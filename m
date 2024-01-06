@@ -1,177 +1,208 @@
-Return-Path: <linux-edac+bounces-313-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-314-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6CD78250AA
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Jan 2024 10:17:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F32825F72
+	for <lists+linux-edac@lfdr.de>; Sat,  6 Jan 2024 13:19:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38B24285436
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Jan 2024 09:17:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 566AA1C21204
+	for <lists+linux-edac@lfdr.de>; Sat,  6 Jan 2024 12:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7EB822F06;
-	Fri,  5 Jan 2024 09:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549926FC9;
+	Sat,  6 Jan 2024 12:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eAGbYa45"
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Ipq0Ao+I"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F44E22F03
-	for <linux-edac@vger.kernel.org>; Fri,  5 Jan 2024 09:17:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E197C433C7;
-	Fri,  5 Jan 2024 09:17:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1704446268;
-	bh=SMyEykfTIwRSNPjMtmb9UVjbMMwML2DMjeJrkE+n+wo=;
-	h=Subject:To:From:Date:From;
-	b=eAGbYa45O/iDxUWoogSlqYEn/Rs+ZBO7R4nL+teiyHYaLRwcG2h3tupK2mffWgEOo
-	 y9Bx/iCKmOvoKBqhzL3voHvhypE6a7jMDUD7HUYCZ4yahCAuAzy85u99aaX0nGLqIG
-	 gWrwHM7IS1EeATtx0jydyFLCD7iHq74f6eMcZvu8=
-Subject: patch "EDAC: constantify the struct bus_type usage" added to driver-core-next
-To: gregkh@linuxfoundation.org,bp@alien8.de,james.morse@arm.com,linux-edac@vger.kernel.org,mchehab@kernel.org,rric@kernel.org,tony.luck@intel.com
-From: <gregkh@linuxfoundation.org>
-Date: Fri, 05 Jan 2024 10:17:23 +0100
-Message-ID: <2024010523-radial-skeleton-e0cf@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3F56FAE;
+	Sat,  6 Jan 2024 12:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6F57E40E01BB;
+	Sat,  6 Jan 2024 12:19:25 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id M2KYUmljKwYP; Sat,  6 Jan 2024 12:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1704543562; bh=WuofjL+TlVJRuKZtEYcpXEUDIrlBp5v/Qqz5LXnIqAY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Ipq0Ao+ICb4PQUIZIaB2gcL+MSgipIYP6MRUgdNIltpfemA/FEiwvhwuqZFPYdljh
+	 KaZOVTym6PgkGBMATDO5sraU/2BAUt4R7GnuGcctphAvsmLdl0qlVu2c3Kive4c2A/
+	 V4S/W4kYWwKkY/VqnoJkNeNSAKuxKvT87CQapbrE5MBL0p2f/XVxfsQWy+Ui7KlFRA
+	 ymK1SmQJa/D4pR7SfDUdU9bGNIGKZsabL2CKumY9gM0IxVVGGFgiFjYAIf+rMZJgF2
+	 1ZiGSUmJ8pUF2cmq9ej8KYLnZi9dtZ/Dm+pQDCpW9ax/eL4C4pVoh7JW9a+AjDQkKr
+	 qJ36D9PcXIikybXn6BVd+L8WITlvJL06nyuO+jVACw6egei5+A/e+7wI9bCFEjnlmG
+	 zoNKw/aHg9RcEbfaSwn/pXFy3J5FLNUukUM7AZ+YQT/I8FJvAn9K0KQTWs+H16SWRZ
+	 8WQJVBYQrXqUvTnCxgHf0V6Ul2oHqLCqbQQpCYuKq8upXAvmveqHN+xccy1V1c7uVd
+	 SpmlhNXp45kfW+53Z3o/Yhcg7gTOLYW0bhpLrBjxupJdwJV6fiv3ENaMw1bVvHdDIV
+	 Ex6qnX1sLMPdEIzoyqtVQyzZHDDXGn/Xu2tkEXBjkbdzAI9Do6t5ZkJDwgmocG2sbE
+	 q8wohuElNHEP1G5uCVsbESLo=
+Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 855CC40E01B2;
+	Sat,  6 Jan 2024 12:19:19 +0000 (UTC)
+Date: Sat, 6 Jan 2024 13:19:12 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.8
+Message-ID: <20240106121912.GAZZlFQJdtoGzRxIiE@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi Linus,
 
-This is a note to let you know that I've just added the patch titled
+please pull the pile of EDAC updates for 6.8.
 
-    EDAC: constantify the struct bus_type usage
+Thx.
 
-to my driver-core git tree which can be found at
-    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-in the driver-core-next branch.
-
-The patch will show up in the next release of the linux-next tree
-(usually sometime within the next 24 hours during the week.)
-
-The patch will also be merged in the next major kernel release
-during the merge window.
-
-If you have any questions about this process, please let me know.
-
-
-From f36be9ce8146faabdbbf74ee0499edb2039c53a5 Mon Sep 17 00:00:00 2001
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date: Tue, 19 Dec 2023 14:13:10 +0100
-Subject: EDAC: constantify the struct bus_type usage
-
-In many places in the edac code, struct bus_type pointers are passed
-around and then eventually sent to the driver core, which can handle a
-constant pointer.  So constantify all of the edac usage of these as well
-because the data in them is never modified by the edac code either.
-
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Robert Richter <rric@kernel.org>
-Cc:  <linux-edac@vger.kernel.org>
-Link: https://lore.kernel.org/r/2023121909-tribute-punctuate-4b22@gregkh
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/edac/edac_device.h       | 2 +-
- drivers/edac/edac_device_sysfs.c | 2 +-
- drivers/edac/edac_module.c       | 4 ++--
- drivers/edac/edac_pci_sysfs.c    | 2 +-
- include/linux/edac.h             | 4 ++--
- 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/edac/edac_device.h b/drivers/edac/edac_device.h
-index 3f44e6b9d387..7db22a4c83ef 100644
---- a/drivers/edac/edac_device.h
-+++ b/drivers/edac/edac_device.h
-@@ -176,7 +176,7 @@ struct edac_device_ctl_info {
- 	struct edac_dev_sysfs_attribute *sysfs_attributes;
- 
- 	/* pointer to main 'edac' subsys in sysfs */
--	struct bus_type *edac_subsys;
-+	const struct bus_type *edac_subsys;
- 
- 	/* the internal state of this controller instance */
- 	int op_state;
-diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
-index 010c26be5846..237a542e045a 100644
---- a/drivers/edac/edac_device_sysfs.c
-+++ b/drivers/edac/edac_device_sysfs.c
-@@ -229,7 +229,7 @@ static struct kobj_type ktype_device_ctrl = {
- int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
- {
- 	struct device *dev_root;
--	struct bus_type *edac_subsys;
-+	const struct bus_type *edac_subsys;
- 	int err = -ENODEV;
- 
- 	edac_dbg(1, "\n");
-diff --git a/drivers/edac/edac_module.c b/drivers/edac/edac_module.c
-index 32a931d0cb71..1c9f62382666 100644
---- a/drivers/edac/edac_module.c
-+++ b/drivers/edac/edac_module.c
-@@ -67,7 +67,7 @@ char *edac_op_state_to_string(int opstate)
-  * sysfs object: /sys/devices/system/edac
-  *	need to export to other files
-  */
--static struct bus_type edac_subsys = {
-+static const struct bus_type edac_subsys = {
- 	.name = "edac",
- 	.dev_name = "edac",
- };
-@@ -90,7 +90,7 @@ static void edac_subsys_exit(void)
- }
- 
- /* return pointer to the 'edac' node in sysfs */
--struct bus_type *edac_get_sysfs_subsys(void)
-+const struct bus_type *edac_get_sysfs_subsys(void)
- {
- 	return &edac_subsys;
- }
-diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
-index 287cc51dbc86..e823e4da086a 100644
---- a/drivers/edac/edac_pci_sysfs.c
-+++ b/drivers/edac/edac_pci_sysfs.c
-@@ -338,7 +338,7 @@ static struct kobj_type ktype_edac_pci_main_kobj = {
- static int edac_pci_main_kobj_setup(void)
- {
- 	int err = -ENODEV;
--	struct bus_type *edac_subsys;
-+	const struct bus_type *edac_subsys;
- 	struct device *dev_root;
- 
- 	edac_dbg(0, "\n");
-diff --git a/include/linux/edac.h b/include/linux/edac.h
-index fa4bda2a70f6..ccaf2ae0801d 100644
---- a/include/linux/edac.h
-+++ b/include/linux/edac.h
-@@ -30,7 +30,7 @@ struct device;
- 
- extern int edac_op_state;
- 
--struct bus_type *edac_get_sysfs_subsys(void);
-+const struct bus_type *edac_get_sysfs_subsys(void);
- 
- static inline void opstate_init(void)
- {
-@@ -492,7 +492,7 @@ struct edac_raw_error_desc {
-  */
- struct mem_ctl_info {
- 	struct device			dev;
--	struct bus_type			*bus;
-+	const struct bus_type		*bus;
- 
- 	struct list_head link;	/* for global list of mem_ctl_info structs */
- 
--- 
-2.43.0
+The following changes since commit 98b1cc82c4affc16f5598d4fa14b1858671b22=
+63:
+
+  Linux 6.7-rc2 (2023-11-19 15:02:14 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_upd=
+ates_for_v6.8
+
+for you to fetch changes up to 1e92af09fab1b5589f3a7ae68109e3c6a5ca6c6e:
+
+  EDAC/skx_common: Filter out the invalid address (2024-01-02 09:20:08 -0=
+800)
+
+----------------------------------------------------------------
+- The EDAC drivers part of the effort to make the ->remove() platform
+  driver callback return void
+
+- Add support for AMD AI accelerators
+
+- Add support for a number of Intel SoCs: Alder Lake-N, Raptor Lake-P,
+  Meteor Lake-{P,PS}
+
+- Random fixes and cleanups all over the place
+
+----------------------------------------------------------------
+Abhinav Singh (1):
+      EDAC/{sb,i7core}_edac: Do not use a plain integer for a NULL pointe=
+r
+
+Andy Shevchenko (4):
+      EDAC, pnd2: Replace custom definition by one from sizes.h
+      EDAC, pnd2: Apply bit macros and helpers where it makes sense
+      EDAC, pnd2: Correct misleading error message in mk_region_mask()
+      EDAC, pnd2: Sort headers alphabetically
+
+Arnd Bergmann (1):
+      EDAC/thunderx: Fix possible out-of-bounds string access
+
+Ilpo J=C3=A4rvinen (1):
+      EDAC/pci_sysfs: Use PCI_HEADER_TYPE_MASK instead of literals
+
+Muralidhara M K (2):
+      EDAC/mc: Add support for HBM3 memory type
+      EDAC/amd64: Add support for family 0x19, models 0x90-9f devices
+
+Qiuxu Zhuo (6):
+      EDAC/igen6: Make get_mchbar() helper function
+      EDAC/igen6: Add Intel Alder Lake-N SoCs support
+      EDAC/igen6: Add Intel Raptor Lake-P SoCs support
+      EDAC/igen6: Add Intel Meteor Lake-PS SoCs support
+      EDAC/igen6: Add Intel Meteor Lake-P SoCs support
+      EDAC/skx_common: Filter out the invalid address
+
+Rob Herring (2):
+      EDAC/altera: Use device_get_match_data()
+      EDAC/armada_xp: Explicitly include correct DT includes
+
+Uwe Kleine-K=C3=B6nig (22):
+      EDAC/altera: Convert to platform remove callback returning void
+      EDAC/armada_xp: Convert to platform remove callback returning void
+      EDAC/aspeed: Convert to platform remove callback returning void
+      EDAC/bluefield: Convert to platform remove callback returning void
+      EDAC/cell: Convert to platform remove callback returning void
+      EDAC/cpc925: Convert to platform remove callback returning void
+      EDAC/dmc520: Convert to platform remove callback returning void
+      EDAC/highbank_l2: Convert to platform remove callback returning voi=
+d
+      EDAC/highbank_mc: Convert to platform remove callback returning voi=
+d
+      EDAC/mpc85xx: Convert to platform remove callback returning void
+      EDAC/npcm: Convert to platform remove callback returning void
+      EDAC/octeon-l2c: Convert to platform remove callback returning void
+      EDAC/octeon-lmc: Convert to platform remove callback returning void
+      EDAC/octeon-pc: Convert to platform remove callback returning void
+      EDAC/octeon-pci: Convert to platform remove callback returning void
+      EDAC/ppc4xx: Convert to platform remove callback returning void
+      EDAC/qcom: Convert to platform remove callback returning void
+      EDAC/synopsys: Convert to platform remove callback returning void
+      EDAC/ti: Convert to platform remove callback returning void
+      EDAC/xgene: Convert to platform remove callback returning void
+      EDAC/zynqmp: Convert to platform remove callback returning void
+      EDAC/fsl_ddr: Convert to platform remove callback returning void
+
+ drivers/edac/altera_edac.c      |  21 ++---
+ drivers/edac/amd64_edac.c       |  66 ++++++++++----
+ drivers/edac/amd64_edac.h       |   1 +
+ drivers/edac/armada_xp_edac.c   |  16 ++--
+ drivers/edac/aspeed_edac.c      |   6 +-
+ drivers/edac/bluefield_edac.c   |   6 +-
+ drivers/edac/cell_edac.c        |   5 +-
+ drivers/edac/cpc925_edac.c      |   6 +-
+ drivers/edac/dmc520_edac.c      |   6 +-
+ drivers/edac/edac_mc.c          |   1 +
+ drivers/edac/edac_pci_sysfs.c   |   4 +-
+ drivers/edac/fsl_ddr_edac.c     |   3 +-
+ drivers/edac/fsl_ddr_edac.h     |   2 +-
+ drivers/edac/highbank_l2_edac.c |   5 +-
+ drivers/edac/highbank_mc_edac.c |   5 +-
+ drivers/edac/i7core_edac.c      |   4 +-
+ drivers/edac/igen6_edac.c       | 194 ++++++++++++++++++++++++++++++++++=
+++----
+ drivers/edac/layerscape_edac.c  |   2 +-
+ drivers/edac/mpc85xx_edac.c     |  13 ++-
+ drivers/edac/npcm_edac.c        |   6 +-
+ drivers/edac/octeon_edac-l2c.c  |   6 +-
+ drivers/edac/octeon_edac-lmc.c  |   5 +-
+ drivers/edac/octeon_edac-pc.c   |   5 +-
+ drivers/edac/octeon_edac-pci.c  |   6 +-
+ drivers/edac/pnd2_edac.c        |  55 ++++++------
+ drivers/edac/ppc4xx_edac.c      |   7 +-
+ drivers/edac/qcom_edac.c        |   6 +-
+ drivers/edac/sb_edac.c          |  10 +--
+ drivers/edac/skx_common.c       |   4 +
+ drivers/edac/synopsys_edac.c    |   6 +-
+ drivers/edac/thunderx_edac.c    |  10 +--
+ drivers/edac/ti_edac.c          |   6 +-
+ drivers/edac/xgene_edac.c       |   6 +-
+ drivers/edac/zynqmp_edac.c      |   6 +-
+ include/linux/edac.h            |   3 +
+ 35 files changed, 331 insertions(+), 182 deletions(-)
 
 
+--=20
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
