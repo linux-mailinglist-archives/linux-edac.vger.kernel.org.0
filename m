@@ -1,106 +1,106 @@
-Return-Path: <linux-edac+bounces-318-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-319-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9112C828CB4
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jan 2024 19:37:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FB2A828E21
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jan 2024 20:48:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F3A81C24756
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jan 2024 18:37:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FC461F24EED
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jan 2024 19:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD1203D0C9;
-	Tue,  9 Jan 2024 18:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6203D540;
+	Tue,  9 Jan 2024 19:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="EuKKB38E"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="igPLvkdL"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F976D6FC;
-	Tue,  9 Jan 2024 18:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7104240E01B0;
-	Tue,  9 Jan 2024 18:37:04 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id b7yVKaHzlFZI; Tue,  9 Jan 2024 18:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1704825422; bh=3GnnfT61nG0MgA4KLPPPfjplcJ6wV6Zbmw1e3o0+qUk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EuKKB38EOmDmgXRgfjQIhkWZOOy7vA6jvLaAqqtKkdkPYY14htlpjS7BHK6U8O/P5
-	 xvvVdyAyV8GiTog2P5YYJSO24CErBZO6VgnWIA8jjqx2cPp7/AOP4Lv9S8tEwnOfPv
-	 +lgzudzbCe+wkvl9Bd+uuzcY3+iW6xwao4w80LfOz4yzJFlJl5ueLu4UpwGXNM9kRO
-	 AETEnyZrDIAQcO/b3GCPkB0yMxZWrq6theK2u8LBwXTjgDyU53ikOT4qtJ3+ZBSxKC
-	 sfuJy5o4TXiMbqqVzEZ10VeauMwlghqE4dBAzlLPBh9zK8wkBW27xm4liAUo/jMMnq
-	 zvM9bFRvaxz/WTfNjMGroFY9lPtYzJVeWDysw5LoLXggzunm67M8wbILK5wxa3Wo1J
-	 Q4ApQ0o/ms48movkl3mhKzkuCEKvhNeKsSi2S1N0CpBfutXS2viqCP6LlDfFJcAQNi
-	 tBOk6dHuYQc8dHFcLna4F6HRMCKfmiGmNsbYBrh+rl5jmdGvMB0zwaD5ifx3xD1yGz
-	 pXU14X6LS2/cP1MYqtH30t/Fxacae2HNMZl+IWWHCc9H0PDKSKMza1AktIjK74sAWU
-	 U9A9dJbCXj0aE9vfWQlJSo8HTU2svyHpGKywH4eZeznp2NxTAVIVMATV2adQLkIk6a
-	 nnQpUJlFQ5Gs9RhnzPp9DRjo=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0308F3D3B8;
+	Tue,  9 Jan 2024 19:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+Received: from localhost (unknown [IPv6:2601:280:5e00:7e19::646])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 30B0640E0196;
-	Tue,  9 Jan 2024 18:36:54 +0000 (UTC)
-Date: Tue, 9 Jan 2024 19:36:46 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Jonathan Corbet <corbet@lwn.net>
+	by ms.lwn.net (Postfix) with ESMTPSA id 100BC2C1;
+	Tue,  9 Jan 2024 19:44:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 100BC2C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1704829482; bh=JrRTImpwqjMu8ndI1e7JDtYO7JM1fCfWbOsYmKSUr2Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=igPLvkdLcePpcMOIvmD1gySNx4M602WaoBmjkldd6//tO8kxCMoxijY1bWcWyvDxM
+	 IOmJtSUAP4H/EFKRjHQL4vs0Zzt/DdcCMSYzXlf2WFuB+0PjbnmBezVwYv9AR8VL8l
+	 W8aMlidrhhEB6mdL1LjiOabAt2AdvIIZw7iRb9DYD1qHxSuGB6u82paTFOuYf1kgxB
+	 seopChC9p9uM/cgHMc8Ae8FRUw5i5mgzZSVTaMpMtR93e3mzWwchAguHJaZm+MZRRR
+	 GdOM7eo7X7JNW7zepo1PghAGkb61vxABwrVwadkCXEqJHcKYuwHUQdlDL8l9eKJbRv
+	 AekBMVieaJSwQ==
+From: Jonathan Corbet <corbet@lwn.net>
+To: Borislav Petkov <bp@alien8.de>
 Cc: Tony Luck <tony.luck@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>,
-	Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Muralidhara M K <muralidhara.mk@amd.com>, linux-doc@vger.kernel.org
+ Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Muralidhara M K <muralidhara.mk@amd.com>,
+ linux-doc@vger.kernel.org
 Subject: Re: [PATCH] Documentation: Begin a RAS section
-Message-ID: <20240109183646.GAZZ2SPiMZv83J3f0a@fat_crate.local>
+In-Reply-To: <20240109183646.GAZZ2SPiMZv83J3f0a@fat_crate.local>
 References: <20231102114225.2006878-1-muralimk@amd.com>
  <20231102114225.2006878-2-muralimk@amd.com>
  <20231128142049.GTZWX3QQTSaQk/+u53@fat_crate.local>
  <87a5pes8jy.fsf@meer.lwn.net>
+ <20240109183646.GAZZ2SPiMZv83J3f0a@fat_crate.local>
+Date: Tue, 09 Jan 2024 12:44:41 -0700
+Message-ID: <87wmsiqok6.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87a5pes8jy.fsf@meer.lwn.net>
+Content-Type: text/plain
 
-On Tue, Jan 09, 2024 at 10:47:29AM -0700, Jonathan Corbet wrote:
-> I wish I'd been copied on this ... 
+Borislav Petkov <bp@alien8.de> writes:
 
-linux-doc was CCed:
+> On Tue, Jan 09, 2024 at 10:47:29AM -0700, Jonathan Corbet wrote:
+>> I wish I'd been copied on this ... 
+>
+> linux-doc was CCed:
+>
+> https://lore.kernel.org/all/20231128142049.GTZWX3QQTSaQk%2F+u53@fat_crate.local/
+>
+> Or did you prefer you directly?
 
-https://lore.kernel.org/all/20231128142049.GTZWX3QQTSaQk%2F+u53@fat_crate.local/
+Lots of stuff goes to linux-doc, I can miss things.
 
-Or did you prefer you directly?
+Of course, I miss things in my own email too...you know the drill...
 
-I've been working to get a handle on
-> the top-level Documentation/ directories for a while, and would rather
-> not see a new one added for this.  Offhand, based on this first
-> document, it looks like material that belongs under
-> Documentation/admin-guide; can we move it there, please?
+> I've been working to get a handle on
+>> the top-level Documentation/ directories for a while, and would rather
+>> not see a new one added for this.  Offhand, based on this first
+>> document, it looks like material that belongs under
+>> Documentation/admin-guide; can we move it there, please?
+>
+> Not really an admin guide thing - yes, based on the current content but
+> actually, the aim for this is to document all things RAS, so it is more
+> likely a subsystem thing. And all the subsystems are directories under
+> Documentation/.
+>
+> So where do you want me to put it?
 
-Not really an admin guide thing - yes, based on the current content but
-actually, the aim for this is to document all things RAS, so it is more
-likely a subsystem thing. And all the subsystems are directories under
-Documentation/.
+The hope with all of this documentation thrashing has been to organize
+our docs with the *reader* in mind.  "All things RAS" is convenient for
+RAS developers, but not for (say) a sysadmin trying to figure out how to
+make use of it.  So I would really rather see RAS documentation placed
+under admin-guide or userspace-api as appropriate.
 
-So where do you want me to put it?
+Yes, there is a lot of existing documentation that still doesn't live up
+to this idea, but we can try to follow it for new stuff while the rest
+is (slowly) fixed up.
 
-Thx.
+Make sense?
 
--- 
-Regards/Gruss,
-    Boris.
+Thanks,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+jon
 
