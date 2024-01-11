@@ -1,112 +1,190 @@
-Return-Path: <linux-edac+bounces-320-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-321-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E80F7828E5A
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jan 2024 21:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC1A682AF64
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Jan 2024 14:19:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89A2B286F07
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jan 2024 20:05:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 556BF285E05
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Jan 2024 13:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DA23D578;
-	Tue,  9 Jan 2024 20:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jRDFwKkX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BDCA16407;
+	Thu, 11 Jan 2024 13:18:07 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EC43D553;
-	Tue,  9 Jan 2024 20:04:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DEB9540E016C;
-	Tue,  9 Jan 2024 20:04:49 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id NiYoeZQQalKc; Tue,  9 Jan 2024 20:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1704830687; bh=myWkA513SB++du6rtg253t0uQ7b+BjB5yRYgGmBmizI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jRDFwKkXwbGGoD+MXs3OvMjNvwwQ9+CgDrEGogr4gtth8jcaqGA8nzkG6phHrHdiw
-	 8ugfNNYWrUrEjXOAuS7WmAVEc6Y4KIY8DxF9XSwUt9/FsYqf3a1Hamp+z/8pqKTZXR
-	 vxF759udYi/x+hWjxVmhoRYBoXlnI0F3rxwra4MNrw7ykwLZqxN1fCsbKQi0JGJU6E
-	 4UqhwVYJsprHSek0/xQUfGtb1DLdycaE60aYKDt0TKzEm8l1ArGPczjygFuQN5qxCm
-	 svHe9DvPmA9s/xj3vir7igBmlPzYsp0V8ghadpKNLDqBm49MbyPk6iVTZK8j7DW9nd
-	 9mf1Nxo/tdGpx+otoEPf46qdRbI4oijuNAqW2lYw553J5+baptZe/KXrr6zYOqtxJG
-	 0XYW9abUMNjA1b4j8k07YZ7TYcVMxRGRUOt0CArFdP5nGaKX/+qHlmEIUD4oKXHsEa
-	 22w8Sygby3jq0bPFUFnqkSZ/cU/7Ip3h0dWZyjmknv55YL/CprPIE+v1AA2OM0GFXN
-	 DRuIn5lu3UmZ6RQ1D2KwB0UoCnQGw5UJXsACuo/hU92ngguf2Y0hQQGxoyXVhxH3cZ
-	 tGehj+8PwCjVI3ktug0TE2g8tqg2Kjx6G+koOtkF5L0CEzTj+5nfWogJufXG0pmPHQ
-	 tbGUBMauPQB+Ejg4fQpSfNnY=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 52EFA40E01B2;
-	Tue,  9 Jan 2024 20:04:39 +0000 (UTC)
-Date: Tue, 9 Jan 2024 21:04:34 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Tony Luck <tony.luck@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>,
-	Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Muralidhara M K <muralidhara.mk@amd.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] Documentation: Begin a RAS section
-Message-ID: <20240109200434.GBZZ2m0vWjm9v795YX@fat_crate.local>
-References: <20231102114225.2006878-1-muralimk@amd.com>
- <20231102114225.2006878-2-muralimk@amd.com>
- <20231128142049.GTZWX3QQTSaQk/+u53@fat_crate.local>
- <87a5pes8jy.fsf@meer.lwn.net>
- <20240109183646.GAZZ2SPiMZv83J3f0a@fat_crate.local>
- <87wmsiqok6.fsf@meer.lwn.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D24F32C94;
+	Thu, 11 Jan 2024 13:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4T9lXD0cr1z6K8wp;
+	Thu, 11 Jan 2024 21:15:24 +0800 (CST)
+Received: from lhrpeml500006.china.huawei.com (unknown [7.191.161.198])
+	by mail.maildlp.com (Postfix) with ESMTPS id 53AB4140CB9;
+	Thu, 11 Jan 2024 21:18:01 +0800 (CST)
+Received: from SecurePC30232.china.huawei.com (10.122.247.234) by
+ lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 11 Jan 2024 13:18:00 +0000
+From: <shiju.jose@huawei.com>
+To: <linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <dave@stgolabs.net>, <jonathan.cameron@huawei.com>,
+	<dave.jiang@intel.com>, <alison.schofield@intel.com>,
+	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>, <dan.j.williams@intel.com>
+CC: <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<david@redhat.com>, <Vilas.Sridharan@amd.com>, <leo.duran@amd.com>,
+	<Yazen.Ghannam@amd.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
+	<tony.luck@intel.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<rafael@kernel.org>, <lenb@kernel.org>, <naoya.horiguchi@nec.com>,
+	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
+	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
+	<mike.malvestuto@intel.com>, <gthelen@google.com>,
+	<wschwartz@amperecomputing.com>, <dferguson@amperecomputing.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
+	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
+Subject: [RFC PATCH v5 00/12] cxl: Add support for CXL feature commands, CXL device patrol scrub control and DDR5 ECS control features
+Date: Thu, 11 Jan 2024 21:17:29 +0800
+Message-ID: <20240111131741.1356-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.35.1.windows.2
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87wmsiqok6.fsf@meer.lwn.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500006.china.huawei.com (7.191.161.198)
 
-On Tue, Jan 09, 2024 at 12:44:41PM -0700, Jonathan Corbet wrote:
-> Of course, I miss things in my own email too...you know the drill...
+From: Shiju Jose <shiju.jose@huawei.com>
 
-Yeah, tell me about it.
+1. Add support for CXL feature mailbox commands.
+2. Add CXL device scrub driver supporting patrol scrub control and ECS
+control features.
+3. Add scrub subsystem driver supports configuring memory scrubs in the system.
+4. Register CXL device patrol scrub and ECS with scrub subsystem.
+5. Add common library for RASF and RAS2 PCC interfaces.
+6. Add driver for ACPI RAS2 feature table (RAS2).
+7. Add memory RAS2 driver and register with scrub subsystem.
 
-My train of thought with CCing maintainers in such cases usually is: I'd
-CC the mailing list as I don't want to bother the maintainer - she/he gets
-too much email anyway and this is an FYI thing anyway so she/he'll find
-it in the archives eventually.
+The QEMU series to support the CXL specific features is available here,
+https://lore.kernel.org/qemu-devel/20231124135338.1191-1-shiju.jose@huawei.com/
 
-> Yes, there is a lot of existing documentation that still doesn't live up
-> to this idea, but we can try to follow it for new stuff while the rest
-> is (slowly) fixed up.
+Changes
+v4 -> v5:
+1. Following are the main changes made based on the feedback from Dan Williams on v4.
+1.1. In the scrub subsystem the common scrub control attributes are statically defined
+     instead of dynamically created.
+1.2. Add scrub subsystem support externally defined attribute group.
+     Add CXL ECS driver define ECS specific attribute group and pass to
+	 the scrub subsystem.
+1.3. Move cxl_mem_ecs_init() to cxl/core/region.c so that the CXL region_id
+     is used in the registration with the scrub subsystem. 	 
+1.4. Add previously posted RASF common and RAS2 patches to this scrub series.
+	 
+2. Add support for the 'enable_background_scrub' attribute
+   for RAS2, on request from Bill Schwartz(wschwartz@amperecomputing.com).
 
-The problem I see here is that not all of the RAS stuff will be
-"admin-guide" stuff but some design decisions we've made. I mean, if it
-is a really curious admin, it'll fit her/his alley but it won't be
-purely administrative tasks' descriptions.
+v3 -> v4:
+1. Fixes for the warnings/errors reported by kernel test robot.
+2. Add support for reading the 'enable' attribute of CXL patrol scrub.
 
-In the end of the day, I don't really care where it is as long as it is
-in one place and we can point people to it and say, here, that's why we
-did it the way we did it and what you can do about it.
+Changes
+v2 -> v3:
+1. Changes for comments from Davidlohr, Thanks.
+ - Updated cxl scrub kconfig
+ - removed usage of the flag is_support_feature from
+   the function cxl_mem_get_supported_feature_entry().
+ - corrected spelling error.
+ - removed unnecessary debug message.
+ - removed export feature commands to the userspace.
+2. Possible fix for the warnings/errors reported by kernel
+   test robot.
+3. Add documentation for the common scrub configure atrributes.
 
-So I'm fine with admin-guide too - just pointing out a potential issue
-I see.
+v1 -> v2:
+1. Changes for comments from Dave Jiang, Thanks.
+ - Split patches.
+ - reversed xmas tree declarations.
+ - declared flags as enums.
+ - removed few unnecessary variable initializations.
+ - replaced PTR_ERR_OR_ZERO() with IS_ERR() and PTR_ERR().
+ - add auto clean declarations.
+ - replaced while loop with for loop.
+ - Removed allocation from cxl_get_supported_features() and
+   cxl_get_feature() and make change to take allocated memory
+   pointer from the caller.
+ - replaced if/else with switch case.
+ - replaced sprintf() with sysfs_emit() in 2 places.
+ - replaced goto label with return in few functions.
+2. removed unused code for supported attributes from ecs.
+3. Included following common patch for scrub configure driver
+   to this series.
+   "memory: scrub: Add scrub driver supports configuring memory scrubbers
+    in the system"
 
-Thx.
+A Somasundaram (1):
+  ACPI:RASF: Add common library for RASF and RAS2 PCC interfaces
+
+Shiju Jose (11):
+  cxl/mbox: Add GET_SUPPORTED_FEATURES mailbox command
+  cxl/mbox: Add GET_FEATURE mailbox command
+  cxl/mbox: Add SET_FEATURE mailbox command
+  cxl/memscrub: Add CXL device patrol scrub control feature
+  cxl/memscrub: Add CXL device ECS control feature
+  memory: scrub: Add scrub subsystem driver supports configuring memory
+    scrubs in the system
+  cxl/memscrub: Register CXL device patrol scrub with scrub configure
+    driver
+  cxl/memscrub: Register CXL device ECS with scrub configure driver
+  ACPICA: ACPI 6.5: Add support for RAS2 table
+  ACPI:RAS2: Add driver for ACPI RAS2 feature table (RAS2)
+  memory: RAS2: Add memory RAS2 driver
+
+ .../ABI/testing/sysfs-class-scrub-configure   |   91 ++
+ drivers/acpi/Kconfig                          |   15 +
+ drivers/acpi/Makefile                         |    1 +
+ drivers/acpi/ras2_acpi.c                      |   97 ++
+ drivers/acpi/rasf_acpi_common.c               |  272 +++++
+ drivers/cxl/Kconfig                           |   23 +
+ drivers/cxl/core/Makefile                     |    1 +
+ drivers/cxl/core/mbox.c                       |   59 +
+ drivers/cxl/core/memscrub.c                   | 1009 +++++++++++++++++
+ drivers/cxl/core/region.c                     |    1 +
+ drivers/cxl/cxlmem.h                          |  120 ++
+ drivers/cxl/pci.c                             |    5 +
+ drivers/memory/Kconfig                        |   15 +
+ drivers/memory/Makefile                       |    3 +
+ drivers/memory/ras2.c                         |  354 ++++++
+ drivers/memory/rasf_common.c                  |  269 +++++
+ drivers/memory/scrub/Kconfig                  |   11 +
+ drivers/memory/scrub/Makefile                 |    6 +
+ drivers/memory/scrub/memory-scrub.c           |  367 ++++++
+ include/acpi/actbl2.h                         |  137 +++
+ include/acpi/rasf_acpi.h                      |   58 +
+ include/memory/memory-scrub.h                 |   78 ++
+ include/memory/rasf.h                         |   88 ++
+ 23 files changed, 3080 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-scrub-configure
+ create mode 100755 drivers/acpi/ras2_acpi.c
+ create mode 100755 drivers/acpi/rasf_acpi_common.c
+ create mode 100644 drivers/cxl/core/memscrub.c
+ create mode 100644 drivers/memory/ras2.c
+ create mode 100644 drivers/memory/rasf_common.c
+ create mode 100644 drivers/memory/scrub/Kconfig
+ create mode 100644 drivers/memory/scrub/Makefile
+ create mode 100755 drivers/memory/scrub/memory-scrub.c
+ create mode 100644 include/acpi/rasf_acpi.h
+ create mode 100755 include/memory/memory-scrub.h
+ create mode 100755 include/memory/rasf.h
 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
