@@ -1,107 +1,116 @@
-Return-Path: <linux-edac+bounces-338-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-339-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 755FC82DA08
-	for <lists+linux-edac@lfdr.de>; Mon, 15 Jan 2024 14:26:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A981A82DA2C
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Jan 2024 14:34:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81D7A1C21128
-	for <lists+linux-edac@lfdr.de>; Mon, 15 Jan 2024 13:26:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5360C1F21A5B
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Jan 2024 13:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF9B168D9;
-	Mon, 15 Jan 2024 13:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A069171B0;
+	Mon, 15 Jan 2024 13:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="V5GiTUoY"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B43171A0;
-	Mon, 15 Jan 2024 13:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4TDCYR4CzfzWmgG;
-	Mon, 15 Jan 2024 21:24:59 +0800 (CST)
-Received: from dggpemm100001.china.huawei.com (unknown [7.185.36.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 85B5A18001C;
-	Mon, 15 Jan 2024 21:25:58 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 15 Jan 2024 21:25:57 +0800
-Message-ID: <e453b190-d387-4b74-bb2c-fbbd2a5c488d@huawei.com>
-Date: Mon, 15 Jan 2024 21:25:57 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D5917543;
+	Mon, 15 Jan 2024 13:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4455B40E01A9;
+	Mon, 15 Jan 2024 13:34:23 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Oa5bjbg3mu8O; Mon, 15 Jan 2024 13:34:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1705325657; bh=67halwUYkwEtIEMK/7EejoC0n1IsXerTwoWSSrGNLE4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V5GiTUoYKMi4a0y18jMfa9A4ExSqn8mTzrzLOQf+Td7ujsAJwkvQNyNSODlJVRRkv
+	 a99TUAi1Oi5O936lSg1y4j//5MzDj51j1lkXJ+uqQ7h79zz6vflnWpt+lnrJ3wCaKk
+	 cYMnQe4ZQ6YPO2g+oHh01JM5P2JzaZTMBALnHQ/2GDyOpFTQyvuuWvf3puidluAptG
+	 YAiKbITvlXluuezUIl1FMwcsZLYdtZrBaNDwLW/bzNPvIjPSQxqv8y3o7LuLznhxjT
+	 AOybizNOGexkKU7SbPSlTKUC+5iQ0/XVENWld3+u6+7j1P6sBjiYmsk0K+tST6x9PT
+	 9JaEkYZadJu7YESK3fMp4DHqa68MNP2bjZ+yw49OU2y4HGhqws/elT9LBj1dk+8Wv5
+	 fKjL20kbinNRwh1j3F3pLBMsgzKLzS21x5fRvW1N+eohQ2MiVl6BdwNsGB7Mdtxpvf
+	 Xkz/SSDGNEIlo/eBG6ZpITCdC1Yg3j5Uova+k7RRKq3LZ9lW3ERPmawTvdRRLH3qeu
+	 p9ovZIF22h/WJ5GcK5WRSumL33YgwDP0NySPdZDbUA9noAx9Miz4gFrtDDAqt9Qnlf
+	 rMGTHMJkbkY4hjUmm3uIkcqnvQ1qb4BJO4KXWafLEJdJfmFzjdwzFUdGQAf3NMN80v
+	 x9Bg4dvIm5nY2JmATMDn/+hA=
+Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4061340E016C;
+	Mon, 15 Jan 2024 13:34:01 +0000 (UTC)
+Date: Mon, 15 Jan 2024 14:33:54 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: Tong Tiangen <tongtiangen@huawei.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-mm@kvack.org, Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 0/3] minor improvements for x86 mce processing
+Message-ID: <20240115133354.GFZaU0Qk2lYmMSkwM9@fat_crate.local>
+References: <20240111135548.3207437-1-tongtiangen@huawei.com>
+ <e453b190-d387-4b74-bb2c-fbbd2a5c488d@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next v4 0/3] minor improvements for x86 mce processing
-Content-Language: en-US
-To: Tong Tiangen <tongtiangen@huawei.com>, Thomas Gleixner
-	<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>, Andy
- Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Andrew
- Morton <akpm@linux-foundation.org>, Naoya Horiguchi <naoya.horiguchi@nec.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-mm@kvack.org>, Guohanjun <guohanjun@huawei.com>
-References: <20240111135548.3207437-1-tongtiangen@huawei.com>
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20240111135548.3207437-1-tongtiangen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm100001.china.huawei.com (7.185.36.93)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e453b190-d387-4b74-bb2c-fbbd2a5c488d@huawei.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Borislav and Tony，
+On Mon, Jan 15, 2024 at 09:25:57PM +0800, Kefeng Wang wrote:
+> could you give us some comments about it, many thanks.
 
-On 2024/1/11 21:55, Tong Tiangen wrote:
-> In this patchset, we remove the unused macro EX_TYPE_COPY and centralize
-> the processing of memory-failure to do_machine_check() to avoid calling
-> memory_failure_queue() separately for different MC-Safe scenarios. In
-> addition, MCE_IN_KERNEL_COPYIN is renamed MCE_IN_KERNEL_COPY_MC to expand
-> its usage scope.
+Since we have a (suspended=C2=B9) merge window currently:
 
-The patchset is a followup[1], as Borislav suggested[2], we firstly
-cleanup unused EX_TYPE_COPY, then rename MCE_IN_KERNEL_COPYIN to
-reduce confusion, could you give us some comments about it,
-many thanks.
+From: Documentation/process/maintainer-tip.rst
 
-> 
-> [1]https://lore.kernel.org/linux-mm/20230526063242.133656-1-wangkefeng.wang@huawei.com/
-> 
-[2] 
-https://lore.kernel.org/linux-edac/20230602160138.GDZHoSYsWoPAinMszk@fat_crate.local/
-> since v3:
->    1. Rebased on linux-next tag next-20240111.
->    2. Delete duplicate commit references on patch 3.
-> 
-> since v2:
->    1. remove redundant fixup type EX_TYPE_COPY.
->    2. rename MCE_IN_KERNEL_COPYIN to MCE_IN_KERNEL_COPY_MC.
->    3. update patch3's commit message and the processing logic of
->       EX_TYPE_DEFAULT_MCE_SAFE based on the discussion of [1].
-> 
-> Kefeng Wang (1):
->    x86/mce: set MCE_IN_KERNEL_COPY_MC for DEFAULT_MCE_SAFE exception
-> 
-> Tong Tiangen (2):
->    x86/mce: remove redundant fixup type EX_TYPE_COPY
->    x86/mce: rename MCE_IN_KERNEL_COPYIN to MCE_IN_KERNEL_COPY_MC
-> 
->   arch/x86/include/asm/asm.h                 |  3 ---
->   arch/x86/include/asm/extable_fixup_types.h | 23 +++++++++++-----------
->   arch/x86/include/asm/mce.h                 |  8 ++++----
->   arch/x86/kernel/cpu/mce/core.c             |  2 +-
->   arch/x86/kernel/cpu/mce/severity.c         |  7 +++----
->   arch/x86/mm/extable.c                      |  9 ---------
->   mm/ksm.c                                   |  1 -
->   mm/memory.c                                | 13 ++++--------
->   8 files changed, 23 insertions(+), 43 deletions(-)
-> 
+Merge window
+^^^^^^^^^^^^
 
+Please do not expect large patch series to be handled during the merge
+window or even during the week before.  Such patches should be submitted =
+in
+mergeable state *at* *least* a week before the merge window opens.
+Exceptions are made for bug fixes and *sometimes* for small standalone
+drivers for new hardware or minimally invasive patches for hardware
+enablement.
+
+During the merge window, the maintainers instead focus on following the
+upstream changes, fixing merge window fallout, collecting bug fixes, and
+allowing themselves a breath. Please respect that.
+
+The release candidate -rc1 is the starting point for new patches to be
+applied which are targeted for the next merge window.
+
+=C2=B9 https://lore.kernel.org/r/CAHk-=3DwjMWpmXtKeiN__vnNO4TcttZR-8dVvd_=
+oBq%2BhjeSsWUwg@mail.gmail.com
+
+--=20
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
