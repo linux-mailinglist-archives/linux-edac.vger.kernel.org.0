@@ -1,121 +1,169 @@
-Return-Path: <linux-edac+bounces-359-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-360-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AD8383909F
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Jan 2024 14:57:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE3DC839D64
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Jan 2024 00:52:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D776D285ED4
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Jan 2024 13:57:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D818287962
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Jan 2024 23:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E4625F570;
-	Tue, 23 Jan 2024 13:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E132254BE3;
+	Tue, 23 Jan 2024 23:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="JU7vykwa"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="pOxiiqov"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2082.outbound.protection.outlook.com [40.107.243.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C625F565;
-	Tue, 23 Jan 2024 13:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706018273; cv=none; b=lRvNI49TqSUC+zaP4scXxrcMN4FfkL+p9BvUM5g0//wVFEBprGGKgthXrqxpOCPO6vGJMa2QI0vNSJ8KyQGGHCHnzE/1kCMG0+BSvvFbQM1/3hL13B8I1KHoGH4RB4zBgFaWwPCPNZcbtpWahkigBFudYz2Z3GhQyQxbJUbkUCg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706018273; c=relaxed/simple;
-	bh=Lr743DzRNBCOnIZotz3AEaz8XjiK7d4JarUHiopO4OE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mIg+i/P+FqDR4ZmTwiOfP0FdKNIoUB0IJvRWIKHgRspr3B/xC5t/b0JYJslYwhjfsubQIxUOzIlVSrpZfNGQEjNNUCMR+UWs26PXLuspjVqesLdAY3CHABtSU30lDh2qPlxeSfgoQmT23f72KMLSrwBo/jWB7NDL3zgjqdhhafg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=JU7vykwa; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9E3A340E01BB;
-	Tue, 23 Jan 2024 13:57:41 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id jUJ43itIBKnQ; Tue, 23 Jan 2024 13:57:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706018258; bh=Gq9fhd5LizCMfcgUfno0hm3hs9DAa8aKTa1odpHlDJk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JU7vykwaoGxztRqZ6gofU73miwd+PR+/TOelEPKWuKd433UOJNr+m4I5bIJrWqmIJ
-	 B7RZuHvO+zZQd1oFWJLs0hhBpa4MrfoXL02ANAkRbw+iEcpec9/ltM1Qb3T9Bp/KjF
-	 OIchcno2pskeKFXKXs4yWt5vjputIBcfo/3DlB8CbtxiPhjT+0RQHKmN+6IPIfyJh2
-	 bJ6PV1XeB9vJ989M6C+87cwx8yoO1WZuHfXT/JD6kPvmOjE01fYivGhjgiGulmkf/d
-	 ojG69FBQc4aPeJ1+udgDPgCTq5PxgwfNCUZDel4Xm2yosqGi6F2tzIgsXwAy5wqS37
-	 m5H0bcZ4ngyLrMM0k+fpeZ80ziRsBeUzkyHs9WUofefZAQSkOPbB4BylvlzbYs1GQT
-	 jI85pJ7ABUq+sbpjerG/08Khok/L0CUsqIigryqenRSsf8KNueFi7vBtmrQACVKGY7
-	 FnqnU95WWRlkWiztzyxuhu3hczQN4voubzBSb/qj1+UEqoaq9/jd5Ps+M1o6rNOuW4
-	 A3ApfB/g1eLrlNjq7mgjqITigUk9aCoLFXfa1CABBorl2qXuuaaWd+3lL/YScAHmKw
-	 sVzdBBBeZOQv4rOF3fMpDGYcDeoGrq43ttP2owDwV2nlnowUnD7+j8u15f8ExyAMVz
-	 lnfzT2fhtQbFx+aig8nlW9DA=
-Received: from zn.tnic (pd953099d.dip0.t-ipconnect.de [217.83.9.157])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 60AF440E00C5;
-	Tue, 23 Jan 2024 13:57:29 +0000 (UTC)
-Date: Tue, 23 Jan 2024 14:57:20 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Michal Simek <michal.simek@amd.com>, Yangtao Li <frank.li@vivo.com>
-Cc: Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] EDAC/synopsys: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <20240123135720.GTZa_FwNLkUmxqKInU@fat_crate.local>
-References: <20230704101811.49637-1-frank.li@vivo.com>
- <20230704101811.49637-3-frank.li@vivo.com>
- <7765c981-7ea1-60a8-a297-7f739ca9a458@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E5154279;
+	Tue, 23 Jan 2024 23:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706053920; cv=fail; b=gb57iqWR5yL+UxPjHTbfuKzxFHL9vFObMDkoTg7n3OWPK0ySZQcvyYU8RQ5XTbgJesGdIjL7ptHeMV+hl9Jk7FWrguQNBsxWmL/CmL5iLj7fGVciq3pz/1hOpQ5/Fd/Mima66KP2UxlbPZW8Y+H78T++hPYcOrgH3UFpdAS167g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706053920; c=relaxed/simple;
+	bh=NqxRvSTQyoRKXt3tmzF5NVxt89X1ZOKw7m4wj6eWflQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VyfbA+T3vSfuynYeaKe2zsTf/i1cn43s1ByOpQk6xATM3yMXKcPLM6qsV0RdmEzC8+EsUYZxNNCwE3ld4LlN4wlFAF02FC90Zdi52UehBwHaRFEKy86lXK7tzOSq8loV7pFtNj9p4C0jKZ2U+VZKI5RXZZvZnWFAoUw1+oJCJWE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=pOxiiqov; arc=fail smtp.client-ip=40.107.243.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QCInVQP9YqBwvfwkGUHYo8mG9wJL1lX3BzX7VZAjfirtF2WCEgOS48TTZXaG/yNnyw4TMJiVNcFW23zPFEbGWXTsrfh4BRiyb7M90wtG8jvt4oLrM+rsOmBC9Q6FtviTvZcXdXqbbJIOiMXMoriJjXXeyS3MRn43gSOdVDCqygUUBfEdggeyntmo51sH52uko7x6BdhjYujjUYGpmPk0Qqmd6K3zTw5Yi2gFJNUDF++6AZ+gcVB69n9gC33jdbEsELytwSgs77C4lEWOVwO3JXrVOmNIncOjYKrpjYRUrfFyTShzMkRWKhm5/EuldZB0h2AASJHDKgozXkPY4QoMyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mUvZyZeEyAKy1Q9MxG5SF//0HE+AqfLvar/e0N9dwVg=;
+ b=OSRU0tBSpoHGKDUziwOSRva3tcbOsGbdvfnLm09nTXKJVpooSfu41FDfSYkrw677DoXVNT14JKB6nmNFEFNNpaOT0HH/31hHoZNfJqDFgKGo/FM/pGBrMRpLGDHcD3cndg8OGr4pmOixgZw8M8841ju8NBoEwEddOZLqGx9M1E9EryxmbMAddd+/XVZ4RBRoPg7lFCCYVvsgkYmd4M4V3wawPXZIMAC3g4fqv42x5kQUyuIjGCdzM3G2v0h+VU3SuAHST0a25qajU1wV2BI3jRJ7h5n53YbBXxxaGWSE2Ii/+5oIrJ7BPmi261m6OuSwtz7VcZ6W0XLG5OCY3lDRfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mUvZyZeEyAKy1Q9MxG5SF//0HE+AqfLvar/e0N9dwVg=;
+ b=pOxiiqov3EhYK7BJDqBQVhhVHCqQ+0o0UgU1u7JOY4E3PDSW9XDK1eW0d3Vo+ri7jKPQFPEe9iWtKNOJJqS137yDg1+Kqyn6pf4AFZbLFd/ousNY03ozlQDIsP2dGbZ7P1aUU6HaCEin6GjWRPP73fMwZ3ZLChGgcRv80RRxjCg=
+Received: from BL0PR0102CA0044.prod.exchangelabs.com (2603:10b6:208:25::21) by
+ BN9PR12MB5130.namprd12.prod.outlook.com (2603:10b6:408:137::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7202.37; Tue, 23 Jan 2024 23:51:57 +0000
+Received: from MN1PEPF0000ECD5.namprd02.prod.outlook.com
+ (2603:10b6:208:25:cafe::ab) by BL0PR0102CA0044.outlook.office365.com
+ (2603:10b6:208:25::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.32 via Frontend
+ Transport; Tue, 23 Jan 2024 23:51:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MN1PEPF0000ECD5.mail.protection.outlook.com (10.167.242.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7202.16 via Frontend Transport; Tue, 23 Jan 2024 23:51:56 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Tue, 23 Jan 2024 17:51:56 -0600
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <linux-trace-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>
+CC: <rostedt@goodmis.org>, <tony.luck@intel.com>, <bp@alien8.de>,
+	<x86@kernel.org>, <linux-kernel@vger.kernel.org>, <yazen.ghannam@amd.com>,
+	<avadnaik@amd.com>
+Subject: [PATCH] tracing: Include PPIN in mce_record tracepoint
+Date: Tue, 23 Jan 2024 17:51:50 -0600
+Message-ID: <20240123235150.3744089-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7765c981-7ea1-60a8-a297-7f739ca9a458@amd.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD5:EE_|BN9PR12MB5130:EE_
+X-MS-Office365-Filtering-Correlation-Id: 50638fa1-d48e-49e5-8a08-08dc1c6e4897
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	THJreMWjqAy1Wy0JDwA7UV24b1B7KTMvzFh+gSBlohowsasDIgDUeHb7h5AFe1boltQEuW4svDBNQbSxnpEVSxrm9z/riAjtCm8Cy5Z1/FZvm0ez9gcKt8Z2MDxEA/Sy2qiHUibrCWtUQy+vcbp1D98WvKWAUfC9q0Wy0ZozqF6ubYdM1n2Ee+nSMNM7EoC6rRK7+QSSbjCFuknpZHXOgzWMXFqOhud5COjeeOFmD8khFTUvwcSRA2LL6jF3GgskQBUegIqmBtFrq25vUYK7cZNfKvE402h9COVq8J9W12qpRLpoPnz9lJCP/lgew00mcrUfG1DZ7i6pvJjdxIjiA+2dMXOhSnzJNHmGU1BJnTjE7Ez8KrbOuXhI7rku1cZUbi2crv7jwg+X50Sbjg8fBdsaFOmQURC1tRf6ZqyWQ6kIonOvCic0Uc0mfRezNTm0aTVExB3XUM+MUa+QnV2oe+pRCKTpWnNrco6PEswXUJuPXTCRfqhZtxeyA8hDOLDioc6RlN/JXf7umyxooRtSglIrvDEvtY1Bla8f82Nn9T1dpRc6Xq+bd/AL2EuSD35LLtMSbquF++9l9jhvhSKOSxDbFhPxeb4q3r53iWp07SoyU+ztvJJIW1Mg2Y85hTHUkUrV7vhA6Uwtk0SjIpOd8l+7/vuaHcD319TvyMR3VD7Ync94L+rUhKP1S/tvgfnQ40cZ6Ch+pu7t/YdCuDML1KlRlKD+RERPWLnaFgHR7JOONMSXvX2Ivi6JAvjNmUfFIbjOI1LK2Uzqqb1LYtMJSA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(396003)(346002)(376002)(136003)(230922051799003)(1800799012)(82310400011)(186009)(451199024)(64100799003)(36840700001)(46966006)(40470700004)(40480700001)(40460700003)(2616005)(1076003)(8676002)(426003)(4326008)(336012)(83380400001)(44832011)(8936002)(47076005)(316002)(7696005)(6666004)(70206006)(54906003)(70586007)(478600001)(5660300002)(26005)(110136005)(16526019)(36860700001)(356005)(81166007)(82740400003)(2906002)(36756003)(41300700001)(86362001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2024 23:51:56.9170
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50638fa1-d48e-49e5-8a08-08dc1c6e4897
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000ECD5.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5130
 
-On Tue, Jul 04, 2023 at 02:17:09PM +0200, Michal Simek wrote:
-> On 7/4/23 12:18, Yangtao Li wrote:
-> > Use devm_platform_ioremap_resource() to simplify code.
-> > 
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > ---
-> >   drivers/edac/synopsys_edac.c | 4 +---
-> >   1 file changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-> > index f7d37c282819..620861fb5231 100644
-> > --- a/drivers/edac/synopsys_edac.c
-> > +++ b/drivers/edac/synopsys_edac.c
-> > @@ -1325,11 +1325,9 @@ static int mc_probe(struct platform_device *pdev)
-> >   	struct synps_edac_priv *priv;
-> >   	struct mem_ctl_info *mci;
-> >   	void __iomem *baseaddr;
-> > -	struct resource *res;
-> >   	int rc;
-> > -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > -	baseaddr = devm_ioremap_resource(&pdev->dev, res);
-> > +	baseaddr = devm_platform_ioremap_resource(pdev, 0);
-> >   	if (IS_ERR(baseaddr))
-> >   		return PTR_ERR(baseaddr);
-> 
-> Reviewed-by: Michal Simek <michal.simek@amd.com>
+Machine Check Error information from struct mce is exported to userspace
+through the mce_record tracepoint.
 
-Applied, thanks.
+Currently, however, the PPIN (Protected Processor Inventory Number) field
+of struct mce is not exported through the tracepoint.
 
+Export PPIN through the tracepoint as it may provide useful information
+for debug and analysis.
+
+Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+---
+ include/trace/events/mce.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/trace/events/mce.h b/include/trace/events/mce.h
+index 1391ada0da3b..657b93ec8176 100644
+--- a/include/trace/events/mce.h
++++ b/include/trace/events/mce.h
+@@ -25,6 +25,7 @@ TRACE_EVENT(mce_record,
+ 		__field(	u64,		ipid		)
+ 		__field(	u64,		ip		)
+ 		__field(	u64,		tsc		)
++		__field(	u64,		ppin	)
+ 		__field(	u64,		walltime	)
+ 		__field(	u32,		cpu		)
+ 		__field(	u32,		cpuid		)
+@@ -45,6 +46,7 @@ TRACE_EVENT(mce_record,
+ 		__entry->ipid		= m->ipid;
+ 		__entry->ip		= m->ip;
+ 		__entry->tsc		= m->tsc;
++		__entry->ppin		= m->ppin;
+ 		__entry->walltime	= m->time;
+ 		__entry->cpu		= m->extcpu;
+ 		__entry->cpuid		= m->cpuid;
+@@ -55,7 +57,7 @@ TRACE_EVENT(mce_record,
+ 		__entry->cpuvendor	= m->cpuvendor;
+ 	),
+ 
+-	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx, ADDR/MISC/SYND: %016Lx/%016Lx/%016Lx, RIP: %02x:<%016Lx>, TSC: %llx, PROCESSOR: %u:%x, TIME: %llu, SOCKET: %u, APIC: %x",
++	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx, ADDR/MISC/SYND: %016Lx/%016Lx/%016Lx, RIP: %02x:<%016Lx>, TSC: %llx, PPIN: %llx, PROCESSOR: %u:%x, TIME: %llu, SOCKET: %u, APIC: %x",
+ 		__entry->cpu,
+ 		__entry->mcgcap, __entry->mcgstatus,
+ 		__entry->bank, __entry->status,
+@@ -63,6 +65,7 @@ TRACE_EVENT(mce_record,
+ 		__entry->addr, __entry->misc, __entry->synd,
+ 		__entry->cs, __entry->ip,
+ 		__entry->tsc,
++		__entry->ppin,
+ 		__entry->cpuvendor, __entry->cpuid,
+ 		__entry->walltime,
+ 		__entry->socketid,
+
+base-commit: 451b2bc29430fa147e36a48348f8b6b615fd6820
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
