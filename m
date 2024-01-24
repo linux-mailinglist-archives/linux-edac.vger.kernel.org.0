@@ -1,78 +1,76 @@
-Return-Path: <linux-edac+bounces-365-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-366-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD4F083A615
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Jan 2024 10:57:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D8FA83A89B
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Jan 2024 12:59:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CBCD1C20CA0
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Jan 2024 09:57:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80D091C21F2E
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Jan 2024 11:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8867A182B3;
-	Wed, 24 Jan 2024 09:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526A960BBE;
+	Wed, 24 Jan 2024 11:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cu3eigpU"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="c720hp7+"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A1417C6E;
-	Wed, 24 Jan 2024 09:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0525F60BBC;
+	Wed, 24 Jan 2024 11:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706090252; cv=none; b=QdMMkpTVrjQoWu6R+FJYyqyuQXGjcZw/1IAkMsqK347GoaMXjv9vpButoWtSqNEVG8GtgpUpwaNMwUXx//xSp/64PQFsFJ8s+fdw1tj5VehuFMVd7kKnk+vtiukjuEl67RMxArXVzx3GYLNn7mTqa9B1DhHkulkR1Gt2rN52oeE=
+	t=1706097570; cv=none; b=b9EUDvwRaY1jcgENh4r1I3WR1tLVybwcrR3mcANI8+bJ8rr3Jc0xonIFCZQ+8RNHg2w78h1HQAVLiJp7s+Zh8PQjHthE9aItxddxiylhRBS/Tw0hNZ+JoV9oxS1DtwoQY49xlclN45613QGS4dIynOq4RwT7VGTyNHolWbRuYOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706090252; c=relaxed/simple;
-	bh=9+hKMgNhK0f6pEf/gbfH0HV3V5FHbRS671inekWpQlk=;
+	s=arc-20240116; t=1706097570; c=relaxed/simple;
+	bh=zRI91rxXLZDZms7nr+vT21vbz/QGrBc+xdSOJtUg6JU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ewTW9mS+JbPtStVh/86gFwfmyc1vifRSf6o+gnU3BIhkevB+QBNaAsmXJBqlicWdr+NexSgzQrQl2O01gLnepJHTXbLHpnaaQVjC8ClfWRD+blYleGMXa366RpF4SetKFCqTNIHn2aDdZLWicC1nqzoape1KQC6fSg7Y4ejSaaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cu3eigpU; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=thBBR0OPCM5GqWtQ419b94g9epFWqfFkBTRrZvPwO52lnDvQRP0TiSHTLZtLH3SEfta9k+KNwEE8I1G+PfrQ8+MCEFxg26IchDsBpMrvyX5ccpdyMYCRGEDkBlvPPcmqc7yoUichOmF+hDqZJmPu8uv65jWatTae2VPRJidbhJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=c720hp7+; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 347E540E01A9;
-	Wed, 24 Jan 2024 09:57:26 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 78AE240E01BB;
+	Wed, 24 Jan 2024 11:59:24 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Y0rsV01bne4u; Wed, 24 Jan 2024 09:57:24 +0000 (UTC)
+	with ESMTP id DSaR5PiRefZh; Wed, 24 Jan 2024 11:59:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706090244; bh=Wto19mwz6qJ8ocgEL/gMtNXJgnaeFsjJB6kj/OkwYo0=;
+	t=1706097562; bh=f039EAwY2JbAGOjR7hRLJIXTmhFyVr7QT7gsd7YvhAY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cu3eigpUjChBJTCD/hAw5mjfgJEHHw6B4s6u4ZmNj0d+5LEzcvUIdv09VBtPD9UqD
-	 SSzMty3hlSB7Tmki1utFQ0sK/eF1Bfwd3KpLdWmG6gWTA9M9K1+10XXdJYJy+8CSSJ
-	 DwrRnBtBCb1+6uy7Y5LZkr8DhoUoqIi/EBTBPpf5B/PY7mt9tjT6QDfHegQC8UgMwg
-	 2Pj7syZ1T2cmLebELuNFJ17U/OMK/UcfDL4uCMNsG3Ybh978r31+Uq0IzJgSF+xMtf
-	 unIU5bN54CgTcfSZGwOSlCKE9jx5kP+ZamDhZJzjuUZqA8Vx6nAIxYXWz4oe7OSe++
-	 V1VqHw1i1qoXykDWSZ2DJY/ADblFdD+vbfXQK68JQ2H2uAQZHQtYOljsECw4oSnXwe
-	 6vKCNDIpBKIkQ6L9njqxzG5K6StncKR9PVXVSu3O2fHtJp9C2lXZS5Im6oeNsvnjMv
-	 2RbsGexzBLDMyT1mmTY87yP4qkIlxuFFp3rEj6z5SnOIkoFcAp9cpauRBML3MvBKkN
-	 MFdgaiNySpC198OdSCjRrlh+l6jRllabsrsF33f/esFOYyYB0I/b1VpQq+K/ZAtNNF
-	 UPaqPD585GJaHC3hzj/5I1+D3rKhsD0DhuWcjRUGtUsjpCw4zpnctxbFGHd0s41NmP
-	 4Jjr1z/00jR+fwpBzdXlXBEg=
+	b=c720hp7+V5ij/EdnUqYZEznYBtuKwVMpR8isHycps7SUKQmyvLI2xd44UklG4sAv6
+	 boODEzf34ONVkZWZqDyl5Z5Ru9h3Ms/0Cr4y23uPwRKNNT/rm7iwfIr2LqD4lrV2LA
+	 5EmmZbpHxx/a0suPInMebt1eNF8bEThqu4YM4NMVtOLhYsvhQYlKf6GJY8LJJvwzou
+	 DTVnAXC+e5Dt7rizJLqWhMX53A1m9L+hbw98kSJjBmgXWWujZ8o8TkF3g/HGNB6DYR
+	 pFcTVzYDUwwqeTBsJKWsstBS2CSDjQUsGpo0kWj2HcgNeT/1rwNlvVQ1ZEsNcs7hRJ
+	 HamhaXznxhM1gVz3VE1xb4qtdBqZGWq3IUGSHJw3rnwfCi8705BQltnh+bv8mgR9o5
+	 ix7c828luiSPlssaUIA3nuLq0vZf7ckvXTnp1EqPn3vTWr9p6FYJ5M+V4GE2+SSVOu
+	 WNMAWQStRre4CuZlCts7GNgcAxHVktuQ7hOIeOOhH0cZnSyv41sjUsWZIG+VXL7DcX
+	 SZrEf3WvnY2xeNFD6vURxddZf9lS741TBPmTsGd0NUHd18qkrfj9RXSpaAxUoUCHdI
+	 bdL/GUjfis5QwyRRR9JEyqTiDHdxD/MaXWClXVRF2v7GaYrdokMPL8Mnr6SR9trSO1
+	 o5iRTdik9jqQHQt9pR9QXApo=
 Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DFBA140E0177;
-	Wed, 24 Jan 2024 09:57:14 +0000 (UTC)
-Date: Wed, 24 Jan 2024 10:57:08 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E78CC40E01AE;
+	Wed, 24 Jan 2024 11:59:10 +0000 (UTC)
+Date: Wed, 24 Jan 2024 12:59:04 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: "Naik, Avadhut" <avadnaik@amd.com>, Tony Luck <tony.luck@intel.com>,
-	Avadhut Naik <avadhut.naik@amd.com>,
-	linux-trace-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	x86@kernel.org, linux-kernel@vger.kernel.org, yazen.ghannam@amd.com
-Subject: Re: [PATCH] tracing: Include PPIN in mce_record tracepoint
-Message-ID: <20240124095708.GAZbDe9Hks0tL2Aj94@fat_crate.local>
-References: <20240123235150.3744089-1-avadhut.naik@amd.com>
- <ZbBV4EGrZw6hJ5IE@agluck-desk3>
- <be870e14-eeb9-4dcf-ba43-a72ef66a3d87@amd.com>
- <20240123203853.66655e95@rorschach.local.home>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, muralidhara.mk@amd.com,
+	william.roche@oracle.com, corbet@lwn.net, linux-doc@vger.kernel.org,
+	christophe.jaillet@wanadoo.fr
+Subject: Re: [PATCH v5 0/3] AMD Address Translation Library
+Message-ID: <20240124115904.GCZbD7iFlIuQKc8H7U@fat_crate.local>
+References: <20240123041401.79812-1-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,18 +79,19 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240123203853.66655e95@rorschach.local.home>
+In-Reply-To: <20240123041401.79812-1-yazen.ghannam@amd.com>
 
-On Tue, Jan 23, 2024 at 08:38:53PM -0500, Steven Rostedt wrote:
-> Yes, rasdaemon uses libtraceevent (or a copy of it internally) that
-> reads the format file to find fields. You can safely add fields to the
-> middle of the event structure and the parsing will be just fine.
+On Mon, Jan 22, 2024 at 10:13:58PM -0600, Yazen Ghannam wrote:
+> Yazen Ghannam (3):
+>   RAS: Introduce AMD Address Translation Library
+>   EDAC/amd64: Use new AMD Address Translation Library
+>   Documentation: RAS: Add index and address translation section
 
-Should we worry about tools who consume the event "blindly", without the
-lib?
+Applied, thanks.
 
-I guess no until we break some use case and then we will have to revert.
-At least this is what we've done in the past...
+New stuff goes ontop now:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-amd-atl
 
 -- 
 Regards/Gruss,
