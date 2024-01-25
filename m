@@ -1,165 +1,112 @@
-Return-Path: <linux-edac+bounces-378-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-379-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3917A83CB8E
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 19:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F3B783CB9F
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 19:55:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CC7B1F255E0
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 18:49:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B06A91F284C8
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 18:54:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F4D13399E;
-	Thu, 25 Jan 2024 18:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C981339A1;
+	Thu, 25 Jan 2024 18:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="WymUOXSG"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="eTg4QeI5"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B3A133982;
-	Thu, 25 Jan 2024 18:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706208573; cv=fail; b=QkctChh351C0FAUi90K0qiTbK+MzqRPRnzLTcrJLtltXFj37SpOOPS5Lf8k0PEyeB9/HLu4VP8WMZsvu+cBpWpO1CS3fkcmSh97nkdmbI4L2gSsM9J8LBwbXkkaXYPUTFGo5Dy3Xfqcykb5Vp6qGdcckS/II02vaX0XKNOPl+mQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706208573; c=relaxed/simple;
-	bh=NbLBkF6zEH0uoaO7HeY/HuYPj2qnL8rZzd30Wjm/+t8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=H1NIKqzA6RfPF4vgiUQW/9gCFLs89CFWiFKfV4BrQovdxq4g9fgjCCl4WwPMOfaZCbnt2LQ0UVWABQo2oKLvgXAbMoVR/ANqCC4xh4wSC3EtDW9jo5D72GePmlTQioUxeVxXQ/QnS39kK4CmOCqulte6iHmmJ/azEszPxdrHuTo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=WymUOXSG; arc=fail smtp.client-ip=40.107.237.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EPByGBVXLRa7rlvAyZZ2nJtCMvLhuNDeDh2x/JZ0tiLfe+IE+ZuRg1z7W19djjjO2QwkE8ggEQLZKYwyzVmEmyAo9eN2aNcdIUFduzF9SJlFSV1Tz+8Lz1mINv5T28oiPmwT6NK4DAu6lYgWSRP8PVinP8X2kZd4J/hCGxkiPa9D58SJB8CewPKiJRcbKvjVRi10i8Y6o3MXPGLHkoKJDiyoFJxqJHlX7RBXkWSPspVnGaWIhwU2l6Me/eSsEuLwzH0VQ+prknpPWHBVJDdMQW1nQHJknR2/1MicbLDPRV7cuVw5o12c+gN56qDiUT9zJRLdQnKVT8EWuGQFhZL4zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1aS911bnnQpF6alcmkt0tnVlyg+x4JGAWKNBwUWhmtk=;
- b=YAyPIzez5u6KOonIAOY4AaTGglrZ53QrsemQElv/Ro/vYfruMCAysJrrkMiipkpx/kZOhER2H+7Y58fhGvaJKyuVLl3ev9gN1+oaMt/0Fgn8vMN8+HyXjJy/p/D5ci7NjB24noH6aV4W+4WTDSGT5nGZsaEAO59pZlVT5HzmDVm0xir3RsahCF83PbZjVUG7h76EcGFAkNxB7+22LkwAbAkJ4bBadTb2G6qj3aQNNBF52VSZbacfNelK9g6me0dZsIvj/uRQzAXgh0/NivGXNqPx/UyG7LZhyWk0S6b09dzWkYBzgzTl2+sGc7GmacVameWJME9f/6m00H41GdYacw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1aS911bnnQpF6alcmkt0tnVlyg+x4JGAWKNBwUWhmtk=;
- b=WymUOXSG1hT9kYTAu4Osa8bkguEzGfE3ezBSLSYmKYx+b6+6aUJ6tpOBgC5lZ1OEm5+l2A2p5JBK2wCy2JIfZrEJMvZoaojV9vcsKr0BrL0oHGKLaAoa3eKI3HPOAVK9ZVN8LREUETYyhsTWJ5IJrWP58bNDCQ5uQalOTHJf2TU=
-Received: from BYAPR21CA0021.namprd21.prod.outlook.com (2603:10b6:a03:114::31)
- by IA1PR12MB8078.namprd12.prod.outlook.com (2603:10b6:208:3f1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.26; Thu, 25 Jan
- 2024 18:49:27 +0000
-Received: from MWH0EPF000989E8.namprd02.prod.outlook.com
- (2603:10b6:a03:114:cafe::88) by BYAPR21CA0021.outlook.office365.com
- (2603:10b6:a03:114::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.8 via Frontend
- Transport; Thu, 25 Jan 2024 18:49:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000989E8.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7202.16 via Frontend Transport; Thu, 25 Jan 2024 18:49:26 +0000
-Received: from titanite-d354host.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 25 Jan 2024 12:49:24 -0600
-From: Avadhut Naik <avadhut.naik@amd.com>
-To: <linux-trace-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>
-CC: <rostedt@goodmis.org>, <tony.luck@intel.com>, <bp@alien8.de>,
-	<x86@kernel.org>, <linux-kernel@vger.kernel.org>, <yazen.ghannam@amd.com>,
-	<avadnaik@amd.com>
-Subject: [PATCH v2 2/2] tracing: Include Microcode Revision in mce_record tracepoint
-Date: Thu, 25 Jan 2024 12:48:57 -0600
-Message-ID: <20240125184857.851355-3-avadhut.naik@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240125184857.851355-1-avadhut.naik@amd.com>
-References: <20240125184857.851355-1-avadhut.naik@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC276341A;
+	Thu, 25 Jan 2024 18:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706208894; cv=none; b=PN7LDyNalhUOcebSNmqhYAdHS9L+psnT3gwxv2LAXGbfqFni/PtawbAa/C6IGXi56Le/jsp9zQSjUEqW9tooEdOJmBo1RPoNE7Bd8OEMiAgnRtndcEF6Jv2SBtBMdvLdDEdifrX+Zg/3nA0agfxMTDnh2Dyg7dYapB2LJDOKKlc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706208894; c=relaxed/simple;
+	bh=uUhFUZXQ4vRb3CNL/o+LkzhDQHu7ajYW4NMDA3n5IN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u9fbeU2cK71KFeuiAYPajSCeN7q8nedBH6dXIcfGEix5PSn2hLoK6tyg+WVrLZvhmZ+Gsp19n6/epj0DmatVMrhX34veWTnrcTA2f4V5TeFqOIv2XTrUeDW4xo6Ur6ikJxGLyuOw61jI3Jpgh5KEz980hI3/p5x0p7ufmB9qHU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=eTg4QeI5; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4B54D40E00C5;
+	Thu, 25 Jan 2024 18:54:42 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 1B73w0UfRrJD; Thu, 25 Jan 2024 18:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706208880; bh=nPXhbPzMU7Z8LSGsHzQlCMKYBA7gkUxN+sOfblh11lE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eTg4QeI5+iJej5EIxhAHAXLWalh3Lw8ot9yp0ezjBd5+8SGkK2FXE6yw0F9FTvULV
+	 ylpBmjtWNZy9t3rlF6HIg8WUN6rcYn82GYTAVEWE/VmI9v25e6Ke2Wu3IfiBP6OkNF
+	 opPPEejlncO6EN4L409GY6D4yPgvUFNDYPQY3nqHYJjYd/bwWV8HUYo22x56+AAQmr
+	 6Gk+ue+b21SWxCBnXcGMxtifAj1/oDBm6fw3+hYpKkuBIxuz1VoVo4v3TbZliuvT2b
+	 6u5wfL7Fi6N8CbRQlriNA9+Xn6P0L3/A9aw+BCWq0q52ddlfUquxRuyqfjxW3yBou4
+	 djMOwGoI0w3BO9jw3EWAaPMYQzY5LYrDbF8nadJ7537v+p0BOHHwgomfCkcJBA0WP2
+	 5jqikpByplVmiiMdftS1rtfbBW4F6D+aXsbLrcaAq0KZiO2wa1zBrjbgxz1URLJ0nQ
+	 +iym9dNrL8tYddP4b9ApxSycm1IAE08O0hSpROXwXoO42cC3qXag40KX79M6Q3vzyE
+	 I+nfw9u9b6MQgPVDXLdh+bzVCPiiTZHa9U0V44Pog2UfZjeK77eRt8KPOhzc10pJ1+
+	 QyBG6q0OE+oyEu05SBD5wMZqTt/OtPzbXBvt3JffDWfsVmZhNQW3Dd0a54SExufodV
+	 od/mNGlabxq3MyyzAlTnYGvs=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CF2B040E016C;
+	Thu, 25 Jan 2024 18:54:30 +0000 (UTC)
+Date: Thu, 25 Jan 2024 19:54:22 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "Naik, Avadhut" <avadnaik@amd.com>, Tony Luck <tony.luck@intel.com>,
+	Avadhut Naik <avadhut.naik@amd.com>,
+	linux-trace-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	x86@kernel.org, linux-kernel@vger.kernel.org, yazen.ghannam@amd.com
+Subject: Re: [PATCH] tracing: Include PPIN in mce_record tracepoint
+Message-ID: <20240125185422.GCZbKuXpLUaOzV8IlO@fat_crate.local>
+References: <20240123235150.3744089-1-avadhut.naik@amd.com>
+ <ZbBV4EGrZw6hJ5IE@agluck-desk3>
+ <be870e14-eeb9-4dcf-ba43-a72ef66a3d87@amd.com>
+ <20240123203853.66655e95@rorschach.local.home>
+ <20240124095708.GAZbDe9Hks0tL2Aj94@fat_crate.local>
+ <20240124090908.1c4daea8@rorschach.local.home>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|IA1PR12MB8078:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4262f079-1670-4a8a-f45e-08dc1dd65afa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	On6V/ByPgWvve2lGG0sOOJd+Tvt/dAk8UwpZjMGu09MGOz/UaeDtFxQCkXa2YTiLmSIXHfN9DCsl5ujdc1oD2ZVrwKJpboLsM9rL8tPmjDu5rMC99dxpCRG1aDf5beXTcuE1UCsP39XeK6xtuMPdCHIDpsornpQHVo9TgIiSyzwCLstOK6gd1lcclLofpmGCRkGtiilKqXb/0rWDa1DIPfaRVJ+G1kZlQ0FWZrRsBFjZAse9/Q+cPEvXO0GGdzDBsc7WzCdxpIO0GR0TDCCvUG9yZNB2b305OuH8jjdNpNse8fJDzfPxYSVOQR9lWQHAo3x65qJ0drhKhOj/kC5apHW5E0ooeEZ/Z+3vNRUJHYZjfM7hxPgKztyozSjzspFbxJuOXumnm5eDHO77bI7j20q4sMmNY/iDXHgVIFqK/r2xx8qsSWotmlpWRmgQTpLr8c1p0aNgr94WyQq0rnQKnLeGtPtscuL5rkAWN4HUWKIK077x5KCZg/RL8v1na5nQXM7rj+uKW4XK1Pa9b0XCa041q4vtZPyEy9utHfdyZFNhIgUoLgfcpUDJug6biliiKg2cIDZZ6LnMsZpUjo2mrMTmrqyQO4t0HGfi7PvstTLluJ9gYXwZkuTCX0QnNMWWbe/8uU45glrhgZpdk5ipH8WRmtKVHMwoVvnxFpANEt3p2Sv9MRjHqdBCThsMmLmGjbR/bOR+rJn3hzp4Y0q7iMrvQ6UPCLMwmFIis6aMI6rUkoA2kDOrQGN1AEvVWK5w6Rv8n0yJMsuHgMEJj+8n6g==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(396003)(346002)(230922051799003)(64100799003)(82310400011)(186009)(451199024)(1800799012)(40470700004)(46966006)(36840700001)(36860700001)(81166007)(2906002)(36756003)(41300700001)(86362001)(47076005)(82740400003)(356005)(54906003)(7696005)(110136005)(316002)(70586007)(70206006)(2616005)(478600001)(8936002)(83380400001)(426003)(5660300002)(8676002)(44832011)(6666004)(1076003)(16526019)(26005)(336012)(4326008)(40460700003)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2024 18:49:26.4964
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4262f079-1670-4a8a-f45e-08dc1dd65afa
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000989E8.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8078
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240124090908.1c4daea8@rorschach.local.home>
 
-Currently, the microcode field (Microcode Revision) of struct mce is not
-exported to userspace through the mce_record tracepoint.
+On Wed, Jan 24, 2024 at 09:09:08AM -0500, Steven Rostedt wrote:
+> I don't think that's a worry anymore. The offsets can change based on
+> kernel config. PowerTop needed to have the library ported to it because
+> it use to hardcode the offsets but then it broke when running the 32bit
+> version on a 64bit kernel.
+> 
+> > 
+> > I guess no until we break some use case and then we will have to revert.
+> > At least this is what we've done in the past...
+> > 
+> 
+> But that revert was reverted when we converted PowerTop to use libtraceevent.
 
-Export it through the tracepoint as it may provide useful information for
-debug and analysis.
+Ok, sounds like a good plan.
 
-Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
----
- include/trace/events/mce.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+/me makes a mental note for the future.
 
-diff --git a/include/trace/events/mce.h b/include/trace/events/mce.h
-index 657b93ec8176..203baccd3c5c 100644
---- a/include/trace/events/mce.h
-+++ b/include/trace/events/mce.h
-@@ -34,6 +34,7 @@ TRACE_EVENT(mce_record,
- 		__field(	u8,		cs		)
- 		__field(	u8,		bank		)
- 		__field(	u8,		cpuvendor	)
-+		__field(	u32,	microcode	)
- 	),
- 
- 	TP_fast_assign(
-@@ -55,9 +56,10 @@ TRACE_EVENT(mce_record,
- 		__entry->cs		= m->cs;
- 		__entry->bank		= m->bank;
- 		__entry->cpuvendor	= m->cpuvendor;
-+		__entry->microcode	= m->microcode;
- 	),
- 
--	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx, ADDR/MISC/SYND: %016Lx/%016Lx/%016Lx, RIP: %02x:<%016Lx>, TSC: %llx, PPIN: %llx, PROCESSOR: %u:%x, TIME: %llu, SOCKET: %u, APIC: %x",
-+	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx, ADDR/MISC/SYND: %016Lx/%016Lx/%016Lx, RIP: %02x:<%016Lx>, TSC: %llx, PPIN: %llx, PROCESSOR: %u:%x, TIME: %llu, SOCKET: %u, APIC: %x, MICROCODE REVISION: %u",
- 		__entry->cpu,
- 		__entry->mcgcap, __entry->mcgstatus,
- 		__entry->bank, __entry->status,
-@@ -69,7 +71,8 @@ TRACE_EVENT(mce_record,
- 		__entry->cpuvendor, __entry->cpuid,
- 		__entry->walltime,
- 		__entry->socketid,
--		__entry->apicid)
-+		__entry->apicid,
-+		__entry->microcode)
- );
- 
- #endif /* _TRACE_MCE_H */
+Thx.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
