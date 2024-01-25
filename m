@@ -1,81 +1,200 @@
-Return-Path: <linux-edac+bounces-368-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-369-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6A6B83AB5C
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Jan 2024 15:09:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9030083B9A2
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 07:29:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 055391C20AA2
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Jan 2024 14:09:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4049D2872C4
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 06:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 081417A702;
-	Wed, 24 Jan 2024 14:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE3F11187;
+	Thu, 25 Jan 2024 06:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VgNY+BzZ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3A477F04;
-	Wed, 24 Jan 2024 14:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8AF125BC;
+	Thu, 25 Jan 2024 06:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706105351; cv=none; b=XNAGaeSnd+hEB35uMTQPiQw9D6Q6pDW9ry/8sU3yjsuHNO+FI/ypgCs/Dt8fwlPmyrGhWwfQILgAj6nw4U/uL7S79tZleL92AJ9fxPb2vN/u2yRfQHucG3xP7BjD4yMZOBfF/961vscRD82aQOL9WJ0Zd+4YnLIPXOdijbiS95o=
+	t=1706164121; cv=none; b=RRfKDwm+iDWJc872fQHHgayM6tsd8cbEuhA1Kb9J63wovxVq0ZCfpD9bK6XqPSfAXMcGb3Q42q+jp0emnOiU0siqSCEYmoolNJ55DTZx9HOCes+fczHCqoag4NQDsoonVRORw67wUR0aazwAu2Vkyp85V4Ujkpcd4lQ+yTTcHq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706105351; c=relaxed/simple;
-	bh=9xyQqImeowhTNiBETbyePeJW8OBK843qk/mKs+AU/Uo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aM5HaTfJ/8nksb5mhJB/sE/d53loRVwm1D/eKgkSbKjBMTuir+kWN4KkzVYJlENono4u1W2MxJ3d2zgY8dEskQY720d42sPbkcYuyvEsXlYvDu5Pkk7hwDSOeirzwzEFvgKlmPh91bitrLOmzbZLk9vAzuC6kQjdoNYGqOTV/pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DC7FC433C7;
-	Wed, 24 Jan 2024 14:09:10 +0000 (UTC)
-Date: Wed, 24 Jan 2024 09:09:08 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: "Naik, Avadhut" <avadnaik@amd.com>, Tony Luck <tony.luck@intel.com>,
- Avadhut Naik <avadhut.naik@amd.com>, linux-trace-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
- yazen.ghannam@amd.com
-Subject: Re: [PATCH] tracing: Include PPIN in mce_record tracepoint
-Message-ID: <20240124090908.1c4daea8@rorschach.local.home>
-In-Reply-To: <20240124095708.GAZbDe9Hks0tL2Aj94@fat_crate.local>
-References: <20240123235150.3744089-1-avadhut.naik@amd.com>
-	<ZbBV4EGrZw6hJ5IE@agluck-desk3>
-	<be870e14-eeb9-4dcf-ba43-a72ef66a3d87@amd.com>
-	<20240123203853.66655e95@rorschach.local.home>
-	<20240124095708.GAZbDe9Hks0tL2Aj94@fat_crate.local>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1706164121; c=relaxed/simple;
+	bh=pvMMZU0mlB2eFcvOm/oK0NtOQG6HPvn9mMao1fi7Zqc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GAi90WQsC2bhrGBFGU+IG5g5Vce+OXeV0RWUdS1lV+xTyv9NzpTDdysGiaGx3SoG8WFUzGjrNhnT5YSr86BwaBySiFAg9FbheW9RaTH6MCSzSo5tjZkWaETK3yzhnUg9Kx5daPZ5b6Z8caREOd505hxOsYpcksz9IpKEExORuao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VgNY+BzZ; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706164118; x=1737700118;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pvMMZU0mlB2eFcvOm/oK0NtOQG6HPvn9mMao1fi7Zqc=;
+  b=VgNY+BzZO7tu02szbM5sY3egj0u72h+5cGdBc7pVVT5NVRIFtJueAD1x
+   bd2sMU86AYMm8EbyyAqsRL3O/l2x7DRmFigeiiFfWzh52sZJhYDRhUEUU
+   JAWs1TVccFwpydr/jmyd9qQU+wPA6UY3migkeskci8EpT2WgDoT0lLc7e
+   VWT80yR138Kk1Rj18d0Vu/AKK9dPvTgYDoJXgzZciCkwGxpEdPQOb/s+V
+   FOy/qrdAI3VdEDlR6sjyYiq0CRo2BZQ5jnO4gMhyl/CaA3n+o3eVdm2qF
+   W5gMYhL1ITWXTqTXOKMZ8hj53oaZctzAd3W2DoIY5wdBRmY/RkTZjMMRL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="9456724"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="9456724"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 22:28:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="2122533"
+Received: from linchen5-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.209.209])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 22:28:27 -0800
+From: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
+To: linux-pci@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-acpi@vger.kernel.org
+Cc: chao.p.peng@linux.intel.com,
+	erwin.tsaur@intel.com,
+	feiting.wanyan@intel.com,
+	qingshun.wang@intel.com,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	"Oliver O'Halloran" <oohall@gmail.com>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	Adam Preble <adam.c.preble@intel.com>,
+	Li Yang <leoyang.li@nxp.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	Robert Richter <rrichter@amd.com>,
+	linux-kernel@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	"Wang, Qingshun" <qingshun.wang@linux.intel.com>
+Subject: [PATCH v2 0/4] PCI/AER: Handle Advisory Non-Fatal properly
+Date: Thu, 25 Jan 2024 14:27:58 +0800
+Message-ID: <20240125062802.50819-1-qingshun.wang@linux.intel.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 24 Jan 2024 10:57:08 +0100
-Borislav Petkov <bp@alien8.de> wrote:
+According to PCIe Base Specification Revision 6.1, Sections 6.2.3.4
+and 6.2.4.3, certain uncorrectable errors will signal ERR_COR instead
+of ERR_NONFATAL, logged as Advisory Non-Fatal Error, and set bits in
+both Correctable Error Status register and Uncorrectable Error Status
+register. Currently, when handling AER events the kernel will only look
+at CE status or UE status, but never both. In the Advisory
+Non-Fatal Error case, bits set in the UE status register will not be
+reported and cleared until the next Fatal/Non-Fatal error arrives.
 
-> On Tue, Jan 23, 2024 at 08:38:53PM -0500, Steven Rostedt wrote:
-> > Yes, rasdaemon uses libtraceevent (or a copy of it internally) that
-> > reads the format file to find fields. You can safely add fields to the
-> > middle of the event structure and the parsing will be just fine.  
-> 
-> Should we worry about tools who consume the event "blindly", without the
-> lib?
+For instance, previously, when the kernel receives an ANFE with Poisoned
+TLP in OS native AER mode, only the status of CE will be reported and
+cleared:
 
-I don't think that's a worry anymore. The offsets can change based on
-kernel config. PowerTop needed to have the library ported to it because
-it use to hardcode the offsets but then it broke when running the 32bit
-version on a 64bit kernel.
+  AER: Corrected error received: 0000:b7:02.0
+  PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00002000/00000000
+     [13] NonFatalErr           
 
-> 
-> I guess no until we break some use case and then we will have to revert.
-> At least this is what we've done in the past...
-> 
+If the kernel receives a Malformed TLP after that, two UE will be
+reported, which is unexpected. The Malformed TLP Header was lost since
+the previous ANFE gated the TLP header logs:
 
-But that revert was reverted when we converted PowerTop to use libtraceevent.
+  PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00041000/00180020
+     [12] TLP                    (First)
+     [18] MalfTLP       
 
--- Steve
+To handle this case properly, add additional fields in aer_err_info to
+track both CE and UE status/mask, UE severity, and Device Status.
+Use this information to determine the status bits that need to be cleared.
+
+Now, in the previous scenario, both CE status and related UE status will
+be reported and cleared after ANFE:
+
+  AER: Corrected error received: 0000:b7:02.0
+  PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00002000/00000000
+     [13] NonFatalErr           
+    Uncorrectable errors that may cause Advisory Non-Fatal:
+     [18] TLP
+
+Additionally, add more data to aer_event tracepoint, which would help
+to better understand ANFE and other errors for external observation.
+
+Note:
+checkpatch.pl will produce following errors and warnings on PATCH 4:
+
+  ERROR: space prohibited after that open parenthesis '('
+  #103: FILE: include/ras/ras_event.h:319:
+  +		__field(	u16,		link_status	)
+
+  ...similar errors omitted...
+
+  WARNING: quoted string split across lines
+  #126: FILE: include/ras/ras_event.h:342:
+  +	TP_printk("%s PCIe Bus Error: severity=%s, %s, TLP Header=%s, "
+  +		 "Correctable Error Status=0x%08x, "
+
+  ...similar warnings omitted...
+
+For readability reasons, these errors and warnings are not fixed,
+following the code style of existing examples in the kernel source tree.
+
+Change log:
+v2:
+  - Reference to the latest PCIe Specification in both commit messages
+    and comments, as suggested by Bjorn Helgaas.
+  - Describe the reason for storing additional information in
+    aer_err_info in the commit message of PATCH 1, as suggested by Bjorn
+    Helgaas.
+  - Add more details of behavior changes in the commit message of PATCH
+    2, as suggested by Bjorn Helgaas.
+
+v1: https://lore.kernel.org/linux-pci/20240111073227.31488-1-qingshun.wang@linux.intel.com/
+
+Wang, Qingshun (4):
+  PCI/AER: Store more information in aer_err_info
+  PCI/AER: Handle Advisory Non-Fatal properly
+  PCI/AER: Fetch information for FTrace
+  RAS: Trace more information in aer_event
+
+ drivers/acpi/apei/ghes.c      |  16 ++-
+ drivers/cxl/core/pci.c        |  15 ++-
+ drivers/pci/pci.h             |  12 ++-
+ drivers/pci/pcie/aer.c        | 191 +++++++++++++++++++++++++++-------
+ include/linux/aer.h           |   6 +-
+ include/linux/pci.h           |  27 +++++
+ include/ras/ras_event.h       |  48 ++++++++-
+ include/uapi/linux/pci_regs.h |   1 +
+ 8 files changed, 269 insertions(+), 47 deletions(-)
+
+
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+-- 
+2.42.0
+
 
