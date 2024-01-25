@@ -1,80 +1,75 @@
-Return-Path: <linux-edac+bounces-379-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-380-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F3B783CB9F
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 19:55:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 538CA83CBB4
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 19:58:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B06A91F284C8
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 18:54:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E5231C21835
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 18:58:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C981339A1;
-	Thu, 25 Jan 2024 18:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D45134720;
+	Thu, 25 Jan 2024 18:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="eTg4QeI5"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="M0s5GG82"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC276341A;
-	Thu, 25 Jan 2024 18:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1751339B7;
+	Thu, 25 Jan 2024 18:58:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706208894; cv=none; b=PN7LDyNalhUOcebSNmqhYAdHS9L+psnT3gwxv2LAXGbfqFni/PtawbAa/C6IGXi56Le/jsp9zQSjUEqW9tooEdOJmBo1RPoNE7Bd8OEMiAgnRtndcEF6Jv2SBtBMdvLdDEdifrX+Zg/3nA0agfxMTDnh2Dyg7dYapB2LJDOKKlc=
+	t=1706209118; cv=none; b=dCRREwfKzXXSBdZc/i+pcVH+qbKvKSob1krNpQ3EnsmfhwU+DlJXiHPo8LYIJLHl9ga2axo2aVVIWYdF1OTWWKPwoS9zCOlQpk9JS7heZZRwOfbVW8Rhnqh/8uqwm2T+uu9LHmvbRAVFYdXM0DjWnzjADy8qi3AFFy8arWCQtCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706208894; c=relaxed/simple;
-	bh=uUhFUZXQ4vRb3CNL/o+LkzhDQHu7ajYW4NMDA3n5IN0=;
+	s=arc-20240116; t=1706209118; c=relaxed/simple;
+	bh=EImR6eH2ja7Zr/g7LqjFSZRPMwchCKt+u7hbgiSybTY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u9fbeU2cK71KFeuiAYPajSCeN7q8nedBH6dXIcfGEix5PSn2hLoK6tyg+WVrLZvhmZ+Gsp19n6/epj0DmatVMrhX34veWTnrcTA2f4V5TeFqOIv2XTrUeDW4xo6Ur6ikJxGLyuOw61jI3Jpgh5KEz980hI3/p5x0p7ufmB9qHU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=eTg4QeI5; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=UtmV2pDAFMAE7fZVmF69sNjK11ZJ2XGBU72q8+ZNEBkreIfsLJG29DAOAP+oz1AYUf99cFolGnUXxXe1nTCt3J1oaqQh9+V8lsgThlfczLeVk7Xj83DvygXvkHtB8FjMB0tPe5LQwnDPXPeW29nNw4sdrJc6TS35QCeYhfuPZyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=M0s5GG82; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4B54D40E00C5;
-	Thu, 25 Jan 2024 18:54:42 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6BA2640E00C5;
+	Thu, 25 Jan 2024 18:58:33 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 1B73w0UfRrJD; Thu, 25 Jan 2024 18:54:40 +0000 (UTC)
+	with ESMTP id xlGWIMdcDzcG; Thu, 25 Jan 2024 18:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706208880; bh=nPXhbPzMU7Z8LSGsHzQlCMKYBA7gkUxN+sOfblh11lE=;
+	t=1706209111; bh=kNuXA3RXePTFCr5Ltq6ndzcIjKS21Y39k7fo+YpxiYI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eTg4QeI5+iJej5EIxhAHAXLWalh3Lw8ot9yp0ezjBd5+8SGkK2FXE6yw0F9FTvULV
-	 ylpBmjtWNZy9t3rlF6HIg8WUN6rcYn82GYTAVEWE/VmI9v25e6Ke2Wu3IfiBP6OkNF
-	 opPPEejlncO6EN4L409GY6D4yPgvUFNDYPQY3nqHYJjYd/bwWV8HUYo22x56+AAQmr
-	 6Gk+ue+b21SWxCBnXcGMxtifAj1/oDBm6fw3+hYpKkuBIxuz1VoVo4v3TbZliuvT2b
-	 6u5wfL7Fi6N8CbRQlriNA9+Xn6P0L3/A9aw+BCWq0q52ddlfUquxRuyqfjxW3yBou4
-	 djMOwGoI0w3BO9jw3EWAaPMYQzY5LYrDbF8nadJ7537v+p0BOHHwgomfCkcJBA0WP2
-	 5jqikpByplVmiiMdftS1rtfbBW4F6D+aXsbLrcaAq0KZiO2wa1zBrjbgxz1URLJ0nQ
-	 +iym9dNrL8tYddP4b9ApxSycm1IAE08O0hSpROXwXoO42cC3qXag40KX79M6Q3vzyE
-	 I+nfw9u9b6MQgPVDXLdh+bzVCPiiTZHa9U0V44Pog2UfZjeK77eRt8KPOhzc10pJ1+
-	 QyBG6q0OE+oyEu05SBD5wMZqTt/OtPzbXBvt3JffDWfsVmZhNQW3Dd0a54SExufodV
-	 od/mNGlabxq3MyyzAlTnYGvs=
+	b=M0s5GG82eNdtZFziw+sS0s/gKa1NbOTcirHKDbJ+4cl1lU/prG7sYEzX0xlohKgB2
+	 ioq2MbxeaUuOS4Ncf1YMoBjFiesPhZvSaX8aFlOelhTAo39ciHYPEcD+Wxy/nbOVlt
+	 HaYHEhwRE9NiBlS8pThDPRr/gPd6yubwnWPGiq7kQferxYc619m3jqo4NsvKeRnpV3
+	 GsKUwJIGnDXS+9+ZK7oj2UcqO/ubvc4ompMJwILtbvxvgJ9h9ENZ63Kga0NHSeUckV
+	 IKbpsGAaZqz7/AmldzUIN1rVeexh2gxOiTwHpIQ9tMcy9FGCasivjMe3ifeCxDqXMY
+	 c6RdxFyO6MJotuCHD8aMgGtqMgt1vKyDBXUD+ShsaECR/kTyoQ5hf4iTAVJa5MT7zF
+	 g7OTeOjvz9cqbzWUTpGYWp3HziUGHf6HsEBgHDfIj9WlKP6ee5EqU5dI+16s08gTfA
+	 V36y9Lf0PoY0Zm1W3mR4xTp0rDMTU7s8c/QjE/DskB5SkYATo2VQcLye8oe/6mLcOv
+	 C61FjgIowgPbKFJoWMRa6XdqUOppJjRZq5NvBI3p6AqK1+d1sSYQH7OWVFmGvg+PKy
+	 ziYAQaNGEvr+9qfcXpLoCLIUTcfH3FMlnA95Mhorwu+8w92J2RNWdgQXatQY0Br4f/
+	 /l8M/PyiGH8ihVj4mt4Q4QdM=
 Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CF2B040E016C;
-	Thu, 25 Jan 2024 18:54:30 +0000 (UTC)
-Date: Thu, 25 Jan 2024 19:54:22 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 659FC40E016C;
+	Thu, 25 Jan 2024 18:58:22 +0000 (UTC)
+Date: Thu, 25 Jan 2024 19:58:21 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: "Naik, Avadhut" <avadnaik@amd.com>, Tony Luck <tony.luck@intel.com>,
-	Avadhut Naik <avadhut.naik@amd.com>,
-	linux-trace-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	x86@kernel.org, linux-kernel@vger.kernel.org, yazen.ghannam@amd.com
-Subject: Re: [PATCH] tracing: Include PPIN in mce_record tracepoint
-Message-ID: <20240125185422.GCZbKuXpLUaOzV8IlO@fat_crate.local>
-References: <20240123235150.3744089-1-avadhut.naik@amd.com>
- <ZbBV4EGrZw6hJ5IE@agluck-desk3>
- <be870e14-eeb9-4dcf-ba43-a72ef66a3d87@amd.com>
- <20240123203853.66655e95@rorschach.local.home>
- <20240124095708.GAZbDe9Hks0tL2Aj94@fat_crate.local>
- <20240124090908.1c4daea8@rorschach.local.home>
+To: Avadhut Naik <avadhut.naik@amd.com>
+Cc: linux-trace-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	rostedt@goodmis.org, tony.luck@intel.com, x86@kernel.org,
+	linux-kernel@vger.kernel.org, yazen.ghannam@amd.com,
+	avadnaik@amd.com
+Subject: Re: [PATCH v2 0/2] Update mce_record tracepoint
+Message-ID: <20240125185821.GDZbKvTW93APAiY1LP@fat_crate.local>
+References: <20240125184857.851355-1-avadhut.naik@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -83,26 +78,23 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240124090908.1c4daea8@rorschach.local.home>
+In-Reply-To: <20240125184857.851355-1-avadhut.naik@amd.com>
 
-On Wed, Jan 24, 2024 at 09:09:08AM -0500, Steven Rostedt wrote:
-> I don't think that's a worry anymore. The offsets can change based on
-> kernel config. PowerTop needed to have the library ported to it because
-> it use to hardcode the offsets but then it broke when running the 32bit
-> version on a 64bit kernel.
+On Thu, Jan 25, 2024 at 12:48:55PM -0600, Avadhut Naik wrote:
+> This patchset updates the mce_record tracepoint so that the recently added
+> fields of struct mce are exported through it to userspace.
 > 
-> > 
-> > I guess no until we break some use case and then we will have to revert.
-> > At least this is what we've done in the past...
-> > 
+> The first patch adds PPIN (Protected Processor Inventory Number) field to
+> the tracepoint.
 > 
-> But that revert was reverted when we converted PowerTop to use libtraceevent.
+> The second patch adds the microcode field (Microcode Revision) to the
+> tracepoint.
 
-Ok, sounds like a good plan.
+This is a lot of static information to add to *every* MCE.
 
-/me makes a mental note for the future.
+And where does it end? Stick full dmesg in the tracepoint too?
 
-Thx.
+What is the real-life use case here?
 
 -- 
 Regards/Gruss,
