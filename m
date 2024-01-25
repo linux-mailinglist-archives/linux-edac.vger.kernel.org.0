@@ -1,281 +1,186 @@
-Return-Path: <linux-edac+bounces-373-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-374-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF2DC83B9DB
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 07:33:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1218C83C351
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 14:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 401891F21A70
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 06:33:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EF8B1C22B9F
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Jan 2024 13:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508F91B7EB;
-	Thu, 25 Jan 2024 06:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D021E4F61C;
+	Thu, 25 Jan 2024 13:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CIxU5pXy"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="MruGMY2N"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A90412B6E;
-	Thu, 25 Jan 2024 06:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEB54F5EC;
+	Thu, 25 Jan 2024 13:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706164193; cv=none; b=t/ekeA2aY02KbcrB8V30gVdoOre+mVtzBRyK4QtgnmU9cVa504ivq95wAEKnzzAETE4fzZLCGsACHc60bJuNAIiUugvur2Ep2zFyhs45XuuhGBBYTQs4nZvXkc0FDRWPRYJjAUjE2K6tqiiw4hiuAZMT8S257Tt4AtP4TvIyli0=
+	t=1706188202; cv=none; b=DzlIm6FzDMUkxv/EyeC9TlO0GKWDHu/V5lSN+rWaPLjjrRZoD1TdFn0t+1LBipEDL8R64DXZrtofeUybdpfvWlAa8+6RpJ99pPk8UrcSqw15mhGv9lula7lJjrK9iUn2ODsiBkpKX5d8ErieOK+0DQFD2qJ9hFNEtfZBbo99+Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706164193; c=relaxed/simple;
-	bh=x32LOme0VCi24BOXE0bhRSdLzmkLr19AHRZy9FC+YGQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k/jLyuIqsCG6KkgGEbDbIAk96orftdB86kbrPUpF/6RCn1hYHCxDk7avFAgf/FQiTvQwh2KJFoiHPahhcjYUmuIwhgILzCLOqVz85b1rJVawSUKF0TnIZEXUjnzbuzsoA/uSTlNXpipxwEpi3M+YGKgFdX8hWk5q7EYO2epiPYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CIxU5pXy; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706164191; x=1737700191;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=x32LOme0VCi24BOXE0bhRSdLzmkLr19AHRZy9FC+YGQ=;
-  b=CIxU5pXy8hoGyw+0r/UeLVYxkSZFTw1/OtpLmEb/weyahrYi3Fxt4o95
-   k6gv36b+ckzBi+TfMe4dEw9L/cRdPosYg6eEDur0tR9uieFGrmREe29QY
-   rXx2yPG95luUzUjaHvOK1gN4F9A6r+4Mleuv5InxY/kl0XSKLPF8TjMaW
-   qyUB9ElEcIEmrFGtFKagoZ+SiP4lb6PuCV5ugzAWhic43Y69J7E7ThPkF
-   jBsAo5huO4BMjQb9AnzE33D/7BbJ0P9wnvfstO2nbt6QY1HCyAk4ySNJW
-   U2+63s27aSWlwWsczRsr0mPzLZC7QoLTkdfE/Rt/ieg8iLau/ZxFZBM74
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="976651"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="976651"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 22:29:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="28658999"
-Received: from linchen5-mobl.ccr.corp.intel.com (HELO localhost) ([10.254.209.209])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 22:29:38 -0800
-From: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-To: linux-pci@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-acpi@vger.kernel.org
-Cc: chao.p.peng@linux.intel.com,
-	erwin.tsaur@intel.com,
-	feiting.wanyan@intel.com,
-	qingshun.wang@intel.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	"Oliver O'Halloran" <oohall@gmail.com>,
-	Miaohe Lin <linmiaohe@huawei.com>,
-	Shiju Jose <shiju.jose@huawei.com>,
-	Adam Preble <adam.c.preble@intel.com>,
-	Li Yang <leoyang.li@nxp.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	Robert Richter <rrichter@amd.com>,
-	linux-kernel@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	"Wang, Qingshun" <qingshun.wang@linux.intel.com>
-Subject: [PATCH v2 4/4] RAS: Trace more information in aer_event
-Date: Thu, 25 Jan 2024 14:28:02 +0800
-Message-ID: <20240125062802.50819-5-qingshun.wang@linux.intel.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20240125062802.50819-1-qingshun.wang@linux.intel.com>
-References: <20240125062802.50819-1-qingshun.wang@linux.intel.com>
+	s=arc-20240116; t=1706188202; c=relaxed/simple;
+	bh=ixOUbUgwpTbStFY8CHWFIMXLd1AVkqVhgHcVTd6hCvE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TqpFfRxmhYSv3B+vnR3aent53ER1sv8ut5U60/JFcytBVmBW+nm7LlZlTe13VjoBVC8LXvhQX+XSwQKJXTbLHYvn/U+sJ89eXGWWJbd6ZgQWFR8ZEHBKi4ZOGMxksKY8rcMC4WL5SH9rLhAASmZuTzbcvjEjbi8kXcw3m8OFeu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=MruGMY2N; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AA17240E01AE;
+	Thu, 25 Jan 2024 13:09:56 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id wUxfKDr1SADY; Thu, 25 Jan 2024 13:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706188194; bh=x3hC8ihP+GWasuSyIpmywSNUiv9Qfrt/J4c5qImuHHU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MruGMY2N/v+nFUJ6fC/PORHL3a93ojDPu9Y2niB99j99SGApPgdbP5F6+a3Ew3tNY
+	 LL5ldJpTD9AIcT7T6RIFz7MKIy5OecPyaV/YoTykFhUi8S9/obEQBwRkFKcobQgcet
+	 xe/moviYYqssfXLq/wGO6t8gD9LOhzmuHUmi9uLlhVpjhWPTUSJRR3qZGBn6onBYA3
+	 +1N81udaM9Bdk86gAldOB0NB8MPkqEOTrFdqF3bitLME8g3hK6QRIjcxfDrqyXc1K+
+	 X7q50TeDsOmv3yvagxkwsA1qbFMJsShDlmCaxstuRMPbeo2lEv4MxqHeRLIR0uid8H
+	 wA6J0MNMrj447Hvf0XqxevBvnOof52Nos6dbEUWOFciGVWvQutRMXdtqn+MPkM0ofU
+	 JXKGjeXus7iKyxA0CMx5Nx9LMZfcrcTZ5npMkuVDEPi4mZT1/WMkohANmYiLlpxMvd
+	 KBOHSfLfLO4CjM6EP8Hsr5aFDbBso72TpiY7HAeo+bx89kNPrmvmfRycUvIug3lFHh
+	 OK65kRqhJb8FvqvxKDScQLGzNYxV98eCA26wBTURd/Ql0UdxPdf7hD39+GnzM3ZBOz
+	 xQoZjyNbIUfELfcBY9iqStstsz1Z4KOFlYdoxhj3pG5THa1Fpn9lCekbW8YekDKfMY
+	 6EqzAuTKqFeN7VVTjXDuTy6w=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 793CB40E0177;
+	Thu, 25 Jan 2024 13:09:42 +0000 (UTC)
+Date: Thu, 25 Jan 2024 14:09:36 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc: Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+	error27@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] EDAC/device_sysfs: Fix calling kobject_put() with
+ ->state_initialized unset
+Message-ID: <20240125130936.GYZbJdkFOQds9w0hAp@fat_crate.local>
+References: <20231128183037.3395755-1-harshit.m.mogalapalli@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20231128183037.3395755-1-harshit.m.mogalapalli@oracle.com>
+X-Spam: Yes
 
-Add following fields in aer_event to better understand Advisory
-Non-Fatal and other errors for external observation:
+On Tue, Nov 28, 2023 at 10:30:35AM -0800, Harshit Mogalapalli wrote:
+> In edac_device_register_sysfs_main_kobj(), when dev_root is NULL,
 
-  - cor_status		(Correctable Error Status)
-  - cor_mask		(Correctable Error Mask)
-  - uncor_status	(Uncorrectable Error Status)
-  - uncor_severity	(Uncorrectable Error Severity)
-  - uncor_mask		(Uncorrectable Error Mask)
-  - aer_cap_ctrl	(AER Capabilities and Control)
-  - link_status		(Link Status)
-  - device_status	(Device Status)
-  - device_control_2	(Device Control 2)
+When is dev_root NULL?
 
-In addition to the raw register value, value of following fields are
-extracted and logged for better observability:
+A real use case or this is just from code staring?
 
-  - "First Error Pointer" and "Completion Timeout Prefix/Header Log
-    Capable" from "AER Capabilities and Control"
-  - "Completion Timeout Value" and "Completion Timeout Disable"
-    from "Device Control 2"
+> diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
+> index 010c26be5846..4cac14cbdb60 100644
+> --- a/drivers/edac/edac_device_sysfs.c
+> +++ b/drivers/edac/edac_device_sysfs.c
+> @@ -253,11 +253,13 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
+>  
+>  	/* register */
+>  	dev_root = bus_get_dev_root(edac_subsys);
+> -	if (dev_root) {
+> -		err = kobject_init_and_add(&edac_dev->kobj, &ktype_device_ctrl,
+> -					   &dev_root->kobj, "%s", edac_dev->name);
 
-Signed-off-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
+What cb4a0bec0bb9 did looks wrong. That if (err) check should be inside
+the if (dev_root).
+
+IOW, that function's error checking needs balancing. Something like
+this below.
+
+And looking at the other one, it has the same issue...
+
 ---
- drivers/pci/pcie/aer.c        | 17 +++++++++++--
- include/ras/ras_event.h       | 48 ++++++++++++++++++++++++++++++++---
- include/uapi/linux/pci_regs.h |  1 +
- 3 files changed, 60 insertions(+), 6 deletions(-)
+diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
+index 237a542e045a..3476ef13e681 100644
+--- a/drivers/edac/edac_device_sysfs.c
++++ b/drivers/edac/edac_device_sysfs.c
+@@ -228,8 +228,8 @@ static struct kobj_type ktype_device_ctrl = {
+  */
+ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
+ {
+-	struct device *dev_root;
+ 	const struct bus_type *edac_subsys;
++	struct device *dev_root;
+ 	int err = -ENODEV;
+ 
+ 	edac_dbg(1, "\n");
+@@ -243,26 +243,26 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
+ 	/* Init the devices's kobject */
+ 	memset(&edac_dev->kobj, 0, sizeof(struct kobject));
+ 
+-	/* Record which module 'owns' this control structure
+-	 * and bump the ref count of the module
++	/*
++	 * Record which module 'owns' this control structure and bump
++	 * the ref count of the module
+ 	 */
+ 	edac_dev->owner = THIS_MODULE;
+ 
+ 	if (!try_module_get(edac_dev->owner))
+ 		goto err_out;
+ 
+-	/* register */
+ 	dev_root = bus_get_dev_root(edac_subsys);
+-	if (dev_root) {
+-		err = kobject_init_and_add(&edac_dev->kobj, &ktype_device_ctrl,
+-					   &dev_root->kobj, "%s", edac_dev->name);
+-		put_device(dev_root);
+-	}
++	if (!dev_root)
++		goto err_module;
++
++	err = kobject_init_and_add(&edac_dev->kobj, &ktype_device_ctrl,
++				   &dev_root->kobj, "%s", edac_dev->name);
+ 	if (err) {
+-		edac_dbg(1, "Failed to register '.../edac/%s'\n",
+-			 edac_dev->name);
++		edac_dbg(1, "Failed to register '.../edac/%s'\n", edac_dev->name);
+ 		goto err_kobj_reg;
+ 	}
++
+ 	kobject_uevent(&edac_dev->kobj, KOBJ_ADD);
+ 
+ 	/* At this point, to 'free' the control struct,
+@@ -273,9 +273,11 @@ int edac_device_register_sysfs_main_kobj(struct edac_device_ctl_info *edac_dev)
+ 
+ 	return 0;
+ 
+-	/* Error exit stack */
+ err_kobj_reg:
+ 	kobject_put(&edac_dev->kobj);
++	put_device(dev_root);
++
++err_module:
+ 	module_put(edac_dev->owner);
+ 
+ err_out:
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index eec3406f727a..2f5639f6c40f 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -757,6 +757,7 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
- 	int layer, agent;
- 	int id = pci_dev_id(dev);
- 	const char *level;
-+	struct aer_capability_regs aer_caps;
- 
- 	if (info->severity == AER_CORRECTABLE) {
- 		status = info->cor_status;
-@@ -793,8 +794,18 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
- 	if (info->id && info->error_dev_num > 1 && info->id == id)
- 		pci_err(dev, "  Error of this Agent is reported first\n");
- 
-+	aer_caps = (struct aer_capability_regs) {
-+	  .cor_status = info->cor_status,
-+	  .cor_mask = info->cor_mask,
-+	  .uncor_status = info->uncor_status,
-+	  .uncor_severity = info->uncor_severity,
-+	  .uncor_mask = info->uncor_mask,
-+	  .cap_control = info->aer_cap_ctrl
-+	};
- 	trace_aer_event(dev_name(&dev->dev), (status & ~mask),
--			info->severity, info->tlp_header_valid, &info->tlp);
-+			info->severity, info->tlp_header_valid, &info->tlp,
-+			&aer_caps, info->link_status,
-+			info->device_status, info->device_control_2);
- }
- 
- static void aer_print_port_info(struct pci_dev *dev, struct aer_err_info *info)
-@@ -870,7 +881,9 @@ void pci_print_aer(struct pci_dev *dev, int aer_severity,
- 		__print_tlp_header(dev, &aer->header_log);
- 
- 	trace_aer_event(dev_name(&dev->dev), (status & ~mask),
--			aer_severity, tlp_header_valid, &aer->header_log);
-+			aer_severity, tlp_header_valid, &aer->header_log,
-+			aer, info.link_status,
-+			info.device_status, info.device_control_2);
- }
- EXPORT_SYMBOL_NS_GPL(pci_print_aer, CXL);
- 
-diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-index cbd3ddd7c33d..a94997073d90 100644
---- a/include/ras/ras_event.h
-+++ b/include/ras/ras_event.h
-@@ -300,9 +300,14 @@ TRACE_EVENT(aer_event,
- 		 const u32 status,
- 		 const u8 severity,
- 		 const u8 tlp_header_valid,
--		 struct aer_header_log_regs *tlp),
-+		 struct aer_header_log_regs *tlp,
-+		 struct aer_capability_regs *aer_caps,
-+		 const u16 link_status,
-+		 const u16 device_status,
-+		 const u16 device_control_2),
- 
--	TP_ARGS(dev_name, status, severity, tlp_header_valid, tlp),
-+	TP_ARGS(dev_name, status, severity, tlp_header_valid, tlp,
-+		aer_caps, link_status, device_status, device_control_2),
- 
- 	TP_STRUCT__entry(
- 		__string(	dev_name,	dev_name	)
-@@ -310,6 +315,10 @@ TRACE_EVENT(aer_event,
- 		__field(	u8,		severity	)
- 		__field(	u8, 		tlp_header_valid)
- 		__array(	u32, 		tlp_header, 4	)
-+		__field_struct(struct aer_capability_regs, aer_caps)
-+		__field(	u16,		link_status	)
-+		__field(	u16,		device_status	)
-+		__field(	u16,		device_control_2)
- 	),
- 
- 	TP_fast_assign(
-@@ -317,6 +326,10 @@ TRACE_EVENT(aer_event,
- 		__entry->status		= status;
- 		__entry->severity	= severity;
- 		__entry->tlp_header_valid = tlp_header_valid;
-+		__entry->aer_caps	= *aer_caps;
-+		__entry->link_status	= link_status;
-+		__entry->device_status	= device_status;
-+		__entry->device_control_2 = device_control_2;
- 		if (tlp_header_valid) {
- 			__entry->tlp_header[0] = tlp->dw0;
- 			__entry->tlp_header[1] = tlp->dw1;
-@@ -325,7 +338,20 @@ TRACE_EVENT(aer_event,
- 		}
- 	),
- 
--	TP_printk("%s PCIe Bus Error: severity=%s, %s, TLP Header=%s\n",
-+	TP_printk("%s PCIe Bus Error: severity=%s, %s, TLP Header=%s, "
-+		  "Correctable Error Status=0x%08x, "
-+		  "Correctable Error Mask=0x%08x, "
-+		  "Uncorrectable Error Status=0x%08x, "
-+		  "Uncorrectable Error Severity=0x%08x, "
-+		  "Uncorrectable Error Mask=0x%08x, "
-+		  "AER Capability and Control=0x%08x, "
-+		  "First Error Pointer=0x%x, "
-+		  "Completion Timeout Prefix/Header Log Capable=%s, "
-+		  "Link Status=0x%04x, "
-+		  "Device Status=0x%04x, "
-+		  "Device Control 2=0x%04x, "
-+		  "Completion Timeout Value=0x%x, "
-+		  "Completion Timeout Disable=%sn",
- 		__get_str(dev_name),
- 		__entry->severity == AER_CORRECTABLE ? "Corrected" :
- 			__entry->severity == AER_FATAL ?
-@@ -335,7 +361,21 @@ TRACE_EVENT(aer_event,
- 		__print_flags(__entry->status, "|", aer_uncorrectable_errors),
- 		__entry->tlp_header_valid ?
- 			__print_array(__entry->tlp_header, 4, 4) :
--			"Not available")
-+			"Not available",
-+		__entry->aer_caps.cor_status,
-+		__entry->aer_caps.cor_mask,
-+		__entry->aer_caps.uncor_status,
-+		__entry->aer_caps.uncor_severity,
-+		__entry->aer_caps.uncor_mask,
-+		__entry->aer_caps.cap_control,
-+		PCI_ERR_CAP_FEP(__entry->aer_caps.cap_control),
-+		__entry->aer_caps.cap_control & PCI_ERR_CAP_CTO_LOGC ? "True" : "False",
-+		__entry->link_status,
-+		__entry->device_status,
-+		__entry->device_control_2,
-+		__entry->device_control_2 & PCI_EXP_DEVCTL2_COMP_TIMEOUT,
-+		__entry->device_control_2 & PCI_EXP_DEVCTL2_COMP_TMOUT_DIS ?
-+					    "True" : "False")
- );
- 
- /*
-diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
-index a39193213ff2..54160ed2a8c9 100644
---- a/include/uapi/linux/pci_regs.h
-+++ b/include/uapi/linux/pci_regs.h
-@@ -787,6 +787,7 @@
- #define  PCI_ERR_CAP_ECRC_GENE	0x00000040	/* ECRC Generation Enable */
- #define  PCI_ERR_CAP_ECRC_CHKC	0x00000080	/* ECRC Check Capable */
- #define  PCI_ERR_CAP_ECRC_CHKE	0x00000100	/* ECRC Check Enable */
-+#define  PCI_ERR_CAP_CTO_LOGC	0x00001000	/* Completion Timeout Prefix/Header Log Capable */
- #define PCI_ERR_HEADER_LOG	0x1c	/* Header Log Register (16 bytes) */
- #define PCI_ERR_ROOT_COMMAND	0x2c	/* Root Error Command */
- #define  PCI_ERR_ROOT_CMD_COR_EN	0x00000001 /* Correctable Err Reporting Enable */
 -- 
-2.42.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
