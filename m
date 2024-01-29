@@ -1,71 +1,71 @@
-Return-Path: <linux-edac+bounces-402-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-403-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96CDB83FE44
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Jan 2024 07:24:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E374183FE45
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Jan 2024 07:24:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FB71B23289
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Jan 2024 06:24:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BEBB282E79
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Jan 2024 06:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB46C4C63D;
-	Mon, 29 Jan 2024 06:22:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E224CB5C;
+	Mon, 29 Jan 2024 06:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IyVrbS20"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LRaGXN50"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2092745BE3;
-	Mon, 29 Jan 2024 06:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8641253E02;
+	Mon, 29 Jan 2024 06:22:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706509320; cv=none; b=s47lf0EeiZJJrRXEAdPAgEN/lUICJd1J0YjxurHO7FhOgMXw4z/9rtnTUxl4NGFmBr3z4MDIDfyUxnGWCG0w4EpGVoNNygEEotAwHI3PlSQEFrrXwVaSwc/sDcOtcuRKPqbVsV/Kae529aKHPDRwfPNZ5mRNm6Rm05FwkKOx/Y0=
+	t=1706509328; cv=none; b=jVLfxzHh7XSnsI+krpZlY9ZYDIEtpPK1hZH4GebVR6ys/I0eJYkr1aGIhhawrCcdIg/FksOjZ4UXunSYqJOAH3Q3yZA44k2+gddLY+Yk5NpTQ9fMq1VdNJfdFHUfZh3w9pS2NkKmiY/nR1A0b6faVBEgFMExXv6VRvnreY48kKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706509320; c=relaxed/simple;
-	bh=NyFm/qK97sk3YCbcjtu2VHQloWxPYZyoAekB4PP4bnI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=KR2Lu1kTiu0vaXopF9c6k82RbplgEhtUF9XTNob2ZsfWDYwe9NIsgQS8kBoIlwUbTGoa44ch2zciyF1sq0DoRqlb1AnnK1S6gYJXDQm8IMU223XNQi7HDfAXnYYLmZAozd0UHfLRBBX8Y/InPwx2bPIPYGMd8aiL7X1qShH/heI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IyVrbS20; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1706509328; c=relaxed/simple;
+	bh=utYE4hLqczcpZ/LSvSwtG/51QIIizZvq86ERVo6zB2k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=XnaTq4YoZGASR+WuQYAgrNKkax9r40Cr4VJu5l+lGHl5IHhYUx48nEW1RFAXrESW06fb2BLWfey3lJ2wF1qJ6aGUlpsjViYxkIGc9CEN78ApyErOgMJJxzP+C/JQHZ/9kE0l82o6ffCBmQdszq0eqTdGGwSctGlP68v23+YZeW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LRaGXN50; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706509319; x=1738045319;
+  t=1706509326; x=1738045326;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=NyFm/qK97sk3YCbcjtu2VHQloWxPYZyoAekB4PP4bnI=;
-  b=IyVrbS20F5rv4pdlrFyIBczGSxQfYrYZqBMchMo1Lwv7VaArS0E4qkzl
-   LwWySDMTdqyJ+TvyooOCaW8ezQfYcm22RIj+9hpQGY1udHqiWx5kmMmOR
-   AyC5M94PZIkss8foW8xhRvPmiGsBmzVjwFbMWUNKENI6AatobkUgaJm30
-   OOXQKjH7HZfTfWlWyxOhwg+Lvunu1SFis3ZDq/dMRuPvZBCQEwAq+j3aj
-   lY8dUm7seE98WDjJuWsclTfLfEB7RXu3PoMMCOFRBWvmyZb/k3v4mYlf7
-   74GtgG++uUDXN1hrViGjEBCwNhdFVEQKKAjUpMAOw00ClOqMyAa3Nm/hh
+  bh=utYE4hLqczcpZ/LSvSwtG/51QIIizZvq86ERVo6zB2k=;
+  b=LRaGXN50JMTxWCW77RPbHj69MQFsLDC9PLNDdSJDjpND6DD6EPzK1vCX
+   WH/advzp7V+r2vgNNDioKw01j79a76gZJZw82W9rk/jDiYYv10gcg6AIW
+   AHCU0ZOHjoOHpQ962bEHQFFtLPJLUtUpZkNPWcV0lH58NDwiyuRd8nn9e
+   dczgE1SKfaZJKohXRYMN9C0jVc4hv05+hVo/AOUtkSSLrdlNtmVnSdbUK
+   TxJtVYsM6yOHQP6UgwDS9xUezAN7hgFtfS/D9dl2sT09qpjMou6jK1vRe
+   /UU4b1T1a/kunFzCz30G1J3+L8qTytSPvBraLTQqTZTbtKL38Ldx5o7JP
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="16219206"
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="16219269"
 X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="16219206"
+   d="scan'208";a="16219269"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 22:21:58 -0800
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 22:22:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
-   d="scan'208";a="3270608"
+   d="scan'208";a="3270617"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 22:21:55 -0800
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 22:22:03 -0800
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: Tony Luck <tony.luck@intel.com>
-Cc: Lili Li <lili.li@intel.com>,
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
 	Borislav Petkov <bp@alien8.de>,
 	Aristeu Rozanski <aris@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	lili.li@intel.com,
 	ricardo.neri-calderon@linux.intel.com
-Subject: [PATCH 1/2] EDAC/igen6: Add one more Intel Alder Lake-N SoC support
-Date: Mon, 29 Jan 2024 14:20:39 +0800
-Message-Id: <20240129062040.60809-2-qiuxu.zhuo@intel.com>
+Subject: [PATCH 2/2] EDAC/i10nm: Add Intel Grand Ridge micro-server support
+Date: Mon, 29 Jan 2024 14:20:40 +0800
+Message-Id: <20240129062040.60809-3-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240129062040.60809-1-qiuxu.zhuo@intel.com>
 References: <20240129062040.60809-1-qiuxu.zhuo@intel.com>
@@ -75,36 +75,27 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-From: Lili Li <lili.li@intel.com>
+The Grand Ridge CPU model uses similar memory controller registers with
+Granite Rapids server. Add Grand Ridge CPU model ID for EDAC support.
 
-Add a new Intel Alder Lake-N SoC compute die ID for EDAC support.
-
-Signed-off-by: Lili Li <lili.li@intel.com>
-Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- drivers/edac/igen6_edac.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/edac/i10nm_base.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index 2b0ecdeba5cd..cdd8480e7368 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -238,6 +238,7 @@ static struct work_struct ecclog_work;
- #define DID_ADL_N_SKU9	0x4678
- #define DID_ADL_N_SKU10	0x4679
- #define DID_ADL_N_SKU11	0x467c
-+#define DID_ADL_N_SKU12	0x4632
- 
- /* Compute die IDs for Raptor Lake-P with IBECC */
- #define DID_RPL_P_SKU1	0xa706
-@@ -583,6 +584,7 @@ static const struct pci_device_id igen6_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, DID_ADL_N_SKU9), (kernel_ulong_t)&adl_n_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_ADL_N_SKU10), (kernel_ulong_t)&adl_n_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_ADL_N_SKU11), (kernel_ulong_t)&adl_n_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_ADL_N_SKU12), (kernel_ulong_t)&adl_n_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_RPL_P_SKU1), (kernel_ulong_t)&rpl_p_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_RPL_P_SKU2), (kernel_ulong_t)&rpl_p_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_RPL_P_SKU3), (kernel_ulong_t)&rpl_p_cfg },
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 2b83d6de9352..3fd22a1eb1a9 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -951,6 +951,7 @@ static const struct x86_cpu_id i10nm_cpuids[] = {
+ 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(EMERALDRAPIDS_X,	X86_STEPPINGS(0x0, 0xf), &spr_cfg),
+ 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(GRANITERAPIDS_X,	X86_STEPPINGS(0x0, 0xf), &gnr_cfg),
+ 	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ATOM_CRESTMONT_X,	X86_STEPPINGS(0x0, 0xf), &gnr_cfg),
++	X86_MATCH_INTEL_FAM6_MODEL_STEPPINGS(ATOM_CRESTMONT,	X86_STEPPINGS(0x0, 0xf), &gnr_cfg),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, i10nm_cpuids);
 -- 
 2.17.1
 
