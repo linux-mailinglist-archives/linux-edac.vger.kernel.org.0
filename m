@@ -1,100 +1,152 @@
-Return-Path: <linux-edac+bounces-405-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-406-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4FD684197E
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Jan 2024 03:44:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16F3D842E7B
+	for <lists+linux-edac@lfdr.de>; Tue, 30 Jan 2024 22:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61ACA1F2A8B6
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Jan 2024 02:44:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F9691F24BBF
+	for <lists+linux-edac@lfdr.de>; Tue, 30 Jan 2024 21:09:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0FEC364DC;
-	Tue, 30 Jan 2024 02:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0C74762C6;
+	Tue, 30 Jan 2024 21:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YgcXvTwg"
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PhEU/CIe"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533A3364C6;
-	Tue, 30 Jan 2024 02:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7118D6D1D0;
+	Tue, 30 Jan 2024 21:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706582640; cv=none; b=BpMQtE0gvw1dkQMfhPnH6SSuZNB1uowY8ptANtsX3rZ9/pYkb4otmu6AUDDZRPfVWhHhQIgO2gebOYSk0yGjK7jEI453jEp0YUOwOfUhL7c23zF8Qm2+yagOwnMC/LaDppbNIlIpnO6/lo+A9I94E2CcPLqLB0iKxsa2VpF+qcg=
+	t=1706648988; cv=none; b=k3G9nm8q4RXSn5FNyvL7aP3vcDrXnoWW8pp+hNr539/m3o3dWNnjU/0/wOmyGZJolpSSFXofeI44/MUSkAN5EL9+NX8S36RxnqoWZrTdwUX/ACRMhkDTuT6B8Fcde3fkdqjEYUOtUMaNMgDjd5DuYJhgzDuE04NAvQNfkCDpP4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706582640; c=relaxed/simple;
-	bh=ubCKWnZsunLpK7T4k/fDNTnKB29T+6wnKi0+ohAnxek=;
+	s=arc-20240116; t=1706648988; c=relaxed/simple;
+	bh=RqXQWzMZk7h9sjW01LAhN2z8E+xcSHPZ2yV6QPz7Cik=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gh/Xzf81EYL1RkVYJFrNIz9PaXJg9Vw0U3AuST/oCoBPiJNwAhebc5FvEVE7TvoupUrU2cCvyAqvOHOuHGKdqv94HTsxXqtrkuJk3F2WvPvpZQrLxKL5VImQDj6TeK9hj0NDnCJj2xMD5GNbOuzG7lxlOoeNyNmXnbN9F3BMhpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YgcXvTwg; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706582639; x=1738118639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ubCKWnZsunLpK7T4k/fDNTnKB29T+6wnKi0+ohAnxek=;
-  b=YgcXvTwgQJcRhOTSjlNEv955dlo1fZwswgXaSxnYArLLy1pTVF41FyBm
-   /nD0j+/yhFAQILrZv8GNJtl4ByPAAdj60KP4xJ7Oib9gydWopknS589A9
-   S7hN+88WKLiT37YN32+Mk4QQq7hTt5U5AvLYIryPfzAY20BEndotfMuJd
-   rlEGQlvktwZbqg0maeTaokzE++JHw8Tkv9AyVkb1BE4PkWh7pv05sSLUX
-   Ik8u9iHz3IpdYXNw+HTF3jrzMh0XCeqT3FMeqVissW+f6CYgTkmHii8yX
-   E9UHCpw7fT6RTothKaqt992B039dPwv5BF1uK6oCi023t5FNFckEOO3Lr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="9790962"
-X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
-   d="scan'208";a="9790962"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 18:43:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="788043181"
-X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
-   d="scan'208";a="788043181"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 18:43:57 -0800
-Date: Mon, 29 Jan 2024 18:45:21 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-	Aristeu Rozanski <aris@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lili.li@intel.com
-Subject: Re: [PATCH 0/2] EDAC/{igen6,i10nm}: Add EDAC support for two Intel
- CPUs
-Message-ID: <20240130024521.GA14663@ranerica-svr.sc.intel.com>
-References: <20240129062040.60809-1-qiuxu.zhuo@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DMYYb2ZGKUvW9xX8r+2XrS96xrfBCCJ2U/dAJHD9bpg1BhYofI1WL3/VGakWLHiSt6TWBR0MeeSfSPdm8Kwsy0zEfTosRw1UoAoxqgpXVQF/yMgiNKe2TsFmlF+Gja8fkiCRlq6CvKo2SckhjckzL8HAapKkWx09ekVQC+sXp3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PhEU/CIe reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 99EC440E016C;
+	Tue, 30 Jan 2024 21:09:43 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 9dtgCcRxuuf0; Tue, 30 Jan 2024 21:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706648980; bh=bJPo8ARfu4bb/8etD558K4kEYcakH1/Jplzb9yO6z2M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PhEU/CIeFKefePRNCVVfnWgqZ+oQ6NklARokqwCfUE0aHtDUx1IXqr6K7Bju1OxSF
+	 gupEOBS3x9s7wgo9mtgVZ8Y2waPTYE25PtuY/mOfjbJ9MBbiyy8N8BbqmbQ/AXbkNu
+	 rxI6MJgP2QqKIAQEk3uTF7bVGwwxWkLhBCrq7qf4muFbHbvagYwDGjJUrn5O/gPhSq
+	 PFH8NvDstTJMSv4X5tvxqKGqWHq1NkXHyDUIokv1TBAiArHgBpuSRMBr+CETIsJ1d9
+	 12MWbc/0jGUX+SBC+tJ8ZG5gCqh2oyF2TAe2kYtvItwUjEGmStCOWP8z5DMyl58xnq
+	 zsO+hFeBG6PNAYHoIfwnNWK2/e0GEXJpt0uLL0+Zk0P5lVSkfM0S/QBRkc/we2Xc6h
+	 BsNgYiUgRP+p9QuQ3RSRGXxnsnkvWFJCEXTG+2MjSm3YOC1CVFa03z7RjBBiTO3ghn
+	 N6OxxrpNth4xe5aYmHV1FNmCbEx9BBZUQvB4Ga+T2STFvdf5aL+2q2ncS++O6Wsh3H
+	 abTLvLLlGlLZvYmgyPlEbHYh+g/tEWvNSn2uc8s2rrcssh6/7jEsTsGOAw46RUsBq8
+	 PjMnQSUFRhoPLQVMZT7nE5C8LC8n6FvvMocE0EGNowEAp0z7StzlWaTBeaoL3l3ca0
+	 Chk1ooHJth0OYnsINGlDovWg=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F2C7A40E00C5;
+	Tue, 30 Jan 2024 21:09:23 +0000 (UTC)
+Date: Tue, 30 Jan 2024 22:09:18 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	wangkefeng.wang@huawei.com,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-mm@kvack.org, Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 1/3] x86/mce: remove redundant fixup type
+ EX_TYPE_COPY
+Message-ID: <20240130210918.GFZbllfs4jUcd_QHL2@fat_crate.local>
+References: <20240111135548.3207437-1-tongtiangen@huawei.com>
+ <20240111135548.3207437-2-tongtiangen@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240129062040.60809-1-qiuxu.zhuo@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20240111135548.3207437-2-tongtiangen@huawei.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 29, 2024 at 02:20:38PM +0800, Qiuxu Zhuo wrote:
-> Both patches solely add CPU IDs for EDAC support.
-> 
-> - Part1: Add a new Alder Lake-N SoC compute die ID for EDAC support.
-> - Part2: Add the Grand Ridge (micro-server) CPU model ID for EDAC support.
-> 
-> Lili Li (1):
->   EDAC/igen6: Add one more Intel Alder Lake-N SoC support
-> 
-> Qiuxu Zhuo (1):
->   EDAC/i10nm: Add Intel Grand Ridge micro-server support
-> 
->  drivers/edac/i10nm_base.c | 1 +
->  drivers/edac/igen6_edac.c | 2 ++
->  2 files changed, 3 insertions(+)
+On Thu, Jan 11, 2024 at 09:55:46PM +0800, Tong Tiangen wrote:
+> In commit 034ff37d3407 ("x86: rewrite '__copy_user_nocache' function"),
+> rewrited __copy_user_nocache() uses EX_TYPE_UACCESS instead of
+> EX_TYPE_COPY=EF=BC=8Cthis change does not broken the MC safe copy for
+> __copy_user_nocache(), but as a result, there's no place for EX_TYPE_CO=
+PY
+> to use. Therefore, we remove the definition of EX_TYPE_COPY.
 
-For the whole series,
+Please use passive voice in your commit message: no "we" or "I", etc,
+and describe your changes in imperative mood.
 
-Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Also, pls read section "2) Describe your changes" in
+Documentation/process/submitting-patches.rst for more details.
+
+Also, see section "Changelog" in
+Documentation/process/maintainer-tip.rst
+
+> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/incl=
+ude/asm/extable_fixup_types.h
+> index fe6312045042..787916ec1e12 100644
+> --- a/arch/x86/include/asm/extable_fixup_types.h
+> +++ b/arch/x86/include/asm/extable_fixup_types.h
+> @@ -36,18 +36,17 @@
+>  #define	EX_TYPE_DEFAULT			 1
+>  #define	EX_TYPE_FAULT			 2
+>  #define	EX_TYPE_UACCESS			 3
+> -#define	EX_TYPE_COPY			 4
+> -#define	EX_TYPE_CLEAR_FS		 5
+> -#define	EX_TYPE_FPU_RESTORE		 6
+> -#define	EX_TYPE_BPF			 7
+> -#define	EX_TYPE_WRMSR			 8
+> -#define	EX_TYPE_RDMSR			 9
+> -#define	EX_TYPE_WRMSR_SAFE		10 /* reg :=3D -EIO */
+> -#define	EX_TYPE_RDMSR_SAFE		11 /* reg :=3D -EIO */
+> -#define	EX_TYPE_WRMSR_IN_MCE		12
+> -#define	EX_TYPE_RDMSR_IN_MCE		13
+> -#define	EX_TYPE_DEFAULT_MCE_SAFE	14
+> -#define	EX_TYPE_FAULT_MCE_SAFE		15
+> +#define	EX_TYPE_CLEAR_FS		 4
+> +#define	EX_TYPE_FPU_RESTORE		 5
+> +#define	EX_TYPE_BPF			 6
+> +#define	EX_TYPE_WRMSR			 7
+> +#define	EX_TYPE_RDMSR			 8
+> +#define	EX_TYPE_WRMSR_SAFE		 9 /* reg :=3D -EIO */
+> +#define	EX_TYPE_RDMSR_SAFE		10 /* reg :=3D -EIO */
+> +#define	EX_TYPE_WRMSR_IN_MCE		11
+> +#define	EX_TYPE_RDMSR_IN_MCE		12
+> +#define	EX_TYPE_DEFAULT_MCE_SAFE	13
+> +#define	EX_TYPE_FAULT_MCE_SAFE		14
+
+You don't need to renumber them - all you need to do is to comment it
+out:
+
+/* unused, was: #define EX_TYPE_COPY 		4 */
+
+--=20
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
