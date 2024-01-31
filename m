@@ -1,83 +1,79 @@
-Return-Path: <linux-edac+bounces-409-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-410-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C900843874
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Jan 2024 09:04:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20D548438D5
+	for <lists+linux-edac@lfdr.de>; Wed, 31 Jan 2024 09:24:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2CBCCB21CE5
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Jan 2024 08:04:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2A1A1F2906E
+	for <lists+linux-edac@lfdr.de>; Wed, 31 Jan 2024 08:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1A355E72;
-	Wed, 31 Jan 2024 08:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA24B5731A;
+	Wed, 31 Jan 2024 08:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RnTZpY74"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LYIjIA42"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8875810E;
-	Wed, 31 Jan 2024 08:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14605D750
+	for <linux-edac@vger.kernel.org>; Wed, 31 Jan 2024 08:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706688284; cv=none; b=NTWx9wVAPKem5mjsjttr/f1sX4lcYtgY9Hz35lyVOKSNQ6PLs1tQc38wML/qEogTthiO0s86BDDACsGu/Rm/F0/WbS2we/iJLz5hHxnMRmhDofUR7GNejSkwZYN53lbIMQVV6oXGSE1zYy4Ximh6z13R3c7bwwqui9B+lL0nj38=
+	t=1706689472; cv=none; b=VG5UGtKMC1X1Taay1G+y+ew24mD5gqTX24zqD6kkyQ9MvDioTSfLUXDbsgiRoCmwI/zlNuZ/X7nphmWkmzXrlCnE5Wv5C9OAfAJpB0xJJMlOk+ZPyg/oARVV2JISKKZLqQOcnVklFi5CD1f6QlzNmqKGlnxCKATUCcxi9klRrWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706688284; c=relaxed/simple;
-	bh=2wy6IAqZWDlhSg8xSyQOwMuys/jiy/qt5c8fR9V26Dk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L284JjzBbHxyhZq69nKJiZdO6e48f6qiPPYQj3K/pWqQWxLR17Euqi3vaJkK22dZVpoVWZCoM09uIN00CERQ2md+y0IL9cgzkc7cuhKMWuJgbdbw4mdQOUlJ+p5RVFPEudBih56zRc9hLTTJBpf/nZV/NTcB1JDpMohpWstvBUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RnTZpY74; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706688283; x=1738224283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2wy6IAqZWDlhSg8xSyQOwMuys/jiy/qt5c8fR9V26Dk=;
-  b=RnTZpY7441tr9SUQhtUa7Lb/Y82sOq51hxnSFNIIUU1Qxw/tkujLmFlI
-   0/0fox3fx85baQM+EZkPLLVsAP0LbNy5juv4GXwI28VJnMcgO2wiuaaeq
-   9Pjqwn4f/WIgjzUURa+O04Ryo2y/NzBnAP0pyo9mPQ9hMe72bxd2peZXv
-   T3IMLANiC6GpXuq5W1o13T+en8ze1olub9kXzETdkYpIQXSoG2jj1vSPq
-   jGqfhFV7rFlXAzMQNla4KqACBIN0+iks3TblBFqRnrgvho9kSikcskWHS
-   TA8rpNw8phoXA9Eyd7YGO1yznAAljWV3S0ZUaDYU5Zxw+2f+lHhhxJhgT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="17059012"
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="17059012"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 00:04:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
-   d="scan'208";a="3992171"
-Received: from nixos.sh.intel.com (HELO localhost) ([10.238.2.93])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 00:04:33 -0800
-Date: Wed, 31 Jan 2024 16:04:21 +0800
-From: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-To: 
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-acpi@vger.kernel.org, chao.p.peng@linux.intel.com, erwin.tsaur@intel.com, 
-	feiting.wanyan@intel.com, qingshun.wang@intel.com, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, 
-	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Bjorn Helgaas <helgaas@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-	Oliver O'Halloran <oohall@gmail.com>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Shiju Jose <shiju.jose@huawei.com>, Adam Preble <adam.c.preble@intel.com>, 
-	Li Yang <leoyang.li@nxp.com>, Lukas Wunner <lukas@wunner.de>, 
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, Robert Richter <rrichter@amd.com>, linux-kernel@vger.kernel.org, 
-	linux-cxl@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] PCI/AER: Store more information in aer_err_info
-Message-ID: <ojv6nqi55o4q3aazf34w7yjriagup3h5dmim7k67xuv6t7xdjr@m3bjyroi4jfq>
-References: <20240125062802.50819-1-qingshun.wang@linux.intel.com>
- <20240125062802.50819-2-qingshun.wang@linux.intel.com>
- <6ecb7bbf-0eba-4cea-b9b8-05fd092b7d01@linux.intel.com>
+	s=arc-20240116; t=1706689472; c=relaxed/simple;
+	bh=ZnF7iKo/ZFbGkBB2MbsvheyNsQD3je4DZX7Au09k4DA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XZDg27InLcCf64MipnlRZ2fxfCO5b+vAWqDTxrZNHVMLkJMBsLYHnS1CvqRrgI6INDGbkdo1SfWXbq0Lv0oc1lpAVMSP9Dp0QxUHvtRhmnqaINE1hY0EikjDCXqqjS1r9Og90ooPV7TkvgayNcIcN2MXtnRzLtML8kDRbObRJ6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LYIjIA42; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33ae4205ad8so2713487f8f.2
+        for <linux-edac@vger.kernel.org>; Wed, 31 Jan 2024 00:24:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706689469; x=1707294269; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VlKKphLBogbuT0RBIYdtdc5+J5iprMNNjA2TgZhIPr8=;
+        b=LYIjIA424ArZUH+A6k1TiLRxSqxKvN+2UragETnPzGYK0XyY/A2i7KxJtNErzRIR3q
+         obmGR+XJOmgITikXmLhtGZUIc143UjrT4xqWmBgj9+dYLCKmCTy2d3sa/lhKCbC9srPm
+         ncVoEeAtyexe4Oq12f/ufI3wv5hc5Ofh2Adfgd+KbHgmk9FhZy2bG8fWxNw6UtT8gopP
+         iunBbS+p7MHmkh+rerDWPHLWSSjeMvlAtT8z4nsn7qKKfl3puDlR9QQu8FLIV8VWXy5+
+         3HE+2HIhaza176QAbvU0pqs5DvRXu5GegkWeolkthvbrNcr9FQqFKOQ4ZEyjNctmYSEY
+         ycrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706689469; x=1707294269;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VlKKphLBogbuT0RBIYdtdc5+J5iprMNNjA2TgZhIPr8=;
+        b=oGRIy0h/xinjFMaIUsSuf55WuhmO2wvB/LmV4tWVG8699gMYRcE52V6tldxL2/d4cP
+         QC8NgnEAN+PH17ymyLRekxL3cbXIQHK1EMCGlP/f0EfV2NrQk/H3tp98EsAGW13hwmkc
+         1Ki8QT5OIWCz0vqZcaHgvwyitu87kJtyzNWBGLYJIRG1iWCYKHFtouwpZxIJbxsseeIz
+         0Ebv82ZJ6xApmUtcbRLIdHkbdE0R7cLlo3xcj3JB9TmCG6Sh3iX/BdXOALDZ/vNfAU7B
+         hXRdZM1uHzh5o1Sr/Ua5krmtbfu2A041k9B2NdcAmJ51xEqqcJMS3w36CN7YALsjU+8N
+         HFfw==
+X-Gm-Message-State: AOJu0YxRfCZsPFipzkqVdNvNQvn2axboq1bMXh8a09fZukCPxfnt/mFw
+	YWwaA5p9GDfiT1UydOpw/OvwNf8bEmIbNOtazoc2lH7EwhJR7UhJwYguXNOtknvlXdRfNBX7iHN
+	e
+X-Google-Smtp-Source: AGHT+IG/KsmeYrAxJSxpF1zN165aGnxdGMtGJFaiuGGf+pE/DxpE2WAhuz1IAOCKENhXBOFFshzNUA==
+X-Received: by 2002:a05:6000:25b:b0:33a:e52b:5a36 with SMTP id m27-20020a056000025b00b0033ae52b5a36mr470161wrz.44.1706689469111;
+        Wed, 31 Jan 2024 00:24:29 -0800 (PST)
+Received: from localhost ([102.140.226.10])
+        by smtp.gmail.com with ESMTPSA id bj26-20020a0560001e1a00b0033ae6530969sm10016575wrb.85.2024.01.31.00.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 00:24:28 -0800 (PST)
+Date: Wed, 31 Jan 2024 11:24:25 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Muralidhara M K <muralidhara.mk@amd.com>
+Cc: Yazen Ghannam <Yazen.Ghannam@amd.com>, Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] RAS/AMD/ATL: Fix array overflow in
+ get_logical_coh_st_fabric_id_mi300()
+Message-ID: <279c8b5e-6c00-467a-9071-9c67926abea4@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -86,142 +82,32 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6ecb7bbf-0eba-4cea-b9b8-05fd092b7d01@linux.intel.com>
+X-Mailer: git-send-email haha only kidding
 
-On Tue, Jan 30, 2024 at 06:26:39PM -0800, Kuppuswamy Sathyanarayanan wrote:
-> 
-> On 1/24/24 10:27 PM, Wang, Qingshun wrote:
-> > When Advisory Non-Fatal errors are raised, both correctable and
-> 
-> Maybe you can start with same info about what Advisory Non-FataL
-> errors are and the specification reference. I know that you included
-> it in cover letter. But it is good to include it in commit log.
+Check against ARRAY_SIZE() which is the number of elements instead of
+sizeof() which is the number of bytes.  Otherwise we potentially read
+beyond the end of the phy_to_log_coh_st_map_mi300[] array.
 
-Good idea, thanks!
+Fixes: 453f0ae79732 ("RAS/AMD/ATL: Add MI300 support")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/ras/amd/atl/denormalize.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> > uncorrectable error statuses will be set. The current kernel code cannot
-> > store both statuses at the same time, thus failing to handle ANFE properly.
-> > In addition, to avoid clearing UEs that are not ANFE by accident, UE
-> 
-> Please add some details about the impact of not clearing them.
+diff --git a/drivers/ras/amd/atl/denormalize.c b/drivers/ras/amd/atl/denormalize.c
+index d5d0e1fda159..49a900e066f1 100644
+--- a/drivers/ras/amd/atl/denormalize.c
++++ b/drivers/ras/amd/atl/denormalize.c
+@@ -405,7 +405,7 @@ static const u16 phy_to_log_coh_st_map_mi300[] = {
+ 
+ static u16 get_logical_coh_st_fabric_id_mi300(struct addr_ctx *ctx)
+ {
+-	if (ctx->inst_id >= sizeof(phy_to_log_coh_st_map_mi300)) {
++	if (ctx->inst_id >= ARRAY_SIZE(phy_to_log_coh_st_map_mi300)) {
+ 		atl_debug(ctx, "Instance ID out of range");
+ 		return ~0;
+ 	}
+-- 
+2.43.0
 
-Makes sense, will do.
-
-> > severity and Device Status also need to be recorded: any fatal UE cannot
-> > be ANFE, and if Fatal/Non-Fatal Error Detected is set in Device Status, do
-> > not take any assumption and let UE handler to clear UE status.
-> >
-> > Store status and mask of both correctable and uncorrectable errors in
-> > aer_err_info. The severity of UEs and the values of the Device Status
-> > register are also recorded, which will be used to determine UEs that should
-> > be handled by the ANFE handler. Refactor the rest of the code to use
-> > cor/uncor_status and cor/uncor_mask fields instead of status and mask
-> > fields.
-> >
-> > Signed-off-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-> > ---
-> >  drivers/acpi/apei/ghes.c | 10 ++++-
-> >  drivers/cxl/core/pci.c   |  6 ++-
-> >  drivers/pci/pci.h        |  8 +++-
-> >  drivers/pci/pcie/aer.c   | 93 ++++++++++++++++++++++++++--------------
-> >  include/linux/aer.h      |  4 +-
-> >  include/linux/pci.h      | 27 ++++++++++++
-> >  6 files changed, 111 insertions(+), 37 deletions(-)
-> >
-> > ......
-> >
-> > @@ -1213,38 +1233,49 @@ int aer_get_device_error_info(struct pci_dev *dev, struct aer_err_info *info)
-> >  	int temp;
-> >  
-> >  	/* Must reset in this function */
-> > -	info->status = 0;
-> > +	info->cor_status = 0;
-> > +	info->uncor_status = 0;
-> > +	info->uncor_severity = 0;
-> >  	info->tlp_header_valid = 0;
-> >  
-> >  	/* The device might not support AER */
-> >  	if (!aer)
-> >  		return 0;
-> >  
-> > -	if (info->severity == AER_CORRECTABLE) {
-> > +	if (info->severity == AER_CORRECTABLE ||
-> > +	    info->severity == AER_NONFATAL ||
-> > +	    type == PCI_EXP_TYPE_ROOT_PORT ||
-> > +	    type == PCI_EXP_TYPE_RC_EC ||
-> > +	    type == PCI_EXP_TYPE_DOWNSTREAM) {
-> 
-> 
-> It looks like you are reading both uncorrectable and correctable status
-> by default for both NONFATAL and CORRECTABLE errors. Why not do
-> it conditionally only for ANFE errors?
-> 
-> 
-
-My initial purpose was the value will be used in aer_event trace in
-PATCH 4 under both conditions, but I can also add checks here to reduce
-unnecessary IO and remove the checks in PATCH 4.
-
-> > +		/* Link is healthy for IO reads */
-> >  		pci_read_config_dword(dev, aer + PCI_ERR_COR_STATUS,
-> > -			&info->status);
-> > +				      &info->cor_status);
-> >  		pci_read_config_dword(dev, aer + PCI_ERR_COR_MASK,
-> > -			&info->mask);
-> >  
-> > ......
-> >
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index add9368e6314..259812620d4d 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -318,6 +318,33 @@ struct pci_sriov;
-> >  struct pci_p2pdma;
-> >  struct rcec_ea;
-> >  
-> > +struct pcie_capability_regs {
-> > +	u8 pcie_cap_id;
-> > +	u8 next_cap_ptr;
-> > +	u16 pcie_caps;
-> > +	u32 device_caps;
-> > +	u16 device_control;
-> > +	u16 device_status;
-> > +	u32 link_caps;
-> > +	u16 link_control;
-> > +	u16 link_status;
-> > +	u32 slot_caps;
-> > +	u16 slot_control;
-> > +	u16 slot_status;
-> > +	u16 root_control;
-> > +	u16 root_caps;
-> > +	u32 root_status;
-> > +	u32 device_caps_2;
-> > +	u16 device_control_2;
-> > +	u16 device_status_2;
-> > +	u32 link_caps_2;
-> > +	u16 link_control_2;
-> > +	u16 link_status_2;
-> > +	u32 slot_caps_2;
-> > +	u16 slot_control_2;
-> > +	u16 slot_status_2;
-> > +};
-> > +
-> IIUC, this struct is only used drivers/acpi/apei/ghes.c . Why not define it in that file?
-
-You are right. Whenever we need it elsewhere, we can move it to the
-header file anyway.
-
-> >  /* The pci_dev structure describes PCI devices */
-> >  struct pci_dev {
-> >  	struct list_head bus_list;	/* Node in per-bus list */
-> 
-> -- 
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
-> 
-
---
-Best regards,
-Wang, Qingshun
 
