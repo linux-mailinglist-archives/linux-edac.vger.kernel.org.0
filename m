@@ -1,101 +1,138 @@
-Return-Path: <linux-edac+bounces-420-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-421-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF3F58453C1
-	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 10:23:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECA338455EB
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 12:03:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10115B26E13
-	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 09:22:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E90821C22EC2
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 11:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E084A15CD71;
-	Thu,  1 Feb 2024 09:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="NawEF8H0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C7515D5A3;
+	Thu,  1 Feb 2024 11:02:45 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6734A15CD5C;
-	Thu,  1 Feb 2024 09:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E79915CD56;
+	Thu,  1 Feb 2024 11:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706779323; cv=none; b=JY5SeGuu/iIU+yKwmqFgV7n4YLR93L4kuuZQ9Uy4CKsriIf1cAosA3Oc+A92JzA1BTtoU1bb5OIQIHm/i3/lGclB61Tipdn/+3kQQ8zcv7kW32uyUlvmwaEF4ITUCnJmZjrECQOJotqiQyoukCakMFwSvoDcal4qzy5Y1KefPb0=
+	t=1706785365; cv=none; b=kVQQe0EHgEUSkSvgpdgu5gBX8nYil1xMm/Oikdo+wOWq4N11UmZ5VL8NdGv7fmyj43yJ0h2FIk8keLGxG8GuOkrLbVinMNcGBC6LqzQ2HrpgtPkCI+aZy+EINIEaXBukL93IUzagX4HgzqyqMQyZqWzbh19Me3qG3ThESXC0GSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706779323; c=relaxed/simple;
-	bh=c/OtwZ1IVY3svpSGJcfnXW8p+CkDVu3pn+h8kJ4hxi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RzSGIJbHQV7zuVbLrgG1YHbtZ7bPyQdL8ATwnqVoKNNcMd5m35oFDfUOqNHh83iWxeQEFWWvOFyWdF9tqCUJEo0HN44i/V5YNciJ7r3LqLal65fRi+epaOC/XA/87zrAQgu2h8paQsCsqaiPJRJEqHzNYGXRmHHA74N6N7Vx0Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=NawEF8H0; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0E87740E01A9;
-	Thu,  1 Feb 2024 09:21:58 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id HbuLDg8jRx1L; Thu,  1 Feb 2024 09:21:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1706779315; bh=0Q3UUFk6+/2SkhRCa05XVslnKNWRkpVQdLj6IkRIvOQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NawEF8H0wvIx6pk2E2d2j8+Vq/ffdEIwfZGyFaT1EIKzr2JzAJcLgmaOCQGde6ZZS
-	 qvq9VOkHmB5jctS5kfZJQAxQNhBY/e1MBPSqAlB4enAq7ndTJ+gstuziUX/yeYkIxE
-	 O4Mjolx6PYROYXJeOuDGED/pbNYgpTZV5189th8bbhOwSI8beEY/FG/q5iNqIQB8sB
-	 N2T6t7xWLPx3iTJykSJ0Ycn4rHUv697P8N55TCLdesJKjIGEEx12/DzoJgHEWdVb1I
-	 pcBt/pcy+nzFwcxgBwM3A8x8ZeOAxIVHmHzyFEHJWDf54Js+qbeE9nXtzEWo7ma7VG
-	 2hVz2iykKxEWN7ktkg+Nz4D1MDCTBzsQmAoOVJmv71LAaL9d9LJjY4CDHZd4iwpR2h
-	 nNqYE1NbikhpNRi3jMTml5fRxe1hRFcnMpwM9Smv8nDbbDz8En2laWZ/662psgeJcc
-	 qVTOXeXLlnSEtGmD3voHMzVCUJFRrsk3pkGAqYNwe+u3AV4LY5QU+v24Qp+bsoi4uz
-	 b5zo0jEYLamJydzC8gATMlsquCP2kon6O/Mgk015d+GllRyVdCe7nwXMH/PEhr50jl
-	 czo28vbdx0xnmO3Ksh2JkjEWOTFN+WNftppHa3r6kJe8oCa7il/EThzuYT1Dse+6JR
-	 oZdYUe5hc/62Azy7+Ff/FpHI=
-Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C12AC40E00C5;
-	Thu,  1 Feb 2024 09:21:48 +0000 (UTC)
-Date: Thu, 1 Feb 2024 10:21:48 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com, muralidhara.mk@amd.com
-Subject: Re: [PATCH] RAS/AMD/ATL: Add MI300 DRAM to Normalized address
- translation support
-Message-ID: <20240201092148.GBZbtirOfNAR3SYmht@fat_crate.local>
-References: <20240131165732.88297-1-yazen.ghannam@amd.com>
+	s=arc-20240116; t=1706785365; c=relaxed/simple;
+	bh=rNRuMMSbWJkzUzT3LGX+S4XIK4AHjMbsn++vP0q8UXY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ojOrPX9ekWVVKa/HJ6JybH0+qFj1Pfg39ZuJ4DBiPWvBnscD2TzoCuhV4JboXr6KcgStla0VytoIPermaRA6UvBT/6OMU7GlIrniVIJ2Cu+HtJLAnZpS9h8d7KPyqRMtLMCz9ESZf1h1SnEphlrZpUJ76gdtf97VNadZdW4h4WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TQbZB5CzVz1xn1G;
+	Thu,  1 Feb 2024 19:01:38 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (unknown [7.193.23.234])
+	by mail.maildlp.com (Postfix) with ESMTPS id BFB5E140412;
+	Thu,  1 Feb 2024 19:02:39 +0800 (CST)
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 1 Feb 2024 19:02:38 +0800
+Message-ID: <b8a0c361-3dc7-256f-e2f5-359a31b8975d@huawei.com>
+Date: Thu, 1 Feb 2024 19:02:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240131165732.88297-1-yazen.ghannam@amd.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v4 1/3] x86/mce: remove redundant fixup type
+ EX_TYPE_COPY
+To: Borislav Petkov <bp@alien8.de>
+CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	<wangkefeng.wang@huawei.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Tony Luck
+	<tony.luck@intel.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
+	<peterz@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, Naoya
+ Horiguchi <naoya.horiguchi@nec.com>, <linux-kernel@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>, <linux-mm@kvack.org>, Guohanjun
+	<guohanjun@huawei.com>
+References: <20240111135548.3207437-1-tongtiangen@huawei.com>
+ <20240111135548.3207437-2-tongtiangen@huawei.com>
+ <20240130210918.GFZbllfs4jUcd_QHL2@fat_crate.local>
+From: Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <20240130210918.GFZbllfs4jUcd_QHL2@fat_crate.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
 
-On Wed, Jan 31, 2024 at 10:57:32AM -0600, Yazen Ghannam wrote:
-> diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
-> index 7bfa21a582f0..816c2c5c683f 100644
-> --- a/drivers/ras/amd/atl/umc.c
-> +++ b/drivers/ras/amd/atl/umc.c
-> @@ -49,6 +49,203 @@ static u8 get_coh_st_inst_id_mi300(struct atl_err *err)
->  	return i;
->  }
->  
-> +static u16 internal_bitwise_xor(u16 val)
 
-Why are we calling it "internal"?
 
--- 
-Regards/Gruss,
-    Boris.
+在 2024/1/31 5:09, Borislav Petkov 写道:
+> On Thu, Jan 11, 2024 at 09:55:46PM +0800, Tong Tiangen wrote:
+>> In commit 034ff37d3407 ("x86: rewrite '__copy_user_nocache' function"),
+>> rewrited __copy_user_nocache() uses EX_TYPE_UACCESS instead of
+>> EX_TYPE_COPY，this change does not broken the MC safe copy for
+>> __copy_user_nocache(), but as a result, there's no place for EX_TYPE_COPY
+>> to use. Therefore, we remove the definition of EX_TYPE_COPY.
+> 
+> Please use passive voice in your commit message: no "we" or "I", etc,
+> and describe your changes in imperative mood.
+> 
+> Also, pls read section "2) Describe your changes" in
+> Documentation/process/submitting-patches.rst for more details.
+> 
+> Also, see section "Changelog" in
+> Documentation/process/maintainer-tip.rst
 
-https://people.kernel.org/tglx/notes-about-netiquette
+OK, thanks, Improved in the next release.
+
+> 
+>> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
+>> index fe6312045042..787916ec1e12 100644
+>> --- a/arch/x86/include/asm/extable_fixup_types.h
+>> +++ b/arch/x86/include/asm/extable_fixup_types.h
+>> @@ -36,18 +36,17 @@
+>>   #define	EX_TYPE_DEFAULT			 1
+>>   #define	EX_TYPE_FAULT			 2
+>>   #define	EX_TYPE_UACCESS			 3
+>> -#define	EX_TYPE_COPY			 4
+>> -#define	EX_TYPE_CLEAR_FS		 5
+>> -#define	EX_TYPE_FPU_RESTORE		 6
+>> -#define	EX_TYPE_BPF			 7
+>> -#define	EX_TYPE_WRMSR			 8
+>> -#define	EX_TYPE_RDMSR			 9
+>> -#define	EX_TYPE_WRMSR_SAFE		10 /* reg := -EIO */
+>> -#define	EX_TYPE_RDMSR_SAFE		11 /* reg := -EIO */
+>> -#define	EX_TYPE_WRMSR_IN_MCE		12
+>> -#define	EX_TYPE_RDMSR_IN_MCE		13
+>> -#define	EX_TYPE_DEFAULT_MCE_SAFE	14
+>> -#define	EX_TYPE_FAULT_MCE_SAFE		15
+>> +#define	EX_TYPE_CLEAR_FS		 4
+>> +#define	EX_TYPE_FPU_RESTORE		 5
+>> +#define	EX_TYPE_BPF			 6
+>> +#define	EX_TYPE_WRMSR			 7
+>> +#define	EX_TYPE_RDMSR			 8
+>> +#define	EX_TYPE_WRMSR_SAFE		 9 /* reg := -EIO */
+>> +#define	EX_TYPE_RDMSR_SAFE		10 /* reg := -EIO */
+>> +#define	EX_TYPE_WRMSR_IN_MCE		11
+>> +#define	EX_TYPE_RDMSR_IN_MCE		12
+>> +#define	EX_TYPE_DEFAULT_MCE_SAFE	13
+>> +#define	EX_TYPE_FAULT_MCE_SAFE		14
+> 
+> You don't need to renumber them - all you need to do is to comment it
+> out:
+> 
+> /* unused, was: #define EX_TYPE_COPY 		4 */
+
+OK.
+
+Thanks.
+Tong.
+
+> 
 
