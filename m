@@ -1,142 +1,131 @@
-Return-Path: <linux-edac+bounces-423-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-424-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB5D88457F8
-	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 13:44:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22329845A05
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 15:21:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 805211F27450
-	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 12:44:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D244428DE3D
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Feb 2024 14:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FBB986636;
-	Thu,  1 Feb 2024 12:43:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA265CDE3;
+	Thu,  1 Feb 2024 14:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PCKLKH2G"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABEB86633;
-	Thu,  1 Feb 2024 12:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF635D47C;
+	Thu,  1 Feb 2024 14:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706791438; cv=none; b=fBeaCRJYYnxYfeWpGp/ynQuDPhzTBgKsrkkYIuMT0iJjba/rI6qT6l3+1rYg5s5/to1ijZhAOT8DLnFQDXRXdCKB/rfSBT4ZM1YUEzkCef7GW34LiBcOz8WrAa7cjzDOXbHh5yxHbuWFyTkffdAV9IdydFvDHIaeROITPA8ukA0=
+	t=1706797240; cv=none; b=U8c339bQc5JKEa56UDISXMukvOkja+ZhUNRt/yygA/2GY53KG5Qe5Gu04Ab360QkCjq3I24YuWkn22T45bPPQppvFF4dutrFOKEf5IM2lguJ+fgIUhC0e5dHDNDLviTyPPEeS95YFldz211ptynzDfwnJrA4W3MR/b488Khtlxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706791438; c=relaxed/simple;
-	bh=4auvn7LjrJT99HD1SM4g6QDGfIrFfbJp8dsmDU8bIfU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=W2ZsbB/H0MgqFvrQdtohIqaw5Ous/mKeJ9PLMBQQmVbGwQUOGaRzcoPJM+nqnKHaMfeWjYcqunTDQ5+Vo0pzPifyLWHI8vrLwObkgTXzG+hHWRCIskIGOuqI9sr5jnBbulAtM3aLeGvIo/s9FhJHaLqWLtmJnQwSdN5pxF410ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TQdpy54rgz1xn48;
-	Thu,  1 Feb 2024 20:42:50 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (unknown [7.193.23.234])
-	by mail.maildlp.com (Postfix) with ESMTPS id CD6D514040D;
-	Thu,  1 Feb 2024 20:43:51 +0800 (CST)
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 1 Feb 2024 20:43:50 +0800
-Message-ID: <67c1f723-0a5e-6ab5-dd71-a654509fb956@huawei.com>
-Date: Thu, 1 Feb 2024 20:43:49 +0800
+	s=arc-20240116; t=1706797240; c=relaxed/simple;
+	bh=ls3Y9r/Uq4irY8NRgnSFG7fUl9lG9vHTYW3B2Qo0Tj8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f0Tk2psx0Yyg6WSZ6seUVTBSfuhArRN/01sRlSlY4tGJ1NTdS5dLkSI+JX/pPh1BkSg+YvVyOsOhvOgRZH/o7FVm1xoAtUN7cg+T/XjxYCB46Ep2YXv5WmVbLcWr4nMVm1rE1a6L+XeMWsxSbMrqfxRpb2aMi37bM27tF6YIWQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PCKLKH2G reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A2BA140E01A9;
+	Thu,  1 Feb 2024 14:20:35 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 88CsPpaq-GMn; Thu,  1 Feb 2024 14:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706797233; bh=xLdndXITEY495qtqbGzZcEEPT9mnJ0YIOGrS6BKjJaM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PCKLKH2GkFT3YzrJ8zxsR7Ehs6Wl+PfNG/Dkdd7QMeybdYcaLVfX6ROGM2FM8DBbk
+	 pDmdTpb5pJMNFrVM3bhv+5mH2AWEa7s9Eo20bzpQ6+ZU+lDKmz3s9RWhlbe6eti1FG
+	 7RQuRZwmEJhvftzGBIvW6P/lCNTx+mrfT/EwpcCYUWdsqMmGAXZYQg41/22/Tbflt1
+	 U06MBKgX/d6yq9vauEkcPeB5++5fksDWecFa36Di4P2MISXL66lLnpL00scQSiEsl8
+	 0fa2ZI/fuIl+s823oru494flUcBFsw1cZxFsmT9n0ectL4ylZVmnFM9NmcdAkff+aX
+	 hCAGks4QivkqDRcO6dxB6SuaYCYlYRVn+L/2PloWZm0L3JCc+k5BWTSImegkx5ijPc
+	 SZ9EwSSYSfz+u3u7HS8GnwGT9WsQwvkQKirwjANhNQFv2rC9rZ8nPJXh8QAX07UhQE
+	 vl+aCknAX4g3BXtku8hnEml4nARoZVt+isnROhC1t5EvdvwQzB7gB4qu1JAFA8UeqH
+	 2eimCKBkVKMISn0JOu2xAnfMLipmuxfgkTTQG8JkiJy9T6ZYfIKDoCmyud8+GRaTCE
+	 0Y1/t0JIqsPyfNnGBqv8vzBxC09bpR8gw5cs9iVzXww6lb3NzOHUPL5OLPu9QEEYk6
+	 k7cwvBP7UQ5VEXHclrZ1IjG4=
+Received: from zn.tnic (pd953033e.dip0.t-ipconnect.de [217.83.3.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6C90940E016C;
+	Thu,  1 Feb 2024 14:20:17 +0000 (UTC)
+Date: Thu, 1 Feb 2024 15:20:16 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	wangkefeng.wang@huawei.com,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-mm@kvack.org, Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 2/3] x86/mce: rename MCE_IN_KERNEL_COPYIN to
+ MCE_IN_KERNEL_COPY_MC
+Message-ID: <20240201142016.GFZbuooG9CRoK90U2C@fat_crate.local>
+References: <20240111135548.3207437-1-tongtiangen@huawei.com>
+ <20240111135548.3207437-3-tongtiangen@huawei.com>
+ <20240131070258.GGZbnwov0g918F-FGz@fat_crate.local>
+ <3009aadd-69d6-c797-20b4-95cf926b6dd9@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 1/3] x86/mce: remove redundant fixup type
- EX_TYPE_COPY
-To: Borislav Petkov <bp@alien8.de>
-CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	<wangkefeng.wang@huawei.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Tony Luck
-	<tony.luck@intel.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, Naoya
- Horiguchi <naoya.horiguchi@nec.com>, <linux-kernel@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, <linux-mm@kvack.org>, Guohanjun
-	<guohanjun@huawei.com>
-References: <20240111135548.3207437-1-tongtiangen@huawei.com>
- <20240111135548.3207437-2-tongtiangen@huawei.com>
- <20240130210918.GFZbllfs4jUcd_QHL2@fat_crate.local>
-From: Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <20240130210918.GFZbllfs4jUcd_QHL2@fat_crate.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3009aadd-69d6-c797-20b4-95cf926b6dd9@huawei.com>
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Feb 01, 2024 at 07:37:25PM +0800, Tong Tiangen wrote:
+> =E5=9C=A8 2024/1/31 15:02, Borislav Petkov =E5=86=99=E9=81=93:
+> > On Thu, Jan 11, 2024 at 09:55:47PM +0800, Tong Tiangen wrote:
+> > > Currently, there are some kernel memory copy scenarios is also mc s=
+afe
+> > > which use copy_mc_to_kernel() or copy_mc_user_highpage().
+> >=20
+> > Both of those end up in copy_mc_enhanced_fast_string() which does
+> > EX_TYPE_DEFAULT_MCE_SAFE.
+>=20
+> OK, how about this commit msg change? :)
+>=20
+> Currently, there are some kernel memory copy scenarios is also mc safe
+> which use copy_mc_to_kernel() or copy_mc_user_highpage(), **both of tho=
+se
+> end up in copy_mc_enhanced_fast_string() or copy_mc_fragile() which doe=
+s
+> EX_TYPE_DEFAULT_MCE_SAFE.**
+>=20
+> In these scenarios, posion pages need to be isolated too. Therefore, a
+> macro similar to MCE_IN_KERNEL_COPYIN is required. For this reason, we
+> can rename MCE_IN_KERNEL_COPYIN to MCE_IN_KERNEL_COPY_MC, the new macro
+> can be applied to both user-to-kernel mc safe copy and kernel-to-kernel
+> mc safe copy.
 
+Maybe my question wasn't clear: why is that renaming churn needed at
+all? What are you "fixing" here?
 
-在 2024/1/31 5:09, Borislav Petkov 写道:
-> On Thu, Jan 11, 2024 at 09:55:46PM +0800, Tong Tiangen wrote:
->> In commit 034ff37d3407 ("x86: rewrite '__copy_user_nocache' function"),
->> rewrited __copy_user_nocache() uses EX_TYPE_UACCESS instead of
->> EX_TYPE_COPY，this change does not broken the MC safe copy for
->> __copy_user_nocache(), but as a result, there's no place for EX_TYPE_COPY
->> to use. Therefore, we remove the definition of EX_TYPE_COPY.
-> 
-> Please use passive voice in your commit message: no "we" or "I", etc,
-> and describe your changes in imperative mood.
-> 
-> Also, pls read section "2) Describe your changes" in
-> Documentation/process/submitting-patches.rst for more details.
-> 
-> Also, see section "Changelog" in
-> Documentation/process/maintainer-tip.rst
+What is the problem that you're encountering which needs fixing?
 
-Hi Borislav:
+Thx.
 
-how about this commit msg change?
+--=20
+Regards/Gruss,
+    Boris.
 
-Since commit 034ff37d3407 ("x86: rewrite '__copy_user_nocache'
-function") rewrited __copy_user_nocache() uses EX_TYPE_UACCESS
-instead of EX_TYPE_COPY，there is no user for EX_TYPE_COPY，so
-remove it.
-
-Thanks.
-Tong.
-
-> 
->> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
->> index fe6312045042..787916ec1e12 100644
->> --- a/arch/x86/include/asm/extable_fixup_types.h
->> +++ b/arch/x86/include/asm/extable_fixup_types.h
->> @@ -36,18 +36,17 @@
->>   #define	EX_TYPE_DEFAULT			 1
->>   #define	EX_TYPE_FAULT			 2
->>   #define	EX_TYPE_UACCESS			 3
->> -#define	EX_TYPE_COPY			 4
->> -#define	EX_TYPE_CLEAR_FS		 5
->> -#define	EX_TYPE_FPU_RESTORE		 6
->> -#define	EX_TYPE_BPF			 7
->> -#define	EX_TYPE_WRMSR			 8
->> -#define	EX_TYPE_RDMSR			 9
->> -#define	EX_TYPE_WRMSR_SAFE		10 /* reg := -EIO */
->> -#define	EX_TYPE_RDMSR_SAFE		11 /* reg := -EIO */
->> -#define	EX_TYPE_WRMSR_IN_MCE		12
->> -#define	EX_TYPE_RDMSR_IN_MCE		13
->> -#define	EX_TYPE_DEFAULT_MCE_SAFE	14
->> -#define	EX_TYPE_FAULT_MCE_SAFE		15
->> +#define	EX_TYPE_CLEAR_FS		 4
->> +#define	EX_TYPE_FPU_RESTORE		 5
->> +#define	EX_TYPE_BPF			 6
->> +#define	EX_TYPE_WRMSR			 7
->> +#define	EX_TYPE_RDMSR			 8
->> +#define	EX_TYPE_WRMSR_SAFE		 9 /* reg := -EIO */
->> +#define	EX_TYPE_RDMSR_SAFE		10 /* reg := -EIO */
->> +#define	EX_TYPE_WRMSR_IN_MCE		11
->> +#define	EX_TYPE_RDMSR_IN_MCE		12
->> +#define	EX_TYPE_DEFAULT_MCE_SAFE	13
->> +#define	EX_TYPE_FAULT_MCE_SAFE		14
-> 
-> You don't need to renumber them - all you need to do is to comment it
-> out:
-> 
-> /* unused, was: #define EX_TYPE_COPY 		4 */
-> 
+https://people.kernel.org/tglx/notes-about-netiquette
 
