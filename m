@@ -1,146 +1,130 @@
-Return-Path: <linux-edac+bounces-429-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-430-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BED7A8469CE
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Feb 2024 08:51:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C629184714E
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Feb 2024 14:39:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F16EE1C20F09
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Feb 2024 07:51:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E7C6B245BA
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Feb 2024 13:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD6D17BA8;
-	Fri,  2 Feb 2024 07:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF59F46558;
+	Fri,  2 Feb 2024 13:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="KiiExzXL"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E950E179AD;
-	Fri,  2 Feb 2024 07:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B48A46B9A;
+	Fri,  2 Feb 2024 13:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706860280; cv=none; b=XSIgrw8xzoiTu4r2j4ZAcy3hCa9zoMrCoSNXd/VCN3OtdmUEk9GfLku/0pjdPUoHkCbHCHGr+Weqy8aZ6PZCX/yhJoEO4+CNZrfNxWgZwYX0dcPPIsvZnlQ3MiBFu85HAKaSrxFYMRVle07zJK5NDSBtIprwyIghQOlyZDdQqCY=
+	t=1706881182; cv=none; b=tOS/1Nvdo9as0jjh+gCHLqQ6VSnb8RkIuMiOOMLcIlv1gS/B/jR62DGOFznioGaxDpX1miQEStpVFMORz4sWg7wcWaPQocKcX1MzheX96A511n1a1uaA2iNVEraMXQFCYT2CuBvFVKlPMQzyjO3Vk0QJ5VhNkvLhd7sOmYHLPos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706860280; c=relaxed/simple;
-	bh=6CeHjpWTHiilKMN0s9ZZArB1+0+f4ZveMoELOFvHi5g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=iQrFKv18/zR377u1WmtrVpUxnHHk+zYwdKESi5o6n41QGKF4PCh+ttMMeXxt7J+nc1MuC01SAJa9cqHWIQmMHCIxFtgZgdartJupdxsbThjhqsq3eSPNuVH9hBVtUCCR6pJC20Cu7U5n1opiKL5mwfDFYg1o77lkb2bmnzSq+wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4TR7Fs67dFz1Q8ZP;
-	Fri,  2 Feb 2024 15:49:21 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (unknown [7.193.23.234])
-	by mail.maildlp.com (Postfix) with ESMTPS id 46058140414;
-	Fri,  2 Feb 2024 15:51:14 +0800 (CST)
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 2 Feb 2024 15:51:13 +0800
-Message-ID: <39c1e4d2-b1d0-91ae-595e-1add4698dd7f@huawei.com>
-Date: Fri, 2 Feb 2024 15:51:12 +0800
+	s=arc-20240116; t=1706881182; c=relaxed/simple;
+	bh=miDAUqH++egcoxWAD5wW30DmvWxqjaeshiXLXeM5glY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TzR32TAD+ogAImLtdzEbmFY3l+tYEpciqreUG29Gf6DKDLZcvq+gxgzY2zyIVxgBvrlhChooCWNB9q1lMBluko1p34rAJB2GHd7P77dwH4F3qMVk0H1NhdXa1Vji+ufEc3Bt7gq2wZbZLfy7blgniqfKCdUCpEp7KOXCxVv2pBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=KiiExzXL; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B7DF740E01A2;
+	Fri,  2 Feb 2024 13:39:36 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id uci-jhhF5SNC; Fri,  2 Feb 2024 13:39:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1706881173; bh=i41MKt90HCy/J6mZcV7OB0Wu4vTJEn+w5XEKHKNjBAM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KiiExzXLJY4+AspZZQa0Av26b2H8HFzHlmtkPc/0vs3Q33lr2CivSmBLYVAwvoTN2
+	 rxdQq9xq/zktgGVr7XpYMFHB+zptXlm7E+L/Sw8ToT7duFQCmALMqZLhP4Beokw4uO
+	 Jg97HZ0IDCzAIw4j8MkrHx2o1iaVpRQufanVh/ia0J3IBa9RxqdMK74Xd1NtDIl54N
+	 jvIWUxk5sxX6IwGs4+PhEHuwFbWbFt9n383ROsRBuLk70IZssOk1JHYK8tmCyoWIlR
+	 xtMLpRxJP2hNFD5m3I+iyvWuZlsdnPz+Hs5jC+o/Z58TM05iEZnzRGMt7NH352O7UZ
+	 uDcgei3r65O9ZwTTNSTT3ETGmaXktkUT+vwFVbgZdVPMAYyJwp03ZSTMTU8g3AULB5
+	 ZQw/Zk1Pq09G2gdhTTJDe/d5Eqb9DNtbVAspzxIlQYDA2klONS9fssRqLCigoRBiug
+	 xadCEFvVJ2XegD11ZH3/M4Di+8/kCmwnJjx+gh/jB5E3D7xacBNYMriVUs/ZvG1xDo
+	 pBRblQhKOCN7Ds7hK4mHVt6hK1dY2UU5eZeH7hn19sjBqRs7LI3pwhIwgp+e086Mp/
+	 0g3MWRpmI3iGTue+P8O6/aXow+C0F4F7LTVeaXQeYUakyI0AXak8Y4XmRlVQl3g3aB
+	 Zr69JeKncVzcY6dm/LXlM0Yw=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AC6BE40E016C;
+	Fri,  2 Feb 2024 13:39:17 +0000 (UTC)
+Date: Fri, 2 Feb 2024 14:39:11 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	wangkefeng.wang@huawei.com,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-mm@kvack.org, Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v4 2/3] x86/mce: rename MCE_IN_KERNEL_COPYIN to
+ MCE_IN_KERNEL_COPY_MC
+Message-ID: <20240202133911.GBZbzwf-M37M-J3EJX@fat_crate.local>
+References: <20240111135548.3207437-1-tongtiangen@huawei.com>
+ <20240111135548.3207437-3-tongtiangen@huawei.com>
+ <20240131070258.GGZbnwov0g918F-FGz@fat_crate.local>
+ <3009aadd-69d6-c797-20b4-95cf926b6dd9@huawei.com>
+ <20240201142016.GFZbuooG9CRoK90U2C@fat_crate.local>
+ <39c1e4d2-b1d0-91ae-595e-1add4698dd7f@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 2/3] x86/mce: rename MCE_IN_KERNEL_COPYIN to
- MCE_IN_KERNEL_COPY_MC
-To: Borislav Petkov <bp@alien8.de>
-CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	<wangkefeng.wang@huawei.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Tony Luck
-	<tony.luck@intel.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, Naoya
- Horiguchi <naoya.horiguchi@nec.com>, <linux-kernel@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, <linux-mm@kvack.org>, Guohanjun
-	<guohanjun@huawei.com>
-References: <20240111135548.3207437-1-tongtiangen@huawei.com>
- <20240111135548.3207437-3-tongtiangen@huawei.com>
- <20240131070258.GGZbnwov0g918F-FGz@fat_crate.local>
- <3009aadd-69d6-c797-20b4-95cf926b6dd9@huawei.com>
- <20240201142016.GFZbuooG9CRoK90U2C@fat_crate.local>
-From: Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <20240201142016.GFZbuooG9CRoK90U2C@fat_crate.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600017.china.huawei.com (7.193.23.234)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <39c1e4d2-b1d0-91ae-595e-1add4698dd7f@huawei.com>
 
+On Fri, Feb 02, 2024 at 03:51:12PM +0800, Tong Tiangen wrote:
+> Currently, there are some kernel memory copy scenarios is also mc safe
+> which use copy_mc_to_kernel() or copy_mc_user_highpage(), these kernel-
+> to-kernel copy use fixup_type EX_TYPE_DEFAULT_MCE_SAFE. In these
+> scenarios, posion pages need to be isolated too and the current
 
+So you have, for example:
 
-在 2024/2/1 22:20, Borislav Petkov 写道:
-> On Thu, Feb 01, 2024 at 07:37:25PM +0800, Tong Tiangen wrote:
->> 在 2024/1/31 15:02, Borislav Petkov 写道:
->>> On Thu, Jan 11, 2024 at 09:55:47PM +0800, Tong Tiangen wrote:
->>>> Currently, there are some kernel memory copy scenarios is also mc safe
->>>> which use copy_mc_to_kernel() or copy_mc_user_highpage().
->>>
->>> Both of those end up in copy_mc_enhanced_fast_string() which does
->>> EX_TYPE_DEFAULT_MCE_SAFE.
->>
->> OK, how about this commit msg change? :)
->>
->> Currently, there are some kernel memory copy scenarios is also mc safe
->> which use copy_mc_to_kernel() or copy_mc_user_highpage(), **both of those
->> end up in copy_mc_enhanced_fast_string() or copy_mc_fragile() which does
->> EX_TYPE_DEFAULT_MCE_SAFE.**
->>
->> In these scenarios, posion pages need to be isolated too. Therefore, a
->> macro similar to MCE_IN_KERNEL_COPYIN is required. For this reason, we
->> can rename MCE_IN_KERNEL_COPYIN to MCE_IN_KERNEL_COPY_MC, the new macro
->> can be applied to both user-to-kernel mc safe copy and kernel-to-kernel
->> mc safe copy.
-> 
-> Maybe my question wasn't clear: why is that renaming churn needed at
-> all? What are you "fixing" here?
-> 
-> What is the problem that you're encountering which needs fixing?
+  unsigned long __must_check copy_mc_to_kernel(void *dst, const void *src, unsigned len)
 
-This patch is a prepare patch and the next patch is a fix patch, the
-complete logic of the two patches is as follows:
+Now imagine you get a MCE for *dst which is some kernel page which
+cannot be poisoned: direct map, kernel text, and so on.
 
-The problem i'm encountering:
--------------------------------
-In the x86 mce processing, error_context() setting macro
-MCE_IN_KERNEL_COPYIN to identify copy from user(user-to-kernel copy) for
-fixup_type EX_TYPE_UACCESS.
+Attempting to poison such a page would not work, to put it mildly.
 
-Then do_machine_check() uses macro MCE_IN_KERNEL_COPYIN to isolate
-posion page in memory_failure().
+So, again, what *exactly* are you "fixing" here?
 
-Currently, there are some kernel memory copy scenarios is also mc safe
-which use copy_mc_to_kernel() or copy_mc_user_highpage(), these kernel-
-to-kernel copy use fixup_type EX_TYPE_DEFAULT_MCE_SAFE. In these
-scenarios, posion pages need to be isolated too and the current
-implementation is to actively call memory_failure_queue() when the copy
-fails.
+When I read "Currently, there are some kernel memory copy scenarios" and
+there's nothing more explaining what those scenarios are, I'm tempted to
+ignore this completely until you give a detailed and concrete example
+what the problem is:
 
-Calling memory_failure_queue() separately is not a good implementation,
-call it uniformly in do_machine_check() is more reasonable.
+What exactly are you doing, what goes wrong, why does this need to be
+fixed and so on...
 
-Solution:
-----------
-A macro similar to MCE_IN_KERNEL_COPYIN is required, so we can rename
-MCE_IN_KERNEL_COPYIN to MCE_IN_KERNEL_COPY_MC, the new macro can be
-applied to both user-to-kernel mc safe copy and kernel-to-kernel mc safe
-copy, in error_context()，we can set MCE_IN_KERNEL_COPY_MC for both
-fixup_type EX_TYPE_UACCESS and EX_TYPE_DEFAULT_MCE_SAFE.
+If there isn't such a real-life use case you're encountering, then this
+all is waste of time.
 
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
 
-Do you think it's clear to say so and then we can merge the two patches
-to make the complete logic clearer in commit msg ?
-
-Many thanks.
-Tong.
-
-> 
-> Thx.
-> 
+https://people.kernel.org/tglx/notes-about-netiquette
 
