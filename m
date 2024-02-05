@@ -1,154 +1,121 @@
-Return-Path: <linux-edac+bounces-452-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-453-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D5F1849437
-	for <lists+linux-edac@lfdr.de>; Mon,  5 Feb 2024 08:10:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD64284944C
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Feb 2024 08:19:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0311B282BA7
-	for <lists+linux-edac@lfdr.de>; Mon,  5 Feb 2024 07:10:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DAD01F2452D
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Feb 2024 07:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEDA1C133;
-	Mon,  5 Feb 2024 07:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF38C153;
+	Mon,  5 Feb 2024 07:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MtckPxYJ"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="M2L9jptv"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2082.outbound.protection.outlook.com [40.107.102.82])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEFD10A2E;
-	Mon,  5 Feb 2024 07:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.82
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707117017; cv=fail; b=Z+U/uDzcdvUTfpduD/7OVU/OoS74nPJjf8MO+MUq8Tk+CeBdfNspXC7h3FqY3w1MmY8U7tCN5ftbe03Y54Si1USkJfBdtuXYxWCUAgRZoM4uB5OrmKJzYjWJR5uZxj5on21zcpBZMs+T27nE28dpZcfob6j6JGSvGpCvMiBmpvc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707117017; c=relaxed/simple;
-	bh=Zq1YHmyH3GtY4NyozeASZEe8vpWQZeFDp52MNW0opos=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:In-Reply-To:
-	 Content-Type:MIME-Version; b=XNuDdptXhZipe2+HZSQoAH4cKT954uqEQRVEZzai8P3jIG6jberG2VD+uepM5/j5AtzYo4BOvKBNrpYgdRtxNYX1ax/BtGR+WyerFyQQGGmDQ1yGtvtypcYxXnGTrwT/eluPa4DMitNi0/cIp1S+YE68vfrtIrsB/MpRneiBwcI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MtckPxYJ; arc=fail smtp.client-ip=40.107.102.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F2YMaspjrkJ4y20zDsGIJ3Cp1ETZ2/SzAcY/WU7uQP3MIrD0tSeRlHIsOLziHbMKolOuHGqo07ImAqiAZe5lbdYKoeW9PoWeVEeHk0pOCqponYfZKj75rGwecCUGrAxb6GgiWJCjWgClCu/pYpB6wwwqY30hpZV5cM1KfVoFqgXr0TI05v65EDKNOCGjODRqUaddvWY4pSZQQXzJwGa1ZDFHvy+akYPArB4OzYd+ahbQdz8CUs2gCuaOFR7iyYRuTzyOc/RCTkHGOFH82XWaPV7vzJwj4iWOJZVFt2fNcKElQLmOwx6M92fpwv/rDxEin9sxF4TTMRCXgnXuVH4dow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n8oaeFUkJMWLJ7wMZGPImGcnywyXHWk3k4xb8cqU6To=;
- b=D6SuJysHFocizK7vOT0JAuHpuKQZxW8bKqQesR/KTSizQZT8SRZmHHbK4dPOzUPrn8ylKjnF1AthKHuwZTL2XzSNuPqVkY/UoK16lxX835yrgeQatKHeAVTVtrvtNYV5egV0TxvRGQX0jYTRYDBLL9ivI8EmqbpKiwXgoGznT3eXcINDTDUdp7SLcbp1ky8ayUPrWo3/ascGRtXmmuiykMPv+xEWI9p36zv3xzMvy1LuzgVXKiSoup8KwxpmKCoKlE8rpoQZF7KfdjuS6M0DSgQ4holYxbb+sVXangBuRmqThSqq/HomBAVXDtEoD1E23BDQhsnpJNydW3gVJUUn6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n8oaeFUkJMWLJ7wMZGPImGcnywyXHWk3k4xb8cqU6To=;
- b=MtckPxYJcIegdAaqn7ml36U0qnzUqNoMNCxdUxgYVsV53oOwumdBT/ECJi6LrLIM6xr6om+NcpHhgK7I7yjjDQ9le11KgkJP6U4VFZXOqQtuI/H6+WSppclYKUyxus4TefirQLCcEoeRAsrVDiLItK9cLlxuayUKezJf96xzRSs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH8PR12MB7325.namprd12.prod.outlook.com (2603:10b6:510:217::19)
- by CH3PR12MB7641.namprd12.prod.outlook.com (2603:10b6:610:150::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.16; Mon, 5 Feb
- 2024 07:10:11 +0000
-Received: from PH8PR12MB7325.namprd12.prod.outlook.com
- ([fe80::a2e6:c3b5:4e05:825c]) by PH8PR12MB7325.namprd12.prod.outlook.com
- ([fe80::a2e6:c3b5:4e05:825c%4]) with mapi id 15.20.7270.015; Mon, 5 Feb 2024
- 07:10:11 +0000
-Subject: Re: [PATCH] EDAC/amd64: Add MI300 row retirement support
-To: Yazen Ghannam <yazen.ghannam@amd.com>, bp@alien8.de,
- linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, avadhut.naik@amd.com, john.allen@amd.com,
- muralidhara.mk@amd.com
-References: <20240204155106.3110934-1-yazen.ghannam@amd.com>
-From: "M K, Muralidhara" <muralimk@amd.com>
-Message-ID: <7469b9fe-227a-4ab7-f88d-b399ad1d7941@amd.com>
-Date: Mon, 5 Feb 2024 12:40:02 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-In-Reply-To: <20240204155106.3110934-1-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN0PR01CA0044.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:49::19) To PH8PR12MB7325.namprd12.prod.outlook.com
- (2603:10b6:510:217::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646D011190;
+	Mon,  5 Feb 2024 07:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707117540; cv=none; b=nSphi5CRqpYXC+SE+JX861bciXhJwlip07wqENndk66J6M2c4wBYMaJFZiQHMCK3HCD9Pg62cVAtfhpGVoAFBu120S3RKKsqUdLweYZzUcwMTkrB39LHN5dcKRRJ/d6PAcUg4hehEsD52v5vubpRdnfdywDNWf1+ewv0HsY5szw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707117540; c=relaxed/simple;
+	bh=73k30Uuu2I0nXwmzN/giEsYyYLykqNOzfOvlrrvM9QI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=jUXCCdz4+jvhNA6MeXAVUHd+8+Lnc/6UdzEqojGPm43C7NaWtPEr8yz4FmefHYANqki00+7if57VgyOHQMQLvDAVAyDIGwV60u3ddjWsYIzNuU/nxtN7PfovqtSrwfUvjdQNS4KAzrBwjNVxw+luNlzYv9ZpAese0EFu4nBfh64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=M2L9jptv; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1707117514; x=1707722314; i=markus.elfring@web.de;
+	bh=73k30Uuu2I0nXwmzN/giEsYyYLykqNOzfOvlrrvM9QI=;
+	h=X-UI-Sender-Class:Date:To:Cc:From:Subject;
+	b=M2L9jptvoI4I7+K/EudTNtJrCo0CPh8GMvqhLw1GZXVWPw7519nQigtlsdsflvKj
+	 rID500k2cNuaQYce/tTHZi/nagQasi/P36aEfd+bMER9Z1psZ8xmcP1XsjJjDpmD+
+	 If1DhcgKtHvqpFIGibeD2sLrkhJbynu/hR1vhmYsRqyzBtkFreY8t39DA3B5WwJmR
+	 W3/a8I3DyWuzpvjmCDgGjjglQd6a8rJTtf5rfjs7V2zFQkkhoijM1acAzQFsg+ki8
+	 JMs7PRZk5ELEXCza8+uUHGma0g7r0Si/Tz4Ho/ysHd2r9FXaaijRaVMe7xy4ImusB
+	 m/JNDLfCsQMCTc/Zcg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1M7Nmo-1rebQ610LE-007sv2; Mon, 05
+ Feb 2024 08:18:34 +0100
+Message-ID: <0b255d17-deab-4d6e-bf44-d950b512dc14@web.de>
+Date: Mon, 5 Feb 2024 08:18:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR12MB7325:EE_|CH3PR12MB7641:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e7328dd-4d9b-4ffe-ca59-08dc26197dce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	JB1HMMzh/lid4GjNYNPAtk/yDz/STmeoCB7Z+OnreTp2AG+hRVWE0X9QsM2UeZC61mUbqQ00+bJRRuQeC6UieAYwTSzNJH5hod++Rztj9VN9+ozsZONRi9JyajdXGiw5FWtxwL2ngVKM+a3exHp6sq7ODhfc86pzQxKuit4KffMNwAtpWlj40JHZQMC86c7fTMn0bSDzaxIEcbygnqoOtSv5JGkD2FmJCY5zeYnnDRG0t2rPzq1bihClIDt7dVl0+g0xO9f4Z7AA3Te5VQX1ZOZIXh4eub93WzFyvqyB/KcquZKduik8Cd0tr1O6UQUrai8fpa/TpCOpO+NmwXE3TqKp4BoadA2E5bh4s6Rj0VWtV2xMcTphd5oVeqBmA9Wmju2DTXy9E7Dh8daDf+zNLIXf5QyviH1PsIEKH37CZTowQRmfJj/wQxz7axQOxB0gXbUFfJdF+bpamfAs1SUEB7Jka+WmjEwcEe6SrRHI56mOLiI+CPxjcOH6zutI9r0qLXnXq6YS3gFWg5Dmo38WjSht626vFYO6tpx9raIWq/LiVbuhDciexERweZPRjyiXZPTmBvPjGWGzO1amqk8BOmyBtBpguV54rQ0NFh5gNJO2P7Dm6lcdeT97IPx1S6bt1hDnaepth+WeL+pTnIQGXg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR12MB7325.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(136003)(366004)(39860400002)(230922051799003)(64100799003)(1800799012)(186009)(451199024)(6512007)(2616005)(26005)(6506007)(31696002)(478600001)(966005)(53546011)(6486002)(66946007)(66556008)(66476007)(4326008)(8676002)(8936002)(316002)(31686004)(6666004)(38100700002)(36756003)(41300700001)(2906002)(4744005)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MFlaYVJ2Q0tRM0pYbzRDOWVqak1tTSsvbmtNOXBTR3FNdmx1TWN0VkNBUU9h?=
- =?utf-8?B?R0tMaThLbGNVMEJDRGdRMlNYdnNvZ01KbC9pRkExMDlncmJnK0V5NzZtYmFx?=
- =?utf-8?B?OERSWmpYaHBUd3VjMFIxa25oNldZOFdwWG0zVVJpUVNYay9CSlBiWE5iQnVT?=
- =?utf-8?B?T3VKTHpCd3ZEcko0NGt4MFg5TzhrNUhIM1hoUTFKSWZsQVdtUnpPL2lHKzc4?=
- =?utf-8?B?QUJuaGZGQWcxbWxINzdyeENoWFdyeFgrcllmMDgzYUJlWEplcmdydGRGSGRi?=
- =?utf-8?B?ejlodHEraUZRclkvSUh2NDljTTByaC9uZ20vT2tsOVlIYVROYTNwUk51YWlo?=
- =?utf-8?B?amdKeGtaMlVPOGNKR3lsaCswOE9JZk5oZ29qOVpRbjIzUEphd0VNU01IVVZR?=
- =?utf-8?B?blo3NVpVeWx0Y3BjcTBkanhPaFAxVUM3ZXB2Ykxkbk40TC80WVdVWHc0M1BT?=
- =?utf-8?B?UXo0SWY4Tk96eGdTcVJoUlhKelRyZ2VNNm4yaVJjSmR2NHNhWE56YnhGNjdK?=
- =?utf-8?B?R0QrQ29NdEVPSjVlMGhDakMwalc4NWlDZmpLM3pSTWVsZXEzVlA2MGhYdmJD?=
- =?utf-8?B?NHFSczF5NUw4OXczRzMrcGt3cEdoTTh0bndLektXaTMzQW5VK04rZWFybVVX?=
- =?utf-8?B?N2ZUZUs2eGJ2eENaYm44ckJxVStSbGVEY1B1YTdrTmxIQndxN1YzSkVUcm1H?=
- =?utf-8?B?Q0xaQmFlZFVEemt1aEFZcUU3aTNEZzQ1TE9LMzA1bk0valpjcWovRWFURUlZ?=
- =?utf-8?B?Z1d6bjRoNXVDQlZjWmQwcWIzMWhjQW5ici9HelNWV0pUVU1KUFJXQ2pBZkNE?=
- =?utf-8?B?WHFHWW9NWnlxMDNXbWpOOTc0TEZpTUdXUDBMZTkxZndJMi9rOUxOeVh6RGFi?=
- =?utf-8?B?OWp2VkRXOGpwNjUzejNJMzFESnFuTnVsZWlsWjlCRzBTd1RXVFlWdnVmKzh1?=
- =?utf-8?B?bHNuNEJWUG01d1V0Wnk2WWJFcmVENUJzc1QzeUJYdU1mTWFvN0R1UGFreU9n?=
- =?utf-8?B?WGVReitTNm5SeDgwUHlPdG5YdkVLMjIrdFVwbjE2dXdxdHZOTmhVNU5OQXdj?=
- =?utf-8?B?YlBuTktaN3ZzdzZMd0p2NVVZdEFYaHhRSkd1N1ltUDl2dFdrdy8zbXhaQ3Y0?=
- =?utf-8?B?aDhrSUl5SnFEWHBUdWhwUzBEanNyNURnL3R5KzVRc2htOG8vbE1acTJzQ0do?=
- =?utf-8?B?WnhxRGQwSGhNQndXY3lNd1J1eUx5QmtSZ0VIYUdKZ3NGUjMzRS9yZmQ0REVl?=
- =?utf-8?B?MUU1Zi9Vb3A5am8zOGNCTmo1cnl5QTZ3em1ZemxCVEE0LzhtVGtjSUN6bWU4?=
- =?utf-8?B?bU9IMk1xUDMxZDVxT20zaTZwT0xpSXFzTEVmaDRzWitKc2ZjaGJJc0VKb1pv?=
- =?utf-8?B?YmovTkkxL2o3bjFGc1dsbjNKbE5EYnA3Y2VYczNPSCt1TjhtZWJQVzN6aFky?=
- =?utf-8?B?NFZzME5aTmtsbUxibzRnSnRVWWFJRVUra3dULzBOU1BVRmQydkl0ZlZkVzdC?=
- =?utf-8?B?cHh1UVZMTTVoblg1RU0yTnkyalhsblZYWDFKdjFiL1RHcWtwY2lrRjF1L3lk?=
- =?utf-8?B?UkFucUFvczN5Sjh0OFZ5YzFSYjdPN1U3QWhDOGxPWGZSK2F6WDdBTHI2S2Zp?=
- =?utf-8?B?aEMxTVIvV2t6QWdMVTlCdXdqMU5DVUpRaFJ0dktTcmIraTZiWm1EWHZEamJ5?=
- =?utf-8?B?QmRUSFA4YjZ3ZkpCRlI2bjAvYWRwekhzUUJqL253STB5ZzJWUDUyMHhqZjF5?=
- =?utf-8?B?RG5rak1lSzdUVnAwbW16RUt3VVdJY0k3NTRUN1ROL1NxTm8wTzR2UmtKSFNS?=
- =?utf-8?B?TzlqVWEzc3dHMkxvZ3RrV2FRY2dKbGNyZHR3UmVjZE9CdE8wV2xBVlhIRjZj?=
- =?utf-8?B?U3lRVGpvdlBGS3Q4dEcwVEt2NmFOYWJmTk1iRTFVbmVzc1NmT1gweEp6QW1P?=
- =?utf-8?B?R3pxLzE3NE1DYzFRcmVoVzkvMERZT09qTVBVUFppQlZHWmZET0lOcDZIL2t6?=
- =?utf-8?B?TTAzanF1aCtkcWRxV3RGOEdDMGowOHdLbHBENmZrc2o4Sm5OT1VicUh3RWxT?=
- =?utf-8?B?TVpGZkoyWmhvT2w1cy81Z24rVisyb1ljd0d5blFPS1FEWVhUTTY3TDFVTEl3?=
- =?utf-8?Q?gQrM79cDPbrU9ZXa6lEPTCRe0?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e7328dd-4d9b-4ffe-ca59-08dc26197dce
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB7325.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 07:10:11.0474
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ze5OH5xX+vRFToJZ8brIE9XEPOrcB2WCXPfrF2DSQRMKwD+EyTve6YptMAt/zWc0sAYLJsSPk+F1LZzS+QOXew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7641
+User-Agent: Mozilla Thunderbird
+To: linux-edac@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
+ Khuong Dinh <khuong@os.amperecomputing.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
+ <rric@kernel.org>, Tony Luck <tony.luck@intel.com>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] EDAC/xgene: Use devm_platform_get_and_ioremap_resource() in
+ xgene_edac_probe()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:4hV7VJ0mx1v/VvrknYWWyPT1r0T07XTywcSSrrjZxNUELMe+hag
+ MeVbBYU5q/nEhNx0LZ7rfm9tMQ25/pPdOPBlfB1mBPbH9bElk7c0sEEwTOv/QNFYXPkUDg1
+ gm25BR26WYV5zBjKKVEJgGH6u3I+VFXERsXymYkVexBoij3lSv9dbX7Wti/2ct06xa1n+tz
+ ob6G05muvdrywSLVHp0eA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ZAg9M4qwheQ=;c5zCXkRmxY+UGlNIsKrF+g1zke3
+ fGPzSLCw34v1RPBeYLeN09uPFDiiYIpivGB7A10GlwaBdEEVLe5gyKoXB4E2yGEu+4+p44Pgt
+ M0JQyESTNaySDqnd3yADb7GSYB+2nVPU9/9X20FELbf7jAN1qoDyLyUTYmYKCcvU+mPnNv3HL
+ qFevPiEzOe1zesSmEfUa5Wt1HaxGszvx/jsXqQm9BTRSbGROVwmGkOGOjAnIYij1C2OP+n9lw
+ xWcD8y0XwqWL66YtZ7IIXAuD6adgkuK5aqgYvejaog2rRg+KWGINnQbI22UrEmg9nOwisGn7+
+ azcBlFOpON1E6uAePbgEmuMUkt376Ggtg52udxWoDl/nxlRonv4QdqhZWkpWMsKqSPvXGwqv5
+ S35o3A5zlGnO2lpgvtAKPMvftHrqJbXELqI/VOFZGJovEVftAIcAEbIN31bubkUB3S3KnPwbA
+ kVU+9SK5IzW2aXHzZkDZtNURbD2G/0rVVjd6emS00QicvaZUQdeQqhgTo1MbnssG5hINMzbHr
+ nbXNXdWRw2tXSPnnLwIIpEBAPsFlO6I/1/V9b715fJT2lVFHWpYlefEcmPFEKmRYRUpGfUiae
+ ciM0FlPkf/ACR6mldBDse1WOy1jFsEeELznNvvjgyn19w49GvC8gIw7GN3UpWQntIJKUDL6qO
+ eXMRgYBr9cSUUt7qp6ejQTvgb1YSQatV0z5U/SUk8JrQZ70XYrLrjYwO4Jw0a0q4Ys43lGAPn
+ +a/w0J+ix4UfjIrQas3RrCdbxLHpvT5ZuLj/J6V1KpGkw9nJT7YjLmWF3qrNRWLNUSN4ai5P3
+ 6eqqLxTzfUoLtVhE/ScEPA5mqf18CI4rLVjMHex0xhF6s=
 
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Mon, 5 Feb 2024 08:12:24 +0100
 
+A wrapper function is available since the commit 890cc39a879906b63912482df=
+c41944579df2dc6
+("drivers: provide devm_platform_get_and_ioremap_resource()").
+Thus reuse existing functionality instead of keeping duplicate source code=
+.
 
-On 2/4/2024 9:21 PM, Yazen Ghannam wrote:
-> https://lore.kernel.org/r/20231129073521.2127403-7-muralimk@amd.com
-> 
-> I'd like to include Murali as co-developer, since this is based on his
-> work.
+This issue was detected by using the Coccinelle software.
 
-Thanks for the flow. I have tested and row retirement feature is working 
-as expected. Please include Co-developed-by:Muralidhara M K 
-<muralidhara.mk@amd.com>
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/edac/xgene_edac.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
+index 1b50f8160013..8776765b6d2e 100644
+=2D-- a/drivers/edac/xgene_edac.c
++++ b/drivers/edac/xgene_edac.c
+@@ -1903,8 +1903,7 @@ static int xgene_edac_probe(struct platform_device *=
+pdev)
+ 		edac->rb_map =3D NULL;
+ 	}
+
+-	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	edac->pcp_csr =3D devm_ioremap_resource(&pdev->dev, res);
++	edac->pcp_csr =3D devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(edac->pcp_csr)) {
+ 		dev_err(&pdev->dev, "no PCP resource address\n");
+ 		rc =3D PTR_ERR(edac->pcp_csr);
+=2D-
+2.43.0
+
 
