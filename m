@@ -1,236 +1,154 @@
-Return-Path: <linux-edac+bounces-451-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-452-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7B78848F03
-	for <lists+linux-edac@lfdr.de>; Sun,  4 Feb 2024 16:51:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D5F1849437
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Feb 2024 08:10:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B927CB22712
-	for <lists+linux-edac@lfdr.de>; Sun,  4 Feb 2024 15:51:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0311B282BA7
+	for <lists+linux-edac@lfdr.de>; Mon,  5 Feb 2024 07:10:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717EF22301;
-	Sun,  4 Feb 2024 15:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEDA1C133;
+	Mon,  5 Feb 2024 07:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SmAPnwwO"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MtckPxYJ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2058.outbound.protection.outlook.com [40.107.93.58])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2082.outbound.protection.outlook.com [40.107.102.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4965D2261F;
-	Sun,  4 Feb 2024 15:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEFD10A2E;
+	Mon,  5 Feb 2024 07:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.82
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707061885; cv=fail; b=ho0ZUn+bgai9oLepKR91ADwQIiaTL7WZRWCYYy6sh15UNXuQWhKQEmadT73ZEYBnqW48oOTF4XvXmPrg0C71dUutUY+lKRtG9UX6n0D7Lw9xebs2dyVWh6T0DOjOjiMDK/BYke7P9I3UvF+qG9Andt8w9Ez4Ni42T6a6opCT2NA=
+	t=1707117017; cv=fail; b=Z+U/uDzcdvUTfpduD/7OVU/OoS74nPJjf8MO+MUq8Tk+CeBdfNspXC7h3FqY3w1MmY8U7tCN5ftbe03Y54Si1USkJfBdtuXYxWCUAgRZoM4uB5OrmKJzYjWJR5uZxj5on21zcpBZMs+T27nE28dpZcfob6j6JGSvGpCvMiBmpvc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707061885; c=relaxed/simple;
-	bh=IZ2yY35WRSrVl1vUswGDAQNqmhV88hYmwJYVfBW96oU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QSU8j5EsOqaAYEiUDwGPCraZL0TVzzlBOs7OwgCS01omoLpsIlxXG8fG1Lcy+5HYHCzgbvg4n0YZqFXKqXY6fL+2Pv6FDMwGLoGi+4ib10EqDy0zoMzDJeIfcXAEBbwv6aR2pFooeFp5yYhA2n6A0BqC6MTNevMmNBCvrJQ9SFU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SmAPnwwO; arc=fail smtp.client-ip=40.107.93.58
+	s=arc-20240116; t=1707117017; c=relaxed/simple;
+	bh=Zq1YHmyH3GtY4NyozeASZEe8vpWQZeFDp52MNW0opos=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:In-Reply-To:
+	 Content-Type:MIME-Version; b=XNuDdptXhZipe2+HZSQoAH4cKT954uqEQRVEZzai8P3jIG6jberG2VD+uepM5/j5AtzYo4BOvKBNrpYgdRtxNYX1ax/BtGR+WyerFyQQGGmDQ1yGtvtypcYxXnGTrwT/eluPa4DMitNi0/cIp1S+YE68vfrtIrsB/MpRneiBwcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MtckPxYJ; arc=fail smtp.client-ip=40.107.102.82
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dFeuBjGREQ0hmxMK9h04VEWakwyU7HQGR4EHCZy37f9Ti7roqR5Yw/9MCEY04ihwU/txbz8Sqs23m3yuDfq2bgDRPMXEfRstYjjivhsqyu/MCtmvcSxFVcWqKNuP2PZlU43E8a3lX1tjpkyN7dpqbtIZfirTHJg9Slrv8MndT1kZXKbJ3ZkJhvcZS62DBKYUJRwJ2q533zeGQCxm1D68PZT3leK3lTuDfpzaXjYyhNtoYXSYDK+eO24VkFdrChz7+vT7cGpysbGE8orc+hxYD2G5ZxZqgV8+8G2KaEsBZPXgz6VgyQ3y5TwvaOMFe8Rhk3LkLBk3gmZ6lAMATp3Olg==
+ b=F2YMaspjrkJ4y20zDsGIJ3Cp1ETZ2/SzAcY/WU7uQP3MIrD0tSeRlHIsOLziHbMKolOuHGqo07ImAqiAZe5lbdYKoeW9PoWeVEeHk0pOCqponYfZKj75rGwecCUGrAxb6GgiWJCjWgClCu/pYpB6wwwqY30hpZV5cM1KfVoFqgXr0TI05v65EDKNOCGjODRqUaddvWY4pSZQQXzJwGa1ZDFHvy+akYPArB4OzYd+ahbQdz8CUs2gCuaOFR7iyYRuTzyOc/RCTkHGOFH82XWaPV7vzJwj4iWOJZVFt2fNcKElQLmOwx6M92fpwv/rDxEin9sxF4TTMRCXgnXuVH4dow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KJeBZdPKE378NT5tKJwNsRb91vNjRTz+TSqgUExmYEs=;
- b=STPks0FFUTo9pFizl+DEMQ4apfJmv17ev9b1b7V9IKkzgvRVu1r+6PJYL78YRpOP/d1nHw1dj3QBMPEp4MsNWZY9jNKzIMCtIeuA6fp9H4WWjnE+AO1cDyXUR34ieFc2hdtboBrWrfpl05utv3zX/cN7KFU34SHDDRSjdy4nSQH+DW+C1zpVsC8TehM4+5p6Jd8mYD8fPecfl9akm5wf1CEIdoKj3JfdPiDQRan4fW7C9OQKuEXn57QHYVv+Q1fyqciDsToQUrQe6axFpJr/hI8sMVSgt2ajRiIYMJZiDNMdtVfL6ngPyajRg4hZnGl2azeD4wHuDxXS+0tM4FG2Ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
+ bh=n8oaeFUkJMWLJ7wMZGPImGcnywyXHWk3k4xb8cqU6To=;
+ b=D6SuJysHFocizK7vOT0JAuHpuKQZxW8bKqQesR/KTSizQZT8SRZmHHbK4dPOzUPrn8ylKjnF1AthKHuwZTL2XzSNuPqVkY/UoK16lxX835yrgeQatKHeAVTVtrvtNYV5egV0TxvRGQX0jYTRYDBLL9ivI8EmqbpKiwXgoGznT3eXcINDTDUdp7SLcbp1ky8ayUPrWo3/ascGRtXmmuiykMPv+xEWI9p36zv3xzMvy1LuzgVXKiSoup8KwxpmKCoKlE8rpoQZF7KfdjuS6M0DSgQ4holYxbb+sVXangBuRmqThSqq/HomBAVXDtEoD1E23BDQhsnpJNydW3gVJUUn6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KJeBZdPKE378NT5tKJwNsRb91vNjRTz+TSqgUExmYEs=;
- b=SmAPnwwO7WE/uRWzUqnSlbtewlpHn+dodkMMqmzaAc9dMeyzf5ID1sIzfdYaPSfjj8r4L0qNDxiLFgRVlySu5MkhN2HJurpP28iTDM7zHj6nU14voGxUuL6m2MpP/UStyK3oqEM3ArjWJYAJT6ssBvcUt/CF7UqgFyDGcnjUMeY=
-Received: from SJ0PR13CA0058.namprd13.prod.outlook.com (2603:10b6:a03:2c2::33)
- by SJ2PR12MB8689.namprd12.prod.outlook.com (2603:10b6:a03:53d::22) with
+ bh=n8oaeFUkJMWLJ7wMZGPImGcnywyXHWk3k4xb8cqU6To=;
+ b=MtckPxYJcIegdAaqn7ml36U0qnzUqNoMNCxdUxgYVsV53oOwumdBT/ECJi6LrLIM6xr6om+NcpHhgK7I7yjjDQ9le11KgkJP6U4VFZXOqQtuI/H6+WSppclYKUyxus4TefirQLCcEoeRAsrVDiLItK9cLlxuayUKezJf96xzRSs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH8PR12MB7325.namprd12.prod.outlook.com (2603:10b6:510:217::19)
+ by CH3PR12MB7641.namprd12.prod.outlook.com (2603:10b6:610:150::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.14; Sun, 4 Feb
- 2024 15:51:17 +0000
-Received: from CO1PEPF000042AD.namprd03.prod.outlook.com
- (2603:10b6:a03:2c2:cafe::ca) by SJ0PR13CA0058.outlook.office365.com
- (2603:10b6:a03:2c2::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.22 via Frontend
- Transport; Sun, 4 Feb 2024 15:51:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000042AD.mail.protection.outlook.com (10.167.243.42) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7249.19 via Frontend Transport; Sun, 4 Feb 2024 15:51:16 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Sun, 4 Feb
- 2024 09:51:15 -0600
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: <bp@alien8.de>, <linux-edac@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
-	<john.allen@amd.com>, <muralidhara.mk@amd.com>, Yazen Ghannam
-	<yazen.ghannam@amd.com>
-Subject: [PATCH] EDAC/amd64: Add MI300 row retirement support
-Date: Sun, 4 Feb 2024 09:51:06 -0600
-Message-ID: <20240204155106.3110934-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.16; Mon, 5 Feb
+ 2024 07:10:11 +0000
+Received: from PH8PR12MB7325.namprd12.prod.outlook.com
+ ([fe80::a2e6:c3b5:4e05:825c]) by PH8PR12MB7325.namprd12.prod.outlook.com
+ ([fe80::a2e6:c3b5:4e05:825c%4]) with mapi id 15.20.7270.015; Mon, 5 Feb 2024
+ 07:10:11 +0000
+Subject: Re: [PATCH] EDAC/amd64: Add MI300 row retirement support
+To: Yazen Ghannam <yazen.ghannam@amd.com>, bp@alien8.de,
+ linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, avadhut.naik@amd.com, john.allen@amd.com,
+ muralidhara.mk@amd.com
+References: <20240204155106.3110934-1-yazen.ghannam@amd.com>
+From: "M K, Muralidhara" <muralimk@amd.com>
+Message-ID: <7469b9fe-227a-4ab7-f88d-b399ad1d7941@amd.com>
+Date: Mon, 5 Feb 2024 12:40:02 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
+In-Reply-To: <20240204155106.3110934-1-yazen.ghannam@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN0PR01CA0044.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:49::19) To PH8PR12MB7325.namprd12.prod.outlook.com
+ (2603:10b6:510:217::19)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042AD:EE_|SJ2PR12MB8689:EE_
-X-MS-Office365-Filtering-Correlation-Id: 56318c19-ce1b-410a-a7d0-08dc25991fab
+X-MS-TrafficTypeDiagnostic: PH8PR12MB7325:EE_|CH3PR12MB7641:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2e7328dd-4d9b-4ffe-ca59-08dc26197dce
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	UhLlwWQccHF3UWHl5rHoFjJ6LSoAgmtU5mhQpUi7AHNv7E3PFQVv/dfiePMV2TdtYSsvnRqeVmMhpXElQC3ZkMbUyiUXHWLCfsX6sxftmmQpuQbi0WFm4E0xJnBL6RMClNbNJXL/1Yb/4IOfVuVaauJYyY+qi6YYxFrF9rhlTML1aygkQ3rak+/H+Y5xTh1J/qGu+Jvaa3QrK6lopFFqjjVlpiMBz8Smd8QGp5HoLz9gtwCOFDKX2vrvuLcIs0Mh77YDbIau2GjtaUzJ/BhULwUuUbM00+MIIC9L9TGA3E+ZdCDIXNJk90Jjhp8Bct28nPNvXVnGp1gLCYuxKuwmIO5MuB3tQ2pVWJWnaLA/NGiDP0NqBGKWMJ0RZ4asrVQz3k+McBoj5dgcLAlvtQWfp+lxQEFDgyKg2n2jIr9dJEputIHYVF65uinpncLK/qUJReWeVUsBm5L6S6+xn2YW66JBzN6sK+5SCPDS5kSnkU1osz4NOgICPzDcJbthdhKjim6re+QWUfv7zEsPXed/ci3xbBvTDqxkYcU0xlsqeuJCGWoGmhxZBJGYTN88Abhrh5dF7q0IiRL2yAGLGUykQ18dmHnIZV5X0iSe/9EAzdV6+RPWukfLUhVlPivUKDZ1NOOE+6ER2TDf1eqSEKwjoX5vyx9VRGOvHiPDKFqi5K1hVL3DAuqgDYlGGqzaHcXCNwvJC/6o0NKmnERgBdjGoIs2re3eJUK5bXqMT7HoRlSb66A+54zYuUasS0vGmn+WJEBvgKsa3Tpw3FOhv+EEDa9KSzXT7jJqwbq2AkOBaWs=
+	JB1HMMzh/lid4GjNYNPAtk/yDz/STmeoCB7Z+OnreTp2AG+hRVWE0X9QsM2UeZC61mUbqQ00+bJRRuQeC6UieAYwTSzNJH5hod++Rztj9VN9+ozsZONRi9JyajdXGiw5FWtxwL2ngVKM+a3exHp6sq7ODhfc86pzQxKuit4KffMNwAtpWlj40JHZQMC86c7fTMn0bSDzaxIEcbygnqoOtSv5JGkD2FmJCY5zeYnnDRG0t2rPzq1bihClIDt7dVl0+g0xO9f4Z7AA3Te5VQX1ZOZIXh4eub93WzFyvqyB/KcquZKduik8Cd0tr1O6UQUrai8fpa/TpCOpO+NmwXE3TqKp4BoadA2E5bh4s6Rj0VWtV2xMcTphd5oVeqBmA9Wmju2DTXy9E7Dh8daDf+zNLIXf5QyviH1PsIEKH37CZTowQRmfJj/wQxz7axQOxB0gXbUFfJdF+bpamfAs1SUEB7Jka+WmjEwcEe6SrRHI56mOLiI+CPxjcOH6zutI9r0qLXnXq6YS3gFWg5Dmo38WjSht626vFYO6tpx9raIWq/LiVbuhDciexERweZPRjyiXZPTmBvPjGWGzO1amqk8BOmyBtBpguV54rQ0NFh5gNJO2P7Dm6lcdeT97IPx1S6bt1hDnaepth+WeL+pTnIQGXg==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(346002)(396003)(39860400002)(230922051799003)(64100799003)(1800799012)(82310400011)(186009)(451199024)(46966006)(40470700004)(36840700001)(40480700001)(40460700003)(36756003)(478600001)(86362001)(356005)(336012)(1076003)(83380400001)(82740400003)(966005)(47076005)(16526019)(26005)(426003)(2616005)(41300700001)(70206006)(4326008)(70586007)(54906003)(5660300002)(7696005)(81166007)(6666004)(44832011)(36860700001)(110136005)(316002)(8936002)(8676002)(2906002)(36900700001);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR12MB7325.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(136003)(366004)(39860400002)(230922051799003)(64100799003)(1800799012)(186009)(451199024)(6512007)(2616005)(26005)(6506007)(31696002)(478600001)(966005)(53546011)(6486002)(66946007)(66556008)(66476007)(4326008)(8676002)(8936002)(316002)(31686004)(6666004)(38100700002)(36756003)(41300700001)(2906002)(4744005)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MFlaYVJ2Q0tRM0pYbzRDOWVqak1tTSsvbmtNOXBTR3FNdmx1TWN0VkNBUU9h?=
+ =?utf-8?B?R0tMaThLbGNVMEJDRGdRMlNYdnNvZ01KbC9pRkExMDlncmJnK0V5NzZtYmFx?=
+ =?utf-8?B?OERSWmpYaHBUd3VjMFIxa25oNldZOFdwWG0zVVJpUVNYay9CSlBiWE5iQnVT?=
+ =?utf-8?B?T3VKTHpCd3ZEcko0NGt4MFg5TzhrNUhIM1hoUTFKSWZsQVdtUnpPL2lHKzc4?=
+ =?utf-8?B?QUJuaGZGQWcxbWxINzdyeENoWFdyeFgrcllmMDgzYUJlWEplcmdydGRGSGRi?=
+ =?utf-8?B?ejlodHEraUZRclkvSUh2NDljTTByaC9uZ20vT2tsOVlIYVROYTNwUk51YWlo?=
+ =?utf-8?B?amdKeGtaMlVPOGNKR3lsaCswOE9JZk5oZ29qOVpRbjIzUEphd0VNU01IVVZR?=
+ =?utf-8?B?blo3NVpVeWx0Y3BjcTBkanhPaFAxVUM3ZXB2Ykxkbk40TC80WVdVWHc0M1BT?=
+ =?utf-8?B?UXo0SWY4Tk96eGdTcVJoUlhKelRyZ2VNNm4yaVJjSmR2NHNhWE56YnhGNjdK?=
+ =?utf-8?B?R0QrQ29NdEVPSjVlMGhDakMwalc4NWlDZmpLM3pSTWVsZXEzVlA2MGhYdmJD?=
+ =?utf-8?B?NHFSczF5NUw4OXczRzMrcGt3cEdoTTh0bndLektXaTMzQW5VK04rZWFybVVX?=
+ =?utf-8?B?N2ZUZUs2eGJ2eENaYm44ckJxVStSbGVEY1B1YTdrTmxIQndxN1YzSkVUcm1H?=
+ =?utf-8?B?Q0xaQmFlZFVEemt1aEFZcUU3aTNEZzQ1TE9LMzA1bk0valpjcWovRWFURUlZ?=
+ =?utf-8?B?Z1d6bjRoNXVDQlZjWmQwcWIzMWhjQW5ici9HelNWV0pUVU1KUFJXQ2pBZkNE?=
+ =?utf-8?B?WHFHWW9NWnlxMDNXbWpOOTc0TEZpTUdXUDBMZTkxZndJMi9rOUxOeVh6RGFi?=
+ =?utf-8?B?OWp2VkRXOGpwNjUzejNJMzFESnFuTnVsZWlsWjlCRzBTd1RXVFlWdnVmKzh1?=
+ =?utf-8?B?bHNuNEJWUG01d1V0Wnk2WWJFcmVENUJzc1QzeUJYdU1mTWFvN0R1UGFreU9n?=
+ =?utf-8?B?WGVReitTNm5SeDgwUHlPdG5YdkVLMjIrdFVwbjE2dXdxdHZOTmhVNU5OQXdj?=
+ =?utf-8?B?YlBuTktaN3ZzdzZMd0p2NVVZdEFYaHhRSkd1N1ltUDl2dFdrdy8zbXhaQ3Y0?=
+ =?utf-8?B?aDhrSUl5SnFEWHBUdWhwUzBEanNyNURnL3R5KzVRc2htOG8vbE1acTJzQ0do?=
+ =?utf-8?B?WnhxRGQwSGhNQndXY3lNd1J1eUx5QmtSZ0VIYUdKZ3NGUjMzRS9yZmQ0REVl?=
+ =?utf-8?B?MUU1Zi9Vb3A5am8zOGNCTmo1cnl5QTZ3em1ZemxCVEE0LzhtVGtjSUN6bWU4?=
+ =?utf-8?B?bU9IMk1xUDMxZDVxT20zaTZwT0xpSXFzTEVmaDRzWitKc2ZjaGJJc0VKb1pv?=
+ =?utf-8?B?YmovTkkxL2o3bjFGc1dsbjNKbE5EYnA3Y2VYczNPSCt1TjhtZWJQVzN6aFky?=
+ =?utf-8?B?NFZzME5aTmtsbUxibzRnSnRVWWFJRVUra3dULzBOU1BVRmQydkl0ZlZkVzdC?=
+ =?utf-8?B?cHh1UVZMTTVoblg1RU0yTnkyalhsblZYWDFKdjFiL1RHcWtwY2lrRjF1L3lk?=
+ =?utf-8?B?UkFucUFvczN5Sjh0OFZ5YzFSYjdPN1U3QWhDOGxPWGZSK2F6WDdBTHI2S2Zp?=
+ =?utf-8?B?aEMxTVIvV2t6QWdMVTlCdXdqMU5DVUpRaFJ0dktTcmIraTZiWm1EWHZEamJ5?=
+ =?utf-8?B?QmRUSFA4YjZ3ZkpCRlI2bjAvYWRwekhzUUJqL253STB5ZzJWUDUyMHhqZjF5?=
+ =?utf-8?B?RG5rak1lSzdUVnAwbW16RUt3VVdJY0k3NTRUN1ROL1NxTm8wTzR2UmtKSFNS?=
+ =?utf-8?B?TzlqVWEzc3dHMkxvZ3RrV2FRY2dKbGNyZHR3UmVjZE9CdE8wV2xBVlhIRjZj?=
+ =?utf-8?B?U3lRVGpvdlBGS3Q4dEcwVEt2NmFOYWJmTk1iRTFVbmVzc1NmT1gweEp6QW1P?=
+ =?utf-8?B?R3pxLzE3NE1DYzFRcmVoVzkvMERZT09qTVBVUFppQlZHWmZET0lOcDZIL2t6?=
+ =?utf-8?B?TTAzanF1aCtkcWRxV3RGOEdDMGowOHdLbHBENmZrc2o4Sm5OT1VicUh3RWxT?=
+ =?utf-8?B?TVpGZkoyWmhvT2w1cy81Z24rVisyb1ljd0d5blFPS1FEWVhUTTY3TDFVTEl3?=
+ =?utf-8?Q?gQrM79cDPbrU9ZXa6lEPTCRe0?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2024 15:51:16.9772
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e7328dd-4d9b-4ffe-ca59-08dc26197dce
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB7325.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 07:10:11.0474
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56318c19-ce1b-410a-a7d0-08dc25991fab
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000042AD.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8689
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ze5OH5xX+vRFToJZ8brIE9XEPOrcB2WCXPfrF2DSQRMKwD+EyTve6YptMAt/zWc0sAYLJsSPk+F1LZzS+QOXew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7641
 
-AMD MI300 systems have on-die High Bandwidth Memory. This memory has a
-relatively higher error rate, and it is not individually replaceable
-like DIMMs.
 
-Uncorrectable ECC errors are individually reported as Deferred errors
-using the AMD Deferred error interrupt. Each reported error corresponds
-to a single hardware error.
 
-Correctable ECC errors may reported in batches through MCA Thresholding.
-Users can configure the threshold limit based on their policy. Each
-reported Correctable error represents a single occurrence of the
-threshold limit being reached.
+On 2/4/2024 9:21 PM, Yazen Ghannam wrote:
+> https://lore.kernel.org/r/20231129073521.2127403-7-muralimk@amd.com
+> 
+> I'd like to include Murali as co-developer, since this is based on his
+> work.
 
-The current guidance from AMD designers is that memory affected by ECC
-errors within a DRAM row should be retired. Action should be taken on
-every reported ECC error.
-
-Add a helper function to apply this policy for MI300 systems.
-
-This and similar functionality may be best handled in a separate,
-generic module. In the meantime, do this in AMD64 EDAC for simplicity.
-
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Notes:
-
-This is a complete rewrite of the following patch:
-https://lore.kernel.org/r/20231129073521.2127403-7-muralimk@amd.com
-
-I'd like to include Murali as co-developer, since this is based on his
-work.
-
-The remaining MI300 RAS work will be focused on saving and restoring bad
-memory information across reboots. The latest set on the mailing list is
-here:
-https://lore.kernel.org/r/20231129075034.2159223-1-muralimk@amd.com
-
- drivers/edac/Kconfig      |  1 +
- drivers/edac/amd64_edac.c | 48 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+)
-
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 16c8de5050e5..8b147403c955 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -78,6 +78,7 @@ config EDAC_GHES
- config EDAC_AMD64
- 	tristate "AMD64 (Opteron, Athlon64)"
- 	depends on AMD_NB && EDAC_DECODE_MCE
-+	depends on MEMORY_FAILURE
- 	imply AMD_ATL
- 	help
- 	  Support for error detection and correction of DRAM ECC errors on
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index ca9a8641652d..ee2f3ff15ab7 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -2795,6 +2795,51 @@ static void umc_get_err_info(struct mce *m, struct err_info *err)
- 	err->csrow = m->synd & 0x7;
- }
- 
-+/*
-+ * When a DRAM ECC error occurs on MI300 systems, it is recommended to retire
-+ * all memory within that DRAM row. This applies to the memory with a DRAM
-+ * bank.
-+ *
-+ * To find the memory addresses, loop through permutations of the DRAM column
-+ * bits and find the System Physical address of each. The column bits are used
-+ * to calculate the intermediate Normalized address, so all permutations should
-+ * be checked.
-+ *
-+ * See amd_atl::convert_dram_to_norm_addr_mi300() for MI300 address formats.
-+ */
-+#define MI300_UMC_MCA_COL	GENMASK(5, 1)
-+#define MI300_NUM_COL		BIT(HWEIGHT(MI300_UMC_MCA_COL))
-+static void retire_row_mi300(struct atl_err *a_err)
-+{
-+	unsigned long addr;
-+	struct page *p;
-+	u8 col;
-+
-+	for (col = 0; col < MI300_NUM_COL; col++) {
-+		a_err->addr &= ~MI300_UMC_MCA_COL;
-+		a_err->addr |= FIELD_PREP(MI300_UMC_MCA_COL, col);
-+
-+		addr = amd_convert_umc_mca_addr_to_sys_addr(a_err);
-+		if (IS_ERR_VALUE(addr))
-+			continue;
-+
-+		addr = PHYS_PFN(addr);
-+
-+		/*
-+		 * Skip invalid or already poisoned pages to avoid unnecessary
-+		 * error messages from memory_failure().
-+		 */
-+		p = pfn_to_online_page(addr);
-+		if (!p)
-+			continue;
-+
-+		if (PageHWPoison(p))
-+			continue;
-+
-+		memory_failure(addr, 0);
-+	}
-+}
-+
- static void decode_umc_error(int node_id, struct mce *m)
- {
- 	u8 ecc_type = (m->status >> 45) & 0x3;
-@@ -2845,6 +2890,9 @@ static void decode_umc_error(int node_id, struct mce *m)
- 
- 	error_address_to_page_and_offset(sys_addr, &err);
- 
-+	if (pvt->fam == 0x19 && pvt->dram_type == MEM_HBM3)
-+		retire_row_mi300(&a_err);
-+
- log_error:
- 	__log_ecc_error(mci, &err, ecc_type);
- }
--- 
-2.34.1
-
+Thanks for the flow. I have tested and row retirement feature is working 
+as expected. Please include Co-developed-by:Muralidhara M K 
+<muralidhara.mk@amd.com>
 
