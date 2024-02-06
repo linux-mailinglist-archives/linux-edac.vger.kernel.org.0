@@ -1,149 +1,122 @@
-Return-Path: <linux-edac+bounces-464-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-465-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FBFA84BB1B
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 17:36:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB39084BB2D
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 17:42:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DA502898B3
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 16:36:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05DD51C235B2
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 16:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607CC17F5;
-	Tue,  6 Feb 2024 16:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26F7117F5;
+	Tue,  6 Feb 2024 16:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="wm2GeNKk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qmzpn5pk"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1342E552;
-	Tue,  6 Feb 2024 16:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BCC6FA9;
+	Tue,  6 Feb 2024 16:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707237332; cv=none; b=Sl1aPlLkxJUBEnbrUgJQ3Mu+cNE3xKAAWihXtL9zVBZuZ9dlWGINhXvDh9blYE5eP0Rtp5RhfkvTyueKdPIosKYAX6Xu+SE8x8s/OEgWJqaWL7ZtTV1xo/UATFSVBuFTrL2E06N9Ms6LyUZmOQNu2A+MMfqkFQqB05sohZjrzKs=
+	t=1707237719; cv=none; b=PLUn9qKw7xzewCmJWp9Jl8viebUXZqKo40i+YQocB0i2Whqxl9K2mQlGL1tkLt1YWBtYUgX5I6MGOmZOpaHqAvRmCIX+kxO5Y6lLhAQgg+8ZMhVx12IJn5ZshTnZGHDGtQ18kuW2WawO9aL0lYPL/L6d/S9iE/qh7WI6jSwOAq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707237332; c=relaxed/simple;
-	bh=JM/dM6wGVgOsNpN99AnBS8S4uISuXxo9JPeocMSYoto=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=MxR1dU0V5ONRhVWkbh7oht/w5skTXHyWapXWRS663eYotNq8knsLFqwXFvbxgEMEzl7HyN9/amsVeVGw4vLKSLoXpJ/IqA8o+nv8SkwJTfss6/k1BjISby6tpZ1Ab5BQ2etsJPsdZLUkjnIiBiosALR/8oQjUMeIDqnrr4i04x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=wm2GeNKk; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1707237302; x=1707842102; i=markus.elfring@web.de;
-	bh=JM/dM6wGVgOsNpN99AnBS8S4uISuXxo9JPeocMSYoto=;
-	h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:
-	 In-Reply-To;
-	b=wm2GeNKkzOndkNz/FtcaFa4S9HHjec3kDslAkK3GraBiGHrAmC00TncNVhbeqBDk
-	 dI1i1sB69oHbVdYiHHSchrj9LrCVHAbTbNNk7nWefWQQkT2dHDB4cSNsZZLVRejnR
-	 y0TgGNQb3ZPou/oJ6mfKrKpU1cWirhDQhv4tL3qtjEMuOns6zeHCmeknH2GyPEeah
-	 qkIufCXsWWFi9+uQzCmj+a40Kba5FHwRvlbDV+NSkKCYvFwBEvn5/phnclWvdjtZb
-	 0dZt3Yd7WDZt/0zjDefOQ1i7mic/Yiyi1GzIqZ/hZcFA+tRk5EHp496fzC7c0mVa+
-	 XOVult7M7Rlgdp1nqw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MbCI8-1r0WVC29Yu-00bZlD; Tue, 06
- Feb 2024 17:35:02 +0100
-Message-ID: <6e6ce5f8-b701-4660-a71b-478b29197a21@web.de>
-Date: Tue, 6 Feb 2024 17:34:59 +0100
+	s=arc-20240116; t=1707237719; c=relaxed/simple;
+	bh=rRNlDDubtypf416CZLetd6q9gBTbLbGyegrQgkQerDE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XqcfC/MibPEAkftQqmPEj2mEcoRbpW1UIse+8OMTOqOMrsDOMTqKl759jcgr3+XrKP1CUi+FR6/difDhhcABWcpe9j8EDc04g9xg7VIJUU598ANeaiZ1VFFbyd+WRP1oTy6SbNcqo65TQ2Bf0DyT10umLDPoIRlcppnPJVPvXWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qmzpn5pk; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707237718; x=1738773718;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rRNlDDubtypf416CZLetd6q9gBTbLbGyegrQgkQerDE=;
+  b=Qmzpn5pkmHrBxj1x8SRX+1gMJwP7cK3Erf6mFFDnKbXIKSjMluSoLojA
+   LUejvNaaFirzqB2BHHT8On/4PZLe/EonVCd1gtqm/b/n5iwT0As137igm
+   M7V/gaubYEg6AjM4mi+jOHMaWUohFuN1wbZfel+NdXCvw22P5l6q+AGAa
+   OKWS0tG80PDE+/RWdOO4/bWAHIFuplNaK/luwLZGYjfwAtLwb+yf5h4UG
+   y7Sx2B+QWVc7RbxkeH0TmYeDR8IZ35gOtfaSTsw6vBAtc+N6UT4Mi20HV
+   VLG6pH+XkTJfLQcKFf5str5sTTnzeyJdcqsy+JzYPU84SYCiQhWszW9oT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="18304899"
+X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
+   d="scan'208";a="18304899"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 08:41:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
+   d="scan'208";a="1357592"
+Received: from jingjing-mobl1.ccr.corp.intel.com (HELO localhost) ([10.254.215.110])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 08:41:49 -0800
+Date: Wed, 7 Feb 2024 00:41:41 +0800
+From: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-acpi@vger.kernel.org, chao.p.peng@linux.intel.com, erwin.tsaur@intel.com, 
+	feiting.wanyan@intel.com, qingshun.wang@intel.com, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, 
+	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>, Oliver O'Halloran <oohall@gmail.com>, 
+	Miaohe Lin <linmiaohe@huawei.com>, Shiju Jose <shiju.jose@huawei.com>, 
+	Adam Preble <adam.c.preble@intel.com>, Li Yang <leoyang.li@nxp.com>, Lukas Wunner <lukas@wunner.de>, 
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, 
+	Robert Richter <rrichter@amd.com>, linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	linux-edac@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] PCI/AER: Store more information in aer_err_info
+Message-ID: <2rfnevhnhylik4r6smr56uunsxweo7s5elo65sjhiztvxnr6bq@5fcyv22zxyyp>
+References: <20240125062802.50819-2-qingshun.wang@linux.intel.com>
+ <20240205231231.GA830643@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2] EDAC/xgene: Use devm_platform_ioremap_resource() in
- xgene_edac_probe()
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-To: linux-edac@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
- Khuong Dinh <khuong@os.amperecomputing.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
- <rric@kernel.org>, Tony Luck <tony.luck@intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <0b255d17-deab-4d6e-bf44-d950b512dc14@web.de>
-In-Reply-To: <0b255d17-deab-4d6e-bf44-d950b512dc14@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:hVEeAHWZkLBabGliku9TpAcPPUlMuNPVJGnTqc1ncndDJaWdiqz
- YkXhK1xHsPme+wPdYtE5z5VFxNbLpIa6lUSqXKzTxukevtlGSwPDKU8GaJfbE4+xK1ilUm9
- l4QodqIrM8Pc9YiHhoVkzkywvzjFktTpCw/HSRW9OGmg24lFh70VVurOGHjPrY4UYqLmLk+
- bgoWGL8r+og8Qow6uBrAQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:oJf/jY8IscE=;Q+dSKDZhB+CRZBgbdhZB6FGd8+h
- lZ4qQNrVgZ+UFYwLfo7r4KNrViFvHZE0po8IlJ5SFcT62UUivK3MYd1LPpkyY1MtsvKNfLxHi
- yEY8GM8dJro0FmRJJW4DwmWYcLciEVnVjlhgahgKZTCTgeS1hM7J773mBZuxJtNGzPlvqnEWM
- 8xIrbvQm+I5qJU3QPCxy/YiDlkToKOH3ZPeKPYk/9BGQ1GXUhXYD9+ODA99S+lAjj88ZD8s9O
- 78rzvWfPPFm5EKr4NUsttFqZ3tzM2x6Og+jwMs939+OV1MEQC0+BEeCKKQJYilh42i0KfM6Gk
- dwvqk53uqmXWcMURgq1xYrUPeeOEczS3UOwdb0i7VQE83bfFYz/OTpOQ8TuhyWmvGGjfzTxYa
- D4fkVJTKt7oR3INknULpqlrn9lGJYcHpaqiNqh8m4Dx4SqUPVrtoQD03VXVWS6keBhs+alSC+
- DSnn4PJ/9jyH1Cypg9DK39u9f3M9h+M1uSvWfhEqpTh4V22G3LPIcDxT1yOfG1CrDn4e5HG/+
- hKdDw2um0ilxPMG4y+9hcLTno6kxW30c8xrtT5wl5Srd57hDagJX9HmNQTNchh1CZ4rOr3uFK
- OImKxLGnDdR5MRaRbCxMKm4UvkNUnjL4xlQP2+3Rbe63tq+3bQZqKo6Luo5Jb3J3PCK/I2Fly
- Pr0pNEpiR9hM7QUOwyfJC0mYx25qcqMkPJAZkwl009TIzwh1x4to/MgsFjwyEt19aaZCTKy++
- z1HSWt3Ipakixy8V3vYm+sKPXxemyCebs56anaIa5OR13Yr90lAs/RVGSneZNPoiSgC2wfyjy
- M9h7ere6ST0hrdNh5w2+vM9H4GRFiToE9adw0RSiXKdjs=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240205231231.GA830643@bhelgaas>
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Tue, 6 Feb 2024 17:30:11 +0100
+On Mon, Feb 05, 2024 at 05:12:31PM -0600, Bjorn Helgaas wrote:
+> On Thu, Jan 25, 2024 at 02:27:59PM +0800, Wang, Qingshun wrote:
+> > When Advisory Non-Fatal errors are raised, both correctable and
+> > uncorrectable error statuses will be set. The current kernel code cannot
+> > store both statuses at the same time, thus failing to handle ANFE properly.
+> > In addition, to avoid clearing UEs that are not ANFE by accident, UE
+> > severity and Device Status also need to be recorded: any fatal UE cannot
+> > be ANFE, and if Fatal/Non-Fatal Error Detected is set in Device Status, do
+> > not take any assumption and let UE handler to clear UE status.
+> > 
+> > Store status and mask of both correctable and uncorrectable errors in
+> > aer_err_info. The severity of UEs and the values of the Device Status
+> > register are also recorded, which will be used to determine UEs that should
+> > be handled by the ANFE handler. Refactor the rest of the code to use
+> > cor/uncor_status and cor/uncor_mask fields instead of status and mask
+> > fields.
+> 
+> There's a lot going on in this patch.  Could it possibly be split up a
+> bit, e.g., first tease apart aer_err_info.status/.mask into
+> .cor_status/mask and .uncor_status/mask, then add .uncor_severity,
+> then add the device_status bit separately?  If it could be split up, I
+> think the ANFE case would be easier to see.
+> 
+> Thanks a lot for working on this area!
+> 
+> Bjorn
 
-A wrapper function is available since the commit 7945f929f1a77a1c8887a97ca=
-07f87626858ff42
-("drivers: provide devm_platform_ioremap_resource()").
+Thanks for the feedback! Will split it up into two pacthes in the next
+version.
 
-* Thus reuse existing functionality instead of keeping duplicate source co=
-de.
-
-* Delete a local variable which became unnecessary with this refactoring.
-
-
-This issue was transformed by using the Coccinelle software.
-
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
-
-v2:
-The transformation pattern was adjusted based on advices by known contribu=
-tors.
-
-Examples:
-* Doug Anderson
-* Geert Uytterhoeven
-* Robin Murphy
-
-
- drivers/edac/xgene_edac.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
-index 1b50f8160013..59eb0e97adef 100644
-=2D-- a/drivers/edac/xgene_edac.c
-+++ b/drivers/edac/xgene_edac.c
-@@ -1845,7 +1845,6 @@ static int xgene_edac_probe(struct platform_device *=
-pdev)
- {
- 	struct xgene_edac *edac;
- 	struct device_node *child;
--	struct resource *res;
- 	int rc;
-
- 	edac =3D devm_kzalloc(&pdev->dev, sizeof(*edac), GFP_KERNEL);
-@@ -1903,8 +1902,7 @@ static int xgene_edac_probe(struct platform_device *=
-pdev)
- 		edac->rb_map =3D NULL;
- 	}
-
--	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	edac->pcp_csr =3D devm_ioremap_resource(&pdev->dev, res);
-+	edac->pcp_csr =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(edac->pcp_csr)) {
- 		dev_err(&pdev->dev, "no PCP resource address\n");
- 		rc =3D PTR_ERR(edac->pcp_csr);
-=2D-
-2.43.0
-
+--
+Best regards,
+Wang, Qingshun
 
