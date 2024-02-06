@@ -1,251 +1,189 @@
-Return-Path: <linux-edac+bounces-457-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-458-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6519484AA7D
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 00:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD2384ABFF
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 03:09:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E3C128F142
-	for <lists+linux-edac@lfdr.de>; Mon,  5 Feb 2024 23:26:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35159287165
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 02:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81B348CC5;
-	Mon,  5 Feb 2024 23:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 460F557307;
+	Tue,  6 Feb 2024 02:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vwqg4BOk"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="b+KMj6tv"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B374D487A8;
-	Mon,  5 Feb 2024 23:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EBA56B6F;
+	Tue,  6 Feb 2024 02:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707175578; cv=none; b=OP6tVfGcyf5kWy4Fl9nfvPGVqOTxkguw7WUQvYloo1hT98TjO9MgkaPJESZfvYoqwt/6tqKhsncfGVSVn5iYaiWZiuqbmiAG/N8mPHL3fS8TUSgGZrcecgn/2OoMJRNgwg1cyuh90zvTgjVR0RO7FbsE51eZhumclBMRfpvhP+w=
+	t=1707185358; cv=none; b=E7PEzjVEZxWqzIHGlJ7z4Na+iQX7i8W99HKf7Su6+Mi6X7v0F3QzWHRZl3DFV8/M82VMIQter1OaQqFNxhyRkwI9MVVmFFoMHvJll2QaRqWktz79YKJv368I7gGhrVHY06aRlpznxQK3BF7Q+jgP9oKaEhJidVe4r9/hXO1i8Ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707175578; c=relaxed/simple;
-	bh=rPDqkVIaBAt59WvWCMCNHI2fg0XJ8s0loDIMQgxQP8s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=NyXmPn8R9BVRJ2jV0lWp74v3XMTJEt+KQsxgsujbwThH54+QXNvXJ15do6ORCjUl8VTl1jpq/7fNPIZGg069iG1z3Q82GyLKZxh/3i7fNipetQR4Ifxy9tRenieNuOwerz7REkZQrMTAoCZ5jdxw1z8fF6wt4vYWyPSlX6reARY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vwqg4BOk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01158C433C7;
-	Mon,  5 Feb 2024 23:26:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707175578;
-	bh=rPDqkVIaBAt59WvWCMCNHI2fg0XJ8s0loDIMQgxQP8s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=Vwqg4BOk21pmyc61uHVY92/BtwKW1aoHUXDJx6qwZJxFgZghX/kykCDj4BqhdLBWS
-	 7Ng+CNdbAGWy2CieZjlhnL2PUO03icspO7TrL+SSPk1LqoEy51MRaTLQ0NnU9fc000
-	 nGVxMzB/sfyALuN78Tkr0CIj4MIxZbW087G2bRTndGtG9fnollm3Vq+5zUb/KW6T5G
-	 LazJse1MhQ8m/FKjSxeJ1BqWEccbXsA30T5SYhaN9tjHTgoSKbT/p/4ouhagTNxkMR
-	 8YR5tQ7s41VcyX2TFRWiEpA4QYB9PtqhfWSCcF273qJmS8uEwpfNBWvVpbCiX7oUUB
-	 04t8cMBkt54vQ==
-Date: Mon, 5 Feb 2024 17:26:16 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-acpi@vger.kernel.org, chao.p.peng@linux.intel.com,
-	erwin.tsaur@intel.com, feiting.wanyan@intel.com,
-	qingshun.wang@intel.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Miaohe Lin <linmiaohe@huawei.com>,
-	Shiju Jose <shiju.jose@huawei.com>,
-	Adam Preble <adam.c.preble@intel.com>, Li Yang <leoyang.li@nxp.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	Robert Richter <rrichter@amd.com>, linux-kernel@vger.kernel.org,
-	linux-cxl@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] PCI/AER: Handle Advisory Non-Fatal properly
-Message-ID: <20240205232616.GA831017@bhelgaas>
+	s=arc-20240116; t=1707185358; c=relaxed/simple;
+	bh=WYfoRPya76Tqck0ScDgB0y5w0roJ0OYNP1LTT+2qcEk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JeHGi5PkP5aBV4JD0Kmh/1Gmst9kmQ2fRsukbqwjuNpgEyp7RogdrwtIfOvTuRdrwHH175kx2jFIXfCvTML7bcW/xYA6k+K17lVx6pZ+DK/N07YfD5MCMpAVyafzxXHUPk465qrTImGkkJgSIoeIM9leUAJv3wGldj3E1pUyh3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=b+KMj6tv; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4161EYUn020918;
+	Tue, 6 Feb 2024 02:08:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-11-20;
+ bh=TNBqmrMN0GKiz0meyol2MTt7jK7ZOMX41ADnOQ7L/UU=;
+ b=b+KMj6tvO4efzEbKZhSG/xzlHnsPmbgMlBfcTWawkZTnAIffaQla4J5cVDofspUuJqWS
+ /o00HHnk0n3gN9qp3mx/3E4gJC1I52m2sdoqn6JFMG+i8UwxEXr0NcQnIWxdhEFBJn+E
+ /x8af1pQLtk1k1AM1L7u822p8aQ15VNJPSq8MPE9D4515Gx5HixPyTgAvA3/EgoqxoHI
+ QgW4sF8UUf5WKq6QgWwluTQ92vNZ9x/szjLyibVmDwZBAu8ox17jHGO02Dm+ih1uUcH6
+ DGK4SsClE47m3SK3AzW4xYXw6GyPWvrQpLAswBi0lOq+tWmzWKU14KToHTtMKtqix0Tu 5w== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w1bwengt7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 06 Feb 2024 02:08:03 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4160ucci039478;
+	Tue, 6 Feb 2024 02:08:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3w1bx6cdtw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 06 Feb 2024 02:08:02 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41627qHJ034652;
+	Tue, 6 Feb 2024 02:08:01 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3w1bx6cdrb-2;
+	Tue, 06 Feb 2024 02:08:01 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alistar Popple <alistair@popple.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        =?UTF-8?q?Bruno=20Pr=C3=A9mont?= <bonbons@linux-vserver.org>,
+        Chandrakanth patil <chandrakanth.patil@broadcom.com>,
+        Christian Gromm <christian.gromm@microchip.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>, cocci@inria.fr,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Don Brace <don.brace@microchip.com>, dri-devel@lists.freedesktop.org,
+        Eddie James <eajames@linux.ibm.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Hannes Reinecke <hare@kernel.org>, Hannes Reinecke <hare@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>, Helge Deller <deller@gmx.de>,
+        HighPoint Linux Team <linux@highpoint-tech.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ian Rogers <irogers@google.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morse <james.morse@arm.com>, Jeremy Kerr <jk@ozlabs.org>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Joel Stanley <joel@jms.id.au>, Jonathan Cameron <jic23@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Ketan Mukadam <ketan.mukadam@broadcom.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-scsi@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        megaraidlinux.pdl@broadcom.com, Michael Cyr <mikecyr@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Januszewski <spock@gentoo.org>,
+        MPT-FusionLinux.pdl@broadcom.com, Namhyung Kim <namhyung@kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, netdev@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Nilesh Javali <njavali@marvell.com>,
+        Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Richard Cochran <richardcochran@gmail.com>,
+        Robert Richter <rric@kernel.org>, Russell King <linux@armlinux.org.uk>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Satish Kharat <satishkh@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Stefan Achatz <erazor_de@users.sourceforge.net>,
+        storagedev@microchip.com, Stuart Yoder <stuyoder@gmail.com>,
+        Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>, target-devel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, Tony Luck <tony.luck@intel.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Vadim Pasternak <vadimp@nvidia.com>, x86@kernel.org
+Subject: Re: (subset) [PATCH 00/42] Fix coccicheck warnings
+Date: Mon,  5 Feb 2024 21:07:38 -0500
+Message-ID: <170715263710.945763.16540743989774199712.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20240116041129.3937800-1-lizhijian@fujitsu.com>
+References: <20240116041129.3937800-1-lizhijian@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240125062802.50819-3-qingshun.wang@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-05_18,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 phishscore=0
+ spamscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2402060013
+X-Proofpoint-ORIG-GUID: pTT_U64MvKVXcaNppMcpJ2F1AhkrIKYI
+X-Proofpoint-GUID: pTT_U64MvKVXcaNppMcpJ2F1AhkrIKYI
 
-In the subject, "properly" really doesn't convey information.  I think
-this patch does two things:
+On Tue, 16 Jan 2024 12:10:47 +0800, Li Zhijian wrote:
 
-  - Prints error bits that might be ANFE 
-  - Clears UNCOR_STATUS bits that were previously not cleared
+> make coccicheck COCCI=$PWD/scripts/coccinelle/api/device_attr_show.cocci`
+> complians some warnnings as following[1]:
+> 
+> Not sure if someone had tried these fixes, feel free to ignore this
+> patch set if we have come to a *NOT-FIX* conclusion before :)
+> 
+> This patch set also fix a few snprintf() beside coccicheck reported.
+> For example, some thing like
+> xxx_show() {
+> 	rc = snprintf();
+> ...
+> 	return rc;
+> }
+> 
+> [...]
 
-Maybe the subject line could say something about those (clearing
-UNCOR_STATUS might be more important, or maybe this could even be
-split into two patches so we could see both).
+Applied to 6.9/scsi-queue, thanks!
 
-On Thu, Jan 25, 2024 at 02:28:00PM +0800, Wang, Qingshun wrote:
-> When processing an Advisory Non-Fatal error, ideally both correctable
-> error status and uncorrectable error status should be cleared. However,
-> there is no way to fully identify the UE associated with ANFE. Even
-> worse, a Fatal/Non-Fatal error may set the same UE status bit as ANFE.
-> Assuming an ANFE is FE/NFE is kind of bad, but assuming a FE/NFE is an
-> ANFE is usually unacceptable. To avoid clearing UEs that are not ANFE by
-> accident, the most conservative route is taken here: If any of the
-> Fatal/Non-Fatal Error Detected bits is set in Device Status, do not
-> touch UE status, they should be cleared later by the UE handler.
-> Otherwise, a specific set of UEs that may be raised as ANFE according to
-> the PCIe specification will be cleared if their corresponding severity
-> is non-fatal. Additionally, log UEs that will be cleared.
-> 
-> For instance, previously when kernel receives an ANFE with Poisoned TLP
-> in OS native AER mode, only status of CE will be reported and cleared:
-> 
->   AER: Corrected error received: 0000:b7:02.0
->   PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
->     device [8086:0db0] error status/mask=00002000/00000000
->      [13] NonFatalErr
-> 
-> If the kernel receives a Malformed TLP after that, two UE will be
-> reported, which is unexpected. Malformed TLP Header was lost since
-> the previous ANF gated the TLP header logs:
-> 
->   PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
->     device [8086:0db0] error status/mask=00041000/00180020
->      [12] TLP                    (First)
->      [18] MalfTLP
-> 
-> Now, in the same scenario, both CE status and related UE status will be
-> reported and cleared after ANFE:
-> 
->   AER: Corrected error received: 0000:b7:02.0
->   PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
->     device [8086:0db0] error status/mask=00002000/00000000
->      [13] NonFatalErr
->     Uncorrectable errors that may cause Advisory Non-Fatal:
->      [18] TLP
-> 
-> Signed-off-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-> ---
->  drivers/pci/pcie/aer.c | 61 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index 6583dcf50977..713cbf625d3f 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -107,6 +107,12 @@ struct aer_stats {
->  					PCI_ERR_ROOT_MULTI_COR_RCV |	\
->  					PCI_ERR_ROOT_MULTI_UNCOR_RCV)
->  
-> +#define AER_ERR_ANFE_UNC_MASK		(PCI_ERR_UNC_POISON_TLP |	\
-> +					PCI_ERR_UNC_COMP_TIME |		\
-> +					PCI_ERR_UNC_COMP_ABORT |	\
-> +					PCI_ERR_UNC_UNX_COMP |		\
-> +					PCI_ERR_UNC_UNSUP)
-> +
->  static int pcie_aer_disable;
->  static pci_ers_result_t aer_root_reset(struct pci_dev *dev);
->  
-> @@ -612,6 +618,32 @@ const struct attribute_group aer_stats_attr_group = {
->  	.is_visible = aer_stats_attrs_are_visible,
->  };
->  
-> +static int anfe_get_related_err(struct aer_err_info *info)
-> +{
-> +	/*
-> +	 * Take the most conservative route here. If there are
-> +	 * Non-Fatal/Fatal errors detected, do not assume any
-> +	 * bit in uncor_status is set by ANFE.
-> +	 */
-> +	if (info->device_status & (PCI_EXP_DEVSTA_NFED | PCI_EXP_DEVSTA_FED))
-> +		return 0;
-> +	/*
-> +	 * According to PCIe Base Specification Revision 6.1,
-> +	 * Section 6.2.3.2.4, if an UNCOR error is rasied as
-> +	 * Advisory Non-Fatal error, it will match the following
-> +	 * conditions:
-> +	 *	a. The severity of the error is Non-Fatal.
-> +	 *	b. The error is one of the following:
-> +	 *		1. Poisoned TLP
-> +	 *		2. Completion Timeout
-> +	 *		3. Completer Abort
-> +	 *		4. Unexpected Completion
-> +	 *		5. Unsupported Request
-> +	 */
-> +	return info->uncor_status & ~info->uncor_mask
-> +		& AER_ERR_ANFE_UNC_MASK & ~info->severity;
-> +}
-> +
->  static void pci_dev_aer_stats_incr(struct pci_dev *pdev,
->  				   struct aer_err_info *info)
->  {
-> @@ -678,6 +710,7 @@ static void __aer_print_error(struct pci_dev *dev,
->  			      struct aer_err_info *info)
->  {
->  	unsigned long status;
-> +	unsigned long anfe_status;
->  	const char **strings;
->  	const char *level, *errmsg;
->  	int i;
-> @@ -700,6 +733,21 @@ static void __aer_print_error(struct pci_dev *dev,
->  		pci_printk(level, dev, "   [%2d] %-22s%s\n", i, errmsg,
->  				info->first_error == i ? " (First)" : "");
->  	}
-> +
-> +	if (info->severity == AER_CORRECTABLE && (status & PCI_ERR_COR_ADV_NFAT)) {
-> +		anfe_status = anfe_get_related_err(info);
-> +		if (anfe_status) {
-> +			pci_printk(level, dev, "Uncorrectable errors that may cause Advisory Non-Fatal:");
-> +			for_each_set_bit(i, &anfe_status, 32) {
-> +				errmsg = aer_uncorrectable_error_string[i];
-> +				if (!errmsg)
-> +					errmsg = "Unknown Error Bit";
-> +
-> +				pci_printk(level, dev, "   [%2d] %-22s\n", i, errmsg);
-> +			}
-> +		}
-> +	}
-> +
->  	pci_dev_aer_stats_incr(dev, info);
->  }
->  
-> @@ -1097,6 +1145,14 @@ static inline void cxl_rch_handle_error(struct pci_dev *dev,
->  					struct aer_err_info *info) { }
->  #endif
->  
-> +static void handle_advisory_nonfatal(struct pci_dev *dev, struct aer_err_info *info)
-> +{
-> +	int aer = dev->aer_cap;
-> +
-> +	pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS,
-> +			       anfe_get_related_err(info));
-> +}
-> +
->  /**
->   * pci_aer_handle_error - handle logging error into an event log
->   * @dev: pointer to pci_dev data structure of error source device
-> @@ -1113,9 +1169,12 @@ static void pci_aer_handle_error(struct pci_dev *dev, struct aer_err_info *info)
->  		 * Correctable error does not need software intervention.
->  		 * No need to go through error recovery process.
->  		 */
-> -		if (aer)
-> +		if (aer) {
->  			pci_write_config_dword(dev, aer + PCI_ERR_COR_STATUS,
->  					info->cor_status);
-> +			if (info->cor_status & PCI_ERR_COR_ADV_NFAT)
-> +				handle_advisory_nonfatal(dev, info);
-> +		}
->  		if (pcie_aer_is_native(dev)) {
->  			struct pci_driver *pdrv = dev->driver;
->  
-> -- 
-> 2.42.0
-> 
+[22/42] drivers/scsi/fnic: Convert snprintf to sysfs_emit
+        https://git.kernel.org/mkp/scsi/c/1ad717c92925
+[25/42] drivers/scsi/ibmvscsi: Convert snprintf to sysfs_emit
+        https://git.kernel.org/mkp/scsi/c/29ff822f466e
+[26/42] drivers/scsi/ibmvscsi_tgt: Convert snprintf to sysfs_emit
+        https://git.kernel.org/mkp/scsi/c/01105c23de42
+[27/42] drivers/scsi/isci: Convert snprintf to sysfs_emit
+        https://git.kernel.org/mkp/scsi/c/5fbf37e53091
+[34/42] drivers/scsi/pm8001: Convert snprintf to sysfs_emit
+        https://git.kernel.org/mkp/scsi/c/8179041f801d
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
 
