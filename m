@@ -1,236 +1,149 @@
-Return-Path: <linux-edac+bounces-463-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-464-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7C3184B71F
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 14:59:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FBFA84BB1B
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 17:36:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECBC81C25605
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 13:59:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DA502898B3
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 16:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADBA131E5F;
-	Tue,  6 Feb 2024 13:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607CC17F5;
+	Tue,  6 Feb 2024 16:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RGy0LUFo"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="wm2GeNKk"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EEC131E5A;
-	Tue,  6 Feb 2024 13:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1342E552;
+	Tue,  6 Feb 2024 16:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707227890; cv=none; b=fT73swC6xxPiJSmMu0khByrSLP5za3kpj5aZgo7RwXQajl0YBteKL8/zf9L6Isc/6qyDQ66PRjygI0SeHQWVUIIRKBd2LKNmzftSE7nTBJ8q2BMAljhLwXwDPbbFoYAwlaHT9CKkGYDt4NCBD0iG9MvKVbJonMJ/fAhkUc30jZI=
+	t=1707237332; cv=none; b=Sl1aPlLkxJUBEnbrUgJQ3Mu+cNE3xKAAWihXtL9zVBZuZ9dlWGINhXvDh9blYE5eP0Rtp5RhfkvTyueKdPIosKYAX6Xu+SE8x8s/OEgWJqaWL7ZtTV1xo/UATFSVBuFTrL2E06N9Ms6LyUZmOQNu2A+MMfqkFQqB05sohZjrzKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707227890; c=relaxed/simple;
-	bh=eWVd+iQjSnkkATuBAY8oLrtYHKAXW1b0jt18ycqn0UY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ke2t2knIXSRchAdo98sltZ2R9RYT4pT55hTyxOEPbVUNrQYq+2gfcSfOkieHEmVuP28wBv06ljSXBC729bSmak32SekcFuy1wnTmqZS7n6nuI4/vDK/sEZucyN1UNbwVFmHSSkrbGXVxBRVVmsUDbfNo+oMW/gIAzQbg3PHbJxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RGy0LUFo; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707227889; x=1738763889;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eWVd+iQjSnkkATuBAY8oLrtYHKAXW1b0jt18ycqn0UY=;
-  b=RGy0LUFoawE1U5iUPG+XVNljGjTXJwT3j7jLlV+sDul0IceknsxCGZWV
-   FOlyAA78ULx6esvoedyYDkKDVxOWwoRtBegPN+HwsvFwEbslvZYDKkrh7
-   BwMJl6cu5Z6LiyX9GHcBoz43edFSoOJPvIbzdmeM/7SwwdOj7xDGy8nWg
-   1Z3VGth64w5+DYapdAiIvz7IFZHOKAXPXlqRydPn4Ck9WYFSCGKm2zcio
-   T45TIyZ9HxP37kayHaCIYSax3C+g512TCWrB7CFlmyimktTIWxlfz5nMz
-   puVm0A9I1csszW9Ci55ekWsLEFmxrpFTUZlV6BlHJJ2iSygQtynWRtCfM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="905272"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="905272"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:58:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="1008779"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.36.139])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:58:02 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: linux-pci@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	intel-wired-lan@lists.osuosl.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	"Oliver O'Halloran" <oohall@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Cc: Ard Biesheuvel <ardb@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	linux-edac@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	Tony Luck <tony.luck@intel.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 4/4] PCI: Create helper to print TLP Header and Prefix Log
-Date: Tue,  6 Feb 2024 15:57:17 +0200
-Message-Id: <20240206135717.8565-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240206135717.8565-1-ilpo.jarvinen@linux.intel.com>
-References: <20240206135717.8565-1-ilpo.jarvinen@linux.intel.com>
+	s=arc-20240116; t=1707237332; c=relaxed/simple;
+	bh=JM/dM6wGVgOsNpN99AnBS8S4uISuXxo9JPeocMSYoto=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=MxR1dU0V5ONRhVWkbh7oht/w5skTXHyWapXWRS663eYotNq8knsLFqwXFvbxgEMEzl7HyN9/amsVeVGw4vLKSLoXpJ/IqA8o+nv8SkwJTfss6/k1BjISby6tpZ1Ab5BQ2etsJPsdZLUkjnIiBiosALR/8oQjUMeIDqnrr4i04x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=wm2GeNKk; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1707237302; x=1707842102; i=markus.elfring@web.de;
+	bh=JM/dM6wGVgOsNpN99AnBS8S4uISuXxo9JPeocMSYoto=;
+	h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:
+	 In-Reply-To;
+	b=wm2GeNKkzOndkNz/FtcaFa4S9HHjec3kDslAkK3GraBiGHrAmC00TncNVhbeqBDk
+	 dI1i1sB69oHbVdYiHHSchrj9LrCVHAbTbNNk7nWefWQQkT2dHDB4cSNsZZLVRejnR
+	 y0TgGNQb3ZPou/oJ6mfKrKpU1cWirhDQhv4tL3qtjEMuOns6zeHCmeknH2GyPEeah
+	 qkIufCXsWWFi9+uQzCmj+a40Kba5FHwRvlbDV+NSkKCYvFwBEvn5/phnclWvdjtZb
+	 0dZt3Yd7WDZt/0zjDefOQ1i7mic/Yiyi1GzIqZ/hZcFA+tRk5EHp496fzC7c0mVa+
+	 XOVult7M7Rlgdp1nqw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MbCI8-1r0WVC29Yu-00bZlD; Tue, 06
+ Feb 2024 17:35:02 +0100
+Message-ID: <6e6ce5f8-b701-4660-a71b-478b29197a21@web.de>
+Date: Tue, 6 Feb 2024 17:34:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH v2] EDAC/xgene: Use devm_platform_ioremap_resource() in
+ xgene_edac_probe()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+To: linux-edac@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
+ Khuong Dinh <khuong@os.amperecomputing.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
+ <rric@kernel.org>, Tony Luck <tony.luck@intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <0b255d17-deab-4d6e-bf44-d950b512dc14@web.de>
+In-Reply-To: <0b255d17-deab-4d6e-bf44-d950b512dc14@web.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:hVEeAHWZkLBabGliku9TpAcPPUlMuNPVJGnTqc1ncndDJaWdiqz
+ YkXhK1xHsPme+wPdYtE5z5VFxNbLpIa6lUSqXKzTxukevtlGSwPDKU8GaJfbE4+xK1ilUm9
+ l4QodqIrM8Pc9YiHhoVkzkywvzjFktTpCw/HSRW9OGmg24lFh70VVurOGHjPrY4UYqLmLk+
+ bgoWGL8r+og8Qow6uBrAQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:oJf/jY8IscE=;Q+dSKDZhB+CRZBgbdhZB6FGd8+h
+ lZ4qQNrVgZ+UFYwLfo7r4KNrViFvHZE0po8IlJ5SFcT62UUivK3MYd1LPpkyY1MtsvKNfLxHi
+ yEY8GM8dJro0FmRJJW4DwmWYcLciEVnVjlhgahgKZTCTgeS1hM7J773mBZuxJtNGzPlvqnEWM
+ 8xIrbvQm+I5qJU3QPCxy/YiDlkToKOH3ZPeKPYk/9BGQ1GXUhXYD9+ODA99S+lAjj88ZD8s9O
+ 78rzvWfPPFm5EKr4NUsttFqZ3tzM2x6Og+jwMs939+OV1MEQC0+BEeCKKQJYilh42i0KfM6Gk
+ dwvqk53uqmXWcMURgq1xYrUPeeOEczS3UOwdb0i7VQE83bfFYz/OTpOQ8TuhyWmvGGjfzTxYa
+ D4fkVJTKt7oR3INknULpqlrn9lGJYcHpaqiNqh8m4Dx4SqUPVrtoQD03VXVWS6keBhs+alSC+
+ DSnn4PJ/9jyH1Cypg9DK39u9f3M9h+M1uSvWfhEqpTh4V22G3LPIcDxT1yOfG1CrDn4e5HG/+
+ hKdDw2um0ilxPMG4y+9hcLTno6kxW30c8xrtT5wl5Srd57hDagJX9HmNQTNchh1CZ4rOr3uFK
+ OImKxLGnDdR5MRaRbCxMKm4UvkNUnjL4xlQP2+3Rbe63tq+3bQZqKo6Luo5Jb3J3PCK/I2Fly
+ Pr0pNEpiR9hM7QUOwyfJC0mYx25qcqMkPJAZkwl009TIzwh1x4to/MgsFjwyEt19aaZCTKy++
+ z1HSWt3Ipakixy8V3vYm+sKPXxemyCebs56anaIa5OR13Yr90lAs/RVGSneZNPoiSgC2wfyjy
+ M9h7ere6ST0hrdNh5w2+vM9H4GRFiToE9adw0RSiXKdjs=
 
-Add pcie_print_tlp_log() helper to print TLP Header and Prefix Log.
-Print End-End Prefixes only if they are non-zero.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Tue, 6 Feb 2024 17:30:11 +0100
 
-Consolidate the few places which currently print TLP using custom
-formatting.
+A wrapper function is available since the commit 7945f929f1a77a1c8887a97ca=
+07f87626858ff42
+("drivers: provide devm_platform_ioremap_resource()").
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |  4 +--
- drivers/pci/pci.c                             | 28 +++++++++++++++++++
- drivers/pci/pcie/aer.c                        | 10 ++-----
- drivers/pci/pcie/dpc.c                        |  5 +---
- include/linux/aer.h                           |  2 ++
- 5 files changed, 35 insertions(+), 14 deletions(-)
+* Thus reuse existing functionality instead of keeping duplicate source co=
+de.
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index 6ce720726a1a..73eabf3215e5 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -11355,8 +11355,8 @@ static pci_ers_result_t ixgbe_io_error_detected(struct pci_dev *pdev,
- 
- 		vf = FIELD_GET(0x7F, req_id);
- 		e_dev_err("VF %d has caused a PCIe error\n", vf);
--		e_dev_err("TLP: dw0: %8.8x\tdw1: %8.8x\tdw2: %8.8x\tdw3: %8.8x\n",
--			  tlp_log.dw[0], tlp_log.dw[1], tlp_log.dw[2], tlp_log.dw[3]);
-+		pcie_print_tlp_log(pdev, &tlp_log, "");
-+
- 		switch (adapter->hw.mac.type) {
- 		case ixgbe_mac_82599EB:
- 			device_id = IXGBE_82599_VF_DEVICE_ID;
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 268a5b9f1dff..d7974d25ae44 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -9,6 +9,7 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/array_size.h>
- #include <linux/kernel.h>
- #include <linux/delay.h>
- #include <linux/dmi.h>
-@@ -1118,6 +1119,33 @@ int pcie_read_tlp_log(struct pci_dev *dev, int where, int where2,
- }
- EXPORT_SYMBOL_GPL(pcie_read_tlp_log);
- 
-+/**
-+ * pcie_print_tlp_log - Print TLP Header / Prefix Log contents
-+ * @dev:	PCIe device
-+ * @tlp_log:	TLP Log structure
-+ * @pfx:	Internal string prefix (for indentation)
-+ *
-+ * Prints TLP Header and Prefix Log information held by @tlp_log.
-+ */
-+void pcie_print_tlp_log(const struct pci_dev *dev,
-+			const struct pcie_tlp_log *tlp_log, const char *pfx)
-+{
-+	unsigned int i;
-+
-+	pci_err(dev, "%sTLP Header: %#010x %#010x %#010x %#010x",
-+		pfx, tlp_log->dw[0], tlp_log->dw[1], tlp_log->dw[2], tlp_log->dw[3]);
-+
-+	if (tlp_log->prefix[0])
-+		pr_cont(" E-E Prefixes:");
-+	for (i = 0; i < ARRAY_SIZE(tlp_log->prefix); i++) {
-+		if (!tlp_log->prefix[i])
-+			break;
-+		pr_cont(" %#010x", tlp_log->prefix[i]);
-+	}
-+	pr_cont("\n");
-+}
-+EXPORT_SYMBOL_GPL(pcie_print_tlp_log);
-+
- /**
-  * pci_restore_bars - restore a device's BAR values (e.g. after wake-up)
-  * @dev: PCI device to have its BARs restored
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index ecc1dea5a208..efb9e728fe94 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -664,12 +664,6 @@ static void pci_rootport_aer_stats_incr(struct pci_dev *pdev,
- 	}
- }
- 
--static void __print_tlp_header(struct pci_dev *dev, struct pcie_tlp_log *t)
--{
--	pci_err(dev, "  TLP Header: %08x %08x %08x %08x\n",
--		t->dw[0], t->dw[1], t->dw[2], t->dw[3]);
--}
--
- static void __aer_print_error(struct pci_dev *dev,
- 			      struct aer_err_info *info)
+* Delete a local variable which became unnecessary with this refactoring.
+
+
+This issue was transformed by using the Coccinelle software.
+
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+
+v2:
+The transformation pattern was adjusted based on advices by known contribu=
+tors.
+
+Examples:
+* Doug Anderson
+* Geert Uytterhoeven
+* Robin Murphy
+
+
+ drivers/edac/xgene_edac.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
+index 1b50f8160013..59eb0e97adef 100644
+=2D-- a/drivers/edac/xgene_edac.c
++++ b/drivers/edac/xgene_edac.c
+@@ -1845,7 +1845,6 @@ static int xgene_edac_probe(struct platform_device *=
+pdev)
  {
-@@ -724,7 +718,7 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
- 	__aer_print_error(dev, info);
- 
- 	if (info->tlp_header_valid)
--		__print_tlp_header(dev, &info->tlp);
-+		pcie_print_tlp_log(dev, &info->tlp, "  ");
- 
- out:
- 	if (info->id && info->error_dev_num > 1 && info->id == id)
-@@ -796,7 +790,7 @@ void pci_print_aer(struct pci_dev *dev, int aer_severity,
- 			aer->uncor_severity);
- 
- 	if (tlp_header_valid)
--		__print_tlp_header(dev, &aer->header_log);
-+		pcie_print_tlp_log(dev, &aer->header_log, "  ");
- 
- 	trace_aer_event(dev_name(&dev->dev), (status & ~mask),
- 			aer_severity, tlp_header_valid, &aer->header_log);
-diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-index f384d0b02aa0..9c93871fbe37 100644
---- a/drivers/pci/pcie/dpc.c
-+++ b/drivers/pci/pcie/dpc.c
-@@ -229,10 +229,7 @@ static void dpc_process_rp_pio_error(struct pci_dev *pdev)
- 	pcie_read_tlp_log(pdev, cap + PCI_EXP_DPC_RP_PIO_HEADER_LOG,
- 			  cap + PCI_EXP_DPC_RP_PIO_TLPPREFIX_LOG,
- 			  dpc_tlp_log_len(pdev), &tlp_log);
--	pci_err(pdev, "TLP Header: %#010x %#010x %#010x %#010x\n",
--		tlp_log.dw[0], tlp_log.dw[1], tlp_log.dw[2], tlp_log.dw[3]);
--	for (i = 0; i < pdev->dpc_rp_log_size - 5; i++)
--		pci_err(pdev, "TLP Prefix Header: dw%d, %#010x\n", i, tlp_log.prefix[i]);
-+	pcie_print_tlp_log(pdev, &tlp_log, "");
- 
- 	if (pdev->dpc_rp_log_size < 5)
- 		goto clear_status;
-diff --git a/include/linux/aer.h b/include/linux/aer.h
-index 9a8845c01400..210f497e7cdd 100644
---- a/include/linux/aer.h
-+++ b/include/linux/aer.h
-@@ -41,6 +41,8 @@ struct aer_capability_regs {
- int pcie_read_tlp_log(struct pci_dev *pdev, int where, int where2,
- 		      unsigned int tlp_len, struct pcie_tlp_log *tlp_log);
- unsigned int aer_tlp_log_len(struct pci_dev *dev);
-+void pcie_print_tlp_log(const struct pci_dev *dev,
-+			const struct pcie_tlp_log *tlp_log, const char *pfx);
- 
- #if defined(CONFIG_PCIEAER)
- int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
--- 
-2.39.2
+ 	struct xgene_edac *edac;
+ 	struct device_node *child;
+-	struct resource *res;
+ 	int rc;
+
+ 	edac =3D devm_kzalloc(&pdev->dev, sizeof(*edac), GFP_KERNEL);
+@@ -1903,8 +1902,7 @@ static int xgene_edac_probe(struct platform_device *=
+pdev)
+ 		edac->rb_map =3D NULL;
+ 	}
+
+-	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	edac->pcp_csr =3D devm_ioremap_resource(&pdev->dev, res);
++	edac->pcp_csr =3D devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(edac->pcp_csr)) {
+ 		dev_err(&pdev->dev, "no PCP resource address\n");
+ 		rc =3D PTR_ERR(edac->pcp_csr);
+=2D-
+2.43.0
 
 
