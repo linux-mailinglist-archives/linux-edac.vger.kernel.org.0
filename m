@@ -1,60 +1,60 @@
-Return-Path: <linux-edac+bounces-465-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-466-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB39084BB2D
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 17:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FE3C84BB4D
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 17:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05DD51C235B2
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 16:42:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 589091C2336E
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 16:47:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26F7117F5;
-	Tue,  6 Feb 2024 16:41:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D0D469E;
+	Tue,  6 Feb 2024 16:46:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qmzpn5pk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kYMDHaqh"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BCC6FA9;
-	Tue,  6 Feb 2024 16:41:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A204A15;
+	Tue,  6 Feb 2024 16:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707237719; cv=none; b=PLUn9qKw7xzewCmJWp9Jl8viebUXZqKo40i+YQocB0i2Whqxl9K2mQlGL1tkLt1YWBtYUgX5I6MGOmZOpaHqAvRmCIX+kxO5Y6lLhAQgg+8ZMhVx12IJn5ZshTnZGHDGtQ18kuW2WawO9aL0lYPL/L6d/S9iE/qh7WI6jSwOAq8=
+	t=1707238017; cv=none; b=QDuJVBE2OYQF3uIOM8X8Nwz3tBqIeHKDHCNbUq9L+me5Mdda+5EnttMYIAFRAsnRQCtUsRciBgAV/oKujcjBVLvKzVeXz3nyr1oTNIdAdpNuFVQMLxr9nxITsecNU4kJdDo3qLB+H0GOCoGIKjjBYl9VrnMzAX9VewmNsKG36q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707237719; c=relaxed/simple;
-	bh=rRNlDDubtypf416CZLetd6q9gBTbLbGyegrQgkQerDE=;
+	s=arc-20240116; t=1707238017; c=relaxed/simple;
+	bh=USPZtu7vxjk1ebvcOxNJKhO0fXx2MLMuxDfhFtm/z84=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XqcfC/MibPEAkftQqmPEj2mEcoRbpW1UIse+8OMTOqOMrsDOMTqKl759jcgr3+XrKP1CUi+FR6/difDhhcABWcpe9j8EDc04g9xg7VIJUU598ANeaiZ1VFFbyd+WRP1oTy6SbNcqo65TQ2Bf0DyT10umLDPoIRlcppnPJVPvXWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qmzpn5pk; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=oci5wMc+Qgyy04Jv0l+PwmJ8ipmOL/rJzU6h1YRc/whNa2s/8kAYTDPlDbZi265j5KWohf1AwHrjRls/s0AAjZ9UZcGipqQcNZ8I8lhdRYfA9RM0qUjIbzCzbG9CusLpZXK+96nmugDdcTSlVPhE7tEaya1hOi9t9LYbGGZ8wZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kYMDHaqh; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707237718; x=1738773718;
+  t=1707238016; x=1738774016;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rRNlDDubtypf416CZLetd6q9gBTbLbGyegrQgkQerDE=;
-  b=Qmzpn5pkmHrBxj1x8SRX+1gMJwP7cK3Erf6mFFDnKbXIKSjMluSoLojA
-   LUejvNaaFirzqB2BHHT8On/4PZLe/EonVCd1gtqm/b/n5iwT0As137igm
-   M7V/gaubYEg6AjM4mi+jOHMaWUohFuN1wbZfel+NdXCvw22P5l6q+AGAa
-   OKWS0tG80PDE+/RWdOO4/bWAHIFuplNaK/luwLZGYjfwAtLwb+yf5h4UG
-   y7Sx2B+QWVc7RbxkeH0TmYeDR8IZ35gOtfaSTsw6vBAtc+N6UT4Mi20HV
-   VLG6pH+XkTJfLQcKFf5str5sTTnzeyJdcqsy+JzYPU84SYCiQhWszW9oT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="18304899"
+  bh=USPZtu7vxjk1ebvcOxNJKhO0fXx2MLMuxDfhFtm/z84=;
+  b=kYMDHaqhX6IoTu0VXfJSwq45DbvH6NRX6keJD1lrTVLOtDxWbnK14cRf
+   VLt/g4glmaY3FFhOrSvUn9zeOxE8r77peqdylkeY7MokWDEFipVHmMwRX
+   QKmDll+XRIxwNgkyc4XoD8nWo2t2mmF1vT/xd7CzGVelNGeXU07C56ikz
+   1COvb2UwUFn/95nGRQB31mOevZW4gT54ZnA+bUqkaw8ELbZCH9M+SrGgU
+   6yNS1r53pCBiP7OXVBSWK/ZlYCnLydlGq2HbJ3LfFuabBZJlFzCWLltgZ
+   Q1pkCmNNRThiRSnIsavmhMSK2pg0l4j5OvAdvEhIkaYHOq4EaIi78w3SU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="12146629"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="18304899"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 08:41:56 -0800
+   d="scan'208";a="12146629"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 08:46:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="1357592"
+   d="scan'208";a="1102749"
 Received: from jingjing-mobl1.ccr.corp.intel.com (HELO localhost) ([10.254.215.110])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 08:41:49 -0800
-Date: Wed, 7 Feb 2024 00:41:41 +0800
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 08:46:48 -0800
+Date: Wed, 7 Feb 2024 00:46:39 +0800
 From: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
 To: Bjorn Helgaas <helgaas@kernel.org>
 Cc: linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
@@ -72,10 +72,10 @@ Cc: linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
 	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, 
 	Robert Richter <rrichter@amd.com>, linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org, 
 	linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] PCI/AER: Store more information in aer_err_info
-Message-ID: <2rfnevhnhylik4r6smr56uunsxweo7s5elo65sjhiztvxnr6bq@5fcyv22zxyyp>
-References: <20240125062802.50819-2-qingshun.wang@linux.intel.com>
- <20240205231231.GA830643@bhelgaas>
+Subject: Re: [PATCH v2 2/4] PCI/AER: Handle Advisory Non-Fatal properly
+Message-ID: <ay2cwgycgjfqz5jmteeijgjiuje2u62wozhnkr76ag4tny6vl4@upbmy22y3hcn>
+References: <20240125062802.50819-3-qingshun.wang@linux.intel.com>
+ <20240205232616.GA831017@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -84,39 +84,20 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240205231231.GA830643@bhelgaas>
+In-Reply-To: <20240205232616.GA831017@bhelgaas>
 
-On Mon, Feb 05, 2024 at 05:12:31PM -0600, Bjorn Helgaas wrote:
-> On Thu, Jan 25, 2024 at 02:27:59PM +0800, Wang, Qingshun wrote:
-> > When Advisory Non-Fatal errors are raised, both correctable and
-> > uncorrectable error statuses will be set. The current kernel code cannot
-> > store both statuses at the same time, thus failing to handle ANFE properly.
-> > In addition, to avoid clearing UEs that are not ANFE by accident, UE
-> > severity and Device Status also need to be recorded: any fatal UE cannot
-> > be ANFE, and if Fatal/Non-Fatal Error Detected is set in Device Status, do
-> > not take any assumption and let UE handler to clear UE status.
-> > 
-> > Store status and mask of both correctable and uncorrectable errors in
-> > aer_err_info. The severity of UEs and the values of the Device Status
-> > register are also recorded, which will be used to determine UEs that should
-> > be handled by the ANFE handler. Refactor the rest of the code to use
-> > cor/uncor_status and cor/uncor_mask fields instead of status and mask
-> > fields.
+On Mon, Feb 05, 2024 at 05:26:16PM -0600, Bjorn Helgaas wrote:
+> In the subject, "properly" really doesn't convey information.  I think
+> this patch does two things:
 > 
-> There's a lot going on in this patch.  Could it possibly be split up a
-> bit, e.g., first tease apart aer_err_info.status/.mask into
-> .cor_status/mask and .uncor_status/mask, then add .uncor_severity,
-> then add the device_status bit separately?  If it could be split up, I
-> think the ANFE case would be easier to see.
+>   - Prints error bits that might be ANFE 
+>   - Clears UNCOR_STATUS bits that were previously not cleared
 > 
-> Thanks a lot for working on this area!
+> Maybe the subject line could say something about those (clearing
+> UNCOR_STATUS might be more important, or maybe this could even be
+> split into two patches so we could see both).
 > 
-> Bjorn
 
-Thanks for the feedback! Will split it up into two pacthes in the next
-version.
-
---
-Best regards,
-Wang, Qingshun
+Good idea, thanks. I think splitting it into two patches would be the
+better approach.
 
