@@ -1,133 +1,154 @@
-Return-Path: <linux-edac+bounces-468-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-469-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F273084C9F0
-	for <lists+linux-edac@lfdr.de>; Wed,  7 Feb 2024 12:50:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A0E584CABA
+	for <lists+linux-edac@lfdr.de>; Wed,  7 Feb 2024 13:30:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 758EC1F26300
-	for <lists+linux-edac@lfdr.de>; Wed,  7 Feb 2024 11:50:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5E0B1C256DF
+	for <lists+linux-edac@lfdr.de>; Wed,  7 Feb 2024 12:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986471B811;
-	Wed,  7 Feb 2024 11:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26DDA5A7BB;
+	Wed,  7 Feb 2024 12:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y6Wu6pno"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Dc/tUaMI"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78181D525;
-	Wed,  7 Feb 2024 11:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2EF31755;
+	Wed,  7 Feb 2024 12:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707306652; cv=none; b=PuC4UoJrIip7A6X7+dOyGA5tF/hkLqyxYCdKAtZ6ZJXW+6IH8aJ8skxiURgKSGQ5vbeHkXIXgsIjMu+c0XFSyvHSGqeiRAhLOrl+OCUB4v8hLli2lgFrH4HHwx5Q3odC37hbuWf9v4q2KR4NdH8jLfryVzccgeGN8wkpo0tyvcI=
+	t=1707309018; cv=none; b=FguwPBmtXhFspsgHmDrzuQqihWP19KHrzMLQDyeTePkdLEXKsFo0jzfGSfEIMX2egmt3lS6nqyf3pZmecC/9V+FDr7GXwO0JbouLFpd0PaKmaIywa311q3+u4rDYqffFoQq3Ta5TKVoCpqL/oJ93Lq2MGx6eJSFexj7EKL2Gy7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707306652; c=relaxed/simple;
-	bh=SfvJn+xoupBR1MbkXFoDnA5hLXb3/g/1CcV8cOlXD/A=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=WZW8MG3XeH3TMiXgw10eaJRkwKploy7wNFKikXB/icvEZ5WUdhIOZEYP1M19EYNJCN5RonR9GhPOqOYLP3/rBcemNPEa0piFGok/nFAV1Yh1kYC/XoQ9dvYM/OZXLLfRNhj2mIcjq1k7TRvOfhCwKtFF177P3lC5dR7jkx5aDn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y6Wu6pno; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707306651; x=1738842651;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=SfvJn+xoupBR1MbkXFoDnA5hLXb3/g/1CcV8cOlXD/A=;
-  b=Y6Wu6pnom9XLv6poGlDiUWQsebH+Dk2elTYCJDQzn3C8DC7ZvXyiHmw5
-   yobsVvVo8LysAr9PllLlEbmlFK0ipHXwjPHdvOimsaWtILkwFEV1osbHM
-   V1YTvfQJLtH4ScELhVy9wRdhogHLfIT6bMONwwjB1QcUPtroN7l5BlcaS
-   oLjcflRgYAqzeoophCcahRcxi/DnkSdOvpZqoI/+ZPVPrpjxewKSIv19K
-   TTv0IqubjZa9V3orFBAtyE7PJcN1H5MNakjo1sZJr4uVGZwhSLv7AXT5M
-   1hV4HZP74SThZU5OWmJSSzYITj3rhvGnarjK8ILnyr30g92TAhrUxWksF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="4837019"
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="4837019"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 03:50:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="909976005"
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="909976005"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.51.96])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 03:50:43 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 7 Feb 2024 13:50:37 +0200 (EET)
-To: linux-pci@vger.kernel.org, 
-    "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-cc: Bjorn Helgaas <bhelgaas@google.com>, 
-    Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-    intel-wired-lan@lists.osuosl.org, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-    Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-    linux-edac@vger.kernel.org, linux-efi@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org, 
-    Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-    Netdev <netdev@vger.kernel.org>, Oliver O'Halloran <oohall@gmail.com>, 
-    Paolo Abeni <pabeni@redhat.com>, Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH 0/4] PCI: Consolidate TLP Log reading and printing
-In-Reply-To: <20240206135717.8565-1-ilpo.jarvinen@linux.intel.com>
-Message-ID: <d1168e4a-c766-b3c2-bb74-c8dbae984cff@linux.intel.com>
-References: <20240206135717.8565-1-ilpo.jarvinen@linux.intel.com>
+	s=arc-20240116; t=1707309018; c=relaxed/simple;
+	bh=l/I1R6TO971Rm9gzs/Zx8mjrl1tpZ9fmPkTQ0MQ2jl0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rOEylE+pf85SCkzElXuAhYKowZoDTut2+Lqbgs34DivHhDoEnMk4vmcCSq7+i5vbGDWPiDxpIXX04BQ/y2bWgBWLSOFD9qsXpqu27XTL9smJp24AjWF9e0J/r0QDm1eEdkvDdRtEwXfRoniEXykoW1DgUNQSNz/B47TtCsbl0Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Dc/tUaMI; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4F5FF40E01F7;
+	Wed,  7 Feb 2024 12:30:06 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id gZmVZCS8ja_O; Wed,  7 Feb 2024 12:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707309004; bh=neMQamQmFqij5v0x/QfM0vgH5KoHFOe0tPCa7WZMvKc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Dc/tUaMIs8BJJUfjfyuOd0jAsrzUmCNX7vTfH8INBqThEFBdRfp5f5FcU0nCscJxH
+	 ciR/3tvkZUGI5BWmwxEc/K+uShPxQ1U8pwyVn5LSGjEivfTjNvv6c7QOMozVhPziGc
+	 zR5+UOUkPQemarw5nTASgLR2JuIBf7on3fcZUyFVrBJNffgNHceVAN6pcfnofgcZ1d
+	 3ch7oPx5Qh9qEIHLbTJcKVJoO4ZXXqIKOgjhk0nsiryImy9mUnDJNgFCwmnL47XiBJ
+	 kTnlUYyS6++th3sY3V6XMzp2hy7qaloJw1l5ttaD1PdhaFrRfA80a6l0bJwsQXwrKi
+	 7d5VTwmh5bn4GNqA+YZ/mmKPFvVaLxjtzy7rEBcQreSXBRYgbitCE2cGvUnsxz6N/e
+	 1RPD48m+EJWxpGdzphhMrMDme0Zq4drsSweBQpe9+n5LsBISgcN6SYw6/T8gWiWnr9
+	 TM+x5zL43AjvXCDV5T8Ygl2lBvImHEyquGayu91mRWEHu1ZCxdY6k2z+Vnark5yAI5
+	 u/B/iWVCE9BxvNREe+g+TejekTIGYHSMFbGfe8hEqsB7S9cbAO5nSVEnom+MZIpHlF
+	 NQ+U9RzjChZNdOiT/2BoQ5ZxCoUxNPaNLCF+nfPOe1xE+TQnlzU5ezMtF9Ujz/+mGC
+	 RaSl75FL3SvjkWhxJlkYDvbU=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AB74B40E016D;
+	Wed,  7 Feb 2024 12:29:47 +0000 (UTC)
+Date: Wed, 7 Feb 2024 13:29:42 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Tong Tiangen <tongtiangen@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	wangkefeng.wang@huawei.com,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-mm@kvack.org, Guohanjun <guohanjun@huawei.com>
+Subject: Re: [PATCH -next v5 2/3] x86/mce: set MCE_IN_KERNEL_COPYIN for
+ DEFAULT_MCE_SAFE exception
+Message-ID: <20240207122942.GRZcN3tqWkV-WE-pak@fat_crate.local>
+References: <20240204082627.3892816-1-tongtiangen@huawei.com>
+ <20240204082627.3892816-3-tongtiangen@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-2015099635-1707302934=:1119"
-Content-ID: <ca89eb14-5052-c712-0d3b-dae8e97234e8@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240204082627.3892816-3-tongtiangen@huawei.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Sun, Feb 04, 2024 at 04:26:26PM +0800, Tong Tiangen wrote:
+> diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+> index bca780fa5e57..b2cce1b6c96d 100644
+> --- a/arch/x86/kernel/cpu/mce/severity.c
+> +++ b/arch/x86/kernel/cpu/mce/severity.c
+> @@ -292,11 +292,11 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
+>  	case EX_TYPE_UACCESS:
+>  		if (!copy_user)
+>  			return IN_KERNEL;
+> +		fallthrough;
+> +	case EX_TYPE_DEFAULT_MCE_SAFE:
+>  		m->kflags |= MCE_IN_KERNEL_COPYIN;
+>  		fallthrough;
 
---8323328-2015099635-1707302934=:1119
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <5d24dca6-e3dc-f4f5-8d6c-ee0d65616a2f@linux.intel.com>
+I knew something was still bugging me here and this is still wrong.
 
-Adding Cc Quigshun which I ended up forgotting despite thinking it at one=
-=20
-point.
+Let's imagine this flow:
 
---=20
- i.
+copy_mc_to_user() - note *src is kernel memory
+|-> copy_mc_enhanced_fast_string or copy_mc_fragile - it's the same thing
+  |-> -#MC, exception type EX_TYPE_DEFAULT_MCE_SAFE
+    |-> error_context():
+       case EX_TYPE_DEFAULT_MCE_SAFE:
+                m->kflags |= MCE_IN_KERNEL_COPYIN;
 
-On Tue, 6 Feb 2024, Ilpo J=E4rvinen wrote:
+MCE_IN_KERNEL_COPYIN does kill_me_never():
 
-> This series consolidates AER & DPC TLP Log handling code. Helpers are
-> added for reading and printing the TLP Log and the format is made to
-> include E-E Prefixes in both cases (previously only one DPC RP PIO
-> displayed the E-E Prefixes).
->=20
-> I'd appreciate if people familiar with ixgbe could check the error
-> handling conversion within the driver is correct.
->=20
-> Ilpo J=E4rvinen (4):
->   PCI/AER: Cleanup register variable
->   PCI: Generalize TLP Header Log reading
->   PCI: Add TLP Prefix reading into pcie_read_tlp_log()
->   PCI: Create helper to print TLP Header and Prefix Log
->=20
->  drivers/firmware/efi/cper.c                   |  4 +-
->  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 39 +++------
->  drivers/pci/ats.c                             |  2 +-
->  drivers/pci/pci.c                             | 79 +++++++++++++++++++
->  drivers/pci/pci.h                             |  2 +-
->  drivers/pci/pcie/aer.c                        | 28 ++-----
->  drivers/pci/pcie/dpc.c                        | 31 ++++----
->  drivers/pci/probe.c                           | 14 ++--
->  include/linux/aer.h                           | 16 ++--
->  include/linux/pci.h                           |  2 +-
->  include/ras/ras_event.h                       | 10 +--
->  include/uapi/linux/pci_regs.h                 |  2 +
->  12 files changed, 145 insertions(+), 84 deletions(-)
->=20
->=20
---8323328-2015099635-1707302934=:1119--
+	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
+
+but that's reading from kernel memory!
+
+IOW, I *think* that switch statement should be this:
+
+	switch (fixup_type) {
+	case EX_TYPE_UACCESS:
+	case EX_TYPE_DEFAULT_MCE_SAFE:
+		if (!copy_user)
+			return IN_KERNEL;
+
+		m->kflags |= MCE_IN_KERNEL_COPYIN;
+		fallthrough;
+
+	case EX_TYPE_FAULT_MCE_SAFE:
+		m->kflags |= MCE_IN_KERNEL_RECOV;
+		return IN_KERNEL_RECOV;
+
+	default:
+		return IN_KERNEL;
+	}
+
+Provided I'm not missing a case and provided is_copy_from_user() really
+detects all cases properly.
+
+And then patch 3 is wrong because we only can handle "copy in" - not
+just any copy.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
