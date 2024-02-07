@@ -1,130 +1,133 @@
-Return-Path: <linux-edac+bounces-467-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-468-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B8BA84BBC0
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 18:23:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F273084C9F0
+	for <lists+linux-edac@lfdr.de>; Wed,  7 Feb 2024 12:50:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AABF22842B8
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Feb 2024 17:23:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 758EC1F26300
+	for <lists+linux-edac@lfdr.de>; Wed,  7 Feb 2024 11:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08478F68;
-	Tue,  6 Feb 2024 17:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986471B811;
+	Wed,  7 Feb 2024 11:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbH/xjJY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y6Wu6pno"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E4CCA4A;
-	Tue,  6 Feb 2024 17:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78181D525;
+	Wed,  7 Feb 2024 11:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707240217; cv=none; b=W+NRZ+NbhvI6LkVxj25VuVzbT6bhH9pEyLGEyYuHKp8kyj0CisKCFo3AfoSS34wZtBlDHyTkollysPsYrt66B6rULPmCtx4BO2wsJ5XVIy8DiM9YRN34EW6q3ZiDFJqUG0njBOHACavmpRRg9whkJEW+vs5ebUcJ3iT9F5L3A1k=
+	t=1707306652; cv=none; b=PuC4UoJrIip7A6X7+dOyGA5tF/hkLqyxYCdKAtZ6ZJXW+6IH8aJ8skxiURgKSGQ5vbeHkXIXgsIjMu+c0XFSyvHSGqeiRAhLOrl+OCUB4v8hLli2lgFrH4HHwx5Q3odC37hbuWf9v4q2KR4NdH8jLfryVzccgeGN8wkpo0tyvcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707240217; c=relaxed/simple;
-	bh=po8vFxWrgnIMI30IcGK3wKjOx+diDmMTZZJBoYh+eQs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=ptp/Ub1Vh+vRM3vexZNK4ipHEDE4MBnoiODARqM4nuUtT/wjZ76mPTUIrQIrF+NnmC6p2iZs6KhXvKQInMbbFWjvX9gXMgBQ/zzosX3e0m+o4wVJzj3LBZJ2llRSs9BwTTv91vEvUg1DrR7Ikdkklf/tDOvTariT/aj0KJcAzu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbH/xjJY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C145DC433F1;
-	Tue,  6 Feb 2024 17:23:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707240217;
-	bh=po8vFxWrgnIMI30IcGK3wKjOx+diDmMTZZJBoYh+eQs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=VbH/xjJYNUgcSHYX8q6R3XOgMBMYdLFz0wwh7u9in+aDxvfieDaQsfcKyvc8IJljm
-	 b4KjHmApQTFpV3dO3iDbgzIq452iChe4Hlh+NbWkOfvbUZAwcqMJKOmdrdWJDvx820
-	 yGKAU6o3UzpUqJtxSEDdVVdgjfhrjOOzt539Zz72GbRfzqXZni2RnBmRWm0weRDqIa
-	 abarX5VsT/PfIoUpx71JSSklbKAA2HtBv69vFwRwxqV13L9xCWMblKCxtAmGpAIqwi
-	 8sqKs24ZwA9C+e3TEvivW9S6Jps4z6qQAk8w70V+oieQDehciCMb6nvmk5plKPIwiL
-	 i1EveBd1FnZ6A==
-Date: Tue, 6 Feb 2024 11:23:35 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-acpi@vger.kernel.org, chao.p.peng@linux.intel.com,
-	erwin.tsaur@intel.com, feiting.wanyan@intel.com,
-	qingshun.wang@intel.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Miaohe Lin <linmiaohe@huawei.com>,
-	Shiju Jose <shiju.jose@huawei.com>,
-	Adam Preble <adam.c.preble@intel.com>, Li Yang <leoyang.li@nxp.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	Robert Richter <rrichter@amd.com>, linux-kernel@vger.kernel.org,
-	linux-cxl@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] PCI/AER: Store more information in aer_err_info
-Message-ID: <20240206172335.GA872811@bhelgaas>
+	s=arc-20240116; t=1707306652; c=relaxed/simple;
+	bh=SfvJn+xoupBR1MbkXFoDnA5hLXb3/g/1CcV8cOlXD/A=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=WZW8MG3XeH3TMiXgw10eaJRkwKploy7wNFKikXB/icvEZ5WUdhIOZEYP1M19EYNJCN5RonR9GhPOqOYLP3/rBcemNPEa0piFGok/nFAV1Yh1kYC/XoQ9dvYM/OZXLLfRNhj2mIcjq1k7TRvOfhCwKtFF177P3lC5dR7jkx5aDn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y6Wu6pno; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707306651; x=1738842651;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=SfvJn+xoupBR1MbkXFoDnA5hLXb3/g/1CcV8cOlXD/A=;
+  b=Y6Wu6pnom9XLv6poGlDiUWQsebH+Dk2elTYCJDQzn3C8DC7ZvXyiHmw5
+   yobsVvVo8LysAr9PllLlEbmlFK0ipHXwjPHdvOimsaWtILkwFEV1osbHM
+   V1YTvfQJLtH4ScELhVy9wRdhogHLfIT6bMONwwjB1QcUPtroN7l5BlcaS
+   oLjcflRgYAqzeoophCcahRcxi/DnkSdOvpZqoI/+ZPVPrpjxewKSIv19K
+   TTv0IqubjZa9V3orFBAtyE7PJcN1H5MNakjo1sZJr4uVGZwhSLv7AXT5M
+   1hV4HZP74SThZU5OWmJSSzYITj3rhvGnarjK8ILnyr30g92TAhrUxWksF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="4837019"
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="4837019"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 03:50:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="909976005"
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="909976005"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.51.96])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 03:50:43 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 7 Feb 2024 13:50:37 +0200 (EET)
+To: linux-pci@vger.kernel.org, 
+    "Wang, Qingshun" <qingshun.wang@linux.intel.com>
+cc: Bjorn Helgaas <bhelgaas@google.com>, 
+    Jesse Brandeburg <jesse.brandeburg@intel.com>, 
+    intel-wired-lan@lists.osuosl.org, Tony Nguyen <anthony.l.nguyen@intel.com>, 
+    Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+    linux-edac@vger.kernel.org, linux-efi@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org, 
+    Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
+    Netdev <netdev@vger.kernel.org>, Oliver O'Halloran <oohall@gmail.com>, 
+    Paolo Abeni <pabeni@redhat.com>, Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH 0/4] PCI: Consolidate TLP Log reading and printing
+In-Reply-To: <20240206135717.8565-1-ilpo.jarvinen@linux.intel.com>
+Message-ID: <d1168e4a-c766-b3c2-bb74-c8dbae984cff@linux.intel.com>
+References: <20240206135717.8565-1-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2rfnevhnhylik4r6smr56uunsxweo7s5elo65sjhiztvxnr6bq@5fcyv22zxyyp>
+Content-Type: multipart/mixed; BOUNDARY="8323328-2015099635-1707302934=:1119"
+Content-ID: <ca89eb14-5052-c712-0d3b-dae8e97234e8@linux.intel.com>
 
-On Wed, Feb 07, 2024 at 12:41:41AM +0800, Wang, Qingshun wrote:
-> On Mon, Feb 05, 2024 at 05:12:31PM -0600, Bjorn Helgaas wrote:
-> > On Thu, Jan 25, 2024 at 02:27:59PM +0800, Wang, Qingshun wrote:
-> > > When Advisory Non-Fatal errors are raised, both correctable and
-> > > uncorrectable error statuses will be set. The current kernel code cannot
-> > > store both statuses at the same time, thus failing to handle ANFE properly.
-> > > In addition, to avoid clearing UEs that are not ANFE by accident, UE
-> > > severity and Device Status also need to be recorded: any fatal UE cannot
-> > > be ANFE, and if Fatal/Non-Fatal Error Detected is set in Device Status, do
-> > > not take any assumption and let UE handler to clear UE status.
-> > > 
-> > > Store status and mask of both correctable and uncorrectable errors in
-> > > aer_err_info. The severity of UEs and the values of the Device Status
-> > > register are also recorded, which will be used to determine UEs that should
-> > > be handled by the ANFE handler. Refactor the rest of the code to use
-> > > cor/uncor_status and cor/uncor_mask fields instead of status and mask
-> > > fields.
-> > 
-> > There's a lot going on in this patch.  Could it possibly be split up a
-> > bit, e.g., first tease apart aer_err_info.status/.mask into
-> > .cor_status/mask and .uncor_status/mask, then add .uncor_severity,
-> > then add the device_status bit separately?  If it could be split up, I
-> > think the ANFE case would be easier to see.
-> 
-> Thanks for the feedback! Will split it up into two pacthes in the next
-> version.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Or even three:
+--8323328-2015099635-1707302934=:1119
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <5d24dca6-e3dc-f4f5-8d6c-ee0d65616a2f@linux.intel.com>
 
-  1) tease apart aer_err_info.status/.mask into .cor_status/mask and
-     .uncor_status/mask
+Adding Cc Quigshun which I ended up forgotting despite thinking it at one=
+=20
+point.
 
-  2) add .uncor_severity
+--=20
+ i.
 
-  3) add device_status
+On Tue, 6 Feb 2024, Ilpo J=E4rvinen wrote:
 
-Looking at this again, I'm a little confused about 2) and 3).  I see
-the new read of PCI_ERR_UNCOR_SEVER into .uncor_severity, but there's
-no actual *use* of it.
-
-Same for 3), I see the new read of PCI_EXP_DEVSTA, but AFAICS there's
-no use of that value.
-
-We should have the addition of these new values in the same patch
-that *uses* them.
-
-Bjorn
+> This series consolidates AER & DPC TLP Log handling code. Helpers are
+> added for reading and printing the TLP Log and the format is made to
+> include E-E Prefixes in both cases (previously only one DPC RP PIO
+> displayed the E-E Prefixes).
+>=20
+> I'd appreciate if people familiar with ixgbe could check the error
+> handling conversion within the driver is correct.
+>=20
+> Ilpo J=E4rvinen (4):
+>   PCI/AER: Cleanup register variable
+>   PCI: Generalize TLP Header Log reading
+>   PCI: Add TLP Prefix reading into pcie_read_tlp_log()
+>   PCI: Create helper to print TLP Header and Prefix Log
+>=20
+>  drivers/firmware/efi/cper.c                   |  4 +-
+>  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 39 +++------
+>  drivers/pci/ats.c                             |  2 +-
+>  drivers/pci/pci.c                             | 79 +++++++++++++++++++
+>  drivers/pci/pci.h                             |  2 +-
+>  drivers/pci/pcie/aer.c                        | 28 ++-----
+>  drivers/pci/pcie/dpc.c                        | 31 ++++----
+>  drivers/pci/probe.c                           | 14 ++--
+>  include/linux/aer.h                           | 16 ++--
+>  include/linux/pci.h                           |  2 +-
+>  include/ras/ras_event.h                       | 10 +--
+>  include/uapi/linux/pci_regs.h                 |  2 +
+>  12 files changed, 145 insertions(+), 84 deletions(-)
+>=20
+>=20
+--8323328-2015099635-1707302934=:1119--
 
