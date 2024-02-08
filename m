@@ -1,292 +1,301 @@
-Return-Path: <linux-edac+bounces-482-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-481-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2691C84EB58
-	for <lists+linux-edac@lfdr.de>; Thu,  8 Feb 2024 23:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB45F84EA1A
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Feb 2024 22:09:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1C2B1F26D76
-	for <lists+linux-edac@lfdr.de>; Thu,  8 Feb 2024 22:11:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 660711F2EEE9
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Feb 2024 21:09:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8722F4F605;
-	Thu,  8 Feb 2024 22:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F5E48799;
+	Thu,  8 Feb 2024 21:09:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="YOXU7Gja"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ho/4VcWz"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from quail.birch.relay.mailchannels.net (quail.birch.relay.mailchannels.net [23.83.209.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642CF50A64;
-	Thu,  8 Feb 2024 22:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.209.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1DA4EB40;
+	Thu,  8 Feb 2024 21:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707430271; cv=pass; b=j9EnTL03irdyNr+spaUoyU1Ax8I1uiqJynGMVPEOt2fHkUF8yw0bK8Pf8Lb6729tsgsM1YxMic0WQMmny3KnBJQ4FP5+Qm/hb1kQEaYOgwjdg4R1fcD1KhLGJUuvCwYWdmUWxtNnpwwP3gkZQIOWFnQlLXK3qRgybi0Nip1oaLI=
+	t=1707426572; cv=fail; b=IA0/U6mS63dU/W3BpY+YvpSF1GKRUKvp/VP85Az1AQuivWihBvbI4BVHK54qHMQkpSa/ciVRN5CHw+FWHYAwnDv2FYhcAVGI0k+GmNurlmq5i6bWPYGpkiyWYGjKpyMiarXqip+FgwfCyPTl/dCFhQvzdNNh6LwuCrEgWXNDFaA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707430271; c=relaxed/simple;
-	bh=EfzQfH39aO+4zozrTp5Iw6smZ27pVpvHxXQ5G56bcOQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XJRbn7Vt2XGh+RvqGbKtY2jxJZtNsbZaewMXfavpl9H8Ko2hhwn+V6jtUJ5KgAOE5xmLFOvK+/BTCKgJZ+sJIwvIyXf13LjBvhRgjYSXA6h1lNMZEBT6Svm9QME/Md+v+14oFW3llMbhAghBE3FPzvRWhZwRGI9I2kFnRweK9uU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=YOXU7Gja; arc=pass smtp.client-ip=23.83.209.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 2FC81C3258;
-	Thu,  8 Feb 2024 20:52:26 +0000 (UTC)
-Received: from pdx1-sub0-mail-a315.dreamhost.com (unknown [127.0.0.6])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 575F7C2B2F;
-	Thu,  8 Feb 2024 20:52:25 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1707425545; a=rsa-sha256;
-	cv=none;
-	b=eYQaUjfaqCK4xqX9nP/8LGZahisop7rwAID90vEA1OqmZHHOvAXr6pQaADpvMEW08Bu+dQ
-	+O/mPnQu+7rb2/ZSs/IY8HcRn4Tp3JMsztQWNADwix7ZdKFhXTo6GxrRcvCYbeY1M2K38Y
-	yN17gvV+SDM3VaeJL890Kb9tMimDPTrJdKteWtrBydp1LjX1FzXZXcBAjl5ntfNKIcrkZV
-	gtGhLJLa6E74WhDMu5ueIsiVY6h97FAA8cv2kgfOOpdIwzjzOxN2DjBzVGyMUMSHNW9D16
-	tcggDxwzVG1rhjNJRXcKCgUi6RMV3VXNcIFwRopKyWEDodPBXPsCyzL3YeTUfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1707425545;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=CcMUr6aSsUDavOgiQY01krpatcLaL0XR+yGhEiyDQ5U=;
-	b=qohssJ3OLAkOXjEBqbEjqEUP2wcs/MEVf4omu3Zfh/lu81SQ0fYOXywmomz8sEUn+q5+Km
-	/3PR/FgF4924gtPBnGlZ0Nr4tqKV5+fWisrdhJAKGXWPScDzdXirusXVAkfCWxBAUDNlMW
-	WviojhJYBcFf4mSRrK5fqZ8kg7FY42g39/GDeAwAhtNyXr9VU06oKJeV1wpnHbe8xgYgx4
-	m2sgHla7QJVns7HKhjuaZJJ5OeptqotMWeIuiEddhvGTGDXnUbvNbPdG0E+zCKQFrbuJA1
-	t7eknmDYMLQz2J+VjPfOF3gQYgGuB155PzR3+eai/mURyFVj4WKg4p+kGiI/Ow==
-ARC-Authentication-Results: i=1;
-	rspamd-55b4bfd7cb-6hq8s;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Bubble-Relation: 2299cdce6fe69eba_1707425545994_4052383959
-X-MC-Loop-Signature: 1707425545994:3695226952
-X-MC-Ingress-Time: 1707425545993
-Received: from pdx1-sub0-mail-a315.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.107.7.223 (trex/6.9.2);
-	Thu, 08 Feb 2024 20:52:25 +0000
-Received: from offworld (unknown [108.175.208.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a315.dreamhost.com (Postfix) with ESMTPSA id 4TW8Lb0jY9z6f;
-	Thu,  8 Feb 2024 12:52:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1707425545;
-	bh=CcMUr6aSsUDavOgiQY01krpatcLaL0XR+yGhEiyDQ5U=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=YOXU7GjaqvpZw5IyzvttEBrRKB/ZhM7rPdiuGFFLyx9t5cKNmHOZz/0p0fuNpyBJ4
-	 XipLwJ+ptUNHrgtjNmf2EEprypP59TujNiDwdnRsgBgtXhJ8noBZsqpH1v8Jv3wrvs
-	 Fjk20dPzwDQCntNE3UHANhWu7hPxg3LLfVojP3JKQ0SJO/fcR/d2BEtb19/QoCHgDJ
-	 3TR9axYgi/99YlcCej1kx7fe8v7EVdLnRfN2v3moZGwyPBowvnZpMatyr1OTtjn63g
-	 O7vb5b6IXdLLxhlQXXzTYNHmpAfLwcX7wxwRTgE1G6ZtL7jodYakara7t6arTrjAOV
-	 zjck6sMz1nunQ==
-Date: Thu, 8 Feb 2024 12:52:08 -0800
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: shiju.jose@huawei.com
-Cc: linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-mm@kvack.org, jonathan.cameron@huawei.com, dave.jiang@intel.com, 
-	alison.schofield@intel.com, vishal.l.verma@intel.com, ira.weiny@intel.com, 
-	dan.j.williams@intel.com, linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	david@redhat.com, Vilas.Sridharan@amd.com, leo.duran@amd.com, 
-	Yazen.Ghannam@amd.com, rientjes@google.com, jiaqiyan@google.com, tony.luck@intel.com, 
-	Jon.Grimm@amd.com, dave.hansen@linux.intel.com, rafael@kernel.org, lenb@kernel.org, 
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com, 
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com, duenwen@google.com, 
-	mike.malvestuto@intel.com, gthelen@google.com, wschwartz@amperecomputing.com, 
-	dferguson@amperecomputing.com, tanxiaofei@huawei.com, prime.zeng@hisilicon.com, 
-	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com, linuxarm@huawei.com
-Subject: Re: [RFC PATCH v5 01/12] cxl/mbox: Add GET_SUPPORTED_FEATURES
- mailbox command
-Message-ID: <2k3fvg2xlp7ie47cy7finxchmb6sinkut2mp23wfvv73ik3erw@wohmod7labx5>
-Mail-Followup-To: shiju.jose@huawei.com, linux-cxl@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org, jonathan.cameron@huawei.com, 
-	dave.jiang@intel.com, alison.schofield@intel.com, vishal.l.verma@intel.com, 
-	ira.weiny@intel.com, dan.j.williams@intel.com, linux-edac@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, david@redhat.com, Vilas.Sridharan@amd.com, leo.duran@amd.com, 
-	Yazen.Ghannam@amd.com, rientjes@google.com, jiaqiyan@google.com, tony.luck@intel.com, 
-	Jon.Grimm@amd.com, dave.hansen@linux.intel.com, rafael@kernel.org, lenb@kernel.org, 
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com, 
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com, duenwen@google.com, 
-	mike.malvestuto@intel.com, gthelen@google.com, wschwartz@amperecomputing.com, 
-	dferguson@amperecomputing.com, tanxiaofei@huawei.com, prime.zeng@hisilicon.com, 
-	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com, linuxarm@huawei.com
-References: <20240111131741.1356-1-shiju.jose@huawei.com>
- <20240111131741.1356-2-shiju.jose@huawei.com>
+	s=arc-20240116; t=1707426572; c=relaxed/simple;
+	bh=5xu093wYWztwU1JQbUmgpsn+yYdWR09LoEI25rrKBWM=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=W/1RyelxN8IzoSe9fQuaKmmoloHvkmTsn87ybZWrW2zTdXMOUk3qKZjEl3eEbkVhaKvDMB6tPFoMKRNpPncnCiBskz9mcSfhd9lY42yl/CP9bAllW3/k9K7zImWItKX1p7ufKyEjCdEwrCS/yC4WYgeY0dG3J4Hv7keE4NdJdjE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ho/4VcWz; arc=fail smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707426570; x=1738962570;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=5xu093wYWztwU1JQbUmgpsn+yYdWR09LoEI25rrKBWM=;
+  b=Ho/4VcWze9NhHanngGKdmJZb8N4DWCxOhNMa+u+gio2oRMO8uWYSBhUz
+   rfUri0noIMrp1VofFl+EsfDozy3nFtmcaR2T+zX/oRd2oVGwlQvXUbJxr
+   ZekC2o/AqI80Slgh8lK1p3UxVAdQO/Ka6/k1QsrYTglbcko0vqNx7OsY4
+   DmbUPo2+aGBoQQRCvmSJRcjWkTwHND6dsSiQALeZYHUiZlu5S9MN8XLsT
+   GrGwAa02pjZ/NNxK2kB+QCWZ8eU69Q08RUZl54+r7pYCfZqCsSixifByt
+   vtUb25JOOIGjPQMWgVc4XmWkLGS+GaU1mxwnYKkuU/+MlMpOW91Imt2jL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="26768637"
+X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
+   d="scan'208";a="26768637"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 13:09:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="824956351"
+X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
+   d="scan'208";a="824956351"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Feb 2024 13:09:28 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 8 Feb 2024 13:09:27 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 8 Feb 2024 13:09:27 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Thu, 8 Feb 2024 13:09:27 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.40) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 8 Feb 2024 13:09:27 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b9fdCsXEj5JMEACofXT5f15GcYLRRIEvbJ6pyxpGAg12kagqWUuxgDTGgIUPh1ohH1oSJdWYT5v+BIimY1956Esdk4aKiT0pHzEwrX2cEB3/SfTy05YvwZf85x8EoFViH7zdqW494AKBAYvZcmdYzIlakeNfqq+C30iroQyzByaSzDOLQwff8gM5E9pc/FKjjyjxlsj3nJvHWGPR11Om7/+N0eh06rbpPAXuBdw+QKVghyyGL1J9mXeNTTGLtabqLS34v26/RR4WMk7yrJ3dRd2xPPah6sjyED1AQK35JlWybCoBbY9yJUQ8VmPZVclX/Nf2VtdnQZr30zcbtoAPQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iS2+ZA9hufiJaVKpmMjK6uEhZSXNVxRxKA43S09oU/s=;
+ b=mMQuTO7G7VqZ6Z0MR3yszPXOtMB4BIGO0zxF5UegbknDsb1PWEgfdIb9AaGQmA/g5dzw0/Z0lPj4TKumgNWdxVg+YKEMx6bM6kkJtvuXCIIleptz+uzJgzMA2fr+YxwwbVnzCW3iLicb7MclmQETVfgsKQyDnSKGVeVfnDbjLOcJlCKx1sO2dg4Sol2ebaO3n6NOmYMaqHxWr2cILWWTK0U4wqrBxk8aIuiQrbOSA+yzk4Y8K1+MYo4jkVaIaF8x+U3fLtZjfIiNrXrABEBybtInSOWpCxeDFJz/eaDu8jbd9LXiGvd4yGfl9ttNSAwsQOzDLfQkQ5VoFv5kWUr5uw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+ by MW5PR11MB5881.namprd11.prod.outlook.com (2603:10b6:303:19d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.24; Thu, 8 Feb
+ 2024 21:09:25 +0000
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::c3aa:f75e:c0ed:e15f]) by BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::c3aa:f75e:c0ed:e15f%3]) with mapi id 15.20.7249.038; Thu, 8 Feb 2024
+ 21:09:25 +0000
+Message-ID: <75f48901-fbfa-4ef4-99b9-312800d20896@intel.com>
+Date: Thu, 8 Feb 2024 13:09:23 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] x86/MCE: Extend size of the MCE Records pool
+To: Avadhut Naik <avadhut.naik@amd.com>, <x86@kernel.org>,
+	<linux-edac@vger.kernel.org>
+CC: <bp@alien8.de>, <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
+	<yazen.ghannam@amd.com>, <avadnaik@amd.com>
+References: <20240207225632.159276-1-avadhut.naik@amd.com>
+ <20240207225632.159276-2-avadhut.naik@amd.com>
+Content-Language: en-US
+From: Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <20240207225632.159276-2-avadhut.naik@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0069.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::14) To BYAPR11MB3320.namprd11.prod.outlook.com
+ (2603:10b6:a03:18::25)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20240111131741.1356-2-shiju.jose@huawei.com>
-User-Agent: NeoMutt/20231221
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|MW5PR11MB5881:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27531e4e-b79d-46b4-4d65-08dc28ea3a81
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EKsW8mUdSqe6zHY+NK4wtNyCXJ8/xme+YTfNl3Y1J6hdbVK6HEQ3+xXc9RzF6Aunc/eMAZrmAk3O4d8ALv9SAMZUbclSx3ogQe1Pc+4NRolxSp9UOnyV8lcZhvqMlksT9MS+UDSJTnvV9RYKdws6/C3IyhcGl8R0tOv2BqR362/p5sX5jLZpoYJxE5SzYEbIH75JOUnD9zRm8T/c+4QgFh4qYZL+VXc9ZddZVLAEvPrmdNdF7jWRJrgyc4sVyn3zDEVSISFXIlortFwgj1tSmEMp7HihrDHms+iuHC7as+vKn3QSCEvy3l49aShbaqBs/hprSDpfWfpLT64qiviwd+rCBCTpPdG2VvSfurZWwaQL8vkEIbt1P8NXqn22fy25mRUn9vgh0CNfEoUO39NMr1Vgv/G5GH/0gXMJ4mYKJ/Rsg4ncq0PP95mYfPVSRu8wv6FFDmVNVvXze2IdwflFVvAIlM/X7no2Ebc1PY9mpGaMcsrRb290oCKuT7E1nXuFRNKI4Dr8ciFAs90egpuwWTxUaABeU/C0vs/mgWuaVtXvb/6oE1PbUoGR29FQKgmT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(136003)(396003)(366004)(39860400002)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(31686004)(41300700001)(83380400001)(6506007)(53546011)(6486002)(478600001)(6512007)(66476007)(66946007)(66556008)(44832011)(26005)(2616005)(2906002)(36756003)(5660300002)(86362001)(31696002)(316002)(8936002)(4326008)(8676002)(82960400001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzM5QjdETnZvdFlWL1F3WnMwbXNqcys5WUxFcW1lTmRnSDJBSFcraDFhS2Mx?=
+ =?utf-8?B?ci94NzFYT1UrdDVRUkpOSGxWMjVKMEtuYVFvMTZMeWhOcGVJdEUrTFdmZmVO?=
+ =?utf-8?B?TEpzQmFYNnN1Z2REZ25oYWpDNWFNMWFTNC9zekwydGJDc2dpelY0a1B1MDhi?=
+ =?utf-8?B?YzFzdVljWnNGTWNiZS8rSS8zaDRtZ3RTbHMwb2E1Njh0TEd3SXREbGdLWXEr?=
+ =?utf-8?B?N3pFS1NzZFFyek9jUVhsbXBXRWp6dWRLV0ZuQWFRd3AzNDlrUFFycFZMSjVU?=
+ =?utf-8?B?Uzk4TU5KRzNvalp3a1paSDlubkZrWDB0ZnoyWm5WWDhiRFJWRlk2VmRlVnV0?=
+ =?utf-8?B?eXZVa2RuUFk3T0NtR2xQeTFsMjVUTUozL0FuYVhVVjhQV3FOdWlYMTNTaktG?=
+ =?utf-8?B?ZFI4bmJrZXhid1hKTnYrbWtTRlZ4YTd4YnhaczBGRmFlMml1R2Y4M0J3Ukc0?=
+ =?utf-8?B?bWNlcm03WU5KVkVRRTdXRE9Cenh4aVpxMEZyQnB3ZUtXMnF0UWIyK0RlU1h1?=
+ =?utf-8?B?SWVqRUhvSGNjUWdlOEtRZ2NjMDB1cThXU3ZNM2luL0ZyV3huS01EMUk1TUxU?=
+ =?utf-8?B?QzdtUGlRd2lLbHMzZmpnd0RkWEtOcDY4dll2REVXYkpneWdPemV2Rnk3cUpn?=
+ =?utf-8?B?UVdwWHFGclN6NGxtUFRWSXEzQllwb2ZmcEp2RW9yK2daT242NG9iZHZWN1di?=
+ =?utf-8?B?Z3Zpb2FBSzJjVjJZWmwvRTF3Qks5YUJLdTlLQ0VOU0t0RitRcFNKRytmcUxs?=
+ =?utf-8?B?R0h2cUI4SW54SStnb2RVWjVIS0hOcTFvbXg2dW5yTDZ2VktaeENla1FRVHI5?=
+ =?utf-8?B?NU5wV3pnZDF4b2k2VWRXNGRQcWlPanMwMVd0L3dtUDBjcjlHbU5Rdk1yVm1a?=
+ =?utf-8?B?M1hOMmdhZDB3d0FISGFuYUZycGpjUVM4ZTMvY0NGVWFrSVk2TmdUWXhMdGcr?=
+ =?utf-8?B?akRBR3RNcldmR1VCSm5wZHljT1VyZlQ5YUFWbVFaeG05S2hMSEpzRFQ5S0Mv?=
+ =?utf-8?B?Rnp4ZVIyMFhrWGZ5YTd0ckxjRUdpeCs4TTdVUUllRExLRGZrbFV3dE8vaUJW?=
+ =?utf-8?B?N2RqbmN6OWhZcHhoNmdaNHIyamhibnhuV2RMRkcvaEhIQSsyTWR1ZmJSbU9Q?=
+ =?utf-8?B?NDd3ZFdPaW1LVmFvNUludExWOVA0a1hWV2wremJNcEpVVzhqWVdoQnpraFhH?=
+ =?utf-8?B?d1F3VjArZWs5M2Z4djRMczFyWis0aGY0WURDMVZiM2FJVERnbnRsTUxnandE?=
+ =?utf-8?B?N0c4NFo4K2lxUGJBQWNrUnQvMDdQOWRCbzJjUnUwaEJ0QitIckF0RWZVRnpV?=
+ =?utf-8?B?Z2tpVnVic0tJKzhaODlWU3ZiMWlMMXNzKzVaQU1SVVhBU0FpT215NnZOSGxG?=
+ =?utf-8?B?eXpvZGUyY3FNRlJ5UkVod3kyOWVjb3E3MTRKc2J2WDFFQTFaTktWVGYzQnRU?=
+ =?utf-8?B?SnJadVB5bVRBdDJMZHFSSE9rR0lVQ3dHNlFua3g2SzdXeitGc0xXU3dCMFBq?=
+ =?utf-8?B?Tkg5bG5ROXM5Vlc3Ky9KR0RZTnZURUFSaTlIUm5Oa3paUndWRVFIVzlpdnhE?=
+ =?utf-8?B?UjNaYzI4S1pjbU1FKzZHK1Z1OEtGMVcxbVRYcGNoeFNSZ0VMT05rOUx2Z3JH?=
+ =?utf-8?B?dDVIYThTeE12MVZhQTJ0N2Q0eWR6cWR4OG54MXVMMEE1TUFIN1JXSDRBWEdm?=
+ =?utf-8?B?dDE0UEZhVXVXUXVwS21yTU5uVG9qc1VCaDk4cEdiVjBSeTlVM3JTT05XUmdH?=
+ =?utf-8?B?RUlZSVEwbDgxNVZaek9hS3IrbEFyQmc3Yk45Ynd4OG5OeStndE11c0tudmhm?=
+ =?utf-8?B?RWY4UFBMcmtZbkJCOGx1eWZFb05MQ25HNitoRysvaVo2MTBJZ3JvYVhYU2J0?=
+ =?utf-8?B?akwyL3pqZ3A0MEpHRmgyUkFNTjdGMXg5N0dvSkNQdmlzTkJqOVJLcFlmSlZB?=
+ =?utf-8?B?cThGTEh5OVBON3NHazltbnlFaDIwWDZvN3NNUlYyVDduRFE1b0JodWZJckRx?=
+ =?utf-8?B?R0hsdm8zNzVwUkgrMHpzK1NKeWl4TzdvcStYOVk1SDBjVGlzK1ZNZyt6UWlB?=
+ =?utf-8?B?d2l1dUdHL3hxSUdpYTNUYzhsNHVVdmRPVS9FOEpQYmYwbU1lK3lMdWF2eWtq?=
+ =?utf-8?Q?hYAfLtEVmFGpraxYXVAdEDXcW?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27531e4e-b79d-46b4-4d65-08dc28ea3a81
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2024 21:09:24.9660
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UT+1RfXCR299RkYywRDwNslSyBixdEXss+pPnZJ75hBaqIZQbjqlimqRIRfn+NyXHuKrE5hrUuyD3X+IhbeMyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5881
+X-OriginatorOrg: intel.com
 
-On Thu, 11 Jan 2024, shiju.jose@huawei.com wrote:
+On 2/7/2024 2:56 PM, Avadhut Naik wrote:
 
->From: Shiju Jose <shiju.jose@huawei.com>
->
->Add support for GET_SUPPORTED_FEATURES mailbox command.
->
->CXL spec 3.0 section 8.2.9.6 describes optional device specific features.
+> Extend the size of MCE Records pool to better serve modern systems. The
+> increase in size depends on the CPU count of the system. Currently, since
+> size of struct mce is 124 bytes, each logical CPU of the system will have
+> space for at least 2 MCE records available in the pool. To get around the
+> allocation woes during early boot time, the same is undertaken using
+> late_initcall().
+> 
 
-For the whole series, might as well make it 3.1 based. Are you aware of
-any major differences (I have not checked) between versions in either
-this or any of the two users that use feats?
+I guess making this proportional to the number of CPUs is probably fine
+assuming CPUs and memory capacity *would* generally increase in sync.
 
->CXL devices supports features with changeable attributes.
->Get Supported Features retrieves the list of supported device specific
->features. The settings of a feature can be retrieved using Get Feature
->and optionally modified using Set Feature.
->
->Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
->---
-> drivers/cxl/core/mbox.c | 23 ++++++++++++++++
-> drivers/cxl/cxlmem.h    | 59 +++++++++++++++++++++++++++++++++++++++++
-> 2 files changed, 82 insertions(+)
->
->diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
->index 36270dcfb42e..6960ce935e73 100644
->--- a/drivers/cxl/core/mbox.c
->+++ b/drivers/cxl/core/mbox.c
->@@ -1303,6 +1303,29 @@ int cxl_set_timestamp(struct cxl_memdev_state *mds)
-> }
-> EXPORT_SYMBOL_NS_GPL(cxl_set_timestamp, CXL);
->
->+int cxl_get_supported_features(struct cxl_memdev_state *mds,
->+						struct cxl_mbox_get_supp_feats_in *pi,
->+						void *feats_out)
->+{
->+	struct cxl_mbox_cmd mbox_cmd;
->+	int rc;
->+
->+	mbox_cmd = (struct cxl_mbox_cmd) {
->+		.opcode = CXL_MBOX_OP_GET_SUPPORTED_FEATURES,
->+		.size_in = sizeof(*pi),
->+		.payload_in = pi,
->+		.size_out = le32_to_cpu(pi->count),
->+		.payload_out = feats_out,
->+		.min_out = sizeof(struct cxl_mbox_get_supp_feats_out),
->+	};
->+	rc = cxl_internal_send_cmd(mds, &mbox_cmd);
->+	if (rc < 0)
->+		return rc;
->+
->+	return 0;
->+}
->+EXPORT_SYMBOL_NS_GPL(cxl_get_supported_features, CXL);
->+
-> int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->		       struct cxl_region *cxlr)
-> {
->diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
->index a2fcbca253f3..d831dad748f5 100644
->--- a/drivers/cxl/cxlmem.h
->+++ b/drivers/cxl/cxlmem.h
->@@ -506,6 +506,7 @@ enum cxl_opcode {
->	CXL_MBOX_OP_SET_TIMESTAMP	= 0x0301,
->	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
->	CXL_MBOX_OP_GET_LOG		= 0x0401,
->+	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
->	CXL_MBOX_OP_IDENTIFY		= 0x4000,
->	CXL_MBOX_OP_GET_PARTITION_INFO	= 0x4100,
->	CXL_MBOX_OP_SET_PARTITION_INFO	= 0x4101,
->@@ -740,6 +741,61 @@ struct cxl_mbox_set_timestamp_in {
->
-> } __packed;
->
->+/* Get Supported Features CXL 3.0 Spec 8.2.9.6.1 */
->+/*
->+ * Get Supported Features input payload
->+ * CXL rev 3.0 section 8.2.9.6.1; Table 8-75
->+ */
->+struct cxl_mbox_get_supp_feats_in {
->+	__le32 count;
->+	__le16 start_index;
->+	u16 reserved;
->+} __packed;
->+
->+/*
->+ * Get Supported Features Supported Feature Entry
->+ * CXL rev 3.0 section 8.2.9.6.1; Table 8-77
->+ */
->+/* Supported Feature Entry : Payload out attribute flags */
->+#define CXL_FEAT_ENTRY_FLAG_CHANGABLE	BIT(0)
->+#define CXL_FEAT_ENTRY_FLAG_DEEPEST_RESET_PERSISTENCE_MASK	GENMASK(3, 1)
->+
->+enum cxl_feat_attrib_value_persistence {
->+	CXL_FEAT_ATTRIB_VALUE_PERSISTENCE_NONE = 0x0,
->+	CXL_FEAT_ATTRIB_VALUE_PERSISTENCE_CXL_RESET = 0x1,
->+	CXL_FEAT_ATTRIB_VALUE_PERSISTENCE_HOT_RESET = 0x2,
->+	CXL_FEAT_ATTRIB_VALUE_PERSISTENCE_WARM_RESET = 0x3,
->+	CXL_FEAT_ATTRIB_VALUE_PERSISTENCE_COLD_RESET = 0x4,
+But, is there some logic to having 2 MCE records per logical cpu or it
+is just a heuristic approach? In practice, the pool is shared amongst
+all MCE sources and can be filled by anyone, right?
 
-Just leave the enums without explicit values - you are not
-changing the default counting.
+> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+> ---
+>  arch/x86/kernel/cpu/mce/core.c     |  3 +++
+>  arch/x86/kernel/cpu/mce/genpool.c  | 22 ++++++++++++++++++++++
+>  arch/x86/kernel/cpu/mce/internal.h |  1 +
+>  3 files changed, 26 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index b5cc557cfc37..5d6d7994d549 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -2901,6 +2901,9 @@ static int __init mcheck_late_init(void)
+>  	if (mca_cfg.recovery)
+>  		enable_copy_mc_fragile();
+>  
+> +	if (mce_gen_pool_extend())
+> +		pr_info("Couldn't extend MCE records pool!\n");
+> +
 
->+	CXL_FEAT_ATTRIB_VALUE_PERSISTENCE_MAX
->+};
->+
->+#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_ACROSS_FW_UPDATE_MASK	BIT(4)
->+#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_DEFAULT_SEL_SUPPORT_MASK	BIT(5)
->+#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_SAVED_SEL_SUPPORT_MASK	BIT(6)
->+
->+struct cxl_mbox_supp_feat_entry {
->+	uuid_t uuid;
->+	__le16 feat_index;
->+	__le16 get_feat_size;
->+	__le16 set_feat_size;
->+	__le32 attrb_flags;
+Why do this unconditionally? For a vast majority of low core-count, low
+memory systems the default 2 pages would be good enough.
 
-Nit but rename to 'attr', it is more along the kernel coding style
-(just compare a git grep of attrb vs attr). Also applies to the whole
-series.
+Should there be a threshold beyond which the extension becomes active?
+Let's say, for example, a check for num_present_cpus() > 32 (Roughly
+based on 8Kb memory and 124b*2 estimate per logical CPU).
 
-Thanks,
-Davidlohr
+Whatever you choose, a comment above the code would be helpful
+describing when the extension is expected to be useful.
 
->+	u8 get_feat_version;
->+	u8 set_feat_version;
->+	__le16 set_feat_effects;
->+	u8 rsvd[18];
->+}  __packed;
->+
->+/*
->+ * Get Supported Features output payload
->+ * CXL rev 3.0 section 8.2.9.6.1; Table 8-76
->+ */
->+struct cxl_mbox_get_supp_feats_out {
->+	__le16 entries;
->+	__le16 nsuppfeats_dev;
->+	u32 reserved;
->+	struct cxl_mbox_supp_feat_entry feat_entries[];
->+} __packed;
->+
-> /* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */
-> struct cxl_mbox_poison_in {
->	__le64 offset;
->@@ -867,6 +923,9 @@ void clear_exclusive_cxl_commands(struct cxl_memdev_state *mds,
->				  unsigned long *cmds);
-> void cxl_mem_get_event_records(struct cxl_memdev_state *mds, u32 status);
-> int cxl_set_timestamp(struct cxl_memdev_state *mds);
->+int cxl_get_supported_features(struct cxl_memdev_state *mds,
->+			       struct cxl_mbox_get_supp_feats_in *pi,
->+			       void *feats_out);
-> int cxl_poison_state_init(struct cxl_memdev_state *mds);
-> int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->		       struct cxl_region *cxlr);
->--
->2.34.1
->
+>  	mcheck_debugfs_init();
+>  
+>  	/*
+> diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
+> index fbe8b61c3413..aed01612d342 100644
+> --- a/arch/x86/kernel/cpu/mce/genpool.c
+> +++ b/arch/x86/kernel/cpu/mce/genpool.c
+> @@ -20,6 +20,7 @@
+>   * 2 pages to save MCE events for now (~80 MCE records at most).
+>   */
+>  #define MCE_POOLSZ	(2 * PAGE_SIZE)
+> +#define CPU_GEN_MEMSZ	256
+>  
+
+The comment above MCE_POOLSZ probably needs a complete re-write. Right
+now, it reads as follows:
+
+* This memory pool is only to be used to save MCE records in MCE context.
+* MCE events are rare, so a fixed size memory pool should be enough. Use
+* 2 pages to save MCE events for now (~80 MCE records at most).
+
+Apart from the numbers being incorrect since sizeof(struct mce) has
+increased, this patch is based on the assumption that the current MCE
+memory pool is no longer enough in certain cases.
+
+>  static struct gen_pool *mce_evt_pool;
+>  static LLIST_HEAD(mce_event_llist);
+> @@ -116,6 +117,27 @@ int mce_gen_pool_add(struct mce *mce)
+>  	return 0;
+>  }
+>  
+> +int mce_gen_pool_extend(void)
+> +{
+> +	unsigned long addr, len;
+
+s/len/size/
+
+> +	int ret = -ENOMEM;
+> +	u32 num_threads;
+> +
+> +	num_threads = num_present_cpus();
+> +	len = PAGE_ALIGN(num_threads * CPU_GEN_MEMSZ);
+
+Nit: Can the use of the num_threads variable be avoided?
+How about:
+
+	size = PAGE_ALIGN(num_present_cpus() * CPU_GEN_MEMSZ);
+
+
+
+> +	addr = (unsigned long)kzalloc(len, GFP_KERNEL);
+
+Also, shouldn't the new allocation be incremental to the 2 pages already
+present?
+
+Let's say, for example, that you have a 40-cpu system and the calculated
+size in this case comes out to 40 * 2 * 128b = 9920bytes  i.e. 3 pages.
+You only need to allocate 1 additional page to add to mce_evt_pool
+instead of the 3 pages that the current code does.
+
+Sohil
+
+> +
+> +	if (!addr)
+> +		goto out;
+> +
+> +	ret = gen_pool_add(mce_evt_pool, addr, len, -1);
+> +	if (ret)
+> +		kfree((void *)addr);
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+>  static int mce_gen_pool_create(void)
+>  {
+>  	struct gen_pool *tmpp;
+
+
 
