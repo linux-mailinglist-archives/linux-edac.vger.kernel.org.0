@@ -1,199 +1,107 @@
-Return-Path: <linux-edac+bounces-487-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-488-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC5FD84FD4C
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 21:03:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2649B84FD54
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 21:09:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEEBE1C20DBF
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 20:03:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6A61286730
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 20:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9091884A5D;
-	Fri,  9 Feb 2024 20:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8F585C58;
+	Fri,  9 Feb 2024 20:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wkt+S9sT"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="O8MzgYqL"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2082.outbound.protection.outlook.com [40.107.243.82])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48C985299;
-	Fri,  9 Feb 2024 20:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.82
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707508985; cv=fail; b=PAmmwloQKoBz3T+kXOPfgrX1ZUOHFbbKFaxFs8vgaH8gGtdklquW//072KKCBNUip2rRU9GDqqwS0/d5x2lUSEvNJ4fEqcijJj468qT236B4TmaaLLnHkbGME5AgkDj+RNu+DdDsZ5AqBDy8CYUh1jkSakiBgUNInGsfZn6PS4k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707508985; c=relaxed/simple;
-	bh=hicL5xHZkgZAGV1CWTfx2GYQktrz2iKrZKXs8UZVAEQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=dOM4WH1TP123vrZk3tSSqz1conU4BBUpP42mhObUTM01nPMMckRXxcjuVMpqUROX3KUhs19Ts3r7wXIK3fABOJKwocNC20oY1SOGUPjOdNQ/rrVVRIRLOfjWdZzKWSXv+F8mzY+OM7rRuafGLRX7+x0AN55JrbiX9m6wF7hM6RY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wkt+S9sT; arc=fail smtp.client-ip=40.107.243.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hgFtlsZZYhSaxXiTu3/BUg2GFdl/+yUVPle3Ra409gq/1CPzEJ5GBDTxSEqiDANxIfHxRDbmP5/ecXjQxAOucwhK5ceJqHnCu96XnmJ6URs6bS5rurwU8HNfg9p/nXHMA0UXiPBSPQm3yr50v0H8S4GRKl8RGRQAS074Q9SRC5+Dm0wdbKOuP95FNr86bNNHwH+WMKFf9EtRYPI8yIIvQgMehtMnaln97Tw9SmJ6EwySOglAX9zmb9QnfK+zcisQj0FtksZeYvDGywswUGiH9cq0hOZuDw+Thn88QI0XUO1aS9rlF9aew7c4Xlj7n9KIUcTAZSZOJzrtacMOkokR7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fGnkEpcCMtPYbWrkBTcP2Jng/YyBXBjufBRRUZAkJ20=;
- b=NZTLc262iFMz/MR/sRRiu8jEmRkjNBc94d18Qq93Tbr9sf8JrIDqJcc4zJviZV7GEE0sfF1Lb2qy8kKxJF801kvd/w2AuyNWzVlPIDRsGE0EhdHEA5utClE9r+1pjFa+3EqHvtZDn3m0DXuPNTP5Tw5A8uuuARf0Nfyva6LfRfkCuSIzRorFPOYM3A1Tohvk3ipgMeiK0EmS4D9s7+ndcWrGcACOReztT9Cn5dhYMqcYOhVJPFmWgGvm5jxibT4CvbACtpbC5ae4O+3MVWF/f1IDvoeNtE9XvOhZBnmYTsBhIl5U2j+IbBUvn+rxk9Tdbar4XO5EpoMGYPHzERSfAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fGnkEpcCMtPYbWrkBTcP2Jng/YyBXBjufBRRUZAkJ20=;
- b=wkt+S9sTvPtHimr8hJN2m+cZGt2MICM1dKUnzjGEiz8bva6mlt8DARBov/dMZxeTxzlkfarIqHLWGX3lxk/sSicanA2XClYEar14xEpQmoBbMehkhjvAWzt8UtQy7OoUl2v5YMXQoNI5HEUbKo6uOJ8jMCYmLTYelJhi5BUzP9g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH3PR12MB8403.namprd12.prod.outlook.com (2603:10b6:610:133::14)
- by CY5PR12MB6178.namprd12.prod.outlook.com (2603:10b6:930:25::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.10; Fri, 9 Feb
- 2024 20:02:52 +0000
-Received: from CH3PR12MB8403.namprd12.prod.outlook.com
- ([fe80::ea0e:199a:3686:40d4]) by CH3PR12MB8403.namprd12.prod.outlook.com
- ([fe80::ea0e:199a:3686:40d4%4]) with mapi id 15.20.7270.016; Fri, 9 Feb 2024
- 20:02:52 +0000
-Message-ID: <51255499-0b5d-45c6-9c72-f353bae83c0d@amd.com>
-Date: Fri, 9 Feb 2024 14:02:49 -0600
-User-Agent: Mozilla Thunderbird
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197D1364DA;
+	Fri,  9 Feb 2024 20:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707509376; cv=none; b=MSnFBLIgWoko0bwZiauC76/pBSW/be1jn1oqxBETzURXzHWI9kvQeY4iS5TENmqIab+tMpzGBJWd29Tw2fe5iF+n2Q2Hwn6Qj4dZYGqXyNFV4TPHeDZcRACvzEWEAaB1GbwGmU1Zt/mo+OEUO9AXCGBcg6dbb2vCEQRv2ECxIO4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707509376; c=relaxed/simple;
+	bh=avRF5KuBWc3ma8rB/3veb7AOZ1g3jgcb+O6RW9gVQRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pNLsWhypOBdgHCiuR1qgU4OKxcW3UmXoOsOi+ZDSG2tZ+vw7D3gvgtmFtaBgF6Rf3wDFlSNbeJkelqH+8d9KVZ0E1O3V7Y7TKBxOBMK8cC0UhhSptrJpL4i17yFd4vqfuYtFsVVbB0hsu7lw0rHouP7eqRHAtEsHkBQDGAouUpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=O8MzgYqL; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0242A40E01A9;
+	Fri,  9 Feb 2024 20:09:33 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id lwmklwoJTMGe; Fri,  9 Feb 2024 20:09:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707509369; bh=wVv1Ryzvn+UsKu2wdcKEViTQeQ4mNlo6bgwO9G+cMD8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O8MzgYqLLK+u+My7C/3fSo2r2Xd86Q/yrubXDhvZO8u1b/iUBew83qfndl4VJH2Dq
+	 nd0Gz472VVWfzX8T3+zvG97PeS5dIm7rkg/gpKqw8/f/VQVyMkNAgOwtWoP2wFv1/L
+	 3oklS0/SuyXfht6YoZMEhJRC9hkGHGw91kzPi3FCqfalaj2PMK6Vg5wjVdfofaldCm
+	 u0jfHVfeAU1FGDYz98zAlSiNAZqfYn1TwfLMwFL3esfKQqD8phwxItxzsT2ZacvJ4e
+	 TdaP6oYjdNj/ikWJ74l0NS31d1Dk3yVVdtMFYRFWr8jQU2inan37Yh3cKrr+i3huJD
+	 zyIxO85QgOj8M5/FqP58qaJKKR0nnBIlYRv2RSszuTpghyfHA5Azfq99WlObBLZ8e4
+	 WE/xHubqaACHlZpxh3BVxv4Vg/vatHbOswu1jXzUyfGHYHWhma+ixdkfhcjUIqLEc/
+	 5fuTvNRIM2n7BcfbWs6/+30xz/pP/tHJ+ugTK2qbE5P3FCPPY43IrJ8cPQL7nbUrQF
+	 ZtKGwHeUl+SfTysM/g0FB+1ELbwzFnNiApS1dz7dzAsz2LIElaC6y2qt2XT+ZUMX8J
+	 Qbg3Ne/w5kq3W5Qn70i2MmT3ozI3UI0lr2IJrb21qmoniTCPfsog0/R8Jo4W+yaKIO
+	 ChjyjjjSJMqoMR6eX69RgKp4=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BC6CE40E0192;
+	Fri,  9 Feb 2024 20:09:21 +0000 (UTC)
+Date: Fri, 9 Feb 2024 21:09:20 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: "Naik, Avadhut" <avadnaik@amd.com>
+Cc: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+	linux-edac@vger.kernel.org, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, yazen.ghannam@amd.com,
+	Avadhut Naik <avadhut.naik@amd.com>
 Subject: Re: [PATCH 2/2] x86/MCE: Add command line option to extend MCE
  Records pool
-Content-Language: en-US
-To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
- linux-edac@vger.kernel.org
-Cc: bp@alien8.de, tony.luck@intel.com, linux-kernel@vger.kernel.org,
- yazen.ghannam@amd.com, Avadhut Naik <avadhut.naik@amd.com>
+Message-ID: <20240209200920.GFZcaGcOr757W9O3IG@fat_crate.local>
 References: <20240207225632.159276-1-avadhut.naik@amd.com>
  <20240207225632.159276-3-avadhut.naik@amd.com>
  <8b4f8ec2-7534-4f77-b44f-6728c699ff64@intel.com>
-From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <8b4f8ec2-7534-4f77-b44f-6728c699ff64@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0159.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:3c3::7) To CH3PR12MB8403.namprd12.prod.outlook.com
- (2603:10b6:610:133::14)
+ <51255499-0b5d-45c6-9c72-f353bae83c0d@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8403:EE_|CY5PR12MB6178:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8196e207-bed7-41ef-a68f-08dc29aa18e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ORddpt+olnU23irbp+VYaMqj6Zdz/lsR06mFA37FM9N15tRMM2ng7n2gSpi+HPI1uIzErIDlg5WkeSikVXW7Wghm7wX+KBAnl6MLcLAsnv3zeIpqIjGeqqir6W5tJlxChAJkBrHHlCQf9Fvk7z7hHquxwPHoROo7ruvDgNyZ+aRGhmb1h8wMSy2l/wm7nVnpKBfAnr5kbKZpyvIKOaLB2t/6mNlHfvhBoUCKdOSuwRx8Ud5LJ7CgG2INYJiUPxwqpV7/LIWLm5GUf+nBLVFCdGLKh9mgLNNz9vprY5h7LqkcL5GPWbn4YTvKgl8YGcVwqksojL8YtLatxUMxSTWo63iSyzalupoIT99c4v7lQon2jvS7llsRQ5yeXrceanLKYkeGDefBBnDibrSABJrrUeIf2RCQyP3mdxEjgIa6iUz7abO8Ua1Rn6a2piNKd8TzKxa1FZAqv+1ITaz7gRUCfMndzDeM5CXEW9RERKI6ROvRaQ+i0JBHR/gHbsPYwpdGd7L782A5dHRhBoLxi4LgwwV0ZRRiWWpQtCt6oH26AGezOuw22eRZMs49itOwLNqw
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8403.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(396003)(376002)(346002)(366004)(230922051799003)(186009)(1800799012)(451199024)(64100799003)(5660300002)(316002)(41300700001)(2906002)(2616005)(26005)(38100700002)(31696002)(36756003)(83380400001)(66946007)(66556008)(66476007)(8936002)(4326008)(6506007)(6512007)(478600001)(6486002)(8676002)(53546011)(6666004)(31686004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NEtEYUVaK1dzc0ZITG9VVW5tU0N5eGh4WFJPcGpWT3JRSnlVNk9ZaEQ3ekN0?=
- =?utf-8?B?VnUzM2h6QzM3bmRWU1AxOXVaa3ZuODF6K2FRVkh4S1Rhb21oNEsyWUZlU2lH?=
- =?utf-8?B?RDZDalh6dTYybXIvanp1ZFlNZVIwUlhnby82a0t6QUZMYW5wa2YxTEVGQ2Fw?=
- =?utf-8?B?aDRyN0ZRMmZjMElOVGJBZnN5YkpjOGxSeXRaLzJXQ3NhS1pIR3Y2Y2txdUZF?=
- =?utf-8?B?VXB3TWVMQk56L1Bmay8rOTJRVVpjMktieEVHRktITDY5OEZzZE1MRG9laG5P?=
- =?utf-8?B?YkFPYjV5Uld1bzRTYUhuaUNvaGNmODFwNFBUbEdMbDlCUmRhMW95RFd4cm9F?=
- =?utf-8?B?NVlJbXkxTG1SaVcyUW5XSWF5NE5sTVBHMzk1d0Q1VmJ4c3VwYjBXUHVBNUV5?=
- =?utf-8?B?dTlmeEM1UEVlc2VSNnphMVRHclVHVE9xNi9nSTJUejhxbHdlRUxTaXNSNklx?=
- =?utf-8?B?aE9rS2Zoc3I4MGVXZXp4UjduZFBqNUFVcUZLNlc1OTZkU0hmTHYveFRZbEFt?=
- =?utf-8?B?TDV0TWxTeHM5NEJVR1FJNTNlaGkvL1hqZ3V3Y2F3NEcxRHhQR0JwcTRyRGFq?=
- =?utf-8?B?T0U1SVhQSEVsQ1NRTnowNE5LQUZYNWwxc2pxTVNhM3hIREgvZUZLaFJ0MDhN?=
- =?utf-8?B?cEhQMmVBdzRjb08reUJmcEp5NG56OGxlK2FyNjhEa25nUm1yTzhtTFJuamgx?=
- =?utf-8?B?djY5VG9kM1Fnck1OUnRIK1F0VUlvdWtpTCtvbjQvV2d4cEZzMlVoQnVHekl5?=
- =?utf-8?B?VE9ETUZIYlVyYW50TTB2MS85N04wbUo1eTlIQTZPS3diMXpBaTIzZEt0TERu?=
- =?utf-8?B?ZlF5WVE4OGVmZzlpR092a28za1lNblExbHRJbUZWUkYyYnZwOGludjF0RWMr?=
- =?utf-8?B?eHJucmVtdi9CcDNlSk9PK1R3SnZSN1ZCakhKUldyZVpIV1A3c1Ztc1pCUG54?=
- =?utf-8?B?YUJPZjArMzYzSWlzNTB0eVdQM296UkNsQ0JUaFVIbEJsNmVPY0NtVC9velh0?=
- =?utf-8?B?KzhzR1l0MFlwdXFEQzNhWFNiaVQ4cVZaRENYQnNJTVlZMzRHOFNtMHJKemlk?=
- =?utf-8?B?M1V2UlFYcTl5WXRpcENnaUJWR1J1QzJNalFYUnJhREpZLy9DYmFqSnJOd1U2?=
- =?utf-8?B?ZVJRRVZsd0orK0hoVmZSM2ZjU2ZYeDRnelR1WWZCcE96bHRnRmFVeXIya2pn?=
- =?utf-8?B?TnB3bUVyekY1dmpXdTVhWFF2Y3p0NEUwcVNpUWVibWROdCsrU253VkZTTGJI?=
- =?utf-8?B?Q1JhbExHMDZXWHdVSHBpMWJubHo1dVlEbDAwZ2pPNkhPL1JiQWtuMEJVQTJh?=
- =?utf-8?B?ZnVydXh1OFVRWmcxVFZiZ1dhS09Qb0xVZ3JSdXNBbDhwVlNpYXVEemFwQWJR?=
- =?utf-8?B?WWdtSkF2V0RSKytqNFp4VFpRZjFaUjF4eE1TcXI4RkgwbXFKa0J6aE5PblFO?=
- =?utf-8?B?WUhoRkdaY05tbkF6SzYrWHdSc2UxZEF5bC8vV2JBbGRENm1yRTlGU2hMWkty?=
- =?utf-8?B?RkdESmp2cVk5bW4vSUYxNTdtVHNUZlg5ZjBjelpNTXNlWkh2RUs0aDBoYmJx?=
- =?utf-8?B?VDlRYnRVdEkwUWd4bGZydnorWlJYVThtREZXdEJPazRkN2VvdElHalF3dXRj?=
- =?utf-8?B?WENnd3JoUWRIQldZVWtna3Fwd1ZRKzdlZjI0SGZ5SHUvR3I5YjFkcVBNU0ds?=
- =?utf-8?B?Z1QrWkEyaDNybUxrTU54ZnZyZkNka0NkTkhZeVhQcmViZ2NkWlZVa3h0aHNu?=
- =?utf-8?B?NW4wZ3liY1NTclZpeHlqZnhrU213Y2hsVjNJbjFuVm82NnF5ZGd3dmVpaDVI?=
- =?utf-8?B?MkRMUmtkaXlXbTJnS1dFVHROS3htQVZubkh1Y0JXaVVISFU5bTJOOUsxYnYz?=
- =?utf-8?B?ZHB3UVhlMlUrTXR0Qk1QTk5MNUM2L1Rib25Jalp0OHRFTHArT3pSeDJpazJy?=
- =?utf-8?B?d0R1cVhCL2VOUEdTZHo3RnRyNE5OcXpOSXdSQVVGcnVEMzVpcytSajd2OVJV?=
- =?utf-8?B?VmZvUUVLSjNDS0d0VVQ5TnpZOWRVMEI0WjBPNzNQQVVJdFJodEpnWC9rQXdi?=
- =?utf-8?B?U3AvaDg0NWlyMDB6UkFudXlhQlZ6MVBoa3oxL3BzOE1JMmpqWXZzaEFQYSs3?=
- =?utf-8?Q?PPF3B6/0sjy+QtsCiEBj+Fbra?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8196e207-bed7-41ef-a68f-08dc29aa18e8
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8403.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 20:02:52.3473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xe+EllZzVfspl7hIR3un+W8XQz7hDgAB3Ok4ngDJ1rfb0acjhfrIBFJkEan6jCx1Qg4S7aDAF2ggI/O5yBvAhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6178
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <51255499-0b5d-45c6-9c72-f353bae83c0d@amd.com>
 
-Hi,
+On Fri, Feb 09, 2024 at 02:02:49PM -0600, Naik, Avadhut wrote:
+> Is it safe to assume that users will always want to increase the size
+> of the pool and not decrease it?
 
-On 2/8/2024 19:36, Sohil Mehta wrote:
-> On 2/7/2024 2:56 PM, Avadhut Naik wrote:
->> Extension of MCE Records pool, based on system's CPU count, was undertaken
->> through the previous patch (x86/MCE: Extend size of the MCE Records pool).
->>
-> 
-> This statement is unnecessary.
->
-Noted.
- 
->> Add a new command line parameter "mce-genpool-extend" to set the size of
->> MCE Records pool to a predetermined number of pages instead of system's
->> CPU count.
->>
-> 
-> Like Tony, I am unsure of when this would be useful.
-> 
-> Also, why does it need to override the CPU count based extension
-> mechanism? Would just adding more pages not work for them?
-> 
-> If there really is a good reason to do this, how about changing
-> mce-genpool-extend to mce-genpool-add-pages and keeping the description
-> the same?
-> 
-> mce-genpool-add-pages=	[X86-64] Number of pages to add to MCE Records pool.
-> 
-> Then you can simply add these many number of additional pages to the new
-> CPU based mechanism.
-> 
-Is it safe to assume that users will always want to increase the size of the
-pool and not decrease it?
+Why don't you make the gen pool size a function of the number of CPUs on
+the system and have it all work automagically?
 
-IMO, the command-line option provides flexibility for users to choose the size of
-MCE Records pool in case, they don't agree with the CPU count logic. Just added it
-to ensure that we are not enforcing this increased memory footprint across the board.
+Burdening the user with yet another cmdline switch is a bad idea. We
+have way too many as it is.
 
-Would you agree?
+This stuff should work out-of-the-box, without user intervention if
+possible. And it is possible in this case.
+
+Thx.
 
 -- 
-Thanks,
-Avadhut Naik
+Regards/Gruss,
+    Boris.
 
-> Sohil
-> 
->> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
->> ---
->>  .../admin-guide/kernel-parameters.txt         |  2 ++
->>  arch/x86/kernel/cpu/mce/genpool.c             | 22 ++++++++++++++++---
->>  2 files changed, 21 insertions(+), 3 deletions(-)
->>
-> 
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
