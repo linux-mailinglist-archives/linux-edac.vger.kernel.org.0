@@ -1,79 +1,80 @@
-Return-Path: <linux-edac+bounces-486-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-487-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD1CD84FD32
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 20:52:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC5FD84FD4C
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 21:03:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A0E31F225B7
-	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 19:52:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEEBE1C20DBF
+	for <lists+linux-edac@lfdr.de>; Fri,  9 Feb 2024 20:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A021284A53;
-	Fri,  9 Feb 2024 19:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9091884A5D;
+	Fri,  9 Feb 2024 20:03:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="axI61JW/"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wkt+S9sT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2059.outbound.protection.outlook.com [40.107.243.59])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2082.outbound.protection.outlook.com [40.107.243.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AC584A45;
-	Fri,  9 Feb 2024 19:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48C985299;
+	Fri,  9 Feb 2024 20:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.82
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707508348; cv=fail; b=CndbioaXd3KNx0XUZWxAaxVB5t98FZj7LQa/7ZXcZLpma7faILRQSjj6tstIAwDKl9dZk2I4fyOpbN7sIEBfv8gPA3DLa5cHAlz9qiXTP/ifVW2UIpzHHddyW+0QU0E+3ZRIqhArF6yy8GKn6NSdGK+UI25QtjFHuTJduf0Rt1c=
+	t=1707508985; cv=fail; b=PAmmwloQKoBz3T+kXOPfgrX1ZUOHFbbKFaxFs8vgaH8gGtdklquW//072KKCBNUip2rRU9GDqqwS0/d5x2lUSEvNJ4fEqcijJj468qT236B4TmaaLLnHkbGME5AgkDj+RNu+DdDsZ5AqBDy8CYUh1jkSakiBgUNInGsfZn6PS4k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707508348; c=relaxed/simple;
-	bh=NXYbZwCzr9tZU1DQjoeF47+ter3IrrQP/GRNvZa7btY=;
+	s=arc-20240116; t=1707508985; c=relaxed/simple;
+	bh=hicL5xHZkgZAGV1CWTfx2GYQktrz2iKrZKXs8UZVAEQ=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=CguogAqwogAi8i0f8r8+HwR+BgisujWh8jgM43zO9b7bGFkVTQ52Sz0Me/P0F654x6AlwaUJQ2Uxvtw/tEcU3qmj45Q5pfxEh0lVjZCW2P5nu+B6b9Tu8ra4YUFrYeWvfVfHYbaq9rQGL2YppzcI9CuGcwB/l7pJXEcVFfhXm3c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=axI61JW/; arc=fail smtp.client-ip=40.107.243.59
+	 Content-Type:MIME-Version; b=dOM4WH1TP123vrZk3tSSqz1conU4BBUpP42mhObUTM01nPMMckRXxcjuVMpqUROX3KUhs19Ts3r7wXIK3fABOJKwocNC20oY1SOGUPjOdNQ/rrVVRIRLOfjWdZzKWSXv+F8mzY+OM7rRuafGLRX7+x0AN55JrbiX9m6wF7hM6RY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wkt+S9sT; arc=fail smtp.client-ip=40.107.243.82
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PVtERBwmslsBh05xQJf253ttDQeUPM3Wz0v10gzeUe0n+KyjrWR9sr5CwopzeeFPD4Et90GX3wNQUqA9WIxdcIXlovOF5jhoQmoqO/lCqUlShUZ6nGQxEfra6CJERQl5DSE3eV2R4bV1VQBASEnvR9se23gR+EpX1W4IXeBq5x8GBC6/shbIkdJrwIWMdB3a0Uhu9etFMN4Kw23TYrwYp0IGy0lYbnpWgaza65xYqqa8zbfPoy1DkjvJKu+ltFfQ09lMXOatLo1VPq420npACKEm+UqxrLqgVFwFhZeP/Sa8Oy2AgZQriWjBpr/isea+wZfOJss5JpV5k59NQ+JKTw==
+ b=hgFtlsZZYhSaxXiTu3/BUg2GFdl/+yUVPle3Ra409gq/1CPzEJ5GBDTxSEqiDANxIfHxRDbmP5/ecXjQxAOucwhK5ceJqHnCu96XnmJ6URs6bS5rurwU8HNfg9p/nXHMA0UXiPBSPQm3yr50v0H8S4GRKl8RGRQAS074Q9SRC5+Dm0wdbKOuP95FNr86bNNHwH+WMKFf9EtRYPI8yIIvQgMehtMnaln97Tw9SmJ6EwySOglAX9zmb9QnfK+zcisQj0FtksZeYvDGywswUGiH9cq0hOZuDw+Thn88QI0XUO1aS9rlF9aew7c4Xlj7n9KIUcTAZSZOJzrtacMOkokR7A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M3GEzTS9rpRVM1c7n3l2KIpmQQ9nJGqmxq9igy9wU6A=;
- b=g6xFL6gPri/aKL/D4+cy/mPWZ0qJzzagCwBu9Nbz7J1HYCb5y3ZfIExVfOQYwkCvhOhvJXwqNLqZQiY0ruYGycce+MLfY26dcK4rPI1lTN5AazQk7zS8jpxSAVyBRkSpJUnuOtfavSHgWrq6YaldRPZ1gboILKwVdN1+4NM+pXW3Yk3rOwWDV3sc9km/Bb4U2TYMW8jqXOOTEqGgTE9Q/AMRXmFnPAdD59DvnG76cw8EQ5bzhiG7BQw3UhRVc+6DOkS4jfHS224VVmySc8E/7b6aEINBjo/SM5u391CgMWAp2GkdMgreZmB3iEJpSmUAv5kaotcdOyq2xA6cqRei8A==
+ bh=fGnkEpcCMtPYbWrkBTcP2Jng/YyBXBjufBRRUZAkJ20=;
+ b=NZTLc262iFMz/MR/sRRiu8jEmRkjNBc94d18Qq93Tbr9sf8JrIDqJcc4zJviZV7GEE0sfF1Lb2qy8kKxJF801kvd/w2AuyNWzVlPIDRsGE0EhdHEA5utClE9r+1pjFa+3EqHvtZDn3m0DXuPNTP5Tw5A8uuuARf0Nfyva6LfRfkCuSIzRorFPOYM3A1Tohvk3ipgMeiK0EmS4D9s7+ndcWrGcACOReztT9Cn5dhYMqcYOhVJPFmWgGvm5jxibT4CvbACtpbC5ae4O+3MVWF/f1IDvoeNtE9XvOhZBnmYTsBhIl5U2j+IbBUvn+rxk9Tdbar4XO5EpoMGYPHzERSfAA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M3GEzTS9rpRVM1c7n3l2KIpmQQ9nJGqmxq9igy9wU6A=;
- b=axI61JW/gZC1GNoe9IVAy4Ws0oH2B3td8bK5LuunOzjGAI00U4ptqlyy41JNgEZd18VhKqIeI2q7QECBAnYFP/mGGFakWG4gsCCEnoT+w8+30WrFZ398m4R7LO9gD+qes2FhKxuW2Lr6n/GBENzA42aZYGWEOrL3DaPyy81L/yo=
+ bh=fGnkEpcCMtPYbWrkBTcP2Jng/YyBXBjufBRRUZAkJ20=;
+ b=wkt+S9sTvPtHimr8hJN2m+cZGt2MICM1dKUnzjGEiz8bva6mlt8DARBov/dMZxeTxzlkfarIqHLWGX3lxk/sSicanA2XClYEar14xEpQmoBbMehkhjvAWzt8UtQy7OoUl2v5YMXQoNI5HEUbKo6uOJ8jMCYmLTYelJhi5BUzP9g=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from CH3PR12MB8403.namprd12.prod.outlook.com (2603:10b6:610:133::14)
- by LV8PR12MB9449.namprd12.prod.outlook.com (2603:10b6:408:204::9) with
+ by CY5PR12MB6178.namprd12.prod.outlook.com (2603:10b6:930:25::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.12; Fri, 9 Feb
- 2024 19:52:23 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.10; Fri, 9 Feb
+ 2024 20:02:52 +0000
 Received: from CH3PR12MB8403.namprd12.prod.outlook.com
  ([fe80::ea0e:199a:3686:40d4]) by CH3PR12MB8403.namprd12.prod.outlook.com
  ([fe80::ea0e:199a:3686:40d4%4]) with mapi id 15.20.7270.016; Fri, 9 Feb 2024
- 19:52:23 +0000
-Message-ID: <17b1747a-8487-44d2-b79c-0da03b09c990@amd.com>
-Date: Fri, 9 Feb 2024 13:52:21 -0600
+ 20:02:52 +0000
+Message-ID: <51255499-0b5d-45c6-9c72-f353bae83c0d@amd.com>
+Date: Fri, 9 Feb 2024 14:02:49 -0600
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 1/2] x86/MCE: Extend size of the MCE Records pool
+Subject: Re: [PATCH 2/2] x86/MCE: Add command line option to extend MCE
+ Records pool
+Content-Language: en-US
 To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
  linux-edac@vger.kernel.org
 Cc: bp@alien8.de, tony.luck@intel.com, linux-kernel@vger.kernel.org,
  yazen.ghannam@amd.com, Avadhut Naik <avadhut.naik@amd.com>
 References: <20240207225632.159276-1-avadhut.naik@amd.com>
- <20240207225632.159276-2-avadhut.naik@amd.com>
- <75f48901-fbfa-4ef4-99b9-312800d20896@intel.com>
-Content-Language: en-US
+ <20240207225632.159276-3-avadhut.naik@amd.com>
+ <8b4f8ec2-7534-4f77-b44f-6728c699ff64@intel.com>
 From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <75f48901-fbfa-4ef4-99b9-312800d20896@intel.com>
+In-Reply-To: <8b4f8ec2-7534-4f77-b44f-6728c699ff64@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9PR13CA0120.namprd13.prod.outlook.com
- (2603:10b6:806:24::35) To CH3PR12MB8403.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA1P222CA0159.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:3c3::7) To CH3PR12MB8403.namprd12.prod.outlook.com
  (2603:10b6:610:133::14)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -82,224 +83,104 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8403:EE_|LV8PR12MB9449:EE_
-X-MS-Office365-Filtering-Correlation-Id: 549ac24a-e4d0-4a4d-719f-08dc29a8a267
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8403:EE_|CY5PR12MB6178:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8196e207-bed7-41ef-a68f-08dc29aa18e8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	P2WSEGTIMk3OmoCDa9kLCgXdJKxYYmVNibMEhCb3TVhefuf+4zmt/+l01V9NFXhRcJN1FXomRS4JTHT0C73848yOiNedpsRMSGlEcwiBFn7gGvhiHrAu3EpBkF+I9B1RpX3d8DYK9NaOJlbAhgSu3OXlt2PctyOoIF+CHEBLKMUvHzYF6rzDShilvbJM18TNTZtU/eLlApz+ZF28qeF5rNU+6PoVWRKv6z7GE7mEealf0UMzHm0R1+M9e9HPc0Lq3+xuPojiWRGYyPUUj0LCxd64pdVa98vMMP+xBh5cM77+f05vE1DrbWm6lMWvSesFAZHoWlOdbFvJ+5297fziwgfazh6p/Z8u/ll3/GCXNr/qY4NgSHGkUcQr7GnGmUBo0/aQaIloRxiFP6kF58w7v5OZgqjC5et9BB0sjrU5JKFvuv5CvXJxxOIGPH52hiLogi5jHVW7JIG6uD2FkxtgB5N6FMdvySd0Q2oZb9sSMcn1x9ZmW7FZqXQUFGNEB3Y5HF+v/0KcVbLc8kmhHeU2yV5azmY01knf96ADVtF+yYT3vc5gUoY1NWveUAYJkG4Q
+	ORddpt+olnU23irbp+VYaMqj6Zdz/lsR06mFA37FM9N15tRMM2ng7n2gSpi+HPI1uIzErIDlg5WkeSikVXW7Wghm7wX+KBAnl6MLcLAsnv3zeIpqIjGeqqir6W5tJlxChAJkBrHHlCQf9Fvk7z7hHquxwPHoROo7ruvDgNyZ+aRGhmb1h8wMSy2l/wm7nVnpKBfAnr5kbKZpyvIKOaLB2t/6mNlHfvhBoUCKdOSuwRx8Ud5LJ7CgG2INYJiUPxwqpV7/LIWLm5GUf+nBLVFCdGLKh9mgLNNz9vprY5h7LqkcL5GPWbn4YTvKgl8YGcVwqksojL8YtLatxUMxSTWo63iSyzalupoIT99c4v7lQon2jvS7llsRQ5yeXrceanLKYkeGDefBBnDibrSABJrrUeIf2RCQyP3mdxEjgIa6iUz7abO8Ua1Rn6a2piNKd8TzKxa1FZAqv+1ITaz7gRUCfMndzDeM5CXEW9RERKI6ROvRaQ+i0JBHR/gHbsPYwpdGd7L782A5dHRhBoLxi4LgwwV0ZRRiWWpQtCt6oH26AGezOuw22eRZMs49itOwLNqw
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8403.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(396003)(39860400002)(366004)(346002)(230922051799003)(451199024)(64100799003)(1800799012)(186009)(478600001)(6486002)(66476007)(66946007)(66556008)(316002)(36756003)(83380400001)(38100700002)(26005)(31696002)(6506007)(53546011)(2616005)(6512007)(2906002)(4326008)(8936002)(8676002)(31686004)(41300700001)(5660300002);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8403.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(396003)(376002)(346002)(366004)(230922051799003)(186009)(1800799012)(451199024)(64100799003)(5660300002)(316002)(41300700001)(2906002)(2616005)(26005)(38100700002)(31696002)(36756003)(83380400001)(66946007)(66556008)(66476007)(8936002)(4326008)(6506007)(6512007)(478600001)(6486002)(8676002)(53546011)(6666004)(31686004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OVlreTJhbmNSV3Evb0tEVzdKWVlmM3dWaWtTYUFuQjZLakRjZjRUaFUyTFVs?=
- =?utf-8?B?MGFPK3VKZUtpSjlwOG5wNmJYcmU5KzRlNEtvWDFya0ZkWlpNTnVLa2RUcHdm?=
- =?utf-8?B?MmtmQW9oWWwrMmFlb3d4MndpNTJKZnBlRjlrM3lweEUwWFo2dkpoWi9SR0h1?=
- =?utf-8?B?Q2VNUi96QklEWTI0a0s2MWhHN3Y2OEh4VjZXZVh1MTl1YzJ2TFNLK0lDWmxS?=
- =?utf-8?B?MDdwdHNxaUpmZG02azB6VjZVUHlrRUFmdm9xUnp4ektSdDR4RWtoWjVrendP?=
- =?utf-8?B?MTgvZlF4ZUVUck10WFRxdy9KZmNrak9TY1IySDZvbHBFazRHdmN4RFN5UGlq?=
- =?utf-8?B?QmN2VDcwTFVFdUVKeTh0TGtPOGM4LzUxL0loeVFuWEE2ek1QajVYN3czNW9z?=
- =?utf-8?B?Qjk1UDZsSXk4VWYrYmY4ajRWZXl6K1BHNWtSRU1uM2JQeWlaY1FCWTd3SmlJ?=
- =?utf-8?B?aUs4dnZKamdmTXY5SWhLU3RXT0ppY28rcy9KSzY5Unk4bTZzSGtmWXc3Uy9y?=
- =?utf-8?B?aUFYWGxGS2R1bmJTWlhaelArem9ZK2thQ1dTSTgzY21FWC83cTFCNnR1QXlV?=
- =?utf-8?B?bm5HUnFHT2tHK0dJelhPTDRuSzI1cEZ4YmhuTlI1aFVwTTFsbkNLbDdZWGJi?=
- =?utf-8?B?WWYrd09PajN1SWpjWjhKSTlGSjViSWJNTmsxNGczSGl6bW0yR0VSdVZnSFR2?=
- =?utf-8?B?SEZoQnRXbWhWUzhnVFlFc0NsS2dFd2ZNaVBlZkxCUHdDYjlUMG1TQ012TUp4?=
- =?utf-8?B?KzhzdFlnNW9KajIvODJBYVZocVhGWG5CYU1iNlUyNmR4VnIxT0pUd2dveGh1?=
- =?utf-8?B?TGtvTE5oTkRkUGt3SEYvV1hjNDlCNHo4ZEZyWVlWVkF6d2R1TTRqNTNpNlB4?=
- =?utf-8?B?ZFgvYlpnU2c4Y20wS3RFU1hzRnkxc05hQVRTcmRhU1Zpcll3Z0tuQWd6cDZa?=
- =?utf-8?B?amdVSzdseXlTQzhVb2p6OUdSVURmOXNsdndqRmYrL1hFWllEWlJpZmFmOUVO?=
- =?utf-8?B?WGxYcHRpZ3NXbEM1WDBkUXhMamVFWjY2bm01YVV3aWRpQVRnQ0ZkK3lYbDVv?=
- =?utf-8?B?bmhlM3JSNlQ1a3owRWJWejYwWFN4YTczbTVieEV2R2RYTHFMQkJqMjRhRXA5?=
- =?utf-8?B?WnFSR2h3UXQ0eGRUcGs0QnVpdzZDbmdpNGpUbXRJYkVwNEh0RkU2Q05GZUUr?=
- =?utf-8?B?VDQzakU1dHUyb0h3YTBjQnMreU8yakJ0Y1pHUEFLU1NmbWNOdVlIc1phSjZK?=
- =?utf-8?B?Z0lVUmRLbFV5Ky9yQllGZHpYMGxLelNhcWg1TkxFRzZzekxuZkdMUUlUREFC?=
- =?utf-8?B?M3k2Qlo3NjdybkVNd0tCWitiK0lNL1djdE5ZMnFzMHBQSm10TExoRzQzUkRI?=
- =?utf-8?B?UjIzeWdPOXdydVFPOE5vd3E0VE12RC92ZGZ1dDhPZGQ2ZXp6eTZuRWNMZHdz?=
- =?utf-8?B?cDRoT2VBaGpraVJoaGNFaC9yaVJ5SjZrcm9wRFNNQzNQQTZ0NWk0T2pZNkRB?=
- =?utf-8?B?bUNWZ0hPdS9zalBMT2VQcVg4ZElkektoL0VyY2FVZ3FNOVJMdGZKYlJPODNF?=
- =?utf-8?B?VHJiSnZHUXdJeUEyT0l4WFZXWXprUmV6UHpLWllHRG44bW05dXRZdEhUdDVv?=
- =?utf-8?B?aHJSSFV2WjR6cXBxUTlRc01TY3o3eDRwSlZxSFYvZ3FzVjBuVjZkMkhKelpr?=
- =?utf-8?B?SzJTa0VTUWdueFkzd2twVHlEbkZDc3o4WVVoeUszWFlxd1k2bDloNm9oalJi?=
- =?utf-8?B?UXdFdkM2c1p6czkrRDhsQjNXdzMwa0x4Nkx1WFBUSm94VFhDcVdVTUx0WmVL?=
- =?utf-8?B?QTYwczlWRjJ6akFkK2RtMFpEbCtQRjJZZ293eHNORkhuVkJ4dTJjc3l2M0JZ?=
- =?utf-8?B?YSt2Vm9qSFFTbGVvQkhhd2llQ1E5eDVodHpQVWJ5QXpiMmYzcVNRNVFGd0Iw?=
- =?utf-8?B?Y1RpMHFlMWVoZ1BPZHlzOTA3b21NcFRKbjZmR25uaFpCeG9PcXphSnYxYkJm?=
- =?utf-8?B?dTU2VDltcWZoZExvUnVDKzRkVzZJQUJ5aCtCSENteXZZdURuNEJyK2gzS0E4?=
- =?utf-8?B?YWV2N2FldUU4aGpMQUpJdzRNbWtqRHNiRDc4cm5CcmVObUxEdVNNM09HQTUz?=
- =?utf-8?Q?MLsUw47Bt0J/oFIsDBJt6os+B?=
+	=?utf-8?B?NEtEYUVaK1dzc0ZITG9VVW5tU0N5eGh4WFJPcGpWT3JRSnlVNk9ZaEQ3ekN0?=
+ =?utf-8?B?VnUzM2h6QzM3bmRWU1AxOXVaa3ZuODF6K2FRVkh4S1Rhb21oNEsyWUZlU2lH?=
+ =?utf-8?B?RDZDalh6dTYybXIvanp1ZFlNZVIwUlhnby82a0t6QUZMYW5wa2YxTEVGQ2Fw?=
+ =?utf-8?B?aDRyN0ZRMmZjMElOVGJBZnN5YkpjOGxSeXRaLzJXQ3NhS1pIR3Y2Y2txdUZF?=
+ =?utf-8?B?VXB3TWVMQk56L1Bmay8rOTJRVVpjMktieEVHRktITDY5OEZzZE1MRG9laG5P?=
+ =?utf-8?B?YkFPYjV5Uld1bzRTYUhuaUNvaGNmODFwNFBUbEdMbDlCUmRhMW95RFd4cm9F?=
+ =?utf-8?B?NVlJbXkxTG1SaVcyUW5XSWF5NE5sTVBHMzk1d0Q1VmJ4c3VwYjBXUHVBNUV5?=
+ =?utf-8?B?dTlmeEM1UEVlc2VSNnphMVRHclVHVE9xNi9nSTJUejhxbHdlRUxTaXNSNklx?=
+ =?utf-8?B?aE9rS2Zoc3I4MGVXZXp4UjduZFBqNUFVcUZLNlc1OTZkU0hmTHYveFRZbEFt?=
+ =?utf-8?B?TDV0TWxTeHM5NEJVR1FJNTNlaGkvL1hqZ3V3Y2F3NEcxRHhQR0JwcTRyRGFq?=
+ =?utf-8?B?T0U1SVhQSEVsQ1NRTnowNE5LQUZYNWwxc2pxTVNhM3hIREgvZUZLaFJ0MDhN?=
+ =?utf-8?B?cEhQMmVBdzRjb08reUJmcEp5NG56OGxlK2FyNjhEa25nUm1yTzhtTFJuamgx?=
+ =?utf-8?B?djY5VG9kM1Fnck1OUnRIK1F0VUlvdWtpTCtvbjQvV2d4cEZzMlVoQnVHekl5?=
+ =?utf-8?B?VE9ETUZIYlVyYW50TTB2MS85N04wbUo1eTlIQTZPS3diMXpBaTIzZEt0TERu?=
+ =?utf-8?B?ZlF5WVE4OGVmZzlpR092a28za1lNblExbHRJbUZWUkYyYnZwOGludjF0RWMr?=
+ =?utf-8?B?eHJucmVtdi9CcDNlSk9PK1R3SnZSN1ZCakhKUldyZVpIV1A3c1Ztc1pCUG54?=
+ =?utf-8?B?YUJPZjArMzYzSWlzNTB0eVdQM296UkNsQ0JUaFVIbEJsNmVPY0NtVC9velh0?=
+ =?utf-8?B?KzhzR1l0MFlwdXFEQzNhWFNiaVQ4cVZaRENYQnNJTVlZMzRHOFNtMHJKemlk?=
+ =?utf-8?B?M1V2UlFYcTl5WXRpcENnaUJWR1J1QzJNalFYUnJhREpZLy9DYmFqSnJOd1U2?=
+ =?utf-8?B?ZVJRRVZsd0orK0hoVmZSM2ZjU2ZYeDRnelR1WWZCcE96bHRnRmFVeXIya2pn?=
+ =?utf-8?B?TnB3bUVyekY1dmpXdTVhWFF2Y3p0NEUwcVNpUWVibWROdCsrU253VkZTTGJI?=
+ =?utf-8?B?Q1JhbExHMDZXWHdVSHBpMWJubHo1dVlEbDAwZ2pPNkhPL1JiQWtuMEJVQTJh?=
+ =?utf-8?B?ZnVydXh1OFVRWmcxVFZiZ1dhS09Qb0xVZ3JSdXNBbDhwVlNpYXVEemFwQWJR?=
+ =?utf-8?B?WWdtSkF2V0RSKytqNFp4VFpRZjFaUjF4eE1TcXI4RkgwbXFKa0J6aE5PblFO?=
+ =?utf-8?B?WUhoRkdaY05tbkF6SzYrWHdSc2UxZEF5bC8vV2JBbGRENm1yRTlGU2hMWkty?=
+ =?utf-8?B?RkdESmp2cVk5bW4vSUYxNTdtVHNUZlg5ZjBjelpNTXNlWkh2RUs0aDBoYmJx?=
+ =?utf-8?B?VDlRYnRVdEkwUWd4bGZydnorWlJYVThtREZXdEJPazRkN2VvdElHalF3dXRj?=
+ =?utf-8?B?WENnd3JoUWRIQldZVWtna3Fwd1ZRKzdlZjI0SGZ5SHUvR3I5YjFkcVBNU0ds?=
+ =?utf-8?B?Z1QrWkEyaDNybUxrTU54ZnZyZkNka0NkTkhZeVhQcmViZ2NkWlZVa3h0aHNu?=
+ =?utf-8?B?NW4wZ3liY1NTclZpeHlqZnhrU213Y2hsVjNJbjFuVm82NnF5ZGd3dmVpaDVI?=
+ =?utf-8?B?MkRMUmtkaXlXbTJnS1dFVHROS3htQVZubkh1Y0JXaVVISFU5bTJOOUsxYnYz?=
+ =?utf-8?B?ZHB3UVhlMlUrTXR0Qk1QTk5MNUM2L1Rib25Jalp0OHRFTHArT3pSeDJpazJy?=
+ =?utf-8?B?d0R1cVhCL2VOUEdTZHo3RnRyNE5OcXpOSXdSQVVGcnVEMzVpcytSajd2OVJV?=
+ =?utf-8?B?VmZvUUVLSjNDS0d0VVQ5TnpZOWRVMEI0WjBPNzNQQVVJdFJodEpnWC9rQXdi?=
+ =?utf-8?B?U3AvaDg0NWlyMDB6UkFudXlhQlZ6MVBoa3oxL3BzOE1JMmpqWXZzaEFQYSs3?=
+ =?utf-8?Q?PPF3B6/0sjy+QtsCiEBj+Fbra?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 549ac24a-e4d0-4a4d-719f-08dc29a8a267
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8196e207-bed7-41ef-a68f-08dc29aa18e8
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8403.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 19:52:23.7204
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 20:02:52.3473
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XzyannCTFHOvXZH8+rGT0YKrdChMCgCFFTh4+MqWaZ536Y2N0CED4fOpWPmG6lqmqC+NWeL0hQa/AoxWG2zz3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9449
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xe+EllZzVfspl7hIR3un+W8XQz7hDgAB3Ok4ngDJ1rfb0acjhfrIBFJkEan6jCx1Qg4S7aDAF2ggI/O5yBvAhw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6178
 
 Hi,
 
-On 2/8/2024 15:09, Sohil Mehta wrote:
+On 2/8/2024 19:36, Sohil Mehta wrote:
 > On 2/7/2024 2:56 PM, Avadhut Naik wrote:
-> 
->> Extend the size of MCE Records pool to better serve modern systems. The
->> increase in size depends on the CPU count of the system. Currently, since
->> size of struct mce is 124 bytes, each logical CPU of the system will have
->> space for at least 2 MCE records available in the pool. To get around the
->> allocation woes during early boot time, the same is undertaken using
->> late_initcall().
+>> Extension of MCE Records pool, based on system's CPU count, was undertaken
+>> through the previous patch (x86/MCE: Extend size of the MCE Records pool).
 >>
 > 
-> I guess making this proportional to the number of CPUs is probably fine
-> assuming CPUs and memory capacity *would* generally increase in sync.
-> 
-> But, is there some logic to having 2 MCE records per logical cpu or it
-> is just a heuristic approach? In practice, the pool is shared amongst
-> all MCE sources and can be filled by anyone, right?
-> 
-Yes, the pool is shared among all MCE sources but the logic for 256 is
-that the genpool was set to 2 pages i.e. 8192 bytes in 2015.
-Around that time, AFAIK, the max number of logical CPUs on a system was
-32.
-So, in the maximum case, each CPU will have around 256 bytes (8192/32) in
-the pool. It equates to approximately 2 MCE records since sizeof(struct mce)
-back then was 88 bytes.
->> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
->> ---
->>  arch/x86/kernel/cpu/mce/core.c     |  3 +++
->>  arch/x86/kernel/cpu/mce/genpool.c  | 22 ++++++++++++++++++++++
->>  arch/x86/kernel/cpu/mce/internal.h |  1 +
->>  3 files changed, 26 insertions(+)
->>
->> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
->> index b5cc557cfc37..5d6d7994d549 100644
->> --- a/arch/x86/kernel/cpu/mce/core.c
->> +++ b/arch/x86/kernel/cpu/mce/core.c
->> @@ -2901,6 +2901,9 @@ static int __init mcheck_late_init(void)
->>  	if (mca_cfg.recovery)
->>  		enable_copy_mc_fragile();
->>  
->> +	if (mce_gen_pool_extend())
->> +		pr_info("Couldn't extend MCE records pool!\n");
->> +
-> 
-> Why do this unconditionally? For a vast majority of low core-count, low
-> memory systems the default 2 pages would be good enough.
-> 
-> Should there be a threshold beyond which the extension becomes active?
-> Let's say, for example, a check for num_present_cpus() > 32 (Roughly
-> based on 8Kb memory and 124b*2 estimate per logical CPU).
-> 
-> Whatever you choose, a comment above the code would be helpful
-> describing when the extension is expected to be useful.
-> 
-Put it in unconditionally because IMO the increase in memory even for
-low-core systems didn't seem to be substantial. Just an additional page
-for systems with less than 16 CPUs.
-
-But I do get your point. Will add a check in mcheck_late_init() for CPUs
-present. Something like below:
-
-@@ -2901,7 +2901,7 @@ static int __init mcheck_late_init(void)
-    if (mca_cfg.recovery)
-        enable_copy_mc_fragile();
-
--   if (mce_gen_pool_extend())
-+   if ((num_present_cpus() > 32) && mce_gen_pool_extend())
-        pr_info("Couldn't extend MCE records pool!\n");
-
-Does this look good? The genpool extension will then be undertaken only for
-systems with more than 32 CPUs. Will explain the same in a comment.
-
->>  	mcheck_debugfs_init();
->>  
->>  	/*
->> diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
->> index fbe8b61c3413..aed01612d342 100644
->> --- a/arch/x86/kernel/cpu/mce/genpool.c
->> +++ b/arch/x86/kernel/cpu/mce/genpool.c
->> @@ -20,6 +20,7 @@
->>   * 2 pages to save MCE events for now (~80 MCE records at most).
->>   */
->>  #define MCE_POOLSZ	(2 * PAGE_SIZE)
->> +#define CPU_GEN_MEMSZ	256
->>  
-> 
-> The comment above MCE_POOLSZ probably needs a complete re-write. Right
-> now, it reads as follows:
-> 
-> * This memory pool is only to be used to save MCE records in MCE context.
-> * MCE events are rare, so a fixed size memory pool should be enough. Use
-> * 2 pages to save MCE events for now (~80 MCE records at most).
-> 
-> Apart from the numbers being incorrect since sizeof(struct mce) has
-> increased, this patch is based on the assumption that the current MCE
-> memory pool is no longer enough in certain cases.
-> 
-Yes, will change the comment to something like below:
-
- * This memory pool is only to be used to save MCE records in MCE context.
- * Though MCE events are rare, their frequency typically depends on the
- * system's memory and CPU count.
- * Allocate 2 pages to the MCE Records pool during early boot with the
- * option to extend the pool, as needed, through command line, for systems
- * with CPU count of more than 32.
- * By default, each logical CPU can have around 2 MCE records in the pool
- * at the same time. 
-
-Sounds good?
-
->>  static struct gen_pool *mce_evt_pool;
->>  static LLIST_HEAD(mce_event_llist);
->> @@ -116,6 +117,27 @@ int mce_gen_pool_add(struct mce *mce)
->>  	return 0;
->>  }
->>  
->> +int mce_gen_pool_extend(void)
->> +{
->> +	unsigned long addr, len;
-> 
-> s/len/size/
-> 
+> This statement is unnecessary.
+>
 Noted.
->> +	int ret = -ENOMEM;
->> +	u32 num_threads;
->> +
->> +	num_threads = num_present_cpus();
->> +	len = PAGE_ALIGN(num_threads * CPU_GEN_MEMSZ);
+ 
+>> Add a new command line parameter "mce-genpool-extend" to set the size of
+>> MCE Records pool to a predetermined number of pages instead of system's
+>> CPU count.
+>>
 > 
-> Nit: Can the use of the num_threads variable be avoided?
-> How about:
+> Like Tony, I am unsure of when this would be useful.
 > 
-> 	size = PAGE_ALIGN(num_present_cpus() * CPU_GEN_MEMSZ);
+> Also, why does it need to override the CPU count based extension
+> mechanism? Would just adding more pages not work for them?
 > 
-Will do.
+> If there really is a good reason to do this, how about changing
+> mce-genpool-extend to mce-genpool-add-pages and keeping the description
+> the same?
 > 
+> mce-genpool-add-pages=	[X86-64] Number of pages to add to MCE Records pool.
 > 
->> +	addr = (unsigned long)kzalloc(len, GFP_KERNEL);
+> Then you can simply add these many number of additional pages to the new
+> CPU based mechanism.
 > 
-> Also, shouldn't the new allocation be incremental to the 2 pages already
-> present?
-> 
-> Let's say, for example, that you have a 40-cpu system and the calculated
-> size in this case comes out to 40 * 2 * 128b = 9920bytes  i.e. 3 pages.
-> You only need to allocate 1 additional page to add to mce_evt_pool
-> instead of the 3 pages that the current code does.
-> 
-Will make it incremental when genpool extension is being undertaken through
-the default means. Something like below:
+Is it safe to assume that users will always want to increase the size of the
+pool and not decrease it?
 
-@@ -129,6 +134,7 @@ int mce_gen_pool_extend(void)
-    } else {
-        num_threads = num_present_cpus();
-        len = PAGE_ALIGN(num_threads * CPU_GEN_MEMSZ);
-+       len -= MCE_POOLSZ;
+IMO, the command-line option provides flexibility for users to choose the size of
+MCE Records pool in case, they don't agree with the CPU count logic. Just added it
+to ensure that we are not enforcing this increased memory footprint across the board.
 
-Does this sound good?
+Would you agree?
 
 -- 
 Thanks,
@@ -307,23 +188,12 @@ Avadhut Naik
 
 > Sohil
 > 
->> +
->> +	if (!addr)
->> +		goto out;
->> +
->> +	ret = gen_pool_add(mce_evt_pool, addr, len, -1);
->> +	if (ret)
->> +		kfree((void *)addr);
->> +
->> +out:
->> +	return ret;
->> +}
->> +
->>  static int mce_gen_pool_create(void)
->>  {
->>  	struct gen_pool *tmpp;
+>> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+>> ---
+>>  .../admin-guide/kernel-parameters.txt         |  2 ++
+>>  arch/x86/kernel/cpu/mce/genpool.c             | 22 ++++++++++++++++---
+>>  2 files changed, 21 insertions(+), 3 deletions(-)
+>>
 > 
-> 
-
 
 
