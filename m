@@ -1,124 +1,158 @@
-Return-Path: <linux-edac+bounces-515-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-516-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 883B3851F89
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 22:28:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76D42851FBA
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 22:37:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D77FB21DB7
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 21:28:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A88F01C22505
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 21:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A724CB3D;
-	Mon, 12 Feb 2024 21:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C924CDE1;
+	Mon, 12 Feb 2024 21:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Hf+6DOBZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fdU4dDrF"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEB41DDC5;
-	Mon, 12 Feb 2024 21:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A697546453;
+	Mon, 12 Feb 2024 21:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707773283; cv=none; b=RYK/dn7uGogRPwbMRSWjZTWH8hAP8avlZ762GQHXI/9G7Gqyw3KQtPKJLjhymVAt0Ur8zIl7MsmzkJHMGF0enOalzBY0ZcCzo8fZaeYYAyNHqBFByDv2PgPG09D2YAyJ2AQJOA4eez8Qk5mhtJU9wMRxagO6TaEsSlRVlJ8V8EU=
+	t=1707773833; cv=none; b=FH0JNM82O9PTiKLE0I1mU0aKhABXegKrv6irHpfFx5Mnno9h8yAanv5B8fE2+0/OIK/fmzpHOy5Y/8omtqfYpPwBfNqIYlJg/ugfIOuKJxTkKmNeC+lCT/hr9nzkyAYOV2nH0vR7+FXizgKG91yKlTDx1R0anvTTGHafDQlt9+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707773283; c=relaxed/simple;
-	bh=YZ61mZF1bLjrVmSJ2CG1mBsGDRT77xZa5jGT7hzxP84=;
+	s=arc-20240116; t=1707773833; c=relaxed/simple;
+	bh=nbPBW+LVdPgWVpFKe00QQCTZhOf+yrh6eERXbHsxeCQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OGfKO0MUMSqQEWn0H02iN+pjriU87m63OmNIvHnxCAVGAyBsOA1AjvtKAq+PhLncoavncre1dmJ9GSBOHZOW4j1mtRyW+x6X7Ph0d0diyOt7xH/biT0ZgqAETEPzZ+gYI3NSsU+ESW1XXobZF8NXHz2AcQzn0BaI1By4bs6AKf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Hf+6DOBZ; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D00CD40E01F7;
-	Mon, 12 Feb 2024 21:27:57 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id z0DJA0e8CGyn; Mon, 12 Feb 2024 21:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707773275; bh=tV41PkOi77BQFnFr1wJW0H9Ckl+9yDY0EbtAyYtf1Tk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hf+6DOBZzTaQ3ZhX3SjZcByUdotf9YaR4x+7FZM9rfKzAqvoG7j9xbQBIsq6cswwu
-	 JuDRf0fRDEMICT1EMQC0Qx9ls11wUNDgCfP/BDkqtk+XRjKkX6OBnjtks7VlfnFZY6
-	 mXiIdL/GLOuZbJu+LZQb9jQMWnbXyVCdYuYvEm3T9TTcpAMWbk8TUy5QMt1BHJPWxL
-	 L3+1+T6UII6opfqSBmVzSXSV4wDFczrc7sERZvP6szkUEO1sMDH8RGgbRM7EY89vMX
-	 5beizSU2az/3T/pl1adQ+M7TqRh//ty+mP6dvyYsTPymJ8wyK6t16juRztsXUvRrXR
-	 XBRQkVILzv2S1jzhgUN1WBwxeRp7io+kxKQzwcIEj8jMDef4gn6e85mp5HHlxWA9k2
-	 4JU98g0+u99CQY2OQGEuOVrHWxhXLYmLMhOiyfdFIzsFe+7ug/vlc6/2fApMCclPdx
-	 BzqucckzhTXlfxAzyvzbnjefXVW9KeTKD0boG5RWYLmT+hcANFMdAYYS1z73eRBbQq
-	 6xXzB5Jz+X9iK087jMueZGRAhCSfAy6ZlhbY9bA6bKoEPSYbhKnhe052gR0nFxNIQt
-	 +1kPrb0VthQB8KJTR9sE69XbWDEXahwCfoesM1YvnSLclC/d4HWUJGRuwI94lfS1XA
-	 NATXatAKpbJZyb38RIrjds9I=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 54D3340E0192;
-	Mon, 12 Feb 2024 21:27:46 +0000 (UTC)
-Date: Mon, 12 Feb 2024 22:27:41 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: "Luck, Tony" <tony.luck@intel.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	"Naik, Avadhut" <avadnaik@amd.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=d3464Y2NiMMjrlIMDSF/raklcOkNPEPjXOVf1ynxY0n/bxavqcGbOn8Cp7v2nrWdyNEmuFW2ley5dnwQ8bzIB3XN0MW/a7yvEzB9c0N80z6xz+6XOZ4l/lNr+80RUX9767h3ViUWwNPwzBphD8LqPIaQVlbuSaeIiQ6j6fop3ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fdU4dDrF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707773832; x=1739309832;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nbPBW+LVdPgWVpFKe00QQCTZhOf+yrh6eERXbHsxeCQ=;
+  b=fdU4dDrF9CWnKt0wsyhsO1bDZAg2NyntRL2Yu0kcIAU0a5MCz6jIbovZ
+   Q/9qq9hNerarnQ2FYe3ZII6ryf6/tDdSYmx7Na+St9aJKeUDrZdAxAnUf
+   eYN4SmzMXckQyAmQKdCbJnm+YXnJEpyY37Eh41lt/YOG+OERXMomXvJtw
+   pThQghwDK81Xv5vRpPMza9gIpayQGHCb5NEy58upfvsDG69qH/4eEMIXn
+   aul89eHAIQgJHk7WU4Bc0l/I7v/AsAP620KM//YbzpKhbyRCHGToI3Heb
+   dhvBctsvlUTmVidNE8AzYYvFdinCDlFQnn2+mdIaHcNPTHmxdlyV95kf4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1895537"
+X-IronPort-AV: E=Sophos;i="6.06,155,1705392000"; 
+   d="scan'208";a="1895537"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 13:37:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,155,1705392000"; 
+   d="scan'208";a="7329489"
+Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.74])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 13:37:10 -0800
+Date: Mon, 12 Feb 2024 13:37:09 -0800
+From: Tony Luck <tony.luck@intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: "Naik, Avadhut" <avadnaik@amd.com>,
 	"Mehta, Sohil" <sohil.mehta@intel.com>,
 	"x86@kernel.org" <x86@kernel.org>,
 	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
 	Avadhut Naik <avadhut.naik@amd.com>
 Subject: Re: [PATCH 2/2] x86/MCE: Add command line option to extend MCE
  Records pool
-Message-ID: <20240212212741.GPZcqNTXfU2OX7uRtx@fat_crate.local>
-References: <20240209205111.GGZcaQP1gb6C9m0WZB@fat_crate.local>
- <5DB0FF8D-C6DA-45DC-B287-201A9BF48BDA@alien8.de>
- <75ddf61d-8dda-47fa-9da0-24221feb22a2@amd.com>
+Message-ID: <ZcqPhVO_DtD2x5N7@agluck-desk3>
+References: <75ddf61d-8dda-47fa-9da0-24221feb22a2@amd.com>
  <20240211111455.GAZcisL09LeFPWa2EI@fat_crate.local>
- <b5904910-ed58-405f-9425-566383b48068@amd.com>
- <SJ1PR11MB6083CF3400AD2F2047D65E17FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <34b19db5-bd72-457c-9b6a-c2089f6be83c@amd.com>
- <SJ1PR11MB6083E7E11F6C7BCC8C6C7F21FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20240212201038.GNZcp7PuIqIJndpDM9@fat_crate.local>
- <47901422-ac07-47db-bf44-3f4353e92b1d@paulmck-laptop>
+ <774e7ca5-154d-4ca4-bc4c-2f945c20b938@amd.com>
+ <20240212085801.GAZcndma4UTPtKm33e@fat_crate.local>
+ <20240212093246.GBZcnlvkPKDC8C7rv5@fat_crate.local>
+ <SJ1PR11MB6083B3511D18787BE823AB2CFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20240212175408.GIZcpbQHVjEtwRKLS-@fat_crate.local>
+ <SJ1PR11MB60830AF35FA89C7869B8C11EFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20240212191401.GLZcpt-XHFqPg3cDw-@fat_crate.local>
+ <SJ1PR11MB6083C60D7584B02E9CAF19D5FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47901422-ac07-47db-bf44-3f4353e92b1d@paulmck-laptop>
+In-Reply-To: <SJ1PR11MB6083C60D7584B02E9CAF19D5FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
 
-On Mon, Feb 12, 2024 at 12:44:06PM -0800, Paul E. McKenney wrote:
-> If it is the #MC adding new memory, agreed.
+On Mon, Feb 12, 2024 at 07:41:03PM +0000, Luck, Tony wrote:
+> > It needs a proper explanation why that's ok rather than an empirical
+> > test only.
 > 
-> If the #MC is simply traversing the list, and the interrupted context
-> was in the midst of adding a new element, this should be no worse than
-> some other CPU traversing the list while this CPU is in the midst of
-> adding a new element.
+> start_kernel()
+>    ... setup_arch()
+>        .... acpi stuff parses MADT and sets bits in possible map
+> 
+>    ... arch_cpu_finalize_init()
+>        ... calls mce_gen_pool_init()
 
-Right, Tony answered which context is doing what.
+This made me question the "we don't have an allocator in
+mce_gen_pool_init()". Because if we got through all the
+ACPI stuff, we surely have an allocator.
 
-What I'm still scratching my head over is, why grab a spinlock around
+Below patch doesn't explode at runtime.
 
-	list_add_rcu(&chunk->next_chunk, &pool->chunks);
+-Tony
 
-?
-
-That's the part that looks really weird.
-
-And that's the interrupted context, yap.
-
-Thx.
-
+diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
+index fbe8b61c3413..81de877f2a51 100644
+--- a/arch/x86/kernel/cpu/mce/genpool.c
++++ b/arch/x86/kernel/cpu/mce/genpool.c
+@@ -16,14 +16,12 @@
+  * used to save error information organized in a lock-less list.
+  *
+  * This memory pool is only to be used to save MCE records in MCE context.
+- * MCE events are rare, so a fixed size memory pool should be enough. Use
+- * 2 pages to save MCE events for now (~80 MCE records at most).
++ * MCE events are rare, so a fixed size memory pool should be enough.
++ * Allocate on a sliding scale based on number of CPUs.
+  */
+-#define MCE_POOLSZ	(2 * PAGE_SIZE)
+ 
+ static struct gen_pool *mce_evt_pool;
+ static LLIST_HEAD(mce_event_llist);
+-static char gen_pool_buf[MCE_POOLSZ];
+ 
+ /*
+  * Compare the record "t" with each of the records on list "l" to see if
+@@ -118,14 +116,23 @@ int mce_gen_pool_add(struct mce *mce)
+ 
+ static int mce_gen_pool_create(void)
+ {
++	int mce_numrecords, mce_poolsz;
+ 	struct gen_pool *tmpp;
+ 	int ret = -ENOMEM;
++	void *mce_pool;
+ 
+ 	tmpp = gen_pool_create(ilog2(sizeof(struct mce_evt_llist)), -1);
+ 	if (!tmpp)
+ 		goto out;
+ 
+-	ret = gen_pool_add(tmpp, (unsigned long)gen_pool_buf, MCE_POOLSZ, -1);
++	mce_numrecords = max(80, num_possible_cpus() * 8);
++	mce_poolsz = mce_numrecords * ilog2(sizeof(struct mce_evt_llist));
++	mce_pool = kmalloc(mce_poolsz, GFP_KERNEL);
++	if (!mce_pool) {
++		gen_pool_destroy(tmpp);
++		goto out;
++	}
++	ret = gen_pool_add(tmpp, (unsigned long)mce_pool, mce_poolsz, -1);
+ 	if (ret) {
+ 		gen_pool_destroy(tmpp);
+ 		goto out;
 -- 
-Regards/Gruss,
-    Boris.
+2.43.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
