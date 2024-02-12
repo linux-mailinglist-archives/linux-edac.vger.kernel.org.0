@@ -1,66 +1,66 @@
-Return-Path: <linux-edac+bounces-518-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-519-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B789E85214C
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 23:19:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9743585219E
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 23:42:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7044C2828F7
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 22:19:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53A9E281388
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 22:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC584D5B4;
-	Mon, 12 Feb 2024 22:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 697E04D599;
+	Mon, 12 Feb 2024 22:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ROtNTCb/"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="WC6GNWEd"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1314C627;
-	Mon, 12 Feb 2024 22:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FCF4E1C5;
+	Mon, 12 Feb 2024 22:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707776374; cv=none; b=EA0Ui12kQhsR81rH8hjXinqmdgwa7qtFhbFBkPUFNLEJduR0zQh+nOtOlTF9V2XHCzqpC0Iv6GdumzK6hJr95EUqvROZ2o0EjQMVmAGsAN2muOSKt5hT74v5gwcMCQ61Ma2N6O3WkbDhYWgPlMz1D6mIE9XiKuDvuXTFLw17HmQ=
+	t=1707777762; cv=none; b=AL+pG1QSglOeJ+tWNs8OJJbf4OZMuB+BkGQZMPReMqO7QGwEwLeh9UOOyNudeeMEWOdgWEuWqtokRy9hyK5ofprBUS5k59HFvheX3xC8bvA60h9sitDvULRKMSRSWOLYWCxQV75CAroA/9NpsfSBgI8fOOoP1Hn2NBG0ZK/KstY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707776374; c=relaxed/simple;
-	bh=TOV0VPbgYhVuGs3WaQo1Bs/dFoe+twoUgMCmPmx1f3M=;
+	s=arc-20240116; t=1707777762; c=relaxed/simple;
+	bh=8kXPD0fz3eMvLUNOcgV0WOmnWYLHc75zgudLhPqDaG0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jT3CjySiFrsU8oOa3esJRNJMeWTRMNp2EPN3da8gClRaWtSNd/j1TNMmYhrdctpFNNftyrk3P7NfOB4lnzi7JgUG33A62Ouiong5o9tDfCYEWMmhdhXc/NBG5t0A/vqTCZ1I880GrHiQdbJX4jUfQpY/OqXHwJrb5TTdEvrDVq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ROtNTCb/; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=dHM6v3oN8CSvIrlCfn5QK6dXBocoG01gibCQQMbqafAnaMFw3qTfmJD5Gl+lEMQwndOnf5ijy8Zpo3fFp0hkI+ClhpI64B5Nr1A7QnZRsl4EcsCdPG5+R9VtSkW9gD8MAUJtD3pUAmPtTyL5GknKiY9Xlf/qR1T+HY6NRaZjDU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=WC6GNWEd; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 319F240E01A9;
-	Mon, 12 Feb 2024 22:19:30 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D3FE640E0196;
+	Mon, 12 Feb 2024 22:42:37 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id U-nMxRo4Sa1P; Mon, 12 Feb 2024 22:19:28 +0000 (UTC)
+	with ESMTP id KTOy966-kHxz; Mon, 12 Feb 2024 22:42:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707776368; bh=aGQuQtLo2pIRz9eissMy1rrrA1/OASmalUGzgXffMq0=;
+	t=1707777754; bh=yCQoPT3adfRBUxB8UAr04/eO8kc2ia97mmC+gu+LmLg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ROtNTCb/mLSODiJ9SqAKHNYqCmEH0YrHfjR//4RqPvJ3M+I2IhOj/HAnCT+CiJaQf
-	 b44LBGNltF7swU2gX8mKFZRKmAFrelSevAG//YdwzMU9O0YPx3AQUZF8pBMamJzUS9
-	 FtamvwtRU5I9LGFxp/j+z0jIqgf06MfXECDix0fDFU6WXohD+Wdm9qytyKDV3fRimM
-	 /7q81GZTWqYGQN4Vr+jGYBLU/wp0WWNAyWulDqLMHX+lke+n8HtAFEAreW6zCf9JVG
-	 96nl13X6XwaYH4A+p2TCn0sEYbudyFsAP5zTucclwB09F9NgEfZ+S/oe0yafv/PTgd
-	 YkXwAWxiUSZu3JiFGP2dPAvPERk5Y7uB7YY9yt7xXO5LF5op+3vP1imGGABLwaxj4h
-	 bC6X9VOkXiNzAOuRrFR+Zb0zGXr0CrgLh9ZxSotYoVYfzNXVq8Hew3NOYr8UVsnjOE
-	 F+9ffLn71s0H+A1Q0gqSQfX9MBtbAtJQmkmgiB9z+fn/fK3oLqy6fAszgwPHl97fcP
-	 3sXASAoRLv7c0DY1/pssp+ayYCFSEJxYScpk88B/URoJghUVlQ1qxAj4Tu65iKLrG4
-	 9+3ujZKtA47ZSD0PCU8QnK5//Xkh+dMXYqCQxd7ZmDXmFN5TJ9t9+D5P9hy37/xMNT
-	 CYseFqLTLWhiLWxZM/hJDPG0=
+	b=WC6GNWEdjii1xe0PyUrWAhXzH0uHXo/P52/l9NJtnl3OuzIYpxh72H25qDzr5mvQY
+	 6w9iuIcyYbN0FCo+sZygwi1I6uk2HTX65wgiFPo3xpkhVXVzLL0VR+qkricxEUlTqk
+	 EbvCRm4eJJDwLEhDO0USw29n+Hu4iphAX+R7jbIY/6W1zPxyoeMcPYvHLBJnqQVEdc
+	 ImefsYUeV21fRg6h3ojXgLyJ/b8jtDlljeYkd2Vi/Ryg9rxopELt2rjI/hupHi2huz
+	 ojYBYqiYct5npWxspppJpM4Oxa1++tL+vEdJwmobvSM1xtFHU2H8pUbq27ieaqJAlZ
+	 FeE88k2guk6zKR7Yj/Wj/rfIe8mdLjW7zsXt0i8zbaBgvl4pwIi06fkmpE1/9WWp/p
+	 AOaty/WJk6Y+XTVaAr5onr7hmDzX2tIRYWaO0+n2XUeDL/VwFUWIVR/oB4g5eElcZo
+	 pm/AYTMz8Maw5SJNzbRuylborkYa1uZFoy4Mr+gK5/P0pdKpWq5yRV62i5tSdGZ4OQ
+	 lOW+pfblxVZ6U0dzpEp2ZUmbY4+uSZuZZPwMy+mYtuwi8X5XYachSWKkG0ev+6tvya
+	 JBJYhLlRaJjKGtSUoEYsYcUGJEXlPD+YkkLySpIEcYERtX5Qe76VkLgQI6YrTTOXz0
+	 oIDZ4yLy4BhiyQRfEOdFcrHY=
 Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F3C8140E0196;
-	Mon, 12 Feb 2024 22:19:19 +0000 (UTC)
-Date: Mon, 12 Feb 2024 23:19:13 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1EA0240E01A9;
+	Mon, 12 Feb 2024 22:42:26 +0000 (UTC)
+Date: Mon, 12 Feb 2024 23:42:20 +0100
 From: Borislav Petkov <bp@alien8.de>
 To: Tony Luck <tony.luck@intel.com>
 Cc: "Naik, Avadhut" <avadnaik@amd.com>,
@@ -72,9 +72,8 @@ Cc: "Naik, Avadhut" <avadnaik@amd.com>,
 	Avadhut Naik <avadhut.naik@amd.com>
 Subject: Re: [PATCH 2/2] x86/MCE: Add command line option to extend MCE
  Records pool
-Message-ID: <20240212221913.GRZcqZYRd6EPTTnN97@fat_crate.local>
-References: <774e7ca5-154d-4ca4-bc4c-2f945c20b938@amd.com>
- <20240212085801.GAZcndma4UTPtKm33e@fat_crate.local>
+Message-ID: <20240212224220.GSZcqezMhPojxvIcvO@fat_crate.local>
+References: <20240212085801.GAZcndma4UTPtKm33e@fat_crate.local>
  <20240212093246.GBZcnlvkPKDC8C7rv5@fat_crate.local>
  <SJ1PR11MB6083B3511D18787BE823AB2CFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
  <20240212175408.GIZcpbQHVjEtwRKLS-@fat_crate.local>
@@ -83,6 +82,7 @@ References: <774e7ca5-154d-4ca4-bc4c-2f945c20b938@amd.com>
  <SJ1PR11MB6083C60D7584B02E9CAF19D5FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
  <ZcqPhVO_DtD2x5N7@agluck-desk3>
  <20240212220833.GQZcqW4WxKH34i-oBR@fat_crate.local>
+ <20240212221913.GRZcqZYRd6EPTTnN97@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -91,17 +91,56 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240212220833.GQZcqW4WxKH34i-oBR@fat_crate.local>
+In-Reply-To: <20240212221913.GRZcqZYRd6EPTTnN97@fat_crate.local>
 
-On Mon, Feb 12, 2024 at 11:08:33PM +0100, Borislav Petkov wrote:
-> I'll have to dig into my archives tomorrow, on a clear head...
+On Mon, Feb 12, 2024 at 11:19:13PM +0100, Borislav Petkov wrote:
+> On Mon, Feb 12, 2024 at 11:08:33PM +0100, Borislav Petkov wrote:
+> > I'll have to dig into my archives tomorrow, on a clear head...
+> 
+> So I checked out 648ed94038c030245a06e4be59744fd5cdc18c40 which is
+> 4.2-something.
+> 
+> And even back then, mcheck_cpu_init() gets called *after* mm_init()
+> which already initializes the allocators. So why did we allocate that
+> buffer statically?
 
-So I checked out 648ed94038c030245a06e4be59744fd5cdc18c40 which is
-4.2-something.
+Found it in my archives. You should have it too:
 
-And even back then, mcheck_cpu_init() gets called *after* mm_init()
-which already initializes the allocators. So why did we allocate that
-buffer statically?
+Date: Thu, 31 Jul 2014 02:51:25 -0400
+From: "Chen, Gong" <gong.chen@linux.intel.com>
+To: tony.luck@intel.com, bp@alien8.de
+Subject: Re: [RFC PATCH untest v2 1/4] x86, MCE: Provide a lock-less memory pool to save error record
+Message-ID: <20140731065125.GA5999@gchen.bj.intel.com>
+
+and that's not on any ML that's why I can't find it on lore...
+
+There's this fragment from Chen:
+
+--------
+> diff --git a/arch/x86/kernel/cpu/mcheck/mce.c b/arch/x86/kernel/cpu/mcheck/mce.c
+> index bb92f38..a1b6841 100644
+> --- a/arch/x86/kernel/cpu/mcheck/mce.c
+> +++ b/arch/x86/kernel/cpu/mcheck/mce.c
+> @@ -2023,6 +2023,9 @@ int __init mcheck_init(void)
+>  {
+>       mcheck_intel_therm_init();
+>  
+> +     if (!mce_genpool_init())
+> +             mca_cfg.disabled = true;
+> +
+when setup_arch is called, memory subsystem hasn't been initialized,
+which means I can't use regular page allocation function. So I still
+need to put genpool init in mcheck_cpu_init.
+--------
+
+And that is still the case - mcheck_init() gets called in setup_arch()
+and thus before before mm_init() which is called mm_core_init() now.
+
+And on that same thread we agree that we should allocate it statically
+but then the call to mce_gen_pool_init() ended up in mcheck_cpu_init()
+which happens *after* mm_init().
+
+What a big fscking facepalm. :-\
 
 -- 
 Regards/Gruss,
