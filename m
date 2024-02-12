@@ -1,120 +1,218 @@
-Return-Path: <linux-edac+bounces-505-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-506-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29104851DBC
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 20:14:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F15AF851DFF
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 20:40:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D803F28278C
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 19:14:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73D901F21CD1
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 19:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F5A345C14;
-	Mon, 12 Feb 2024 19:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FD74776F;
+	Mon, 12 Feb 2024 19:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Na5cIFTp"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="sSQ68kiI"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8891E45C12;
-	Mon, 12 Feb 2024 19:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707765266; cv=none; b=QXu0PdwHUX9Jq3IhJxdG/ETshVPqGf1jz1hJdmyCknw1aNlokBCPNI4DBV4/6MFs1Oyv2B0lXhwOsAtrwdAD0p7+L+p5BBnlWTXRrhZLgoCBUYC/nWoA8VBYsCjqNgEgxgR+6gPO18WSSNAOmYGcydgB5JlwZ5GB3MyQQ5dXiNY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707765266; c=relaxed/simple;
-	bh=wk4IdpB+jmxZs3ctjwHg8x2TnIHTBOV5b+cPXBULd28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KqrhLP/BjDXr7SflyPlWp3Qoh2NwIqZ9tTUGYKfWrjyuhmnRfCLzrCHq1RmbgVnyZQbt+xWkL4JA9AxKdmB9+GW757a1jjmWm0Yn89KhKPQCO3Poaj1LZGSdzWPY/GJXAqYDegxTwzoAnkpgjmUG513yEu9gPHd+NmKzFN/PAXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Na5cIFTp; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3DBE140E01A9;
-	Mon, 12 Feb 2024 19:14:20 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id BVXoUC6KDzMB; Mon, 12 Feb 2024 19:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707765257; bh=C5wEpCM0L2FZSRTo/20pndRjhx4iPSK/Cw1XrpMyaoE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Na5cIFTpl514oNlTpw0KdaDEwKc826n/EbZ6nue8mfsMCRolpONHuU6WJnPdRhm2H
-	 s9wjWsZL1QgGvVgBjP1Uvg5OPzj71TyQTCyrNoiSl3DPTGTLnfi9QidMPMeG4yVVkq
-	 rpL8PyGH+HjZx5IINDoDqUNgtIITXbdWlHjmssTG47av7EN++OmqV2vHcsKouWNnJa
-	 o1tSW9xokADow36zadnrX9zA6F4UYzt+0IN38Wa5RWIQQhsrUqBMvObbaPukOcEUZq
-	 UY8eDkwLcTX5FX5DsosQlvQvw8ZSlqqiaAkLX/oOEF1hqM3RGtCHxrj8tTe9RAQa9g
-	 I10eeDdeTRO/az8tde8j26mD75gepjXqDke1uaMlR96/lLbf4+CBHM7sSI7jU9/S4r
-	 EaoMBz6BIVQ0GCGZsmQYc7ph4r0lqycGBLMZxDWwoFZiEKTLW4egyfv3caX4omkXDN
-	 DuF+1DNRrliiYuWs8ZEpu7iT3ScCVlrX7hdNvUykJn2KDa+9JJWUS9S462cbu8ncrk
-	 tu+ZbbFlF7W+oDxcbCkaolwvFg62BmD4wM9msmtaYpe+Iw3lsI1WXBHtafd3ohxnFF
-	 bQwf176pWCdAcL4VqGVF0ILTGYipdgPMOZpiZwhk0GkTurx00qu8wbcApX8x1D3dfg
-	 W/PwjjsO+aHvEnr1jLD/6Gws=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 968F740E01F7;
-	Mon, 12 Feb 2024 19:14:09 +0000 (UTC)
-Date: Mon, 12 Feb 2024 20:14:01 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: "Naik, Avadhut" <avadnaik@amd.com>,
-	"Mehta, Sohil" <sohil.mehta@intel.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
-	Avadhut Naik <avadhut.naik@amd.com>
-Subject: Re: [PATCH 2/2] x86/MCE: Add command line option to extend MCE
- Records pool
-Message-ID: <20240212191401.GLZcpt-XHFqPg3cDw-@fat_crate.local>
-References: <20240209205111.GGZcaQP1gb6C9m0WZB@fat_crate.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41111E522;
+	Mon, 12 Feb 2024 19:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707766828; cv=fail; b=LsBufYFTJvrCsxdt6F576YoA9s42+TXL3vothPS2MMDkNIOr6fTMx5n/RxwSt9VuuAveSsWH6ZDys65dRmJf0Gu8LNLdOIsU1T+zbevzxAsdj9Ewwtja+qZhHPiiJMjlVbtCzT07imKU6mhiSdM2G3P4UEPU0w2Pp8dyiLWnJOU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707766828; c=relaxed/simple;
+	bh=rPQ138zFjPwBtW+VqmIrLkBgQDN5bTDy3RfZuGPjWrc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=jAGOin+Xk8PV7L+0pfModIBedmwBg73azM0U6ozME2r8Hmby1FZX78o9efUUJJbeOaPPjW7uCJzl5/xdRrVqcXAA0k8Xhj0fkzDOkV9puFkiG4ZYy/UsM3KxYjfwytoUDAfBDlVhDTze+jB1WR6fE123GUln/DOXDn2v2/A+sU0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=sSQ68kiI; arc=fail smtp.client-ip=40.107.93.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mVdH+wWWD2NBiM+tOgNAdc3VWmV2nNSJnlkeWsgFnMrY4RPiVIIzHvWgjpyFVDD3KnDYXf0u6fLL1Q7fTcGAaL+rnj426P22e0/IC3bBgCXYfhmFruXJwGBfA+ZwIfXGSyYMb9PaGkpN+IpBtPjpGwnFjoHezdRDZworjypwApRqGmgLhuu0/YpqC8ryen+2UuW5NfAzJaM4LWonWjF535Wdv37A5k7n2HeoootNWqsRfkDKrw4ucTtrb3PFCc/9U8GSb3lfMoh2xX3L0hosa2frgjiiWqqqUpO3wOznFGJEFUFe91Mf311h2qIoAqPu1IDU7PGZjREZzsM3p9SV7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Uenu68UTtPsWxh29aGhp1AqsHTMN1/deSx250raOc3c=;
+ b=YO+fXD70LpozpaYvU/17xxcB7PVPO0skwzZWWGXeYZTUGcPgv9aWpkz1B9ktq/VOMwq0qtSb9NRsyCk4v9KD4IJl2ItrHVroCYb+nA8Kcs+ku9LAXRBjAYPGjqnt/E3uQrZ06m2YRtquMFcQyQ8JPwVNdkxbPSlI2aIq2vC6pMy+cHBL9afVNdEVyc4p+6/D3mXD+EGfwMrzbBhpKnqNIyPCbJxYcF2tVH/dF1UwTBGJkF+AAjLKPjbJQ0SlacBKssdfa2iLk6GxDoeSRuuQ9TXoelpqirdsWuuFXTQZGQMdiqptEQP+CDMa4p6619FyrY9dfzqOgBGkEQaUr3u/VA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Uenu68UTtPsWxh29aGhp1AqsHTMN1/deSx250raOc3c=;
+ b=sSQ68kiIHDplwo1zFk3SzUrE+WrJ3EwXJR/bMMF7djp7u9Ac+d9pSi34Pro2U77PmUsrx1M2PUK3XNnDX36gK7cMys5Z5NPBH1XWnY9HyVtnLJkpFS0xFEGMB47oNW+SU5wNWCwbKlszZVWUKwkikoW1KG3Zudg6Y58fA4gLT+c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB8403.namprd12.prod.outlook.com (2603:10b6:610:133::14)
+ by MN0PR12MB6102.namprd12.prod.outlook.com (2603:10b6:208:3ca::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.14; Mon, 12 Feb
+ 2024 19:40:23 +0000
+Received: from CH3PR12MB8403.namprd12.prod.outlook.com
+ ([fe80::ea0e:199a:3686:40d4]) by CH3PR12MB8403.namprd12.prod.outlook.com
+ ([fe80::ea0e:199a:3686:40d4%4]) with mapi id 15.20.7292.019; Mon, 12 Feb 2024
+ 19:40:23 +0000
+Message-ID: <1cf19ecf-4785-48c9-91ef-4ca3c965f568@amd.com>
+Date: Mon, 12 Feb 2024 13:40:21 -0600
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH 2/2] x86/MCE: Add command line option to extend MCE Records
+ pool
+Content-Language: en-US
+To: "Luck, Tony" <tony.luck@intel.com>, Yazen Ghannam
+ <yazen.ghannam@amd.com>, Borislav Petkov <bp@alien8.de>
+Cc: "Mehta, Sohil" <sohil.mehta@intel.com>, "x86@kernel.org"
+ <x86@kernel.org>, "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Avadhut Naik <avadhut.naik@amd.com>
+References: <20240207225632.159276-1-avadhut.naik@amd.com>
+ <20240207225632.159276-3-avadhut.naik@amd.com>
+ <8b4f8ec2-7534-4f77-b44f-6728c699ff64@intel.com>
+ <51255499-0b5d-45c6-9c72-f353bae83c0d@amd.com>
+ <20240209200920.GFZcaGcOr757W9O3IG@fat_crate.local>
+ <7a4945b0-322a-444e-a0ca-860a062a49c3@amd.com>
+ <20240209205111.GGZcaQP1gb6C9m0WZB@fat_crate.local>
  <5DB0FF8D-C6DA-45DC-B287-201A9BF48BDA@alien8.de>
  <75ddf61d-8dda-47fa-9da0-24221feb22a2@amd.com>
  <20240211111455.GAZcisL09LeFPWa2EI@fat_crate.local>
- <774e7ca5-154d-4ca4-bc4c-2f945c20b938@amd.com>
- <20240212085801.GAZcndma4UTPtKm33e@fat_crate.local>
- <20240212093246.GBZcnlvkPKDC8C7rv5@fat_crate.local>
- <SJ1PR11MB6083B3511D18787BE823AB2CFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20240212175408.GIZcpbQHVjEtwRKLS-@fat_crate.local>
- <SJ1PR11MB60830AF35FA89C7869B8C11EFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <b5904910-ed58-405f-9425-566383b48068@amd.com>
+ <SJ1PR11MB6083CF3400AD2F2047D65E17FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From: "Naik, Avadhut" <avadnaik@amd.com>
+In-Reply-To: <SJ1PR11MB6083CF3400AD2F2047D65E17FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DS7PR03CA0202.namprd03.prod.outlook.com
+ (2603:10b6:5:3b6::27) To CH3PR12MB8403.namprd12.prod.outlook.com
+ (2603:10b6:610:133::14)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB60830AF35FA89C7869B8C11EFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8403:EE_|MN0PR12MB6102:EE_
+X-MS-Office365-Filtering-Correlation-Id: c017a322-d6d8-4817-7e6b-08dc2c02746b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	dxYLsjT3kkCX3d+w9A8ag08/hWqWsg6dUf3//3CvZ8NSTdr/zxHyQF3FJ8f/8fnjg68RoamEEJ1KPe80azHwqV+DD4zR0iiz07Nvk7OzoXZkMPlvJOQO8NYuTGil7NzMR56xRwUSvvZxnW9d/Uo/n5X4aL5aeZNMgiyRmarvtmc2reJ2KRviRUg2CsPxZq8E024RjgWd5Wx3Cpyv1BdFIH/KSXJ5gR3ZIsmwtOelwBoBu/OZCQ/r7Ds0qdbCVVsWaihHcQqax9I69Zgpi2VgEwVY/G5Vamgsb0ru3Y9La62rI/P3ZJpBSyaMLsAFjH6QOjSwRtlS0cVtstLwWdB8GPZAUj0sowEHT+/wA/0Hqetf4u/bH9O/EDbpoqYCs6/T76XLxmjzUUPm1gnWbrpPryxFuSeDc3N5+7a/tN7hwJW/YUsT1cpESVADcMtcPr6lH15YUT8wyfSQ8FFHjVZsllwXZJD4umCR4HY3hkq/BWtDpeySFYylNWdBl8jDEM7SIOdbV8k/JHF+OfMLk16rf2hr9yL5nhl3UZqXxyiAOTlqor75k71iMN8HEmMTmo5z
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8403.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(376002)(346002)(366004)(136003)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(6486002)(31686004)(6512007)(478600001)(41300700001)(8676002)(2906002)(4326008)(5660300002)(8936002)(66946007)(53546011)(54906003)(6506007)(316002)(66556008)(66476007)(2616005)(31696002)(26005)(110136005)(83380400001)(36756003)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?KzYxUzhVTGlsM3kyQU0wL1VnT0VseUtvSldDZVJKYVlncXR3MlFPSU92MlJC?=
+ =?utf-8?B?dEVWSUQvU1ZEMG1aM1VJZkxrL2J0MXpiY1VEQ2ZBanFMYklXUnRYZTFQY1M1?=
+ =?utf-8?B?NUpzRVNWOHg1Sng5a0NqMXJSTjMyL0QvajhXMUdUTi82dUE0bkZvVGppVDlG?=
+ =?utf-8?B?b2hOc2o2Nk5lY04rNzRjelNYWm5Ub2U0cU0rWXUrZU83VEVTUGg5dHNKZmNK?=
+ =?utf-8?B?WU5zTU4xcDVUdW1WTEowdUg4eG5vUjFlMXl0YzVuZExWU2xqNTQzcWRFeklh?=
+ =?utf-8?B?Wmk5a2JDTWNlMU5VR2daYWlEeE0vYk5QV0hRSWRJWjluc1ZMV3IvNGZmei9O?=
+ =?utf-8?B?djhXbUtoSFVmcFBLRmJDQ1dDM0UzQ2g2ZDZmTzdqbE5tdWVrdjBmd1lJVnBt?=
+ =?utf-8?B?U2Nrd25DRlhzS1B0ZFp4Z2tLaU51UFBSM1VxU0VueEVMaFZyeFlzcWptK0Uz?=
+ =?utf-8?B?b3M3L0pydDZ3akJKYS81RU51SUR2bmlnaHZVWVFqMTA4QmZPSCt6ZWlxMkRP?=
+ =?utf-8?B?WlNyaWRNamRNZ29KWERKcmdCdGR6WUpKZU9mWXRPeXBxcGloL3c5TjNmUDBw?=
+ =?utf-8?B?UmJ3b2M4RGtKU3Bwd0pJMTZJbUFVM3JZZDNOL2l6RjhZdjdWNU5wTjZoV0Zr?=
+ =?utf-8?B?NlVwUmNwZEtPelFIVHJSVERkaDAyWmkzZGRYYXpTbGVuRTQyQzZ3WWkycUpO?=
+ =?utf-8?B?cjFKVjYrNXNSRDhTRHNELzF0c054OVFUY05BOE1pYnNNNW1vdWExYkI0aWho?=
+ =?utf-8?B?Wk93MlFUb3JCazFwWVJuYVJLV1lFOVlJRm9zNEZwd2Nia3NGRjFzS2Z1cGZ0?=
+ =?utf-8?B?cEhTUXNvT01nc1NnRmpjQmZLTTBkZWtkTnozdFFNTGNRODhsN09mczY3Q1Vq?=
+ =?utf-8?B?R2gyam1lN2pEdFlwYmVjbVBZdExvSkJSbUt2SzF0WGZDOGdQa0pGcDJhWVBY?=
+ =?utf-8?B?TUIrRDAxV0daaVZUZ09raWZMNXAxNk9rOHZhOGZKWXJ3aDV0aWkyWTdua2Fp?=
+ =?utf-8?B?dnZ3LzEyMWVsT01rYk8vWXFjaVNZSHpmNm1GOTZHMDdWT3ZXNkVEdEhvMGhv?=
+ =?utf-8?B?QUJBbXJ4YTZqazl3OEIvdnBQOU1MaHQ5YWRtcDBDQkNGUmZqT1FnQXgzWlBP?=
+ =?utf-8?B?RHdRYll6Rnc4eGJjWVlCT3l5M0preGtSOHpvd2tVNnloeUFlMG44RjE5MEhq?=
+ =?utf-8?B?OGdmeW9VZ0wzWVFGSVgvQVFLc1RMTG9KdmdBTERBdTVDTHFWVzhZWUxubjZO?=
+ =?utf-8?B?SjZmeEhxZ3gveTg3K2xla2pkVGlGNmZKYlI5MWpLVFVxU1ovbkdQOXhtOW03?=
+ =?utf-8?B?ak5RNVh5WkJxblhYbktzNHlXaHVoM2YrdXlUZDRqRkNqZDJZWDFFTU9ZeDJ4?=
+ =?utf-8?B?NGFHcmpxRTJCK3NWODltbjJ2THJzU2lnbzdBK3hWa1M0RDRqQUZVNytmSHM2?=
+ =?utf-8?B?ZXExWXVpcEE4MHNDMWJLRFRmYk5SSkJLMm1kSDBla25GRTNiT080cUljOFdG?=
+ =?utf-8?B?K0dWTWIxR1NCdEE0MnhoVFNMWjUwb1ZZaGlqSkZ1a1hlZXlQREJSRXZ4a3k2?=
+ =?utf-8?B?Nkw5UWc0Si9EUmhyV3VQcmVQQXFMcHM3bDd6ODhSTjNqeDJFZkMyMVJyVXFv?=
+ =?utf-8?B?NzdDdTdsQ2FDNW01MDJkNnRFL09WT0dRZ3ZoMGxyZ3JyeG5jeDQxVGVJQlFC?=
+ =?utf-8?B?ZG4zRUJMTEVLd2syNWlnUDdBM1oyd0VXS3QwT01pdGxxdUNSZCtJQmF2cUdk?=
+ =?utf-8?B?amF6dEZYZVFHcmNSNVdxUFdBZGszb3YrVDFyRXJPVWwyRVE5VFdDRVVGWHJh?=
+ =?utf-8?B?YmxBdUpnQ2gvb0VRa2szTmxzT3RkTkxEVU55ZEx6U2s4MUIwNDZodll1c1Nh?=
+ =?utf-8?B?RzdsV0FibCsxdWFUa2FMb2d1NmMvRE1WZ1dyNVBXU25kR1YyNmRPb1VjbXNZ?=
+ =?utf-8?B?OWVGQ1BWMzJ1MUVEVEhSRGllUWhjZ2M5MzlMeGN4Z3ZGQ0syL2J3ZlRITi9M?=
+ =?utf-8?B?UWswZ2dtTjNGRlpwRmZtZnZOSzJUR09oay80dnU3TitBNUJaSHZrOTJUMmU1?=
+ =?utf-8?B?bk91aDI0T0h6WCt3UzUzL0RtbGt4REFXQmZZbUpBNEI5ZXBPc09EUld3UWRD?=
+ =?utf-8?Q?rwh3jhmyJiDORb/y5TrNV1BDF?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c017a322-d6d8-4817-7e6b-08dc2c02746b
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8403.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2024 19:40:23.6303
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kQZnB24YZTxBg3r7IX+3QTq7derHuZsf7rwrr9Zhh/qLVCiB2R92kgVD/Y747cfC66fkBSXKPR5yMq8iuUHoeQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6102
 
-On Mon, Feb 12, 2024 at 06:45:34PM +0000, Luck, Tony wrote:
-> So it is currently true that number of CPUs has been computed at this point.
+Hi,
 
-It needs a proper explanation why that's ok rather than an empirical
-test only.
+On 2/12/2024 12:58, Luck, Tony wrote:
+>> I need to look more at the genpool code, but I thought I'd ask too.
+> 
+> Yazen,
+> 
+> gen_pool_add_owner() is the code that adds an extra chunk to an existing genpool.
+> 
+> This bit doesn't look obviously safe against a #MC at the wrong moment in the middle of
+> the list_add_rcu()
+> 
+>         spin_lock(&pool->lock);
+>         list_add_rcu(&chunk->next_chunk, &pool->chunks);
+>         spin_unlock(&pool->lock);
+> 
 
-> I use "git send-email" to send out patches, and usually "b4" to get them
-> to my desktop. I do have "mutt" on there, but IT have made it complex
-> for me to use it to simply read & reply.
+Even I am somewhat confused by this.
 
-IT departments all around the world make sure of that. :)
+The spinlock is mostly held to prevent other primitives
+from modifying chunks within the genpool.
 
-> It requires separate mutt config files to fetch mail and a different
-> config to send mail because of the firewall rules on the lab where my
-> desktop lives.
+In #MC context however, we are not modifying the existing
+chunks, per se.
 
-Yeah, that's why I'm working with !company mail account. For my own
-sanity.
+While in the MC context, records will be added to the genpool
+through gen_pool_alloc() which eventually drops down into
+gen_pool_alloc_algo_owner().
+
+gen_pool_alloc_algo_owner() iterates over the existing chunks
+within the genpool through list_for_each_entry_rcu(), within
+an RCU read-side critical section (rcu_read_lock()).
+
+Now, the below description of list_for_each_entry_rcu():
+
+ * list_for_each_entry_rcu  -   iterate over rcu list of given type
+ * @pos:    the type * to use as a loop cursor.
+ * @head:   the head for your list.
+ * @member: the name of the list_head within the struct.
+ * @cond:   optional lockdep expression if called from non-RCU protection.
+ *
+ * This list-traversal primitive may safely run concurrently with
+ * the _rcu list-mutation primitives such as list_add_rcu()
+ * as long as the traversal is guarded by rcu_read_lock().
+
+
+Makes me wonder if the genpool can be extended and traversed
+concurrently.
+
+OFC, not sure if gen_pool_alloc_algo_owner() being in #MC context
+makes a difference here or if I am missing something.
 
 -- 
-Regards/Gruss,
-    Boris.
+Thanks,
+Avadhut Naik
+> -Tony
+> 
+> 
+> 
+> 
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
 
