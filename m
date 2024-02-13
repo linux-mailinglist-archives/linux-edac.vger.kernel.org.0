@@ -1,98 +1,143 @@
-Return-Path: <linux-edac+bounces-523-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-524-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 062138526DC
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Feb 2024 02:45:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D26D852EFF
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Feb 2024 12:21:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 002A31C2386A
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Feb 2024 01:45:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A00941F217CC
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Feb 2024 11:21:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790B57AE70;
-	Tue, 13 Feb 2024 01:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9508D364BD;
+	Tue, 13 Feb 2024 11:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jk61vhMv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8NL7LZX"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5131428DB7;
-	Tue, 13 Feb 2024 01:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB21364A3;
+	Tue, 13 Feb 2024 11:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707786424; cv=none; b=BLVxx/QzblCrBIU3iv3sw0cMdxmCj4wlpXF0oMjb9li8wgqOaBkT1AnOI/DI1MiFuxQfO0cL1QAGhg+w7ipwHNkU7kjJfzw6LNN+OMSTuV8tflxemeB+0NzDnn8EP2h5zrz44oCk5G0u9fHhtKKAtO8VpzgIusVRZztG3bTYa2g=
+	t=1707823259; cv=none; b=o38GUCma1NPQiFAoAEzqnb9iQBDQCoDXEOj/U6bmp6/sC1mFyBtHb8PGsHrOd7swUDpJIBDtnIQky98On+3GP33T8RXO4y0FzUAEis1PzQOLDX2qnn562s3q4DKj+jQf8IyPOjCgKnuPrbe8FwPfn7gDzE3nT31j4Fq3MUR6+2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707786424; c=relaxed/simple;
-	bh=peoO574K4wfwc8JzNW3ZPwHb5yzWC0yTYMUNPjNzFMk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tu2zv0L6VDaPjZ9wsjb5WmAhzknAskgyCUxuxjpw5cNkjBpgWAJOzFt2pfja/rHVHQ58VVg+CX3FW6gjb6XXgtWvJ3n4Rz9xOVSv6v+YH+LFKfdBm2433+ps9pWBN8R5mB2f8YAvrBsKUnmLiaQ47UKY9kx+3zwBvvZ/5WI1SbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jk61vhMv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6431C43390;
-	Tue, 13 Feb 2024 01:07:03 +0000 (UTC)
+	s=arc-20240116; t=1707823259; c=relaxed/simple;
+	bh=pOyF5CfLouZgow7TuV5pWW9r9yPAsPyI7+i4TrHEPsU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XcDIChYkbqkEDueMHspkQoG4yvjHhWumUv3CHZyL3lEJL/rHDM5nVNVvqDm2RdPBndq1xWSBLe7B3MDJ1ZHyqYpZGXOqfcRHpnzFNeNDeIk/9fpnXMYNmUE0AQZDS2+l1v7vlfM6DFhe0K2+up4HmYK+AEL2ITU4N0VnKi0TPVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8NL7LZX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC9CC433F1;
+	Tue, 13 Feb 2024 11:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707786423;
-	bh=peoO574K4wfwc8JzNW3ZPwHb5yzWC0yTYMUNPjNzFMk=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=jk61vhMv0DpQERHjsyFWEND7ONl8w1aGspJ5NqBje076fszXvrnzoPAuiqTnAcEai
-	 YzmqtNKBXKGGUFX03135Pb5OjN0AU+IuiZs5ZMLvwm62PnkFBipnYXhfu2416GlpW4
-	 qh6sNYFvrDfXNAR28Ec4uIY1Z+P0/KI1Zr9zb3ls6arDTJlxcSqeaOGIVNfpqnnXsP
-	 KA+4BvC3a1S8ZRDFa5gvikE1rd1N03O4iR1kKVbqD8IprCnFhtVuEfljDKWFNqMBUA
-	 iwQAuf/S6WxTOLFyEEA+NNYOVSZbMYMZFDfdtMBTi0yMpZmZ3Ubu/emiFFDD8PB110
-	 2qsCEvfDnoE4g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 575BCCE0C4C; Mon, 12 Feb 2024 17:07:03 -0800 (PST)
-Date: Mon, 12 Feb 2024 17:07:03 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: "Luck, Tony" <tony.luck@intel.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	"Naik, Avadhut" <avadnaik@amd.com>,
-	"Mehta, Sohil" <sohil.mehta@intel.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Avadhut Naik <avadhut.naik@amd.com>
-Subject: Re: [PATCH 2/2] x86/MCE: Add command line option to extend MCE
- Records pool
-Message-ID: <c72b9c44-1908-4934-a890-3a3e9a39ef9d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240211111455.GAZcisL09LeFPWa2EI@fat_crate.local>
- <b5904910-ed58-405f-9425-566383b48068@amd.com>
- <SJ1PR11MB6083CF3400AD2F2047D65E17FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <34b19db5-bd72-457c-9b6a-c2089f6be83c@amd.com>
- <SJ1PR11MB6083E7E11F6C7BCC8C6C7F21FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20240212201038.GNZcp7PuIqIJndpDM9@fat_crate.local>
- <47901422-ac07-47db-bf44-3f4353e92b1d@paulmck-laptop>
- <20240212212741.GPZcqNTXfU2OX7uRtx@fat_crate.local>
- <2d8b17f2-c22f-478f-b407-9d2dfd2064f7@paulmck-laptop>
- <20240212231009.GAZcqlUVY8U2hzOaF4@fat_crate.local>
+	s=k20201202; t=1707823258;
+	bh=pOyF5CfLouZgow7TuV5pWW9r9yPAsPyI7+i4TrHEPsU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=j8NL7LZXhY9d9S9H+jlm3YKSQKgOe5jcKiaGzUDOQ1snpFtSJqhfOaeFmjutyi7zq
+	 nNteUvklFXDC/3oybcOQWM2YfepjHSWJwygEarwTushIWuo5pvXICyaiLJSC3zm+6Q
+	 /1Cn6uRgp7ZlJ+siQLuDkIqbXVc5LYw8glM3iFd1HwlE+tOmSEpIDtFalgsNCtq29e
+	 QoeENfA+SUwmcGNBK+wk64DxptIsR8ClWn/hZbZ/JPDsIDf6oq93VEyMNB4h2uXO+r
+	 KMxoINUVJbIOexhcMd6ralxLbcy6idqa+hSleBawABSfDFr15Pc6ssYCUkFT2+6d5d
+	 R1H7uBC1Tt7Dg==
+From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To: bp@alien8.de
+Cc: linux-kernel@vger.kernel.org,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	Andre Przywara <andre.przywara@arm.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Douglas Thompson <dougthompson@xmission.com>,
+	James Morse <james.morse@arm.com>,
+	Jan Luebbe <jlu@pengutronix.de>,
+	Johannes Thumshirn <morbidrsa@gmail.com>,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-edac@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Ralf Baechle <ralf@linux-mips.org>,
+	Robert Richter <rric@kernel.org>,
+	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH 0/7] EDAC: remove unused structure members
+Date: Tue, 13 Feb 2024 12:20:44 +0100
+Message-ID: <20240213112051.27715-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.43.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212231009.GAZcqlUVY8U2hzOaF4@fat_crate.local>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 13, 2024 at 12:10:09AM +0100, Borislav Petkov wrote:
-> On Mon, Feb 12, 2024 at 02:46:57PM -0800, Paul E. McKenney wrote:
-> > The usual reason is to exclude other CPUs also doing list_add_rcu()
-> > on the same list. 
-> 
-> Doh, it even says so in the comment above list_add_rcu().
-> 
-> And the traversal which is happening in NMI-like context is fine.
-> 
-> So phew, I think we should be fine here. Thanks!
-> 
-> And as it turns out, we're not going to need any of that after all as
-> it looks like we can allocate the proper size from the very beginning...
+Hi,
 
-Sounds even better!  ;-)
+this series removes unused EDAC structure members as found by
+clang-struct (and manually checked by me).
 
-							Thanx, Paul
+I admit I could not even compile-test octeon files, hopefully
+kernel-test robot would catch mistakes in there.
+
+Cc: Andre Przywara <andre.przywara@arm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Douglas Thompson <dougthompson@xmission.com>
+Cc: James Morse <james.morse@arm.com>
+Cc: Jan Luebbe <jlu@pengutronix.de>
+Cc: Johannes Thumshirn <morbidrsa@gmail.com>
+Cc: Khuong Dinh <khuong@os.amperecomputing.com>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-edac@vger.kernel.org
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Michal Simek <michal.simek@amd.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Robert Richter <rric@kernel.org>
+Cc: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+
+Jiri Slaby (SUSE) (7):
+  EDAC/amd64: Remove amd64_pvt::ext_nbcfg
+  EDAC/device: Remove edac_dev_sysfs_block_attribute::{block,value}
+  EDAC/device: Remove edac_dev_sysfs_block_attribute::store()
+  EDAC: Remove dynamic attributes from edac_device_alloc_ctl_info()
+  EDAC: Remove edac_pci_ctl_info::edac_subsys
+  EDAC: Remove edac_pci_ctl_info::complete
+  EDAC: Remove edac_device_ctl_info::removal_complete
+
+ drivers/edac/altera_edac.c       |  8 ++---
+ drivers/edac/amd64_edac.h        |  1 -
+ drivers/edac/amd8111_edac.c      |  3 +-
+ drivers/edac/armada_xp_edac.c    |  2 +-
+ drivers/edac/cpc925_edac.c       |  2 +-
+ drivers/edac/edac_device.c       | 53 ++------------------------------
+ drivers/edac/edac_device.h       | 22 ++-----------
+ drivers/edac/edac_device_sysfs.c | 22 ++-----------
+ drivers/edac/edac_pci.h          |  5 ---
+ drivers/edac/highbank_l2_edac.c  |  2 +-
+ drivers/edac/mpc85xx_edac.c      |  2 +-
+ drivers/edac/octeon_edac-l2c.c   |  2 +-
+ drivers/edac/octeon_edac-pc.c    |  2 +-
+ drivers/edac/qcom_edac.c         |  1 -
+ drivers/edac/sifive_edac.c       |  3 +-
+ drivers/edac/thunderx_edac.c     |  6 ++--
+ drivers/edac/xgene_edac.c        | 10 +++---
+ drivers/edac/zynqmp_edac.c       |  2 +-
+ 18 files changed, 26 insertions(+), 122 deletions(-)
+
+-- 
+2.43.1
+
 
