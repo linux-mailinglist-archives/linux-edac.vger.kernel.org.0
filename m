@@ -1,68 +1,51 @@
-Return-Path: <linux-edac+bounces-522-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-523-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBAF885224F
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Feb 2024 00:10:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 062138526DC
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Feb 2024 02:45:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 578491C21C58
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Feb 2024 23:10:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 002A31C2386A
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Feb 2024 01:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550B54EB51;
-	Mon, 12 Feb 2024 23:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790B57AE70;
+	Tue, 13 Feb 2024 01:07:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cSSROMVO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jk61vhMv"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95FEE4EB28;
-	Mon, 12 Feb 2024 23:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5131428DB7;
+	Tue, 13 Feb 2024 01:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707779431; cv=none; b=jqqA6L2WdR4FGZLWpm5Ht5OnoLQQOvFhLcVEROmWrIsZoIY5HtVpq7ONXxEJm6FNb71Q78wjFQdIbB8EHhe6mGpefgfFBJ5bUf9JINzKLgVno8sUEecA94YjIBxjiZMLJ9oT2eXUYnaEHIt02W4+4+Y7dYlQGbGxBLnhSKGulaA=
+	t=1707786424; cv=none; b=BLVxx/QzblCrBIU3iv3sw0cMdxmCj4wlpXF0oMjb9li8wgqOaBkT1AnOI/DI1MiFuxQfO0cL1QAGhg+w7ipwHNkU7kjJfzw6LNN+OMSTuV8tflxemeB+0NzDnn8EP2h5zrz44oCk5G0u9fHhtKKAtO8VpzgIusVRZztG3bTYa2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707779431; c=relaxed/simple;
-	bh=kLS8+liRFc8Av1JsFpqI5qboWvNUiRYE+DF0OAk9EV8=;
+	s=arc-20240116; t=1707786424; c=relaxed/simple;
+	bh=peoO574K4wfwc8JzNW3ZPwHb5yzWC0yTYMUNPjNzFMk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C22OFOBMfjE2FvsNbOCNxs/yQgLKhVuebamseVwTS3nHpjL4DNoiNj0C1QmWzA3UXMX/udzqvCj1lNrkjFKRSCJxppD2gCa71ydBc21Q/jAHmstCBvB/1xE/TFEK4UfJNMuhSlZg2zaGK0Vt4G1Ewgx2l+oJaQgCmadc96L0Zeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cSSROMVO; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 65D3940E01BB;
-	Mon, 12 Feb 2024 23:10:26 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id huSHbf6mq5Ex; Mon, 12 Feb 2024 23:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707779424; bh=39mF2a31e7R6BCJbA5oz2VBjGFXWjXh1FN58lK1do2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cSSROMVOHM37bF6Uuy6/leFNyPTSzpVCAlkmcxBxuWjXZqcAiVLgb0ZxPTc3CIiuU
-	 QXZBTH5zC6EvL6QJ2EIxw2rVeUwU6pEqU0KzWmVp87bdfg4ShQ9b3IPM1N/gKUjJd3
-	 Y+nFX5wd+YTy8nAWG2JZFmIL114Xq/P1CJFNjR2ga3R2o5bRuC7TRuqpxdTnasPDtA
-	 yQMjTw+/c+cRIVScm/Hl+Fos4dI4w4pIveT9kZJusq4Nf2s5Z+mj6vDwHWM+cHss8N
-	 4ukye/4uvWCA2MFaPdtYWNYHFCvmFO4CHBqXklUru2WmsZGTfguHPBWcTYjknYplNi
-	 vcK9Pq5oxnqBlYLZHmU5IRIoh0ioTzwGxgpcnHkiro77aCWie32m/Or6ZPV1nKSTyy
-	 WcPsKYU9BA89d96CGdAzpOTydG4pv9vFuLouk34DPXlzIcJA9T6V7Aj6YkNz1YyYoE
-	 07julTZAnK8GLHvseQgs0G9SnoNYRyjkPyqRmekXMhbusfvds1ot67bWcnXydBjqdj
-	 Afimybr/u8U2KlYeieDhcnI1mRSdQAycHSShcUEkCHBYKUYh5vRWzjmv/OU6nOV9eF
-	 CYPJRqDtP8waGbnBzmgxMJRIUzaOsPNCZnVVvHNo+tvaVK19MdaFdNgAUgs4uxMOy8
-	 o5nzqIn2ffMuMYl9Pd1Wlq/U=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1167640E01A9;
-	Mon, 12 Feb 2024 23:10:15 +0000 (UTC)
-Date: Tue, 13 Feb 2024 00:10:09 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: "Paul E. McKenney" <paulmck@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tu2zv0L6VDaPjZ9wsjb5WmAhzknAskgyCUxuxjpw5cNkjBpgWAJOzFt2pfja/rHVHQ58VVg+CX3FW6gjb6XXgtWvJ3n4Rz9xOVSv6v+YH+LFKfdBm2433+ps9pWBN8R5mB2f8YAvrBsKUnmLiaQ47UKY9kx+3zwBvvZ/5WI1SbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jk61vhMv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6431C43390;
+	Tue, 13 Feb 2024 01:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707786423;
+	bh=peoO574K4wfwc8JzNW3ZPwHb5yzWC0yTYMUNPjNzFMk=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=jk61vhMv0DpQERHjsyFWEND7ONl8w1aGspJ5NqBje076fszXvrnzoPAuiqTnAcEai
+	 YzmqtNKBXKGGUFX03135Pb5OjN0AU+IuiZs5ZMLvwm62PnkFBipnYXhfu2416GlpW4
+	 qh6sNYFvrDfXNAR28Ec4uIY1Z+P0/KI1Zr9zb3ls6arDTJlxcSqeaOGIVNfpqnnXsP
+	 KA+4BvC3a1S8ZRDFa5gvikE1rd1N03O4iR1kKVbqD8IprCnFhtVuEfljDKWFNqMBUA
+	 iwQAuf/S6WxTOLFyEEA+NNYOVSZbMYMZFDfdtMBTi0yMpZmZ3Ubu/emiFFDD8PB110
+	 2qsCEvfDnoE4g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 575BCCE0C4C; Mon, 12 Feb 2024 17:07:03 -0800 (PST)
+Date: Mon, 12 Feb 2024 17:07:03 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
 Cc: "Luck, Tony" <tony.luck@intel.com>,
 	Yazen Ghannam <yazen.ghannam@amd.com>,
 	"Naik, Avadhut" <avadnaik@amd.com>,
@@ -73,9 +56,9 @@ Cc: "Luck, Tony" <tony.luck@intel.com>,
 	Avadhut Naik <avadhut.naik@amd.com>
 Subject: Re: [PATCH 2/2] x86/MCE: Add command line option to extend MCE
  Records pool
-Message-ID: <20240212231009.GAZcqlUVY8U2hzOaF4@fat_crate.local>
-References: <75ddf61d-8dda-47fa-9da0-24221feb22a2@amd.com>
- <20240211111455.GAZcisL09LeFPWa2EI@fat_crate.local>
+Message-ID: <c72b9c44-1908-4934-a890-3a3e9a39ef9d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20240211111455.GAZcisL09LeFPWa2EI@fat_crate.local>
  <b5904910-ed58-405f-9425-566383b48068@amd.com>
  <SJ1PR11MB6083CF3400AD2F2047D65E17FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
  <34b19db5-bd72-457c-9b6a-c2089f6be83c@amd.com>
@@ -84,34 +67,32 @@ References: <75ddf61d-8dda-47fa-9da0-24221feb22a2@amd.com>
  <47901422-ac07-47db-bf44-3f4353e92b1d@paulmck-laptop>
  <20240212212741.GPZcqNTXfU2OX7uRtx@fat_crate.local>
  <2d8b17f2-c22f-478f-b407-9d2dfd2064f7@paulmck-laptop>
+ <20240212231009.GAZcqlUVY8U2hzOaF4@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d8b17f2-c22f-478f-b407-9d2dfd2064f7@paulmck-laptop>
+In-Reply-To: <20240212231009.GAZcqlUVY8U2hzOaF4@fat_crate.local>
 
-On Mon, Feb 12, 2024 at 02:46:57PM -0800, Paul E. McKenney wrote:
-> The usual reason is to exclude other CPUs also doing list_add_rcu()
-> on the same list. 
+On Tue, Feb 13, 2024 at 12:10:09AM +0100, Borislav Petkov wrote:
+> On Mon, Feb 12, 2024 at 02:46:57PM -0800, Paul E. McKenney wrote:
+> > The usual reason is to exclude other CPUs also doing list_add_rcu()
+> > on the same list. 
+> 
+> Doh, it even says so in the comment above list_add_rcu().
+> 
+> And the traversal which is happening in NMI-like context is fine.
+> 
+> So phew, I think we should be fine here. Thanks!
+> 
+> And as it turns out, we're not going to need any of that after all as
+> it looks like we can allocate the proper size from the very beginning...
 
-Doh, it even says so in the comment above list_add_rcu().
+Sounds even better!  ;-)
 
-And the traversal which is happening in NMI-like context is fine.
-
-So phew, I think we should be fine here. Thanks!
-
-And as it turns out, we're not going to need any of that after all as
-it looks like we can allocate the proper size from the very beginning...
-
-Lovely.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+							Thanx, Paul
 
