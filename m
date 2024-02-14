@@ -1,75 +1,82 @@
-Return-Path: <linux-edac+bounces-537-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-538-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A68048543A8
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 08:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAF828543C9
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 09:05:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8CEE1C21E59
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 07:53:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CDBA1C26971
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 08:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10D611713;
-	Wed, 14 Feb 2024 07:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE07711C80;
+	Wed, 14 Feb 2024 08:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Dh2sPnMr"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="HIj1aOUd"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14EC11C80;
-	Wed, 14 Feb 2024 07:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8280911CAE;
+	Wed, 14 Feb 2024 08:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707897186; cv=none; b=t/IDvXTsr/HMkiaNflrycQUODahX/cRkphHekccQ+/TRjNrYAkqlD3ZlEV73DpEhFfnRE+61RFy2SYYKCqveScyXCrXfHUs3sPuADnI8kqXC+quz10in1pKVAKi8YeWpuMndZSA5+Cm9/qnWH6a1YL3+tuhKA9fNAOKTsJQX//4=
+	t=1707897918; cv=none; b=B6AMN6en00aEN3nS66HDvGTl57xJw27Ks5x9a3eQSpZO/hlYMorYrKKNSLSau+LAKERkYguBfQ8z+K/zSe4/YbZAiY7i6IlFG6HzJOoIT2yte8ORurL0X3KZdPwmlE3ToIa3y4Lr/cKYimp7VZG2TgpBqBcwig7kY7+0hZ8O43c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707897186; c=relaxed/simple;
-	bh=nwJ6BmrvNXG+hweFMVXWIckxNuV3ICGXzOY/FpflPus=;
+	s=arc-20240116; t=1707897918; c=relaxed/simple;
+	bh=SxLL66KI2Rdgt4DQ2amvwkz/bwGfcJljx07IEjRYabw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BfYXkw8QmuXeibiJ0Cfx7jM1qjlprzKhrhrvG2+KL0h/ewd1+cXIrtYUBMZcQ9eWBG8z8TdOZKRV0sQwxKFpCvqmOCYfiXmepmnWsTfux+aYX9DHqsSWHyh9NoMFRs+F+SR4iytTJfOg1C1cTYM/lZqvGHNkqTC+sFiSxMFhncc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Dh2sPnMr; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=J9fibC5cwW130VPPhCtHDdmQTrk/R8E+EByFvic3PaiwIVZ3flpKlLjWr4BXK/niXOCQcPA3ZfdZNZdgWFzMRmys2/v+D5xtR2UHKUwPrA99h8hnN+tLDHEb3Z7zzA4eYtDndYJsmSUQzkBJtczpUlefvFc+L2w0pZ986adaaP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=HIj1aOUd; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3A3AB40E016C;
-	Wed, 14 Feb 2024 07:53:00 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2221D40E023B;
+	Wed, 14 Feb 2024 08:05:14 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id AtoXIdDPOwXA; Wed, 14 Feb 2024 07:52:58 +0000 (UTC)
+	with ESMTP id 8Md-vuCYqU9g; Wed, 14 Feb 2024 08:05:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707897177; bh=92xNvKeTH2GkkS9ze9entiR/JfiiO841QHEnNATcD0k=;
+	t=1707897911; bh=qzGqNBXybCl6E1OOEmCbLF/cWN/TtS0WFUma9rI8APw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dh2sPnMr+9Fdg7qIibTGcTUaNK3YbfZeCEDPus9NZMos8gnsHZcXc7gtpjIf4TM8T
-	 KcCslolsbE6vxqdz2Mm36+K7CLpAWlQ9xlp+iqyUwbMnmSPX6dwAQaVPxgXYOKp9p6
-	 YVGSgQ61YjzMQf/7KKOSr9zpzLAg/sf9OIzty8JdLOGpd68xtOvtWmu8NtoK4T5i3c
-	 4F3eQf9KfFYmdlDFTLPsAtoZIZjWN3In6Kg6bj/s52Ud8tVBu5pVSQkFB2VyLLhlwD
-	 8FeQ9t27ycJrvvfuRah1s3rKyOW3tF08TnCFyDqcUNnjmOI3AqBTyS8mEg6nB5fgTQ
-	 TRHv3XyUEZQFCnclcdBd5oQmU21C838NC55I12C7+YnZ5qWap6SLfouiEWlNKmL4hR
-	 FhAdjDMlQda+R+565sjRpGHZPu+Dhoyc30tNSiupUX/OXjPszNOlRgi+KTd1i1KWoU
-	 6hQVxDPAsrrgLw/lCms7oyni7Ug+kFFKJRZUUK974d+g16QICxnyBJxWv3IHwOd8h1
-	 RGux7bAipcvp7Iik+VZAqHPrTJb09RJx7yrQ3QZtci3d4H8RUOhbm0p1S9sIVyyFob
-	 nAvl3eOnN3nNzlYU8H2iYMALGlD2WU7qHWznl28y0+PBfy2qVp5/T06N08Ey36fjhu
-	 Mhys/jKSbPfMVIvj282N9fvE=
+	b=HIj1aOUdL9YCVuPfBR5G1tr55pVcDG48HB/VtwVWIf7L/uZZjPnioSO+oieE1lZF6
+	 MBPTepQ+862TugI1zZspCSCeS4H81jx6BpVMZGbgZvQ83bN/19MSeWAnjxCTAeCy4D
+	 jgMUU6PYJHAw/Acs6QJOzDQ/jTINI67DSEnKKNkcAF0OCO14EUQ//nJL2vQPKQTe/E
+	 Y+nzES3JJ+RkWWpGr052Gb9Eiql+Q6l/HkLjCksU9WPmvoVAvrn4hFl4Nutn4jihKK
+	 GFdXk9Yz4mGuYqHhv/RpSSxYGe6WzzOKIJGBxlyQf8G66F3GPJNiht0dkgOXQw+yGO
+	 aPlH4f+jm+dp9dkG/OXGKycqgM+aRFqFLy4RR2tOPjcsOZdjetWfgHgEDjfy8vYm7e
+	 0onXxc/+PZ4GCznhONM/0f8GIEk4+lb3yMEztvwkZu7ekrLbknAoiYrKL9gERGTmR7
+	 NHBZU7pN0qv2I+WAfNR669B5Z08XK9D3uAv+2hcnUEZY42qrBrP7MrsJQiXyT2ZTJo
+	 ADoWt5ihdUFIUrwq44ODoZacS+uvOqK5TQGrzJj+YJYJseSYIrlwgB1mXNuURw+RWL
+	 9BWHnFdN72yxwBeMYfW0ndq+8f3fHAQ/sDI+xJQaS9C3Xr5+JFy+aONGSSAunMhlWh
+	 0VQWuDu1xtLer1+ihQw46OvQ=
 Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 900B640E0192;
-	Wed, 14 Feb 2024 07:52:48 +0000 (UTC)
-Date: Wed, 14 Feb 2024 08:52:42 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BB25640E0192;
+	Wed, 14 Feb 2024 08:05:02 +0000 (UTC)
+Date: Wed, 14 Feb 2024 09:04:56 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com, muralidhara.mk@amd.com,
-	naveenkrishna.chatradhi@amd.com, sathyapriya.k@amd.com
-Subject: Re: [PATCH 0/2] FRU Memory Poison Manager
-Message-ID: <20240214075242.GAZcxxSiMsDoacvC1M@fat_crate.local>
-References: <20240214033516.1344948-1-yazen.ghannam@amd.com>
+To: "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"git (AMD-Xilinx)" <git@amd.com>,
+	"Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"rric@kernel.org" <rric@kernel.org>
+Subject: Re: [PATCH v3] EDAC/versal: Make the bits in error injection
+ configurable
+Message-ID: <20240214080456.GBZcx0KPuNdoD0dQEf@fat_crate.local>
+References: <20240208094653.11704-1-shubhrajyoti.datta@amd.com>
+ <20240213183439.GDZcu2PwWnFxsRp7x2@fat_crate.local>
+ <BY5PR12MB49024FB7BAC0CF996726E366814E2@BY5PR12MB4902.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -78,28 +85,12 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240214033516.1344948-1-yazen.ghannam@amd.com>
+In-Reply-To: <BY5PR12MB49024FB7BAC0CF996726E366814E2@BY5PR12MB4902.namprd12.prod.outlook.com>
 
-On Tue, Feb 13, 2024 at 09:35:14PM -0600, Yazen Ghannam wrote:
-> I included questions in code comments where I think more attention is
-> needed.
+On Wed, Feb 14, 2024 at 05:33:25AM +0000, Datta, Shubhrajyoti wrote:
+> Thanks tested it working fine .
 
-Lemme look.
-
-> Also, I kept Naveen as a maintainer in case he's still interested.
-
-I don't mind that as long as he responds to bug reports from users and
-addresses them in timely manner.
-
-> I did some basic testing on a 2P server system without ERST support.
-> Mostly I tried to check out the memory layout of the structures. And I
-> did some memory error injections to check out the record updating flow.
-> I did some fixups after testing, so I apologize if I missed anything.
-
-Right, I'd like for Murali and/or Naveen to test the final version but
-lemme go through them first.
-
-Thx.
+Thanks, now queued.
 
 -- 
 Regards/Gruss,
