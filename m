@@ -1,66 +1,66 @@
-Return-Path: <linux-edac+bounces-572-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-573-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 823DE8553B9
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 21:10:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A01C68553DD
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 21:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B51E11C2197B
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 20:10:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5737E293E33
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 20:19:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7E8213DB9F;
-	Wed, 14 Feb 2024 20:10:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA2AB13DBBB;
+	Wed, 14 Feb 2024 20:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="iJWUD7/o"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="B9L65EMI"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67061E4B7;
-	Wed, 14 Feb 2024 20:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4792A13DBA9;
+	Wed, 14 Feb 2024 20:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707941444; cv=none; b=UTzjREdg5fYoptCoKNLji22wq5aMwsv6j6DX4fnVZWVISbB0L2Rz/lbfYVaymlnmMhPKuQIxreTNtTtQ5xPJ2UsRN5Oic4ExwJE7H65AJ6Dsu4+4lzssqUalnAkCuI8R7zccnWtD/vz+ptjS0M/jFfguzXb2n0ITNGIEIIv5tIU=
+	t=1707941954; cv=none; b=jGiNjdNUldnK+KQCP3ZBSTHRNr8+XP9SLaAKZr6ePavdAShMZJw7HY3PCOc6xOZ4NiWqzQhINdY3sDkVWEMKhkAqa1J7ioeIPzf/olLVBz4vJtPkndGh2ERwK9QZ8XrgRKDbR62DSSElTYcR+++P++dF7dDOJsxsxv1NP87e7pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707941444; c=relaxed/simple;
-	bh=3DEw2bejqdHv83RpCK7MpKXxCnwuuzs/j5eNYOI6FDo=;
+	s=arc-20240116; t=1707941954; c=relaxed/simple;
+	bh=c7phOXNT4Dkql8q/Y/2mhdiuhF8tmZLyQsVm70ulEM4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RWF0TsBQ4zeg1nnYcHshRDY0olyExiX+XFR7QqJWnoeTkcHTV9lLWbHII3RmN+5BGsvoaM3uO3AECBecn+4W08zZe6EP65vIBRwxrUna4TIWtsspP6LuTA6jVV1bJqaXxZTkL42OmqrYeS1tRN5n8UkNhk8DoqUzuk8k+Ot0WeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=iJWUD7/o; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=tFXcGWUHtNvtsgAH9NWImgD9ahKCBkCT2wjDWLtS32TbtOYaLpDq9d99sLTdD7grWEsP/brn67lwwwGGe/pF7NLGeGwY2YzSzfFJuTVOXoq9O//l9uzg54qzXzO+T+dFu4gpoluqPbjhf3sBwGLho3Z7S19fKdUjnU9my55kiO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=B9L65EMI; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B8B9C40E023B;
-	Wed, 14 Feb 2024 20:10:39 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3B1AF40E01A9;
+	Wed, 14 Feb 2024 20:19:10 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 3A5CcIbVRZVG; Wed, 14 Feb 2024 20:10:37 +0000 (UTC)
+	with ESMTP id nzSfv2Sp4XZL; Wed, 14 Feb 2024 20:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707941437; bh=v2uz5bkFJIe38UIfTC8p/jckQNb9Ysmp7VG4BbqORTc=;
+	t=1707941947; bh=ighEcsqx7KfyfF1ddIXJeKNu80xIvoW6GUDahetkqN4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iJWUD7/oGN40FjfLmH/w7fAMdN5mLk8XUFcK3l64gZefjxlzaQvFMxA7yFrkDJs8M
-	 1zi23ZIDBqvf7RD5k4nIESAsrX2GZZZtDU/B1K8phXzQlXSKxK5Ffn2XL4nFwTNe52
-	 5EbOGGWPaaoPbSplgbWSy8G8kligyFfS9zVdzyZYhjz1ceK/sxYUb5YbAA+l1XLCR5
-	 a4Y4540umqxp7CPQJxnEoUUCZcVxZew7OoZE1wsd7CnZwjb51pjFUDkRe2EE9vZNVw
-	 tlCcoCovENidhe7j+a7MvtFE/hr/q567m/mpxOHZE+s6B2ulnuOxD1Z65gSHYlRa/P
-	 6wPZsADGsS1gc47CxxcTs/KScKgSmoYoktRQytrQ4FICD2KzUvj9yALHrBArjtK8uL
-	 eNqdkpJa6IZvA7rdpgeBRgZHNbOFLVZ3k2hiNdcLYWd0mQfxVQf3XneK5VnQrEGxhs
-	 wbVXvPY4gm4oIgAPdPBOAjfUIsoliTeDXQQ4mqLds5VioapliEJLCv1pKXgbn2w5HZ
-	 bN26D7SYo71hcQ+C11uLpbmoR9COUaUEnvld45fZFfrE0JhJO1OkU9r+/9LX/vudCT
-	 KhDHQ/wrrzbh0H1uABdEbVtgAkCxM4F7PONVc9NdPubngfxdXWn2qb7ylxHsagm5hf
-	 VlUtV+p3nYa3KMQebKgf2R+s=
+	b=B9L65EMIybREj+F+VT3Xfs7LRXTCHux0EQQRoovwDeGYoVLwjZhBOynkZrWVpTrth
+	 +WoGFeHdP+LzNc4z4pvKWsJ3DR0UQBJyy8m7eUDWR5KBVJyx/Y6pfudaZ8A/QCuWa/
+	 V/AD+MXDuYGbJhZW9oNsNDzKcf6OUGvosDMbTIXUPlstHz5pneiPvJEnjLZckJ1PJG
+	 Sw56PPozg1ZzdxTnFQcj9nm1KC5cgse4Z0/JXECONLCeK0fnMsfZVFkXohOcAk9mOh
+	 b6hvhEQV2eQEpdxtS3g55WYghUsTcBRB8+Es9nwMgdxXjVTxHjvA5Y1smDSSSgkKZA
+	 w3Q0NI08itPSRhM/2CyU8RhQeBaMw5+mX9HSyvyISd2wNPUqm2HTvzpB4itv0NJd5m
+	 vYGJm86kxQOI23bgjqRZouS3gZ+2x6A/Oj/NiXQE27g2rwIyZi9AV+H5ZPBfQ0DgiT
+	 0H0P3t9NZUd/s+JlC5CbnYlJ8OD0kdysfRpo9NKXsEmdjPCn+lAPVrPzgRYETf9SuI
+	 53in3i7fM5D5roM2MgNihmXdnwpyE8592uCwy3NtngjCfhBcm5AtqbEWXIDn5efS8J
+	 Ox+UQ2vcQGsjndzbAossnKdSANg/xezG0hUlWO5s0TOPbHlLkp7u0ItjI5kr3dJesL
+	 7Do4d2Ca3xF+d4xAfVZVfN+Y=
 Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4093340E01A9;
-	Wed, 14 Feb 2024 20:10:28 +0000 (UTC)
-Date: Wed, 14 Feb 2024 21:10:21 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A30DD40E00B2;
+	Wed, 14 Feb 2024 20:18:58 +0000 (UTC)
+Date: Wed, 14 Feb 2024 21:18:57 +0100
 From: Borislav Petkov <bp@alien8.de>
 To: Yazen Ghannam <yazen.ghannam@amd.com>
 Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
@@ -68,11 +68,11 @@ Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
 	john.allen@amd.com, muralidhara.mk@amd.com,
 	naveenkrishna.chatradhi@amd.com, sathyapriya.k@amd.com
 Subject: Re: [PATCH 2/2] RAS: Introduce the FRU Memory Poison Manager
-Message-ID: <20240214201021.GQZc0eLX1AXV-PwE1K@fat_crate.local>
+Message-ID: <20240214201857.GRZc0gMWRBEzhRznUN@fat_crate.local>
 References: <20240214033516.1344948-1-yazen.ghannam@amd.com>
  <20240214033516.1344948-3-yazen.ghannam@amd.com>
- <20240214113630.GIZcylvp6-m-FNNE7H@fat_crate.local>
- <4096ae55-62bb-4705-94dc-ccf90ee64988@amd.com>
+ <20240214120214.GJZcyrxgyLLwQ8y19Z@fat_crate.local>
+ <1a46d8cb-104f-4854-a09e-c60095e2dcd0@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,18 +81,23 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4096ae55-62bb-4705-94dc-ccf90ee64988@amd.com>
+In-Reply-To: <1a46d8cb-104f-4854-a09e-c60095e2dcd0@amd.com>
 
-On Wed, Feb 14, 2024 at 10:26:41AM -0500, Yazen Ghannam wrote:
-> > > +static bool is_valid_fmp(struct fru_rec *rec)
-> > 
-> > fmp_is_valid()
-> > 
+On Wed, Feb 14, 2024 at 10:33:15AM -0500, Yazen Ghannam wrote:
+> I was also thinking that MODULE_DEVICE_TABLE shouldn't be used. Not all
+> MI300-based systems will need or can use this module. And it does depend
+> on specific platform configurations.
 > 
-> Ack.
+> So the module should not autoload. Users will need to manually load it if
+> they know that it's usable on their platform. We can keep the cpuid[] and
+> model checks just for extra safety.
+
+Ok, makes sense.
+
+The above converted:
 
 diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
-index bcee828cb916..3600bf0dca53 100644
+index bcee828cb916..6b280cf503a4 100644
 --- a/drivers/ras/amd/fmpm.c
 +++ b/drivers/ras/amd/fmpm.c
 @@ -447,7 +447,7 @@ static int save_new_records(void)
@@ -140,6 +145,88 @@ index bcee828cb916..3600bf0dca53 100644
  
  	return true;
  }
+@@ -588,36 +584,35 @@ static void set_fmp_fields(struct fru_rec *rec, unsigned int cpu)
+ 	fmp->validation_bits |= FMP_VALID_ID;
+ }
+ 
+-static unsigned int get_cpu_for_fru_num(unsigned int i)
+-{
+-	unsigned int cpu = 0;
+-
+-	/* Should there be more robust error handling if none found? */
+-	for_each_online_cpu(cpu) {
+-		if (topology_physical_package_id(cpu) == i)
+-			return cpu;
+-	}
+-
+-	return cpu;
+-}
+-
+ static void init_fmps(void)
+ {
+ 	struct fru_rec *rec;
+ 	unsigned int i, cpu;
+ 
++	cpus_read_lock();
+ 	for_each_fru(i, rec) {
+-		cpu = get_cpu_for_fru_num(i);
+-		set_fmp_fields(rec, cpu);
++		int fru_cpu = -1;
++
++		for_each_online_cpu(cpu) {
++			if (topology_physical_package_id(cpu) == i) {
++				fru_cpu = i;
++				break;
++			}
++		}
++
++		if (fru_cpu < 0)
++			continue;
++
++		set_fmp_fields(rec, fru_cpu);
+ 	}
++	cpus_read_unlock();
+ }
+ 
+ static int get_system_info(void)
+ {
+-	u8 model = boot_cpu_data.x86_model;
+-
+ 	/* Only load on MI300A systems for now. */
+-	if (!(model >= 0x90 && model <= 0x9f))
++	if (!(boot_cpu_data.x86_model >= 0x90 &&
++	      boot_cpu_data.x86_model <= 0x9f))
+ 		return -ENODEV;
+ 
+ 	if (!cpu_feature_enabled(X86_FEATURE_AMD_PPIN)) {
+@@ -641,7 +636,7 @@ static int get_system_info(void)
+ 	return 0;
+ }
+ 
+-static void deallocate_records(void)
++static void free_records(void)
+ {
+ 	struct fru_rec *rec;
+ 	int i;
+@@ -728,7 +723,7 @@ static int __init fru_mem_poison_init(void)
+ 	return 0;
+ 
+ out_free:
+-	deallocate_records();
++	free_records();
+ out:
+ 	return ret;
+ }
+@@ -736,7 +731,7 @@ static int __init fru_mem_poison_init(void)
+ static void __exit fru_mem_poison_exit(void)
+ {
+ 	mce_unregister_decode_chain(&fru_mem_poison_nb);
+-	deallocate_records();
++	free_records();
+ }
+ 
+ module_init(fru_mem_poison_init);
+
 
 -- 
 Regards/Gruss,
