@@ -1,66 +1,66 @@
-Return-Path: <linux-edac+bounces-545-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-546-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B95DF8547B7
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 12:06:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E7268547CC
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 12:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48DB6B237F2
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 11:06:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 032D21F23349
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 11:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8152C18E1E;
-	Wed, 14 Feb 2024 11:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D008199B9;
+	Wed, 14 Feb 2024 11:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fdS+gbDD"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="D6+DyW5y"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C61018E10;
-	Wed, 14 Feb 2024 11:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C77718EA2;
+	Wed, 14 Feb 2024 11:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707908762; cv=none; b=rHkx4rcyLbv1zm+xygjpCmiMs2evJB6FFexDIY/EbsisVVPdhLdkwTGcma6/AsQn2bTnd8mZaE/ujSH9wHpP85qY+jEggFVDv/ALZq21r4/clyQyID1E5VLNwNwgOIniUIRgTomz6yuyIuojF4SZh3ipK5muqwCtTiiRZ15bYFQ=
+	t=1707909049; cv=none; b=UdgfTf/5a9wyLnEVGYzVuAQJV3cyKtRsljoHQcvbvAdEXW2Vs+vnZQsHfkhv5mctC/WMbZG4gG2OasA8jiW6cMuSLp780BYQSAEA8mgSW8O9wce4/wkuUl/7kwHfboOgrqhYIv+XfB+nqh0usXHmK6KtE8/E4vEbTASDZ2PquYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707908762; c=relaxed/simple;
-	bh=yfyMflBKNtVGtU2ImfDEona8nwijQRrVLRbwSrI2atQ=;
+	s=arc-20240116; t=1707909049; c=relaxed/simple;
+	bh=TJq9COw6PDecnjnk1YApAb3gGy01Mt/c9IxmMSaHGGM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f3LAIT3nd18xqPJEVAYJ/ckhvM1zHfCi5PI6CK3vMZrue0V28wKz9DiLm3JVwbOM8ZqL+3ASuR6cj0SuHlhfsCSqMr44wIRBoaPDykXff32IpSbgJqNPkCSFNRZi0WFppK3A4Niq5maNAVe5JM6EX6LpMgcAryDVbf64SM42hiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fdS+gbDD; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=WUr2ZxqbxXyZClmfltTkECJC4xeIkZcxMsDX8cMPpVdw4KYO2x79SbjGtNcUTX8eQ3qMUFhSTU/sx3coYCQ6aFyr/+fKecmfWVTEvas+KMowUV6DpLtJ+Im7WaiL2BX1BsI6aEvj1vqTUjBE0oZVeJQIYbGCmmvzJx9+4srSPAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=D6+DyW5y; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7B0A040E023B;
-	Wed, 14 Feb 2024 11:05:57 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DE6CD40E01A9;
+	Wed, 14 Feb 2024 11:10:44 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 4oMTBDzLIK7G; Wed, 14 Feb 2024 11:05:55 +0000 (UTC)
+	with ESMTP id Q-TUVYAXG5nX; Wed, 14 Feb 2024 11:10:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707908755; bh=RFhzM1mdJMfnEuHgaoIgi2HNPVK8ohL6VlPzvvVhHBg=;
+	t=1707909042; bh=u8DgBZxZUU4PAy3YQROt3KGRvRieHIBBxlz3D9L7msU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fdS+gbDDk820q13tmn01nLrKge4DftiKKp4/vca/XB0m67UKxVrQlna6EuNVHkqZG
-	 QRHOEZtUKD5KRVHctmRzXcN3XIJ75Ss5td7yTZJeAsZv8atbGS3mxgte+9Ob/gtWzH
-	 Tj604yrwrEvshmu96Mmc+mElqecvIgDpas6LwPDZXjgAdAZGux6dmVvm+x17hGZrKF
-	 r8BN340NUkcRr4j/YYPnMMTkgW+yVFbXr4X3doLigfGUPEwyKUa1d95ay1tSQU0/pD
-	 cbNT7aF+4iDnE3XagjMpWHtsy6fvG9BviKvGrOSq9MB5Kqqvlrt/lSRmZ9aggRRgOp
-	 LZyH/iU7Z5UZsQA9hcPaklUVbYukJSNvfPEytv+1Wz/clbFgPGyXL4TitGQqU+kmDh
-	 g7OZFJVJcUlRRsbDVUEE7TwTCng9lA+tQBVqekrXlIIOFRZRNhmm4ADhr54MQuDwVW
-	 DKbhjuSf35EY9+ZUjDVGlvC0jgbo4s2nkoQ7nynu5Dze4nQlX3Ts3vNLc+8CntFcls
-	 /znaiguEzz3koFjtVu09lkZ897d6BiZ4jvmegjXAP0rF0kwYGMg34e0cms431oE+vj
-	 C+fQKVZ/qQS9WuVsmHd0XgHyHO62wvx7DjIMLqVuIod1jPdEfbaw26BWS+kbLhlH/9
-	 u1Twhe1dSJUaUm8kWc1yVTeY=
+	b=D6+DyW5yeFF1Vckp55kkzEB2cOf+/5BNIsy+igBgyL2W4f8rtjHNGfqKfrlr5QUQY
+	 FlfFp0R4FcXeBMQgjDlJqRCdW3xNZglwUXpnrbt/JnlsmqVXMnCXIzVvKC7IA+el6T
+	 SmbL5+eE/CU9NCdVG9Tx52rG3Xhsrbn80ys3L19TYJmuOtDyu1sJYDPSBsMc1ghybr
+	 GDbdofdYcIwy7PpCkWb1xb9LYcieIReu5rAbI5m84i4IKXE0XRh8tTPn8wJIQ3qFSB
+	 IRq5gsPsThTrhQA+hpWNwg2ai+KROQcnRdJuJ4HpB5V/r2A97V6BS6YaY6qDJLmapN
+	 DDPFL5i5zgWslYQVGNuPeoGQK2OfabdCxY8ZwPEySbHIU2akpVTMPLNOLodXXydsxY
+	 vbdO7rP10CfhM2K8VTn9VlP1E6R+bycQZ6FWaooJB4DIgv4DZJvTLS+s/mFbGLQMbu
+	 WAmVl/5FYzg1er8njJat8XaaS2DfIlzWoGZTp2O8ZObrk4diT4lS9O4LWpX6/+Cy0V
+	 GO1Xqr8EnpXkSVgKBjJ9KvrsYT3Xi69xTiUZaoudVQ6HemLKSXpLdKTSuC2FUD/Zr6
+	 TrNicAs5BQMNBFeCK2DrbM7WmD51s8vu5UZFIs1dg9+9W7yt7VpnABHq5xZ2/aGYND
+	 OeGurmdexLQDCeBIRrKObYR4=
 Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 26B6C40E0192;
-	Wed, 14 Feb 2024 11:05:46 +0000 (UTC)
-Date: Wed, 14 Feb 2024 12:05:41 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9750940E016C;
+	Wed, 14 Feb 2024 11:10:33 +0000 (UTC)
+Date: Wed, 14 Feb 2024 12:10:32 +0100
 From: Borislav Petkov <bp@alien8.de>
 To: Yazen Ghannam <yazen.ghannam@amd.com>
 Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
@@ -68,7 +68,7 @@ Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
 	john.allen@amd.com, muralidhara.mk@amd.com,
 	naveenkrishna.chatradhi@amd.com, sathyapriya.k@amd.com
 Subject: Re: [PATCH 2/2] RAS: Introduce the FRU Memory Poison Manager
-Message-ID: <20240214110541.GFZcyehY44eSSYsW2l@fat_crate.local>
+Message-ID: <20240214111032.GGZcyfqFqsW0j4Yy3a@fat_crate.local>
 References: <20240214033516.1344948-1-yazen.ghannam@amd.com>
  <20240214033516.1344948-3-yazen.ghannam@amd.com>
 Precedence: bulk
@@ -82,86 +82,56 @@ Content-Disposition: inline
 In-Reply-To: <20240214033516.1344948-3-yazen.ghannam@amd.com>
 
 On Tue, Feb 13, 2024 at 09:35:16PM -0600, Yazen Ghannam wrote:
-> +static inline struct cper_fru_poison_desc *get_fpd(struct fru_rec *rec, u32 entry)
+> +static void init_fpd(struct cper_fru_poison_desc *fpd,  struct mce *m)
 > +{
-> +	return &rec->entries[entry];
+> +	memset(fpd, 0, sizeof(struct cper_fru_poison_desc));
+> +
+> +	fpd->timestamp	= m->time;
+> +	fpd->hw_id_type = FPD_HW_ID_TYPE_MCA_IPID;
+> +	fpd->hw_id	= m->ipid;
+> +	fpd->addr_type	= FPD_ADDR_TYPE_MCA_ADDR;
+> +	fpd->addr	= m->addr;
 > +}
 
-This one needs to go too.
-
-> +static inline u32 get_fmp_len(struct fru_rec *rec)
-> +{
-> +	return rec->sec_desc.section_length - sizeof(struct cper_section_descriptor);
-> +}
-
-Oh well, I guess we can keep that one.
-
-> +/* Calculate a new checksum. */
-> +static u32 get_fmp_checksum(struct fru_rec *rec)
-> +{
-> +	struct cper_sec_fru_mem_poison *fmp = get_fmp(rec);
-> +	u32 len, checksum;
-> +
-> +	len = get_fmp_len(rec);
-> +
-> +	/* Get the current total. */
-> +	checksum = do_fmp_checksum(fmp, len);
-> +
-> +	/* Subtract the current checksum from total. */
-> +	checksum -= fmp->checksum;
-> +
-> +	/* Return the compliment value. */
-> +	return 0 - checksum;
-> +}
-
-Let's get rid of that one.
-
-Also, I think it is called *complement* value and you simply do
-
-        /* Use the complement value. */
-        rec->fmp.checksum = -checksum;
-
-I'd say.
-
----
+Get rid of that one:
 
 diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
-index 9eaf892e35b9..f8799beddcc4 100644
+index f8799beddcc4..090b60d269e7 100644
 --- a/drivers/ras/amd/fmpm.c
 +++ b/drivers/ras/amd/fmpm.c
-@@ -195,11 +195,12 @@ static u32 do_fmp_checksum(struct cper_sec_fru_mem_poison *fmp, u32 len)
- 	return checksum;
+@@ -221,17 +221,6 @@ static int update_record_on_storage(struct fru_rec *rec)
+ 	return ret;
  }
  
--/* Calculate a new checksum. */
--static u32 get_fmp_checksum(struct fru_rec *rec)
-+static int update_record_on_storage(struct fru_rec *rec)
- {
- 	u32 len, checksum;
-+	int ret;
- 
-+	/* Calculate a new checksum. */
- 	len = get_fmp_len(rec);
- 
- 	/* Get the current total. */
-@@ -208,15 +209,8 @@ static u32 get_fmp_checksum(struct fru_rec *rec)
- 	/* Subtract the current checksum from total. */
- 	checksum -= rec->fmp.checksum;
- 
--	/* Return the compliment value. */
--	return 0 - checksum;
+-static void init_fpd(struct cper_fru_poison_desc *fpd,  struct mce *m)
+-{
+-	memset(fpd, 0, sizeof(struct cper_fru_poison_desc));
+-
+-	fpd->timestamp	= m->time;
+-	fpd->hw_id_type = FPD_HW_ID_TYPE_MCA_IPID;
+-	fpd->hw_id	= m->ipid;
+-	fpd->addr_type	= FPD_ADDR_TYPE_MCA_ADDR;
+-	fpd->addr	= m->addr;
 -}
 -
--static int update_record_on_storage(struct fru_rec *rec)
--{
--	int ret;
--
--	rec->fmp.checksum = get_fmp_checksum(rec);
-+	/* Use the complement value. */
-+	rec->fmp.checksum = -checksum;
+ static bool has_valid_entries(struct fru_rec *rec)
+ {
+ 	if (!(rec->fmp.validation_bits & FMP_VALID_LIST_ENTRIES))
+@@ -288,7 +277,13 @@ static void update_fru_record(struct fru_rec *rec, struct mce *m)
  
- 	pr_debug("Writing to storage");
+ 	mutex_lock(&fmpm_update_mutex);
  
+-	init_fpd(&fpd, m);
++	memset(&fpd, 0, sizeof(struct cper_fru_poison_desc));
++
++	fpd.timestamp	= m->time;
++	fpd.hw_id_type = FPD_HW_ID_TYPE_MCA_IPID;
++	fpd.hw_id	= m->ipid;
++	fpd.addr_type	= FPD_ADDR_TYPE_MCA_ADDR;
++	fpd.addr	= m->addr;
+ 
+ 	/* This is the first entry, so just save it. */
+ 	if (!has_valid_entries(rec))
 
 -- 
 Regards/Gruss,
