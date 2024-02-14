@@ -1,82 +1,77 @@
-Return-Path: <linux-edac+bounces-538-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-539-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAF828543C9
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 09:05:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ABFB85441D
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 09:36:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CDBA1C26971
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 08:05:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0CA01F27CF6
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 08:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE07711C80;
-	Wed, 14 Feb 2024 08:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE654696;
+	Wed, 14 Feb 2024 08:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="HIj1aOUd"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="lI0j0dur"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8280911CAE;
-	Wed, 14 Feb 2024 08:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0B9522E;
+	Wed, 14 Feb 2024 08:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707897918; cv=none; b=B6AMN6en00aEN3nS66HDvGTl57xJw27Ks5x9a3eQSpZO/hlYMorYrKKNSLSau+LAKERkYguBfQ8z+K/zSe4/YbZAiY7i6IlFG6HzJOoIT2yte8ORurL0X3KZdPwmlE3ToIa3y4Lr/cKYimp7VZG2TgpBqBcwig7kY7+0hZ8O43c=
+	t=1707899806; cv=none; b=Mmfr3424EQu4dreqfCRD7XbV3hdpK0TEeDneiLy6fioD8qLW9RJqXJWvL50uVNXzyp+VrnmxxVRUHmbwAb+JsvCvKDxeo1bSyIOimrxMLa/SUZVRxZ1GaDrD46zhH5uKoo7IqTMpQ/mlJosNXt7/3RYdivHEswKGbXczyJEXOPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707897918; c=relaxed/simple;
-	bh=SxLL66KI2Rdgt4DQ2amvwkz/bwGfcJljx07IEjRYabw=;
+	s=arc-20240116; t=1707899806; c=relaxed/simple;
+	bh=zQgmIhi+kQAKviTy4ChZK3tEEE/C4xNJP03WQkiuQN4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J9fibC5cwW130VPPhCtHDdmQTrk/R8E+EByFvic3PaiwIVZ3flpKlLjWr4BXK/niXOCQcPA3ZfdZNZdgWFzMRmys2/v+D5xtR2UHKUwPrA99h8hnN+tLDHEb3Z7zzA4eYtDndYJsmSUQzkBJtczpUlefvFc+L2w0pZ986adaaP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=HIj1aOUd; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=unmY5/inYAM00ca3TnKLIDY7f3wWinxKmBXL9TXwdnIOadPYSIKFieXL/1Akw8ThVitU75TxRQ6KjQZwfyZPF+KZ+69KJw5WmpXgMP0NOC/e5lvJHxLtjRNPPefeJC4WdCNGEDet3YmRaqEZ+luGsJ3+YG031xh6/j34YYx/a6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=lI0j0dur; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2221D40E023B;
-	Wed, 14 Feb 2024 08:05:14 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DC4E140E01A9;
+	Wed, 14 Feb 2024 08:36:41 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 8Md-vuCYqU9g; Wed, 14 Feb 2024 08:05:12 +0000 (UTC)
+	with ESMTP id vo1c1cekKH8y; Wed, 14 Feb 2024 08:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707897911; bh=qzGqNBXybCl6E1OOEmCbLF/cWN/TtS0WFUma9rI8APw=;
+	t=1707899798; bh=siSrL0RoIFgEq/5UZFumCLQMop+BzDrlljtnxlEM89o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HIj1aOUdL9YCVuPfBR5G1tr55pVcDG48HB/VtwVWIf7L/uZZjPnioSO+oieE1lZF6
-	 MBPTepQ+862TugI1zZspCSCeS4H81jx6BpVMZGbgZvQ83bN/19MSeWAnjxCTAeCy4D
-	 jgMUU6PYJHAw/Acs6QJOzDQ/jTINI67DSEnKKNkcAF0OCO14EUQ//nJL2vQPKQTe/E
-	 Y+nzES3JJ+RkWWpGr052Gb9Eiql+Q6l/HkLjCksU9WPmvoVAvrn4hFl4Nutn4jihKK
-	 GFdXk9Yz4mGuYqHhv/RpSSxYGe6WzzOKIJGBxlyQf8G66F3GPJNiht0dkgOXQw+yGO
-	 aPlH4f+jm+dp9dkG/OXGKycqgM+aRFqFLy4RR2tOPjcsOZdjetWfgHgEDjfy8vYm7e
-	 0onXxc/+PZ4GCznhONM/0f8GIEk4+lb3yMEztvwkZu7ekrLbknAoiYrKL9gERGTmR7
-	 NHBZU7pN0qv2I+WAfNR669B5Z08XK9D3uAv+2hcnUEZY42qrBrP7MrsJQiXyT2ZTJo
-	 ADoWt5ihdUFIUrwq44ODoZacS+uvOqK5TQGrzJj+YJYJseSYIrlwgB1mXNuURw+RWL
-	 9BWHnFdN72yxwBeMYfW0ndq+8f3fHAQ/sDI+xJQaS9C3Xr5+JFy+aONGSSAunMhlWh
-	 0VQWuDu1xtLer1+ihQw46OvQ=
+	b=lI0j0dury37/40BMOf2FxxhasZLvwE5jofAWPPAC/qMjiQeBbsl12GdJAIPeJCObY
+	 tag1L+H/ttEsvE5kGMQu7AHOboIx5TK8VipBnZD9Uc3lzaWhjVUrRt0j92WT81AEYT
+	 1gMvfZjBUsi+haW9mYiRZUzM3jXGkFiL/ar8sV81OSuGhJTZ+rr5TAAKIcWRonJryQ
+	 erhkTe2AS89T1xaXYJc3Ixljxl5cQUtsyHc38t2hcfjD6Yb03UbcSU05h9fzZEqNyu
+	 iW3MmWTBiLzOjFxyMsxstaSQ7XOpOnGixirDE3G3GfgOkhy9+/9Rmq4pYffm8b61EG
+	 JkiaolmEaHekHTmF4mCaDS5/BkImOYXEmBRSYZbWWYzyBZLH4iFbgTkD4zbtSUdnl/
+	 z/EWan+Z5pmQIdc96YEHe1oVa8/tGZO4F1Cs/6IceSX1IeaZa5SsA9efi2weMWMK5U
+	 FCa3UMnJQAMz1rqMKNfzXrOR30acpGv4sHj6OvHkCxsibg6mGyY57w+7NpKhT7V9el
+	 guGoq3DC9pMbmQb/IaCIniHF/e6PKGpjXeT3aMUqfRjBGVPqpnhL7zjDv0Wzj6Ud0U
+	 2XyZfHZZMaDh+cVRSN89VNv3fxdNpDO9cIs76RhcWw0hPabpBa6bD73a9VyENcr0uV
+	 LPVTi6UPa9y+XGImU37+Nvzo=
 Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BB25640E0192;
-	Wed, 14 Feb 2024 08:05:02 +0000 (UTC)
-Date: Wed, 14 Feb 2024 09:04:56 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B1EE240E00B2;
+	Wed, 14 Feb 2024 08:36:29 +0000 (UTC)
+Date: Wed, 14 Feb 2024 09:36:23 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
-Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"git (AMD-Xilinx)" <git@amd.com>,
-	"Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"tony.luck@intel.com" <tony.luck@intel.com>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"mchehab@kernel.org" <mchehab@kernel.org>,
-	"rric@kernel.org" <rric@kernel.org>
-Subject: Re: [PATCH v3] EDAC/versal: Make the bits in error injection
- configurable
-Message-ID: <20240214080456.GBZcx0KPuNdoD0dQEf@fat_crate.local>
-References: <20240208094653.11704-1-shubhrajyoti.datta@amd.com>
- <20240213183439.GDZcu2PwWnFxsRp7x2@fat_crate.local>
- <BY5PR12MB49024FB7BAC0CF996726E366814E2@BY5PR12MB4902.namprd12.prod.outlook.com>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, muralidhara.mk@amd.com,
+	naveenkrishna.chatradhi@amd.com, sathyapriya.k@amd.com
+Subject: Re: [PATCH 1/2] RAS/AMD/ATL, EDAC/amd64: Move MI300 Row Retirement
+ to ATL
+Message-ID: <20240214083623.GZZcx7h_BcIWpoEmMJ@fat_crate.local>
+References: <20240214033516.1344948-1-yazen.ghannam@amd.com>
+ <20240214033516.1344948-2-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -85,12 +80,36 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BY5PR12MB49024FB7BAC0CF996726E366814E2@BY5PR12MB4902.namprd12.prod.outlook.com>
+In-Reply-To: <20240214033516.1344948-2-yazen.ghannam@amd.com>
 
-On Wed, Feb 14, 2024 at 05:33:25AM +0000, Datta, Shubhrajyoti wrote:
-> Thanks tested it working fine .
+On Tue, Feb 13, 2024 at 09:35:15PM -0600, Yazen Ghannam wrote:
+> DRAM row retirement depends on model-specific information that is best
+> done within the AMD Address Translation Library.
+> 
+> Export a generic wrapper function for other modules to use. Add any
+> model-specific helpers here.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>  drivers/edac/Kconfig        |  1 -
+>  drivers/edac/amd64_edac.c   | 48 ----------------------------------
+>  drivers/ras/amd/atl/Kconfig |  1 +
+>  drivers/ras/amd/atl/umc.c   | 51 +++++++++++++++++++++++++++++++++++++
+>  include/linux/ras.h         |  2 ++
+>  5 files changed, 54 insertions(+), 49 deletions(-)
 
-Thanks, now queued.
+So basically I can zap:
+
+8be4984891e0 ("EDAC/amd64: Add MI300 row retirement support")
+
+from
+
+https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-amd-atl
+
+and you can send me a patch which adds the row retirement straight to
+the ATL?
+
+Thx.
 
 -- 
 Regards/Gruss,
