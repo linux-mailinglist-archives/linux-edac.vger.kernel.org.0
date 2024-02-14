@@ -1,236 +1,184 @@
-Return-Path: <linux-edac+bounces-573-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-574-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A01C68553DD
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 21:19:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94E38553E9
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 21:23:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5737E293E33
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 20:19:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39A6D1F21DA5
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 20:23:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA2AB13DBBB;
-	Wed, 14 Feb 2024 20:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7E713DBB6;
+	Wed, 14 Feb 2024 20:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="B9L65EMI"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Nr7DOj6X"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4792A13DBA9;
-	Wed, 14 Feb 2024 20:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707941954; cv=none; b=jGiNjdNUldnK+KQCP3ZBSTHRNr8+XP9SLaAKZr6ePavdAShMZJw7HY3PCOc6xOZ4NiWqzQhINdY3sDkVWEMKhkAqa1J7ioeIPzf/olLVBz4vJtPkndGh2ERwK9QZ8XrgRKDbR62DSSElTYcR+++P++dF7dDOJsxsxv1NP87e7pw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707941954; c=relaxed/simple;
-	bh=c7phOXNT4Dkql8q/Y/2mhdiuhF8tmZLyQsVm70ulEM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tFXcGWUHtNvtsgAH9NWImgD9ahKCBkCT2wjDWLtS32TbtOYaLpDq9d99sLTdD7grWEsP/brn67lwwwGGe/pF7NLGeGwY2YzSzfFJuTVOXoq9O//l9uzg54qzXzO+T+dFu4gpoluqPbjhf3sBwGLho3Z7S19fKdUjnU9my55kiO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=B9L65EMI; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3B1AF40E01A9;
-	Wed, 14 Feb 2024 20:19:10 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id nzSfv2Sp4XZL; Wed, 14 Feb 2024 20:19:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707941947; bh=ighEcsqx7KfyfF1ddIXJeKNu80xIvoW6GUDahetkqN4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B9L65EMIybREj+F+VT3Xfs7LRXTCHux0EQQRoovwDeGYoVLwjZhBOynkZrWVpTrth
-	 +WoGFeHdP+LzNc4z4pvKWsJ3DR0UQBJyy8m7eUDWR5KBVJyx/Y6pfudaZ8A/QCuWa/
-	 V/AD+MXDuYGbJhZW9oNsNDzKcf6OUGvosDMbTIXUPlstHz5pneiPvJEnjLZckJ1PJG
-	 Sw56PPozg1ZzdxTnFQcj9nm1KC5cgse4Z0/JXECONLCeK0fnMsfZVFkXohOcAk9mOh
-	 b6hvhEQV2eQEpdxtS3g55WYghUsTcBRB8+Es9nwMgdxXjVTxHjvA5Y1smDSSSgkKZA
-	 w3Q0NI08itPSRhM/2CyU8RhQeBaMw5+mX9HSyvyISd2wNPUqm2HTvzpB4itv0NJd5m
-	 vYGJm86kxQOI23bgjqRZouS3gZ+2x6A/Oj/NiXQE27g2rwIyZi9AV+H5ZPBfQ0DgiT
-	 0H0P3t9NZUd/s+JlC5CbnYlJ8OD0kdysfRpo9NKXsEmdjPCn+lAPVrPzgRYETf9SuI
-	 53in3i7fM5D5roM2MgNihmXdnwpyE8592uCwy3NtngjCfhBcm5AtqbEWXIDn5efS8J
-	 Ox+UQ2vcQGsjndzbAossnKdSANg/xezG0hUlWO5s0TOPbHlLkp7u0ItjI5kr3dJesL
-	 7Do4d2Ca3xF+d4xAfVZVfN+Y=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A30DD40E00B2;
-	Wed, 14 Feb 2024 20:18:58 +0000 (UTC)
-Date: Wed, 14 Feb 2024 21:18:57 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com, muralidhara.mk@amd.com,
-	naveenkrishna.chatradhi@amd.com, sathyapriya.k@amd.com
-Subject: Re: [PATCH 2/2] RAS: Introduce the FRU Memory Poison Manager
-Message-ID: <20240214201857.GRZc0gMWRBEzhRznUN@fat_crate.local>
-References: <20240214033516.1344948-1-yazen.ghannam@amd.com>
- <20240214033516.1344948-3-yazen.ghannam@amd.com>
- <20240214120214.GJZcyrxgyLLwQ8y19Z@fat_crate.local>
- <1a46d8cb-104f-4854-a09e-c60095e2dcd0@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20EF13A89A;
+	Wed, 14 Feb 2024 20:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707942198; cv=fail; b=cLWBs5RxZj3W3SZSlnDz89afgC/VV73LqIMHqQQLh37V2ahQ4NBpEfph04jkHaFJpVsFZ4CuBvH5aUmXYUyEkkY0zqVr2dnkYlEfn/Ucgh9DfLVEmgtLjAxfY34TIzyNnYECDsnPBr0QrLE0PvVQrTEGmC0CR3DYbUfCvfas3HQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707942198; c=relaxed/simple;
+	bh=d2N49HARO1EboJRLYJnCYztvTP/4WVtjbcge+2tE20s=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=a6ol2bY/Fk8iqbH9PZGhgxng7oIxo5c6dQjMuA9tlGnfHrPdGNehZivi6DFInwbaYDeRk7uGRYxa4JoNAiiKYnrcY9UMdNBDRJw014wCcNa2n/APgx3mQprWTdakCeD8178wnLeHeTjBmp1b2+jyF0ITsC87t8npxjUZ09IpbKg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Nr7DOj6X; arc=fail smtp.client-ip=40.107.237.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RvtF40gPJ/YQch7zWrMh7C6FYwsFNj0xWApjPvb2klz2BLdfb46kFBD11+bwD6IH9AtgTuotPMaplqGJ4YHlQPesCVxVyUbjXoirxnM+KCllMa63U9gF7MGmyn4n9KYPOQZDGYviUlH6Y6KmUNGPMJ0GDEDIZSJ1dqV7LSLihDf3SSwhmmbUWgApaLJ7EtdNMvS8Ef/iMKnuy1LFExPUhFEXw6eyL+uqu7pTC7uJNY+1ymA2sZKzg3QfDyMI+nKd9kkPsNsLEHGe65EerSj4s4d0Zu3689Fl0tiEG5jeFTor2Jf7/hwghZGUmkXlCEmZlxIw5dKq1sv5MKmgakePPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TD9sgQD+ivkok8pmdNpaJeCrwuO5rwrvPK76WC/Q+1s=;
+ b=YTu40SLIxnV2Cv373mMGHSX3uYwjCgnYc6iXxIUP3QnB1n1xEV13PMpCC9Eh9SMNdeS/op1UiH5Cf1pqPavtxmPj7KmpHtOwO4yvuFC5jlu1qI61q/8xKj6k4oZuYn5aYs+1NBR8dacr99JmZjaAoU/TaQ+8sPOvzSmKmn4/ARrXjqYwWVPPZdT+tiuLjtgONVnSOnlrrkTZMbX7Jvz/lqv9UX6x42axqYaclGvFkFsugiUMJCYTIB6CV5TRmQl/zGdy1613dFzAEUvzSdnfdYUF6ESmSsCJQ2roWLmKCSR3Zl0p8FkJtTPjYTtGF3uL2xxzKXswGEPcwFTfnHIm2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TD9sgQD+ivkok8pmdNpaJeCrwuO5rwrvPK76WC/Q+1s=;
+ b=Nr7DOj6XzxcJR7HK9fon3OgLix4KcJo9YYGtvOuL/jVzhlHeOMLZ7S3iR7V/pJE9TCt3GU4zAALjmogGkm+5LwTjN0xciWnqNEyWwN4JnY9fTvMbbEJjHHnaCsPtg6ffbeXVJOnBEip2Sy3pMydkkPrIdIVhJcSBv3ukej8CWwg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by MW4PR12MB7287.namprd12.prod.outlook.com (2603:10b6:303:22c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.21; Wed, 14 Feb
+ 2024 20:23:13 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::3a46:cf50:1239:510c]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::3a46:cf50:1239:510c%7]) with mapi id 15.20.7270.016; Wed, 14 Feb 2024
+ 20:23:13 +0000
+Message-ID: <fc83e824-f37e-4164-95b3-e57bee60b2a9@amd.com>
+Date: Wed, 14 Feb 2024 15:23:11 -0500
+User-Agent: Mozilla Thunderbird
+Cc: yazen.ghannam@amd.com, linux-kernel@vger.kernel.org,
+ Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
+ <rric@kernel.org>, linux-edac@vger.kernel.org
+Subject: Re: [PATCH 1/7] EDAC/amd64: Remove amd64_pvt::ext_nbcfg
+Content-Language: en-US
+To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, bp@alien8.de
+References: <20240213112051.27715-1-jirislaby@kernel.org>
+ <20240213112051.27715-2-jirislaby@kernel.org>
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20240213112051.27715-2-jirislaby@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN0PR07CA0013.namprd07.prod.outlook.com
+ (2603:10b6:408:141::19) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1a46d8cb-104f-4854-a09e-c60095e2dcd0@amd.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|MW4PR12MB7287:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a6e758c-e4ae-4e05-c357-08dc2d9ac517
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	IaWJ93eR+deFsU29mrbD8XE//5/XiLo1ysSUfhCs9g2IELJNkWUd/F7m46fcgPBuE8O1yOA0usbDDmayPDA6rNFrOCZIjIHOt3Z71jctDNr/u5EhGVDxb6E+iYcrQh0tjBpUOlQr9+VzG0m1whh3j+YqgylYl1KAXwbTbmbNro57kTaHnGC2RAhoucd23zX5Zf+a+eXUWxqQqL5qfeNF6x2YzGzRanLRFgAFQguwRhpV3ynZyYmqHaMbcLb2s1h4zbtxuO89Xq/Kj0gco6PSztLgyBl2lma06qEvnUEHbh7LdFHJzv84OVJa3+CR7Ra1yA9+jStCkxV5oIz7CGuAxa6Rnv6gqYUpQKzOLccubczrIDaF/WSuWLIe9dUIcY01IYOk0NQdhvTezIKnAYKpOW2XQRhswolym7aQG5C9w4+bCrYCFaR5nahJsD7yxoKNDfzVq2dcIk833Ic/jW6sQSw4dpXTUo4jOVs7K0wktZcgiGR8RBy9P+gmhgy3EXSZk7GbVpntmk2rXOzoGrwqbmbjPflST+2H24x0U1rblrQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(366004)(376002)(136003)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(6512007)(6486002)(966005)(478600001)(41300700001)(31686004)(8936002)(8676002)(4326008)(2906002)(44832011)(5660300002)(6506007)(66946007)(53546011)(54906003)(316002)(66556008)(66476007)(2616005)(31696002)(86362001)(26005)(83380400001)(38100700002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WkdHcWU0TUtXTnlxUFE3Nm1uZW9sZWxqdHdhaCswajgwTnE0RjhsclBuSWw0?=
+ =?utf-8?B?NmJOZ0JLOHd3NDhrdkZNSHJrWW1vSG9KbU94aTlkTmtnT2U2UWFsdWROQjRi?=
+ =?utf-8?B?T0pmYlpRaDhGbVdYZzFMV29mTkJ1NkFic3hNb2V6YU8vaTlDQVdKNGc1akV6?=
+ =?utf-8?B?VzlVSWtBa3IrekJqSzFxMElDeVl2SFBtc0MxWXg3U0pxU0NLV2JhZkpxQVRo?=
+ =?utf-8?B?ZWk1WW0vdjlIeDZTMndvNjhCNHc4T3NMbWJZMU9xRjhYL0ZiMXhhZEN5TEZV?=
+ =?utf-8?B?dlFuK28zM0pXRXlweWhOQm9kNHNOWkdublI1V2l1N2VNU282L0w2NXlaeCtT?=
+ =?utf-8?B?ZStQYkFwejRwVStPOEpjRDFVZkU1cVM5NTRXQ2dsU0pHQjBnMDJ2cU13c3d0?=
+ =?utf-8?B?ZWtDS2lMYTVhYkpyU0MwYktMSkpiNE9NMEhnS29pT0U3UFpaL2pGWlcxSlVO?=
+ =?utf-8?B?ek9lbVBDOEY3ODlzNWVpcDhSRHN1NWdDbFdMam1sdm1CMkVQcmUyL1lRclBo?=
+ =?utf-8?B?UGZEczgzTE1JK3pVM2R1OE1nWjVtQWVldm5FTVZwUGlMc1JOUzRvK3daQTZT?=
+ =?utf-8?B?Yi9pa3J0bGNOczcxMXpFNU84NUtnMU95U2EydDVOYkVpYmF4dnJPTkI2RjNz?=
+ =?utf-8?B?RDhuTkZxaWlyYndFY3M0RGllZER3dEdSSUtJZ1JPR2dLN3JCdGNkVmtDSDBM?=
+ =?utf-8?B?cTdoNm1QeVExMXZIS29zNTlESlZmazR5QVlrL3hjaUo3K0NhM0UzczBYcEtv?=
+ =?utf-8?B?Z1JOMDNhNlhRcStFZ2FXZld6cWZDMDBKckZISTkwTTlCNUlsSjhSN3BhdXRI?=
+ =?utf-8?B?MnprbklCcjJ6a0d5WFJDV3BxK2ZwM1pSRzNHUGNMeVAwYTFmd0N0S2hhWUtL?=
+ =?utf-8?B?Nmtaa0h4RGxId0hBQlpkQ0IvZi9aeHJjeWJ1WEh5YXE0bWRFbm0rcS9QLy9O?=
+ =?utf-8?B?NkRCL0xjSDhYMVFScUx0MEVENmhwWi9xb08za1IzaHd5VVg4TGhlMVBwd2Yv?=
+ =?utf-8?B?Z0xFcGh0akJjeFF0TDFVaTFuZDFEYS9vMlZITXpHb0d2SGJFSGpTWDBSM2Q0?=
+ =?utf-8?B?eXBvUU9wTllFT2tJUUd4SzhaNnhVa2JQbndBK1QrM3J4S0JIUWJTYmU3c2lp?=
+ =?utf-8?B?SnZ4N3pWRFRQSXlmbS9rMUNSbnpKUnZqdlVNbGNaNitRMDBTaUhYb3NPVUJZ?=
+ =?utf-8?B?Z1ZkclNKRVBzUFhiNElXQnhVTFdmaWhNZlRrNFZudmU4SjZHdkZEcEpxdmt3?=
+ =?utf-8?B?SElBaS90bDErOHE2TnlCYi9INTJ3WnBleDVTa0NRZ1dkL2tqZGJXcTlGVHAz?=
+ =?utf-8?B?QnR2c3JWZG4ybjRjRFhzUnJmZTVJTm0rVThjcGZQT1ZFcVVZd1JMSWwwNURx?=
+ =?utf-8?B?ekJSWVhvMWdhM0doN1N0eGN1MEpaRWZVajFYdyt0WXk0eXplYllCU2NiV0dR?=
+ =?utf-8?B?b3MxOUhMRUU2SVhYY3pYWG1GcWxLck9DeWUzSHpuaDlWcFduQnRxa2tTUGFZ?=
+ =?utf-8?B?QXpYMHRUVStCb28wZFhmMURhVG5ndzVRejBZc0IxaWpTSmw0b1Z2eU93ZWNz?=
+ =?utf-8?B?ZExMUGx3aFZUdFc3UCtrWU96ckF5Y0VYS1hNSThhWUFMbTNjL0ZFcGZzVmZL?=
+ =?utf-8?B?QVpKcWpEc1ZlTFpXdFIyY1o1ZUFzcFp5N0toak1WQ1EzQUIrWFpIM1B6cFpO?=
+ =?utf-8?B?cDFuUDdnN01TWGFadkdvcnlGUGRNSnFBaDVaMHZxK3hpajVCTWNCbkRkc3Zz?=
+ =?utf-8?B?d3RPaGsxa3V6cFhYZFRycS9uQnpUN1NjTngwS3p3WDlhb3Y5NXN6UFUzZTk0?=
+ =?utf-8?B?ejdoTTFuUlVDdHNONHQrdC9QcDMrU2RDaThlSEUzWU1HRDFvbE1jTzJPNzNq?=
+ =?utf-8?B?YjFhZ3ZDOTdycEN3dk40L3U4V3pHcFI3dmZld3hyaUxVTGVpRTZYS2dUL2ls?=
+ =?utf-8?B?WXZNeWFja1BqNnRZalYwekJ2VWhjeEdTODdpZ1VVRURVdkVvUlZ4VFhCWDRi?=
+ =?utf-8?B?OXhqZzZKb25yWDFzeVhKVG5RN3M2VUh3a1luenYwZjVUNzB6bEtXUllIdjZT?=
+ =?utf-8?B?aEhYd3hoVFZ6UnRZRjErenBPdDd1dkU1ZUZlbmEvOEI1OUdCKzdZNkNERHFQ?=
+ =?utf-8?Q?1lue1OUvMwDm3g8+KbbWv/NbB?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a6e758c-e4ae-4e05-c357-08dc2d9ac517
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2024 20:23:13.6093
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1REgjI3eScKmI2o4YXoDVRCDtMUM6z6VzHiMk912yMtwlrZMmUUuAmHGtFzYQpBzstUQ3LShRPJuXHkomACBGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7287
 
-On Wed, Feb 14, 2024 at 10:33:15AM -0500, Yazen Ghannam wrote:
-> I was also thinking that MODULE_DEVICE_TABLE shouldn't be used. Not all
-> MI300-based systems will need or can use this module. And it does depend
-> on specific platform configurations.
+On 2/13/2024 6:20 AM, Jiri Slaby (SUSE) wrote:
+> Commit cfe40fdb4a46 (amd64_edac: add driver header) added amd64_pvt
+> struct with ext_nbcfg in it. But noone used that member since then.
 > 
-> So the module should not autoload. Users will need to manually load it if
-> they know that it's usable on their platform. We can keep the cpuid[] and
-> model checks just for extra safety.
+> Therefore, remove it.
+> 
+> Found by https://github.com/jirislaby/clang-struct.
+> 
+> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Robert Richter <rric@kernel.org>
+> Cc: linux-edac@vger.kernel.org
+> ---
+>   drivers/edac/amd64_edac.h | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
+> index 1665f7932bac..b879b12971e7 100644
+> --- a/drivers/edac/amd64_edac.h
+> +++ b/drivers/edac/amd64_edac.h
+> @@ -345,7 +345,6 @@ struct amd64_pvt {
+>   	u32 dchr1;		/* DRAM Configuration High DCT1 reg */
+>   	u32 nbcap;		/* North Bridge Capabilities */
+>   	u32 nbcfg;		/* F10 North Bridge Configuration */
+> -	u32 ext_nbcfg;		/* Extended F10 North Bridge Configuration */
+>   	u32 dhar;		/* DRAM Hoist reg */
+>   	u32 dbam0;		/* DRAM Base Address Mapping reg for DCT0 */
+>   	u32 dbam1;		/* DRAM Base Address Mapping reg for DCT1 */
 
-Ok, makes sense.
+This field likely was intended to be used with the EXT_NB_MCA_CFG definition.
+But I agree it's not used and can be removed.
 
-The above converted:
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
-diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
-index bcee828cb916..6b280cf503a4 100644
---- a/drivers/ras/amd/fmpm.c
-+++ b/drivers/ras/amd/fmpm.c
-@@ -447,7 +447,7 @@ static int save_new_records(void)
- 	return ret;
- }
- 
--static bool is_valid_fmp(struct fru_rec *rec)
-+static bool fmp_is_valid(struct fru_rec *rec)
- {
- 	struct cper_sec_fru_mem_poison *fmp = &rec->fmp;
- 	u32 len = get_fmp_len(rec);
-@@ -486,19 +486,12 @@ static bool is_valid_fmp(struct fru_rec *rec)
- 	return true;
- }
- 
--static void restore_record(struct fru_rec *new, struct fru_rec *old)
--{
--	/* Records larger than max_rec_len were skipped earlier. */
--	size_t len = min(max_rec_len, old->hdr.record_length);
--
--	memcpy(new, old, len);
--}
--
- static bool valid_record(struct fru_rec *old)
- {
- 	struct fru_rec *new;
-+	size_t len;
- 
--	if (!is_valid_fmp(old)) {
-+	if (!fmp_is_valid(old)) {
- 		pr_debug("Ignoring invalid record");
- 		return false;
- 	}
-@@ -509,8 +502,11 @@ static bool valid_record(struct fru_rec *old)
- 		return false;
- 	}
- 
--	/* What if ERST has duplicate FRU entries? */
--	restore_record(new, old);
-+	/* Records larger than max_rec_len were skipped earlier. */
-+	len = min(max_rec_len, old->hdr.record_length);
-+
-+	/* Restore the record */
-+	memcpy(new, old, len);
- 
- 	return true;
- }
-@@ -588,36 +584,35 @@ static void set_fmp_fields(struct fru_rec *rec, unsigned int cpu)
- 	fmp->validation_bits |= FMP_VALID_ID;
- }
- 
--static unsigned int get_cpu_for_fru_num(unsigned int i)
--{
--	unsigned int cpu = 0;
--
--	/* Should there be more robust error handling if none found? */
--	for_each_online_cpu(cpu) {
--		if (topology_physical_package_id(cpu) == i)
--			return cpu;
--	}
--
--	return cpu;
--}
--
- static void init_fmps(void)
- {
- 	struct fru_rec *rec;
- 	unsigned int i, cpu;
- 
-+	cpus_read_lock();
- 	for_each_fru(i, rec) {
--		cpu = get_cpu_for_fru_num(i);
--		set_fmp_fields(rec, cpu);
-+		int fru_cpu = -1;
-+
-+		for_each_online_cpu(cpu) {
-+			if (topology_physical_package_id(cpu) == i) {
-+				fru_cpu = i;
-+				break;
-+			}
-+		}
-+
-+		if (fru_cpu < 0)
-+			continue;
-+
-+		set_fmp_fields(rec, fru_cpu);
- 	}
-+	cpus_read_unlock();
- }
- 
- static int get_system_info(void)
- {
--	u8 model = boot_cpu_data.x86_model;
--
- 	/* Only load on MI300A systems for now. */
--	if (!(model >= 0x90 && model <= 0x9f))
-+	if (!(boot_cpu_data.x86_model >= 0x90 &&
-+	      boot_cpu_data.x86_model <= 0x9f))
- 		return -ENODEV;
- 
- 	if (!cpu_feature_enabled(X86_FEATURE_AMD_PPIN)) {
-@@ -641,7 +636,7 @@ static int get_system_info(void)
- 	return 0;
- }
- 
--static void deallocate_records(void)
-+static void free_records(void)
- {
- 	struct fru_rec *rec;
- 	int i;
-@@ -728,7 +723,7 @@ static int __init fru_mem_poison_init(void)
- 	return 0;
- 
- out_free:
--	deallocate_records();
-+	free_records();
- out:
- 	return ret;
- }
-@@ -736,7 +731,7 @@ static int __init fru_mem_poison_init(void)
- static void __exit fru_mem_poison_exit(void)
- {
- 	mce_unregister_decode_chain(&fru_mem_poison_nb);
--	deallocate_records();
-+	free_records();
- }
- 
- module_init(fru_mem_poison_init);
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Yazen
 
