@@ -1,66 +1,66 @@
-Return-Path: <linux-edac+bounces-541-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-542-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD59F854535
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 10:29:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7804A854725
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 11:29:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 748C528E713
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 09:29:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 348AF283AA3
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 10:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF9412B9B;
-	Wed, 14 Feb 2024 09:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F8817581;
+	Wed, 14 Feb 2024 10:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="JUYCd74y"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="C9QMQ6yK"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3C6168D0;
-	Wed, 14 Feb 2024 09:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0479918622;
+	Wed, 14 Feb 2024 10:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707902941; cv=none; b=M6ZvVPfuBRBEU9CVcQ13Txkp/kQlqXOn7213MKSDtg222KTh5CTujaZKvg69BnhiCkZdz0Y2bA6Lc/Zav6L45hV6IAHSaIZRmgRVvCnXvY2HbZzmRdMmndAwxeiheExIJl2AxmL8n4LXK47eVN3i4eJ+Xg5AX1o8RwC/Kwgmupo=
+	t=1707906591; cv=none; b=RJ68+JDzFav9T4/0MH4BtlEwpUnAdZ3kpkv+TloTTBsTJB4T0p1VDS2EYbriKCKyxYVxuwRuvCo41+esvvK+K5FqbfDPNFToKzm7oLj8uBXQSIyxk5A5hmZfNybD6rjONH1ebEn9OUJbSBH8HXEy66hpPJ82tBU9H6OEiG7u9Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707902941; c=relaxed/simple;
-	bh=1hpRClKmTPNX2vTFzy0Be6KFiRl2Dy3oFeZC6agd1a8=;
+	s=arc-20240116; t=1707906591; c=relaxed/simple;
+	bh=P8NIjxnK1HpiSt8JOMSGnObb9cSdOm4A3Kl6MdIabe8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iwJeAFwQMDzB2IcQoZap1bZczWbb47YmaL44ePtaiCCjK4GHbBwEgWzXuC0+zUUINAToINEs2MuQmPp5rABH/2oA5X7DUpEEFG5Z2hfeFULfTIujgTImw2ilb6cnHOebkzYfMBuIYmjMFc+Gf/EAiKMlO1mpKz/r3RWP5CZjGwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=JUYCd74y; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=dKJ4K4Dm6Y8R+4j9blAXpH1U61VmsBA974vPbqlbLlgIqJ8wvYJ6MdnpVzr/3p365or6hU6jFHY8UiCb538pf7DwYb9i7Ea2QrVoP28ZMMqkleU/RiSU50XMqBoMca6d2uOipG/w6g9LEzMk4tuBeAS4z4gmKIkVZUicOyiwT94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=C9QMQ6yK; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6473040E01A9;
-	Wed, 14 Feb 2024 09:28:57 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 537F940E0192;
+	Wed, 14 Feb 2024 10:29:45 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id WP9Zj7QVWper; Wed, 14 Feb 2024 09:28:55 +0000 (UTC)
+	with ESMTP id OJkRduORFJq7; Wed, 14 Feb 2024 10:29:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1707902934; bh=LD2OQzDMo0zKu6jbPv5GEtHNMYpXCiZT9uYQtfb85b8=;
+	t=1707906583; bh=7/LMMLekrkUxQZt8slNeuu2XCYWDTa2NzF89+ohaswY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JUYCd74younkhk806A/9+fjVO4i5LbNUyM3b2pcysD+bGG5zRTZu2crWvgZ1muVuD
-	 AAwFWHkLH6Gc+79SZwfdIO7e0WTf6oDluFyGG7C+UbWsyyUycxi1cApg4Mbz8fhXjq
-	 k9kGanvl5ckEwJ5fU/GC5FR9uPDD6WLQpSIlZnap8CQvclo4etEBiWuiYf5o+tMNPC
-	 so44o53+V75/3e8bZ62UW8e1AXNwENPt9XUW3iUA89ulBbxRyyLqVlEjI0zWs57Wx+
-	 MFbVo9cKTsg6tDejxAQyxWxDqSMsayfEHMSW6uqJ7X+FPshwXyBhkx2rwR9LaGwy6e
-	 1RfyxRARn39R0mW9cT2PfijnNc9xXzVcWYS8FWOf3xukwCADY5Nez8SVBUTY9DysdH
-	 9XW+6GFcglHPjtXtMg5We4u5LUvumXCxGZAyoEu9P5f7xWGCo7Be2LuZeVUeVm1OaY
-	 ++uLYuHSc7tV1MZg3PSNkG5obCBNm/uucj4N7jhUr/JW3cCYaThk3Vls+GmbkclheO
-	 u+8Uz15u2XGhNFRZNEskKhjd5uy42xR6rl6OWotW6/U5rjw5Nsl+yY0xvSGvO/G6ei
-	 JHTvhrB+1mRWxd9Jo2q5fIV4Qyr3iGuqQh8nRFshqzNTCMzvKC1YvOJwnCc2BibVB1
-	 bufdPWF3P8V/xQw199YS05bA=
+	b=C9QMQ6yKDpmEIF1ahn39D8l/7HFv4shwH0OPcYcHug6Iy2UIijdW5sUKsAiTug2lX
+	 LnmNo682LxpVQZ+AOdtO2kVrBxgSlc1sAc1BvyXIWJ4pjTLQRVb75NHmpaOgMorPEa
+	 +jlpWzb2zBT7qCBWXYt7/N67dAAqY52HL+ZiphbUKrUJHS5j/TPVeWTuIdORw/pzkU
+	 QsbJlX3DC02kdL4aRa1htYey2rYi6HOzHU+5jqnMobxrWTb8rP7zl0jHQ8Q3OJx/7w
+	 kNUfn0qr70SNBBjeyaSHtEDx6/Cetlqy/hndUGdIQyZNptgjVJx898LKSQ7X5VV33p
+	 fCW76Ep89RWfZqTAeidiXF3YiLaSKKqZjGrdk+ruSZsunhYYywXUSDWBZfo/nNGMxg
+	 SnEckHnI4zfM5tofD20K3OdgnLesMmGeg6ngukd+5Vbhn4kyc3NK45QVVCtasqAfPS
+	 AXeAAqJ80Gw3vxlnvbFN0AiMOuwaGaAFz/3CVb0r8bvewQKf7OFloG93BI+J9yCsda
+	 W5ni+nhkFaemhkkNkM0JXjL6sEVmx9wJ0EvQdraZ+x5XQw9ZqaHCUDCae5ZJu4+8yU
+	 Eqs+KMFq4KsP9WBQWPWjG57YTtjNOGPaX/Oa8y/R8v38aqCUSK4Umexq0Oj6JlkU7m
+	 0jR/nOswTZIoWQR32pJ7Oyh4=
 Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8433E40E00B2;
-	Wed, 14 Feb 2024 09:28:45 +0000 (UTC)
-Date: Wed, 14 Feb 2024 10:28:39 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 06FAD40E00B2;
+	Wed, 14 Feb 2024 10:29:33 +0000 (UTC)
+Date: Wed, 14 Feb 2024 11:29:26 +0100
 From: Borislav Petkov <bp@alien8.de>
 To: Yazen Ghannam <yazen.ghannam@amd.com>
 Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
@@ -68,7 +68,7 @@ Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
 	john.allen@amd.com, muralidhara.mk@amd.com,
 	naveenkrishna.chatradhi@amd.com, sathyapriya.k@amd.com
 Subject: Re: [PATCH 2/2] RAS: Introduce the FRU Memory Poison Manager
-Message-ID: <20240214092839.GBZcyHxzsaz9NcijyV@fat_crate.local>
+Message-ID: <20240214102926.GCZcyWBuEBe7WRXWYO@fat_crate.local>
 References: <20240214033516.1344948-1-yazen.ghannam@amd.com>
  <20240214033516.1344948-3-yazen.ghannam@amd.com>
 Precedence: bulk
@@ -82,139 +82,72 @@ Content-Disposition: inline
 In-Reply-To: <20240214033516.1344948-3-yazen.ghannam@amd.com>
 
 On Tue, Feb 13, 2024 at 09:35:16PM -0600, Yazen Ghannam wrote:
-> +config RAS_FMPM
-> +	tristate "FRU Memory Poison Manager"
-> +	default m
-> +	depends on X86_MCE
+> +/* FRU Memory Poison Section, UEFI vX.Y sec N.X.Z */
 
-I know this is generic-ish but it needs to be enabled only on AMD for
-now. Whoever wants it somewhere else, then whoever needs to test it
-there first and then enable it there.
+Whack those:
 
-> +	imply AMD_ATL
-> +	help
-> +	  Support saving and restoring memory error information across reboot
-> +	  cycles using ACPI ERST as persistent storage. Error information is
+diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
+index 328e0a962c23..0246b13b5ba1 100644
+--- a/drivers/ras/amd/fmpm.c
++++ b/drivers/ras/amd/fmpm.c
+@@ -72,7 +72,7 @@
+ /* FRU ID Types */
+ #define FMP_ID_TYPE_X86_PPIN		0
+ 
+-/* FRU Memory Poison Section, UEFI vX.Y sec N.X.Z */
++/* FRU Memory Poison Section */
+ struct cper_sec_fru_mem_poison {
+ 	u32 checksum;
+ 	u64 validation_bits;
+@@ -89,7 +89,7 @@ struct cper_sec_fru_mem_poison {
+ /* FRU Descriptor Address Types */
+ #define FPD_ADDR_TYPE_MCA_ADDR		0
+ 
+-/* Memory Poison Descriptor, UEFI vX.Y sec N.X.Y */
++/* Memory Poison Descriptor */
+ struct cper_fru_poison_desc {
+ 	u64 timestamp;
+ 	u32 hw_id_type;
 
-s/cycles//
 
-> +	  saved with the UEFI CPER "FRU Memory Poison" section format.
+> +/**
+> + * DOC: fru_poison_entries (byte)
+> + * Maximum number of descriptor entries possible for each FRU.
+> + *
+> + * Values between '1' and '255' are valid.
+> + * No input or '0' will default to FMPM_DEFAULT_MAX_NR_ENTRIES.
+> + */
+> +static u8 max_nr_entries;
+> +module_param(max_nr_entries, byte, 0644);
+> +MODULE_PARM_DESC(max_nr_entries,
+> +		 "Maximum number of memory poison descriptor entries per FRU");
+
+Why is there a module parameter?
+
+So that people can brick their BIOSes if it can't handle some size?
+
+Can we read out the max size of the area destined for FRU records from
+somewhere and go with it?
+
+> +#define FMPM_DEFAULT_MAX_NR_ENTRIES	8
 > +
-> +	  Memory may be retired during boot time and run time depending on
-
-s/may/is/
-
-Please check all your text - too many "may"s for something which is not
-a vendor doc. :)
-
-> +	  platform-specific policies.
+> +/* Maximum number of FRUs in the system. */
+> +static unsigned int max_nr_fru;
 > +
->  endif
-> diff --git a/drivers/ras/Makefile b/drivers/ras/Makefile
-> index 3fac80f58005..11f95d59d397 100644
-> --- a/drivers/ras/Makefile
-> +++ b/drivers/ras/Makefile
-> @@ -3,4 +3,5 @@ obj-$(CONFIG_RAS)	+= ras.o
->  obj-$(CONFIG_DEBUG_FS)	+= debugfs.o
->  obj-$(CONFIG_RAS_CEC)	+= cec.o
->  
-> +obj-$(CONFIG_RAS_FMPM)	+= amd/fmpm.o
->  obj-y			+= amd/atl/
-> diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
-> new file mode 100644
-> index 000000000000..077d9f35cc7d
-> --- /dev/null
-> +++ b/drivers/ras/amd/fmpm.c
-> @@ -0,0 +1,776 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/* Total length of record including headers and list of descriptor entries. */
+> +static size_t max_rec_len;
+> +
 > +/*
-> + * FRU (Field-Replaceable Unit) Memory Poison Manager
-> + *
-> + * Copyright (c) 2024, Advanced Micro Devices, Inc.
-> + * All Rights Reserved.
-> + *
-> + * Authors:
-> + *	Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
-> + *	Muralidhara M K <muralidhara.mk@amd.com>
-> + *	Yazen Ghannam <Yazen.Ghannam@amd.com>
-> + *
-> + * Implementation notes, assumptions, and limitations:
-> + *
-> + * - FRU Memory Poison Section and Memory Poison Descriptor definitions are not yet
-> + *   included in the UEFI specification. So they are defined here. Afterwards, they
-> + *   may be moved to linux/cper.h, if appropriate.
-> + *
-> + * - Platforms based on AMD MI300 systems will be the first to use these structures.
-> + *   There are a number of assumptions made here that will need to be generalized
-> + *   to support other platforms.
-> + *
-> + *   AMD MI300-based platform(s) assumptions:
-> + *   - Memory errors are reported through x86 MCA.
-> + *   - The entire DRAM row containing a memory error should be retired.
-> + *   - There will be (1) FRU Memory Poison Section per CPER.
-> + *   - The FRU will be the CPU Package (Processor Socket).
-> + *   - The default number of Memory Poison Descriptor entries should be (8).
-> + *   - The Platform will use ACPI ERST for persistent storage.
-> + *   - All FRU records should be saved to persistent storage. Module init will
-> + *     fail if any FRU record is not successfully written.
+> + * Protect the local cache and prevent concurrent writes to storage.
 
-Please drop all that capitalized spelling.
+"local cache"?
 
-> + * - Source code will be under 'drivers/ras/amd/' unless and until there is interest
-> + *   to use this module for other vendors.
-
-This is not needed.
-
-> + * - Boot time memory retirement may occur later than ideal due to dependencies
-> + *   on other libraries and drivers. This leaves a gap where bad memory may be
-> + *   accessed during early boot stages.
-> + *
-> + * - Enough memory should be pre-allocated for each FRU record to be able to hold
-> + *   the expected number of descriptor entries. This, mostly empty, record is
-> + *   written to storage during init time. Subsequent writes to the same record
-> + *   should allow the Platform to update the stored record in-place. Otherwise,
-> + *   if the record is extended, then the Platform may need to perform costly memory
-> + *   management operations on the storage. For example, the Platform may spend time
-> + *   in Firmware copying and invalidating memory on a relatively slow SPI ROM.
-
-That's a good thing to have here.
-
+> + * This is only needed after init once notifier block registration is done.
+> + */
+> +static DEFINE_MUTEX(fmpm_update_mutex);
 > +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/cper.h>
-> +#include <linux/ras.h>
-> +
-> +#include <acpi/apei.h>
-> +
-> +#include <asm/cpu_device_id.h>
-> +#include <asm/mce.h>
-> +
-> +#pragma pack(1)
-
-Is that some ugly thing to avoid adding __packed annotation to the
-structure definitions below?
-
-"GCC supports several types of pragmas, primarily in order to compile
-code originally written for other compilers. Note that in general we do
-not recommend the use of pragmas; See Declaring Attributes of Functions,
-for further explanation. "
-
-Oh, that 1 is something else:
-
--fpack-struct[=n]
-
-    Without a value specified, pack all structure members together
-    without holes. When a value is specified (which must be a small
-    power of two), pack structure members according to this value,
-    representing the maximum alignment (that is, objects with default
-    alignment requirements larger than this are output potentially
-    unaligned at the next fitting location.
-
-So do I understand it correctly that struct members should be aligned to
-2^1 bytes?
-
-Grepping the tree, this looks like something BIOS does...
+> +#define for_each_fru(i, rec) \
+> +	for (i = 0; rec = fru_records[i], i < max_nr_fru; i++)
 
 -- 
 Regards/Gruss,
