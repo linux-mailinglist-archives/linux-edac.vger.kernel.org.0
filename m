@@ -1,184 +1,206 @@
-Return-Path: <linux-edac+bounces-574-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-578-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B94E38553E9
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 21:23:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7281985612D
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Feb 2024 12:15:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39A6D1F21DA5
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Feb 2024 20:23:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC4C81F21081
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Feb 2024 11:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7E713DBB6;
-	Wed, 14 Feb 2024 20:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Nr7DOj6X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E94612B152;
+	Thu, 15 Feb 2024 11:15:12 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20EF13A89A;
-	Wed, 14 Feb 2024 20:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707942198; cv=fail; b=cLWBs5RxZj3W3SZSlnDz89afgC/VV73LqIMHqQQLh37V2ahQ4NBpEfph04jkHaFJpVsFZ4CuBvH5aUmXYUyEkkY0zqVr2dnkYlEfn/Ucgh9DfLVEmgtLjAxfY34TIzyNnYECDsnPBr0QrLE0PvVQrTEGmC0CR3DYbUfCvfas3HQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707942198; c=relaxed/simple;
-	bh=d2N49HARO1EboJRLYJnCYztvTP/4WVtjbcge+2tE20s=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=a6ol2bY/Fk8iqbH9PZGhgxng7oIxo5c6dQjMuA9tlGnfHrPdGNehZivi6DFInwbaYDeRk7uGRYxa4JoNAiiKYnrcY9UMdNBDRJw014wCcNa2n/APgx3mQprWTdakCeD8178wnLeHeTjBmp1b2+jyF0ITsC87t8npxjUZ09IpbKg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Nr7DOj6X; arc=fail smtp.client-ip=40.107.237.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RvtF40gPJ/YQch7zWrMh7C6FYwsFNj0xWApjPvb2klz2BLdfb46kFBD11+bwD6IH9AtgTuotPMaplqGJ4YHlQPesCVxVyUbjXoirxnM+KCllMa63U9gF7MGmyn4n9KYPOQZDGYviUlH6Y6KmUNGPMJ0GDEDIZSJ1dqV7LSLihDf3SSwhmmbUWgApaLJ7EtdNMvS8Ef/iMKnuy1LFExPUhFEXw6eyL+uqu7pTC7uJNY+1ymA2sZKzg3QfDyMI+nKd9kkPsNsLEHGe65EerSj4s4d0Zu3689Fl0tiEG5jeFTor2Jf7/hwghZGUmkXlCEmZlxIw5dKq1sv5MKmgakePPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TD9sgQD+ivkok8pmdNpaJeCrwuO5rwrvPK76WC/Q+1s=;
- b=YTu40SLIxnV2Cv373mMGHSX3uYwjCgnYc6iXxIUP3QnB1n1xEV13PMpCC9Eh9SMNdeS/op1UiH5Cf1pqPavtxmPj7KmpHtOwO4yvuFC5jlu1qI61q/8xKj6k4oZuYn5aYs+1NBR8dacr99JmZjaAoU/TaQ+8sPOvzSmKmn4/ARrXjqYwWVPPZdT+tiuLjtgONVnSOnlrrkTZMbX7Jvz/lqv9UX6x42axqYaclGvFkFsugiUMJCYTIB6CV5TRmQl/zGdy1613dFzAEUvzSdnfdYUF6ESmSsCJQ2roWLmKCSR3Zl0p8FkJtTPjYTtGF3uL2xxzKXswGEPcwFTfnHIm2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TD9sgQD+ivkok8pmdNpaJeCrwuO5rwrvPK76WC/Q+1s=;
- b=Nr7DOj6XzxcJR7HK9fon3OgLix4KcJo9YYGtvOuL/jVzhlHeOMLZ7S3iR7V/pJE9TCt3GU4zAALjmogGkm+5LwTjN0xciWnqNEyWwN4JnY9fTvMbbEJjHHnaCsPtg6ffbeXVJOnBEip2Sy3pMydkkPrIdIVhJcSBv3ukej8CWwg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by MW4PR12MB7287.namprd12.prod.outlook.com (2603:10b6:303:22c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.21; Wed, 14 Feb
- 2024 20:23:13 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::3a46:cf50:1239:510c]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::3a46:cf50:1239:510c%7]) with mapi id 15.20.7270.016; Wed, 14 Feb 2024
- 20:23:13 +0000
-Message-ID: <fc83e824-f37e-4164-95b3-e57bee60b2a9@amd.com>
-Date: Wed, 14 Feb 2024 15:23:11 -0500
-User-Agent: Mozilla Thunderbird
-Cc: yazen.ghannam@amd.com, linux-kernel@vger.kernel.org,
- Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
- <rric@kernel.org>, linux-edac@vger.kernel.org
-Subject: Re: [PATCH 1/7] EDAC/amd64: Remove amd64_pvt::ext_nbcfg
-Content-Language: en-US
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, bp@alien8.de
-References: <20240213112051.27715-1-jirislaby@kernel.org>
- <20240213112051.27715-2-jirislaby@kernel.org>
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20240213112051.27715-2-jirislaby@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN0PR07CA0013.namprd07.prod.outlook.com
- (2603:10b6:408:141::19) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C106924B26;
+	Thu, 15 Feb 2024 11:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707995712; cv=none; b=DvxWR9b9IUHWA4ULqljJFdjU9ZbLgzYJ6/85l1JtQoJJH+6EOo3FNiZSIl1Hi4X4D+9Tgxy0X5nnnV9xALEGiUkeWvD6/+OFEYk9/LJp2eqziEzyBBxGNsmn1JMSlLo3qlpAFfUQxrND7inqGN2ZH4YZCvaDV/qhIF8ffYmfwdc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707995712; c=relaxed/simple;
+	bh=3YNSswNx6Yv0gmGhgq0yLDSBxhvbWAqTXfJN/rnKcdY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i3AL+njEmWveK9mOST7X45aSP6CwlfEvuhAdFPoEvRwlhqjTuIQofTuaP0e5IyaFxfsMAupS/BIo5kDafFrr48GWgQl8ksqm5NoeQHaSVrKS4tf+BVAfXH34/Xu1M2z29UP1+tJfxQiQtAyukQ9q5is/lI940cs1VCzF50fwywo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TbC7F0vHBz6K8wc;
+	Thu, 15 Feb 2024 19:11:37 +0800 (CST)
+Received: from lhrpeml500006.china.huawei.com (unknown [7.191.161.198])
+	by mail.maildlp.com (Postfix) with ESMTPS id A3BF5140B55;
+	Thu, 15 Feb 2024 19:15:04 +0800 (CST)
+Received: from SecurePC30232.china.huawei.com (10.122.247.234) by
+ lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 15 Feb 2024 11:15:03 +0000
+From: <shiju.jose@huawei.com>
+To: <linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <dan.j.williams@intel.com>, <dave@stgolabs.net>,
+	<jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
+	<alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+	<ira.weiny@intel.com>
+CC: <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<david@redhat.com>, <Vilas.Sridharan@amd.com>, <leo.duran@amd.com>,
+	<Yazen.Ghannam@amd.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
+	<tony.luck@intel.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<rafael@kernel.org>, <lenb@kernel.org>, <naoya.horiguchi@nec.com>,
+	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
+	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
+	<mike.malvestuto@intel.com>, <gthelen@google.com>,
+	<wschwartz@amperecomputing.com>, <dferguson@amperecomputing.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
+	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
+Subject: [RFC PATCH v6 00/12] cxl: Add support for CXL feature commands, CXL device patrol scrub control and DDR5 ECS control features
+Date: Thu, 15 Feb 2024 19:14:42 +0800
+Message-ID: <20240215111455.1462-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.35.1.windows.2
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|MW4PR12MB7287:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a6e758c-e4ae-4e05-c357-08dc2d9ac517
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	IaWJ93eR+deFsU29mrbD8XE//5/XiLo1ysSUfhCs9g2IELJNkWUd/F7m46fcgPBuE8O1yOA0usbDDmayPDA6rNFrOCZIjIHOt3Z71jctDNr/u5EhGVDxb6E+iYcrQh0tjBpUOlQr9+VzG0m1whh3j+YqgylYl1KAXwbTbmbNro57kTaHnGC2RAhoucd23zX5Zf+a+eXUWxqQqL5qfeNF6x2YzGzRanLRFgAFQguwRhpV3ynZyYmqHaMbcLb2s1h4zbtxuO89Xq/Kj0gco6PSztLgyBl2lma06qEvnUEHbh7LdFHJzv84OVJa3+CR7Ra1yA9+jStCkxV5oIz7CGuAxa6Rnv6gqYUpQKzOLccubczrIDaF/WSuWLIe9dUIcY01IYOk0NQdhvTezIKnAYKpOW2XQRhswolym7aQG5C9w4+bCrYCFaR5nahJsD7yxoKNDfzVq2dcIk833Ic/jW6sQSw4dpXTUo4jOVs7K0wktZcgiGR8RBy9P+gmhgy3EXSZk7GbVpntmk2rXOzoGrwqbmbjPflST+2H24x0U1rblrQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(366004)(376002)(136003)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(6512007)(6486002)(966005)(478600001)(41300700001)(31686004)(8936002)(8676002)(4326008)(2906002)(44832011)(5660300002)(6506007)(66946007)(53546011)(54906003)(316002)(66556008)(66476007)(2616005)(31696002)(86362001)(26005)(83380400001)(38100700002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WkdHcWU0TUtXTnlxUFE3Nm1uZW9sZWxqdHdhaCswajgwTnE0RjhsclBuSWw0?=
- =?utf-8?B?NmJOZ0JLOHd3NDhrdkZNSHJrWW1vSG9KbU94aTlkTmtnT2U2UWFsdWROQjRi?=
- =?utf-8?B?T0pmYlpRaDhGbVdYZzFMV29mTkJ1NkFic3hNb2V6YU8vaTlDQVdKNGc1akV6?=
- =?utf-8?B?VzlVSWtBa3IrekJqSzFxMElDeVl2SFBtc0MxWXg3U0pxU0NLV2JhZkpxQVRo?=
- =?utf-8?B?ZWk1WW0vdjlIeDZTMndvNjhCNHc4T3NMbWJZMU9xRjhYL0ZiMXhhZEN5TEZV?=
- =?utf-8?B?dlFuK28zM0pXRXlweWhOQm9kNHNOWkdublI1V2l1N2VNU282L0w2NXlaeCtT?=
- =?utf-8?B?ZStQYkFwejRwVStPOEpjRDFVZkU1cVM5NTRXQ2dsU0pHQjBnMDJ2cU13c3d0?=
- =?utf-8?B?ZWtDS2lMYTVhYkpyU0MwYktMSkpiNE9NMEhnS29pT0U3UFpaL2pGWlcxSlVO?=
- =?utf-8?B?ek9lbVBDOEY3ODlzNWVpcDhSRHN1NWdDbFdMam1sdm1CMkVQcmUyL1lRclBo?=
- =?utf-8?B?UGZEczgzTE1JK3pVM2R1OE1nWjVtQWVldm5FTVZwUGlMc1JOUzRvK3daQTZT?=
- =?utf-8?B?Yi9pa3J0bGNOczcxMXpFNU84NUtnMU95U2EydDVOYkVpYmF4dnJPTkI2RjNz?=
- =?utf-8?B?RDhuTkZxaWlyYndFY3M0RGllZER3dEdSSUtJZ1JPR2dLN3JCdGNkVmtDSDBM?=
- =?utf-8?B?cTdoNm1QeVExMXZIS29zNTlESlZmazR5QVlrL3hjaUo3K0NhM0UzczBYcEtv?=
- =?utf-8?B?Z1JOMDNhNlhRcStFZ2FXZld6cWZDMDBKckZISTkwTTlCNUlsSjhSN3BhdXRI?=
- =?utf-8?B?MnprbklCcjJ6a0d5WFJDV3BxK2ZwM1pSRzNHUGNMeVAwYTFmd0N0S2hhWUtL?=
- =?utf-8?B?Nmtaa0h4RGxId0hBQlpkQ0IvZi9aeHJjeWJ1WEh5YXE0bWRFbm0rcS9QLy9O?=
- =?utf-8?B?NkRCL0xjSDhYMVFScUx0MEVENmhwWi9xb08za1IzaHd5VVg4TGhlMVBwd2Yv?=
- =?utf-8?B?Z0xFcGh0akJjeFF0TDFVaTFuZDFEYS9vMlZITXpHb0d2SGJFSGpTWDBSM2Q0?=
- =?utf-8?B?eXBvUU9wTllFT2tJUUd4SzhaNnhVa2JQbndBK1QrM3J4S0JIUWJTYmU3c2lp?=
- =?utf-8?B?SnZ4N3pWRFRQSXlmbS9rMUNSbnpKUnZqdlVNbGNaNitRMDBTaUhYb3NPVUJZ?=
- =?utf-8?B?Z1ZkclNKRVBzUFhiNElXQnhVTFdmaWhNZlRrNFZudmU4SjZHdkZEcEpxdmt3?=
- =?utf-8?B?SElBaS90bDErOHE2TnlCYi9INTJ3WnBleDVTa0NRZ1dkL2tqZGJXcTlGVHAz?=
- =?utf-8?B?QnR2c3JWZG4ybjRjRFhzUnJmZTVJTm0rVThjcGZQT1ZFcVVZd1JMSWwwNURx?=
- =?utf-8?B?ekJSWVhvMWdhM0doN1N0eGN1MEpaRWZVajFYdyt0WXk0eXplYllCU2NiV0dR?=
- =?utf-8?B?b3MxOUhMRUU2SVhYY3pYWG1GcWxLck9DeWUzSHpuaDlWcFduQnRxa2tTUGFZ?=
- =?utf-8?B?QXpYMHRUVStCb28wZFhmMURhVG5ndzVRejBZc0IxaWpTSmw0b1Z2eU93ZWNz?=
- =?utf-8?B?ZExMUGx3aFZUdFc3UCtrWU96ckF5Y0VYS1hNSThhWUFMbTNjL0ZFcGZzVmZL?=
- =?utf-8?B?QVpKcWpEc1ZlTFpXdFIyY1o1ZUFzcFp5N0toak1WQ1EzQUIrWFpIM1B6cFpO?=
- =?utf-8?B?cDFuUDdnN01TWGFadkdvcnlGUGRNSnFBaDVaMHZxK3hpajVCTWNCbkRkc3Zz?=
- =?utf-8?B?d3RPaGsxa3V6cFhYZFRycS9uQnpUN1NjTngwS3p3WDlhb3Y5NXN6UFUzZTk0?=
- =?utf-8?B?ejdoTTFuUlVDdHNONHQrdC9QcDMrU2RDaThlSEUzWU1HRDFvbE1jTzJPNzNq?=
- =?utf-8?B?YjFhZ3ZDOTdycEN3dk40L3U4V3pHcFI3dmZld3hyaUxVTGVpRTZYS2dUL2ls?=
- =?utf-8?B?WXZNeWFja1BqNnRZalYwekJ2VWhjeEdTODdpZ1VVRURVdkVvUlZ4VFhCWDRi?=
- =?utf-8?B?OXhqZzZKb25yWDFzeVhKVG5RN3M2VUh3a1luenYwZjVUNzB6bEtXUllIdjZT?=
- =?utf-8?B?aEhYd3hoVFZ6UnRZRjErenBPdDd1dkU1ZUZlbmEvOEI1OUdCKzdZNkNERHFQ?=
- =?utf-8?Q?1lue1OUvMwDm3g8+KbbWv/NbB?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a6e758c-e4ae-4e05-c357-08dc2d9ac517
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2024 20:23:13.6093
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1REgjI3eScKmI2o4YXoDVRCDtMUM6z6VzHiMk912yMtwlrZMmUUuAmHGtFzYQpBzstUQ3LShRPJuXHkomACBGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7287
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500006.china.huawei.com (7.191.161.198)
 
-On 2/13/2024 6:20 AM, Jiri Slaby (SUSE) wrote:
-> Commit cfe40fdb4a46 (amd64_edac: add driver header) added amd64_pvt
-> struct with ext_nbcfg in it. But noone used that member since then.
-> 
-> Therefore, remove it.
-> 
-> Found by https://github.com/jirislaby/clang-struct.
-> 
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Robert Richter <rric@kernel.org>
-> Cc: linux-edac@vger.kernel.org
-> ---
->   drivers/edac/amd64_edac.h | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-> index 1665f7932bac..b879b12971e7 100644
-> --- a/drivers/edac/amd64_edac.h
-> +++ b/drivers/edac/amd64_edac.h
-> @@ -345,7 +345,6 @@ struct amd64_pvt {
->   	u32 dchr1;		/* DRAM Configuration High DCT1 reg */
->   	u32 nbcap;		/* North Bridge Capabilities */
->   	u32 nbcfg;		/* F10 North Bridge Configuration */
-> -	u32 ext_nbcfg;		/* Extended F10 North Bridge Configuration */
->   	u32 dhar;		/* DRAM Hoist reg */
->   	u32 dbam0;		/* DRAM Base Address Mapping reg for DCT0 */
->   	u32 dbam1;		/* DRAM Base Address Mapping reg for DCT1 */
+From: Shiju Jose <shiju.jose@huawei.com>
 
-This field likely was intended to be used with the EXT_NB_MCA_CFG definition.
-But I agree it's not used and can be removed.
+1. Add support for CXL feature mailbox commands.
+2. Add CXL device scrub driver supporting patrol scrub control and ECS
+control features.
+3. Add scrub subsystem driver supports configuring memory scrubs in the system.
+4. Register CXL device patrol scrub and ECS with scrub subsystem.
+5. Add common library for RASF and RAS2 PCC interfaces.
+6. Add driver for ACPI RAS2 feature table (RAS2).
+7. Add memory RAS2 driver and register with scrub subsystem.
 
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+The QEMU series to support the CXL specific features is available here,
+https://lore.kernel.org/qemu-devel/20240215110146.1444-1-shiju.jose@huawei.com/T/#t
 
-Thanks,
-Yazen
+Changes
+v5 -> v6:
+1. Changes for comments from Davidlohr, Thanks.
+ - Update CXL feature code based on spec 3.1.
+ - Rename attrb -> attr
+ - Use enums with default counting.  
+2. Rebased to the recent kernel.
+
+v4 -> v5:
+1. Following are the main changes made based on the feedback from Dan Williams on v4.
+1.1. In the scrub subsystem the common scrub control attributes are statically defined
+     instead of dynamically created.
+1.2. Add scrub subsystem support externally defined attribute group.
+     Add CXL ECS driver define ECS specific attribute group and pass to
+	 the scrub subsystem.
+1.3. Move cxl_mem_ecs_init() to cxl/core/region.c so that the CXL region_id
+     is used in the registration with the scrub subsystem. 	 
+1.4. Add previously posted RASF common and RAS2 patches to this scrub series.
+	 
+2. Add support for the 'enable_background_scrub' attribute
+   for RAS2, on request from Bill Schwartz(wschwartz@amperecomputing.com).
+
+v3 -> v4:
+1. Fixes for the warnings/errors reported by kernel test robot.
+2. Add support for reading the 'enable' attribute of CXL patrol scrub.
+
+Changes
+v2 -> v3:
+1. Changes for comments from Davidlohr, Thanks.
+ - Updated cxl scrub kconfig
+ - removed usage of the flag is_support_feature from
+   the function cxl_mem_get_supported_feature_entry().
+ - corrected spelling error.
+ - removed unnecessary debug message.
+ - removed export feature commands to the userspace.
+2. Possible fix for the warnings/errors reported by kernel
+   test robot.
+3. Add documentation for the common scrub configure atrributes.
+
+v1 -> v2:
+1. Changes for comments from Dave Jiang, Thanks.
+ - Split patches.
+ - reversed xmas tree declarations.
+ - declared flags as enums.
+ - removed few unnecessary variable initializations.
+ - replaced PTR_ERR_OR_ZERO() with IS_ERR() and PTR_ERR().
+ - add auto clean declarations.
+ - replaced while loop with for loop.
+ - Removed allocation from cxl_get_supported_features() and
+   cxl_get_feature() and make change to take allocated memory
+   pointer from the caller.
+ - replaced if/else with switch case.
+ - replaced sprintf() with sysfs_emit() in 2 places.
+ - replaced goto label with return in few functions.
+2. removed unused code for supported attributes from ecs.
+3. Included following common patch for scrub configure driver
+   to this series.
+   "memory: scrub: Add scrub driver supports configuring memory scrubbers
+    in the system"
+
+A Somasundaram (1):
+  ACPI:RASF: Add common library for RASF and RAS2 PCC interfaces
+
+Shiju Jose (11):
+  cxl/mbox: Add GET_SUPPORTED_FEATURES mailbox command
+  cxl/mbox: Add GET_FEATURE mailbox command
+  cxl/mbox: Add SET_FEATURE mailbox command
+  cxl/memscrub: Add CXL device patrol scrub control feature
+  cxl/memscrub: Add CXL device ECS control feature
+  memory: scrub: Add scrub subsystem driver supports configuring memory
+    scrubs in the system
+  cxl/memscrub: Register CXL device patrol scrub with scrub configure
+    driver
+  cxl/memscrub: Register CXL device ECS with scrub configure driver
+  ACPICA: ACPI 6.5: Add support for RAS2 table
+  ACPI:RAS2: Add driver for ACPI RAS2 feature table (RAS2)
+  memory: RAS2: Add memory RAS2 driver
+
+ .../ABI/testing/sysfs-class-scrub-configure   |   91 ++
+ drivers/acpi/Kconfig                          |   15 +
+ drivers/acpi/Makefile                         |    1 +
+ drivers/acpi/ras2_acpi.c                      |   97 ++
+ drivers/acpi/rasf_acpi_common.c               |  272 +++++
+ drivers/cxl/Kconfig                           |   23 +
+ drivers/cxl/core/Makefile                     |    1 +
+ drivers/cxl/core/mbox.c                       |   59 +
+ drivers/cxl/core/memscrub.c                   | 1009 +++++++++++++++++
+ drivers/cxl/core/region.c                     |    1 +
+ drivers/cxl/cxlmem.h                          |  123 ++
+ drivers/cxl/pci.c                             |    5 +
+ drivers/memory/Kconfig                        |   15 +
+ drivers/memory/Makefile                       |    3 +
+ drivers/memory/ras2.c                         |  354 ++++++
+ drivers/memory/rasf_common.c                  |  269 +++++
+ drivers/memory/scrub/Kconfig                  |   11 +
+ drivers/memory/scrub/Makefile                 |    6 +
+ drivers/memory/scrub/memory-scrub.c           |  367 ++++++
+ include/acpi/actbl2.h                         |  137 +++
+ include/acpi/rasf_acpi.h                      |   58 +
+ include/memory/memory-scrub.h                 |   78 ++
+ include/memory/rasf.h                         |   88 ++
+ 23 files changed, 3083 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-scrub-configure
+ create mode 100755 drivers/acpi/ras2_acpi.c
+ create mode 100755 drivers/acpi/rasf_acpi_common.c
+ create mode 100644 drivers/cxl/core/memscrub.c
+ create mode 100644 drivers/memory/ras2.c
+ create mode 100644 drivers/memory/rasf_common.c
+ create mode 100644 drivers/memory/scrub/Kconfig
+ create mode 100644 drivers/memory/scrub/Makefile
+ create mode 100755 drivers/memory/scrub/memory-scrub.c
+ create mode 100644 include/acpi/rasf_acpi.h
+ create mode 100755 include/memory/memory-scrub.h
+ create mode 100755 include/memory/rasf.h
+
+-- 
+2.34.1
+
 
