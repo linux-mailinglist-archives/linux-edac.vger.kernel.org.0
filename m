@@ -1,157 +1,491 @@
-Return-Path: <linux-edac+bounces-610-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-611-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BA5D85816E
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Feb 2024 16:40:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B83898584B5
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Feb 2024 18:59:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6D7C284039
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Feb 2024 15:40:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EB2E281EF8
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Feb 2024 17:59:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0BB130AF0;
-	Fri, 16 Feb 2024 15:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6641A133410;
+	Fri, 16 Feb 2024 17:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lY8z9P/b"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aO5XnCik"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2068.outbound.protection.outlook.com [40.107.220.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7AE130ADB
-	for <linux-edac@vger.kernel.org>; Fri, 16 Feb 2024 15:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708097728; cv=fail; b=ijamsmqi4NF6IdKx+aZrnz1Esruc3qBENwyWGzrTTb6eWXA3zXx8e6arXRzQP0txrCCYGziYMV7giKe0f3SQ21S17nbpvXYz4gp0ChYInOE/D+xVQ43Q96e5xMKCZp8gqtN7fZdbvq01zurgo8f43OosctuEeysTldmfumegXjY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708097728; c=relaxed/simple;
-	bh=MeJpTSOlsLRLK51DUVmWZWvkOSd+Ha8aCxjkBP5mNWE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cfv8hl5xzsKV0R5UpmKHHtdIfAbmiTD3I5WK/QlegyZje74KUcf2LqlmEiKAUXApbnprmjdfh1lEH3tfKvkD0XSAkjjPChB2YAmIfBmitOnOcF1Kq6TZKdeJp3WsFMdSKh05WJI/TPI3LmqlmbpBwFMwOxKxY1MDcwUof/ZGs/g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lY8z9P/b; arc=fail smtp.client-ip=40.107.220.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eLQMshKsOcxX/Lsj9+kzxbba8a8+ZaSoANGjJp5hqtdbrWHGnmVwtuO2E4TokH5LHWrVkj24p6cvUlOXI1/2fPDSci0JWbYa+eAqrTY/eaTNESwzrrB0Yc+D3jx6/BO1JTqRVX/rCJButGx7ehZyrmYWGAVpc1Cy8oSti3LpYeO6rHz0eZa0UFSHKxRh26DZpAz4fhYc4biOX7he8jav8siCm410T6i9jExBMlEO+catuYForJ5mpZ/yOUyNbGIBHfVGu6nzDO0gWTyE+LJOkjBmOKDUTvAzX8EpUe6oxUkRbEEoqU+dzC5WsF+F9LHm4NMadg+D4GLgjlKJGhF/Ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QGFmvzHkdJkIMOIrMrQhMkQaI3myOnwRfBEkRKwUmMI=;
- b=hBrBkGliREmOR7EYccoroRbvolvJzMtukAunNROCIfEEFIBGxIlZ+3OO9y2IwAxFx0JqjUCySLXqDAwIIGQ/Ru9iQdHQJziwfLQPL1mX7AkqcPhesnDoTLdKWcCvSE9dbAZWKhUpTEJEit4QTPl9afjz0lMMRVLFBGDPogyuK1x3kTVXcsWNNN0tlkQdrA9dOpnzva6Fe370uOiJHfaQc3Yk2idr7SDP9Aa9HbgGzRlyw25w2Q6KXaBWz25c1Pss9uXmUdmelLgxCsfp0YGODdJKRv3fxGyCiMFQ/+R1b4LHR/xoLILGoiTLCkpmdRqKFbYfdxlV7QYbrp2fMYtWoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QGFmvzHkdJkIMOIrMrQhMkQaI3myOnwRfBEkRKwUmMI=;
- b=lY8z9P/bFit8IDz92XsEzfyc6cGZKzYPDnVCogoyWM9Tp4OwqYW25fRIAxdRCPBbrAIbR9CfJTxRD2hFNZOBcWr4LhnJX9jfUbJJrZon7/C9IYQpRKeCEtlx5OEgtyXMMQX6yUId7b7NHirpHMYiSA5ZcqZQuTZUs9HNG68zuWA=
-Received: from PH8PR02CA0028.namprd02.prod.outlook.com (2603:10b6:510:2da::29)
- by MN0PR12MB5931.namprd12.prod.outlook.com (2603:10b6:208:37e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.15; Fri, 16 Feb
- 2024 15:35:22 +0000
-Received: from SN1PEPF0002529E.namprd05.prod.outlook.com
- (2603:10b6:510:2da:cafe::48) by PH8PR02CA0028.outlook.office365.com
- (2603:10b6:510:2da::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.41 via Frontend
- Transport; Fri, 16 Feb 2024 15:35:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF0002529E.mail.protection.outlook.com (10.167.242.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7292.25 via Frontend Transport; Fri, 16 Feb 2024 15:35:21 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 16 Feb
- 2024 09:35:20 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 16 Feb
- 2024 09:35:19 -0600
-Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Fri, 16 Feb 2024 09:35:17 -0600
-From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <git@amd.com>, <shubhrajyoti.datta@amd.com>,
-	<sai.krishna.potthuri@amd.com>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>
-Subject: [PATCH 3/3] EDAC/versal: Do not send the cumulative values
-Date: Fri, 16 Feb 2024 21:05:08 +0530
-Message-ID: <20240216153508.26569-4-shubhrajyoti.datta@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240216153508.26569-1-shubhrajyoti.datta@amd.com>
-References: <20240216153508.26569-1-shubhrajyoti.datta@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FB1132493;
+	Fri, 16 Feb 2024 17:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708106342; cv=none; b=IXP6KZ4kQKVH8Kspp1tNwCs8u8ZYasx0SWy0yggSLf6KrgK+TKm2rpITKcRNjDAnr/RENrKSToomVIDeP4+IOSQA4SFnoIa9CnO7OgfyHxjLUahID7GVXecsta+Q1YR292dJjAUrImrcbYLmDMVlDSx9TnuyA9ounq6ImsNNiO8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708106342; c=relaxed/simple;
+	bh=+PqkRbRSH++0IYnYB/a3Vw97KSbi9YQUovgEwXLQjmY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P0iWY2WjKUQach04wxM0NzEF5/4YAaepYJwbv7rMOZvciwijPtuWEH2zmKBJ5daLy/NLRjIXn1yWV9fhTOlTx80KYSl4G6+KorA7rR5ria1EdUPakKjp0BjzNIYYzFoImgurm8QIqtA4fwrOV6RmdAzWtNPA7pgsPBfIIflOXMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aO5XnCik; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6e0507eb60cso1597071b3a.3;
+        Fri, 16 Feb 2024 09:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708106340; x=1708711140; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hH43F2xAPB/ks5JUHmf/XMk0PC3oEYZ4qnSY0+cZETI=;
+        b=aO5XnCikqPeU4l7uiyWU0e1RDU2XQNck8SYAQFXGjwum6PFRzkCPZbYP82Bj6OBAOs
+         8PMkt9n5Eckw475xTOmsUH9j87C+OZyw+wC5VNSmltHrLPtcYza9YOJ+3fZ4WI9r+Ewf
+         JIeSZX95Y9UnGgdiKw8HI/N/S2KlqgPgQFlphLKvSchIuXwak474IWYKQzRtLh1I0y3d
+         q1vF4GmGqlEfe541PTNfHVLTuINLmlZxMPGiFrTz6+/qG1ulFV+wbLRsysjFnPC5gqSx
+         PFSeCEaWjPAKxypMi1TBDYRRC8Ud840UOs60o3lxoAtgbDLzetFW5oDuhsU4cNfo+0LD
+         zkHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708106340; x=1708711140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hH43F2xAPB/ks5JUHmf/XMk0PC3oEYZ4qnSY0+cZETI=;
+        b=tfzidofrRRzEt7Kw1X4cnNdwTzHcqaCyvzaVk/oOXEaoCp5G2UUlvuuDE1G1rzMSLu
+         RKIRBh3gKtYkiUYw4IiqLKAqbAaprqgu4/2hAtQ+QXx7LzSY1rkuP9twwzU+WQrTwkzs
+         GMfDPaFr0nm8v2iqWBYF94h7q+lEmgXsrlyIvE7dFIfVmyqiuBca1JkVdU/kMajQkdu4
+         scYqr01zO7XoFGEdoejUPrbHinrtRlDhddJjH3snGneS00BTgh89ihke/pWwp/wbYDpH
+         7fU9933a5opGSCg1NxtJV5g4rGXFJ+SwBZH+Wb/ze7MCyfRsRZeuG6mIP9gP7/8txw5e
+         Dkrw==
+X-Forwarded-Encrypted: i=1; AJvYcCX2AJhoKZ8bWg5EVPV6oTSLHuty4gCRk/FWYZwp9ErL++piAOHSCtTKf3Zbfcc88Rj0LgzkiLEd3TVDG3HUOx3uMmPlI+GNZkYVr+N7KAfuI00MisNukVEe5n9maa/Rt6OwORNyw89qI3IbgnflAzBaRoocJMBynwFJEB+x65gIAFV+rpE=
+X-Gm-Message-State: AOJu0Yw28YAQPz1XEf4hhXx3Y7WQJ5ZbdQQpqLiXvGgdeZTgEbFlxlRg
+	womET+bk1tLKKYaelrXgNoV1DhfVJGcRXPyJO97dV5DfcAAjlupN
+X-Google-Smtp-Source: AGHT+IHkvo4psKVDx9AOZFUBRJUz8xKDEVAeAd8Sm6Fku4o4O6cqOk5RoogdQE2aqNzShnIK+xyl8w==
+X-Received: by 2002:a05:6a00:190e:b0:6e0:ed67:b309 with SMTP id y14-20020a056a00190e00b006e0ed67b309mr6762758pfi.21.1708106339699;
+        Fri, 16 Feb 2024 09:58:59 -0800 (PST)
+Received: from debian ([2601:641:300:14de:f1a:387c:5c5c:3099])
+        by smtp.gmail.com with ESMTPSA id m16-20020a056a00081000b006e13d849fa5sm237509pfk.68.2024.02.16.09.58.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 09:58:59 -0800 (PST)
+From: fan <nifan.cxl@gmail.com>
+X-Google-Original-From: fan <fan@debian>
+Date: Fri, 16 Feb 2024 09:58:55 -0800
+To: shiju.jose@huawei.com
+Cc: linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-mm@kvack.org, dave@stgolabs.net, jonathan.cameron@huawei.com,
+	dave.jiang@intel.com, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com,
+	dan.j.williams@intel.com, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, david@redhat.com,
+	Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
+	rientjes@google.com, jiaqiyan@google.com, tony.luck@intel.com,
+	Jon.Grimm@amd.com, dave.hansen@linux.intel.com, rafael@kernel.org,
+	lenb@kernel.org, naoya.horiguchi@nec.com, james.morse@arm.com,
+	jthoughton@google.com, somasundaram.a@hpe.com,
+	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
+	mike.malvestuto@intel.com, gthelen@google.com,
+	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
+	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com,
+	linuxarm@huawei.com
+Subject: Re: [RFC PATCH v5 05/12] cxl/memscrub: Add CXL device ECS control
+ feature
+Message-ID: <Zc-iX3fyHEB-NnBD@debian>
+References: <20240111131741.1356-1-shiju.jose@huawei.com>
+ <20240111131741.1356-6-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002529E:EE_|MN0PR12MB5931:EE_
-X-MS-Office365-Filtering-Correlation-Id: 40dee27f-bc35-43f5-a500-08dc2f04e30b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	0L9Rmw9yqXB/T2AejP1oUDWWCMXX5dfXVE/mLNavBdDNZCYaaNNLZHClPdsPxrJ486hmi7vQwvYsigXrrgeAVjtE1Nxh9KOlPfkZxC1sZnWnfb++reHnQrh+LOaXegBPBCxoqN7+yikBXM09sKcAuyRJLHNKlSekGBAD+dfXTUJKHMsOv8eNvtmoJKtiBerlBgPOBJHBx5zaq1pg/u8ytc4A8EQ2LS+NxYf6nGxILtKqcFs+7qv74+ufvrGO7dF22dO9PpmLzqAePl9tF3209dtyTo68x6EP8pi+MeapDC1HO/1nyd7FtuJ3Isp6Mqr/IdVpItpVEXoJxF4CVY6vk2btLAvvzhjlf/LfDu+3tYrecJRUH7EhBOTG4m7wvuFvrk7xkG0bfLIiP6oNtRFDj9/32GMpI7Wv31AuaJr2IEa2El6R+UjEkFMCJCqPlCyEwzG+dxsKKI9F/kP8qkBKXaSssNOEKBTBctdy0O7IYHfEYIp4SLpdx8oqfAm2WYSw+/oYNaFB86vhai34G0FpJVxih0BHqImLBqrO+1Qmdn8ccOWmA6kWGm0Jz6Dato6YkwXTEjNYUIaejw9qSTtMfU7zdM7fTJe+V+ovWPwNhyWjBJXmpwui1BfUFF9UZK2UIzOrSc/2AxH5GeT41zKmSw==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(346002)(396003)(376002)(136003)(230922051799003)(451199024)(1800799012)(82310400011)(186009)(36860700004)(64100799003)(40470700004)(46966006)(83380400001)(356005)(81166007)(82740400003)(70586007)(70206006)(8936002)(8676002)(6916009)(4326008)(2906002)(44832011)(5660300002)(426003)(336012)(26005)(2616005)(1076003)(41300700001)(316002)(54906003)(6666004)(478600001)(86362001)(36756003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2024 15:35:21.4708
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40dee27f-bc35-43f5-a500-08dc2f04e30b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002529E.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5931
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240111131741.1356-6-shiju.jose@huawei.com>
 
-Currently collective errors are reported. Change it to
-intantaneous values. The cumulative values can be got from the
-debug prints.
+On Thu, Jan 11, 2024 at 09:17:34PM +0800, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> CXL spec 3.1 section 8.2.9.9.11.2 describes the DDR5 Error Check Scrub (ECS)
+> control feature.
+> 
+> The Error Check Scrub (ECS) is a feature defined in JEDEC DDR5 SDRAM
+> Specification (JESD79-5) and allows the DRAM to internally read, correct
+> single-bit errors, and write back corrected data bits to the DRAM array
+> while providing transparency to error counts. The ECS control feature
+> allows the request to configure ECS input configurations during system
+> boot or at run-time.
+> 
+> The ECS control allows the requester to change the log entry type, the ECS
+> threshold count provided that the request is within the definition
+> specified in DDR5 mode registers, change mode between codeword mode and
+> row count mode, and reset the ECS counter.
+> 
+> Open Question:
+> Is cxl_mem_ecs_init() invoked in the right function in cxl/core/region.c?
+>  
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> ---
+>  drivers/cxl/core/memscrub.c | 303 +++++++++++++++++++++++++++++++++++-
+>  drivers/cxl/core/region.c   |   1 +
+>  drivers/cxl/cxlmem.h        |   3 +
+>  3 files changed, 306 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/core/memscrub.c b/drivers/cxl/core/memscrub.c
+> index e0d482b0bf3a..e7741e2fdbdb 100644
+> --- a/drivers/cxl/core/memscrub.c
+> +++ b/drivers/cxl/core/memscrub.c
+> @@ -5,7 +5,7 @@
+>   * Copyright (c) 2023 HiSilicon Limited.
+>   *
+>   *  - Provides functions to configure patrol scrub
+> - *    feature of the CXL memory devices.
+> + *    and DDR5 ECS features of the CXL memory devices.
+>   */
+>  
+>  #define pr_fmt(fmt)	"CXL_MEM_SCRUB: " fmt
+> @@ -264,3 +264,304 @@ int cxl_mem_patrol_scrub_init(struct cxl_memdev *cxlmd)
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_mem_patrol_scrub_init, CXL);
+> +
+> +/* CXL DDR5 ECS control definitions */
+> +#define CXL_MEMDEV_ECS_GET_FEAT_VERSION	0x01
+> +#define CXL_MEMDEV_ECS_SET_FEAT_VERSION	0x01
+> +
+> +static const uuid_t cxl_ecs_uuid =
+> +	UUID_INIT(0xe5b13f22, 0x2328, 0x4a14, 0xb8, 0xba, 0xb9, 0x69, 0x1e,     \
+> +		  0x89, 0x33, 0x86);
+> +
+> +struct cxl_ecs_context {
+> +	struct device *dev;
+> +	u16 nregions;
+> +	int region_id;
+> +	u16 get_feat_size;
+> +	u16 set_feat_size;
+> +};
+> +
+> +/**
+> + * struct cxl_memdev_ecs_params - CXL memory DDR5 ECS parameter data structure.
+> + * @log_entry_type: ECS log entry type, per DRAM or per memory media FRU.
+> + * @threshold: ECS threshold count per GB of memory cells.
+> + * @mode:	codeword/row count mode
+> + *		0 : ECS counts rows with errors
+> + *		1 : ECS counts codeword with errors
+> + * @reset_counter: [IN] reset ECC counter to default value.
+> + */
+> +struct cxl_memdev_ecs_params {
+> +	u8 log_entry_type;
+> +	u16 threshold;
 
-Fixes: 6f15b178cd63 ("EDAC/versal: Add a Xilinx Versal memory controller driver")
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
----
+Why need to be u16? It has only 3 bits.
 
- drivers/edac/versal_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +	u8 mode;
+> +	bool reset_counter;
+> +};
+> +
+> +enum {
+> +	CXL_MEMDEV_ECS_PARAM_LOG_ENTRY_TYPE = 0,
+> +	CXL_MEMDEV_ECS_PARAM_THRESHOLD,
+> +	CXL_MEMDEV_ECS_PARAM_MODE,
+> +	CXL_MEMDEV_ECS_PARAM_RESET_COUNTER,
+> +};
+> +
+> +#define	CXL_MEMDEV_ECS_LOG_ENTRY_TYPE_MASK	GENMASK(1, 0)
+> +#define	CXL_MEMDEV_ECS_REALTIME_REPORT_CAP_MASK	BIT(0)
+> +#define	CXL_MEMDEV_ECS_THRESHOLD_COUNT_MASK	GENMASK(2, 0)
+> +#define	CXL_MEMDEV_ECS_MODE_MASK	BIT(3)
+> +#define	CXL_MEMDEV_ECS_RESET_COUNTER_MASK	BIT(4)
+> +
+> +static const u16 ecs_supp_threshold[] = { 0, 0, 0, 256, 1024, 4096 };
+> +
+> +enum {
+> +	ECS_LOG_ENTRY_TYPE_DRAM = 0x0,
+> +	ECS_LOG_ENTRY_TYPE_MEM_MEDIA_FRU = 0x1,
+> +};
+> +
+> +enum {
+> +	ECS_THRESHOLD_256 = 3,
+> +	ECS_THRESHOLD_1024 = 4,
+> +	ECS_THRESHOLD_4096 = 5,
+> +};
+> +
+> +enum {
+> +	ECS_MODE_COUNTS_ROWS = 0,
+> +	ECS_MODE_COUNTS_CODEWORDS = 1,
+> +};
+> +
+> +struct cxl_memdev_ecs_feat_read_attrbs {
+> +	u8 ecs_log_cap;
+> +	u8 ecs_cap;
+> +	__le16 ecs_config;
+> +	u8 ecs_flags;
+> +}  __packed;
+> +
+> +struct cxl_memdev_ecs_set_feat_pi {
+> +	struct cxl_mbox_set_feat_in pi;
+> +	struct cxl_memdev_ecs_feat_wr_attrbs {
+> +		u8 ecs_log_cap;
+> +		__le16 ecs_config;
+> +	} __packed wr_attrbs[];
+> +}  __packed;
+> +
+> +/* CXL DDR5 ECS control functions */
+> +static int cxl_mem_ecs_get_attrbs(struct device *dev, int fru_id,
+> +				  struct cxl_memdev_ecs_params *params)
+> +{
+> +	struct cxl_memdev_ecs_feat_read_attrbs *rd_attrbs __free(kvfree) = NULL;
+> +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev->parent);
+> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> +	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
+> +	struct cxl_mbox_get_feat_in pi = {
+> +		.uuid = cxl_ecs_uuid,
+> +		.offset = 0,
+> +		.selection = CXL_GET_FEAT_SEL_CURRENT_VALUE,
+> +	};
+> +	struct cxl_ecs_context *cxl_ecs_ctx;
+> +	u8 threshold_index;
+> +	int ret;
+> +
+> +	if (!mds)
+> +		return -EFAULT;
+> +	cxl_ecs_ctx = dev_get_drvdata(dev);
+> +
+> +	pi.count = cxl_ecs_ctx->get_feat_size;
+> +	rd_attrbs = kvmalloc(pi.count, GFP_KERNEL);
+> +	if (!rd_attrbs)
+> +		return -ENOMEM;
+> +
+> +	ret = cxl_get_feature(mds, &pi, rd_attrbs);
+> +	if (ret) {
+> +		params->log_entry_type = 0;
+> +		params->threshold = 0;
+> +		params->mode = 0;
+> +		return ret;
+> +	}
+> +	params->log_entry_type = FIELD_GET(CXL_MEMDEV_ECS_LOG_ENTRY_TYPE_MASK,
+> +					   rd_attrbs[fru_id].ecs_log_cap);
+> +	threshold_index = FIELD_GET(CXL_MEMDEV_ECS_THRESHOLD_COUNT_MASK,
+> +				    rd_attrbs[fru_id].ecs_config);
+> +	params->threshold = ecs_supp_threshold[threshold_index];
+> +	params->mode = FIELD_GET(CXL_MEMDEV_ECS_MODE_MASK,
+> +				 rd_attrbs[fru_id].ecs_config);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused
+> +cxl_mem_ecs_set_attrbs(struct device *dev, int fru_id,
+> +		       struct cxl_memdev_ecs_params *params, u8 param_type)
+> +{
+> +	struct cxl_memdev_ecs_feat_read_attrbs *rd_attrbs __free(kvfree) = NULL;
+> +	struct cxl_memdev_ecs_set_feat_pi *set_pi __free(kvfree) = NULL;
+> +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev->parent);
+> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> +	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
+> +	struct cxl_mbox_get_feat_in pi = {
+> +		.uuid = cxl_ecs_uuid,
+> +		.offset = 0,
+> +		.selection = CXL_GET_FEAT_SEL_CURRENT_VALUE,
+> +	};
+> +	struct cxl_memdev_ecs_feat_wr_attrbs *wr_attrbs;
+> +	struct cxl_memdev_ecs_params rd_params;
+> +	struct cxl_ecs_context *cxl_ecs_ctx;
+> +	u16 nmedia_frus, count;
+> +	u32 set_pi_size;
+> +	int ret;
+> +
+> +	if (!mds)
+> +		return -EFAULT;
+> +
+> +	cxl_ecs_ctx = dev_get_drvdata(dev);
+> +	nmedia_frus = cxl_ecs_ctx->nregions;
+> +
+> +	rd_attrbs = kvmalloc(cxl_ecs_ctx->get_feat_size, GFP_KERNEL);
+> +	if (!rd_attrbs)
+> +		return -ENOMEM;
+> +
+> +	pi.count = cxl_ecs_ctx->get_feat_size;
+> +	ret = cxl_get_feature(mds, &pi, rd_attrbs);
+> +	if (ret)
+> +		return ret;
+> +	set_pi_size = sizeof(struct cxl_mbox_set_feat_in) +
+> +				cxl_ecs_ctx->set_feat_size;
+> +	set_pi = kvmalloc(set_pi_size, GFP_KERNEL);
+> +	if (!set_pi)
+> +		return -ENOMEM;
+> +
+> +	set_pi->pi.uuid = cxl_ecs_uuid;
+> +	set_pi->pi.flags = CXL_SET_FEAT_FLAG_MOD_VALUE_SAVED_ACROSS_RESET |
+> +				CXL_SET_FEAT_FLAG_FULL_DATA_TRANSFER;
+> +	set_pi->pi.offset = 0;
+> +	set_pi->pi.version = CXL_MEMDEV_ECS_SET_FEAT_VERSION;
+> +	/* Fill writable attributes from the current attributes read for all the media FRUs */
+> +	wr_attrbs = set_pi->wr_attrbs;
+> +	for (count = 0; count < nmedia_frus; count++) {
+> +		wr_attrbs[count].ecs_log_cap = rd_attrbs[count].ecs_log_cap;
+> +		wr_attrbs[count].ecs_config = rd_attrbs[count].ecs_config;
+> +	}
+> +
+> +	/* Fill attribute to be set for the media FRU */
+> +	switch (param_type) {
+> +	case CXL_MEMDEV_ECS_PARAM_LOG_ENTRY_TYPE:
+> +		if (params->log_entry_type != ECS_LOG_ENTRY_TYPE_DRAM &&
+> +		    params->log_entry_type != ECS_LOG_ENTRY_TYPE_MEM_MEDIA_FRU) {
+> +			dev_err(dev->parent,
+> +				"Invalid CXL ECS scrub log entry type(%d) to set\n",
+> +			       params->log_entry_type);
+> +			dev_err(dev->parent,
+> +				"Log Entry Type 0: per DRAM  1: per Memory Media FRU\n");
+> +			return -EINVAL;
+> +		}
+> +		wr_attrbs[fru_id].ecs_log_cap = FIELD_PREP(CXL_MEMDEV_ECS_LOG_ENTRY_TYPE_MASK,
+> +							   params->log_entry_type);
+> +		break;
+> +	case CXL_MEMDEV_ECS_PARAM_THRESHOLD:
+> +		wr_attrbs[fru_id].ecs_config &= ~CXL_MEMDEV_ECS_THRESHOLD_COUNT_MASK;
+> +		switch (params->threshold) {
+> +		case 256:
+> +			wr_attrbs[fru_id].ecs_config |= FIELD_PREP(
+> +						CXL_MEMDEV_ECS_THRESHOLD_COUNT_MASK,
+> +						ECS_THRESHOLD_256);
+> +			break;
+> +		case 1024:
+> +			wr_attrbs[fru_id].ecs_config |= FIELD_PREP(
+> +						CXL_MEMDEV_ECS_THRESHOLD_COUNT_MASK,
+> +						ECS_THRESHOLD_1024);
+> +			break;
+> +		case 4096:
+> +			wr_attrbs[fru_id].ecs_config |= FIELD_PREP(
+> +						CXL_MEMDEV_ECS_THRESHOLD_COUNT_MASK,
+> +						ECS_THRESHOLD_4096);
+> +			break;
+> +		default:
+> +			dev_err(dev->parent,
+> +				"Invalid CXL ECS scrub threshold count(%d) to set\n",
+> +				params->threshold);
+> +			dev_err(dev->parent,
+> +				"Supported scrub threshold count: 256,1024,4096\n");
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	case CXL_MEMDEV_ECS_PARAM_MODE:
+> +		if (params->mode != ECS_MODE_COUNTS_ROWS &&
+> +		    params->mode != ECS_MODE_COUNTS_CODEWORDS) {
+> +			dev_err(dev->parent,
+> +				"Invalid CXL ECS scrub mode(%d) to set\n",
+> +				params->mode);
+> +			dev_err(dev->parent,
+> +				"Mode 0: ECS counts rows with errors"
+> +				" 1: ECS counts codewords with errors\n");
+> +			return -EINVAL;
+> +		}
+> +		wr_attrbs[fru_id].ecs_config &= ~CXL_MEMDEV_ECS_MODE_MASK;
+> +		wr_attrbs[fru_id].ecs_config |= FIELD_PREP(CXL_MEMDEV_ECS_MODE_MASK,
+> +							  params->mode);
+> +		break;
+> +	case CXL_MEMDEV_ECS_PARAM_RESET_COUNTER:
+> +		wr_attrbs[fru_id].ecs_config &= ~CXL_MEMDEV_ECS_RESET_COUNTER_MASK;
+> +		wr_attrbs[fru_id].ecs_config |= FIELD_PREP(CXL_MEMDEV_ECS_RESET_COUNTER_MASK,
+> +							   params->reset_counter);
+> +		break;
+> +	default:
+> +		dev_err(dev->parent, "Invalid CXL ECS parameter to set\n");
+> +		return -EINVAL;
+> +	}
+> +	ret = cxl_set_feature(mds, set_pi, set_pi_size);
+> +	if (ret) {
+> +		dev_err(dev->parent, "CXL ECS set feature fail ret=%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Verify attribute is set successfully */
+> +	ret = cxl_mem_ecs_get_attrbs(dev, fru_id, &rd_params);
+> +	if (ret) {
+> +		dev_err(dev->parent, "Get cxlmemdev ECS params fail ret=%d\n", ret);
+> +		return ret;
+> +	}
+> +	switch (param_type) {
+> +	case CXL_MEMDEV_ECS_PARAM_LOG_ENTRY_TYPE:
+> +		if (rd_params.log_entry_type != params->log_entry_type)
+> +			return -EFAULT;
+> +		break;
+> +	case CXL_MEMDEV_ECS_PARAM_THRESHOLD:
+> +		if (rd_params.threshold != params->threshold)
+> +			return -EFAULT;
+> +		break;
+> +	case CXL_MEMDEV_ECS_PARAM_MODE:
+> +		if (rd_params.mode != params->mode)
+> +			return -EFAULT;
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int cxl_mem_ecs_init(struct cxl_memdev *cxlmd, int region_id)
+> +{
+> +	struct cxl_mbox_supp_feat_entry feat_entry;
+> +	struct cxl_ecs_context *cxl_ecs_ctx;
+> +	int nmedia_frus;
+> +	int ret;
+> +
+> +	ret = cxl_mem_get_supported_feature_entry(cxlmd, &cxl_ecs_uuid, &feat_entry);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (!(feat_entry.attrb_flags & CXL_FEAT_ENTRY_FLAG_CHANGABLE))
+> +		return -ENOTSUPP;
+> +	nmedia_frus = feat_entry.get_feat_size/
+> +				sizeof(struct cxl_memdev_ecs_feat_read_attrbs);
+> +	if (nmedia_frus) {
+> +		cxl_ecs_ctx = devm_kzalloc(&cxlmd->dev, sizeof(*cxl_ecs_ctx), GFP_KERNEL);
+> +		if (!cxl_ecs_ctx)
+> +			return -ENOMEM;
+> +
+> +		cxl_ecs_ctx->nregions = nmedia_frus;
+> +		cxl_ecs_ctx->get_feat_size = feat_entry.get_feat_size;
+> +		cxl_ecs_ctx->set_feat_size = feat_entry.set_feat_size;
+> +		cxl_ecs_ctx->region_id = region_id;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_mem_ecs_init, CXL);
+> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> index 3e817a6f94c6..ca71ad403d62 100644
+> --- a/drivers/cxl/core/region.c
+> +++ b/drivers/cxl/core/region.c
+> @@ -2912,6 +2912,7 @@ int cxl_add_to_region(struct cxl_port *root, struct cxl_endpoint_decoder *cxled)
+>  			dev_err(&cxlr->dev, "failed to enable, range: %pr\n",
+>  				p->res);
+>  	}
+> +	cxl_mem_ecs_init(cxlmd, atomic_read(&cxlrd->region_id));
 
-diff --git a/drivers/edac/versal_edac.c b/drivers/edac/versal_edac.c
-index e776d8d79ae4..8ada7a960dfc 100644
---- a/drivers/edac/versal_edac.c
-+++ b/drivers/edac/versal_edac.c
-@@ -425,7 +425,7 @@ static void handle_error(struct mem_ctl_info *mci, struct ecc_status *stat)
- 			 convert_to_physical(priv, pinf), pinf.burstpos);
- 
- 		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
--				     priv->ce_cnt, 0, 0, 0, 0, 0, -1,
-+				     1, 0, 0, 0, 0, 0, -1,
- 				     priv->message, "");
- 	}
- 
-@@ -438,7 +438,7 @@ static void handle_error(struct mem_ctl_info *mci, struct ecc_status *stat)
- 			 convert_to_physical(priv, pinf), pinf.burstpos);
- 
- 		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
--				     priv->ue_cnt, 0, 0, 0, 0, 0, -1,
-+				     1, 0, 0, 0, 0, 0, -1,
- 				     priv->message, "");
- 	}
- 
--- 
-2.17.1
+Check the return value and process accordingly.
 
+Fan
+
+>  
+>  	put_device(region_dev);
+>  out:
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 25c46e72af16..c255063dd795 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -986,9 +986,12 @@ int cxl_clear_poison(struct cxl_memdev *cxlmd, u64 dpa);
+>  /* cxl memory scrub functions */
+>  #ifdef CONFIG_CXL_SCRUB
+>  int cxl_mem_patrol_scrub_init(struct cxl_memdev *cxlmd);
+> +int cxl_mem_ecs_init(struct cxl_memdev *cxlmd, int region_id);
+>  #else
+>  static inline int cxl_mem_patrol_scrub_init(struct cxl_memdev *cxlmd)
+>  { return -ENOTSUPP; }
+> +static inline int cxl_mem_ecs_init(struct cxl_memdev *cxlmd, int region_id)
+> +{ return -ENOTSUPP; }
+>  #endif
+>  
+>  #ifdef CONFIG_CXL_SUSPEND
+> -- 
+> 2.34.1
+> 
 
