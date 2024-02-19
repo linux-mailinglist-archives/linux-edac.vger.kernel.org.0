@@ -1,235 +1,149 @@
-Return-Path: <linux-edac+bounces-613-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-614-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99EDA859A92
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Feb 2024 02:47:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CF4C859FAA
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Feb 2024 10:26:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C59F0B20BD6
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Feb 2024 01:47:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47D1B286241
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Feb 2024 09:26:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2F39EDD;
-	Mon, 19 Feb 2024 01:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE0923755;
+	Mon, 19 Feb 2024 09:26:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ujAijiCv"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Xf0cdP2x"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC04394;
-	Mon, 19 Feb 2024 01:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB94C22619;
+	Mon, 19 Feb 2024 09:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708307235; cv=none; b=qiEwk+tND5eGam+PCqRg7zDD72jNuw3RzkkOz2JAek51PLU6o5N96Zo4cWF+U/tuGllnqp1gb+8n5wTJsM2Du3tVxuVSkyL317R2SQOgHtQsvPlINn+rCcya9LTKcST0n8+p+ev2WeBafPyPknvNxNAiMrQJTJx2Cvb+8lri4/E=
+	t=1708334779; cv=none; b=VoMInItOIR0wPrKuhwYZVkyheUgICFY1m5ybMzhfgiPA8u9G4elNr5XahWDYnSHDO/lcNWr/ZfQgevogvZkH/sYbPybTchlkshkUaUVt3pXsUhxLcUsQb++kz/1XFK3XDzKy8K5aPvxCLgKoknSk0VJqUQxK5sKKLNGVmrjhsNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708307235; c=relaxed/simple;
-	bh=ksaa4UwMu7iSxFJGBgVO7PBzq/jdvj9fS1T+/SOrN1A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tp7N3ME8jyMakltPf9jW2L2Q7pteHbFyRr+diHO+WxmMIgsipPRncgIWHeMIZlcSFTVhQi0RGkX9IE9bIcrw5uKFAU0kxhoWpX5KOFsAIRYVdTpxBi5Mx36hlnHigrSNp2ssjGsNPmzFNPIGDDhj4CX7GljmLY9hcc91CNUymDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ujAijiCv; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1708307223; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=6cJ+ZJtAysi52r932E530yoSx3LcIwhYcvRHFW0VzE4=;
-	b=ujAijiCvDp6hEHrozPJG+eXFZ5O2d0T23S6rqg3/YkEXDSjQKMG7D0mqPNE0tCAhnaOu5uhDQTRbmp8TEQeveL4W5t3q6ZvgqghYjRqtESGgOxQag4AbT/0q8ud3WOYhOyq3RXCOfZno/6+XcuOaNa8AZCfOIKl8H64U/IwU3n8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0W0mV91Q_1708307218;
-Received: from 30.240.113.204(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0W0mV91Q_1708307218)
-          by smtp.aliyun-inc.com;
-          Mon, 19 Feb 2024 09:47:01 +0800
-Message-ID: <a1a6d101-1c08-4cd0-860f-af905869c573@linux.alibaba.com>
-Date: Mon, 19 Feb 2024 09:46:57 +0800
+	s=arc-20240116; t=1708334779; c=relaxed/simple;
+	bh=JvAKRCTepAOVOrEHkC52aYvy+39kprUzUC+lxvHxVgU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S0rQwQMx7YDoadPksGpzXi39mj8dg+RLqPQOZB0iN1DC8Nqa0MIAoWRKv/SxWU2sV0N6LNs2jerzYLrTVQgHBHg9GLeYClKPHCQrKMS+y9v37PaWYHk59VbFDI4HSgVa24Vv0zRZNE2kqOELtmSwZpv37NAeFlXL9XTCP07dsVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Xf0cdP2x; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7366540E01B5;
+	Mon, 19 Feb 2024 09:26:13 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Mq1WMaf5Uafz; Mon, 19 Feb 2024 09:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1708334770; bh=UeyP8KcF7dj4h57hjnNyWpdHtLUCNmmBLKlm/tndrmU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xf0cdP2xgYwE7kk7NPoncwRQ2vWHPuBzFiX9Tp/dkKOkz7smCwncVf0nzi1Na0lVi
+	 x6ujl4Eih/C97YDlmeLExPqrbjN3/aaspiUhEbhnXTW1mcnIxZm2GBmz8Vm+MttUNx
+	 718loAEebT/uwngmUFn2ICrqZyBj/QciEgICYjPGkDAsJ1k3JF11Q8g83P4umT5v5H
+	 jNENwJiT4B5rbIChpoeAM/XQN3VTlBnlLBOS0P8iEDUciphLLIs5Ur52B23krqy4Ky
+	 QWAjTpPWG5pPWTs4C91do1EZTp92qFN5LpX5M2Fww5TuYARes6D/UiQ6Yr/p/yzMhD
+	 5nWN2iSpsbO3TDbHOv6sRHTUUhXtsdnA19VmQMa1qBhGGYxsgygmL84WdtsQal30w3
+	 oGn4Mfo7Ite08xAMz5y+ziPRCJuKMN9sIKEOnT8Ja/9D5z8EIWx1tiYtBFJ45fVLd9
+	 ByPPRpVoiiUHKhjBj01J6zSM1PuJmriXQv6SHiGlIKAyK8iJLYinVBmsQm8Z6OrCIg
+	 +T/HT9O+/gLpixmCRHqIZcgxS/JYamyKfclw2ziFb4x1K2+HqVdbV3opVQtZYxnHw4
+	 WrBcLblJm6zCeGMNmCRCHfSm/hWAaKzFiHZwPJ8ohAebLAsnqG/RI+NufsbkjC6zrf
+	 l+T3vQ8Jaw0ElXahzouG/fww=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 13EB640E0196;
+	Mon, 19 Feb 2024 09:25:35 +0000 (UTC)
+Date: Mon, 19 Feb 2024 10:25:28 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
+	mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
+	naoya.horiguchi@nec.com, james.morse@arm.com,
+	gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+	linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
+	ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
+	baolin.wang@linux.alibaba.com, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
+	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
+	zhuo.song@linux.alibaba.com, Ira Weiny <ira.weiny@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH v11 1/3] ACPI: APEI: send SIGBUS to current task if
+ synchronous memory error not recovered
+Message-ID: <20240219092528.GTZdMeiDWIDz613VeT@fat_crate.local>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20240204080144.7977-2-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 0/3] ACPI: APEI: handle synchronous exceptions in task
- work to send correct SIGBUS si_code
-To: bp@alien8.de, rafael@kernel.org, wangkefeng.wang@huawei.com,
- tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
- linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com,
- gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
- ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
- baolin.wang@linux.alibaba.com, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20240204080144.7977-1-xueshuai@linux.alibaba.com>
-Content-Language: en-US
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20240204080144.7977-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240204080144.7977-2-xueshuai@linux.alibaba.com>
 
-Hi, James and Borislav,
+On Sun, Feb 04, 2024 at 04:01:42PM +0800, Shuai Xue wrote:
+> Synchronous error was detected as a result of user-space process accessing
+> a 2-bit uncorrected error. The CPU will take a synchronous error exception
+> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue a
+> memory_failure() work which poisons the related page, unmaps the page, and
+> then sends a SIGBUS to the process, so that a system wide panic can be
+> avoided.
+> 
+> However, no memory_failure() work will be queued when abnormal synchronous
+> errors occur. These errors can include situations such as invalid PA,
+> unexpected severity, no memory failure config support, invalid GUID
+> section, etc. In such case, the user-space process will trigger SEA again.
+> This loop can potentially exceed the platform firmware threshold or even
+> trigger a kernel hard lockup, leading to a system reboot.
+> 
+> Fix it by performing a force kill if no memory_failure() work is queued
+> for synchronous errors.
+> 
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+>  drivers/acpi/apei/ghes.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 7b7c605166e0..0892550732d4 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -806,6 +806,15 @@ static bool ghes_do_proc(struct ghes *ghes,
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * If no memory failure work is queued for abnormal synchronous
+> +	 * errors, do a force kill.
+> +	 */
+> +	if (sync && !queued) {
+> +		pr_err("Sending SIGBUS to current task due to memory error not recovered");
+> +		force_sig(SIGBUS);
+> +	}
 
-Gentle Ping. Any feedback to this new version?
+Except that there are a bunch of CXL GUIDs being handled there too and
+this will sigbus those processes now automatically.
 
-Thank you.
+Lemme add the whole bunch from
 
-Best Regards,
-Shuai
+  671a794c33c6 ("acpi/ghes: Process CXL Component Events")
 
-On 2024/2/4 16:01, Shuai Xue wrote:
-> ## Changes Log
-> changes since v10:
-> - rebase to v6.8-rc2
-> 
-> changes since v9:
-> - split patch 2 to address exactly one issue in one patch (per Borislav)
-> - rewrite commit log according to template (per Borislav)
-> - pickup reviewed-by tag of patch 1 from James Morse
-> - alloc and free twcb through gen_pool_{alloc, free) (Per James)
-> - rewrite cover letter
-> 
-> changes since v8:
-> - remove the bug fix tag of patch 2 (per Jarkko Sakkinen)
-> - remove the declaration of memory_failure_queue_kick (per Naoya Horiguchi)
-> - rewrite the return value comments of memory_failure (per Naoya Horiguchi)
-> 
-> changes since v7:
-> - rebase to Linux v6.6-rc2 (no code changed)
-> - rewritten the cover letter to explain the motivation of this patchset
-> 
-> changes since v6:
-> - add more explicty error message suggested by Xiaofei
-> - pick up reviewed-by tag from Xiaofei
-> - pick up internal reviewed-by tag from Baolin
-> 
-> changes since v5 by addressing comments from Kefeng:
-> - document return value of memory_failure()
-> - drop redundant comments in call site of memory_failure() 
-> - make ghes_do_proc void and handle abnormal case within it
-> - pick up reviewed-by tag from Kefeng Wang 
-> 
-> changes since v4 by addressing comments from Xiaofei:
-> - do a force kill only for abnormal sync errors
-> 
-> changes since v3 by addressing comments from Xiaofei:
-> - do a force kill for abnormal memory failure error such as invalid PA,
-> unexpected severity, OOM, etc
-> - pcik up tested-by tag from Ma Wupeng
-> 
-> changes since v2 by addressing comments from Naoya:
-> - rename mce_task_work to sync_task_work
-> - drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
-> - add steps to reproduce this problem in cover letter
-> 
-> changes since v1:
-> - synchronous events by notify type
-> - Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
-> 
-> ## Cover Letter
-> 
-> There are two major types of uncorrected recoverable (UCR) errors :
-> 
-> - Synchronous error: The error is detected and raised at the point of the
->   consumption in the execution flow, e.g. when a CPU tries to access
->   a poisoned cache line. The CPU will take a synchronous error exception
->   such as Synchronous External Abort (SEA) on Arm64 and Machine Check
->   Exception (MCE) on X86. OS requires to take action (for example, offline
->   failure page/kill failure thread) to recover this uncorrectable error.
-> 
-> - Asynchronous error: The error is detected out of processor execution
->   context, e.g. when an error is detected by a background scrubber. Some data
->   in the memory are corrupted. But the data have not been consumed. OS is
->   optional to take action to recover this uncorrectable error.
-> 
-> Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
-> MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
-> could be used to determine whether a synchronous exception occurs on ARM64
-> platform. When a synchronous exception is detected, the kernel should
-> terminate the current process which accessing the poisoned page. This is
-> done by sending a SIGBUS signal with an error code BUS_MCEERR_AR,
-> indicating an action-required machine check error on read.
-> 
-> However, the memory failure recovery is incorrectly sending a SIGBUS
-> with wrong error code BUS_MCEERR_AO for synchronous errors in early kill
-> mode, even MF_ACTION_REQUIRED is set. The main problem is that
-> synchronous errors are queued as a memory_failure() work, and are
-> executed within a kernel thread context, not the user-space process that
-> encountered the corrupted memory on ARM64 platform. As a result, when
-> kill_proc() is called to terminate the process, it sends the incorrect
-> SIGBUS error code because the context in which it operates is not the
-> one where the error was triggered.
-> 
-> To this end, fix the problem by:
-> 
-> - Patch 1: performing a force kill if no memory_failure() work is queued for
-> 	   synchronous errors.
-> - Patch 2: a minor comments improvement.
-> - Patch 3: queue memory_failure() as a task_work so that it runs in the
-> 	   context of the process that is actually consuming the poisoned
-> 	   data, and it will send SIBBUS with si_code BUS_MCEERR_AR.
-> 
-> Lv Ying and XiuQi from Huawei also proposed to address similar problem[2][4].
-> Acknowledge to discussion with them.
-> 
-> ## Steps to Reproduce This Problem
-> 
-> To reproduce this problem:
-> 
-> 	# STEP1: enable early kill mode
-> 	#sysctl -w vm.memory_failure_early_kill=1
-> 	vm.memory_failure_early_kill = 1
-> 
-> 	# STEP2: inject an UCE error and consume it to trigger a synchronous error
-> 	#einj_mem_uc single
-> 	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-> 	injecting ...
-> 	triggering ...
-> 	signal 7 code 5 addr 0xffffb0d75000
-> 	page not present
-> 	Test passed
-> 
-> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
-> and it is not fact.
-> 
-> After this patch set:
-> 
-> 	# STEP1: enable early kill mode
-> 	#sysctl -w vm.memory_failure_early_kill=1
-> 	vm.memory_failure_early_kill = 1
-> 
-> 	# STEP2: inject an UCE error and consume it to trigger a synchronous error
-> 	#einj_mem_uc single
-> 	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-> 	injecting ...
-> 	triggering ...
-> 	signal 7 code 4 addr 0xffffb0d75000
-> 	page not present
-> 	Test passed
-> 
-> The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
-> as we expected.
-> 
-> [1] Add ARMv8 RAS virtualization support in QEMU https://patchew.org/QEMU/20200512030609.19593-1-gengdongjiu@huawei.com/
-> [2] https://lore.kernel.org/lkml/20221205115111.131568-3-lvying6@huawei.com/
-> [3] https://lkml.kernel.org/r/20220914064935.7851-1-xueshuai@linux.alibaba.com
-> [4] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
-> 
-> Shuai Xue (3):
->   ACPI: APEI: send SIGBUS to current task if synchronous memory error
->     not recovered
->   mm: memory-failure: move return value documentation to function
->     declaration
->   ACPI: APEI: handle synchronous exceptions in task work to send correct
->     SIGBUS si_code
-> 
->  arch/x86/kernel/cpu/mce/core.c |  9 +---
->  drivers/acpi/apei/ghes.c       | 84 +++++++++++++++++++++-------------
->  include/acpi/ghes.h            |  3 --
->  mm/memory-failure.c            | 22 +++------
->  4 files changed, 59 insertions(+), 59 deletions(-)
-> 
+for comment to Cc.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
