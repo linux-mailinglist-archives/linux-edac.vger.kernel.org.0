@@ -1,149 +1,278 @@
-Return-Path: <linux-edac+bounces-614-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-615-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CF4C859FAA
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Feb 2024 10:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E666185B9D7
+	for <lists+linux-edac@lfdr.de>; Tue, 20 Feb 2024 12:03:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47D1B286241
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Feb 2024 09:26:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BE4C286971
+	for <lists+linux-edac@lfdr.de>; Tue, 20 Feb 2024 11:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE0923755;
-	Mon, 19 Feb 2024 09:26:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Xf0cdP2x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900D865BB3;
+	Tue, 20 Feb 2024 11:03:04 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB94C22619;
-	Mon, 19 Feb 2024 09:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490AF629FD;
+	Tue, 20 Feb 2024 11:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708334779; cv=none; b=VoMInItOIR0wPrKuhwYZVkyheUgICFY1m5ybMzhfgiPA8u9G4elNr5XahWDYnSHDO/lcNWr/ZfQgevogvZkH/sYbPybTchlkshkUaUVt3pXsUhxLcUsQb++kz/1XFK3XDzKy8K5aPvxCLgKoknSk0VJqUQxK5sKKLNGVmrjhsNQ=
+	t=1708426984; cv=none; b=alUaowNew/1adYUnakUVtIkiMrKhoAHUjSIWPo4QrHuRapU8D0IuK8F3L31TJeCUaCizcJBS8bHZrOCpK14KNvbLs4NSTmO1dQgFmnkl5dtCOnykSqaK9L78shD8qgxgnE7iw1DDqkDBE9cyVh9Ek4EW++Lbx01jI6BKWclXGa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708334779; c=relaxed/simple;
-	bh=JvAKRCTepAOVOrEHkC52aYvy+39kprUzUC+lxvHxVgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S0rQwQMx7YDoadPksGpzXi39mj8dg+RLqPQOZB0iN1DC8Nqa0MIAoWRKv/SxWU2sV0N6LNs2jerzYLrTVQgHBHg9GLeYClKPHCQrKMS+y9v37PaWYHk59VbFDI4HSgVa24Vv0zRZNE2kqOELtmSwZpv37NAeFlXL9XTCP07dsVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Xf0cdP2x; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7366540E01B5;
-	Mon, 19 Feb 2024 09:26:13 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Mq1WMaf5Uafz; Mon, 19 Feb 2024 09:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708334770; bh=UeyP8KcF7dj4h57hjnNyWpdHtLUCNmmBLKlm/tndrmU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xf0cdP2xgYwE7kk7NPoncwRQ2vWHPuBzFiX9Tp/dkKOkz7smCwncVf0nzi1Na0lVi
-	 x6ujl4Eih/C97YDlmeLExPqrbjN3/aaspiUhEbhnXTW1mcnIxZm2GBmz8Vm+MttUNx
-	 718loAEebT/uwngmUFn2ICrqZyBj/QciEgICYjPGkDAsJ1k3JF11Q8g83P4umT5v5H
-	 jNENwJiT4B5rbIChpoeAM/XQN3VTlBnlLBOS0P8iEDUciphLLIs5Ur52B23krqy4Ky
-	 QWAjTpPWG5pPWTs4C91do1EZTp92qFN5LpX5M2Fww5TuYARes6D/UiQ6Yr/p/yzMhD
-	 5nWN2iSpsbO3TDbHOv6sRHTUUhXtsdnA19VmQMa1qBhGGYxsgygmL84WdtsQal30w3
-	 oGn4Mfo7Ite08xAMz5y+ziPRCJuKMN9sIKEOnT8Ja/9D5z8EIWx1tiYtBFJ45fVLd9
-	 ByPPRpVoiiUHKhjBj01J6zSM1PuJmriXQv6SHiGlIKAyK8iJLYinVBmsQm8Z6OrCIg
-	 +T/HT9O+/gLpixmCRHqIZcgxS/JYamyKfclw2ziFb4x1K2+HqVdbV3opVQtZYxnHw4
-	 WrBcLblJm6zCeGMNmCRCHfSm/hWAaKzFiHZwPJ8ohAebLAsnqG/RI+NufsbkjC6zrf
-	 l+T3vQ8Jaw0ElXahzouG/fww=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 13EB640E0196;
-	Mon, 19 Feb 2024 09:25:35 +0000 (UTC)
-Date: Mon, 19 Feb 2024 10:25:28 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
-	mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com,
-	gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
-	ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
-	baolin.wang@linux.alibaba.com, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
-	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
-	zhuo.song@linux.alibaba.com, Ira Weiny <ira.weiny@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 1/3] ACPI: APEI: send SIGBUS to current task if
- synchronous memory error not recovered
-Message-ID: <20240219092528.GTZdMeiDWIDz613VeT@fat_crate.local>
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20240204080144.7977-2-xueshuai@linux.alibaba.com>
+	s=arc-20240116; t=1708426984; c=relaxed/simple;
+	bh=zuvLddHIXbqnQ9+Zwy+M4L650QAJdwFPOIroz3/ec9o=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nu4GqVASipKVT2vbxDbHJOfYlP6ZeGns2H4Ex5uaO5/VE+11tiXNtufkG67pDgpLk23cDrFfK7z+Ei7IxZY9xjTUBZaneep471oNrfZG0bX0j7OxFhB56kBZ2pX4YlH0iWVS/AvDBd+HKVzkogg2b5vGgekLx4kF3hQE9oSw5lM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TfGcM5KXGz6K6QG;
+	Tue, 20 Feb 2024 18:58:59 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 18AFD140B54;
+	Tue, 20 Feb 2024 19:02:59 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 20 Feb
+ 2024 11:02:58 +0000
+Date: Tue, 20 Feb 2024 11:02:56 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: <shiju.jose@huawei.com>
+CC: <linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <dan.j.williams@intel.com>, <dave@stgolabs.net>,
+	<dave.jiang@intel.com>, <alison.schofield@intel.com>,
+	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<david@redhat.com>, <Vilas.Sridharan@amd.com>, <leo.duran@amd.com>,
+	<Yazen.Ghannam@amd.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
+	<tony.luck@intel.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<rafael@kernel.org>, <lenb@kernel.org>, <naoya.horiguchi@nec.com>,
+	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
+	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
+	<mike.malvestuto@intel.com>, <gthelen@google.com>,
+	<wschwartz@amperecomputing.com>, <dferguson@amperecomputing.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
+	<linuxarm@huawei.com>
+Subject: Re: [RFC PATCH v6 01/12] cxl/mbox: Add GET_SUPPORTED_FEATURES
+ mailbox command
+Message-ID: <20240220110256.00001586@Huawei.com>
+In-Reply-To: <20240215111455.1462-2-shiju.jose@huawei.com>
+References: <20240215111455.1462-1-shiju.jose@huawei.com>
+	<20240215111455.1462-2-shiju.jose@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240204080144.7977-2-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Sun, Feb 04, 2024 at 04:01:42PM +0800, Shuai Xue wrote:
-> Synchronous error was detected as a result of user-space process accessing
-> a 2-bit uncorrected error. The CPU will take a synchronous error exception
-> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue a
-> memory_failure() work which poisons the related page, unmaps the page, and
-> then sends a SIGBUS to the process, so that a system wide panic can be
-> avoided.
-> 
-> However, no memory_failure() work will be queued when abnormal synchronous
-> errors occur. These errors can include situations such as invalid PA,
-> unexpected severity, no memory failure config support, invalid GUID
-> section, etc. In such case, the user-space process will trigger SEA again.
-> This loop can potentially exceed the platform firmware threshold or even
-> trigger a kernel hard lockup, leading to a system reboot.
-> 
-> Fix it by performing a force kill if no memory_failure() work is queued
-> for synchronous errors.
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+On Thu, 15 Feb 2024 19:14:43 +0800
+<shiju.jose@huawei.com> wrote:
+
+> From: Shiju Jose <shiju.jose@huawei.com>
+>=20
+> Add support for GET_SUPPORTED_FEATURES mailbox command.
+>=20
+> CXL spec 3.1 section 8.2.9.6 describes optional device specific features.
+> CXL devices supports features with changeable attributes.
+> Get Supported Features retrieves the list of supported device specific
+> features. The settings of a feature can be retrieved using Get Feature
+> and optionally modified using Set Feature.
+>=20
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Hi Shiju,
+
+Some comment inline.
+
+Mostly just naming suggestions. Actual functionality looks good to me.
+
+
 > ---
->  drivers/acpi/apei/ghes.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 7b7c605166e0..0892550732d4 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -806,6 +806,15 @@ static bool ghes_do_proc(struct ghes *ghes,
->  		}
->  	}
->  
-> +	/*
-> +	 * If no memory failure work is queued for abnormal synchronous
-> +	 * errors, do a force kill.
-> +	 */
-> +	if (sync && !queued) {
-> +		pr_err("Sending SIGBUS to current task due to memory error not recovered");
-> +		force_sig(SIGBUS);
-> +	}
+>  drivers/cxl/core/mbox.c | 23 +++++++++++++++
+>  drivers/cxl/cxlmem.h    | 62 +++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 85 insertions(+)
+>=20
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index 27166a411705..191f51f3df0e 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -1290,6 +1290,29 @@ int cxl_set_timestamp(struct cxl_memdev_state *mds)
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_set_timestamp, CXL);
+> =20
+> +int cxl_get_supported_features(struct cxl_memdev_state *mds,
+> +						struct cxl_mbox_get_supp_feats_in *pi,
+> +						void *feats_out)
 
-Except that there are a bunch of CXL GUIDs being handled there too and
-this will sigbus those processes now automatically.
+Odd indent.  Align the later lines with s of struct
 
-Lemme add the whole bunch from
+Comments on input types in header below.
 
-  671a794c33c6 ("acpi/ghes: Process CXL Component Events")
 
-for comment to Cc.
+> +{
+> +	struct cxl_mbox_cmd mbox_cmd;
+> +	int rc;
+> +
+> +	mbox_cmd =3D (struct cxl_mbox_cmd) {
+> +		.opcode =3D CXL_MBOX_OP_GET_SUPPORTED_FEATURES,
+> +		.size_in =3D sizeof(*pi),
+> +		.payload_in =3D pi,
+> +		.size_out =3D le32_to_cpu(pi->count),
+> +		.payload_out =3D feats_out,
+> +		.min_out =3D sizeof(struct cxl_mbox_get_supp_feats_out),
+feats_out should be typed, in which case this becomes
+sizeof(*feats_out)
 
--- 
-Regards/Gruss,
-    Boris.
+> +	};
+> +	rc =3D cxl_internal_send_cmd(mds, &mbox_cmd);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_get_supported_features, CXL);
+> +
+>  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
+>  		       struct cxl_region *cxlr)
+>  {
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 5303d6942b88..23e4d98b9bae 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -529,6 +529,7 @@ enum cxl_opcode {
+>  	CXL_MBOX_OP_SET_TIMESTAMP	=3D 0x0301,
+>  	CXL_MBOX_OP_GET_SUPPORTED_LOGS	=3D 0x0400,
+>  	CXL_MBOX_OP_GET_LOG		=3D 0x0401,
+> +	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	=3D 0x0500,
+>  	CXL_MBOX_OP_IDENTIFY		=3D 0x4000,
+>  	CXL_MBOX_OP_GET_PARTITION_INFO	=3D 0x4100,
+>  	CXL_MBOX_OP_SET_PARTITION_INFO	=3D 0x4101,
+> @@ -698,6 +699,64 @@ struct cxl_mbox_set_timestamp_in {
+> =20
+>  } __packed;
+> =20
+> +/* Get Supported Features CXL 3.1 Spec 8.2.9.6.1 */
+> +/*
+> + * Get Supported Features input payload
+> + * CXL rev 3.1 section 8.2.9.6.1 Table 8-95
+> + */
+> +struct cxl_mbox_get_supp_feats_in {
+> +	__le32 count;
+> +	__le16 start_index;
+> +	u16 reserved;
 
-https://people.kernel.org/tglx/notes-about-netiquette
+=46rom a local style point of view using a u16 for reserved is
+a new style choice - best to avoid that - most common option looks to
+be
+
+	u8 rsvd[2];
+
+> +} __packed;
+> +
+> +/*
+> + * Get Supported Features Supported Feature Entry
+> + * CXL rev 3.1 section 8.2.9.6.1 Table 8-97
+> + */
+> +/* Supported Feature Entry : Payload out attribute flags */
+> +#define CXL_FEAT_ENTRY_FLAG_CHANGABLE	BIT(0)
+> +#define CXL_FEAT_ENTRY_FLAG_DEEPEST_RESET_PERSISTENCE_MASK	GENMASK(3, 1)
+> +#define CXL_FEAT_ENTRY_FLAG_PERSIST_ACROSS_FIRMWARE_UPDATE	BIT(4)
+> +#define CXL_FEAT_ENTRY_FLAG_SUPPORT_DEFAULT_SELECTION	BIT(5)
+> +#define CXL_FEAT_ENTRY_FLAG_SUPPORT_SAVED_SELECTION	BIT(6)
+> +
+> +enum cxl_feat_attr_value_persistence {
+> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_NONE,
+> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_CXL_RESET,
+> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_HOT_RESET,
+> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_WARM_RESET,
+> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_COLD_RESET,
+> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_MAX
+> +};
+> +
+> +#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_ACROSS_FW_UPDATE_MASK	BIT(4)
+Not sure there is benefit in defining mask for single bit fields.
+Or if there is don't define the value above.
+> +#define CXL_FEAT_ENTRY_FLAG_PERSIST_ACROSS_FIRMWARE_UPDATE	BIT(4)
+
+Either is probably fine, just not both!
+
+> +#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_DEFAULT_SEL_SUPPORT_MASK	BIT(5)
+> +#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_SAVED_SEL_SUPPORT_MASK	BIT(6)
+> +
+> +struct cxl_mbox_supp_feat_entry {
+> +	uuid_t uuid;
+> +	__le16 feat_index;
+
+Given it's in a feat entry, could drop 'feat' as redundant info.
+
+	__le16 index;
+	__le16 get_size;
+etc
+
+> +	__le16 get_feat_size;
+> +	__le16 set_feat_size;
+> +	__le32 attr_flags;
+> +	u8 get_feat_version;
+> +	u8 set_feat_version;
+> +	__le16 set_feat_effects;
+> +	u8 rsvd[18];
+> +}  __packed;
+> +
+> +/*
+> + * Get Supported Features output payload
+> + * CXL rev 3.1 section 8.2.9.6.1 Table 8-96
+> + */
+> +struct cxl_mbox_get_supp_feats_out {
+> +	__le16 entries;
+> +	__le16 nsuppfeats_dev;
+Probably don't need the _dev postfix.  Command being sent to a device
+so that doesn't add much.
+
+I looked at naming in similar cases.  For mailbox clear we have nr_recs,
+so perhaps nr_supported ?
+
+> +	u32 reserved;
+	u8 rsvd[4];
+as above - match the local syle.
+> +	struct cxl_mbox_supp_feat_entry feat_entries[];
+> +} __packed;
+> +
+>  /* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */
+>  struct cxl_mbox_poison_in {
+>  	__le64 offset;
+> @@ -829,6 +888,9 @@ void cxl_event_trace_record(const struct cxl_memdev *=
+cxlmd,
+>  			    enum cxl_event_type event_type,
+>  			    const uuid_t *uuid, union cxl_event *evt);
+>  int cxl_set_timestamp(struct cxl_memdev_state *mds);
+> +int cxl_get_supported_features(struct cxl_memdev_state *mds,
+> +			       struct cxl_mbox_get_supp_feats_in *pi,
+> +			       void *feats_out);
+
+
+Don't use a void * for that output data.  It should be a
+struct cxl_mbox_get_supp_feats_out *
+
+For the input, the other similar functions are providing parameters
+directly, not wrapped up in a structure.  Easy enough to do that here
+as well as we only need
+u32 count, u16 start_index
+instead of pi
+
+
+>  int cxl_poison_state_init(struct cxl_memdev_state *mds);
+>  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
+>  		       struct cxl_region *cxlr);
+
 
