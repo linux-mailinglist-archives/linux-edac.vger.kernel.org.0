@@ -1,143 +1,155 @@
-Return-Path: <linux-edac+bounces-630-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-631-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAB1085EEED
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Feb 2024 03:07:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06E6C85FE81
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Feb 2024 17:55:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9D681C21EF7
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Feb 2024 02:07:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF1D1285D5B
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Feb 2024 16:55:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC475168BD;
-	Thu, 22 Feb 2024 02:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54F8A153BD5;
+	Thu, 22 Feb 2024 16:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bHC2M4Rk"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RF/RoxGX"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2088.outbound.protection.outlook.com [40.107.93.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FEA13FF1;
-	Thu, 22 Feb 2024 02:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708567655; cv=none; b=u255SuA9RjF8+TqS2c2wwPP16r1dUALUvyywefYJzASCR1rs5jowuRsZ3SSDfzrBeaSZDblJtOR7R2XTCKbkm3vfijlfENFjP1xhK2qu9BqIDEWHIq0jxxmS+8LeM91TYnt0VOIRQlDhKGE5m50qmzo83/4aHbFcaZ/juqu7Yb0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708567655; c=relaxed/simple;
-	bh=wpfrzY5wnM49lInKxaLzb9/hPGzdAubLDvCFyOqjldc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FtAZ6RoiNC8KlJssg3yYmH0Gt/YLRysp/JnxbWRsCzlaAqcXHJxsITqPNS0cqcEJFHlw/K3kIQHZyJxEIhaIaYMRUAtfzdK4bWC5bvAExGE/IWao1NqTsyuhscBF+EMVp/NkyKHEoHzgr3K6VlBD5KBM0gfzlCqyjAJNKADl54Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bHC2M4Rk; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1708567644; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=lDGwJr9TuPvJsHHw5w4m96qLqRHU5UZ2FIU9NMbibkY=;
-	b=bHC2M4Rk2wv0ylI87krt3QbgBa+WsZdcKjeeVawCMgE59rh2AuqctJIQw80gUR5agkL0oeaTDmalmtdsjFdxIx627a9T3mWcGvaLYmS3oWCSEVTZSO6Ah5UIDVnR2Uacs0OQ3FbX2m+PVgX7FOw9lzq/xDSbRS2TaIwdEWzw8m4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=35;SR=0;TI=SMTPD_---0W1.N3yS_1708567639;
-Received: from 30.240.113.243(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0W1.N3yS_1708567639)
-          by smtp.aliyun-inc.com;
-          Thu, 22 Feb 2024 10:07:22 +0800
-Message-ID: <bdf15819-46e0-498f-97e1-a0183f257086@linux.alibaba.com>
-Date: Thu, 22 Feb 2024 10:07:18 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683DB15098A;
+	Thu, 22 Feb 2024 16:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708620907; cv=fail; b=jyTDApxMUytM7cnoqM9NuWbiArcANFOmoUr6WvDgsJ7w6MEWsKNJLohN6izGp2f/V4siRDLsrAmaAy8nl6kIhz00utDriv/P4hPmP4Lj/4mI72OVFjZDlUnBULpfPqhmED2N4Uam2vk8x4CHFJydcrgyK4+cqVuhGTeCZ4Mlzhc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708620907; c=relaxed/simple;
+	bh=ZCnjNbBQgJ/MQjlQeOCEPc8uZa2nulbupCi6Cdzb6X0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KrBR4S5a5iI3HNH79Hl8WnAejd1bMkicd7NNNZRsKs2VIveL9tHK4mh1GVmhfDZ6/bwBRdQgzww9KczgsdzoR3HxF7UEZeHrJ6XIiPbIfEvAvtQQ1PNZTjoo/8uqZCJmKqihr1vU7eWhnoXayZXgNstnETR2z++zIReBNaRU3yc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RF/RoxGX; arc=fail smtp.client-ip=40.107.93.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jEVkVNHNAAxfbPFwtEjYD2Lx+7Qh/yr/2L7Jvb8LBgNL3tD8IeUtJ/AOopqnpmYaYYl7hKH1aH7FkUyOjO5P38Px5Yr/kJrFYMzM3vqekq3ciK9Yfj69uMGJ/pj53O2ge+VF4fadSiWWzcX7fqdr8onHVoW3OC8Y+zraundb90mByrk0uMLvaNJnrXbD1GMX7NMdI57sgaytuIYA26ZCLvJS1GBNb8rkgOROA2tuUHoAPaHYmWWztR1h6OPR3jQD9c4qmP4elMGztWq8AdtyYofZbg78qa9/8IjyXbS0IRzO3K3CtE9fjyj7ByBwpsUDCUX3TF+XK2URKndEm8Od6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZEWrLJhcJNx3jvUGP3CWe4rhsGDi+5feYj/NA/b8cbE=;
+ b=KjsJFVKJcQiVm0M8BY7JEWV0YOEokY0whO12FM93kL8nC2fBaHrYDANQVm7SHrsJ8od6NvPJQ6gaDzJGjkJwvk+LK0tiga6TBrD/14Sk/7IPi1SKEFq+uDEQkBVTkpAsadxpKEIAibBZ4UawnNDn5Cam21ioThOSGHO/q/VfysunE01fjTLv0xkmwKIFkbw7upA31qrijmiSS0LGPs1QZsFAjGnu3pcDq33SEa2TtfTwGguSXVutZcNQ4/YqFh+WrmNMkKYkHRAkpaHC5FxJTvIn40UWrvdOYx7f9v3UhRSbat5mnp0QpKnNCoeRO3FKAbf94Lm89wWtUYDK5N8jSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZEWrLJhcJNx3jvUGP3CWe4rhsGDi+5feYj/NA/b8cbE=;
+ b=RF/RoxGX0/TEX2zOU5FzYZ7n2lzFyhhezxKPIK0G0BpHaJljNbi10OAqYuKRIQ009Lln6uVfYGolLLNgm3ne6RRqrryYKnWRLEkrZIpnLFDO+3ejM0RovlOJ0yFpDNt0Z1jkiWJ5oWSd0d47PZPyEfShBCkXWB6eMxRR+dw0kwE=
+Received: from BYAPR05CA0097.namprd05.prod.outlook.com (2603:10b6:a03:e0::38)
+ by MN2PR12MB4360.namprd12.prod.outlook.com (2603:10b6:208:266::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.24; Thu, 22 Feb
+ 2024 16:55:02 +0000
+Received: from SJ1PEPF00001CDF.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0:cafe::46) by BYAPR05CA0097.outlook.office365.com
+ (2603:10b6:a03:e0::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.14 via Frontend
+ Transport; Thu, 22 Feb 2024 16:55:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF00001CDF.mail.protection.outlook.com (10.167.242.7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7292.25 via Frontend Transport; Thu, 22 Feb 2024 16:55:00 +0000
+Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 22 Feb
+ 2024 10:54:59 -0600
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: <bp@alien8.de>, <tony.luck@intel.com>, <linux-edac@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
+	<john.allen@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH] RAS/AMD/ATL: Fix bit overflow in denorm_addr_df4_np2()
+Date: Thu, 22 Feb 2024 10:54:49 -0600
+Message-ID: <20240222165449.23582-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 1/3] ACPI: APEI: send SIGBUS to current task if
- synchronous memory error not recovered
-To: Borislav Petkov <bp@alien8.de>, Ira Weiny <ira.weiny@intel.com>,
- "Luck, Tony" <tony.luck@intel.com>, "james.morse@arm.com"
- <james.morse@arm.com>
-Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
- mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
- naoya.horiguchi@nec.com, gregkh@linuxfoundation.org, will@kernel.org,
- jarkko@kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
- ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
- baolin.wang@linux.alibaba.com, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com, Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Dan Williams <dan.j.williams@intel.com>
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20240204080144.7977-2-xueshuai@linux.alibaba.com>
- <20240219092528.GTZdMeiDWIDz613VeT@fat_crate.local>
-Content-Language: en-US
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20240219092528.GTZdMeiDWIDz613VeT@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CDF:EE_|MN2PR12MB4360:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9388dc5d-d93b-47bf-c046-08dc33c70261
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	uVDuEwiifQjNVyFxnw41Z97EY98pyi9pikpprgj/52Xdzs6uVDULei2LHbVIoSIgIiEPFU4bB7Tv/ICu03/mNehOrjkZTd/pc0U7U/SmAPH0vZHACB6zywIB/7JISsFFiy85luFFEaeCyyRpIiLmY6g9qfH3vgWxcrcn5RKK+rHXUCtE6nB5uWIx82eXt5uEjAyAbj6JRNx1mZt633TcBhPA6nlZLS5yI1aCFetZlvJauJEGyUNM7ikrA/z1uHyjW0scu587Njs/itqYRrnv513xOqNEgCJ3Nz7WZOXZdkkVXqDZvzxGEMNxGUc6KiB6I0FOy10IAnzxxPA2qUVaCY4osQIl/Dn2FNeCExx90z6V76KdkCaTr1SX3UB/BMQ0YeD/qyl4ybQ4wVuJ8TBRqEJiYJl0LzoZSne2cd98toT8+95gK7JxwZlRRxUOXW4l8rLYi9M3czHM2PfG6t3tF6U3sjXHImJ5pPxw8dxxBEjOAOUPSpiwH2JFbWd+04ohP4XTFbnyUG9MCpA35E+wmrt8Z8EnMZCHBZC0zmJSlYMMSBrtn6HfgjjSbfEhImWUE5kfFjRVIhQOOkXuz9LtQIoHGJw6qfCZwo1A8eUS9xV4VC47o/h5l+g2ygah3rgC4rzZMz8NPSGPTwvNj37JYw==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(46966006)(40470700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2024 16:55:00.9830
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9388dc5d-d93b-47bf-c046-08dc33c70261
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CDF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4360
 
+The hash_pa8 and hashed_bit values in denorm_addr_df4_np2() are
+currently defined as u8 types. These variables represent single bits.
 
+'hash_pa8' is set based on logical AND operations using masks with more
+than 8 bits. So the calculated value will not fit in this variable. It
+will always be '0'. The 'hash_pa8' check later in the function will fail
+which produces incorrect results for some cases.
 
-On 2024/2/19 17:25, Borislav Petkov wrote:
-> On Sun, Feb 04, 2024 at 04:01:42PM +0800, Shuai Xue wrote:
->> Synchronous error was detected as a result of user-space process accessing
->> a 2-bit uncorrected error. The CPU will take a synchronous error exception
->> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue a
->> memory_failure() work which poisons the related page, unmaps the page, and
->> then sends a SIGBUS to the process, so that a system wide panic can be
->> avoided.
->>
->> However, no memory_failure() work will be queued when abnormal synchronous
->> errors occur. These errors can include situations such as invalid PA,
->> unexpected severity, no memory failure config support, invalid GUID
->> section, etc. In such case, the user-space process will trigger SEA again.
->> This loop can potentially exceed the platform firmware threshold or even
->> trigger a kernel hard lockup, leading to a system reboot.
->>
->> Fix it by performing a force kill if no memory_failure() work is queued
->> for synchronous errors.
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> ---
->>  drivers/acpi/apei/ghes.c | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 7b7c605166e0..0892550732d4 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -806,6 +806,15 @@ static bool ghes_do_proc(struct ghes *ghes,
->>  		}
->>  	}
->>  
->> +	/*
->> +	 * If no memory failure work is queued for abnormal synchronous
->> +	 * errors, do a force kill.
->> +	 */
->> +	if (sync && !queued) {
->> +		pr_err("Sending SIGBUS to current task due to memory error not recovered");
->> +		force_sig(SIGBUS);
->> +	}
-> 
-> Except that there are a bunch of CXL GUIDs being handled there too and
-> this will sigbus those processes now automatically.
+Change these variables to bool type. This clarifies that they are
+single bit values. Also, this allows the compiler to ensure they hold
+the proper results. Remove an unnecessary shift operation.
 
-Before the CXL GUIDs added, @Tony confirmed that the HEST notifications are always
-asynchronous on x86 platform, so only Synchronous External Abort (SEA) on ARM is
-delivered as a synchronous notification.
+Fixes: 3f3174996be6 ("RAS: Introduce AMD Address Translation Library")
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+---
+ drivers/ras/amd/atl/denormalize.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Will the CXL component trigger synchronous events for which we need to terminate the
-current process by sending sigbus to process?
+diff --git a/drivers/ras/amd/atl/denormalize.c b/drivers/ras/amd/atl/denormalize.c
+index 49a900e066f1..f46bce119255 100644
+--- a/drivers/ras/amd/atl/denormalize.c
++++ b/drivers/ras/amd/atl/denormalize.c
+@@ -545,7 +545,7 @@ static int denorm_addr_df4_np2(struct addr_ctx *ctx)
+ 	unsigned int mod_value, shift_value;
+ 	u16 mask = df_cfg.component_id_mask;
+ 	u64 temp_addr_a, temp_addr_b;
+-	u8 hash_pa8, hashed_bit;
++	bool hash_pa8, hashed_bit;
+ 
+ 	switch (ctx->map.intlv_mode) {
+ 	case DF4_NPS4_3CHAN_HASH:
+@@ -578,7 +578,6 @@ static int denorm_addr_df4_np2(struct addr_ctx *ctx)
+ 		temp_addr_a	= remove_bits(shift_value, shift_value, ctx->ret_addr);
+ 	} else {
+ 		hash_pa8	= (ctx->coh_st_fabric_id & df_cfg.socket_id_mask);
+-		hash_pa8	>>= df_cfg.socket_id_shift;
+ 		temp_addr_a	= ctx->ret_addr;
+ 	}
+ 
+-- 
+2.34.1
 
-> 
-> Lemme add the whole bunch from
-> 
->   671a794c33c6 ("acpi/ghes: Process CXL Component Events")
-> 
-> for comment to Cc.
-> 
-
-Thank you.
-
-Best Regards,
-Shuai
 
