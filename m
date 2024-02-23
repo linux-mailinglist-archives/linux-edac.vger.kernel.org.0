@@ -1,109 +1,103 @@
-Return-Path: <linux-edac+bounces-671-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-672-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9910386161D
-	for <lists+linux-edac@lfdr.de>; Fri, 23 Feb 2024 16:44:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F12AA8617CD
+	for <lists+linux-edac@lfdr.de>; Fri, 23 Feb 2024 17:26:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32C62B21DDF
-	for <lists+linux-edac@lfdr.de>; Fri, 23 Feb 2024 15:43:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E77E1C209C3
+	for <lists+linux-edac@lfdr.de>; Fri, 23 Feb 2024 16:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F22B8287B;
-	Fri, 23 Feb 2024 15:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Hl77ICMb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FEADDBB;
+	Fri, 23 Feb 2024 16:25:59 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179704A3D;
-	Fri, 23 Feb 2024 15:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A60A7EF06;
+	Fri, 23 Feb 2024 16:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708703033; cv=none; b=nK1G3GbAI9ZxAvY46lPzsTpU3jPMtS3PMaqzdci4D/hMH9gXlcdxmNp/qWehMxkpQXt6aW5Ruwi8ybiDIV1zEuvbncTnxTah6NH/fpr/iZ3COopXKvoVTj1gezql7O99ANtaO/A7PdyXn5ML0N332Q5h0TE4XWeS3QNdWSl79DU=
+	t=1708705559; cv=none; b=PjrXHKNt/RVU9Ev8YO3lF6jXnoaiD0Ohkpd7M/Oyi/NN/Z87Nij28MoV9gn0hLDn1ooDrOXpqiMK3B6obZ2RRbicqttr71R4xUKg/AmAQjkyA0yak+itFZv63ZoMPxXtVSU5ZoCuln1MuF6XrQauZrpup/bYrDnLDrKdEFQWBnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708703033; c=relaxed/simple;
-	bh=LRbUtJsi5tFV5Td5mfsuSsDvyXVEmiUYSJKc4U9GivU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KeSY0aJBpbqD14J0i5nPjMvJjPiU5ttPJr8geDRk4vZwmKLb7zbzAIiiqNXO6YFxuCvCyIxPCV6EhBCF6MLGUs+1JuWuNmCbUm8vTyesJFedWrexGmIiFK8yQPC2J/e7gtZ6gjT5E+PUVmxmGNbnWKVjWWQO/1lomDof7bpuTJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Hl77ICMb; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6F3D840E01A0;
-	Fri, 23 Feb 2024 15:43:41 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id YyMHoWaZT0-N; Fri, 23 Feb 2024 15:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708703018; bh=vOuid2cJTRQLhiLgDF9qDITkt0o2BhRLiMIp10b+zB0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hl77ICMbkiYiZXvnyP7l2drG6hgZ4Ocx0OmlAwmeL+3agO8UQXbkPtu9UHeYwVvCk
-	 fgojY2YiA1nbEZEf3o/QUicgYfYzdqtWICyIMv7KSvpQBZUON8BAPavJgOV4yyWRcv
-	 MARAP+KTuGeW3nEJjwsJTVBZoHoW0cQmbDTlKpNsxMi4tETXM7Z67ftazhCz924lQ1
-	 kR7sK/Lt/UoMVj0/HlLmsmJyRD5wRSonm1Zxr+Z0T0ocdHEMwujmFl0A9GvbqbaWFv
-	 mxYHZ9FGCYCyxdlOitulO/q+SeT9+QE9v4nLngN6E/5SDn4GcnAYtTrDLA3Ijjaxw3
-	 B+qnh6uLPCBZ0ZBR2x9alDC6rR8Dw5DhF2xjq27dcSfTPJ7wbiYeCfZMeCXcn8CVdF
-	 s0p3vfTNLM+NsPctNdMKiEz+fVGwVCLIj7JRGSJJl84Pxgg1yYi1UA2sYcoC7qzRGu
-	 ul5Od0UxW1Mrr1wGg12U2ReAaZ6zizCI5AEY7EtnLAue0T2F3GE5zClHTLexscMMSV
-	 uA/JiB+48CLcWxmdjFDbhZLEReZRqrpjxa4aurhC3s5Kv2P/Qr/wGwukViwrlXv0Ni
-	 ouDFi0Af7q5Hwk3AExxf1tmSoAtvDC/x/asn9L0GrL/G1brZFVMVEivvo6E6FhrX66
-	 YaWYc02C743bAOSmPKn5wG/0=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DDE8040E016C;
-	Fri, 23 Feb 2024 15:42:57 +0000 (UTC)
-Date: Fri, 23 Feb 2024 16:42:51 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: shiju.jose@huawei.com
-Cc: linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org, dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, david@redhat.com,
-	Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
-	rientjes@google.com, jiaqiyan@google.com, tony.luck@intel.com,
-	Jon.Grimm@amd.com, dave.hansen@linux.intel.com, rafael@kernel.org,
-	lenb@kernel.org, naoya.horiguchi@nec.com, james.morse@arm.com,
-	jthoughton@google.com, somasundaram.a@hpe.com,
-	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
-	mike.malvestuto@intel.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com,
-	linuxarm@huawei.com
+	s=arc-20240116; t=1708705559; c=relaxed/simple;
+	bh=pcgLlYSZ94N8Z5tjPSaQIgYSm+pxjOpzSlJJCy147m0=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dr/4ypPYAvI5XJC3a6WWVwbAu98iHZpg/umh1TUfQhYnj8jSPZPLgVXVm6phxrusUQW4CGekIycT99PFBUptmtDc0dIGqk2myG3puN4CtSmQRC+DexMz7Gdr3hJOQ5SaHrEazQ4ocEN/UhZs386oS9JupJirmzknKANHWewklFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ThFd33KWmz6JB2J;
+	Sat, 24 Feb 2024 00:21:27 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 51DEA140D30;
+	Sat, 24 Feb 2024 00:25:53 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 23 Feb
+ 2024 16:25:52 +0000
+Date: Fri, 23 Feb 2024 16:25:51 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: <shiju.jose@huawei.com>, <linux-cxl@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+	<dan.j.williams@intel.com>, <dave@stgolabs.net>, <dave.jiang@intel.com>,
+	<alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+	<ira.weiny@intel.com>, <linux-edac@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <david@redhat.com>,
+	<Vilas.Sridharan@amd.com>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
+	<rientjes@google.com>, <jiaqiyan@google.com>, <tony.luck@intel.com>,
+	<Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>, <rafael@kernel.org>,
+	<lenb@kernel.org>, <naoya.horiguchi@nec.com>, <james.morse@arm.com>,
+	<jthoughton@google.com>, <somasundaram.a@hpe.com>, <erdemaktas@google.com>,
+	<pgonda@google.com>, <duenwen@google.com>, <mike.malvestuto@intel.com>,
+	<gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <tanxiaofei@huawei.com>,
+	<prime.zeng@hisilicon.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
 Subject: Re: [RFC PATCH v7 00/12] memory: scrub: introduce subsystem +
  CXL/ACPI-RAS2 drivers
-Message-ID: <20240223154251.GAZdi8--NPaMAK_ZBp@fat_crate.local>
+Message-ID: <20240223162551.000013ec@Huawei.com>
+In-Reply-To: <20240223154251.GAZdi8--NPaMAK_ZBp@fat_crate.local>
 References: <20240223143723.1574-1-shiju.jose@huawei.com>
+	<20240223154251.GAZdi8--NPaMAK_ZBp@fat_crate.local>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240223143723.1574-1-shiju.jose@huawei.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Fri, Feb 23, 2024 at 10:37:11PM +0800, shiju.jose@huawei.com wrote:
-> CXL patrol scrub and DDR5 ECS and ACPI RAS2 HW based memory
-> patrol scrub features are added as use cases for the scrub
-> subsystem to expose the scrub controls to the user.
+On Fri, 23 Feb 2024 16:42:51 +0100
+Borislav Petkov <bp@alien8.de> wrote:
 
-WTH is a RAS2 driver and where is the RAS1 driver?
+> On Fri, Feb 23, 2024 at 10:37:11PM +0800, shiju.jose@huawei.com wrote:
+> > CXL patrol scrub and DDR5 ECS and ACPI RAS2 HW based memory
+> > patrol scrub features are added as use cases for the scrub
+> > subsystem to expose the scrub controls to the user.  
+> 
+> WTH is a RAS2 driver and where is the RAS1 driver?
+> 
+Odd ACPI naming.  RASF (which is very limited) was replaced by RAS2.
 
--- 
-Regards/Gruss,
-    Boris.
+Both are ACPI tables that describe the Platform Communication Channels
+(mailbox) + provide a definition of the protocol that is sent over
+it in order to control memory scrub.  RAS2 has some other uses this
+driver isn't touching on.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+So in short, it's an ACPI spec defined interface for controlling 
+Memory Scrub engines.
+
+https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Model.html#acpi-ras2-feature-table-ras2
+
+Jonathan
 
