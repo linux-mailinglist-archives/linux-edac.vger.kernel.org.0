@@ -1,170 +1,183 @@
-Return-Path: <linux-edac+bounces-695-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-696-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 006CC867BD4
-	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 17:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF42D8681C3
+	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 21:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A81DE1F242E4
-	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 16:25:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65EA71F241F3
+	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 20:16:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6371F12CDB1;
-	Mon, 26 Feb 2024 16:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43E8130E54;
+	Mon, 26 Feb 2024 20:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dEYla/AI"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="kjGUb0D4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2121.outbound.protection.outlook.com [40.107.94.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891F512CD97;
-	Mon, 26 Feb 2024 16:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708964749; cv=none; b=GCWIEREILh0X46QI7oRmuQ5dmM52C3nm+sEchRAk3kvZqv2ZL/OfOnx87yEBJ9sOaxPZXT2WDg9k8JvjTsvTJxD8+DBVx0q4PZRwjvkbokzUH5nQudFbiwU23rE5hadGnjW6Yz+z9XAkLu1wE0Z9X2FTmlDcPH7Cv/OZRjf7p5g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708964749; c=relaxed/simple;
-	bh=M644AwlcdbJIK6jKjqVty6atIp/A2bidPGf41KXqsw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VU1l7i3Zrv5G63UK2+DIfthkBzwR2k4kZ0BRb4V7v846jRKpiOnKkJp2VFTDzCglkrFwZ4AuPlI2FSF1EVjQsQFjdoHsTT7EY2+DAk3w8OkyOybpmZgASvtrr7r+uO6XVW/qOk+IlemI2rksf3Q17CooNyTLg+WCK1Qn3HaueKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=dEYla/AI; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D26DF40E0192;
-	Mon, 26 Feb 2024 16:16:30 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 0nrPwegJ6bWT; Mon, 26 Feb 2024 16:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708964188; bh=mHQ8bfE6f3nYOsHMRhfypl1NqckUD1JD2a1p01ILVIo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dEYla/AIA+H46pXvNQR0AR8cr1Tl7325Z2IDiLDcmJVkTCq8kZINw4Rb+eoYEVaWC
-	 dQ4/cg/yx/7VpqwUCD8OmPI/BMopgFeds9z7WcsNzkPrSUy8+yoxcn4i03C/Vi2aRU
-	 KlIZAuEyG6MkxfHLsEM8CkENvHsNo9r0B+P5QpFMFHtsvv08EYnouhuhe3AmjKUjKy
-	 NrVxhocJ7RN0d5dL4qYYog2erYyqAHdfW/zSLhx4VQmdJD520B5EMOP7ucupty5wLn
-	 qb35KkQGUtWLcfdwg34JvYY5XkgkEFT4cd6a6++B0R4V44mYk0BjL+laUmiR0XrjRW
-	 Am69hO+/oRUnAbXH2DKwmmkON4Zn94gUZuBx7hw6Wj4Gly3feGy1X9mQaQpfv7drV3
-	 j3CcOTKRcQ+cs/BOSvOC3+pOStOOI2oRgdvesOsTELxCCiw9yLMksh2vFnVZY7H+5C
-	 7nyaNPoVR+/RkOQ74UILw7nN5bAcNDbEplaXPXlAE+ulMUiDDqYJ1j9RmUblzqquOV
-	 2xQWrenTnHMwJ6pj6+VwMxoFciTRUWb9MajB/OPGPMnOxI1nDK6g4hWeO6SViRAOWf
-	 FFu0/bjew0h1PGEnNoe8Xv/R39OEbuVdglaj6gYlckGvEbc6TeeVDBp/VvJ6cRSZ3w
-	 6MLzF7UpuriAiTBOkNUUjvXc=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B0B9C40E0196;
-	Mon, 26 Feb 2024 16:16:19 +0000 (UTC)
-Date: Mon, 26 Feb 2024 17:16:12 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com, muralidhara.mk@amd.com, sathyapriya.k@amd.com,
-	naveenkrishna.chatradhi@amd.com
-Subject: Re: [PATCH 2/3] RAS/AMD/FMPM: Save SPA values
-Message-ID: <20240226161612.GDZdy5TH6H5VWRGWOK@fat_crate.local>
-References: <20240226152941.2615007-1-yazen.ghannam@amd.com>
- <20240226152941.2615007-3-yazen.ghannam@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2C7130E20;
+	Mon, 26 Feb 2024 20:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.121
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708978579; cv=fail; b=eSnmpR3tTdvficQ9F9rt6HVspCrdqD06U2BZWMh/GWQCXpgrIvN0R7mio/cqc6ObM0muiL6KEK4mO/XmIEsTi5M4MnOKffVld2+bF4hFFcj3+Pq0lxvQAgXEQ9J1yOeOnT6SjWLd15lX+qHidM8Wu3NXFxfoD+sv/UYsNzw44Cc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708978579; c=relaxed/simple;
+	bh=LuI8vtimLTlomzeAI0qh3T0yf5vcS1483iai0i15I6o=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=JH0llYDwXZt9im4DEyKk7lbs4Mxjnl1Yf+hT0xziWp0l6E7kUHKzWphy7MQZrTSJfPeVy9AKpbf6bMNBVhLOHjnvjjizI0jJChPlMx+cftLDkm2IQA5JPFR14ivjREmqfjtZqcCBbARcFtRwx7T+WQQYTGMoXJzfrXMcZYoz2GY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=kjGUb0D4; arc=fail smtp.client-ip=40.107.94.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i8pmSNRb9fCz63BoiuCuACEgoLu29YIns47648B7kT6y/6opYiphNMhPw/5c/yyzYecp75C9KrU6ICrXLoXQniBKBWMOp/8VGEzDSJ7hfkAjeNIzUkzigvQkZ/mrqo165YygxkcbiTbjX5oGKcfdA7FV62ZYI0WyBC4n/cl23Xp+1cCfzctz0Rwfjm5TvSRuccqy4j/XyOsAjVfUwRZKrKzyWBa225h55fzeeXMfu6xkTJhtiH6YNDvGZJIA+Lij+ySLCHrbIdGRKxw7d5R7iR39msez7ax/SP30myl1PBgyYW8yQGo6SwpHLxLuvGmLYV3tjN6th5OyD/bjDYbkxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r42JpEStbsyaigYdfMyU7Usd+8IsnYg6xNzTAGhTiy0=;
+ b=IY4nbimGYywHguzgmcxeJQIxyJCj83p0qm1l6hX2lWsyxayZ05CEzczB0I6YNA1NZ5mQMDmA5j9qfyBWw0lAP7Pqpo/T//39gHbvbS4iwLxvn69OqQBUwa7P/ZgKFnsxiJePuFoHhI1G9LRug5TEO/heIY9q1Cnur62lMmoqxcaqDx0t2gd3xUb7K063v7RpQ8eIs9RnFzeb6sCzO2/jGS8SbGaCdYOmmSIWJT5Ua7ALrqfen4aMSMZuW84MLG+oHoxcBgsctzxajQCxO+21c+UuM0pRcu7uu4iK5oh9jBWuaF9WRn1C5chDVn1LJNEF823OJDE+SVmy8l4lUGeJcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r42JpEStbsyaigYdfMyU7Usd+8IsnYg6xNzTAGhTiy0=;
+ b=kjGUb0D49+Qqg4T7s/JawV0NUYwxAlwXpT8sl0J65RXafjBx+a86OLQVysAh98fGbEal2c7SsySX/KJl9KRk+O9y37D3bdcxsHn9arX+9XY2CBt2vmAuExoyL2Ok9YGhyvvvs/qQlnZPcZil53q8AyxNUGDxKjN7y33KvOMoBxc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from CO1PR01MB7370.prod.exchangelabs.com (2603:10b6:303:159::16) by
+ CO1PR01MB6629.prod.exchangelabs.com (2603:10b6:303:d6::9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7316.36; Mon, 26 Feb 2024 20:16:14 +0000
+Received: from CO1PR01MB7370.prod.exchangelabs.com
+ ([fe80::28bb:f135:bd95:a21d]) by CO1PR01MB7370.prod.exchangelabs.com
+ ([fe80::28bb:f135:bd95:a21d%7]) with mapi id 15.20.7316.034; Mon, 26 Feb 2024
+ 20:16:14 +0000
+From: Daniel Ferguson <danielf@os.amperecomputing.com>
+Subject: [PATCH v4 0/2] Adds additional information to ARM RAS errors
+Date: Mon, 26 Feb 2024 12:15:18 -0800
+Message-Id: <20240226-b4-arm-ras-error-vendor-info-v4-rc3-v4-0-08e0f168fec1@os.amperecomputing.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFbx3GUC/x2NwQqDMBAFf0X23AVd02L7K8VDNC91D03KBoIg/
+ ruhp2EuMwcVmKLQqzvIULVoTk3craN18+kD1tCcpBfXiwgvjr192XxhmGXjihQaNMXM1bGtIy8
+ IY5yew/0xgFrpZ4i6/y/v+TwvcLKc/nUAAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+ James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, 
+ Borislav Petkov <bp@alien8.de>
+Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-edac@vger.kernel.org, 
+ Daniel Ferguson <danielf@os.amperecomputing.com>, 
+ Shengwei Luo <luoshengwei@huawei.com>, 
+ Jason Tian <jason@os.amperecomputing.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: PH7PR17CA0057.namprd17.prod.outlook.com
+ (2603:10b6:510:325::6) To CO1PR01MB7370.prod.exchangelabs.com
+ (2603:10b6:303:159::16)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240226152941.2615007-3-yazen.ghannam@amd.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR01MB7370:EE_|CO1PR01MB6629:EE_
+X-MS-Office365-Filtering-Correlation-Id: 478b9059-a33a-4bbf-8d64-08dc3707c814
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	d2Khbi47uFnLt8SI57eR+2i4S99f8lVzPbwcBu2zPQJTFwPCQJ0E5+IlzVV7/mOxOxWdaMzpiZ8arUO2QCBZ5kXA13giIgnyAbp5ookP1OIslBOtd22z9NLdki6jA42V96lxeZJIUF9KqUWD+5+mMiRE7H04Y2QZBKXLdl4ipBRfP7lTcQRrk9ns1kUP5+fZyLhkovHpCnG4h8MLj5FH2S0GOLCpKxv54zd/7+ghDaRG4WA64dgv8j3/hUH/th4X5gqJbJ1y0R070neIxU4ecFl1HwsxLLv6L1u7YTaV1gaL4GZZUD5cjORxG+NRZmt9ijBXcVKbh24Y3zXvWfA4LG51x8PKqyp/YFSkBt5YGBWKLpqBWMVVtBKXv2mdxX7XqGP4mMxoQWIbiKA3EZ5Ez0x4cDWyLneXusIxICpDYuYW1kFVhfKJCM5aPNiSA6yWzVMszMj7m2+fKbXjJvEFf4Er+c6GwPrQ07muekIeByactE+URNEAhd1A3a6AftHNIXRFKQ59j5JszK2Ri7gYxlQWoD0vD47NxsnP3D1CWPGGscqAlUq8Sq3Z4Yy1Sc/AFy4wqhytlDdhY30xDmDuUM2IrU6e8IWsg7Bf3jS4oASXNwvSDEnadFHk7VsBOMxTo575Gp40jBtfAp/MeQr3rP6d3AVAg+ZZHrK8B9rXKDfmVwQm8jXb5gfEZu7Mdd9+ppv8oA4vXAYJw+Jp2/2G/Q==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR01MB7370.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UGt1WEVzMzRSZ3dSQnMybk5JVWZnaklYblg4TXZ1YmhKS2hxNzlwOWNpNWVI?=
+ =?utf-8?B?cWxndk01eWozd2JMRjkva0F0U1k0RGp6SkRmeFVnOHMzUHdVc0JBblZ1NkRx?=
+ =?utf-8?B?N25QMlhQMmNCbGRJcFBKMkJkbkxRVkJwQW9VQldadjQxTmlOeE8wRWlqSkJP?=
+ =?utf-8?B?cGdBc2xNcXJDODRaenkxVjNLd2JHMnZ2ZFdEazFGR0w2RlhYTXFIaVJnOUl1?=
+ =?utf-8?B?WDBpUFc2eWs1MU1DRzUzTmVBakRLWjlNWG1nRGJTQ2hPSHJyL1cvZkg4REl2?=
+ =?utf-8?B?MW1TNmREdUUvWFRzTkx3QnlaalRmbGJxU2Z4ZmRvd09POGJJREJQeEpiaUpB?=
+ =?utf-8?B?RVk4bEpsMVJOanhjeDBnTHY1TGFlMkhqNEhTUDZISktSSUoyMUxFNjVvWjEv?=
+ =?utf-8?B?bUtjd0dvMWhvallVSUF1UTJqcFhnTjlueFVNczJaeno3S0V4aWVYWHBYcWVX?=
+ =?utf-8?B?TXVUcUg1L3huL05TSWN0ZDgyOUVyZUczd1drQzBXU2NpSnQ1QVZDVnNaS0ph?=
+ =?utf-8?B?bW0wRDhBdi9McE1JNDY0NUFNMXdlQllIenhRWktCQitVLy9yUFRybG13SnF2?=
+ =?utf-8?B?akxlNFN3NWNwSGtjZ0JqSTRIRm1uRmtHVEpvckZhRkN0QWMrMFpaQ1UvV0xH?=
+ =?utf-8?B?bVFTMStuOFp5aVppYnZVVlQ2dDRhd00zYkZtTVJmNEV0NE5hZ08xaEU1QWV0?=
+ =?utf-8?B?MmhLdUZkYVhjZ082bCszcFRnaHo3dFBNOHZSQkhIWGsyWXl3NGhWZ2ozckRs?=
+ =?utf-8?B?MWNwMXcxRGVCNHVvZE9VTC82aUxwU1VxSGgxREg0Ykp1ZTJwamdFQU9rL2J1?=
+ =?utf-8?B?WUlCOHBhRUs5WDNiUjZCcC9SY2lROHZVZzkzZXJzNmYxeko1T0IzWlpJWTMw?=
+ =?utf-8?B?dVhKTi9yQ3BLL3JIYUpqVlcyTDlQci9ia01ZVHV2ZTIyQzkyR1ZaSU1vdm5x?=
+ =?utf-8?B?NHhuUE1pZXljbVZxUkx3UGNDaTJpakNwM1ZJM1VLTmhYekhxdkExb09LMitm?=
+ =?utf-8?B?VGFlcDRveHAyNXdvbG1VZGw0T2F1cUlBdkVPTTRCdGNKaWxFWTQzTW5YUDZD?=
+ =?utf-8?B?ZDZURlQxMTJ4eGFqMXQ4OUpPWElPN0s4MzhPV0ZYUytZbjNTdGMwN1c0dGhi?=
+ =?utf-8?B?SWJxVWNMOVR1dFV4OWpRR050OGhPQUFWWlRaTEUwWDlBbnRxcmZ2bGZDNU5v?=
+ =?utf-8?B?bXBtWTRNTjhmRSsyeVoxaTJXMzQ4ckVJNGRsRnAzVkgxTkZrK3VkcDFBVzBm?=
+ =?utf-8?B?U2tLUlJtb2JqTTJ0WXZZWlF3OTUraUZ5Zy9DWWhTOXFlQmNxNjJwbEovaFEx?=
+ =?utf-8?B?NndEK05BajlGeGZud3dxb0NMSGF1aGZEYWRkS0Yvcko5a2pzcDRqdTBTNUtG?=
+ =?utf-8?B?KytKejUzbzQwWUJqd0pXK3JMakJGNjZrRVg5Vm00ZHc4UWt1dTlIZWl6MDVr?=
+ =?utf-8?B?RVd0OVpDdnhWb0tCRVRkcC9GMVFkelRXem92YVBuandYRW96YVRXeTd6Mjli?=
+ =?utf-8?B?TlNqektYM1hYMllLeFFjaTFzcjNDbVJqRmVxaEpIOCtGaVUwMXNQbFkycXdr?=
+ =?utf-8?B?elpMTmtXcloraUhtUjFqNVB4TGF0dkhrMWU3SDl5WWMxTFBsVlovY0NLVUd0?=
+ =?utf-8?B?MlNyODVXSCszcGduRUFQRWxTYk82K2duWG5lTDNPL2h1THYwcmdLNEtLamVi?=
+ =?utf-8?B?d1NRbG1MaWxoK0ZBdkJsSGh4YjQ5WXBaclJ1Uk91c013eFNRNFQ2UHhnWDBm?=
+ =?utf-8?B?enJzT2I1UU43QVE0dlV1TUxmQ0NsZjViWmRMaXhRMW5iN3VLTlRTMENPbVhy?=
+ =?utf-8?B?RTN1cHR4ZGkwMEk5SlNYNURUWkIyZUR4QktPQmQ5WEQ4S2xKR054Wk0zbzhV?=
+ =?utf-8?B?RzUzZXRpNDMxS2YrUVVFcnN2ZGFZN1FRWDhVYTEvYXVOeGhTaXJjaytBd0JC?=
+ =?utf-8?B?ZHYyaFp0RVg0Z0o5WUdFYU5pYzdKUmN5VGlYcGFYRDhkcmFrNUJqaWhjWW1D?=
+ =?utf-8?B?ejBQMW45OWN4SzdOemd6T0hFTjN5VmF1WGM3Y1o1QW1NSjh6bU9yWXozN0tR?=
+ =?utf-8?B?VGF5bmF0UUxSdUxkbjZkM1RGdjVlOEROWndFaHFWMlYxY1VWYllIMjNINi9a?=
+ =?utf-8?B?VGdGZC94TFZKTzZMSmJ4dmxObVhpRFc0L2FKa3hURXlWTm12Y1ROMThLVFFx?=
+ =?utf-8?Q?PRgi+OOrOdwUNRKdr+pawWA=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 478b9059-a33a-4bbf-8d64-08dc3707c814
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR01MB7370.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2024 20:16:14.3020
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XcuCqsuzLLjR3LCDDrpX22uCCHygfk3ucktSBFy7LYzUl2YN0H6N9H6pUbGCzwOzoJnk6UIJVtf7rvCP67TT30zcf9C/uzyrip0Wns75WNoeZzEVGtjyYsNluvuqz556
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6629
 
-On Mon, Feb 26, 2024 at 09:29:40AM -0600, Yazen Ghannam wrote:
-> @@ -111,6 +111,9 @@ struct fru_rec {
->   */
->  static struct fru_rec **fru_records;
->  
-> +#define INVALID_SPA	~0ULL
-> +static u64 *sys_addrs;
+The patch by Shengwei includes most of the justification for this series
+in the commit message. The only thing i've done is add a few conditional compilation
+directives based on feedback from a previous submission attempt. This series adds:
 
-Let's do:
+1) Conditional compilation directives around ARM specific RAS error 
+   handling routines, so non-ARM platforms are not unnecessarily bloated.
+2) ARM Processor error section (As defined by UEFI 2.9 N2.4) to tracepoints for userspace
+   consumption. This particular patch is a RESEND. 
 
-/* system physical addresses array */
-static u64 *spa_addrs;
+Changes since v3:
+	Added conditional compilation directives
 
-so that it is self-documenting.
+Links:
+https://lkml.org/lkml/2023/12/14/1488
 
-> +
->  #define CPER_CREATOR_FMP						\
->  	GUID_INIT(0xcd5c2993, 0xf4b2, 0x41b2, 0xb5, 0xd4, 0xf9, 0xc3,	\
->  		  0xa0, 0x33, 0x08, 0x75)
-> @@ -140,6 +143,9 @@ static unsigned int max_nr_fru;
->  /* Total length of record including headers and list of descriptor entries. */
->  static size_t max_rec_len;
->  
-> +/* Total number of entries for the entire system. */
-> +static unsigned int sys_nr_entries;
+Signed-off-by: Daniel Ferguson <danielf@os.amperecomputing.com>
+---
+Daniel Ferguson (1):
+      RAS: ACPI: APEI: add conditional compilation to ARM specific error reporting routines.
 
-sys_ things are always related to syscalls etc. Since it is a static
-var, just call it:
+Shengwei Luo (1):
+      RAS: Report ARM processor information to userspace
 
-	/* Number of SPA entries */
-	nr_entries
+ drivers/acpi/apei/ghes.c |  7 +++++--
+ drivers/ras/ras.c        | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
+ include/linux/ras.h      | 19 +++++++++++++++++--
+ include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 111 insertions(+), 11 deletions(-)
+---
+base-commit: 7e90b5c295ec1e47c8ad865429f046970c549a66
+change-id: 20240222-b4-arm-ras-error-vendor-info-v4-rc3-bed3f891561e
 
-or so.
-
-I was gonna say "nr_err_records" but we're calling them entries so...
-
->  /*
->   * Protect the local records cache in fru_records and prevent concurrent
->   * writes to storage. This is only needed after init once notifier block
-> @@ -269,6 +275,40 @@ static bool rec_has_fpd(struct fru_rec *rec, struct cper_fru_poison_desc *fpd)
->  	return false;
->  }
->  
-> +static void save_spa(struct fru_rec *rec, unsigned int entry,
-> +		     u64 addr, u64 id, unsigned int cpu)
-> +{
-> +	unsigned int i, fru_idx, sys_entry;
-> +	unsigned long sys_addr;
-> +	struct atl_err a_err;
-> +
-> +	memset(&a_err, 0, sizeof(struct atl_err));
-> +
-> +	a_err.addr = addr;
-> +	a_err.ipid = id;
-> +	a_err.cpu  = cpu;
-> +
-> +	sys_addr = amd_convert_umc_mca_addr_to_sys_addr(&a_err);
-> +	if (IS_ERR_VALUE(sys_addr)) {
-> +		pr_debug("Failed to get system address\n");
-> +		return;
-> +	}
-> +
-> +	for (i = 0; i < sys_nr_entries; i += max_nr_entries) {
-> +		fru_idx = i / max_nr_entries;
-> +		if (fru_records[fru_idx] != rec)
-> +			continue;
-> +
-> +		sys_entry = i + entry;
-> +		if (sys_entry < sys_nr_entries) {
-> +			sys_addrs[sys_entry] = sys_addr;
-> +			pr_debug("fru_idx: %u, entry: %u, sys_entry: %u, sys_addr: 0x%016llx\n",
-> +				 fru_idx, entry, sys_entry, sys_addrs[sys_entry]);
-> +			break;
-> +		}
-
-	else {
-		WARN_ON_ONCE("... indexing wrong bla... ");
-	}
-
-to catch crap.
-
+Best regards,
 -- 
-Regards/Gruss,
-    Boris.
+Daniel Ferguson <danielf@os.amperecomputing.com>
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
