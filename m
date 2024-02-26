@@ -1,85 +1,74 @@
-Return-Path: <linux-edac+bounces-688-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-689-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 083378671FA
-	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 11:51:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ABAF86749C
+	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 13:19:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D3721F25A48
-	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 10:51:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9481C1F29511
+	for <lists+linux-edac@lfdr.de>; Mon, 26 Feb 2024 12:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D1F1CD0C;
-	Mon, 26 Feb 2024 10:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84398604AE;
+	Mon, 26 Feb 2024 12:19:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="g6HOrIAM"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="O6F0P5vL"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CD41C6B5;
-	Mon, 26 Feb 2024 10:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE8E604A5;
+	Mon, 26 Feb 2024 12:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708944419; cv=none; b=JkcJKh3yQ/1DWnxmmymW++abKZivKszT/sTqTGdR1B8YVsYMt9iSJ2vMObGOMamoF402s2OJnMeVy8mIoJ0/bb6u9av/euqOTcIH7hNfUTnQIqU9V3qoz4jwVxSplcVG4SXha3wwQAJeNZo0Ov64///1sqZPaviDK91FaHEgcxU=
+	t=1708949985; cv=none; b=jDBpcdEdRCmFtq4yg+IbWHC14B2k2JPY+TpLcEz3lH+A1PXvpOqMJN1UB1vM7f2vrfxBJDloFeALIWPDCoLCH2nSbl3k0LTLbGijk+4C0Ubxeuu1VvDywQP+0WjcWbbNqI/ptJJ+8M2CRnWjmvw63rH73qwTIVYJo2SDSAX235Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708944419; c=relaxed/simple;
-	bh=h0CHJQF50KwK8mIjEWCRDsj1eq3eD3C/obvTaUXkT3Y=;
+	s=arc-20240116; t=1708949985; c=relaxed/simple;
+	bh=S8qmz8mEsCC2aVp3rHsO/dP5uHUmHA33spU6e8whFWU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kn1UOFl/EIHyqk4UYIPgqJ9HWWTmKEUfvobplzOkR32/NHTSfeihTZ+B3FIsjOQ4w8VllkwYDoPDbK3ZL1VaDpaD2HfrORYk4Ja+cchziUsNAXhtqGe+0rdez4R1CoGOOg07Y8jXBnbuT09mjgIwYzVMIo3P3h04/4kUEqdubCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=g6HOrIAM; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lpq97MebkVVtCN2hxSl/e4edsAWv4FZ/d/hY3hJJE9490BGMzv8d/ZG1R1DfeacZifoK0B+5nKEwcHkQ3o4xEZFt6fPX0E1+grZiw9gs9PzmMuPMhTiNIMJRIMxVuW1SoVFDRjZVWFd93IGl/NIVOGM2EDY45Ek2BDAL0XM6NH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=O6F0P5vL; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4F4E240E00B2;
-	Mon, 26 Feb 2024 10:46:54 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id F019E40E0192;
+	Mon, 26 Feb 2024 12:19:34 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id U7uW1zKRoeoK; Mon, 26 Feb 2024 10:46:52 +0000 (UTC)
+	with ESMTP id SYe9xRSlCndm; Mon, 26 Feb 2024 12:19:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1708944411; bh=0CUdEbnigVU9mXxGYVPNrIQnBDNCqMVq2aXpPsduCD0=;
+	t=1708949972; bh=aowlc4g9p201VE/ouP+cqCteydTDAa5Ymyxa0wtZGh4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g6HOrIAMBI/QdrQCHnh6KLtisQeavnbe4CIRbk5nJQZFObd2N2xPrKOGuXqYMg2t6
-	 P4Dmj/wJwv1rYMqLn+i4zxnBWaBG9Cebrj+lVhkKl9vyQj4rZ4RpjExeUQsEgNqwER
-	 2PLB98axkXAIPxgZ/CW5yxyV3w7usK4m/N4N82rR1SPvO3mJsmJ17Y44w5CGu4wEeq
-	 c/schnPIPTJrw3nOlbFi53BoJXIKJLmF/0L6NWbCMn0lZV7LkHJqla5KSSPh+Ke8Qz
-	 rdBfvZoNA1H+jP0+DXhiI+9iRBWMEuUMPl/eBi3ghQpJeRebfYNN9sPRZXoFyjZet5
-	 HSTuZ57hFy4M0Ym+SYqOyeL030DoTjKmHdhiI5wH9RTGzz/Ai+E/Q6YIeAFAiTz/TB
-	 +WvD6mlU5YujNYju/yyQfYjp/u+xLdEi8MV0NgOHozqGiHAd70X+cTrQxWco86YUZs
-	 lTh4PKq+w3p16TNk2UPgqxUA4Q+zQ8w7VZ9xr8pVsZDI0Fg6+jfplM2ilB8u4VrBz9
-	 ii9/B6ZZ0aoHI/ZVNJm/mh6g4lLPALdPmSoVPo+vLbMHiEhw3VSdleofAGMfkSVQhB
-	 BsFAwm40e2IREa1nZCNfc28OgNKKSQ8a0g+2Ul+RVN8/fqPrLxe9cspumL6YxgnBRD
-	 piQBTNX/Di/raOX/POmXs3HY=
+	b=O6F0P5vLl9DOOGKeY4yfOxipgnBAV0gmmXxFvCJmKvAA6tQoKAcFfkHWSRECiYjYQ
+	 4yhpkt6Rwpq2p8++S2UUABKzBJUvnY18xiwJ8Z9XLVU7cjMEwfgoJtvLZnSGWGxXUy
+	 E1MrQo6/5a7Tt99DO364o8ILN82NjpyOatVr0OaQ48u12jmwIEFblUy8Y8QRFYB/bK
+	 QxPADBg4LQ70gTP4My4sMQxcG/F1ahMQXvGQNmv8eF2TdnzoH8TF4ngD0s/3bVcxPd
+	 hUTklgOaJq2DrappMYDj36S/YkqQ3wEKznBn6ub0lGlamqtRlujW3zj+tg8C++XEwL
+	 IoSwSn1emgQB56TClbNj4ayCglNMbLUE9f/sYAWlK0/WmEor+WmHw1QZoFjg5E61Yo
+	 9UFCuZNzd6AW5fjN/x/M7TPWjsj8ABBLD7lRW8gfosUH52L/khj12wKxQIO46bMx0R
+	 Jnmp//zQ18amjTSEsLtJBXTe8LiixPh6mj2XiERHLF3W+s0q4/NL1TATczKQs7+ya+
+	 dYRIGMkjM/L+DRyYZ4hGGu4J8QnyvU6bQAQyzuOKLT+ED5ppC5pg7m6GxHlgtBXtAx
+	 hcl5ReOGpGXTNL4WonzfLWbGnOjfgTuHloFcn5gALAlVX0wtxBzcxedOg9eJE6q+6d
+	 aWJlKJkdoG3YaG8u/VB2SjYk=
 Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DA82840E0196;
-	Mon, 26 Feb 2024 10:46:18 +0000 (UTC)
-Date: Mon, 26 Feb 2024 11:46:11 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 05B1A40E016C;
+	Mon, 26 Feb 2024 12:19:25 +0000 (UTC)
+Date: Mon, 26 Feb 2024 13:19:19 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
-	mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com,
-	gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
-	ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
-	baolin.wang@linux.alibaba.com, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
-	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
-	zhuo.song@linux.alibaba.com
-Subject: Re: [PATCH v11 2/3] mm: memory-failure: move return value
- documentation to function declaration
-Message-ID: <20240226104611.GCZdxr82q-Wcms7R3S@fat_crate.local>
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20240204080144.7977-3-xueshuai@linux.alibaba.com>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com
+Subject: Re: [PATCH] RAS/AMD/ATL: Fix bit overflow in denorm_addr_df4_np2()
+Message-ID: <20240226121919.GBZdyBx_jqFsHCWZP7@fat_crate.local>
+References: <20240222165449.23582-1-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -88,71 +77,51 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240204080144.7977-3-xueshuai@linux.alibaba.com>
+In-Reply-To: <20240222165449.23582-1-yazen.ghannam@amd.com>
 
-On Sun, Feb 04, 2024 at 04:01:43PM +0800, Shuai Xue wrote:
-> Part of return value comments for memory_failure() were originally
-> documented at the call site. Move those comments to the function
-> declaration to improve code readability and to provide developers with
-> immediate access to function usage and return information.
+On Thu, Feb 22, 2024 at 10:54:49AM -0600, Yazen Ghannam wrote:
+> The hash_pa8 and hashed_bit values in denorm_addr_df4_np2() are
+> currently defined as u8 types. These variables represent single bits.
 > 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> 'hash_pa8' is set based on logical AND operations using masks with more
+> than 8 bits. So the calculated value will not fit in this variable. It
+> will always be '0'. The 'hash_pa8' check later in the function will fail
+> which produces incorrect results for some cases.
+> 
+> Change these variables to bool type. This clarifies that they are
+> single bit values. Also, this allows the compiler to ensure they hold
+> the proper results. Remove an unnecessary shift operation.
+> 
+> Fixes: 3f3174996be6 ("RAS: Introduce AMD Address Translation Library")
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 > ---
->  arch/x86/kernel/cpu/mce/core.c | 9 +--------
->  mm/memory-failure.c            | 9 ++++++---
->  2 files changed, 7 insertions(+), 11 deletions(-)
+>  drivers/ras/amd/atl/denormalize.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index bc39252bc54f..822b21eb48ad 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1365,17 +1365,10 @@ static void kill_me_maybe(struct callback_head *cb)
->  		return;
+> diff --git a/drivers/ras/amd/atl/denormalize.c b/drivers/ras/amd/atl/denormalize.c
+> index 49a900e066f1..f46bce119255 100644
+> --- a/drivers/ras/amd/atl/denormalize.c
+> +++ b/drivers/ras/amd/atl/denormalize.c
+> @@ -545,7 +545,7 @@ static int denorm_addr_df4_np2(struct addr_ctx *ctx)
+>  	unsigned int mod_value, shift_value;
+>  	u16 mask = df_cfg.component_id_mask;
+>  	u64 temp_addr_a, temp_addr_b;
+> -	u8 hash_pa8, hashed_bit;
+> +	bool hash_pa8, hashed_bit;
+>  
+>  	switch (ctx->map.intlv_mode) {
+>  	case DF4_NPS4_3CHAN_HASH:
+> @@ -578,7 +578,6 @@ static int denorm_addr_df4_np2(struct addr_ctx *ctx)
+>  		temp_addr_a	= remove_bits(shift_value, shift_value, ctx->ret_addr);
+>  	} else {
+>  		hash_pa8	= (ctx->coh_st_fabric_id & df_cfg.socket_id_mask);
+> -		hash_pa8	>>= df_cfg.socket_id_shift;
+>  		temp_addr_a	= ctx->ret_addr;
 >  	}
 >  
-> -	/*
-> -	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
-> -	 * to the current process with the proper error info,
-> -	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
-> -	 *
-> -	 * In both cases, no further processing is required.
-> -	 */
->  	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
->  		return;
->  
-> -	pr_err("Memory error not recovered");
-> +	pr_err("Sending SIGBUS to current task due to memory error not recovered");
+> -- 
 
-Unrelated change.
-
->  	kill_me_now(cb);
->  }
->  
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 636280d04008..d33729c48eff 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -2175,9 +2175,12 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
->   * Must run in process context (e.g. a work queue) with interrupts
->   * enabled and no spinlocks held.
->   *
-> - * Return: 0 for successfully handled the memory error,
-> - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
-> - *         < 0(except -EOPNOTSUPP) on failure.
-> + * Return values:
-> + *   0             - success
-> + *   -EOPNOTSUPP   - hwpoison_filter() filtered the error event.
-> + *   -EHWPOISON    - sent SIGBUS to the current process with the proper
-> + *                   error info by kill_accessing_process().
-
-kill_accessing_process() is not the only one returning -EHWPOISON.
-
-And if you look at the code, it should be:
-
-	-EHWPOISON	- the page was already poisoned, potentially
-			kill process
-
-or so.
+Applied, thanks.
 
 -- 
 Regards/Gruss,
