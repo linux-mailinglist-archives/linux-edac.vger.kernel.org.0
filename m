@@ -1,72 +1,72 @@
-Return-Path: <linux-edac+bounces-712-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-713-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BDF286D092
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Feb 2024 18:27:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7458E86D115
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Feb 2024 18:47:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B8001C224E8
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Feb 2024 17:27:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0464B216FD
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Feb 2024 17:47:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64DF46CC1B;
-	Thu, 29 Feb 2024 17:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4B96CC1B;
+	Thu, 29 Feb 2024 17:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iE/bZrx8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d17RTBnL"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53785E082;
-	Thu, 29 Feb 2024 17:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D348241C77;
+	Thu, 29 Feb 2024 17:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709227620; cv=none; b=potryGPIIHOjjs50krfXwEoN/rMKE0C/+rbdZV1Hj30NapaTHfTPRR8wy+YGnHKlkLn4dSorPGMMLtor1wevqQoD/zYtFxpvgCV1sIY5LkacCJawPJZgJ5Jx6wx7ZNqh4tH/LpeE2RlzLf7GHnokc7ARItkdx/AShKttRrC6Pzc=
+	t=1709228859; cv=none; b=nT0pf/kMraCOY8g71xmYMsdB+txX+sNvaa0bzSSUWeV60J6mrZCblaKKlr8w/zZ9TgXFiSS4CoSF/L5fAYuqLFrtbK96omWLzmWN00fMH+CnU0HVqm9ZPPPl87dbQ7F1nK7bk9xC0I0nFoJRPUMxGPz6ww22pPtM+qABgE0Z4FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709227620; c=relaxed/simple;
-	bh=/JaDBH1RUWq1bA062JryjFL4ALd2l03adAlP7w/617s=;
+	s=arc-20240116; t=1709228859; c=relaxed/simple;
+	bh=zOm8v0xgvoTy0+JJYPF0SRtMmSadzTUnyE6CXTv40rw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O1pZYdJUPWS6iMnuJCzTUmli+Slig/2VjLrZaUYomY8k7uUNKF+mZJzFKARedL08XtuUh5p/mBP9rvjjc7uPVHgXD7s3zvQ35NEdKHiVv6D955ZO/R78O8xyQMRSWhpSCuL/uOOIzoidTKZPsC8iv6N0U8uUzPHBNWTOBtiGVuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iE/bZrx8; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=tjsX7xiOwNhW8asaK5/d8O+hTO+fB+SnNBqtITBto/iUwrKVPhXHDoGUaHaP9vtheUCwUs96WY94WRZwUTG5VR8RXfxvHm2o3hKjUy1Spbv7Ur0+/0WTxc5Yc56s+wTevWL3yqf0gjXSfIfrLCpdo6KjJ3vqoyhX/44bfRA+YIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d17RTBnL; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709227619; x=1740763619;
+  t=1709228858; x=1740764858;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/JaDBH1RUWq1bA062JryjFL4ALd2l03adAlP7w/617s=;
-  b=iE/bZrx8WtZ7QF16L0fruAOK8FXRB00cK6Ryx/O7dTVlgV7vwOjpBjSU
-   COZOM7go0WX9RYk7Ch7A7EFrzSmKYjs/a75eFK5FavfiSjG5UmJ79EyVY
-   D+AZm4ta8c5ks5KYsgd5PXvXcoWQaBcqWLwG2VnpIDYnEvLO1Oc61ehad
-   YA7uPFnf4U6rYT7QfTY3/3jd+JhszQ6yoV9dH5qNAy0CAhU5se+BxNAqM
-   60WDqkbACjVIGdqApgO8xMiijaZ3JxDcz50w3NvxyQB/o/MEg0Usl+HrS
-   M+pExvvYPpLAZm/FckLWdtFq9MrcTzKf4ZuoN6Y/6+KI1i25gmt6hbsEc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="3600313"
+  bh=zOm8v0xgvoTy0+JJYPF0SRtMmSadzTUnyE6CXTv40rw=;
+  b=d17RTBnLla4bqkwx8klURgWU2o4H4pH3w36BNhvworBST1HbGmMR/8Lx
+   C7GjB3fodcCrG5kRTc237rEj0lc39/j3PQuqIREwwWwZXKF58GoDof4Co
+   yInFQp5g3sMeaMEJGrvKrR80W2jTEqWhHmRi3cm7pH37LYf3ANBOPJ1gO
+   IKATytS6NMZxT122TW2CeI3/nSQ8oSA54bvt+DmiCDNUfN5It5VNI/VZd
+   D9TVXxZXjC6zz3zjb2ofuskYtBREyyaoYH4agLXT+X1CLrVTkED6ZoO4+
+   BOQhmuFlWjhQB3mXjt0EgCxr84rVJIxNqbcQFi9+lMxlSVGlWqyvIbAoe
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="7498320"
 X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="3600313"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 09:26:58 -0800
+   d="scan'208";a="7498320"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 09:47:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
-   d="scan'208";a="7820865"
+   d="scan'208";a="8033487"
 Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.105])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 09:26:58 -0800
-Date: Thu, 29 Feb 2024 09:26:56 -0800
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 09:47:26 -0800
+Date: Thu, 29 Feb 2024 09:47:24 -0800
 From: Tony Luck <tony.luck@intel.com>
-To: "Naik, Avadhut" <avadnaik@amd.com>
-Cc: Borislav Petkov <bp@alien8.de>, "Mehta, Sohil" <sohil.mehta@intel.com>,
+To: Borislav Petkov <bp@alien8.de>
+Cc: "Naik, Avadhut" <avadnaik@amd.com>,
+	"Mehta, Sohil" <sohil.mehta@intel.com>,
 	"x86@kernel.org" <x86@kernel.org>,
 	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
 	Avadhut Naik <avadhut.naik@amd.com>
 Subject: Re: [PATCH] x86/mce: Dynamically size space for machine check records
-Message-ID: <ZeC-YGnnYAMh5kPn@agluck-desk3>
-References: <20240212175408.GIZcpbQHVjEtwRKLS-@fat_crate.local>
- <SJ1PR11MB60830AF35FA89C7869B8C11EFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Message-ID: <ZeDDLLQWPyyZve_s@agluck-desk3>
+References: <SJ1PR11MB60830AF35FA89C7869B8C11EFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
  <20240212191401.GLZcpt-XHFqPg3cDw-@fat_crate.local>
  <SJ1PR11MB6083C60D7584B02E9CAF19D5FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
  <ZcqPhVO_DtD2x5N7@agluck-desk3>
@@ -75,6 +75,7 @@ References: <20240212175408.GIZcpbQHVjEtwRKLS-@fat_crate.local>
  <20240212224220.GSZcqezMhPojxvIcvO@fat_crate.local>
  <Zd--PJp-NbXGrb39@agluck-desk3>
  <8ee24cad-e9b8-4321-aad4-9a9ba4f8b7b6@amd.com>
+ <20240229083951.GAZeBC1yS3MPonWwKv@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -83,60 +84,48 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8ee24cad-e9b8-4321-aad4-9a9ba4f8b7b6@amd.com>
+In-Reply-To: <20240229083951.GAZeBC1yS3MPonWwKv@fat_crate.local>
 
-On Thu, Feb 29, 2024 at 12:42:38AM -0600, Naik, Avadhut wrote:
-> Hi,
+On Thu, Feb 29, 2024 at 09:39:51AM +0100, Borislav Petkov wrote:
+> On Thu, Feb 29, 2024 at 12:42:38AM -0600, Naik, Avadhut wrote:
+> > Somewhat confused here. Weren't we also exploring ways to avoid
+> > duplicate records from being added to the genpool? Has something
+> > changed in that regard?
 > 
-> On 2/28/2024 17:14, Tony Luck wrote:
-> > Systems with a large number of CPUs may generate a large
-> > number of machine check records when things go seriously
-> > wrong. But Linux has a fixed buffer that can only capture
-> > a few dozen errors.
-> > 
-> > Allocate space based on the number of CPUs (with a minimum
-> > value based on the historical fixed buffer that could store
-> > 80 records).
-> > 
-> > Signed-off-by: Tony Luck <tony.luck@intel.com>
-> > ---
-> > 
-> > Discussion earlier concluded with the realization that it is
-> > safe to dynamically allocate the mce_evt_pool at boot time.
-> > So here's a patch to do that. Scaling algorithm here is a
-> > simple linear "4 records per possible CPU" with a minimum
-> > of 80 to match the legacy behavior. I'm open to other
-> > suggestions.
-> > 
-> > Note that I threw in a "+1" to the return from ilog2() when
-> > calling gen_pool_create(). From reading code, and running
-> > some tests, it appears that the min_alloc_order argument
-> > needs to be large enough to allocate one of the mce_evt_llist
-> > structures.
-> > 
-> > Some other gen_pool users in Linux may also need this "+1".
-> > 
+> You can always send patches proposing how *you* think this duplicate
+> elimination should look like and we can talk. :)
 > 
-> Somewhat confused here. Weren't we also exploring ways to avoid
-> duplicate records from being added to the genpool? Has something
-> changed in that regard?
+> I don't think anyone would mind it if done properly but first you'd need
+> a real-life use case. As in, do we log sooo many duplicates such that
+> we'd want to dedup?
 
-I'm going to cover this in the reply to Boris.
+There are definitly cases where dedup will not help. If a row fails in a
+DIMM there will be a flood of correctable errors with different addresses
+(depending on number of channels in the interleave schema for a system
+this may be dozens or hundreds of distinct addresses).
 
-> > +	mce_numrecords = max(80, num_possible_cpus() * 4);
-> > +	mce_poolsz = mce_numrecords * (1 << order);
-> > +	mce_pool = kmalloc(mce_poolsz, GFP_KERNEL);
-> 
-> To err on the side of caution, wouldn't kzalloc() be a safer choice here?
+Same for other failures in structures like column and rank.
 
-Seems like too much caution. When mce_gen_pool_add() allocates
-an entry from the pool it does:
+As to "real-life" use cases. A search on Lore for "MCE records pool
+full!" only finds threads about modifications to this code. So the
+general population of Linux developers isn't seeing this.
 
-	memcpy(&node->mce, mce, sizeof(*mce));
-	llist_add(&node->llnode, &mce_event_llist);
+But a search in my internal e-mail box kicks up a dozen or so distinct
+hits from internal validation teams in just the past year. But those
+folks are super-dedicated to finding corner cases. Just this morning I
+got a triumphant e-mail from someone who reproduced an issue "after 1.6
+million error injections".
 
-between those two lines, every field in the struct mce_evt_llist
-is written (including any holes in the struct mce part of the structure).
+I'd bet that large cloud providers with system numbered in the hundreds
+of thousands see the MCE pool exhausted from time to time.
+
+Open question is "How many error records do you need to diagnose the
+cause of various floods of errors?"
+
+I'm going to say that the current 32 (see earlier e-mail today to
+Sohil https://lore.kernel.org/all/ZeC8_jzdFnkpPVPf@agluck-desk3/ )
+isn't enough for big systems. It may be hard to distinguish between
+the various bulk fail modes with just that many error logs.
 
 -Tony
 
