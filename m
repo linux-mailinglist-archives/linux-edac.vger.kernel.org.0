@@ -1,323 +1,372 @@
-Return-Path: <linux-edac+bounces-722-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-724-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E32A86E36E
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Mar 2024 15:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3667686E393
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Mar 2024 15:42:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3C81B22229
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Mar 2024 14:38:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87E03B20B62
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Mar 2024 14:42:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE7A38F9A;
-	Fri,  1 Mar 2024 14:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="iZj4Ph1w"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 339F1442A;
+	Fri,  1 Mar 2024 14:42:01 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2057.outbound.protection.outlook.com [40.107.101.57])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2102209F;
-	Fri,  1 Mar 2024 14:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709303889; cv=fail; b=CYQEXtgI8mGYa2iVCM6HLClmVsGefb9wupN9K3kavUsw1DHtqKPk97t/DdFbl2LN7Fy/W8cQW8GVRxMXzJVxu+l0IdvPFglQ0nmJXqqkrjdrTr6BMphlbtb6AZaqE7BAWQidoJurZwM3BmQyiCEAhPc9Tc1F1KDMlpsVYdtyUwY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709303889; c=relaxed/simple;
-	bh=jawXv2OGl20dD+3vtBqQub2qeJPQXmWeI81g9vZupOI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=szyWlUX128fKnX6NiCIhufpxxh9jAnipeqFJLOXUGeD36iOs71yXyF/l0PKrtZCCdkrkJqENXQLcoLK5tM5gZhuLHKJx9pr/OQ+w1c5rngkDMoerqYcND3UurHinecYls7o6q/aeQFz2zWj/98noJEMk/B8DbkEF9iOC1oclGC8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=iZj4Ph1w; arc=fail smtp.client-ip=40.107.101.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iffV8Wb3chfUfffhW1Zmj1U+eYP5SnqRcqjESsxN21b50G7aASRBOV2XENfMvITQmCygCjrp1O+OQRT9XdbzuUuEKOiust9hZNYWmahhFQYTRE0YzYyIHxhNRJlRVsyc2trtz+gG1WzA5Zfc3cGrvYJqtr5H4eEcOtpalzAnYDyDcrnOVLN3Jl3hmtLn/vopsH3zL3xs83IBmU/fRyYhrm9CFrdVLkGKQdqal2TVuDrGxXHlZ1g5GAe6NvLyCsiGkD+FHJsukiVYo9tBQMYvZNJQ3rTB4Rq5Tl7kSgfMqvULX5lrVJsiLNUoZWKAW2+1EOqSO3/7cydkqq3p+cpwog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5MjkK1O1gP6wxjQjLWTe3gtWuOp2U7TuEzh0A2PE0Hs=;
- b=Y+PbF9wQthWPzUTiiQyHiB0wdXvGvyNV08SE2cd86wayv80C0LNT7RA85SYcPF9QzNfqfHStgXI7O8Hc9+aV97fTbt+PInS5tUjppNBC/kByr4a1Jx1p3HtK/Vs2Q7mSwVPAnRXHgAV806AOrZjQQ5IYuv5QrJzzKo5zXLU9Lqr4T7L16nxE9tGT3FxNFtby3Pue9V3F1yac9jmInUCSmhIRi+BsJTkTtCLK4gHE4+8MzBB5dStSwptqkcB+TzA8YYeihqUr90znaU1710meUX33lEC+BA61cfilnzZlGLHR4n2kpMszYPGLylOnUClbmyPu8yIi1QcwH9tIShW1fA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5MjkK1O1gP6wxjQjLWTe3gtWuOp2U7TuEzh0A2PE0Hs=;
- b=iZj4Ph1wAJjcQcOmeOV6wtWbVTASX0/YS/ZZPtW3uVME3YEP0YHu8KysJqJO9rO+lgSLeBH7KMDO8tCo7axvvGLQPzX+MutEsYItC4qrC1evEUauw4dTn2KJR2n9vGDDDKi9nDkXXy0bG1JgX8Xo3qClOv8nHrkOiWFruqf6vnk=
-Received: from SN1PR12CA0049.namprd12.prod.outlook.com (2603:10b6:802:20::20)
- by CY5PR12MB6551.namprd12.prod.outlook.com (2603:10b6:930:41::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.34; Fri, 1 Mar
- 2024 14:38:05 +0000
-Received: from SA2PEPF0000150A.namprd04.prod.outlook.com
- (2603:10b6:802:20:cafe::58) by SN1PR12CA0049.outlook.office365.com
- (2603:10b6:802:20::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.32 via Frontend
- Transport; Fri, 1 Mar 2024 14:38:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF0000150A.mail.protection.outlook.com (10.167.242.42) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7362.11 via Frontend Transport; Fri, 1 Mar 2024 14:38:05 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 1 Mar
- 2024 08:37:59 -0600
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: <bp@alien8.de>, <tony.luck@intel.com>, <linux-edac@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
-	<john.allen@amd.com>, <muralidhara.mk@amd.com>, <sathyapriya.k@amd.com>,
-	<naveenkrishna.chatradhi@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 3/3] RAS/AMD/FMPM: Add debugfs interface to print record entries
-Date: Fri, 1 Mar 2024 08:37:48 -0600
-Message-ID: <20240301143748.854090-4-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240301143748.854090-1-yazen.ghannam@amd.com>
-References: <20240301143748.854090-1-yazen.ghannam@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDBE23DE;
+	Fri,  1 Mar 2024 14:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709304121; cv=none; b=AF37UPLV1+Re4r8Gx5ffd4e4ioihwCXO5h4KeCJBqodtl5CzVO4HV7r2tMQI44gRSA7P+98hTdp4sBbvs69JEyfCUyROMGMjmnXZLSWLxrM9GVb/ldDuuK2hRecQxNfTWpKKh25rOpHfC5kihipK5VZANmvoVUPvKGMPPLv8bd4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709304121; c=relaxed/simple;
+	bh=I06CBHd0H62wr/ulGLh0iMZkxB0t3HLpZQz58Xo2Io4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pm3BRYdUrfJbGtYtwcYomORMGEPgnUfMZ7QWfwsUCZM1Iepg0QX+cbG8zyHoQGBxptcfjBumbmygiEqxs4skJ31lYyAVXHq/WNcckRBb0QogrENJmUb1gRFpJu6YFBjdRDmLfUYk+fId0P4Bjc85N59uim+YAzNzon5ycB6dyxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TmVzT3M5kz6J9St;
+	Fri,  1 Mar 2024 22:37:09 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id B54051409F9;
+	Fri,  1 Mar 2024 22:41:54 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 1 Mar
+ 2024 14:41:53 +0000
+Date: Fri, 1 Mar 2024 14:41:53 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Dan Williams <dan.j.williams@intel.com>
+CC: Shiju Jose <shiju.jose@huawei.com>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"dave@stgolabs.net" <dave@stgolabs.net>, "dave.jiang@intel.com"
+	<dave.jiang@intel.com>, "alison.schofield@intel.com"
+	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
+	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"tony.luck@intel.com" <tony.luck@intel.com>, "Jon.Grimm@amd.com"
+	<Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "mike.malvestuto@intel.com"
+	<mike.malvestuto@intel.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>, wanghuiqiang
+	<wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>, Vikram Sethi
+	<vsethi@nvidia.com>
+Subject: Re: [RFC PATCH v6 00/12] cxl: Add support for CXL feature commands,
+ CXL device patrol scrub control and DDR5 ECS control features
+Message-ID: <20240301144153.0000133b@Huawei.com>
+In-Reply-To: <65e0e046a165e_ca001294bc@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20240215111455.1462-1-shiju.jose@huawei.com>
+	<65d6936952764_1138c7294e@dwillia2-xfh.jf.intel.com.notmuch>
+	<54c55412e9374e4e9cacf8410a5a98cb@huawei.com>
+	<65d8f5201f8cc_2509b29467@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+	<20240226102944.000070a3@Huawei.com>
+	<65e0e046a165e_ca001294bc@dwillia2-xfh.jf.intel.com.notmuch>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF0000150A:EE_|CY5PR12MB6551:EE_
-X-MS-Office365-Filtering-Correlation-Id: eddf2e3f-145e-417e-4520-08dc39fd34d1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	coiHbPDx0T08ZOB0TlQje2sIWto3cORLlkoJMaQE+L6+TKw7HOztdsTHQKp501z+Uwf8HPpINydUmNnP+Scp6NxhxwgUVpg1ggM2Ggnc1zIPMnHRnrX2CyZMR6ELR6LkFYogBc+WO5coFIMY7SlWklulFpwwsMWH7wb8eEsQmG1tujtGMINXx/v0bxZBBDABqPOMmtvkGm0L2SWks9f/opXTrkJCQSxUQQ8/I1CpHT01ptDHqRUC849kaZR90E6fYuTBIM1ivLHkcb2chwIS8bTwzCgKJobBNs/i/xkNeZKevALa+jXFaFhe9nbSbtYkEkh4a/q0sHXkhSI8wHqcf4uYCwuCjDCBkjo94BS01WQvrV/5a/ytzn2shHCeNbs9OAlALPHU3l6OrDeSpm7UbsmGoMyuPZEUV1LKVsDr6gSMluI3CMX2AC+zw6LO7qTC/K/9ctmQ5725O9A4pPUEuWrxbdeNdX/zzlg0Gr4Mb5OyuMknOdhLROIq7a5wafq7vzciRDeThykv5AqW2NRwx+QzKmeKrxYnmz5QpCZ3E4uJzpgMm3lI05sCJV9JnuN1fouwUhwAccC0tc4wEsBAzp5OeTAXnAFG8ZFVZAuaAmxjVK8JltPOuLiqAcblod+ZfgXH1VvElMjZa+V7Y7EYEjoZ2UvDFfzzxdHNG1zFMl6WEsgfhQdjm97NiT29A28on6Srqnx0DdLbxbyYR1yL1g==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2024 14:38:05.4781
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eddf2e3f-145e-417e-4520-08dc39fd34d1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF0000150A.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6551
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-It is helpful to see the saved record entries during run time in
-human-readable format. This is useful for testing during module
-development. And it can be used by system admins to quickly and easily
-see the state of the system.
 
-Provide a sequential file in debugfs to print fields of interest from
-the FRU records and their entries.
+> 
+> > > > Regarding RASF patrol scrub no one cared about it as it's useless and
+> > > > any new implementation should be RAS2.    
+> > > 
+> > > The assertion that "RASF patrol scrub no one cared about it as it's
+> > > useless and any new implementation should be RAS2" needs evidence.
+> > > 
+> > > For example, what platforms are going to ship with RAS2 support, what
+> > > are the implications of Linux not having RAS2 scrub support in a month,
+> > > or in year? There are parts of the ACPI spec that have never been
+> > > implemented what is the evidence that RAS2 is not going to suffer the
+> > > same fate as RASF?   
+> > 
+> > From discussions with various firmware folk we have a chicken and egg
+> > situation on RAS2. They will stick to their custom solutions unless there is
+> > plausible support in Linux for it - so right now it's a question mark
+> > on roadmaps. Trying to get rid of that question mark is why Shiju and I
+> > started looking at this in the first place. To get rid of that question
+> > mark we don't necessarily need to have it upstream, but we do need
+> > to be able to make the argument that there will be a solution ready
+> > soon after they release the BIOS image.  (Some distros will take years
+> > to catch up though).
+> > 
+> > If anyone else an speak up on this point please do. Discussions and
+> > feedback communicated to Shiju and I off list aren't going to
+> > convince people :(
+> > Negatives perhaps easier to give than positives given this is seen as
+> > a potential feature for future platforms so may be confidential.  
+> 
+> So one of the observations from efforts like RAS API [1] is that CXL is
+> definining mechanisms that others are using for non-CXL use cases. I.e.
+> a CXL-like mailbox that supports events is a generic transport that can
+> be used for many RAS scenarios not just CXL endpoints. It supplants
+> building new ACPI interfaces for these things because the expectation is
+> that an OS just repurposes its CXL Type-3 infrastructure to also drive
+> event collection for RAS API compliant devices in the topology.
+> 
+> [1]: https://www.opencompute.org/w/index.php?title=RAS_API_Workstream
+> 
+> So when considering whether Linux should build support for ACPI RASF,
+> ACPI RAS2, and / or Open Compute RAS API it is worthwile to ask if one
+> of those can supplant the others.
 
-Don't fail to load the module if the debugfs interface is not available.
-This is a convenience feature which does not affect other module
-functionality.
+RAS API is certainly interesting but the bit of the discussion
+that matters here will equally apply to CXL RAS controls as of today
+(will ship before OCP) and Open Compute's RAS API (sometime in the future).
 
-The new interface reads the record entries and should hold the mutex.
-Expand the mutex code comment to clarify when it should be held.
+The subsystem presented here was to address the "show us your code" that
+was inevitable feedback if we'd gone for a discussion Doc style RFC.
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Link:
-https://lore.kernel.org/r/20240226152941.2615007-4-yazen.ghannam@amd.com
+What really matters here is whether a common ABI is necessary and what
+it looks like.
+Not even the infrastructure, just whether it's sysfs and what the controls)
+Sure there is less code if it all looks like that CXL get feature,
+but not that much less.  + I'm hoping we'll also end up sharing with
+the various embedded device solutions out there today.
 
-v1->v2:
-* Update based on patch 1 and 2 changes.
+I notice a few familiar names in the meeting recordings. Anyone want
+to provide a summary of overlap etc and likely end result?
+I scan read the docs and caught up with some meetings at high speed,
+but that's not the same as day to day involvement in the spec development. 
+Maybe the lesson to take away from this is a more general interface is
+needed incorporating scrub control (which at this stage is probably
+just a name change!)
 
- drivers/ras/amd/fmpm.c | 131 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 131 insertions(+)
+I see that patrol scrub is on the RAS actions list which is great.
 
-diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
-index a7bb36eb60cb..d670aa11aef4 100644
---- a/drivers/ras/amd/fmpm.c
-+++ b/drivers/ras/amd/fmpm.c
-@@ -54,6 +54,8 @@
- #include <asm/cpu_device_id.h>
- #include <asm/mce.h>
- 
-+#include "../debugfs.h"
-+
- #define INVALID_CPU			UINT_MAX
- 
- /* Validation Bits */
-@@ -116,6 +118,9 @@ static u64 *spa_entries;
- 
- #define INVALID_SPA	~0ULL
- 
-+static struct dentry *fmpm_dfs_dir;
-+static struct dentry *fmpm_dfs_entries;
-+
- #define CPER_CREATOR_FMP						\
- 	GUID_INIT(0xcd5c2993, 0xf4b2, 0x41b2, 0xb5, 0xd4, 0xf9, 0xc3,	\
- 		  0xa0, 0x33, 0x08, 0x75)
-@@ -152,6 +157,11 @@ static unsigned int spa_nr_entries;
-  * Protect the local records cache in fru_records and prevent concurrent
-  * writes to storage. This is only needed after init once notifier block
-  * registration is done.
-+ *
-+ * The majority of a record is fixed at module init and will not change
-+ * during run time. The entries within a record will be updated as new
-+ * errors are reported. The mutex should be held whenever the entries are
-+ * accessed during run time.
-  */
- static DEFINE_MUTEX(fmpm_update_mutex);
- 
-@@ -813,6 +823,124 @@ static int allocate_records(void)
- 	return ret;
- }
- 
-+static void *fmpm_start(struct seq_file *f, loff_t *pos)
-+{
-+	if (*pos >= (spa_nr_entries + 1))
-+		return NULL;
-+	return pos;
-+}
-+
-+static void *fmpm_next(struct seq_file *f, void *data, loff_t *pos)
-+{
-+	if (++(*pos) >= (spa_nr_entries + 1))
-+		return NULL;
-+	return pos;
-+}
-+
-+static void fmpm_stop(struct seq_file *f, void *data)
-+{
-+}
-+
-+#define SHORT_WIDTH	8
-+#define U64_WIDTH	18
-+#define TIMESTAMP_WIDTH	19
-+#define LONG_WIDTH	24
-+#define U64_PAD		(LONG_WIDTH - U64_WIDTH)
-+#define TS_PAD		(LONG_WIDTH - TIMESTAMP_WIDTH)
-+static int fmpm_show(struct seq_file *f, void *data)
-+{
-+	unsigned int fru_idx, entry, spa_entry, line;
-+	struct cper_fru_poison_desc *fpd;
-+	struct fru_rec *rec;
-+
-+	line = *(loff_t *)data;
-+	if (line == 0) {
-+		seq_printf(f, "%-*s", SHORT_WIDTH, "fru_idx");
-+		seq_printf(f, "%-*s", LONG_WIDTH,  "fru_id");
-+		seq_printf(f, "%-*s", SHORT_WIDTH, "entry");
-+		seq_printf(f, "%-*s", LONG_WIDTH,  "timestamp");
-+		seq_printf(f, "%-*s", LONG_WIDTH,  "hw_id");
-+		seq_printf(f, "%-*s", LONG_WIDTH,  "addr");
-+		seq_printf(f, "%-*s", LONG_WIDTH,  "spa");
-+		goto out_newline;
-+	}
-+
-+	spa_entry = line - 1;
-+	fru_idx	  = spa_entry / max_nr_entries;
-+	entry	  = spa_entry % max_nr_entries;
-+
-+	rec = fru_records[fru_idx];
-+	if (!rec)
-+		goto out;
-+
-+	seq_printf(f, "%-*u",		SHORT_WIDTH, fru_idx);
-+	seq_printf(f, "0x%016llx%-*s",	rec->fmp.fru_id, U64_PAD, "");
-+	seq_printf(f, "%-*u",		SHORT_WIDTH, entry);
-+
-+	mutex_lock(&fmpm_update_mutex);
-+
-+	if (entry >= rec->fmp.nr_entries) {
-+		seq_printf(f, "%-*s", LONG_WIDTH, "*");
-+		seq_printf(f, "%-*s", LONG_WIDTH, "*");
-+		seq_printf(f, "%-*s", LONG_WIDTH, "*");
-+		seq_printf(f, "%-*s", LONG_WIDTH, "*");
-+		goto out_unlock;
-+	}
-+
-+	fpd = &rec->entries[entry];
-+
-+	seq_printf(f, "%ptT%-*s",	&fpd->timestamp, TS_PAD,  "");
-+	seq_printf(f, "0x%016llx%-*s",	fpd->hw_id,	 U64_PAD, "");
-+	seq_printf(f, "0x%016llx%-*s",	fpd->addr,	 U64_PAD, "");
-+
-+	if (spa_entries[spa_entry] == INVALID_SPA)
-+		seq_printf(f, "%-*s", LONG_WIDTH, "*");
-+	else
-+		seq_printf(f, "0x%016llx%-*s", spa_entries[spa_entry], U64_PAD, "");
-+
-+out_unlock:
-+	mutex_unlock(&fmpm_update_mutex);
-+out_newline:
-+	seq_putc(f, '\n');
-+out:
-+	return 0;
-+}
-+
-+static const struct seq_operations fmpm_seq_ops = {
-+	.start	= fmpm_start,
-+	.next	= fmpm_next,
-+	.stop	= fmpm_stop,
-+	.show	= fmpm_show,
-+};
-+
-+static int fmpm_open(struct inode *inode, struct file *file)
-+{
-+	return seq_open(file, &fmpm_seq_ops);
-+}
-+
-+static const struct file_operations fmpm_fops = {
-+	.open		= fmpm_open,
-+	.release	= seq_release,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+};
-+
-+static void setup_debugfs(void)
-+{
-+	struct dentry *dfs = ras_get_debugfs_root();
-+
-+	if (!dfs)
-+		return;
-+
-+	fmpm_dfs_dir = debugfs_create_dir("fmpm", dfs);
-+	if (!fmpm_dfs_dir)
-+		return;
-+
-+	fmpm_dfs_entries = debugfs_create_file("entries", 0400, fmpm_dfs_dir, NULL, &fmpm_fops);
-+	if (!fmpm_dfs_entries)
-+		debugfs_remove(fmpm_dfs_dir);
-+}
-+
- static const struct x86_cpu_id fmpm_cpuids[] = {
- 	X86_MATCH_VENDOR_FAM(AMD, 0x19, NULL),
- 	{ }
-@@ -854,6 +982,8 @@ static int __init fru_mem_poison_init(void)
- 	if (ret)
- 		goto out_free;
- 
-+	setup_debugfs();
-+
- 	retire_mem_records();
- 
- 	mce_register_decode_chain(&fru_mem_poison_nb);
-@@ -870,6 +1000,7 @@ static int __init fru_mem_poison_init(void)
- static void __exit fru_mem_poison_exit(void)
- {
- 	mce_unregister_decode_chain(&fru_mem_poison_nb);
-+	debugfs_remove(fmpm_dfs_dir);
- 	free_records();
- }
- 
--- 
-2.34.1
+> 
+> Speaking only for myself with my Linux kernel maintainer hat on, I am
+> much more attracted to proposals like RAS API where native drivers can
+> be deployed vs ACPI which brings ACPI static definition baggage and a
+> 3rd component to manage. RAS API is kernel driver + device-firmware
+> while I assume ACPI RAS* is kernel ACPI driver + BIOS firmware +
+> device-firmware.
+
+Not really. The only thing needed from BIOS firmware is a static table
+ to OS to describe where to find the hardware (RAS2 is a header and (1+)
+pointers to the PCCT table entry that tells you where the mailbox(s)
+(PCC Channel) are and their interrupts etc.  It's all of 48 bytes of
+static data to parse.
+
+Could have been done that in DSDT (where you will find other PCC channels
+as many methods can use them under the hood to chat to firmware + there
+are some other users where they are the only option) but my guess is
+assumption is RAS might be needed pre AML interpreter so it's a static table.
+
+A PCC channel is the ACPI spec standard mailbox design (well several
+options for how to do it, but given the code is upstream and in use
+for other purposes, no new maintenance burden for us :)
+PCC channels can be shared resources handling multiple protocols.
+They are used for various other things where the OS needs
+to talk to firmware and have been upstream for a while.
+
+
+ACPI driver --------<PCC Mailbox>---> Device Firmware
+vs
+RAS API Driver-----<CXL Mailbox>----> Device Firmware
+or
+CXL Driver --------<CXL Mailbox>----> Device Firmware
+
+The new complexity (much like the CXL solution) lies in the
+control protocol sent over the mailbox (which is pretty simple!)
+
+Some of the complexity in the driver is left over from earlier
+version doing RASF and RAS2 so we'll flatten that layering out
+and it'll be even simpler in next RFC and perhaps not hint at
+false complexity or maintenance burden.
+
+The only significant burden I really see form incorporating RAS2
+is the need for an interface that works for both (very similar)
+configuration control sets.  Once that is defined we need to support
+the ABI for ever anyway so may be sysfs attribute of extra ABI to
+support in current design?
+
+
+> 
+> In other words, this patch proposal enables both CXL memscrub and ACPI
+> RAS2 memscrub. It asserts that nobody cares about ACPI RASF memscrub,
+> and your clarification asserts that RAS2 is basically dead until Linux
+> adopts it. So then the question becomes why should Linux breath air into
+> the ACPI RAS2 memscrub proposal when initiatives like RAS API exist?
+
+A fair question and one where I'm looking for inputs from others.
+
+However I think you may be assuming a lot more than is actually
+involved in the RAS2 approach - see below.
+
+> 
+> The RAS API example seems to indicate that one way to get scrub support
+> for non-CXL memory controllers would be to reuse CXL memscrub
+> infrastructure. In a world where there is kernel mechanism to understand
+> CXL-like scrub mechanisms, why not nudge the industry in that direction
+> instead of continuing to build new and different ACPI mechanisms?
+
+There may be some shared elements of course (and it seems the RAS API
+stuff has severak sets of proposals for interfacing approaches), but ultimately
+a RAS API element still hangs off something that isn't a CXL device, so
+still demands some common infrastructure (e.g. a class or similar) or
+we are going to find the RAS tools buried under a bunch of different individual
+drivers.
+1) Maybe shared for system components (maybe not from some of the diagrams!)
+   But likely 1 interface per socket. Probably PCI, but maybe platform devices
+   (I'd not be surprised to see a PCC channel type added for this mailbox)
+   /sys/bus/pci/devices/pcixxx/rasstuff/etc
+2) CXL devices say /sys/bus/cxl/devices/mem0/rasstuff/etc.
+3) Other system components such as random PCI drivers.
+
+Like other cases of common infrastructure, I'd argue for a nice class with
+the devices parentage linking back to the underlying EP driver.
+/sys/class/ras/ras0 parent ->   /sys/bus/cxl/devices/mem0/
+/sys/class/ras/ras1 parent ->   /sys/bus/pci/device/pcixxx/ RAS API device.
+etc
+
+Same as if we had a bunch of devices that happened to have an LED on them
+and wanted common userspace controls so registered with /sys/class/led
+
+So to me RAS API looks like another user of this proposal that indeed
+shares a bunch of common code with the CXL driver stack (hopefully they'll
+move to PCI MMPT from current definition based on CXL 2.0 mailbox so the
+discoverability isn't CXL spec based. (I may not have latest version of course!)
+
+> 
+> > > There are parts of the CXL specification that have
+> > > never been implemented in mass market products.  
+> > 
+> > Obviously can't talk about who was involved in this feature
+> > in it's definition, but I have strong confidence it will get implemented
+> > for reasons I can point at on a public list. 
+> > a) There will be scrubbing on devices.
+> > b) It will need control (evidence for this is the BIOS controls mentioned below
+> >    for equivalent main memory).
+> > c) Hotplug means that control must be done by OS driver (or via very fiddly
+> >    pre hotplug hacks that I think we can all agree should not be necessary
+> >    and aren't even an option on all platforms)
+> > d) No one likes custom solutions.
+> > This isn't a fancy feature with a high level of complexity which helps.  
+> 
+> That does help, it would help even more if the maintenance burden of CXL
+> scrub precludes needing to carry the burden of other implementations.
+
+I think we disagree on whether the burden is significant - sure
+we can spin interfaces differently to make it easier for CXL and we can
+just stick it on the individual endpoints for now.
+
+Key here is ABI, I don't really care about whether we wrap it up in a subsystem
+(mostly we do that to enforce compliance with the ABI design as easier than
+ reviewing against a document!)
+
+I want to see userspace ABI that is general enough to extend to other
+devices and doesn't require a horrible hydra of a userspace program on top
+of incompatible controls because everyone wanted to do it slightly
+differently.  The exercise of including RAS2 (and earlier RASF which
+we dropped) was about establishing commonality and I think that was very
+useful.
+
+I'm reluctant to say it will never be necessary to support RAS2 (because
+I want to see solutions well before anyone will have built OCPs proposal
+and RAS2 works on many of today's systems with a small amount of firmware
+work, many have existing PCC channels to appropriate management controllers
+and as I understand it non standard interfaces to control the scrubbing
+engines).
+
+So I think not considering an ABI that is designed to be general is just
+storing up pain for us in the future.
+
+I'm not sure the design we have here is the right one which is why it
+was an RFC :)
+
+> 
+> [..]
+> > >   
+> > > > Previous discussions in the community about RASF and scrub could be find here.
+> > > > https://lore.kernel.org/lkml/20230915172818.761-1-shiju.jose@huawei.com/#r
+> > > > and some old ones,
+> > > > https://patchwork.kernel.org/project/linux-arm-kernel/patch/CS1PR84MB0038718F49DBC0FF03919E1184390@CS1PR84MB0038.NAMPRD84.PROD.OUTLOOK.COM/
+> > > >     
+> > > 
+> > > Do not make people hunt for old discussions, if there are useful points
+> > > in that discussion that make the case for the patch set include those in
+> > > the next submission, don't make people hunt for the latest state of the
+> > > story.  
+> > 
+> > Sure, more of an essay needed along with links given we are talking
+> > about the views of others.
+> > 
+> > Quick summary from a reread of the linked threads.
+> > AMD not implemented RASF/RAS2 yet - looking at it last year, but worried
+> > about inflexibility of RAS2 spec today. They were looking at some spec
+> > changes to improve this + other functions to be added to RAS2.
+> > I agree with it being limited, but think extending with backwards
+> > compatibility isn't a problem (and ACPI spec rules in theory guarantee
+> > it won't break).  I'm keen on working with current version
+> > so that we can ensure the ABI design for CXL encompasses it.
+> > 
+> > Intel folk were cc'd but not said anything on that thread, but Tony Luck
+> > did comment in Jiaqi Yan's software scrubbing discussion linked below.
+> > He observed that a hardware implementation can be complex if doing range
+> > based scrubbing due to interleave etc. RAS2 and CXL both side step this
+> > somewhat by making it someone elses problem. In RAS2 the firmware gets
+> > to program multiple scrubbers to cover the range requested. In CXL
+> > for now this leaves the problem for userspace, but we can definitely
+> > consider a region interface if it makes sense.
+> > 
+> > I'd also like to see inputs from a wider range of systems folk + other
+> > CPU companies.  How easy this is to implement is heavily dependent on
+> > what entity in your system is responsible for this sort of runtime
+> > service and that varies a lot.  
+> 
+> This answers my main question of whether RAS2 is a done deal with
+> shipping platforms making it awkward for Linux to *not* support RAS2, or
+> if this is the start of an industry conversation that wants some Linux
+> ecosystem feedback. It sounds more like the latter.
+
+I'll let others speak up on this as I was presenting on my current outlook
+and understand others are much further down the path.
+
+> 
+> > > > https://lore.kernel.org/all/20221103155029.2451105-1-jiaqiyan@google.com/    
+> > > 
+> > > Yes, now that is a useful changelog, thank you for highlighting it,
+> > > please follow its example.  
+> > 
+> > It's not a changelog as such but a RFC in text only form.
+> > However indeed lots of good info in there.
+> > 
+> > Jonathan  
+> 
+> Thanks again for taking the time Jonathan.
+> 
+You are welcome and thanks for all the questions / pointers.
+
+Jonathan
+
 
 
