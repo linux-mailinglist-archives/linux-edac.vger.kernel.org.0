@@ -1,116 +1,258 @@
-Return-Path: <linux-edac+bounces-735-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-736-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAFD087328B
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 10:30:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03AA7874232
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 22:52:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28A9F1C23736
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 09:30:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 720951F253C4
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 21:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7690F5DF18;
-	Wed,  6 Mar 2024 09:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9CA1B80B;
+	Wed,  6 Mar 2024 21:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="IU6gnfHS"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MFRaY28A"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2068.outbound.protection.outlook.com [40.107.96.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6203F5DF14;
-	Wed,  6 Mar 2024 09:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709717409; cv=none; b=iNYJ0joM+EXuyI8hpgRGvaa4L+4QcK24Xyk5zpfRHAQE/3wlHde6IA77bmkJb49PRBi+kkIEa88W37C/wzn7Oh9dlCQYqb9psvzmF5A2zaB3Jjv+rZ+OAmN9sVfuraloVyz/bnUybxKCMQURdo9nNgykmEA7cP8p32LTB7yD0IE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709717409; c=relaxed/simple;
-	bh=Y3Lty5lImWF4AdPZOBki5RRdl2NHf3ZUczPC5/UTnF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y75lImGTKSth/tx4rEfUfEobchyixrvtbG07HM+zcEKhpvbQOY8wsGlRDi0JB5uO4KsjQg+sq9gchER4lCxAHNf2KwNowZpoZ2abNjM2xOEql/1xjMpu2Gt2b6hf5nxdS/wexlwvIBCGvoOOvxBI567GXjEBJeVzp9xBX0cfbLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=IU6gnfHS; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1BCE540E0196;
-	Wed,  6 Mar 2024 09:29:56 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id bqkuGXKgdDpk; Wed,  6 Mar 2024 09:29:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1709717393; bh=ULazbDSQsUMx2ImMe7sehWqqLLpe6QH805TY3SG+RIo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IU6gnfHS48SjLW0YjSJT931n7oyiqhmm3FMoE0m7vZo6If6OvFt5UMriBF2VUB50g
-	 djcTqjqZLlpM4xVI0J7PWyrkWLNO4Y69M4dH1zGtQJNlP4ogwOwikG7qNPfL9Oa/fW
-	 fRb+ssMk2X0dl9STlKXyCD4o5X0Xp2+Hnjy5n3WhZ0IwYpzMLw/1j2q6Y3GaGaSc7x
-	 HGoROG3FDCQ4yb0MhugEAeR7WUgrk2qc+DldbeuSuaBgxJxMXP4GdcAguWfZ9GiN07
-	 +XTkF8dMFS9j/5/xd1NYPUf/Ufo8uRh0ARuiLMrO+doG3u6sKYiUqqqSMHZvwzqVbA
-	 s91Piy6v32XpF9janId0nq9YGB/3qC5WNeUWDUCHhaYoKhmXUuqb35FsWmuEECa5/f
-	 H9aIIQmhoqWhQNl5AbNNzeeZMtVqZaUS+q4OOv1OpDUX99s4iq89qrrhaUpCHWJk0x
-	 dLtY65SiwAEjHBYFbOqmCaI8TWhzxpQ6d/S5UqIfzSPdItTXCN6tz5HilmfElSZC55
-	 Q5SM+15bhEx66Kdetd2xV6NPfoTqNELLYPobVuQuQh1HA8vPgb6lpJISJ9iMHX6i1v
-	 jiYDpKvpXHjhbO3dhfpBlcddB2iBOlBjGYNNCJIKwvSwR1R1pDmQgbd7/QXSAUyre1
-	 OW6SAk79GLGRQ4O6lmDm0Kv0=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2249B40E019B;
-	Wed,  6 Mar 2024 09:29:45 +0000 (UTC)
-Date: Wed, 6 Mar 2024 10:29:38 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>, Tony Luck <tony.luck@intel.com>,
-	naveenkrishna.chatradhi@amd.com, muralidhara.mk@amd.com,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] RAS/AMD/FMPM: Fix off by one in error handling
-Message-ID: <20240306092938.GAZeg3grpW-PMOqFz9@fat_crate.local>
-References: <6fdec71a-846b-4cd0-af69-e5f6cd12f4f6@moroto.mountain>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F8E2FB2;
+	Wed,  6 Mar 2024 21:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709761961; cv=fail; b=rziGkDo4MltI0tpR6hGTtSqoPdmqRI3/xTwI5rcZ49UTSt2tfBiTSp8yK9yqz6RFU2SMxzzHMjPifKI43lwNCHesKfph6jG1umJk1KfgRl8a8FSZpTB3fxGxG3K4YAEeCm4YoLILbG+r5kTFtUL/IfvrDlm96hphl5NLwbC4Cus=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709761961; c=relaxed/simple;
+	bh=VVpPrm5cYjenRfzzVlWVv6AiGyZtw37eJl10QJMvLQo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=l/jhd58iwledwThHGfEE3hxfSq3JzSrnFmKWR7Kggz+w9kXBVE/gQCCeZpm8/Tt+sAydBiYqgJbVVjYd88k6kW2hSZL7Sr+4FiAW8tEslB7DaHuy/89G5oQKgtTmi1rsdRqYgNWGWmByR06e5/qw6/ziF/0RVGf/jGO611RRd+Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MFRaY28A; arc=fail smtp.client-ip=40.107.96.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cSH4bUFb1aa79g7cLO6kv8EqfYKNemGINGsbElIX69KBq2SF8J08zUn/Dx3C/5djAQdoTf5AwFS1/KcXjQOKDr09xxJ64r681YgvDgaDxE6At/myjyA/0xWZlTh+u7PsDMG4NDzdJrwKy1pE2DVSKmuS0oyr9YBbmGBGVscnFTzS99RLTu2/fHrJxaxCWPrsO9v3MgvszUsN98t+xMwQL8Z3g99kG3rf9B+S8vLw0NLI2gsW77stmTCAgUdPBXYner6Y9dHLQ9VsEQxV41TZv4eokghmOqzzzo4J6G6y5FMR4j5kXDzJC02AYVbAHsjxgWGz4tyfvzEp/uOgFDsy5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y913MFGe8mgk78aQtNczxuflZaNMskiF5iwXGT2TT9s=;
+ b=LgQ8/BAFUaOhL22DAcyxsrfPF8myjaNDNvZh3NodwKK8Khllth4ntwskJBvxK+FQXGFCoKJFXreJtPcLxojXUG/pMaR5cB6jjj/l+biU3txZ7rTympJg42wQQG/kpMUiVaCTcLdvr5RgbRbXI3mJna8fHtStr/pCXLzKowccfDsMM2fL8K+wMb1MsKRi11Tlpx/Uau+EnPGH+aYMescbvbCqMYpg6VQ/3n1DXfHQaFJAGNJEs9HR1fcfoVQC2tHVw6M7EGbXQ8IP1BTfiL6c7Fp1OzfYNElQgGdB7KLcOFOK52JGbBjbcUiDPU12KFxXdgcy4T64bmJF+EGxwEOIrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y913MFGe8mgk78aQtNczxuflZaNMskiF5iwXGT2TT9s=;
+ b=MFRaY28AXrlBR8ltjQBE7BL11f/hZyEguqwwg9YCLx8bCSw/NDMi54ooYZvtROIgrXDi0VIm/Y0FfqrLJFlmDjUGU7zVWYeUZpL3aK40fRDpJBUAlVc5xiOF3a98O6gswa6bHHuzrcP2dkcnV2x8Fz4CDvXgiJGuOFJ+kMwx9N8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB8403.namprd12.prod.outlook.com (2603:10b6:610:133::14)
+ by CY5PR12MB9054.namprd12.prod.outlook.com (2603:10b6:930:36::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Wed, 6 Mar
+ 2024 21:52:37 +0000
+Received: from CH3PR12MB8403.namprd12.prod.outlook.com
+ ([fe80::aaa1:af99:e0e5:7f14]) by CH3PR12MB8403.namprd12.prod.outlook.com
+ ([fe80::aaa1:af99:e0e5:7f14%5]) with mapi id 15.20.7362.019; Wed, 6 Mar 2024
+ 21:52:37 +0000
+Message-ID: <e6675835-46ca-4183-86ce-008fde928e73@amd.com>
+Date: Wed, 6 Mar 2024 15:52:34 -0600
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH] x86/mce: Dynamically size space for machine check records
+Content-Language: en-US
+To: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
+Cc: "Mehta, Sohil" <sohil.mehta@intel.com>, "x86@kernel.org"
+ <x86@kernel.org>, "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+ Avadhut Naik <avadhut.naik@amd.com>
+References: <20240212093246.GBZcnlvkPKDC8C7rv5@fat_crate.local>
+ <SJ1PR11MB6083B3511D18787BE823AB2CFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20240212175408.GIZcpbQHVjEtwRKLS-@fat_crate.local>
+ <SJ1PR11MB60830AF35FA89C7869B8C11EFC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20240212191401.GLZcpt-XHFqPg3cDw-@fat_crate.local>
+ <SJ1PR11MB6083C60D7584B02E9CAF19D5FC482@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <ZcqPhVO_DtD2x5N7@agluck-desk3>
+ <20240212220833.GQZcqW4WxKH34i-oBR@fat_crate.local>
+ <20240212221913.GRZcqZYRd6EPTTnN97@fat_crate.local>
+ <20240212224220.GSZcqezMhPojxvIcvO@fat_crate.local>
+ <Zd--PJp-NbXGrb39@agluck-desk3>
+From: "Naik, Avadhut" <avadnaik@amd.com>
+In-Reply-To: <Zd--PJp-NbXGrb39@agluck-desk3>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN9PR03CA0628.namprd03.prod.outlook.com
+ (2603:10b6:408:106::33) To CH3PR12MB8403.namprd12.prod.outlook.com
+ (2603:10b6:610:133::14)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6fdec71a-846b-4cd0-af69-e5f6cd12f4f6@moroto.mountain>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8403:EE_|CY5PR12MB9054:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a8b758e-b770-4ded-846a-08dc3e27bcc0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	0MI9w8AoHSo9YPYDlfYKkFMX/BU16RXTyrnAnqw45ANh2tr+63F9Akqjl31w4lfpRDpzlyFt+B5ftgpHIf6YWXAP0wjoWCG0YWQhhDg9RH7Hrz6WPIOX+h3rPsSrAQFNtZK3JpHaaZGvBFWNEvegDZiDkHCOt7+TkbmS7ALNFKz7xA48oXv2B+bDMMQVzn1k7qeatyAM6aHDyr6dnwm2g2o3oofDMmPDimsxGRShMvs+5zXs6ODOpQ2k5b07e+Oo9xcpitQjOcD/D3If6IQCKNd2uqF4KtU69FR1WJiiyDlzi4xqgU9S4+Wxd6HpBtT6Er1dsT6HHXnOlw0Azyzx9IH7xYIQyfJtDv2LA+n81aSxSkOm54RrATefpiiqUASugI8r/RD8WctceMQt4TFX/QHzqZdm3tvH8cpjKalKRNHQfDYWzc17v92o99NmFVtQ0mxtoiS8D1jLy2wXemP2V1SQDvsP8E5/M5CtGzdccivz1EGyJY33d5/ureQscG5yWqro0cRg7Ll03R88AB+9AoNcbYPq0grVSaBq76fBiptmWMrwBNOFKp5mc3kLuo4YVhU9hXHQGPxU1tRn/eYHnW7BVxjtFnBmQVpZYsDRR7b1E1/4+yZK8RX5fbtnBUsMFGf1tlwzwnha131105iQxDdZ5O+L2OCXxUGtqui/epY=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8403.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dEgvcXo4a0tvMFdwTlVMOEQ5dElkbTNtb0JKV1FDSTFFejhyZElzNG05RHU0?=
+ =?utf-8?B?ejVvczlNMy9jSklnS2hNZEx4YmpQOXpPdXNISy9nLzdIcmwvcTl1eGdSWnFv?=
+ =?utf-8?B?RksxMVoxT1dySjB6L2tGQUUveStic2pjS0V0cTZRNTNOMlFWRkxIQ3I0eXJ6?=
+ =?utf-8?B?WThvZWtQVHZwL0RNTGsyMWREQ0xwYzVOZGpnOXpPTW8rT05WWk4zM2dkQzNi?=
+ =?utf-8?B?ZWN3ZHlnTmVxWXZnM1hRTDAzczl0VmRSdERGcFNwd0d6WVVXMDNhMXVZdDJF?=
+ =?utf-8?B?MDBMRkpZUFRtdkFyYWZXVDRNa0kyNXJzQTRIMnNkMFJGdHBGdVhUV3k5Y0N0?=
+ =?utf-8?B?UDBCb3ZLQStCVUJ6SUcyZlowSE9ER0dVYTlkVEQwMm1MZ0NSOWpVNlllbVpZ?=
+ =?utf-8?B?eGVFTTJYdEhHVjNveW9Zdi9NVnRDalBJTEw3K2JGdEFYQjBMa09kUHpucDZo?=
+ =?utf-8?B?Z2t0WjBOV2Z2YTlJOWtwb3kwMy9uQjJoT2dobGdqcGtzY0NCaWhWVTNtejFT?=
+ =?utf-8?B?WG9nekJHZUlUL1VGMFZHWXF3ZlNobG83SUVKMzlSWWtrWUUwekMxVlNxUStD?=
+ =?utf-8?B?amNBVDRsVUJ3MWdiS1hMSUZ4YjYzazV4Sjl2RjAvdC9pOWt0NHVOR2ZldTRw?=
+ =?utf-8?B?UE8xOUJrT1dQejVDdVVXSkZGWjk1VnZVMm5DaG1OcXZQQzhFYWcvZmZ4VmtZ?=
+ =?utf-8?B?cU1hNXVJRDE5dHc4UCtabnpmZ2IrUGpQUFpXbjAvclhhSXFlZXFFVFdWTjhV?=
+ =?utf-8?B?VEpsN09xdkpUUDNPN0E2UzMvNlZRWTlFYXFpS2hudjhDVklsTWhidzZVaW9a?=
+ =?utf-8?B?Y1owdGpab25BZ1k0Nno2U0FqSHFoK1JJMEptT3lwbTZtZHRNUzQwTzRyOGxw?=
+ =?utf-8?B?MnV6QXpIQWptcDByZXJETUxVYmRLSTRxanljcEFOMU5ndnZ1YXEzZ2tjRlFQ?=
+ =?utf-8?B?M3ltcVplMU5qU3g2dFAwVGQzSXFkVTJGOFFuWGU1WTBMV01EbWhaTEM5VkFq?=
+ =?utf-8?B?N2V5TVd0Nm1GYjVMVkh3UzhsSVZiU25pOGtONXNpQjlhb3RMcXRwSXZROEg1?=
+ =?utf-8?B?a05PY2RWbVFjdHJlMkExeG9mdE5obThSSDdFNkZRMUt1L1U1RlNDVnBkSVFB?=
+ =?utf-8?B?L1lyR21WTk9waFpyMDhFZm04NWJMVG92TEpUakhsMHVzblptUTVjNzI5dnRS?=
+ =?utf-8?B?dnFtSmVDSmgvN1J6bVVzVFA0cDF1NjJpQmhtdjBLM2dPUHNxQWNpTEl5R3kw?=
+ =?utf-8?B?MTBuQi9mODdRaUNSdFJsOGRsK01yR1BFSnV5TXpnTUZPbE10cE90Nkw5OGpl?=
+ =?utf-8?B?VitQNGxlUzZTaUIzZXV4U0pscExzN2thaUJVd0Z2ZW1sNzIvbzAwMjFGN2tB?=
+ =?utf-8?B?RlhKdFlhMjVxVmN6YzNRRUdzRWZwODNYMzdUeVVRcjUyYU9hdG5IOXFGTFNq?=
+ =?utf-8?B?czdiZXEvNnIwSU92OGNIQXpSMXZGV0wrcTU0OXhlL1lmMHZNbHhnMUw0R29a?=
+ =?utf-8?B?ZjZVVkpxVmtFNEVxbytiUFpSYW04WUpYa2FGSmxXNUIxbHBZakJKUnlkZis1?=
+ =?utf-8?B?M2gzMjZhclM3Qk9ERDYya2dmcGFNL2RlRXlSSHBZY2h3aFQ1dzZ1TDhJbktW?=
+ =?utf-8?B?THF3aXdSLzd5OWlIWmZaVWNGLy9iSWNDcnUxcGZLMlFva21WVHlEc1BSSDZp?=
+ =?utf-8?B?b2FjRDdiVm81ODJPVTFRWEJvMDJoTDJweHUrbktBRGVmUUxOV2hZa25wMldl?=
+ =?utf-8?B?ZmJsNGdtZ0pYbFZGekNuWFMwazRJaFN4bWJQbVE2ZGFzUi9aNWo5Z1pINHRU?=
+ =?utf-8?B?Q3BFdkpwWDIySWlFVlN3bTRobmRFaUo4bm5aOFlWWlgzaXhtRGM0cUI4Vy9l?=
+ =?utf-8?B?N1JqM0FpNk1WaTdPNWpMYWUzK2JxNjE0Zi8xWlJENkVTQW00Z3JDcmwwOW1U?=
+ =?utf-8?B?Y1BwY0N6dDR3NlhrUTMwaDZ5QlF5YVN2NjhHcnhMUEpZdTFzTUdnaHAvRnJ3?=
+ =?utf-8?B?MHI3Y2pKRnZ4ajBxcjhYTzB3MmRwTW5JWXQwd0R3S3YraTgvYjJwS1dMRjJw?=
+ =?utf-8?B?amQ1R1c0VU4xczBQc1h4MEpJT01GSFd5M0hza1F2eDJ4NTNic1Z5N1BGdzJH?=
+ =?utf-8?Q?gNrPRjitOJBdMmpNyEdMO2Jvy?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a8b758e-b770-4ded-846a-08dc3e27bcc0
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8403.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2024 21:52:37.3483
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yV+T7GVUxnfidf6tK9dRLJ1IZoHIbgLuRs/9/KPJ9DUVLzgfSTvzMbzpZbBXTIYvLBaKidEnL41vT7kev6icig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB9054
 
-On Wed, Mar 06, 2024 at 08:30:46AM +0300, Dan Carpenter wrote:
-> Decrement "i" before the first iteration.  Depending on where this fails
-> it could free something from one element beyond the end of the
-> fru_records[] array.
+Hi,
+
+On 2/28/2024 17:14, Tony Luck wrote:
+> Systems with a large number of CPUs may generate a large
+> number of machine check records when things go seriously
+> wrong. But Linux has a fixed buffer that can only capture
+> a few dozen errors.
 > 
-> Fixes: 6f15e617cc99 ("RAS: Introduce a FRU memory poison manager")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Allocate space based on the number of CPUs (with a minimum
+> value based on the historical fixed buffer that could store
+> 80 records).
+> 
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
 > ---
->  drivers/ras/amd/fmpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
-> index 0963c9e7b853..2f4ac9591c8f 100644
-> --- a/drivers/ras/amd/fmpm.c
-> +++ b/drivers/ras/amd/fmpm.c
-> @@ -817,7 +817,7 @@ static int allocate_records(void)
->  	return ret;
+> Discussion earlier concluded with the realization that it is
+> safe to dynamically allocate the mce_evt_pool at boot time.
+> So here's a patch to do that. Scaling algorithm here is a
+> simple linear "4 records per possible CPU" with a minimum
+> of 80 to match the legacy behavior. I'm open to other
+> suggestions.
+> 
+> Note that I threw in a "+1" to the return from ilog2() when
+> calling gen_pool_create(). From reading code, and running
+> some tests, it appears that the min_alloc_order argument
+> needs to be large enough to allocate one of the mce_evt_llist
+> structures.
+> 
+> Some other gen_pool users in Linux may also need this "+1".
+> 
+>  arch/x86/kernel/cpu/mce/genpool.c | 22 ++++++++++++++++------
+>  1 file changed, 16 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
+> index fbe8b61c3413..a1f0a8f29cf5 100644
+> --- a/arch/x86/kernel/cpu/mce/genpool.c
+> +++ b/arch/x86/kernel/cpu/mce/genpool.c
+> @@ -16,14 +16,13 @@
+>   * used to save error information organized in a lock-less list.
+>   *
+>   * This memory pool is only to be used to save MCE records in MCE context.
+> - * MCE events are rare, so a fixed size memory pool should be enough. Use
+> - * 2 pages to save MCE events for now (~80 MCE records at most).
+> + * MCE events are rare, so a fixed size memory pool should be enough.
+> + * Allocate on a sliding scale based on number of CPUs.
+>   */
+> -#define MCE_POOLSZ	(2 * PAGE_SIZE)
+> +#define MCE_MIN_ENTRIES	80
 >  
->  out_free:
-> -	for (; i >= 0; i--)
-> +	while (--i >= 0)
->  		kfree(fru_records[i]);
+>  static struct gen_pool *mce_evt_pool;
+>  static LLIST_HEAD(mce_event_llist);
+> -static char gen_pool_buf[MCE_POOLSZ];
 >  
->  	kfree(fru_records);
-> -- 
+>  /*
+>   * Compare the record "t" with each of the records on list "l" to see if
+> @@ -118,14 +117,25 @@ int mce_gen_pool_add(struct mce *mce)
+>  
+>  static int mce_gen_pool_create(void)
+>  {
+> +	int mce_numrecords, mce_poolsz;
+>  	struct gen_pool *tmpp;
+>  	int ret = -ENOMEM;
+> +	void *mce_pool;
+> +	int order;
+>  
+> -	tmpp = gen_pool_create(ilog2(sizeof(struct mce_evt_llist)), -1);
+> +	order = ilog2(sizeof(struct mce_evt_llist)) + 1;
+> +	tmpp = gen_pool_create(order, -1);
+>  	if (!tmpp)
+>  		goto out;
+>  
+> -	ret = gen_pool_add(tmpp, (unsigned long)gen_pool_buf, MCE_POOLSZ, -1);
+> +	mce_numrecords = max(80, num_possible_cpus() * 4);
 
-Applied, thanks.
+Per Boris's below suggestion, shouldn't this be:
+	mce_numrecords = max(80, num_possible_cpus() * 16);
+
+>> 	min(4*PAGE_SIZE, num_possible_cpus() * PAGE_SIZE);
+> 
+> max() ofc.
+> 
+>> There's a sane minimum and one page pro logical CPU should be fine on
+>> pretty much every configuration...
+
+4 MCE records per CPU equates to 1024 bytes, considering the genpool intrinsic
+behavior you explained in the other subthread.
+
+Apart from this, tested the patch on a couple of AMD systems. Didn't observe any
+issues.
+
+> +	mce_poolsz = mce_numrecords * (1 << order);
+> +	mce_pool = kmalloc(mce_poolsz, GFP_KERNEL);
+> +	if (!mce_pool) {
+> +		gen_pool_destroy(tmpp);
+> +		goto out;
+> +	}
+> +	ret = gen_pool_add(tmpp, (unsigned long)mce_pool, mce_poolsz, -1);
+>  	if (ret) {
+>  		gen_pool_destroy(tmpp);
+>  		goto out;
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Avadhut Naik
 
