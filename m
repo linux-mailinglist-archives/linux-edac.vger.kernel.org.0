@@ -1,113 +1,275 @@
-Return-Path: <linux-edac+bounces-734-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-732-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2564B872EC9
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 07:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B11E4872E50
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 06:28:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACFF8B22F67
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 06:24:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BEF1B217A4
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 05:27:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B64261BF20;
-	Wed,  6 Mar 2024 06:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA65617551;
+	Wed,  6 Mar 2024 05:27:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b="FFnnYNOt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkIlz7z7"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from quicklyemailsend77.com (quicklyemailsend77.com [57.128.172.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7211BDDB
-	for <linux-edac@vger.kernel.org>; Wed,  6 Mar 2024 06:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.128.172.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C055A5381;
+	Wed,  6 Mar 2024 05:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709706240; cv=none; b=sCq7EYy1LDqQTk88xdAtslR7hukbb9Irx8/LeTgZAA56GTY7Vn0Xzoo/uzfAyB0EfRrGQvwep9aVibV2gMScrm/+/ve+aVK03hKEHB+3pWjrJpVMr/CS2g5jcmCMLvU3BuAWwmKKDDcQCNbTZUGZaEX+ghUlJf0rmn6BJZ5h4iM=
+	t=1709702874; cv=none; b=VGCz4/pVu7C+s6pQPJqtxhVeunqdtf6a0aDVery2RVo4o0znF98QI8JkVUuLBbgLqXWzBIZfPUWanWgP6oSCoAr52cpRm1JY8l8oBfhz9W5o705WHgLiqdYvGt6kAbaqltPIb9DBeDYq34moji2KaFgmkliYETW/DHxqhxyC2zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709706240; c=relaxed/simple;
-	bh=UkCnC3hxyWUR811IY5T5PlAQFaHotSY7xhHSl4hh88I=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z95zPrg0oovHGw6aUTHPe7Uu+b5A1PgXKeQqH/7WOlNCAc1Y9Ki+KJZ3uhaXoL4Pz+9Fi9KBhW1MvrR1PLPl5pcGmZq0xyRBq0/xiPn3aIO+c6h/hwbIAbpBN5eck9COjfeJbp77kz/oO4PTXIH4WdlwkglnYXoOTkGorIteed4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com; spf=pass smtp.mailfrom=quicklyemailsend77.com; dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b=FFnnYNOt; arc=none smtp.client-ip=57.128.172.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicklyemailsend77.com
-Received: from quicklyemailsend77.com (unknown [185.255.114.95])
-	by quicklyemailsend77.com (Postfix) with ESMTPA id 64C65397794
-	for <linux-edac@vger.kernel.org>; Wed,  6 Mar 2024 03:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 quicklyemailsend77.com 64C65397794
+	s=arc-20240116; t=1709702874; c=relaxed/simple;
+	bh=wKnbumHw86NpSxlTFIsomzV9Cee/hsO0cJfbKBQ1Ltw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jNJ0Sm65rXK7vi9DWkGB0G9qlxUu/0X9CBCKKMGvMJxDL1U6Xazv38smkaR1x+79KxnipHkBx/C5Zq/PbpWhy8D0MUlmXHHTIZ54nMtpqINDxoc6YxLrRSXruTpQBLKhk/9VnSfSJBfg5ehTRILqQhljWgwinIzfo5n8juPsRLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkIlz7z7; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5134f830488so2295997e87.0;
+        Tue, 05 Mar 2024 21:27:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=quicklyemailsend77.com; s=default; t=1709697103;
-	bh=eefLZdwY5mr6nwq86b3d+rtsxGUHJntuGmXl+R35AcQ=;
-	h=Reply-To:From:To:Subject:Date:From;
-	b=FFnnYNOtvh1g1m8Jb6z0lwM/MsHXa2lBN0f82SLz0okAXk+wFF0tCcvoTMLwYpUma
-	 HPssKQveZvkEn1RYB7o8CMm9wEaA2MbYXlSvoa9zjCW+XvggCF5OLF85BD6jwFbtm8
-	 iWlA5g251oC3+4M9htPeN4e6QfojAt1RnAAL6xua0w/XSUT5nSrD+zL0ChoZuUC1Vt
-	 9is2fVHVpC7NaSUSMyd67ZWiGQi0oFiDL3HLUC7PR11vh5ZRyDJ1aa1M6DF3JnP1iF
-	 ThYrHy5MWbQ8JcyyDAOdBWXcyS/496f+EsSfP4IzMaL13YyKePv2dEynCChbn4f1pH
-	 QbOylwNg5RwJg==
-Reply-To: joakimlarson@skendiaelevator.com
-From: info@quicklyemailsend77.com
-To: linux-edac@vger.kernel.org
-Subject: =?UTF-8?B?7YyQ66ekIOusuOydmCAyMDI0?=
-Date: 05 Mar 2024 19:51:42 -0800
-Message-ID: <20240305195141.548529BA03923160@quicklyemailsend77.com>
+        d=gmail.com; s=20230601; t=1709702871; x=1710307671; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o6XANTBlf+Hs9bvtmVOEbSoR6w8IVhuP5PyAmad96gU=;
+        b=nkIlz7z7+/TzMXCTrizfss9B9s7aOYq+cB9Hr1H1J/v+n44zMaRXevLvK3EOOB5jEQ
+         GP3+PQAy0gbV6PSc0wO0xKzDHDm82J7Z4znTJGXDSTojTAPdoV6lvQ6O5g57zlupVLDU
+         DdoQl9LAZviwBcozn0FeoI7hP3dnExq4kLoPAUWgVRMoC7KL+A/BDNvypJWtmpNPMFCk
+         FZKD3Qsn97pkJ53IQyxoVO0rgJaNuE4PwhLKO+zb2cyJk170IfbtBNuUmOsHCa2JAUDR
+         CRb3VMYTj/EVRX3JYbuU8n32RqHHWZ51j6im5j6pssrEwbbV6LqIBuw54QYq0e7mWlwH
+         mONA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709702871; x=1710307671;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o6XANTBlf+Hs9bvtmVOEbSoR6w8IVhuP5PyAmad96gU=;
+        b=fr6V+g0XvnirDDtl+V6+4lqMBupX38d5jDJ+OLWJPeErQfWICS8bjYZsdOPxnpektC
+         1DPRsAqz1/bPAbzaz+1CsetKg+vHn/kTgASfg2rij0CGzce2OOOf6oaQNPWbdvB9Cb4z
+         s7gpg2VnsGrGKclKqLzfR48/qOslT5FV68Dp1+werH02ocOzKu8SL+bmUcqbuI+o/Qmz
+         B5Bfc4R6yG67lWUGr4XHP0k0MwH4Vh1yqy2XcGxc7gpnnBkUxIU3w2CBjZda1Rd37QB7
+         JEuWQXtuh+pvtImsn8L9PWECV6403hTjEtTfzyngsEtUBTLJjEXvyEkR5lpaVj6t21i4
+         45Ww==
+X-Forwarded-Encrypted: i=1; AJvYcCU2HsrU0K+Hoa5/YeUDReJbvo/EcvQvCatEUJO/Bjgn2G0R3dn5oZ/VcRllPlrI450XcZXf8vXpFy7rTo/3Kb1/SvZtfqwgZ+Vep9Vo2egdn6CxXDgKDL58OxFppO6NGrB3My5gzTLcaA==
+X-Gm-Message-State: AOJu0Yw/Iid+fVppU9NqjSfLg9udawGKtAzHdBtJA9P6rRoBHclvhWFN
+	pDm0W3iQyP8ehuj8vv7ReLkc4g6z62VA29km9YbSYOr5eYQ/YomGWI2v3jNJM+WmJeQQ56AOvW4
+	OpljL6Bfs7Zzz0D3C0ap7Qn0yvbWlVJBfDaPgEw==
+X-Google-Smtp-Source: AGHT+IEV8/o3jo9E7Lp/Mc9+d1xZq5uwZjt002ECMmo5PNhaBpnQ1gL7QcMHHTkoZreIlmul4g1YHUkohgFH+8dhTbE=
+X-Received: by 2002:a05:6512:3194:b0:513:5eb5:f7f4 with SMTP id
+ i20-20020a056512319400b005135eb5f7f4mr369476lfe.55.1709702870587; Tue, 05 Mar
+ 2024 21:27:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
+References: <20240222181324.28242-1-fancer.lancer@gmail.com>
+In-Reply-To: <20240222181324.28242-1-fancer.lancer@gmail.com>
+From: Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
+Date: Wed, 6 Mar 2024 10:57:38 +0530
+Message-ID: <CAKfKVtErVuCM+pa1e7Lwt0DUU-t-U0eNRnZSw39pfsZ8gv8QZQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/20] EDAC/mc/synopsys: Various fixes and cleanups
+To: Serge Semin <fancer.lancer@gmail.com>
+Cc: Michal Simek <michal.simek@amd.com>, Alexander Stein <alexander.stein@ew.tq-group.com>, 
+	Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter <rric@kernel.org>, 
+	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+On Thu, Feb 22, 2024 at 11:52=E2=80=AFPM Serge Semin <fancer.lancer@gmail.c=
+om> wrote:
+>
+> This patchset is a first one in the series created in the framework of
+> my Synopsys DW uMCTL2 DDRC-related work:
+>
+> [1: In-progress v5] EDAC/mc/synopsys: Various fixes and cleanups
+> Link: ---you are looking at it---
+> [2: In-progress v4] EDAC/synopsys: Add generic DDRC info and address mapp=
+ing
+> Link: https://lore.kernel.org/linux-edac/20230920192806.29960-1-fancer.la=
+ncer@gmail.com
+> [3: In-progress v4] EDAC/synopsys: Add generic resources and Scrub suppor=
+t
+> Link: https://lore.kernel.org/linux-edac/20230920195720.32047-1-fancer.la=
+ncer@gmail.com
+>
+> Note the patchsets above must be merged in the same order as they are
+> placed in the list in order to prevent conflicts. Nothing prevents them
+> from being reviewed synchronously though. Any tests are very welcome.
+> Thanks in advance.
+>
+> The main goal of the entire set of the changes provided in the mentioned
+> patchsets is to as much as possible specialise the synopsys_edac.c driver
+> to be working with the Synopsys DW uMCTL2 DDR controllers of various
+> versions and synthesized parameters, and add useful error-detection
+> features.
+>
+> Regarding this series content. It's an initial patchset which
+> traditionally provides various fixes, cleanups and modifications required
+> for the more comfortable further features development. The main goal of i=
+t
+> though is to detach the Xilinx Zynq A05 DDRC related code into the
+> dedicated driver since first it has nothing to do with the Synopsys DW
+> uMCTL2 DDR controller and second it will be a great deal obstacle on the
+> way of extending the Synopsys-part functionality.
+>
+> The series starts with the fixes patches, which in short concern the next
+> aspects: touching the ZynqMP-specific CSRs on the Xilinx ZinqMP platform
+> only, serializing an access to the ECCCLR/ECCCTL register, adding correct=
+ memory
+> devices type detection, setting a correct value to the
+> mem_ctl_info.scrub_cap field, dropping an erroneous ADDRMAP[4] parsing an=
+d
+> getting back a correct order of the ECC errors info detection procedure.
+>
+> Afterwards the patchset provides several cleanup patches required for the
+> more coherent code splitting up (Xilinx Zynq A05 and Synopsys DW uMCTL2
+> DDRCs) so the provided modifications would be useful in both drivers.
+> First the platform resource open-coded IO-space remapping is replaced wit=
+h
+> the devm_platform_ioremap_resource() method call for the sake of the code
+> simplification. Secondly the next redundant entities are dropped: interna=
+l
+> CE/UE errors counters, local to_mci() macros definition, some redundant
+> ecc_error_info structure fields and redundant info from the error message=
+,
+> duplicated dimm->nr_pages debug printout and spaces from the MEM_TYPE
+> flags declarations. (The later two updates concern the MCI core part.)
+> Thirdly before detaching the Zynq A05-related code an unique MC index
+> allocation infrastructure is added to the MCI core. It's required since
+> after splitting the driver up both supported types of memory devices coul=
+d
+> be correctly probed on the same platform. Note even though it's currently
+> unsupported by the synsopsys_edac.c driver it's claimed to be possible by
+> the original driver author (it was a reason of having two unrelated
+> devices supported in a single driver). Finally the Xilinx Zynq A05 part o=
+f
+> the driver is moved out to a dedicated driver. After that the
+> platform-specific setups API is removed from the Synopsys DW uMCTL2 DDRC
+> driver since it's no longer required.
+>
+> Finally as the cherry on the cake a set of the local coding style
+> cleanups are provided: unify the DW uMCTL2 DDRC driver entities naming an=
+d
+> replace the open-coded "shift/mask" pattern with the kernel helpers like
+> BIT/GENMASK/FIELD_x in there. It shall significantly improve the code
+> readability.
+>
 
-=EC=95=88=EB=85=95=ED=95=98=EC=84=B8=EC=9A=94
-=20
-=EC=8A=A4=EC=9B=A8=EB=8D=B4 =EC=8A=A4=EC=B9=B8=EB=94=94=EC=95=84 =EC=97=98=
-=EB=A0=88=EB=B0=94=ED=86=A0(Skandia Elevato)=EC=97=90=EC=84=9C =EC=98=A8 =
-=EC=9A=94=EC=95=84=ED=82=B4 =EB=9D=BC=EB=A5=B4=EC=86=90(JOAKIM LARSSON) .
-=20
-=EC=9A=B0=EB=A6=AC=EB=8A=94 =EA=B8=B4=EA=B8=89=ED=95=98=EA=B2=8C =EA=B7=80=
-=ED=95=98=EC=9D=98 =EC=A0=9C=ED=92=88=EC=9D=84 =ED=95=84=EC=9A=94=EB=A1=9C =
-=ED=95=98=EB=A9=B0 =EA=B0=80=EB=8A=A5=ED=95=9C =ED=95=9C =EB=B9=A8=EB=A6=AC=
- =EC=8B=9C=ED=97=98 =EC=A3=BC=EB=AC=B8=EC=9D=84 =ED=95=98=EA=B3=A0 =EC=8B=
-=B6=EC=8A=B5=EB=8B=88=EB=8B=A4. 
-=20
-=EC=98=A8=EB=9D=BC=EC=9D=B8=EC=9C=BC=EB=A1=9C =EC=A0=9C=ED=92=88=EC=97=90 =
-=EB=8C=80=ED=95=9C =EC=A0=95=EB=B3=B4=EB=A5=BC =EC=88=98=EC=A7=91=ED=95=98=
-=EA=B3=A0 =EC=9E=88=EC=8A=B5=EB=8B=88=EB=8B=A4. 
-=20
-=EA=B7=B8=EB=A6=AC=EA=B3=A0 =EB=82=B4 =EB=AA=A8=EC=9E=84=EC=97=90=EC=84=9C =
-=EB=82=98=EB=8A=94 =EC=9A=B0=EB=A6=AC=EA=B0=80 =EB=8B=B9=EC=8B=A0=EC=9D=98 =
-=EC=A0=9C=ED=92=88=EC=9D=84 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EA=B2=83=EC=9D=B4=
-=EB=9D=BC=EA=B3=A0 =EC=83=9D=EA=B0=81=ED=95=A9=EB=8B=88=EB=8B=A4.
-=20
-1. =EC=B5=9C=EC=8B=A0 Catalouge=EB=A5=BC =EB=B3=B4=EB=82=BC =EC=88=98 =EC=
-=9E=88=EC=8A=B5=EB=8B=88=EA=B9=8C?
-=20
-2. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EC=88=98 =EC=9E=
-=88=EB=8A=94 =EC=B5=9C=EC=86=8C=ED=95=9C=EC=9D=80 =EB=AC=B4=EC=97=87=EC=9D=
-=B4=EA=B3=A0 =EB=98=90=ED=95=9C =EA=B8=B0=EA=B0=84=EC=9D=84 =EB=B3=B4=EB=82=
-=B4=EC=8B=AD=EC=8B=9C=EC=98=A4=20
-=EB=B0=8F =EC=A1=B0=EA=B1=B4.
-3. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=98=EB=8A=94 =EA=B2=
-=BD=EC=9A=B0 =EC=A7=80=EB=B6=88=EC=9D=84 =EC=96=B4=EB=96=BB=EA=B2=8C =ED=95=
-=B4=EA=B2=B0=ED=95=98=EA=B8=B0=EB=A5=BC =EC=9B=90=ED=95=98=EC=8B=AD=EB=8B=
-=88=EA=B9=8C?
-=20
-=EA=B7=80=ED=95=98=EC=9D=98 =ED=9A=8C=EC=8B=A0 =EB=8C=80=EA=B8=B0 =EC=A4=91=
+For the zynqmp
 
+Reviewed-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 
-Mr Joakim larssonv(=EB=B6=80=EC=82=AC=EC=9E=A5/=EC=98=81=EC=97=85 =EA=B4=80=
-=EB=A6=AC=EC=9E=90)
-
-=EB=B0=A9=EB=AC=B8=EC=9E=90 =EC=A3=BC=EC=86=8C: Kedumsv=C3=A4gen 14, SE-534=
- 94 Vara, Sweden
-
-=EB=B0=B0=EC=86=A1 =EC=A3=BC=EC=86=8C: Industriv=C3=A4gen, SE-534 94 Vara, =
-Sweden
-
-joakimlarson@skendiaelevator.com
-https://skandiaelevator.com
-
+Thanks,
+> Changelog v2:
+> - Move Synopsys DW uMCTL2 DDRC bindings file renaming to a separate patch=
+.
+>   (@Krzysztof)
+> - Introduce a new compatible string "snps,dw-umctl2-ddrc" matching the ne=
+w
+>   DT-schema name.
+> - Forgot to fix some of the prefix of the SYNPS_ZYNQMP_IRQ_REGS macro
+>   in several places. (@tbot)
+> - Drop the no longer used "priv" pointer from the mc_init() function.
+>   (@tbot)
+> - Include "linux/bitfield.h" header file to get the FIELD_GET macro
+>   definition. (@tbot)
+> - Drop the already merged in patches:
+> [PATCH 12/20] EDAC/mc: Replace spaces with tabs in memtype flags definiti=
+on
+> [PATCH 13/20] EDAC/mc: Drop duplicated dimm->nr_pages debug printout
+>
+> Changelog v3:
+> - Drop the no longer used "priv" pointer from the mc_init() function.
+>   (@tbot)
+> - Drop the merged in patches:
+> [PATCH v2 14/19] dt-bindings: memory: snps: Detach Zynq DDRC controller s=
+upport
+> [PATCH v2 15/19] dt-bindings: memory: snps: Use more descriptive device n=
+ame
+>   (@Krzysztof)
+>
+> Changelog v4:
+> - Remove Rob, Krzysztof and DT-mailing list from Cc since the respective
+>   patches have already been merged in.
+> - Add a new patch
+>   [PATCH v4 6/20] EDAC/synopsys: Fix misleading IRQ self-cleared quirk fl=
+ag
+>   detached from the very first patch of the series.
+> - Add a new patch
+>   [PATCH v4 15/20] EDAC/mc: Re-use generic unique MC index allocation pro=
+cedure
+> - Add a new patch
+>   [PATCH v4 18/20] EDAC/synopsys: Unify CSRs macro declarations
+>   collecting the changes from various patches of the series.
+> - Drop redundant empty lines left by mistake.
+> - Drop private counters access from the check_errors() method too.
+> - Rebase onto the kernel v6.6-rcX.
+>
+> Link: https://lore.kernel.org/linux-edac/20230920191059.28395-1-fancer.la=
+ncer@gmail.com
+> Changelog v5:
+> - Fix function names in the zynq_edac.c kdoc.
+> - Rebase onto the kernel 6.8-rc3.
+>
+> Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+> Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-edac@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+>
+> Serge Semin (20):
+>   EDAC/synopsys: Fix ECC status data and IRQ disable race condition
+>   EDAC/synopsys: Fix generic device type detection procedure
+>   EDAC/synopsys: Fix mci->scrub_cap field setting
+>   EDAC/synopsys: Drop erroneous ADDRMAP4.addrmap_col_b10 parse
+>   EDAC/synopsys: Fix reading errors count before ECC status
+>   EDAC/synopsys: Fix misleading IRQ self-cleared quirk flag
+>   EDAC/synopsys: Use platform device devm ioremap method
+>   EDAC/synopsys: Drop internal CE and UE counters
+>   EDAC/synopsys: Drop local to_mci() macro definition
+>   EDAC/synopsys: Drop struct ecc_error_info.blknr field
+>   EDAC/synopsys: Shorten out struct ecc_error_info.bankgrpnr field name
+>   EDAC/synopsys: Drop redundant info from the error messages
+>   EDAC/mc: Init DIMM labels in MC registration method
+>   EDAC/mc: Add generic unique MC index allocation procedure
+>   EDAC/mc: Re-use generic unique MC index allocation procedure
+>   EDAC/synopsys: Detach Zynq A05 DDRC support to separate driver
+>   EDAC/synopsys: Drop unused platform-specific setup API
+>   EDAC/synopsys: Unify CSRs macro declarations
+>   EDAC/synopsys: Unify struct/macro/function prefixes
+>   EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
+>
+>  MAINTAINERS                  |   1 +
+>  drivers/edac/Kconfig         |   9 +-
+>  drivers/edac/Makefile        |   1 +
+>  drivers/edac/dmc520_edac.c   |   4 +-
+>  drivers/edac/edac_mc.c       | 135 ++++-
+>  drivers/edac/edac_mc.h       |   4 +
+>  drivers/edac/pasemi_edac.c   |   5 +-
+>  drivers/edac/ppc4xx_edac.c   |   5 +-
+>  drivers/edac/synopsys_edac.c | 967 ++++++++++++-----------------------
+>  drivers/edac/zynq_edac.c     | 501 ++++++++++++++++++
+>  10 files changed, 963 insertions(+), 669 deletions(-)
+>  create mode 100644 drivers/edac/zynq_edac.c
+>
+> --
+> 2.43.0
+>
+>
 
