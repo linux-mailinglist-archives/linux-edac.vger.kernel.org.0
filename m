@@ -1,251 +1,113 @@
-Return-Path: <linux-edac+bounces-731-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-734-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC7BB872B50
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 00:58:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2564B872EC9
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 07:24:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7348C283CC6
-	for <lists+linux-edac@lfdr.de>; Tue,  5 Mar 2024 23:58:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACFF8B22F67
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Mar 2024 06:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28B112DDA5;
-	Tue,  5 Mar 2024 23:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B64261BF20;
+	Wed,  6 Mar 2024 06:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N5z/JnQj"
+	dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b="FFnnYNOt"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from quicklyemailsend77.com (quicklyemailsend77.com [57.128.172.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19614171D2;
-	Tue,  5 Mar 2024 23:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7211BDDB
+	for <linux-edac@vger.kernel.org>; Wed,  6 Mar 2024 06:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.128.172.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709683092; cv=none; b=GVNEkg4d5E/8hlmYNkhEyONq74SeQF9ikLfv5uIezkIJ5BF/Ye4uzLjAWTTtBt5bNRbBJCFShky8UT2Am0ek7Vs4iIG/M0yaOf1X5VMsmwZRb2o8pS66//DIvtIhlkl8n2d2vjkaobarpENZK/t8qGk7eaqooHP99osOHV0ZHrk=
+	t=1709706240; cv=none; b=sCq7EYy1LDqQTk88xdAtslR7hukbb9Irx8/LeTgZAA56GTY7Vn0Xzoo/uzfAyB0EfRrGQvwep9aVibV2gMScrm/+/ve+aVK03hKEHB+3pWjrJpVMr/CS2g5jcmCMLvU3BuAWwmKKDDcQCNbTZUGZaEX+ghUlJf0rmn6BJZ5h4iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709683092; c=relaxed/simple;
-	bh=4hCUq/hjcZij7Vw+LDYWfYReVMXKhq7r70yM7c0jmfI=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XQBXJIkpkW8loVRzFCI6tUYS09q2jFZxRsP5hS2p1+1SGRWef6cJ80uwi9otRDY5dwllLpNBT3o6Yt1Jv8rIcTFoohUjjlxHsLHiR1SjErpzhiojB9HmGYKjoHRnGKuPeH74TUxpMrTd692TT8aB3iHrN6vhCAtTUMy7Ylz7AEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N5z/JnQj; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e56787e691so238179b3a.0;
-        Tue, 05 Mar 2024 15:58:10 -0800 (PST)
+	s=arc-20240116; t=1709706240; c=relaxed/simple;
+	bh=UkCnC3hxyWUR811IY5T5PlAQFaHotSY7xhHSl4hh88I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Z95zPrg0oovHGw6aUTHPe7Uu+b5A1PgXKeQqH/7WOlNCAc1Y9Ki+KJZ3uhaXoL4Pz+9Fi9KBhW1MvrR1PLPl5pcGmZq0xyRBq0/xiPn3aIO+c6h/hwbIAbpBN5eck9COjfeJbp77kz/oO4PTXIH4WdlwkglnYXoOTkGorIteed4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com; spf=pass smtp.mailfrom=quicklyemailsend77.com; dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b=FFnnYNOt; arc=none smtp.client-ip=57.128.172.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicklyemailsend77.com
+Received: from quicklyemailsend77.com (unknown [185.255.114.95])
+	by quicklyemailsend77.com (Postfix) with ESMTPA id 64C65397794
+	for <linux-edac@vger.kernel.org>; Wed,  6 Mar 2024 03:51:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 quicklyemailsend77.com 64C65397794
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709683090; x=1710287890; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CRPbTjVgyE4PYwh/jnpL0ufRys+ZJBqz1o3jrQedx1Q=;
-        b=N5z/JnQjQeIeVkuECWVQX5EBNV6WMJpKOuUWKAgu98+ww5EK+7tER3tTp2IWioS4OI
-         b3GS4WdCh9ldMmhyLaeG8+UPYu0AtI2P6UDZJ9bOtBTN6mjxl2GvfmdsJwPJqqp2u5Dg
-         QtBj+G80FK8xpC1/Jhu9T9LqOyXJZ4ZsFESD2mjQ8bZkRGOMkQ0ZhwtjAa3KG8GSXqh1
-         dt+93EzJwnYJY6kwlb6qWX7gJddn8yUMTs1fBY2KN59q/wHsv6Nr/PRs1f3tUWEpI7b4
-         qTrKXAUpWnMffqvjbm+JxMkrw7DCid2MOhPQIMIc+tU1Cwtiuop0GTUab6m9AeGsH9U/
-         gWXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709683090; x=1710287890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CRPbTjVgyE4PYwh/jnpL0ufRys+ZJBqz1o3jrQedx1Q=;
-        b=fxnvIUYlFgFTF3AOc6+M14hYwz/nqqwLERjGXrdTSh6p4sVqZc83XDXyqz+lYv1bH5
-         E4+WVYcAskvtBda2/grpxugNQW+4LZWe6v4GF7Rd+oJ5S1ykAdFrKcN3ItWySwg72pCw
-         R7ZC7FqyYFK4Sv120TFnkhOAGeueZcqGEZ8zgD5eYvF2ZDlxjf4uI/46uuLxcbeeRYf1
-         SB5nlf+IrP4UwkO72QiECxTzt5Js2i+55zulQBFD1gSex0sKE0S7lukzbjt0VQTW2A+i
-         yZakM/uj+jWeV/yQ1MBbzSCjXWD7L8q5HCggnEnpR2qloeDpmZ0V6HcYZlpxMMdH3KxG
-         yQPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUagw3p3GQp1tTIG+VEctIfmZ9VkpanYZxX5tZ393j/tenLJL9YmJx2f7D0fp6qtOGKPXvoI/lTM2Nn6OTw2ZUspMM4fqLu3u60rORI65uoHJAZh8ULOs8DunREKJsopQnISB2pFsE3J7x2Ny32MOjDp/yGL8eUBgXIV6RWqPn0u8of3Cs=
-X-Gm-Message-State: AOJu0YwDJ74QREu5IW1CjQOZFRKAqSnByFD5K+9fGVzCJlOiLQClVtzg
-	792wnV2lfNIH1HJCW/8jz4cGzpyIEr2Z4KOCB2w3bKdFHj/8yyX3
-X-Google-Smtp-Source: AGHT+IFkyfofyClB+sf4ug0A6uUDjt2ZbsKesCzqOAmB+JwKyE/QcgD3QAAH8mfPCIEOeeVjDbPGeg==
-X-Received: by 2002:a05:6a20:e111:b0:1a1:48df:d55c with SMTP id kr17-20020a056a20e11100b001a148dfd55cmr4371695pzb.0.1709683090406;
-        Tue, 05 Mar 2024 15:58:10 -0800 (PST)
-Received: from debian ([2601:641:300:14de:881:34a4:d51c:3425])
-        by smtp.gmail.com with ESMTPSA id jw13-20020a056a00928d00b006e5574db193sm9885184pfb.18.2024.03.05.15.58.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 15:58:10 -0800 (PST)
-From: fan <nifan.cxl@gmail.com>
-X-Google-Original-From: fan <fan@debian>
-Date: Tue, 5 Mar 2024 15:57:53 -0800
-To: shiju.jose@huawei.com
-Cc: linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org, dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, david@redhat.com,
-	Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
-	rientjes@google.com, jiaqiyan@google.com, tony.luck@intel.com,
-	Jon.Grimm@amd.com, dave.hansen@linux.intel.com, rafael@kernel.org,
-	lenb@kernel.org, naoya.horiguchi@nec.com, james.morse@arm.com,
-	jthoughton@google.com, somasundaram.a@hpe.com,
-	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
-	mike.malvestuto@intel.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com,
-	linuxarm@huawei.com
-Subject: Re: [RFC PATCH v6 01/12] cxl/mbox: Add GET_SUPPORTED_FEATURES
- mailbox command
-Message-ID: <ZeexgfzE2LkiV_Na@debian>
-References: <20240215111455.1462-1-shiju.jose@huawei.com>
- <20240215111455.1462-2-shiju.jose@huawei.com>
+	d=quicklyemailsend77.com; s=default; t=1709697103;
+	bh=eefLZdwY5mr6nwq86b3d+rtsxGUHJntuGmXl+R35AcQ=;
+	h=Reply-To:From:To:Subject:Date:From;
+	b=FFnnYNOtvh1g1m8Jb6z0lwM/MsHXa2lBN0f82SLz0okAXk+wFF0tCcvoTMLwYpUma
+	 HPssKQveZvkEn1RYB7o8CMm9wEaA2MbYXlSvoa9zjCW+XvggCF5OLF85BD6jwFbtm8
+	 iWlA5g251oC3+4M9htPeN4e6QfojAt1RnAAL6xua0w/XSUT5nSrD+zL0ChoZuUC1Vt
+	 9is2fVHVpC7NaSUSMyd67ZWiGQi0oFiDL3HLUC7PR11vh5ZRyDJ1aa1M6DF3JnP1iF
+	 ThYrHy5MWbQ8JcyyDAOdBWXcyS/496f+EsSfP4IzMaL13YyKePv2dEynCChbn4f1pH
+	 QbOylwNg5RwJg==
+Reply-To: joakimlarson@skendiaelevator.com
+From: info@quicklyemailsend77.com
+To: linux-edac@vger.kernel.org
+Subject: =?UTF-8?B?7YyQ66ekIOusuOydmCAyMDI0?=
+Date: 05 Mar 2024 19:51:42 -0800
+Message-ID: <20240305195141.548529BA03923160@quicklyemailsend77.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215111455.1462-2-shiju.jose@huawei.com>
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 15, 2024 at 07:14:43PM +0800, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Add support for GET_SUPPORTED_FEATURES mailbox command.
-> 
-> CXL spec 3.1 section 8.2.9.6 describes optional device specific features.
-> CXL devices supports features with changeable attributes.
-> Get Supported Features retrieves the list of supported device specific
-> features. The settings of a feature can be retrieved using Get Feature
-> and optionally modified using Set Feature.
-> 
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
->  drivers/cxl/core/mbox.c | 23 +++++++++++++++
->  drivers/cxl/cxlmem.h    | 62 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 85 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 27166a411705..191f51f3df0e 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -1290,6 +1290,29 @@ int cxl_set_timestamp(struct cxl_memdev_state *mds)
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_set_timestamp, CXL);
->  
-> +int cxl_get_supported_features(struct cxl_memdev_state *mds,
-> +						struct cxl_mbox_get_supp_feats_in *pi,
-> +						void *feats_out)
-> +{
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	int rc;
-> +
-> +	mbox_cmd = (struct cxl_mbox_cmd) {
-> +		.opcode = CXL_MBOX_OP_GET_SUPPORTED_FEATURES,
-> +		.size_in = sizeof(*pi),
-> +		.payload_in = pi,
-> +		.size_out = le32_to_cpu(pi->count),
-> +		.payload_out = feats_out,
-> +		.min_out = sizeof(struct cxl_mbox_get_supp_feats_out),
-> +	};
-> +	rc = cxl_internal_send_cmd(mds, &mbox_cmd);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_get_supported_features, CXL);
-> +
->  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->  		       struct cxl_region *cxlr)
->  {
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 5303d6942b88..23e4d98b9bae 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -529,6 +529,7 @@ enum cxl_opcode {
->  	CXL_MBOX_OP_SET_TIMESTAMP	= 0x0301,
->  	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
->  	CXL_MBOX_OP_GET_LOG		= 0x0401,
-> +	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
->  	CXL_MBOX_OP_IDENTIFY		= 0x4000,
->  	CXL_MBOX_OP_GET_PARTITION_INFO	= 0x4100,
->  	CXL_MBOX_OP_SET_PARTITION_INFO	= 0x4101,
-> @@ -698,6 +699,64 @@ struct cxl_mbox_set_timestamp_in {
->  
->  } __packed;
->  
-> +/* Get Supported Features CXL 3.1 Spec 8.2.9.6.1 */
 
-In current code, block comments starts with /* and the real comments go
-from the second line.
+=EC=95=88=EB=85=95=ED=95=98=EC=84=B8=EC=9A=94
+=20
+=EC=8A=A4=EC=9B=A8=EB=8D=B4 =EC=8A=A4=EC=B9=B8=EB=94=94=EC=95=84 =EC=97=98=
+=EB=A0=88=EB=B0=94=ED=86=A0(Skandia Elevato)=EC=97=90=EC=84=9C =EC=98=A8 =
+=EC=9A=94=EC=95=84=ED=82=B4 =EB=9D=BC=EB=A5=B4=EC=86=90(JOAKIM LARSSON) .
+=20
+=EC=9A=B0=EB=A6=AC=EB=8A=94 =EA=B8=B4=EA=B8=89=ED=95=98=EA=B2=8C =EA=B7=80=
+=ED=95=98=EC=9D=98 =EC=A0=9C=ED=92=88=EC=9D=84 =ED=95=84=EC=9A=94=EB=A1=9C =
+=ED=95=98=EB=A9=B0 =EA=B0=80=EB=8A=A5=ED=95=9C =ED=95=9C =EB=B9=A8=EB=A6=AC=
+ =EC=8B=9C=ED=97=98 =EC=A3=BC=EB=AC=B8=EC=9D=84 =ED=95=98=EA=B3=A0 =EC=8B=
+=B6=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EC=98=A8=EB=9D=BC=EC=9D=B8=EC=9C=BC=EB=A1=9C =EC=A0=9C=ED=92=88=EC=97=90 =
+=EB=8C=80=ED=95=9C =EC=A0=95=EB=B3=B4=EB=A5=BC =EC=88=98=EC=A7=91=ED=95=98=
+=EA=B3=A0 =EC=9E=88=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EA=B7=B8=EB=A6=AC=EA=B3=A0 =EB=82=B4 =EB=AA=A8=EC=9E=84=EC=97=90=EC=84=9C =
+=EB=82=98=EB=8A=94 =EC=9A=B0=EB=A6=AC=EA=B0=80 =EB=8B=B9=EC=8B=A0=EC=9D=98 =
+=EC=A0=9C=ED=92=88=EC=9D=84 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EA=B2=83=EC=9D=B4=
+=EB=9D=BC=EA=B3=A0 =EC=83=9D=EA=B0=81=ED=95=A9=EB=8B=88=EB=8B=A4.
+=20
+1. =EC=B5=9C=EC=8B=A0 Catalouge=EB=A5=BC =EB=B3=B4=EB=82=BC =EC=88=98 =EC=
+=9E=88=EC=8A=B5=EB=8B=88=EA=B9=8C?
+=20
+2. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EC=88=98 =EC=9E=
+=88=EB=8A=94 =EC=B5=9C=EC=86=8C=ED=95=9C=EC=9D=80 =EB=AC=B4=EC=97=87=EC=9D=
+=B4=EA=B3=A0 =EB=98=90=ED=95=9C =EA=B8=B0=EA=B0=84=EC=9D=84 =EB=B3=B4=EB=82=
+=B4=EC=8B=AD=EC=8B=9C=EC=98=A4=20
+=EB=B0=8F =EC=A1=B0=EA=B1=B4.
+3. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=98=EB=8A=94 =EA=B2=
+=BD=EC=9A=B0 =EC=A7=80=EB=B6=88=EC=9D=84 =EC=96=B4=EB=96=BB=EA=B2=8C =ED=95=
+=B4=EA=B2=B0=ED=95=98=EA=B8=B0=EB=A5=BC =EC=9B=90=ED=95=98=EC=8B=AD=EB=8B=
+=88=EA=B9=8C?
+=20
+=EA=B7=80=ED=95=98=EC=9D=98 =ED=9A=8C=EC=8B=A0 =EB=8C=80=EA=B8=B0 =EC=A4=91=
 
-Fan
-> +/*
-> + * Get Supported Features input payload
-> + * CXL rev 3.1 section 8.2.9.6.1 Table 8-95
-> + */
-> +struct cxl_mbox_get_supp_feats_in {
-> +	__le32 count;
-> +	__le16 start_index;
-> +	u16 reserved;
-> +} __packed;
-> +
-> +/*
-> + * Get Supported Features Supported Feature Entry
-> + * CXL rev 3.1 section 8.2.9.6.1 Table 8-97
-> + */
-> +/* Supported Feature Entry : Payload out attribute flags */
-> +#define CXL_FEAT_ENTRY_FLAG_CHANGABLE	BIT(0)
-> +#define CXL_FEAT_ENTRY_FLAG_DEEPEST_RESET_PERSISTENCE_MASK	GENMASK(3, 1)
-> +#define CXL_FEAT_ENTRY_FLAG_PERSIST_ACROSS_FIRMWARE_UPDATE	BIT(4)
-> +#define CXL_FEAT_ENTRY_FLAG_SUPPORT_DEFAULT_SELECTION	BIT(5)
-> +#define CXL_FEAT_ENTRY_FLAG_SUPPORT_SAVED_SELECTION	BIT(6)
-> +
-> +enum cxl_feat_attr_value_persistence {
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_NONE,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_CXL_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_HOT_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_WARM_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_COLD_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_MAX
-> +};
-> +
-> +#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_ACROSS_FW_UPDATE_MASK	BIT(4)
-> +#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_DEFAULT_SEL_SUPPORT_MASK	BIT(5)
-> +#define CXL_FEAT_ENTRY_FLAG_PERSISTENCE_SAVED_SEL_SUPPORT_MASK	BIT(6)
-> +
-> +struct cxl_mbox_supp_feat_entry {
-> +	uuid_t uuid;
-> +	__le16 feat_index;
-> +	__le16 get_feat_size;
-> +	__le16 set_feat_size;
-> +	__le32 attr_flags;
-> +	u8 get_feat_version;
-> +	u8 set_feat_version;
-> +	__le16 set_feat_effects;
-> +	u8 rsvd[18];
-> +}  __packed;
-> +
-> +/*
-> + * Get Supported Features output payload
-> + * CXL rev 3.1 section 8.2.9.6.1 Table 8-96
-> + */
-> +struct cxl_mbox_get_supp_feats_out {
-> +	__le16 entries;
-> +	__le16 nsuppfeats_dev;
-> +	u32 reserved;
-> +	struct cxl_mbox_supp_feat_entry feat_entries[];
-> +} __packed;
-> +
->  /* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */
->  struct cxl_mbox_poison_in {
->  	__le64 offset;
-> @@ -829,6 +888,9 @@ void cxl_event_trace_record(const struct cxl_memdev *cxlmd,
->  			    enum cxl_event_type event_type,
->  			    const uuid_t *uuid, union cxl_event *evt);
->  int cxl_set_timestamp(struct cxl_memdev_state *mds);
-> +int cxl_get_supported_features(struct cxl_memdev_state *mds,
-> +			       struct cxl_mbox_get_supp_feats_in *pi,
-> +			       void *feats_out);
->  int cxl_poison_state_init(struct cxl_memdev_state *mds);
->  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->  		       struct cxl_region *cxlr);
-> -- 
-> 2.34.1
-> 
+
+Mr Joakim larssonv(=EB=B6=80=EC=82=AC=EC=9E=A5/=EC=98=81=EC=97=85 =EA=B4=80=
+=EB=A6=AC=EC=9E=90)
+
+=EB=B0=A9=EB=AC=B8=EC=9E=90 =EC=A3=BC=EC=86=8C: Kedumsv=C3=A4gen 14, SE-534=
+ 94 Vara, Sweden
+
+=EB=B0=B0=EC=86=A1 =EC=A3=BC=EC=86=8C: Industriv=C3=A4gen, SE-534 94 Vara, =
+Sweden
+
+joakimlarson@skendiaelevator.com
+https://skandiaelevator.com
+
 
