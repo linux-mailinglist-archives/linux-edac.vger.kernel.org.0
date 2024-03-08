@@ -1,70 +1,60 @@
-Return-Path: <linux-edac+bounces-743-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-744-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E50C087571B
-	for <lists+linux-edac@lfdr.de>; Thu,  7 Mar 2024 20:27:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8554F876044
+	for <lists+linux-edac@lfdr.de>; Fri,  8 Mar 2024 09:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DA11281D02
-	for <lists+linux-edac@lfdr.de>; Thu,  7 Mar 2024 19:27:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AB641F279D6
+	for <lists+linux-edac@lfdr.de>; Fri,  8 Mar 2024 08:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6E113664B;
-	Thu,  7 Mar 2024 19:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PZ0SfAgN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43B7C54BE3;
+	Fri,  8 Mar 2024 08:52:08 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EC8136980;
-	Thu,  7 Mar 2024 19:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCAA51005
+	for <linux-edac@vger.kernel.org>; Fri,  8 Mar 2024 08:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709839636; cv=none; b=LKuUtuXaMJitxPh2IO0zgC5rvoxHs/cUcQhcc9UEEqhcBGzhM/DXR0yxPN0GuROB3kycFp1vyq2woWIWYIHM1aZ8oTbWfNJR8btPzpD19JF7HUt734X9FHTV02pzudo0eSi6hzSywZ5hbxKLFnQ2bbMIBt/eM1rFb9QQIj0qZGw=
+	t=1709887928; cv=none; b=pKFfCrexQQ8eIBIeP3yefspI0L5iNKvOABZk9LfTK2XbusjhV4F23lHhjP7LGFzZ6aui+20kHtVI5F6W8Yjx7wEjUbb299kGzsrWKZ7viyc9VSfbG/3HxsDlN7R6FHqdi4B+5xbe0l/T5cytho72TGINnx7IR5F6oUL74IdLkY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709839636; c=relaxed/simple;
-	bh=O9HYUfGhBrMg/vLIPn1khVFtzwO/60/tyJqtjWCD8sg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fSkrFTPn/DN1gKpxu/2JXG3sSu/kc3KkqpC1EAtXQRw2YrljtJ2eBWjvKSUQGxJZrWJajUWALLpHCsGZo1tMNFJgLK9AEQvOsNbt8JOyFsW+aiZKUuKzi7f5T/ba8r/YeYy8Y1tYgk8Z3fP+HzATUKUaOelA+YoG8z/MTSba3GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PZ0SfAgN; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709839634; x=1741375634;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=O9HYUfGhBrMg/vLIPn1khVFtzwO/60/tyJqtjWCD8sg=;
-  b=PZ0SfAgNUdvdcdshRph9WdfPLnvbX9ty+SYaMrHEvr0lsfJfjTJxtDHJ
-   QLX/vKiHotwfibQlB2jTM57WhkXYizpF6P1SxWPvk3BJL+muDTydG+C2F
-   37nBFTnI5+nGQPMcaEYFfScOmbCP1MLEc4unwqw0Kjge8FUTQDztIK89K
-   gxEGVCEjTo9oR5vkOHUGd3dQyMB5S4FyM4uBofmfhvGf8IWCW3pIebJN1
-   R4luJtpQ/R8V9D/EJMAwC0Rz0LN+COm8Aj8cBjkLslIWHagbxJiP/iBh2
-   Cy0zoPw0Fvb66PcUKqdn521Zzijvsd6ieOLewfNE7DWqD0FS5wHPVSLhz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="4654556"
-X-IronPort-AV: E=Sophos;i="6.07,107,1708416000"; 
-   d="scan'208";a="4654556"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 11:27:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,107,1708416000"; 
-   d="scan'208";a="10287693"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.105])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 11:27:13 -0800
-From: Tony Luck <tony.luck@intel.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: "Naik, Avadhut" <avadnaik@amd.com>,
-	"Mehta, Sohil" <sohil.mehta@intel.com>,
-	"Yazen Ghannam" <yazen.ghannam@amd.com>,
-	x86@kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1709887928; c=relaxed/simple;
+	bh=sI9hMknmZv1lagGTe+7lNNnStfimvsnSaNduUFuwG3c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uz64o2Hr5GI2serI5ElB2tKN/K54cQeEiD9EPeXQEFIY71jjgKesqJ1L7l6JggsjwZI4kJ/GV3deOGlDjDZhbemNYirHLfg9sePfai0tnWWakwF9zQcSvk5H1bdJ+qbLHKFBYvq5b9BuhnLitp2+g4XHR7AsHHkh5gfqBFdVeos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riVxF-0006vN-RB; Fri, 08 Mar 2024 09:51:49 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riVxF-0056N3-2k; Fri, 08 Mar 2024 09:51:49 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1riVxE-00245Q-3D;
+	Fri, 08 Mar 2024 09:51:49 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+	Borislav Petkov <bp@alien8.de>,
 	Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v3] x86/mce: Dynamically size space for machine check records
-Date: Thu,  7 Mar 2024 11:27:04 -0800
-Message-ID: <20240307192704.37213-1-tony.luck@intel.com>
+Cc: James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	linux-edac@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH] EDAC/versal: Convert to platform remove callback returning void
+Date: Fri,  8 Mar 2024 09:51:06 +0100
+Message-ID:  <83deca1ce260f7e17ff3cb106c9a6946d4ca4505.1709886922.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -72,93 +62,66 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1936; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=sI9hMknmZv1lagGTe+7lNNnStfimvsnSaNduUFuwG3c=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBl6tF8JZD2lQ7ejfSCGXLvKHl1r5c9Ih6oLAsXp dxzh7yf8QuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZerRfAAKCRCPgPtYfRL+ TvdUB/wKZeSqUf1n++YbWBEPmdy2ew5RLzF7X2A5pKKyPVCrUXEHjwYaAMfrXUZLIFr/RXgSwbF ECmP+crd0dvfvm5vR4kuCU1JZVztDNWy5B20nrGfNZIGKp4sHsZZQP7xba7F4ueP+6degYZDNNN yXCGlkK0LR9czir2Qu7+av7lJ//fsp1v2bwopA+3m5P5X2Kb+xFuHnGV82F2OeVdRndfl6BBIYE gLFaBAdeZE09VnW0/9oBiy1YcMxCAzQFo/pThTmJeuaHImn46lpkIZwZAtILcWVXolKFvz3h47S 3m1z3DMxJpP7sazAUBDvOZnNflNcS8jMqsiiQan13F0LMGkZ
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-edac@vger.kernel.org
 
-Systems with a large number of CPUs may generate a large
-number of machine check records when things go seriously
-wrong. But Linux has a fixed buffer that can only capture
-a few dozen errors.
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is ignored (apart
+from emitting a warning) and this typically results in resource leaks.
 
-Allocate space based on the number of CPUs (with a minimum
-value based on the historical fixed buffer that could store
-80 records).
+To improve here there is a quest to make the remove callback return
+void. In the first step of this quest all drivers are converted to
+.remove_new(), which already returns void. Eventually after all drivers
+are converted, .remove_new() will be renamed to .remove().
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
+ drivers/edac/versal_edac.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Changes since V2; Link: https://lore.kernel.org/all/20240307000256.34352-1-tony.luck@intel.com/
-
-Boris: Eliminate "out:" label in mce_gen_pool_create()
-
-Sohil: Added Reviewed-by tag
-
- arch/x86/kernel/cpu/mce/genpool.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
-index fbe8b61c3413..cadf28662a70 100644
---- a/arch/x86/kernel/cpu/mce/genpool.c
-+++ b/arch/x86/kernel/cpu/mce/genpool.c
-@@ -16,14 +16,14 @@
-  * used to save error information organized in a lock-less list.
-  *
-  * This memory pool is only to be used to save MCE records in MCE context.
-- * MCE events are rare, so a fixed size memory pool should be enough. Use
-- * 2 pages to save MCE events for now (~80 MCE records at most).
-+ * MCE events are rare, so a fixed size memory pool should be enough.
-+ * Allocate on a sliding scale based on number of CPUs.
-  */
--#define MCE_POOLSZ	(2 * PAGE_SIZE)
-+#define MCE_MIN_ENTRIES	80
-+#define MCE_PER_CPU	2
- 
- static struct gen_pool *mce_evt_pool;
- static LLIST_HEAD(mce_event_llist);
--static char gen_pool_buf[MCE_POOLSZ];
- 
- /*
-  * Compare the record "t" with each of the records on list "l" to see if
-@@ -118,22 +118,32 @@ int mce_gen_pool_add(struct mce *mce)
- 
- static int mce_gen_pool_create(void)
- {
-+	int mce_numrecords, mce_poolsz, order;
- 	struct gen_pool *tmpp;
- 	int ret = -ENOMEM;
-+	void *mce_pool;
- 
--	tmpp = gen_pool_create(ilog2(sizeof(struct mce_evt_llist)), -1);
-+	order = order_base_2(sizeof(struct mce_evt_llist));
-+	tmpp = gen_pool_create(order, -1);
- 	if (!tmpp)
--		goto out;
-+		return ret;
- 
--	ret = gen_pool_add(tmpp, (unsigned long)gen_pool_buf, MCE_POOLSZ, -1);
-+	mce_numrecords = max(MCE_MIN_ENTRIES, num_possible_cpus() * MCE_PER_CPU);
-+	mce_poolsz = mce_numrecords * (1 << order);
-+	mce_pool = kmalloc(mce_poolsz, GFP_KERNEL);
-+	if (!mce_pool) {
-+		gen_pool_destroy(tmpp);
-+		return ret;
-+	}
-+	ret = gen_pool_add(tmpp, (unsigned long)mce_pool, mce_poolsz, -1);
- 	if (ret) {
- 		gen_pool_destroy(tmpp);
--		goto out;
-+		kfree(mce_pool);
-+		return ret;
- 	}
- 
- 	mce_evt_pool = tmpp;
- 
--out:
- 	return ret;
+diff --git a/drivers/edac/versal_edac.c b/drivers/edac/versal_edac.c
+index 3016870689f1..1688a5050f63 100644
+--- a/drivers/edac/versal_edac.c
++++ b/drivers/edac/versal_edac.c
+@@ -1160,7 +1160,7 @@ static int mc_probe(struct platform_device *pdev)
+ 	return rc;
  }
  
+-static int mc_remove(struct platform_device *pdev)
++static void mc_remove(struct platform_device *pdev)
+ {
+ 	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
+ 	struct edac_priv *priv = mci->pvt_info;
+@@ -1178,8 +1178,6 @@ static int mc_remove(struct platform_device *pdev)
+ 			      XPM_EVENT_ERROR_MASK_DDRMC_NCR, err_callback, mci);
+ 	edac_mc_del_mc(&pdev->dev);
+ 	edac_mc_free(mci);
+-
+-	return 0;
+ }
+ 
+ static struct platform_driver xilinx_ddr_edac_mc_driver = {
+@@ -1188,7 +1186,7 @@ static struct platform_driver xilinx_ddr_edac_mc_driver = {
+ 		.of_match_table = xlnx_edac_match,
+ 	},
+ 	.probe = mc_probe,
+-	.remove = mc_remove,
++	.remove_new = mc_remove,
+ };
+ 
+ module_platform_driver(xilinx_ddr_edac_mc_driver);
 
-base-commit: d206a76d7d2726f3b096037f2079ce0bd3ba329b
+base-commit: 8ffc8b1bbd505e27e2c8439d326b6059c906c9dd
 -- 
 2.43.0
 
