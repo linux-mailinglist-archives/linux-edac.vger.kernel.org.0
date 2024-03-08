@@ -1,182 +1,199 @@
-Return-Path: <linux-edac+bounces-745-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-746-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34DEB87605A
-	for <lists+linux-edac@lfdr.de>; Fri,  8 Mar 2024 09:55:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 093AA87608D
+	for <lists+linux-edac@lfdr.de>; Fri,  8 Mar 2024 10:01:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF48028151F
-	for <lists+linux-edac@lfdr.de>; Fri,  8 Mar 2024 08:55:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BD6FB23941
+	for <lists+linux-edac@lfdr.de>; Fri,  8 Mar 2024 09:01:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817B74314A;
-	Fri,  8 Mar 2024 08:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zqMDu1P5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E6852F6E;
+	Fri,  8 Mar 2024 09:01:22 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2064.outbound.protection.outlook.com [40.107.96.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839844F5F9
-	for <linux-edac@vger.kernel.org>; Fri,  8 Mar 2024 08:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709888112; cv=fail; b=vFBmXm4sUZz8cqhnA5t0NOBE5baat6roj058HHGJf/nBH5sbQwTNWW5qfhhttUuGUx1EPVpl0AtvGHz6sV2nWGb2KCLxwS9RMeoF69DROlgxROiDn9q4T+t7D+xxfA90MnKZYvrQ/i6/Dg39MEY3ANxKtRoHofCj+hosTO20JLo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709888112; c=relaxed/simple;
-	bh=XQYMa8KqVMdA6sbsRxddeV57XFEeJQTxav46p0F2oo8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=VGwYvJIgF62VKXuln/XxZRz54a73KwrqwX3eJCM8rUc+ksG9Ir7pqT2kQguF3JEw7TCjqUAJKmDUhqnr7W89lKHRXOUmPhj6ZtPAZtIArKXkHwvvhMMVEgcdT6MsWciHAayIAP4l1RDvkpZkTu/T1yxoV6zuTizRAVWigbRc8lc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=zqMDu1P5; arc=fail smtp.client-ip=40.107.96.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LGiPIJSPYr7Wgz0fZpdd1R/rNRmphaskcpo40eU5/JsluBQutRS3pmecI7Ba+Fet+M8lbMPdOraupz/YYIPRtJnt0GMBGscX9GxwghTFEuEnQnfq65IJmHAhKCNOPAFlzA7IfoDX0ChZXl+Kqy6dw9V7vLIULtRbfZK3MH6zi4qD7RTt8oTtv3a27vZ3BXO0PCUnexGPUQHUF3Wi22bwxmlFnrEPaXrgsxckJ9DRClVzGfRHlXJEi4B0FwylDWPS2OUKqohU7Kx14MUE+rp9kWWs6HNFf8CfC4qeE+JWU3ziHo8942ApVpk1dBMZzf542QH4YRq/hp6gk0VV49P79Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XQYMa8KqVMdA6sbsRxddeV57XFEeJQTxav46p0F2oo8=;
- b=mOhI2Bxddpt50ylAAU0pAe4buJS/Tu0DEAVqHg6ZQmQT46LFXfUZfFTN4vSIhewPRLCbGUFQstBUWKysqaGnxKHgogc0FyEm+zvnfpGPCrNAXop3Fi1SocVRGi8x4F9MWpWeozci0y4E27oi0cnovxQPUP6Atu0CNKa9qCE5Qz1ntP351LMC8rlTkllPBFfYR0EecURKFRtgwFeDSaAHdz6aBa1q+WSMoVeNUQoF0qm875F5qbvcCrvRlZQUawHdLSTn1srsyfRyx1vhZ57CsyfgFO7JlncovvLPFXJmKbINH7SzKIiDY+9Cz6u4cbk5+iU56xGsZ+wo+a9LDloSjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XQYMa8KqVMdA6sbsRxddeV57XFEeJQTxav46p0F2oo8=;
- b=zqMDu1P5Z8M2S1a53t4vjiufML6BronPQCkP7gB5zIU7XxLfsj9ZGE0qEx547KoXeZK1JfXNs0CHqCn/3+2McZb/3f3lqlZPuDXoYYh0hCyTpvGQYDoR9vjT+8TZS4ZR2JxLiuovuhujbaYN9uKFx9LZdQH8MMFejoegOA8q0Ho=
-Received: from BY5PR12MB4902.namprd12.prod.outlook.com (2603:10b6:a03:1dd::9)
- by MN0PR12MB6053.namprd12.prod.outlook.com (2603:10b6:208:3cf::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.27; Fri, 8 Mar
- 2024 08:55:07 +0000
-Received: from BY5PR12MB4902.namprd12.prod.outlook.com
- ([fe80::7cbc:d8b7:696e:7edb]) by BY5PR12MB4902.namprd12.prod.outlook.com
- ([fe80::7cbc:d8b7:696e:7edb%4]) with mapi id 15.20.7362.024; Fri, 8 Mar 2024
- 08:55:07 +0000
-From: "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
-To: =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <u.kleine-koenig@pengutronix.de>,
-	"Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>, Borislav Petkov
-	<bp@alien8.de>, Tony Luck <tony.luck@intel.com>
-CC: James Morse <james.morse@arm.com>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Robert Richter <rric@kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: RE: [PATCH] EDAC/versal: Convert to platform remove callback
- returning void
-Thread-Topic: [PATCH] EDAC/versal: Convert to platform remove callback
- returning void
-Thread-Index: AQHacTXeq3nfty+vi0yGuKIyQzN/uLEtiZhw
-Date: Fri, 8 Mar 2024 08:55:07 +0000
-Message-ID:
- <BY5PR12MB4902011971E052DFFC42D2D881272@BY5PR12MB4902.namprd12.prod.outlook.com>
-References:
- <83deca1ce260f7e17ff3cb106c9a6946d4ca4505.1709886922.git.u.kleine-koenig@pengutronix.de>
-In-Reply-To:
- <83deca1ce260f7e17ff3cb106c9a6946d4ca4505.1709886922.git.u.kleine-koenig@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=371d6bb6-7ddf-4162-a3f3-98cee453c19d;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-03-08T08:52:53Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR12MB4902:EE_|MN0PR12MB6053:EE_
-x-ms-office365-filtering-correlation-id: ab5119e8-e1bc-494f-a51d-08dc3f4d743a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- nExxQgojU6DDiTEJARReomqoj0pW88tOmzOfvx02DijxCeNBsYvUU24EMNRvYJOvu2Xnl8JEgGTtxy3BpMN46ECu7PpXcEhmBmnJTjS25Ln62e0qHSjgRgc+DEqn75WwK835ZosOG4tGT0SXUrnA/lYaKiWR2keBgjQIg99PayNnIxj7LzpfVhjMjvV7MRUzDCp8EJIp9rkk7tS0Xqh7MKhSgsKsRs72MsvWpoaAdnVdDIYM9OJnhFVGEwTUfP8+vKuCLyZLtrKJfsO00nqB5NASKXuTIk85tnjJzKFar003sQbSX++nhpMfCLcHGurna2Luv80h2HR4xX6Abk5Ux+D1k3UNjats3YR1ZGoVwy57BYTWElC9MoQUkoVOMDJwn63MRXWADlESjCY17jzLpdsenxkcSBsgWCXHNnG3liEeMMKwB6poUgsfYkdulcsLdAOI14ZVYxP1qOnetB/khrNI5tgXGLHTA2RWwypJzfgMtzbilVcHJVI9+5HZJFicjDzgiKrl2M4bxpz5ki3EXIXJAkkeq1Dl4UEm5YCkUmqkqHOqwZWR62OwS+KcH7qHGyXCjB9BKA2Ji4iQ0sIQDS0mD+Yb156nmeeIQgRmrO0qonlhTSUoxolRsEOIQ+StwVD3yXvMgQWI/sC2o5/ABy1ICQzQOSbsOVYGiEF8xXs0btzDeAkhEQ9vqhIAmcclJuYZPbQLaJyPD3jVg8sS+WxMmSUKjO2LmFudPBFfOqI=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4902.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?V0RnSDkxbjFWU2lPdGVFa2FUYlVoczNCczFGQkNlNStPMUNVZnE3ZGpKMXQ1?=
- =?utf-8?B?c2c4Q3A0OWRWWUpTaFNHQVpjTTFxWGgwbHRCODA3YlRBTmRxRE9SNlVHRTkv?=
- =?utf-8?B?eVFDZUNDMlU1ZGY0Z2RhWGd0TE11WThJUVJYZmFBNTA0aVBPNHI0enNpdytl?=
- =?utf-8?B?K05kMnNicTBNTGUzOUpYM3lCTnRVMFFZalZMTW03TWJQT0h4bm91ZHN6RmZ6?=
- =?utf-8?B?QzRZSFRoSTZBSElQUkN2Mys5dUhVQldRRnBsRDkrZVRVa2dMUldlSUdEQmJX?=
- =?utf-8?B?UDdUVnFFMVBxSXNLTlFNNFRQR2xucTBENFJyblVMbFB0OE9GVGxmYlR4ZTZF?=
- =?utf-8?B?Q0RYSGpyaTRKKzlXRFVGQ0swQWhLWXBxa2JLRm9HNDk1bERhaGZjSkNYMmJl?=
- =?utf-8?B?Tm5iZFFrakVEaTNUOWt4TWVaOC8vbUwwOTEzbHJjeGY2Qkh2MDBqa0dFUGJ5?=
- =?utf-8?B?L0FhQ3ZCZXBxYmFkcUhxU2ovZUNKanlma0U4cGExaXJGNVB3UTh6WW5ibjlX?=
- =?utf-8?B?TUVFVERDMzM2OFBRR2hMdy9nNVVCelhXTWJXVm9qcjY2VU9NMElBaDk3SEF5?=
- =?utf-8?B?ZmhKNEhSKzdmSXJlOGpOOGx4UDM2enBZOEREb1BMV0hKMjVsaE5wOEZrYm9n?=
- =?utf-8?B?RmhROTZpU1BzMzlZcFNkb0R4dERYbTZISGRvSVlQbVZQZ1JIbTlxWEpRUkc2?=
- =?utf-8?B?Vm5EQ0xNazhMeDRoNmRSRy9vQTMwYWpPdkE1cDJzM29OQmRJZWhXTzhySVBu?=
- =?utf-8?B?dGFXUzNaMWFtaGFTNHFtTjZENkhYRGhqdmFQMC9lQjJHSjFsd0N4azBTM3pX?=
- =?utf-8?B?L0Vqd0hwaG9oUllNOHpjOHZKaUhUdDV3dmFhSExBNXl6RjVXaytodWdjMXl2?=
- =?utf-8?B?SE50Q1VRdWpiU0NFVTkyWXpvZm9MeEo2VmRnNEFLWm02TEE3U3hTQWMxeG9C?=
- =?utf-8?B?cWh2OUo1US96cUJHcENxMUpubUJIemhUTDhockVUUFVPS2pIa3JyTGptL3Nx?=
- =?utf-8?B?UFhuNmJzM0gyRUpsc01nWXdCU2FqVU1mVWFXemJYSVpmR28wTW1MNTRzdWlC?=
- =?utf-8?B?MjdWdTA1Zm1VZ0NSckRpcFNtcmphdVdkZ2VUV1NQd1lrYlR6KzBEbi80UTRK?=
- =?utf-8?B?ODZ2MTFyR3VnanNFMFNVMi9RcTZ6MjVaSVgyQmZGUFF1WWhrK2xjOWw1SHhs?=
- =?utf-8?B?ZUVUaHdhRmxWUWJ0SkxUdTVqczFwL08vNTJ0S3NBblVrdWQ1VkNPU0tZMmFO?=
- =?utf-8?B?VnIvVjQrUW1pTkVMaTRmaEpOazFkVy8zUWYrbjhoRU50cUt5dzhmREdDemRa?=
- =?utf-8?B?aXdDWUdja2s1TktFS3Bmc1VqVzZxclUyck9JOUxvOS84c3djbmtGWng2dUM5?=
- =?utf-8?B?V3RiWitPVjNOdXJ3YlZzb0pZV1ZPd2RoandWblR5RDJBYUJibVY3WkpQc2lJ?=
- =?utf-8?B?R3dJRGRVZnNlUGR2bWI1Z2g0ZkFJSktUdDFhZzNmV3ZqcXJGZFNDQUdLM2sw?=
- =?utf-8?B?dFpsK2ovV0F0bjY1TFd3Zyt4b0EybFhldURGUnBpQ0xRNXU4UGdxVmg1RHRT?=
- =?utf-8?B?ZS9ORDJKbHF2TXhZTjQyWDY3bGVoN0tDYnFJQS9oTzV1cUxXQ3dZUld3Vndz?=
- =?utf-8?B?SHE4Z2RTT1VCZkdmUUxvenJZT1NqeVhyNEZ6THJIa2hvckZxQ1lVaW4zZFRM?=
- =?utf-8?B?eVMyamZTMmFyS1dSL0Z2MXNnM09uODhBZkJvdTdib1FRRGdIWVRTNUN6SDNO?=
- =?utf-8?B?c1NhWnJkRGZrdTNMRWFVUWV5RU9tMHM3NHlZaThYdTVRQkVVWkZBRnJUeld3?=
- =?utf-8?B?bU03ZXRRWmVPSllYTStWUkw1ODEyL1ZHL0NFa0E0NXBDN09Nb0hEa05oSExl?=
- =?utf-8?B?MXJmT0pNSHZuN1EwVVhkVXhwNXhHVUJTUGFnUXM2b2pKcUw3ZHI0cUxNNk1m?=
- =?utf-8?B?OG04TUh1VkpvUlA1cllYU2F1Y3p1bnJaTjcxTTF6MzFzR01vMm5kMm85Q0tx?=
- =?utf-8?B?cW1wdFlxLzdNN3FsL3dZZ2hKL3phMHJkMlZyNjFVZnJKRVUyMTlqVlQrNWtx?=
- =?utf-8?B?dW1oQUFwall3S01oeExjV3ZTbEpBWUEwcW1oaTFsSzRPYWVZQXZrcXpWelha?=
- =?utf-8?Q?rkrU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBF822626;
+	Fri,  8 Mar 2024 09:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709888482; cv=none; b=ffSBJWSQNvUkjFSL6RrMq0LkP/L8LLAjSoKC32qMVG8JZ356A2ExquYLBdGJ/+7aJ1+iP809+sqZIYWoV1+T41QbA8QKxQ7EkoBEjVcrMalOfZQ+uIV6zHtqQJ6SjvVtxdb5CzSVQYHqXhq8T5Q9Vt43NvIBYGt7euFFTebCgmQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709888482; c=relaxed/simple;
+	bh=4WtSez7y1sqvueVAuL6wTOF2ze6LwK0nsEL149t47kY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hD8DoPtOUiERZfA5BctWMGw2rHkSBKzTZQs70HK4QYPNKzaFwAHuTb1dy8hWi5Uv+mWLMQH6zk93NoMRMerFiuNX9F1q5pY22vf/vGDtrtxiQ+v45kAddLrLjt0SqcXclgpZoiF6ldAaHVaKq3lmgGcqzFT079fOsU/vqEqEuqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5131c48055cso2082313e87.1;
+        Fri, 08 Mar 2024 01:01:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709888478; x=1710493278;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LvXW3E9+jESnoQTbwbLGyAfHW50wx/fOEE3g4YMyjXc=;
+        b=RU5zSw/679YNqyjWwXc78/VIIm97gF3debG8wUjQS4gsHjkxX73ldglE2uFJXpFg4s
+         tx8IZff5Mq3kik36FgUyKos1VozEF/Hko4uzZbPiPDo+ndENo2JR4AO/tiIA9lIn4WDr
+         CU5V0z/Kb86Br45LZYjp1KqQObOmemwrrprynpF+5P+R7JKkNaHtOP2KKxxopd4AXqj6
+         Ius0K7EOw8X3mpKnyhXCCBpcXX0SpRMtKhBsOU8Z7jPV9aN7DUlQXyVvIMVkXOr/lhD6
+         qETWPVC9mN1SWJOM3Prbzq0fThiXdl4cc9wl40X876R3EX2OHg+Q7YQHLhhE/pnugLPS
+         wD1g==
+X-Forwarded-Encrypted: i=1; AJvYcCUm34+yIA8Dt1O38UGg5DfWD8p8qd2paUmfYgvDJ5m/Bdevy7yrsI+yprxVXj56CkmDKLtPmlk4/9G+Y286FjAOM2iULCLqqeZCnw==
+X-Gm-Message-State: AOJu0YyDUbrKSg3npG72pK4IEDjReWfi0KsVqEbYl4rEZIsVbkCiiR69
+	AmUGd4PJhif+PyOSu7pmWNv7WEtaGE5L3UnY6EIix/ExpQN7g9nYU8GjrGoYppc=
+X-Google-Smtp-Source: AGHT+IEpfi//nVxJAnor4NCJHc24VK9+4TcCXQ2ack4X582bj8gaaQgw+Y6kEUma9tpfLA4BKEz5TA==
+X-Received: by 2002:ac2:47ea:0:b0:512:d88a:3a8f with SMTP id b10-20020ac247ea000000b00512d88a3a8fmr2867729lfp.25.1709888477500;
+        Fri, 08 Mar 2024 01:01:17 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05600c444900b00412f8bf2d82sm5183960wmn.28.2024.03.08.01.01.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Mar 2024 01:01:16 -0800 (PST)
+Message-ID: <c46cc960-1b7c-4e61-977a-f22ea5fdd944@kernel.org>
+Date: Fri, 8 Mar 2024 10:01:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4902.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab5119e8-e1bc-494f-a51d-08dc3f4d743a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2024 08:55:07.4546
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8mN4TifMVACyQoRBMgdflVkU2EtY2uHnpOZB302LSGFffMac4B0B3Y9ZBN1NgdrJpqsvHu+9OUzz5J2p2xg5TQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6053
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/7] EDAC: remove unused structure members
+Content-Language: en-US
+To: bp@alien8.de
+Cc: linux-kernel@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+ Bjorn Andersson <andersson@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+ Douglas Thompson <dougthompson@xmission.com>,
+ James Morse <james.morse@arm.com>, Jan Luebbe <jlu@pengutronix.de>,
+ Johannes Thumshirn <morbidrsa@gmail.com>,
+ Khuong Dinh <khuong@os.amperecomputing.com>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, linux-edac@vger.kernel.org,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Michal Simek <michal.simek@amd.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Ralf Baechle
+ <ralf@linux-mips.org>, Robert Richter <rric@kernel.org>,
+ Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+ Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+ Tony Luck <tony.luck@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>
+References: <20240213112051.27715-1-jirislaby@kernel.org>
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
+ rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
+ rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
+ i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
+ wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
+ ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
+ cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
+ 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
+ w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
+ YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
+ IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
+ BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
+ eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
+ 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
+ XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
+ l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
+ UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
+ gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
+ oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
+ o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
+ Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
+ wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
+ t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
+ YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
+ DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
+ f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
+ 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
+ 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
+ /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
+ 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
+ 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
+ 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
+ wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
+ 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
+ jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
+ wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
+ wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
+ W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
+ f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
+ DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
+ S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
+In-Reply-To: <20240213112051.27715-1-jirislaby@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNz
-YWdlLS0tLS0NCj4gRnJvbTogVXdlIEtsZWluZS1Lw7ZuaWcgPHUua2xlaW5lLWtvZW5pZ0BwZW5n
-dXRyb25peC5kZT4NCj4gU2VudDogRnJpZGF5LCBNYXJjaCA4LCAyMDI0IDI6MjEgUE0NCj4gVG86
-IERhdHRhLCBTaHViaHJhanlvdGkgPHNodWJocmFqeW90aS5kYXR0YUBhbWQuY29tPjsgUG90dGh1
-cmksIFNhaQ0KPiBLcmlzaG5hIDxzYWkua3Jpc2huYS5wb3R0aHVyaUBhbWQuY29tPjsgQm9yaXNs
-YXYgUGV0a292IDxicEBhbGllbjguZGU+Ow0KPiBUb255IEx1Y2sgPHRvbnkubHVja0BpbnRlbC5j
-b20+DQo+IENjOiBKYW1lcyBNb3JzZSA8amFtZXMubW9yc2VAYXJtLmNvbT47IE1hdXJvIENhcnZh
-bGhvIENoZWhhYg0KPiA8bWNoZWhhYkBrZXJuZWwub3JnPjsgUm9iZXJ0IFJpY2h0ZXIgPHJyaWNA
-a2VybmVsLm9yZz47IGxpbnV4LQ0KPiBlZGFjQHZnZXIua2VybmVsLm9yZzsga2VybmVsQHBlbmd1
-dHJvbml4LmRlDQo+IFN1YmplY3Q6IFtQQVRDSF0gRURBQy92ZXJzYWw6IENvbnZlcnQgdG8gcGxh
-dGZvcm0gcmVtb3ZlIGNhbGxiYWNrDQo+IHJldHVybmluZyB2b2lkDQo+DQo+IENhdXRpb246IFRo
-aXMgbWVzc2FnZSBvcmlnaW5hdGVkIGZyb20gYW4gRXh0ZXJuYWwgU291cmNlLiBVc2UgcHJvcGVy
-DQo+IGNhdXRpb24gd2hlbiBvcGVuaW5nIGF0dGFjaG1lbnRzLCBjbGlja2luZyBsaW5rcywgb3Ig
-cmVzcG9uZGluZy4NCj4NCj4NCj4gVGhlIC5yZW1vdmUoKSBjYWxsYmFjayBmb3IgYSBwbGF0Zm9y
-bSBkcml2ZXIgcmV0dXJucyBhbiBpbnQgd2hpY2ggbWFrZXMNCj4gbWFueSBkcml2ZXIgYXV0aG9y
-cyB3cm9uZ2x5IGFzc3VtZSBpdCdzIHBvc3NpYmxlIHRvIGRvIGVycm9yIGhhbmRsaW5nIGJ5DQo+
-IHJldHVybmluZyBhbiBlcnJvciBjb2RlLiBIb3dldmVyIHRoZSB2YWx1ZSByZXR1cm5lZCBpcyBp
-Z25vcmVkIChhcGFydCBmcm9tDQo+IGVtaXR0aW5nIGEgd2FybmluZykgYW5kIHRoaXMgdHlwaWNh
-bGx5IHJlc3VsdHMgaW4gcmVzb3VyY2UgbGVha3MuDQo+DQo+IFRvIGltcHJvdmUgaGVyZSB0aGVy
-ZSBpcyBhIHF1ZXN0IHRvIG1ha2UgdGhlIHJlbW92ZSBjYWxsYmFjayByZXR1cm4gdm9pZC4gSW4N
-Cj4gdGhlIGZpcnN0IHN0ZXAgb2YgdGhpcyBxdWVzdCBhbGwgZHJpdmVycyBhcmUgY29udmVydGVk
-IHRvIC5yZW1vdmVfbmV3KCksIHdoaWNoDQo+IGFscmVhZHkgcmV0dXJucyB2b2lkLiBFdmVudHVh
-bGx5IGFmdGVyIGFsbCBkcml2ZXJzIGFyZSBjb252ZXJ0ZWQsDQo+IC5yZW1vdmVfbmV3KCkgd2ls
-bCBiZSByZW5hbWVkIHRvIC5yZW1vdmUoKS4NCj4NCj4gVHJpdmlhbGx5IGNvbnZlcnQgdGhpcyBk
-cml2ZXIgZnJvbSBhbHdheXMgcmV0dXJuaW5nIHplcm8gaW4gdGhlIHJlbW92ZQ0KPiBjYWxsYmFj
-ayB0byB0aGUgdm9pZCByZXR1cm5pbmcgdmFyaWFudC4NCj4NCj4gU2lnbmVkLW9mZi1ieTogVXdl
-IEtsZWluZS1Lw7ZuaWcgPHUua2xlaW5lLWtvZW5pZ0BwZW5ndXRyb25peC5kZT4NCj4gLS0tDQpS
-ZXZpZXdlZC1ieTogU2h1YmhyYWp5b3RpIERhdHRhIDxzaHViaHJhanlvdGkuZGF0dGFAYW1kLmNv
-bT4NCg==
+Any plans on looking into/commenting/merging this :)?
+
+On 13. 02. 24, 12:20, Jiri Slaby (SUSE) wrote:
+> Hi,
+> 
+> this series removes unused EDAC structure members as found by
+> clang-struct (and manually checked by me).
+> 
+> I admit I could not even compile-test octeon files, hopefully
+> kernel-test robot would catch mistakes in there.
+> 
+> Cc: Andre Przywara <andre.przywara@arm.com>
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Douglas Thompson <dougthompson@xmission.com>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Jan Luebbe <jlu@pengutronix.de>
+> Cc: Johannes Thumshirn <morbidrsa@gmail.com>
+> Cc: Khuong Dinh <khuong@os.amperecomputing.com>
+> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Cc: linux-edac@vger.kernel.org
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Michal Simek <michal.simek@amd.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Robert Richter <rric@kernel.org>
+> Cc: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> Cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+> 
+> Jiri Slaby (SUSE) (7):
+>    EDAC/amd64: Remove amd64_pvt::ext_nbcfg
+>    EDAC/device: Remove edac_dev_sysfs_block_attribute::{block,value}
+>    EDAC/device: Remove edac_dev_sysfs_block_attribute::store()
+>    EDAC: Remove dynamic attributes from edac_device_alloc_ctl_info()
+>    EDAC: Remove edac_pci_ctl_info::edac_subsys
+>    EDAC: Remove edac_pci_ctl_info::complete
+>    EDAC: Remove edac_device_ctl_info::removal_complete
+> 
+>   drivers/edac/altera_edac.c       |  8 ++---
+>   drivers/edac/amd64_edac.h        |  1 -
+>   drivers/edac/amd8111_edac.c      |  3 +-
+>   drivers/edac/armada_xp_edac.c    |  2 +-
+>   drivers/edac/cpc925_edac.c       |  2 +-
+>   drivers/edac/edac_device.c       | 53 ++------------------------------
+>   drivers/edac/edac_device.h       | 22 ++-----------
+>   drivers/edac/edac_device_sysfs.c | 22 ++-----------
+>   drivers/edac/edac_pci.h          |  5 ---
+>   drivers/edac/highbank_l2_edac.c  |  2 +-
+>   drivers/edac/mpc85xx_edac.c      |  2 +-
+>   drivers/edac/octeon_edac-l2c.c   |  2 +-
+>   drivers/edac/octeon_edac-pc.c    |  2 +-
+>   drivers/edac/qcom_edac.c         |  1 -
+>   drivers/edac/sifive_edac.c       |  3 +-
+>   drivers/edac/thunderx_edac.c     |  6 ++--
+>   drivers/edac/xgene_edac.c        | 10 +++---
+>   drivers/edac/zynqmp_edac.c       |  2 +-
+>   18 files changed, 26 insertions(+), 122 deletions(-)
+> 
+
+-- 
+js
+suse labs
+
 
