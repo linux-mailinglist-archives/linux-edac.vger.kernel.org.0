@@ -1,129 +1,254 @@
-Return-Path: <linux-edac+bounces-752-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-753-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFCC0877F15
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Mar 2024 12:35:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02CB687844A
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Mar 2024 16:57:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D5FA1C212D1
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Mar 2024 11:35:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67AABB203CC
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Mar 2024 15:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359CF3AC08;
-	Mon, 11 Mar 2024 11:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C197244C9B;
+	Mon, 11 Mar 2024 15:57:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V2d5ZUNn"
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="imN2A/yH"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0EA3A268;
-	Mon, 11 Mar 2024 11:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F4A3D57A;
+	Mon, 11 Mar 2024 15:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710156909; cv=none; b=NRbxAccQ0wFywY1yJ1y3Tr5uuK/dXgkTc3DD1W/Zyp1/CFawjPu2VFg8p4O3ihdIpellpRgLe9uiRQf3TdfwIqTKjqF8cW2PajeUjEp/6mkpVA56MgOr74jY8baIw/MBbsWPofCGAw2RzVAvL+gcdvcE3hwcO9FwL5+cUipX3TY=
+	t=1710172653; cv=none; b=UQPIH+lJCdA1ai6kcB4vTMMsTKAgP5UK0V5Gp35LmxVRRwqaxbHrruV4EOwavQVezX0BITrZmgp7O795F7YRlSa55lQFVXr8q4SwnAMXjKe6Sd1eLIEXHZMxQZeOu70LCoLBAX75+loUak4Qbcc0E5HkJxWWQn4xJzUslshi7AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710156909; c=relaxed/simple;
-	bh=pYF/44sGUvtGohJefbieCblrNnn6V9de0G2M8//jghE=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=F3xnnmL4txap7Izznelqs+0JTV1bMI+mT43R1c9dN5QcLmYyP9m2dss4ERCZw6T6BIbQHq4aouXY/T2l32X77RMOJ4dif4ua/h08A+2wr3ClxCboN/D34eewOgLPYr/G7x+TsOzhPWcE1tm+PdPp5ymVJ7ODdruPxs6xEdGirdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V2d5ZUNn; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710156907; x=1741692907;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=pYF/44sGUvtGohJefbieCblrNnn6V9de0G2M8//jghE=;
-  b=V2d5ZUNnGrt+BrL0WUPF3Uv4SIE+Ho0HR0sRFsqpef7G7sslDpMlG2Le
-   /DHWAQjupw7P0pqfJS0EDitUgtRdzUTip87MaN91a9a7miZu8lWvjH3jM
-   DTXZ5LzfGx7AYVsXn2W+M0d2tvwU0dNIDQNGOveMdRhbVm8Idy8xkElKq
-   dnIOEEgAOb7zEbDGfzXGP8YpxMlolvn0V9/tvIihMuxRiYdpGuMo5rY8g
-   xvRPcDpWR8MTRWRJ9zukH3GISglrR+JuLVteh0awMV0JnXOi7pFii69Kc
-   waUB6v8sGIJukpVQsTPBXGVhHXfJhFFpr6P83UGFNjkq1WCAAcHNAGJa4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="4656318"
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="4656318"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 04:35:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
-   d="scan'208";a="15784787"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.201])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 04:34:59 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 11 Mar 2024 13:34:54 +0200 (EET)
-To: Bjorn Helgaas <helgaas@kernel.org>
-cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, 
-    Jesse Brandeburg <jesse.brandeburg@intel.com>, 
-    intel-wired-lan@lists.osuosl.org, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-    Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-    linux-edac@vger.kernel.org, linux-efi@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org, 
-    Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-    Netdev <netdev@vger.kernel.org>, Oliver O'Halloran <oohall@gmail.com>, 
-    Paolo Abeni <pabeni@redhat.com>, Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH 0/4] PCI: Consolidate TLP Log reading and printing
-In-Reply-To: <20240308213107.GA700934@bhelgaas>
-Message-ID: <cc3f6a32-a00d-3c68-bc89-c042d238e7fe@linux.intel.com>
-References: <20240308213107.GA700934@bhelgaas>
+	s=arc-20240116; t=1710172653; c=relaxed/simple;
+	bh=+JzLhUHlznDSPhMmybaDQJjRbxgOMb9QjNIs1IIzdnc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tMFkpIE3C4FBxfCgdxo3y1z8DgIra++QjavBF2iyL8+GS4nHV5moOx/XOTTy8Qi7zCiAtXrxPr1+mXSVSlJksqJMykbj2EKXt7zNIzrHm7OJ93DBnIyouULl2FxDMvVZoubDx34b/47oNTBEbKi1lulJHQKjbRARJON3oB/dCVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=imN2A/yH reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E1B7E40E016C;
+	Mon, 11 Mar 2024 15:57:26 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id IcmgLqOfcd0G; Mon, 11 Mar 2024 15:57:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1710172641; bh=4UcCZrez3KOXdj+RqoFy/4ZD2HYEO1uqfdsR63iT0ww=;
+	h=Date:From:To:Cc:Subject:From;
+	b=imN2A/yH8qcUcdLiqGDtnIaP7fn/F32xaaWYl2n08zuq3YsKWdI8vxLY6JJWJGEzT
+	 TgQGd8CDGxSU7daY3bBHCaIDy1Jn55YDQYN8FsUq8RI+tB2WXRb1naQWzCf47Od4x4
+	 7oRAUeIzKczODiwI0OTXQwKRk+ef42T2gitrGsFTXJHm4MbcLSZEuTxnMbLZmy8sCL
+	 Ik/uFeHPvT+g+IRyVOflyrQRwL84oTaAz9AoYnGP4fFa+d1DAumYZysaBHt5m7yDQL
+	 g9N2186JSmK4i+YfvBdGWad04fNkei0G6uHb4+5m1KQFZWSUMa1etVtL9COawDwsKD
+	 6dRdy1Q0Y5WWi8FbBcRb6Rf6E1lciMyCDbieq/Bx52fZQydxETfJTaBWsSap4v2lWx
+	 0rsonVYSsuwAmNCe7vQEU5zS/G5buKTg16LI1DHhF51vhcyMUEcNazU4QkPfI9cgIR
+	 yoj/RzkvG9APwIrCSdYgHZgNrimCTSM0WKvghYOc6lDQHD8y8nC8SvMIU+4OcqFoG8
+	 fgNIYQX/wdKKWQda58lSw7y2+6VqnkEkEd3Gm+Tkpy7+EEf7x3sRudDbNjh5DyCr6r
+	 YUJfTxOmOZ503CuPvKJwfYEL5Y/96fONKWxFTVEpV+lL5ynNXE5hNfkS4gsbG937/d
+	 XxKpAA1DXbiet/g/1uUHFjlI=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B176340E0028;
+	Mon, 11 Mar 2024 15:57:17 +0000 (UTC)
+Date: Mon, 11 Mar 2024 16:57:11 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	linux-edac <linux-edac@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.9
+Message-ID: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-141571146-1710156894=:1142"
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-141571146-1710156894=:1142
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 8 Mar 2024, Bjorn Helgaas wrote:
+Hi Linus,
 
-> On Tue, Feb 06, 2024 at 03:57:13PM +0200, Ilpo J=C3=A4rvinen wrote:
-> > This series consolidates AER & DPC TLP Log handling code. Helpers are
-> > added for reading and printing the TLP Log and the format is made to
-> > include E-E Prefixes in both cases (previously only one DPC RP PIO
-> > displayed the E-E Prefixes).
-> >=20
-> > I'd appreciate if people familiar with ixgbe could check the error
-> > handling conversion within the driver is correct.
-> >=20
-> > Ilpo J=C3=A4rvinen (4):
-> >   PCI/AER: Cleanup register variable
-> >   PCI: Generalize TLP Header Log reading
->=20
-> I applied these first two to pci/aer for v6.9, thanks, these are all
-> nice improvements!
->=20
-> I postponed the ixgbe part for now because I think we should get an
-> ack from those maintainers or just send it to them since it subtly
-> changes the error and device removal checking there.
+please pull EDAC updates for 6.9.
 
-Okay, I'll make sure they're separated properly for the remaining patches=
+Due to the topology changes from tip, a oneliner is needed to be applied
+as part of the merge commit:
+
+diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+index 08c6dbd44c62..59b6169093f7 100644
+--- a/drivers/ras/amd/atl/umc.c
++++ b/drivers/ras/amd/atl/umc.c
+@@ -315,7 +315,7 @@ static u8 get_die_id(struct atl_err *err)
+ 	 * For CPUs, this is the AMD Node ID modulo the number
+ 	 * of AMD Nodes per socket.
+ 	 */
+-	return topology_die_id(err->cpu) % amd_get_nodes_per_socket();
++	return topology_amd_node_id(err->cpu) % topology_amd_nodes_per_pkg();
+ }
 =20
-(I was already planning on doing that separation and posting v2 to avoid=20
-their input blocking the changed but you beat me to it).
+ #define UMC_CHANNEL_NUM	GENMASK(31, 20)
+---
 
-> >   PCI: Add TLP Prefix reading into pcie_read_tlp_log()
-> >   PCI: Create helper to print TLP Header and Prefix Log
->=20
-> I'll respond to these with some minor comments.
+Linux-next did test with a similar diff carried on forwards:
 
-Did you forget to send those comments?
+https://lore.kernel.org/r/20240227134352.6deda860@canb.auug.org.au
+
+but we very recently realized that
+s/topology_die_id/topology_amd_node_id/ needs to happen too.
+
+That's not a big deal, though, as these are all new drivers for new
+hardware which pretty much no one has yet so there's no risk of breaking
+any existing machines out there.
+
+Thx.
+
+---
+
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd3=
+3d:
+
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_upd=
+ates_for_v6.9
+
+for you to fetch changes up to af65545a0f82d7336f62e34f69d3c644806f5f95:
+
+  Merge remote-tracking branches 'ras/edac-drivers', 'ras/edac-misc' and =
+'ras/edac-amd-atl' into edac-updates-for-v6.9 (2024-03-11 16:24:20 +0100)
+
+----------------------------------------------------------------
+ - Add a FRU (Field Replaceable Unit) memory poison manager which
+   collects and manages previously encountered hw errors in order to
+   save them to persistent storage across reboots. Previously recorded
+   errors are "replayed" upon reboot in order to poison memory which has
+   caused said errors in the past.
+
+   The main use case is stacked, on-chip memory which cannot simply be
+   replaced so poisoning faulty areas of it and thus making them
+   inaccessible is the only strategy to prolong its lifetime.
+
+ - Add an AMD address translation library glue which converts the
+   reported addresses of hw errors into system physical addresses in
+   order to be used by other subsystems like memory failure, for
+   example. Add support for MI300 accelerators to that library.
+
+ - igen6: Add support for Alder Lake-N SoC
+
+ - i10nm: Add Grand Ridge support
+
+ - The usual fixlets and cleanups
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (3):
+      Documentation: Move RAS section to admin-guide
+      RAS: Export helper to get ras_debugfs_dir
+      Merge remote-tracking branches 'ras/edac-drivers', 'ras/edac-misc' =
+and 'ras/edac-amd-atl' into edac-updates-for-v6.9
+
+Dan Carpenter (2):
+      RAS/AMD/ATL: Fix array overflow in get_logical_coh_st_fabric_id_mi3=
+00()
+      RAS/AMD/FMPM: Fix off by one when unwinding on error
+
+Lili Li (1):
+      EDAC/igen6: Add one more Intel Alder Lake-N SoC support
+
+Muralidhara M K (1):
+      RAS/AMD/ATL: Add MI300 support
+
+Qiuxu Zhuo (1):
+      EDAC/i10nm: Add Intel Grand Ridge micro-server support
+
+Shubhrajyoti Datta (1):
+      EDAC/versal: Make the bit position of injected errors configurable
+
+Uwe Kleine-K=C3=B6nig (1):
+      EDAC/versal: Convert to platform remove callback returning void
+
+Yangtao Li (1):
+      EDAC/synopsys: Convert to devm_platform_ioremap_resource()
+
+Yazen Ghannam (9):
+      RAS: Introduce AMD Address Translation Library
+      EDAC/amd64: Use new AMD Address Translation Library
+      Documentation: RAS: Add index and address translation section
+      RAS/AMD/ATL: Add MI300 DRAM to normalized address translation suppo=
+rt
+      RAS/AMD/ATL: Add MI300 row retirement support
+      RAS: Introduce a FRU memory poison manager
+      RAS/AMD/ATL: Fix bit overflow in denorm_addr_df4_np2()
+      RAS/AMD/FMPM: Save SPA values
+      RAS/AMD/FMPM: Add debugfs interface to print record entries
+
+ .../admin-guide/RAS/address-translation.rst        |   24 +
+ .../ras.rst =3D> admin-guide/RAS/error-decoding.rst} |   11 +-
+ Documentation/admin-guide/RAS/index.rst            |    7 +
+ .../admin-guide/{ras.rst =3D> RAS/main.rst}          |   10 +-
+ Documentation/admin-guide/index.rst                |    2 +-
+ Documentation/index.rst                            |    1 -
+ MAINTAINERS                                        |   15 +-
+ drivers/edac/Kconfig                               |    1 +
+ drivers/edac/amd64_edac.c                          |  286 +-----
+ drivers/edac/i10nm_base.c                          |    1 +
+ drivers/edac/igen6_edac.c                          |    2 +
+ drivers/edac/synopsys_edac.c                       |    4 +-
+ drivers/edac/versal_edac.c                         |  199 +++-
+ drivers/ras/Kconfig                                |   13 +
+ drivers/ras/Makefile                               |    3 +
+ drivers/ras/amd/atl/Kconfig                        |   21 +
+ drivers/ras/amd/atl/Makefile                       |   18 +
+ drivers/ras/amd/atl/access.c                       |  133 +++
+ drivers/ras/amd/atl/core.c                         |  225 +++++
+ drivers/ras/amd/atl/dehash.c                       |  500 ++++++++++
+ drivers/ras/amd/atl/denormalize.c                  |  718 ++++++++++++++
+ drivers/ras/amd/atl/internal.h                     |  306 ++++++
+ drivers/ras/amd/atl/map.c                          |  682 +++++++++++++
+ drivers/ras/amd/atl/reg_fields.h                   |  606 ++++++++++++
+ drivers/ras/amd/atl/system.c                       |  288 ++++++
+ drivers/ras/amd/atl/umc.c                          |  341 +++++++
+ drivers/ras/amd/fmpm.c                             | 1013 ++++++++++++++=
+++++++
+ drivers/ras/cec.c                                  |   10 +-
+ drivers/ras/debugfs.c                              |    8 +-
+ drivers/ras/debugfs.h                              |    2 +-
+ drivers/ras/ras.c                                  |   31 +
+ include/linux/ras.h                                |   18 +
+ 32 files changed, 5164 insertions(+), 335 deletions(-)
+ create mode 100644 Documentation/admin-guide/RAS/address-translation.rst
+ rename Documentation/{RAS/ras.rst =3D> admin-guide/RAS/error-decoding.rs=
+t} (73%)
+ create mode 100644 Documentation/admin-guide/RAS/index.rst
+ rename Documentation/admin-guide/{ras.rst =3D> RAS/main.rst} (99%)
+ create mode 100644 drivers/ras/amd/atl/Kconfig
+ create mode 100644 drivers/ras/amd/atl/Makefile
+ create mode 100644 drivers/ras/amd/atl/access.c
+ create mode 100644 drivers/ras/amd/atl/core.c
+ create mode 100644 drivers/ras/amd/atl/dehash.c
+ create mode 100644 drivers/ras/amd/atl/denormalize.c
+ create mode 100644 drivers/ras/amd/atl/internal.h
+ create mode 100644 drivers/ras/amd/atl/map.c
+ create mode 100644 drivers/ras/amd/atl/reg_fields.h
+ create mode 100644 drivers/ras/amd/atl/system.c
+ create mode 100644 drivers/ras/amd/atl/umc.c
+ create mode 100644 drivers/ras/amd/fmpm.c
 
 
 --=20
- i.
+Regards/Gruss,
+    Boris.
 
---8323328-141571146-1710156894=:1142--
+https://people.kernel.org/tglx/notes-about-netiquette
 
