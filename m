@@ -1,79 +1,102 @@
-Return-Path: <linux-edac+bounces-756-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-757-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 294CB878C43
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 02:30:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD352878CFA
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 03:24:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68DAEB20D9C
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 01:30:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F05D41C20AB1
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 02:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6B54690;
-	Tue, 12 Mar 2024 01:30:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BDCE524F;
+	Tue, 12 Mar 2024 02:24:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dssKHF2w"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nRB0eJ3X"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1525F811;
-	Tue, 12 Mar 2024 01:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1278811;
+	Tue, 12 Mar 2024 02:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710207005; cv=none; b=kKMXNTdcvOiAdaxSJaVh7FdwYJaUVAGm79lkUHeEHcd5Cuqj8UNOQI4jBpyUl3KH4TLrdN06mff9Uo7LxVEPgjk3GrNFNSzGsd65eTRWv+Sc7l1qe6mkebrGS6rQ5miHM6Z0Ez0UOF9EwQPo3yk0aSOGUeWXTiBsAdLkwLrtlEg=
+	t=1710210261; cv=none; b=GJJt1RXGbv6SNXBNlb5/6HIpib2y9Q6dxvuOEzLESD/9f1y9YvsBwFcAMjrQVAjlkVoXeGB7DHMMhT+AKBvekBA3KAPx0/zleOLC+PGIJW1A7/LXfaoktuHZUMJnF+JIwxAm3eJm5CMGoLgktXd10aVtM5qWHc85IuQjcD6mkFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710207005; c=relaxed/simple;
-	bh=zNReEfidZjW7TzC29kl2o6cK/Ja/nTmzX+A/3j/LoCU=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=a0pCpbJfxEnCHZKlpNXS+j48G68VUPHmiwYdqkzpa+U1wbv/VTzj8SMnk7hEGCM/osyT5e4lWSXxRHNp6fOLj85FYZ4oIx2+SMpRCaJWMMh860KKKL4z4ztf8ziXPA8wvAQcVfusOpjLu3aUbyoriPjU/kWem0AKqbD3BvWa6+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dssKHF2w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E13F3C43390;
-	Tue, 12 Mar 2024 01:30:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710207004;
-	bh=zNReEfidZjW7TzC29kl2o6cK/Ja/nTmzX+A/3j/LoCU=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=dssKHF2wCxjIubgJ8fZYQGJzzsGzOZqERFxe73vaA0C73pkifDogwZfzILvmTqz2F
-	 1buMoEpFfBFXdjv5M+BG/2Ymrr6T/DQ8jodRvWoD5doE8obOz+f39V5x9YDCy6w2pG
-	 OpoO2Dhvka76SmS4jUgaGd0xW2B6TeQXIGxKx2HOK8DnExivwk/5NqOEFPDSLovdvK
-	 5HqBIIb8dqVqFr+o9gGGe1A32V3MoAIdWMU4MfEfEFw77dxfuuvGu/eI/iMJK/NM3A
-	 ss8Gz9zphw8bW2KoCjm74pmDvEe6oTsOBZwMOrYP5S9jayDxGrNvUzVQ2gTAHi4Rvc
-	 HIeHVzd15UUow==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BAD34D95055;
-	Tue, 12 Mar 2024 01:30:04 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC updates for v6.9
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
-References: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.9
-X-PR-Tracked-Commit-Id: af65545a0f82d7336f62e34f69d3c644806f5f95
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b0402403e54ae9eb94ce1cbb53c7def776e97426
-Message-Id: <171020700473.888.16637533826672826953.pr-tracker-bot@kernel.org>
-Date: Tue, 12 Mar 2024 01:30:04 +0000
-To: Borislav Petkov <bp@alien8.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>, linux-edac <linux-edac@vger.kernel.org>
+	s=arc-20240116; t=1710210261; c=relaxed/simple;
+	bh=fG56aufdfltkZYeNBOEgH9TwSlq3RcV6Utjd56I7WFU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PTEmiBcd+Q/grsh4iZv9SfJP2TRLUZMzoID3M4oYLXQ4CavNjm9vXwbH5t6lzCiGwCse5tUGlxKJgQG8Dh0X7zrRqJNYjPIvNkCmXhvO3pDTLZcodFVuX5LPxf5Wq5ZTUbnCR5Hsb7H7K2cOkX+uhoH9RGDtcde5HiCugMRNajw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nRB0eJ3X; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=9SbrPiGCdQrCt1N5ALQH0ssl1pc2Fp8ln+P1Az4BYwg=; b=nRB0eJ3XHAXgng9YKgOiAiJOkM
+	rS9b+rDCpbQRp67REvX239+NvvQEykGjZeuFuYRSRmq2j6ancaHvad0xHtbI64xxWQ3uS+pk/9lIe
+	vr7Z2RY8bXHkTbJFTz5NBzUO+t3a32gJW6o7+1RwR+qhh5RzS5Ed8UZ4SMo9AoMEOKRLb3e6iiGQ/
+	NAvC+u6liyvX+KpK0ELcSuqjN1lYrpzIwMlpNJyQUaL4+hASVeeBBTlKfX/s0ZeOTBVRrtmJg5ZCn
+	phzrMhLW4kjtGyVyoOzWckH6oxSuJDfvUvIZmVyPwrmXOtWYVfPs4PqyVXLQ/p/sbnX/XCXH3z2+m
+	rDGf8VQQ==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rjroP-00000003zcl-2wJh;
+	Tue, 12 Mar 2024 02:24:17 +0000
+Message-ID: <a4bdcf74-5c6f-4483-a4f0-8ad6558a3c8d@infradead.org>
+Date: Mon, 11 Mar 2024 19:24:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL] EDAC updates for v6.9
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+ Borislav Petkov <bp@alien8.de>
+Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+ linux-edac <linux-edac@vger.kernel.org>
+References: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
+ <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Mon, 11 Mar 2024 16:57:11 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.9
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b0402403e54ae9eb94ce1cbb53c7def776e97426
+On 3/11/24 18:12, Linus Torvalds wrote:
+> On Mon, 11 Mar 2024 at 08:57, Borislav Petkov <bp@alien8.de> wrote:
+>>
+>> -       return topology_die_id(err->cpu) % amd_get_nodes_per_socket();
+>> +       return topology_amd_node_id(err->cpu) % topology_amd_nodes_per_pkg();
+> 
+> Ho humm. Lookie here:
+> 
+>     static inline unsigned int topology_amd_nodes_per_pkg(void)
+>     { return 0; };
+> 
 
-Thank you!
+and there's an extra/trailing ';'.
+
+> that's the UP case.
+> 
+> Yeah, I'm assuming nobody tests this for UP, but it's clearly wrong to
+> potentially do that modulus by zero.
+> 
+> So I made the merge also change that UP case of
+> topology_amd_nodes_per_pkg() to return 1.
+> 
+> Because dammit, not only is a mod-by-zero wrong, a UP system most
+> definitely has one node per package, not zero.
+> 
+>                Linus
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+#Randy
 
