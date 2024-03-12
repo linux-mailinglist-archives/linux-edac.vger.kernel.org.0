@@ -1,300 +1,96 @@
-Return-Path: <linux-edac+bounces-763-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-764-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2AEA879119
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 10:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 819E98791AC
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 11:07:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68398282249
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 09:41:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C109281BC5
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 10:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3904B7827E;
-	Tue, 12 Mar 2024 09:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A211478294;
+	Tue, 12 Mar 2024 10:07:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SiE2pY22";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f0o2Zrht"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AF278273;
-	Tue, 12 Mar 2024 09:41:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B203D3A7;
+	Tue, 12 Mar 2024 10:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710236495; cv=none; b=ZbTOulhdLw+++OtY683nKbzLHkEDoCNXrIW3FESjfrBDC8IJM8yQLJ3CyoctQavDA5YH8WuaL4+DT+FyU4Q9rvz+e1rqsOtepY9T3DdeRD+tJ1c/a//WkpObsnbfTKbFvpWfP/rNkH4KJd0S7y4H75RMORduz5ECfAW0nJLZax8=
+	t=1710238061; cv=none; b=GsudIj8Z3Y9uxvmlOWZnib2fMYkmoZ17yv7/b7umoRk04PEVreYDCvc7U8jHGAVRU3F0AiQIUGRGKBgWoZvSsp0QRg48PVwlt692Jbm5wSDq4R1S30gOFHlGqUZKGK4Bdtm67tfVVdqxp+xuwFo5H6MDANSDqjCIz+lq7RetD/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710236495; c=relaxed/simple;
-	bh=9BVd3T4GZqlg+poIfhaoPYk3KkThuqvVtjsxrrpVzUg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=nXsjDloJSJjTY1IYr81d91FJtZJfe9iTyfdcFrYgOo2ukmQqw19ry4ICQz/avYpvbtpPGC9V+phYCf4Wq8KpEjge7+eO3334C8ShFZ3aN/NWFnDOeg2DDTLr0X4o3bWuXI1m6DXx8GYb1Dl1S8XeIavYxCYu9AarsH7yPI10UVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Tv7pW0sy4z688hZ;
-	Tue, 12 Mar 2024 17:37:23 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (unknown [7.191.162.67])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5738E140D1D;
-	Tue, 12 Mar 2024 17:41:28 +0800 (CST)
-Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 12 Mar 2024 09:41:27 +0000
-Received: from lhrpeml500006.china.huawei.com ([7.191.161.198]) by
- lhrpeml500006.china.huawei.com ([7.191.161.198]) with mapi id 15.01.2507.035;
- Tue, 12 Mar 2024 09:41:27 +0000
-From: Shiju Jose <shiju.jose@huawei.com>
-To: fan <nifan.cxl@gmail.com>
-CC: "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "dan.j.williams@intel.com"
-	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"Jonathan Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
-	<dave.jiang@intel.com>, "alison.schofield@intel.com"
-	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
-	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
-	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
-	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "Jon.Grimm@amd.com"
-	<Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "mike.malvestuto@intel.com"
-	<mike.malvestuto@intel.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
-	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>, wanghuiqiang
-	<wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>
-Subject: RE: [RFC PATCH v7 03/12] cxl/mbox: Add SET_FEATURE mailbox command
-Thread-Topic: [RFC PATCH v7 03/12] cxl/mbox: Add SET_FEATURE mailbox command
-Thread-Index: AQHaZmXa2rf54FiQvUO4a7U5LboEzbEzJw+AgADJeeA=
-Date: Tue, 12 Mar 2024 09:41:27 +0000
-Message-ID: <b6aa1dd19ab44b7db7b9aa1318c5d8b0@huawei.com>
-References: <20240223143723.1574-1-shiju.jose@huawei.com>
- <20240223143723.1574-4-shiju.jose@huawei.com> <Ze91l0jz_DZR9jjx@debian>
-In-Reply-To: <Ze91l0jz_DZR9jjx@debian>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1710238061; c=relaxed/simple;
+	bh=Dd9d0UnxqufVfdrX22bmS5DDjMof9oB963Q+fw5StGk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Qqy28GSabaNHXpu1Ddzm6pvo51m4BppWPUnCvk3GEg0MZ/ds+SCcIZAtTslwilV/9PuoIrihCAIku6aTxEiB5ZZePjt/w3w9D5TP27aTABk0kHh6hTwx3hqksRiHiWS3ry0JOHnsk2bZxawj4ejc8QGfXxaov2XMQt3eqJORWcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SiE2pY22; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f0o2Zrht; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1710238058;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yhjK5b3mLPLjt7IRKiFb96a/RGCJHwt7u3VLnuYDLqA=;
+	b=SiE2pY22XIbt74fR5+g2hNoNj0RHmko1vTPOMNDWKAzlkp5cx1OB+Ilo2MsjiQloBgK88q
+	nSI3QE08TUPWZCmRyGz6sZkhaMvF2stbmJrWZARVO5uRHiPlIol2WfXG5Gl7q6GI0YOR5A
+	YhPCZYUPe4JfibKcmeC4GxrtbWMXcR2RPPVacgl2mIgsiGYuE3hFb2HvaREc9DiyCjso9p
+	bMySyLf2SwDjskWnSFSn/ll1a99Rd3i/NRoaHet08ihN/SvJDLc1scF0qqtH55jaapN4Po
+	0dFBVTcV3bQMafDzUbb6L+TrksQb6kwcCZGszcnH6o4r9XT0qMQh0TUJheoIGw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1710238058;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yhjK5b3mLPLjt7IRKiFb96a/RGCJHwt7u3VLnuYDLqA=;
+	b=f0o2Zrht095O28J8Uccd+vmmzvLXXUYxOaEPM3OX74O386o2g55p7o8LepzAvnAOWAkHNQ
+	LIcF4YFs44W+y9Ag==
+To: Linus Torvalds <torvalds@linux-foundation.org>, Borislav Petkov
+ <bp@alien8.de>
+Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>, linux-edac
+ <linux-edac@vger.kernel.org>
+Subject: Re: [GIT PULL] EDAC updates for v6.9
+In-Reply-To: <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+References: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
+ <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+Date: Tue, 12 Mar 2024 11:07:37 +0100
+Message-ID: <878r2npxue.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
 
-Hi Fan,
+On Mon, Mar 11 2024 at 18:12, Linus Torvalds wrote:
 
->-----Original Message-----
->From: fan <nifan.cxl@gmail.com>
->Sent: 11 March 2024 21:20
->To: Shiju Jose <shiju.jose@huawei.com>
->Cc: linux-cxl@vger.kernel.org; linux-acpi@vger.kernel.org; linux-
->mm@kvack.org; dan.j.williams@intel.com; dave@stgolabs.net; Jonathan
->Cameron <jonathan.cameron@huawei.com>; dave.jiang@intel.com;
->alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.com;
->linux-edac@vger.kernel.org; linux-kernel@vger.kernel.org; david@redhat.com=
-;
->Vilas.Sridharan@amd.com; leo.duran@amd.com; Yazen.Ghannam@amd.com;
->rientjes@google.com; jiaqiyan@google.com; tony.luck@intel.com;
->Jon.Grimm@amd.com; dave.hansen@linux.intel.com; rafael@kernel.org;
->lenb@kernel.org; naoya.horiguchi@nec.com; james.morse@arm.com;
->jthoughton@google.com; somasundaram.a@hpe.com;
->erdemaktas@google.com; pgonda@google.com; duenwen@google.com;
->mike.malvestuto@intel.com; gthelen@google.com;
->wschwartz@amperecomputing.com; dferguson@amperecomputing.com;
->tanxiaofei <tanxiaofei@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>=
-;
->kangkang.shen@futurewei.com; wanghuiqiang <wanghuiqiang@huawei.com>;
->Linuxarm <linuxarm@huawei.com>
->Subject: Re: [RFC PATCH v7 03/12] cxl/mbox: Add SET_FEATURE mailbox
->command
+> On Mon, 11 Mar 2024 at 08:57, Borislav Petkov <bp@alien8.de> wrote:
+>>
+>> -       return topology_die_id(err->cpu) % amd_get_nodes_per_socket();
+>> +       return topology_amd_node_id(err->cpu) % topology_amd_nodes_per_pkg();
 >
->On Fri, Feb 23, 2024 at 10:37:14PM +0800, shiju.jose@huawei.com wrote:
->> From: Shiju Jose <shiju.jose@huawei.com>
->>
->> Add support for SET_FEATURE mailbox command.
->>
->> CXL spec 3.1 section 8.2.9.6 describes optional device specific features=
-.
->> CXL devices supports features with changeable attributes.
->> The settings of a feature can be optionally modified using Set Feature
->> command.
->>
->> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
->> ---
->>  drivers/cxl/core/mbox.c | 67
->+++++++++++++++++++++++++++++++++++++++++
->>  drivers/cxl/cxlmem.h    | 30 ++++++++++++++++++
->>  2 files changed, 97 insertions(+)
->>
->> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c index
->> c078e62ea194..d1660bd20bdb 100644
->> --- a/drivers/cxl/core/mbox.c
->> +++ b/drivers/cxl/core/mbox.c
->> @@ -1366,6 +1366,73 @@ size_t cxl_get_feature(struct cxl_memdev_state
->> *mds,  }  EXPORT_SYMBOL_NS_GPL(cxl_get_feature, CXL);
->>
->> +int cxl_set_feature(struct cxl_memdev_state *mds,
->> +		    const uuid_t feat_uuid, u8 feat_version,
->> +		    void *feat_data, size_t feat_data_size,
->> +		    u8 feat_flag)
->> +{
->> +	struct cxl_memdev_set_feat_pi {
->> +		struct cxl_mbox_set_feat_hdr hdr;
->> +		u8 feat_data[];
->> +	}  __packed;
->> +	size_t data_in_size, data_sent_size =3D 0;
->> +	struct cxl_mbox_cmd mbox_cmd;
->> +	size_t hdr_size;
->> +	int rc =3D 0;
->> +
->> +	struct cxl_memdev_set_feat_pi *pi __free(kfree) =3D
->> +					kmalloc(mds->payload_size,
->GFP_KERNEL);
->> +	pi->hdr.uuid =3D feat_uuid;
->> +	pi->hdr.version =3D feat_version;
->> +	feat_flag &=3D ~CXL_SET_FEAT_FLAG_DATA_TRANSFER_MASK;
->> +	hdr_size =3D sizeof(pi->hdr);
->> +	/*
->> +	 * Check minimum mbox payload size is available for
->> +	 * the feature data transfer.
->> +	 */
->> +	if (hdr_size + 10 > mds->payload_size)
+> Ho humm. Lookie here:
 >
->Where does this magic number come from?
+>     static inline unsigned int topology_amd_nodes_per_pkg(void)
+>     { return 0; };
+>
+> that's the UP case.
+>
+> Yeah, I'm assuming nobody tests this for UP, but it's clearly wrong to
+> potentially do that modulus by zero.
 
-This represents minimum extra number of bytes to be available in the mail b=
-ox
-for storing the actual feature data to work with multipart feature data tra=
-nsfers.
-This will be set as a definition in the next version and however not sure t=
-he
-best value to be set.
->
->Fan
->
->> +		return -ENOMEM;
->> +
->> +	if ((hdr_size + feat_data_size) <=3D mds->payload_size) {
->> +		pi->hdr.flags =3D cpu_to_le32(feat_flag |
->> +
->CXL_SET_FEAT_FLAG_FULL_DATA_TRANSFER);
->> +		data_in_size =3D feat_data_size;
->> +	} else {
->> +		pi->hdr.flags =3D cpu_to_le32(feat_flag |
->> +
->CXL_SET_FEAT_FLAG_INITIATE_DATA_TRANSFER);
->> +		data_in_size =3D mds->payload_size - hdr_size;
->> +	}
->> +
->> +	do {
->> +		pi->hdr.offset =3D cpu_to_le16(data_sent_size);
->> +		memcpy(pi->feat_data, feat_data + data_sent_size,
->data_in_size);
->> +		mbox_cmd =3D (struct cxl_mbox_cmd) {
->> +			.opcode =3D CXL_MBOX_OP_SET_FEATURE,
->> +			.size_in =3D hdr_size + data_in_size,
->> +			.payload_in =3D pi,
->> +		};
->> +		rc =3D cxl_internal_send_cmd(mds, &mbox_cmd);
->> +		if (rc < 0)
->> +			return rc;
->> +
->> +		data_sent_size +=3D data_in_size;
->> +		if (data_sent_size >=3D feat_data_size)
->> +			return 0;
->> +
->> +		if ((feat_data_size - data_sent_size) <=3D (mds->payload_size -
->hdr_size)) {
->> +			data_in_size =3D feat_data_size - data_sent_size;
->> +			pi->hdr.flags =3D cpu_to_le32(feat_flag |
->> +
->CXL_SET_FEAT_FLAG_FINISH_DATA_TRANSFER);
->> +		} else {
->> +			pi->hdr.flags =3D cpu_to_le32(feat_flag |
->> +
->CXL_SET_FEAT_FLAG_CONTINUE_DATA_TRANSFER);
->> +		}
->> +	} while (true);
->> +
->> +	return rc;
->> +}
->> +EXPORT_SYMBOL_NS_GPL(cxl_set_feature, CXL);
->> +
->>  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->>  		       struct cxl_region *cxlr)
->>  {
->> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h index
->> bcfefff062a6..a8d4104afa53 100644
->> --- a/drivers/cxl/cxlmem.h
->> +++ b/drivers/cxl/cxlmem.h
->> @@ -531,6 +531,7 @@ enum cxl_opcode {
->>  	CXL_MBOX_OP_GET_LOG		=3D 0x0401,
->>  	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	=3D 0x0500,
->>  	CXL_MBOX_OP_GET_FEATURE		=3D 0x0501,
->> +	CXL_MBOX_OP_SET_FEATURE		=3D 0x0502,
->>  	CXL_MBOX_OP_IDENTIFY		=3D 0x4000,
->>  	CXL_MBOX_OP_GET_PARTITION_INFO	=3D 0x4100,
->>  	CXL_MBOX_OP_SET_PARTITION_INFO	=3D 0x4101,
->> @@ -773,6 +774,31 @@ struct cxl_mbox_get_feat_in {
->>  	u8 selection;
->>  }  __packed;
->>
->> +/* Set Feature CXL 3.1 Spec 8.2.9.6.3 */
->> +/*
->> + * Set Feature input payload
->> + * CXL rev 3.1 section 8.2.9.6.3 Table 8-101  */
->> +/* Set Feature : Payload in flags */
->> +#define CXL_SET_FEAT_FLAG_DATA_TRANSFER_MASK	GENMASK(2, 0)
->> +enum cxl_set_feat_flag_data_transfer {
->> +	CXL_SET_FEAT_FLAG_FULL_DATA_TRANSFER,
->> +	CXL_SET_FEAT_FLAG_INITIATE_DATA_TRANSFER,
->> +	CXL_SET_FEAT_FLAG_CONTINUE_DATA_TRANSFER,
->> +	CXL_SET_FEAT_FLAG_FINISH_DATA_TRANSFER,
->> +	CXL_SET_FEAT_FLAG_ABORT_DATA_TRANSFER,
->> +	CXL_SET_FEAT_FLAG_DATA_TRANSFER_MAX
->> +};
->> +#define CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET	BIT(3)
->> +
->> +struct cxl_mbox_set_feat_hdr {
->> +	uuid_t uuid;
->> +	__le32 flags;
->> +	__le16 offset;
->> +	u8 version;
->> +	u8 rsvd[9];
->> +}  __packed;
->> +
->>  /* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */  struct
->> cxl_mbox_poison_in {
->>  	__le64 offset;
->> @@ -912,6 +938,10 @@ size_t cxl_get_feature(struct cxl_memdev_state
->*mds,
->>  		       size_t feat_out_size,
->>  		       size_t feat_out_min_size,
->>  		       enum cxl_get_feat_selection selection);
->> +int cxl_set_feature(struct cxl_memdev_state *mds,
->> +		    const uuid_t feat_uuid, u8 feat_version,
->> +		    void *feat_data, size_t feat_data_size,
->> +		    u8 feat_flag);
->>  int cxl_poison_state_init(struct cxl_memdev_state *mds);  int
->> cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->>  		       struct cxl_region *cxlr);
->> --
->> 2.34.1
->>
+Duh. I clearly was not thinking at all when I wrote this.
 
-Thanks,
-Shiju
+Thanks for spotting it.
+
+
+       tglx
 
