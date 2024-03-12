@@ -1,115 +1,131 @@
-Return-Path: <linux-edac+bounces-760-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-761-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F712878F25
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 08:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A099879074
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 10:16:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF0742827AA
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 07:45:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BFF52818B2
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 09:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A986996C;
-	Tue, 12 Mar 2024 07:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7CE77F2E;
+	Tue, 12 Mar 2024 09:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="XRgI0KAO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bOccOup7"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FFF6995B;
-	Tue, 12 Mar 2024 07:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA7678298;
+	Tue, 12 Mar 2024 09:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710229529; cv=none; b=HhyJvUt+T/1O9DfJiYhKSg5o6lzjAIS2hQmz/5RSwlmDs0PWQbFnMBaQ5wuCIt8sI83dfQ4rjEDBvdt+dve6RRTtQBiJd01cFc0my5UVl/YX32slHb8vYdgI2HRPcFZ6k/SG9Nz6SwmXnSV5/zdeEDhvgaZJh3z3vyFW0ElXrfY=
+	t=1710234977; cv=none; b=E+FTWTH8ld59v/V2aj/N5PN5YfT5w4ZGP3kiUyjq615jfo/6fiRTyQVDB9YzW+/shxiduIPsK/+Jd01sFlswHwT1G1aL48qRiKm9R6V+OoXRW4fmY9aIajdZy7hCD8pSOdEXlvghmWKDiHVxAMs0cqMJ8UwS8KpVbG6PCJqGBng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710229529; c=relaxed/simple;
-	bh=V/3C99+SjfBu6YxPC7xYaJOXeNA/MjKY6uwJ3NULtF4=;
+	s=arc-20240116; t=1710234977; c=relaxed/simple;
+	bh=G315+vLg/P531vku2rclRXAdHwlitSZmCc23+i2KxfA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M5qUNPi8/kePUP2foH7lSH41pI0qMG9ftEaXO9lkpiG1hBB8CNnQHfulBo0EDyX/DZVJNHHKnNs6U4P0oLiJ2+RW4YU92+lvQRwxKfnhUYtA+uS3c93WtVnq4srwikm3tDI+9LU6fUudhLIP6AWKIcxqNrboA6h77Ir+ePcyNJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=XRgI0KAO; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4FE3F40E0196;
-	Tue, 12 Mar 2024 07:45:18 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id QCbY7VwbVN0h; Tue, 12 Mar 2024 07:45:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1710229516; bh=7t6+HTXOBDKap6sFQU1Tk7yBPukO7meCgLOVL8iHZos=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XRgI0KAOeKttbfKSRzrmvdCJmQbt8aPzytSyPsM59Lzrw18bWh08pFy0IUzmRojoC
-	 +k/Se8AwizadmmSeOlKW/uMAXfmnmHJj1kpwxWwGRQ5npiP4QiWvxZh0O4WykkWGMQ
-	 6XQd9IHwVXv7GyknoUrgzlio3piyIgekaRKplzMye7dfLSG7sw7OHi8RmIMphKgX//
-	 j58fv6DpZpMI6/82hxcWng0c3fVchvQN0NJMNNr22oT2xYgP+7QXBX4BDOpOYuHoV9
-	 Ei65WxRRTGnq6YRo1cx/iqzLZNvUigIvNavH/RQ4RgqA68IxnXaYG6cWa8kPQYEXaH
-	 000GwG7gfPYLFPfEQ54n8a7xvWikZSEtdgjaMPmwNs/2506TmRxcUzNQjDUabPR4NS
-	 CqdDRCkKTEzbmGr+vMSZcuoCPmooNwaPkzFcfpBxa6PZQ4j42P1IRZ92exwWftr+EL
-	 gwS+kkVAbYces82pGBP6yAxl+9hr1dRPZ/CKpJsjYQjiPyyDBYBqplaDzI/3WxW3sV
-	 i5g8qkFsUWUnjyoHJwAa51Kut8tsL8rC5Ab/YiGZf2/6+OklGPcf2sF66TwR+1UPEQ
-	 mvpZxHOqlv1W55QZGunCVXTrSI1WTxv8tArNbHY9ZD+JiUJaf9ghV1QuMlu8Tf+yoe
-	 uTVBrTEbv1zWhWw3fM4MqlZw=
-Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DDAB640E016B;
-	Tue, 12 Mar 2024 07:45:11 +0000 (UTC)
-Date: Tue, 12 Mar 2024 08:45:04 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=EgyDOSJT86lUVlG49Jl0pOPB/FJ49kbeG1hBGu+WAvfKcCUV60taV5Dy5d775l1ZnQ3MVJymxslI7UL4U7u35j2P/SZTEu4ZffUN5JSrPcnbuvhaYMVrolOl7bf5ef96fImMRXWPyXINgElIfNE7aMUVIebHOuUDtY0vjYszLWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bOccOup7; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-412e784060cso36730305e9.1;
+        Tue, 12 Mar 2024 02:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710234974; x=1710839774; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UCbSTMWCq5rGAqV7JzOZ4N2Vb64C/jbpTS2kzFs2kkE=;
+        b=bOccOup76rMcwJB1laqu3jM/MkpQwcYJz7hhT1tzMPfuUzwUOLIeBa+jcXd7tzP0Zm
+         iPwxRIDNRPVDhVjHjESZusVgmLql9sPVSr25I47nf84DGYsnHkzd9JQGxcEDz0E6H05P
+         exQjypyPMk403ZEUEnFNRtnEs3dw+oi8ZppxUK1JK5/2pSREGf0Fsefdd2mevOy1VFcY
+         bAv93MTkh0qtf5uLqRz4Aat9Nu0hjqn4QTUvF6uoIeUZ7pJ9MHaXxa/LdU48lN/FTfXO
+         ULCzivhbpyXHlwawLren4gmzhe3zzpVsVN4bQjRP1lFV07A/X72IyXLhNYPgzlV2toLH
+         6YeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710234974; x=1710839774;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UCbSTMWCq5rGAqV7JzOZ4N2Vb64C/jbpTS2kzFs2kkE=;
+        b=swpwePqeL1vtK5xj7vf2tunWhAeuPzBZKnBazO+mO+SFFqv7o76Th6lSKj7eCoTDvC
+         mf3VANtn8UOnfqMn90YkTn2M3sTxwAaycWK4B1RDraF0ok0bV0dX9WzCVv296UVrpbsj
+         MRQvB7Ed+P/6z3DAvtrrQXcRcE7y1eoC8ob7bB5EXmZLj0LocLzK6PSWUjnqw66Ve3yV
+         qfMoMQPYBKd1xtwwHdIKFpCOFjB/TOkT1Un/jImTZDJOmrT0dU5X5hSBTjiray+WB0XP
+         UHlIQLr7rTaV70xcBrcMvp61C8Q7vUnuiYI/sf5vZHq50ybvG2E7xC4zENPmF6AvnQAN
+         c94g==
+X-Forwarded-Encrypted: i=1; AJvYcCW9U+YPVHMMXBAEAQ1MPVX/abeY9VDYc/sjoUJrmTBw2EugyBu/xYnB5FPsFfGJDbQS2urKiObaQb/IEwn09tHkwe02mJq6VmpcNWfXM0aow6TkaasEhDYTtViLUFf/XJRrT6UQfw7sug==
+X-Gm-Message-State: AOJu0YzT/fjt2njRccRJFr6F6b+MPTM0sA+KRlfGznRtm5+7ZZ1mcXPr
+	QKiRonCxbwm0QA98dfH+431o/QbjMqQ2NOdT8du1eamiphX1hSz8
+X-Google-Smtp-Source: AGHT+IHmU0FvtYtu5lBbAmRgmihLpj93b7PVuFWiQadP2jJglX3kSh5T0uFL6LAq6aLv/ier94I00A==
+X-Received: by 2002:adf:c684:0:b0:33d:27c3:9f47 with SMTP id j4-20020adfc684000000b0033d27c39f47mr8029417wrg.35.1710234973550;
+        Tue, 12 Mar 2024 02:16:13 -0700 (PDT)
+Received: from gmail.com (1F2EF295.nat.pool.telekom.hu. [31.46.242.149])
+        by smtp.gmail.com with ESMTPSA id jg4-20020a05600ca00400b004134540ae3asm1044464wmb.3.2024.03.12.02.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Mar 2024 02:16:12 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Tue, 12 Mar 2024 10:16:10 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, x86-ml <x86@kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>,
 	linux-edac <linux-edac@vger.kernel.org>
 Subject: Re: [GIT PULL] EDAC updates for v6.9
-Message-ID: <20240312074504.GAZfAIANxTdC5Tb0vb@fat_crate.local>
+Message-ID: <ZfAdWtBt60hAx//4@gmail.com>
 References: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
  <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+ <20240312074504.GAZfAIANxTdC5Tb0vb@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+In-Reply-To: <20240312074504.GAZfAIANxTdC5Tb0vb@fat_crate.local>
 
-On Mon, Mar 11, 2024 at 06:12:54PM -0700, Linus Torvalds wrote:
-> Ho humm. Lookie here:
+
+* Borislav Petkov <bp@alien8.de> wrote:
+
+> On Mon, Mar 11, 2024 at 06:12:54PM -0700, Linus Torvalds wrote:
+> > Ho humm. Lookie here:
+> > 
+> >     static inline unsigned int topology_amd_nodes_per_pkg(void)
+> >     { return 0; };
+> > 
+> > that's the UP case.
+> > 
+> > Yeah, I'm assuming nobody tests this for UP,
 > 
->     static inline unsigned int topology_amd_nodes_per_pkg(void)
->     { return 0; };
-> 
-> that's the UP case.
-> 
-> Yeah, I'm assuming nobody tests this for UP,
+> Unless it gets randomly enabled in my randconfig builds once in a blue
+> moon, I'd say pretty seldomly. I've heard people raise the question
+> multiple times whether we should simply make CONFIG_SMP default y on x86
+> and frankly, it'll get rid of a whole bunch of stupid corner cases like
+> that...
 
-Unless it gets randomly enabled in my randconfig builds once in a blue
-moon, I'd say pretty seldomly. I've heard people raise the question
-multiple times whether we should simply make CONFIG_SMP default y on x86
-and frankly, it'll get rid of a whole bunch of stupid corner cases like
-that...
+Making it 'default y' in the Kconfig alone changes very little, as people & 
+bots will still stumble on !SMP via allnoconfig or randconfig builds.
 
-> but it's clearly wrong to potentially do that modulus by zero.
+If you mean forcing CONFIG_SMP via 'select SMP' on x86 on the other hand, 
+that's worth considering - although I think there will be a ton of extra 
+cross-build breakage as most patches still get created & tested on x86.
 
-Yep.
+In other words, the x86 UP build basically has the side-effect utility of 
+covering a lot of UP cross-build scenarios in generic code.
 
-> So I made the merge also change that UP case of
-> topology_amd_nodes_per_pkg() to return 1.
-> 
-> Because dammit, not only is a mod-by-zero wrong, a UP system most
-> definitely has one node per package, not zero.
+I think the most viable approach would be to make SMP the only model all 
+across the kernel (and eventually removing the CONFIG_SMP option), while 
+propagating UP data structures and locking primitives to the UP arch level, 
+instead of having CONFIG_SMP #ifdefs in generic code.
 
-Yap, that's the the straight-forward thing to do, thanks for fixing it!
+Maybe not today, but certainly in a few years.
 
--- 
-Regards/Gruss,
-    Boris.
+Thanks,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+	Ingo
 
