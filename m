@@ -1,261 +1,114 @@
-Return-Path: <linux-edac+bounces-754-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-755-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BB198789F4
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Mar 2024 22:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CEE13878C27
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 02:13:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 811C8B211F1
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Mar 2024 21:20:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEA4CB20FDD
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Mar 2024 01:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5256D56B6B;
-	Mon, 11 Mar 2024 21:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1492D6FB9;
+	Tue, 12 Mar 2024 01:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D9gGpIua"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="eB+KKJnG"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF5356772;
-	Mon, 11 Mar 2024 21:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0F46FB2
+	for <linux-edac@vger.kernel.org>; Tue, 12 Mar 2024 01:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710192045; cv=none; b=bbvb8CwJHRDe4mx9JeBUqdMNwf/0cjhCVGjbtcPp5y32hOWxYrQH+dSyl1dfAnJsehPKHfw335IqPk8+/iEMqv7fT6AWRYnbsxT8q8hoOkt+07uUxCHnRknKCLTXd7XcRi5Mqs+hmvY7Hp9sfs5Ea/cKNtycoqQ5h25QJ+ZH/UQ=
+	t=1710205996; cv=none; b=NVf72GbEBSz1mFcGLDAck3tWY8mw5cEzk1C9Sz7PFjl8isXNCtarZIZ/Maf9yw4iTIOdaZds8aWTlwyx9bIRoRkyaWkiKermMF20LBWcIF8IzjIlDV09c80ICUF6YB3+U2XFGRt2OPRAGJj8MvYQ4PzH75IAdUmPacxi60rBWhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710192045; c=relaxed/simple;
-	bh=HxYdp/+1ZrmqCfP7H1h9KnkYHbDmS8tczK9UeaKATig=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NeNFU8jQrufw0UNrXtIaWPdjwrLbeUlUJLpHj3802m+e3ktSVc1D8HtX/kkwuEcJbFCTvcP/Q9u4q5Zg85/z+jImgDjQ+UcQw1cli+hY99wOUbZncx/nVeZy9cLDmpJ3Is8fOg0GTqTlycidzMrisIsRjZCZusQVO6WFFH1J72w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D9gGpIua; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7bed9fb159fso172492439f.1;
-        Mon, 11 Mar 2024 14:20:43 -0700 (PDT)
+	s=arc-20240116; t=1710205996; c=relaxed/simple;
+	bh=OoTfBiXWRGI+caRKGfOwBQ7X4jH3qbOdB8+DW++9Ti4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SeE3l8ZdZ325VHxPMaZ6DH4O8NoYuMvdC44lZEMci0BzgHUw1GHpBOBkAtHI8bQVwehczrcpu5QBpa6fA09/KtopIEhNu4suKbKNOXVLGBdPJOqOR2U0QYYIHKmifH8Mpov2uxy4hWPeXFoHlEThixvcqFk9CGgmPkIoEdzMwhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=eB+KKJnG; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5683093ffbbso5377188a12.1
+        for <linux-edac@vger.kernel.org>; Mon, 11 Mar 2024 18:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710192043; x=1710796843; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BBhNEQBVy1fL/SUIc8TvpP+Pi6/a540l6mhfsmCEnoA=;
-        b=D9gGpIuaKliULNOid2NDaeh/rxs8s9kHu1YDiG5TYBrkC3bAoW2CUIioGe5LzmITXn
-         UEtWWw+drSglfkEAq1Z4FN3MIIlyScW5yxvYXhLZB2PMTR17Jz4Buvuce002k3I+YkIA
-         GOyoJISL2jJ4rQw7yTK/ZCbtQWKGEJLkecLqZekN/prt3Zsj74GYmS7Q9KGIvtP8ewKr
-         xFzdAlj9Gc3w3Qe8adxiUTfkkjfXBxoegs/L3NtluYoVlNfGndQwWJidy9nBNhzr3+HA
-         IUJLEgN/cWFLy33yDRaqzr2xY3N8ju3tJYwqwSmHJpw0Dg4mHmrmwaJF0sTksb8w/W18
-         k1qw==
+        d=linux-foundation.org; s=google; t=1710205992; x=1710810792; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ffcfxp86MIw0q9t4PzeGv7I+ngeEtHYjmW7Mt61FKs8=;
+        b=eB+KKJnG1fj7ry/MA9wgLbRjat+rzW9/K6OrU0mzHsVFOm3xuvT8hS8xpk2wLLjMaR
+         xiuYcqOopBh1nUpF/FjEekEiQ2NPfyvVOsVNu+CthLh/gq9Ef364xQTuN2FLWvBtf0Gi
+         F7bJWp2cjCGL5mSa4Qv7JZ0PTsqA58UhUcuI8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710192043; x=1710796843;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BBhNEQBVy1fL/SUIc8TvpP+Pi6/a540l6mhfsmCEnoA=;
-        b=uyRtQ5rLtO3BwPYbQzfQ6hOoQQG1xi3km79ntZS5l/0sJUYw9M2lV0xAG0ROgsJFid
-         hXkEfUPOV3/DHgtZlbhB1W//EX5DMa97aK289zZYg5anBEu/7fZHGh2OUhjDkNRHxSU8
-         HTT1nIlLLRcofYWTcyryx7s4Fg7cl1675IFDgPCyeO8k8TGbGYgUFspzXVf8G2fqCz6v
-         l47td1y4prNvzt+//usvQ6O70ceqb6T8ddMOHYF1WirkFD/1Ic9uDkDr2UXzfE+hIhRP
-         IBiIImevwCollKJdut1apy0OlyGF/UTfWg2GaJJbHmtNF6LnE0ZZKqat6tI5inATvom1
-         7C/w==
-X-Forwarded-Encrypted: i=1; AJvYcCXNZQPRKceiaLGRVDNzxqvo+VUj9wDwQC4KfRitebiCToT+MWPZG/CIxopkzQs5tJdTny0vRkrYwnFtm11icOKVzSZWf652+7Ba5Q/fMUst7KYZfPsiI55lX7Xh9WybJivDHdQbofpmKtnDc9aXYAYYHVZasb9Jl4cMs31SFw0JJlz5+Lc=
-X-Gm-Message-State: AOJu0YzR5ibGQWoONgv92ceKVG0MSXQqJYfUhQrfprmTaWN9zu4+yPoy
-	A9CRRv4cSHe8QlFd9Zs2RzlEspYjj4I7JSN5/cH7aSnJUP86pNAK
-X-Google-Smtp-Source: AGHT+IF0bJjkZx211Ow0o9UR7ZYHFVRcRVsv6ZP9/5/UfJ2pK3pt/4piWTc05I528CJAag+9Qocpiw==
-X-Received: by 2002:a05:6602:3307:b0:7c7:b761:9cea with SMTP id b7-20020a056602330700b007c7b7619ceamr8625565ioz.14.1710192042729;
-        Mon, 11 Mar 2024 14:20:42 -0700 (PDT)
-Received: from debian ([50.205.20.42])
-        by smtp.gmail.com with ESMTPSA id a26-20020a056638005a00b004746fab2afdsm1904555jap.40.2024.03.11.14.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 14:20:42 -0700 (PDT)
-From: fan <nifan.cxl@gmail.com>
-X-Google-Original-From: fan <fan@debian>
-Date: Mon, 11 Mar 2024 14:20:23 -0700
-To: shiju.jose@huawei.com
-Cc: linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org, dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, david@redhat.com,
-	Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
-	rientjes@google.com, jiaqiyan@google.com, tony.luck@intel.com,
-	Jon.Grimm@amd.com, dave.hansen@linux.intel.com, rafael@kernel.org,
-	lenb@kernel.org, naoya.horiguchi@nec.com, james.morse@arm.com,
-	jthoughton@google.com, somasundaram.a@hpe.com,
-	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
-	mike.malvestuto@intel.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com,
-	linuxarm@huawei.com
-Subject: Re: [RFC PATCH v7 03/12] cxl/mbox: Add SET_FEATURE mailbox command
-Message-ID: <Ze91l0jz_DZR9jjx@debian>
-References: <20240223143723.1574-1-shiju.jose@huawei.com>
- <20240223143723.1574-4-shiju.jose@huawei.com>
+        d=1e100.net; s=20230601; t=1710205992; x=1710810792;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ffcfxp86MIw0q9t4PzeGv7I+ngeEtHYjmW7Mt61FKs8=;
+        b=oFRvHBndrT3d0VObVzQ6gd32McEIvXkLEpWlAMxa31YEWAVAqGRsfbRwKJSmm6O9Z+
+         caoVXE3VEgKnAgA0zsdqnn0KB6c+DmT4b3YvN1LaVDkT4P7OyjaMXWJNQ2/kA8mdT9Tw
+         idEFL31j+IQAm50AVK+RDOyoS3z7UmLDjEiAqgZfRQhMmP3x4rCt8xaCRXl+AFZg3kGT
+         L96QofzXuf13URtnNCgOPjdFyLCYtRbDQ27QTu3DRGuDwPK/reNs4wZGsi5W6DYRJ06L
+         aq7lRALKr7GJgoHfMwDvwxaX/yVi5nPudc7K7Z0Ll8lwkuQqxen/roOKy0XV34hT7ZUH
+         pijg==
+X-Forwarded-Encrypted: i=1; AJvYcCXIiU0gIeHNnPdWRxYAK4F+0bU9yexKVsJ8TRKXoW6dIZiEk5e8Udnak2gK0tngXFB2HgbQj5RzsGEgHti+DSzh8NlpPPEOvZ/MdQ==
+X-Gm-Message-State: AOJu0YzqJ1yymbaigWApMWBLnX6BxBnHM/yjb1YJc3vddDuSqNsqyb62
+	eRvnAThrW+dr4djy8Q82R25jTwTef93HmIHIkZu0U4/7IiwADEZIxeZl+JeVu8IB0xPKG8xFSPr
+	eSPj7Lg==
+X-Google-Smtp-Source: AGHT+IGeDCJOSboo6qElSaIkJNyqC2hkXFCeYiQuhLQiUb5llfy95aDYDf7KY2OY+R1dJRvtohZnCg==
+X-Received: by 2002:a05:6402:907:b0:568:3362:cccf with SMTP id g7-20020a056402090700b005683362cccfmr5667756edz.7.1710205992182;
+        Mon, 11 Mar 2024 18:13:12 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id m26-20020aa7c2da000000b005682d4f12b4sm3434951edp.45.2024.03.11.18.13.11
+        for <linux-edac@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Mar 2024 18:13:11 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a45fd0a0980so321131266b.2
+        for <linux-edac@vger.kernel.org>; Mon, 11 Mar 2024 18:13:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXyFO/SWt0T4djFxT5Ihws60g7SPBahjoLUdUvoQgjPqGXDCk4otf3oKcDiO99nuPi9ugbyv5lzd2XOKqjTZco+K+W+uoCyf6mHEQ==
+X-Received: by 2002:a17:907:a801:b0:a45:94bf:18e6 with SMTP id
+ vo1-20020a170907a80100b00a4594bf18e6mr6438267ejc.73.1710205991317; Mon, 11
+ Mar 2024 18:13:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240223143723.1574-4-shiju.jose@huawei.com>
+References: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
+In-Reply-To: <20240311155651.GAZe8pw0urOnUZj1y_@fat_crate.local>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 11 Mar 2024 18:12:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+Message-ID: <CAHk-=whTBKoHrBpMxh7OHQ=pcdy6K2zqqsJOZeCC4xSqRXb5Bg@mail.gmail.com>
+Subject: Re: [GIT PULL] EDAC updates for v6.9
+To: Borislav Petkov <bp@alien8.de>
+Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>, 
+	linux-edac <linux-edac@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Feb 23, 2024 at 10:37:14PM +0800, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Add support for SET_FEATURE mailbox command.
-> 
-> CXL spec 3.1 section 8.2.9.6 describes optional device specific features.
-> CXL devices supports features with changeable attributes.
-> The settings of a feature can be optionally modified using Set Feature
-> command.
-> 
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
->  drivers/cxl/core/mbox.c | 67 +++++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxlmem.h    | 30 ++++++++++++++++++
->  2 files changed, 97 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index c078e62ea194..d1660bd20bdb 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -1366,6 +1366,73 @@ size_t cxl_get_feature(struct cxl_memdev_state *mds,
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_get_feature, CXL);
->  
-> +int cxl_set_feature(struct cxl_memdev_state *mds,
-> +		    const uuid_t feat_uuid, u8 feat_version,
-> +		    void *feat_data, size_t feat_data_size,
-> +		    u8 feat_flag)
-> +{
-> +	struct cxl_memdev_set_feat_pi {
-> +		struct cxl_mbox_set_feat_hdr hdr;
-> +		u8 feat_data[];
-> +	}  __packed;
-> +	size_t data_in_size, data_sent_size = 0;
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	size_t hdr_size;
-> +	int rc = 0;
-> +
-> +	struct cxl_memdev_set_feat_pi *pi __free(kfree) =
-> +					kmalloc(mds->payload_size, GFP_KERNEL);
-> +	pi->hdr.uuid = feat_uuid;
-> +	pi->hdr.version = feat_version;
-> +	feat_flag &= ~CXL_SET_FEAT_FLAG_DATA_TRANSFER_MASK;
-> +	hdr_size = sizeof(pi->hdr);
-> +	/*
-> +	 * Check minimum mbox payload size is available for
-> +	 * the feature data transfer.
-> +	 */
-> +	if (hdr_size + 10 > mds->payload_size)
+On Mon, 11 Mar 2024 at 08:57, Borislav Petkov <bp@alien8.de> wrote:
+>
+> -       return topology_die_id(err->cpu) % amd_get_nodes_per_socket();
+> +       return topology_amd_node_id(err->cpu) % topology_amd_nodes_per_pkg();
 
-Where does this magic number come from? 
+Ho humm. Lookie here:
 
-Fan
+    static inline unsigned int topology_amd_nodes_per_pkg(void)
+    { return 0; };
 
-> +		return -ENOMEM;
-> +
-> +	if ((hdr_size + feat_data_size) <= mds->payload_size) {
-> +		pi->hdr.flags = cpu_to_le32(feat_flag |
-> +				       CXL_SET_FEAT_FLAG_FULL_DATA_TRANSFER);
-> +		data_in_size = feat_data_size;
-> +	} else {
-> +		pi->hdr.flags = cpu_to_le32(feat_flag |
-> +				       CXL_SET_FEAT_FLAG_INITIATE_DATA_TRANSFER);
-> +		data_in_size = mds->payload_size - hdr_size;
-> +	}
-> +
-> +	do {
-> +		pi->hdr.offset = cpu_to_le16(data_sent_size);
-> +		memcpy(pi->feat_data, feat_data + data_sent_size, data_in_size);
-> +		mbox_cmd = (struct cxl_mbox_cmd) {
-> +			.opcode = CXL_MBOX_OP_SET_FEATURE,
-> +			.size_in = hdr_size + data_in_size,
-> +			.payload_in = pi,
-> +		};
-> +		rc = cxl_internal_send_cmd(mds, &mbox_cmd);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		data_sent_size += data_in_size;
-> +		if (data_sent_size >= feat_data_size)
-> +			return 0;
-> +
-> +		if ((feat_data_size - data_sent_size) <= (mds->payload_size - hdr_size)) {
-> +			data_in_size = feat_data_size - data_sent_size;
-> +			pi->hdr.flags = cpu_to_le32(feat_flag |
-> +					       CXL_SET_FEAT_FLAG_FINISH_DATA_TRANSFER);
-> +		} else {
-> +			pi->hdr.flags = cpu_to_le32(feat_flag |
-> +					       CXL_SET_FEAT_FLAG_CONTINUE_DATA_TRANSFER);
-> +		}
-> +	} while (true);
-> +
-> +	return rc;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_set_feature, CXL);
-> +
->  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->  		       struct cxl_region *cxlr)
->  {
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index bcfefff062a6..a8d4104afa53 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -531,6 +531,7 @@ enum cxl_opcode {
->  	CXL_MBOX_OP_GET_LOG		= 0x0401,
->  	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
->  	CXL_MBOX_OP_GET_FEATURE		= 0x0501,
-> +	CXL_MBOX_OP_SET_FEATURE		= 0x0502,
->  	CXL_MBOX_OP_IDENTIFY		= 0x4000,
->  	CXL_MBOX_OP_GET_PARTITION_INFO	= 0x4100,
->  	CXL_MBOX_OP_SET_PARTITION_INFO	= 0x4101,
-> @@ -773,6 +774,31 @@ struct cxl_mbox_get_feat_in {
->  	u8 selection;
->  }  __packed;
->  
-> +/* Set Feature CXL 3.1 Spec 8.2.9.6.3 */
-> +/*
-> + * Set Feature input payload
-> + * CXL rev 3.1 section 8.2.9.6.3 Table 8-101
-> + */
-> +/* Set Feature : Payload in flags */
-> +#define CXL_SET_FEAT_FLAG_DATA_TRANSFER_MASK	GENMASK(2, 0)
-> +enum cxl_set_feat_flag_data_transfer {
-> +	CXL_SET_FEAT_FLAG_FULL_DATA_TRANSFER,
-> +	CXL_SET_FEAT_FLAG_INITIATE_DATA_TRANSFER,
-> +	CXL_SET_FEAT_FLAG_CONTINUE_DATA_TRANSFER,
-> +	CXL_SET_FEAT_FLAG_FINISH_DATA_TRANSFER,
-> +	CXL_SET_FEAT_FLAG_ABORT_DATA_TRANSFER,
-> +	CXL_SET_FEAT_FLAG_DATA_TRANSFER_MAX
-> +};
-> +#define CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET	BIT(3)
-> +
-> +struct cxl_mbox_set_feat_hdr {
-> +	uuid_t uuid;
-> +	__le32 flags;
-> +	__le16 offset;
-> +	u8 version;
-> +	u8 rsvd[9];
-> +}  __packed;
-> +
->  /* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */
->  struct cxl_mbox_poison_in {
->  	__le64 offset;
-> @@ -912,6 +938,10 @@ size_t cxl_get_feature(struct cxl_memdev_state *mds,
->  		       size_t feat_out_size,
->  		       size_t feat_out_min_size,
->  		       enum cxl_get_feat_selection selection);
-> +int cxl_set_feature(struct cxl_memdev_state *mds,
-> +		    const uuid_t feat_uuid, u8 feat_version,
-> +		    void *feat_data, size_t feat_data_size,
-> +		    u8 feat_flag);
->  int cxl_poison_state_init(struct cxl_memdev_state *mds);
->  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->  		       struct cxl_region *cxlr);
-> -- 
-> 2.34.1
-> 
+that's the UP case.
+
+Yeah, I'm assuming nobody tests this for UP, but it's clearly wrong to
+potentially do that modulus by zero.
+
+So I made the merge also change that UP case of
+topology_amd_nodes_per_pkg() to return 1.
+
+Because dammit, not only is a mod-by-zero wrong, a UP system most
+definitely has one node per package, not zero.
+
+               Linus
 
