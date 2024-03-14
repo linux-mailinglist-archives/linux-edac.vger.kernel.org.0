@@ -1,190 +1,184 @@
-Return-Path: <linux-edac+bounces-777-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-778-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A064687C1F9
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 18:16:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 572ED87C2B6
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 19:32:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F62C2832EA
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 17:16:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D45FDB21B3F
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 18:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0003E745C5;
-	Thu, 14 Mar 2024 17:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bLCoITag"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93954757F0;
+	Thu, 14 Mar 2024 18:32:01 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DD7745EF;
-	Thu, 14 Mar 2024 17:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39117350B;
+	Thu, 14 Mar 2024 18:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710436573; cv=none; b=pa5eWWCTUVu23gIu9DLdzyelcGH3Rdm1Spjc+ExPpMzA7qTQbSxpnT4ofO1PC+fKVGud2yCg/OcnzAPTGIxZLgYKdvQai7IXBJDjmsP8u4hjkoATW3L+5MqQtmISZrzIG5JJic7o6/yRIIYStNaGPevFBvJu2HA2R5AOvLScq74=
+	t=1710441121; cv=none; b=EZoUVEHF++UUYYt9fb4/hpjdkwvysB7w0VUIEI9O2BDkfjP0eTCf6ipD2zul41ZM0Vay59ZbvyxbNemQA6K2KZ/JiceRnVHizaFGaAt7qQxyvwHP8orXEaXHYptopGpdU5Qq6kM/b2cyAyj/DouG1jAfxb0+2g+ND+dPzIeYFjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710436573; c=relaxed/simple;
-	bh=L79tdLUwzaaRgRXL97CbprC3UX8xdukYNWJfNJ9rn8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=eBmoVrhdHceeTiln6lyCinqE3bVDfq996CBG3VRinT4YLK99VnL1K/ar3uGeh3607Mr4uFXuNS8PTw4inT/hP6rfpCTCPQrJbTLfwqUY8204avPwyGdVzJURS7mhGENp4R3RFFBpd7SzKVEowT2uoM0UylC9mg0an/i43m3HP3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bLCoITag; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C6BC433F1;
-	Thu, 14 Mar 2024 17:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710436573;
-	bh=L79tdLUwzaaRgRXL97CbprC3UX8xdukYNWJfNJ9rn8Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=bLCoITag/SuEtTrsO/sMEjHd4BnWeVtJvXB6210xjO0cdkxYMA8vA1JIb6pEd2Kfy
-	 Id8hEuP4GShaNC+PpogaxARWBhxMId5O2Cie8lL7/14MzwoABw+v7vAtpZtvsqvwVm
-	 j+7ReyKeR/gEjByLQxpMlRsVYXDEGyGeHFdCK6t+sjpJtjaZP9s/5wAN9lzVmWJr7r
-	 pLa+CQidixlNP3GHezj2k/ubGEQYBhmB8PMTnGZbFPbhqQ4aFXAmuJp6RUqrSv3XnA
-	 050p8/o022AJfkYOdhHhi7dvoS2VTcsuMhDFAH55Xucdvzdz4Rqw4PKJtaUCOfiv+R
-	 zUf5Dv5K5Grxg==
-Date: Thu, 14 Mar 2024 12:16:11 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	intel-wired-lan@lists.osuosl.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-edac@vger.kernel.org, Greg Rose <gvrose8192@gmail.com>,
-	Jeff Kirsher <tarbal@gmail.com>
-Subject: Re: [PATCH 2/4] PCI: Generalize TLP Header Log reading
-Message-ID: <20240314171611.GA958323@bhelgaas>
+	s=arc-20240116; t=1710441121; c=relaxed/simple;
+	bh=mvdnoLfy3ROkxmfR7t2H/wROfPIdheF/nBqPtCWPX4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=caLa/U/pxbHZR3c2cgLYTWNfRiA+6oquCYVT0Zmwd3BR/OrkH/rbhZk1lY5pP3oWRjph2JZwAmOZLHBdGaQYp7AYEQdESRFcyNEAwWBKfS3IFbfttuB+96ugNrUdTjPMYwMOfjTBCQ7G8BRIlMWMFp5hWA2G/VbK2/563kweVw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A243FC43390;
+	Thu, 14 Mar 2024 18:31:55 +0000 (UTC)
+Date: Thu, 14 Mar 2024 14:34:06 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Alison Schofield <alison.schofield@intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+ freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
+ linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
+ iommu@lists.linux.dev, linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, ath10k@lists.infradead.org,
+ linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+ ath12k@lists.infradead.org, brcm80211@lists.linux.dev,
+ brcm80211-dev-list.pdl@broadcom.com, linux-usb@vger.kernel.org,
+ linux-bcachefs@vger.kernel.org, linux-nfs@vger.kernel.org,
+ ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org,
+ linux-xfs@vger.kernel.org, linux-edac@vger.kernel.org,
+ selinux@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
+ linux-hwmon@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-wpan@vger.kernel.org, dev@openvswitch.org,
+ linux-s390@vger.kernel.org, tipc-discussion@lists.sourceforge.net, Julia
+ Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
+ __assign_str()
+Message-ID: <20240314143406.6289a060@gandalf.local.home>
+In-Reply-To: <ZfMslbCmCtyEaEWN@aschofie-mobl2>
+References: <20240223125634.2888c973@gandalf.local.home>
+	<ZfMslbCmCtyEaEWN@aschofie-mobl2>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240206135717.8565-3-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-[+cc Greg, Jeff -- ancient history, I know, sorry!]
+On Thu, 14 Mar 2024 09:57:57 -0700
+Alison Schofield <alison.schofield@intel.com> wrote:
 
-On Tue, Feb 06, 2024 at 03:57:15PM +0200, Ilpo Järvinen wrote:
-> Both AER and DPC RP PIO provide TLP Header Log registers (PCIe r6.1
-> secs 7.8.4 & 7.9.14) to convey error diagnostics but the struct is
-> named after AER as the struct aer_header_log_regs. Also, not all places
-> that handle TLP Header Log use the struct and the struct members are
-> named individually.
+> On Fri, Feb 23, 2024 at 12:56:34PM -0500, Steven Rostedt wrote:
+> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> > 
+> > [
+> >    This is a treewide change. I will likely re-create this patch again in
+> >    the second week of the merge window of v6.9 and submit it then. Hoping
+> >    to keep the conflicts that it will cause to a minimum.
+> > ]
+
+Note, change of plans. I plan on sending this in the next merge window, as
+this merge window I have this patch:
+
+  https://lore.kernel.org/linux-trace-kernel/20240312113002.00031668@gandalf.local.home/
+
+That will warn if the source string of __string() is different than the
+source string of __assign_str(). I want to make sure they are identical
+before just dropping one of them.
+
+
 > 
-> Generalize the struct name and members, and use it consistently where
-> TLP Header Log is being handled so that a pcie_read_tlp_log() helper
-> can be easily added.
+> > diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
+> > index bdf117a33744..07ba4e033347 100644
+> > --- a/drivers/cxl/core/trace.h
+> > +++ b/drivers/cxl/core/trace.h  
 > 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> snip to poison
+> 
+> > @@ -668,8 +668,8 @@ TRACE_EVENT(cxl_poison,
+> >  	    ),
+> >  
+> >  	TP_fast_assign(
+> > -		__assign_str(memdev, dev_name(&cxlmd->dev));
+> > -		__assign_str(host, dev_name(cxlmd->dev.parent));
+> > +		__assign_str(memdev);
+> > +		__assign_str(host);  
+> 
+> I think I get that the above changes work because the TP_STRUCT__entry for
+> these did:
+> 	__string(memdev, dev_name(&cxlmd->dev))
+> 	__string(host, dev_name(cxlmd->dev.parent))
 
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> index bd541527c8c7..5fdf37968b2d 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /* Copyright(c) 1999 - 2018 Intel Corporation. */
->  
-> +#include <linux/aer.h>
->  #include <linux/types.h>
->  #include <linux/module.h>
->  #include <linux/pci.h>
-> @@ -391,22 +392,6 @@ u16 ixgbe_read_pci_cfg_word(struct ixgbe_hw *hw, u32 reg)
->  	return value;
->  }
->  
-> -#ifdef CONFIG_PCI_IOV
-> -static u32 ixgbe_read_pci_cfg_dword(struct ixgbe_hw *hw, u32 reg)
-> -{
-> -	struct ixgbe_adapter *adapter = hw->back;
-> -	u32 value;
-> -
-> -	if (ixgbe_removed(hw->hw_addr))
-> -		return IXGBE_FAILED_READ_CFG_DWORD;
-> -	pci_read_config_dword(adapter->pdev, reg, &value);
-> -	if (value == IXGBE_FAILED_READ_CFG_DWORD &&
-> -	    ixgbe_check_cfg_remove(hw, adapter->pdev))
-> -		return IXGBE_FAILED_READ_CFG_DWORD;
-> -	return value;
-> -}
-> -#endif /* CONFIG_PCI_IOV */
-> -
->  void ixgbe_write_pci_cfg_word(struct ixgbe_hw *hw, u32 reg, u16 value)
->  {
->  	struct ixgbe_adapter *adapter = hw->back;
-> @@ -11332,8 +11317,8 @@ static pci_ers_result_t ixgbe_io_error_detected(struct pci_dev *pdev,
->  #ifdef CONFIG_PCI_IOV
->  	struct ixgbe_hw *hw = &adapter->hw;
->  	struct pci_dev *bdev, *vfdev;
-> -	u32 dw0, dw1, dw2, dw3;
-> -	int vf, pos;
-> +	struct pcie_tlp_log tlp_log;
-> +	int vf, pos, ret;
->  	u16 req_id, pf_func;
->  
->  	if (adapter->hw.mac.type == ixgbe_mac_82598EB ||
-> @@ -11351,14 +11336,13 @@ static pci_ers_result_t ixgbe_io_error_detected(struct pci_dev *pdev,
->  	if (!pos)
->  		goto skip_bad_vf_detection;
->  
-> -	dw0 = ixgbe_read_pci_cfg_dword(hw, pos + PCI_ERR_HEADER_LOG);
-> -	dw1 = ixgbe_read_pci_cfg_dword(hw, pos + PCI_ERR_HEADER_LOG + 4);
-> -	dw2 = ixgbe_read_pci_cfg_dword(hw, pos + PCI_ERR_HEADER_LOG + 8);
-> -	dw3 = ixgbe_read_pci_cfg_dword(hw, pos + PCI_ERR_HEADER_LOG + 12);
-> -	if (ixgbe_removed(hw->hw_addr))
-> +	ret = pcie_read_tlp_log(pdev, pos + PCI_ERR_HEADER_LOG, &tlp_log);
-> +	if (ret < 0) {
-> +		ixgbe_check_cfg_remove(hw, pdev);
->  		goto skip_bad_vf_detection;
-> +	}
->  
-> -	req_id = dw1 >> 16;
-> +	req_id = tlp_log.dw[1] >> 16;
->  	/* On the 82599 if bit 7 of the requestor ID is set then it's a VF */
->  	if (!(req_id & 0x0080))
->  		goto skip_bad_vf_detection;
-> @@ -11369,9 +11353,8 @@ static pci_ers_result_t ixgbe_io_error_detected(struct pci_dev *pdev,
->  
->  		vf = FIELD_GET(0x7F, req_id);
->  		e_dev_err("VF %d has caused a PCIe error\n", vf);
-> -		e_dev_err("TLP: dw0: %8.8x\tdw1: %8.8x\tdw2: "
-> -				"%8.8x\tdw3: %8.8x\n",
-> -		dw0, dw1, dw2, dw3);
-> +		e_dev_err("TLP: dw0: %8.8x\tdw1: %8.8x\tdw2: %8.8x\tdw3: %8.8x\n",
-> +			  tlp_log.dw[0], tlp_log.dw[1], tlp_log.dw[2], tlp_log.dw[3]);
->  		switch (adapter->hw.mac.type) {
->  		case ixgbe_mac_82599EB:
->  			device_id = IXGBE_82599_VF_DEVICE_ID;
+That's the point. They have to be identical or you will likely bug.
 
-The rest of this patch is headed for v6.10, but I dropped this ixgbe
-change for now.
+The __string(name, src) is used to find the string length of src which
+allocates the necessary length on the ring buffer. The __assign_str(name, src)
+will copy src into the ring buffer.
 
-These TLP Log registers are generic, not device-specific, and if
-there's something lacking in the PCI core that leads to ixgbe reading
-and dumping them itself, I'd rather improve the PCI core so all
-drivers will benefit without having to add code like this.
+Similar to:
 
-83c61fa97a7d ("ixgbe: Add protection from VF invalid target DMA") [1]
-added the ixgbe TLP Log dumping way back in v3.2 (2012).  It does do
-some device-specific VF checking and so on, but even back then, it
-looks like the PCI core would have dumped the log itself [2], so I
-don't know why we needed the extra dumping in ixgbe.
+	len = strlen(src);
+	buf = malloc(len);
+	strcpy(buf, str);
 
-So what I'd really like is to remove the TLP Log reading and printing
-from ixgbe completely, but keep the VF checking.
+Where __string() is strlen() and __assign_str() is strcpy(). It doesn't
+make sense to use two different strings, and if you did, it would likely be
+a bug.
 
-Bjorn
+But the magic behind __string() does much more than just get the length of
+the string, and it could easily save the pointer to the string (along with
+its length) and have it copy that in the __assign_str() call, making the
+src parameter of __assign_str() useless.
 
-[1] https://git.kernel.org/linus/83c61fa97a7d
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pcie/aer/aerdrv_errprint.c?id=83c61fa97a7d#n181
+> 
+> >  		__entry->serial = cxlmd->cxlds->serial;
+> >  		__entry->overflow_ts = cxl_poison_overflow(flags, overflow_ts);
+> >  		__entry->dpa = cxl_poison_record_dpa(record);
+> > @@ -678,12 +678,12 @@ TRACE_EVENT(cxl_poison,
+> >  		__entry->trace_type = trace_type;
+> >  		__entry->flags = flags;
+> >  		if (region) {
+> > -			__assign_str(region, dev_name(&region->dev));
+> > +			__assign_str(region);
+> >  			memcpy(__entry->uuid, &region->params.uuid, 16);
+> >  			__entry->hpa = cxl_trace_hpa(region, cxlmd,
+> >  						     __entry->dpa);
+> >  		} else {
+> > -			__assign_str(region, "");
+> > +			__assign_str(region);
+> >  			memset(__entry->uuid, 0, 16);
+> >  			__entry->hpa = ULLONG_MAX;  
+> 
+> For the above 2, there was no helper in TP_STRUCT__entry. A recently
+> posted patch is fixing that up to be __string(region, NULL) See [1],
+> with the actual assignment still happening in TP_fast_assign.
+
+__string(region, NULL) doesn't make sense. It's like:
+
+	len = strlen(NULL);
+	buf = malloc(len);
+	strcpy(buf, NULL);
+
+??
+
+I'll reply to that email.
+
+-- Steve
+
+> 
+> Does that assign logic need to move to the TP_STRUCT__entry definition
+> when you merge these changes? I'm not clear how much logic is able to be
+> included, ie like 'C' style code in the TP_STRUCT__entry.
+> 
+> [1]
+> https://lore.kernel.org/linux-cxl/20240314044301.2108650-1-alison.schofield@intel.com/
 
