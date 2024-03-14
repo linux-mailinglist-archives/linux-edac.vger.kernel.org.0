@@ -1,78 +1,83 @@
-Return-Path: <linux-edac+bounces-770-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-771-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF70187B9A0
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 09:50:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 168E287C15A
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 17:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65B621F21EC3
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 08:50:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C01602831BA
+	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 16:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A89A66CDC7;
-	Thu, 14 Mar 2024 08:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2807319E;
+	Thu, 14 Mar 2024 16:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="nwYqSfSr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="hQu8uwjA"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E38B6CDA9;
-	Thu, 14 Mar 2024 08:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710406076; cv=none; b=fbWvrknfV4bcb47TUFl80mG462/FxmHUCp+CKARwSHSXTFSK4kfxo3BvZXdTmzvWlHx1mVrpITiYx6PbQHRym56klgNXSs1Hk1arOAv1P8h/8y0KwrmLuRnfE5E5RJr15+CrhoePd28KxUQJQG8COUE4hCMhywcs0CwCpghqe10=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710406076; c=relaxed/simple;
-	bh=wAcO1IpntOHEdG0AKWa5VqlvhorvUSXFJzyhOp2iimw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=H9ApcPkDqO4ZVfA10KAzLfdhbj9GNnHzG6/gLv0kabaZ8iESzpiSMliUuGw334pYijDJgqimE48CY6l9Ta7xFzNuv8H7MmxE3j3Ng/Bkymo9Jm2JO5Hdr6F+Bg6C0UYnkgR96gej0d8ukbC+aUOxp3XPBKzmq25f5TvmOjiPkGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=nwYqSfSr; arc=none smtp.client-ip=207.54.90.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1710406075; x=1741942075;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wAcO1IpntOHEdG0AKWa5VqlvhorvUSXFJzyhOp2iimw=;
-  b=nwYqSfSr7L9MBySRKr9DmSH3sCZpMCVa8MP0w88d5MXZ/6YE4slCyBrQ
-   v+lRNDHkIFTOTZvSxiNunNP4F4CJxh6CxcIiJnWBkfuhoh4JZXQtp5czC
-   rTl4EKn8PRUSeGx+lDA6i05oIeXYvkXEHBklag226SxCj0fosSDrJe7wY
-   8zFAAaOCfabEWwH3T0uqs5suxOZNUrKTNdvCWCTQ9k7iXmx3cSrgZldNr
-   lwThibUPbqjXCrAgb7ZUouXaNMDYyIBAt6RaXIyjAjU+0NyHSkJMkp2Ry
-   NTP1atEmqqUzJf3irsi6xxP7FhzwO5PNlgm29OWj0LLfMyxcdLWTjpznA
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11012"; a="152123706"
-X-IronPort-AV: E=Sophos;i="6.07,124,1708354800"; 
-   d="scan'208";a="152123706"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2024 17:46:41 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-	by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id E09BC2326A;
-	Thu, 14 Mar 2024 17:46:38 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 1DB0DF7D7;
-	Thu, 14 Mar 2024 17:46:38 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 9928E20098E08;
-	Thu, 14 Mar 2024 17:46:37 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.167.226.45])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id C007B1A006B;
-	Thu, 14 Mar 2024 16:46:36 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: linux-kernel@vger.kernel.org
-Cc: Li Zhijian <lizhijian@fujitsu.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-edac@vger.kernel.org
-Subject: [PATCH] EDAC/mc_sysfs: Convert sprintf/snprintf to sysfs_emit
-Date: Thu, 14 Mar 2024 16:46:28 +0800
-Message-Id: <20240314084628.1322006-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50ED970CCB;
+	Thu, 14 Mar 2024 16:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710434165; cv=fail; b=K5O0fRev7Obxg+IfbbkmUSBROpwR2ocwyWv3z/pVcjQzDKZcAyCGnou0DP7FjPdSHCvyjTlSxI3k00DBq9CeFW9tqDhCw/Ygp6Zif2lBWkFIJ7AL86hyr9GCOI78yrKbDslS6PmfKtffVDmoAgntof9NjwBj6FFXSQD03tv2xFY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710434165; c=relaxed/simple;
+	bh=NvkeTuX+OS2ap2Tvipeu3pk5TdIr83kpkO2ZRWiosRg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bWqeNiOscWw5NihMBvZthvf2jG6RZN56xaX/dI02nug6t5jLyWx/MP0rc9j21Vw3lACwqTHTz24TOp7hEZzm4sJAqwMJkEVMUi8ddKHOc0OPEI4W2I+Lv+wi7WR3iSDHtziDLWR3/i02bFDS5MEZMJ2CTTrdBgXRYGlK/L9RPVI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=hQu8uwjA; arc=fail smtp.client-ip=40.107.236.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FgDCdOy1u13yCyDN60zgJaCC3+nPyu0tB+wFrCJibxw35rd4XcHsG+pCgN128h2PS3y7wMritgetku7kpYsu1WOLU7vgligY5/+CGp3SnvDeMLZ1s3UiuQ0aBv8h7IyaEdzWtN4KmdNb7QrLzFO/HfIZYh9ifjgGe5sUXhSx1WjQFHu8HsHpxxURz96TuQjpb0zy8K5klHTCuYW+XNhfaYWswHVIZYjpt/cSwDazlnVsWuILUgOKZFVvCaZauumKmuBb0png8AIAKzOk5tX3h6hkxCVgH+mBciOQNwp+Hzf8Nq3pkLi3ViT7XUGtpLdvamyuGtoNpvO8WKmfVQMltg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F8qKkfcsjoyEHNBF6XoQkBFVCo6OKU8BpIdAlkv0KUY=;
+ b=hKTKH9mhAfcrwoPEY5QrqAj9RcTwTaNwM4dkJsKkuJwmBkymQscfivCrQxXIjLqQkLtKIjkLkD177ahm2cngb4ZQeDUEKTToqtLZFVMbjYLUu5T2TfDX8ljWDVVyPizoR5Fjb6DDFpWcUyAWARHfMZXm6tj3NikWraBnluArU2mcg19iu1urAqZZHML5a7DpCij9rMiwtCIv+USeiIbTvpHKVjJj7tHnLYh9MzkBUjC5Em7I99+QbcGmejJ/owAXy5noASsXm9FDkMdgjJIdMXpShax1q68NGoTWMXu8QTSZim87Wsft+TeCKSMZfM7od9PfpGyNFtc2r6F+zB2JmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F8qKkfcsjoyEHNBF6XoQkBFVCo6OKU8BpIdAlkv0KUY=;
+ b=hQu8uwjAPD2b0+2hjmwrRpZG+PXidRhmo/LkMHtPkqPvjq+Y2GF/ydKKu0YKEzSPLKHhy6KJw3fi0Nm2Ux03k6Y44Rh8VtZrYXyCXj+0U6TDd2eGmM4HgDYx2Q0GMFYUXClHWFEawxvEhPSL3i2NXxbu/ofAhnEC4L/sCqjwKYQ=
+Received: from CH0PR03CA0214.namprd03.prod.outlook.com (2603:10b6:610:e7::9)
+ by SJ2PR12MB9239.namprd12.prod.outlook.com (2603:10b6:a03:55e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.19; Thu, 14 Mar
+ 2024 16:36:00 +0000
+Received: from CH3PEPF0000000B.namprd04.prod.outlook.com
+ (2603:10b6:610:e7:cafe::93) by CH0PR03CA0214.outlook.office365.com
+ (2603:10b6:610:e7::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.19 via Frontend
+ Transport; Thu, 14 Mar 2024 16:36:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH3PEPF0000000B.mail.protection.outlook.com (10.167.244.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7386.12 via Frontend Transport; Thu, 14 Mar 2024 16:36:00 +0000
+Received: from jallen-jump-host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 14 Mar
+ 2024 11:35:59 -0500
+From: John Allen <john.allen@amd.com>
+To: <bp@alien8.de>, <linux-edac@vger.kernel.org>, <tony.luck@intel.com>
+CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
+	<yazen.ghannam@amd.com>, <muralidhara.mk@amd.com>, John Allen
+	<john.allen@amd.com>
+Subject: [PATCH 0/4] RAS: ATL: DF 4.5 NP2 Denormalization 
+Date: Thu, 14 Mar 2024 16:35:23 +0000
+Message-ID: <20240314163527.63321-1-john.allen@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -80,262 +85,53 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28250.005
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28250.005
-X-TMASE-Result: 10--7.234800-10.000000
-X-TMASE-MatchedRID: z2BzWfwZiWs4ibokZ3+Q0CoiRKlBVkYIBXngI6jFvpfDqO6/8R69QE8U
-	roFNOGp7a6aAZTOwtJmRloiW1Kgftd2ZdKe8BPbSfc0UG4EkZrGIkRP7M27eX2O0yVK/5LmcQiM
-	ingSlKoKMx5HzfQifbPE41045MrHXFDCN/1eC4ASdVNZaI2n6/8E5XPQnBzGXq8KsbROd9VSArq
-	oIZrVn15fzUkBpc072FUpxEqvctVLs7aQkqkpFyrnHu4BcYSmtojQrbrPpzzrHwEnu5JwrbSyOx
-	jnKDQBj1ZfxqqVrxASdqC2fLtk9xB8TzIzimOwPC24oEZ6SpSkj80Za3RRg8L9X8I9jdNOBfSW6
-	ADVA5GG+DOGK/b5ZKEbh6KkT6LGlzruA0Aqz72g=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PEPF0000000B:EE_|SJ2PR12MB9239:EE_
+X-MS-Office365-Filtering-Correlation-Id: 751b6a88-c641-4754-bc78-08dc4444d508
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	a15+NtaXcNKRXSsi0u9pVNBdTvUlQ6pYm9N3IB/Jj3B9YrYIxBeqJBnnlxc7G5oSR0b4HwYYKSOZQUTnVDwTXztebp+WRa8ekA0jfzv0MpFsQXYJuwPuQys7PyJE4tmNq9Oh6l8tHp3BlejrWaZzF1m5aJmD1Vtmt8sz1g/zw28Zmno2M8Hc210CWWcW0uUrRM4fjvaBRsmogCRb0vE74u9vrlL9mZktngqJpZaZiHEvleJaREgkc3jO2/ETZFdOTr5/pZMyKW0T/Ku6x4Mi/VLVTG7xuGxvzfLtAHl6xFVTt6IjGyAP/20cIonFleEi7HkAr3lf+3UOE3kzYElFavJQ9N8jIwIEFeSaMRC2znoKL3/87YfCGMyvOx6qry4LP1+po2tHpXICmD6b8HGXXM1bevWn3Yw1D5lykzl2mr8xzMtufDFqIswyi8RdaqqM5SpDIcawMB0dwX32PI/9MT7X9CDFGJkqUAAl9pIcVdvLk/OrH2hCgn7SexXibxBXkCuObcvLpweJHII3CPD3c12/n5bDGfR4GTVbwkRrV1oHHYFUcqjHM7FO5ixhS0t6HtXAjsXoQSqxwwAQucXittJ60SJGLvmVgoTTsRQ/JsheTAZC1Oq3QcG80B9QAC34m57NkbWr5ttdx6Z0mfPVauSVcBDrTxPmJAIITaBvzytUjdEcXrVjjnqaNh4ZuoNV0H8jLpYsWG6BJNaZa19z2TwkS032mEv276wLw/Ib0UzzdjtiRsVW5hU7pkPL7hE1
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(376005)(82310400014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2024 16:36:00.1727
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 751b6a88-c641-4754-bc78-08dc4444d508
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH3PEPF0000000B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9239
 
-Per filesystems/sysfs.rst, show() should only use sysfs_emit()
-or sysfs_emit_at() when formatting the value to be returned to user space.
+Implement non-power-of-two denormalization for Data Fabric 4.5 in the
+AMD address translation library.
 
-coccinelle complains that there are still a couple of functions that use
-snprintf(). Convert them to sysfs_emit().
+Tree: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git
+Base commit: bd17b7c34fadef645becde1245b9394f69f31702 (origin/edac-amd-atl)  
 
-sprintf() will be converted as weel if they have.
+John Allen (4):
+  RAS: ATL: Read DRAM hole base early
+  RAS: ATL: Expand helpers for adding and removing base and hole
+  RAS: ATL: Add map_bits_valid to header
+  RAS: ATL: Implement DF 4.5 NP2 denormalization
 
-Generally, this patch is generated by
-make coccicheck M=<path/to/file> MODE=patch \
-COCCI=scripts/coccinelle/api/device_attr_show.cocci
+ drivers/ras/amd/atl/core.c        |  48 +--
+ drivers/ras/amd/atl/dehash.c      |   2 +-
+ drivers/ras/amd/atl/denormalize.c | 530 ++++++++++++++++++++++++++++++
+ drivers/ras/amd/atl/internal.h    |  48 +++
+ drivers/ras/amd/atl/map.c         |  37 +++
+ drivers/ras/amd/atl/system.c      |  21 ++
+ 6 files changed, 662 insertions(+), 24 deletions(-)
 
-No functional change intended
-
-CC: Borislav Petkov <bp@alien8.de>
-CC: Tony Luck <tony.luck@intel.com>
-CC: James Morse <james.morse@arm.com>
-CC: Mauro Carvalho Chehab <mchehab@kernel.org>
-CC: Robert Richter <rric@kernel.org>
-CC: linux-edac@vger.kernel.org
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
-This is a part of the work "Fix coccicheck device_attr_show warnings"[1]
-Split them per subsystem so that the maintainer can review it easily
-[1] https://lore.kernel.org/lkml/20240116041129.3937800-1-lizhijian@fujitsu.com/
----
- drivers/edac/edac_mc_sysfs.c | 48 ++++++++++++++++++------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 5116873c3330..5820b6c4da18 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -146,7 +146,7 @@ static ssize_t csrow_ue_count_show(struct device *dev,
- {
- 	struct csrow_info *csrow = to_csrow(dev);
- 
--	return sprintf(data, "%u\n", csrow->ue_count);
-+	return sysfs_emit(data, "%u\n", csrow->ue_count);
- }
- 
- static ssize_t csrow_ce_count_show(struct device *dev,
-@@ -154,7 +154,7 @@ static ssize_t csrow_ce_count_show(struct device *dev,
- {
- 	struct csrow_info *csrow = to_csrow(dev);
- 
--	return sprintf(data, "%u\n", csrow->ce_count);
-+	return sysfs_emit(data, "%u\n", csrow->ce_count);
- }
- 
- static ssize_t csrow_size_show(struct device *dev,
-@@ -166,7 +166,7 @@ static ssize_t csrow_size_show(struct device *dev,
- 
- 	for (i = 0; i < csrow->nr_channels; i++)
- 		nr_pages += csrow->channels[i]->dimm->nr_pages;
--	return sprintf(data, "%u\n", PAGES_TO_MiB(nr_pages));
-+	return sysfs_emit(data, "%u\n", PAGES_TO_MiB(nr_pages));
- }
- 
- static ssize_t csrow_mem_type_show(struct device *dev,
-@@ -174,7 +174,7 @@ static ssize_t csrow_mem_type_show(struct device *dev,
- {
- 	struct csrow_info *csrow = to_csrow(dev);
- 
--	return sprintf(data, "%s\n", edac_mem_types[csrow->channels[0]->dimm->mtype]);
-+	return sysfs_emit(data, "%s\n", edac_mem_types[csrow->channels[0]->dimm->mtype]);
- }
- 
- static ssize_t csrow_dev_type_show(struct device *dev,
-@@ -182,7 +182,7 @@ static ssize_t csrow_dev_type_show(struct device *dev,
- {
- 	struct csrow_info *csrow = to_csrow(dev);
- 
--	return sprintf(data, "%s\n", dev_types[csrow->channels[0]->dimm->dtype]);
-+	return sysfs_emit(data, "%s\n", dev_types[csrow->channels[0]->dimm->dtype]);
- }
- 
- static ssize_t csrow_edac_mode_show(struct device *dev,
-@@ -191,7 +191,7 @@ static ssize_t csrow_edac_mode_show(struct device *dev,
- {
- 	struct csrow_info *csrow = to_csrow(dev);
- 
--	return sprintf(data, "%s\n", edac_caps[csrow->channels[0]->dimm->edac_mode]);
-+	return sysfs_emit(data, "%s\n", edac_caps[csrow->channels[0]->dimm->edac_mode]);
- }
- 
- /* show/store functions for DIMM Label attributes */
-@@ -207,8 +207,8 @@ static ssize_t channel_dimm_label_show(struct device *dev,
- 	if (!rank->dimm->label[0])
- 		return 0;
- 
--	return snprintf(data, sizeof(rank->dimm->label) + 1, "%s\n",
--			rank->dimm->label);
-+	return sysfs_emit(data, "%s\n",
-+			  rank->dimm->label);
- }
- 
- static ssize_t channel_dimm_label_store(struct device *dev,
-@@ -243,7 +243,7 @@ static ssize_t channel_ce_count_show(struct device *dev,
- 	unsigned int chan = to_channel(mattr);
- 	struct rank_info *rank = csrow->channels[chan];
- 
--	return sprintf(data, "%u\n", rank->ce_count);
-+	return sysfs_emit(data, "%u\n", rank->ce_count);
- }
- 
- /* cwrow<id>/attribute files */
-@@ -515,7 +515,7 @@ static ssize_t dimmdev_label_show(struct device *dev,
- 	if (!dimm->label[0])
- 		return 0;
- 
--	return snprintf(data, sizeof(dimm->label) + 1, "%s\n", dimm->label);
-+	return sysfs_emit(data, "%s\n", dimm->label);
- }
- 
- static ssize_t dimmdev_label_store(struct device *dev,
-@@ -546,7 +546,7 @@ static ssize_t dimmdev_size_show(struct device *dev,
- {
- 	struct dimm_info *dimm = to_dimm(dev);
- 
--	return sprintf(data, "%u\n", PAGES_TO_MiB(dimm->nr_pages));
-+	return sysfs_emit(data, "%u\n", PAGES_TO_MiB(dimm->nr_pages));
- }
- 
- static ssize_t dimmdev_mem_type_show(struct device *dev,
-@@ -554,7 +554,7 @@ static ssize_t dimmdev_mem_type_show(struct device *dev,
- {
- 	struct dimm_info *dimm = to_dimm(dev);
- 
--	return sprintf(data, "%s\n", edac_mem_types[dimm->mtype]);
-+	return sysfs_emit(data, "%s\n", edac_mem_types[dimm->mtype]);
- }
- 
- static ssize_t dimmdev_dev_type_show(struct device *dev,
-@@ -562,7 +562,7 @@ static ssize_t dimmdev_dev_type_show(struct device *dev,
- {
- 	struct dimm_info *dimm = to_dimm(dev);
- 
--	return sprintf(data, "%s\n", dev_types[dimm->dtype]);
-+	return sysfs_emit(data, "%s\n", dev_types[dimm->dtype]);
- }
- 
- static ssize_t dimmdev_edac_mode_show(struct device *dev,
-@@ -571,7 +571,7 @@ static ssize_t dimmdev_edac_mode_show(struct device *dev,
- {
- 	struct dimm_info *dimm = to_dimm(dev);
- 
--	return sprintf(data, "%s\n", edac_caps[dimm->edac_mode]);
-+	return sysfs_emit(data, "%s\n", edac_caps[dimm->edac_mode]);
- }
- 
- static ssize_t dimmdev_ce_count_show(struct device *dev,
-@@ -580,7 +580,7 @@ static ssize_t dimmdev_ce_count_show(struct device *dev,
- {
- 	struct dimm_info *dimm = to_dimm(dev);
- 
--	return sprintf(data, "%u\n", dimm->ce_count);
-+	return sysfs_emit(data, "%u\n", dimm->ce_count);
- }
- 
- static ssize_t dimmdev_ue_count_show(struct device *dev,
-@@ -589,7 +589,7 @@ static ssize_t dimmdev_ue_count_show(struct device *dev,
- {
- 	struct dimm_info *dimm = to_dimm(dev);
- 
--	return sprintf(data, "%u\n", dimm->ue_count);
-+	return sysfs_emit(data, "%u\n", dimm->ue_count);
- }
- 
- /* dimm/rank attribute files */
-@@ -758,7 +758,7 @@ static ssize_t mci_sdram_scrub_rate_show(struct device *dev,
- 		return bandwidth;
- 	}
- 
--	return sprintf(data, "%d\n", bandwidth);
-+	return sysfs_emit(data, "%d\n", bandwidth);
- }
- 
- /* default attribute files for the MCI object */
-@@ -768,7 +768,7 @@ static ssize_t mci_ue_count_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 
--	return sprintf(data, "%u\n", mci->ue_mc);
-+	return sysfs_emit(data, "%u\n", mci->ue_mc);
- }
- 
- static ssize_t mci_ce_count_show(struct device *dev,
-@@ -777,7 +777,7 @@ static ssize_t mci_ce_count_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 
--	return sprintf(data, "%u\n", mci->ce_mc);
-+	return sysfs_emit(data, "%u\n", mci->ce_mc);
- }
- 
- static ssize_t mci_ce_noinfo_show(struct device *dev,
-@@ -786,7 +786,7 @@ static ssize_t mci_ce_noinfo_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 
--	return sprintf(data, "%u\n", mci->ce_noinfo_count);
-+	return sysfs_emit(data, "%u\n", mci->ce_noinfo_count);
- }
- 
- static ssize_t mci_ue_noinfo_show(struct device *dev,
-@@ -795,7 +795,7 @@ static ssize_t mci_ue_noinfo_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 
--	return sprintf(data, "%u\n", mci->ue_noinfo_count);
-+	return sysfs_emit(data, "%u\n", mci->ue_noinfo_count);
- }
- 
- static ssize_t mci_seconds_show(struct device *dev,
-@@ -804,7 +804,7 @@ static ssize_t mci_seconds_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 
--	return sprintf(data, "%ld\n", (jiffies - mci->start_time) / HZ);
-+	return sysfs_emit(data, "%ld\n", (jiffies - mci->start_time) / HZ);
- }
- 
- static ssize_t mci_ctl_name_show(struct device *dev,
-@@ -813,7 +813,7 @@ static ssize_t mci_ctl_name_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 
--	return sprintf(data, "%s\n", mci->ctl_name);
-+	return sysfs_emit(data, "%s\n", mci->ctl_name);
- }
- 
- static ssize_t mci_size_mb_show(struct device *dev,
-@@ -833,7 +833,7 @@ static ssize_t mci_size_mb_show(struct device *dev,
- 		}
- 	}
- 
--	return sprintf(data, "%u\n", PAGES_TO_MiB(total_pages));
-+	return sysfs_emit(data, "%u\n", PAGES_TO_MiB(total_pages));
- }
- 
- static ssize_t mci_max_location_show(struct device *dev,
 -- 
-2.29.2
+2.34.1
 
 
