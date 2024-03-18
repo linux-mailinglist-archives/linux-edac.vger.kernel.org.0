@@ -1,184 +1,192 @@
-Return-Path: <linux-edac+bounces-778-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-779-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 572ED87C2B6
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 19:32:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32AD487EB97
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Mar 2024 16:06:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D45FDB21B3F
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Mar 2024 18:32:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0BA7282519
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Mar 2024 15:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93954757F0;
-	Thu, 14 Mar 2024 18:32:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A84B4EB3D;
+	Mon, 18 Mar 2024 15:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="0IsV1wGX"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39117350B;
-	Thu, 14 Mar 2024 18:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710441121; cv=none; b=EZoUVEHF++UUYYt9fb4/hpjdkwvysB7w0VUIEI9O2BDkfjP0eTCf6ipD2zul41ZM0Vay59ZbvyxbNemQA6K2KZ/JiceRnVHizaFGaAt7qQxyvwHP8orXEaXHYptopGpdU5Qq6kM/b2cyAyj/DouG1jAfxb0+2g+ND+dPzIeYFjc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710441121; c=relaxed/simple;
-	bh=mvdnoLfy3ROkxmfR7t2H/wROfPIdheF/nBqPtCWPX4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=caLa/U/pxbHZR3c2cgLYTWNfRiA+6oquCYVT0Zmwd3BR/OrkH/rbhZk1lY5pP3oWRjph2JZwAmOZLHBdGaQYp7AYEQdESRFcyNEAwWBKfS3IFbfttuB+96ugNrUdTjPMYwMOfjTBCQ7G8BRIlMWMFp5hWA2G/VbK2/563kweVw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A243FC43390;
-	Thu, 14 Mar 2024 18:31:55 +0000 (UTC)
-Date: Thu, 14 Mar 2024 14:34:06 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
- freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
- linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
- iommu@lists.linux.dev, linux-tegra@vger.kernel.org, netdev@vger.kernel.org,
- linux-hyperv@vger.kernel.org, ath10k@lists.infradead.org,
- linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
- ath12k@lists.infradead.org, brcm80211@lists.linux.dev,
- brcm80211-dev-list.pdl@broadcom.com, linux-usb@vger.kernel.org,
- linux-bcachefs@vger.kernel.org, linux-nfs@vger.kernel.org,
- ocfs2-devel@lists.linux.dev, linux-cifs@vger.kernel.org,
- linux-xfs@vger.kernel.org, linux-edac@vger.kernel.org,
- selinux@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
- linux-hwmon@vger.kernel.org, io-uring@vger.kernel.org,
- linux-sound@vger.kernel.org, bpf@vger.kernel.org,
- linux-wpan@vger.kernel.org, dev@openvswitch.org,
- linux-s390@vger.kernel.org, tipc-discussion@lists.sourceforge.net, Julia
- Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [FYI][PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-Message-ID: <20240314143406.6289a060@gandalf.local.home>
-In-Reply-To: <ZfMslbCmCtyEaEWN@aschofie-mobl2>
-References: <20240223125634.2888c973@gandalf.local.home>
-	<ZfMslbCmCtyEaEWN@aschofie-mobl2>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E95A4C619;
+	Mon, 18 Mar 2024 15:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710774371; cv=fail; b=eu4Asyhxu1Ha6V2lYBm285y7pqtjNkDfx+LIuQ9ur5YwM5x03CcbkKh1MisbFPQPx9gMYS+s+PrD6ta5VYUA9I1P2xU7Orn3G6cKHJnLRfwik8GKbONjy9FiYHLswQ4QKHS6DRAjNabp++7+wcA5kYDCzcfHuknKCS3luuZyz3U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710774371; c=relaxed/simple;
+	bh=MUR9pqfzkveP99lePUGGHssKp2mhQfEux4CfHSLZoiI=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Lcsw74ZKMp7ehVMia/RpiCkTASkWP3MfsuHO0NL7TTJwcgYzMHhTlDIpz7U7E+wRIL52U5RxwNIAHbSvUIn6G9rqx9ZwuBlsSscB4H158L0+ZDVaDMWhRGZUSIJb9PF0uEp13I6OIhMj25QtVXKCKLDtStHx1tcygflXHEekyAg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=0IsV1wGX; arc=fail smtp.client-ip=40.107.236.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=buEgcTpNertotQ+Q7iJNSqkipxhy7YlUGAy8aRbfCUyEN0CSuxXxxbBNsOMDoS+iwuFUhP9eANQZ5snMDKEr+YhbQ/5GmjspTQ4m1taobQxPQ1eyATzekih4lmLxJ1WQKCRiO28HFBER88cGT/oCW6QTKIvQxZCwckPKi8XiEfRW6sHMHJBBuMtIocm3HZVXSa2zHW2rcOMXbQxKIrNInxf0Hedv7ipvgYiUrtEIIjQ+206sER4+nVJqMsZK9AnKNeeABs+ft3hP+8NmEx4Kjgl9XXGIRH423f+C77WTMIhCQWBSInOAPwRVHpEmcEdDwScvWyse2qRDJYzdrp3Pfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1Or2Y9VZeSdjt/X8zQA5aZS9oYIbow8MmwD4UHwx/u4=;
+ b=UKm+0ynn3IO3t/5Lwc8kWe4tPqlpmYHZVQ81sZDHyxShoCKP0s5ctfWMjTDHTVHiHpbAPa0rDC3ruYJZAFcnuXe/BA5u3oTt1iLGOWNKOC4vf2Np89eapuco0i/I+g5jnIy6ZfqnDifFidTOY5ojzN8g5juyYZYewDnbZUsdfkURz2hJxet+I5vVOT3wmD8xPcPkWpCIFDmwOKLB9L4UQSjgJprMk/k0Er1IXY4QYECSrDTFV521O7+3PXh7fRWg9vmjat0m0fGqKp8P8IRQWBsfyjkHt2EkXoGT5/dPV0TybclWRVSYyUa8AcrUjOF8waS8grspiXmeoftVOTRc+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Or2Y9VZeSdjt/X8zQA5aZS9oYIbow8MmwD4UHwx/u4=;
+ b=0IsV1wGXQO8RC/Ikub01lBPlSG2WIaLn37OuxcLd3dFZ0HZRbkaeC6SBKZIFAdDsm1J0VluNoFhiTahNjjuHe6kDtqMBNwStWQK9waOOuKBBqFadddU4TlTv60t9JQQrbNkf7A47T/vD+eVjN6t1/8k6nUvnjZQrOxc2SjgvsWs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3109.namprd12.prod.outlook.com (2603:10b6:a03:db::17)
+ by CY5PR12MB6370.namprd12.prod.outlook.com (2603:10b6:930:20::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.26; Mon, 18 Mar
+ 2024 15:06:06 +0000
+Received: from BYAPR12MB3109.namprd12.prod.outlook.com
+ ([fe80::3278:b63e:55dc:d1a4]) by BYAPR12MB3109.namprd12.prod.outlook.com
+ ([fe80::3278:b63e:55dc:d1a4%4]) with mapi id 15.20.7386.022; Mon, 18 Mar 2024
+ 15:06:06 +0000
+Message-ID: <10919f69-4008-4156-88e4-3c72e3775562@amd.com>
+Date: Mon, 18 Mar 2024 11:06:02 -0400
+User-Agent: Mozilla Thunderbird
+Cc: yazen.ghannam@amd.com, linux-kernel@vger.kernel.org,
+ avadhut.naik@amd.com, muralidhara.mk@amd.com
+Subject: Re: [PATCH 1/4] RAS: ATL: Read DRAM hole base early
+To: John Allen <john.allen@amd.com>, bp@alien8.de,
+ linux-edac@vger.kernel.org, tony.luck@intel.com
+References: <20240314163527.63321-1-john.allen@amd.com>
+ <20240314163527.63321-2-john.allen@amd.com>
+Content-Language: en-US
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20240314163527.63321-2-john.allen@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR18CA0022.namprd18.prod.outlook.com
+ (2603:10b6:208:23c::27) To BYAPR12MB3109.namprd12.prod.outlook.com
+ (2603:10b6:a03:db::17)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3109:EE_|CY5PR12MB6370:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0bcf1705-441a-495a-a00a-08dc475cef83
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	TJjIuPbeNIIy/gVJd8g1k7UClSzEZccZSGGWTjeWKrun/xVe7xBH6QBKS24XhwouP/MqKLlUhzUtXAQIcXAn6HLfPlMZZ6Wqkid04Kt/+BKhUh3ADZYELbVswjNW3kucHRF/GYE9tI47bb+VA4XMuOhgLbKEX+6v3h/xMj91S7QX5YjE5hvzzhMOAOmjrlG40r3MIc4xwMgA84DRIf7HNy5PbbEQAkQuqWVhFNBh+8E1E4PDu0TEoqS3iZQtJ28sJ8q42kEXuqvtFlsh9RRH/80MGLE/Myz68meB9x4ThqbHtyIfZNTipXksw//q8bs+qiT46FqcUEtyrQMsE5L+UW+SiUcx2geO34ENIy71wLwtc1FT3gvDSdcTEPan1u/+fh9s2+VTqroejWFDiFavYnkcdqBxzJWUbd9UeEnpXBprDdQRpu4AzfjZkwmoeVdcbf2vFKxIiGtEWcIUwRfngR5I4X1CkIv705+ZuPCR6ugeqmSX1wWDV6hQF98NpwSpxb54FcuFZJGUmsnDPzeSrOtpkhRvwWPtcrz2bircinjGvrjCxtRKf9tAkMyJvxHrVVJ1ZnSPRkVm9KcFaN4REwjXsZg6gM2w+U93j6sIH0UoAnAR0t2VLrf7cgIMelIDcwBlvzAbF9YTGMdYMn8BGITRHmOjS0LDR1JMHDBMX5o=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UCtVMUdXcnNtcXNDNFFnUTBjTjlGaURuU1NxbkxMK2QzK2htaXFXMmlpR0pQ?=
+ =?utf-8?B?MGxQWDQvVGtRRTVPTE1yNDk5SmFBSHpzMnBJNGp2ZmRaR1NKZnJmOTVFVGJs?=
+ =?utf-8?B?Um0yM2t5eDBjUzUrbXZITDhjSURkaTdZbCs1Vk42NjdaZlA3WXNRak1xNWRQ?=
+ =?utf-8?B?UzVnYkZjbDFBS1BKRGh0eWRmbWZhalFFYk4rc1J4UFFSRWI4cEFpQU8zalNr?=
+ =?utf-8?B?dEh3Sy9jZGh5QzBPallVdTE5QXFGWlh0MW0wRm54OUdTNCtCVlFBVW9GQnlU?=
+ =?utf-8?B?YjNaSGlpWnRpZGdOMWtJL001U2dGRVZsdTFSUmlobGNOTC9RQVRhUlFFaTFX?=
+ =?utf-8?B?VXUwbDBvelZrWklUTzMxSzB6dWN3SEZpanZQd2dOemxoT0daWS9KS3doNjZo?=
+ =?utf-8?B?RUMrZWwrUzZpT2RUMVZxUWMyN0srUVo0U09FMG9JYXp0TU4xRk5Qbm90R1Ri?=
+ =?utf-8?B?NFhhSE44Vk1veFdGYTJWQUFQRDdwYWhIL3ljZURhR2g4blo3U243eEZ2YU0z?=
+ =?utf-8?B?bFVNOHgvZnVLSmFpWCtrNnpIRnhLY2Q4cVM2SHZBcnM0aEFqcFVmbU9tdm15?=
+ =?utf-8?B?YmkrNGR0NmhzMFNJZmRET2grb2Y5YWN1MnUrYWl2QXpNWWwyYnFFaW5OaE5m?=
+ =?utf-8?B?SjZyRWJhSW53MWV4ZkJXRzN0aEpRdWtLWlEwc1RSL0JRUEtXVE9qUWJXeHNE?=
+ =?utf-8?B?RWJEalNwb1lkY3kvNWZ3RzI5bXlualZPR3YrU3B5TTlROTFQYURYeFh2OVZX?=
+ =?utf-8?B?YnprY3dweWw4WHh3SEw4eFVBeG5EZUVDbHRobHFMeU81dVpqVUhiTVU1dFcw?=
+ =?utf-8?B?eVNjOU5WSEp6ZElsZ1JyeFEvdnRXZWdxdzB6VUw4a3phQ2xxZDU5c3dWcTk5?=
+ =?utf-8?B?elY2dGNNbGl4RUgwSjM5c1pPWURwN0FkRjBmaGhDS3BJTlFzQ0o5YmQvVUla?=
+ =?utf-8?B?VjFNdGFIekhoUE4wWmZSWW5uR29YSzRHRnV3VTlLVWdLS1RpbjFWMVdDZjNS?=
+ =?utf-8?B?djJXVWVKMlBjeGl6UmY4cGtpRU0vaGRSK3VTQUw3eWR4bEh1VE5YeUhuR29Z?=
+ =?utf-8?B?Y1pCMGs2Z0tiSDRSUVZPMGJIYWtRV0tQYTdwWWxLVVZsNmVoUUhBVnBDNEpX?=
+ =?utf-8?B?TllnZmV3c296UC9lL2RjdnZvdmdKcGNIK2oySENGVGZCYTBiaExhWkJzNzg4?=
+ =?utf-8?B?RG9nU3k0NzFDSVpReUJ0clYrMHFjTWR4eC9kc1dTZ1Zrb1pGWllZb3J2ZXJN?=
+ =?utf-8?B?N014ZjBKc3BZT1IwZC8wWDFXMHljdlJsNVRvd3A5Wk1NUytESVpjSUV4UU5q?=
+ =?utf-8?B?cld2dDBEdDk4QjB2M0lwUHVqZVFYdlgrRTJGTllGeW83YjJpaUNsMUNpQnh1?=
+ =?utf-8?B?bSt3eTJzMFpHWjgwOVY2WUZ0dHFDVXg4VTJuVkZnaG1LYWc2cmRQUU1wMWF0?=
+ =?utf-8?B?UnkwNzZXVXl4YjAybjlTMVFhemRVS3FIaFZSSzlHdGNNa3E2UGN0a004TDY1?=
+ =?utf-8?B?UDR4Wk1XYWxHaXIrcFBTVnRYRVhEaHdGcXdIcFBkaGFKUDRra3RCZVBxZWQ1?=
+ =?utf-8?B?YldkWU5SN1RiWlAvVi9zNEdPZ2NtS0ZYakttOUNNdFdDQ2xic1d4cWNCbk82?=
+ =?utf-8?B?Qmp4ZUtQUGdpb3N2ai9HYllneHNoSGoycFdIRlFCRHhseHkwa0FQVjkwdDNk?=
+ =?utf-8?B?YnVaSkg2bzF5TCtmbjVJZXRWVXIwR1J1b0VER1NEdFZLWFVBTU1FV05DSGs4?=
+ =?utf-8?B?Tnp1aWtLRnI1bXQzaTFEbXdqY0NiNlJCdytSZ3hXTjZNK3ZLZ1UxQklpenZ0?=
+ =?utf-8?B?bjVZTXQrUlJleW9OMy9Cc0lrRlh6WWkyOTBVd05XMTVtSXhwK0p3a3A1VWRM?=
+ =?utf-8?B?ajZ3L3JnWVVaYkdPTzB0b3l2NXd0WWdic016dlVUdWs0SlRuU04welFoWEVP?=
+ =?utf-8?B?U09ZZjMrekJVSzNnelVUY1NEZHFZVnJSZjMya243Tlp0dDd6RStXeXE0VUxw?=
+ =?utf-8?B?VWNJZlBaMk15WUxQVXZsWjliUXhrd1lOL1RlY3A3cHIyeUZSRDc3MnFGS3Vh?=
+ =?utf-8?B?TFZBSmZHbDVXS2poSzdON3FpS05kOE8rRCtHdmpWR2VwZ28wVVU2SzVoWUg5?=
+ =?utf-8?Q?Z0VaEaPfLNW5ztUNKq+vKVQ4y?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bcf1705-441a-495a-a00a-08dc475cef83
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3109.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2024 15:06:06.3497
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lDGdKWqpJN61j0sJWUS4aFoydZi+Pyit3iyZiIS45BeFe7zRTylxlvEL/Lbikf9qYHPisv703MpbDxLumfOADQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6370
 
-On Thu, 14 Mar 2024 09:57:57 -0700
-Alison Schofield <alison.schofield@intel.com> wrote:
+On 3/14/24 12:35, John Allen wrote:
 
-> On Fri, Feb 23, 2024 at 12:56:34PM -0500, Steven Rostedt wrote:
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > 
-> > [
-> >    This is a treewide change. I will likely re-create this patch again in
-> >    the second week of the merge window of v6.9 and submit it then. Hoping
-> >    to keep the conflicts that it will cause to a minimum.
-> > ]
+Please use "RAS/AMD/ATL:" for the $SUBJECT prefix.
 
-Note, change of plans. I plan on sending this in the next merge window, as
-this merge window I have this patch:
+> Read DRAM hole base when constructing the address map as the value will
+> not change during translation.
 
-  https://lore.kernel.org/linux-trace-kernel/20240312113002.00031668@gandalf.local.home/
-
-That will warn if the source string of __string() is different than the
-source string of __assign_str(). I want to make sure they are identical
-before just dropping one of them.
-
-
-> 
-> > diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-> > index bdf117a33744..07ba4e033347 100644
-> > --- a/drivers/cxl/core/trace.h
-> > +++ b/drivers/cxl/core/trace.h  
-> 
-> snip to poison
-> 
-> > @@ -668,8 +668,8 @@ TRACE_EVENT(cxl_poison,
-> >  	    ),
-> >  
-> >  	TP_fast_assign(
-> > -		__assign_str(memdev, dev_name(&cxlmd->dev));
-> > -		__assign_str(host, dev_name(cxlmd->dev.parent));
-> > +		__assign_str(memdev);
-> > +		__assign_str(host);  
-> 
-> I think I get that the above changes work because the TP_STRUCT__entry for
-> these did:
-> 	__string(memdev, dev_name(&cxlmd->dev))
-> 	__string(host, dev_name(cxlmd->dev.parent))
-
-That's the point. They have to be identical or you will likely bug.
-
-The __string(name, src) is used to find the string length of src which
-allocates the necessary length on the ring buffer. The __assign_str(name, src)
-will copy src into the ring buffer.
-
-Similar to:
-
-	len = strlen(src);
-	buf = malloc(len);
-	strcpy(buf, str);
-
-Where __string() is strlen() and __assign_str() is strcpy(). It doesn't
-make sense to use two different strings, and if you did, it would likely be
-a bug.
-
-But the magic behind __string() does much more than just get the length of
-the string, and it could easily save the pointer to the string (along with
-its length) and have it copy that in the __assign_str() call, making the
-src parameter of __assign_str() useless.
-
-> 
-> >  		__entry->serial = cxlmd->cxlds->serial;
-> >  		__entry->overflow_ts = cxl_poison_overflow(flags, overflow_ts);
-> >  		__entry->dpa = cxl_poison_record_dpa(record);
-> > @@ -678,12 +678,12 @@ TRACE_EVENT(cxl_poison,
-> >  		__entry->trace_type = trace_type;
-> >  		__entry->flags = flags;
-> >  		if (region) {
-> > -			__assign_str(region, dev_name(&region->dev));
-> > +			__assign_str(region);
-> >  			memcpy(__entry->uuid, &region->params.uuid, 16);
-> >  			__entry->hpa = cxl_trace_hpa(region, cxlmd,
-> >  						     __entry->dpa);
-> >  		} else {
-> > -			__assign_str(region, "");
-> > +			__assign_str(region);
-> >  			memset(__entry->uuid, 0, 16);
-> >  			__entry->hpa = ULLONG_MAX;  
-> 
-> For the above 2, there was no helper in TP_STRUCT__entry. A recently
-> posted patch is fixing that up to be __string(region, NULL) See [1],
-> with the actual assignment still happening in TP_fast_assign.
-
-__string(region, NULL) doesn't make sense. It's like:
-
-	len = strlen(NULL);
-	buf = malloc(len);
-	strcpy(buf, NULL);
-
-??
-
-I'll reply to that email.
-
--- Steve
+More specifically, the value will not change during run time.
 
 > 
-> Does that assign logic need to move to the TP_STRUCT__entry definition
-> when you merge these changes? I'm not clear how much logic is able to be
-> included, ie like 'C' style code in the TP_STRUCT__entry.
+> Signed-off-by: John Allen <john.allen@amd.com>
+> ---
+>   drivers/ras/amd/atl/core.c     | 15 ++-------------
+>   drivers/ras/amd/atl/internal.h |  2 ++
+>   drivers/ras/amd/atl/system.c   | 21 +++++++++++++++++++++
+>   3 files changed, 25 insertions(+), 13 deletions(-)
 > 
-> [1]
-> https://lore.kernel.org/linux-cxl/20240314044301.2108650-1-alison.schofield@intel.com/
+> diff --git a/drivers/ras/amd/atl/core.c b/drivers/ras/amd/atl/core.c
+> index 6dc4e06305f7..c1710d233adb 100644
+> --- a/drivers/ras/amd/atl/core.c
+> +++ b/drivers/ras/amd/atl/core.c
+> @@ -51,22 +51,11 @@ static bool legacy_hole_en(struct addr_ctx *ctx)
+>   
+>   static int add_legacy_hole(struct addr_ctx *ctx)
+>   {
+> -	u32 dram_hole_base;
+> -	u8 func = 0;
+> -
+>   	if (!legacy_hole_en(ctx))
+>   		return 0;
+>   
+> -	if (df_cfg.rev >= DF4)
+> -		func = 7;
+> -
+> -	if (df_indirect_read_broadcast(ctx->node_id, func, 0x104, &dram_hole_base))
+> -		return -EINVAL;
+> -
+> -	dram_hole_base &= DF_DRAM_HOLE_BASE_MASK;
+> -
+> -	if (ctx->ret_addr >= dram_hole_base)
+> -		ctx->ret_addr += (BIT_ULL(32) - dram_hole_base);
+> +	if (ctx->addr >= df_cfg.dram_hole_base)
+> +		ctx->addr += (BIT_ULL(32) - df_cfg.dram_hole_base);
+
+There is a compilation error here. Please make sure to build each patch
+individually.
+
+Thanks,
+Yazen
 
