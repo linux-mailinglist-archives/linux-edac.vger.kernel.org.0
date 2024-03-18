@@ -1,79 +1,78 @@
-Return-Path: <linux-edac+bounces-780-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-781-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6322A87EC2A
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Mar 2024 16:29:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C68687EC73
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Mar 2024 16:47:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82A451C21021
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Mar 2024 15:29:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C37781F21EA3
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Mar 2024 15:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F404F1F6;
-	Mon, 18 Mar 2024 15:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D9652F6D;
+	Mon, 18 Mar 2024 15:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="HGwVUmhQ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="t7TgZ7wI"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2014F887;
-	Mon, 18 Mar 2024 15:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A2452F6C;
+	Mon, 18 Mar 2024 15:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.83
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710775737; cv=fail; b=GOVC8nG8QYUNHZBvsOPW/n1HP9OhjOKU8SoDNDaxUv4UaUtKafJhI+X6r+h06496UrlUdNPx+w5kARgLP6Q4VV6/D0vQSUgoHRfYaiOs/YNuiVh9YESnS2TjCwKsASbZnFJhU+MYPO50fUq3VrkxyPOXM9pGmMlJlIo5mdpPZRs=
+	t=1710776807; cv=fail; b=biaPXV9Nwk7msdeqJDaLz7NMhRIwUoCUTUahtWyMM9qyn2KzedHWshSrJqCz5UrM7fk/AtMO76Vl01vSXmax1Y/dIjGn+0eMIPAWOCoBm0WAZHg0G72ZLVJUXY3bsx3gIQlzd2PuNUyqsf+XOOG+pGuOlSl7SqqjzRBkn8v4/Us=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710775737; c=relaxed/simple;
-	bh=c3Dv0PHjGKdLI9uj2aw2lADBk00cChZpI9pTHwz09eA=;
+	s=arc-20240116; t=1710776807; c=relaxed/simple;
+	bh=HaGb1peEIkH6r+bW2+Ik8GkBwj+BRJnwNiB2fB4W2vY=;
 	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=FUEa0xfEgOImMDe8Nh7OfSE/HZFNsNWXsHBrohH+UlBpjX9lYY303FFsG4m4shBLLGcIx72MsQcCXaIXt5BJ3AOiLlVMVT0kceCMETAeW1yybjtAO2+SHGSUQ/d2Xw1ZsZXkQcV34QjetalORTFKBfVMsE6PDuN5K1HRnmkWT4g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=HGwVUmhQ; arc=fail smtp.client-ip=40.107.220.47
+	 Content-Type:MIME-Version; b=b0S90mQTadI4L53V7f/3MsWZ1RIk70VGsu7jxmcFQ/+WjGKEryCWLyiY1UZHKhVXV6ABkrnC1zk8+8NytQQrWJw6Hxt9hoBN+AzvSFe8SELZaIqF8SE6qXXq14H9A2DsqTyReOj/DDw+OLimGrp5+khJs74PUeHFV/AZqzAmd18=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=t7TgZ7wI; arc=fail smtp.client-ip=40.107.223.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=evLfcCTCiMbgz37vOYpwrunmyOyhfRTumyFJve8e51sxOD2+FDJHWZee1jpxI6Vp3beR2H0nqoDAvm8DJ7wR1r15Az8tLbiRHOGPmN5CSKwt8shlkP9FgYTjMr9zIU1yA2tKw4R9KZOviOUnEtLCSWfoZBB0rkv11cd3TE1j9UoD/h6CE7DiDBUfDAaCG+mnShzDFSnL++RXR6kRLZdGxrG16E3wQrkiwpSmr5WcO7EYy10ztc6d/883ruaNI748JEsimQD4nk0G3wRyEW5g2hZURt+oTc/ngBXdvu2ZlquEbD6BWPXTzV6AFjvxPQDgFI3NrnHB5yIJBlUdi/GfwQ==
+ b=nWr3s45HQHL3KT/ALWC8HCLVgqp494nRBfSaMsZ6J5VHUNYPt3GA2WaoKXZu6PuQZL49oqXf2O+h8BQm068PSkPrX3gW9Mh+IZQV2Qsaly9PhpACmQWf4EyoOELs8KbPT7eFPDMl3/5Nxim3oPfrnBBqUqKRceWKD7XQCUVTq8DTBjOpMdYWIv0gHv7rh9UhrAfoH4WtRzLe1S9W+0gLOz9im7M10/sI907pXKwLGvEPKF0Ytlj/hT8ME4TcSxa1FzSIeIIsgRmNCjowK8mItZfoJpe77awXWIaz0lrpohvQH0Dy9cRvsWJv8wR+D4Vnbm+Swmn67Z5qHm7/o6Y+Ug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j0QqKq0vIzXNUNb+jSr/4dM4kk3bl2ndXdn5BpmBSBQ=;
- b=dbNq7rBm4uXzHPkgUo68WumCgwy9jzAVeiLYeX4SSjsrVy9QnozgwBseZgxa/OLnhjaVAwv2Od3++ZyvUZy0KlxW5rrA5YCCiAQiOjnH/fHdI+h1RAaEhbqkNQPMJMRudOGglJEh+4TYZptw468Sm358ftziyXop1MSeuw0Z1Qu14CzZxW2HNBFqW8rQuVdxjaWx3NJEQ3YtXFIXlOzwkkk/fAnN1o0kUqlhLHKItKUQ+1zFBGTzkCqEkNuT9JN3N27p19XLflOD8BdOb2JXfpDOuehrvyb/9nJNpplXdZh5mcQA5Jop5EZIGbsdRpLatqhPfFMTeh4wkYfjWZSeBg==
+ bh=AHCVui+8oaQfFycyg+C8Tnu4AqxHD2npmo0hgpKikAI=;
+ b=BzI6+DGlD8whWcIR8XA1uGIGePIgj1ABsiutaSsuO5da22n8PGCApiFIE/8hgZsHUJeTFAjT/8kkNGXREBtSRQfDJt8zN9V0XnnLneuS8iFe9aeTYgu4X28JU6LEVeTmoInDhjSaU+PAnw+H770dns1tv2a+idZVbCskHk9e5Wd1Gh8pmeDZmVfn9mOu0drITcoqte6CpbQEPOjmER2dnHpOrK6WweknV5bh72Vj2XtEGDubeew3XwNGs1ZD2aLuMjJBVZSXlmcEL9Ksc41R6aB9rXA4tFr9VCoFbCjnrWWI2gkDBLhHYCT6O21lwcQLYMgMV0GmIKLYjh2S8GA+Lw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j0QqKq0vIzXNUNb+jSr/4dM4kk3bl2ndXdn5BpmBSBQ=;
- b=HGwVUmhQS7tCTt5VQMcB3vhjjTjlwJsgMcjeqUyY4hB2qUYYdzXMa8IHizjx4xS5KWSu1Vb6NbzJXTVV3dahcHNHvR0XZWq1lXrl88fKvmxZlWcD/gbWBsN/LmeNLfYzzCs4IgN2vqj0nsJCXTkjooXcal34u9vv6PjqSHka6/Y=
+ bh=AHCVui+8oaQfFycyg+C8Tnu4AqxHD2npmo0hgpKikAI=;
+ b=t7TgZ7wIhSkkSExeDlxkrDn3vaA4SahgopgUHurjizTZF1a/YZtvg+eaowNhwA2paVBcYg59RlMSfYNgYeVGxLgaOtjBMPwJQ+YfAQWPnlIDXq5EJJIL3E51m24r7FkjUeKqvrcVAP/2RtwbuOXNE/NIjL9xEvy56AOrxAttW+k=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from BYAPR12MB3109.namprd12.prod.outlook.com (2603:10b6:a03:db::17)
- by DS7PR12MB5959.namprd12.prod.outlook.com (2603:10b6:8:7e::21) with
+ by IA1PR12MB6578.namprd12.prod.outlook.com (2603:10b6:208:3a2::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.27; Mon, 18 Mar
- 2024 15:28:53 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.26; Mon, 18 Mar
+ 2024 15:46:42 +0000
 Received: from BYAPR12MB3109.namprd12.prod.outlook.com
  ([fe80::3278:b63e:55dc:d1a4]) by BYAPR12MB3109.namprd12.prod.outlook.com
  ([fe80::3278:b63e:55dc:d1a4%4]) with mapi id 15.20.7386.022; Mon, 18 Mar 2024
- 15:28:52 +0000
-Message-ID: <ff9e4658-18c4-4a36-962a-373c15c337a2@amd.com>
-Date: Mon, 18 Mar 2024 11:28:48 -0400
+ 15:46:42 +0000
+Message-ID: <893141c6-41f8-415a-a1a3-d3e4267ec333@amd.com>
+Date: Mon, 18 Mar 2024 11:46:39 -0400
 User-Agent: Mozilla Thunderbird
 Cc: yazen.ghannam@amd.com, linux-kernel@vger.kernel.org,
  avadhut.naik@amd.com, muralidhara.mk@amd.com
-Subject: Re: [PATCH 2/4] RAS: ATL: Expand helpers for adding and removing base
- and hole
+Subject: Re: [PATCH 3/4] RAS: ATL: Add map_bits_valid to header
 Content-Language: en-US
 To: John Allen <john.allen@amd.com>, bp@alien8.de,
  linux-edac@vger.kernel.org, tony.luck@intel.com
 References: <20240314163527.63321-1-john.allen@amd.com>
- <20240314163527.63321-3-john.allen@amd.com>
+ <20240314163527.63321-4-john.allen@amd.com>
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20240314163527.63321-3-john.allen@amd.com>
+In-Reply-To: <20240314163527.63321-4-john.allen@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0796.namprd03.prod.outlook.com
- (2603:10b6:408:13f::21) To BYAPR12MB3109.namprd12.prod.outlook.com
+X-ClientProxiedBy: BN8PR03CA0002.namprd03.prod.outlook.com
+ (2603:10b6:408:94::15) To BYAPR12MB3109.namprd12.prod.outlook.com
  (2603:10b6:a03:db::17)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -82,180 +81,111 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3109:EE_|DS7PR12MB5959:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0b33055-6579-4e31-c30a-08dc47601df8
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3109:EE_|IA1PR12MB6578:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ecf0c62-8448-4851-cc06-08dc47629bbe
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	SFMMi/Ho65amgaej7eP01XXBYsHP2Npv9hdNlGgYO4l0BAKhNuw6rK5guFNOZuNsPsWLXArGoMRNy72y0ieu2/g61T4OuATPnrPZZycafBgKaAn+M/ue3O0Z7/ZFDKjAtMU9Z8+v7Bq3ZU9frG/AK/HtP3P7kNr5Egn8ZXWFibKIt8BmkLCC0cdmCawL7mptC3Z4UqcUT62KGr93TjdZylo42XBuyzpj7Zaq+86mU8MI+SX4Uiie/n8A8Bf+Hg45IfSd1IuVfe8ZJYC+CS5OiLx6xZ7TTFpnL+JQeEmUkm3UqFugx0GLzNbe8ODQ01djXQcgS5Wj2L30FfbItUbcc66MmbZ7nT/KTCRbVssF2ApONzpG5wFeIEeXUv94IXJpfsh4QHcykKHsq9TTUktHqtRUxlW6f3lQDg537zDPsgftcjtukeYw2E+gOcuPPU6CPBorUByGiOjOVCUGe2WKyX9Lb0I8tYckLDDxptjOuaRw+dhmgX5gvnnAifrVNpM/5xNBz6+P6/sHE/41vNUHCHcXjR9G2Li0Fq2qgQ6Vi/TjcrbsicaraCmrNVf5uF8m9tXKe44MsFdxAGZMqsx1sRpr82wSdqPtnEmSfhNnO1pTr9hB0NEwnyhGnr/ft91iurBIrWscWBAByH+oy9bQq1fBeE3bmcl3STDb6csh2KA=
+	8/1GVxLiJN2HUTT/u3vHtVwp/9ZCqH4KS7tDv3wFQSo04KUsDDqrEdmdifWbzmhZIHfPwlEgNThO064c8TSf0n68MUeIV8HZdqzq8tVx77YgDTF2hLsTl/iSBhPPEbaGU5//CClPX7zwpJM8eR6rsN+EM7VbHwrEtqoPdjHNlFItFyVxC5rkGkiwgxI7sQ+s46pMXNduZ/sxs6fhebp0+Jmpqzqm+bABb0HKm3Cpp2qIA+BWXgBmtnjTVHRZ071JBhGg9bH/6HrAvKxIWvPDy/0ptOBBVFFnKWesZ4iOxzPWbgLgwdBq7mZyngDbJ9jEqiuTbXAQOKlNYDn7NUIp4EuXl6jRTdm3mpewCmiEpzTqmdr4oZUXnqML/G4EUFmSPlQqaRDRN4lVi/sb2LmUCVsdH1s0mU/xP7cggg237+wXBqwvvx3nqU8iPNP5XpRHJz59k/M5cACU384gRfiguEsUEbOIoOA+3SbTHePtf7K4XVywF280JE0dAW6lRsoTa75TDPwUwaZlDb7fRCnWUrCwdo+sWR9/qflX13DjH+kxM842mgw//odWb9nFQkFQJM22/PKx2xFs7Ye8iEM6Tx6lOBMfmkXW7AEkInzmw7fNpG274kUBPIWDdY12D7c3275Yk+MFaKMYyc71v2jZXeWRMAedSg7vmuY0E36B1E8=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VWpJMThrWVFuVU5taFByclFtcDFrVTlNQnAzRFNucmVHV205bFJ4WGhUZTNG?=
- =?utf-8?B?RURRRi80eDErZVBreEd4YlV5SERCcDA2eEhodVAxTHhSMXRaOXYzMDVKWWJT?=
- =?utf-8?B?TjZKVmdPTkFTVjdVNFk4K3M5dUJCUWcwTEtuYWU3N21rVTBrclZuVFF4dENL?=
- =?utf-8?B?a2xTaEtWK3dWaTIxMEdIalNxU3dnakRUdGthcTlzcXk5MklzVld4ejJQblJK?=
- =?utf-8?B?Tys2R2pWTHBmRkp3WlF6MkZYODIwNFVaT0tROCs0VTFMZFh2bFNJT2J1c0Jt?=
- =?utf-8?B?UkVhRW4waWZhWXcybjJyNmoxZjJ0Rk1KZXFDQkUyNUw5SysxWUNHNnh5aEZM?=
- =?utf-8?B?YklYK2Q1MUVvUDdRNEk5bUlIdE4rcGNRbXd0TTNRUU5WOUtqcmZYQVBtS2lo?=
- =?utf-8?B?QWtKbzkraEJUTTNNQUdIOU95YUNvV2crTUZBc1pOSWMrQ0wyeUYzcG5zRUx0?=
- =?utf-8?B?UGlaWStySitpWFcwTjlTMVExTWlZdGpSdVgwZEZkcURGMzZramxtNVA5MEM3?=
- =?utf-8?B?VFowMm5IL0F0cXBtSnFpNEJ3Q00wZlhteXRLMEFDdEVOVTlKcFdYbjRHcE1s?=
- =?utf-8?B?STZidzRmbWtZa3dZblZOTmhuWTJhV3p1K2VlUWVXZlJpSlFPclFKdUcyWlIw?=
- =?utf-8?B?MlduVHpvcUlmUnV5eThNOFRubEpJWVY0TW1tRExlaHZtNlcwazNTQ1VndU14?=
- =?utf-8?B?YkE5dTJmYlZLSzJKeFVNUEpBdEdIazdSV09WTXFjby9talZCU0EyenNZNkdU?=
- =?utf-8?B?Y2F5TXE4c3IvTERyRTN0b0JxalhQL2NIZDlWNzhJNHVQZjlEenQxSGpMaU9D?=
- =?utf-8?B?ajRQLzV4Ynk0c0J0bncrMm1HeXlONnpTNkUwaStoUmVGOFo2aUtoWEJnNUNL?=
- =?utf-8?B?ZW1haUpWRWZBNDJwL1dXaEx0RGxpbkFRckUvWCtMWnRVTHZvSXBSY0l5WEFT?=
- =?utf-8?B?WWpid21LL3I0RFRYMnd6dzc0THBEZGsrdk5WUmJyREdNeHVTc1ZvSnhjYkMz?=
- =?utf-8?B?a04yRy9yd3dSTGo3MkFGUWVJdjc4OGs3bGtKbUJpVkp2NVQ1dE95M0JFLzNi?=
- =?utf-8?B?blhqVFU5YVZQSVRrTEgzTENXSlpMR3I1YmlsZXZXdTB1UXY5aVoxMlMzL1J6?=
- =?utf-8?B?RWRvVjAvYUV4WEttTG83cldjajJLbUVZY3pPSWh4OS95ZjRpak1KUlJyTjY0?=
- =?utf-8?B?UVg0N2xJU1VIVU5LR2hlNnZnUnd0T25VK1dRUitWaEZ2RC9GMDArWVhPYzdi?=
- =?utf-8?B?dE1iTWcvaXNPcEFLelVGNkphWWI3WTRHbzcrZUtuYUdpYkhoMTR4RFo1cXlV?=
- =?utf-8?B?Vmg0YnRidTJFNTlEZEhQYm1wbEEvVnVmM2Q3ejhhampNZUExTjVkS2VKRldW?=
- =?utf-8?B?aUhCOHFHRmhva0kzV1pGbUpnWCtRQXhTWHNLK2FRa1ZFNkROVFJsUGdJczkw?=
- =?utf-8?B?RzFDZlQvVCtvUFdqL3dhUUNQUHBHQ0NEenQ5YmFGNWxROXVjYUVLRFprN3ha?=
- =?utf-8?B?Lzd5Ylkvdnh1T1lGWmhjQXlQN0FFSEdGNmxYb1NBTmUyeCtJVlAxVzZoaUY1?=
- =?utf-8?B?OFZhREEwVXIyeG14Rllod05uK2xIWDhVNHFVaFRqSFh1YkNheHNDbzlYVS9v?=
- =?utf-8?B?MGhSS3RmZHJkU3NMK1E1d3BVc0FUbkIxcHdnUmJWNU9mRitqNDZhSVVHYlli?=
- =?utf-8?B?VGY3RHFoT3RJQ1k3RDc3bnV4Uk5MelBOaVRVR2RTKy9iTGVHem1tNUQvNWwy?=
- =?utf-8?B?RnpNVWxra3pySUZvVEZ4bnluY096RTd0L0pxb29kTldHTHBxNXh1ZG4rWndV?=
- =?utf-8?B?cC84b0ZUMG8rWEdVRXcxemMxbkdqVEtmRGtqOFhlSGhZMlRCcXMrTVBMSHRI?=
- =?utf-8?B?VFpYWkpobUpHL1FHNkJJSEpsNHljYXNBWGVoRVlDU0J4OC9GTllpZjlrbWZz?=
- =?utf-8?B?N3RTMVJ3bmtVRmJSR25ib0IzVW55VDB4YnIzVmptRzRDSHBOR3E0V1FWcjIw?=
- =?utf-8?B?SGNQbkdZZ2JNaW80b083a29LN3kyaVBBMXZzcXhCeTVXblU4WHY1ZjhZRjFJ?=
- =?utf-8?B?eGExK1gzVnNVd3NUR3BSeEkvUE9NcGtMUUxMa2EvR3VKcWU2ajRTYW0rWjhN?=
- =?utf-8?Q?2v/TgGLVuQ7mdTRl3XpspibRt?=
+	=?utf-8?B?NXhmTExWWE5UZmpXd3dxemdMTWo1d3oxWG9LWlZlTXZhc1Y4TjJrK3lhQVpC?=
+ =?utf-8?B?R0JjZDNPRDMxWE1qTG5SR3NJMHpwdno1cmU3SUw3UGYzMWdmeGJ3VlhqbzMr?=
+ =?utf-8?B?c3JMdnJnNlR6eFR0UEN0MkU1VFJJSWFyZFNHL0pRZGdRT1VjL0VRT0Q1UjhV?=
+ =?utf-8?B?bms2cU50SEJ5UVgyYkJEd3NFWmN4Q3dZNHJydTVkQVkrSDlzb2ZtT0JUWkJ2?=
+ =?utf-8?B?cFpsM2FMTU5hSGVSemR6dHdlWm10TmVtQ092UlpCVFdaVnlnRmZIVzVTeWhk?=
+ =?utf-8?B?eUlsRDlFbENMVTRqdmRSVGdXd2djUVRVOVM3VHcyZEl1MnJ6cmNpblkxK3Vs?=
+ =?utf-8?B?WGY5U0FTdmtBL3B5VXloTnlVNWlrNE1mM0J5TmlkTnhrMXBxUk00M016MEhv?=
+ =?utf-8?B?NWMydzB1SEw5bTlRUU5JblMxNjNpbENybU0xelJDcjl1UDFYdTg5dDU2VEsr?=
+ =?utf-8?B?YjlIK3RPY2dQcmtvYjJnUG1iOWlldzJRdXRNWno0KzNZYmU1cnVtdlZzTmZ3?=
+ =?utf-8?B?VUZBeUhOYjBDdm9zQ0RtbG5MZkE1Qmo3dGxIZXJvdTBjVUlqR2o0YVU2ZGhu?=
+ =?utf-8?B?ZWNiUU1lUTNRd3krUm5qQkxzd2RZRzY3Um84T3FXV1U4Mkx6WlJFeFV2SnlJ?=
+ =?utf-8?B?bWVoSUZBZXV4RzFLbVFsZEZadEdNNGhmWDdteUFSVU0vVmZZUzM3YTMxdHBU?=
+ =?utf-8?B?TUpHSmFBZGJvWmdjcDZOWUNPeUdLSGhQcW5GOEQxTFRtSk5tNjFDVW9PamN1?=
+ =?utf-8?B?LzJVM2oxTzhyWG02M2NyMXFvWXIvTC9xRGFBVXZuNkYwZ2FJNys1ZVNDRGJh?=
+ =?utf-8?B?eWJ3VHp4alc4eDZpMDdncnh5eGczL1BRWGtkY0NQcnpPL0hUSjFwRmh3ZlJi?=
+ =?utf-8?B?eHltUEc3Q1BTY2dTRHZUamJpWlNUb3lMSmpQakoyb2sxL0VOV3l6cWhRS0p3?=
+ =?utf-8?B?bVFWR2NOckUyWFhjOGwxRlVrZ0lITnJyMzdVQ1RPVkdveW9aQ0dEL1FtTTZs?=
+ =?utf-8?B?QTdLU21VODQvVTNuVGN4MG9nQnNBSUhHRzg4UlJpWkQ1YU9TODV4dFRRaGJn?=
+ =?utf-8?B?ZlJWeGw2U09sNmMwdTY3RTNBaTJDTjhOazA4dVc1V0dZeG9RTHRjV3NrbUJa?=
+ =?utf-8?B?NmhHNUZ5eHNrdWxaUXltbmtzRFBUMmlaRGIxRjBGYlA2SnhxamlDbXRadFh2?=
+ =?utf-8?B?eUQydFgvN1dEZlRreFRwVHNNRXpTU05tTU0wSnhKbldZTHA5REY3Mjl0WTJN?=
+ =?utf-8?B?RHY5K0ZUNU9nQ05Sdy95bjMwYVY5VXc2dVVpK2JuWjBPT0FYalRRTGFvSVJJ?=
+ =?utf-8?B?MGpxVEp3Vlp1czdidWZCcGNWTEFmWVZjWFBPY0NQRUcwcDlBc0RNaHpJU0Ix?=
+ =?utf-8?B?YVVTOW50a25lOFFzbFJhdXgwZ0RueDFxeENHNXdWMVhwT05sY0dTNnFWcEtZ?=
+ =?utf-8?B?T01NQWRDUVh6aFp4ZG5taGQyaFVZTFNMdHR2azJWODJ6NUViSjBCN3lKdHox?=
+ =?utf-8?B?dDNheHNCM3F0dC8veG94djdKMFV1TlY3d2hBaVVHVXR6NDJZcHFjdGFJNnhK?=
+ =?utf-8?B?bEZQaU1ZR1k2dE9zajdBUnd2enFCNC8vZ2tnSDJQcHBRV3RLb0g2MXpSK1Rm?=
+ =?utf-8?B?Myt2N0xKalVjTEZjdEI1c3huSjB3RDJJcytoS1luSHdwTjV2NXJZdHBkUzN6?=
+ =?utf-8?B?cWNyNDZYa1p6NmdCajJMUEN2SDJHSFRQTThCTGxTZmE2NEJvL1ovQlhBMkZ4?=
+ =?utf-8?B?YlBWRVFVaFlJRjVKbUJ6aEtmY1V3ajRHb1V5eUNCaE9iaVUvZVdubkk1dEov?=
+ =?utf-8?B?bzVJR0lHQXlLRzkzZDhST0FmVVNsL2R3MGVpL0JqckYzK294QTdjazI4NEFv?=
+ =?utf-8?B?RC8rc2xmSFhIOHVQdTZWT2FBQldvUGlFZ3FNeW9Oak4wK2YxUzJuVjVGSXFI?=
+ =?utf-8?B?S1BzMEt6eWFFVkF3ZlFQRWVVYVVwR2dsZzN0N0oxdVE5dWovZzl0c1IyeHFW?=
+ =?utf-8?B?MkR2N3Bta3cvdTRKdXpjek5TdGNhL1hTSUhNNlI5TlI2R2xyY3JvYTdtb3Fr?=
+ =?utf-8?B?c0tmaEZiaG1lK0NwbXhjNjBEVGxTRFlTRTdObjhaMmowMkhpdG9SdEd2dm9H?=
+ =?utf-8?Q?xMJJjpx7HEBmmzSiP/WBH0X49?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0b33055-6579-4e31-c30a-08dc47601df8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ecf0c62-8448-4851-cc06-08dc47629bbe
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3109.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2024 15:28:52.6517
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2024 15:46:42.6481
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oanky+gssgcGpWEsP5YMIrJ8ayoQJNgtMGVtlKoKauQQcUJQ1nHYuzB/45o69Rn4aMgCLAGml47MQZ2pTzO16w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5959
+X-MS-Exchange-CrossTenant-UserPrincipalName: vImc4rj12zOm+JJ6hSOpXTk1vUkKfEW+tWdJTbKwPphNYalte1zs1DgiMaxXIRtTiYuAuNfkuGrIYn26/6kMOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6578
 
 On 3/14/24 12:35, John Allen wrote:
-> Data fabric 4.5 denormalization will need to frequently add and remove
-
-More specifically, the non-power-of-2 cases will need this.
-
-> the base and the legacy MMIO hole. Modify existing helpers to improve DF
-> 4.5 denormalization flow and add helper to remove the base and hole.
-
-Please write the what/context, why/issue, and how/fix information as
-separate paragraphs even if they're just a single sentence each. I think
-this helps to find the details more easily.
-
+> Make map_bits_valid available in the AMD ATL internal header as the
+> function can be used in other parts of the library.
 > 
 > Signed-off-by: John Allen <john.allen@amd.com>
 > ---
->   drivers/ras/amd/atl/core.c     | 43 ++++++++++++++++++++++------------
->   drivers/ras/amd/atl/internal.h |  3 +++
->   2 files changed, 31 insertions(+), 15 deletions(-)
+>   drivers/ras/amd/atl/dehash.c   | 2 +-
+>   drivers/ras/amd/atl/internal.h | 3 +++
+>   2 files changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/ras/amd/atl/core.c b/drivers/ras/amd/atl/core.c
-> index c1710d233adb..cafdfc57d929 100644
-> --- a/drivers/ras/amd/atl/core.c
-> +++ b/drivers/ras/amd/atl/core.c
-> @@ -49,15 +49,26 @@ static bool legacy_hole_en(struct addr_ctx *ctx)
->   	return FIELD_GET(DF_LEGACY_MMIO_HOLE_EN, reg);
->   }
->   
-> -static int add_legacy_hole(struct addr_ctx *ctx)
-> +static u64 add_legacy_hole(struct addr_ctx *ctx, u64 addr)
+> diff --git a/drivers/ras/amd/atl/dehash.c b/drivers/ras/amd/atl/dehash.c
+> index 4ea46262c4f5..a20cf615b83a 100644
+> --- a/drivers/ras/amd/atl/dehash.c
+> +++ b/drivers/ras/amd/atl/dehash.c
+> @@ -19,7 +19,7 @@
+>    * If @num_intlv_dies and/or @num_intlv_sockets are 1, it means the
+>    * respective interleaving is disabled.
+>    */
+> -static inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+> +inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+>   				  u8 num_intlv_dies, u8 num_intlv_sockets)
 >   {
->   	if (!legacy_hole_en(ctx))
-> -		return 0;
-> +		return addr;
->   
-> -	if (ctx->addr >= df_cfg.dram_hole_base)
-> -		ctx->addr += (BIT_ULL(32) - df_cfg.dram_hole_base);
-> +	if (addr >= df_cfg.dram_hole_base)
-> +		addr += (BIT_ULL(32) - df_cfg.dram_hole_base);
->   
-> -	return 0;
-> +	return addr;
-> +}
-> +
-> +static u64 remove_legacy_hole(struct addr_ctx *ctx, u64 addr)
-> +{
-> +	if (!legacy_hole_en(ctx))
-> +		return addr;
-> +
-> +	if (addr >= df_cfg.dram_hole_base)
-> +		addr -= (BIT_ULL(32) - df_cfg.dram_hole_base);
-> +
-> +	return addr;
->   }
->   
->   static u64 get_base_addr(struct addr_ctx *ctx)
-> @@ -72,14 +83,16 @@ static u64 get_base_addr(struct addr_ctx *ctx)
->   	return base_addr << DF_DRAM_BASE_LIMIT_LSB;
->   }
->   
-> -static int add_base_and_hole(struct addr_ctx *ctx)
-> +u64 add_base_and_hole(struct addr_ctx *ctx, u64 addr)
->   {
-> -	ctx->ret_addr += get_base_addr(ctx);
-> -
-> -	if (add_legacy_hole(ctx))
-> -		return -EINVAL;
-> +	addr += get_base_addr(ctx);
-> +	return add_legacy_hole(ctx, addr);
-> +}
->   
-> -	return 0;
-> +u64 remove_base_and_hole(struct addr_ctx *ctx, u64 addr)
-> +{
-> +	addr -= get_base_addr(ctx);
-> +	return remove_legacy_hole(ctx, addr);
-
-This should be the inverse of the "add" operation, I think. So remove
-the legacy hole first, then remove the base address.
-
->   }
->   
->   static bool late_hole_remove(struct addr_ctx *ctx)
-> @@ -123,14 +136,14 @@ unsigned long norm_to_sys_addr(u8 socket_id, u8 die_id, u8 coh_st_inst_id, unsig
->   	if (denormalize_address(&ctx))
->   		return -EINVAL;
->   
-> -	if (!late_hole_remove(&ctx) && add_base_and_hole(&ctx))
-> -		return -EINVAL;
-> +	if (!late_hole_remove(&ctx))
-> +		ctx.ret_addr = add_base_and_hole(&ctx, ctx.ret_addr);
->   
->   	if (dehash_address(&ctx))
->   		return -EINVAL;
->   
-> -	if (late_hole_remove(&ctx) && add_base_and_hole(&ctx))
-> -		return -EINVAL;
-> +	if (late_hole_remove(&ctx))
-> +		ctx.ret_addr = add_base_and_hole(&ctx, ctx.ret_addr);
->   
->   	if (addr_over_limit(&ctx))
->   		return -EINVAL;
+>   	if (!(ctx->map.intlv_bit_pos == bit1 || ctx->map.intlv_bit_pos == bit2)) {
 > diff --git a/drivers/ras/amd/atl/internal.h b/drivers/ras/amd/atl/internal.h
-> index 1413c8ddc6c5..05b870fcb24e 100644
+> index 05b870fcb24e..4681449321de 100644
 > --- a/drivers/ras/amd/atl/internal.h
 > +++ b/drivers/ras/amd/atl/internal.h
-> @@ -236,6 +236,9 @@ int dehash_address(struct addr_ctx *ctx);
->   unsigned long norm_to_sys_addr(u8 socket_id, u8 die_id, u8 coh_st_inst_id, unsigned long addr);
->   unsigned long convert_umc_mca_addr_to_sys_addr(struct atl_err *err);
+> @@ -239,6 +239,9 @@ unsigned long convert_umc_mca_addr_to_sys_addr(struct atl_err *err);
+>   u64 add_base_and_hole(struct addr_ctx *ctx, u64 addr);
+>   u64 remove_base_and_hole(struct addr_ctx *ctx, u64 addr);
 >   
-> +u64 add_base_and_hole(struct addr_ctx *ctx, u64 addr);
-> +u64 remove_base_and_hole(struct addr_ctx *ctx, u64 addr);
+> +inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+> +			   u8 num_intlv_dies, u8 num_intlv_sockets);
+> +
+>   /*
+>    * Make a gap in @data that is @num_bits long starting at @bit_num.
+>    * e.g. data		= 11111111'b
 
-remove_base_and_hole() is only used in denormalize.c, correct? So why
-not define it there as static? Other than trying to keep the code
-together and symmetrical, I mean.
+Ultimately, the maps should be validated as soon as they are gathered. I
+figured we would do that later. But that would wipe out this change.
+And, after looking at dehash.c again, map_bits_valid() isn't used in too
+many places right now.
+
+So I think validate_address_map() from the following patch should be
+done for all modes first. That way we don't need to add and then remove
+this function from the header.
 
 Thanks,
 Yazen
