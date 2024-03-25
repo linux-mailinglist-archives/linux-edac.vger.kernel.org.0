@@ -1,57 +1,75 @@
-Return-Path: <linux-edac+bounces-797-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-798-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E850F88AC18
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Mar 2024 18:44:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 112FA88AD33
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Mar 2024 19:11:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A016A2E8046
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Mar 2024 17:44:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 435C31C3D8A9
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Mar 2024 18:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6126A3DAC06;
-	Mon, 25 Mar 2024 16:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7541F1E522;
+	Mon, 25 Mar 2024 17:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="y4Gs7Wc+"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="NAxxMR0n"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A703228EB
-	for <linux-edac@vger.kernel.org>; Mon, 25 Mar 2024 16:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6AE18E25
+	for <linux-edac@vger.kernel.org>; Mon, 25 Mar 2024 17:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711385412; cv=none; b=FiDSXeLhzE9uSuFTSdXhFgT12MYOX8dL6SeJ0vagF9gT7E7qLeMcDurB/BgxvS5zjkbAUN0tRwtAP4AsrSmqn4jUMItBkGR/dTJPv7NrZ3EsabngfIIAgOoDFn9HqGMcR5k5v7zEO5eD8pA3+sEj07fjOoQvGBQKLG25jyYIGiE=
+	t=1711388346; cv=none; b=kH9OhAdln1ZOMPhRd/MTBVBHEHfxukHOPwfxm59ZZcEhnrXXpaC6rXmedpyxDewCPzIqcZ7KW5bJ1IhLHQZY1Zj3zt9UpVjUs85xlyNrGQ+7N1UD5UwJG/qW1VByzL3X6Lvn3epbxmy1mkWOcUMgUsXwOyxChFvu3WjRDsE6IDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711385412; c=relaxed/simple;
-	bh=NM2DjWasKO3U2cYlnqsBRoZqYihxwWdozHhOdR1/G/w=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Oj0xhwKcP5EgM/CQlARxPHMYQsYG3AJ63r0YETg3dB4HP5nNc6OypRJen7wvRvgKME642+wQT013pZoGhhqLPA8vstmlhx3d+hLRKpqmvCMWyXY//MH8NW2EBjMg+ksYimH0o9m63t3Kk3TnN0ej1RRnlYZnPdgD3u2Te4I/GEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=y4Gs7Wc+; arc=none smtp.client-ip=185.70.40.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1711385401; x=1711644601;
-	bh=NM2DjWasKO3U2cYlnqsBRoZqYihxwWdozHhOdR1/G/w=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=y4Gs7Wc+pCJJvBKQVTtv+A3tgCzEqf0v1/zr1gS1oQrrXD1CmKc6awkzxxGk9r+Vw
-	 g7q+08I+Fwj4CjGFpRu42349kfDZYKpsrhRgZb2ds8K3sG92Rme/ul6nVCPxR+iZba
-	 l50//Q+nkDsDlgsnB5ZLYVLprGsHGZ1Ocuz61kQptvZwdMKoiFX/ubp6D4Tn44N5SQ
-	 9WexVA1ploVB/8vIHkoWscaBFE0PwCV2UssmJr15vZyoeYtwzFODt+ZogxgnQnlxBt
-	 m1ZziBCOEz71XO96grpA8PjtrLSfhF4xXnLU/6IjiW1ykAfK3kKRCuKgZCCwHpYdVD
-	 SH7SHYx22LknA==
-Date: Mon, 25 Mar 2024 16:49:54 +0000
-To: Borislav Petkov <bp@alien8.de>
-From: A <akira.2020@protonmail.com>
-Cc: "tony.luck@intel.com" <tony.luck@intel.com>, "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+	s=arc-20240116; t=1711388346; c=relaxed/simple;
+	bh=3JvG4fr37Vhrrbb8kJmM7pqZEZBifYyOGImRVRkwprw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M9LGO+Gh3GYcJY+txoKgbueshmJt2nDVq8b4gCaMg2xdE6Ttz7qyafp+DSOixnMBBpXUePXX1f9TB6nDskZzc4sjRWRXAQiue2SGUV2ggJ21V6Wf21TjVpeTcFE605CA4rTPP5EfWBXRjQukTxRn2VIRRgrJxyD9aaNR4D6YlmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=NAxxMR0n; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5449640E0247;
+	Mon, 25 Mar 2024 17:39:00 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id xQey0RY9BRgP; Mon, 25 Mar 2024 17:38:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1711388336; bh=eALaW0qDyBiyLJ8xuJ6Fpl12WV6i0h+J9Eikp46P79Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NAxxMR0nFnDR86fR1QdwtkEd67Tx1drUrbaJLK4sIYB2Es+BmyeMM1jl9i2KA2+JD
+	 p95KwTOXek+zF/UzrjyaM+vAka2pzhYo4i/xbn74WAnJLCChUgK6FfTrZlzroUvpVv
+	 GevRBh0qCzcCfzZZfUdeeVAWR08X0U9SVLjswj1YtXJUMY6DEVlRNvqGQqRHMbAd1U
+	 eV0/DdEg7YXRkl5SaIVrsk2GZ/Ckso1fyKvC2ClrqiQuuVfkV9z3CsOWD4xwZX4ONt
+	 SJtHjUMKgKEvR3kU+tMQIPHb9wAcaSnI/qik6kiEK4itso1xA1vpkTh8Gtl+E9UNaq
+	 vVN0hta/pbBsKqRNvEUalzkXXwOpnxMmzQRHfjSNSZxD30CUr4Q5jCsXCHZol0aWGF
+	 5NJH3QQ1pfclJfkx87HZfj9IrkwPksBPpDMtYT+5N+d53cehWqRH4hzPNPe564R6PF
+	 3EQe8SlQ4K8pcS3cyamt+ZkmWAw3taphPcQfQgzrPt+LDk404PlM/xMtbXq6za2/6T
+	 vOXtR012D4KXBgLf7fSr66XYVhkJ2j8hroiG1OmwLE8+n1jO5IueEruUG+EukSGLeb
+	 d/4JMO2JJ1q2KoQSN+qLul5N33USLI/w0tLf/QYMAbyW5LQHOReZ9559eOAsmhoqW1
+	 51W7qbbRt2yNkf706JJpffOk=
+Received: from zn.tnic (p5de8ecf7.dip0.t-ipconnect.de [93.232.236.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E14340E016C;
+	Mon, 25 Mar 2024 17:38:53 +0000 (UTC)
+Date: Mon, 25 Mar 2024 18:38:47 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: A <akira.2020@protonmail.com>
+Cc: "tony.luck@intel.com" <tony.luck@intel.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 Subject: Re: kernel 6.9-rc1 fails to compile if debugfs is disabled
-Message-ID: <HCNla3hB7hRLtei6e9hDKTtNA8rpNlHjh6qeb6ysaiRniyNYBQFsbIqVPuHfIdOpkRAmL91XOFES7iumuKZcbUqZnOo59I6Sok1Irc3NcjU=@protonmail.com>
-In-Reply-To: <20240325160818.GDZgGhcpLu3uks_K9z@fat_crate.local>
-References: <N0Pv2Kh3nXKRyRNwwsJbgOoQ2_TE7fBqHtMUpI4-ijf4qosbq3o_HNCgL02-pr7hgQd6zLqXpJF_MmChCOrzABfX7s6D5lWI3KXk_B2iFB0=@protonmail.com> <20240325160818.GDZgGhcpLu3uks_K9z@fat_crate.local>
-Feedback-ID: 7267082:user:proton
+Message-ID: <20240325173847.GFZgG2p9XT3OH0po5Y@fat_crate.local>
+References: <N0Pv2Kh3nXKRyRNwwsJbgOoQ2_TE7fBqHtMUpI4-ijf4qosbq3o_HNCgL02-pr7hgQd6zLqXpJF_MmChCOrzABfX7s6D5lWI3KXk_B2iFB0=@protonmail.com>
+ <20240325160818.GDZgGhcpLu3uks_K9z@fat_crate.local>
+ <HCNla3hB7hRLtei6e9hDKTtNA8rpNlHjh6qeb6ysaiRniyNYBQFsbIqVPuHfIdOpkRAmL91XOFES7iumuKZcbUqZnOo59I6Sok1Irc3NcjU=@protonmail.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -59,51 +77,23 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <HCNla3hB7hRLtei6e9hDKTtNA8rpNlHjh6qeb6ysaiRniyNYBQFsbIqVPuHfIdOpkRAmL91XOFES7iumuKZcbUqZnOo59I6Sok1Irc3NcjU=@protonmail.com>
 
+On Mon, Mar 25, 2024 at 04:49:54PM +0000, A wrote:
+> thanks, this works
 
+Thanks for testing. Do you want me to add
 
+Reported-by: akira.2020@protonmail.com
 
+to the official fix?
 
+Thx.
 
-On Monday, March 25th, 2024 at 16:08, Borislav Petkov <bp@alien8.de> wrote:
+-- 
+Regards/Gruss,
+    Boris.
 
->=20
->=20
-> On Mon, Mar 25, 2024 at 03:10:25PM +0000, A wrote:
->=20
-> > https://bugzilla.kernel.org/show_bug.cgi?id=3D218640
-> >=20
-> > kernel 6.9-rc1 fails to compile if debugfs is disabled (CONFIG_DEBUG_FS=
-):
->=20
->=20
-> This should fix it:
->=20
-> ---
-> diff --git a/drivers/ras/Kconfig b/drivers/ras/Kconfig
-> index fc4f4bb94a4c..41697e326fa6 100644
-> --- a/drivers/ras/Kconfig
-> +++ b/drivers/ras/Kconfig
-> @@ -37,7 +37,7 @@ source "drivers/ras/amd/atl/Kconfig"
-> config RAS_FMPM
-> tristate "FRU Memory Poison Manager"
-> default m
-> - depends on AMD_ATL && ACPI_APEI
-> + depends on AMD_ATL && ACPI_APEI && DEBUG_FS
-> help
-> Support saving and restoring memory error information across reboot
-> using ACPI ERST as persistent storage. Error information is saved with
->=20
->=20
-> --
-> Regards/Gruss,
-> Boris.
->=20
-> https://people.kernel.org/tglx/notes-about-netiquette
-
-thanks, this works
-
-kind regards,
-anthony s.k.
+https://people.kernel.org/tglx/notes-about-netiquette
 
