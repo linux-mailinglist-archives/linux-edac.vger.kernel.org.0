@@ -1,64 +1,53 @@
-Return-Path: <linux-edac+bounces-793-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-794-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D725A8873EE
-	for <lists+linux-edac@lfdr.de>; Fri, 22 Mar 2024 20:30:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E507888AA1F
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Mar 2024 17:51:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBE31F23CAD
-	for <lists+linux-edac@lfdr.de>; Fri, 22 Mar 2024 19:30:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22ED31C3794C
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Mar 2024 16:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2727A15D;
-	Fri, 22 Mar 2024 19:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A5B12CDB4;
+	Mon, 25 Mar 2024 15:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GI4W6i26"
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="VOHsPPT7"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7787A157;
-	Fri, 22 Mar 2024 19:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AABA71756
+	for <linux-edac@vger.kernel.org>; Mon, 25 Mar 2024 15:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711135813; cv=none; b=giOnuV2bUfdRzRm399Re2dvoBREVgcfnEo5Tv9xeGUu7i5emumD1erKCPKu33RHL2aXQuABPdX2hpu2IFmKp4rYJRFT/Pm5REQ0yQc2GrCEIZ5JsGxZxuWKeWF8tchpfEwsPTmq+nVpJEGc/fLCWIDrvpx0DVt4ID1jRe79t/ms=
+	t=1711379455; cv=none; b=gd0aOls2UOzCgLZ6YZuchqqcX10iNftAR+CeS0cgm0MwCs1Hm4N6yPEY2PRDagiwlo+Vfmm4ni58SU8iqsd3KJw0TNwp2mzDojSYlswssT7HYUVPv4NKns6s5W0P5AY2Ev8LeZkKjlt7uDqNEuDbvgAKyuee6ClVoD7SoFeGsY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711135813; c=relaxed/simple;
-	bh=9R6ki8LkQLAWyMMmV+81/0KXBdxdkaUt91oUyJxHRXQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=IYiU374NgAm5WgNqJKJUa0icEVzud0W4KOGo5y5dGAGfSCB9pcJ/G02TB71+Uk9ygIdUaQfIBo2ikyZyPUEdqVIXHFPIkT9bJRcdl+CehvksJCft5MmyW+alRyMYOv9yoCEdxO+hR9QsBTTXXKfY5xfLxtxAJvylCD2EO2G00Ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GI4W6i26; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D41C433F1;
-	Fri, 22 Mar 2024 19:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711135813;
-	bh=9R6ki8LkQLAWyMMmV+81/0KXBdxdkaUt91oUyJxHRXQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=GI4W6i26GH4YKoxcLI7lQ8yf1CYz3gnsVS5q/50obT5c+RAjHWdIx+1+1fcYFuMSK
-	 z7tq2Hy8gsByyk1C6HLUmIdEjEMjPlAEd5SPyoRNSsS1HUrAS8NtMtMQaTjVj8XtIP
-	 GfI5wwIhfK2ZdvFH8yfESIP4RXcrOtJGRVvTmGJafpDdRsj5RvAbXWu2XtvMvItr/Z
-	 Zoq9QazCmln///YbTsHQqQmawt8pLZ8s+57149iivVTAWIDAH/W5Cm1wZubwMH+tEE
-	 0i08O00EIoJelk5Ubc024aZSDXEmpIUnVRa35wSfyaEC/x0wB3d6Rabg6Z8TigwMBO
-	 GVbz6krwT5hCg==
-Date: Fri, 22 Mar 2024 14:30:11 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	intel-wired-lan@lists.osuosl.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	linux-edac@vger.kernel.org, linux-efi@vger.kernel.org,
-	Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH 3/4] PCI: Add TLP Prefix reading into pcie_read_tlp_log()
-Message-ID: <20240322193011.GA701027@bhelgaas>
+	s=arc-20240116; t=1711379455; c=relaxed/simple;
+	bh=dQ67tVVBj3jJzC3Xt9i758lr8XmlPDrlUnK50w56drI=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=HgUOkVtI09djRAc5FgV3dMr9EPUaCv6i+T20NsEPqtiduqkcuXnrMu6gbGs3iWyKkEsybR2meYC0ln9VnRSsHhFf5n+N5VAUlPmvhS7LtTvbRnhBybU3Ls3lN9N3/jjPZGc3tn5U7ExiCAP6S3hFBLux11iLiK1MtC7Mxe5KTjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=VOHsPPT7; arc=none smtp.client-ip=185.70.43.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1711379445; x=1711638645;
+	bh=dQ67tVVBj3jJzC3Xt9i758lr8XmlPDrlUnK50w56drI=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=VOHsPPT71B7qyMrjY3vVJjKkD/R63MgWo0DZayKCZgyiBhlzyJpoq9NapMsMOE+99
+	 +4lD6gRJIPW92DQ9CZFSFv0GEkR/bx5xrE7NmPYK9W8s4PdoXTbESruznKArsPcqE4
+	 Mdf7NBg0lD2UIWzwWBT1cm59uflEXRI3h6rNOCwJa39J0qDQxrSMwiFdaBFeqTXEkC
+	 XYx9eohDEy3npdsTsGCPpXZaB3Go9JnnDcur7eO+I7FMKN9SSV6bVyHwA31R/IopIX
+	 6mCfZn185zdZbEDNtZ3I1XCeMmW1/DzO/fHX/e6D6IbSxhMRTEWl3i9g0+LC+dlxXP
+	 MAzTH0/Yti5NQ==
+Date: Mon, 25 Mar 2024 15:10:25 +0000
+To: "tony.luck@intel.com" <tony.luck@intel.com>, "bp@alien8.de" <bp@alien8.de>
+From: A <akira.2020@protonmail.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+Subject: kernel 6.9-rc1 fails to compile if debugfs is disabled
+Message-ID: <N0Pv2Kh3nXKRyRNwwsJbgOoQ2_TE7fBqHtMUpI4-ijf4qosbq3o_HNCgL02-pr7hgQd6zLqXpJF_MmChCOrzABfX7s6D5lWI3KXk_B2iFB0=@protonmail.com>
+Feedback-ID: 7267082:user:proton
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -66,55 +55,24 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240206135717.8565-4-ilpo.jarvinen@linux.intel.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 06, 2024 at 03:57:16PM +0200, Ilpo Järvinen wrote:
-> pcie_read_tlp_log() handles only 4 TLP Header Log DWORDs but TLP Prefix
-> Log (PCIe r6.1 secs 7.8.4.12 & 7.9.14.13) may also be present.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218640
 
-s/TLP Header Log/Header Log/ to match spec terminology (also below)
+kernel 6.9-rc1 fails to compile if debugfs is disabled (CONFIG_DEBUG_FS):
 
-> Generalize pcie_read_tlp_log() and struct pcie_tlp_log to handle also
-> TLP Prefix Log. The layout of relevant registers in AER and DPC
-> Capability is not identical but the offsets of TLP Header Log and TLP
-> Prefix Log vary so the callers must pass the offsets to
-> pcie_read_tlp_log().
+it fails here:
 
-s/is not identical but/is identical, but/ ?
+```ERROR: modpost: "ras_get_debugfs_root" [drivers/ras/amd/fmpm.ko] undefin=
+ed!
+make[5]: *** [scripts/Makefile.modpost:145: Module.symvers] Error 1
+make[4]: *** [Makefile:1871: modpost] Error 2
+make[3]: *** [debian/rules:74: build-arch] Error 2
+dpkg-buildpackage: error: make -f debian/rules binary subprocess returned e=
+xit status 2
+make[2]: *** [scripts/Makefile.package:121: bindeb-pkg] Error 2
+make[1]: *** [/ram/linux-6.9-rc1/Makefile:1541: bindeb-pkg] Error 2
+make: *** [Makefile:240: __sub-make] Error 2```
 
-The spec is a little obtuse about Header Log Size.
-
-> Convert eetlp_prefix_path into integer called eetlp_prefix_max and
-> make is available also when CONFIG_PCI_PASID is not configured to
-> be able to determine the number of E-E Prefixes.
-
-I think this eetlp_prefix_path piece is right, but would be nice in a
-separate patch since it's a little bit different piece to review.
-
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> @@ -11336,7 +11336,9 @@ static pci_ers_result_t ixgbe_io_error_detected(struct pci_dev *pdev,
->  	if (!pos)
->  		goto skip_bad_vf_detection;
->  
-> -	ret = pcie_read_tlp_log(pdev, pos + PCI_ERR_HEADER_LOG, &tlp_log);
-> +	ret = pcie_read_tlp_log(pdev, pos + PCI_ERR_HEADER_LOG,
-> +				pos + PCI_ERR_PREFIX_LOG,
-> +				aer_tlp_log_len(pdev), &tlp_log);
->  	if (ret < 0) {
->  		ixgbe_check_cfg_remove(hw, pdev);
->  		goto skip_bad_vf_detection;
-
-We applied the patch to export pcie_read_tlp_log(), but I'm having
-second thoughts about it.   I don't think drivers really have any
-business here, and I'd rather not expose either pcie_read_tlp_log() or
-aer_tlp_log_len().
-
-This part of ixgbe_io_error_detected() was added by 83c61fa97a7d
-("ixgbe: Add protection from VF invalid target DMA"), and to me it
-looks like debug code that probably doesn't need to be there as long
-as the PCI core does the appropriate logging.
-
-Bjorn
+if i enable debugfs, it compiles without failing.
 
