@@ -1,102 +1,193 @@
-Return-Path: <linux-edac+bounces-806-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-807-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BED8588C13C
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 12:50:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECB9A88C3F3
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 14:44:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0FEE1C3EBA7
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 11:50:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1B91305C54
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 13:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8152E6BFCB;
-	Tue, 26 Mar 2024 11:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF4882D8F;
+	Tue, 26 Mar 2024 13:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hLFnzUYW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2KTQQxba"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2126.outbound.protection.outlook.com [40.107.94.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B431B6BB5D;
-	Tue, 26 Mar 2024 11:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711453804; cv=none; b=YJ38htV0hWG3o3XsKnDXFU8ZcTeoQfrK+whnZnezDDdmdccRM2jDA0qVZNuIk19A7Cwm1asE1VmEW8GHO1oxpsz3Ep2YMc9+8gYPuwTCZY+wIfhtYLkVpQpSXq4W/1u49urXJj61/7gu5uWc2q20eIbAzEFMY2FX0468npD5Ek0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711453804; c=relaxed/simple;
-	bh=EDRGr0XiS5XxgjyxuIYgM/fzheL+KMSa8NRn3sANHUE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ONCwi23eKoWqCYlqdaH2fLYTxslLHe9etMrAquJ4/UVE6WXmJS1VM0tZOwpHdc0BQouJg1tDfqkd7dlRi6LPbFaMr1H707fJbEqDghaXwTQhse/T0ID9X9j48tj5ODHd1m299rm3vvxZzpaxwaM81wuqHga2WqCQGfBFCdgmzTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hLFnzUYW; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 914D740E02A5;
-	Tue, 26 Mar 2024 11:50:00 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Vv1Q3r0T9g5U; Tue, 26 Mar 2024 11:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1711453797; bh=YQSqFoSKslIAbcaScbRhUZMD4A8hZrrFlPhDRUl7ZX8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hLFnzUYWhUz892PkZodHyUd8IPNjT+lL1SaZUL+TZZzlAsRDOdByeyOPYG3BVmvys
-	 +cRgnTn0A6SY9aw2qnKM23tK/wnvbW11lUje6FQhKWuw/P4tl7xd85/IXDTn+hMV3r
-	 r4ysTvjhDE140zt1w4Fr6tGmvLWCCYDbXkl/1Uot+Y7Tj5cme4eqEn5A/p5yWVNBym
-	 Wu5ZbYbwfZkf5OG9cTXumtMUaAPvzZtKM8kkhvXNpxf8I+gJVep8LRbMu6oTyTDJVg
-	 5Ost+Z6PaCOfaXsRxc0mwhKXIUozIV3/5any2wmL9n2GqLW4J4/hNwjOWrujxLC4Bf
-	 rUqsZ3CnZBOgfhKw05cpH9fOzhuTChPJ0u6WWSuKeM2Ws6ZzJ5uxMiCzgCoCIOxrHq
-	 CrWkfT4Kk6R8V+5L2JDd5UG8EFvlt0pxCbgrWGfQSekHs0HnVkMVCfFHpxRC+ficjm
-	 Nvgkq5HIGXp7wZMCdLQY6kpGUVjtNg3wljdry05KCYb/udEe2CNIu3yMOYvM/C6a5g
-	 i08aQ3SzvKy0LRgA0D/dDQLTX21ASVv7TNYd1soJwmo0K/EVQDzGrCOgMPU4QKEuTz
-	 NbS7zV2BvbDLvXM/s+hJwutv3YAt6Y8b7gyZIkf5j8MquXwy5DQbY30ZRwcxr6Nl2Z
-	 UmimZ13ua8JGxLQ8UwjIOROs=
-Received: from zn.tnic (p5de8ecf7.dip0.t-ipconnect.de [93.232.236.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5AF5D40E02A2;
-	Tue, 26 Mar 2024 11:49:50 +0000 (UTC)
-Date: Tue, 26 Mar 2024 12:49:45 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Tony Luck <tony.luck@intel.com>
-Cc: "Naik, Avadhut" <avadnaik@amd.com>,
-	"Mehta, Sohil" <sohil.mehta@intel.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] x86/mce: Dynamically size space for machine check
- records
-Message-ID: <20240326114945.GEZgK2WUJRKexfQomR@fat_crate.local>
-References: <20240307192704.37213-1-tony.luck@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A07782C96;
+	Tue, 26 Mar 2024 13:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.126
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711460511; cv=fail; b=RlkKvQh27EgQ1G/zJ9MfRR6la30fbcSAMnvnjrZkcmSxe992N8Hkcr5697Fp7fz5nAmPqKZy2r5v1J5VrbvASJFeIvBU4TpWFOEvzfLppPQ1SiNTsFr27AogwT40s+w0DapbpU2/VoZSHmPCDNUn+/TaUY2YydBFYaazBavfnDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711460511; c=relaxed/simple;
+	bh=y813hl2OHanPWAfdfMDyvUiniMLghaGlppW+nYHIrSM=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Q9JUl5hgscCv7xdvAZsx4NQ9qtPQVTzZmPFdbI88EKfkgCzAXO/dYZ34/fwF7X/DDqCVoHLFD9szPuMHq4zOiFIrGuykVAsG+as8JHz6mT6GFKQfKFUmgp4AeTsXiu8fI5FnaEn6uTNbCl+9ZAkHEv+EWphDKEPdH5lG0Av3YmI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2KTQQxba; arc=fail smtp.client-ip=40.107.94.126
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gmm5UCRcsZnPzQ/m5DGhrNFHdc3/HOzF8U4MQ0fTk/tjAgTv2eQVKDb9TfiNlqgsJStFBM+qITqPONFLI7OeJkLRu+1El4ANiH9KUCieGiSmlPhXDSHh9BXcqaLAT9g+sVurdb4ObiBgInZtbuDRlCu+tPTT6sJo7cCruHc6iFXhF2Vi/7CN6FQftZqSlOrtyEvSpQneGGK1Gz8BnN6EqDPdob7jZGH86q2Fm1YwvhC4PUHeE/0yo27kbTxlLPDBPUVTI4lgYzvF3oYBVJ8M7TKGbxwRBKBJbKHsZbdOojaB/HP3meUvNLHzyMUAjgutii2U5p7uzrpvbtqnAw9/zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GFzbL2QfGqplRna6KT7mIHPNXZoZR6jyLg3y5EhXz/U=;
+ b=M8yuqqCLlv937jwfxSbxEZHGwQIyf+iKqJ1jlOd0gyDhZS+uppRSyKMbUr6J1Cq/itEhfExphuzeTj+Q6yHkWw6O9SPBmySamaJ1Uaun+WvL6ZuGy8toJmAK304hYYF6D2/E5m6kZv6lcmk/vbq+TqVzzaHINws81hjqi9XQo+Up/JBi6BNz2PTw2yfgwHV/r9vtuZIhz8t8UuMLoF0ZBKZWTuvABvR3HfRUUqG3BmzbvuocW5UO3Ar4vNR570IRWlO6YnOOKgMlP5PhCcMEFiaWmk4oAYu4FHIONxtDrVrLaigku3itC6H8IiGZd4iA1AueyBPWbdM+Swoc92yXfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GFzbL2QfGqplRna6KT7mIHPNXZoZR6jyLg3y5EhXz/U=;
+ b=2KTQQxbaR6xNhCPN49wkKU1TuFJHgzG66kBpa/6oboQN0MZM/5cCaB+7GJOW63yZ7AuVamJWveupFN2fbdoaqz5f9Gr92JBEJ+xTbpWjvYBSl1DIcwZCRZKSU4SdR5aw4vA/zBxHPqA7bqH2k2DIk3vg5Gve+nUSK7h2MMFiA/s=
+Received: from BYAPR12MB3109.namprd12.prod.outlook.com (2603:10b6:a03:db::17)
+ by DS0PR12MB9400.namprd12.prod.outlook.com (2603:10b6:8:1b6::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Tue, 26 Mar
+ 2024 13:41:46 +0000
+Received: from BYAPR12MB3109.namprd12.prod.outlook.com
+ ([fe80::b2b4:a3f1:a86:d6bd]) by BYAPR12MB3109.namprd12.prod.outlook.com
+ ([fe80::b2b4:a3f1:a86:d6bd%5]) with mapi id 15.20.7409.028; Tue, 26 Mar 2024
+ 13:41:45 +0000
+Message-ID: <eede2586-f143-4107-a065-2860ed413d0a@amd.com>
+Date: Tue, 26 Mar 2024 09:41:41 -0400
+User-Agent: Mozilla Thunderbird
+Cc: yazen.ghannam@amd.com, LKML <linux-kernel@vger.kernel.org>,
+ "anthony s . k ." <akira.2020@protonmail.com>
+Subject: Re: [PATCH] RAS/AMD/FMPM: Fix build when debugfs is not enabled
+To: Borislav Petkov <bp@alien8.de>, linux-edac <linux-edac@vger.kernel.org>
+References: <20240325183755.776-1-bp@alien8.de>
+Content-Language: en-US
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+In-Reply-To: <20240325183755.776-1-bp@alien8.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR04CA0029.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::42) To BYAPR12MB3109.namprd12.prod.outlook.com
+ (2603:10b6:a03:db::17)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240307192704.37213-1-tony.luck@intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3109:EE_|DS0PR12MB9400:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	kmD9vqrmKWiX4eXz9daFwgFSjGlws1CtQ2P89BFVnLpfCKZw8Jp8AivBosPxYj+niUgvNbyYDvIbW0TKCJWj7t/bEN3eI6hFHPnMMEDMkM2fIhR2XW1IU0qqHwd62RBK2Z05V1ck8suJN06tI4bCJ2WPREiHD/cZIenkSkWjClkD7QHyqiLAwzvD5etnzLgVjopmkC/h4vJDvSBlWJs5utsVoTxog+WBM4Tog4xg2Q+9/mvTuRNrepiqM6UuUPlJq9wzKcWAlv4//g2wCp33lDfEk12wf2aed+t64lu97Z5WbzP47heLta/4qEbiTPhjo61HVp7lC79hnzadrH1wu0psIMTy7uUXajGxEs/4+QBXeZR8V5Ll+TxlZYBrM/97ipS3c3YQ7S8mYUfadkycUQx4XqkU0qBfnn9A4uVqt4H/Vf/ZbG5vq5ZrdbCTJa5WCxZESk6asNNHa7S5kqWYzH4uLYyTtYGw1Wh4az37QvU4vt5pmaLTkCLBGn0vkWr5kGS9JzRCwERCRxtDKmSgvyX/cTnJ+v3RzUn4S0Cc5BpbvD3ZuPbbD8niMrn4Wg+NxFbDgvynIJjZBytcBf+I631Mn440jRFx9BApHWEtSaE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?V3AzWUd4YWFQQWlKV3YxTmQyUnZJaHVHaGpnV1VkY0FxYlB4cDU4alJiRDR0?=
+ =?utf-8?B?VEljWlRsbXZwUUlTeFFPNTBXeEVNVGl6S2JaUDhXU3l4dStjdlhQdTcwL1NS?=
+ =?utf-8?B?ZjEvdlgxbmJxaEZoWHp4ZW9OdVE5dEtnWjFtd0NUaUR0d3kzaHNDUFg2aEF0?=
+ =?utf-8?B?SHFPajdWWi9BcFI3Tm9TY2plNUtDMlphTG9NWERpdndtMHM5eUNEVllGeHR1?=
+ =?utf-8?B?Q1Yyc2t6NXZoTndwM1JoWEhicnpTZTdrZ01hSXpvdDBDdmpUd1B2R1R2OHR0?=
+ =?utf-8?B?enV3clFSOW5CT1NlTHROSFp3OGpvclMrbCs3MmdKL1NlVDVaWjZWUE9IVmsr?=
+ =?utf-8?B?RkMyYnE3RHFFRE80d3VmMlhwVW5PclNjOGc2WElwbWtmUmFLSXFKZUpURGlE?=
+ =?utf-8?B?TlEwWS84VHZuZDVranU1QlZwVUcxZDJBeGpmWVFxWE42QUJKd3VMZ3k4ZkVS?=
+ =?utf-8?B?bFdVWEo3Ui9SdGk2VER0ZUFvL2ZMcTcrd05ueGdPeEYxMHFCYmlCdkM2Ujhu?=
+ =?utf-8?B?NDlCWFNVSWVGR2hnckFMaFRIbk0zNUJ2bEE3dCtHRDVuMlJGTEN4V3VHSWdi?=
+ =?utf-8?B?cHFzTE1hN0U2VjU4QmpMYzNQZUQ2RFFuTWw1b2NiV21ROWMvaDRPTDdxaGcx?=
+ =?utf-8?B?UkJIMXJpa3Y5cHNWUzd5aURuUG5CejE4RXZqR2p6cWpZK2U2N0ZDa253WEh5?=
+ =?utf-8?B?TlZtUmdHU09tcHNqM1pDY2kwSlhSaThVb2VMQkpMWWwvSDNDUVZDZmJhQ0th?=
+ =?utf-8?B?ZE5UK3h2aE9WcWtDdzUxSi9TWFpKVC9KTkVPd0hKL2ZlU2ZFa3B1QWkyQUhQ?=
+ =?utf-8?B?bDhucytXNVRSK2RVZzBoeFFXV0pTc2JPTnVvTU5WREVEZkNBRUNmTEovL2lp?=
+ =?utf-8?B?MFRXQXdCVGdlOUEvWHFhTHJYdyt0dUtJREZtdzBLR2hkTFZuZU9zUGpqZmpS?=
+ =?utf-8?B?Qml6WGZoUzFuejN5MWN4ZGdhSnh6YXdTMTdDM3dZRWdsMFVZSStWZFl6dENZ?=
+ =?utf-8?B?dVRMRzZuTU9yMjBYdG1HMWxkK1ViS2cyRXhlSG9RdGRYai9BbnB5TGZmQW9n?=
+ =?utf-8?B?LzFqNG9sUjZTZ1V5Q1JDOHFjbmNNZzR1WUNRSFc1U0xDL21ERndFaHl3RWNk?=
+ =?utf-8?B?dlZzdU55NEJkYmlaL01NeXBDSlA3aVVTYmpXQjBYMUJZL3E3enZzR0IyQWFC?=
+ =?utf-8?B?RnFZdnJJSElUSnVuclFzclAvK1NuWVJ2ZU9BNTJUWEVNQUlUbmlJV1ZUYVN2?=
+ =?utf-8?B?K3ZYZGY4LzhnZVVqTnR5YXZSVzdZVndRSFNRYjVSRzRKcUNBMnUvZGVIaUFO?=
+ =?utf-8?B?QTBFOWxTL1MyQUxnV3Z1MCt6cWFlbEFYMGZrVk8xOWkxQkZ1V0h1TFdZVC92?=
+ =?utf-8?B?L3NhbkdOZDhHeERxUkc1Yi93emV2bE1lR0hrMTNQMmN1TnVCWjZIRHo4VGIr?=
+ =?utf-8?B?WUhjOU5EdTNwbHg4VytldVJPcTBXckViWXA3QmtmdzAzU2hLSjBXRncveE5t?=
+ =?utf-8?B?aFowaWZ0RkEvd2hmdHhTbXZCOW8xVFhSVTdqTVdqam1KWHVrN3o3YWVVYVJu?=
+ =?utf-8?B?U3JBMVVsdlZmVS9PL3NGZkJtbXZCZWplT0lYMk1DVjZZQTdhdmptVFpiemps?=
+ =?utf-8?B?Vy9JWEI3Skx1enJXbVJqaHAvNFpNTTVya3duQzlxZzRmVVZnT2Q2UVNVUmdx?=
+ =?utf-8?B?bXZyL1g4VHhzRGFoR3RaSHV1SUxOKzlYZFAxbG84Q1daMkMydmtCSERicWxF?=
+ =?utf-8?B?NThwZnlzWHZWTFVRaXFvM1R1ME9qTWE0eTdzT08vcW8xS21HeU9ZeitmeDJK?=
+ =?utf-8?B?N2txd0loY1ZYam9JWm9CbFk0SSswMnhSQ24zODIvRVRETWhIQzE3TjNZdjgx?=
+ =?utf-8?B?S1plZUlnRmYydlBpT0hCbGJvZWxYdmt3U2VyNHFxend3ODBnYkFSOG13Y1FC?=
+ =?utf-8?B?ZlB4eEhnUDVsVVlabFlmcW1tdEZrV1Aya04wTHlBZ0FYWGFJN3FIVjdDVnBD?=
+ =?utf-8?B?clFXWWtuUEQ0angvWUVKRitGenlCRE5oWHZwUU9IWUdXSktIeWg1Y3o5VkFN?=
+ =?utf-8?B?Y1E0Rnl2RDA1bFB0eWNMM1FEM2xsWEcvdUt5dWJ0R0FjZnlGUFBpamZKRVhQ?=
+ =?utf-8?Q?oiTKq7moUZxt3x5a20nemysLq?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ddef6c6f-04ec-4d15-ce1e-08dc4d9a7a67
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3109.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 13:41:45.7950
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pPtClsGl+Rv3PXP2qm5e/ZOQ96NzGNHE5sTD86yncYVF84U9nFZIgkeLn5QFyg1YZ14xMG/gBs8mR8Sr+L3e0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9400
 
-On Thu, Mar 07, 2024 at 11:27:04AM -0800, Tony Luck wrote:
-> -	ret = gen_pool_add(tmpp, (unsigned long)gen_pool_buf, MCE_POOLSZ, -1);
-> +	mce_numrecords = max(MCE_MIN_ENTRIES, num_possible_cpus() * MCE_PER_CPU);
-> +	mce_poolsz = mce_numrecords * (1 << order);
 
-So, on a big fat machine with 8K CPUs that's, what
+On 3/25/24 14:37, Borislav Petkov wrote:
+> From: "Borislav Petkov (AMD)" <bp@alien8.de>
+> 
+> Have the driver depend on DEBUG_FS as it is useless without it.
 
-	8192 * 2 * (1 << 8) = ~4M
+This isn't true which is why the module doesn't fail to load if debugfs
+is not available.
 
-buffer?
+> 
+> Fixes: 6f15e617cc99 ("RAS: Introduce a FRU memory poison manager")
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218640
+> Reported-by: anthony s.k. <akira.2020@protonmail.com>
+> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>   drivers/ras/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ras/Kconfig b/drivers/ras/Kconfig
+> index fc4f4bb94a4c..41697e326fa6 100644
+> --- a/drivers/ras/Kconfig
+> +++ b/drivers/ras/Kconfig
+> @@ -37,7 +37,7 @@ source "drivers/ras/amd/atl/Kconfig"
+>   config RAS_FMPM
+>   	tristate "FRU Memory Poison Manager"
+>   	default m
+> -	depends on AMD_ATL && ACPI_APEI
+> +	depends on AMD_ATL && ACPI_APEI && DEBUG_FS
 
-Well, if you have a fat machine, you get fat buffers too.
+This was my first thought too. However, besides not true as stated
+above, this also leaves the issue open for others to hit.
 
--- 
-Regards/Gruss,
-    Boris.
+I think the fix below (not tested) would be more appropriate.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+What do you think?
+
+Thanks,
+Yazen
+
+diff --git a/drivers/ras/debugfs.h b/drivers/ras/debugfs.h
+index 4749ccdeeba1..ab95831e7710 100644
+--- a/drivers/ras/debugfs.h
++++ b/drivers/ras/debugfs.h
+@@ -4,6 +4,10 @@
+
+  #include <linux/debugfs.h>
+
++#if IS_ENABLED(DEBUG_FS)
+  struct dentry *ras_get_debugfs_root(void);
++#else
++static inline struct dentry *ras_get_debugfs_root(void) { return NULL; }
++#endif /* DEBUG_FS */
+
+  #endif /* __RAS_DEBUGFS_H__ */
 
