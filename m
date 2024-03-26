@@ -1,74 +1,78 @@
-Return-Path: <linux-edac+bounces-807-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-808-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECB9A88C3F3
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 14:44:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 324EF88C411
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 14:48:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1B91305C54
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 13:44:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 567BF1C3EE96
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 13:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF4882D8F;
-	Tue, 26 Mar 2024 13:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD02763E2;
+	Tue, 26 Mar 2024 13:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2KTQQxba"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="o/phD5CT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2126.outbound.protection.outlook.com [40.107.94.126])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2105.outbound.protection.outlook.com [40.107.93.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A07782C96;
-	Tue, 26 Mar 2024 13:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.126
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4109374BE8;
+	Tue, 26 Mar 2024 13:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.105
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711460511; cv=fail; b=RlkKvQh27EgQ1G/zJ9MfRR6la30fbcSAMnvnjrZkcmSxe992N8Hkcr5697Fp7fz5nAmPqKZy2r5v1J5VrbvASJFeIvBU4TpWFOEvzfLppPQ1SiNTsFr27AogwT40s+w0DapbpU2/VoZSHmPCDNUn+/TaUY2YydBFYaazBavfnDE=
+	t=1711460847; cv=fail; b=LJFQXf0E08m2fWjt3JghyXfRUHp51a/JmXxkcNo5SfCmvmS7hm25t4qWbvDDVIXGZvfsvalZWOWA7ynu1QxhDlr2U2ZCGZ0VleODCDGLI4dypwPAvkwg54Rgu7+3kt35XrZDVIagwZ9tAWlL3JyJBeomKEPb9/Bdi8ZJPq5/y7A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711460511; c=relaxed/simple;
-	bh=y813hl2OHanPWAfdfMDyvUiniMLghaGlppW+nYHIrSM=;
+	s=arc-20240116; t=1711460847; c=relaxed/simple;
+	bh=tBblZa16JdDFiGVQq2gU5Hmgp2UTlvUY6UxCTwrcQ/8=;
 	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Q9JUl5hgscCv7xdvAZsx4NQ9qtPQVTzZmPFdbI88EKfkgCzAXO/dYZ34/fwF7X/DDqCVoHLFD9szPuMHq4zOiFIrGuykVAsG+as8JHz6mT6GFKQfKFUmgp4AeTsXiu8fI5FnaEn6uTNbCl+9ZAkHEv+EWphDKEPdH5lG0Av3YmI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2KTQQxba; arc=fail smtp.client-ip=40.107.94.126
+	 Content-Type:MIME-Version; b=eCXNlXm5GTLG4uSR5uXrKOzk6gafBGWQ7RyuKChlwupKxdn68UB/JW4C6kj29ZzIVSozYosDkCNGVppbKbcQIQEgakV5CEWDbIkFqmI7T5tMHgMcyBgkohAhoa/vK3XLaxUp9nikx1fUrRm+bYbk7wu6rmqA5yB3e5pJUDdFpTo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=o/phD5CT; arc=fail smtp.client-ip=40.107.93.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gmm5UCRcsZnPzQ/m5DGhrNFHdc3/HOzF8U4MQ0fTk/tjAgTv2eQVKDb9TfiNlqgsJStFBM+qITqPONFLI7OeJkLRu+1El4ANiH9KUCieGiSmlPhXDSHh9BXcqaLAT9g+sVurdb4ObiBgInZtbuDRlCu+tPTT6sJo7cCruHc6iFXhF2Vi/7CN6FQftZqSlOrtyEvSpQneGGK1Gz8BnN6EqDPdob7jZGH86q2Fm1YwvhC4PUHeE/0yo27kbTxlLPDBPUVTI4lgYzvF3oYBVJ8M7TKGbxwRBKBJbKHsZbdOojaB/HP3meUvNLHzyMUAjgutii2U5p7uzrpvbtqnAw9/zg==
+ b=J4pOcMVzseuojEx6G7s+9tQQQsISi2vX0Py3A8gKP4gIWOoAJEgVmL4u2qgEqMHIEsnBO/u5GIJDRMW3ObAPELJm9X8QZpQKpk8HO9GpnQ/PAQ7gDPzuTYVejp5FQOdLx/uvXnuYxY0ibkE7PzIZITJnCupj3/bac30KgOxpvzE9JJkMhrHKnDHqVd4ayXpc4ekunW9jLZeHu90PL4fPXBdbAuuMErH/GEb8TMVgj0JjyZZTfsO7v/q0K6uiNcqcyIqKuhBrFYLwSfDuVoA0Lm4NQZ6eDYWXh6jOymyQfrO2+N8VBRoBL/xqwTrCVeT4ANbOKUBQQftYP7PtWT0DhQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GFzbL2QfGqplRna6KT7mIHPNXZoZR6jyLg3y5EhXz/U=;
- b=M8yuqqCLlv937jwfxSbxEZHGwQIyf+iKqJ1jlOd0gyDhZS+uppRSyKMbUr6J1Cq/itEhfExphuzeTj+Q6yHkWw6O9SPBmySamaJ1Uaun+WvL6ZuGy8toJmAK304hYYF6D2/E5m6kZv6lcmk/vbq+TqVzzaHINws81hjqi9XQo+Up/JBi6BNz2PTw2yfgwHV/r9vtuZIhz8t8UuMLoF0ZBKZWTuvABvR3HfRUUqG3BmzbvuocW5UO3Ar4vNR570IRWlO6YnOOKgMlP5PhCcMEFiaWmk4oAYu4FHIONxtDrVrLaigku3itC6H8IiGZd4iA1AueyBPWbdM+Swoc92yXfg==
+ bh=dcBstimaPNGF4amWrJLizoD/cXgPrZVKFKKw1AcuXGc=;
+ b=YfZkM96SgXp/IVLRUKF0PxAF4IV0mswFIU7FAEOqWtOcxJYk5DrOm2NNkJMqwmo7jSP62qbe0oiqGvn13QYaGLUV99sdqVDVQvSX3zZ9mSEtPGetmuwuQXnM2pSyOXkBLC/AFzshOvvoXrDsYpMKsCpmo8H9WsToR9rWkNroYveo7sBNEbDVHkeR1GO29CDz6yZuyDiW33dVJMcarXmbvgD52DezGJaGRR/E7mPysdtxlI5m99TzrqDWkCiz6mEMqfVAnuzc0nEsVh4v25Nop5HqtQX+Fz4g7vi+6yB7NlMiTInOfGCPlJWQsxJFPt+FVK9oNuKQsj8JLL+07e3nwg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GFzbL2QfGqplRna6KT7mIHPNXZoZR6jyLg3y5EhXz/U=;
- b=2KTQQxbaR6xNhCPN49wkKU1TuFJHgzG66kBpa/6oboQN0MZM/5cCaB+7GJOW63yZ7AuVamJWveupFN2fbdoaqz5f9Gr92JBEJ+xTbpWjvYBSl1DIcwZCRZKSU4SdR5aw4vA/zBxHPqA7bqH2k2DIk3vg5Gve+nUSK7h2MMFiA/s=
+ bh=dcBstimaPNGF4amWrJLizoD/cXgPrZVKFKKw1AcuXGc=;
+ b=o/phD5CTP4P48vCtuEOQ27dm1RbAHMAPHIHx+KaiscnJTOY1FUqa6I+782XByfTdlRGWDWcCJtviWl6VptBsBlC+HhOHLrLTvsbWwWpLjq/pNT0yQ8Zb3r5B7VG1EkIUZqz6BQEggYPBVdfV6fAMvMSyhJ1FiMT0gVoLXMNzsGU=
 Received: from BYAPR12MB3109.namprd12.prod.outlook.com (2603:10b6:a03:db::17)
- by DS0PR12MB9400.namprd12.prod.outlook.com (2603:10b6:8:1b6::9) with
+ by PH8PR12MB6676.namprd12.prod.outlook.com (2603:10b6:510:1c3::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.32; Tue, 26 Mar
- 2024 13:41:46 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.26; Tue, 26 Mar
+ 2024 13:47:23 +0000
 Received: from BYAPR12MB3109.namprd12.prod.outlook.com
  ([fe80::b2b4:a3f1:a86:d6bd]) by BYAPR12MB3109.namprd12.prod.outlook.com
  ([fe80::b2b4:a3f1:a86:d6bd%5]) with mapi id 15.20.7409.028; Tue, 26 Mar 2024
- 13:41:45 +0000
-Message-ID: <eede2586-f143-4107-a065-2860ed413d0a@amd.com>
-Date: Tue, 26 Mar 2024 09:41:41 -0400
+ 13:47:23 +0000
+Message-ID: <2d0a3e4c-cd1a-485a-8d36-cd449e73bc68@amd.com>
+Date: Tue, 26 Mar 2024 09:47:18 -0400
 User-Agent: Mozilla Thunderbird
-Cc: yazen.ghannam@amd.com, LKML <linux-kernel@vger.kernel.org>,
- "anthony s . k ." <akira.2020@protonmail.com>
-Subject: Re: [PATCH] RAS/AMD/FMPM: Fix build when debugfs is not enabled
-To: Borislav Petkov <bp@alien8.de>, linux-edac <linux-edac@vger.kernel.org>
-References: <20240325183755.776-1-bp@alien8.de>
+Cc: yazen.ghannam@amd.com, bp@alien8.de, linux-edac@vger.kernel.org,
+ tony.luck@intel.com, linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
+ muralidhara.mk@amd.com
+Subject: Re: [PATCH 3/4] RAS: ATL: Add map_bits_valid to header
 Content-Language: en-US
+To: John Allen <john.allen@amd.com>
+References: <20240314163527.63321-1-john.allen@amd.com>
+ <20240314163527.63321-4-john.allen@amd.com>
+ <893141c6-41f8-415a-a1a3-d3e4267ec333@amd.com>
+ <ZgHXR8O7CIoOmfvM@AUS-L1-JOHALLEN.amd.com>
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20240325183755.776-1-bp@alien8.de>
+In-Reply-To: <ZgHXR8O7CIoOmfvM@AUS-L1-JOHALLEN.amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR04CA0029.namprd04.prod.outlook.com
- (2603:10b6:208:d4::42) To BYAPR12MB3109.namprd12.prod.outlook.com
+X-ClientProxiedBy: BN0PR04CA0161.namprd04.prod.outlook.com
+ (2603:10b6:408:eb::16) To BYAPR12MB3109.namprd12.prod.outlook.com
  (2603:10b6:a03:db::17)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -77,117 +81,123 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3109:EE_|DS0PR12MB9400:EE_
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3109:EE_|PH8PR12MB6676:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	kmD9vqrmKWiX4eXz9daFwgFSjGlws1CtQ2P89BFVnLpfCKZw8Jp8AivBosPxYj+niUgvNbyYDvIbW0TKCJWj7t/bEN3eI6hFHPnMMEDMkM2fIhR2XW1IU0qqHwd62RBK2Z05V1ck8suJN06tI4bCJ2WPREiHD/cZIenkSkWjClkD7QHyqiLAwzvD5etnzLgVjopmkC/h4vJDvSBlWJs5utsVoTxog+WBM4Tog4xg2Q+9/mvTuRNrepiqM6UuUPlJq9wzKcWAlv4//g2wCp33lDfEk12wf2aed+t64lu97Z5WbzP47heLta/4qEbiTPhjo61HVp7lC79hnzadrH1wu0psIMTy7uUXajGxEs/4+QBXeZR8V5Ll+TxlZYBrM/97ipS3c3YQ7S8mYUfadkycUQx4XqkU0qBfnn9A4uVqt4H/Vf/ZbG5vq5ZrdbCTJa5WCxZESk6asNNHa7S5kqWYzH4uLYyTtYGw1Wh4az37QvU4vt5pmaLTkCLBGn0vkWr5kGS9JzRCwERCRxtDKmSgvyX/cTnJ+v3RzUn4S0Cc5BpbvD3ZuPbbD8niMrn4Wg+NxFbDgvynIJjZBytcBf+I631Mn440jRFx9BApHWEtSaE=
+	V6W6auSOhxQ/bTQpHpDFnDrMwQJHFKYAeKF08JPjcoLh2o0bjkCjfk/5hzry5DHbf62kZJ8Zxo4lsmIH98PiyUVgNLb36g2GXKtYigjjEEK/OMXi3gUaOPYxFhYTcGXZpcqe3nsghEP2am1wd9etZxuTROpwKdcbq+EV1RZVF4e9Sh7jGBNa4UacjVXcZ3HTlMsLEFZQC4AU8XjAe7O3760sNbFFJbYRByOmc1ngeTzDJWhZc8jzbECW5rXjlklADqT28BbayBeLWAkN6X4yt10mc+3OmYreg+BKU3QZ9F4bThVVc70lobLSV3ITxaCDKDYGrtCVnNleIID+tsD505kNlUC2YgIyvF8M6g9X0u9J7nf96Tn2KVKOmeeD2BBejvvVGW4BlCuEA+LDkICZycwFRExZaBv2aW8W6lmxgVigVqBogHhW2Jx37TS8WBxErHnQSRjF5cTpzAypxl6U2BoDTqZBjuXjkDZD/oTS/ZQdn3vaymwepIxsUDIikmyYysd0bwsfElo1oQbJnKI5R97TiSixexKlRKrIbFExlV5IPmIWzx1RK8tGSAe1DO+VPRQXw7M786HuJd9icggi90+gju2K2mC5XWl4BozYra+Kix7ztAgA/7yVd1ByMJubAyDh+jBg1UhwfCLIBtC0n8LMNObLZO7A6eBmveg4rjg=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V3AzWUd4YWFQQWlKV3YxTmQyUnZJaHVHaGpnV1VkY0FxYlB4cDU4alJiRDR0?=
- =?utf-8?B?VEljWlRsbXZwUUlTeFFPNTBXeEVNVGl6S2JaUDhXU3l4dStjdlhQdTcwL1NS?=
- =?utf-8?B?ZjEvdlgxbmJxaEZoWHp4ZW9OdVE5dEtnWjFtd0NUaUR0d3kzaHNDUFg2aEF0?=
- =?utf-8?B?SHFPajdWWi9BcFI3Tm9TY2plNUtDMlphTG9NWERpdndtMHM5eUNEVllGeHR1?=
- =?utf-8?B?Q1Yyc2t6NXZoTndwM1JoWEhicnpTZTdrZ01hSXpvdDBDdmpUd1B2R1R2OHR0?=
- =?utf-8?B?enV3clFSOW5CT1NlTHROSFp3OGpvclMrbCs3MmdKL1NlVDVaWjZWUE9IVmsr?=
- =?utf-8?B?RkMyYnE3RHFFRE80d3VmMlhwVW5PclNjOGc2WElwbWtmUmFLSXFKZUpURGlE?=
- =?utf-8?B?TlEwWS84VHZuZDVranU1QlZwVUcxZDJBeGpmWVFxWE42QUJKd3VMZ3k4ZkVS?=
- =?utf-8?B?bFdVWEo3Ui9SdGk2VER0ZUFvL2ZMcTcrd05ueGdPeEYxMHFCYmlCdkM2Ujhu?=
- =?utf-8?B?NDlCWFNVSWVGR2hnckFMaFRIbk0zNUJ2bEE3dCtHRDVuMlJGTEN4V3VHSWdi?=
- =?utf-8?B?cHFzTE1hN0U2VjU4QmpMYzNQZUQ2RFFuTWw1b2NiV21ROWMvaDRPTDdxaGcx?=
- =?utf-8?B?UkJIMXJpa3Y5cHNWUzd5aURuUG5CejE4RXZqR2p6cWpZK2U2N0ZDa253WEh5?=
- =?utf-8?B?TlZtUmdHU09tcHNqM1pDY2kwSlhSaThVb2VMQkpMWWwvSDNDUVZDZmJhQ0th?=
- =?utf-8?B?ZE5UK3h2aE9WcWtDdzUxSi9TWFpKVC9KTkVPd0hKL2ZlU2ZFa3B1QWkyQUhQ?=
- =?utf-8?B?bDhucytXNVRSK2RVZzBoeFFXV0pTc2JPTnVvTU5WREVEZkNBRUNmTEovL2lp?=
- =?utf-8?B?MFRXQXdCVGdlOUEvWHFhTHJYdyt0dUtJREZtdzBLR2hkTFZuZU9zUGpqZmpS?=
- =?utf-8?B?Qml6WGZoUzFuejN5MWN4ZGdhSnh6YXdTMTdDM3dZRWdsMFVZSStWZFl6dENZ?=
- =?utf-8?B?dVRMRzZuTU9yMjBYdG1HMWxkK1ViS2cyRXhlSG9RdGRYai9BbnB5TGZmQW9n?=
- =?utf-8?B?LzFqNG9sUjZTZ1V5Q1JDOHFjbmNNZzR1WUNRSFc1U0xDL21ERndFaHl3RWNk?=
- =?utf-8?B?dlZzdU55NEJkYmlaL01NeXBDSlA3aVVTYmpXQjBYMUJZL3E3enZzR0IyQWFC?=
- =?utf-8?B?RnFZdnJJSElUSnVuclFzclAvK1NuWVJ2ZU9BNTJUWEVNQUlUbmlJV1ZUYVN2?=
- =?utf-8?B?K3ZYZGY4LzhnZVVqTnR5YXZSVzdZVndRSFNRYjVSRzRKcUNBMnUvZGVIaUFO?=
- =?utf-8?B?QTBFOWxTL1MyQUxnV3Z1MCt6cWFlbEFYMGZrVk8xOWkxQkZ1V0h1TFdZVC92?=
- =?utf-8?B?L3NhbkdOZDhHeERxUkc1Yi93emV2bE1lR0hrMTNQMmN1TnVCWjZIRHo4VGIr?=
- =?utf-8?B?WUhjOU5EdTNwbHg4VytldVJPcTBXckViWXA3QmtmdzAzU2hLSjBXRncveE5t?=
- =?utf-8?B?aFowaWZ0RkEvd2hmdHhTbXZCOW8xVFhSVTdqTVdqam1KWHVrN3o3YWVVYVJu?=
- =?utf-8?B?U3JBMVVsdlZmVS9PL3NGZkJtbXZCZWplT0lYMk1DVjZZQTdhdmptVFpiemps?=
- =?utf-8?B?Vy9JWEI3Skx1enJXbVJqaHAvNFpNTTVya3duQzlxZzRmVVZnT2Q2UVNVUmdx?=
- =?utf-8?B?bXZyL1g4VHhzRGFoR3RaSHV1SUxOKzlYZFAxbG84Q1daMkMydmtCSERicWxF?=
- =?utf-8?B?NThwZnlzWHZWTFVRaXFvM1R1ME9qTWE0eTdzT08vcW8xS21HeU9ZeitmeDJK?=
- =?utf-8?B?N2txd0loY1ZYam9JWm9CbFk0SSswMnhSQ24zODIvRVRETWhIQzE3TjNZdjgx?=
- =?utf-8?B?S1plZUlnRmYydlBpT0hCbGJvZWxYdmt3U2VyNHFxend3ODBnYkFSOG13Y1FC?=
- =?utf-8?B?ZlB4eEhnUDVsVVlabFlmcW1tdEZrV1Aya04wTHlBZ0FYWGFJN3FIVjdDVnBD?=
- =?utf-8?B?clFXWWtuUEQ0angvWUVKRitGenlCRE5oWHZwUU9IWUdXSktIeWg1Y3o5VkFN?=
- =?utf-8?B?Y1E0Rnl2RDA1bFB0eWNMM1FEM2xsWEcvdUt5dWJ0R0FjZnlGUFBpamZKRVhQ?=
- =?utf-8?Q?oiTKq7moUZxt3x5a20nemysLq?=
+	=?utf-8?B?azhNREVkNUxpOFJ6ajlxNHlaaW9RN2NnMSt6Umw3L2haV2FoOHlSa3RkWW1J?=
+ =?utf-8?B?dlBnOFltREtxWklhUHdhNVFyVU1OVS8vUm5ieERjcWRUUzVZeHAvcXp1MkRa?=
+ =?utf-8?B?ZzVxZkVxd1N2MGJOYWlDeTlJU3JBbGRCTnJHSW8xSFh0ZEM0MnVFQUVmaVJB?=
+ =?utf-8?B?Q25OS0V2c2hlSFBQMDdPSU8rTExYOHJuR3pBeGIzV0ZDejdlaERTQXRLUTc0?=
+ =?utf-8?B?STJZNkdxc3prUXJiS29ac0wrOEZaNUhjU0ZFRnBiREVRL1c5ZlhhbXlQT1Vy?=
+ =?utf-8?B?azVFUDFheVV1TWp1SmgreGNjQzVhRjdpaE5iWU13ZTJURDErZHl5S2ppajlC?=
+ =?utf-8?B?U1VKQ3hOb2pybllhaWFXeUZNZjQvQXhIM2srVkdtSHQzMTA2WTA5bWZxWGgz?=
+ =?utf-8?B?SjF6bzErTlgzSTZSb1ljcytVaG1vOEJZbU1HV0dydU82THYyOXp3b0VRelhp?=
+ =?utf-8?B?Sng0KzhrbnJnNTN3c1VvQjFYenhaWUNWMzhreld6VTlJUFFTQ3lHNi9sd0pI?=
+ =?utf-8?B?KzVQUENhK052MVJCVlJmN2dvS29STWlpOFRqVGZjZnlibnVhcWtNYjBMcC8x?=
+ =?utf-8?B?bGdCRWY2bTBCVHN6RmNucEdDRFhBRGF2ZkFnTk1hbnRhZE5BK0o5QjJWQXI5?=
+ =?utf-8?B?Q3dYWW9WZHZnS3dEQlhpb3l6bWVxZDgyWHFDMm4va3FmbWErcEk2Z3M5amkw?=
+ =?utf-8?B?UXZtUmFrLzlPZENJcGZqblByZ3BTaSt5OFdZa3Rsd0wxbXpsZmpURk5RTUJ2?=
+ =?utf-8?B?OUR6M3ZrT2tBUTdTMHdieWlFQU9LWkRONzNVQlRmcHhZZk9FWW9qdE1oYm5m?=
+ =?utf-8?B?cXhGWFZiWGRqWGF0cC96UWU2TWdvRkpERldVbDNQS0xwQ1JoUWRoQUY0bk5H?=
+ =?utf-8?B?WkJqK3hSU2dxRmNudGxna3o4Y1ByZVpKRWhmQ2haREdidlpUWk9zLzdoNlNh?=
+ =?utf-8?B?bnppK0lJbWxPdHBQZWwvV3F1UVpyYndNRTlTbGxKdDFNTGtIdkJyWmxxTEhh?=
+ =?utf-8?B?SzVHVlpsTTJFUFBoRnFRRXBlSUdWL3g0b0N0UW1VSkwxWDFQOGtZcFFqazFI?=
+ =?utf-8?B?YmFaZEVyeWVyVThoSXdIemxNajVtby9tZ3ozTHhaZERUQmV6ZGpvVHJ6WmlC?=
+ =?utf-8?B?dklxa0N1c1B4NUM0NnBmMlpLaW9lRllvZlVjNFdVNGpuS0hQQnI5bFZrS0Ir?=
+ =?utf-8?B?MlBNSm5hNzBwcGM3bHU5ZDM2U1I5Zlc2TkR2dFJqM1dmZmI1RzloNXV6V1BC?=
+ =?utf-8?B?Y2JpSUE1SXVEYUpoSVoxOWJHb29YYzBTQUxmdlF5YTBLK2UrYXo1UnJPSXFx?=
+ =?utf-8?B?SUxDcDJkUVg1YTJPMkFjS2RzM3lEbDEyTVpBdkNDNCtGYmJuUDVHK1NTUVVK?=
+ =?utf-8?B?ZHFMQ3JlK0pUOHhmTmVlQ3J0VlhBRDIva05sYnNtUmF6N2lLWnBVY04yWUkv?=
+ =?utf-8?B?bThrcVROWW0zNzltWms3K2xQSXFiTjBOdXFMTXB6T1AyYUtPMmVmaVRrcEdO?=
+ =?utf-8?B?MTkxSUhMOFBDUDhscUtPR1d3Zll4OVQ5ZFFwcUtwam45MndBMnpCL01EZjFm?=
+ =?utf-8?B?QWhlU0pCRWpGdlphRmY2ZXVzc2VNR2ZBVzVrcm5Xd1pXUGNuMWZjVTMzT3Zt?=
+ =?utf-8?B?WSt1Y2FxVG90amNqeHFwcEEyWlVWbjBSMW5KWitUblVKMDFXZDQ5U253bzMw?=
+ =?utf-8?B?ZUNJM3hTUEZMeDg2WU84MmpybE5sTmw2QzNITXN5MEZmSlpuemJGSnU4SUZO?=
+ =?utf-8?B?b3lvM0x5VWt5Uk1mWnVvR1F2M2cwL0J6bTBqY2xheVFFNWxrT0g1UmM1RHNr?=
+ =?utf-8?B?RFl4akZrME4rd3ArWEt6WnhZbWxTT25oWXkrai9JZnVlaDVkdEphT09nV1pn?=
+ =?utf-8?B?czdFSXJvbHpxQXNPb3A0akNEaWNxK2tMWThNSldyQnJBVUZvTFdwaFpmVzZM?=
+ =?utf-8?B?dXhGUUlqNWhTZ0NoMzNOcGlJeVZjSmJ5MkNuK3NvemM1K1Y3ZkZoQkppWUtO?=
+ =?utf-8?B?b2VZL21xRTZFVm5yUkErQVRiQmxBaGFjYS83Y3pxQkFGTHZqbm5BMkl1TTg1?=
+ =?utf-8?B?UlhMZ1JyV0lWR0VabXZLclREK1lPTVRvaStSWFRuNkt6WHF4MmJRSk5jdS8w?=
+ =?utf-8?Q?S0p7DsAhfAUw9glEwTwjkfJ1L?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ddef6c6f-04ec-4d15-ce1e-08dc4d9a7a67
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f5c606c-e512-49d9-0d18-08dc4d9b4388
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3109.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 13:41:45.7950
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 13:47:22.9434
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pPtClsGl+Rv3PXP2qm5e/ZOQ96NzGNHE5sTD86yncYVF84U9nFZIgkeLn5QFyg1YZ14xMG/gBs8mR8Sr+L3e0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9400
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7vDshX4070UgiBY2U0CBC69mAYm20PWL8a4ReClx8c7WK128wxvPVGyBCQsUMv7QuXf942thyu7JzhJD6DKt/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6676
 
 
-On 3/25/24 14:37, Borislav Petkov wrote:
-> From: "Borislav Petkov (AMD)" <bp@alien8.de>
+
+On 3/25/24 15:57, John Allen wrote:
+> On Mon, Mar 18, 2024 at 11:46:39AM -0400, Yazen Ghannam wrote:
+>> On 3/14/24 12:35, John Allen wrote:
+>>> Make map_bits_valid available in the AMD ATL internal header as the
+>>> function can be used in other parts of the library.
+>>>
+>>> Signed-off-by: John Allen <john.allen@amd.com>
+>>> ---
+>>>    drivers/ras/amd/atl/dehash.c   | 2 +-
+>>>    drivers/ras/amd/atl/internal.h | 3 +++
+>>>    2 files changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/ras/amd/atl/dehash.c b/drivers/ras/amd/atl/dehash.c
+>>> index 4ea46262c4f5..a20cf615b83a 100644
+>>> --- a/drivers/ras/amd/atl/dehash.c
+>>> +++ b/drivers/ras/amd/atl/dehash.c
+>>> @@ -19,7 +19,7 @@
+>>>     * If @num_intlv_dies and/or @num_intlv_sockets are 1, it means the
+>>>     * respective interleaving is disabled.
+>>>     */
+>>> -static inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+>>> +inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+>>>    				  u8 num_intlv_dies, u8 num_intlv_sockets)
+>>>    {
+>>>    	if (!(ctx->map.intlv_bit_pos == bit1 || ctx->map.intlv_bit_pos == bit2)) {
+>>> diff --git a/drivers/ras/amd/atl/internal.h b/drivers/ras/amd/atl/internal.h
+>>> index 05b870fcb24e..4681449321de 100644
+>>> --- a/drivers/ras/amd/atl/internal.h
+>>> +++ b/drivers/ras/amd/atl/internal.h
+>>> @@ -239,6 +239,9 @@ unsigned long convert_umc_mca_addr_to_sys_addr(struct atl_err *err);
+>>>    u64 add_base_and_hole(struct addr_ctx *ctx, u64 addr);
+>>>    u64 remove_base_and_hole(struct addr_ctx *ctx, u64 addr);
+>>> +inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+>>> +			   u8 num_intlv_dies, u8 num_intlv_sockets);
+>>> +
+>>>    /*
+>>>     * Make a gap in @data that is @num_bits long starting at @bit_num.
+>>>     * e.g. data		= 11111111'b
+>>
+>> Ultimately, the maps should be validated as soon as they are gathered. I
+>> figured we would do that later. But that would wipe out this change.
+>> And, after looking at dehash.c again, map_bits_valid() isn't used in too
+>> many places right now.
+>>
+>> So I think validate_address_map() from the following patch should be
+>> done for all modes first. That way we don't need to add and then remove
+>> this function from the header.
 > 
-> Have the driver depend on DEBUG_FS as it is useless without it.
+> I'm not sure I understand. Are you saying that we should just move the
+> map_bits_valid function to map.c and then make the map_bits_valid calls
+> that are currently in dehash.c to validate_address_map?
+>
 
-This isn't true which is why the module doesn't fail to load if debugfs
-is not available.
-
-> 
-> Fixes: 6f15e617cc99 ("RAS: Introduce a FRU memory poison manager")
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218640
-> Reported-by: anthony s.k. <akira.2020@protonmail.com>
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
->   drivers/ras/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ras/Kconfig b/drivers/ras/Kconfig
-> index fc4f4bb94a4c..41697e326fa6 100644
-> --- a/drivers/ras/Kconfig
-> +++ b/drivers/ras/Kconfig
-> @@ -37,7 +37,7 @@ source "drivers/ras/amd/atl/Kconfig"
->   config RAS_FMPM
->   	tristate "FRU Memory Poison Manager"
->   	default m
-> -	depends on AMD_ATL && ACPI_APEI
-> +	depends on AMD_ATL && ACPI_APEI && DEBUG_FS
-
-This was my first thought too. However, besides not true as stated
-above, this also leaves the issue open for others to hit.
-
-I think the fix below (not tested) would be more appropriate.
-
-What do you think?
+I mean that the maps should be validated once as soon as they are
+gathered (in map.c). This would happen before we get to dehash
+functions. So we don't need any map valid checks in dehash.c.
 
 Thanks,
 Yazen
-
-diff --git a/drivers/ras/debugfs.h b/drivers/ras/debugfs.h
-index 4749ccdeeba1..ab95831e7710 100644
---- a/drivers/ras/debugfs.h
-+++ b/drivers/ras/debugfs.h
-@@ -4,6 +4,10 @@
-
-  #include <linux/debugfs.h>
-
-+#if IS_ENABLED(DEBUG_FS)
-  struct dentry *ras_get_debugfs_root(void);
-+#else
-+static inline struct dentry *ras_get_debugfs_root(void) { return NULL; }
-+#endif /* DEBUG_FS */
-
-  #endif /* __RAS_DEBUGFS_H__ */
 
