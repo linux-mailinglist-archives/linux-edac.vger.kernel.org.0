@@ -1,60 +1,60 @@
-Return-Path: <linux-edac+bounces-816-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-817-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6CE88CF09
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 21:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C14888CFF5
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 22:27:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D79F1C27AA0
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 20:38:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F3A81C2E001
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Mar 2024 21:27:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752B413D8BE;
-	Tue, 26 Mar 2024 20:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E08C13D617;
+	Tue, 26 Mar 2024 21:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Zs4xrFeD"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Tu3eg7VE"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2041.outbound.protection.outlook.com [40.107.223.41])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C14313D513;
-	Tue, 26 Mar 2024 20:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670CF12C7FF;
+	Tue, 26 Mar 2024 21:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711485188; cv=fail; b=gDatAh+xRZbNbihTXk1F8ATDGqqaScynNCSYljxF7/IA1lWGpo/vnHSuTFGgXDHZJd8xDQygCQ39r4QmMFjdpzXzPlW5N5jNyx2Ma3ZHAiOCQnrj+5lGgii1Z6n9R5yFkSiMJBY6ovQbrK2CWIuKE+SYs3h6VNT8xVumObzsduY=
+	t=1711488423; cv=fail; b=hCUePubGHFjetntTlEI5/U/B9VbfJPm0jL1/OXJK7MbiySZS/em8W8rgzvxGp2Xzd7yOlBjF0R34wlkzCzmt5qx5D/Xm2GmBgaLVQ3lbn8PsUFEYmv0iofvaLIY89Lg0NVTpHWUwT5UvopgueqV+mOLNB6Kjc5tlC4ugcB70C0U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711485188; c=relaxed/simple;
-	bh=KWbrCl+PZ3tLX5BxiE1dr0dSmkQqfrKfUTmmzX2WA1A=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lI21pDgc2FJWsVjkt+kAd5TDSLm6alRkfnoQiqY6ce7KRIqbXEfpmMxJAXXtJrl04nsoBy0e9D0rZJCuo4ubo/RaFHmmBH5x29BLLVoLS+vReeBJ4xls1RxxZcN/5S5iiCaFCHx/fRCGDuKbo3qynyqVC7USLkCo/GRZvape9eY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Zs4xrFeD; arc=fail smtp.client-ip=40.107.223.41
+	s=arc-20240116; t=1711488423; c=relaxed/simple;
+	bh=pS7TH0aSBGd4LOKo+j9duXtCzy0ymz898yGLigY3RI4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D4bGAF2EhJ6mpMeA5otQC+7NmHnVacLKsbDobeSiSTDVBUnW7VCUjB3dqVywtCG+W6HrYyNfz6liDe5ZlNxU4swYPabYsFGqZ66SFA0IoGO43OSa0rZ5DDRnVP/AUjS5a1xX4wuYJupwzrPVxryqH2L+qZ64uxSUoqZpCMtjYUo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Tu3eg7VE; arc=fail smtp.client-ip=40.107.244.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OAOz0vFO6Fi/T0Pu60drSpTV1bB0lJ/8LzIFYteFcx93J1hKhh1cRyxEtw59iSLTVlISytiY24tQUIjF8upWQrePxP1BLg0Qi7489yaN64KSzXwYaSbDARMzOe7u/qFXuK9Dksp6V19NQgFsdc7A7g3Cau4BWlu18de5/bDK76kGZlhj1D0YAVdENKi9Li3kDIL5z0uHbJyrTGh0aGjFibp3kY8ieTnID8n8vtsRkrzlYFPP981KGi6/zSFJwiLymYJyOJrZx5fMeqA2sb5+TeE8vXSiZzVMelWEFf2xpVhe+4AFTDMKDa0vY9mM1KwTKE9WDc/mOZyqCvzQvlnDRg==
+ b=m3m48ydvTwu8uX9tBdScjGGGowmnj4ZeDmfS3t6KatYPlurr2nhbzDBRfTjsWEvWjbJBSDuKfOxSA7GIzBgqPT+AVXkQnt0PCVXHcZGrHoaxzBmzt5HqEAg+giVZ59LmS4A8T9vUHqMpIETm22IoX9U9yAjx73HM41GCmDE6HSW10llSPuvsVPC8fbw/YOmLc5XCoTf6+QZM9q2zqoNrIad0S2bewh3d/S6mHPqAI5LvXvSYzZtmzYnwyEIDDkggcUBf8ezeIybAy6kC1DtGc3SO8FNNDwMExy1JrLoXd6XncHBp/R4vvks3Abs/i3ibrnML8yP3zfI+L9eZwP+F3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TfEkF9NVMBpQlwcgRuR3dV+4dn6yy6SCJE8LBVFU6LA=;
- b=Vdn3y+sXN8w/glD8SDcy3SHQrpdvQuUT9JpxBQz+V92hOznTdb0PiHnX1LLSMmBwFGj8Se5g2HGq/tNME+NEIytYSIVEYFW2fuM1c+ra9l5l3Ay94pFrFqQc9HBlqlphAQWfEMxw5FzgWkRKWUSG4fJtCzYKoXPb0p+6R0AFWQG0aUAgxSK9BIIl8jA5uIrzQQAhM0BLRRYGOhQMmUDuvieueoXSqwcj6KBJJQH0sem9AUcXZP3J361mgh1j+0pZaS/S1EoYrCsinfQyqQX//W87Ywvw1sgn5iD3WISpsXGhin3/C/zGG1afjTogxAV3QcGQh5Nk6t3C1/buven3FA==
+ bh=FfU5Z0iaHRlI9h+ejhoRg/+pNAoHASYHD0Q96UtUvbk=;
+ b=P11AgAp6ageyyhwsevQIE19faLw6JTzo5rJBbQpQB2SHgnfl9QxgR8A7THCh+zA3bYAgihvgTkuMsFN44rezS+/imtoNruxfIckLzLNX/MbFDdo3LW9cB3JCXy9+h/pQ1eozpRjDbaGXK0HJJI1hVj13Vuevx4IowdsJWLRhs6btADidxxRMgkvfM3nUKLUNDkGQw30NMXHy/qBjXhgSiALQrMXurcc8jw3eLj1f/JR/wrgrb0yfA7+R5Wmys0ZhxpQA0Cd63N3xlHVShQmSvXK8LV3LyLX7Zjaml/3/XALiXYbjUnrW8Gnps74pSGaiE8ug7XwIoA91rfhUlA3SUw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TfEkF9NVMBpQlwcgRuR3dV+4dn6yy6SCJE8LBVFU6LA=;
- b=Zs4xrFeDz7xzBwg62PruvrIq/Pa32MLdimEBpa+XD+FhyE+SfHC9VcDzpdEhrQUQMc07XhQVv0q0LuQ9dPm99sBzKm+rbTVtp6ZHvJyevfnc0knshEzyRa/Dvmm36vaTVsb7x17AiU16YAoy5uJjWgc7D7zTv/zd+MtnUiQqJb0=
-Received: from MW2PR2101CA0034.namprd21.prod.outlook.com (2603:10b6:302:1::47)
- by MN2PR12MB4472.namprd12.prod.outlook.com (2603:10b6:208:267::11) with
+ bh=FfU5Z0iaHRlI9h+ejhoRg/+pNAoHASYHD0Q96UtUvbk=;
+ b=Tu3eg7VEww/AvSRCQhX5U+Jpmd42wAWkbuCDzPRJ+jq6He92pV4fbQKJCI2O92JROuMSY8DJbuKQF0aSPqONsYfQinnJ7Vpg758VfDLtJ+fSFpJWvwAzP9UCIxG4GmghBfrB00ZexkS/7jOK/ZWFBJj5lDIMcV92hGNODrcapZE=
+Received: from BN9PR03CA0322.namprd03.prod.outlook.com (2603:10b6:408:112::27)
+ by PH7PR12MB6717.namprd12.prod.outlook.com (2603:10b6:510:1b0::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.33; Tue, 26 Mar
- 2024 20:33:04 +0000
-Received: from MWH0EPF000989EA.namprd02.prod.outlook.com
- (2603:10b6:302:1:cafe::8e) by MW2PR2101CA0034.outlook.office365.com
- (2603:10b6:302:1::47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.8 via Frontend
- Transport; Tue, 26 Mar 2024 20:33:03 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.31; Tue, 26 Mar
+ 2024 21:26:58 +0000
+Received: from BN2PEPF0000449E.namprd02.prod.outlook.com
+ (2603:10b6:408:112:cafe::53) by BN9PR03CA0322.outlook.office365.com
+ (2603:10b6:408:112::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
+ Transport; Tue, 26 Mar 2024 21:26:58 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -62,91 +62,94 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000989EA.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ BN2PEPF0000449E.mail.protection.outlook.com (10.167.243.149) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 20:33:02 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 21:26:58 +0000
+Received: from jallen-jump-host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 26 Mar
- 2024 15:33:01 -0500
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: <bp@alien8.de>, <tony.luck@intel.com>, <linux-edac@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
-	<john.allen@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>, "anthony s .
- knowles" <akira.2020@protonmail.com>
-Subject: [PATCH] RAS: Avoid build errors when CONFIG_DEBUG_FS=n
-Date: Tue, 26 Mar 2024 20:32:52 +0000
-Message-ID: <20240326203252.2699278-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
+ 2024 16:26:57 -0500
+From: John Allen <john.allen@amd.com>
+To: <rafael@kernel.org>, <lenb@kernel.org>, <bp@alien8.de>,
+	<yazen.ghannam@amd.com>
+CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>, John Allen <john.allen@amd.com>
+Subject: [PATCH 0/2] PRM handler direct call interface
+Date: Tue, 26 Mar 2024 21:26:38 +0000
+Message-ID: <20240326212640.96920-1-john.allen@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989EA:EE_|MN2PR12MB4472:EE_
-X-MS-Office365-Filtering-Correlation-Id: ce771791-5b68-4406-421d-08dc4dd3ef35
+X-MS-TrafficTypeDiagnostic: BN2PEPF0000449E:EE_|PH7PR12MB6717:EE_
+X-MS-Office365-Filtering-Correlation-Id: f84be2e3-b3dc-4445-ca55-08dc4ddb77e5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	IEl1ETi/zayBRF/fF7dLfRS5U90XPXkBJRiSeF6qMXH7b5OcsjQ2WFxmOPWBSu87WD5Q5wuHQ5QGAKyeCjdmL272U2cboLRpeJDhgJMyp3C9VGi7aCNX4nnMHzG1/duUNgZsxafOTz37F1F7n+jqjcC2/SsFhX+NpobjWEuI4vXLQnykhPg++B9hZN2EFltYx5Ck5VifcGM/RRbE+C5y2M7dl0mcN2T8zqaETYVthQdD5GLBZCDuyj5WKzPQ1lO1lUUsJHX6FLh82KYK5dn8GnqFUyYPcj2dV1eryvsFU1k+kOGJFZf/DzXNHdwHjE3pbOZXMERD6dOvXYYE7LZW9O/UESC6XIfLp/Jiw/HjsC7gLoKfrLPOv4yBxPveRJ6nq0WfG87G9T9dTrCDR5YZoIcBBu+NeY0+FY33BHHJnA5iSetfImh64J5r268PM/47VwHCsRkO1uX0aSytOGlcvIf53m4sPf/ypK1tSGYto6TcBrJj/j1miP00F0f9vXmB8m3LVuGLDT7cmi566Fky7YFlOethHPzhVE2amBeU41OVZm3IPlQR00YYaSgH9o7YsZB6B0ZABqOfysCVlNcv5H8Qe+kGesegxerkwxAGVL2ItQIHb08JqU4BN0uXPoYq7Wr1NaHcWKyVLdqnT9JcM0D0DXk6+E7hT6FNykHx9w7RWF+vB/tEg12F1jCOKCLPH8h5JxsIxp4a7IvnD/Bb3g==
+	9k9tiGkFnll0MnlgQoSJ5Gfi6KI9ua4Gk81tBB3q2KfyiIQMiBPx1HvxonmHuxpbr3e/9GVBFtsvQCxViSC+QX8W9qK1JP4c3qW7G0iNrTZtoUd1uaffeDVwnWLIgp+iUYWe6Hu7StKDWUK4nBi1dhYfzDYQavgAXeSBMCIVyvtK1yRdjAccTV+DuWItQq3w6vo22oB/h4rZ/c+UKCJR90pOtPXFqEwYt4oGfHyG9wbm14I1XZajYdSPCKY4PALQqCcakdIfodYNGlMBl71bnDAHCYDbStKKgObluDoSgF+7OSU0nJJVhJ83MqdzT4qAeYEiC1lz8RX7ABUyZtG0CmQfkZ8564aOIAnpw+89J005OMrzrKTcExpjT/1rGd02dBCJUMUgX0OSYzg9O3X7YNeGQ0zsybeLd4XukgNK0qNXBjQNwDhsAKNm0cEyRofbG0Ys8JzvBVWGvYeojgnMX7J5f0a5mwXM5G58hiUU2tDwlUbUEi5GQieftuwLdpcNlraNhTWtujAAjEq9KRjCI1wMrjPfAqoSbvJk1axY1FdJgi4hZ5q+pnH/uaR7MPzfG04nn+2ksBDP4iOVg3UeHkFX7F6x6DvcFd93K3uWa+mcL508HLoBzqgDrhLp3OpI85pfJ4HY15mqQYgDB/GmO5N6wrdjla7zJVadqM7Jffg2ZXYx0bRI0PbJWlC+GVpkNNGtZnFamBrK7QMmRZuSjA==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(82310400014)(1800799015)(376005);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(1800799015)(82310400014)(376005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 20:33:02.5044
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 21:26:58.3555
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce771791-5b68-4406-421d-08dc4dd3ef35
+X-MS-Exchange-CrossTenant-Network-Message-Id: f84be2e3-b3dc-4445-ca55-08dc4ddb77e5
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000989EA.namprd02.prod.outlook.com
+	BN2PEPF0000449E.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4472
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6717
 
-A new helper was introduced for RAS modules to get be able to get the
-RAS subsystem debugfs root directory. The helper is defined in debugfs.c
-which is only built when CONFIG_DEBUG_FS=y.
+Platform Runtime Mechanism (PRM) introduces a means for the AML
+interpreter and OS drivers to invoke runtime handlers from platform
+firmware in order to remove the need for certain classes of SMIs.
+Further details can be seen in the PRM specification[1].
 
-However, it's possible that the modules would include debugfs support
-for optional functionality. One current example is the fmpm module. In
-this case, a build error will occur when CONFIG_RAS_FMPM is selected and
-CONFIG_DEBUG_FS=n.
+Future AMD platforms will implement a PRM module in firmware that will
+include handlers for performing various types of address translation.
+The address translation PRM module is documented in chapter 22 of the
+publicly available "AMD Family 1Ah Models 00h–0Fh and Models 10h–1Fh
+ACPI v6.5 Porting Guide"[2].
 
-Add an inline helper function stub for the CONFIG_DEBUG_FS=n case.
+While the kernel currently has support for calling PRM handlers from the
+AML interpreter, it does not support calling PRM handlers directly from
+OS drivers. This series implements the direct call interface and uses it
+for translating normalized addresses to system physical addresses.
 
-Fixes: 9d2b6fa09d15 ("RAS: Export helper to get ras_debugfs_dir")
-Reported-by: anthony s. knowles <akira.2020@protonmail.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218640
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Tested-by: anthony s. knowles <akira.2020@protonmail.com>
-Link: https://lore.kernel.org/r/20240325183755.776-1-bp@alien8.de
----
- drivers/ras/debugfs.h | 4 ++++
- 1 file changed, 4 insertions(+)
+Thanks,
+John
 
-diff --git a/drivers/ras/debugfs.h b/drivers/ras/debugfs.h
-index 4749ccdeeba1..5a2f48439258 100644
---- a/drivers/ras/debugfs.h
-+++ b/drivers/ras/debugfs.h
-@@ -4,6 +4,10 @@
- 
- #include <linux/debugfs.h>
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
- struct dentry *ras_get_debugfs_root(void);
-+#else
-+static inline struct dentry *ras_get_debugfs_root(void) { return NULL; }
-+#endif /* DEBUG_FS */
- 
- #endif /* __RAS_DEBUGFS_H__ */
+[1]: https://uefi.org/sites/default/files/resources/Platform%20Runtime%20Mechanism%20-%20with%20legal%20notice.pdf
+[2]: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/programmer-references/58088-0.75-pub.pdf
+
+Tree: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+Base commit: 4cece764965020c22cff7665b18a012006359095 
+
+John Allen (2):
+  ACPI: PRM: Add PRM handler direct call support
+  ras/amd/atl: Translate normalized to system physical addresses using
+    PRM
+
+ drivers/acpi/prmt.c            | 24 ++++++++++++++
+ drivers/ras/amd/atl/Makefile   |  1 +
+ drivers/ras/amd/atl/internal.h |  2 ++
+ drivers/ras/amd/atl/prm.c      | 58 ++++++++++++++++++++++++++++++++++
+ drivers/ras/amd/atl/umc.c      |  5 +++
+ include/linux/prmt.h           |  5 +++
+ 6 files changed, 95 insertions(+)
+ create mode 100644 drivers/ras/amd/atl/prm.c
+
 -- 
 2.34.1
 
