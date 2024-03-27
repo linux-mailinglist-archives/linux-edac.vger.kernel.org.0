@@ -1,182 +1,1233 @@
-Return-Path: <linux-edac+bounces-820-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-821-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA15C88D382
-	for <lists+linux-edac@lfdr.de>; Wed, 27 Mar 2024 01:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFEC188D605
+	for <lists+linux-edac@lfdr.de>; Wed, 27 Mar 2024 06:46:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ECDD302A76
-	for <lists+linux-edac@lfdr.de>; Wed, 27 Mar 2024 00:48:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 625AA2A4E14
+	for <lists+linux-edac@lfdr.de>; Wed, 27 Mar 2024 05:46:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82400179AE;
-	Wed, 27 Mar 2024 00:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E846714AA0;
+	Wed, 27 Mar 2024 05:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="danRWf2k"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983D328EC;
-	Wed, 27 Mar 2024 00:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033361EEF7;
+	Wed, 27 Mar 2024 05:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711500497; cv=none; b=KDNiEW1gXB8PPWBA5dUJ/L/lGfpzN4MlBnE3lcHktyWMUPN1iZIAdNDxfTi7INLC8uP3Q2XoirjHDRZr3I2LaALUWOPeFaZvdI1LZzjDHP4+TKbv8lBJPKPAJtM4fD8IgnPNMbj8/gYPVATfKVEgZtTv7DlObCTyVHEPXFrW5PY=
+	t=1711518382; cv=none; b=SVMvdYT5ap325XEQmwfr6IDbpAbITEtREZEMgE2BKyhXIm9emF48p+7ELGX70v3lVbbJCuA4zA0UfWDAVRKKMeC9xVrZcNj87fnQMVXzOX+35pLXSCxG16X34gdQLAZiyddTi0/bbOmeQQWydkR/raZykXn+RDgXBv/Nr8MuSEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711500497; c=relaxed/simple;
-	bh=hWuZXrxDD/5dw1ptkdk4OsxL5BtRsRdCmo6PnucLDH0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=VGOrXVrOPgGCG7reS9UJg+BjS12SR1B2sPTZKz/6oj52E/oapAkhkO0C6xY10Xo4+qTpG6NaTMvqmt4HvFE4652yGwEtUIH2ATztXQBwkrcFTPs+/6LvLcXtYxq6TdYJ2U8EQS68TXqMS03cCA4/VvymbfX5cjqoNWdA3zF2/kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4V47LN0cv7z1GDJm;
-	Wed, 27 Mar 2024 08:47:40 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (unknown [7.193.23.234])
-	by mail.maildlp.com (Postfix) with ESMTPS id 795961A0172;
-	Wed, 27 Mar 2024 08:48:10 +0800 (CST)
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 27 Mar 2024 08:48:09 +0800
-Message-ID: <cf82a480-568e-7ce0-5394-bd6c511c067e@huawei.com>
-Date: Wed, 27 Mar 2024 08:48:08 +0800
+	s=arc-20240116; t=1711518382; c=relaxed/simple;
+	bh=x4U4GgIGgZptwpmvKrsR8EGLQ5nYcfJCPC29ReNMaHo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e5iNn6rIn3YFh/5W8yEKeEAsEbQMCd3RQTFq+8ICQob8ENX8SQy8+hUMTq/QcAuiltGxqLSuto9nfQ4OB9xEwzW2+e1lIYrmM3cDk4SauCFP/1UbAJ9THeimOllp0uhDB2NPmP0b4qSOHfM7yCvDt5dgGQVsCJ/yGGqyDbUrF8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=danRWf2k; arc=none smtp.client-ip=115.124.30.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1711518375; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=OSHyGfVhKnUFgIS6w9GodS24K8CDECRgROMq90kNB2o=;
+	b=danRWf2kF/VSM8VCzHZT//lJM67v1ojAtLd2jUxp5GjJkbsjMZtfun2WHnerhTMe/S2ytsRV6ttXYSiFEJUZd4DIA/3P55sshhZxslU9XeM59iiwplJMKDmNrrnfO21Oi1e4E8cAWOug77FhQcI+UTpF18O6R0OjESIv25VVpy8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0W3NXxXZ_1711518373;
+Received: from 30.240.112.129(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0W3NXxXZ_1711518373)
+          by smtp.aliyun-inc.com;
+          Wed, 27 Mar 2024 13:46:15 +0800
+Message-ID: <3dc79e45-2256-43af-9f4d-57948f687458@linux.alibaba.com>
+Date: Wed, 27 Mar 2024 13:46:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v5 2/3] x86/mce: set MCE_IN_KERNEL_COPYIN for
- DEFAULT_MCE_SAFE exception
-From: Tong Tiangen <tongtiangen@huawei.com>
-To: Borislav Petkov <bp@alien8.de>
-CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	<wangkefeng.wang@huawei.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Tony Luck
-	<tony.luck@intel.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, Naoya
- Horiguchi <naoya.horiguchi@nec.com>, <linux-kernel@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, <linux-mm@kvack.org>, Guohanjun
-	<guohanjun@huawei.com>
-References: <20240204082627.3892816-1-tongtiangen@huawei.com>
- <20240204082627.3892816-3-tongtiangen@huawei.com>
- <20240207122942.GRZcN3tqWkV-WE-pak@fat_crate.local>
- <100198dd-320f-68e6-9c09-210620940a74@huawei.com>
-In-Reply-To: <100198dd-320f-68e6-9c09-210620940a74@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] ACPI/AEST: Initial AEST driver
+Content-Language: en-US
+To: Ruidong Tian <tianruidong@linux.alibaba.com>, catalin.marinas@arm.com,
+ will@kernel.org, lpieralisi@kernel.org, guohanjun@huawei.com,
+ sudeep.holla@arm.com, baolin.wang@linux.alibaba.com,
+ linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, rafael@kernel.org, lenb@kernel.org,
+ tony.luck@intel.com, bp@alien8.de, linux-edac@vger.kernel.org,
+ "james.morse@arm.com" <james.morse@arm.com>
+Cc: tianruidond@linux.alibaba.com,
+ Tyler Baicar <baicar@os.amperecomputing.com>
+References: <20240321025317.114621-1-tianruidong@linux.alibaba.com>
+ <20240321025317.114621-2-tianruidong@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20240321025317.114621-2-tianruidong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
 
-Hi Petkov：
 
-	Kindly ping...
 
-Thanks,
-Tong.
+On 2024/3/21 10:53, Ruidong Tian wrote:
+> From: Tyler Baicar <baicar@os.amperecomputing.com>
+> 
+> Add support for parsing the ARM Error Source Table and basic handling of
+> errors reported through both memory mapped and system register interfaces.
+> 
+> Assume system register interfaces are only registered with private
+> peripheral interrupts (PPIs); otherwise there is no guarantee the
+> core handling the error is the core which took the error and has the
+> syndrome info in its system registers.
+> 
+> In kernel-first mode, all configuration is controlled by kernel, include
+> CE ce_threshold and interrupt enable/disable.
+> 
+> All detected errors will be processed as follow:
+>   - CE, DE: use a workqueue to log this hardware errors.
+>   - UER, UEO: log it and call memory_failure in workquee.
+>   - UC, UEU: panic in irq context.
+> 
+> Signed-off-by: Tyler Baicar <baicar@os.amperecomputing.com>
+> Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
+> ---
+>  MAINTAINERS                  |  11 +
+>  arch/arm64/include/asm/ras.h |  71 +++
+>  drivers/acpi/arm64/Kconfig   |  10 +
+>  drivers/acpi/arm64/Makefile  |   1 +
+>  drivers/acpi/arm64/aest.c    | 834 +++++++++++++++++++++++++++++++++++
+>  include/linux/acpi_aest.h    |  92 ++++
+>  include/linux/cpuhotplug.h   |   1 +
+>  7 files changed, 1020 insertions(+)
+>  create mode 100644 arch/arm64/include/asm/ras.h
+>  create mode 100644 drivers/acpi/arm64/aest.c
+>  create mode 100644 include/linux/acpi_aest.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index dd5de540ec0b..34900d4bb677 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -330,6 +330,17 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+>  F:	drivers/acpi/arm64
+>  
+> +ACPI AEST
+> +M:	Tyler Baicar <baicar@os.amperecomputing.com>
+> +M:	Ruidong Tian <tianruidond@linux.alibaba.com>
+> +L:	linux-acpi@vger.kernel.org
+> +L:	linux-arm-kernel@lists.infradead.org
+> +S:	Supported
+> +F:	arch/arm64/include/asm/ras.h
+> +F:	drivers/acpi/arm64/aest.c
+> +F:	include/linux/acpi_aest.h
+> +
+> +
+>  ACPI FOR RISC-V (ACPI/riscv)
+>  M:	Sunil V L <sunilvl@ventanamicro.com>
+>  L:	linux-acpi@vger.kernel.org
+> diff --git a/arch/arm64/include/asm/ras.h b/arch/arm64/include/asm/ras.h
+> new file mode 100644
+> index 000000000000..04667f0de30f
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/ras.h
+> @@ -0,0 +1,71 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_RAS_H
+> +#define __ASM_RAS_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/bits.h>
+> +
+> +/* ERR<n>FR */
+> +#define ERR_FR_RP                      BIT(15)
+> +#define ERR_FR_CEC                     GENMASK_ULL(14, 12)
+> +
+> +#define ERR_FR_RP_SINGLE_COUNTER       0
+> +#define ERR_FR_RP_DOUBLE_COUNTER       1
+> +
+> +#define ERR_FR_CEC_0B_COUNTER          0
+> +#define ERR_FR_CEC_8B_COUNTER          BIT(1)
+> +#define ERR_FR_CEC_16B_COUNTER         BIT(2)
+> +
+> +/* ERR<n>STATUS */
+> +#define ERR_STATUS_AV		BIT(31)
+> +#define ERR_STATUS_V		BIT(30)
+> +#define ERR_STATUS_UE		BIT(29)
+> +#define ERR_STATUS_ER		BIT(28)
+> +#define ERR_STATUS_OF		BIT(27)
+> +#define ERR_STATUS_MV		BIT(26)
+> +#define ERR_STATUS_CE		(BIT(25) | BIT(24))
+> +#define ERR_STATUS_DE		BIT(23)
+> +#define ERR_STATUS_PN		BIT(22)
+> +#define ERR_STATUS_UET		(BIT(21) | BIT(20))
+> +#define ERR_STATUS_CI		BIT(19)
+> +#define ERR_STATUS_IERR		GENMASK_ULL(15, 8)
+> +#define ERR_STATUS_SERR		GENMASK_ULL(7, 0)
+> +
+> +/* These bit is write-one-to-clear */
 
-在 2024/2/18 18:08, Tong Tiangen 写道:
-> 
-> 
-> 在 2024/2/7 20:29, Borislav Petkov 写道:
->> On Sun, Feb 04, 2024 at 04:26:26PM +0800, Tong Tiangen wrote:
->>> diff --git a/arch/x86/kernel/cpu/mce/severity.c 
->>> b/arch/x86/kernel/cpu/mce/severity.c
->>> index bca780fa5e57..b2cce1b6c96d 100644
->>> --- a/arch/x86/kernel/cpu/mce/severity.c
->>> +++ b/arch/x86/kernel/cpu/mce/severity.c
->>> @@ -292,11 +292,11 @@ static noinstr int error_context(struct mce *m, 
->>> struct pt_regs *regs)
->>>       case EX_TYPE_UACCESS:
->>>           if (!copy_user)
->>>               return IN_KERNEL;
->>> +        fallthrough;
->>> +    case EX_TYPE_DEFAULT_MCE_SAFE:
->>>           m->kflags |= MCE_IN_KERNEL_COPYIN;
->>>           fallthrough;
->>
->> I knew something was still bugging me here and this is still wrong.
->>
->> Let's imagine this flow:
->>
->> copy_mc_to_user() - note *src is kernel memory
->> |-> copy_mc_enhanced_fast_string or copy_mc_fragile - it's the same thing
->>    |-> -#MC, exception type EX_TYPE_DEFAULT_MCE_SAFE
->>      |-> error_context():
->>         case EX_TYPE_DEFAULT_MCE_SAFE:
->>                  m->kflags |= MCE_IN_KERNEL_COPYIN;
->>
->> MCE_IN_KERNEL_COPYIN does kill_me_never():
->>
->>     pr_err("Kernel accessed poison in user space at %llx\n", 
->> p->mce_addr);
->>
->> but that's reading from kernel memory!
-> 
-> Hi:
-> 
-> 1. The copy_mc_to_kernel() is used in the coredump, KSM, and COW
-> scenarios, in these scenarios, the src mem stores the user data and the
-> kernel use kernel address to access the src mem(using kmap()).
-> 
-> 2. the src mem of copy_mc_to_user() is currently only used by the DAX:
-> 
->    dax_iomap_iter()
->      -> dax_copy_to_iter()
->        -> _copy_mc_to_iter
->          -> copy_to_user_iter_mc()
->            -> copy_mc_to_user()
-> 
-> DAX is also used to store user data，such as pmem，pmem uses the kernel
-> address to access src mem(memremap_pages()):
-> 
->    pmem_attach_disk()
->      -> devm_memremap_pages()
->        -> memremap_pages()
-> 
-> 3. EX_TYPE_DEFAULT_MCE_SAFE is only used in
-> copy_mc_to_user()/copy_mc_to_kernel()。
-> 
-> 4. Therefore, for EX_TYPE_DEFAULT_MCE_SAFE, the memory page where the
-> hardware error occurs stores user data, these page can be securely
-> isolated. This is different from UACCESS, which can be securely isolated
-> only COPYIN(the src mem is user data) is checked.
-> 
-> Based on the above understanding, I think the original logic should be
-> fine, except for the pr_err() in kill_me_never().
-> 
-> Thanks.
-> Tong.
-> 
->>
->> IOW, I *think* that switch statement should be this:
->>
->>     switch (fixup_type) {
->>     case EX_TYPE_UACCESS:
->>     case EX_TYPE_DEFAULT_MCE_SAFE:
->>         if (!copy_user)
->>             return IN_KERNEL;
->>
->>         m->kflags |= MCE_IN_KERNEL_COPYIN;
->>         fallthrough;
->>
->>     case EX_TYPE_FAULT_MCE_SAFE:
->>         m->kflags |= MCE_IN_KERNEL_RECOV;
->>         return IN_KERNEL_RECOV;
->>
->>     default:
->>         return IN_KERNEL;
->>     }
->>
->> Provided I'm not missing a case and provided is_copy_from_user() really
->> detects all cases properly.
->>
->> And then patch 3 is wrong because we only can handle "copy in" - not
->> just any copy.
->>
->> Thx.
->>
+Typo: s/These bit is/These bits are
+
+> +#define ERR_STATUS_W1TC		(ERR_STATUS_AV | ERR_STATUS_V | ERR_STATUS_UE | \
+> +				ERR_STATUS_ER | ERR_STATUS_OF | ERR_STATUS_MV | \
+> +				ERR_STATUS_CE | ERR_STATUS_DE | ERR_STATUS_PN | \
+> +				ERR_STATUS_UET | ERR_STATUS_CI)
+> +
+> +#define ERR_STATUS_UET_UC	0
+> +#define ERR_STATUS_UET_UEU	1
+> +#define ERR_STATUS_UET_UER	2
+> +#define ERR_STATUS_UET_UEO	3
+> +
+> +/* ERR<n>CTLR */
+> +#define ERR_CTLR_FI		BIT(3)
+> +#define ERR_CTLR_UI		BIT(2)
+> +
+> +/* ERR<n>ADDR */
+> +#define ERR_ADDR_AI		BIT(61)
+> +#define ERR_ADDR_PADDR		GENMASK_ULL(55, 0)
+> +
+> +/* ERR<n>MISC0 */
+> +
+> +/* ERR<n>FR.CEC == 0b010, ERR<n>FR.RP == 0  */
+> +#define ERR_MISC0_8B_OF		BIT(39)
+> +#define ERR_MISC0_8B_CEC	GENMASK_ULL(38, 32)
+> +
+> +/* ERR<n>FR.CEC == 0b100, ERR<n>FR.RP == 0  */
+> +#define ERR_MISC0_16B_OF	BIT(47)
+> +#define ERR_MISC0_16B_CEC	GENMASK_ULL(46, 32)
+> +
+> +struct ras_ext_regs {
+> +	u64 err_fr;
+> +	u64 err_ctlr;
+> +	u64 err_status;
+> +	u64 err_addr;
+> +	u64 err_misc[4];
+> +};
+> +
+> +#endif	/* __ASM_RAS_H */
+> diff --git a/drivers/acpi/arm64/Kconfig b/drivers/acpi/arm64/Kconfig
+> index b3ed6212244c..639db671c5cf 100644
+> --- a/drivers/acpi/arm64/Kconfig
+> +++ b/drivers/acpi/arm64/Kconfig
+> @@ -21,3 +21,13 @@ config ACPI_AGDI
+>  
+>  config ACPI_APMT
+>  	bool
+> +
+> +config ACPI_AEST
+> +	bool "ARM Error Source Table Support"
+> +
+> +	help
+> +	  The Arm Error Source Table (AEST) provides details on ACPI
+> +	  extensions that enable kernel-first handling of errors in a
+> +	  system that supports the Armv8 RAS extensions.
+> +
+> +	  If set, the kernel will report and log hardware errors.
+> diff --git a/drivers/acpi/arm64/Makefile b/drivers/acpi/arm64/Makefile
+> index 143debc1ba4a..b5b740058c46 100644
+> --- a/drivers/acpi/arm64/Makefile
+> +++ b/drivers/acpi/arm64/Makefile
+> @@ -5,3 +5,4 @@ obj-$(CONFIG_ACPI_GTDT) 	+= gtdt.o
+>  obj-$(CONFIG_ACPI_APMT) 	+= apmt.o
+>  obj-$(CONFIG_ARM_AMBA)		+= amba.o
+>  obj-y				+= dma.o init.o
+> +obj-$(CONFIG_ACPI_AEST) 	+= aest.o
+> diff --git a/drivers/acpi/arm64/aest.c b/drivers/acpi/arm64/aest.c
+> new file mode 100644
+> index 000000000000..ab17aa5f5997
+> --- /dev/null
+> +++ b/drivers/acpi/arm64/aest.c
+> @@ -0,0 +1,834 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * ARM Error Source Table Support
+> + *
+> + * Copyright (c) 2021, Ampere Computing LLC
+> + * Copyright (c) 2021-2024, Alibaba Group.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/acpi_aest.h>
+> +#include <linux/cpuhotplug.h>
+> +#include <linux/kernel.h>
+> +#include <linux/genalloc.h>
+> +#include <linux/llist.h>
+> +#include <acpi/actbl.h>
+> +#include <asm/ras.h>
+> +
+> +#undef pr_fmt
+> +#define pr_fmt(fmt) "ACPI AEST: " fmt
+> +
+> +#define CASE_READ(res, x)						\
+> +	case (x): {							\
+> +		res = read_sysreg_s(SYS_##x##_EL1);			\
+> +		break;							\
+> +	}
+> +
+> +#define CASE_WRITE(val, x)						\
+> +	case (x): {							\
+> +		write_sysreg_s((val), SYS_##x##_EL1);			\
+> +		break;							\
+> +	}
+> +
+> +#define for_each_implemented_record(index, node)			\
+> +		for ((index) = node->interface.record_start;		\
+> +			(index) < node->interface.record_end;		\
+> +			(index)++)
+> +
+> +#define AEST_LOG_PREFIX_BUFFER	64
+> +
+> +/*
+> + * This memory pool is only to be used to save AEST node in AEST irq context.
+> + * There can be 500 AEST node at most.
+> + */
+> +#define AEST_NODE_ALLOCED_MAX	500
+> +
+> +static struct acpi_table_header *aest_table;
+> +
+> +static struct aest_node __percpu **aest_ppi_data;
+> +
+> +static int *ppi_irqs;
+> +static u8 num_ppi;
+> +static u8 ppi_idx;
+> +
+> +static struct work_struct aest_work;
+> +
+> +static struct gen_pool *aest_node_pool;
+> +static struct llist_head aest_node_llist;
+> +
+> +static u64 aest_sysreg_read(u64 __unused, u32 offset)
+> +{
+> +	u64 res;
+> +
+> +	switch (offset) {
+> +	CASE_READ(res, ERXFR)
+> +	CASE_READ(res, ERXCTLR)
+> +	CASE_READ(res, ERXSTATUS)
+> +	CASE_READ(res, ERXADDR)
+> +	CASE_READ(res, ERXMISC0)
+> +	CASE_READ(res, ERXMISC1)
+> +	CASE_READ(res, ERXMISC2)
+> +	CASE_READ(res, ERXMISC3)
+> +	default :
+> +		res = 0;
+> +	}
+> +	return res;
+> +}
+> +
+> +static void aest_sysreg_write(u64 base, u32 offset, u64 val)
+> +{
+> +	switch (offset) {
+> +	CASE_WRITE(val, ERXFR)
+> +	CASE_WRITE(val, ERXCTLR)
+> +	CASE_WRITE(val, ERXSTATUS)
+> +	CASE_WRITE(val, ERXADDR)
+> +	CASE_WRITE(val, ERXMISC0)
+> +	CASE_WRITE(val, ERXMISC1)
+> +	CASE_WRITE(val, ERXMISC2)
+> +	CASE_WRITE(val, ERXMISC3)
+> +	default :
+> +		return;
+> +	}
+> +}
+> +
+> +static u64 aest_iomem_read(u64 base, u32 offset)
+> +{
+> +	return readq_relaxed((void *)(base + offset));
+> +}
+> +
+> +static void aest_iomem_write(u64 base, u32 offset, u64 val)
+> +{
+> +	writeq_relaxed(val, (void *)(base + offset));
+> +}
+> +
+> +static void aest_print(struct aest_node_llist *lnode)
+> +{
+> +	static atomic_t seqno = { 0 };
+> +	unsigned int curr_seqno;
+> +	char pfx_seq[AEST_LOG_PREFIX_BUFFER];
+> +	int index;
+> +	struct ras_ext_regs *regs;
+> +
+> +	curr_seqno = atomic_inc_return(&seqno);
+> +	snprintf(pfx_seq, sizeof(pfx_seq), "{%u}" HW_ERR, curr_seqno);
+> +	pr_info("%sHardware error from %s\n", pfx_seq, lnode->node_name);
+> +
+> +	switch (lnode->type) {
+> +	case ACPI_AEST_PROCESSOR_ERROR_NODE:
+> +		pr_err("%s Error from CPU%d\n", pfx_seq, lnode->id0);
+> +		break;
+> +	case ACPI_AEST_MEMORY_ERROR_NODE:
+> +		pr_err("%s Error from memory at SRAT proximity domain 0x%x\n",
+> +			pfx_seq, lnode->id0);
+> +		break;
+> +	case ACPI_AEST_SMMU_ERROR_NODE:
+> +		pr_err("%s Error from SMMU IORT node 0x%x subcomponent 0x%x\n",
+> +			pfx_seq, lnode->id0, lnode->id1);
+> +		break;
+> +	case ACPI_AEST_VENDOR_ERROR_NODE:
+> +		pr_err("%s Error from vendor hid 0x%x uid 0x%x\n",
+> +			pfx_seq, lnode->id0, lnode->id1);
+> +		break;
+> +	case ACPI_AEST_GIC_ERROR_NODE:
+> +		pr_err("%s Error from GIC type 0x%x instance 0x%x\n",
+> +			pfx_seq, lnode->id0, lnode->id1);
+> +		break;
+> +	default:
+> +		pr_err("%s Unknown AEST node type\n", pfx_seq);
+> +		return;
+> +	}
+> +
+> +	index = lnode->index;
+> +	regs = lnode->regs;
+> +
+> +	pr_err("%s  ERR%uFR: 0x%llx\n", pfx_seq, index, regs->err_fr);
+> +	pr_err("%s  ERR%uCTRL: 0x%llx\n", pfx_seq, index, regs->err_ctlr);
+> +	pr_err("%s  ERR%uSTATUS: 0x%llx\n", pfx_seq, index, regs->err_status);
+> +	if (regs->err_status & ERR_STATUS_AV)
+> +		pr_err("%s  ERR%uADDR: 0x%llx\n", pfx_seq, index, regs->err_addr);
+> +
+> +	if (regs->err_status & ERR_STATUS_MV) {
+> +		pr_err("%s  ERR%uMISC0: 0x%llx\n", pfx_seq, index, regs->err_misc[0]);
+> +		pr_err("%s  ERR%uMISC1: 0x%llx\n", pfx_seq, index, regs->err_misc[1]);
+> +		pr_err("%s  ERR%uMISC2: 0x%llx\n", pfx_seq, index, regs->err_misc[2]);
+> +		pr_err("%s  ERR%uMISC3: 0x%llx\n", pfx_seq, index, regs->err_misc[3]);
+> +	}
+> +}
+> +
+> +static void aest_handle_memory_failure(struct aest_node_llist *lnode)
+> +{
+> +	unsigned long pfn;
+> +	u64 addr;
+> +
+> +	if (test_bit(lnode->index, &lnode->addressing_mode) ||
+> +		(lnode->regs->err_addr & ERR_ADDR_AI))
+> +		return;
+> +
+> +	addr = lnode->regs->err_addr & (1UL << CONFIG_ARM64_PA_BITS);
+> +	pfn = PHYS_PFN(addr);
+> +
+> +	if (!pfn_valid(pfn)) {
+> +		pr_warn(HW_ERR "Invalid physical address: %#llx\n", addr);
+> +		return;
+> +	}
+> +
+> +	memory_failure(pfn, 0);
+> +}
+> +
+> +static void aest_node_pool_process(struct work_struct *__unused)
+> +{
+> +	struct llist_node *head;
+> +	struct aest_node_llist *lnode, *tmp;
+> +	u64 status;
+> +
+> +	head = llist_del_all(&aest_node_llist);
+> +	if (!head)
+> +		return;
+> +
+> +	head = llist_reverse_order(head);
+> +	llist_for_each_entry_safe(lnode, tmp, head, llnode) {
+
+Do we really need to pretect the llnode with _safe() here?
+
+> +		aest_print(lnode);
+> +
+> +		status = lnode->regs->err_status;
+> +		if ((status & ERR_STATUS_UE) &&
+> +			(status & ERR_STATUS_UET) > ERR_STATUS_UET_UEU)
+> +			aest_handle_memory_failure(lnode);
+> +		gen_pool_free(aest_node_pool, (unsigned long)lnode,
+> +				sizeof(*lnode));
+> +	}
+> +}
+> +
+> +static int aest_node_gen_pool_add(struct aest_node *node, int index,
+> +				struct ras_ext_regs *regs)
+> +{
+> +	struct aest_node_llist *list;
+
+I know name is alway a hard work, but list is meanless to aest.
+
+> +
+> +	if (!aest_node_pool)
+> +		return -EINVAL;
+> +
+> +	list = (void *)gen_pool_alloc(aest_node_pool, sizeof(*list));
+> +	if (!list)
+> +		return -ENOMEM;
+> +
+> +	list->type = node->type;
+> +	list->node_name = node->name;
+> +	switch (node->type) {
+> +	case ACPI_AEST_PROCESSOR_ERROR_NODE:
+> +		list->id0 = node->spec.processor.processor_id;
+> +		if (node->spec.processor.flags & (ACPI_AEST_PROC_FLAG_SHARED |
+> +						ACPI_AEST_PROC_FLAG_GLOBAL))
+> +			list->id0 = smp_processor_id();
+> +
+> +		list->id1 = node->spec.processor.resource_type;
+> +		break;
+> +	case ACPI_AEST_MEMORY_ERROR_NODE:
+> +		list->id0 = node->spec.memory.srat_proximity_domain;
+> +		break;
+> +	case ACPI_AEST_SMMU_ERROR_NODE:
+> +		list->id0 = node->spec.smmu.iort_node_reference;
+> +		list->id1 = node->spec.smmu.subcomponent_reference;
+> +		break;
+> +	case ACPI_AEST_VENDOR_ERROR_NODE:
+> +		list->id0 = node->spec.vendor.acpi_hid;
+> +		list->id1 = node->spec.vendor.acpi_uid;
+> +		break;
+> +	case ACPI_AEST_GIC_ERROR_NODE:
+> +		list->id0 = node->spec.gic.interface_type;
+> +		list->id1 = node->spec.gic.instance_id;
+> +		break;
+> +	default:
+> +		list->id0 = 0;
+> +		list->id1 = 0;
+> +	}
+> +
+> +	list->regs =  regs;
+> +	list->index = index;
+> +	list->addressing_mode = node->interface.addressing_mode;
+> +	llist_add(&list->llnode, &aest_node_llist);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aest_node_pool_init(void)
+> +{
+> +	unsigned long addr, size;
+> +	int rc;
+> +
+> +	if (aest_node_pool)
+> +		return 0;
+> +
+> +	size = ilog2(sizeof(struct aest_node_llist));
+> +	aest_node_pool = gen_pool_create(size, -1);
+> +	if (!aest_node_pool)
+> +		return -ENOMEM;
+> +
+> +	addr = (unsigned long)vmalloc(PAGE_ALIGN(size * AEST_NODE_ALLOCED_MAX));
+> +	if (!addr)
+> +		goto err_pool_alloc;
+> +
+> +	rc = gen_pool_add(aest_node_pool, addr, size, -1);
+
+The size you added here is not equal to the size of buffer you alloced from vmalloc().
+
+> +	if (rc)
+> +		goto err_pool_add;
+> +
+> +	return 0;
+> +
+> +err_pool_add:
+> +	vfree((void *)addr);
+> +
+> +err_pool_alloc:
+> +	gen_pool_destroy(aest_node_pool);
+> +
+> +	return -ENOMEM;
+> +}
+> +
+> +static void aest_log(struct aest_node *node, int index, struct ras_ext_regs *regs)
+> +{
+> +	if (!aest_node_gen_pool_add(node, index, regs))
+> +		schedule_work(&aest_work);
+> +}
+> +
+> +/*
+> + * Each PE may has multi error record, you must selects an error record to
+> + * be accessed through the Error Record System registers.
+> + */
+> +static inline void aest_select_record(struct aest_node *node, int i)
+> +{
+> +	if (node->interface.type == ACPI_AEST_NODE_SYSTEM_REGISTER) {
+> +		write_sysreg_s(i, SYS_ERRSELR_EL1);
+
+should check if ERRSELR_EL1.SEL is greater than or equal to ERRIDR_EL1.NUM,
+
+> +		isb();
+> +	}
+> +}
+> +
+> +/* Ensure all writes has taken effect. */
+> +static inline void aest_sync(struct aest_node *node)
+> +{
+> +	if (node->interface.type == ACPI_AEST_NODE_SYSTEM_REGISTER)
+> +		isb();
+> +}
+> +
+> +static int aest_proc(struct aest_node *node)
+> +{
+> +	struct ras_ext_regs regs = {0};
+> +	struct aest_access *access;
+> +	int i, count = 0;
+> +	u64 regs_p;
+> +
+> +	for_each_implemented_record(i, node) {
+> +
+> +		/* 1b: Error record at i index is not implemented */
+> +		if (test_bit(i, &node->interface.record_implemented))
+> +			continue;
+> +
+> +		aest_select_record(node, i);
+> +
+> +		access = node->access;
+> +		regs_p = (u64)&node->interface.regs[i];
+> +
+> +		regs.err_status = access->read(regs_p, ERXSTATUS);
+> +		if (!(regs.err_status & ERR_STATUS_V))
+> +			continue;
+> +
+> +		count++;
+> +
+> +		if (regs.err_status & ERR_STATUS_AV)
+> +			regs.err_addr = access->read(regs_p, ERXADDR);
+> +
+> +		regs.err_fr = access->read(regs_p, ERXFR);
+> +		regs.err_ctlr = access->read(regs_p, ERXCTLR);
+> +
+> +		if (regs.err_status & ERR_STATUS_MV) {
+> +			regs.err_misc[0] = access->read(regs_p, ERXMISC0);
+> +			regs.err_misc[1] = access->read(regs_p, ERXMISC1);
+> +			regs.err_misc[2] = access->read(regs_p, ERXMISC2);
+> +			regs.err_misc[3] = access->read(regs_p, ERXMISC3);
+> +		}
+> +
+> +		if (node->interface.flags & ACPI_AEST_INTERFACE_CLEAR_MISC) {
+> +			access->write(regs_p, ERXMISC0, 0);
+> +			access->write(regs_p, ERXMISC1, 0);
+> +			access->write(regs_p, ERXMISC2, 0);
+> +			access->write(regs_p, ERXMISC3, 0);
+> +		} else
+> +			access->write(regs_p, ERXMISC0,
+> +					node->interface.ce_threshold[i]);
+> +
+> +		aest_log(node, i, &regs);
+
+aest_log() should be calledafter panic check?
+
+> +
+> +		/* panic if unrecoverable and uncontainable error encountered */
+> +		if ((regs.err_status & ERR_STATUS_UE) &&
+> +			(regs.err_status & ERR_STATUS_UET) < ERR_STATUS_UET_UER)
+> +			panic("AEST: unrecoverable error encountered");
+
+Is arm64_is_fatal_ras_serror() applicable here? @James, can you help to confirm?
+
+> +
+> +		/* Write-one-to-clear the bits we've seen */
+> +		regs.err_status &= ERR_STATUS_W1TC;
+> +
+> +		/* Multi bit filed need to write all-ones to clear. */
+> +		if (regs.err_status & ERR_STATUS_CE)
+> +			regs.err_status |= ERR_STATUS_CE;
+> +
+> +		/* Multi bit filed need to write all-ones to clear. */
+> +		if (regs.err_status & ERR_STATUS_UET)
+> +			regs.err_status |= ERR_STATUS_UET;
+> +
+> +		access->write(regs_p, ERXSTATUS, regs.err_status);
+> +
+> +		aest_sync(node);
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static irqreturn_t aest_irq_func(int irq, void *input)
+> +{
+> +	struct aest_node *node = input;
+> +
+> +	if (aest_proc(node))
+> +		return IRQ_HANDLED;
+> +
+> +	return IRQ_NONE;
+> +}
+> +
+> +static int __init aest_register_gsi(u32 gsi, int trigger, void *data,
+> +					irq_handler_t aest_irq_func)
+> +{
+> +	int cpu, irq;
+> +
+> +	irq = acpi_register_gsi(NULL, gsi, trigger, ACPI_ACTIVE_HIGH);
+> +
+> +	if (irq == -EINVAL) {
+> +		pr_err("failed to map AEST GSI %d\n", gsi);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (irq_is_percpu_devid(irq)) {
+> +		ppi_irqs[ppi_idx] = irq;
+> +		for_each_possible_cpu(cpu) {
+> +			memcpy(per_cpu_ptr(aest_ppi_data[ppi_idx], cpu), data,
+> +			       sizeof(struct aest_node));
+> +		}
+> +		if (request_percpu_irq(irq, aest_irq_func, "AEST",
+> +				       aest_ppi_data[ppi_idx++])) {
+> +			pr_err("failed to register AEST IRQ %d\n", irq);
+> +			return -EINVAL;
+> +		}
+> +	} else {
+> +		if (request_irq(irq, aest_irq_func, IRQF_SHARED, "AEST",
+> +				data)) {
+> +			pr_err("failed to register AEST IRQ %d\n", irq);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int __init aest_init_interrupts(struct acpi_aest_hdr *hdr,
+> +				       struct aest_node *node)
+> +{
+> +	struct acpi_aest_node_interrupt *interrupt;
+> +	int i, trigger, ret = 0, err_ctlr, regs_p;
+> +
+> +	interrupt = ACPI_ADD_PTR(struct acpi_aest_node_interrupt, hdr,
+> +				 hdr->node_interrupt_offset);
+> +
+> +	for (i = 0; i < hdr->node_interrupt_count; i++, interrupt++) {
+> +		trigger = (interrupt->flags & AEST_INTERRUPT_MODE) ?
+> +			  ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
+> +		if (aest_register_gsi(interrupt->gsiv, trigger, node,
+> +					aest_irq_func))
+> +			ret = -EINVAL;
+> +	}
+> +
+> +	/* Ensure RAS interrupt is enabled */
+> +	for_each_implemented_record(i, node) {
+> +		/* 1b: Error record at i index is not implemented */
+> +		if (test_bit(i, &node->interface.record_implemented))
+> +			continue;
+> +
+> +		aest_select_record(node, i);
+> +
+> +		regs_p = (u64)&node->interface.regs[i];
+> +
+> +		err_ctlr = node->access->read(regs_p, ERXCTLR);
+> +
+> +		if (interrupt->type == ACPI_AEST_NODE_FAULT_HANDLING)
+> +			err_ctlr |= ERR_CTLR_FI;
+> +		if (interrupt->type == ACPI_AEST_NODE_ERROR_RECOVERY)
+> +			err_ctlr |= ERR_CTLR_UI;
+
+Fault handling interrupts (ERR<n>CTLR.CFI) on corrected errors should also be enabled.
+
+> +
+> +		node->access->write(regs_p, ERXCTLR, err_ctlr);
+> +
+> +		aest_sync(node);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void __init set_aest_node_name(struct aest_node *node)
+> +{
+> +	switch (node->type) {
+> +	case ACPI_AEST_PROCESSOR_ERROR_NODE:
+> +		node->name = kasprintf(GFP_KERNEL, "AEST-CPU%d",
+> +			node->spec.processor.processor_id);
+> +		break;
+> +	case ACPI_AEST_MEMORY_ERROR_NODE:
+> +	case ACPI_AEST_SMMU_ERROR_NODE:
+> +	case ACPI_AEST_VENDOR_ERROR_NODE:
+> +	case ACPI_AEST_GIC_ERROR_NODE:
+> +		node->name = kasprintf(GFP_KERNEL, "AEST-%llx",
+> +			node->interface.phy_addr);
+> +		break;
+> +	default:
+> +		node->name = kasprintf(GFP_KERNEL, "AEST-Unkown-Node");
+> +	}
+> +}
+> +
+> +/* access type is decided by AEST interface type. */
+> +static struct aest_access aest_access[] = {
+> +	[ACPI_AEST_NODE_SYSTEM_REGISTER] = {
+> +		.read = aest_sysreg_read,
+> +		.write = aest_sysreg_write,
+> +	},
+> +
+> +	[ACPI_AEST_NODE_MEMORY_MAPPED] = {
+> +		.read = aest_iomem_read,
+> +		.write = aest_iomem_write,
+> +	},
+> +	{ }
+> +};
+> +
+> +/* In kernel-first mode, kernel will report every CE by default. */
+> +static void __init aest_set_ce_threshold(struct aest_node *node)
+> +{
+> +	u64 regs_p, err_fr, err_fr_cec, err_fr_rp, err_misc0, ce_threshold;
+> +	int i;
+> +
+> +	for_each_implemented_record(i, node) {
+> +		/* 1b: Error record at i index is not implemented */
+> +		if (test_bit(i, &node->interface.record_implemented))
+> +			continue;
+> +
+> +		aest_select_record(node, i);
+> +		regs_p = (u64)&node->interface.regs[i];
+> +
+> +		err_fr = node->access->read(regs_p, ERXFR);
+> +		err_fr_cec = FIELD_GET(ERR_FR_CEC, err_fr);
+> +		err_fr_rp = FIELD_GET(ERR_FR_RP, err_fr);
+> +		err_misc0 = node->access->read(regs_p, ERXMISC0);
+> +
+> +		if (err_fr_cec == ERR_FR_CEC_0B_COUNTER)
+> +			pr_debug("%s-%d do not support CE threshold!\n",
+> +					node->name, i);
+
+Quoted from ARM RAS spec:
+
+If the node implements a corrected error counter or counters, then a corrected error event is defined as
+follows:
+• A corrected error event occurs when a counter overflows and sets a counter overflow flag to 0b1.
+
+Otherwise, a corrected error event occurs when the error record records an error as a Corrected error.
+
+So, if the node does not support CE threshold, it will report every CE and no ce_threshold should be set.
+
+
+> +		else if (err_fr_cec == ERR_FR_CEC_8B_COUNTER &&
+> +				err_fr_rp == ERR_FR_RP_SINGLE_COUNTER) {
+> +			pr_debug("%s-%d support 8 bit CE threshold!\n",
+> +					node->name, i);
+> +			ce_threshold = err_misc0 | ERR_MISC0_8B_CEC;
+> +		} else if (err_fr_cec == ERR_FR_CEC_16B_COUNTER &&
+> +				err_fr_rp == ERR_FR_RP_SINGLE_COUNTER) {
+> +			pr_debug("%s-%d support 16 bit CE threshold!\n",
+> +					node->name, i);
+> +			ce_threshold = err_misc0 | ERR_MISC0_16B_CEC;
+> +		} else
+> +			pr_debug("%s-%d do not support double counter yet!\n",
+> +					node->name, i);
+> +
+> +		node->access->write(regs_p, ERXMISC0, ce_threshold);
+
+ce_threshold may be uninited in some of above if-else branch.
+
+> +		node->interface.ce_threshold[i] = ce_threshold;
+> +
+> +		aest_sync(node);
+> +	}
+> +}
+> +
+> +static int __init aest_init_interface(struct acpi_aest_hdr *hdr,
+> +				       struct aest_node *node)
+> +{
+> +	struct acpi_aest_node_interface *interface;
+> +	struct resource *res;
+> +	int size;
+> +
+> +	interface = ACPI_ADD_PTR(struct acpi_aest_node_interface, hdr,
+> +				 hdr->node_interface_offset);
+> +
+> +	if (interface->type >= ACPI_AEST_XFACE_RESERVED) {
+> +		pr_err("invalid interface type: %d\n", interface->type);
+> +		return -EINVAL;
+> +	}
+> +
+> +	node->interface.type = interface->type;
+> +	node->interface.phy_addr = interface->address;
+> +	node->interface.record_start = interface->error_record_index;
+> +	node->interface.record_end = interface->error_record_index +
+> +					interface->error_record_count;
+Why rename the field name here?
+
+> +	node->interface.flags = interface->flags;
+> +	node->interface.record_implemented = interface->error_record_implemented;
+> +	node->interface.status_reporting = interface->error_status_reporting;
+> +	node->interface.addressing_mode = interface->addressing_mode;
+> +	node->access = &aest_access[interface->type];
+> +> +
+> +
+> +	/*
+> +	 * Currently SR based handling is done through the architected
+> +	 * discovery exposed through SRs. That may change in the future
+> +	 * if there is supplemental information in the AEST that is
+> +	 * needed.
+> +	 */
+> +	if (interface->type == ACPI_AEST_NODE_SYSTEM_REGISTER)
+> +		return 0;
+> +
+> +	res = kzalloc(sizeof(struct resource), GFP_KERNEL);
+> +	if (!res)
+> +		return -ENOMEM;
+> +
+> +	size = interface->error_record_count * sizeof(struct ras_ext_regs);
+> +	res->name = "AEST";
+> +	res->start = interface->address;
+> +	res->end = res->start + size;
+> +	res->flags = IORESOURCE_MEM;
+> +
+> +	if (insert_resource(&iomem_resource, res)) {
+> +		pr_notice("request region conflict with %s\n",
+> +			res->name);
+> +	}
+> +
+> +	node->interface.regs = ioremap(res->start, size);
+> +	if (!node->interface.regs) {
+> +		pr_err("Ioremap for %s failed!\n", node->name);
+> +		kfree(res);
+> +		return -EINVAL;
+> +	}
+> +
+> +	node->interface.ce_threshold = kzalloc(sizeof(u64) *
+> +				interface->error_record_count, GFP_KERNEL);
+> +	if (!node->interface.ce_threshold)
+> +		return -ENOMEM;
+> +
+> +	aest_set_ce_threshold(node);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __init aest_init_common(struct acpi_aest_hdr *hdr,
+> +						struct aest_node *node)
+> +{
+> +	int ret;
+> +
+> +	set_aest_node_name(node);
+> +
+> +	ret = aest_init_interface(hdr, node);
+> +	if (ret) {
+> +		pr_err("failed to init interface\n");
+> +		return ret;
+> +	}
+> +
+> +	return aest_init_interrupts(hdr, node);
+> +}
+> +
+> +static int __init aest_init_node_default(struct acpi_aest_hdr *hdr)
+> +{
+> +	struct aest_node *node;
+> +	union aest_node_spec *node_spec;
+> +	int ret;
+> +
+> +	node = kzalloc(sizeof(struct aest_node), GFP_KERNEL);
+
+e.g. If the second node is failed to alloced, where you free the first node?
+
+> +	if (!node)
+> +		return -ENOMEM;
+> +
+> +	node->type = hdr->type;
+> +	node_spec = ACPI_ADD_PTR(union aest_node_spec, hdr,
+> +					hdr->node_specific_offset);
+> +
+> +	memcpy(&node->spec, node_spec,
+> +			hdr->node_interface_offset - hdr->node_specific_offset);
+> +
+> +	ret = aest_init_common(hdr, node);
+> +	if (ret)
+> +		kfree(node);
+> +
+> +	return ret;
+> +}
+> +
+> +static int __init aest_init_processor_node(struct acpi_aest_hdr *hdr)
+> +{
+> +	struct aest_node *node;
+> +	union aest_node_spec *node_spec;
+> +	union aest_node_processor *proc;
+> +	int ret;
+> +
+> +	node = kzalloc(sizeof(struct aest_node), GFP_KERNEL);
+> +	if (!node)
+> +		return -ENOMEM;
+> +
+> +	node->type = hdr->type;
+> +	node_spec = ACPI_ADD_PTR(union aest_node_spec, hdr,
+> +					hdr->node_specific_offset);
+> +
+> +	memcpy(&node->spec, node_spec,
+> +			hdr->node_interface_offset - hdr->node_specific_offset);
+> +
+> +	proc = ACPI_ADD_PTR(union aest_node_processor, node_spec,
+> +					sizeof(acpi_aest_processor));
+> +
+> +	switch (node->spec.processor.resource_type) {
+> +	case ACPI_AEST_CACHE_RESOURCE:
+> +		memcpy(&node->proc, proc,
+> +				sizeof(struct acpi_aest_processor_cache));
+> +		break;
+> +	case ACPI_AEST_TLB_RESOURCE:
+> +		memcpy(&node->proc, proc,
+> +				sizeof(struct acpi_aest_processor_tlb));
+> +		break;
+> +	case ACPI_AEST_GENERIC_RESOURCE:
+> +		memcpy(&node->proc, proc,
+> +				sizeof(struct acpi_aest_processor_generic));
+> +		break;
+> +	}
+> +
+> +	ret = aest_init_common(hdr, node);
+> +	if (ret)
+> +		kfree(node);
+> +
+> +	return ret;
+> +}
+> +
+> +static int __init aest_init_node(struct acpi_aest_hdr *node)
+> +{
+> +	switch (node->type) {
+> +	case ACPI_AEST_PROCESSOR_ERROR_NODE:
+> +		return aest_init_processor_node(node);
+> +	case ACPI_AEST_MEMORY_ERROR_NODE:
+> +	case ACPI_AEST_VENDOR_ERROR_NODE:
+> +	case ACPI_AEST_SMMU_ERROR_NODE:
+> +	case ACPI_AEST_GIC_ERROR_NODE:
+> +		return aest_init_node_default(node);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static void __init aest_count_ppi(struct acpi_aest_hdr *header)
+> +{
+> +	struct acpi_aest_node_interrupt *interrupt;
+> +	int i;
+> +
+> +	interrupt = ACPI_ADD_PTR(struct acpi_aest_node_interrupt, header,
+> +				 header->node_interrupt_offset);
+> +
+> +	for (i = 0; i < header->node_interrupt_count; i++, interrupt++) {
+> +		if (interrupt->gsiv >= 16 && interrupt->gsiv < 32)
+> +			num_ppi++;
+> +	}
+> +}
+> +
+> +static int aest_starting_cpu(unsigned int cpu)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < num_ppi; i++)
+> +		enable_percpu_irq(ppi_irqs[i], IRQ_TYPE_NONE);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aest_dying_cpu(unsigned int cpu)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < num_ppi; i++)
+> +		disable_percpu_irq(ppi_irqs[i]);
+> +
+> +	return 0;
+> +}
+> +
+> +int __init acpi_aest_init(void)
+> +{
+> +	struct acpi_aest_hdr *aest_node, *aest_end;
+> +	struct acpi_table_aest *aest;
+> +	int i, ret = 0;
+> +
+> +	if (acpi_disabled)
+> +		return 0;
+> +
+> +	if (!IS_ENABLED(CONFIG_ARM64_RAS_EXTN))
+> +		return 0;
+> +
+> +	if (ACPI_FAILURE(acpi_get_table(ACPI_SIG_AEST, 0, &aest_table)))
+> +		return -EINVAL;
+> +
+> +	ret = aest_node_pool_init();
+> +	if (ret) {
+> +		pr_err("Failed init aest node pool.\n");
+> +		goto fail;
+> +	}
+> +
+> +	INIT_WORK(&aest_work, aest_node_pool_process);
+> +
+> +	aest = (struct acpi_table_aest *)aest_table;
+> +
+> +	/* Get the first AEST node */
+> +	aest_node = ACPI_ADD_PTR(struct acpi_aest_hdr, aest,
+> +				 sizeof(struct acpi_table_header));
+> +	/* Pointer to the end of the AEST table */
+> +	aest_end = ACPI_ADD_PTR(struct acpi_aest_hdr, aest,
+> +				aest_table->length);
+> +
+> +	while (aest_node < aest_end) {
+> +		if (((u64)aest_node + aest_node->length) > (u64)aest_end) {
+> +			pr_err("AEST node pointer overflow, bad table.\n");
+> +			return -EINVAL;
+> +		}
+> +
+> +		aest_count_ppi(aest_node);
+> +
+> +		aest_node = ACPI_ADD_PTR(struct acpi_aest_hdr, aest_node,
+> +					 aest_node->length);
+> +	}
+> +
+> +	aest_ppi_data = kcalloc(num_ppi, sizeof(struct aest_node_data *),
+> +				GFP_KERNEL);
+> +	if (!aest_ppi_data) {
+> +		ret = -ENOMEM;
+> +		goto fail;
+> +	}
+> +
+> +	ppi_irqs = kcalloc(num_ppi, sizeof(int), GFP_KERNEL);
+> +	if (!ppi_irqs) {
+> +		ret = -ENOMEM;
+> +		goto fail;
+> +	}
+> +
+> +	for (i = 0; i < num_ppi; i++) {
+> +		aest_ppi_data[i] = alloc_percpu(struct aest_node);
+> +		if (!aest_ppi_data[i]) {
+> +			pr_err("Failed percpu allocation.\n");
+> +			ret = -ENOMEM;
+> +			goto fail;
+> +		}
+> +	}
+> +
+> +	aest_node = ACPI_ADD_PTR(struct acpi_aest_hdr, aest,
+> +				 sizeof(struct acpi_table_header));
+> +
+> +	while (aest_node < aest_end) {
+
+A macro for_each_aest_node() will be more readable.
+
+> +		ret = aest_init_node(aest_node);
+> +		if (ret) {
+> +			pr_err("failed to init node: %d", ret);
+> +			goto fail;
+> +		}
+> +
+> +		aest_node = ACPI_ADD_PTR(struct acpi_aest_hdr, aest_node,
+> +					 aest_node->length);
+> +	}
+> +
+> +
+> +
+> +	return cpuhp_setup_state(CPUHP_AP_ARM_AEST_STARTING,
+> +			  "drivers/acpi/arm64/aest:starting",
+> +			  aest_starting_cpu, aest_dying_cpu);
+> +
+> +fail:
+> +	for (i = 0; i < num_ppi; i++)
+> +		free_percpu(aest_ppi_data[i]);
+
+You should free the aest_ppi_data[0:i], aest_ppi_data[i:num_ppi] are not alloc_percpu().
+
+> +	kfree(aest_ppi_data);
+> +	return ret;
+> +}
+> +subsys_initcall(acpi_aest_init);
+> diff --git a/include/linux/acpi_aest.h b/include/linux/acpi_aest.h
+> new file mode 100644
+> index 000000000000..679187505dc6
+> --- /dev/null
+> +++ b/include/linux/acpi_aest.h
+> @@ -0,0 +1,92 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef AEST_H
+> +#define AEST_H
+> +
+> +#include <acpi/actbl.h>
+> +#include <asm/ras.h>
+> +
+> +#define AEST_INTERRUPT_MODE		BIT(0)
+> +
+> +#define ACPI_AEST_PROC_FLAG_GLOBAL	(1<<0)
+> +#define ACPI_AEST_PROC_FLAG_SHARED	(1<<1)
+> +
+> +#define ACPI_AEST_INTERFACE_CLEAR_MISC	(1<<0)
+> +
+> +#define ERXFR			0x0
+> +#define ERXCTLR			0x8
+> +#define ERXSTATUS		0x10
+> +#define ERXADDR			0x18
+> +#define ERXMISC0		0x20
+> +#define ERXMISC1		0x28
+> +#define ERXMISC2		0x30
+> +#define ERXMISC3		0x38
+> +
+> +struct aest_node_interface {
+> +	u8 type;
+> +	u64 phy_addr;
+> +	u16 record_start;
+> +	u16 record_end;
+> +	u32 flags;
+> +	unsigned long record_implemented;
+> +	unsigned long status_reporting;
+> +	unsigned long addressing_mode;
+> +	struct ras_ext_regs *regs;
+> +	u64 *ce_threshold;
+> +};
+> +
+> +union aest_node_processor {
+> +	struct acpi_aest_processor_cache cache_data;
+> +	struct acpi_aest_processor_tlb tlb_data;
+> +	struct acpi_aest_processor_generic generic_data;
+> +};
+> +
+> +union aest_node_spec {
+> +	struct acpi_aest_processor processor;
+> +	struct acpi_aest_memory memory;
+> +	struct acpi_aest_smmu smmu;
+> +	struct acpi_aest_vendor vendor;
+> +	struct acpi_aest_gic gic;
+> +};
+> +
+> +struct aest_access {
+> +	u64 (*read)(u64 base, u32 offset);
+> +	void (*write)(u64 base, u32 offset, u64 val);
+> +};
+> +
+> +struct aest_node {
+> +	char *name;
+> +	u8 type;
+> +	struct aest_node_interface interface;
+> +	union aest_node_spec spec;
+> +	union aest_node_processor proc;
+> +	struct aest_access *access;
+> +};
+> +
+> +struct aest_node_llist {
+> +	struct llist_node llnode;
+> +	char *node_name;
+> +	int type;
+> +	/*
+> +	 * Different nodes have different meanings:
+> +	 *   - Processor node	: processor number.
+> +	 *   - Memory node	: SRAT proximity domain.
+> +	 *   - SMMU node	: IORT proximity domain.
+> +	 *   - Vendor node	: hardware ID.
+> +	 *   - GIC node		: interface type.
+> +	 */
+> +	u32 id0;
+> +	/*
+> +	 * Different nodes have different meanings:
+> +	 *   - Processor node	: processor resource type.
+> +	 *   - Memory node	: Non.
+> +	 *   - SMMU node	: subcomponent reference.
+> +	 *   - Vendor node	: Unique ID.
+> +	 *   - GIC node		: instance identifier.
+> +	 */
+> +	u32 id1;
+> +	int index;
+> +	unsigned long addressing_mode;
+> +	struct ras_ext_regs *regs;
+> +};
+> +
+> +#endif /* AEST_H */
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index 624d4a38c358..f0dda08dbad2 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -186,6 +186,7 @@ enum cpuhp_state {
+>  	CPUHP_AP_CSKY_TIMER_STARTING,
+>  	CPUHP_AP_TI_GP_TIMER_STARTING,
+>  	CPUHP_AP_HYPERV_TIMER_STARTING,
+> +	CPUHP_AP_ARM_AEST_STARTING,
+>  	/* Must be the last timer callback */
+>  	CPUHP_AP_DUMMY_TIMER_STARTING,
+>  	CPUHP_AP_ARM_XEN_STARTING,
 
