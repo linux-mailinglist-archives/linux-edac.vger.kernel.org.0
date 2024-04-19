@@ -1,77 +1,79 @@
-Return-Path: <linux-edac+bounces-918-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-919-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DD848AA1E2
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Apr 2024 20:16:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43E738AB341
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 18:21:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24AC128809A
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Apr 2024 18:16:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F7661C20F36
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 16:21:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCA9178CF2;
-	Thu, 18 Apr 2024 18:16:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F77E130E20;
+	Fri, 19 Apr 2024 16:21:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TqE71ZqU"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="15Y9IbR8"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C994433BF;
-	Thu, 18 Apr 2024 18:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F24130A6B;
+	Fri, 19 Apr 2024 16:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713464174; cv=fail; b=chqeLBQ1iU1cyLbj2u5Suhv3yqcHGwn9Ei5FSy9mR3/L+cmXv5c2MmJSu1lWYHE9ZHkLENZuf8rlOJPShclfBq8qoxLeaMCDS6T83pbmi+4QqYZFHCjemanDenOoC8z0/rPBT6dHPVjSwvIWoJVdcwahb5HbZk/yzXiRfnMvwyQ=
+	t=1713543661; cv=fail; b=SeiGY27MAPp91uFYeeb4C/7pv3v50PCAtp2aU/w036cS6O3x2n0KgLIQM723VDO0CksOA5YAQm+SXbyg3UvjuQF8a6vhorqo+joYYDaPEk9dbliIpnpHMwa9PNlwY7nULnZWVbCvYMOpBhY69J2QX9hQDpNyU6zKcc72IhlvLfc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713464174; c=relaxed/simple;
-	bh=YldUuLnxA0b/kPZQSqhj0gyzLP9biZjWVXPISLvlGj8=;
+	s=arc-20240116; t=1713543661; c=relaxed/simple;
+	bh=SY3BPx2WnV/kC1RnQePEDaftcMfOdHTOgTUbfja+l0o=;
 	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hWMKTYwTNfRruOJSZuGHVvrGy4WwQzGBbItRKOKZKcUdTJiYCNNcnMINDWAOigh8apCu2a51qxM9XC/yQ3n3KbH1lGvnNrLFpHz53dgBalFXsbfVqX13HsaPuYOlOlzMS8wEujfHZsSh3CAP9JH3WT08orFGgH68t/HoqWMg6+8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TqE71ZqU; arc=fail smtp.client-ip=40.107.244.78
+	 Content-Type:MIME-Version; b=TatqVbVSnw2ECAWB3sRkVsqo+AvQ0xMB9o8u7sft7TaxbjRWm9QUGdmFBRweDk7qDioz3MZU/5GqpGRjYIHF/haTe/kqNKLUXsFcEWtIztA4JvEylPbmWRPCdbTXtQLeBHBX4hPHY8N74zcytDz8hqJ3tOmXNmeUaUJyS92xnNk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=15Y9IbR8; arc=fail smtp.client-ip=40.107.93.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rj4nDx7RGBLyFHriy2Rz55Di1KbNcFH4BNpg8kxZDJCQ45DbOX6+rsiDvI1UufhtOO33pHV+OpdvQMLZiVwTArDrobDmx5CwIDtKG1yDbd60CGTfLO1je6myp5gJmQJw9ZU4f0Pm9qK9hbuCmDCWsVkEgM2gOziYbmcJyVNBnwV31nqcfWNworAumx1m9+H54LY01DTaMDmnDR3K3epvVzsGeIOpgDXwVr6G5hokVEJ3sanrwrTB++biTu/rfKDVG3NSjKECz1leoC5ioUGXOE7usrf7W1qfI/ehSw0ZtIJFmxc+7GbefjaR6EKVkc9rY47+Zdm9h8EIBo8WW3gamg==
+ b=SWAbNeypVMzBo2+o2WA+WUaqYGQ1RNmMq9Cgv3ST8gyKbQUNkh8F3jnxSWHe2ivD58jmODEa57PqvY8iCkM0P8IVVCPEkzWnnB5uESOv82e0MJ2h3htDcTgcDMOBuOz6IkHkiO53eOT99E5D6GziDKLp3T2rF5lGi7UXExjcmhC54hC1fTwrCbSG1fl13Lwyu9/hS7S1b7N6uolMdmOANEcnyBckNFP+nInZq/oPTjYRIOxizd7+PxvpobGNmn3Q3JQ/f/pIFEy1Xa0gJxEo/mXm/xbvEpL8yWlNwxdRQJZeYbmHQVSyFpb2CWQ9oFHJA6touur3h0qgZwerqhetuw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KlUF8RC/YeGqD0VOtX6jP9ZFFcgT5zRe9+rBuSCTFVs=;
- b=PamSWC6lj1mzEcY/jcxAP+OYzDx6L0tREjQITbptIVgBvTF7lFTRdd1PrSpVflDV+fTb2PzcC00Pjpstf+t/+uz/xMNi3nLCVMsbv7y1AOHlqbYakqcKVFjrXFHj7lPQyVG6Nhf5VneX6dAFEThbJeCno9q27/HwfI+VPj6rmK05udGOrzPCK/w0TxvNppobYYrj4wlcBZV0I2aIYHSk6J86AruVVW4w5M99XnKIFVTpyyoHKLag8daPwzYcEIHE45p7Z17VAWq5vVhk2y1AYSGaH2Xj4iEsiyCHP2i0xN615IUs5ALsMUVPe679djlqWwxQbnm4woslyefuNLuaLg==
+ bh=KZQEy1AHRmhQ0FL1BsgR2bCdGdujbvwEHWBSC6b4l8g=;
+ b=Pcb5b9knvDxn62ez4QN1hkE8mUsnK/F4sNGmzj06IC/WUkpy34iI/jGm3nCcGB9IHlnkLwqH/M0KWq9CDWOfenQTuKlAS4Xci/U7N07xjp3cnHztqUSUuayM9+eJoVBbf8WC8ZU+bcj/jJt/YPmGoLhIUzdRxLmFtyjpq/MPqHZI043rQMho2h7RFWwLKt12AoY7BzqYeFiQTiI/OLjze1G0qRrNsoGiY9gw9DbrIrEQrB4f7Zlnn+7MA5njtaVnqmAn1TNYiGMviyy3Btw+qUW9mBNwwZTH8Kd5KpCnJzIjGSP1WyWhJpupQ9UygAJS3S8jYYiFuXSQZAZARG9swg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KlUF8RC/YeGqD0VOtX6jP9ZFFcgT5zRe9+rBuSCTFVs=;
- b=TqE71ZqU8ihWGHXb94n/QCTjH5D5MgzxHL32sBoLlK5aqOuvC3T0aBXgVK2LT58uZJ6oR2MUMSMABYq/sQNM8N49l+24pS0Nas/ZPM8eoxHk+MvdkwGZAcGdxUXj1mZ6/iE1P+b3H013me2cw0IYWISOy8OTwfh84FNqSt6QN2w=
+ bh=KZQEy1AHRmhQ0FL1BsgR2bCdGdujbvwEHWBSC6b4l8g=;
+ b=15Y9IbR8qVldjk98O1CijNKNheO93E614kjC4z5HEzO0++y7qwMU8APthjQ5OYveYio+xiMeHSLaiGeIj+qNsPM0GeKu2GFGJ/64IMH+19/eZV+24Gc50JeqcrwT+3GZU2CZl+rWpoMCGHdIZEn92jyIcLv5pP2ekahsDtTd7zw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by SA1PR12MB8642.namprd12.prod.outlook.com (2603:10b6:806:383::11) with
+ by SJ1PR12MB6052.namprd12.prod.outlook.com (2603:10b6:a03:489::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.42; Thu, 18 Apr
- 2024 18:16:09 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Fri, 19 Apr
+ 2024 16:20:55 +0000
 Received: from BN8PR12MB3108.namprd12.prod.outlook.com
  ([fe80::43a5:ed10:64c2:aba3]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::43a5:ed10:64c2:aba3%7]) with mapi id 15.20.7452.049; Thu, 18 Apr 2024
- 18:16:09 +0000
-Message-ID: <354cce06-b1b9-4523-9b71-d0576eb3a01f@amd.com>
-Date: Thu, 18 Apr 2024 14:16:06 -0400
+ ([fe80::43a5:ed10:64c2:aba3%7]) with mapi id 15.20.7452.049; Fri, 19 Apr 2024
+ 16:20:55 +0000
+Message-ID: <27fadd8a-d5a7-4b65-a2ec-c1aa04a15048@amd.com>
+Date: Fri, 19 Apr 2024 12:20:53 -0400
 User-Agent: Mozilla Thunderbird
-Cc: yazen.ghannam@amd.com, x86@kernel.org, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] x86/mce: Implement recovery for errors in TDX/SEAM
- non-root mode
+Cc: yazen.ghannam@amd.com, linux-kernel@vger.kernel.org,
+ avadhut.naik@amd.com, muralidhara.mk@amd.com
+Subject: Re: [PATCH v3 3/4] RAS/AMD/ATL: Validate address map when information
+ is gathered
+To: John Allen <john.allen@amd.com>, bp@alien8.de,
+ linux-edac@vger.kernel.org, tony.luck@intel.com
+References: <20240418161417.6091-1-john.allen@amd.com>
+ <20240418161417.6091-4-john.allen@amd.com>
 Content-Language: en-US
-To: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
-References: <20240408180944.44638-1-tony.luck@intel.com>
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20240408180944.44638-1-tony.luck@intel.com>
+In-Reply-To: <20240418161417.6091-4-john.allen@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0474.namprd03.prod.outlook.com
- (2603:10b6:408:139::29) To BN8PR12MB3108.namprd12.prod.outlook.com
+X-ClientProxiedBy: BN0PR04CA0208.namprd04.prod.outlook.com
+ (2603:10b6:408:e9::33) To BN8PR12MB3108.namprd12.prod.outlook.com
  (2603:10b6:408:40::20)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -80,171 +82,302 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SA1PR12MB8642:EE_
-X-MS-Office365-Filtering-Correlation-Id: 62b138a4-42fa-4423-9f75-08dc5fd39efd
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SJ1PR12MB6052:EE_
+X-MS-Office365-Filtering-Correlation-Id: d7b0163d-4148-47dd-f732-08dc608cb085
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	/HV3TVwFkk737I/2oFagbhLeyyYbuWtmfCmK1ubFTO6I/meRuyNRxjnb+l0B1oqyT3OUyLZ8a8lIMeglqHDB6gkTdjxoj1NEAKogScSOyI5JBKV8TObzLvvlAsDu2aU3OlHekf7oXfSWXKTju4SRLrsurThaE28wESbueFQxbl+ybOwmnsGaxio4kdH8eXAq5T1j5KPAHlcE3j2A2G/ixwJyd/udtnb96rCVLVSQLsjawCVwjLbdOTjc9nVnZUox4lO52SL4NgY6aZZRPXe9egSSgYsJ9PJnxnCMMLoRKiosETrCQw7YoSXCnpeqNFhygpqcX0PanMY9z/sCZGpPPb72Q7DyMka5ntzWSlvdicKsgHD4PyBtYhtFO/wJehrvYEFn4h4UlXlY2qvAqoJoKuPsA+QaBqDxbr9y98e/wO5lTaDVGXJby/W/7duMCBrdv6mT7zeNXrtF75YMjbjU54JI9nK8dnSYlPmBC2y7dsVm86Z71pt/h/KfVYHljaJyJ7kaBv9NfXw8SxuS05cMOCk1EJWcUKBPFC4kUNZbB5JTuy3E9SDpGBJf0SfNaEYiLpm5Di1I1ZSCfg1t1E8AY1W+8Ie/oIAmVbxANC+PxPQMarS5kByY8sUVO9+j5sIS9IgkOuwCBSYfXKNoGFjVjTB/jI/gjJDNNoiheZDvGFs=
+	yfdQYMktmWkmCCGF8Po028LkLp+v4wAUUvKWgniPN9zLo+xdJrz2Ds3suIZ6xdqtkA72MqD7P9bTUpdatUPlmyl59cNuxyJv7TMdmU6io5rYk7M6kjZ51JjWVcu84t8odJ9QVh5h4e8C064UPCkP290kxpYztzeS5ixff6YFYTNX006xzAw9E4SPKsZeleUGsZ5Jxf64Lerb2GyoqjHGunX0j+VatcoHLpQHYCNWRkCwAU464qIxyEPELMgoU/nJf2MsdwiiLpUdqfjppzB7gqKthNKfswZNCI+/D59XuUDiOjeFD0W9rv8SUDRNpCfG/5gWSZrGlHRr7bWTBLIL03IXKMWVr+4qzbhzf87YBck/FkvZE3pGdg+siOiIXL+tdeTwSl70fEDPz3N3tnJF/87YGQx5Sa3tOAHWzGRCnuTRCA+MZXtE6J85QTg8UgH0wCuM9fuinm2dwGVVci8QcPbhDwhGX9ZyF0AjDBNHUCiW5yQV2QCDVtnRrbuI1q9yJ3DNATThDRzYcGDylLn8j93O/KSbAQxlxwbPC2pGNnPsdkTK5BX9haFefkILkEZZh81pCExQyxY+3aweQh462rL2TwASO6286HyUoOeyuB5ENeF4wjZsV7uLQoTpwG6rXsUnM2rwSZBdfK0xH43WvNpuojp57m6fGa8aJ23LvmA=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cHlrQ01PY0NsYi9pNEwwNmkrb0YxS1RQdGd6d3ZOZm5DTEJUSVZtcnJaUDMx?=
- =?utf-8?B?Rm1xd0l3dG43WUZLUFhsek9LRlBtMFkwRTg5Nkp2ZFc0cEwxTEtQbHR0T3dV?=
- =?utf-8?B?akZ0SGRxcngwWENxNWtSV1c5TUVGb1RDQ0V5MzdUUUZPYU9OSXJjbjhLeDN4?=
- =?utf-8?B?SW9OSW50b0J0cGN6TlVrMVVFcDZkTTh1WmdERjZMK3BUTFBCR3orYXNLTWh2?=
- =?utf-8?B?blQzMTNWQWRNT0FiQVFjV2hQZFBrOElZR1dMcWw3SnAwaWNjTUhaYlJTM3Ni?=
- =?utf-8?B?SFoySFdGY1lCd3FxUDFmaGh5NUFTUDdzRWxsc0RPT281dU0waklpc05hVEJV?=
- =?utf-8?B?eHdoajlwVEZTdXRkWnFwcGtTb2t2TXJKdXJSMzJMSmM0b3RwZVVuQlFkeWhF?=
- =?utf-8?B?MEpYcUlTYU1kNy9VdXRjM0c0ZTJibDBxYnhqSFo0UEptM21DR3Nha29WeHl6?=
- =?utf-8?B?bC9qY2p6YlpLTVA5andtU0ROb2J1WXhIWnNZemJPbERnUWx5MGtYcXdVSDhq?=
- =?utf-8?B?d1VXRkFFOWJrczZMeFhTS096dWU3cHdpVTdHNU02czNSR2V6TjB6VmJ4Rmho?=
- =?utf-8?B?VDZyWktMb3dJdTd1Z2VSdU1tVUVUY1V1Z1lDT3FWWTJmai9MazhqNEZ1d2I3?=
- =?utf-8?B?eGxjcVc5YzYzbnFaRE1xUEJyV1QwVm9RclpJYnVmMHNCdVh4Q0swTEJFVGk1?=
- =?utf-8?B?ZmN4QVRGL3JCZGlrMldheUY5SXV0c3hzeC9vd1lESnIxbG41Zk94MFY1Nits?=
- =?utf-8?B?dWQ2Rmp3ZFhJMkN0QTVPQ244MEh2Qk9CYlhtK0FNVFFxNkl6VDRMOFNYMTdI?=
- =?utf-8?B?YTRjZ29jYVZwS1ZVQkpqMTFOUFFqcXJJdmp6VnM3UWJ6T3RmNjhJMnpud0xj?=
- =?utf-8?B?TkxvR05OQTRqZThYK0JhOUgwSFZadGFrM3kxaXhpcWhMeUdNNW4xYmg2Q2F0?=
- =?utf-8?B?R3UwM3lmbXZpTnRDNkI2N0dBUFRZYllnR1QwUGpsRDN5cUw0Z3BhaW1iY0s0?=
- =?utf-8?B?WFliekNmc1pSK1RzRkRIWFZkS2ZESHBuTXZ0TmRjaVpyVTNYVERUSVZLMnlD?=
- =?utf-8?B?Vnk0MmEvYk05MUVNeVMzRCt6Yys5b1NSRTNMRlpFOVlWaFUvNElTVHlUN2RJ?=
- =?utf-8?B?UVE4dGJ2RXdZU25iSWdMdTE4TVNQVzBOQ0JjeHBSNFhYcVlpSFhHTnNtNmlU?=
- =?utf-8?B?dVRsbDhlb1ZEQU9hQmRVZEVQQmYveDJmQyt1MmhoRmhNNTFhOHpMbWhEdnhT?=
- =?utf-8?B?N3M0TEZqM01wempKWVh3MnVoa1ZNQm12b2Z6L0NGR2NzeGMvUXhaQjBEdmt6?=
- =?utf-8?B?enlwcFNPNjY5QWZObGFTdE9Iekszd0ZIZjVNZTIzZW1LeHg0V3FKdHBCVmti?=
- =?utf-8?B?RWpHa2IySDI0QitNeFpyeUxGeWpmS2JlTTZqTG9ZZ3lDd1R6QW13Rm1SRTkx?=
- =?utf-8?B?MTh1VlIvRDZuOUxEWS9HZ3BMeUxTcWJUazUxK0lsS2w4dk5QUU9jaDk5QmZF?=
- =?utf-8?B?aUZHOW5jMERYQzhsUjkyZnJNN0hjNVIxRjMrblpRTks1bXVPekZxdlo1ZUx1?=
- =?utf-8?B?WThyRzZXbFVFWGFxbmtZbzAyN3NIY0ZIV3RhOW4yZnQ2clBTMDRaM2N5RXJK?=
- =?utf-8?B?b3dCZGhwNVp1TTBkVCt2Zjc4M1pBc3RRTHlJbk1PNjdoNWw4ZFRJZ1lEUkZS?=
- =?utf-8?B?RkZGMWVpSnV6dTBvYm8zYkppdk1lSWFWemhrTFE4amZmRndEY2tGdTlhaFl1?=
- =?utf-8?B?eEFmei9rN2tldlg1Z1FudkxSRGQ4SGlVMTFhemNlR3EzM0RpWk1kYzNrem90?=
- =?utf-8?B?c3NuZ1FiVVRFTE4vSWNrMDd6Yk1nMFB1YkxwcDJhNUtzT1BqM0g1ZFpLMEo3?=
- =?utf-8?B?cjlUbnhoNmo5TksvWmZrdXI5QnllMGVFWGhud3dOeFlyZXZRWjhTUmNSeklH?=
- =?utf-8?B?emNXL09LOS9KSWxRRjRKZ2dDaWtCa0pXWkFtejBVa0pxTFIzajBmaERkZ1oy?=
- =?utf-8?B?ZzZ1dWZVVEVzOHkyL1M5NTU4V3I5WkZMQ1ZHVUJ4cnFWa3FSMUhacmlUa3hn?=
- =?utf-8?B?bHVPRElmdFhYN25JUEFpNG95TC82MWVEbXBUS25FMnhJZVNEeDdXVjRpdTBn?=
- =?utf-8?Q?YMneWzliW5/palnrcmHNUwHgt?=
+	=?utf-8?B?Q2hsVFVIVUo4eWtSZGRPQ1loL0RqZXlzdFRPdCtwd2RNY2JqZ3FHcEZ2QTBB?=
+ =?utf-8?B?cGVMbXdRdDVDNVZSSE5HWVd3Y1BsZ0U5Rjl1US9wTDdQcHVuWG9KNyt4VmJ0?=
+ =?utf-8?B?Y05aOEhFa0g2d2pJUVIwSnlvQjdjb01DTzgzN1JRUG00cFNsa0ZUVk5BOGhD?=
+ =?utf-8?B?OTRHMFMzWnRlVVYvVTBCbnpaZXlnMW0zUkFEa1U5eENhK1dDVVFDbXVDdHlX?=
+ =?utf-8?B?TDdYQ1N0dXRMcUROMm1LVE9YR3RtZ2pzRFRDS0JUTTdBdUpDUTN3amRXaTNZ?=
+ =?utf-8?B?enkxQnpVck55UWpmZFRZWWxEdkltS3RGMzZjTndwSytvVTVVUmZGeDhSY3Yy?=
+ =?utf-8?B?RlFyeEtLWHJTSVhqV3BGSnhpZmtkRitSbEJkQlYxQzVKTk1LN0dKY2IwR1FZ?=
+ =?utf-8?B?RjgvVUlHNDFZNVVITkkxRWw3Vk14VzMrSDBFOXBVVjFYWkJTZE90TVFNSlhM?=
+ =?utf-8?B?THpraDBVVGEvdmlDNGN1OWdVUGxyR1BqQ2FLaXNaTmJBd3JCdFRhZUkrc2wv?=
+ =?utf-8?B?SWh3Z2JTYTRWb09ydHBsanRKMDRqRWIrVVM5dHhyTUxCbFdVNWJuVGsvVWlE?=
+ =?utf-8?B?Mi9VdkhpeTZvVmdSUlhUc2JiaHJMTmtYOHVlN0UxZ1dQV05yblEvcit6V2hJ?=
+ =?utf-8?B?SS80U1RiaWNHa2p2eTVQUTMvRWZBTzdTM2JUZWFFL1ZBVE5XRU9QTUZBQk1J?=
+ =?utf-8?B?enZ4SDdRRjFMNEo5dUJFOWt5RS9PelgySjdGc2dORk93Y3VRbnBHTFM4dktu?=
+ =?utf-8?B?ZTlsekZsOWJpVnkrV3l3dm1mMnVRMi9qSEk0MjNFVTcxditYeFEzQS9HQnQz?=
+ =?utf-8?B?dk04RUZDbGF4aDJPQWpYWWRCOWlkMlI1RDNTRWFvUFhxZW5rLzR0MGtYangr?=
+ =?utf-8?B?WE9Ucll5MzBmTkYrYWhSdVJWN0VkbndpUnE0U1hRVjFmTncwbGx0ckNJMjJY?=
+ =?utf-8?B?MjROa1ppTm5OSVRDOExrcTRLUWhhbnByZEszSWpMdGdmTWs4amt3SnVyVERW?=
+ =?utf-8?B?bDAyWVc2L0pqbGRiWE5Rb1hwNDRIMnUrT2VoOXczYmkrOHpJWEkrZXhBaWtF?=
+ =?utf-8?B?OExlMEdNdS9XOHdxUnhkdVZ1YnllZXZvMlhXVHZPRDZhWmk5Qmdvd0hBV3FL?=
+ =?utf-8?B?Q09ITzNxWFFLYm0xWlVtMUpoMFM2a25KdVY0ZzRlVDhZL1NlaGVZN0RXV0t3?=
+ =?utf-8?B?N1hXMHZiWWtHdU1KM3haK1IwaGRxM3RpUHFWcDcvekF2Wlh5cmVFWC9jMVpL?=
+ =?utf-8?B?akRlMGIxOU5MZkt6QXNEU0hSOGJNK3A0TWhYZTVNSXFZWmhzemFLUW9uZjhC?=
+ =?utf-8?B?M1lwUkJxL1ZEdjl1UGwzamRZZjNPekZUNVNHS2JXMG8xRUhnRmx3cjNYbERC?=
+ =?utf-8?B?QUFEYlovL05tdFk2S016U2dFRU44K2ZpdWJJVWFoZ2k3RzNPL2NjS29ySG04?=
+ =?utf-8?B?aTNiVmJqc1UwWGZEWkQrV2xSZkJ2UnNGTnZPSWt6b3l6dVM5SklnVW5PMVAz?=
+ =?utf-8?B?SDB3cVlhbHZwUWhLd29PaU1ycHVTYlVrbVF5YmMyTU9CMGhBc2V1SVlQZnVG?=
+ =?utf-8?B?OFRSSjMyMzZkYThjY2Nzd3F4YzRmWlZYUC9qd1VLWjZ2QThHSXVqZ2ZmdWJG?=
+ =?utf-8?B?M2V2d2xkODVQRjFkcWlzNkNlWThiMisvN1VPMnRFWXkwTW1HRXA4QUNLTG40?=
+ =?utf-8?B?ajFYUUVzRnA1TFdZSk1UR0pnaDByOHFLNzNmbUFDTTBTSGFFWjArMFVUSll0?=
+ =?utf-8?B?bGlJcUM1dkRrTHppQnJ3S1BXMFZ6QVVtYjBSVmk0RlhxZCtIMjZ2ajVJRE84?=
+ =?utf-8?B?d0YxZzhDcU5yck5pR0NtaU1WUGxKZDl4NE5sSFhFTHlKdDJwT01aS290ZlRu?=
+ =?utf-8?B?MzZwek9pMkgvOFdIcTdNNEx3NURpaEdJWWNxOGExcGdsZWk5TzhTdk5oMDJ6?=
+ =?utf-8?B?OTlEQUFDTjdLcnFCcUxDQVhYZ0pDbDA5K0ZsR0lyRzNMVWxjRFpPa2QwN2Rn?=
+ =?utf-8?B?RVkvUEIzcGtaMlZxT0p1czc2cnJqc1ltdGg4RE4xQ3QvZ2Fxb29UVm42MUts?=
+ =?utf-8?B?cVhlSGdOVkVrODVnWUU2bnlQbE93ZnZtZUwvRmtqRzBZR2FualJsb0ZPUFBj?=
+ =?utf-8?Q?Xackit8e01y6804xDHYBp1WB9?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62b138a4-42fa-4423-9f75-08dc5fd39efd
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7b0163d-4148-47dd-f732-08dc608cb085
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2024 18:16:09.1836
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2024 16:20:55.4750
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NR8pKcnl0m02uPMGgcfbhLcO5QtYGEXZKXi2aX+pNpB1bQGw/T2FhiQx3Bz9VOla0AWbNc+4CaEepJF5VAsjPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8642
+X-MS-Exchange-CrossTenant-UserPrincipalName: g4KbhHhT40ioYcdzXIchTgfz8jUhBL7BIS3j0kstaiplIShqWIjkREkfXBR5U30+09F1mKyKciH9olRbkGaskA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6052
 
-On 4/8/2024 2:09 PM, Tony Luck wrote:
-> Machine check SMIs (MSMI) signaled during SEAM operation (typically
-> inside TDX guests), on a system with Intel eMCA enabled, might eventually
-> be reported to the kernel #MC handler with the saved RIP on the stack
-> pointing to the instruction in kernel code after the SEAMCALL instruction
-> that entered the SEAM operation. Linux currently says that is a fatal
-> error and shuts down.
+On 4/18/24 12:14, John Allen wrote:
+> Validate address maps at the time the information is gathered as the
+> address map will not change during translation.
 > 
-> There is a new bit in IA32_MCG_STATUS that, when set to 1, indicates
-> that the machine check didn't originally occur at that saved RIP, but
-> during SEAM non-root operation.
-> 
-> Add new entries to the severity table to detect this for both data load
-> and instruction fetch that set the severity to "AR" (action required).
-> 
-> Increase the width of the mcgmask/mcgres fields in "struct severity"
-> from unsigned char to unsigned short since the new bit is in position 12.
-> 
-> Action required for these errors is just mark the page as poisoned and
-> return from the machine check handler.
-> 
-> Backport note. Little value in backporting this patch to stable or LTS
-> kernels as this is only relevant with support for TDX, which I assume
-> won't be backported. But for anyone taking this to v6.1 or older, you
-> also need commit a51cbd0d86d3 ("x86/mce: Use severity table to handle
-> uncorrected errors in kernel")
-> 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-> 
+> Signed-off-by: John Allen <john.allen@amd.com>
 > ---
-> The SEAM_NR bit in IA32_MCG_STATUS hasn't yet made it into the Intel
-> Software Developers' Manual. But it is described in section 16.5.2
-> of "Intel(R) Trust Domain Extensions (Intel(R) TDX) Module Base
-> Architecture Specification" downloadable from:
-> https://cdrdv2.intel.com/v1/dl/getContent/733575
+> v2:
+>   - New in v2.
+> v3:
+>   - Move DF 4.5 np2 validation to patch 4.
+>   - Update commit description.
 > ---
->  arch/x86/include/asm/mce.h         |  2 ++
->  arch/x86/kernel/cpu/mce/core.c     | 18 ++++++++++++++++++
->  arch/x86/kernel/cpu/mce/severity.c | 16 ++++++++++++++--
->  3 files changed, 34 insertions(+), 2 deletions(-)
+>  drivers/ras/amd/atl/dehash.c | 43 ------------------
+>  drivers/ras/amd/atl/map.c    | 85 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 85 insertions(+), 43 deletions(-)
 > 
-> diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-> index de3118305838..dfd2e9699bd7 100644
-> --- a/arch/x86/include/asm/mce.h
-> +++ b/arch/x86/include/asm/mce.h
-> @@ -13,6 +13,7 @@
->  #define MCG_CTL_P		BIT_ULL(8)   /* MCG_CTL register available */
->  #define MCG_EXT_P		BIT_ULL(9)   /* Extended registers available */
->  #define MCG_CMCI_P		BIT_ULL(10)  /* CMCI supported */
-> +#define MCG_SEAM_NR		BIT_ULL(12)  /* MCG_STATUS_SEAM_NR supported */
->  #define MCG_EXT_CNT_MASK	0xff0000     /* Number of Extended registers */
->  #define MCG_EXT_CNT_SHIFT	16
->  #define MCG_EXT_CNT(c)		(((c) & MCG_EXT_CNT_MASK) >> MCG_EXT_CNT_SHIFT)
-> @@ -25,6 +26,7 @@
->  #define MCG_STATUS_EIPV		BIT_ULL(1)   /* ip points to correct instruction */
->  #define MCG_STATUS_MCIP		BIT_ULL(2)   /* machine check in progress */
->  #define MCG_STATUS_LMCES	BIT_ULL(3)   /* LMCE signaled */
-> +#define MCG_STATUS_SEAM_NR	BIT_ULL(12)  /* Machine check inside SEAM non-root mode */
+> diff --git a/drivers/ras/amd/atl/dehash.c b/drivers/ras/amd/atl/dehash.c
+> index 4ea46262c4f5..d4ee7ecabaee 100644
+> --- a/drivers/ras/amd/atl/dehash.c
+> +++ b/drivers/ras/amd/atl/dehash.c
+> @@ -12,41 +12,10 @@
 >  
->  /* MCG_EXT_CTL register defines */
->  #define MCG_EXT_CTL_LMCE_EN	BIT_ULL(0) /* Enable LMCE */
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 84d41be6d06b..771a9f183260 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1593,6 +1593,24 @@ noinstr void do_machine_check(struct pt_regs *regs)
->  		else
->  			queue_task_work(&m, msg, kill_me_maybe);
+>  #include "internal.h"
 >  
-> +	} else if (m.mcgstatus & MCG_STATUS_SEAM_NR) {
-
-MCG_CAP[12] (MCG_SEAM_NR) should be checked first, correct? This could be a
-new mce_vendor_flags field set during MCA init.
-
-> +		/*
-> +		 * Saved RIP on stack makes it look like the machine check
-> +		 * was taken in the kernel on the instruction following
-> +		 * the entry to SEAM mode. But MCG_STATUS_SEAM_NR indicates
-> +		 * that the machine check was taken inside SEAM non-root
-> +		 * mode.  CPU core has already marked that guest as dead.
-> +		 * It is OK for the kernel to resume execution at the
-> +		 * apparent point of the machine check as the fault did
-> +		 * not occur there. Mark the page as poisoned so it won't
-> +		 * be added to free list when the guest is terminated.
-> +		 */
-> +		if (mce_usable_address(&m)) {
-> +			struct page *p = pfn_to_online_page(m.addr >> PAGE_SHIFT);
+> -/*
+> - * Verify the interleave bits are correct in the different interleaving
+> - * settings.
+> - *
+> - * If @num_intlv_dies and/or @num_intlv_sockets are 1, it means the
+> - * respective interleaving is disabled.
+> - */
+> -static inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+> -				  u8 num_intlv_dies, u8 num_intlv_sockets)
+> -{
+> -	if (!(ctx->map.intlv_bit_pos == bit1 || ctx->map.intlv_bit_pos == bit2)) {
+> -		pr_debug("Invalid interleave bit: %u", ctx->map.intlv_bit_pos);
+> -		return false;
+> -	}
+> -
+> -	if (ctx->map.num_intlv_dies > num_intlv_dies) {
+> -		pr_debug("Invalid number of interleave dies: %u", ctx->map.num_intlv_dies);
+> -		return false;
+> -	}
+> -
+> -	if (ctx->map.num_intlv_sockets > num_intlv_sockets) {
+> -		pr_debug("Invalid number of interleave sockets: %u", ctx->map.num_intlv_sockets);
+> -		return false;
+> -	}
+> -
+> -	return true;
+> -}
+> -
+>  static int df2_dehash_addr(struct addr_ctx *ctx)
+>  {
+>  	u8 hashed_bit, intlv_bit, intlv_bit_pos;
+>  
+> -	if (!map_bits_valid(ctx, 8, 9, 1, 1))
+> -		return -EINVAL;
+> -
+>  	intlv_bit_pos = ctx->map.intlv_bit_pos;
+>  	intlv_bit = !!(BIT_ULL(intlv_bit_pos) & ctx->ret_addr);
+>  
+> @@ -67,9 +36,6 @@ static int df3_dehash_addr(struct addr_ctx *ctx)
+>  	bool hash_ctl_64k, hash_ctl_2M, hash_ctl_1G;
+>  	u8 hashed_bit, intlv_bit, intlv_bit_pos;
+>  
+> -	if (!map_bits_valid(ctx, 8, 9, 1, 1))
+> -		return -EINVAL;
+> -
+>  	hash_ctl_64k = FIELD_GET(DF3_HASH_CTL_64K, ctx->map.ctl);
+>  	hash_ctl_2M  = FIELD_GET(DF3_HASH_CTL_2M, ctx->map.ctl);
+>  	hash_ctl_1G  = FIELD_GET(DF3_HASH_CTL_1G, ctx->map.ctl);
+> @@ -171,9 +137,6 @@ static int df4_dehash_addr(struct addr_ctx *ctx)
+>  	bool hash_ctl_64k, hash_ctl_2M, hash_ctl_1G;
+>  	u8 hashed_bit, intlv_bit;
+>  
+> -	if (!map_bits_valid(ctx, 8, 8, 1, 2))
+> -		return -EINVAL;
+> -
+>  	hash_ctl_64k = FIELD_GET(DF4_HASH_CTL_64K, ctx->map.ctl);
+>  	hash_ctl_2M  = FIELD_GET(DF4_HASH_CTL_2M, ctx->map.ctl);
+>  	hash_ctl_1G  = FIELD_GET(DF4_HASH_CTL_1G, ctx->map.ctl);
+> @@ -247,9 +210,6 @@ static int df4p5_dehash_addr(struct addr_ctx *ctx)
+>  	u8 hashed_bit, intlv_bit;
+>  	u64 rehash_vector;
+>  
+> -	if (!map_bits_valid(ctx, 8, 8, 1, 2))
+> -		return -EINVAL;
+> -
+>  	hash_ctl_64k = FIELD_GET(DF4_HASH_CTL_64K, ctx->map.ctl);
+>  	hash_ctl_2M  = FIELD_GET(DF4_HASH_CTL_2M, ctx->map.ctl);
+>  	hash_ctl_1G  = FIELD_GET(DF4_HASH_CTL_1G, ctx->map.ctl);
+> @@ -360,9 +320,6 @@ static int mi300_dehash_addr(struct addr_ctx *ctx)
+>  	bool hashed_bit, intlv_bit, test_bit;
+>  	u8 num_intlv_bits, base_bit, i;
+>  
+> -	if (!map_bits_valid(ctx, 8, 8, 4, 1))
+> -		return -EINVAL;
+> -
+>  	hash_ctl_4k  = FIELD_GET(DF4p5_HASH_CTL_4K, ctx->map.ctl);
+>  	hash_ctl_64k = FIELD_GET(DF4_HASH_CTL_64K,  ctx->map.ctl);
+>  	hash_ctl_2M  = FIELD_GET(DF4_HASH_CTL_2M,   ctx->map.ctl);
+> diff --git a/drivers/ras/amd/atl/map.c b/drivers/ras/amd/atl/map.c
+> index 8b908e8d7495..94c5f665d5bc 100644
+> --- a/drivers/ras/amd/atl/map.c
+> +++ b/drivers/ras/amd/atl/map.c
+> @@ -642,6 +642,87 @@ static int get_global_map_data(struct addr_ctx *ctx)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Verify the interleave bits are correct in the different interleaving
+> + * settings.
+> + *
+> + * If @num_intlv_dies and/or @num_intlv_sockets are 1, it means the
+> + * respective interleaving is disabled.
+> + */
+> +static inline bool map_bits_valid(struct addr_ctx *ctx, u8 bit1, u8 bit2,
+> +				  u8 num_intlv_dies, u8 num_intlv_sockets)
+> +{
+> +	if (!(ctx->map.intlv_bit_pos == bit1 || ctx->map.intlv_bit_pos == bit2)) {
+> +		pr_debug("Invalid interleave bit: %u", ctx->map.intlv_bit_pos);
+> +		return false;
+> +	}
 > +
-> +			if (p)
-> +				SetPageHWPoison(p);
-> +		}
+> +	if (ctx->map.num_intlv_dies > num_intlv_dies) {
+> +		pr_debug("Invalid number of interleave dies: %u", ctx->map.num_intlv_dies);
+> +		return false;
+> +	}
+> +
+> +	if (ctx->map.num_intlv_sockets > num_intlv_sockets) {
+> +		pr_debug("Invalid number of interleave sockets: %u", ctx->map.num_intlv_sockets);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static int validate_address_map(struct addr_ctx *ctx)
+> +{
+> +	switch (ctx->map.intlv_mode) {
+> +	case DF2_2CHAN_HASH:
+> +		if (!map_bits_valid(ctx, 8, 9, 1, 1))
+> +			goto out;
+> +		break;
+> +
 
-I think this is okay, and it could even be more generalized as a "page
-offline" action.
+This case ^^^ is the same as below and can fall through.
 
-Here's some WIP for a generic MCE "action table":
-https://github.com/AMDESE/linux/commit/cf0b8a97240ab
+> +	case DF3_COD4_2CHAN_HASH:
+> +	case DF3_COD2_4CHAN_HASH:
+> +	case DF3_COD1_8CHAN_HASH:
+> +		if (!map_bits_valid(ctx, 8, 9, 1, 1))
+> +			goto out;
+> +		break;
+> +
+> +	case DF4_NPS4_2CHAN_HASH:
+> +	case DF4_NPS2_4CHAN_HASH:
+> +	case DF4_NPS1_8CHAN_HASH:
+> +		if (!map_bits_valid(ctx, 8, 8, 1, 2))
+> +			goto out;
+> +		break;
+> +
 
-This is based on the short discussion here:
-https://lore.kernel.org/linux-edac/ZD7gPkfWQeEeEfBe@agluck-desk3.sc.intel.com/
+Same here.
 
-Basically, all the status bits would be checked in mce_severity() and the
-appropriate action is set to be done later.
+> +	case DF4p5_NPS4_2CHAN_1K_HASH:
+> +	case DF4p5_NPS4_2CHAN_2K_HASH:
+> +	case DF4p5_NPS2_4CHAN_1K_HASH:
+> +	case DF4p5_NPS2_4CHAN_2K_HASH:
+> +	case DF4p5_NPS1_8CHAN_1K_HASH:
+> +	case DF4p5_NPS1_8CHAN_2K_HASH:
+> +	case DF4p5_NPS1_16CHAN_1K_HASH:
+> +	case DF4p5_NPS1_16CHAN_2K_HASH:
+> +		if (!map_bits_valid(ctx, 8, 8, 1, 2))
+> +			goto out;
+> +		break;
+> +
+> +	case MI3_HASH_8CHAN:
+> +	case MI3_HASH_16CHAN:
+> +	case MI3_HASH_32CHAN:
+> +		if (!map_bits_valid(ctx, 8, 8, 4, 1))
+> +			goto out;
+> +		break;
+> +
+> +	default:
+> +		atl_debug_on_bad_intlv_mode(ctx);
+> +		return -EINVAL;
 
-This would be future work, of course. What do you think?
+This catches valid modes that don't have validation checks. We should
+drop this. Please see diff below.
+
+> +	}
+> +
+> +	return 0;
+> +
+> +out:
+> +	atl_debug(ctx, "Inconsistent address map");
+> +	return -EINVAL;
+> +}
+> +
+>  static void dump_address_map(struct dram_addr_map *map)
+>  {
+>  	u8 i;
+> @@ -678,5 +759,9 @@ int get_address_map(struct addr_ctx *ctx)
+>  
+>  	dump_address_map(&ctx->map);
+>  
+> +	ret = validate_address_map(ctx);
+> +	if (ret)
+> +		return ret;
+> +
+>  	return ret;
+>  }
 
 Thanks,
 Yazen
+
+-----
+
+diff --git a/drivers/ras/amd/atl/map.c b/drivers/ras/amd/atl/map.c
+index 07de50017315..75be1434505b 100644
+--- a/drivers/ras/amd/atl/map.c
++++ b/drivers/ras/amd/atl/map.c
+@@ -731,9 +731,9 @@ static int validate_address_map(struct addr_ctx *ctx)
+                        goto out;
+                break;
+
++       /* Nothing to do for modes that don't need special validation checks. */
+        default:
+-               atl_debug_on_bad_intlv_mode(ctx);
+-               return -EINVAL;
++               break;
+        }
+
+        return 0;
+
+
+
 
