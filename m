@@ -1,166 +1,175 @@
-Return-Path: <linux-edac+bounces-931-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-932-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 787968AB4BC
-	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 20:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 27F268AB664
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 23:22:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A83B31C211B9
-	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 18:06:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52EEB1C20923
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 21:22:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237EB13B59E;
-	Fri, 19 Apr 2024 18:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500893EA8C;
+	Fri, 19 Apr 2024 21:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="lnA5X4oT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f100.google.com (mail-io1-f100.google.com [209.85.166.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44550130AC4;
-	Fri, 19 Apr 2024 18:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD26168C4
+	for <linux-edac@vger.kernel.org>; Fri, 19 Apr 2024 21:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713550013; cv=none; b=fmBVg7wy7AyYjGOUiEl65+uGunbk7ZoAWpkHJmJy1/LodO0KvdHP322sSDo5AwZpYDpwSeO+13/8HqvApGGAhdnCIT1yuCpV+0y+lIm1twpNyp35P4efSsmqtLkkuCHQm1TcTJ9zkdhMPckbkHctWGndYRplaliglqbqYlLy31Q=
+	t=1713561721; cv=none; b=PE/ze68LJw07KTX+3x4C3e7ELyxBCJ5L5jLRSiAAlMExySdwGzX1+qp47xRrTYXithdLjQJDVY/5he8lrFuHc9MybYJu1uoYD+Wtsni4d+d0p6Yqot7my4Qjjkp7Cu55HJQwj2DC53YkzUnSjSERE74ak1/Rg1bP7Meu0Qxc3Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713550013; c=relaxed/simple;
-	bh=g6h4liwRb6pLZ6FcdagGwL8SquGArFkeky/4BcIbLcs=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ngfVmq4WyA+kioPq+FjWyTpqW0JmXq2gW/X8/wAOi9QIWtrIeEkvf/f2ijw8XKaxoHG68yp1PZ5FoPVC8uRNMhuAjNd01oDAATnMbF+tDesXyHrDol7cvwrc5NWRt+gw7qQx6yrtm7TyMOBUy22sj7cDmXb7+LfWky6VFa2w2LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VLjGG1Ljkz6JBHw;
-	Sat, 20 Apr 2024 02:04:38 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 50007140447;
-	Sat, 20 Apr 2024 02:06:44 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 19 Apr
- 2024 19:06:43 +0100
-Date: Fri, 19 Apr 2024 19:06:42 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: <shiju.jose@huawei.com>
-CC: <linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-mm@kvack.org>, <dan.j.williams@intel.com>, <dave@stgolabs.net>,
-	<dave.jiang@intel.com>, <alison.schofield@intel.com>,
-	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<david@redhat.com>, <Vilas.Sridharan@amd.com>, <leo.duran@amd.com>,
-	<Yazen.Ghannam@amd.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
-	<tony.luck@intel.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
-	<rafael@kernel.org>, <lenb@kernel.org>, <naoya.horiguchi@nec.com>,
-	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
-	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
-	<mike.malvestuto@intel.com>, <gthelen@google.com>,
-	<wschwartz@amperecomputing.com>, <dferguson@amperecomputing.com>,
-	<wbs@os.amperecomputing.com>, <nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>,
-	<prime.zeng@hisilicon.com>, <kangkang.shen@futurewei.com>,
-	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [RFC PATCH v8 06/10] ACPICA: Add __free() based cleanup
- function for acpi_put_table
-Message-ID: <20240419190642.00005ee7@huawei.com>
-In-Reply-To: <20240419164720.1765-7-shiju.jose@huawei.com>
-References: <20240419164720.1765-1-shiju.jose@huawei.com>
-	<20240419164720.1765-7-shiju.jose@huawei.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+	s=arc-20240116; t=1713561721; c=relaxed/simple;
+	bh=Dy6r00+QLoVuu1LiYQEFKSZr8Df1mxRid4jJDJgAKAk=;
+	h=Date:From:To:Subject:Message-ID:Content-Type:Content-Disposition;
+	b=foDetTslSrDUpTHIJXyv0JzBfKGsxIIYqpxWRNn00dZQ7G6i49+6sWUXOlUcnSyva7iJBM6XRMw3GIh6UtIUL7WmymSBWQNqJDiYb9cRBOhR+tM/jl9eQ7TNpxwgHkPRwTaCEcnnLA7XoMXPcRcfAelhE8S1ZM1GyHJkBTJS89c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=lnA5X4oT; arc=none smtp.client-ip=209.85.166.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-io1-f100.google.com with SMTP id ca18e2360f4ac-7d6bc8d4535so98819439f.2
+        for <linux-edac@vger.kernel.org>; Fri, 19 Apr 2024 14:21:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713561718; x=1714166518;
+        h=user-agent:content-disposition:message-id:subject:to:from:date
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dk5lXmNBoXbs1sYkD5JKQRQzIZ6XPHZXpN2SFvV8AvY=;
+        b=XTNXxujvzAHhgDibT7ghSqqLwO6fuJCuTCf0ExXN+oFUgvNpdsdCpq1OIoDubkGM+p
+         PhAwJInE2CjL1e+w+93NOE8LjHKFnHlEjO4p53yo4/uKV5bBIbTcnxdNcOltAcoybtEq
+         8b2qlL1DG/cYmGMIhenpzdSQal7apI8coVtQJ9yXLBnZa8rYnc2dqNbNZsCZiN9XGnd0
+         km0QCDlsiFseX2dFiAz4ApEkf9YlP9PuqFeWNf6dxukU5hoiXdgJAZh8NgyI8b9djd+Y
+         0dzECiwA5LruJBYLlvYhJrZ1hWn3M43DFmIRihbjZjXaU+qtaRYywwvnNOh54FXyyBLp
+         hvWg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/31xUb0vtjtO6Wm5F/mRTmrguDcV15PbJ+deB6dQgCZy91RWahldzdy0HSbRwtAki8qKX/ioWSFE0bDP01yoJRO/Whai/drR95A==
+X-Gm-Message-State: AOJu0Ywf/wU5B30EIUhch4dcsHZZFBY7Hq55eBdLa5YasHajMT1bUR+u
+	G4V1ajUtLbdaORre4kjMKGzb7TJ3P0p4v4UHaeKaprPrNl/dzdrPnlQawsxFzaRL4mhkcEUYkAu
+	mWfBryOtANC6XxElishAjTbeNV54NJA==
+X-Google-Smtp-Source: AGHT+IH06ZnGRvIrfPAfMKjvA86P7UNAIHH3www+B4UrHMIKcqVrdN26RAHJBDiLANSDxR4irHpc6i+aOiwK
+X-Received: by 2002:a05:6e02:1a2e:b0:369:9494:5135 with SMTP id g14-20020a056e021a2e00b0036994945135mr3865762ile.24.1713561718482;
+        Fri, 19 Apr 2024 14:21:58 -0700 (PDT)
+Received: from smtp.aristanetworks.com ([74.123.28.25])
+        by smtp-relay.gmail.com with ESMTPS id w12-20020a056e021c8c00b0036a3e54b6c2sm224974ill.59.2024.04.19.14.21.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Apr 2024 14:21:58 -0700 (PDT)
+X-Relaying-Domain: arista.com
+Received: from visor (unknown [172.22.75.75])
+	by smtp.aristanetworks.com (Postfix) with ESMTPS id 812AC402054;
+	Fri, 19 Apr 2024 14:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
+	s=Arista-A; t=1713561717;
+	bh=Dk5lXmNBoXbs1sYkD5JKQRQzIZ6XPHZXpN2SFvV8AvY=;
+	h=Date:From:To:Subject:From;
+	b=lnA5X4oTa+3K6pUwdCVVa/BFXFw6dMlkN2d9/9Bf8kZIcel5Rh23eKoGFXOKknvU9
+	 cife91FG1h70sySYbBTPlyDIpW+m0cQ/MN1UI0AsqCGIZnpSRArT8CvkEy6OYDMWwk
+	 GuM4FA7S+iilPpTf1lRjujo7bjd0QBLLC1pntj60IpKeYF1+Odqn+Tey1xGWUwqQQJ
+	 pLnSsmx7bro9xOPopDvXId4pDP5qiBBZQiaZGvcRgHgJQkuwW7eYv1FYJWdQHH7BKQ
+	 KVJDtrx9+rM+Yo0bK7tqXqnw/hMxGcwZWC++OnR/hAtSj4ckqrBlHUPf43hPSHo/qJ
+	 VbZUt19GTh17A==
+Date: Fri, 19 Apr 2024 14:21:51 -0700
+X-SMTP-Authentication: Allow-List-permitted
+X-SMTP-Authentication: Allow-List-permitted
+From: Ivan Delalande <colona@arista.com>
+To: mchehab@kernel.org, linux-edac@vger.kernel.org
+Subject: [PATCH] rasdaemon: don't emit error syslog when exiting normally
+Message-ID: <20240419212151.GA98667@visor>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/2.1.4 (2021-12-11)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Sat, 20 Apr 2024 00:47:15 +0800
-<shiju.jose@huawei.com> wrote:
+Tidy up read_ras_event_all_cpus exit path so that it returns 0 when
+exiting normally after receiving a signal. It would return -1 and make
+the caller emit "Huh! something got wrong. Aborting." in this case.
 
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> Add __free() based cleanup function for acpi_put_table.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
+Also add missing error message for ras_mc_event_opendb and fix the
+grammar a bit in the message above.
 
-Reviewing (and rejecting) my own patch time ;(
+Fixes: a7b6a0464fba ("rasdaemon: add signal handling for the cleanup")
+Signed-off-by: Ivan Delalande <colona@arista.com>
+---
+ ras-events.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-I was thinking this would be useful more widely but hadn't looked
-as closely as I should have done.  Sorry Shiju for sending you
-down a bad path.
-
->  include/acpi/acpixf.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/acpi/acpixf.h b/include/acpi/acpixf.h
-> index 3d90716f9522..fc64d903a703 100644
-> --- a/include/acpi/acpixf.h
-> +++ b/include/acpi/acpixf.h
-> @@ -492,6 +492,8 @@ ACPI_EXTERNAL_RETURN_STATUS(acpi_status
->  					    **out_table))
->  ACPI_EXTERNAL_RETURN_VOID(void acpi_put_table(struct acpi_table_header *table))
->  
-> +DEFINE_FREE(acpi_put_table, struct acpi_table_header *, if (!IS_ERR_OR_NULL(_T)) acpi_put_table(_T))
-
-This is reliant on acpi_get_table2() in patch 8 / below being used as acpi_get_table()
-doesn't return the table.
-
-Maybe we are better off treating acpi_get_table() / acpi_put_table() as if it were a
-conditional lock? Or change the 93 instances of acpi_get_table to deal with it returning
-a copy of the table handle pointer
-
-That would bring it inline with many other get functions in the kernel + make our life
-easier using tooling like this.
-
-
-+static struct acpi_table_header *acpi_get_table2(acpi_string signature,
-+						  u32 instance)
-+{
-+	struct acpi_table_header *header = NULL;
-+	acpi_status status = acpi_get_table(signature, instance, &header);
-+
-+	if (ACPI_FAILURE(status))
-+		return ERR_PTR(-EINVAL);
-+
-+	return header;
-+}
-So that we could do things like:
-+	struct acpi_table_header *pAcpiTable __free(acpi_put_table) =
-+						acpi_get_table2("RAS2", 0);
-
-and avoid having to call acpi_put_table() in error paths etc.
-
-The snag is that acpi_get_table() is from acpica (via this wrapper) so any
-modification would be a little messy. Also a number of cases use the status
-value via 
-const char *msg = acpi_format_exception(status);
-
-Which we'd need to return via some path (a parameter probably). We 'could'
-do that but the advantages of this are getting eroded.
-
-Upshot, this is messier than I thought, so we probably shouldn't do it.
-
-The code in ras2 can be done reasonably neatly an outer wrapper function
-that gets the table and an inner one that deals with the actual processing
-of the entries.
-
-Pity as there are some messy bits of code this would tidy up. In most of
-those a helper function also works.
-
-Jonathan
-
-p.s. Whilst looking at this I noticed that acpi_has_watchdog() if it
-succeeds doesn't put the wdat table which seems suspicious as a side
-effect.
-
-> +
->  ACPI_EXTERNAL_RETURN_STATUS(acpi_status
->  			    acpi_get_table_by_index(u32 table_index,
->  						    struct acpi_table_header
-
+diff --git a/ras-events.c b/ras-events.c
+index a097238..200163a 100644
+--- a/ras-events.c
++++ b/ras-events.c
+@@ -430,7 +430,7 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+ 	sigset_t mask;
+ 	int warnonce[n_cpus];
+ 	char pipe_raw[PATH_MAX];
+-	int legacy_kernel = 0;
++	int rc = 0;
+ #if 0
+ 	int need_sleep = 0;
+ #endif
+@@ -473,6 +473,7 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+ 		fds[i].fd = open_trace(pdata[0].ras, pipe_raw, O_RDONLY);
+ 		if (fds[i].fd < 0) {
+ 			log(TERM, LOG_ERR, "Can't open trace_pipe_raw\n");
++			rc = -1;
+ 			goto error;
+ 		}
+ 	}
+@@ -488,13 +489,17 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+ 	fds[n_cpus].fd = signalfd(-1, &mask, 0);
+ 	if (fds[n_cpus].fd < 0) {
+ 		log(TERM, LOG_WARNING, "signalfd\n");
++		rc = -1;
+ 		goto error;
+ 	}
+ 
+ 	log(TERM, LOG_INFO, "Listening to events for cpus 0 to %d\n", n_cpus - 1);
+ 	if (pdata[0].ras->record_events) {
+-		if (ras_mc_event_opendb(pdata[0].cpu, pdata[0].ras))
++		if (ras_mc_event_opendb(pdata[0].cpu, pdata[0].ras)) {
++			log(TERM, LOG_ERR, "Can't open database\n");
++			rc = -1;
+ 			goto error;
++		}
+ #ifdef HAVE_NON_STANDARD
+ 		if (ras_ns_add_vendor_tables(pdata[0].ras))
+ 			log(TERM, LOG_ERR, "Can't add vendor table\n");
+@@ -577,7 +582,7 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
+ 		 */
+ 		if (count_nready == n_cpus) {
+ 			/* Should only happen with legacy kernels */
+-			legacy_kernel = 1;
++			rc = -255;
+ 			break;
+ 		}
+ #endif
+@@ -605,10 +610,7 @@ error:
+ 			close(fds[i].fd);
+ 	}
+ 
+-	if (legacy_kernel)
+-		return -255;
+-	else
+-		return -1;
++	return rc;
+ }
+ 
+ static int read_ras_event(int fd,
+@@ -1162,7 +1164,8 @@ int handle_ras_events(int record_events)
+ 		pthread_mutex_destroy(&ras->db_lock);
+ 	}
+ 
+-	log(SYSLOG, LOG_INFO, "Huh! something got wrong. Aborting.\n");
++	if (rc)
++		log(SYSLOG, LOG_INFO, "Huh! something went wrong. Aborting.\n");
+ 
+ err:
+ 	if (data)
+-- 
+2.34.1
 
