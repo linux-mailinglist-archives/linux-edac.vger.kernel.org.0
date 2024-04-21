@@ -1,175 +1,138 @@
-Return-Path: <linux-edac+bounces-932-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-933-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27F268AB664
-	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 23:22:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BE938ABEE6
+	for <lists+linux-edac@lfdr.de>; Sun, 21 Apr 2024 12:08:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52EEB1C20923
-	for <lists+linux-edac@lfdr.de>; Fri, 19 Apr 2024 21:22:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 793C21F210AF
+	for <lists+linux-edac@lfdr.de>; Sun, 21 Apr 2024 10:08:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500893EA8C;
-	Fri, 19 Apr 2024 21:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="lnA5X4oT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906D71078F;
+	Sun, 21 Apr 2024 10:08:12 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-io1-f100.google.com (mail-io1-f100.google.com [209.85.166.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD26168C4
-	for <linux-edac@vger.kernel.org>; Fri, 19 Apr 2024 21:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5332D33D5;
+	Sun, 21 Apr 2024 10:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713561721; cv=none; b=PE/ze68LJw07KTX+3x4C3e7ELyxBCJ5L5jLRSiAAlMExySdwGzX1+qp47xRrTYXithdLjQJDVY/5he8lrFuHc9MybYJu1uoYD+Wtsni4d+d0p6Yqot7my4Qjjkp7Cu55HJQwj2DC53YkzUnSjSERE74ak1/Rg1bP7Meu0Qxc3Zs=
+	t=1713694092; cv=none; b=r6GyDNYTYKhJ0Jq3PFeheVdyF6ccAWS2rWrQ691gs8Gce5fApEEB36lclU/SyX0FG8mJxRnC0O5IcnBqEIqh7MhTNdhMH+wtqkbSCCtpEx1LjvtBJH9Z3+kG/XwKbfbPWyUk2ACdjyT+eF1CRLnVrJvVbIlM5H4fscjjG/EhjPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713561721; c=relaxed/simple;
-	bh=Dy6r00+QLoVuu1LiYQEFKSZr8Df1mxRid4jJDJgAKAk=;
-	h=Date:From:To:Subject:Message-ID:Content-Type:Content-Disposition;
-	b=foDetTslSrDUpTHIJXyv0JzBfKGsxIIYqpxWRNn00dZQ7G6i49+6sWUXOlUcnSyva7iJBM6XRMw3GIh6UtIUL7WmymSBWQNqJDiYb9cRBOhR+tM/jl9eQ7TNpxwgHkPRwTaCEcnnLA7XoMXPcRcfAelhE8S1ZM1GyHJkBTJS89c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=lnA5X4oT; arc=none smtp.client-ip=209.85.166.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-io1-f100.google.com with SMTP id ca18e2360f4ac-7d6bc8d4535so98819439f.2
-        for <linux-edac@vger.kernel.org>; Fri, 19 Apr 2024 14:21:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713561718; x=1714166518;
-        h=user-agent:content-disposition:message-id:subject:to:from:date
-         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dk5lXmNBoXbs1sYkD5JKQRQzIZ6XPHZXpN2SFvV8AvY=;
-        b=XTNXxujvzAHhgDibT7ghSqqLwO6fuJCuTCf0ExXN+oFUgvNpdsdCpq1OIoDubkGM+p
-         PhAwJInE2CjL1e+w+93NOE8LjHKFnHlEjO4p53yo4/uKV5bBIbTcnxdNcOltAcoybtEq
-         8b2qlL1DG/cYmGMIhenpzdSQal7apI8coVtQJ9yXLBnZa8rYnc2dqNbNZsCZiN9XGnd0
-         km0QCDlsiFseX2dFiAz4ApEkf9YlP9PuqFeWNf6dxukU5hoiXdgJAZh8NgyI8b9djd+Y
-         0dzECiwA5LruJBYLlvYhJrZ1hWn3M43DFmIRihbjZjXaU+qtaRYywwvnNOh54FXyyBLp
-         hvWg==
-X-Forwarded-Encrypted: i=1; AJvYcCW/31xUb0vtjtO6Wm5F/mRTmrguDcV15PbJ+deB6dQgCZy91RWahldzdy0HSbRwtAki8qKX/ioWSFE0bDP01yoJRO/Whai/drR95A==
-X-Gm-Message-State: AOJu0Ywf/wU5B30EIUhch4dcsHZZFBY7Hq55eBdLa5YasHajMT1bUR+u
-	G4V1ajUtLbdaORre4kjMKGzb7TJ3P0p4v4UHaeKaprPrNl/dzdrPnlQawsxFzaRL4mhkcEUYkAu
-	mWfBryOtANC6XxElishAjTbeNV54NJA==
-X-Google-Smtp-Source: AGHT+IH06ZnGRvIrfPAfMKjvA86P7UNAIHH3www+B4UrHMIKcqVrdN26RAHJBDiLANSDxR4irHpc6i+aOiwK
-X-Received: by 2002:a05:6e02:1a2e:b0:369:9494:5135 with SMTP id g14-20020a056e021a2e00b0036994945135mr3865762ile.24.1713561718482;
-        Fri, 19 Apr 2024 14:21:58 -0700 (PDT)
-Received: from smtp.aristanetworks.com ([74.123.28.25])
-        by smtp-relay.gmail.com with ESMTPS id w12-20020a056e021c8c00b0036a3e54b6c2sm224974ill.59.2024.04.19.14.21.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Apr 2024 14:21:58 -0700 (PDT)
-X-Relaying-Domain: arista.com
-Received: from visor (unknown [172.22.75.75])
-	by smtp.aristanetworks.com (Postfix) with ESMTPS id 812AC402054;
-	Fri, 19 Apr 2024 14:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-	s=Arista-A; t=1713561717;
-	bh=Dk5lXmNBoXbs1sYkD5JKQRQzIZ6XPHZXpN2SFvV8AvY=;
-	h=Date:From:To:Subject:From;
-	b=lnA5X4oTa+3K6pUwdCVVa/BFXFw6dMlkN2d9/9Bf8kZIcel5Rh23eKoGFXOKknvU9
-	 cife91FG1h70sySYbBTPlyDIpW+m0cQ/MN1UI0AsqCGIZnpSRArT8CvkEy6OYDMWwk
-	 GuM4FA7S+iilPpTf1lRjujo7bjd0QBLLC1pntj60IpKeYF1+Odqn+Tey1xGWUwqQQJ
-	 pLnSsmx7bro9xOPopDvXId4pDP5qiBBZQiaZGvcRgHgJQkuwW7eYv1FYJWdQHH7BKQ
-	 KVJDtrx9+rM+Yo0bK7tqXqnw/hMxGcwZWC++OnR/hAtSj4ckqrBlHUPf43hPSHo/qJ
-	 VbZUt19GTh17A==
-Date: Fri, 19 Apr 2024 14:21:51 -0700
-X-SMTP-Authentication: Allow-List-permitted
-X-SMTP-Authentication: Allow-List-permitted
-From: Ivan Delalande <colona@arista.com>
-To: mchehab@kernel.org, linux-edac@vger.kernel.org
-Subject: [PATCH] rasdaemon: don't emit error syslog when exiting normally
-Message-ID: <20240419212151.GA98667@visor>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/2.1.4 (2021-12-11)
+	s=arc-20240116; t=1713694092; c=relaxed/simple;
+	bh=i1S6nqyTGUB5Pf4qllbaMsCVKY0B+Yn5GKrEWxkRPls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GAXFBkISq++s9vrV33CB3wbB7bBiIkeFQh4FWgDvJ7nMEYgcdKRG/a4U1L5lVl+NfPL/iUZ8ZjDBgJiluEFkDZhwW+fH+Y97OxeajimL3XPtv4+mY5b3bj5rzUrCplXtOhngd74MXLqcaMbIgfEtB9LXYX7715JxcppfnLqmtmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id F3A7240E0187;
+	Sun, 21 Apr 2024 10:08:07 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id hJeOWKH7xEdp; Sun, 21 Apr 2024 10:08:02 +0000 (UTC)
+Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 792AD40E0028;
+	Sun, 21 Apr 2024 10:07:45 +0000 (UTC)
+Date: Sun, 21 Apr 2024 12:07:30 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Serge Semin <fancer.lancer@gmail.com>
+Cc: Michal Simek <michal.simek@amd.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>,
+	Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH v5 01/20] EDAC/synopsys: Fix ECC status data and IRQ
+ disable race condition
+Message-ID: <20240421100712.GAZiTlUOm1hrLQvaMi@fat_crate.local>
+References: <20240222181324.28242-1-fancer.lancer@gmail.com>
+ <20240222181324.28242-2-fancer.lancer@gmail.com>
+ <20240415183616.GDZh1zoFsBzvAEduRo@fat_crate.local>
+ <szcie4giwjykne4su6uu5wsmtsl3e3jd53rjfiwir6hm3ju7as@6eqh2xmj35ie>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <szcie4giwjykne4su6uu5wsmtsl3e3jd53rjfiwir6hm3ju7as@6eqh2xmj35ie>
 
-Tidy up read_ras_event_all_cpus exit path so that it returns 0 when
-exiting normally after receiving a signal. It would return -1 and make
-the caller emit "Huh! something got wrong. Aborting." in this case.
+On Tue, Apr 16, 2024 at 01:06:11PM +0300, Serge Semin wrote:
+> It looks indeed crazy because the method is called enable_intr() and
+> is called in the IRQ handler. Right, re-enabling the IRQ in the handler
+> doesn't look good. But under the hood it was just a way to fix the
+> problem described in the commit you cited. enable_intr() just gets
+> back the IRQ Enable flags cleared a bit before in the
+> zynqmp_get_error_info() method.
+> 
+> The root cause of the problem is that the IRQ status/clear flags:
+> ECCCLR.ecc_corrected_err_clr	(R/W1C)
+> ECCCLR.ecc_uncorrected_err_clr	(R/W1C)
+> ECCCLR.ecc_corr_err_cnt_clr	(R/W1C)
+> ECCCLR.ecc_uncorr_err_cnt_clr	(R/W1C)
+> etc
+> 
+> and the IRQ enable/disable flags (since v3.10a):
+> ECCCLR.ecc_corrected_err_intr_en	(R/W)
+> ECCCLR.ecc_uncorrected_err_intr_en	(R/W)
+> 
+> reside in a single register - ECCCLR (Synopsys has renamed it to
+> ECCCTL since v3.10a due to adding the IRQ En/Dis flags).
+> 
+> Thus any concurrent access to that CSR like "Clear IRQ
+> status/counters" and "IRQ disable/enable" need to be protected from
+> the race condition.
 
-Also add missing error message for ras_mc_event_opendb and fix the
-grammar a bit in the message above.
+Ok, let's pick this apart one-by-one. I'll return to the rest you're
+explaining as needed.
 
-Fixes: a7b6a0464fba ("rasdaemon: add signal handling for the cleanup")
-Signed-off-by: Ivan Delalande <colona@arista.com>
----
- ras-events.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+So, can writes to the status/counter bits while writing the *same* bit
+to the IRQ enable/disable bit prevent any race conditions?
 
-diff --git a/ras-events.c b/ras-events.c
-index a097238..200163a 100644
---- a/ras-events.c
-+++ b/ras-events.c
-@@ -430,7 +430,7 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 	sigset_t mask;
- 	int warnonce[n_cpus];
- 	char pipe_raw[PATH_MAX];
--	int legacy_kernel = 0;
-+	int rc = 0;
- #if 0
- 	int need_sleep = 0;
- #endif
-@@ -473,6 +473,7 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 		fds[i].fd = open_trace(pdata[0].ras, pipe_raw, O_RDONLY);
- 		if (fds[i].fd < 0) {
- 			log(TERM, LOG_ERR, "Can't open trace_pipe_raw\n");
-+			rc = -1;
- 			goto error;
- 		}
- 	}
-@@ -488,13 +489,17 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 	fds[n_cpus].fd = signalfd(-1, &mask, 0);
- 	if (fds[n_cpus].fd < 0) {
- 		log(TERM, LOG_WARNING, "signalfd\n");
-+		rc = -1;
- 		goto error;
- 	}
- 
- 	log(TERM, LOG_INFO, "Listening to events for cpus 0 to %d\n", n_cpus - 1);
- 	if (pdata[0].ras->record_events) {
--		if (ras_mc_event_opendb(pdata[0].cpu, pdata[0].ras))
-+		if (ras_mc_event_opendb(pdata[0].cpu, pdata[0].ras)) {
-+			log(TERM, LOG_ERR, "Can't open database\n");
-+			rc = -1;
- 			goto error;
-+		}
- #ifdef HAVE_NON_STANDARD
- 		if (ras_ns_add_vendor_tables(pdata[0].ras))
- 			log(TERM, LOG_ERR, "Can't add vendor table\n");
-@@ -577,7 +582,7 @@ static int read_ras_event_all_cpus(struct pthread_data *pdata,
- 		 */
- 		if (count_nready == n_cpus) {
- 			/* Should only happen with legacy kernels */
--			legacy_kernel = 1;
-+			rc = -255;
- 			break;
- 		}
- #endif
-@@ -605,10 +610,7 @@ error:
- 			close(fds[i].fd);
- 	}
- 
--	if (legacy_kernel)
--		return -255;
--	else
--		return -1;
-+	return rc;
- }
- 
- static int read_ras_event(int fd,
-@@ -1162,7 +1164,8 @@ int handle_ras_events(int record_events)
- 		pthread_mutex_destroy(&ras->db_lock);
- 	}
- 
--	log(SYSLOG, LOG_INFO, "Huh! something got wrong. Aborting.\n");
-+	if (rc)
-+		log(SYSLOG, LOG_INFO, "Huh! something went wrong. Aborting.\n");
- 
- err:
- 	if (data)
+Meaning, you only change the status and counter bits and you preserve
+the same value in the IRQ disable/enable bit?
+
+IOW, I'm thinking of shadowing that ECCCTL in software so that we update
+it from the shadowed value.
+
+Because, AFAIU, the spinlock won't help if you grab it, clear the
+status/counter bits and disable the interrupt in the process. You want
+to only clear the status/counter bits and leave the interrupt enabled.
+
+Right?
+
+IOW, in one single write you do:
+
+ECCCLR.ecc_corrected_err_clr=1
+ECCCLR.ecc_uncorrected_err_clr=1
+ECCCLR.ecc_corr_err_cnt_clr=1
+ECCCLR.ecc_uncorr_err_cnt_clr=1
+ECCCLR.ecc_corrected_err_intr_en=1
+ECCCLR.ecc_uncorrected_err_intr_en=1
+
+?
+
+Thx.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
