@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-944-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-945-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 840E68B120B
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 20:21:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 537298B1213
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 20:21:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 257A61F21EBB
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 18:21:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8580B1C22988
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 18:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE72181335;
-	Wed, 24 Apr 2024 18:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B0418410E;
+	Wed, 24 Apr 2024 18:15:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UCkIxdrn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l7omLfu+"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CC218133A;
-	Wed, 24 Apr 2024 18:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CFE17F39E;
+	Wed, 24 Apr 2024 18:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713982523; cv=none; b=BRP3Ys80+ls+V+WHxDQO1lX7eHZ9+rB7Vde6ow27+/o5kd5Ovv+2QYtErUPW9+Sj5xteQh6aI2QIlWDt9B7KMD0sk3qTiiLZ9AAE/2j8qDFFkDTHfPptZ7anO6+7Iu13AY2mf3xeTyDcVxEMMBZkdr2aoUN4fnf1FATfIvWt4Hk=
+	t=1713982526; cv=none; b=lwr1vIZP+J84kO2IQm5bkmMcfwXmXummkCHOA674mnuKxxy2o8sEpbdPzisqrxQuvfpN5ukjH681FyXIxCuy9kOesPvqLTm/SkGEfz8/daIMHXSNOnQ7CjFkhTTluoHbUlWK+DwN5ff8J7Oi/Ixvbd2y1Ncas7ILjLnBVMmtQOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713982523; c=relaxed/simple;
-	bh=J5hiIdzXZvx6tAF17llwzadEEbvMd4HK2TJQKlWWZVo=;
+	s=arc-20240116; t=1713982526; c=relaxed/simple;
+	bh=RNT+k0vH5nyuxqu3Y+Ud1FK95n7UPRfWtbXzxwVqrV4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FaXSCY8QBPkWwI8LopEpsyT8tBZ0tgJVdgglJFRR0h4MBogadx4fTU28dp1ZdOFoNOtLvuFxQgvTc9JEt6cqBZsLpurMeqSvOAZGo9pzC2AaNQsQ3raPt8Vfh2reJNXZEyYy8+QKhNs5ltZ8JdjbDI6fL0R9TLaQVVlBPKSONPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UCkIxdrn; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=BMyCs4LVS0bC7xIJyB8m6W5hxN5wRLFDzQwNCcRZAQHFyy+WkoI8ii4c5nY5ESNeLA9xGTOdBSp5X3SqsrPsI0nnrPprZzNTLnjLAPDnCb1d2xMaz7w7RmfdvwYce0qLUi0HoUUBZWFi/3giQ4c6I1vI9dEGZ7f3f+c4PM7KeRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l7omLfu+; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713982522; x=1745518522;
+  t=1713982523; x=1745518523;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=J5hiIdzXZvx6tAF17llwzadEEbvMd4HK2TJQKlWWZVo=;
-  b=UCkIxdrnsmSKj+DzxJkQEwIKAcyqo6wsFZCiAqIxec68E7E9KJCxRCHE
-   DDZyMOUqGJfblyU1N7aeGBfpa8fCYnXwtTsKRbvCUTZ5sPXBDD1+B+2F2
-   QpCwekAVzihJP6UByVRjlunpbRQoK/mxIMz41vZkD/fHamqFTeCN2R3SO
-   G061f5cE6K7ZKUKxKvJg2BMQgN1GSAhsMq1aKbsZ38Y6Uj8htpRmMfGQL
-   TUN9KJWNf1P2VZeC01R+CNv9y+HYhAqEOWWaIGzNCIPl6l8BmFI5x6lmB
-   pOgJHCsWBJzVNSswVO1+FxyfWlCSyvhv1zrpcohdYX/OB3t5tOMrwBNER
-   Q==;
-X-CSE-ConnectionGUID: 42oprxY3Ro2AggsFbfmsKw==
-X-CSE-MsgGUID: 8r4wpvh7SVeAG1HQzMzQpw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9481994"
+  bh=RNT+k0vH5nyuxqu3Y+Ud1FK95n7UPRfWtbXzxwVqrV4=;
+  b=l7omLfu+CTStaV+Zlo0n5EfzFvQ5zfrxWgTGb45tP2qWkrMzOce/1yyF
+   bANiIyGwgGg6TrKGwl4simkeEjo8qZTJiPFWLVy75j1Pk+ZdzCGWfwKIP
+   jAUdy+MoQOYJJvMuemE3iyWf37XCY8CQ2s1FQtZPGQsZL5Gg5XUl6oDke
+   Q7i4Z+DA+uOjtM1jigUuXbu99O+mIqoDdm4sIvTDCB21SLTObqZXs5U1F
+   98DZhSOzn0P7T4hNTvA7ArrNdnQ5zn3bx+ZMqXu5QVh47JxMqAe9WM09o
+   ufZY9OuzeMUyMQEnpPckuR6wIExh4PLsTlsc2v4Q4Vmn18hVbskZnl0Ae
+   g==;
+X-CSE-ConnectionGUID: IfrdMIN1RhmFy1jMxpYpYg==
+X-CSE-MsgGUID: rcpsuFpYQBOQBQw99uBcWQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9482004"
 X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
-   d="scan'208";a="9481994"
+   d="scan'208";a="9482004"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
   by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 11:15:12 -0700
-X-CSE-ConnectionGUID: u9kpHmymT3qBVaY3N+AmTg==
-X-CSE-MsgGUID: sLnf+kpDTLyA3e6CtDkmrg==
+X-CSE-ConnectionGUID: 3N7OQ/o8SAO9NhA7ZCmJIw==
+X-CSE-MsgGUID: bDu9a9cXQw6s048MOIf4tQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
-   d="scan'208";a="29262744"
+   d="scan'208";a="29262748"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.105])
   by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 11:15:12 -0700
 From: Tony Luck <tony.luck@intel.com>
@@ -69,9 +69,9 @@ Cc: "H. Peter Anvin" <hpa@zytor.com>,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: [PATCH v4 32/71] x86/mce: Switch to new Intel CPU model defines
-Date: Wed, 24 Apr 2024 11:15:11 -0700
-Message-ID: <20240424181511.41772-1-tony.luck@intel.com>
+Subject: [PATCH v4 33/71] x86/mce: Switch to new Intel CPU model defines
+Date: Wed, 24 Apr 2024 11:15:12 -0700
+Message-ID: <20240424181512.41791-1-tony.luck@intel.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240424181245.41141-1-tony.luck@intel.com>
 References: <20240424181245.41141-1-tony.luck@intel.com>
@@ -87,39 +87,55 @@ New CPU #defines encode vendor and family as well as model.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- arch/x86/kernel/cpu/mce/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/mce/intel.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 771a9f183260..ad0623b659ed 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -47,7 +47,7 @@
- #include <linux/kexec.h>
- 
- #include <asm/fred.h>
+diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+index 399b62e223d2..f6103e6bf69a 100644
+--- a/arch/x86/kernel/cpu/mce/intel.c
++++ b/arch/x86/kernel/cpu/mce/intel.c
+@@ -13,7 +13,7 @@
+ #include <linux/cpumask.h>
+ #include <asm/apic.h>
+ #include <asm/cpufeature.h>
 -#include <asm/intel-family.h>
 +#include <asm/cpu_device_id.h>
  #include <asm/processor.h>
- #include <asm/traps.h>
- #include <asm/tlbflush.h>
-@@ -1948,14 +1948,14 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
- 		if (c->x86 == 6 && c->x86_model <= 13 && cfg->bootlog < 0)
- 			cfg->bootlog = 0;
+ #include <asm/msr.h>
+ #include <asm/mce.h>
+@@ -455,10 +455,10 @@ static void intel_imc_init(struct cpuinfo_x86 *c)
+ {
+ 	u64 error_control;
  
--		if (c->x86 == 6 && c->x86_model == 45)
-+		if (c->x86_vfm == INTEL_SANDYBRIDGE_X)
- 			mce_flags.snb_ifu_quirk = 1;
+-	switch (c->x86_model) {
+-	case INTEL_FAM6_SANDYBRIDGE_X:
+-	case INTEL_FAM6_IVYBRIDGE_X:
+-	case INTEL_FAM6_HASWELL_X:
++	switch (c->x86_vfm) {
++	case INTEL_SANDYBRIDGE_X:
++	case INTEL_IVYBRIDGE_X:
++	case INTEL_HASWELL_X:
+ 		if (rdmsrl_safe(MSR_ERROR_CONTROL, &error_control))
+ 			return;
+ 		error_control |= 2;
+@@ -484,12 +484,11 @@ bool intel_filter_mce(struct mce *m)
+ 	struct cpuinfo_x86 *c = &boot_cpu_data;
  
- 		/*
- 		 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
- 		 * rep movs.
- 		 */
--		if (c->x86 == 6 && c->x86_model == INTEL_FAM6_SKYLAKE_X)
-+		if (c->x86_vfm == INTEL_SKYLAKE_X)
- 			mce_flags.skx_repmov_quirk = 1;
- 	}
- 
+ 	/* MCE errata HSD131, HSM142, HSW131, BDM48, HSM142 and SKX37 */
+-	if ((c->x86 == 6) &&
+-	    ((c->x86_model == INTEL_FAM6_HASWELL) ||
+-	     (c->x86_model == INTEL_FAM6_HASWELL_L) ||
+-	     (c->x86_model == INTEL_FAM6_BROADWELL) ||
+-	     (c->x86_model == INTEL_FAM6_HASWELL_G) ||
+-	     (c->x86_model == INTEL_FAM6_SKYLAKE_X)) &&
++	if ((c->x86_vfm == INTEL_HASWELL ||
++	     c->x86_vfm == INTEL_HASWELL_L ||
++	     c->x86_vfm == INTEL_BROADWELL ||
++	     c->x86_vfm == INTEL_HASWELL_G ||
++	     c->x86_vfm == INTEL_SKYLAKE_X) &&
+ 	    (m->bank == 0) &&
+ 	    ((m->status & 0xa0000000ffffffff) == 0x80000000000f0005))
+ 		return true;
 -- 
 2.44.0
 
