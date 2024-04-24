@@ -1,76 +1,75 @@
-Return-Path: <linux-edac+bounces-951-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-952-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7EF18B1272
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 20:34:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B22678B133E
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 21:07:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E70DD1C20C08
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 18:34:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6839A1F26488
+	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 19:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E5415E9B;
-	Wed, 24 Apr 2024 18:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B36208CE;
+	Wed, 24 Apr 2024 19:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="A0qyPPgA"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="JUCvmZrw"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ECAC568A;
-	Wed, 24 Apr 2024 18:34:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E0C1CD24;
+	Wed, 24 Apr 2024 19:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713983694; cv=none; b=i53wJB0Er1X9zjRNv4zjhxbG7VWswFIBt4IjFS8JRt//l1K7e4fFyc2OHC81peX8c72ZTfnGocUYHKBA/ANAHczSmIHF9STrgnu5/sDbBsm/W/oV94TO2K9uvW9BTXoWx/jbAwRhrB5BtrtqajkVVlzi9E1X9AqbuQhE4TFGPk0=
+	t=1713985639; cv=none; b=N/B58iJf1a3rIu76t4s+GW9tPziPO0ulQbu1VpkUUze/Ir7Nq44mnHV9eiHICnvR2HgK431fQfCZyNLEuQBonZrqIb9iWzR+laLXOTDmGSLwS6XyWPe1RzIWUEQpRAxjb9Js8KoUPJkNkdISZGDacUj0Q5XMcL+WL9D5W+Xqn24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713983694; c=relaxed/simple;
-	bh=oCVgc8+y+x5fGR5TsGfG0er7opagmP5XkKqOTf2aT8c=;
+	s=arc-20240116; t=1713985639; c=relaxed/simple;
+	bh=URHwfcZ2dvJLtTkhWQROx4aAwctdwvwLAfIwr0/k4Sk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HQbgL4V7S1zpCTtNSx+M5Fx0JEYaOeai/zD5a+OZot80R1IbDsBpk0rF+bvj8W30muOk6gnWH1YXyr+bsjnbVhLsmpFcPKR4A4q/db/08Un+Zr+5JigfOduKcWfMNB+fg37F/C0Bjxcfy8/v1pN226OpROIoN0pkXug92wKnF2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=A0qyPPgA; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=mS/u9WUnZjRgPaBq/LMnRUoSy0nQkSOhQRXJkLA5ux3zkyGFe7nvtJTNc2gEP5tWLVw2KStqvDEeJYG7qFJFUInrest4ID3GGzBElAJBHalK/ybXey5ZtSLhYs+mpzVyzqiwL61kDLAN4kRFRsIpF/nPZ7j6Gnmclpdm2yvmTwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=JUCvmZrw; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3E02140E0249;
-	Wed, 24 Apr 2024 18:34:48 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id ADC3440E0192;
+	Wed, 24 Apr 2024 19:07:15 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id l1nWQHHUdBYV; Wed, 24 Apr 2024 18:34:43 +0000 (UTC)
+	with ESMTP id RsixhrfbRsJC; Wed, 24 Apr 2024 19:07:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1713983682; bh=FG75FcCiem2JbZ6KSePc6u6dCPqsNWw2QYqFUaBzuCs=;
+	t=1713985632; bh=QjOQvZjxGr+HZwRAXiop9IEkjMTXSpDO12auOhbpb2Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A0qyPPgACV7iQcsfRBB6k21KrwTs5zRrI26jR4Zu/5XDMuISbDs7sKXnX8XUya/55
-	 RwWclRe7Y2YbqnybkJMauceHVYOEuVI0+viBsOtmDCfNUnrJXumOQMaH7KL1jA1ZmB
-	 QQLUNKhH7FaoXlGEz7sXAAfYXuayR9/wgF4npoBD4Xhhh3IYe+Dm0lX9uYaWN/xL8/
-	 253Kir+YZXCNvBGq94BW0rEgN1jLh95v1U/Yeib8EAamTkAYgF/4grr+8NjTLH91al
-	 LdcXNfM0ru6+JZFqu7IsKS2Rai6L0SLjSkxuPSkaxJyIChaRB0ijwwHYt+VEMVkG5/
-	 ISgutzRhAC/hJhYvAG8kYxNlJhxRvuNzhPMtu7/hoULcHGigK27YQDQEKCar13X1ng
-	 cM3ISXXGuTmfxBQwXHovMJInzYez+ksnDjvZbWnaDqXGNCaAOQFiWY6+Cde01IYGvy
-	 FS7tIgeTxGUXr5LwhmxOluXbYGnKy2/Xh7INT+ajCNOI0XIlVG4yMN/qP/hD5Zl/D6
-	 Li1S4Cbeq61y1N7bgHeT0nGoC+ipm6nsXKXf6ufiFSHoyikP1NHMUnGH66TOrkxkHo
-	 fNfeVkEq0IPCsAyNjXOwJi5NW5XtKmZmMtHNCmV4wpp7xXYAETXNcKd3wBoBKDqqCv
-	 SM/Y6uOqKSQXZfa5dhGazQJA=
+	b=JUCvmZrwBh9PA8yQmaliGzMFwck50yT5yE3WmZbz427mrhUyN1oW2P+b8nMXnfYet
+	 +dVIeg+VAiZ7aYITPnp3krR4Z7MMurddjoqhF7RS1oNChbXT/ZBb3CQ+5Z6QXEPjZ/
+	 1Kh1sl++lIqHkrUUJfcoSgZ6PDTMQbR8mE0aXfzyG0SbFGHh4GgN1kc6ozR/Zh4PP8
+	 J6WQaxqUC4p4PFHZKJINYVpTxhyA0ny8NV2vlqyn6oAhKaUeRvSxDg5BxRJKaglPzL
+	 LSz4+rR6uggHp2GOKuMfWRAZZ3FGLSj6Uk9+IwQG//gTDvpuWdMnE9m7pYqW8sJCgn
+	 2+/XBbNlmzn1hN7Iz4Sm9V2HDhgxo/e4qZRBSvvtiJYsWsTbNoLFVqIQTYvqHpgdfa
+	 NheF8icbFaZ4YWMbXQ//G1jXEvHLqq7M5lY9azRUJH8pdCYpsEfibYCIXWaxQy9vXf
+	 wtPo4x6u0Zt4Wg6gVFSho47ot3TLsqEU1XKRKK3aHLmQXirNBmbSw7xwCmN+Ce9pl1
+	 wTVq0/QZvBC+GUxsO9CplB6MUVXTdQiGrhoyq/X16so2wYnlz1j0ou7q15M5MG2+q4
+	 Gbm++b1L/jsE3WpK3T5hZZuDZ5wX+blIi7meX4DrcDEeE9Yte9jgYCEhWBanrO0bjS
+	 yHYWHNNVJozXIiAK9RU3d+cU=
 Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5730540E016B;
-	Wed, 24 Apr 2024 18:34:35 +0000 (UTC)
-Date: Wed, 24 Apr 2024 20:34:29 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D571C40E01C5;
+	Wed, 24 Apr 2024 19:07:04 +0000 (UTC)
+Date: Wed, 24 Apr 2024 21:06:58 +0200
 From: Borislav Petkov <bp@alien8.de>
 To: Yazen Ghannam <yazen.ghannam@amd.com>
 Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
 	tony.luck@intel.com, x86@kernel.org, Avadhut.Naik@amd.com,
 	John.Allen@amd.com
-Subject: Re: [PATCH v2 06/16] x86/mce/amd: Prep DFR handler before enabling
- banks
-Message-ID: <20240424183429.GGZilQtVJtGhOPm1ES@fat_crate.local>
+Subject: Re: [PATCH v2 07/16] x86/mce/amd: Simplify DFR handler setup
+Message-ID: <20240424190658.GHZilYUvw1KfSfVd_e@fat_crate.local>
 References: <20240404151359.47970-1-yazen.ghannam@amd.com>
- <20240404151359.47970-7-yazen.ghannam@amd.com>
+ <20240404151359.47970-8-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -79,60 +78,63 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240404151359.47970-7-yazen.ghannam@amd.com>
+In-Reply-To: <20240404151359.47970-8-yazen.ghannam@amd.com>
 
-On Thu, Apr 04, 2024 at 10:13:49AM -0500, Yazen Ghannam wrote:
-> Scalable MCA systems use the per-bank MCA_CONFIG register to enable
-> deferred error interrupts. This is done as part of SMCA configuration.
+On Thu, Apr 04, 2024 at 10:13:50AM -0500, Yazen Ghannam wrote:
+> AMD systems with the SUCCOR feature can send an APIC LVT interrupt for
+> deferred errors. The LVT offset is 0x2 by convention, i.e. this is the
+> default as listed in hardware documentation.
 > 
-> Currently, the deferred error interrupt handler is set up after SMCA
-> configuration.
-> 
-> Move the deferred error interrupt handler set up before SMCA
-> configuration. This ensures the kernel is ready to receive the
-> interrupts before the hardware is configured to send them.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
-> 
-> Notes:
->     Link:
->     https://lkml.kernel.org/r/20231118193248.1296798-11-yazen.ghannam@amd.com
->     
->     v1->v2:
->     * No change.
-> 
->  arch/x86/kernel/cpu/mce/amd.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 3093fed06194..e8e78d91082b 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -589,6 +589,9 @@ static void deferred_error_interrupt_enable(struct cpuinfo_x86 *c)
->  	u32 low = 0, high = 0;
->  	int def_offset = -1, def_new;
+> However, the MCA registers may list a different LVT offset for this
+> interrupt. The kernel should honor the value from the hardware.
+
+There's this "may" thing again.
+
+Is this enablement for some future hw too or do you really trust the
+value in MSR_CU_DEF_ERR is programmed correctly in all cases?
+
+> Simplify the enable flow by using the hardware-provided value. Any
+> conflicts will be caught by setup_APIC_eilvt(). Conflicts on production
+> systems can be handled as quirks, if needed.
+
+Well, which systems support succor?
+
+I'd like to test this on them before we face all the quirkery. :)
+
+That area has been plagued by hw snafus if you look at
+setup_APIC_eilvt() and talk to uncle Robert. :-P
+
+> @@ -595,17 +584,15 @@ static void deferred_error_interrupt_enable(struct cpuinfo_x86 *c)
+>  	if (rdmsr_safe(MSR_CU_DEF_ERR, &low, &high))
+>  		return;
 >  
-> +	if (!mce_flags.succor)
+> +	/*
+> +	 * Trust the value from hardware.
+> +	 * If there's a conflict, then setup_APIC_eilvt() will throw an error.
+> +	 */
+>  	def_new = (low & MASK_DEF_LVTOFF) >> 4;
+> -	if (!(low & MASK_DEF_LVTOFF)) {
+> -		pr_err(FW_BUG "Your BIOS is not setting up LVT offset 0x2 for deferred error IRQs correctly.\n");
+> -		def_new = DEF_LVT_OFF;
+> -		low = (low & ~MASK_DEF_LVTOFF) | (DEF_LVT_OFF << 4);
+> -	}
+> +	if (setup_APIC_eilvt(def_new, DEFERRED_ERROR_VECTOR, APIC_EILVT_MSG_FIX, 0))
+> +		return;
+>  
+> -	def_offset = setup_APIC_deferred_error(def_offset, def_new);
+> -	if ((def_offset == def_new) &&
+> -	    (deferred_error_int_vector != amd_deferred_error_interrupt))
+> -		deferred_error_int_vector = amd_deferred_error_interrupt;
 
-Does succor imply smca?
+There was a reason for that - deferred_error_int_vector is a global var
+and you're calling enable_deferred_error_interrupt() on each CPU.
 
-Because you have now this order:
+> +	deferred_error_int_vector = amd_deferred_error_interrupt;
+>  
+>  	if (!mce_flags.smca)
+>  		low = (low & ~MASK_DEF_INT_TYPE) | DEF_INT_TYPE_APIC;
 
-	deferred_error_interrupt_enable(c);
-
-	...
-
-	configure_smca(bank);
-
-and that one tests mce_flags.smca
-
-Now, if succor didn't imply smca, we'll enable the DF irq handler for
-no good reason on (succor=true && smca=false) systems.
-
-If the implication is given:
-
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Thx.
 
 -- 
 Regards/Gruss,
