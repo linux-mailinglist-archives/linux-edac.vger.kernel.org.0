@@ -1,74 +1,67 @@
-Return-Path: <linux-edac+bounces-954-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-955-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 893718B16F9
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Apr 2024 01:19:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12C8E8B1EF3
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Apr 2024 12:17:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14E771F2658C
-	for <lists+linux-edac@lfdr.de>; Wed, 24 Apr 2024 23:19:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13CAB1F22374
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Apr 2024 10:17:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CBE16F0FB;
-	Wed, 24 Apr 2024 23:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A8586AFC;
+	Thu, 25 Apr 2024 10:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aLKuutOA"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Jp2qf/nV"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9A1142E6F;
-	Wed, 24 Apr 2024 23:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB29086629;
+	Thu, 25 Apr 2024 10:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714000759; cv=none; b=q7ropMWqYUP6pHyAUegZoAJMqeRdLZaEoyButvVILYkHsIDWdaXUzwUrhtGBmOaWB1+tKg9ejVhXrKSKshAjLMbcRQQVFEcrbzT+NPXyYaNMvsEo7govUrPq5ALnTuUqMc/RnwhkiUrz+hYrXbJnNvOT/lyqjh9FiXJDnj+wuto=
+	t=1714040203; cv=none; b=uA8tUXSEPfKyUpw56t2PFpS2AKpaMS5ScxVCRR3htplIPLUW9+7mYNDL702JpW2q/sajxNEvXNbhHQDlB746DvD4SqJl7KAha5iR4hNe/Pgnf4s/iZEDwp3jwhJXfp/K0x9FrPzfT1UC1O2wUktTy/lZYcfjbabv80kf909i65E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714000759; c=relaxed/simple;
-	bh=T0q3Dl6/0KH0khAoyfEPkB4v/KHhMEDnVbAu9J++Ykg=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sMvn3b4a2qmctrk7OPqjuWaQQmjT33ciXQJGu7UChL/Dk6J1FpSC68ylhGosnz/dp6nupbZLCcMgetWCUXCQKh9xeEUMR/VFke9eyp6sZQR37dwPXltW1E01A3f/KzuG7t/F9qljVEuMXkoUSHs7CfCkRSnf3umTFYrxdFz2TJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aLKuutOA; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6f30f69a958so388884b3a.1;
-        Wed, 24 Apr 2024 16:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714000757; x=1714605557; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sakwDrIIsmCz4hVkB1z5sN2fWtElfeE23GuvVoi+CRM=;
-        b=aLKuutOA2LNZoBs/lhGRc/8Psr3FFvZj/sgGs8feAr7FdJZ6V1PVg+4ettu4kz8KMT
-         hAqgJpHtwfB0Gj+vWWL5XFYIMUsFX43qgjwJNN41Cnjck2Thh+iO/l0BAZdTiKrzPMJ2
-         YnTy0ourOsB5cHq/EQFssakSJyi0gY0Wh8IXYlb4yN+2adrjv3RlkZ9nRFNN9AQRx1LH
-         SGl37ZKHwLNzCmL4GZ33NebaV/mW/cVgpdCPCCgUWWRQspy62B/GvWiLXmk9souP9GEc
-         VjE6eKreTPk6I7hDXLcEocZLRQ1CJi/BK2f7gDOV8rKQHO/UY2HN2EV5cgB3U0ScK3qS
-         F1kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714000757; x=1714605557;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sakwDrIIsmCz4hVkB1z5sN2fWtElfeE23GuvVoi+CRM=;
-        b=UgvxXKlyhDuwBTFYerX9IZqNq1lqqfcYdHyaMx13e0FFmXI8LlJe5YcGFTf/QatKWY
-         TbuKZnqKmj3fYS+ZemQEPmEHIwbOIpqLIxq7vMjwxAWz/6OS+SvdqhNr+J9LEvGn92+A
-         79yxgMC1frObO9WVZ25TLCs5BSM48cIAAvdvAkgm4LDX4c1olyBxv7uCVoQXlq7cRDOE
-         bvyrfnuXIg2V8Yzw3QYwY+1M5rNn/mrxuP94XOhGk8fSZJ34WmfoAz9EFv/UCVuTnqIZ
-         raJ8fXIdaZLw9yU4uDf/ajejiBB9/eVLlccAevSr5FVv4RxTLbG4UqF7OrqR4TFdiQ1/
-         gRTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWNO7BCAy8hH1JWW0ymCWknTMki9xicRzP9gQGT0WBmP+AxPz2DEE1u3B87sVDIXgHLnoE1AZO1ErPPB1ZoPatp2KUW5u67iEzmovsl+vdswL5bev7lO2+3Ov+jm/zHcGgAFmTwHm2qtpIt3maRMAbbpHCn+9eEzYUwHdBP3RiAAXltPl4=
-X-Gm-Message-State: AOJu0YyTWeId+h/vZQ0LvEazxZQjzON2kx/KXHqC7eVolxLLjz2iCjuf
-	Tqhaw4a8zXxNaMjK8ggDYHlCj8cquhHdX+aUopRCzoSZuYct4jMn
-X-Google-Smtp-Source: AGHT+IEuvZAJziMcw4WYyCy553sul9ZkpvveDxJ7UhszeD5DLuljCvM3wLrc+K7mU7JskjhiQsWU8A==
-X-Received: by 2002:a05:6a21:2709:b0:1ac:48a9:8a42 with SMTP id rm9-20020a056a21270900b001ac48a98a42mr4263409pzb.14.1714000756872;
-        Wed, 24 Apr 2024 16:19:16 -0700 (PDT)
-Received: from debian ([2601:641:300:14de:56e5:6d59:647c:63a1])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170902768500b001e4478e9b21sm12438135pll.244.2024.04.24.16.19.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 16:19:16 -0700 (PDT)
-From: fan <nifan.cxl@gmail.com>
-X-Google-Original-From: fan <fan@debian>
-Date: Wed, 24 Apr 2024 16:19:06 -0700
+	s=arc-20240116; t=1714040203; c=relaxed/simple;
+	bh=JxFzyBE2ZQODB3KYFqw2793763GvT8dRZ7h+3JwWiu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eFiNQEbfa+XrxI800cj8d6Egfsym9Y0hz0A6aFzCVbI9Lc3mp4wewt1fgMNwupvTDT7H6ZBCedZszbQByeCz0SGHqwxQ6rdT2a99mTMUPmK8bIVECdc/xxjlhUkQhQXPjQugde5AvRBiRwdacWyUmHCqHG2iVlKs0PiURDg9jZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Jp2qf/nV; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B1E9840E0177;
+	Thu, 25 Apr 2024 10:16:35 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id FCtK1WAIkr4K; Thu, 25 Apr 2024 10:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1714040190; bh=lQVGO48zfCsjUCeoo0X+OlSYkAJs9QgyWvhiTbSIGUU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Jp2qf/nVwQRF+Tnee2mxsYOBpAmuqdRFgq5Fit9SSbryoXrWX6+lSjqdRDvutNbrY
+	 gJ9K8rBc1x4dXpBLre21B3p6iMNJXKEGb8yY4w69RpgL9JlD/XPHrZuJLza3WACwWO
+	 HDGL2TlQfHXqCgFtgkdP8cvVzp3UEDogiRO1dxWEloGaJt3W1Bthy9sJTA+hZUPamA
+	 f8EI4qvxL1pU3RAGKTaaZLg5P1PnAsTIPK5b7dbnkjEwdxQc/5i66StISZ7M/41k1z
+	 9rzAOXVROI9BbGciqGTvviBEEE+4w6omO/ehJLLFKstEsuytx9bgPaqZAc1CuOCbkk
+	 VKB1yxsZoDiX3G1bt4eznI6p6hHpF2fued64cbEkbrgRDMfoZTscOrkOldAPCjSxDt
+	 D5q9q3iP3b2eatofiDYitPOIl+RGAfczCgIwvkBijDsNNfhVpA/n/KIlzTEnvdDLGs
+	 Z0E86zLf3N3GPPVN7ovbZF/tDkp7RRsO++OLPL8hJAp2qWCxckd+bPFpqttNxH076F
+	 E4TriyrxZguOXsYcizJ9RYeBAFGrlhxdGwVWMm4o8TLimQWFLKPB3jhGkzbVZkJeDO
+	 gamzx1ahQ/2erFJ0/JbHBrxP+y53/fum3xWBfy8+A1xGgE9cEGQSC320x9CVMNinur
+	 c8i4aytaH4LYv+nyYZAYyV1E=
+Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1660940E01C5;
+	Thu, 25 Apr 2024 10:15:48 +0000 (UTC)
+Date: Thu, 25 Apr 2024 12:15:42 +0200
+From: Borislav Petkov <bp@alien8.de>
 To: shiju.jose@huawei.com
 Cc: linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
 	linux-mm@kvack.org, dan.j.williams@intel.com, dave@stgolabs.net,
@@ -88,166 +81,370 @@ Cc: linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
 	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
 	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com,
 	linuxarm@huawei.com
-Subject: Re: [RFC PATCH v8 03/10] cxl/mbox: Add GET_FEATURE mailbox command
-Message-ID: <ZimTauNEryrxDQgF@debian>
+Subject: Re: [RFC PATCH v8 01/10] ras: scrub: Add scrub subsystem
+Message-ID: <20240425101542.GAZiotThrq7bOE9Ieb@fat_crate.local>
 References: <20240419164720.1765-1-shiju.jose@huawei.com>
- <20240419164720.1765-4-shiju.jose@huawei.com>
+ <20240419164720.1765-2-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240419164720.1765-4-shiju.jose@huawei.com>
+In-Reply-To: <20240419164720.1765-2-shiju.jose@huawei.com>
 
-On Sat, Apr 20, 2024 at 12:47:12AM +0800, shiju.jose@huawei.com wrote:
+On Sat, Apr 20, 2024 at 12:47:10AM +0800, shiju.jose@huawei.com wrote:
 > From: Shiju Jose <shiju.jose@huawei.com>
 > 
-> Add support for GET_FEATURE mailbox command.
+> Add scrub subsystem supports configuring the memory scrubbers
+> in the system. The scrub subsystem provides the interface for
+> registering the scrub devices. The scrub control attributes
+> are provided to the user in /sys/class/ras/rasX/scrub
 > 
-> CXL spec 3.1 section 8.2.9.6 describes optional device specific features.
-> The settings of a feature can be retrieved using Get Feature command.
-> 
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 > ---
->  drivers/cxl/core/mbox.c | 53 +++++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxlmem.h    | 28 ++++++++++++++++++++++
->  2 files changed, 81 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 82e279b821e2..999965871048 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -1318,6 +1318,59 @@ int cxl_get_supported_features(struct cxl_memdev_state *mds,
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_get_supported_features, CXL);
+>  .../ABI/testing/sysfs-class-scrub-configure   |  47 +++
+>  drivers/ras/Kconfig                           |   7 +
+>  drivers/ras/Makefile                          |   1 +
+>  drivers/ras/memory_scrub.c                    | 271 ++++++++++++++++++
+>  include/linux/memory_scrub.h                  |  37 +++
+>  5 files changed, 363 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-class-scrub-configure
+>  create mode 100755 drivers/ras/memory_scrub.c
+>  create mode 100755 include/linux/memory_scrub.h
+
+ERROR: modpost: missing MODULE_LICENSE() in drivers/ras/memory_scrub.o
+make[2]: *** [scripts/Makefile.modpost:145: Module.symvers] Error 1
+make[1]: *** [/mnt/kernel/kernel/2nd/linux/Makefile:1871: modpost] Error 2
+make: *** [Makefile:240: __sub-make] Error 2
+
+Each patch of yours needs to build.
+
+> diff --git a/Documentation/ABI/testing/sysfs-class-scrub-configure b/Documentation/ABI/testing/sysfs-class-scrub-configure
+> new file mode 100644
+> index 000000000000..3ed77dbb00ad
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-scrub-configure
+> @@ -0,0 +1,47 @@
+> +What:		/sys/class/ras/
+> +Date:		March 2024
+> +KernelVersion:	6.9
+> +Contact:	linux-kernel@vger.kernel.org
+> +Description:
+> +		The ras/ class subdirectory belongs to the
+> +		common ras features such as scrub subsystem.
+> +
+> +What:		/sys/class/ras/rasX/scrub/
+> +Date:		March 2024
+> +KernelVersion:	6.9
+> +Contact:	linux-kernel@vger.kernel.org
+> +Description:
+> +		The /sys/class/ras/ras{0,1,2,3,...}/scrub directories
+
+You have different scrubbers.
+
+I'd prefer if you put their names in here instead and do this structure:
+
+/sys/class/ras/scrub/cxl-patrol
+		    /ars
+		    /cxl-ecs
+		    /acpi-ras2
+
+and so on.
+
+Unless the idea is for those devices to have multiple RAS-specific
+functionality than just scrubbing. Then you want to do
+
+/sys/class/ras/cxl/scrub
+		  /other_function
+
+/sys/class/ras/ars/scrub
+		  /...
+
+You get the idea.
+
+> +		correspond to each scrub device registered with the
+> +		scrub subsystem.
+> +
+> +What:		/sys/class/ras/rasX/scrub/name
+> +Date:		March 2024
+> +KernelVersion:	6.9
+> +Contact:	linux-kernel@vger.kernel.org
+> +Description:
+> +		(RO) name of the memory scrubber
+> +
+> +What:		/sys/class/ras/rasX/scrub/enable_background
+> +Date:		March 2024
+> +KernelVersion:	6.9
+> +Contact:	linux-kernel@vger.kernel.org
+> +Description:
+> +		(RW) Enable/Disable background(patrol) scrubbing if supported.
+> +
+> +What:		/sys/class/ras/rasX/scrub/rate_available
+
+That's dumping a range so I guess it should be called probably
+"possible_rates" or so, so that it is clear what it means.
+
+If some scrubbers support only a discrete set of rate values, then
+"possible_rates" fits too if you dump them as a list of values.
+
+> +Date:		March 2024
+> +KernelVersion:	6.9
+> +Contact:	linux-kernel@vger.kernel.org
+> +Description:
+> +		(RO) Supported range for the scrub rate by the scrubber.
+> +		The scrub rate represents in hours.
+> +
+> +What:		/sys/class/ras/rasX/scrub/rate
+> +Date:		March 2024
+> +KernelVersion:	6.9
+> +Contact:	linux-kernel@vger.kernel.org
+> +Description:
+> +		(RW) The scrub rate specified and it must be with in the
+> +		supported range by the scrubber.
+> +		The scrub rate represents in hours.
+> diff --git a/drivers/ras/Kconfig b/drivers/ras/Kconfig
+> index fc4f4bb94a4c..181701479564 100644
+> --- a/drivers/ras/Kconfig
+> +++ b/drivers/ras/Kconfig
+> @@ -46,4 +46,11 @@ config RAS_FMPM
+>  	  Memory will be retired during boot time and run time depending on
+>  	  platform-specific policies.
 >  
-> +size_t cxl_get_feature(struct cxl_memdev_state *mds,
-> +		       const uuid_t feat_uuid, void *feat_out,
-> +		       size_t feat_out_size,
-> +		       size_t feat_out_min_size,
-> +		       enum cxl_get_feat_selection selection)
+> +config SCRUB
+> +	tristate "Memory scrub driver"
+> +	help
+> +	  This option selects the memory scrub subsystem, supports
+
+s/This option selects/Enable/
+
+> +	  configuring the parameters of underlying scrubbers in the
+> +	  system for the DRAM memories.
+> +
+>  endif
+> diff --git a/drivers/ras/Makefile b/drivers/ras/Makefile
+> index 11f95d59d397..89bcf0d84355 100644
+> --- a/drivers/ras/Makefile
+> +++ b/drivers/ras/Makefile
+> @@ -2,6 +2,7 @@
+>  obj-$(CONFIG_RAS)	+= ras.o
+>  obj-$(CONFIG_DEBUG_FS)	+= debugfs.o
+>  obj-$(CONFIG_RAS_CEC)	+= cec.o
+> +obj-$(CONFIG_SCRUB)	+= memory_scrub.o
+>  
+>  obj-$(CONFIG_RAS_FMPM)	+= amd/fmpm.o
+>  obj-y			+= amd/atl/
+> diff --git a/drivers/ras/memory_scrub.c b/drivers/ras/memory_scrub.c
+> new file mode 100755
+> index 000000000000..7e995380ec3a
+> --- /dev/null
+> +++ b/drivers/ras/memory_scrub.c
+> @@ -0,0 +1,271 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Memory scrub subsystem supports configuring the registered
+> + * memory scrubbers.
+> + *
+> + * Copyright (c) 2024 HiSilicon Limited.
+> + */
+> +
+> +#define pr_fmt(fmt)     "MEM SCRUB: " fmt
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/bitops.h>
+> +#include <linux/delay.h>
+> +#include <linux/kfifo.h>
+> +#include <linux/memory_scrub.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/spinlock.h>
+> +
+> +/* memory scrubber config definitions */
+
+No need for that comment.
+
+> +static ssize_t rate_available_show(struct device *dev,
+> +				   struct device_attribute *attr,
+> +				   char *buf)
 > +{
-> +	struct cxl_dev_state *cxlds = &mds->cxlds;
-> +	struct cxl_mbox_get_feat_in pi;
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	size_t data_rcvd_size = 0;
-> +	size_t data_to_rd_size, size_out;
-> +	int rc;
+> +	struct scrub_device *scrub_dev = to_scrub_device(dev);
+> +	u64 min_sr, max_sr;
+> +	int ret;
 > +
-> +	if (feat_out_size < feat_out_min_size) {
-> +		dev_err(cxlds->dev,
-> +			"%s: feature out buffer size(%lu) is not big enough\n",
-> +			__func__, feat_out_size);
-> +		return 0;
-> +	}
+> +	ret = scrub_dev->ops->rate_avail_range(dev, &min_sr, &max_sr);
+> +	if (ret)
+> +		return ret;
 > +
-> +	if (feat_out_size <= mds->payload_size)
-> +		size_out = feat_out_size;
-> +	else
-> +		size_out = mds->payload_size;
-
-Using min() instead?
-    size_out = min(feat_out_size, mds->payload_size)
-
-> +	pi.uuid = feat_uuid;
-> +	pi.selection = selection;
-> +	do {
-> +		if ((feat_out_min_size - data_rcvd_size) <= mds->payload_size)
-> +			data_to_rd_size = feat_out_min_size - data_rcvd_size;
-> +		else
-> +			data_to_rd_size = mds->payload_size;
-
-data_to_rd_size = min(feat_out_min_size - data_rcvd_size, mds->payload_size);
-    
-It seems feat_out_min_size is always the same as feat_out_size in this series,
-what is it for? For the loop here, my understanding is we need to fill up the
-out buffer multiple times if the feature cannot be held in a call, so it
-seems feat_out_min_size should be feat_out_size here.
-
-Fan
-
-> +
-> +		pi.offset = cpu_to_le16(data_rcvd_size);
-> +		pi.count = cpu_to_le16(data_to_rd_size);
-> +
-> +		mbox_cmd = (struct cxl_mbox_cmd) {
-> +			.opcode = CXL_MBOX_OP_GET_FEATURE,
-> +			.size_in = sizeof(pi),
-> +			.payload_in = &pi,
-> +			.size_out = size_out,
-> +			.payload_out = feat_out + data_rcvd_size,
-> +			.min_out = data_to_rd_size,
-> +		};
-> +		rc = cxl_internal_send_cmd(mds, &mbox_cmd);
-> +		if (rc < 0 || mbox_cmd.size_out == 0)
-> +			return 0;
-> +		data_rcvd_size += mbox_cmd.size_out;
-> +	} while (data_rcvd_size < feat_out_min_size);
-> +
-> +	return data_rcvd_size;
+> +	return sysfs_emit(buf, "0x%llx-0x%llx\n", min_sr, max_sr);
 > +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_get_feature, CXL);
+
+This glue driver will need to store the min and max scrub rates on init
+and rate_store() will have to verify the newly supplied rate is within
+that range before writing it.
+
+Not the user, nor the underlying hw driver.
+
 > +
->  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->  		       struct cxl_region *cxlr)
->  {
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 06231e63373e..c822eb30e6d1 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -528,6 +528,7 @@ enum cxl_opcode {
->  	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
->  	CXL_MBOX_OP_GET_LOG		= 0x0401,
->  	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
-> +	CXL_MBOX_OP_GET_FEATURE		= 0x0501,
->  	CXL_MBOX_OP_IDENTIFY		= 0x4000,
->  	CXL_MBOX_OP_GET_PARTITION_INFO	= 0x4100,
->  	CXL_MBOX_OP_SET_PARTITION_INFO	= 0x4101,
-> @@ -754,6 +755,28 @@ struct cxl_mbox_get_supp_feats_out {
->  	struct cxl_mbox_supp_feat_entry feat_entries[];
->  } __packed;
->  
-> +/*
-> + * Get Feature CXL 3.1 Spec 8.2.9.6.2
-> + */
+> +DEVICE_ATTR_RW(enable_background);
+> +DEVICE_ATTR_RO(name);
+> +DEVICE_ATTR_RW(rate);
+> +DEVICE_ATTR_RO(rate_available);
+
+static
+
 > +
-> +/*
-> + * Get Feature input payload
-> + * CXL rev 3.1 section 8.2.9.6.2 Table 8-99
-> + */
-> +enum cxl_get_feat_selection {
-> +	CXL_GET_FEAT_SEL_CURRENT_VALUE,
-> +	CXL_GET_FEAT_SEL_DEFAULT_VALUE,
-> +	CXL_GET_FEAT_SEL_SAVED_VALUE,
-> +	CXL_GET_FEAT_SEL_MAX
+> +static struct attribute *scrub_attrs[] = {
+> +	&dev_attr_enable_background.attr,
+> +	&dev_attr_name.attr,
+> +	&dev_attr_rate.attr,
+> +	&dev_attr_rate_available.attr,
+> +	NULL
 > +};
 > +
-> +struct cxl_mbox_get_feat_in {
-> +	uuid_t uuid;
-> +	__le16 offset;
-> +	__le16 count;
-> +	u8 selection;
-> +}  __packed;
+> +static umode_t scrub_attr_visible(struct kobject *kobj,
+> +				  struct attribute *a, int attr_id)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct scrub_device *scrub_dev = to_scrub_device(dev);
+> +	const struct scrub_ops *ops = scrub_dev->ops;
 > +
->  /* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */
->  struct cxl_mbox_poison_in {
->  	__le64 offset;
-> @@ -888,6 +911,11 @@ int cxl_set_timestamp(struct cxl_memdev_state *mds);
->  int cxl_get_supported_features(struct cxl_memdev_state *mds,
->  			       u32 count, u16 start_index,
->  			       struct cxl_mbox_get_supp_feats_out *feats_out);
-> +size_t cxl_get_feature(struct cxl_memdev_state *mds,
-> +		       const uuid_t feat_uuid, void *feat_out,
-> +		       size_t feat_out_size,
-> +		       size_t feat_out_min_size,
-> +		       enum cxl_get_feat_selection selection);
->  int cxl_poison_state_init(struct cxl_memdev_state *mds);
->  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->  		       struct cxl_region *cxlr);
-> -- 
-> 2.34.1
-> 
+> +	if (a == &dev_attr_enable_background.attr) {
+> +		if (ops->set_enabled_bg && ops->get_enabled_bg)
+> +			return a->mode;
+> +		if (ops->get_enabled_bg)
+> +			return 0444;
+> +		return 0;
+> +	}
+> +	if (a == &dev_attr_name.attr)
+> +		return ops->get_name ? a->mode : 0;
+> +	if (a == &dev_attr_rate_available.attr)
+> +		return ops->rate_avail_range ? a->mode : 0;
+> +	if (a == &dev_attr_rate.attr) { /* Write only makes little sense */
+> +		if (ops->rate_read && ops->rate_write)
+> +			return a->mode;
+> +		if (ops->rate_read)
+> +			return 0444;
+> +		return 0;
+> +	}
+
+All of that stuff's permissions should be root-only.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct attribute_group scrub_attr_group = {
+> +	.name		= "scrub",
+> +	.attrs		= scrub_attrs,
+> +	.is_visible	= scrub_attr_visible,
+> +};
+> +
+> +static const struct attribute_group *scrub_attr_groups[] = {
+> +	&scrub_attr_group,
+> +	NULL
+> +};
+> +
+> +static void scrub_dev_release(struct device *dev)
+> +{
+> +	struct scrub_device *scrub_dev = to_scrub_device(dev);
+> +
+> +	ida_free(&scrub_ida, scrub_dev->id);
+> +	kfree(scrub_dev);
+> +}
+> +
+> +static struct class scrub_class = {
+> +	.name = "ras",
+> +	.dev_groups = scrub_attr_groups,
+> +	.dev_release = scrub_dev_release,
+> +};
+> +
+> +static struct device *
+> +scrub_device_register(struct device *parent, void *drvdata,
+> +		      const struct scrub_ops *ops)
+> +{
+> +	struct scrub_device *scrub_dev;
+> +	struct device *hdev;
+> +	int err;
+> +
+> +	scrub_dev = kzalloc(sizeof(*scrub_dev), GFP_KERNEL);
+> +	if (!scrub_dev)
+> +		return ERR_PTR(-ENOMEM);
+> +	hdev = &scrub_dev->dev;
+> +
+> +	scrub_dev->id = ida_alloc(&scrub_ida, GFP_KERNEL);
+
+What's that silly thing for?
+
+> +	if (scrub_dev->id < 0) {
+> +		kfree(scrub_dev);
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+> +
+> +	scrub_dev->ops = ops;
+> +	hdev->class = &scrub_class;
+> +	hdev->parent = parent;
+> +	dev_set_drvdata(hdev, drvdata);
+> +	dev_set_name(hdev, SCRUB_ID_FORMAT, scrub_dev->id);
+> +	err = device_register(hdev);
+> +	if (err) {
+> +		put_device(hdev);
+> +		return ERR_PTR(err);
+> +	}
+> +
+> +	return hdev;
+> +}
+> +
+> +static void devm_scrub_release(void *dev)
+> +{
+> +	device_unregister(dev);
+> +}
+> +
+> +/**
+> + * devm_scrub_device_register - register scrubber device
+> + * @dev: the parent device
+> + * @drvdata: driver data to attach to the scrub device
+> + * @ops: pointer to scrub_ops structure (optional)
+> + *
+> + * Returns the pointer to the new device on success, ERR_PTR() otherwise.
+> + * The new device would be automatically unregistered with the parent device.
+> + */
+> +struct device *
+> +devm_scrub_device_register(struct device *dev, void *drvdata,
+> +			   const struct scrub_ops *ops)
+> +{
+> +	struct device *hdev;
+> +	int ret;
+> +
+> +	if (!dev)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	hdev = scrub_device_register(dev, drvdata, ops);
+> +	if (IS_ERR(hdev))
+> +		return hdev;
+> +
+> +	ret = devm_add_action_or_reset(dev, devm_scrub_release, hdev);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return hdev;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_scrub_device_register);
+> +
+> +static int __init memory_scrub_control_init(void)
+> +{
+> +	return class_register(&scrub_class);
+> +}
+> +subsys_initcall(memory_scrub_control_init);
+
+You can't just blindly register this thing without checking whether
+there are even any hw scrubber devices on the system.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
