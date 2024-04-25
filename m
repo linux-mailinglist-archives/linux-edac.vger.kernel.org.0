@@ -1,179 +1,284 @@
-Return-Path: <linux-edac+bounces-961-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-962-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF3058B2185
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Apr 2024 14:20:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FE188B21F7
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Apr 2024 14:52:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85451281E64
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Apr 2024 12:20:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7979A1F21471
+	for <lists+linux-edac@lfdr.de>; Thu, 25 Apr 2024 12:52:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F50612BF33;
-	Thu, 25 Apr 2024 12:20:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927331494C4;
+	Thu, 25 Apr 2024 12:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="OjmLnecI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WQ/fxeKn"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A25812BEA1
-	for <linux-edac@vger.kernel.org>; Thu, 25 Apr 2024 12:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714047600; cv=fail; b=JvYteieTYJ8qhWT3mRDJ2Km05zGd4we87pLnOIMpz0MVz2G5HG3P3SI8BFS55ym0hI410qVBbFd5VcBgw2PFoSHQak+woy6o3GMbH41fA7f7AGy8o/LREknSuEVRP1Ia8uamPV8iT1I4H3/LFstEWs7TdLsQOCNPm7ZHio2EOGM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714047600; c=relaxed/simple;
-	bh=OWXV6BSXnOC+1KRUZzCRMOhv3uwRYq6lJGKIV6tW7Yg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tFRMij7JSnzx3D7qYn542rtTUUckM2vBu5nvhYkhPTeUH0enaVcZawoYZGEITw/dXjF9vg2PbmCOvh9CzF1Ud4gTHkFxVKs12nudCRTHTEGcJwY9OR7RNGpEdn3pipLD2I9YjIAj08Q3gs5TRWybyIZYQ4T9SDaZUQOMTKPyAXA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=OjmLnecI; arc=fail smtp.client-ip=40.107.223.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=obNdQYYsqHDtyFZ3oytPjHJFG8mD91dazDf/QdWCT0JvEPaXBwKy7M/KIEM8evDn6bN1prFTs5zwiHYjKhO7whhKUis8u182CGwl37X8jNkm7ytB/5PmvvJF8GUFIFPS/+9iwuZsKnMXmA7NHPK403Svc1LEOZZ9g+RJDYFLZ2/IDrDsgRRCwyRya8v45FQReuA14xEZtINXSQ/4ejU7kXyVmQSsocMY6bQz0y1pOHMQ6qSxuW8t3LYLUphIK8qPG2hX8A27puateMY2fDoZ3iy6niVQ1hameiqt2N0xq2Vmlkteu7UQ0SUTqQBRDYgpA4MP3WGYyT0/aqIFfW3T1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yx5WShIEA9v6c11TqVCRD5oeLQDSrTRrxF5dguiSfUM=;
- b=DkJLowcxqKuTequ/wAPsLQPT/kbZXmt+tEggEQB23c9yDeNXCvolt+zaP2RMtFZg3GvR6gt06ZS01Ot2zfLpA5IggDlX9vCGxg4YTZmM9pJqTwmye/6iiCgZZF85ua+s6FegaY6jfpR78B6/+k3AkgufqwbFjXKiPpV1Z6XQSpBwQEZx/NPtABm1KC8QkD9dACinBb3rnaKHHBAL22ZhuPUsug7DoPtMRTuG8d+AuCDYH+rwznh752+FPTAEuId3z/eTk91HqbVqDttk9Q7iDxF7dMr+LuEn+gL7rO/HYKa6laSYdxhaYDuSG4xgxg7iB/Hc+Zg55cJmOhdh0rkM9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yx5WShIEA9v6c11TqVCRD5oeLQDSrTRrxF5dguiSfUM=;
- b=OjmLnecIwGgplul9PIEGalP2qbO8/IB4L6EkM/xykKYUYOy++PVX4i2w6/hhUa+DooP/7xL9YfzjBfFXeurAh/UUFdh/kyPZ3Tfl8DXy5MRy4qKzd+dStl74ll92Ym5UUgNhkexPxuRJyptPefhBkeVxOq0MpWUiwqbBQCD2bzA=
-Received: from BN8PR07CA0023.namprd07.prod.outlook.com (2603:10b6:408:ac::36)
- by CY8PR12MB7515.namprd12.prod.outlook.com (2603:10b6:930:93::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.48; Thu, 25 Apr
- 2024 12:19:54 +0000
-Received: from BN3PEPF0000B069.namprd21.prod.outlook.com
- (2603:10b6:408:ac:cafe::35) by BN8PR07CA0023.outlook.office365.com
- (2603:10b6:408:ac::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7495.35 via Frontend
- Transport; Thu, 25 Apr 2024 12:19:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B069.mail.protection.outlook.com (10.167.243.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7519.0 via Frontend Transport; Thu, 25 Apr 2024 12:19:54 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 25 Apr
- 2024 07:19:53 -0500
-Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Thu, 25 Apr 2024 07:19:51 -0500
-From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <git@amd.com>, <rric@kernel.org>, <mchehab@kernel.org>,
-	<james.morse@arm.com>, <tony.luck@intel.com>, <bp@alien8.de>,
-	<sai.krishna.potthuri@amd.com>
-Subject: [RESEND PATCH 3/3] EDAC/versal: Do not send the cumulative values
-Date: Thu, 25 Apr 2024 17:49:42 +0530
-Message-ID: <20240425121942.26378-4-shubhrajyoti.datta@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240425121942.26378-1-shubhrajyoti.datta@amd.com>
-References: <20240425121942.26378-1-shubhrajyoti.datta@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64721494BC;
+	Thu, 25 Apr 2024 12:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714049566; cv=none; b=gPpx5mPbizl/5KG1yuzKD9XDmETgYE8AN/hTaITxHPUk3KSp8mVzJYdBXomAEVEBfFfijI6pzkQ+joH8VowgaCnHNH5BK4tIuOWKvmuUfeGCZ/RyT+s2mdBLtPRc4JOBuLiMTZg8JxsigQ/7VfJuQMk6UlHaKC/Hm1Qw34pgNPU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714049566; c=relaxed/simple;
+	bh=gwekB6RaRxlS2eDN29F2xhmseDxkCdGf0FrbJqw4PTE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIXSXkm36WMUnd+HgTMyyuYBu0Z5G51/c9d2McMln+mlo888oh6D92hLtfJtMO3h3yEhlJWT5uRENot5x5pTDF1jtnJ/1nHkGNMmnLqLxb4Yajq9g0HY4/K/7x0vbwJkukrnr1jkz5dQ89YA2kdpSZXEYadIn09niLkwrAPV9rM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WQ/fxeKn; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-518f8a69f82so1035525e87.2;
+        Thu, 25 Apr 2024 05:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714049563; x=1714654363; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N68U3YqC3rWgap6HAasJ+BwSMTaiU5pcUurN9g7aQI8=;
+        b=WQ/fxeKnZEMEyq3mtjpxAoBvyxKqd3PbW9lXR3pZxfz9DezyTzJjG2aVokSl1BvIQ0
+         Mt9tQoRgxMeAgQttu5FumNKrH3w01Mb0bbhqfBtx15euq5ovard6VFnuMTmAvOr0XKUa
+         nMHxuiRHdsLwAZYSMUXq6HuLhS/IO52ugi3oeAQXFDbNBAzvXFz9VjkKUt76/o9LSNDe
+         kVcSzX71gAg9k5qIWe8TvIMfmAe7qVltCTpkawvHHkXd6kHF8XqDK8YqMainJlovTh+O
+         PIHZs5RMAlKQcwsjIQwFaQdsxPek/5/psWv2hswqwKJPHl9ipo1N3fo14ltg2rbCQ+BM
+         LLJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714049563; x=1714654363;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N68U3YqC3rWgap6HAasJ+BwSMTaiU5pcUurN9g7aQI8=;
+        b=odHEQqc6WJZOLhrrLdS9jEdUKldV4euej52xo6gXfZtwPUxVPn7nz646RAXb4bst/e
+         bZCcRX2B1OJrCgC9FOg0VL3PLN7EbQ6smsJppU8fSYoVvTIIXsU6FTH5O7DDED9hHESP
+         yVYurgj4dTIAdzTy8Lb/a8fg2BM2MtHVX9W3otLHaKW4tMXlC+2Vg20oZzsd+XRne4Rn
+         LeeMPYTeFOGaz7GG4ekPEZqnfregQ42GXQySEGgZ1WUF0atN6KfRm4rlYDzahYxnlh5B
+         oVAKWaazV0M2xl5pXCv2Ooh7Umc+Y0hzFUeg+JgleeWTGaJo5CIIFwCtOA4WcHt5FKej
+         PvYA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfaz7rrGPgYghkRFUjIuYV2/puihm7rAeICOoB01NocCdVNvS79dTGbHzMpggGN9jczjMSqgwvONGPk1krx4iDNvClfpC1a4Bt5DfeABjcbKO1ogGlCxvNWp2qMxYTHC3tfqVNsJwLuQ==
+X-Gm-Message-State: AOJu0YwBgKUGd/+07QMJAQJVqzlJ6a+Whl4mgJg0Sv/rQhJwE2yP6LH3
+	Jc3d/fKlyI6sAbPcWzB6Hp91gswEfXWIfQ+WlP52S+x1I2nPowt1
+X-Google-Smtp-Source: AGHT+IFuK6e4i06UOQNj7wogVGGgvwPVDzRokotzll1IQA8y85iZylmImbqf3eVrgV+eDhnOJy6oig==
+X-Received: by 2002:a05:6512:3f6:b0:51c:2012:f046 with SMTP id n22-20020a05651203f600b0051c2012f046mr2208675lfq.15.1714049562475;
+        Thu, 25 Apr 2024 05:52:42 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id f9-20020a0565123b0900b00516c403d243sm2810511lfv.60.2024.04.25.05.52.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Apr 2024 05:52:41 -0700 (PDT)
+Date: Thu, 25 Apr 2024 15:52:38 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Michal Simek <michal.simek@amd.com>, 
+	Alexander Stein <alexander.stein@ew.tq-group.com>, Tony Luck <tony.luck@intel.com>, 
+	James Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Robert Richter <rric@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>, Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH v5 01/20] EDAC/synopsys: Fix ECC status data and IRQ
+ disable race condition
+Message-ID: <whgp2xx4dv3szezz3bvmgutgazz6kvie3q7rgpr35zqzuzsygk@wppqzusteru4>
+References: <20240222181324.28242-1-fancer.lancer@gmail.com>
+ <20240222181324.28242-2-fancer.lancer@gmail.com>
+ <20240415183616.GDZh1zoFsBzvAEduRo@fat_crate.local>
+ <szcie4giwjykne4su6uu5wsmtsl3e3jd53rjfiwir6hm3ju7as@6eqh2xmj35ie>
+ <20240421100712.GAZiTlUOm1hrLQvaMi@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: shubhrajyoti.datta@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B069:EE_|CY8PR12MB7515:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04c1a2df-2b1e-4426-d9e3-08dc65220392
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?UaiHyXlXcLw48fw85IuwE3G9F8IdCzr7mLKJhs5jr/quSZd0iTZwVpmXVXrF?=
- =?us-ascii?Q?zqActwuBDQSzGV4s9U8m1FbTTzGJMaAowPFT4AfKNwfGM+8rZpEDyYpGdgoH?=
- =?us-ascii?Q?Xu9vhUTKGOF3u0T3xSiiRQmiEK95KV6hL+vDAA2y5y+tROvr69ppnY+9c8sM?=
- =?us-ascii?Q?Wn/KP6hckQ6b4LQVLYM8xYCKHuabEYkbw4gcWg1ARPKYFItbpp/0V/ach8gt?=
- =?us-ascii?Q?Xno/9fH/OwJF61qJ5urXzXVcXQM5cYU3i5pPemGND17fJgIoYhRqCpXVzJx8?=
- =?us-ascii?Q?e1wVTYMd4NWXSd1DtzemZ3l3/xWjdG5FqjWn8hZSKkYEXrjzFJCxrGTsMPCM?=
- =?us-ascii?Q?pzL8U2sCKmzcIEuMQFn8BZjJ2Xa9jEq59o5YRCpKI7LRCAf6hUtpJxq9FHr7?=
- =?us-ascii?Q?Qa0XaOHQU5/rQ/yfNZiZNwY5798yGiCw5rDIOLT6G10DpHMrrYKHxUSsRYGK?=
- =?us-ascii?Q?bPvD+toYX2Om4hXoyYtVLSta3HcIm2gLhLCGQHEAg507rvaivo4zVEQS/zba?=
- =?us-ascii?Q?OmTOo2dlBhc7y06DgrV342TZm6W7muarugdVr1HIyX6Onwq41wfCWhOBLUAk?=
- =?us-ascii?Q?tc9fiDZg+0P3nGTAR4fp76m2xn3VgbhUalyaXnnm7k0ri8EYrBYhak8ujA62?=
- =?us-ascii?Q?UNLKMivYqHVEbTtozeeuG0kPK/ruYHiLKT6qzJFpuHCxxPYsBe8j+IYBKZKC?=
- =?us-ascii?Q?70v6Z++Mo7UXn2oQQzMVeEUT9lWEVodL+33/rc8tF79YrODmDM3zvuJSZ/mp?=
- =?us-ascii?Q?abytsSrlwQiVhuP7nJSougjOQd513X8yzMwN3JwFIjV3YzDuh9fbNwNzIXp9?=
- =?us-ascii?Q?EdhNji+RxpuXhvtVlpoSUWpDkFJGC74E4gL+SPV0QK9fG2ddkhNoEhaYdU+5?=
- =?us-ascii?Q?R838bhBeM7esZdlkNYqsDf5tiLCxcoHNDRykNdcSjK8XlyxRYFqfXmbi9dg0?=
- =?us-ascii?Q?2WObAZdeSRBHWYq3vopzSBGCwhR7QmdHB1z3l0xJo8Nx4jugNB2HAMLuim0H?=
- =?us-ascii?Q?3unwkixuo7TCg/F1DaB9eGCqPBNPMrETzAuY3SNPBNhiOCe19dIEJlSfdpkp?=
- =?us-ascii?Q?rTLevqZmIdVtkdPTkMZTYLkENXcbfyWUeFfqvAFyzz+iSpUMEwF9Ot4gOOld?=
- =?us-ascii?Q?4gCFjPfcEB/9bXH7XxvQlxwNeUtAEJw4GhL2G954m/rgc3PPp4avuNojl0Ef?=
- =?us-ascii?Q?KeH0LPkgZJbjubRKYkiuDp1R2D/e9xeHXL+XDZ1bJ326N/iJyI6LbzX33u3o?=
- =?us-ascii?Q?7ib5qTzpZmVq7LvSlJCXdMcb9Zcwnq+8gf6mHtzNRTkzHZxuFQA1V0AayrnJ?=
- =?us-ascii?Q?F18gdAgyTNUNc3d/nIccB3jFp4GcldiEIKGeDzH54Jj8cG7iKXYL5igCuMO1?=
- =?us-ascii?Q?CR+lXmE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(376005)(36860700004)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2024 12:19:54.2704
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04c1a2df-2b1e-4426-d9e3-08dc65220392
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B069.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7515
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240421100712.GAZiTlUOm1hrLQvaMi@fat_crate.local>
 
-Currently collective errors are reported. Change it to
-intantaneous values. The cumulative values can be got from the
-debug prints.
+On Sun, Apr 21, 2024 at 12:07:30PM +0200, Borislav Petkov wrote:
+> On Tue, Apr 16, 2024 at 01:06:11PM +0300, Serge Semin wrote:
+> > It looks indeed crazy because the method is called enable_intr() and
+> > is called in the IRQ handler. Right, re-enabling the IRQ in the handler
+> > doesn't look good. But under the hood it was just a way to fix the
+> > problem described in the commit you cited. enable_intr() just gets
+> > back the IRQ Enable flags cleared a bit before in the
+> > zynqmp_get_error_info() method.
+> > 
+> > The root cause of the problem is that the IRQ status/clear flags:
+> > ECCCLR.ecc_corrected_err_clr	(R/W1C)
+> > ECCCLR.ecc_uncorrected_err_clr	(R/W1C)
+> > ECCCLR.ecc_corr_err_cnt_clr	(R/W1C)
+> > ECCCLR.ecc_uncorr_err_cnt_clr	(R/W1C)
+> > etc
+> > 
+> > and the IRQ enable/disable flags (since v3.10a):
+> > ECCCLR.ecc_corrected_err_intr_en	(R/W)
+> > ECCCLR.ecc_uncorrected_err_intr_en	(R/W)
+> > 
+> > reside in a single register - ECCCLR (Synopsys has renamed it to
+> > ECCCTL since v3.10a due to adding the IRQ En/Dis flags).
+> > 
+> > Thus any concurrent access to that CSR like "Clear IRQ
+> > status/counters" and "IRQ disable/enable" need to be protected from
+> > the race condition.
+> 
+> Ok, let's pick this apart one-by-one. I'll return to the rest you're
+> explaining as needed.
+> 
+> So, can writes to the status/counter bits while writing the *same* bit
+> to the IRQ enable/disable bit prevent any race conditions?
 
-Fixes: 6f15b178cd63 ("EDAC/versal: Add a Xilinx Versal memory controller driver")
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+No, because the clear and enable/disable bits belong to the same CSR.
+While you are writing the clear+same/enable bits, the concurrent IO
+may have changed the same/enable bits. Like this:
 
----
+     IRQ-handler                        |    IRQ-disabler
+                                        |
+ tmp = clear_sts_bits | enable_irq_bits;|
+                                        | ECCCLR = 0; // disable IRQ
+ ECCCLR = tmp;                          |
+----------------------------------------+--------------------------------------
 
- drivers/edac/versal_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+As a result even though the IRQ-disabler cleared the IRQ-enable bits,
+the IRQ-handler got them back to being set. The same will happen if we
+get to write the *same* bits in the handler:
 
-diff --git a/drivers/edac/versal_edac.c b/drivers/edac/versal_edac.c
-index a1407a399ed9..08e9f155d7e3 100644
---- a/drivers/edac/versal_edac.c
-+++ b/drivers/edac/versal_edac.c
-@@ -506,7 +506,7 @@ static void handle_error(struct mem_ctl_info *mci, struct ecc_status *stat)
- 		e->type = HW_EVENT_ERR_CORRECTED;
- 		
- 		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
--				     priv->ce_cnt, 0, 0, 0, 0, 0, -1,
-+				     1, 0, 0, 0, 0, 0, -1,
- 				     priv->message, "");
- 	}
- 
-@@ -520,7 +520,7 @@ static void handle_error(struct mem_ctl_info *mci, struct ecc_status *stat)
- 		e->type = HW_EVENT_ERR_UNCORRECTED;
- 
- 		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
--				     priv->ue_cnt, 0, 0, 0, 0, 0, -1,
-+				     1, 0, 0, 0, 0, 0, -1,
- 				     priv->message, "");
- 	}
- 
--- 
-2.17.1
+     IRQ-handler                        |    IRQ-disabler
+                                        |
+ tmp = ECCCLR | clear_sts_bits;         |
+                                        | ECCCLR = 0; // disable IRQs
+ ECCCLR = tmp;                          |
+----------------------------------------+--------------------------------------
 
+The last example is almost the same as what happens at the moment and
+what I am fixing in this patch. The difference is that there is a
+greater number of ECCCLR CSR changes performed in the IRQ-handler
+context, which makes the critical section even wider than it could be:
+
+     IRQ-handler                        |    IRQ-disabler
+                                        |
+zynqmp_get_error_info:                  |
+ ECCCLR = clear_sts_bits;               |
+ ECCCLR = 0; // actually redundant      |
+...                                     | ECCCLR = 0; // disable IRQs
+enable_intr:                            |
+ ECCCLR = enable_irq_bits;              |
+----------------------------------------+--------------------------------------
+
+> 
+> Meaning, you only change the status and counter bits and you preserve
+> the same value in the IRQ disable/enable bit?
+
+AFAICS this won't help to solve the race condition because writing the
+preserved value of the enable/disable bits is the cause of the race
+condition. The critical section is in concurrent flushing of different
+values to the ECCCLR.*en bits. The only ways to solve that are:
+1. prevent the concurrent access
+2. serialize the critical section
+
+> 
+> IOW, I'm thinking of shadowing that ECCCTL in software so that we update
+> it from the shadowed value.
+
+I don't see the shadowing will help to prevent what is happening
+unless you know some shadow-register pattern I am not aware of. AFAIR
+the shadow register is normally utilized for the cases of:
+1. read ops returns an incorrect value or a CSR couldn't be read
+2. IO bus is too slow in order to speed-up the RMW-pattern
+In any case the shadowed value and the process of the data flushing
+would need to be protected with a lock anyway in order to sync the
+shadow register content and the actual value written to the CSR.
+
+> 
+> Because, AFAIU, the spinlock won't help if you grab it, clear the
+> status/counter bits and disable the interrupt in the process. You want
+> to only clear the status/counter bits and leave the interrupt enabled.
+> 
+> Right?
+
+Right, but the spinlock will help. What I need to do deal with two
+concurrent operations:
+IRQ-handler:  clear the status/counter bits and leave the IRQ enable
+              bits as is.
+IRQ-disabler: clear the IRQ enable bits
+These actions need to be serialized in order to prevent the race
+condition.
+
+> 
+> IOW, in one single write you do:
+> 
+> ECCCLR.ecc_corrected_err_clr=1
+> ECCCLR.ecc_uncorrected_err_clr=1
+> ECCCLR.ecc_corr_err_cnt_clr=1
+> ECCCLR.ecc_uncorr_err_cnt_clr=1
+> ECCCLR.ecc_corrected_err_intr_en=1
+> ECCCLR.ecc_uncorrected_err_intr_en=1
+> 
+> ?
+
+This won't be help because the concurrent IRQ-disabler could have
+already cleared the IRQ enable bits while the IRQ-handler is being
+executed and about to write to the ECCCLR register. Like this:
+
+     IRQ-handler                        |    IRQ-disabler
+                                        |
+ tmp = clear_sts_bits | enable_irq_bits;|
+                                        | ECCCLR = 0; // disable IRQ
+ ECCCLR = tmp;                          |
+----------------------------------------+--------------------------------------
+
+Even if we get to add the spin-lock serializing the ECCCLR writes it
+won't solve the problem since the IRQ-disabler critical section could
+be executed a bit before the IRQ-handler critical section so the later
+one will just re-enable the IRQs disabled by the former one.
+
+Here is what is suggested in my patch to fix the problem:
+
+     IRQ-handler                        |    IRQ-disabler
+                                        |
+zynqmp_get_error_info:                  |
+                                        | lock_irqsave
+                                        | ECCCLR = 0; // disable IRQs
+                                        | unlock_irqrestore
+ lock_irqsave;                          |
+ tmp = ECCCLR | clear_sts_bits;         |
+ ECCCLR = tmp;                          |
+ unlock_irqrestore;                     |
+----------------------------------------+--------------------------------------
+
+See, the IRQ-status/counters clearing and IRQ disabling processes are
+serialized so the former one wouldn't override the values written by
+the later one.
+
+Here is the way it would have looked in case of the shadow-register
+implementation:
+
+     IRQ-handler                        |    IRQ-disabler
+                                        |
+zynqmp_get_error_info:                  |
+                                        | lock_irqsave
+                                        | shadow_en_bits = 0;
+                                        | ECCCLR = shadow_en_bits; // disable IRQs
+                                        | unlock_irqrestore
+ lock_irqsave;                          |
+ tmp = clear_sts_bits | shadow_en_bits; |
+ ECCCLR = tmp;                          |
+ unlock_irqrestore;                     |
+----------------------------------------+--------------------------------------
+
+The shadow-register pattern just prevents one ECCCLR read op. The
+shadowed data sync would have needed the serialization anyway. Seeing
+the DW DDR uMCTL2 controller CSRs are always memory mapped, I don't
+see using the shadow-register CSR would worth being implemented unless
+you meant something different.
+
+-Serge(y)
+
+> 
+> Thx.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
