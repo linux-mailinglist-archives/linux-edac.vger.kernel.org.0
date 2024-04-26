@@ -1,228 +1,277 @@
-Return-Path: <linux-edac+bounces-968-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-969-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42C908B36AE
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Apr 2024 13:46:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C42C08B3C76
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Apr 2024 18:12:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 458AFB21F7A
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Apr 2024 11:46:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6EA31C20EBE
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Apr 2024 16:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383AE145B08;
-	Fri, 26 Apr 2024 11:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6638315219E;
+	Fri, 26 Apr 2024 16:12:07 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6121E13F01A;
-	Fri, 26 Apr 2024 11:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27979148FE1;
+	Fri, 26 Apr 2024 16:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714131965; cv=none; b=JxkJSRJLKMayyT00pPpePdB2KoEJslmdGYl0iv3wGlktwxQdk7g0Q3wJT97m0P3+w8oT6ctH/i7SXu7ZlttUaIEHfqRGk2qyNG/X1TXH6252SPkXcY2DcKSJRC+DCZDInYJ2mdIy3hEdL4tz/9zjL0lnEZ4TDq7W/S7o7ieT8RA=
+	t=1714147927; cv=none; b=rEBalFM3qtO8nhDj8H+ktwjm1PmaEdmLwSZfgo7qIHPxGcw3pO9yEbFm1A52TRWdtYBfrGHBc5k+DwFhjJj6rXuJ+5oV1uhDYlQ7CYq02gfBS8BOPzDj6chUwzTDmxsGoo8YxNd/Wq5u5w7hc7QCJ1kB3nCj2mNm6mGqL6rSdDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714131965; c=relaxed/simple;
-	bh=q24SSJ+T0vV9DSEUwcxv6+8o6HqVvsFTlJdIC0R2MZw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=AHQupa5a8v5elso6plNES87zKVgbEA6GFfevwziTRPj1LRWtULv7m0YPy7/5qFtNxoy8p01u5h1fTn9A/Hh0knANgAXVldnuQj0N8379MVpphEkFF514WLJydtEENEFCfxcBIRNdA+7LT9Rsc7N5OmX3ARjOAdlREWR26CMJ7Dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+	s=arc-20240116; t=1714147927; c=relaxed/simple;
+	bh=VgzhTmVD5rrpMdVv+Epuseb412iscCiAD5rrfiDFg3E=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=g/kSu3Y5OAKVGH7e+c5eoXVdfStWmHukfJtv5QACl/QopCBvaiXurBwKRy/i+tjrK5ncCf+rZeY60lndNPq/jTnV52dVpbC4C0pOeJy6ObFt4YSt+p5v+o9GmEkk/2GDl47NGWenTY6UWLtPBE5pHLdZmHDROa8+tzk2e2MSYQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4VQrS249yqzXmqd;
-	Fri, 26 Apr 2024 19:42:26 +0800 (CST)
-Received: from kwepemm000010.china.huawei.com (unknown [7.193.23.169])
-	by mail.maildlp.com (Postfix) with ESMTPS id 223C3180073;
-	Fri, 26 Apr 2024 19:45:59 +0800 (CST)
-Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- kwepemm000010.china.huawei.com (7.193.23.169) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Fri, 26 Apr 2024 19:45:58 +0800
-Received: from lhrpeml500006.china.huawei.com ([7.191.161.198]) by
- lhrpeml500006.china.huawei.com ([7.191.161.198]) with mapi id 15.01.2507.035;
- Fri, 26 Apr 2024 12:45:56 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Daniel Ferguson <danielf@os.amperecomputing.com>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, Len Brown <lenb@kernel.org>, James Morse
-	<james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, Borislav Petkov
-	<bp@alien8.de>
-CC: "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>, luoshengwei
-	<luoshengwei@huawei.com>, Jason Tian <jason@os.amperecomputing.com>
-Subject: RE: [PATCH v5 2/2] RAS: Report ARM processor information to userspace
-Thread-Topic: [PATCH v5 2/2] RAS: Report ARM processor information to
- userspace
-Thread-Index: AQHae+MXvt+LT1M4gUi6zd/xMyYverF6pajQ
-Date: Fri, 26 Apr 2024 11:45:56 +0000
-Message-ID: <73d0834a539a4a69bca670141dd06bc8@huawei.com>
-References: <20240321-b4-arm-ras-error-vendor-info-v5-rc3-v5-0-850f9bfb97a8@os.amperecomputing.com>
- <20240321-b4-arm-ras-error-vendor-info-v5-rc3-v5-2-850f9bfb97a8@os.amperecomputing.com>
-In-Reply-To: <20240321-b4-arm-ras-error-vendor-info-v5-rc3-v5-2-850f9bfb97a8@os.amperecomputing.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQyNC1Mh5z6K6PC;
+	Sat, 27 Apr 2024 00:09:31 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 36C67140B55;
+	Sat, 27 Apr 2024 00:12:00 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 26 Apr
+ 2024 17:11:59 +0100
+Date: Fri, 26 Apr 2024 17:11:58 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+CC: "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
+	"james.morse@arm.com" <james.morse@arm.com>, "Luck, Tony"
+	<tony.luck@intel.com>, "bp@alien8.de" <bp@alien8.de>, "dave@stgolabs.net"
+	<dave@stgolabs.net>, "Jiang, Dave" <dave.jiang@intel.com>, "Schofield,
+ Alison" <alison.schofield@intel.com>, "Verma, Vishal L"
+	<vishal.l.verma@intel.com>, "Weiny, Ira" <ira.weiny@intel.com>,
+	"bhelgaas@google.com" <bhelgaas@google.com>, "helgaas@kernel.org"
+	<helgaas@kernel.org>, "mahesh@linux.ibm.com" <mahesh@linux.ibm.com>,
+	"oohall@gmail.com" <oohall@gmail.com>, "linmiaohe@huawei.com"
+	<linmiaohe@huawei.com>, "shiju.jose@huawei.com" <shiju.jose@huawei.com>,
+	"Preble, Adam C" <adam.c.preble@intel.com>, "leoyang.li@nxp.com"
+	<leoyang.li@nxp.com>, "lukas@wunner.de" <lukas@wunner.de>,
+	"Smita.KoralahalliChannabasappa@amd.com"
+	<Smita.KoralahalliChannabasappa@amd.com>, "rrichter@amd.com"
+	<rrichter@amd.com>, "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Tsaur, Erwin"
+	<erwin.tsaur@intel.com>, "Kuppuswamy, Sathyanarayanan"
+	<sathyanarayanan.kuppuswamy@intel.com>, "Williams, Dan J"
+	<dan.j.williams@intel.com>, "Wanyan, Feiting" <feiting.wanyan@intel.com>,
+	"Wang, Yudong" <yudong.wang@intel.com>, "Peng, Chao P"
+	<chao.p.peng@intel.com>, "qingshun.wang@linux.intel.com"
+	<qingshun.wang@linux.intel.com>
+Subject: Re: [PATCH v3 1/3] PCI/AER: Store UNCOR_STATUS bits that might be
+ ANFE in aer_err_info
+Message-ID: <20240426171158.000024d4@Huawei.com>
+In-Reply-To: <SJ0PR11MB6744EC971D1BE6F3119EEA9992112@SJ0PR11MB6744.namprd11.prod.outlook.com>
+References: <20240417061407.1491361-1-zhenzhong.duan@intel.com>
+	<20240417061407.1491361-2-zhenzhong.duan@intel.com>
+	<20240422171629.00005675@Huawei.com>
+	<SJ0PR11MB6744EC971D1BE6F3119EEA9992112@SJ0PR11MB6744.namprd11.prod.outlook.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-VGVzdGVkLWJ5OiBTaGlqdSBKb3NlIDxzaGlqdS5qb3NlQGh1YXdlaS5jb20+DQoNCkNQVSBjb3Jl
-IGlzb2xhdGlvbiBmZWF0dXJlIGluIHJhc2RhZW1vbiBoYXMgZGVwZW5kZW5jeSBvbiB0aGlzIGtl
-cm5lbCBwYXRjaC4NCg0KVGhhbmtzLA0KU2hpanUNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0t
-LQ0KPkZyb206IERhbmllbCBGZXJndXNvbiA8ZGFuaWVsZkBvcy5hbXBlcmVjb21wdXRpbmcuY29t
-Pg0KPlNlbnQ6IDIxIE1hcmNoIDIwMjQgMjI6NTYNCj5UbzogUmFmYWVsIEouIFd5c29ja2kgPHJh
-ZmFlbEBrZXJuZWwub3JnPjsgTGVuIEJyb3duIDxsZW5iQGtlcm5lbC5vcmc+Ow0KPkphbWVzIE1v
-cnNlIDxqYW1lcy5tb3JzZUBhcm0uY29tPjsgVG9ueSBMdWNrIDx0b255Lmx1Y2tAaW50ZWwuY29t
-PjsNCj5Cb3Jpc2xhdiBQZXRrb3YgPGJwQGFsaWVuOC5kZT4NCj5DYzogbGludXgtYWNwaUB2Z2Vy
-Lmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPmVkYWNA
-dmdlci5rZXJuZWwub3JnOyBEYW5pZWwgRmVyZ3Vzb24gPGRhbmllbGZAb3MuYW1wZXJlY29tcHV0
-aW5nLmNvbT47DQo+bHVvc2hlbmd3ZWkgPGx1b3NoZW5nd2VpQGh1YXdlaS5jb20+OyBKYXNvbiBU
-aWFuDQo+PGphc29uQG9zLmFtcGVyZWNvbXB1dGluZy5jb20+DQo+U3ViamVjdDogW1BBVENIIHY1
-IDIvMl0gUkFTOiBSZXBvcnQgQVJNIHByb2Nlc3NvciBpbmZvcm1hdGlvbiB0byB1c2Vyc3BhY2UN
-Cj4NCj5Gcm9tOiBTaGVuZ3dlaSBMdW8gPGx1b3NoZW5nd2VpQGh1YXdlaS5jb20+DQo+DQo+VGhl
-IG9yaWdpbmFsIGFybV9ldmVudCB0cmFjZSBjb2RlIG9ubHkgdHJhY2VzIG91dCBBUk0gcHJvY2Vz
-c29yIGVycm9yDQo+aW5mb3JtYXRpb24gZGF0YS4gSXQncyBub3QgZW5vdWdoIGZvciB1c2VyIHRv
-IHRha2UgYXBwcm9wcmlhdGUgYWN0aW9uLg0KPg0KPkFjY29yZGluZyB0byBVRUZJXzJfOSBzcGVj
-aWZpY2F0aW9uIGNoYXB0ZXIgTjIuNC40LCB0aGUgQVJNIHByb2Nlc3NvciBlcnJvcg0KPnNlY3Rp
-b24gaW5jbHVkZXMgc2V2ZXJhbCBBUk0gcHJvY2Vzc29yIGVycm9yIGluZm9ybWF0aW9uLCBzZXZl
-cmFsIEFSTQ0KPnByb2Nlc3NvciBjb250ZXh0IGluZm9ybWF0aW9uIGFuZCBzZXZlcmFsIHZlbmRv
-ciBzcGVjaWZpYyBlcnJvciBpbmZvcm1hdGlvbg0KPnN0cnVjdHVyZXMuIEluIGFkZGl0aW9uIHRv
-IHRoZXNlIGluZm8sIHRoZXJlIGFyZSBlcnJvciBzZXZlcml0eSBhbmQgY3B1IGxvZ2ljYWwNCj5p
-bmRleCBhYm91dCB0aGUgZXZlbnQuIFJlcG9ydCBhbGwgb2YgdGhlc2UgaW5mb3JtYXRpb24gdG8g
-dXNlcnNwYWNlIHZpYSBwZXJmIGkvZi4NCj5TbyB0aGF0IHRoZSB1c2VyIGNhbiBkbyBjcHUgY29y
-ZSBpc29sYXRpb24gYWNjb3JkaW5nIHRvIGVycm9yIHNldmVyaXR5IGFuZCBvdGhlcg0KPmluZm8u
-DQo+DQo+U2lnbmVkLW9mZi1ieTogU2hlbmd3ZWkgTHVvIDxsdW9zaGVuZ3dlaUBodWF3ZWkuY29t
-Pg0KPlNpZ25lZC1vZmYtYnk6IEphc29uIFRpYW4gPGphc29uQG9zLmFtcGVyZWNvbXB1dGluZy5j
-b20+DQo+U2lnbmVkLW9mZi1ieTogRGFuaWVsIEZlcmd1c29uIDxkYW5pZWxmQG9zLmFtcGVyZWNv
-bXB1dGluZy5jb20+DQo+LS0tDQo+IGRyaXZlcnMvYWNwaS9hcGVpL2doZXMuYyB8ICAzICstLQ0K
-PiBkcml2ZXJzL3Jhcy9yYXMuYyAgICAgICAgfCA0Ng0KPisrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrLS0NCj4gaW5jbHVkZS9saW51eC9yYXMuaCAgICAgIHwgMTUg
-KysrKysrKysrKysrLS0tDQo+IGluY2x1ZGUvcmFzL3Jhc19ldmVudC5oICB8IDQ4DQo+KysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tDQo+IDQgZmlsZXMgY2hh
-bmdlZCwgMTAwIGluc2VydGlvbnMoKyksIDEyIGRlbGV0aW9ucygtKQ0KPg0KPmRpZmYgLS1naXQg
-YS9kcml2ZXJzL2FjcGkvYXBlaS9naGVzLmMgYi9kcml2ZXJzL2FjcGkvYXBlaS9naGVzLmMgaW5k
-ZXgNCj41ODAxNDU1OGI4ZTAuLmE5M2M4MGZlMWJhYiAxMDA2NDQNCj4tLS0gYS9kcml2ZXJzL2Fj
-cGkvYXBlaS9naGVzLmMNCj4rKysgYi9kcml2ZXJzL2FjcGkvYXBlaS9naGVzLmMNCj5AQCAtNTM1
-LDkgKzUzNSw4IEBAIHN0YXRpYyBib29sIGdoZXNfaGFuZGxlX2FybV9od19lcnJvcihzdHJ1Y3QN
-Cj5hY3BpX2hlc3RfZ2VuZXJpY19kYXRhICpnZGF0YSwNCj4gCWludCBzZWNfc2V2LCBpOw0KPiAJ
-Y2hhciAqcDsNCj4NCj4tCWxvZ19hcm1faHdfZXJyb3IoZXJyKTsNCj4tDQo+IAlzZWNfc2V2ID0g
-Z2hlc19zZXZlcml0eShnZGF0YS0+ZXJyb3Jfc2V2ZXJpdHkpOw0KPisJbG9nX2FybV9od19lcnJv
-cihlcnIsIHNlY19zZXYpOw0KPiAJaWYgKHNldiAhPSBHSEVTX1NFVl9SRUNPVkVSQUJMRSB8fCBz
-ZWNfc2V2ICE9DQo+R0hFU19TRVZfUkVDT1ZFUkFCTEUpDQo+IAkJcmV0dXJuIGZhbHNlOw0KPg0K
-PmRpZmYgLS1naXQgYS9kcml2ZXJzL3Jhcy9yYXMuYyBiL2RyaXZlcnMvcmFzL3Jhcy5jIGluZGV4
-DQo+MjQ5ZGNlMjFhNzM4Li4zZTJiZWVkMmRiMDcgMTAwNjQ0DQo+LS0tIGEvZHJpdmVycy9yYXMv
-cmFzLmMNCj4rKysgYi9kcml2ZXJzL3Jhcy9yYXMuYw0KPkBAIC01Myw5ICs1Myw1MSBAQCB2b2lk
-IGxvZ19ub25fc3RhbmRhcmRfZXZlbnQoY29uc3QgZ3VpZF90ICpzZWNfdHlwZSwNCj5jb25zdCBn
-dWlkX3QgKmZydV9pZCwgIH0NCj4NCj4gI2lmIGRlZmluZWQoQ09ORklHX0FSTSkgfHwgZGVmaW5l
-ZChDT05GSUdfQVJNNjQpIC12b2lkDQo+bG9nX2FybV9od19lcnJvcihzdHJ1Y3QgY3Blcl9zZWNf
-cHJvY19hcm0gKmVycikNCj4rdm9pZCBsb2dfYXJtX2h3X2Vycm9yKHN0cnVjdCBjcGVyX3NlY19w
-cm9jX2FybSAqZXJyLCBjb25zdCB1OCBzZXYpDQo+IHsNCj4tCXRyYWNlX2FybV9ldmVudChlcnIp
-Ow0KPisJdTMyIHBlaV9sZW47DQo+Kwl1MzIgY3R4X2xlbiA9IDA7DQo+KwlzMzIgdnNlaV9sZW47
-DQo+Kwl1OCAqcGVpX2VycjsNCj4rCXU4ICpjdHhfZXJyOw0KPisJdTggKnZlbl9lcnJfZGF0YTsN
-Cj4rCXN0cnVjdCBjcGVyX2FybV9lcnJfaW5mbyAqZXJyX2luZm87DQo+KwlzdHJ1Y3QgY3Blcl9h
-cm1fY3R4X2luZm8gKmN0eF9pbmZvOw0KPisJaW50IG4sIHN6Ow0KPisJaW50IGNwdTsNCj4rDQo+
-KwlwZWlfbGVuID0gc2l6ZW9mKHN0cnVjdCBjcGVyX2FybV9lcnJfaW5mbykgKiBlcnItPmVycl9p
-bmZvX251bTsNCj4rCXBlaV9lcnIgPSAodTggKillcnIgKyBzaXplb2Yoc3RydWN0IGNwZXJfc2Vj
-X3Byb2NfYXJtKTsNCj4rDQo+KwllcnJfaW5mbyA9IChzdHJ1Y3QgY3Blcl9hcm1fZXJyX2luZm8g
-KikoZXJyICsgMSk7DQo+KwljdHhfaW5mbyA9IChzdHJ1Y3QgY3Blcl9hcm1fY3R4X2luZm8gKiko
-ZXJyX2luZm8gKyBlcnItPmVycl9pbmZvX251bSk7DQo+KwljdHhfZXJyID0gKHU4ICopY3R4X2lu
-Zm87DQo+Kwlmb3IgKG4gPSAwOyBuIDwgZXJyLT5jb250ZXh0X2luZm9fbnVtOyBuKyspIHsNCj4r
-CQlzeiA9IHNpemVvZihzdHJ1Y3QgY3Blcl9hcm1fY3R4X2luZm8pICsgY3R4X2luZm8tPnNpemU7
-DQo+KwkJY3R4X2luZm8gPSAoc3RydWN0IGNwZXJfYXJtX2N0eF9pbmZvICopKChsb25nKWN0eF9p
-bmZvICsgc3opOw0KPisJCWN0eF9sZW4gKz0gc3o7DQo+Kwl9DQo+Kw0KPisJdnNlaV9sZW4gPSBl
-cnItPnNlY3Rpb25fbGVuZ3RoIC0gKHNpemVvZihzdHJ1Y3QgY3Blcl9zZWNfcHJvY19hcm0pICsN
-Cj4rCQkJCQkJcGVpX2xlbiArIGN0eF9sZW4pOw0KPisJaWYgKHZzZWlfbGVuIDwgMCkgew0KPisJ
-CXByX3dhcm4oRldfQlVHDQo+KwkJCSJzZWN0aW9uIGxlbmd0aDogJWRcbiIsIGVyci0+c2VjdGlv
-bl9sZW5ndGgpOw0KPisJCXByX3dhcm4oRldfQlVHDQo+KwkJCSJzZWN0aW9uIGxlbmd0aCBpcyB0
-b28gc21hbGxcbiIpOw0KPisJCXByX3dhcm4oRldfQlVHDQo+KwkJCSJmaXJtd2FyZS1nZW5lcmF0
-ZWQgZXJyb3IgcmVjb3JkIGlzIGluY29ycmVjdFxuIik7DQo+KwkJdnNlaV9sZW4gPSAwOw0KPisJ
-fQ0KPisJdmVuX2Vycl9kYXRhID0gKHU4ICopY3R4X2luZm87DQo+Kw0KPisJY3B1ID0gR0VUX0xP
-R0lDQUxfSU5ERVgoZXJyLT5tcGlkcik7DQo+KwkvKiB3aGVuIHJldHVybiB2YWx1ZSBpcyBpbnZh
-bGlkLCBzZXQgY3B1IGluZGV4IHRvIC0xICovDQo+KwlpZiAoY3B1IDwgMCkNCj4rCQljcHUgPSAt
-MTsNCj4rDQo+Kwl0cmFjZV9hcm1fZXZlbnQoZXJyLCBwZWlfZXJyLCBwZWlfbGVuLCBjdHhfZXJy
-LCBjdHhfbGVuLA0KPisJCQl2ZW5fZXJyX2RhdGEsICh1MzIpdnNlaV9sZW4sIHNldiwgY3B1KTsN
-Cj4gfQ0KPiAjZW5kaWYNCj4NCj5kaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9yYXMuaCBiL2lu
-Y2x1ZGUvbGludXgvcmFzLmggaW5kZXgNCj44MTFmZWI5ZDgxNjAuLjIwNzBlNGFlMDYyNiAxMDA2
-NDQNCj4tLS0gYS9pbmNsdWRlL2xpbnV4L3Jhcy5oDQo+KysrIGIvaW5jbHVkZS9saW51eC9yYXMu
-aA0KPkBAIC0yNSw3ICsyNSw3IEBAIHZvaWQgbG9nX25vbl9zdGFuZGFyZF9ldmVudChjb25zdCBn
-dWlkX3QgKnNlY190eXBlLA0KPiAJCQkgICAgY29uc3QgZ3VpZF90ICpmcnVfaWQsIGNvbnN0IGNo
-YXIgKmZydV90ZXh0LA0KPiAJCQkgICAgY29uc3QgdTggc2V2LCBjb25zdCB1OCAqZXJyLCBjb25z
-dCB1MzIgbGVuKTsgICNpZg0KPmRlZmluZWQoQ09ORklHX0FSTSkgfHwgZGVmaW5lZChDT05GSUdf
-QVJNNjQpIC12b2lkDQo+bG9nX2FybV9od19lcnJvcihzdHJ1Y3QgY3Blcl9zZWNfcHJvY19hcm0g
-KmVycik7DQo+K3ZvaWQgbG9nX2FybV9od19lcnJvcihzdHJ1Y3QgY3Blcl9zZWNfcHJvY19hcm0g
-KmVyciwgY29uc3QgdTggc2V2KTsNCj4gI2VuZGlmDQo+ICNlbHNlDQo+IHN0YXRpYyBpbmxpbmUg
-dm9pZA0KPkBAIC0zNSw3ICszNSw3IEBAIGxvZ19ub25fc3RhbmRhcmRfZXZlbnQoY29uc3QgZ3Vp
-ZF90ICpzZWNfdHlwZSwgIHsgcmV0dXJuOw0KPn0gICNpZiBkZWZpbmVkKENPTkZJR19BUk0pIHx8
-IGRlZmluZWQoQ09ORklHX0FSTTY0KSAgc3RhdGljIGlubGluZSB2b2lkIC0NCj5sb2dfYXJtX2h3
-X2Vycm9yKHN0cnVjdCBjcGVyX3NlY19wcm9jX2FybSAqZXJyKSB7IHJldHVybjsgfQ0KPitsb2df
-YXJtX2h3X2Vycm9yKHN0cnVjdCBjcGVyX3NlY19wcm9jX2FybSAqZXJyLCBjb25zdCB1OCBzZXYp
-IHsgcmV0dXJuOw0KPit9DQo+ICNlbmRpZg0KPiAjZW5kaWYNCj4NCj5AQCAtNTUsNSArNTUsMTQg
-QEAgc3RhdGljIGlubGluZSB2b2lkIGFtZF9yZXRpcmVfZHJhbV9yb3coc3RydWN0IGF0bF9lcnIN
-Cj4qZXJyKSB7IH0gIHN0YXRpYyBpbmxpbmUgdW5zaWduZWQgbG9uZw0KPmFtZF9jb252ZXJ0X3Vt
-Y19tY2FfYWRkcl90b19zeXNfYWRkcihzdHJ1Y3QgYXRsX2VyciAqZXJyKSB7IHJldHVybiAtRUlO
-VkFMOw0KPn0gICNlbmRpZiAvKiBDT05GSUdfQU1EX0FUTCAqLw0KPi0NCj4rI2lmIGRlZmluZWQo
-Q09ORklHX0FSTSkgfHwgZGVmaW5lZChDT05GSUdfQVJNNjQpICNpbmNsdWRlDQo+Kzxhc20vc21w
-X3BsYXQuaD4NCj4rLyoNCj4rICogSW5jbHVkZSBBUk0gc3BlY2lmaWMgU01QIGhlYWRlciB3aGlj
-aCBwcm92aWRlcyBhIGZ1bmN0aW9uIG1hcHBpbmcNCj4rbXBpZHIgdG8NCj4rICogY3B1IGxvZ2lj
-YWwgaW5kZXguDQo+KyAqLw0KPisjZGVmaW5lIEdFVF9MT0dJQ0FMX0lOREVYKG1waWRyKSBnZXRf
-bG9naWNhbF9pbmRleChtcGlkciAmDQo+K01QSURSX0hXSURfQklUTUFTSykgI2Vsc2UgI2RlZmlu
-ZSBHRVRfTE9HSUNBTF9JTkRFWChtcGlkcikgLUVJTlZBTA0KPisjZW5kaWYgLyogQ09ORklHX0FS
-TSB8fCBDT05GSUdfQVJNNjQgKi8NCj4gI2VuZGlmIC8qIF9fUkFTX0hfXyAqLw0KPmRpZmYgLS1n
-aXQgYS9pbmNsdWRlL3Jhcy9yYXNfZXZlbnQuaCBiL2luY2x1ZGUvcmFzL3Jhc19ldmVudC5oIGlu
-ZGV4DQo+YzAxMWVhMjM2ZTliLi5hN2Q3YjZlNzE3YjYgMTAwNjQ0DQo+LS0tIGEvaW5jbHVkZS9y
-YXMvcmFzX2V2ZW50LmgNCj4rKysgYi9pbmNsdWRlL3Jhcy9yYXNfZXZlbnQuaA0KPkBAIC0xNjgs
-MTEgKzE2OCwyNCBAQCBUUkFDRV9FVkVOVChtY19ldmVudCwNCj4gICogVGhpcyBldmVudCBpcyBn
-ZW5lcmF0ZWQgd2hlbiBoYXJkd2FyZSBkZXRlY3RzIGFuIEFSTSBwcm9jZXNzb3IgZXJyb3INCj4g
-ICogaGFzIG9jY3VycmVkLiBVRUZJIDIuNiBzcGVjIHNlY3Rpb24gTi4yLjQuNC4NCj4gICovDQo+
-KyNkZWZpbmUgQVBFSUwgIkFSTSBQcm9jZXNzb3IgRXJyIEluZm8gZGF0YSBsZW4iDQo+KyNkZWZp
-bmUgQVBFSUQgIkFSTSBQcm9jZXNzb3IgRXJyIEluZm8gcmF3IGRhdGEiDQo+KyNkZWZpbmUgQVBF
-Q0lMICJBUk0gUHJvY2Vzc29yIEVyciBDb250ZXh0IEluZm8gZGF0YSBsZW4iDQo+KyNkZWZpbmUg
-QVBFQ0lEICJBUk0gUHJvY2Vzc29yIEVyciBDb250ZXh0IEluZm8gcmF3IGRhdGEiDQo+KyNkZWZp
-bmUgVlNFSUwgIlZlbmRvciBTcGVjaWZpYyBFcnIgSW5mbyBkYXRhIGxlbiINCj4rI2RlZmluZSBW
-U0VJRCAiVmVuZG9yIFNwZWNpZmljIEVyciBJbmZvIHJhdyBkYXRhIg0KPiBUUkFDRV9FVkVOVChh
-cm1fZXZlbnQsDQo+DQo+LQlUUF9QUk9UTyhjb25zdCBzdHJ1Y3QgY3Blcl9zZWNfcHJvY19hcm0g
-KnByb2MpLA0KPisJVFBfUFJPVE8oY29uc3Qgc3RydWN0IGNwZXJfc2VjX3Byb2NfYXJtICpwcm9j
-LCBjb25zdCB1OCAqcGVpX2VyciwNCj4rCQkJY29uc3QgdTMyIHBlaV9sZW4sDQo+KwkJCWNvbnN0
-IHU4ICpjdHhfZXJyLA0KPisJCQljb25zdCB1MzIgY3R4X2xlbiwNCj4rCQkJY29uc3QgdTggKm9l
-bSwNCj4rCQkJY29uc3QgdTMyIG9lbV9sZW4sDQo+KwkJCXU4IHNldiwNCj4rCQkJaW50IGNwdSks
-DQo+DQo+LQlUUF9BUkdTKHByb2MpLA0KPisJVFBfQVJHUyhwcm9jLCBwZWlfZXJyLCBwZWlfbGVu
-LCBjdHhfZXJyLCBjdHhfbGVuLCBvZW0sIG9lbV9sZW4sIHNldiwNCj4rY3B1KSwNCj4NCj4gCVRQ
-X1NUUlVDVF9fZW50cnkoDQo+IAkJX19maWVsZCh1NjQsIG1waWRyKQ0KPkBAIC0xODAsNiArMTkz
-LDE0IEBAIFRSQUNFX0VWRU5UKGFybV9ldmVudCwNCj4gCQlfX2ZpZWxkKHUzMiwgcnVubmluZ19z
-dGF0ZSkNCj4gCQlfX2ZpZWxkKHUzMiwgcHNjaV9zdGF0ZSkNCj4gCQlfX2ZpZWxkKHU4LCBhZmZp
-bml0eSkNCj4rCQlfX2ZpZWxkKHUzMiwgcGVpX2xlbikNCj4rCQlfX2R5bmFtaWNfYXJyYXkodTgs
-IGJ1ZiwgcGVpX2xlbikNCj4rCQlfX2ZpZWxkKHUzMiwgY3R4X2xlbikNCj4rCQlfX2R5bmFtaWNf
-YXJyYXkodTgsIGJ1ZjEsIGN0eF9sZW4pDQo+KwkJX19maWVsZCh1MzIsIG9lbV9sZW4pDQo+KwkJ
-X19keW5hbWljX2FycmF5KHU4LCBidWYyLCBvZW1fbGVuKQ0KPisJCV9fZmllbGQodTgsIHNldikN
-Cj4rCQlfX2ZpZWxkKGludCwgY3B1KQ0KPiAJKSwNCj4NCj4gCVRQX2Zhc3RfYXNzaWduKA0KPkBA
-IC0xOTksMTIgKzIyMCwyOSBAQCBUUkFDRV9FVkVOVChhcm1fZXZlbnQsDQo+IAkJCV9fZW50cnkt
-PnJ1bm5pbmdfc3RhdGUgPSB+MDsNCj4gCQkJX19lbnRyeS0+cHNjaV9zdGF0ZSA9IH4wOw0KPiAJ
-CX0NCj4rCQlfX2VudHJ5LT5wZWlfbGVuID0gcGVpX2xlbjsNCj4rCQltZW1jcHkoX19nZXRfZHlu
-YW1pY19hcnJheShidWYpLCBwZWlfZXJyLCBwZWlfbGVuKTsNCj4rCQlfX2VudHJ5LT5jdHhfbGVu
-ID0gY3R4X2xlbjsNCj4rCQltZW1jcHkoX19nZXRfZHluYW1pY19hcnJheShidWYxKSwgY3R4X2Vy
-ciwgY3R4X2xlbik7DQo+KwkJX19lbnRyeS0+b2VtX2xlbiA9IG9lbV9sZW47DQo+KwkJbWVtY3B5
-KF9fZ2V0X2R5bmFtaWNfYXJyYXkoYnVmMiksIG9lbSwgb2VtX2xlbik7DQo+KwkJX19lbnRyeS0+
-c2V2ID0gc2V2Ow0KPisJCV9fZW50cnktPmNwdSA9IGNwdTsNCj4gCSksDQo+DQo+LQlUUF9wcmlu
-dGsoImFmZmluaXR5IGxldmVsOiAlZDsgTVBJRFI6ICUwMTZsbHg7IE1JRFI6ICUwMTZsbHg7ICIN
-Cj4tCQkgICJydW5uaW5nIHN0YXRlOiAlZDsgUFNDSSBzdGF0ZTogJWQiLA0KPisJVFBfcHJpbnRr
-KCJjcHU6ICVkOyBlcnJvcjogJWQ7IGFmZmluaXR5IGxldmVsOiAlZDsgTVBJRFI6ICUwMTZsbHg7
-IE1JRFI6DQo+JTAxNmxseDsgIg0KPisJCSAgInJ1bm5pbmcgc3RhdGU6ICVkOyBQU0NJIHN0YXRl
-OiAlZDsgIg0KPisJCSAgIiVzOiAlZDsgJXM6ICVzOyAlczogJWQ7ICVzOiAlczsgJXM6ICVkOyAl
-czogJXMiLA0KPisJCSAgX19lbnRyeS0+Y3B1LA0KPisJCSAgX19lbnRyeS0+c2V2LA0KPiAJCSAg
-X19lbnRyeS0+YWZmaW5pdHksIF9fZW50cnktPm1waWRyLCBfX2VudHJ5LT5taWRyLA0KPi0JCSAg
-X19lbnRyeS0+cnVubmluZ19zdGF0ZSwgX19lbnRyeS0+cHNjaV9zdGF0ZSkNCj4rCQkgIF9fZW50
-cnktPnJ1bm5pbmdfc3RhdGUsIF9fZW50cnktPnBzY2lfc3RhdGUsDQo+KwkJICBBUEVJTCwgX19l
-bnRyeS0+cGVpX2xlbiwgQVBFSUQsDQo+KwkJICBfX3ByaW50X2hleChfX2dldF9keW5hbWljX2Fy
-cmF5KGJ1ZiksIF9fZW50cnktPnBlaV9sZW4pLA0KPisJCSAgQVBFQ0lMLCBfX2VudHJ5LT5jdHhf
-bGVuLCBBUEVDSUQsDQo+KwkJICBfX3ByaW50X2hleChfX2dldF9keW5hbWljX2FycmF5KGJ1ZjEp
-LCBfX2VudHJ5LT5jdHhfbGVuKSwNCj4rCQkgIFZTRUlMLCBfX2VudHJ5LT5vZW1fbGVuLCBWU0VJ
-RCwNCj4rCQkgIF9fcHJpbnRfaGV4KF9fZ2V0X2R5bmFtaWNfYXJyYXkoYnVmMiksIF9fZW50cnkt
-Pm9lbV9sZW4pKQ0KPiApOw0KPg0KPiAvKg0KPg0KPi0tDQo+Mi40My4wDQo+DQoNCg==
+On Tue, 23 Apr 2024 02:25:05 +0000
+"Duan, Zhenzhong" <zhenzhong.duan@intel.com> wrote:
+
+> >-----Original Message-----
+> >From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> >Subject: Re: [PATCH v3 1/3] PCI/AER: Store UNCOR_STATUS bits that might
+> >be ANFE in aer_err_info
+> >
+> >On Wed, 17 Apr 2024 14:14:05 +0800
+> >Zhenzhong Duan <zhenzhong.duan@intel.com> wrote:
+> >  
+> >> In some cases the detector of a Non-Fatal Error(NFE) is not the most
+> >> appropriate agent to determine the type of the error. For example,
+> >> when software performs a configuration read from a non-existent
+> >> device or Function, completer will send an ERR_NONFATAL Message.
+> >> On some platforms, ERR_NONFATAL results in a System Error, which
+> >> breaks normal software probing.
+> >>
+> >> Advisory Non-Fatal Error(ANFE) is a special case that can be used
+> >> in above scenario. It is predominantly determined by the role of the
+> >> detecting agent (Requester, Completer, or Receiver) and the specific
+> >> error. In such cases, an agent with AER signals the NFE (if enabled)
+> >> by sending an ERR_COR Message as an advisory to software, instead of
+> >> sending ERR_NONFATAL.
+> >>
+> >> When processing an ANFE, ideally both correctable error(CE) status and
+> >> uncorrectable error(UE) status should be cleared. However, there is no
+> >> way to fully identify the UE associated with ANFE. Even worse, a Fatal
+> >> Error(FE) or Non-Fatal Error(NFE) may set the same UE status bit as
+> >> ANFE. Treating an ANFE as NFE will reproduce above mentioned issue,
+> >> i.e., breaking softwore probing; treating NFE as ANFE will make us
+> >> ignoring some UEs which need active recover operation. To avoid clearing
+> >> UEs that are not ANFE by accident, the most conservative route is taken
+> >> here: If any of the FE/NFE Detected bits is set in Device Status, do not
+> >> touch UE status, they should be cleared later by the UE handler. Otherwise,
+> >> a specific set of UEs that may be raised as ANFE according to the PCIe
+> >> specification will be cleared if their corresponding severity is Non-Fatal.
+> >>
+> >> To achieve above purpose, store UNCOR_STATUS bits that might be ANFE
+> >> in aer_err_info.anfe_status. So that those bits could be printed and
+> >> processed later.
+> >>
+> >> Tested-by: Yudong Wang <yudong.wang@intel.com>
+> >> Co-developed-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
+> >> Signed-off-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
+> >> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+> >> ---
+> >>  drivers/pci/pci.h      |  1 +
+> >>  drivers/pci/pcie/aer.c | 45  
+> >++++++++++++++++++++++++++++++++++++++++++  
+> >>  2 files changed, 46 insertions(+)
+> >>
+> >> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> >> index 17fed1846847..3f9eb807f9fd 100644
+> >> --- a/drivers/pci/pci.h
+> >> +++ b/drivers/pci/pci.h
+> >> @@ -412,6 +412,7 @@ struct aer_err_info {
+> >>
+> >>  	unsigned int status;		/* COR/UNCOR Error Status */
+> >>  	unsigned int mask;		/* COR/UNCOR Error Mask */
+> >> +	unsigned int anfe_status;	/* UNCOR Error Status for ANFE */
+> >>  	struct pcie_tlp_log tlp;	/* TLP Header */
+> >>  };
+> >>
+> >> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> >> index ac6293c24976..27364ab4b148 100644
+> >> --- a/drivers/pci/pcie/aer.c
+> >> +++ b/drivers/pci/pcie/aer.c
+> >> @@ -107,6 +107,12 @@ struct aer_stats {
+> >>  					PCI_ERR_ROOT_MULTI_COR_RCV |  
+> >	\  
+> >>  					PCI_ERR_ROOT_MULTI_UNCOR_RCV)
+> >>
+> >> +#define AER_ERR_ANFE_UNC_MASK  
+> >	(PCI_ERR_UNC_POISON_TLP |	\  
+> >> +					PCI_ERR_UNC_COMP_TIME |  
+> >	\  
+> >> +					PCI_ERR_UNC_COMP_ABORT |  
+> >	\  
+> >> +					PCI_ERR_UNC_UNX_COMP |  
+> >	\  
+> >> +					PCI_ERR_UNC_UNSUP)
+> >> +
+> >>  static int pcie_aer_disable;
+> >>  static pci_ers_result_t aer_root_reset(struct pci_dev *dev);
+> >>
+> >> @@ -1196,6 +1202,41 @@ void aer_recover_queue(int domain, unsigned  
+> >int bus, unsigned int devfn,  
+> >>  EXPORT_SYMBOL_GPL(aer_recover_queue);
+> >>  #endif
+> >>
+> >> +static void anfe_get_uc_status(struct pci_dev *dev, struct aer_err_info  
+> >*info)  
+> >> +{
+> >> +	u32 uncor_mask, uncor_status;
+> >> +	u16 device_status;
+> >> +	int aer = dev->aer_cap;
+> >> +
+> >> +	if (pcie_capability_read_word(dev, PCI_EXP_DEVSTA,  
+> >&device_status))  
+> >> +		return;
+> >> +	/*
+> >> +	 * Take the most conservative route here. If there are
+> >> +	 * Non-Fatal/Fatal errors detected, do not assume any
+> >> +	 * bit in uncor_status is set by ANFE.
+> >> +	 */
+> >> +	if (device_status & (PCI_EXP_DEVSTA_NFED | PCI_EXP_DEVSTA_FED))
+> >> +		return;
+> >> +  
+> >
+> >Is there not a race here?  If we happen to get either an NFED or FED
+> >between the read of device_status above and here we might pick up a status
+> >that corresponds to that (and hence clear something we should not).  
+> 
+> In this scenario, info->anfe_status is 0.
+
+OK. In that case what is the point of the check above?
+If the code is safe to races, it's safe to go ahead without that check
+on what might race.
+
+> 
+> >
+> >Or am I missing that race being close somewhere?  
+> 
+> The bits leading to NFED or FED is masked out when assigning info->anfe_status.
+> Bits for FED is masked out by ~info->severity,
+> bit for NFED is masked out by AER_ERR_ANFE_UNC_MASK.
+> 
+> So we never clear status bits for NFED or FED in ANFE handler.
+> 
+> See below assignment of info->anfe_status.
+> 
+> Thanks
+> Zhenzhong
+> 
+> >  
+> >> +	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS,  
+> >&uncor_status);  
+> >> +	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_MASK,  
+> >&uncor_mask);  
+> >> +	/*
+> >> +	 * According to PCIe Base Specification Revision 6.1,
+> >> +	 * Section 6.2.3.2.4, if an UNCOR error is raised as
+> >> +	 * Advisory Non-Fatal error, it will match the following
+> >> +	 * conditions:
+> >> +	 *	a. The severity of the error is Non-Fatal.
+> >> +	 *	b. The error is one of the following:
+> >> +	 *		1. Poisoned TLP           (Section 6.2.3.2.4.3)
+> >> +	 *		2. Completion Timeout     (Section 6.2.3.2.4.4)
+> >> +	 *		3. Completer Abort        (Section 6.2.3.2.4.1)
+> >> +	 *		4. Unexpected Completion  (Section 6.2.3.2.4.5)
+> >> +	 *		5. Unsupported Request    (Section 6.2.3.2.4.1)
+> >> +	 */
+> >> +	info->anfe_status = uncor_status & ~uncor_mask & ~info->severity  
+> >&  
+> >> +			    AER_ERR_ANFE_UNC_MASK;
+> >> +}
+> >> +
+> >>  /**
+> >>   * aer_get_device_error_info - read error status from dev and store it to  
+> >info  
+> >>   * @dev: pointer to the device expected to have a error record
+> >> @@ -1213,6 +1254,7 @@ int aer_get_device_error_info(struct pci_dev  
+> >*dev, struct aer_err_info *info)  
+> >>
+> >>  	/* Must reset in this function */
+> >>  	info->status = 0;
+> >> +	info->anfe_status = 0;
+> >>  	info->tlp_header_valid = 0;
+> >>
+> >>  	/* The device might not support AER */
+> >> @@ -1226,6 +1268,9 @@ int aer_get_device_error_info(struct pci_dev  
+> >*dev, struct aer_err_info *info)  
+> >>  			&info->mask);
+> >>  		if (!(info->status & ~info->mask))
+> >>  			return 0;
+> >> +
+> >> +		if (info->status & PCI_ERR_COR_ADV_NFAT)
+> >> +			anfe_get_uc_status(dev, info);
+> >>  	} else if (type == PCI_EXP_TYPE_ROOT_PORT ||
+> >>  		   type == PCI_EXP_TYPE_RC_EC ||
+> >>  		   type == PCI_EXP_TYPE_DOWNSTREAM ||  
+> 
+> 
+
 
