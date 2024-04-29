@@ -1,137 +1,105 @@
-Return-Path: <linux-edac+bounces-973-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-974-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93F1B8B586A
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Apr 2024 14:24:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA8A28B58B8
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Apr 2024 14:38:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5D661C2301B
-	for <lists+linux-edac@lfdr.de>; Mon, 29 Apr 2024 12:24:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06D7DB22304
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Apr 2024 12:38:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FBE16F53D;
-	Mon, 29 Apr 2024 12:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D5FAC15D;
+	Mon, 29 Apr 2024 12:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="NusVyk7t"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A880954BCC;
-	Mon, 29 Apr 2024 12:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEF4322E;
+	Mon, 29 Apr 2024 12:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714393302; cv=none; b=Wp9VCdv6F2fVKJT+DS7D0Q74FtTi9rgWcaKWKUJETMFxfjWPnQQGcCxOByNhNUMJc0QyxIpLrV7MufxZq5zI19RR3ibhgVFtJ7BuTxIPy9T04/i1svJJL0Y7cl532RUutsGJuj4vMeSzdBjkzwNXFeSmc8fax0Ve8he57qCjqTI=
+	t=1714394315; cv=none; b=o+Lbq8AdRg7KgYYZ2f5M7LeEpYTYIZAWjVHkhJeHEiWrqbwaXwdEEDhhSErcCHJJwK/klkZd4gZ0Bw2krsbe808Cy2WC5dZSSJ4q8lg7RyVKENgH8YBvH9vzDHEXspUrY+2u/7RQoS30Ov4aPA66k4josVuOtx2t41BfmFWaBGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714393302; c=relaxed/simple;
-	bh=u9i7GEaEPB0efe/XuAZN0XrJRMGHZ1l3GMvjslIx3gs=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RFdyO36yl5z8ZJhNUtloK/bqwEYna5dc6tViXvRccMmROK+hNEa5lOzHkLkpQ0ejzM0z6DAo9JrqhQzx0Y3M86Ek3rmAHvTqrOhB4oeA7q1IL5/X5bUISvjRs4lBQ4DYmWGquJaA6Ha/2nrafTfySWAceDJl32yN6bLVAbK6TnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VSj6s3BKzz6GD6F;
-	Mon, 29 Apr 2024 20:19:01 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 989301400DB;
-	Mon, 29 Apr 2024 20:21:35 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 29 Apr
- 2024 13:21:34 +0100
-Date: Mon, 29 Apr 2024 13:21:33 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Shiju Jose <shiju.jose@huawei.com>
-CC: fan <nifan.cxl@gmail.com>, "linux-cxl@vger.kernel.org"
-	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"dan.j.williams@intel.com" <dan.j.williams@intel.com>, "dave@stgolabs.net"
-	<dave@stgolabs.net>, "dave.jiang@intel.com" <dave.jiang@intel.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>, "ira.weiny@intel.com"
-	<ira.weiny@intel.com>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "david@redhat.com" <david@redhat.com>,
-	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>, "leo.duran@amd.com"
-	<leo.duran@amd.com>, "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
-	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
-	<jiaqiyan@google.com>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "mike.malvestuto@intel.com"
-	<mike.malvestuto@intel.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
-	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>, wanghuiqiang
-	<wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>
-Subject: Re: [RFC PATCH v8 05/10] cxl/memscrub: Add CXL device patrol scrub
- control feature
-Message-ID: <20240429132133.0000606c@Huawei.com>
-In-Reply-To: <31df9f7d63e34e4bb1504dcc13a70604@huawei.com>
-References: <20240419164720.1765-1-shiju.jose@huawei.com>
-	<20240419164720.1765-6-shiju.jose@huawei.com>
-	<Ziw_Ll3vMBK1zNw4@debian>
-	<31df9f7d63e34e4bb1504dcc13a70604@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1714394315; c=relaxed/simple;
+	bh=v4UXMKorrS1MWpudNhezId53qq7JsKiY5JAW3oUdBZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gfgWkN9iv1FrVbRpvnUTx5KxxcWYJkg6ix4viOGIgRg/tZOxi/kjgXc0z3YN4NmP6I5wREoJM1H6x+QMXV846aiZYQs1CzdbJp/v1lgvqL0xIYhCIxZuE5jhoEm3Vff+BkEP0SipI+h6abfNFj6ModnOT4hUwlR5LJ8LTxpPkAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=NusVyk7t; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AFA4F40E0187;
+	Mon, 29 Apr 2024 12:38:30 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id usRaInnAyky6; Mon, 29 Apr 2024 12:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1714394307; bh=uBo83RXsgIKfYIzl0qK0twOO+iMg1Pp04mCeg+L0u3A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NusVyk7t3e/4AVJvzRmoo/WpHndXOyrDyvqq7AIfC805pIVSuCuy77Lxo9kRaxz/u
+	 WcKT2ZCfdBVZ/wkfqmgBjJBF6NY16RdIYQG5OkVX1UdC7/6A59vyoXDKUHKpTE/eXj
+	 F3CBCjmPVbYauhBW792GJNVScgvfWapxRHZMc7RCuaA+TSJ49p1ca05dwVdqPD8BQh
+	 flHDxZIM5cyl7C+m+MO7LPdK1V2mlfcrxrDs8DWsKR1/JKUXGjzPvIBpdgVeRilcb0
+	 d7QpoJ0q83Vkzv3JZTPfgWB4FxOgZPkFX0zqwLm9/7JGHEBomvQDFcp7JZJTLdFc0Y
+	 k8ww5GlMbdkjbRi8Oj6A+x4aVXK1KiT0ZgWiGp3jgc5ZH5kjMeZWiFzvT7SeTjbYOR
+	 rv+0GBGKjVVvTjjGd3hwj6l8EHphZVT4QMxElMXdUKUFkglyDb4+WIQM9KYa23lplh
+	 W/jnrNz97GdbsFkG/YMEgxeRXLZ7DXhDnLwNOxShE4sgsrjTnIBYolQ8HXsKD0NTW8
+	 JpRnlWvEqdoFQXcAPXv8Km19/MPvkFxHl3VnQOE8kGxlW28uvS7HuwxkCvvfn1pfoD
+	 ePYKV2ZA7HojMw2sLASUz1vrWh1/8Yv6sWSFRJJ57WNp/T+vIiAdjz4AQeXiR16LhJ
+	 o+Kr9mEsrVANE+lR4st9PAr8=
+Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 06C2240E00C7;
+	Mon, 29 Apr 2024 12:38:19 +0000 (UTC)
+Date: Mon, 29 Apr 2024 14:38:18 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, Avadhut.Naik@amd.com,
+	John.Allen@amd.com
+Subject: Re: [PATCH v2 06/16] x86/mce/amd: Prep DFR handler before enabling
+ banks
+Message-ID: <20240429123818.GCZi-UugM5_UFHm7es@fat_crate.local>
+References: <20240404151359.47970-1-yazen.ghannam@amd.com>
+ <20240404151359.47970-7-yazen.ghannam@amd.com>
+ <20240424183429.GGZilQtVJtGhOPm1ES@fat_crate.local>
+ <190ec43d-bd44-42a4-a395-f278f97748fb@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <190ec43d-bd44-42a4-a395-f278f97748fb@amd.com>
 
+On Thu, Apr 25, 2024 at 09:31:58AM -0400, Yazen Ghannam wrote:
+> They are independent features. SUCCOR is the feature that defines the deferred
+> error interrupt and data poisoning. This predates SMCA. SUCCOR was introduced
+> in the later Family 15h systems.
 
-> >> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c index
-> >> 0c79d9ce877c..399e43463626 100644
-> >> --- a/drivers/cxl/mem.c
-> >> +++ b/drivers/cxl/mem.c
-> >> @@ -117,6 +117,12 @@ static int cxl_mem_probe(struct device *dev)
-> >>  	if (!cxlds->media_ready)
-> >>  		return -EBUSY;
-> >>
-> >> +	rc = cxl_mem_patrol_scrub_init(cxlmd);
-> >> +	if (rc) {
-> >> +		dev_dbg(&cxlmd->dev, "CXL patrol scrub init failed\n");
-> >> +		return rc;
-> >> +	}  
-> >
-> >If the device does not support memory patrol scrub feature, the above function
-> >will return -EOPNOTSUPP. Since the feature is optional, should we just warn it
-> >and let it go through?  
-> Feedback from Jonathan was that, if this feature is built in, then should not proceed
-> if the patrol scrub init failed, though it is an optional feature.
+... and as we've established, it is not really enabled on them for
+whatever reason so for simplicity's sake, we'll simply assume that it
+was enabled together with SMCA and that would simplify a lot of things
+in the code.
 
-Oops. That wasn't my intent.  If the feature is implemented by the hardware and
-init fails, then I think we should fail probe.  Or maybe just print a very shouty
-message about it being broken.  If the feature is simply not implemented we
-should definitely not fail.
+Please put that in the commit message so that we know.
 
-Jonathan
+Thx.
 
->  
-> >
-> >Fan  
-> >> +
-> >>  	/*
-> >>  	 * Someone is trying to reattach this device after it lost its port
-> >>  	 * connection (an endpoint port previously registered by this memdev
-> >> was
-> >> --
-> >> 2.34.1
-> >>  
-> Thanks,
-> Shiju
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
