@@ -1,118 +1,172 @@
-Return-Path: <linux-edac+bounces-986-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-987-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5CB98B7F78
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Apr 2024 20:08:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ABD98B8413
+	for <lists+linux-edac@lfdr.de>; Wed,  1 May 2024 03:54:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 551CF1F23A6F
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Apr 2024 18:08:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D048BB22685
+	for <lists+linux-edac@lfdr.de>; Wed,  1 May 2024 01:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8F61836D0;
-	Tue, 30 Apr 2024 18:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="F9+CoEGz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889EB3D71;
+	Wed,  1 May 2024 01:54:25 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91197181B9D;
-	Tue, 30 Apr 2024 18:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF85B53A9
+	for <linux-edac@vger.kernel.org>; Wed,  1 May 2024 01:54:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714500416; cv=none; b=NMsNxuklyZjXK6TEu+I7Deer4df7XPFT124d05IFZJzQ3ypWRokkbw7itDkN8xp3YOgTggDefj2k2NZ25ohTxUWkgYkr7NYVSjiZ1tJC0Jtoz72JpK2JXVLNiKtr01ZSan+kwCrTZ72Y/UaN4p6KtIJVs9WPlkpzlc/AYMOG42c=
+	t=1714528465; cv=none; b=c4HclicxD638mc2ShNw+0tCsYYC5bA71ZWECRMSfpeeURGIH2OjGqGP+pmi93wnGzwaorsXuc8r3OEalbpEnBsl5h3tww8UR8xDjtoAu8fnO+vVccdhXLZBY9SwX+c1MWBwe8yoBH6rUZhT8q8hCRX1ZqHk0uRCG2WTdcab4SJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714500416; c=relaxed/simple;
-	bh=0qsg5fAauxbEqdIcYQLN/yej9YBMwtvKQ9nkrp+Br4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lo9G3Fmzs2Q9MH82oojDwLPGbUJKZaAjzGj0FrTtC2o07/RXRFelGCLrSnzdm8YnlBZwN+JM931cEQsTc/TPYtVa+1UCQYve6lQemiBw7MoX07SG41PUPVY4AyukrF3HVG5XPJT/Y3t3HouL9g9yU7ctIkXXwJLXx34kDIyoZXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=F9+CoEGz; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A5F6D40E01F6;
-	Tue, 30 Apr 2024 18:06:52 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id vbcD7_edTS81; Tue, 30 Apr 2024 18:06:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1714500409; bh=Y7s8TMJ8qHLzbZ6gWl7cQnaOJBDIe4Dw83e3EgHGNuU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F9+CoEGzJ/y/ehxDH3klsh9Gsv8WNJPvz9wXGF0+toT5WaIsTGcmbMtyWkNc/8/sq
-	 kRC93KCG1bKC3Bt72C28yAC+tbLXIe1cfG4NPt5elguqRn+MQs5pCfhp5bpAmY//97
-	 5Qo3/nkSXyMLmt4f16aQqGTPnrJHqNpkH7XojNGQFhhdKEqxrOXPsfV8vjTMoRSY6m
-	 jUb1Fa9BL9DvZ9Ql/UxaanqV1P9H3dtBdF9nAN2YIgoi9lA7H5woKt6XmEU7OLlRPv
-	 18HwqQxZWPMf36yQLVk3QnEoAun3gJigVimPcSEd7SiwLgzL17QwI579/S2mffJSjn
-	 T5iXPxSya5K3jIpJQowpMWUc4pfMygkGuNC4e3xrJETdvp76LBjr8GpyQg/R2X7Ysk
-	 9J5qLr62N0Ci1RSA+yfhXb6V7BP1lJu7qB1YQHAAUHY/zzqriMdsaaZ1qTqJvWYdTZ
-	 x0vQ9WrjA12F5Wss86aA+YfFN8mCNx4rAB8TROpxPHfsfQxasAJNOHdLjMNoV4+pMr
-	 nNSxp1O4M40iUJ1oQIpx/X5siDyPKsVPjDooRgk/zTkLEH0oCThk8n8MTSJoQhxaKj
-	 0Uob7rHZySNCYmUz8VQvjwUVMncOXP2a50fad4zaUZBmFM5FrSIB74vgVC2wnMES00
-	 9nBDL1hoVW8sumhZfUUZ98EY=
-Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 51D3940E0187;
-	Tue, 30 Apr 2024 18:06:41 +0000 (UTC)
-Date: Tue, 30 Apr 2024 20:06:35 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Robert Richter <rrichter@amd.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, x86@kernel.org, Avadhut.Naik@amd.com,
-	John.Allen@amd.com
-Subject: Re: [PATCH v2 07/16] x86/mce/amd: Simplify DFR handler setup
-Message-ID: <20240430180635.GDZjEzK8H3xQ_uEGYn@fat_crate.local>
-References: <20240404151359.47970-1-yazen.ghannam@amd.com>
- <20240404151359.47970-8-yazen.ghannam@amd.com>
- <20240424190658.GHZilYUvw1KfSfVd_e@fat_crate.local>
- <e0d10606-4472-4cde-b55d-34180efad42b@amd.com>
- <Zi_oPUzvCDhRVSk4@rric.localdomain>
+	s=arc-20240116; t=1714528465; c=relaxed/simple;
+	bh=C57SS3ZCxGbsth/enpLPQrXsGoafcJbbAhmTHWl3C7Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jGeDNpHlLeVKlTpFG8SCkNMwrPnb0OTy7P3m4OuUyMaBdWlNM/MaiBNRkElAyWpxpfeof7mzeedcYiZJaPzZmALmwG0OSdbRpXt7h8glqA6JxCBjHPGH7/I6+VN5Mmw/xBpv+n7wGQl6u6t95ix4UFoYXUJ+GwJhQiXwQTPtJVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-418e4cd2196so49935195e9.1
+        for <linux-edac@vger.kernel.org>; Tue, 30 Apr 2024 18:54:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714528461; x=1715133261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OLnjoLX8ymDEP1c+yitd+kAvKd73++0UdRqIJdMpHHw=;
+        b=Uia+l2jkUPvsPRN+DBBYRpGf8LN1yDg6L90fG1lx9sXnyx+z6Nq6XSca5QVRUvuo9U
+         VsARVsctOk5PoOXtIwhsjl99gH4vxVX8tfyf6cAiXpyJ35vg9d6SltPH1SdKsh7FpNt3
+         V0vP27/xY2aHm+r9od0wnkrFvTSiCTvA88EgnJgOL5yl7IX0MGEPFmPXd8iUrH0bQXwB
+         mSf88uwtsRGeMFrs06v4DXXrf69yehuquUG6vdGW3tpLBR7oF8f08q+MfHg4n7bUX5VT
+         hONTClW0CexcX2tfZbT8alMCw5iEOCm84olb04I0GM4Dgue/rSQ1J73A0jiAo3T0Z+Xh
+         qW8g==
+X-Gm-Message-State: AOJu0Yx8I6+gXnA2kKThnnsupy1D/7lm5VYzNHQ0sbCSX090m+ITurzJ
+	8mkILglje+7DJvO0kPXhhuSoiUxlEQSyH1avkmM74QiF5kAugJRS11t37Q==
+X-Google-Smtp-Source: AGHT+IEXntGOgZLf7ytglEirZsNd7AK/UAILjedaAeYsBm0eeI1K+1c8k26dbXqqI5GfXbvxthikbQ==
+X-Received: by 2002:a05:600c:1e05:b0:418:c1a3:8521 with SMTP id ay5-20020a05600c1e0500b00418c1a38521mr779421wmb.26.1714528461009;
+        Tue, 30 Apr 2024 18:54:21 -0700 (PDT)
+Received: from localhost.localdomain ([82.213.248.3])
+        by smtp.gmail.com with ESMTPSA id r10-20020a05600c458a00b0041c130520fbsm618399wmo.46.2024.04.30.18.54.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Apr 2024 18:54:20 -0700 (PDT)
+From: Andrew Zaborowski <andrew.zaborowski@intel.com>
+To: linux-edac@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>
+Subject: [PATCH][RFC] exec: x86: Ensure SIGBUS delivered on MCE
+Date: Wed,  1 May 2024 03:53:40 +0200
+Message-Id: <20240501015340.3014724-1-andrew.zaborowski@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Zi_oPUzvCDhRVSk4@rric.localdomain>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 29, 2024 at 08:34:37PM +0200, Robert Richter wrote:
-> After looking a while into it I think the issue was the following:
-> 
-> IBS offset was not enabled by firmware, but MCE already was (due to
-> earlier setup). And mce was (maybe) not on all cpus and only one cpu
-> per socket enabled. The IBS vector should be enabled on all cpus. Now
-> firmware allocated offset 1 for mce (instead of offset 0 as for
-> k8). This caused the hardcoded value (offset 1 for IBS) to be already
-> taken. Also, hardcoded values couldn't be used at all as this would
-> have not been worked on k8 (for mce). Another issue was to find the
-> next free offset as you couldn't examine just the current cpu. So even
-> if the offset on the current was available, another cpu might have
-> that offset already in use. Yet another problem was that programmed
-> offsets for mce and ibs overlapped each other and the kernel had to
-> reassign them (the ibs offset).
-> 
-> I hope a remember correctly here with all details.
+Uncorrected memory errors are signaled to processes using SIGBUS or an
+error retval from a syscall.  But there's a corner cases in execve where
+a SIGSEGV will be delivered.  Specifically this will happen if the binary
+loader triggers a memory error reading user pages.  The architecture's
+handler (MCE handler on x86) may queue a call to memory_failure but that
+won't run until the execve() returns.  The binary loader is called after
+bprm->point_of_no_return is set meaning that any error is handled by
+bprm_execve() with a SIGSEGV to the process.
 
-I think you're remembering it correct because after I read this, a very
-very old and dormant brain cell did light up in my head and said, oh
-yeah, that definitely rings a bell!
+To ensure it is terminated with a SIGBUS we 1. let pending work run in
+the bprm_execve error case.
 
-:-P
+And 2. ensure memory_failure() is passed MF_ACTION_REQUIRED so that the
+SIGBUS is queued.  Normally when the MCE is in a syscall, a fixup of
+return IP and a call to kill_me_never are enough.  But in this case
+it's necessary to queue kill_me_maybe() which will set
+MF_ACTION_REQUIRED.
 
-Yazen, this is the type of mess I was talking about.
+Reuse current->in_execve to make the decision.
 
+Signed-off-by: Andrew Zaborowski <andrew.zaborowski@intel.com>
+---
+ arch/x86/kernel/cpu/mce/core.c | 14 ++++++++++++++
+ fs/exec.c                      | 12 +++++++++---
+ include/linux/sched.h          |  2 +-
+ 3 files changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 84d41be6d06b..11effdff942c 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1593,6 +1593,20 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		else
+ 			queue_task_work(&m, msg, kill_me_maybe);
+ 
++	} else if (current->in_execve) {
++		/*
++		 * Cannot recover a task in execve() beyond point of no
++		 * return but stop further user memory accesses.
++		 */
++		if (m.kflags & MCE_IN_KERNEL_RECOV) {
++			if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
++				mce_panic("Failed kernel mode recovery", &m, msg);
++		}
++
++		if (!mce_usable_address(&m))
++			queue_task_work(&m, msg, kill_me_now);
++		else
++			queue_task_work(&m, msg, kill_me_maybe);
+ 	} else {
+ 		/*
+ 		 * Handle an MCE which has happened in kernel space but from
+diff --git a/fs/exec.c b/fs/exec.c
+index cf1df7f16e55..1bea9c252a11 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -67,6 +67,7 @@
+ #include <linux/time_namespace.h>
+ #include <linux/user_events.h>
+ #include <linux/rseq.h>
++#include <linux/task_work.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/mmu_context.h>
+@@ -1888,10 +1889,15 @@ static int bprm_execve(struct linux_binprm *bprm)
+ 	 * If past the point of no return ensure the code never
+ 	 * returns to the userspace process.  Use an existing fatal
+ 	 * signal if present otherwise terminate the process with
+-	 * SIGSEGV.
++	 * SIGSEGV.  Run pending work before that in case it is
++	 * terminating the process with a different signal.
+ 	 */
+-	if (bprm->point_of_no_return && !fatal_signal_pending(current))
+-		force_fatal_sig(SIGSEGV);
++	if (bprm->point_of_no_return) {
++		task_work_run();
++
++		if (!fatal_signal_pending(current))
++			force_fatal_sig(SIGSEGV);
++	}
+ 
+ 	sched_mm_cid_after_execve(current);
+ 	current->fs->in_exec = 0;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 3c2abbc587b4..8970a191d8fe 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -922,7 +922,7 @@ struct task_struct {
+ 	unsigned			sched_rt_mutex:1;
+ #endif
+ 
+-	/* Bit to tell TOMOYO we're in execve(): */
++	/* Bit to tell TOMOYO and x86 MCE code we're in execve(): */
+ 	unsigned			in_execve:1;
+ 	unsigned			in_iowait:1;
+ #ifndef TIF_RESTORE_SIGMASK
 -- 
-Regards/Gruss,
-    Boris.
+2.39.3
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
