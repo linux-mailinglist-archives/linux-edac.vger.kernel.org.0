@@ -1,84 +1,82 @@
-Return-Path: <linux-edac+bounces-1002-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1003-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5270D8BCCD1
-	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 13:28:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D8158BCD8B
+	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 14:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F7D2B20BD1
-	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 11:28:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F4411C2219D
+	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 12:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79AB4142E8B;
-	Mon,  6 May 2024 11:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C0D143892;
+	Mon,  6 May 2024 12:13:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLQ1AkOh"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="SexplnPz"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCC14EB2B;
-	Mon,  6 May 2024 11:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD55143895;
+	Mon,  6 May 2024 12:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714994877; cv=none; b=gLMg3wIDapNB61bohxVgCCg01lSgON712zq2cnmWeG4D6dYhrBcNcdj2j3V7LVCa0Et2gJ2b4EEIC68UVS5tCAuPvJp7oOqIGo7tCNJMjWOY8QdGnHynLgJYfjTnhOWLbXTz52PKK5KNcGKPL/SQD1s5qqf30QoXnaoM2esMDwQ=
+	t=1714997587; cv=none; b=BH/rFKxlgiwXkTCa14pfEedFwsvm/fIxJSCGEfPV7v3s/ioaqUbJ7IsVs0OcZmK65lzSEb7zOiufo/cPOEyyWytowjBvveXikza0lChhrCm+4CCoVhnDaSAHdPe+lakBPD+9kTdrnXo86/8i9vPUw+4IkPCaoGg28gafT0DmcAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714994877; c=relaxed/simple;
-	bh=TYa7LqFUn4O54qe0PJ9xUIdydNrTgl1lnBS2X3KM/9Q=;
+	s=arc-20240116; t=1714997587; c=relaxed/simple;
+	bh=JG4F5Vliq1cxbKJA3HniZ3sx6UHw/Yf2C1Q65sEsqrE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jd7OlchbsotdMGmZ+S02NsY5algOQMAyJ4BJBrI5gu8XG2+BxEYYMS4tLcxhr4R/3AsIA926/QvygroSy4RpY/sRELYotdbCgu1m/5pheo+IGJ47fHW5Hle6pyxafsT66pnKnvCqPNDD2mYKcEyfgFlO5yn82gchSU0Nooirv88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLQ1AkOh; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-51f300b318cso2124325e87.3;
-        Mon, 06 May 2024 04:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714994874; x=1715599674; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=98MA2KnZNukqEgivtO7pL7bJLRRsIxFS9OSQbEv7Vcs=;
-        b=dLQ1AkOhPmrADYd3WsEvky0BVxGW1Ot2kD4J0bZQwfg3DEg9W54u8RGUIqntm+UdWd
-         VKodVPzRG93dCiSFpZLWO9OSYau2A1Xps2VEfrGRJtpbpBM0YAVal7C+JJLJqb9t8/H+
-         zfgo+HZVb3GC8aulVihksMAYGHRlmpRuIvOJk1aiRjkevbtR29zY2QiES5IOBfZU86Q1
-         GMFpODmRv2N9pcHlMlrsk4hPpY//9Xey1m4OAbi/vrv8Kys/PJqcq2UB8zhDs13oMJ+t
-         eFuicBfW5uDsvOYpgAUBwASx58y8wZnq7wn4smosnWCeyfmGitZNsbQg/HtS3PbPSNHF
-         BOgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714994874; x=1715599674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=98MA2KnZNukqEgivtO7pL7bJLRRsIxFS9OSQbEv7Vcs=;
-        b=vHadb66uIAYw8EF1pwh5zzJdPM0leO02WLQkTGwkDO2Bvv7hbXaTsB5azb7dt27KnI
-         KIpsyInsGZACQv2S2/GCV8I+eCO1dGTK8AlJlvuNkhK6ZxAGWPkXq5rHx9fmpo7UsZB3
-         3AwpPoSi4zo+PpOC+NhPqD1/FyhKvMOJt7qfsNU5y8YvmKfH6chQzhzoDNLvsNAYRPFK
-         gbTj64iaYKAwCRz4E8SKeHTlWiQicLSknBo8mrWPSi0O8okmD14JkoUCVcGjLibDl7lc
-         +fuB6TmfHnrxg/ihdlF7yMpIOX82P0q3bWurzPFi54oGXGu1bakIBxsLl65GQQAP5VHR
-         uvKA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2wAfhdz9u1niMlXLLhqGMUGql8M025OfLDqA7Qbgi9akSPWti/rRry4EQgY3+xToilmJ+B3N88jMLMSZs3hE0IB0v6Sxw8MFdVW+R5VOOxqRTakt5/Kmeiid5RaRf30N6Mwqmkduqhg==
-X-Gm-Message-State: AOJu0YyVNEQExgX0eMZw1p7H9U45GJWSf65EkFA0YypsvUGiMlyM+fSR
-	p+l5hU4jv2+WbhbCDmhoWUfxyXv+qp0G+p3QTZkDt8gVeC2apOeX
-X-Google-Smtp-Source: AGHT+IGYR9rYJo2k5OgOsPl9WSRbVSU+FeAkCa2R7Yk80NbffyS5OzCW4i9hD486JQ1D9GgaSk9DNA==
-X-Received: by 2002:a05:6512:48c7:b0:51c:bf9f:ffb1 with SMTP id er7-20020a05651248c700b0051cbf9fffb1mr6070165lfb.34.1714994873758;
-        Mon, 06 May 2024 04:27:53 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id bp42-20020a05651215aa00b0051f131c08c4sm1645514lfb.183.2024.05.06.04.27.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 04:27:53 -0700 (PDT)
-Date: Mon, 6 May 2024 14:27:50 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Michal Simek <michal.simek@amd.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, Tony Luck <tony.luck@intel.com>, 
-	James Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Robert Richter <rric@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>, Borislav Petkov <bp@suse.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=noebAiBGYCFTTb7Lqw18RkxD7h3q71srMGz6IBwpebzGTMLubFHCYEWobhkThiMeqdqCFNw8H689W0fK4wqCjBWtpOFZM389Lr5EDnlf7u7WJ8Z+OxMoeHn/ik2kSdakgR4E9pIE439r95StSDt7DwO20BtQ8+SUf+g25t7yc8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=SexplnPz; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7971340E01E8;
+	Mon,  6 May 2024 12:13:02 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id rJfRrwpOcMj5; Mon,  6 May 2024 12:12:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1714997579; bh=/of+dyTW6UaI+A6BFaoUs57S0GorDUxHRqObed0VRzE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SexplnPzD845D+0w5+eP+0ESkaUvL6gUYWbrNRIpCCuz4OGDoKbSBa1Tu/U7Xbd+I
+	 mwlut2leWuEoIZU7PdPiKcwoRPab8QMn23dHrBAVLjwE8eA74TFlnAc7wBNiNB6HPn
+	 9oy2JEokTaIY0t11CKL0LVc/JcoKuz3grWqgS+wb6yuYUdhsZtuQ+rWYzhEWY4XhoA
+	 vRLFQByu9+kEWbrbVDJOlfMT4bIsw7cvJGH6S6MtrmuI/upRGNFFcjeUnbuLFD6Ret
+	 p6jBHz0AAt15YEKS+BRLe4wdGFnXXtC9Lmp4Bm9EGcZXWAnfgBWuIuPx56ftf4ZN4/
+	 EXcmUGX0krYdPVweESAWlAeU/nC2l0XHSMhqAg2hW2+Mjg8b6iGaT4GPbdADsglESU
+	 4gjakgghhzSTNU4JcIFOW5XtY3E/+oXc4cD/+YtjUsBJHOLKMxTKz9aAu26Kblqdk0
+	 UZwjxIAxh2nVBvqPuM1VLGGq//APBQc3oOj+Ulzni5YFNQ9pQ9AwJLvsnNMey7AL4b
+	 kwDmsMFt0eQS3y2fRS9LQvtpYlcEj/l22wa3qxIvysJy0Tu4HCUO5DI/YwbpZJScGo
+	 I1+DUWnLGNf2hXdU6etWiuJ1d8e3vOjO2/rlZ4LzmHFVqO5Zc4TpPkG5b493kkzehX
+	 gX6GyQCoALjr5JpNMGI1bXFQ=
+Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2CE9540E0187;
+	Mon,  6 May 2024 12:12:43 +0000 (UTC)
+Date: Mon, 6 May 2024 14:12:37 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Serge Semin <fancer.lancer@gmail.com>
+Cc: Michal Simek <michal.simek@amd.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>,
+	Borislav Petkov <bp@suse.de>
 Subject: Re: [PATCH v5 01/20] EDAC/synopsys: Fix ECC status data and IRQ
  disable race condition
-Message-ID: <vugkhnu5c7so7dk3z2cuhlbu66gv6skvicuseblrmkzyttnnlr@lqzqvysk6wbl>
+Message-ID: <20240506121237.GIZjjJNRhtixp7VVHl@fat_crate.local>
 References: <20240222181324.28242-1-fancer.lancer@gmail.com>
  <20240222181324.28242-2-fancer.lancer@gmail.com>
  <20240415183616.GDZh1zoFsBzvAEduRo@fat_crate.local>
@@ -86,86 +84,29 @@ References: <20240222181324.28242-1-fancer.lancer@gmail.com>
  <20240421100712.GAZiTlUOm1hrLQvaMi@fat_crate.local>
  <whgp2xx4dv3szezz3bvmgutgazz6kvie3q7rgpr35zqzuzsygk@wppqzusteru4>
  <20240506102029.GGZjiu7TKP9FVp-2Sb@fat_crate.local>
+ <vugkhnu5c7so7dk3z2cuhlbu66gv6skvicuseblrmkzyttnnlr@lqzqvysk6wbl>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240506102029.GGZjiu7TKP9FVp-2Sb@fat_crate.local>
+In-Reply-To: <vugkhnu5c7so7dk3z2cuhlbu66gv6skvicuseblrmkzyttnnlr@lqzqvysk6wbl>
 
-On Mon, May 06, 2024 at 12:20:29PM +0200, Borislav Petkov wrote:
-> On Thu, Apr 25, 2024 at 03:52:38PM +0300, Serge Semin wrote:
-> > Even if we get to add the spin-lock serializing the ECCCLR writes it
-> > won't solve the problem since the IRQ-disabler critical section could
-> > be executed a bit before the IRQ-handler critical section so the later
-> > one will just re-enable the IRQs disabled by the former one.
-> > 
-> > Here is what is suggested in my patch to fix the problem:
-> > 
-> >      IRQ-handler                        |    IRQ-disabler
-> >                                         |
-> > zynqmp_get_error_info:                  |
-> >                                         | lock_irqsave
-> >                                         | ECCCLR = 0; // disable IRQs
-> >                                         | unlock_irqrestore
-> >  lock_irqsave;                          |
-> >  tmp = ECCCLR | clear_sts_bits;         |
-> >  ECCCLR = tmp;                          |
-> >  unlock_irqrestore;                     |
-> 
+On Mon, May 06, 2024 at 02:27:50PM +0300, Serge Semin wrote:
+> Always welcome. Glad we've settled this.)
 
-> <--- I'm presuming here the IRQ-disabler will reenable interrupts at
-> some point?
-> 
-> Otherwise we have the same problem as before when interrupts remain off
-> after the IRQ handler has run.
+Yap, it looks good so far.
 
-In the sketch above the IRQ-disabler is the method which disables the
-IRQ in the concurrent manner. After my patch is applied the
-IRQ-handler will no longer touch the IRQ enable/disable bits, but will
-preserve them as is:
--       clearval = ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_CE_ERRCNT;
--       clearval |= ECC_CTRL_CLR_UE_ERR | ECC_CTRL_CLR_UE_ERRCNT;
-+       spin_lock_irqsave(&priv->reglock, flags);
-+
-+       clearval = readl(base + ECC_CLR_OFST) |
-+                  ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_CE_ERRCNT |
-+                  ECC_CTRL_CLR_UE_ERR | ECC_CTRL_CLR_UE_ERRCNT;
-        writel(clearval, base + ECC_CLR_OFST);
--       writel(0x0, base + ECC_CLR_OFST);
-+
-+       spin_unlock_irqrestore(&priv->reglock, flags);
+Lemme queue it into urgent and send it Linuswards soon-ish.
 
-Thus there won't be need in the IRQs re-enabling later in the handler:
+Thx.
 
-@@ -576,8 +601,6 @@ static irqreturn_t intr_handler(int irq, void *dev_id)
-        /* v3.0 of the controller does not have this register */
-        if (!(priv->p_data->quirks & DDR_ECC_INTR_SELF_CLEAR))
-                writel(regval, priv->baseaddr + DDR_QOS_IRQ_STAT_OFST);
--       else
--               enable_intr(priv);
+-- 
+Regards/Gruss,
+    Boris.
 
-So the only IRQ-disabler left in the driver - disable_intr() - will be
-called from the device/driver remove() function. The ECCCLR CSR access
-will be guarded with the spin-lock in the IRQ-disabler and in the
-IRQ-handler. So it will be safe to have them executed concurrently.
-
-> 
-> Other than that, yes, I see it, we will need the locking.
-> 
-> Thanks for elaborating.
-
-Always welcome. Glad we've settled this.)
-
--Serge(y)
-
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+https://people.kernel.org/tglx/notes-about-netiquette
 
