@@ -1,112 +1,177 @@
-Return-Path: <linux-edac+bounces-1003-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1004-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D8158BCD8B
-	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 14:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E7FE28BD1B7
+	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 17:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F4411C2219D
-	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 12:13:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 179FD1C21D85
+	for <lists+linux-edac@lfdr.de>; Mon,  6 May 2024 15:46:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C0D143892;
-	Mon,  6 May 2024 12:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86A171553A1;
+	Mon,  6 May 2024 15:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="SexplnPz"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ENp7PUsp"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2055.outbound.protection.outlook.com [40.107.92.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD55143895;
-	Mon,  6 May 2024 12:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714997587; cv=none; b=BH/rFKxlgiwXkTCa14pfEedFwsvm/fIxJSCGEfPV7v3s/ioaqUbJ7IsVs0OcZmK65lzSEb7zOiufo/cPOEyyWytowjBvveXikza0lChhrCm+4CCoVhnDaSAHdPe+lakBPD+9kTdrnXo86/8i9vPUw+4IkPCaoGg28gafT0DmcAY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714997587; c=relaxed/simple;
-	bh=JG4F5Vliq1cxbKJA3HniZ3sx6UHw/Yf2C1Q65sEsqrE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noebAiBGYCFTTb7Lqw18RkxD7h3q71srMGz6IBwpebzGTMLubFHCYEWobhkThiMeqdqCFNw8H689W0fK4wqCjBWtpOFZM389Lr5EDnlf7u7WJ8Z+OxMoeHn/ik2kSdakgR4E9pIE439r95StSDt7DwO20BtQ8+SUf+g25t7yc8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=SexplnPz; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7971340E01E8;
-	Mon,  6 May 2024 12:13:02 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id rJfRrwpOcMj5; Mon,  6 May 2024 12:12:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1714997579; bh=/of+dyTW6UaI+A6BFaoUs57S0GorDUxHRqObed0VRzE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SexplnPzD845D+0w5+eP+0ESkaUvL6gUYWbrNRIpCCuz4OGDoKbSBa1Tu/U7Xbd+I
-	 mwlut2leWuEoIZU7PdPiKcwoRPab8QMn23dHrBAVLjwE8eA74TFlnAc7wBNiNB6HPn
-	 9oy2JEokTaIY0t11CKL0LVc/JcoKuz3grWqgS+wb6yuYUdhsZtuQ+rWYzhEWY4XhoA
-	 vRLFQByu9+kEWbrbVDJOlfMT4bIsw7cvJGH6S6MtrmuI/upRGNFFcjeUnbuLFD6Ret
-	 p6jBHz0AAt15YEKS+BRLe4wdGFnXXtC9Lmp4Bm9EGcZXWAnfgBWuIuPx56ftf4ZN4/
-	 EXcmUGX0krYdPVweESAWlAeU/nC2l0XHSMhqAg2hW2+Mjg8b6iGaT4GPbdADsglESU
-	 4gjakgghhzSTNU4JcIFOW5XtY3E/+oXc4cD/+YtjUsBJHOLKMxTKz9aAu26Kblqdk0
-	 UZwjxIAxh2nVBvqPuM1VLGGq//APBQc3oOj+Ulzni5YFNQ9pQ9AwJLvsnNMey7AL4b
-	 kwDmsMFt0eQS3y2fRS9LQvtpYlcEj/l22wa3qxIvysJy0Tu4HCUO5DI/YwbpZJScGo
-	 I1+DUWnLGNf2hXdU6etWiuJ1d8e3vOjO2/rlZ4LzmHFVqO5Zc4TpPkG5b493kkzehX
-	 gX6GyQCoALjr5JpNMGI1bXFQ=
-Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2CE9540E0187;
-	Mon,  6 May 2024 12:12:43 +0000 (UTC)
-Date: Mon, 6 May 2024 14:12:37 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Serge Semin <fancer.lancer@gmail.com>
-Cc: Michal Simek <michal.simek@amd.com>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
-	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>,
-	Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH v5 01/20] EDAC/synopsys: Fix ECC status data and IRQ
- disable race condition
-Message-ID: <20240506121237.GIZjjJNRhtixp7VVHl@fat_crate.local>
-References: <20240222181324.28242-1-fancer.lancer@gmail.com>
- <20240222181324.28242-2-fancer.lancer@gmail.com>
- <20240415183616.GDZh1zoFsBzvAEduRo@fat_crate.local>
- <szcie4giwjykne4su6uu5wsmtsl3e3jd53rjfiwir6hm3ju7as@6eqh2xmj35ie>
- <20240421100712.GAZiTlUOm1hrLQvaMi@fat_crate.local>
- <whgp2xx4dv3szezz3bvmgutgazz6kvie3q7rgpr35zqzuzsygk@wppqzusteru4>
- <20240506102029.GGZjiu7TKP9FVp-2Sb@fat_crate.local>
- <vugkhnu5c7so7dk3z2cuhlbu66gv6skvicuseblrmkzyttnnlr@lqzqvysk6wbl>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C348002A;
+	Mon,  6 May 2024 15:46:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715010388; cv=fail; b=HwTbLWHgbDgicdjAGB4hKOVIXm++2M/3MjV+1SWom7GlwNWuTUcf56k34+Hvj8mbOC+q0N3LN6DddkUWhQ415BkttzkBAgwq+sxecAG68ya4nXxtWKMi7/1XwKHUkfaFYK4gJuAld6lHZ8ORvxL+xAJP9h+24rerEnNRykCOcJY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715010388; c=relaxed/simple;
+	bh=mUJi1OBGETCns/05GOpYSavqY2U7KlMdz4AGzBvDCQ0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D/Xl68nKUVqkMF5r5602BL36Co2zqhufR53s+JD/LDWhUy44q/GIOIV31QjIXB7TkrpaLpFfRgqnLSPmBhuNAj5Aj2n2Ja8K73hNJoclLCKtwv451H/k8WDfZnlvKYBAWVhj62KE1G/8UmFS/AhAvQhNhF6Bz7SKwJJuVGgDX5A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ENp7PUsp; arc=fail smtp.client-ip=40.107.92.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JqnZDLyc95DkmSLxVOWe6Au3TjN9SKtuNuAUg7RBqdpIydZIw1vazYSxkWrIrilK3WBfKv9VYHZkU3AHah5P/FjALzOAjnfMiWqgHgwIQLLb/kSBh7Wdf3CqXvGmf7VgttwtJWq9KpBTxVCOYN9adp70jYhuEeyKOdDI1ywtCtcParj1tU6cUIvLDsAmksS3y/QrXDQfxMvlWPw93VB5nnAZlLnK9uHZRaQxKvq7N7ok5Ri1sqLJ63TKthNt+qcdPRzpdue3TTIt/aN0vspxbO1ZaJl5HyM5S7kUZwfbNNiPYc8tunMqU9WbEaTle7vqj/Q/jnIBloFG3ngjYAzu/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n3JkJKMh+qRRJKCXkDMKFYu6EnJwxDOoF/I/goB5mZw=;
+ b=ocW0+epANfCZLs353KYqzwZJVVmEK+O2E/5jAPIOqUHQw5aa2pTtf30GQ8vGUanQ4+3VDJxosZSMDTM9u9DvCRxWh1nvHOC2Ss+PfF8YpcEpWVhObSzFiLE1a/2l7oODJ+hKOLrJ+u6EEjGtO4gnYPEsWPxBA9TLTQqJWtrw4ad1seFA/ipZIHfAl739IcdH3Nk2FehhFSU/pAUBN1A97Htv8qRXofOI9ZclQz/vbrj4N4MVy0aVXsNITlEEOftEuWydrxUn14B+5T/Si2OcsU3JCu1LAtTUndstJT7DK6phle017I9FgC4N0CcCC5ocgxgo3roaq6RD18uh0sDEPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n3JkJKMh+qRRJKCXkDMKFYu6EnJwxDOoF/I/goB5mZw=;
+ b=ENp7PUspqyRm1xvXsz4txvoAhU0/1C36nT1La4MdQjdvJ7WKo2l9Qh/Vpv0nHwy0YKvI2zAr6XPx94FeY3XmY1gg8XOG20tf2PE/pBYaG4OOIufUv9843+sWOTrcodpD4vf7kft/FnUknLmws728v3vckUmhdWfySKPbAj/j08w=
+Received: from SA0PR11CA0149.namprd11.prod.outlook.com (2603:10b6:806:131::34)
+ by PH7PR12MB7914.namprd12.prod.outlook.com (2603:10b6:510:27d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42; Mon, 6 May
+ 2024 15:46:20 +0000
+Received: from SA2PEPF00001507.namprd04.prod.outlook.com
+ (2603:10b6:806:131:cafe::a2) by SA0PR11CA0149.outlook.office365.com
+ (2603:10b6:806:131::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42 via Frontend
+ Transport; Mon, 6 May 2024 15:46:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SA2PEPF00001507.mail.protection.outlook.com (10.167.242.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7544.18 via Frontend Transport; Mon, 6 May 2024 15:46:20 +0000
+Received: from jallen-jump-host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 6 May
+ 2024 10:46:18 -0500
+From: John Allen <john.allen@amd.com>
+To: <bp@alien8.de>, <linux-edac@vger.kernel.org>, <tony.luck@intel.com>,
+	<yazen.ghannam@amd.com>
+CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
+	<muralidhara.mk@amd.com>, John Allen <john.allen@amd.com>
+Subject: [PATCH v4 0/4] RAS: ATL: DF 4.5 NP2 Denormalization
+Date: Mon, 6 May 2024 15:46:01 +0000
+Message-ID: <20240506154605.71814-1-john.allen@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <vugkhnu5c7so7dk3z2cuhlbu66gv6skvicuseblrmkzyttnnlr@lqzqvysk6wbl>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001507:EE_|PH7PR12MB7914:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e6f1e2e-bd9c-47b9-0aae-08dc6de3acd2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|36860700004|1800799015|82310400017|376005;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?6I/IzZRCZPE5Bxd9EylwTPtxtAC7v0V4kdOuz8Wya64GvBJ+hco0soZnOHBL?=
+ =?us-ascii?Q?+TK93cLJQB8k8tiJN8rsdQLog/mT5h99L9lNbfsbqVjzepiINQQbKVmQ6ERn?=
+ =?us-ascii?Q?gkschjw5cqOhSytv90NT4dxUyJKSUV8lnFdBScSnYlTnhTbmQ5Il8jW1q6by?=
+ =?us-ascii?Q?X3j38sBBgBTjUBI/9sTSq7xu5+fVposwqY2Tj/xMmbfxsbksiwIvvWZTCXvb?=
+ =?us-ascii?Q?MRH3WOPLd9bi6dT8w8NDnmE103NE2VYDkaOQg3BzgpQJZICT+yotXtBYAr8i?=
+ =?us-ascii?Q?eHIOYzuPsgdoOWaDHwE5Nt5XrBWs4IvtA2XIdv0Kbj5Ptw2fZUVSZ7Jx1PZr?=
+ =?us-ascii?Q?ejGWA/3NLB+W/X38zbKKpJZjCcGOPbiAtdvUSKe5mvy2F1Fn3veP8qxKXQNY?=
+ =?us-ascii?Q?al5FmK7p3tD7OXDtA/rz9xLed49wCH4kBkhDg2LA+F+vSfit+xUUSm3pbp/R?=
+ =?us-ascii?Q?95Mh5Zma9C9hZPySCSXk4YTYOc9MQE3NWOAdpl8UI885cDZkfQeYw9NCFElv?=
+ =?us-ascii?Q?n75kNFGqqCui9wOZ6adnDzqECTN6EbY2uHIhZtAPP5By7/1CYO6itOKQjw2A?=
+ =?us-ascii?Q?Y096rkELYhCQhDuBTuoKgk6zOAb9jwREPozcYd1vyZgZVS83bWWEDdTedFqa?=
+ =?us-ascii?Q?FWH+FugH9eBCgEZ2QkBH2taL0Zy/1akOmGKNvRI1MiUV0PzRLMbuYXkeHceg?=
+ =?us-ascii?Q?gSWo66MYgyQzTD401ZdGvs7YhNUcRQt0ikgt+VWDRicfVHeYX1jK/czqiq8c?=
+ =?us-ascii?Q?JLfnipTu1hBXwhlOgakePXXMYB4D/ktaxOMDo5Z+MqxRka1bKwah9HUa8nr8?=
+ =?us-ascii?Q?5eEfQFrlOGCib8tGjniilhu3A05TgEleqn95Ggc3ZPW2muVOZCJBHSdxD6gv?=
+ =?us-ascii?Q?pV1tCU0W/AasJVEjHxEHj558DpwIbnjDNuJMtVkWxAq/guM7vR8Nr/CR82J9?=
+ =?us-ascii?Q?7BXmYtFzrJ666LiK7+0rF6GUEA8VPVTtDuXRY+E38mRoDWN5bbJmDRZUB0MJ?=
+ =?us-ascii?Q?CTxj7KssqLiZe641ZcVjdpdFFdfFtr1CwJDZpXvXnWxGUsq6hpbidkvm41Yw?=
+ =?us-ascii?Q?AedVSAVVfebI9MvpBTglJtPdjRlYS5fuqg24yw+ZLLA9LqsULB/ipHHs7wo5?=
+ =?us-ascii?Q?DB3ZscrwmgRiY3xrfBnMic9VBrkgVPiVMgKbwRTczLn6vXi/DvfoksPmrIQY?=
+ =?us-ascii?Q?cQOm2RtGGrQw43O5U2cHUg6wLyeBRy6airtebZGZ4GC1J5Qlk1sE40QN5P3R?=
+ =?us-ascii?Q?hJ863TwD3YdY/WdlAR9ziqpNn5iVRoHoMyjb1Rr13WPgF3a87kVjom1Vc9LB?=
+ =?us-ascii?Q?feaoMyLsTX9/r33VmQth4rn+4L9lY/y4ZEBilnH+AbbLYlMZNjmr0XblVgcm?=
+ =?us-ascii?Q?wKwvZgbHoABRk9Ltig2/p5jzWgWn?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(1800799015)(82310400017)(376005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 15:46:20.3593
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e6f1e2e-bd9c-47b9-0aae-08dc6de3acd2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00001507.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7914
 
-On Mon, May 06, 2024 at 02:27:50PM +0300, Serge Semin wrote:
-> Always welcome. Glad we've settled this.)
+Implement non-power-of-two denormalization for Data Fabric 4.5 in the
+AMD address translation library.
 
-Yap, it looks good so far.
+Tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git
+Base commit:
+bd17b7c34fadef645becde1245b9394f69f31702
+(origin/edac-amd-atl)
 
-Lemme queue it into urgent and send it Linuswards soon-ish.
+v2:
+  - Fix compilation error.
+  - Make remove_base_and_hole the inverse of add_base_and_hole.
+  - Move all map validation checks to validate_address_map at the
+    beginning of translation
+v3:
+  - Fix bug where the legacy hole was not getting removed properly.
+  - Minor rework of functions for matching the normalized address and
+    logical cs fabric id.
+v4:
+  - Merge common cases in map validation function.
+  - Fix map validation for cases that don't have explicit checks.
 
-Thx.
+John Allen (4):
+  RAS/AMD/ATL: Read DRAM hole base early
+  RAS/AMD/ATL: Expand helpers for adding and removing base and hole
+  RAS/AMD/ATL: Validate address map when information is gathered
+  RAS/AMD/ATL: Implement DF 4.5 NP2 denormalization
+
+ drivers/ras/amd/atl/core.c        |  48 +--
+ drivers/ras/amd/atl/dehash.c      |  43 ---
+ drivers/ras/amd/atl/denormalize.c | 523 ++++++++++++++++++++++++++++++
+ drivers/ras/amd/atl/internal.h    |  45 +++
+ drivers/ras/amd/atl/map.c         |  97 ++++++
+ drivers/ras/amd/atl/system.c      |  21 ++
+ 6 files changed, 711 insertions(+), 66 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
