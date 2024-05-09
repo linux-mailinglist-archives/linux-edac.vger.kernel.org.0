@@ -1,152 +1,219 @@
-Return-Path: <linux-edac+bounces-1018-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1019-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E50E8C04F2
-	for <lists+linux-edac@lfdr.de>; Wed,  8 May 2024 21:26:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06DF48C0CD3
+	for <lists+linux-edac@lfdr.de>; Thu,  9 May 2024 10:51:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CE201F24709
-	for <lists+linux-edac@lfdr.de>; Wed,  8 May 2024 19:26:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 295ED1C21051
+	for <lists+linux-edac@lfdr.de>; Thu,  9 May 2024 08:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B43A130A51;
-	Wed,  8 May 2024 19:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11BC14A09F;
+	Thu,  9 May 2024 08:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fx6/uGoa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RMyNR/Ec"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E4839AD6;
-	Wed,  8 May 2024 19:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FB2128396;
+	Thu,  9 May 2024 08:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715196403; cv=none; b=Vy2oDGxnc8G9xOw0bwoNXEenDhIimRXUWqGx2zv8p47/WkXEmwgtVopCadejdkcIRmmWhsxW9UXVuUiRgmuTYSW8zhgfP0fs05imOK3kKyJcnGIE0iyPlANBLuGwCkX+mcvf5NF60B1WYM+bDNqlt/faFPyLu0vGXYwNi22yE6g=
+	t=1715244684; cv=none; b=kHwplKIhuX6UJmPrGW1bj1WJqISoY2QgMQJ6U0Mr7jpgPVOCSeLcqD0SlS+7zeaSPAlWpeiQXA0Iah/cS5C7svYjXBmdPBVzGmGTFcwQlUs77HKAE8Sr8V9NWhAGCkr/6FjDL7IId3n7BwjT8bcf6AMIsITWj2axU+yvlsp46MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715196403; c=relaxed/simple;
-	bh=AQ4aj6+Lyl30KBT589y0Wg9owBgdJw7PaStUeDorEOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CIfZGCUBroqe8ggeWgXYQwzn5pVpGEdiM5cvBBi3Wa2juUQtQRBsjJ+0td8XZRg12LlpzCDowkE7Xfpuv48b1wxXeZOJRmu5x47quoh/BnwtEtLmXAKyeBbrWPcgPG1LNnd+KUFwbbNWbYiHYVGvLTefN932Pz7dZfiZf2gFCAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fx6/uGoa; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7D6BC40E0177;
-	Wed,  8 May 2024 19:26:37 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id FJBrvZdqr9td; Wed,  8 May 2024 19:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1715196394; bh=MmARqp4eGq04zOmDOAjY3swGyB0SboUexwrUO+pYtb0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fx6/uGoa2vQ7dKihmWFq8nD+Z7Wd+e9d/4odS4YYXLjbSee3L+gS6hSdpGMC4UQMu
-	 aqCpPUpuCkFK2/uubhzOWl1CnYB4wCz2aeD8RgqUEfO16eWC0hWu9wSx7T48I7XSGt
-	 nXesYrDt48iheoRGqCESLoUTOKf6BL8qh87w1ViWwttCPP+chEYhkc5U1L25f+7je7
-	 n91teh1XUP8tuTlH+udSxGMS0QmC/nGr8vgXTAtJy0DNeG1y8kkev3ZS9s7IidWXGN
-	 TW0Fk6Mj1el9/f049O5DwZmq1zEoz6yl7t49yocPaf0ilbbxqG+DuzCcFLDAwP3e4k
-	 eLU/02AS8X76gLrPv+ZdqC6iDZsar/B9qWiiXwKO7B3wXaQVBGXa3GwZ69iAX/7wH6
-	 tr+s75mn6L050ZWYGRnUjsENqEtqWK+VXifF15RP0na4dC00Z+aoxMFUpLavKBA7M9
-	 b25V9A8dCTJhew6e60OiD2d+5QdVlZ+p/eS/2h58MArcaxAuTSd61UxkVC57O7NmtY
-	 XxkQtXWTVnk3/0MCmsXDxu1khQM99af0zaHJQzAEOTNdjaXS1jVCez2s9/UPxlPdwD
-	 DThHPSggIeJJY1FAddNQkYuDNe+Pwp2nXHB/fDs9rrESC7mNy6QZ/rE9xaTys4edad
-	 d+KdXyZpBf72VCLFq0CV0IYE=
-Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C481F40E01A3;
-	Wed,  8 May 2024 19:25:51 +0000 (UTC)
-Date: Wed, 8 May 2024 21:25:46 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Shiju Jose <shiju.jose@huawei.com>
-Cc: "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-	"dave@stgolabs.net" <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	"dave.jiang@intel.com" <dave.jiang@intel.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-	"ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"david@redhat.com" <david@redhat.com>,
-	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
-	"leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
-	"rientjes@google.com" <rientjes@google.com>,
-	"jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"tony.luck@intel.com" <tony.luck@intel.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
-	"erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>,
-	"mike.malvestuto@intel.com" <mike.malvestuto@intel.com>,
-	"gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
-	tanxiaofei <tanxiaofei@huawei.com>,
-	"Zengtao (B)" <prime.zeng@hisilicon.com>,
-	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
-	wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: Re: [RFC PATCH v8 01/10] ras: scrub: Add scrub subsystem
-Message-ID: <20240508192546.GHZjvRuvtu0XSJbkmz@fat_crate.local>
-References: <20240419164720.1765-1-shiju.jose@huawei.com>
- <20240419164720.1765-2-shiju.jose@huawei.com>
- <20240425101542.GAZiotThrq7bOE9Ieb@fat_crate.local>
- <63fdbe26b51f4b7c859bfb30287c8673@huawei.com>
- <20240506103014.GHZjixNhhFkgkMhDg_@fat_crate.local>
- <e0ce36eb80054440ab877ccee4e606de@huawei.com>
- <20240508172002.GGZju0QvNfjB7Xm6qL@fat_crate.local>
- <4ceb38897d854cc095fca1220d49a4d2@huawei.com>
+	s=arc-20240116; t=1715244684; c=relaxed/simple;
+	bh=UuNlm3kDCVruMLI+aaRK5geLMaD9c7v7/gptoRxJydY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=h8hcvvW+ThRUAnkPdSGOkV7OWLzrn1qkWppvZjwLC+Zs8xMPubIN24DrX08mhT0pLop8KrJE9aZdRWIWBmWhGllOAWxZ1n/tyn8tlcTIAEGlKDmGXP5XZJLqI1VZrBtIMfBND+sBucFF0r9TbxyhZE2x7JOd5RtscmeJdOd8f04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RMyNR/Ec; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715244682; x=1746780682;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UuNlm3kDCVruMLI+aaRK5geLMaD9c7v7/gptoRxJydY=;
+  b=RMyNR/EcVFQOxXyLFLRmBurfxGOC8YkGdVZ1LAonFcHqAHwJ8r2Lzq8d
+   e9n3Uu/FsBO8zxXtL5fFDBzXGQWT1om9bEeEcFyHjBxRl0nsvP9IbmwMQ
+   2hVepN1FkUb0biScrIgm8KJih6waZagSwbF+Nbci9r9+Vd9K+miFxzao1
+   NdnApebteGmI4Cr/I5njbSdJAUCp+4thgt+QZiaaVvMWFx7xZE/7hKAsa
+   T++SUQ0BGEYpjYau7xQiXV3vfEbm6J9wYAl4i0JKQug/Q3yD8spTCY5Xm
+   rMiESZ22if64vrJO8yqYTuDycZY5s3mVHh5USxLUfbfUr3Qb1K9gk1q3W
+   A==;
+X-CSE-ConnectionGUID: Q6Yonj0MQHCS+l+XbYm81Q==
+X-CSE-MsgGUID: +ANTXSGVQzO1UH5wRBMG/Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11067"; a="14103950"
+X-IronPort-AV: E=Sophos;i="6.08,147,1712646000"; 
+   d="scan'208";a="14103950"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 01:51:21 -0700
+X-CSE-ConnectionGUID: 6b+qMRU8QoKFRQ8UJLIHDw==
+X-CSE-MsgGUID: yt2Ktp1zSJqdCQpMpq1diw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,147,1712646000"; 
+   d="scan'208";a="29060665"
+Received: from unknown (HELO SPR-S2600BT.bj.intel.com) ([10.240.192.124])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 01:51:14 -0700
+From: Zhenzhong Duan <zhenzhong.duan@intel.com>
+To: linux-pci@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org,
+	linux-acpi@vger.kernel.org,
+	rafael@kernel.org,
+	lenb@kernel.org,
+	james.morse@arm.com,
+	tony.luck@intel.com,
+	bp@alien8.de,
+	dave@stgolabs.net,
+	jonathan.cameron@huawei.com,
+	dave.jiang@intel.com,
+	alison.schofield@intel.com,
+	vishal.l.verma@intel.com,
+	ira.weiny@intel.com,
+	bhelgaas@google.com,
+	helgaas@kernel.org,
+	mahesh@linux.ibm.com,
+	oohall@gmail.com,
+	linmiaohe@huawei.com,
+	shiju.jose@huawei.com,
+	adam.c.preble@intel.com,
+	lukas@wunner.de,
+	Smita.KoralahalliChannabasappa@amd.com,
+	rrichter@amd.com,
+	linux-cxl@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	erwin.tsaur@intel.com,
+	sathyanarayanan.kuppuswamy@intel.com,
+	dan.j.williams@intel.com,
+	feiting.wanyan@intel.com,
+	yudong.wang@intel.com,
+	chao.p.peng@intel.com,
+	qingshun.wang@linux.intel.com,
+	Zhenzhong Duan <zhenzhong.duan@intel.com>
+Subject: [PATCH v4 0/3] PCI/AER: Handle Advisory Non-Fatal error
+Date: Thu,  9 May 2024 16:48:30 +0800
+Message-Id: <20240509084833.2147767-1-zhenzhong.duan@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4ceb38897d854cc095fca1220d49a4d2@huawei.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 08, 2024 at 05:44:03PM +0000, Shiju Jose wrote:
-> I mean scrub subsystem module is not loaded and initialzed until
-> a dependent  device module is loaded and a device does not get
-> registered with the scrub subsystem on a machine which doesn't have
-> the corresponding scrub features.
+Hi,
 
-Stop this rambling blabla please. This should *not* happen:
+This is a relay work of Qingshun's v2 [1], but changed to focus on ANFE
+processing as subject suggests and drops trace-event for now. I think it's
+a bit heavy to do extra IOes to get PCIe registers only for trace purpose
+and not see it a community request for now.
 
-# insmod ./memory_scrub.ko
-# echo $?
-0
-# lsmod
-Module                  Size  Used by
-memory_scrub           12288  0
+According to PCIe Base Specification Revision 6.1, Sections 6.2.3.2.4 and
+6.2.4.3, certain uncorrectable errors will signal ERR_COR instead of
+ERR_NONFATAL, logged as Advisory Non-Fatal Error(ANFE), and set bits in
+both Correctable Error(CE) Status register and Uncorrectable Error(UE)
+Status register. Currently, when handling AER events the kernel will only
+look at CE status or UE status, but never both. In the ANFE case, bits set
+in the UE status register will not be reported and cleared until the next
+FE/NFE arrives.
 
-This is on a silly guest which has none of those dependent devices crap.
+For instance, previously, when the kernel receives an ANFE with Poisoned
+TLP in OS native AER mode, only the status of CE will be reported and
+cleared:
 
-Your scrub module should load only on a machine which has the hardware
-- not just for fun and on anything.
+  AER: Correctable error message received from 0000:b7:02.0
+  PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00002000/00000000
+     [13] NonFatalErr
+
+If the kernel receives a Malformed TLP after that, two UEs will be
+reported, which is unexpected. The Malformed TLP Header is lost since
+the previous ANFE gated the TLP header logs:
+
+  PCIe Bus Error: severity="Uncorrectable (Fatal), type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00041000/00180020
+     [12] TLP                    (First)
+     [18] MalfTLP
+
+To handle this case properly, calculate potential ANFE related status bits
+and save in aer_err_info. Use this information to determine the status bits
+that need to be cleared.
+
+Now, for the previous scenario, both CE status and related UE status will
+be reported and cleared after ANFE:
+
+  AER: Correctable error message received from 0000:b7:02.0
+  PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00002000/00000000
+     [13] NonFatalErr
+    Uncorrectable errors that may cause Advisory Non-Fatal:
+     [18] TLP
+
+Note:
+checkpatch.pl will produce following warnings on PATCH2/3:
+
+WARNING: 'UE' may be misspelled - perhaps 'USE'?
+#22:
+uncorrectable error(UE) status should be cleared. However, there is no
+
+...similar warnings omitted...
+
+This is a false-positive, so not fixed.
+
+WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit description?)
+#10:
+  PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
+
+...similar warnings omitted...
+
+For readability reasons, these warnings are not fixed.
+
+
+
+[1] https://lore.kernel.org/linux-pci/20240125062802.50819-1-qingshun.wang@linux.intel.com
+
+Thanks
+Qingshun, Zhenzhong
+
+Changelog:
+v4:
+  - Fix a race in anfe_get_uc_status() (Jonathan)
+  - Add a comment to explain side effect of processing ANFE as NFE (Jonathan)
+  - Drop the check for PCI_EXP_DEVSTA_NFED
+
+v3:
+  - Split ANFE print and processing to two patches (Bjorn)
+  - Simplify ANFE handling, drop trace event
+  - Polish comments and patch description
+  - Add Tested-by
+
+v2:
+  - Reference to the latest PCIe Specification in both commit messages
+    and comments, as suggested by Bjorn Helgaas.
+  - Describe the reason for storing additional information in
+    aer_err_info in the commit message of PATCH 1, as suggested by Bjorn
+    Helgaas.
+  - Add more details of behavior changes in the commit message of PATCH
+    2, as suggested by Bjorn Helgaas.
+
+v3: https://lore.kernel.org/lkml/20240417061407.1491361-1-zhenzhong.duan@intel.com
+v2: https://lore.kernel.org/linux-pci/20240125062802.50819-1-qingshun.wang@linux.intel.com
+v1: https://lore.kernel.org/linux-pci/20240111073227.31488-1-qingshun.wang@linux.intel.com
+
+Zhenzhong Duan (3):
+  PCI/AER: Store UNCOR_STATUS bits that might be ANFE in aer_err_info
+  PCI/AER: Print UNCOR_STATUS bits that might be ANFE
+  PCI/AER: Clear UNCOR_STATUS bits that might be ANFE
+
+ drivers/pci/pci.h      |  1 +
+ drivers/pci/pcie/aer.c | 75 +++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 75 insertions(+), 1 deletion(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
