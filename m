@@ -1,161 +1,117 @@
-Return-Path: <linux-edac+bounces-1034-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1039-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31FD08C2340
-	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 13:25:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE9938C251E
+	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 14:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6B0B284411
-	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 11:25:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C3341F21910
+	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 12:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39E1B16E893;
-	Fri, 10 May 2024 11:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2D8127B66;
+	Fri, 10 May 2024 12:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="OovjXAU7"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5782116EC0C;
-	Fri, 10 May 2024 11:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD54D376;
+	Fri, 10 May 2024 12:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715340220; cv=none; b=sAP2i8NS4MwfD+GSwuxEQgC/XLzfMoKjHy5RcRSIzsoJBjputbpZaRVKb3NFvdkVFiqR8yg19EDRCyA5gdpGmtcDAgFD6k52u8vjXZjXW1JEu/ABCKimZVH3yupENyGW4vPKw9h+gQlED8xji8RtMu03Y36djILb49bUtFArkY4=
+	t=1715345557; cv=none; b=t+EbtiDWEXjjI349Rj+3H49tT4UUa2oTRuIQrDK4o8Z33HB6Yet6ywIyuO+8RR9mQQks4vUUNFMp9JZKXktp8WAP8pkTKJNNGT+8S6Vij2Vj1nQuSPLRCY8mdCrAtwLb3poLTx1hvOxy2SxrTbGFHMe7yW6bHB1maw5rGzXPMRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715340220; c=relaxed/simple;
-	bh=Lno1tWiY1+h5kAeqlxDHiicLEPlL2vfS2TjNN2jg2h4=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BtFWesmlfsBhvU7DA750OWaCyfx3mC5FZcqL5bo1atlSqV4pKbJq+jKxhjT9xg8IwMsZiUcRBsi4s7zdNy5nevnfD8nGEd9cv6ByHHzA2Rzs/4jzxb0yI1rH3ofnzuP2PSClDqRcxkZQVaow6lfpsoJSDFL57glMNnWIrzf/dAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VbRM36936z6K9R3;
-	Fri, 10 May 2024 19:22:55 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id EF1A1140A77;
-	Fri, 10 May 2024 19:23:27 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 10 May
- 2024 12:23:27 +0100
-Date: Fri, 10 May 2024 12:23:25 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Dan Williams <dan.j.williams@intel.com>
-CC: <shiju.jose@huawei.com>, <linux-cxl@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>, <dave@stgolabs.net>,
-	<dave.jiang@intel.com>, <alison.schofield@intel.com>,
-	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<david@redhat.com>, <Vilas.Sridharan@amd.com>, <leo.duran@amd.com>,
-	<Yazen.Ghannam@amd.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
-	<tony.luck@intel.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
-	<rafael@kernel.org>, <lenb@kernel.org>, <naoya.horiguchi@nec.com>,
-	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
-	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
-	<mike.malvestuto@intel.com>, <gthelen@google.com>,
-	<wschwartz@amperecomputing.com>, <dferguson@amperecomputing.com>,
-	<wbs@os.amperecomputing.com>, <nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>,
-	<prime.zeng@hisilicon.com>, <kangkang.shen@futurewei.com>,
-	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [RFC PATCH v8 05/10] cxl/memscrub: Add CXL device patrol scrub
- control feature
-Message-ID: <20240510122325.00005e83@Huawei.com>
-In-Reply-To: <663d69c61db8c_3d7b4294e0@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-References: <20240419164720.1765-1-shiju.jose@huawei.com>
-	<20240419164720.1765-6-shiju.jose@huawei.com>
-	<663d69c61db8c_3d7b4294e0@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1715345557; c=relaxed/simple;
+	bh=pDwlZWiIXP/ed5ZKK47iOK1IxJybI7zmM6gq7+VyleA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F2iAirbzvWVWeTWqUZqWGgfrvduogdEswF9MY5CKYzUmwAxjNwtH/qr+vooQeuPJg3YRgamZ7AWCJsqrz3cZA3HO+A4Mi5gx1BMWUynZVRc10A2qdSPlXLC+OQwEycJpxR7clzhbts47a4Fy4RkIXjRHX+0Dbmqgoq+MQnHp0Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=OovjXAU7; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 53F7D40E024C;
+	Fri, 10 May 2024 12:52:31 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 2geoQ1AAp8Ho; Fri, 10 May 2024 12:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1715345548; bh=vXXmcFqFduUzeShgTnzVQzbxh5p2i8qrDyrsMQmHWzc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OovjXAU7Fg8DyDHu6YjJN7KRin/dtzIfRaoaKpuXQ/vPijUDDJkjaMa5xs9UTsnf7
+	 +vHBIVa0kRqXkutRpOBjlNKq8shi9kLA1spCHWB9LQEyyF2fpWA9OoZ49sFq4j/e2A
+	 c3j3dinA5cFSC3zTdnNHDErwZepu1iwWo4UpzqDpcyKBAsXaNsKexKSXPhC38MXcc7
+	 uSRJtvoGLZLb+58Mnl3NLfu3VlHkLFA1xUh3uJ5xSPlXwHe1JBGQkjXgbb4Q6c5437
+	 cRrIOH3dUItgtlv58Y0piJKXGEEdvh97LkqNGyC/JJPX40kDkDyeqqW7njICYwdccI
+	 p8SBeti0ChQe1MRcjo8kJbjcOI5QhnY/1RWGyRJGtNQ8MHqxMs+B9DYFtFt4CJEvlx
+	 XKK0/6KKCVQacpx3nvj/3NkKuj+mWsZ0NPQTxQb5qzWpLKZjSoSaSehqhgTFc9f72l
+	 VZhLjFHAWnnwjMIXd51wuOR4SIUB0WPm7OWHfK8+IkmMpSFYzX376eV0BSMNuWKjrZ
+	 Vp/n/I5TzLa7Mx78oFkhN2jJ1vtaA4arKEkymaL4b63DCzlgoX7sJzjMAndgwzKl4M
+	 XHVzNKM1IIyMUNMQYqvOso4Hlw+1JaEpmgJ5QE9vUxIkSxT7FpZeY9ARiWjURsMkgc
+	 QmsLuWeC4dc87PhPGOkmwq/8=
+Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1ED5B40E0187;
+	Fri, 10 May 2024 12:52:20 +0000 (UTC)
+Date: Fri, 10 May 2024 14:52:14 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Tony Luck <tony.luck@intel.com>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH v2 3/3] ACPI: extlog: Make print_extlog_rcd() log
+ unconditionally
+Message-ID: <20240510125214.GCZj4YfluoP-mDz3_U@fat_crate.local>
+References: <20240510112740.667445-1-fabio.m.de.francesco@linux.intel.com>
+ <20240510112740.667445-4-fabio.m.de.francesco@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240510112740.667445-4-fabio.m.de.francesco@linux.intel.com>
 
-On Thu, 9 May 2024 17:26:46 -0700
-Dan Williams <dan.j.williams@intel.com> wrote:
+On Fri, May 10, 2024 at 01:21:47PM +0200, Fabio M. De Francesco wrote:
+> Make extlog_print_rcd() log unconditionally to report errors even if
+> userspace is not consuming trace events. Remove ras_userspace_consumers()
+> because it is not anymore used.
 
-> shiju.jose@ wrote:
-> > From: Shiju Jose <shiju.jose@huawei.com>
-> > 
-> > CXL spec 3.1 section 8.2.9.9.11.1 describes the device patrol scrub control
-> > feature. The device patrol scrub proactively locates and makes corrections
-> > to errors in regular cycle.
-> > 
-> > Allow specifying the number of hours within which the patrol scrub must be
-> > completed, subject to minimum and maximum limits reported by the device.
-> > Also allow disabling scrub allowing trade-off error rates against
-> > performance.
-> > 
-> > Register with scrub subsystem to provide scrub control attributes to the
-> > user.
-> > 
-> > Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>  
-> [..]
-> > diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> > index 0c79d9ce877c..399e43463626 100644
-> > --- a/drivers/cxl/mem.c
-> > +++ b/drivers/cxl/mem.c
-> > @@ -117,6 +117,12 @@ static int cxl_mem_probe(struct device *dev)
-> >  	if (!cxlds->media_ready)
-> >  		return -EBUSY;
-> >  
-> > +	rc = cxl_mem_patrol_scrub_init(cxlmd);
-> > +	if (rc) {
-> > +		dev_dbg(&cxlmd->dev, "CXL patrol scrub init failed\n");
-> > +		return rc;
-> > +	}  
-> 
-> 2 concerns:
-> 
-> * Why should cxl_mem_probe() fail just because this optional
->   scrub interface did not register?
-> 
+Did you do any git archeology before that?
 
-Flip the dev_dbg to dev_warn() and indeed carry on.
+d6cae935ec5b ("trace, eMCA: Add a knob to adjust where to save event log")
 
-> * Why is this not located in cxl_region_probe()? If the ras2 scrub is an
->   HPA-based scrub I think CXL should do the work to interface with the scrub
->   interface at the same level. This also provides another in-kernel user
->   for all the DPA-to-HPA translation infrastructure that the CXL driver
->   contains. Pretty much the only reason the CXL driver needs to exist at
->   all is address translation, so at a minimum it seems a waste to inflict
->   more need to understand DPAs on userspace.
+I can't find in this commit message why this is needed... Do share pls.
 
-As you might expect this will get messy - I'm not saying it's a bad thing
-to do, but complexities that come to mind include:
+> This change makes extlog_print() (ELOG) log consistently with ghes_proc()
+> (GHES).
 
-* Scrub is device wide (unlike RAS2 which in theory supports HPA range control)
-  So if you map a given DPA range into multiple regions then the controls
-  will interfere.  Maybe scrub at max rate requested for any region is fine.
-* Interleave - so we'd be controlling multiple hardware scrubbers.
-* Comes and goes with regions.  Do we stop scrubbing if no region?  Not sure.
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
 
-My guess is break down is:
-1) Component registered for each CXL mem device to handle the control + combining
-   of all regions specific requests.
-2) Region specific component that exposes the controls on HPA basis, and
-   requests from all it's CXL mem device drivers a minimum service level.
-3) Device specific scrub instance (perhaps) reflecting that some scrub may
-   make sense when not yet in a region (identify bad mem etc).
+Also, do
 
-So I think we will end up with a lot more layering in here, but end result
-will indeed be better.
+$ git grep 'This patch' Documentation/process
 
-This has been going on a while, so not sure the DPA to HPA stuff was all in place
-and at the time I think was still an open question of whether that should be
-a userspace problem or not.  Anyhow time to adapt :)
+for more details.
 
-Jonathan
+Pls have a look at our documentation and check all your patches.
 
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
