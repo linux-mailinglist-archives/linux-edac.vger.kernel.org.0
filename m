@@ -1,117 +1,135 @@
-Return-Path: <linux-edac+bounces-1039-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1040-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE9938C251E
-	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 14:52:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74A7D8C25CB
+	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 15:31:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C3341F21910
-	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 12:52:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A8E31F21D8A
+	for <lists+linux-edac@lfdr.de>; Fri, 10 May 2024 13:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2D8127B66;
-	Fri, 10 May 2024 12:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="OovjXAU7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D8A12C47D;
+	Fri, 10 May 2024 13:31:49 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD54D376;
-	Fri, 10 May 2024 12:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA173127E18;
+	Fri, 10 May 2024 13:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715345557; cv=none; b=t+EbtiDWEXjjI349Rj+3H49tT4UUa2oTRuIQrDK4o8Z33HB6Yet6ywIyuO+8RR9mQQks4vUUNFMp9JZKXktp8WAP8pkTKJNNGT+8S6Vij2Vj1nQuSPLRCY8mdCrAtwLb3poLTx1hvOxy2SxrTbGFHMe7yW6bHB1maw5rGzXPMRY=
+	t=1715347909; cv=none; b=XbBiuOYDBvftRKYTEsQM7xrRtcR+zcibP8keAHltVmx5Jf/k9QSRHgXPzqrQ8rVL/KlM4u3AWZd0HyB1TlA69PsTbKIAdp7lDM98vdtutHMUQiRvnjP0YhZeoflpxJX7wiBgbL2dIsxqQCfZiHrZZOmKrFdFa8nhCchOx7X9N2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715345557; c=relaxed/simple;
-	bh=pDwlZWiIXP/ed5ZKK47iOK1IxJybI7zmM6gq7+VyleA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F2iAirbzvWVWeTWqUZqWGgfrvduogdEswF9MY5CKYzUmwAxjNwtH/qr+vooQeuPJg3YRgamZ7AWCJsqrz3cZA3HO+A4Mi5gx1BMWUynZVRc10A2qdSPlXLC+OQwEycJpxR7clzhbts47a4Fy4RkIXjRHX+0Dbmqgoq+MQnHp0Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=OovjXAU7; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 53F7D40E024C;
-	Fri, 10 May 2024 12:52:31 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 2geoQ1AAp8Ho; Fri, 10 May 2024 12:52:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1715345548; bh=vXXmcFqFduUzeShgTnzVQzbxh5p2i8qrDyrsMQmHWzc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OovjXAU7Fg8DyDHu6YjJN7KRin/dtzIfRaoaKpuXQ/vPijUDDJkjaMa5xs9UTsnf7
-	 +vHBIVa0kRqXkutRpOBjlNKq8shi9kLA1spCHWB9LQEyyF2fpWA9OoZ49sFq4j/e2A
-	 c3j3dinA5cFSC3zTdnNHDErwZepu1iwWo4UpzqDpcyKBAsXaNsKexKSXPhC38MXcc7
-	 uSRJtvoGLZLb+58Mnl3NLfu3VlHkLFA1xUh3uJ5xSPlXwHe1JBGQkjXgbb4Q6c5437
-	 cRrIOH3dUItgtlv58Y0piJKXGEEdvh97LkqNGyC/JJPX40kDkDyeqqW7njICYwdccI
-	 p8SBeti0ChQe1MRcjo8kJbjcOI5QhnY/1RWGyRJGtNQ8MHqxMs+B9DYFtFt4CJEvlx
-	 XKK0/6KKCVQacpx3nvj/3NkKuj+mWsZ0NPQTxQb5qzWpLKZjSoSaSehqhgTFc9f72l
-	 VZhLjFHAWnnwjMIXd51wuOR4SIUB0WPm7OWHfK8+IkmMpSFYzX376eV0BSMNuWKjrZ
-	 Vp/n/I5TzLa7Mx78oFkhN2jJ1vtaA4arKEkymaL4b63DCzlgoX7sJzjMAndgwzKl4M
-	 XHVzNKM1IIyMUNMQYqvOso4Hlw+1JaEpmgJ5QE9vUxIkSxT7FpZeY9ARiWjURsMkgc
-	 QmsLuWeC4dc87PhPGOkmwq/8=
-Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1ED5B40E0187;
-	Fri, 10 May 2024 12:52:20 +0000 (UTC)
-Date: Fri, 10 May 2024 14:52:14 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-	Tony Luck <tony.luck@intel.com>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [RFC PATCH v2 3/3] ACPI: extlog: Make print_extlog_rcd() log
- unconditionally
-Message-ID: <20240510125214.GCZj4YfluoP-mDz3_U@fat_crate.local>
-References: <20240510112740.667445-1-fabio.m.de.francesco@linux.intel.com>
- <20240510112740.667445-4-fabio.m.de.francesco@linux.intel.com>
+	s=arc-20240116; t=1715347909; c=relaxed/simple;
+	bh=QDeUIilVTn4GdjQ9ikQzbhB+jiyiep3X6WCQDzncYZI=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VWHJSuyLO1MdCu0b3cKrfeWJwIMB0gC4PKH+Qi/AjqVPm1m7JpFC1JwTnr0lD2pFtrgs/Rv0LGkDvrdPhr49tQ0LxoMa5JKJIBvp2klOgSO1mi22SS9OQq44YG9C3W93xYOXRr4RFMSskk1eHFsfDcQBjWWw0lVB6ppJ/mbpT0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VbV7z4xFKz6K5ks;
+	Fri, 10 May 2024 21:28:31 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id C21D61400D4;
+	Fri, 10 May 2024 21:31:43 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 10 May
+ 2024 14:31:42 +0100
+Date: Fri, 10 May 2024 14:31:41 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: Shiju Jose <shiju.jose@huawei.com>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"dan.j.williams@intel.com" <dan.j.williams@intel.com>, "dave@stgolabs.net"
+	<dave@stgolabs.net>, "dave.jiang@intel.com" <dave.jiang@intel.com>,
+	"alison.schofield@intel.com" <alison.schofield@intel.com>,
+	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>, "ira.weiny@intel.com"
+	<ira.weiny@intel.com>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "david@redhat.com" <david@redhat.com>,
+	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>, "leo.duran@amd.com"
+	<leo.duran@amd.com>, "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
+	<jiaqiyan@google.com>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "mike.malvestuto@intel.com"
+	<mike.malvestuto@intel.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>, wanghuiqiang
+	<wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Jean Delvare
+	<jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Dmitry Torokhov
+	<dmitry.torokhov@gmail.com>
+Subject: Re: [RFC PATCH v8 01/10] ras: scrub: Add scrub subsystem
+Message-ID: <20240510143141.000042da@Huawei.com>
+In-Reply-To: <D9511DC1-1566-473A-A426-111BB1F7F9F0@alien8.de>
+References: <20240419164720.1765-1-shiju.jose@huawei.com>
+	<20240419164720.1765-2-shiju.jose@huawei.com>
+	<20240425101542.GAZiotThrq7bOE9Ieb@fat_crate.local>
+	<63fdbe26b51f4b7c859bfb30287c8673@huawei.com>
+	<20240506103014.GHZjixNhhFkgkMhDg_@fat_crate.local>
+	<e0ce36eb80054440ab877ccee4e606de@huawei.com>
+	<20240508172002.GGZju0QvNfjB7Xm6qL@fat_crate.local>
+	<4ceb38897d854cc095fca1220d49a4d2@huawei.com>
+	<20240508192546.GHZjvRuvtu0XSJbkmz@fat_crate.local>
+	<20240509101939.0000263a@Huawei.com>
+	<D9511DC1-1566-473A-A426-111BB1F7F9F0@alien8.de>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240510112740.667445-4-fabio.m.de.francesco@linux.intel.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Fri, May 10, 2024 at 01:21:47PM +0200, Fabio M. De Francesco wrote:
-> Make extlog_print_rcd() log unconditionally to report errors even if
-> userspace is not consuming trace events. Remove ras_userspace_consumers()
-> because it is not anymore used.
 
-Did you do any git archeology before that?
+> How hard is that "jump through hoops" thing anyway?
 
-d6cae935ec5b ("trace, eMCA: Add a knob to adjust where to save event log")
+I'd conservatively estimate 500 lines of duplicated code from the CXL
+subsystem just to handle the setup and discovery of the mailbox, plus
+all the checks needed to establish the device is in a state to reply.
+Also locking or module load ordering constraints because we need
+to ensure mutual exclusion on that mailbox between this module and the CXL
+core. So it would approximately triple the size of this driver to
+check for CXL scrub support. Not to mention hotplug - which could
+possibly be solved with appropriate udev rules to try loading this again
+whenever a CXL memory device gets plugged in.
 
-I can't find in this commit message why this is needed... Do share pls.
+Alternative would be to make this ras class driver dependent on the CXL
+driver stack running first. Thus if you wanted RAS2 ACPI table support, you'd
+need to load a whole bunch of CXL stuff.
 
-> This change makes extlog_print() (ELOG) log consistently with ghes_proc()
-> (GHES).
+Add another similar driver in future and we get another few 100 lines of code
+or another dependency. To me those numbers make it unsustainable.
 
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
+> 
+> You mean it should load so that when booting an allmodconfig kernel there are not enough modules which are loading so lemme load one more. And then I need to go and rmmod them all before I need to do localmodconfig and build a tailored kernel for the machine.
+> 
+> Or is there some other reason to load silly modules, use up resources for no good reason whatsoever and bloat the machine?
 
-Also, do
+As Dan, Shiju and I observed (and Shiju tested to be sure we weren't
+getting it wrong), normal setups including your allmodconfig
+build would not even load the driver.  What are we missing?
 
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
-Pls have a look at our documentation and check all your patches.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Jonathan
 
