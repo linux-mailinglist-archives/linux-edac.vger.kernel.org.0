@@ -1,81 +1,72 @@
-Return-Path: <linux-edac+bounces-1047-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1048-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959418C318D
-	for <lists+linux-edac@lfdr.de>; Sat, 11 May 2024 15:08:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B8688C3563
+	for <lists+linux-edac@lfdr.de>; Sun, 12 May 2024 09:57:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 294DC281E60
-	for <lists+linux-edac@lfdr.de>; Sat, 11 May 2024 13:08:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 844E7B20DE7
+	for <lists+linux-edac@lfdr.de>; Sun, 12 May 2024 07:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3E050A8F;
-	Sat, 11 May 2024 13:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BE713FF6;
+	Sun, 12 May 2024 07:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="QMDxiaPP"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="RcQV5buF"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BAD50A6E;
-	Sat, 11 May 2024 13:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6541117547;
+	Sun, 12 May 2024 07:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715432904; cv=none; b=rHk1q07MMCI4PCXyVVEkRi/o8GLI2COYaYJKfK6xExhFn7aWzBqRKfuWfn5lSkibPTh0CW9187VgxL1gxS112O0bOM9ty/RpZVgrFFAzjdlQPhISwuJFjscqjWeXbUmz9+6jimycRqQSyh+2Tk/nNursw2fpeBnayJ4VbZffA4M=
+	t=1715500669; cv=none; b=hvwvouN5Q5KrAr781yf0Vt1UoFvJEz60jDasdtde/0xo9Jv/E1TRCjWnsXW8r/4MbkRYZKzQKZAd1lh8/evsnX0ZKZvgiUu5xii9eV7jDN4g01g2FLkPnpY5AdzVy1VnAtTZ0xWjZ/jjWodELfBwWqFfheouNLyChL88qcJx2mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715432904; c=relaxed/simple;
-	bh=VkukmLqoNf0vM3tHlbUPLF8zbaFjlYyVWkV0/NzvKko=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=anp1xxXAWXtZkjGPiGHeLuRIMDlrckBXTgvz9Yy5H7jzMX8YHcwR4k6b2L3rIU68XxzYzPRt/z0e28cfhXXE3fVfWrY540GS02I5bils7Sj03pqaffs3RO6XS6p3QWx/YTaSKTPXYQMSlOSmz3yvk4YtjsXMmTgPsZZ6HP4qopI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=QMDxiaPP; arc=none smtp.client-ip=65.109.113.108
+	s=arc-20240116; t=1715500669; c=relaxed/simple;
+	bh=QXHxJHGm8I7427Cx6l2zmM59WVrA9mo6FKgFwLvF5UI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ITXGYXQnd6hptsKqogTHCVPz0pdf9a/9bf05gulGbAnNZF65kRpX7D9Fvoidd9zC/w9yHq0UtdZLyt15KQ4kzAFCOjWj2TW9NfWGqfbVbvHVmtAFoBatRC0SSh8L3tbWj4AUlKNhrVLrb9/nI2hls2Qd0GDYAuqxC9WpLBx0eTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=RcQV5buF; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9919F40E01A1;
-	Sat, 11 May 2024 13:08:19 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7AEEA40E01E8;
+	Sun, 12 May 2024 07:57:45 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id WVSMvkQIl5QV; Sat, 11 May 2024 13:08:16 +0000 (UTC)
+	with ESMTP id 42L-u38UhMtn; Sun, 12 May 2024 07:57:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1715432896; bh=ecSaKsp0uVZzm2MoFq8UJY3XN8cj8gw46icOK5RxnC8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QMDxiaPP5ldgNbHz0TcicT+aWjo9iMRpVOxy/Jt+df/CSgJ/rfgha2rjhA/zxR4fQ
-	 4Zt6gKISfh8yfkkC2Kbj8E8gbQ03UINJ5PDAW8E5nEVosS0NQogiFLH/s06eh15GO9
-	 S39VSeMyJ+Q/CZDBIOh6sHwYxu1m9EM9DF41b4qYVnyhXCi3HV9+SsnWD6MBvQSILa
-	 3iYhgCJrwF7xtRVpGIh/9DlgVNfX+G1NPPwvmrZ2sr3wCCegR6FBpEKt89WOnc+VgD
-	 EGkVfBx7QcXWxAhsthIrSlTvnPY50noaiIpiSUpRlTt5dgY1/D2EzO/GkZRVxXf3SB
-	 J5JDsKJE5GT1IlNiIZRAVVWybTR0KUFWoObU9wa/jSsR93zFzvRpqUnefFngRpMsVv
-	 MkJ//z3m7gXzXEYqEcfVf/n+xSZvH10H81KVi70CwT60F+h2Q3BpaH5OGDWUd8+gSP
-	 hk6L7xS4nZVPwqPuBRoOWZDbcHS16TDHGZYy6QJ1byxpb81wb4I/Zg7muN3LTnv+0k
-	 RtG7EseYgemaHnVqgfd814Tx2vJOBlphh/SIPzXQ9p2Oqvd8czfTv2mm3lKBCnlZDC
-	 ollKHiKh+F7AE/88PJ41jlaqCkuQzbzrGuET+n50w9nPHbntOqC0TVNcDoBkMYw/V1
-	 S3RIVy5joi4VMSmnfYctgMog=
+	t=1715500662; bh=ZKOV/WDxVJbHkMSxsJUPe7uSTsZds0t2PFPid3HynrA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=RcQV5buFtscUSrJSfHythi/VAPdYZ8cDlseST8SP+M3R9Mt+OwyYZ2qXmdlrL6keW
+	 VmGBJeBBRk0jiK3gY/+cX/ZxnU+1T4JAocfuSH34Rqaw0Av7BSjsZc5km7UL2WBaup
+	 r83EuFe/8G9girQkgZJY4nJQ+oipwdSJfubeHDjomLcuvvQUzs53Kbvppe7/ygrYFQ
+	 UnFBn/wrJrVcEb/O9UzukMYqPh7YyJuEJKEc3GyNYoprnFZFcvSpUyVrrO0gP8pcRN
+	 az4w8XjhyZ7ZFwrIXLroz5aaoRD1jA7SUWHVjQbeo1vYWwnUTjhCMvjuZ6kDxu81aN
+	 SGZQRMJTSSc6ARMlCbFJJIjblUM1B5fogmUdLRmpI/C//4CTKCvcKt/1GZCPkzBEAo
+	 QtSbK0f6RzyQpY+5h3xSGAHqP66MXnOWgPizeusF6BTDCf3UVqPRyJnM8JwC7JkX95
+	 eQfjC1uIuvI9NIVV8TAS8p0pogi1pQjETCilb78gbjJba76qvnUnN4UiYE0T74drNF
+	 OgsIMXcnwwiyk9QJk4M7I3oLrbtoKBpoHH3GVUVNJVv++7ichbSguZMzAQiE4P7fMP
+	 rKPT4HMyTco0VmiP7Q9tfYnbnS65vqln6muhrZAaO6UdVAgF7dTgzBED8GMRy7bPIL
+	 o7JeF3p2hEivzBd2HQE5ftP4=
 Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4FE6D40E016A;
-	Sat, 11 May 2024 13:08:08 +0000 (UTC)
-Date: Sat, 11 May 2024 15:08:01 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4B2AC40E016A;
+	Sun, 12 May 2024 07:57:39 +0000 (UTC)
+Date: Sun, 12 May 2024 09:57:32 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org
-Subject: Re: [RFC PATCH v2 3/3] ACPI: extlog: Make print_extlog_rcd() log
- unconditionally
-Message-ID: <20240511130801.GBZj9tsenZ5SKXgRTm@fat_crate.local>
-References: <20240510112740.667445-1-fabio.m.de.francesco@linux.intel.com>
- <7009544.jJDZkT8p0M@fdefranc-mobl3>
- <20240510192556.GDZj50xFIWSqK2gzQR@fat_crate.local>
- <2881368.Ex9A2HvPv6@fdefranc-mobl3>
- <663e9bd4c2525_db82d29451@dwillia2-xfh.jf.intel.com.notmuch>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC/urgent for v6.9
+Message-ID: <20240512075732.GAZkB2bMH9QL7i1eZS@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -84,40 +75,38 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <663e9bd4c2525_db82d29451@dwillia2-xfh.jf.intel.com.notmuch>
 
-On Fri, May 10, 2024 at 03:12:36PM -0700, Dan Williams wrote:
-> I had asked Fabio to take a look at whether it made sense to continue
-> with the concept of ras_userspace_consumers() especially since it seems
-> limited to the EXTLOG case.
-> 
-> In general I am finding that between OS Native and Firmware First error
-> reporting the logging approaches are inconsistent.
-> 
-> As far I can see rasdaemon would not even notice is the "daemon_active"
-> debugfs file went away [1],
+Hi Linus,
 
-It tells the kernel that it is consuming the error info from the
-tracepoints.
-
-> and it should be the case that the tracepoints always fire whether
-> daemon_active is open or not.
->
-> So I was expecting this removal to be a conversation starter on the
-> wider topic of error reporting consistency.
-
-Yeah, and then they'll come and say: ew, we're getting error duplicates
-- once logged in dmesg and once through the tracepoints.
-
-So just like with the other thread, we have to figure out what our
-scheme will be wrt hw error logging, agree on it and then make it
-consistent.
-
-Do we want to have both? Should it be configurable? Probably...
-
-Anything else...?
+please pull a single urgent EDAC fix for v6.9.
 
 Thx.
+
+---
+
+The following changes since commit dd5a440a31fae6e459c0d6271dddd62825505361:
+
+  Linux 6.9-rc7 (2024-05-05 14:06:01 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.9
+
+for you to fetch changes up to 591c946675d88dcc0ae9ff54be9d5caaee8ce1e3:
+
+  EDAC/synopsys: Fix ECC status and IRQ control race condition (2024-05-06 14:19:07 +0200)
+
+----------------------------------------------------------------
+- Fix a race condition when clearing error count bits and toggling
+  the error interrupt throug the same register, in synopsys_edac
+
+----------------------------------------------------------------
+Serge Semin (1):
+      EDAC/synopsys: Fix ECC status and IRQ control race condition
+
+ drivers/edac/synopsys_edac.c | 50 ++++++++++++++++++++++++++++++++------------
+ 1 file changed, 37 insertions(+), 13 deletions(-)
+
 
 -- 
 Regards/Gruss,
