@@ -1,169 +1,147 @@
-Return-Path: <linux-edac+bounces-1053-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1054-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97388C3D68
-	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 10:39:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 504FA8C3DE3
+	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 11:14:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57FE51F22165
-	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 08:39:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AC6B282914
+	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 09:14:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315E2148314;
-	Mon, 13 May 2024 08:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44601487D0;
+	Mon, 13 May 2024 09:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RuXY0wuo"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="i9nXMw8c"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0D8147C81
-	for <linux-edac@vger.kernel.org>; Mon, 13 May 2024 08:39:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A031487D2;
+	Mon, 13 May 2024 09:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715589564; cv=none; b=FXHpFdsSdBXrTOlKv6j85Frrnz7A/UySgLjb3Wem1wQACiUj7Aa+e7eghlxNOnmScEIdQYr6kevfjvgnZW5k2WhgGkcpEr6s+Qtx2KmaUuGTU7bRTsKmTzduPrTQiRVssrvTQMeUMhMIFLHeaQ1fPX1gYeSH3hqWjPrGO/CE2gQ=
+	t=1715591606; cv=none; b=lnv1RBi2wTy4Y1bjG78+1cvZ2RY8ILbbEcUpDb2bR1sU5jAtwVIZO3m2dyFwPrAMnX+Xr46cDraUggSYBTwfCsDKdhbbEofHQsy2MyB2Sdw6IHY9YQXws8Ps4ZHI0wHKCKJpEa+T4BP6kK7+P0Gvrg97Ti4U8BmTPtnfNXX63c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715589564; c=relaxed/simple;
-	bh=xu3qLH3KAqGeXAe+wySJk/AxLkLnUen062a0S8lS+5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=M3GKYxKO835n79rbon7tgFGDrMP3TOek2H2zCQqScG0+W/sizbMPlMfz44OWbWuVYcJLu2Fp96IPBG+A2E35TTrPIBYwTvlc/8r3WgUk6ClPxOh9ziwtmY+j2vdJIbPCwtnb6jMVanjawjd0UQNCPB9w/Xa0wmBIKa0LkXIlyOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RuXY0wuo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715589561;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PFXGqSIkyTAMybQe23aWDxPcyyUfYDtwAeH1eyZFLGs=;
-	b=RuXY0wuog7opMj/TIRzVzVsKJzOxpW3oWFI+L22xsxBVzYUezPuks9RKY2rtGVdedsj3wf
-	+OiJXA0QMN21PwIu6iqeuixhcB5MSx85LCPNGBu1XQElhXe2w9ja0Ra/rREP9zxdp8z8yT
-	w8mw9L0mx3E9G0VHLDsKsrRkz/YY7Uc=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-292-74AOe9a8NU6tqwTKpmRbMw-1; Mon, 13 May 2024 04:39:20 -0400
-X-MC-Unique: 74AOe9a8NU6tqwTKpmRbMw-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a59c0ecd59cso290094766b.2
-        for <linux-edac@vger.kernel.org>; Mon, 13 May 2024 01:39:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715589559; x=1716194359;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PFXGqSIkyTAMybQe23aWDxPcyyUfYDtwAeH1eyZFLGs=;
-        b=fuwsEsbVLt4ibUZ/dO2itj7kWnzKxzXe64dyiLtYOS+4xUGWeShY3CPPllaJM6tZMl
-         ReM2rt+jnIvHlrtPtWSEZyRudQ1Z6S0csNnePlMRiGX2KxtIIPLnkzigI5HbI0Cnwzw/
-         vb49yViB8FYo+K1xk8QftBpLHCeQJTWn13dIWvu0Ndrn8Mc55F3y5Tm+uY+7PhK8L0+h
-         Lwidg/2V0tecIA3HxolB8j+UxKm8h01Rm6hUXT5GF8J8ppxqFLUzGvvirDWQXq30GtM4
-         YNyxCxK38ol/RFGfuZlt4/o0bVZCzOi9tA7+iOvlna1tttsdMGte0/vh+qjU8I582FmS
-         VzHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWwII++JcZovNihPfksqYSR5xH1CqcErgrKPvzPI/7zGsxfTXuyI8wPkcbpZCsMJ0J6zW/pC9RsCr6ebU8Cf4qumucbLSltjM1/ow==
-X-Gm-Message-State: AOJu0YyuiI1kKki35YFTud4p5Hpk/KDSDpdSe4ytbBmwrfZj8t3EGZSr
-	Vb+OpXqYaOj+tClnkckONOV8LEMhSXG6Ty6VIZXj6g1UfqWg9sufpsQauIp7RvXu9AjVgPMVzcA
-	5tfmAE/5P3MGq83rIfxb4gvhxp18h8Sw9dgmfYmzmE4MAWxNV/sxvLG6Y8aY=
-X-Received: by 2002:a17:906:66ca:b0:a59:c2c3:bb4c with SMTP id a640c23a62f3a-a5a2d675a9dmr803341866b.70.1715589558852;
-        Mon, 13 May 2024 01:39:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGAYMUvPAgKG1/Dn2DN+IH/Xl+9GnDev7DUS8ig8zq3P229TKqP/dEy/Pr/PBub/ElY0kVDnw==
-X-Received: by 2002:a17:906:66ca:b0:a59:c2c3:bb4c with SMTP id a640c23a62f3a-a5a2d675a9dmr803340466b.70.1715589558430;
-        Mon, 13 May 2024 01:39:18 -0700 (PDT)
-Received: from [10.40.98.157] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17894da1sm565624066b.89.2024.05.13.01.39.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 May 2024 01:39:18 -0700 (PDT)
-Message-ID: <2db5beba-500b-458e-9fc3-f05bb982172c@redhat.com>
-Date: Mon, 13 May 2024 10:39:17 +0200
+	s=arc-20240116; t=1715591606; c=relaxed/simple;
+	bh=ETTJMxP526nDWVGZ2VZ+CQhmbdZGE6wqhJV0IsxB5oI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mB2tfm2pT0ChRFL9zR5DLy1mHgGKdHxr7cGcSsiGbQ5GGzoRe5tSJ1vmyqkhPSHn+GfaIzjCce+nqFiEvOPmd8ChZPYJe+SOcQZ81OWeG6CJkW+f6co396trSPXkOqZfiHwNc0dnhSXAtiOXQxpzENgOLWeUhF/qFEJ2rl9VLCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=i9nXMw8c; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4B51B40E01A3;
+	Mon, 13 May 2024 09:13:15 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id aXNytFTO2m4L; Mon, 13 May 2024 09:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1715591592; bh=IYzIeVf8cY7wHCiLXApnXAIycqd85/pbtpdEs243Usk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=i9nXMw8cpfGcNHOkz6+rLeJaNslcrHGBa8pciXug2sw1HO7xeQdnfmZy+0tdGEs8o
+	 MSC6xxXv5Z7so1sJD5rC2VUCkiZ+vcD8gygGrTca8Tmy0XeePKZQtFcEK9JpIImjCp
+	 OtAX6yT7yUUhejYGOqfPInK4+BzTQPFV9kXG7XZbl5aoXExzBR93bVrDZ+5QQpXU92
+	 dry0o6xCXI4+GRQDL2osoV9FZp/x5b2UteD6nef+a4ZWDoyM6YPufPatlCw72hWJJi
+	 wwsNtGjwOBuoAG7BUSdioVqIT2/3CVTmfETerqYDSwn8jjzJlS6qiLjCFvS2YIwhA/
+	 CtoGvCJYWfveI/aHeV/VpLe57ltrRIhlbej2rlvlaEgPedY2MI1WgQDQxERlmHPAKD
+	 /8HD67M9SR+MZsJoPgiXZlJ825bFYvCgEp33XBYwU+2QBJJ7QXUx0cclOR6Mejqgk4
+	 4qb7gL7YBHrt/OGgaun+OCKeIbiugbHJp156vILTRatjoSxf1qzIs4loDKmzYrDKFi
+	 2csMIKcSTU5EAfdcZAX5nSiqnL1Fibn50R4FYad77zcesA3VrjJqGtr/KICiIji0nk
+	 kf2BKd0blW3FBzIJNejqWNyOay3+Kr5V3yWIwjbxMiCsPE3N4bfa91axBrD0LnazHk
+	 obanrLk+ZOyfbR7Sd4l7MfFs=
+Received: from zn.tnic (pd953020b.dip0.t-ipconnect.de [217.83.2.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 15AD340E0192;
+	Mon, 13 May 2024 09:13:09 +0000 (UTC)
+Date: Mon, 13 May 2024 11:13:02 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.10
+Message-ID: <20240513091302.GAZkHZnuY3xHJWwzs-@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ACPI: video: Use vendor backlight on Lenovo X1 Carbon.
-To: dengxiang <dengxiang@nfschina.com>, lenb@kernel.org, rafael@kernel.org,
- linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- wanghuiqiang@huawei.com, prime.zeng@hisilicon.com, tony.luck@intel.com
-References: <20240513033834.9174-1-dengxiang@nfschina.com>
-Content-Language: en-US
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240513033834.9174-1-dengxiang@nfschina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hi dengxiang,
+Hi Linus,
 
+please pull a boring set of EDAC updates for 6.10.
 
-On 5/13/24 5:38 AM, dengxiang wrote:
-> Lenovo X1 Carbon advertises both native and vendor backlight
-> control interfaces.But Linux defaults to picking the native ACPI
-> video backlight interface, which will make that the vendor
-> zx_backlight interface to not work.
+Thx.
 
-A couple of remarks / questions:
+---
 
-1. Looking at the strings you match on this is not for a Lenovo X1 Carbon,
-but rather for a Lenovo Kaitan model ?  So it seems that the commit message
-and the comment for the quirk need some work.
-	
-2. I have never heard of a zx_backlight interface before and there certainly
-is no upstream driver providing this. I believe you need to explain what
-is going on in a bit more detail here and then we can see if this really is
-the best way to fix this. It seems that these Lenovo Kaitan laptops are
-using Zhaoxin Kaixian x86 processors with integrate graphics. I would expect
-the zx_backlight interface to be provided by the driver for the Zhaoxin Kaixian
-integrated graphics in this case. And if that is the case then the integrated
-graphics driver should use BACKLIGHT_RAW (aka native) for the backlight type
-and with that change this quirk should not be necessary .
+The following changes since commit 4cece764965020c22cff7665b18a012006359095:
 
-3. Vendor specific backlight interfaces are normally only found on really
-old laptops. Since Windows XP laptops typically use the ACPI backlight
-interface and since Windows 8 they typically use the GPU's native
-backlight driver. So adding a quirk to use a vendor interface in 2024 is
-weird. Again can you explain in a lot more detail what is going on here,
-but I guess the backlight class device is provided by the driver for the
-integrated graphics and in that case the fix is to simply change the type
-of the backlight device registered by the igfx driver to BACKLIGHT_RAW.
+  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
 
-4. You posted the same patch twice ?
+are available in the Git repository at:
 
-Regards,
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac_updates_for_v6.10
 
-Hans
+for you to fetch changes up to e0d335077831196bffe6a634ffe385fc684192ca:
 
+  EDAC/skx_common: Allow decoding of SGX addresses (2024-04-08 09:49:45 -0700)
 
+----------------------------------------------------------------
+- Have skx_edac decode error addresses belonging to SGX properly
 
+- Remove a bunch of unused struct members
 
+- Other cleanups
 
-> 
-> Add a DMI quirk to force use of the vendor interface.
-> 
-> Signed-off-by: dengxiang <dengxiang@nfschina.com>
-> ---
->  drivers/acpi/video_detect.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
-> index 2cc3821b2b16..e647186b4e83 100644
-> --- a/drivers/acpi/video_detect.c
-> +++ b/drivers/acpi/video_detect.c
-> @@ -875,6 +875,14 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
->  		DMI_MATCH(DMI_PRODUCT_NAME, "Mipad2"),
->  		},
->  	},
-> +	{
-> +	 .callback = video_detect_force_vendor,
-> +	 /* Lenovo X1 Carbon */
-> +	 .matches = {
-> +		DMI_MATCH(DMI_SYS_VENDOR, "KaiTian"),
-> +		DMI_MATCH(DMI_PRODUCT_NAME, "KaiTian X1 G1d"),
-> +		},
-> +	},
->  	{ },
->  };
->  
+----------------------------------------------------------------
+Jiri Slaby (SUSE) (5):
+      EDAC/amd64: Remove unused struct member amd64_pvt::ext_nbcfg
+      EDAC/device: Remove edac_dev_sysfs_block_attribute::{block,value}
+      EDAC/device: Remove edac_dev_sysfs_block_attribute::store()
+      EDAC: Remove dynamic attributes from edac_device_alloc_ctl_info()
+      EDAC: Remove unused struct members
 
+Li Zhijian (1):
+      EDAC/mc_sysfs: Convert sprintf()/snprintf() to sysfs_emit()
+
+Qiuxu Zhuo (1):
+      EDAC/skx_common: Allow decoding of SGX addresses
+
+ drivers/edac/altera_edac.c       |  8 +++---
+ drivers/edac/amd64_edac.h        |  1 -
+ drivers/edac/amd8111_edac.c      |  3 +--
+ drivers/edac/armada_xp_edac.c    |  2 +-
+ drivers/edac/cpc925_edac.c       |  2 +-
+ drivers/edac/edac_device.c       | 53 ++--------------------------------------
+ drivers/edac/edac_device.h       | 22 +++--------------
+ drivers/edac/edac_device_sysfs.c | 22 +++--------------
+ drivers/edac/edac_mc_sysfs.c     | 47 +++++++++++++++++------------------
+ drivers/edac/edac_pci.h          |  5 ----
+ drivers/edac/highbank_l2_edac.c  |  2 +-
+ drivers/edac/mpc85xx_edac.c      |  2 +-
+ drivers/edac/octeon_edac-l2c.c   |  2 +-
+ drivers/edac/octeon_edac-pc.c    |  2 +-
+ drivers/edac/qcom_edac.c         |  1 -
+ drivers/edac/sifive_edac.c       |  3 +--
+ drivers/edac/skx_common.c        |  2 +-
+ drivers/edac/thunderx_edac.c     |  6 ++---
+ drivers/edac/xgene_edac.c        | 10 +++-----
+ drivers/edac/zynqmp_edac.c       |  2 +-
+ 20 files changed, 50 insertions(+), 147 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
