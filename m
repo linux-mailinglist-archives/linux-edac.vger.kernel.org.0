@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-1051-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1052-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CB598C3A7A
-	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 05:29:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 786D48C3A81
+	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 05:38:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD31028127B
-	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 03:29:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B3301C20837
+	for <lists+linux-edac@lfdr.de>; Mon, 13 May 2024 03:38:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A404145B30;
-	Mon, 13 May 2024 03:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E6F145B38;
+	Mon, 13 May 2024 03:38:54 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id EFAE1145A11;
-	Mon, 13 May 2024 03:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with SMTP id A3E4542A86;
+	Mon, 13 May 2024 03:38:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715570969; cv=none; b=ZOtWabiQfC/rEkaNicVApHFk7GtCRFCenc1NjabquBxhP6diz06IFPSj9A2HKNkCeH4m+isHqcthabVLIVcqdEfIhmL3Gq43hW8Y8Il0uSNpvNikU8uzLfV7gH7BVXzNAtmny0K/EWgjZitcPvGlSpAvCRwBrigBgdmndBv7fZQ=
+	t=1715571534; cv=none; b=NX82lTzI7MBajK6ie09aw300JVr3AC3UaWDffDyRbh0GC8POdG6yf/pNMTgjXb3Oct9vddKZHNJQGwQPEtm1Cbx8mVFNRR8z4f8yIz+CwwGFvMkOpX6f4EBljhBmwCeE4OF4HXDRPZrxACOZZ+XYAuT/7mOokpe6lgYzt7T5yKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715570969; c=relaxed/simple;
+	s=arc-20240116; t=1715571534; c=relaxed/simple;
 	bh=tkh8eCP0pbd39xurVRNii2rqP0hk0zpbzdUfZw4bnTo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t2VsBvyMV4thKEEBu08H0R+bNq+xNqnX5AD8I2kADPw7PHD4GR8jM/bhOrX6A7cZJ3op9DAEbVMQG6ew7xXA1kZg0/PQMIEpQGFEvnWKMIpcJ3OhY7SOv4FQ6DGwiLL1UyGb2lfF9P/rgDZXrb490LAatYeGS3Vz8y5g1aIGBo4=
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=m6Ghsm/7jOlqabeglz8VxyWDg4KcNw6btIFXNCZw28I12l/9d/Q60nhZpiHMjhsrxaoVQOHsHQRqvylUt2wK79oTYK821rObEVRa5ZYypYqvMxTltvu48BlEygMkNVyOYyrZow2bMiFhO8q/KIQFvB7QeGuUIAGxvsR1McPVcOc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
 Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 8E9B56046A8C1;
-	Mon, 13 May 2024 11:28:45 +0800 (CST)
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 13F916046A8C1;
+	Mon, 13 May 2024 11:38:47 +0800 (CST)
 X-MD-Sfrom: dengxiang@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From: dengxiang <dengxiang@nfschina.com>
@@ -42,9 +42,9 @@ To: lenb@kernel.org,
 	prime.zeng@hisilicon.com,
 	tony.luck@intel.com
 Cc: dengxiang <dengxiang@nfschina.com>
-Subject: [PATCH] ACPI: video: Add force_vendor quirk for Lenovo X1 Carbon.
-Date: Mon, 13 May 2024 11:28:31 +0800
-Message-Id: <20240513032831.7983-1-dengxiang@nfschina.com>
+Subject: [PATCH] ACPI: video: Use vendor backlight on Lenovo X1 Carbon.
+Date: Mon, 13 May 2024 11:38:34 +0800
+Message-Id: <20240513033834.9174-1-dengxiang@nfschina.com>
 X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
