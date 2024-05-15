@@ -1,79 +1,116 @@
-Return-Path: <linux-edac+bounces-1055-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1056-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D262A8C5A02
-	for <lists+linux-edac@lfdr.de>; Tue, 14 May 2024 19:02:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF5988C5F7A
+	for <lists+linux-edac@lfdr.de>; Wed, 15 May 2024 05:46:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E892B21C35
-	for <lists+linux-edac@lfdr.de>; Tue, 14 May 2024 17:02:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 766441F2295B
+	for <lists+linux-edac@lfdr.de>; Wed, 15 May 2024 03:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E29717F37C;
-	Tue, 14 May 2024 17:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2U6hYdU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2ED9381B8;
+	Wed, 15 May 2024 03:46:03 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650FB158213;
-	Tue, 14 May 2024 17:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 845B037142;
+	Wed, 15 May 2024 03:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715706164; cv=none; b=BFv20DiZrL14nTf3LKcNATmHUSWylBJ7YBss+GRLewn21qi4FyqPE7ea+FssoqzVgyQYSIcVlMqqW7M4adI05d4jheGLiCD1KEr0BIKkYbxBqD2qxwli4B3o31dHY7VNpbPvGWznSnlLPzlvbGdZOxtp0JBDOSTiwlUvkyyKFQI=
+	t=1715744763; cv=none; b=Qa+oIUM/62tEf/h2HVH2FW3AjxCa0BEzO1j7QtgW84iFaJnelx9iN9mJ8xxl3McjEhpwpxwGqluRQPEtIpxqusZRZkQD6KKPcZ/uj2LFsZlXN9C6jRmck8jIzoXYa3szd0CeGnMKJZ2stX1nKeO3M2IxFWgUOE8lyB7tcCnF5NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715706164; c=relaxed/simple;
-	bh=qfkTSjP/78j6zWhDn7n3i47GTQW7+iaS7wwXUJl6qW4=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=NlI9YQlM5wSRHabNtF14Zk64GpDSPy4YIU9++eu35ByAoGx3KMu5MYZyNOqIO1C6WJSNUNUNHMvmWDrbVR73m6Tks/YNqKadkNijRgBHHclKUZCKFn+Z91UqtlXUE1g3ylaUC3iRibRm6tv6utBZXyIAHY5MPN4xQJBR4lFAt1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2U6hYdU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1B3FC2BD10;
-	Tue, 14 May 2024 17:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715706164;
-	bh=qfkTSjP/78j6zWhDn7n3i47GTQW7+iaS7wwXUJl6qW4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=p2U6hYdUd+hUznCnT8wrcCIOdTvh5dJi86IZKvG0oFUjQTpOVejFybpAXrv5ETn9+
-	 1QC8VGf5pRDPiEE/VAm1JV2b2j0qHRXRlAj9bynTGKxr4/63FYjBtkygs8cyYIzUDD
-	 I7Ace1AXrGHxgCohIVg7BqQTlVQOLKHPj0/WBybdaNSopdLySY0GWPGtFt6eG6jDTh
-	 CD2ZwKO1f0u+MAFzI4ox1O5Vv0vCYvYUJK3xDipE3nZ5mXa4bD0MwPkAVdpJiXOdIB
-	 1KOwP9V1ihuvESNRIT7n0W/kOqQc2n07Lc9QXnXnRONkjohy1qFZ/sewtIjttXM9NQ
-	 GUu+WWy5YEOHg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9FC0C43339;
-	Tue, 14 May 2024 17:02:43 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC updates for v6.10
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240513091302.GAZkHZnuY3xHJWwzs-@fat_crate.local>
-References: <20240513091302.GAZkHZnuY3xHJWwzs-@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-edac.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20240513091302.GAZkHZnuY3xHJWwzs-@fat_crate.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac_updates_for_v6.10
-X-PR-Tracked-Commit-Id: e0d335077831196bffe6a634ffe385fc684192ca
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: eba77c0477312c7b614338b24a8cf533695d1257
-Message-Id: <171570616394.7410.273440332718137862.pr-tracker-bot@kernel.org>
-Date: Tue, 14 May 2024 17:02:43 +0000
-To: Borislav Petkov <bp@alien8.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1715744763; c=relaxed/simple;
+	bh=bSk2pktMR0TCwUGzbqyIW1/sI5S2OHHcWRq8iKG2hfQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
+	 Content-Type; b=HX9aO3fK5Czk3D/F7NDr/8khAegzScD6+Pd8TqFn6oVxTcZIF94FZZHoaioUkJbIsq6ZA2Bir50f+CS6b6AgeIJAL8OTcBB6bwvTHaPblfdKR4XlhVXHbC8OlVflC2Blki23G0eydmaeNAkhVtITBpaK4Mdyc7+yhOlwElPFhxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id CB660602637E5;
+	Wed, 15 May 2024 11:45:20 +0800 (CST)
+X-MD-Sfrom: dengxiang@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: dengxiang <dengxiang@nfschina.com>
+To: hdegoede@redhat.com
+Cc: dengxiang@nfschina.com,
+	lenb@kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	prime.zeng@hisilicon.com,
+	rafael@kernel.org,
+	tony.luck@intel.com,
+	wanghuiqiang@huawei.com
+Subject: Re: [PATCH] ACPI: video: Use vendor backlight on Lenovo X1 Carbon.
+Date: Wed, 15 May 2024 11:45:01 +0800
+Message-Id: <20240515034501.12772-1-dengxiang@nfschina.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <2db5beba-500b-458e-9fc3-f05bb982172c@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Mon, 13 May 2024 11:13:02 +0200:
+Hi Hans,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac_updates_for_v6.10
+> A couple of remarks / questions:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/eba77c0477312c7b614338b24a8cf533695d1257
+> 1. Looking at the strings you match on this is not for a Lenovo X1 Carbon,
+> but rather for a Lenovo Kaitan model ?  So it seems that the commit message
+> and the comment for the quirk need some work.
 
-Thank you!
+ok, I will add DMI_PRODUCT_VERSION & DMI_BOARD_NAME to make a distinction between  X1 Carbon and other kaitian models.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 2. I have never heard of a zx_backlight interface before and there certainly
+> is no upstream driver providing this. I believe you need to explain what
+> is going on in a bit more detail here and then we can see if this really is
+> the best way to fix this. It seems that these Lenovo Kaitan laptops are
+> using Zhaoxin Kaixian x86 processors with integrate graphics. I would expect
+> the zx_backlight interface to be provided by the driver for the Zhaoxin Kaixian
+> integrated graphics in this case. And if that is the case then the integrated
+> graphics driver should use BACKLIGHT_RAW (aka native) for the backlight type
+> and with that change this quirk should not be necessary .
+
+Yes, zx_backlight interface has been provided by the driver for the Zhaoxin Kaixian integrated graphics. Also use backlight_device_register("zx_backlight",...).
+Strangely enough, X1 Carbon laptops will generate two native acpi_video as belows:
+ 
+lrwxrwxrwx 1 root root 0  5月 14 16:20 acpi_video0 -> ../../devices/pci0000:00/0000:00:01.0/backlight/acpi_video0
+lrwxrwxrwx 1 root root 0  5月 14 16:20 acpi_video1 -> ../../devices/pci0000:00/0000:00:01.0/backlight/acpi_video1
+
+As you see, it will conflict with the same pci bus, then zx_blacklight interface can't be shown on the path /sys/class/backlight/.
+That is to say, zhaoxin driver contain key code as belows:
+#if DRM_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
+    if(acpi_video_get_backlight_type() != acpi_backlight_vendor)
+    {
+        return ret;
+    }
+#endif
+
+If i remove the key code, this laptops will generate two native acpi_video and zx_backlight on the sys backlight patch. Once add acpi_backlight=vendor parameter into kernel cmdline, 
+just zx_backlight interface has been left on the sys path, which mean that both acpi_video0 and acpi_video1 interface can not be found.
+
+> 3. Vendor specific backlight interfaces are normally only found on really
+> old laptops. Since Windows XP laptops typically use the ACPI backlight
+> interface and since Windows 8 they typically use the GPU's native
+> backlight driver. So adding a quirk to use a vendor interface in 2024 is
+> weird. Again can you explain in a lot more detail what is going on here,
+> but I guess the backlight class device is provided by the driver for the
+> integrated graphics and in that case the fix is to simply change the type
+> of the backlight device registered by the igfx driver to BACKLIGHT_RAW.
+
+As mentioned in 2  questions above zhaoxin drivers had used backlight_device_register("zx_backlight"...) as BACKLIGHT_RAW.
+
+> 4. You posted the same patch twice ?
+
+Sorry, i was wrong to think that before patch would be missed by you. also i forgot about the time zone difference. I am sorry for any inconvenience that I have brought to you.
+
+Best Regards,
+dengxiang
 
