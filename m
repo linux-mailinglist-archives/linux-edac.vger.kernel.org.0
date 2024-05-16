@@ -1,221 +1,177 @@
-Return-Path: <linux-edac+bounces-1057-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1058-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99B698C6B75
-	for <lists+linux-edac@lfdr.de>; Wed, 15 May 2024 19:29:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49E658C7438
+	for <lists+linux-edac@lfdr.de>; Thu, 16 May 2024 11:57:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A3B71F2442E
-	for <lists+linux-edac@lfdr.de>; Wed, 15 May 2024 17:29:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D20C1C236E5
+	for <lists+linux-edac@lfdr.de>; Thu, 16 May 2024 09:57:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23BF43B2A1;
-	Wed, 15 May 2024 17:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7CA143874;
+	Thu, 16 May 2024 09:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g1De4Bih"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="M6DainB4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565EE28680
-	for <linux-edac@vger.kernel.org>; Wed, 15 May 2024 17:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E650F14293;
+	Thu, 16 May 2024 09:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715794167; cv=none; b=W+F08sDIkMoChol0S6g+2Ixmz4iMv3zJoVHonmxUq00sves/D6xrsMsQeRdJXXCgC9WhRT/ZiQlN+KdxJURUIoBninHQ5zzL18tJmWtoD8uHb+ZbKbHltqmenZWvyi1KTUHuxSdKDT4QtdNsz1ua6VGNN8ed1N7Dl4eGQoBB2CU=
+	t=1715853457; cv=none; b=OwTB7oLWzMZLjYrD7tO1ru9kj0HtLmaxrYK0IG336fQb6m47HTofJv9i6O4Jd4832LzGJYxKO0n/v2JQL00ePdMz4YH9u2Xb66ldL5KdRxux6iFqxscv+n5rB4zIjVpFjqDYDn2DToPqGtN3hwu8OmlF6saJEmSrk1O5w1M4w38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715794167; c=relaxed/simple;
-	bh=f/iuzZMlmH508xLuK+c3POd1uCl01loh39/9JbXRo/I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EQkfYBQbTVkzCl20a+D4jjhhVr1m1KGrr8F2q2GgrdKpG6CqaPzKl5jo4zNrPQ26NL58Bo6r9G3j5E7ujTP6qsk1mwTGZvjx0AIoEtix6a1/jbA7ekEt41YJ3dZJBJONh1sNM5NODfgXhS1YP0uazLQRg1TUF0WZjuDgeo9hyRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g1De4Bih; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715794164;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RAfbkl7wDlhHLUu1WDwZPQgfI6VIwQuAvbx4geCCHEk=;
-	b=g1De4BihTSbiDXNZPDKaZnEYkZNb/dq3CBolemNJCvtxzd8wBK4LNmztPNVExji5cPDRLM
-	/Fyyvi4u5IGyA4mX95YemoHTwiQHFGj2WEGiOwfO++BCTG309QDRKd7T5fVBdQxP4SIOag
-	n+pGC3mzldr2lzcMph7ZWF64p2/A+yg=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-275-_Z-WOkuJOV6Q91IPBktCjA-1; Wed, 15 May 2024 13:29:19 -0400
-X-MC-Unique: _Z-WOkuJOV6Q91IPBktCjA-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-523b4b04fa2so13066e87.1
-        for <linux-edac@vger.kernel.org>; Wed, 15 May 2024 10:29:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715794158; x=1716398958;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RAfbkl7wDlhHLUu1WDwZPQgfI6VIwQuAvbx4geCCHEk=;
-        b=j9pRHLMjbssCFUPvf1Mt+5QdnYWCjdPYDp62t1GmKZI7sCMQNciSqyAlTy1D4Jw1q2
-         1gwK0yvTzQKRoz8iO5c/tnASJyawYyHNE2aYvNVqKodFd+DCBJhMmh5d1KXJv2Rf4hax
-         QC1ZolyvKBMICcH9r1+Q/tLtdOJLNUJA3IDhpde/vV2fCeHnLWZPC+SYI4WL4SbsQBzS
-         9HMc0w0tB8jnCB+8DNtKQtROytkgIWeHcnUcdB+mgXl7g+pkliy8CQ7Ro+kgx9QqzPC1
-         mxjGJlCttvHyYqNWzhuGhZ6d0YYJgOBy0fBXGt5u5HVxJ+HJRQinXErD49U2W9R1Wnov
-         66tA==
-X-Forwarded-Encrypted: i=1; AJvYcCWxxJDpwFjPLJzJyM/qOC/0RQDSZ5EFIbjW2VDSlJfTqZ7Spu64KWsG2xuFUIW/5z5zWIcJUVZBQB0JRD6X21ieOrgeYCon/1XvCQ==
-X-Gm-Message-State: AOJu0Yz4HqYojkNZvUdHB9tpp10GfSNUuLUWfIoENAR14LFPxU+fEM3j
-	tp6tr/gORVccxqX4wWQlCBfBuLkHFY8rCh+mSxmGgQlbc6VSZt3VtbWdEUUJjEUxIlsK+0P8GWT
-	omPgrRezzIwUgOxQaMDZ9z11xHkMglhVu3oIEyi0rto3MCRMgPR5pl0h8HI8=
-X-Received: by 2002:ac2:4e11:0:b0:516:d232:2516 with SMTP id 2adb3069b0e04-5220fc7c59amr15507435e87.6.1715794158273;
-        Wed, 15 May 2024 10:29:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHDrCwDGj4XtoQfDTNZCsTDx1LFrxlRKr0DQD3VjW8RoHfkTcT7e3ifieXQ/Csi1JyJ3zpPXg==
-X-Received: by 2002:ac2:4e11:0:b0:516:d232:2516 with SMTP id 2adb3069b0e04-5220fc7c59amr15507407e87.6.1715794157745;
-        Wed, 15 May 2024 10:29:17 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a17b17844sm879836966b.190.2024.05.15.10.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 May 2024 10:29:17 -0700 (PDT)
-Message-ID: <04271fb5-cca3-4bca-b98e-3fab8a78c724@redhat.com>
-Date: Wed, 15 May 2024 19:29:16 +0200
+	s=arc-20240116; t=1715853457; c=relaxed/simple;
+	bh=ON1mL+QNRSBXFklaXMD/l37rxtKcsZUzmRwJ6kaQtQM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jSb/pB39MuwkZlVwtMWZzfHWlWkAkUqt6jbKjv7Oi5WhEKxJv2weY790gRbF2+nZb9ymNwDIvoOO4rFgO/dIQaYrrbUz+Y0WImRUHgJp5Jt8XrTwx33a2tRx+224MH1xXdy6tSYIzHpYccXtDjG2JOE802oSIt8BlcYEJsqFgKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=M6DainB4; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 75E0140E016A;
+	Thu, 16 May 2024 09:57:32 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ZmEHKAOatmne; Thu, 16 May 2024 09:57:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1715853448; bh=N3hlxw9aahtEYdoCrk85o0Biy95tVPWvjuIc5FNL0yo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M6DainB4kgiJKha/2O5yqsQuoS/WQ+LYWwyrfNjOrmrUd6Q/Q5OTdYYZLZ1x9xzwo
+	 jX/noe5x4bmMoMVqW6tIf3mgJN4bSzQCc8ndMa5aZ7mWHyadpm7kkE5ZdAcsSa+r4d
+	 c5kgNHXFv1mBvUtM+EChAlfaFmKSrZMepgxjXwEkGp0nvLlhnQAP1PK5zCz5H8IL3T
+	 pMLmMYR66W4EjRkYAfO9DQ3iDN1oAJlWvCKOCOIKmzBSnUmB+j622zelmwXS46rw6E
+	 nKtgGu2MAns8vVlb2BBaznrGUhFoifaGG1jqwhW9H8AglXu+qPNxsi8yLjrrdDwC47
+	 mZdZXewYESFUya+JqMOi18XrhqxCXZtcAaxmbXqDR5u+z1q2/yTRsUhEt5YHceITcD
+	 v3qQQbDL21nBG5p1IihnLv9jLPI+3a00au8fNIRNUFq4TEoTmAWE8M+p1NpXpBLWDa
+	 b53fEUEP/eByEe2poR+xI/Q2AA87KuGxLybraHi4gwqVpslPlFrCkQkCgnvSkqeVbM
+	 4/dfphteapH7VltP991E5s4wq4+RoM8oFqY5uyzvfwidQ8uAyUyrXKntwPd8IN8kOI
+	 DrwQnyKYyaEGXnDnUuV6bHRJqxfPqs5bzC5cx2/eb7Xsx5izyC1t3uqDOMGW6qyIT9
+	 J295MjR/fg9GS1fozIhHO45w=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BFF5440E0177;
+	Thu, 16 May 2024 09:57:20 +0000 (UTC)
+Date: Thu, 16 May 2024 11:57:14 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org
+Subject: Re: [RFC PATCH v2 3/3] ACPI: extlog: Make print_extlog_rcd() log
+ unconditionally
+Message-ID: <20240516095714.GCZkXYeiKbUk2QXoIO@fat_crate.local>
+References: <20240510112740.667445-1-fabio.m.de.francesco@linux.intel.com>
+ <7009544.jJDZkT8p0M@fdefranc-mobl3>
+ <20240510192556.GDZj50xFIWSqK2gzQR@fat_crate.local>
+ <2881368.Ex9A2HvPv6@fdefranc-mobl3>
+ <663e9bd4c2525_db82d29451@dwillia2-xfh.jf.intel.com.notmuch>
+ <20240511130801.GBZj9tsenZ5SKXgRTm@fat_crate.local>
+ <6641548474088_3dce92942b@dwillia2-mobl3.amr.corp.intel.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ACPI: video: Use vendor backlight on Lenovo X1 Carbon.
-To: dengxiang <dengxiang@nfschina.com>
-Cc: lenb@kernel.org, linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- prime.zeng@hisilicon.com, rafael@kernel.org, tony.luck@intel.com,
- wanghuiqiang@huawei.com
-References: <20240515034501.12772-1-dengxiang@nfschina.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240515034501.12772-1-dengxiang@nfschina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6641548474088_3dce92942b@dwillia2-mobl3.amr.corp.intel.com.notmuch>
 
-Hi dengxian,
+On Sun, May 12, 2024 at 04:45:08PM -0700, Dan Williams wrote:
+> Yes, my point though was that if it got deleted I doubt anyone would
+> notice. rasdaemon explicitly does not check the return from
+> open("daemon_active").
 
-On 5/15/24 5:45 AM, dengxiang wrote:
-> Hi Hans,
+The intent was for userspace to open it and thus it'll increment
+trace_count which then ras_userspace_consumers() reads...
+
+> I am also curious about the history here. This "daemon_active" scheme is
+> an awkward way to detect that something is consuming the tracepoint. It
+> was added on v4.0, but Steven had added "tracepoint_enabled()" back in
+> v3.17:
 > 
->> A couple of remarks / questions:
-> 
->> 1. Looking at the strings you match on this is not for a Lenovo X1 Carbon,
->> but rather for a Lenovo Kaitan model ?  So it seems that the commit message
->> and the comment for the quirk need some work.
-> 
-> ok, I will add DMI_PRODUCT_VERSION & DMI_BOARD_NAME to make a distinction between  X1 Carbon and other kaitian models.
-> 
->> 2. I have never heard of a zx_backlight interface before and there certainly
->> is no upstream driver providing this. I believe you need to explain what
->> is going on in a bit more detail here and then we can see if this really is
->> the best way to fix this. It seems that these Lenovo Kaitan laptops are
->> using Zhaoxin Kaixian x86 processors with integrate graphics. I would expect
->> the zx_backlight interface to be provided by the driver for the Zhaoxin Kaixian
->> integrated graphics in this case. And if that is the case then the integrated
->> graphics driver should use BACKLIGHT_RAW (aka native) for the backlight type
->> and with that change this quirk should not be necessary .
-> 
-> Yes, zx_backlight interface has been provided by the driver for the Zhaoxin Kaixian integrated graphics. Also use backlight_device_register("zx_backlight",...).
-> Strangely enough, X1 Carbon laptops will generate two native acpi_video as belows:
->  
-> lrwxrwxrwx 1 root root 0  5月 14 16:20 acpi_video0 -> ../../devices/pci0000:00/0000:00:01.0/backlight/acpi_video0
-> lrwxrwxrwx 1 root root 0  5月 14 16:20 acpi_video1 -> ../../devices/pci0000:00/0000:00:01.0/backlight/acpi_video1
-> 
-> As you see, it will conflict with the same pci bus, then zx_blacklight interface can't be shown on the path /sys/class/backlight/.
-> That is to say, zhaoxin driver contain key code as belows:
-> #if DRM_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
->     if(acpi_video_get_backlight_type() != acpi_backlight_vendor)
->     {
->         return ret;
->     }
-> #endif
-> 
-> If i remove the key code, this laptops will generate two native acpi_video and zx_backlight on the sys backlight patch. Once add acpi_backlight=vendor parameter into kernel cmdline, 
-> just zx_backlight interface has been left on the sys path, which mean that both acpi_video0 and acpi_video1 interface can not be found.
+> 7c65bbc7dcfa tracing: Add trace_<tracepoint>_enabled() function
 
-Ok, so the way this is supposed to work is as follows, there is a single
-acpi_video_get_backlight_type() function which all backlight drivers are
-supposed to use (and all in tree drivers do use).
+Ha, I usually talk to Rostedt for all things tracepoint when wondering
+how we could use them for RAS purposes but I haven't this time, it
+seems.
 
-This looks like this (simplified a bit, see drivers/acpi/video_detect.c):
+> So even if non-rasdaemon userspace was watching the extlog tracepoints
+> they would not fire because ras_userspace_consumers() prevents it.
+>
+> I am finding it difficult to see why ras_userspace_consumers() needs to
+> continue to be maintained.
 
-enum acpi_backlight_type __acpi_video_get_backlight_type(bool native, bool *auto_detect)
-{
-	...
+Well, you still need some functionality which tests whether a userspace
+daemon consumes RAS events. Whether it is something cludgy like now or
+something which checks whether all RAS tracepoints have been enabled,
+something's gotta be there.
 
-        /* Use ACPI video if available, except when native should be preferred. */
-        if ((video_caps & ACPI_VIDEO_BACKLIGHT) &&
-             !(native_available && prefer_native_over_acpi_video()))
-                return acpi_backlight_video;
+> That would be odd since there is no ras_userspace_consumers() in the
+> ACPI GHES path,
 
-        /* Use native if available */
-        if (native_available)
-                return acpi_backlight_native;
+Probably because no one's using RAS daemon with GHES. I at least haven't
+heard of anyone complaining about this yet...
 
-	/* ... long comment explaining this ... */
-        if (acpi_osi_is_win8())
-                return acpi_backlight_none;
+> so it is already the case that you can get duplicate error information
+> depending on which path triggers the error.
+>
+> Tracepoints are individually configurable.
 
-        /* No ACPI video/native (old hw), use vendor specific fw methods. */
-        return acpi_backlight_vendor;
-}
+Sure.
 
-as you can see here acpi_backlight_video is only returned if available
-(which it is in this case) *and* there is no native GPU backlight
-driver or prefer_native_over_acpi_video() returns false.
+> From my perspective I want alignement between "firmware first" and "OS
+> Native" events and I think any movement away from kernel log messages as
+> a hardware error mechanism towards tracepoints is a good thing.
 
-Since there is no way for this function to know a native GPU driver
-is supported it uses the native parameter passed to it for this,
-so native backlight drivers, like the Zhaoxin Kaixian integrated graphics
-driver must call a special helper, which internally calls the above
-function with native=true. I think not calling that special helper
-is why you see the acpi_video backlight devices, assuming you are
-using a recent mainline kernel.
+That has been the goal for a while now, yap.
 
-So that:
+Anyone who parses the kernel log for anything serious has been living
+under a rock in the last decade at least. :)
 
-#if DRM_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
-    if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
-    {
-        return ret;
-    }
-#endif
+> Recall that tracepoints can also be configured to emit to the kernel
+> log, so that might be a way to keep legacy kernel log message parsing
+> environments happy.
 
-block you quoted should look like this when using recent upstream
-kernels:
+Ok.
 
-    if (!acpi_video_backlight_use_native())
-    {
-        return ret;
-    }
+> Would be great to hear from folks that have a reasons for kernel log
+> message error reporting to continue.
 
-Although that return ret looks weird, maybe hardcode 0 for success
-(not registering is on purpose, so success ?)
+Right, from my experience so far, you never hear anything. :-\
 
-Or to keep things compatible with multiple kernel versions use:
+So if we do anything, it should be something simple and which works for
+almost everyone.
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
-    if (!acpi_video_backlight_use_native())
-    {
-        return ret;
-    }
-#elif DRM_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
-    if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
-    {
-        return ret;
-    }
-#endif
+With RAS, everyone does their own thing. And then there's the firmware
+which claims that it can do better RAS but then f*cks up on basic things
+like *actually* shipping a working EINJ or whatever implementation.
 
-Please give this a try, I believe you will not need a quirk
-when the Zhaoxin Kaixian integrated graphics driver does
-the right thing.
+So in the end of the day it is, oh, we need our drivers in the OS
+because we can't fix firmware. It is harder to fix it than *hardware*
+:-P
 
-Regards,
+> Uniformity of error response to "fatal" events, but that is mainly a
+> PCIe error handling concern not  CPU errors.
 
-Hans
+Sure, just make sure to keep it simple and generic.
 
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
