@@ -1,238 +1,173 @@
-Return-Path: <linux-edac+bounces-1066-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1067-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01B9A8C8426
-	for <lists+linux-edac@lfdr.de>; Fri, 17 May 2024 11:50:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F6BA8C8564
+	for <lists+linux-edac@lfdr.de>; Fri, 17 May 2024 13:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2CB18B22939
-	for <lists+linux-edac@lfdr.de>; Fri, 17 May 2024 09:50:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3368A1C20C2E
+	for <lists+linux-edac@lfdr.de>; Fri, 17 May 2024 11:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 770A12BD0D;
-	Fri, 17 May 2024 09:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aqPS27rf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ybHcdzif";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aqPS27rf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ybHcdzif"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11EF3CF73;
+	Fri, 17 May 2024 11:16:03 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DE724B34;
-	Fri, 17 May 2024 09:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8188B200DD;
+	Fri, 17 May 2024 11:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715939427; cv=none; b=O4xq5yuQ28+cp3xEKAI3QWWFbn5Dz4WzUQ06C3sswhNsPfcYD0nUAQo4DY3xiKJ/9CP67P6kBucgLyilSJIHnHHE4z7dVnytfiqe2kCzDemJ75K8XyApr/EmTI4jF32HpI/km67OngFpVmeDJaW3/dsXEqtP5bqoE+JY67hRlyA=
+	t=1715944563; cv=none; b=V+Sx+Oqh3jv8303HBxN/Zpwzje2Rd/sOmfQvyll1aCAFQriqwEQRWtJ0vwROlmJNMPKMuRK/kYkY3wwDP30sev4I5yBJKqTRKkioT8tdrmQH9IQDB7zOYwx1CUE6N0vkwAbIHqFU88F5i1oDo43goWT1z+G4hS3w0mkBTFkx+Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715939427; c=relaxed/simple;
-	bh=fH748Fp39+O/lxgUrh9rhN64OkwK7uTA4acwzoyb8i0=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=H+2+gI0oSJRdPj14eLzxvbVR6e79738QtYfx2VDCCdilIIM/OTo8vtzhzfPBWXiKyGsUIc7WXPbwVAAmubUiG0kDJFGsVMGCvyNX3JyVQyoiamOM6Zw9VXPjlDNVJ7yj4wamOw5KsKwikutUqe/wLB3Q9yiaghIbwEyOivewIKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aqPS27rf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ybHcdzif; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aqPS27rf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ybHcdzif; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6034E37344;
-	Fri, 17 May 2024 09:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1715939422; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=aqPS27rfYVOIlQYJQqRWN1OB2KuGqplKO0xASvAy99Em1LNhKAq/Z45rrmqOfomt6ymSXF
-	OiEv1bW+ZdpI213w3TR/RlpBxADCOtSoygZG2IWVCeRjyU7fk9xYWgYywcz+IS9+rfxp20
-	iBC1DT09pzE+KgT4PXFcXk6IVt2gReU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1715939422;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=ybHcdzifmrWaHz4fudlW6TywmF4wPptrNP5A3fPjgJZxiNP8yysPTURMY+P9YDVx2v+UNY
-	h72YrP3bBg//bVBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1715939422; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=aqPS27rfYVOIlQYJQqRWN1OB2KuGqplKO0xASvAy99Em1LNhKAq/Z45rrmqOfomt6ymSXF
-	OiEv1bW+ZdpI213w3TR/RlpBxADCOtSoygZG2IWVCeRjyU7fk9xYWgYywcz+IS9+rfxp20
-	iBC1DT09pzE+KgT4PXFcXk6IVt2gReU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1715939422;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8jfFpRbNQ4JylrNPf/Ju6XAY6qQjrc+0U9vxW7VwdqA=;
-	b=ybHcdzifmrWaHz4fudlW6TywmF4wPptrNP5A3fPjgJZxiNP8yysPTURMY+P9YDVx2v+UNY
-	h72YrP3bBg//bVBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3DB2D13991;
-	Fri, 17 May 2024 09:50:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id rHjlDV0oR2boBwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 17 May 2024 09:50:21 +0000
-Date: Fri, 17 May 2024 11:50:38 +0200
-Message-ID: <87r0e0zs0h.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	Linux trace kernel
- <linux-trace-kernel@vger.kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers 
- <mathieu.desnoyers@efficios.com>,
-	Linus Torvalds 
- <torvalds@linux-foundation.org>,
-	linuxppc-dev@lists.ozlabs.org,
-	kvm@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org,
-	virtualization@lists.linux.dev,
-	linux-rdma@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev,
-	linux-tegra@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	ath10k@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	ath11k@lists.infradead.org,
-	ath12k@lists.infradead.org,
-	brcm80211@lists.linux.dev,
-	brcm80211-dev-list.pdl@broadcom.com,
-	linux-usb@vger.kernel.org,
-	linux-bcachefs@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev,
-	linux-cifs@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-hwmon@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-wpan@vger.kernel.org,
-	dev@openvswitch.org,
-	linux-s390@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net,
-	Julia 
- Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH] tracing/treewide: Remove second parameter of __assign_str()
-In-Reply-To: <20240516133454.681ba6a0@rorschach.local.home>
-References: <20240516133454.681ba6a0@rorschach.local.home>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1715944563; c=relaxed/simple;
+	bh=VxSDOGPhBpR+noSDaZ9gn1Vm4yDGRV5HNg3mi/hKtuU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UAs0Dc6pUuQfHhctma88Y6ACPlFoMwywvwfQRUD3k53aoqQHipjns4oQRE583U0vPHb/EXU+UyeDfWjXn0K8J2HhVtjDzwAgkYvtMMaci1bITDLPulkttLLk6uBPnt/TZKx5My4Tbm5Zn8+NeCIK0nJLWGX+pn6xkzIzZpT3Jkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Vgknq1Jnvz6JBHH;
+	Fri, 17 May 2024 19:12:31 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9E417140A70;
+	Fri, 17 May 2024 19:15:56 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 17 May
+ 2024 12:15:55 +0100
+Date: Fri, 17 May 2024 12:15:54 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: Dan Williams <dan.j.williams@intel.com>, Shiju Jose
+	<shiju.jose@huawei.com>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"dave@stgolabs.net" <dave@stgolabs.net>, "dave.jiang@intel.com"
+	<dave.jiang@intel.com>, "alison.schofield@intel.com"
+	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
+	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"tony.luck@intel.com" <tony.luck@intel.com>, "Jon.Grimm@amd.com"
+	<Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "mike.malvestuto@intel.com"
+	<mike.malvestuto@intel.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>, wanghuiqiang
+	<wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Jean Delvare
+	<jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Dmitry Torokhov
+	<dmitry.torokhov@gmail.com>
+Subject: Re: [RFC PATCH v8 01/10] ras: scrub: Add scrub subsystem
+Message-ID: <20240517121554.000031d4@Huawei.com>
+In-Reply-To: <20240511101705.GAZj9FoVbThp7JUK16@fat_crate.local>
+References: <4ceb38897d854cc095fca1220d49a4d2@huawei.com>
+	<20240508192546.GHZjvRuvtu0XSJbkmz@fat_crate.local>
+	<20240509101939.0000263a@Huawei.com>
+	<D9511DC1-1566-473A-A426-111BB1F7F9F0@alien8.de>
+	<20240509200306.GAZj0r-h5Tnc0ecIOz@fat_crate.local>
+	<663d3e58a0f73_1c0a1929487@dwillia2-xfh.jf.intel.com.notmuch>
+	<20240509215147.GBZj1Fc06Ieg8EQfnR@fat_crate.local>
+	<663d55515a2d9_db82d2941e@dwillia2-xfh.jf.intel.com.notmuch>
+	<20240510092511.GBZj3n9ye_BCSepFZy@fat_crate.local>
+	<663e55c59d9d_3d7b429475@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+	<20240511101705.GAZj9FoVbThp7JUK16@fat_crate.local>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	R_RATELIMIT(0.00)[to_ip_from(RL6rcqepr6awpd9qb5xxedoiwq)];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[50];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[efficios.com:email,inria.fr:email,imap1.dmz-prg2.suse.org:helo,suse.de:email,goodmis.org:email,linux-foundation.org:email]
-X-Spam-Score: -1.80
-X-Spam-Flag: NO
-
-On Thu, 16 May 2024 19:34:54 +0200,
-Steven Rostedt wrote:
-> 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> [
->    This is a treewide change. I will likely re-create this patch again in
->    the second week of the merge window of v6.10 and submit it then. Hoping
->    to keep the conflicts that it will cause to a minimum.
-> ]
-> 
-> With the rework of how the __string() handles dynamic strings where it
-> saves off the source string in field in the helper structure[1], the
-> assignment of that value to the trace event field is stored in the helper
-> value and does not need to be passed in again.
-> 
-> This means that with:
-> 
->   __string(field, mystring)
-> 
-> Which use to be assigned with __assign_str(field, mystring), no longer
-> needs the second parameter and it is unused. With this, __assign_str()
-> will now only get a single parameter.
-> 
-> There's over 700 users of __assign_str() and because coccinelle does not
-> handle the TRACE_EVENT() macro I ended up using the following sed script:
-> 
->   git grep -l __assign_str | while read a ; do
->       sed -e 's/\(__assign_str([^,]*[^ ,]\) *,[^;]*/\1)/' $a > /tmp/test-file;
->       mv /tmp/test-file $a;
->   done
-> 
-> I then searched for __assign_str() that did not end with ';' as those
-> were multi line assignments that the sed script above would fail to catch.
-> 
-> Note, the same updates will need to be done for:
-> 
->   __assign_str_len()
->   __assign_rel_str()
->   __assign_rel_str_len()
-> 
-> I tested this with both an allmodconfig and an allyesconfig (build only for both).
-> 
-> [1] https://lore.kernel.org/linux-trace-kernel/20240222211442.634192653@goodmis.org/
-> 
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Julia Lawall <Julia.Lawall@inria.fr>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-For the sound part
-Acked-by: Takashi Iwai <tiwai@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
 
-thanks,
+Focusing on just one bit.
 
-Takashi
+> > Now, the question of how many legacy scrub interfaces should be
+> > considered in this design out of the gate is a worthwhile discussion. I
+> > am encouraged that this ABI is at least trying to handle more than 1
+> > backend, which makes me feel better that adding a 3rd and 4th might not
+> > be prohibitive.  
+> 
+> See above.
+> 
+> I'm perfectly fine with: "hey, we have a new scrub API interfacing to
+> RAS scrub capability and it is *the* thing to use and all other hw scrub
+> functionality should be shoehorned into it.
+> 
+> So this thing's design should at least try to anticipate supporting
+> other scrub hw.
+> 
+> Because there's EDAC too. Why isn't this scrub thing part of EDAC? Why
+> isn't this scrub API part of edac_core? I mean, this is all RAS so why
+> design a whole new thing when the required glue is already there?
+> 
+> We can just as well have a
+> 
+> 	/sys/devices/system/edac/scrub/
+> 
+> node hierarchy and have everything there.
+
+A few questions about this. It seems an unusual use fake devices and a bus
+so I'm trying to understand how we might do something that looks more standard
+but perhaps also fit within the existing scheme.  I appreciate this stuff
+has evolved over a long time, so lots of backwards compatibility concerns.
+
+If I follow this right the current situation is:
+
+/sys/devices/system/edac is the 'virtual' device registered on the edac bus.
+
+> 
+> Why does it have to be yet another thing?
+> 
+> And if it needs to be separate, who's going to maintain it?
+> 
+> > Which matches what I reacted to on the last posting:
+> > 
+> >    "Maybe it is self evident to others, but for me there is little in these
+> >     changelogs besides 'mechanism exists, enable it'"
+> > 
+> > ...and to me that feedback was taken to heart with much improved
+> > changelogs in this new posting.  
+> 
+> Ok.
+> 
+> > This init time feature probing discussion feels like it was born from a
+> > micommunication / misunderstanding.  
+> 
+> Yes, it seems so, thanks for clarifying things.
+> 
+> I still am unclear on the usecases and how this is supposed to be used
+> and also, as mentioned above, we have a *lot* of RAS functionality
+> spread around the kernel. Perhaps we should start unifying it instead of
+> adding more...
+> 
+> So the big picture and where we're headed to, needs to be clarified first.
+> 
+> Thx.
+> 
+
 
