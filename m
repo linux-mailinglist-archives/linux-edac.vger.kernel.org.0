@@ -1,59 +1,59 @@
-Return-Path: <linux-edac+bounces-1099-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1101-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBD148CD9D7
-	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 20:27:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3BFE8CD9E0
+	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 20:27:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12E87B2242B
-	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 18:27:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6681FB20B9C
+	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 18:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F32B82872;
-	Thu, 23 May 2024 18:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB83883CBE;
+	Thu, 23 May 2024 18:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KkRo9wLk"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uKySHWCV"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2076.outbound.protection.outlook.com [40.107.101.76])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2067.outbound.protection.outlook.com [40.107.220.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C36C328B6;
-	Thu, 23 May 2024 18:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BB6839F1;
+	Thu, 23 May 2024 18:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.67
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716488835; cv=fail; b=dJ/dojilbB2NnYY0hgDSAm2P1WHKGpT7XbxSf4F7NITjqyS0KjtwxMqsKprSouhnHjUhtfvSph4ZSoIaynFiR1AIiDGCFIRnSja/WGwTZIgAOtDYaMEHHIg/jV5Z5Zldd0S89I941mVmf/27pbLJcYIFFPLLVqM/NTJ2eBCA+0M=
+	t=1716488839; cv=fail; b=QpEum1y1yZW2uhRBOClks/OJ/X+2jb3PiFwi+GSqc4zlsWV6a1LA0qRrISMFIRyNXjaItkCbFGhOZ2QRWmzbAOm4n4ehvS+1p6P4yM7G60fEvJRyzYnwoh883CAFE8u3oFOFgh4YBVjX4blmi8CE1IVB+a/g/11INwVRIRudDvY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716488835; c=relaxed/simple;
-	bh=wwYqJWUS+KYhs9EtGAZZWv9VZgwoU0otfpLm+i1Ff6s=;
+	s=arc-20240116; t=1716488839; c=relaxed/simple;
+	bh=2gYvUh5PKw2233MexlsVSiWRL1PGFQPAhe56WcdKUdY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=MNodi8K+x6HLEmlUNN1lMA3DbNvMkwwLnx0daAvhyCz9DfleVsJfQImVBg7A9F+XZr7FwReTehfxh1EJ49v0cM8K7WvOHekXlmnL6Vh8LU0brdX8PG1Ziivq+1ybXIy4lxHl9uwqb5xyYsR4tpfXFRdAAdQMoA2Q9PUVczey9bA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KkRo9wLk; arc=fail smtp.client-ip=40.107.101.76
+	 In-Reply-To:To:CC; b=GXuW1O0bE0c98QzQ/rNyVRRXO5/vY7TecytSjFOl84949nb/jrnPBdFiMtAFWVjUNPtwEzmNDndB/ZhfBI9uEitw3svNIlxsoR8Rve84dQu5l1cGUWuTVwXTzmJtoAg+qkTFsX3/8TM0KlbFT7E/AmCMJnT/BZqCVC6Yrfd5kU0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uKySHWCV; arc=fail smtp.client-ip=40.107.220.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wj6klcuIhzdQjRe4DOULpqByr7BhTEhl1ukwHdJzCKwaOeaGk+pJuObdsYOKFKd7bvIwPvRpzc0XQO0IJnqjUfjfMlchwO/D3u2EKM+c4jL/fwTThcTHw4Gm4FzZBy8XIzbPOS2a5i8xLBjMJHmZrPQqBF/EUALfrgSXjBJuEa5OHewqXsQi2nsvMD7Ja4p70M/p7qVulRd6TwXEOWxd760aKGunmYWjcHwwtszBuvnnp5CjYG9pD2p9v+YxW3f39JsBSKxG0/SYNcgmegng8OPJLlifIylLg74+qX7FqN3zxGrixL251wRaR8DhHNoc+d/BuqYtCzSMMhps3NpnQA==
+ b=U6xR4SuHUprAhD9apMlrecQaP/P0xFnIQWLN7IqK1K/ge6zjL77PWoHfnm4nrfiM/xXhs8luIPkL7io0Ox10HpIz1g0+B67K1cGGxCrGlwrWPTsf6LFnGT+FhHXAZPrty2fWVCFKr66eNbELkWN+e+Ri3fUcFJcQ5dNabTP1dqttOjQM/BQ0cnLZwnSi9PHNvxzNR3C41PPY15M8gcFoQtvvczZDIk8a7Gh4yae4qGxd3VIVVZpcMmSE0SuIZt8SvhooPP/JMwK1QfuQDR9QrhhehmjePTqPmL0kyvBR1JjjyZBy6phFjWwmx6yuLP8/yW7dwS913ZQmfbg6QLuaqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/OCt8Z94Wcov5itagpyaQtF99QufOLAe8Ee91JXuDAo=;
- b=XV8iExjpkVkur1819WVqN2LNrxWLe4nmqoVXGWLSzzb5CEAOzjsxUlnXcBs+gyCDO49Ei8USAR/nAChGdrvqllVkPNDY+epOqEq9Yv/4e7wApDGyRR4cpPCS7qTGfh48V1XBz0Jhy3mrBVDHG8EWqP9iHVZT+OflV4nDqDJsCsW918NU7oB3hjH3C1XKuKugXI5sYzyAk+DdgYQ/+rMDLTTRHPbSMz9KH7duuLEiUks6M9Q8dJXTN/p/XrGdmiEdyfym8sX6zCnOYROn5xr0BUYQNfDNqd91bRQ7s2kvBmLCecxxT3pJJlceocR2Sl2qr0netjulvB44ROH/2l8UXA==
+ bh=PQMYUiQToI6bsPL5qK5LK7Ie+ErRZ5mhsBYqaRs6/bY=;
+ b=M5Ym+qFZPCo0rVosB7tfNLs13W0uOAXJFNskKcdPP2uHcqtRW7QJo8cCkpP3doWbUY3cJ+VSnfVu2uomcy0WLFZcI2ubv38WgsLwXD6ezo68BYwSGgTfNHHqbDuy4uP9tJ/Xqu6C+0AAdHXoQpRU/BmrjT2gWoHAaBWOHSb5YkYm8PPXGh2ED+aU+QdxcMX6dZjJgnm3Ya2mtkptOcfurKCT4vlKXsMlgmsjmDBkdJ1uRA8VaYztjmTe7OLnlwyGT+qMRSf2CTrHv3JtD4HNMaVCMDWisdoRBa7Ur84Nx0qYo6l4CzIKTGuDsfyjuHR5KzrI1GzAKByGt94yY4sgiw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/OCt8Z94Wcov5itagpyaQtF99QufOLAe8Ee91JXuDAo=;
- b=KkRo9wLkNdLwTQvtFDRTwTvjblsWz0Tqymz1R04PQuDTa9eUiYeAmwSKTFbC2saqvI+OqNPiWbsi8JshmFxxPDP8HhitAwceXm9unJokaGt0K3HEX0wYn6g6++4oB2Xq1mKV0VETsbZH2KGXN1im9Hbt2vJZyTFtODrVb83Z67g=
-Received: from DS7PR03CA0264.namprd03.prod.outlook.com (2603:10b6:5:3b3::29)
- by DM3PR12MB9287.namprd12.prod.outlook.com (2603:10b6:8:1ac::18) with
+ bh=PQMYUiQToI6bsPL5qK5LK7Ie+ErRZ5mhsBYqaRs6/bY=;
+ b=uKySHWCV569z7hhXvq//seSm7VQJjGmmLcbILkHBANk3FKWI6k833SCmW78h3/c3zstApvgFs1vJR8UtPVRvKgtas83BsNRQXTVAtl45XMlCNtizLj9Q857IFmMI/nz98KMIcVHFZcgCPpGkbFZX01YsHMxfzpxnEE9MF8fYNlo=
+Received: from DS7PR03CA0247.namprd03.prod.outlook.com (2603:10b6:5:3b3::12)
+ by DS0PR12MB9040.namprd12.prod.outlook.com (2603:10b6:8:f5::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.18; Thu, 23 May
- 2024 18:27:11 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.36; Thu, 23 May
+ 2024 18:27:15 +0000
 Received: from CH3PEPF00000011.namprd21.prod.outlook.com
- (2603:10b6:5:3b3:cafe::21) by DS7PR03CA0264.outlook.office365.com
- (2603:10b6:5:3b3::29) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:5:3b3:cafe::da) by DS7PR03CA0247.outlook.office365.com
+ (2603:10b6:5:3b3::12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.35 via Frontend
  Transport; Thu, 23 May 2024 18:27:11 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
@@ -71,8 +71,9 @@ Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 23 May
  2024 13:27:09 -0500
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 23 May 2024 13:26:53 -0500
-Subject: [PATCH v3 2/8] EDAC/amd64: Check return value of amd_smn_read()
+Date: Thu, 23 May 2024 13:26:54 -0500
+Subject: [PATCH v3 3/8] hwmon: (k10temp) Check return value of
+ amd_smn_read()
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,7 +82,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240523-fix-smn-bad-read-v3-2-aa44c622de39@amd.com>
+Message-ID: <20240523-fix-smn-bad-read-v3-3-aa44c622de39@amd.com>
 References: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
 In-Reply-To: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
 To: Guenter Roeck <linux@roeck-us.net>, <x86@kernel.org>, Yazen Ghannam
@@ -94,186 +95,171 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000011:EE_|DM3PR12MB9287:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3cf4c44a-b482-4943-e4d2-08dc7b55f61f
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000011:EE_|DS0PR12MB9040:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35ae8702-a0f9-4b6c-445b-08dc7b55f660
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|36860700004|376005|1800799015|82310400017;
+	BCL:0;ARA:13230031|376005|1800799015|36860700004|82310400017;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?OTNwWnNYcFNiWHVhMm5pSkg0QXZPVzFXQU53VlQyaFlPTTJtOWdVL0hybXhJ?=
- =?utf-8?B?SkNNZHgzQ0p2QzQvVjRXWUZtRXo3cXJEVnhHZUNMZkxITVNnTzBHNjg5cmh3?=
- =?utf-8?B?TTIrOUxGZTdLTU1MMThlNStXNWZvSmpXTnNrZ0syMC9nbjcwMXYrYnQ3NklW?=
- =?utf-8?B?QlZ5MkxoODV5bXRwbnZSMWZvWldtcU9uZDlVRnNCM1I1c29pNUFoQjNtTjc4?=
- =?utf-8?B?Y1gyQzN6MzBySjZTdmNaeTBQOFRvdjdsOFg0SUMvTEdTLzJZeW1EQ1RtM2xa?=
- =?utf-8?B?dFZWVjN5ZUNyUnk2N2dUVUIwWHBRV3Y4c1VSQ2NKUVF2aXpWN3pYMnE3Rlh3?=
- =?utf-8?B?RkExTDAwN2VudTNTUVVhdDMxZ0xPc1pTeUx5U0ZrMFUyemxDN2t1TTdTZVhJ?=
- =?utf-8?B?VkNKRlEwRDNTbEtxaUdYazhYaFV4ajluclN2MFpQSW5JN0l0bC80UjNLb2FZ?=
- =?utf-8?B?UldPbEJFb0J2aFROaXA3b0kvSzZ6bGVmeVFWOHlRemNQb2VOK1pWOUpnT3Ar?=
- =?utf-8?B?YUV4cjZWdmUwd0ZNZDdJRUJFQ1JYYmlrVys0SWxOYU9lMXEweDBNYWwvMDNa?=
- =?utf-8?B?dGVmcHAxYm4xTW9yeUh1QnhWeno1RGF4WkZFL2ZFanZLcFpFMkV3QS96dkty?=
- =?utf-8?B?WmdVaG05QVFrTURzUVdxT2hsb3Nzb1pUWFBjdlM0bnhMMjZpSms1RzNxa1Fp?=
- =?utf-8?B?amp1YllENTZFUDY0RzZxWnB6ano5bHhtL0tzQjRKQVdzeDYvVFZQbjMzK1ZF?=
- =?utf-8?B?ZWQzZ051bU9HSGcvWnYycTVTYXA4THpLazFuOVVTdkg2blBFWlVNbFd6NVJ3?=
- =?utf-8?B?UGlua21NdXczamMzQmVOc3NVeTNEZmJyQndqdGpWbU90K1ZNK1MwenVlZjlR?=
- =?utf-8?B?bEdoRy8yNGVZdWZjaXhXdDNycUN1OFA2ekg2RXZNcTFkQ3liNU5FUWNNNkMx?=
- =?utf-8?B?Ylc0V2gwNmora25HSDVHb1VOZVZHWXBBdU05WkZQRkdrQmZOS1BqZjdlRUxI?=
- =?utf-8?B?YjAyNlFNaDN2Rk1pZUtCYjFibUF4Q1MwU0REc2F5UGErQmZPMGJEV3BzYVlv?=
- =?utf-8?B?aktlb0xvM2JWclB2dG9peDdLd3BxT3BNdk5QWGh6Rm1Zc3U1NXdsV09HQXVx?=
- =?utf-8?B?V2k4a2YwSzFRWXZCMGVzdElmdXh5TGg2ckVHbXNkamJHbXoyeERFdnVTV055?=
- =?utf-8?B?SVBGTGtNcGViTlAvRnFya0V4SEd1Wi9jWXlKMFl1NnM5SUNFckVLN3BDU1dJ?=
- =?utf-8?B?eUtYUDZEcW5YeVZQSWpPbkZaRlY4NFBWcytzRUE4eldMenN4Q29qdTc0dVFC?=
- =?utf-8?B?TWJUYVRMckI0aUIvZGlaYVpoME44bDVuUThvSmhIQmR5V1U4amxuQSs0OE5h?=
- =?utf-8?B?d011YlNjWnh4NDQ2dVNtSFNUM2d0dk9RRkRGOHdnampWYU9IVHh5Um1rNWo1?=
- =?utf-8?B?b0QvR2dYZXVXanBUMjdNVWdSNTRXK0JtemtYV05KRTZRZmlwb0VEanAvNVRs?=
- =?utf-8?B?OXplbWNpWGxTQXpuTmhiUnI1bTNEMkZLSWNPMkpNMEt2VXdsMDREZ1lUcjVk?=
- =?utf-8?B?dC9FQXViakM0dnE3Q0dEemhxTzJSRHFneFJQa2F6S25qRnJKUEZrOGR3UzNQ?=
- =?utf-8?B?MGlSbGdlQ2lQVTlPbzVRamw2NmIwTCtybTd5R01TSzhBVGk4QS9TVi9HUHRD?=
- =?utf-8?B?SzdWSUFzeXhpbTBzanhoZmI4c3gvMkZ0VTVjVzVqRW01cDFjUHhQaTRFTWhU?=
- =?utf-8?B?WitzU00rRUdxL2p4c2lTL0R4WXE0TTVNSVB3N0E5VW41d3QwMzIwT2VZbnRX?=
- =?utf-8?Q?rIeBChDRvv/2PZxv94Gzzqrr0SYgsrbOhIsqw=3D?=
+	=?utf-8?B?TTRQMnlQSmpmYUJQTi9tVXlUQTJLTDQ0REs0NUNkbjhsN1VDYTY4Vk83T3Zm?=
+ =?utf-8?B?QXZXL2pQTE9KZHBRcjd2TzlIaStzdHpkdjRuQmtaOU0xZGloUm9nYUMvMVdS?=
+ =?utf-8?B?R2VCclVrdSthNzNiSm1RNjZVa3JsSHAzYm01RW1lN2FWdmxJeU9LWk40UjVt?=
+ =?utf-8?B?dnJmT1REYUl6SFNqakxzNkpsRnpUOGJHdVlEVFJHczVjT3JQbFR0NEJtL3BC?=
+ =?utf-8?B?a1YrbGI5Y1pwZExlSzB4ZE5nSXVxbmRWKyt0VmswZW8yUkdZb3p2QXZWYnVN?=
+ =?utf-8?B?UXBObngvbDZLRm8wdENRUC9DQ1BhVjVoOS9GZnoyTFUvWTIrSjQ3cHJCeWx5?=
+ =?utf-8?B?VGtHaWxSKzlnaHBzYmpSTVVuTzNYL0ZwVEpTWFZKbUFhbFR6UVFlbUkvdFdw?=
+ =?utf-8?B?anJTMXoxRU93cDRKM3FHN0xZYmo5eFR3UVRUQXQwV0xCY0ZUeUVFVkNGQUEx?=
+ =?utf-8?B?VlRVQjZGVzlNaDRZR1dwMElzQUdQTVFxaUdmVjdiOFZQaTN4N2NPcFJjSi9Q?=
+ =?utf-8?B?TUova1RidlBoaTl0RkJ2eGlyYUpQR1dFcnU2S3dNOEtZcW5UZ0pZRy9YZVgr?=
+ =?utf-8?B?WVdHZUlGTlBQcVBTbWN4ZzF3bk4wQm1KY2dJQ0l6VlM4UnNLSzJjWEJ6SWRS?=
+ =?utf-8?B?Q1ZvSm45Y2s2UytCNWdvMk15NHI1V1lnb1lxQU9FYmU3S3JMbHIyalQ5NmFY?=
+ =?utf-8?B?WFBRZE1kZXNlNFIvOUJSMVF3bGJBak10ZDh1U1Nmcmx1SWZFQ3Y0a3FPYks3?=
+ =?utf-8?B?QWFWRmMxek9zS2xzYVpmZ3loL3d5aVFPdTFLZ1BUcTRyQWhZQUhiZzNjM2FB?=
+ =?utf-8?B?RGpSQWt5Z0piNE80ZHRsNmlSTEYxa0ZMWlBvNGE2S1JnV2dxTGRLS3VoTnUr?=
+ =?utf-8?B?dHdRYkVHNGJ6enpTZWVnREhWb21McXVkRGhhd3YvRXlPVXpBMG5obnVGc29D?=
+ =?utf-8?B?YkdiNi9NT0ZpNzQ5YmdFSU1lOGFmeVIzU2g5UnZZcGM0NE9YK0JJRGNVN0Q3?=
+ =?utf-8?B?TjRIbDlBREo2c3ltSDRCanNBU0M5TldHOFBUczdEV01EUTVrVVpkY1hWZVdv?=
+ =?utf-8?B?RFMweCtHSFBqMmZrYlZ5bG1DdHYwZnFQUXVrUnpNN3NHQm10Qnl5cUQxNjdl?=
+ =?utf-8?B?K3ZjNDhMSkw1VW9BU2ZhdlVlLzBOdXJ4UEkwVnBxYTRxMHRCYld1bFZSYWlK?=
+ =?utf-8?B?SDN6cmNzUHNSL2ExTVZhanAxNDFnZWpTMHltYUwrMnRyZVFkSTJvVjFFL0Zi?=
+ =?utf-8?B?bHIxZjFUTkQ0RXVkVk5WTXNjN2RVRkNvZFI4YitDT3JRUGdIRi83NGMyQWxF?=
+ =?utf-8?B?WlhyWGdpNURpTWtpaWNDbjZsN2VaWFF3ZmUyV3FQZ2RabEJETWZ4Szc3ZGh3?=
+ =?utf-8?B?MXZjTVJGMTQ3d3Jud3dSd2E4MmI2dFc5N1Y1MXhnUStTc3JaVGJFYVRTU2VW?=
+ =?utf-8?B?WHlkMmE5UHAvWmNMalQwRHd4Sk9FdkVpenBwYmhmOVpwa1N0L3phUVZCT1ZU?=
+ =?utf-8?B?ZDJscnZwMU0wRGVJQy9lOW5jd0JYN0RkMnBPcUVUMFYvcURIRStDUmd5Ykxz?=
+ =?utf-8?B?RngwalljU3J4NTltd0g4azgzRWFvU2VTbkxuUGl2UzduVzBaaVV6QzdXN1do?=
+ =?utf-8?B?STQyWkdPaTVhaEdSM2M1a1pCa3h5cW9JWlIwSEhmTWdCdGprYzl1M3JNUDBQ?=
+ =?utf-8?B?VTdJSnI1WkVWVVBJL0dmUis5bk1HNWdXa1RZOFJRYTBrZUNXa3FxWU5mdm1D?=
+ =?utf-8?B?d0JkOHhWWEQrRzBtM3pzdXVUR1RhQUJoOUZINDBsd2R3d2cwUW14VUNMMGt3?=
+ =?utf-8?B?dXRzU21ya1JHd3lhZjJhMmJKSlZRTEFsMXEwbmR5cFQrNnJzcERCRG1zR0J1?=
+ =?utf-8?Q?6yTnNk0Ri0McS?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(376005)(1800799015)(82310400017);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(1800799015)(36860700004)(82310400017);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2024 18:27:11.0864
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2024 18:27:11.5083
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cf4c44a-b482-4943-e4d2-08dc7b55f61f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35ae8702-a0f9-4b6c-445b-08dc7b55f660
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	CH3PEPF00000011.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9287
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9040
 
 Check the return value of amd_smn_read() before saving a value. This
-ensures invalid values aren't saved. The struct umc instance is
-initialized to 0 during memory allocation. Therefore, a bad read will
-keep the value as 0 providing the expected Read-as-Zero behavior.
+ensures invalid values aren't saved or used.
+
+There are three cases here with slightly different behavior.
+
+1) read_tempreg_nb_zen():
+	This is a function pointer which does not include a return code.
+	In this case, set the register value to 0 on failure. This
+	enforces Read-as-Zero behavior.
+
+2) k10temp_read_temp():
+	This function does have return codes, so return the error code
+	from the failed register read. Continued operation is not
+	necessary, since there is no valid data from the register.
+	Furthermore, if the register value was set to 0, then the
+	following operation would underflow.
+
+3) k10temp_get_ccd_support():
+	This function reads the same register from multiple CCD
+	instances in a loop. And a bitmask is formed if a specific bit
+	is set in each register instance. The loop should continue on a
+	failed register read, skipping the bit check.
 
 Furthermore, the __must_check attribute will be added to amd_smn_read().
 Therefore, this change is required to avoid compile-time warnings.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 Cc: stable@vger.kernel.org
 ---
- drivers/edac/amd64_edac.c | 51 ++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 37 insertions(+), 14 deletions(-)
+ drivers/hwmon/k10temp.c | 36 +++++++++++++++++++++++++++---------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 4cedfb3b4cb6..e958ade6ff24 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -1436,6 +1436,7 @@ static void umc_read_base_mask(struct amd64_pvt *pvt)
- 	u32 *base, *base_sec;
- 	u32 *mask, *mask_sec;
- 	int cs, umc;
-+	u32 tmp;
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 8092312c0a87..6cad35e7f182 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -153,8 +153,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
  
- 	for_each_umc(umc) {
- 		umc_base_reg = get_umc_base(umc) + UMCCH_BASE_ADDR;
-@@ -1448,13 +1449,17 @@ static void umc_read_base_mask(struct amd64_pvt *pvt)
- 			base_reg = umc_base_reg + (cs * 4);
- 			base_reg_sec = umc_base_reg_sec + (cs * 4);
- 
--			if (!amd_smn_read(pvt->mc_node_id, base_reg, base))
-+			if (!amd_smn_read(pvt->mc_node_id, base_reg, &tmp)) {
-+				*base = tmp;
- 				edac_dbg(0, "  DCSB%d[%d]=0x%08x reg: 0x%x\n",
- 					 umc, cs, *base, base_reg);
-+			}
- 
--			if (!amd_smn_read(pvt->mc_node_id, base_reg_sec, base_sec))
-+			if (!amd_smn_read(pvt->mc_node_id, base_reg_sec, &tmp)) {
-+				*base_sec = tmp;
- 				edac_dbg(0, "    DCSB_SEC%d[%d]=0x%08x reg: 0x%x\n",
- 					 umc, cs, *base_sec, base_reg_sec);
-+			}
- 		}
- 
- 		umc_mask_reg = get_umc_base(umc) + UMCCH_ADDR_MASK;
-@@ -1467,13 +1472,17 @@ static void umc_read_base_mask(struct amd64_pvt *pvt)
- 			mask_reg = umc_mask_reg + (cs * 4);
- 			mask_reg_sec = umc_mask_reg_sec + (cs * 4);
- 
--			if (!amd_smn_read(pvt->mc_node_id, mask_reg, mask))
-+			if (!amd_smn_read(pvt->mc_node_id, mask_reg, &tmp)) {
-+				*mask = tmp;
- 				edac_dbg(0, "  DCSM%d[%d]=0x%08x reg: 0x%x\n",
- 					 umc, cs, *mask, mask_reg);
-+			}
- 
--			if (!amd_smn_read(pvt->mc_node_id, mask_reg_sec, mask_sec))
-+			if (!amd_smn_read(pvt->mc_node_id, mask_reg_sec, &tmp)) {
-+				*mask_sec = tmp;
- 				edac_dbg(0, "    DCSM_SEC%d[%d]=0x%08x reg: 0x%x\n",
- 					 umc, cs, *mask_sec, mask_reg_sec);
-+			}
- 		}
- 	}
- }
-@@ -2892,7 +2901,7 @@ static void umc_read_mc_regs(struct amd64_pvt *pvt)
+ static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
  {
- 	u8 nid = pvt->mc_node_id;
- 	struct amd64_umc *umc;
--	u32 i, umc_base;
-+	u32 i, tmp, umc_base;
- 
- 	/* Read registers from each UMC */
- 	for_each_umc(i) {
-@@ -2900,11 +2909,20 @@ static void umc_read_mc_regs(struct amd64_pvt *pvt)
- 		umc_base = get_umc_base(i);
- 		umc = &pvt->umc[i];
- 
--		amd_smn_read(nid, umc_base + get_umc_reg(pvt, UMCCH_DIMM_CFG), &umc->dimm_cfg);
--		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
--		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
--		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
--		amd_smn_read(nid, umc_base + UMCCH_UMC_CAP_HI, &umc->umc_cap_hi);
-+		if (!amd_smn_read(nid, umc_base + get_umc_reg(pvt, UMCCH_DIMM_CFG), &tmp))
-+			umc->dimm_cfg = tmp;
-+
-+		if (!amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &tmp))
-+			umc->umc_cfg = tmp;
-+
-+		if (!amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &tmp))
-+			umc->sdp_ctrl = tmp;
-+
-+		if (!amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &tmp))
-+			umc->ecc_ctrl = tmp;
-+
-+		if (!amd_smn_read(nid, umc_base + UMCCH_UMC_CAP_HI, &tmp))
-+			umc->umc_cap_hi = tmp;
- 	}
+-	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
++	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
++			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
++		*regval = 0;
  }
  
-@@ -3633,16 +3651,21 @@ static void gpu_read_mc_regs(struct amd64_pvt *pvt)
+ static long get_raw_temp(struct k10temp_data *data)
+@@ -205,6 +206,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 			     long *val)
  {
- 	u8 nid = pvt->mc_node_id;
- 	struct amd64_umc *umc;
--	u32 i, umc_base;
-+	u32 i, tmp, umc_base;
+ 	struct k10temp_data *data = dev_get_drvdata(dev);
++	int ret = -EOPNOTSUPP;
+ 	u32 regval;
  
- 	/* Read registers from each UMC */
- 	for_each_umc(i) {
- 		umc_base = gpu_get_umc_base(pvt, i, 0);
- 		umc = &pvt->umc[i];
- 
--		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
--		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
--		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
-+		if (!amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &tmp))
-+			umc->umc_cfg = tmp;
+ 	switch (attr) {
+@@ -221,13 +223,17 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 				*val = 0;
+ 			break;
+ 		case 2 ... 13:		/* Tccd{1-12} */
+-			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+-				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+-						  &regval);
++			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
++					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
++					   &regval);
 +
-+		if (!amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &tmp))
-+			umc->sdp_ctrl = tmp;
++			if (ret)
++				return ret;
 +
-+		if (!amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &tmp))
-+			umc->ecc_ctrl = tmp;
+ 			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
+ 			break;
+ 		default:
+-			return -EOPNOTSUPP;
++			return ret;
+ 		}
+ 		break;
+ 	case hwmon_temp_max:
+@@ -243,7 +249,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 			- ((regval >> 24) & 0xf)) * 500 + 52000;
+ 		break;
+ 	default:
+-		return -EOPNOTSUPP;
++		return ret;
  	}
+ 	return 0;
  }
+@@ -381,8 +387,20 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+ 	int i;
  
+ 	for (i = 0; i < limit; i++) {
+-		amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
++		/*
++		 * Ignore inaccessible CCDs.
++		 *
++		 * Some systems will return a register value of 0, and the TEMP_VALID
++		 * bit check below will naturally fail.
++		 *
++		 * Other systems will return a PCI_ERROR_RESPONSE (0xFFFFFFFF) for
++		 * the register value. And this will incorrectly pass the TEMP_VALID
++		 * bit check.
++		 */
++		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
++				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
++			continue;
++
+ 		if (regval & ZEN_CCD_TEMP_VALID)
+ 			data->show_temp |= BIT(TCCD_BIT(i));
+ 	}
 
 -- 
 2.34.1
