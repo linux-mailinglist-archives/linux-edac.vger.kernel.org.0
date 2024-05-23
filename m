@@ -1,76 +1,76 @@
-Return-Path: <linux-edac+bounces-1107-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1108-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 576568CDAE6
-	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 21:32:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF2698CDAE9
+	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 21:32:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D667A1F23AAE
-	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 19:32:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A72B028112F
+	for <lists+linux-edac@lfdr.de>; Thu, 23 May 2024 19:32:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5C083CDD;
-	Thu, 23 May 2024 19:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB25284A21;
+	Thu, 23 May 2024 19:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E+m7hL3N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iI8Ix6KB"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6B429AB;
-	Thu, 23 May 2024 19:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E03629AB;
+	Thu, 23 May 2024 19:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716492717; cv=none; b=I05EjEj+dHhrEdmGCmp8QPw6Skn2r7i++KHiWE5Ov0kqvKBoNVqYjuccCIFhlulAgue650QCnBHhAUtyvdmVkOj69PIECKrWUnxWOzvpNMa7CFHqBow6ROdmzn/xH4nPG5gGKY/Opk2sdaY2u0Ns3XO5VPMVDGfG/AmpI31duHg=
+	t=1716492769; cv=none; b=OFYHVkxnwlrFSSleGYn57uzErU7kA56yHnKTrIh9CCYYsr+1iqc76Lqy1NvNp9I9Xqz0ciBoRu//zytlHEt6fq1dZN4J/SUaorN5f5Z8DTK3od4nvPQK80xO2i6HFRmRfuFrEeLf/W9zhU15iJD5NnFURDyr2j8uFAGEvukwHRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716492717; c=relaxed/simple;
-	bh=aXYDXIn/ENB6oZKwNZ1Jq36Ex2Cl3fIqV674B6i/STM=;
+	s=arc-20240116; t=1716492769; c=relaxed/simple;
+	bh=4GOxqwSwAIEiFQo8otRI26MEmyqqZnsFcMuNXCQewRw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=De9zzVrrdXXg89UWGKyv6HVg2bavNPkeStDkyoYpVTfn9rcjV6+kO/hJJE/2VqCfe31tK8dlw4ZC8N79A4a8K6/TpX8h49zrLDrsapYbJXBIxMMua2Dqbr/kz6auEWsibtEdITflnfB/CdN35MBvZzmPLUjnr2AFLFdqyBHg3wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E+m7hL3N; arc=none smtp.client-ip=209.85.214.169
+	 In-Reply-To:Content-Type; b=FNXn1WgSQt0BayHsHJW6HLF6DtEvs6bnpGJ1QWi1XhWfaHnvQrjO7xZS2zTDB/Rqo2KMCBf/L9CNfln46+KhY9DWEnl1DHiFiuBzIV+W74+fa20lKv+ELhPEGMvSYcTweyw3tJqfJUe6hEw/o4d+7TP0TQ/enN1jOhCb69LSeik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iI8Ix6KB; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1f44b513017so242555ad.1;
-        Thu, 23 May 2024 12:31:55 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6f8ecafd661so130953b3a.3;
+        Thu, 23 May 2024 12:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716492715; x=1717097515; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716492767; x=1717097567; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ercL6wWo4kFiMX1hwzNAewQSqM8Z99TOJrvmuHqRN8E=;
-        b=E+m7hL3NQ/vKxrczE3+KqphPfiZKh5yMaowhR70JuNENdKf/C6p7NQBlU/C4Z84Zvi
-         4Y4ZITN34nvEfwQWNrSHKGWysjplga20aUjbaSb0sNC/dgIO+nK7C9d6hZVSIfD2eB9G
-         NMZNLsAkMOF8cfQIOide0TN63PVSY0kEWY2ptqZfet0YwvdgU47n91jac+DqHxSqOgRZ
-         aZioNmU2UV4k6h6CtPzMI4s9hqtsq3mhhkkA3wVzet7Y4hbWA6t4+4ES/MsbkyzPRnf8
-         fKYoWOQTUtS3kTn1nIIl8n2wiraQIhGhQMOwQcQhkhVbhz29DUfDu2CH677c4QkjxP29
-         t9Xg==
+        bh=BSMPg+JtmEvTAgJMEj6aatCAtPVZX62UHvRca6wD2Kg=;
+        b=iI8Ix6KBU4uw+uZeaNr5DFbWuJghKO1AsFwr3wPL5BmqGSz/zW2mXCwQuFTVyIgRsB
+         2EBKkk1uRjU+0QtrqEywitrm6TyfMQcc7z+pJMfQONDlB5WTB8yl9A/fdl58Fqsyzxjq
+         3L3UgnXn+hTIaBnde2m0Th3QoBC6+uiwHcXaemU4uvMb38imj9F8WlQ3dnvOfdmPAQSM
+         gxs+W7jxSWrpYaTIGg2MJlexMwOd+otJ/qQ70iEj0KWn+F1c3nvTOm+pAy8GtfDQl/oq
+         bntprQGUF10r2SFE9ESIpw8o7jgjeJLKM1iz1q4a57D/n8bXLvh4sf/Zy6+mmAMZSZkR
+         6S1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716492715; x=1717097515;
+        d=1e100.net; s=20230601; t=1716492767; x=1717097567;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ercL6wWo4kFiMX1hwzNAewQSqM8Z99TOJrvmuHqRN8E=;
-        b=vllEsOlpsWHxkKY4KRhlmD7/7lKqQtLusERoIAK3jJ98eNQ5KQDz/vuwRmsRODsmeY
-         a+yhZVQBLTiO3H35rTASTrLClcNpzpTv6bTZDXv4DMdwsMYAuR/JpSnm9299+1F6d4vv
-         KDwVntDVIey/34dSTnJqx7RV3ld87/buODr4gtotak10AtpRocIUfYmuD5b9btQ838im
-         tOU3blcmIyOsxXnat7bXkLeYRXL5jVElBTi98KBPvU3QVwB8MwynUxLq73eC3/bdRYoY
-         r+IToGkZxk/md0z/1Cc78irIEWgUUBiduXvMpcr9/zsytDwXdt4zZhl6wV5VFcxBg7eK
-         puCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV8E2BywsHLBvpEwDR9CYivwNLJy5ZdatEBfu5a5z8i9HnlHm677Uduj6mEe9QplXBTx+GwSvZcIiddZ4ED5KSufDmKdT3ANwRKJrY/2D5z0LcOuA8yqCb+RF2KMPpH0AsW6Mjp/LDpWS/OPP6AIiPDczVU/rfE1DYWXGtWWYzX4TVhsWQD
-X-Gm-Message-State: AOJu0YzDaO/1C3nSboDMkFhpEbJHtiA8/mgIHi2DDzkESGGv4VAcZDRK
-	Y9Ynvt7XUuHUZEFYz227Z+I62JDu26MO34N8bQ0JPT4AfqdRjO2h
-X-Google-Smtp-Source: AGHT+IHzj6nVNQNhgjPaU0bHbQ9GIYWP1dZ8yY3ol7Im5Z2GzF6t4GYmkVlNSPS/18YzfhJyoil4nQ==
-X-Received: by 2002:a17:902:d504:b0:1ea:9596:11eb with SMTP id d9443c01a7336-1f4498e22a7mr2695745ad.60.1716492715219;
-        Thu, 23 May 2024 12:31:55 -0700 (PDT)
+        bh=BSMPg+JtmEvTAgJMEj6aatCAtPVZX62UHvRca6wD2Kg=;
+        b=C5bPLjKyepaZSBOletuXs36EuuC8ZbvtaX+nA3Q+683s7AdZtyAl6YJa4vvO5G2Yt1
+         I/XFX9ISMYNOz2JM2r8xv6768luWFVJld+GYgo80YPaAaMXAc650ZMoJm0imWrn3QBIQ
+         ePUGFVGkxa7EKODRPNJKDumpnCrd0CvFAOjZz6s1yQWNkDl83jD0K0FprDGxMdX20NM+
+         Rdy/N7Dy2nTHtSnlIaq+31Zi2ncWMBAIqHjIE575ngA3eHVe/qYGADEQElD5UKe+ch3J
+         XUl9DJIVdlxSX/LZkH63ZSxUbhN1egOgmXb1mCXDXrKZoWteoppnXIOKlW6F7SjnltO9
+         mUcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXjr7VaTRNxXPwB8zSQTNNa7ROnZuTakeXpR4YR6WUU/ge89eWrlFHRvXqh0VMbMcujLqAPBaYoOUp+gtkcd8IiROvJ1DxrjDYeUlCpPeRzsgtpsW04SF1P/C+Cq522RZv51CwJ4nOtHVOFck5nTQRxIxRilKZdYgHVLIvX5d59bsDzAuiL
+X-Gm-Message-State: AOJu0Yzj+jwW17Rrf1xOjkuKv2i0Ocs0lNc9L0pXhxgtDCstdKBRn/qv
+	/5IL1kRw99aGvVxsHP7iojeIcv/le1Y2ZnLnk/RPdm8sInKXYSOT+Mud9Q==
+X-Google-Smtp-Source: AGHT+IEsc9w8u4r7TAhFz0RGNRWa656awiEPnloFIin0qsmMhcGBFEIYszrGdCA/9LYwVNDtREboZg==
+X-Received: by 2002:a05:6a00:4088:b0:6f4:4441:a32b with SMTP id d2e1a72fcca58-6f8f40962bbmr141467b3a.26.1716492767283;
+        Thu, 23 May 2024 12:32:47 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b1b1d13sm260115155ad.0.2024.05.23.12.31.53
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2a6646bsm25102513b3a.15.2024.05.23.12.32.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 May 2024 12:31:53 -0700 (PDT)
+        Thu, 23 May 2024 12:32:46 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <93f90092-b757-4bf9-9f43-34801d92c345@roeck-us.net>
-Date: Thu, 23 May 2024 12:31:52 -0700
+Message-ID: <8e765d02-c7ef-48db-83b0-341362d71c70@roeck-us.net>
+Date: Thu, 23 May 2024 12:32:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -78,13 +78,13 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/8] hwmon: (k10temp) Remove unused HAVE_TDIE() macro
+Subject: Re: [PATCH v3 8/8] hwmon: (k10temp) Rename _data variable
 To: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org
 Cc: Mario Limonciello <mario.limonciello@amd.com>,
  linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 References: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
- <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
+ <20240523-fix-smn-bad-read-v3-8-aa44c622de39@amd.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,15 +130,20 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
+In-Reply-To: <20240523-fix-smn-bad-read-v3-8-aa44c622de39@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/23/24 11:26, Yazen Ghannam wrote:
 > ...to address the following warning:
 > 
-> drivers/hwmon/k10temp.c:104:9:
-> warning: macro is not used [-Wunused-macros]
+> drivers/hwmon/k10temp.c:273:47:
+> warning: declaration shadows a variable in the global scope [-Wshadow]
+> static umode_t k10temp_is_visible(const void *_data,
+>                                                ^
+> include/asm-generic/sections.h:36:13:
+> note: previous declaration is here
+> extern char _data[], _sdata[], _edata[];
 > 
 > No functional change is intended.
 > 
@@ -147,21 +152,27 @@ On 5/23/24 11:26, Yazen Ghannam wrote:
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/hwmon/k10temp.c | 1 -
->   1 file changed, 1 deletion(-)
+>   drivers/hwmon/k10temp.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 6deb272c7cef..a2d203304533 100644
+> index a2d203304533..543526bac042 100644
 > --- a/drivers/hwmon/k10temp.c
 > +++ b/drivers/hwmon/k10temp.c
-> @@ -101,7 +101,6 @@ struct k10temp_data {
->   #define TCCD_BIT(x)	((x) + 2)
+> @@ -269,11 +269,11 @@ static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
+>   	}
+>   }
 >   
->   #define HAVE_TEMP(d, channel)	((d)->show_temp & BIT(channel))
-> -#define HAVE_TDIE(d)		HAVE_TEMP(d, TDIE_BIT)
+> -static umode_t k10temp_is_visible(const void *_data,
+> +static umode_t k10temp_is_visible(const void *drvdata,
+>   				  enum hwmon_sensor_types type,
+>   				  u32 attr, int channel)
+>   {
+> -	const struct k10temp_data *data = _data;
+> +	const struct k10temp_data *data = drvdata;
+>   	struct pci_dev *pdev = data->pdev;
+>   	u32 reg;
 >   
->   struct tctl_offset {
->   	u8 model;
 > 
 
 
