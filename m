@@ -1,55 +1,55 @@
-Return-Path: <linux-edac+bounces-1135-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1136-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB0E68CEF59
-	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 16:43:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6FC38CEF9D
+	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 17:00:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFD61F214ED
-	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 14:43:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76CA3B20D97
+	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 15:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224DE54BD8;
-	Sat, 25 May 2024 14:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CE61EEE4;
+	Sat, 25 May 2024 15:00:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="v9GRPg1K"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="sDDJuVS4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E0357C94;
-	Sat, 25 May 2024 14:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3382D15A4;
+	Sat, 25 May 2024 15:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716648226; cv=none; b=gO7jKsQT+ZynBbQBb10NGJFZvtSTT+upiE6ytIhad3E/Xv1MxhPc9Lqh/5l0tSr8JCLsT2VjBm7FxTETXZstWF/9y72h0y7gMLOHLXc+agB/LS2P6Ik/QI7wy60qspYA+6GlWU4MvTUb4pyyylcNExP5h7YSTQPEaiDEGvoQU4o=
+	t=1716649240; cv=none; b=AzNDwChtfbIPzwiUNCiQjSKIgEW3aOjcz4VOlI1Axgtff71+mcguc+zg0O1YlBT7ivVR85DJi6q+Ok0TU52n2KYwubnRSwUYmL4LM1bH+yx7JD4EYb6Ou1vhd5cA9N8kOaqS2RcmEYBdhag/bs7pLHhEp+lq4fJIkhlQ31SiqDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716648226; c=relaxed/simple;
-	bh=fkcSscRVePBzClU/ByafnLde7oTUX6HZ++aSee07ccs=;
+	s=arc-20240116; t=1716649240; c=relaxed/simple;
+	bh=Q4pzHCy4+tG7Zfat4dTz2yoLFglRjI6sDCvu3SF13IY=;
 	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=aK250zl1sEBPfr5oKmktA0lmnIlFLH9GWuxv2sQVaNr0yQIX7nkk3hvKp8sv4QWdfPJZ/vsDju1XKYWLKgEVE+5KEeywiW7Deq6iXAxjDzjnHUbBmne5LJJiI6tgJqOTcPzJwNTGxJ/6Q1dHuGSSbkORHLuc6AwF00B2hY75u9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=v9GRPg1K; arc=none smtp.client-ip=212.227.15.14
+	 In-Reply-To:Content-Type; b=jNLsqTa7cp53ei2U+6viGexJe8ilk0eiaEznEZKLVL+6uFvDjK9fxIPhN8nzfKmsKoeGiS/MFLNhs825+o0x9bUEZSDmChTNcUHy6bNh7wsePR2ECj8msCYNLG0MzxJYvV77W/WwfROcSAMdGB5Mgq4cHbzrJNIYRmCLzKSYC5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=sDDJuVS4; arc=none smtp.client-ip=212.227.15.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1716648199; x=1717252999; i=markus.elfring@web.de;
-	bh=fkcSscRVePBzClU/ByafnLde7oTUX6HZ++aSee07ccs=;
+	s=s29768273; t=1716649214; x=1717254014; i=markus.elfring@web.de;
+	bh=Q4pzHCy4+tG7Zfat4dTz2yoLFglRjI6sDCvu3SF13IY=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
 	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
 	 cc:content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=v9GRPg1KEYYrxlY/tsE9O4exPHM5M5OvPE72/MZr+cv0S59+jLS5PcLP6YXZ9xnU
-	 zndQKjjrCl3KQMhc0INkNTjEI0KDY1YnoDn2W8UnyVZ94ghyACYIw+i0OgIi+rkwr
-	 Eu064jBbcdMMznekVEnIYk4C3xPFFy0VETsMnC6S3szMD2OTlG+lNWOZ12RxsckVc
-	 AP4s1v6oBpwXEu9DDLZWwj5eCcvN/nxcxPa1094c6ydVKuBABNBOv4a/RamzzVMfc
-	 YglqBkknmagIw/ZZFBuDGH3TWsAi4hzD2XvKi1LaLHn/w1iQQr87z9/epqW+NLSWP
-	 u/OVpGgUZXr8qahCGA==
+	b=sDDJuVS4LuXtznwMdAZ99aoXYPLqs15tsCkafF698ZnL2gkw5UMNscR0AKFTtkip
+	 qK8dYmTgdSs8j2cgyDvkCJz1cJux/NVB2U6wh5ae/ebrKEXYa7aO0TH4RLMEouQvC
+	 5aXwanwKKG38ovLION3dJxURqy/hk09fXNzHbvMYvvH2jlGmT39Jc+Dcw+o/cOkeh
+	 ywgUkLFFlCNl6j88hkjXuoRkLGwwTfJ8PxboGsDYqr4A4x12HSAgnKanBn8C/Mdww
+	 Y4pP8a6kOOywKasPJU2u/GlVYTtmrLsUnZgZk6/0bdxoaF76d2t4Ed8/96Fpap3O2
+	 Rf9TlT+fEIJDrTBCng==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
 Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1N6K1l-1sYXLq2s93-00zZ6o; Sat, 25
- May 2024 16:43:19 +0200
-Message-ID: <cc397371-cb8a-43ba-8a63-98856b6fc0ca@web.de>
-Date: Sat, 25 May 2024 16:43:18 +0200
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MKMA7-1rwmVF0V7X-00SzY9; Sat, 25
+ May 2024 17:00:14 +0200
+Message-ID: <120effa0-b739-4fab-a890-559cf353c4ab@web.de>
+Date: Sat, 25 May 2024 17:00:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -62,37 +62,39 @@ To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
  x86@kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Mario Limonciello <mario.limonciello@amd.com>
-References: <20240523-fix-smn-bad-read-v3-6-aa44c622de39@amd.com>
-Subject: Re: [PATCH v3 6/8] hwmon: (k10temp) Reduce k10temp_get_ccd_support()
- parameters
+References: <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
+Subject: Re: [PATCH v3 7/8] hwmon: (k10temp) Remove unused HAVE_TDIE() macro
 Content-Language: en-GB
 From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240523-fix-smn-bad-read-v3-6-aa44c622de39@amd.com>
+In-Reply-To: <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:8e5ILg0ccv40lWaOtqg2D8SgzVpmxsIPIOXqqOAu2EP0gVU6f5h
- dMXEsFiyjFLeoa8OKIncw3mrV1ziT9Ioexl4PPU/UHCqytDerJ1y0n4UeFbQA7oePWkAAxs
- H+jic0ZGoXtwfYJRmDrBRmmM38jsNHsX9aqOcGLWyfWnxFuhx8tyTjCsI7iOpESHy6aCEeT
- PKTx1pj4UHwXXY+02MwCA==
+X-Provags-ID: V03:K1:18e4ZdRo77H94xd/yj+nZPqU3N9WiFOdAfqaQzyAZfEgBkjvxKl
+ 4izmT08RherBSjcEuZPvg27RDS7zQzB8g4JgU9UbSdTpbNiuoVTbJMJXKAREY3wtDlUYCM2
+ RZD32oD9ykjTZpajRzQZY92YO9XMh4KSN1lLKXcdZg/pf9N0bK0NJ/EzisSpZMlspc4Cqhs
+ Ek1YKAljWlEyRGfLyaxxg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Ull0oJpgIdY=;FurdIMuXMAktoU+xEw8OTdQmBM6
- H4V1sd0KyLKThgT0BqjK4U4qgNJLoHXQCDN8GLrvum63kSTIFlo6ElI2R1K3gwHtcuFVI8iW+
- iTitMPLjrb0Bq97Y3+IGhBLF+fedpGguAK/rET3ZJXi9Q74FU5GUxsamNWq2Xu2ZtBwomuLax
- XzYFwJKjWQc7Xyk+0FwG4+cQsXphwL2sSD5KVDZ9MdFlTVb2PAVYbTnIygceQGQdVcFYy5SQZ
- 3DuXODfb8d+x4xQyfyg9fG3SiV2K3PRr3kxeZZT2NAMeoqZ0vrTbB6OmuXwuMfIcDEJtPbQYz
- oIJ+QLnX+BM7T7MJXSJkQW/EiCHD7inafmV8Klv2i+Y7B4CyIrFr5+ktVfXpsYEJ/rQBOq4Tt
- QgzIRcUYdJWbzyeWXW9rCWd1nbnQn7UPwrrtCjWhyQ6+YVybEP8YlQ8gbGvvxpTYIIYN6+tV3
- ooTANPcM5EAAVBqw3oaN1+ynYRsxtReQ8zMNv5WLt6kGMNkCNyhz/Jui4zkxNNBu14M7kkNFI
- Gm8maROV1S0eQQvMFwshe2tikAKBhi2Om3PxYApcsyPwCE9SxQSp1oKr/btXMEF+aM5NUXYzv
- ICRHVL9dOlDuvpI2HywASV22hYNW+UkuFt5nn3yIGoF0trtrhWbUSu0wPLCEjr3oMr2MGsQJ6
- hr6vPkdnkIDOmvx5pjLdrrkGGHj2MJkZZC+L9yiJrflv8hePuSV98S0bH+brX8zBfK7TgLSJp
- hqqkec4Fwbd927OCemuYrjSFOsS5dXvTyABayG0BhnxTVbPRIdf0zfH2TpxOidPNe5ufxi+iC
- BC97E8RAwauT9GtGEarZjc/lIl+9m8tzY3tLUfofY9eB8=
+UI-OutboundReport: notjunk:1;M01:P0:YXst0CnWAZY=;bWLS72JZhB6sGBWTU5Uum+GIYAm
+ 4rH0a+REkNHHAr2u+IVcvR/EHoB+ZwyA0AG6vqHmaDd+5+Zde/+x+uUxVCE/QaDh2Si+37Cb6
+ d0XGxNa5p91vYKiREq/kuOQXWe06k4WU9LZYCfza45OluUJT9tj/Kixy79wcAHN2zEURzAYKf
+ PuQb9piTEkG5tLE3Z/icLoiPtGDJX1QUsuHfupvQH8dTZjTmKY6ORYhMDkbNgYoNO28pE1zn5
+ f49Yr1n/HQ0x5ZEHnmZPeHwXVms3k7TWZKXqq8MUvEY5O0pwcUdlMSkia+ivWTRPsbu3ONdCY
+ FiHSzCqjvvMVM+52FquyXCtYpZYQIpwjEaO8emPu60kIjWdVrgvG7NZE5izUwB3Z4tRn2mOyt
+ UBBM3X0a4qRFIwIMzRb0Z4XNoXyJUmBH/2DCxedH3+jJzJ24ihlyTsRr8HzeieKBNSSKo0Fqo
+ gd0Trap9tteWE02mqYdcGD2vYEQd8/S9+FXRDnKeB/iKmzHJIPaLO12Q6HnPEl1iro5UEa1ft
+ WPyUXnBpetGunVyUI16+Lm/3rYjKUm0/HQZN3Obx6L6ec5DUmC42D49m8fizuwtaoFUY2X9fx
+ b68Kk3PGcmF4XjgsXWJu7z1Zz1hOzumZjQ/6cXK3Nx62Jxb9enqVBilfN0c2UkWlJFAF/Bc5W
+ 37mryidQGH20pASj5NLpbL1YSkyiJivZQT0DGnBsVF6kTAeCT9DkIBoM5GhoZp8j+pr1OK6LW
+ WHGktG7FwW7tGWVsQSZX/tKKeWnhfgH7/pp+p9Qzr5wkFTboJoFOus4sGrmKTO0WPjVmeDtdH
+ IlnN0u8ZSsk4OMiJahSltaTDDjbEJFnva287vhtRdUGBg=
 
-=E2=80=A6
-> Drop the "pdev" input parameter as it is no longer needed.
+> ...to address the following warning:
+>
+> drivers/hwmon/k10temp.c:104:9:
+> warning: macro is not used [-Wunused-macros]
 
-Can such information be relevant for the tag =E2=80=9CFixes=E2=80=9D?
+Can such a source code cleanup matter also for the tag =E2=80=9CFixes=E2=
+=80=9D?
 
 Regards,
 Markus
