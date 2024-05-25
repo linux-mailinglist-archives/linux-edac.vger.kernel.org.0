@@ -1,121 +1,100 @@
-Return-Path: <linux-edac+bounces-1131-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1132-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C141C8CEE11
-	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 08:39:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0E38CEEF5
+	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 15:23:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BB30281BA2
-	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 06:39:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FFF41F214AB
+	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 13:23:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D46BE55;
-	Sat, 25 May 2024 06:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2BD43E470;
+	Sat, 25 May 2024 13:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="G8dNiMUb"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9578DB65F;
-	Sat, 25 May 2024 06:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B4A101F4;
+	Sat, 25 May 2024 13:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716619164; cv=none; b=HVf9cD+eyRQYPS6tIPnd6I/zjeDfUG02/w72w0o7H15I8/5YOyBbphxMc76K8I7pKpGCCLx8fuLnHHC706ufpXJDfMcT/WPy0Ps6nVF1b0FnTJfR3IustJbr6zLFQP0QxV5EdGGIgbrzbmal1pbcs/taDQ3p49skUsSoFZY1kaw=
+	t=1716643377; cv=none; b=T5BugqcDnB2u+5IapwJu1Am+uYjoM6Z9N5OjLLJwXc0RyJb1UT374ID40ouqt05FUYv8ZF8HyIIxDQH2NKy0taj3aJz8HKOXfBb/95BobOqDWyK8v4e3VABSDMl8cesnBWg0GDVOxlT1G13rVIGjQ5Zj8hoX1hH4j/ineZFNnzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716619164; c=relaxed/simple;
-	bh=tzjnnwmaKALSL+mff6QqnjTI8XCweVW0QvT8pa5RMTI=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=rK3a14a731iFoq8pfzi2u3B7WPnucQxMrqzZgXSbxDwkoDodS9ayAnKTPmKiVHAbPqxuqeCfRKcwtUjpYYxz4eoVoauPabm0/Rb2axRj6/waihpzkfIgYwx+l0a1jZIPVMCEEa8FXIqLVHa7O7FttbklPbrLpdDXgtjawWDVUM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4VmXGY2FwlzxPyn;
-	Sat, 25 May 2024 14:35:33 +0800 (CST)
-Received: from canpemm500002.china.huawei.com (unknown [7.192.104.244])
-	by mail.maildlp.com (Postfix) with ESMTPS id D56DF180A9F;
-	Sat, 25 May 2024 14:39:17 +0800 (CST)
-Received: from [10.173.135.154] (10.173.135.154) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Sat, 25 May 2024 14:39:17 +0800
-Subject: Re: [PATCH 10/13] mm/memory-failure: move some function declarations
- into internal.h
-To: kernel test robot <lkp@intel.com>
-CC: <oe-kbuild-all@lists.linux.dev>, <nao.horiguchi@gmail.com>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, <akpm@linux-foundation.org>,
-	<tony.luck@intel.com>, <bp@alien8.de>
-References: <20240524091310.1430048-11-linmiaohe@huawei.com>
- <202405251049.hxjwX7zO-lkp@intel.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <2600230a-5e81-393f-509a-17dbdda99259@huawei.com>
-Date: Sat, 25 May 2024 14:39:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1716643377; c=relaxed/simple;
+	bh=twZv0XwD38Sgrc7cZswUW04/P8d8QPz8QlGCO53cniQ=;
+	h=Message-ID:Date:MIME-Version:To:References:Subject:From:Cc:
+	 In-Reply-To:Content-Type; b=Z85e7zFBUZziUjtf7QJO6iIIrK32PjvgDRXASF0Zp1EaQKdBVoWI1Wz3ZdKZRAqAhY9aiZHu7KprF+a+1Tdm7JpZDQeVsPM8clS4m/0FURY18DFS1AH6wwba2x1eJKJMrAqMhp0dRnFIDSOM9VbIE19uiZG1cWLEAan4dKnm310=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=G8dNiMUb; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1716643351; x=1717248151; i=markus.elfring@web.de;
+	bh=twZv0XwD38Sgrc7cZswUW04/P8d8QPz8QlGCO53cniQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:References:
+	 Subject:From:Cc:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=G8dNiMUbwUKjzXMaWkHcvdLfiXs3jWf45cPgiEfjG9T0zQLr4FYfz/Rp50ihAv6B
+	 BX3uWY8Frx9sfjGK5DIM06ITMTBpe7SIUfNKwWg4U4UAo3rChE27JwikO0wizsE/E
+	 H/g3L+HJ7ju0fDUj3TAeTUTMmtmCtbeXl+UebmdhsOu7fcaGVolL3hTXV/J3vQ1WJ
+	 MdQRz3Hb1CKSRC7j5ohuT6arVN9zsPQEN8mzmdwmTjSgXwoNdSQG/R9O6uqotGEZ8
+	 ot+UZHOn3bx5IV6QNc9VkGxz83Y1eCT7cgdi+SaonN00zmP3K0/hzf401e/Wbhl5A
+	 L/H7lVrArypDL3htfA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MKM5z-1rwloW2E4l-00Lxhx; Sat, 25
+ May 2024 15:22:31 +0200
+Message-ID: <e084c47b-5a14-464e-b2fd-bdfeb9fc8dc3@web.de>
+Date: Sat, 25 May 2024 15:22:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <202405251049.hxjwX7zO-lkp@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
+User-Agent: Mozilla Thunderbird
+To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ x86@kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>
+References: <20240523-fix-smn-bad-read-v3-2-aa44c622de39@amd.com>
+Subject: Re: [PATCH v3 2/8] EDAC/amd64: Check return value of amd_smn_read()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20240523-fix-smn-bad-read-v3-2-aa44c622de39@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:h9m6DHXFR84RKzbcIb+FaTFLgvibH9mmJn4paw4Qt9pUSGJ3Od1
+ nQUAbZjvazlKRaZs06sabcarChxiTkFHP/IioLOfUxtH0DRQsMRxE1yv5idWv5zrt31V5B0
+ dmKB0k7L1KBbWmV+aXsNdvQpri/fsQo5D1RhqDvhJC3m1260hp29FChdfklFTZsGls5kk1g
+ ACkGD3JXkFUoxBx9ok6DA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:HMLPTIJfApg=;xDoy1xlEVS2hpwr5HArNs8O5zrr
+ nFRNbneLkEeMvq80JZ524EbzsyU+rZCOwFK19GKTluHxPj+wsBYkA3Fje7mUyTUW7chLCvqu+
+ O7ij7zgkVJHsUGMS7H7IIwARcZ184JWr1WzEBNTiPiihC0OLG2xE/EQfSddPT8JDE2obEyAsS
+ PKsL14Omf+ykRHbNjllJwTHNdJyEY3cef2mhjvUG/4tXkdd7yFNwGqkbASxvOW5W9EskPuAxJ
+ Hi8g/6kylZXZp6/36vUpriq1+Cn6ZVOp4ZD9mj+cu00vP0Qj8khuHAdsWo6M1dJ8S9M6U+gq7
+ 50RH8XIMZOfscfQr4bmyLBdTdcP7e0Nh2l0M+FrsNXW1gIj9Rzm1Es/R8oP/bXA4xq6YW2hKE
+ iCPQudJt8TkWaHeVulvPpk5GLfqRcTdmJCaYEo1sE/BrSKwfiFnNV4rBGOLVz6cKjEueh9D15
+ pdPLGPli75AA48polfPADoRbGw7KKMUAoW2IwDzUg3/rySTTkI4X+f6mvRnyVxOVCnYpuh9JD
+ PMePvSXaEibvEQUTjFLPRX3YU/+Czbw6UmGk6lJL/x+cenMJnxxTDEe78GG3W7fMBoxt5JmV1
+ Dg3xPL8FwN4Vm4SJUz7xzw1RNrHbojLaaU/iR40KywJ3fKZNwLEcZA04exVXwup9Ld3S1EczF
+ qaVdNpweezPoTfWEfD89R0vW/Rojr60hiX/BAqPiL0CaWB1q0WmVP/WsYDmnH3oU83la3i/ss
+ h1mLED9x+wsSwJQr0JccKP3ZF9p41+SJa1aNmsXNgspYvSUMsqBZG/8SOrS89edbHzzd5/OxZ
+ NEorrtGdKE9V12OktZTdC2+NTP+mh21mlO4G/Ahnm8HDc=
 
-On 2024/5/25 10:39, kernel test robot wrote:
-> Hi Miaohe,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on linus/master next-20240523]
-> [cannot apply to v6.9]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Miaohe-Lin/mm-memory-failure-simplify-put_ref_page/20240524-171903
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20240524091310.1430048-11-linmiaohe%40huawei.com
-> patch subject: [PATCH 10/13] mm/memory-failure: move some function declarations into internal.h
-> config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20240525/202405251049.hxjwX7zO-lkp@intel.com/config)
-> compiler: powerpc64-linux-gcc (GCC) 13.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240525/202405251049.hxjwX7zO-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202405251049.hxjwX7zO-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/vfio/vfio_iommu_spapr_tce.c: In function 'tce_page_is_contained':
->>> drivers/vfio/vfio_iommu_spapr_tce.c:195:16: error: implicit declaration of function 'page_shift'; did you mean 'page_size'? [-Werror=implicit-function-declaration]
->      195 |         return page_shift(compound_head(page)) >= it_page_shift;
->          |                ^~~~~~~~~~
->          |                page_size
->    cc1: some warnings being treated as errors
-> --
->    arch/powerpc/mm/book3s64/iommu_api.c: In function 'mm_iommu_do_alloc':
->>> arch/powerpc/mm/book3s64/iommu_api.c:155:45: error: implicit declaration of function 'page_shift'; did you mean 'page_size'? [-Werror=implicit-function-declaration]
->      155 |                                 pageshift = page_shift(compound_head(page));
->          |                                             ^~~~~~~~~~
->          |                                             page_size
->    cc1: some warnings being treated as errors
-> --
->    drivers/net/ethernet/ibm/ehea/ehea_qmr.c: In function 'ehea_is_hugepage':
->>> drivers/net/ethernet/ibm/ehea/ehea_qmr.c:676:13: error: implicit declaration of function 'page_shift'; did you mean 'page_size'? [-Werror=implicit-function-declaration]
->      676 |         if (page_shift(pfn_to_page(pfn)) != EHEA_HUGEPAGESHIFT)
->          |             ^~~~~~~~~~
->          |             page_size
->    cc1: some warnings being treated as errors
+=E2=80=A6
+> Check the return value of amd_smn_read() before saving a value.
+> This ensures invalid values aren't saved. =E2=80=A6
 
-Will fix this too. Thanks for testing and reporting.
-Thanks.
-.
+Does such information indicate a need for the tag =E2=80=9CFixes=E2=80=9D?
 
+Regards,
+Markus
 
