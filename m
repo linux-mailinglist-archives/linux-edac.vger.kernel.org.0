@@ -1,101 +1,178 @@
-Return-Path: <linux-edac+bounces-1136-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1137-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6FC38CEF9D
-	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 17:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA8128CFC81
+	for <lists+linux-edac@lfdr.de>; Mon, 27 May 2024 11:11:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76CA3B20D97
-	for <lists+linux-edac@lfdr.de>; Sat, 25 May 2024 15:00:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A832B206A8
+	for <lists+linux-edac@lfdr.de>; Mon, 27 May 2024 09:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CE61EEE4;
-	Sat, 25 May 2024 15:00:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80F713048C;
+	Mon, 27 May 2024 09:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="sDDJuVS4"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="YyTu/wxD"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3382D15A4;
-	Sat, 25 May 2024 15:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1246CDB1;
+	Mon, 27 May 2024 09:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716649240; cv=none; b=AzNDwChtfbIPzwiUNCiQjSKIgEW3aOjcz4VOlI1Axgtff71+mcguc+zg0O1YlBT7ivVR85DJi6q+Ok0TU52n2KYwubnRSwUYmL4LM1bH+yx7JD4EYb6Ou1vhd5cA9N8kOaqS2RcmEYBdhag/bs7pLHhEp+lq4fJIkhlQ31SiqDk=
+	t=1716801059; cv=none; b=Wze2Rp6CNf5U5kfNa0TSW83jP9KCzBv1/JN+D0u7vUOgCfVRbOIC/kWCzpb6uLiahBtRiYjezYUCiOsKLkQ5HAw9lfi4Riobje348V6rLtiNXDJZWZml52L5Fhe1rj7Rg4bQ/g3TKvc+eX6ye0lJDOuF+gmHDV53f28NiNuaTr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716649240; c=relaxed/simple;
-	bh=Q4pzHCy4+tG7Zfat4dTz2yoLFglRjI6sDCvu3SF13IY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=jNLsqTa7cp53ei2U+6viGexJe8ilk0eiaEznEZKLVL+6uFvDjK9fxIPhN8nzfKmsKoeGiS/MFLNhs825+o0x9bUEZSDmChTNcUHy6bNh7wsePR2ECj8msCYNLG0MzxJYvV77W/WwfROcSAMdGB5Mgq4cHbzrJNIYRmCLzKSYC5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=sDDJuVS4; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1716649214; x=1717254014; i=markus.elfring@web.de;
-	bh=Q4pzHCy4+tG7Zfat4dTz2yoLFglRjI6sDCvu3SF13IY=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=sDDJuVS4LuXtznwMdAZ99aoXYPLqs15tsCkafF698ZnL2gkw5UMNscR0AKFTtkip
-	 qK8dYmTgdSs8j2cgyDvkCJz1cJux/NVB2U6wh5ae/ebrKEXYa7aO0TH4RLMEouQvC
-	 5aXwanwKKG38ovLION3dJxURqy/hk09fXNzHbvMYvvH2jlGmT39Jc+Dcw+o/cOkeh
-	 ywgUkLFFlCNl6j88hkjXuoRkLGwwTfJ8PxboGsDYqr4A4x12HSAgnKanBn8C/Mdww
-	 Y4pP8a6kOOywKasPJU2u/GlVYTtmrLsUnZgZk6/0bdxoaF76d2t4Ed8/96Fpap3O2
-	 Rf9TlT+fEIJDrTBCng==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MKMA7-1rwmVF0V7X-00SzY9; Sat, 25
- May 2024 17:00:14 +0200
-Message-ID: <120effa0-b739-4fab-a890-559cf353c4ab@web.de>
-Date: Sat, 25 May 2024 17:00:13 +0200
+	s=arc-20240116; t=1716801059; c=relaxed/simple;
+	bh=hna6wiJn5J3YlKLz1DIYbTqakeYLBOtj6qBnzA4Yaic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k+hL1w7SbO5L2j1+ukNfPf8DlpWXXG59h96sguVzeClEI9AtiIT3+5reVVaam1YOxRIZUoO6aWHXqXJ6cw2/hgQPeY+is5F8BbLK6F8VYx4QjvgFRKPwQrPv94HPf/DGwtd1vlLq9CjspSyOUFu4cDJhs3fUDjYECgWXULDf+Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=YyTu/wxD; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8F9A940E01E8;
+	Mon, 27 May 2024 09:10:48 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id KohNzWZ-0NVO; Mon, 27 May 2024 09:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1716801045; bh=9w6qbzhl3mSC9BIHJao+s6F+3dipO5EQO7O9UXzK/zI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YyTu/wxDSCSpg3L0kZMPZppqT/G+B//WNjrOLn+PjqrbbMgu9dR0NVDH28KuTRxVm
+	 C7MPk9kDlKbxXo6Ozp9t9p5hAuS8WRuOaZA1NuVCjdqnqmhKiV0yYcDCJ0exzbHRRO
+	 NugkfCcU9KYfpFbohF7s7CMfvrAqH+XMC2Qa4YQOnPe563GpTIkLFD6Iz+fgd7aUTG
+	 2x6WelBxPxHgSP919X3hCV5laUPRAippv0q/HRbtzWnsOkpbVWXnzL8hr2P2FhYWeD
+	 KvHyKFskhgtz2kXi6tKVL+/y6p0nnCdEkMQBnBUsXZhGQiEfJPTRx3LHyxKtadwvjU
+	 c1qdGPpc6DnFOXMssojWCwGrOUZcuHDI53O8UQgthz9LELy2OdCglqDqSs1ACih7kI
+	 7JMSRUOvGesXZmn/q+fnw3PrQBEsX2yfhW01zPT1nv+gM7PwIyNu20y/akRoRYfs4X
+	 uGXp1gbnlDlmjVgzgf5KmIB7G543KcpaNBCxy8SbrUsPcqpIEAwrTUyoHZ2mV2RwEz
+	 ezqAhf9DxvnEQ1HrjhsLxFJOdDQe+wYz8KqRlQILtCwm5S/rQiud3KZyr1AIQpyNWj
+	 4NTDdQnFD94AOADNehNN7feDr+OnRr6lqEWqW8DTwRTvhPgvxo1M1S1+xfAqfdt/RK
+	 6CLE1az6qWrGmVfm9qW8JuDs=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9615A40E016A;
+	Mon, 27 May 2024 09:09:58 +0000 (UTC)
+Date: Mon, 27 May 2024 11:09:51 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Dan Williams <dan.j.williams@intel.com>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"dave@stgolabs.net" <dave@stgolabs.net>,
+	"dave.jiang@intel.com" <dave.jiang@intel.com>,
+	"alison.schofield@intel.com" <alison.schofield@intel.com>,
+	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+	"ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"david@redhat.com" <david@redhat.com>,
+	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
+	"leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+	"erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>,
+	"mike.malvestuto@intel.com" <mike.malvestuto@intel.com>,
+	"gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>,
+	"Zengtao (B)" <prime.zeng@hisilicon.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+	wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [RFC PATCH v8 01/10] ras: scrub: Add scrub subsystem
+Message-ID: <20240527090951.GAZlRN3wh9107DSfGK@fat_crate.local>
+References: <663d3e58a0f73_1c0a1929487@dwillia2-xfh.jf.intel.com.notmuch>
+ <20240509215147.GBZj1Fc06Ieg8EQfnR@fat_crate.local>
+ <663d55515a2d9_db82d2941e@dwillia2-xfh.jf.intel.com.notmuch>
+ <20240510092511.GBZj3n9ye_BCSepFZy@fat_crate.local>
+ <663e55c59d9d_3d7b429475@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+ <20240511101705.GAZj9FoVbThp7JUK16@fat_crate.local>
+ <20240517121554.000031d4@Huawei.com>
+ <20240517124418.00000b48@Huawei.com>
+ <20240521080621.GBZkxV_ZWnbbrq-yV_@fat_crate.local>
+ <20240522104017.00003904@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
- linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
- x86@kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
-Subject: Re: [PATCH v3 7/8] hwmon: (k10temp) Remove unused HAVE_TDIE() macro
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240523-fix-smn-bad-read-v3-7-aa44c622de39@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:18e4ZdRo77H94xd/yj+nZPqU3N9WiFOdAfqaQzyAZfEgBkjvxKl
- 4izmT08RherBSjcEuZPvg27RDS7zQzB8g4JgU9UbSdTpbNiuoVTbJMJXKAREY3wtDlUYCM2
- RZD32oD9ykjTZpajRzQZY92YO9XMh4KSN1lLKXcdZg/pf9N0bK0NJ/EzisSpZMlspc4Cqhs
- Ek1YKAljWlEyRGfLyaxxg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:YXst0CnWAZY=;bWLS72JZhB6sGBWTU5Uum+GIYAm
- 4rH0a+REkNHHAr2u+IVcvR/EHoB+ZwyA0AG6vqHmaDd+5+Zde/+x+uUxVCE/QaDh2Si+37Cb6
- d0XGxNa5p91vYKiREq/kuOQXWe06k4WU9LZYCfza45OluUJT9tj/Kixy79wcAHN2zEURzAYKf
- PuQb9piTEkG5tLE3Z/icLoiPtGDJX1QUsuHfupvQH8dTZjTmKY6ORYhMDkbNgYoNO28pE1zn5
- f49Yr1n/HQ0x5ZEHnmZPeHwXVms3k7TWZKXqq8MUvEY5O0pwcUdlMSkia+ivWTRPsbu3ONdCY
- FiHSzCqjvvMVM+52FquyXCtYpZYQIpwjEaO8emPu60kIjWdVrgvG7NZE5izUwB3Z4tRn2mOyt
- UBBM3X0a4qRFIwIMzRb0Z4XNoXyJUmBH/2DCxedH3+jJzJ24ihlyTsRr8HzeieKBNSSKo0Fqo
- gd0Trap9tteWE02mqYdcGD2vYEQd8/S9+FXRDnKeB/iKmzHJIPaLO12Q6HnPEl1iro5UEa1ft
- WPyUXnBpetGunVyUI16+Lm/3rYjKUm0/HQZN3Obx6L6ec5DUmC42D49m8fizuwtaoFUY2X9fx
- b68Kk3PGcmF4XjgsXWJu7z1Zz1hOzumZjQ/6cXK3Nx62Jxb9enqVBilfN0c2UkWlJFAF/Bc5W
- 37mryidQGH20pASj5NLpbL1YSkyiJivZQT0DGnBsVF6kTAeCT9DkIBoM5GhoZp8j+pr1OK6LW
- WHGktG7FwW7tGWVsQSZX/tKKeWnhfgH7/pp+p9Qzr5wkFTboJoFOus4sGrmKTO0WPjVmeDtdH
- IlnN0u8ZSsk4OMiJahSltaTDDjbEJFnva287vhtRdUGBg=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240522104017.00003904@Huawei.com>
 
-> ...to address the following warning:
->
-> drivers/hwmon/k10temp.c:104:9:
-> warning: macro is not used [-Wunused-macros]
+On Wed, May 22, 2024 at 10:40:17AM +0100, Jonathan Cameron wrote:
+> Where I've used the symlink approach in the past, it has always
+> been about keeping a legacy interface in place, not where I'd start
+> with something new.   Hence I think this is a question of how far
+> we 'breakaway' from existing edac structure.
 
-Can such a source code cleanup matter also for the tag =E2=80=9CFixes=E2=
-=80=9D?
+Yes, since we're designing this anew, we can do whatever we prefer. So
+let's do the standard driver model stuff.
 
-Regards,
-Markus
+However, there's also /sys/devices/system/edac/ so I don't know what the
+right thing to do there is. Are we supposed to put everything under
+/sys/bus/edac now and /sys/devices/system/edac is wrong now and should
+go away? Maybe we should talk to Greg first ... :)
+
+> This suggests the second option above, but I wanted to confirm as Shiju
+> and I read this differently.
+
+As said, we wanna do the new correct way of how a sysfs interface should
+look and leave the old one as it is.
+
+> Ok. There is an existing is the minimal sysfs existing interface but I'm
+> fine with ignoring it for now.
+
+Yes, we don't know who's even using it and why. That's why I'm very
+interested in how this new thing is going to be used so that we know
+what we're committing to supporting forever.
+
+> *much sympathy!*  As we ramp up more on this stuff, we'll try and
+> help out where we can.
+
+Always appreciated! :-)
+
+> Hopefully we all agree on a unified solution being the target.
+> 
+> Feels like we are converging. Now we are down to the details :)
+
+Yap.
+
+Thanks!
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
