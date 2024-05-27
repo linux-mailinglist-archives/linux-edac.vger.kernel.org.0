@@ -1,118 +1,140 @@
-Return-Path: <linux-edac+bounces-1139-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1140-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D548D00BE
-	for <lists+linux-edac@lfdr.de>; Mon, 27 May 2024 15:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 428B28D0148
+	for <lists+linux-edac@lfdr.de>; Mon, 27 May 2024 15:23:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F6F4B24539
-	for <lists+linux-edac@lfdr.de>; Mon, 27 May 2024 13:00:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2A4BB276FE
+	for <lists+linux-edac@lfdr.de>; Mon, 27 May 2024 13:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D114161B43;
-	Mon, 27 May 2024 12:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4612D15ECEE;
+	Mon, 27 May 2024 13:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="GFbn4st0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pt8k4UTl"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0C016079D;
-	Mon, 27 May 2024 12:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7386D13BAC2;
+	Mon, 27 May 2024 13:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716814620; cv=none; b=F0xZPi/8+/RPAW0deqtUw4TNwjthVOnxbkHq6TKMNa8ym7Nnnd6O1ui5YbhYSYNi7kw+bbHVlprm1Nf5fhHw4nFLqmMxgQbK+7o9mHN6a1+h7+0cNVbTh5nVYkdlAjLCFdn5oDImYLo3FutHXc9pAXorDJqBHEw076MdUVCnJWs=
+	t=1716816168; cv=none; b=LGQyQTLMIWZCsN18/5w2JESDyNDR0z52mVLGArr0sPVrLnPaCB+Hr33KkFCkQ8JBprBOIl/qoC5voWEkXa7RI2FPzcRa6p36JVsPraULBR4AJuETtKKltw8Gw/SzkfTFwUn4R4KZxZ1rika0I2zKyVPWvlVGPxU78wtpa5PijuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716814620; c=relaxed/simple;
-	bh=otmXjCzv9e1yKhrG2FOGrSXgT59YxsBJtrlYqKPOgso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SFe87xv8RwH1sfIttCcRnDsUj8WnQ4/XwQlAafSmOtp83rW8SEP8aDE5kmPwYnu0j+i3mxIRau/Nik4HHhNp8vNx/zgI3t487uxHhNgt7lPuBrmxI1hwNqZZYbCdTAFJjTL/r9iCIAIqIHWzqCvO4HoCI4QWgBGua/RWCS5H+Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=GFbn4st0; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0A5F540E01A1;
-	Mon, 27 May 2024 12:56:55 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id EZOzCBgsOdXp; Mon, 27 May 2024 12:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1716814611; bh=0G0ODqoWY+xI0sbXQornRwLP45IDPVjo5oOKNS4y6/g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GFbn4st0nSfJtxcpqiI4PN9DW5ppqeyHiKqbpSvsy9x4og1JYNogEERgar7czWUV0
-	 5D/snq9k9sfORqPoUMhVQThS8FzG1fyCLkdA4Q1GBFDah3Aci7C+sgAafLYUFGrJEV
-	 QYFi53i6Uic5m1PPG9GweQO7lfeIbkQKEscK2C02SWZbN3LkSS7K9M/Ljm4rFHypMR
-	 47u7+WJpnNmoGQ5C+btUihBggyHK08ABWsG8y5BNS6V2wEb5a4I+QeYntwzyFARs43
-	 eCuvLuSaVugk/cYze0wmWKSLoRR2go5dbGecPYxwMU7FbHGH1vUEiy+92HPGVjaVZq
-	 0qSilI7IbennS+39KBAmQ0cRL/yA5pM0ZmzoNZ3AN8tgfbzrfbraNcAADANl8fWIPB
-	 N7Q7AFVKjRz8lKixTiBWJ3TykohPQYBxhWJKmLpauviJMM38JHX8/FXXmwXiTt1xfA
-	 Y4Cdxj+2Vb863hsU9YPvDSYNKAT1MFp1HkFdLCH/a/KYSphpsonjrUArYpZxEpaL5V
-	 GhaFtNUyCVvCCrZdW/wmKJPM+BedZdQOUuEGDSNH/LIs7231oQT1RC+bU93QWnsqGn
-	 4Eb479a5hX4yf0SP5GyNiRBGzhSUMGT9hCeUs9Rc80IevN0EVUrUAu6P/0Gqs8CDSu
-	 eIeZQQ4OPg8rU9rJ+j10bZY8=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 138DE40E01E8;
-	Mon, 27 May 2024 12:56:46 +0000 (UTC)
-Date: Mon, 27 May 2024 14:56:39 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: linux@treblig.org
-Cc: rric@kernel.org, james.morse@arm.com, linux-edac@vger.kernel.org,
+	s=arc-20240116; t=1716816168; c=relaxed/simple;
+	bh=1fUsgjmy0HwSjUNwgAEgVrkX83AtUHExHKTskQldwu8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=D82wnb3RVIdip6zHpddHnKzZlWti2EB+TQJD1AlVBByJAtW4ozGYMaVQW1m/TVHwZyzoWLQTsmm5sDTg1fBaF6/67xJ0SSh0M0YBJhPvBfeMT1pjHVHdY9fgZAWAAf3A1cC2SspvuGttaRMMcbVWQ6vIsILLGbZEIMz6oOGF0xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pt8k4UTl; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716816166; x=1748352166;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1fUsgjmy0HwSjUNwgAEgVrkX83AtUHExHKTskQldwu8=;
+  b=Pt8k4UTlbnlaFgonvn609LfYBebOhaT2boSzng0U7qXIv8DF7Kp2ped/
+   E4NxIza4/BePtCUU4WLZOOczLn4zu0Ig2KTTwo9s20hgmOSYG/X8QEOvN
+   mfhXQ/268DkX7t++pHlOVHWAeRMLyN5TkJB91BfsAYl96xqkOcmg1xYW/
+   C7Ek/WR6ibawdE8VI0F80OClGzE8gSxTuzAE/8uH1sB1l6971LADz+Yoz
+   XA0wt0ejj6gVeIgmFOEUXINZXaXeB3ngwSHao+ClCE6hP3TnkYJYxgRb3
+   ZzaRQ2OIHczOgbxTP3tNzy+31Xg0bhxxq6VXPAJGFOKPb06As6w5NC+Ef
+   w==;
+X-CSE-ConnectionGUID: eAoe8qImTCiyjspxLRHPBw==
+X-CSE-MsgGUID: Lg3NhQjYTi+AVJkPd2xD0g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="13006467"
+X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
+   d="scan'208";a="13006467"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 06:22:45 -0700
+X-CSE-ConnectionGUID: V+Sj+DB6RGiufqFct8CSyw==
+X-CSE-MsgGUID: uvfdAZLMSSOZkgYtaStOvA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
+   d="scan'208";a="34787283"
+Received: from unknown (HELO localhost) ([10.245.247.140])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 06:22:43 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Muralidhara M K <muralidhara.mk@amd.com>,
+	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] edac: thunderx: remove unused struct 'error_syndrome'
-Message-ID: <20240527125639.GDZlSDB23LuyyP8fb2@fat_crate.local>
-References: <20240516133404.251397-1-linux@treblig.org>
+Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] EDAC/amd64: Convert PCIBIOS_* return codes to errnos
+Date: Mon, 27 May 2024 16:22:34 +0300
+Message-Id: <20240527132236.13875-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240516133404.251397-1-linux@treblig.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 16, 2024 at 02:34:04PM +0100, linux@treblig.org wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> 
-> 'error_syndrome' appears never to have been used.
-> Remove it, together with the MAX_SYNDROME_REGS it used.
-> 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> ---
->  drivers/edac/thunderx_edac.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/drivers/edac/thunderx_edac.c b/drivers/edac/thunderx_edac.c
-> index fab9891e569a..75c04dfc3962 100644
-> --- a/drivers/edac/thunderx_edac.c
-> +++ b/drivers/edac/thunderx_edac.c
-> @@ -35,12 +35,6 @@ enum {
->  	ERR_UNKNOWN	= 3,
->  };
->  
-> -#define MAX_SYNDROME_REGS 4
-> -
-> -struct error_syndrome {
-> -	u64 reg[MAX_SYNDROME_REGS];
-> -};
-> -
->  struct error_descr {
->  	int	type;
->  	u64	mask;
-> -- 
+gpu_get_node_map() uses pci_read_config_dword() that returns PCIBIOS_*
+codes. The return code is then returned all the way into the module
+init function amd64_edac_init() that returns it as is. The module init
+functions, however, should return normal errnos.
 
-Applied, thanks.
+Convert PCIBIOS_* returns code using pcibios_err_to_errno() into normal
+errno before returning it from gpu_get_node_map().
 
+For consistency, convert also the other similar cases which return
+PCIBIOS_* codes even if they do not have any bugs at the moment.
+
+Fixes: 4251566ebc1c ("EDAC/amd64: Cache and use GPU node map")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/edac/amd64_edac.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index 1f3520d76861..a17f3c0cdfa6 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -81,7 +81,7 @@ int __amd64_read_pci_cfg_dword(struct pci_dev *pdev, int offset,
+ 		amd64_warn("%s: error reading F%dx%03x.\n",
+ 			   func, PCI_FUNC(pdev->devfn), offset);
+ 
+-	return err;
++	return pcibios_err_to_errno(err);
+ }
+ 
+ int __amd64_write_pci_cfg_dword(struct pci_dev *pdev, int offset,
+@@ -94,7 +94,7 @@ int __amd64_write_pci_cfg_dword(struct pci_dev *pdev, int offset,
+ 		amd64_warn("%s: error writing to F%dx%03x.\n",
+ 			   func, PCI_FUNC(pdev->devfn), offset);
+ 
+-	return err;
++	return pcibios_err_to_errno(err);
+ }
+ 
+ /*
+@@ -1025,8 +1025,10 @@ static int gpu_get_node_map(struct amd64_pvt *pvt)
+ 	}
+ 
+ 	ret = pci_read_config_dword(pdev, REG_LOCAL_NODE_TYPE_MAP, &tmp);
+-	if (ret)
++	if (ret) {
++		ret = pcibios_err_to_errno(ret);
+ 		goto out;
++	}
+ 
+ 	gpu_node_map.node_count = FIELD_GET(LNTM_NODE_COUNT, tmp);
+ 	gpu_node_map.base_node_id = FIELD_GET(LNTM_BASE_NODE_ID, tmp);
 -- 
-Regards/Gruss,
-    Boris.
+2.39.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
