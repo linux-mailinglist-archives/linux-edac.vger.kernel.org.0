@@ -1,78 +1,76 @@
-Return-Path: <linux-edac+bounces-1170-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1171-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F4578D8781
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Jun 2024 18:56:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 546E18D8817
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Jun 2024 19:37:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B36431F21EA8
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Jun 2024 16:56:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6F5E1F21F4E
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Jun 2024 17:37:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AED1369A5;
-	Mon,  3 Jun 2024 16:55:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2371369A7;
+	Mon,  3 Jun 2024 17:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Xx+PoQf6"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="W1d4dOyI"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE8E1369A7;
-	Mon,  3 Jun 2024 16:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F0328382;
+	Mon,  3 Jun 2024 17:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717433752; cv=none; b=qm7Xx743/urlXs0ruvA15u9JKZb7ZTqt2AzqHt1OwHq0ZpiNImYIA4PrsUDDU/6UsU5c0gHG0XC+wXYMD017i+ECBvhznRykUA8HxpD74d9I0pAYSQPI9/cu4XsIpARU/vZIBUqYQ8y1pHsbCFVdZrPL1OBQhCVq6aQd0v6Sht8=
+	t=1717436268; cv=none; b=lOjPIIelohdHKdjdwVWJWae9Fp/eQ+VOyxu/55Huf7J72ZXnI12cKxKBUSPfAAOxVwnnsZl2mDKI+FlnGl/S5oHQkX2zjEa4nkxefxxxaK5Pm6L4zK2Dk6c/zyTc4DYbp/Zmm4eJjNeCk6Ox3Eya5/I0Xkmaza+0OJ7Aehykf6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717433752; c=relaxed/simple;
-	bh=1JY5giR8tigZEuaRc4F7AHu/Puv1SymNII1xdYKwxxc=;
+	s=arc-20240116; t=1717436268; c=relaxed/simple;
+	bh=jVYpDKFsAQoVl6zoNLBDteeJmjYcmSe5lrpmSH4vu1Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K0kQr99w6/hgPzO4crL/AMQ7uDhc/8nuE16EWmaA5EPfQDJHgfIuXlDUDG1UDEn3UZVnOE5xEqUnxE6/P+AelfBqUUZ+DxgslVORLw8PCJeqxffIPguI81CKFrIGuRLOmp9ZAr9gGz5ya00rn9MnClzyJJQIt7CvDZYWsGzmfPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Xx+PoQf6; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=WT2xOflguyOo6NATrGmU46r8vgbTM3QEeCFd7UDCoswBS/Nb1Mo5+R6wSeDlvkoCHn88iw0rgvtpGIKQbK2EdElEPGJ37Wt9OAX0ek4pWbTI6klsTre6iIiif/2ZObts2Lm/uYsFnlNVQMwoM/XYebhHgLYPCNEt2OyBtkFv77w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=W1d4dOyI; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D9FF040E016A;
-	Mon,  3 Jun 2024 16:55:47 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 15BC440E016A;
+	Mon,  3 Jun 2024 17:37:44 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 2_HiGnsD6OZb; Mon,  3 Jun 2024 16:55:43 +0000 (UTC)
+	with ESMTP id G0wd4BSyBX0M; Mon,  3 Jun 2024 17:37:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1717433743; bh=s5eN5yVkeKGkUm5T3DGoBbn7AsYBRjMyVANCmgwxza0=;
+	t=1717436260; bh=hpYIA2DA+gPQxWdwquhJ9GCmfI5W+kioR5xvfct83vg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xx+PoQf6gJjR0nDXlsJqatrFFhW4C4+tcLSXzrN9w/9cK1ScnE1BG7fQZ2AbVtbWi
-	 M5IeDeN1VfuE3DX2N17/wOGTxJ6XCLpoGS2UCvWeDodTqGQfhXMC4ie7GVEEwtPeyt
-	 LB7qDfabmC0OV8ktkjVTZsi4A/M8i7ObGzzod56Ucq+knkKa13Tsbx/5KhYDouOjTZ
-	 cqDjeOTeAShgIIXAU1GAqizf8JfDdUA2Ymwt4KYDgkjvQJvZ2h7wf2xaUhig9LvoQz
-	 jlcLM7MsnW4/xHGToxUFIcEBxxZUN/4v4v2jwrH4VNKtH6Kmw9XSK/jXgT13LfMC0P
-	 2VY523jHDoSeXrcCfhIks2OFcyT9RYum8/nOG9ijlpXeAC5MAr4jG6YMfWCWfOxl7b
-	 TSRjmDAuqjc9JIPt4EoPbc09ZDDNqwKd3L7YZwBHPIlIVaezVfdbjz7fSF5mlApSEL
-	 f0noRnCO8+5qb5ZZMcQ4N9nOh94XWhTJl/7WIn0QGTE9WxPYKkRQH2Lc1jUwO0HB4O
-	 olLyIXADwmD4Kfsx2H9R46FRScGFWKdJb3SIDcqOx/MeaKLVKQok8mEJp69I4LeoeL
-	 Ei9f8vQ58Hg+cALcu/F8ZXo5FaHCbaNkRNSbpHaYHmrSyJhbN3k6dzs5xYjuqAXpRf
-	 gV2hufwYQvlQaweshQo3KkKo=
+	b=W1d4dOyIVmtZOVL7jYc/a+ptiZvBitggW6+IGai6I05/WZLTltDl/cdFieQN4iX0k
+	 Kk2Rq66y7bPwGYBpq70+nb6kPGyyM68RmoRK0aD/a8IRjAnMoVkpZvsnU9uGH2RqJE
+	 PZc3mvJUjRaNVgbohpZJsdkGjFbfVRHoU3aFZN+8rZnnqUWMm0NUIakC90O0rl/f1H
+	 q/AatCU9/JcAANx4/uOOVknU7MRqKOlqt8D921ucdX5j6u0AINuqHB2xVBMwFo9OOV
+	 68WPKPZ42x4PQAcz3l4F2L/PTPPsW9mc1G3sTF9p1spb0gi4hBJYp7d4LxDXpX9Gpe
+	 bHoRmHy/F03+mC7sjK5/S5sJMswXbWVKUquHYtg583DvHwSVBEGSsuuEq4BCs2q4ST
+	 l8j6VOIe/Qsie/YIfbqzZZ/45p1qKCL4QoLpuRxpwrXjGW8v7vdO+xc3sGpqoFHGUU
+	 O4f+5Hm5JOls3u7SYHw1R1iOrzPN8rHtkb88n/CcucQTK918WZZQhk2xB4hUl09OQI
+	 ICbR1Pu2jmAUt9lVR3hDJHfNpdTzjHrmCLSgr8hzYbdU31lG7iNE8G2OL3ZBjt+ncX
+	 B2mHAKVxLEShK6WaHm4jwfA2zxtMIkpWy8pXrhPXfvzcw1XRrablua7mTtRaFladGR
+	 c5Fs0W3EGsvffxG2kWIum5o0=
 Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F166B40E0081;
-	Mon,  3 Jun 2024 16:55:35 +0000 (UTC)
-Date: Mon, 3 Jun 2024 18:55:30 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 480E340E016C;
+	Mon,  3 Jun 2024 17:37:33 +0000 (UTC)
+Date: Mon, 3 Jun 2024 19:37:27 +0200
 From: Borislav Petkov <bp@alien8.de>
 To: Yazen Ghannam <yazen.ghannam@amd.com>
 Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
 	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
 	john.allen@amd.com
-Subject: Re: [PATCH 3/3] x86/mce: Use mce_prep_record() helpers for
- apei_smca_report_x86_error()
-Message-ID: <20240603165530.GFZl31gtuABwpe1svP@fat_crate.local>
-References: <20240521125434.1555845-1-yazen.ghannam@amd.com>
- <20240521125434.1555845-4-yazen.ghannam@amd.com>
- <20240529172809.GJZldlqSr5km0frQ_o@fat_crate.local>
- <6d508036-befd-4d5c-b02e-abb228ed9144@amd.com>
+Subject: Re: [PATCH 4/9] x86/mce: Move machine_check_poll() status checks to
+ helper functions
+Message-ID: <20240603173727.GOZl3_V9eVbm0184Wi@fat_crate.local>
+References: <20240523155641.2805411-1-yazen.ghannam@amd.com>
+ <20240523155641.2805411-5-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,68 +79,77 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6d508036-befd-4d5c-b02e-abb228ed9144@amd.com>
+In-Reply-To: <20240523155641.2805411-5-yazen.ghannam@amd.com>
 
-On Mon, Jun 03, 2024 at 10:34:10AM -0400, Yazen Ghannam wrote:
-> One day I'll break this habit. Thanks again for the reminder. :)
+On Thu, May 23, 2024 at 10:56:36AM -0500, Yazen Ghannam wrote:
+> @@ -709,48 +747,9 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+>  		if (!mca_cfg.cmci_disabled)
+>  			mce_track_storm(&m);
+>  
+> -		/* If this entry is not valid, ignore it */
+> -		if (!(m.status & MCI_STATUS_VAL))
+> +		if (!log_poll_error(flags, &m))
+>  			continue;
+>  
+> -		/*
+> -		 * If we are logging everything (at CPU online) or this
+> -		 * is a corrected error, then we must log it.
+> -		 */
+> -		if ((flags & MCP_UC) || !(m.status & MCI_STATUS_UC))
+> -			goto log_it;
+> -
+> -		/*
+> -		 * Newer Intel systems that support software error
+> -		 * recovery need to make additional checks. Other
+> -		 * CPUs should skip over uncorrected errors, but log
+> -		 * everything else.
+> -		 */
 
-Sure, np. :-)
+You lost that comment.
 
-> >>  	for_each_possible_cpu(cpu) {
-> >> -		if (cpu_data(cpu).topo.initial_apicid == lapic_id) {
-> >> -			m.extcpu = cpu;
-> >> -			m.socketid = cpu_data(m.extcpu).topo.pkg_id;
-> >> +		if (cpu_data(cpu).topo.initial_apicid == lapic_id)
-> >>  			break;
-> >> -		}
-> >>  	}
-> >>  
-> >> -	m.apicid = lapic_id;
-> >> +	if (!cpu_possible(cpu))
-> >> +		return -EINVAL;
-> > 
-> > What's that test for? You just iterated over the possible CPUs using
-> > "cpu" as the iterator there...
-> > 
-> 
-> This is to catch the case where there was no break from the loop.
+> -		if (!mca_cfg.ser) {
+> -			if (m.status & MCI_STATUS_UC)
+> -				continue;
+> -			goto log_it;
+> -		}
+> -
+> -		/* Log "not enabled" (speculative) errors */
+> -		if (!(m.status & MCI_STATUS_EN))
+> -			goto log_it;
+> -
+> -		/*
+> -		 * Log UCNA (SDM: 15.6.3 "UCR Error Classification")
+> -		 * UC == 1 && PCC == 0 && S == 0
+> -		 */
+> -		if (!(m.status & MCI_STATUS_PCC) && !(m.status & MCI_STATUS_S))
+> -			goto log_it;
+> -
+> -		/*
+> -		 * Skip anything else. Presumption is that our read of this
+> -		 * bank is racing with a machine check. Leave the log alone
+> -		 * for do_machine_check() to deal with it.
+> -		 */
+> -		continue;
+> -
+> -log_it:
+>  		if (flags & MCP_DONTLOG)
+>  			goto clear_it;
 
-If the CPU is possible != whether there was a apicid match.
+Btw, the code looks really weird now:
 
-Here's how you do that and I'd let you figure out why yours doesn't
-always work:
+                if (!log_poll_error(flags, &m))
+                        continue;
 
-diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index 0cbadfaf2400..3885fe05f01e 100644
---- a/arch/x86/kernel/cpu/mce/apei.c
-+++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -66,6 +66,7 @@ EXPORT_SYMBOL_GPL(apei_mce_report_mem_error);
- int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- {
- 	const u64 *i_mce = ((const u64 *) (ctx_info + 1));
-+	bool apicid_found = false;
- 	unsigned int cpu;
- 	struct mce m;
- 
-@@ -98,11 +99,13 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 		return -EINVAL;
- 
- 	for_each_possible_cpu(cpu) {
--		if (cpu_data(cpu).topo.initial_apicid == lapic_id)
-+		if (cpu_data(cpu).topo.initial_apicid == lapic_id) {
-+			apicid_found = true;
- 			break;
-+		}
- 	}
- 
--	if (!cpu_possible(cpu))
-+	if (!apicid_found)
- 		return -EINVAL;
- 
- 	mce_prep_record_common(&m);
+                if (flags & MCP_DONTLOG)
+                        goto clear_it;
 
+i.e.,
 
-Thx.
+1. Should I log it?
+
+2. Should I not log it?
+
+Oh well, it was like that before logically so...
 
 -- 
 Regards/Gruss,
