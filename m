@@ -1,76 +1,79 @@
-Return-Path: <linux-edac+bounces-1190-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1191-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53B438FD21C
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2024 17:53:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B35C8FD28C
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2024 18:12:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9294281826
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2024 15:53:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10F7E285C87
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2024 16:12:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F17013AD29;
-	Wed,  5 Jun 2024 15:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A4B1514E6;
+	Wed,  5 Jun 2024 16:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hy6c60dx"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dXOfWivM"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EC82BCF4;
-	Wed,  5 Jun 2024 15:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834FE2575A;
+	Wed,  5 Jun 2024 16:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717602811; cv=none; b=mSzgw/6Zdd2ohMNmisSBMdj/4LeORR0GqGzlnV/oHhrGNCgSdS/i7syPSy7pJh6UOb+54dfuveGrHSdXfU7nDYbs90R+y55TU6OIlo2mCxkfcz5jrkp5oemdPr3VhvpTdBPP9J/jJkz2M2o8zhP6LR7qPoM3C1TLKAitDhoxx7s=
+	t=1717603972; cv=none; b=TgOVefNKcUfjjJrMW9h/1c0P/nJdyfDPnrkqMxqOoLIjBKNRuJ3Jx5i3RWils2PdVFJXOyPWDICea6vXZxP5Vp5ahgDXrWk5BqcVDwlFGxOgiCzpFAp/saKz9JDz61Lgrz5L9pwTtgVX9ZuiFmtrdq77DQjLF+xqY8Brwgm3aUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717602811; c=relaxed/simple;
-	bh=GPuI67Q4QN2AdbsA+Og7v3ZSXJUY4ThgSpOcmWh8zfI=;
+	s=arc-20240116; t=1717603972; c=relaxed/simple;
+	bh=bb6R/wccxuh3haaibej5fK5MnrC4BlHZGVvR9Fjaymg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VH+Jd0eQ4x//9iS2tjyV9kIYZRg5DZnMB+YAUaw45PUo70A6dgk2LexK7sUEAoSCPYewI1J9prUgXLMwls2Cv1jngSiyTgJDHvZUQxK+lOFM6xXoeLNnwx7LtzyXqeDW5F0X6HcC8Akrf96Zyxa1aUBqTYWblb73WKqv491zaLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hy6c60dx; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=A3zaJ3pOYIDKnFKOlLLAXah9Pep69CDyxBo1Bm/vW9ApUnSHrKrqODozWGlP4pMlVnheQSLDIShMa594/RFF2WIOIXYs0NbHz15YYjva3iotv1iHPClAbxVujDQATdY3pbTfkWM86QGv7lvlautLxlKBG0PRoReepnAu50ays3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=dXOfWivM; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8DC8A40E016C;
-	Wed,  5 Jun 2024 15:53:24 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 380F740E0176;
+	Wed,  5 Jun 2024 16:12:48 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id PJucYi0PQ18w; Wed,  5 Jun 2024 15:53:21 +0000 (UTC)
+	with ESMTP id 0-nu29L-4QBm; Wed,  5 Jun 2024 16:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1717602800; bh=z0fGa6Mjc8FDWbwQf4t4X0jOVOil0Q5fF5z4mZagBa4=;
+	t=1717603964; bh=XZqop4oMhiyVdjTRe+jU0w8Ay/gg4CSzZsEjcgKQyDQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hy6c60dxyFjpVVPa37xqrQGilB6OgRurUK7Y5cSrXOjxyFps8cfi93yqCkzv2EMGn
-	 acrQvmvPotepc2/ZIiDXnIv8/qDEI/ZT/ZI7xPy37GmIyJTVSDSxbzELDB7TR6ZmWK
-	 umuW/gMldvVF5oCnTTJ7F1quhI5XmNU0OEqPWXFBmMvhMHQnHMJHP86BQZLQZtkudh
-	 jRLrMKMUUJzO+rUc+MzpD3NNuiMyYQHmtg8YIBvWz0lYttAATgh8eelINQS4pCgIdt
-	 z483i052lE4szpjng1SuftlzFyZfJKkqRdYsThoBKc0KPODr+4glWxLTW6eomGZttv
-	 XjzdVDPJL6sMly8zVtBVRats+mnYAte6sFThBejLtocTyrjT1nj3NMqAalC3RerClY
-	 +onBfdfoB5QVclZDvd5K/t6FmECyxN56j+U8UMUHPO4NC6JLbpyWvpcZqdp51qnrSW
-	 wN8ZjBpvRwyUHwtbwEBB4gp3ytPJJ8n8gymVNqIAFDWFEDsr1CC/96u6Co1pvkrCUc
-	 YydNaY5sB4JnWVSGE0Hx17LZFwI4X8A4vP+LjMqkoyrK9VuJHTGPw5laNYBIGDWDyo
-	 TNJjSfWj95dp+6p31QyYhTP927XVUQMDBc94kSoq6O5tnGADjOgWXhCoZzmnIs1goC
-	 T91aATTFX5DUDDi1y8fDR84A=
+	b=dXOfWivMHgTCg1qBrOBgTs6JX5f0uNJG+RCaE5LY1isDuQWivYpQu7tdQdXGuWMHu
+	 Zv7PYO9DYUPD2swPx5Eq2UvT9VYZFATFn9QBxSaWRrqeQ4aQrRAllp1iL1szVOCPc0
+	 ueUHTSQ3dGAl6q/vfkyUl9OjtrWvVTgHTGXc8iNgOGcS3lmUdgO34tUsydS820ar1x
+	 4oo14IGphA9XaP58BsqojGUBqXQKu5uXyVeJttFJO9pfdlXjW1eKDA8MznP5guzcly
+	 +KdeI6X8GttcE6J9vQ/WmMnCCUST4vw8JPFrdato+u51keAe+tzRxuIgfNZCjonMLK
+	 TxoHqY/3RzxKr+iV/AfMA/3CrTSJwJU26e/8ctOK6fdLOUt/yXNS30V03YQvjNtocm
+	 CX6/R/HSUXHoztMgVl3qTvuTj7nxQ5DKPKhcuCNR4Pj/TSNDNBKaMX6vo0VkBCrk+L
+	 K/Eh0fS1S3aOVvBFnxBWplD3sB5a18k8Pj8KMf0muqiVVIADMTiwo6MbgM4BWRqqDV
+	 a179ZB9bMELiOlSjwdn0OC8meNyS01qHQ+WQj2zDJY2crEk9lFzKsadyd6xhoLx/Pm
+	 ETB+s4ZN6sTe7gOxbqGtfSXL0lf0csnQlGANRzwbDHDe62UzHqCBR54afqWiDNUB5J
+	 iOOtJdEmDW2pa70QICwXKvsA=
 Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7FA3B40E0176;
-	Wed,  5 Jun 2024 15:53:14 +0000 (UTC)
-Date: Wed, 5 Jun 2024 17:53:07 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5A03640E016A;
+	Wed,  5 Jun 2024 16:12:37 +0000 (UTC)
+Date: Wed, 5 Jun 2024 18:12:36 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: Yazen Ghannam <Yazen.Ghannam@amd.com>, Tony Luck <tony.luck@intel.com>,
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
+	Mario Limonciello <mario.limonciello@amd.com>,
 	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] RAS/AMD/ATL: add missing MODULE_DESCRIPTION() macro
-Message-ID: <20240605155307.GGZmCJ46VkY-hWn_z8@fat_crate.local>
-References: <20240604-md-ras-amd-atl-v1-1-d4eb3cf3abe4@quicinc.com>
- <20240605094051.GDZmAyo1-j_uBri_YO@fat_crate.local>
- <1d9e1530-be63-4374-b952-e12b15cee9d3@quicinc.com>
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 3/8] hwmon: (k10temp) Check return value of
+ amd_smn_read()
+Message-ID: <20240605161236.GIZmCOdP-CRPJ8-3sY@fat_crate.local>
+References: <20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com>
+ <20240523-fix-smn-bad-read-v3-3-aa44c622de39@amd.com>
+ <20240605122012.GXZmBX_KFQArXB9Lar@fat_crate.local>
+ <7a7c2f41-1608-4348-9183-d99aaa51398e@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -79,31 +82,16 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1d9e1530-be63-4374-b952-e12b15cee9d3@quicinc.com>
+In-Reply-To: <7a7c2f41-1608-4348-9183-d99aaa51398e@amd.com>
 
-On Wed, Jun 05, 2024 at 07:10:14AM -0700, Jeff Johnson wrote:
-> I actually did use a simple script to do a conversion locally, but the hard
-> part is determining what text to use for the description. So my local
-> conversion just added:
-> MODULE_DESCRIPTION("TBD");
+On Wed, Jun 05, 2024 at 09:41:51AM -0400, Yazen Ghannam wrote:
+> I agree that patches 1-3 are not stable-worthy on their own. But I think
+> patch 4 is, and it requires 1-3 to avoid build errors.
 
-Ah, there's that. Can't script that. ;-\
+Which of the rules in the first section of
+Documentation/process/stable-kernel-rules.rst apply for patch 4?
 
-> https://lore.kernel.org/all/20240604-md-hid-letsketch-v1-1-ff38ae7b4cb0@quicinc.com/
-> https://lore.kernel.org/all/20240604-md-hid-lg-g15-v1-1-265b094db089@quicinc.com/
-> https://lore.kernel.org/all/20240604-md-hid-logitech-dj-v1-1-560f6b3cb54b@quicinc.com/
-> https://lore.kernel.org/all/20240603-md-hid-logitech-hidpp-v1-1-060f06e4529f@quicinc.com/
-
-I would've merged them into one - it's not like it is really complicated
-changes you're doing so that each maintainer must deal with it
-separately.
-
-> I then sent a large patch for all of the remaining drivers/hid patches:
-> https://lore.kernel.org/all/20240604-md-hid-misc-v1-1-4f9560796f3c@quicinc.com/
-
-Yap, exactly what I had in mind.
-
-Thx.
+Because I don't see it.
 
 -- 
 Regards/Gruss,
