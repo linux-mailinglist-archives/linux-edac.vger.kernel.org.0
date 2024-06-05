@@ -1,281 +1,118 @@
-Return-Path: <linux-edac+bounces-1182-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1183-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBBC28FBE87
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2024 00:11:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B808FC1BF
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2024 04:22:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C1031F22088
-	for <lists+linux-edac@lfdr.de>; Tue,  4 Jun 2024 22:11:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CC971C23064
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Jun 2024 02:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FB34143754;
-	Tue,  4 Jun 2024 22:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38A86BFB8;
+	Wed,  5 Jun 2024 02:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5P1pJGD"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Go95W800"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882351428E7;
-	Tue,  4 Jun 2024 22:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6C06CDAB;
+	Wed,  5 Jun 2024 02:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717539094; cv=none; b=p539wQ4IEaKzH98Bv+bGFJNhF29icxq702NLW80gfRkEcjoyeRDYsN9Pp+Gi0zSCArc9fw7djH3KC57kkBNJY8On4HgljYDumO+xt0fvWuPLfd44YeovHrCEcKL5lZp4ppXXqaH9z4oAWGIVQge6lfb6B62n3qu67hUFtnpYshc=
+	t=1717554137; cv=none; b=fnkUkZMsugeUtPmmWiE7ncuqYEWOiBXTdbMQVJWolBeNkGGJoAoHDml1VXg1mJmQL+KMwbglsBcvYdQnlQWyoqmCYKELCfCcEbZCibsw4jECQ9Bgkwx+pcZ2s/eMmrWBLffIwVJ0NQMllefGmvwz2+dWfjC08RfzBDGJcKhJSVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717539094; c=relaxed/simple;
-	bh=0qqSJGPTBXwdLDReEi3tf3Iy9LmbcQN7JJSuQdh6qmg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mqoHNQ9aFh3IkzM7tiQ7fXZ873JyWTrDU1LPP954DfCTU3FxiD5L4lCpAtrf4uVv+NHmWdXn4ZiKMehStLUZP4p87o3rSdhrradjy1XxXzU8atwG5YbXXnQfVn6miN4t84WI9wdhY7gTQ8bJOyFf4pgHrMCHP43Cm4hKs2D6ohA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5P1pJGD; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52b91f655d1so299210e87.1;
-        Tue, 04 Jun 2024 15:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717539091; x=1718143891; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wNcIqypllsFpryoBOPTXuwc34jW2JsHEIjMUngdWw6o=;
-        b=l5P1pJGDrnJgV4zQeZGtl+y0XDMuBwacTrv8NUuPnzq7MqNeZzCfctwOiThgUdC/Xt
-         6sIHWE+6//rE6l52sDK9vmol8QQuyRxboe5WvRKpdO10TRwYT2Kapb1+9ShQOk3yB0Q4
-         6ipFEJ3WUz3Ca1qhOWDPY2SerDNZk94Rknfsa4ulpBaJA0Z3TshPqOCyfLRr7DYQApqv
-         cQOF1sx/DnGx6Kres49/rxk4vq6BJTjwW28zrFg80pmX1QlH7RrZdtwjhlxd+2yjvDMk
-         ISQkR0H3UCuw9k2S3T+1/t7FzV6SLeGLZb5u+NhUcYN4C5vBEgtMwrTwWY+bDn20xprO
-         wahw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717539091; x=1718143891;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNcIqypllsFpryoBOPTXuwc34jW2JsHEIjMUngdWw6o=;
-        b=ILc1QIj1WyQi2FunswXy8OPfOaSuFHjBXIjF3sRnCJfeLo96LJ1SsZoR8OWnkd3XaT
-         5eFU2H4TKZTQLAw6laJ5W462AWaqVHFaHxgENxFTWyVJBHSCpSspUY7fi2lfh62UDOJi
-         c+Xxzkhz/TCYlBBkpq0bsPO4Q0vQJn2n4NrWp4l/uVwXeUWzUB1FZRcPwJdzG8YZY7FH
-         mIQMYZvBJPst/67ZO6ej9TERXUB/EyqSROk8hSSU6uBozMOrI8oDIySmffWmL13Ur2h5
-         TUihQVWJ+xjb8c/VYjzTCWi+7r37c/LuyGswhtd5mFpQ6LLGlVlAA3oRiOm+KQgY+L+4
-         raSA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdm0aR3tI2a/Kpf1RA9CsaVH4kNVCwQqRhft3zeB8JbtokEiX8SUQBUn9CaamVhmQfZlh9pGLpDbkMbWbsa2jXvctW9fuQ4EXdjrC5N26nEXZ/Nzmx5iwz5346LAVaC6x+Kwf66hO/qg==
-X-Gm-Message-State: AOJu0Yzz69toNSxFtU3+d1XHluy+n/OpDUuCuuttoujWkpWUVH4wabPr
-	1RBK9/UGRHQK1J6uZX1sDGKcmCzhSgiqOHOugZAwZ8lo552SYW12ryT/CtpT
-X-Google-Smtp-Source: AGHT+IF8V+Sf2LDM+fYrVEKzlj+mfwtV36fS11dhod+90QySKdOAKTpOpaIVDbKmXJxuPv1UIn6T/w==
-X-Received: by 2002:a05:6512:1252:b0:52b:9635:2216 with SMTP id 2adb3069b0e04-52bab21134fmr248129e87.31.1717539090339;
-        Tue, 04 Jun 2024 15:11:30 -0700 (PDT)
-Received: from mobilestation ([95.79.124.210])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52b84d3ebc4sm1638387e87.66.2024.06.04.15.11.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 15:11:29 -0700 (PDT)
-Date: Wed, 5 Jun 2024 01:11:27 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Michal Simek <michal.simek@amd.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, Tony Luck <tony.luck@intel.com>, 
-	James Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Robert Richter <rric@kernel.org>, Manish Narani <manish.narani@xilinx.com>, 
-	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>, Dinh Nguyen <dinguyen@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/20] EDAC/synopsys: Fix generic device type
- detection procedure
-Message-ID: <5h32gfwdk6uztiv7kbsjbvbghu4yuox6h7b6pqughftztyk2yf@cmzsanqvwcmq>
-References: <20240222181324.28242-1-fancer.lancer@gmail.com>
- <20240222181324.28242-3-fancer.lancer@gmail.com>
- <20240604183803.GJZl9fC9R5M2NSQ01O@fat_crate.local>
+	s=arc-20240116; t=1717554137; c=relaxed/simple;
+	bh=AYVfxlnclM0AhGQLKjqmuvx8r+sAkmmnySMrEMRJgxo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=YFTNIGTVVOdMd88l13+aKqbg+hJwQpk5NAAdcBkPkb81lHkUEswt1hQ29wcgZI2E2qxqzkiRapquhaiUZpsudirz4wqmoGj+220+NmOVhFP6FswjXp4AZX3VglFCQlii0FAfSzn7y7Acq8EaWoIYU6M/km42JG42aWz34myLlF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Go95W800; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 454NWhNe004644;
+	Wed, 5 Jun 2024 02:22:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=iy8Qqx5Vp7rbVCRCTUMkKC
+	vdgR7EeoiTJOrpBTvx5Ns=; b=Go95W8008pSFUab5Ye2njvcMuaChcVbg90eMRW
+	IltsCPK3Q+GbUFxkKPK75DQhGjJ2p+SrOQRK5VVkCBwLQFDdVz2uskEsKv7KBAJn
+	Zw3WIvKN4knYWBBACZ2aTRnTEwWUFSaHScUqqz+ZD2t0Mo2/m25Xp6w0+RYM1jQG
+	fEMDfUqWNC/C9hSuhNQv0/hepDjAFj9lfyN1GcJPXWlGntVcFnPtmshRPdDAIju4
+	dvRitIkr8mexVTVhV8ZGKlPHxOKZ4h6IrRnJZahhNE51qmQcfVv1/edFPOZeI3SM
+	eTb3i/tjZF36MpkiOrKXlbFg+1eJTw1RDS94dJhmjR5abNPg==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yjauvgdvs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Jun 2024 02:22:01 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4552M1pn021017
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 5 Jun 2024 02:22:01 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 4 Jun 2024
+ 19:22:00 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Tue, 4 Jun 2024 19:21:59 -0700
+Subject: [PATCH] RAS/AMD/ATL: add missing MODULE_DESCRIPTION() macro
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240604183803.GJZl9fC9R5M2NSQ01O@fat_crate.local>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240604-md-ras-amd-atl-v1-1-d4eb3cf3abe4@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAMbLX2YC/x3MQQqDQAyF4atI1g1MB5lKr1K6iDOxBnRaElsE8
+ e7Grh7f4v0bGKuwwb3ZQPknJu/quF4ayCPVF6MUN8QQ25BCi3NBJUPypWXCkIYSy60LuUvgp4/
+ yIOs/+Hi6ezLGXqnm8cxMUr8rzmQLK+z7AcssPY5/AAAA
+To: Yazen Ghannam <Yazen.Ghannam@amd.com>, Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+CC: <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 33yaVS7EcBRhW2Fec2oFj_vVyBB6R-fw
+X-Proofpoint-GUID: 33yaVS7EcBRhW2Fec2oFj_vVyBB6R-fw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-04_11,2024-06-04_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ spamscore=0 clxscore=1011 suspectscore=0 mlxlogscore=999 phishscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406050017
 
-On Tue, Jun 04, 2024 at 08:38:15PM +0200, Borislav Petkov wrote:
-> On Thu, Feb 22, 2024 at 09:12:47PM +0300, Serge Semin wrote:
-> > First of all the enum dev_type constants describe the memory DRAM chips
-> > used at the stick, not the entire DQ-bus width (see the enumeration kdoc
-> 
-> Which kdoc?
-> 
-> The kernel doc above enum dev_type in include/linux/edac.h?
+make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/ras/amd/atl/amd_atl.o
 
-Right.
+Add the missing invocation of the MODULE_DESCRIPTION() macro.
 
-> 
-> In any case, you need to be precise pls.
-> 
-> > for details). So what is returned from the zynqmp_get_dtype() function and
-> > then specified to the dimm_info->dtype field is definitely incorrect.
-> 
-> Whoops, you lost me here. Why is it incorrect?
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+ drivers/ras/amd/atl/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-As I said because dev_type is the memory DRAM chips type (individual
-DRAM chip data bus width), and not the entire DQ-bus width or its
-currently active part. Even from that perspective the function name
-and the subsequent return value utilization is incorrect.
+diff --git a/drivers/ras/amd/atl/core.c b/drivers/ras/amd/atl/core.c
+index 6dc4e06305f7..7be4982fdf19 100644
+--- a/drivers/ras/amd/atl/core.c
++++ b/drivers/ras/amd/atl/core.c
+@@ -222,4 +222,5 @@ static void __exit amd_atl_exit(void)
+ module_init(amd_atl_init);
+ module_exit(amd_atl_exit);
+ 
++MODULE_DESCRIPTION("AMD Address Translation Library");
+ MODULE_LICENSE("GPL");
 
-Imagine the Xilinx ZynqMP has the 64-bit DQ-bus width. Having
-(MSTR.data_bus_width == DDRCTL_EWDTH_16) means that only a quarter of
-the bus will be utilized to get data from the DRAMs. So all the
-connected DRAM chip(s) data buses are _somehow_ distributed along the
-16 bits of the DRAM controller DQ-bus. It can be a single DRAM chip
-with 16-bit DQ-bus, or two x8 DRAM chips, or four x4 DRAM chips, etc.
+---
+base-commit: a693b9c95abd4947c2d06e05733de5d470ab6586
+change-id: 20240604-md-ras-amd-atl-06fd2d780c86
 
-> 
-> You want
-> 
-> "zynqmp_get_dtype - Return the controller memory width."
-> 
-> to return the memory width supported by the controller?
-> 
-> 	dimm->dtype     = p_data->get_dtype(priv->baseaddr);
-> 
-> 	enum dev_type dtype;    /* memory device type */
-> 
-> Yeah, no, that function returns the DIMM device type.
-> 
-> /me looks at the code.
-> 
-> Aha, so you mean the device width should be determined from that
-> DDRC_MSTR_CFG* thing.
-
-That's what is said in "Secondly" and "Thirdly".
-
-> 
-> > Secondly the DRAM chips type has nothing to do with the data bus width
-> > specified in the MSTR.data_bus_width CSR field. That CSR field just
-> > determines the part of the whole DQ-bus currently used to access the data
-> > from the all DRAM memory chips. So it doesn't indicate the individual
-> > chips type. Thirdly the DRAM chips type can be determined only in case of
-> > the DDR4 protocol by means of the MSTR.device_config field state (it is
-> 
-
-> Hold on, this driver runs on all kinds of hardware I presume. Are you
-> thinking about older ones which don't do DDR4?
-> 
-> Or does that thing do DDR4 only?
-
-First of all, not that much of the kinds. Just Xilinx ZynqMP DDRC
-(based on the DW uMCTL 2.40a IP-core) and some version of DW uMCTL
-3.80a being possessed by Dinh Nguyen and, by a lucky coincident, turned
-to be mainly compatibly with the Xilinx ZynqMP DDR controller.
-
-Secondly I've checked that part on all the DW uMCTL2 databooks I've
-got (I've got lots: versions 1.x, 2.x and 3.x). DW uMCTL2 v1.x doesn't
-support DDR4. DW uMCTL2 v2.x and v3.x IP-cores do support DDR4 but
-work as I described: the only way to determine the DRAM chips type is
-to use the MSTR.device_config field content and for DDR4 only.
-MSTR.data_bus_width field has nothing to do with that.
-
-> 
-> > supposed to be set by the system firmware).
-
-> > Finally the DW uMCTL2 DDRC ECC
-> > capability doesn't depend on the memory chips type. Moreover it doesn't
-> > depend on the utilized data bus width in runtime either. The IP-core
-> > reference manual says in [1,2] that the ECC support can't be enabled
-> > during the IP-core synthesizes for the DRAM data bus widths other than 16,
-> 
-> This sentence is missing something.
-> 
-> > 32 or 64.  At the same time the bus width mode (MSTR.data_bus_width)
-> > doesn't change the ECC feature availability. Thus it was wrong to
-> > determine the ECC state with respect to the DQ-bus width mode.
-
-Sorry, but this part doesn't miss anything. It merely says that
-neither memory DRAM chips type nor MSTR.data_bus_width value could be
-utilized to determine the ECC support. According to the databooks the
-ECC support can be available on the IP-cores which _full_ DQ-bus width
-is 16, 32 or 64. MSTR.data_bus_width, selecting the active part of the
-full DQ-bus, doesn't change the ECC feature availability in anyway.
-From that perspective the zynqmp_get_dtype() utilization in
-zynqmp_get_ecc_state() has also been incorrect.
-
-> 
-> You need to split your paragraphs with newlines to help readability.
-> Right now it is a blob of hard to parse text. For example, when you have
-> to write "Secondly, " that's your split right there. "Thirdly," is your
-> next newline. And so on.
-
-Ok.
-
-> 
-> > Fix all of the mistakes described above in the zynqmp_get_dtype() and
-> > zynqmp_get_ecc_state() methods: specify actual DRAM chips data width only
-> > for the DDR4 protocol and return that it's UNKNOWN in the rest of the
-> > cases;
-> 
-
-> What are the rest of the cases and why is it ok to return UNKNOWN all of
-> a sudden? IOW, how was the old code even tested?!
-
-First of all, MSTR.data_bus_width field can have only one of the next
-three values: 0x1, 0x2 and 0x3. All of them are handled in
-zynqmp_get_dtype(). So in the current (incorrect) implementation it
-will never return DEV_UNKNOWN.
-
-Secondly, dimm->dtype isn't utilized for something significant in the
-EDAC subsystem, but is just exposed to the user-space via the dev_type
-sysfs node.
-
-So based on that my bet is that since the incorrect code didn't affect
-the main driver functionality and since the dimm->dtype is just
-exposed to user-space, the bug has been living just fine unnoticed up
-until I started digging into the original DW uMCTL2 HW-manuals,
-started studying the driver code, and decided to convert the driver to
-supporting generic version of the DW uMCTL2 controller (not only the
-Xilinx version of it). That's what this series and the next two ones
-are about - about converting the driver to supporting truly generic DW
-uMCTL controllers.
-
-> 
-> > determine ECC availability by the ECCCFG0.ecc_mode field state
-> > only (that field can't be modified anyway if the IP-core was synthesized
-> > with no ECC support).
-> > 
-> > [1] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
-> > Databook, Version 3.91a, October 2020, p. 421.
-> > [2] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
-> > Databook, Version 3.91a, October 2020, p. 633.
-> 
-> Can those be freely accessed?
-> 
-> If not, you should say so.
-
-No, they can't be.
-
-> 
-> > Fixes: b500b4a029d5 ("EDAC, synopsys: Add ECC support for ZynqMP DDR controller")
-> 
-> So this commit is in 4.20.
-> 
-> Does that mean that this fix needs to get backported to all stable
-> kernels?
-
-It's up to the stable maintainers to decide.
-
-> 
-> Have you tested this on all hw this driver supports and made sure no
-> regressions are introduced?
-
-I've tested it on the devices with DW uMCTL 2.51a + DDR3 memory and DW
-uMCTL 3.10a + DDR4 memory. I am sure this will work for Xilinx ZynqMP
-too, especially seeing we've already got the Shubhrajyoti Datta Rb
-tag:
-https://lore.kernel.org/linux-edac/CAKfKVtErVuCM+pa1e7Lwt0DUU-t-U0eNRnZSw39pfsZ8gv8QZQ@mail.gmail.com/
-
--Serge(y)
-
-> 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
 
