@@ -1,216 +1,222 @@
-Return-Path: <linux-edac+bounces-1216-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1217-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 639FA8FF193
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 18:06:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 070918FF20F
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 18:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E07731C231BB
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 16:06:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52A9628B19E
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 16:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4940919307E;
-	Thu,  6 Jun 2024 16:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D455519925B;
+	Thu,  6 Jun 2024 16:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hjXKW9Dx"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dYlnaH+6"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2078.outbound.protection.outlook.com [40.107.94.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE36197A8A;
-	Thu,  6 Jun 2024 16:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717689997; cv=none; b=n4DlXRTRnVIDppRkqPddYk69nPpA3+FjrpQrKmr3w3MzCVyfxVR342YO08yfj/xRJV2aOcXAHKBbTouFiCvtMd8GrOSBcvhiFD933ycZSIdZ7/wwU+UYe2tRF3/ZDJP3Hj7EbO24PMI9QkN5m4tASgLORmKtQIAZaiyDwGK6810=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717689997; c=relaxed/simple;
-	bh=4pA/6KLDnT53+vx4qMnQiKe0VoIk3n8+GEHKApSPA7Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bri7gFpl+8ivHF816pDPKfHMxa58pZcmXLcq7Y0+2bjD/QCY4QqtfOzPEZ8M1Qb+/bSkd+FCVfYaY0t2xULOWhf+p1VWwD8S4YkamYYQJ0XaLwmq1jfOfSuSzIrfmyhs3HCiPm4j7L3QFjjFt04CxR/SzO0FtQFRZquR5SiCuQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hjXKW9Dx; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 59E0D40E0177;
-	Thu,  6 Jun 2024 16:06:32 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 9oTyQaefmcS0; Thu,  6 Jun 2024 16:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1717689985; bh=yNiIiUrsriudqclFjLXJzKQ4Ttub+OIs99LR3avItYs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hjXKW9DxeUu9aYm5BTzAi4VUPIYgVK61PopErp2APevAYakJhr7CxNPIYBKp9jmbt
-	 iJ83j1nCVMNLyfCzKTC6tvsWhjeFOz4y+Nt8R9iOrHvBEAemf1jcSL6rnApKXwcuX7
-	 RCVpPSQWW5vvlDJ1+bHpKUuP2zLS8J++4Kqk1MBP9gq5JJKX+iPd8/K8DGizdE1Bu9
-	 2M3gUiSkCPJ7uYw1mTQ4AXs0Jwc0IJydwcPq4vzbz6Z+I1uc52Dts5X3+jKfFyGAAx
-	 Hm3U8Y3C47whcAX0yw0AZb/FNFqfkM+Nckf4gCaLIg9ufOuXD+YKe+l+4Ja3A/cVrc
-	 VSXevzhXxMMd5r2FFZDrlH7X+LOXPTdTvkyVa4bCzlf4N/C0KAfjLuKlnq8IUgrWY7
-	 KEs9cVxXvda/yssDlwzMrQhg9JguYckb8JwVzsZFg/eh9o0gqofKLA1y6u5HELj7fE
-	 SahSODA0/z1zHY/6o72zqI5eZLZVBf24/8JFUeQY+pEhMtQur3oN3tN1et52bONwnI
-	 NqHKhNrHI5OSHp5UkfKO0haHb/rFshLJNCGt5HyKxoUx8IoPa8ZkpnB5U/As1DTQX+
-	 v0u54Wp0hdNWX8zS+wcWOIK65Robm0iQ0TlboK1qzt8LYJCZ0IPIcAoD8eEzR1vVmt
-	 uM0W6E2TSQg6W6pgB/sdTUjQ=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C995340E016A;
-	Thu,  6 Jun 2024 16:05:38 +0000 (UTC)
-Date: Thu, 6 Jun 2024 18:05:33 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Shiju Jose <shiju.jose@huawei.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"dave@stgolabs.net" <dave@stgolabs.net>,
-	"dave.jiang@intel.com" <dave.jiang@intel.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-	"ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"david@redhat.com" <david@redhat.com>,
-	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
-	"leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
-	"rientjes@google.com" <rientjes@google.com>,
-	"jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"tony.luck@intel.com" <tony.luck@intel.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
-	"erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>,
-	"mike.malvestuto@intel.com" <mike.malvestuto@intel.com>,
-	"gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
-	tanxiaofei <tanxiaofei@huawei.com>,
-	"Zengtao (B)" <prime.zeng@hisilicon.com>,
-	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
-	wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [RFC PATCH v8 01/10] ras: scrub: Add scrub subsystem
-Message-ID: <20240606160533.GDZmHeTbhCoJYKSsD2@fat_crate.local>
-References: <663d3e58a0f73_1c0a1929487@dwillia2-xfh.jf.intel.com.notmuch>
- <20240509215147.GBZj1Fc06Ieg8EQfnR@fat_crate.local>
- <663d55515a2d9_db82d2941e@dwillia2-xfh.jf.intel.com.notmuch>
- <20240510092511.GBZj3n9ye_BCSepFZy@fat_crate.local>
- <663e55c59d9d_3d7b429475@dwillia2-mobl3.amr.corp.intel.com.notmuch>
- <20240511101705.GAZj9FoVbThp7JUK16@fat_crate.local>
- <6645f0738ead48a79f1baf753fc709c6@huawei.com>
- <20240520125857.00007641@Huawei.com>
- <20240527092131.GBZlRQmxwFTxxyR20q@fat_crate.local>
- <20240528100645.00000765@Huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13378196DBD;
+	Thu,  6 Jun 2024 16:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717690404; cv=fail; b=gAMfLVigGDhM30fG3R8FGk7MzEmvzyETa+dzhSi8EGlsVAKz+agk+832hMyFRgCrGZA9sOxrtUgQYOpsQDmE7lz4Y/vHcXzNvtIj2lUtVOScInHmA0SiTIS/HwcfH2A6ob9G8oZn5nmpfNcKXF6dyzW2YKiauqfZDODH8BxIPJc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717690404; c=relaxed/simple;
+	bh=rMKl2Ju4rz8Eciq1vRTCKvEViIz94XdRhEk5wyS6Ut8=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=es6JL3Mb970euC8mpWjRVxO3Em14k4FzenSxx9XbwUrLDvxLs+WlX83hjRUnFD5hbZ3jXJ1HhfWPd0HghlFZYKuEJLyccv6PMZU3pvCpY1ify6a37mc+O4pgyYVJxWJPk+G04aL+jC5Aq4uGkNJPUR9GvV9bA/xFlQXeODoj8JE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dYlnaH+6; arc=fail smtp.client-ip=40.107.94.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WJi6SJzcDn0fGZvwCUE4dueEekldwSNXZ+A52vhFpO/17eh74S+6gIRDOYBjcdL0ySk6q1/4iuWcTFcaD3oNVltZ26FFTMDRwBAftVlCE0hGBcjHRP0xINA8uWM80Ac5MDOsmWSGbKjmXnlLtsvL+7P8xTeSo0WWSbTpXStKBPffLyL6bJMw73xpctxufbnHwK54CW3/91kt/WuZvA9azBmnBdawARIhtSHSSnftWG0oM7uxsN88tbquvh/Xr61P5mkUarGiyyBzTxxZW1xjmNdcWTZd1l0STSiX98fnI5VsbvYYAt4a4ayJNgOLu2QiGQwA0pzkLeFU5kqpJYr7ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=N1sbUM+l+XWQcadxazAjbEi0qWrlnbOUQWJosB4nfN8=;
+ b=FvBBAuV7odZpUQIhAx1u/bDp6232kT/YlkIZbFD1s4ihyU3SZW6NFR83koJjaCcIR+uXaqkUZFpVchFazaNX/4IQGlGZtyiA0U45wK+QYbvBOnYpmmedYIizLeB/1s232+AJY9KQS8XvgODqmbJOxNHjExK+pEbFOEZkA277iFtuXM/VHa5N4lKMXNmy6nY+uDwS2C03Y33LrlSkpFde+ceRtR5YQkWctSDB74TGPYOkG4mfPzt1r3XW4bUsdgK5s7TeYeZIRQXslaAdZbsTm1jxFHrNu6henbLLyF+odJZgSic+1VFxzK4XDa+P4V4MLQMA42JaJUQQF+h2xYdoTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N1sbUM+l+XWQcadxazAjbEi0qWrlnbOUQWJosB4nfN8=;
+ b=dYlnaH+6qK+jDsOzOVaSmYpLIP8OhBS0DAL/qU4m7Q8Z8s1Sk9Zy0mcQYhQdocQarYR8kJTaZaAfYgF7TbX+JBS/E9iiFokP8NjV7sCMqRjLDm1Y6aLIff2fXS5BYe7jTPwke6131sqi8hz6jDE2bLUqcuNdf+XBMNQhKdSS3hE=
+Received: from CH0PR04CA0110.namprd04.prod.outlook.com (2603:10b6:610:75::25)
+ by CH3PR12MB7716.namprd12.prod.outlook.com (2603:10b6:610:145::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.34; Thu, 6 Jun
+ 2024 16:13:20 +0000
+Received: from CH2PEPF00000146.namprd02.prod.outlook.com
+ (2603:10b6:610:75:cafe::65) by CH0PR04CA0110.outlook.office365.com
+ (2603:10b6:610:75::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.21 via Frontend
+ Transport; Thu, 6 Jun 2024 16:13:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH2PEPF00000146.mail.protection.outlook.com (10.167.244.103) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7633.15 via Frontend Transport; Thu, 6 Jun 2024 16:13:20 +0000
+Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 6 Jun
+ 2024 11:13:19 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH v4 0/8] Enhance AMD SMN Error Checking
+Date: Thu, 6 Jun 2024 11:12:53 -0500
+Message-ID: <20240606-fix-smn-bad-read-v4-0-ffde21931c3f@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240528100645.00000765@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAXgYWYC/32OwQrCMAyGX0V6NqNNu2o9+R7ioa5x62GdtDKcY
+ +9uJogHwUvgD/m+/LMolCMVcdjMItMYSxwSB7PdiKbzqSWIgbNAiUZqdHCNDyh9gosPkIkHErk
+ Qmqt2eycYu2Xim7fydObcxXIf8vT+MKp1u8q0rJVdpVpWRtU7VBYUTP5JqWr5cfL90fehaoZer
+ JYRv6RVzHKZPZPOKvkf1B/QyBr1b/9RgwTvjWksYiDtvviyLC98itmnIQEAAA==
+To: Guenter Roeck <linux@roeck-us.net>, <x86@kernel.org>, Yazen Ghannam
+	<yazen.ghannam@amd.com>
+CC: Mario Limonciello <mario.limonciello@amd.com>,
+	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <babu.moger@amd.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000146:EE_|CH3PR12MB7716:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6cf201b-fb92-4828-f1a1-08dc86439518
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|82310400017|1800799015|376005|36860700004;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Q2RvcDE4SDBWSHJ0NDF3YjV1SFpyQ2Y2d3Ewbk9MTnlmV0duOHZra0pycHZk?=
+ =?utf-8?B?MVJwMVpJWnVRSlNGTWxvVFVILzZkT015RzBwYkNTbDNTTGZnT1BKNjQvUkJ6?=
+ =?utf-8?B?bDREeEpRYTl6bmJSRTJ1TFZLdjhySDluTnZIVk1DTUxncUNmZWlaSVdQOEpR?=
+ =?utf-8?B?RzZQc0tNa2c0OXN4dzBsazNvL0JUd0NuVGZUckdiTEx0YjNDY2FrTEg5THpn?=
+ =?utf-8?B?TzFaR0tuNlVrcFVrWTJkM3dHbmdqMCtjRHhWUHo0NUp1WEdqSU1Zd3Q3RGpz?=
+ =?utf-8?B?TVFrN0ZDcmFsN0FzU3plVDRJM2pwTTN2QzU1TlMyR3dqWFhjWXEvSHFUVXQr?=
+ =?utf-8?B?ZldRTitZWXRnVDVCeE5aRGFXbSsvSEtVb3RiNjJONHV1Nm5qbW1RckcvUzJZ?=
+ =?utf-8?B?K0orRkdSVURrZkNCRmN6OTVrbGI1Zy9RUWRnNS9nQTZCcG1wOXpMZUFDUmo0?=
+ =?utf-8?B?M29iQlJLbVoxMFl5aDJqMTEzbE5EL2FRUEUvZm82T0dFN2hFaElWc2NtVUMx?=
+ =?utf-8?B?ZVJ2RHJpeEhQNUY0cFE0WEhxVlBzb3dDY0N4RDAycFU0a2V6L0dmMlR2UjNp?=
+ =?utf-8?B?Qm52c1FPMVhHRXNqb0V5WCt4Uy90OXgvNVNCSXNPcEM3RmluY3EwRlR6WUYw?=
+ =?utf-8?B?UXlDaitZQVlacmt1Wm9qemxETDBwNHNCdTVGeGZVV3kxazNBZ1JRVFlBRjBL?=
+ =?utf-8?B?TDlzMVJZdUo5M09Gc1N5aDluTmVmZHd1U2x0ODhCcVIyU3ZYQTd2S2FEU2po?=
+ =?utf-8?B?SXNYWm1iVU5TRjBJNktpT2pqY0ZzUmE5YjN2RGxwV2tLNmQyWEJXTm92VllE?=
+ =?utf-8?B?dzk1TUZsREJmS0RGSE9YeCtVVE9yNkZSUzdYeDF3a2taUGpIR0VkMGgyckNK?=
+ =?utf-8?B?SG1RNzBoYmlmcWVBMEpwdnJsQnB4ZDlabWlUTnlOZjYzOEVBUEFhTFRsU3VG?=
+ =?utf-8?B?TGhiT1lqWDJTZkY2b0pLUlV4MjlQR21KWFRsaUdPS0UzWWVzUFZ5RDA5OFZJ?=
+ =?utf-8?B?WHZsbnRrdHVrQkJ1T09OQ0JZMksxZ1NKcUZLZEZ1cXNiUHorMkE1Yjl5d3l5?=
+ =?utf-8?B?eHJDSDMzWUs5ZVV2bW44dW1FaDhHWEdsek5KZzhLd3ovUU0yalozd3lFSUtz?=
+ =?utf-8?B?VGJPK0hEdzM0aUVqYkNST3FxbEtHU1N2MkkwNmwyKzJkMXI2ZzRic2l1dW80?=
+ =?utf-8?B?V0pIQWphd0lCeUZGL3ZzclY0U0YzUUtJQmJ3NlI4aHdDTkYzMnMrV1MzQkVu?=
+ =?utf-8?B?ektDWTZ6amR4blc4QTJwVHBFTGlieTZiWUt2Y1hFSUtCTnpNTXVwM0ZUZlJ2?=
+ =?utf-8?B?ZWJLSC94Sm1PaElMYVBxSkdjbERqZEVLUWdscE8rWjBaNE52RDBvRXZDSS9P?=
+ =?utf-8?B?RjJvcVdZOUZRNXlSNHJvUVA0eHVoN1RPbHpZcGRiS2g3RUJjdGFyd3lnbUNk?=
+ =?utf-8?B?R2FKSVZpZ1BoaGsrUE8wemV3WmtjSTcrYUwrcHB2VnBuVC9QZkNwRmpwQWlJ?=
+ =?utf-8?B?d2ZHWHdRdklyOXBwclR3NUE1U1NjT0RIdG1tMU9lVUx1Z2w2cHN4S29kT0NS?=
+ =?utf-8?B?WlZrKzRzT1JkR1ZhRDc1QU41dGJYdkovTmNKaTdMLzJPdkd0bTM5MVJUbk1n?=
+ =?utf-8?B?cUd3T0NSdGxDOVB4Y1E3YmZmdjV1TmtycFU2bkd4RS9KOFh6aFh3a3Zadk1N?=
+ =?utf-8?B?WnY0RmFXQzNTY2NJTmNuSmxVODgzNWcyU2JYcUdQOGRlSTRzMWZKQVd3RDc0?=
+ =?utf-8?B?WGhRdlI2K09qSGJWQy9ad2IrUUtvY29qcWdiQlZacG91NHNuZmRXQjJheEZ6?=
+ =?utf-8?B?cStYbkYwMS8yOWNTUGIzWlRSTVdnMTY3Rmc5Z2FsZDBXci85bitCNlBVTHRD?=
+ =?utf-8?B?Y2JFREdlZ2o0VzY4K1B3bTNWYk5JdkVWMWY0OWZXVG9tMjFmcXM3Rjljbjhv?=
+ =?utf-8?Q?mzWVfvCg7jQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400017)(1800799015)(376005)(36860700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 16:13:20.1357
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6cf201b-fb92-4828-f1a1-08dc86439518
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF00000146.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7716
 
-On Tue, May 28, 2024 at 10:06:45AM +0100, Jonathan Cameron wrote:
-> If dealing with disabling, I'd be surprised if it was a normal policy but
-> if it were udev script or boot script. If unusual event (i.e. someone is
+Hi all,
 
-Yeah, I wouldn't disable it during boot but around my workload only. You
-want for automatic scrubs to still happen on the system.
+This set implements more robust error checking for AMD System Management
+Network (SMN) accesses.
 
-> trying to reduce jitter in a benchmark targetting something else) then
-> interface is simple enough that an admin can poke it directly.
+Patches 1-3:
+	- Pre-patches in AMD64 EDAC and K10Temp modules.
+	- Required in order to avoid build warnings with the
+	  introduction of the __must_check attribute in patch 4.
 
-Right, for benchmarks direct poking is fine.
+Patch 4:
+	- Introduces __must_check attribute for SMN access functions.
 
-When it is supposed to be something more involved like, dunno, HPC doing
-a heavy workload and it wants to squeeze all performance so I guess
-turning off the scrubbers would be part of the setup script. So yeah, if
-this is properly documented, scripting around it is easy.
+Patches 5-6:
+	- Optional cleanup patches in k10temp.
+	- Not required for the SMN access issue, but I thought they may
+	  be good to do.
 
-> To a certain extent this is bounded by what the hardware lets us
-> do but agreed we should make sure it 'works' for the usecases we know
-> about.  Starting point is some more documentation in the patch set
-> giving common flows (and maybe some example scripts).
+Patches 7-8:
+	- Minor changes in k10temp.
+	- Fix W=2 warnings found during build testing.
 
-Yap, sounds good. As in: "These are the envisioned usages at the time of
-writing... " or so.
+Thanks,
+Yazen
 
-> > Do you go and start a scrub cycle by hand?
-> 
-> Typically no, but the option would be there to support an admin who is
-> suspicious or who is trying to gather statistics or similar.
+Changes in v4:
+- Rebased on tip/x86/urgent.
+- Reword commit message for patch 4.
+- Dropped stable tags.
+- Included additional tags from Guenter.
+- Link to v3: https://lore.kernel.org/r/20240523-fix-smn-bad-read-v3-0-aa44c622de39@amd.com
 
-Ok.
+Changes in v3:
+- Added tags from Guenter and Mario.
+- Removed unused variable in patch 2.
+- Added patches 7 and 8 to fix extra warnings in k10temp.
+- Link to v2: https://lore.kernel.org/r/20230615160328.419610-1-yazen.ghannam@amd.com
 
-> That definitely makes sense for NVDIMM scrub as the model there is
-> to only ever do it on a demand as a single scrub pass.
-> For a cyclic scrub we can spin a policy in rasdaemon or similar to
-> possibly crank up the frequency if we are getting lots of 'non scrub'
-> faults (i.e. correct error reported on demand accesses).
+Changes in v2:
+- Address return code comments from Guenter.
+- Link to v1: https://lore.kernel.org/r/20230516202430.4157216-1-yazen.ghannam@amd.com
 
-I was going to suggest that: automating stuff with rasdaemon. It would
-definitely simplify talking to that API.
+To: Guenter Roeck <linux@roeck-us.net>
+To: x86@kernel.org
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
 
-> Shiju is our expert on this sort of userspace stats monitoring and
-> handling so I'll leave him to come back with a proposal / PoC for doing that.
-> 
-> I can see two motivations though:
-> a) Gather better stats on suspect device by ensuring more correctable
->    error detections.
-> b) Increase scrubbing on a device which is on it's way out but not replacable
->    yet for some reason.
-> 
-> I would suggest this will be PoC level only for now as it will need
-> a lot of testing on large fleets to do anything sophisticated.
+Yazen Ghannam (8):
+      EDAC/amd64: Remove unused register accesses
+      EDAC/amd64: Check return value of amd_smn_read()
+      hwmon: (k10temp) Check return value of amd_smn_read()
+      x86/amd_nb: Enhance SMN access error checking
+      hwmon: (k10temp) Define helper function to read CCD temp
+      hwmon: (k10temp) Reduce k10temp_get_ccd_support() parameters
+      hwmon: (k10temp) Remove unused HAVE_TDIE() macro
+      hwmon: (k10temp) Rename _data variable
 
-Yeah, sounds like a good start.
+ arch/x86/include/asm/amd_nb.h |  4 +--
+ arch/x86/kernel/amd_nb.c      | 39 ++++++++++++++++++++----
+ drivers/edac/amd64_edac.c     | 69 ++++++++++++++++++++++++-------------------
+ drivers/edac/amd64_edac.h     |  4 ---
+ drivers/hwmon/k10temp.c       | 62 +++++++++++++++++++++++++-------------
+ 5 files changed, 115 insertions(+), 63 deletions(-)
 
-> > Do you automate it? I wanna say yes because that's miles better than
-> > having to explain yet another set of knobs to users.
-> 
-> First instance, I'd expect an UDEV policy so when a new CXL memory
-> turns up we set a default value.  A cautious admin would have tweaked
-> that script to set the default to scrub more often, an admin who 
-> knows they don't care might turn it off. We can include an example of that
-> in next version I think.
+base_commit: c625dabbf1c4a8e77e4734014f2fde7aa9071a1f
+change-id: 20240329-fix-smn-bad-read-2ee9ddcf3989
 
-Yes, and then hook into rasdaemon the moment it logs an error in some
-component to go and increase scrubbing of that component. But yeah, you
-said that above already.
-
-> Absolutely.  One area that needs to improve (Dan raised it) is
-> association with HPA ranges so we at can correlate easily error reports
-> with which scrub engine.  That can be done with existing version but
-> it's fiddlier than it needs to be. This 'might' be a userspace script
-> example, or maybe making associations tighter in kernel.
-
-Right.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
