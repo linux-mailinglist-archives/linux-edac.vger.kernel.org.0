@@ -1,190 +1,147 @@
-Return-Path: <linux-edac+bounces-1225-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1226-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C166A8FF232
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 18:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E1838FF380
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 19:16:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A38C1F213E0
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 16:18:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33A511F234BF
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Jun 2024 17:16:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8337199EAA;
-	Thu,  6 Jun 2024 16:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE59D198E90;
+	Thu,  6 Jun 2024 17:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XhNjxgb5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HZOpp7+g"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1002219CCF4;
-	Thu,  6 Jun 2024 16:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717690415; cv=fail; b=KVMGbmBCkYQ81QfjA26sJbKhDu8o58AIdlotCfDEiH/gXx+/F/hRE4gX3vYUi0CjLU87REJ3pyLaRbYyoWfI2Pb58IdlKglJLoNWkH7WGFG8SS/x1wShWkhWAMkWK8AVVZqETetq0keq/kB6Hk0nW1mRPjrjGlhgRqGi7rdtIzs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717690415; c=relaxed/simple;
-	bh=1skJ/7VJ1g2JtxqhkVli2UyaJ7oCXqXoF/P+u1FuNqw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Q1jrs6XFn++T3GZ/POgWWo/Th4uDVJp0sO4XvKTzjzGt7Apz2B3YeRSo2fqt27O34AfLSB/AJSvY2Xdsre7+hqWua4CXhaLrdC6J87fZF/sR60wQZdjL3NVpXeVQ69d1NOyTMbd8S7pOJy6xI24i8pQMtiZavV3M8krdaxVlQYE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XhNjxgb5; arc=fail smtp.client-ip=40.107.244.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HgtVhK4IWNTFh7qnraElEebZSN3gUOCVTjELqF7TWqmvC9zHnSC8ogKcmsEdWgMj9ldduq8wH1xCpdy2EFBEsrFBcIJXXNd/pkesQTim8r1PWQGKfjEFvKFHT8CJY9fdi9oZy4MUnUa2mPCEXjiGjpUwvtgFrOfDVb8xncHRS8Ezy9sNgh7W5ft7HmpyXzXtOBWgRvEMaciFO+PUdO6MCKENZ1P0dSkYMcbB1za6rbi1lSE0xl3AnAQuv8XPKcTxrQKqQ2WbChOqeX0PQKELkcxjNz2YWhJgQeVH/aGB3VMV/L5QZUcnNsLWzjSkUXaxvRQrMDD3VHcEci+fiV+TAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UE47HnUxvTJjZSnzAEg9NHiMXdh7F1Vo3vF5L9ZH1NA=;
- b=Mh+yOSqj99Xws/jBf6Wzkht7ZTGACQ0GNlncMSXHH4UtTlQgSAPgCEDUjjEgjue8SsOQWaDq9u+W6ONGeKKg03YOSDqJulP3H2Iop91TaJ71MlS3ucc2swAmFGqRxYKZM5XWh4IlEVedbfA7S5rVuBWJE6aqAOMuPozfRrv4oNcZ2h54FXogKnxRf2G853pShkqNoXrVAEdhwOdH8OQjQUQDb9erJ92RGInOc8aOb7kawfqoY5iwtIBQ+NrWSh12s0fzRbnHmpaDBZtPtGpt/8sgEbKsqXLvB1Pb0auJksWsThEI2TyfFIwRQ9PzK8J4Dc8l7WaGGSf7EzE3IR0xgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UE47HnUxvTJjZSnzAEg9NHiMXdh7F1Vo3vF5L9ZH1NA=;
- b=XhNjxgb5YWQFYptXTbQUa6EIaA4W83ZI85e2Uy6NAa0SLJuc3m8haa24VQ07mLagZdvQ49O66RE8vyy8UGb1g3Ogp8LZjuJCbuRNCyNA1UvZzDRM8lEDJdzUr7t1SkppRuXh53/nFJrEcAlCod6fOCNPLbSefoZWN0dFTfLoEGE=
-Received: from CH0PR04CA0097.namprd04.prod.outlook.com (2603:10b6:610:75::12)
- by PH0PR12MB7813.namprd12.prod.outlook.com (2603:10b6:510:286::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.25; Thu, 6 Jun
- 2024 16:13:29 +0000
-Received: from CH2PEPF00000146.namprd02.prod.outlook.com
- (2603:10b6:610:75:cafe::ec) by CH0PR04CA0097.outlook.office365.com
- (2603:10b6:610:75::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.20 via Frontend
- Transport; Thu, 6 Jun 2024 16:13:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH2PEPF00000146.mail.protection.outlook.com (10.167.244.103) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7633.15 via Frontend Transport; Thu, 6 Jun 2024 16:13:28 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 6 Jun
- 2024 11:13:22 -0500
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 6 Jun 2024 11:13:01 -0500
-Subject: [PATCH v4 8/8] hwmon: (k10temp) Rename _data variable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127A8195B1E;
+	Thu,  6 Jun 2024 17:16:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717694169; cv=none; b=ANkrG1IrC425msTDV1ZOhgWpkwx+fbXJDNGbljsJtJ3xfecMSmKRrChOmzdXHpAhh9GqgxuduglC62Z2VXd92kXHbbyRUH0ij16jPZp1O9/arbBdKZZoOIv9B+hZpuwC/Im968/hbfjC/kKHMZCd4f6KCfBsY2T+pZyNOpN1FKU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717694169; c=relaxed/simple;
+	bh=EmENuP/0WrhU+AYR+dKTRxH3d014P3mfyl5SZikIGcY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HzEB37FDIG23GAATLQGMYUv7iFzwd750Bl2YeFVBwB+9QdH1RGezEBue5UzEM65z7I5LZdgKPhnog5Nvhruz69bco/brwoKLH0O9Ru15hx3FIbM+zll52LIpmNZhBwHYjoSGiwXNik6h9/0Otu4Q+1S0Y0F/R981FMExP5GjUR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HZOpp7+g; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717694168; x=1749230168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EmENuP/0WrhU+AYR+dKTRxH3d014P3mfyl5SZikIGcY=;
+  b=HZOpp7+gwUWmXTl9GSJBkp8LA/W6gumlksA+pGiyAv1yMmiZgFta5V8/
+   8qRFQZbfxSG2NB7oYtsM2Q10XAJ+6+xwUjaIImunM28Qvsrnp5Zz4yAIp
+   MtZym+aak3Fac/+hy336HNKW7uKPTN6EvyVNCib0tKeE6oiZHsPlxwILn
+   T6raLrVkAeLbbhBRBllWjhLKoKJeB3B07iYlTYCXSLj/fLc9NYLzya8mU
+   qQozJV2a8/dHRqTQzASWffmmYsAQO2Hs+3fsXIv7FfLO/oVVSJ/wjiAD/
+   Lwx2bt83vLzS3tNnhkx5/ujRht/Odq/qNuhyY6jdwcpChG36Hkkf/gCkk
+   g==;
+X-CSE-ConnectionGUID: zhJ5kwVPQkqWsJ5LdZsV3Q==
+X-CSE-MsgGUID: 4Fd6XVrFSdWzJfcsMvX/rQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11095"; a="14189539"
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="14189539"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 10:15:56 -0700
+X-CSE-ConnectionGUID: rzJkR3G2QmGtO4Ya3jlk+g==
+X-CSE-MsgGUID: XrpE4k2+Rxu7jkhYm1x1IQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="42611051"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 06 Jun 2024 10:15:54 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFGiN-0003TE-1K;
+	Thu, 06 Jun 2024 17:15:51 +0000
+Date: Fri, 7 Jun 2024 01:15:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+	tony.luck@intel.com, bp@alien8.de
+Cc: oe-kbuild-all@lists.linux.dev, nao.horiguchi@gmail.com,
+	linmiaohe@huawei.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+Subject: Re: [PATCH v2 07/13] mm/memory-failure: simplify unneeded
+ hwpoison_filter() variant
+Message-ID: <202406070136.hGQwVbsv-lkp@intel.com>
+References: <20240606063247.712575-8-linmiaohe@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240606-fix-smn-bad-read-v4-8-ffde21931c3f@amd.com>
-References: <20240606-fix-smn-bad-read-v4-0-ffde21931c3f@amd.com>
-In-Reply-To: <20240606-fix-smn-bad-read-v4-0-ffde21931c3f@amd.com>
-To: Guenter Roeck <linux@roeck-us.net>, <x86@kernel.org>, Yazen Ghannam
-	<yazen.ghannam@amd.com>
-CC: Mario Limonciello <mario.limonciello@amd.com>,
-	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <babu.moger@amd.com>
-X-Mailer: b4 0.13.0
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000146:EE_|PH0PR12MB7813:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c365862-689b-4bf6-a3a2-08dc86439a59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|1800799015|36860700004|376005|82310400017;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bGNaM21WM1hvc1ZrL2hnQ2syQ3FIMTJBdXV6UmVWWEJUN0lYalhLMDhaYnpk?=
- =?utf-8?B?ZEdzYkdOd2thaDJPamw3MkhoZjFYVlJza3RSc1F5TThZcWtjbyt4RCtHaThV?=
- =?utf-8?B?WTRVdHBGUXNlQzBQV3ZYanlSZytnNDZvY0J3U2pTMDZmSEpRV0hSRXhTekZz?=
- =?utf-8?B?WnE5NytRTEFmd3JaUm5zUEk4RnJVTjVQMlROTkZzVU9kYVZsUVRMTDdGUU1X?=
- =?utf-8?B?dnlicnU3Y2luMk55UGJTanZ5bVRRNURmWkdjdmFBRVR2VUliM3A5S2YzUDFO?=
- =?utf-8?B?UE9NUXdwZUErcjB0N3RFVTc5ZWV1R0pqNUdjSkJFa3JkcENVOVJUMjEvaVJz?=
- =?utf-8?B?bHZ0ejViSXhTL25YRmR1TGRPSldoNTZ5cFhZMklXREcxL3VRSkhGdm5kL3Br?=
- =?utf-8?B?ZnY0cXh5SFl6SWRoTlF1Tlo0NmxweFJEbGcyY0RERy9TMVZ4b2RnTHJrQ25Q?=
- =?utf-8?B?VnV3OW82blpPYVBiekxudStCNE5ML3kzQVV2Y1UrRGVEMjgxbmNjZGZZSTNt?=
- =?utf-8?B?NVhnSDFiQWU2Umduazd3NzFQYno1NjV0Q0VlRUhDcTVReXdmZlN1eXZCZWZi?=
- =?utf-8?B?TTZnbDIvNmRrZG5aTGxSRVpSNGErOGpRRTNneXE4enlqSjdDZEZVclBwS1pv?=
- =?utf-8?B?MkhmU3BFUjd5VW05d0tyVkJQNy9OZWF4VUVPWFA4dlE4VG9DK0tCSnRRbEZh?=
- =?utf-8?B?azA4Q1NIbDc2NnNTVUxKMitFZjY4aktzVXNuQVpWaTY2NUNoZURwWlVyVE9a?=
- =?utf-8?B?MmtKRXhnQUdUb3QxdkpHNm1IZGUzRWFDMGlTaU5VYkxjRUU0SE9vT2RCc3lH?=
- =?utf-8?B?b3ZEMTBuYW8xaUpTeTRPN05ZV1lFNENxQTdvS1JBTXlmblJMa0ZCanUvSkRi?=
- =?utf-8?B?Y2IvK3VreWJWekJtYVFhaG1PTEZma1VqdUZ4REI3REEvRUZtL3ltaXZzUzRl?=
- =?utf-8?B?WTFVQTA1eGVaRGJpUFU2R1NpNzN4WmFNZ25wbjJxejVPN3R2L29TMUp6ZUJO?=
- =?utf-8?B?ZzhCQ0lWa3hiVGN1OXZHOC9nOG9DREZackg1SmdXbmg5a25SbGdGcGc5OWRr?=
- =?utf-8?B?aU1MU05DbWY3Q0QrU24xUEhtbFJ2ZGRiOEFjdXo4WGh4TElna3phNktiSkgz?=
- =?utf-8?B?b1ZCejB4QytZalgxMXhPSHF6R2hUVCt4SXMrUm80Z0hzWi9pL2NVSk05cEs5?=
- =?utf-8?B?ejcySjFpTUtkem0vZUxtMG5xcEZ2R1JqUjdJbjFuWDZ4TXd1bTJjQ0ZIVnFl?=
- =?utf-8?B?aEtKa1lhbTU5QlJRc2EwUlI2bVZNU1VkNnlwVUkrWUFJdmJ3ckpmeDc5SjVw?=
- =?utf-8?B?WmxkemUzdmVHVzJHamQ2QjRZWGFPcFRzYkUzQk1qeWUxdVM3VDhtZ09McDJV?=
- =?utf-8?B?eFRhekxxWjhpUXJZRmp0UHRQdXgzcmhvem5aY2RYMDUrSlV2aGgyV3hkaTVo?=
- =?utf-8?B?ZElmM0RJWlM2Q09JcXQyemJ6aGJFYmIrMUNGSjFLY09pMVZjSHdJL0pwc3Z3?=
- =?utf-8?B?QjgzYXQzK3hjUVdjV2dRVmNYN3hUNEVIRU1oQUl1eE9NaFZHV2lIdEVnUXZa?=
- =?utf-8?B?RG53c0oxNlFyOFh6dWhKREFsVUZJT20xY0NVSjJQeFBGTWVkdFlBblNNMVhl?=
- =?utf-8?B?bS9KSExaS1pQcFNrYzdITzVWZ25EQzEzLzNGUnhqbnE5ZW9BQ3QvckpWRzRY?=
- =?utf-8?B?a0hISFFwQ0RHa3p4SU90SWZSajd3dkVMTGVIc2xSdUhYVTVzaVVJY0NSekJu?=
- =?utf-8?B?WmFzVTJPSVdnMFJuNmZKdnNyM3ZEeUNZZHNnS296ajdRN3gyckdrL3RmdEhD?=
- =?utf-8?B?a2xPcTl0V29zaCs3Uk9RYTFoN2xhazZVVUhMdDdkb3V5MklyRyttNDQwMXd5?=
- =?utf-8?B?ZmtUQ3hreG5OUnc1dVNZNFZDbFNYRlRaYzl4VzFRNzlScmc9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(376005)(82310400017);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 16:13:28.9483
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c365862-689b-4bf6-a3a2-08dc86439a59
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000146.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7813
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240606063247.712575-8-linmiaohe@huawei.com>
 
-...to address the following warning:
+Hi Miaohe,
 
-drivers/hwmon/k10temp.c:273:47:
-warning: declaration shadows a variable in the global scope [-Wshadow]
-static umode_t k10temp_is_visible(const void *_data,
-                                              ^
-include/asm-generic/sections.h:36:13:
-note: previous declaration is here
-extern char _data[], _sdata[], _edata[];
+kernel test robot noticed the following build errors:
 
-No functional change is intended.
+[auto build test ERROR on 19b8422c5bd56fb5e7085995801c6543a98bda1f]
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/k10temp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Miaohe-Lin/mm-memory-failure-simplify-put_ref_page/20240606-143939
+base:   19b8422c5bd56fb5e7085995801c6543a98bda1f
+patch link:    https://lore.kernel.org/r/20240606063247.712575-8-linmiaohe%40huawei.com
+patch subject: [PATCH v2 07/13] mm/memory-failure: simplify unneeded hwpoison_filter() variant
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20240607/202406070136.hGQwVbsv-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240607/202406070136.hGQwVbsv-lkp@intel.com/reproduce)
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index a2d203304533..543526bac042 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -269,11 +269,11 @@ static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
- 
--static umode_t k10temp_is_visible(const void *_data,
-+static umode_t k10temp_is_visible(const void *drvdata,
- 				  enum hwmon_sensor_types type,
- 				  u32 attr, int channel)
- {
--	const struct k10temp_data *data = _data;
-+	const struct k10temp_data *data = drvdata;
- 	struct pci_dev *pdev = data->pdev;
- 	u32 reg;
- 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406070136.hGQwVbsv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/memory-failure.c:299:19: error: static declaration of 'hwpoison_filter' follows non-static declaration
+     299 | static inline int hwpoison_filter(struct page *p)
+         |                   ^~~~~~~~~~~~~~~
+   In file included from mm/memory-failure.c:64:
+   mm/internal.h:1072:12: note: previous declaration of 'hwpoison_filter' with type 'int(struct page *)'
+    1072 | extern int hwpoison_filter(struct page *p);
+         |            ^~~~~~~~~~~~~~~
+
+
+vim +/hwpoison_filter +299 mm/memory-failure.c
+
+   280	
+   281	int hwpoison_filter(struct page *p)
+   282	{
+   283		if (!hwpoison_filter_enable)
+   284			return 0;
+   285	
+   286		if (hwpoison_filter_dev(p))
+   287			return -EINVAL;
+   288	
+   289		if (hwpoison_filter_flags(p))
+   290			return -EINVAL;
+   291	
+   292		if (hwpoison_filter_task(p))
+   293			return -EINVAL;
+   294	
+   295		return 0;
+   296	}
+   297	EXPORT_SYMBOL_GPL(hwpoison_filter);
+   298	#else
+ > 299	static inline int hwpoison_filter(struct page *p)
+   300	{
+   301		return 0;
+   302	}
+   303	#endif
+   304	
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
