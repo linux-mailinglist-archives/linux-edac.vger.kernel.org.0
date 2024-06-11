@@ -1,274 +1,176 @@
-Return-Path: <linux-edac+bounces-1250-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1251-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0683790420C
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2024 18:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 017A09046ED
+	for <lists+linux-edac@lfdr.de>; Wed, 12 Jun 2024 00:30:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D44D28DDCC
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2024 16:59:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65F63286995
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Jun 2024 22:30:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BD636E612;
-	Tue, 11 Jun 2024 16:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262EE15444C;
+	Tue, 11 Jun 2024 22:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WteRQuKz"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Wnh6U5C4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2045.outbound.protection.outlook.com [40.107.236.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775C654F8C;
-	Tue, 11 Jun 2024 16:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718125054; cv=none; b=HI3ZIgJSMGJVu86ekBmxbZ4dyRXn8LRlk+yYnYgwz+l1F8qzPZgVxkYrpjRc4vYEvQs0IceLzi8GLLEDI0raS16tXkxT5vKYofAg/ia0gjRjqcVA3lZI6+yHzOiTeT/peR4G8UKlSoOD5KfgQiX59KwiYl1z2l2EDHoqEDv2NZo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718125054; c=relaxed/simple;
-	bh=0j9xLy5Qks09hEcPhv2VnG2UIckde8Oga43oVWaqW3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DCXAMqXkMJMq+1kIp+Wcbwc6wy1mNr8MWql51Ay9QwXmuk4ahiwrQeCrs9TKjPG4C9V4dRNBQIqoz0bRU7oyKyq1aUReG/Jf5VpCaS7ewtrbDqizaVt4k4giDDdcz2C2ODm4j+8PfUPYH8Ic135+Abp4nLoObWAmWIFfaWj58f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WteRQuKz; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52c8c0d73d3so3028905e87.1;
-        Tue, 11 Jun 2024 09:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718125050; x=1718729850; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fVZmCCMrY5B1OGTLHHDWkVuVsFJAPTCCeQK/T+rNRwE=;
-        b=WteRQuKziXZ/k/kFJHMan/G6kjPOIpQrLnzQ3Et05jD+mebUhGH7EW8ipJ7aFP24xX
-         eZAY0u6A1dSGDVwLXpn3UXyWYy97Rk8V2pqnkbZgqaDLlSt9/tqxBtR7d7swXLDw1NcH
-         jlG0uy/OoDZUwPOrof7E04r6EowDKxQz+soOi3S5BqOG06ADn4e8oRgTx/KJliVDpkaf
-         P1okw7BMVjmhL6u8g15pMKssGlLzN8nZJuFUippJ5IcIZPbtdRELmifSt5eij4uSKaH/
-         hX3Ohqf4KVyqKrung/HGHbHmKwJzBiVXjBdsG3nbDkEARm71bXqgez4I3s10G9LbIrQl
-         K6mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718125050; x=1718729850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fVZmCCMrY5B1OGTLHHDWkVuVsFJAPTCCeQK/T+rNRwE=;
-        b=mdZKKPmnQ4HQk25a8SJfSz45Vw9NdPvgMgHETv59dgLhofOp/4kG8zeupC6tdAjAra
-         iJMaZxQN5NeebYnypxZC+m40SdCPJPQ8jLLgRcm/hjOMl1qhGT68GSTwIf058YRi1Tkn
-         RHJVpRQxMaJXUekdJbGaPuZ52IbFQ8b6Y0814A8kaNQ3emh13ewHenWmR/fel+bsboEr
-         Pu2HQWYFRCTmQjlk/YKNODoCOYcckBCgOsxaU0YKT8MlVu2hQt3J6uwp++iH9nNM+k7I
-         sfzIOxuvlFS0KI40mzhJHXhJcxxDKLPXZDGj7c7m4EUGexcQoumpY3JYHKB0FDy7nvo2
-         5KYw==
-X-Forwarded-Encrypted: i=1; AJvYcCXOPYtEinKX3jIB3vVwNSbbgMUo7J0JU5qM4UkjwQcA3BBReK0O53+KYkQkKXclylhMSiI5JauiziXH/CW/tYBgMNJv0B2zBuIkD/d7qlvM5MoZlT1T/oMdGDMLxDuYFVUh3H0h2LbTUA==
-X-Gm-Message-State: AOJu0YxGm3NzJaPjxsd6j6Ef7wVMBsQb1bH4rFljqOat+FNyNaxql52a
-	fum1yj7P2vl/RMrZCsxJMItUx7avVW8UcaOx27N+9p0WSKtl53+9
-X-Google-Smtp-Source: AGHT+IHZfG9ebsXQWLg8L8GT7HK6IHZSNiflrcroHABeSVOEPCLBqVHn8B4pP0eyYRJQMV5QeCvmog==
-X-Received: by 2002:a05:6512:3041:b0:52b:bdbd:2c43 with SMTP id 2adb3069b0e04-52bbdbd3144mr9127474e87.61.1718125050140;
-        Tue, 11 Jun 2024 09:57:30 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52c81726991sm1492536e87.220.2024.06.11.09.57.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 09:57:29 -0700 (PDT)
-Date: Tue, 11 Jun 2024 19:57:26 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Dinh Nguyen <dinguyen@kernel.org>, Michal Simek <michal.simek@amd.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, Tony Luck <tony.luck@intel.com>, 
-	James Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Robert Richter <rric@kernel.org>, Manish Narani <manish.narani@xilinx.com>, 
-	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/20] EDAC/synopsys: Fix generic device type
- detection procedure
-Message-ID: <xgckna5pkrh6rgw4sz7hct6akndpewjmqzsep4lz23j6qdme33@f2y7gdqp2ihw>
-References: <20240222181324.28242-1-fancer.lancer@gmail.com>
- <20240222181324.28242-3-fancer.lancer@gmail.com>
- <20240604183803.GJZl9fC9R5M2NSQ01O@fat_crate.local>
- <5h32gfwdk6uztiv7kbsjbvbghu4yuox6h7b6pqughftztyk2yf@cmzsanqvwcmq>
- <20240610080037.GFZmaypaCbTsXdGeKw@fat_crate.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B4A14EC73;
+	Tue, 11 Jun 2024 22:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718145053; cv=fail; b=Tz0BGaiD6rI9gTDxl6/tHKF9XIU3/qKji0k1obsepkMMh0oajLuX2qfAWEcvnomjZVzHuDPFhprwuwmbwDGqeX0AXWCK7SbHGSQofWFeCOOiEH7e7rjFbxfA6INbVTnkN4HBCPy5IkT4G7R6rvYWaGBNxI9PqReQzNZSPDOLGjs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718145053; c=relaxed/simple;
+	bh=9feu1ry0wc6vdyKWelu9tB7hvnxMquIDZ4BvyykZHlg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u7o4FxdkmA8W1ZuD9T7ImfT+oNY1XaCXt8EXu9shnN+DDN0R31JJnZPljsqfqGWhFPoVxjCUQqHspbsMCImSIKtztx6PhTJyD8vNYXwKXqG8l+vq+KNCmWyl1ZedEO/QgtzsgBIepiR0v83qUyJevgAPXgjvQuAb1sJjUnof0tg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Wnh6U5C4; arc=fail smtp.client-ip=40.107.236.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ogjQYBlHHTVkkHlzP0h24jGfnRDl7LpP94kd4Hnj+8ZAj0Xvuhv8m8w5xuHcaZFjprghPxLuwIagp4SLLEoYkryBV0nsaxbeYDnFEY6TEDcuP5Ok5Rxhnu9bfSBWZiRtQ5tfP8BjnwQhbNJFtLJnvK9iQ661P1LDvl2k31jlcYlMTM6f0UMG+hUS7iYVPfKw/CM1aZkXZNmC7GbzO5//Vso78AX2sQxDn+66T6/pANjxeNTDEjTJhqxHApGUu2roSk1MyTcQxUdH6cc9j/KAqtwsYaDhZa04OHUJxRp5Z4iVMaPGNuNl3HmNzixIlaXiy+GnTddVmILY6OGxZcJzUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=us7wQFOsOryuJcamWuwA22pfnzJeYuv1V+XhQJV2HMw=;
+ b=bo1K+8O5y4auCIsTZSyLA/rHmJFysz2O4UoFEyV6Xt5KJUvjlWtma2HUtun4urlk8PWiboNZjS/Oy0acyuUhAFukYjiPa/QTaVglIB9C+7xR23iOggR6NzprJSNabdIr1UwehQqDvw94poUmaeuv6I9nIN8AhMC94fceHPxGa8W3GliIrfULcZZziG+cbv65eSF5A3yFV3i5phZjYek0c8BU6gwtzzT7jB2J9YATen9e2Z+65Dm6TgWWauK+v9USYInzrhVZqxYY+cfMXPwcUzLLRm6ITXvmu/11QFKn1YtvWY6tHFLriTc9mNIZsPGK3peR+o3zyl83TyVSIqWFRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=alien8.de smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=us7wQFOsOryuJcamWuwA22pfnzJeYuv1V+XhQJV2HMw=;
+ b=Wnh6U5C45gmWTJtu3FTWjBLqJaIWhriWgcuF+XfW38m+Wrqs2s7ETMEJyNBMMu3b4hvZ1n+L0IFE8nG+zxjEpCZPt5DzgAeWnqliOrPzhu8Hys6hJ6ut80KmreNXjytxCwKaXudIWgpqOc1k4cn/pQfItnP7KVeCeOogIjxNcYghjOSHTzgkYJAPfjg4WiCEC/qvBPsVfuEwly5LvqU/tFJovgkd6oV3HZPfd8K4M8crCpBeA1+iOibmtXknFUlXbcCZbr/sfZyrVU4yYHOpfLDg7aaRjpWOqWHP0Kmlwm6xW02ZsLlIM//MXS/Tfk76+E3QT5I4WBgJmL5ZTIVF2w==
+Received: from MN2PR18CA0017.namprd18.prod.outlook.com (2603:10b6:208:23c::22)
+ by CY8PR12MB7658.namprd12.prod.outlook.com (2603:10b6:930:9e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
+ 2024 22:30:47 +0000
+Received: from MN1PEPF0000ECD7.namprd02.prod.outlook.com
+ (2603:10b6:208:23c:cafe::65) by MN2PR18CA0017.outlook.office365.com
+ (2603:10b6:208:23c::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.19 via Frontend
+ Transport; Tue, 11 Jun 2024 22:30:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ MN1PEPF0000ECD7.mail.protection.outlook.com (10.167.242.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.15 via Frontend Transport; Tue, 11 Jun 2024 22:30:46 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 11 Jun
+ 2024 15:30:21 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 11 Jun
+ 2024 15:30:20 -0700
+Received: from vdi.nvidia.com (10.127.8.9) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server id 15.2.1544.4 via Frontend Transport; Tue, 11 Jun
+ 2024 15:30:19 -0700
+From: David Thompson <davthompson@nvidia.com>
+To: <bp@alien8.de>, <tony.luck@intel.com>, <james.morse@arm.com>,
+	<mchehab@kernel.org>, <rric@kernel.org>
+CC: <shravankr@nvidia.com>, <linux-edac@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, David Thompson <davthompson@nvidia.com>
+Subject: [PATCH v1] EDAC/bluefield - fix potential integer overflow
+Date: Tue, 11 Jun 2024 18:30:17 -0400
+Message-ID: <20240611223017.30988-1-davthompson@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240610080037.GFZmaypaCbTsXdGeKw@fat_crate.local>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD7:EE_|CY8PR12MB7658:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6ba8f33-15ed-4747-781c-08dc8a662379
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230032|82310400018|36860700005|376006|1800799016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?9EWo8nmeE3SZlWSHbuFY62+OdLpqRGyYLcaQw8Fm45CChIN4JA+i68/SJAay?=
+ =?us-ascii?Q?5CZMN8RcYwXg6ew5a6L/o+VpJFZWf4Gr7Okn5zkGQjQnYBHdX3vv/XwzRk9Y?=
+ =?us-ascii?Q?7U5bXxHeODhVNBvsuJMz0V0+F5o/tnbV65QBj4wLJx7Vg5LGMmz71pYRgV2s?=
+ =?us-ascii?Q?fCnzYMv8sw7RrMNcaEqslroGcJGAwiO7OvCxpHuk1fkoUxd4vxDbe7LJ5AA8?=
+ =?us-ascii?Q?sMhrKa5b4GPiqytzivHRiiIRMc3hGag8AKNWhrNsMFmR7RK1p71XRFt48ItT?=
+ =?us-ascii?Q?3hHQgncnxMdhw4LQHNyAnXNOv8Xki6+g3CpUZY1CTy+pi2DfBoDobyD2xNIo?=
+ =?us-ascii?Q?GNyA1Eg8JG4NpKG76p3EZwLToOOrXfAGmirav0UEcVUgl6eUHtbmfmygJ/Em?=
+ =?us-ascii?Q?s51uSOD6VwjslAC+4Ee637BgiEi1jU4m3g+iFyPAbhgxPa5QBboI5/QA057c?=
+ =?us-ascii?Q?U0f0Sk8TlbDnKOBK9ijF94JVhBhR4aGBUdWMlwc5fsIp6nOJ+avVZPSoD53z?=
+ =?us-ascii?Q?TACyUQ6/Lne8v372N1C0u5LmMJqF8LKMb7YObHjdJAo297aPshJdR/CLgkt/?=
+ =?us-ascii?Q?D9A6BFI8qZ/uKe0jgY4Ki0+gTpguy3ng00Qc2CpJlq64VdQVnnpADaQNOkD+?=
+ =?us-ascii?Q?ElyH/ZkCXwQ0/WWdk/TGRBhO6tLnaFym61LOTfqQlvcc3vP/2FB9uQ+//qbL?=
+ =?us-ascii?Q?+5q956tOcxhVHe3K7h/7VbigIoul7hwSE1n5Xiaf2EUlZby8Skc1AkA9F3NZ?=
+ =?us-ascii?Q?uNVLaeIO1dC3HVBmRnd70GcQdGlvhQnQVbtxNLYs6CcNg3fvnyPiaReUJztf?=
+ =?us-ascii?Q?SrVPQcyHPjF3+t3P8BSYbSLiE9+A8Uth5/Qbb2Y4022JtmR4jsyIsS/p2J6Z?=
+ =?us-ascii?Q?mP2anMOujkYxkgz/pRLJoYY6sPH6BVvsrrYVebpidvOJjHOr1RtN+7pLqBwE?=
+ =?us-ascii?Q?NOiJKhkQ0O66WPDtHtnFKpBgfKKFDlkj7aVgwwfeRfJgCZxGS4J7T/mQWWM6?=
+ =?us-ascii?Q?RjYQs6kIlqNrnNBPnxOH0F+zu4xq1j2JjdxmMH8vriUqFV42yr90BgeXrDpj?=
+ =?us-ascii?Q?VlpJ59dvADAUHXeCf7VnIZ62DRkq4Tecfs8bzOsfnfhs/VwKP8DIwINX9AXy?=
+ =?us-ascii?Q?hMQFSnRKalqYE+QSG1NV3JmaY3qF3Zyt21IN/gm72ZAbReKQV054avsJq7ET?=
+ =?us-ascii?Q?hW5NeiO0g4h/fn9zWo3vFGF5jWZS8LdhY5Ka6yS7llPYrgq0G2oGuz6LLBM+?=
+ =?us-ascii?Q?CjbXGWar9TLQL9lKPQbo45LlKR+Ga5vB2siTAlLNOTaCuyH4RrVETNlOx6Sl?=
+ =?us-ascii?Q?9PHT00L90xJ1EoZmMVilRqVYLo2D9CJGVdBJ01wF/z9BdwxAOiIWeXsXb6Ei?=
+ =?us-ascii?Q?UGpemNYaFGuJ66bnRQSD4j/cEAx5ka+Ea/jmKHSWIbgHFazioA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230032)(82310400018)(36860700005)(376006)(1800799016);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 22:30:46.4196
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6ba8f33-15ed-4747-781c-08dc8a662379
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000ECD7.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7658
 
-On Mon, Jun 10, 2024 at 10:00:37AM +0200, Borislav Petkov wrote:
-> On Wed, Jun 05, 2024 at 01:11:27AM +0300, Serge Semin wrote:
-> > As I said because dev_type is the memory DRAM chips type (individual
-> > DRAM chip data bus width), and not the entire DQ-bus width or its
-> > currently active part. Even from that perspective the function name
-> > and the subsequent return value utilization is incorrect.
-> 
-> Well, maybe the author misunderstood it but the result of this goes to
-> sysfs:
-> 
-> 	dimm->dtype     = p_data->get_dtype(priv->baseaddr);
-> 
-> which is in Documentation/ABI/testing/sysfs-devices-edac:
-> 
-> What:		/sys/devices/system/edac/mc/mc*/(dimm|rank)*/dimm_dev_type
-> Date:		April 2012
-> Contact:	Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> 		linux-edac@vger.kernel.org
-> Description:	This attribute file will display what type of DRAM device is
-> 		being utilized on this DIMM (x1, x2, x4, x8, ...).
-> 
+The 64-bit argument for the "get DIMM info" SMC call consists of
+"mem_ctrl_idx" left-shifted 16 bits and OR-ed with DIMM index.
+With "mem_ctrl_idx" defined as 32-bits wide the left-shift operation
+truncates the upper 16 bits of information during the calculation
+of the SMC argument. The "mem_ctrl_idx" stack variable must be
+defined as 64-bits wide to prevent any potential integer overflow,
+i.e. loss of data from upper 16 bits.
 
-> So you'd need to fix the comment above zynqmp_get_dtype() or I can do so
-> too while applying.
+Fixes: 82413e562ea6 ("EDAC, mellanox: Add ECC support for BlueField DDR4")
+Reviewed-by: Shravan Kumar Ramani <shravankr@nvidia.com>
+Signed-off-by: David Thompson <davthompson@nvidia.com>
+---
+ drivers/edac/bluefield_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Right. I missed the comment indeed. Thanks for spotting that. If it
-won't be that much of a burden please fix it on merging the patch in.
-If I need to release v7 with this patch included, then I'll fix the
-comment myself. 
+diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.c
+index 5b3164560648..0e539c107351 100644
+--- a/drivers/edac/bluefield_edac.c
++++ b/drivers/edac/bluefield_edac.c
+@@ -180,7 +180,7 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
+ static void bluefield_edac_init_dimms(struct mem_ctl_info *mci)
+ {
+ 	struct bluefield_edac_priv *priv = mci->pvt_info;
+-	int mem_ctrl_idx = mci->mc_idx;
++	u64 mem_ctrl_idx = mci->mc_idx;
+ 	struct dimm_info *dimm;
+ 	u64 smc_info, smc_arg;
+ 	int is_empty = 1, i;
+-- 
+2.30.1
 
-> 
-> > First of all, not that much of the kinds.
-> 
-> What does that mean: "not that much of the kinds"?
-
-The answer was following that phrase. Just two devices: ZynqMP DDRC
-and a DW uMCTL v3.80a-based DDRC available on the Dinh Nguyen's
-device. Seeing there were no much changes provided to the driver to
-support that controller, the controller must have been compatible with
-the Xilinx ZynqMP DDRC in the vast majority of the DW uMCTL2 DDRC
-parameters/features.
-
-> 
-> > Just Xilinx ZynqMP DDRC (based on the DW uMCTL 2.40a IP-core) and some
-> > version of DW uMCTL 3.80a being possessed by Dinh Nguyen and, by
-> > a lucky coincident, turned to be mainly compatibly with the Xilinx
-> > ZynqMP DDR controller.
-> 
-> Then Dinh better holler here what the story is.
-> 
-> > > > 32 or 64.  At the same time the bus width mode (MSTR.data_bus_width)
-> > > > doesn't change the ECC feature availability. Thus it was wrong to
-> > > > determine the ECC state with respect to the DQ-bus width mode.
-> > 
-> > Sorry, but this part doesn't miss anything.
-> 
-> Gramatically:
-> 
-> "The IP-core reference manual says in [1,2] that the ECC support can't
-> be enabled during the IP-core synthesizes for the DRAM data bus widths
-> other than 16,..."
-> 
-> "synthesizes" looks wrong.
-> 
-> It either needs to be
-> 
-> "... be enabled *while* the IP-core synthesizes for the DRAM..." which
-> still doesn't make too much sense.
-> 
-> Or
-> 
-> "... be enabled during the IP-core *synthesis* for the DRAM..."
-> 
-> I don't know what you mean with that "synthesizes" thing.
-
-But you know what it means if "synthesis" would have been utilized, right?
-If no, I'll explain. If yes, then you're right. My mistake. I confused two
-letters. I'll fix it in v7 should the patch need to be included there.
-
-> 
-> > First of all, MSTR.data_bus_width field can have only one of the next
-> > three values: 0x1, 0x2 and 0x3. All of them are handled in
-> > zynqmp_get_dtype(). So in the current (incorrect) implementation it
-> > will never return DEV_UNKNOWN.
-> > 
-> > Secondly, dimm->dtype isn't utilized for something significant in the
-> > EDAC subsystem, but is just exposed to the user-space via the dev_type
-> > sysfs node.
-> 
-> See above.
-> 
-> > So based on that my bet is that since the incorrect code didn't affect
-> > the main driver functionality and since the dimm->dtype is just
-> > exposed to user-space, the bug has been living just fine unnoticed up
-> > until I started digging into the original DW uMCTL2 HW-manuals,
-> > started studying the driver code, and decided to convert the driver to
-> > supporting generic version of the DW uMCTL2 controller (not only the
-> > Xilinx version of it). That's what this series and the next two ones
-> > are about - about converting the driver to supporting truly generic DW
-> > uMCTL controllers.
-> 
-> I absolutely don't have a problem with that - good idea!
-> 
-> However, we don't break machines and don't introduce regressions.
-
-Who would have argued.)
-
-> 
-> > > Can those be freely accessed?
-> > > 
-> > > If not, you should say so.
-> > 
-> > No, they can't be.
-> 
-> Then you don't need to mention them.
-
-Well, I see it otherwise. If you posses the databook then by using the
-references you can find the info there straight away with no need in
-struggling through the _1.5K_ pages file. If you don't have one, then
-you can just skip that part of the log.
-
-So I'd rather leave the refs be in the log.
-
-> 
-> > 
-> > > 
-> > > > Fixes: b500b4a029d5 ("EDAC, synopsys: Add ECC support for ZynqMP DDR controller")
-> > > 
-> > > So this commit is in 4.20.
-> > > 
-> > > Does that mean that this fix needs to get backported to all stable
-> > > kernels?
-> > 
-> > It's up to the stable maintainers to decide.
-> 
-> Haha, you're funny. How can the stable maintainers know whether each
-> patch that has Fixes: tags is stable material?
-> 
-> Nope, that's up to the maintainer to decide.
-
-... and the review committee, and the linux-kernel list members may
-participate in the discussion too. But that's not the point here,
-right?
-
-Anyway if you wished to know my opinion, then really I don't have a
-strong one in this patch regard. From one side the patch does fix an
-"oh, that's not good" issue. That's why I has added the Fixes tag. On
-the other hand the problem has been here unnoticed for years and
-nobody cared. The only parts the incorrect method implementation has
-affected was a wrong value returned to the user-space via the
-sysfs-node, and the first part of the ECC-availability test procedure
-which has turned to be redundant anyway since the zynqmp_get_dtype()
-method never returns DEV_UNKNOWN. So my conclusion is the same. It's up
-to the maintainers to decide. 
-
-> 
-> > I've tested it on the devices with DW uMCTL 2.51a + DDR3 memory and DW
-> > uMCTL 3.10a + DDR4 memory. I am sure this will work for Xilinx ZynqMP
-> > too, especially seeing we've already got the Shubhrajyoti Datta Rb
-> > tag:
-> 
-> Yes, I've asked him to review that driver because this is not something
-> I have or use and so on...
-
-As you can see, I do and of two IP-core major versions (and plenty of
-the DW uMCTL2 IP-core databooks). So should you need some help with
-testing the bits coming for the Synopsys DW uMCTL2 EDAC driver, just
-send a ping to me. I'll test them out.
-
--Serge(y)
-
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
 
