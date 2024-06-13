@@ -1,158 +1,123 @@
-Return-Path: <linux-edac+bounces-1279-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1280-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90574907E28
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2024 23:29:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB85A907E38
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2024 23:37:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40652286C3C
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2024 21:29:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70FF41F25848
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Jun 2024 21:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0A41494BC;
-	Thu, 13 Jun 2024 21:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45AF013DDBA;
+	Thu, 13 Jun 2024 21:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IHYh6VKk"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kPP+T7yX"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E6614830F;
-	Thu, 13 Jun 2024 21:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB2A71747;
+	Thu, 13 Jun 2024 21:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718314141; cv=none; b=fjnMmS2bFyFoBDo7OfKdqS0d5REeOyp0CIuOFRgo4SU7787DHDd4CfTChZdRjSUP/HdmKQDMp8+Cdsa2BnDu8gpc2qhXk38Kfo36bN9Dg3kgbsSNYhgKG4c9qbHJaaj/voODiQysDvqVRASIGgvY0uJKm7cOf29U5DmJM0mqn74=
+	t=1718314631; cv=none; b=YQmgXkk5MoiOqLg0giVLzR1VNs1wkonirLcuHLyZ8+XrGVXFT2s285DEeVO/Uv5cSfxzAkBVPz7Zb/9WxMQjonNxf4yZW1u0TK/7GoDtUBslimwPongxe61hp4YNdqJFJ43oSMgZ8eSrBloRzftLA52EPRnO1OOXUhs0LeLnOl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718314141; c=relaxed/simple;
-	bh=YS29bszp9afz/G0r85TArT7huFYqmbOIu0J0gzVV/eY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TnRyizUyvNPnvzVKsZvjHQeVG/W+r7mW3IhIg/jFYmmBHmYj3GffCHvCXllTnrchTeFMkCF6inCeWLkDqgt40zljE+b4n0OfkohvnwoFkB9XjHnslowE3efL1sAqqRFbn76zuAMc20B9wDLU3afG8whaOot2Bwo8eApULMzBbvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IHYh6VKk; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718314139; x=1749850139;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YS29bszp9afz/G0r85TArT7huFYqmbOIu0J0gzVV/eY=;
-  b=IHYh6VKkUVU+gM0Bw1j0vxDzWRcx6II/18q88JugfaSZSx0A2fjZKPMH
-   wveYKOPTp+NDPFY/rSy882I0mkWXEMIpXmiEHhudCfWPCTFwE9fAuvit8
-   tE8mwb/ykl1YH7mGCmtVWYgS2GC0m+JFgQ/kAfj4/P8HdhTz1kRL9Ph0O
-   AbF6zCB6aO1zxFrOUSZla2keiTaP3QSTOB1kg7YnfcI0Y+4zV7N0eB3zt
-   1y7ucrgnPGUCVtL9dkYZDJN2Xes4TAtb0aOADmU464KEPQSMrWwA2nU7r
-   p9LYxFrajrKxWE2z5zhPeySQpvw+uRJjFDA11fRnC0vzV1VlQV9tM2jGd
-   w==;
-X-CSE-ConnectionGUID: PvajivFGTPW9M7BeaxY7Ew==
-X-CSE-MsgGUID: D+l0qybqTdia4yYxphaGeg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11102"; a="25810066"
-X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
-   d="scan'208";a="25810066"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 14:28:57 -0700
-X-CSE-ConnectionGUID: uAEz45bZQayb3m06ogpjDg==
-X-CSE-MsgGUID: 8wYPM8OIR3aM0UJEbKdGaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
-   d="scan'208";a="40173275"
-Received: from sramkris-mobl1.amr.corp.intel.com (HELO [10.124.223.37]) ([10.124.223.37])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 14:28:56 -0700
-Message-ID: <0a93b8bd-c50b-4ffd-8d6c-ba3b20b601b5@linux.intel.com>
-Date: Thu, 13 Jun 2024 14:28:55 -0700
+	s=arc-20240116; t=1718314631; c=relaxed/simple;
+	bh=JbhWnVRwHYOcKn4OzP0YKh1BkZLEBKqwpyE6zStyX7A=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=OT2aXXoGEAcFR4QZjkv0EyfKkwqj/U0PFQ52s+p+wQ4xScLZ1lTzvKs9Otu0aEkGBPVbnLIzl9cQhxiIM3QPyLtOdXquGpsGnTkebq38KTfTFo13P8/vXl2WRNRDQd6j9LhryRqJJLzVJO9tlu2xj8rWVsHdIm5sXIxhXo+F5b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kPP+T7yX; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45DJGMae008079;
+	Thu, 13 Jun 2024 21:36:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=zxFlDvDS2ZXrOAEi2ahNLT
+	O+mwXjt++ZBBrq5JCsaWU=; b=kPP+T7yX3hVGnuOdblPk0qLewQqfV36U2sY1rJ
+	xdPT5sZE105V2oDkW8Frzy7iIio7Q3X4uE4HsqIYE6NjsMLEUlD/zJimWzaopVtu
+	S8YbR2LCFCcHwaDRzat4vbvO14CHLTg9WiWSx/RQwwlzhoF/JoiF1xOukDod+KZs
+	PxATKxLkpBRixTtOqy//gXlf/KeByNRAAiz4ml5/etP5qlvkhFtWvZref4RlYVgY
+	5XzvS2qtxW+mmkJWt1OCOSaN4PFj9h1sI1vLnF1JZL0+tjtiEA+gPuIXWBT47Ovx
+	mLawhPcvFcJ9stQzJFyqYc8UsceTRvGB0ik1c0uXKobVgZwQ==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yr6q58brg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 13 Jun 2024 21:36:23 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45DLaMhv007667
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 13 Jun 2024 21:36:22 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 13 Jun
+ 2024 14:36:22 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Thu, 13 Jun 2024 14:36:21 -0700
+Subject: [PATCH] EDAC: layerscape: add missing MODULE_DESCRIPTION() macro
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] PCI/AER: Print UNCOR_STATUS bits that might be
- ANFE
-To: Zhenzhong Duan <zhenzhong.duan@intel.com>, linux-pci@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org,
- rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
- tony.luck@intel.com, bp@alien8.de, dave@stgolabs.net,
- jonathan.cameron@huawei.com, dave.jiang@intel.com,
- alison.schofield@intel.com, vishal.l.verma@intel.com, ira.weiny@intel.com,
- bhelgaas@google.com, helgaas@kernel.org, mahesh@linux.ibm.com,
- oohall@gmail.com, linmiaohe@huawei.com, shiju.jose@huawei.com,
- adam.c.preble@intel.com, lukas@wunner.de,
- Smita.KoralahalliChannabasappa@amd.com, rrichter@amd.com,
- linux-cxl@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, erwin.tsaur@intel.com,
- sathyanarayanan.kuppuswamy@intel.com, dan.j.williams@intel.com,
- feiting.wanyan@intel.com, yudong.wang@intel.com, chao.p.peng@intel.com,
- qingshun.wang@linux.intel.com
-References: <20240509084833.2147767-1-zhenzhong.duan@intel.com>
- <20240509084833.2147767-3-zhenzhong.duan@intel.com>
-Content-Language: en-US
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20240509084833.2147767-3-zhenzhong.duan@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20240613-md-arm64-drivers-edac-v1-1-149a4f0f61bb@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAFRma2YC/x3MwQrCMAyA4VcZORvo2jrBVxEPWZu5gK2SzDEYe
+ 3erx+/w/zsYq7DBtdtBeRWTV23oTx2kmeqDUXIzeOejG/qAJSNpGSJmlZXVkDMl9BNFH0J0+XK
+ G1r6VJ9n+39u9eSRjHJVqmn+3p9TPhoVsYYXj+AK0GddVhgAAAA==
+To: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        "James
+ Morse" <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>
+CC: <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qx5vZ_mOmP87_TktJgIINlt4i4zrSx3W
+X-Proofpoint-ORIG-GUID: qx5vZ_mOmP87_TktJgIINlt4i4zrSx3W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-13_13,2024-06-13_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0
+ mlxlogscore=989 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406130155
 
+With ARCH=arm64, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/edac/layerscape_edac_mod.o
 
-On 5/9/24 1:48 AM, Zhenzhong Duan wrote:
-> When an Advisory Non-Fatal error(ANFE) triggers, both correctable error(CE)
-> status and ANFE related uncorrectable error(UE) status will be printed:
->
->   AER: Correctable error message received from 0000:b7:02.0
->   PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
->     device [8086:0db0] error status/mask=00002000/00000000
->      [13] NonFatalErr
->     Uncorrectable errors that may cause Advisory Non-Fatal:
->      [18] TLP
->
-> Tested-by: Yudong Wang <yudong.wang@intel.com>
-> Co-developed-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-> Signed-off-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
-> ---
+Add the missing invocation of the MODULE_DESCRIPTION() macro.
 
-LGTM
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+ drivers/edac/layerscape_edac.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
+index d2f895033280..b70d5d258fcb 100644
+--- a/drivers/edac/layerscape_edac.c
++++ b/drivers/edac/layerscape_edac.c
+@@ -69,6 +69,7 @@ static void __exit fsl_ddr_mc_exit(void)
+ 
+ module_exit(fsl_ddr_mc_exit);
+ 
++MODULE_DESCRIPTION("Freescale Layerscape EDAC module");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("NXP Semiconductor");
+ module_param(edac_op_state, int, 0444);
 
->  drivers/pci/pcie/aer.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index f2839b51321a..ed435f09ac27 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -681,6 +681,7 @@ static void __aer_print_error(struct pci_dev *dev,
->  {
->  	const char **strings;
->  	unsigned long status = info->status & ~info->mask;
-> +	unsigned long anfe_status = info->anfe_status;
->  	const char *level, *errmsg;
->  	int i;
->  
-> @@ -701,6 +702,20 @@ static void __aer_print_error(struct pci_dev *dev,
->  				info->first_error == i ? " (First)" : "");
->  	}
->  	pci_dev_aer_stats_incr(dev, info);
-> +
-> +	if (!anfe_status)
-> +		return;
-> +
-> +	strings = aer_uncorrectable_error_string;
-> +	pci_printk(level, dev, "Uncorrectable errors that may cause Advisory Non-Fatal:\n");
-> +
-> +	for_each_set_bit(i, &anfe_status, 32) {
-> +		errmsg = strings[i];
-> +		if (!errmsg)
-> +			errmsg = "Unknown Error Bit";
-> +
-> +		pci_printk(level, dev, "   [%2d] %s\n", i, errmsg);
-> +	}
->  }
->  
->  void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240613-md-arm64-drivers-edac-2fa423340d75
 
 
