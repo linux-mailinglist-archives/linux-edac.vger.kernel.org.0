@@ -1,80 +1,72 @@
-Return-Path: <linux-edac+bounces-1295-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1296-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF5EE909435
-	for <lists+linux-edac@lfdr.de>; Sat, 15 Jun 2024 00:44:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF2D8909CC6
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Jun 2024 11:26:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E36111C20E3D
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Jun 2024 22:44:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71D132821EC
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Jun 2024 09:26:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08BFB1862A9;
-	Fri, 14 Jun 2024 22:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66461180A99;
+	Sun, 16 Jun 2024 09:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="HBltePky"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Zm9h1ND6"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F6F149C44;
-	Fri, 14 Jun 2024 22:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4031233C0;
+	Sun, 16 Jun 2024 09:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718405084; cv=none; b=PO+cC+woUo2eUDBagH2wZrKzGTBNfPlgwXoeXLdbfQf9IicOYM4ymTC7atr2q/8g84+Ee/7/HUizkn8sXmaoh1cVcWMrREUElfZCEHES18MWkfquzseTHqjaCWn1vtCSnkyIOHsN3fQmT7oqtL4M7JVXP3YNUEScgH1N1knoBDU=
+	t=1718530008; cv=none; b=K9jYdAyDUbsYRSXWbSgIywtCnvR5Jbe5vWzmmTo2IFo+drpLnp0Zxp1tK1KzJc0bPcbTHosjRFCwExiwwmkwLah3s5k7Z2bAqeecCBV33HydLH2/NfNNDqpBlKIN98uV00EVD2T+SdapVlvqW8e/DYp7wO1fwaitBUSV3rMfXGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718405084; c=relaxed/simple;
-	bh=LwLfd7EKwsJ0G7wHBCXbWwKS/g5mW2CBi1ld96rE67I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=no7nevhJtZGH8YA/KZCctZFGnhyl8TUvuyoROg1d9HGT0Jmj+P72XuRPN779/AVrcKhaRnWXIlAT88jBTD1HhwNkq3puUelmSvTe0+iO1935320Zo2WDZ37xYCcaO22qG8i0TrGLRGrSBDXQ98TEgBzCFEm6Z0CrMfJJx9ei5FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=HBltePky; arc=none smtp.client-ip=65.109.113.108
+	s=arc-20240116; t=1718530008; c=relaxed/simple;
+	bh=j3vOrzweWX1GE41fTl2m6LEe4d+ziKfF15U+bYMV0D4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PYyb1MopNKYyJzLZcBqIhsCILOs641fGpNGiQ4pTqsrm1x0DCcQBT9YPm1dCipTx16IfWYn0as9wXyAKbB5wFdzFMJp2ZsMez9ALld5+V/UzwHPZUaCGIZl5xfcbWl9vAqNPWMZLkIzLsAzlMxbIlN/kAMCN4yktmy5vTqUSf0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Zm9h1ND6; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id CB01E40E01E1;
-	Fri, 14 Jun 2024 22:44:38 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8EC2B40E021A;
+	Sun, 16 Jun 2024 09:26:35 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id OHx-QliiWOsE; Fri, 14 Jun 2024 22:44:35 +0000 (UTC)
+	with ESMTP id 9BjSBD58pyW3; Sun, 16 Jun 2024 09:26:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1718405074; bh=pZEP9FiO05naVI+EWU0oRywVwkC22GZNUEWLRM/5K2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HBltePkyk+H4i3SNgF8v3RHoFy7eQtxanZkGnciYSijEncMRJJ2REhwMptp0E7do8
-	 oQ7YiTXs024ZE9blVVJtETyIF0eoSPIRs42Qc8+XpsnwbxbTkG4rpKb0R6zBEpNmj0
-	 caroeWpBn6KSFsISQ+QujYa/WlN3iORRzDVTvCB3Vy/KFgmYZLVOK2D8ugCJBNPnFj
-	 ENAj8Lfe+R3Zes98E49I2TsaKqQym8OgMTKesMSUDmRfHknXyb3iY3zksmX2eKIQNt
-	 mwmcCuMC5nMCgSyDK/DDFoeLwZWlvPUevGfXQi+6iMnU87om3+iJcXCXcZMbDfEXDp
-	 jXK7hdCWkvG5HfuJjBVOA5Oym31sHlJQMh5JmPbTTJVHhIvcxbmdxbNnYpUk1SRaos
-	 iXpkGZ5tIeGf4GikzSysRsgocLrx+EhsDP3VSK02dS7p4EZBgm1Xie0pJ0zNHnyEpk
-	 trGcsEukca7dYB2MNdBzpj2NDhd4ODYZpXy85TRPvUT/S6CSEeoLzkgs8L/4+AOrZP
-	 Y+QcQ5S4Nl8MuVy1tsLTwCiWOfvPtLI3Vwyq1WBsNMEu7PFWog0opTUBtOjOcGpMMD
-	 bW3ikl1/92v6gxJ0uezH8fNgGb4lc/eRc82yA7NAciLvmh2KxenFvS/LDbDMVx1X70
-	 tplMrSnczxFb7eMWKS6YlUsg=
+	t=1718529992; bh=v8KnRjWWYrWsg8jYbf/KCGOCjIQw22bsuKrCdsHH1PE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Zm9h1ND6F3c0XzAdHuNUUdBQcyPvx08g7P1k7oNCIRKqmkuRqe4KFicHWYum5afGV
+	 NbeIUhanKpSxHJHHoLCirj6wosKRdl+MMsmU5RR6jiP0KS75DqeUo676zrIUo9XZ0h
+	 /7ZF9mEIKG3JPF09/mFHZOq7gWTT5bSSlduRDWmQn/BQsVjeXGIjPR2AORO3o4ZsBv
+	 hIrL+O+WqLkhuZl6cmTaUJd5nou067u5obX9VZKGe4vxqQ8wrJOCRZb7zH3iVD+BF4
+	 UyJqUJqfDBqEuWW/HBV0biD5KjjckuvR55hGCdNKl7oZwhf5jMaqfKaoTq75ubCuq7
+	 ccCqtiwCuRZ+F6HFIwkvGy8vslzDXFmTgCgS6uouHWjtlC18ypEOu3TcgRQPTODcb9
+	 CzQyurPGsk3aEwA1Osudty+0GDP3Iru4S+ogwE+GNmYmTAcpo0mhMfxmDGL04Q/6iS
+	 wt4uQzM4ADoXoRgaDr6qBWUpJ2TtQxF/F62bbtL3CY0wxLssBlJRlho80cRdjZUfgX
+	 XhQ4BP//lodlCE2DgF9fyS0hWvt6xV/vsCmg/28nS9ESjOPkFl1b3QJvqTn3iluzya
+	 PSaQoWuwZjjCS6bXXSSBE3s46Ud7sQt77HkVtIGe0B/ynw3rV2EpTHW+8D5vm9SiI3
+	 YRUHzzQB/DHdWFnxwCAmC7XM=
 Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 93B9540E01D6;
-	Fri, 14 Jun 2024 22:44:27 +0000 (UTC)
-Date: Sat, 15 Jun 2024 00:44:20 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 44EA140E01D6;
+	Sun, 16 Jun 2024 09:26:29 +0000 (UTC)
+Date: Sun, 16 Jun 2024 11:26:21 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com
-Subject: Re: [PATCH 3/3] x86/mce: Use mce_prep_record() helpers for
- apei_smca_report_x86_error()
-Message-ID: <20240614224420.GGZmzHxDEH2D2TLpjN@fat_crate.local>
-References: <20240521125434.1555845-1-yazen.ghannam@amd.com>
- <20240521125434.1555845-4-yazen.ghannam@amd.com>
- <20240529172809.GJZldlqSr5km0frQ_o@fat_crate.local>
- <6d508036-befd-4d5c-b02e-abb228ed9144@amd.com>
- <20240603165530.GFZl31gtuABwpe1svP@fat_crate.local>
- <20240614214736.GA726880@yaz-khff2.amd.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC urgent for v6.10-rc4
+Message-ID: <20240616092621.GAZm6vvbHCGbc4hKz_@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -83,55 +75,40 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240614214736.GA726880@yaz-khff2.amd.com>
 
-On Fri, Jun 14, 2024 at 05:47:36PM -0400, Yazen Ghannam wrote:
-> I don't see why it won't work. If there is no break, then the iterator
-> ends by setting the variable past the last valid value.
-> 
-> For example, I ran this on a system with 512 CPUs:
-> 
->         unsigned int cpu;
-> 
-> 	/* Loops over CPUs 0-511. */
->         for_each_possible_cpu(cpu)
->                 pr_info("loop: cpu=%d\n", cpu);
-> 
-> 	/* CPU is now set to 512. */
->         pr_info("final: cpu=%d\n", cpu);
-> 
-> 	/* CPU 512 is not possible. */
->         pr_info("CPU %d is %s possible\n", cpu, cpu_possible(cpu) ? "" : "not");
-> 
-> But...I like your suggestion as it is much more explicit. And I might be
-> missing something. :/
+Hi Linus,
 
-I can think of at least three:
+please pull two MI300 address translation fixes for v6.10-rc4.
 
-* CPU topology and the initial_apicid sometimes can get programmed wrong by the
-* FW. Nothing new.
+Thx.
 
-* nr_cpus= - you can enable less CPUs than actually physically present so an MCE
-on a CPU which is not enabled by Linux will be -EINVAL
+---
 
-* possible_cpus= - pretty much the same thing
+The following changes since commit 83a7eefedc9b56fe7bfeff13b6c7356688ffa670:
 
-But I haven't actually tried them - am just looking at the code.
+  Linux 6.10-rc3 (2024-06-09 14:19:43 -0700)
 
-And yes, with the apicid_found boolean it is perfectly clear what's going on.
+are available in the Git repository at:
 
-And looking at
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.10_rc4
 
-  convert_apicid_to_cpu()
+for you to fetch changes up to ba437905b4fbf0ee1686c175069239a1cc292558:
 
-which already does that loop, we probably should talk to tglx whether we can
-simply export that helper.
+  RAS/AMD/ATL: Use system settings for MI300 DRAM to normalized address translation (2024-06-16 11:22:57 +0200)
 
-And better yet if he's done some more helpful caching of the reverse mapping:
-apicid to CPU number. As part of the topology rewrite. Because then we don't
-need the loop at all.
+----------------------------------------------------------------
+- Fix two issues with MI300 address translation logic
 
-Thx. 
+----------------------------------------------------------------
+Yazen Ghannam (2):
+      RAS/AMD/ATL: Fix MI300 bank hash
+      RAS/AMD/ATL: Use system settings for MI300 DRAM to normalized address translation
+
+ drivers/ras/amd/atl/internal.h |   2 +-
+ drivers/ras/amd/atl/system.c   |   2 +-
+ drivers/ras/amd/atl/umc.c      | 160 +++++++++++++++++++++++++++++------------
+ 3 files changed, 116 insertions(+), 48 deletions(-)
+
 
 -- 
 Regards/Gruss,
