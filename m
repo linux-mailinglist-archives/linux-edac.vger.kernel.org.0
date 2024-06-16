@@ -1,133 +1,79 @@
-Return-Path: <linux-edac+bounces-1297-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1298-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D087F909E31
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Jun 2024 17:44:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53617909F23
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Jun 2024 20:24:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BC54B20B89
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Jun 2024 15:44:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08BD1282C38
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Jun 2024 18:24:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF6D13ADA;
-	Sun, 16 Jun 2024 15:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097115476B;
+	Sun, 16 Jun 2024 18:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DSsyiO92"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ohTzT9Zw"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBBA79DC;
-	Sun, 16 Jun 2024 15:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B4D51012;
+	Sun, 16 Jun 2024 18:24:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718552651; cv=none; b=MXmjeljk79oMW+1bACqpL9EfWIbEB7iJXwnC5Ngo/ZKFgrWXGTFocGvO6UXAdc8d8u2S18J0EiGfo0EI+Wf67UmQ4KCLbraUu+/RBJ2Muya2b+360UwZhPIFW3Wlkne/C8umq44yoBPgmxd3UPqL1Nf4vQod+6aeVsy6DkqqxFc=
+	t=1718562272; cv=none; b=DMyQ+VSLvyw4oGOYVWLTVOgCLHNV8hfUa5F0sm9jMMH6bwuKQW4+MiEzmxwTFwT/4MPYbXcsqjNfJpkLWtTJPUn3Qd4Jd9GGnH2ezot69vLDJvPRrOTVhP6+89p50iulcqslWVxABCYPhd51sOOMVcgmg9jqa38t5YhdY5mceJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718552651; c=relaxed/simple;
-	bh=5J9509OFTzcHXg0xKY5e9qCb+9NQ/M515MoxHsqYDhs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pobwi0ZbBE43z2ZkcYOn2qH/fuUaj0/im1IMpLkgD0QeabvdX9GM9+8qBL9xhkl6b/95MYOHXklgfVyfdMti6ECnAd/sMQiHyZKjgWM3VCZ9L1jr90OOEpeyhPnZhoHhCEzXRl0lo0/b6LjA7ASFMWgyWpCaDCuwjrJ6nQ7VjV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DSsyiO92; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4132740E01D6;
-	Sun, 16 Jun 2024 15:44:05 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id BQB8rDG1Y4lR; Sun, 16 Jun 2024 15:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1718552641; bh=cs5k6wCM6WEBXE8GoO5vcyrZNJxaQk9crLc+eqq03Wg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DSsyiO922uLiu8V6vg4kFpQXkH4Yq3KyXfQq7szvqvFQj1/e8H4/Oio/L+KchEt3G
-	 hCA94/WdtNUoOiLYXjC8NHInLqHwAJfhZgN2UW+BqavHbD7oAe79V0OVuJ272zxzFP
-	 EOyzg6RtkJ9ZBiXmZYlsy48f8Xnl7+qlSaD0ZxAJ4xu1EqJ8nagO6vlv4vqXgNHUTQ
-	 lZS5VkwMO++ij1KMxjOXMGvnM322qfIOpGAkY4rvzKUFUSI9Fg5kuYoucdyVoFsTIo
-	 qn7mGSXssSwo82zMxksdalDG7ZquOSUkVSHyaeHmWlfGPIPX4Qs1KzuClpXwp4+caf
-	 37rfKlFIsi5bj+BLGb4Z8MJHdZBukWYQUsLtubbTcLiib3IDLMHEdu2Dp9XSVhg7sT
-	 5ph9d9kz9q8JrsZlNmTei3aO26q8Brgmct8xTGMEXzMUAIeYoAcWT6/uZoVpFfCotT
-	 /kcDCshJpiDxtYDsDXcS6Lkg497pm2Wxad4cZYcgZ2v+T3Q8nMKUXTXGkq4xeYGK7D
-	 CNR55nSaZ1nfKlw5941Iw7aMqn4a3UNrw6aBocH2dOwR3gpIS1ix8gKQaZtQzTy2/1
-	 laIBxr0VGvLGBA+uHZ6KC2Q5vdOM9pHHpyGupzCKZhWJhHkSvIBMIDFfD1xTFvREjq
-	 UlL4X3mdzSgFIwD/OFvBjQz8=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4B82F40E0185;
-	Sun, 16 Jun 2024 15:43:53 +0000 (UTC)
-Date: Sun, 16 Jun 2024 17:43:47 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] EDAC: layerscape: add missing MODULE_DESCRIPTION() macro
-Message-ID: <20240616154347.GCZm8IMxshO8YYTTjB@fat_crate.local>
-References: <20240613-md-arm64-drivers-edac-v1-1-149a4f0f61bb@quicinc.com>
+	s=arc-20240116; t=1718562272; c=relaxed/simple;
+	bh=uKFb0AJTMagQkxwGTc73zoMThBSjNEuR3j9Q0Yd8fp8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=EV114tJFYEDIk0eBAO5Oq2u3B0c1IaYE1eVI28Ru10d/KjllztSQUQrV9PeVIPMPWjwM02VEtpyGjVog88EexFckOwvzbJpIUqZmic1HM+tZ4ktf3xYya8sSCveQ9jzRRBGKejdOmIdnGl+znJvqLt3P9J6h7ov+z1ycPI4rrz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ohTzT9Zw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BBB20C2BBFC;
+	Sun, 16 Jun 2024 18:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718562272;
+	bh=uKFb0AJTMagQkxwGTc73zoMThBSjNEuR3j9Q0Yd8fp8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=ohTzT9ZwhkZQAvz29hcyI3Er1+6sZJ8SgwrO/gtc5Lwhwn7rzIHXws2jKOkjWW9Kk
+	 Bj8PxeLhVdwChbwId0rpqcXo6X25TAJ9v2zRLauriGD49YugmHbPjaoVneTQgORWaV
+	 5yh4qu5F+HjbOGmfSPXEI0/zNXQditJC8T/gpiObiMFXFn8lJBHlmSTLtkxmQctEun
+	 5JoSYaduus5W7Ir1u9TMqx/2MIJAzCvzBHe6mp4i4Ebmhak4fTJrMVRwaX2nvoO7dk
+	 DfiwSzh1gIfz3SkKSrpG9Z4VOTVjgKg03IsOir5GjCWZOlPQsxk93JtSzqw3Bdv41p
+	 Dwa21FtWKTu+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B08D4C43616;
+	Sun, 16 Jun 2024 18:24:32 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC urgent for v6.10-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240616092621.GAZm6vvbHCGbc4hKz_@fat_crate.local>
+References: <20240616092621.GAZm6vvbHCGbc4hKz_@fat_crate.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240616092621.GAZm6vvbHCGbc4hKz_@fat_crate.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.10_rc4
+X-PR-Tracked-Commit-Id: ba437905b4fbf0ee1686c175069239a1cc292558
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e39388e430d0b170fdaf319059e719d3c6875d07
+Message-Id: <171856227271.1143.18404823142288797945.pr-tracker-bot@kernel.org>
+Date: Sun, 16 Jun 2024 18:24:32 +0000
+To: Borislav Petkov <bp@alien8.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240613-md-arm64-drivers-edac-v1-1-149a4f0f61bb@quicinc.com>
 
-On Thu, Jun 13, 2024 at 02:36:21PM -0700, Jeff Johnson wrote:
-> With ARCH=arm64, make allmodconfig && make W=1 C=1 reports:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/edac/layerscape_edac_mod.o
-> 
-> Add the missing invocation of the MODULE_DESCRIPTION() macro.
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> ---
->  drivers/edac/layerscape_edac.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
-> index d2f895033280..b70d5d258fcb 100644
-> --- a/drivers/edac/layerscape_edac.c
-> +++ b/drivers/edac/layerscape_edac.c
-> @@ -69,6 +69,7 @@ static void __exit fsl_ddr_mc_exit(void)
->  
->  module_exit(fsl_ddr_mc_exit);
->  
-> +MODULE_DESCRIPTION("Freescale Layerscape EDAC module");
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("NXP Semiconductor");
->  module_param(edac_op_state, int, 0444);
-> 
-> ---
+The pull request you sent on Sun, 16 Jun 2024 11:26:21 +0200:
 
-$ git grep -E "MODULE_(DESCRIPTION|LICENSE)" drivers/edac/
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.10_rc4
 
-I'd expect to see regular pairs like this:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e39388e430d0b170fdaf319059e719d3c6875d07
 
-drivers/edac/al_mc_edac.c:348:MODULE_LICENSE("GPL v2");
-drivers/edac/al_mc_edac.c:350:MODULE_DESCRIPTION("Amazon's Annapurna Lab's Memory Controller EDAC Driver");
-
-drivers/edac/altera_edac.c:2216:MODULE_DESCRIPTION("EDAC Driver for Altera Memories");
-
-drivers/edac/amd64_edac.c:4238:MODULE_LICENSE("GPL");
-drivers/edac/amd64_edac.c:4240:MODULE_DESCRIPTION("MC support for AMD64 memory controllers");
-...
-
-but there are cases which need fixing.
-
-How about you do them all with one patch?
-
-Thx.
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
