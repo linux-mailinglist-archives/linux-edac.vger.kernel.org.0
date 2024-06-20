@@ -1,169 +1,158 @@
-Return-Path: <linux-edac+bounces-1313-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1314-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BF5D90FB7C
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Jun 2024 05:02:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3936390FD3B
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Jun 2024 09:02:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F2F2283885
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Jun 2024 03:02:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AD4C1C2152B
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Jun 2024 07:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78681E876;
-	Thu, 20 Jun 2024 03:02:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5997B42A81;
+	Thu, 20 Jun 2024 07:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wr4sFejV"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="QblhbUMx"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749542B9DB;
-	Thu, 20 Jun 2024 03:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2E6383A1
+	for <linux-edac@vger.kernel.org>; Thu, 20 Jun 2024 07:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718852533; cv=none; b=PzZCVpoLdeIs7jtxPhIKoKwaBYc0LxKJPh4fcSW7r191YonPohuMpZIivNm1O8jQeKah/b7iqtZzLRXHcZrVmJFTgJwlqhS2+4H262Zox1vAOVdio6e0qAsjRf3J2o1idVTn+Xu4aerlB20u/ZsXGymgkfIY0MUc0XOzEXkufQE=
+	t=1718866912; cv=none; b=HAHGajImCv2xMInQ71edj31ab8VoeD/VCVFfOW7SPNlxET2fYMMY9TuXan9PxC3zPh19HPowgjTynS6ZOfSThyD3HTFmt7W8ga2HYGDSnv0NjHlBr0++Y7VGLuBJVxAmV5YJVjbsmwBUqO/bBP+o//Zhnmfy2/AKaJu9jHctL7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718852533; c=relaxed/simple;
-	bh=pX6yLIgJt2iX60Vu88UyxHydot/8e2sqBVfmTWy6BT4=;
+	s=arc-20240116; t=1718866912; c=relaxed/simple;
+	bh=QQtpn/smuLvkV56HzwtCw5pAv16yzPHyp8Pzu33MgLA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RXmMqvp82PZkk6wM384Bt21xN9e1fieleESzi8yAHvk5E5xcW0iuuFOQnH24I2JHrBF4DkI63Z3RpEJEksGfQ2IGgXLIqDhCu6fj/Eq5tSrNjUrQvEt4pF7oEaEriqKqgXrX1+BuA5mtql4RHaeuNJkrOfteQWmHKOQ3OjUhWW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wr4sFejV; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718852532; x=1750388532;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pX6yLIgJt2iX60Vu88UyxHydot/8e2sqBVfmTWy6BT4=;
-  b=Wr4sFejVYlP0t1DHHBj/PbK8gePKtDO635zRioNUU5R+L4Ufchn2/TzE
-   8mmhphaV9sbqFkIq8rWR0WvLyiojbRA46jgvvXAQaGyndAn7eOzyTKUHN
-   /Jm3n/KBhWdxlSD8XOaRBreuL0WJ7L4YGZP0/TArdL1cLmoQa5qdre9c3
-   aDrNMavhX9ok/wUBO7y42o+QRlPOgHH5vVNcMAoZxC4MJniHjPC1IVeIf
-   LIGh296nIB9jRqwS7zLduQ6hwtMpwHnEoPB7OtuU+LiWluk6YVIbNBRsv
-   f5QIMs/3BddNBL9veNtIBg1w+1XOk8yme68zobmp1Prff8VtCAku4bJXJ
-   g==;
-X-CSE-ConnectionGUID: 36RjLfgdQyuiPSkc5OIbUQ==
-X-CSE-MsgGUID: I5VrkIJ2R86ff1FcEhzaPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11108"; a="26444266"
-X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
-   d="scan'208";a="26444266"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 20:02:09 -0700
-X-CSE-ConnectionGUID: j3RjqRmeQfitApUR7+ovhg==
-X-CSE-MsgGUID: 91FXVXzXSP+7S/ROgY8EIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
-   d="scan'208";a="42049454"
-Received: from unknown (HELO SPR-S2600BT.bj.intel.com) ([10.240.192.127])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 20:02:01 -0700
-From: Zhenzhong Duan <zhenzhong.duan@intel.com>
-To: linux-pci@vger.kernel.org
-Cc: bhelgaas@google.com,
-	mahesh@linux.ibm.com,
-	oohall@gmail.com,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-acpi@vger.kernel.org,
-	rafael@kernel.org,
-	lenb@kernel.org,
-	james.morse@arm.com,
-	tony.luck@intel.com,
-	bp@alien8.de,
-	dave@stgolabs.net,
-	jonathan.cameron@huawei.com,
-	dave.jiang@intel.com,
-	alison.schofield@intel.com,
-	vishal.l.verma@intel.com,
-	ira.weiny@intel.com,
-	helgaas@kernel.org,
-	linmiaohe@huawei.com,
-	shiju.jose@huawei.com,
-	adam.c.preble@intel.com,
-	lukas@wunner.de,
-	Smita.KoralahalliChannabasappa@amd.com,
-	rrichter@amd.com,
-	linux-cxl@vger.kernel.org,
+	 MIME-Version:Content-Type; b=Io1madBwKG4Q6fMa1dcqZplKFm2lUCcLmflkNGJKQWly4B2VAk5YPrGM5Sze9jUdP8fU2vLhwNrpkubYLPhtEWuLSdw2fCUVLkfGLiAwRypnnH6VfhC+jRYL78rXAWYmCRH83HkBTNv2j2YRmNKTDvssYc0hnX4doEzYJ57rPo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=QblhbUMx; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70601bcfddcso550245b3a.3
+        for <linux-edac@vger.kernel.org>; Thu, 20 Jun 2024 00:01:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1718866908; x=1719471708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ibiGIkIJozxVRVQ0W/R98N1EhJWcdntoJXMh9zcTPvk=;
+        b=QblhbUMxOb1EKUTdUqmUDY3FV1Vsi8Ticw9Enu5ovjH1M8rvnezK5N5+MBTJTr8nWd
+         +w62OmWUXQOT2PYt8Mhkyy0As2zvec74qCrlo2zc2VfAUlQP0ulUYmrh0O1rO523Kl2A
+         62bs9NABEBqsDEUOvk3rEovXe/labGP3aGUwzXmo2pphkVzvnkdXxmVGyquT/S8KIKAg
+         c3hWJf6Bms+TnX5J+fFCpKk6TJZrLnmJTSUDcBYXY7IhPdOoN6kuqo9nVufE0y0Lig+M
+         ZBjs21zpbmmBsqHwcsA3ZrfWcJC/uSt/GEieq5YvIETydgGKAplNjtXM887pcxFY9XKc
+         6GTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718866908; x=1719471708;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ibiGIkIJozxVRVQ0W/R98N1EhJWcdntoJXMh9zcTPvk=;
+        b=CVY+xiIwdqc5Fxo1eOZ3PS3e8UCuQ7eZhdPEnZYWGSn1MG30Rs6WZd6lad+cD4YXbm
+         UmOCAmwkKh8k+63qC2fSW4MzoEw9PUff/V83kQFKzzs5qup9jkvY2bzOMYH002w8n4TB
+         tsQwVQb6PHeRQZ9h4a0nTX/e6kjrtH8k33FW0zfAm11k4aH9xybGMWE/D5Q+BQTu3XW1
+         cut7D/bbG8G398w3p6GHcwGQoncVMfVJ+HP5mcXrOUshJGDz2x2mBKxyZAK7uqC2JJNI
+         f0B7J4dD9uZ2/cA6SYvLYD7gb5TxUzYEIafeHvvjIvudvrpHPnf6vmdObJtZttMjZvIw
+         l8aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUUtSYAWHI6YioGPrOdRLehVrLY19xPSqjNMYhE8R7YbqDSKJ6izab/1HiOetED1vjkDKpKIv6GYLBr4a6TCCdc1HcsKpkYT5HeKQ==
+X-Gm-Message-State: AOJu0YyDsjEp+/5pSnvCRpd90Wr7cH6RZ4w0iScMN68cM2x8Xp6msU5f
+	p49rr+ksbkJS4L5V9EfmnyMU/72NbgwZRKoACwQE9FQ9Cf5X6ji3vWk4sCwaKes=
+X-Google-Smtp-Source: AGHT+IHDyzJcEghpRsfweA27T0zs7L2wOX7octNPLrUWsJgbfYtwABrlONIhyLuVS3lq1wnWvWgthA==
+X-Received: by 2002:a05:6a20:ae86:b0:1b6:dd1e:da3c with SMTP id adf61e73a8af0-1bcbb152c98mr4585211637.0.1718866908610;
+        Thu, 20 Jun 2024 00:01:48 -0700 (PDT)
+Received: from L4CR4519N7.bytedance.net ([2001:c10:ff04:0:1000:0:1:7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9c85f4229sm8446535ad.156.2024.06.20.00.01.44
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 20 Jun 2024 00:01:48 -0700 (PDT)
+From: "$(name)" <qirui.001@bytedance.com>
+X-Google-Original-From: "$(name)" <$(mail address)>
+To: tony.luck@intel.com
+Cc: bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	hpa@zytor.com,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	erwin.tsaur@intel.com,
-	sathyanarayanan.kuppuswamy@intel.com,
-	dan.j.williams@intel.com,
-	feiting.wanyan@intel.com,
-	yudong.wang@intel.com,
-	chao.p.peng@intel.com,
-	qingshun.wang@linux.intel.com,
-	Zhenzhong Duan <zhenzhong.duan@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [PATCH v5 2/2] PCI/AER: Print UNCOR_STATUS bits that might be ANFE
-Date: Thu, 20 Jun 2024 10:58:57 +0800
-Message-Id: <20240620025857.206647-3-zhenzhong.duan@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240620025857.206647-1-zhenzhong.duan@intel.com>
-References: <20240620025857.206647-1-zhenzhong.duan@intel.com>
+	mingo@redhat.com,
+	qirui.001@bytedance.com,
+	tglx@linutronix.de,
+	x86@kernel.org
+Subject: RE: [PATCH] x86/mce: count the number of occurrences of each MCE severity
+Date: Thu, 20 Jun 2024 15:01:40 +0800
+Message-Id: <20240620070140.12854-1-qirui.001@bytedance.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-145)
+In-Reply-To: <SJ1PR11MB6083AC9C721D46D3CCF9846BFCCE2@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <SJ1PR11MB6083AC9C721D46D3CCF9846BFCCE2@SJ1PR11MB6083.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When an Advisory Non-Fatal error(ANFE) triggers, both correctable error(CE)
-status and ANFE related uncorrectable error(UE) status will be printed:
+On 6/19/24 上午1:35, Luck, Tony wrote:
+> 
+>> In the current implementation, we can only know whether each MCE
+>> severity has occurred, and cannot know how many times it has occurred
+>> accurately. This submission supports viewing how many times each MCE
+>> severity has occurred.
+> 
+> Is know how many times each case was hit useful? The original commit
+> for this code said it was just to check coverage for the mce-test suite.
+> 
+> 4611a6fa4b37 ("x86, mce: export MCE severities coverage via debugfs")
+> 
+> So you either covered a case in the severities table, or you didn't. Does it
+> help to know that you covered a case multiple times?
+> 
 
-  AER: Correctable error message received from 0000:b7:02.0
-  PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
-    device [8086:0db0] error status/mask=00002000/00000000
-     [13] NonFatalErr
-    Uncorrectable errors that may cause Advisory Non-Fatal:
-     [12] TLP
+In the fault injection test in the laboratory, we inject errors multiple
+times and need a counter to tell us how many times each case has
+occurred and compare it with the expected number to determine the test
+results
 
-Tested-by: Yudong Wang <yudong.wang@intel.com>
-Co-developed-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-Signed-off-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
- drivers/pci/pcie/aer.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+In the production environment, the counter can reflect the actual number
+of times each MCE error type occurs, which can help us detect the MCE
+error distribution of large-scale Data center infrastructure 
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index 3dcfa0191169..ba3a54092f2c 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -681,6 +681,7 @@ static void __aer_print_error(struct pci_dev *dev,
- {
- 	const char **strings;
- 	unsigned long status = info->status & ~info->mask;
-+	unsigned long anfe_status = info->anfe_status;
- 	const char *level, *errmsg;
- 	int i;
- 
-@@ -701,6 +702,20 @@ static void __aer_print_error(struct pci_dev *dev,
- 				info->first_error == i ? " (First)" : "");
- 	}
- 	pci_dev_aer_stats_incr(dev, info);
-+
-+	if (!anfe_status)
-+		return;
-+
-+	strings = aer_uncorrectable_error_string;
-+	pci_printk(level, dev, "Uncorrectable errors that may cause Advisory Non-Fatal:\n");
-+
-+	for_each_set_bit(i, &anfe_status, 32) {
-+		errmsg = strings[i];
-+		if (!errmsg)
-+			errmsg = "Unknown Error Bit";
-+
-+		pci_printk(level, dev, "   [%2d] %s\n", i, errmsg);
-+	}
- }
- 
- void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
--- 
-2.34.1
+>> Due to the limitation of char type, the maximum supported statistics are
+>> currently 255 times
+>>
 
+How about changing char to u64, which is enough for real-world
+situations and won't waste a lot of memory? 
+
+>> Signed-off-by: Rui Qi<qirui.001@bytedance.com>
+>> ---
+>>   arch/x86/kernel/cpu/mce/severity.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+>> index dac4d64dfb2a..a81e34c6e3ee 100644
+>> --- a/arch/x86/kernel/cpu/mce/severity.c
+>> +++ b/arch/x86/kernel/cpu/mce/severity.c
+>> @@ -405,7 +405,7 @@ static noinstr int mce_severity_intel(struct mce *m, struct pt_regs *regs, char
+>>                        continue;
+>>                if (msg)
+>>                        *msg = s->msg;
+>> -             s->covered = 1;
+>> +             s->covered++;
+> 
+> Wraparound sets this back to zero. Should this be:
+> 
+> 	if (s->covered < 255)
+> 		s->covered++;
+> 
+> [Is there a #define for max value in an unsigned char? I could find one. If there is,
+> then use that instead of hard coded 255]
+> 
+>>
+>>                return s->sev;
+>>        }--
+> 
+> -Tony
 
