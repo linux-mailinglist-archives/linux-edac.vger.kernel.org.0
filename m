@@ -1,266 +1,225 @@
-Return-Path: <linux-edac+bounces-1310-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1311-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95CDB90EEC0
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Jun 2024 15:31:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A94E490FB74
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Jun 2024 05:02:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1A2DB21711
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Jun 2024 13:31:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9322D1C20DAC
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Jun 2024 03:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3772514373E;
-	Wed, 19 Jun 2024 13:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0B01CAB1;
+	Thu, 20 Jun 2024 03:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L9xNRFYD"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2D81E526;
-	Wed, 19 Jun 2024 13:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE37E63C;
+	Thu, 20 Jun 2024 03:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718803896; cv=none; b=bpl2KqsRoz6ahcGKhi9A0zuthJmYj+49vCJFDYiOaIx8zxhJ1mcxTqHixtmm9/j+5Y3d3Q7yhOnlyvzJpPfSOexy1KfO9IMj8MIY1PmgFpYIMuhoVCOSi1OevUvlc2y3jUHq8NWNKjbQKiNJep+92ObsYctg2XFPQEmdqC7gJ8Q=
+	t=1718852515; cv=none; b=ko3aFimRqWeAtoNmxfN8C+EaK+0f3qjrbmWBKdT9b0IQlJ3Luf2hL94RxypTvFqzFZrHfZW2cmj5lalHG4EMRGyh/W6Qz3kMh/Tu+pgmIuObzexOn2iX+4uDXIG+KAO482K/cIYWRYlWkedwP/OEQinMfCdQ/RtU1GB61a3abbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718803896; c=relaxed/simple;
-	bh=+QbUwWCPAn++iu2c2Vl3hSYdSoxIO8Gi/j1gFVZds8c=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CxDCCxFMmMDdiKqHH3a+GNdT64DrvufiYi7i/YHDdqpZuqzH66k3YcsHxMvPIfVvKaw9BO1kJwx9jKEXj+uQ50L1/tTEpk/lNFxTUGWxGYOn3dCmO51Hh0nR1Er1Zhpq8K1RU2/h6rpqaD44Uisf4AltulZy+J51mBXCLlppx/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4W44JS2p9Qz6K6FZ;
-	Wed, 19 Jun 2024 21:31:04 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 943051406AE;
-	Wed, 19 Jun 2024 21:31:24 +0800 (CST)
-Received: from localhost (10.203.174.77) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 19 Jun
- 2024 14:31:20 +0100
-Date: Wed, 19 Jun 2024 14:31:17 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-CC: Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Shiju Jose <shiju.jose@huawei.com>, Tony
- Luck <tony.luck@intel.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
-	<u.kleine-koenig@pengutronix.de>, "Alison Schofield"
-	<alison.schofield@intel.com>, Ard Biesheuvel <ardb@kernel.org>, Dan Williams
-	<dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>, Ira Weiny
-	<ira.weiny@intel.com>, Len Brown <lenb@kernel.org>, Shuai Xue
-	<xueshuai@linux.alibaba.com>, <linux-acpi@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, <linux-efi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] efi/cper: align ARM CPER type with UEFI 2.9A/2.10
- specs
-Message-ID: <20240619143117.00000c9c@Huawei.com>
-In-Reply-To: <60da74c80a0b05ea4a5b4b7f2eda1b58d555edce.1718794335.git.mchehab+huawei@kernel.org>
-References: <60da74c80a0b05ea4a5b4b7f2eda1b58d555edce.1718794335.git.mchehab+huawei@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1718852515; c=relaxed/simple;
+	bh=EIVXR1Drz5ZwlD3T4VwTfooVVhT2SxMV7lr93B1iMIg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iPfmhix/GS9ZfVdlYSE9AiAZb0weDZ05sonaSr9SklOgYNvZiH3OcBP2ERHpg1scCtcELVVbs1/17FXuUdcM4xG3R7eWtPgpBU/TyDNhMEnBDVpkD5GZTFKOthllIwn7MP5viqbASNKmqLqUjjABJG+vyMVHD0Es/vBUazHkB9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L9xNRFYD; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718852513; x=1750388513;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EIVXR1Drz5ZwlD3T4VwTfooVVhT2SxMV7lr93B1iMIg=;
+  b=L9xNRFYDNG/RU4cwBwoEO7alZhI+NLCgItNop79wuEqWQyX3E3cpI2Za
+   8o4JBqM1HOGGrOx4ECDBGjJYb0R/s6vLKSfk6WdG+xXewe4w16xiAEMN3
+   m/1CILuDPekFomkygWvY5gkQyoTf8K9Bxv8wGkHFYjcp38NhPBlxHhtss
+   CqKiC8mw0EuULCbf3ntjzGu68h96VMt0HUcRXLa+TxwyiqHE7/ZdAWIAb
+   cTFJQTDlRYndmz0dh/zldSDrRUpOxOFikutrjbK2Hd7C6r7Ivw1GLfAeQ
+   h5xbM/cxC+XjV4GutqJf8GypNkU2K0TvvqpGcevt0xxuJLUS37SdEMXd5
+   A==;
+X-CSE-ConnectionGUID: 93BSlk5HS8KrTmXA/pMLLA==
+X-CSE-MsgGUID: hiVqABXRQN+aPvu7Z05gWQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11108"; a="26444191"
+X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
+   d="scan'208";a="26444191"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 20:01:52 -0700
+X-CSE-ConnectionGUID: GsV7gGC6RDm/wd79OQ/n6A==
+X-CSE-MsgGUID: I3E8fsj0QnmEqr/RNB1usw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
+   d="scan'208";a="42049389"
+Received: from unknown (HELO SPR-S2600BT.bj.intel.com) ([10.240.192.127])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 20:01:45 -0700
+From: Zhenzhong Duan <zhenzhong.duan@intel.com>
+To: linux-pci@vger.kernel.org
+Cc: bhelgaas@google.com,
+	mahesh@linux.ibm.com,
+	oohall@gmail.com,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-acpi@vger.kernel.org,
+	rafael@kernel.org,
+	lenb@kernel.org,
+	james.morse@arm.com,
+	tony.luck@intel.com,
+	bp@alien8.de,
+	dave@stgolabs.net,
+	jonathan.cameron@huawei.com,
+	dave.jiang@intel.com,
+	alison.schofield@intel.com,
+	vishal.l.verma@intel.com,
+	ira.weiny@intel.com,
+	helgaas@kernel.org,
+	linmiaohe@huawei.com,
+	shiju.jose@huawei.com,
+	adam.c.preble@intel.com,
+	lukas@wunner.de,
+	Smita.KoralahalliChannabasappa@amd.com,
+	rrichter@amd.com,
+	linux-cxl@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	erwin.tsaur@intel.com,
+	sathyanarayanan.kuppuswamy@intel.com,
+	dan.j.williams@intel.com,
+	feiting.wanyan@intel.com,
+	yudong.wang@intel.com,
+	chao.p.peng@intel.com,
+	qingshun.wang@linux.intel.com,
+	Zhenzhong Duan <zhenzhong.duan@intel.com>
+Subject: [PATCH v5 0/2] PCI/AER: Handle Advisory Non-Fatal error
+Date: Thu, 20 Jun 2024 10:58:55 +0800
+Message-Id: <20240620025857.206647-1-zhenzhong.duan@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Transfer-Encoding: 8bit
 
-On Wed, 19 Jun 2024 12:52:38 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+Hi,
 
-> Up to UEFI spec, the type byte of CPER struct was defined simply
-> as:
-> 
-> Type at byte offset 4:
-> 
-> 	- Cache error
-> 	- TLB Error
-> 	- Bus Error
-> 	- Micro-architectural Error
-> 	All other values are reserved
-> 
-> Yet, there was no information about how this would be encoded.
-> 
-> Spec 2.9A corrected it by defining:
-> 
-> 	- Bit 1 - Cache Error
-> 	- Bit 2 - TLB Error
-> 	- Bit 3 - Bus Error
-> 	- Bit 4 - Micro-architectural Error
-> 	All other values are reserved
-> 
-> Spec 2.10 also preserve the same encoding as 2.9A
-> 
-> See: https://uefi.org/specs/UEFI/2.10/Apx_N_Common_Platform_Error_Record.html#arm-processor-error-information
-> 
-> Adjust CPER handling code for ARM to properly handle UEFI 2.9A and
-> 2.10 encoding.
+This is a relay work of Qingshun's v2 [1], but changed to focus on ANFE
+processing as subject suggests and drops trace-event for now. I think it's
+a bit heavy to do extra IOes to get PCIe registers only for trace purpose
+and not see it a community request for now.
 
-Hi Mauro,
+According to PCIe Base Specification Revision 6.1, Sections 6.2.3.2.4 and
+6.2.4.3, certain uncorrectable errors will signal ERR_COR instead of
+ERR_NONFATAL, logged as Advisory Non-Fatal Error(ANFE), and set bits in
+both Correctable Error(CE) Status register and Uncorrectable Error(UE)
+Status register. Currently, when handling AER events the kernel will only
+look at CE status or UE status, but never both. In the ANFE case, bits set
+in the UE status register will not be reported and cleared until the next
+FE/NFE arrives.
 
-I'd be tempted to use "ARM Processor" throughout this patch description
-as could in theory be something else and currently the link
-is the only way to tell!
+For instance, previously, when the kernel receives an ANFE with Poisoned
+TLP in OS native AER mode, only the status of CE will be reported and
+cleared:
 
-A few comments inline.
+  AER: Correctable error message received from 0000:b7:02.0
+  PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00002000/00000000
+     [13] NonFatalErr
 
-Good catch on the spec change btw.
+If the kernel receives a Malformed TLP after that, two UEs will be
+reported, which is unexpected. The Malformed TLP Header is lost since
+the previous ANFE gated the TLP header logs:
 
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  drivers/acpi/apei/ghes.c        | 19 +++++++++++---
->  drivers/firmware/efi/cper-arm.c | 44 ++++++++++++++-------------------
->  include/linux/cper.h            |  9 +++----
->  3 files changed, 37 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index ed32bbecb4a3..365de4115508 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -546,9 +546,12 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
->  	p = (char *)(err + 1);
->  	for (i = 0; i < err->err_info_num; i++) {
->  		struct cper_arm_err_info *err_info = (struct cper_arm_err_info *)p;
-> -		bool is_cache = (err_info->type == CPER_ARM_CACHE_ERROR);
-> +		bool is_cache = (err_info->type & CPER_ARM_CACHE_ERROR);
+  PCIe Bus Error: severity="Uncorrectable (Fatal), type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00041000/00180020
+     [12] TLP                    (First)
+     [18] MalfTLP
 
-Matches local style I guess but the () are unnecessary.
+To handle this case properly, calculate potential ANFE related status bits
+and save in aer_err_info. Use this information to determine the status bits
+that need to be cleared.
 
->  		bool has_pa = (err_info->validation_bits & CPER_ARM_INFO_VALID_PHYSICAL_ADDR);
-> -		const char *error_type = "unknown error";
-> +		char error_type[120] = "";
+Now, for the previous scenario, both CE status and related UE status will
+be reported and cleared after ANFE:
 
-> +		char *s = error_type;
-> +		int len = 0;
-> +		int i;
+  AER: Correctable error message received from 0000:b7:02.0
+  PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
+    device [8086:0db0] error status/mask=00002000/00000000
+     [13] NonFatalErr
+    Uncorrectable errors that may cause Advisory Non-Fatal:
+     [12] TLP
 
-Shadowing i which is bad for readability.
+Note:
+checkpatch.pl will produce following warnings on PATCH1&2:
 
->  
->  		/*
->  		 * The field (err_info->error_info & BIT(26)) is fixed to set to
-> @@ -562,8 +565,16 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
->  			continue;
->  		}
->  
-> -		if (err_info->type < ARRAY_SIZE(cper_proc_error_type_strs))
-> -			error_type = cper_proc_error_type_strs[err_info->type];
-> +		for (i = 0; i < ARRAY_SIZE(cper_proc_error_type_strs); i++) {
-> +			if (!(err_info->type & (1U << i)))
-> +				continue;
-> +
-> +			len += snprintf(s, sizeof(err_info->type) - len, "%s ", cper_proc_error_type_strs[i]);
+WARNING: 'UE' may be misspelled - perhaps 'USE'?
+#22:
+uncorrectable error(UE) status should be cleared. However, there is no
 
-Size of the index into the type string array?  I'm confused.
-sizeof(error_type) maybe?
+...similar warnings omitted...
 
-Also, maybe break that long line of code before cper_*
+This is a false-positive, so not fixed.
+
+WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit description?)
+#10:
+  PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
+
+...similar warnings omitted...
+
+For readability reasons, these warnings are not fixed.
 
 
-> +			s += len;
-> +		}
-> +
-> +		if (!*error_type)
-> +			strscpy(error_type, "unknown error", sizeof(error_type));
 
-Perhaps should handle multiple bits where only one is unknown?
-So maybe compare with a mask of known bits and print this on the end (perhaps
-including which bit)?
+[1] https://lore.kernel.org/linux-pci/20240125062802.50819-1-qingshun.wang@linux.intel.com
 
->  
->  		pr_warn_ratelimited(FW_WARN GHES_PFX
->  				    "Unhandled processor error type: %s\n",
-> diff --git a/drivers/firmware/efi/cper-arm.c b/drivers/firmware/efi/cper-arm.c
-> index fa9c1c3bf168..f57641eb548a 100644
-> --- a/drivers/firmware/efi/cper-arm.c
-> +++ b/drivers/firmware/efi/cper-arm.c
-> @@ -93,15 +93,11 @@ static void cper_print_arm_err_info(const char *pfx, u32 type,
->  	bool proc_context_corrupt, corrected, precise_pc, restartable_pc;
->  	bool time_out, access_mode;
->  
-> -	/* If the type is unknown, bail. */
-> -	if (type > CPER_ARM_MAX_TYPE)
-> -		return;
-> -
->  	/*
->  	 * Vendor type errors have error information values that are vendor
->  	 * specific.
->  	 */
-> -	if (type == CPER_ARM_VENDOR_ERROR)
-> +	if (type & CPER_ARM_VENDOR_ERROR)
->  		return;
->  
->  	if (error_info & CPER_ARM_ERR_VALID_TRANSACTION_TYPE) {
-> @@ -116,43 +112,38 @@ static void cper_print_arm_err_info(const char *pfx, u32 type,
->  	if (error_info & CPER_ARM_ERR_VALID_OPERATION_TYPE) {
->  		op_type = ((error_info >> CPER_ARM_ERR_OPERATION_SHIFT)
->  			   & CPER_ARM_ERR_OPERATION_MASK);
-> -		switch (type) {
-> -		case CPER_ARM_CACHE_ERROR:
-> +		if (type & CPER_ARM_CACHE_ERROR) {
->  			if (op_type < ARRAY_SIZE(arm_cache_err_op_strs)) {
-> -				printk("%soperation type: %s\n", pfx,
-> +				printk("%scache error: %s\n", pfx,
->  				       arm_cache_err_op_strs[op_type]);
-Can we keep that this is an operation type in print?
-"%scache error, operation type: %s\n" perhaps?
+Thanks
+Qingshun, Zhenzhong
 
->  			}
-> -			break;
-> -		case CPER_ARM_TLB_ERROR:
-> +		}
-> +		if (type & CPER_ARM_TLB_ERROR) {
->  			if (op_type < ARRAY_SIZE(arm_tlb_err_op_strs)) {
-> -				printk("%soperation type: %s\n", pfx,
-> +				printk("%sTLB error: %s\n", pfx,
->  				       arm_tlb_err_op_strs[op_type]);
->  			}
-> -			break;
-> -		case CPER_ARM_BUS_ERROR:
-> +		}
-> +		if (type & CPER_ARM_BUS_ERROR) {
->  			if (op_type < ARRAY_SIZE(arm_bus_err_op_strs)) {
-> -				printk("%soperation type: %s\n", pfx,
-> +				printk("%sbus error: %s\n", pfx,
->  				       arm_bus_err_op_strs[op_type]);
->  			}
-> -			break;
->  		}
->  	}
->  
->  	if (error_info & CPER_ARM_ERR_VALID_LEVEL) {
->  		level = ((error_info >> CPER_ARM_ERR_LEVEL_SHIFT)
->  			 & CPER_ARM_ERR_LEVEL_MASK);
+Changelog:
+v5:
+ - squash patch 1 and 3 (Kuppuswamy)
+ - add comment about avoiding race and fix typo error (Kuppuswamy)
+ - collect Jonathan and Kuppuswamy's R-b
 
-Not a today thing, but would be lovely to use FIELD_GET()
-for all these with appropriately fixed up mask definitions.
-Right now it is inconsistent as the valid entries are handled
-as shifted values, and we have GENMASK(X,0) plus a shift for these.
+v4:
+  - Fix a race in anfe_get_uc_status() (Jonathan)
+  - Add a comment to explain side effect of processing ANFE as NFE (Jonathan)
+  - Drop the check for PCI_EXP_DEVSTA_NFED
 
-> -		switch (type) {
-> -		case CPER_ARM_CACHE_ERROR:
-> +		if (type & CPER_ARM_CACHE_ERROR)
->  			printk("%scache level: %d\n", pfx, level);
-> -			break;
-> -		case CPER_ARM_TLB_ERROR:
-> +
-> +		if (type & CPER_ARM_TLB_ERROR)
->  			printk("%sTLB level: %d\n", pfx, level);
-> -			break;
-> -		case CPER_ARM_BUS_ERROR:
-> +
-> +		if (type & CPER_ARM_BUS_ERROR)
->  			printk("%saffinity level at which the bus error occurred: %d\n",
->  			       pfx, level);
-> -			break;
-> -		}
->  	}
+v3:
+  - Split ANFE print and processing to two patches (Bjorn)
+  - Simplify ANFE handling, drop trace event
+  - Polish comments and patch description
+  - Add Tested-by
 
+v2:
+  - Reference to the latest PCIe Specification in both commit messages
+    and comments, as suggested by Bjorn Helgaas.
+  - Describe the reason for storing additional information in
+    aer_err_info in the commit message of PATCH 1, as suggested by Bjorn
+    Helgaas.
+  - Add more details of behavior changes in the commit message of PATCH
+    2, as suggested by Bjorn Helgaas.
+
+v4: https://lkml.org/lkml/2024/5/9/247
+v3: https://lore.kernel.org/lkml/20240417061407.1491361-1-zhenzhong.duan@intel.com
+v2: https://lore.kernel.org/linux-pci/20240125062802.50819-1-qingshun.wang@linux.intel.com
+v1: https://lore.kernel.org/linux-pci/20240111073227.31488-1-qingshun.wang@linux.intel.com
+
+
+Zhenzhong Duan (2):
+  PCI/AER: Clear UNCOR_STATUS bits that might be ANFE
+  PCI/AER: Print UNCOR_STATUS bits that might be ANFE
+
+ drivers/pci/pci.h      |  1 +
+ drivers/pci/pcie/aer.c | 79 +++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 79 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
 
 
