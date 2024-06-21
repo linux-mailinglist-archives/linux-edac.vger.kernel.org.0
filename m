@@ -1,118 +1,119 @@
-Return-Path: <linux-edac+bounces-1338-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1339-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9536912CD5
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Jun 2024 19:59:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44890912CF4
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Jun 2024 20:06:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 014E91C23816
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Jun 2024 17:59:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B197F1F24A89
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Jun 2024 18:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE2D15FD1B;
-	Fri, 21 Jun 2024 17:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC33178CEC;
+	Fri, 21 Jun 2024 18:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tnw6bM7N"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="ogS24POi"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2110.outbound.protection.outlook.com [40.107.93.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B5A13D521;
-	Fri, 21 Jun 2024 17:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011832E417;
+	Fri, 21 Jun 2024 18:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.110
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718992795; cv=fail; b=QeDvEypFGwb5k4Y6vQeVwRxHK5wOATsTRrFnSAvdO0VWbYQYondJz2JWdOlQcS4dPL66Liw9bov9SONyJNjtNLb/eZpCloGuIrVR1KUqmt2DyolrpgMyORf9we8u8g7RdyvHaU3JqVf3r82+yGeZfMVYeC8ZFOiTFC1rJTI+mNU=
+	t=1718993206; cv=fail; b=kh5dJ5IGtRldS8B84cTL6omTfbRHGMSgQA4i6aJmrJzhoazCWNqS3wgQm0lFjWNwxObY7uJDMz+PdBzH355mKsfO2mS5bU/PW1vOLrUfrSfiNJ7SXOpo+AOnkA8ZChWi9yq57t7knDaKD3SEkIkzX8w8Wb21wMiSvyVDVRA264c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718992795; c=relaxed/simple;
-	bh=gwxfVzuXwIzsAitT2FKb5pw2WkGN2+ydwR7mtdnWVmc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=nG3GYtd0NZ/LboEeMgTE48vRV2OB9KONfWIj/vAB3/e9rPziNbFOVy3to82QGGQpfBb1UHFBpHZ3BgWMtN7b6nioK27bhNlI4+2CFFxbahc3/xn28JCT5El1qECR001wyX/jxMTxFW9BcXSgxvu9S1iXbsj8EMnRrnKAUr4MTlE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tnw6bM7N; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718992793; x=1750528793;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=gwxfVzuXwIzsAitT2FKb5pw2WkGN2+ydwR7mtdnWVmc=;
-  b=Tnw6bM7NNYKDcFcjba3P8Imt1C8c5p9YQp3WMz05ZZd5b4cA5fEOAGW4
-   GSejY6IzGLdxCUcLnNc2heCsIqL4EdilF2dQtp8ljQuYw7/621idc5Yd6
-   EPJMV7j4JkByDeo4tNrAtSHfdMmmA4hP2g4DdCDN1p6bO3mAkGn3Bxhz1
-   TuCZf6TQt4f11UdQmeEqlkAfXioCobIlP3IpreCrCOh7jKIWgieUA3NB5
-   3eVGMqHy2ekUrnvbKqmmHEXjGDDSd7sQLi7z519qc6qGi0pUV5N/7Zytw
-   eZ0umnEMk1f8sqQO0GSbS4gf+Ap00LI0XFLcK76HWDCIjhBTJVcZByyeC
-   A==;
-X-CSE-ConnectionGUID: JUwBgLQiSPmatmwIgEiXdA==
-X-CSE-MsgGUID: U8znblecSSm37BUmdHFSNw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="33497707"
-X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
-   d="scan'208";a="33497707"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2024 10:59:53 -0700
-X-CSE-ConnectionGUID: ldddngJoRTu+7E9UVJoutQ==
-X-CSE-MsgGUID: PIwp18MWSDOYcp39Y27JQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,255,1712646000"; 
-   d="scan'208";a="47579878"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orviesa003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 21 Jun 2024 10:59:53 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 21 Jun 2024 10:59:52 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Fri, 21 Jun 2024 10:59:52 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.45) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 21 Jun 2024 10:59:52 -0700
+	s=arc-20240116; t=1718993206; c=relaxed/simple;
+	bh=5TfGGsLAKo4fmwLj9Oygg5s+jMiMEah3Oamkr85k2xU=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=NFa8o0wdWGDvKJ3FgSmvMc822hn526WYOg9up7LO/glBkC/AJv60LnJbKxuHtD83RZDYG0BMG9sgTM1/EFbSlqUQrO9FYZlBKQ3YGGg9ahjx+ekeJSe4qvkGvEDMqwbT4fTQBOg5MWEAL/SbaeQk3gGhZz3df/B4cke9vALJCIM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=ogS24POi; arc=fail smtp.client-ip=40.107.93.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VDcPysyL1CYBHGzKL7gZoVWRN2GUQTzFXo88vHyUb8P6pNQKDXUqGLQzpPV6vQTf4bNU3t2AIlPZtpRwqX/TlVYR+YUfupHiUsENHXM/W/e3zGYrrFV3Pd3rtRoJdejQ4BfypglJvizu6lSLZlsEpmfx0ZzjrfH+Bs49vzMpzP+Z0I6TG2DThyshC5HEW1oE/QU+H7a4Bb8BHVUsEyJjx0A5DUHp8xJ/92OSBV1ar63V6EdtCEcgvJy767cGTAzbzmcB0c/bZ91fccUw33GcL5FTdjzJzr/4bG60hwvfRlQRny1CC1jU7mKckOO7tXy0B+sQWCMj3Yu3LJP/rgXM3A==
+ b=ALwntIfMYf/f/Uedgzxvher2El+z9JJe4KF3MeEgQ47NVfEJPIH7ay2pxHqfGDa4tuuhtntEEOdIpaCTqOSFgpKfSA1PZRQ3BnJDs98niUcWiSAspwIcdbqvN8V0v+Py3/pizxoLALhP94Ypyuz+QIotLo6a/15gfltWXmeWacPH5Ovnv+4ogdUJdAJJUO56RZUQHyk00bl5H7TUqa2a9hdvhIoAxvEyS/GG35L8kg4A1nDk0sjCLQSY5RoQemDeTbh32zgSd6xZs6eLmyHxWe2hEtgTg26IExvSJgX6/dU7euH8hFnKRfJYqNl8y8ppDdGwSE+5gYbAu8RY1sZlvA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wevQysr0nHN4aWSQUBiGku5yOthrKoXFko6oqsVsxhg=;
- b=bLRtCD8JEJ/h+9LPVYrbqXHS6e9Y5xXEOsGnieeZpP4FCL/KmjJ86+YRGpk4ybSPDiGaErR3tiWQAdS2ahx7cI9QA0Enw65aW3A9IP3iMpz2rQY/Rb8PwxGLimZy9+47D3y5+fWO1j5jnWwU81I27+PmgXfjD3eaCV9kfWA6EiL6z4VyQyI3OUnE9izT7qh3x8yecnOftRr140cBgmkRgjbD2tTkrUFdgyBmyUTu2iom1yNjM54lxcSb7OOSffwRXdX9oDXVTG8+MIk+7Kn/YQaugnoyjrgFEaPWFA8ift+uj8cBeb7qNVfJuZbYPXxfN9s7GrF7emR/fz47dfXZKA==
+ bh=xBrPu+ke8gCbBJiNJ7wFwrpHG1FtOctEsNzRCF5KNx0=;
+ b=fP5UYlouLbViVcAdrh9uiQWGV3vEtCMUmF0fiOkabtPeeANM8qnCwbdyCMpNSqh6Cy+p7nwKeebWwTW4N7SykUYRLsXjG68ySoou8CaPxWmLB+2AZI75x8GM5DGviRzDaNZ0BJYQqPaPlJfdn07Wm9JqxYncnFdSkJg2YamFVwh90i3p1OfDMKVBQGdnxPiv5I8bHvUPbrFcJBmBesV/cm6Pk12AZ5NT+CdXHgZMTusSMnndvhbgHCfjQwTwmlipAr4+bdUeJET1oFNuwYvr535hHblKc5+3EnTncjBPGHGhqrz+6AZXATfE0A7X0HdRaVuo44u9KYsM83KC/Q4QmA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xBrPu+ke8gCbBJiNJ7wFwrpHG1FtOctEsNzRCF5KNx0=;
+ b=ogS24POiy9ljW3onowEvVDUuo96wLFsrlb6aiGAmZayuRhEAxMbF0k9QnFS2kk0+WDBPwbECP8js8/kwsnjVbRyBQfTyJ7cOozHO5hxHDtB1xzMVWEy5CMqqz2kpBiaq6ivrkt22und5nEEwb0Cjy/Yvj5jA0YL6wtJHT+LaLss=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by SA1PR11MB8374.namprd11.prod.outlook.com (2603:10b6:806:385::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.22; Fri, 21 Jun
- 2024 17:59:49 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6b05:74cf:a304:ecd8]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6b05:74cf:a304:ecd8%6]) with mapi id 15.20.7633.021; Fri, 21 Jun 2024
- 17:59:49 +0000
-Date: Fri, 21 Jun 2024 10:59:46 -0700
-From: Dan Williams <dan.j.williams@intel.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Shiyang Ruan
-	<ruansy.fnst@fujitsu.com>
-CC: <qemu-devel@nongnu.org>, <linux-cxl@vger.kernel.org>,
-	<dan.j.williams@intel.com>, <dave@stgolabs.net>, <ira.weiny@intel.com>,
-	<alison.schofield@intel.com>, <dave.jiang@intel.com>,
-	<vishal.l.verma@intel.com>, Borislav Petkov <bp@alien8.de>, Tony Luck
-	<tony.luck@intel.com>, James Morse <james.morse@arm.com>, "Mauro Carvalho
- Chehab" <mchehab@kernel.org>, Robert Richter <rric@kernel.org>,
-	<linux-edac@vger.kernel.org>, Miaohe Lin <linmiaohe@huawei.com>, "Naoya
- Horiguchi" <nao.horiguchi@gmail.com>, <linux-mm@kvack.org>
-Subject: Re: [RFC PATCH] cxl: avoid duplicating report from MCE & device
-Message-ID: <6675bf92116ed_57ac294a@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20240618165310.877974-1-ruansy.fnst@fujitsu.com>
- <20240620180239.00004d41@Huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240620180239.00004d41@Huawei.com>
-X-ClientProxiedBy: MW4PR03CA0329.namprd03.prod.outlook.com
- (2603:10b6:303:dd::34) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from CO1PR01MB7370.prod.exchangelabs.com (2603:10b6:303:159::16) by
+ CO1PR01MB6743.prod.exchangelabs.com (2603:10b6:303:d5::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.33; Fri, 21 Jun 2024 18:06:39 +0000
+Received: from CO1PR01MB7370.prod.exchangelabs.com
+ ([fe80::6e98:87d1:5562:ad73]) by CO1PR01MB7370.prod.exchangelabs.com
+ ([fe80::6e98:87d1:5562:ad73%3]) with mapi id 15.20.7698.017; Fri, 21 Jun 2024
+ 18:06:39 +0000
+Message-ID: <84e75542-026f-4c99-a8e0-f07dbf1695e8@os.amperecomputing.com>
+Date: Fri, 21 Jun 2024 11:06:36 -0700
+User-Agent: Mozilla Thunderbird
+From: Daniel Ferguson <danielf@os.amperecomputing.com>
+Subject: Re: [RFC PATCH v8 10/10] ras: scrub: ACPI RAS2: Add memory ACPI RAS2
+ driver
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "david@redhat.com" <david@redhat.com>,
+ "Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
+ "leo.duran@amd.com" <leo.duran@amd.com>,
+ "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+ "rientjes@google.com" <rientjes@google.com>,
+ "jiaqiyan@google.com" <jiaqiyan@google.com>,
+ "tony.luck@intel.com" <tony.luck@intel.com>,
+ "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org"
+ <lenb@kernel.org>, "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+ "james.morse@arm.com" <james.morse@arm.com>,
+ "jthoughton@google.com" <jthoughton@google.com>,
+ "somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+ "erdemaktas@google.com" <erdemaktas@google.com>,
+ "pgonda@google.com" <pgonda@google.com>,
+ "duenwen@google.com" <duenwen@google.com>,
+ "mike.malvestuto@intel.com" <mike.malvestuto@intel.com>,
+ "gthelen@google.com" <gthelen@google.com>,
+ "wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+ "dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+ "wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+ "nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+ tanxiaofei <tanxiaofei@huawei.com>, "Zengtao (B)"
+ <prime.zeng@hisilicon.com>,
+ "kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+ wanghuiqiang <wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>,
+ "ira.weiny@intel.com" <ira.weiny@intel.com>,
+ "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+ "alison.schofield@intel.com" <alison.schofield@intel.com>,
+ "dave.jiang@intel.com" <dave.jiang@intel.com>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ "dave@stgolabs.net" <dave@stgolabs.net>,
+ "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>,
+ "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+ "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>
+References: <20240419164720.1765-1-shiju.jose@huawei.com>
+ <20240419164720.1765-11-shiju.jose@huawei.com>
+ <fcd0621b-dd68-4e0d-96e1-15c16a3278d0@os.amperecomputing.com>
+ <d1986e8e1d8549c588f7488dfd5dd374@huawei.com>
+Content-Language: en-US
+In-Reply-To: <d1986e8e1d8549c588f7488dfd5dd374@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0070.namprd04.prod.outlook.com
+ (2603:10b6:303:6b::15) To CO1PR01MB7370.prod.exchangelabs.com
+ (2603:10b6:303:159::16)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -120,241 +121,425 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SA1PR11MB8374:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc749220-cdfc-41b4-fffa-08dc921bf18f
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: CO1PR01MB7370:EE_|CO1PR01MB6743:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd9d7b1d-c054-4531-2dba-08dc921ce5d9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230037|376011|7416011|366013|1800799021;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?/OZvCs8cyTlsSiOQQi6AA9F09Vm5tLQthh9e1JN+NndFBANEYEaB0tfMxWa/?=
- =?us-ascii?Q?79itXqaJmv2UJoPe/AHGET78TtXmDVSGGWxoCFq/UE6G0HrhY8bfIFGSWxOz?=
- =?us-ascii?Q?ehEoaiLjBVZ5AbB+TAJFIz6f236t9ewI33uyZ3MvL653Hgy9ssB4nQVBvuMI?=
- =?us-ascii?Q?BXjEx9PxxjN0CDiHq3YlR78ttayKwGwClDwNdgWPX8id2oHsMOl7FCCpUZ0N?=
- =?us-ascii?Q?zEw8Su3/yu5J0/B2i1/HR7uo+aWXOWeDbhJX/vkL6NCJ6cg6quRfaTWEOKMO?=
- =?us-ascii?Q?52YW6KR5yo9nxb3gDiI1/byE12V/zwKQxtWt/J/Wh4k2dEpo9UQm5iLokG8q?=
- =?us-ascii?Q?M6mGdsm2ccLHph/3UVwgvk4iq0r7kXCVNeGJsLFGlGC0eQtvxlcNbOqcHO7u?=
- =?us-ascii?Q?p6yABgITGg+J7+hJA+Dr7CYcQb2649IwS1Qzrr2MP6n/B/dQy//2C0e1cKJN?=
- =?us-ascii?Q?1vwhURBzls0yV0wEOJWQFR8jBDiFXCVcRRg2D/p9fEEYX+ekXPhGUD+/lsZE?=
- =?us-ascii?Q?pl9596mlxAW2XGJi7OPpbBxcZlnAgux7L8/TF94s6aRbbjbAqN4zuVo6t1kz?=
- =?us-ascii?Q?rx0VMEddH+rn+LyLYZlW38mxmlc8XkKkBC8nrDYl4vPE3Gt31Y2c54vQGPiS?=
- =?us-ascii?Q?yyQWF7dXW6gkRijOT975KuS1JhM2Hkf8ar/w72AiZIAuerF8ibuhepfMZjj9?=
- =?us-ascii?Q?ulL3sSLMR85U62hy9mE4fzJ7Vke6f6iK6Oqlnn9gK1W3mZpLXud2y56F9XC8?=
- =?us-ascii?Q?Za+0/8mxBFb/nJydu2hd+J2qQfeA2N9gWo11IDP05xc/Si9m66Rw7xSxpzQa?=
- =?us-ascii?Q?vinYFozk2+gsWglw8IGnGuMjnqWpN86V35owZkuLYZRD04j8IVtQRNFs11EQ?=
- =?us-ascii?Q?Grb+5AOc6hA7TKXYNPCgqVJZFi/s7sveioiyW5u4FSJ0voAh6WXh7QAbtdP6?=
- =?us-ascii?Q?uwyP3gqXQ968D8stZmT9Cb88dKgjB++3dVCGkGo9ltj6+b32sOgl7MAXCdtT?=
- =?us-ascii?Q?b+11w32Qo1pjR71VVPTbWCaSViYJfN4IcFr2CPSDY6PLq2MBTQHcA7ITB2F0?=
- =?us-ascii?Q?r8PgWdFFwB1PKQsjuhzi75asO6s3XqHwLVjHM1SU7IZEcbSD1vPztlmeeqM1?=
- =?us-ascii?Q?oZ6VnuWL/gLcmSJmen2jCU1aYqiEmsYSvtAxmWL63cJ7vidQOwpPdSQUk0yv?=
- =?us-ascii?Q?2KIg1J4C3MMnh9eGgfU1ZC09BQRcSPmh0/RZ4TUOFkmfpAUodYny04JNw2sk?=
- =?us-ascii?Q?rPa3YkobbW6s2AheUeed?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(376011)(7416011)(366013)(1800799021);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230037|366013|52116011|376011|7416011|1800799021|38350700011;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WktsS1BGb1ZLaEZvSUhBU2RlL29yV0NsUG9BeWhnQm5WWHRXMmZPcXdmUDNY?=
+ =?utf-8?B?NWs0bno0ODE3UUJIZVhkWGlnT0JjZDdBamFFQXg4NTFvcWFtV1Q1dGxxZ051?=
+ =?utf-8?B?L1hZcFRWV01pZ1pSUU05aG9NM2l2elVIbjBkNlhVallBalltb0RsWHE3SWpn?=
+ =?utf-8?B?NFVGNGcyQ0NXK2hIWHBtWDl6LzlOK3M5KzVPRFVzdkYyMUlzWWxnc21LWUIz?=
+ =?utf-8?B?SFNYS1RXVit2VGgrOHVXL0cvd2tDUE5EcnVySFY4aUNtdHhsTTlrMlBteWVl?=
+ =?utf-8?B?VE1uanRoRDB3QjF0VnNtK3lSemlrbDMxVTZLTS9PRlhoKzJHbTU3RXArS2JK?=
+ =?utf-8?B?OGlZbDJwMVZDRDQ4bFhORno2ZzhaMkdpeEFqeUV2cDRjbkNjeUgra1FIU01o?=
+ =?utf-8?B?UWhkMXpCWnpSYUVxY3hmVkFCSFlqVk4rTGFwL1c5ZlZSSStqRSs3enhiSkpo?=
+ =?utf-8?B?c2ZwVHFWVC9LYU5zWHFFVGloTVBSNS9oMTNEYjlTd3pIUmV6Tnpkd2cvMlho?=
+ =?utf-8?B?Y3ZYZ1Jsa25LV09qb1BIM2V2ODhJN0FkUmpYdmFUMlZ2Ti9nV2k0OFhqV1lV?=
+ =?utf-8?B?V2dvRCs4N005djlXZ0I0d1dXYzNKN0FaQXpBamRNbEh4REVlbGJqTUxqZWdv?=
+ =?utf-8?B?VHRkVFVyNkNXbGFrMk5Lang2SkRHTWxCWER4MmdNYVhDU3JVQ1hsUUwvVTJL?=
+ =?utf-8?B?L1VsbG5GRW8wYUJXeTdzejJ2L0hqSFNOT1FNM2NMY0xmN1Bnc1U0VU1qSU5n?=
+ =?utf-8?B?eXNXbGFDbkM4K1cyaU1qQ1ViVnhGS1NsZUZrK3kvVGcrQTMza3JmWTZEa2ly?=
+ =?utf-8?B?T2pEMVdlcFozaER1T2lJM3JvTzhrWTZGMzdiVGdwUStIbW1SSnJ1YUpYZytH?=
+ =?utf-8?B?eU9ZN25BN0FlaW4rM2JIYVlSZCtHYWRFUlpFNmQrMzBuQWM5TEM3R2xCMUtz?=
+ =?utf-8?B?aWxTUlIycWRzQUY5R2syZ0pPOHk3S3dhRmRTaitiZFkvT1dvUFNTTzMzQ1h1?=
+ =?utf-8?B?WmI2SDZtbTVKKzJuOURuWVNQN25mb0JWWkxlaGVDbUFtLzdHTzUxNGdLczFL?=
+ =?utf-8?B?Wmc1SzBGeDhWck5yUmY2dEY5aEZuQmpPdlJBSVZPSStvaGMrN2NxelNoVm0v?=
+ =?utf-8?B?amVlN3c5eXVXNmNDRUR3eEFqZUUybnlUVlhVWEhFUHVFMjV5aHdnYUFFK2d1?=
+ =?utf-8?B?eUp5Z1V2N3pKTTgyNU1sSnRjRmpkdVNLcHVTUXA4d05hNWg0WWQ0RTlDV25x?=
+ =?utf-8?B?SGFWT2sxdE9yb2V3WkhUcENibVZrbGpRRWFobGU5Q1YxRm1YY0RnbkhMc1Bk?=
+ =?utf-8?B?aEdhK1ZLcE1Jc0xBSnNKTXBGNDlGcmt2eDErNkFlM3hSUDBXMUMzMlVoaFJJ?=
+ =?utf-8?B?YWhJZmJpRHZhS2swRWtxb040ODF0OWE2SUp2WXhrZXl0Q2FGNWJkREZDOHhp?=
+ =?utf-8?B?UUU5OGcvUVpsQTJ3WkxQWDJheHhYYVE2WSs4UnFrS25EcW83dnowS0dWSzkz?=
+ =?utf-8?B?bUFZdHVVaS8yQ3BPeVV2Lzl0ZGNwTG84d3VvYTZBd2xMekV6clUxTzRnSXhI?=
+ =?utf-8?B?UjNhWkRmUnpqdzBiYXg3RWhXTDZyWDhYSzhGMnl2WGdZdlRuUy9QWWVzMkZ3?=
+ =?utf-8?B?NjJweUQwZ3VtZDBNQ1U1eko2aDVJbnV0U09WZzg4NHRFWjV5ajEyNkZZbUlr?=
+ =?utf-8?B?eXVpM0ZtdmtIdzV2cTlBdUJtNUl4RmNTeTBkM1R3bkxROTVNcDM1N1hHdjNT?=
+ =?utf-8?B?TEZ3L2lNMHJqRGR4bHQzNVYxNExqbTBKOENEWllxWVBjV0NlK002ajFJTVVP?=
+ =?utf-8?Q?LNEQ6Sk2SNdN/o8W/qOXgWycsC337MXY08Of8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR01MB7370.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230037)(366013)(52116011)(376011)(7416011)(1800799021)(38350700011);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hqc5L/3aO9d5+x423sfEjhe3I7wQD3wmoIBkFygqbd/GfPpDvefarQB8vGxT?=
- =?us-ascii?Q?Wn86UL0mA06kA0a8nQEI/P5ubrUTlQEknjW8wTXo9GMQht/F2UIdPhZBet4l?=
- =?us-ascii?Q?8vf7DthQoir0DAIMWpB0jsyCmz3sZFqi0goqdhHHBI9Jzx6iq+/HZTdY01Pd?=
- =?us-ascii?Q?TjCKcmMKSp6c8tlBHmXaH0vot1ZLouDwXXRR7FvcmriwXAn5KGkzdXkuQ9GO?=
- =?us-ascii?Q?l9nclPgvHlGlL3u4AN9YHNNA/sllCHUF3Z7Fv4MlITrRcVrPSiC2wfmy6siz?=
- =?us-ascii?Q?uBPxlLShnHKyKdDWWPX0dsQG9vnlSVcFDm/hxmRJ5qly0lB2CohXGsS2tuB6?=
- =?us-ascii?Q?xd2tahdPH9Hy5pBC8Fwc/7Ih+c4YU2IgtDZl/EmEs0RV+jQNT9YyaFUNFG+e?=
- =?us-ascii?Q?/4KfxU2KjzXYY1M/6kiAKEe9LRnGmErzM2M/OTEcRXBUqy87rNhuKMWzak7z?=
- =?us-ascii?Q?Tnc2rbEUGwJ17TbAiZ4vxoRSO1p/wpbsnUcUBGeWPYwdbt8eYIfEMQCjl++P?=
- =?us-ascii?Q?Z6znZmhe3swOrof1BEB0xS25bvJALQ5C+SX4yn2556PW93Zyjj7n48aP2AXH?=
- =?us-ascii?Q?m2E5WvZdz0UsCYYx8WJ2QK5hRaRs2KcptN5jzkJOpe+unLE1AqQjXMuJcZFe?=
- =?us-ascii?Q?pDZYkG1StDPcfXe9W9q3okJSxp5cB85C+qFfRU7jLK7Gxnr/JqOsbz0vFLar?=
- =?us-ascii?Q?8+W0SQ3ytNWtlBbUehGNGvhk75QYer4mJJj9pqXRbF24HKB66Enm0CZOxLm5?=
- =?us-ascii?Q?lJXdIUEnm20I/ZInyUhaJwoiOPwCY5l0MNNH2c7sGRfTFxUGqKqRyEjc93bf?=
- =?us-ascii?Q?it79nfVfWdmDxYxzr6eiRVLqU076OawpMqr+h19ulvaa3hHRVI65kGXjbltp?=
- =?us-ascii?Q?H2z9Yh80UEn52Q4yXqiRxBcqvegHZ9kItEY2oaFk2scuQbU2Gp5w1ZvXZYlD?=
- =?us-ascii?Q?Wqbzrsoy9Kme5GVZZsoTmQK4Vdmfq7Ag11DHJ7dn4uOEM033aNRswgoA2J8I?=
- =?us-ascii?Q?YSYKcve/Mg2bNfEZ6nPAUvcKdEX6J2pzbrnMkj70wMZheHQa1+3pbsEygxsp?=
- =?us-ascii?Q?4m50W8wWOZm0axb0BrNhROME2dKPs9sm08rw0l4ZfPWigIYK+GBOUWT2dI2d?=
- =?us-ascii?Q?8TjQyDuHoYgGZsYdTlUuG3CDW1L4bv3P8HdqY0uAhNWvg0Fmso9pvoMAowlR?=
- =?us-ascii?Q?vbMpykHjAp1hl8kHkc36ru8j5q6siO5pk6kyw9dsBiVp2c7ZcYHeS8U1oRfd?=
- =?us-ascii?Q?V4AyCd69XAXAmPiyMhZRwf9L0ZqflFeK9SFNPMr8hf7Hgo73xziMJAuNLwIC?=
- =?us-ascii?Q?otDLNHC/n5a9SmvR5yuLitmqWBqPqPz6Stwew3SdBu6an+wclVpjA9fEBlem?=
- =?us-ascii?Q?y0GmfekAKpnLve1bCYAY3d6eMDo5YEITEGn33Q4+3Z6q1YTOaPcEu0RomxiM?=
- =?us-ascii?Q?DT/DuKho30odYAHh5tmVsRSAcMj8mM9Vlm8HGiwAZdk4W9tUa0ok4ZKAU4Av?=
- =?us-ascii?Q?agXqglsgooO8VXA/EqjAAsGs8dDjTcAwvpEnL2UYwifkJH/q7rXaXatjIt/5?=
- =?us-ascii?Q?seuwezWSm5xtpYVVK79yTqA8hLSd+y9/0FZag3bnsCX9nXJOfbaF/aW4R42O?=
- =?us-ascii?Q?ig=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc749220-cdfc-41b4-fffa-08dc921bf18f
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ek9CaWEzNnNuRHVkRi9yVmNmdEZ0Y0xBVlNsejhFUWdDakFDVXAvV095YUYy?=
+ =?utf-8?B?MEE3bC96cFdvaEhkYmtDajhNdGdYNSs2ZzdNVGtBRXRwZ1VMNUNyV1ZmQWUx?=
+ =?utf-8?B?cm1leDF6a3p2VW9HdHhyN1UrVHlYdllWYWFTUGJrUFhqdkFpaHBuQ2plVGVO?=
+ =?utf-8?B?RWhMZ1hXN29mSGtFZC8rSUNoL3piU1JrNzdBaUxCSU5xRTU0VzdBWUd1Z3RY?=
+ =?utf-8?B?SjF5SjB2d0xTTjZ6WDdnS08vL3g1dmpOZ3lHWFF4TjU5LzdiOVJobFFHZndP?=
+ =?utf-8?B?VjlHNXliTndMdzhqcm9IdDRZOEh6dHpRbG5zbDRNNncvNFgySjZuYUV3N3JK?=
+ =?utf-8?B?OWFZNWUyT3NBb2U1YUwyWnZCVWpDUyt6WS9YU3o1SE43bmk0L2hXeHFhMHVF?=
+ =?utf-8?B?cE8rcUFwNUhXU1hnYzZPbENwUnd4R1RBUUtJWFI4NlMyWkl2WVhyRmYrakta?=
+ =?utf-8?B?dlFJeE5ORDNLWmJoUnlEamRoTzRBLzRYTVB0N1lWZmxMbnFUTkJ4ZEZ1TXBW?=
+ =?utf-8?B?dkROR1RIYnpvQkcxeW1GQkZMc0tneXhXSE9sOWhYOWIwQkJwZVZpRks2dEkx?=
+ =?utf-8?B?UjhVUldFWVZLZGlTUy9tSnowelNJZnlRTlR2K3gzQ0kweEVhbE1IUDhWT3h1?=
+ =?utf-8?B?Ukhrb1VwaC9pVHY2bndMZ1BlZUJHRDNNWTUwZXRac09ZQjB3bEpkOGlvQ1dk?=
+ =?utf-8?B?aGV6ZnU4MnBIVkJ5Y0JNWkFsSUtXQUR6aHB6TDVYWXQ5SEk5Wms3RU5SbDBW?=
+ =?utf-8?B?ZEI5RWk5Zk5HblY3UVV4Vk51amU2MzRzeEhVOG5UWVRlT0NmaVkyb3ZCSEFz?=
+ =?utf-8?B?L3ZOdENYaUtPeFFRREtkMVV2cWFwM0JNcUc0LzV5L2VUenZuN05XWjY3aTBa?=
+ =?utf-8?B?UnU3ejFBSXBEWVF0eFA3UDF0emllckluNTdlaU5EeWxYVVgvUVhVTTNhU21K?=
+ =?utf-8?B?VTBmdVg0RmYyUmZVUTFvWmpucGdhcnBZbWlSazdwMEt4b3pMc3Rta3J0QUE2?=
+ =?utf-8?B?bHI0djU2VWpobjhHRVR0SnRONGlWdWI5ZUdwdFE4Rkp3LzRTSjgvcWN6Zldx?=
+ =?utf-8?B?eU9IZEZwN2tobzJ0d0ZENmZRKytBZ1g2VG1uUEUwU2l0Y3lRY2ZmcE14dXZO?=
+ =?utf-8?B?YXJXYWhuREpoZW13d3lMTWxteUFQb0NONldBd0U1N1hsYWRHUlhlajJlUkNE?=
+ =?utf-8?B?dHZCUlFKSXA1dlZ3V3JTUzRWMlpheE9CQy96d0dJMmYxZE5nRlBFYzFRSzRh?=
+ =?utf-8?B?NEZSeHhvYW9FeDNCdkM1RmRTL3pTUThnTzdSaDd4SXMyZEk3cEE4Z1BFM1ZY?=
+ =?utf-8?B?blNhYXRMckYzcHFpd01RbHhhYzVpeUxLWmVqK1RyWnVTRTBJMG9uaVVOUUtG?=
+ =?utf-8?B?ZXVJWGRDRis4SHNydHJBKzJFQ2wwTVJlREJFeGhpNU9jSU9KVHJoTm9MT2h5?=
+ =?utf-8?B?NzJJaVNwZy8vdEZiLzZ2MFFFaWk4UEtHeURMeXh3V0hqdEs2ZGU4UFRJNEZZ?=
+ =?utf-8?B?N2I5Y0FTNGhVRC8wczF6RWFQckZMSy9hcSszSUNHRU9sVWx2MjV1VUx4Ukph?=
+ =?utf-8?B?Nk92Q3hYQW5TalhKZ1NsQUJLMkw5d0F4eklLVlAwT2VWUldZd1hQc0NFc0x1?=
+ =?utf-8?B?aE0rK1d5c1R4N3ViTno4VmhLRldabVdoZFFjNktyRmhMTC92MDFxWGxCRUFp?=
+ =?utf-8?B?bnZodzFmQlRTSjY4UFo2R3U5SnFKYTFlOVhlSWFlZTRDZy9MZEdQcEkvdVN6?=
+ =?utf-8?B?QjduVWtlTjF6d2ZROVM1UFV3ZzZXVWVhajVSc2wvODhETmc0d2xadnJNN0ZQ?=
+ =?utf-8?B?QlpzUDkxemQvcXdUVVBHSnhpVjc3RUo4cGdZSy9Ib3dteWhZdFIyeDEzV0Ry?=
+ =?utf-8?B?Mmllc2o2b2FVdTVPem9heldjVlprY1BmSzVHM0Frc0RlbFVlL3dDdHkyL2o0?=
+ =?utf-8?B?T2RLamFuMzBYaEc3L3VIbjg4WDNKaWVVVlBkTDRNMldJNkFNZmNoaVI0V3dz?=
+ =?utf-8?B?NXpVbFlraDBLdWt4OHpTaHYxZ25iemNJNGhtY3Fxd3VEQ25tU28vVU05UWFP?=
+ =?utf-8?B?S3plOTJIemNwV2UwcGZQVVZ0TzJDU1ptUldTcENQekRaaDhJTHUvcndlWnRv?=
+ =?utf-8?B?N01SNTNNZER0VStnbHRQWmlvSVdHaU11TE5ya3JHOGg1THBrR3k4WGdQOFhF?=
+ =?utf-8?Q?h7UeyK4ol4bQQYC8wjGltHE=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd9d7b1d-c054-4531-2dba-08dc921ce5d9
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR01MB7370.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 17:59:49.5481
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 18:06:39.5450
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BN93KaI8gKKNcVoxnqbhBN+yT15aawKCrai01foH2617Tmt5cDcGiKRpJM5lJRMrdAVPkby5Qed9loaheHZQcUXnRZsCNjL+MFGtwCbhNzE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8374
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hb9JCTaTD2sTF3kpSEJHDubv3Vp07BYc3tqVKTF4e+7H8PipkkDfStCwey8HHM0gntX3Xab4KJVZxZuBJ8b4Wc5tOIrRx1dbtqWRT7Vi4uoxS624slY4Yibe4qfA3PnT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6743
 
-Jonathan Cameron wrote:
-> On Wed, 19 Jun 2024 00:53:10 +0800
-> Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
-> 
-> > Background:
-> > Since CXL device is a memory device, while CPU consumes a poison page of 
-> > CXL device, it always triggers a MCE by interrupt (INT18), no matter 
-> > which-First path is configured.  This is the first report.  Then 
-> > currently, in FW-First path, the poison event is transferred according 
-> > to the following process: CXL device -> firmware -> OS:ACPI->APEI->GHES 
-> >  -> CPER -> trace report.  This is the second one.  These two reports  
-> > are indicating the same poisoning page, which is the so-called "duplicate
-> > report"[1].  And the memory_failure() handling I'm trying to add in
-> > OS-First path could also be another duplicate report.
-> > 
-> > Hope the flow below could make it easier to understand:
-> > CPU accesses bad memory on CXL device, then
-> >  -> MCE (INT18), *always* report (1)
-> >  -> * FW-First (implemented now)
-> >       -> CXL device -> FW
-> > 	      -> OS:ACPI->APEI->GHES->CPER -> trace report (2.a)  
-> >     * OS-First (not implemented yet, I'm working on it)
-> >       -> CXL device -> MSI
-> > 	      -> OS:CXL driver -> memory_failure() (2.b)  
-> > so, the (1) and (2.a/b) are duplicated.
-> > 
-> > (I didn't get response in my reply for [1] while I have to make patch to
-> > solve this problem, so please correct me if my understanding is wrong.)
-> > 
-> > This patch adds a new notifier_block and MCE_PRIO_CXL, for CXL memdev
-> > to check whether the current poison page has been reported (if yes,
-> > stop the notifier chain, won't call the following memory_failure()
-> > to report), into `x86_mce_decoder_chain`.  In this way, if the poison
-> > page already handled(recorded and reported) in (1) or (2), the other one
-> > won't duplicate the report.  The record could be clear when
-> > cxl_clear_poison() is called.
-> > 
-> > [1] https://lore.kernel.org/linux-cxl/664d948fb86f0_e8be294f8@dwillia2-mobl3.amr.corp.intel.com.notmuch/
-> > 
-> > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> 
-> So poison can be cleared in a number of ways and a CXL poison clear command
-> is unfortunately only one of them.  Some architectures have instructions
-> that guarantee to write a whole cacheline and can clear things as well.
-> I believe x86 does for starters.
 
-Yes, movdir64b.
 
-> +CC linux-edac and related maintainers / reviewers.
->     linux-mm and hwpoison maintainer.
+On 6/7/2024 8:46 AM, Shiju Jose wrote:
+> Hi Daniel,
 > 
-> So I think this needs a more general solution that encompasses 
-> more general cleanup of poison.
+> Thanks for the feedback.
+> 
+>> -----Original Message-----
+>> From: Daniel Ferguson <danielf@os.amperecomputing.com>
+>> Sent: 05 June 2024 22:33
+>> To: Shiju Jose <shiju.jose@huawei.com>
+>> Cc: linux-edac@vger.kernel.org; linux-kernel@vger.kernel.org;
+>> david@redhat.com; Vilas.Sridharan@amd.com; leo.duran@amd.com;
+>> Yazen.Ghannam@amd.com; rientjes@google.com; jiaqiyan@google.com;
+>> tony.luck@intel.com; Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
+>> rafael@kernel.org; lenb@kernel.org; naoya.horiguchi@nec.com;
+>> james.morse@arm.com; jthoughton@google.com; somasundaram.a@hpe.com;
+>> erdemaktas@google.com; pgonda@google.com; duenwen@google.com;
+>> mike.malvestuto@intel.com; gthelen@google.com;
+>> wschwartz@amperecomputing.com; dferguson@amperecomputing.com;
+>> wbs@os.amperecomputing.com; nifan.cxl@gmail.com; tanxiaofei
+>> <tanxiaofei@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
+>> kangkang.shen@futurewei.com; wanghuiqiang <wanghuiqiang@huawei.com>;
+>> Linuxarm <linuxarm@huawei.com>; ira.weiny@intel.com;
+>> vishal.l.verma@intel.com; alison.schofield@intel.com; dave.jiang@intel.com;
+>> Jonathan Cameron <jonathan.cameron@huawei.com>; dave@stgolabs.net;
+>> dan.j.williams@intel.com; linux-mm@kvack.org; linux-acpi@vger.kernel.org;
+>> linux-cxl@vger.kernel.org
+>> Subject: Re: [RFC PATCH v8 10/10] ras: scrub: ACPI RAS2: Add memory ACPI
+>> RAS2 driver
+>>
+>>> +/* Context - lock must be held */
+>>> +static int ras2_get_patrol_scrub_running(struct ras2_scrub_ctx *ras2_ctx,
+>>> +					 bool *running)
+>>> +{
+>>> +	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
+>>> +					ras2_ctx->pcc_subspace-
+>>> pcc_comm_addr;
+>>> +	int ret;
+>>> +
+>>> +	if (ras2_ctx->bg)
+>>> +		*running = true;
+>>> +
+>>> +	ps_sm->common.set_capabilities[0] =
+>> RAS2_SUPPORT_HW_PARTOL_SCRUB;
+>>> +	ps_sm->params.patrol_scrub_command =
+>> RAS2_GET_PATROL_PARAMETERS;
+>>
+>> Need to reset the address range (base and size). A user may have previously
+>> called "Enable Background" where the code zeros out these parameters.
+>> 	ps_sm->params.requested_address_range[0] = ras2_ctx->base;
+>> 	ps_sm->params.requested_address_range[1] = ras2_ctx->size;
+> The address range is being set to the above in the ras2_hw_scrub_set_enabled_od(), because they are
+> valid for on-demand scrubbing only. 
+> 
+> However the ras2_ctx->base and ras2_ctx->size are set to the  
+> ras2_ctx->base = ps_sm->params.actual_address_range[0];
+> ras2_ctx->size = ps_sm->params.actual_address_range[1];
+> in the ras2_update_patrol_scrub_params_cache(), which is called after enabling bg scrub and on-demand scrub. 
+> Thus ras2_ctx->base and ras2_ctx->size may have a 0 or garbage value for bg scrub because address range is not valid for bg scrubbing as perc ACPI specification. I will add checks to retain the cached address range if bg scrub is enabled. 
+>>
+>>
+>>> +
+>>> +	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
+>>> +	if (ret) {
+>>> +		dev_err(ras2_ctx->dev, "failed to read parameters\n");
+>>> +		return ret;
+>>> +	}
+>>> +
+>>> +	*running = ps_sm->params.flags &
+>>> +RAS2_PATROL_SCRUB_FLAG_SCRUBBER_RUNNING;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_write_rate(struct device *dev, u64 rate) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +	bool running;
+>>> +	int ret;
+>>> +
+>>> +	guard(mutex)(&ras2_ctx->lock);
+>>> +	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	if (running)
+>>> +		return -EBUSY;
+>>
+>>
+>> I suggest we do not check if the patrol scrub is running when we are merely
+>> updating cached values. More importantly, if we had previously wrote an invalid
+>> value (that is only invalidated by firmware after executing a command), then
+>> when we try to write a correct value, this "ras2_get_patrol_scrub_running"
+>> check will always fail, therefore preventing us from correcting our error.
+> 
+> In our opinion, write the rate and range etc, though updating the cached values, should be allowed only when the scrub is NOT running to avoid confusion thinking they are actually set in the running scrubber, when read them back in the userspace.
 
-I think unless the device has "List Poison" coverage for volatile ranges
-that the kernel should not worry about tracking this itself.
 
-Perhaps what is needed is that after successful memory_failure()
-handling when the page is known to be offline the device backing the
-memory can be notified that it is safe to repair the page and but it
-back into service, but I expect that would be comparison of the device's
-own poison tracking relative to the notification of successful page
-offline.
+It may be that I didn't explain myself properly last time. Let me try
+again.
 
-> 
-> Trivial comments inline.
-> 
-> Jonathan
-> 
-> 
-> > ---
-> >  arch/x86/include/asm/mce.h |   1 +
-> >  drivers/cxl/core/mbox.c    | 130 +++++++++++++++++++++++++++++++++++++
-> >  drivers/cxl/core/memdev.c  |   6 +-
-> >  drivers/cxl/cxlmem.h       |   3 +
-> >  4 files changed, 139 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-> > index dfd2e9699bd7..d8109c48e7d9 100644
-> > --- a/arch/x86/include/asm/mce.h
-> > +++ b/arch/x86/include/asm/mce.h
-> > @@ -182,6 +182,7 @@ enum mce_notifier_prios {
-> >  	MCE_PRIO_NFIT,
-> >  	MCE_PRIO_EXTLOG,
-> >  	MCE_PRIO_UC,
-> > +	MCE_PRIO_CXL,
-> >  	MCE_PRIO_EARLY,
-> >  	MCE_PRIO_CEC,
-> >  	MCE_PRIO_HIGHEST = MCE_PRIO_CEC
-> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> > index 2626f3fff201..0eb3c5401e81 100644
-> > --- a/drivers/cxl/core/mbox.c
-> > +++ b/drivers/cxl/core/mbox.c
-> > @@ -4,6 +4,8 @@
-> >  #include <linux/debugfs.h>
-> >  #include <linux/ktime.h>
-> >  #include <linux/mutex.h>
-> > +#include <linux/notifier.h>
-> > +#include <asm/mce.h>
-> >  #include <asm/unaligned.h>
-> >  #include <cxlpci.h>
-> >  #include <cxlmem.h>
-> > @@ -880,6 +882,9 @@ void cxl_event_trace_record(const struct cxl_memdev *cxlmd,
-> >  		if (cxlr)
-> >  			hpa = cxl_trace_hpa(cxlr, cxlmd, dpa);
-> >  
-> > +		if (hpa != ULLONG_MAX && cxl_mce_recorded(hpa))
-> > +			return;
-> > +
-> >  		if (event_type == CXL_CPER_EVENT_GEN_MEDIA)
-> >  			trace_cxl_general_media(cxlmd, type, cxlr, hpa,
-> >  						&evt->gen_media);
-> > @@ -1408,6 +1413,127 @@ int cxl_poison_state_init(struct cxl_memdev_state *mds)
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(cxl_poison_state_init, CXL);
-> >  
-> > +struct cxl_mce_record {
-> > +	struct list_head node;
-> > +	u64 hpa;
-> > +};
-> > +LIST_HEAD(cxl_mce_records);
-> > +DEFINE_MUTEX(cxl_mce_mutex);
-> > +
-> > +bool cxl_mce_recorded(u64 hpa)
-> > +{
-> > +	struct cxl_mce_record *cur, *next, *rec;
-> > +	int rc;
-> > +
-> > +	rc = mutex_lock_interruptible(&cxl_mce_mutex);
-> 
-> guard(mutex)(&cxl_mce_muted);
+1) This driver code does not currently check to see if an
+'addr_range_base' is valid or not. Validation occurs in the platform
+firmware, when either GET_PATROL_PARAMETERS or START_PATROL_SCRUBBER is
+executed. If our platform firmware detects an invalid address, it raises
+an error.
 
-Agree, _interruptible is really only suitable for user ABI facing locks,
-not kernel internal helper functions, but this comment is moot if this
-tracking switches to xarray.
+2) Therefore, a user can specify an invalid address, and the user will
+not know that the address is invalid until after the cached parameters
+(used to check if the patrol scrubber is running) are written to.
 
-> 
-> > +	if (rc)
-> > +		return false;
-> > +
-> > +	list_for_each_entry_safe(cur, next, &cxl_mce_records, node) {
-> > +		if (cur->hpa == hpa) {
-> > +			mutex_unlock(&cxl_mce_mutex);
-> > +			return true;
-> > +		}
-> > +	}
-> > +
-> > +	rec = kmalloc(sizeof(struct cxl_mce_record), GFP_KERNEL);
-> > +	rec->hpa = hpa;
-> > +	list_add(&cxl_mce_records, &rec->node);
-> > +
-> > +	mutex_unlock(&cxl_mce_mutex);
-> > +
-> > +	return false;
-> > +}
-> > +
-> > +void cxl_mce_clear(u64 hpa)
-> > +{
-> > +	struct cxl_mce_record *cur, *next;
-> > +	int rc;
-> > +
-> > +	rc = mutex_lock_interruptible(&cxl_mce_mutex);
-> 
-> Maybe cond_guard().
+3) Now, every time the user attempts to write a value to either base,
+size, or rate; the preceding call to ras2_get_patrol_scrub_running will
+result in an error, and the attempt to write a different value fails.
 
-cond_guard() was rejected, you meant scoped_cond_guard()? But, then I
-think _interruptible is not appropriate here.
+To Conclude:
+If a user specifies an invalid address, the only way to correct the
+invalid address is to reboot or module reload. To me, that seems like a
+show-stopper.
+
+>>
+>>> +
+>>> +	if (rate < ras2_ctx->rate_min || rate > ras2_ctx->rate_max)
+>>> +		return -EINVAL;
+>>> +
+>>> +	ras2_ctx->rate = rate;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_read_rate(struct device *dev, u64 *rate) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +
+>>> +	*rate = ras2_ctx->rate;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_read_rate_avail(struct device *dev, u64
+>>> +*min, u64 *max) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +
+>>> +	*min = ras2_ctx->rate_min;
+>>> +	*max = ras2_ctx->rate_max;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_read_range(struct device *dev, u64 *base,
+>>> +u64 *size) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +
+>>> +	*base = ras2_ctx->base;
+>>> +	*size = ras2_ctx->size;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_write_range(struct device *dev, u64 base,
+>>> +u64 size) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +	bool running;
+>>> +	int ret;
+>>> +
+>>> +	guard(mutex)(&ras2_ctx->lock);
+>>> +	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	if (running)
+>>> +		return -EBUSY;
+>>
+>> I suggest we do not check if the patrol scrub is running. See previous comment
+>> above.
+> Same as above.
+> 
+>>
+>>> +
+>>> +	ras2_ctx->base = base;
+>>> +	ras2_ctx->size = size;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_set_enabled_bg(struct device *dev, bool
+>>> +enable) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
+>>> +					ras2_ctx->pcc_subspace-
+>>> pcc_comm_addr;
+>>> +	int ret;
+>>> +
+>>> +	guard(mutex)(&ras2_ctx->lock);
+>>> +	ps_sm->common.set_capabilities[0] =
+>> RAS2_SUPPORT_HW_PARTOL_SCRUB;
+>>> +	if (enable) {
+>>> +		ps_sm->params.requested_address_range[0] = 0;
+>>> +		ps_sm->params.requested_address_range[1] = 0;
+>>> +		ps_sm->params.scrub_params_in &=
+>> ~RAS2_PATROL_SCRUB_RATE_IN_MASK;
+>>> +		ps_sm->params.scrub_params_in |=
+>> FIELD_PREP(RAS2_PATROL_SCRUB_RATE_IN_MASK,
+>>> +							    ras2_ctx->rate);
+>>> +		ps_sm->params.patrol_scrub_command =
+>> RAS2_START_PATROL_SCRUBBER;
+>>> +	} else {
+>>> +		ps_sm->params.patrol_scrub_command =
+>> RAS2_STOP_PATROL_SCRUBBER;
+>>> +	}
+>>> +	ps_sm->params.scrub_params_in &=
+>> ~RAS2_PATROL_SCRUB_EN_BACKGROUND;
+>>> +	ps_sm->params.scrub_params_in |=
+>> FIELD_PREP(RAS2_PATROL_SCRUB_EN_BACKGROUND,
+>>> +						    enable);
+>>> +
+>>> +	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
+>>> +	if (ret) {
+>>> +		dev_err(ras2_ctx->dev, "%s: failed to enable(%d) background
+>> scrubbing\n",
+>>> +			__func__, enable);
+>>> +		return ret;
+>>> +	}
+>>> +	ras2_ctx->bg = true;
+>>> +
+>>> +	/* Update the cache to account for rounding of supplied parameters and
+>> similar */
+>>> +	return ras2_update_patrol_scrub_params_cache(ras2_ctx);
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_get_enabled_bg(struct device *dev, bool
+>>> +*enabled) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +
+>>> +	*enabled = ras2_ctx->bg;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int ras2_hw_scrub_set_enabled_od(struct device *dev, bool
+>>> +enable) {
+>>> +	struct ras2_scrub_ctx *ras2_ctx = dev_get_drvdata(dev);
+>>> +	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
+>>> +					ras2_ctx->pcc_subspace-
+>>> pcc_comm_addr;
+>>> +	bool enabled;
+>>> +	int ret;
+>>> +
+>>> +	guard(mutex)(&ras2_ctx->lock);
+>>> +	ps_sm->common.set_capabilities[0] =
+>> RAS2_SUPPORT_HW_PARTOL_SCRUB;
+>>> +	if (enable) {
+>>> +		if (!ras2_ctx->size) {
+>>> +			dev_warn(ras2_ctx->dev,
+>>> +				 "%s: Invalid requested address range,
+>> requested_address_range[0]=0x%llx "
+>>> +				 "requested_address_range[1]=0x%llx\n",
+>> __func__,
+>>> +				 ps_sm->params.requested_address_range[0],
+>>> +				 ps_sm->params.requested_address_range[1]);
+>>> +			return -ERANGE;
+>>> +		}
+>>> +		ret = ras2_get_patrol_scrub_running(ras2_ctx, &enabled);
+>>> +		if (ret)
+>>> +			return ret;
+>>> +
+>>> +		if (enabled)
+>>> +			return 0;
+>>> +
+>>> +		ps_sm->params.scrub_params_in &=
+>> ~RAS2_PATROL_SCRUB_RATE_IN_MASK;
+>>> +		ps_sm->params.scrub_params_in |=
+>> FIELD_PREP(RAS2_PATROL_SCRUB_RATE_IN_MASK,
+>>> +							    ras2_ctx->rate);
+>>> +		ps_sm->params.requested_address_range[0] = ras2_ctx->base;
+>>> +		ps_sm->params.requested_address_range[1] = ras2_ctx->size;
+>>
+>>
+>> We need to clear the RAS2_PATROL_SCRUB_EN_BACKGROUND bit in the input
+>> parameters.
+>> This is in case "Enable Background" was previously called, and this bit was set.
+>>
+>> 		ps_sm->params.scrub_params_in &=
+>> ~RAS2_PATROL_SCRUB_EN_BACKGROUND;
+> We need to stop background scrub if it is already running before start an on-demand scrubbing. 
+> The RAS2_PATROL_SCRUB_EN_BACKGROUND bit would be cleared with disable  bg scrub
+> with the following code
+> in ras2_hw_scrub_set_enabled_bg() when disable background scrub('enable' is 0 in this case).
+> ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_EN_BACKGROUND;
+> ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_EN_BACKGROUND,
+> 						    enable);
+> Hope it make sense?
+
+
+Yes, this makes sense. But, on our platform, we automatically enable
+background when on-demand finishes(or is stopped). Similarly, if we
+enable on-demand then we automatically disable background. So, some sort
+of patrol is always on-going. The user is unable to turn them both off
+at the same time.
+
+Due to our implementation choices, this causes some weirdness with how
+the driver represents enable_background and enable_on_demand
+independently, since our scrubbers are not independent.
+
+I'm going to leave this conversation here for now, because on different
+platforms, maybe having independent control for background and on-demand
+is desired.
+
+>>
+>>
+>>> +		ps_sm->params.patrol_scrub_command =
+>> RAS2_START_PATROL_SCRUBBER;
+>>> +	} else {
+>>> +		ps_sm->params.patrol_scrub_command =
+>> RAS2_STOP_PATROL_SCRUBBER;
+>>> +	}
+>>> +
+>>> +	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
+>>> +	if (ret) {
+>>> +		dev_err(ras2_ctx->dev, "failed to enable(%d) the demand
+>> scrubbing\n", enable);
+>>> +		return ret;
+>>> +	}
+>>> +	ras2_ctx->bg = false;
+>>> +
+>>> +	return ras2_update_patrol_scrub_params_cache(ras2_ctx);
+>>> +}
+>>
+>>
+> Thanks,
+> Shiju
 
