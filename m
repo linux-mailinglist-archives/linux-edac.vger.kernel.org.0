@@ -1,152 +1,150 @@
-Return-Path: <linux-edac+bounces-1349-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1352-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAED7914619
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 11:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFF4591469F
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 11:46:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 740831F21047
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 09:20:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 598861F2440E
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 09:46:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925EF130A73;
-	Mon, 24 Jun 2024 09:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DCD513699A;
+	Mon, 24 Jun 2024 09:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DQl9hJ1f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EVvXwvTa"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC1C4962B;
-	Mon, 24 Jun 2024 09:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F7F5380F
+	for <linux-edac@vger.kernel.org>; Mon, 24 Jun 2024 09:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719220790; cv=none; b=R2qPvwiTkBHgWWIUD/5h/lCLsayvfk3tNGbcDlj549inPGEs/TI9j6b/Jpz6Vlyaw58IUqqaay7h9c1iMvo0N8jipsXGWUTZmV29QyzXzLJlK8PFll1cCt9Ad/7E/eSwG89qmX3GkpZX8bdbR7ZN6frLJVv1xnaNOTvqWXk2H0Y=
+	t=1719222346; cv=none; b=c5cA/MF5hzzZfjsRPTdnwpihiqpWP8cXoODo23csCMPFL74QyK3rZRcsxMJvg7GJ21G05KGJDK2Dd44NOtdRU83ij9uAPRjllVt6A+qOlMLZSMQ3kPIThXHmFLV0wOk67Qj7C8j0arhEoN+gBzC/4VcVTrj47ZEMJ/c9g96l2QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719220790; c=relaxed/simple;
-	bh=ueKAZu/ar61RH+7+SVha6r9QoHpXIuCXEquxTHmjDy8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cw4bR03qMI1GnjgBcbRcQpb1sc6t0/BiDgSzF3DUIjRcY0j1FUcBV4o0nROh1x1gLRV5dMWeXDcEvb2BSiPG21i7etd7cYLuIZK1ICewcq77zZYYB54HhDK91Z6w7ohrruU6xW5OkPfBrAC6GRKZ7MlTeAFPXkHL7MX+vZ6kdbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DQl9hJ1f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B65FC4AF0A;
-	Mon, 24 Jun 2024 09:19:50 +0000 (UTC)
+	s=arc-20240116; t=1719222346; c=relaxed/simple;
+	bh=cW52zxJgpVsSrE9cLev7A24Pl9+DDNAp4ic425Ti+Y4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tD/NDk2csL5P4L46QdJaSOmAmbTBvLIkXjQvqsCYLcUdufkhORbsihSEvr/GPCTaA5g3vHJESWp/AKIhNQ9MgUigQfwS3e25RgIBGSLR8sl7aE/pAGU7ySbRurWrmK4phFFbfSyX/JiR6Mkyxy7l7QGrxUchNRs+uTKm09vqXW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EVvXwvTa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0246FC2BBFC;
+	Mon, 24 Jun 2024 09:45:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719220790;
-	bh=ueKAZu/ar61RH+7+SVha6r9QoHpXIuCXEquxTHmjDy8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DQl9hJ1fKghiq9MwhsYzEd3OPju43qMtQZqFVba1+dc/YYg3vbhEJGQ0M2Vnc+RHS
-	 bSvzLEeiz6v3VQO970GB0JMALPfNe/5CBQn6rLji3tfKa7b7aCbP3kHP1glYN+nM+n
-	 c6si/OcXorTEL68dH4eK/czp2WUx0hF11HjLBkHdJzLf6FftFTPc35Ii+q57RtS6Jf
-	 7cBsl3l33TIvowngFXwOUeUaBKpXMXs/qHE7W27n0FwcwJDAjbxkR9kda7LHWZo4C6
-	 3KttKQqA7Xpfrq3WytiVd3ImILwnATwJk0SjEYlkyNHWzNN9xDfA2qgVvGNpqhVCK3
-	 KAss1erx/qE6Q==
-Received: from mchehab by mail.kernel.org with local (Exim 4.97.1)
-	(envelope-from <mchehab@kernel.org>)
-	id 1sLfrX-000000085br-2FWa;
-	Mon, 24 Jun 2024 11:19:47 +0200
+	s=k20201202; t=1719222345;
+	bh=cW52zxJgpVsSrE9cLev7A24Pl9+DDNAp4ic425Ti+Y4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EVvXwvTa2dRso95ijmvxkEJ8uAhkbmG37zOi+grH8prpdua6kADnowYph3H4mI6+g
+	 JkKtGCwrutt4IJnNqvNDIYX0YHJHV35/afDZZh8vCfWmvWXGQDZMl+CzNDS5a3iPre
+	 AXbfEpO30WPRVmcVvicq0wk4IefC+thYSegFbpRXdRH9q79whpXhO5DXxwUXpCHB22
+	 ZqpJV3IWeID8vFwEnEH3kNvSsKFsXw8Aq8dXhi5ir0EnZKXit3Am/8upEBGDnWLWzL
+	 2R6Bo6feNlIHLKqIXVIkiiJfqJRKA23Dvp6KLxxdLlnBicDmP7JGDfUt/qQ7HvN68I
+	 sa8162M5uux4w==
+Date: Mon, 24 Jun 2024 11:45:40 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: 
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	"Borislav Petkov" <bp@alien8.de>,
-	"James Morse" <james.morse@arm.com>,
-	"Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-	"Shiju Jose" <shiju.jose@huawei.com>,
-	"Tony Luck" <tony.luck@intel.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] docs: efi: add CPER functions to driver-api
-Date: Mon, 24 Jun 2024 11:19:21 +0200
-Message-ID: <c159ef52241b263ffdc15140d7f3195b389b9166.1719219886.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <cover.1719219886.git.mchehab+huawei@kernel.org>
-References: <cover.1719219886.git.mchehab+huawei@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: <shiju.jose@huawei.com>, <qemu-devel@nongnu.org>,
+ <linux-edac@vger.kernel.org>, <tanxiaofei@huawei.com>,
+ <prime.zeng@hisilicon.com>, <linuxarm@huawei.com>
+Subject: Re: [RFC PATCH 1/1] hw/arm: FW first ARM processor error injection.
+Message-ID: <20240624114540.400b70a1@coco.lan>
+In-Reply-To: <20240621193316.00000d83@Huawei.com>
+References: <20240621165115.336-1-shiju.jose@huawei.com>
+	<20240621193316.00000d83@Huawei.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-There are two kernel-doc like descriptions at cper, which is used
-by other parts of cper and on ghes driver. They both have kernel-doc
-like descriptions.
+Em Fri, 21 Jun 2024 19:33:16 +0100
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> escreveu:
 
-Change the tags for them to be actual kernel-doc tags and add them
-to the driver-api documentaion at the UEFI section.
+> On Fri, 21 Jun 2024 17:51:15 +0100
+> <shiju.jose@huawei.com> wrote:
+> 
+> > From: Shiju Jose <shiju.jose@huawei.com>  
+> Thanks for posting this.
+> 
+> Given this is going to linux-edac, probably should mention
+> this is QEMU based error injection.  For cross postings
+> between kernel related and qemu lists I tend to stick
+> qemu in the [] of the patch description.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Thank you for that! It is really useful. Btw, I'm using a small
+script to do the error injection using netcat (nc), and assuming
+that the QMP interface used for error injection will be started 
+at localhost port 4445, e. g. qemu is started with:
+
+	-qmp tcp:localhost:4445,server=on,wait=off
+
+Btw, I added some instructions about how to use it under rasdaemon
+page:
+
+	https://github.com/mchehab/rasdaemon/wiki/Error-injection-testing
+
+Feel free to improve it.
+
+Thanks,
+Mauro
+
 ---
- Documentation/driver-api/firmware/efi/index.rst | 11 ++++++++---
- drivers/firmware/efi/cper.c                     | 10 ++++------
- 2 files changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/driver-api/firmware/efi/index.rst b/Documentation/driver-api/firmware/efi/index.rst
-index 4fe8abba9fc6..5a6b6229592c 100644
---- a/Documentation/driver-api/firmware/efi/index.rst
-+++ b/Documentation/driver-api/firmware/efi/index.rst
-@@ -1,11 +1,16 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--============
--UEFI Support
--============
-+====================================================
-+Unified Extensible Firmware Interface (UEFI) Support
-+====================================================
- 
- UEFI stub library functions
- ===========================
- 
- .. kernel-doc:: drivers/firmware/efi/libstub/mem.c
-    :internal:
-+
-+UEFI Common Platform Error Record (CPER) functions
-+==================================================
-+
-+.. kernel-doc:: drivers/firmware/efi/cper.c
-diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-index 4cf56657afde..c8a432c5cb5d 100644
---- a/drivers/firmware/efi/cper.c
-+++ b/drivers/firmware/efi/cper.c
-@@ -69,7 +69,7 @@ const char *cper_severity_str(unsigned int severity)
- }
- EXPORT_SYMBOL_GPL(cper_severity_str);
- 
--/*
-+/**
-  * cper_print_bits - print strings for set bits
-  * @pfx: prefix for each line, including log level and prefix string
-  * @bits: bit mask
-@@ -106,18 +106,16 @@ void cper_print_bits(const char *pfx, unsigned int bits,
- 		printk("%s\n", buf);
- }
- 
--/*
-+/**
-  * cper_bits_to_str - return a string for set bits
-  * @buf: buffer to store the output string
-  * @buf_size: size of the output string buffer
-  * @bits: bit mask
-  * @strs: string array, indexed by bit position
-  * @strs_size: size of the string array: @strs
-- * @mask: a continuous bitmask used to detect the first valid bit of the
-- *        bitmap.
-  *
-- * Add to @buf the bitmask in hexadecimal. Then, for each set bit in @bits
-- * mask, add the corresponding string describing the bit in @strs to @buf.
-+ * Add to @buf the bitmask in hexadecimal. Then, for each set bit in @bits,
-+ * add the corresponding string describing the bit in @strs to @buf.
-  */
- char *cper_bits_to_str(char *buf, int buf_size, unsigned long bits,
- 		       const char * const strs[], unsigned int strs_size)
--- 
-2.45.2
+
+#!/bin/bash
+
+trap 'catch $LINENO "$BASH_COMMAND"' ERR
+catch() {
+	echo "Error on line $1: $2"
+	exit 1
+}
+
+ERROR_DEFAULT='"cache-error"'
+ERROR=""
+
+HELP="$0 [<-c|--cache-error> <-t|--tlb-error> <-b|--bus-error> <-v|--vendor-error>|--micro-arch-error]"
+
+while [ "$1" != "" ]; do
+	case "$1" in
+		-c|--cache-error)
+			if [ ! -z "$ERROR" ]; then ERROR="$ERROR, "; fi
+			ERROR+='"cache-error"'
+			;;
+		-t|--tlb-error)
+			if [ ! -z "$ERROR" ]; then ERROR="$ERROR, "; fi
+			ERROR+='"tlb-error"'
+			;;
+		-b|--bus-error)
+			if [ ! -z "$ERROR" ]; then ERROR="$ERROR, "; fi
+			ERROR+='"bus-error"'
+			;;
+		-v|--vendor-error|--micro-arch-error)
+			if [ ! -z "$ERROR" ]; then ERROR="$ERROR, "; fi
+			ERROR+='"micro-arch-error"'
+			;;
+		help|-h|--help)
+			echo $HELP
+			exit 0
+			;;
+	esac
+	shift
+done
+
+
+if [ -z "$ERROR" ]; then
+	ERROR=$ERROR_DEFAULT
+fi
+
+CACHE_MSG='{ "execute": "qmp_capabilities" } '
+CACHE_MSG+='{ "execute": "arm-inject-error", "arguments": { "errortypes": ['$ERROR'] } }'
+
+echo $CACHE_MSG
+echo $CACHE_MSG | nc -v localhost 4445
+
 
 
