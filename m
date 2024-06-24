@@ -1,90 +1,69 @@
-Return-Path: <linux-edac+bounces-1346-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1350-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C174914142
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 06:49:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E0891461C
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 11:20:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23632B20E2A
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 04:49:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F257280E1D
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Jun 2024 09:20:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5D579F6;
-	Mon, 24 Jun 2024 04:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A136130AC8;
+	Mon, 24 Jun 2024 09:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="e/KSLxsT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDUDM/rc"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3001C168B1
-	for <linux-edac@vger.kernel.org>; Mon, 24 Jun 2024 04:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC5812E1F6;
+	Mon, 24 Jun 2024 09:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719204555; cv=none; b=rrVRhabh3381CfXK//3WXyA5xRizffcMTades0DEZZnjlA9Lb5DbB4UYtPyhR310Ij/t7s8iyea1yJyUYMQxDegyXI/60tpuRS+6zTCMLBvCgC/zJpT9RLkbrN36HO65tppSUmmIsBRpBo36QJJ8bciMslnxLVqQmW21NKKWtJ4=
+	t=1719220790; cv=none; b=ZYixsa4sKIPUTvHszCbmj/Vf5w7W5bG3BBOr4N1kVVZeFWirMUIQMQ/LjePCvu7scOVi0AveROfT+cGcMo7PIVKDwOD4FJ7/8c45U7XHPZ+sb9auH/XeFXWgr+m/4AVcpV0qHHayps3tQt5oODmZTr5kxf5urbHYzFsAkdZxJqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719204555; c=relaxed/simple;
-	bh=mni7Xjh+W9N8YsIN4sLCAw2EtVVl7YuRtFktOF8G9k0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gQC96+LUHTR+24iNC+CUm0iyWfR7EhK35vdp1scO8fmMCU9wbZjTwg7RBvywoElefMXz7oKWyAy/10pOLBwrfQOBuZFRR4v4uFByoYzfJ0MHKJZp6Y1uDGjQ4mARr4hsajl83ebAhPwCIBnUjeiZxSzmGdgZf/3ZLj+jcG25gE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=e/KSLxsT; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7066f68e22cso785640b3a.2
-        for <linux-edac@vger.kernel.org>; Sun, 23 Jun 2024 21:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1719204553; x=1719809353; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5yCT5VxgAao2DKcwL/n1MwIFuYF06UPFj6XxxbzHuqM=;
-        b=e/KSLxsTcJSOMYUBonD4vtVQahTG/gVPLWTp5R8CfCGHQ3vDNRY01A1T+EZY63m8as
-         XgGUHGQAXPJqyFNoKOgpnrQ7QI2bSXWQIy0sS0e9LYPAPtF15J0sFUidx61egU2cGO+3
-         DmLFc7oLEOiZ+y8yQbBryQTIFYh2I3rWzCvoZwdMYDfpRJAADjzu5RU5QSBXWOMIEV3q
-         A3PQo+FFmDnBYF4K4QRKpoVjdbDIpmBI1wB2Fc+vRfsXWCPaAO6K80E1JZE6M6+fgqJp
-         TdOkBym0TmcoLRsfKBl4L5Tc3Ia0Inv1+equh4XdoIwjzX5u+CA0C7D3Uk4dT/Io0D4e
-         /U8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719204553; x=1719809353;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5yCT5VxgAao2DKcwL/n1MwIFuYF06UPFj6XxxbzHuqM=;
-        b=b173ctHB6ebiv0yT6qZMS9CeCArXqeMcpIsy9JrzbVBU/OcU6uwK9Cc0bZSe2xfpwC
-         78JyISbqkAAOzlmObbGnLfe4mqf5uIKNzrik+ee/BdxCUkLzL9bSYz6TgmlAgbSJ/xkZ
-         uHddbcBRTnI4qF+/qfaJy+mifOPUoJNfzM/bBIxqNoHygkf21kQLWNrh9rxhpq1YmCEw
-         xQZCtA72U9i4dnUmj/+La4fUK88/ACyvz9AyAYx3V5E2sddv5Xj0GWTZY5iVXuOcJyXZ
-         E2sK5weBqeGHVrm3FZkUuD1P1V6JiLt+UUVyI6MprSD+iMXSFThv7LmPLiNpIIQCn7k9
-         i9mQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9T4sjsnIVnue5lX4fdZNZWb9aRwbUgYw/94CPWLiRs9yA3oS3+yOTUhgk3CYI2o+tMwWvEGwzlQSLlkegeA6FqWf+X1EIe26KGQ==
-X-Gm-Message-State: AOJu0YxJaqer6FoyEqRrqAH5lzRYGUAvz2mIimxYUh4nqOgjSDMydP/j
-	CKYcRfyZujpCWSllD539JAl3MzRO0ctT6lr/qkA+PnyE8Vv9F50lWSBSmOJlhdE=
-X-Google-Smtp-Source: AGHT+IFMV0C+R+NwkxEg9McBmus0ucAUY3nQfRaA6AfKEyZMnE1mK8ZXtSOnx+hXLXQWZw+NmSap4w==
-X-Received: by 2002:a05:6a00:69b7:b0:702:38ff:4a59 with SMTP id d2e1a72fcca58-70670e79d03mr4295625b3a.6.1719204553330;
-        Sun, 23 Jun 2024 21:49:13 -0700 (PDT)
-Received: from L4CR4519N7.bytedance.net ([2001:c10:ff04:0:1000:0:1:6])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70651194776sm5254865b3a.67.2024.06.23.21.49.09
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 23 Jun 2024 21:49:12 -0700 (PDT)
-From: Rui Qi <qirui.001@bytedance.com>
-X-Google-Original-From: Rui Qi
-To: tony.luck@intel.com
-Cc: bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	linux-edac@vger.kernel.org,
+	s=arc-20240116; t=1719220790; c=relaxed/simple;
+	bh=oU/8r7bCLv97UE0Vbd5wfZPsGHSnpZEWps6OW3Re6iY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mvvIm4NmKiWpASZoRitTo0dPQprgxEKwQ4h8fJ3CPGYpX8GArCf4egPKfaN2EJIVRhvPRsz/PiMyJIceq7ITwUKWTQ/yi7YGI1MvKKtPGcwU4ITc5wU8PrNLtZ5B0+lZNuBsf2UNelKSw6trzFep37ygmMmVD26aKb7NRwHCG+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDUDM/rc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB07C32789;
+	Mon, 24 Jun 2024 09:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719220790;
+	bh=oU/8r7bCLv97UE0Vbd5wfZPsGHSnpZEWps6OW3Re6iY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fDUDM/rcfjvVFi3bB/GzUkANTdmyfRJjUvwindo/e8azmI+AAma0IIVyCPla0ocxG
+	 3Hx0HSaJcjENu71NAcnXuDVZfg/hW2n+/S22/ARbZdiUqWRFVR/C5ZZT3+ZiE/ECNf
+	 CBjJwMMe/AECuukZUN/topehhHRVLeOxwYqkPrCmIDKb0ygf1KM5Epwqtzh6fZc5ET
+	 SdBTWAAY+zbn4eQ3E0lVpUtWBbJmDfzRYJx7EhIYZveNHKg2cx08T19Wl9op6HBRdZ
+	 429WVVaq49nkgWfbiJ6EWN/uWBu4uWdGBFaRr1d03vJWToyk4MretRZYHK0YriCMSI
+	 pKHQ1HOLtaE+A==
+Received: from mchehab by mail.kernel.org with local (Exim 4.97.1)
+	(envelope-from <mchehab@kernel.org>)
+	id 1sLfrX-000000085bc-1UbK;
+	Mon, 24 Jun 2024 11:19:47 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: 
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	linux-efi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	mingo@redhat.com,
-	qirui.001@bytedance.com,
-	tglx@linutronix.de,
-	x86@kernel.org
-Subject: Re: [External] [PATCH] x86/mce: count the number of occurrences of each MCE severity
-Date: Mon, 24 Jun 2024 12:48:39 +0800
-Message-Id: <20240624044839.87035-1-qirui.001@bytedance.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-145)
-In-Reply-To: <SJ1PR11MB6083E1173846A5C8B4529D25FCC82@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <SJ1PR11MB6083E1173846A5C8B4529D25FCC82@SJ1PR11MB6083.namprd11.prod.outlook.com>
+	linux-edac@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Len Brown <lenb@kernel.org>,
+	linux-acpi@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v5 0/4] fix CPER issues related to UEFI 2.9A Errata
+Date: Mon, 24 Jun 2024 11:19:17 +0200
+Message-ID: <cover.1719219886.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -93,54 +72,96 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-From: Rui Qi <qirui.001@bytedance.com>
+The UEFI 2.9A errata makes clear how ARM processor type encoding should
+be done: it is meant to be equal to Generic processor, using a bitmask.
 
-Hi Tony,
+The current code assumes, for both generic and ARM processor types
+that this is an integer, which is an incorrect assumption.
 
-> You seem to have problems with the e-mail infrastructure. I got a few extra copies
-> of this in HTML format. This one is in plain text, but the From: header says "$(name)"
-> 
+Fix it. While here, also fix a compilation issue when using W=1.
 
-Sorry， some problem with my thunderbird mail agent. I will use git send-mail instead from now on.
-> 
->>> So you either covered a case in the severities table, or you didn't. Does it
->>> help to know that you covered a case multiple times?
->>>
->>
->> In the fault injection test in the laboratory, we inject errors multiple
->> times and need a counter to tell us how many times each case has
->> occurred and compare it with the expected number to determine the test
->> results
-> 
-> In my testing on Intel/x86 I don't always see a 1:1 mapping between my
-> test, and the severities rule. This is because of a h/w race between the
-> memory controller reporting the error when it sees an uncorrectable ECC
-> issue, and the core trying to consume the poisoned data. If the memory
-> controller signal wins the race, Linux takes the page offline and there isn't
-> a poison consumption error, just a page fault.
-> 
->> In the production environment, the counter can reflect the actual number
->> of times each MCE error type occurs, which can help us detect the MCE
->> error distribution of large-scale Data center infrastructure
-> 
-> That could be useful.
->
-Thank you for your expertise!
+After the change, Kernel will properly decode receiving two errors at the same
+message, as defined at UEFI spec:
 
->>>> Due to the limitation of char type, the maximum supported statistics are
->>>> currently 255 times
->>>>
->>
->> How about changing char to u64, which is enough for real-world
->> situations and won't waste a lot of memory?
-> 
-> u64 seems like serious overkill. A change from "unsigned char" to "unsigned int"
-> would keep track of 4 billion errors. That seems like plenty :-)
->> -Tony
-Yes, unsinged int is far enough.
+[   75.282430] Memory failure: 0x5cdfd: recovery action for free buddy page: Recovered
+[   94.973081] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 1
+[   94.973770] {2}[Hardware Error]: event severity: recoverable
+[   94.974334] {2}[Hardware Error]:  Error 0, type: recoverable
+[   94.974962] {2}[Hardware Error]:   section_type: ARM processor error
+[   94.975586] {2}[Hardware Error]:   MIDR: 0x000000000000cd24
+[   94.976202] {2}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x000000000000ab12
+[   94.977011] {2}[Hardware Error]:   error affinity level: 2
+[   94.977593] {2}[Hardware Error]:   running state: 0x1
+[   94.978135] {2}[Hardware Error]:   Power State Coordination Interface state: 4660
+[   94.978884] {2}[Hardware Error]:   Error info structure 0:
+[   94.979463] {2}[Hardware Error]:   num errors: 3
+[   94.979971] {2}[Hardware Error]:    first error captured
+[   94.980523] {2}[Hardware Error]:    propagated error captured
+[   94.981110] {2}[Hardware Error]:    overflow occurred, error info is incomplete
+[   94.981893] {2}[Hardware Error]:    error_type: 0x0006: cache error|TLB error
+[   94.982606] {2}[Hardware Error]:    error_info: 0x000000000091000f
+[   94.983249] {2}[Hardware Error]:     transaction type: Data Access
+[   94.983891] {2}[Hardware Error]:     cache error, operation type: Data write
+[   94.984559] {2}[Hardware Error]:     TLB error, operation type: Data write
+[   94.985215] {2}[Hardware Error]:     cache level: 2
+[   94.985749] {2}[Hardware Error]:     TLB level: 2
+[   94.986277] {2}[Hardware Error]:     processor context not corrupted
 
-BTW, if you dont mind, I will send a V2 patch based on our discussion.
+And the error code is properly decoded according with table N.17 from UEFI 2.10
+spec:
+
+	[   94.981893] {2}[Hardware Error]:    error_type: 0x0006: cache error|TLB error
+
+The error injection logic was checked via QEMU using this patch:
+https://lore.kernel.org/all/20240621165115.336-1-shiju.jose@huawei.com/
+
+v5:
+- Do some cleanups and minor fixes as suggested by Jonathan and Tony:
+  - check errors at strscpy();
+  - simplify cper_bits_to_str() function;
+  - use FIELD_GET() and for_each_set_bit();
+  - use ARRAY_SIZE() on infofx to let it clear that it should be size of newpfx + 1;
+  - fix kernel-doc warning with W=1;
+  - use kernel-doc for two exported functions at cper.c.
+
+v4:
+- The print function had some bugs on it, which was discovered with
+  the help of an error injection tool I'm now using.
+
+v3:
+- It adds a helper function to produce a buffer describing the
+  error bits at cper's printk and ghes pr_warn_bitrated. It also
+  fixes a W=1 error while building cper.
+
+v2:
+- It fixes the way printks are handled on both cper_arm and ghes
+  drivers.
+
+v1: 
+- (tagged as RFC) was mostly to give a heads up that the current 
+  implementation is not following the spec. It also touches
+  only cper code.
+
+
+
+
+Mauro Carvalho Chehab (4):
+  efi/cper: Adjust infopfx size to accept an extra space
+  efi/cper: Add a new helper function to print bitmasks
+  efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
+  docs: efi: add CPER functions to driver-api
+
+ .../driver-api/firmware/efi/index.rst         | 11 ++--
+ drivers/acpi/apei/ghes.c                      | 15 +++---
+ drivers/firmware/efi/cper-arm.c               | 52 +++++++++----------
+ drivers/firmware/efi/cper.c                   | 41 ++++++++++++++-
+ include/linux/cper.h                          | 12 +++--
+ 5 files changed, 89 insertions(+), 42 deletions(-)
+
+-- 
+2.45.2
 
 
 
