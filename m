@@ -1,175 +1,215 @@
-Return-Path: <linux-edac+bounces-1365-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1366-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E669168B6
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2024 15:19:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E97C8917200
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2024 22:01:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515461F22109
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2024 13:19:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D03F288597
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Jun 2024 20:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB25C157A6C;
-	Tue, 25 Jun 2024 13:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E009217F39F;
+	Tue, 25 Jun 2024 19:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BeXRLSau"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="AmIBiSxT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2058.outbound.protection.outlook.com [40.107.236.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B8F14B954
-	for <linux-edac@vger.kernel.org>; Tue, 25 Jun 2024 13:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719321585; cv=none; b=BlPS7xJ09DorUxiYAeRdxkF5ip5twoBYfF+cT3HU09+/NzLioYCPXFFt1VMhC9jqpgKxNJtzZ+LeD+wOJjZhyH8PbDyoFjRuW2R4AfpgoCHNbz2AHMFcMsp6qD4MQutwjvjvX7KZiwVK0bK/s3q7vpD+sK+RGH+e2qYbVQpQJPM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719321585; c=relaxed/simple;
-	bh=Yyf/auCc31bC0oQe5Meh++bNvU4qDPsE/3v9n7a+Q2M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bbxXCwozGahJOIiPi3fszaQvAfxABeXuOUrJ8+9W+/BRHhcgwHeKENn9Vw2NGsgiX0QSTxg90W4cy9BOmyHpKItCWzSzv3cvgyQ0G5cr33Zi0JjyBTgIAfc9rwJb8jjvkCxQZrD05oej+yM9yrXDZJ7ozr15SrhOmQxjCOPw+Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BeXRLSau; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42108856c33so38742215e9.1
-        for <linux-edac@vger.kernel.org>; Tue, 25 Jun 2024 06:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1719321582; x=1719926382; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=48yte4gKSqaQnEHN3UMFhPgzd1yTJsSvbj40aM201ew=;
-        b=BeXRLSauvvLFAp2orPzkTjMTZnKK5atj4qQ5ljciOVwSK2iDyIL2+oak2clIrmDZtZ
-         3uZ2UPTbzxrmfezCxb3nDiMKgwalFQMmAz1LZ7G5rHr6Nc6/Z/VwCK3xwqci44/NcQh5
-         w/4qhMMGmisuKmHatW4J51sDB8zXPsAIKH3feEUTW4KGgBqvJh+SsecMexgqtxgp/xvQ
-         TDNvrYAU+aE4wNRUwiggKYaTaqzdvhaSJ9YT/D87YcXZue0ksi8FNAvZph1RH6F5wEev
-         W2q4RhVBWZhUkpbDAUOsGXe/lQjy1mXCtdVnLfsiuzdkQHAwz/cXoOmeBV2Ksd6jXTzv
-         vKdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719321582; x=1719926382;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=48yte4gKSqaQnEHN3UMFhPgzd1yTJsSvbj40aM201ew=;
-        b=hDAdgFAcRG/08kBX9c4Mve/+sEpS9+KBQrwxHnRUpp1pHqMG0dY9a8GDJICymKPJ78
-         iUPG4ok3CuTOKZIRS471c6m872+2dTtRporhrPxdeHkms6ZVaCJa0c1kBK8kwk2KR9qG
-         KdL7JxhTDfHTJRDjANd59k+o9fTaSGiOD5J2dOwPwAKLgpBidlI2ZEatAmCBxzM8E+3C
-         GKgPQYo6bTRPsLpH22ZGxrtjlAHs9mW8v9Z2qIjVM6+ooVAxtXK60+Em4URZqHw19xKf
-         4N4yN4Ivx9fgW9EHOLCF20H3ONPuvDfs2IxJgIArtgTmdD09BPAHVLi2JAG4CSj3ulAk
-         LD0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVRS9aORX/04k8LD1TPL/LXjP6Y4hlwAIHPqIGuW3NeuEV3MteA7u6eShGZDBPLquQ+Lgmf4e9oMTAbd3c+vV7Orpau3RrpnOzKdQ==
-X-Gm-Message-State: AOJu0YztDc8SKFPqgKBKlywNpguMscJSNeBL9BDv0G6dbxAK0xPvmnHa
-	ifYTHjMw/du5cAcKboo248cnECnJIc73zM/JPIlGW74sZ8DoEE7UI7RQ/tug2XI=
-X-Google-Smtp-Source: AGHT+IH0CMWNndifpo43wA5FkYclBGPAQbOql8DRY/i6lVJ+tERFRrZJIyogey7lkuy76vWAHz99qA==
-X-Received: by 2002:a5d:688c:0:b0:361:94d9:1e9f with SMTP id ffacd0b85a97d-366e325bc07mr6692790f8f.7.1719321581772;
-        Tue, 25 Jun 2024 06:19:41 -0700 (PDT)
-Received: from ?IPV6:2a10:bac0:b000:7579:7285:c2ff:fedd:7e3a? ([2a10:bac0:b000:7579:7285:c2ff:fedd:7e3a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4247d0c54d9sm217268865e9.28.2024.06.25.06.19.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 06:19:41 -0700 (PDT)
-Message-ID: <bbdf9caa-7c0f-44d1-a69d-a5cecc7cd4fa@suse.com>
-Date: Tue, 25 Jun 2024 16:19:40 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F24317D890;
+	Tue, 25 Jun 2024 19:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719345403; cv=fail; b=dAkEiKh6PE0Nnq3bo+4J+Eco1tYqsrd/VOsmJu3wv74Gv7trsx7QSWtzjMNnO+iRMNC2DxBXA6VEJTCjidPUV4Cs8eAfpcWGI2gaXKV1ga67dGzZ7oD+eDFPs+bNoGEIORMYFb2JYkUFKB6avDTv1Bnu1INx8JDFcKk3cAnwn/0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719345403; c=relaxed/simple;
+	bh=uudaWzmxCLdLwpWh5JOObl0j8crt58QX+KPfoTnPQEY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NBMoP0KNQ4CTKlOIvDFl2yVRHJdl5hsQtYhtMU/962tTnZd6V2gaSUdCbavurzYUeeP+EsO/TOt+X/N+WYA4GDbpgbByPP+r7mcfTx3hUhH/61/E630IsMzJYl3aw34usVpqEKZIv5w/arI056H8R/bGuMGpJTEGUj8nQ9nsUrc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=AmIBiSxT; arc=fail smtp.client-ip=40.107.236.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TxlaqWXxXO9KHo73GafLd+tkaIcO25d4CyI3Dcas0BlKPj09+AZbDOxIbaUxP6ciAu/fSJyK2QsNXruLOdCIF5pHeIxJpyZkNzMtNsk25ziKiuqrxH/0VYN+lckAAVZFLRAX6B4MjGk0xaXQVE4C/uetolz7lQrgri5kO/738TtgqZojsbtOV+6FG+nqUH2n6XQvZ+/OhsPxMI1siKmlT0tuafV01Hs8DWUEDf8NB/Ka8jbYUp0FDzHNluK/xjGGFlMX+ex2lrekvRq0Fr4S8eHfEqOSb6F/WlP4En0XdDwFSAIfaF22DlKhB622rVV4YdIngu8oc/hgA6FKXRJxig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1/y+emeftpZYpkKaCIvVDoMqhpsrGRP4HPJJm72ZGYU=;
+ b=gVslZ1/79K6Pe4jK1ntruMPOzGdNHBemMeqJbCDvyrWYkBtVHcUrG3kkTyjQFpbUfYPCBr4aAgwJKdcx/3fQFO+6tOyhmzbTkC189Vbk3ZivsWzZWOQp+UpTfLHBLMa1Pc4TxBb7AAFKDQExXa7SbnzILA7fNs6PWX5xJAQKFD+NMH3eyCpZJNvFjfU230aIDp+JcQU2tWySeaa2mquYUj7ON85kfIP60XkZFWMxCss9J9pAZFDMEeaKxAwXQRGf+cHEQZ7pke9iHRba94oBtYDzxPsdE1tNssb6MtTb4NlE3SW1UBruQs746WE87RTYNgiD12DbmHKa/OTWl8gMtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1/y+emeftpZYpkKaCIvVDoMqhpsrGRP4HPJJm72ZGYU=;
+ b=AmIBiSxTkj4YeE8/CSP67DgWGvxREjs0X/LAcy6uOsO0UvUIBjE0vWiovws73FFgeitDj1cal2lAvtL1P++IIVuQyyql7lTJk+KTQimlXTETI45BA2KiJ/yJWefAFcuyWXlQtvohAULnH1TKGlDELpCM9oHVTiNkogHLRlf14YE=
+Received: from DM6PR12CA0032.namprd12.prod.outlook.com (2603:10b6:5:1c0::45)
+ by SA1PR12MB7270.namprd12.prod.outlook.com (2603:10b6:806:2b9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.30; Tue, 25 Jun
+ 2024 19:56:32 +0000
+Received: from CY4PEPF0000E9D9.namprd05.prod.outlook.com
+ (2603:10b6:5:1c0:cafe::60) by DM6PR12CA0032.outlook.office365.com
+ (2603:10b6:5:1c0::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.38 via Frontend
+ Transport; Tue, 25 Jun 2024 19:56:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D9.mail.protection.outlook.com (10.167.241.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7677.15 via Frontend Transport; Tue, 25 Jun 2024 19:56:31 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 25 Jun 2024 14:56:30 -0500
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
+	<rafael@kernel.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<rostedt@goodmis.org>, <lenb@kernel.org>, <mchehab@kernel.org>,
+	<james.morse@arm.com>, <airlied@gmail.com>, <yazen.ghannam@amd.com>,
+	<john.allen@amd.com>, <avadnaik@amd.com>
+Subject: [PATCH v2 0/4] MCE wrapper and support for new SMCA syndrome MSRs
+Date: Tue, 25 Jun 2024 14:56:20 -0500
+Message-ID: <20240625195624.2565741-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] x86/mce: Define mce_prep_record() helpers for
- common and per-CPU fields
-To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
- avadhut.naik@amd.com, john.allen@amd.com
-References: <20240624212008.663832-1-yazen.ghannam@amd.com>
- <20240624212008.663832-5-yazen.ghannam@amd.com>
-From: Nikolay Borisov <nik.borisov@suse.com>
-Content-Language: en-US
-In-Reply-To: <20240624212008.663832-5-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D9:EE_|SA1PR12MB7270:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7be06a1-20d3-412a-4720-08dc9550e8da
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230038|36860700011|376012|7416012|1800799022|82310400024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Kog25HFCJlGuljieFJrblAmDr1aMtlV/rxW6TT+dwJwtePphAIMcV0igxMwR?=
+ =?us-ascii?Q?pry4fwnvfMUzbn71CHa3hCTqkc3Qhp9GEoU6k4tu31bltt2qIWACW53fQuFZ?=
+ =?us-ascii?Q?qeDmKMOw13UDjXiN9b8IULTkygJ//jzAG1KohGQCEA0Rt2claEiraCXYH1Sr?=
+ =?us-ascii?Q?TYPG688Y4Xi5+iBxIc0FPtHyeugwr7j1FvGK/vPHdwlXjqHd++EEBSF7O+rk?=
+ =?us-ascii?Q?Ed7qiHDKSekQIKl/cGjijIAvUekBppq00yHqDVhhvlIlIaFAjpdFsLDjj+fe?=
+ =?us-ascii?Q?nZRmmzFrs3gqyZeoMFXn+U49C+2QPTtUxecmEmh8ZdJ8oJS1rXUAw9ba7u3F?=
+ =?us-ascii?Q?fCba92UqSn96TYuQPdKqmgjWg3sGvxDR6cZaEKC2s1GMdlDOUU7C1N/U6Nni?=
+ =?us-ascii?Q?ZLZYHkbsvVFhZCLd724I2hwPMkRL02HZpUPzk4pIAQmIVef7Y7GEDk6Yr0YT?=
+ =?us-ascii?Q?ILweCVV0LU8ysYc8Zv0ITQEbSobZaU3vc+2LHrIACIf/Iisz8Qh1aZ2fk6kW?=
+ =?us-ascii?Q?yaaaMcbfOkGujEzPaodzOL9mzhOEWLsns8wk+kbGcBUGGqkAyMam9C0qXmz9?=
+ =?us-ascii?Q?npWBJ3hW0otDvh78m5OAbcPR/ylT3X9N8aVttgxeQ5SFqOmyGrCVl6wkRtps?=
+ =?us-ascii?Q?OBZ8RbSFUlF9zHGuD79D0XFtfmgh5+DZNRZSRf0SQRfatdmIOob49SksYYDW?=
+ =?us-ascii?Q?pUWNpQNJsnO3bTKpCo+130pONj5SpD6f9KxX8/DFyEtE5kWmB6UYxESX9kJ5?=
+ =?us-ascii?Q?+FiRHPy5RtZpMbiVHEIvu+oNJW4kwvA26y+ocKmwIw916285pzPJK9cRy08X?=
+ =?us-ascii?Q?mMkgtabd+LTmUqiCjje8nmcAeK5hv+0fh1ZL4tG3RiR2Aj6HfjPv4WjoGvlP?=
+ =?us-ascii?Q?Kj/o693rJM7Cbvl0IR/OndXB43MX464VCjXKboNKU5Y98XuCZcEUtJNoqpkl?=
+ =?us-ascii?Q?bKgHuujN7hkdJ1Sh4nac1ho85Am1DgXBoxrPwDE3uIKLQXnXJxovVlCgCfJK?=
+ =?us-ascii?Q?lOefdsdBLQERbplalht3vyLHjpd6vXkPglh4xgS+68zMLqAQwFv7n2sik6W7?=
+ =?us-ascii?Q?y/E5WT7qFWxJooydMVUYnUcOtINciUjKicU6t4PaT63CNzUER+LlCoqzD7tu?=
+ =?us-ascii?Q?J0/78REoKbUDB7dzFPiHzHyZgSN6ZatumQpEbirgVxjZIEqmlGMPOvVrjQGh?=
+ =?us-ascii?Q?8ZmxyhzjVl+tJmO5nzmtfsXchLf/3/G1WbI+ybvcHyD0PIUJQPTtcm++uP1i?=
+ =?us-ascii?Q?qSjGP/KUJdAhNyEWOJC7u4jvk61rCqnT1cpbK+2Zn/WHpk24RD9ERvnSjx93?=
+ =?us-ascii?Q?2grtBmyAtEwoS4vhoIAHi3gTL+uRruRFIFEgMj8fZlq2Co1TmPWaTYM19SAE?=
+ =?us-ascii?Q?b5LiLDA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230038)(36860700011)(376012)(7416012)(1800799022)(82310400024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2024 19:56:31.5059
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7be06a1-20d3-412a-4720-08dc9550e8da
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9D9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7270
+
+This patchset adds a new wrapper for struct mce to prevent its bloating
+and export vendor specific error information. Additionally, support is
+also introduced for two new "syndrome" MSRs used in newer AMD Scalable
+MCA (SMCA) systems. Also, a new "FRU Text in MCA" feature that uses these
+new "syndrome" MSRs has been addded.
+
+Patch 1 adds the new wrapper structure mce_hw_err for the struct mce
+while also modifying the mce_record tracepoint to use the new wrapper.
+
+Patch 2 adds support for the new "syndrome" registers. They are read/printed
+wherever the existing MCA_SYND register is used.
+
+Patch 3 updates the function that pulls MCA information from UEFI x86
+Common Platform Error Records (CPERs) to handle systems that support the
+new registers.
+
+Patch 4 adds support to the AMD MCE decoder module to detect and use the
+"FRU Text in MCA" feature which leverages the new registers.
+
+NOTE:
+
+This set was initially submitted as part of the larger MCA Updates set.
+
+v1: https://lore.kernel.org/linux-edac/20231118193248.1296798-1-yazen.ghannam@amd.com/
+v2: https://lore.kernel.org/linux-edac/20240404151359.47970-1-yazen.ghannam@amd.com/
+
+However, since the MCA Updates set has been split up into smaller sets,
+this set, going forward, will be submitted independently.
+
+Having said that, this set set depends on and applies cleanly on top of
+the below two sets.
+
+[1] https://lore.kernel.org/linux-edac/20240521125434.1555845-1-yazen.ghannam@amd.com/
+[2] https://lore.kernel.org/linux-edac/20240523155641.2805411-1-yazen.ghannam@amd.com/
+
+Changes in v2:
+ - Drop dependencies on sets [1] and [2] above and rebase on top of
+   tip/master. (Boris)
+
+Avadhut Naik (2):
+  x86/mce: Add wrapper for struct mce to export vendor specific info
+  x86/mce, EDAC/mce_amd: Add support for new MCA_SYND{1,2} registers
+
+Yazen Ghannam (2):
+  x86/mce/apei: Handle variable register array size
+  EDAC/mce_amd: Add support for FRU Text in MCA
+
+ arch/x86/include/asm/mce.h              |  20 ++-
+ arch/x86/kernel/cpu/mce/amd.c           |  33 ++--
+ arch/x86/kernel/cpu/mce/apei.c          | 119 ++++++++++----
+ arch/x86/kernel/cpu/mce/core.c          | 201 ++++++++++++++----------
+ arch/x86/kernel/cpu/mce/dev-mcelog.c    |   2 +-
+ arch/x86/kernel/cpu/mce/genpool.c       |  20 +--
+ arch/x86/kernel/cpu/mce/inject.c        |   4 +-
+ arch/x86/kernel/cpu/mce/internal.h      |   4 +-
+ drivers/acpi/acpi_extlog.c              |   2 +-
+ drivers/acpi/nfit/mce.c                 |   2 +-
+ drivers/edac/i7core_edac.c              |   2 +-
+ drivers/edac/igen6_edac.c               |   2 +-
+ drivers/edac/mce_amd.c                  |  27 +++-
+ drivers/edac/pnd2_edac.c                |   2 +-
+ drivers/edac/sb_edac.c                  |   2 +-
+ drivers/edac/skx_common.c               |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c |   2 +-
+ drivers/ras/amd/fmpm.c                  |   2 +-
+ drivers/ras/cec.c                       |   2 +-
+ include/trace/events/mce.h              |  51 +++---
+ 20 files changed, 316 insertions(+), 185 deletions(-)
 
 
+base-commit: 4fe5c16f5e5e0bd1a71a5ac79b5870f91b6b8e81
+-- 
+2.34.1
 
-On 25.06.24 г. 0:20 ч., Yazen Ghannam wrote:
-> Generally, MCA information for an error is gathered on the CPU that
-> reported the error. In this case, CPU-specific information from the
-> running CPU will be correct.
-> 
-> However, this will be incorrect if the MCA information is gathered while
-> running on a CPU that didn't report the error. One example is creating
-> an MCA record using mce_prep_record() for errors reported from ACPI.
-> 
-> Split mce_prep_record() so that there is a helper function to gather
-> common, i.e. not CPU-specific, information and another helper for
-> CPU-specific information.
-> 
-> Leave mce_prep_record() defined as-is for the common case when running
-> on the reporting CPU.
-> 
-> Get MCG_CAP in the global helper even though the register is per-CPU.
-> This value is not already cached per-CPU like other values. And it does
-> not assist with any per-CPU decoding or handling.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
-> Link:
-> https://lkml.kernel.org/r/20240521125434.1555845-3-yazen.ghannam@amd.com
-> 
-> v1->v2:
-> * No change.
-> 
->   arch/x86/kernel/cpu/mce/core.c     | 34 ++++++++++++++++++++----------
->   arch/x86/kernel/cpu/mce/internal.h |  2 ++
->   2 files changed, 25 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index dd5192ef52e0..0133f88dfffb 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -117,20 +117,32 @@ static struct irq_work mce_irq_work;
->    */
->   BLOCKING_NOTIFIER_HEAD(x86_mce_decoder_chain);
->   
-> -/* Do initial initialization of a struct mce */
-> -void mce_prep_record(struct mce *m)
-> +void mce_prep_record_common(struct mce *m)
->   {
->   	memset(m, 0, sizeof(struct mce));
-> -	m->cpu = m->extcpu = smp_processor_id();
-> +
-> +	m->cpuid	= cpuid_eax(1);
-> +	m->cpuvendor	= boot_cpu_data.x86_vendor;
-> +	m->mcgcap	= __rdmsr(MSR_IA32_MCG_CAP);
->   	/* need the internal __ version to avoid deadlocks */
-> -	m->time = __ktime_get_real_seconds();
-> -	m->cpuvendor = boot_cpu_data.x86_vendor;
-> -	m->cpuid = cpuid_eax(1);
-> -	m->socketid = cpu_data(m->extcpu).topo.pkg_id;
-> -	m->apicid = cpu_data(m->extcpu).topo.initial_apicid;
-> -	m->mcgcap = __rdmsr(MSR_IA32_MCG_CAP);
-> -	m->ppin = cpu_data(m->extcpu).ppin;
-> -	m->microcode = boot_cpu_data.microcode;
-> +	m->time		= __ktime_get_real_seconds();
-> +}
-> +
-> +void mce_prep_record_per_cpu(unsigned int cpu, struct mce *m)
-> +{
-> +	m->cpu		= cpu;
-> +	m->extcpu	= cpu;
-> +	m->apicid	= cpu_data(m->extcpu).topo.initial_apicid;
-> +	m->microcode	= cpu_data(m->extcpu).microcode;
-> +	m->ppin		= cpu_data(m->extcpu).ppin;
-
-nit: Similar to tglx's feedback for patch 2 you could use topology_ppin()
-
-> +	m->socketid	= cpu_data(m->extcpu).topo.pkg_id;
-nit: topology_physical_package_id()
-
-
-> +}
-> +
-
-
-<snip>
 
