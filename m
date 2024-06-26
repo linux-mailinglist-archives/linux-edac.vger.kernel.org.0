@@ -1,159 +1,120 @@
-Return-Path: <linux-edac+bounces-1374-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1375-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AA40917879
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 08:03:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87DA1917C94
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 11:34:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36C22284E0E
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 06:03:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D6F71F22311
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 09:34:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6270638D;
-	Wed, 26 Jun 2024 06:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E194516C854;
+	Wed, 26 Jun 2024 09:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="hj516aKd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kK/5HHxh"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1073A13C8F5;
-	Wed, 26 Jun 2024 06:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64AD16A92B;
+	Wed, 26 Jun 2024 09:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719381803; cv=none; b=f6+uPlVWCsVfPTKR1UjoXrU7Xxo3M3OyPj51S6gakIwxm/u5dorPswF1ixiN0tQNRRxb6um5M2amuYgJPmB/uRoDss09/FFxPKrmb47+8569FgLcPSbiM71UBXzqPs3ZuGypPteKHW45y9/gjKASPqeWqrI01/ljIsUEQNKWP+k=
+	t=1719394427; cv=none; b=kut+kkMmdUImcH7vyVyURUuouprQ6dM6P0nnl2nyUDAj4pkc/oQkDJJp9SE/sB71asgfSFKLd5sZQ7OYy+/SXadl1M2TH4HvjG6p/ww07zGwUFLpyaHzghKWT8n2eyU14PxoXbS7xpN3dQv3mZXpmfGYZherYGnfOIpT7WiWaLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719381803; c=relaxed/simple;
-	bh=m8YTY6GpEs3iSnFV8kd7Br7h+HDW2hkTnhnYCYUuL6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BC4LhEVg8tSUMA6OEXAIccegN/POdUIqpaGD3+1Yvem7063I3CxPgj1F6GUUMLgm89Y0QSoz8bNQqQZgRCHA9ZY9L0oClIQGnw0NQ0IvBnjZPjc4VSBjHIavxlAtCAuZgxsizC8Ai0MZVQ6qweM4GufO/tnXb0/5Xb4W4gjNdBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=hj516aKd; arc=none smtp.client-ip=139.138.36.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1719381800; x=1750917800;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m8YTY6GpEs3iSnFV8kd7Br7h+HDW2hkTnhnYCYUuL6g=;
-  b=hj516aKdtQp/v7XXeug7TE28dM5YyweZJHFzo6NZVeXD/GLFcdOaqqRJ
-   mg4YEuV1+8MpcxXqkJl2YSLACzkUUPJ2SXR1+W8lsZMyf/IYm5w/iSVWW
-   lNZ1g7pZhw2iGdCx2nouVaYXAIYRIJneL6AwF0DmaWOOLZo9FYA0EaBoc
-   FVfoaiED+cGxduKAiqPgvlklTl+6q58m0MBr3MUktGBwDugCVXDYhXWFJ
-   gRHaWuUe+Hw04nRlaj2SkINUb3yyyXr6gObqibwmNLJFukCcwucKyUwLR
-   JrifZ/ahr748OcBdZ/JEJIZjTozs5XDGHjz16y5ZXg+AlPugu88CDm8n/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="152361441"
-X-IronPort-AV: E=Sophos;i="6.08,266,1712588400"; 
-   d="scan'208";a="152361441"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 15:03:10 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id D62E5C13D0;
-	Wed, 26 Jun 2024 15:03:07 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 4CC50BF4B7;
-	Wed, 26 Jun 2024 15:03:06 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id CB1EF2007CA91;
-	Wed, 26 Jun 2024 15:03:05 +0900 (JST)
-Received: from [192.168.50.5] (unknown [10.167.226.114])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 087111A0002;
-	Wed, 26 Jun 2024 14:03:03 +0800 (CST)
-Message-ID: <bc58d99a-785f-4bb3-a9c9-9cf50ea7e06d@fujitsu.com>
-Date: Wed, 26 Jun 2024 14:03:03 +0800
+	s=arc-20240116; t=1719394427; c=relaxed/simple;
+	bh=EbfiOlmbYgzxHeaGEJru1qN0I6Ch6Nlbu6LOKQXKdU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=PI8ay5tH0QB8aC3VJqXnpgjWTkP5eDVNafhuXzFFA/eJVdPNXKT9tvrAPNLUlNuvDH3TZdCJa11CaGsfHRS0ooJcZ5O7/Cu4569+oDMTG2Q/U07h1J9Sl0lx+2KX/Yodk9DQlxlHayC+xbCYzDR2iJD6QR2ucv9HwCXdB9Q47K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kK/5HHxh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C0CDC2BD10;
+	Wed, 26 Jun 2024 09:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719394427;
+	bh=EbfiOlmbYgzxHeaGEJru1qN0I6Ch6Nlbu6LOKQXKdU8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kK/5HHxhxNvIQh9kncbgt2LUPODnmWVPzu4FdoMdRpkEBbsFo/jlfkMEp7SuKR0ir
+	 qsa6qcgcwdZniUAaEDtwfGFMpKg5C9uonLhxC4GzrJJhC8RGYKFj8dHCdzD4JZ+BJ3
+	 W6kM8lRU6to1NQyls2STMWDorzLl/RC2UBUyh4wKXHXPDYsZk53H5/yfDtFGvIawq3
+	 S4q+DNnNZhC8Odci3lYPiBumptf4Tg2I3hrsukMNC+FXcC8LBOX32qDS5djmClCjKU
+	 gxC98B+4orXRU10EQM3ws3ED2UjjOwQ4iIJLPTtPA9KOj3dn5v6SQ3YiwS/p1NuQTN
+	 lxnxUOL2OSUSA==
+Date: Wed, 26 Jun 2024 11:33:41 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Tony Luck <tony.luck@intel.com>, EDAC Mailing List
+ <linux-edac@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Mauro Carvalho Chehab
+ <m.chehab@huawei.com>, Shengwei Luo <luoshengwei@huawei.com>, Daniel
+ Ferguson <danielf@os.amperecomputing.com>, Jose <shiju.jose@huawei.com>,
+ Jason Tian <jason@os.amperecomputing.com>, Jonathan Cameron
+ <jonathan.cameron@huawei.com>, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [GIT PULL for v6.10-rc6] edac fixes for kernel 6.11
+Message-ID: <20240626113322.5e263aa0@coco.lan>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] cxl: avoid duplicating report from MCE & device
-To: "Luck, Tony" <tony.luck@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
- "Williams, Dan J" <dan.j.williams@intel.com>
-Cc: "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
- "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
- "dave@stgolabs.net" <dave@stgolabs.net>, "Weiny, Ira" <ira.weiny@intel.com>,
- "Schofield, Alison" <alison.schofield@intel.com>,
- "Jiang, Dave" <dave.jiang@intel.com>,
- "Verma, Vishal L" <vishal.l.verma@intel.com>, Borislav Petkov
- <bp@alien8.de>, James Morse <james.morse@arm.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
- <rric@kernel.org>, "linux-edac@vger.kernel.org"
- <linux-edac@vger.kernel.org>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>,
- "linux-mm@kvack.org" <linux-mm@kvack.org>
-References: <20240618165310.877974-1-ruansy.fnst@fujitsu.com>
- <20240620180239.00004d41@Huawei.com>
- <6675bf92116ed_57ac294a@dwillia2-xfh.jf.intel.com.notmuch>
- <20240621194506.000024aa@Huawei.com>
- <SJ1PR11MB6083837A8588894E49FEBC7BFCC92@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <SJ1PR11MB6083837A8588894E49FEBC7BFCC92@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28482.005
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28482.005
-X-TMASE-Result: 10--14.782900-10.000000
-X-TMASE-MatchedRID: bdIiGNtle6uPvrMjLFD6eKn9fPsu8s0a2q80vLACqaeqvcIF1TcLYPAF
-	43IXaj2gSY/hjDx7hppvUDqCNlsvKH+zsg6kp2C3Q0Xm0pWWLkroUwvpyt4rucg9ufahCGm1l2i
-	SdQmYgPCf4Zlhm+r+lc5cp47XA8AiC9QTSuTOQRl+J3gtIe0gA8qspZV+lCSLdBaEtWosUzVYTF
-	/5quaSLwftggnq5tKUMTii0wFdgxqOeQ6RXnGCFkX/j4QZJ10NajzNTFMlQCNtfzoljzPXO9F8e
-	0i2JFlZ371UTvxX45vRKmOlruuzzop+5WdOMDCgv8fLAX0P50B2ZYwNBqM6IlLvEapiw2T1hXAr
-	+h4GfTAIZNHliKo/PSm+XCxBE3RsKgAlgjPhYpaOtWfhyZ77Dn0tCKdnhB581B0Hk1Q1KyIOsEC
-	O9s+GHnQdJ7XfU86eOwBXM346/+z07YdcTiNsP7Uv9Q5rrJhWezfWWH34ZgZxRwXGk1PHIsR47n
-	50KUDY
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+
+Hi Borislav,
+
+Please pull from:
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-edac tags/edac/v6.10-1
+
+For two patches that fix UEFI 2.6+ implementation of the ARM trace event, 
+as the original implementation was incomplete.
+
+The patches on this series was sent at:
+	https://lore.kernel.org/all/20240321-b4-arm-ras-error-vendor-info-v5-rc3-v5-0-850f9bfb97a8@os.amperecomputing.com/
+
+I did a couple of changes at the first patch addressing some coding style
+issues. At the second patch, I replaced the original description to a proper
+one identifying precisely why the patch is needed and what it does.
+
+In summary:
+changeset e9279e83ad1f ("trace, ras: add ARM processor error trace event")
+was incomplete: it added a trace event that was reporting only some fields
+of the CPER record generated for ARM processor from UEFI 2.6 spec.
+
+Those are not enough to actually parse such events on userspace, nor to
+take any actions like isolating problematic CPU cores.
+
+The patch was validated with the help of an ARM EINJ code for QEMU:
+
+	https://github.com/mchehab/rasdaemon/wiki/error-injection
+
+I tested the ghes and cper reports both with and without this change,
+using different versions of rasdaemon, with and without support for
+the extended trace event. Those are a summary of the test results:
+
+- adding more fields to the trace events didn't break userspace API:
+  both versions of rasdaemon handled it;
+
+- the rasdaemon patches to handle the new trace report was missing
+  a backward-compatibility logic. I fixed already. With that, rasdaemon
+  can handle both old and new trace events.
+
+Btw, rasdaemon has gained support for the extended trace since its
+version 0.5.8 (released in 2021). I didn't saw any issues there
+complain about troubles on it, so either distros used on ARM servers
+are using an old version of rasdaemon, or they're carrying on the trace
+event changes as well.
+
+Regards,
+Mauro
+
+---
 
 
-
-在 2024/6/22 4:44, Luck, Tony 写道:
->> So who actually cares about recovering poisoned volatile memory?
->> I'd like to understand more on how significant a use case this is.
->> Whilst I can conjecture that its an extreme case of wanting to avoid
->> loosing the ability to create 1GiB or larger pages due to poison
->> is that a real problem for anyone today?  Note this is just the case
->> where you've reached an actual uncorrectable error and probably
->> / possibly killed something, not the more common soft offlining
->> of memory due to correctable errors being detected.
-> 
-> I guess you really need a reply from someone with a data center
-> with thousands of machines, since that's where this question
-> may be important.
-> 
-> My humble opinion is that, outside of the huge page issue, nobody
-> should try to recover a poisoned page. Systems that can report
-> and recover from poison have tens, hundreds, or more GBytes
-> of memory. Dropping 4K pages will not have any measurable
-> impact on a system (even if there are hundreds of pages dropped).
-> 
-> There's no reliable way to determine whether the poisoned page
-> was due to some transient issue, or a permanent defect. Recovering
-> a poisoned page runs the risk that the poison will re-occur. Perhaps
-> next use of the page will be in some unrecoverable (kernel) context.
-> 
-> So recovery has some risk, but very little upside benefit.
-
-Since the hardware provides the instruction(CPU)/command(CXL) to clear 
-the poison, we could make the function work, at least as an optional 
-feature.  Then users could decide to use it or not after evaluating the 
-risk and benefit.
-
-I think doing recovery is an improvement step, and may need a lot of 
-discussion.  I'm not sure if we could reach a conclusion in this thread. 
-  Just hope more comments on the original problem (duplicate report) to 
-solve in this patch.
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
 
---
 Thanks,
-Ruan.
-
-> 
-> -Tony
+Mauro
 
