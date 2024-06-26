@@ -1,180 +1,159 @@
-Return-Path: <linux-edac+bounces-1373-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1374-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B49D9175D5
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 03:46:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AA40917879
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 08:03:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FBC11C21D24
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 01:46:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36C22284E0E
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 06:03:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC2F4D27D;
-	Wed, 26 Jun 2024 01:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6270638D;
+	Wed, 26 Jun 2024 06:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="JlI9d8KS"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="hj516aKd"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
+Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCD58C1A;
-	Wed, 26 Jun 2024 01:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.83
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719366349; cv=fail; b=Dpg7z9PqJbL95c2e7Eq4luHzDEAdYGEO3Ktx44EjylpD4UFKPeuOp1ed2aabfKFH4LDEyMHebKovU7MUf0qv5bSAkpyUgHXCX5iwce6Qizxc8M+b2v/UoFeLSXwJy7CTY0wSsp1F2/0O/OzdibXl3A3S2GxxQZaWJ16fkKVNURQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719366349; c=relaxed/simple;
-	bh=2eam6t2A4C0rp4On/XnewUlUBJTua5SgLglLSnieuR8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=VtiAXZu4JYuPKIDXO4Ego/UW2APhLBs+jDMdVV+i843JeJ9SolBbDGpBceJYnXUIGQIcj2bqb+1zH8I6FPVG2KbYdJB+Nua/GvgMRCCZ+ugpyBEWNlKttsud0RO/2l+OEnXp/Kn0k/tVUwmwK0TjvDdH3OqafUPT97/IGM73qNY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=JlI9d8KS; arc=fail smtp.client-ip=40.107.220.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h5O1AyVBTm4krp7LgidOD9fIvHnn/WRDMNX6GaqiP1auYsM1TNTqSyGv/nzx2Gyc3g1UpkOkSGeK6Mrl3yxz+0t/YU/c5xedofj0M/T6MT1U6U7Cc2OBicbCX8iFXruvavdsveGq0CmxvUjyKvGyqjH1WeGbL1ZwKbXU066ANmt8xaijOiExQjNLj+cQVXCM6fRiqqNcVS7ZgPG36fEG5hHFY4DwmGMFWGaHqiOPpjjXcFFI7/9CLnLj5CCc9indlBJkl0bOwl2jf7klx0yASHLj0fPHyycp8sAz5P+5fg85GtlZdMXwlS/GGdC0jd4bgv6KS+kMo8RgAw2MS6Pn1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pJrEdFd2AuoZOk31b0Yj3EsnlQw+XjR4vCcuVcHZ6fs=;
- b=U0oCVkzA4OXyHilZ/elzdFp2JveVMyOEIjNEgi/u4sjp5RIZ7x8Ra7q9U3TBCfKVsDBRpMlj6UyTZyZptAzYpMD8p6t6Ksq4sj0BdYt2R8Pk8LqzT3AgawGcOSvQGQmOy4pw/saeuI/wfWQSySXTHdr6rBBJBT+7Ngxx19akSz/ZB9zYgi4th056oLPF9cagJ6PWZIy6sHrXbmQ9cl/6mteAiRrsr9CpzaYYXb3t6xQ3idPVP2KWQgNta5pVADXua8QBpRSxdZv0+CqLoPqtmIIFFVxTIBJR4vBZKPeQVKPIB64vO2HZFZ3xwqHkMq7Kgyadxibf6eYr6svjdvaobA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pJrEdFd2AuoZOk31b0Yj3EsnlQw+XjR4vCcuVcHZ6fs=;
- b=JlI9d8KSjOVY2add0wiC95/9XWy/fw1yKyLsn0/HawPD8FG4hSz1syr532HRtt+QtBap74+BncfYMJWwtxniUlvlVZ/nEiveEu6w02cR4VoVj+T45bcTbhoyba1W20kVyt+jFvJb2OlOnZ0Rb/9cb2+p/Jx+LsYKQalkFmisOVY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BL3PR12MB6378.namprd12.prod.outlook.com (2603:10b6:208:3b1::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.28; Wed, 26 Jun
- 2024 01:45:45 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::43a5:ed10:64c2:aba3]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::43a5:ed10:64c2:aba3%6]) with mapi id 15.20.7698.025; Wed, 26 Jun 2024
- 01:45:45 +0000
-Date: Tue, 25 Jun 2024 21:45:42 -0400
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Nikolay Borisov <nik.borisov@suse.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com
-Subject: Re: [PATCH v2 4/5] x86/mce: Define mce_prep_record() helpers for
- common and per-CPU fields
-Message-ID: <20240626014542.GC1086@yaz-khff2.amd.com>
-References: <20240624212008.663832-1-yazen.ghannam@amd.com>
- <20240624212008.663832-5-yazen.ghannam@amd.com>
- <bbdf9caa-7c0f-44d1-a69d-a5cecc7cd4fa@suse.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bbdf9caa-7c0f-44d1-a69d-a5cecc7cd4fa@suse.com>
-X-ClientProxiedBy: BN9PR03CA0958.namprd03.prod.outlook.com
- (2603:10b6:408:108::33) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1073A13C8F5;
+	Wed, 26 Jun 2024 06:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.225
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719381803; cv=none; b=f6+uPlVWCsVfPTKR1UjoXrU7Xxo3M3OyPj51S6gakIwxm/u5dorPswF1ixiN0tQNRRxb6um5M2amuYgJPmB/uRoDss09/FFxPKrmb47+8569FgLcPSbiM71UBXzqPs3ZuGypPteKHW45y9/gjKASPqeWqrI01/ljIsUEQNKWP+k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719381803; c=relaxed/simple;
+	bh=m8YTY6GpEs3iSnFV8kd7Br7h+HDW2hkTnhnYCYUuL6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BC4LhEVg8tSUMA6OEXAIccegN/POdUIqpaGD3+1Yvem7063I3CxPgj1F6GUUMLgm89Y0QSoz8bNQqQZgRCHA9ZY9L0oClIQGnw0NQ0IvBnjZPjc4VSBjHIavxlAtCAuZgxsizC8Ai0MZVQ6qweM4GufO/tnXb0/5Xb4W4gjNdBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=hj516aKd; arc=none smtp.client-ip=139.138.36.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1719381800; x=1750917800;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=m8YTY6GpEs3iSnFV8kd7Br7h+HDW2hkTnhnYCYUuL6g=;
+  b=hj516aKdtQp/v7XXeug7TE28dM5YyweZJHFzo6NZVeXD/GLFcdOaqqRJ
+   mg4YEuV1+8MpcxXqkJl2YSLACzkUUPJ2SXR1+W8lsZMyf/IYm5w/iSVWW
+   lNZ1g7pZhw2iGdCx2nouVaYXAIYRIJneL6AwF0DmaWOOLZo9FYA0EaBoc
+   FVfoaiED+cGxduKAiqPgvlklTl+6q58m0MBr3MUktGBwDugCVXDYhXWFJ
+   gRHaWuUe+Hw04nRlaj2SkINUb3yyyXr6gObqibwmNLJFukCcwucKyUwLR
+   JrifZ/ahr748OcBdZ/JEJIZjTozs5XDGHjz16y5ZXg+AlPugu88CDm8n/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="152361441"
+X-IronPort-AV: E=Sophos;i="6.08,266,1712588400"; 
+   d="scan'208";a="152361441"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 15:03:10 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id D62E5C13D0;
+	Wed, 26 Jun 2024 15:03:07 +0900 (JST)
+Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
+	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 4CC50BF4B7;
+	Wed, 26 Jun 2024 15:03:06 +0900 (JST)
+Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
+	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id CB1EF2007CA91;
+	Wed, 26 Jun 2024 15:03:05 +0900 (JST)
+Received: from [192.168.50.5] (unknown [10.167.226.114])
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 087111A0002;
+	Wed, 26 Jun 2024 14:03:03 +0800 (CST)
+Message-ID: <bc58d99a-785f-4bb3-a9c9-9cf50ea7e06d@fujitsu.com>
+Date: Wed, 26 Jun 2024 14:03:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|BL3PR12MB6378:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc74669d-5daf-4dc0-554e-08dc9581b241
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230038|1800799022|366014|376012;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?W9wbkhuP0eiKsYx+sggfUIeKjRx+ZhTkHx5IN6c8dNxvRpTPFD35mMfcpFSq?=
- =?us-ascii?Q?sfm8LFQ7T6nJQlbqb/T/YytnlswYr2hrDly1KlnUMWK3vnLqFyWki2vtU7LE?=
- =?us-ascii?Q?8mho4zxxJMoezvNHHnFSa8Fnah3p5Kl+L3itCsiydiIPXN1QkGQMDjaEpRnO?=
- =?us-ascii?Q?GX4S7Z0b67v4DddaxGt0D9/8TD7LPvEG0D3q4ucjQYrihRJaQqHumIkNzjIr?=
- =?us-ascii?Q?WbvKYYjVEQ2RYtfppnKDupAR7vY+d9F2Wd5natui2bgG59HMLU3NWaonkQI9?=
- =?us-ascii?Q?YzZuqTobqwHhB1vILc8M7BmAw9suNBvENVBXxdvC58JZ01quwbh2ZWdGJ0RO?=
- =?us-ascii?Q?YOjNTIe4CUGN2XzG+aVxnhuYwt28RWqlYIv1accRoML9qUAxE/wkJDiRrzW0?=
- =?us-ascii?Q?6GHbnxtblBSYspacWK5Z0gDSzC4rKjIOHPgWYKPnOc+iubESnhjf65MB1BmC?=
- =?us-ascii?Q?Ydh+QrH8hrvGNGqagxawH9QdNGNamDxg0xwugNB8x9v6YwqaXB6hvbEwpi2l?=
- =?us-ascii?Q?NvJ8oqkCxxeiZaSmUDT+sZCtK+eLDk4AUExYRz1h/J+pdt42vubg30pW6Tkp?=
- =?us-ascii?Q?c9uxY1lqwCXlgvreTp8P5/jwZiEcDdnkicVzgqOOQfXR1kbiZWXg91JIq9kD?=
- =?us-ascii?Q?842MDCifaSSw0m3cplbZWWveuj95k9ko6wtSvCz+afghgQdISH7/BIwd5ZBI?=
- =?us-ascii?Q?WzNoC9jLQxFXGxsyuicYe+wHpDtyg3DsCyijhUtr47HR/G/6N09sIKEoi2ve?=
- =?us-ascii?Q?nyqx+J8L9vBrab03Mc9YJznRf36dElI5zJ8EpyWiRU63UFFflA29Ddk76RQN?=
- =?us-ascii?Q?FX2q+gzVgnTDQe+dlJnfY62RR7VD2DUYD6AmmqvXwdDxxN48DAYbD2txcywT?=
- =?us-ascii?Q?sDhA9DogJTRyoOZl5napqnpyC+TNmyU1C+FLLosEpcCRJKgnsZEdXhLbo3o4?=
- =?us-ascii?Q?OCDXvp0SJVWGIOtZ1optL4XAqyPuL8UmVWkJd5KMujRKgY8EWKWzd2KTnUZ3?=
- =?us-ascii?Q?SpsJLB2GfIjHJE1RzKbACGilg1D3XSD7Knh7N+h7EVN/gIDsuSAMpJbqcPro?=
- =?us-ascii?Q?ofyhcCYLDIopfg+c0HIdFuaMMD4ESze0D5a6u5812Y+lJujNGLKQKp++VmjK?=
- =?us-ascii?Q?JNZ8sx+kQ9+bZ0ZWUYQwIwNfyVOlemnYpuPjCdv42BluiuDANtxhq1PK8nMi?=
- =?us-ascii?Q?pFUkHmMtgpix/A86f25yfPdn3fVyZIDLCB/tDY8oIuFmm/djKOybW1iSKuW+?=
- =?us-ascii?Q?zN3t21uhg9UJzS0I0sy0qtEssOxesg5FIPA3uUmTIjVCg9j6G4E/NxtQFf3L?=
- =?us-ascii?Q?rZYxOvFEtU7RzNo8DeqQSRQA?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230038)(1800799022)(366014)(376012);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?gbmFjD8iICMj/hlSMFbS0vzr7wYxrVCY+vr/7KKJz6BEuSigXqO25wHTspVY?=
- =?us-ascii?Q?ZQTPIfCiAxb7wYeoc137OYsCOxJjrm9htT6dzFR9Rbc87re/W9SDPsLpQOm2?=
- =?us-ascii?Q?67Fk0zjDrjrohnIA+8/4b4FDXcHS+qMXIFKFUCn2/FKCGqn52PKGE4Wdk2k/?=
- =?us-ascii?Q?lbqNCKTJqhG3VfpzWEMU+EQTjQMsf3yz8vHtipHRy14jAr/CEDTdbXpfWq2O?=
- =?us-ascii?Q?8yKyAG1SwTEc5vuoPipYOICnZhAt4x3RxKeTcaRZdw/Ak1TlPbkyq2LWWDtz?=
- =?us-ascii?Q?zN6gn3amZp7TD3MDLDO/riqnL7et9cUOcouLT9yFaRB8G88ey47b1/5PcNlT?=
- =?us-ascii?Q?lEGLkUkVl9e7Tq0HBCA6YRjFFLi5orW9q2n3Pn1bHsD/B0rqRno7TJk6s5Ki?=
- =?us-ascii?Q?gtepkg9efEnfs4RPWVfUI1x1WBmEyMgSnbeVJzDRetUlatcurvtEVQAjx9LH?=
- =?us-ascii?Q?ger7P4sllnAsN1e27DuDOv8WUYZoQMoCtBv0FRCICUsJdBC8l+JmA5N5fITn?=
- =?us-ascii?Q?FmgmItVdIcm6ITmBReNHCGsx3+O4JZA/yZNRP4b344bxE70jS3PlQtEbLOU5?=
- =?us-ascii?Q?kLycKjhzzQpNb+nGOHoiEZRIpvTe1aGCDCVbL/RZ0RsPfN5w7ZF7dCGnKVux?=
- =?us-ascii?Q?m7svB+79V5JhEhVa/MeP9rMViO/F9bQ1yLszl2wh12y4noSFoDbAwmYGktDc?=
- =?us-ascii?Q?CAZjG7bFKfrDxGYaIkA2sc+ri0QFEJi1ySNgdpN7DdiNucjfXEbBeJmx8TtH?=
- =?us-ascii?Q?P+f3+RxhjjIZBMPg5Onr1xDR1vVnzDeSDeoCOcKJcW8iQ2lewhRtwa4kptwS?=
- =?us-ascii?Q?cdSZ9Ooke3g+QJJH2atet6sOx/Oz1/0C6hkcO/dc6Nxb/haLgJ/9UVyYkLyg?=
- =?us-ascii?Q?6qrtHFi2hQQBEhwdQ8VVv8oBqV0MaaP/Hi8BK1s9GURF5ew43+onGt8hyoEh?=
- =?us-ascii?Q?AtCEOkkC1MUgW6TbX4xCRsmIO1I5kLdX+8k2YjdL6sE20ppEU1U9j38f+nrs?=
- =?us-ascii?Q?ucd74WSSCxA2T2RozjqCaK/+m0knBLXTKdqSIkeB/qyUL/mlXcaCWnMJkFT+?=
- =?us-ascii?Q?FptsfJPgp6+ek9UXaWpbIgR7o33kjX9rBAv6rOrGtRGQCvyOrYycuaiDRBEb?=
- =?us-ascii?Q?dLfwkyHvE+HSpNRJ5xhJMuNoLp+lKJtAMC/E100KEgpLQ2NXWNuST2yTuNg7?=
- =?us-ascii?Q?wCyBqYDoSTokMZFAxrvj4sLervgXhBF1OGKtP+n+pITIyR/OXko3xo7Ouvjw?=
- =?us-ascii?Q?ovpvz8m4VjUk3Y8RUUJBWwCGeLV43/x3XEwfZiZqIdOJ7NpisWDs1Rh9CsOk?=
- =?us-ascii?Q?vfKKQFubTiDhD81Y4U7rAwZkoe9+yL5SgK4CDDnV/znJuRDuywBWgtlzhME6?=
- =?us-ascii?Q?4KTUtZweeT73eENMnx1UDlOSuEXrVZpGE0Sq14pTvVVuOlm2t1OX3/K/K43S?=
- =?us-ascii?Q?zjFyctw7u+UGFi7yz1qTJyHYlv6PZtvWPtBZTSmM/FvgA8GzuoKRAiessTsT?=
- =?us-ascii?Q?pJiOc85vqLBLa8Cu/ddlGRUqZHN4FOT5kKLnuWMU+jLyKEB9AKFYj9NuvhsY?=
- =?us-ascii?Q?dxvwHiaWRK5HaChcYaMeN0slGF2rxMUb2OlPZ7ii?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc74669d-5daf-4dc0-554e-08dc9581b241
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2024 01:45:45.4732
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ugr6OOwXe7XgEixj+5aYDfdQ6sLpIAhVxdPVer+Qfvk5zM1XNGc1cjTGyqdv3fCH+Ya1FU8PWJ1FO7pGpBvzdw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6378
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] cxl: avoid duplicating report from MCE & device
+To: "Luck, Tony" <tony.luck@intel.com>,
+ Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+ "Williams, Dan J" <dan.j.williams@intel.com>
+Cc: "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+ "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+ "dave@stgolabs.net" <dave@stgolabs.net>, "Weiny, Ira" <ira.weiny@intel.com>,
+ "Schofield, Alison" <alison.schofield@intel.com>,
+ "Jiang, Dave" <dave.jiang@intel.com>,
+ "Verma, Vishal L" <vishal.l.verma@intel.com>, Borislav Petkov
+ <bp@alien8.de>, James Morse <james.morse@arm.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
+ <rric@kernel.org>, "linux-edac@vger.kernel.org"
+ <linux-edac@vger.kernel.org>, Miaohe Lin <linmiaohe@huawei.com>,
+ Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>
+References: <20240618165310.877974-1-ruansy.fnst@fujitsu.com>
+ <20240620180239.00004d41@Huawei.com>
+ <6675bf92116ed_57ac294a@dwillia2-xfh.jf.intel.com.notmuch>
+ <20240621194506.000024aa@Huawei.com>
+ <SJ1PR11MB6083837A8588894E49FEBC7BFCC92@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <SJ1PR11MB6083837A8588894E49FEBC7BFCC92@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28482.005
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28482.005
+X-TMASE-Result: 10--14.782900-10.000000
+X-TMASE-MatchedRID: bdIiGNtle6uPvrMjLFD6eKn9fPsu8s0a2q80vLACqaeqvcIF1TcLYPAF
+	43IXaj2gSY/hjDx7hppvUDqCNlsvKH+zsg6kp2C3Q0Xm0pWWLkroUwvpyt4rucg9ufahCGm1l2i
+	SdQmYgPCf4Zlhm+r+lc5cp47XA8AiC9QTSuTOQRl+J3gtIe0gA8qspZV+lCSLdBaEtWosUzVYTF
+	/5quaSLwftggnq5tKUMTii0wFdgxqOeQ6RXnGCFkX/j4QZJ10NajzNTFMlQCNtfzoljzPXO9F8e
+	0i2JFlZ371UTvxX45vRKmOlruuzzop+5WdOMDCgv8fLAX0P50B2ZYwNBqM6IlLvEapiw2T1hXAr
+	+h4GfTAIZNHliKo/PSm+XCxBE3RsKgAlgjPhYpaOtWfhyZ77Dn0tCKdnhB581B0Hk1Q1KyIOsEC
+	O9s+GHnQdJ7XfU86eOwBXM346/+z07YdcTiNsP7Uv9Q5rrJhWezfWWH34ZgZxRwXGk1PHIsR47n
+	50KUDY
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-On Tue, Jun 25, 2024 at 04:19:40PM +0300, Nikolay Borisov wrote:
 
-[...]
 
-> > +
-> > +void mce_prep_record_per_cpu(unsigned int cpu, struct mce *m)
-> > +{
-> > +	m->cpu		= cpu;
-> > +	m->extcpu	= cpu;
-> > +	m->apicid	= cpu_data(m->extcpu).topo.initial_apicid;
-> > +	m->microcode	= cpu_data(m->extcpu).microcode;
-> > +	m->ppin		= cpu_data(m->extcpu).ppin;
+在 2024/6/22 4:44, Luck, Tony 写道:
+>> So who actually cares about recovering poisoned volatile memory?
+>> I'd like to understand more on how significant a use case this is.
+>> Whilst I can conjecture that its an extreme case of wanting to avoid
+>> loosing the ability to create 1GiB or larger pages due to poison
+>> is that a real problem for anyone today?  Note this is just the case
+>> where you've reached an actual uncorrectable error and probably
+>> / possibly killed something, not the more common soft offlining
+>> of memory due to correctable errors being detected.
 > 
-> nit: Similar to tglx's feedback for patch 2 you could use topology_ppin()
+> I guess you really need a reply from someone with a data center
+> with thousands of machines, since that's where this question
+> may be important.
 > 
-> > +	m->socketid	= cpu_data(m->extcpu).topo.pkg_id;
-> nit: topology_physical_package_id()
+> My humble opinion is that, outside of the huge page issue, nobody
+> should try to recover a poisoned page. Systems that can report
+> and recover from poison have tens, hundreds, or more GBytes
+> of memory. Dropping 4K pages will not have any measurable
+> impact on a system (even if there are hundreds of pages dropped).
 > 
->
+> There's no reliable way to determine whether the poisoned page
+> was due to some transient issue, or a permanent defect. Recovering
+> a poisoned page runs the risk that the poison will re-occur. Perhaps
+> next use of the page will be in some unrecoverable (kernel) context.
+> 
+> So recovery has some risk, but very little upside benefit.
 
-Yes, will update both.
+Since the hardware provides the instruction(CPU)/command(CXL) to clear 
+the poison, we could make the function work, at least as an optional 
+feature.  Then users could decide to use it or not after evaluating the 
+risk and benefit.
 
+I think doing recovery is an improvement step, and may need a lot of 
+discussion.  I'm not sure if we could reach a conclusion in this thread. 
+  Just hope more comments on the original problem (duplicate report) to 
+solve in this patch.
+
+
+--
 Thanks,
-Yazen
+Ruan.
+
+> 
+> -Tony
 
