@@ -1,81 +1,80 @@
-Return-Path: <linux-edac+bounces-1376-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1377-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B5A2917D27
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 12:02:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D949917EA4
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 12:45:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D9D7B20D7B
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 10:02:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECBBD28A9F9
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 10:45:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9F7173342;
-	Wed, 26 Jun 2024 10:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E18117B50B;
+	Wed, 26 Jun 2024 10:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="k+cJkItj"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PdlZ4x6+"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4735616EBE5;
-	Wed, 26 Jun 2024 10:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607B2176AAB;
+	Wed, 26 Jun 2024 10:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719396170; cv=none; b=Wx6VAkwT9RBNP8jKCarpuHdQRu0zQt1xOqeA+n+8rg6tHGmoj0HihEifXaEgN6FENYZRGgshekFa8C/bwnPwrUejfQ5URqXvv9xmnT/F2Zifg/akPPNLQ/dOthtolGL7g+XzuXL92wSIr29L4Z7WD/MdbAAR90xz5Wm7GwWnvvg=
+	t=1719398702; cv=none; b=eSMV6Iw8t1oF5TN/PDTyqheGaC0MhTzW3nm9QchOa2/uXZg/WNOSCil/Rd8z0f3ICIhIML9DWx3BGu776HKy2kctVhj9vyUxnHsXBD9e0zMwkTZa0G81lcE0x5MEs+ZejV8sV2gGlBtq+5thFBH2WxP7Tj2owe0bk/Ux2PJ+E7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719396170; c=relaxed/simple;
-	bh=7vJCvp/7xnSt0k6s6hy/bZa2PYeD50NH6MW9l+0gHmY=;
+	s=arc-20240116; t=1719398702; c=relaxed/simple;
+	bh=N5HUNnSxF52LqTiTZ4MD/cgKDig5Sbo0lMVYyZgGD88=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=At1aEh794j81RAV8Xbi5Cy76Hd6oSrBfGNwna4idmRqXXy7YYKrbiQ52Eh8WFF5im8s9gC3HQoN6Ge6js54++/X+1XYDVtnGh4UoZEgYVSXwb/iL9ZmU+9XIwIXhvFkIuhCbQCaNgTwN3rph5TLNTx/lAO07ONy9R7AZC0p/IjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=k+cJkItj; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=ihsH59JUNRvr+UT65RmL5+qC3iBJJ0dfLO/63b1nKVaPhx+dZE1CQ3Z2/zc7PNaEJ6w4xiw6iLYBdSoR0wIqg7NaLIlm3h1+QhoN3wRUIdbfMC6s+XnXIxeZMFJMbN4S+msj9JqqIV4H+/pTFZxZKINqgdOSMYRIiujhJbI5PxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PdlZ4x6+; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B381740E021E;
-	Wed, 26 Jun 2024 10:02:44 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 959C240E021E;
+	Wed, 26 Jun 2024 10:44:56 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id jRMYJYaiDzF9; Wed, 26 Jun 2024 10:02:41 +0000 (UTC)
+	with ESMTP id WLfKgW4WQVYn; Wed, 26 Jun 2024 10:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1719396161; bh=lD4TyeZu/NhhgQQlfGteNi+vykIB4ZpqnU53gHZBmtk=;
+	t=1719398691; bh=Y2MsjGLfE7g1SN+DJyJWLxEAOzeLgB4denA5+ilckE4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k+cJkItji6nli1P7LsZrysOq4r7ZPT0ZOKELzmfKPORSfJvoE2WeT625RSUn0fmCB
-	 nbUXM5++2/fNukBgfO1dNVhLzGXyxEuyzak6YknsN19/pk3Rj6oGTvz+TAcgPdePB2
-	 3HN6qYmjBwMfmiGuD8mHdVjLXGfdYE1g0qX+OdeAYVl3wwgjDGBG2DdgJs54z+JfuK
-	 kNRwUiFZ/e5xkM0bAAiMx5F30vpMOQqRTbkiXDv+JDFidy8j5AYVhM33mQxG2yafQt
-	 +x/+I9aIy7hysiFzYRuM/eAUzJ79rahjKU3V9ziAGM0boqq49UjA3E+bslOYmqch8W
-	 VLyqis0HV6KYO7yHhunAcQ9ZvO2ZKzI5wD9fxuJioMyfgQr/b3y139mfF1SSAlyKM3
-	 3bVo1ydiCgUuER2b2C640UvsUDXIFtjPOuSg/SPG4WbpyIi7/tGCPJS3b7A+qORerz
-	 ENqmu5Ov/HR+drPyZysAdYpMY3xYG3gDw0m8eBEnlkV/57vj7+4sGDqxxCeVpLWzPe
-	 1qpCAFeoWBD6Rjn66fN428cHZTFUR9ES5x+lA5gZj0o/hr7woIj56j6z5rkJ5nxNoe
-	 ae0T0rqFJ1yl2cnEKaFBKQb9sR+VQvPsrPYEZbvhXSZ2YCRyRzaYbkMgyCOD1zWYKl
-	 6F+RxQge14VHxtjAspcd/gDI=
+	b=PdlZ4x6+xF4IrjgXiJynmbDOih/0s7toOMtXLZexV6s3QxDY98m4u1/H2vKjvjtEv
+	 tI5sWZO46M14fnZ+XHwS/52/LRKqnXyHF6aRFKoD/5ruHdG+NykZ9oK3yKxpI8MnQ3
+	 2YtACds0AjJ5WyAIQZ06a4/vQFEombCbYoipqZE6b9dWlzS2v/KXBD67MZpBgp/hLS
+	 fRbLZxqAr+KZMgfhVRMfuKl3eInAaYnimzGafclexXnBtzX/e93FXuXFK8jq2Txypd
+	 NYq78OrHTmLia/vXFeC01Nw7FoHImiSkFqIrbAviM/n//OOzZB2uAhIhI/3lbACkm3
+	 2RRl1AkELgqoZDTlj4sU/xnYD6Lxv/88Iuz6eeI/NaZfbAfxer4fEEexmPPA37KUyx
+	 r0xbm2Ffj4ltVMcE282lMtQB2x1YirE7DJzqCasfumzNNgxL51+hOgPLjg+dbzSVco
+	 uP/UVXU3Y+DljvRiz9sIVnKQ2wOW6xNxB5iY612TPgBBz0E12fZhUIHGnKqjBuRnR5
+	 /4GgmObWcU2zXNrFQrZ0tLvggkp16vQpsI3k7TzQUrQ54iNLQDgO/LRnLY59Lx8aA7
+	 5HMDGdyV6M8GBHusBC04GUmGLNXAtI1BiXpPexdISG/b4uhbOMB5Krhcaarh/Ds8bp
+	 9hVabBrD9DHO04wnwhnhlLM4=
 Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F74D40E0185;
-	Wed, 26 Jun 2024 10:02:30 +0000 (UTC)
-Date: Wed, 26 Jun 2024 12:02:23 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8562440E01D6;
+	Wed, 26 Jun 2024 10:44:33 +0000 (UTC)
+Date: Wed, 26 Jun 2024 12:44:27 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>,
-	EDAC Mailing List <linux-edac@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Mauro Carvalho Chehab <m.chehab@huawei.com>,
-	Shengwei Luo <luoshengwei@huawei.com>,
-	Daniel Ferguson <danielf@os.amperecomputing.com>,
-	Jose <shiju.jose@huawei.com>,
-	Jason Tian <jason@os.amperecomputing.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [GIT PULL for v6.10-rc6] edac fixes for kernel 6.11
-Message-ID: <20240626100223.GAZnvnL9xKNAwFrUFK@fat_crate.local>
-References: <20240626113322.5e263aa0@coco.lan>
+To: tony.luck@intel.com
+Cc: Avadhut Naik <avadhut.naik@amd.com>, x86@kernel.org,
+	linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rafael@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+	rostedt@goodmis.org, lenb@kernel.org, mchehab@kernel.org,
+	james.morse@arm.com, airlied@gmail.com, yazen.ghannam@amd.com,
+	john.allen@amd.com, avadnaik@amd.com
+Subject: Re: [PATCH v2 1/4] x86/mce: Add wrapper for struct mce to export
+ vendor specific info
+Message-ID: <20240626104427.GNZnvxC1JHclKwwKQU@fat_crate.local>
+References: <20240625195624.2565741-1-avadhut.naik@amd.com>
+ <20240625195624.2565741-2-avadhut.naik@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -84,52 +83,67 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240626113322.5e263aa0@coco.lan>
+In-Reply-To: <20240625195624.2565741-2-avadhut.naik@amd.com>
 
-On Wed, Jun 26, 2024 at 11:33:41AM +0200, Mauro Carvalho Chehab wrote:
-> Hi Borislav,
+On Tue, Jun 25, 2024 at 02:56:21PM -0500, Avadhut Naik wrote:
+> Currently, exporting new additional machine check error information
+> involves adding new fields for the same at the end of the struct mce.
+> This additional information can then be consumed through mcelog or
+> tracepoint.
 > 
-> Please pull from:
->   git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-edac tags/edac/v6.10-1
-
-Do:
-
-git tag -l <edac tree>
-
-to see how we're naming the EDAC tags and use the same scheme pls.
-
-> For two patches that fix UEFI 2.6+ implementation of the ARM trace event, 
-> as the original implementation was incomplete.
+> However, as new MSRs are being added (and will be added in the future)
+> by CPU vendors on their newer CPUs with additional machine check error
+> information to be exported, the size of struct mce will balloon on some
+> CPUs, unnecessarily, since those fields are vendor-specific. Moreover,
+> different CPU vendors may export the additional information in varying
+> sizes.
 > 
-> The patches on this series was sent at:
-> 	https://lore.kernel.org/all/20240321-b4-arm-ras-error-vendor-info-v5-rc3-v5-0-850f9bfb97a8@os.amperecomputing.com/
+> The problem particularly intensifies since struct mce is exposed to
+> userspace as part of UAPI. It's bloating through vendor-specific data
+> should be avoided to limit the information being sent out to userspace.
+> 
+> Add a new structure mce_hw_err to wrap the existing struct mce. The same
+> will prevent its ballooning since vendor-specifc data, if any, can now be
+> exported through a union within the wrapper structure and through
+> __dynamic_array in mce_record tracepoint.
+> 
+> Furthermore, new internal kernel fields can be added to the wrapper
+> struct without impacting the user space API.
+> 
+> Note: Some Checkpatch checks have been ignored to maintain coding style.
+> 
+> [Yazen: Add last commit message paragraph.]
+> 
+> Suggested-by: Borislav Petkov (AMD) <bp@alien8.de>
+> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>  arch/x86/include/asm/mce.h              |   6 +-
+>  arch/x86/kernel/cpu/mce/amd.c           |  29 ++--
+>  arch/x86/kernel/cpu/mce/apei.c          |  54 +++----
+>  arch/x86/kernel/cpu/mce/core.c          | 178 +++++++++++++-----------
+>  arch/x86/kernel/cpu/mce/dev-mcelog.c    |   2 +-
+>  arch/x86/kernel/cpu/mce/genpool.c       |  20 +--
+>  arch/x86/kernel/cpu/mce/inject.c        |   4 +-
+>  arch/x86/kernel/cpu/mce/internal.h      |   4 +-
+>  drivers/acpi/acpi_extlog.c              |   2 +-
+>  drivers/acpi/nfit/mce.c                 |   2 +-
+>  drivers/edac/i7core_edac.c              |   2 +-
+>  drivers/edac/igen6_edac.c               |   2 +-
+>  drivers/edac/mce_amd.c                  |   2 +-
+>  drivers/edac/pnd2_edac.c                |   2 +-
+>  drivers/edac/sb_edac.c                  |   2 +-
+>  drivers/edac/skx_common.c               |   2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c |   2 +-
+>  drivers/ras/amd/fmpm.c                  |   2 +-
+>  drivers/ras/cec.c                       |   2 +-
+>  include/trace/events/mce.h              |  42 +++---
+>  20 files changed, 199 insertions(+), 162 deletions(-)
 
-ac3a74c73a6c (tag: refs/tags/edac/v6.10-1) RAS: Report all ARM processor CPER information to userspace
-54481ee6de96 RAS: ACPI: APEI: add conditional compilation to ARM specific error reporting routines.
+Ok, did some minor massaging but otherwise looks ok now.
 
-This is an ACPI patch so it needs Rafael.
-
-Then it needs a Link tag. The ordering we use in the EDAC tree is just like in
-tip:
-
-Fixes:
-Closes:
-Reported-by:
-Suggested-by:
-SOB chain
-Reviewed-by:
-Acked-by:
-Tested-by:
-CC:
-Link:
-
-Then, the ifdeffery is ugly but ghes_handle_arm_hw_error() at least puts it
-inside the function. log_arm_hw_error() should do the same and then you don't
-need the ifdeffery around the prototype.
-
-Patch 1 needs massaging too.
-
-So please send them as a normal set so that I can take a proper look first.
+Tony, any comments? You ok with this, would that fit any Intel-specific vendor
+fields too or do you need some additional Intel-specific changes?
 
 Thx.
 
