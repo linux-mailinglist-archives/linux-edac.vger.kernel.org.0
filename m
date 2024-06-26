@@ -1,66 +1,66 @@
-Return-Path: <linux-edac+bounces-1379-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1380-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A255918058
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 13:58:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE74891807F
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 14:05:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 446351F2119E
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 11:58:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BE791C217CF
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Jun 2024 12:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8673B1802C2;
-	Wed, 26 Jun 2024 11:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C4C180A7B;
+	Wed, 26 Jun 2024 12:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="OlSDsUWb"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="UV8Pr+Gd"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E28149E06;
-	Wed, 26 Jun 2024 11:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA5F180A6A;
+	Wed, 26 Jun 2024 12:04:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719403078; cv=none; b=puSIxl/4LIbgN2GVs/PMuWQNAkufIg3QVfxuXTOZViV1vnds/BuzEPBErXO7ivRPdoYKqoW0LbjhR1z8ENE3ojN+fiOrkNFvQZXMD4zMumWhAwmUhRm4Arl7LjVC7b0B87vRle/amVpqoOlB7MjP0pyP9EKbGsz7FGCRU/o1g+I=
+	t=1719403496; cv=none; b=dxnaBJDu4qvZVofKPDGCU4r9YumNDARpZN1fbRGtc0lgGnll4ZDN3JXdOL01IxH+cTn/vVygjn8LFJdjMYfYpwRINH7jiGaLC+gMIj9E2HzSEjfkNPE5cYxte7anfL3pvw3sL0ui3fWPVf14UogzPwoZMDOshpBPdM/N2OfoYCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719403078; c=relaxed/simple;
-	bh=N4l6MEM8Kb0sl/tgaxpPhxXwDu9KIcUXzbA5ENyc4Pg=;
+	s=arc-20240116; t=1719403496; c=relaxed/simple;
+	bh=RPSKzma0tITGWNvrqVFU2s7s33ANWD+5HmsV/+rnbU0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fHW3pfO1pxDEaYlkx7KKLtVLsnSY/Gk6w6NMYYp01XnFT146tnnGU4eszu59mdjb0PW6tBFtKJn5bJTxArpLxk4IG7h0rGKiHKH9ZsKo1RbOG1oKU6jjBP6rkT0+Yf+6n1vjh4qiJXJ6p2yK2CHQZk5L2JepRHKQUct7h+XwTEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=OlSDsUWb; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=brv+K+J01rL1TtysXJKAqdpHVXsNI6miEGmy4OoNmWp4ktBwd0kSQ5h6FJrN9TRe7sX727fTKY2D/hWvfqxD1C4kORw6hNOlubNmaJC/wj44w/vsmfpGck7Jpa83TSLqgi/BmiP9U/Awyp0E4TxjtAdK7p0Wkf3TaPCVgHHGUWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=UV8Pr+Gd; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E03D640E0219;
-	Wed, 26 Jun 2024 11:57:53 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DFE9540E021D;
+	Wed, 26 Jun 2024 12:04:52 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 3BoJPFucZedR; Wed, 26 Jun 2024 11:57:50 +0000 (UTC)
+	with ESMTP id ZqpO0mb8Hsle; Wed, 26 Jun 2024 12:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1719403069; bh=r49OXr3owHtWkbfriGJWueL5gi1+VE3lZHu88Kq8SVA=;
+	t=1719403488; bh=RtsuJxlpaR/vRpQMDpl+Q6w8HUwk8Oh67+w5Au7b/og=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OlSDsUWbpR1ckeVIt9DRoVmraS5ScvD0SdcsdlzdJDyhdg+qnsStSjIEAoD+C0Bqt
-	 MWKu6ac4ZOsK8bW8kry0XHTaFVqigwkPYBHsOlMBIIHB9EUGuayIEpe1alGG25NrEM
-	 vb1CHn4yFj7a3/LGHPa38fa2UAgWXw5MZrGwCXR1EduRaRHppGdPqc5hZiyGGgkGjv
-	 FlRL/hzLaJfaaVR1O2l0LrbnBMRQoo0NKnI6/1q36ss9Kbfz3FSFHYI6CsWuojyQJB
-	 p9I4LtngJMrlZKfNPEADovMRU10VPAQKNIKYkDErbGQbU6We/CE6usih2z4EMA0AVJ
-	 qhZt5ea3oQFVAdNVBQmHyZLvVoYBO46I3WNrH2FW669elDEtAE1yuZLP8Jgj3Lo/Hu
-	 /PVR8tdPXpy0FU6eJ+RddI/kXUfN+Sh3xsmpW0D5KL3wI2Qt7PQpo1dpOBfLaxxYA+
-	 cuKNB9JJWXgZMQNTr72gTIYg5H9VQsJIdHBvdiLpKcbAfyqPkM/+OPMfWdLR/W3Mnf
-	 PJcV0mWKe6sEdmKP8R5b77OWNxwqht20t0AW75yt7PmtzYmheuEtssQ8arAPjuQ961
-	 uHjYZ2P+HC5inOFoRfoM3H0YmfkUmeCEqFU7rM0qtvPscjOTPbow/UQTFH3RjsT9zp
-	 Vcn287CjQbUSHqpSg3KMwbhQ=
+	b=UV8Pr+GdPP/ZCDA6G9OkFPmx/xqeMXJ8nXBfShukrhWiNJerlwzUndKWYysSAcauU
+	 6DguyyxF7mJw8sk0VxW64oTL3GUvB+Nh9ym/QK77xxdwhUVvtYNXwSWhEEZNhoDP1r
+	 6Ic9FyuuEGZIetqhSm1Z6glPWXt5sMCFXGZ+1glJcbyVCtf4P7ousy6uo/v4tRDkNu
+	 ZkChOMpOnbjIk7LKA9Vj7veh5C12ZYFxucNNrip1HED/pMyRPY0aH781zo/096O7IL
+	 Z37mJ2O8Nt4v9u8VWVGahty+fZ11dWXHo3vemwhiDNTf78zQOV0691mZrIZzo+9YCg
+	 RaD8Ff1ZI6ZBo75q/GPPdgJUHMW7Zw9Q2jGCw7jks74Wms/a8ejOgwIeON/0kkkorH
+	 6+KIJpqtI1ZSQMXKyQJzE7JWs5dWPZcJoGw1XREhZ/xr72ISEVrSShcfDOm3FBZC8q
+	 y1xPvRSzLoJB+fKyfYRJTaAfW18xo8qdv9iPLGwPd9GgnN4gfLajaVGuAZ+4HWLp1p
+	 Y06MKLVPD3dl0b+0NMPqTDPXpri5u/AjIqguG1+oR6AiibgIwoC6JbxeK3yKKF0wGc
+	 dZ8uxcfvfxtC4TFrlvzyQIc9PNF9ivQ0R/14Ar17z51ur8tBisOzLbLSdSHH8XMIVQ
+	 ak63VomfFV+y+H7tsOqyh27A=
 Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E11340E0218;
-	Wed, 26 Jun 2024 11:57:31 +0000 (UTC)
-Date: Wed, 26 Jun 2024 13:57:24 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 981D140E0185;
+	Wed, 26 Jun 2024 12:04:30 +0000 (UTC)
+Date: Wed, 26 Jun 2024 14:04:29 +0200
 From: Borislav Petkov <bp@alien8.de>
 To: Avadhut Naik <avadhut.naik@amd.com>
 Cc: x86@kernel.org, linux-edac@vger.kernel.org,
@@ -70,10 +70,10 @@ Cc: x86@kernel.org, linux-edac@vger.kernel.org,
 	rostedt@goodmis.org, lenb@kernel.org, mchehab@kernel.org,
 	james.morse@arm.com, airlied@gmail.com, yazen.ghannam@amd.com,
 	john.allen@amd.com, avadnaik@amd.com
-Subject: Re: [PATCH v2 3/4] x86/mce/apei: Handle variable register array size
-Message-ID: <20240626115641.GPZnwB-QEGYCoI_Fv3@fat_crate.local>
+Subject: Re: [PATCH v2 4/4] EDAC/mce_amd: Add support for FRU Text in MCA
+Message-ID: <20240626120429.GQZnwDzQ47y1fOlFTp@fat_crate.local>
 References: <20240625195624.2565741-1-avadhut.naik@amd.com>
- <20240625195624.2565741-4-avadhut.naik@amd.com>
+ <20240625195624.2565741-5-avadhut.naik@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -82,93 +82,73 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240625195624.2565741-4-avadhut.naik@amd.com>
+In-Reply-To: <20240625195624.2565741-5-avadhut.naik@amd.com>
 
-On Tue, Jun 25, 2024 at 02:56:23PM -0500, Avadhut Naik wrote:
+On Tue, Jun 25, 2024 at 02:56:24PM -0500, Avadhut Naik wrote:
 > From: Yazen Ghannam <yazen.ghannam@amd.com>
 > 
-> ACPI Boot Error Record Table (BERT) is being used by the kernel to
-> report errors that occurred in a previous boot. On some modern AMD
-> systems, these very errors within the BERT are reported through the
-> x86 Common Platform Error Record (CPER) format which consists of one
-> or more Processor Context Information Structures. These context
-> structures provide a starting address and represent an x86 MSR range
-> in which the data constitutes a contiguous set of MSRs starting from,
-> and including the starting address.
+> A new "FRU Text in MCA" feature is defined where the Field Replaceable
+> Unit (FRU) Text for a device is represented by a string in the new
+> MCA_SYND1 and MCA_SYND2 registers. This feature is supported per MCA
+> bank, and it is advertised by the McaFruTextInMca bit (MCA_CONFIG[9]).
 > 
-> It's common, for AMD systems that implement this behavior, that the
-> MSR range represents the MCAX register space used for the Scalable MCA
-> feature. The apei_smca_report_x86_error() function decodes and passes
-> this information through the MCE notifier chain. However, this function
-> assumes a fixed register size based on the original HW/FW implementation.
+> The FRU Text is populated dynamically for each individual error state
+> (MCA_STATUS, MCA_ADDR, et al.). This handles the case where an MCA bank
+> covers multiple devices, for example, a Unified Memory Controller (UMC)
+> bank that manages two DIMMs.
 > 
-> This assumption breaks with the addition of two new MCAX registers viz.
-> MCA_SYND1 and MCA_SYND2. These registers are added at the end of the
-> MCAX register space, so they won't be included when decoding the CPER
-> data.
+
+From here...
+
+> Print the FRU Text string, if available, when decoding an MCA error.
 > 
-> Rework apei_smca_report_x86_error() to support a variable register array
-> size. This covers any case where the MSR context information starts at
-> the MCAX address for MCA_STATUS and ends at any other register within
-> the MCAX register space.
+> Also, add field for MCA_CONFIG MSR in struct mce_hw_err as vendor specific
+> error information and save the value of the MSR. The very value can then be
+> exported through tracepoint for userspace tools like rasdaemon to print FRU
+> Text, if available.
 > 
-> Add code comments indicating the MCAX register at each offset.
-> 
-> [Yazen: Add Avadhut as co-developer for wrapper changes.]
+>  Note: Checkpatch checks/warnings are ignored to maintain coding style.
+
+... to here goes into the trash can except what MCA_CONFIG is for being logged
+as part of the error.
+
+> [Yazen: Add Avadhut as co-developer for wrapper changes. ]
 > 
 > Co-developed-by: Avadhut Naik <avadhut.naik@amd.com>
 > Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
-This needs Avadhut's SOB after Yazen's.
+Ditto as for patch 3.
 
-Touchups ontop:
+> ---
 
-diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index 7a15f0ca1bd1..6bbeb29125a9 100644
---- a/arch/x86/kernel/cpu/mce/apei.c
-+++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -69,7 +69,7 @@ EXPORT_SYMBOL_GPL(apei_mce_report_mem_error);
- int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- {
- 	const u64 *i_mce = ((const u64 *) (ctx_info + 1));
--	unsigned int cpu, num_registers;
-+	unsigned int cpu, num_regs;
- 	struct mce_hw_err err;
- 	struct mce *m = &err.m;
- 
-@@ -93,10 +93,10 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 	/*
- 	 * The number of registers in the register array is determined by
- 	 * Register Array Size/8 as defined in UEFI spec v2.8, sec N.2.4.2.2.
--	 * Ensure that the array size includes at least 1 register.
-+	 * Sanity-check registers array size.
- 	 */
--	num_registers = ctx_info->reg_arr_size >> 3;
--	if (!num_registers)
-+	num_regs = ctx_info->reg_arr_size >> 3;
-+	if (!num_regs)
- 		return -EINVAL;
- 
- 	mce_setup(m);
-@@ -118,13 +118,12 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 	/*
- 	 * The SMCA register layout is fixed and includes 16 registers.
- 	 * The end of the array may be variable, but the beginning is known.
--	 * Switch on the number of registers. Cap the number of registers to
--	 * expected max (15).
-+	 * Cap the number of registers to expected max (15).
- 	 */
--	if (num_registers > 15)
--		num_registers = 15;
-+	if (num_regs > 15)
-+		num_regs = 15;
- 
--	switch (num_registers) {
-+	switch (num_regs) {
- 	/* MCA_SYND2 */
- 	case 15:
- 		err.vi.amd.synd2 = *(i_mce + 14);
+> @@ -853,8 +850,18 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
+>  
+>  		if (m->status & MCI_STATUS_SYNDV) {
+>  			pr_cont(", Syndrome: 0x%016llx\n", m->synd);
+> -			pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
+> -				 err->vi.amd.synd1, err->vi.amd.synd2);
+> +			if (mca_config & MCI_CONFIG_FRUTEXT) {
+> +				char frutext[17];
+> +
+> +				memset(frutext, 0, sizeof(frutext));
+
+Why are you clearing it if you're overwriting it immediately?
+
+> +				memcpy(&frutext[0], &err->vi.amd.synd1, 8);
+> +				memcpy(&frutext[8], &err->vi.amd.synd2, 8);
+> +
+> +				pr_emerg(HW_ERR "FRU Text: %s", frutext);
+> +			} else {
+> +				pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
+> +					 err->vi.amd.synd1, err->vi.amd.synd2);
+> +			}
+>  		}
+>  
+>  		pr_cont("\n");
+> -- 
+> 2.34.1
+> 
 
 -- 
 Regards/Gruss,
