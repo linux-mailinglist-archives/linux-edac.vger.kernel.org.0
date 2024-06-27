@@ -1,89 +1,103 @@
-Return-Path: <linux-edac+bounces-1400-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1401-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDFFE91A3F8
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 12:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E55791A7D7
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 15:28:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B7B41C21359
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 10:36:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 310CB1C20B12
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 13:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D848A13E04F;
-	Thu, 27 Jun 2024 10:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D8319409E;
+	Thu, 27 Jun 2024 13:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DR1mA6pe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2upjU3x"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A571813DBBC;
-	Thu, 27 Jun 2024 10:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B773C194081;
+	Thu, 27 Jun 2024 13:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719484575; cv=none; b=o5YNoL+BrFCM09sD9Is4EZZblPc2NagH/yb+0wWeCewQ6OW/IeWQUx/heW6o0pD8MhrgPhhGLn8aBuSwqgWD8kbZtoadYtTtgRVRn5myUAHnMHL+9Gam+oOh1rSKl7oDjZKXxT7lGjn5pX1plLl1KJQ24oDBUZ8zkxeYhrl+1Q8=
+	t=1719494918; cv=none; b=C5br2KuL5shRZ5AFWs+C+q+CZHccJ/Vxkcj34Spst3b1/F41tUMX6VAOtqJtI8YdoANyhfWFV5vEL4TuzWGFW4jjvI2iMwcCapMqXO1uNJAVHBglL39JNU5EHwa2n01Q22kQgFAUP8fqukrg2XUP3IpfPUs/Zm6zgW0mizRPsck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719484575; c=relaxed/simple;
-	bh=9dr2O71goYL0Y2jeVans7wbNZNCDIE61bIUBtDFtk0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KLBYU0uocIIMlww2Q65GwZbLw55B1dfIlSIZI+pFqVBJ5mXqTlsDouKLJTI3XyintaV3ceJE5Svw0Yv5dgyMzl4IezwnhEe6KplA7bmOmNMajMVIW0GrrX0vx/qzNxS+uHxmZJ9UqDDrbSbOcc8MC0G0rvQeSL8kMKAVg5S2Z9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DR1mA6pe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D4EC4AF07;
-	Thu, 27 Jun 2024 10:36:15 +0000 (UTC)
+	s=arc-20240116; t=1719494918; c=relaxed/simple;
+	bh=+045qnTXBH8+G9rW6kXmFWaJL7epAnf4z+AkvHv0WsE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UL7vsJUBez7/fox92eUsXsImO6r+C5bYlHRH4Sd+bUbOPRIbBSv2UcwBxOARL8z7iQ1Za7YYHnZZlcQiNvbizA0WZAjIZ31T+gvwiGuSvLLaupZ4hTcUaZ71RC17WOPvde/qP+aH8YQDHqlyFV/ITLO+RFW/3n0HFjttWG6wKUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2upjU3x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9B2C2BBFC;
+	Thu, 27 Jun 2024 13:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719484575;
-	bh=9dr2O71goYL0Y2jeVans7wbNZNCDIE61bIUBtDFtk0E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DR1mA6peRt/InxmCu95SVVyBu7qPu4rrq4itjGAR3pw14XUtQ3OPv9L07qO7dbO6S
-	 MZibo7r7TUr16dwJ9R525s1DhvQk665Iu2NoWRwLG65uMkkBYuwG4l90KIzKKq+7wB
-	 DjlbzOYtnisTI0k3NJ0PfhUz6Ahb4JPJWz/jCDvE6k+bVJXV6ZEwXVVzThxg+HLxEJ
-	 WMdwcAPmL4VmOLGT53QZuVyv9R+4YYyPc7LxY5xINPHcV+E3FMSbeOg8EPHLHnSDqI
-	 YZlTmgya/1YSDqaUaNQjdoD0VTlXI/bCFniyUycST81Zk/dL4+k/6GLdUNIgkLXWib
-	 llXXeGVGYLzpw==
-Received: from mchehab by mail.kernel.org with local (Exim 4.97.1)
-	(envelope-from <mchehab@kernel.org>)
-	id 1sMmU9-0000000BC91-0phD;
-	Thu, 27 Jun 2024 12:36:13 +0200
+	s=k20201202; t=1719494918;
+	bh=+045qnTXBH8+G9rW6kXmFWaJL7epAnf4z+AkvHv0WsE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=j2upjU3xjS9SUSWtv9T+LW79+Lvx1Id7q/oxurQEPr5zPVdMmttqAlyM9DHk7EakU
+	 bXILn4NegpXLyv5Rc19H5zzAK6LbKnW79TYrzuCkrkt6MYsZvnBb1509zhmOMFkd4Z
+	 0Kw46xvqetXD4qaSrWrZ1cHRBaPnWp29B6zfUIpnoW2CSmMGunNSsr6l11MVNmgGeX
+	 6tN4P8fT6q7MHndkeVCasF4+M7xBQKGXH1nI+v9gTuyvkQgXAnj+TZPP02NB0+c7mc
+	 PLxgT2G3Ch9GCKh2PqIFl2aWwTPLyFXLEmoXibZyExNOo3IyYxT6+GXCuF+913f386
+	 QF2tOrAMQ7NwA==
+Date: Thu, 27 Jun 2024 15:28:30 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: Borislav Petkov <bp@alien8.de>
-Cc: Shengwei Luo <luoshengwei@huawei.com>,
-	"Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	"Shiju Jose" <shiju.jose@huawei.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Daniel Ferguson <danielf@os.amperecomputing.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Len Brown <lenb@kernel.org>,
-	Shuai Xue <xueshuai@linux.alibaba.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tony Luck <tony.luck@intel.com>,
-	Tyler Baicar <tbaicar@codeaurora.org>,
-	Will Deacon <will@kernel.org>,
-	Xie XiuQi <xiexiuqi@huawei.com>,
-	linux-acpi@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jason Tian <jason@os.amperecomputing.com>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v2 2/2] RAS: Report all ARM processor CPER information to userspace
-Date: Thu, 27 Jun 2024 12:36:08 +0200
-Message-ID: <75b5c9a47c9caf9490c5eedd85e201b7bdb8bf57.1719484498.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <cover.1719484498.git.mchehab+huawei@kernel.org>
+Cc: Shengwei Luo <luoshengwei@huawei.com>, "Jonathan Cameron"
+ <Jonathan.Cameron@huawei.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Shiju Jose" <shiju.jose@huawei.com>, Dan Williams
+ <dan.j.williams@intel.com>, Daniel Ferguson
+ <danielf@os.amperecomputing.com>, Dave Jiang <dave.jiang@intel.com>, Ira
+ Weiny <ira.weiny@intel.com>, James Morse <james.morse@arm.com>, Len Brown
+ <lenb@kernel.org>, Shuai Xue <xueshuai@linux.alibaba.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Tony Luck <tony.luck@intel.com>, Tyler Baicar
+ <tbaicar@codeaurora.org>, Will Deacon <will@kernel.org>, Xie XiuQi
+ <xiexiuqi@huawei.com>, linux-acpi@vger.kernel.org,
+ linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, Jason Tian
+ <jason@os.amperecomputing.com>
+Subject: Re: [PATCH v2 2/2] RAS: Report all ARM processor CPER information
+ to userspace
+Message-ID: <20240627152830.3c6f5853@coco.lan>
+In-Reply-To: <75b5c9a47c9caf9490c5eedd85e201b7bdb8bf57.1719484498.git.mchehab+huawei@kernel.org>
 References: <cover.1719484498.git.mchehab+huawei@kernel.org>
+	<75b5c9a47c9caf9490c5eedd85e201b7bdb8bf57.1719484498.git.mchehab+huawei@kernel.org>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Shengwei Luo <luoshengwei@huawei.com>
+Em Thu, 27 Jun 2024 12:36:08 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+
+> From: Shengwei Luo <luoshengwei@huawei.com>
+> 
+> The ARM processor CPER record was added at UEFI 2.6, and hasn't
+> any changes up to UEFI 2.10 on its struct.
+> 
+
+Heh, I over-cleanup this patch. This type cast is needed:
+@@ -70,7 +70,7 @@ void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
+ 
+ 	err_info = (struct cper_arm_err_info *)(err + 1);
+ 	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
+-	ctx_err = ctx_info;
++	ctx_err = (u8 *)ctx_info;
+ 	for (n = 0; n < err->context_info_num; n++) {
+ 		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
+ 		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
+
+Full patch with this small fix enclosed.
+
+Thanks,
+Mauro
+
+[PATCH v2.1 2/2] RAS: Report all ARM processor CPER information to userspace
 
 The ARM processor CPER record was added at UEFI 2.6, and hasn't
 any changes up to UEFI 2.10 on its struct.
@@ -159,12 +173,6 @@ Tested-by: Shiju Jose <shiju.jose@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Link: https://uefi.org/specs/UEFI/2.10/Apx_N_Common_Platform_Error_Record.html#arm-processor-error-section
----
- drivers/acpi/apei/ghes.c |  3 +--
- drivers/ras/ras.c        | 45 +++++++++++++++++++++++++++++++++++--
- include/linux/ras.h      | 16 ++++++++++----
- include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
- 4 files changed, 99 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
 index 2589a3536d91..90efca025d27 100644
@@ -357,7 +365,4 @@ index 7c47151d5c72..ce5214f008eb 100644
  );
  
  /*
--- 
-2.45.2
-
 
