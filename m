@@ -1,72 +1,72 @@
-Return-Path: <linux-edac+bounces-1412-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1413-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A45AF91AE29
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 19:35:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 060E691AE2C
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 19:36:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6F791C21D02
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 17:35:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C325B299D1
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 17:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5751A0707;
-	Thu, 27 Jun 2024 17:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46DB19D8B0;
+	Thu, 27 Jun 2024 17:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCcSwfYM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="chg/88jK"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26DF19D8AA;
-	Thu, 27 Jun 2024 17:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED82D19AA48;
+	Thu, 27 Jun 2024 17:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719509600; cv=none; b=oPZzbGXc/hWHefUKNJgbDphPXvWi/ZkD0JH5qERA7W1D2Q51+73pYvkrp5AOL0CmEoso8GrnIGdk0Xs+8pXYYs46ZBrQt21OYrACM7EUbUnB5u8A1qtop67XTOXKAAPa3C6KLfXMUlPc0NKlx0uDUzgRIrPcT5meZIiwQLJywLI=
+	t=1719509602; cv=none; b=s0Qzm2BjfYxKMH/IHUo/GopspmXeDekBGCrNAC2de+L0T8ule+PYfAqgbUjUxfGCOJ68OzQc8VhDEdsQc96C4Q93pC4nxXsCX0xUKH7d7wzbtBZ3bn2ks5mnFkPwpkWzWCJMU9QLc+qetCE629Ki5EnckXiWwO5ErBnH7cBeIwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719509600; c=relaxed/simple;
-	bh=IYmmnV5RVqUUMm9QlI4vjGcOPFzp2z6XRNAi5GyWOUk=;
+	s=arc-20240116; t=1719509602; c=relaxed/simple;
+	bh=YHq0Y1+/9ES+aKYsEIHWalSLRrmTzHNw4gkOlg6Iw6E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nhfrnnzNsdaybGUhOL4/w1xT4bV7LeK0F+OVPkrTsBlAGyEsXKoFUwtn1kI1ygHrNMheKEr58C5jJAXrh0KGZsYd3VExdpVmrKmq0QIOWXR7kzmbnXKOjSpe+OTTBq3xFYZSITRjpC8sV3wrkYyhVe0yOjvl2dwjw0HaugKf7mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCcSwfYM; arc=none smtp.client-ip=209.85.208.175
+	 MIME-Version; b=co+fzohYEyrp+XeBklAYximzVE9NH6VSlHT++n19mFNS8/zoiXFcriIXTZG/Pz+XSANXPxe2dpkEkQgTe2owcFkMA3RES2AjEIm0rSPrseHxb3+tOnTcUTktJ6925DpDhyeMxjp7kTFFwTOZy4wJ+eA3LIlCa9fbB/UMrACGdBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=chg/88jK; arc=none smtp.client-ip=209.85.208.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2eaa89464a3so92837191fa.3;
-        Thu, 27 Jun 2024 10:33:18 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ec3f875e68so90654701fa.0;
+        Thu, 27 Jun 2024 10:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719509597; x=1720114397; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719509599; x=1720114399; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wkA9C4eBe9zrPFkOyR9chwI8BZqNOGe215GRsYCQ0Vk=;
-        b=bCcSwfYM0PVWTMlMSVEMXxOPMG4h5s2baiUkcM2CKqXHRitM/SqfaaZO1x/8tR06X8
-         RLgBocNRaE/OUtbXdTsI+0ZVkR/liNDmpv+369god0L001hQZgHfsPL1rxl3PhbFNHhj
-         eanh78nBWybrtK0eEMRceq+bU1eKR7m63k8xNmtShVzFYC9dpJMJ7OWikthF7+ipndIl
-         wda1CTxAapkXeqprA1kahCkH21eo9YREKsDCfw8k2+KUVTjyzh8hOF+N3BubaUsyaaI2
-         dl3cek/0FSBCuW82ohZRi0wqP8IPkyGWO3JoHLFzSHHs6atYtT3zAbnT2GLMiq9Mvd0Z
-         TGYw==
+        bh=ISugwrJpK+qCNO3mL2KSTDUU9IbUyyHgug7HQ4HSe5U=;
+        b=chg/88jKp6pPp/RTFoKlphqLO91Z8I/l/r9D0MH+8XL2OA22Z2UvRl59C7xSci2+NG
+         bHgm+cK9Fs/2YJFY/nzjoLacvHRlR6a1az+qHk9W0QZOtvEGgbQbvWdAZCS8Tz54KxCE
+         ohuSjFRpk9xPtcJNFUmc6SD4nluQtRK100my7m0MSS0e/3inNcG67X57zOkm/5uph+1C
+         kdFUUpjbPdFURKWa8nLoyWBplC4Bzm08zFfDfAJqo4paBMqUXMslFaxPDE3r/8jHQkXF
+         iDJOvW9kA8ciOPj6md6bC19iKpuNUzyav232qLol7+d78gUROkrpy4jgomND1iCydbq/
+         8x3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719509597; x=1720114397;
+        d=1e100.net; s=20230601; t=1719509599; x=1720114399;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wkA9C4eBe9zrPFkOyR9chwI8BZqNOGe215GRsYCQ0Vk=;
-        b=JVUoggwMnWMOLnLz1+WSnM9dWcWE4p2jocqS9jTQbiJhFacyaXOMb2HKABfR4yF+Ez
-         osir4zdwZm48vZdCVNRRuyafE7cbGkyYwkFJIkAEOk5bR8uzDkt8z7CS7s+5skZfss1F
-         i0uRP2iqg6KL0tsjkI38tNbS6V8rJgt26l6L4OEycpFw8z1WhVXs53+/C43XYLAjfmW0
-         aerJrS0UMbsZEzyLkmRBHzGmjABkKG1p1rAsLY3HMci8vkRpPU7tAkDuSG1xKQ+G9GkB
-         PqiMI1aQG13G2U6ef1H8RNez2zuKdeCGjYpZPnQvUl012mkBJTkNZtQ7hstBNlkkktHD
-         OSIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfaT2IM+iYEWnUT7WczIbu7zXVPymE31B2pG9oJCTdbyEkNRaNZoVx7r7EQsfm4h8tfCzO56w0QFrieRuoilOBBqle48MG8QEdtagscC7yJwhQWLpqcwF8vD1ER81YsR/J29C1yQDcuQ==
-X-Gm-Message-State: AOJu0YxRFR7oM1YjRetzqINr/68Y0WJYjwZass2M7QVDMXCPdDwjMUWl
-	nqhSU8caQ4EbB0D/ducyqf3/XeXUZtIRDdH+Aqsbx6ox3hf5eC1Z
-X-Google-Smtp-Source: AGHT+IGRHdnaZ61P0qLag6rV5tFY8rbbLPkyQL7JrDkYZXnvm5q2UAt24A8bDte9VKFYXgoMVqZu3w==
-X-Received: by 2002:a2e:97d8:0:b0:2eb:ef78:29c8 with SMTP id 38308e7fff4ca-2ec5797a37fmr91414371fa.14.1719509596861;
-        Thu, 27 Jun 2024 10:33:16 -0700 (PDT)
+        bh=ISugwrJpK+qCNO3mL2KSTDUU9IbUyyHgug7HQ4HSe5U=;
+        b=bk0PAxwFL1eBt4A9fPA7oBNtOXCEPTBu6ttBvfTGbAm/Hz8FydrcBY1uGUjBn8eZPe
+         Dw1tyEptxQprqlfpeQ3yY1PYQ9b23wUKf3BbRdttJV7OlkA3HdjfAbQVJxQbgble6c+H
+         dRk79QvBpRSQS9s5fuoUt6YBHDfBAWt0t2kNHHrBgrBKNbpi+2B6x0uSLsGYhTUhjdNw
+         enLeo5XCbIXNYIUMNIcxR61Lv1b8YZ650Y2XShjtKUDrJMYA1y6DsLPaxHKWndKhBGgJ
+         ffkgm32N4xDe2zVeN0h5pDXYh1bO1etsi4LVVdfgG50O5HNm5TJzFCRT/VrfRPcxxSFB
+         3yiw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6T1Ez/RpChu4QHt9D6ebevSwrIkUruAQ/UeQh0e7G3ayXQHW1d6DWQDygfLApH9xXwwd+a4Qk691GrBkHWhA+4YP+Q7VzJ/OQgBoc8exOycgy12DvTgG3dDTMIdvu5LCqqwkSG6B4nw==
+X-Gm-Message-State: AOJu0Yz4C6dOF6ZwDzQu9TUi3zEv8Prqh1MWJrccyKnwTvsroDXq/aaM
+	v4e+kLHZCdLycUUPc1z5ZGVuxS63+rQX/o84HwLo/h2BInKBW45E
+X-Google-Smtp-Source: AGHT+IFJKI9Xx+K5dwhq/UHl+CAPUoBjUFBUnEIN5qh4rNroF9Q1yIhmdU4HDUxxv9PnwR5qtx/vKw==
+X-Received: by 2002:a2e:7a0a:0:b0:2ec:543e:909e with SMTP id 38308e7fff4ca-2ec5b378497mr88498941fa.15.1719509599129;
+        Thu, 27 Jun 2024 10:33:19 -0700 (PDT)
 Received: from localhost ([213.79.110.82])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ee4a344147sm3286201fa.15.2024.06.27.10.33.16
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ee4a4cf7a3sm3203691fa.135.2024.06.27.10.33.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jun 2024 10:33:16 -0700 (PDT)
+        Thu, 27 Jun 2024 10:33:18 -0700 (PDT)
 From: Serge Semin <fancer.lancer@gmail.com>
 To: Michal Simek <michal.simek@amd.com>,
 	Alexander Stein <alexander.stein@ew.tq-group.com>,
@@ -83,11 +83,10 @@ Cc: Serge Semin <fancer.lancer@gmail.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Subject: [PATCH RESEND v6 09/18] EDAC/synopsys: Shorten out struct ecc_error_info.bankgrpnr field name
-Date: Thu, 27 Jun 2024 20:32:16 +0300
-Message-ID: <20240627173251.25718-10-fancer.lancer@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v6 10/18] EDAC/synopsys: Drop redundant info from the error messages
+Date: Thu, 27 Jun 2024 20:32:17 +0300
+Message-ID: <20240627173251.25718-11-fancer.lancer@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240627173251.25718-1-fancer.lancer@gmail.com>
 References: <20240627173251.25718-1-fancer.lancer@gmail.com>
@@ -99,84 +98,61 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-None of the ecc_error_info structure fields have "nr" suffix even though
-each of them do represent some number (row number, column number, bank
-number). Drop the suffix from the bankgrpnr field name for the sake of
-unification then. Similarly drop the word "Number" from the CE/UE error
-messages too since it doesn't give any helpful info there.
+Currently the custom error messages are needlessly long so the logged text
+gets to be printed in several lines in console. There is some
+duplicated/redundant information which can be freely removed from it: drop
+the message prefix "DDR ECC error type:%s" since the resultant text
+printed to the log by the edac_mc_printk() method will contain the error
+type and the memory controller id referring to the device detected the
+error anyway; with no harm to readability shorten out the phrase "Bit
+Position" to being just "Bit".
 
 Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
-Reviewed-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 ---
- drivers/edac/synopsys_edac.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/edac/synopsys_edac.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index a874f6e4130d..8b7069bca600 100644
+index 8b7069bca600..23a2f56fcb74 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -268,17 +268,17 @@
-  * @row:	Row number.
-  * @col:	Column number.
-  * @bank:	Bank number.
-+ * @bankgrp:	Bank group number.
-  * @bitpos:	Bit position.
-  * @data:	Data causing the error.
-- * @bankgrpnr:	Bank group number.
-  */
- struct ecc_error_info {
- 	u32 row;
- 	u32 col;
- 	u32 bank;
-+	u32 bankgrp;
- 	u32 bitpos;
- 	u32 data;
--	u32 bankgrpnr;
- };
- 
- /**
-@@ -429,7 +429,7 @@ static int zynqmp_get_error_info(struct synps_edac_priv *priv)
- 	regval = readl(base + ECC_CEADDR1_OFST);
- 	p->ceinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
- 					ECC_CEADDR1_BNKNR_SHIFT;
--	p->ceinfo.bankgrpnr = (regval &	ECC_CEADDR1_BNKGRP_MASK) >>
-+	p->ceinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
- 					ECC_CEADDR1_BNKGRP_SHIFT;
- 	p->ceinfo.col = (regval & ECC_CEADDR1_COL_MASK);
- 	p->ceinfo.data = readl(base + ECC_CSYND0_OFST);
-@@ -443,7 +443,7 @@ static int zynqmp_get_error_info(struct synps_edac_priv *priv)
- 	regval = readl(base + ECC_UEADDR0_OFST);
- 	p->ueinfo.row = (regval & ECC_CEADDR0_RW_MASK);
- 	regval = readl(base + ECC_UEADDR1_OFST);
--	p->ueinfo.bankgrpnr = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
-+	p->ueinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
- 					ECC_CEADDR1_BNKGRP_SHIFT;
- 	p->ueinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
- 					ECC_CEADDR1_BNKNR_SHIFT;
-@@ -478,9 +478,9 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
+@@ -478,13 +478,13 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
  		pinf = &p->ceinfo;
  		if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT) {
  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
--				 "DDR ECC error type:%s Row %d Col %d Bank %d BankGroup Number %d Bit Position: %d Data: 0x%08x",
-+				 "DDR ECC error type:%s Row %d Col %d Bank %d Bank Group %d Bit Position: %d Data: 0x%08x",
- 				 "CE", pinf->row, pinf->col, pinf->bank,
--				 pinf->bankgrpnr, pinf->bitpos, pinf->data);
-+				 pinf->bankgrp, pinf->bitpos, pinf->data);
+-				 "DDR ECC error type:%s Row %d Col %d Bank %d Bank Group %d Bit Position: %d Data: 0x%08x",
+-				 "CE", pinf->row, pinf->col, pinf->bank,
+-				 pinf->bankgrp, pinf->bitpos, pinf->data);
++				 "Row %d Col %d Bank %d Bank Group %d Bit %d Data 0x%08x",
++				 pinf->row, pinf->col, pinf->bank, pinf->bankgrp,
++				 pinf->bitpos, pinf->data);
  		} else {
  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
- 				 "DDR ECC error type:%s Row %d Bank %d Col %d Bit Position: %d Data: 0x%08x",
-@@ -497,9 +497,9 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
+-				 "DDR ECC error type:%s Row %d Bank %d Col %d Bit Position: %d Data: 0x%08x",
+-				 "CE", pinf->row, pinf->bank, pinf->col,
++				 "Row %d Bank %d Col %d Bit: %d Data: 0x%08x",
++				 pinf->row, pinf->bank, pinf->col,
+ 				 pinf->bitpos, pinf->data);
+ 		}
+ 
+@@ -497,13 +497,12 @@ static void handle_error(struct mem_ctl_info *mci, struct synps_ecc_status *p)
  		pinf = &p->ueinfo;
  		if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT) {
  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
--				 "DDR ECC error type :%s Row %d Col %d Bank %d BankGroup Number %d",
-+				 "DDR ECC error type :%s Row %d Col %d Bank %d Bank Group %d",
- 				 "UE", pinf->row, pinf->col, pinf->bank,
--				 pinf->bankgrpnr);
-+				 pinf->bankgrp);
+-				 "DDR ECC error type :%s Row %d Col %d Bank %d Bank Group %d",
+-				 "UE", pinf->row, pinf->col, pinf->bank,
+-				 pinf->bankgrp);
++				 "Row %d Col %d Bank %d Bank Group %d",
++				 pinf->row, pinf->col, pinf->bank, pinf->bankgrp);
  		} else {
  			snprintf(priv->message, SYNPS_EDAC_MSG_SIZE,
- 				 "DDR ECC error type :%s Row %d Bank %d Col %d ",
+-				 "DDR ECC error type :%s Row %d Bank %d Col %d ",
+-				 "UE", pinf->row, pinf->bank, pinf->col);
++				 "Row %d Bank %d Col %d",
++				 pinf->row, pinf->bank, pinf->col);
+ 		}
+ 
+ 		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
 -- 
 2.43.0
 
