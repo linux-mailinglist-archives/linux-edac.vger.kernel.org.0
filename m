@@ -1,188 +1,119 @@
-Return-Path: <linux-edac+bounces-1424-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1425-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5DDA91B661
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 07:44:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A64C91B69A
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 08:01:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F504B23E7F
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 05:44:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A4D31C22B24
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 06:01:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D675646453;
-	Fri, 28 Jun 2024 05:41:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DBF437143;
+	Fri, 28 Jun 2024 06:01:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cwt+1Ngt"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="GUiKgoqN"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F673C08A;
-	Fri, 28 Jun 2024 05:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D1917F7;
+	Fri, 28 Jun 2024 06:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719553318; cv=none; b=WEkd6ctvnb0Y7rOyrmLu+mr22lKfqbYSgBPPvbub95u7JqkzjhT6AhiCyOL3esuTNcO7jHGilrzM5jKb4XZ7H0ZEHbMlPpxwH1DhlhftpQ6Fp2DJ8E5/VtxhS9RSUGL7yEimwWu6g/JdsIFEhjFaEqNXDFtYhZ9Z1iHHP0IeX3s=
+	t=1719554500; cv=none; b=L1Gws654QEN82LoZUTldiXtAwQ2eYVwaL+YMU35xIPyoYTOA+HXK3PbDea/a77Fi39H5OpfVdjyieJGotsk4iePjTodqq8OQb6DuePFvqpRzQzNGK2dyPyIEVH2TAqFzDBWJ1T0MtcD7YMFpafz24YWux+2ghSel76hLRpGWTo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719553318; c=relaxed/simple;
-	bh=csJqhxOzCeto3DBvtcGzR+6z5HcyLrbiBa9C1wvpq5c=;
+	s=arc-20240116; t=1719554500; c=relaxed/simple;
+	bh=P6y1P3/wGDrObrg47XiQpw9OHprDZ9SYzqDl+eYONgw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C6hBtaNETB1hy52BusXdbHSJoz9d/nWaP4Ap61uUYfzz9lw9DqY8qCDS9jPhTK89Nz+ZtX13iAdxgslpp53yQu6XBalDAmLYpEyP4dtG2U3YV0gooImW65Dhq8RJ2KtALzm6whRjuRP235KYET454D+ByXTf8SdkvXOdLQTmm+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cwt+1Ngt; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719553317; x=1751089317;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=csJqhxOzCeto3DBvtcGzR+6z5HcyLrbiBa9C1wvpq5c=;
-  b=Cwt+1NgtGmQlLrFr8ljqqsB4IXEOqH68k9flA9Ao2lJvD7kv9t7ai5+S
-   RjGdRhnjunKJdn75iva06wPc2JG/I9T7vbIWJWcUn67C+vMO1MTO1Tc4R
-   bsa4ERy3TwNyCj2xdqzRx5Nvqlo5G4pFysEcHeMnXziKBoFipIl19LDTP
-   MjS26YEi7E3aXOPEntsIYRyzAj8uTnnpgDDaPcmkNEaM6sx3tABemSYAE
-   B0S7mYLeq34gRe1zVyEqJvUOtuL+DwiT5PUJkBGINLiOIvohkrC9gezCQ
-   xzo6pIjSd/ipXAV3PwbO5aBi7ff7eer016hoxYHka3m8In8k1SA1GIuhy
-   A==;
-X-CSE-ConnectionGUID: WVyxPPIFRZGstV5YKH4MmA==
-X-CSE-MsgGUID: ifCWdn+QQ+SdzR/9M2f6DQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16602534"
-X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="16602534"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 22:41:56 -0700
-X-CSE-ConnectionGUID: 9FcuFt56QNinwr1mxyaTnw==
-X-CSE-MsgGUID: suthwj7KRoCiMxuLu2BjKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="44514689"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 27 Jun 2024 22:41:51 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sN4Mn-000GqH-1g;
-	Fri, 28 Jun 2024 05:41:49 +0000
-Date: Fri, 28 Jun 2024 13:41:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	Shengwei Luo <luoshengwei@huawei.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Daniel Ferguson <danielf@os.amperecomputing.com>,
-	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Len Brown <lenb@kernel.org>, Shiju Jose <shiju.jose@huawei.com>,
-	Shuai Xue <xueshuai@linux.alibaba.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tony Luck <tony.luck@intel.com>,
-	Tyler Baicar <tbaicar@codeaurora.org>,
-	Will Deacon <will@kernel.org>, Xie XiuQi <xiexiuqi@huawei.com>,
-	linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=g0I5Shp3MjT6TvzkHQlcqTMApk+MVmLmp7OKGJBG+9qtoJmR99ifiPLCK9/Z98MpF3BRlzVxYhjhhaisDj4q1DaNFkBBNWBdoI2Y0UH+D22WAMfNBkPX0jfZ6rkbxQWwHuUL4NJ1m1l21R3UzUusbfQ5qEH4O32VgKLFzRLz0+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=GUiKgoqN; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4036B40E0194;
+	Fri, 28 Jun 2024 06:01:35 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id cNAKaoYubs04; Fri, 28 Jun 2024 06:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1719554491; bh=Mf9vyWFcLEnZ2ff2oQQwYlpqrKcC87z/wHFeRfd/kt8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GUiKgoqND0rQYtu3a6wlVTolrNJE0mGRmNEcUEZ8Y1D2mWYGl521jK3wl040PRUvo
+	 OSEs3Su8VEWDjgnEn1dBldHjsFBBupe+S7Zkbs+oz44MgPCuUBZPmFCTi0B3YeuNoj
+	 hok76XF6d4Las8lxnk42KQgJapVtDVjuD5sG3jvepcZFXnRRmQhiStv7fJmdJq8C+C
+	 pIFHQYv68aRPx4yrPo3LhhMWUs3SLtnnM6GoocgesjE9PvRRUjB+hC3AkUuMegXk8A
+	 LyR+r9wbI1uN040u54hdgpSmkBD86VEp/RIJnRZ53DjeJWgsDq4JHWLvnTMdE2/0rd
+	 8UbON54YEnRVNB5WHv1rfDLBqyTgHNxU9MIj26TvTu+NFAIFuWhRNU7jzmTMVCBibB
+	 wKw41LrL92OOceRdRQTI8LZ24mTlnIV4Z4THCZ6/hhcN4v7OLl4aF3YKlqzBP+9CPg
+	 vXTVUMSQW9KoApd30in+Nf7hZA/HJQseiJzx9kV6OdoMtDM/ID1sJGfgTSU7xvidkj
+	 WgtasDbqX987SUf5qw+ZVkkvi8NA4YAIFz54a4/VOngcYEF2FIiZZe/9XPlyTK3TOv
+	 tRBhVFYl2rT/hy8+cEIhGaLxxMkSc0mDLQWx9R+y1yMXhLn9AfubFyD4VI3uZmhzvA
+	 2Ystz8652en+JagBwYdoREZo=
+Received: from nazgul.tnic (business-24-134-159-81.pool2.vodafone-ip.de [24.134.159.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7298240E0027;
+	Fri, 28 Jun 2024 06:01:13 +0000 (UTC)
+Date: Fri, 28 Jun 2024 08:01:26 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Serge Semin <fancer.lancer@gmail.com>
+Cc: Michal Simek <michal.simek@amd.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Manish Narani <manish.narani@xilinx.com>,
+	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Jason Tian <jason@os.amperecomputing.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH 2/2] RAS: Report all ARM processor CPER information to
- userspace
-Message-ID: <202406281339.b9yJADtu-lkp@intel.com>
-References: <eed2c4a4fbbb71226ca1944bc7e319bfa9f8aec0.1719471257.git.mchehab+huawei@kernel.org>
+	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH RESEND v6 01/18] EDAC/synopsys: Fix generic device type
+ detection procedure
+Message-ID: <20240628060126.GBZn5Rto4AYYm_qeqB@fat_crate.local>
+References: <20240627173251.25718-1-fancer.lancer@gmail.com>
+ <20240627173251.25718-2-fancer.lancer@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <eed2c4a4fbbb71226ca1944bc7e319bfa9f8aec0.1719471257.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20240627173251.25718-2-fancer.lancer@gmail.com>
 
-Hi Mauro,
+On Thu, Jun 27, 2024 at 08:32:08PM +0300, Serge Semin wrote:
+> First of all the enum dev_type constants describe the memory DRAM chips
+> used at the stick, not the entire DQ-bus width (see the enumeration kdoc
+> for details).
 
-kernel test robot noticed the following build errors:
+Last time I said:
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.10-rc5 next-20240627]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+"Which kdoc?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mauro-Carvalho-Chehab/RAS-ACPI-APEI-add-conditional-compilation-to-ARM-error-report-functions/20240627-225843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/eed2c4a4fbbb71226ca1944bc7e319bfa9f8aec0.1719471257.git.mchehab%2Bhuawei%40kernel.org
-patch subject: [PATCH 2/2] RAS: Report all ARM processor CPER information to userspace
-config: arm64-randconfig-002-20240628 (https://download.01.org/0day-ci/archive/20240628/202406281339.b9yJADtu-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281339.b9yJADtu-lkp@intel.com/reproduce)
+The kernel doc above enum dev_type in include/linux/edac.h?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406281339.b9yJADtu-lkp@intel.com/
+In any case, you need to be precise pls."
 
-All errors (new ones prefixed by >>):
+https://lore.kernel.org/all/20240604183803.GJZl9fC9R5M2NSQ01O@fat_crate.local
 
-   drivers/ras/ras.c: In function 'log_arm_hw_error':
->> drivers/ras/ras.c:73:17: error: assignment to 'u8 *' {aka 'unsigned char *'} from incompatible pointer type 'struct cper_arm_ctx_info *' [-Werror=incompatible-pointer-types]
-      73 |         ctx_err = ctx_info;
-         |                 ^
-   cc1: some warnings being treated as errors
-
-
-vim +73 drivers/ras/ras.c
-
-    54	
-    55	void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
-    56	{
-    57	#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
-    58		struct cper_arm_err_info *err_info;
-    59		struct cper_arm_ctx_info *ctx_info;
-    60		u8 *ven_err_data;
-    61		u32 ctx_len = 0;
-    62		int n, sz, cpu;
-    63		s32 vsei_len;
-    64		u32 pei_len;
-    65		u8 *pei_err;
-    66		u8 *ctx_err;
-    67	
-    68		pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
-    69		pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
-    70	
-    71		err_info = (struct cper_arm_err_info *)(err + 1);
-    72		ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
-  > 73		ctx_err = ctx_info;
-    74		for (n = 0; n < err->context_info_num; n++) {
-    75			sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
-    76			ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
-    77			ctx_len += sz;
-    78		}
-    79	
-    80		vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
-    81						  pei_len + ctx_len);
-    82		if (vsei_len < 0) {
-    83			pr_warn(FW_BUG
-    84				"section length: %d\n", err->section_length);
-    85			pr_warn(FW_BUG
-    86				"section length is too small\n");
-    87			pr_warn(FW_BUG
-    88				"firmware-generated error record is incorrect\n");
-    89			vsei_len = 0;
-    90		}
-    91		ven_err_data = (u8 *)ctx_info;
-    92	
-    93		cpu = GET_LOGICAL_INDEX(err->mpidr);
-    94		/* when return value is invalid, set cpu index to -1 */
-    95		if (cpu < 0)
-    96			cpu = -1;
-    97	
-    98		trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
-    99				ven_err_data, (u32)vsei_len, sev, cpu);
-   100	#endif
-   101	}
-   102	
+Ignoring this patch for now until you've incorporated all review
+feedback.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
