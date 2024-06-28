@@ -1,158 +1,185 @@
-Return-Path: <linux-edac+bounces-1422-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1423-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF7DA91B0B1
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 22:44:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE8FD91B5CB
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 06:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF04B1C2344A
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Jun 2024 20:44:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BD9F28438F
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 04:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F0171A08AF;
-	Thu, 27 Jun 2024 20:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7962533CF1;
+	Fri, 28 Jun 2024 04:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jGhcRKaU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F7htaq3d"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA051A00C4;
-	Thu, 27 Jun 2024 20:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA1D22612;
+	Fri, 28 Jun 2024 04:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719521039; cv=none; b=VQkb7BY8gwOmloHH8yC5YfkQnu5LAO05lAKkv6+N0CAXJtP2QuZWbvcTN5ETJ8Zox89iz9d+kHaIuieYtnzDqJ6m+K52IAUYmqiH9Djd/JsbcgI1D0bxOSVZWHFzRYJrz23NvySB1GZrrzY/Hs8CLW54hsEFjALPUtA0nxiRg3M=
+	t=1719550029; cv=none; b=YP7d5JrOApMI0sJBtsSadsmiFEHCWR8TV3LwSnd1Fh9bl0O0grKhZOH0Ti9iVDRHOoMtoDsQ/F/bn3Jt2GF+ovX4UI7YIM/4MhuiUTUtCPRcE4YtrJlxR7UTaAMLlzN4x5BWeTJPoVcLqhtj7uwjr54JTj7RcMRcjM+lyWU1Qy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719521039; c=relaxed/simple;
-	bh=/0ycm2l9j34jtAIWJSiu1VNq/2gkvHWjQune4ds9FHI=;
+	s=arc-20240116; t=1719550029; c=relaxed/simple;
+	bh=hhSOyJfbZRZhIjSoV5AnADdHQZS1XJORgVzByzcsybE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m+ZXIyYtMg/jromidqEyY+JTPHnsajZUzdRwFopfKK0HO/GaZM7biJHq21BFL0SsyCZbGAOoZelXVJ1ZrTvXq+PJzxWm4/3yobjryhGhJrw7N1vmYvJimjEA1YbDriX5hf+Sigzn7SoCl18vhwTNGJdhxfU+kYYqTF7SsZi2t78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=jGhcRKaU; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 299B740E0192;
-	Thu, 27 Jun 2024 20:43:46 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id GVxICnAt8jnR; Thu, 27 Jun 2024 20:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1719521023; bh=gj/diKGPWDCvq6ujznbYp0uO62jv3WgqjfqjkC72k/U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jGhcRKaU9MLOnRKN6pLSgD+4DxjsPDyzqzLQ2qtB5OIlBiCoYdNnpF0UFTo4eCh8v
-	 wGPReesggVgLq2ugqBg5cQ9+slKUOO3WoKrW4Av9yNYLsN+mYRcvDAQhNn8B3z0YoB
-	 2AWOCRfSdnG0nE/fUo84OonJmd8PohrEZYtcGTmDRjyAwVY3H/WapXehoo5XE2dc9o
-	 Tz4kwMJa+ylqns7JdC6lWLE1U4zVxUuKxjH9hMOMczgUhKbjQ0bUBRCM1ewJxmcuQC
-	 w++/R8mLa2BkfVuAaXHOSQQam+aViqnV92aANO4BptHgWEjqaRE5VEw+ouMZW/qpb9
-	 0l2ZajP/LvUp6qerGGUM/2X1YzOC/w4ILNFDGKdAsJMPN7XBn/s582SdV2iAGz1HTA
-	 bINeMdl89gJ5BM3O1RoIifIcXgCjsR9OjZ15YQJBW42F0FeeFzu0Q9yJV5rLzDd1uo
-	 KbdYaOgEnLyxTFSoqZRaf23mhzg+oRYg5atMAJK0xAnN02wdCUP9ssXSKYQBhm9LN7
-	 hkx78qm1I7KMzVKw7K8WneBMltA/6tvDHydqoAqesEkcb2tWAKQdeABh9peQ5urOjL
-	 4Nxc+90Piji8tIog9rNBQc8qWMaT02Isah+wBPU9m59n8zLjnuZ2dBen/b+JZBSdqL
-	 BXAXzIfhRqO6n8+P+y8OZOTQ=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BF8CA40E0194;
-	Thu, 27 Jun 2024 20:43:27 +0000 (UTC)
-Date: Thu, 27 Jun 2024 22:43:19 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Serge Semin <fancer.lancer@gmail.com>
-Cc: Dinh Nguyen <dinguyen@kernel.org>, Michal Simek <michal.simek@amd.com>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Manish Narani <manish.narani@xilinx.com>,
-	Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/20] EDAC/synopsys: Fix generic device type
- detection procedure
-Message-ID: <20240627204319.GEZn3O50ZppcI418Zx@fat_crate.local>
-References: <20240222181324.28242-1-fancer.lancer@gmail.com>
- <20240222181324.28242-3-fancer.lancer@gmail.com>
- <20240604183803.GJZl9fC9R5M2NSQ01O@fat_crate.local>
- <5h32gfwdk6uztiv7kbsjbvbghu4yuox6h7b6pqughftztyk2yf@cmzsanqvwcmq>
- <20240610080037.GFZmaypaCbTsXdGeKw@fat_crate.local>
- <xgckna5pkrh6rgw4sz7hct6akndpewjmqzsep4lz23j6qdme33@f2y7gdqp2ihw>
+	 Content-Type:Content-Disposition:In-Reply-To; b=StXbEOL/QT75t4LuaPmBypJx4+OEBjXkC7uqhgWGpdtuMWbZsQUQdX/HXOISjEsjpvl+RvnKhMZG7O2gmMsi1mu6xL1fYiCTIhdgKldx5plqYme7ETgmzwtsWur+o/An72bS8duVFRhIBn09Bux7j9RbSnlvt/ikWBMqhD//VKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F7htaq3d; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719550027; x=1751086027;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hhSOyJfbZRZhIjSoV5AnADdHQZS1XJORgVzByzcsybE=;
+  b=F7htaq3d082niNVfoeAVgjzk0fchFSd5q0HH2QaP+r5kJ6kW2gDjfRpR
+   uO0e97xg+WR0ICipk9A6KFvSwsYHasaC+DOKgR29kt133mgnL3CIqRink
+   q3CeTa//4CavZWEL8Gu4Gw9SiFvs+EUZ2m2+dO9TJ8A/BYUkSgvhiqVkl
+   1JsBWQ7LKq7dqoEfwnJvVclUdFmEFjBK4SYBd9IjYjTDQv3md9p/JatvV
+   X4we4RthwqdNK96glJK7EiS9h1XozrqCjYVAu8r6YZWcuewUb53QFwpKF
+   46856jRG1B+4OHlqUN7gtbhLN6qzYBoRv+J3iRGsQjtsOnzfj3dS+cajD
+   g==;
+X-CSE-ConnectionGUID: gbLliY+eSru6S8c9WWLaxA==
+X-CSE-MsgGUID: FyPUZP6CTZWOT6W681WI0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16537255"
+X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
+   d="scan'208";a="16537255"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 21:47:06 -0700
+X-CSE-ConnectionGUID: cCW7NoNoRpib26TeZ6KruA==
+X-CSE-MsgGUID: hLb0L9vtSdmkdnpJYFiLHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
+   d="scan'208";a="45254075"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 27 Jun 2024 21:47:02 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sN3Vj-000Gnw-2k;
+	Fri, 28 Jun 2024 04:46:59 +0000
+Date: Fri, 28 Jun 2024 12:46:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	Daniel Ferguson <danielf@os.amperecomputing.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Len Brown <lenb@kernel.org>, Shengwei Luo <luoshengwei@huawei.com>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Tony Luck <tony.luck@intel.com>, linux-acpi@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH 1/2] RAS: ACPI: APEI: add conditional compilation to ARM
+ error report functions
+Message-ID: <202406281232.xTKmzO76-lkp@intel.com>
+References: <95baa46a5e1c88f08e328dbbfbbd01602e092234.1719471257.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xgckna5pkrh6rgw4sz7hct6akndpewjmqzsep4lz23j6qdme33@f2y7gdqp2ihw>
+In-Reply-To: <95baa46a5e1c88f08e328dbbfbbd01602e092234.1719471257.git.mchehab+huawei@kernel.org>
 
-On Tue, Jun 11, 2024 at 07:57:26PM +0300, Serge Semin wrote:
-> Well, I see it otherwise. If you posses the databook then by using the
-> references you can find the info there straight away with no need in
-> struggling through the _1.5K_ pages file. If you don't have one, then
-> you can just skip that part of the log.
-> 
-> So I'd rather leave the refs be in the log.
+Hi Mauro,
 
-Sorry, we don't do elitist logs: only for the people who have access to some
-specs behind a paywall or whatnot.
+kernel test robot noticed the following build errors:
 
-If those are not available freely, then you should paraphrase the relevant
-information into the commit message so that it explains the problem fully and
-people don't need to have access to those databooks and then state that the
-docs you reference to not publicly available. And you're doing former so I can
-fixup latter.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.10-rc5 next-20240627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > Nope, that's up to the maintainer to decide.
-> 
-> ... and the review committee,
+url:    https://github.com/intel-lab-lkp/linux/commits/Mauro-Carvalho-Chehab/RAS-ACPI-APEI-add-conditional-compilation-to-ARM-error-report-functions/20240627-225843
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/95baa46a5e1c88f08e328dbbfbbd01602e092234.1719471257.git.mchehab%2Bhuawei%40kernel.org
+patch subject: [PATCH 1/2] RAS: ACPI: APEI: add conditional compilation to ARM error report functions
+config: x86_64-buildonly-randconfig-003-20240628 (https://download.01.org/0day-ci/archive/20240628/202406281232.xTKmzO76-lkp@intel.com/config)
+compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281232.xTKmzO76-lkp@intel.com/reproduce)
 
-There's a review committee? 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406281232.xTKmzO76-lkp@intel.com/
 
-I must've missed the PSA. :-P
+All error/warnings (new ones prefixed by >>):
 
-> and the linux-kernel list members may participate in the discussion too. But
-> that's not the point here, right?
+   drivers/acpi/apei/ghes.c: In function 'ghes_handle_arm_hw_error':
+>> drivers/acpi/apei/ghes.c:575:16: error: 'queued' undeclared (first use in this function)
+     575 |         return queued;
+         |                ^~~~~~
+   drivers/acpi/apei/ghes.c:575:16: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/acpi/apei/ghes.c:576:1: warning: control reaches end of non-void function [-Wreturn-type]
+     576 | }
+         | ^
 
-No, that's exactly the point - the maintainer and the submitter decide that
-- not stable people or your "committee".
 
-If someone gives a good reason why a patch should go to stable, sure, but also
-the maintainer's decision in the end.
+vim +/queued +575 drivers/acpi/apei/ghes.c
 
-You know why? Because in reality the maintainer gets to mop it up after
-everybody and fix shit.
-
-> It's up to the maintainers to decide.
-
-Yes, what I said.
-
-As to the reason whether a patch qualifies for stable, read this here:
-
-Documentation/process/stable-kernel-rules.rst
-
-> As you can see, I do and of two IP-core major versions (and plenty of
-> the DW uMCTL2 IP-core databooks). So should you need some help with
-> testing the bits coming for the Synopsys DW uMCTL2 EDAC driver, just
-> send a ping to me. I'll test them out.a
-
-You can also add yourself as a reviewer for that driver and get CCed on code
-submissions and test them.
-
-I can surely use the help.
-
-Thx.
+7f17b4a121d0d5 James Morse     2020-05-01  530  
+a70297d2213253 Shuai Xue       2023-12-18  531  static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
+a70297d2213253 Shuai Xue       2023-12-18  532  				     int sev, bool sync)
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  533  {
+4a485d7f807462 Daniel Ferguson 2024-06-27  534  #if defined(CONFIG_ARM) || defined (CONFIG_ARM64)
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  535  	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
+a70297d2213253 Shuai Xue       2023-12-18  536  	int flags = sync ? MF_ACTION_REQUIRED : 0;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  537  	bool queued = false;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  538  	int sec_sev, i;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  539  	char *p;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  540  
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  541  	log_arm_hw_error(err);
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  542  
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  543  	sec_sev = ghes_severity(gdata->error_severity);
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  544  	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
+7f17b4a121d0d5 James Morse     2020-05-01  545  		return false;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  546  
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  547  	p = (char *)(err + 1);
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  548  	for (i = 0; i < err->err_info_num; i++) {
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  549  		struct cper_arm_err_info *err_info = (struct cper_arm_err_info *)p;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  550  		bool is_cache = (err_info->type == CPER_ARM_CACHE_ERROR);
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  551  		bool has_pa = (err_info->validation_bits & CPER_ARM_INFO_VALID_PHYSICAL_ADDR);
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  552  		const char *error_type = "unknown error";
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  553  
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  554  		/*
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  555  		 * The field (err_info->error_info & BIT(26)) is fixed to set to
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  556  		 * 1 in some old firmware of HiSilicon Kunpeng920. We assume that
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  557  		 * firmware won't mix corrected errors in an uncorrected section,
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  558  		 * and don't filter out 'corrected' error here.
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  559  		 */
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  560  		if (is_cache && has_pa) {
+a70297d2213253 Shuai Xue       2023-12-18  561  			queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  562  			p += err_info->length;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  563  			continue;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  564  		}
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  565  
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  566  		if (err_info->type < ARRAY_SIZE(cper_proc_error_type_strs))
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  567  			error_type = cper_proc_error_type_strs[err_info->type];
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  568  
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  569  		pr_warn_ratelimited(FW_WARN GHES_PFX
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  570  				    "Unhandled processor error type: %s\n",
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  571  				    error_type);
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  572  		p += err_info->length;
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11  573  	}
+4a485d7f807462 Daniel Ferguson 2024-06-27  574  #endif
+ccb5ecdc2ddeaf Xiaofei Tan     2021-06-11 @575  	return queued;
+cf870c70a19444 Naveen N. Rao   2013-07-10 @576  }
+cf870c70a19444 Naveen N. Rao   2013-07-10  577  
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
