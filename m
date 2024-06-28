@@ -1,104 +1,183 @@
-Return-Path: <linux-edac+bounces-1435-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1436-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E99791C165
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 16:45:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0EF391C74D
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 22:29:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A133281698
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 14:45:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DAB41F26A00
+	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 20:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F7C4C3BE;
-	Fri, 28 Jun 2024 14:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D6677114;
+	Fri, 28 Jun 2024 20:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="USazIl4K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKu7Gtim"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8743FD4;
-	Fri, 28 Jun 2024 14:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DDF76C76;
+	Fri, 28 Jun 2024 20:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719585930; cv=none; b=MiApb57CKgJK1ki7MDthAUJjWCHHP/O8EjALiRivoLiF+ggk1k9LimCOxmK7X84cis4rbSN0ZEDmyikyaxU/hdvlRi8fI+UvP6xcjKM+ChGxzOPP/TsDb9DS3gStKEbatAzd67nZdBsWBJsdNQDQ0uknfBpmrsYBt8aX4BZu1pA=
+	t=1719606551; cv=none; b=uk2mvByGKx7yjrQ+gAjavrOoX8bBFcFd9YH/OmpjgUm1DXTVdcV1O5eR1FBpeRIX214OFgzTXZ74oEkFzUjLPSnsG9M/Y3tQXdoNYs5tb9HNlXso2//sgOtUVH9V+TH5YZjF/N/DRbbxflgvNC2kafdRCxv+PTu5taoyeLkWiv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719585930; c=relaxed/simple;
-	bh=aICuprWnSjP9eScCzHB3FMUjG8kNJF3xR6iAE6BPq08=;
+	s=arc-20240116; t=1719606551; c=relaxed/simple;
+	bh=tfe5a/HvAURMpYv4FI+g4wXkv6seRMWPbq9u0BdH7fc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E7g9on3Px+ZRiAWyVdQDLPGYS8xReARixiCA6MKhSigx9ASTpyVNlUTt1hwB3pcbqikAaTUXe1TfD+Wz3dKDAb6Ef2hg+7bOmtCmJLJ+I1YeFG1kHK8yE7aHgoeU64GpEbTI9vR5GyrdBrP0FM29sL30+4PtDV1M6vaP90yz0dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=USazIl4K; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 439A340E0027;
-	Fri, 28 Jun 2024 14:45:24 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 1EkaqO1vDdWG; Fri, 28 Jun 2024 14:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1719585921; bh=g878iQcJ2TWlDYARgfF2E7Nv6DYEvGZ50sNVanN/6IM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=USazIl4KIKWFGJggBkcn4pn9HbQL+ZTwfgEYfzyzVCSUcYSjim2PUX/NrVS32WgNL
-	 uuq8LrVYkMp0T4ubO0S4wIEmihMmrBOLZSxMpP4bjTV+6bjifMY5Up1H6hqzr9tU5Y
-	 3OhSK4bZS3N6oiclMAjabZhKgWK/TJ+XZcUWpgnMkncqy8OXqaqBxHcmMxDOjFZFjA
-	 soGytd/vrG5sKCvaZxXL7D+imGHKYdT6l8fsGz0Nq2lIGI/Hxnplr2CJk9SptW1+/u
-	 QRs6or3+ERwtA3lOVCW5yHjWEvHIn+Jqj/MygxFIoV3ayyTOw71N8yOypTn4ylIniX
-	 tiYnqoLbm01C7x0u+64mGRiLlwWA+twu2efmwIWfJQig6bgwXeKpa0v9wL60VNTIyd
-	 uejLl9tkfsl9ApR/1HK9PlQlz3gMrvuj1zV/uufLidJ3Tf+8Cg45cLJ1rLeHk0mYY6
-	 yoIGwJ2SR59k4x3o3riODckeoZ6HXcUqJ54D95YID52tQWCz/xkr39LX4ixolzkMvO
-	 6ZIwiFjnQjecqh3Djc5n+wruOCarUP0o6m5lyj3GguxVZkV/D3D8DGcnqaYKNXnuDQ
-	 vIgCR/VXBrKWGlOp03J7JSvd/6v0D9erTLKla9hT7Wba90sCGBAvplhS9GM7QTHXCr
-	 STL1xVkn3q4lCPrsq/uZe8fg=
-Received: from nazgul.tnic (business-24-134-159-81.pool2.vodafone-ip.de [24.134.159.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3C48E40E0187;
-	Fri, 28 Jun 2024 14:45:13 +0000 (UTC)
-Date: Fri, 28 Jun 2024 16:45:35 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-	avadhut.naik@amd.com, john.allen@amd.com
-Subject: Re: [PATCH v2 1/5] x86/topology: Export helper to get CPU number
- from APIC ID
-Message-ID: <20240628144535.GAZn7Mj4jofP3Vz2xf@fat_crate.local>
-References: <20240624212008.663832-1-yazen.ghannam@amd.com>
- <20240624212008.663832-2-yazen.ghannam@amd.com>
- <87ed8l7byy.ffs@tglx>
- <20240626014212.GA1086@yaz-khff2.amd.com>
- <20240628083722.GFZn52QnltR_2gjuO5@fat_crate.local>
- <20240628141542.GA124261@yaz-khff2.amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QBk3tNcce7IkOxgjnPNdNaL0yZcFGtmuHM8ui5Oa8IFKB4/YCnb2oB+FoGQKCQ44t0zOM5Gwf55UnA7jdWKfHQbEb7HjEgtp/gX57XBI8KfZcLc68WaW6TA532Tm8tlQhtqsDAUZRujv6IrdIJvINxzcjtVtDKq3qJ+yZw9dRxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKu7Gtim; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719606550; x=1751142550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tfe5a/HvAURMpYv4FI+g4wXkv6seRMWPbq9u0BdH7fc=;
+  b=oKu7Gtimj5MshfnLS0UD61Mx8tWml2jxximi77e0HUHBMyiM+RVFdmhN
+   QhJSJVclU76EC7gNxUulG9dyb3YJpD8awAQf7xEEysDXPAjAwx+HHa0SI
+   4rTpTfj8Lh+9CDlst1nmZjjiQOFGAF1jp2SAmCN4IMJY4sDI47r6bjYf8
+   0RES8q6Xu/BLqQ4H4+TSiMFy03SpW6JwgViERIzHGs2C4iSAwBjfIEdrB
+   huRI4DeOTqTkRh7rl7SFKDa8/dZzOvUKwvQM70kSjKEOHd+IkIob8s7Yw
+   HG+iphslHgoJrsw9pDi6aRfWVFl3DNF9QVvQDXibYcdDbfNLQ6oBmwtgh
+   A==;
+X-CSE-ConnectionGUID: +GOVDWMlQdCiDTplsoWQiA==
+X-CSE-MsgGUID: fCByjD0nTVubMdX8TCEgOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11117"; a="42223295"
+X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
+   d="scan'208";a="42223295"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 13:29:08 -0700
+X-CSE-ConnectionGUID: njTA7HW3ThW8tWfRxDh5eQ==
+X-CSE-MsgGUID: YZ1G1OqjQjG9ACIKE/51OA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
+   d="scan'208";a="75565564"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 28 Jun 2024 13:29:03 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sNIDN-000IPX-0a;
+	Fri, 28 Jun 2024 20:29:01 +0000
+Date: Sat, 29 Jun 2024 04:28:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Shiju Jose <shiju.jose@huawei.com>, Tony Luck <tony.luck@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	Len Brown <lenb@kernel.org>, Shuai Xue <xueshuai@linux.alibaba.com>,
+	linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/4] efi/cper: align ARM CPER type with UEFI 2.9A/2.10
+ specs
+Message-ID: <202406290457.3HKFUkuV-lkp@intel.com>
+References: <b9354882f45a0c600e65df4bacee2f1080c4ba89.1719219886.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240628141542.GA124261@yaz-khff2.amd.com>
+In-Reply-To: <b9354882f45a0c600e65df4bacee2f1080c4ba89.1719219886.git.mchehab+huawei@kernel.org>
 
-On Fri, Jun 28, 2024 at 10:15:42AM -0400, Yazen Ghannam wrote:
-> Thanks for the tip. It looks to me that SMP and X86_LOCAL_APIC are
-> generally independent.
+Hi Mauro,
 
-They are?
+kernel test robot noticed the following build errors:
 
-config X86_LOCAL_APIC
-        def_bool y
-        depends on X86_64 || SMP
-	^^^^^^^		     ^^^
+[auto build test ERROR on efi/next]
+[also build test ERROR on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.10-rc5 next-20240627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mauro-Carvalho-Chehab/efi-cper-Adjust-infopfx-size-to-accept-an-extra-space/20240625-203952
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
+patch link:    https://lore.kernel.org/r/b9354882f45a0c600e65df4bacee2f1080c4ba89.1719219886.git.mchehab%2Bhuawei%40kernel.org
+patch subject: [PATCH v5 3/4] efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
+config: x86_64-buildonly-randconfig-003-20240628 (https://download.01.org/0day-ci/archive/20240629/202406290457.3HKFUkuV-lkp@intel.com/config)
+compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240629/202406290457.3HKFUkuV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406290457.3HKFUkuV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/acpi/apei/ghes.c: In function 'ghes_handle_arm_hw_error':
+>> drivers/acpi/apei/ghes.c:566:34: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+     566 |                                  FIELD_GET(CPER_ARM_ERR_TYPE_MASK, err_info->type),
+         |                                  ^~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_GET +566 drivers/acpi/apei/ghes.c
+
+   530	
+   531	static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
+   532					       int sev, bool sync)
+   533	{
+   534		struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
+   535		int flags = sync ? MF_ACTION_REQUIRED : 0;
+   536		char error_type[120];
+   537		bool queued = false;
+   538		int sec_sev, i;
+   539		char *p;
+   540	
+   541		log_arm_hw_error(err);
+   542	
+   543		sec_sev = ghes_severity(gdata->error_severity);
+   544		if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
+   545			return false;
+   546	
+   547		p = (char *)(err + 1);
+   548		for (i = 0; i < err->err_info_num; i++) {
+   549			struct cper_arm_err_info *err_info = (struct cper_arm_err_info *)p;
+   550			bool is_cache = err_info->type & CPER_ARM_CACHE_ERROR;
+   551			bool has_pa = (err_info->validation_bits & CPER_ARM_INFO_VALID_PHYSICAL_ADDR);
+   552	
+   553			/*
+   554			 * The field (err_info->error_info & BIT(26)) is fixed to set to
+   555			 * 1 in some old firmware of HiSilicon Kunpeng920. We assume that
+   556			 * firmware won't mix corrected errors in an uncorrected section,
+   557			 * and don't filter out 'corrected' error here.
+   558			 */
+   559			if (is_cache && has_pa) {
+   560				queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
+   561				p += err_info->length;
+   562				continue;
+   563			}
+   564	
+   565			cper_bits_to_str(error_type, sizeof(error_type),
+ > 566					 FIELD_GET(CPER_ARM_ERR_TYPE_MASK, err_info->type),
+   567					 cper_proc_error_type_strs,
+   568					 ARRAY_SIZE(cper_proc_error_type_strs));
+   569	
+   570			pr_warn_ratelimited(FW_WARN GHES_PFX
+   571					    "Unhandled processor error type 0x%02x: %s%s\n",
+   572					    err_info->type, error_type,
+   573					    (err_info->type & ~CPER_ARM_ERR_TYPE_MASK) ? " with reserved bit(s)" : "");
+   574			p += err_info->length;
+   575		}
+   576	
+   577		return queued;
+   578	}
+   579	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
