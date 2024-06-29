@@ -1,183 +1,119 @@
-Return-Path: <linux-edac+bounces-1436-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1437-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0EF391C74D
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 22:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8123491CDA7
+	for <lists+linux-edac@lfdr.de>; Sat, 29 Jun 2024 16:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DAB41F26A00
-	for <lists+linux-edac@lfdr.de>; Fri, 28 Jun 2024 20:29:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EF511F22273
+	for <lists+linux-edac@lfdr.de>; Sat, 29 Jun 2024 14:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D6677114;
-	Fri, 28 Jun 2024 20:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D7080C15;
+	Sat, 29 Jun 2024 14:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKu7Gtim"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="E0gCzjp/"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DDF76C76;
-	Fri, 28 Jun 2024 20:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE721D52D;
+	Sat, 29 Jun 2024 14:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719606551; cv=none; b=uk2mvByGKx7yjrQ+gAjavrOoX8bBFcFd9YH/OmpjgUm1DXTVdcV1O5eR1FBpeRIX214OFgzTXZ74oEkFzUjLPSnsG9M/Y3tQXdoNYs5tb9HNlXso2//sgOtUVH9V+TH5YZjF/N/DRbbxflgvNC2kafdRCxv+PTu5taoyeLkWiv8=
+	t=1719673070; cv=none; b=dHdij/IsoUqNb5qls/1mSG222yP27nxNRc+UgMYxkpXKCLUrGk0I9DCLVwqBSOBM5+m9MjXOGbSHI3yGln0VOa0MDxV8bViaJ9e2Fjtcw0cdXAvQ9FvTI6uK+FwwZZk0orHRHWKcE8gUTOEIRa+lrzbMHbhtVXEOVYe9oe9ZCHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719606551; c=relaxed/simple;
-	bh=tfe5a/HvAURMpYv4FI+g4wXkv6seRMWPbq9u0BdH7fc=;
+	s=arc-20240116; t=1719673070; c=relaxed/simple;
+	bh=5KUqIH8oR9S8Oul/SubmquGzNQYNYip/VXcm9bSvXZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QBk3tNcce7IkOxgjnPNdNaL0yZcFGtmuHM8ui5Oa8IFKB4/YCnb2oB+FoGQKCQ44t0zOM5Gwf55UnA7jdWKfHQbEb7HjEgtp/gX57XBI8KfZcLc68WaW6TA532Tm8tlQhtqsDAUZRujv6IrdIJvINxzcjtVtDKq3qJ+yZw9dRxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKu7Gtim; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719606550; x=1751142550;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tfe5a/HvAURMpYv4FI+g4wXkv6seRMWPbq9u0BdH7fc=;
-  b=oKu7Gtimj5MshfnLS0UD61Mx8tWml2jxximi77e0HUHBMyiM+RVFdmhN
-   QhJSJVclU76EC7gNxUulG9dyb3YJpD8awAQf7xEEysDXPAjAwx+HHa0SI
-   4rTpTfj8Lh+9CDlst1nmZjjiQOFGAF1jp2SAmCN4IMJY4sDI47r6bjYf8
-   0RES8q6Xu/BLqQ4H4+TSiMFy03SpW6JwgViERIzHGs2C4iSAwBjfIEdrB
-   huRI4DeOTqTkRh7rl7SFKDa8/dZzOvUKwvQM70kSjKEOHd+IkIob8s7Yw
-   HG+iphslHgoJrsw9pDi6aRfWVFl3DNF9QVvQDXibYcdDbfNLQ6oBmwtgh
-   A==;
-X-CSE-ConnectionGUID: +GOVDWMlQdCiDTplsoWQiA==
-X-CSE-MsgGUID: fCByjD0nTVubMdX8TCEgOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11117"; a="42223295"
-X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
-   d="scan'208";a="42223295"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 13:29:08 -0700
-X-CSE-ConnectionGUID: njTA7HW3ThW8tWfRxDh5eQ==
-X-CSE-MsgGUID: YZ1G1OqjQjG9ACIKE/51OA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
-   d="scan'208";a="75565564"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 28 Jun 2024 13:29:03 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sNIDN-000IPX-0a;
-	Fri, 28 Jun 2024 20:29:01 +0000
-Date: Sat, 29 Jun 2024 04:28:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=UtwJr7yPK093xu/w7jmVfSwglB6rMua2jymTM24jUH2l3yuJHKfDuqN9BnIWvmnN7H/KRb0woAb3k8tirvhyxNhf3PJ1WyUyzqYlKsl8tq9CDLLMrJdmmTPjv2waptEK7Lu/tj0DZo0dboRp96t3Z38LV+t62FBLwj0y9E0FyOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=E0gCzjp/; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E1A3640E0219;
+	Sat, 29 Jun 2024 14:57:45 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id jaKAkfwgC1lf; Sat, 29 Jun 2024 14:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1719673062; bh=eidaWZkQ9zYvGZvDZWYlfu8Wo1BVtlIeu2FB1QuEbwY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E0gCzjp/3skB/ErRfxBOVZllAN4DK5yql8V+4ggu6UhPAPEaVDGZnZdLPHS3SNdMx
+	 JTWj2fITRlYa9BO0Zbz7kvZYvALscohUyukiWtlwRmJa0/KIJds3Bi46ZBTchuiRFn
+	 BHIJzVPjMYnZdCNca/X33kKqq/qt0DnwKD7EdGBRtw58lMJ8XwjJ8Ji5s+km0fhUH7
+	 L4VUMOE0cbY6FlUM90vMiXywEWVohK0WFrmi3AV3rPsJfaOmOw++GOZ3AXNNGKuVBa
+	 drrr67hn0k7tVfz4wQFZCI1xEPYGlHdTGj811aYt6/IIjNeEq37qz9v6RSK1meYyf4
+	 J2y7+KDewXmXKigV74wmde7/fAOm2AAzZiwazJAovONt8Hfxc8edP6Y7KqgeZG7wzM
+	 0TuSOlTxMw4+3PNiDadZZllYBI0TMmzgZ7H8ojqGkcHmoL79KoTJszuerghjZBKjc0
+	 qHkl3/mqhS2n4tb7r4/dLQWhDetJ3uzfps19bDn4+zpwd2OFa0Y1qaBvKASKj4vCSd
+	 jrFvn/RE89YJWZFjPfblETWIpaO7dWFXs+8Cf2nk9KMglVziYkzE19fQ0yWVKIASlM
+	 dSNm1nkyIDXXmVYOpiVye/F40ESyDmSOliIPVrtLKmH2pExHEcoKbGNWEeAHoXFntP
+	 U2FgEgJMCEGl9gqsU66PtVqA=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DA09440E0027;
+	Sat, 29 Jun 2024 14:57:30 +0000 (UTC)
+Date: Sat, 29 Jun 2024 16:57:25 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc: Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Shiju Jose <shiju.jose@huawei.com>, Tony Luck <tony.luck@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
-	Len Brown <lenb@kernel.org>, Shuai Xue <xueshuai@linux.alibaba.com>,
-	linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/4] efi/cper: align ARM CPER type with UEFI 2.9A/2.10
- specs
-Message-ID: <202406290457.3HKFUkuV-lkp@intel.com>
-References: <b9354882f45a0c600e65df4bacee2f1080c4ba89.1719219886.git.mchehab+huawei@kernel.org>
+	Robert Richter <rric@kernel.org>,
+	Johannes Thumshirn <morbidrsa@gmail.com>,
+	Ralf Baechle <ralf@linux-mips.org>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] EDAC: add missing MODULE_DESCRIPTION() macros
+Message-ID: <20240629145725.GBZoAg1ZqBWQmJ2_FP@fat_crate.local>
+References: <20240617-md-arm64-drivers-edac-v2-1-6d6c5dd1e5da@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b9354882f45a0c600e65df4bacee2f1080c4ba89.1719219886.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20240617-md-arm64-drivers-edac-v2-1-6d6c5dd1e5da@quicinc.com>
 
-Hi Mauro,
+On Mon, Jun 17, 2024 at 12:53:52PM -0700, Jeff Johnson wrote:
+> With ARCH=arm64, make allmodconfig && make W=1 C=1 reports:
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/edac/layerscape_edac_mod.o
+> 
+> Add the missing invocation of the MODULE_DESCRIPTION() macro to all
+> files which have a MODULE_LICENSE().
+> 
+> This includes mpc85xx_edac.c and four octeon_edac-*.c files which,
+> although they did not produce a warning with the arm64 allmodconfig
+> configuration, may cause this warning with other configurations.
+> 
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> ---
+> Changes in v2:
+> - Updated to fix all missing MODULE_DESCRIPTION() macros in drivers/edac
+> - Link to v1: https://lore.kernel.org/r/20240613-md-arm64-drivers-edac-v1-1-149a4f0f61bb@quicinc.com
+> - v1 subject: [PATCH] EDAC: layerscape: add missing MODULE_DESCRIPTION() macro
+> ---
+>  drivers/edac/layerscape_edac.c | 1 +
+>  drivers/edac/mpc85xx_edac.c    | 1 +
+>  drivers/edac/octeon_edac-l2c.c | 1 +
+>  drivers/edac/octeon_edac-lmc.c | 1 +
+>  drivers/edac/octeon_edac-pc.c  | 1 +
+>  drivers/edac/octeon_edac-pci.c | 1 +
+>  6 files changed, 6 insertions(+)
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on efi/next]
-[also build test ERROR on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.10-rc5 next-20240627]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mauro-Carvalho-Chehab/efi-cper-Adjust-infopfx-size-to-accept-an-extra-space/20240625-203952
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-patch link:    https://lore.kernel.org/r/b9354882f45a0c600e65df4bacee2f1080c4ba89.1719219886.git.mchehab%2Bhuawei%40kernel.org
-patch subject: [PATCH v5 3/4] efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
-config: x86_64-buildonly-randconfig-003-20240628 (https://download.01.org/0day-ci/archive/20240629/202406290457.3HKFUkuV-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240629/202406290457.3HKFUkuV-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406290457.3HKFUkuV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/acpi/apei/ghes.c: In function 'ghes_handle_arm_hw_error':
->> drivers/acpi/apei/ghes.c:566:34: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-     566 |                                  FIELD_GET(CPER_ARM_ERR_TYPE_MASK, err_info->type),
-         |                                  ^~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/FIELD_GET +566 drivers/acpi/apei/ghes.c
-
-   530	
-   531	static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
-   532					       int sev, bool sync)
-   533	{
-   534		struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
-   535		int flags = sync ? MF_ACTION_REQUIRED : 0;
-   536		char error_type[120];
-   537		bool queued = false;
-   538		int sec_sev, i;
-   539		char *p;
-   540	
-   541		log_arm_hw_error(err);
-   542	
-   543		sec_sev = ghes_severity(gdata->error_severity);
-   544		if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
-   545			return false;
-   546	
-   547		p = (char *)(err + 1);
-   548		for (i = 0; i < err->err_info_num; i++) {
-   549			struct cper_arm_err_info *err_info = (struct cper_arm_err_info *)p;
-   550			bool is_cache = err_info->type & CPER_ARM_CACHE_ERROR;
-   551			bool has_pa = (err_info->validation_bits & CPER_ARM_INFO_VALID_PHYSICAL_ADDR);
-   552	
-   553			/*
-   554			 * The field (err_info->error_info & BIT(26)) is fixed to set to
-   555			 * 1 in some old firmware of HiSilicon Kunpeng920. We assume that
-   556			 * firmware won't mix corrected errors in an uncorrected section,
-   557			 * and don't filter out 'corrected' error here.
-   558			 */
-   559			if (is_cache && has_pa) {
-   560				queued = ghes_do_memory_failure(err_info->physical_fault_addr, flags);
-   561				p += err_info->length;
-   562				continue;
-   563			}
-   564	
-   565			cper_bits_to_str(error_type, sizeof(error_type),
- > 566					 FIELD_GET(CPER_ARM_ERR_TYPE_MASK, err_info->type),
-   567					 cper_proc_error_type_strs,
-   568					 ARRAY_SIZE(cper_proc_error_type_strs));
-   569	
-   570			pr_warn_ratelimited(FW_WARN GHES_PFX
-   571					    "Unhandled processor error type 0x%02x: %s%s\n",
-   572					    err_info->type, error_type,
-   573					    (err_info->type & ~CPER_ARM_ERR_TYPE_MASK) ? " with reserved bit(s)" : "");
-   574			p += err_info->length;
-   575		}
-   576	
-   577		return queued;
-   578	}
-   579	
+Applied, thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
