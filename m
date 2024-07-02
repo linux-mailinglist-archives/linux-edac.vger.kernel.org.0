@@ -1,107 +1,132 @@
-Return-Path: <linux-edac+bounces-1447-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1448-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B89891E842
-	for <lists+linux-edac@lfdr.de>; Mon,  1 Jul 2024 21:07:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA8AE924177
+	for <lists+linux-edac@lfdr.de>; Tue,  2 Jul 2024 16:54:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBB71283C26
-	for <lists+linux-edac@lfdr.de>; Mon,  1 Jul 2024 19:07:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD8E41C238CF
+	for <lists+linux-edac@lfdr.de>; Tue,  2 Jul 2024 14:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F2716F27F;
-	Mon,  1 Jul 2024 19:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6420A1BA89E;
+	Tue,  2 Jul 2024 14:54:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="URIQhaTD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tbxW6LU5"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2052BC8C7;
-	Mon,  1 Jul 2024 19:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF3E1BA892;
+	Tue,  2 Jul 2024 14:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719860846; cv=none; b=lh2U08csOKI8dhLrxW6V0jsC/eavEZ0c2ALccxGWJCe1B2E0dro23V36rOD3fBJ/lpT6vGw42PUJcTi0Rfg8YCdAigF+5/xEkwVyUx/ZYyF15VAQJX3Xj76UF0cp+QBVSO4uMEg/w1MFej/KxowD6hRaLB7gC8Ahh1fVRbjBF48=
+	t=1719932070; cv=none; b=Y26RK/3QjKLfVB6IY2Dos1DxIg6s+PaPuLug7uvhV6Q1rffQ1j6/TDoxwLoLTZWvhWZBaB8VBXKI0oWB+zwA1/2zUDdBi/Bf5mCZP1NxNUmvb4OXG8+MPoT9GbqjrG3Ph9Hi5gtxZ184WTJGF0RMN65uSeHC7mUJU5bjCTIFEgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719860846; c=relaxed/simple;
-	bh=BXqpDmhelS53fqFTYgCoicuf3ZcXJwS6pFu7n/nrJNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KVU8yLBsJrPAaTWiSGPcnPX9G+Yu8DGE6HSeynFr3i/gPHC/IUpvDKafHwJRfu0TFbpKWyb97bGV4Yna+BIRC4XaHSj7qQ/KCo+up1Vw7CnlixlogkKd7pY7bLOdFJVl2oLwihRpSjjNy9FenfMFYp/T9V5Vxema/QqJVzHoWwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=URIQhaTD; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B1D4440E021B;
-	Mon,  1 Jul 2024 19:07:20 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 91M11-d0dMNM; Mon,  1 Jul 2024 19:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1719860837; bh=YvgcWqvpapeeWojA6dF/+phZFfl1obRl2CIZRAObln4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=URIQhaTDvh0kXZgX12KbyeLXwtEef+DyrJp+u+h0U7jkvt97ah/GP/EvC5JbdFlCy
-	 9EB8mN6ns+/mwjGd92gz5pnbki7qp8uLmDmu6mvItKmpSD83X2JEfl7bEXrY8jMf4F
-	 9h04etUdKKbqpvdvBid3s5KG7kBC7QtvyEXVqdi0aHGiMrPfJ1QNI7lS+Axd+MY0Df
-	 quvc6s+tkNtdsML4ODoiM6sJ12TyGG1fWfeayhQsmXKb75/QWWzWR8zmM/fpuw/nSN
-	 UkiCnaZLGvvWeJkdW0ZD6Q1ZX7VB1HGQuie4ia4ZzOgL4gd5PCjTu/J9S7UMxJz9Jp
-	 46tBqHCN/PnEN5f1EMAb2P25gKmAu+Q7X6otb/KX1NHlv7HHiS4s2LawrMdIepv/RD
-	 oUhYXUo81RMa5hFFYBcTEDjRPvqB+SA5Fain7cj5pVt6g/8S3tNl+R+gt1j8xGUcMb
-	 HMPICbAtqJ1G8WAN897PTmLlP13Po3T28An+HlQj+VZMWlLu0kSj7J5vIkt4tJlcke
-	 KJtDEeETW+HEZNaSDB1YYCygJfi/nZOB9lhBXuvL9HoelBZtALd4mhkXRkPv77NU3j
-	 STEvOFLTqpBoNVFnLRVhnPhkvwSJvfsOutG7EXlgwrOI89SrMngB7M7WSvfiMF6TvZ
-	 bnFrH6hZESfGNE5C7senlgv4=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 503DF40E0185;
-	Mon,  1 Jul 2024 19:07:09 +0000 (UTC)
-Date: Mon, 1 Jul 2024 21:07:04 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-	avadhut.naik@amd.com, john.allen@amd.com
-Subject: Re: [PATCH v2 1/5] x86/topology: Export helper to get CPU number
- from APIC ID
-Message-ID: <20240701190704.GKZoL-WBZ19-z8s7UR@fat_crate.local>
-References: <20240624212008.663832-1-yazen.ghannam@amd.com>
- <20240624212008.663832-2-yazen.ghannam@amd.com>
- <87ed8l7byy.ffs@tglx>
- <20240626014212.GA1086@yaz-khff2.amd.com>
- <20240628083722.GFZn52QnltR_2gjuO5@fat_crate.local>
- <20240628141542.GA124261@yaz-khff2.amd.com>
- <20240628144535.GAZn7Mj4jofP3Vz2xf@fat_crate.local>
- <20240701175142.GA4681@yaz-khff2.amd.com>
+	s=arc-20240116; t=1719932070; c=relaxed/simple;
+	bh=TaI+nB0ZJGeSrYMleXJBRusDkseeq1JKf+GsAnw96SU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=COLGd7FdaSJlK6Ti0//jLo28tR6erkhIjke6kSgno/2q1H8FXnPlFyTwd+aRmy+MRAhbn49BG+MXyDpIaEbGb5pvSlJl/mr47873AIIIOZ3zobU5LB3CvcSqB2w88Y1mCXBBm+aPzUjicJRD5fsATYTpRk2NLlrJak4JIDuxj6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tbxW6LU5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD7CBC4AF0C;
+	Tue,  2 Jul 2024 14:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719932069;
+	bh=TaI+nB0ZJGeSrYMleXJBRusDkseeq1JKf+GsAnw96SU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tbxW6LU5ep5erzNL3EiwJb+I50M0eCWr/UImQXOVTgGMJtJgHDPRC2MfuK07nS0xH
+	 eeVGsFvai1Zvii6pfTYF1VtduyU2jqSNxcqnqeKsWO4lgbYijb++YuaxLG+WFGu3ET
+	 8A7l9Ap8Il3oNDN4scdS5i5Q593Cbs3u8tDedWkYBDYVqw5hi+sB+QAD0S2pcF1ZHd
+	 ixUm8vwNEcREa2VT8zU15+oFFvj/EW5f3HqBwj1jluIUctY7kh2j61jSA+zqnNIfic
+	 KceDooX7q1j/9aqszl4kbzxx5E/c/ayWQ1citKeVtCuT+kmgoKhHNuxI1m17dzXbJT
+	 Q+Q5cn/tUZXVQ==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ee75ffce77so10538291fa.3;
+        Tue, 02 Jul 2024 07:54:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXWSwLSneNtf8RBJuYQU5z58asbqapyeWwZLpPMVyURDdrW4xKeiZRRXEpsI36rml/k1/c8pnc+8tYM4khx5YffDvQZFtJI5HvHcX7WsY9mM5MOBXXfjk0ePIhkk/aJcKDM4UrwYu0DQ+KTUerYQouYZmTxPbrUgrbk1UcPVB1GsibiLRXQwV93OxftsFejO57goQwWmjx4DBwD1jvHoao=
+X-Gm-Message-State: AOJu0YxE02DI9gI3Ea9lM3buFJK3N/jhRivN1wgHUe8+tFfa+7h/n/Si
+	RuR8lzB5gBFZCdXlA1fmH7/eMW2bcaTbuxyEvA39ywN4VY34faYRqO7I3WjD+W8lxhyQ+NXB/Kp
+	yDwl5ac5dYscH2HOskBdL7/Ps/J0=
+X-Google-Smtp-Source: AGHT+IHb3CV0ugaADa64FK+5hltnQPwSgB/QJrId5Rv7Zs0zSjmG+9VdS1AjRSt9LsoPkH80k6BYiK1TmI/EB8+bIx4=
+X-Received: by 2002:a05:651c:b14:b0:2ec:5488:cc9e with SMTP id
+ 38308e7fff4ca-2ee5e3bbd14mr72964281fa.26.1719932068120; Tue, 02 Jul 2024
+ 07:54:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240701175142.GA4681@yaz-khff2.amd.com>
+References: <20240506174721.72018-1-john.allen@amd.com> <20240506174721.72018-2-john.allen@amd.com>
+ <20240627080801.GDZn0d4Sr9y0B6zvPh@fat_crate.local>
+In-Reply-To: <20240627080801.GDZn0d4Sr9y0B6zvPh@fat_crate.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 2 Jul 2024 16:54:17 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXF534YBft=a9X=RwBthEuPb4j7usQ+F-j2PHCjFhmeZxg@mail.gmail.com>
+Message-ID: <CAMj1kXF534YBft=a9X=RwBthEuPb4j7usQ+F-j2PHCjFhmeZxg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ACPI: PRM: Add PRM handler direct call support
+To: Borislav Petkov <bp@alien8.de>
+Cc: John Allen <john.allen@amd.com>, linux-efi <linux-efi@vger.kernel.org>, rafael@kernel.org, 
+	lenb@kernel.org, yazen.ghannam@amd.com, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jul 01, 2024 at 01:51:42PM -0400, Yazen Ghannam wrote:
-> X86_LOCAL_APIC depends on the logical OR of a bunch of options. So it
-> depends on "any one" of the options to be enabled. But it doesn't need
-> all of them.
+On Thu, 27 Jun 2024 at 10:08, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Mon, May 06, 2024 at 05:47:20PM +0000, John Allen wrote:
+> > Platform Runtime Mechanism (PRM) handlers can be invoked from either the
+> > AML interpreter or directly by an OS driver. Implement the direct call
+> > method.
+> >
+> > Export the symbol as this will be used by modules such as the AMD
+> > Address Translation Library and likely others in the future.
+> >
+> > Signed-off-by: John Allen <john.allen@amd.com>
+> > Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> > ---
+> > v2:
+> >   - Align statements setting fields in context buffer on '='
+> > ---
+> >  drivers/acpi/prmt.c  | 24 ++++++++++++++++++++++++
+> >  include/linux/prmt.h |  5 +++++
+> >  2 files changed, 29 insertions(+)
+> >
+> > diff --git a/drivers/acpi/prmt.c b/drivers/acpi/prmt.c
+> > index c78453c74ef5..1cfaa5957ac4 100644
+> > --- a/drivers/acpi/prmt.c
+> > +++ b/drivers/acpi/prmt.c
+> > @@ -214,6 +214,30 @@ static struct prm_handler_info *find_prm_handler(const guid_t *guid)
+> >  #define UPDATE_LOCK_ALREADY_HELD     4
+> >  #define UPDATE_UNLOCK_WITHOUT_LOCK   5
+> >
+> > +int acpi_call_prm_handler(guid_t handler_guid, void *param_buffer)
+> > +{
+> > +     struct prm_handler_info *handler = find_prm_handler(&handler_guid);
+> > +     struct prm_module_info *module = find_prm_module(&handler_guid);
+> > +     struct prm_context_buffer context;
+> > +     efi_status_t status;
+> > +
+> > +     if (!module || !handler)
+> > +             return -ENODEV;
+> > +
+> > +     memset(&context, 0, sizeof(context));
+> > +     ACPI_COPY_NAMESEG(context.signature, "PRMC");
+> > +     context.identifier         = handler->guid;
+> > +     context.static_data_buffer = handler->static_data_buffer_addr;
+> > +     context.mmio_ranges        = module->mmio_info;
+> > +
+> > +     status = efi_call_acpi_prm_handler(handler->handler_addr,
+> > +                                        (u64)param_buffer,
+> > +                                        &context);
+> > +
+> > +     return efi_status_to_err(status);
+> > +}
+>
+> + linux-efi as Rafael wanted to make sure the environment is created properly
+> for the EFI runtime services call...
+>
 
-Yes, I can see that.
+This looks fine to me.
 
-How does any of that info answer your initial question?
-
-IOW, if you don't have LAPIC support in the kernel, what CPU number should we
-return for any APIC ID serving as input, and why?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
