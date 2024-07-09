@@ -1,86 +1,85 @@
-Return-Path: <linux-edac+bounces-1467-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1468-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A7E92B011
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2024 08:27:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9756B92B015
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2024 08:29:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EA0F1F22B67
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2024 06:27:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5426F282880
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Jul 2024 06:29:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32B481386B4;
-	Tue,  9 Jul 2024 06:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C55D13A24B;
+	Tue,  9 Jul 2024 06:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="miDyuQn7"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="CL5gzEJg"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2080.outbound.protection.outlook.com [40.107.243.80])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330217D07F;
-	Tue,  9 Jul 2024 06:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C6D7D07F;
+	Tue,  9 Jul 2024 06:29:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.73
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720506455; cv=fail; b=JT5MQIcNIb+LimZ4RcPQIO/M6Gxv4R1/7i1uXGZOGLgiMeJf8nop6TL4haTiIZIbwJPW1E18eETLKujbyqM3zmceDwuXWKXM1Pq9QVdFKNIciOCnHKjcArceowFn8QgWco6C9oJ2Y5MZOe12XhsqIhNvXg5D0Kna85w9hYOnQ44=
+	t=1720506561; cv=fail; b=n6KTFmuAf0sJ41bYC63JESGRm9ei6qFQN4jfXmf1YN1nKPrUZvHLbG5Siu1ZquQ4fwl0Yg7vmxlMPR4o+qvRqZeAGrWjDWWlF462LivwLutRoBIKzYI9H+lJoyNBZjtHoQMSk7FSqvVLWIsaChSPoLlfXdWrjbDW9UY7kW6SM9g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720506455; c=relaxed/simple;
-	bh=VXChbCMvIcclDwcbr0gZWmjPMc1biLbFsfN/Z9e/G1A=;
+	s=arc-20240116; t=1720506561; c=relaxed/simple;
+	bh=+4fchTMypagWoLS+t7WnBDbzXLY4rqBCCcdA/hryh/M=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=tFl4rQ/hq8sbnTS28rTvWZxWE1DMArUnqsxyhKvb7nixjZxP4CDs+ajAj9Ll3M+I0YLPE26mINEssQhqp0gsWfgoC2u7EKrhpirImbchKrKbz11lrCPhmob9C/Cesr5Ee4BselQqZZuQMX54YanbUimlsGUmTFCBQPKg6cQa1FU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=miDyuQn7; arc=fail smtp.client-ip=40.107.243.80
+	 Content-Type:MIME-Version; b=IDzEQ6HPYHAd/d0SLRscAHGR1D+8ao+Zdp9FOao8r4eQ1Gx+liZXSV9cH5y2Up+xClrTMZQNL8PhVxM0S9uSFwHcdICQ+oGMDzLWUzYJpX4SEzfUqliAWJSLRlf0o51MRlytshrxXpoVOqQLi2IiXnGclCXbMNc+E4/zg4anarU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=CL5gzEJg; arc=fail smtp.client-ip=40.107.237.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A0LsM6frDqeSfl+oHqDtzQEI4jcUsBnhdj8bCefPB9Cf2YUOb5ZGRkX7tuJ/X+NkBjlqRUgxxKRAZl9DSQa71gih0G+9EhiRxaNaRCIKMYZ7o3iXjz6r7QVXjt2ZAsqVRU07zgzezHsJ3K8NTGeIQUkdH3MbADKlM3bJeN08uDly0ZYY/NjuYKxgJ4oZ6jKpJwaxjJBtmb+Mx0xsKZXl5gOHmuyhemJtwdmltNg804mUDF1YgBJcyjVVbeJtNkh/ODHhWnW8xgiMKI4rhecqPCQJhUG0/+irohoILQ0j4bj2QixNK6CvEw1eZXmqlIokfhukkyf4fvAkOo92QYcVWg==
+ b=ga2aj1B3iz/lsbzV5pELmc/49AmoFbr+V5TdSf/9raAnrkbJvZwVYvb1EyRpdv5ouW/mjIxssABZsuatRiuUxUQPfpcRjRMkVdh3sTCq6lHVDRh5I8iCElUyPYZuIunJCP3tKnfGZKbORp0L0AWEhJh+wPu6Z8luSr5e+RKHR8DkYJjcxG/It6ZueH5xrk5bcc9HjN/5qS/8jmQKx6L7mPaQRu02hG86FXy0iBfyPRe32zCJmPdwk6jF/8h2HjVk1CXFfgUBElcWKUpSU02ffTlvdB6w2zhSJjmhFKt8tXth3SpgGICdBrxUkLpdwDYVEHCwuzZWOdNV62LZCKNyYQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8KzTwmoJZSM1YtC/338CPmnjU4m7BY4I26+ivN2wq9E=;
- b=dbKgc76iZ9Kv2ypxNapsZWkMmuxb2/vW87fmZdkCtMAiwg2tZUyiHbeDUQ05ruQ29kiFx6nWwXA4srLkaZgyznKZ5FVnWJqTDplmwTF7VBOGnafJ9TAonHeAeNt88UXblQ2o3kblORp0DqEj3lbgqpycYXEHqXEZy0WIsRgVwyIDY/lyR8nC+Z81MpW/iEqAXthYH2vC/0fdhhzn1xRRkFjXzamCPiV64zeaF3QjYTp56xE+jZNyCO0uFeFqfsIXJi3NqkL6paknqb/38sFDsI2O11U0FwJXtLul2c21M1TYttxrnvuf8dzQ3aWbZUxOEs9F5L8mVVaq/86MlqikZw==
+ bh=qGAYBJFSp6qXIjFYDCJcHuZHDyhb3nkyVfOXvI+RS8M=;
+ b=a1iFffUZC1MosnxyquZUZ1e+K07Gmr7CdGrpJtLce+zs04KEO+5QCnKqLFKHumenl4suC3gnRmrOruZFl/XqO2N8nYbwKuLxD0eYnaDsjAqka8ZxtgG3qFuB/EH8aKnvvMWM+vEFKQbZ+pAmZLdIozsQbh2Gt3jzH7nJ3PBFyTcMy3VA0n4AKDJOYdghb7j0YUx+IVhgLD+1lAAWw+OZ4nrkrn3ZlBBTJfG4h4Njr/AJeaIYImvPfM1AkcumYrnt0rQ5esmdS8ZVzHpqsNUkKVtOQah/77Mu890zud8q3fr/80aeBgObOg41OXaAxfGvtcz1VK9fgn+eU5Za3iDO6Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8KzTwmoJZSM1YtC/338CPmnjU4m7BY4I26+ivN2wq9E=;
- b=miDyuQn7UtusKuEFMnZ/08jNGyBsNX4brQRoN+haioZUz19RvLUk/1GDFtNZYHVm+4zWM+QYof0qviFCa1kfc5vEX5bfVnOsMAN96VIyrcpqklUNXoOIPZcSLaLyEgKBsmbzB/RfgyWHYJAFCHg2ovOa3/aTXlr9ylqHGnkiB1k=
+ bh=qGAYBJFSp6qXIjFYDCJcHuZHDyhb3nkyVfOXvI+RS8M=;
+ b=CL5gzEJgtyAvpxqopQfxVwJIQ+kJSWyQ6gu3kmP1zADDmCBRLN8jeAxjLs5YRbUXwHhggVPha5ooXMRa4URpDFfrR8HIEtqytJO501DkHR3TX8015Kx+v3C/u7ESFJQs4WI9dOshp8i1MDrSzduqEs7uXPV04mhmFXLezA5/+yk=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from CH3PR12MB8403.namprd12.prod.outlook.com (2603:10b6:610:133::14)
  by MW4PR12MB6753.namprd12.prod.outlook.com (2603:10b6:303:1ec::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.30; Tue, 9 Jul
- 2024 06:27:30 +0000
+ 2024 06:29:16 +0000
 Received: from CH3PR12MB8403.namprd12.prod.outlook.com
  ([fe80::bdb:41da:3604:a469]) by CH3PR12MB8403.namprd12.prod.outlook.com
  ([fe80::bdb:41da:3604:a469%7]) with mapi id 15.20.7741.033; Tue, 9 Jul 2024
- 06:27:30 +0000
-Message-ID: <17bba31a-9bb0-40e5-be7e-96ac6d421066@amd.com>
-Date: Tue, 9 Jul 2024 01:27:25 -0500
+ 06:29:16 +0000
+Message-ID: <efa65048-e176-4bad-aac8-0147d26b1362@amd.com>
+Date: Tue, 9 Jul 2024 01:29:13 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] x86/mce, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
+Subject: Re: [PATCH v2 4/4] EDAC/mce_amd: Add support for FRU Text in MCA
 Content-Language: en-US
 To: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, tony.luck@intel.com, rafael@kernel.org,
- tglx@linutronix.de, mingo@redhat.com, rostedt@goodmis.org, lenb@kernel.org,
- mchehab@kernel.org, james.morse@arm.com, airlied@gmail.com,
- yazen.ghannam@amd.com, john.allen@amd.com,
- Avadhut Naik <avadhut.naik@amd.com>
+Cc: Avadhut Naik <avadhut.naik@amd.com>, x86@kernel.org,
+ linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ tony.luck@intel.com, rafael@kernel.org, tglx@linutronix.de,
+ mingo@redhat.com, rostedt@goodmis.org, lenb@kernel.org, mchehab@kernel.org,
+ james.morse@arm.com, airlied@gmail.com, yazen.ghannam@amd.com,
+ john.allen@amd.com
 References: <20240625195624.2565741-1-avadhut.naik@amd.com>
- <20240625195624.2565741-3-avadhut.naik@amd.com>
- <20240626111036.GOZnv3LFCPnYfrRYSE@fat_crate.local>
- <6c318161-9ae4-4965-b8f3-e38bf1393628@amd.com>
- <20240626181805.GDZnxbXRJlCecNeDGW@fat_crate.local>
+ <20240625195624.2565741-5-avadhut.naik@amd.com>
+ <20240626120429.GQZnwDzQ47y1fOlFTp@fat_crate.local>
+ <ff9efb14-f3e5-4c4e-8285-7da853e6ffb7@amd.com>
+ <20240626182013.GEZnxb3TpU6VgROX8g@fat_crate.local>
 From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <20240626181805.GDZnxbXRJlCecNeDGW@fat_crate.local>
+In-Reply-To: <20240626182013.GEZnxb3TpU6VgROX8g@fat_crate.local>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0153.namprd11.prod.outlook.com
- (2603:10b6:806:1bb::8) To CH3PR12MB8403.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN4PR0501CA0033.namprd05.prod.outlook.com
+ (2603:10b6:803:40::46) To CH3PR12MB8403.namprd12.prod.outlook.com
  (2603:10b6:610:133::14)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -90,261 +89,115 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CH3PR12MB8403:EE_|MW4PR12MB6753:EE_
-X-MS-Office365-Filtering-Correlation-Id: 233be717-df70-4d61-f759-08dc9fe0355e
+X-MS-Office365-Filtering-Correlation-Id: 14600452-35f1-4d49-5011-08dc9fe07517
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MzVqUEFicDdTcmdIWS9keWpkQWJ0dG1Edy8vTWRlb1JCNCtjdjF3b1JOOE9C?=
- =?utf-8?B?Y3Q4L2dXZHVhYkpFYnVjd1JVRDBOQk05bnE5N20yNjAwcVBsM1Bwc1BKeEVE?=
- =?utf-8?B?ZDNEQTNucUl2a2RLSlJyWkdBNFdaS1UweUw4YVJ6N3F0cjJSVkpRSm45ZXhM?=
- =?utf-8?B?RGFib1pQSmFaMGU0Z0JXSCsxRDgxWjh5SUk1Z3ZwTm5VaE8wVW5XeWxyU3Z4?=
- =?utf-8?B?bzU5NlpIK2MwSzRnZ1Z3WDRqdDJ2RE9wRGtpZ0Q1L2xWMTgydzUzQklheFdm?=
- =?utf-8?B?QTRyeGtDaURWdGM2Nk5DcG82U3ZFYVNXYlIwZ0dhbVVKK2FxazhGN2Y0RC8r?=
- =?utf-8?B?YUFDenh0RkZBMlNqOE1iZzBMcllkdXFuMldNWVNMakw2dUx2ZmIzK2NQaWpm?=
- =?utf-8?B?WVIza0tLbHpDb1k5VXlXRGlXNUlHQTBGbDFkNDQ2cXFPaEg2dDVpSVpQTmY2?=
- =?utf-8?B?QVNDVzVRaS94MEpOYWxPWmlaTnRyR2h3TTBoL2F0WisrVk1GUWVweWZTaUM4?=
- =?utf-8?B?RWN6VlAzRk1UN0IyQTJLL3VhMjVJcmFIa2g0MFZHTTVsMDFoUWhYd0JqSjMw?=
- =?utf-8?B?NVNXcGZscmQxaWRLNnJYbldnekQ2UUJNaFl2a3h0elRHQ1lEZUxlalF0NFBK?=
- =?utf-8?B?dk82WEJGVWtBc0lRMy84Y2RMWnY0czN2cGtDM1poazJvYnFic3NxbDVEOGdG?=
- =?utf-8?B?UG9pbXNnaGkvKzlYVm1lMGJWMW5pN01sQVBJUjBXUXZaUVRiSmxaeUxmR1pI?=
- =?utf-8?B?QnE0WEEybW53NTQ2aDhQa3BrTjF1Z0lybE1kbmtPRC82Ni9JN0JITDFVcnJq?=
- =?utf-8?B?UE95UHdjMkdwOWtzeHNpOVp3NzdyMGFHTElxekVpdjg1TkRXUHhmTElzVmUz?=
- =?utf-8?B?Skt1Ync5dGRqN1IxRmJwY3YvMHEwajlqWUxXS3ZzNUd6Yndtdis3QUpkL0Vq?=
- =?utf-8?B?T3FxNlpsK2U2d25xOW12ZnlBYzFnV2Z1S1UyNzZqaXk2WWZYcEU0ZHJDMnA2?=
- =?utf-8?B?R0FHenJWcUNEQ2p0TTVRSnNiU09LSWhsQkpycXRKaFVValpWOWp3L3UrRWZ2?=
- =?utf-8?B?OUowZWRIZnptMkk5eFNpclBYb3h3MXhJb2ZKL240ZnVDZ001UWNNckcxYkF4?=
- =?utf-8?B?aXZXZ1ZtZUVkamZNT2VsRHVvdjdObFRod1BncHhIQ0xTYWY1Q2JWTktTRk5r?=
- =?utf-8?B?WVgzdzBLd3lObExzWXpoaExxQjNxY3BaRDNtek9sMTNkejE1YXM5bitZVlBX?=
- =?utf-8?B?bWd4TEZNYlhrT3JDekZWdjZ6SnFaamQrUTBKejZZT0ZFbHV3d2RESGVrSjIw?=
- =?utf-8?B?MEJORFFyNWpPRjdpSVVGazUrdVZlWFlwWnRLN2dGOFFzNTZBYlAzaS9weUMz?=
- =?utf-8?B?cGJzb0drZFFaclJ0MG1GYjFhNEYzZlFSNlErQlZNcnE2S0NocXN4eDhhUlY5?=
- =?utf-8?B?WWRBTmNOQXRnVTFteDFoZVRSMUtkYnRORGNxTmYveEIveUd0UzNiQ1ArSmpk?=
- =?utf-8?B?MzV4U0orS05Sekh4QWxPMlJUOG5hTUJodTc0ZFZJMGJlSDNTeVFsdXgrY3I4?=
- =?utf-8?B?Y3FGQjZDcE5GYUlDZnZld0dmeGVhdDZXbEdXa3hmWUkrS0NpSndoVktVdWJ6?=
- =?utf-8?B?QVIxM1MrTWtFQU9lTUhwT0Nsb2VIN2RjbVM1TUtRMnNuYXBuR1VaamVpcjl0?=
- =?utf-8?B?WjhER0pIK1hQcTNDVHArVGU4azYwd0xrMWFEbHFpcURRTzh0OFpGSlBuQ2V4?=
- =?utf-8?Q?7dLjMrJJLvTcdk7z3w=3D?=
+	=?utf-8?B?L0w0V21PeTNxR1pYdDF2dU9yU2M2QnZydXZ4WnhYYnFuY0Q4cjlDN1JacnJY?=
+ =?utf-8?B?T0ZvcnUrRlpEOU5vVEtHc0UvQ1k2dXlJMmQ5eTdveGxLQVRWa2prdzR3OHp0?=
+ =?utf-8?B?UWhHdkZhQUxVZHJyK1E4QjcxRUUyVEZRKzdjamY3YlNVYWJVdFVIOW5zMkNi?=
+ =?utf-8?B?VTQyQ3JtV3IwQ0VmK0VUdER2TkpLd3pseFcyaDJaWWhRU0NBYlRvSE5iNnM0?=
+ =?utf-8?B?c21pUUkwM3JQVlVFbU9xSHRPY0s1QzJaYk53eXJzb0dZblNZUC9jMW9MalpB?=
+ =?utf-8?B?WS83WU84Y0RiSmxNaTlEVDdQSTF3U0dDVHRnZEZRdjczNTl5YTdBNHpyTDVG?=
+ =?utf-8?B?VmlJVVBsQUNjZWt6eFNBZWI4TEV4TVA4emdQK3pob1VGUW1vVTFvSXg2bFBM?=
+ =?utf-8?B?TzJHOHRrdDJTZ08xMytocEhXdTF3Y2RaMnRsbjFvL1FmMU03bS82ZkZETi92?=
+ =?utf-8?B?U0drMjJ0MGVQL2plcHdUc2JpZzJ0R2F3VENPaE00a1Q0eUxJQ1luV3JMT0lN?=
+ =?utf-8?B?S1V5WTc5d1dIMUpXNDY1K29IQXZCZXRiay9KdTBFQTZrVUFSTjdzSGlHMnM0?=
+ =?utf-8?B?cGtmazZtV0d0Y1U0MndYUkFIbVE0YUNUSWd6ZmtTZmRDS240VTlDMDZRcitk?=
+ =?utf-8?B?M3BMcUdsaWVuWG90SGptRDRWS0VRZi9KQWg4b0ZMVk5zTFM1dXYwbkUvLzV0?=
+ =?utf-8?B?QmQwVm9zcnBISHltVXJMR1Z5bVMxUEpMMlhyZGFGV0NqclpqSTJqM29Pd0Yx?=
+ =?utf-8?B?Y0NwdTE3ZFdDcnZCWkxoZy96RVZqNFVtZ2d3Rk9JYTlwcERmMjlmMnlMMkg3?=
+ =?utf-8?B?UnZMNTBmQzVxOXhKaVZxdFhLcTRMMnhuWnpDNUxnNFB4RXp6N0N6NkU1UERz?=
+ =?utf-8?B?Y05qNnZ3SjQ1K0VncGwxMDQ3cGpvQXdSRGZpeXdUTWJOR3ZwbGZyVFQ1YWNV?=
+ =?utf-8?B?Mm9ManE5VzFhVGs3RUcyR0Rzcm1tdHZEcTloYXZFa0pQQmFGTDBkekFOSUZE?=
+ =?utf-8?B?RlpoWlZBS3A2SjNpbXZWWG1QUUZiWUEvVGNYS1Q5Z1BGNlhaN1JYc3NxRkpz?=
+ =?utf-8?B?TGhIUUNDdzZqTkZ1WVNrMENvMWEybWtmNFhlRTRaN1RlSFlzaU1GeE1Bd3Er?=
+ =?utf-8?B?WTdlSStQcW45a25CODZNdmRYYWlTaGw0YkN5U0lmaHBHSXV2R29QNTlIYWdI?=
+ =?utf-8?B?TjdJR2dKVEJoRVhtTUF4VHV3amtqd2s4Yi9oVndlem90elFleDVzQkxXNmtK?=
+ =?utf-8?B?akdiK1ZaY2QyQ3JZYWQyRnJFZDRDWmgyTmoxa2VrcGh1dmhoOG5INU4xcHBY?=
+ =?utf-8?B?NGdoK0V6MFNVYmx4U3YzOWZJNjI3dDczM0JFNFlzSkJXa1FQQmY5eHNnY2N4?=
+ =?utf-8?B?MlJDU1d3OVB0c0xwTFFIOXRlVzdrRHplTThMOFR4VDBiS002dlE4bGtJQit0?=
+ =?utf-8?B?RUlUcklkeXA1VHhOMi85VmRjTlFZbFRpMU1jTlN3M29ObndEWW1jOTBnQ09w?=
+ =?utf-8?B?SWdvTGJKK0Q2MWVSYzFHNjNTYVJuZEd6SW5QR056UzVvbkJWRTczVXJ3NVR5?=
+ =?utf-8?B?ZWkwRG8yeHJKUy9FZkt5L1hyb2JJNjIwRE5Hc2RjR3Y4Q2lDUHN4c3lRSGxP?=
+ =?utf-8?B?Uk1HSzJWcHdDQ3NQWjRKNThoOGxIbnRHT0RQQURmSnNNaDYzTTBoRDNCRHFJ?=
+ =?utf-8?B?NFRIU3JzQmQ4aUNMNkV1Nmpxb3QyMWVEYTVUY0syTUZZYUlsdUJ6S0FhN0o4?=
+ =?utf-8?B?MUZ1UTJ5YU5FampLV0RxcEw5SFArMWdxTWJPZ2lzUVVwdEdXdURCNjNxSHFM?=
+ =?utf-8?B?T240T2ZVc2VXdEgxVmRadz09?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8403.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cDhscC85UUlrbjg4cTZBWlJUb1FvOVEyOE5iZlozVktiMnhZRHN0NjN0Q010?=
- =?utf-8?B?c0pYWVd4d0cxWENnYTdheU9XV1o2NEdaK0hRaFo4Q2FPWXd5dFVwcXBzemd6?=
- =?utf-8?B?c0kvbms1ZFp2dWhYMTZScVhucTNBMEVNbjB1VWUzc3JxRVVWRmxvNjVJV3Jn?=
- =?utf-8?B?MXRJcVYrSU1OaG44dm9vVkF6TWtlM3RJVE1xMUdTVlcvSnI1L01wTGpDUk1E?=
- =?utf-8?B?NXVSSkVUVFJOQURsWXNoZjRWdlM1WlFrdGdoejllcGdacFZmWXVaSlZjdDJL?=
- =?utf-8?B?UExIbmdzd0ZlWFdxcWliOGM2TDNpZ2VYNVViVW5xOXJteEtMcWNrcVBHN1pH?=
- =?utf-8?B?VTFyalI4NERTN2dxeGFIa2pTSFYxSk03VlYyb0JXL3dnY21qeERoVGFIT2xo?=
- =?utf-8?B?a1NFWkVoOE84UGNYcDU4c3hlN2hBV041ZjdaeGQ2K0FQM2VqRUVOM2VmUjRK?=
- =?utf-8?B?THFydksyemQ2QzdmVGNrNy9jdkE3SzNxZk9Lb2l5S2JZYlpLWlVVUEJZWXEr?=
- =?utf-8?B?MUI5V3kyaUJyOHJJQVQvc1RBZGlDWHhSUmlXSjJmZU9ieDkyNStHQVo5OURk?=
- =?utf-8?B?UUVZcmZFR0VMY3dFOUtXWWR0ZTZZcHVMa1dzQ25zQUNobWZtN1NNOEQxWWNT?=
- =?utf-8?B?VnI0S0RybG5qQ3NZYnRFdnNQdEZ1ZS9NdXZKT3FMWlhaU2N3MkJwNFhjbTZp?=
- =?utf-8?B?V0duWWNYczlEY0xjdXh6dy8rZHlCRjlZOHVYTVRBa0lhU244dkFNRXRFaFNk?=
- =?utf-8?B?Sm11R2VCUFlxVmV2NWc3VlErNGRpTWUyKytMWTBISUVudjNPTlRjUzl3RklU?=
- =?utf-8?B?d0JQUjVreFFuc3diYk16WFhMTFFkeGlUZjM4WXZFWGJhc2w4ZUowZnZMdTVq?=
- =?utf-8?B?OVJXK3pUQjhOQWtKYmJoNUcrZis3VXVDMGZlVXlOZHpNb3RFNHFSUlhMS1hj?=
- =?utf-8?B?UHc1ZVRGOStzd3ZycEZMVStYRldpS0MyYVIwN1l4OXFiZXkyQmR4QW9wMUZQ?=
- =?utf-8?B?R0lSNEJFdC81dHRsaEEwVXJxYlk2dnM4WHlBdHVlWUxEc21EcnFMT1Z2TGtX?=
- =?utf-8?B?eU1WMlNEa3Uxd0xyQkhyc0J1UmJWOU9WUDJlVVZBSE50YU5zeUhYeXROVngz?=
- =?utf-8?B?OGprSm5uRHo5OGs1L3FiaVNyN0RkRVJ6NEJ4MjNVRWhCQ3YvZVpRNGZCSEx6?=
- =?utf-8?B?d2tBckd5TnpjNFRIRGJlRzZaZnRNeG1RVU9Vd25LTkE3QjgxaVZ3azd0YlhD?=
- =?utf-8?B?eURuZjMxblcrR1hiYld1d1d4YWxGUlRmcUtPNlBOckkxZVhxQ0NXOVVFemhr?=
- =?utf-8?B?bW16NEZWbzhBcEVOa2RPSmh0clp4UHg1cXp6dVhCSmR2cU5zRXJmS0ljdUd0?=
- =?utf-8?B?dFhiNTM3OEovaFVSQkN1dUw1cXp1ODZMcTg1TytzZFl6Slp4YWdJbVJpNWtN?=
- =?utf-8?B?d0FreGRNU01zeC8veXdvQ2xKWHovbVZtMTJuc1NXZldzZEZHKzFPa1dkdE5X?=
- =?utf-8?B?TDIvbXFKOEh3ZnZzZ240OEVMcnV0VllHY3JCeGFhWEFzc3ZnTDdDR3l0Qk96?=
- =?utf-8?B?VWorNXNjdEhKWjBSZ2FXWmtIZW9XMlVhSW43b3dPQTlhNS82UkdUVENQb0s0?=
- =?utf-8?B?OCsvUEh6TkNzMWhiaXpvVW8vNjJBV0JIOXZkeDJSM0VxNmU5YU1uSmdyNlFW?=
- =?utf-8?B?ZkNWeWlRcndNT3hBKzhQbm4xV21SUEJ1Z1NJdFJzY0VJdkRsQk5mWjRHSGxs?=
- =?utf-8?B?T0NSV0EzTDFicHFqdXI1QmJyTk1XK2ptUmwzaE1kZVNBMFBYM21FR0xtZ0NN?=
- =?utf-8?B?SW1BRklsbExmcm5PYWtVOWM3K1FCSmRUQ3FBTWoxK1QwbFdGUytZS3NNUHc4?=
- =?utf-8?B?aUZKU0hCY0M2b3R4VnlkcWJVdUM3am1lNTVZZURuS05qbXlTaFM0MlFPYnFR?=
- =?utf-8?B?ME16Nk5kZ2ltQ2RCbHE1V0tESkphMVhRdXZuYVo3aW9YbjdrdGZWOWtJa3NG?=
- =?utf-8?B?blRYaHhCdENEMVZMeHJ2Y2djU1pDdFRxWXlUZHd4Y2g0WkZUNUNlQWFQdlF6?=
- =?utf-8?B?OUNlV3l5YzNoTkJuVjZsY0pVSllnZ2g3TmhuY3duSzZMbUlnWHc3eFlReVkv?=
- =?utf-8?Q?s26t1iYywMp0GIcbtaiBD5N6k?=
+	=?utf-8?B?NTNMQU4vVXBUbWFvWEpBTjVuQ0lkZUpLSDFzUHNsRE5QbmUxYUt1Wm1nTTEx?=
+ =?utf-8?B?YW5DNCtLWlFQdTBrQzg2N0UyeDU1MitVbUZwYnZDU2NYSUhjanZkMHpzd09v?=
+ =?utf-8?B?c2ZnbERtR3B1TFhNQWhrbmRYZjRyUXJIcmtoN1d4akw3Um56MFMra0hXZmgw?=
+ =?utf-8?B?WUpCa1BjQXoyYTVzN2htNXk2ZWxFRXRvRkM4WVExbjR6RFZVYUFjWU9JZC8r?=
+ =?utf-8?B?dEh5ODdZOE9PblZQbGVrV0tsMlFydzFQNjlvMExtQkJnWS9xM3ZWOTdad1JZ?=
+ =?utf-8?B?RDVRRTQvM3Jmc2ZxcUhFdTBHWHZmTFFjc0VSZ0JGOEg0Y3MzdE9jM0VxR2J4?=
+ =?utf-8?B?SklPeVBzUVV5QkEzallYdkc0cHA0bmRtQjEvamhiY21ENU1kMEF3eElQelpy?=
+ =?utf-8?B?dmo5OTJ3LzFvczgxU2hsRlJRZkFBVEFZUXJ3TjIxcEtLaUdPRFNzeklzVG9Y?=
+ =?utf-8?B?cnhvKy9ZUXVqY29VRnFzOFVJekV1TkllWXJOY095ZFZYZlQyNTdVR0tQWjlm?=
+ =?utf-8?B?NDVhQ3lPbXlUbGcyUVR6WTBVaTFPaGFtWk9jRzltU1h3NjdqMy81Z2ZLWXJD?=
+ =?utf-8?B?RG5LSnRpN1pFeDR1U2svSjVYOU1qNmlncW1PamhLUXRYSC9lcTcxQ3RINE5k?=
+ =?utf-8?B?UGRyYWhDa1JNNDFtdVY1WUY4WmJsOWdoc085MVRhbXNwTmZmNWc0bmxVNVJu?=
+ =?utf-8?B?SDQvMDBHOEZlUE1saDlsWis3YXE5cWVHVjVldVpRWUVxcGI0N05ET2s0V1U1?=
+ =?utf-8?B?TFdobW5PYmxHVmUxNUhiSE9PaEh5OW1tek0yRE5xQzlCN25ENUFjajVLbkdX?=
+ =?utf-8?B?eTNqeVhjQTR5TU42SFI4YlBCVTlINEllaUJtYWhtSnE4Qm8ybWNWM1haRG1h?=
+ =?utf-8?B?VDZpUjAzT1p3enM1bE9kQUV6ODhsUnVuVGEwQm5JVHJLdzRkODNJZ2QrNU9m?=
+ =?utf-8?B?cENsRnhHNlk4ekZSdzVLOG5kTUNxSllhbkJuRXVxV2lwanAvTE1reWliQjZS?=
+ =?utf-8?B?anZQRFJ3N3dmZHVTbzRGMEFEcDlNUUxaclJkTi9va0x5cUJmek94TUpFK3Qy?=
+ =?utf-8?B?RWp2dllaZFhabjFUdFJhY1BGQklMQ0FPQ3RkUmNnejdxK0JDZWtOaU1QYmNq?=
+ =?utf-8?B?S1gzVXkzeVRpc2tKZG5jQnBHSHdUVlh0cEpUVHB3bkVQT1B6RXRzL3Z3WVpD?=
+ =?utf-8?B?bG9tZG82ZWhpWlZUNDhudWNta0o4Q2luNnlEZDN0WFBEYnRlbmtsTU1mWFRv?=
+ =?utf-8?B?N1FIeFlLYkgvZm9RVDVRbHlIeklub2M4ajM1SnVwd2lvL25Teko0N1o0OHp2?=
+ =?utf-8?B?cUwxcWk1Zi9YZmkwbHZDMHh4MjYvSjM2U3k2VzhBeGNLZnNySWRYcjNoREM0?=
+ =?utf-8?B?OHp1M00rMlBZTDFsZUM2VUhtSWNabHBaQXZHQk4ydGtNb1E0ZkpuUTU5bzFk?=
+ =?utf-8?B?UXFjZ2E4QWJUdUwxeUxhengwRjk0OWc1N243YzNQN01EZEwrc0s0MXMwVWJz?=
+ =?utf-8?B?UzdUUzJDU3BFL09LNW81N3NLV3ljeWlaNHlxck1lWG1GSVgwOTZ4TWRZdS9q?=
+ =?utf-8?B?QzBSZjNOeHI1akEyU1hCb3FJZEZHWjRFNGhlWm1FMSswZW1GQnNpc0NZNDQ5?=
+ =?utf-8?B?bFpUM0YwQWM0bHlMcnh0TmR5VHZlUWJzVmN0TGlxaEZoRy9lZ1RDb2VvOFhi?=
+ =?utf-8?B?L3FtUmFvSTA0eDZQS1NzbVh6Tkt1S0dkZEVlVmxiM1MzeVoyRjBJa2NxREFp?=
+ =?utf-8?B?bS9yWHZoN2FBc2RhcHRKMUV2eWtZTVBJWWRLbHh6cHZDUlc4S0ZkMkI2UHhZ?=
+ =?utf-8?B?WEc0QjBEU1A0M3ZtTWhQQ3pidisxdUlBSGgxOHc5SjFWK0RDbHk1UGpJdERJ?=
+ =?utf-8?B?QTB2WkpwejJWdks5SVEzbWptVzhxQlIzcWxIamw0eEhJSWxZcXZPVXUyWHZF?=
+ =?utf-8?B?dmpzZUJ1dVVOZGRoWVlhWWFMR2V3OWhTSjAyOFJDaG54NzZkYU1IS1lJaW03?=
+ =?utf-8?B?VGRZS2N3WXh6T1lhYmYxMTBRM2FBdzk3UEV5ZlBNN2FKMlFxMzZ3Q2hxdWZD?=
+ =?utf-8?B?T2tTbnZmQ2paQW4zcDNQdHlaZVNjSjFhUGl2U0U0aHowTHNSc0svYUl3Y1g2?=
+ =?utf-8?Q?GCnF3F9jAcYQfrivrLHuPeW+W?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 233be717-df70-4d61-f759-08dc9fe0355e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14600452-35f1-4d49-5011-08dc9fe07517
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8403.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2024 06:27:29.9486
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2024 06:29:16.7268
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R6EqtXNzlUtN1kewQyvpIaWJRaxjwWYPncpH8jxd5smzqw5fGN1c8P9+hOjJgR3xoxlbmPvRw77IqKQFIh0kTg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: NGETzPQ9zo15Uvd0d9AUPzqRHOxYdZS7tsR5HcM6GL/TVBf1tHdAM3eTXjV3QhuQp5ONTDq6qlTbHVK8b5522g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6753
 
 
 
-On 6/26/2024 13:18, Borislav Petkov wrote:
-> On Wed, Jun 26, 2024 at 12:24:20PM -0500, Naik, Avadhut wrote:
->>
->>
->> On 6/26/2024 06:10, Borislav Petkov wrote:
->>> On Tue, Jun 25, 2024 at 02:56:22PM -0500, Avadhut Naik wrote:
->>>> AMD's Scalable MCA systems viz. Genoa will include two new registers:
+On 6/26/2024 13:20, Borislav Petkov wrote:
+> On Wed, Jun 26, 2024 at 01:00:30PM -0500, Naik, Avadhut wrote:
 >>>
->>> "viz."?
+>>> Why are you clearing it if you're overwriting it immediately?
 >>>
->> Right. Will mention Zen4 instead of Genoa.
+>> Since its a local variable, wanted to ensure that the memory is zeroed out to prevent
+>> any issues with the %s specifier, used later on.
 > 
-> I still don't know what "viz." means...
+> What issues?
 > 
-IIUC, its an abbreviation of a Latin word and is used as a synonym for "namely"
-or "that is to say".
-Might not be the best choice in this case. Will change it.
+Its a locally defined string of 17 bytes. We are doing memcpy() into the first 16 bytes.
+Don't we need to ensure that it is NULL-terminated to prevent undefined behavior when its
+given to pr_emerg()? Am I missing something here?
 
->> Yes, I catch your drift. Will reword the commit message to explain that the
->> new syndrome registers are going to be exported through the tracepoint
->> in a dynamic array, as they are vendor-specific, so that usersapce error
->> decoding tools can retrieve the supplemental error information within them.
+>> Would you recommend removing that and using initializer instead for the string?
 > 
-> Again, why?
+> I'd recommend looking at what the code does and then really thinking whether
+> that makes any sense.
 > 
-> Why is it important to have them in the tracepoint?
-> 
-Userspace error decoding tools like the rasdaemon gather related hardware error
-information through the tracepoints. As such, its important to have these two
-registers in the tracepoint so that the tools like rasdaemon can parse them
-and output the supplemental error information like FRU Text contained in them.
-Yes, the registers are also being outputted thorough the dmesg but printk messages
-are not an ABI.
-The proper way to export these registers is through the tracepoint.
-
->>>> Note: Checkpatch warnings/errors are ignored to maintain coding style.
->>>
->>> This goes...
->>>
->>>>
->>>> [Yazen: Drop Yazen's Co-developed-by tag and moved SoB tag.]
->>>
->>> Yes, you did but now your SOB chain is wrong:
->>>
->>>> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
->>>> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
->>>
->>> This tells me Avadhut is the author, Yazen handled it and he's sending it to
->>> me. But nope, he isn't. So it needs another Avadhut SOB underneath.
->>>
->>> Audit all patches pls.
->>>
->> Wasn't aware of this chronology. Thanks for this information!
-> 
-> Well, there's documentation for that which you should've read already, before
-> sending patches:
-> 
-> https://kernel.org/doc/html/latest/process/development-process.html
-> 
-> and
-> 
-> https://kernel.org/doc/html/latest/process/submitting-patches.html
-> 
-> especially.
-> 
->> So, IIUC, the sequence for this patch should be as follows?
->>
->> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
->> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
->> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
-> 
-> Yes, now I leave it to you to explain why. Hint: it is in those docs above.
-> 
-Got it. The first SoB entry is of the primary author. The successive SoB's are
-from the people handling and transporting the patch.
-IOW, the route taken by a patch, as its propagated, to maintainers and eventually
-to Linus, should be evident from the SoB chain.
-
->>
->>>> ---
->>>
->>> ... right under those three "---" as such notes do not belong in the commit
->>> message. Remember that for the future.
->>>
->> Okay. Will move the note here.
-> 
-> Or remove it completely. checkpatch is crap - I know. No need to have it in
-> every patch.
-> 
-Okay. Will remove the note altogether.
-It's also present in the commit descriptions of other patches in this set.
-Will remove from there as well.
-
->> Had considered this. But struct mce_hw_err *err wouldn't really be used in
->> mce_read_aux() in patch 1. Only struct mce m, which is already available, will
->> be used.
-> 
-> So?
-> 
->> Hence, deferred the change to this patch where usage of struct mce_hw_err *err
->> is actually introduced in mce_read_aux().
->>
->> Do you prefer having this change in patch 1 instead?
-> 
-> I prefer a patch to contain one logical and complete change only. Because this
-> makes review easier. You should try reviewing patches sometimes too and you'll
-> know.
-> 
-Understood. Will move this to patch1.
-
->>> So that vendor data layout - is that ABI too? Or are we free to shuffle the
->>> fields around in the future or even remove some?
->>>
->>> This all needs to be specified somewhere explicitly so that nothing relies on
->>> that layout.
->>>
->>> And I'm not sure that that's enough because when userspace tools start using
->>> them, then they're practically an ABI so you can't change them even if you
->>> wanted to.
->>>
->>> So is libtraceevent or all the other libraries going to parse this as a blob
->>> and it is always going to remain such?
->>>
->>> But then the tools which interpret it need to know its layout and if it
->>> changes, perhaps check kernel version which then becomes RealUgly(tm).
->>>
->>> So you might just as well dump the separate fields one by one, without
->>> a dynamic array.
->>>
->>> Or do a dynamic array but specify that their layout in struct
->>> mce_hw_er.vendor.amd are cast in stone so that we're all clear on what goes
->>> where.
->>>
->>> Questions over questions...
->>>
->> Should we document this where struct mce_hw_err is defined, in
->> arch/x86/include/asm/mce.h? Or do you have any other recommendations?
-> 
-> I don't know. If I knew I wouldn't have questions which you can read again and
-> try to answer.
-> 
-IIUC, at least for now, the libtraceevent library parses the entire vendor data
-array as a blob. Rather, a pointer to the array in the raw tracepoint record along
-with its length is returned by the library's tep_get_field_raw() API.
-
-This very API has been used for implementing support for these registers and FRU
-Text in the rasdaemon.
-
-https://github.com/mchehab/rasdaemon/pull/122
-
-Thus, the position of the array within the tracepoint and its length can be changed
-in the future.
-
-Its layout however, is a completely different matter. At least for AMD, it shouldn't
-be changed. New fields, if any, should be added at the end.
-
-The underlying reason for this is the FRU text feature.
-
-With this set, the first two elements of the vendor data dynamic array are SYND 1/2
-registers while the third element is MCA_CONFIG (added through patch 4 of the set).
-Now, in rasdaemon, SYND1/2 register contents (i.e. first two fields) are interpreted
-as FRU Text only if BIT(9) of MCA_CONFIG (third field) is set.
-
-Thus, we depend on array's layout for accurate FRU Text decoding in the rasdaemon.
-
-Hope this answers some of your questions!
 
 -- 
 Thanks,
