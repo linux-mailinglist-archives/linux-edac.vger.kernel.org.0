@@ -1,60 +1,61 @@
-Return-Path: <linux-edac+bounces-1490-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1488-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D66D492D206
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Jul 2024 14:55:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D33692D205
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Jul 2024 14:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06A7A1C2178C
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Jul 2024 12:55:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98987B219BA
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Jul 2024 12:54:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29D381922D6;
-	Wed, 10 Jul 2024 12:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A08611922D0;
+	Wed, 10 Jul 2024 12:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="akhC30il"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZRyYz6E6"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3189018FDD4
-	for <linux-edac@vger.kernel.org>; Wed, 10 Jul 2024 12:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2E51922CC
+	for <linux-edac@vger.kernel.org>; Wed, 10 Jul 2024 12:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720616098; cv=none; b=hPGO5KdzcsgDdeM8tlqY3JM+bam9Ai+VaH8ZjIvf+hfdWHoidYKbYRdH72knCUiIrv5WzurzsKIx4mnLMp4rzx+vf/u6jjgJlpYG5BEJDqoD0Ffi7EOVZSEpGMeNC5pKt44d6ZIgMr/IPZYMmMnDx44BSve1aYp+k+OQnUsodaE=
+	t=1720616095; cv=none; b=n+8p8P3zgNdLQOEUhFSc5lg9m1mBjvJGStzAix+W0jJ8+w7KGqTKtLCpAIO5DT/G+0jzZ+xC2i7YbbYaQXRQ6LV0lSfV+Wr5uO7yxdeyMxKRqjB9FbKhqt/XPkNfADj897aY5BVfvsA+O1pUyBtYrhe0iSv2wH+sM0g0fp6WXCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720616098; c=relaxed/simple;
-	bh=iyhDRd0tdD3nFuZ73bX3M9v+EM3Ik5VJ5bCjwFAAkyo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AlYnYBOZYgqk+fMdrp2SDfGDBhyWgXe0luZ93u1ussoLjc+gDbWFU+aSZ4cDWsHwZE4cJyScxKHWtBUyJZiDKGhqNt++GescNPiyxa7AL5Xyx4ccJM+8ej3wvK1nUYYOB5BKBur+cN9CKRJZni9u5D8un8sv87i7lkZgh+Ckszw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=akhC30il; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1720616095; c=relaxed/simple;
+	bh=ldvJXcDEveNrv7pYd++eyjYMCnJZJLncc1CzEei4jnE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KDdf7nXvVPUHwVYdH9N4ekiQChvTaHzleJxVMpJCBfDUFNpkygqxZN4/TAEKGwTjWZ/Oc4ABNHR536HXfBGVrv+hkmPNtOj62qewcQh4ikdtSRUvNUT1u6qKM1FhmqO6ZeOTA75Prdc1jHjA7yjqF4CrsMjX2zj79CcHCiPhsjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZRyYz6E6; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720616096; x=1752152096;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iyhDRd0tdD3nFuZ73bX3M9v+EM3Ik5VJ5bCjwFAAkyo=;
-  b=akhC30ilo1awpEzR8pWSg4cGxb/DH3pyKY4mIC9nuqIoWaX/3Yrxsgdi
-   PgHbTAky17W1KKXYTpHMF9ve92jJX76tWRkUoUOXNucd/wr+Uyyp2sT5k
-   ghvztRJuwMV7AvcdpL7/0DAhq+tPkqQEOzvM3y2VVGklGlZJufcUWQnLR
-   zc7s+sFgzvEYlZvpR/RkwWu8zjzLrGNNND0rowg2D1OL0eC6HU5SHRgXY
-   LVCW2HEAiEs3ui/csf7OCetpsWvMZX/4Y9hXDpBArHLEYKnUCqHi1R+IC
-   ujyL1aqPDr3lv24IQKAaYXKN9WAJsIm6fNW883mINZdRljsFehizNWfM0
-   A==;
-X-CSE-ConnectionGUID: aEBRBTbWQce+2ADU5CXTuw==
-X-CSE-MsgGUID: JaoH/IJBQbe4kKmZreiAkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11128"; a="28524541"
+  t=1720616093; x=1752152093;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ldvJXcDEveNrv7pYd++eyjYMCnJZJLncc1CzEei4jnE=;
+  b=ZRyYz6E6QBFmYZD0x/w+Fjjc1Wy3XrTY/AVcKZuVeVpEf/g76s1p8rsF
+   9p/i0CyhYKjMhjGfze2wJrvDp+pbpulPPtav/NCQz5fZOwZk+i+qgRR9S
+   iQC4IGCtbjrAhbTO4FEZLcb0jfg8NYL3pIjCD9hY3Ex0/aG9JeMYzVVgn
+   3P7KbLfyvHCgcJEGBVaCvr07XSd/Sj5WOSYmwt4EuJ+y+CwHxnV5Vg16W
+   FAONzEkNH17Ch1DEMY7jsf2EGrPrp0nldX1kqB+mj/IUmCVznSXrY2Dus
+   +2VVgwyReF978TRDOkpCt0T1d0EbuIPfPAqMxGB6/SEGdidQP9BU0fjvd
+   Q==;
+X-CSE-ConnectionGUID: vJtMcjjLRiWYT3T30RvLeQ==
+X-CSE-MsgGUID: bJDlYJ1qSFKh9Rydu/d3gA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11128"; a="28524546"
 X-IronPort-AV: E=Sophos;i="6.09,198,1716274800"; 
-   d="scan'208";a="28524541"
+   d="scan'208";a="28524546"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
   by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2024 05:54:53 -0700
-X-CSE-ConnectionGUID: 01vYcPkIR/uzxG+dtqX1mw==
-X-CSE-MsgGUID: wlldvR3CRUuaI1yhitbczA==
+X-CSE-ConnectionGUID: bKN9OE+qQ3SkW/gouq2s7A==
+X-CSE-MsgGUID: jCbw6dRQSN6VUnr6BXQ/7Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,198,1716274800"; 
-   d="scan'208";a="48933750"
+   d="scan'208";a="48933753"
 Received: from linuxbkc-devel.jf.intel.com ([10.54.39.76])
   by orviesa008.jf.intel.com with ESMTP; 10 Jul 2024 05:54:53 -0700
 From: Andrew Zaborowski <andrew.zaborowski@intel.com>
@@ -64,10 +65,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Tony Luck <tony.luck@intel.com>,
 	Eric Biederman <ebiederm@xmission.com>,
 	Borislav Petkov <bp@alien8.de>
-Subject: [PATCH 1/3] x86: Add task_struct flag to force SIGBUS on MCE
-Date: Wed, 10 Jul 2024 05:54:43 -0700
-Message-ID: <20240710125445.564245-1-andrew.zaborowski@intel.com>
+Subject: [PATCH 2/3] execve: Ensure SIGBUS delivered on memory failure
+Date: Wed, 10 Jul 2024 05:54:44 -0700
+Message-ID: <20240710125445.564245-2-andrew.zaborowski@intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240710125445.564245-1-andrew.zaborowski@intel.com>
+References: <20240710125445.564245-1-andrew.zaborowski@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -82,103 +85,72 @@ using SIGBUS or, if the error happens in a syscall, an error retval
 from the syscall.  The SIGBUS is documented in
 Documentation/mm/hwpoison.rst#failure-recovery-modes
 
-But there are corner cases where we cannot or don't want to return a
-plain error from the syscall.  Subsequent commits covers two such cases:
-execve and rseq.  Current code, in both places, will kill the task with a
-SIGSEGV on error.  While not explicitly stated, it can be argued that it
-should be a SIGBUS, for consistency and for the benefit of the userspace
-signal handlers.  Even if the process cannot handle the signal, perhaps
-the parent process can.  This was the case in the scenario that
-motivated this patch.
+In execve() there is a point of no return
+(bprm->point_of_no_return) after which the syscall... cannot return.
+The binary loading happens after this point so if the loader triggers
+a memory error reading user pages, and after control returns to
+bprm_execve(), that function reacts by sending a SIGSEGV.
 
-In both cases, the architecture's exception handler (MCE handler on x86)
-will queue a call to memory_failure.  This doesn't work because the
-syscall-specific code sees the -EFAULT and terminates the task before
-the queued work runs.
-
-To fix this: 1. let pending work run in the error cases in both places.
-
-And 2. on MCE, ensure memory_failure() is passed MF_ACTION_REQUIRED so
-that the SIGBUS is queued.  Normally when the MCE is in a syscall,
-a fixup of return IP and a call to kill_me_never() are what we want.
-But in this case it's necessary to queue kill_me_maybe() which will set
-MF_ACTION_REQUIRED which is checked by memory_failure().
-
-To do this the syscall code will set current->kill_on_efault, a new
-task_struct flag.  Check that flag in
-arch/x86/kernel/cpu/mce/core.c:do_machine_check()
-
-Note: the flag is not x86 specific even if only x86 handling is being
-added here.  The definition could be guarded by #ifdef
-CONFIG_MEMORY_FAILURE, but it would then need set/clear utilities.
+Set the new current->kill_on_efault flag and run pending task work to
+ensure that a SIGBUS is queued in memory_failure()
 
 Signed-off-by: Andrew Zaborowski <andrew.zaborowski@intel.com>
 ---
-This is a v2 of
-https://lore.kernel.org/linux-mm/20240501015340.3014724-1-andrew.zaborowski@intel.com/
-In the v1 the existing flag current->in_execve was being reused instead
-of adding a new one.  Kees Cook commented in
-https://lore.kernel.org/linux-mm/202405010915.465AF19@keescook/ that
-current->in_execve is going away.  Lacking a better idea and seeing
-that execve() and rseq() would benefit from using a common mechanism, I
-decided to add this new flag.
+ fs/exec.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-Perhaps with a better name current->kill_on_efault could replace
-brpm->point_of_no_return to offset the pain of having this extra flag.
----
- arch/x86/kernel/cpu/mce/core.c | 18 +++++++++++++++++-
- include/linux/sched.h          |  2 ++
- 2 files changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index ad0623b65..13f2ace3d 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1611,7 +1611,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 			if (p)
- 				SetPageHWPoison(p);
- 		}
--	} else {
-+	} else if (!current->kill_on_efault) {
- 		/*
- 		 * Handle an MCE which has happened in kernel space but from
- 		 * which the kernel can recover: ex_has_fault_handler() has
-@@ -1628,6 +1628,22 @@ noinstr void do_machine_check(struct pt_regs *regs)
+diff --git a/fs/exec.c b/fs/exec.c
+index 400731422..26c4efe1a 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -68,6 +68,7 @@
+ #include <linux/user_events.h>
+ #include <linux/rseq.h>
+ #include <linux/ksm.h>
++#include <linux/task_work.h>
  
- 		if (m.kflags & MCE_IN_KERNEL_COPYIN)
- 			queue_task_work(&m, msg, kill_me_never);
-+	} else {
-+		/*
-+		 * Even with recovery code extra handling is required when
-+		 * we're not returning to userspace after error (e.g. in
-+		 * execve() beyond the point of no return) to ensure that
-+		 * a SIGBUS is delivered.
-+		 */
-+		if (m.kflags & MCE_IN_KERNEL_RECOV) {
-+			if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
-+				mce_panic("Failed kernel mode recovery", &m, msg);
-+		}
+ #include <linux/uaccess.h>
+ #include <asm/mmu_context.h>
+@@ -1290,6 +1291,7 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	 * Ensure all future errors are fatal.
+ 	 */
+ 	bprm->point_of_no_return = true;
++	me->kill_on_efault = true;
+ 
+ 	/*
+ 	 * Make this the only thread in the thread group.
+@@ -1896,6 +1898,7 @@ static int bprm_execve(struct linux_binprm *bprm)
+ 	/* execve succeeded */
+ 	current->fs->in_exec = 0;
+ 	current->in_execve = 0;
++	current->kill_on_efault = false;
+ 	rseq_execve(current);
+ 	user_events_execve(current);
+ 	acct_update_integrals(current);
+@@ -1907,14 +1910,20 @@ static int bprm_execve(struct linux_binprm *bprm)
+ 	 * If past the point of no return ensure the code never
+ 	 * returns to the userspace process.  Use an existing fatal
+ 	 * signal if present otherwise terminate the process with
+-	 * SIGSEGV.
++	 * SIGSEGV.  Run pending work before that in case it is
++	 * terminating the process with a different signal.
+ 	 */
+-	if (bprm->point_of_no_return && !fatal_signal_pending(current))
+-		force_fatal_sig(SIGSEGV);
++	if (bprm->point_of_no_return) {
++		task_work_run();
 +
-+		if (!mce_usable_address(&m))
-+			queue_task_work(&m, msg, kill_me_now);
-+		else
-+			queue_task_work(&m, msg, kill_me_maybe);
- 	}
++		if (!fatal_signal_pending(current))
++			force_fatal_sig(SIGSEGV);
++	}
  
- out:
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 61591ac6e..0cde1ba11 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -975,6 +975,8 @@ struct task_struct {
- 	/* delay due to memory thrashing */
- 	unsigned                        in_thrashing:1;
- #endif
-+	/* Kill task on user memory access error */
-+	unsigned                        kill_on_efault:1;
+ 	sched_mm_cid_after_execve(current);
+ 	current->fs->in_exec = 0;
+ 	current->in_execve = 0;
++	current->kill_on_efault = false;
  
- 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
- 
+ 	return retval;
+ }
 -- 
 2.43.0
 
