@@ -1,130 +1,155 @@
-Return-Path: <linux-edac+bounces-1502-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1503-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5793A92EB5B
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Jul 2024 17:11:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3595E92EB96
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Jul 2024 17:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88C381C22539
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Jul 2024 15:11:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA5332855BA
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Jul 2024 15:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681F116B388;
-	Thu, 11 Jul 2024 15:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lLCxQ0G9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4439D16B392;
+	Thu, 11 Jul 2024 15:24:19 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AA65477A;
-	Thu, 11 Jul 2024 15:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31DF166317;
+	Thu, 11 Jul 2024 15:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720710688; cv=none; b=kpENNp4glNJqGd+d8Qj4HrwF2I84spq4MMFKdqZKRw+07KcvQ99TXtXg/ckgMTHySR3lzIiDZSF46NHLkJhWHPzDMBwULCUl2F7nmXYyg4xjaM06iv2WJuC4Z+h6+58lGBp6zT/OmoSRioYzd4vM5S4zBH3rGG9ShWVgQzEE7JE=
+	t=1720711459; cv=none; b=DskRsRuzYh+3pUkF8GE30t/sXOWUo8RIt/Y8Ol16yr8Wuk+5dJV5nMf/e+jXrHBbW4Kc5bvLLAWEJEVaXf8XinlTTsMC4SO+jKKENCe3SD/LUNCmosi3w4G0G4tfheBWER52Ujr7gM7/SIS/MhVBkK7LUUQNtIDk35alHTDriXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720710688; c=relaxed/simple;
-	bh=KJv5O+fnwI7m638Hl0OTuNwGIFqLMp1Wj/vA4Xb7VD0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dlYV+b+e0ajdK3EaJGFBJCcT12WYw493JWxyMnPBNHK8ioM4m7n/0scq1SCbjob01apjhnuAqAhkeNfcwFSFl6ILY5RlaEOPHUX4wRGa3EhsnlYWDlow98AaAnVXz5mnCjz0RJ0+iMsL9K5wqd3qbQ5EfLaFSt9x4U++3Qb3SHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lLCxQ0G9; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-70af5fbf0d5so716372b3a.1;
-        Thu, 11 Jul 2024 08:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720710686; x=1721315486; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bjqcD2k7yBNFFIMv18ORQ9h3/ZcEHadXRMMIxuE0fSg=;
-        b=lLCxQ0G9VWrGTROKel25L7DVcmk/ERcDEWfQcudhYP349edvXfogQLK0JOwZkVQK/9
-         nudxZEBQpo/cEEs64fK4hfC1hvAP3JA6e8eudFsZY0WWJeN7ZYNinB9HKhHxcdTRnXIs
-         LzH3M2mBDOvo2LJQYYDqixrwWi0MZ0Q2uNMtFDYp3FlnDdCs4jjNK84RbN51QnSoe5bj
-         /lx85OOzS5sqW9BcdsPkyNhpwLl9CqV+O9HW9n6qG2mBw5crYbVk2rUHT47nK9CbLQGm
-         X8Wp/3H5WV7iC9kf4+d3hWCN4gDvZGoGLgAZM2d+TJdIBlCuy7nyH8rGLdss24m/pOF7
-         sYjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720710686; x=1721315486;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bjqcD2k7yBNFFIMv18ORQ9h3/ZcEHadXRMMIxuE0fSg=;
-        b=ROSgFLR6CvabTtBnh/w5UMaQKbx63ePbvBn3OZEDxBVXgYiTCJLU1nVkqSDXG/g8sX
-         UeEmcjJ7aU69z7Xj/DMk4MIcSwG66exkTAdDNyylKgEUYtOe1/Jc0AFblyMq4MRrFF60
-         qAeK9MgJD2Y3hmWiIayzTWh2U+o7aYOfphkz3PM5ONHuETb/DfZuAn5SKIRqHUI1pzRn
-         p6xCFMuxkgWRV0CBATWrWKhoDCHQ+Kfj1+Ju4NYWaWlX+DmXfuSLp8K7RnWQTD3c/znT
-         +S7aTJkTw3KMbfxIV2b7TR+75oOmd2OGg17r7XjvRBm5X1U061BYl5yG3sJwAvqRYYqt
-         jhbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGOE5SyITSiS5vyVDjm3M3wJ4GeX/DQtDrc3997K+T0r6DsR8kg2WKqN2puk+oUT6cXf+XeMbxgCgfSOwCrQVmiVnLqBzc67nhTtuuUHqPpN0MWi+FYOpVXiYXJDiLyeHkCo9CTFBbsA==
-X-Gm-Message-State: AOJu0YxeemMbNZD4j9VhIQQHyZ/aMbj1ShdMI0Yx5ENpueobMA3VyUeh
-	SPj+CqZR1WIxC3xsa/Vi7oHrKaHEcEs9l3sSiG+iv4vvOXtr0oAx
-X-Google-Smtp-Source: AGHT+IGNUjxzlPxKH/kapqaAb/9KWwYDP/oYtQd9KY4Dub2jrY8XFm7Omt/4jHDqfQ1iS5PXVMTTNw==
-X-Received: by 2002:a05:6a00:174a:b0:70b:5368:a212 with SMTP id d2e1a72fcca58-70b61dc856amr2900647b3a.15.1720710686001;
-        Thu, 11 Jul 2024 08:11:26 -0700 (PDT)
-Received: from mobilestation ([217.118.64.114])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b439ee26fsm5778775b3a.209.2024.07.11.08.11.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 08:11:25 -0700 (PDT)
-Date: Thu, 11 Jul 2024 18:11:13 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Michal Simek <michal.simek@amd.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, Tony Luck <tony.luck@intel.com>, 
-	James Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Robert Richter <rric@kernel.org>, Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH RESEND v6 02/18] EDAC/synopsys: Fix mci->scrub_cap field
- setting
-Message-ID: <wva6x7hrksgvoffpzi5h7q6ucfhdj2fngnezdmnru6gktgmf6q@yfs3lvzrdrhf>
-References: <20240627173251.25718-1-fancer.lancer@gmail.com>
- <20240627173251.25718-3-fancer.lancer@gmail.com>
- <20240709113522.GEZo0getHKGPD588S1@fat_crate.local>
+	s=arc-20240116; t=1720711459; c=relaxed/simple;
+	bh=P6XElzflGdE/upeKRCqdTNgR6yj/DyxIK7hMeVukaBY=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NdTbm7dxfD5bUZeWd3XY0qlTZAcPI2tKULWO1dnkLv/qZfV758zfC66ZzqyEraWEPBhMkpgwmM1HWu8mRv/qQV/qxuEgVNVuvvqgb25NzI1/V3ZXzK5SqsHRTHLGKXClVySZZftysBNjh6vjDZ8WIXH02/lEtz+DBOH9qGFv+NI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WKdlf53MJz67KPG;
+	Thu, 11 Jul 2024 23:23:10 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 57F301400C9;
+	Thu, 11 Jul 2024 23:24:12 +0800 (CST)
+Received: from localhost (10.203.174.77) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 11 Jul
+ 2024 16:24:11 +0100
+Date: Thu, 11 Jul 2024 16:24:11 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+CC: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, "Ard
+ Biesheuvel" <ardb@kernel.org>, James Morse <james.morse@arm.com>, "Len Brown"
+	<lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Shiju Jose"
+	<shiju.jose@huawei.com>, Alison Schofield <alison.schofield@intel.com>, Dave
+ Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	<linux-acpi@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-efi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/5] efi/cper: Add a new helper function to print
+ bitmasks
+Message-ID: <20240711162411.00007e5e@Huawei.com>
+In-Reply-To: <5bb5f806a763b295401972fdff17bb455bee2e82.1720679234.git.mchehab+huawei@kernel.org>
+References: <cover.1720679234.git.mchehab+huawei@kernel.org>
+	<5bb5f806a763b295401972fdff17bb455bee2e82.1720679234.git.mchehab+huawei@kernel.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240709113522.GEZo0getHKGPD588S1@fat_crate.local>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Tue, Jul 09, 2024 at 01:35:22PM +0200, Borislav Petkov wrote:
-> On Thu, Jun 27, 2024 at 08:32:09PM +0300, Serge Semin wrote:
-> > The mem_ctl_info.scrub_cap field is supposed to be set with the ECC
-> > scrub-related flags. Instead the driver erroneously initializes it with
-> > the SCRUB_HW_SRC flag ID. It's definitely wrong, but it hasn't caused any
-> > problem so far since the structure field isn't used by the EDAC core. Fix
-> > it anyway by using the SCRUB_FLAG_HW_SRC macro to initialize the field.
-> 
-> This hasn't been used at least since it got added by
-> 
-> commit da9bb1d27b21cb24cbb6a2efb5d3c464d357a01e
-> Author: Alan Cox <alan@lxorguk.ukuu.org.uk>
-> Date:   Wed Jan 18 17:44:13 2006 -0800
-> 
->     [PATCH] EDAC: core EDAC support code
-> 
-> AFAICT.
-> 
-> Please remove ->scrub_cap along with enum scrub_type instead.
-> 
-> We can always resurrect it if needed.
+On Thu, 11 Jul 2024 08:28:54 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
 
-Agreed. I'll drop all of these from the EDAC core and drivers.
+> Sometimes it is desired to produce a single log line for errors.
+> Add a new helper function for such purpose.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+LGTM
 
--Serge(y)
+Reviewed-by; Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
+> ---
+>  drivers/firmware/efi/cper.c | 43 +++++++++++++++++++++++++++++++++++++
+>  include/linux/cper.h        |  2 ++
+>  2 files changed, 45 insertions(+)
 > 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+> index 7d2cdd9e2227..462d739e8dd1 100644
+> --- a/drivers/firmware/efi/cper.c
+> +++ b/drivers/firmware/efi/cper.c
+> @@ -106,6 +106,49 @@ void cper_print_bits(const char *pfx, unsigned int bits,
+>  		printk("%s\n", buf);
+>  }
+>  
+> +/**
+> + * cper_bits_to_str - return a string for set bits
+> + * @buf: buffer to store the output string
+> + * @buf_size: size of the output string buffer
+> + * @bits: bit mask
+> + * @strs: string array, indexed by bit position
+> + * @strs_size: size of the string array: @strs
+> + *
+> + * Add to @buf the bitmask in hexadecimal. Then, for each set bit in @bits,
+> + * add the corresponding string describing the bit in @strs to @buf.
+> + *
+> + * Return: number of bytes stored or an error code if lower than zero.
+> + */
+> +int cper_bits_to_str(char *buf, int buf_size, unsigned long bits,
+> +		     const char * const strs[], unsigned int strs_size)
+> +{
+> +	int len = buf_size;
+> +	char *str = buf;
+> +	int i, size;
+> +
+> +	*buf = '\0';
+> +
+> +	for_each_set_bit(i, &bits, strs_size) {
+> +		if (!(bits & (1U << (i))))
+> +			continue;
+> +
+> +		if (*buf && len > 0) {
+> +			*str = '|';
+> +			len--;
+> +			str++;
+> +		}
+> +
+> +		size = strscpy(str, strs[i], len);
+> +		if (size < 0)
+> +			return size;
+> +
+> +		len -= size;
+> +		str += size;
+> +	}
+> +	return len - buf_size;
+> +}
+> +EXPORT_SYMBOL_GPL(cper_bits_to_str);
+> +
+>  static const char * const proc_type_strs[] = {
+>  	"IA32/X64",
+>  	"IA64",
+> diff --git a/include/linux/cper.h b/include/linux/cper.h
+> index 265b0f8fc0b3..25858a7608b7 100644
+> --- a/include/linux/cper.h
+> +++ b/include/linux/cper.h
+> @@ -584,6 +584,8 @@ const char *cper_mem_err_type_str(unsigned int);
+>  const char *cper_mem_err_status_str(u64 status);
+>  void cper_print_bits(const char *prefix, unsigned int bits,
+>  		     const char * const strs[], unsigned int strs_size);
+> +int cper_bits_to_str(char *buf, int buf_size, unsigned long bits,
+> +		     const char * const strs[], unsigned int strs_size);
+>  void cper_mem_err_pack(const struct cper_sec_mem_err *,
+>  		       struct cper_mem_err_compact *);
+>  const char *cper_mem_err_unpack(struct trace_seq *,
+
 
