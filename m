@@ -1,359 +1,280 @@
-Return-Path: <linux-edac+bounces-1506-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1511-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B61C792F882
-	for <lists+linux-edac@lfdr.de>; Fri, 12 Jul 2024 11:56:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A148992FAFF
+	for <lists+linux-edac@lfdr.de>; Fri, 12 Jul 2024 15:15:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C710281AF0
-	for <lists+linux-edac@lfdr.de>; Fri, 12 Jul 2024 09:56:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25EA21F2327B
+	for <lists+linux-edac@lfdr.de>; Fri, 12 Jul 2024 13:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB1714A4C8;
-	Fri, 12 Jul 2024 09:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C098517107B;
+	Fri, 12 Jul 2024 13:15:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/zPYY/4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RfEltek4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C15143C5D;
-	Fri, 12 Jul 2024 09:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720778208; cv=fail; b=j/ceko0KdSx7GvmdD73QfOYsLVXV3f16JVl83pVO0WIv0Pj4cqKrJP9WHS5ExBQk1UQkKn0nzO1RDQSAc5Ps9QqcKvdxq6AMRWjH9kDzoKLl3o+SuHtxl3mM6lejlOvfmnyxShqooJEBdCHOzEWAroVtK+POPytEtP7RYFad4Bs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720778208; c=relaxed/simple;
-	bh=g31dHeMcIYnb7/8nJCuTOOgxuCyTberdv9OLsqdPn0k=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NNIXrxCMpyXDTqoM+0RuyLLH85jxlITx8mgnqOPOOpuKQUIfZEC2OojvBCKYYsK4yJmI53mKGn7VMr1G1m88oey35mYKzo2C/Bq7io6kPvJgdkZ6P8mRBBl6oCWRISLpm6GeC555vnafuVTlBNatd6cC+j+pHHoFp7RtP1gPYwA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/zPYY/4; arc=fail smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720778207; x=1752314207;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=g31dHeMcIYnb7/8nJCuTOOgxuCyTberdv9OLsqdPn0k=;
-  b=i/zPYY/4AxxH40ZMGZHSdFXbogC/H5AkkPgX+3l8IX9yWBB1nM6Q6anL
-   GhVjtB/EenFR0rtzhv+THOW1WfFvCLX31BEcGwT8efH5wmJAYBht9xvNV
-   jYwZF2GeqX+nnrjPhfA/hkOGk24+MUkTQJXxi4n/VdZaCNynGRtx9kVnP
-   nAIOPn6E0eCq4iAmXW6v5e94LsVXFWkae5OyHMPu189ACuQHA0qbE5h7W
-   XlhMJa7UYr0RnOaZnIVc5yS/t8PTOJz1R2BbzRT69Ca9OhN8aDiiw5PoU
-   gvS8NNwgTTgG2D5kwMe9bXpirn6djCJHJVcFhpYF6JRshikRjEM2+a9e8
-   Q==;
-X-CSE-ConnectionGUID: doKerV3wRZmBXSRFnPzrow==
-X-CSE-MsgGUID: VihsKWLIQeS31eV3IrdKIA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="17921502"
-X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
-   d="scan'208";a="17921502"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 02:56:46 -0700
-X-CSE-ConnectionGUID: cJ5ee0wWRJeWAiLHXpLZxw==
-X-CSE-MsgGUID: +NZzCbrVStiAbyVRD+eeNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
-   d="scan'208";a="48963957"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orviesa009.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Jul 2024 02:56:45 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 12 Jul 2024 02:56:44 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 12 Jul 2024 02:56:44 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Fri, 12 Jul 2024 02:56:44 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 12 Jul 2024 02:56:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GZtjZ6kfJKQJlDsrmCa7GE6o++GyUbijlHoaZm0XSQRkoQlqAcFfLToSaSMMZluYuKJXdmzDO4NRoW3FIuCCLnPdV+KsPhTPsyZjqJoCiDjUVGMbxQDLy1mo7rMwriTxiXsIwgDkCdNBaWrMIBDccqrxyiwb5c1d9T0ux6XLWeVAJ5Hgicru1j4lfM5V4xg9Nkq3UT5ZqIbrRmsi8UO1a3zLr71smSvOyDvcyZjY0ezcOFQpOqzDKknzAH+X6uJSKzQ1ZfbL9oG9x0wcog6uRM45l2T94V3pUe1uhDYiHGBRYSZ0ii3a/T3okHNVR/91BLsGGXYhBoHVFbBqa7foJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wO1BrZOsyaZacw3gkhsgXRe939CvdqL6KFUJxsplhy8=;
- b=Lk+pdgJ+5HVtp8wOLj1s/Xu1U3o19CvYgFkh38o/igSQmiM3lbfLUq+z0nZayofoygAyhUPlRiK/eOS7ALsIL2pSMd6D7H6t9PILLIe7lUMVLjfZnH/LDHp9KyFOkUm1XE1U4apIRaV4it5j90ZAUpl60qQnrdn1VSeqeeb+4kXaxJD3gH0x167mlWwa1JCZTByaM5PA0hX7dm7c0lmStch9W1Nm8ikk6/5XxeWljqe1iboT6fOVqSqWZAdhCz+uFJm6Td4QJHVObGR1cYp43QKWIO8XOUJyy9qU7cwkvxktvfQUKDQJpUcF9ihivn74/bXo5XROgPwk19fvx1S6+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ0PR11MB6744.namprd11.prod.outlook.com (2603:10b6:a03:47d::10)
- by PH0PR11MB5206.namprd11.prod.outlook.com (2603:10b6:510:3f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.22; Fri, 12 Jul
- 2024 09:56:37 +0000
-Received: from SJ0PR11MB6744.namprd11.prod.outlook.com
- ([fe80::fe49:d628:48b1:6091]) by SJ0PR11MB6744.namprd11.prod.outlook.com
- ([fe80::fe49:d628:48b1:6091%7]) with mapi id 15.20.7762.020; Fri, 12 Jul 2024
- 09:56:37 +0000
-From: "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-To: "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	"bhelgaas@google.com" <bhelgaas@google.com>
-CC: "mahesh@linux.ibm.com" <mahesh@linux.ibm.com>, "oohall@gmail.com"
-	<oohall@gmail.com>, "linuxppc-dev@lists.ozlabs.org"
-	<linuxppc-dev@lists.ozlabs.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "james.morse@arm.com"
-	<james.morse@arm.com>, "Luck, Tony" <tony.luck@intel.com>, "bp@alien8.de"
-	<bp@alien8.de>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"jonathan.cameron@huawei.com" <jonathan.cameron@huawei.com>, "Jiang, Dave"
-	<dave.jiang@intel.com>, "Schofield, Alison" <alison.schofield@intel.com>,
-	"Verma, Vishal L" <vishal.l.verma@intel.com>, "Weiny, Ira"
-	<ira.weiny@intel.com>, "helgaas@kernel.org" <helgaas@kernel.org>,
-	"linmiaohe@huawei.com" <linmiaohe@huawei.com>, "shiju.jose@huawei.com"
-	<shiju.jose@huawei.com>, "Preble, Adam C" <adam.c.preble@intel.com>,
-	"lukas@wunner.de" <lukas@wunner.de>, "Smita.KoralahalliChannabasappa@amd.com"
-	<Smita.KoralahalliChannabasappa@amd.com>, "rrichter@amd.com"
-	<rrichter@amd.com>, "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Tsaur, Erwin"
-	<erwin.tsaur@intel.com>, "Kuppuswamy, Sathyanarayanan"
-	<sathyanarayanan.kuppuswamy@intel.com>, "Williams, Dan J"
-	<dan.j.williams@intel.com>, "Wanyan, Feiting" <feiting.wanyan@intel.com>,
-	"Wang, Yudong" <yudong.wang@intel.com>, "Peng, Chao P"
-	<chao.p.peng@intel.com>, "qingshun.wang@linux.intel.com"
-	<qingshun.wang@linux.intel.com>
-Subject: RE: [PATCH v5 0/2] PCI/AER: Handle Advisory Non-Fatal error
-Thread-Topic: [PATCH v5 0/2] PCI/AER: Handle Advisory Non-Fatal error
-Thread-Index: AQHawr41SN+Mhr/ECEeuzsossoYQIbHy+4Gw
-Date: Fri, 12 Jul 2024 09:56:36 +0000
-Message-ID: <SJ0PR11MB67441DAC71325558C8881EEF92A62@SJ0PR11MB6744.namprd11.prod.outlook.com>
-References: <20240620025857.206647-1-zhenzhong.duan@intel.com>
-In-Reply-To: <20240620025857.206647-1-zhenzhong.duan@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR11MB6744:EE_|PH0PR11MB5206:EE_
-x-ms-office365-filtering-correlation-id: 2f3e8ba6-6cdd-461b-1649-08dca258eb60
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?0HjW5Oe7PBuvKUoMdO4cNumnc01kwxgugvnV8wZJ9mGuv3QEV3Sc1v8Etbl7?=
- =?us-ascii?Q?NUlUiPx8jhPUXOJHt0Nz+FRaCpKWRc2pItWbqB9KGvjESmYKMqSITm7gbjKC?=
- =?us-ascii?Q?3EiuTPtf5NhKO63sKOCLqYNy8JEIsZV5dx1eslhMxyy7L3AEqTNjty/HACso?=
- =?us-ascii?Q?Vuivx3oihLhhZk4Q1SgvghQSoNcu9d35oAjarre1OXXsrpahwQy2mJi8Qwfl?=
- =?us-ascii?Q?a+PBvlPeMs47QPPvCoN+Y4StvzerT+Etc4DBf5S5Jv1XWKZyiZHhOxAYMZuw?=
- =?us-ascii?Q?xETpwEOgcB0KjG6H8jgZriL8Wih0rwGxjP5/CZWwrMW2EaWx+pJjPeDSQcru?=
- =?us-ascii?Q?K8thh4UVEfTWL0CMLUIL7DomLKMMeodIUXwJ9YgIS2l9+uoPlnIRJRzayCHJ?=
- =?us-ascii?Q?+sbbfTswLj6pgfTWR+iHrg1pSq40mbiynHDVHg6otLDKhHnhx51C7Fm3Rt80?=
- =?us-ascii?Q?SCXWEhPniLtT46iRXWwsADI/DXTXTUPDuFxO0wzZ1yy1TnQvf7dHlezAiLPB?=
- =?us-ascii?Q?7gSjJMOx3xKZQxTQIWpFNYtF6KxqmlnL3PUJTfR5H682sLnkR6MReiPrACb3?=
- =?us-ascii?Q?Ei73f0Lf/dU1gpVOl+pi4VqkHfKstQCeTHtkrLj9GiVoLQ1eDVFdoedi+Mnx?=
- =?us-ascii?Q?HXRziofUpbdX29uS2FE4GRnQIOxwKtuS6yHHMhaAzreZKOApcKtKu7v+j74S?=
- =?us-ascii?Q?0DQxfpQdKKlpjZoG++1361o+yyY5juQw4z2JTZi4tgBtmIUVLHQR+MIvNL9J?=
- =?us-ascii?Q?Q9XbH1gRtUICd3jAilaVTaAdTne8I94Vt6A0QgiyTAada8QMiUap78R+G81t?=
- =?us-ascii?Q?rgQvlyfXJ0uT9qO5tOl0M/d8L3029xHbqChEANU3h8fuYHtazxkBE9X/Eay8?=
- =?us-ascii?Q?1UfRVRcHoCETGBrvNEwqpJjKkJvond3Jpfs61MmY0StVY+RimQqtxOwX7Utr?=
- =?us-ascii?Q?hUIABscQ8r7eajm1u5cce+Pf5f8gIy8q9rFoOEcyXdwfmH6K4D7eQWpJsQEx?=
- =?us-ascii?Q?yZOAEfiS6nHm/qP9UjgmkcptmoqaSoh4qacnBLfYh/gEpOsw0JvYnC1ZViEh?=
- =?us-ascii?Q?XQl5SMLs6KRnicLUWtxk7e9P0FXpc9fCiSvrmUC5BPCzSB5vE4CTVgMDfiNE?=
- =?us-ascii?Q?l6oPv8iTzOQ+Yfs+RfsVggdTRwE6YE8006ghCiX3xk3nN+CWZ4nPLy2+YiOD?=
- =?us-ascii?Q?J67Z4QZEYrcndNtunFObj+HP7jNkBY33lMjfRg9NTvHi65w26QXmZHo7h3fw?=
- =?us-ascii?Q?MS8gRlQZvD3lmab2o0BrTUp2Ic6muazxGsTqqewJV03tV6z4XICs3JdbX0yA?=
- =?us-ascii?Q?1NBzI4Ae+nBVN6M75QV4x4/BSfGXl0YiPuUojvK/PdjCN52NRIw5LLgdWZUc?=
- =?us-ascii?Q?NrWA2Yg=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB6744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QY6e1qlq0LmHyZPX6T/bmCDoiMgKJ2QSTz9L3ZSMuWkh7/OJe722FHowyi33?=
- =?us-ascii?Q?FUmxwhFiki8DTYkhIFVw3sq+/HR+MIbM9IWPJzjM+/I4lyZiOMU/cNyQhny1?=
- =?us-ascii?Q?lrP8zWnFox6dQatJKcF5HswDiWOcGSf1hjZzoG1JUFu+ZLqad/tHTHTyR1jB?=
- =?us-ascii?Q?tNjz6GVLUlZ4QpllLDewbqE/m31kchcriheMMBKLUq8MphYOnqkHHMXsq/VW?=
- =?us-ascii?Q?1uMNgw8PYhYFeMRC1FBhIoRCsciF9gKPQeho2Hx3WrtTk6T8e4R3K0XZClHL?=
- =?us-ascii?Q?H+UvWZAoS9eU86yx12oJkF3e/e/lWYcByaguvk8z8LBAroj8tiOSXpyIZeEd?=
- =?us-ascii?Q?mSMlInEwbqDKJwZQaYk0AVyCcQPTFFylhlFs2nGKyR0aezHLL3e9jEMMcYMO?=
- =?us-ascii?Q?XPrCmCLr71dMK4BxkehjedyviutHKaeqe/1Ga/JL2E5rD9qC7Jp+uYIkM+GX?=
- =?us-ascii?Q?puiTCzUoieC7P56o4VjMKU25uyKcs1EU7xHWEt4CQpgthi/oAjGDGpTkMQP/?=
- =?us-ascii?Q?xDOo6db3La9IlNV3EQ3z2xQ37OGxGuoZwiG0UZN9mFQZ+JbQslWe3Z83h0qF?=
- =?us-ascii?Q?VtCA1OSE8foljtJRR3zLs7woM/Ltfd+qvTnDK+ptB1dUfB+Xs+sO2vIA4d7M?=
- =?us-ascii?Q?0WX6T7KdqQpkILS/FWfVoTOueN6hw3+GRdfizhYxu6wIHi5YfNespSg3zv5K?=
- =?us-ascii?Q?ndFNY5mItP1cJkH4aHtiXoiuwoL1GG0RfwzSvr74IpmHELVoeQG5RkNFtq4V?=
- =?us-ascii?Q?ek6+UbdvJ9LfDsSDtGhLjHM62Ods2Gw8UwAnikC4q292TLRTst5cb0k9V4P4?=
- =?us-ascii?Q?BVYUbw6tLmrbD0idBw+U+gdbYCetupOOBrQ5gVeTzEL4y+5s5vVW5Gb7AY2q?=
- =?us-ascii?Q?mXvc0ZA/NcuVvNgj5sZqbYaZR9mQKf9fgJNumaHJw6GBvdXOXat/ncQm7LMu?=
- =?us-ascii?Q?Pd17tMWgGHvABfhAXx0XF3h9mqJklSPXqJnySjJsFZQMI+C0IiesHYf+Avl0?=
- =?us-ascii?Q?enwAltVrlKE1xKF447pf+8GX1yJigwih3Wj06CZeetFp8i9XID6F4/KyOQIY?=
- =?us-ascii?Q?YIKkvPOUqO6dOtJhimOr/KfUGOsICVs4d+LNYQ0RxhmOvpctY3gGpBSw4t9a?=
- =?us-ascii?Q?6gTT+4jMlliFSD/YQ6VIv2tX3SgE/Wm93VOPWtbE3mOcXQXIJ/EmY1gZuj5J?=
- =?us-ascii?Q?JjkmDy3j1F71ZbJQ7h2gnDGoj2xM1naa/u6vDmOyLj0ALkJA+0ncLrNj2z+p?=
- =?us-ascii?Q?XFmMYJpN6PsfSL4IeCkEQACVxzMgKRxOzTNO1OsA6DjJZs17RIs3uXS6KKoz?=
- =?us-ascii?Q?HW+YCKe2a9d9rL5P6T+UdAFDWvt/LVB15cB4GF8zdQSa/DCVWzVqyJKvWRjl?=
- =?us-ascii?Q?7shUcHNM1dhtlQ8dkhrE4e26wjnnAdFRxp+fmdj/sSPUsogChkFv5jA6FaRG?=
- =?us-ascii?Q?l0+7gu0pYOYi1JJ1jtGoZG9pUnVZiyIId9nyzk+LfSX4DROpMW62THTtd2I1?=
- =?us-ascii?Q?9rzmyTrKs5Yo4aX5fy0+U4HB33cuZIMj4F9mvBx5sQ50CVDq4ylr7ORNX+Ta?=
- =?us-ascii?Q?gnnaMDfCuCKM/XFwzwJwC5IyiH2xRPL91LejG5r6?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C51A17085C
+	for <linux-edac@vger.kernel.org>; Fri, 12 Jul 2024 13:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720790122; cv=none; b=h87MJXN9N6wfpJ9e3U/NrdVBD7aQ+rY5qYJan9NKCqYYdK8+7GhQWmDrcQoqueVc1KBL+JsrmoahVTG2p1A9CTOMxfwOUL5foteNnwrpEMxW3LHWM4pDe7WCjwvvTfhxb11x83/Tq4UwVAnr0Qpxs93Qx2qUg2Dy/ufgZrOHfMA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720790122; c=relaxed/simple;
+	bh=MGMlBnivAvmjZ0C8RVAOZqYx3QkANOHh0kWOJlIWGmM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oA6vkqp44OpY/rVaOGVX/1zORdO69+YWNUtmYYceB83gOz8M0lY30kYrnujNFuXCkjcU8HtjwiPDitELy86wRP4aylAkbShwJcZ2OfruwqPCcxrHm/KWsPyWnZ20spskA+y1116quTkgXsLSF1mKtniJiyhh/4D1CdvxOg5qbcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RfEltek4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F6BC4AF07;
+	Fri, 12 Jul 2024 13:15:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720790122;
+	bh=MGMlBnivAvmjZ0C8RVAOZqYx3QkANOHh0kWOJlIWGmM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RfEltek49bqcCYjB6mTEJE+4oW/aOoJlCfZwYPa1iqDdV57ET2ZxgNcM84A4n7JpU
+	 LAF5vSaz15AuKTdTkfgulC2j1TwrnpgLOEdsZr2MexZNZ/5rMnfW0FlCdGcWXPcQYk
+	 PhIpvhF6XYTbJ0QSTvjDRj+c9PdyRs02z6Zv08TM8DYObq+HQuJK4oq2eDCwxLI8d2
+	 gJ6Zzz8rJt9OS0fGp0rhvo02MFTgv+xJXiOyF3/99uVmRhDvetFHb86tZgpoY+SqID
+	 i3P4RXGpsP+FCjPCW8E6aBIi86HBiJ8lJy7qYW6uMARPtjpMBoE/i4eWdFQPEMd0T1
+	 AP4tA/GVDSDmg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.97.1)
+	(envelope-from <mchehab@kernel.org>)
+	id 1sSG7K-00000003iDu-0vb5;
+	Fri, 12 Jul 2024 15:15:18 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: 
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	linux-edac@vger.kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	=?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+	Ani Sinha <anisinha@redhat.com>,
+	Beraldo Leal <bleal@redhat.com>,
+	Dongjiu Geng <gengdongjiu1@gmail.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Shannon Zhao <shannon.zhaosl@gmail.com>,
+	Thomas Huth <thuth@redhat.com>,
+	Wainer dos Santos Moschetta <wainersm@redhat.com>,
+	Yanan Wang <wangyanan55@huawei.com>,
+	qemu-arm@nongnu.org,
+	qemu-devel@nongnu.org
+Subject: [PATCH v2 0/7] Add ACPI CPER firmware first error injection for Arm Processor
+Date: Fri, 12 Jul 2024 15:15:07 +0200
+Message-ID: <cover.1720789921.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB6744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f3e8ba6-6cdd-461b-1649-08dca258eb60
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2024 09:56:36.8951
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BanIRRhVlsg3gglK9WIBT8X0h0/hmUopTWgr+HBc76WPzA/La/fcWUNXJUcPvGiTtDzQYeXqkI5n7wnUng6jAutYt40BHJK3KPlyxsK71b8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5206
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Hi Bjorn,
+Testing OS kernel ACPI APEI CPER support is tricky, as one depends on
+having hardware with special-purpose BIOS and/or hardware.
 
-Kindly ping, this series got Reviewed-by and no comments for a month.
-Will you think about picking it or further improvements are needed.
-Look forward to your suggestions.
+With QEMU, it becomes a lot easier, as it can be done via QMP.
 
-Thanks
-Zhenzhong
+This series add support for ARM Processor CPER error injection,
+according with ACPI 6.x and UEFI 2.9A/2.10 specs.
 
->-----Original Message-----
->From: Duan, Zhenzhong <zhenzhong.duan@intel.com>
->Subject: [PATCH v5 0/2] PCI/AER: Handle Advisory Non-Fatal error
->
->Hi,
->
->This is a relay work of Qingshun's v2 [1], but changed to focus on ANFE
->processing as subject suggests and drops trace-event for now. I think it's
->a bit heavy to do extra IOes to get PCIe registers only for trace purpose
->and not see it a community request for now.
->
->According to PCIe Base Specification Revision 6.1, Sections 6.2.3.2.4 and
->6.2.4.3, certain uncorrectable errors will signal ERR_COR instead of
->ERR_NONFATAL, logged as Advisory Non-Fatal Error(ANFE), and set bits in
->both Correctable Error(CE) Status register and Uncorrectable Error(UE)
->Status register. Currently, when handling AER events the kernel will only
->look at CE status or UE status, but never both. In the ANFE case, bits set
->in the UE status register will not be reported and cleared until the next
->FE/NFE arrives.
->
->For instance, previously, when the kernel receives an ANFE with Poisoned
->TLP in OS native AER mode, only the status of CE will be reported and
->cleared:
->
->  AER: Correctable error message received from 0000:b7:02.0
->  PCIe Bus Error: severity=3DCorrectable, type=3DTransaction Layer, (Recei=
-ver ID)
->    device [8086:0db0] error status/mask=3D00002000/00000000
->     [13] NonFatalErr
->
->If the kernel receives a Malformed TLP after that, two UEs will be
->reported, which is unexpected. The Malformed TLP Header is lost since
->the previous ANFE gated the TLP header logs:
->
->  PCIe Bus Error: severity=3D"Uncorrectable (Fatal), type=3DTransaction La=
-yer,
->(Receiver ID)
->    device [8086:0db0] error status/mask=3D00041000/00180020
->     [12] TLP                    (First)
->     [18] MalfTLP
->
->To handle this case properly, calculate potential ANFE related status bits
->and save in aer_err_info. Use this information to determine the status bit=
-s
->that need to be cleared.
->
->Now, for the previous scenario, both CE status and related UE status will
->be reported and cleared after ANFE:
->
->  AER: Correctable error message received from 0000:b7:02.0
->  PCIe Bus Error: severity=3DCorrectable, type=3DTransaction Layer, (Recei=
-ver ID)
->    device [8086:0db0] error status/mask=3D00002000/00000000
->     [13] NonFatalErr
->    Uncorrectable errors that may cause Advisory Non-Fatal:
->     [12] TLP
->
->Note:
->checkpatch.pl will produce following warnings on PATCH1&2:
->
->WARNING: 'UE' may be misspelled - perhaps 'USE'?
->#22:
->uncorrectable error(UE) status should be cleared. However, there is no
->
->...similar warnings omitted...
->
->This is a false-positive, so not fixed.
->
->WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit
->description?)
->#10:
->  PCIe Bus Error: severity=3DCorrectable, type=3DTransaction Layer, (Recei=
-ver ID)
->
->...similar warnings omitted...
->
->For readability reasons, these warnings are not fixed.
->
->
->
->[1] https://lore.kernel.org/linux-pci/20240125062802.50819-1-
->qingshun.wang@linux.intel.com
->
->Thanks
->Qingshun, Zhenzhong
->
->Changelog:
->v5:
-> - squash patch 1 and 3 (Kuppuswamy)
-> - add comment about avoiding race and fix typo error (Kuppuswamy)
-> - collect Jonathan and Kuppuswamy's R-b
->
->v4:
->  - Fix a race in anfe_get_uc_status() (Jonathan)
->  - Add a comment to explain side effect of processing ANFE as NFE (Jonath=
-an)
->  - Drop the check for PCI_EXP_DEVSTA_NFED
->
->v3:
->  - Split ANFE print and processing to two patches (Bjorn)
->  - Simplify ANFE handling, drop trace event
->  - Polish comments and patch description
->  - Add Tested-by
->
->v2:
->  - Reference to the latest PCIe Specification in both commit messages
->    and comments, as suggested by Bjorn Helgaas.
->  - Describe the reason for storing additional information in
->    aer_err_info in the commit message of PATCH 1, as suggested by Bjorn
->    Helgaas.
->  - Add more details of behavior changes in the commit message of PATCH
->    2, as suggested by Bjorn Helgaas.
->
->v4: https://lkml.org/lkml/2024/5/9/247
->v3: https://lore.kernel.org/lkml/20240417061407.1491361-1-
->zhenzhong.duan@intel.com
->v2: https://lore.kernel.org/linux-pci/20240125062802.50819-1-
->qingshun.wang@linux.intel.com
->v1: https://lore.kernel.org/linux-pci/20240111073227.31488-1-
->qingshun.wang@linux.intel.com
->
->
->Zhenzhong Duan (2):
->  PCI/AER: Clear UNCOR_STATUS bits that might be ANFE
->  PCI/AER: Print UNCOR_STATUS bits that might be ANFE
->
-> drivers/pci/pci.h      |  1 +
-> drivers/pci/pcie/aer.c | 79
->+++++++++++++++++++++++++++++++++++++++++-
-> 2 files changed, 79 insertions(+), 1 deletion(-)
->
->--
->2.34.1
+This series consists of:
+
+- one patch using a define for ARM virt GPIO power pin
+  (requested during last review);
+- three patches from Jonathan (one coauthored with Shiju) with basic
+  EINJ features, already submitted as RFC (but not merged yet) at:
+    https://lore.kernel.org/qemu-devel/20240628090605.529-1-shiju.jose@huawei.com/
+- three patches from me extending it to optionally allow to
+  generate all sorts of possible valid combinations for
+  ARM Processor CPER record.
+
+I've been using it to test a Linux Kernel patch series fixing
+UEFI 2.9A errata and ARM processor trace event:
+   https://lore.kernel.org/linux-edac/3853853f820a666253ca8ed6c7c724dc3d50044a.1720679234.git.mchehab+huawei@kernel.org/T/#t
+
+I also wrote some Wiki pages for rasdaemon (a Linux daemon
+widely used to monitor and react to RAS events):
+   https://github.com/mchehab/rasdaemon/wiki/error-injection
+
+Being really helpful to test the Linux Kernel behavior when
+firmware-first RAS events for ARM processor arrives there,
+helping to validate how CPER and GHES driver handles them
+(and further testing userspace apps like rasdaemon):
+
+Sending this command to QMP:
+    { "execute": "qmp_capabilities" } 
+    { "execute": "arm-inject-error", "arguments": {"error": [{"type": ["cache-error"]}]} }
+
+Produces a simple CPER register, properly handled by the Linux
+Kernel:
+
+[  839.952678] {4}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 1
+[  839.953145] {4}[Hardware Error]: event severity: recoverable
+[  839.953451] {4}[Hardware Error]:  Error 0, type: recoverable
+[  839.953763] {4}[Hardware Error]:   section_type: ARM processor error
+[  839.954094] {4}[Hardware Error]:   MIDR: 0x0000000000000000
+[  839.954383] {4}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000080000000
+[  839.954802] {4}[Hardware Error]:   running state: 0x0
+[  839.955066] {4}[Hardware Error]:   Power State Coordination Interface state: 0
+[  839.955424] {4}[Hardware Error]:   Error info structure 0:
+[  839.955712] {4}[Hardware Error]:   num errors: 1
+[  839.955983] {4}[Hardware Error]:    first error captured
+[  839.956260] {4}[Hardware Error]:    propagated error captured
+[  839.956561] {4}[Hardware Error]:    error_type: 0x02: cache error
+[  839.956882] {4}[Hardware Error]:    error_info: 0x000000000054007f
+[  839.957192] {4}[Hardware Error]:     transaction type: Instruction
+[  839.957495] {4}[Hardware Error]:     cache error, operation type: Instruction fetch
+[  839.957888] {4}[Hardware Error]:     cache level: 1
+[  839.958166] {4}[Hardware Error]:     processor context not corrupted
+[  839.958459] {4}[Hardware Error]:     the error has not been corrected
+[  839.958771] {4}[Hardware Error]:     PC is imprecise
+[  839.959074] [Firmware Warn]: GHES: Unhandled processor error type 0x02: cache error
+
+rasdaemon output (rasdaemon still needs to be patched for
+UEFI 2.9A errata):
+
+           <...>-211   [002] d..1.     0.000129 arm_event 2024-07-11 09:50:45 +0000 affinity: -1 MPIDR: 0x80000000 MIDR: 0x0 running_state: 0 psci_state: 0 ARM Processor Err Info data len: 32
+<CANT FIND FIELD buf>cpu: 0; error: 2; affinity level: 255; MPIDR: 0000000080000000; MIDR: 0000000000000000; running state: 0; PSCI state: 0; ARM Processor Err Info data len: 32; ARM Processor Err Info raw data: 00 20 06 00 02 00 00 05 7f 00 54 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00; ARM Processor Err Context Info data len: 0; ARM Processor Err Context Info raw data: ; Vendor Specific Err Info data len: 0; Vendor Specific Err Info raw data: 
+
+More complex events with multiple Processor Error Information structures
+can be produced like:
+
+    { "execute": "arm-inject-error", "arguments":  {
+        "validation": ["mpidr-valid", "affinity-valid", "running-state-valid", "vendor-specific-valid"],
+        "running-state": [], "psci-state": 1229279264, 
+        "error": [{
+            "validation": ["multiple-error-valid", "flags-valid"], 
+	"type": ["tlb-error", "bus-error", "micro-arch-error"], 
+                               "multiple-error": 3, "phy-addr": 57005, "virt-addr": 48879},
+                 {"type": ["micro-arch-error"]}, 
+                 {"type": ["tlb-error"]}, 
+                 {"type": ["bus-error"]},
+                 {"type": ["cache-error"]}],
+                 "context": [{"register": [57005, 48879, 43962, 47787]}],
+                 "vendor-specific": [12, 23, 53, 52, 3, 123, 243, 255]} }
+
+[  925.340284] {5}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 1
+[  925.340662] {5}[Hardware Error]: event severity: recoverable
+[  925.340924] {5}[Hardware Error]:  Error 0, type: recoverable
+[  925.341280] {5}[Hardware Error]:   section_type: ARM processor error
+[  925.341631] {5}[Hardware Error]:   MIDR: 0x0000000000000000
+[  925.341893] {5}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000080000000
+[  925.342278] {5}[Hardware Error]:   error affinity level: 0
+[  925.342571] {5}[Hardware Error]:   running state: 0x0
+[  925.342835] {5}[Hardware Error]:   Power State Coordination Interface state: 1229279264
+[  925.343157] {5}[Hardware Error]:   Error info structure 0:
+[  925.343388] {5}[Hardware Error]:   num errors: 4
+[  925.343602] {5}[Hardware Error]:    error_type: 0x1c: TLB error|bus error|micro-architectural error
+[  925.343960] {5}[Hardware Error]:    virtual fault address: 0x000000000000beef
+[  925.344241] {5}[Hardware Error]:    physical fault address: 0x000000000000dead
+[  925.344526] {5}[Hardware Error]:   Error info structure 1:
+[  925.344757] {5}[Hardware Error]:   num errors: 1
+[  925.344965] {5}[Hardware Error]:    first error captured
+[  925.345183] {5}[Hardware Error]:    propagated error captured
+[  925.345416] {5}[Hardware Error]:    error_type: 0x10: micro-architectural error
+[  925.345714] {5}[Hardware Error]:   Error info structure 2:
+[  925.345946] {5}[Hardware Error]:   num errors: 1
+[  925.346148] {5}[Hardware Error]:    first error captured
+[  925.346413] {5}[Hardware Error]:    propagated error captured
+[  925.346719] {5}[Hardware Error]:    error_type: 0x04: TLB error
+[  925.346988] {5}[Hardware Error]:    error_info: 0x00000080d6460fff
+[  925.347248] {5}[Hardware Error]:     transaction type: Generic
+[  925.347492] {5}[Hardware Error]:     TLB error, operation type: Generic read (type of instruction or data request cannot be determined)
+[  925.347945] {5}[Hardware Error]:     TLB level: 1
+[  925.348153] {5}[Hardware Error]:     processor context corrupted
+[  925.348392] {5}[Hardware Error]:     the error has been corrected
+[  925.348635] {5}[Hardware Error]:     PC is imprecise
+[  925.348848] {5}[Hardware Error]:     Program execution can be restarted reliably at the PC associated with the error.
+[  925.349232] {5}[Hardware Error]:   Error info structure 3:
+[  925.349459] {5}[Hardware Error]:   num errors: 1
+[  925.349662] {5}[Hardware Error]:    first error captured
+[  925.349884] {5}[Hardware Error]:    propagated error captured
+[  925.350115] {5}[Hardware Error]:    error_type: 0x08: bus error
+[  925.350371] {5}[Hardware Error]:    error_info: 0x0000000078da03ff
+[  925.350629] {5}[Hardware Error]:     transaction type: Generic
+[  925.350878] {5}[Hardware Error]:     bus error, operation type: Prefetch
+[  925.351144] {5}[Hardware Error]:     affinity level at which the bus error occurred: 3
+[  925.351451] {5}[Hardware Error]:     processor context not corrupted
+[  925.351702] {5}[Hardware Error]:     the error has not been corrected
+[  925.351960] {5}[Hardware Error]:     PC is precise
+[  925.352164] {5}[Hardware Error]:     Program execution can be restarted reliably at the PC associated with the error.
+[  925.352546] {5}[Hardware Error]:     participation type: Generic
+[  925.352801] {5}[Hardware Error]:     address space: External Memory Access
+[  925.353071] {5}[Hardware Error]:   Error info structure 4:
+[  925.353299] {5}[Hardware Error]:   num errors: 1
+[  925.353502] {5}[Hardware Error]:    first error captured
+[  925.353720] {5}[Hardware Error]:    propagated error captured
+[  925.353963] {5}[Hardware Error]:    error_type: 0x02: cache error
+[  925.354222] {5}[Hardware Error]:    error_info: 0x000000000054007f
+[  925.354478] {5}[Hardware Error]:     transaction type: Instruction
+[  925.354782] {5}[Hardware Error]:     cache error, operation type: Instruction fetch
+[  925.355203] {5}[Hardware Error]:     cache level: 1
+[  925.355495] {5}[Hardware Error]:     processor context not corrupted
+[  925.355848] {5}[Hardware Error]:     the error has not been corrected
+[  925.356206] {5}[Hardware Error]:     PC is imprecise
+[  925.356493] {5}[Hardware Error]:   Context info structure 0:
+[  925.356809] {5}[Hardware Error]:    register context type: AArch64 EL1 context registers
+[  925.357282] {5}[Hardware Error]:    00000000: 0000dead 00000000 0000beef 00000000
+[  925.357800] {5}[Hardware Error]:    00000010: 0000abba 00000000 0000baab 00000000
+[  925.358267] {5}[Hardware Error]:    00000020: 00000000 00000000
+[  925.358523] {5}[Hardware Error]:   Vendor specific error info has 8 bytes:
+[  925.358822] {5}[Hardware Error]:    00000000: 3435170c fff37b03                    ..54.{..
+[  925.359192] [Firmware Warn]: GHES: Unhandled processor error type 0x1c: TLB error|bus error|micro-architectural error
+[  925.359590] [Firmware Warn]: GHES: Unhandled processor error type 0x10: micro-architectural error
+[  925.359935] [Firmware Warn]: GHES: Unhandled processor error type 0x04: TLB error
+[  925.360235] [Firmware Warn]: GHES: Unhandled processor error type 0x08: bus error
+[  925.360534] [Firmware Warn]: GHES: Unhandled processor error type 0x02: cache error
+
+---
+
+Changes since v1:
+- added a new patch using a define for GPIO power pin;
+- patch 2 changed to also use a define for generic error GPIO pin;
+- a couple cleanups at patch 2 removing uneeded else clauses.
+
+Jonathan Cameron (3):
+  arm/virt: Wire up GPIO error source for ACPI / GHES
+  acpi/ghes: Support GPIO error source.
+  acpi/ghes: Add a logic to handle block addresses and FW first ARM
+    processor error injection
+
+Mauro Carvalho Chehab (4):
+  arm/virt: place power button pin number on a define
+  target/arm: preserve mpidr value
+  acpi/ghes: update comments to point to newer ACPI specs
+  acpi/ghes: extend arm error injection logic
+
+ configs/targets/aarch64-softmmu.mak |   1 +
+ hw/acpi/ghes.c                      | 324 ++++++++++++++++++---
+ hw/arm/Kconfig                      |   4 +
+ hw/arm/arm_error_inject.c           | 420 ++++++++++++++++++++++++++++
+ hw/arm/arm_error_inject_stubs.c     |  34 +++
+ hw/arm/meson.build                  |   3 +
+ hw/arm/virt-acpi-build.c            |  34 ++-
+ hw/arm/virt.c                       |  17 +-
+ include/hw/acpi/ghes.h              |  41 +++
+ include/hw/arm/virt.h               |   4 +
+ include/hw/boards.h                 |   1 +
+ qapi/arm-error-inject.json          | 277 ++++++++++++++++++
+ qapi/meson.build                    |   1 +
+ qapi/qapi-schema.json               |   1 +
+ target/arm/cpu.h                    |   1 +
+ target/arm/helper.c                 |  10 +-
+ tests/lcitool/libvirt-ci            |   2 +-
+ 17 files changed, 1130 insertions(+), 45 deletions(-)
+ create mode 100644 hw/arm/arm_error_inject.c
+ create mode 100644 hw/arm/arm_error_inject_stubs.c
+ create mode 100644 qapi/arm-error-inject.json
+
+-- 
+2.45.2
+
 
 
