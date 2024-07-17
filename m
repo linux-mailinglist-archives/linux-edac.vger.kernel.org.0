@@ -1,49 +1,49 @@
-Return-Path: <linux-edac+bounces-1533-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1534-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FCEA933BA0
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 13:02:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF59F933BC8
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 13:06:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62081B22808
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 11:02:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E819B1C22ACE
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 11:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6C717E915;
-	Wed, 17 Jul 2024 11:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8651A17F39A;
+	Wed, 17 Jul 2024 11:06:49 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B1F179A3;
-	Wed, 17 Jul 2024 11:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EFD17E8FD;
+	Wed, 17 Jul 2024 11:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721214127; cv=none; b=lRwSiIq8JuAAUJr1HIusGn+6oLTrD11jt3hvaT/fpIJ8IK+pysCymkPQL2G7NUleZNfdqyPKtXqj0EVw35veHNkkvJVJLYB8mCjYZ0CXi5y9+gzrUnCP2IA92U8wAmB21SqO8g64v3VBaej7/P1kedtkFrWyWuAvXpKcUHIn8YM=
+	t=1721214409; cv=none; b=T3ShlXMEgr+sw+pJpIWJAuZry+5pfeQ5RVV7OzIYbWBsIMjjDGMQbXF4Ds2D+EoykOgCPcz5RbkfH8T4RRUsAR2vh97Ott/AexwA9A1Wbt1iNguy+R0gEsPtAngY2Bg0E5xe1H4jp/rAz/rROQrzn9vLp38eNq+lSp7Ro3L+620=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721214127; c=relaxed/simple;
-	bh=B8EKS0CCbDmktpcy0IZ9qHE/qvXTSqfCVVMxF5PTGbw=;
+	s=arc-20240116; t=1721214409; c=relaxed/simple;
+	bh=rKjsm66nd2Yy3GanOS6mfhnJt810rHEaDxggUXYZgSY=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=SOBf0IFe5mIcCUgrqRLtNuz//SxRZCa8QQp8ldcrMI0ElqfzqWkVT3PSLzNPI1XA3BDrZ/NQkNwhvN69iGZ+Wmiv2qBVFGMu2lsxGHikWzJQ4LsWROIaYcMPXPOI37GKhRGLYq/i6dqDASVEveLHDQe1y30kGNphS7lUkiaF5qU=
+	 Content-Type:MIME-Version; b=gJELqHrHeVOkFtfnPvRLyRqjOhD9EktNYcYd2rrsjz6Tc/sy7lMdnY+RtmiHZ11q3wPXe/X9kokNw58naGs9zA88bmzdePje7VTjdFAs+bppwzSBGoq0YdcG+GuZfjTq2N+PT0m66xbd2CEHXrG2aL4o4HtQpDTCHo5sAj9hYxM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WPCcw4Y3gz6K98Q;
-	Wed, 17 Jul 2024 18:59:44 +0800 (CST)
-Received: from lhrpeml100005.china.huawei.com (unknown [7.191.160.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2F9461400DB;
-	Wed, 17 Jul 2024 19:01:59 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WPClS6rvBz6JB8C;
+	Wed, 17 Jul 2024 19:05:24 +0800 (CST)
+Received: from lhrpeml500006.china.huawei.com (unknown [7.191.161.198])
+	by mail.maildlp.com (Postfix) with ESMTPS id 21799140A08;
+	Wed, 17 Jul 2024 19:06:43 +0800 (CST)
 Received: from lhrpeml500006.china.huawei.com (7.191.161.198) by
- lhrpeml100005.china.huawei.com (7.191.160.25) with Microsoft SMTP Server
+ lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 17 Jul 2024 12:01:58 +0100
+ 15.1.2507.39; Wed, 17 Jul 2024 12:06:42 +0100
 Received: from lhrpeml500006.china.huawei.com ([7.191.161.198]) by
  lhrpeml500006.china.huawei.com ([7.191.161.198]) with mapi id 15.01.2507.039;
- Wed, 17 Jul 2024 12:01:58 +0100
+ Wed, 17 Jul 2024 12:06:42 +0100
 From: Shiju Jose <shiju.jose@huawei.com>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: fan <nifan.cxl@gmail.com>
 CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
 	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
 	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
@@ -71,21 +71,19 @@ CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
 	<mike.malvestuto@intel.com>, "gthelen@google.com" <gthelen@google.com>,
 	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
 	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>, tanxiaofei
 	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
  Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
 	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
 	Linuxarm <linuxarm@huawei.com>
 Subject: RE: [RFC PATCH v9 01/11] EDAC: Add generic EDAC RAS feature driver
 Thread-Topic: [RFC PATCH v9 01/11] EDAC: Add generic EDAC RAS feature driver
-Thread-Index: AQHa15FyV2KoSGHoUUqpwpmK3mdCjbH6oGWAgAAYuNA=
-Date: Wed, 17 Jul 2024 11:01:58 +0000
-Message-ID: <2cb0dde458bd4eb79b0a96cb99fe1ef5@huawei.com>
+Thread-Index: AQHa15FyV2KoSGHoUUqpwpmK3mdCjbH5lEYAgAEuFlA=
+Date: Wed, 17 Jul 2024 11:06:42 +0000
+Message-ID: <f271f9a257e64b398783717237e63186@huawei.com>
 References: <20240716150336.2042-1-shiju.jose@huawei.com>
-	<20240716150336.2042-2-shiju.jose@huawei.com>
- <20240717120027.7168536a@foz.lan>
-In-Reply-To: <20240717120027.7168536a@foz.lan>
+ <20240716150336.2042-2-shiju.jose@huawei.com> <Zpa1UNTOcJgcq2q5@debian>
+In-Reply-To: <Zpa1UNTOcJgcq2q5@debian>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -99,13 +97,13 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Hi Mauro,
+Hi Fan,
 
-Thanks for the feedbacks.
+Thanks for the feedback.
 
 >-----Original Message-----
->From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->Sent: 17 July 2024 11:00
+>From: fan <nifan.cxl@gmail.com>
+>Sent: 16 July 2024 19:01
 >To: Shiju Jose <shiju.jose@huawei.com>
 >Cc: linux-edac@vger.kernel.org; linux-cxl@vger.kernel.org; linux-
 >acpi@vger.kernel.org; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
@@ -128,9 +126,7 @@ Thanks for the feedbacks.
 >Subject: Re: [RFC PATCH v9 01/11] EDAC: Add generic EDAC RAS feature drive=
 r
 >
->Em Tue, 16 Jul 2024 16:03:25 +0100
-><shiju.jose@huawei.com> escreveu:
->
+>On Tue, Jul 16, 2024 at 04:03:25PM +0100, shiju.jose@huawei.com wrote:
 >> From: Shiju Jose <shiju.jose@huawei.com>
 >>
 >> Add generic EDAC driver supports registering RAS features supported in
@@ -176,13 +172,7 @@ r
 >> + * Copyright (c) 2024 HiSilicon Limited.
 >> + */
 >> +
->
 >> +#define pr_fmt(fmt)     "EDAC RAS CONTROL FEAT: " fmt
->
->Sounds a too long prefix for my taste.
-Will do. Previously it was "EDAC RAS FEAT"
-
->
 >> +
 >> +#include <linux/edac_ras_feature.h>
 >> +
@@ -223,29 +213,6 @@ Will do. Previously it was "EDAC RAS FEAT"
 >> +
 >> +	return num;
 >> +}
->
->I would place this function earlier and/or add some documentation for the =
-above
->two functions.
-Will do. I guess you want place these functions above edac_ras_dev_release(=
-) right?=20
-
->
->I got confused when reviewed the first function and saw there an
->unconditional:
-The call  for the feature specific init functions  are added  here in the n=
-ext feature specific patches
-of this series. =20
->
->	return 1;
->
->Now, I guess the goal is to return the number of initialized features, rig=
-ht?
-Return the number of attr groups added for a feature as the instances for a=
- feature is dynamic,
-for e.g.  the number of FRUs in ECS feature.
- =20
->
 >> +
 >> +/**
 >> + * edac_ras_dev_register - register device for ras features with edac
@@ -286,38 +253,15 @@ for e.g.  the number of FRUs in ECS feature.
 >> +			attr_gcnt +=3D
 >ras_features[feat].ecs_info.num_media_frus;
 >> +			break;
->
->As already suggested, the enum names shall be in uppercase.
->Having a lowercase one here looks really weird.
-Agree.
->
 >> +		default:
 >> +			ret =3D -EINVAL;
 >> +			goto ctx_free;
 >> +		}
 >> +	}
->
->I would place this logic earlier, before allocating ctx, as, in case of er=
-rors, the
->function can just call "return -EINVAL".
-Ok.
-
->
 >> +
 >> +	ras_attr_groups =3D devm_kzalloc(parent,
 >> +				       (attr_gcnt + 1) * sizeof(*ras_attr_groups),
 >> +				       GFP_KERNEL);
->
->Hmm... why are you using devm variant here, and non-devm one for cxt?
->
->My personal preference is to avoid devm variants, as memory is only freed
->when the device refcount becomes zero (which, depending on the driver, may
->never happen in practice, as driver core may keep a refcount, depending on=
- how
->the device was probed).
-Can use Kzalloc and need to add free for ras_attr_groups on error etc.=20
-
->
 >> +	if (!ras_attr_groups) {
 >> +		ret =3D -ENOMEM;
 >> +		goto ctx_free;
@@ -326,19 +270,11 @@ Can use Kzalloc and need to add free for ras_attr_groups on error etc.=20
 >> +	attr_gcnt =3D 0;
 >> +	for (feat =3D 0; feat < num_features; feat++, ras_features++) {
 >> +		if (ras_features->feat =3D=3D ras_feat_scrub) {
->
->I would use a switch here as well, just like the previous feature type che=
-ck.
-Will do.
->
 >> +			if (!ras_features->scrub_ops)
 >> +				continue;
 >> +			ret =3D edac_ras_feat_scrub_init(parent, &ctx->scrub,
 >> +						       ras_features,
 >&ras_attr_groups[attr_gcnt]);
->
->I don't think it is worth having those ancillary functions here...
->
 >> +			if (ret < 0)
 >> +				goto ctx_free;
 >> +
@@ -349,30 +285,21 @@ Will do.
 >> +			ret =3D edac_ras_feat_ecs_init(parent, &ctx->ecs,
 >> +						     ras_features,
 >&ras_attr_groups[attr_gcnt]);
->
->and here, as most of the current functions are very simple:
->
->both just sets two arguments:
->
->	edata->ops
->	edata->private
->
->and returned vaules are always a positive counter...
->
 >> +			if (ret < 0)
 >> +				goto ctx_free;
->
->So, this check for instance, doesn't make sense.
-The call  for the feature specific init functions  are added  in the next f=
-eature specific patches
-of this series and which could return error. =20
->
 >> +
 >> +			attr_gcnt +=3D ret;
 >> +		} else {
 >> +			ret =3D -EINVAL;
 >> +			goto ctx_free;
+>We already check this in the first pass, cannot be reached in the second p=
+ass.
+Will change.
+
 >> +		}
+>Why use if/else instead of using switch/case as above?
+Will do.
+
 >> +	}
 >> +	ras_attr_groups[attr_gcnt] =3D NULL;
 >> +	ctx->dev.bus =3D edac_get_sysfs_subsys();
@@ -386,6 +313,9 @@ of this series and which could return error. =20
 >> +	ret =3D device_register(&ctx->dev);
 >> +	if (ret) {
 >> +		put_device(&ctx->dev);
+>need to free ctx?
+Will fix.
+
 >> +		return ret;
 >> +	}
 >> +
@@ -424,10 +354,11 @@ of this series and which could return error. =20
 >> +	ras_feat_ecs,
 >> +	ras_feat_max
 >> +};
->
->Enum values in uppercase, please.
+>Use uppercase for the strings.
 Will do.
+
 >
+>Fan
 >> +
 >> +struct edac_ecs_ex_info {
 >> +	u16 num_media_frus;
@@ -463,12 +394,6 @@ Will do.
 >> +	union {
 >> +		struct edac_ecs_ex_info ecs_info;
 >> +	};
->
->I would place the variable structs union at the end. This may help with
->alignments, if you place the pointers earlier.
-Will do.
-
->
 >> +	union {
 >> +		void *scrub_ctx;
 >> +		void *ecs_ctx;
@@ -480,12 +405,9 @@ Will do.
 >> +			  const struct edac_ras_feature *ras_features); #endif
 >/*
 >> +__EDAC_RAS_FEAT_H */
->
->
->
->Thanks,
->Mauro
->
+>> --
+>> 2.34.1
+>>
 
 Thanks,
 Shiju
