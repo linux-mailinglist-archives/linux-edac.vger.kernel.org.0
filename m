@@ -1,108 +1,85 @@
-Return-Path: <linux-edac+bounces-1531-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1532-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFEFF932F97
-	for <lists+linux-edac@lfdr.de>; Tue, 16 Jul 2024 20:01:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E90DF933A94
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 12:00:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A267B22BC3
-	for <lists+linux-edac@lfdr.de>; Tue, 16 Jul 2024 18:01:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1747D1C23063
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 10:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0A91A00FC;
-	Tue, 16 Jul 2024 18:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036AB5FBBA;
+	Wed, 17 Jul 2024 10:00:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XIcoFejX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oIITv2Oz"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F25319DF50;
-	Tue, 16 Jul 2024 18:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7A219A;
+	Wed, 17 Jul 2024 10:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721152869; cv=none; b=gpfmeDxO3P5VGaUWluJTZdN15+JuqIPyO+XXcHVCYsPouVxWkbGMRyUURdqkU6vI+lFP7b79G7TdpJc1AHepS7+vn0AAOLWruphrVzmAhg5VCKXY80wbDvA4xxGuYtE80qcGv1uDKSSC6YVhccHReW36Gx1TecF73pXueM9qodo=
+	t=1721210439; cv=none; b=TiosBgJqTDEkhCOl5umpKXxX0ubjNSkUvSET5Vw7/rraVrT9WJ4GEF3A5wtZD0q4rApS5TKhd24STvGW70a0aowmsTLMNfdEg+0GmaAjnP/Zdssrv3tolE6PuUHmaGc6Jc5NVviGVbZ/EFmcwQZ/+JARM6PVfvh1yTJP6pc1GfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721152869; c=relaxed/simple;
-	bh=KR/9+FSOLnHKUZvGl6uia0Q1acLO/mzhJgsAr7JoUoM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7z7gYwZsRnHttfMV04nOVo1au0gkKK6Wmfz/VRvlQeMSDvXknLZaqgdZfCKsTawxvoWFimUjGQpV1LzFsFc2A4WgyL+KIyE1FJS63L8qRCi/IzhWN2XkDBT8I8V41GRRtot+x+6U2+E+O3r8LdWDpOoJ5xARIHtLRU8+bScpvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XIcoFejX; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-71871d5e087so4313310a12.1;
-        Tue, 16 Jul 2024 11:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721152867; x=1721757667; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n1C1Q6iQjSP7jJaIPmzSv+qHxYtW3M+ElpgX8xl2QsM=;
-        b=XIcoFejXsus21r7IqF95bZlAqGz9vP8XwuS/eaJLAUUdYHcW0Ap56mzaYJywWmhEX1
-         gyOVJnXx3pTrKD5pRl5P3ePhC15jLU/TGCwp5moASa+3BZNQ3T+JC0+ogkUE15fDS0XZ
-         fJHOKmwxi6Yty9CuqMX48MBIJZ/OMrAMEHjz9tZTlXYhZvV7520+5RfDXxtZH31pi1JG
-         KobUokUiP/cOBcvEpa+rdcdHrTSgpOGUCI337Sa/uuZ3vQtxoHGfZb/yPwi7tIHy6Blc
-         kB0wB+vMO0V4o6HqWa5a1kGWDEV+cSF6lHC1pClXiin4th9w3ArKEMCnuIgnYkp+V2MU
-         FEdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721152867; x=1721757667;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n1C1Q6iQjSP7jJaIPmzSv+qHxYtW3M+ElpgX8xl2QsM=;
-        b=N2b/jm8wNMOIajoapwEsNbtHgNe89bPg6z7CJuQiNswKC2wq5VXILaTcJSRayei/zS
-         r/CK9HM210kYfnmpaRze9/cRkUxo0BT1jc0Cfmr2rfrGN9p/eo7CCkvnSRzFXLscCzpU
-         hz1lZzsNNStIMk+73q2Zzb1YHo0bVBALdnkHyU03Kqgk5WtP+qRTqMgLQ6XqwbbxK1eJ
-         qMlfKeK+ECpr8LeZQpPYBxBhpdocouvv2kqx/1G97uTe/fmmWxSXBn5B/wh4KgbTc26z
-         co6UgbKc2AqejSfrXsuhrmxjaTka/ZywoDivTntg9KSb/OF+s54PypJpqP8crggjHtRO
-         NY3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUf5iIdsIybEiuYBFxfnzCtW7hxPCNEfdIP4NhCqF+wrzJ0zqNJj6kbmm3qDu++BA42vvOhfNQFunFfORFQtXco3sT281XCHNPxEihKDL4HRYe96xETx2aC6Thx+sVlhK4bObsbxLgI55YjdA6XqOxSHj9CqsEni2Zxnm4LYcNTg09OtA==
-X-Gm-Message-State: AOJu0YxNlEIhmCq93IWga9G4So5tvxN5fkfMg5W3VbFP7jnvif4nQRpg
-	x+RhdqiF9kSfKxE3Ev50zHCwPGxEwTEhCYcWvtrxfc2N3y+dtBhH
-X-Google-Smtp-Source: AGHT+IFtDdCXzBbpOEOVaX0vdT2j/8BHFC/NJmlOuKch/r1HJV8JlFsde906AZeDoj+jcBOzp4et2Q==
-X-Received: by 2002:a05:6a20:72a6:b0:1c0:e4d6:9bec with SMTP id adf61e73a8af0-1c3f11f31e9mr3823389637.7.1721152867104;
-        Tue, 16 Jul 2024 11:01:07 -0700 (PDT)
-Received: from debian ([2601:646:8f03:9fee:9e58:7df9:6d36:6c31])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b81972f56sm6398629b3a.84.2024.07.16.11.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 11:01:06 -0700 (PDT)
-From: fan <nifan.cxl@gmail.com>
-X-Google-Original-From: fan <fan@debian>
-Date: Tue, 16 Jul 2024 11:00:48 -0700
-To: shiju.jose@huawei.com
-Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bp@alien8.de, tony.luck@intel.com,
-	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
-	dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
-	duenwen@google.com, mike.malvestuto@intel.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
-	wanghuiqiang@huawei.com, linuxarm@huawei.com
+	s=arc-20240116; t=1721210439; c=relaxed/simple;
+	bh=Y8fvJSiFbbffJ1tqg7DrvVvGrSXcWezFpGdYqavSyYE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EhRDQoW/ScSqhakKoeu3I0rneiDFu39qg+ECrcSjfVZMfscICv/9qcDBJTcwLXVRBU+fFa1qlrMzP86yRSAfLGAWcVucqthMhXY9SoyvMC1pYyxtSwkfKgY8AcaSYBbmMceEHJSWKnCgwE4QvqXzcV3Zcs7TNwFbNumWDnVhLv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oIITv2Oz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B67CC4AF09;
+	Wed, 17 Jul 2024 10:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721210439;
+	bh=Y8fvJSiFbbffJ1tqg7DrvVvGrSXcWezFpGdYqavSyYE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oIITv2Oz4LaYbx37sPrRhnS5Zy7L+dyPBRU/6MTbfM2Fn+OCv3YDkZ9S10+DWZnlM
+	 0F4oIBxHi8wV6UOO0z+ZkKYdR2D5jvPyMhTRhzNrP3nqKMWENFGmm8ElKW2ZxgDZ6q
+	 vGuKfq/UCe4quA1e9K+R3suPSMDPSOGnXTCtWu6g3rlVLKwkZfK5n6VZ5GbWcdEurl
+	 4GjxlObJgMZ0hagz+HhZ7Hb+6Lxf7uvvDC9Rzwayl+ufzQsEb9CBk6F1FDE/kyWvKs
+	 91lpAII81wyYMAMOQJpjdjrcFX6R1PIegnV7PaLOHwe2Iogcd+OjVX2ZgXzxLni7gq
+	 YRFJyMt1Bx7+w==
+Date: Wed, 17 Jul 2024 12:00:27 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: <shiju.jose@huawei.com>
+Cc: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+ <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
+ <rafael@kernel.org>, <lenb@kernel.org>, <mchehab@kernel.org>,
+ <dan.j.williams@intel.com>, <dave@stgolabs.net>,
+ <jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
+ <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+ <ira.weiny@intel.com>, <david@redhat.com>, <Vilas.Sridharan@amd.com>,
+ <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>, <rientjes@google.com>,
+ <jiaqiyan@google.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+ <naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
+ <somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+ <duenwen@google.com>, <mike.malvestuto@intel.com>, <gthelen@google.com>,
+ <wschwartz@amperecomputing.com>, <dferguson@amperecomputing.com>,
+ <wbs@os.amperecomputing.com>, <nifan.cxl@gmail.com>,
+ <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+ <roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+ <wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
 Subject: Re: [RFC PATCH v9 01/11] EDAC: Add generic EDAC RAS feature driver
-Message-ID: <Zpa1UNTOcJgcq2q5@debian>
+Message-ID: <20240717120027.7168536a@foz.lan>
+In-Reply-To: <20240716150336.2042-2-shiju.jose@huawei.com>
 References: <20240716150336.2042-1-shiju.jose@huawei.com>
- <20240716150336.2042-2-shiju.jose@huawei.com>
+	<20240716150336.2042-2-shiju.jose@huawei.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240716150336.2042-2-shiju.jose@huawei.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 16, 2024 at 04:03:25PM +0100, shiju.jose@huawei.com wrote:
+Em Tue, 16 Jul 2024 16:03:25 +0100
+<shiju.jose@huawei.com> escreveu:
+
 > From: Shiju Jose <shiju.jose@huawei.com>
 > 
 > Add generic EDAC driver supports registering RAS features supported
@@ -147,7 +124,11 @@ On Tue, Jul 16, 2024 at 04:03:25PM +0100, shiju.jose@huawei.com wrote:
 > + * Copyright (c) 2024 HiSilicon Limited.
 > + */
 > +
+
 > +#define pr_fmt(fmt)     "EDAC RAS CONTROL FEAT: " fmt
+
+Sounds a too long prefix for my taste.
+
 > +
 > +#include <linux/edac_ras_feature.h>
 > +
@@ -192,6 +173,18 @@ On Tue, Jul 16, 2024 at 04:03:25PM +0100, shiju.jose@huawei.com wrote:
 > +
 > +	return num;
 > +}
+
+I would place this function earlier and/or add some documentation
+for the above two functions.
+
+I got confused when reviewed the first function and saw there an
+unconditional:
+
+	return 1;
+
+Now, I guess the goal is to return the number of initialized
+features, right?
+
 > +
 > +/**
 > + * edac_ras_dev_register - register device for ras features with edac
@@ -232,15 +225,31 @@ On Tue, Jul 16, 2024 at 04:03:25PM +0100, shiju.jose@huawei.com wrote:
 > +		case ras_feat_ecs:
 > +			attr_gcnt += ras_features[feat].ecs_info.num_media_frus;
 > +			break;
+
+As already suggested, the enum names shall be in uppercase.
+Having a lowercase one here looks really weird.
+
 > +		default:
 > +			ret = -EINVAL;
 > +			goto ctx_free;
 > +		}
 > +	}
+
+I would place this logic earlier, before allocating ctx, as, in case of
+errors, the function can just call "return -EINVAL".
+
 > +
 > +	ras_attr_groups = devm_kzalloc(parent,
 > +				       (attr_gcnt + 1) * sizeof(*ras_attr_groups),
 > +				       GFP_KERNEL);
+
+Hmm... why are you using devm variant here, and non-devm one for cxt?
+
+My personal preference is to avoid devm variants, as memory is
+only freed when the device refcount becomes zero (which, depending
+on the driver, may never happen in practice, as driver core may keep
+a refcount, depending on how the device was probed).
+
 > +	if (!ras_attr_groups) {
 > +		ret = -ENOMEM;
 > +		goto ctx_free;
@@ -249,10 +258,17 @@ On Tue, Jul 16, 2024 at 04:03:25PM +0100, shiju.jose@huawei.com wrote:
 > +	attr_gcnt = 0;
 > +	for (feat = 0; feat < num_features; feat++, ras_features++) {
 > +		if (ras_features->feat == ras_feat_scrub) {
+
+I would use a switch here as well, just like the previous feature type
+check.
+
 > +			if (!ras_features->scrub_ops)
 > +				continue;
 > +			ret = edac_ras_feat_scrub_init(parent, &ctx->scrub,
 > +						       ras_features, &ras_attr_groups[attr_gcnt]);
+
+I don't think it is worth having those ancillary functions here...
+
 > +			if (ret < 0)
 > +				goto ctx_free;
 > +
@@ -262,17 +278,27 @@ On Tue, Jul 16, 2024 at 04:03:25PM +0100, shiju.jose@huawei.com wrote:
 > +				continue;
 > +			ret = edac_ras_feat_ecs_init(parent, &ctx->ecs,
 > +						     ras_features, &ras_attr_groups[attr_gcnt]);
+
+and here, as most of the current functions are very simple:
+
+both just sets two arguments:
+
+	edata->ops
+	edata->private
+
+and returned vaules are always a positive counter...
+
 > +			if (ret < 0)
 > +				goto ctx_free;
+
+So, this check for instance, doesn't make sense.
+
 > +
 > +			attr_gcnt += ret;
 > +		} else {
 > +			ret = -EINVAL;
 > +			goto ctx_free;
-We already check this in the first pass, cannot be reached in the second
-pass.
 > +		}
-Why use if/else instead of using switch/case as above?
 > +	}
 > +	ras_attr_groups[attr_gcnt] = NULL;
 > +	ctx->dev.bus = edac_get_sysfs_subsys();
@@ -286,7 +312,6 @@ Why use if/else instead of using switch/case as above?
 > +	ret = device_register(&ctx->dev);
 > +	if (ret) {
 > +		put_device(&ctx->dev);
-need to free ctx?
 > +		return ret;
 > +	}
 > +
@@ -323,9 +348,9 @@ need to free ctx?
 > +	ras_feat_ecs,
 > +	ras_feat_max
 > +};
-Use uppercase for the strings.
 
-Fan
+Enum values in uppercase, please.
+
 > +
 > +struct edac_ecs_ex_info {
 > +	u16 num_media_frus;
@@ -362,6 +387,10 @@ Fan
 > +	union {
 > +		struct edac_ecs_ex_info ecs_info;
 > +	};
+
+I would place the variable structs union at the end. This may help with 
+alignments, if you place the pointers earlier.
+
 > +	union {
 > +		void *scrub_ctx;
 > +		void *ecs_ctx;
@@ -372,7 +401,9 @@ Fan
 > +			  void *parent_pvt_data, int num_features,
 > +			  const struct edac_ras_feature *ras_features);
 > +#endif /* __EDAC_RAS_FEAT_H */
-> -- 
-> 2.34.1
-> 
+
+
+
+Thanks,
+Mauro
 
