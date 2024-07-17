@@ -1,59 +1,59 @@
-Return-Path: <linux-edac+bounces-1541-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1542-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9D99341B8
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 19:53:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFA309341BA
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 19:55:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF7131F230AE
-	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 17:53:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E5071C21182
+	for <lists+linux-edac@lfdr.de>; Wed, 17 Jul 2024 17:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BC9181D07;
-	Wed, 17 Jul 2024 17:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502A9182A40;
+	Wed, 17 Jul 2024 17:55:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ucIlcz63"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nfaT9YBO"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2085.outbound.protection.outlook.com [40.107.102.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0EA182A40;
-	Wed, 17 Jul 2024 17:53:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7C0181B9A;
+	Wed, 17 Jul 2024 17:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721238825; cv=fail; b=vCYQntNAeAdx+BmWaSaQIYRj4ex+I8yW33+NTpCApa3M6cHSk5quNF3n5vqRk79fwbqkjBHoS7BP9AGDtwvCXodRg3x30oRnUaQUJHwvrnUF6U57wVLfxtCz9yxM2G1yCN4IqrKRROYlK7BsMYBHJRwF1bQh5dgNPtrzrb67RMs=
+	t=1721238925; cv=fail; b=akscywxA7imMMK6UnKjPYodUYjFz7G7NOohhed1vOUZ3ceyJwYuTDymwescK9/PxoPy8IzIybuPM0J/uQ8dQ8QT2nZV8Dfckkl9eYjDx35K3f26mWxT8r+iKe5AeCHTzwniS5iFqVbS9J9n5ksqmQTlqppF8YkxhFkTxFSVSMVg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721238825; c=relaxed/simple;
-	bh=lQs+B79i+SNlHitVOARATKK9Syhg15PRRbBcY//4W7U=;
+	s=arc-20240116; t=1721238925; c=relaxed/simple;
+	bh=hLgttD2/KidnY1ej9TsVFIzBWVf/F6Mivc7jo7zXNIQ=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Dy4FcWu7tcOX9fqvK+2/Fx/HalxRdEivMcJjZcIgAJGz0P712enBfj6k6m2ixijdBRLA8UhuxBg55IXcyDZKBh4rEP44egAYWoQh29mYYgw0GfTarcAtNbDxJaw43oyFeZw9kPO5pq1/uK5paXnqmJsb7eVACr/NSoGZuDwNgco=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ucIlcz63; arc=fail smtp.client-ip=40.107.223.63
+	 Content-Type:MIME-Version; b=iRBRyby+HPYVwP0wM1TsWBmQxbIceyunC7JwFe0gjPIUfXMeCK5juwzXydcNbObul9/my+Zk9/q7otAyowJL91l0lpfoNtDJf3AVxFHgX4G9ENb65cddkHdJin2FbC7igSU8ETrwKUuuE9XIE0divP5T6RuPQd8xAF20dcEqBuY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nfaT9YBO; arc=fail smtp.client-ip=40.107.102.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ersGCpYARv1zVnnf2DTMK5tyC2sqyJA09eDoANODQ1ulZHvmwoIokbpP96nM8Gr+FIu/7ui6lisfskI5LGf8tUWAR6JFAkL4RjtjOv3u1Eg0kJWjxIlr3EpVil98+EEcpLohnX0JmSuhwdq8mXk2P0mobpL1/OP4MugGx5Q0K4bKbfRkTJmlN5cx4J6X5gU+Y+eZH4uv8YPGMJjt+rP2tgXhze0eo3YXJfPKng3FrCqSlEeqt6mWTRqrIkPsQDFcZpHasie1GS6KhfNMBhAti89F21qz9aTt5HTvt4juLiRKFtN7H3QjdBeZFxhsPLfU5XID0uaHV1t3uEX1JsjcMw==
+ b=SyCpfWZR72nZsXjko99vHggPBT/5g9G9KPZwxuHGtwX5/DRc0+BjjYRCBc2MVLVT7DJkE6gUj3eUOHAE2/XBqAyZ+MNT0o3AKREP8XCdL04w487M7witb7E0jSKBqNpVxgjfYs/xWTlxlidezLGmpn4hiWsKnO6+YwfokFlwMHQ/x4dHvv8ouzWRV4l2lP4T0tawAYeKq+fuEq4sR6s5gzGA6Og3xREiXw5mSYVZemGG0pGuJVGRalkcvy+37eC3Z4xbFhAnvB1NNGkDtxs8Qw0c6HzDhhZhASf47Fyhd76F301LW0WmX+WJfnTIGgZJWfm7e80tM8iNGI8rKOf2zA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FVzcjWsCxofI93B9d6HkbydSW0zW3RC4Q173Y24nM/Q=;
- b=jW7vkRpeIkrvCjpXraPPybRbc/Dc0uPaZrNiYg3TuwAYbj3EHn3XvJfhrVcGq7AKgskUPmEhO0T7SqU8j4RA+S9VlnoA0jP4zkg1BoG0uWgKMPe5XG4iiS19anYd9MHKmaNE7AKSML4pRJEKB609XqOnW8/pYzdY4f7Zu51Wnn1LB254Hlcp9L2g0eBTr/FTv8wwYaY7ikAfaE8oN5VWCNMCMZnFyZKu2uwHV8pqyBG3hY1c4nuG8CY6wXxdsWo4Np2Su5Lser3d3TLvj5nigiI9gVsMLCpavd8cGwTKzNpAUXAbzuW/R/JcNb7dKlnuVr3Nv80p6t8s5LO/QYmD8g==
+ bh=X6sKoX4kZOEa7jFNpt1eDRl7Ft5huw0Ud4I0vw6qnXA=;
+ b=RF8wDfMaVd1dyLKu8EkIO2aLiTxF7o07YxjBf2VvN7BS9A+sRHpexEJ9kice+Dp9tk+6v402xViSNtR45ubpg6qF1slobDJBtYYC6IqytZMvxe4xCpx6+wO6FksCoT5kJ2CbbNhMt8KNKL+iJTkxXcJytaS9Z1fQbb1scNB5a3hUwerh2/s5x7o5Irgzb5t6TnY/Kvp9F9TIgLVchE+4ScM3KrdmEoXJuq1tHBhkrb3X/QeRuu9OgPGmzeXPfrgaOhnx6BozCUm3ATDjgGuXuocwwiPpTs2s0dm9N+ON6xSyTJwIlB9ZWaaWytJwGGnL6egU0StGqBrnfOEGd8xrdQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FVzcjWsCxofI93B9d6HkbydSW0zW3RC4Q173Y24nM/Q=;
- b=ucIlcz63TChQuqSl+oOphD24yfpNPn1neoNtVe7mHjsKX6nkEydauzXBEsVuEdZGRI0K3dHt8jw9NdIjF+ENuk4tNk9V0HHc4/YhLOiYG6fqww5qWTj1ga6wqh7Rx4H9tRz+fzgu2PpNfSPCtrBj0J6Cf8EgsEso+7J1fFHEtMq36z7sEpAF2f0Y6DC4LgyxxXgKmK+gfAi0c3+VX6PGkeQT0szrzgBld38RW/28Dj3ddnFhFXVtJDJQ0jNGD9CfkEFDjr6tzuqAk2dp8XK2E0lXQg7x+qfiANqi81gF9kbhoC200KgCfFFrX0p+BIHvzOb1IE0Nrai9OIi0CihNZg==
+ bh=X6sKoX4kZOEa7jFNpt1eDRl7Ft5huw0Ud4I0vw6qnXA=;
+ b=nfaT9YBOni+O6rXuCi1Upd02KvEjpl1Vl1N3O6MmxIT61TgrpMArilU3vhP4tavaaovfWzMekoG2+CJXPuHrPmWyiMsYsz44jIv+8V5YqBdsU8/3UhjNc1hm58EA95CQFdw6eLJlJCdUPPcCm0kN+JDexkqEBHpGCDhVRED3KfgKrKFImfB84RGMBoM2EVu58TclXoc1/WV4KR0c66VvT5h9tWHmRljTHwpr2XBVoaPq61nUAkNR8MlKvAWUllmq/+5cNKyzKKX7+wQMstxsfQOxpyhp2NilMClu/0INr9bu9wdyVAUuKuuQPB9T5L9AbMd5C0/6LEShjAoydbWoNA==
 Received: from DM6PR12MB5534.namprd12.prod.outlook.com (2603:10b6:5:20b::9) by
- MN0PR12MB6078.namprd12.prod.outlook.com (2603:10b6:208:3ca::6) with Microsoft
+ DS7PR12MB5840.namprd12.prod.outlook.com (2603:10b6:8:7b::10) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7762.25; Wed, 17 Jul 2024 17:53:36 +0000
+ 15.20.7762.28; Wed, 17 Jul 2024 17:55:19 +0000
 Received: from DM6PR12MB5534.namprd12.prod.outlook.com
  ([fe80::e3bf:44f8:b0ac:c892]) by DM6PR12MB5534.namprd12.prod.outlook.com
  ([fe80::e3bf:44f8:b0ac:c892%4]) with mapi id 15.20.7784.015; Wed, 17 Jul 2024
- 17:53:35 +0000
+ 17:55:19 +0000
 From: David Thompson <davthompson@nvidia.com>
 To: "bp@alien8.de" <bp@alien8.de>, "tony.luck@intel.com"
 	<tony.luck@intel.com>, "james.morse@arm.com" <james.morse@arm.com>,
@@ -62,14 +62,16 @@ To: "bp@alien8.de" <bp@alien8.de>, "tony.luck@intel.com"
 CC: Shravan Ramani <shravankr@nvidia.com>, "linux-edac@vger.kernel.org"
 	<linux-edac@vger.kernel.org>, "linux-kernel@vger.kernel.org"
 	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1] EDAC/bluefield - fix potential integer overflow
-Thread-Topic: [PATCH v1] EDAC/bluefield - fix potential integer overflow
-Thread-Index: AQHavE8DcQoKX9J1akCoAWULvtvss7H7a20w
-Date: Wed, 17 Jul 2024 17:53:35 +0000
+Subject: RE: [PATCH v2] EDAC/bluefield: Use Arm SMC for EMI access on
+ BlueField-2
+Thread-Topic: [PATCH v2] EDAC/bluefield: Use Arm SMC for EMI access on
+ BlueField-2
+Thread-Index: AQHawZcLvtIw5VYGyk2nr9pnxACEa7H7YbPg
+Date: Wed, 17 Jul 2024 17:55:19 +0000
 Message-ID:
- <DM6PR12MB553486995EB0AEC62777CE0AC7A32@DM6PR12MB5534.namprd12.prod.outlook.com>
-References: <20240611223017.30988-1-davthompson@nvidia.com>
-In-Reply-To: <20240611223017.30988-1-davthompson@nvidia.com>
+ <DM6PR12MB553449C7E5BC89FFC7F11422C7A32@DM6PR12MB5534.namprd12.prod.outlook.com>
+References: <20240618154819.28825-1-davthompson@nvidia.com>
+In-Reply-To: <20240618154819.28825-1-davthompson@nvidia.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -77,67 +79,67 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR12MB5534:EE_|MN0PR12MB6078:EE_
-x-ms-office365-filtering-correlation-id: 64f6cab3-e7c7-4bfb-998d-08dca68961b2
+x-ms-traffictypediagnostic: DM6PR12MB5534:EE_|DS7PR12MB5840:EE_
+x-ms-office365-filtering-correlation-id: 3a44bbd4-18a3-456d-0ae6-08dca6899f7e
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?IvHzF2Rs+doco1Nw8kYYsMK9DrAh6c409Nb7cC7WqfVwx0fC8RoFjI998CEq?=
- =?us-ascii?Q?OqH2PBaA9ObX9FQTARHL6glJX23QFwT0fRRKVNurJWN3zXM5OOq6s1SgcY4P?=
- =?us-ascii?Q?GP9tbgBL4vF4N7bVRYj9i/xCwHkx07O7c/4WQA3SVxyzu7/Ta/yBBGAV0hhm?=
- =?us-ascii?Q?Ayy2aeXHEfEiT2Zkz8p01JaJQJdetYUFIs0TcEK5gHMXd0NjWPru+7bHvBT6?=
- =?us-ascii?Q?/edX8djHs+aVRpg7z32kEmjej2ixT+Ty/XFBQoJTo22xvJmzPpcl+5shl5Fw?=
- =?us-ascii?Q?5uA9ODqnj59a2yenleJehilOCGspZFYjqeHwhNaV5afO0WU1IlCN1LzyoFpy?=
- =?us-ascii?Q?dHY3uUxBycNKTo7Vm+AuSlW2qAeDGsL2dMh6ghJ5yBH/qBz+L0LHJ7KtNVg6?=
- =?us-ascii?Q?B2eOq9HgJvAdMf5pewBqEHrvBY5GrQW+0UrDPLt9fsj7XOtm5T/KnElJ4Pj9?=
- =?us-ascii?Q?qA3QUfofVs6XTsk+bYObBR6d4cprTu+6a2utoMmwjGYRnGybcBVphskyY4PX?=
- =?us-ascii?Q?QqJZ/ffngTKzGHQa5FL0oi8RcDaKzxJYgnbKeVrXQLlUfD+I9DFXgPyaEVE4?=
- =?us-ascii?Q?BRLVpeeLJm0gRUONpqeLpGLTETAT44kWYdsK15Kzn7gbg0ywOZYxyLaMuoQL?=
- =?us-ascii?Q?0uDtAcVokrVv6GUp6RiCpuUTZsLxeQ3mAEZLwcWasLYImrNwKFSliuTydSlU?=
- =?us-ascii?Q?VqsjyDTZmJ/hthTf7lxcQjV/Bx0luJuguqEjpeH1JS9HgYvMtyCsL7hO/diB?=
- =?us-ascii?Q?EYXxyvry1XgDBmxYbIMnt50rlMh4IWEIZXnIJmAA+gROC6UqhpkT2MPq6eOL?=
- =?us-ascii?Q?ELEbkKVM6zkSGSz43HETAmrvWBDTZKPuj5VAcMTrdG2aj07eb40olAc/NGb0?=
- =?us-ascii?Q?b6qSzFJlG2V58+yk7UxIcXCdwEstW1y2OsFUtL6+1J7c0xe6KRB7poDD5JQA?=
- =?us-ascii?Q?P4YFjevT18hH2vCWZoNLDjJkEPICSeXxZvcnBUTeYljs+jE8Ha9yT/lwBIf+?=
- =?us-ascii?Q?aYZkWgCKle2ZXSye3jFWsKBib6lYbJW6l17l2gzAHj/D/uG4FeX2H1+NnRXJ?=
- =?us-ascii?Q?9Ox4/PSeyyhczdm95mtE/agXjz+LUqeFGE9HXc5TMjex/Bmyo0mKfhn1VgH8?=
- =?us-ascii?Q?2f99P8ZNfHU5AoA9TU+T/MMSS3RRQSYfcGKNi97ysalAXCfdZytUvI4LvTPt?=
- =?us-ascii?Q?Vcfo6Gbg6IELbJhJKfeShMjyhHwKRDMfAZ603EPtyhzgg34EvRS8C+VAea+R?=
- =?us-ascii?Q?NEMgaA4tsNBt9TMIOr4COuebOkGDOG+X7FaIQTPoqWHo8Y7D8uODf3XOPcUM?=
- =?us-ascii?Q?nMXV6UOosdO4g0GdkEReRU35j7ydJBkGSv/SS0YRAyFj+gxLROdhz5ZeTvyP?=
- =?us-ascii?Q?FvTj9AM9rFAWXpKexPpbEoqx4mXJCYtuWL7rSx97tx9NqRZ7bA=3D=3D?=
+ =?us-ascii?Q?Owqkl11Lcvgliky8OVaEpJ3one/W7b+bSi7FzFs7hiCo3nXnotvU+sYnUCen?=
+ =?us-ascii?Q?gZ16AbYw8oGzKtHtn9v4kjEYHt6eJVZ+cEAALJk6r1/hbspP7SOHZlUPcF2R?=
+ =?us-ascii?Q?Je0TDGLkWSjwH2k2qpRfet+JY9RpEJAkFLFv2CwogeGJ+5qj0ESiO6ARNFZe?=
+ =?us-ascii?Q?N/6dqpq4LnR+XMMl+4PG782zBW9bhwI00frTBRPuXj2L/dDUWzuTbGxTbyCh?=
+ =?us-ascii?Q?x/DFACV/+R/yNEXgcKuilg1SfpwtEb6EPODHIWUXOvoDm07fSePdSbyIlxxn?=
+ =?us-ascii?Q?Ut6oAfHihe7dVdvxvHl5rSS5BwkU6+4FIhFCUwGAKSGGFnfh+KhD9lEx7t73?=
+ =?us-ascii?Q?Llb+Xb5GkUuQPsKUEQ3v32zEZvriDR6OMv843Xq1SV/hYJo9h5qXROsEMMdG?=
+ =?us-ascii?Q?ez+Kd3Ho4p+70/t1jQL+lijks1LhivDerGprtN/Jy2iU1A5Up5t4DeeaU6q0?=
+ =?us-ascii?Q?XIwR7JDns9ak+A+W2vNEbNGGkz5eMF5gZVh13RukCZzyUYLoRx8PqHIaw0X8?=
+ =?us-ascii?Q?NcqZU+OV2Il/6ztzcaSPk0nZpg64ANS36Vtboz/nc3W04Vjlht9EExG1g3B3?=
+ =?us-ascii?Q?nwJVneZMzdU7nBafZ/AIaDwVoWrb71PzvDJnk9L3eGO6iZgM5XMG/3b8Txm2?=
+ =?us-ascii?Q?r6XbDPuihuratCbTgjoF83TuPIyGnQXt2n8T/lSeyULes9PZ3VBrlm9mwSdM?=
+ =?us-ascii?Q?6n42ooDk99h6/ADopBfgpn2C/vZ1+dds0iIfX97qpECShfZKOYyrZ25lRVLu?=
+ =?us-ascii?Q?PlWVN9II1qXBRm1dmnfJdlPNyf8gGa6I1DUurT9PCFhZ61Tt9n9Th/mFbJ/p?=
+ =?us-ascii?Q?RQwKUdk5Ul0nMjKOut/yYK5wzfZk9mWGanAMh6BL3+eeyP5s2qOLrwYbkUgi?=
+ =?us-ascii?Q?I5Ng0yexFHeJ+J5TxY9hFO5Hu+GapeL94pkemaFBS4jXJvgkhx/9j29IJp2O?=
+ =?us-ascii?Q?swR3n3psbvGoLFC+f65RUlhgQb9/5HTcCSpt0Q3jmDKtd8GQ/JVCZuS6n0oV?=
+ =?us-ascii?Q?+4hgyL2DzGP2s/hoR1AzSTw2evzhqHvyvn4m3Tz6/bmlf68MCLv/w7/jYKUm?=
+ =?us-ascii?Q?3hxJM4rvpfjC+tLB4Bf49Au2XtbH+mNJ1ndZERFLt5bgGoCW5ivD586+oIzn?=
+ =?us-ascii?Q?eLYIXC6wQH43Gu1lBfs4DvNhmtz/JdUfG/AtshZhe0fAaviPJYcAfBbwxuV2?=
+ =?us-ascii?Q?lzfOF3GtyIKD1RepavOzDlw2X96OSNEdj6S6wowp6j10ZQE6FVKGIg1DGJxN?=
+ =?us-ascii?Q?IOvFDOElYl3EyX+1LFiEQ9xsxmB2HigVo6oOKqpv/0TIoL4E2cS94lvzkoDG?=
+ =?us-ascii?Q?g17ATzmf+GwGArge3AhzbAnA7vaMp5k49/TahP5MVZ/esmro7Q/kVckXQOLf?=
+ =?us-ascii?Q?Cca0HkiGukhPmBYdg5mImRDvmqEEeIc5xFMAfYLr3XQiH0SSTg=3D=3D?=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB5534.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB5534.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?EHYvhAMsSMTsO+c8cpKSnOOnzWadfXBUi+pMkF26KLaIW+1MlVYpwjZmMH7M?=
- =?us-ascii?Q?qmJJTr4tdH7gi2fAq7Z0uNewmbMtTFSEjDDOn/vHRLmo0Gww+vjye1IShJdd?=
- =?us-ascii?Q?X+snwN/K12HpDK0GkzNKG542pJ437BnVMQAzKX5YfauyzFEp16MgUIfys+zQ?=
- =?us-ascii?Q?pQShb+MGa1a5ZVfgg5VPviPHVPD9PMnc0nlLJBPw79XzXpzcaMtRPxz3jnBU?=
- =?us-ascii?Q?AZooftM6xOMrU9HZ9nVigIJr35U+gCKG6/Bo/OUmT3woQwQuEdv0HUo8RwU1?=
- =?us-ascii?Q?IVmJrAMO+4I27HlZPy93RsyQhCbTPo5TGjtCA7TGu7ex7uhLqxW/2NnSXGBJ?=
- =?us-ascii?Q?lodH1T8jeWluzzNF2Na7mZvtcdgcceAjjWeBttqbeAFkCvN3WtZ7baupTJ3I?=
- =?us-ascii?Q?Fjf9RIxQV70CSel8tLxmiTXs93CEOI2CYTSbP/EUlThlUvKq3IBitriOW3qX?=
- =?us-ascii?Q?IwwhFUWrQKsxWGyHfizEoLQ9o0s/597CE7GTtyg1U6UOp/BczjLNl5YA3SIJ?=
- =?us-ascii?Q?95DCutTm6nRYoIaWaSYDNsYePTEbzfhVwozALRRP34YSzA9WamNzZnKJ1ZIk?=
- =?us-ascii?Q?4kLkWudPUzIQu+kV8YFZRk1hPmVNOlXrh7qxDaFfa4aQywSN+HakQB4dAral?=
- =?us-ascii?Q?/xO1ENGKGnFwwxND8m5WhlU5EIYyis8/vTU5JJw4RoYtoLu1JGIp6r4dVUxh?=
- =?us-ascii?Q?OmKk66jlTX+IL4/ueeghXK7FkwzQtHElwrhygvZCWs5XoNrL97zd4BtDtlpM?=
- =?us-ascii?Q?jv65flF2CE+Z1vlHToYsBhlJ/4b21D2S+WMcHhJBf0YP/wso9rRc+97+bK7/?=
- =?us-ascii?Q?G3nuoeok9SUowb/jpnFaXeQJkQNOroHEThnCF0582OFpP1NORa+yRfiNIIkW?=
- =?us-ascii?Q?bcZKGhtytzD19f7I6RW1PpkpXguSLwclXTeRIbRz9WtwQd6ojdswbvKSadN3?=
- =?us-ascii?Q?3LQ49FmErRMn3InCW0yLpcM5DlaFrfOw8bDLVmKAkLNa7KGNFNBGQVLF6mk2?=
- =?us-ascii?Q?JzoGTTxBxW/slAmHk5DraTmnXXrG4DI8cjutgntyrOrLBxZnQzLUHCKm1PVk?=
- =?us-ascii?Q?zH+JUGStHMo+QfzusrNx5DE2FJAHHFp2Rh4GhjJRkkZVqRRq7hkqowDEQMG2?=
- =?us-ascii?Q?Ey04VJBjoH4FIYE5AYR87bc3vJRZiPphkAlxwkoqmdSC/5CKSarx6rsTNrMa?=
- =?us-ascii?Q?9o6N9njllrT8IOuYYTLv0U8Jj3t1BB+ZuvncKKeeMBXnA4COIUSAVJANRmpp?=
- =?us-ascii?Q?+2QWghlEiehc2UrtzNgO4JX5vhYDdJVFkWUMeT+XaIIAx8MzMECQEn97CnbR?=
- =?us-ascii?Q?dI4gDHK5AoXL87/84LXGi08hA+oE0LvncJezOKev/zTl+UKbNxYPvSfdhg+v?=
- =?us-ascii?Q?KU8lLRPrCz8O9PPOrbclKk2WSWQK2gBJPMRCGFG7bbogZyDE6NTDTqORhqnP?=
- =?us-ascii?Q?Lso5RMULnWSkk4Y2b5Q02XNpZZ/Mkxqoc7U5UBjcn7+eHVucr7A5JBskeTrG?=
- =?us-ascii?Q?+fYqEaEYpyXd/FcqJwDgw24QMXmEmxwfI/2vNGlOTGwLbeRnOYxfOZc51tVy?=
- =?us-ascii?Q?1h5AGbIsVHJ2inu9NoZOipxOQ+9W+Xj9AKrY59j9?=
+ =?us-ascii?Q?Cagh39z2Ap5FcH452cD1+zI3JkLrm0xdquve+xrsAikIMilOkFim1PMGyk1Z?=
+ =?us-ascii?Q?DOSwvjUoxdZVFvtW2L9h/86b8Ruy6EJXemGHF7+Y0jIsln4u2ABmWqEjeoX9?=
+ =?us-ascii?Q?+ssndUcv4xQNnzH30TGqMWnPA9wCJelBmB1VxrA4im4ePFYdkVVjxE1LnR2b?=
+ =?us-ascii?Q?T2GuBAWWwh8HjOCH/UUQP66sz2gT20+Svx7RWd30SLP9DQ6kEYUxbAOZElKo?=
+ =?us-ascii?Q?bWep0qMZySgeiNXl3Eip0A/dc33yVep63c/1YZaPFZLaWaWCKOdPiLJq7exV?=
+ =?us-ascii?Q?s8LrszNsaykB+Z9tfjrkQMnleCAGRKImB5LigeaDqclfvx2HbjulBjfb9h6Q?=
+ =?us-ascii?Q?jtR2E7GGGr45vkOg5uf+gRHrplHG4ENHkJ92DWBCQuPIha9LPt7IzZyYpl5V?=
+ =?us-ascii?Q?wmDPqH/qKqZ/81Ik/HTxVY86OknhLOA9szzR6VJinYlvME3lAYHSuPe6zARp?=
+ =?us-ascii?Q?bl06tqqE5Kxu7QuHGMcNXq0k3pNuSx1lJ9LfXzTr2yiMVyDt5xZNymE3as1l?=
+ =?us-ascii?Q?zDeTFJjKG+yz6Nkg4NFfflby2PCMl9fxqskGoBtZBEvEv9vyUa+3djID770F?=
+ =?us-ascii?Q?f5FEbCk6IJYQMbUUPmQG8nEWtRF9SG9wXnqwNL//LKMngmE0t/jaBNcQr6kh?=
+ =?us-ascii?Q?dmw23A3fBBrRnVRPxMKPThN/LTNH2j9e9tbUCYpCyZULy2PJ89XNJR/nSt5y?=
+ =?us-ascii?Q?mBq5E+h4Kne4yQeGUDp7LMMcuAkwasqBh9RfIwKQbBM67xGUjTFX48+/zOwj?=
+ =?us-ascii?Q?8crvoOzgBSX/j0qkysBMfSAWCYz2aqB4i+skaV3jDU1JuKi54iTaB2vCvYlD?=
+ =?us-ascii?Q?gWj1vHIC/Eqdcytcjh/nVvYDaA/FRTG2iYV2ya4c2uHoVhi/8/Has5e/z5Cv?=
+ =?us-ascii?Q?ct7vnuPumE7TFBUHWoZCav0baQB8QZ3DYRv25+crSF2VJs3WXCX/1xjbQ4uw?=
+ =?us-ascii?Q?GppgkVyfQDRPr36PvcpQi2H3ogM3fLUzhor2IHs6Z5RkGDsHr4iWiNdpUJkh?=
+ =?us-ascii?Q?vX3FNWDdGlXD3yGr4ZIBg3Ts6yqr034JRuh1Cj9eMAp1q0v7Q31+IBUHMLmk?=
+ =?us-ascii?Q?IyGU04clPC8gklebh2/zintT2LGAWfJQKyrvrwH2sECz0Ub91hbqrtN7vKxu?=
+ =?us-ascii?Q?LTr+R5L7xMEZSI3QMwGHwdxM2wOKDEFxMFTkgJTQ2TF+RdhiwpgDT6pGnsOP?=
+ =?us-ascii?Q?TqaeToEpuuyp+/7/0ITFYCsjFy2btBU7G3lZdp/uCK7o5xUtUCiPGkQQD5Y8?=
+ =?us-ascii?Q?4UmhKWEkcjA81Yst+ffPM+d1wAbydFyBJ+gq+LIl5+e1ueSQ7YHmGYzNQ+cl?=
+ =?us-ascii?Q?15Kf+G2j2jBI3/CmV/0xYWmJlP5fgyU7dSUSDGbtgts8ESsPifePMtQ/cY4C?=
+ =?us-ascii?Q?mJsBFSAr8df9ymXlrY2e7WxQGEeaT/CBaoaSDJxzCYs8ZQVBCI9pdrZIBseW?=
+ =?us-ascii?Q?H11+Od081zhlf7LXvh5RUPgvyXWfgSwTQDUmW7N/hymZLO6vmPQU+q401qgt?=
+ =?us-ascii?Q?75JN5qa2WAaIs1ztvJLfjNQOLkLRHMuIZ13QnjQ/Vp+ahHiHWCmpKx0lhoNt?=
+ =?us-ascii?Q?pg23QGqRwCqS/mWJQvKV359d36mxIVUIZtZ3MKjX?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -149,57 +151,399 @@ MIME-Version: 1.0
 X-OriginatorOrg: Nvidia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB5534.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64f6cab3-e7c7-4bfb-998d-08dca68961b2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2024 17:53:35.9378
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a44bbd4-18a3-456d-0ae6-08dca6899f7e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2024 17:55:19.5855
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3QU24ZjeC1z6rS2PIldlX+0dPfoLsfwvzM4w0LmxI2iOGD9At46VPF5HmKrZqa0CIrZJ4C+049oWXH4TEKwghg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6078
+X-MS-Exchange-CrossTenant-userprincipalname: LBtFqQR+oE+c9GjOkpXjT71VXVrbLou3+48zPV0nrVlK4C2XX3hdLU1UAYAPcxzK2lldJJT7097w2Sc+vZv1ww==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5840
 
 > -----Original Message-----
 > From: David Thompson <davthompson@nvidia.com>
-> Sent: Tuesday, June 11, 2024 6:30 PM
+> Sent: Tuesday, June 18, 2024 11:48 AM
 > To: bp@alien8.de; tony.luck@intel.com; james.morse@arm.com;
 > mchehab@kernel.org; rric@kernel.org
 > Cc: Shravan Ramani <shravankr@nvidia.com>; linux-edac@vger.kernel.org; li=
 nux-
 > kernel@vger.kernel.org; David Thompson <davthompson@nvidia.com>
-> Subject: [PATCH v1] EDAC/bluefield - fix potential integer overflow
+> Subject: [PATCH v2] EDAC/bluefield: Use Arm SMC for EMI access on BlueFie=
+ld-2
 >=20
-> The 64-bit argument for the "get DIMM info" SMC call consists of "mem_ctr=
-l_idx"
-> left-shifted 16 bits and OR-ed with DIMM index.
-> With "mem_ctrl_idx" defined as 32-bits wide the left-shift operation trun=
-cates
-> the upper 16 bits of information during the calculation of the SMC argume=
-nt. The
-> "mem_ctrl_idx" stack variable must be defined as 64-bits wide to prevent =
-any
-> potential integer overflow, i.e. loss of data from upper 16 bits.
+> The BlueField EDAC driver supports the first generation BlueField-1 SoC, =
+but not
+> the second generation BlueField-2 SoC.  The BlueField-2 SoC is different =
+in that
+> only secure accesses are allowed to the External Memory Interface (EMI) r=
+egister
+> block. On BlueField-2, all read/write accesses from Linux to EMI register=
+s are
+> routed via Arm Secure Monitor Call (SMC) through Arm Trusted Firmware (AT=
+F),
+> which runs at EL3 privileged state.
 >=20
-> Fixes: 82413e562ea6 ("EDAC, mellanox: Add ECC support for BlueField DDR4"=
-)
-> Reviewed-by: Shravan Kumar Ramani <shravankr@nvidia.com>
+> On BlueField-1, EMI registers are mapped and accessed directly. In order =
+to
+> support BlueField-2, the driver's read and write access methods must be
+> extended with additional logic to include secure access to the EMI regist=
+ers via
+> SMCs.
+>=20
+> The driver's probe routine must check the ACPI table for presence of the
+> "sec_reg_block" property and ensure the minimum required SMC service vers=
+ion
+> is present before enabling the BlueField-2 secure access methods.
+> The "sec_reg_block" property is only present in BlueField-2 ACPI table, n=
+ot the
+> BlueField-1 ACPI table.
+>=20
+> Also, the bluefield_edac driver needs two coding style fixes: one fix add=
+resses an
+> issue raised by checkpatch, and the other fix provides consistency in dec=
+laration
+> of #defines.
+>=20
 > Signed-off-by: David Thompson <davthompson@nvidia.com>
+> Reviewed-by: Shravan Kumar Ramani <shravankr@nvidia.com>
 > ---
->  drivers/edac/bluefield_edac.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v1 -> v2
+> a) removed #defines for SMC function IDs that are not used
+> b) added "bluefield_edac_" prefix to "secure_readl/writel" functions
+> c) added "bluefield_" prefix to "edac_readl/writel" functions
+> d) changed logic to use "uN" typedefs instead of "uintN_t"
+> e) added initialization of "priv->dev" in probe()
+> f) added more details to commit message
+>=20
+> v0 -> v1
+> Updated commit message
+> ---
+>  drivers/edac/bluefield_edac.c | 174 ++++++++++++++++++++++++++++++----
+>  1 file changed, 155 insertions(+), 19 deletions(-)
 >=20
 > diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.=
 c index
-> 5b3164560648..0e539c107351 100644
+> 5b3164560648..4e0db1cbfbe7 100644
 > --- a/drivers/edac/bluefield_edac.c
 > +++ b/drivers/edac/bluefield_edac.c
-> @@ -180,7 +180,7 @@ static void bluefield_edac_check(struct mem_ctl_info
-> *mci)  static void bluefield_edac_init_dimms(struct mem_ctl_info *mci)  {
+> @@ -47,13 +47,22 @@
+>  #define MLXBF_EDAC_MAX_DIMM_PER_MC	2
+>  #define MLXBF_EDAC_ERROR_GRAIN		8
+>=20
+> +#define MLXBF_WRITE_REG_32		(0x82000009)
+> +#define MLXBF_READ_REG_32		(0x8200000A)
+> +#define MLXBF_SIP_SVC_VERSION		(0x8200ff03)
+> +
+> +#define MLXBF_SMCCC_ACCESS_VIOLATION	(-4)
+> +
+> +#define MLXBF_SVC_REQ_MAJOR		0
+> +#define MLXBF_SVC_REQ_MINOR		3
+> +
+>  /*
+> - * Request MLNX_SIP_GET_DIMM_INFO
+> + * Request MLXBF_SIP_GET_DIMM_INFO
+>   *
+>   * Retrieve information about DIMM on a certain slot.
+>   *
+>   * Call register usage:
+> - * a0: MLNX_SIP_GET_DIMM_INFO
+> + * a0: MLXBF_SIP_GET_DIMM_INFO
+>   * a1: (Memory controller index) << 16 | (Dimm index in memory controlle=
+r)
+>   * a2-7: not used.
+>   *
+> @@ -61,7 +70,7 @@
+>   * a0: MLXBF_DIMM_INFO defined below describing the DIMM.
+>   * a1-3: not used.
+>   */
+> -#define MLNX_SIP_GET_DIMM_INFO		0x82000008
+> +#define MLXBF_SIP_GET_DIMM_INFO		0x82000008
+>=20
+>  /* Format for the SMC response about the memory information */  #define
+> MLXBF_DIMM_INFO__SIZE_GB GENMASK_ULL(15, 0) @@ -72,9 +81,12 @@
+> #define MLXBF_DIMM_INFO__PACKAGE_X GENMASK_ULL(31, 24)
+>=20
+>  struct bluefield_edac_priv {
+> +	struct device *dev;
+>  	int dimm_ranks[MLXBF_EDAC_MAX_DIMM_PER_MC];
+>  	void __iomem *emi_base;
+>  	int dimm_per_mc;
+> +	bool svc_sreg_support;
+> +	u32 sreg_tbl_edac;
+>  };
+>=20
+>  static u64 smc_call1(u64 smc_op, u64 smc_arg) @@ -86,6 +98,71 @@ static =
+u64
+> smc_call1(u64 smc_op, u64 smc_arg)
+>  	return res.a0;
+>  }
+>=20
+> +static int bluefield_edac_secure_readl(void __iomem *addr, u32 *result,
+> +u32 sreg_tbl) {
+> +	struct arm_smccc_res res;
+> +	int status;
+> +
+> +	arm_smccc_smc(MLXBF_READ_REG_32, sreg_tbl, (uintptr_t)addr,
+> +		      0, 0, 0, 0, 0, &res);
+> +
+> +	status =3D res.a0;
+> +
+> +	switch (status) {
+> +	case SMCCC_RET_NOT_SUPPORTED:
+> +	case MLXBF_SMCCC_ACCESS_VIOLATION:
+> +		return -1;
+> +	default:
+> +		*result =3D (u32)res.a1;
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int bluefield_edac_secure_writel(void __iomem *addr, u32 data,
+> +u32 sreg_tbl) {
+> +	struct arm_smccc_res res;
+> +	int status;
+> +
+> +	arm_smccc_smc(MLXBF_WRITE_REG_32, sreg_tbl, data, (uintptr_t)addr,
+> +		      0, 0, 0, 0, &res);
+> +
+> +	status =3D res.a0;
+> +
+> +	switch (status) {
+> +	case SMCCC_RET_NOT_SUPPORTED:
+> +	case MLXBF_SMCCC_ACCESS_VIOLATION:
+> +		return -1;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int bluefield_edac_readl(void __iomem *addr, u32 *result,
+> +				bool sreg_support, u32 sreg_tbl)
+> +{
+> +	int err =3D 0;
+> +
+> +	if (sreg_support)
+> +		err =3D bluefield_edac_secure_readl(addr, result, sreg_tbl);
+> +	else
+> +		*result =3D readl(addr);
+> +
+> +	return err;
+> +}
+> +
+> +static int bluefield_edac_writel(void __iomem *addr, u32 data,
+> +				 bool sreg_support, u32 sreg_tbl)
+> +{
+> +	int err =3D 0;
+> +
+> +	if (sreg_support)
+> +		err =3D bluefield_edac_secure_writel(addr, data, sreg_tbl);
+> +	else
+> +		writel(data, addr);
+> +
+> +	return err;
+> +}
+> +
+>  /*
+>   * Gather the ECC information from the External Memory Interface registe=
+rs
+>   * and report it to the edac handler.
+> @@ -99,7 +176,7 @@ static void bluefield_gather_report_ecc(struct
+> mem_ctl_info *mci,
+>  	u32 ecc_latch_select, dram_syndrom, serr, derr, syndrom;
+>  	enum hw_event_mc_err_type ecc_type;
+>  	u64 ecc_dimm_addr;
+> -	int ecc_dimm;
+> +	int ecc_dimm, err;
+>=20
+>  	ecc_type =3D is_single_ecc ? HW_EVENT_ERR_CORRECTED :
+>  				   HW_EVENT_ERR_UNCORRECTED;
+> @@ -109,14 +186,22 @@ static void bluefield_gather_report_ecc(struct
+> mem_ctl_info *mci,
+>  	 * registers with information about the last ECC error occurrence.
+>  	 */
+>  	ecc_latch_select =3D MLXBF_ECC_LATCH_SEL__START;
+> -	writel(ecc_latch_select, priv->emi_base + MLXBF_ECC_LATCH_SEL);
+> +	err =3D bluefield_edac_writel(priv->emi_base + MLXBF_ECC_LATCH_SEL,
+> +				    ecc_latch_select, priv->svc_sreg_support,
+> +				    priv->sreg_tbl_edac);
+> +	if (err)
+> +		dev_err(priv->dev, "ECC latch select write failed.\n");
+>=20
+>  	/*
+>  	 * Verify that the ECC reported info in the registers is of the
+>  	 * same type as the one asked to report. If not, just report the
+>  	 * error without the detailed information.
+>  	 */
+> -	dram_syndrom =3D readl(priv->emi_base + MLXBF_SYNDROM);
+> +	err =3D bluefield_edac_readl(priv->emi_base + MLXBF_SYNDROM,
+> &dram_syndrom,
+> +				   priv->svc_sreg_support, priv->sreg_tbl_edac);
+> +	if (err)
+> +		dev_err(priv->dev, "DRAM syndrom read failed.\n");
+> +
+>  	serr =3D FIELD_GET(MLXBF_SYNDROM__SERR, dram_syndrom);
+>  	derr =3D FIELD_GET(MLXBF_SYNDROM__DERR, dram_syndrom);
+>  	syndrom =3D FIELD_GET(MLXBF_SYNDROM__SYN, dram_syndrom); @@ -
+> 127,13 +212,24 @@ static void bluefield_gather_report_ecc(struct mem_ctl_=
+info
+> *mci,
+>  		return;
+>  	}
+>=20
+> -	dram_additional_info =3D readl(priv->emi_base + MLXBF_ADD_INFO);
+> +	err =3D bluefield_edac_readl(priv->emi_base + MLXBF_ADD_INFO,
+> &dram_additional_info,
+> +				   priv->svc_sreg_support, priv->sreg_tbl_edac);
+> +	if (err)
+> +		dev_err(priv->dev, "DRAM additional info read failed.\n");
+> +
+>  	err_prank =3D FIELD_GET(MLXBF_ADD_INFO__ERR_PRANK,
+> dram_additional_info);
+>=20
+>  	ecc_dimm =3D (err_prank >=3D 2 && priv->dimm_ranks[0] <=3D 2) ? 1 : 0;
+>=20
+> -	edea0 =3D readl(priv->emi_base + MLXBF_ERR_ADDR_0);
+> -	edea1 =3D readl(priv->emi_base + MLXBF_ERR_ADDR_1);
+> +	err =3D bluefield_edac_readl(priv->emi_base + MLXBF_ERR_ADDR_0,
+> &edea0,
+> +				   priv->svc_sreg_support, priv->sreg_tbl_edac);
+> +	if (err)
+> +		dev_err(priv->dev, "Error addr 0 read failed.\n");
+> +
+> +	err =3D bluefield_edac_readl(priv->emi_base + MLXBF_ERR_ADDR_1,
+> &edea1,
+> +				   priv->svc_sreg_support, priv->sreg_tbl_edac);
+> +	if (err)
+> +		dev_err(priv->dev, "Error addr 1 read failed.\n");
+>=20
+>  	ecc_dimm_addr =3D ((u64)edea1 << 32) | edea0;
+>=20
+> @@ -147,6 +243,7 @@ static void bluefield_edac_check(struct mem_ctl_info
+> *mci)  {
 >  	struct bluefield_edac_priv *priv =3D mci->pvt_info;
-> -	int mem_ctrl_idx =3D mci->mc_idx;
-> +	u64 mem_ctrl_idx =3D mci->mc_idx;
->  	struct dimm_info *dimm;
->  	u64 smc_info, smc_arg;
->  	int is_empty =3D 1, i;
+>  	u32 ecc_count, single_error_count, double_error_count, ecc_error =3D 0;
+> +	int err;
+>=20
+>  	/*
+>  	 * The memory controller might not be initialized by the firmware @@ -
+> 155,7 +252,11 @@ static void bluefield_edac_check(struct mem_ctl_info *mc=
+i)
+>  	if (mci->edac_cap =3D=3D EDAC_FLAG_NONE)
+>  		return;
+>=20
+> -	ecc_count =3D readl(priv->emi_base + MLXBF_ECC_CNT);
+> +	err =3D bluefield_edac_readl(priv->emi_base + MLXBF_ECC_CNT,
+> &ecc_count,
+> +				   priv->svc_sreg_support, priv->sreg_tbl_edac);
+> +	if (err)
+> +		dev_err(priv->dev, "ECC count read failed.\n");
+> +
+>  	single_error_count =3D FIELD_GET(MLXBF_ECC_CNT__SERR_CNT,
+> ecc_count);
+>  	double_error_count =3D FIELD_GET(MLXBF_ECC_CNT__DERR_CNT,
+> ecc_count);
+>=20
+> @@ -172,8 +273,12 @@ static void bluefield_edac_check(struct mem_ctl_info
+> *mci)
+>  	}
+>=20
+>  	/* Write to clear reported errors. */
+> -	if (ecc_count)
+> -		writel(ecc_error, priv->emi_base + MLXBF_ECC_ERR);
+> +	if (ecc_count) {
+> +		err =3D bluefield_edac_writel(priv->emi_base + MLXBF_ECC_ERR,
+> ecc_error,
+> +					    priv->svc_sreg_support, priv-
+> >sreg_tbl_edac);
+> +		if (err)
+> +			dev_err(priv->dev, "ECC Error write failed.\n");
+> +	}
+>  }
+>=20
+>  /* Initialize the DIMMs information for the given memory controller. */ =
+@@ -
+> 189,7 +294,7 @@ static void bluefield_edac_init_dimms(struct mem_ctl_info
+> *mci)
+>  		dimm =3D mci->dimms[i];
+>=20
+>  		smc_arg =3D mem_ctrl_idx << 16 | i;
+> -		smc_info =3D smc_call1(MLNX_SIP_GET_DIMM_INFO, smc_arg);
+> +		smc_info =3D smc_call1(MLXBF_SIP_GET_DIMM_INFO, smc_arg);
+>=20
+>  		if (!FIELD_GET(MLXBF_DIMM_INFO__SIZE_GB, smc_info)) {
+>  			dimm->mtype =3D MEM_EMPTY;
+> @@ -244,6 +349,7 @@ static int bluefield_edac_mc_probe(struct
+> platform_device *pdev)
+>  	struct bluefield_edac_priv *priv;
+>  	struct device *dev =3D &pdev->dev;
+>  	struct edac_mc_layer layers[1];
+> +	struct arm_smccc_res res;
+>  	struct mem_ctl_info *mci;
+>  	struct resource *emi_res;
+>  	unsigned int mc_idx, dimm_count;
+> @@ -279,13 +385,44 @@ static int bluefield_edac_mc_probe(struct
+> platform_device *pdev)
+>  		return -ENOMEM;
+>=20
+>  	priv =3D mci->pvt_info;
+> +	priv->dev =3D dev;
+> +
+> +	/*
+> +	 * The "sec_reg_block" property in the ACPI table determines the
+> method
+> +	 * the driver uses to access the EMI registers:
+> +	 * a) property is not present - directly access registers via readl/wri=
+tel
+> +	 * b) property is present - indirectly access registers via SMC calls
+> +	 *    (assuming required Silicon Provider service version found)
+> +	 */
+> +	if (device_property_read_u32(dev,
+> +				     "sec_reg_block", &priv->sreg_tbl_edac)) {
+> +		priv->svc_sreg_support =3D false;
+> +	} else {
+> +		/*
+> +		 * Check for minimum required Arm Silicon Provider (SiP) service
+> +		 * version, ensuring support of required SMC function IDs.
+> +		 */
+> +		arm_smccc_smc(MLXBF_SIP_SVC_VERSION, 0, 0, 0, 0, 0, 0, 0,
+> &res);
+> +		if (res.a0 =3D=3D MLXBF_SVC_REQ_MAJOR &&
+> +		    res.a1 >=3D MLXBF_SVC_REQ_MINOR) {
+> +			priv->svc_sreg_support =3D true;
+> +		} else {
+> +			dev_err(dev, "Required SMCs are not supported.\n");
+> +			ret =3D -EINVAL;
+> +			goto err;
+> +		}
+> +	}
+>=20
+>  	priv->dimm_per_mc =3D dimm_count;
+> -	priv->emi_base =3D devm_ioremap_resource(dev, emi_res);
+> -	if (IS_ERR(priv->emi_base)) {
+> -		dev_err(dev, "failed to map EMI IO resource\n");
+> -		ret =3D PTR_ERR(priv->emi_base);
+> -		goto err;
+> +	if (!priv->svc_sreg_support) {
+> +		priv->emi_base =3D devm_ioremap_resource(dev, emi_res);
+> +		if (IS_ERR(priv->emi_base)) {
+> +			dev_err(dev, "failed to map EMI IO resource\n");
+> +			ret =3D PTR_ERR(priv->emi_base);
+> +			goto err;
+> +		}
+> +	} else {
+> +		priv->emi_base =3D (void __iomem *)emi_res->start;
+>  	}
+>=20
+>  	mci->pdev =3D dev;
+> @@ -320,7 +457,6 @@ static int bluefield_edac_mc_probe(struct
+> platform_device *pdev)
+>  	edac_mc_free(mci);
+>=20
+>  	return ret;
+> -
+>  }
+>=20
+>  static void bluefield_edac_mc_remove(struct platform_device *pdev)
 > --
 > 2.30.1
 
@@ -211,4 +555,5 @@ the patch, or have changes you would like me to make.
 Thank you for your time.
 
 Regards, Dave
+
 
