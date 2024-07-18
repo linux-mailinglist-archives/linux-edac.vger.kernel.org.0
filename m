@@ -1,48 +1,74 @@
-Return-Path: <linux-edac+bounces-1546-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1547-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F7B9347F4
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 08:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8178C93487B
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 09:03:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A964A282889
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 06:19:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96518282AA6
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 07:03:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D810B54F8C;
-	Thu, 18 Jul 2024 06:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41417347E;
+	Thu, 18 Jul 2024 07:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4nkZpUL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ahr4qWfS"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC17282EE;
-	Thu, 18 Jul 2024 06:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363CA8488;
+	Thu, 18 Jul 2024 07:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721283568; cv=none; b=VV4lBhw6Oqy7o7eFLkzpoMWDykFWZRdnDZ10GfJ4D+ptoZox8dvVtlXgw9d5f4vBmJEJhURMCOooM8Ha2tyyq/95C3cNWAAzBQL1A/wXqVWYTdShqi0mmcdTSBbqAm6JKdGWr3luySctfJAWI3CLdXbe09isyWzPy3OeRq4H5tE=
+	t=1721286231; cv=none; b=vDg2/CnL1KoleZCupMrn4hmTwjZxc+IXOsgLgHy5BG69Zk2Bu4ngBA0XAi3y0m5EBf7uV+0yJuck53JCicn+mFS3ofE5lwlfK5xjVYfXDWlmu+6Wvm6+eV6wJBdc0VJPRfNg44UVVW0r/sDR6So1Sd0gX1cw2mOvX8VYMo5t8gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721283568; c=relaxed/simple;
-	bh=4Clifxq7cRdC7gqNNrtV/aDjuvKrcihIvqZOJQVZ0e8=;
+	s=arc-20240116; t=1721286231; c=relaxed/simple;
+	bh=kWPKzz3p73xr0LfUMEvbu383QRqZBQhsyF6zqshu1LY=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aAllKZJxury6IpLK8c/iKP6t/5YoHnfXfNjAmqS95BNFOuYrBpLOn+pGsNbhPlgD1Ox5liE3ePREOlYmhK9Q7KJqjXNT3TxhO7IX9sqztTzQAt37KDmnDtTVThmtUxZ2YhvBY+uPsyXDJ336F7Zz44semZlXo8eFzNidxHhbGBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4nkZpUL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2DC1C116B1;
-	Thu, 18 Jul 2024 06:19:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721283568;
-	bh=4Clifxq7cRdC7gqNNrtV/aDjuvKrcihIvqZOJQVZ0e8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=r4nkZpULnd0Yq27Yj+TqpJXL7SxXakKd3FwPHLr7Mvjqm8N0/c15uzAL6f1S3VjsF
-	 xVzfximTLc1KJzGEMgKitrknuk5Bhmav7qGcMALylhiHhxsxqfjycmfFbfHRhMbmLu
-	 0pppvCMDjDTf7BSqn9ZEaRXTaZTcPyUyc20AQMMcf5liWz6SXX014hSfePRnswyxza
-	 qWFc/D/Xkd0bKZAf1uMq3ezY+3dqlhjmaub8DX+SAFSRKzsTm7S3IJqdouuIWflYIH
-	 JYKZ8GLL4i9cV58IqS+8+DfmWAYZAfyDlKROHRWcRMBRU6jwv3nG+HbQKlV0c01xKW
-	 z1W1XMjeMA2Vw==
-Date: Thu, 18 Jul 2024 08:19:16 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+	 MIME-Version:Content-Type; b=tb/QG9oOV8jhhqg9OKNE9twzN8EfBXdRUzGnlZ+ukUeOfZ61sSMXxVAuxlD9pUidsVdT8X9cp618TTGOst1VVvFnI5SwOE+Dp31SouGDE5O2i7poP0JMM03dizVGvoJoNvxNNTBU4ueo4g8B8IgsqD5CH989rzHw1DOU6yoxOKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ahr4qWfS; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a79f9a72a99so292979966b.0;
+        Thu, 18 Jul 2024 00:03:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721286227; x=1721891027; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hge8610M0WbBaD4FfYHWgFbqCZWbS2MKcPSo7d+K8eI=;
+        b=Ahr4qWfSdhyHGiERUeeO6trQUbSZj0GM3NiRBd30qUVFgpnNIcknaXomYyvGl9jXgJ
+         O/aiIlPtbZS28T1kvFU+pr/L57ixw7mdv07p38jdh+nBSfqXr1Hbl3mtc1sXc6iQV+B3
+         UDw8UvrcbV36cTMyTHXjmqMoEzqiNbEScd8fhx3cwwomH24s5R30rH9h+GgMi8Ku8ylu
+         jt1bCaZXH43/oC9xeWMEwCb+8A39J65vKRb5sgzMP1Dy1FW/rTiFGVB3mWoFqHTu94Ds
+         n7NW4dQXDQJYKyX32KX+4Ff0MyWeci+i90E01zzCEaLO88oP934NRzLGYfHiZBynN/jm
+         WQNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721286227; x=1721891027;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hge8610M0WbBaD4FfYHWgFbqCZWbS2MKcPSo7d+K8eI=;
+        b=Vkx+tX3ayqO/toMqIDW+Hb9dJLoCN1zMomoz8xGocTPEZM/GeRpCfAtL4OTIjeNlqf
+         ueVmJ/6BW3SZRfCUMzIqZ+XzmUwZuTdvXpf26+skSt3V5QDr21DgvoFpXpNLHLaCarGs
+         vP/LoJiskfBgyMlrOJ8Sp7QucyWCKI1eEdyb44tEKjL7nwkEpbKhB/s2dHKKb18ygf6P
+         RbpdJs0oDQMi+0krPf1SBZ6gdPTOdYNpSxD+EueYA3URpoXDS2fiiznZkLApCDpepBu/
+         ZwFcmL/42ewx0XKieaZKg/2B5PbhtxLyaZlBf/auNxbi+gF8NlDaeRrKELH3sv6bAHNn
+         a0lg==
+X-Forwarded-Encrypted: i=1; AJvYcCXXl5UNRmBZxGtOI6Tyrju9t4fh0xC7IScZurd+15cEy4ChkaDgiHll2Zwh6WkMkyKTVN3xyP39auDYoNasTL3NdMrsoHvhvlloXG096UgDuH8YW5E1apEHbfZYMeJMPlAklPLJwBRdPz+2J+vacxrGNJ0XrpSdEe/mvdPr371gx99V+A==
+X-Gm-Message-State: AOJu0YxY42z0MkoTgcoRynqHgkru5DNXfUe0sFxe5MCr1aigJIzmN7gi
+	E4xprrciru+Z0syKU6ZPor4CT7hfKh0tmvbymz7eZJ/UULcmxMFA
+X-Google-Smtp-Source: AGHT+IEx3FN7buZRlIsdV7Gfu6sBaYYKtZaNP4w4Cn6eWsMfJ3ZPKSH42QYSXA/oliyxDCj9gu0y1A==
+X-Received: by 2002:a17:906:aed3:b0:a6f:dd93:7ffb with SMTP id a640c23a62f3a-a7a0f0c6cdbmr190265766b.1.1721286226999;
+        Thu, 18 Jul 2024 00:03:46 -0700 (PDT)
+Received: from foz.lan ([178.24.78.73])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a79bc7f21afsm520734166b.119.2024.07.18.00.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jul 2024 00:03:46 -0700 (PDT)
+Date: Thu, 18 Jul 2024 09:03:44 +0200
+From: Mauro Carvalho Chehab <maurochehab@gmail.com>
 To: Shiju Jose <shiju.jose@huawei.com>
 Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
  "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
@@ -77,13 +103,13 @@ Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
  Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
  <kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
  Linuxarm <linuxarm@huawei.com>
-Subject: Re: [RFC PATCH v9 01/11] EDAC: Add generic EDAC RAS feature driver
-Message-ID: <20240718081916.3c9afb65@foz.lan>
-In-Reply-To: <2cb0dde458bd4eb79b0a96cb99fe1ef5@huawei.com>
+Subject: Re: [RFC PATCH v9 02/11] EDAC: Add EDAC scrub control driver
+Message-ID: <20240718090344.00050815@foz.lan>
+In-Reply-To: <ff37e3dd6f804964b7d15d1f917359fb@huawei.com>
 References: <20240716150336.2042-1-shiju.jose@huawei.com>
-	<20240716150336.2042-2-shiju.jose@huawei.com>
-	<20240717120027.7168536a@foz.lan>
-	<2cb0dde458bd4eb79b0a96cb99fe1ef5@huawei.com>
+	<20240716150336.2042-3-shiju.jose@huawei.com>
+	<20240717145632.436a0cb0@foz.lan>
+	<ff37e3dd6f804964b7d15d1f917359fb@huawei.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -92,25 +118,22 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Em Wed, 17 Jul 2024 11:01:58 +0000
+Em Wed, 17 Jul 2024 14:07:05 +0000
 Shiju Jose <shiju.jose@huawei.com> escreveu:
 
-> Hi Mauro,
-> 
-> Thanks for the feedbacks.
-> 
 > >-----Original Message-----
 > >From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> >Sent: 17 July 2024 11:00
+> >Sent: 17 July 2024 13:57
 > >To: Shiju Jose <shiju.jose@huawei.com>
 > >Cc: linux-edac@vger.kernel.org; linux-cxl@vger.kernel.org; linux-
 > >acpi@vger.kernel.org; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
 > >bp@alien8.de; tony.luck@intel.com; rafael@kernel.org; lenb@kernel.org;
 > >mchehab@kernel.org; dan.j.williams@intel.com; dave@stgolabs.net; Jonathan
 > >Cameron <jonathan.cameron@huawei.com>; dave.jiang@intel.com;
-> >alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.com;
+> >alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.co=
+m;
 > >david@redhat.com; Vilas.Sridharan@amd.com; leo.duran@amd.com;
 > >Yazen.Ghannam@amd.com; rientjes@google.com; jiaqiyan@google.com;
 > >Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
@@ -123,377 +146,565 @@ Shiju Jose <shiju.jose@huawei.com> escreveu:
 > >Sassu <roberto.sassu@huawei.com>; kangkang.shen@futurewei.com;
 > >wanghuiqiang <wanghuiqiang@huawei.com>; Linuxarm
 > ><linuxarm@huawei.com>
-> >Subject: Re: [RFC PATCH v9 01/11] EDAC: Add generic EDAC RAS feature driver
+> >Subject: Re: [RFC PATCH v9 02/11] EDAC: Add EDAC scrub control driver
 > >
-> >Em Tue, 16 Jul 2024 16:03:25 +0100
+> >Em Tue, 16 Jul 2024 16:03:26 +0100
 > ><shiju.jose@huawei.com> escreveu:
-> >  
+> > =20
 > >> From: Shiju Jose <shiju.jose@huawei.com>
 > >>
-> >> Add generic EDAC driver supports registering RAS features supported in
-> >> the system. The driver exposes feature's control attributes to the
-> >> userspace in /sys/bus/edac/devices/<dev-name>/<ras-feature>/
+> >> Add generic EDAC scrub control driver supports configuring the memory
+> >> scrubbers in the system. The device with scrub feature, get the scrub
+> >> descriptor from the EDAC scrub and registers with the EDAC RAS feature
+> >> driver, which adds the sysfs scrub control interface. The scrub
+> >> control attributes are available to the userspace in =20
+> >/sys/bus/edac/devices/<dev-name>/scrub/. =20
+> >>
+> >> Generic EDAC scrub driver and the common sysfs scrub interface
+> >> promotes unambiguous access from the userspace irrespective of the
+> >> underlying scrub devices.
 > >>
 > >> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > >> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > >> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 > >> ---
-> >>  drivers/edac/Makefile            |   1 +
-> >>  drivers/edac/edac_ras_feature.c  | 155
-> >> +++++++++++++++++++++++++++++++  include/linux/edac_ras_feature.h |
-> >> 66 +++++++++++++
-> >>  3 files changed, 222 insertions(+)
-> >>  create mode 100755 drivers/edac/edac_ras_feature.c  create mode
-> >> 100755 include/linux/edac_ras_feature.h
+> >>  Documentation/ABI/testing/sysfs-edac-scrub |  64 +++++
+> >>  drivers/edac/Makefile                      |   2 +-
+> >>  drivers/edac/edac_ras_feature.c            |   1 +
+> >>  drivers/edac/edac_scrub.c                  | 312 +++++++++++++++++++++
+> >>  include/linux/edac_ras_feature.h           |  28 ++
+> >>  5 files changed, 406 insertions(+), 1 deletion(-)  create mode 100644
+> >> Documentation/ABI/testing/sysfs-edac-scrub
+> >>  create mode 100755 drivers/edac/edac_scrub.c
 > >>
+> >> diff --git a/Documentation/ABI/testing/sysfs-edac-scrub
+> >> b/Documentation/ABI/testing/sysfs-edac-scrub
+> >> new file mode 100644
+> >> index 000000000000..dd19afd5e165
+> >> --- /dev/null
+> >> +++ b/Documentation/ABI/testing/sysfs-edac-scrub
+> >> @@ -0,0 +1,64 @@
+> >> +What:		/sys/bus/edac/devices/<dev-name>/scrub
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		The sysfs edac bus devices /<dev-name>/scrub subdirectory
+> >> +		belongs to the memory scrub control feature, where <dev-
+> >name>
+> >> +		directory corresponds to a device/memory region registered
+> >> +		with the edac scrub driver and thus registered with the
+> >> +		generic edac ras driver too.
+> >> +
+> >> +What:		/sys/bus/edac/devices/<dev-
+> >name>/scrub/addr_range_base
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		(RW) The base of the address range of the memory region
+> >> +		to be scrubbed (on-demand scrubbing).
+> >> +
+> >> +What:		/sys/bus/edac/devices/<dev-
+> >name>/scrub/addr_range_size
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		(RW) The size of the address range of the memory region
+> >> +		to be scrubbed (on-demand scrubbing).
+> >> +
+> >> +What:		/sys/bus/edac/devices/<dev-
+> >name>/scrub/enable_background
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		(RW) Start/Stop background(patrol) scrubbing if supported.
+> >> +
+> >> +What:		/sys/bus/edac/devices/<dev-
+> >name>/scrub/enable_on_demand
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		(RW) Start/Stop on-demand scrubbing the memory region
+> >> +		if supported. =20
+> >
+> >This is a generic comment for all sysfs calls: what happens if not suppo=
+rted?
+> >
+> >There are a couple of ways to implement it, like:
+> >
+> >1. Don't create the attribute;
+> >2. return an error code (-ENOENT? -EINVAL?) if trying to read or
+> >   write to the devnode - please detail the used error code(s);
+> >
+> >In any case, please define the behavior and document it.
+> >
+> >From what I see, you're setting 0x444 on RW nodes when write is not enab=
+led,
+> >but still it is possible to not have RO supported. This is specially tru=
+e as
+> >technology evolves, as memory controllers and different types of memorie=
+s may
+> >have very different ways to control it[1]. =20
+>=20
+> It is not true. If the parent device does not support and define callback=
+s for both read and write,
+> then return 0 as you can see in the scrub_attr_visible() and the attribute
+> would not be present for that device in the sysfs.
+> For e.g. attributes addr_range_base and addr_range_size does not support =
+by CXL patrol
+> scrub feature, but supported by ACPI RAS2 scrub feature. =20
+> >
+> >[1] If you're curious enough, one legacy example of memories
+> >    implemented on a very different way was Fully Buffered DIMMs
+> >    where each DIMM had its own internal chipset to offload
+> >    certain tasks, including scrubbing and ECC implementation.
+> >    It ended not being succeeded long term, as it required
+> >    special DIMMs for server's market, reducing the production
+> >    scale, but it is an interesting example about how hardware
+> >    designs could be innovative breaking existing paradigms.
+> >    The FB-DIMM design actually forced a redesign at the EDAC
+> >    subsystem, as it was too centered on how an specific type
+> >    of memory controllers.
+> > =20
+> >> +
+> >> +What:		/sys/bus/edac/devices/<dev-name>/scrub/name
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		(RO) name of the memory scrubber
+> >> + =20
+> >
+> > =20
+> >> +What:		/sys/bus/edac/devices/<dev-
+> >name>/scrub/cycle_in_hours_available
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		(RO) Supported range for the scrub cycle in hours by the
+> >> +		memory scrubber.
+> >> +
+> >> +What:		/sys/bus/edac/devices/<dev-
+> >name>/scrubin_hours
+> >> +Date:		Oct 2024
+> >> +KernelVersion:	6.12
+> >> +Contact:	linux-edac@vger.kernel.org
+> >> +Description:
+> >> +		(RW) The scrub cycle in hours specified and it must be with in =20
+> >the =20
+> >> +		supported range by the memory scrubber. =20
+> >
+> >Why specifying it in hours? I would use seconds, as it is easy to repres=
+ent one
+> >hour as 3600 seconds, but you can't specify a cycle of, let's say, 30min=
+, if the
+> >minimum range value is one hour. =20
+> For the CXL patrol scrub, scrub cycle defined in hours(CXL spec 3.1 Table=
+ 8-208. Device Patrol Scrub
+> Control Feature Writable Attributes), but ACPI RAS2 does not define the u=
+nit for the scrub cycle.
+> Thus proposed  represent scrub cycle in hours in common.
+
+I understand that the final goal of this series is to have CXL exported
+via sysfs, but this patch is not binding the scrub to CXL. Instead, it
+is placing it on a generic location:
+
+	/sys/bus/edac/devices/<dev-name>/scrub
+
+So, it doesn't make sense to bind it to CXL 3.1 spec.
+
+> Not sure how convenient to set the scrub cycle in seconds from the user p=
+erspective and
+
+=46rom users perspective, it doesn't make much difference.=20
+
+See, IMO, we should define this as:
+
+	/sys/bus/edac/devices/<dev-name>/scrub/min_cycle_duration
+	/sys/bus/edac/devices/<dev-name>/scrub/max_cycle_duration
+	/sys/bus/edac/devices/<dev-name>/scrub/current_cycle_duration
+
+See, whatever logic userspace does, it needs to read the contents of
+`min_cycle_duration`, choose a value higher than that, and then check=20
+if the value is not bigger than `max_cycle_duration`.
+
+Such value will then be written at current_cycle_duration.
+
+The logic inside the Kernel will then convert it into some register
+data, rounding it to the closest value to fit the actual memory
+controller parameters.
+
+A read from `current_cycle_duration` will than return what it was
+actually programmed there.
+
+So, even if the user programs it to, let's say, 4 hours, the actual
+content of `current_cycle_duration` could return a number indicating
+that the actual cycle is 4 hours, 20 minutes and 30 seconds.
+
+> also is it require to finish the background scrubbing in such short time?
+
+My main concern here is not about the minimal value, but about the minimal
+quantity that can be specified/returned.=20
+
+See, if you think on a generic way, It should be possible that some device
+would support a scrub cycle lasting 2 hours and 30 minutes, for instance.
+
+I'm also concerned scrubbing and memory refresh times are very dependent of
+the memory technologies used to store and retain data at DRAM. From time to
+time, we see large shifts on such technologies, affecting by orders of
+order of magnitude memory timings including refresh and scrub cycles.
+
+> >I mean, we never know how technology will evolve nor how manufacturers w=
+ill
+> >implement support for scrubbing cycle on their chipsets.
+> > =20
 > >> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile index
-> >> 9c09893695b7..c532b57a6d8a 100644
+> >> c532b57a6d8a..de56cbd039eb 100644
 > >> --- a/drivers/edac/Makefile
 > >> +++ b/drivers/edac/Makefile
-> >> @@ -10,6 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
+> >> @@ -10,7 +10,7 @@ obj-$(CONFIG_EDAC)			:=3D edac_core.o
 > >>
-> >>  edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
-> >>  edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
-> >> +edac_core-y	+= edac_ras_feature.o
+> >>  edac_core-y	:=3D edac_mc.o edac_device.o edac_mc_sysfs.o
+> >>  edac_core-y	+=3D edac_module.o edac_device_sysfs.o wq.o
+> >> -edac_core-y	+=3D edac_ras_feature.o
+> >> +edac_core-y	+=3D edac_ras_feature.o edac_scrub.o
 > >>
-> >>  edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
+> >>  edac_core-$(CONFIG_EDAC_DEBUG)		+=3D debugfs.o
 > >>
 > >> diff --git a/drivers/edac/edac_ras_feature.c
-> >> b/drivers/edac/edac_ras_feature.c new file mode 100755 index
-> >> 000000000000..24a729fea66f
-> >> --- /dev/null
+> >> b/drivers/edac/edac_ras_feature.c index 24a729fea66f..48927f868372
+> >> 100755
+> >> --- a/drivers/edac/edac_ras_feature.c
 > >> +++ b/drivers/edac/edac_ras_feature.c
-> >> @@ -0,0 +1,155 @@
+> >> @@ -36,6 +36,7 @@ static int edac_ras_feat_scrub_init(struct device
+> >> *parent,  {
+> >>  	sdata->ops =3D sfeat->scrub_ops;
+> >>  	sdata->private =3D sfeat->scrub_ctx;
+> >> +	attr_groups[0] =3D edac_scrub_get_desc();
+> >>
+> >>  	return 1;
+> >>  }
+> >> diff --git a/drivers/edac/edac_scrub.c b/drivers/edac/edac_scrub.c new
+> >> file mode 100755 index 000000000000..0b07eafd3551
+> >> --- /dev/null
+> >> +++ b/drivers/edac/edac_scrub.c
+> >> @@ -0,0 +1,312 @@
 > >> +// SPDX-License-Identifier: GPL-2.0
 > >> +/*
-> >> + * EDAC RAS control feature driver supports registering RAS
-> >> + * features with the EDAC and exposes the feature's control
-> >> + * attributes to the userspace in sysfs.
+> >> + * Generic EDAC scrub driver supports controlling the memory
+> >> + * scrubbers in the system and the common sysfs scrub interface
+> >> + * promotes unambiguous access from the userspace.
 > >> + *
 > >> + * Copyright (c) 2024 HiSilicon Limited.
 > >> + */
-> >> +  
-> >  
-> >> +#define pr_fmt(fmt)     "EDAC RAS CONTROL FEAT: " fmt  
-> >
-> >Sounds a too long prefix for my taste.  
-> Will do. Previously it was "EDAC RAS FEAT"
-> 
-> >  
+> >> +
+> >> +#define pr_fmt(fmt)     "EDAC SCRUB: " fmt
 > >> +
 > >> +#include <linux/edac_ras_feature.h>
 > >> +
-> >> +static void edac_ras_dev_release(struct device *dev) {
-> >> +	struct edac_ras_feat_ctx *ctx =
-> >> +		container_of(dev, struct edac_ras_feat_ctx, dev);
-> >> +
-> >> +	kfree(ctx);
-> >> +}
-> >> +
-> >> +const struct device_type edac_ras_dev_type = {
-> >> +	.name = "edac_ras_dev",
-> >> +	.release = edac_ras_dev_release,
-> >> +};
-> >> +
-> >> +static void edac_ras_dev_unreg(void *data) {
-> >> +	device_unregister(data);
-> >> +}
-> >> +
-> >> +static int edac_ras_feat_scrub_init(struct device *parent,
-> >> +				    struct edac_scrub_data *sdata,
-> >> +				    const struct edac_ras_feature *sfeat,
-> >> +				    const struct attribute_group **attr_groups) {
-> >> +	sdata->ops = sfeat->scrub_ops;
-> >> +	sdata->private = sfeat->scrub_ctx;
-> >> +
-> >> +	return 1;
-> >> +}
-> >> +
-> >> +static int edac_ras_feat_ecs_init(struct device *parent,
-> >> +				  struct edac_ecs_data *edata,
-> >> +				  const struct edac_ras_feature *efeat,
-> >> +				  const struct attribute_group **attr_groups) {
-> >> +	int num = efeat->ecs_info.num_media_frus;
-> >> +
-> >> +	edata->ops = efeat->ecs_ops;
-> >> +	edata->private = efeat->ecs_ctx;
-> >> +
-> >> +	return num;
-> >> +}  
-> >
-> >I would place this function earlier and/or add some documentation for the above
-> >two functions.  
-> Will do. I guess you want place these functions above edac_ras_dev_release() right? 
-
-I mean placing edac_ras_feat_ecs_ini() before edac_ras_feat_scrub_init(),
-as it helps reviewers to understand that the return code is the number
-of attr groups. Another option would be to document the arguments and
-the return value for such functions.
-
-> >
-> >I got confused when reviewed the first function and saw there an
-> >unconditional:  
-> The call  for the feature specific init functions  are added  here in the next feature specific patches
-> of this series.  
-> >
-> >	return 1;
-> >
-> >Now, I guess the goal is to return the number of initialized features, right?  
-> Return the number of attr groups added for a feature as the instances for a feature is dynamic,
-> for e.g.  the number of FRUs in ECS feature.
->   
-> >  
-> >> +
-> >> +/**
-> >> + * edac_ras_dev_register - register device for ras features with edac
-> >> + * @parent: client device.
-> >> + * @name: client device's name.
-> >> + * @private: parent driver's data to store in the context if any.
-> >> + * @num_features: number of ras features to register.
-> >> + * @ras_features: list of ras features to register.
-> >> + *
-> >> + * Returns 0 on success, error otherwise.
-> >> + * The new edac_ras_feat_ctx would be freed automatically.
-> >> + */
-> >> +int edac_ras_dev_register(struct device *parent, char *name,
-> >> +			  void *private, int num_features,
-> >> +			  const struct edac_ras_feature *ras_features) {
-> >> +	const struct attribute_group **ras_attr_groups;
-> >> +	struct edac_ras_feat_ctx *ctx;
-> >> +	int attr_gcnt = 0;
-> >> +	int ret, feat;
-> >> +
-> >> +	if (!parent || !name || !num_features || !ras_features)
-> >> +		return -EINVAL;
-> >> +
-> >> +	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-> >> +	if (!ctx)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	ctx->dev.parent = parent;
-> >> +	ctx->private = private;
-> >> +
-> >> +	/* Double parse so we can make space for attributes */
-> >> +	for (feat = 0; feat < num_features; feat++) {
-> >> +		switch (ras_features[feat].feat) {
-> >> +		case ras_feat_scrub:
-> >> +			attr_gcnt++;
-> >> +			break;
-> >> +		case ras_feat_ecs:
-> >> +			attr_gcnt +=  
-> >ras_features[feat].ecs_info.num_media_frus;  
-> >> +			break;  
-> >
-> >As already suggested, the enum names shall be in uppercase.
-> >Having a lowercase one here looks really weird.  
-> Agree.
-> >  
-> >> +		default:
-> >> +			ret = -EINVAL;
-> >> +			goto ctx_free;
-> >> +		}
-> >> +	}  
-> >
-> >I would place this logic earlier, before allocating ctx, as, in case of errors, the
-> >function can just call "return -EINVAL".  
-> Ok.
-> 
-> >  
-> >> +
-> >> +	ras_attr_groups = devm_kzalloc(parent,
-> >> +				       (attr_gcnt + 1) * sizeof(*ras_attr_groups),
-> >> +				       GFP_KERNEL);  
-> >
-> >Hmm... why are you using devm variant here, and non-devm one for cxt?
-> >
-> >My personal preference is to avoid devm variants, as memory is only freed
-> >when the device refcount becomes zero (which, depending on the driver, may
-> >never happen in practice, as driver core may keep a refcount, depending on how
-> >the device was probed).  
-> Can use Kzalloc and need to add free for ras_attr_groups on error etc. 
-
-Ok. While here, please also use the kcalloc/kmalloc_array variants, as
-doing num * sizeof(foo) should be avoided.
-
-Btw, there are some checks inside checkpatch meant to identify it like
-ALLOC_WITH_MULTIPLY. Not sure why it didn't trigger it here.
-
-Hint: while the number of false positive hits increase, I'm always running
-checkpatch with --strict, as it detects some additional potential problems.
-
-> >> +	if (!ras_attr_groups) {
-> >> +		ret = -ENOMEM;
-> >> +		goto ctx_free;
-> >> +	}
-> >> +
-> >> +	attr_gcnt = 0;
-> >> +	for (feat = 0; feat < num_features; feat++, ras_features++) {
-> >> +		if (ras_features->feat == ras_feat_scrub) {  
-> >
-> >I would use a switch here as well, just like the previous feature type check.  
-> Will do.
-> >  
-> >> +			if (!ras_features->scrub_ops)
-> >> +				continue;
-> >> +			ret = edac_ras_feat_scrub_init(parent, &ctx->scrub,
-> >> +						       ras_features,  
-> >&ras_attr_groups[attr_gcnt]);
-> >
-> >I don't think it is worth having those ancillary functions here...
-> >  
-> >> +			if (ret < 0)
-> >> +				goto ctx_free;
-> >> +
-> >> +			attr_gcnt += ret;
-> >> +		} else if (ras_features->feat == ras_feat_ecs) {
-> >> +			if (!ras_features->ecs_ops)
-> >> +				continue;
-> >> +			ret = edac_ras_feat_ecs_init(parent, &ctx->ecs,
-> >> +						     ras_features,  
-> >&ras_attr_groups[attr_gcnt]);
-> >
-> >and here, as most of the current functions are very simple:
-> >
-> >both just sets two arguments:
-> >
-> >	edata->ops
-> >	edata->private
-> >
-> >and returned vaules are always a positive counter...
-> >  
-> >> +			if (ret < 0)
-> >> +				goto ctx_free;  
-> >
-> >So, this check for instance, doesn't make sense.  
-> The call  for the feature specific init functions  are added  in the next feature specific patches
-> of this series and which could return error.  
-
-Ok.
-
-> >  
-> >> +
-> >> +			attr_gcnt += ret;
-> >> +		} else {
-> >> +			ret = -EINVAL;
-> >> +			goto ctx_free;
-> >> +		}
-> >> +	}
-> >> +	ras_attr_groups[attr_gcnt] = NULL;
-> >> +	ctx->dev.bus = edac_get_sysfs_subsys();
-> >> +	ctx->dev.type = &edac_ras_dev_type;
-> >> +	ctx->dev.groups = ras_attr_groups;
-> >> +	dev_set_drvdata(&ctx->dev, ctx);
-> >> +	ret = dev_set_name(&ctx->dev, name);
-> >> +	if (ret)
-> >> +		goto ctx_free;
-> >> +
-> >> +	ret = device_register(&ctx->dev);
-> >> +	if (ret) {
-> >> +		put_device(&ctx->dev);
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	return devm_add_action_or_reset(parent, edac_ras_dev_unreg,
-> >> +&ctx->dev);
-> >> +
-> >> +ctx_free:
-> >> +	kfree(ctx);
-> >> +	return ret;
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(edac_ras_dev_register);
-> >> diff --git a/include/linux/edac_ras_feature.h
-> >> b/include/linux/edac_ras_feature.h
-> >> new file mode 100755
-> >> index 000000000000..000e99141023
-> >> --- /dev/null
-> >> +++ b/include/linux/edac_ras_feature.h
-> >> @@ -0,0 +1,66 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0 */
-> >> +/*
-> >> + * EDAC RAS control features.
-> >> + *
-> >> + * Copyright (c) 2024 HiSilicon Limited.
-> >> + */
-> >> +
-> >> +#ifndef __EDAC_RAS_FEAT_H
-> >> +#define __EDAC_RAS_FEAT_H
-> >> +
-> >> +#include <linux/types.h>
-> >> +#include <linux/edac.h>
-> >> +
-> >> +#define EDAC_RAS_NAME_LEN	128
-> >> +
-> >> +enum edac_ras_feat {
-> >> +	ras_feat_scrub,
-> >> +	ras_feat_ecs,
-> >> +	ras_feat_max
-> >> +};  
-> >
-> >Enum values in uppercase, please.  
-> Will do.
-> >  
-> >> +
-> >> +struct edac_ecs_ex_info {
-> >> +	u16 num_media_frus;
-> >> +};
-> >> +
-> >> +/*
-> >> + * EDAC RAS feature information structure  */ struct edac_scrub_data
+> >> +static ssize_t addr_range_base_show(struct device *ras_feat_dev,
+> >> +				    struct device_attribute *attr,
+> >> +				    char *buf)
 > >> +{
-> >> +	const struct edac_scrub_ops *ops;
-> >> +	void *private;
-> >> +};
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	u64 base, size;
+> >> +	int ret;
 > >> +
-> >> +struct edac_ecs_data {
-> >> +	const struct edac_ecs_ops *ops;
-> >> +	void *private;
-> >> +};
-> >> +
-> >> +struct device;
-> >> +
-> >> +struct edac_ras_feat_ctx {
-> >> +	struct device dev;
-> >> +	void *private;
-> >> +	struct edac_scrub_data scrub;
-> >> +	struct edac_ecs_data ecs;
-> >> +};
-> >> +
-> >> +struct edac_ras_feature {
-> >> +	enum edac_ras_feat feat;
-> >> +	union {
-> >> +		const struct edac_scrub_ops *scrub_ops;
-> >> +		const struct edac_ecs_ops *ecs_ops;
-> >> +	};
-> >> +	union {
-> >> +		struct edac_ecs_ex_info ecs_info;
-> >> +	};  
+> >> +	ret =3D ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &b=
+ase, =20
+> >&size); =20
+> >> +	if (ret)
+> >> +		return ret; =20
 > >
-> >I would place the variable structs union at the end. This may help with
-> >alignments, if you place the pointers earlier.  
-> Will do.
-> 
-> >  
-> >> +	union {
-> >> +		void *scrub_ctx;
-> >> +		void *ecs_ctx;
-> >> +	};
-> >> +};
-> >> +
-> >> +int edac_ras_dev_register(struct device *parent, char *dev_name,
-> >> +			  void *parent_pvt_data, int num_features,
-> >> +			  const struct edac_ras_feature *ras_features); #endif  
-> >/*  
-> >> +__EDAC_RAS_FEAT_H */  
-> >
-> >
-> >
-> >Thanks,
-> >Mauro
-> >  
-> 
-> Thanks,
-> Shiju
+> >Also a generic comment applied to all devnodes: what if ops->read_range =
+is
+> >NULL? Shouldn't it be checked? Btw, you could use read_range =3D=3D NULL=
+ if to
+> >implement error handling for unsupported features. =20
+> If ops->read_range is NULL, scrub_attr_visible() return 0 and then the co=
+rresponding attributes
+> addr_range_base and addr_range_size  would not be added in the sysfs.
+> Same for other attributes.
 
-Thanks,
-Mauro
+Ok. Please document that either at the patch description and/or at the ABI.
+
+> > =20
+> >> +
+> >> +	return sysfs_emit(buf, "0x%llx\n", base); }
+> >> +
+> >> +static ssize_t addr_range_size_show(struct device *ras_feat_dev,
+> >> +				    struct device_attribute *attr,
+> >> +				    char *buf)
+> >> +{
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	u64 base, size;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &b=
+ase, =20
+> >&size); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return sysfs_emit(buf, "0x%llx\n", size); }
+> >> +
+> >> +static ssize_t addr_range_base_store(struct device *ras_feat_dev,
+> >> +				     struct device_attribute *attr,
+> >> +				     const char *buf, size_t len) {
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	u64 base, size;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &b=
+ase, =20
+> >&size); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	ret =3D kstrtou64(buf, 16, &base); =20
+> >
+> >I would use base 0, letting the parser expect "0x" for hexadecimal value=
+s.
+> >Same for other *_store methods. =20
+> Will check.
+>=20
+> > =20
+> >> +	if (ret < 0)
+> >> +		return ret;
+> >> +
+> >> +	ret =3D ops->write_range(ras_feat_dev->parent, ctx->scrub.private, b=
+ase, =20
+> >size); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return len;
+> >> +}
+> >> +
+> >> +static ssize_t addr_range_size_store(struct device *ras_feat_dev,
+> >> +				     struct device_attribute *attr,
+> >> +				     const char *buf,
+> >> +				     size_t len)
+> >> +{
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	u64 base, size;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &b=
+ase, =20
+> >&size); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	ret =3D kstrtou64(buf, 16, &size);
+> >> +	if (ret < 0)
+> >> +		return ret;
+> >> +
+> >> +	ret =3D ops->write_range(ras_feat_dev->parent, ctx->scrub.private, b=
+ase, =20
+> >size); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return len;
+> >> +}
+> >> +
+> >> +static ssize_t enable_background_store(struct device *ras_feat_dev,
+> >> +				       struct device_attribute *attr,
+> >> +				       const char *buf, size_t len) {
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	bool enable;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D kstrtobool(buf, &enable);
+> >> +	if (ret < 0)
+> >> +		return ret;
+> >> +
+> >> +	ret =3D ops->set_enabled_bg(ras_feat_dev->parent, ctx->scrub.private=
+, =20
+> >enable); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return len;
+> >> +}
+> >> +
+> >> +static ssize_t enable_background_show(struct device *ras_feat_dev,
+> >> +				      struct device_attribute *attr, char *buf) {
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	bool enable;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->get_enabled_bg(ras_feat_dev->parent, ctx->scrub.private=
+, =20
+> >&enable); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return sysfs_emit(buf, "%d\n", enable); }
+> >> +
+> >> +static ssize_t enable_on_demand_show(struct device *ras_feat_dev,
+> >> +				     struct device_attribute *attr, char *buf) {
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	bool enable;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->get_enabled_od(ras_feat_dev->parent, ctx->scrub.private=
+, =20
+> >&enable); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return sysfs_emit(buf, "%d\n", enable); }
+> >> +
+> >> +static ssize_t enable_on_demand_store(struct device *ras_feat_dev,
+> >> +				      struct device_attribute *attr,
+> >> +				      const char *buf, size_t len) {
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	bool enable;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D kstrtobool(buf, &enable);
+> >> +	if (ret < 0)
+> >> +		return ret;
+> >> +
+> >> +	ret =3D ops->set_enabled_od(ras_feat_dev->parent, ctx->scrub.private=
+, =20
+> >enable); =20
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return len;
+> >> +}
+> >> +
+> >> +static ssize_t name_show(struct device *ras_feat_dev,
+> >> +			 struct device_attribute *attr, char *buf) {
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->get_name(ras_feat_dev->parent, ctx->scrub.private, buf);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return strlen(buf);
+> >> +}
+> >> +
+> >> +static ssize_t cycle_in_hours_show(struct device *ras_feat_dev, struc=
+t =20
+> >device_attribute *attr, =20
+> >> +				   char *buf)
+> >> +{
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	u64 val;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->cycle_in_hours_read(ras_feat_dev->parent, ctx-
+> >>scrub.private, &val);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return sysfs_emit(buf, "0x%llx\n", val); }
+> >> +
+> >> +static ssize_t cycle_in_hours_store(struct device *ras_feat_dev, stru=
+ct =20
+> >device_attribute *attr, =20
+> >> +				    const char *buf, size_t len)
+> >> +{
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	long val;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D kstrtol(buf, 10, &val); =20
+> >
+> >Even here, I would be using base=3D0, but if you only want to support ba=
+se 10,
+> >please document it at the sysfs ABI. =20
+> Will do.
+> > =20
+> >> +	if (ret < 0)
+> >> +		return ret;
+> >> +
+> >> +	ret =3D ops->cycle_in_hours_write(ras_feat_dev->parent, ctx-
+> >>scrub.private, val);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return len;
+> >> +}
+> >> +
+> >> +static ssize_t cycle_in_hours_range_show(struct device *ras_feat_dev,
+> >> +					 struct device_attribute *attr,
+> >> +					 char *buf)
+> >> +{
+> >> +	struct edac_ras_feat_ctx *ctx =3D dev_get_drvdata(ras_feat_dev);
+> >> +	const struct edac_scrub_ops *ops =3D ctx->scrub.ops;
+> >> +	u64 min_schrs, max_schrs;
+> >> +	int ret;
+> >> +
+> >> +	ret =3D ops->cycle_in_hours_range(ras_feat_dev->parent, ctx-
+> >>scrub.private,
+> >> +					&min_schrs, &max_schrs);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	return sysfs_emit(buf, "0x%llx-0x%llx\n", min_schrs, max_schrs); =20
+> >
+> >Hmm... you added the store in decimal, but here you're showing in hexa..=
+. =20
+> Will check for store and show decimal.
+> >
+> >Btw, don't group multiple values on a single sysfs node. Instead, implem=
+ent two
+> >separate devnodes: =20
+> Here we are showing the supported range for the scrub cycle.=20
+> I am wondering any opinion on this from others?
+
+That is how ABIs are implemented.=20
+
+See for instance hwmon class, where all measurements have ranges, mapped
+as min/max pairs:
+
+/sys/class/hwmon/hwmonX/currY_max
+/sys/class/hwmon/hwmonX/currY_min
+/sys/class/hwmon/hwmonX/currY_rated_max
+/sys/class/hwmon/hwmonX/currY_rated_min
+/sys/class/hwmon/hwmonX/fanY_max
+/sys/class/hwmon/hwmonX/fanY_min
+/sys/class/hwmon/hwmonX/humidityY_max
+/sys/class/hwmon/hwmonX/humidityY_max_alarm
+/sys/class/hwmon/hwmonX/humidityY_max_hyst
+/sys/class/hwmon/hwmonX/humidityY_min
+/sys/class/hwmon/hwmonX/humidityY_min_alarm
+/sys/class/hwmon/hwmonX/humidityY_min_hyst
+/sys/class/hwmon/hwmonX/humidityY_rated_max
+/sys/class/hwmon/hwmonX/humidityY_rated_min
+/sys/class/hwmon/hwmonX/inY_max
+/sys/class/hwmon/hwmonX/inY_min
+/sys/class/hwmon/hwmonX/inY_rated_max
+/sys/class/hwmon/hwmonX/inY_rated_min
+...
+
+You can also seek for range: there's none defined under ABI=20
+documentation.
+
+Tip: you can use:
+	./scripts/get_abi.pl search
+
+to check such things.
 
