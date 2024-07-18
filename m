@@ -1,39 +1,38 @@
-Return-Path: <linux-edac+bounces-1552-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1553-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F2F4934E4A
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 15:36:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A34FD934E87
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 15:50:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7A7D1F229B1
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 13:36:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F1EB281B5A
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Jul 2024 13:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5442213D2A9;
-	Thu, 18 Jul 2024 13:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E73B142E85;
+	Thu, 18 Jul 2024 13:48:57 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91AA9457;
-	Thu, 18 Jul 2024 13:36:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3E01428FE;
+	Thu, 18 Jul 2024 13:48:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721309805; cv=none; b=qLJW0yCvULRmj5bEI/iTtE7b8YXd8mJfNA3mKDe7w5qdZRvCJsPXRzEeadSU06t6sQvShzu0tL0Iuqov8p7R7tlv7vJ6sAfnj1Zpn5C5IwW/MA4ReLa32ck0EhA+H24zJeCV+lZsQYYrqOEYOOldLbvMA8LEUAPbuZuYWW18fvw=
+	t=1721310537; cv=none; b=YqujJY6TFyPJhAUGscPZUFr0DpgPkWW9PaD/mG/K886FDBJVLP9PUz4rwSeiGnzhLuY8p0BxbjOQH8a3em8q72rsr7XaHuHKjviY3FZCj7cijavqbFBZ8GPwGEDW99Y9rkyJ69AaGhCQrFVVRZPlMBT++RxeZGflmIaAD11TrVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721309805; c=relaxed/simple;
-	bh=ObHzaO5cQ+0BpnyclW7TbzxelIA/WLZ2tkr0Tgkm5lU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kXZwp0wYW8C6dr4YiTUnxfc8mAf6KwfpyU4S8AcosVPUKRKjKR06NZuNmB4BpIhoIGFFC/JvRw90TRiV8F28OcPg/DK8Z1M0BoRoUekvxI6VODdCGX78oauWDwiZvZr5dGXA4hdQCLiWOiezxeTnQHyQmVUiMiYZKbDyQOSq9TA=
+	s=arc-20240116; t=1721310537; c=relaxed/simple;
+	bh=xcUolf28j3XL+XhGjEbntFKSgRy5QU52gR9O/3mHUUA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IU5eHnXLwB7AV8MjJfPSLJ3QCtWrQ06qUwdylejVQuZDDpBRl1UUuDzp7s+AuWCbXgVOncXsUpyUCp1O8qo2uyUXK6ouHi7D1kD5EYQvEN0Sl2UL9BWuaOnqeQbcEH5Cqa5La7ntshCzshp0TFsVXfakag8r9DE2CbaS+WI1ICo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
 Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-01 (Coremail) with SMTP id qwCowACHjMhUGplmNUcSBA--.2034S2;
-	Thu, 18 Jul 2024 21:36:28 +0800 (CST)
+	by APP-01 (Coremail) with SMTP id qwCowAD3_MgzHZlmbcASBA--.1517S2;
+	Thu, 18 Jul 2024 21:48:43 +0800 (CST)
 From: Ma Ke <make24@iscas.ac.cn>
-To: shubhrajyoti.datta@amd.com,
-	sai.krishna.potthuri@amd.com,
+To: kristo@kernel.org,
 	bp@alien8.de,
 	tony.luck@intel.com,
 	james.morse@arm.com,
@@ -43,9 +42,9 @@ Cc: linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Ma Ke <make24@iscas.ac.cn>,
 	stable@vger.kernel.org
-Subject: [PATCH v3] EDAC/versal: Fix possible null pointer dereference in emif_get_id()
-Date: Thu, 18 Jul 2024 21:36:18 +0800
-Message-Id: <20240718133618.802667-1-make24@iscas.ac.cn>
+Subject: [PATCH v2] EDAC/ti: Fix possible null pointer dereference in _emif_get_id()
+Date: Thu, 18 Jul 2024 21:48:34 +0800
+Message-Id: <20240718134834.826890-1-make24@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -54,10 +53,10 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowACHjMhUGplmNUcSBA--.2034S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrurWUKF1DGw13tr4kuFWUtwb_yoWftrX_Gw
-	18WFWfXF4qgFn0kwsFgrsxZrWSyayj9r1DXrn7K3sak345X3W3XrnagF4kAw1Dur1kuFWD
-	GrnrK343Ar1UujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID:qwCowAD3_MgzHZlmbcASBA--.1517S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW7tryUWF18tr13Wr4DJwb_yoWkGFX_KF
+	1rWFy7Xr1vqFnrGwsIqrnxZryIy3yj9w1vqrs2g393try5Xa45Xrs3XF1DZrZrWry09Fy5
+	KrWqk34rur1UujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
 	9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
 	6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
 	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
@@ -73,27 +72,25 @@ X-Coremail-Antispam: 1UD129KBjvdXoWrurWUKF1DGw13tr4kuFWUtwb_yoWftrX_Gw
 	C2KfnxnUUI43ZEXa7VU1c4S5UUUUU==
 X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-In emif_get_id(), of_get_address() may return NULL which is later
+In _emif_get_id(), of_get_address() may return NULL which is later
 dereferenced. Fix this bug by adding NULL check.
 
 Cc: stable@vger.kernel.org
-Fixes: 6f15b178cd63 ("EDAC/versal: Add a Xilinx Versal memory controller driver")
+Fixes: 86a18ee21e5e ("EDAC, ti: Add support for TI keystone and DRA7xx EDAC")
 Signed-off-by: Ma Ke <make24@iscas.ac.cn>
 ---
-Changes in v3:
-- added Cc stable line.
 Changes in v2:
-- fixed the typo according to suggestions.
+- added Cc stable line.
 ---
- drivers/edac/versal_edac.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/edac/ti_edac.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/edac/versal_edac.c b/drivers/edac/versal_edac.c
-index a556d23e8261..7aa9468acd53 100644
---- a/drivers/edac/versal_edac.c
-+++ b/drivers/edac/versal_edac.c
-@@ -1053,6 +1053,9 @@ static u32 emif_get_id(struct device_node *node)
- 	const __be32 *addrp;
+diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
+index 29723c9592f7..6f3da8d99eab 100644
+--- a/drivers/edac/ti_edac.c
++++ b/drivers/edac/ti_edac.c
+@@ -207,6 +207,9 @@ static int _emif_get_id(struct device_node *node)
+ 	int my_id = 0;
  
  	addrp = of_get_address(node, 0, NULL, NULL);
 +	if (!addrp)
@@ -101,7 +98,17 @@ index a556d23e8261..7aa9468acd53 100644
 +
  	my_addr = (u32)of_translate_address(node, addrp);
  
- 	for_each_matching_node(np, xlnx_edac_match) {
+ 	for_each_matching_node(np, ti_edac_of_match) {
+@@ -214,6 +217,9 @@ static int _emif_get_id(struct device_node *node)
+ 			continue;
+ 
+ 		addrp = of_get_address(np, 0, NULL, NULL);
++		if (!addrp)
++			return -EINVAL;
++
+ 		addr = (u32)of_translate_address(np, addrp);
+ 
+ 		edac_printk(KERN_INFO, EDAC_MOD_NAME,
 -- 
 2.25.1
 
