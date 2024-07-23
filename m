@@ -1,57 +1,57 @@
-Return-Path: <linux-edac+bounces-1559-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1560-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B0EF93A32D
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8758193A32E
 	for <lists+linux-edac@lfdr.de>; Tue, 23 Jul 2024 16:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 000F2281630
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Jul 2024 14:48:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA77C1C22D21
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Jul 2024 14:48:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 769FD15698B;
-	Tue, 23 Jul 2024 14:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9045115698D;
+	Tue, 23 Jul 2024 14:48:08 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C197F152DF5
-	for <linux-edac@vger.kernel.org>; Tue, 23 Jul 2024 14:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7E513B599
+	for <linux-edac@vger.kernel.org>; Tue, 23 Jul 2024 14:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721746087; cv=none; b=q3YXneKUfsqEJ3aqXfFQs24cTu2Q44YPyENLQrXTViaQ3avQhUmU34Xmo3mn9KNrRjtMldOHGjNDxBFSg6UMUjQu0Bs+KZiCizvgZU0q+lLMRmnck2h43c7IhIkgytE2idg/a978I2iwbQ3NQfxelhjlUcVYYHUKNpzORIjwBQw=
+	t=1721746088; cv=none; b=cqOZs+U9jL0UGB+yi3HrIXTm7Hhsb5f9AIYf6XbuvkxGuV/Glm2505zgsKwBEwweZy2sD2gHrbzdfrbEKKZXqWR4sb/GxmCSOwl3kaplVIkk/g2N4ZDvcdLZy3MjEbuQh8+wVrSrkXzjik2jW6G+VBMNygFenzVVJgp1QcUrUHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721746087; c=relaxed/simple;
-	bh=AYKn+OMraqctBUuRBW986AW2Ho9auOXsJCU3LHrJoZ0=;
+	s=arc-20240116; t=1721746088; c=relaxed/simple;
+	bh=rvuBcT+S1WYjQTAYZl7/VnTWCfy1hALqleSD1QEJ5pI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bm2iHT4J+V3zLCwUN4Tl8cYlhxYZxg7u8iMad3GnAbaJaCEdb2Jt/Y+bq6QNGfXpvd0k8WH4dRxeUjdwfVXh/90HKnW2MKi0pxchlu872ocQq+aPAoqapy/R+9vpG+N5sxTqJBne/sloYh480e94ORG3T9DIzWYrDJCECrmFsL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.42
+	 MIME-Version; b=tMr+u6tkjQiEU1/Snwyd1dPoQZ8LewDOhoca7uC7J7eBthevZTVmVT5QqZgsspxR2L8VbIvzNQqBZ7sW5V9+NH3aQ3qW49m2UZQGo3nZ0t8qw2WS1bb5/0FH4F6WeSn1xl7YVTE5YQE+fnmgb2EHSdrm5GNhaD/Z2O3K53xXjNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5a3458bf858so4108898a12.1
-        for <linux-edac@vger.kernel.org>; Tue, 23 Jul 2024 07:48:05 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-58b0beaf703so4617530a12.2
+        for <linux-edac@vger.kernel.org>; Tue, 23 Jul 2024 07:48:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721746084; x=1722350884;
+        d=1e100.net; s=20230601; t=1721746085; x=1722350885;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Uk7q0YZEAexRwDC7TlJ8MY8yGZV+7BAd5qc9ovT0Rfs=;
-        b=ojwenE7/GixuX/CKQdoQBvR2qflJ9imvICEyOCS221aAhVlt138nN+zC0LBS1QKl+2
-         mHtjtQwd3OsX+l570N5vE9rNASIk2Qf6MyUUIyf6kZ8dtq9zkzAkBd2ZarmS/EKjaUCy
-         XlsHWnPfInGJSQ6AkiYYXAyuNA41A08nd/B2KJUyHde5vZfgGXla3dM1X97Q89IM+bKO
-         oMLrDNL3A+buJFMMkp5rphVPQS1s/FeHMqSoIBUE6q0yJS0vBLgS9l6LAFdr6DDC/GKc
-         hXrUhTo3WWEhHH//NddQ5WlcM/YeR+lWrsaAGbH6kV8X1YiFUyVrsk5QS0Fa8EVx8GGi
-         sYLg==
-X-Gm-Message-State: AOJu0YwTdIgo1IPttLywq3zG9yervlv5OuOLXCEzH4AEJATnSTn9y6AO
-	Z07pVTF4W/0Mnz0hSxp+DFo6Ca1LUl46vVcIH3ObiY5TM4xOfjC/z/jo4vlW0nU=
-X-Google-Smtp-Source: AGHT+IFha2h6a6MvQHTcjWMHo++g83oEpo5lFlYgf69Px3ng8ztnl88jC5Ynwb7213r/pEK/4abM0g==
-X-Received: by 2002:a50:9b4a:0:b0:5a3:b866:eae0 with SMTP id 4fb4d7f45d1cf-5aaa596d039mr76881a12.32.1721746083530;
-        Tue, 23 Jul 2024 07:48:03 -0700 (PDT)
+        bh=+dSTBvmiXsKIJg1nIDwcRbXdVetMzZpCGukJXuNM8Mg=;
+        b=NEtRURR9fR+/dpNQq36rHZUaUwrzFvAWFkZwY+f/1re+NlQXcXokjCUSeqFHDc4pts
+         Q6yvGiJtfCzWS+pMo4NNCv24/0TuJPXNYAkGjDEkTBGUkgJzFH1F1ZWrFH0vOE/RtUjI
+         HPTmutWZmP0BEOMoxQn935oQIKCaaVEKJucLL5Zpi1r2KQGb1Bd1iV4cLTdIQx9s1zOh
+         1Osa+9jgdETjwP1/B7iHrWEiHG7xrYBJDg3MEXzP2zL7RVv6PzM6olTMtckTJ0NR7okm
+         c3Jm4boVjGhG9vNRSPF6NZHmiJaitKVK/8Sr3SiaQbKiJ+kRvb8JZLP6MXxmOh/JWVe8
+         tcKA==
+X-Gm-Message-State: AOJu0YzQcldQowxE5aCNNXmn5RRDyBqEBxvKC9NTsWP/T1bma1GMzucY
+	sRT87GXe7+Mq3d6Au8BEyfo+wuhIJWVFVGWemogfsY5PsTTKLBqscWsdkzGJp4w=
+X-Google-Smtp-Source: AGHT+IFsLZAKyynJoDJ+VTBxNc87Aq7bXNUhQFN3SUw3iTssqlxbS/Hb3ixCOgUjFnM2sQsZonSapg==
+X-Received: by 2002:a05:6402:3584:b0:59c:31fd:266b with SMTP id 4fb4d7f45d1cf-5a3f08931a3mr9333027a12.28.1721746084919;
+        Tue, 23 Jul 2024 07:48:04 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:110f:4a11:8500:e7a:15ff:fe95:b9d8])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5a30c7d36f3sm7555071a12.91.2024.07.23.07.48.01
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5a30c7d36f3sm7555071a12.91.2024.07.23.07.48.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jul 2024 07:48:02 -0700 (PDT)
+        Tue, 23 Jul 2024 07:48:04 -0700 (PDT)
 From: Andrew Zaborowski <andrew.zaborowski@intel.com>
 To: linux-edac@vger.kernel.org,
 	linux-mm@kvack.org
@@ -59,9 +59,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Tony Luck <tony.luck@intel.com>,
 	Eric Biederman <ebiederm@xmission.com>,
 	Borislav Petkov <bp@alien8.de>
-Subject: [RESEND][PATCH 2/3] execve: Ensure SIGBUS delivered on memory failure
-Date: Tue, 23 Jul 2024 16:47:51 +0200
-Message-ID: <20240723144752.1478226-2-andrew.zaborowski@intel.com>
+Subject: [RESEND][PATCH 3/3] rseq: Ensure SIGBUS delivered on memory failure
+Date: Tue, 23 Jul 2024 16:47:52 +0200
+Message-ID: <20240723144752.1478226-3-andrew.zaborowski@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723144752.1478226-1-andrew.zaborowski@intel.com>
 References: <20240723144752.1478226-1-andrew.zaborowski@intel.com>
@@ -78,72 +78,87 @@ using SIGBUS or, if the error happens in a syscall, an error retval
 from the syscall.  The SIGBUS is documented in
 Documentation/mm/hwpoison.rst#failure-recovery-modes
 
-In execve() there is a point of no return
-(bprm->point_of_no_return) after which the syscall... cannot return.
-The binary loading happens after this point so if the loader triggers
-a memory error reading user pages, and after control returns to
-bprm_execve(), that function reacts by sending a SIGSEGV.
+Once a user task sets t->rseq in the rseq() syscall, if the kernel
+cannot access the memory pointed to by t->rseq->rseq_cs, that initial
+rseq() and all future syscalls should return an error so understandably
+the code just kills the task.
 
-Set the new current->kill_on_efault flag and run pending task work to
-ensure that a SIGBUS is queued in memory_failure()
+To ensure that SIGBUS is used set the new t->kill_on_efault flag and
+run queued task work on rseq_get_rseq_cs() errors to give memory_failure
+the chance to run.
+
+Note: the rseq checks run inside resume_user_mode_work() so whenever
+_TIF_NOTIFY_RESUME is set.  They do not run on every syscall exit so
+I'm not concerned that these extra flag operations are in a hot path,
+except with CONFIG_DEBUG_RSEQ.
 
 Signed-off-by: Andrew Zaborowski <andrew.zaborowski@intel.com>
 ---
- fs/exec.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ kernel/rseq.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 400731422..26c4efe1a 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -68,6 +68,7 @@
- #include <linux/user_events.h>
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index 9de6e35fe..c5809cd13 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -13,6 +13,7 @@
+ #include <linux/syscalls.h>
  #include <linux/rseq.h>
- #include <linux/ksm.h>
+ #include <linux/types.h>
 +#include <linux/task_work.h>
+ #include <asm/ptrace.h>
  
- #include <linux/uaccess.h>
- #include <asm/mmu_context.h>
-@@ -1290,6 +1291,7 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	 * Ensure all future errors are fatal.
- 	 */
- 	bprm->point_of_no_return = true;
-+	me->kill_on_efault = true;
+ #define CREATE_TRACE_POINTS
+@@ -320,6 +321,8 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
+ 	if (unlikely(t->flags & PF_EXITING))
+ 		return;
  
++	t->kill_on_efault = true;
++
  	/*
- 	 * Make this the only thread in the thread group.
-@@ -1896,6 +1898,7 @@ static int bprm_execve(struct linux_binprm *bprm)
- 	/* execve succeeded */
- 	current->fs->in_exec = 0;
- 	current->in_execve = 0;
-+	current->kill_on_efault = false;
- 	rseq_execve(current);
- 	user_events_execve(current);
- 	acct_update_integrals(current);
-@@ -1907,14 +1910,20 @@ static int bprm_execve(struct linux_binprm *bprm)
- 	 * If past the point of no return ensure the code never
- 	 * returns to the userspace process.  Use an existing fatal
- 	 * signal if present otherwise terminate the process with
--	 * SIGSEGV.
-+	 * SIGSEGV.  Run pending work before that in case it is
-+	 * terminating the process with a different signal.
- 	 */
--	if (bprm->point_of_no_return && !fatal_signal_pending(current))
--		force_fatal_sig(SIGSEGV);
-+	if (bprm->point_of_no_return) {
+ 	 * regs is NULL if and only if the caller is in a syscall path.  Skip
+ 	 * fixup and leave rseq_cs as is so that rseq_sycall() will detect and
+@@ -330,13 +333,18 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
+ 		if (unlikely(ret < 0))
+ 			goto error;
+ 	}
+-	if (unlikely(rseq_update_cpu_node_id(t)))
+-		goto error;
+-	return;
++	if (likely(!rseq_update_cpu_node_id(t)))
++		goto out;
+ 
+ error:
++	/* Allow task work to override signr */
++	task_work_run();
++
+ 	sig = ksig ? ksig->sig : 0;
+ 	force_sigsegv(sig);
++
++out:
++	t->kill_on_efault = false;
+ }
+ 
+ #ifdef CONFIG_DEBUG_RSEQ
+@@ -353,8 +361,17 @@ void rseq_syscall(struct pt_regs *regs)
+ 
+ 	if (!t->rseq)
+ 		return;
+-	if (rseq_get_rseq_cs(t, &rseq_cs) || in_rseq_cs(ip, &rseq_cs))
++
++	t->kill_on_efault = true;
++
++	if (rseq_get_rseq_cs(t, &rseq_cs) || in_rseq_cs(ip, &rseq_cs)) {
++		/* Allow task work to override signr */
 +		task_work_run();
 +
-+		if (!fatal_signal_pending(current))
-+			force_fatal_sig(SIGSEGV);
+ 		force_sig(SIGSEGV);
 +	}
- 
- 	sched_mm_cid_after_execve(current);
- 	current->fs->in_exec = 0;
- 	current->in_execve = 0;
-+	current->kill_on_efault = false;
- 
- 	return retval;
++
++	t->kill_on_efault = false;
  }
+ 
+ #endif
 -- 
 2.43.0
 
