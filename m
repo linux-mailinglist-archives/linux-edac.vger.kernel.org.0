@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-1570-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1571-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8C6293D690
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 18:07:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30A3293D693
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 18:07:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1EAEB20E42
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 16:07:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E026528303D
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 16:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05DC917C226;
-	Fri, 26 Jul 2024 16:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8AF17C7CC;
+	Fri, 26 Jul 2024 16:06:55 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CB91F95A;
-	Fri, 26 Jul 2024 16:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43264200AF;
+	Fri, 26 Jul 2024 16:06:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722010013; cv=none; b=Ebtk6yxLUkJveOhM9JBsL2K1sWr15T6TaJLeTAjelgavg0BPvhko9ag9fqc6hryi68yOSjqPjorDN1ZXNJhusAsB9SzeeljTG34mJ9BVYg7sazNo18aUyGmw76fpQ/ILni998IbQvWHEbn8yMkLa3F7IR8eM2K29MOSZFf9YfC8=
+	t=1722010015; cv=none; b=OcB+Y8nUloC8/jgREeW1ZYEIYuVpOYuc8g2pMizOsMhBmwfc2xhYqxo8hnIgNZulSggkCRLVUdMhZzOql+qT9R9CoYudO0W1Cd0PMHzSYoZO6kxx34aePaeznLAvKZhmd7B/z4r6/7bYTSAgOB3G57RlDMRrD9BN2WBBsNua3XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722010013; c=relaxed/simple;
-	bh=/4TtZdcdNNAZIZkaKwoXLx+rjD2uR8+2//NUjDOyf9Q=;
+	s=arc-20240116; t=1722010015; c=relaxed/simple;
+	bh=zIktT+4gBoEf4yrJXrbJ3v0O758dseFqbORCs2wLMjE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=haCmbojI/QCv5JCT/rVDEnnzjmum6nkbXhwq9PoykdnUUQ3vu3xDKt2K41tofsafUaAWg2DhSnbwlChOuhi+ROmwh2YPVXKYq1mk3fUbGMTyct65bOcp4Oc1JrFMn4jlnV7Tu4QlKleppFBR3DPI9UGDybp3d+efhIGQQLcTKbg=
+	 MIME-Version:Content-Type; b=hpHLJejVS+toR9SvhXt6apkWef7stdLIDDDuCDzrfitrWZE+qDHOf/r5iTjBySs8Gr1XJ3qfRUphmaQw+nic517xusMiva6Fpotj33xBShZrR+fK646rBDORoCX4FHA4F62LTiZw6N6wAtZ3exNxbMzBgaRA8xW06oKPVvJSZzE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WVsyD5mffz6K9L7;
-	Sat, 27 Jul 2024 00:04:20 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WVsyG6Ww8z6K9LQ;
+	Sat, 27 Jul 2024 00:04:22 +0800 (CST)
 Received: from lhrpeml500006.china.huawei.com (unknown [7.191.161.198])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7F042140A30;
-	Sat, 27 Jul 2024 00:06:48 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 992721404FC;
+	Sat, 27 Jul 2024 00:06:50 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.173.33) by
  lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 26 Jul 2024 17:06:47 +0100
+ 15.1.2507.39; Fri, 26 Jul 2024 17:06:49 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
@@ -58,9 +58,9 @@ CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
 	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
 	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
 	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v10 01/11] EDAC: Add generic EDAC RAS control feature driver
-Date: Fri, 26 Jul 2024 17:05:45 +0100
-Message-ID: <20240726160556.2079-2-shiju.jose@huawei.com>
+Subject: [PATCH v10 02/11] EDAC: Add EDAC scrub control driver
+Date: Fri, 26 Jul 2024 17:05:46 +0100
+Message-ID: <20240726160556.2079-3-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20240726160556.2079-1-shiju.jose@huawei.com>
 References: <20240726160556.2079-1-shiju.jose@huawei.com>
@@ -77,292 +77,520 @@ X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Add generic EDAC driver supports registering RAS features supported
-in the system. The driver exposes feature's control attributes to the
-userspace in /sys/bus/edac/devices/<dev-name>/<ras-feature>/
+Add generic EDAC scrub control driver supports configuring the memory scrubbers
+in the system. The device with scrub feature, get the scrub descriptor from the
+EDAC scrub and registers with the EDAC RAS feature driver, which adds the sysfs
+scrub control interface. The scrub control attributes are available to the
+userspace in /sys/bus/edac/devices/<dev-name>/scrub/.
+
+Generic EDAC scrub driver and the common sysfs scrub interface promotes
+unambiguous access from the userspace irrespective of the underlying scrub
+devices.
+
+The sysfs scrub attribute nodes would be present only if the client driver
+has implemented the corresponding attribute callback function and pass in ops
+to the EDAC RAS feature driver during registration.
 
 Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- drivers/edac/Makefile            |   1 +
- drivers/edac/edac_ras_feature.c  | 181 +++++++++++++++++++++++++++++++
- include/linux/edac_ras_feature.h |  66 +++++++++++
- 3 files changed, 248 insertions(+)
- create mode 100755 drivers/edac/edac_ras_feature.c
- create mode 100755 include/linux/edac_ras_feature.h
+ Documentation/ABI/testing/sysfs-edac-scrub |  76 +++++
+ drivers/edac/Makefile                      |   2 +-
+ drivers/edac/edac_ras_feature.c            |   1 +
+ drivers/edac/edac_scrub.c                  | 333 +++++++++++++++++++++
+ include/linux/edac_ras_feature.h           |  30 ++
+ 5 files changed, 441 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-edac-scrub
+ create mode 100755 drivers/edac/edac_scrub.c
 
+diff --git a/Documentation/ABI/testing/sysfs-edac-scrub b/Documentation/ABI/testing/sysfs-edac-scrub
+new file mode 100644
+index 000000000000..6b9531301c95
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-edac-scrub
+@@ -0,0 +1,76 @@
++What:		/sys/bus/edac/devices/<dev-name>/scrub
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		The sysfs edac bus devices /<dev-name>/scrub subdirectory
++		belongs to the memory scrub control feature, where <dev-name>
++		directory corresponds to a device/memory region registered
++		with the edac scrub driver and thus registered with the
++		generic edac ras driver too.
++		The sysfs scrub attr nodes would be present only if the
++		client driver has implemented the corresponding attr
++		callback function and pass in ops to the EDAC RAS feature
++		driver during registration.
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/addr_range_base
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RW) The base of the address range of the memory region
++		to be scrubbed (on-demand scrubbing).
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/addr_range_size
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RW) The size of the address range of the memory region
++		to be scrubbed (on-demand scrubbing).
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/enable_background
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RW) Start/Stop background(patrol) scrubbing if supported.
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/enable_on_demand
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RW) Start/Stop on-demand scrubbing the memory region
++		if supported.
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/name
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RO) name of the memory scrubber
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/min_cycle_duration
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RO) Supported minimum scrub cycle duration in seconds
++		by the memory scrubber.
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/max_cycle_duration
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RO) Supported maximum scrub cycle duration in seconds
++		by the memory scrubber.
++
++What:		/sys/bus/edac/devices/<dev-name>/scrub/current_cycle_duration
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RW) The current scrub cycle duration in seconds and must be
++		within the supported range by the memory scrubber.
 diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index 9c09893695b7..c532b57a6d8a 100644
+index c532b57a6d8a..de56cbd039eb 100644
 --- a/drivers/edac/Makefile
 +++ b/drivers/edac/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
+@@ -10,7 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
  
  edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
  edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
-+edac_core-y	+= edac_ras_feature.o
+-edac_core-y	+= edac_ras_feature.o
++edac_core-y	+= edac_ras_feature.o edac_scrub.o
  
  edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
  
 diff --git a/drivers/edac/edac_ras_feature.c b/drivers/edac/edac_ras_feature.c
-new file mode 100755
-index 000000000000..dca19fd511b5
---- /dev/null
+index dca19fd511b5..b65a4c0b8e3e 100755
+--- a/drivers/edac/edac_ras_feature.c
 +++ b/drivers/edac/edac_ras_feature.c
-@@ -0,0 +1,181 @@
+@@ -47,6 +47,7 @@ static int edac_ras_feat_scrub_init(struct device *parent,
+ {
+ 	sdata->ops = sfeat->scrub_ops;
+ 	sdata->private = sfeat->scrub_ctx;
++	attr_groups[0] = edac_scrub_get_desc();
+ 
+ 	return 1;
+ }
+diff --git a/drivers/edac/edac_scrub.c b/drivers/edac/edac_scrub.c
+new file mode 100755
+index 000000000000..fd67aa942ded
+--- /dev/null
++++ b/drivers/edac/edac_scrub.c
+@@ -0,0 +1,333 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * EDAC RAS control feature driver supports registering RAS
-+ * features with the EDAC and exposes the feature's control
-+ * attributes to the userspace in sysfs.
++ * Generic EDAC scrub driver supports controlling the memory
++ * scrubbers in the system and the common sysfs scrub interface
++ * promotes unambiguous access from the userspace.
 + *
 + * Copyright (c) 2024 HiSilicon Limited.
 + */
 +
-+#define pr_fmt(fmt)     "EDAC RAS FEAT: " fmt
++#define pr_fmt(fmt)     "EDAC SCRUB: " fmt
 +
 +#include <linux/edac_ras_feature.h>
 +
-+static void edac_ras_dev_release(struct device *dev)
++static ssize_t addr_range_base_show(struct device *ras_feat_dev,
++				    struct device_attribute *attr,
++				    char *buf)
 +{
-+	struct edac_ras_feat_ctx *ctx =
-+		container_of(dev, struct edac_ras_feat_ctx, dev);
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	u64 base, size;
++	int ret;
 +
-+	kfree(ctx->dev.groups);
-+	kfree(ctx);
-+}
-+
-+const struct device_type edac_ras_dev_type = {
-+	.name = "edac_ras_dev",
-+	.release = edac_ras_dev_release,
-+};
-+
-+static void edac_ras_dev_unreg(void *data)
-+{
-+	device_unregister(data);
-+}
-+
-+/**
-+ * edac_ras_feat_scrub_init - Init ras scrub feature
-+ * @parent: client device.
-+ * @sdata: pointer to struct edac_scrub_data.
-+ * @sfeat: pointer to struct edac_ras_feature for scrub.
-+ * @attr_groups: pointer to attribute group's container.
-+ *
-+ * Returns number of scrub feature's attribute groups on success,
-+ * error otherwise.
-+ */
-+static int edac_ras_feat_scrub_init(struct device *parent,
-+				    struct edac_scrub_data *sdata,
-+				    const struct edac_ras_feature *sfeat,
-+				    const struct attribute_group **attr_groups)
-+{
-+	sdata->ops = sfeat->scrub_ops;
-+	sdata->private = sfeat->scrub_ctx;
-+
-+	return 1;
-+}
-+
-+/**
-+ * edac_ras_feat_ecs_init - Init ras ecs feature
-+ * @parent: client device.
-+ * @edata: pointer to struct edac_ecs_data.
-+ * @efeat: pointer to struct edac_ras_feature for ecs.
-+ * @attr_groups: pointer to attribute group's container.
-+ *
-+ * Returns number of ecs feature's attribute groups on success,
-+ * error otherwise.
-+ */
-+static int edac_ras_feat_ecs_init(struct device *parent,
-+				  struct edac_ecs_data *edata,
-+				  const struct edac_ras_feature *efeat,
-+				  const struct attribute_group **attr_groups)
-+{
-+	int num = efeat->ecs_info.num_media_frus;
-+
-+	edata->ops = efeat->ecs_ops;
-+	edata->private = efeat->ecs_ctx;
-+
-+	return num;
-+}
-+
-+/**
-+ * edac_ras_dev_register - register device for ras features with edac
-+ * @parent: client device.
-+ * @name: client device's name.
-+ * @private: parent driver's data to store in the context if any.
-+ * @num_features: number of ras features to register.
-+ * @ras_features: list of ras features to register.
-+ *
-+ * Returns 0 on success, error otherwise.
-+ * The new edac_ras_feat_ctx would be freed automatically.
-+ */
-+int edac_ras_dev_register(struct device *parent, char *name,
-+			  void *private, int num_features,
-+			  const struct edac_ras_feature *ras_features)
-+{
-+	const struct attribute_group **ras_attr_groups;
-+	struct edac_ras_feat_ctx *ctx;
-+	int attr_gcnt = 0;
-+	int ret, feat;
-+
-+	if (!parent || !name || !num_features || !ras_features)
-+		return -EINVAL;
-+
-+	/* Double parse so we can make space for attributes */
-+	for (feat = 0; feat < num_features; feat++) {
-+		switch (ras_features[feat].feat) {
-+		case RAS_FEAT_SCRUB:
-+			attr_gcnt++;
-+			break;
-+		case RAS_FEAT_ECS:
-+			attr_gcnt += ras_features[feat].ecs_info.num_media_frus;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+	}
-+
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	ctx->dev.parent = parent;
-+	ctx->private = private;
-+
-+	ras_attr_groups = kcalloc(attr_gcnt + 1, sizeof(*ras_attr_groups), GFP_KERNEL);
-+	if (!ras_attr_groups) {
-+		ret = -ENOMEM;
-+		goto ctx_free;
-+	}
-+
-+	attr_gcnt = 0;
-+	for (feat = 0; feat < num_features; feat++, ras_features++) {
-+		switch (ras_features->feat) {
-+		case RAS_FEAT_SCRUB:
-+			if (!ras_features->scrub_ops)
-+				continue;
-+			ret = edac_ras_feat_scrub_init(parent, &ctx->scrub,
-+						       ras_features,
-+						       &ras_attr_groups[attr_gcnt]);
-+			if (ret < 0)
-+				goto groups_free;
-+
-+			attr_gcnt += ret;
-+			break;
-+		case RAS_FEAT_ECS:
-+			if (!ras_features->ecs_ops)
-+				continue;
-+			ret = edac_ras_feat_ecs_init(parent, &ctx->ecs,
-+						     ras_features,
-+						     &ras_attr_groups[attr_gcnt]);
-+			if (ret < 0)
-+				goto groups_free;
-+
-+			attr_gcnt += ret;
-+			break;
-+		default:
-+			ret = -EINVAL;
-+			goto groups_free;
-+		}
-+	}
-+	ras_attr_groups[attr_gcnt] = NULL;
-+	ctx->dev.bus = edac_get_sysfs_subsys();
-+	ctx->dev.type = &edac_ras_dev_type;
-+	ctx->dev.groups = ras_attr_groups;
-+	dev_set_drvdata(&ctx->dev, ctx);
-+	ret = dev_set_name(&ctx->dev, name);
++	ret = ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &base, &size);
 +	if (ret)
-+		goto groups_free;
-+
-+	ret = device_register(&ctx->dev);
-+	if (ret) {
-+		put_device(&ctx->dev);
-+		goto groups_free;
 +		return ret;
++
++	return sysfs_emit(buf, "0x%llx\n", base);
++}
++
++static ssize_t addr_range_size_show(struct device *ras_feat_dev,
++				    struct device_attribute *attr,
++				    char *buf)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	u64 base, size;
++	int ret;
++
++	ret = ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &base, &size);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "0x%llx\n", size);
++}
++
++static ssize_t addr_range_base_store(struct device *ras_feat_dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t len)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	u64 base, size;
++	int ret;
++
++	ret = ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &base, &size);
++	if (ret)
++		return ret;
++
++	ret = kstrtou64(buf, 0, &base);
++	if (ret < 0)
++		return ret;
++
++	ret = ops->write_range(ras_feat_dev->parent, ctx->scrub.private, base, size);
++	if (ret)
++		return ret;
++
++	return len;
++}
++
++static ssize_t addr_range_size_store(struct device *ras_feat_dev,
++				     struct device_attribute *attr,
++				     const char *buf,
++				     size_t len)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	u64 base, size;
++	int ret;
++
++	ret = ops->read_range(ras_feat_dev->parent, ctx->scrub.private, &base, &size);
++	if (ret)
++		return ret;
++
++	ret = kstrtou64(buf, 0, &size);
++	if (ret < 0)
++		return ret;
++
++	ret = ops->write_range(ras_feat_dev->parent, ctx->scrub.private, base, size);
++	if (ret)
++		return ret;
++
++	return len;
++}
++
++static ssize_t enable_background_store(struct device *ras_feat_dev,
++				       struct device_attribute *attr,
++				       const char *buf, size_t len)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	bool enable;
++	int ret;
++
++	ret = kstrtobool(buf, &enable);
++	if (ret < 0)
++		return ret;
++
++	ret = ops->set_enabled_bg(ras_feat_dev->parent, ctx->scrub.private, enable);
++	if (ret)
++		return ret;
++
++	return len;
++}
++
++static ssize_t enable_background_show(struct device *ras_feat_dev,
++				      struct device_attribute *attr, char *buf)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	bool enable;
++	int ret;
++
++	ret = ops->get_enabled_bg(ras_feat_dev->parent, ctx->scrub.private, &enable);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%d\n", enable);
++}
++
++static ssize_t enable_on_demand_show(struct device *ras_feat_dev,
++				     struct device_attribute *attr, char *buf)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	bool enable;
++	int ret;
++
++	ret = ops->get_enabled_od(ras_feat_dev->parent, ctx->scrub.private, &enable);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%d\n", enable);
++}
++
++static ssize_t enable_on_demand_store(struct device *ras_feat_dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t len)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	bool enable;
++	int ret;
++
++	ret = kstrtobool(buf, &enable);
++	if (ret < 0)
++		return ret;
++
++	ret = ops->set_enabled_od(ras_feat_dev->parent, ctx->scrub.private, enable);
++	if (ret)
++		return ret;
++
++	return len;
++}
++
++static ssize_t name_show(struct device *ras_feat_dev,
++			 struct device_attribute *attr, char *buf)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	int ret;
++
++	ret = ops->get_name(ras_feat_dev->parent, ctx->scrub.private, buf);
++	if (ret)
++		return ret;
++
++	return strlen(buf);
++}
++
++static ssize_t min_cycle_duration_show(struct device *ras_feat_dev,
++				       struct device_attribute *attr,
++				       char *buf)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	u32 val;
++	int ret;
++
++	ret = ops->min_cycle_read(ras_feat_dev->parent, ctx->scrub.private, &val);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%u\n", val);
++}
++
++static ssize_t max_cycle_duration_show(struct device *ras_feat_dev,
++				       struct device_attribute *attr,
++				       char *buf)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	u32 val;
++	int ret;
++
++	ret = ops->max_cycle_read(ras_feat_dev->parent, ctx->scrub.private, &val);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%u\n", val);
++}
++
++static ssize_t current_cycle_duration_show(struct device *ras_feat_dev,
++					   struct device_attribute *attr,
++					   char *buf)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	u32 val;
++	int ret;
++
++	ret = ops->cycle_duration_read(ras_feat_dev->parent, ctx->scrub.private, &val);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%u\n", val);
++}
++
++static ssize_t current_cycle_duration_store(struct device *ras_feat_dev,
++					    struct device_attribute *attr,
++					    const char *buf, size_t len)
++{
++	struct edac_ras_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_scrub_ops *ops = ctx->scrub.ops;
++	long val;
++	int ret;
++
++	ret = kstrtol(buf, 0, &val);
++	if (ret < 0)
++		return ret;
++
++	ret = ops->cycle_duration_write(ras_feat_dev->parent, ctx->scrub.private, val);
++	if (ret)
++		return ret;
++
++	return len;
++}
++
++static DEVICE_ATTR_RW(addr_range_base);
++static DEVICE_ATTR_RW(addr_range_size);
++static DEVICE_ATTR_RW(enable_background);
++static DEVICE_ATTR_RW(enable_on_demand);
++static DEVICE_ATTR_RO(name);
++static DEVICE_ATTR_RO(min_cycle_duration);
++static DEVICE_ATTR_RO(max_cycle_duration);
++static DEVICE_ATTR_RW(current_cycle_duration);
++
++static struct attribute *scrub_attrs[] = {
++	&dev_attr_addr_range_base.attr,
++	&dev_attr_addr_range_size.attr,
++	&dev_attr_enable_background.attr,
++	&dev_attr_enable_on_demand.attr,
++	&dev_attr_name.attr,
++	&dev_attr_min_cycle_duration.attr,
++	&dev_attr_max_cycle_duration.attr,
++	&dev_attr_current_cycle_duration.attr,
++	NULL
++};
++
++static umode_t scrub_attr_visible(struct kobject *kobj,
++				  struct attribute *a, int attr_id)
++{
++	struct device *ras_feat_dev = kobj_to_dev(kobj);
++	struct edac_ras_feat_ctx *ctx;
++	const struct edac_scrub_ops *ops;
++
++	ctx = dev_get_drvdata(ras_feat_dev);
++	if (!ctx)
++		return 0;
++
++	ops = ctx->scrub.ops;
++	if (a == &dev_attr_addr_range_base.attr ||
++	    a == &dev_attr_addr_range_size.attr) {
++		if (ops->read_range && ops->write_range)
++			return a->mode;
++		if (ops->read_range)
++			return 0444;
++		return 0;
++	}
++	if (a == &dev_attr_enable_background.attr) {
++		if (ops->set_enabled_bg && ops->get_enabled_bg)
++			return a->mode;
++		if (ops->get_enabled_bg)
++			return 0444;
++		return 0;
++	}
++	if (a == &dev_attr_enable_on_demand.attr) {
++		if (ops->set_enabled_od && ops->get_enabled_od)
++			return a->mode;
++		if (ops->get_enabled_od)
++			return 0444;
++		return 0;
++	}
++	if (a == &dev_attr_name.attr)
++		return ops->get_name ? a->mode : 0;
++	if (a == &dev_attr_min_cycle_duration.attr)
++		return ops->min_cycle_read ? a->mode : 0;
++	if (a == &dev_attr_max_cycle_duration.attr)
++		return ops->max_cycle_read ? a->mode : 0;
++	if (a == &dev_attr_current_cycle_duration.attr) {
++		if (ops->cycle_duration_read && ops->cycle_duration_write)
++			return a->mode;
++		if (ops->cycle_duration_read)
++			return 0444;
++		return 0;
 +	}
 +
-+	return devm_add_action_or_reset(parent, edac_ras_dev_unreg, &ctx->dev);
-+
-+groups_free:
-+	kfree(ras_attr_groups);
-+ctx_free:
-+	kfree(ctx);
-+	return ret;
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(edac_ras_dev_register);
-diff --git a/include/linux/edac_ras_feature.h b/include/linux/edac_ras_feature.h
-new file mode 100755
-index 000000000000..8f0e0c47a617
---- /dev/null
-+++ b/include/linux/edac_ras_feature.h
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * EDAC RAS control features.
++
++static const struct attribute_group scrub_attr_group = {
++	.name		= "scrub",
++	.attrs		= scrub_attrs,
++	.is_visible	= scrub_attr_visible,
++};
++
++/**
++ * edac_scrub_get_desc - get edac scrub's attr descriptor
 + *
-+ * Copyright (c) 2024 HiSilicon Limited.
++ * Returns attribute_group for the scrub feature.
 + */
-+
-+#ifndef __EDAC_RAS_FEAT_H
-+#define __EDAC_RAS_FEAT_H
-+
-+#include <linux/types.h>
-+#include <linux/edac.h>
-+
-+#define EDAC_RAS_NAME_LEN	128
-+
-+enum edac_ras_feat {
-+	RAS_FEAT_SCRUB,
-+	RAS_FEAT_ECS,
-+	RAS_FEAT_MAX
-+};
-+
-+struct edac_ecs_ex_info {
-+	u16 num_media_frus;
-+};
-+
-+/*
-+ * EDAC RAS feature information structure
++const struct attribute_group *edac_scrub_get_desc(void)
++{
++	return &scrub_attr_group;
++}
+diff --git a/include/linux/edac_ras_feature.h b/include/linux/edac_ras_feature.h
+index 8f0e0c47a617..89cb5a756ebe 100755
+--- a/include/linux/edac_ras_feature.h
++++ b/include/linux/edac_ras_feature.h
+@@ -19,6 +19,36 @@ enum edac_ras_feat {
+ 	RAS_FEAT_MAX
+ };
+ 
++/**
++ * struct scrub_ops - scrub device operations (all elements optional)
++ * @read_range: read base and offset of scrubbing range.
++ * @write_range: set the base and offset of the scrubbing range.
++ * @get_enabled_bg: check if currently performing background scrub.
++ * @set_enabled_bg: start or stop a bg-scrub.
++ * @get_enabled_od: check if currently performing on-demand scrub.
++ * @set_enabled_od: start or stop an on-demand scrub.
++ * @min_cycle_read: minimum supported scrub cycle duration in seconds.
++ * @max_cycle_read: maximum supported scrub cycle duration in seconds.
++ * @cycle_duration_read: get the scrub cycle duration in seconds.
++ * @cycle_duration_write: set the scrub cycle duration in seconds.
++ * @get_name: get the memory scrubber's name.
 + */
-+struct edac_scrub_data {
-+	const struct edac_scrub_ops *ops;
-+	void *private;
++struct edac_scrub_ops {
++	int (*read_range)(struct device *dev, void *drv_data, u64 *base, u64 *size);
++	int (*write_range)(struct device *dev, void *drv_data, u64 base, u64 size);
++	int (*get_enabled_bg)(struct device *dev, void *drv_data, bool *enable);
++	int (*set_enabled_bg)(struct device *dev, void *drv_data, bool enable);
++	int (*get_enabled_od)(struct device *dev, void *drv_data, bool *enable);
++	int (*set_enabled_od)(struct device *dev, void *drv_data, bool enable);
++	int (*min_cycle_read)(struct device *dev, void *drv_data,  u32 *min);
++	int (*max_cycle_read)(struct device *dev, void *drv_data,  u32 *max);
++	int (*cycle_duration_read)(struct device *dev, void *drv_data, u32 *cycle);
++	int (*cycle_duration_write)(struct device *dev, void *drv_data, u32 cycle);
++	int (*get_name)(struct device *dev, void *drv_data, char *buf);
 +};
 +
-+struct edac_ecs_data {
-+	const struct edac_ecs_ops *ops;
-+	void *private;
-+};
++const struct attribute_group *edac_scrub_get_desc(void);
 +
-+struct device;
-+
-+struct edac_ras_feat_ctx {
-+	struct device dev;
-+	void *private;
-+	struct edac_scrub_data scrub;
-+	struct edac_ecs_data ecs;
-+};
-+
-+struct edac_ras_feature {
-+	enum edac_ras_feat feat;
-+	union {
-+		const struct edac_scrub_ops *scrub_ops;
-+		const struct edac_ecs_ops *ecs_ops;
-+	};
-+	union {
-+		void *scrub_ctx;
-+		void *ecs_ctx;
-+	};
-+	union {
-+		struct edac_ecs_ex_info ecs_info;
-+	};
-+};
-+
-+int edac_ras_dev_register(struct device *parent, char *dev_name,
-+			  void *parent_pvt_data, int num_features,
-+			  const struct edac_ras_feature *ras_features);
-+#endif /* __EDAC_RAS_FEAT_H */
+ struct edac_ecs_ex_info {
+ 	u16 num_media_frus;
+ };
 -- 
 2.34.1
 
