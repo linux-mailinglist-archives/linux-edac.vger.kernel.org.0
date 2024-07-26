@@ -1,201 +1,251 @@
-Return-Path: <linux-edac+bounces-1567-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1568-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42BA193D35E
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 14:44:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29CB193D4B1
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 16:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E081C1F22BAB
-	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 12:44:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D8AE1C236AE
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Jul 2024 14:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463C117B4FC;
-	Fri, 26 Jul 2024 12:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C2717E9;
+	Fri, 26 Jul 2024 14:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="birg0LmC"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="DjVPC6t+"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2077.outbound.protection.outlook.com [40.107.93.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C6717B4F6
-	for <linux-edac@vger.kernel.org>; Fri, 26 Jul 2024 12:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721997772; cv=none; b=s2L9qvbL/u2geHkHsFSrwMyQ1ZZ1+Kq8iBMKR/I+oysvNd7ResdmZeb0awB0GGTaPINb2k2jWgk9UQGXeX0SlqnsmFKdbh7jOHgLBwSlc9n89j8tYddfJjN3kjtdxL+c+Szyw3q403UYTqf8qPpU/ptRK6jDc/S6xxR4UeceICI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721997772; c=relaxed/simple;
-	bh=3FpAOI0XwVJqDeWoToMPlQk7UbYeMwbA4/9XXjuJOeo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bEEhAtfEmYbbRoMo+WYhUTiFXwe4ynSaNTg4t3KrXGP0UhojUUVGfPSlHAd0BT1ohIxn/+fQG+EZQenrPnDiN3p1MqHglL24y6b9RBnLW+sBOcDR2upYCN87XZBybvR/YvrL9sUyE7osoTtfZFi20MXx7+U6puHiCKjpqzOHetk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=birg0LmC; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3EED640E0268;
-	Fri, 26 Jul 2024 12:42:47 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id SE279nqAYx7t; Fri, 26 Jul 2024 12:42:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1721997763; bh=qo4k6fHH32u0WfiwjvRGfPewtmWSz3wEffWL8pPI0us=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=birg0LmCJxFOxgIqkf/gNCwhJeeK/SGOcQEBD86dPB7j6opuehYYW3HwKzXgw8W5c
-	 YC0Sx8EOA/nHxuL8etoDoY8cumtGcmHbmIwbsImJT/AfngOCq4dFXvydlVOVOTncwY
-	 u+zHKT/2pXcmmETnaxy++RopD6CXnCoLwV/mZJUzdWavwUqSLxGvT4OR/KG/vnU3Z0
-	 pPMUvlLANXW4dQZZPqG4rwoYGW3JApDMQUCtfkD+VCYHnRkUpcidiKvcBLCG7YekE8
-	 Qw/R0mvWpybUs+YEtWlW/PPRAAqLsW8GAF/KVetxcqT1RPXY3x+dZNauNfCb/KB6/G
-	 XnXdAVqeAbSpjP6LHfMBY6Lu5uub8K6IQxjW5RnzyAxa8kMC1zTVwlQyAbJOONa0cd
-	 4W651JC5vbn9it7vGpS+NwP1FXu/w3gtUE9T0b4UY7Zw1ZZuu30hBHzIMpHYZVgo9O
-	 7foLgcB2gIB3D5v49bT5ybL0b/VLVvAFesYDw/Wk7U879hKbfxnjamE/AWn3p3ihlg
-	 cpZWHRyzNtxl4rceh8JUYAi7FJLwW9ZnYKtmWfg3g875glJt9a/WvQvbldi3idY0AS
-	 6XBYNCwTJTlUcTegXBrWAAUFYFOPnqCQk/KROHmFdsUMifOptD1mG7PNd5seKmpq4s
-	 7dRY6PgD0SUYeDrxXruMQtUM=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0C71D40E01B3;
-	Fri, 26 Jul 2024 12:42:37 +0000 (UTC)
-Date: Fri, 26 Jul 2024 14:42:32 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Andres Valloud <ten@smallinteger.com>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Tony Luck <tony.luck@intel.com>
-Cc: x86@kernel.org, linux-edac <linux-edac@vger.kernel.org>
-Subject: Re: Unrecognized MSR report
-Message-ID: <20240726124232.GBZqOZuM0yue1Oak-A@fat_crate.local>
-References: <f5fab0e1-a6f3-4e53-a605-0aaf6d26ee3e@smallinteger.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D0A812;
+	Fri, 26 Jul 2024 14:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722002446; cv=fail; b=BSA9GuGbm2p/uwpBzBSlFIF8a1bkkPMrnAhyZZQE+B9x05V9g4v2CIAeNHBjCYwkzXANIb+fK9Z5JD9eZMnc0IElOZEXSn2tqkqdti1zHMkWRD6Q7LvR1ykhDT73HfcVzctP0pAjZPq1xybizM7gNBtUjkqF3FCll5wW447Zvs0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722002446; c=relaxed/simple;
+	bh=vBfxJL/8Y7LtkhoSY3wZ+l/KeimagLDc1YeAkq2NQ2w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uyubCro5jd1WgSA5q4ZaXtUwYoRkmbfjQIgDwAZCg4NVHPhlRDqLO5JrwtC/e3EMNiYLNLbGuZ7czohuY/gi3jl2TnMTH2GrFpPqb56HB1bYqt/PLhm/mdh+xabdmAe/jlDNih3ep3giP0dGA3cmP195/TSJ7pqGFDO6AcUJf4Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=DjVPC6t+; arc=fail smtp.client-ip=40.107.93.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NT3oYHYuuRvPkHvrrUa7VAh/1vjij+6mHnH+il7XGZd8n7n49GT6QoNR6mv7yuie/GUfdOlsvrjRRLPJDnye1YMiyveRhmsqA0vzMnAPpH366er1Kz0hHYhTevdNIs3ZIps3CPX5CIg+7HwRJpXbh2birNIKG8xEriKx32HuZOVFfggTZIsBbiGXCu8qQOMh/vKUt1VDlfTggDUzCtR3GH+QnaBOfTSVQ9MA8q4Gm+PlsP3qCgGy83qJ7/037k5JUukWjuhI0k1O/55WS8myr/e8RlnP1xskPo1nlGe9AFrjNM+NPi5rRtm9qIGvqKHacD4dRol67/F3PBygx+E5GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a7qalojOFv2KIiSD56fx/NnxhMbo4+6A/fSLFIF7uk0=;
+ b=TqEgx/zyl8/lgXya8Mg8iRaD7kNW/Txdu12p+hP4vvFLgHJXu26KvOm/aLwNIzUeQZkyMqMHzojLRsvJRdDu6aywVClbzIGI+fvuesfnxfSXVSqdiG5gdN8+nnaOxEHAGumSkvmaCNP4NPd7J9mu8IIbCCn9nQ4n/eTzBu9VI9nhVSH/B/fpFj7msyurZhfjhsanRmSmDn7O9Lnm1K4F8xOvIm5bD2sbMRkHgEEEn28Ruf22YKXqMQKu0lDrIHp2Ttm5NC2EXG1ZwVii0M1sL0HdcBaBu7yOs7GrRqceRSgKae6aik/UBcuzkDCSXR9UCctB1yeFb+Ayvm0dzICuuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a7qalojOFv2KIiSD56fx/NnxhMbo4+6A/fSLFIF7uk0=;
+ b=DjVPC6t+GGI3Ioc7aW4/ZuKbjBejlB90AlQY0PC60GHt6AZvm+Emf+QezXu7odjjU81ROk9axK0D14UovRuB0PfDUHz49R6vpv3Hv2WhGmCYNLsAuxXCRkU5tIRVma2Blf4cMP8F1NzYBo7naFaMlSvVRT5UxTE0h+DUgmS/mko=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by MW5PR12MB5651.namprd12.prod.outlook.com (2603:10b6:303:19f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.29; Fri, 26 Jul
+ 2024 14:00:41 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::43a5:ed10:64c2:aba3]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::43a5:ed10:64c2:aba3%6]) with mapi id 15.20.7784.020; Fri, 26 Jul 2024
+ 14:00:38 +0000
+Date: Fri, 26 Jul 2024 10:00:30 -0400
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com
+Subject: Re: [PATCH 4/9] x86/mce: Move machine_check_poll() status checks to
+ helper functions
+Message-ID: <20240726140030.GA193170@yaz-khff2.amd.com>
+References: <20240523155641.2805411-1-yazen.ghannam@amd.com>
+ <20240523155641.2805411-5-yazen.ghannam@amd.com>
+ <20240603173727.GOZl3_V9eVbm0184Wi@fat_crate.local>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240603173727.GOZl3_V9eVbm0184Wi@fat_crate.local>
+X-ClientProxiedBy: BN9PR03CA0524.namprd03.prod.outlook.com
+ (2603:10b6:408:131::19) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f5fab0e1-a6f3-4e53-a605-0aaf6d26ee3e@smallinteger.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|MW5PR12MB5651:EE_
+X-MS-Office365-Filtering-Correlation-Id: b35ef19e-6c0f-40a7-b20d-08dcad7b53e0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8XDUM1oxaEagClL43aSEAVGX+YNm8D21tPMojppxOFlVfy6pl1ALXrMwXKMZ?=
+ =?us-ascii?Q?55hozk0yUCSHSlorVBePesIz3ka4ObeyRPaQ9vjR7dv6O29meOuLR7p2hOZJ?=
+ =?us-ascii?Q?JoiCuVKIIuwuouhVwR8czTpQN/BVeHOq5wljZUfWodS3QwpFfKdv1GVXz4GS?=
+ =?us-ascii?Q?2+pgIO+qUaab+8H9iHFIiZmLwvaXDFSrIGaJHedHLhEu26ta9+S6SCECnwRj?=
+ =?us-ascii?Q?j8LB+taykdWgPE36nylaAxH21tS1Wx8Oy5qHo0TJJW7cmzbP7BcROpG/NjNP?=
+ =?us-ascii?Q?wqG8I/uSqm1nlClmnUbR1vTbLX6fMQ8SdORxzRXCN/6RVjrnTzbJNxftUJvB?=
+ =?us-ascii?Q?q5Z9hoDqOO9NR+bwPtnY4kNJWndbiifH8UTeMDSGEKWvVSqDZzzhDv9e63mk?=
+ =?us-ascii?Q?LZazx8F6LHa2hKFxFibnKX+q7CXJQxcL16YihFjv95dgf2nTqTKTnjbDPFk1?=
+ =?us-ascii?Q?V+QoUWkSnN1YpFdKEfJBy+5MSoDbdcXD1WYeSfRA3IJS/oJKKWkMPbugEOiW?=
+ =?us-ascii?Q?2eKOir+OSS8ByHo9T/t08BbZxg/BndhARJ6NfaOwOCOUFeIgWuYY5m+5HJVY?=
+ =?us-ascii?Q?yTog8iO5OxY2jSwwSc7fk/Z5vqLz4yOS2iZKA8M7WJPr0iW58dePdzTrXY/K?=
+ =?us-ascii?Q?qwwQ/DS0mOIm6a5kpd9/BKTlflcw7XQh+8LDlvFwRS8DWnyywnEiXgaQPpcv?=
+ =?us-ascii?Q?C6ofhw4pZEoRf1CxItD3OsSVfPPQKwNrK/P08mm8rzgV4cbM/pfeqGTYW3L5?=
+ =?us-ascii?Q?Na6NrLznm5TtaG7Fc3VAh8+MLIe/PoUUaawWCarIEoOh7tEnn7htxGgOx/lw?=
+ =?us-ascii?Q?IQYmR8WKu6oGOqZb/8+bSrx2cLCi9d2HDPs8cvjhLsO7y2xToFsbWIj5TnxK?=
+ =?us-ascii?Q?Ta1srWEnBVuyHZga5IsjHfxJmfZ7l+ASxnZulOTLC37XOS0VzeVt3nDPUQu9?=
+ =?us-ascii?Q?oMuRqGLJoIeP1eLpIs/0uvpRY58oIiBvOfjgYtg4K0XtPtFgxRX0shnCDNP/?=
+ =?us-ascii?Q?Mxgcl35MlmTGwvL39d4a1dvZKeDjjI8vhWiZuBdMoPxqiGwIx09hJW/A41Tf?=
+ =?us-ascii?Q?Zv/q5UEDQ1d7JqdGwgl7+YH9jyLXs3J+ISdCKDtOYtUvKFlgBiTBy3xEOc5H?=
+ =?us-ascii?Q?fwKCRIogIX/4cL6nlCwgXbel6TeF32tX4LcC5uvqirK2xfpNC/v2HIxffKPO?=
+ =?us-ascii?Q?XqxvCQsmaEOK//y9ftpfO0W2D2RTTQR8TAIoTTehdFGLUL/cMgl9BEwggNvz?=
+ =?us-ascii?Q?VrwvTSBBNmsI6DIQGh5N1vwPvZn0Az/cY5Db09Tn8pJaASUXeZodprvjfKtq?=
+ =?us-ascii?Q?oe5M8I8kC+TOhLkl0uQWWttHiv8ATK3W1JSQW/bpK6QjUw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?7+iGVD3xwtGL8B8ixtGh1NWdSXYOcgdDIP/ch1OzbDqN7Hb+iEimCVMmfX2s?=
+ =?us-ascii?Q?C/Y0PvkTJVIU/SpWzQqvZ4OTrbYXuJCS5m5guzsSGqy17asAiH/hHAEqAo+9?=
+ =?us-ascii?Q?NiqIZQGWMIG+c6VKC40+tgRrkuLfE5UliiFKv4IQUzzZBqVFCimClahabuFX?=
+ =?us-ascii?Q?wOwuDqSdI804/PO3JfcuXNU8QthhUmipNV1URq8aNXOFTcw5blgFabdC/8ih?=
+ =?us-ascii?Q?fA3bvCIDNuGrEdUiHlByhl5CYLdWikQkc9517f2QOqNScFqRd0holvKAzlG/?=
+ =?us-ascii?Q?EXtFiILuCDa5RGy7E72MFbjlkyvFubmwRjpv2i52jriqsAhadbU3C1UkZcB2?=
+ =?us-ascii?Q?uAIJLLHv4mZDdVuNyNS24yjssSEMJbreFN8WHrvRyFLsxs7BD5/e9+aWrzGw?=
+ =?us-ascii?Q?OTWv2H5w8kN9SIwf/UR/izBnF3cTN0heakpifi60zoCsZtnfAngEHn5tK+DZ?=
+ =?us-ascii?Q?1zUjUdB0T3E227iX7uHTVEH0c4djnK2SVXpcLhToDlPi+DC3NjcFuTrXcBqc?=
+ =?us-ascii?Q?exzP6eHdakP9klh0HR18N71P9ip/SBiVObltwBCVRzdUsvOESMrLm+OxJjCR?=
+ =?us-ascii?Q?TxctUjAoAvcZNRhv9z/riZHg6JvqK0qmlDoLj2HU0fXGglmNGVOknFVd9a/H?=
+ =?us-ascii?Q?siwd7fPr2kPF3Yg01MYviyjSF2yQ4KRZE68VdFiu9JuJEwfo4Er0SqgFLkIj?=
+ =?us-ascii?Q?uz5v4FfF43el5NrP3LXIiMzeXfQzXoWBhEoGIQocqiC+5H/32v9EqyoQcEh0?=
+ =?us-ascii?Q?rAnhRHluSd7WJZJRV1R/rjjlDIDqlC8E3Wd/Psiql5R6Va1v3vKzx2orrD93?=
+ =?us-ascii?Q?Dx+KTdP6hcspY5j7Z3PLOgO+3qck+e6e7XxoW06d2SG7UuthhuCE4wZ9Hcbi?=
+ =?us-ascii?Q?hQAOQNTnJCA2I70KZTCJkUi9Rqv43tdbFg1PsVwBp+EKIn+nZ5hz4GFBzUi3?=
+ =?us-ascii?Q?NDDncMZrC4ACHTZpAHfgYLoo/1XW6/GxKwwAX2r8bgthBAn1f7i+tYQdc/9l?=
+ =?us-ascii?Q?p/i8ELea4Z+7ewB/oOOOmcJgI+qq9jCJEFWBhzzcoKcqsxASDJMuwS8VqLXl?=
+ =?us-ascii?Q?NPyR8KtGtbqVsAGXyVj/on2tFI+MH7AqDvQ4edSt9mDsjhGtUDJVNn1mRyat?=
+ =?us-ascii?Q?UBrGATeqcjkeuV//3R74uZ1DKN+0bs9+zNTOTQXMnG9EjaXm6wUiysx4HQGP?=
+ =?us-ascii?Q?Y0mxPAI3i6ncLLCk59Xoq7UCA7pi5FqnVKb6e8ZYylXqN5yJid9YUeqJW277?=
+ =?us-ascii?Q?5oUhalLzuGals1jUAkErDVfaGlfefr5v5bAm6B/FqJp55GcQqAUNbEVKgJBG?=
+ =?us-ascii?Q?LqFfsxHgRzP5q4vjyvVH6sHeRJV5ckyRWRSJt9TgS4o3E0Gzxyv/PCKZsHvr?=
+ =?us-ascii?Q?HSaVAeScICEAC98gjFdCbHB2fwIXOLskjk6QLppbXM3Y1S/eevUYNI7nSLZB?=
+ =?us-ascii?Q?vPYOlu9Z6rJvPRaE7Z7f1iSJuxd85mKrgVpGIcuc68IRusHIa9aClWH5RYNJ?=
+ =?us-ascii?Q?rdwJU56apryIkNZATfcE/zoRxysBo+VftZGJ1c9rEkrS7SWUieiO/NmZZG4b?=
+ =?us-ascii?Q?LuY4T7hCvs5f0s05BiB5nJtIFJtkfxlHtqJ2aE4C?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b35ef19e-6c0f-40a7-b20d-08dcad7b53e0
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2024 14:00:38.1511
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aprOvQu+FW5m2jcqzMdQ1QyK9tGzR8fC8HZYm/fAG/ZWacL9ti8CWWc1zLsXKUP9r3QBMdbyc1xKQHodhCnkew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5651
 
-+ Mauro, Tony, linux-edac
-
-On Thu, Jul 25, 2024 at 12:28:23AM -0700, Andres Valloud wrote:
-> Hello, after installing rasdaemon the logs complain thus.
+On Mon, Jun 03, 2024 at 07:37:27PM +0200, Borislav Petkov wrote:
+> On Thu, May 23, 2024 at 10:56:36AM -0500, Yazen Ghannam wrote:
+> > @@ -709,48 +747,9 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+> >  		if (!mca_cfg.cmci_disabled)
+> >  			mce_track_storm(&m);
+> >  
+> > -		/* If this entry is not valid, ignore it */
+> > -		if (!(m.status & MCI_STATUS_VAL))
+> > +		if (!log_poll_error(flags, &m))
+> >  			continue;
+> >  
+> > -		/*
+> > -		 * If we are logging everything (at CPU online) or this
+> > -		 * is a corrected error, then we must log it.
+> > -		 */
+> > -		if ((flags & MCP_UC) || !(m.status & MCI_STATUS_UC))
+> > -			goto log_it;
+> > -
+> > -		/*
+> > -		 * Newer Intel systems that support software error
+> > -		 * recovery need to make additional checks. Other
+> > -		 * CPUs should skip over uncorrected errors, but log
+> > -		 * everything else.
+> > -		 */
 > 
-> [604477.995036] msr: Write to unrecognized MSR 0x17f by rasdaemon (pid:
-> 24480).
+> You lost that comment.
 > 
-> The hardware in question is a supermicro server with 2x E5-2630v2.  A newer
-> server with 2x Xeon Gold 6128 is also running rasdaemon, but there is no
-> complaint about MSR 0x17f there.
+
+Sorry, will keep it.
+
+> > -		if (!mca_cfg.ser) {
+> > -			if (m.status & MCI_STATUS_UC)
+> > -				continue;
+> > -			goto log_it;
+> > -		}
+> > -
+> > -		/* Log "not enabled" (speculative) errors */
+> > -		if (!(m.status & MCI_STATUS_EN))
+> > -			goto log_it;
+> > -
+> > -		/*
+> > -		 * Log UCNA (SDM: 15.6.3 "UCR Error Classification")
+> > -		 * UC == 1 && PCC == 0 && S == 0
+> > -		 */
+> > -		if (!(m.status & MCI_STATUS_PCC) && !(m.status & MCI_STATUS_S))
+> > -			goto log_it;
+> > -
+> > -		/*
+> > -		 * Skip anything else. Presumption is that our read of this
+> > -		 * bank is racing with a machine check. Leave the log alone
+> > -		 * for do_machine_check() to deal with it.
+> > -		 */
+> > -		continue;
+> > -
+> > -log_it:
+> >  		if (flags & MCP_DONTLOG)
+> >  			goto clear_it;
 > 
-> Both systems are running Ubuntu 22.04 LTS, fully up to date, with kernel
-> version 6.5.0-44.
+> Btw, the code looks really weird now:
 > 
-> The text in the MSR document referenced from the logs only makes reference
-> to AMD cpus.  There is also the different behavior depending on the Intel
-> cpu model.  This circumstance does not appear to be covered by the document.
-> Reporting as requested...
+>                 if (!log_poll_error(flags, &m))
+>                         continue;
+> 
+>                 if (flags & MCP_DONTLOG)
+>                         goto clear_it;
+> 
+> i.e.,
+> 
+> 1. Should I log it?
+> 
+> 2. Should I not log it?
+> 
+> Oh well, it was like that before logically so...
+>
 
-Thanks, appreciated.
+We can rename the new function and add comments. What do you think of
+the change below?
 
----
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
-Date: Fri, 26 Jul 2024 14:39:53 +0200
-Subject: [PATCH] mce-intel: Do not enable optional MCE logging in rasdaemon
+Thanks,
+Yazen
 
-The kernel already does that, see kernel commit:
+@@ -797,9 +797,11 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+		if (!mca_cfg.cmci_disabled)
+			mce_track_storm(&m);
 
-  68299a42f842 ("x86/mce: Enable additional error logging on certain Intel CPUs")
+-               if (!log_poll_error(flags, &m, &status_reg))
++               /* Verify that the error should be logged based on hardware conditions. */
++               if (!loggable_poll_error(flags, &m, &status_reg))
+			continue;
 
-so rip out yet another case of poking into MSRs from userspace.
++               /* Clear a loggable error, e.g., one leftover from boot time. */
+		if (flags & MCP_DONTLOG)
+			goto clear_it;
 
-Reported-by: Andres Valloud <ten@smallinteger.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- mce-intel.c       | 26 --------------------------
- ras-mce-handler.c | 11 -----------
- ras-mce-handler.h |  3 ---
- 3 files changed, 40 deletions(-)
 
-diff --git a/mce-intel.c b/mce-intel.c
-index 0ff3072dfd0e..285c067aec93 100644
---- a/mce-intel.c
-+++ b/mce-intel.c
-@@ -461,29 +461,3 @@ static int domsr(int cpu, int msr, int bit)
- 	close(fd);
- 	return 0;
- }
--
--int set_intel_imc_log(enum cputype cputype, unsigned int ncpus)
--{
--	int cpu, msr, bit, rc;
--
--	switch (cputype) {
--	case CPU_SANDY_BRIDGE_EP:
--	case CPU_IVY_BRIDGE_EPEX:
--	case CPU_HASWELL_EPEX:
--	case CPU_KNIGHTS_LANDING:
--	case CPU_KNIGHTS_MILL:
--		msr = 0x17f;	/* MSR_ERROR_CONTROL */
--		bit = 0x2;	/* MemError Log Enable */
--		break;
--	default:
--		return 0;
--	}
--
--	for (cpu = 0; cpu < ncpus; cpu++) {
--		rc = domsr(cpu, msr, bit);
--		if (rc)
--			return rc;
--	}
--
--	return 0;
--}
-diff --git a/ras-mce-handler.c b/ras-mce-handler.c
-index ea58ac091267..0480f41b259b 100644
---- a/ras-mce-handler.c
-+++ b/ras-mce-handler.c
-@@ -249,17 +249,6 @@ int register_mce_handler(struct ras_events *ras, unsigned int ncpus)
- 		ras->mce_priv = NULL;
- 		return rc;
- 	}
--	switch (mce->cputype) {
--	case CPU_SANDY_BRIDGE_EP:
--	case CPU_IVY_BRIDGE_EPEX:
--	case CPU_HASWELL_EPEX:
--	case CPU_KNIGHTS_LANDING:
--	case CPU_KNIGHTS_MILL:
--		set_intel_imc_log(mce->cputype, ncpus);
--	default:
--		break;
--	}
--
- 	return rc;
- }
- 
-diff --git a/ras-mce-handler.h b/ras-mce-handler.h
-index 57984ecc4357..aa820d3458cc 100644
---- a/ras-mce-handler.h
-+++ b/ras-mce-handler.h
-@@ -109,9 +109,6 @@ int ras_mce_event_handler(struct trace_seq *s,
- 			  struct tep_record *record,
- 			  struct tep_event *event, void *context);
- 
--/* enables intel iMC logs */
--int set_intel_imc_log(enum cputype cputype, unsigned int ncpus);
--
- /* Undertake AMD SMCA Error Decoding */
- void decode_smca_error(struct mce_event *e, struct mce_priv *m);
- void amd_decode_errcode(struct mce_event *e);
--- 
-2.43.0
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
