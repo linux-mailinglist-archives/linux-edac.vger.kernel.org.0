@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-1585-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1586-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DEAD941554
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Jul 2024 17:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F601941558
+	for <lists+linux-edac@lfdr.de>; Tue, 30 Jul 2024 17:19:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05DB828332C
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Jul 2024 15:19:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 144BB283192
+	for <lists+linux-edac@lfdr.de>; Tue, 30 Jul 2024 15:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74D21A2C26;
-	Tue, 30 Jul 2024 15:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A971A38EF;
+	Tue, 30 Jul 2024 15:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="nCYNPeai"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uqaUhD8I"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2043.outbound.protection.outlook.com [40.107.220.43])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432BF29A2;
-	Tue, 30 Jul 2024 15:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4714E1A38DE;
+	Tue, 30 Jul 2024 15:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.81
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722352764; cv=fail; b=V/nQ8uOUFR3/TSwxtg9QTCkZd/WxPdJ7Ma9UiKfl+VVLE6j0yBlRAXFZrMAEu2PuL0TlQJ6KrK/jCxTocFEvtm1YCy4d+9BCPUcNP7fucLPaTxs5/AZ8s++LcZprNItrulql0rpZRSjXZgvwVq1bffXX0m2Ys3DxQ4U/MzbG1Ow=
+	t=1722352769; cv=fail; b=sX6xgXeYPRB6ACZ+UJ7Ny0RbTHn/ICQOkXIg8Bj0252+t+jmtqohTzFhtavwb7tE1CqZ29FOClSFtEg5QBXUv1a9rhOaAsn8zgLNFchWdb8/G3+LnO8oXv1pM/ZCQGYsYOki1yEKHQC1Ret8mGLiiIxhb2AY+HzoZDK+A1yFVqM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722352764; c=relaxed/simple;
-	bh=kBYEECle8dvM+nHiTRzdd6vrU1ZJOMeUYl90SJexNDw=;
+	s=arc-20240116; t=1722352769; c=relaxed/simple;
+	bh=cuJAGLWeRUc1HLYty2ljcRYRFrgc5EvSOhg+eWsgi6w=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fWSU69inlr1DtlTjppdHBE0aPhiNDZoaSQihNbqWkmfmfrrOIEefM36KSd96SE1FEbH5vLoI4/Pst4sVj0ufmrDO2W8H+KiVnd1f4n6gp3TPBVUcbhiVt1iKzH4rMu1PWrIzl6nXiEOVwKiIDdrpx6Gsmamu9vb/2G9VgJfh54k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=nCYNPeai; arc=fail smtp.client-ip=40.107.220.43
+	 MIME-Version:Content-Type; b=Bw2xKkykV42PeYY3PMBQ4OT35RSMyoAOeEMFNgiLE9AOQIeptdJBRSNUd/D5GtELo1Y7NrX7SN39huz+dFDdT71Z2dIoCHe3QFbkyynd4f3jqNGvmsK0ak8z2eiGIlDWHMdf3aoCwr9kEwR/EfaOqSyMyzaabcoCABmh8u4yyoc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uqaUhD8I; arc=fail smtp.client-ip=40.107.94.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=F17827Es+AEe5osPDFTNjDQjRGb5ONzqQkEqLuWFeD3zAFPbi7M/QeLT9V6jzC0faPf2+80mjsW5qVpJSd5wWSv2Hqw9SVlKxnMWHIsEkRD39zZZ3MFz2dj9Li45I9NocDQlcgIBJTf8umgNUbqbdglORDVNOLPUD3931YCW7ignjriYSXUgn+43/JmVTQf+cica9CsW/oT7X3Gqmzg59H26luqDscxpsiriECnyyQYlCllXWgcIvXw6f3VuxT/7b2j2xFiBo80+deC1zxwaPRjfZPTtt46q6iG33BlPxJhMg9PhCXmonV3gAney3ck9szyfDwaT5OkXKH45cJvTqA==
+ b=KeW2OIQKfOBzREC1ZmXBtzSn1yZpToz7cfpiCAoTjp7VYhm9iiMHcABh+FA1VG/DBdAmAG6t8fOx8uQJOw7fP20F26rsUUGoGVhAtSkU7dnQErNWRtp+wpD8EXS7r8mqTTIZN16LZ4aUkNAPFnEDYtycfXFGCflOnR3IRtCDTHXh0QLKeqvSPLIEIOgXi7AQHtDpjvSBdkFsPZnBdVoxmH93WumXgTBh0YbJb5yhpdDwGeuq8f4KCr+jD4BKiYa+wYlpn6WD/L3XPPQno7byPlii0RBIHxgrQGtwJbpTwl/hCUJcbhZFHRHvqrQ79cPbK4lQJ0N1RMiuR4/CxhvRgg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jwdFtOO+LQJ3njBiu07QWiS6zBg66JKrcDzCMiKNUJ4=;
- b=PAXG42qUK+baAlYQiQkQHEw9hbOf6xgeZ8HEceUnllDYxH/zdGQU635j6NxYsiA0SzOPIwi+mvp21pqJE7VhzPQs7mRwqbXlCHJ/VS35xZw//ELXFGjKSxPoKtmk4in/Ryhu9mpj+d//IHC5uOzyvxTltF7wNzkUF83VjXsGohpYnnaEpb6I0g4b9aiyB8Tkj0ydZH5aGFMTFBzI5OromztKeVNkm4xFlzovkLcNdnZM5z8ItbVZ68ON/CGh8ShXk9fo2/e6p7z7Rp8j15c/WNL1hZRKv18+BVYgNCiiTdxdIm1ciPvNELktxNHc2RPEorsTEH2YCcpkxlPNsbcDQw==
+ bh=1iDpznTtQWM7DYsYxMk3lL6BffX1299LsAyt5kKlh2Q=;
+ b=BeR/kO3bXjWoBcdupOcMVfcMciooI3rILdHsYTnVuYtdAGwZZIc8+8AGhOJiiWqYUHyFOusOt/zwmgHQ2gyrO3LJyg0La0eIyG8SIgwrUI1CABT4LDp7o9VXCZF/uo6GIJVkp1BkXmSdFSuQDhhaY5byfrh+TYfH+GBaQ7d61o4DL6zGeXs2dFZGgOOIZJLuNe6GcfeEaCWEv4GLvnZ33CxT91HW9J5TKgW9fM/YuMOvZ7MJle6lTUjjZ0eiZX3zyb5YFpovCmmrQMsa1HkUlm1CC4BLUVuc5BGLQ4fASPJiJGV1aRAv3hWS2QFzK+NHS4j08xe3QX+bPs411y47lw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jwdFtOO+LQJ3njBiu07QWiS6zBg66JKrcDzCMiKNUJ4=;
- b=nCYNPeaiE00Mdp3RvRCXd+dwv3BFNNVw35SmKTYVpIGTjTkW/B34t3/s1WL0eFuhVInUHXVVM6CTd4re0ZGbZ7mkM++dGf1wToRzzyestcRNBFcZVodFapC2fP1gvg+aRa+CiNERyNoGyFQEev3LRtX+GwiLmuXoHeu+Co7DYUM=
-Received: from BYAPR05CA0071.namprd05.prod.outlook.com (2603:10b6:a03:74::48)
- by PH8PR12MB7230.namprd12.prod.outlook.com (2603:10b6:510:226::17) with
+ bh=1iDpznTtQWM7DYsYxMk3lL6BffX1299LsAyt5kKlh2Q=;
+ b=uqaUhD8IHEBbsX9glbHIZ7P5tjrW07McX6U17MhZIc9kil7DR2DyOeRFdKhny9yYl7YiUn7xOVrgGvQ/sb/1+ffTeO+AFN1rc4+WijZ661Dk50llCMWgNrkc1LDxUHOyalv9pOZ0PpMYldZzh23NX0IGNaZo2+M2uTAQvCqxhEw=
+Received: from MW4PR03CA0021.namprd03.prod.outlook.com (2603:10b6:303:8f::26)
+ by DS0PR12MB7509.namprd12.prod.outlook.com (2603:10b6:8:137::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Tue, 30 Jul
- 2024 15:19:20 +0000
-Received: from SJ1PEPF00002312.namprd03.prod.outlook.com
- (2603:10b6:a03:74:cafe::b3) by BYAPR05CA0071.outlook.office365.com
- (2603:10b6:a03:74::48) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.19 via Frontend
- Transport; Tue, 30 Jul 2024 15:19:20 +0000
+ 2024 15:19:23 +0000
+Received: from SJ1PEPF00002310.namprd03.prod.outlook.com
+ (2603:10b6:303:8f:cafe::a7) by MW4PR03CA0021.outlook.office365.com
+ (2603:10b6:303:8f::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.34 via Frontend
+ Transport; Tue, 30 Jul 2024 15:19:23 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,22 +63,21 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ1PEPF00002312.mail.protection.outlook.com (10.167.242.166) with Microsoft
+ SJ1PEPF00002310.mail.protection.outlook.com (10.167.242.164) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7828.19 via Frontend Transport; Tue, 30 Jul 2024 15:19:20 +0000
+ 15.20.7828.19 via Frontend Transport; Tue, 30 Jul 2024 15:19:22 +0000
 Received: from jallen-jump-host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 30 Jul
- 2024 10:19:16 -0500
+ 2024 10:19:21 -0500
 From: John Allen <john.allen@amd.com>
 To: <rafael@kernel.org>, <lenb@kernel.org>, <bp@alien8.de>,
 	<yazen.ghannam@amd.com>
 CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, John Allen <john.allen@amd.com>, "Rafael J .
- Wysocki" <rafael.j.wysocki@intel.com>, Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v3 1/2] ACPI: PRM: Add PRM handler direct call support
-Date: Tue, 30 Jul 2024 15:17:30 +0000
-Message-ID: <20240730151731.15363-2-john.allen@amd.com>
+	<linux-edac@vger.kernel.org>, John Allen <john.allen@amd.com>
+Subject: [PATCH v3 2/2] RAS/AMD/ATL: Translate normalized to system physical addresses using PRM
+Date: Tue, 30 Jul 2024 15:17:31 +0000
+Message-ID: <20240730151731.15363-3-john.allen@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240730151731.15363-1-john.allen@amd.com>
 References: <20240730151731.15363-1-john.allen@amd.com>
@@ -88,128 +87,233 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002312:EE_|PH8PR12MB7230:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0ce034d-e3fe-41ec-74e0-08dcb0aafc74
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002310:EE_|DS0PR12MB7509:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee2254e7-9053-4d1c-d3d7-08dcb0aafde2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Ny3Aqe1f8md5B2g1JjuRdn5yjo2XjSzosiOJ5xiR2guFgvhWs799M3XAsX1n?=
- =?us-ascii?Q?Q8vskfJc78AHJjgeOWQE4tR4/f/6/BF8CKiQClX4h8QUwqt1QF6fZJhrEUU5?=
- =?us-ascii?Q?deHKEq8FyIQjDOsgYMeH1SEnRS7se/7aY/2XCUVVwVV94+2xYhxl65akmsB5?=
- =?us-ascii?Q?rDMaO6fLbFOko1zQDzlMzUImzKhuiYR4hgnfL2EdxGrhxLURQ3woC7S7wkgS?=
- =?us-ascii?Q?ssMAuiZizIsFICgPyjQx76k8QqXV1V97KflZItUMcUx4Ic4PimRMouAx4DGv?=
- =?us-ascii?Q?bsCqFdhuZplDrSr0Maw1pmW4widHRCKDCRIIXpn1Y5WYbfOeZCoSndoxF2Uc?=
- =?us-ascii?Q?61lzpN2RgT1jA0pXTWsfCgl/PzujMGoFLLIjuNm1c6jzU/+h6n9TarxDgy8Y?=
- =?us-ascii?Q?gnRBfeB5WtVzphHkcHk5h9vkrWLzLRIozXP53VO84eC/zkkMMj4rXJGxjZWS?=
- =?us-ascii?Q?BvALKkbSw1I7XGaV1hdafr7ZMbURco4DYLMpuoBRcIhcPBFVtIGkqX4HxAvN?=
- =?us-ascii?Q?r0W6B24K20DZbqIsyoOSujonLfCCc5Q8vMcdxZwvXx56T9IDCX4p+ZqFt8rO?=
- =?us-ascii?Q?FYk5rANRJquE448qBJiMmbCsPCJ72JQzGXdub56q4XJ8+jjhH5VhgvSMbzKG?=
- =?us-ascii?Q?kxW5doYJygMn7pRajsSOSmLTdKCBhGlTuIq/LETyI6HOK6YZMLMKab08cbm8?=
- =?us-ascii?Q?L14VnDgs3bqvpGfnQU9j4zVppzfoi2nl0j+nCLkdPsCU6wscehxZsjYThJCi?=
- =?us-ascii?Q?u9BVm6UxND7zCCaFQ8nnU+600CXFRv6X2JhGafbWwuknP+Vq3Xvs+nL7UUbW?=
- =?us-ascii?Q?X2DQEGuDfUSfNo7bXjL4EpX+wT8PyCitW40wHmGhbR/EeXK8IdA1GWYZ8XC5?=
- =?us-ascii?Q?fuxiOaJKHT+kTGC2ojlrRTEHoQHMd+5CR1xOu25QYUEFu3MeQmH2BXh1gr2m?=
- =?us-ascii?Q?Y2u1iSipH/nFiv9f4BhvGtoEe0pIwMQ7hZ7wgTLtpBiJy2hj5K+KA84uGQce?=
- =?us-ascii?Q?bspnQtRnoj7V2IjZWE7SLY3XSrna5NBOZqPl5sgy6gOqsN06+w4mukYxGjrV?=
- =?us-ascii?Q?q4LT+sghU7TBNlehfb0yFelBolLpi2tsxcqJiy1whDOZ44vSorpTHFhmJ2m/?=
- =?us-ascii?Q?5L6wKdvt/HOhM9YzX4LEhzm37NqT3zjBJ2YYKjzoaX5muANnVg6gH5E6sanH?=
- =?us-ascii?Q?OpczT+qiKitvkkptsgb0v9h2fcu8QRt+Ct/iELjWiY2bZZhS3AOkFmBxowZY?=
- =?us-ascii?Q?gVOiP8aDQJHkrp7xJilfDFIi4a89IIy3ZZHacEbHjv7XQBLE6JSqz4uQn4Bd?=
- =?us-ascii?Q?+fBcw1afQXQMZfTqjnVeA56Jx1Pb8bDTU4z55kQh11PYJz6v2uz4u+bOdnZa?=
- =?us-ascii?Q?jK70m4EJYfxYq1ioUREUx+Yuj6O3geNK+lSsYNlhzYMgo8MnfKio1nHWm/ZQ?=
- =?us-ascii?Q?31M9m3GhHxn+LQWnITvd5Fc6a+jQfkp3?=
+	=?utf-8?B?Qmd2cmZKUUF2SFdkY3hveUM2NDZ4OElRREhzUVlkVDhvMlNBYUJKNFZmMG1z?=
+ =?utf-8?B?NEVwUCtmajJBTklyQVMyamV2Z3FkNkpObGY2UGZqKzFESmdYREd6bWdJZHpx?=
+ =?utf-8?B?YVNFZ2IyNnFhdGI4UkUvYTlZUXo0dk1pY1hzOCtCN3FXbW5ta3hJV1VuRXp1?=
+ =?utf-8?B?S2JsMkhlZkwxRDNNNXVuMzlsUVovV1VsM2svbnVxTHhxUEwxNDdyYkdueHl0?=
+ =?utf-8?B?c3g3MTJKclQvNDlpd3IvbGc2NGxVaW5BcjRqNHY1UkliUktqancvUlVBa1ZN?=
+ =?utf-8?B?aGJNNDVpVUF1K1BJU3VFVFF6MnBRZisrWnZscnFzMFNpbjlTVFBaSUNNL0wv?=
+ =?utf-8?B?N1N3TEhSMGxBWXArUTRnT2N3SElZam4rRlM2d3NVV3htelVTRzVrZ2VmaCtK?=
+ =?utf-8?B?Mktpb1VZa1E1eDVzdmZOZEZUNFRhSXU4TGRXb2cwdGgxeTd6aGRlWmdMbUMv?=
+ =?utf-8?B?ZzNhUHhNd2RoQ1poWDRGTWg5Vkc3MEQzWTllSEE5MTVGTkpBRUlKTlBBeGZn?=
+ =?utf-8?B?QjN6TmMrRktSOHo1Z0labXpFT1N4Y1NWZm5OVHd4RWZEM091ZTVmaDFFNFJW?=
+ =?utf-8?B?OFhjNXNWOHhlSnFNa0pqQ0FQT0pSbGhic0VQOFRWUFBVYk9XZUdGeU5aRFJT?=
+ =?utf-8?B?dFBHTTg0WjFYcGJ6MmE1ajdwWHkzbzF2d256WXlMRWt3eTNZcHFEUVNkbWFQ?=
+ =?utf-8?B?VytZY2U5cHhKYWl6Q29oSW9mSEs2enppcDd6NGRxcHFxTFlkWFpPY3ptdkt2?=
+ =?utf-8?B?dkEreDcyaGczNFNITE9OSXM2MFhkVmpwNTBaQ3d5Ulh3WVgxeEE2UEwxRi9q?=
+ =?utf-8?B?Z0x0N3BqdTYrL3JjZ0JFdEtCV1NsVFltc1E5MmhuY1VvNzhWcHVVYVJLa1d5?=
+ =?utf-8?B?ZmVUajVKQmJuQVNnTHJpbXlmY09zR1l5TEhZNHo2SVE3R3ZBOVJjSkFWQTV6?=
+ =?utf-8?B?ZlJTUTFXZC9vU1MzNkU1ZmNJZENDUG50UXJMTE52TEU4N2JPWS85V3MzbzNx?=
+ =?utf-8?B?MVY4T2pBV3VtTEFIQmt3bVVnY0hjMGNnZTMxS0huTXZSZzFZZjNZZWRnMm0r?=
+ =?utf-8?B?UjRVV2lrUDE3R29zK21oYXZ6UlNxR21YeFc2SkhhQzY1YkRIVlpZV2lFTEZH?=
+ =?utf-8?B?VGQwTVprVFJ0cGNKRnU3bDdnOWhtVGxMUElWaW5GQ3Q0MzBIaFdRRTNTa1FV?=
+ =?utf-8?B?TGVrUm5WZzZhUFVWZVJ3bkxlRGxueG1JRGhhekpVU1h5M1JlSzBYdGZ2NFNr?=
+ =?utf-8?B?dDZ5NWE1L3c0L0Exb25UdGtPVllrYVhzcVc3UkFlQlFLdk4xcTg0S3dMR1Nv?=
+ =?utf-8?B?SXNkNHlMRU9SZ3dZUUdWN0Y5SExreDZLaHdtNmhUeFZ2STE3VGVxUVhFV0NO?=
+ =?utf-8?B?S2ppbXNtS1VzMmlIc2NGc2RVTFNFcENPaGEweEJoTlFtdHBibnh4R3FKVXVK?=
+ =?utf-8?B?a1kwUDQ4cmF2aDRwd2J0OXdnalNzZ3hVU1JUQ0ZXby9JV0NqNFVSWXhYYWJn?=
+ =?utf-8?B?OHMreFJqbmtCRSsvMmxwektLS2drZm5tM0JUNTRqU0thOVNIV1BFQWFtdWZ3?=
+ =?utf-8?B?QTlMazRNdThHMlVHMmIrUGVtZkJkYjZhQXQ3dENydC93TzVjeXN3aGZscW9U?=
+ =?utf-8?B?d0t1azZHK3hEaXZ0ZnNGNkJhZmU1UzZmSDhjWHJEUExnUm9uWU1ZZEpLVEI1?=
+ =?utf-8?B?SnRaSldIWTMzdHZwdHpIMlBTcjByRVI1WmxqS1FINThDNE5XNlhxN1FtN25h?=
+ =?utf-8?B?QUJIZ0NnL1IvY1FCTERDRnhIM0xJakxENlZRbmRVRFVBK1RwVUs1ZCtCcXFN?=
+ =?utf-8?B?d295Vkp1b1A0TWxLV2JHOWFGYzVFNVdKSHFEOEtnQ2cvbmxTeGtxRlF0cGZy?=
+ =?utf-8?B?d01DWFkvMzg2bEtXYktoT1VwV1JRVDVZd3RIUmg1U0tra20vaDhhTzV6eGRN?=
+ =?utf-8?Q?B2gydtVWH8LRzx856T98z6C8WCks3fzg?=
 X-Forefront-Antispam-Report:
 	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 15:19:20.4780
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 15:19:22.8635
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0ce034d-e3fe-41ec-74e0-08dcb0aafc74
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee2254e7-9053-4d1c-d3d7-08dcb0aafde2
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002312.namprd03.prod.outlook.com
+	SJ1PEPF00002310.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7230
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7509
 
-Platform Runtime Mechanism (PRM) handlers can be invoked from either the
-AML interpreter or directly by an OS driver. Implement the direct call
-method.
+Future AMD platforms will provide a UEFI PRM module that implements a
+number of address translation PRM handlers. This will provide an
+interface for the OS to call platform specific code without requiring
+the use of SMM or other heavy firmware operations.
 
-Export the symbol as this will be used by modules such as the AMD
-Address Translation Library and likely others in the future.
+AMD Zen-based systems report memory error addresses through Machine
+Check banks representing Unified Memory Controllers (UMCs) in the form
+of UMC relative "normalized" addresses. A normalized address must be
+converted to a system physical address to be usable by the OS.
+
+Add support for the normalized to system physical address translation
+PRM handler in the AMD Address Translation Library and prefer it over
+native code if available. The GUID and parameter buffer structure are
+specific to the normalized to system physical address handler provided
+by the address translation PRM module included in future AMD systems.
+
+The address translation PRM module is documented in chapter 22 of the
+publicly available "AMD Family 1Ah Models 00h–0Fh and Models 10h–1Fh
+ACPI v6.5 Porting Guide".
 
 Signed-off-by: John Allen <john.allen@amd.com>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 ---
 v2:
-  - Align statements setting fields in context buffer on '='
----
- drivers/acpi/prmt.c  | 24 ++++++++++++++++++++++++
- include/linux/prmt.h |  5 +++++
- 2 files changed, 29 insertions(+)
+  - Make norm_to_sys_prm_handler_guid static.
+  - Change pr_info statements to more appropriate pr_debug and
+    pr_info_once statements
 
-diff --git a/drivers/acpi/prmt.c b/drivers/acpi/prmt.c
-index c78453c74ef5..1cfaa5957ac4 100644
---- a/drivers/acpi/prmt.c
-+++ b/drivers/acpi/prmt.c
-@@ -214,6 +214,30 @@ static struct prm_handler_info *find_prm_handler(const guid_t *guid)
- #define UPDATE_LOCK_ALREADY_HELD 	4
- #define UPDATE_UNLOCK_WITHOUT_LOCK 	5
+v3:
+  - Add new AMD_ATL_PRM config instead of #if defined(CONFIG_APCI_PRMT)
+    in prm.c
+  - Shorten variable names
+  - Update file header to include reference to the ACPI Porting Guide
+---
+ drivers/ras/amd/atl/Kconfig    |  4 +++
+ drivers/ras/amd/atl/Makefile   |  2 ++
+ drivers/ras/amd/atl/internal.h | 10 ++++++
+ drivers/ras/amd/atl/prm.c      | 57 ++++++++++++++++++++++++++++++++++
+ drivers/ras/amd/atl/umc.c      |  5 +++
+ 5 files changed, 78 insertions(+)
+ create mode 100644 drivers/ras/amd/atl/prm.c
+
+diff --git a/drivers/ras/amd/atl/Kconfig b/drivers/ras/amd/atl/Kconfig
+index df49c23e7f62..551680073e43 100644
+--- a/drivers/ras/amd/atl/Kconfig
++++ b/drivers/ras/amd/atl/Kconfig
+@@ -19,3 +19,7 @@ config AMD_ATL
  
-+int acpi_call_prm_handler(guid_t handler_guid, void *param_buffer)
+ 	  Enable this option if using DRAM ECC on Zen-based systems
+ 	  and OS-based error handling.
++
++config AMD_ATL_PRM
++	depends on AMD_ATL && ACPI_PRMT
++	def_bool y
+diff --git a/drivers/ras/amd/atl/Makefile b/drivers/ras/amd/atl/Makefile
+index 4acd5f05bd9c..b56892c0c0d9 100644
+--- a/drivers/ras/amd/atl/Makefile
++++ b/drivers/ras/amd/atl/Makefile
+@@ -15,4 +15,6 @@ amd_atl-y		+= map.o
+ amd_atl-y		+= system.o
+ amd_atl-y		+= umc.o
+ 
++amd_atl-$(CONFIG_AMD_ATL_PRM) += prm.o
++
+ obj-$(CONFIG_AMD_ATL)	+= amd_atl.o
+diff --git a/drivers/ras/amd/atl/internal.h b/drivers/ras/amd/atl/internal.h
+index 9de5d53d0568..143d04c779a8 100644
+--- a/drivers/ras/amd/atl/internal.h
++++ b/drivers/ras/amd/atl/internal.h
+@@ -282,6 +282,16 @@ unsigned long convert_umc_mca_addr_to_sys_addr(struct atl_err *err);
+ u64 add_base_and_hole(struct addr_ctx *ctx, u64 addr);
+ u64 remove_base_and_hole(struct addr_ctx *ctx, u64 addr);
+ 
++#ifdef CONFIG_AMD_ATL_PRM
++unsigned long prm_umc_norm_to_sys_addr(u8 socket_id, u64 umc_bank_inst_id, unsigned long addr);
++#else
++static inline unsigned long prm_umc_norm_to_sys_addr(u8 socket_id, u64 umc_bank_inst_id,
++						     unsigned long addr)
 +{
-+	struct prm_handler_info *handler = find_prm_handler(&handler_guid);
-+	struct prm_module_info *module = find_prm_module(&handler_guid);
-+	struct prm_context_buffer context;
-+	efi_status_t status;
-+
-+	if (!module || !handler)
-+		return -ENODEV;
-+
-+	memset(&context, 0, sizeof(context));
-+	ACPI_COPY_NAMESEG(context.signature, "PRMC");
-+	context.identifier         = handler->guid;
-+	context.static_data_buffer = handler->static_data_buffer_addr;
-+	context.mmio_ranges        = module->mmio_info;
-+
-+	status = efi_call_acpi_prm_handler(handler->handler_addr,
-+					   (u64)param_buffer,
-+					   &context);
-+
-+	return efi_status_to_err(status);
++       return -ENODEV;
 +}
-+EXPORT_SYMBOL_GPL(acpi_call_prm_handler);
++#endif
 +
  /*
-  * This is the PlatformRtMechanism opregion space handler.
-  * @function: indicates the read/write. In fact as the PlatformRtMechanism
-diff --git a/include/linux/prmt.h b/include/linux/prmt.h
-index 24da8364b919..9c094294403f 100644
---- a/include/linux/prmt.h
-+++ b/include/linux/prmt.h
-@@ -2,6 +2,11 @@
- 
- #ifdef CONFIG_ACPI_PRMT
- void init_prmt(void);
-+int acpi_call_prm_handler(guid_t handler_guid, void *param_buffer);
- #else
- static inline void init_prmt(void) { }
-+static inline int acpi_call_prm_handler(guid_t handler_guid, void *param_buffer)
+  * Make a gap in @data that is @num_bits long starting at @bit_num.
+  * e.g. data		= 11111111'b
+diff --git a/drivers/ras/amd/atl/prm.c b/drivers/ras/amd/atl/prm.c
+new file mode 100644
+index 000000000000..0931a20d213b
+--- /dev/null
++++ b/drivers/ras/amd/atl/prm.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * AMD Address Translation Library
++ *
++ * prm.c : Plumbing code for ACPI Platform Runtime Mechanism (PRM)
++ *
++ * Information on AMD PRM modules and handlers including the GUIDs and buffer
++ * structures used here are defined in the AMD ACPI Porting Guide in the
++ * chapter "Platform Runtime Mechanism Table (PRMT)"
++ *
++ * Copyright (c) 2024, Advanced Micro Devices, Inc.
++ * All Rights Reserved.
++ *
++ * Author: John Allen <john.allen@amd.com>
++ */
++
++#include "internal.h"
++
++#include <linux/prmt.h>
++
++/*
++ * PRM parameter buffer - normalized to system physical address, as described
++ * in the "PRM Parameter Buffer" section of the AMD ACPI Porting Guide.
++ */
++struct norm_to_sys_param_buf {
++	u64 norm_addr;
++	u8 socket;
++	u64 bank_id;
++	void *out_buf;
++} __packed;
++
++static const guid_t norm_to_sys_guid = GUID_INIT(0xE7180659, 0xA65D, 0x451D,
++						 0x92, 0xCD, 0x2B, 0x56, 0xF1,
++						 0x2B, 0xEB, 0xA6);
++
++unsigned long prm_umc_norm_to_sys_addr(u8 socket_id, u64 bank_id, unsigned long addr)
 +{
-+	return -EOPNOTSUPP;
++	struct norm_to_sys_param_buf p_buf;
++	unsigned long ret_addr;
++	int ret;
++
++	p_buf.norm_addr = addr;
++	p_buf.socket    = socket_id;
++	p_buf.bank_id   = bank_id;
++	p_buf.out_buf   = &ret_addr;
++
++	ret = acpi_call_prm_handler(norm_to_sys_guid, &p_buf);
++	if (!ret)
++		return ret_addr;
++
++	if (ret == -ENODEV)
++		pr_debug("PRM module/handler not available\n");
++	else
++		pr_notice_once("PRM address translation failed\n");
++
++	return ret;
 +}
- #endif
+diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+index a1b4accf7b96..dc8aa12f63c8 100644
+--- a/drivers/ras/amd/atl/umc.c
++++ b/drivers/ras/amd/atl/umc.c
+@@ -401,9 +401,14 @@ unsigned long convert_umc_mca_addr_to_sys_addr(struct atl_err *err)
+ 	u8 coh_st_inst_id = get_coh_st_inst_id(err);
+ 	unsigned long addr = get_addr(err->addr);
+ 	u8 die_id = get_die_id(err);
++	unsigned long ret_addr;
+ 
+ 	pr_debug("socket_id=0x%x die_id=0x%x coh_st_inst_id=0x%x addr=0x%016lx",
+ 		 socket_id, die_id, coh_st_inst_id, addr);
+ 
++	ret_addr = prm_umc_norm_to_sys_addr(socket_id, err->ipid, addr);
++	if (!IS_ERR_VALUE(ret_addr))
++		return ret_addr;
++
+ 	return norm_to_sys_addr(socket_id, die_id, coh_st_inst_id, addr);
+ }
 -- 
 2.34.1
 
