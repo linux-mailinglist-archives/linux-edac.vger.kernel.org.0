@@ -1,123 +1,203 @@
-Return-Path: <linux-edac+bounces-1601-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1602-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F18E2942FA5
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Jul 2024 15:03:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11D9F943BD1
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Aug 2024 02:31:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A15E1F2ECD0
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Jul 2024 13:03:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB31D1F21C74
+	for <lists+linux-edac@lfdr.de>; Thu,  1 Aug 2024 00:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B29291AED40;
-	Wed, 31 Jul 2024 13:02:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5FC19FA68;
+	Thu,  1 Aug 2024 00:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RHfq1sSf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bd2E0qR8"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86B21AD9C3
-	for <linux-edac@vger.kernel.org>; Wed, 31 Jul 2024 13:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DB819F471;
+	Thu,  1 Aug 2024 00:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722430946; cv=none; b=IszsIkR1hIEw20z/0OYAf7v94zqR2C9VadfJNr+0mpqZ1Jw9ZINCZMqzFtATOT87q8y1RTX3UN3Tq/CLIbmAdX3bcEI4qtbXukZtl5nLGm8n1rDB/zme9HZpxmpkmHW3rF58wwGVxNbE4bj3F8E8LBEDd5Qviy0B9L6mA+6d8ZA=
+	t=1722471317; cv=none; b=HAXzgNcINOLXqeMXq+kgjs1hg7WKSYM2Nrd4HpDvrYc/tq2LK9ZjZbwng3kubvulrNnqVH1598/Z7QGQbqErF1QlfLOtfEihmic1puM4UkpvLVq4PWYgZQcesdR8LCF7feYanYh582/zD31cqwJhKK7CB/7hprsfaZ8rO6FaCP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722430946; c=relaxed/simple;
-	bh=Oc/Jyw/3l7deURsx6ObtrQRzh4lRxYVwTUMPci4xYCo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UI3EpKFpvwNyUNrhVSV5SQEyI/mnJVRowxNeYvhzPlwFYWFXKKRcjdEW/Oq/QHQH/6yafqoeUQ2Yc5/I780VP0qaTIvJUk9Md1ZgzsKphBJOhxm4yzBpzER/57C5htj9xEysiKhWMHDak+JkxTgzRDg5TvwQdcJtNgyvOgywRJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RHfq1sSf; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a7aabb71bb2so783027766b.2
-        for <linux-edac@vger.kernel.org>; Wed, 31 Jul 2024 06:02:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1722430943; x=1723035743; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F4BG3zNMbEJddgXJUjT4WgeflBAopL+8wuEX/aqqwoo=;
-        b=RHfq1sSfn5gzOiu/LAufCcf2eUf9jPYGgwLQxpKbVS+MleAC+zAoGmciFO7yitdtuS
-         8SiH0rs4qsnYBS5wrZHrKivlb1zYgceeniEpcs4IBOum7XAmwvhanOGYCUV7lWYLqzLn
-         CzRAt8jcNOSm9NUn8uc8f3m9TUNY6b4oR+nQ3gC0QpRPSzBUuDJyQw3ekxA9ZLbuzJfm
-         NLmtVB2zeOIVH34cgRbRQJ86jyZJ50BmkYD728MeCO8+TQ/BeqWiD0VT7KGtggNawkX4
-         Czrr5pkrU2tde9ih9naGZ09Mr6m41svjiIPYwglCvb3ezlQoL11VWyhXdnzRsDXLrY85
-         bOUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722430943; x=1723035743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4BG3zNMbEJddgXJUjT4WgeflBAopL+8wuEX/aqqwoo=;
-        b=gM1smGvimhxOoxTNufzlRkiUajLerv5zd5wLkiKiWw1pXUk7mXdzLLBU1rntGS9rbW
-         4GmTfMUHlPhMRzpZHwE8MRBHOfC+l1hR8IbvX3qneinY6de2dBdauWLAz/4VgJyybTc+
-         tYrPYazgLn1iAYI5J+e+8GCWro911lMwPnJJOJU3SptJf0l4JQT8WYNsJzRPyJr3qAzH
-         ryg7Bzosq6bGmH/icyTd8MxeVM0WjCt4R2/dLNhHx8ajmACG+SB7WdW8M1oFDJb4NvDI
-         oKr3kDPHvjseManiLLQ1NrprbdrailJTK1rR2W2RuOIl/+0wJcb/0WqOc+lQApxh2zKf
-         wSLg==
-X-Forwarded-Encrypted: i=1; AJvYcCWWmvZ8aObihBMbZJzklC5ztWQTVi/Y0Ew39VsrRv574ArFUZZvjfujmQ9ONseKg7RMKQeFTwyFq86VscfTW2PBxBeXhsB5CiAjdw==
-X-Gm-Message-State: AOJu0Yw4QSNSK/0iOD9qx4dT2yOGb9nDMTyTh47FWBv9s88DVdd+pHvM
-	zAB9z6Ie4gXnvwB3RxvPPjEaZaEYVxdiPcD4f9d1L0mvnCHrW8TvyN8zORaSRgI=
-X-Google-Smtp-Source: AGHT+IF0fgoz2Gx9ngVoTxdE7ITgBxCT7yFBbjFXW4blK/j6htLAn+5mcOYFNvkvjg/C1yVczMqIZA==
-X-Received: by 2002:a17:907:3f1e:b0:a7a:bb54:c852 with SMTP id a640c23a62f3a-a7d401863e0mr1018612766b.61.1722430942870;
-        Wed, 31 Jul 2024 06:02:22 -0700 (PDT)
-Received: from [192.168.0.20] (nborisov.ddns.nbis.net. [109.121.143.186])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab236eesm763733666b.22.2024.07.31.06.02.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jul 2024 06:02:22 -0700 (PDT)
-Message-ID: <5f3b4573-daa3-47b4-a7d5-b3e05fc5b79e@suse.com>
-Date: Wed, 31 Jul 2024 16:02:20 +0300
+	s=arc-20240116; t=1722471317; c=relaxed/simple;
+	bh=I2mBLo//YVf/w2hfDAytxjq/qRNRENSTSM4Ox32e6F4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dNI9pPykfb43dHF0gaq7Z0j6IpK9Uvoi4ucLPA+KokyZ6TToYy28/qkaaLkDIJ2vN5vedHMdDDAZKYau4INrVDuJwHq5LQYkvbRX8hyo2bwo4e8UPi2cR59LWVA4I6UfbII4H59AZ69g4wAwQ2/yAWeydPf+ZfUMq8blh0LcCik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bd2E0qR8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09293C4AF14;
+	Thu,  1 Aug 2024 00:15:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722471316;
+	bh=I2mBLo//YVf/w2hfDAytxjq/qRNRENSTSM4Ox32e6F4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Bd2E0qR8TsOLO1RHlQthUtE6CqrEiDgRWPwq36am//A1d5Xvq4OI/5wt86LBIm5v3
+	 LUbdDMsTYG+WaTYJnR222wH4xIjfC76BrvB/gJb2mBJHQejr5ZpTaS9rQkAdwOFme/
+	 r8N9utKjsHKPAB/aswtRx/yxCy5vB1zUQlZDdtbjWgV5YRKrE4dI8gBsNw3tN/fsXx
+	 kQlm+J6iI14cES54fCMAQGexh4v6IxB9DuIlIUuTbxr5WeaHiirFNmofYqR9+9WPQo
+	 NSvSg2rcniIVir6c0d22py6qSyLOJyvn3xhIaqpvyc+86CDmYzMkHFnD+BuS0/Rj6H
+	 Fmbm37dBLtlsA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-edac@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.10 070/121] EDAC/amd64: Check return value of amd_smn_read()
+Date: Wed, 31 Jul 2024 20:00:08 -0400
+Message-ID: <20240801000834.3930818-70-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240801000834.3930818-1-sashal@kernel.org>
+References: <20240801000834.3930818-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/3] Rework mce_setup()
-To: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
- avadhut.naik@amd.com, john.allen@amd.com
-References: <20240730182958.4117158-1-yazen.ghannam@amd.com>
-Content-Language: en-US
-From: Nikolay Borisov <nik.borisov@suse.com>
-In-Reply-To: <20240730182958.4117158-1-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.2
 Content-Transfer-Encoding: 8bit
 
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
+[ Upstream commit 5ac6293047cf5de6daca662347c19347e856c2a5 ]
 
-On 30.07.24 г. 21:29 ч., Yazen Ghannam wrote:
-> Hi all,
-> 
-> This revision drops the topology export idea from v2. It seemed to add
-> more complexity than just doing a local search.
-> 
-> Thanks,
-> Yazen
-> 
-> Link:
-> https://lkml.kernel.org/r/20240624212008.663832-1-yazen.ghannam@amd.com
-> 
-> Yazen Ghannam (3):
->    x86/mce: Rename mce_setup() to mce_prep_record()
->    x86/mce: Define mce_prep_record() helpers for common and per-CPU
->      fields
->    x86/mce: Use mce_prep_record() helpers for
->      apei_smca_report_x86_error()
-> 
->   arch/x86/include/asm/mce.h         |  2 +-
->   arch/x86/kernel/cpu/mce/amd.c      |  2 +-
->   arch/x86/kernel/cpu/mce/apei.c     | 18 +++++++-------
->   arch/x86/kernel/cpu/mce/core.c     | 38 ++++++++++++++++++++----------
->   arch/x86/kernel/cpu/mce/internal.h |  2 ++
->   5 files changed, 38 insertions(+), 24 deletions(-)
-> 
-> 
-> base-commit: 1cd27e88888d54de5fefbeb0b44c26194ffa83ce
+Check the return value of amd_smn_read() before saving a value. This
+ensures invalid values aren't saved. The struct umc instance is
+initialized to 0 during memory allocation. Therefore, a bad read will
+keep the value as 0 providing the expected Read-as-Zero behavior.
 
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Link: https://lore.kernel.org/r/20240606-fix-smn-bad-read-v4-2-ffde21931c3f@amd.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/edac/amd64_edac.c | 51 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 37 insertions(+), 14 deletions(-)
 
-Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index a17f3c0cdfa60..4300c4e7683c8 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -1454,6 +1454,7 @@ static void umc_read_base_mask(struct amd64_pvt *pvt)
+ 	u32 *base, *base_sec;
+ 	u32 *mask, *mask_sec;
+ 	int cs, umc;
++	u32 tmp;
+ 
+ 	for_each_umc(umc) {
+ 		umc_base_reg = get_umc_base(umc) + UMCCH_BASE_ADDR;
+@@ -1466,13 +1467,17 @@ static void umc_read_base_mask(struct amd64_pvt *pvt)
+ 			base_reg = umc_base_reg + (cs * 4);
+ 			base_reg_sec = umc_base_reg_sec + (cs * 4);
+ 
+-			if (!amd_smn_read(pvt->mc_node_id, base_reg, base))
++			if (!amd_smn_read(pvt->mc_node_id, base_reg, &tmp)) {
++				*base = tmp;
+ 				edac_dbg(0, "  DCSB%d[%d]=0x%08x reg: 0x%x\n",
+ 					 umc, cs, *base, base_reg);
++			}
+ 
+-			if (!amd_smn_read(pvt->mc_node_id, base_reg_sec, base_sec))
++			if (!amd_smn_read(pvt->mc_node_id, base_reg_sec, &tmp)) {
++				*base_sec = tmp;
+ 				edac_dbg(0, "    DCSB_SEC%d[%d]=0x%08x reg: 0x%x\n",
+ 					 umc, cs, *base_sec, base_reg_sec);
++			}
+ 		}
+ 
+ 		umc_mask_reg = get_umc_base(umc) + UMCCH_ADDR_MASK;
+@@ -1485,13 +1490,17 @@ static void umc_read_base_mask(struct amd64_pvt *pvt)
+ 			mask_reg = umc_mask_reg + (cs * 4);
+ 			mask_reg_sec = umc_mask_reg_sec + (cs * 4);
+ 
+-			if (!amd_smn_read(pvt->mc_node_id, mask_reg, mask))
++			if (!amd_smn_read(pvt->mc_node_id, mask_reg, &tmp)) {
++				*mask = tmp;
+ 				edac_dbg(0, "  DCSM%d[%d]=0x%08x reg: 0x%x\n",
+ 					 umc, cs, *mask, mask_reg);
++			}
+ 
+-			if (!amd_smn_read(pvt->mc_node_id, mask_reg_sec, mask_sec))
++			if (!amd_smn_read(pvt->mc_node_id, mask_reg_sec, &tmp)) {
++				*mask_sec = tmp;
+ 				edac_dbg(0, "    DCSM_SEC%d[%d]=0x%08x reg: 0x%x\n",
+ 					 umc, cs, *mask_sec, mask_reg_sec);
++			}
+ 		}
+ 	}
+ }
+@@ -2910,7 +2919,7 @@ static void umc_read_mc_regs(struct amd64_pvt *pvt)
+ {
+ 	u8 nid = pvt->mc_node_id;
+ 	struct amd64_umc *umc;
+-	u32 i, umc_base;
++	u32 i, tmp, umc_base;
+ 
+ 	/* Read registers from each UMC */
+ 	for_each_umc(i) {
+@@ -2918,11 +2927,20 @@ static void umc_read_mc_regs(struct amd64_pvt *pvt)
+ 		umc_base = get_umc_base(i);
+ 		umc = &pvt->umc[i];
+ 
+-		amd_smn_read(nid, umc_base + get_umc_reg(pvt, UMCCH_DIMM_CFG), &umc->dimm_cfg);
+-		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
+-		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
+-		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
+-		amd_smn_read(nid, umc_base + UMCCH_UMC_CAP_HI, &umc->umc_cap_hi);
++		if (!amd_smn_read(nid, umc_base + get_umc_reg(pvt, UMCCH_DIMM_CFG), &tmp))
++			umc->dimm_cfg = tmp;
++
++		if (!amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &tmp))
++			umc->umc_cfg = tmp;
++
++		if (!amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &tmp))
++			umc->sdp_ctrl = tmp;
++
++		if (!amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &tmp))
++			umc->ecc_ctrl = tmp;
++
++		if (!amd_smn_read(nid, umc_base + UMCCH_UMC_CAP_HI, &tmp))
++			umc->umc_cap_hi = tmp;
+ 	}
+ }
+ 
+@@ -3651,16 +3669,21 @@ static void gpu_read_mc_regs(struct amd64_pvt *pvt)
+ {
+ 	u8 nid = pvt->mc_node_id;
+ 	struct amd64_umc *umc;
+-	u32 i, umc_base;
++	u32 i, tmp, umc_base;
+ 
+ 	/* Read registers from each UMC */
+ 	for_each_umc(i) {
+ 		umc_base = gpu_get_umc_base(pvt, i, 0);
+ 		umc = &pvt->umc[i];
+ 
+-		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
+-		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
+-		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
++		if (!amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &tmp))
++			umc->umc_cfg = tmp;
++
++		if (!amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &tmp))
++			umc->sdp_ctrl = tmp;
++
++		if (!amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &tmp))
++			umc->ecc_ctrl = tmp;
+ 	}
+ }
+ 
+-- 
+2.43.0
+
 
