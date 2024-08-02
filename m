@@ -1,78 +1,78 @@
-Return-Path: <linux-edac+bounces-1610-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1611-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C2E09457DD
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2024 08:01:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 360D29457F3
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2024 08:11:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC8EF1F22C8A
-	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2024 06:01:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 234C7B2314D
+	for <lists+linux-edac@lfdr.de>; Fri,  2 Aug 2024 06:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9111C2BD;
-	Fri,  2 Aug 2024 06:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F316A3A1B6;
+	Fri,  2 Aug 2024 06:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="V3o20lmk"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="y9tQ78ct"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2066.outbound.protection.outlook.com [40.107.101.66])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2043.outbound.protection.outlook.com [40.107.236.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BD62C9D;
-	Fri,  2 Aug 2024 06:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4C41757D;
+	Fri,  2 Aug 2024 06:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722578480; cv=fail; b=rx7sLYRBPm1yL9bpKOIFrjDr6Qp/BwBbDI+p/bzBkJ6L/YtRxYrTnafQ3HOTC+tZk+MfZ5kkGy/SYDXtsCWoJT/bENGji9X59U2FxJpd8ewQr6qQ4YNI5C045CtOsmwMEz6eBZhjGvVxBsce/7xOLsrrFdWct/yxfF7WDH9iYYQ=
+	t=1722579085; cv=fail; b=WkPN95AmNjgyD3YN8tW7Zvq3S4Su+BwBZ87mYKVSpRxXrF+YJCwSl2gwQgiOl3sWA5is9P7kgK0CUzT+ahGFCPPPKsaCXY0YIFQ06Kzygcm4hrh40BMFwix4rAhDXW6lgjK2mp7t7hG/PhEUJLx/CqKCqQbBwB0I3DrlnOhDo/Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722578480; c=relaxed/simple;
-	bh=q1tWSPR5Jad5GwGmmXy4hVIOrWs6weTdKoUK6nf2oa0=;
+	s=arc-20240116; t=1722579085; c=relaxed/simple;
+	bh=H+p1hDDMrFWR3jydPh+Rkx5rGnR4JAZ5OEfqmaTSLSk=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=GfoBLl2L13l0jcm0mOkN43hJ/R9Q/Z/BEx5Rbn9PVmgFkTjkDaiOJoS6bzCFL4KYj4yF3Q6I+uinypZpxS4VEot9JhrBlzJLudYEJ1rX/rqodSm4xcNq4s7CF8vMk0mHYcx/gBUBY8k2u/Rf366VtLhRDVVLqjk+cIV5TgaB0sw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=V3o20lmk; arc=fail smtp.client-ip=40.107.101.66
+	 Content-Type:MIME-Version; b=Z/lnC0i96lfrS+eStO9wkzmfcj8TxDNfm6+5xaoRZV0B1FhT7OrVO854bBp4x/OLkWWVtl7fWpYJAleTb1gvaGj47qHkUuOHR8Zlc6ZrLri4Ta7XS01nZZ8FLTRyCggAIV6XpK1wllVpx1DZXuBESbGEB9Q+Ihxvsp441VxWFRs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=y9tQ78ct; arc=fail smtp.client-ip=40.107.236.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T5C0Zli31atKcOq1bAJ4StmJAiQgl91r1zY9mmyNVhKb+dDdSaItb0RxfKaxpMV17cBs/ib1ixU7uRJUYXSXCkkjREWyafc/DzOLbB7i+qnK5VqCEIQ3q8QM5uvMaHgW4un7C6pc205RAtOBxd8Mrv1C1rWRXgBnezGih+g1txGCMGp+Jn2rYcHC5Bcrhn0dcXfVxstykUvtak33ikDWzwqTitWvHFxJwdJYcFmXc/1F5nRlfUbeKFM2BesOrcUMOqM5buQiOKS230Zq9mrh47o46a892LCsGPCRqZ5v/KMuGPjyPscFUFKaehYuewEw5fZkfAMALatQJd99Qo/g1g==
+ b=O34vYGucaGhIM+GJiM6xqBXC1tzDi7PcoaImOiTfagu4M3uiKoJGtQdUO2VoFUiABirwFPYRYVYXOPS3CE+qTa2zXNx7403CDzlMFGoLd5w+fvwsoubEqjj8g1kEWKPeCtBiJMC8+sno4S+pwT5jVhpO3KEPr5a81GBSJpOdDqvJAhfY5534TcXPvfsU41RG7NFEYCIyhssxT093rlZwmB8z7KKXVeaZTSZUTtIe7CewRiDpQD1O8lFl0sHF6zCGLPgJs+O5DlQ9+61fXY6hArWc9Ledaj0mgMy5N7Hh/HakD5UKqP0k9kdguXkeoQIjGeF90Bx9I62SD0hNk8hQAw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jjs6HIFLyOb5poJ5d/6oXI9gHxGKHlhZICzW6z5EPes=;
- b=o80KY58fI92j4zffe+wBxJfnZ2cZZyalTPxY2q6OdY3tUYCkZ9CDEFGdmSP1LYihYRz5ZQBmFh4H+UShc9VurwvOOasrgqMJc5DdspOxVrILTA8EHgLPqxIkXDEQWB72U0e6yNS1gB9Xo5UTR7AEyybn1uWJx8ka5uOuXCd/cwAl0cPPwlN1/gFZKANnyfvQ9al0gLyKWqRox5bs0LP9jb+9wlGVl5LOq91H9z5pXNo5ZSFa1zcbbdp6t0CPaDXwXkOdgcQwdsJ5vHTv85Z65P+ON8WxJa7W5fz7SkRaHDwI2z2Igj6J4bGlEZRDtkBo5sYE+39DF4o+ur6sH0j5IQ==
+ bh=5BRh3GWXRKqz1mfjrLhoai7/0IkkDo/aT55X8ipdwTs=;
+ b=nyTBKMLe+EkS2h1ylA/eZqHgkVqxtsiaNfHRDThXSymxjZcUPVQ7D6rkBDkfXgEi089L49b7XDupt+G1WrCJXzXHeQTCQ2+MMdsvN9DVYNmdjTVPBOgq2mn4S3BhM3DPWN7DzSy4ExIyA/2Q5H6v/EmUqZpiOygQHoruTaaMIkXA//yLwN5JXsvC1CR0EXp8BSUK2XtAcbksw2h85VYapcOf2qMv5qnAA4nGiEvNZ1iiiSgjIX8+vs+i6Ag8/eLJa5FS2VSXcPvNjrVsio7REEEoQrVWg4jQTmnyLfMSwVobajgomu+lwXopNWxePBiwSVTbprZNL+qIw2LIOLfH9w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jjs6HIFLyOb5poJ5d/6oXI9gHxGKHlhZICzW6z5EPes=;
- b=V3o20lmkZ+cUBT2Y86JDJ8hiOk9b1mZYVpS6U0RoIq9Ms2I1gO1EZ/Kg/2OQ0t2YSC0+8dyURpxw/N2JD8Vy3szuDuOujdqvoc3EKZo/W6G8gL7hieGYa5CXfq/Q6UKyTEfH8JVaqPIBIbYL+l8R07chrX8UScHjKoCtPuo/W78=
+ bh=5BRh3GWXRKqz1mfjrLhoai7/0IkkDo/aT55X8ipdwTs=;
+ b=y9tQ78ctmuyI7iLAXUm+2zJyYeGAMTb/IKpAmd00GN+GSftORdrdtgUkPKvEztbMSH1tmU5/f2gwEhsDmHlYfBZoEO0UTNHk8d8NsCk79idOcSHiveBw1n5EBCZKwsoRHXrnArXKJYGnt+FPSvhaoV6RayXzdPSbqCAAT/XwFjk=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
- by SN7PR12MB7276.namprd12.prod.outlook.com (2603:10b6:806:2af::8) with
+ by BL3PR12MB6644.namprd12.prod.outlook.com (2603:10b6:208:3b1::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Fri, 2 Aug
- 2024 06:01:15 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.22; Fri, 2 Aug
+ 2024 06:11:21 +0000
 Received: from CH0PR12MB5388.namprd12.prod.outlook.com
  ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
  ([fe80::a363:f18a:cdd1:9607%5]) with mapi id 15.20.7828.024; Fri, 2 Aug 2024
- 06:01:15 +0000
-Message-ID: <7021a08b-ba75-4d16-a71f-b38e48df5af3@amd.com>
-Date: Fri, 2 Aug 2024 01:01:07 -0500
+ 06:11:21 +0000
+Message-ID: <322fd9eb-8793-402a-ba6a-617591561254@amd.com>
+Date: Fri, 2 Aug 2024 01:11:18 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] EDAC/altera: Fix possible null pointer dereference
+Subject: Re: [PATCH v3 RESEND] EDAC/ti: Fix possible null pointer dereference
+ in _emif_get_id()
 Content-Language: en-US
-To: Ma Ke <make24@iscas.ac.cn>, dinguyen@kernel.org, bp@alien8.de,
- tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
- rric@kernel.org, niravkumar.l.rabara@intel.com
+To: Ma Ke <make24@iscas.ac.cn>, kristo@kernel.org, bp@alien8.de,
+ tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org, rric@kernel.org
 Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
  stable@vger.kernel.org
-References: <20240802033849.1560017-1-make24@iscas.ac.cn>
+References: <20240802044134.1569313-1-make24@iscas.ac.cn>
 From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <20240802033849.1560017-1-make24@iscas.ac.cn>
+In-Reply-To: <20240802044134.1569313-1-make24@iscas.ac.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0156.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:3c3::19) To CH0PR12MB5388.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA0PR11CA0166.namprd11.prod.outlook.com
+ (2603:10b6:806:1bb::21) To CH0PR12MB5388.namprd12.prod.outlook.com
  (2603:10b6:610:d7::15)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -81,141 +81,149 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|SN7PR12MB7276:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7209e06a-ae8c-4a33-f836-08dcb2b8822f
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|BL3PR12MB6644:EE_
+X-MS-Office365-Filtering-Correlation-Id: d4574662-dcc2-4de1-6537-08dcb2b9ee14
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eXNkQ1hVZ0dPMnI0bWs4dC9YWDB2VW5vUFR5VlFHYWk0TnJ2S3JLdFQwZ3hu?=
- =?utf-8?B?UEtidzhmYW1zL2o3MUljdzRhWXVBWnpJTGZXcm9rMWxBWGV3R0V0ZEtTTTFE?=
- =?utf-8?B?ZVhCTC9DRm1TRURVS043YXlJNVAzVCtKTnZWalR5aVZiVXBKM2ZwVzd5Smw1?=
- =?utf-8?B?cmo3VUpRTHJZeHlQR0M5QmlDdEpsdTA0Q3hTK3ZkUW9ONzROUm54WGVQOWFE?=
- =?utf-8?B?WXQybG8wRUt2L1dQSzBabnF1R29tYWJWbnh5eGxlOEtEa2QyQlJrT0xkTTFQ?=
- =?utf-8?B?VVBwbzNpSFFSdGxUNDNIY3lSMFRUeDNoMXRkTDRsM3NLOEVaVzRWaUZBQTIw?=
- =?utf-8?B?M0lrbWp4OHpnNmhhcWhKdzByNWw5VWZFd3JTNWsyQUxzditMM0t5U2NIM1Bw?=
- =?utf-8?B?Z1BUeno4TXhBYlRlcExwdS80M254Q1FuUVdXZmZRMndtMDhPMzBPUGxybUJE?=
- =?utf-8?B?SkFKcjh3cHpzNzZFbmV3TzNTdHYwdENBOFg5SnhrVWJCWXhqQ2s5enN0eUdK?=
- =?utf-8?B?K2VxYWh3MEpMRHg2WnlYQTUzYlhLeUQ2ZFJLY1ZYdHhnUnRFQnhwMldxMEJT?=
- =?utf-8?B?K0tMeXJ5Y0pwN0tKaWZDdStzSHBqcWtycEl0VEZaVE5HQml5czhWR3pTUlYy?=
- =?utf-8?B?K0ZLWEdnRXRUdWlXQ0dnSmNOM2UwdnBPdkY5U3ZBK29vclE0UTRaaVVZMG8x?=
- =?utf-8?B?amM5K0xVb1gvemgvaXN5Kzh5K0F4cHNoVGlRWWVuWmxhWXZ3U0ZkOEp1cTZK?=
- =?utf-8?B?bW10NVM3OHY2bC9qaWdLZzc3bnNIeUdRcHBXcWNXOTltTWExSkI0V0xqQTZ2?=
- =?utf-8?B?NnkrakZPRTlma08wS1h1ZUh0WVVsMk5oUnE4c0wveGJYeFhlUERNNW1LbHJm?=
- =?utf-8?B?UGQvQTZIK1NWZGFJNEhybXVBRkJOMmJhRERsYkkra2sxRk1vcjRKTlg0aGg2?=
- =?utf-8?B?c28vWm82US94UHBBOG5HYklKWjd1dVhHRUdMdlIxQjVKYktaeEFxaytSWXpB?=
- =?utf-8?B?N3BQS3U5bDAxMWQvNFFGanllQzhlTUFybHo3Y1E2ZitOMlo5UGxQNzY0NjdJ?=
- =?utf-8?B?bThyeVFrOFVqMmdqZHFvc2NsZmN3dkNrMmhUcXBWVDhyS1Q1eEpqQW1hZ3k5?=
- =?utf-8?B?dlNoSVpuRzFZQjdkQ0FmbWx0RUdGZGU0Sml0elB1a3RjZFZVQVFNdlFpamU0?=
- =?utf-8?B?MGlJRjNBU3gxNXZhYWdENVgrdWNRSFRYRmNkNmZjQllLd0dDVThSaFJtbW5S?=
- =?utf-8?B?NVcrdUgvZTFpK09Ja0N5Sk1PNGZUTm1KeTg1RzdSZEEreE5WODg1SHVRTGtN?=
- =?utf-8?B?RTlmS3ptaXFvRytobjlUQmRVMjJJUTJaaVRpMDJEcUVtdHFUSDFXd0lDdStC?=
- =?utf-8?B?VTVrYngxZmlYaTdpdnhoNFJEWHBNdGZjbEV3M2oxTTJhQzR2YTRhMHhDWXdl?=
- =?utf-8?B?MzBHZmNXTUlzSzdpQnRlWVZuUHh0a1FCOTRhS2doMlE5NExkcjd2TVhGRytZ?=
- =?utf-8?B?emx3bGN6ZGh6WnlUYWx5V2xJTEFmalF3Uml6UHF1NUhXcFpoR1ltenNEVDRO?=
- =?utf-8?B?aHdUeEtraFBDdWVHOTNPWFFxTk9xTC9SNG5YRm5ldEpaNjc0ZWs2NGNzUURs?=
- =?utf-8?B?b2trYlNVZVFTL3V1OWczSFU0Y1BrSlptTDN0elVtblBDd0JNeE5WbHhkUUI4?=
- =?utf-8?B?Ym5YYnU3ZnBha3drdHpDVHZHcE5teTdaZFdDamhjbmxUVWtVRy96NFp2VmRx?=
- =?utf-8?B?aTBwN3RsNksrazdNNDlVYStubnFod25PZm95UGNOQ2NQU3JUVmJqRFM4ME4x?=
- =?utf-8?B?MXFoaElhM0xhK0QvdFhhUT09?=
+	=?utf-8?B?MHpOZ2FxaWtGWHNWM2oxV25VVFFMZjRsSGRmTFlpckZlQVp3T1dlek8vbENL?=
+ =?utf-8?B?cm1EUkhpMXlrWEtSTTVTSGZEcy91QkZRMmdNczdMN1VmSzBuY2Jta3BXSTdQ?=
+ =?utf-8?B?SmI1WHhrTkNrTWxoV1hpZGVXRC83cE4xOHdkZ1RWa1JSS3AvdXNMNXZhU0c1?=
+ =?utf-8?B?RmNFSTZZbVIwNlN1M0I2RVEzdlh1TmJjTGgydjdRSGtuUlQ4V1h1dzJGSUNI?=
+ =?utf-8?B?ZGlmdzNZME9nd21DMjJ3akpLaEJEWkdDTFpzVGxYUDBnYTFzbC9NUzkxcno5?=
+ =?utf-8?B?YnVlNlUwVlVtaGx1bHZ3SWQ3VGVwZUFjVW8xUzFuUEhOSDZmZzFhaC9KYUVq?=
+ =?utf-8?B?K1VycDNJZ01BWUtBWGFyYklEakFJWDNVZzk1cmgwUjhQMW9zb016UjFGcHpm?=
+ =?utf-8?B?d0N1UHZCMExmbUUwMVVpdHJOclc5emorWm5vU3FIUlZuZmxOa0hqVU50SnFI?=
+ =?utf-8?B?YXhNL2lzbkdKSXF2VXk5ZDVTeEJ1c3liY2laODNMVTVqeHlwalQzUy81NThV?=
+ =?utf-8?B?ZkJFaUZsV1p3QmVYMEU2ckh0UGE0dXRmMzZNRVdZY0pkdnJSWkV5S0NCSVZV?=
+ =?utf-8?B?ZWUyQVBBSk5kK1l1cjZ5U3pzL2psNjNkY2FzZURKWXNXZFdXMmN4THY5d2w0?=
+ =?utf-8?B?emhtcDNPNE43MGVSNDNlQVU2T1ViMkJ3WDN6aTd1bWVoVjJ3RnJic0ZMbnlL?=
+ =?utf-8?B?bG05RHBXdnZkSVRDa2ZHSTBBSk1Ya2Vpc29LQ1dxalRWM1QzNngvWUVGUVoz?=
+ =?utf-8?B?ZnVuZDZ0cjJXNDZCZWkvaFJHQ1Q4dDZkaFJvZkNNV2N3MkN2VXdNWCtrSStT?=
+ =?utf-8?B?dEZUWWtESTB3MU9BOVJSQ1VSOERZZ0s3RmZYSDJlTWRSOXFpT3BjbjhFT1lr?=
+ =?utf-8?B?U1RFMlVHMHRyYklwZTgxZ2ttTmpqblRuM29vNlAvdlZ1UWhoblBoNVZNN0RC?=
+ =?utf-8?B?dTlnUlIvWlJST1FBMmZBOFNXRStCVXJFaU1LcHgwMDlkY2tUMVNIM0t0RGtm?=
+ =?utf-8?B?c2h5ZHBQOS91RzdmenVRaVJFTUZqVDhrNmdhVlI2NDBCVllOTk9FSTI2TWpM?=
+ =?utf-8?B?bDBzK1VqOEEwOHhkbG5RdUpNeWlpbFhMN3hoVXYzSVk4MUEvOEVYay9udko1?=
+ =?utf-8?B?ekdJNld4dlhva3NPcGZHMFNURGVlczVJYkVBTmp6cWZ6UkNTUFVnMllDcVdW?=
+ =?utf-8?B?N2oxRHMzeWZuZzNJbVM2NEd2WXQxM011cDlqYkFMSS9XcWJrNnZIZUtqTi9Y?=
+ =?utf-8?B?L0J3WHpCNW9IRWFOS1hzVnhiUk1IV3gyR3Z1TDRpV3NucjF1UzZISGZGM2s1?=
+ =?utf-8?B?RVRENVlldCtVc3BJbzdmQXdtcnJZVDI3MjZoa1J2djREbWRFY1FPRVpMTWtz?=
+ =?utf-8?B?RnN3RjJFTXMrTUZZcWtwa201RldkRUhsckl1b0JmL0dUM056aXN2cU5HdkVL?=
+ =?utf-8?B?TUJQZXc3ZGk3bFZIR2VMc252cThvcEliMVpHQTFncUhwYVBDKzd4NWEzaUY2?=
+ =?utf-8?B?cnRERjVJdmdjd09odDVNcmVBZjV6ZnVjbXFsTlE2dGp2N0ZOVE9QVm9xZnNo?=
+ =?utf-8?B?KzdrMGNGeXVJalhoVDF6U29TN05vTWxUbkV0QUphUDUzRVBlYjFRVEtXc3By?=
+ =?utf-8?B?TFBWUHdoaFZQWWVNK2pIRDk4K0g1K0JHSWdnZ0JPRnZpZkV4QU8zNzM3M3ZE?=
+ =?utf-8?B?WGhIWDYwMStyd0JCK0EyNVBhby94RlRSUGk2VGZ0WmoxTlFjT0dwT3NnRTM1?=
+ =?utf-8?Q?Q2BBFhLwS8rWl5BLcg=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T2FnUkdNMWNGSWhTUGY4NGN3Z24zYkF4alJBTTZMQVhQdkU4SklOWm1UeVFs?=
- =?utf-8?B?OGd5cmlnVTdTa2NPTk1nZnpKRytjaWR1alIrUEJrWTVCV3ltZmc3cVVGaVNv?=
- =?utf-8?B?V251SVZrSWhoTHgzVFNBWUNyK3hRTGViNEREVzc0aXFKNVl3VWRCZTVqUWRU?=
- =?utf-8?B?ejgxR3NSTHJodTlOZHR0dkQxYS9LdE5ncC9Ed2VWMTM5ekYvcUR1MThUaUFS?=
- =?utf-8?B?bFdSdDdZbGhqckQwRkJLSFRpdmNGazlBM2czOTUxNEQrYW1sVS9nVXI0dUJr?=
- =?utf-8?B?SGRubVhYekUvamI5Y2dXd2trcXFtdnIrbm5FdTNESFdRZU1CWWs4YlFGbm1Z?=
- =?utf-8?B?ZUhJcEpvaVRJZXM3UHhuR1pjSm5XTTUxSWVyZk9TTUp4WjNWUFBaM0V3UTV3?=
- =?utf-8?B?MkcxRUpDSEtraXFPMEJQdXF0UHcvMGhWNGMrQnA5MjAyZVdMOEh0aFJncVlZ?=
- =?utf-8?B?VVB6YVRKdDRyQnp1N214OUYvNFNoL2RsaE5WZUhqejRmWVc0RHY3NHU2S1pK?=
- =?utf-8?B?K2E0YmJ6VGwzUXFnVCt0UVhHYnNKMWhMYzlwRmRVanQ4VVlCemdvZm9HY0Ry?=
- =?utf-8?B?eTFvV1JJOGN4MFdOcUhkZmVXay9SUTNoai9HbFhVZ3Ayc3k4bm16N0JYMmpY?=
- =?utf-8?B?OVZoQnE1Y2JuQThtcWVCbXpZNVZrazZBeXB5OWgvbnQzOUhZbVR5TXpvYnVR?=
- =?utf-8?B?NzNLUGJ2K2hlYThHS1BZRG9OVFNNUmxhcFNuTXFFMndGQlE4SC8yNEkyRGJo?=
- =?utf-8?B?bnZLRENCNFpzK1ZvT0c5U1lQNEF6b0NrSDNCVVl2MS9LK2V0ZlQ1YmZRRWV5?=
- =?utf-8?B?dkRzWnk3dEZzMFk4ZjVZVG1BRnhlaU5RUWc0NEZ6dXNLVlQvZTgyYkJoM1RT?=
- =?utf-8?B?ZWhUVzFFdjgrcUUzNWJ3a1VpU29vNE9KM0NNSFpBUE1mMEM4bWQ0bGdJZTVr?=
- =?utf-8?B?VGlpbGlQUG9BUzJSTmtIa2FOK1NEeFFUNTVvMTBQc3VwVTJMM25NYTJjTC9K?=
- =?utf-8?B?dDN2UmxUWjE5NUFzNGpuOXJsbmRmUGh1SnlhcHVNSXVUcm4yWmVZdGNVQlJH?=
- =?utf-8?B?Qm1Ca2RMekRKbVhhWjNtZmJTVFhoaXlTOHh3R2lQcU5QeUFVMjJLUUF6ZnFj?=
- =?utf-8?B?aFR5ellUaEh1NGJSMTdkM1h3Mm9jWHZpcGl2VmVYMmhMd3NTSzFmOVNpcURC?=
- =?utf-8?B?cGFyM2Z3aWdpbE9nblB3WjRleWpHK1ZGRFFUK3liVGxZc2xYc052SkU1cWl0?=
- =?utf-8?B?bllmb3Y0Nnptc2dqMVdMN3JTYVJUVmlYK0lZYWs1Rm1nVDcwT1JEUG5ERkgr?=
- =?utf-8?B?NWd4ZmI2b1BxNHJyUUhuMmQ1elFRRmpsd2NHNFJJaGZhOE8yVjVpN1RXMm5j?=
- =?utf-8?B?Sit2MFptL2hiU1lzOXhza3pWN3Y5eUZyMFhPV2xKeTUvbW9lNWJQZWZRK0cy?=
- =?utf-8?B?TTFwcStMOUVCbllwQm1hQXd2bDV4bFU5ZDBFR3RHZ2E2MGhlam1Cb2tqN0N2?=
- =?utf-8?B?Z0pmYkNkOVBDdnJNUnBSeEVBaTg1Z2VPMldmV0xDTEJUUWVwTkNuYVJpVVBt?=
- =?utf-8?B?Rit4OXplNVVVNnQ4U1JNYlVFLzlGM1N3UDRzbmhaTTg4aFBSNzUyRDhpdzJY?=
- =?utf-8?B?U082WW5RN0R2c2h1VVZHSHhlR1hVTlVHd3dIVVJjM1RNR3E0bWdPd25SSXdT?=
- =?utf-8?B?ZWRBSTdnOEg5dDFsRXREOVdRMitRVk5ibkZvbmdSSXlJdk5KZWYzY1RNeDhy?=
- =?utf-8?B?YzBQSTl2Yzc0cG80WWQ4VFUyUEJvM2h0YWZ5RTJHT29IY3dhZ2EyZEtNb0dr?=
- =?utf-8?B?elJJVWJhMDZJOS9kbGtibWk2R1ZhZVorZEtaZXJ6M0pmSTNPMTI2bktvQ2t1?=
- =?utf-8?B?TGpTVUszRjZoK0tSODF2ZGdFNU15RzY3RnFMODRuc21kZ2JpcHE0YklsRkJw?=
- =?utf-8?B?OW9KRTVyWHFZRU00djVhZGdWWTRwZlg4OGNKY2pvZGZFN1ViUW9XMEtoUU5J?=
- =?utf-8?B?VHZVNDhCcm9ETENubjlQcmNwYjZLcDVna2hRSFBwUmUvaGpRcWU5ZW5PWmht?=
- =?utf-8?B?M2pEL0J6Qkxua1FJckFvYTljY3NTcnZhbkgxM3lwSzBvVm82MnRINlVQRStP?=
- =?utf-8?Q?pVJ1s+I6SBb6oCqCGFHn9Wrlx?=
+	=?utf-8?B?V25NQWYzQktuU2VMSFRHbUxsRDBrREZwNTkwT0dFTkdXYUNyc1FHMmtEa01i?=
+ =?utf-8?B?MTRoRzBJVnFwTDErMURDVGlSRjd1dFBVZFNCbUROaDFoWDhhSGU1eE9VUGtE?=
+ =?utf-8?B?bkFYWk5HdVRsYjdsZ1JlZDQreVhDMGlscHdzVGM1UTNzWEoxSnU2QWxCQ3ho?=
+ =?utf-8?B?RVg3Rk1DT0puQ0lhN3hWMlQwa2tmU0QyOXVUVnVEeGtmMjRoaXoxV0RQK2RD?=
+ =?utf-8?B?M3o3V0FjRnVzUzF3VVNlbGJTY2hpdGU1dXNXaHl6WVhuNjhhNVFvUVo5M1JQ?=
+ =?utf-8?B?NlB0QjN5N3BvbmVOc2MwTW1VUk1TWktpQzRnMDIzeGF5OUwzZ2EyWDNxYlpz?=
+ =?utf-8?B?c0I0WnJTdGVTdUhaMFBZMG5sMk9ZRFd2S2xhdXYyWC9JWllneWVEbWtRZHZG?=
+ =?utf-8?B?WnBBTTFKZ2Y4Yk5IUHRTMnVuZXV0d0s5eWY1YTZWOWN6NlNqc1ZHcnNmRkZk?=
+ =?utf-8?B?ZEZhTm9MaitJaU5YZ25vK3hmaERmNGNwOUZ4U01tdDh5YUs3aWZKTStEM0ZB?=
+ =?utf-8?B?RzhFT0JXMjJ2U3VaL3J6d1owcGxMZkt4QysvOERQazlzU1JFWHF4MjJTMDU3?=
+ =?utf-8?B?ZDFjTHZhaWJSRzRZSDJYbmgzNjFKTE5tblNEckNXS0l2cVlTUXlOeXNMaWto?=
+ =?utf-8?B?ZDFqRnBYQTZ0NmdOaFZVODJNVTN6UzNvQ2JUWWs4OUpnRkUzREZNTkJQbkVO?=
+ =?utf-8?B?VlQxQXhKRmJUYkVGMXRuSk9RSnZhdXFzclRvMkhqTTRoS0pJL0ZJbVozQWlj?=
+ =?utf-8?B?T3prRE1VRVdEOXByazI3TmFLUzRGT1RFNVBhcS9tc09PMmU4RkpxM3BqanNI?=
+ =?utf-8?B?TXJXMUNGbjRxTFVhQzBTNkxsNEFwaUlvZUdIQUR0a1ZoeHQwVWhaR1BpYzdh?=
+ =?utf-8?B?WXkzQVRCUm5mTk5qRVpMVXVMR0dmWStEMW4vTmhTU0VKblNQcE1KZFBIVmpT?=
+ =?utf-8?B?dkNKdUNBSlpTRkJwUlJqKzJvTlIzbXlpM2EzS01mSFV5MldJTlFGd3V6bUF3?=
+ =?utf-8?B?bFI4c3lWdExGWWUrRkp5RjJwR1lEaHZkY3JONDgyNjZPY0l1dm1wQWhEL2J0?=
+ =?utf-8?B?aG16TFpDVllYbDF5Y2ttM2oyL1QvalBBVEVsVlNJallkQUs4ZEZ0RGp2a1Zi?=
+ =?utf-8?B?dmJYL0k0VWhSSmdNYitxQ0ZRbXM4T2hPUHN2QWM3WDdQYnlOanFyckRsYjJW?=
+ =?utf-8?B?MHdQQjMyM2paN1JzajJtTlFnRnFtU2pYUjFSTWVsODlsdlRwODNnZXVzSjZx?=
+ =?utf-8?B?WW15R2JHaGsyTHkxZFNKMmhIMnUvNjRsVTBoem90U2cyUXZmdDhqTDB5bTVE?=
+ =?utf-8?B?Yy9oU1Rvd1FwS25jUjd5ZUdnSmxwaVNubG9LSFFmaTMzNnZqNFFxVDV2MndK?=
+ =?utf-8?B?RGxoQkE5aUJRWTd3T0dqTjA4dVB4cW9jMWpXZSs2M1dGa2JDeW1PekxFbDlC?=
+ =?utf-8?B?MFMzRDhxbVNKaU51UVlSQ2R4c3l5ZzVCSittb3dFNDI2Z2dvK21JdVBheDYz?=
+ =?utf-8?B?Q1VRMC8wODlqWXNiUHZIVGtuTU5pQ3VVbHlYdXhCaHlnSUVMT0dPRGpPeWFZ?=
+ =?utf-8?B?cUk0aHRIRXZSREhRdktWTFk2bUFsbDFTY3Vzdml0Q1RrSTZFUnhMZGNmU2xV?=
+ =?utf-8?B?dUZkQXVyaHFjTzN1RmtmMysyOFlWVlNXMTVzMG5CUWFYQUNmTm9sOVFSN2ZT?=
+ =?utf-8?B?Tk5JdDc0NWdHQjVwNFo2eGpOaHRYalU3U0txTU8zblg4UWlmc2RXUG9KZExo?=
+ =?utf-8?B?YlZTN05vWjdha1JxQm5UekVJV1BKM0xGbVVySWxwdllrZEMwSnp2U1QrNmZS?=
+ =?utf-8?B?dG9Kcm80bGNYVGZ3cVlCRlJPUlVhY29qTjJrU2V5VU5FODY3ZFhRUE9rV1lK?=
+ =?utf-8?B?ZjBSZnJKRjZUbWJFckl1ZnZVaU93ekpIMWh0eU12VTJPdXk1dC8vanV1Vlhk?=
+ =?utf-8?B?SnAzMFFEYW9jdU95aUlseituOGdpNjM1MmlUcmJzamdXaG5XSDFkdXhGTEdu?=
+ =?utf-8?B?RldicDZZaVJuWCtNZGlURDRnV1pobnEzandIbVREN2tsZ0RoM1huQkVGUEJy?=
+ =?utf-8?B?cGhUSlYrL2t4SVFTKzc1MU81YXl5bmNlaDRFcjBUT0Z0QVJlSUwzalhZQ29P?=
+ =?utf-8?Q?Gs21BBtGCBLfvcA8KrpttR8NJ?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7209e06a-ae8c-4a33-f836-08dcb2b8822f
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4574662-dcc2-4de1-6537-08dcb2b9ee14
 X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2024 06:01:15.1212
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2024 06:11:21.4255
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2Sb0oZ9C1d/PgkO5AB/PEKxcxonUVSVF8j1jPgewXc4nmzSoJRCP7B6oqrGbk6qIHCD/lbjZUK86XVyLsW/loA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7276
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4j/HovMLwJp8U1IQJkh/Z003dOC9DSoraRa3dGh3Q/ev+o1XkPiOngY1qFuDJSpLq2sgCT5oKKadz7wCUShsiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6644
 
-On 8/1/2024 22:38, Ma Ke wrote:
-> In altr_s10_sdram_check_ecc_deps(), of_get_address() may return NULL which
-> is later dereferenced. Fix this bug by adding NULL check.
+On 8/1/2024 23:41, Ma Ke wrote:
+> In _emif_get_id(), of_get_address() may return NULL which is later
+> dereferenced. Fix this bug by adding NULL check.
 > 
-Only of_get_address() has been mentioned here but the patch also tries to
-fix a possible NULL pointer dereference arising from of_translate_address().
-Also, a some context on how this was discovered might be helpful.
-
+> Found by code review.
+> 
 > Cc: stable@vger.kernel.org
-> Fixes: e1bca853dddc ("EDAC/altera: Add SDRAM ECC check for U-Boot")
+> Fixes: 86a18ee21e5e ("EDAC, ti: Add support for TI keystone and DRA7xx EDAC")
 > Signed-off-by: Ma Ke <make24@iscas.ac.cn>
 > ---
->  drivers/edac/altera_edac.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
+> Changes in v3:
+> - added the patch operations omitted in PATCH v2 RESEND compared to PATCH 
+> v2. Sorry for my oversight.
+> Changes in v2:
+> - added Cc stable line.
+> ---
+>  drivers/edac/ti_edac.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index fe89f5c4837f..d6bf0eebeb41 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -1086,6 +1086,7 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
->  	struct arm_smccc_res result;
->  	struct device_node *np;
->  	phys_addr_t sdram_addr;
-> +	const __be32 *sdram_addrp;
->  	u32 read_reg;
->  	int ret;
+> diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
+> index 29723c9592f7..6f3da8d99eab 100644
+> --- a/drivers/edac/ti_edac.c
+> +++ b/drivers/edac/ti_edac.c
+> @@ -207,6 +207,9 @@ static int _emif_get_id(struct device_node *node)
+>  	int my_id = 0;
 >  
-> @@ -1093,8 +1094,14 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
->  	if (!np)
->  		goto sdram_err;
->  
-> -	sdram_addr = of_translate_address(np, of_get_address(np, 0,
-> -							     NULL, NULL));
-> +	sdram_addrp = of_get_address(np, 0, NULL, NULL);
-> +	if (!sdram_addrp)
+>  	addrp = of_get_address(node, 0, NULL, NULL);
+> +	if (!addrp)
 > +		return -EINVAL;
 > +
-> +	sdram_addr = of_translate_address(np, sdram_addrp);
-> +	if (!sdram_addr)
-> +		return -EINVAL;
+>  	my_addr = (u32)of_translate_address(node, addrp);
+>  
+>  	for_each_matching_node(np, ti_edac_of_match) {
+> @@ -214,6 +217,9 @@ static int _emif_get_id(struct device_node *node)
+>  			continue;
+>  
+>  		addrp = of_get_address(np, 0, NULL, NULL);
+> +		if (!addrp)
+> +			return -EINVAL;
 > +
-Will sdram_addr here ever be NULL?
-IIUC, of_translate_address() will return OF_BAD_ADDR in case the translation fails.
-Perhaps, a more prudent check here, if required, would be
+>  		addr = (u32)of_translate_address(np, addrp);
+>  
+>  		edac_printk(KERN_INFO, EDAC_MOD_NAME,
 
-	if (sdram_addr == OF_BAD_ADDR)
+In [1], you are fixing possible NULL pointer dereferences arising from
+of_get_address() and of_translate_address()
+In this patch, however, you are only attempting to fix possible NULL
+pointer dereferences arising from of_get_address().
+Any reason why of_translate_address() doesn't need to be fixed here?
+
+Also, since [1] and this patch are addressing possible NULL pointer
+dereferences from similar functions, you may want to club them
+together as a single patchset. Makes its easier for people to review.
+
+[1]: https://lore.kernel.org/linux-edac/7021a08b-ba75-4d16-a71f-b38e48df5af3@amd.com/T/#t
 
 -- 
 Thanks,
