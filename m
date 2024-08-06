@@ -1,128 +1,104 @@
-Return-Path: <linux-edac+bounces-1623-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1624-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9C2C948B00
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Aug 2024 10:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A116948B67
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Aug 2024 10:36:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A01081F20FB6
-	for <lists+linux-edac@lfdr.de>; Tue,  6 Aug 2024 08:14:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 409221F20EE6
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Aug 2024 08:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23ED61BBBEF;
-	Tue,  6 Aug 2024 08:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE8F11BCA06;
+	Tue,  6 Aug 2024 08:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BaIOUnw8"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510F32AF12;
-	Tue,  6 Aug 2024 08:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7A016C692
+	for <linux-edac@vger.kernel.org>; Tue,  6 Aug 2024 08:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722932065; cv=none; b=KsOvn99Ecj08cRM1QR0QShhJw7vU1YgmQ/NScwWLSwBhGrIDtGZ6Li+C63QC2ZKtYc/r4gfCr+XbZakG9lyfNIzfKpz6w2VeMFpvcBdZ3KMa5pFnitj3wI/q8QywRnLKhrRGwCRLUD+4L4pTTK0yvEfWuf779yFgyLjmuC5/5IU=
+	t=1722933378; cv=none; b=H/IjvyyTpK2RADflM6DTnhbXqchmCO/oaxww1/DqLUr+zvNJQEe240pAmjxRwoklH0IsOBI5B7gLWmVzHCWlk6SSw3CUDikbY09g/26ZVnxIrnCfKtW0x/tYPF+YbbHxxE3nqQtcRytFJlGYKz+VLToHmLE9qX3Jap6lCvdTwSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722932065; c=relaxed/simple;
-	bh=MzpatUKUmAcY11XbvIbLG/5RlKt1lq4ke36pTytXhLE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I3T9O2M2DWR18TjCTPo5pU99WCOu0v1ZeRPfatImwyCQCKw3OMxLrVkOOrP6Uy0kzlX5iZ/QFkVXM4wt6sHyQgxU/D8Ii6eoSDWTRjCRybsXFqXMwLoAohtsNNqr8vVpuBm/ipTM8fQS6LNCOudURtj7BkRP54xiRYPvKc3Ijvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-01 (Coremail) with SMTP id qwCowACnr0tS27FmbP_jAw--.25002S2;
-	Tue, 06 Aug 2024 16:14:13 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: kristo@kernel.org,
-	bp@alien8.de,
-	tony.luck@intel.com,
-	james.morse@arm.com,
-	mchehab@kernel.org,
-	rric@kernel.org
-Cc: linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ma Ke <make24@iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH v4] EDAC/ti: Fix possible null pointer dereference in _emif_get_id()
-Date: Tue,  6 Aug 2024 16:14:02 +0800
-Message-Id: <20240806081402.2397921-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1722933378; c=relaxed/simple;
+	bh=isWmInvF8zjF5zmzmODpnA8VtQPy/7l7Wo73wfwOeGI=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=AJN1cd7uirzBxj6gTcZFYebpKHG+ZHxeUtAw2Uv0HM6sl13LFKAUN4bJWWskeyR0xtBX53TKxWor+xaLNCv4aIOdSWhFo/xnAj2Ci4sx1rnG8wLq/noJY6C02+oQ/jeR0ffAFyip7e8t76sMhh1mmLpwhDqg8DsZHHRHlNER03A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=BaIOUnw8; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1853D40E0263;
+	Tue,  6 Aug 2024 08:36:08 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id PBjgeXEXT0BW; Tue,  6 Aug 2024 08:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1722933362; bh=VZFvU3B0MUdsE30lRLKXxTh4CS93t0dD+7S2kGCVcH0=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=BaIOUnw8uiep927zX+FK1LG973ZaOEv8QOzjE6sj5lhlvgaeEjdyQzB1fkjR0QZN+
+	 /KkceWy3wff0ZtG8Y/xrtVrwfFN/dfMAp3XBJgw38a2OK7p37YqJPJg5oL2r44+fBM
+	 HShKHLenBousdJ0sDBf6HEIYcyG31pFHfKiquyNeWxM2/FAIwRGA8gUZ2UmCCedHSt
+	 lWUyrZN7HQoFBH3/AxgbRcDBO5d/Kuric2pi69DxyOzVhnw3+S/lW0+7mqsAQkFE3Z
+	 qlPauHee1JIlg45/3XaP7xlL53AU+ixI33ya2afSLHb4BFK1khTeQpRaWe2P1MGJl2
+	 ozmnARRtyvnGDXUSWnocIbMOXP0GLJxM5mnYZSotfigFJKzilKeSn+BXuF94+p2+8V
+	 KqYV6JYcEj7qnvR5o0vtQQ3C+LRa6Nvlo4KhgBipoblOSVm2jaZTbGzqL/pFUqE43p
+	 b3L5+YePUPYwfaCN4IV5iqo4ejJIP/avUTy/xy7JYLHd2LtPQmcmZLUfr6i4iR6CQX
+	 JQzX5E3YUMVozIGT060I/Sic4jAqBcRLuFQ2ZjyYKMrFOlCyP3SRjC29zmpqzsaGar
+	 P3P44UPqNc67XLNqNtqxsVyluiEJtxfW8yGKsHYeDryyZ4WMYgHADpuo7+ED8k71SY
+	 7T4y4jsoFX9xjuxUeOGU++FQ=
+Received: from [IPv6:::1] (unknown [IPv6:2a02:3038:200:5769:7408:31de:2ee1:8cc])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6D05140E0027;
+	Tue,  6 Aug 2024 08:35:55 +0000 (UTC)
+Date: Tue, 06 Aug 2024 11:35:48 +0300
+From: Borislav Petkov <bp@alien8.de>
+To: Kees Cook <kees@kernel.org>, Andrew Zaborowski <andrew.zaborowski@intel.com>
+CC: linux-edac@vger.kernel.org, linux-mm@kvack.org,
+ Tony Luck <tony.luck@intel.com>, Eric Biederman <ebiederm@xmission.com>,
+ x86@kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BRESEND=5D=5BPATCH_1/3=5D_x86=3A_Add_tas?=
+ =?US-ASCII?Q?k=5Fstruct_flag_to_force_SIGBUS_on_MCE?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <202408052135.342F9455@keescook>
+References: <20240723144752.1478226-1-andrew.zaborowski@intel.com> <202408052135.342F9455@keescook>
+Message-ID: <6273D749-9CEC-45E4-8C56-FA3A1DBE1137@alien8.de>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowACnr0tS27FmbP_jAw--.25002S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1fCr17Ww4rAw4DXr17GFg_yoW8Gw13pw
-	47WFW3Ar1DKry2qrs2vF1rXFyrC3Z7JayDKry8K3sY93W5Xr9rA3409rZIgFyayrW8GFW3
-	Xw45tFs8WFyUJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBa14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr
-	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
-	x2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20x
-	vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-	3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
-	AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUAxhLUUUUU=
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-In _emif_get_id(), of_get_address() may return NULL which is later
-dereferenced. Fix this bug by adding NULL check. of_translate_address() is
-the same.
+On August 6, 2024 7:36:40 AM GMT+03:00, Kees Cook <kees@kernel=2Eorg> wrote=
+:
+>Since this touches arch/x86/, can an x86 maintainer review this? I can
+>carry this via the execve tree=2E=2E=2E
 
-Found by code review.
+No, we can't until the smoke from the handwaving clears:
 
-Cc: stable@vger.kernel.org
-Fixes: 86a18ee21e5e ("EDAC, ti: Add support for TI keystone and DRA7xx EDAC")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
----
-Changes in v4:
-- added the check of of_translate_address() as suggestions.
-Changes in v3:
-- added the patch operations omitted in PATCH v2 RESEND compared to PATCH 
-v2. Sorry for my oversight.
-Changes in v2:
-- added Cc stable line.
----
- drivers/edac/ti_edac.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+>> While not explicitly stated, it can be argued that it
+>> should be a SIGBUS, for consistency and for the benefit of the userspac=
+e
+>> signal handlers=2E  Even if the process cannot handle the signal, perha=
+ps
+>> the parent process can=2E  This was the case in the scenario that
+>> motivated this patch=2E
 
-diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
-index 29723c9592f7..f466f12630d3 100644
---- a/drivers/edac/ti_edac.c
-+++ b/drivers/edac/ti_edac.c
-@@ -207,14 +207,24 @@ static int _emif_get_id(struct device_node *node)
- 	int my_id = 0;
- 
- 	addrp = of_get_address(node, 0, NULL, NULL);
-+	if (!addrp)
-+		return -EINVAL;
-+
- 	my_addr = (u32)of_translate_address(node, addrp);
-+	if (my_addr == OF_BAD_ADDR)
-+		return -EINVAL;
- 
- 	for_each_matching_node(np, ti_edac_of_match) {
- 		if (np == node)
- 			continue;
- 
- 		addrp = of_get_address(np, 0, NULL, NULL);
-+		if (!addrp)
-+			return -EINVAL;
-+
- 		addr = (u32)of_translate_address(np, addrp);
-+		if (addr == OF_BAD_ADDR)
-+			return -EINVAL;
- 
- 		edac_printk(KERN_INFO, EDAC_MOD_NAME,
- 			    "addr=%x, my_addr=%x\n",
--- 
-2.25.1
+I have no clue what that is trying to tell me=2E
 
+--=20
+Sent from a small device: formatting sucks and brevity is inevitable=2E 
 
