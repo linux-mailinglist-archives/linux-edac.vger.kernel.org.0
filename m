@@ -1,148 +1,152 @@
-Return-Path: <linux-edac+bounces-1638-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1639-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B33C294D9BC
-	for <lists+linux-edac@lfdr.de>; Sat, 10 Aug 2024 03:20:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B60B94DA46
+	for <lists+linux-edac@lfdr.de>; Sat, 10 Aug 2024 05:21:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71C462826D1
-	for <lists+linux-edac@lfdr.de>; Sat, 10 Aug 2024 01:20:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B32831F21DD8
+	for <lists+linux-edac@lfdr.de>; Sat, 10 Aug 2024 03:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8184138DD6;
-	Sat, 10 Aug 2024 01:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C5971EB3E;
+	Sat, 10 Aug 2024 03:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dmJVjwxS"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90AB347C7
-	for <linux-edac@vger.kernel.org>; Sat, 10 Aug 2024 01:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3917A101EE
+	for <linux-edac@vger.kernel.org>; Sat, 10 Aug 2024 03:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723252827; cv=none; b=JgjPvnA6b6QCGFmaCRFgsObJCwj4LiZRloQgLjtRDx3+lBxJEQ/LuFLICxBqOtplbYus1edBS2XlMrLKVg01WHrAHJiuTsoxHyeA+535RXSi1hJKHQym8r8isTrvuJtRhIP3K45mxhysoJXABi4q/AjkI3phyds4FQM/udhhdpU=
+	t=1723260080; cv=none; b=esTyph9fR3ttWR8ads4vY/sW0IFDcNiS8POf4rOHF2DM8g+wdL+0g9T5fcGsjN1jTQc6QzQl7QHNMf8I+II0nLZwjFl0NEcvY6H1N+dCwzQy29+Nbz6+F15EeZtGTHwC4MOjqWtN54v1P7DtnkNTfLoxBCtdp5A/Z9YfgH5XIMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723252827; c=relaxed/simple;
-	bh=sZKAqEPRH+3BXKesIUMnjObWxesO/WZHIDe7bFn8I/o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=ExlhtwZc+X654AlomLghAhpqKNxyaQBXjXqQaHeac3JcjeDCAsJPbXSEqo4KYMXbHdDqIuRldk7ndqwh0mWk/ivtLs0Fp88G3ABnJBqr2yGFaeXxRxhKZX5ECqT5EDApw4utdmdPvBe1zNqudNm18Mfx+d2pU+l6xYAUtp4WtZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-530e062217eso3354812e87.1
-        for <linux-edac@vger.kernel.org>; Fri, 09 Aug 2024 18:20:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723252823; x=1723857623;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=921RZ7c4N2Z6LcTEM1hasybk9CumTC+dT+QKpGhch3o=;
-        b=rKnIsZ1W7aQ2h3/2wIZUyJJi3iwYmnCvnEwo3kACxby0KIFVFrCrPS3Bw/V7H1s5qj
-         821qy3POJrWqKoDZ9ooRhXdD+uAYjKE4RB+Gec21A98Z9qm14KS8sxbEdR+tcf5ZWlNJ
-         5Y6z2UUipiBzt/3NXBhNz8rDhQ1dDGJbBOnMd0h+9JCkYkA6YOJvaI3Fqz5kQHrMbeXL
-         OIpZoYchqetdoeVn6/Pf1K5VPbGEejvNZVCMeGjS5pLPyaIYhVrpuxzcl7FBSG6FeXsf
-         bB6A9QZbZsekgdx67SCkNsPCrXFStP9+Q7M17Qr/vVLy6t2X/q03BVR1SfN9TUFKZ8cU
-         YlIg==
-X-Forwarded-Encrypted: i=1; AJvYcCWFk3Ai51jvJ585zv6eC8nnqNBiQgBn9xRAa68KyPwn6UzQ5gTXA2AZUOcwE51i/qDbUJ/oLepd4B2fskG7w2fsK5XX/vib94OMXw==
-X-Gm-Message-State: AOJu0YwOn69UJCuV3EiF87UiXFI/J18PIoAgEw/+jYqvE4MzPv198+TM
-	UzgWrK4uC/+JYYxQZYEYf2dAjJOUr1bWu/gDyck97pD8aMzkMAhUZdeRua71uXc=
-X-Google-Smtp-Source: AGHT+IH+aX/roTEKjrMS5hxgqG8Rb+ot6T/WPLJj2KePabzkfepjy1PtClVlq4ppKMvNOam7H2xwlA==
-X-Received: by 2002:a05:6512:ad2:b0:52e:9951:7881 with SMTP id 2adb3069b0e04-530ee9f3d9dmr2488163e87.52.1723252822998;
-        Fri, 09 Aug 2024 18:20:22 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53200f1b2b5sm84368e87.217.2024.08.09.18.20.22
-        for <linux-edac@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Aug 2024 18:20:22 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f025b94e07so29719501fa.0
-        for <linux-edac@vger.kernel.org>; Fri, 09 Aug 2024 18:20:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXGBfM0PGi0ztG8DtppciC0P32JLW/rIAfINxUuOlKvW4VDcRn4z464ZEj1AtaeEurXdLrAoEcjVS5ebB5eDiYPdixsakq43RLGvA==
-X-Received: by 2002:a2e:b887:0:b0:2f0:1b87:9090 with SMTP id
- 38308e7fff4ca-2f1a6c6d3f8mr26956051fa.29.1723252822006; Fri, 09 Aug 2024
- 18:20:22 -0700 (PDT)
+	s=arc-20240116; t=1723260080; c=relaxed/simple;
+	bh=x49stirWWXr0MCSv/qgO0nUE0IPMTWDRurxV+CDF7as=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=umxjhhsyDApuE+XmpPoYO9g0C+fW0AmCgV6vLrzG66D7JBvQHmGIpGepWtCbeJU42BpXNyQejJ7OI6KwLUkl2wfFu59X19aPU8oADn3ZCL4meXifJPy0dy1nWpIJdU2gT1zW2/9nwmNIX1WNSaLYxsXFdZgDEURDSySRZgU+cl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=dmJVjwxS; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id CA29540E0263;
+	Sat, 10 Aug 2024 03:21:09 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id aChhZq3rybOW; Sat, 10 Aug 2024 03:21:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1723260060; bh=EWj1ieL4VaFASgQnFt9FPnrOKju2ddoBf6+jL+AxRwQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dmJVjwxSb3wPTXSvs3oXps257Op2uZQlX4caBfXvS2vAeXkxXaGQiRkonq9s6yMvc
+	 QTgova5d440avYtiec6QtrOsPmtgQ7+BmSbwGM9JHDzKiLYpVd2eWJcIKYg7BFS51C
+	 nNrVlr6dNF6N2YW4JDPFFfF4KSlTsOGgVwfYNwywB+COl7NiB3NTIjUFpnZqxTq5k3
+	 wi17hrMHIugA+sLSbkB7aB/L19T4W9YKaiL8oUjl6Vq0DM5jpaDdSPXet/0s518x5B
+	 QoyciqxkPOZXn6fn37CiIMerRX/J4ZHY+vHNJFuk44EFvyW1COUr8YeTDGFaO9onfv
+	 7gBxs6RP3zBJXPdSNSYppLFULrBOf+hyJBd69aYKvQkM2qNXVIf8yagh45FuG3aP9X
+	 pEOh/uvUcrTiqqD5oZiwMJsA6eR9wdLKJ3/8a4YyZvRUcJT9JEbqQ6CG1eVdWAbmb5
+	 AWU5OyOTetuty0RTShq1o3KGBKlgBqZ5FAtSTyKr8LV5f/ESeV8NYLSjE/x4K8MKwj
+	 nCinz+0DDSFsmtlT8S41T3oD4Bh7AuGTVUppl0C6qva6+XwToivnCzVxzhcbrEsRv1
+	 VcvnyCONYPecnQfp30QQNVWpdPGlOVDcua7UiBUdQMf/DmEGpeZ7pMEJEL8Gy9lvWJ
+	 aI4AkFlbY0rjihVcfBKBYZto=
+Received: from nazgul.tnic (unknown [87.120.165.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 493EE40E022F;
+	Sat, 10 Aug 2024 03:20:53 +0000 (UTC)
+Date: Sat, 10 Aug 2024 05:21:49 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Andrew Zaborowski <andrew.zaborowski@intel.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	Eric Biederman <ebiederm@xmission.com>,
+	"x86@kernel.org" <x86@kernel.org>, Tony <tony.luck@intel.com>,
+	Andrew Zaborowski <balrogg@gmail.com>
+Subject: Re: [RESEND][PATCH 1/3] x86: Add task_struct flag to force SIGBUS on
+ MCE
+Message-ID: <20240810032134.GAZrbcvpn_cYzFdEwB@fat_crate.local>
+References: <20240723144752.1478226-1-andrew.zaborowski@intel.com>
+ <202408052135.342F9455@keescook>
+ <6273D749-9CEC-45E4-8C56-FA3A1DBE1137@alien8.de>
+ <SA1PR11MB69926BFE8EFDA7B3C3D84560E7B82@SA1PR11MB6992.namprd11.prod.outlook.com>
+ <CAOq732KXwsKdht55E-Z18choiAYn6dMpXc-TD15B7MOUH1fpxQ@mail.gmail.com>
+ <20240808145331.GAZrTb60FX_I3p0Ukx@fat_crate.local>
+ <CAOq732JV+zcCqgqTbAtVdE+7jYuen2ioG+F+3i5yaBd7Aj8ANA@mail.gmail.com>
+ <20240809083229.GAZrXUHfjgVcHSZPsb@fat_crate.local>
+ <SA1PR11MB69927AE28B46583DCB5C97DEE7BA2@SA1PR11MB6992.namprd11.prod.outlook.com>
+ <CAOq732KnHFo3VaRH9V-x0k5m=h1jyNrdtKj4quG8Yaq7wPQjKg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240723144752.1478226-1-andrew.zaborowski@intel.com>
- <202408052135.342F9455@keescook> <6273D749-9CEC-45E4-8C56-FA3A1DBE1137@alien8.de>
- <SA1PR11MB69926BFE8EFDA7B3C3D84560E7B82@SA1PR11MB6992.namprd11.prod.outlook.com>
- <CAOq732KXwsKdht55E-Z18choiAYn6dMpXc-TD15B7MOUH1fpxQ@mail.gmail.com>
- <20240808145331.GAZrTb60FX_I3p0Ukx@fat_crate.local> <CAOq732JV+zcCqgqTbAtVdE+7jYuen2ioG+F+3i5yaBd7Aj8ANA@mail.gmail.com>
- <20240809083229.GAZrXUHfjgVcHSZPsb@fat_crate.local> <SA1PR11MB69927AE28B46583DCB5C97DEE7BA2@SA1PR11MB6992.namprd11.prod.outlook.com>
-In-Reply-To: <SA1PR11MB69927AE28B46583DCB5C97DEE7BA2@SA1PR11MB6992.namprd11.prod.outlook.com>
-From: Andrew Zaborowski <andrew.zaborowski@intel.com>
-Date: Sat, 10 Aug 2024 03:20:10 +0200
-X-Gmail-Original-Message-ID: <CAOq732KnHFo3VaRH9V-x0k5m=h1jyNrdtKj4quG8Yaq7wPQjKg@mail.gmail.com>
-Message-ID: <CAOq732KnHFo3VaRH9V-x0k5m=h1jyNrdtKj4quG8Yaq7wPQjKg@mail.gmail.com>
-Subject: Re: [RESEND][PATCH 1/3] x86: Add task_struct flag to force SIGBUS on MCE
-To: Borislav Petkov <bp@alien8.de>, "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>, 
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, Eric Biederman <ebiederm@xmission.com>, 
-	"x86@kernel.org" <x86@kernel.org>, Tony <tony.luck@intel.com>, 
-	Andrew Zaborowski <balrogg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAOq732KnHFo3VaRH9V-x0k5m=h1jyNrdtKj4quG8Yaq7wPQjKg@mail.gmail.com>
 
-Borislav Petkov <bp@alien8.de> wrote:
-> So instead of the process getting killed, you want to return SIGBUS
-> because, "hey caller, your process encountered an MCE while being
-> attempted to be executed"?
+On Sat, Aug 10, 2024 at 03:20:10AM +0200, Andrew Zaborowski wrote:
+> True, though that's hard to link to a specific process crash.
 
-The tests could be changed to expect the SIGSEGV but in this case it
-seemed that the test was good and the kernel was misbehaving.  One of
-the authors of the MCE handling code confirmed that.
+The process name when the MCE gets reported is *actually* there in the
+splat: current->comm.
 
->
-> > Qemu relies on the SIGBUS logic but the execve and rseq
-> > cases cannot be recovered from, the main benefit of sending the
-> > correct signal is perhaps information to the user.
->
-> You will have that info in the logs - we're usually very loud when we
-> get an MCE...
+> I was replying to your comment about the size of the change.
 
-True, though that's hard to link to a specific process crash.  It's
-also hard to extract the page address in the process's address space
-from that, although I don't think there's a current use case.
+My comment was about the code you're adding:
 
->
-> > If this cannot be fixed then optimally it should be documented.
->
-> I'm not convinced at all that jumping through hoops you're doing, is
-> worth the effort.
+ arch/x86/kernel/cpu/mce/core.c | 18 +++++++++++++++++-
+ fs/exec.c                      | 15 ++++++++++++---
+ include/linux/sched.h          |  2 ++
+ kernel/rseq.c                  | 25 +++++++++++++++++++++----
+ 4 files changed, 52 insertions(+), 8 deletions(-)
 
-That could be, again this could be fixed in the documentation instead.
+If it is in drivers, I don't care. But it is in main paths and for
+a questionable use case.
 
->
-> > As for "all that code", the memory failure handling code is of certain
-> > size and this is a comparatively tiny fix for a tiny issue.
->
-> No, I didn't say anything about the memory failure code - it is about
+> Supporting something generally includes supporting the common and the
+> obscure cases.
 
-I was replying to your comment about the size of the change.
+Bullshit. We certainly won't support some obscure use cases just
+because.
 
-> supporting that obscure use case and the additional logic you're adding
-> to the #MC handler which looks like a real mess already and us having to
-> support that use case indefinitely.
+> From the user's point of view the kernel has been committed to
+> supporting these scenarios indefinitely or until the deprecation of
+> the SIGBUS-on-memory-error logic, and simply has a bug.
 
-Supporting something generally includes supporting the common and the
-obscure cases.  From the user's point of view the kernel has been
-committed to supporting these scenarios indefinitely or until the
-deprecation of the SIGBUS-on-memory-error logic, and simply has a bug.
+And lemme repeat my question:
 
->
-> So why does it matter if a process which is being executed and gets an
-> MCE beyond the point of no return absolutely needs to return SIGBUS vs
-> it getting killed and you still get an MCE logged on the machine, in
-> either case?
+So why does it matter if a process which is being executed and gets an
+MCE beyond the point of no return absolutely needs to return SIGBUS vs
+it getting killed and you still get an MCE logged on the machine, in
+either case?
 
-A SIGSEGV strongly implies a problem with the program being run, not a
-specific instance of it.  A SIGBUS could be not the program's fault,
-like in this case.
+Bug which is seen by whom or what?
 
-In these tests the workload was simply relaunched on a SIGBUS which
-sounded fair to me.  A qemu VM could similarly be restarted on an
-unrecoverable MCE in a page that doesn't belong to the VM but to qemu
-itself.
+If a process dies, it dies.
 
-Best regards
+> In these tests the workload was simply relaunched on a SIGBUS which
+> sounded fair to me.  A qemu VM could similarly be restarted on an
+> unrecoverable MCE in a page that doesn't belong to the VM but to qemu
+> itself.
+
+If an MCE hits at that particular point once in a blue moon, I don't
+care. If it is a special use case where you inject an MCE right then and
+there to test recovery actions, then that's perhaps a different story.
+
+Usually, a lot of things can be done. As long as there's a valid use
+case to support. But since you hesitate to explain what exactly we're
+supporting, I can't help you.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
