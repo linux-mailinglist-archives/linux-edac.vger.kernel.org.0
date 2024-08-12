@@ -1,115 +1,162 @@
-Return-Path: <linux-edac+bounces-1641-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1642-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C6DE94DBF1
-	for <lists+linux-edac@lfdr.de>; Sat, 10 Aug 2024 11:24:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEC4994E920
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Aug 2024 11:02:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DD131F21D09
-	for <lists+linux-edac@lfdr.de>; Sat, 10 Aug 2024 09:24:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62B701F20F35
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Aug 2024 09:02:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4276314C586;
-	Sat, 10 Aug 2024 09:24:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C53166F22;
+	Mon, 12 Aug 2024 09:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="C7uXh3oI"
+	dkim=pass (1024-bit key) header.d=purdea.ro header.i=@purdea.ro header.b="lHmEDxLa"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE43F4436E
-	for <linux-edac@vger.kernel.org>; Sat, 10 Aug 2024 09:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C17D1514C1
+	for <linux-edac@vger.kernel.org>; Mon, 12 Aug 2024 09:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723281864; cv=none; b=C29cl6rUSjTvJk/0OkyIxQaPvT0szsnKOEIRqx/O8P/r3/G7RlsetN0ihYQLF0Cslk3ACT2rrEcK5ngV9nBXCBrvdeidBoPwiZwVKRUMewV+UsdZ0phOKKQ0gUZmUBL4brGBn/mbMsd57vpBDOx/cyUPkayo3CIXNqH3Yt1X5LE=
+	t=1723453363; cv=none; b=bYOZaj2hAn1eEvtPF1uwjJHDbZt8KCzclYI+wyKgpzuBMLj1gMsP1VoGkOvTq9LYSNjaEEEX47Yt8R0HqzsODmI7w9gBoKlyKDHZH0FVVHUr7THqYt3nzgmpsAqCbvtbSDNW6j0gbIWOSLTzQszni8ltMlOOi0DCOesIwlAJEeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723281864; c=relaxed/simple;
-	bh=p6ynztmWrHoZOLhfJB0gK7RD0fUlEd+yfWBccP+pa5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=odOebZXm/my8v3s5sxkL0YQOlBIHrQ1NzSVuthtbtwCIhfwdwgpdc+BZUWj2/30Qj3DvEjnqExgYp53dwKG/j9ekeEbzT8/KygCJO9JAdV+Ao0gRsNvoHmlLC4QL+0nQNdEi9y/XJ3soAcZd05Knd6wCkE2PrVvnSJ2srI+Ujug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=C7uXh3oI; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5670740E0269;
-	Sat, 10 Aug 2024 09:24:18 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id IXuQ6i0a39BC; Sat, 10 Aug 2024 09:24:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1723281855; bh=i0Ti64cL59inM0Kf6cJNjZxHhxdNSwj2+mzo6QRAot0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C7uXh3oIyU4A6mV+xLzLvptbwZe8mmgK/QEApVAWKkHgonkF+AlwaEvLKIn6yP8U/
-	 jw4JK6dLCGLdW3Ge91/bX0Y2PnNsQL0BE/+ezHGnWkMZVNBPoNJaRzIcwcvJCmGEm4
-	 P/IcO50x5+1aACTqaoV20fZIEzKcEx9dDEL148LwOPTsy58DPzhBxtQS9JXm0GY+m+
-	 JKxbrY6QOA6pTk6qdoJJEa/c2bd7N7+6Z8D17hC3oNSrU0fVo4tvf7dwfQBSXwxrfw
-	 qXkVh4eEqFIYhUWSBTqGdCcSooo1zwFsmP457UP/Jj7rHsODLD2bHSL16XNodf4eBj
-	 rxDRqUqeFRta1IZ7gy15mcnQNvUmumikiQlby5nTk6UWXe8+ttesp2Q9soPzfGfhYP
-	 ea5xdlzMipxDGBzlcJXvKNzWzRJc0bLIhbhJKhihlLEbNCZworVR96GwkUNACOCwCF
-	 M8HnCWTxFObVkkOVf8fyu6lkB9VG7zeOtcqITuL3ozsiPcmpJ5GXQbufIVxqvucK4y
-	 SHB0V9Mlyz2NcXPAmUaRnnmEDliRAfN508dT7NnN/vXNoxuYjjiIs7M/wGfDD9yvt0
-	 fYcNiXAWH0qJUjz5qrfU0qPfFFLGzkQ3rw8Zm8v3xJr0wYecxD/ZFBpV3VUdCEw+AO
-	 GwL7+n+jYoX8oFkchgnk1qzA=
-Received: from nazgul.tnic (unknown [87.120.165.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 14C3040E0263;
-	Sat, 10 Aug 2024 09:24:09 +0000 (UTC)
-Date: Sat, 10 Aug 2024 11:25:05 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Andrew Zaborowski <andrew.zaborowski@intel.com>
-Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	Eric Biederman <ebiederm@xmission.com>,
-	"x86@kernel.org" <x86@kernel.org>, Tony <tony.luck@intel.com>
-Subject: Re: [RESEND][PATCH 1/3] x86: Add task_struct flag to force SIGBUS on
- MCE
-Message-ID: <20240810092454.GAZrcx5kZ8mNkpa-io@fat_crate.local>
-References: <6273D749-9CEC-45E4-8C56-FA3A1DBE1137@alien8.de>
- <SA1PR11MB69926BFE8EFDA7B3C3D84560E7B82@SA1PR11MB6992.namprd11.prod.outlook.com>
- <CAOq732KXwsKdht55E-Z18choiAYn6dMpXc-TD15B7MOUH1fpxQ@mail.gmail.com>
- <20240808145331.GAZrTb60FX_I3p0Ukx@fat_crate.local>
- <CAOq732JV+zcCqgqTbAtVdE+7jYuen2ioG+F+3i5yaBd7Aj8ANA@mail.gmail.com>
- <20240809083229.GAZrXUHfjgVcHSZPsb@fat_crate.local>
- <SA1PR11MB69927AE28B46583DCB5C97DEE7BA2@SA1PR11MB6992.namprd11.prod.outlook.com>
- <CAOq732KnHFo3VaRH9V-x0k5m=h1jyNrdtKj4quG8Yaq7wPQjKg@mail.gmail.com>
- <20240810032134.GAZrbcvpn_cYzFdEwB@fat_crate.local>
- <CAOq732Ly1r06VedTa2EMb8o_L0+QMgJaVCHdEJFXVs5z7OVRBg@mail.gmail.com>
+	s=arc-20240116; t=1723453363; c=relaxed/simple;
+	bh=BZkGiYw/RcP1yrmKR2AdTcX/GXYKxSOtIm1AZRbFzcc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=dYEh6G7J1L2b3bhcfhjtCoVSPeaX1nqDixzYmBKfBemu+gDMOp9ZKP31kykJaQ8iEh5135xS0x/wu2U1xS1wIbx8ijNn3psTjthPmN99YQikpy9oXnyaXtauL06qHr0HliHYX+Q0gzNjWXQUJ78UIW934xFTm6085zzqDugd1ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=purdea.ro; spf=pass smtp.mailfrom=purdea.ro; dkim=pass (1024-bit key) header.d=purdea.ro header.i=@purdea.ro header.b=lHmEDxLa; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=purdea.ro
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purdea.ro
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e0ec934a1fdso1587583276.0
+        for <linux-edac@vger.kernel.org>; Mon, 12 Aug 2024 02:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purdea.ro; s=google; t=1723453360; x=1724058160; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ghsP0JHuEJiPTmjPZJJORUAZJBzn1Ge74yblfGP1i30=;
+        b=lHmEDxLah7tC7YtPkFPSxO0N5faV87nJtzTFiwdluKYLla4HQosdk1x+lrNlm7Otyq
+         V793IZR6a9HB/TR4UXZ4cPy7UGEB7n3pQZb/C9jzZcenM3hhyVr/hCuVSxTSR/y/toVb
+         L8hjA03uwHMACtuEPBaLJdY2Ym6eG4vvOMzG4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723453360; x=1724058160;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ghsP0JHuEJiPTmjPZJJORUAZJBzn1Ge74yblfGP1i30=;
+        b=PSRkU21A+XxnBkVVJ6zZttLQ5KKAufFxJl9jY7SkY3oalZW6fbXpHtN9W6jv/r3eNB
+         ABmNpR/+1EMXnnPvTYehTypIA8Yls2sBywhymO8lNU3LSwvDX2cSSqPDYNge2npA2/CP
+         oMgnODO3zKQY426ceavszBBLzCk7+mjDsRylRbxZxpHpvGft7MQl8LTwAaLEl5FmjLkW
+         5b2dFUxgs9dm2oNvN9NqNa5P8PmLgDpPcGqZwubvnLWEna145D5qADUYZ4jrvuze+CN5
+         WQ8ofYXN2neLiSc+qodpno4+/TEkYb/o7h/JmjULp2/IrD2YXZTxRFbO5eqR0TbBC39r
+         swtw==
+X-Gm-Message-State: AOJu0Ywfu+WkEcmXEo2suzOTwGmzGZf6FcicVozPylJjoYb64CBHENKC
+	1E5VG+/ONUSdZqxp166cDsBZtxQD1Ypg55mH4As5nRDjzgGNYo7i4dUMyPuFk2OIolSsPitU+rq
+	2yZvDX+BY8Vf4GaQmumOTxGh2Np+gRB1UOA/FH+Ezy5aM2jp3cQ==
+X-Google-Smtp-Source: AGHT+IF+lz3rjsge6upnoRVIV8dj9ihYwZfHHQXT5j8s+5+oqHrasebRpBqjKIG54YIyccJisQJLmD89TQhC+CUJTRI=
+X-Received: by 2002:a05:6902:1504:b0:e0b:6cd2:6d6c with SMTP id
+ 3f1490d57ef6-e0eb998247amr10132542276.32.1723453359877; Mon, 12 Aug 2024
+ 02:02:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAOq732Ly1r06VedTa2EMb8o_L0+QMgJaVCHdEJFXVs5z7OVRBg@mail.gmail.com>
+From: Andrei Purdea <andrei@purdea.ro>
+Date: Mon, 12 Aug 2024 09:02:29 +0000
+Message-ID: <CA+mMEgddRSFN=CqbzPjVqqPkEOgxXh5Uw0qkM8usPDuHOGqoWQ@mail.gmail.com>
+Subject: Memory not cleared by UEFI, causing spurious UE messages.
+To: linux-edac@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-So,
+Hello,
 
-to sum up the thread here:
+Let me describe a system I have been debugging:
+1) Thinkpad P51, Xeon E3-1505M v6, EDAC handled by the ie31200_edac
+kernel module. Latest UEFI firmware available (but also behaved the
+same with a previous version)
+2) If I boot normally, I'm getting many periodic UE EDAC reports in dmesg
+3) I'm Experiencing no real errors (i.e. memtest86+ and userspace
+memtester always passes)
+4) If I boot with the kernel command line hacing "memtest=1", then I'm
+not getting any spurious EDAC messages (the purpose is to touch every
+memory location)
+5) If I reboot with memtest=0 after first booting with memtest=1,
+without power cycle, I am also not getting any spurious EDAC messages
+6) However as soon as I power cyclem and boot with memtest=0, the
+spurious EDAC messages are back
+7) The spurious EDAC messages also go away if the system is up for a
+while with memory heavy workloads, presumably because eventually it
+does touch most memory locations.
 
-1. Arguably, tasks which have encountered a memory error should get sent
-   a SIGBUS.
+So I think the above behavior can be explained perfectly by:
+- the UEFI doesn't clear the memory
+- there is no mechanism in the kernel to clear all memory after boot
+(either all at once, or page by page as it's needed, or other block
+size at a time)
+- the computer performs partial writes, or perhaps there are some
+caches that sometimes fetch uninitialized memory, or even there could
+be applications reading uninitialized memory
 
-2. if a valid use case appears, the proper fix should be not to sprinkle
-   special-handling code in random syscalls in a whack-a-mole fashion
-   but to note somewhere in the task struct that the task has
-   encountered a memory error and then *override* the signal it gets
-   sent to it with a SIGBUS one.
+So I think the first question I have is what's the official contract
+between kernel/UEFI, is it expected that systems generally clear the
+memory after initialisation? Is this put into writing somewhere, so I
+can reference it if I try to contact Lenovo? (although I doubt they'll
+build a new firmware, there's a big message on the support page saying
+this device is at the end of development support)
 
-   I.e., this should be a generic solution, if anything.
+On a different machine (ASRock Taichi motherboard), I have a UEFI
+setting, that allows me to toggle Memory Clear for non-ECC memory, and
+the description of the setting implies that Memory Clear is enforced
+when ECC memory is in use. I did not find such a setting in the
+Thinkpad P51 UEFI.
 
-Thx.
+Other related things I found:
+https://buttersideup.com/mediawiki/index.php/Uninitialized_ECC_bits
+i.e. some Asus motherboards need "quick boot" to be disabled for the
+same reason. In my UEFI there's a Boot Mode=Quick/Diagnostics
+settings, however it has no effect.
 
--- 
-Regards/Gruss,
-    Boris.
+That wiki page also mentions "Gigabyte GA-X48-DS" motherboard which
+has no bios workaround, and requires the use of memtest=1. I found
+this page after I spent many hours, and after I figured out on my own
+what my actual problem was, and that memtest=1 can work around it.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I think irrespective of whether Lenovo can release a UEFI fix, we
+could make the process a lot more frictionless for the end user:
+
+1) We could have a workaround that's better than memtest=1. This takes
+12 seconds on my 64GiB system, I bet it can be a lot faster if it
+would only need to initialize memory. (Also, does memtest actually
+cover _all_ memory? If any 64-bit word remains not-covered, maybe some
+kernel memory, and it triggers an error for a user running with
+edac_mc_panic_on_ue=1, it could cause a very rare kernel panic for no
+reason). We don't actually need to initialize all memory, but we do
+need to touch all memory, so if we're already using some areas we can
+make sure they're ECC corrected by reading them before the edac
+drivers start up.
+
+2) We could have some kind of autodetected quirks to enable that
+workaround automatically. I'm thinking autodetect motherboard and/or
+UEFI version.
+
+3) Maybe we could have a warning in dmesg, explaining the situation,
+if random uninitialized memory is detected with ECC on. This could be
+problematic to implement. And could fail if bootloader/uefi used some
+memory area for storage, or in case of kexec, and I'm sure there's
+other situations.
+   - Alternatively perhaps the warning could be printed if the error
+shows up very soon after boot
+   - Or maybe on first error a reference to this wiki page could be
+printed: https://buttersideup.com/mediawiki/index.php/WhyAmIgettingMemoryErrors
+(again, I just found this page seconds ago, as I'm writing this email,
+after spending many hours figuring out what's wrong. I'm not that bad
+at googling.)  Maybe some of this info should be moved into the kernel
+RAS documentation:
+https://www.kernel.org/doc/html/v4.10/admin-guide/ras.html
+
+Cheers,
+Andrei
 
