@@ -1,162 +1,106 @@
-Return-Path: <linux-edac+bounces-1642-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1643-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEC4994E920
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Aug 2024 11:02:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4A0195147A
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Aug 2024 08:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62B701F20F35
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Aug 2024 09:02:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 037C81C23FEC
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Aug 2024 06:25:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C53166F22;
-	Mon, 12 Aug 2024 09:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BF0012C484;
+	Wed, 14 Aug 2024 06:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=purdea.ro header.i=@purdea.ro header.b="lHmEDxLa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="he0BaJc2"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C17D1514C1
-	for <linux-edac@vger.kernel.org>; Mon, 12 Aug 2024 09:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C7574424;
+	Wed, 14 Aug 2024 06:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723453363; cv=none; b=bYOZaj2hAn1eEvtPF1uwjJHDbZt8KCzclYI+wyKgpzuBMLj1gMsP1VoGkOvTq9LYSNjaEEEX47Yt8R0HqzsODmI7w9gBoKlyKDHZH0FVVHUr7THqYt3nzgmpsAqCbvtbSDNW6j0gbIWOSLTzQszni8ltMlOOi0DCOesIwlAJEeE=
+	t=1723616605; cv=none; b=GN7sthjjKrWPnURTM/6NQte/s8JWO/qQ79kIdBuoOIL4uA8L/YfrOcnBQyyukwKdc5PluQMFbHxgsTKFntnz9C3vCnj4mYeq17Gg7vLE+Fn94rTB8rWGscAqWKd2yMZappDIF5WRdx9mQRvCmLHmtst9IP7WhYiLdJH+0NCP0vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723453363; c=relaxed/simple;
-	bh=BZkGiYw/RcP1yrmKR2AdTcX/GXYKxSOtIm1AZRbFzcc=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=dYEh6G7J1L2b3bhcfhjtCoVSPeaX1nqDixzYmBKfBemu+gDMOp9ZKP31kykJaQ8iEh5135xS0x/wu2U1xS1wIbx8ijNn3psTjthPmN99YQikpy9oXnyaXtauL06qHr0HliHYX+Q0gzNjWXQUJ78UIW934xFTm6085zzqDugd1ZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=purdea.ro; spf=pass smtp.mailfrom=purdea.ro; dkim=pass (1024-bit key) header.d=purdea.ro header.i=@purdea.ro header.b=lHmEDxLa; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=purdea.ro
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purdea.ro
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e0ec934a1fdso1587583276.0
-        for <linux-edac@vger.kernel.org>; Mon, 12 Aug 2024 02:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purdea.ro; s=google; t=1723453360; x=1724058160; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ghsP0JHuEJiPTmjPZJJORUAZJBzn1Ge74yblfGP1i30=;
-        b=lHmEDxLah7tC7YtPkFPSxO0N5faV87nJtzTFiwdluKYLla4HQosdk1x+lrNlm7Otyq
-         V793IZR6a9HB/TR4UXZ4cPy7UGEB7n3pQZb/C9jzZcenM3hhyVr/hCuVSxTSR/y/toVb
-         L8hjA03uwHMACtuEPBaLJdY2Ym6eG4vvOMzG4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723453360; x=1724058160;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ghsP0JHuEJiPTmjPZJJORUAZJBzn1Ge74yblfGP1i30=;
-        b=PSRkU21A+XxnBkVVJ6zZttLQ5KKAufFxJl9jY7SkY3oalZW6fbXpHtN9W6jv/r3eNB
-         ABmNpR/+1EMXnnPvTYehTypIA8Yls2sBywhymO8lNU3LSwvDX2cSSqPDYNge2npA2/CP
-         oMgnODO3zKQY426ceavszBBLzCk7+mjDsRylRbxZxpHpvGft7MQl8LTwAaLEl5FmjLkW
-         5b2dFUxgs9dm2oNvN9NqNa5P8PmLgDpPcGqZwubvnLWEna145D5qADUYZ4jrvuze+CN5
-         WQ8ofYXN2neLiSc+qodpno4+/TEkYb/o7h/JmjULp2/IrD2YXZTxRFbO5eqR0TbBC39r
-         swtw==
-X-Gm-Message-State: AOJu0Ywfu+WkEcmXEo2suzOTwGmzGZf6FcicVozPylJjoYb64CBHENKC
-	1E5VG+/ONUSdZqxp166cDsBZtxQD1Ypg55mH4As5nRDjzgGNYo7i4dUMyPuFk2OIolSsPitU+rq
-	2yZvDX+BY8Vf4GaQmumOTxGh2Np+gRB1UOA/FH+Ezy5aM2jp3cQ==
-X-Google-Smtp-Source: AGHT+IF+lz3rjsge6upnoRVIV8dj9ihYwZfHHQXT5j8s+5+oqHrasebRpBqjKIG54YIyccJisQJLmD89TQhC+CUJTRI=
-X-Received: by 2002:a05:6902:1504:b0:e0b:6cd2:6d6c with SMTP id
- 3f1490d57ef6-e0eb998247amr10132542276.32.1723453359877; Mon, 12 Aug 2024
- 02:02:39 -0700 (PDT)
+	s=arc-20240116; t=1723616605; c=relaxed/simple;
+	bh=08md5farfI8/U7k7Z0ZVhMh1+qgSE56XmGI12U5uknA=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=sD7WghWl5p1yEfjdE1/RWQ4f4pjJH8jgQCrs0XlzH8+Ly6B+Jb1ImqzeLmGU9qgOWIfGeSqXyb6vbIGu+teSAH+v6N8SJRa/dPXocdGaNNMS3si5PmbsYI9zXCkB66movgbK5WbF5brZWv1AuoixhQB2t4pgYNyqLNKUD5MgNWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=he0BaJc2; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723616603; x=1755152603;
+  h=from:to:cc:subject:date:message-id;
+  bh=08md5farfI8/U7k7Z0ZVhMh1+qgSE56XmGI12U5uknA=;
+  b=he0BaJc2yoEo1TJsYyysKw5U2aso1WV4iyflYaqQqbD0/GnDM4VsoYha
+   lc4VUNP0mjAd17e+x8Eak4NhYZB5/fpQKub47NPwa0J4He8g9LLd79GP8
+   f46q/IUtLUykf5xmNMFJbUxearnKb00Ymt7d5f7RzEnX9nmi2NYtwW1/A
+   xBJF5LkjjPX2C3NViRziksxv71j/6ShqwIzbnXrLNejERGHE5VpIl0iUq
+   4F6yphMiosMJIFJB7ay+fO2rkH1LmfHh4cIrowUnkEkgJrEQWBJYPoR4x
+   JuKu//p/aiq07pPRN4ruPLTBmNDBjtj1r2/fSGrt2pRwvqA80YAslBLNv
+   g==;
+X-CSE-ConnectionGUID: Cl01zjpYT+yDEQvD/WKbFA==
+X-CSE-MsgGUID: vlRxD6KJS1O5Ucly3Kg2SQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11163"; a="21972893"
+X-IronPort-AV: E=Sophos;i="6.09,288,1716274800"; 
+   d="scan'208";a="21972893"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 23:23:22 -0700
+X-CSE-ConnectionGUID: 6PM9q/EyRBWZJ2fOF+7NJg==
+X-CSE-MsgGUID: 5SqrjFCOTNa6mEgtpO4UhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,288,1716274800"; 
+   d="scan'208";a="59013610"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 23:23:20 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: Tony Luck <tony.luck@intel.com>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH 1/1] EDAC/igen6: Fix conversion of system address to physical memory address
+Date: Wed, 14 Aug 2024 14:10:11 +0800
+Message-Id: <20240814061011.43545-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: Andrei Purdea <andrei@purdea.ro>
-Date: Mon, 12 Aug 2024 09:02:29 +0000
-Message-ID: <CA+mMEgddRSFN=CqbzPjVqqPkEOgxXh5Uw0qkM8usPDuHOGqoWQ@mail.gmail.com>
-Subject: Memory not cleared by UEFI, causing spurious UE messages.
-To: linux-edac@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+The conversion of system address to physical memory address (as viewed by
+the memory controller) by igen6_edac is incorrect when the system address
+is above the TOM (Total amount Of populated physical Memory) for Elkhart
+Lake and Ice Lake (Neural Network Processor). Fix this conversion.
 
-Let me describe a system I have been debugging:
-1) Thinkpad P51, Xeon E3-1505M v6, EDAC handled by the ie31200_edac
-kernel module. Latest UEFI firmware available (but also behaved the
-same with a previous version)
-2) If I boot normally, I'm getting many periodic UE EDAC reports in dmesg
-3) I'm Experiencing no real errors (i.e. memtest86+ and userspace
-memtester always passes)
-4) If I boot with the kernel command line hacing "memtest=1", then I'm
-not getting any spurious EDAC messages (the purpose is to touch every
-memory location)
-5) If I reboot with memtest=0 after first booting with memtest=1,
-without power cycle, I am also not getting any spurious EDAC messages
-6) However as soon as I power cyclem and boot with memtest=0, the
-spurious EDAC messages are back
-7) The spurious EDAC messages also go away if the system is up for a
-while with memory heavy workloads, presumably because eventually it
-does touch most memory locations.
+Fixes: 10590a9d4f23 ("EDAC/igen6: Add EDAC driver for Intel client SoCs using IBECC")
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ drivers/edac/igen6_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So I think the above behavior can be explained perfectly by:
-- the UEFI doesn't clear the memory
-- there is no mechanism in the kernel to clear all memory after boot
-(either all at once, or page by page as it's needed, or other block
-size at a time)
-- the computer performs partial writes, or perhaps there are some
-caches that sometimes fetch uninitialized memory, or even there could
-be applications reading uninitialized memory
+diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
+index 0fe75eed8973..189a2fc29e74 100644
+--- a/drivers/edac/igen6_edac.c
++++ b/drivers/edac/igen6_edac.c
+@@ -316,7 +316,7 @@ static u64 ehl_err_addr_to_imc_addr(u64 eaddr, int mc)
+ 	if (igen6_tom <= _4GB)
+ 		return eaddr + igen6_tolud - _4GB;
+ 
+-	if (eaddr < _4GB)
++	if (eaddr >= igen6_tom)
+ 		return eaddr + igen6_tolud - igen6_tom;
+ 
+ 	return eaddr;
+-- 
+2.17.1
 
-So I think the first question I have is what's the official contract
-between kernel/UEFI, is it expected that systems generally clear the
-memory after initialisation? Is this put into writing somewhere, so I
-can reference it if I try to contact Lenovo? (although I doubt they'll
-build a new firmware, there's a big message on the support page saying
-this device is at the end of development support)
-
-On a different machine (ASRock Taichi motherboard), I have a UEFI
-setting, that allows me to toggle Memory Clear for non-ECC memory, and
-the description of the setting implies that Memory Clear is enforced
-when ECC memory is in use. I did not find such a setting in the
-Thinkpad P51 UEFI.
-
-Other related things I found:
-https://buttersideup.com/mediawiki/index.php/Uninitialized_ECC_bits
-i.e. some Asus motherboards need "quick boot" to be disabled for the
-same reason. In my UEFI there's a Boot Mode=Quick/Diagnostics
-settings, however it has no effect.
-
-That wiki page also mentions "Gigabyte GA-X48-DS" motherboard which
-has no bios workaround, and requires the use of memtest=1. I found
-this page after I spent many hours, and after I figured out on my own
-what my actual problem was, and that memtest=1 can work around it.
-
-I think irrespective of whether Lenovo can release a UEFI fix, we
-could make the process a lot more frictionless for the end user:
-
-1) We could have a workaround that's better than memtest=1. This takes
-12 seconds on my 64GiB system, I bet it can be a lot faster if it
-would only need to initialize memory. (Also, does memtest actually
-cover _all_ memory? If any 64-bit word remains not-covered, maybe some
-kernel memory, and it triggers an error for a user running with
-edac_mc_panic_on_ue=1, it could cause a very rare kernel panic for no
-reason). We don't actually need to initialize all memory, but we do
-need to touch all memory, so if we're already using some areas we can
-make sure they're ECC corrected by reading them before the edac
-drivers start up.
-
-2) We could have some kind of autodetected quirks to enable that
-workaround automatically. I'm thinking autodetect motherboard and/or
-UEFI version.
-
-3) Maybe we could have a warning in dmesg, explaining the situation,
-if random uninitialized memory is detected with ECC on. This could be
-problematic to implement. And could fail if bootloader/uefi used some
-memory area for storage, or in case of kexec, and I'm sure there's
-other situations.
-   - Alternatively perhaps the warning could be printed if the error
-shows up very soon after boot
-   - Or maybe on first error a reference to this wiki page could be
-printed: https://buttersideup.com/mediawiki/index.php/WhyAmIgettingMemoryErrors
-(again, I just found this page seconds ago, as I'm writing this email,
-after spending many hours figuring out what's wrong. I'm not that bad
-at googling.)  Maybe some of this info should be moved into the kernel
-RAS documentation:
-https://www.kernel.org/doc/html/v4.10/admin-guide/ras.html
-
-Cheers,
-Andrei
 
