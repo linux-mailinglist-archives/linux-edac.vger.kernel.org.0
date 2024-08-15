@@ -1,90 +1,90 @@
-Return-Path: <linux-edac+bounces-1648-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1649-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F056953C16
-	for <lists+linux-edac@lfdr.de>; Thu, 15 Aug 2024 22:50:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E2A3953C2B
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Aug 2024 22:52:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2D121C23E3F
-	for <lists+linux-edac@lfdr.de>; Thu, 15 Aug 2024 20:50:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CBCB1C22A0F
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Aug 2024 20:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B1314E2DF;
-	Thu, 15 Aug 2024 20:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8006E14F9D9;
+	Thu, 15 Aug 2024 20:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EfCwSEAt"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="o+paYvTT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2040.outbound.protection.outlook.com [40.107.101.40])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2043.outbound.protection.outlook.com [40.107.102.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85A914A609;
-	Thu, 15 Aug 2024 20:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8295314EC7D;
+	Thu, 15 Aug 2024 20:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723754850; cv=fail; b=X3nwc2M9CQTF04c9Xeis0Tz6231C3OGNBrNN+vYM97qf6GquEl/6xX9CwFNM2+XkKSpD8n0et83uV4Zb5X4bF18p9qytR+ajzMBKo4v+Pc+gdVH2eZ10o1NBHeaH2aJ867c+0u3X6E++9Vd6EemKiwSnVmIEjDVa91ctWu4wfFE=
+	t=1723755000; cv=fail; b=SWubaq6z1hXFC7lvmcx9W+AIJ3jJqWgdQ8CAUO6HqJzPHqcodTcdntc7aLPvtXqaGKLTVtFTxXcZ2sBvJ08xc3lwGUjlmBvXIh1bi5Jtb2B9ljUnTREuArOrWyX8KTQceKdBJc+tWakTPHw6TKLJ26vdvxLAW7QFYISOrvESd5w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723754850; c=relaxed/simple;
-	bh=9feu1ry0wc6vdyKWelu9tB7hvnxMquIDZ4BvyykZHlg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BvwbrOAr25aTIX2wWo8veJS8lQc6tyEXO98Nc1lzgjUKjvCkGyD95SQvInNvX2UhGguUenttfye3Drrd1/vVDcnWUFjTxzlMP/DS4AkjaWD3pOB5CeBy2nO+R7/M/MBeoLt5K6zsK57cUkMK8C6CyxpuXUShKYT/2epGwpwius0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EfCwSEAt; arc=fail smtp.client-ip=40.107.101.40
+	s=arc-20240116; t=1723755000; c=relaxed/simple;
+	bh=PSSL7mAIfmYWSlwXigPTYvsj0Ifc/pAr90nK1p/Tgj4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YWmG7jOrcZ8JMhpH3eixRcpMsrCyN/QDBo0sBEvqhMclTzAIm7QaAgOrKF2OOXZayUmo5yOhn/52ebC05aWXBP74K6qGx2qR2UlXzDr+kHmaU1pplgMV9/tPqdgkSqj44hsMZTUjTvFQjd4ll42Y2eSbRjKwT1Qf3GBYCoJczB8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=o+paYvTT; arc=fail smtp.client-ip=40.107.102.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=grlxdbuGrq259GbPJCzphxiuMIgZQUYua9MEP69cOg4gGDvI3AS/9JG6GGSM1xvjyZVX49QBWc41l1kjjmvTSyoWYjEd/eMwolm5ZME007KQHqc0rZtX5uC6HUFuZYPDxYNOszWNV1IMGzlrtKX1/qTFgDKslVYLPJGNgD+Zd7Wjx92nt7Kejthvg8UVNGpn5uhl/MHGJ42H4x8mMwGhXdvX6mGFcmBuGSJCufMAiQie45ROD/B3l8lU6/a4r91LuCK0UWPLixy65RKU0bv2dIe7Kg9O59IpAohDNczHu/x+O7Pj77en6tcg/+8b5z3mlJKVbsz0z8trOu21HuYdJA==
+ b=Y6JcqIJDN2n8T3AGrwAmKJ4PLfv04T6SzeB0gmMr4dKeVfORFyQq/wQmPoubb593/Cv/xxM4K8RHjYz41fZkut1UdQPGhpo8KLidpzW3nMeMsWim68uzSdiG7WUKiSOHlwCbnZLoZ1fvSZmq00Fm10xglSns+mQcrfrneqavxUZtytuTPBK4p2w2xWPzgQS57D6OmYRpEJ/1aTNnpJLCmydhRIh3CKoqd8OM4cIgRX5hBx6o9fYKqBKjFb88j/WpsK9iNLnuURJdfFScRFGq3jJltUa3wDL1w9qY1DovZwdeeJb5ZXw2nII2w80QAqOxe9GKONLIvRtUzo9CW/sR1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=us7wQFOsOryuJcamWuwA22pfnzJeYuv1V+XhQJV2HMw=;
- b=JhFM2WZmdwMC+B/HzVNo1ag34r09Ag778+8yUk2BGzNXgHRgTnkNyhZ/KyWmmUOynNK5/rba6u7KnXXFAkpX/E7qhwUsAKU04G5T+XkGnk3PbVpYrDHuex0AUnSzoGQheXsRCuWrth8swoJ8Uk8vrsRhNZot04ylXEQLghh19f1+bEC4VtkwqaGIpan3K5sVNNQYblsXBY7rU29fcQAS4FdyX2AGIWOfxLNmNyxp/4KjtvSRI7W7Skic9fvVojt8JgfUgl0u6d0K+L9mMwUcqOl+JJfh+AhyMF3z/gS+r7rFUn34EXVUNXxZ+dwwJVjcARJldr7ZSVn//fgLmCJpcg==
+ bh=ZZ+Mui7B4+tPl1FFOz2Ml6yLbSgZ8yUXnmroXI+bWdk=;
+ b=W+DjeQoGl7l5Xh6e8K35I3ikbEsxHWkXoWiJ+14VoklqaTU7lgBRT1nNvDmn1HtLsQRPEEeRfFt6923o/ZYNe8NMeoQdqgqiq+OxKyxho6oIyTuxg8lAYXKlz0okaCaGM3BK+pLdyo7gMq6ZlWZ3TFq7mmAIf/S3Z6e6Bq7Elv5ZjEd4diAE2wBli2x1agUkFrHLSvapiU5b60j0i4cc+IhdxAAfhtx3ODyY6Nd3XowGJ3qZKe2RzTfbeyvr6ZYJkAvKS7rlLW6VEJKfYfbP1RtS70hYEzlEuAjjBYUnTDiCDq3cEYOlufy/KEKpsVOTllVr3kWlKtalg93SYOXnFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=alien8.de smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=alien8.de smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=us7wQFOsOryuJcamWuwA22pfnzJeYuv1V+XhQJV2HMw=;
- b=EfCwSEAtVc2D+l6lJOGtYJ32x9VdcBdx9PfR79ODK4IBP7coe5y4cA9Wc0cWQc0dIUN3TYwST9YfZvAFE1tSoFKQ/qNy/0V2/tPTaGQaqha5DGF5PGcZ7ldQsKpe5wtU6adTLh17H2MCFsrD7nWMq64KxGCSPKkPAXXKMHer0F6Ezjm6WNL/mDftmGza4EicRg9fvPCVoJR31+FSH9hw/7FLyDZohWRCn2Iha2IseqAfmZq77c6y6brbVgv+RvAQ3j6KIQ67R3jt/uQldieDxsiwp/pZKHn/oDOQSVy5PNNCEBwXb7jg4jNlAwJLGWB+g65Mp1ztty3/IZ+f7s/ZZQ==
-Received: from SJ0PR13CA0089.namprd13.prod.outlook.com (2603:10b6:a03:2c4::34)
- by PH7PR12MB7380.namprd12.prod.outlook.com (2603:10b6:510:20f::20) with
+ bh=ZZ+Mui7B4+tPl1FFOz2Ml6yLbSgZ8yUXnmroXI+bWdk=;
+ b=o+paYvTTcrcmcwvdjP5l8dabqWi9J0S97XqyDumTBgGyCpKDCtV3Lj7LxGnAkJhzC/wKOwrGX+6gEJZrg7tEE9IG23jDBBZfiwp1J1klTWZMjuOKHUSwsOlfn0YBu3nlQ2B1IG8YC2+1jQ4Z+YToaDcsJSVwuJCHV7cEirGrTEIlaYU19HhWOZcz7rbDWBLeAc4bWlAZ1XmAJB0M1RvPVePJ7DxnzJgYumN8Xk1yPm++34CJDVzCy4F98S8hp+xzztW4QUeBRK4VcIWR5qWRKcjF43ZfOqkbh6i/id38FOD5rhOzvA1fM8SKvdSqiu13kgNblMj12rKAClC/Ov4/1w==
+Received: from CH5PR03CA0005.namprd03.prod.outlook.com (2603:10b6:610:1f1::24)
+ by BY5PR12MB4228.namprd12.prod.outlook.com (2603:10b6:a03:20b::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.23; Thu, 15 Aug
- 2024 20:47:21 +0000
-Received: from SJ1PEPF00001CE2.namprd05.prod.outlook.com
- (2603:10b6:a03:2c4:cafe::65) by SJ0PR13CA0089.outlook.office365.com
- (2603:10b6:a03:2c4::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.16 via Frontend
- Transport; Thu, 15 Aug 2024 20:47:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.19; Thu, 15 Aug
+ 2024 20:49:51 +0000
+Received: from DS3PEPF0000C37B.namprd04.prod.outlook.com
+ (2603:10b6:610:1f1:cafe::f5) by CH5PR03CA0005.outlook.office365.com
+ (2603:10b6:610:1f1::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.33 via Frontend
+ Transport; Thu, 15 Aug 2024 20:49:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- SJ1PEPF00001CE2.mail.protection.outlook.com (10.167.242.10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7849.8 via Frontend Transport; Thu, 15 Aug 2024 20:47:21 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS3PEPF0000C37B.mail.protection.outlook.com (10.167.23.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7849.8 via Frontend Transport; Thu, 15 Aug 2024 20:49:50 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 15 Aug
- 2024 13:47:12 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Thu, 15 Aug 2024 13:47:12 -0700
-Received: from vdi.nvidia.com (10.127.8.9) by mail.nvidia.com (10.126.190.182)
+ 2024 13:49:32 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 15 Aug
+ 2024 13:49:31 -0700
+Received: from vdi.nvidia.com (10.127.8.9) by mail.nvidia.com (10.129.68.6)
  with Microsoft SMTP Server id 15.2.1544.4 via Frontend Transport; Thu, 15 Aug
- 2024 13:47:11 -0700
+ 2024 13:49:30 -0700
 From: David Thompson <davthompson@nvidia.com>
 To: <bp@alien8.de>, <tony.luck@intel.com>, <james.morse@arm.com>,
 	<mchehab@kernel.org>, <rric@kernel.org>
 CC: <linux-edac@vger.kernel.org>, <shravankr@nvidia.com>,
 	<linux-kernel@vger.kernel.org>, David Thompson <davthompson@nvidia.com>
-Subject: [v1, RESEND] EDAC/bluefield - fix potential integer overflow
-Date: Thu, 15 Aug 2024 16:47:00 -0400
-Message-ID: <20240815204700.6447-1-davthompson@nvidia.com>
+Subject: [v2, RESEND] EDAC/bluefield: Use Arm SMC for EMI access on BlueField-2
+Date: Thu, 15 Aug 2024 16:49:28 -0400
+Message-ID: <20240815204928.7333-1-davthompson@nvidia.com>
 X-Mailer: git-send-email 2.30.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -97,80 +97,387 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE2:EE_|PH7PR12MB7380:EE_
-X-MS-Office365-Filtering-Correlation-Id: fcfc75c8-8491-42ed-4383-08dcbd6b75d3
+X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37B:EE_|BY5PR12MB4228:EE_
+X-MS-Office365-Filtering-Correlation-Id: 760954d0-41de-4d51-1107-08dcbd6bce6d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
+	BCL:0;ARA:13230040|1800799024|82310400026|376014|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ubofKp968MvMJfSo5E15GWTGY+HRfQoOsyXFLtPR/q6Abe6sz68sO9YkPSTv?=
- =?us-ascii?Q?GIISzJeHSSFlw3auUxP51qBkeBCaGKVq+ud1lhkTINJ1ScN3ZlxdgK6emwBx?=
- =?us-ascii?Q?NaYmSeu6+XQJkA1HjvFhzGnw7DI8ieQP/tmQtA09PBZv6HQ26tjS2dmKuQiW?=
- =?us-ascii?Q?v5w/nGrw45Kpu36FGoeepINHGGsr9DKkBfSu6BpXNtKLaIDkc6BdbByPP8G3?=
- =?us-ascii?Q?4iGYMwz/phYtx+WWrsneZAWzPqIDFKf3ivUU+rmpXZQnLenk5+MK+H/QsR/+?=
- =?us-ascii?Q?6xhcnS+3xLh72NAWU6L+dhcavv/0gLujoC7VaBOPe44622m9kq+dXC6bpsDU?=
- =?us-ascii?Q?dZjgbgYy9jGHQ/JUHU0lz1v5g47HFoPDJHrM4Gdnf4s0WMqtK7Q5Z4BIMj+B?=
- =?us-ascii?Q?T2SLRQHh/naPvVg4huQ7zU592bH+AcOu+iSh3b4byTyyW0Y6SsgYzrHUGwg+?=
- =?us-ascii?Q?oMWjlIxLEzLPEo6neQz+9BoI1V8bY6VE1rBEncmsn8PBf/rshow1OcbRWzkp?=
- =?us-ascii?Q?vqm81h+YN6BSpo6RWupZ0IJ/zEIwqsM9yI5kTAzVx5wOrua4/QluEC28i90h?=
- =?us-ascii?Q?NNRdBTee3QNd3UV/zd6fY/DQ5orkhHwqAROZKeBc3sAimUTO6YaPrCDQj/L7?=
- =?us-ascii?Q?yoC30BD08gX6YBieKYbbEH8gd0pqIjVNUFNMcMCB6Kceg25TjAH8eeyUy7RG?=
- =?us-ascii?Q?sCVb3G1FUK6vD8lq7IDLWZfReDK5V9qbdlmM9tbsS39lKMFdwN/pJ5Iv/fhP?=
- =?us-ascii?Q?DV95wqIbhftvSv1J4zFLxFZiEWQX7SnpC9ubzEf2cRmz8SGLZjUUcwXA/UI/?=
- =?us-ascii?Q?+fgaC6VCmHkf2YA48kzy2Ab6rXNnSv41kbL7NYphEwpNC/Jhka/pw4T6JifX?=
- =?us-ascii?Q?AzagdzLIngfx38p1wL8aOuEcOpe2vqtROcydtaxGCSle8obwlmWD5kL3vHqc?=
- =?us-ascii?Q?FRQD/qTzgQ5CTqFK1I+5XlngAW7pov8Kqwwotg7PFbpBm8GdgjTvYgSSXIGr?=
- =?us-ascii?Q?ddpNXW2hGFw29j2MGlOBjD9TMz9S8e3oFmSFtd15naaLoawXmS6r4Q3Wxdce?=
- =?us-ascii?Q?Zd+bVt50eCf+nuxwz12oAWWp+ViI4MXkVWi19Fl6otCZFygQiXV9ccHRgB7M?=
- =?us-ascii?Q?5eMLORYwC6/xnUudyqkWtrUjO30zo+oYhLZGTlML+wkqHTfViFrdVtkTbEZU?=
- =?us-ascii?Q?KMl7MRvwCA9+XBkEeFsj7ER6FHjmjjrMuByO8AxDTMj/HVIAcDlbE6T9BIdz?=
- =?us-ascii?Q?doML0CkTYfWYZcSOiy9hKvqqwQk/jaLss4hydQQQj/4H7v75Qd7AtjJCTAim?=
- =?us-ascii?Q?+8I3n3W4eDLst0rUl3D9GNawdkPx9qVJCv1DEQF6a5vrTtJe4Fvhp1488F5I?=
- =?us-ascii?Q?TM976BGHLXCifl4t9v5XaTJ1KzCNq73RyOOXcu2k27lNFMEz4W9F9JGuGtKV?=
- =?us-ascii?Q?1YOF6DxZYaW0P19mBouGS6wxuUJ42FTt?=
+	=?us-ascii?Q?qOU05vr5l/ggsLIps0jLlsijETCTJCjX9x3Hzo7bPf2iMlHYCKYmmzGgJTD5?=
+ =?us-ascii?Q?2xCl6/gSGBpmpXadApP41B7drhrx3re+tfEEdEMJabf+f8l5yo5CLVC+IlEH?=
+ =?us-ascii?Q?9MI+TmMoiM8EugHGsES8xDxu5Pg7TEOAGAdkbbOFvkHOixNrl3Z9HU6u6IFQ?=
+ =?us-ascii?Q?c05JqMIRQbfTTxbeFRok/Iu5HIkiOAonv4KgXsfwmq8na3sJ6gTH79ZYXOz6?=
+ =?us-ascii?Q?mCKRxAxWKPvhqYI3Us6U2Ozhm+zQ+eZJGaYIya55O/g83Mze97yGEawiKpAh?=
+ =?us-ascii?Q?oxXbwlogJscgd24Melqlt9ZPuicwJQbr8pksFSdjtIjqqpipNP+pcyy3JuoQ?=
+ =?us-ascii?Q?psKPbQhJ9RL80YTX200X38gFN8DnpJkEtEuiiM4QscWMfrwqy+QqfG4Evs86?=
+ =?us-ascii?Q?LZSe7eA+8p2K8pe9c+C7Ww66P8brd3pPQdnRDSb6+XynwAtwjzh8gqgA2Hyl?=
+ =?us-ascii?Q?O2eFWxZFJlS2o2utvriEqwcM72e7+cS6+OYwd8xIRlM4GU1Or1kZZ0bohDf/?=
+ =?us-ascii?Q?LOBaWHNiORWOk7VaKKIddmZOvKxygAYAaC/dagQFSBH+P5dlXrHVoQjXgH4e?=
+ =?us-ascii?Q?0I5Zg7kVSPV5yNmkUH6hiE9+eFeVARhO3Yk7kdTBoDZv6EflDE26kFH3iWag?=
+ =?us-ascii?Q?NL60X6AKfp3HS41osICQCATTTfibPwUCPhbT3AQEzh/YsBndQaN6nlilenk7?=
+ =?us-ascii?Q?Ky+XrxUiAtE5TQhSkhHJJIlJwNV9eoVgDhWgw/IAMpwMlIQTXeOITGoBn8Zu?=
+ =?us-ascii?Q?09+iyPuv53LmWr4mCJtT51/gd18hF30d41eGJRVbb/hxn2b5BtfXXtPBrYw4?=
+ =?us-ascii?Q?7s7KCGRqv+G1ViQVgfcEMVEwEfvhOVm67Se0X+VszwBoW4W4mZ49WAVl67cm?=
+ =?us-ascii?Q?3cvTmWv+LI+zt1btGZpQVMlyds8ALzEi34QWvZF1aiNdPwqSlRdT+UktPnh/?=
+ =?us-ascii?Q?PFiTRJ+tESSZM33yri54d9DK6jE6uDAg0kcUb8anHCGKbYLXtO5qae1QJNgH?=
+ =?us-ascii?Q?iKXhm9UYBUXmVzbO5Q9SbOT/Ca4f51pDK0rC5sYsUQ+IMM3X2c69nHDMUA8a?=
+ =?us-ascii?Q?qa+ERrVH9A6IYdeQw0lqssTMGEHsK3UZ6HjBrIN9LcSUJEyVV0WKKUs9chBy?=
+ =?us-ascii?Q?g8aea1RwHXtdIzhD+eBhs93sy6pI8sv5RYHePMIihDFpGWFtXhcIZgVdLp7Y?=
+ =?us-ascii?Q?ZeP/pFw8tii3WeI6oXAzVv48DCxmvMP/vP6Ds2oY5BWL4u9l/AZEVZx6MoOR?=
+ =?us-ascii?Q?Ftmjw43HDKQPwoMGX66rbRvSg+Gmwh35gtiVSNW8SNkBvlVUiPCLpClWthN1?=
+ =?us-ascii?Q?czjyNZP79IECKCOsrWIYLq5MPhbfkcSqsU4xVPv4JytogpZSH14zmZxD0pMG?=
+ =?us-ascii?Q?M+0Ab35+HdiQapcUdUjd+2Zj5h4qbOetyHtEWOcfFRPGrNbK81WXaGW4idSt?=
+ =?us-ascii?Q?ml3BP1vmX34b6QPXFaPhy6SV27ujBJIp?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 20:47:21.5385
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 20:49:50.0141
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcfc75c8-8491-42ed-4383-08dcbd6b75d3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 760954d0-41de-4d51-1107-08dcbd6bce6d
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00001CE2.namprd05.prod.outlook.com
+	DS3PEPF0000C37B.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7380
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4228
 
-The 64-bit argument for the "get DIMM info" SMC call consists of
-"mem_ctrl_idx" left-shifted 16 bits and OR-ed with DIMM index.
-With "mem_ctrl_idx" defined as 32-bits wide the left-shift operation
-truncates the upper 16 bits of information during the calculation
-of the SMC argument. The "mem_ctrl_idx" stack variable must be
-defined as 64-bits wide to prevent any potential integer overflow,
-i.e. loss of data from upper 16 bits.
+The BlueField EDAC driver supports the first generation BlueField-1 SoC,
+but not the second generation BlueField-2 SoC.  The BlueField-2 SoC is
+different in that only secure accesses are allowed to the External Memory
+Interface (EMI) register block. On BlueField-2, all read/write accesses
+from Linux to EMI registers are routed via Arm Secure Monitor Call (SMC)
+through Arm Trusted Firmware (ATF), which runs at EL3 privileged state.
 
-Fixes: 82413e562ea6 ("EDAC, mellanox: Add ECC support for BlueField DDR4")
-Reviewed-by: Shravan Kumar Ramani <shravankr@nvidia.com>
+On BlueField-1, EMI registers are mapped and accessed directly. In order
+to support BlueField-2, the driver's read and write access methods must
+be extended with additional logic to include secure access to the EMI
+registers via SMCs.
+
+The driver's probe routine must check the ACPI table for presence of
+the "sec_reg_block" property and ensure the minimum required SMC service
+version is present before enabling the BlueField-2 secure access methods.
+The "sec_reg_block" property is only present in BlueField-2 ACPI table,
+not the BlueField-1 ACPI table.
+
+Also, the bluefield_edac driver needs two coding style fixes: one fix
+addresses an issue raised by checkpatch, and the other fix provides
+consistency in declaration of #defines.
+
 Signed-off-by: David Thompson <davthompson@nvidia.com>
+Reviewed-by: Shravan Kumar Ramani <shravankr@nvidia.com>
 ---
- drivers/edac/bluefield_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v1 -> v2
+a) removed #defines for SMC function IDs that are not used
+b) added "bluefield_edac_" prefix to "secure_readl/writel" functions
+c) added "bluefield_" prefix to "edac_readl/writel" functions
+d) changed logic to use "uN" typedefs instead of "uintN_t"
+e) added initialization of "priv->dev" in probe()
+f) added more details to commit message
+
+v0 -> v1
+Updated commit message
+---
+ drivers/edac/bluefield_edac.c | 174 ++++++++++++++++++++++++++++++----
+ 1 file changed, 155 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.c
-index 5b3164560648..0e539c107351 100644
+index 5b3164560648..4e0db1cbfbe7 100644
 --- a/drivers/edac/bluefield_edac.c
 +++ b/drivers/edac/bluefield_edac.c
-@@ -180,7 +180,7 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
- static void bluefield_edac_init_dimms(struct mem_ctl_info *mci)
+@@ -47,13 +47,22 @@
+ #define MLXBF_EDAC_MAX_DIMM_PER_MC	2
+ #define MLXBF_EDAC_ERROR_GRAIN		8
+ 
++#define MLXBF_WRITE_REG_32		(0x82000009)
++#define MLXBF_READ_REG_32		(0x8200000A)
++#define MLXBF_SIP_SVC_VERSION		(0x8200ff03)
++
++#define MLXBF_SMCCC_ACCESS_VIOLATION	(-4)
++
++#define MLXBF_SVC_REQ_MAJOR		0
++#define MLXBF_SVC_REQ_MINOR		3
++
+ /*
+- * Request MLNX_SIP_GET_DIMM_INFO
++ * Request MLXBF_SIP_GET_DIMM_INFO
+  *
+  * Retrieve information about DIMM on a certain slot.
+  *
+  * Call register usage:
+- * a0: MLNX_SIP_GET_DIMM_INFO
++ * a0: MLXBF_SIP_GET_DIMM_INFO
+  * a1: (Memory controller index) << 16 | (Dimm index in memory controller)
+  * a2-7: not used.
+  *
+@@ -61,7 +70,7 @@
+  * a0: MLXBF_DIMM_INFO defined below describing the DIMM.
+  * a1-3: not used.
+  */
+-#define MLNX_SIP_GET_DIMM_INFO		0x82000008
++#define MLXBF_SIP_GET_DIMM_INFO		0x82000008
+ 
+ /* Format for the SMC response about the memory information */
+ #define MLXBF_DIMM_INFO__SIZE_GB GENMASK_ULL(15, 0)
+@@ -72,9 +81,12 @@
+ #define MLXBF_DIMM_INFO__PACKAGE_X GENMASK_ULL(31, 24)
+ 
+ struct bluefield_edac_priv {
++	struct device *dev;
+ 	int dimm_ranks[MLXBF_EDAC_MAX_DIMM_PER_MC];
+ 	void __iomem *emi_base;
+ 	int dimm_per_mc;
++	bool svc_sreg_support;
++	u32 sreg_tbl_edac;
+ };
+ 
+ static u64 smc_call1(u64 smc_op, u64 smc_arg)
+@@ -86,6 +98,71 @@ static u64 smc_call1(u64 smc_op, u64 smc_arg)
+ 	return res.a0;
+ }
+ 
++static int bluefield_edac_secure_readl(void __iomem *addr, u32 *result, u32 sreg_tbl)
++{
++	struct arm_smccc_res res;
++	int status;
++
++	arm_smccc_smc(MLXBF_READ_REG_32, sreg_tbl, (uintptr_t)addr,
++		      0, 0, 0, 0, 0, &res);
++
++	status = res.a0;
++
++	switch (status) {
++	case SMCCC_RET_NOT_SUPPORTED:
++	case MLXBF_SMCCC_ACCESS_VIOLATION:
++		return -1;
++	default:
++		*result = (u32)res.a1;
++		return 0;
++	}
++}
++
++static int bluefield_edac_secure_writel(void __iomem *addr, u32 data, u32 sreg_tbl)
++{
++	struct arm_smccc_res res;
++	int status;
++
++	arm_smccc_smc(MLXBF_WRITE_REG_32, sreg_tbl, data, (uintptr_t)addr,
++		      0, 0, 0, 0, &res);
++
++	status = res.a0;
++
++	switch (status) {
++	case SMCCC_RET_NOT_SUPPORTED:
++	case MLXBF_SMCCC_ACCESS_VIOLATION:
++		return -1;
++	default:
++		return 0;
++	}
++}
++
++static int bluefield_edac_readl(void __iomem *addr, u32 *result,
++				bool sreg_support, u32 sreg_tbl)
++{
++	int err = 0;
++
++	if (sreg_support)
++		err = bluefield_edac_secure_readl(addr, result, sreg_tbl);
++	else
++		*result = readl(addr);
++
++	return err;
++}
++
++static int bluefield_edac_writel(void __iomem *addr, u32 data,
++				 bool sreg_support, u32 sreg_tbl)
++{
++	int err = 0;
++
++	if (sreg_support)
++		err = bluefield_edac_secure_writel(addr, data, sreg_tbl);
++	else
++		writel(data, addr);
++
++	return err;
++}
++
+ /*
+  * Gather the ECC information from the External Memory Interface registers
+  * and report it to the edac handler.
+@@ -99,7 +176,7 @@ static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
+ 	u32 ecc_latch_select, dram_syndrom, serr, derr, syndrom;
+ 	enum hw_event_mc_err_type ecc_type;
+ 	u64 ecc_dimm_addr;
+-	int ecc_dimm;
++	int ecc_dimm, err;
+ 
+ 	ecc_type = is_single_ecc ? HW_EVENT_ERR_CORRECTED :
+ 				   HW_EVENT_ERR_UNCORRECTED;
+@@ -109,14 +186,22 @@ static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
+ 	 * registers with information about the last ECC error occurrence.
+ 	 */
+ 	ecc_latch_select = MLXBF_ECC_LATCH_SEL__START;
+-	writel(ecc_latch_select, priv->emi_base + MLXBF_ECC_LATCH_SEL);
++	err = bluefield_edac_writel(priv->emi_base + MLXBF_ECC_LATCH_SEL,
++				    ecc_latch_select, priv->svc_sreg_support,
++				    priv->sreg_tbl_edac);
++	if (err)
++		dev_err(priv->dev, "ECC latch select write failed.\n");
+ 
+ 	/*
+ 	 * Verify that the ECC reported info in the registers is of the
+ 	 * same type as the one asked to report. If not, just report the
+ 	 * error without the detailed information.
+ 	 */
+-	dram_syndrom = readl(priv->emi_base + MLXBF_SYNDROM);
++	err = bluefield_edac_readl(priv->emi_base + MLXBF_SYNDROM, &dram_syndrom,
++				   priv->svc_sreg_support, priv->sreg_tbl_edac);
++	if (err)
++		dev_err(priv->dev, "DRAM syndrom read failed.\n");
++
+ 	serr = FIELD_GET(MLXBF_SYNDROM__SERR, dram_syndrom);
+ 	derr = FIELD_GET(MLXBF_SYNDROM__DERR, dram_syndrom);
+ 	syndrom = FIELD_GET(MLXBF_SYNDROM__SYN, dram_syndrom);
+@@ -127,13 +212,24 @@ static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
+ 		return;
+ 	}
+ 
+-	dram_additional_info = readl(priv->emi_base + MLXBF_ADD_INFO);
++	err = bluefield_edac_readl(priv->emi_base + MLXBF_ADD_INFO, &dram_additional_info,
++				   priv->svc_sreg_support, priv->sreg_tbl_edac);
++	if (err)
++		dev_err(priv->dev, "DRAM additional info read failed.\n");
++
+ 	err_prank = FIELD_GET(MLXBF_ADD_INFO__ERR_PRANK, dram_additional_info);
+ 
+ 	ecc_dimm = (err_prank >= 2 && priv->dimm_ranks[0] <= 2) ? 1 : 0;
+ 
+-	edea0 = readl(priv->emi_base + MLXBF_ERR_ADDR_0);
+-	edea1 = readl(priv->emi_base + MLXBF_ERR_ADDR_1);
++	err = bluefield_edac_readl(priv->emi_base + MLXBF_ERR_ADDR_0, &edea0,
++				   priv->svc_sreg_support, priv->sreg_tbl_edac);
++	if (err)
++		dev_err(priv->dev, "Error addr 0 read failed.\n");
++
++	err = bluefield_edac_readl(priv->emi_base + MLXBF_ERR_ADDR_1, &edea1,
++				   priv->svc_sreg_support, priv->sreg_tbl_edac);
++	if (err)
++		dev_err(priv->dev, "Error addr 1 read failed.\n");
+ 
+ 	ecc_dimm_addr = ((u64)edea1 << 32) | edea0;
+ 
+@@ -147,6 +243,7 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
  {
  	struct bluefield_edac_priv *priv = mci->pvt_info;
--	int mem_ctrl_idx = mci->mc_idx;
-+	u64 mem_ctrl_idx = mci->mc_idx;
- 	struct dimm_info *dimm;
- 	u64 smc_info, smc_arg;
- 	int is_empty = 1, i;
+ 	u32 ecc_count, single_error_count, double_error_count, ecc_error = 0;
++	int err;
+ 
+ 	/*
+ 	 * The memory controller might not be initialized by the firmware
+@@ -155,7 +252,11 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
+ 	if (mci->edac_cap == EDAC_FLAG_NONE)
+ 		return;
+ 
+-	ecc_count = readl(priv->emi_base + MLXBF_ECC_CNT);
++	err = bluefield_edac_readl(priv->emi_base + MLXBF_ECC_CNT, &ecc_count,
++				   priv->svc_sreg_support, priv->sreg_tbl_edac);
++	if (err)
++		dev_err(priv->dev, "ECC count read failed.\n");
++
+ 	single_error_count = FIELD_GET(MLXBF_ECC_CNT__SERR_CNT, ecc_count);
+ 	double_error_count = FIELD_GET(MLXBF_ECC_CNT__DERR_CNT, ecc_count);
+ 
+@@ -172,8 +273,12 @@ static void bluefield_edac_check(struct mem_ctl_info *mci)
+ 	}
+ 
+ 	/* Write to clear reported errors. */
+-	if (ecc_count)
+-		writel(ecc_error, priv->emi_base + MLXBF_ECC_ERR);
++	if (ecc_count) {
++		err = bluefield_edac_writel(priv->emi_base + MLXBF_ECC_ERR, ecc_error,
++					    priv->svc_sreg_support, priv->sreg_tbl_edac);
++		if (err)
++			dev_err(priv->dev, "ECC Error write failed.\n");
++	}
+ }
+ 
+ /* Initialize the DIMMs information for the given memory controller. */
+@@ -189,7 +294,7 @@ static void bluefield_edac_init_dimms(struct mem_ctl_info *mci)
+ 		dimm = mci->dimms[i];
+ 
+ 		smc_arg = mem_ctrl_idx << 16 | i;
+-		smc_info = smc_call1(MLNX_SIP_GET_DIMM_INFO, smc_arg);
++		smc_info = smc_call1(MLXBF_SIP_GET_DIMM_INFO, smc_arg);
+ 
+ 		if (!FIELD_GET(MLXBF_DIMM_INFO__SIZE_GB, smc_info)) {
+ 			dimm->mtype = MEM_EMPTY;
+@@ -244,6 +349,7 @@ static int bluefield_edac_mc_probe(struct platform_device *pdev)
+ 	struct bluefield_edac_priv *priv;
+ 	struct device *dev = &pdev->dev;
+ 	struct edac_mc_layer layers[1];
++	struct arm_smccc_res res;
+ 	struct mem_ctl_info *mci;
+ 	struct resource *emi_res;
+ 	unsigned int mc_idx, dimm_count;
+@@ -279,13 +385,44 @@ static int bluefield_edac_mc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	priv = mci->pvt_info;
++	priv->dev = dev;
++
++	/*
++	 * The "sec_reg_block" property in the ACPI table determines the method
++	 * the driver uses to access the EMI registers:
++	 * a) property is not present - directly access registers via readl/writel
++	 * b) property is present - indirectly access registers via SMC calls
++	 *    (assuming required Silicon Provider service version found)
++	 */
++	if (device_property_read_u32(dev,
++				     "sec_reg_block", &priv->sreg_tbl_edac)) {
++		priv->svc_sreg_support = false;
++	} else {
++		/*
++		 * Check for minimum required Arm Silicon Provider (SiP) service
++		 * version, ensuring support of required SMC function IDs.
++		 */
++		arm_smccc_smc(MLXBF_SIP_SVC_VERSION, 0, 0, 0, 0, 0, 0, 0, &res);
++		if (res.a0 == MLXBF_SVC_REQ_MAJOR &&
++		    res.a1 >= MLXBF_SVC_REQ_MINOR) {
++			priv->svc_sreg_support = true;
++		} else {
++			dev_err(dev, "Required SMCs are not supported.\n");
++			ret = -EINVAL;
++			goto err;
++		}
++	}
+ 
+ 	priv->dimm_per_mc = dimm_count;
+-	priv->emi_base = devm_ioremap_resource(dev, emi_res);
+-	if (IS_ERR(priv->emi_base)) {
+-		dev_err(dev, "failed to map EMI IO resource\n");
+-		ret = PTR_ERR(priv->emi_base);
+-		goto err;
++	if (!priv->svc_sreg_support) {
++		priv->emi_base = devm_ioremap_resource(dev, emi_res);
++		if (IS_ERR(priv->emi_base)) {
++			dev_err(dev, "failed to map EMI IO resource\n");
++			ret = PTR_ERR(priv->emi_base);
++			goto err;
++		}
++	} else {
++		priv->emi_base = (void __iomem *)emi_res->start;
+ 	}
+ 
+ 	mci->pdev = dev;
+@@ -320,7 +457,6 @@ static int bluefield_edac_mc_probe(struct platform_device *pdev)
+ 	edac_mc_free(mci);
+ 
+ 	return ret;
+-
+ }
+ 
+ static void bluefield_edac_mc_remove(struct platform_device *pdev)
 -- 
 2.30.1
 
