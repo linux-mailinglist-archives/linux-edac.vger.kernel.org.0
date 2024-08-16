@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-1663-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1664-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E5EB954F1E
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 18:43:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E57CE954F23
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 18:44:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70B62B22BC2
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 16:43:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 991A52856DD
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 16:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F33D1C0DD9;
-	Fri, 16 Aug 2024 16:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481E71C2336;
+	Fri, 16 Aug 2024 16:43:40 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2171BE87A;
-	Fri, 16 Aug 2024 16:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25151C0DEE;
+	Fri, 16 Aug 2024 16:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723826617; cv=none; b=YATgUTBYqr06hXtnVN68tfRDQNPtlI8OkXX1ZopFUj9drMYJmvr0CBvtThhcu3ujUclytx2lCwVlpnZKAUyFmAqPwdW2E2QJ6syFIGK8oonfSUO90BXGSU9n7klCr3nPVPWk1QFYN015eWMnt2RmSu6K/QA+3WOxZI5qjYmYLqk=
+	t=1723826620; cv=none; b=CIv2xCu9CKnvgCvk1SO7lUgjF/RfBVz2/UngH+13JG3g9KLo0Mh/EmtxerRRIY583HpabsV+ofYg+F+LwHSSlp9/j369qT77FzgeHuvhngr7jE4ZSQj4DU5jUe08+J1W4L4piziW2P5AZjRImDy9e//VMySzlT01fZZEWBlRZFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723826617; c=relaxed/simple;
-	bh=sXtTLlb8vOUr73B7YgT2yT0DDDEzA4nYn2TdL8fWNRM=;
+	s=arc-20240116; t=1723826620; c=relaxed/simple;
+	bh=jN1gN/vlqkDO0davdYpA+VVl1ecXGdLvU+odC3ZOUdo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=thzggPEAMJerPJPWHTlvi2B/wY9Z3ZWFiUKJcTEYtulAPkufshzoJur38rYmOu2rh5NfQLUYg0p6oK1aCUkm2i3t+X8ylfoqfdY03J62cl5PA69d36OBZkx85O45rFHirvAHnS8u6mtK1Xy9uQf3qoLUEZw3nyssy192VyZllWs=
+	 MIME-Version:Content-Type; b=JJi4DT+omniQ7fLZgP1xyD5BGHTxKIZ8Vo0YCIrtqMU3asql6TRf6GACpomfbb0o6z6A5ki/9pi3P8f3EmMh6ZI912VXWxqKBpDopw98du+coW4JFneJF78Je8HZcHOci/WRQN3UYt7EIWEDhK4icedaatOMesBr3GP068WEOVU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wlnlt3czQz6K5st;
-	Sat, 17 Aug 2024 00:40:10 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wlnlw6Wphz6K5q1;
+	Sat, 17 Aug 2024 00:40:12 +0800 (CST)
 Received: from lhrpeml500006.china.huawei.com (unknown [7.191.161.198])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7B00C1400D3;
-	Sat, 17 Aug 2024 00:43:33 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id DF9D2140A36;
+	Sat, 17 Aug 2024 00:43:35 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.148.43) by
  lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 16 Aug 2024 17:43:32 +0100
+ 15.1.2507.39; Fri, 16 Aug 2024 17:43:34 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
@@ -59,9 +59,9 @@ CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v11 04/14] cxl/mbox: Add GET_SUPPORTED_FEATURES mailbox command
-Date: Fri, 16 Aug 2024 17:42:27 +0100
-Message-ID: <20240816164238.1902-5-shiju.jose@huawei.com>
+Subject: [PATCH v11 05/14] cxl/mbox: Add GET_FEATURE mailbox command
+Date: Fri, 16 Aug 2024 17:42:28 +0100
+Message-ID: <20240816164238.1902-6-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20240816164238.1902-1-shiju.jose@huawei.com>
 References: <20240816164238.1902-1-shiju.jose@huawei.com>
@@ -78,186 +78,118 @@ X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Add support for GET_SUPPORTED_FEATURES mailbox command.
+Add support for GET_FEATURE mailbox command.
 
 CXL spec 3.1 section 8.2.9.6 describes optional device specific features.
-CXL devices support features with changeable attributes.
-
-CXL spec 3.1 section 8.2.9.6.1 describes Get Supported features command.
-Get Supported Features retrieves the list of supported device specific
-features. The settings of a feature can be retrieved using Get Feature
-and optionally modified using Set Feature.
+The settings of a feature can be retrieved using Get Feature command.
+CXL spec 3.1 section 8.2.9.6.2 describes Get Feature command.
 
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- drivers/cxl/core/mbox.c | 68 +++++++++++++++++++++++++++++++++++++++++
- drivers/cxl/cxlmem.h    | 63 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 131 insertions(+)
+ drivers/cxl/core/mbox.c | 40 ++++++++++++++++++++++++++++++++++++++++
+ drivers/cxl/cxlmem.h    | 27 +++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
 
 diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index 2626f3fff201..760fa3e1075f 100644
+index 760fa3e1075f..c283684e8e73 100644
 --- a/drivers/cxl/core/mbox.c
 +++ b/drivers/cxl/core/mbox.c
-@@ -1324,6 +1324,74 @@ int cxl_set_timestamp(struct cxl_memdev_state *mds)
+@@ -1392,6 +1392,46 @@ int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *
  }
- EXPORT_SYMBOL_NS_GPL(cxl_set_timestamp, CXL);
+ EXPORT_SYMBOL_NS_GPL(cxl_get_supported_feature_entry, CXL);
  
-+int cxl_get_supported_features(struct cxl_memdev_state *mds,
-+			       u32 count, u16 start_index,
-+			       struct cxl_mbox_get_supp_feats_out *feats_out)
++size_t cxl_get_feature(struct cxl_memdev_state *mds,
++		       const uuid_t feat_uuid,
++		       enum cxl_get_feat_selection selection,
++		       void *feat_out, size_t feat_out_size)
 +{
-+	struct cxl_mbox_get_supp_feats_in pi;
++	size_t data_to_rd_size, size_out;
++	struct cxl_mbox_get_feat_in pi;
 +	struct cxl_mbox_cmd mbox_cmd;
++	size_t data_rcvd_size = 0;
 +	int rc;
 +
-+	pi.count = cpu_to_le32(count);
-+	pi.start_index = cpu_to_le16(start_index);
++	if (!feat_out || !feat_out_size)
++		return 0;
 +
-+	mbox_cmd = (struct cxl_mbox_cmd) {
-+		.opcode = CXL_MBOX_OP_GET_SUPPORTED_FEATURES,
-+		.size_in = sizeof(pi),
-+		.payload_in = &pi,
-+		.size_out = count,
-+		.payload_out = feats_out,
-+		.min_out = sizeof(*feats_out),
-+	};
-+	rc = cxl_internal_send_cmd(mds, &mbox_cmd);
-+	if (rc < 0)
-+		return rc;
++	size_out = min(feat_out_size, mds->payload_size);
++	pi.uuid = feat_uuid;
++	pi.selection = selection;
++	do {
++		data_to_rd_size = min(feat_out_size - data_rcvd_size, mds->payload_size);
++		pi.offset = cpu_to_le16(data_rcvd_size);
++		pi.count = cpu_to_le16(data_to_rd_size);
 +
-+	return 0;
++		mbox_cmd = (struct cxl_mbox_cmd) {
++			.opcode = CXL_MBOX_OP_GET_FEATURE,
++			.size_in = sizeof(pi),
++			.payload_in = &pi,
++			.size_out = size_out,
++			.payload_out = feat_out + data_rcvd_size,
++			.min_out = data_to_rd_size,
++		};
++		rc = cxl_internal_send_cmd(mds, &mbox_cmd);
++		if (rc < 0 || !mbox_cmd.size_out)
++			return 0;
++		data_rcvd_size += mbox_cmd.size_out;
++	} while (data_rcvd_size < feat_out_size);
++
++	return data_rcvd_size;
 +}
-+EXPORT_SYMBOL_NS_GPL(cxl_get_supported_features, CXL);
-+
-+int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *feat_uuid,
-+				    struct cxl_mbox_supp_feat_entry *feat_entry_out)
-+{
-+	struct cxl_mbox_supp_feat_entry *feat_entry;
-+	int feat_index, feats_out_size;
-+	int nentries, count;
-+	int ret;
-+
-+	feat_index = 0;
-+	feats_out_size = sizeof(struct cxl_mbox_get_supp_feats_out) +
-+				sizeof(struct cxl_mbox_supp_feat_entry);
-+	struct cxl_mbox_get_supp_feats_out *feats_out __free(kfree) =
-+					kmalloc(feats_out_size, GFP_KERNEL);
-+	if (!feats_out)
-+		return -ENOMEM;
-+
-+	while (true) {
-+		memset(feats_out, 0, feats_out_size);
-+		ret = cxl_get_supported_features(mds, feats_out_size,
-+						 feat_index, feats_out);
-+		if (ret)
-+			return ret;
-+
-+		nentries = feats_out->nr_entries;
-+		if (!nentries)
-+			return -EOPNOTSUPP;
-+
-+		/* Check CXL memdev supports the feature */
-+		feat_entry = feats_out->feat_entries;
-+		for (count = 0; count < nentries; count++, feat_entry++) {
-+			if (uuid_equal(&feat_entry->uuid, feat_uuid)) {
-+				memcpy(feat_entry_out, feat_entry,
-+				       sizeof(*feat_entry_out));
-+				return 0;
-+			}
-+		}
-+		feat_index += nentries;
-+	}
-+}
-+EXPORT_SYMBOL_NS_GPL(cxl_get_supported_feature_entry, CXL);
++EXPORT_SYMBOL_NS_GPL(cxl_get_feature, CXL);
 +
  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
  		       struct cxl_region *cxlr)
  {
 diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index af8169ccdbc0..9939c771f642 100644
+index 9939c771f642..608e3ed845a7 100644
 --- a/drivers/cxl/cxlmem.h
 +++ b/drivers/cxl/cxlmem.h
-@@ -531,6 +531,7 @@ enum cxl_opcode {
- 	CXL_MBOX_OP_GET_LOG_CAPS	= 0x0402,
+@@ -532,6 +532,7 @@ enum cxl_opcode {
  	CXL_MBOX_OP_CLEAR_LOG           = 0x0403,
  	CXL_MBOX_OP_GET_SUP_LOG_SUBLIST = 0x0405,
-+	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
+ 	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
++	CXL_MBOX_OP_GET_FEATURE		= 0x0501,
  	CXL_MBOX_OP_IDENTIFY		= 0x4000,
  	CXL_MBOX_OP_GET_PARTITION_INFO	= 0x4100,
  	CXL_MBOX_OP_SET_PARTITION_INFO	= 0x4101,
-@@ -700,6 +701,63 @@ struct cxl_mbox_set_timestamp_in {
- 
+@@ -758,6 +759,28 @@ struct cxl_mbox_get_supp_feats_out {
+ 	struct cxl_mbox_supp_feat_entry feat_entries[];
  } __packed;
  
 +/*
-+ * Get Supported Features CXL 3.1 Spec 8.2.9.6.1
++ * Get Feature CXL 3.1 Spec 8.2.9.6.2
 + */
 +
 +/*
-+ * Get Supported Features input payload
-+ * CXL rev 3.1 section 8.2.9.6.1 Table 8-95
++ * Get Feature input payload
++ * CXL rev 3.1 section 8.2.9.6.2 Table 8-99
 + */
-+struct cxl_mbox_get_supp_feats_in {
-+	__le32 count;
-+	__le16 start_index;
-+	u8 rsvd[2];
-+} __packed;
-+
-+/*
-+ * Get Supported Features Supported Feature Entry
-+ * CXL rev 3.1 section 8.2.9.6.1 Table 8-97
-+ */
-+/* Supported Feature Entry : Payload out attribute flags */
-+#define CXL_FEAT_ENTRY_FLAG_CHANGABLE	BIT(0)
-+#define CXL_FEAT_ENTRY_FLAG_DEEPEST_RESET_PERSISTENCE_MASK	GENMASK(3, 1)
-+#define CXL_FEAT_ENTRY_FLAG_PERSIST_ACROSS_FIRMWARE_UPDATE	BIT(4)
-+#define CXL_FEAT_ENTRY_FLAG_SUPPORT_DEFAULT_SELECTION	BIT(5)
-+#define CXL_FEAT_ENTRY_FLAG_SUPPORT_SAVED_SELECTION	BIT(6)
-+
-+enum cxl_feat_attr_value_persistence {
-+	CXL_FEAT_ATTR_VALUE_PERSISTENCE_NONE,
-+	CXL_FEAT_ATTR_VALUE_PERSISTENCE_CXL_RESET,
-+	CXL_FEAT_ATTR_VALUE_PERSISTENCE_HOT_RESET,
-+	CXL_FEAT_ATTR_VALUE_PERSISTENCE_WARM_RESET,
-+	CXL_FEAT_ATTR_VALUE_PERSISTENCE_COLD_RESET,
-+	CXL_FEAT_ATTR_VALUE_PERSISTENCE_MAX
++enum cxl_get_feat_selection {
++	CXL_GET_FEAT_SEL_CURRENT_VALUE,
++	CXL_GET_FEAT_SEL_DEFAULT_VALUE,
++	CXL_GET_FEAT_SEL_SAVED_VALUE,
++	CXL_GET_FEAT_SEL_MAX
 +};
 +
-+struct cxl_mbox_supp_feat_entry {
++struct cxl_mbox_get_feat_in {
 +	uuid_t uuid;
-+	__le16 index;
-+	__le16 get_size;
-+	__le16 set_size;
-+	__le32 attr_flags;
-+	u8 get_version;
-+	u8 set_version;
-+	__le16 set_effects;
-+	u8 rsvd[18];
++	__le16 offset;
++	__le16 count;
++	u8 selection;
 +}  __packed;
-+
-+/*
-+ * Get Supported Features output payload
-+ * CXL rev 3.1 section 8.2.9.6.1 Table 8-96
-+ */
-+struct cxl_mbox_get_supp_feats_out {
-+	__le16 nr_entries;
-+	__le16 nr_supported;
-+	u8 rsvd[4];
-+	struct cxl_mbox_supp_feat_entry feat_entries[];
-+} __packed;
 +
  /* Get Poison List  CXL 3.0 Spec 8.2.9.8.4.1 */
  struct cxl_mbox_poison_in {
  	__le64 offset;
-@@ -831,6 +889,11 @@ void cxl_event_trace_record(const struct cxl_memdev *cxlmd,
- 			    enum cxl_event_type event_type,
- 			    const uuid_t *uuid, union cxl_event *evt);
- int cxl_set_timestamp(struct cxl_memdev_state *mds);
-+int cxl_get_supported_features(struct cxl_memdev_state *mds,
-+			       u32 count, u16 start_index,
-+			       struct cxl_mbox_get_supp_feats_out *feats_out);
-+int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *feat_uuid,
-+				    struct cxl_mbox_supp_feat_entry *feat_entry_out);
+@@ -894,6 +917,10 @@ int cxl_get_supported_features(struct cxl_memdev_state *mds,
+ 			       struct cxl_mbox_get_supp_feats_out *feats_out);
+ int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *feat_uuid,
+ 				    struct cxl_mbox_supp_feat_entry *feat_entry_out);
++size_t cxl_get_feature(struct cxl_memdev_state *mds,
++		       const uuid_t feat_uuid,
++		       enum cxl_get_feat_selection selection,
++		       void *feat_out, size_t feat_out_size);
  int cxl_poison_state_init(struct cxl_memdev_state *mds);
  int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
  		       struct cxl_region *cxlr);
