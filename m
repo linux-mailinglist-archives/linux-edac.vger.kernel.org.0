@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-1671-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1672-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62AA9954F36
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 18:46:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5593954F3B
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 18:46:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7C951F23C51
-	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 16:46:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D939288EB0
+	for <lists+linux-edac@lfdr.de>; Fri, 16 Aug 2024 16:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EC01C6892;
-	Fri, 16 Aug 2024 16:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7522D1C7B62;
+	Fri, 16 Aug 2024 16:43:56 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD411C57B4;
-	Fri, 16 Aug 2024 16:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F34E1C6895;
+	Fri, 16 Aug 2024 16:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723826634; cv=none; b=t44DFv5IOuq1CNdpxIoVOrQja6YOwpBuIFXJk0AOMM0wEK2GMjUfnQYxbiBX+OJCdIGXjF/3Mg33OSThdsazEinJ+hf2ssE82VRy2/rSWUd9aL6fLiuxoWP/h0ryCMBtmcsbg184IBUZkogXDi5nLzhqkMYwMPsaCJTHNqG2Nl4=
+	t=1723826636; cv=none; b=TB0zdi8vAlouDrSWyUmPxCGo38I5vThwnQ9EbXDOZ7rCgTlyiyn9CzjmtVyWJwuSFRjagWEppVoMmKzoy6kbsF9OiarGunSn9oe+Wm+m4+PT6GEq080cBRTPW4RlvI9JVxTD8Uw8tSbAZWVGrPDewiIYGFbn4dTiWEMJoDMrdCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723826634; c=relaxed/simple;
-	bh=R/KxH16OUH8CB6PZXCFVpRBWbJtpeTyjLuE0VJ8WK9A=;
+	s=arc-20240116; t=1723826636; c=relaxed/simple;
+	bh=sVzXcrXp5WhJqqWZkOgPFyZ05P9iQTRzoYJNjvMnsZE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hFSxrl59xJbb8/8BzrVMYsrrDkWypYNFVAJckX0QqSoifVdlW0F4y5LKiguGfzF1Hs0OS1OaWtM2zLIzYw+YpSDVnC+Q9W97K9kRb+B0f810ENOin8rVUd+8mxkYVse6rZ563LXPkturXAIYvMgAr7ll04Nv8O9QS7DSqhEa4l8=
+	 MIME-Version:Content-Type; b=lK3pgCE82gCZTnVhicunTj8FQYwnRIfzA35YWzRJYA2NGzZ/3llrrJzokOIDuoyH6xmffMNI3jH+fyWpCoLBUUVc+vvnrcy8QzQd34Rw/+c28j5KDdxnM0bE9IJqRy+xILCMSiqtiDrIp4OgRzyHTkqHvm4q0CJYn+J4n56QOWg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wlnmx0Lw3z6K61T;
-	Sat, 17 Aug 2024 00:41:05 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wlnmj2wm4z6K9P3;
+	Sat, 17 Aug 2024 00:40:53 +0800 (CST)
 Received: from lhrpeml500006.china.huawei.com (unknown [7.191.161.198])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5B9ED1400C9;
-	Sat, 17 Aug 2024 00:43:49 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id A40081400C9;
+	Sat, 17 Aug 2024 00:43:51 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.148.43) by
  lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 16 Aug 2024 17:43:47 +0100
+ 15.1.2507.39; Fri, 16 Aug 2024 17:43:50 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
@@ -59,9 +59,9 @@ CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v11 11/14] ras: mem: Add memory ACPI RAS2 driver
-Date: Fri, 16 Aug 2024 17:42:34 +0100
-Message-ID: <20240816164238.1902-12-shiju.jose@huawei.com>
+Subject: [PATCH v11 12/14] EDAC: Add EDAC PPR control driver
+Date: Fri, 16 Aug 2024 17:42:35 +0100
+Message-ID: <20240816164238.1902-13-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20240816164238.1902-1-shiju.jose@huawei.com>
 References: <20240816164238.1902-1-shiju.jose@huawei.com>
@@ -78,526 +78,440 @@ X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Memory ACPI RAS2 driver binds to the platform device add by the
-ACPI RAS2 table parser.
+Add generic EDAC PPR(Post Package Repair) control driver supports configuring
+the memory PPR feature in the system. Supports both sPPR(soft PPR) and
+hPPR(hard PPR). The device with PPR feature, get the PPR descriptor from the
+EDAC PPR and registers with the EDAC, which adds the sysfs PPR control attributes.
+The PPR control attributes are available to the userspace in
+/sys/bus/edac/devices/<dev-name>/pprX/
 
-Driver uses a PCC subspace for communicating with the ACPI compliant
-platform to provide control of memory scrub parameters to the userspace
-via the edac scrub.
+Generic EDAC PPR driver and the common sysfs PPR interface promotes
+unambiguous access from the userspace irrespective of the underlying memory
+devices with PPR feature supported.
 
-Get the scrub attr descriptors from the EDAC scrub and register with EDAC
-RAS feature driver to expose sysfs scrub control attributes to the userspace.
-For example scrub control for the RAS2 memory device is exposed in
-/sys/bus/edac/devices/acpi_ras2_mem0/scrub/
+The sysfs PPR attribute nodes would be present only if the client driver
+has implemented the corresponding attribute callback functions and pass in ops
+to the EDAC during registration.
 
-Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Note: There are other PPR drivers to come apart from the CXL PPR in this series.
+
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- Documentation/edac/edac-scrub.rst |  41 +++
- drivers/ras/Kconfig               |  10 +
- drivers/ras/Makefile              |   1 +
- drivers/ras/acpi_ras2.c           | 411 ++++++++++++++++++++++++++++++
- 4 files changed, 463 insertions(+)
- create mode 100644 drivers/ras/acpi_ras2.c
+ Documentation/ABI/testing/sysfs-edac-ppr |  69 ++++++
+ drivers/edac/Makefile                    |   2 +-
+ drivers/edac/edac_device.c               |   6 +
+ drivers/edac/edac_ppr.c                  | 255 +++++++++++++++++++++++
+ include/linux/edac.h                     |  29 +++
+ 5 files changed, 360 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-edac-ppr
+ create mode 100755 drivers/edac/edac_ppr.c
 
-diff --git a/Documentation/edac/edac-scrub.rst b/Documentation/edac/edac-scrub.rst
-index 7815d674f496..38456bbff530 100644
---- a/Documentation/edac/edac-scrub.rst
-+++ b/Documentation/edac/edac-scrub.rst
-@@ -72,3 +72,44 @@ root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub/enable_background
- root@localhost:~# echo 0 > /sys/bus/edac/devices/cxl_region0/scrub/enable_background
- root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub/enable_background
- 0
-+
-+2. RAS2
-+2.1 On demand scrubbing for a specific memory region.
-+root@localhost:~# echo 0x120000 > /sys/bus/edac/devices/acpi_ras2_mem0/scrub/addr_range_base
-+root@localhost:~# echo 0x150000 > /sys/bus/edac/devices/acpi_ras2_mem0/scrub/addr_range_size
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/min_cycle_duration
-+3600
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/max_cycle_duration
-+86400
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/current_cycle_duration
-+36000
-+root@localhost:~# echo 54000 > /sys/bus/edac/devices/acpi_ras2_mem0/scrub/current_cycle_duration
-+root@localhost:~# echo 1 > /sys/bus/edac/devices/acpi_ras2_mem0/scrub/enable_on_demand
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/enable_on_demand
-+1
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/current_cycle_duration
-+54000
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/addr_range_base
-+0x120000
-+root@localhost:~# cat //sys/bus/edac/devices/acpi_ras2_mem0/scrub/addr_range_size
-+0x150000
-+root@localhost:~# echo 0 > /sys/bus/edac/devices/acpi_ras2_mem0/scrub/enable_on_demand
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/enable_on_demand
-+0
-+
-+2.2 Background scrubbing the entire memory
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/min_cycle_duration
-+3600
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/max_cycle_duration
-+86400
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/current_cycle_duration
-+36000
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/enable_background
-+0
-+root@localhost:~# echo 10800 > /sys/bus/edac/devices/acpi_ras2_mem0/scrub/current_cycle_duration
-+root@localhost:~# echo 1 > /sys/bus/edac/devices/acpi_ras2_mem0/enable_background
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/enable_background
-+1
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras2_mem0/scrub/current_cycle_duration
-+10800
-+root@localhost:~# echo 0 > /sys/bus/edac/devices/acpi_ras2_mem0/enable_background
-diff --git a/drivers/ras/Kconfig b/drivers/ras/Kconfig
-index fc4f4bb94a4c..a2635017d80d 100644
---- a/drivers/ras/Kconfig
-+++ b/drivers/ras/Kconfig
-@@ -46,4 +46,14 @@ config RAS_FMPM
- 	  Memory will be retired during boot time and run time depending on
- 	  platform-specific policies.
- 
-+config MEM_ACPI_RAS2
-+	tristate "Memory ACPI RAS2 driver"
-+	depends on ACPI_RAS2
-+	depends on EDAC
-+	help
-+	  The driver binds to the platform device added by the ACPI RAS2
-+	  table parser. Use a PCC channel subspace for communicating with
-+	  the ACPI compliant platform to provide control of memory scrub
-+	  parameters to the user via the edac scrub.
-+
- endif
-diff --git a/drivers/ras/Makefile b/drivers/ras/Makefile
-index 11f95d59d397..a0e6e903d6b0 100644
---- a/drivers/ras/Makefile
-+++ b/drivers/ras/Makefile
-@@ -2,6 +2,7 @@
- obj-$(CONFIG_RAS)	+= ras.o
- obj-$(CONFIG_DEBUG_FS)	+= debugfs.o
- obj-$(CONFIG_RAS_CEC)	+= cec.o
-+obj-$(CONFIG_MEM_ACPI_RAS2)	+= acpi_ras2.o
- 
- obj-$(CONFIG_RAS_FMPM)	+= amd/fmpm.o
- obj-y			+= amd/atl/
-diff --git a/drivers/ras/acpi_ras2.c b/drivers/ras/acpi_ras2.c
+diff --git a/Documentation/ABI/testing/sysfs-edac-ppr b/Documentation/ABI/testing/sysfs-edac-ppr
 new file mode 100644
-index 000000000000..f319ad097642
+index 000000000000..af6ccef9661b
 --- /dev/null
-+++ b/drivers/ras/acpi_ras2.c
-@@ -0,0 +1,411 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
++++ b/Documentation/ABI/testing/sysfs-edac-ppr
+@@ -0,0 +1,69 @@
++What:		/sys/bus/edac/devices/<dev-name>/ppr*
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		The sysfs edac bus devices /<dev-name>/ppr* subdirectory
++		belongs to the memory media PPR (Post Package Repair) control
++		feature, where <dev-name> directory corresponds to a device
++		registered with the EDAC PPR driver and thus registered with
++		the generic edac device driver.
++		/ppr* belongs to either sPPR (Soft PPR) or hPPR (Hard PPR)
++		feature for the memory device.
++		The sysfs PPR attr nodes would be only present if PPR is
++		supported.
++
++What:		/sys/bus/edac/devices/<dev-name>/ppr*/persist_mode_avail
++Date:		Oct 2024
++KernelVersion:	6.12For e.g. HBM, DDR.
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RO) persist PPR modes supported in the device.
++		For e.g. Hard PPR(hPPR) for a permanent row repair,
++		Soft PPR(sPPR) for a temporary row repair.
++
++What:		/sys/bus/edac/devices/<dev-name>/ppr*/persist_mode
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RW) Current persist PPR mode.
++
++What:		/sys/bus/edac/devices/<dev-name>/ppr*/dpa_support
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RO) True if supports DPA for PPR maintenance operation.
++
++What:		/sys/bus/edac/devices/<dev-name>/ppr*/ppr_safe_when_in_use
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(RO) True if memory media is accessible and data is retained
++		during the PPR operation.
++
++What:		/sys/bus/edac/devices/<dev-name>/ppr*/repair_hpa
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(WO) Start the PPR operation for the HPA (host physical
++		address) set. Return failure if resources are not available
++		to perform repair.
++
++What:		/sys/bus/edac/devices/<dev-name>/ppr*/repair_dpa
++Date:		Oct 2024
++KernelVersion:	6.12
++Contact:	linux-edac@vger.kernel.org
++Description:
++		(WO) Starts the PPR operation for the DPA(device physical
++		address) set. Return failure if resources are not available
++                to perform repair.
++		In some states of system configuration (e.g. before address decoders
++		have been configured), memory devices (e.g. CXL) may not have an
++		active mapping in the main host address physical address map.
++		As such, the memory to repair must be identified by a device
++		specific physical addressing scheme using a DPA. The DPA to use
++		will be presented in related error records.
+diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+index 4645e4032523..4e8e94fbea6a 100644
+--- a/drivers/edac/Makefile
++++ b/drivers/edac/Makefile
+@@ -10,7 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
+ 
+ edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
+ edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
+-edac_core-y	+= edac_scrub.o edac_ecs.o
++edac_core-y	+= edac_scrub.o edac_ecs.o edac_ppr.o
+ 
+ edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
+ 
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index 17e7ded01b22..6d6599c0659d 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+@@ -626,6 +626,12 @@ static int edac_dev_feat_init(struct device *parent,
+ 	case RAS_FEAT_PPR:
+ 		dev_data->ppr_ops = ras_feat->ppr_ops;
+ 		dev_data->private = ras_feat->ppr_ctx;
++
++		ret = edac_ppr_get_desc(parent, attr_groups,
++					ras_feat->instance);
++		if (ret)
++			return ret;
++
+ 		return 1;
+ 	default:
+ 		return -EINVAL;
+diff --git a/drivers/edac/edac_ppr.c b/drivers/edac/edac_ppr.c
+new file mode 100755
+index 000000000000..dab2ba0a8145
+--- /dev/null
++++ b/drivers/edac/edac_ppr.c
+@@ -0,0 +1,255 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * ACPI RAS2 memory driver
++ * Generic EDAC PPR driver supports controlling the memory
++ * device with Post Package Repair (PPR) feature in the system
++ * and the common sysfs PPR control interface promotes unambiguous
++ * access from the userspace.
 + *
 + * Copyright (c) 2024 HiSilicon Limited.
-+ *
 + */
 +
-+#define pr_fmt(fmt)	"MEMORY ACPI RAS2: " fmt
++#define pr_fmt(fmt)     "EDAC PPR: " fmt
 +
-+#include <linux/bitfield.h>
 +#include <linux/edac.h>
-+#include <linux/platform_device.h>
-+#include <acpi/ras2_acpi.h>
 +
-+#define RAS2_DEV_NUM_RAS_FEATURES	1
-+
-+#define RAS2_SUPPORT_HW_PARTOL_SCRUB	BIT(0)
-+#define RAS2_TYPE_PATROL_SCRUB	0x0000
-+
-+#define RAS2_GET_PATROL_PARAMETERS	0x01
-+#define	RAS2_START_PATROL_SCRUBBER	0x02
-+#define	RAS2_STOP_PATROL_SCRUBBER	0x03
-+
-+#define RAS2_PATROL_SCRUB_SCHRS_IN_MASK	GENMASK(15, 8)
-+#define RAS2_PATROL_SCRUB_EN_BACKGROUND	BIT(0)
-+#define RAS2_PATROL_SCRUB_SCHRS_OUT_MASK	GENMASK(7, 0)
-+#define RAS2_PATROL_SCRUB_MIN_SCHRS_OUT_MASK	GENMASK(15, 8)
-+#define RAS2_PATROL_SCRUB_MAX_SCHRS_OUT_MASK	GENMASK(23, 16)
-+#define RAS2_PATROL_SCRUB_FLAG_SCRUBBER_RUNNING	BIT(0)
-+
-+#define RAS2_SCRUB_NAME_LEN      128
-+#define RAS2_HOUR_IN_SECS    3600
-+
-+struct acpi_ras2_ps_shared_mem {
-+	struct acpi_ras2_shared_memory common;
-+	struct acpi_ras2_patrol_scrub_parameter params;
++enum edac_ppr_attributes {
++	PPR_PERSIST_MODE_AVAIL,
++	PPR_PERSIST_MODE,
++	PPR_DPA_SUPPORT,
++	PPR_SAFE_IN_USE,
++	PPR_HPA,
++	PPR_DPA,
++	PPR_MAX_ATTRS
 +};
 +
-+static int ras2_is_patrol_scrub_support(struct ras2_scrub_ctx *ras2_ctx)
-+{
-+	struct acpi_ras2_shared_memory __iomem *common = (void *)
-+				ras2_ctx->pcc_subspace->pcc_comm_addr;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	common->set_capabilities[0] = 0;
-+
-+	return common->features[0] & RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+}
-+
-+static int ras2_update_patrol_scrub_params_cache(struct ras2_scrub_ctx *ras2_ctx)
-+{
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+					ras2_ctx->pcc_subspace->pcc_comm_addr;
-+	int ret;
-+
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	ps_sm->params.patrol_scrub_command = RAS2_GET_PATROL_PARAMETERS;
-+
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "failed to read parameters\n");
-+		return ret;
-+	}
-+
-+	ras2_ctx->min_scrub_cycle = FIELD_GET(RAS2_PATROL_SCRUB_MIN_SCHRS_OUT_MASK,
-+					      ps_sm->params.scrub_params_out);
-+	ras2_ctx->max_scrub_cycle = FIELD_GET(RAS2_PATROL_SCRUB_MAX_SCHRS_OUT_MASK,
-+					      ps_sm->params.scrub_params_out);
-+	if (!ras2_ctx->bg) {
-+		ras2_ctx->base = ps_sm->params.actual_address_range[0];
-+		ras2_ctx->size = ps_sm->params.actual_address_range[1];
-+	}
-+	ras2_ctx->scrub_cycle_hrs = FIELD_GET(RAS2_PATROL_SCRUB_SCHRS_OUT_MASK,
-+					      ps_sm->params.scrub_params_out);
-+
-+	return 0;
-+}
-+
-+/* Context - lock must be held */
-+static int ras2_get_patrol_scrub_running(struct ras2_scrub_ctx *ras2_ctx,
-+					 bool *running)
-+{
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+					ras2_ctx->pcc_subspace->pcc_comm_addr;
-+	int ret;
-+
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	ps_sm->params.patrol_scrub_command = RAS2_GET_PATROL_PARAMETERS;
-+
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "failed to read parameters\n");
-+		return ret;
-+	}
-+
-+	*running = ps_sm->params.flags & RAS2_PATROL_SCRUB_FLAG_SCRUBBER_RUNNING;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_read_min_scrub_cycle(struct device *dev, void *drv_data,
-+					      u32 *min)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+
-+	*min = ras2_ctx->min_scrub_cycle * RAS2_HOUR_IN_SECS;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_read_max_scrub_cycle(struct device *dev, void *drv_data,
-+					      u32 *max)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+
-+	*max = ras2_ctx->max_scrub_cycle * RAS2_HOUR_IN_SECS;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_cycle_read(struct device *dev, void *drv_data,
-+				    u32 *scrub_cycle_secs)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+
-+	*scrub_cycle_secs = ras2_ctx->scrub_cycle_hrs * RAS2_HOUR_IN_SECS;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_cycle_write(struct device *dev, void *drv_data,
-+				     u32 scrub_cycle_secs)
-+{
-+	u8 scrub_cycle_hrs = scrub_cycle_secs / RAS2_HOUR_IN_SECS;
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+
-+	if (running)
-+		return -EBUSY;
-+
-+	if (scrub_cycle_hrs < ras2_ctx->min_scrub_cycle ||
-+	    scrub_cycle_hrs > ras2_ctx->max_scrub_cycle)
-+		return -EINVAL;
-+
-+	ras2_ctx->scrub_cycle_hrs = scrub_cycle_hrs;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_read_range(struct device *dev, void *drv_data, u64 *base, u64 *size)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+
-+	/*
-+	 * When BG scrubbing is enabled the actual address range is not valid.
-+	 * Return -EBUSY now unless findout a method to retrieve actual full PA range.
-+	 */
-+	if (ras2_ctx->bg)
-+		return -EBUSY;
-+
-+	*base = ras2_ctx->base;
-+	*size = ras2_ctx->size;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_write_range(struct device *dev, void *drv_data, u64 base, u64 size)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+
-+	if (running)
-+		return -EBUSY;
-+
-+	if (!base || !size) {
-+		dev_warn(dev, "%s: Invalid address range, base=0x%llx size=0x%llx\n",
-+			 __func__, base, size);
-+		return -EINVAL;
-+	}
-+
-+	ras2_ctx->base = base;
-+	ras2_ctx->size = size;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_set_enabled_bg(struct device *dev, void *drv_data, bool enable)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+					ras2_ctx->pcc_subspace->pcc_comm_addr;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+	if (enable) {
-+		if (ras2_ctx->bg || running)
-+			return -EBUSY;
-+		ps_sm->params.requested_address_range[0] = 0;
-+		ps_sm->params.requested_address_range[1] = 0;
-+		ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_SCHRS_IN_MASK;
-+		ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_SCHRS_IN_MASK,
-+							    ras2_ctx->scrub_cycle_hrs);
-+		ps_sm->params.patrol_scrub_command = RAS2_START_PATROL_SCRUBBER;
-+	} else {
-+		if (!ras2_ctx->bg)
-+			return -EPERM;
-+		if (!ras2_ctx->bg && running)
-+			return -EBUSY;
-+		ps_sm->params.patrol_scrub_command = RAS2_STOP_PATROL_SCRUBBER;
-+	}
-+	ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_EN_BACKGROUND;
-+	ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_EN_BACKGROUND,
-+						    enable);
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "Failed to %s background scrubbing\n",
-+			enable ? "enable" : "disable");
-+		return ret;
-+	}
-+	if (enable) {
-+		ras2_ctx->bg = true;
-+		/* Update the cache to account for rounding of supplied parameters and similar */
-+		ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+	} else {
-+		ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+		ras2_ctx->bg = false;
-+	}
-+
-+	return ret;
-+}
-+
-+static int ras2_hw_scrub_get_enabled_bg(struct device *dev, void *drv_data, bool *enabled)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+
-+	*enabled = ras2_ctx->bg;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_set_enabled_od(struct device *dev, void *drv_data, bool enable)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+					ras2_ctx->pcc_subspace->pcc_comm_addr;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	if (ras2_ctx->bg)
-+		return -EBUSY;
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+	if (enable) {
-+		if (!ras2_ctx->base || !ras2_ctx->size) {
-+			dev_warn(ras2_ctx->dev,
-+				 "%s: Invalid address range, base=0x%llx "
-+				 "size=0x%llx\n", __func__,
-+				 ras2_ctx->base, ras2_ctx->size);
-+			return -ERANGE;
-+		}
-+		if (running)
-+			return -EBUSY;
-+		ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_SCHRS_IN_MASK;
-+		ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_SCHRS_IN_MASK,
-+							    ras2_ctx->scrub_cycle_hrs);
-+		ps_sm->params.requested_address_range[0] = ras2_ctx->base;
-+		ps_sm->params.requested_address_range[1] = ras2_ctx->size;
-+		ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_EN_BACKGROUND;
-+		ps_sm->params.patrol_scrub_command = RAS2_START_PATROL_SCRUBBER;
-+	} else {
-+		if (!running)
-+			return 0;
-+		ps_sm->params.patrol_scrub_command = RAS2_STOP_PATROL_SCRUBBER;
-+	}
-+
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "Failed to %s demand scrubbing\n",
-+			enable ? "enable" : "disable");
-+		return ret;
-+	}
-+
-+	return ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+}
-+
-+static int ras2_hw_scrub_get_enabled_od(struct device *dev, void *drv_data, bool *enabled)
-+{
-+	struct ras2_scrub_ctx *ras2_ctx = drv_data;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	if (ras2_ctx->bg) {
-+		*enabled = false;
-+		return 0;
-+	}
-+
-+	return ras2_get_patrol_scrub_running(ras2_ctx, enabled);
-+}
-+
-+static const struct edac_scrub_ops ras2_scrub_ops = {
-+	.read_range = ras2_hw_scrub_read_range,
-+	.write_range = ras2_hw_scrub_write_range,
-+	.get_enabled_bg = ras2_hw_scrub_get_enabled_bg,
-+	.set_enabled_bg = ras2_hw_scrub_set_enabled_bg,
-+	.get_enabled_od = ras2_hw_scrub_get_enabled_od,
-+	.set_enabled_od = ras2_hw_scrub_set_enabled_od,
-+	.min_cycle_read = ras2_hw_scrub_read_min_scrub_cycle,
-+	.max_cycle_read = ras2_hw_scrub_read_max_scrub_cycle,
-+	.cycle_duration_read = ras2_hw_scrub_cycle_read,
-+	.cycle_duration_write = ras2_hw_scrub_cycle_write,
++struct edac_ppr_dev_attr {
++	struct device_attribute dev_attr;
++	u8 instance;
 +};
 +
-+static DEFINE_IDA(ras2_ida);
++struct edac_ppr_context {
++	char name[EDAC_FEAT_NAME_LEN];
++	struct edac_ppr_dev_attr ppr_dev_attr[PPR_MAX_ATTRS];
++	struct attribute *ppr_attrs[PPR_MAX_ATTRS + 1];
++	struct attribute_group group;
++};
 +
-+static void ida_release(void *ctx)
++#define to_ppr_dev_attr(_dev_attr)      \
++		container_of(_dev_attr, struct edac_ppr_dev_attr, dev_attr)
++
++static ssize_t persist_mode_avail_show(struct device *ras_feat_dev,
++				       struct device_attribute *attr, char *buf)
 +{
-+	struct ras2_scrub_ctx *ras2_ctx = ctx;
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
 +
-+	ida_free(&ras2_ida, ras2_ctx->id);
++	return ops->get_persist_mode_avail(ras_feat_dev->parent,
++					   ctx->ppr[inst].private, buf);
 +}
 +
-+static int ras2_probe(struct platform_device *pdev)
++static ssize_t persist_mode_show(struct device *ras_feat_dev,
++				 struct device_attribute *attr, char *buf)
 +{
-+	struct edac_dev_feature ras_features[RAS2_DEV_NUM_RAS_FEATURES];
-+	char scrub_name[RAS2_SCRUB_NAME_LEN];
-+	struct ras2_scrub_ctx *ras2_ctx;
-+	int num_ras_features = 0;
-+	int ret, id;
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
++	u32 mode;
++	int ret;
 +
-+	/* RAS2 PCC Channel and Scrub specific context */
-+	ras2_ctx = devm_kzalloc(&pdev->dev, sizeof(*ras2_ctx), GFP_KERNEL);
-+	if (!ras2_ctx)
-+		return -ENOMEM;
-+
-+	ras2_ctx->dev = &pdev->dev;
-+	mutex_init(&ras2_ctx->lock);
-+
-+	ret = devm_ras2_register_pcc_channel(&pdev->dev, ras2_ctx,
-+					     *((int *)dev_get_platdata(&pdev->dev)));
-+	if (ret < 0) {
-+		dev_dbg(ras2_ctx->dev,
-+			"failed to register pcc channel ret=%d\n", ret);
-+		return ret;
-+	}
-+	if (!ras2_is_patrol_scrub_support(ras2_ctx))
-+		return -EOPNOTSUPP;
-+
-+	ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
++	ret = ops->get_persist_mode(ras_feat_dev->parent, ctx->ppr[inst].private, &mode);
 +	if (ret)
 +		return ret;
 +
-+	id = ida_alloc(&ras2_ida, GFP_KERNEL);
-+	if (id < 0)
-+		return id;
++	return sysfs_emit(buf, "%u\n", mode);
++}
 +
-+	ras2_ctx->id = id;
++static ssize_t persist_mode_store(struct device *ras_feat_dev,
++				  struct device_attribute *attr,
++				  const char *buf,
++				  size_t len)
++{
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
++	long mode;
++	int ret;
 +
-+	ret = devm_add_action_or_reset(&pdev->dev, ida_release, ras2_ctx);
++	ret = kstrtol(buf, 0, &mode);
 +	if (ret < 0)
 +		return ret;
 +
-+	snprintf(scrub_name, sizeof(scrub_name), "acpi_ras2_mem%d",
-+		 ras2_ctx->id);
++	ret = ops->set_persist_mode(ras_feat_dev->parent, ctx->ppr[inst].private, mode);
++	if (ret)
++		return ret;
 +
-+	ras_features[num_ras_features].feat = RAS_FEAT_SCRUB;
-+	ras_features[num_ras_features].scrub_ops = &ras2_scrub_ops;
-+	ras_features[num_ras_features].scrub_ctx = ras2_ctx;
-+	num_ras_features++;
-+
-+	return edac_dev_register(&pdev->dev, scrub_name, NULL,
-+				 num_ras_features, ras_features);
++	return len;
 +}
 +
-+static const struct platform_device_id ras2_id_table[] = {
-+	{ .name = "acpi_ras2", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(platform, ras2_id_table);
++static ssize_t dpa_support_show(struct device *ras_feat_dev,
++				struct device_attribute *attr, char *buf)
++{
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
++	int ret;
++	u32 val;
 +
-+static struct platform_driver ras2_driver = {
-+	.probe = ras2_probe,
-+	.driver = {
-+		.name = "acpi_ras2",
-+	},
-+	.id_table = ras2_id_table,
-+};
-+module_driver(ras2_driver, platform_driver_register, platform_driver_unregister);
++	ret = ops->get_dpa_support(ras_feat_dev->parent, ctx->ppr[inst].private, &val);
++	if (ret)
++		return ret;
 +
-+MODULE_IMPORT_NS(ACPI_RAS2);
-+MODULE_DESCRIPTION("ACPI RAS2 memory driver");
-+MODULE_LICENSE("GPL");
++	return sysfs_emit(buf, "%u\n", val);
++}
++
++static ssize_t ppr_safe_when_in_use_show(struct device *ras_feat_dev,
++					 struct device_attribute *attr, char *buf)
++{
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
++	int ret;
++	u32 val;
++
++	ret = ops->get_ppr_safe_when_in_use(ras_feat_dev->parent,
++					    ctx->ppr[inst].private, &val);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%u\n", val);
++}
++
++static ssize_t repair_hpa_store(struct device *ras_feat_dev,
++				struct device_attribute *attr,
++				const char *buf, size_t len)
++{
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
++	u64 hpa;
++	int ret;
++
++	ret = kstrtou64(buf, 0, &hpa);
++	if (ret < 0)
++		return ret;
++
++	ret = ops->do_ppr(ras_feat_dev->parent, ctx->ppr[inst].private, true, hpa);
++	if (ret)
++		return ret;
++
++	return len;
++}
++
++static ssize_t repair_dpa_store(struct device *ras_feat_dev,
++				struct device_attribute *attr,
++				const char *buf, size_t len)
++{
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
++	u64 dpa;
++	int ret;
++
++	ret = kstrtou64(buf, 0, &dpa);
++	if (ret < 0)
++		return ret;
++
++	ret = ops->do_ppr(ras_feat_dev->parent, ctx->ppr[inst].private, 0, dpa);
++	if (ret)
++		return ret;
++
++	return len;
++}
++
++static umode_t ppr_attr_visible(struct kobject *kobj,
++				struct attribute *a, int attr_id)
++{
++	struct device *ras_feat_dev = kobj_to_dev(kobj);
++	struct device_attribute *dev_attr =
++				container_of(a, struct device_attribute, attr);
++	u8 inst = ((struct edac_ppr_dev_attr *)to_ppr_dev_attr(dev_attr))->instance;
++	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
++	const struct edac_ppr_ops *ops = ctx->ppr[inst].ppr_ops;
++
++	switch (attr_id) {
++	case PPR_PERSIST_MODE_AVAIL:
++		return ops->get_persist_mode_avail ? a->mode : 0;
++	case PPR_PERSIST_MODE:
++		if (ops->get_persist_mode && ops->set_persist_mode)
++			return a->mode;
++		if (ops->get_persist_mode)
++			return 0444;
++		return 0;
++	case PPR_DPA_SUPPORT:
++		return ops->get_dpa_support ? a->mode : 0;
++	case PPR_SAFE_IN_USE:
++		return ops->get_ppr_safe_when_in_use ? a->mode : 0;
++	case PPR_HPA:
++	case PPR_DPA:
++		return ops->do_ppr ? a->mode : 0;
++	default:
++		return 0;
++	}
++}
++
++#define EDAC_PPR_ATTR_RO(_name, _instance)       \
++	((struct edac_ppr_dev_attr) { .dev_attr = __ATTR_RO(_name), \
++				     .instance = _instance })
++
++#define EDAC_PPR_ATTR_WO(_name, _instance)       \
++	((struct edac_ppr_dev_attr) { .dev_attr = __ATTR_WO(_name), \
++				     .instance = _instance })
++
++#define EDAC_PPR_ATTR_RW(_name, _instance)       \
++	((struct edac_ppr_dev_attr) { .dev_attr = __ATTR_RW(_name), \
++				     .instance = _instance })
++
++static int ppr_create_desc(struct device *ppr_dev,
++			   const struct attribute_group **attr_groups,
++			   u8 instance)
++{
++	struct edac_ppr_context *ppr_ctx;
++	struct attribute_group *group;
++	int i;
++
++	ppr_ctx = devm_kzalloc(ppr_dev, sizeof(*ppr_ctx), GFP_KERNEL);
++	if (!ppr_ctx)
++		return -ENOMEM;
++
++	group = &ppr_ctx->group;
++	ppr_ctx->ppr_dev_attr[0] = EDAC_PPR_ATTR_RO(persist_mode_avail, instance);
++	ppr_ctx->ppr_dev_attr[1] = EDAC_PPR_ATTR_RW(persist_mode, instance);
++	ppr_ctx->ppr_dev_attr[2] = EDAC_PPR_ATTR_RO(dpa_support, instance);
++	ppr_ctx->ppr_dev_attr[3] = EDAC_PPR_ATTR_RO(ppr_safe_when_in_use, instance);
++	ppr_ctx->ppr_dev_attr[4] = EDAC_PPR_ATTR_WO(repair_hpa, instance);
++	ppr_ctx->ppr_dev_attr[5] = EDAC_PPR_ATTR_WO(repair_dpa, instance);
++	for (i = 0; i < PPR_MAX_ATTRS; i++)
++		ppr_ctx->ppr_attrs[i] = &ppr_ctx->ppr_dev_attr[i].dev_attr.attr;
++
++	sprintf(ppr_ctx->name, "%s%d", "ppr", instance);
++	group->name = ppr_ctx->name;
++	group->attrs = ppr_ctx->ppr_attrs;
++	group->is_visible  = ppr_attr_visible;
++
++	attr_groups[0] = group;
++
++	return 0;
++}
++
++/**
++ * edac_ppr_get_desc - get edac PPR descriptors
++ * @ppr_dev: client PPR device
++ * @attr_groups: pointer to attrribute group container
++ * @instance: device's PPR instance number.
++ *
++ * Returns 0 on success, error otherwise.
++ */
++int edac_ppr_get_desc(struct device *ppr_dev,
++		      const struct attribute_group **attr_groups,
++		      u8 instance)
++{
++	if (!ppr_dev || !attr_groups)
++		return -EINVAL;
++
++	return ppr_create_desc(ppr_dev, attr_groups, instance);
++}
+diff --git a/include/linux/edac.h b/include/linux/edac.h
+index 86fc4ee97f20..9154fa64eb67 100644
+--- a/include/linux/edac.h
++++ b/include/linux/edac.h
+@@ -739,6 +739,35 @@ int edac_ecs_get_desc(struct device *ecs_dev,
+ 		      const struct attribute_group **attr_groups,
+ 		      u16 num_media_frus);
+ 
++enum edac_ppr_type {
++	EDAC_TYPE_SPPR, /* soft PPR */
++	EDAC_TYPE_HPPR, /* hard PPR */
++};
++
++/**
++ * struct edac_ppr_ops - PPR(Post Package Repair) device operations
++ * (all elements optional)
++ * @get_persist_mode_avail: get the persist modes supported in the device.
++ * @get_persist_mode: get the persist mode of the PPR instance.
++ * @set_persist_mode: set the persist mode for the PPR instance.
++ * @get_dpa_support: get dpa support flag.
++ * @get_ppr_safe_when_in_use: get whether memory media is accessible and
++ *			       data is retained during PPR operation.
++ * @do_ppr: start PPR operation for the HPA/DPA set.
++ */
++struct edac_ppr_ops {
++	int (*get_persist_mode_avail)(struct device *dev, void *drv_data, char *buf);
++	int (*get_persist_mode)(struct device *dev, void *drv_data, u32 *mode);
++	int (*set_persist_mode)(struct device *dev, void *drv_data, u32 mode);
++	int (*get_dpa_support)(struct device *dev, void *drv_data, u32 *val);
++	int (*get_ppr_safe_when_in_use)(struct device *dev, void *drv_data, u32 *val);
++	int (*do_ppr)(struct device *dev, void *drv_data, bool hpa, u64 pa);
++};
++
++int edac_ppr_get_desc(struct device *ppr_dev,
++		      const struct attribute_group **attr_groups,
++		      u8 instance);
++
+ /*
+  * EDAC device feature information structure
+  */
 -- 
 2.34.1
 
