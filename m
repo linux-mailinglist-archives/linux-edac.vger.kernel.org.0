@@ -1,134 +1,99 @@
-Return-Path: <linux-edac+bounces-1679-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1680-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FBF195608F
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Aug 2024 02:30:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDE3495699E
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Aug 2024 13:47:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39BE9B21130
-	for <lists+linux-edac@lfdr.de>; Mon, 19 Aug 2024 00:30:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D0041C219B7
+	for <lists+linux-edac@lfdr.de>; Mon, 19 Aug 2024 11:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491B816415;
-	Mon, 19 Aug 2024 00:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b/wNtnIV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E405166F34;
+	Mon, 19 Aug 2024 11:47:02 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D96EC2;
-	Mon, 19 Aug 2024 00:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101DA15DBAB;
+	Mon, 19 Aug 2024 11:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724027426; cv=none; b=UNAD6tvjDd5D5+6PT20pMxUz6F1hrfX7WwoXWsr0IaZqVRXvDMqheArrWyQd8RnS9e/Ui980jUbE+vuGUPfDAmNu4RrAKX1UfXgvm3TyVONZZ5iFxoetJSiEEaYEM9SOX6EkByjsO1I1I7P7CoGdSX1q8RnTGqsRIyvrTXf6MTc=
+	t=1724068022; cv=none; b=bWDGfHVCra+uY+kU7Dji9tKgU4wUCOudliPwWrmJXBQ9IRIGTn6vAB7AuaVs2ZXUMNBngr+B3L06/DCsTbe4a9ELzR0QGzR3xqxYFVpOV6KbAA6Ry7MQMJpzXMlF7ktcayH0jktyFSyQnWALMSrhCKu4LkkvKV4RIGKdASnKvK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724027426; c=relaxed/simple;
-	bh=E3JR5s7Wgc/eHnVwduUVdcqhj2KymdGNAdjHK99sMCQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwfoieQFp7h9looH44lA92+y8fVLORi5Qcik0yjADn4QWZwdpBgnDHh8l+dgbeyPYimt6pZE01h92L7vZxcdeFw2+pY3AMrDx/jpD4/m/D7rqbfaXEZAFehpNOLoJkkbYjVR9JhWl15dB4jcHM1pwcAJYsCLqqDS8J+BNjFAYFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b/wNtnIV; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724027424; x=1755563424;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E3JR5s7Wgc/eHnVwduUVdcqhj2KymdGNAdjHK99sMCQ=;
-  b=b/wNtnIVtqI+Zn67LwekbieEQfELcuc+pZfA6Pu+SmIy7AzbUqFvwLXf
-   e8onulvp2Isxqx5j+5P/ZBzpaeQW9yahkFqiVC4ttqEfktRHupxZjIzPQ
-   pvGqqpBia7StHLy8aiowwxktpvhrf0EXvOP5L3ouE2Mykj/FfO3GN+YVh
-   M/4596rYltoDnFLlzJcwIOVB8Nbau2knvvcfjkz2BSjPm95gpc2FVFgk/
-   nmMa0BwxaKyFg77K1VShKhrmwV0gbwgolt25Db19c1bakigl9vwOZ7eW0
-   5jebeAo7ZJCXQcC0EidVZt0qXaeGEUUmk60ktmQ8f/3xF+82eSUmvTO1f
-   g==;
-X-CSE-ConnectionGUID: BRT8dZtPQIayEiHyxfPaQA==
-X-CSE-MsgGUID: E8Cv12vPSqeztuCZxnXc1w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11168"; a="39715683"
-X-IronPort-AV: E=Sophos;i="6.10,157,1719903600"; 
-   d="scan'208";a="39715683"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2024 17:30:24 -0700
-X-CSE-ConnectionGUID: JXtd5NROQOy/bAxsJ/oRRg==
-X-CSE-MsgGUID: Y/H0DJmxROuFevJNO9hMBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,157,1719903600"; 
-   d="scan'208";a="65034467"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 18 Aug 2024 17:30:17 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sfqHl-0008Wq-2j;
-	Mon, 19 Aug 2024 00:30:13 +0000
-Date: Mon, 19 Aug 2024 08:29:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: shiju.jose@huawei.com, linux-edac@vger.kernel.org,
-	linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, bp@alien8.de, tony.luck@intel.com,
-	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
-	dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com
-Subject: Re: [PATCH v11 01/14] EDAC: Add support for EDAC device feature's
- control
-Message-ID: <202408190825.fBBO0NTN-lkp@intel.com>
-References: <20240816164238.1902-2-shiju.jose@huawei.com>
+	s=arc-20240116; t=1724068022; c=relaxed/simple;
+	bh=t1TFW9cxO9uIT0QFXqimGrlIZRzQeJwX2dY2EUYNaKk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VF9pcVpOCZ9mKpGvj4V0UVzJF6hyHmugV/nKtHZW8NbSuNMnXWEJ8ckPgfRtMJbFBki5r3AvCGn5hmQtU46MZQZ6oTip92OOErusFphP3OY0Ue8JwXK1BtVac7XxwF9ahrkjZgbbIrlCyeElSkRUNm8sjLkorIfOMo48dBUiIa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WnW3r1hlNzfbZf;
+	Mon, 19 Aug 2024 19:44:56 +0800 (CST)
+Received: from kwepemg500010.china.huawei.com (unknown [7.202.181.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id D088C1400CD;
+	Mon, 19 Aug 2024 19:46:55 +0800 (CST)
+Received: from huawei.com (10.67.174.76) by kwepemg500010.china.huawei.com
+ (7.202.181.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 19 Aug
+ 2024 19:46:54 +0800
+From: Yuntao Liu <liuyuntao12@huawei.com>
+To: <openipmi-developer@lists.sourceforge.net>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<dmaengine@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC: <minyard@acm.org>, <ludovic.desroches@microchip.com>, <vkoul@kernel.org>,
+	<daniel@zonque.org>, <haojian.zhuang@gmail.com>, <robert.jarzmik@free.fr>,
+	<morbidrsa@gmail.com>, <bp@alien8.de>, <tony.luck@intel.com>,
+	<james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>,
+	<codrin.ciubotariu@microchip.com>, <andi.shyti@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+	<stern@rowland.harvard.edu>, <u.kleine-koenig@pengutronix.de>,
+	<duje.mihanovic@skole.hr>, <broonie@kernel.org>,
+	<andriy.shevchenko@linux.intel.com>, <liuyuntao12@huawei.com>
+Subject: [PATCH -next 0/9] drivers: fix some module autoloading
+Date: Mon, 19 Aug 2024 11:38:46 +0000
+Message-ID: <20240819113855.787149-1-liuyuntao12@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240816164238.1902-2-shiju.jose@huawei.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemg500010.china.huawei.com (7.202.181.71)
 
-Hi,
+Add MODULE_DEVICE_TABLE(), so modules could be properly autoloaded
+based on the alias from platform_device_id table.
 
-kernel test robot noticed the following build warnings:
+Yuntao Liu (9):
+  usb: ehci-mv: fix module autoloading
+  soc: pxa: ssp: fix module autoloading
+  misc: atmel-ssc: fix module autoloading
+  i2c: at91: fix module autoloading
+  mpc85xx_edac: fix module autoloading
+  dmaengine: pxa: fix module autoloading
+  dmaengine: mmp_pdma: fix module autoloading
+  dmaengine: at_hdmac: fix module autoloading
+  ipmi: ipmi_ssif: fix module autoloading
 
-[auto build test WARNING on ras/edac-for-next]
-[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge cxl/next linus/master cxl/pending v6.11-rc3 next-20240816]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/shiju-jose-huawei-com/EDAC-Add-support-for-EDAC-device-feature-s-control/20240817-004442
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-patch link:    https://lore.kernel.org/r/20240816164238.1902-2-shiju.jose%40huawei.com
-patch subject: [PATCH v11 01/14] EDAC: Add support for EDAC device feature's control
-config: i386-randconfig-062-20240818 (https://download.01.org/0day-ci/archive/20240819/202408190825.fBBO0NTN-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240819/202408190825.fBBO0NTN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408190825.fBBO0NTN-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/edac/edac_device.c:584:26: sparse: sparse: symbol 'edac_dev_type' was not declared. Should it be static?
-   drivers/edac/edac_device.c: note: in included file (through include/linux/smp.h, include/linux/lockdep.h, include/linux/spinlock.h, ...):
-   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
-
-vim +/edac_dev_type +584 drivers/edac/edac_device.c
-
-   583	
- > 584	const struct device_type edac_dev_type = {
-   585		.name = "edac_dev",
-   586		.release = edac_dev_release,
-   587	};
-   588	
+ drivers/char/ipmi/ipmi_ssif.c      | 1 +
+ drivers/dma/at_hdmac.c             | 1 +
+ drivers/dma/mmp_pdma.c             | 1 +
+ drivers/dma/pxa_dma.c              | 1 +
+ drivers/edac/mpc85xx_edac.c        | 1 +
+ drivers/i2c/busses/i2c-at91-core.c | 1 +
+ drivers/misc/atmel-ssc.c           | 1 +
+ drivers/soc/pxa/ssp.c              | 1 +
+ drivers/usb/host/ehci-mv.c         | 1 +
+ 9 files changed, 9 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
