@@ -1,53 +1,57 @@
-Return-Path: <linux-edac+bounces-1702-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1703-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2162C959474
-	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 08:17:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D754A9594FE
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 08:48:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97001B233EA
-	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 06:17:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 833931F22712
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 06:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BC516D4FF;
-	Wed, 21 Aug 2024 06:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9DB22139CB;
+	Wed, 21 Aug 2024 06:48:25 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8603D15C150;
-	Wed, 21 Aug 2024 06:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15B5A21C168;
+	Wed, 21 Aug 2024 06:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724221029; cv=none; b=dfFiIu62B/WFXlPylI75/HjYp2cEnCqf4IzORfq5qCKnWOpO3IIxdp4x6Wt4HBHgZhx4qzcjkdmcPtBMTdOEc9lhgJ7eYubu9Kr1Qtqva7/zfmBkx29L0RWdMlgnsEhGM3acLTofO/mTzSll/03aosaNKJU9NA/orGcM9USMU3c=
+	t=1724222905; cv=none; b=ZJPe6O+8w08WrOZwZs2Ud20XJxr8/MVC6FVKqkVejfDs3WawkBdAL2jVchFkUo/Ox4O6F90KMz5RhpRLDrb3KB0n5GYD6ku62w1maOiiLsZwzjQ2zGMVRJ6/uKMcDhyJWGpw87bpEX4hRPXUrQnzWfHBtzp1GF9NalNIFJO5/Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724221029; c=relaxed/simple;
-	bh=2XgjUA3+Jq76hc3frjNsDmVolGe3r+NnQBfF+T8bkz4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=S8UVg7CJIvod+d17zHW8S4KLObBWOpuF73nUsNdR15dfSMr42JdaXKI9R6s6MYxdXF+OyPZL4YVzE+LTSGhrdMTA1v9c5Y1OaLv5pCVACaac2WzdeXmkkMdWe8stdSrQ0QELMqKqcOTWcVg4GMckvzytDH+8ox9io2h8+KNVyxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-05 (Coremail) with SMTP id zQCowACnjjlMhsVmtWmgCA--.5884S2;
-	Wed, 21 Aug 2024 14:16:52 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: dinguyen@kernel.org,
+	s=arc-20240116; t=1724222905; c=relaxed/simple;
+	bh=TnfqwPhCDzvHlQgyCowvuGGh7oEQuJ1Tf2kdo2IYJS0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sTBmGAjxUxoHR6eUaDdWLrLrlK11auCHfcidPxGbOyLUh/aaF/4K22qLPikZ96owXcgnzAvmPLgtvNXvfwb9nThb/FjZ83iNTkGtqZ29LNkW+6CKcQH1fkksiAkpUzEno9CkKmu2ojSQO5okQ14D5CUfJLiUkhgj/ClnYxJVwJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.40.54.90])
+	by gateway (Coremail) with SMTP id _____8Bx7eqxjcVmS+kaAA--.58093S3;
+	Wed, 21 Aug 2024 14:48:17 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.40.54.90])
+	by front1 (Coremail) with SMTP id qMiowMAxVOCxjcVmQVQcAA--.59935S2;
+	Wed, 21 Aug 2024 14:48:17 +0800 (CST)
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+To: chenhuacai@kernel.org,
+	kernel@xen0n.name,
 	bp@alien8.de,
 	tony.luck@intel.com,
 	james.morse@arm.com,
 	mchehab@kernel.org,
 	rric@kernel.org,
-	niravkumar.l.rabara@intel.com,
-	akpm@linux-foundation.org
-Cc: linux-edac@vger.kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Ma Ke <make24@iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH v2 RESEND] EDAC/altera: Fix possible null pointer dereference
-Date: Wed, 21 Aug 2024 14:16:43 +0800
-Message-Id: <20240821061643.1406622-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	linux-edac@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	zhaoqunqin <zhaoqunqin@loongson.cn>
+Subject: [PATCH v1 0/2] Add EDAC driver for loongson memory controller
+Date: Wed, 21 Aug 2024 14:47:26 +0800
+Message-Id: <20240821064728.8642-1-zhaoqunqin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -55,71 +59,46 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowACnjjlMhsVmtWmgCA--.5884S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1fCr17Ww4rWFWDuw45KFg_yoW8Xw4xpr
-	W7W345tryUKa4UWr4vvws5XFy5C3Z3Xay0qrWIyayY93y3Xw15Jryj9FWUta4jqrW8Cay3
-	tr45tw45AayUJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-	1j6rxdM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJV
-	W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI2
-	0VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28Icx
-	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU122NtUUUUU==
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+X-CM-TRANSID:qMiowMAxVOCxjcVmQVQcAA--.59935S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7GF18Kr47ZrWrJw17JF1UurX_yoWxKwc_Ca
+	4xAaykGr4kKa4UGayYqr18ZrWaqFWjk3Z5C3Wqqw1rXw1avr13Xr4Du3W3Ca47JF4DWFnx
+	ZrW8KF93Z3WUtosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUceOJUUUUU
 
-In altr_s10_sdram_check_ecc_deps(), of_get_address() may return NULL which
-is later dereferenced. Fix this bug by adding NULL check.
-of_translate_address() is the same.
+From: zhaoqunqin <zhaoqunqin@loongson.cn>
 
-Found by code review.
+These patchs are based on 6.10.4. Add a simple EDAC driver which report
+single bit errors (CE) only on loongson platform.
 
-Cc: stable@vger.kernel.org
-Fixes: e1bca853dddc ("EDAC/altera: Add SDRAM ECC check for U-Boot")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
----
-Changes in v2:
-- modified the check of of_translate_address() as suggestions.
----
- drivers/edac/altera_edac.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+zhaoqunqin (2):
+  Loongarch: EDAC driver for loongson memory controller
+  dt-bindings: EDAC for loongson memory controller
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index fe89f5c4837f..4fbfa338e05f 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -1086,6 +1086,7 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
- 	struct arm_smccc_res result;
- 	struct device_node *np;
- 	phys_addr_t sdram_addr;
-+	const __be32 *sdram_addrp;
- 	u32 read_reg;
- 	int ret;
- 
-@@ -1093,8 +1094,14 @@ static int altr_s10_sdram_check_ecc_deps(struct altr_edac_device_dev *device)
- 	if (!np)
- 		goto sdram_err;
- 
--	sdram_addr = of_translate_address(np, of_get_address(np, 0,
--							     NULL, NULL));
-+	sdram_addrp = of_get_address(np, 0, NULL, NULL);
-+	if (!sdram_addrp)
-+		return -EINVAL;
-+
-+	sdram_addr = of_translate_address(np, sdram_addrp);
-+	if (sdram_addr == OF_BAD_ADDR)
-+		return -EINVAL;
-+
- 	of_node_put(np);
- 	sdram_ecc_addr = (unsigned long)sdram_addr + prv->ecc_en_ofst;
- 	arm_smccc_smc(INTEL_SIP_SMC_REG_READ, sdram_ecc_addr,
+ .../bindings/edac/loongson,ls-mc-edac.yaml    |  35 +++
+ MAINTAINERS                                   |   7 +
+ arch/loongarch/Kconfig                        |   2 +
+ drivers/edac/Kconfig                          |  10 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/loongson_edac.c                  | 208 ++++++++++++++++++
+ 6 files changed, 263 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/loongson,ls-mc-edac.yaml
+ create mode 100644 drivers/edac/loongson_edac.c
+
 -- 
-2.25.1
+2.31.1
 
 
