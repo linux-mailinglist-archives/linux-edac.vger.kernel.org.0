@@ -1,363 +1,203 @@
-Return-Path: <linux-edac+bounces-1712-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1713-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59835959F1D
-	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 15:57:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66EB3959F2C
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 16:00:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11B6028423C
-	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 13:57:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B74A2B22277
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 14:00:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF7D1AF4E6;
-	Wed, 21 Aug 2024 13:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 391CF18990A;
+	Wed, 21 Aug 2024 14:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="ik3CmFaW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Ot0OEB5f"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2086.outbound.protection.outlook.com [40.107.93.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD72F199946;
-	Wed, 21 Aug 2024 13:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.137
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724248641; cv=none; b=nl1FAIEiEBXs40qAZXkXmbPm/bRMSh3boKBEwCHNwchKe6pc7nP/uvjM+2Sjp/IIN0hEd6eSquxjWvy3f1oMf0rXwiUrbUVGqE+YVIc2AE+8h7ii7HHvSyfEd6ypx+hjpxXBp4tYm6JCF1fmUpWNr59vPHTDz2g34TWksN3v0w4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724248641; c=relaxed/simple;
-	bh=Vmns/KCkTSIUEDDrY1N4NuJbDBwwQf3ZYG53AW+z+IU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u2peJIC/3dxCpJTxSA3DfImziGj9Ih8qlnwLWhCcUAUA2w+1DqzA/GcKY4zR3RfL7BapPJd9x615HbeSQ9vvYmNtn6J/KLtUss1TU0iPqSgGcaBZGFWVSJpQFZzxZB3uyLQ9WonV0WwviNFlIg9Ux7+pPzpVZK6ekISrpp8ArMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=ik3CmFaW; arc=none smtp.client-ip=207.54.90.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1724248636; x=1755784636;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Vmns/KCkTSIUEDDrY1N4NuJbDBwwQf3ZYG53AW+z+IU=;
-  b=ik3CmFaWA6FHu+Q8Edj2e5idFXCnV9n0XKOBnSuAIdOxq8roRnsN3e25
-   Mao4qwM/B7DqMnSVihV3ZmvA61wjk7oyZcG9j40Rh9ZkakedbL/N05E5u
-   TpQOxsEpwA+tjAS4leyhmpMZJkdUWbgnOXgFXaJL8i12bnaZPLpVaSaJw
-   X8tB9XI0VgztfZo+j7bN/q3ZII0S8lznPdzB5EH9WKW/rflsdS1TaZsgx
-   PHizmsqE6+eZMEsjy+T9PHgdqBTBErBBjdb/3qPzKURPUnOKjf5Sk24hE
-   fVOWFZuO8oBT1e316OYVPylHv/xu+EKG7/LnWmbnC6n9bLqoBlH28FKz0
-   A==;
-X-CSE-ConnectionGUID: 6pMzSiX4TKGJbtJRU6Ya9g==
-X-CSE-MsgGUID: vrtwK+nNQ8GcyIUNfvDP0Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="150659870"
-X-IronPort-AV: E=Sophos;i="6.10,164,1719846000"; 
-   d="scan'208";a="150659870"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 22:57:07 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 45BE7D6473;
-	Wed, 21 Aug 2024 22:57:06 +0900 (JST)
-Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 81F9BBF3C8;
-	Wed, 21 Aug 2024 22:57:05 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 126C122460B;
-	Wed, 21 Aug 2024 22:57:05 +0900 (JST)
-Received: from [10.193.128.195] (unknown [10.193.128.195])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 215D91A000A;
-	Wed, 21 Aug 2024 21:57:03 +0800 (CST)
-Message-ID: <f136caa2-5e2f-4b58-9490-823cb85eaa21@fujitsu.com>
-Date: Wed, 21 Aug 2024 21:57:02 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9144E1547D4;
+	Wed, 21 Aug 2024 14:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724248837; cv=fail; b=brZAEPDp1ew9YY28zXVzAi+2MdCSbOEbj1DEfYyzFgLK9Msh6inBMnoGMvASHsXPFdidp7L4a2LNK7/WbxWpHpx9WMMTMg9ndGarBJXlCD42dzQLZa2UXliTYZvyYFxU1EIc8HnM+Ot/Mf9HaDe+oOhuM/RmvRCgsKv4pWlogv8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724248837; c=relaxed/simple;
+	bh=fMVEMEhHCbSxeH7XSr/IA9D14GY0ZN0OxSS6RzIwC/c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kkKpob3wgMRcY93nKY7LEkUxAaBFsAr/mhzKUSxnj6WymmMMcQw27tQDKJtQOFTzzxZqUjHqVQKJBKe0DkYkCElXGQuJj5V9B4KX/wpR2Oe9MdPZjet6t9XJ4I8RPtNisvH5yiafPwDCeSPdmQ4mZK0Ab2l9Ps8MRmScWY6jM7k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Ot0OEB5f; arc=fail smtp.client-ip=40.107.93.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IHygFeDT3I0XpdFV+wHzkaNzSZ3AC20JvC/hKDPbFRnMdYWqBqFg7TNmfF+/a+KC7tblxlDFtiq3G7QMzQXvXfwQX3KM1WMFsjGNjNH/QN29F6S4D19BNL7x2/s+Pim+Xt1OEVXu4UdM9h/dpVHizxoJW3SA+0+KzdMNm2PNEU2wHT+h30P3D/wIisXnIT1+yjfvbZ8JsvS0ejrukpd8pXjwUAFXjOUMwcm69FVS4EZEoCH6Eh5539q8rzHMxnH7OEStlbVsLesNcOdZ0xVozKNmC5tF4Af7wU8PHEjxg7VH6wyUEx1/9AyqSxOhh2ZF1njQucyTtde3X9rNugh/gQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JNUsCb8NoiES/7ljgF3CDrm+UF0AXdn02NFsDviOEEQ=;
+ b=CmpA2gFmJ8guXPMLM7okCGGwmmEDDKuQ2bNhMmxeB48Vq2mXStp0/HKTR4s8nTE+MrAi6kDQc1bA9yxsX6i6jmoSXivSIErz9xxvlZuLj7HArgPvR3er197+DRj6SiK+oDbQPeq5taYgEjCC4DGCqIUHF+zl7/G4AZzjROnysAuzkPsZMHNR3QWi/M63EfF6QUfTCSOSWGUhzjDQrYxeieoyQfmuYRuTt+CuZqkml34pMHhsMRjwYTJXctciTVJwKtwE77OJ5QyKCtHPInr0aHHY2Nk72a+h7HTCU0XghLex4cdnHGpXFDGef8lWOvukK/EpDI+YUWDjY5Nh3FWJWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JNUsCb8NoiES/7ljgF3CDrm+UF0AXdn02NFsDviOEEQ=;
+ b=Ot0OEB5fjAqN/QAzBJ4X3+lV79/aO/7dX1CXarIfMSBZTjNsx8tc2T6ngAy6PTLmCRxD7vqWn6d9W3xgA3MkBxhpu5/oDNEFMmfy6B9ebk4msfWEelSwLgl+S1c5ViJcm8M/rZJnbHYqFdpjGaHbfO/vtqEeiQu1qo9NUanxMFA=
+Received: from MW4PR03CA0139.namprd03.prod.outlook.com (2603:10b6:303:8c::24)
+ by LV3PR12MB9439.namprd12.prod.outlook.com (2603:10b6:408:20e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Wed, 21 Aug
+ 2024 14:00:32 +0000
+Received: from CO1PEPF000044FA.namprd21.prod.outlook.com
+ (2603:10b6:303:8c:cafe::31) by MW4PR03CA0139.outlook.office365.com
+ (2603:10b6:303:8c::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21 via Frontend
+ Transport; Wed, 21 Aug 2024 14:00:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044FA.mail.protection.outlook.com (10.167.241.200) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7897.4 via Frontend Transport; Wed, 21 Aug 2024 14:00:31 +0000
+Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 21 Aug
+ 2024 09:00:26 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: <linux-edac@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>, <x86@kernel.org>,
+	<avadhut.naik@amd.com>, <john.allen@amd.com>, <boris.ostrovsky@oracle.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH] x86/MCE: Prevent CPU offline for SMCA CPUs with non-core banks
+Date: Wed, 21 Aug 2024 09:00:17 -0500
+Message-ID: <20240821140017.330105-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] cxl/core: introduce device reporting poison
- hanlding
-To: Fan Ni <nifan.cxl@gmail.com>
-Cc: qemu-devel@nongnu.org, linux-cxl@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-mm@kvack.org, dan.j.williams@intel.com,
- vishal.l.verma@intel.com, Jonathan.Cameron@huawei.com,
- alison.schofield@intel.com, bp@alien8.de, dave.jiang@intel.com,
- dave@stgolabs.net, ira.weiny@intel.com, james.morse@arm.com,
- linmiaohe@huawei.com, mchehab@kernel.org, nao.horiguchi@gmail.com,
- rric@kernel.org, tony.luck@intel.com
-References: <20240808151328.707869-1-ruansy.fnst@fujitsu.com>
- <20240808151328.707869-2-ruansy.fnst@fujitsu.com> <ZrUONRvQf4M6CNCh@fan>
-From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <ZrUONRvQf4M6CNCh@fan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28608.007
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28608.007
-X-TMASE-Result: 10--23.928600-10.000000
-X-TMASE-MatchedRID: C0Xwo0Y+vY2PvrMjLFD6eKn9fPsu8s0a2q80vLACqaeqvcIF1TcLYLBk
-	jjdoOP1bW9EH4+AJvKPMrGM6h+7YUICoSWHZmQrDKiJEqUFWRghZDdHiTk9OcJDHQ2MaZXz4jK1
-	xN9jQWTmEkt/L8HtAJ6Y70l+keWg+/iG8k6NejseJJ72DuZB0nDnOm2OHJgpY/gMNehoKqTtSRG
-	QAFjO+uHeO6Bj0fYm80+j23NMt8oZujdbubeNfI52wBULX+gacQ1Zooh0EhXhXGTbsQqHbks2fh
-	/Vuh6xFrs8eT/x5DzdWHSUfKtrk8CZ0TtZEfDmeTuctSpiuWyUUi4Ehat0545Tx+2LIqNmtJstK
-	1NXQZJeXYZQAF2E+zIMuR75hY8zA9H//YyhN9ge4u3nS+3EEDvi4nVERfgwdZ7MN8KplzpwY20f
-	1wrB11o3fDvBOMJyVk0bQDJF2wJjev27akzvuZt+pUF0HsjxRmF/+S9oK0r2vloAnGr4qhkINRX
-	nZvSBfgEx/MZlaMxXBlU8KFeeE9VABpNhnDlEI9k0tWBWiOf8th3LBMeXue3HBbiUCoeceWnMen
-	dKlFy9E/RFnPTO/Q/Z5MzLbDyyOmmJTaSCgYAvG+nS24MzHeX0tCKdnhB581B0Hk1Q1KyIOsECO
-	9s+GHnQdJ7XfU86ekGUtrowrXLg=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044FA:EE_|LV3PR12MB9439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ab1dafc-be28-4b48-57fc-08dcc1e99f0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?tMgMaDRMSszGgxcf5/jHo3yyvtp/+aVjnm/gsG2LoQGjQi46F5Yo58CZ9WkU?=
+ =?us-ascii?Q?cXz8ZO9z0kQE7qck59SReFM2K5zkKPdg8RNehD3mfm9tEMVJNI0Hn2Wf+IZD?=
+ =?us-ascii?Q?0sqO5GgkUsL3zdT+7Bii478NbdWfDkLgId4C0IpDLOLWoAqGOFqcYoTEU7To?=
+ =?us-ascii?Q?lA/e6F8YKriV51lRMgwTJv8lqGRyc8g/di57GO9j/IAng3I56FN6XOxO6pEM?=
+ =?us-ascii?Q?0CtVc2WvrCwbExDs6IhxJjRT4cWDlzu7q0GTAlK/hBscfuYkxSG3zmAOS8z+?=
+ =?us-ascii?Q?7jyukGCZOdK2u6jqZr9FOqRz3fJzIgAmqWxcNd9dX/G+HW8RuCqj0id+yB4J?=
+ =?us-ascii?Q?B8ScIf3xuCXvuXcMOOWZTkft1G/2vV/4CouNqYTecHQFr3nMrm8mopQhZPa8?=
+ =?us-ascii?Q?fmMhU0IOMs5sCoOf1+d1iFok9C9rlZkzhMJO1xgNPWhZv7ZdtY3OthrGysZa?=
+ =?us-ascii?Q?6yIR4hD9h6lFkgQCdStUfzyUd1jdDC8osHy6egM1AnwFtFCWL34f1OvMHIfW?=
+ =?us-ascii?Q?zMTIWhHTgshh92F9DNhucMZhOn14v0P3xXJxi84lhZ+MeLJD9ZpxJgjU12kg?=
+ =?us-ascii?Q?TliEO8sFLDUQoVHdEcuNBdtUYJIpjgWOtoKV9zrcgdFAIXrOu0YTp5pi3d0Y?=
+ =?us-ascii?Q?jCjj7R4axuy9Lgy730vSpnE52s8C9o90S8IPof56N2Y4NmNV3CxYIHXglZir?=
+ =?us-ascii?Q?cpuLjfFkmG8kxKZ3eTMLBaHawQhGFI6Nj9wH7fnSfMTy88pgPCCuXEPbpkk4?=
+ =?us-ascii?Q?5V7bUc3d7vfip/1+2u+SeZFnFizdfHaR/Pg4xXpqUsnQQVcOp0kaJ1WfJSpO?=
+ =?us-ascii?Q?MBxfUH3r8QtDo4lkAfc4a2OYvg0nsnzyhowejm1MN+vLtWiMI7LERf8HBfw4?=
+ =?us-ascii?Q?FKBLGOzWcGhexfxSMwo8leWdtYT4qYIPhN2/nmhLUihdgX8gfn4DelC/UpdW?=
+ =?us-ascii?Q?bQFAQHLjHjX87tEQiEssciSLEdDrR3cbn9NGh8OrONpixTnST6UiPfYXFRvE?=
+ =?us-ascii?Q?OOxKndcROGv4nM0rcX5sRZlfHj3TKAiNLoGMwS7QnLndPGGUkGIDptiCxwMX?=
+ =?us-ascii?Q?WVIKVhI/yctPweoKptqG/Ybi5g1Uoyg8R/TvNuf/RRxN3ZHDGOdnV8yBn8Ri?=
+ =?us-ascii?Q?THCmzvHGH5i0NIDHD3dQ0nCIC+znsdOfmRaebTnNEL4u0ZlUfYtETws2YaJl?=
+ =?us-ascii?Q?/nsg66yCcwZqcPyfyUZKcWqtY77sOeLZ99565RdXqxcVxtpdJ+OIUr36eo6k?=
+ =?us-ascii?Q?rWTIVzwMDs0Rn5E7+Dago1y53Rh8gUI60U0bhjVgJuGt6zL0cA9pMa9KLvig?=
+ =?us-ascii?Q?MKgi9cgc9OFqysKRW3PrcYzG4Xtzjir5LH9qWnSsvkn4tNxMOdEBqNjYgAck?=
+ =?us-ascii?Q?ikCNimefvGOFLhTWZf7/nAyvXjQxWwZuGLKNvbeCEWTVUGLJeeT5XQ+BKz3U?=
+ =?us-ascii?Q?5L67hNUaS5zlWnAF8W2dW4w7Nn+dqT3A?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2024 14:00:31.7819
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ab1dafc-be28-4b48-57fc-08dcc1e99f0c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044FA.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9439
 
+Logical CPUs in AMD Scalable MCA (SMCA) systems can manage non-core
+banks. Each of these banks represents unique and separate hardware
+located within the system. Each bank is managed by a single logical CPU;
+they are not shared. Furthermore, the "CPU to MCA bank" assignment
+cannot be modified at run time.
 
+The MCE subsystem supports run time CPU hotplug. Many vendors have
+non-core MCA banks, so MCA settings are not cleared when a CPU is
+offlined for these vendors.
 
-在 2024/8/9 2:28, Fan Ni 写道:
-> On Thu, Aug 08, 2024 at 11:13:27PM +0800, Shiyang Ruan wrote:
->> CXL device can find&report memory problems, even before MCE is detected
->> by CPU.  AFAIK, the current kernel only traces POISON error event
->> from FW-First/OS-First path, but it doesn't handle them, neither
->> notify processes who are using the POISON page like MCE does.
->>
->> Thus, user have to read logs from trace and find out which device
->> reported the error and which applications are affected.  That is not
->> an easy work and cannot be handled in time.  Thus, it is needed to add
->> the feature to make the work done automatically and quickly.  Once CXL
->> device reports the POISON error (via FW-First/OS-First), kernel
->> handles it immediately, similar to the flow when a MCE is triggered.
->>
->> The current call trace of error reporting&handling looks like this:
->> ```
->> 1.  MCE (interrupt #18, while CPU consuming POISON)
->>       -> do_machine_check()
->>         -> mce_log()
->>           -> notify chain (x86_mce_decoder_chain)
->>             -> memory_failure()
->>
->> 2.a FW-First (optional, CXL device proactively find&report)
->>       -> CXL device -> Firmware
->>         -> OS: ACPI->APEI->GHES->CPER -> CXL driver -> trace
->>                                                    \-> memory_failure()
->>                                                        ^----- ADD
->> 2.b OS-First (optional, CXL device proactively find&report)
->>       -> CXL device -> MSI
->>         -> OS: CXL driver -> trace
->>                          \-> memory_failure()
->>                              ^------------------------------- ADD
->> ```
->> This patch adds calling memory_failure() while CXL device reporting
->> error is received, marked as "ADD" in figure above.
->>
->> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
->> ---
->>   drivers/cxl/core/mbox.c   | 75 ++++++++++++++++++++++++++++++++-------
->>   drivers/cxl/cxlmem.h      |  8 ++---
->>   drivers/cxl/pci.c         |  4 +--
->>   include/linux/cxl-event.h | 16 ++++++++-
->>   4 files changed, 83 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
->> index e5cdeafdf76e..0cb6ef2e6600 100644
->> --- a/drivers/cxl/core/mbox.c
->> +++ b/drivers/cxl/core/mbox.c
->> @@ -849,10 +849,55 @@ int cxl_enumerate_cmds(struct cxl_memdev_state *mds)
->>   }
->>   EXPORT_SYMBOL_NS_GPL(cxl_enumerate_cmds, CXL);
->>   
->> -void cxl_event_trace_record(const struct cxl_memdev *cxlmd,
->> -			    enum cxl_event_log_type type,
->> -			    enum cxl_event_type event_type,
->> -			    const uuid_t *uuid, union cxl_event *evt)
->> +static void cxl_report_poison(struct cxl_memdev *cxlmd, u64 hpa)
->> +{
->> +	unsigned long pfn = PHYS_PFN(hpa);
->> +
->> +	memory_failure_queue(pfn, 0);
->> +}
->> +
->> +static void cxl_event_handle_general_media(struct cxl_memdev *cxlmd,
->> +					   enum cxl_event_log_type type,
->> +					   u64 hpa,
->> +					   struct cxl_event_gen_media *rec)
->> +{
->> +	if (type == CXL_EVENT_TYPE_FAIL) {
->> +		switch (rec->media_hdr.transaction_type) {
->> +		case CXL_EVENT_TRANSACTION_READ:
->> +		case CXL_EVENT_TRANSACTION_WRITE:
->> +		case CXL_EVENT_TRANSACTION_SCAN_MEDIA:
->> +		case CXL_EVENT_TRANSACTION_INJECT_POISON:
->> +			cxl_report_poison(cxlmd, hpa);
->> +			break;
->> +		default:
->> +			break;
->> +		}
->> +	}
->> +}
->> +
->> +static void cxl_event_handle_dram(struct cxl_memdev *cxlmd,
->> +				  enum cxl_event_log_type type,
->> +				  u64 hpa,
->> +				  struct cxl_event_dram *rec)
->> +{
->> +	if (type == CXL_EVENT_TYPE_FAIL) {
->> +		switch (rec->media_hdr.transaction_type) {
->> +		case CXL_EVENT_TRANSACTION_READ:
->> +		case CXL_EVENT_TRANSACTION_WRITE:
->> +		case CXL_EVENT_TRANSACTION_SCAN_MEDIA:
->> +		case CXL_EVENT_TRANSACTION_INJECT_POISON:
->> +			cxl_report_poison(cxlmd, hpa);
->> +			break;
->> +		default:
->> +			break;
->> +		}
->> +	}
->> +}
->> +
->> +void cxl_event_handle_record(struct cxl_memdev *cxlmd,
->> +			     enum cxl_event_log_type type,
->> +			     enum cxl_event_type event_type,
->> +			     const uuid_t *uuid, union cxl_event *evt)
->>   {
->>   	if (event_type == CXL_CPER_EVENT_MEM_MODULE) {
->>   		trace_cxl_memory_module(cxlmd, type, &evt->mem_module);
->> @@ -880,18 +925,22 @@ void cxl_event_trace_record(const struct cxl_memdev *cxlmd,
->>   		if (cxlr)
->>   			hpa = cxl_dpa_to_hpa(cxlr, cxlmd, dpa);
->>   
->> -		if (event_type == CXL_CPER_EVENT_GEN_MEDIA)
->> +		if (event_type == CXL_CPER_EVENT_GEN_MEDIA) {
->>   			trace_cxl_general_media(cxlmd, type, cxlr, hpa,
->>   						&evt->gen_media);
->> -		else if (event_type == CXL_CPER_EVENT_DRAM)
->> +			cxl_event_handle_general_media(cxlmd, type, hpa,
->> +						&evt->gen_media);
->> +		} else if (event_type == CXL_CPER_EVENT_DRAM) {
->>   			trace_cxl_dram(cxlmd, type, cxlr, hpa, &evt->dram);
->> +			cxl_event_handle_dram(cxlmd, type, hpa, &evt->dram);
-> 
-> Does it make sense to call the trace function in
-> cxl_event_handle_dram/general_media and replace the trace function with
-> the handle_* here?
+Even though the non-core MCA banks remain enabled, MCA errors will not
+be handled (reported, cleared, etc.) on SMCA systems when the managing
+CPU is offline.
 
-Sorry for late reply.  I'm not really good at naming functions.  Since 
-the trace functions already have the framework to deal with each kind of 
-uuids and event types, I don't think we should make another one for the 
-same logics.  Thus, I reused it and renamed the functions.  Maybe 
-"handle" isn't a good word to describe "tracing records and doing 
-memory_failure if necessary".  Could you help me to name it better?
+Check if a CPU manages non-core MCA banks and, if so, prevent it from
+being taken offline.
 
-> 
->> +		}
->>   	}
->>   }
->> -EXPORT_SYMBOL_NS_GPL(cxl_event_trace_record, CXL);
->> +EXPORT_SYMBOL_NS_GPL(cxl_event_handle_record, CXL);
->>   
->> -static void __cxl_event_trace_record(const struct cxl_memdev *cxlmd,
->> -				     enum cxl_event_log_type type,
->> -				     struct cxl_event_record_raw *record)
->> +static void __cxl_event_handle_record(struct cxl_memdev *cxlmd,
->> +				      enum cxl_event_log_type type,
->> +				      struct cxl_event_record_raw *record)
->>   {
->>   	enum cxl_event_type ev_type = CXL_CPER_EVENT_GENERIC;
->>   	const uuid_t *uuid = &record->id;
->> @@ -903,7 +952,7 @@ static void __cxl_event_trace_record(const struct cxl_memdev *cxlmd,
->>   	else if (uuid_equal(uuid, &CXL_EVENT_MEM_MODULE_UUID))
->>   		ev_type = CXL_CPER_EVENT_MEM_MODULE;
->>   
->> -	cxl_event_trace_record(cxlmd, type, ev_type, uuid, &record->event);
->> +	cxl_event_handle_record(cxlmd, type, ev_type, uuid, &record->event);
->>   }
->>   
->>   static int cxl_clear_event_record(struct cxl_memdev_state *mds,
->> @@ -1012,8 +1061,8 @@ static void cxl_mem_get_records_log(struct cxl_memdev_state *mds,
->>   			break;
->>   
->>   		for (i = 0; i < nr_rec; i++)
->> -			__cxl_event_trace_record(cxlmd, type,
->> -						 &payload->records[i]);
->> +			__cxl_event_handle_record(cxlmd, type,
->> +						  &payload->records[i]);
->>   
->>   		if (payload->flags & CXL_GET_EVENT_FLAG_OVERFLOW)
->>   			trace_cxl_overflow(cxlmd, type, payload);
->> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
->> index afb53d058d62..5c4810dcbdeb 100644
->> --- a/drivers/cxl/cxlmem.h
->> +++ b/drivers/cxl/cxlmem.h
->> @@ -826,10 +826,10 @@ void set_exclusive_cxl_commands(struct cxl_memdev_state *mds,
->>   void clear_exclusive_cxl_commands(struct cxl_memdev_state *mds,
->>   				  unsigned long *cmds);
->>   void cxl_mem_get_event_records(struct cxl_memdev_state *mds, u32 status);
->> -void cxl_event_trace_record(const struct cxl_memdev *cxlmd,
->> -			    enum cxl_event_log_type type,
->> -			    enum cxl_event_type event_type,
->> -			    const uuid_t *uuid, union cxl_event *evt);
->> +void cxl_event_handle_record(struct cxl_memdev *cxlmd,
->> +			     enum cxl_event_log_type type,
->> +			     enum cxl_event_type event_type,
->> +			     const uuid_t *uuid, union cxl_event *evt);
->>   int cxl_set_timestamp(struct cxl_memdev_state *mds);
->>   int cxl_poison_state_init(struct cxl_memdev_state *mds);
->>   int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
->> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
->> index 4be35dc22202..6e65ca89f666 100644
->> --- a/drivers/cxl/pci.c
->> +++ b/drivers/cxl/pci.c
->> @@ -1029,8 +1029,8 @@ static void cxl_handle_cper_event(enum cxl_event_type ev_type,
->>   	hdr_flags = get_unaligned_le24(rec->event.generic.hdr.flags);
->>   	log_type = FIELD_GET(CXL_EVENT_HDR_FLAGS_REC_SEVERITY, hdr_flags);
->>   
->> -	cxl_event_trace_record(cxlds->cxlmd, log_type, ev_type,
->> -			       &uuid_null, &rec->event);
->> +	cxl_event_handle_record(cxlds->cxlmd, log_type, ev_type,
->> +				&uuid_null, &rec->event);
->>   }
->>   
->>   static void cxl_cper_work_fn(struct work_struct *work)
->> diff --git a/include/linux/cxl-event.h b/include/linux/cxl-event.h
->> index 0bea1afbd747..be4342a2b597 100644
->> --- a/include/linux/cxl-event.h
->> +++ b/include/linux/cxl-event.h
->> @@ -7,6 +7,20 @@
->>   #include <linux/uuid.h>
->>   #include <linux/workqueue_types.h>
->>   
->> +/*
->> + * Event transaction type
->> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
-> 
-> Here and below, update the specification reference to reflect cxl 3.1.
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+---
+ arch/x86/kernel/cpu/mce/core.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-Ok. Will update it.
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 2a938f429c4d..cf1529d0e6b1 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -2770,10 +2770,34 @@ static int mce_cpu_online(unsigned int cpu)
+ 	return 0;
+ }
+ 
++static bool mce_cpu_is_hotpluggable(void)
++{
++	if (!mce_flags.smca)
++		return true;
++
++	/*
++	 * SMCA systems use banks 0-6 for core units. Banks 7 and later are
++	 * used for non-core units.
++	 *
++	 * Logical CPUs with 7 or fewer banks can be offlined, since they are not
++	 * managing any non-core units.
++	 *
++	 * Check if non-core banks are enabled using MCG_CTL. The hardware may
++	 * report MCG_CAP[Count] greater than is actually present, so it is not a
++	 * good indicator that a CPU has non-core banks.
++	 */
++	return fls_long(mce_rdmsrl(MSR_IA32_MCG_CTL)) <= 7;
++}
++
+ static int mce_cpu_pre_down(unsigned int cpu)
+ {
+ 	struct timer_list *t = this_cpu_ptr(&mce_timer);
+ 
++	if (!mce_cpu_is_hotpluggable()) {
++		pr_info("CPU%d is not hotpluggable\n", cpu);
++		return -EOPNOTSUPP;
++	}
++
+ 	mce_disable_cpu();
+ 	del_timer_sync(t);
+ 	mce_threshold_remove_device(cpu);
+-- 
+2.34.1
 
-
---
-Thanks,
-Ruan.
-
-> 
-> Fan
->> + */
->> +enum cxl_event_transaction_type {
->> +	CXL_EVENT_TRANSACTION_UNKNOWN = 0X00,
->> +	CXL_EVENT_TRANSACTION_READ,
->> +	CXL_EVENT_TRANSACTION_WRITE,
->> +	CXL_EVENT_TRANSACTION_SCAN_MEDIA,
->> +	CXL_EVENT_TRANSACTION_INJECT_POISON,
->> +	CXL_EVENT_TRANSACTION_MEDIA_SCRUB,
->> +	CXL_EVENT_TRANSACTION_MEDIA_MANAGEMENT,
->> +};
->> +
->>   /*
->>    * Common Event Record Format
->>    * CXL rev 3.0 section 8.2.9.2.1; Table 8-42
->> @@ -26,7 +40,7 @@ struct cxl_event_media_hdr {
->>   	__le64 phys_addr;
->>   	u8 descriptor;
->>   	u8 type;
->> -	u8 transaction_type;
->> +	u8 transaction_type;	/* enum cxl_event_transaction_type */
->>   	/*
->>   	 * The meaning of Validity Flags from bit 2 is
->>   	 * different across DRAM and General Media records
->> -- 
->> 2.34.1
->>
 
