@@ -1,35 +1,35 @@
-Return-Path: <linux-edac+bounces-1717-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1718-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EABA95A40F
-	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 19:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0902B95A424
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 19:48:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA3051F25EA7
-	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 17:41:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B397F1F21797
+	for <lists+linux-edac@lfdr.de>; Wed, 21 Aug 2024 17:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A461B3B3D;
-	Wed, 21 Aug 2024 17:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75211B2ED3;
+	Wed, 21 Aug 2024 17:48:16 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4090E14E2CB;
-	Wed, 21 Aug 2024 17:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D884206B;
+	Wed, 21 Aug 2024 17:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724262032; cv=none; b=Y/sxlSS+ppz3dTvSg8849lJjoOeT4Ygnr8/7+/AVe6Q2F5knd3qqxwKJjSKPS2pIPQq8vVPA6bHEx0iteF1QnaEjDfngYxEtwmGBlDDzxPKaNHAW0UtNPSxcUuVwiPtaDrr7Ey/TZaqRBUPaI1DR1/oUXCv+/cKlGlGAkXCSdhM=
+	t=1724262496; cv=none; b=Nhwpy+MhI67UFC7rNy79EJxgVaEQQmPwMATjvQ0JEa7y+Co0vb8zPPv9B1GJnKmdq40+9yPRkylv0ajzOrCknUb1CwgLuliN5lK9ovEju5HILgJhDFajKb7+UNb7yrMyhhBnZbNxPlkP2grVle9gw61pudnF9XK42txqLifQ4HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724262032; c=relaxed/simple;
-	bh=jTHolsPXS8wT18MlchshV3tM0629BPB8suiDRw/qZks=;
+	s=arc-20240116; t=1724262496; c=relaxed/simple;
+	bh=ETygqqImXHwIxRUc8cNj8q3QyWNcTm2Onr+kGGkCYAg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tXoXh3SxK4rcyrwxa3AoyOTZj1cMAYpIVW7vf4yM0XiAVfqjpEAwFJPnpqOU0kuCtXe+HvFoA2ocMhJmWFXOFccjy2gh6BKqhYcTD1eShIGL58xzOj6wAyX9A1byePt7qVvKpM/zYYcg6KIeQ7EA+oLK+CBqkFoousFD2D/fsHM=
+	 MIME-Version:Content-Type; b=LktXgh9aFTlCuGnqHe+YBsxZ6ypWq2E/AQIQ8tNNFVJD9rMdIwH5kSTdyfzmSIRfXrnMzSqHUHYsetSVxuO2j4n4SwK+g4m4bcRhZvZmftZPUbPeLCJYIe6ofURShfni6veir0UhdqUFqf42QmU13NPBYAcFMPM/g8ryE5vbC7w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC791C32781;
-	Wed, 21 Aug 2024 17:40:28 +0000 (UTC)
-Date: Wed, 21 Aug 2024 13:40:57 -0400
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 557F0C32786;
+	Wed, 21 Aug 2024 17:48:14 +0000 (UTC)
+Date: Wed, 21 Aug 2024 13:48:43 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Avadhut Naik <avadhut.naik@amd.com>
 Cc: <x86@kernel.org>, <linux-trace-kernel@vger.kernel.org>,
@@ -39,12 +39,12 @@ Cc: <x86@kernel.org>, <linux-trace-kernel@vger.kernel.org>,
  <lenb@kernel.org>, <mchehab@kernel.org>, <james.morse@arm.com>,
  <airlied@gmail.com>, <yazen.ghannam@amd.com>, <john.allen@amd.com>,
  <avadnaik@amd.com>
-Subject: Re: [PATCH v4 2/4] x86/mce, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
-Message-ID: <20240821134057.6fc50940@gandalf.local.home>
-In-Reply-To: <20240815211635.1336721-3-avadhut.naik@amd.com>
+Subject: [PATCH] tracing: Add __print_dynamic_array() helper
+Message-ID: <20240821134843.5faf9a15@gandalf.local.home>
+In-Reply-To: <20240821134057.6fc50940@gandalf.local.home>
 References: <20240815211635.1336721-1-avadhut.naik@amd.com>
 	<20240815211635.1336721-3-avadhut.naik@amd.com>
+	<20240821134057.6fc50940@gandalf.local.home>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -55,61 +55,88 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 15 Aug 2024 16:16:33 -0500
-Avadhut Naik <avadhut.naik@amd.com> wrote:
+From: Steven Rostedt <rostedt@goodmis.org>
 
-> diff --git a/include/trace/events/mce.h b/include/trace/events/mce.h
-> index 65aba1afcd07..1e7d5696b3ba 100644
-> --- a/include/trace/events/mce.h
-> +++ b/include/trace/events/mce.h
-> @@ -43,6 +43,8 @@ TRACE_EVENT(mce_record,
->  		__field(	u8,		bank		)
->  		__field(	u8,		cpuvendor	)
->  		__field(	u32,		microcode	)
-> +		__field(	u8,		len	)
+When printing a dynamic array in a trace event, the method is rather ugly.
+It has the format of:
 
-You don't need to save the length. It's already saved in the
-__dynamic_array meta data.
+  __print_array(__get_dynamic_array(array),
+            __get_dynmaic_array_len(array) / el_size, el_size)
 
-> +		__dynamic_array(u8, v_data, sizeof(err->vendor))
->  	),
->  
->  	TP_fast_assign(
-> @@ -65,9 +67,11 @@ TRACE_EVENT(mce_record,
->  		__entry->bank		= err->m.bank;
->  		__entry->cpuvendor	= err->m.cpuvendor;
->  		__entry->microcode	= err->m.microcode;
-> +		__entry->len		= sizeof(err->vendor);
-> +		memcpy(__get_dynamic_array(v_data), &err->vendor, sizeof(err->vendor));
->  	),
->  
-> -	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx, ADDR: %016Lx, MISC: %016Lx, SYND: %016Lx, RIP: %02x:<%016Lx>, TSC: %llx, PPIN: %llx, vendor: %u, CPUID: %x, time: %llu, socket: %u, APIC: %x, microcode: %x",
-> +	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016llx, IPID: %016llx, ADDR: %016llx, MISC: %016llx, SYND: %016llx, RIP: %02x:<%016llx>, TSC: %llx, PPIN: %llx, vendor: %u, CPUID: %x, time: %llu, socket: %u, APIC: %x, microcode: %x, vendor data: %s",
->  		__entry->cpu,
->  		__entry->mcgcap, __entry->mcgstatus,
->  		__entry->bank, __entry->status,
-> @@ -83,7 +87,8 @@ TRACE_EVENT(mce_record,
->  		__entry->walltime,
->  		__entry->socketid,
->  		__entry->apicid,
-> -		__entry->microcode)
-> +		__entry->microcode,
-> +		__print_array(__get_dynamic_array(v_data), __entry->len / 8, 8))
+Since dynamic arrays are known to the tracing infrastructure, create a
+helper macro that does the above for you.
 
-You can replace the __entry->len with:
+  __print_dynamic_array(array, el_size)
 
-		__print_array(__get_dynamic_array(v_data), __get_dynamic_array_len(v_data) / 8, 8))
+Which would expand to the same output.
 
-Hmm, I should add a helper function that would do the same with just:
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
 
-		__print_dynamic_array(vdata, 8);
+**** Feel free to take and use this patch with this series ****
 
-Where it will have __print_dynamic_array(array-name, el-size)
+ include/trace/stages/stage3_trace_output.h | 8 ++++++++
+ include/trace/stages/stage7_class_define.h | 1 +
+ samples/trace_events/trace-events-sample.h | 7 ++++++-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
--- Steve
-
->  );
->  
->  #endif /* _TRACE_MCE_H */
+diff --git a/include/trace/stages/stage3_trace_output.h b/include/trace/stages/stage3_trace_output.h
+index c1fb1355d309..8e3215093e1f 100644
+--- a/include/trace/stages/stage3_trace_output.h
++++ b/include/trace/stages/stage3_trace_output.h
+@@ -119,6 +119,14 @@
+ 		trace_print_array_seq(p, array, count, el_size);	\
+ 	})
+ 
++#undef __print_dynamic_array
++#define __print_dynamic_array(array, el_size)				\
++	({								\
++		__print_array(__get_dynamic_array(array),		\
++			      __get_dynamic_array_len(array) / el_size,	\
++			      el_size);					\
++	})
++
+ #undef __print_hex_dump
+ #define __print_hex_dump(prefix_str, prefix_type,			\
+ 			 rowsize, groupsize, buf, len, ascii)		\
+diff --git a/include/trace/stages/stage7_class_define.h b/include/trace/stages/stage7_class_define.h
+index bcb960d16fc0..fcd564a590f4 100644
+--- a/include/trace/stages/stage7_class_define.h
++++ b/include/trace/stages/stage7_class_define.h
+@@ -22,6 +22,7 @@
+ #undef __get_rel_cpumask
+ #undef __get_rel_sockaddr
+ #undef __print_array
++#undef __print_dynamic_array
+ #undef __print_hex_dump
+ #undef __get_buf
+ 
+diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
+index 55f9a3da92d5..999f78d380ae 100644
+--- a/samples/trace_events/trace-events-sample.h
++++ b/samples/trace_events/trace-events-sample.h
+@@ -319,7 +319,7 @@ TRACE_EVENT(foo_bar,
+ 		__assign_cpumask(cpum, cpumask_bits(mask));
+ 	),
+ 
+-	TP_printk("foo %s %d %s %s %s %s %s (%s) (%s) %s", __entry->foo, __entry->bar,
++	TP_printk("foo %s %d %s %s %s %s %s %s (%s) (%s) %s", __entry->foo, __entry->bar,
+ 
+ /*
+  * Notice here the use of some helper functions. This includes:
+@@ -363,6 +363,11 @@ TRACE_EVENT(foo_bar,
+ 		  __print_array(__get_dynamic_array(list),
+ 				__get_dynamic_array_len(list) / sizeof(int),
+ 				sizeof(int)),
++
++/*     A shortcut is to use __print_dynamic_array for dynamic arrays */
++
++		  __print_dynamic_array(list, sizeof(int)),
++
+ 		  __get_str(str), __get_str(lstr),
+ 		  __get_bitmask(cpus), __get_cpumask(cpum),
+ 		  __get_str(vstr))
+-- 
+2.43.0
 
 
