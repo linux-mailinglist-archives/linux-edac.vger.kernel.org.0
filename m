@@ -1,122 +1,97 @@
-Return-Path: <linux-edac+bounces-1722-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1723-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 919FC95ABC3
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Aug 2024 05:14:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61EB495B11A
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Aug 2024 11:05:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 115CC1F25728
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Aug 2024 03:14:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C721FB22CCF
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Aug 2024 09:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D98FF1B28A;
-	Thu, 22 Aug 2024 03:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ik5pq85f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19EF815F41F;
+	Thu, 22 Aug 2024 09:05:15 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61751B7FD;
-	Thu, 22 Aug 2024 03:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575681CF8B;
+	Thu, 22 Aug 2024 09:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724296462; cv=none; b=CVSHqOCSknyej9APwACreL9HipDT0Ei6DEyvs3upXvwage1yq78GcJzEOSmIqaU5/ji+tKFvQzX2T1Xcm4hE4QnC6jTqbzoQF6g8ZvMzWo3xKBgg2MvirpOLetiQJrBuKGEGystrWh8G4EL/cWLS2xShJVeMwKt8WSFcOuR1d3w=
+	t=1724317515; cv=none; b=D13B10KwuUQPmHcEcnsX3oSepK9vtFgLxFDI4fTr/m3C3QQgFXJxNHIb99S+Hyj1H39OnwTno0b9XSm1S6yiA1uKnxSOlGEpOzcc7HUrawbv/TcmgrLw6eSL0pS7ZnVSWdTmeI6FIZERYjJ9VKi8aDF/gGoxc2PmgjfWFru5I7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724296462; c=relaxed/simple;
-	bh=kX/eJEnUnP1fnuKVgl95jcVQXrBQNB/ruJcrqp1XQaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z3giMB8otAKz4cCPt8gDj5GjMgGST+DbjLfeuDsMpdyXjQsE7Ka0Vd51WN3xntc0HCx0712nPwqdlCy44EdXAd8NxfRIkxA4iKQvv37qaiBbyaqlsmCyRpPkYYJbRCYKbXeVypyPvqXyRpSkg+wfwSEcxLt/f605W96meQkNomI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ik5pq85f; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724296461; x=1755832461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kX/eJEnUnP1fnuKVgl95jcVQXrBQNB/ruJcrqp1XQaE=;
-  b=ik5pq85ffQ8M5AVtaoUQXnbgG2ZXy1iMZez6XMHE3Mr+dlBd5zrZRdo+
-   +8IBzXRZ+5t5Mcia1U7lpA9RpjASyYjOmPpQ8QSrGAinoA0V+CpelPsAu
-   fVDRMX2gxCJSEtqHRXEqRMwhW6ZS6OpgRXZOSu3vcUxr/kMtFEo+wvhPK
-   sRYbTGISj/sDTSeYbXAL52He6SRBEelmIUJkgaQMybkNtpx65sc5nvWan
-   neHXc1Dg0EC/eTw2lEbcwWlKW7C41Ix4WO1hOvGGTNYXA5TyvcSCA1WFB
-   J+r03DuhgKkqhaFwjmYlQc0jWux4OsCpWjj7s/+JfCvIJOd0JHr3sQbnt
-   w==;
-X-CSE-ConnectionGUID: p7l+5v9CRPa4aQhr61TrlA==
-X-CSE-MsgGUID: RNlgjxBmQLC1eshioy2l+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="22839559"
-X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="22839559"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 20:14:21 -0700
-X-CSE-ConnectionGUID: b2O2YlYAQqiMBXbgghkKjg==
-X-CSE-MsgGUID: 74af8rXIRTKQt0wXFjqxhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="98800083"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 Aug 2024 20:14:17 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sgyH8-000CDc-0D;
-	Thu, 22 Aug 2024 03:14:14 +0000
-Date: Thu, 22 Aug 2024 11:14:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhao Qunqin <zhaoqunqin@loongson.cn>, chenhuacai@kernel.org,
-	kernel@xen0n.name, bp@alien8.de, tony.luck@intel.com,
-	james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev, loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	devicetree@vger.kernel.org, zhaoqunqin <zhaoqunqin@loongson.cn>
-Subject: Re: [PATCH v1 1/2] Loongarch: EDAC driver for loongson memory
- controller
-Message-ID: <202408221024.FpH0yAEh-lkp@intel.com>
-References: <20240821064728.8642-2-zhaoqunqin@loongson.cn>
+	s=arc-20240116; t=1724317515; c=relaxed/simple;
+	bh=ke62uAz2fqqy3srJ38BfYBli7FNy6/2rFr2aRNu+HW0=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OSs8X38Z/sOyDhsU5ZTNenDXasi0udZPhrZFbletbalU+S9gUtKjawImDPW14vIacUy6xi3uQbJB9xneGuMyPIjFzzJaBRBV9kCR5ZOuA0gct2qL4zaX3yPQEYqlxmWaI9sb16FoSaBbR1It9LXvPeEmodD0zbqpJr51quwJisI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WqHJb4LRpz6K9bj;
+	Thu, 22 Aug 2024 17:02:07 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id D6B7C140A46;
+	Thu, 22 Aug 2024 17:05:08 +0800 (CST)
+Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 22 Aug
+ 2024 10:05:08 +0100
+Date: Thu, 22 Aug 2024 10:05:07 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Yang Ruibin <11162571@vivo.com>
+CC: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<opensource.kernel@vivo.com>
+Subject: Re: [PATCH v1] drivers:ras:Fix the NULL vs IS_ERR() bug for
+ debugfs_create_dir()
+Message-ID: <20240822100507.00000566@Huawei.com>
+In-Reply-To: <20240821071719.8277-1-11162571@vivo.com>
+References: <20240821071719.8277-1-11162571@vivo.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240821064728.8642-2-zhaoqunqin@loongson.cn>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Hi Zhao,
+On Wed, 21 Aug 2024 03:17:18 -0400
+Yang Ruibin <11162571@vivo.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> The debugfs_create_dir() function returns error pointers.
+> It never returns NULL. So use IS_ERR() to check it.
+> 
+> Signed-off-by: Yang Ruibin <11162571@vivo.com>
+Ideally needs a fixes tag. 
 
-[auto build test WARNING on ras/edac-for-next]
-[also build test WARNING on robh/for-next linus/master v6.11-rc4 next-20240821]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Otherwise (given I looked into a similar one last night
+with the same pattern).
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhao-Qunqin/Loongarch-EDAC-driver-for-loongson-memory-controller/20240821-145127
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-patch link:    https://lore.kernel.org/r/20240821064728.8642-2-zhaoqunqin%40loongson.cn
-patch subject: [PATCH v1 1/2] Loongarch: EDAC driver for loongson memory controller
-config: loongarch-kismet-CONFIG_EDAC-CONFIG_LOONGARCH-0-0 (https://download.01.org/0day-ci/archive/20240822/202408221024.FpH0yAEh-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20240822/202408221024.FpH0yAEh-lkp@intel.com/reproduce)
+> ---
+>  drivers/ras/cec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+> index e440b15fbabc..ebd4631b685b 100644
+> --- a/drivers/ras/cec.c
+> +++ b/drivers/ras/cec.c
+> @@ -489,7 +489,7 @@ static int __init create_debugfs_nodes(void)
+>  	}
+>  
+>  	d = debugfs_create_dir("cec", dfs);
+> -	if (!d) {
+> +	if (IS_ERR(d)) {
+>  		pr_warn("Error creating cec debugfs node!\n");
+>  		return -1;
+>  	}
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408221024.FpH0yAEh-lkp@intel.com/
-
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for EDAC when selected by LOONGARCH
-   WARNING: unmet direct dependencies detected for EDAC
-     Depends on [n]: HAS_IOMEM [=y] && EDAC_SUPPORT [=y] && RAS [=n]
-     Selected by [y]:
-     - LOONGARCH [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
