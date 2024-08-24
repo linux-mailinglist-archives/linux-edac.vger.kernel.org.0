@@ -1,108 +1,131 @@
-Return-Path: <linux-edac+bounces-1729-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1730-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0CCD95CC4B
-	for <lists+linux-edac@lfdr.de>; Fri, 23 Aug 2024 14:25:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D4B495DD87
+	for <lists+linux-edac@lfdr.de>; Sat, 24 Aug 2024 13:27:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3BD81C233CA
-	for <lists+linux-edac@lfdr.de>; Fri, 23 Aug 2024 12:25:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 076AE2833C8
+	for <lists+linux-edac@lfdr.de>; Sat, 24 Aug 2024 11:27:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A09518452B;
-	Fri, 23 Aug 2024 12:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dVXSfg5B"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF12E15D5D9;
+	Sat, 24 Aug 2024 11:27:15 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37CF14B95F;
-	Fri, 23 Aug 2024 12:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3CB15688E;
+	Sat, 24 Aug 2024 11:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724415927; cv=none; b=I11TBNGDZhh/UJgpoZDsvVqhqXI/jR6E4f4jWhHZWa7s3lGZe+zn6lG+VkP7Q8kdx9Ladoxq3IRLU4AcAXo5ymHqhfGyZhZvHHD+t/mIOBcL3ytCteCy6ot90Abi0ydLMVt7HD1vGMTl9HIJsO89iNTCui4WoG50sQEzgPYBDyI=
+	t=1724498835; cv=none; b=WNpWCY7O+FnrePNpAQrihrmFNi7xxaZXRuDrX3EyyB0oTWPjKJOfnFXtSr5CZciilapNsanZXyhowqj9g6rGB0SLEHfqHYoFuZ9jMPqQc5fVdui7vJ/3GjPGsgsxon+YFpPiHvm/13JYw6bVoNhhCWPrO93rcrqiu4BEmaQVa1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724415927; c=relaxed/simple;
-	bh=XFTWX1pLHBO3yIEceFWVjik1x5+gnZCCIJKXfr2+hg0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UbckAXAzMr17ltnCJO3m928LKyNIu8TIUPfK7VvITHusmjtfiyVwqyHhT5p2kJ1Yx1fKfYmOcb6uHnhoLX1ObADabFAyHm9QbEU05T+fOw30pLtLStoHWCuO7bCSf3MLHhaVtwWxTMWMmOaPDQ+xf5KhYi81Pbm+ISsDDvWCSmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=dVXSfg5B; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 107BE40E0184;
-	Fri, 23 Aug 2024 12:25:16 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 3qJXJgsvUomD; Fri, 23 Aug 2024 12:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1724415908; bh=E4zWIpk6FvgD5mnWHXs0S3A5EiMqdeJuHJBPRfHRdbU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dVXSfg5Bpj8ji9O4e8fRQb6cArQSER5WXdLpHAYTDzX2O8Y8Lh5a4GJuM35xevU6j
-	 65P7ylNsTTA6Zo132ea3h58UEoAcGRDlbdFky3/lGZ9dkH+wbf4WOy4TqzcaiDxPM4
-	 zvx5s4dX6Wk3qCJKMAUvVF6Wd4fkQixDFz7V4xXH4IPWEyQPS0bORF/JqjQ2sr4YIc
-	 TMvNFq20MNgT50lG/K3GxwLosKFZSnqCCqjbeyiRqPrOcBqjFy5qtzCIHbhT9MBLrr
-	 W7YqqGMvUJmhRu6U9qyrg+P7jrUz5OH3d40IwU5OxeQCEEAvdeqMSN7FpwzM05J5si
-	 54t91IsG/t2xW3nN7Un4paqomgC3ft94XqOGBo++9Yn05/DHX144Vf6fhQa6XKUqYt
-	 U1y1WHABFY2dzxRUnLKBpEoNZWwLWshY/fkV2/y6C1XWPOZ3QDuTNJgo8BZOMRzSmr
-	 4pzi7A0U5uc1ZJfpomRvIFqJWQRDnjtBPWZmiFsysNJNg3E0M4JWVu3u3GKqH8FBEH
-	 5dWu0pbQOK81uUUwga3+d6Ap5eHk5eFIQ+PQq3dxzxaOAqP+77Fm7BxpKW7RqhRg66
-	 8zpg2QP94GwZ8RtoBnJy8XrJKJ7OIiNWe4D5QdjjyDC4/9DHB98tOGpHv5czV45O3W
-	 BvFk8JX9GarUf1VyVPwmkzWM=
-Received: from nazgul.tnic (unknown [IPv6:2a02:3038:208:7949:9e4e:36ff:fe9e:77ac])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EBD9040E01A8;
-	Fri, 23 Aug 2024 12:25:01 +0000 (UTC)
-Date: Fri, 23 Aug 2024 14:25:57 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yang Ruibin <11162571@vivo.com>
-Cc: Tony Luck <tony.luck@intel.com>, Ingo Molnar <mingo@kernel.org>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v3] drivers:ras:Use IS_ERR() to check
- debugfs_create_dir() return value
-Message-ID: <20240823122557.GAZsh_1fb3lYpQ3zj1@fat_crate.local>
-References: <20240823120147.3950878-1-11162571@vivo.com>
+	s=arc-20240116; t=1724498835; c=relaxed/simple;
+	bh=GQ/Lzt5BJnIXCxqaXUpjDvRRgsMfTGcRoMmTbKPEdwo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NzRTVZys0/2nHERDYLRItn/O9QDqNWmFP6zv+ftM3Fo2E+ziikTk1iuM5abu8OOExi1omUy5M7vdoa8qf0cPjET12UdovnSUrNLRiRQUKiflcglL38R78Wp8uttbUGRWpOHDJQKwUHq3oz+hmviwyRPl+C6a7GZW3arbspFSr2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by APP-01 (Coremail) with SMTP id qwCowAAnLEh0w8lmM7j_CQ--.56870S2;
+	Sat, 24 Aug 2024 19:26:51 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: kristo@kernel.org,
+	bp@alien8.de,
+	tony.luck@intel.com,
+	james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org,
+	akpm@linux-foundation.org
+Cc: linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ma Ke <make24@iscas.ac.cn>,
+	stable@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH v5 RESEND] EDAC/ti: Fix possible null pointer dereference in _emif_get_id()
+Date: Sat, 24 Aug 2024 19:26:43 +0800
+Message-Id: <20240824112643.2143250-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240823120147.3950878-1-11162571@vivo.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowAAnLEh0w8lmM7j_CQ--.56870S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1DurW7Ww13uFyUWFW8Xrb_yoW8ArWxpw
+	4UWFW3CryUKr129r4vva18ZFyrC3Z5JayUK3y0k39Y9w45Z34kA34093y2qFyYyrW5Kay7
+	Xan8tFs8ta4UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-On Fri, Aug 23, 2024 at 08:01:47PM +0800, Yang Ruibin wrote:
-> The debugfs_create_dir() function returns error pointers.It
-> never returns NULL. So use IS_ERR() to check its return value.
-> 
-> Fixes: 011d82611172 ("RAS: Add a Corrected Errors Collector")
+In _emif_get_id(), of_get_address() may return NULL which is later
+dereferenced. Fix this bug by adding NULL check.
 
-Nope, can't be that one:
+Found by code review.
 
-$ git show 011d82611172:fs/debugfs/inode.c
-...
-struct dentry *debugfs_create_dir(const char *name, struct dentry *parent)
-{
-        struct dentry *dentry = start_creating(name, parent);
-        struct inode *inode;
+Cc: stable@vger.kernel.org
+Fixes: 86a18ee21e5e ("EDAC, ti: Add support for TI keystone and DRA7xx EDAC")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202408160935.A6QFliqt-lkp@intel.com/
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+Changes in v5:
+- According to the developer's suggestion, added an inspection of function 
+of_translate_address(). However, kernel test robot reported a build 
+warning, so the inspection is removed here, reverting to the modification 
+solution of patch v3.
+Changes in v4:
+- added the check of of_translate_address() as suggestions.
+Changes in v3:
+- added the patch operations omitted in PATCH v2 RESEND compared to PATCH 
+v2. Sorry for my oversight.
+Changes in v2:
+- added Cc stable line.
+---
+ drivers/edac/ti_edac.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-        if (IS_ERR(dentry))
-                return NULL;
-		       ^^^^
-
-
+diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
+index 29723c9592f7..6f3da8d99eab 100644
+--- a/drivers/edac/ti_edac.c
++++ b/drivers/edac/ti_edac.c
+@@ -207,6 +207,9 @@ static int _emif_get_id(struct device_node *node)
+ 	int my_id = 0;
+ 
+ 	addrp = of_get_address(node, 0, NULL, NULL);
++	if (!addrp)
++		return -EINVAL;
++
+ 	my_addr = (u32)of_translate_address(node, addrp);
+ 
+ 	for_each_matching_node(np, ti_edac_of_match) {
+@@ -214,6 +217,9 @@ static int _emif_get_id(struct device_node *node)
+ 			continue;
+ 
+ 		addrp = of_get_address(np, 0, NULL, NULL);
++		if (!addrp)
++			return -EINVAL;
++
+ 		addr = (u32)of_translate_address(np, addrp);
+ 
+ 		edac_printk(KERN_INFO, EDAC_MOD_NAME,
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
