@@ -1,175 +1,328 @@
-Return-Path: <linux-edac+bounces-1740-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1741-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBB61961C17
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Aug 2024 04:25:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20850963AE4
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 08:09:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF1EF1C231CC
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Aug 2024 02:25:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45EFC28750D
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 06:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D910254656;
-	Wed, 28 Aug 2024 02:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796F115B543;
+	Thu, 29 Aug 2024 06:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eYJ/FmN+"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910EB11CBD;
-	Wed, 28 Aug 2024 02:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C0714A0AA;
+	Thu, 29 Aug 2024 06:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724811906; cv=none; b=ZJ4+Bf3AqMA2H4ykotB9a15Fs3gd+KjK1zl66zo4aEzVCknBh2Vo337zuzsHmwNlhkZSUFQdO0yCqoHrsqxrAUncLc6dNIUdlBeYZNWVm/nM+o7Tuo2rIHmQvXu6+/HgJ6ZtxoIvitJVfruMJxgNDVen2PR6cIOoSK+kETXIhHk=
+	t=1724911582; cv=none; b=LB/kHrnS9oCClxPXjQS7yDJa0FEq2uFWeSzH3fJBEfm6yh/rZVS/EroWoFQR0ahA85Cxu/Pw2T90NVUqgv6H0V0AvHKHo40lARDz4J/ZPAu6ycja1X7x5xUcFcoMf4CrUe6rAjHCR756qKebjZHO7N120HSfiI+SiSXLvVMFy5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724811906; c=relaxed/simple;
-	bh=B5dtz9Yqh1A1+UtV12K1RcsbRpJNT05gSeVQzG9YFqU=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=tMmvTQUADSQX9x+yx7NGNWkYvxSjBkJgbgdB9v9DgrIURhbZXXMJXkGFo+tI5oQg6WEGB/5UI/++EvyeBWr4WZTYkJYt4fftHz3gwiKOcTFins7P/hZnsnWjftSNL46vMTXO9JDo5pa3uILL3f/JRjpwOQAqtOxPtO8R6EXn5Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.164])
-	by gateway (Coremail) with SMTP id _____8AxSZp8is5mA1EiAA--.32384S3;
-	Wed, 28 Aug 2024 10:25:00 +0800 (CST)
-Received: from [10.20.42.164] (unknown [10.20.42.164])
-	by front1 (Coremail) with SMTP id qMiowMAxE+B4is5mChwlAA--.41799S2;
-	Wed, 28 Aug 2024 10:24:58 +0800 (CST)
-Subject: Re: [PATCH v1 2/2] dt-bindings: EDAC for loongson memory controller
-To: Krzysztof Kozlowski <krzk@kernel.org>, chenhuacai@kernel.org,
- kernel@xen0n.name, bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
- mchehab@kernel.org, rric@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, devicetree@vger.kernel.org
-References: <20240821064728.8642-1-zhaoqunqin@loongson.cn>
- <20240821064728.8642-3-zhaoqunqin@loongson.cn>
- <de5ffcd8-0f2a-4cca-a7a0-0c4fc0158392@kernel.org>
-From: Zhao Qunqin <zhaoqunqin@loongson.cn>
-Message-ID: <eaeb61e0-ab13-c33f-a42e-c592ef345efa@loongson.cn>
-Date: Wed, 28 Aug 2024 10:24:53 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1724911582; c=relaxed/simple;
+	bh=CNGftTcjiHWPCuS/7frqZeGF4F0gkx+pCsq2XVAeRhY=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=U8ENrxIrbqVBoogdIj0nZDVmvnstG/483oewglOsIFoq23L97DmcXPRI+CjNBGsLDybrtobdTjr3ttu9E/zfneOabArscUYZFuFqqm4k+86+khKch5Tvm0q+03+g02xTolaRWq5pPedNCoArBvcysmRwNBTHQ2+8vJzumsmnMQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eYJ/FmN+; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724911581; x=1756447581;
+  h=from:to:cc:subject:date:message-id;
+  bh=CNGftTcjiHWPCuS/7frqZeGF4F0gkx+pCsq2XVAeRhY=;
+  b=eYJ/FmN+7a32cZjl+WFVkCgRmI6+54m+OGSXOuUQvuJvszLVOr+tySZb
+   a9T3aapRoenqjOrU7KakDWafjDPLQXPo1QvXWN+lXHxg+jU1f0ccrxWf+
+   v81Orc2PeBDHBznwhnWqfUTMG1UNB/ioLcxIw4xMy1kYA1LB7AMA8ZmaG
+   RNSdjjxx9GdXGn5hWqd88HlW0T4axz4Pb0aDJ/kr2kN/3DFH3dpBJKAtx
+   JMfEyzIhTTQezPOBBxAjoPXCe33v1AR6cqb9b0J9EdMN9LzWyaXd2ARr0
+   /lCMxum1quCTks6vptUu1LlfDa5lfHQjHiEdzC4I7SQ8/p8/EOZULbVFR
+   Q==;
+X-CSE-ConnectionGUID: sC5NQrhGRsutusXnr/g32Q==
+X-CSE-MsgGUID: TQzpLlyzQhOqv9k18+vqEw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="23668287"
+X-IronPort-AV: E=Sophos;i="6.10,184,1719903600"; 
+   d="scan'208";a="23668287"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 23:06:21 -0700
+X-CSE-ConnectionGUID: xTtIh/t0TWKxu4OzzxO7bg==
+X-CSE-MsgGUID: sjomjephRYGRHanCKiGRBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,184,1719903600"; 
+   d="scan'208";a="64158261"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 23:06:18 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: Tony Luck <tony.luck@intel.com>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] EDAC/{skx_common,skx,i10nm}: Move the common debug code to skx_common
+Date: Thu, 29 Aug 2024 13:51:01 +0800
+Message-Id: <20240829055101.56245-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <de5ffcd8-0f2a-4cca-a7a0-0c4fc0158392@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:qMiowMAxE+B4is5mChwlAA--.41799S2
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw1DKFy7Kw1DAw4kZw17twc_yoW5Xr17pr
-	n3Aan5Jryjqr1xGrs0gFy8JFWrt348J3ZrJrsrt3W7JFyq9F1YqFya9ryjgFn5Ar48Xry3
-	ZFyfWw429F47ArXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5fHUUUU
-	UU=
 
+Commit
 
-在 2024/8/21 下午4:20, Krzysztof Kozlowski 写道:
-> On 21/08/2024 08:47, Zhao Qunqin wrote:
->> From: zhaoqunqin <zhaoqunqin@loongson.cn>
->>
->> Add: drivers/edac/loongson_edac.c
->>
->> Signed-off-by: zhaoqunqin <zhaoqunqin@loongson.cn>
-> Please use full name, not login.
->
->> ---
->>   .../bindings/edac/loongson,ls-mc-edac.yaml    | 35 +++++++++++++++++++
-> Bindings are before users.
-dt-bindings is 0001-*.patch and driver is 0002-*.patch ?
->
->>   MAINTAINERS                                   |  7 ++++
->>   2 files changed, 42 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/edac/loongson,ls-mc-edac.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/edac/loongson,ls-mc-edac.yaml b/Documentation/devicetree/bindings/edac/loongson,ls-mc-edac.yaml
->> new file mode 100644
->> index 000000000..29e5b8381
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/edac/loongson,ls-mc-edac.yaml
->> @@ -0,0 +1,35 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/edac/loongson,ls-mc-edac.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson Memory Controller EDAC
->> +
->> +maintainers:
->> +  - Zhao Qunqin <zhaoqunqin@loongson.cn>
->> +
->> +description: |
->> +  EDAC node is defined to describe on-chip error detection and correction for
->> +  Loongson Memory Controller.
->> +
->> +properties:
->> +
->> +  compatible:
->> +    const: loongson,ls-mc-edac
-> Missing soc part. And then adjust filename to match proper (new) compatible.
+  afdb82fd763c ("EDAC, i10nm: make skx_common.o a separate module")
 
-ls3c5000l, ls3c5000, ls3d5000, ls3a6000 and ls3c6000 are compatible with 
-ls3a5000.
+made skx_common.o a separate module. With skx_common.o now a separate
+module, move the common debug code setup_{skx,i10nm}_debug() and
+teardown_{skx,i10nm}_debug() in {skx,i10nm}_base.c to skx_common.c to
+reduce code duplication. Additionally, prefix these function names with
+'skx' to maintain consistency with other names in the file.
 
-Can i write compatible string this way:
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ drivers/edac/i10nm_base.c | 52 ++-------------------------------------
+ drivers/edac/skx_base.c   | 52 ++-------------------------------------
+ drivers/edac/skx_common.c | 47 +++++++++++++++++++++++++++++++++++
+ drivers/edac/skx_common.h |  8 ++++++
+ 4 files changed, 59 insertions(+), 100 deletions(-)
 
-properties:
-   compatible:
-     oneOf:
-       - enum:
-           - loongson,ls3a5000-mc-edac
-       - items:
-           - enum:
-               - loongson,ls3c5000l-mc-edac
-               - loongson,ls3c5000-mc-edac
-               - loongson,ls3d5000-mc-edac
-               - loongson,ls3a6000-mc-edac
-               - loongson,ls3c6000-mc-edac
-           - const: loongson,ls3a5000-mc-edac
-
->
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    edac: mc0@1fe00600 {
-> memory-controller@
->
-> and drop unused label.
->
->
->> +        compatible = "loongson,ls-mc-edac";
->> +        reg = <0x0 0x1fe00600 0x0 0x50>;
->> +    };
-> Best regards,
-> Krzysztof
-Thanks for your suggestions,
-
-Zhao Qunqin
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index 24dd896d9a9d..c5b99d575cc7 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -1013,54 +1013,6 @@ static struct notifier_block i10nm_mce_dec = {
+ 	.priority	= MCE_PRIO_EDAC,
+ };
+ 
+-#ifdef CONFIG_EDAC_DEBUG
+-/*
+- * Debug feature.
+- * Exercise the address decode logic by writing an address to
+- * /sys/kernel/debug/edac/i10nm_test/addr.
+- */
+-static struct dentry *i10nm_test;
+-
+-static int debugfs_u64_set(void *data, u64 val)
+-{
+-	struct mce m;
+-
+-	pr_warn_once("Fake error to 0x%llx injected via debugfs\n", val);
+-
+-	memset(&m, 0, sizeof(m));
+-	/* ADDRV + MemRd + Unknown channel */
+-	m.status = MCI_STATUS_ADDRV + 0x90;
+-	/* One corrected error */
+-	m.status |= BIT_ULL(MCI_STATUS_CEC_SHIFT);
+-	m.addr = val;
+-	skx_mce_check_error(NULL, 0, &m);
+-
+-	return 0;
+-}
+-DEFINE_SIMPLE_ATTRIBUTE(fops_u64_wo, NULL, debugfs_u64_set, "%llu\n");
+-
+-static void setup_i10nm_debug(void)
+-{
+-	i10nm_test = edac_debugfs_create_dir("i10nm_test");
+-	if (!i10nm_test)
+-		return;
+-
+-	if (!edac_debugfs_create_file("addr", 0200, i10nm_test,
+-				      NULL, &fops_u64_wo)) {
+-		debugfs_remove(i10nm_test);
+-		i10nm_test = NULL;
+-	}
+-}
+-
+-static void teardown_i10nm_debug(void)
+-{
+-	debugfs_remove_recursive(i10nm_test);
+-}
+-#else
+-static inline void setup_i10nm_debug(void) {}
+-static inline void teardown_i10nm_debug(void) {}
+-#endif /*CONFIG_EDAC_DEBUG*/
+-
+ static int __init i10nm_init(void)
+ {
+ 	u8 mc = 0, src_id = 0, node_id = 0;
+@@ -1159,7 +1111,7 @@ static int __init i10nm_init(void)
+ 
+ 	opstate_init();
+ 	mce_register_decode_chain(&i10nm_mce_dec);
+-	setup_i10nm_debug();
++	skx_setup_debug("i10nm_test");
+ 
+ 	if (retry_rd_err_log && res_cfg->offsets_scrub && res_cfg->offsets_demand) {
+ 		skx_set_decode(i10nm_mc_decode, show_retry_rd_err_log);
+@@ -1187,7 +1139,7 @@ static void __exit i10nm_exit(void)
+ 			enable_retry_rd_err_log(false);
+ 	}
+ 
+-	teardown_i10nm_debug();
++	skx_teardown_debug();
+ 	mce_unregister_decode_chain(&i10nm_mce_dec);
+ 	skx_adxl_put();
+ 	skx_remove();
+diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
+index af3fa807acdb..14cfd394b469 100644
+--- a/drivers/edac/skx_base.c
++++ b/drivers/edac/skx_base.c
+@@ -587,54 +587,6 @@ static struct notifier_block skx_mce_dec = {
+ 	.priority	= MCE_PRIO_EDAC,
+ };
+ 
+-#ifdef CONFIG_EDAC_DEBUG
+-/*
+- * Debug feature.
+- * Exercise the address decode logic by writing an address to
+- * /sys/kernel/debug/edac/skx_test/addr.
+- */
+-static struct dentry *skx_test;
+-
+-static int debugfs_u64_set(void *data, u64 val)
+-{
+-	struct mce m;
+-
+-	pr_warn_once("Fake error to 0x%llx injected via debugfs\n", val);
+-
+-	memset(&m, 0, sizeof(m));
+-	/* ADDRV + MemRd + Unknown channel */
+-	m.status = MCI_STATUS_ADDRV + 0x90;
+-	/* One corrected error */
+-	m.status |= BIT_ULL(MCI_STATUS_CEC_SHIFT);
+-	m.addr = val;
+-	skx_mce_check_error(NULL, 0, &m);
+-
+-	return 0;
+-}
+-DEFINE_SIMPLE_ATTRIBUTE(fops_u64_wo, NULL, debugfs_u64_set, "%llu\n");
+-
+-static void setup_skx_debug(void)
+-{
+-	skx_test = edac_debugfs_create_dir("skx_test");
+-	if (!skx_test)
+-		return;
+-
+-	if (!edac_debugfs_create_file("addr", 0200, skx_test,
+-				      NULL, &fops_u64_wo)) {
+-		debugfs_remove(skx_test);
+-		skx_test = NULL;
+-	}
+-}
+-
+-static void teardown_skx_debug(void)
+-{
+-	debugfs_remove_recursive(skx_test);
+-}
+-#else
+-static inline void setup_skx_debug(void) {}
+-static inline void teardown_skx_debug(void) {}
+-#endif /*CONFIG_EDAC_DEBUG*/
+-
+ /*
+  * skx_init:
+  *	make sure we are running on the correct cpu model
+@@ -728,7 +680,7 @@ static int __init skx_init(void)
+ 	/* Ensure that the OPSTATE is set correctly for POLL or NMI */
+ 	opstate_init();
+ 
+-	setup_skx_debug();
++	skx_setup_debug("skx_test");
+ 
+ 	mce_register_decode_chain(&skx_mce_dec);
+ 
+@@ -742,7 +694,7 @@ static void __exit skx_exit(void)
+ {
+ 	edac_dbg(2, "\n");
+ 	mce_unregister_decode_chain(&skx_mce_dec);
+-	teardown_skx_debug();
++	skx_teardown_debug();
+ 	if (nvdimm_count)
+ 		skx_adxl_put();
+ 	skx_remove();
+diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
+index 8d18099fd528..7cd074401167 100644
+--- a/drivers/edac/skx_common.c
++++ b/drivers/edac/skx_common.c
+@@ -739,6 +739,53 @@ void skx_remove(void)
+ }
+ EXPORT_SYMBOL_GPL(skx_remove);
+ 
++#ifdef CONFIG_EDAC_DEBUG
++/*
++ * Debug feature.
++ * Exercise the address decode logic by writing an address to
++ * /sys/kernel/debug/edac/{skx,i10nm}_test/addr.
++ */
++static struct dentry *skx_test;
++
++static int debugfs_u64_set(void *data, u64 val)
++{
++	struct mce m;
++
++	pr_warn_once("Fake error to 0x%llx injected via debugfs\n", val);
++
++	memset(&m, 0, sizeof(m));
++	/* ADDRV + MemRd + Unknown channel */
++	m.status = MCI_STATUS_ADDRV + 0x90;
++	/* One corrected error */
++	m.status |= BIT_ULL(MCI_STATUS_CEC_SHIFT);
++	m.addr = val;
++	skx_mce_check_error(NULL, 0, &m);
++
++	return 0;
++}
++DEFINE_SIMPLE_ATTRIBUTE(fops_u64_wo, NULL, debugfs_u64_set, "%llu\n");
++
++void skx_setup_debug(const char *name)
++{
++	skx_test = edac_debugfs_create_dir(name);
++	if (!skx_test)
++		return;
++
++	if (!edac_debugfs_create_file("addr", 0200, skx_test,
++				      NULL, &fops_u64_wo)) {
++		debugfs_remove(skx_test);
++		skx_test = NULL;
++	}
++}
++EXPORT_SYMBOL_GPL(skx_setup_debug);
++
++void skx_teardown_debug(void)
++{
++	debugfs_remove_recursive(skx_test);
++}
++EXPORT_SYMBOL_GPL(skx_teardown_debug);
++#endif /*CONFIG_EDAC_DEBUG*/
++
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Tony Luck");
+ MODULE_DESCRIPTION("MC Driver for Intel server processors");
+diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
+index 473421ba7a18..f945c1bf5ca4 100644
+--- a/drivers/edac/skx_common.h
++++ b/drivers/edac/skx_common.h
+@@ -259,4 +259,12 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
+ 
+ void skx_remove(void);
+ 
++#ifdef CONFIG_EDAC_DEBUG
++void skx_setup_debug(const char *name);
++void skx_teardown_debug(void);
++#else
++static inline void skx_setup_debug(const char *name) {}
++static inline void skx_teardown_debug(void) {}
++#endif
++
+ #endif /* _SKX_COMM_EDAC_H */
+-- 
+2.17.1
 
 
