@@ -1,179 +1,202 @@
-Return-Path: <linux-edac+bounces-1747-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1748-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4887E9647F4
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 16:20:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0BB69648AF
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 16:38:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D6D0B278DA
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 14:19:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6142528103A
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 14:38:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5F81AED4C;
-	Thu, 29 Aug 2024 14:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56931B0100;
+	Thu, 29 Aug 2024 14:38:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="WJOtZwsT"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="UD1HV6vp"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885441917C6;
-	Thu, 29 Aug 2024 14:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724941108; cv=fail; b=m2x5z0jmY/uM5OwRI7lEUBkI+hRP6hsRatVH2tEj6vuGSxJcytjGf1DFcrbxeOJj7AHbPiw6jam8RACuv0pNTi0B9N3nXknDLIKPf7SFjAK+W+pDaxIhxtSzLRmvFdF0bqVX+l/wLj3UFeYYTH/mNAFWOnffFCXkwnf/4Qm7X54=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724941108; c=relaxed/simple;
-	bh=m4y1OASdUdr07udhLgBwpUOvlhuD6sjpoIdac9kdVvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=TyRcEkC8IIIzifYs1/V1NZUTgqe3su7/psZ52QNFzceQLeHaGjpf44doczOKDbRqMBqp2DAp9kYdpCkU+GV+RfkoN2ju2ZdUnpx4tresAnGHwgjFci3xaBap6fvYReVrH9GyRdxBgSE/dRD/Juiv1Gj/i0GtJPxL6jQLagkJX58=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=WJOtZwsT; arc=fail smtp.client-ip=40.107.92.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lEWJRPOYX23rbeW1o71o6tPHAwlkb1aN7nr2fGOvb02gN5DPpZARJRNERBV58RTIKKLUdvNudAfGP3tkf4BB6Q9zpwHVNgOdTfPwam19ICag0xsGsokkk8XHD7RqnwxDVQFtkN2QqWDO+sW99SMUmw562XzOdzdnClp2ysF5kY4SAUQn7QvWLGPZl1PuXHk8Ypo6UHTCaR5jrHWDpxr7F8exWezsmEsbpsTFBIXxacGXK9GzgkovMaG2wiAFoSMZsjbUdgHQPMedEuJMxdAaSXha26vMaOxlvTYM8Y7qiH6AtgppWpIm0JqtHBY7/OcNoUok41tS0cyHsYslCILlgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XYDNhSA38JhFcrwPiCyOHCvdOF1ihmi6s/QgaP4PjGY=;
- b=jBh2EjZa/7+EWsQgib1ZOlZgvHvcOx1iOKgQX+JxcNcro2fg5/TXehf+FwTM7iCjkVyb2NG56ad57JMmlhCV2cY/1xIbxnHhEFb5CWwNLu9qABD8A2SCj2YL19Vy6xA3Ksnplp5m4WtByWNqcdvmj/a9pk31pBCSYIdV1deywhhE2ZavJ6qaHIEobWEiY+c4CXpoJJXomLUEDx5XZNRWGz79RidTD2fTYJQdKz+XABh0SmRco1TsPZQbbBDeMlOsJgrt0agCOwNrj35wK70rtRoTGhH/ThbGAKHe/xzV7F7pO/RpZxmH/jZEMPBixwO4x/XqCUHJTupHZSlJcTqD4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XYDNhSA38JhFcrwPiCyOHCvdOF1ihmi6s/QgaP4PjGY=;
- b=WJOtZwsT9Cso/wVTSCbdQ4wK5NtI0fDcVWUmxZVDLM4HnR4XfH6OH+7szO0v+dRBb3BYIwQOclEyam4PaKRclFKiskTQBFM0ee3mgMU460GluweS9HZCwhApXZAbzu8b+RBEVhMPtzcQiNieC8dU2I1E0sdz0XcPBUlJGX5as48=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- IA0PR12MB8421.namprd12.prod.outlook.com (2603:10b6:208:40f::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.26; Thu, 29 Aug 2024 14:18:23 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f%7]) with mapi id 15.20.7897.027; Thu, 29 Aug 2024
- 14:18:23 +0000
-Date: Thu, 29 Aug 2024 10:18:18 -0400
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-	avadhut.naik@amd.com, john.allen@amd.com,
-	boris.ostrovsky@oracle.com
-Subject: Re: [PATCH] x86/MCE: Prevent CPU offline for SMCA CPUs with non-core
- banks
-Message-ID: <20240829141818.GA458692@yaz-khff2.amd.com>
-References: <20240821140017.330105-1-yazen.ghannam@amd.com>
- <87jzg4g8dm.ffs@tglx>
- <20240826132057.GA449322@yaz-khff2.amd.com>
- <9D26E333-B33C-4FD4-9A8F-6F9DC1EC6527@alien8.de>
- <20240827134706.GA719384@yaz-khff2.amd.com>
- <7D571DAA-E399-4580-98B3-8A6E7085CB54@alien8.de>
- <20240829140305.GA448036@yaz-khff2.amd.com>
- <20240829141415.GDZtCCN89eyjycV0uf@fat_crate.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829141415.GDZtCCN89eyjycV0uf@fat_crate.local>
-X-ClientProxiedBy: BN9P220CA0004.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:408:13e::9) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E6E19049D;
+	Thu, 29 Aug 2024 14:38:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724942332; cv=none; b=i1Ihz2WXazqzSOnyMGeqytnL9xp+UkT+EImfhy+Ww2TQhiyF5VT2Q/5Rf+KQPeyftz9QJjjzOTiZyA5yB88uwac/lr2RDujYy+PRP3l04SeuY00vhZyBrG1tCDpSW2vUyxOGWct/guOfXve65E90isBJHD8Wi6YF4HchUJR6seY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724942332; c=relaxed/simple;
+	bh=FMQS2O5d+DRmHBkg5Fp2Zk5YiN6kMZNZGivHCXdxMUk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jEcRkkc+MA3Z/qExFj77H49TQbpTcmcTndk3ON1OlKH+AqKXA4lhey7VVcvwoqJlTk5BvGV1mN9CaIW5G7gSAvt1uinE7MPRCAWAUCRcpTut6YYTk95IG73ytKTfy4n/8A9CTSW3MfB0Xlehwy2aEGcyhLE5kLMHIe57tJtmApU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=UD1HV6vp; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1787840E0275;
+	Thu, 29 Aug 2024 14:38:48 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id uUNMbPNF293b; Thu, 29 Aug 2024 14:38:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1724942322; bh=IO4ma28zS0rS9FhCeUmCpz2/rGp6VmKJbKIMwcc+1F0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UD1HV6vpZJUxduYovLkMvLS0T/08vD4bd6QC/Qc6UZQ5q5PFCjm/pl1tWsXDeJpE4
+	 8k+ad0bOaxZmLf6dKGMLkVc0sNSNzDUJVU0wL8PywLCYnTNBZTB/Z7hfsv5xtBsjJS
+	 4ashoQf0art9MJdepehxRQDON52OM7rvWVHGdvErwrP3RsNo0wuCoiwPJQFHlFJdvW
+	 fE2TSjoIOUJXdCqPDes6RUJqv8mewMNGiq6k1HgiHHsMUbDeutdnbbMjYf9GV+VQz1
+	 wOPhvSokUGktO6yB8np165FQgZa392Tc/8IPkUdBLC8cppUcH0N036LAj7Wk461IZz
+	 kxILcqH7t37FABY89MiNhVOwnsDwGAtM/2laYYdiY4nYoSl069JUZW1V31kKTy9bej
+	 By+ETEUFVzTjTepec+Rq2ewEciHN9UMmfwWTeISISGJNYM5SHS0hRqRwiAAXTF5I2p
+	 JXaFkAI1MSRivKw6A4vkjn5gB8CnPeA437PDO/90LDwEL4fkCrOUsCHEijuPoU66SU
+	 GseDgw55JeWprDUmwEeevhoboxdc+SlKUUfJKfR62mtW6ghAvPYFpKcxqcInHxKpVD
+	 FH7cDzNXIWTVWRl7Zh1D/2SzrH5hhHEQw+WkNa/JvKAB9N/plfS3B/g7fRjXhx6l6a
+	 qKXHhqDNpZFFmF1dmCtO6i8s=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6413E40E0169;
+	Thu, 29 Aug 2024 14:38:19 +0000 (UTC)
+Date: Thu, 29 Aug 2024 16:38:11 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>,
+	Daniel Ferguson <danielf@os.amperecomputing.com>,
+	Ard Biesheuvel <ardb@kernel.org>, James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tyler Baicar <tbaicar@codeaurora.org>,
+	Will Deacon <will@kernel.org>, Xie XiuQi <xiexiuqi@huawei.com>,
+	linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Shengwei Luo <luoshengwei@huawei.com>,
+	Jason Tian <jason@os.amperecomputing.com>
+Subject: Re: [PATCH v2 1/5] RAS: Report all ARM processor CPER information to
+ userspace
+Message-ID: <20240829143811.GDZtCH07BFEdbbv9wx@fat_crate.local>
+References: <cover.1720679234.git.mchehab+huawei@kernel.org>
+ <3853853f820a666253ca8ed6c7c724dc3d50044a.1720679234.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|IA0PR12MB8421:EE_
-X-MS-Office365-Filtering-Correlation-Id: 75caae1a-a9c2-4b3b-6c90-08dcc83570a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/KO8fFMREXd/76EIjN4iCB2bJSCZEqg3SrgRa53chXZ84e6+6hEtjkdGbDW1?=
- =?us-ascii?Q?55T63/FE3MDzPj7LXWDrU+T0EkZQPtXHbsItnk5LGtfzpiX32LIm38kqZhA5?=
- =?us-ascii?Q?0b2tAiMsk5GfcfPI38FF44Gd10zfBuXd3X/8MlW4SWOW+goqdL/A0pgln0vv?=
- =?us-ascii?Q?Hr/JmRJgoukQPnammPm5IcwVcLHDoIvBVSE+hwPIXcVNVm72mb/W+G/p9t+1?=
- =?us-ascii?Q?vSGnVNIak46pmCsS4jfHk5QA/gG/qlFfee9zYrIQIx21lCn6y4crUWddjbHR?=
- =?us-ascii?Q?NfLPzHykaWk9A49uxEKdSwyqVvlBuXkDtfAM9e6HSRm+X/uBjUN2mJhJRqBB?=
- =?us-ascii?Q?J7487kUylkZz6VsQGpESFFesbib6lKCqX9jYSsai9obtNClOLHLudXd4S8+4?=
- =?us-ascii?Q?/eIU2Ydsz8k3GW8M3kIUx35K7lO309D3AsyV67WUpiq1JwlB4bpoGM11+1Yj?=
- =?us-ascii?Q?6jV2mLTLLfJ1K8DEXoKb/YhL6y6cJOkoo3a+yEmZ0HshzGS1DLMixGK3WymG?=
- =?us-ascii?Q?EJ6u3OFDK+1aodg+MNuv70n5cWEYQow61c4XRFpO+hYiC36tNQZJe0P1ZyU1?=
- =?us-ascii?Q?5EHc4NtruBdDX4hlj60GqInpn+GSdKVATYzdwLxIIt0dpnpQ53+f49HzbvDG?=
- =?us-ascii?Q?I8gIwPSEH1Fjqr9LwF4htKqlVlynIxkZwyoTtK0xkQEaUtOZjpZKd9e2OCiy?=
- =?us-ascii?Q?wG1Il3smUcG2z3bV46CJFYvtf1emmgH+ezaW8Yr8iqlIV2UsOCYS3G5g0CLr?=
- =?us-ascii?Q?PQHwe/bYC1tg1vunaGTxvHS4gSRXlhl27Jp2UvL3cVU+27xWrNUI0Gdzm/TI?=
- =?us-ascii?Q?nD3tGst7PVfMwqH0RZ5wXnG69s8ETEp08B+bOb5sW8yNPGuUmY150Xe6cW90?=
- =?us-ascii?Q?ds0WA7B8YbcqzKd9y/S8mIqn4cMnlZ3/+nlPMx+gO6aHc/mx9cExAsFrnJho?=
- =?us-ascii?Q?viiUoA5uRYOFspmDopper/YNbNpKv+tQWJA5qwgnZ8SrWslegSW9ZPinvxy+?=
- =?us-ascii?Q?DeSdg8cQ6U5iyLyEUG3NiQ3CP5Ayo2hqn9g4FXYojVIkPtbW7YD4YzdCNUYi?=
- =?us-ascii?Q?6KPmPLKfEX6+CyfezIiFDoMNrG6/tDRTsRbBgIytKGShMrOjeCcNfZzs1HWq?=
- =?us-ascii?Q?AiLfjhMrrFfqfT+LrLRnQLZkO84/O5tDhUuTu85cG3KYCA1LQJNF3IlMr+JE?=
- =?us-ascii?Q?5wRcj7C27SesHrZ8UbZfJKSFuUogfByb44dFBNW/HpS636cniuBoifSClxxV?=
- =?us-ascii?Q?WvnmbEO7z5zZD7jEUl+28BaQXp0FlQh7v/yxk8SEzGxQ5W/Gt58giBDv5RcC?=
- =?us-ascii?Q?YBHCO9CzyCxLyCNClVs1bNprcvg+hVUQqMSR09lEPs93pA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?C3OIlhOX/WVHG9MIaHP/3XbvG/1h69RysL1cL9Vjm5i8h3Ruqevsp7YuPCud?=
- =?us-ascii?Q?V2paxDpc8zi11Y9Nor5kH7ykfwWMgornJ6M4Fqlrfxsaa88S/cto2JipGUqb?=
- =?us-ascii?Q?yATM1/1UYADUmzbAp3/YOIr9a41S3/G3UJFRD7NpdAYtZC3bn6ic7LFIEUYR?=
- =?us-ascii?Q?gl/mslh6Svj2YdXvknhx9aLcbTK0216MTHch64OkhubYVJ8BQMvNWWB6BesA?=
- =?us-ascii?Q?MGmncPYaA1LDBzdATE2KzbJGVcK3RTg3URnFxXcTIKHq6LT87idxYVZxoi21?=
- =?us-ascii?Q?SsHUggu2apr2KwK9pz4EEI/agIoN9Bqbj1Iw+TmioJFcHkZKdUJTLOPXfi9y?=
- =?us-ascii?Q?lu35BmvLTa+ysCwJd4D2ZW2wYInTUEeOydywFUbKVexaNpqaerL8L6NZ1+nk?=
- =?us-ascii?Q?/NS5NvKoh8xGLRSVadZcTLL3cOdoOeMjT4SEAnACId/8DX/jN8tahk+t+uQ/?=
- =?us-ascii?Q?d1mifxs+AVCzgVBL4p+5vSHUXrJuVk+U0ZCsouHO3UFcfWsTHd7wZOVQH0M9?=
- =?us-ascii?Q?x1ziFIJeKvnhJXbLnFMzNCXW8spkGVcsPvnxzSAITOcthjZCal8GMOUK10wr?=
- =?us-ascii?Q?8qxOLzlrHqDGhq1iHosttddCkz6oJeQ1sCFuRZFc3swoYNGBU9Z8ofgRMNr8?=
- =?us-ascii?Q?5VEUC8yaOtO1/HYrmEhrUMmfX5RNHQ+PUZy8/X9c2yFCBl7edSfZ14ZIz0I7?=
- =?us-ascii?Q?buXwR/lQABFPwf335r/DUpG9BHwqJ+tOJO3Ok/nsGivgQoItI0TVZZuVaZ4H?=
- =?us-ascii?Q?2pgqLJu5rlrXFddeFNIQSA0oHeI8KSXEKXSmVAVWiNrsQlAK3q8Uft63dP6v?=
- =?us-ascii?Q?Byxw7w3Vhi4LJwtkdXYqVGsAmAnu3fDYgqNYXzRF8nKjVqXOlEWEBG3KnhAU?=
- =?us-ascii?Q?hOe5gy+/4x81iyLJGSB2XCJ9ljGG57ztbNr3NMO4nhVbD49PXbF5Tp8xjrpB?=
- =?us-ascii?Q?XT9n+Fbk6S3wan2D+gXlvtksodFeKw90AVakBkUYaQKnzEA5vmOuHBp6GRyL?=
- =?us-ascii?Q?Tt+8ZyeOguhc6oCQRdF7OQoTl/vSzWYZ3oqW/w3OvJHRyZUz4/rpJpSgjgzW?=
- =?us-ascii?Q?r5oFod5rXdi6U+VF9Ow62g+fJhPiPihutNXHj1M61XuvErymOMiC5islLGmN?=
- =?us-ascii?Q?bK7vWCRx8nDUCkc6kqzfujHMzV7WEz73N4A9+h6Dk3W7yBcr/aebLBEbCRve?=
- =?us-ascii?Q?Q3gAjD1cCpCtFPN8uYZsx+8dlaXj5pwWBWOtgINoTeKATSeYSky1jmVHyGWP?=
- =?us-ascii?Q?TT1JlYtpdbHnwWVUomzWyKOyY2TYZfRxYgL63QV0dBo8dpCBcKPBRQnY5aUg?=
- =?us-ascii?Q?FM2M7S2rVtePxo1F8udtPeW+QPqRBEUEYprhsMzco+eQv3dJATkBbM3qMUSR?=
- =?us-ascii?Q?/eGo7E8Dv3UAou9POe773CC3vvozsZrw58VmWHdkdHQjGRffoKMEil8PV364?=
- =?us-ascii?Q?4oh/nBu9O3lchWIMdkPMXav7VDL3k3IVBriNYokm0LD0TMxYERJnKBNxJncA?=
- =?us-ascii?Q?gpXNJjcHlNLbRI3/n2GXpkIYehUlnX3qW6Z1xo1y4d0Jzx3rZaBZe/e2uljd?=
- =?us-ascii?Q?NBL1X7Nwf4pZc8ZLDsx17kpfRhfDHUhkGzk2sOnf?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75caae1a-a9c2-4b3b-6c90-08dcc83570a9
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 14:18:23.0156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vBlX1THq2q2/UOJmpzKQNyEjzaNJhxOGBmugIGyCh4VgUAKTCyzY5Vz2LbfgUQxorXbXSWFK42KLwjAqh2Xb7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8421
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3853853f820a666253ca8ed6c7c724dc3d50044a.1720679234.git.mchehab+huawei@kernel.org>
 
-On Thu, Aug 29, 2024 at 04:14:15PM +0200, Borislav Petkov wrote:
-> On Thu, Aug 29, 2024 at 10:03:05AM -0400, Yazen Ghannam wrote:
-> > Do you think we should we continue to pursue this or no?
+On Thu, Jul 11, 2024 at 08:28:52AM +0200, Mauro Carvalho Chehab wrote:
+> In addition to those data, it also exports two fields that are
+> parsed by the GHES driver when firmware reports it, e. g.:
 > 
-> You mean the kernel should prevent those folks from shooting themselves in the
-> foot?
+> - error severity
+> - cpu logical index
+
+s/cpu/CPU/g
+
+check your whole set pls.
+
+> Report all of these information to userspace via trace uAPI, So that
+> userspace can properly record the error and take decisions related
+> to cpu core isolation according to error severity and other info.
 > 
-> How would that patch look like?
->
+> After this patch, all the data from ARM Processor record from table
 
-Right, I'm working on another revision. I'll try to send it today.
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
 
-The gist is that we can hide the sysfs interface for CPUs that shouldn't
-be hotplugged. We already do this today for other special cases like
-CPU0.
+Also, do
 
-Thanks,
-Yazen
+$ git grep 'This patch' Documentation/process
+
+for more details.
+
+...
+
+> [mchehab: modified patch description, solve merge conflicts and fix coding style]
+> Fixes: e9279e83ad1f ("trace, ras: add ARM processor error trace event")
+> Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+> Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
+> Signed-off-by: Daniel Ferguson <danielf@os.amperecomputing.com>
+
+What is this SOB chain trying to tell me?
+
+All those folks handled the patch?
+
+> Tested-by: Shiju Jose <shiju.jose@huawei.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Link: https://uefi.org/specs/UEFI/2.10/Apx_N_Common_Platform_Error_Record.html#arm-processor-error-section
+> ---
+>  drivers/acpi/apei/ghes.c | 11 ++++-----
+>  drivers/ras/ras.c        | 45 +++++++++++++++++++++++++++++++++++--
+>  include/linux/ras.h      | 16 +++++++++++---
+>  include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
+>  4 files changed, 103 insertions(+), 17 deletions(-)
+
+...
+
+> -void log_arm_hw_error(struct cper_sec_proc_arm *err)
+> +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
+>  {
+> -	trace_arm_event(err);
+> +	struct cper_arm_err_info *err_info;
+> +	struct cper_arm_ctx_info *ctx_info;
+> +	u8 *ven_err_data;
+> +	u32 ctx_len = 0;
+> +	int n, sz, cpu;
+> +	s32 vsei_len;
+> +	u32 pei_len;
+> +	u8 *pei_err;
+> +	u8 *ctx_err;
+> +
+> +	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
+> +	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
+> +
+> +	err_info = (struct cper_arm_err_info *)(err + 1);
+> +	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
+> +	ctx_err = (u8 *)ctx_info;
+> +	for (n = 0; n < err->context_info_num; n++) {
+> +		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
+> +		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
+> +		ctx_len += sz;
+> +	}
+> +
+> +	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
+> +					  pei_len + ctx_len);
+> +	if (vsei_len < 0) {
+> +		pr_warn(FW_BUG
+> +			"section length: %d\n", err->section_length);
+> +		pr_warn(FW_BUG
+> +			"section length is too small\n");
+> +		pr_warn(FW_BUG
+> +			"firmware-generated error record is incorrect\n");
+
+No need to break those lines.
+
+> +		vsei_len = 0;
+> +	}
+> +	ven_err_data = (u8 *)ctx_info;
+> +
+> +	cpu = GET_LOGICAL_INDEX(err->mpidr);
+> +	/* when return value is invalid, set cpu index to -1 */
+
+Obvious comment - no need for it.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
