@@ -1,154 +1,209 @@
-Return-Path: <linux-edac+bounces-1743-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1744-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66C97963ECB
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 10:40:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A45AD964450
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 14:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85CA01C21B2C
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 08:40:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA14E1C2226C
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 12:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3101F181328;
-	Thu, 29 Aug 2024 08:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B3B19047F;
+	Thu, 29 Aug 2024 12:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="AUhNEcMt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DBiRwf3y"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D433D6A;
-	Thu, 29 Aug 2024 08:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7628618DF99;
+	Thu, 29 Aug 2024 12:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724920801; cv=none; b=jAM5HOe1pxIGDh2x5vZ6y630VWf5u97w8SggaO4EEtCmtMBw6o2A3y16zESv7rnC8YwpVSvzznzCkIO5F/5vQjYzNJPe5ASVnUUdLQUC37Yn53/ofm88o14RDaddYnMJSex2H7PvmYSSPklNf1iidjFpfTwRvMnJgZUSuUxA2aQ=
+	t=1724934259; cv=none; b=faEzlGseSSCRjerweuz3zn82GOxx0LGW/0jNF04TJ2x8FIXVA0CLxNthPinBNJqdkbqTW1YWhdVxybFLTS6h31LDX9qI2WExjw7AwC8sf/Z0QEokxj+62fhxoMKmw4z6m4/93gR5UvEOe/stGAXbrXjtRCWilT37gGzVK74/JWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724920801; c=relaxed/simple;
-	bh=FyjX4kcH5LavAMmhOmNvR8SALI7vKJuOwonjdbQiaLU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=aMrHwsF0LqdkcOcG/v/joJovKqdRL7LfVuDPU1+RaTvE2Xwv5O3+jpmUQTm1LQeBzqg7rzfpcpnBiLgc9aTVxmRIaspFaMIqmzUR/kmr+XsQ9Ckr2LlcLU8Q6m9OpYJxG9vkAsaEtQMI5VD82Z8JI13g8i/YmlA4mITlwc7t7Sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=AUhNEcMt; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2D99D40E0184;
-	Thu, 29 Aug 2024 08:39:57 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ITKrumJMBXou; Thu, 29 Aug 2024 08:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1724920793; bh=tqRMih8maOqhgAUQosY7U14hqRXwiLtPrj0M9xoEAXM=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=AUhNEcMtcPtYT++FFWUCR2JVvFBPPnytDRBwzSx0y/pXWKtybnWe6pSkSrB0F4fWz
-	 3EhbGD/grLQjmAZY4ATWshzZ4NNMS2JSWIOs6/SPRn8ulOy47grVfKNXj295QfxuCQ
-	 5OWEd2o1/h5ang6FzaXQNwYJIuRaGeOpxk3UPlfKTN9fyj/02vIk3thHafp/EnBJpD
-	 ulGZNxYu2EJc7Yx8jp96KGLBifjDg0DOfxiIH+hPBQEr6KyTZA+qWZ0zuQWDyixrZg
-	 buUQwCUTaYLvOF1SzfcbJsBG4CPYm3BCt2z55sGOGYep+QWPGdj5dMvH/3ASb5kmCy
-	 JG4C8Nj5hVdTCsd6m5We7DBAQtDK3QS2CglE9YKs0iuyYR/ltxqn9FrJeBmR2WZ8V0
-	 fssdOVSQabXjy1hENJL46oOrp3EmzMVC0M+2mhT6AKzlkMha8m1zHi4HwgLVIcQiF+
-	 q7y7hB0RmM3VA9E1sGTxu8HtPh/lTwFJbRRO6XRUSosg73IHDmCuBje8gGUgrM6+fd
-	 8pGIOeMrpQcnAbtHnVMMn6Kti/y2PfzQeyr3kLoAPTRBMr6ceJeafkM8KXNB7zy5IM
-	 zlRC3njZScFO0Qx67SlOlws3BVImF4Zy00qt6yXk/pIryJvq+J1pkrsrMEATjZSbT9
-	 SVghbv6oJSzXXuFNOQWLWTX4=
-Received: from [127.0.0.1] (business-24-134-159-81.pool2.vodafone-ip.de [24.134.159.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 36B4840E025E;
-	Thu, 29 Aug 2024 08:39:43 +0000 (UTC)
-Date: Thu, 29 Aug 2024 10:39:41 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
- avadhut.naik@amd.com, john.allen@amd.com, boris.ostrovsky@oracle.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_x86/MCE=3A_Prevent_CPU_offl?=
- =?US-ASCII?Q?ine_for_SMCA_CPUs_with_non-core_banks?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20240827134706.GA719384@yaz-khff2.amd.com>
-References: <20240821140017.330105-1-yazen.ghannam@amd.com> <87jzg4g8dm.ffs@tglx> <20240826132057.GA449322@yaz-khff2.amd.com> <9D26E333-B33C-4FD4-9A8F-6F9DC1EC6527@alien8.de> <20240827134706.GA719384@yaz-khff2.amd.com>
-Message-ID: <7D571DAA-E399-4580-98B3-8A6E7085CB54@alien8.de>
+	s=arc-20240116; t=1724934259; c=relaxed/simple;
+	bh=uasQcdx7rxFNG5sGSQR1AXItx94ohSc5+2LDegn3S28=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=W3kX/BisA6sHXttSPD44bZYyr9KJbzjg7Aza1EN145sMCnl92lgY0P2vT/SXsAaaTQY/yttRrIc2lQZQ18Xvt03c40WUiIPr2dDuMShBhLyRpTdRW/ed2Bfw+65WrA3d5L8mRf4TBGhsBs0SgQ4xrSC+0rwrJr4i56FaB7KnYhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DBiRwf3y; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724934257; x=1756470257;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uasQcdx7rxFNG5sGSQR1AXItx94ohSc5+2LDegn3S28=;
+  b=DBiRwf3y4FG/R8tFvs4PsGlGKZaYaBXdEkCWfG4J+L2XA82lVwOt2VDf
+   +ANeKnRKdokOzmi/4p8IfrQ6MidXFfgR+yAOg7A3KpxcODTfsIqxeDNFI
+   d84dWGl4xztDzDNNQ+O7KmXIbGB0050G5PACdZRP1ieSu0AFYNDLAq4QT
+   j/V7nNgVaIYk6OKno8QPBXKjfXv89G2SrKV6a7oZ76X1o7KSwoU0XNn4/
+   Wo3NgJ1srYrBYOpsZiaV/iLTGsSscztEjVglR3s2DFjjvD1+bmFriuqVM
+   bNCdfMxq0fhEsWX9kbSjkjSL2GfBrvBSl6ZzZBmEPKGicK4li2qpGH77O
+   Q==;
+X-CSE-ConnectionGUID: U5r/V3v3RKi30qrapxMldw==
+X-CSE-MsgGUID: EnX3rVwCTzWL3Dp8+qxdVw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="23038748"
+X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
+   d="scan'208";a="23038748"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 05:24:16 -0700
+X-CSE-ConnectionGUID: UiGiflH/SRm10kW3V5qPoA==
+X-CSE-MsgGUID: hzWKf81rQnG2C0RvVf8qtw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
+   d="scan'208";a="63511734"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 05:24:14 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: Tony Luck <tony.luck@intel.com>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] EDAC/sb_edac: Fix the compile warning of large frame size
+Date: Thu, 29 Aug 2024 20:09:03 +0800
+Message-Id: <20240829120903.84152-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On August 27, 2024 3:47:06 PM GMT+02:00, Yazen Ghannam <yazen=2Eghannam@amd=
-=2Ecom> wrote:
->On Tue, Aug 27, 2024 at 02:50:40PM +0200, Borislav Petkov wrote:
->> On August 26, 2024 3:20:57 PM GMT+02:00, Yazen Ghannam <yazen=2Eghannam=
-@amd=2Ecom> wrote:
->> >On Sun, Aug 25, 2024 at 01:16:37PM +0200, Thomas Gleixner wrote:
->> >> On Wed, Aug 21 2024 at 09:00, Yazen Ghannam wrote:
->> >> > Logical CPUs in AMD Scalable MCA (SMCA) systems can manage non-cor=
-e
->> >> > banks=2E Each of these banks represents unique and separate hardwa=
-re
->> >> > located within the system=2E Each bank is managed by a single logi=
-cal CPU;
->> >> > they are not shared=2E Furthermore, the "CPU to MCA bank" assignme=
-nt
->> >> > cannot be modified at run time=2E
->> >> >
->> >> > The MCE subsystem supports run time CPU hotplug=2E Many vendors ha=
-ve
->> >> > non-core MCA banks, so MCA settings are not cleared when a CPU is
->> >> > offlined for these vendors=2E
->> >> >
->> >> > Even though the non-core MCA banks remain enabled, MCA errors will=
- not
->> >> > be handled (reported, cleared, etc=2E) on SMCA systems when the ma=
-naging
->> >> > CPU is offline=2E
->> >> >
->> >> > Check if a CPU manages non-core MCA banks and, if so, prevent it f=
-rom
->> >> > being taken offline=2E
->> >>=20
->> >> Which in turn breaks hibernation and kexec=2E=2E=2E
->> >>
->> >
->> >Right, good point=2E
->> >
->> >Maybe this change can apply only to a user-initiated (sysfs) case?
->> >
->> >Thanks,
->> >Yazen
->> >
->>=20
->> Or, you can simply say that the MCE cannot be processed because the use=
-r took the managing CPU offline=2E=20
->>
->
->I found that we can not populate the "cpuN/online" file=2E This would
->prevent a user from offlining a CPU, but it shouldn't prevent the system
->from doing what it needs=2E
->
->This is already done for CPU0, and other cases I think=2E
->
->> What is this actually really fixing anyway?
->
->There are times where a user wants to take CPUs offline due to software
->licensing=2E And this would prevent the user from unintentionally
->offlining CPUs that would affect MCA handling=2E
->
->Thanks,
->Yazen
+Compiling sb_edac driver with GCC 11.4.0 and the W=1 option reported
+the following warning:
 
-If the user offlines CPUs and some MCEs cannot be handled as a result, the=
-n that's her/his problem, no?
+  drivers/edac/sb_edac.c: In function ‘sbridge_mce_output_error’:
+  drivers/edac/sb_edac.c:3249:1: warning: the frame size of 1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
 
-- Why does it hurt when I do this?=20
-- Well, don't do that then=2E
---=20
-Sent from a small device: formatting sucks and brevity is inevitable=2E 
+As there is no concurrent invocation of sbridge_mce_output_error(),
+fix this warning by moving the large-size variables 'msg' and 'msg_full'
+from the stack to the pre-allocated data segment.
+
+Reported-by: Zhang Rui <rui.zhang@intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ drivers/edac/sb_edac.c | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
+index e5c05a876947..e1cb9918b5a4 100644
+--- a/drivers/edac/sb_edac.c
++++ b/drivers/edac/sb_edac.c
+@@ -29,6 +29,8 @@
+ 
+ /* Static vars */
+ static LIST_HEAD(sbridge_edac_list);
++static char sb_msg[256];
++static char sb_msg_full[512];
+ 
+ /*
+  * Alter this version for the module when modifications are made
+@@ -3079,7 +3081,6 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 	struct mem_ctl_info *new_mci;
+ 	struct sbridge_pvt *pvt = mci->pvt_info;
+ 	enum hw_event_mc_err_type tp_event;
+-	char *optype, msg[256], msg_full[512];
+ 	bool ripv = GET_BITFIELD(m->mcgstatus, 0, 0);
+ 	bool overflow = GET_BITFIELD(m->status, 62, 62);
+ 	bool uncorrected_error = GET_BITFIELD(m->status, 61, 61);
+@@ -3095,10 +3096,10 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 	 * aligned address reported by patrol scrubber.
+ 	 */
+ 	u32 lsb = GET_BITFIELD(m->misc, 0, 5);
++	char *optype, *area_type = "DRAM";
+ 	long channel_mask, first_channel;
+ 	u8  rank = 0xff, socket, ha;
+ 	int rc, dimm;
+-	char *area_type = "DRAM";
+ 
+ 	if (pvt->info.type != SANDY_BRIDGE)
+ 		recoverable = true;
+@@ -3168,7 +3169,7 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 			channel = knl_channel_remap(m->bank == 16, channel);
+ 			channel_mask = 1 << channel;
+ 
+-			snprintf(msg, sizeof(msg),
++			snprintf(sb_msg, sizeof(sb_msg),
+ 				"%s%s err_code:%04x:%04x channel:%d (DIMM_%c)",
+ 				overflow ? " OVERFLOW" : "",
+ 				(uncorrected_error && recoverable)
+@@ -3177,23 +3178,23 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 			edac_mc_handle_error(tp_event, mci, core_err_cnt,
+ 				m->addr >> PAGE_SHIFT, m->addr & ~PAGE_MASK, 0,
+ 				channel, 0, -1,
+-				optype, msg);
++				optype, sb_msg);
+ 		}
+ 		return;
+ 	} else if (lsb < 12) {
+ 		rc = get_memory_error_data(mci, m->addr, &socket, &ha,
+ 					   &channel_mask, &rank,
+-					   &area_type, msg);
++					   &area_type, sb_msg);
+ 	} else {
+ 		rc = get_memory_error_data_from_mce(mci, m, &socket, &ha,
+-						    &channel_mask, msg);
++						    &channel_mask, sb_msg);
+ 	}
+ 
+ 	if (rc < 0)
+ 		goto err_parsing;
+ 	new_mci = get_mci_for_node_id(socket, ha);
+ 	if (!new_mci) {
+-		strcpy(msg, "Error: socket got corrupted!");
++		strcpy(sb_msg, "Error: socket got corrupted!");
+ 		goto err_parsing;
+ 	}
+ 	mci = new_mci;
+@@ -3218,7 +3219,7 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 	 */
+ 	if (!pvt->is_lockstep && !pvt->is_cur_addr_mirrored && !pvt->is_close_pg)
+ 		channel = first_channel;
+-	snprintf(msg_full, sizeof(msg_full),
++	snprintf(sb_msg_full, sizeof(sb_msg_full),
+ 		 "%s%s area:%s err_code:%04x:%04x socket:%d ha:%d channel_mask:%ld rank:%d %s",
+ 		 overflow ? " OVERFLOW" : "",
+ 		 (uncorrected_error && recoverable) ? " recoverable" : "",
+@@ -3226,9 +3227,9 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 		 mscod, errcode,
+ 		 socket, ha,
+ 		 channel_mask,
+-		 rank, msg);
++		 rank, sb_msg);
+ 
+-	edac_dbg(0, "%s\n", msg_full);
++	edac_dbg(0, "%s\n", sb_msg_full);
+ 
+ 	/* FIXME: need support for channel mask */
+ 
+@@ -3239,12 +3240,12 @@ static void sbridge_mce_output_error(struct mem_ctl_info *mci,
+ 	edac_mc_handle_error(tp_event, mci, core_err_cnt,
+ 			     m->addr >> PAGE_SHIFT, m->addr & ~PAGE_MASK, 0,
+ 			     channel, dimm, -1,
+-			     optype, msg_full);
++			     optype, sb_msg_full);
+ 	return;
+ err_parsing:
+ 	edac_mc_handle_error(tp_event, mci, core_err_cnt, 0, 0, 0,
+ 			     -1, -1, -1,
+-			     msg, "");
++			     sb_msg, "");
+ 
+ }
+ 
+-- 
+2.17.1
+
 
