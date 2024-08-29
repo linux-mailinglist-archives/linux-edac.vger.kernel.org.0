@@ -1,147 +1,154 @@
-Return-Path: <linux-edac+bounces-1742-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1743-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF2DE963B84
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 08:28:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66C97963ECB
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 10:40:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2C9C1C21C4D
-	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 06:28:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85CA01C21B2C
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Aug 2024 08:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 387ED14F130;
-	Thu, 29 Aug 2024 06:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3101F181328;
+	Thu, 29 Aug 2024 08:40:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="goRHsBek"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="AUhNEcMt"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8967E1B813;
-	Thu, 29 Aug 2024 06:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D433D6A;
+	Thu, 29 Aug 2024 08:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724912906; cv=none; b=M8iCogk8ZGEaFwB3EoBBHIgtjL5I3sntrAYHLnL3dDpoXHwdmsvnVjVKM0UPLwM6SLEK3xhnLJLRGc1lI1L21olHI3hVQUZi4wMrGb/eERieujUjmFBf0vpARmjnmIXGNe2R3BKih9i5Bz7wKkWBXujHZe5DuFNvnGywi6NmcVc=
+	t=1724920801; cv=none; b=jAM5HOe1pxIGDh2x5vZ6y630VWf5u97w8SggaO4EEtCmtMBw6o2A3y16zESv7rnC8YwpVSvzznzCkIO5F/5vQjYzNJPe5ASVnUUdLQUC37Yn53/ofm88o14RDaddYnMJSex2H7PvmYSSPklNf1iidjFpfTwRvMnJgZUSuUxA2aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724912906; c=relaxed/simple;
-	bh=CC/Lxc2OKAqLqILZZ5OBWYXOqCl5U8tQXMtCMWltyW8=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=M3DPbK6fhTfEzQE6cd7j/8qY/08j5gFrmw/7zX1EahvhBXt23VoLqp1JkfCL+1pCdE3dZ2snwZ9mFJuQIlA+ULyTqAIg2BsvkpFGLZWf+QHQY8T9dgopYMQ7Ulicr+QZafdR+oxG6lYGkldjGgyMoudcPGsYrKPIsLDPsP5dfmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=goRHsBek; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724912900; x=1756448900;
-  h=from:to:cc:subject:date:message-id;
-  bh=CC/Lxc2OKAqLqILZZ5OBWYXOqCl5U8tQXMtCMWltyW8=;
-  b=goRHsBekm+oi05veOv+6hJNYwaG3mXON94A0mSPIXOa3PyAtCetAIUxI
-   8Mr+/8r2XVwmFmsNsCKz/rJKb0VYxbmMn5bP7oCUfbXIQjXlhN76niGPo
-   8vGUfVUUJixXh5OSTml4qDtK9UFTtAMAs2pmiVVVWiujtAqMrVvBhEjpC
-   IrVnXhL8Sq9cYIRUuZhJPQK4WKutatBXiNT4hyvLXdh/dHqbKOzI4/ISr
-   XR6InXBMDRU1Rg0s2D4p25baq0dla2ySRKQ8eNpu6J3ErLh5J1a3ra+U9
-   1yj+XENEQi3blwcm5qBnQYqwPt4pcPihfwtFJoTYoYwyKR77IbzWNRHPZ
-   A==;
-X-CSE-ConnectionGUID: RGGEa92vTXKPNRbgW87oFQ==
-X-CSE-MsgGUID: Jo1IVG3qQuGVNN/fNs3fNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="23059903"
-X-IronPort-AV: E=Sophos;i="6.10,184,1719903600"; 
-   d="scan'208";a="23059903"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 23:28:19 -0700
-X-CSE-ConnectionGUID: fI7cP9kvQam7HTqB7XIRPg==
-X-CSE-MsgGUID: tYVoKNqDQDSSpvwz0Nv3/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
-   d="scan'208";a="86684583"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 23:28:17 -0700
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: Tony Luck <tony.luck@intel.com>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] EDAC/{skx_common,i10nm}: Remove the AMAP register for determing DDR5
-Date: Thu, 29 Aug 2024 14:13:09 +0800
-Message-Id: <20240829061309.57738-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1724920801; c=relaxed/simple;
+	bh=FyjX4kcH5LavAMmhOmNvR8SALI7vKJuOwonjdbQiaLU=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=aMrHwsF0LqdkcOcG/v/joJovKqdRL7LfVuDPU1+RaTvE2Xwv5O3+jpmUQTm1LQeBzqg7rzfpcpnBiLgc9aTVxmRIaspFaMIqmzUR/kmr+XsQ9Ckr2LlcLU8Q6m9OpYJxG9vkAsaEtQMI5VD82Z8JI13g8i/YmlA4mITlwc7t7Sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=AUhNEcMt; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2D99D40E0184;
+	Thu, 29 Aug 2024 08:39:57 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ITKrumJMBXou; Thu, 29 Aug 2024 08:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1724920793; bh=tqRMih8maOqhgAUQosY7U14hqRXwiLtPrj0M9xoEAXM=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=AUhNEcMtcPtYT++FFWUCR2JVvFBPPnytDRBwzSx0y/pXWKtybnWe6pSkSrB0F4fWz
+	 3EhbGD/grLQjmAZY4ATWshzZ4NNMS2JSWIOs6/SPRn8ulOy47grVfKNXj295QfxuCQ
+	 5OWEd2o1/h5ang6FzaXQNwYJIuRaGeOpxk3UPlfKTN9fyj/02vIk3thHafp/EnBJpD
+	 ulGZNxYu2EJc7Yx8jp96KGLBifjDg0DOfxiIH+hPBQEr6KyTZA+qWZ0zuQWDyixrZg
+	 buUQwCUTaYLvOF1SzfcbJsBG4CPYm3BCt2z55sGOGYep+QWPGdj5dMvH/3ASb5kmCy
+	 JG4C8Nj5hVdTCsd6m5We7DBAQtDK3QS2CglE9YKs0iuyYR/ltxqn9FrJeBmR2WZ8V0
+	 fssdOVSQabXjy1hENJL46oOrp3EmzMVC0M+2mhT6AKzlkMha8m1zHi4HwgLVIcQiF+
+	 q7y7hB0RmM3VA9E1sGTxu8HtPh/lTwFJbRRO6XRUSosg73IHDmCuBje8gGUgrM6+fd
+	 8pGIOeMrpQcnAbtHnVMMn6Kti/y2PfzQeyr3kLoAPTRBMr6ceJeafkM8KXNB7zy5IM
+	 zlRC3njZScFO0Qx67SlOlws3BVImF4Zy00qt6yXk/pIryJvq+J1pkrsrMEATjZSbT9
+	 SVghbv6oJSzXXuFNOQWLWTX4=
+Received: from [127.0.0.1] (business-24-134-159-81.pool2.vodafone-ip.de [24.134.159.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 36B4840E025E;
+	Thu, 29 Aug 2024 08:39:43 +0000 (UTC)
+Date: Thu, 29 Aug 2024 10:39:41 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, linux-edac@vger.kernel.org,
+ linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+ avadhut.naik@amd.com, john.allen@amd.com, boris.ostrovsky@oracle.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_x86/MCE=3A_Prevent_CPU_offl?=
+ =?US-ASCII?Q?ine_for_SMCA_CPUs_with_non-core_banks?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20240827134706.GA719384@yaz-khff2.amd.com>
+References: <20240821140017.330105-1-yazen.ghannam@amd.com> <87jzg4g8dm.ffs@tglx> <20240826132057.GA449322@yaz-khff2.amd.com> <9D26E333-B33C-4FD4-9A8F-6F9DC1EC6527@alien8.de> <20240827134706.GA719384@yaz-khff2.amd.com>
+Message-ID: <7D571DAA-E399-4580-98B3-8A6E7085CB54@alien8.de>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The configuration flag 'res_config->support_ddr5 = true' sufficiently
-indicates DDR5 memory support for Sapphire Rapids and Granite Rapids.
-Additionally, the i10nm_edac driver doesn't need to use the AMAP
-register for setting the 'fine_grain_bank' of each DIMM. Therefore,
-remove the AMAP register for determining DDR5.
+On August 27, 2024 3:47:06 PM GMT+02:00, Yazen Ghannam <yazen=2Eghannam@amd=
+=2Ecom> wrote:
+>On Tue, Aug 27, 2024 at 02:50:40PM +0200, Borislav Petkov wrote:
+>> On August 26, 2024 3:20:57 PM GMT+02:00, Yazen Ghannam <yazen=2Eghannam=
+@amd=2Ecom> wrote:
+>> >On Sun, Aug 25, 2024 at 01:16:37PM +0200, Thomas Gleixner wrote:
+>> >> On Wed, Aug 21 2024 at 09:00, Yazen Ghannam wrote:
+>> >> > Logical CPUs in AMD Scalable MCA (SMCA) systems can manage non-cor=
+e
+>> >> > banks=2E Each of these banks represents unique and separate hardwa=
+re
+>> >> > located within the system=2E Each bank is managed by a single logi=
+cal CPU;
+>> >> > they are not shared=2E Furthermore, the "CPU to MCA bank" assignme=
+nt
+>> >> > cannot be modified at run time=2E
+>> >> >
+>> >> > The MCE subsystem supports run time CPU hotplug=2E Many vendors ha=
+ve
+>> >> > non-core MCA banks, so MCA settings are not cleared when a CPU is
+>> >> > offlined for these vendors=2E
+>> >> >
+>> >> > Even though the non-core MCA banks remain enabled, MCA errors will=
+ not
+>> >> > be handled (reported, cleared, etc=2E) on SMCA systems when the ma=
+naging
+>> >> > CPU is offline=2E
+>> >> >
+>> >> > Check if a CPU manages non-core MCA banks and, if so, prevent it f=
+rom
+>> >> > being taken offline=2E
+>> >>=20
+>> >> Which in turn breaks hibernation and kexec=2E=2E=2E
+>> >>
+>> >
+>> >Right, good point=2E
+>> >
+>> >Maybe this change can apply only to a user-initiated (sysfs) case?
+>> >
+>> >Thanks,
+>> >Yazen
+>> >
+>>=20
+>> Or, you can simply say that the MCE cannot be processed because the use=
+r took the managing CPU offline=2E=20
+>>
+>
+>I found that we can not populate the "cpuN/online" file=2E This would
+>prevent a user from offlining a CPU, but it shouldn't prevent the system
+>from doing what it needs=2E
+>
+>This is already done for CPU0, and other cases I think=2E
+>
+>> What is this actually really fixing anyway?
+>
+>There are times where a user wants to take CPUs offline due to software
+>licensing=2E And this would prevent the user from unintentionally
+>offlining CPUs that would affect MCA handling=2E
+>
+>Thanks,
+>Yazen
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- drivers/edac/i10nm_base.c | 9 ++-------
- drivers/edac/skx_common.c | 2 +-
- 2 files changed, 3 insertions(+), 8 deletions(-)
+If the user offlines CPUs and some MCEs cannot be handled as a result, the=
+n that's her/his problem, no?
 
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index 24dd896d9a9d..33cdb3016b7c 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -47,10 +47,6 @@
- 	readl((m)->mbase + ((m)->hbm_mc ? 0xef8 :	\
- 	(res_cfg->type == GNR ? 0xaf8 : 0x20ef8)) +	\
- 	(i) * (m)->chan_mmio_sz)
--#define I10NM_GET_AMAP(m, i)		\
--	readl((m)->mbase + ((m)->hbm_mc ? 0x814 :	\
--	(res_cfg->type == GNR ? 0xc14 : 0x20814)) +	\
--	(i) * (m)->chan_mmio_sz)
- #define I10NM_GET_REG32(m, i, offset)	\
- 	readl((m)->mbase + (i) * (m)->chan_mmio_sz + (offset))
- #define I10NM_GET_REG64(m, i, offset)	\
-@@ -971,7 +967,7 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci,
- {
- 	struct skx_pvt *pvt = mci->pvt_info;
- 	struct skx_imc *imc = pvt->imc;
--	u32 mtr, amap, mcddrtcfg = 0;
-+	u32 mtr, mcddrtcfg = 0;
- 	struct dimm_info *dimm;
- 	int i, j, ndimms;
- 
-@@ -980,7 +976,6 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci,
- 			continue;
- 
- 		ndimms = 0;
--		amap = I10NM_GET_AMAP(imc, i);
- 
- 		if (res_cfg->type != GNR)
- 			mcddrtcfg = I10NM_GET_MCDDRTCFG(imc, i);
-@@ -992,7 +987,7 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci,
- 				 mtr, mcddrtcfg, imc->mc, i, j);
- 
- 			if (IS_DIMM_PRESENT(mtr))
--				ndimms += skx_get_dimm_info(mtr, 0, amap, dimm,
-+				ndimms += skx_get_dimm_info(mtr, 0, 0, dimm,
- 							    imc, i, j, cfg);
- 			else if (IS_NVDIMM_PRESENT(mcddrtcfg, j))
- 				ndimms += skx_get_nvdimm_info(dimm, imc, i, j,
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 8d18099fd528..724d41322dda 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -363,7 +363,7 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
- 	if (imc->hbm_mc) {
- 		banks = 32;
- 		mtype = MEM_HBM2;
--	} else if (cfg->support_ddr5 && (amap & 0x8)) {
-+	} else if (cfg->support_ddr5) {
- 		banks = 32;
- 		mtype = MEM_DDR5;
- 	} else {
--- 
-2.17.1
-
+- Why does it hurt when I do this?=20
+- Well, don't do that then=2E
+--=20
+Sent from a small device: formatting sucks and brevity is inevitable=2E 
 
