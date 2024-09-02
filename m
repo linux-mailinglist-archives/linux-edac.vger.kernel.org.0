@@ -1,70 +1,70 @@
-Return-Path: <linux-edac+bounces-1760-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1761-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 803F2968957
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 16:03:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC8CE9689CB
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 16:20:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BC221C219C2
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 14:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A4B1280EF3
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 14:20:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F88C20FA87;
-	Mon,  2 Sep 2024 14:03:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E1AD19C55D;
+	Mon,  2 Sep 2024 14:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="FOK62MW9"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="RBwoIacM"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E30A19E98B;
-	Mon,  2 Sep 2024 14:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19BF179AA;
+	Mon,  2 Sep 2024 14:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725285801; cv=none; b=tqI1e2U9WL0EkZQZ6UaDXFWcTcclW0EC1bx/GsaI3PV9ospqFQNUlaL68n8oXIe/Dd+jgt5Ml23VchKEmgRpYx4l+9rYvDakw4x05jTb+bBgr/bSGyfL6niJp9DU7/Rln7C3WdzW4vlK5JeXe1svA84+jxiATawtW1EkQQ7kPlo=
+	t=1725286844; cv=none; b=UU24O6p1C9GLTXQ/FER/2/YXmBcBQ6Jpdp7Sz8fYWyihyoIfvMO5nIzPabCfiTV/3GD9K+rWuted9GcFhxLfNNXN5rmT4aArkw3TXrxhpfLw32dXF4w/W2caoq0tQdnkrzHHj7IyBYSChKqi7NXPNgD7h5+Gbh+701csjhaYSTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725285801; c=relaxed/simple;
-	bh=GX/6obQSv/WJf/FAn9TAasDUp/DJhqEtQ4ON1iidy0E=;
+	s=arc-20240116; t=1725286844; c=relaxed/simple;
+	bh=ZkWv2QJf7NlJ00mCSywvA3GddH6obDZjGitEq5QIKtQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mYEu+0MdoT8Wg8WqwfpeBKzUYrH1y9Bsg7J2zwZc4OoYSqBfI6nIeSjBUX44cWqv31njy5fpk/DEgqnJMf1PxjgV2vevpD/UuqgRQOOAModMFGLs/Km9e/MjlhlF86Qg4FuwhNhG+/S8aYlSTvOUYFTQSlR9SeY0b21chSGRYn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=FOK62MW9; arc=none smtp.client-ip=207.54.90.47
+	 In-Reply-To:Content-Type; b=fYbRNEk8k4M73MlE8KRgh4Cu/tcsKtH2CtJ2XxmXuiobMXWujyqS+a7JXNcoitJSLr3W0KSA0CDS4vTXG/rNbb4qRr/c+BxKQpHftqkbSG6jNrcbT1ZjGu/lIFIcmSnGj4FPbmMDssurNAtYUophd0PAt8y1C8DdPbWlpdzkcb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=RBwoIacM; arc=none smtp.client-ip=207.54.90.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1725285799; x=1756821799;
+  t=1725286842; x=1756822842;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=GX/6obQSv/WJf/FAn9TAasDUp/DJhqEtQ4ON1iidy0E=;
-  b=FOK62MW9oPVpjZOW3Y8L3FKQG8rVI2/n5txWW9SIyg/M+BHlyE12iXDg
-   seRkB9A0FJ/jWjQRR3hVWc8C/U0iYcZx+db2t1ZvlwRJXz+mCyK/9J+FH
-   KAKf4bBb5ph5EXOy1cjEdRlWqeRuqZkQaW4mDJ8I3paBv/q3GaUR/3vtj
-   duea9fPNimwAlj0BywFJz/tniVlDanALtrsC0l8wmzO2aFMrlfWWyYLM5
-   uC+71rWq1r6KBgDOcXcGwqAceHGsPbhuO0JzpHZV34ACT8RAKxWmctUNM
-   NwhvcHa/sV7is5swES82/DDv05lMzH7D+21xI/qqLPkjcYXVtAU/QJ4r8
+  bh=ZkWv2QJf7NlJ00mCSywvA3GddH6obDZjGitEq5QIKtQ=;
+  b=RBwoIacM0XeQuWZBtk8B9cTLsGZNltwyFKP7+e2a9hbZylpFJNmtQmzf
+   9kPtix7Ou7maSQlyEEN28NtiU4v3De5q3tUPynYWkkEXhf6ULVT7bLCFe
+   xpdnQn4xqy6FCMlJXnFEtyHNUeZlNG1Um8GsFRfZNKP6v0DMewtDiDk7d
+   w36+OA7BKsIKPP82ZXwQUnWk9zNBohx/QZedbrlIHVFtieLLVLezFwGMp
+   /8bnQ1kwdujg97vTlHxi+sLaGcLloTPWWgvq3Xnnof0jWbTOfi/RRx6OA
+   BhIyH2KFclkyX7H23UB0YgZjMc0ya42eh00zFnTz19ELrqDvJq4ZZM3/p
    Q==;
-X-CSE-ConnectionGUID: QZZPBUTPTX2pgT9HNVnijA==
-X-CSE-MsgGUID: tCYDIVg1SISKzv75HClY5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="172391208"
+X-CSE-ConnectionGUID: 7mXtf9pXT66heOu5aJX5NQ==
+X-CSE-MsgGUID: ++GJYVH4TuqlC6cHkJGiMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="151869290"
 X-IronPort-AV: E=Sophos;i="6.10,195,1719846000"; 
-   d="scan'208";a="172391208"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 23:03:10 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-	by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 9A433D6EEE;
-	Mon,  2 Sep 2024 23:03:07 +0900 (JST)
+   d="scan'208";a="151869290"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 23:19:30 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+	by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 1F29AD800F;
+	Mon,  2 Sep 2024 23:19:28 +0900 (JST)
 Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id DB922CFB76;
-	Mon,  2 Sep 2024 23:03:06 +0900 (JST)
+	by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 5F185D4F51;
+	Mon,  2 Sep 2024 23:19:27 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 602CC6BD5B;
-	Mon,  2 Sep 2024 23:03:06 +0900 (JST)
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id BA7946BD5B;
+	Mon,  2 Sep 2024 23:19:26 +0900 (JST)
 Received: from [10.193.128.195] (unknown [10.193.128.195])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 79DEE1A000A;
-	Mon,  2 Sep 2024 22:03:04 +0800 (CST)
-Message-ID: <05811930-8fa9-42f8-8034-6f0945b103fc@fujitsu.com>
-Date: Mon, 2 Sep 2024 22:03:03 +0800
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 889C41A000A;
+	Mon,  2 Sep 2024 22:19:25 +0800 (CST)
+Message-ID: <c7e48e89-88fb-4810-8bdb-9307203a0091@fujitsu.com>
+Date: Mon, 2 Sep 2024 22:19:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -72,135 +72,119 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] cxl/core: introduce device reporting poison
- hanlding
+Subject: Re: [PATCH v4 2/2] cxl: avoid duplicated report from MCE & device
 To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 Cc: linux-cxl@vger.kernel.org, linux-edac@vger.kernel.org,
  linux-mm@kvack.org, dan.j.williams@intel.com, vishal.l.verma@intel.com,
  alison.schofield@intel.com, bp@alien8.de, dave.jiang@intel.com,
  dave@stgolabs.net, ira.weiny@intel.com, james.morse@arm.com,
  linmiaohe@huawei.com, mchehab@kernel.org, nao.horiguchi@gmail.com,
- rric@kernel.org, tony.luck@intel.com, shiju.jose@huawei.com
+ rric@kernel.org, tony.luck@intel.com
 References: <20240808151328.707869-1-ruansy.fnst@fujitsu.com>
- <20240808151328.707869-2-ruansy.fnst@fujitsu.com>
- <20240827164610.00002f4d@Huawei.com>
+ <20240808151328.707869-3-ruansy.fnst@fujitsu.com>
+ <20240827165255.00003184@Huawei.com>
 From: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-In-Reply-To: <20240827164610.00002f4d@Huawei.com>
+In-Reply-To: <20240827165255.00003184@Huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28636.007
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28638.000
 X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28636.007
-X-TMASE-Result: 10--17.417900-10.000000
-X-TMASE-MatchedRID: xnGAJ48IopiPvrMjLFD6eKn9fPsu8s0a2q80vLACqaeqvcIF1TcLYLBk
-	jjdoOP1bW9EH4+AJvKPMrGM6h+7YUICoSWHZmQrDKiJEqUFWRghZDdHiTk9OcJDHQ2MaZXz4jK1
-	xN9jQWTnOpS+AHyEE2hcHv+b01YKmYY3ozW+EngffqVBdB7I8UaPhbuuLYFOYc/T3GfQUvxlxtF
-	6KhREXKa2fCRhYzsoC+5kmiwJAxT+hxhqB2G57XTe9MF4SNA1+ocSvEPKGO+fAu8ilngS2RRRcq
-	LOELivDxSb5KmzgaAwv1d8yhDAVO4xxTMlLewfdh1CxlJlk5RpJ0h0KLwFrgJm3OIVSf4P5slCg
-	QfGYOCnzgfRAkJS4G6EfeQTpODV8uybvDkIalGAdZEkR8Y/meYQg0F6EHA2oS1jK4vkKprF5GDv
-	/ZOF4Nm5/m6vlvI+l0CcTQ1zeUMSPfh1s1LkJMFlGa4Om1d9neF6MevMVZUBncSzHLoRambTLcN
-	rcH2Gr585VzGMOFzDYh0PvnvUH8EY41YX/o/8KDZX99HwFDsIqtq5d3cxkNUB2W41yROPGyZQsj
-	JwjJMsteacMfEd8nWcmUNFBCcvs6v+KAQNhbdM=
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28638.000
+X-TMASE-Result: 10--18.722600-10.000000
+X-TMASE-MatchedRID: qA30kLX4rkePvrMjLFD6eKn9fPsu8s0a2q80vLACqaeqvcIF1TcLYLBk
+	jjdoOP1bW9EH4+AJvKPWEKq3/x+jsOZusStRKBV2lOneJcroAxQEa8g1x8eqFzKIerHAhfYxh4A
+	8/yPGZNapvxnoY+yIonXOnTupNIIg0ULUiMMnBpvEOJqSsn5KmZQ7eT0DII9NfnzRct83gQIJfS
+	FgccfpAR+fvjkvoc3Be52pOBC+4eHTVE410k90AWQFd4bOnrT64XnbArnSCLHkMnUVL5d0Ezje3
+	avJWBBRdOlApyjqZMKIT8eUrs+4RRs7n0Ur0F2YRN+FMKVZBhEQOcMSo0926lcZNuxCoduS7bVh
+	2RA8dMz3SzCPT5sXYys9U4Zn7lQDVOc6pZRHw9cmZusHWPhfCk3yuY9BGW8rsqiKlYBJQxg0Oxd
+	vWc671FozlTt1FeqbX7bicKxRIU23sNbcHjySQdigzzbKqYUy+gtHj7OwNO0YzpbdT4uedzdKAe
+	VgKQLGIiCPMSPC78UIet2iW5cw1yy8MXciL+hj
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
 
 
-在 2024/8/27 23:46, Jonathan Cameron 写道:
-> On Thu,  8 Aug 2024 23:13:27 +0800
+在 2024/8/27 23:52, Jonathan Cameron 写道:
+> On Thu,  8 Aug 2024 23:13:28 +0800
 > Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
 > 
->> CXL device can find&report memory problems, even before MCE is detected
->> by CPU.  AFAIK, the current kernel only traces POISON error event
->> from FW-First/OS-First path, but it doesn't handle them, neither
->> notify processes who are using the POISON page like MCE does.
->>
->> Thus, user have to read logs from trace and find out which device
->> reported the error and which applications are affected.  That is not
->> an easy work and cannot be handled in time.
-> 
-> These are async reports, so I'm not sure what 'in time' really means here.
-
-'in time' may not be appropriate.  I think 'ASAP' is better.  I just 
-want to say: comparing with users finding out the errors from trace logs 
-and notifying apps manually, kernel handler can do that automatically 
-and ASAP.
-
-> If we get synchronous poison from a processor access it will be handled
-> via traditional means (MCE, ARM SEA etc)
-
-Yes.  For FW-First path, MCE mechanism can cover this.  But for OS-First 
-path, errors can only be traced, then logged by userspace tool like 
-rasdaemon.  We hope in OS-First path, kernel can handle it like MCE does 
-too.
-
-> 
-> Whether to handle async error reports (typically from scrub or because
-> the memory device received poison from someone else) the same way
-> should perhaps be a policy decision.  It should match what we do
-> for firmware first async reports though (any policy controls make sense
-> for both).
-
-Yes.  In OS-First path, I think it should always be turned on.
-
-> 
-> An example of this would be that an host OS might attempt a polite close
-> of an application might attempt a polite if we know there is poison
-> somewhere in a dataset it has access to. If that poison is never seen
-> synchronously (because that data is not read) then it my close
-> successfully rather than being killed.
-
-According to kernel docs for 'early kill' of memory-failure, I think 
-it's suitable for this case.
-
-> 
-> If it's injected poison and we didn't see it synchronously we might
-> well not want to kill anything.
-
-Agree.  Injection APIs are used for debugging, not a really HW poison.
-
-> 
->> Thus, it is needed to add
->> the feature to make the work done automatically and quickly.  Once CXL
->> device reports the POISON error (via FW-First/OS-First), kernel
->> handles it immediately, similar to the flow when a MCE is triggered.
->>
->> The current call trace of error reporting&handling looks like this:
+>> Since CXL device is a memory device, while CPU is consuming a poison
+>> page of CXL device, it always triggers a MCE (via interrupt #18) and
+>> calls memory_failure() to handle POISON page, no matter which-First path
+>> is configured.  CXL device could also find and report the POISON, kernel
+>> now not only traces but also calls memory_failure() to handle it, which
+>> is marked as "NEW" in the figure blow.
 >> ```
 >> 1.  MCE (interrupt #18, while CPU consuming POISON)
 >>       -> do_machine_check()
 >>         -> mce_log()
 >>           -> notify chain (x86_mce_decoder_chain)
->>             -> memory_failure()
->>
+>>             -> memory_failure() <---------------------------- EXISTS
 >> 2.a FW-First (optional, CXL device proactively find&report)
 >>       -> CXL device -> Firmware
 >>         -> OS: ACPI->APEI->GHES->CPER -> CXL driver -> trace
 >>                                                    \-> memory_failure()
->>                                                        ^----- ADD
+>>                                                        ^----- NEW
 >> 2.b OS-First (optional, CXL device proactively find&report)
 >>       -> CXL device -> MSI
 >>         -> OS: CXL driver -> trace
 >>                          \-> memory_failure()
->>                              ^------------------------------- ADD
+>>                              ^------------------------------- NEW
 >> ```
->> This patch adds calling memory_failure() while CXL device reporting
->> error is received, marked as "ADD" in figure above.
+>>
+>> But in this way, the memory_failure() could be called twice or even at
+>> same time, as is shown in the figure above: (1.) and (2.a or 2.b),
+>> before the POISON page is cleared.  memory_failure() has it own mutex
+>> lock so it actually won't be called at same time and the later call
+>> could be avoided because HWPoison bit has been set.  However, assume
+>> such a scenario, "CXL device reports POISON error" triggers 1st call,
+>> user see it from log and want to clear the poison by executing `cxl
+>> clear-poison` command, and at the same time, a process tries to access
+>> this POISON page, which triggers MCE (it's the 2nd call).
 > 
-> Typo in patch title.  handling
+> Attempting to clear poison in a page that is online seems unwise.
+> Does that ever make sense today?
 
-Thanks.
+To be honest, I am not sure about this.  Even if the error from CXL 
+device is recoverable, we don't reuse it again?
 
-> I've also dropped qemu-devel as this doesn't have anything to do with qemu.
 > 
+>>   Since there
+>> is no lock between the 2nd call with clearing poison operation, race
+>> condition may happen, which may cause HWPoison bit of the page in an
+>> unknown state.
+> 
+> As long as that state is always wrong in the sense we think it's poisoned
+> when it isn't we don't care.
 
-OK.
+The 2nd memory_failure() need this state to determine whether to 
+continue its process or return.
 
 >>
->> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+>> Thus, we have to avoid the 2nd call. This patch[2] introduces a new
+>> notifier_block into `x86_mce_decoder_chain` and a POISON cache list, to
+>> stop the 2nd call of memory_failure(). It checks whether the current
+>> poison page has been reported (if yes, stop the notifier chain, don't
+>> call the following memory_failure() to report again).
+>>
 > 
-> Experienced RAS folk in the CC, how do you want this to work for
-> asynchoronous memory errors on CXL devices?
+> If we do want to do this, it belongs in the generic code, not arch specific
+> part. Can we do similar in memory failure?
+
+Yes, I saw the build error.  Will fix this.
+
+> 
+> To RAS reviewers, this isn't a new problem unique to CXL. Does a solution
+> like this make sense in practice, or are we fine to always let two reports
+> for the same error get handled?
 > 
 > 
+> Jonathan
+> 
+> 
+
+
+--
+Thanks,
+Ruan.
 
