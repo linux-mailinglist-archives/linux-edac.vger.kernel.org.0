@@ -1,256 +1,146 @@
-Return-Path: <linux-edac+bounces-1757-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1758-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B099D967E62
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 06:12:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FE869682A3
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 11:05:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0319DB20BF6
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 04:12:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0C741C2201B
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Sep 2024 09:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C78149C69;
-	Mon,  2 Sep 2024 04:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E3A186E4A;
+	Mon,  2 Sep 2024 09:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ArKX447D"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="blR1e5W/"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0518320E;
-	Mon,  2 Sep 2024 04:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221541547D2;
+	Mon,  2 Sep 2024 09:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725250365; cv=none; b=tIDtYW2jfbFoDngXija4rVufFAyN9wL2zjqB/IPM586fjxm/iFlJjm6XIwqzwRRw8OliNaMYmu5osBVOZQxeswObDgDcdvwieUjHzbRfpkg0eefKYG77RrdmA9Uy1WK1OobCPXt+g9u7i5IvP1xzyX5kF6Igqhj2g2gBjPyRnUw=
+	t=1725267915; cv=none; b=C+SL+XwDig47tpxf/LrvL/t86B2VIHePY7xkOZNtpPbIvCok8Q9o2VVW35LbMBH87TrVcfvRSfXusdJ1y5AXmVVXa32x9x04rbQhsCVh7P1Ok68mQb5FzkirXC5VBVzyGFHW5IJtedYKTrNFAMbECB0ZpwPacbt5+Yh+/b9UXaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725250365; c=relaxed/simple;
-	bh=2Yzl1TCxAvmFEWxCD0hG1tgfKeB5Qtda3UkGw1hGLdM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Am2oFAy+EFyuxJJ4PoQ+Hd9aFm3PDMxuzBOJ2X1E9RicuN17AKJVFWd8fjqjJiWdUz36iPiBIKcVC+Z19+7YMFAVVO8eyxpmutPOMbQadWOIGkZq1qmWf82+voikU6lN0MAc3OgKxh/RiLqUwentx8uSPuUOVMsXgIzV2GF210c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ArKX447D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F93DC4CEC2;
-	Mon,  2 Sep 2024 04:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725250364;
-	bh=2Yzl1TCxAvmFEWxCD0hG1tgfKeB5Qtda3UkGw1hGLdM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ArKX447DIZlHbpZgEW+XCefFC+aKgwQjSxdrGmu5T0lNo+fL5d0vFpaAWDsbVXWKq
-	 xnk1QR1Mu7/j8jktl94zL+lbsL2TH3FnWXbLc3n2FR++uDBZobxmLaOhqxKim1b6zM
-	 p7GfLW64xoD0YnE2plga4ZMlq0FX1EvSdbkNy2n+I2UXjVUhW22xzq08LnuiayWE5J
-	 yyF1QwW55J1ChjEXMIJM6heDyvNU6r7u+l6ke1nPxHeDRpAfV29/PHST5e6RJZtn5p
-	 cYFmvqZNxdt5iEK/CDpyCkWgXC6bewqouFZ7YCkxbhium5f9vIH54A4ybaVXaTNJYv
-	 ASd6WFKUiekrA==
-Date: Mon, 2 Sep 2024 06:12:36 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Tony Luck <tony.luck@intel.com>, Daniel Ferguson
- <danielf@os.amperecomputing.com>, Ard Biesheuvel <ardb@kernel.org>, James
- Morse <james.morse@arm.com>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Len Brown <lenb@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Shiju Jose <shiju.jose@huawei.com>, Dan
- Williams <dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Shuai Xue <xueshuai@linux.alibaba.com>, Steven
- Rostedt <rostedt@goodmis.org>, Tyler Baicar <tbaicar@codeaurora.org>, Will
- Deacon <will@kernel.org>, Xie XiuQi <xiexiuqi@huawei.com>,
- linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, Shengwei Luo
- <luoshengwei@huawei.com>, Jason Tian <jason@os.amperecomputing.com>,
- m.chehab@huawei.com
-Subject: Re: [PATCH v2 1/5] RAS: Report all ARM processor CPER information
- to userspace
-Message-ID: <20240902061236.7cfc97fd@foz.lan>
-In-Reply-To: <20240829143811.GDZtCH07BFEdbbv9wx@fat_crate.local>
+	s=arc-20240116; t=1725267915; c=relaxed/simple;
+	bh=47IhWIyyF9Z9QKoW1CtiwhIrW3cuU2agjCSA6CnRqqo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cslQAxdV2ZnSHBs1uMsBbVGpJQFHtqzKQYY9sXvYX9YvuyRI3+FUp54kpxeFth+x144L7JUxJuLP8gC9/E/+WZmYdh98sqZY4X8C3H9tySqcQHdIQ2ijQMo88+sghRESZbs4gTOgJKwenq94Ldb6M1KeMq4+3/xh0h08DtrsXxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=blR1e5W/; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8470B40E0284;
+	Mon,  2 Sep 2024 09:05:10 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id dZlJ3mWUxFdV; Mon,  2 Sep 2024 09:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1725267904; bh=kK1aL9WxF67VsbaboG2sxhPgSy1iVIzpPlT8ewxiaLs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=blR1e5W/R3RR5OlPxzvnsyzfMysS2Q6MRAbn4q+v/7cPd2ZQnYiOh90hpo4GII39D
+	 neteg7YkJf1N1A7WaE+zimAxXEyDoram2qdLl0F/ZsfBl10y6+04o0yRmzFbItGg+k
+	 eU1pMri/hcjktHN0c7/mR9E6i3Wy/Yx7ttsPGu/XDiTx+77rmyn6aSRBG3acV8aLtZ
+	 mDCZyWnrouyC/jwps3ktxd/p+rjq+864upL8nwEwyaKd5Tyje8stT0VHkbGoFIsAN2
+	 3KYmUzvTvYdTPT77o3B8JJeL83Sd6GKDOLwcNlrB1mtskhOHVR0UQUMyC5YkouYhWG
+	 +vc5xAcNXCWa20Y9ujg8QVDZopnJ2+8mQlmjpWq5ysBMh7uPWWHmMh0judBcXFfkx/
+	 mfJFA4yQoq+7VbzQVq3nCdVzIZRB59B2NXlysA0nuv8+uJGsMDc3tx/I/OQ7nfa5ui
+	 kIQUnGIgeZPqTGi6hUzLuT0pdkulM8gxeGgydst/6fX9OmoJoNKWg32XN0EpVZ6IqS
+	 O1OzUl4iTgbcevdNTx3pxPdFtXnJsmZfQcOT5tkNxW5sp72pu+XY3ZPliiInnpbbWT
+	 7QBB6opnZ6AX5f7I3do7dO5VJTGoW5dPBb7m5Gx09NjyJkw6yHB62xm/XTY08n3K+2
+	 ukPTn0QN4m/f61xORvs6e9QI=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EE9AC40E0169;
+	Mon,  2 Sep 2024 09:04:39 +0000 (UTC)
+Date: Mon, 2 Sep 2024 11:04:34 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>,
+	Daniel Ferguson <danielf@os.amperecomputing.com>,
+	Ard Biesheuvel <ardb@kernel.org>, James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tyler Baicar <tbaicar@codeaurora.org>,
+	Will Deacon <will@kernel.org>, Xie XiuQi <xiexiuqi@huawei.com>,
+	linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Shengwei Luo <luoshengwei@huawei.com>,
+	Jason Tian <jason@os.amperecomputing.com>, m.chehab@huawei.com
+Subject: Re: [PATCH v2 1/5] RAS: Report all ARM processor CPER information to
+ userspace
+Message-ID: <20240902090434.GAZtV_ooWloe-TYzO1@fat_crate.local>
 References: <cover.1720679234.git.mchehab+huawei@kernel.org>
-	<3853853f820a666253ca8ed6c7c724dc3d50044a.1720679234.git.mchehab+huawei@kernel.org>
-	<20240829143811.GDZtCH07BFEdbbv9wx@fat_crate.local>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ <3853853f820a666253ca8ed6c7c724dc3d50044a.1720679234.git.mchehab+huawei@kernel.org>
+ <20240829143811.GDZtCH07BFEdbbv9wx@fat_crate.local>
+ <20240902061236.7cfc97fd@foz.lan>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240902061236.7cfc97fd@foz.lan>
 
-Hi Boris,
+On Mon, Sep 02, 2024 at 06:12:36AM +0200, Mauro Carvalho Chehab wrote:
+> Ok. Will address those at the hole series, sending you later today
+> a new version. Except for those, are patches 2-5 ok?
 
-Em Thu, 29 Aug 2024 16:38:11 +0200
-Borislav Petkov <bp@alien8.de> escreveu:
+Haven't looked at them yet.
 
-> On Thu, Jul 11, 2024 at 08:28:52AM +0200, Mauro Carvalho Chehab wrote:
-> > In addition to those data, it also exports two fields that are
-> > parsed by the GHES driver when firmware reports it, e. g.:
-> > 
-> > - error severity
-> > - cpu logical index  
+> Usually, I don't use "this patch". In this specific case, I wanted
+> to bold the new fields that were added to the ARM trace event, making
+> clear that before the changeset, none of such fields exist; they were
+> added on such change. On other words, the keyword here is not patch,
+> but instead "After". Maybe I can replace it with "now", e. g.:
+
+Yes, and you can see what you're doing in the patch itself.
+
+> Anyway, it sounds that the custody chan can better be written as:
 > 
-> s/cpu/CPU/g
-> 
-> check your whole set pls.
+> 	Co-authored-by: Jason Tian <jason@os.amperecomputing.com>
+> 	Co-authored-by: Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+> 	Co-authored-by: Daniel Ferguson <danielf@os.amperecomputing.com>  
+> 	Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
+> 	Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+> 	Signed-off-by: Daniel Ferguson <danielf@os.amperecomputing.com>  
 
-Ok. Will address those at the hole series, sending you later today
-a new version. Except for those, are patches 2-5 ok?
+The tag's name is Co-developed-by: and yes, I think it makes more sense here.
 
-Regards,
-Mauro
+Note:
 
-> > Report all of these information to userspace via trace uAPI, So that
-> > userspace can properly record the error and take decisions related
-> > to cpu core isolation according to error severity and other info.
-> > 
-> > After this patch, all the data from ARM Processor record from table  
-> 
-> Avoid having "This patch" or "This commit" in the commit message. It is
-> tautologically useless.
-> 
-> Also, do
-> 
-> $ git grep 'This patch' Documentation/process
-> 
-> for more details.
+"Since Co-developed-by: denotes authorship, every Co-developed-by: must be
+immediately followed by a Signed-off-by: of the associated co-author.
+Standard sign-off procedure applies, i.e. the ordering of Signed-off-by: tags
+should reflect the chronological history of the patch insofar as possible,
+regardless of whether the author is attributed via From: or Co-developed-by:.
+Notably, the last Signed-off-by: must always be that of the developer
+submitting the patch."
 
-Usually, I don't use "this patch". In this specific case, I wanted
-to bold the new fields that were added to the ARM trace event, making
-clear that before the changeset, none of such fields exist; they were
-added on such change. On other words, the keyword here is not patch,
-but instead "After". Maybe I can replace it with "now", e. g.:
+It is all documented:
 
-	The updated ARM trace event now contains the following fields:
+Documentation/process/submitting-patches.rst
 
-	======================================	=============================
-	UEFI field on table N.16		ARM Processor trace fields
-	======================================	=============================
-	Validation				handled when filling data for
-						affinity MPIDR and running
-						state.
-	ERR_INFO_NUM				pei_len
-	CONTEXT_INFO_NUM			ctx_len
-	Section Length				indirectly reported by
-						pei_len, ctx_len and oem_len
-	Error affinity level			affinity
-	MPIDR_EL1				mpidr
-	MIDR_EL1				midr
-	Running State				running_state
-	PSCI State				psci_state
-	Processor Error Information Structure	pei_err - count at pei_len
-	Processor Context			ctx_err- count at ctx_len
-	Vendor Specific Error Info		oem - count at oem_len
-	======================================	=============================
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
-> ...
-> 
-> > [mchehab: modified patch description, solve merge conflicts and fix coding style]
-> > Fixes: e9279e83ad1f ("trace, ras: add ARM processor error trace event")
-> > Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
-> > Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
-> > Signed-off-by: Daniel Ferguson <danielf@os.amperecomputing.com>  
-> 
-> What is this SOB chain trying to tell me?
-> 
-> All those folks handled the patch?
-
-They reflect what happened with past attempts of upstreaming this
-change at the EDAC mailing list.
-
-See, originally this seems to come from Jason Tian in 2021:
-	https://lore.kernel.org/linux-edac/20210205022229.313030-1-jason@os.amperecomputing.com/
-	https://lore.kernel.org/linux-edac/20210422084944.3718-1-jason@os.amperecomputing.com/
-	https://lore.kernel.org/linux-edac/20210802135929.5283-1-shijie@os.amperecomputing.com/
-
-In 2022, it came a new version from Shengwei Luo:
-	https://lore.kernel.org/lkml/20220126030906.56765-1-lostway@zju.edu.cn/
-	https://lore.kernel.org/linux-edac/20220214030813.135766-1-lostway@zju.edu.cn/
-
-A new version from Daniel Ferguson arrived in 2023:
-	https://lore.kernel.org/linux-edac/20231214232330.306526-2-danielf@os.amperecomputing.com/
-
-Hard to reconstruct the entire history of this changeset, as there were
-several attempts to fix it, and patches got renamed on some of such
-attempts.
-
-Anyway, it sounds that the custody chan can better be written as:
-
-	Co-authored-by: Jason Tian <jason@os.amperecomputing.com>
-	Co-authored-by: Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
-	Co-authored-by: Daniel Ferguson <danielf@os.amperecomputing.com>  
-	Signed-off-by: Jason Tian <jason@os.amperecomputing.com>
-	Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
-	Signed-off-by: Daniel Ferguson <danielf@os.amperecomputing.com>  
-
-It probably makes sense to also indicate the original author of
-it by change the "From" metadata to:
-
-	From: Jason Tian <jason@os.amperecomputing.com>
-
-> 
-> > Tested-by: Shiju Jose <shiju.jose@huawei.com>
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Link: https://uefi.org/specs/UEFI/2.10/Apx_N_Common_Platform_Error_Record.html#arm-processor-error-section
-> > ---
-> >  drivers/acpi/apei/ghes.c | 11 ++++-----
-> >  drivers/ras/ras.c        | 45 +++++++++++++++++++++++++++++++++++--
-> >  include/linux/ras.h      | 16 +++++++++++---
-> >  include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
-> >  4 files changed, 103 insertions(+), 17 deletions(-)  
-> 
-> ...
-> 
-> > -void log_arm_hw_error(struct cper_sec_proc_arm *err)
-> > +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
-> >  {
-> > -	trace_arm_event(err);
-> > +	struct cper_arm_err_info *err_info;
-> > +	struct cper_arm_ctx_info *ctx_info;
-> > +	u8 *ven_err_data;
-> > +	u32 ctx_len = 0;
-> > +	int n, sz, cpu;
-> > +	s32 vsei_len;
-> > +	u32 pei_len;
-> > +	u8 *pei_err;
-> > +	u8 *ctx_err;
-> > +
-> > +	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
-> > +	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
-> > +
-> > +	err_info = (struct cper_arm_err_info *)(err + 1);
-> > +	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
-> > +	ctx_err = (u8 *)ctx_info;
-> > +	for (n = 0; n < err->context_info_num; n++) {
-> > +		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
-> > +		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
-> > +		ctx_len += sz;
-> > +	}
-> > +
-> > +	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
-> > +					  pei_len + ctx_len);
-> > +	if (vsei_len < 0) {
-> > +		pr_warn(FW_BUG
-> > +			"section length: %d\n", err->section_length);
-> > +		pr_warn(FW_BUG
-> > +			"section length is too small\n");
-> > +		pr_warn(FW_BUG
-> > +			"firmware-generated error record is incorrect\n");  
-> 
-> No need to break those lines.
-> 
-> > +		vsei_len = 0;
-> > +	}
-> > +	ven_err_data = (u8 *)ctx_info;
-> > +
-> > +	cpu = GET_LOGICAL_INDEX(err->mpidr);
-> > +	/* when return value is invalid, set cpu index to -1 */  
-> 
-> Obvious comment - no need for it.
-> 
-
-Will address at the next review.
-
-Thanks,
-Mauro
+https://people.kernel.org/tglx/notes-about-netiquette
 
