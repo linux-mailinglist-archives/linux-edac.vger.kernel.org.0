@@ -1,70 +1,69 @@
-Return-Path: <linux-edac+bounces-1767-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1768-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B94F969182
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 04:43:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1950896919E
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 05:02:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 788F02840C7
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 02:43:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 519311C229A7
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 03:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C761CDA02;
-	Tue,  3 Sep 2024 02:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63B5819F137;
+	Tue,  3 Sep 2024 03:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BaEDs2KS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9I41z+Q"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74272AF10;
-	Tue,  3 Sep 2024 02:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369101A4E6A;
+	Tue,  3 Sep 2024 03:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725331421; cv=none; b=TZehCZLyv/csMq4vJvuwzGaeEmhPWKSSUVyAqB8Z5e79YrmKtFkn9HYynbsmrfZHdHafe72H+qBHAy2OqgIPacMi5I8VfAB/V3FSOZsSkl+VrPTFmo/L6VOe3GwwPB0UyVWmDnXMRYxstpYTfxVa+V2yN+WdT/37Ohy2Waj3aSM=
+	t=1725332551; cv=none; b=Z2izswpWSKgGcRbBqKC/N9Pulh/zxVwoBWMoPJzecrJ5/JP+P9harNbt8cSLoxBZT72OfC5hV17TmUS4ic9QDuRN2b6ldVjPaN2z1eZJiyMJeVcVGUsN+4Fjva1obogEkC6GFDrmfRjLSzqfGQHGBHS/3zkrMLRlq95iNH7rAV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725331421; c=relaxed/simple;
-	bh=cNcM9Vfwzv/JQ/D9xoCcTYjftezjbDjt1KTenBHyjlg=;
+	s=arc-20240116; t=1725332551; c=relaxed/simple;
+	bh=h+g1/mX4LLwAzCcVh57Se91YX7evCRnFhLAJ8vk4noI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DgsDCr5Fi2ac8PCqeKsQ/6WpggnB3jw9GzBDERFCQGXFxiwAM/pfOHuahOhSAdDv8zVEOlPv9RZQW93G7zSdV0inrx5Ng1wSY2pFEIVqJ3hcBT15x29WoZsD1+axHEDyfD7KiUtSzKwwn1z5/rMXX4ZKSFYJGWxVzk9sUfvUNsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BaEDs2KS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538E1C4CECA;
-	Tue,  3 Sep 2024 02:43:41 +0000 (UTC)
+	 To:Cc:Content-Type; b=oiWA+UDC6PVCHDxYQbBsW0ORsJhZ67OunBOPRT3uKfOSoCMKvSiWN7kO/uCXdJEmw4/4+D6rAz/ZwHFvws1ky3tLoyUsTCwR3xlV5F7fIdfdWn4x9isriYq318/HnyhjIXyVmB+wcfO71Szg/UxROJWvkjLCBMj/XpjIrwyYC7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9I41z+Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8CE3C4AF09;
+	Tue,  3 Sep 2024 03:02:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725331421;
-	bh=cNcM9Vfwzv/JQ/D9xoCcTYjftezjbDjt1KTenBHyjlg=;
+	s=k20201202; t=1725332550;
+	bh=h+g1/mX4LLwAzCcVh57Se91YX7evCRnFhLAJ8vk4noI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BaEDs2KSvp7fpLkI2nml/Je8yRTc9WpCktA9fNTgBSZ8OHIEemk/VtJd5cnxn3bZI
-	 1DcLxQUi/04ajZ/yocJ9PCdyhTs9dOVZvDIauFA7by+ZGaEV852DCKDBly1NbStNe9
-	 luPEMXPRdqkTiHs3W0wUNhN6Sg0SVpG0LEvirdv3GMIhLyT9evJS+amOs+ifSlTsbY
-	 uz7ZZe/QZ9qY73oPDqX2QN/nu7xzD0aC6/ritQLCqfvsTAl8AykJSttTP0J5vgN0+B
-	 4JXUG/F16kQ2x5gNxlE4Egve1IPeBs7tdnJ6wiBtCCbcMT939Rfj/lLOTTLArUPKTh
-	 bMNMzRbQ/j3qA==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c23f0a9699so2682081a12.1;
-        Mon, 02 Sep 2024 19:43:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3wd4wtyJaZHwpXZNn5uSE+0qO4qrekDBxDHbFL4u4+J9xzqgzI6eFeNEkZMOI339FOCzCmL8M8PvIIg==@vger.kernel.org, AJvYcCUDUJ1xVAEY3wpCglF4xzF13SayTciaVxxOPDZHxKR/0n48bdgcb/Jq7hz/NOaKvuvLjcXnlLYrxWFZB17J@vger.kernel.org, AJvYcCVtnv4G164CWW1LK3C1gPWK0RtBDL98gGhdJ0lidX3aUJmJmZXQ/+od4JMbw9OnLpngvO/cnrXG7jEz@vger.kernel.org
-X-Gm-Message-State: AOJu0YzM3mumoY2EBpQrtlXH0X+odsuGtbusE6vq6AKG5eLY0KWlnl2p
-	Ae29yc4QdJjEBIn7k77LElknD+i1Ww5ZsHoRfHnHjvGwskZ7RrRFXK4FGPlSpsmhqsFmDjNmjZK
-	306GDmQF8WZD1hsrNsCKGch0274c=
-X-Google-Smtp-Source: AGHT+IGN+p9z1ru3voJcQQDGWS1uhpmyHi+Gkstv4ohqSycBQctRmBuAC/2cgVg/k6R159dzaYOyvFrMWRdDmcTVsCM=
-X-Received: by 2002:a05:6402:2696:b0:5c2:6320:928b with SMTP id
- 4fb4d7f45d1cf-5c26320981dmr2020570a12.11.1725331419888; Mon, 02 Sep 2024
- 19:43:39 -0700 (PDT)
+	b=a9I41z+QcoLSsEZgzH9/B8NMy+zBugNN9JdsTX/aTq3ImVAXqe2IyYW5mOrEDSUiz
+	 HgzvlgzGtwfj8UQc+9qwPZn6n1qtDePUgZGQMw69Q7WTxay4MoO6EiMD4KTP2rha1L
+	 GD4vX1NsmxylPEn6gBQsmbKCGtH4FYPSg2gqW4+kkd8Wb9YgZiVarS8kacX4DW3B4X
+	 KqdlcAUobtCTrYisPNoYjtAczKJtDx5bB8q1+Q8hzmt+TuXdtcjZRa2patfaT5nSVa
+	 h/n1q8AIHVMoIBKR7U6HCWmifMD6n4Oaliv9KWjNQcX0gSJPNF1aFgCCEnFWfYuz30
+	 Q4YxVg6mXTW8Q==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5bf006f37daso831566a12.1;
+        Mon, 02 Sep 2024 20:02:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVMCPdE0MKTZef523N2/m/L/WPsrlClkP0BoA7C/uLntg6Dyoi/h2prre1zk/GsXZl93IEJYOrQh5jijg==@vger.kernel.org, AJvYcCWVZqHQSOkt6El6DxYhtVbzHrsd0v6JmOtRpKWCrc+w5fwKS1tRuHPORtII+AKaE22YEnlYkAE3D5ZragrQ@vger.kernel.org, AJvYcCXWVy9Jj7/G45oH8nQE+vAa8HtkN2GeMvnY/FMk5zpCj1jE624bRQxVQqlchBNgnmY756Bzac6rgnrD@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL2tpDMlnSnL4oFnw7TC3UratC1sHcYl8aSlNVep5LwjY4e0YM
+	f/1DEBCvTPnSj5QC/1tsOOmE4TwLgflLItPpDDO18/+sy8a/PAU2rsApSDmGvfAHoz8j73uEvac
+	WPJWHELkiTyw94gVmlf8LQIYk71g=
+X-Google-Smtp-Source: AGHT+IFQvOmt/d4nuCLh90DtJTwLmDb8Y3D8cEuoZukN+Q7nq70ZJqyfeavEAM8ILYDJbhZxOnDULF+uSJWV+GWUIBw=
+X-Received: by 2002:a05:6402:2114:b0:5c2:5248:8bcf with SMTP id
+ 4fb4d7f45d1cf-5c252488ce0mr6071487a12.7.1725332549402; Mon, 02 Sep 2024
+ 20:02:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240903015354.9443-1-zhaoqunqin@loongson.cn> <20240903015354.9443-3-zhaoqunqin@loongson.cn>
- <CAAhV-H7mL2-heGLXyUGC4zF+qcL=66AgkJvasUdEsV7RXZDdQg@mail.gmail.com>
-In-Reply-To: <CAAhV-H7mL2-heGLXyUGC4zF+qcL=66AgkJvasUdEsV7RXZDdQg@mail.gmail.com>
+References: <20240903015354.9443-1-zhaoqunqin@loongson.cn> <20240903015354.9443-2-zhaoqunqin@loongson.cn>
+In-Reply-To: <20240903015354.9443-2-zhaoqunqin@loongson.cn>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 3 Sep 2024 10:43:28 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7RE_PmNxCYNEQTNbaqt4A5XSFzY5moDP-4HDEiz105Pg@mail.gmail.com>
-Message-ID: <CAAhV-H7RE_PmNxCYNEQTNbaqt4A5XSFzY5moDP-4HDEiz105Pg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Loongarch: EDAC driver for loongson memory controller
+Date: Tue, 3 Sep 2024 11:02:17 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6kZcc=01BehCWSp3QT86y68X=LwVQ74Z-Tta_BjSqjrQ@mail.gmail.com>
+Message-ID: <CAAhV-H6kZcc=01BehCWSp3QT86y68X=LwVQ74Z-Tta_BjSqjrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: EDAC for ls3a5000 memory controller
 To: Zhao Qunqin <zhaoqunqin@loongson.cn>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
 	linux-edac@vger.kernel.org, devicetree@vger.kernel.org, 
@@ -74,299 +73,110 @@ Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 3, 2024 at 10:39=E2=80=AFAM Huacai Chen <chenhuacai@kernel.org>=
+Hi, Qunqin,
+
+On Tue, Sep 3, 2024 at 9:53=E2=80=AFAM Zhao Qunqin <zhaoqunqin@loongson.cn>=
  wrote:
 >
-> Hi, Qunqin,
+> add device tree bindings for ls3a5000 EDAC driver.
+
+For dt-binding, of course I'm not as familiar as Krzysztof, but I
+think Documentation/devicetree/bindings/i2c/loongson,ls2x-i2c.yaml is
+a good example.So maybe the file name can be
+Documentation/devicetree/bindings/edac/loongson,ls3a-mc-edac.yaml?
+
+In addition, I don't see any differences for different processors in
+the driver, so maybe it can be more generic as
+Documentation/devicetree/bindings/edac/loongson,ls3x-mc-edac.yaml?
+
 >
-> On Tue, Sep 3, 2024 at 9:53=E2=80=AFAM Zhao Qunqin <zhaoqunqin@loongson.c=
-n> wrote:
-> >
-> > Report single bit errors (CE) only.
-> >
-> > Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
-> > ---
-> >  MAINTAINERS                  |   1 +
-> >  arch/loongarch/Kconfig       |   1 +
-> >  drivers/edac/Kconfig         |   8 ++
-> >  drivers/edac/Makefile        |   1 +
-> >  drivers/edac/ls3a5000_edac.c | 187 +++++++++++++++++++++++++++++++++++
-> >  5 files changed, 198 insertions(+)
-> >  create mode 100644 drivers/edac/ls3a5000_edac.c
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 6cc8cfc8f..b43f82279 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -13242,6 +13242,7 @@ M:      Zhao Qunqin <zhaoqunqin@loongson.cn>
-> >  L:     linux-edac@vger.kernel.org
-> >  S:     Maintained
-> >  F:     Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-eda=
+> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
+> ---
+>  .../edac/loongson,ls3a5000-mc-edac.yaml       | 44 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/loongson,ls3a5=
+000-mc-edac.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-=
+edac.yaml b/Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-eda=
 c.yaml
-> > +F:     drivers/edac/ls3a5000_edac.c
-> >
-> >  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> >  M:     Sathya Prakash <sathya.prakash@broadcom.com>
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > index 70f169210..348030c24 100644
-> > --- a/arch/loongarch/Kconfig
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -182,6 +182,7 @@ config LOONGARCH
-> >         select PCI_QUIRKS
-> >         select PERF_USE_VMALLOC
-> >         select RTC_LIB
-> > +       select EDAC_SUPPORT
-> >         select SPARSE_IRQ
-> >         select SYSCTL_ARCH_UNALIGN_ALLOW
-> >         select SYSCTL_ARCH_UNALIGN_NO_WARN
-> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> > index 16c8de505..2d10256f0 100644
-> > --- a/drivers/edac/Kconfig
-> > +++ b/drivers/edac/Kconfig
-> > @@ -573,5 +573,13 @@ config EDAC_VERSAL
-> >           Support injecting both correctable and uncorrectable errors
-> >           for debugging purposes.
-> >
-> > +config EDAC_LS3A5000
-> > +       tristate "Ls3a5000 Memory Controller"
-> > +       depends on LOONGARCH || COMPILE_TEST
-> > +       help
-> > +         Support for error detection and correction on the ls3a5000 me=
-mory
-> > +         controller. This driver report single bit errors (CE) only.
-> > +         Ls3c5000l, ls3c5000, ls3d5000, ls3a6000 and ls3c6000 are comp=
-atible
-> > +         with ls3a5000.
-> Here can be improved as:
->
-> config EDAC_LOONGSON3
->        tristate "Loonson-3 Memory Controller"
->        depends on LOONGARCH || COMPILE_TEST
->        help
->          Support for error detection and correction on the Loongson-3 fam=
-ily
->          memory controller. This driver reports single bit errors (CE) on=
-ly.
->          Loongson-3A5000/3C5000/3C5000L/3A6000/3C6000 are compatible.
->
-And the driver file should be loongson_edac.c, this naming has nothing
-to do with the dt-binding names.
+> new file mode 100644
+> index 000000000..52f10bc94
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-edac.ya=
+ml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/loongson,ls3a5000-mc-edac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson Memory Controller EDAC
+> +
+> +maintainers:
+> +  - Zhao Qunqin <zhaoqunqin@loongson.cn>
+> +
+> +description: |
+> +  EDAC node is defined to describe on-chip error detection and correctio=
+n for
+> +  Loongson Memory Controller.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - loongson,ls3a5000-mc-edac
+Maybe we can use loongson,ls3a-mc-edac or loongson,ls3x-mc-edac as the
+only name here. But please follow Krzysztof's suggestion first.
 
 Huacai
 
-> >
-> >  endif # EDAC
-> > diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> > index 4edfb83ff..0974e3fa6 100644
-> > --- a/drivers/edac/Makefile
-> > +++ b/drivers/edac/Makefile
-> > @@ -89,3 +89,4 @@ obj-$(CONFIG_EDAC_DMC520)             +=3D dmc520_eda=
-c.o
-> >  obj-$(CONFIG_EDAC_NPCM)                        +=3D npcm_edac.o
-> >  obj-$(CONFIG_EDAC_ZYNQMP)              +=3D zynqmp_edac.o
-> >  obj-$(CONFIG_EDAC_VERSAL)              +=3D versal_edac.o
-> > +obj-$(CONFIG_EDAC_LS3A5000)            +=3D ls3a5000_edac.o
-> > diff --git a/drivers/edac/ls3a5000_edac.c b/drivers/edac/ls3a5000_edac.=
-c
-> > new file mode 100644
-> > index 000000000..c68fd7c5f
-> > --- /dev/null
-> > +++ b/drivers/edac/ls3a5000_edac.c
-> > @@ -0,0 +1,187 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) 2024 Loongson Technology Corporation Limited.
-> > + */
-> > +
-> > +#include <linux/edac.h>
-> > +#include <linux/module.h>
-> > +#include <linux/init.h>
-> > +#include <linux/platform_device.h>
-> > +
-> > +#include "edac_module.h"
-> > +
-> > +enum ecc_index {
-> > +       ECC_SET =3D 0,
-> > +       ECC_RESERVED,
-> > +       ECC_COUNT,
-> > +       ECC_CS_COUNT,
-> > +       ECC_CODE,
-> > +       ECC_ADDR,
-> > +       ECC_DATA0,
-> > +       ECC_DATA1,
-> > +       ECC_DATA2,
-> > +       ECC_DATA3,
-> > +};
-> > +
-> > +struct loongson_edac_pvt {
-> > +       u64 *ecc_base;
-> > +       int last_ce_count;
-> > +};
-> > +
-> > +static void loongson_update_ce_count(struct mem_ctl_info *mci,
-> > +                                       int chan,
-> > +                                       int new)
-> > +{
-> > +       int add;
-> > +       struct loongson_edac_pvt *pvt =3D mci->pvt_info;
-> > +
-> > +       add =3D new - pvt->last_ce_count;
-> > +
-> > +       /* Store the new value */
-> > +       pvt->last_ce_count =3D new;
-> > +
-> > +       /* device resume or any other exceptions*/
-> > +       if (add < 0)
-> > +               return;
-> > +
-> > +       /*updated the edac core */
-> > +       if (add !=3D 0) {
-> > +               edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, add,
-> > +                                       0, 0, 0,
-> > +                                       chan, 0, -1, "error", "");
-> > +               edac_mc_printk(mci, KERN_INFO, "add: %d", add);
-> > +       }
-> > +}
-> > +
-> > +static int loongson_read_ecc(struct mem_ctl_info *mci)
-> > +{
-> > +       u64 ecc;
-> > +       int cs =3D 0;
-> > +       struct loongson_edac_pvt *pvt =3D mci->pvt_info;
-> > +
-> > +       if (!pvt->ecc_base)
-> > +               return pvt->last_ce_count;
-> > +
-> > +       ecc =3D pvt->ecc_base[ECC_CS_COUNT];
-> > +       cs +=3D ecc & 0xff;               // cs0
-> > +       cs +=3D (ecc >> 8) & 0xff;        // cs1
-> > +       cs +=3D (ecc >> 16) & 0xff;       // cs2
-> > +       cs +=3D (ecc >> 24) & 0xff;       // cs3
-> > +
-> > +       return cs;
-> > +}
-> > +
-> > +static void loongson_edac_check(struct mem_ctl_info *mci)
-> > +{
-> > +       loongson_update_ce_count(mci, 0, loongson_read_ecc(mci));
-> > +}
-> > +
-> > +static int get_dimm_config(struct mem_ctl_info *mci)
-> > +{
-> > +       u32 size, npages;
-> > +       struct dimm_info *dimm;
-> > +
-> > +       /* size not used */
-> > +       size =3D -1;
-> > +       npages =3D MiB_TO_PAGES(size);
-> > +
-> > +       dimm =3D edac_get_dimm(mci, 0, 0, 0);
-> > +       dimm->nr_pages =3D npages;
-> > +       snprintf(dimm->label, sizeof(dimm->label),
-> > +                       "MC#%uChannel#%u_DIMM#%u",
-> > +                       mci->mc_idx, 0, 0);
-> > +       dimm->grain =3D 8;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void loongson_pvt_init(struct mem_ctl_info *mci, u64 *vbase)
-> > +{
-> > +       struct loongson_edac_pvt *pvt =3D mci->pvt_info;
-> > +
-> > +       pvt->ecc_base =3D vbase;
-> > +       pvt->last_ce_count =3D loongson_read_ecc(mci);
-> > +}
-> > +
-> > +static int loongson_edac_probe(struct platform_device *pdev)
-> > +{
-> > +       struct resource *rs;
-> > +       struct mem_ctl_info *mci;
-> > +       struct edac_mc_layer layers[2];
-> > +       struct loongson_edac_pvt *pvt;
-> > +       u64 *vbase =3D NULL;
-> > +
-> > +       rs =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +       /* not return if can not find resource or resource start equals=
- NULL */
-> > +       if (rs && rs->start) {
-> > +               vbase =3D devm_ioremap_resource(&pdev->dev, rs);
-> > +               if (IS_ERR(vbase))
-> > +                       return PTR_ERR(vbase);
-> > +       }
-> > +
-> > +       /* allocate a new MC control structure */
-> > +       layers[0].type =3D EDAC_MC_LAYER_CHANNEL;
-> > +       layers[0].size =3D 1;
-> > +       layers[0].is_virt_csrow =3D false;
-> > +       layers[1].type =3D EDAC_MC_LAYER_SLOT;
-> > +       layers[1].size =3D 1;
-> > +       layers[1].is_virt_csrow =3D true;
-> > +       mci =3D edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(*pv=
-t));
-> > +       if (mci =3D=3D NULL)
-> > +               return -ENOMEM;
-> > +
-> > +       edac_dbg(0, "MC: mci =3D %p\n", mci);
-> > +
-> > +       mci->mc_idx =3D edac_device_alloc_index();
-> > +       mci->mtype_cap =3D MEM_FLAG_RDDR4;
-> > +       mci->edac_ctl_cap =3D EDAC_FLAG_NONE;
-> > +       mci->edac_cap =3D EDAC_FLAG_NONE;
-> > +       mci->mod_name =3D "loongson_edac.c";
-> > +       mci->ctl_name =3D "loongson_edac_ctl";
-> > +       mci->dev_name =3D "loongson_edac_dev";
-> > +       mci->ctl_page_to_phys =3D NULL;
-> > +       mci->pdev =3D &pdev->dev;
-> > +       mci->error_desc.grain =3D 8;
-> > +       /* Set the function pointer to an actual operation function */
-> > +       mci->edac_check =3D loongson_edac_check;
-> > +
-> > +       loongson_pvt_init(mci, vbase);
-> > +       get_dimm_config(mci);
-> > +
-> > +       if (edac_mc_add_mc(mci)) {
-> > +               edac_dbg(0, "MC: failed edac_mc_add_mc()\n");
-> > +               edac_mc_free(mci);
-> > +       }
-> > +       edac_op_state =3D EDAC_OPSTATE_POLL;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void loongson_edac_remove(struct platform_device *pdev)
-> > +{
-> > +       struct mem_ctl_info *mci =3D edac_mc_del_mc(&pdev->dev);
-> > +
-> > +       if (mci)
-> > +               edac_mc_free(mci);
-> > +}
-> > +
-> > +static const struct of_device_id loongson_edac_of_match[] =3D {
-> > +       { .compatible =3D "loongson,ls3a5000-mc-edac", },
-> > +       {}
-> > +};
-> > +MODULE_DEVICE_TABLE(of, loongson_edac_of_match);
-> > +
-> > +static struct platform_driver loongson_edac_driver =3D {
-> > +       .probe          =3D loongson_edac_probe,
-> > +       .remove         =3D loongson_edac_remove,
-> > +       .driver         =3D {
-> > +               .name   =3D "ls-mc-edac",
-> The name can be better as loongson-mc-edac.
+> +      - items:
+> +          - enum:
+> +              - loongson,ls3c5000l-mc-edac
+> +              - loongson,ls3c5000-mc-edac
+> +              - loongson,ls3d5000-mc-edac
+> +              - loongson,ls3a6000-mc-edac
+> +              - loongson,ls3c6000-mc-edac
+> +          - const: loongson,ls3a5000-mc-edac
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    memory-controller@1fe00600 {
+> +        compatible =3D "loongson,ls3a5000-mc-edac";
+> +        reg =3D <0x1fe00600 0x50>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 42decde38..6cc8cfc8f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13237,6 +13237,12 @@ S:     Maintained
+>  F:     Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.y=
+aml
+>  F:     drivers/thermal/loongson2_thermal.c
 >
-> Huacai
+> +LOONGSON EDAC DRIVER
+> +M:     Zhao Qunqin <zhaoqunqin@loongson.cn>
+> +L:     linux-edac@vger.kernel.org
+> +S:     Maintained
+> +F:     Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-edac.=
+yaml
+> +
+>  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>  M:     Sathya Prakash <sathya.prakash@broadcom.com>
+>  M:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> --
+> 2.43.0
 >
-> > +               .of_match_table =3D loongson_edac_of_match,
-> > +       },
-> > +};
-> > +
-> > +module_platform_driver(loongson_edac_driver);
-> > +
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_AUTHOR("Zhao Qunqin <zhaoqunqin@loongson.cn>\n");
-> > +MODULE_DESCRIPTION("EDAC driver for loongson memory controller");
-> > --
-> > 2.43.0
-> >
 
