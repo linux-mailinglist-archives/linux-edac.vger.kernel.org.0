@@ -1,121 +1,144 @@
-Return-Path: <linux-edac+bounces-1795-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1796-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BFF7969D98
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 14:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31DDD96A3B4
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 18:09:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05A161F241B0
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 12:29:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CED3D1F261C9
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 16:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D161D0942;
-	Tue,  3 Sep 2024 12:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D551318BB87;
+	Tue,  3 Sep 2024 16:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9Us0aOZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ujGJwoBi"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1621C9877;
-	Tue,  3 Sep 2024 12:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F5418A6CB;
+	Tue,  3 Sep 2024 16:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725366562; cv=none; b=TMuG61DOV2hKXYrARc7eVseJaiGe91bo7loPocvOOvuuK24rBhFjJON8MmMRD2DV4VWEUtcL1mjTpOAlnbW9vh9kOtSoM962qEZRBjzIE4W/0Ih9pLo4fZNuHhjIEv7CIoLlYIdLU/Pm7FivUVLT7DGOIZmxpmxvf8YcTKe4luI=
+	t=1725379750; cv=none; b=ckPdAYqLK0x01Lp1v0G6vgM636h0V3BcqyQiUvK30vMjR9aSHzWGbQ33rfyvdzJpn7c1PPoEf+ux1wD3hip/3IaM4Ca7knyio9HZ+JZpOrOCw/JM14fYW+OiQQz21pXiCtDKn+tSifOkpkYA7ATku2p0I1olSXLm1fNHbSwQaDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725366562; c=relaxed/simple;
-	bh=mb6mRJieKpjZH29B0rASNDb38azxZgn0qQt+MDPQJBc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AhyskIiS7ANal8bBnvfOkUAeT9oeJyEwTkBx8KMH7ZO0sGonmccJJAs4GVre0VOoSt08VvCkNVZjeEXGOj3ks17bxXPHbZ09VsOMGlPxVgE4nDgejjXawIlOL9cDwqQgai3VGEBXVJCnVZiaAE59v40f8XFSgITZMPNBK//N7t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9Us0aOZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94949C4CEC8;
-	Tue,  3 Sep 2024 12:29:18 +0000 (UTC)
+	s=arc-20240116; t=1725379750; c=relaxed/simple;
+	bh=2oYWilPB6GddQnusHJpSufcnEcbn+RzWwm5DmozUZ5Y=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=iS8S1hP2YBAN9QBbcv+V/BpwP9oyZUMyPBuf4jQpJ31mIUbdMjB/FEnq/wnvYF705KfifDN7IdJQoME1Sdiua3y75HAC9cJszfAxdxc+39iX96+Y6jzqvAwbPrHgUPmeOO7b3ZsbOr8ZwnEYK/a5AlOFCUW6TGbLCbD7xuHiKkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ujGJwoBi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95293C4CEC9;
+	Tue,  3 Sep 2024 16:09:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725366562;
-	bh=mb6mRJieKpjZH29B0rASNDb38azxZgn0qQt+MDPQJBc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U9Us0aOZlQiLBfPiB2PKhplSezPLYo2Tb0mkY/upjb33YBz1rZK+gWbj140pes8gX
-	 a4M7MDIfupJwjZuao41UWv/exc7aD7XjISw1bg/d5NpJ0h39Wj/JrPtPuiSJgm/jmT
-	 mQSnQ6ronoIN38SqdlSTYkrBJ7s7l5Af5cTv2kbnvP3yMXO8dXl9AdAt8Fnb6tdOqe
-	 qWMsigZp3zjsZeaFoJGlbgl46FVOQgbfUWHTXZsleTMBoljq5++N7q3nBCPZnZ31MU
-	 mRVTkseHQBBWbt/jthFHSrZ6DqqvWpUUTFi3HU0075FyOklqmZXpY2HVPpP4EFQYYj
-	 l5+ZDdlCXp/JQ==
-Message-ID: <c901ff6b-2e4d-4dd1-82da-e2e3d5db7988@kernel.org>
-Date: Tue, 3 Sep 2024 14:29:15 +0200
+	s=k20201202; t=1725379750;
+	bh=2oYWilPB6GddQnusHJpSufcnEcbn+RzWwm5DmozUZ5Y=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=ujGJwoBiOh2tAitzebKvJV818ZPaoPQPGoqDLnRbHBC9DXT4PpN9tWumvGo3t5ihn
+	 OKUzwmYInDHw+s1JSfEN9mGM6hGjklGRUyjOroraCZYLV7HJivjXdljn72TI34x1w9
+	 rn1br2qKhJ2VlnY1nhQfyi+uRzfy5RZf6lm3H85CvDsX4fGefJaPydF4s3r0luCB2k
+	 j5y1XxE2QDmAhogT7Pn1MdOOnOo26OMmxmfyyUkI3LnLq+J50GDjW7bZg3N7o+/L+k
+	 DyNUk59BgN9jsvVVvfX/zQC12RXSHTDW8wznhdE4b21z523+iZwNymeTE0sfeQG0dN
+	 WuvpuhCHlS5rA==
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/2] dt-bindings: EDAC for ls3a5000 memory controller
-To: Zhao Qunqin <zhaoqunqin@loongson.cn>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, chenhuacai@kernel.org
-Cc: linux-edac@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@xen0n.name, bp@alien8.de,
- tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
- rric@kernel.org, loongarch@lists.linux.dev
-References: <20240903114714.11428-1-zhaoqunqin@loongson.cn>
- <20240903114714.11428-2-zhaoqunqin@loongson.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240903114714.11428-2-zhaoqunqin@loongson.cn>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Tue, 03 Sep 2024 19:09:06 +0300
+Message-Id: <D3WS2P2DU0CE.SANBOLMHG6TC@kernel.org>
+Cc: <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+ <linux-edac@vger.kernel.org>, <x86@kernel.org>, <justin.he@arm.com>,
+ <ardb@kernel.org>, <ying.huang@intel.com>, <ashish.kalra@amd.com>,
+ <baolin.wang@linux.alibaba.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+ <dave.hansen@linux.intel.com>, <lenb@kernel.org>, <hpa@zytor.com>,
+ <robert.moore@intel.com>, <lvying6@huawei.com>, <xiexiuqi@huawei.com>,
+ <zhuo.song@linux.alibaba.com>
+Subject: Re: [PATCH v12 1/3] ACPI: APEI: send SIGBUS to current task if
+ synchronous memory error not recovered
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Shuai Xue" <xueshuai@linux.alibaba.com>, <bp@alien8.de>,
+ <rafael@kernel.org>, <wangkefeng.wang@huawei.com>, <tanxiaofei@huawei.com>,
+ <mawupeng1@huawei.com>, <tony.luck@intel.com>, <linmiaohe@huawei.com>,
+ <naoya.horiguchi@nec.com>, <james.morse@arm.com>, <tongtiangen@huawei.com>,
+ <gregkh@linuxfoundation.org>, <will@kernel.org>
+X-Mailer: aerc 0.18.2
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20240902030034.67152-2-xueshuai@linux.alibaba.com>
+In-Reply-To: <20240902030034.67152-2-xueshuai@linux.alibaba.com>
 
-On 03/09/2024 13:47, Zhao Qunqin wrote:
-> add device tree bindings for ls3a5000 EDAC driver.
-> 
-> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
+On Mon Sep 2, 2024 at 6:00 AM EEST, Shuai Xue wrote:
+> Synchronous error was detected as a result of user-space process accessin=
+g
+> a 2-bit uncorrected error. The CPU will take a synchronous error exceptio=
+n
+> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue =
+a
+> memory_failure() work which poisons the related page, unmaps the page, an=
+d
+> then sends a SIGBUS to the process, so that a system wide panic can be
+> avoided.
+>
+> However, no memory_failure() work will be queued unless all bellow
+> preconditions check passed:
+>
+> - `if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))` in ghes_handle_m=
+emory_failure()
+> - `if (flags =3D=3D -1)` in ghes_handle_memory_failure()
+> - `if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))` in ghes_do_memory_f=
+ailure()
+> - `if (!pfn_valid(pfn) && !arch_is_platform_page(physical_addr)) ` in ghe=
+s_do_memory_failure()
+>
+> In such case, the user-space process will trigger SEA again.  This loop
+> can potentially exceed the platform firmware threshold or even trigger a
+> kernel hard lockup, leading to a system reboot.
+>
+> Fix it by performing a force kill if no memory_failure() work is queued
+> for synchronous errors.
+>
+> Suggested-by: Xiaofei Tan <tanxiaofei@huawei.com>
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>
+> ---
+>  drivers/acpi/apei/ghes.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 623cc0cb4a65..b0b20ee533d9 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -801,6 +801,16 @@ static bool ghes_do_proc(struct ghes *ghes,
+>  		}
+>  	}
+> =20
+> +	/*
+> +	 * If no memory failure work is queued for abnormal synchronous
+> +	 * errors, do a force kill.
+> +	 */
+> +	if (sync && !queued) {
+> +		pr_err("Sending SIGBUS to %s:%d due to hardware memory corruption\n",
+> +			current->comm, task_pid_nr(current));
 
-So no improvements? No changes? Why do you send the same?
+Hmm... doest this need "hardware" or would "memory corruption" be
+enough?
 
-Best regards,
-Krzysztof
+Also, does this need to say that it is sending SIGBUS when the signal
+itself tells that already?
 
+I.e. could "%s:%d has memory corruption" be enough information?
+
+> +		force_sig(SIGBUS);
+> +	}
+> +
+>  	return queued;
+>  }
+> =20
+
+BR, Jarkko
 
