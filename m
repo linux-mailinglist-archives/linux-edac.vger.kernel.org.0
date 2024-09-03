@@ -1,214 +1,190 @@
-Return-Path: <linux-edac+bounces-1776-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1777-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B4A9969652
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 09:59:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DE0B9696B7
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 10:16:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC511C2300B
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 07:59:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB248281614
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 08:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD6E20010C;
-	Tue,  3 Sep 2024 07:58:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9904F20126F;
+	Tue,  3 Sep 2024 08:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RV7tkW9H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bTDgsK2d"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3AF1AB6C0;
-	Tue,  3 Sep 2024 07:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058A2201246
+	for <linux-edac@vger.kernel.org>; Tue,  3 Sep 2024 08:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725350338; cv=none; b=f0iUgmBYO82X3bz8S2E4k2bCg2wmZFUqAeY0FPydxPmqFR4nkWB6FNIDx8t+ClbxV5hjM+Pr9M8MtwXGJLcwXuPm4AFUtLUOk4BLDoH4b2b4PyqUmZ/fwvM7dFg4vT6hbdBtg3QgAfLW8qiIzgvb5Osrj7I4J6HJ57wDTsEauCQ=
+	t=1725351397; cv=none; b=IcLu3iP65YtWpaD2DzDEtMr8jUwqcr0e0ceM/UPojNT4jyjQhLd/7AsyNxYlNCaFnwv5M3WFCq0/37ija7zwRe5XGivTJyad8toUJflFJCiL+CcmF+VniNuypymlGCm1VReckEUwN9KSogYZO3FGL7jTe6fPPRs3XWXpZ6U67J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725350338; c=relaxed/simple;
-	bh=jMBF1eJfkRU7cRnclh+rfEYRcO0cRqD85aPEPxx1qoA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tPYJXzTb/Jn8BuO6bZGad6WEw2i34dO8oIwzgBvfhkRpB29cZqlh7iLQRM7Y4c9z+LYqZkd5UG46E87eR0+tkLM2Uw5LSwLi5/F6EnaEL82DkKFcTgFyJwbZzgbWUvNZrWaN7YBXzmiRxYcXWy8UIXxdsqXXUx2oheYYi58osyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RV7tkW9H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D07C4CEC6;
-	Tue,  3 Sep 2024 07:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725350337;
-	bh=jMBF1eJfkRU7cRnclh+rfEYRcO0cRqD85aPEPxx1qoA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RV7tkW9HQoE1wYSK7zusNyEsAnvWl17yJ76l6NbfdP26mFWaR2gClX4GLjHROoxdL
-	 osFLbvwjYR1WtVHn+Gha22gqzpEHZO+fZ3beNWuP17qhk+UPUPCm8bZBvKFALO2qy6
-	 lR/eHr8OBIiK+dtiUY4vc0z589h5HpcUoWfpP+0sDh7685EKu22xdAQzZYPacLs/+P
-	 sChQyHKRXAfrSY9BEmDYUyOaS+pFfBmi0HlXFe0ZFjK0Ru4tQsUBtWiDJWnsxTeAIf
-	 ux42pjZXBiHxspK/M7v3T1DnSIkLjIp10A8HnXt4x4LkmsrXJrfh9MYMQFe8P3W2j6
-	 04C7QMX6nT8eQ==
-Message-ID: <979d67cc-cbd2-408c-a8ca-a063030bcec2@kernel.org>
-Date: Tue, 3 Sep 2024 09:58:48 +0200
+	s=arc-20240116; t=1725351397; c=relaxed/simple;
+	bh=qWD6oDmFhlFtQ26RoWil/u2Xd529kAvKgP/VU8DME+s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VQx548k9EZ5IpQdAukK4TxCesfaFJWy1lb6P21aO8dqyg+TcazdcGk0kwp2FjQbMci/pFYSn1Yd6qMNyQF2PiXueMxxuQqEwz5auSmdnkAWf2f5eTAiMr483HrgYm+qGT/9YXZ3zclK+ww9ivy/9NwzpA4i8hVxC1Ih8gsCjKpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bTDgsK2d; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7143ae1b560so2636343b3a.1
+        for <linux-edac@vger.kernel.org>; Tue, 03 Sep 2024 01:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725351395; x=1725956195; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+fJrQ0rSs/8UnGUidxILu8gjShkL29ZW5cKN+M+hzbY=;
+        b=bTDgsK2dD6zILapCWerUhi3AG8H0J77nPxP0cS6bYbylvL2O/PGSUjTl1wV3NWsEso
+         95ItRNlQfajjInWZ5UzZel77mvUUGcVI5P2E3sP7fVeNm8tP2LH/tLHq5DW4SAtZbpQo
+         Vfnbolgti7zWyQ5boKI4n+gaYcfW5HcTC+0ArvbPK0WleAHq0wbi5LT7XbFdpKvJrw1u
+         6xVP1O47DFIa+irGdVyzw+e68nYlgf+zi18Oe8fH+hdHUGdDD05XUzQx1A+llD7dFgPC
+         7Ui6g4c2RZjZse+EdcUhJt3jWTWKJ6RAHShAJQMwySv0hhGdC5u+RFNe94lhcQ2T96Iu
+         tv1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725351395; x=1725956195;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+fJrQ0rSs/8UnGUidxILu8gjShkL29ZW5cKN+M+hzbY=;
+        b=oaBbhaqW99Ow1F2L0UYmpN45zn07I33pdzdHYT3W4MQWNjJega8fy8p1AHzkvC8+F/
+         HiK8fFbtkv7ziIAYV5Et8IxfcA0gz5wb8veK66KYcEjNkDPACLlty087dIIRWSA/E6mO
+         hEX5hbYoWfhljj0pLPdAw0F2zMgUorIfEXQk8qxYFveI2ruh11SzMkpDx/fd8Ui8xBVJ
+         2yLdL1GNRUs/e4XDOkv+9lo6dZL2cTApAyaiA/JBpxMHKiCYhN4gjdK7UN7q7Q5V+bkW
+         Fp+w8f2Uqel2lBJiUSmm9WESqXVImUyWZaUQPHcH4Fb3fCwouK0T2FdOd9GseLZX0hYB
+         KP9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUKH1Z4qkt3SpZGmnPbzxyZkz1kw1V7SzRvdQNTLp/G/neokMAWecNVI9vJiVz2t3IGwsVUMxj4aSVW@vger.kernel.org
+X-Gm-Message-State: AOJu0YymRqgHRajEKAMwB7cBX1zS06DoQl4e0Fm5hBEL1ZFRF/squKyG
+	l8WhZNUx+58S6Km2sRZNRmnPNmW21WBuODch+aHZXe8B8b7+OjgXjdO7gs6Feg==
+X-Google-Smtp-Source: AGHT+IEzx2sb61Iw+yKJhSuGvUoiIKIG0B4pIn/MVeglfMXiafwv7HEXXVcBM0YZkQn9Iask8viUjw==
+X-Received: by 2002:a05:6a00:14d1:b0:70d:1b48:e362 with SMTP id d2e1a72fcca58-7173c5c3abemr9762123b3a.26.1725351395259;
+        Tue, 03 Sep 2024 01:16:35 -0700 (PDT)
+Received: from thinkpad ([120.60.129.190])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e569e220sm7999432b3a.132.2024.09.03.01.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Sep 2024 01:16:34 -0700 (PDT)
+Date: Tue, 3 Sep 2024 13:46:19 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc: bp@alien8.de, tony.luck@intel.com, mchehab@kernel.org, rric@kernel.org,
+	andersson@kernel.org, konradybcio@kernel.org,
+	quic_sibis@quicinc.com, abel.vesa@linaro.org,
+	linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/qcom: Make irq configuration optional
+Message-ID: <20240903081619.5our5kkz5umszdio@thinkpad>
+References: <20240903060138.3191160-1-quic_rjendra@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] Loongarch: EDAC driver for loongson memory
- controller
-To: Zhao Qunqin <zhaoqunqin@loongson.cn>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- chenhuacai@kernel.org, linux-edac@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name,
- bp@alien8.de, tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
- rric@kernel.org, loongarch@lists.linux.dev
-References: <20240903015354.9443-1-zhaoqunqin@loongson.cn>
- <20240903015354.9443-3-zhaoqunqin@loongson.cn>
- <jkdyayyjrzuhhfaueiessntfdof2m55xjxedkl3zp2jalf4sii@3fo65j64c6rv>
- <549969b7-26c4-a203-b5a0-2e89ab7e7d79@loongson.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <549969b7-26c4-a203-b5a0-2e89ab7e7d79@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240903060138.3191160-1-quic_rjendra@quicinc.com>
 
-On 03/09/2024 09:24, Zhao Qunqin wrote:
+On Tue, Sep 03, 2024 at 11:31:38AM +0530, Rajendra Nayak wrote:
+> On most modern qualcomm SoCs, the configuration necessary to enable the
+> Tag/Data RAM realted irqs being propagated to the SoC irq controller is
+> already done in firmware (in DSF or 'DDR System Firmware')
 > 
-> 在 2024/9/3 下午2:47, Krzysztof Kozlowski 写道:
->> On Tue, Sep 03, 2024 at 09:53:54AM +0800, Zhao Qunqin wrote:
->>> Report single bit errors (CE) only.
->>>
->>> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
->>> ---
->>>   MAINTAINERS                  |   1 +
->>>   arch/loongarch/Kconfig       |   1 +
->>>   drivers/edac/Kconfig         |   8 ++
->>>   drivers/edac/Makefile        |   1 +
->>>   drivers/edac/ls3a5000_edac.c | 187 +++++++++++++++++++++++++++++++++++
->>>   5 files changed, 198 insertions(+)
->>>   create mode 100644 drivers/edac/ls3a5000_edac.c
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index 6cc8cfc8f..b43f82279 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -13242,6 +13242,7 @@ M:	Zhao Qunqin <zhaoqunqin@loongson.cn>
->>>   L:	linux-edac@vger.kernel.org
->>>   S:	Maintained
->>>   F:	Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-edac.yaml
->>> +F:	drivers/edac/ls3a5000_edac.c
->>>   
->>>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->>>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
->>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->>> index 70f169210..348030c24 100644
->>> --- a/arch/loongarch/Kconfig
->>> +++ b/arch/loongarch/Kconfig
->>> @@ -182,6 +182,7 @@ config LOONGARCH
->>>   	select PCI_QUIRKS
->>>   	select PERF_USE_VMALLOC
->>>   	select RTC_LIB
->>> +	select EDAC_SUPPORT
->> I think you got here comment before. How did you address it?
-> I just randomly found a spot, and I will put it at the end(next version 
-> patch).
-
-No, the comment was different. You must not select user-visible symbols.
-
->>
->>>   	select SPARSE_IRQ
->>>   	select SYSCTL_ARCH_UNALIGN_ALLOW
->>>   	select SYSCTL_ARCH_UNALIGN_NO_WARN
->>> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
->>> index 16c8de505..2d10256f0 100644
->>> --- a/drivers/edac/Kconfig
->>> +++ b/drivers/edac/Kconfig
->>> @@ -573,5 +573,13 @@ config EDAC_VERSAL
->>>   	  Support injecting both correctable and uncorrectable errors
->>>   	  for debugging purposes.
->>>   
->> ...
->>
->>   +
->>> +static int loongson_edac_probe(struct platform_device *pdev)
->>> +{
->>> +	struct resource *rs;
->>> +	struct mem_ctl_info *mci;
->>> +	struct edac_mc_layer layers[2];
->>> +	struct loongson_edac_pvt *pvt;
->>> +	u64 *vbase = NULL;
->>> +
->>> +	rs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +	/* not return if can not find resource or resource start equals NULL */
->> Why?
+> On some like the x1e80100, these registers aren't even accesible to the
+> kernel causing a crash when edac device is probed.
 > 
-> Because there are multiple memory controllers in the ls3x soc,
+> Hence, make the irq configuration optional in the driver and mark x1e80100
+> as the SoC on which this should be avoided.
 > 
-> but the ECC function of some memory controllers cannot be used.
+> Fixes: af16b00578a7 ("arm64: dts: qcom: Add base X1E80100 dtsi and the QCP dts")
+> Reported-by: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
 
-Then what does the driver do for such memory controllers? Your binding
-is quite clear here that above code is just bogus. It is not possible to
-have node without reg.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Please point us to your DTS and results of dtbs_check.
+- Mani
 
+> ---
+>  drivers/edac/qcom_edac.c           | 8 +++++---
+>  drivers/soc/qcom/llcc-qcom.c       | 3 +++
+>  include/linux/soc/qcom/llcc-qcom.h | 2 ++
+>  3 files changed, 10 insertions(+), 3 deletions(-)
 > 
-> But in any case, a node must be created in /sys/devices/system/edac/mc/  
-> through edac_mc_add_mc(mci).
+> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> index d3cd4cc54ace..96611ca09ac5 100644
+> --- a/drivers/edac/qcom_edac.c
+> +++ b/drivers/edac/qcom_edac.c
+> @@ -342,9 +342,11 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
+>  	int ecc_irq;
+>  	int rc;
+>  
+> -	rc = qcom_llcc_core_setup(llcc_driv_data, llcc_driv_data->bcast_regmap);
+> -	if (rc)
+> -		return rc;
+> +	if (!llcc_driv_data->ecc_irq_configured) {
+> +		rc = qcom_llcc_core_setup(llcc_driv_data, llcc_driv_data->bcast_regmap);
+> +		if (rc)
+> +			return rc;
+> +	}
+>  
+>  	/* Allocate edac control info */
+>  	edev_ctl = edac_device_alloc_ctl_info(0, "qcom-llcc", 1, "bank",
+> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> index 8fa4ffd3a9b5..b1c0ae9991d6 100644
+> --- a/drivers/soc/qcom/llcc-qcom.c
+> +++ b/drivers/soc/qcom/llcc-qcom.c
+> @@ -139,6 +139,7 @@ struct qcom_llcc_config {
+>  	int size;
+>  	bool need_llcc_cfg;
+>  	bool no_edac;
+> +	bool irq_configured;
+>  };
+>  
+>  struct qcom_sct_config {
+> @@ -718,6 +719,7 @@ static const struct qcom_llcc_config x1e80100_cfg[] = {
+>  		.need_llcc_cfg	= true,
+>  		.reg_offset	= llcc_v2_1_reg_offset,
+>  		.edac_reg_offset = &llcc_v2_1_edac_reg_offset,
+> +		.irq_configured = true,
+>  	},
+>  };
+>  
+> @@ -1345,6 +1347,7 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>  	drv_data->cfg = llcc_cfg;
+>  	drv_data->cfg_size = sz;
+>  	drv_data->edac_reg_offset = cfg->edac_reg_offset;
+> +	drv_data->ecc_irq_configured = cfg->irq_configured;
+>  	mutex_init(&drv_data->lock);
+>  	platform_set_drvdata(pdev, drv_data);
+>  
+> diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
+> index 9e9f528b1370..acad1f4cf854 100644
+> --- a/include/linux/soc/qcom/llcc-qcom.h
+> +++ b/include/linux/soc/qcom/llcc-qcom.h
+> @@ -125,6 +125,7 @@ struct llcc_edac_reg_offset {
+>   * @num_banks: Number of llcc banks
+>   * @bitmap: Bit map to track the active slice ids
+>   * @ecc_irq: interrupt for llcc cache error detection and reporting
+> + * @ecc_irq_configured: 'True' if firmware has already configured the irq propagation
+>   * @version: Indicates the LLCC version
+>   */
+>  struct llcc_drv_data {
+> @@ -139,6 +140,7 @@ struct llcc_drv_data {
+>  	u32 num_banks;
+>  	unsigned long *bitmap;
+>  	int ecc_irq;
+> +	bool ecc_irq_configured;
+>  	u32 version;
+>  };
+>  
+> -- 
+> 2.34.1
 > 
-> Then if the ECC function of the memory controller cannot be used, set 
-> start to NULL or do not pass mem resource,
-> 
-> which is equivalent to enumeration of memory controller, and the CE 
-> count will always be zero.
-> 
->>> +	if (rs && rs->start) {
->>> +		vbase = devm_ioremap_resource(&pdev->dev, rs);
->>> +		if (IS_ERR(vbase))
->>> +			return PTR_ERR(vbase);
->>> +	}
 
-
-Best regards,
-Krzysztof
-
+-- 
+மணிவண்ணன் சதாசிவம்
 
