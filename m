@@ -1,404 +1,433 @@
-Return-Path: <linux-edac+bounces-1798-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1799-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C8A796A3D2
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 18:11:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA4AD96A498
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 18:36:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C4BE1C24428
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 16:11:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE3D31C20DD3
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Sep 2024 16:36:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578D8189F20;
-	Tue,  3 Sep 2024 16:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B015418BC30;
+	Tue,  3 Sep 2024 16:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRQkYDgV"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="YMohtChu"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2889C189533;
-	Tue,  3 Sep 2024 16:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9EE18BBB5;
+	Tue,  3 Sep 2024 16:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725379881; cv=none; b=MBttoIUu99Oon8hQ8VcsweN0LbKBrU/wQFkIAR6VoK2LoEwv2SA0c1uMbfpBR4dkybzwrSczBAULx44AxKUTtzfFEQMG1zB1UE8fq/CmfbH1t1xP9I0IhcWE/r307jRauppRGWiJTjYFAyd2FLmYOJ4uf84XCboI8jjij7LEHTs=
+	t=1725381390; cv=none; b=FBn4NwzgABVL1JK/WojZ9iKmecEfxUDF5beXzs66k5EaAg6dg2XdKHGktV3n4vU4HXplmt5nfyUSNilN0udNvQHk6ioLOoFsGky910ay/m2dp+gZtRrkK4qPIVK/k/GOPkIIWmEfg9kJcdzHGTt3X85ZehMD2A3d5V3MUZEZpXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725379881; c=relaxed/simple;
-	bh=THL7/x1mxCQjeHgf9Z1afIiTqKiqdomoJs/oxr9ZHSk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=HnDWauDze0HIkSAIcMuYfPLe+U9klr8v1WI29C/vvpEqP6lqc5PSJd4V+AfcF4tLRCfffRnfUQGevKzAcfAZf0fDAhYIMEoMpOuIN+Q5RSsTKYFSC2o4/RWwGLfy8gc2rMaVNLRWyX7L9ejPAxL9G2U8D7s9sE/4Pa2xPItDnR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRQkYDgV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166DDC4CEC4;
-	Tue,  3 Sep 2024 16:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725379880;
-	bh=THL7/x1mxCQjeHgf9Z1afIiTqKiqdomoJs/oxr9ZHSk=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=sRQkYDgVPjZRMwh03glgbKlEIEb0fCPvVmEx1ARP8MG91ewgcqJBPr17D9i9gMSlu
-	 5w7iuezwKG0WMef/9Vka5VFd/MzpypFFVLC3oFsE3WDOa6bv4zn1sD4d2pwNVUMeXo
-	 gIKNn2uPcPeGzK8V3yo01hZBKEJdoD70pyN6v4Jx4+IVTpV/KGBO6cr72TfIZ7NsI4
-	 h4XU942uP5Sly+9QvCnYuEq6y4qprGpBS/mKtqP4DToU9JchT3Wez+eGPQc1qlnVVM
-	 iajs0d6nHdsvjxPp67n5OAVSHz21GHg0jZCoZCGU1Sy7rXVlZtPkKTiM4EZqnILUMW
-	 plBnJjBXcx0Ow==
+	s=arc-20240116; t=1725381390; c=relaxed/simple;
+	bh=543N6+Pih3rc6ARRSx5VE6TXlXwfpZlMMtlOc6RbSP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UxfIJ7ZhGVUZZiJAnu4G++SNZ+iv6s+zEQU06AXt+mZQOb2VoIp0YQMAOMruyhUpHcwAv1OvEqiQPOWwU1+EH/dunq5nYlbwLFn3b4/afBUzQWdtD33R0O6bhtv5gtEmz7SPvaOyk487Jue6qeGBXVW2caXGlj7vZEqoWzRJrw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=YMohtChu; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D6A1840E0285;
+	Tue,  3 Sep 2024 16:36:17 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 6vNpdbQEdZQc; Tue,  3 Sep 2024 16:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1725381371; bh=utMPlXJeOSH8aOyxKwjMpiAJT4ZzqbftcxjJbD0c80k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YMohtChuZaVO2ZjNLp29AnffBfHb9IXnvXbmSYw44RFu5R9IgKWZEKFMxTVSKQztj
+	 bOfuWJnT7HjX9RfRDWUKtz0UZRmU9LEvM3KzMzPwhnYaUNThBiXM50sZXJFUzI2h1o
+	 oYhTJo4Levk3Nk0P4EOzeqwfCNK0wCj7f9jTc4g2Fd3/IXctdPGqxCCu3zVn9ttdpO
+	 VpbKm3xCQBGTYy976eQrGaayY/eBOR6lsxGSApdBVW4WdW7enT9VUVUaXNtMlR7Ptb
+	 BvERUNJXAmAwTdu4fm1uAtgSinjyZGtr/QoQZz4UWN5G7KBnn33U0bmq+Z2fASLxKF
+	 iT9L51BLDXlQwCbTgCDoQB8lc/WtoL6zoND0TtjL/3+A2AuB5oLTP2x6xlNGkVNIdo
+	 oAgUsshxP9SwI5y+JmXbPYw/FAq/0OZyyCzHB9LZRFIKFWndIP6PebV5ETvj0bNYJr
+	 4Q7DC/lISfhSv6SqZPI2CgzoHvvvWcHjDj58ChR4TAJsTIg46RGe+ciylbgNzM6dY8
+	 59fJojBQZFf99F5TpuOrLblrgnYwdT9I3OJDpx2QK+xiCzuhFKJ8fpxkhBvsNoQzG1
+	 Knzbo2fIC/FqMJZrJRDucMOG6tR8L2n/srkp0mpd45j+7kkExFY7m9Pwpg//jcz5TI
+	 NzS/z2M3O73LXKWMMgeU/TM8=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5329940E0169;
+	Tue,  3 Sep 2024 16:35:25 +0000 (UTC)
+Date: Tue, 3 Sep 2024 18:35:19 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: shiju.jose@huawei.com
+Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, tony.luck@intel.com,
+	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
+	dan.j.williams@intel.com, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, vishal.l.verma@intel.com,
+	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
+	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
+	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
+	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
+	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
+	duenwen@google.com, mike.malvestuto@intel.com, gthelen@google.com,
+	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
+	wbs@os.amperecomputing.com, nifan.cxl@gmail.com, jgroves@micron.com,
+	vsalve@micron.com, tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+	wanghuiqiang@huawei.com, linuxarm@huawei.com
+Subject: Re: [PATCH v11 01/14] EDAC: Add support for EDAC device feature's
+ control
+Message-ID: <20240903163519.GAZtc6x7o9Cy1MQAsb@fat_crate.local>
+References: <20240816164238.1902-1-shiju.jose@huawei.com>
+ <20240816164238.1902-2-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Sep 2024 19:11:17 +0300
-Message-Id: <D3WS4D64BTGD.217F1PPA4VQSF@kernel.org>
-Cc: <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
- <linux-edac@vger.kernel.org>, <x86@kernel.org>, <justin.he@arm.com>,
- <ardb@kernel.org>, <ying.huang@intel.com>, <ashish.kalra@amd.com>,
- <baolin.wang@linux.alibaba.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
- <dave.hansen@linux.intel.com>, <lenb@kernel.org>, <hpa@zytor.com>,
- <robert.moore@intel.com>, <lvying6@huawei.com>, <xiexiuqi@huawei.com>,
- <zhuo.song@linux.alibaba.com>
-Subject: Re: [PATCH v12 3/3] ACPI: APEI: handle synchronous exceptions in
- task work
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Shuai Xue" <xueshuai@linux.alibaba.com>, <bp@alien8.de>,
- <rafael@kernel.org>, <wangkefeng.wang@huawei.com>, <tanxiaofei@huawei.com>,
- <mawupeng1@huawei.com>, <tony.luck@intel.com>, <linmiaohe@huawei.com>,
- <naoya.horiguchi@nec.com>, <james.morse@arm.com>, <tongtiangen@huawei.com>,
- <gregkh@linuxfoundation.org>, <will@kernel.org>
-X-Mailer: aerc 0.18.2
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20240902030034.67152-4-xueshuai@linux.alibaba.com>
-In-Reply-To: <20240902030034.67152-4-xueshuai@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240816164238.1902-2-shiju.jose@huawei.com>
 
-On Mon Sep 2, 2024 at 6:00 AM EEST, Shuai Xue wrote:
-> The memory uncorrected error could be signaled by asynchronous interrupt
-> (specifically, SPI in arm64 platform), e.g. when an error is detected by
-> a background scrubber, or signaled by synchronous exception
-> (specifically, data abort excepction in arm64 platform), e.g. when a CPU
-> tries to access a poisoned cache line. Currently, both synchronous and
-> asynchronous error use memory_failure_queue() to schedule
-> memory_failure() exectute in kworker context.
->
-> As a result, when a user-space process is accessing a poisoned data, a
-> data abort is taken and the memory_failure() is executed in the kworker
-> context:
->
->   - will send wrong si_code by SIGBUS signal in early_kill mode, and
->   - can not kill the user-space in some cases resulting a synchronous
->     error infinite loop
->
-> Issue 1: send wrong si_code in early_kill mode
->
-> Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
-> MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
-> could be used to determine whether a synchronous exception occurs on
-> ARM64 platform.  When a synchronous exception is detected, the kernel is
-> expected to terminate the current process which has accessed poisoned
-> page. This is done by sending a SIGBUS signal with an error code
-> BUS_MCEERR_AR, indicating an action-required machine check error on
-> read.
->
-> However, when kill_proc() is called to terminate the processes who have
-> the poisoned page mapped, it sends the incorrect SIGBUS error code
-> BUS_MCEERR_AO because the context in which it operates is not the one
-> where the error was triggered.
->
-> To reproduce this problem:
->
->   # STEP1: enable early kill mode
->   #sysctl -w vm.memory_failure_early_kill=3D1
->   vm.memory_failure_early_kill =3D 1
->
->   # STEP2: inject an UCE error and consume it to trigger a synchronous er=
-ror
->   #einj_mem_uc single
->   0: single   vaddr =3D 0xffffb0d75400 paddr =3D 4092d55b400
->   injecting ...
->   triggering ...
->   signal 7 code 5 addr 0xffffb0d75000
->   page not present
->   Test passed
->
-> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO
-> error and it is not fact.
->
-> To fix it, queue memory_failure() as a task_work so that it runs in
-> the context of the process that is actually consuming the poisoned data.
->
-> After this patch set:
+On Fri, Aug 16, 2024 at 05:42:24PM +0100, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> Add generic EDAC device feature's control supports registering
 
-s/patch set/patch/
+"features"
 
->
->   # STEP1: enable early kill mode
->   #sysctl -w vm.memory_failure_early_kill=3D1
->   vm.memory_failure_early_kill =3D 1
->
->   # STEP2: inject an UCE error and consume it to trigger a synchronous er=
-ror
->   #einj_mem_uc single
->   0: single   vaddr =3D 0xffffb0d75400 paddr =3D 4092d55b400
->   injecting ...
->   triggering ...
->   signal 7 code 4 addr 0xffffb0d75000
->   page not present
->   Test passed
->
-> The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR
-> error as we expected.
->
-> Issue 2: a synchronous error infinite loop due to memory_failure() failed
->
-> If a user-space process, e.g. devmem, a poisoned page which has been set
-> HWPosion flag, kill_accessing_process() is called to send SIGBUS to the
-> current processs with error info. Because the memory_failure() is
-> executed in the kworker contex, it will just do nothing but return
-> EFAULT. So, devmem will access the posioned page and trigger an
-> excepction again, resulting in a synchronous error infinite loop. Such
-> loop may cause platform firmware to exceed some threshold and reboot
-> when Linux could have recovered from this error.
->
-> To reproduce this problem:
->
->   # STEP 1: inject an UCE error, and kernel will set HWPosion flag for re=
-lated page
->   #einj_mem_uc single
->   0: single   vaddr =3D 0xffffb0d75400 paddr =3D 4092d55b400
->   injecting ...
->   triggering ...
->   signal 7 code 4 addr 0xffffb0d75000
->   page not present
->   Test passed
->
->   # STEP 2: access the same page and it will trigger a synchronous error =
-infinite loop
->   devmem 0x4092d55b400
->
-> To fix it, if memory_failure() failed, perform a force kill to current pr=
-ocess.
->
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Check your whole set.
+
+> RAS features supported in the system. Driver exposes feature's
+> control attributes to the userspace in
+
+s/the //
+
+> /sys/bus/edac/devices/<dev-name>/<ras-feature>/
+> 
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 > ---
->  drivers/acpi/apei/ghes.c | 78 +++++++++++++++++++++++-----------------
->  include/acpi/ghes.h      |  3 --
->  include/linux/mm.h       |  1 -
->  mm/memory-failure.c      | 13 -------
->  4 files changed, 45 insertions(+), 50 deletions(-)
->
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index b0b20ee533d9..b956e9ed020f 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -467,28 +467,42 @@ static void ghes_clear_estatus(struct ghes *ghes,
+>  drivers/edac/edac_device.c | 178 +++++++++++++++++++++++++++++++++++++
+>  include/linux/edac.h       |  60 +++++++++++++
+>  2 files changed, 238 insertions(+)
+> 
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 621dc2a5d034..635a41db8b5a 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -570,3 +570,181 @@ void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
+>  		      block ? block->name : "N/A", count, msg);
 >  }
-> =20
->  /*
-> - * Called as task_work before returning to user-space.
-> - * Ensure any queued work has been done before we return to the context =
-that
-> - * triggered the notification.
-> + * struct task_work - for synchronous RAS event
-> + *
-> + * @twork:                callback_head for task work
-> + * @pfn:                  page frame number of corrupted page
-> + * @flags:                work control flags
-> + *
-> + * Structure to pass task work to be handled before
-> + * returning to user-space via task_work_add().
->   */
-> -static void ghes_kick_task_work(struct callback_head *head)
-> +struct task_work {
-> +	struct callback_head twork;
-> +	u64 pfn;
-> +	int flags;
+>  EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
+> +
+> +/* EDAC device feature */
+> +static void edac_dev_release(struct device *dev)
+> +{
+> +	struct edac_dev_feat_ctx *ctx =
+> +		container_of(dev, struct edac_dev_feat_ctx, dev);
+
+Ew, no, don't do such silly linebreaks pls.
+
+> +	kfree(ctx->dev.groups);
+> +	kfree(ctx);
+> +}
+> +
+> +const struct device_type edac_dev_type = {
+> +	.name = "edac_dev",
+> +	.release = edac_dev_release,
 > +};
 > +
-> +static void memory_failure_cb(struct callback_head *twork)
->  {
-> -	struct acpi_hest_generic_status *estatus;
-> -	struct ghes_estatus_node *estatus_node;
-> -	u32 node_len;
-> +	struct task_work *twcb =3D container_of(twork, struct task_work, twork)=
-;
-> +	unsigned long pfn =3D twcb->pfn;
-> +	int ret;
-> =20
-> -	estatus_node =3D container_of(head, struct ghes_estatus_node, task_work=
-);
-> -	if (IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
-> -		memory_failure_queue_kick(estatus_node->task_work_cpu);
-> +	ret =3D memory_failure(twcb->pfn, twcb->flags);
-> +	gen_pool_free(ghes_estatus_pool, (unsigned long)twcb, sizeof(*twcb));
-> =20
-> -	estatus =3D GHES_ESTATUS_FROM_NODE(estatus_node);
-> -	node_len =3D GHES_ESTATUS_NODE_LEN(cper_estatus_len(estatus));
-> -	gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len)=
-;
-> +	if (!ret || ret =3D=3D -EHWPOISON || ret =3D=3D -EOPNOTSUPP)
-> +		return;
+> +static void edac_dev_unreg(void *data)
+> +{
+> +	device_unregister(data);
+> +}
 > +
-> +	pr_err("%#lx: Sending SIGBUS to %s:%d due to hardware memory corruption=
-\n",
-> +			pfn, current->comm, task_pid_nr(current));
-> +	force_sig(SIGBUS);
->  }
-> =20
->  static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->  {
->  	unsigned long pfn;
-> +	struct task_work *twcb;
-> =20
->  	if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
->  		return false;
-> @@ -501,6 +515,18 @@ static bool ghes_do_memory_failure(u64 physical_addr=
-, int flags)
->  		return false;
->  	}
-> =20
-> +	if (flags =3D=3D MF_ACTION_REQUIRED && current->mm) {
-> +		twcb =3D (void *)gen_pool_alloc(ghes_estatus_pool, sizeof(*twcb));
-> +		if (!twcb)
-> +			return false;
+> +/**
+> + * edac_dev_feature_init - Init a ras feature
+
+s/ras/RAS/g
+
+Check your whole set.
+
+> + * @parent: client device.
+> + * @dev_data: pointer to struct edac_dev_data.
+
+I can see it is a pointer. What it is used for?
+
+> + * @feat: pointer to struct edac_dev_feature.
+> + * @attr_groups: pointer to attribute group's container.
+> + *
+> + * Returns number of scrub feature's attribute groups on success,
+> + * error otherwise.
+> + */
+> +static int edac_dev_feat_init(struct device *parent,
+> +			      struct edac_dev_data *dev_data,
+> +			      const struct edac_dev_feature *ras_feat,
+> +			      const struct attribute_group **attr_groups)
+> +{
+> +	int num;
 > +
-> +		twcb->pfn =3D pfn;
-> +		twcb->flags =3D flags;
-> +		init_task_work(&twcb->twork, memory_failure_cb);
-> +		task_work_add(current, &twcb->twork, TWA_RESUME);
-> +		return true;
+> +	switch (ras_feat->feat) {
+> +	case RAS_FEAT_SCRUB:
+> +		dev_data->scrub_ops = ras_feat->scrub_ops;
+> +		dev_data->private = ras_feat->scrub_ctx;
+> +		return 1;
+> +	case RAS_FEAT_ECS:
+> +		num = ras_feat->ecs_info.num_media_frus;
+> +		dev_data->ecs_ops = ras_feat->ecs_ops;
+> +		dev_data->private = ras_feat->ecs_ctx;
+> +		return num;
+> +	case RAS_FEAT_PPR:
+> +		dev_data->ppr_ops = ras_feat->ppr_ops;
+> +		dev_data->private = ras_feat->ppr_ctx;
+> +		return 1;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +/**
+> + * edac_dev_register - register device for ras features with edac
+
+s/edac/EDAC/g
+
+Check your whole set.
+
+> + * @parent: client device.
+> + * @name: client device's name.
+> + * @private: parent driver's data to store in the context if any.
+> + * @num_features: number of ras features to register.
+> + * @ras_features: list of ras features to register.
+> + *
+> + * Returns 0 on success, error otherwise.
+> + * The new edac_dev_feat_ctx would be freed automatically.
+> + */
+> +int edac_dev_register(struct device *parent, char *name,
+> +		      void *private, int num_features,
+> +		      const struct edac_dev_feature *ras_features)
+> +{
+> +	const struct attribute_group **ras_attr_groups;
+> +	struct edac_dev_data *dev_data;
+> +	struct edac_dev_feat_ctx *ctx;
+> +	int ppr_cnt = 0, ppr_inst = 0;
+> +	int attr_gcnt = 0;
+> +	int ret, feat;
+> +
+> +	if (!parent || !name || !num_features || !ras_features)
+> +		return -EINVAL;
+> +
+> +	/* Double parse so we can make space for attributes */
+
+Who's "we"?
+
+Please use passive voice in your comments: no "we" or "I", etc.
+
+Personal pronouns are ambiguous in text, especially with so many
+parties/companies/etc developing the kernel so let's avoid them please.
+
+> +	for (feat = 0; feat < num_features; feat++) {
+> +		switch (ras_features[feat].feat) {
+> +		case RAS_FEAT_SCRUB:
+
+Does this need "fallthrough;" or somesuch?
+
+> +		case RAS_FEAT_PPR:
+> +			attr_gcnt++;
+> +			ppr_cnt++;
+> +			break;
+> +		case RAS_FEAT_ECS:
+> +			attr_gcnt += ras_features[feat].ecs_info.num_media_frus;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
 > +	}
 > +
->  	memory_failure_queue(pfn, flags);
->  	return true;
->  }
-> @@ -745,7 +771,7 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, CXL);
-> =20
-> -static bool ghes_do_proc(struct ghes *ghes,
-> +static void ghes_do_proc(struct ghes *ghes,
->  			 const struct acpi_hest_generic_status *estatus)
->  {
->  	int sev, sec_sev;
-> @@ -810,8 +836,6 @@ static bool ghes_do_proc(struct ghes *ghes,
->  			current->comm, task_pid_nr(current));
->  		force_sig(SIGBUS);
->  	}
-> -
-> -	return queued;
->  }
-> =20
->  static void __ghes_print_estatus(const char *pfx,
-> @@ -1113,9 +1137,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_w=
-ork)
->  	struct ghes_estatus_node *estatus_node;
->  	struct acpi_hest_generic *generic;
->  	struct acpi_hest_generic_status *estatus;
-> -	bool task_work_pending;
->  	u32 len, node_len;
-> -	int ret;
-> =20
->  	llnode =3D llist_del_all(&ghes_estatus_llist);
->  	/*
-> @@ -1130,25 +1152,16 @@ static void ghes_proc_in_irq(struct irq_work *irq=
-_work)
->  		estatus =3D GHES_ESTATUS_FROM_NODE(estatus_node);
->  		len =3D cper_estatus_len(estatus);
->  		node_len =3D GHES_ESTATUS_NODE_LEN(len);
-> -		task_work_pending =3D ghes_do_proc(estatus_node->ghes, estatus);
+> +	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+> +	if (!ctx)
+> +		return -ENOMEM;
 > +
-> +		ghes_do_proc(estatus_node->ghes, estatus);
+> +	ctx->dev.parent = parent;
+> +	ctx->private = private;
 > +
->  		if (!ghes_estatus_cached(estatus)) {
->  			generic =3D estatus_node->generic;
->  			if (ghes_print_estatus(NULL, generic, estatus))
->  				ghes_estatus_cache_add(generic, estatus);
->  		}
-> -
-> -		if (task_work_pending && current->mm) {
-> -			estatus_node->task_work.func =3D ghes_kick_task_work;
-> -			estatus_node->task_work_cpu =3D smp_processor_id();
-> -			ret =3D task_work_add(current, &estatus_node->task_work,
-> -					    TWA_RESUME);
-> -			if (ret)
-> -				estatus_node->task_work.func =3D NULL;
-> -		}
-> -
-> -		if (!estatus_node->task_work.func)
-> -			gen_pool_free(ghes_estatus_pool,
-> -				      (unsigned long)estatus_node, node_len);
-> +		gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
-> +			      node_len);
-> =20
->  		llnode =3D next;
->  	}
-> @@ -1209,7 +1222,6 @@ static int ghes_in_nmi_queue_one_entry(struct ghes =
-*ghes,
-> =20
->  	estatus_node->ghes =3D ghes;
->  	estatus_node->generic =3D ghes->generic;
-> -	estatus_node->task_work.func =3D NULL;
->  	estatus =3D GHES_ESTATUS_FROM_NODE(estatus_node);
-> =20
->  	if (__ghes_read_estatus(estatus, buf_paddr, fixmap_idx, len)) {
-> diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-> index be1dd4c1a917..ebd21b05fe6e 100644
-> --- a/include/acpi/ghes.h
-> +++ b/include/acpi/ghes.h
-> @@ -35,9 +35,6 @@ struct ghes_estatus_node {
->  	struct llist_node llnode;
->  	struct acpi_hest_generic *generic;
->  	struct ghes *ghes;
-> -
-> -	int task_work_cpu;
-> -	struct callback_head task_work;
->  };
-> =20
->  struct ghes_estatus_cache {
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 6549d0979b28..f5f1d6a8a07d 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3981,7 +3981,6 @@ enum mf_flags {
->  int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
->  		      unsigned long count, int mf_flags);
->  extern int memory_failure(unsigned long pfn, int flags);
-> -extern void memory_failure_queue_kick(int cpu);
->  extern int unpoison_memory(unsigned long pfn);
->  extern atomic_long_t num_poisoned_pages __read_mostly;
->  extern int soft_offline_page(unsigned long pfn, int flags);
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index df26e2ff5e06..e369aae2da1f 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -2486,19 +2486,6 @@ static void memory_failure_work_func(struct work_s=
-truct *work)
->  	}
+> +	ras_attr_groups = kcalloc(attr_gcnt + 1, sizeof(*ras_attr_groups), GFP_KERNEL);
+> +	if (!ras_attr_groups) {
+> +		ret = -ENOMEM;
+> +		goto ctx_free;
+> +	}
+> +
+> +	if (ppr_cnt) {
+> +		ctx->ppr = kcalloc(ppr_cnt, sizeof(*(ctx->ppr)), GFP_KERNEL);
+> +		if (!ctx->ppr) {
+> +			ret = -ENOMEM;
+> +			goto groups_free;
+> +		}
+> +	}
+> +
+> +	attr_gcnt = 0;
+> +	for (feat = 0; feat < num_features; feat++, ras_features++) {
+> +		switch (ras_features->feat) {
+> +		case RAS_FEAT_SCRUB:
+> +			if (!ras_features->scrub_ops)
+> +				continue;
+> +			dev_data = &ctx->scrub;
+> +			break;
+> +		case RAS_FEAT_ECS:
+> +			if (!ras_features->ecs_ops)
+> +				continue;
+> +			dev_data = &ctx->ecs;
+> +			break;
+> +		case RAS_FEAT_PPR:
+> +			if (!ras_features->ppr_ops)
+> +				continue;
+> +			dev_data = &ctx->ppr[ppr_inst];
+> +			dev_data->instance = ppr_inst;
+> +			ppr_inst++;
+> +			break;
+> +		default:
+> +			ret = -EINVAL;
+> +			goto data_mem_free;
+> +		}
+> +		ret = edac_dev_feat_init(parent, dev_data, ras_features,
+> +					 &ras_attr_groups[attr_gcnt]);
+> +		if (ret < 0)
+> +			goto data_mem_free;
+> +
+> +		attr_gcnt += ret;
+> +	}
+
+Newline.
+
+> +	ras_attr_groups[attr_gcnt] = NULL;
+> +	ctx->dev.bus = edac_get_sysfs_subsys();
+> +	ctx->dev.type = &edac_dev_type;
+> +	ctx->dev.groups = ras_attr_groups;
+> +	dev_set_drvdata(&ctx->dev, ctx);
+
+Ditto.
+
+> +	ret = dev_set_name(&ctx->dev, name);
+> +	if (ret)
+> +		goto data_mem_free;
+> +
+> +	ret = device_register(&ctx->dev);
+> +	if (ret) {
+> +		put_device(&ctx->dev);
+> +		goto data_mem_free;
+> +		return ret;
+> +	}
+> +
+> +	return devm_add_action_or_reset(parent, edac_dev_unreg, &ctx->dev);
+> +
+> +data_mem_free:
+> +	if (ppr_cnt)
+> +		kfree(ctx->ppr);
+> +groups_free:
+> +	kfree(ras_attr_groups);
+> +ctx_free:
+> +	kfree(ctx);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(edac_dev_register);
+> diff --git a/include/linux/edac.h b/include/linux/edac.h
+> index b4ee8961e623..cc96f55ac714 100644
+> --- a/include/linux/edac.h
+> +++ b/include/linux/edac.h
+> @@ -661,4 +661,64 @@ static inline struct dimm_info *edac_get_dimm(struct mem_ctl_info *mci,
+>  
+>  	return mci->dimms[index];
 >  }
-> =20
-> -/*
-> - * Process memory_failure work queued on the specified CPU.
-> - * Used to avoid return-to-userspace racing with the memory_failure work=
-queue.
-> - */
-> -void memory_failure_queue_kick(int cpu)
-> -{
-> -	struct memory_failure_cpu *mf_cpu;
-> -
-> -	mf_cpu =3D &per_cpu(memory_failure_cpu, cpu);
-> -	cancel_work_sync(&mf_cpu->work);
-> -	memory_failure_work_func(&mf_cpu->work);
-> -}
-> -
->  static int __init memory_failure_init(void)
->  {
->  	struct memory_failure_cpu *mf_cpu;
+> +
+> +/* EDAC device features */
+> +
+> +#define EDAC_FEAT_NAME_LEN	128
+> +
+> +enum edac_dev_feat {
+> +	RAS_FEAT_SCRUB,
+> +	RAS_FEAT_ECS,
+> +	RAS_FEAT_PPR,
 
+What are those? Comments ontop explaining pls.
 
-BR, Jarkko
+> +	RAS_FEAT_MAX
+> +};
+> +
+> +struct edac_ecs_ex_info {
+> +	u16 num_media_frus;
+> +};
+> +
+> +/*
+> + * EDAC device feature information structure
+> + */
+> +struct edac_dev_data {
+> +	union {
+> +		const struct edac_scrub_ops *scrub_ops;
+> +		const struct edac_ecs_ops *ecs_ops;
+> +		const struct edac_ppr_ops *ppr_ops;
+> +	};
+> +	u8 instance;
+> +	void *private;
+> +};
+> +
+> +struct device;
+> +
+> +struct edac_dev_feat_ctx {
+> +	struct device dev;
+> +	void *private;
+> +	struct edac_dev_data scrub;
+> +	struct edac_dev_data ecs;
+> +	struct edac_dev_data *ppr;
+> +};
+> +
+> +struct edac_dev_feature {
+> +	enum edac_dev_feat feat;
+
+			ft_type;
+
+> +	u8 instance;
+> +	union {
+> +		const struct edac_scrub_ops *scrub_ops;
+> +		const struct edac_ecs_ops *ecs_ops;
+> +		const struct edac_ppr_ops *ppr_ops;
+> +	};
+> +	union {
+> +		void *scrub_ctx;
+> +		void *ecs_ctx;
+> +		void *ppr_ctx;
+> +	};
+
+Or drop the silly union and simply do
+
+	void *ctx;
+
+> +	union {
+> +		struct edac_ecs_ex_info ecs_info;
+> +	};
+
+Union with a single member?!
+
+> +};
+> +
+> +int edac_dev_register(struct device *parent, char *dev_name,
+> +		      void *parent_pvt_data, int num_features,
+> +		      const struct edac_dev_feature *ras_features);
+>  #endif /* _LINUX_EDAC_H_ */
+> -- 
+> 2.34.1
+> 
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
