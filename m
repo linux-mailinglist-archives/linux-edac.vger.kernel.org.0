@@ -1,134 +1,176 @@
-Return-Path: <linux-edac+bounces-1808-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1809-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57E5B96B0AA
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 07:51:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2367596B0F6
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 08:07:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EF7E1C22FC6
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 05:51:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDCC91F2647E
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 06:07:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B40182C60;
-	Wed,  4 Sep 2024 05:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04FB84E0D;
+	Wed,  4 Sep 2024 06:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAft2zyn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hbOdppse"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF0539B;
-	Wed,  4 Sep 2024 05:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DC084A36;
+	Wed,  4 Sep 2024 06:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725429079; cv=none; b=jIMiARg7BK/25D3tm6CfVQ0WqLycmzXSr2+c2DeA+b6msdwynJHxmdhClwhvD09sw6A+fuW4/I0XZ2fu9srw1+C0kA+8wGMhRFRd+9Oapg2QmzSf922sK9CrqEpZLfDWl/u0LJV0dpDlEOyoNDPhJDCPc+R5auTvmDW3Agoozzc=
+	t=1725430064; cv=none; b=UMT2guDJyKy6LQKfUolomz0E2L4RLVJOp6HWPK+SiGEQ1CLRMjW/mpyj3yLks2XGvOFUvpxjV87soxTG9sgdF0ip0oWpQ0aJVYkWGQYc94uFz144hYxrCZB0if1ePDudcfW3Rd3EM1q3P18iJognWXyaDMlS3Ez6dqOsopo/zwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725429079; c=relaxed/simple;
-	bh=P4g0iQGNZ4cx+61xUubmEryiNPN142m5EO71H8hhrDQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PwyWEEAk+DxZ7VwW2s/7o5b41uFwxYNSHtBBw/KXycpg8I8hDnA6+DwYlwnVvtrEWshkScpsaF1+c11IvURReBIAfs32GAcgZ52nmoolsjEvunLfpQI+CjQfBC77gBfrUtqLpmTPgvJRxOoC5ffHNZVQLKoXzOSr8L6vWrNLoOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HAft2zyn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B9AC4CEC2;
-	Wed,  4 Sep 2024 05:51:14 +0000 (UTC)
+	s=arc-20240116; t=1725430064; c=relaxed/simple;
+	bh=EPR34i1ApP1W3IN8ZGV5gYeG+Qdt78uCwjXb2+lkZ7E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TSIE2/HprRnwFkUdfg4GgKp6641Cfy3WvhnqqpMCaQzssbM5sANOUP/AF8oujc55I8PQNhN1wmdPKqbTLQxJONOKXl+KBxeivQX9GFT5XdjuQlfABWZTE0vHmna+IUEvc3eOBHinyG1S/t0nGOd624Rj78hTQaOROxm46KAqbPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hbOdppse; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DC72C4CECA;
+	Wed,  4 Sep 2024 06:07:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725429078;
-	bh=P4g0iQGNZ4cx+61xUubmEryiNPN142m5EO71H8hhrDQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HAft2zyniMdQ/7FwR1yYZbiuqnsSthmUpzXqZLxsCG0VoSU8gbNDdfKMMzwpIY2hn
-	 mx1Z3i0zk5JgjdaXD32bF1QnSLAeiPiCWHteE96LFnO10Fweiy0McPkpx2L0v/oLv7
-	 qy0HHI6UWk+C1oTSvbwxXQFIIN6y+4Gb/VA/u2Fj6nyIwzpTAJB2gx2uTmwzXxUvGB
-	 Zm1Zdzf7sRM8Sq3tS/ep2PGzqWYJ7da4HVkAkM9N6cM/Z50jB2ftnTCnFRft2LkNlT
-	 TutYu5K8SV3O5VSDH/s9yVTW7ukSZdIbIx/wGZ7sbQOxZD/W7Os5BH3CcHVIuPAKvN
-	 LI08Els7v4ZFg==
-Message-ID: <c1508929-2e44-497d-b54a-285a3e74ba2d@kernel.org>
-Date: Wed, 4 Sep 2024 07:51:12 +0200
+	s=k20201202; t=1725430064;
+	bh=EPR34i1ApP1W3IN8ZGV5gYeG+Qdt78uCwjXb2+lkZ7E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=hbOdppseLYiL43y+tAVIiYWL2VdtT043qE/WzBHwrFRYQk6vUA2QrqxoQPuaM+6JK
+	 2ZbU0w3Vavl8lhwfSoe7VY13CRmoS9lfNZlb7k8SbENTUpiMWrj35TUUPZ8XgJvJrg
+	 Fyz4E1a/lZnxBsjwypa55JgLao0rgc6rPC+seKwuch2ZDO0HMACYUnjVn5mojUjWL6
+	 H+Cr8MRwd9Jj70aWbMnRB+zg67VQ8v1ABL60JrXqpYIskCQO1iRUQ9+tMboh19GjJt
+	 QE14MJdgPt0HbWrzHan8id3Q6dfO7Akhj/nPHtYuNVomEQocI1y9EPbYF3vZYtTsMM
+	 eBDXUoaU/QvCA==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1sljB8-00000006Ite-04Ih;
+	Wed, 04 Sep 2024 08:07:42 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Ard Biesheuvel <mchehab+huawei@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Len Brown <mchehab+huawei@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	linux-acpi@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/5] Fix issues with ARM Processor CPER records
+Date: Wed,  4 Sep 2024 08:07:13 +0200
+Message-ID: <cover.1725429659.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/2] dt-bindings: EDAC for ls3a5000 memory controller
-To: Zhao Qunqin <zhaoqunqin@loongson.cn>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- chenhuacai@kernel.org, linux-edac@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name,
- bp@alien8.de, tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
- rric@kernel.org, loongarch@lists.linux.dev
-References: <20240903114714.11428-1-zhaoqunqin@loongson.cn>
- <20240903114714.11428-2-zhaoqunqin@loongson.cn>
- <c901ff6b-2e4d-4dd1-82da-e2e3d5db7988@kernel.org>
- <32aded46-86ce-59cf-e8b4-2621c0dd9ebe@loongson.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <32aded46-86ce-59cf-e8b4-2621c0dd9ebe@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-On 04/09/2024 03:15, Zhao Qunqin wrote:
-> 
-> 在 2024/9/3 下午8:29, Krzysztof Kozlowski 写道:
->> On 03/09/2024 13:47, Zhao Qunqin wrote:
->>> add device tree bindings for ls3a5000 EDAC driver.
->>>
->>> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
->> So no improvements? No changes? Why do you send the same?
-> 
-> I'm sorry,  I thought if you hadn't raised any issues with the previous 
-> version of dt binding, I wouldn't need to make any changes.
-> 
-> For this version of the patch, I only changed the driver.
+This is needed for both kernelspace and userspace properly handle
+ARM processor CPER events.
 
-So what changed? Where is the changelog? Where is the tag? Did you get one?
+Patch 1 of this series fix the UEFI 2.6+ implementation of the ARM
+trace event, as the original implementation was incomplete.
+Changeset e9279e83ad1f ("trace, ras: add ARM processor error trace event")
+added such event, but it reports only some fields of the CPER record
+defined on UEFI 2.6+ appendix N, table N.16.  Those are not enough
+actually parse such events on userspace, as not even the event type
+is exported.
 
-Did you read submitting patches document?
+Patch 2 fixes a compilation breakage when W=1;
 
-Best regards,
-Krzysztof
+Patch 3 adds a new helper function to be used by cper and ghes drivers to
+display CPER bitmaps;
+
+Patch 4 fixes CPER logic according with UEFI 2.9A errata. Before it, there
+was no description about how processor type field was encoded. The errata
+defines it as a bitmask, and provides the information about how it should
+be encoded.
+
+Patch 5 adds CPER functions to Kernel-doc.
+
+This series was validated with the help of an ARM EINJ code for QEMU:
+
+	https://gitlab.com/mchehab_kernel/qemu/-/tree/qemu_submission
+
+$ scripts/ghes_inject.py -d arm -p 0xdeadbeef -t cache,bus,micro-arch
+
+[   11.094205] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
+[   11.095009] {1}[Hardware Error]: event severity: recoverable
+[   11.095486] {1}[Hardware Error]:  Error 0, type: recoverable
+[   11.096090] {1}[Hardware Error]:   section_type: ARM processor error
+[   11.096399] {1}[Hardware Error]:   MIDR: 0x00000000000f0510
+[   11.097135] {1}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000080000000
+[   11.097811] {1}[Hardware Error]:   running state: 0x0
+[   11.098193] {1}[Hardware Error]:   Power State Coordination Interface state: 0
+[   11.098699] {1}[Hardware Error]:   Error info structure 0:
+[   11.099174] {1}[Hardware Error]:   num errors: 2
+[   11.099682] {1}[Hardware Error]:    error_type: 0x1a: cache error|bus error|micro-architectural error
+[   11.100150] {1}[Hardware Error]:    physical fault address: 0x00000000deadbeef
+[   11.111214] Memory failure: 0xdeadb: recovery action for free buddy page: Recovered
+
+- 
+
+I also tested the ghes and cper reports both with and without this
+change, using different versions of rasdaemon, with and without
+support for the extended trace event. Those are a summary of the
+test results:
+
+- adding more fields to the trace events didn't break userspace API:
+  both versions of rasdaemon handled it;
+
+- the rasdaemon patches to handle the new trace report was missing
+  a backward-compatibility logic. I fixed already. So, rasdaemon
+  can now handle both old and new trace events.
+
+Btw, rasdaemon has gained support for the extended trace since its
+version 0.5.8 (released in 2021). I didn't saw any issues there
+complain about troubles on it, so either distros used on ARM servers
+are using an old version of rasdaemon, or they're carrying on the trace
+event changes as well.
+
+---
+
+v3:
+ - history of patch 1 improved with a chain of co-developed-by;
+ - add a better description and an example on patch 3;
+ - use BIT_ULL() on patch 3;
+ - add a missing include on patch 4.
+
+v2:
+  - removed an uneeded patch adding #ifdef for CONFIG_ARM/ARM64;
+  - cper_bits_to_str() now returns the number of chars filled at the buffer;
+  - did a cosmetic (blank lines) improvement at include/linux/ras.h;
+  - arm_event trace dynamic arrays renamed to pei_buf/ctx_buf/oem_buf.
+    
+
+
+Jason Tian (1):
+  RAS: Report all ARM processor CPER information to userspace
+
+Mauro Carvalho Chehab (4):
+  efi/cper: Adjust infopfx size to accept an extra space
+  efi/cper: Add a new helper function to print bitmasks
+  efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
+  docs: efi: add CPER functions to driver-api
+
+ .../driver-api/firmware/efi/index.rst         | 11 +++-
+ drivers/acpi/apei/ghes.c                      | 27 ++++----
+ drivers/firmware/efi/cper-arm.c               | 52 ++++++++--------
+ drivers/firmware/efi/cper.c                   | 62 ++++++++++++++++++-
+ drivers/ras/ras.c                             | 41 +++++++++++-
+ include/linux/cper.h                          | 12 ++--
+ include/linux/ras.h                           | 16 ++++-
+ include/ras/ras_event.h                       | 48 ++++++++++++--
+ 8 files changed, 210 insertions(+), 59 deletions(-)
+
+-- 
+2.46.0
+
 
 
