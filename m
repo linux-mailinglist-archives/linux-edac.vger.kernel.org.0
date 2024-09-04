@@ -1,111 +1,101 @@
-Return-Path: <linux-edac+bounces-1803-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1804-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B229996AD92
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 03:03:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B65B96ADB1
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 03:16:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A6581F25C6F
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 01:03:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA37EB24378
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 01:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D7F63D;
-	Wed,  4 Sep 2024 01:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D1E533E7;
+	Wed,  4 Sep 2024 01:16:07 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D431FC8
-	for <linux-edac@vger.kernel.org>; Wed,  4 Sep 2024 01:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B85A4A3F;
+	Wed,  4 Sep 2024 01:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725411819; cv=none; b=Hxf3+rKO3JpciDOzX8BmpDmWsPPUtd1ly/vOWRLQQ6pPu5fZU7l1qKvSQdnDmAlpPFghKVqeZ4U9CnUXGICGKeL5+gCmX06qAJfFVIHRe9y6vCJpMhR/IXzNBkf0N5exUJonk3CvFNt8b4KcMM/GUXztoR1I4YgeUsMwcS8mI88=
+	t=1725412567; cv=none; b=NADJCjfkd2ysVsD52ozyN1TPnNPQgJCVe8pPRWyUr6DKW6asP0NZOt28SssxDMdDZhwyfcrAAAU98zb+UFfP7qLQ89UOZV9k//eUXEsagB1icMJ+PAtnmuLYCzQa50z0zFPfngzv9LR55WHBdqxjLiMCTmShxQwXVqLac7+z0bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725411819; c=relaxed/simple;
-	bh=v7a7wlABZIHS12PkM0wQsHF6Nq+5LLNowLqjAWdk6mo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G5EufoTiDyewx1XS7slSspQqY75vMCn9Lhwgf9clML+H6c8n58PTjZq9/m1HJ4QuASFFBYboNWbgBUcub90w3aTAZX94oISffwCMLpWe8GuSlkrYlLCV3FuJT2r8KsXRwzKpP9EQ6EnJ7m40Qmg0Y8xyTWzmQzt3OkApb6G0rnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Wz3yj4qlPz20nKk;
-	Wed,  4 Sep 2024 08:58:37 +0800 (CST)
-Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5108A140158;
-	Wed,  4 Sep 2024 09:03:34 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 4 Sep
- 2024 09:03:34 +0800
-From: Hongbo Li <lihongbo22@huawei.com>
-To: <bp@alien8.de>, <tony.luck@intel.com>, <james.morse@arm.com>,
-	<mchehab@kernel.org>, <rric@kernel.org>
-CC: <linux-edac@vger.kernel.org>, <lihongbo22@huawei.com>
-Subject: [PATCH -next 2/2] EDAC: Constify struct kobj_type for edac_pci_sysfs
-Date: Wed, 4 Sep 2024 09:12:02 +0800
-Message-ID: <20240904011202.2009727-3-lihongbo22@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240904011202.2009727-1-lihongbo22@huawei.com>
-References: <20240904011202.2009727-1-lihongbo22@huawei.com>
+	s=arc-20240116; t=1725412567; c=relaxed/simple;
+	bh=9lrTEjGx49ggIDY773iVJJwYcmojKAO9Di+PWU9h79g=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=BMODH+FJXnCuM31b7WYs2+cl1v+EC+R9WGDSpbJPm+0S3gPygpZ/SRWnCPf+GBSoc072V8coMPtK1WLbcxqRjJBIlZIrQ5NkHBjh1EDdPNkVq8vYzkOOIqH3PDpNSFz7Z2my79IkYNUrzkaiwPWG4k9h8sLtPToTt9rQlEIR6AI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8AxSZrPtNdmANApAA--.43966S3;
+	Wed, 04 Sep 2024 09:15:59 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front2 (Coremail) with SMTP id qciowMBxzsXOtNdm9m8FAA--.15006S2;
+	Wed, 04 Sep 2024 09:15:58 +0800 (CST)
+Subject: Re: [PATCH V3 1/2] dt-bindings: EDAC for ls3a5000 memory controller
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ chenhuacai@kernel.org, linux-edac@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name,
+ bp@alien8.de, tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
+ rric@kernel.org, loongarch@lists.linux.dev
+References: <20240903114714.11428-1-zhaoqunqin@loongson.cn>
+ <20240903114714.11428-2-zhaoqunqin@loongson.cn>
+ <c901ff6b-2e4d-4dd1-82da-e2e3d5db7988@kernel.org>
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Message-ID: <32aded46-86ce-59cf-e8b4-2621c0dd9ebe@loongson.cn>
+Date: Wed, 4 Sep 2024 09:15:29 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <c901ff6b-2e4d-4dd1-82da-e2e3d5db7988@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500022.china.huawei.com (7.185.36.66)
+Content-Language: en-US
+X-CM-TRANSID:qciowMBxzsXOtNdm9m8FAA--.15006S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUPEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF54CYxVAaw2AFwI0_Jrv_JF1l4c8EcI0Ec7Cj
+	xVAaw2AFwI0_Jw0_GFyl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjxU2nYFDUUUU
 
-These 'struct kobj_type' are not modified. They are only used in
-kobject_init_and_add() which takes a 'const struct kobj_type *ktype'
-parameter.
 
-Constifying these structure (ktype_pci_instance and
-ktype_edac_pci_main_kobj)and moving them to a read-only (text
-section) section, and can increase over all security.
+在 2024/9/3 下午8:29, Krzysztof Kozlowski 写道:
+> On 03/09/2024 13:47, Zhao Qunqin wrote:
+>> add device tree bindings for ls3a5000 EDAC driver.
+>>
+>> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
+> So no improvements? No changes? Why do you send the same?
 
-```
-[Before]
-   text   data    bss    dec    hex    filename
-   4357    856     32   5245   147d    drivers/edac/edac_pci_sysfs.o
+I'm sorry,  I thought if you hadn't raised any issues with the previous 
+version of dt binding, I wouldn't need to make any changes.
 
-[After]
-   text   data    bss    dec    hex    filename
-   4485    760     32   5277   149d    drivers/edac/edac_pci_sysfs.o
-```
+For this version of the patch, I only changed the driver.
 
-Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
----
- drivers/edac/edac_pci_sysfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Best regards,
 
-diff --git a/drivers/edac/edac_pci_sysfs.c b/drivers/edac/edac_pci_sysfs.c
-index 7b44afcf48db..f00efb06b3dc 100644
---- a/drivers/edac/edac_pci_sysfs.c
-+++ b/drivers/edac/edac_pci_sysfs.c
-@@ -143,7 +143,7 @@ static struct attribute *pci_instance_attrs[] = {
- ATTRIBUTE_GROUPS(pci_instance);
- 
- /* the ktype for a pci instance */
--static struct kobj_type ktype_pci_instance = {
-+static const struct kobj_type ktype_pci_instance = {
- 	.release = edac_pci_instance_release,
- 	.sysfs_ops = &pci_instance_ops,
- 	.default_groups = pci_instance_groups,
-@@ -326,7 +326,7 @@ static void edac_pci_release_main_kobj(struct kobject *kobj)
- }
- 
- /* ktype struct for the EDAC PCI main kobj */
--static struct kobj_type ktype_edac_pci_main_kobj = {
-+static const struct kobj_type ktype_edac_pci_main_kobj = {
- 	.release = edac_pci_release_main_kobj,
- 	.sysfs_ops = &edac_pci_sysfs_ops,
- 	.default_groups = edac_pci_groups,
--- 
-2.34.1
+Zhao Qunqin.
+
+>
+> Best regards,
+> Krzysztof
 
 
