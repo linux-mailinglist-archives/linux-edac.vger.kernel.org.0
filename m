@@ -1,188 +1,134 @@
-Return-Path: <linux-edac+bounces-1807-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1808-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CA9B96B076
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 07:24:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57E5B96B0AA
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 07:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6E781F25597
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 05:24:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EF7E1C22FC6
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 05:51:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C139839E3;
-	Wed,  4 Sep 2024 05:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B40182C60;
+	Wed,  4 Sep 2024 05:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQxh9Xy6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAft2zyn"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EEB522F;
-	Wed,  4 Sep 2024 05:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF0539B;
+	Wed,  4 Sep 2024 05:51:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725427483; cv=none; b=MprRD1/YiiOwo2T5AJuVetF1AQV9XnuJ2+c4iDfK6t9M8H8skjHeq8RqQx1Rz81bUdYGwScKqE9P2ZrqpEQWLfY1OW4QAzGnMEWYdNL1X9F8o16o1OyWMuAHKC3rUJuGn1hkN7bQWdfmaYBdX8BawdG4Z0XL/YIgA2g+j4TjoM8=
+	t=1725429079; cv=none; b=jIMiARg7BK/25D3tm6CfVQ0WqLycmzXSr2+c2DeA+b6msdwynJHxmdhClwhvD09sw6A+fuW4/I0XZ2fu9srw1+C0kA+8wGMhRFRd+9Oapg2QmzSf922sK9CrqEpZLfDWl/u0LJV0dpDlEOyoNDPhJDCPc+R5auTvmDW3Agoozzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725427483; c=relaxed/simple;
-	bh=PLczOOovhKela6g7hCR38D9+jRUN17hhMoTicA+UvX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kCdxzlZTu5I1itNzK04qR6+XXm7lFzBUpjFOXi4Jc6sZB1shBCx84p9Sznrj9PSFHUivgzV+FCETYJGRqeI32Y3xYrPe/SrypN78l0BYEBYVf5HYQ5PKD1R7yir0Mcpt0f0IWhefumUToxGb6cAst72i1KBsWCdXomIDOL2Chmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQxh9Xy6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A33EBC4CEC2;
-	Wed,  4 Sep 2024 05:24:39 +0000 (UTC)
+	s=arc-20240116; t=1725429079; c=relaxed/simple;
+	bh=P4g0iQGNZ4cx+61xUubmEryiNPN142m5EO71H8hhrDQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PwyWEEAk+DxZ7VwW2s/7o5b41uFwxYNSHtBBw/KXycpg8I8hDnA6+DwYlwnVvtrEWshkScpsaF1+c11IvURReBIAfs32GAcgZ52nmoolsjEvunLfpQI+CjQfBC77gBfrUtqLpmTPgvJRxOoC5ffHNZVQLKoXzOSr8L6vWrNLoOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HAft2zyn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B9AC4CEC2;
+	Wed,  4 Sep 2024 05:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725427482;
-	bh=PLczOOovhKela6g7hCR38D9+jRUN17hhMoTicA+UvX0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AQxh9Xy6kx8LzFJJtfRUfhsEGhjAhkuYS8b10FCVvbrDf+UMjws+gu0iyzmEHmVqb
-	 jeEcv5tchrl9LEQ3Cy1jhez/6biJABWwRqJcYPOa3ea3GsNncphqfv3jsC8/ySFj6Z
-	 9Hmtkm86PCxiXUCjcJd79YX2DjQahWkKctyaLP4FeCnx4NSsPwGQpKG8+yof2ypvbC
-	 riaFuAbGrq8Z03oEFoADVx5ezJRFj8ct11Kv0yi+0xoGKIY63OdFbnnWxThRNmyzdW
-	 QGuKxHBmLtg9QpNHfJiKzy4D9dmMMFTAURbOTdEIQZrFV+yplTq6xAUV59oq3nsueO
-	 Lo+Ny/yZe8rrQ==
-Date: Wed, 4 Sep 2024 07:24:36 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Tony Luck <tony.luck@intel.com>, Ard Biesheuvel <ardb@kernel.org>, James
- Morse <james.morse@arm.com>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Len Brown <lenb@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Shiju Jose <shiju.jose@huawei.com>, Alison
- Schofield <alison.schofield@intel.com>, Dave Jiang <dave.jiang@intel.com>,
- Ira Weiny <ira.weiny@intel.com>, linux-acpi@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-efi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] efi/cper: Add a new helper function to print
- bitmasks
-Message-ID: <20240904072436.59ee50e7@foz.lan>
-In-Reply-To: <20240902112429.GEZtWgbSo0EVe0EyWE@fat_crate.local>
-References: <cover.1720679234.git.mchehab+huawei@kernel.org>
-	<5bb5f806a763b295401972fdff17bb455bee2e82.1720679234.git.mchehab+huawei@kernel.org>
-	<20240902112429.GEZtWgbSo0EVe0EyWE@fat_crate.local>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=k20201202; t=1725429078;
+	bh=P4g0iQGNZ4cx+61xUubmEryiNPN142m5EO71H8hhrDQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HAft2zyniMdQ/7FwR1yYZbiuqnsSthmUpzXqZLxsCG0VoSU8gbNDdfKMMzwpIY2hn
+	 mx1Z3i0zk5JgjdaXD32bF1QnSLAeiPiCWHteE96LFnO10Fweiy0McPkpx2L0v/oLv7
+	 qy0HHI6UWk+C1oTSvbwxXQFIIN6y+4Gb/VA/u2Fj6nyIwzpTAJB2gx2uTmwzXxUvGB
+	 Zm1Zdzf7sRM8Sq3tS/ep2PGzqWYJ7da4HVkAkM9N6cM/Z50jB2ftnTCnFRft2LkNlT
+	 TutYu5K8SV3O5VSDH/s9yVTW7ukSZdIbIx/wGZ7sbQOxZD/W7Os5BH3CcHVIuPAKvN
+	 LI08Els7v4ZFg==
+Message-ID: <c1508929-2e44-497d-b54a-285a3e74ba2d@kernel.org>
+Date: Wed, 4 Sep 2024 07:51:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/2] dt-bindings: EDAC for ls3a5000 memory controller
+To: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ chenhuacai@kernel.org, linux-edac@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name,
+ bp@alien8.de, tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
+ rric@kernel.org, loongarch@lists.linux.dev
+References: <20240903114714.11428-1-zhaoqunqin@loongson.cn>
+ <20240903114714.11428-2-zhaoqunqin@loongson.cn>
+ <c901ff6b-2e4d-4dd1-82da-e2e3d5db7988@kernel.org>
+ <32aded46-86ce-59cf-e8b4-2621c0dd9ebe@loongson.cn>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <32aded46-86ce-59cf-e8b4-2621c0dd9ebe@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Em Mon, 2 Sep 2024 13:24:29 +0200
-Borislav Petkov <bp@alien8.de> escreveu:
-
-> On Thu, Jul 11, 2024 at 08:28:54AM +0200, Mauro Carvalho Chehab wrote:
-> > Sometimes it is desired to produce a single log line for errors.
-> > Add a new helper function for such purpose.  
+On 04/09/2024 03:15, Zhao Qunqin wrote:
 > 
-> How does this have anything to do with the below function?
-
-There is a variant at cper.c that creates a multi-line output
-for bitmaps.
-
-> Example?
+> 在 2024/9/3 下午8:29, Krzysztof Kozlowski 写道:
+>> On 03/09/2024 13:47, Zhao Qunqin wrote:
+>>> add device tree bindings for ls3a5000 EDAC driver.
+>>>
+>>> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
+>> So no improvements? No changes? Why do you send the same?
 > 
-> Why isn't anything in lib/bitmap-str.c not useful for this?
-
-I took a look there. I wasn't able to find anything remotely
-close to convert a bitmap into their correspondent bit names.
-
-See, the intended usage for this function is to convert ACPI
-bitmasks into the field names. On ARM Processor Error, this is
-used to properly parse the type field, as described at:
-
-	https://uefi.org/specs/UEFI/2.10/Apx_N_Common_Platform_Error_Record.html#arm-processor-error-information
-
-The definition for this specific bitmask starts on bit 1,
-so the logic to parse it uses a FIELD_GET to apply the
-proper bitmask. This is how it is used (see patch 4/5):
-
-	const char * const cper_proc_error_type_strs[] = {
-		"cache error",
-		"TLB error",
-		"bus error",
-		"micro-architectural error",
-	};
-
-	#define CPER_ARM_ERR_TYPE_MASK                     GENMASK(4,1)
-
-	char error_type[120];
-
-	cper_bits_to_str(error_type, sizeof(error_type),
-			 FIELD_GET(CPER_ARM_ERR_TYPE_MASK, err_info->type),
-			 cper_proc_error_type_strs,
-			 ARRAY_SIZE(cper_proc_error_type_strs));
-
-I'll add an example similar to it to kernel-doc comment.
-
+> I'm sorry,  I thought if you hadn't raised any issues with the previous 
+> version of dt binding, I wouldn't need to make any changes.
 > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > ---
-> >  drivers/firmware/efi/cper.c | 43 +++++++++++++++++++++++++++++++++++++
-> >  include/linux/cper.h        |  2 ++
-> >  2 files changed, 45 insertions(+)
-> > 
-> > diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-> > index 7d2cdd9e2227..462d739e8dd1 100644
-> > --- a/drivers/firmware/efi/cper.c
-> > +++ b/drivers/firmware/efi/cper.c
-> > @@ -106,6 +106,49 @@ void cper_print_bits(const char *pfx, unsigned int bits,
-> >  		printk("%s\n", buf);
-> >  }
-> >  
-> > +/**
-> > + * cper_bits_to_str - return a string for set bits
-> > + * @buf: buffer to store the output string
-> > + * @buf_size: size of the output string buffer
-> > + * @bits: bit mask
-> > + * @strs: string array, indexed by bit position
-> > + * @strs_size: size of the string array: @strs
-> > + *
+> For this version of the patch, I only changed the driver.
 
-> > + * Add to @buf the bitmask in hexadecimal.   
-> 
-> Where does it do that?
+So what changed? Where is the changelog? Where is the tag? Did you get one?
 
-Legacy comment from the past version. Will drop it.
+Did you read submitting patches document?
 
-> > Then, for each set bit in @bits,
-> > + * add the corresponding string describing the bit in @strs to @buf.
-> > + *
-> > + * Return: number of bytes stored or an error code if lower than zero.
-> > + */
-> > +int cper_bits_to_str(char *buf, int buf_size, unsigned long bits,
-> > +		     const char * const strs[], unsigned int strs_size)
-> > +{
-> > +	int len = buf_size;
-> > +	char *str = buf;
-> > +	int i, size;
-> > +
-> > +	*buf = '\0';
-> > +
-> > +	for_each_set_bit(i, &bits, strs_size) {
-> > +		if (!(bits & (1U << (i))))  
-> 
-> BIT_UL()
-> 
-> > +			continue;
-> > +
-> > +		if (*buf && len > 0) {  
-> 
-> Uff, this is testing the first char in buf and it gets copied in below in
-> strscpy() through the str pointer.
-> 
-> So this function converts a set of set bits to their corresponding *names*
-> from strs[].
+Best regards,
+Krzysztof
 
-Yes.
-
-> This name doesn't even begin to explain what this function does - it converts
-> a bitmap to the corresponding names of the bits in @strs. If anything, the
-> above comment needs an example and the function needs to be named properly.
-
-I'll add an example.
-
-Thanks,
-Mauro
 
