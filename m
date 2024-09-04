@@ -1,117 +1,115 @@
-Return-Path: <linux-edac+bounces-1811-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1812-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD90B96B590
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 10:54:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9108296B869
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 12:26:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CC73B2AEB6
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 08:53:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DA4A2819B6
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Sep 2024 10:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443521CC8B9;
-	Wed,  4 Sep 2024 08:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188CF1CF5E5;
+	Wed,  4 Sep 2024 10:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="WwgnAhF6"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46CD81CC8AD;
-	Wed,  4 Sep 2024 08:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215AF1372;
+	Wed,  4 Sep 2024 10:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725439952; cv=none; b=g8xO0Z5hW4TZQ8F00kkqCcEj40hf6lwzKvi8jyGgyXEF0Ps5Cgyq38uKSaSWjWD9fd2cf+kBl3lVRJO3kwiEQ4h7O5Md936kLXRz+z8uGdif2YXYrlE54ld3Ge59PUcntyLo7LmzdtdtTSSdb07m4r8vhVl1AxBnqBbXdRl9dgs=
+	t=1725445559; cv=none; b=RlTXUdfyO23KYAGCSAkELydC8Kn0QBW3qjRepnN6mmoKf2SSeMNdg8XJG164fyjs6dXULKUQBZhJ7tSUk9hp99jBJlJ/vww/JUG+Wf5yEoRvoODp227u15l3BbJibkn5AXl5xLD44zrFYWZgWAW0dEz0gELgy2rxjJvShofF72A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725439952; c=relaxed/simple;
-	bh=IvkSCBt+3+2VjlsISB6I1MkJWO67OCf7/ELVtxu1nT8=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=kqVAJbQcs2cDzy4FGPOi91ue6Nan7z8LAQdPMKl58VFaNKMQimTaPgy6UUzK2XoD5nbVdokyv4hONGELP+xhrBDWCUfR5+TZsj8KNY/iqpZMXSsYuHkfDIEAfn05SSK0FtIPOZhXqmc0mdyNXCTvS9U/5+hZ6cY0O7f/HzPlSco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.164])
-	by gateway (Coremail) with SMTP id _____8BxmprFH9hmkRYqAA--.44894S3;
-	Wed, 04 Sep 2024 16:52:21 +0800 (CST)
-Received: from [10.20.42.164] (unknown [10.20.42.164])
-	by front2 (Coremail) with SMTP id qciowMCxH8bDH9hmi64FAA--.16454S2;
-	Wed, 04 Sep 2024 16:52:20 +0800 (CST)
-Subject: Re: [PATCH V3 1/2] dt-bindings: EDAC for ls3a5000 memory controller
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- chenhuacai@kernel.org, linux-edac@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name,
- bp@alien8.de, tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
- rric@kernel.org, loongarch@lists.linux.dev
-References: <20240903114714.11428-1-zhaoqunqin@loongson.cn>
- <20240903114714.11428-2-zhaoqunqin@loongson.cn>
- <c901ff6b-2e4d-4dd1-82da-e2e3d5db7988@kernel.org>
- <32aded46-86ce-59cf-e8b4-2621c0dd9ebe@loongson.cn>
- <c1508929-2e44-497d-b54a-285a3e74ba2d@kernel.org>
-From: Zhao Qunqin <zhaoqunqin@loongson.cn>
-Message-ID: <3beb1cf3-c033-bdec-7d38-f43889d4dc2c@loongson.cn>
-Date: Wed, 4 Sep 2024 16:51:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1725445559; c=relaxed/simple;
+	bh=py3rZr5xnwwStoz/LPOpWcBjqtNnORIgKAA6EXkYBKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bwghsnvh9EfKcxO0yZtmS6YqdIC+7B43hWAQNa0FnK+79wVhY84DwUhzUJ8K25IzEJXI8RisbUX2ThwHLm2eFlcAu3jsw+BG8yDE1hNgBXbLC7staJWmzQjcEqYHIeD/JV19MsWsupxwR+ta1RV7xP1GE+G9IfTZqhO0I85g8qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=WwgnAhF6; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B164540E0191;
+	Wed,  4 Sep 2024 10:25:54 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id IzrP_jv4yo8w; Wed,  4 Sep 2024 10:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1725445550; bh=IaYPSh9xjyFgyW628fViW+lh2mlbqwKw5jDlUwUgSqk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WwgnAhF6BFpo4L3iAK48soqSLpApm20jxY/Pd90bXBo4WAQyZ51vKTbDH663gVZeE
+	 etArLmEcLvZF4Ucr+lgiKbHTjJeHdT5dYuVX9ItjjPB10SC6paBwtEObe1k0oczRkO
+	 BhwMo7Fu1lZdZZHK2Io61y2zm/+s7xRNB7W75dFdq1xyJUGPaeuLeepNbIdWUDs6zU
+	 NBn5366mJwQiSXSEnpi0aItZYsWQON3stRO/zgdd1iXUMeedp0qFymVIzvfySNaH56
+	 VyHivakG7AILKKN4pKjY2rNLJQKxl5tAHGslFeJYKtGwS3vSJOK9VQMyV9cyU7NTME
+	 sFWL1z0sgFFF2SjFgN0dWC8DMzFmHEsFiW0R8fxF2IyKYsHbtSn58WOk4c8r6f6pSq
+	 sL7QHxivIYqRgkmcr/e4YzjOk/IpaaJu1DvG/D/rXkmjAh7Dn4dManDPix2QW28yry
+	 GMGQl12Jv7ILjbFqIC489DbUooCHPn8vxNDtBXe+BRmPrO3KgrhpJNUjRcQqykrEUO
+	 Bzc0L00B5EH4dORy2Hjjpbai1ag6oAEsVpnQxpsiaKGHlY6NrJxuB4CHH5XqtXXBPD
+	 TMVxpO1u6jkpaIdcJMsDqoJmNYwPxlzcaU7J2GmTFdO6HdSyE3bU8jMiM5wOGJHfZe
+	 Q0pknEE7gzHdq2KNhDhYoyug=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 62FA740E0275;
+	Wed,  4 Sep 2024 10:25:32 +0000 (UTC)
+Date: Wed, 4 Sep 2024 12:25:26 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>, Ard Biesheuvel <ardb@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Shiju Jose <shiju.jose@huawei.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Daniel Ferguson <danielf@os.amperecomputing.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>, linux-acpi@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] efi/cper: align ARM CPER type with UEFI 2.9A/2.10
+ specs
+Message-ID: <20240904102526.GBZtg1lgguu4YvxqnV@fat_crate.local>
+References: <cover.1720679234.git.mchehab+huawei@kernel.org>
+ <1ca1274f57fac69eda2f193de53077e8254a70fe.1720679234.git.mchehab+huawei@kernel.org>
+ <20240902152755.GFZtXZe5FPSfjRa9u3@fat_crate.local>
+ <20240904064549.0bddeaab@foz.lan>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <c1508929-2e44-497d-b54a-285a3e74ba2d@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:qciowMCxH8bDH9hmi64FAA--.16454S2
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Jw4Uuw4DCF45XFW5ZFW7WrX_yoWDJwb_Kw
-	4YywnruwnFya4kGFsxJF4xJryvqw4UtrWUur1kXr1Fqw1FqFZrZr4rK34fZw15JFW3WFnr
-	CFZrWFWkCr9xuosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
-	6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jruc_UUU
-	UU=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240904064549.0bddeaab@foz.lan>
 
+On Wed, Sep 04, 2024 at 06:45:49AM +0200, Mauro Carvalho Chehab wrote:
+> It was tested on ARM, together with QEMU error injection code I'm working
+> there. Currently, only GPIO and SEA notification types are supported, so
+> no x86 support yet (I'm trying to add SCI too, allowing to test on x86
+> as well[1]).
+> 
+> It sounds that bitfield.h is indirectly included from
+> arch/arm64/include/asm/sysreg.h when compiled on such arch.
 
-在 2024/9/4 下午1:51, Krzysztof Kozlowski 写道:
-> On 04/09/2024 03:15, Zhao Qunqin wrote:
->> 在 2024/9/3 下午8:29, Krzysztof Kozlowski 写道:
->>> On 03/09/2024 13:47, Zhao Qunqin wrote:
->>>> add device tree bindings for ls3a5000 EDAC driver.
->>>>
->>>> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
->>> So no improvements? No changes? Why do you send the same?
->> I'm sorry,  I thought if you hadn't raised any issues with the previous
->> version of dt binding, I wouldn't need to make any changes.
->>
->> For this version of the patch, I only changed the driver.
-> So what changed? Where is the changelog? Where is the tag? Did you get one?
->
-> Did you read submitting patches document?
+Before you send patches, make sure you *at* *least* build-test them on the
+affected architectures. I don't have to tell you this.
 
-My apologies! I must have missed a part of the content in the document, 
-please forgive me for wasting your time.
+Thx.
 
-Will add tag and changelog in  patch v4.
+-- 
+Regards/Gruss,
+    Boris.
 
-Thank you very much for taking the time to review.
-
-
-Best regards,
-
-Zhao Qunqin.
-
->
-> Best regards,
-> Krzysztof
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
