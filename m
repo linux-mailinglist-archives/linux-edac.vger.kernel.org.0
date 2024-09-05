@@ -1,46 +1,46 @@
-Return-Path: <linux-edac+bounces-1815-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1816-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E579396CCE8
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Sep 2024 05:04:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDCA796CCFD
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Sep 2024 05:08:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A10BE2859C7
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Sep 2024 03:04:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E30E1F28C9E
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Sep 2024 03:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09A31465A9;
-	Thu,  5 Sep 2024 03:04:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE8D1482FE;
+	Thu,  5 Sep 2024 03:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="RmrAbVvA"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HO0RoLPt"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254B41448C7;
-	Thu,  5 Sep 2024 03:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6DA13B293;
+	Thu,  5 Sep 2024 03:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725505459; cv=none; b=cdN8qM3iaEz9vwLxdqMl8xEfbhsHR59cL4vle2KfYFU7ffZfNEEfFCMkyo8KYms7V8xWnlkDK56aXc7B6GK8f0jXrtA7k2bfuTDC0rR3nzJD6VtxaTAASvjPY0adA8172KVHuLqkRH1t2nPe2K7ypvDmOOElHGrouHicTgObEV0=
+	t=1725505708; cv=none; b=q/zhph9bMXZZ1eAIsr1dhUkCYFr+b3T1KPdNSM/22i/ES9rPW2HtLOUrSsOoMc3FP9zchRMCqNyItZAIrTTaZNS+pZqftuB45h7grUwCvrjLQCQ/cwVmq9TIvUZEQkMGX/aApfBPPPsFEF8cY3hOrzFvs/iGXt8NfIXCj762T50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725505459; c=relaxed/simple;
-	bh=7GdYfRNzrCCZuilokKtXRCmGGQXdXKTLbn56/sVnFFo=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=CZ3AbOqoGAsAL28OdO6bb3yIJmn7fhxVyOrqQ85byqDCiNB0YHdbosFsyTerYDFaxfvchavtHcPhmgXmbeCvKA0jYvINXUBc0RhbL4pLbE4gDiYoaPtVmzsRagGwU4O8fCuSBE794T9GK+aow5seOgkeSulcfNRm/HDhu0PUR0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=RmrAbVvA; arc=none smtp.client-ip=115.124.30.131
+	s=arc-20240116; t=1725505708; c=relaxed/simple;
+	bh=4WJBHv2JKuBgtkRGcG2/w3ZQhO5vK8S09DHEyQPXGiI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DogQjhTVnaubDHBmsrF9FBXW1aHWRVZfCqSkl2jiaENzXFR2hKcKUTNlwW+OFJHIw24Q79H6z1ki4pF2UDEKiLo32FEtIFYFQI6U600H0etN1Dy5QFOV2al/NS/WH1XxeTbi/aIQhxhET8ilmclHMzmFeWWigIfBloocee7RRG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HO0RoLPt; arc=none smtp.client-ip=115.124.30.118
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1725505449; h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type;
-	bh=GDVRuhXoCkztJWuUnUtFfnUSjUnxHDl6SdZdNPHpDvI=;
-	b=RmrAbVvAsKRpX3PwvsUZ09TXaKrc7esqwkpG3puATjoSAeYWRUMbQ1YKEFyWRdr29yNuVgnVceKKJfiNRZoqQh75pt7VlNoD1U/cs9nIR3NHEtk41DwoPIq6bijkeeYGhIHV4YFoEqKMSx5b68JoYOZ/2XllsmqQypUrPUkd0LQ=
-Received: from 30.246.162.144(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WEJd.uX_1725505445)
+	t=1725505704; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=jV2+cn/4uNfPspURtuX++pQoMUnXb+at2wi4UK8kjLc=;
+	b=HO0RoLPtq1OPCGowW32Xc6MlKKCesvHDPhWKVImWE+7yjrDUzrPFdhQoQVxN5YnFF+szf69QTUN5VhC5eeLo3nXCNfBqlD8ZL7l7FTshxqMzocJph4CCysmNWnhd1PhI8q2b1IdrqSMmhEEyK7qN7ff/q8vpQppXHi0ebfklu5A=
+Received: from 30.246.162.144(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WEJd1a5_1725505701)
           by smtp.aliyun-inc.com;
-          Thu, 05 Sep 2024 11:04:07 +0800
-Message-ID: <bf984773-2a8e-4528-9af1-9775fdc7c4e2@linux.alibaba.com>
-Date: Thu, 5 Sep 2024 11:04:04 +0800
+          Thu, 05 Sep 2024 11:08:22 +0800
+Message-ID: <b255fe54-4595-487c-b516-d812798e4838@linux.alibaba.com>
+Date: Thu, 5 Sep 2024 11:08:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -48,9 +48,8 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-Subject: Re: [PATCH v12 1/3] ACPI: APEI: send SIGBUS to current task if
- synchronous memory error not recovered
+Subject: Re: [PATCH v12 2/3] mm: memory-failure: move return value
+ documentation to function declaration
 To: Jarkko Sakkinen <jarkko@kernel.org>, bp@alien8.de, rafael@kernel.org,
  wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com,
  tony.luck@intel.com, linmiaohe@huawei.com, naoya.horiguchi@nec.com,
@@ -65,98 +64,69 @@ Cc: linux-acpi@vger.kernel.org, linux-mm@kvack.org,
  robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
  zhuo.song@linux.alibaba.com
 References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20240902030034.67152-2-xueshuai@linux.alibaba.com>
- <D3WS2P2DU0CE.SANBOLMHG6TC@kernel.org>
-In-Reply-To: <D3WS2P2DU0CE.SANBOLMHG6TC@kernel.org>
+ <20240902030034.67152-3-xueshuai@linux.alibaba.com>
+ <D3WS3TK054QR.580Q46WYCDEZ@kernel.org>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <D3WS3TK054QR.580Q46WYCDEZ@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-在 2024/9/4 00:09, Jarkko Sakkinen 写道:
+在 2024/9/4 00:10, Jarkko Sakkinen 写道:
 > On Mon Sep 2, 2024 at 6:00 AM EEST, Shuai Xue wrote:
->> Synchronous error was detected as a result of user-space process accessing
->> a 2-bit uncorrected error. The CPU will take a synchronous error exception
->> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue a
->> memory_failure() work which poisons the related page, unmaps the page, and
->> then sends a SIGBUS to the process, so that a system wide panic can be
->> avoided.
+>> Part of return value comments for memory_failure() were originally
+>> documented at the call site. Move those comments to the function
+>> declaration to improve code readability and to provide developers with
+>> immediate access to function usage and return information.
 >>
->> However, no memory_failure() work will be queued unless all bellow
->> preconditions check passed:
->>
->> - `if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))` in ghes_handle_memory_failure()
->> - `if (flags == -1)` in ghes_handle_memory_failure()
->> - `if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))` in ghes_do_memory_failure()
->> - `if (!pfn_valid(pfn) && !arch_is_platform_page(physical_addr)) ` in ghes_do_memory_failure()
->>
->> In such case, the user-space process will trigger SEA again.  This loop
->> can potentially exceed the platform firmware threshold or even trigger a
->> kernel hard lockup, leading to a system reboot.
->>
->> Fix it by performing a force kill if no memory_failure() work is queued
->> for synchronous errors.
->>
->> Suggested-by: Xiaofei Tan <tanxiaofei@huawei.com>
 >> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->>
 >> ---
->>   drivers/acpi/apei/ghes.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
+>>   arch/x86/kernel/cpu/mce/core.c | 7 -------
+>>   mm/memory-failure.c            | 9 ++++++---
+>>   2 files changed, 6 insertions(+), 10 deletions(-)
 >>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 623cc0cb4a65..b0b20ee533d9 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -801,6 +801,16 @@ static bool ghes_do_proc(struct ghes *ghes,
->>   		}
+>> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+>> index b85ec7a4ec9e..66693b6dd1cd 100644
+>> --- a/arch/x86/kernel/cpu/mce/core.c
+>> +++ b/arch/x86/kernel/cpu/mce/core.c
+>> @@ -1361,13 +1361,6 @@ static void kill_me_maybe(struct callback_head *cb)
+>>   		return;
 >>   	}
 >>   
->> +	/*
->> +	 * If no memory failure work is queued for abnormal synchronous
->> +	 * errors, do a force kill.
->> +	 */
->> +	if (sync && !queued) {
->> +		pr_err("Sending SIGBUS to %s:%d due to hardware memory corruption\n",
->> +			current->comm, task_pid_nr(current));
+>> -	/*
+>> -	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
+>> -	 * to the current process with the proper error info,
+>> -	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
+>> -	 *
+>> -	 * In both cases, no further processing is required.
+>> -	 */
+>>   	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
+>>   		return;
+>>   
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 7066fc84f351..df26e2ff5e06 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -2199,9 +2199,12 @@ static void kill_procs_now(struct page *p, unsigned long pfn, int flags,
+>>    * Must run in process context (e.g. a work queue) with interrupts
+>>    * enabled and no spinlocks held.
+>>    *
+>> - * Return: 0 for successfully handled the memory error,
+>> - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
+>> - *         < 0(except -EOPNOTSUPP) on failure.
+>> + * Return values:
 > 
-> Hmm... doest this need "hardware" or would "memory corruption" be
-> enough?
+> s/Return values/Return:/
 > 
-> Also, does this need to say that it is sending SIGBUS when the signal
-> itself tells that already?
+> https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt
 > 
-> I.e. could "%s:%d has memory corruption" be enough information?
 
 Hi, Jarkko,
 
-Thank you for your suggestion. Maybe it could.
-
-There are some similar error info which use "hardware memory error", e.g.
-
-	static void kill_me_maybe(struct callback_head *cb)
-	{
-		pr_err("Uncorrected hardware memory error in user-access at %llx", 
-p->mce_addr);
-		...
-		pr_err("Memory error not recovered");
-		kill_me_now(cb);
-	}
-	
-	static int kill_proc(struct to_kill *tk, unsigned long pfn, int flags)
-	{
-		pr_err("%#lx: Sending SIGBUS to %s:%d due to hardware memory 
-corruption\n",
-				pfn, t->comm, task_pid_nr(t));
-		...
-			ret = force_sig_mceerr(BUS_MCEERR_AR,
-					 (void __user *)tk->addr, addr_lsb);
-	
-	}	
-
-So, personally, I prefer this info to be consistent with them.
-
+Thank you for the reminder. Will fix it in next version.
 
 Best Regards,
 Shuai
+
 
