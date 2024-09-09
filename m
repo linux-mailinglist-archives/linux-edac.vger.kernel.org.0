@@ -1,192 +1,104 @@
-Return-Path: <linux-edac+bounces-1824-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1825-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B41E896F721
-	for <lists+linux-edac@lfdr.de>; Fri,  6 Sep 2024 16:42:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FDDB970C34
+	for <lists+linux-edac@lfdr.de>; Mon,  9 Sep 2024 05:21:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6862B1F24FF5
-	for <lists+linux-edac@lfdr.de>; Fri,  6 Sep 2024 14:42:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EC911C21AC4
+	for <lists+linux-edac@lfdr.de>; Mon,  9 Sep 2024 03:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA73B1D1727;
-	Fri,  6 Sep 2024 14:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZc3U5fZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1751ACDE6;
+	Mon,  9 Sep 2024 03:21:08 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDFC156880;
-	Fri,  6 Sep 2024 14:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C287117109B;
+	Mon,  9 Sep 2024 03:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725633745; cv=none; b=X5Uz3Nw3HJgjvRSAU9LJZYQME0uScoeaNdCSVpdJ0la1V2ST8Ubd89Ex8a0T0H71RF5ngbPM+IimMhlnwnfzm2Qp0c3QIa6tEQpb8+KqWnS9wKdky53h5PbgGmNe9XWD3Jw/9bi1nofKXehF5VI+rYbvtD1zopXH8ybei/ZTxaU=
+	t=1725852068; cv=none; b=cmO/B258n+nRsrkDa9v5lsj+tL2vv8atzDeiYBJAXt1bWRKaG6HELSxW7YxSQPy4UiNXOzScjnBVLjXMZrCkBwkN0qp6e+vaRllLmzVAhATacMvUbO+ZQvQAexltzwO9rVJINokoHVYL0bw4NePYXXVxTHrLfuiFpA7oH7Kntrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725633745; c=relaxed/simple;
-	bh=TmcKdTXExCJ2UcE1g4PkpPFg+K6EEGji27f/9N6zwT0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=QGr0bzmWfdSTmwuLpyLssStf07X75+li9lFR4aW4LxET/MmQ3fuy329F+eyU8QPX1GFJeJLr0rMstVgrIdik9/YldZdypQBh1gGkAOUnxBaFAYsZJGjabjmzdqB2IyUNB8g0JfpE1tttK3hrspms6iIMVoN3lGSXxTX5IeUaUmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZc3U5fZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70578C4CEC4;
-	Fri,  6 Sep 2024 14:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725633744;
-	bh=TmcKdTXExCJ2UcE1g4PkpPFg+K6EEGji27f/9N6zwT0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=kZc3U5fZf44vXMVSFFrz1bJ9A6votpx8WQajkGxDUSrPlM8OPiv1f6Z5yr9fNl2ij
-	 C/+WXsA17kFTHcMX03Y3/PS8eWODt2aFHvgmJbEXdqGVcm9a5q0CmtXYSy0w18/1qY
-	 4s6zBZsVVggdBdVUm4EZ8guz3uyv71PT3UJjbu3OB8U+Gkm2CNFdZvdmCf06jsdXwv
-	 OBViOamHdL09ScYOdhhMNM6CKWO3auKqPam/oN/XpfAF0hfYLu2DKlmXKL9hTxJiQQ
-	 rqnH4044VJVCrImz2XOeny9ykWOxS9e3QQFPKinAYrHXUSXsua65KTOTelz/DYgoSW
-	 RLy5712wW+YWQ==
+	s=arc-20240116; t=1725852068; c=relaxed/simple;
+	bh=rddMkcO1mxzcbZWcLmTHLUh/bn7ux6X75UAmwH7LezM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=enIruGfg+U94uCiDoUyZejc8R8hjJ8D8tQLJUqArnWUdJfIZy2oABfFU097Vvy9HeC5Zz1wPSoiAu8jdTvLMnbuIOV1naIBeY2tIhwbd50cnC6uAEE9htsrZXr/AyAk4Ms5Dnews/SMNc8Nn+GAOUwj0QqPs5e5hATdd7EJY+Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.40.54.90])
+	by gateway (Coremail) with SMTP id _____8Dxleiead5mAW8CAA--.4567S3;
+	Mon, 09 Sep 2024 11:21:02 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.40.54.90])
+	by front2 (Coremail) with SMTP id qciowMAxa8adad5msCkCAA--.9833S2;
+	Mon, 09 Sep 2024 11:21:01 +0800 (CST)
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	chenhuacai@kernel.org
+Cc: linux-edac@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@xen0n.name,
+	bp@alien8.de,
+	tony.luck@intel.com,
+	james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org,
+	loongarch@lists.linux.dev,
+	Zhao Qunqin <zhaoqunqin@loongson.cn>
+Subject: [PATCH v4 0/2] Add EDAC driver for loongson memory controller
+Date: Mon,  9 Sep 2024 11:21:22 +0800
+Message-Id: <20240909032124.18819-1-zhaoqunqin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 06 Sep 2024 17:42:20 +0300
-Message-Id: <D3ZA3WBGABKG.1SE9YOAX30B2Y@kernel.org>
-Cc: <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
- <linux-edac@vger.kernel.org>, <x86@kernel.org>, <justin.he@arm.com>,
- <ardb@kernel.org>, <ying.huang@intel.com>, <ashish.kalra@amd.com>,
- <baolin.wang@linux.alibaba.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
- <dave.hansen@linux.intel.com>, <lenb@kernel.org>, <hpa@zytor.com>,
- <robert.moore@intel.com>, <lvying6@huawei.com>, <xiexiuqi@huawei.com>,
- <zhuo.song@linux.alibaba.com>
-Subject: Re: [PATCH v12 1/3] ACPI: APEI: send SIGBUS to current task if
- synchronous memory error not recovered
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Shuai Xue" <xueshuai@linux.alibaba.com>, <bp@alien8.de>,
- <rafael@kernel.org>, <wangkefeng.wang@huawei.com>, <tanxiaofei@huawei.com>,
- <mawupeng1@huawei.com>, <tony.luck@intel.com>, <linmiaohe@huawei.com>,
- <naoya.horiguchi@nec.com>, <james.morse@arm.com>, <tongtiangen@huawei.com>,
- <gregkh@linuxfoundation.org>, <will@kernel.org>
-X-Mailer: aerc 0.18.2
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20240902030034.67152-2-xueshuai@linux.alibaba.com>
- <D3WS2P2DU0CE.SANBOLMHG6TC@kernel.org>
- <bf984773-2a8e-4528-9af1-9775fdc7c4e2@linux.alibaba.com>
- <D3YEWCUXEWY3.ALFECJPKZMMG@kernel.org>
- <D3YEYH69KMV4.13SX59Y2HT6D@kernel.org>
- <34d5d58b-7fc2-4f93-9d3b-3051ec5e6a23@linux.alibaba.com>
-In-Reply-To: <34d5d58b-7fc2-4f93-9d3b-3051ec5e6a23@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qciowMAxa8adad5msCkCAA--.9833S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7JFyDtrWDJw1rCw4DZF17XFc_yoWxtwb_Ca
+	17Aay8Jr4vya4DJay2qr1xZFWayF4UGas0kF1qgw15Xr4avr13WFykWa43AFy7Jw1DWFn3
+	ZrZ5KryxA3W8tosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
+	Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+	JVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+	vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
+	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+	wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5fHUUUUUU=
 
-On Fri Sep 6, 2024 at 4:53 AM EEST, Shuai Xue wrote:
->
->
-> =E5=9C=A8 2024/9/5 22:17, Jarkko Sakkinen =E5=86=99=E9=81=93:
-> > On Thu Sep 5, 2024 at 5:14 PM EEST, Jarkko Sakkinen wrote:
-> >> On Thu Sep 5, 2024 at 6:04 AM EEST, Shuai Xue wrote:
-> >>>
-> >>>
-> >>> =E5=9C=A8 2024/9/4 00:09, Jarkko Sakkinen =E5=86=99=E9=81=93:
-> >>>> On Mon Sep 2, 2024 at 6:00 AM EEST, Shuai Xue wrote:
-> >>>>> Synchronous error was detected as a result of user-space process ac=
-cessing
-> >>>>> a 2-bit uncorrected error. The CPU will take a synchronous error ex=
-ception
-> >>>>> such as Synchronous External Abort (SEA) on Arm64. The kernel will =
-queue a
-> >>>>> memory_failure() work which poisons the related page, unmaps the pa=
-ge, and
-> >>>>> then sends a SIGBUS to the process, so that a system wide panic can=
- be
-> >>>>> avoided.
-> >>>>>
-> >>>>> However, no memory_failure() work will be queued unless all bellow
-> >>>>> preconditions check passed:
-> >>>>>
-> >>>>> - `if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))` in ghes_ha=
-ndle_memory_failure()
-> >>>>> - `if (flags =3D=3D -1)` in ghes_handle_memory_failure()
-> >>>>> - `if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))` in ghes_do_me=
-mory_failure()
-> >>>>> - `if (!pfn_valid(pfn) && !arch_is_platform_page(physical_addr)) ` =
-in ghes_do_memory_failure()
-> >>>>>
-> >>>>> In such case, the user-space process will trigger SEA again.  This =
-loop
-> >>>>> can potentially exceed the platform firmware threshold or even trig=
-ger a
-> >>>>> kernel hard lockup, leading to a system reboot.
-> >>>>>
-> >>>>> Fix it by performing a force kill if no memory_failure() work is qu=
-eued
-> >>>>> for synchronous errors.
-> >>>>>
-> >>>>> Suggested-by: Xiaofei Tan <tanxiaofei@huawei.com>
-> >>>>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> >>>>>
-> >>>>> ---
-> >>>>>    drivers/acpi/apei/ghes.c | 10 ++++++++++
-> >>>>>    1 file changed, 10 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> >>>>> index 623cc0cb4a65..b0b20ee533d9 100644
-> >>>>> --- a/drivers/acpi/apei/ghes.c
-> >>>>> +++ b/drivers/acpi/apei/ghes.c
-> >>>>> @@ -801,6 +801,16 @@ static bool ghes_do_proc(struct ghes *ghes,
-> >>>>>    		}
-> >>>>>    	}
-> >>>>>   =20
-> >>>>> +	/*
-> >>>>> +	 * If no memory failure work is queued for abnormal synchronous
-> >>>>> +	 * errors, do a force kill.
-> >>>>> +	 */
-> >>>>> +	if (sync && !queued) {
-> >>>>> +		pr_err("Sending SIGBUS to %s:%d due to hardware memory corruptio=
-n\n",
-> >>>>> +			current->comm, task_pid_nr(current));
-> >>>>
-> >>>> Hmm... doest this need "hardware" or would "memory corruption" be
-> >>>> enough?
-> >>>>
-> >>>> Also, does this need to say that it is sending SIGBUS when the signa=
-l
-> >>>> itself tells that already?
-> >>>>
-> >>>> I.e. could "%s:%d has memory corruption" be enough information?
-> >>>
-> >>> Hi, Jarkko,
-> >>>
-> >>> Thank you for your suggestion. Maybe it could.
-> >>>
-> >>> There are some similar error info which use "hardware memory error", =
-e.g.
-> >>
-> >> By tweaking my original suggestion just a bit:
-> >>
-> >> "%s:%d: hardware memory corruption"
-> >>
-> >> Can't get clearer than that, right?
-> >=20
-> > And obvious reason that shorter and more consistent klog message is eas=
-y
-> > to spot and grep. It is simply less convoluted.
-> >=20
-> > If you want also SIGBUS, I'd just put it as "%s:%d: hardware memory
-> > corruption (SIGBUS)"
-> >=20
-> > BR, Jarkko
->
-> Hi, Jarkko,
->
-> I will change it to "%s:%d: hardware memory corruption (SIGBUS)".
->
-> Thank you for valuable suggestion.
+Add a simple EDAC driver which report single bit errors (CE) only on
+loongson platform.
 
-Yeah, no intention nitpick, it has a practical value when debugging
-issues :-)
+Zhao Qunqin (2):
+  dt-bindings: EDAC for ls3a5000 memory controller
+  Loongarch: EDAC driver for loongson memory controller
 
->
-> Best Regards,
-> Shuai
+ .../edac/loongson,ls3a5000-mc-edac.yaml       |  44 +++++
+ MAINTAINERS                                   |   7 +
+ arch/loongarch/Kconfig                        |   1 +
+ drivers/edac/Kconfig                          |   8 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/loongson_edac.c                  | 182 ++++++++++++++++++
+ 6 files changed, 243 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-edac.yaml
+ create mode 100644 drivers/edac/loongson_edac.c
 
-BR, Jarkko
+
+base-commit: 61124f42dcaa30f58a8b47a2b69ddb80260677c7
+-- 
+2.43.0
+
 
