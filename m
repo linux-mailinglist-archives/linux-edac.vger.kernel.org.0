@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-1845-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1849-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E61F6974DEF
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Sep 2024 11:07:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C056C974E03
+	for <lists+linux-edac@lfdr.de>; Wed, 11 Sep 2024 11:09:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44CB0B2142D
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Sep 2024 09:07:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F4CA286A37
+	for <lists+linux-edac@lfdr.de>; Wed, 11 Sep 2024 09:09:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB0D17D354;
-	Wed, 11 Sep 2024 09:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFED1186E39;
+	Wed, 11 Sep 2024 09:07:23 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045D217A596;
-	Wed, 11 Sep 2024 09:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3899183CA6;
+	Wed, 11 Sep 2024 09:07:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726045632; cv=none; b=srJctf9L5VmvAx1UQZ+iySbjamXOd7V8Lf8Wp4lkuCOfqzvlw/UX/qFWK2LO/7ehvmqagTm4XUtxOyNZfb4e0bCFlPyG7JWhO4PQzyllKPWkkruo+9PztVg6f7jeWR0XeJnxEvs9lp++5t4QqPK/jVYjMz7ddBU5IZ9LAtm/cok=
+	t=1726045643; cv=none; b=UUYXfFGvjOzyRd6dQnvEqhZTSIsrV1c4Yqd9UvafSjd272k5ECJ6XHVsugrEgc4gQ2vGD1YuOJa/Re4PiIQyZpWS6wYxHAC0ik4WFuyfDaNDgdlB2R4o3PTe86ybzTxwEjaJ7pAeTYyY0tYzBOG3MwT3GRK1ybOiG2pzzXRV6G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726045632; c=relaxed/simple;
-	bh=BFHrlI/MM/kiYtl3ULW3S7/Cz7YROhPayjg7oyBfV/o=;
+	s=arc-20240116; t=1726045643; c=relaxed/simple;
+	bh=6myZm6/GR+DrEO8QIveZrmaYCfWjqHMoO6my+y0csY4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZP0fJDBL4z6b1zQtCKKvTkxrJ5X4XhYmJVSDZmDVDmQ7FXywGNcUhbN0Vqm4wQk2maiPrQOjyLNm+xqRbWbQs4AwxqhMtROpP+cqDC4/qcD1PQh9E6Il8vnrZ4bOCGUnhzejPB3eJhTNc+JN4ypNrTNZ/reDEHT05FY3CCnioFU=
+	 MIME-Version:Content-Type; b=SRk0gafiXy2lkTM1x7eumHwZlSPkz0CctybaWGNDnyZ0w7vfGrOMI+mYvHahnRwl9NiCAhPvKtXzMgcLVyDSXgbSei++8Qe7SGwIqn8uOBn9BnncB+KJkmqzfZuUejTXEp6zXpYyOOkF2baXESSKGiFbTfBverTpJ5vl4AmOrpI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4X3ZMc3XX1z6K6R1;
-	Wed, 11 Sep 2024 17:02:20 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4X3ZNc68mmz6K8qx;
+	Wed, 11 Sep 2024 17:03:12 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id 49C6E140CB9;
-	Wed, 11 Sep 2024 17:07:07 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id B6100140F63;
+	Wed, 11 Sep 2024 17:07:10 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.245.151) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 11 Sep 2024 11:07:04 +0200
+ 15.1.2507.39; Wed, 11 Sep 2024 11:07:08 +0200
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
@@ -59,9 +59,9 @@ CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v12 03/17] EDAC: Add EDAC ECS control driver
-Date: Wed, 11 Sep 2024 10:04:32 +0100
-Message-ID: <20240911090447.751-4-shiju.jose@huawei.com>
+Subject: [PATCH v12 04/17] cxl: Move mailbox related bits to the same context
+Date: Wed, 11 Sep 2024 10:04:33 +0100
+Message-ID: <20240911090447.751-5-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20240911090447.751-1-shiju.jose@huawei.com>
 References: <20240911090447.751-1-shiju.jose@huawei.com>
@@ -76,591 +76,812 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
  frapeml500007.china.huawei.com (7.182.85.172)
 
-From: Shiju Jose <shiju.jose@huawei.com>
+From: Dave Jiang <dave.jiang@intel.com>
 
-Add EDAC ECS (Error Check Scrub) control driver supports configuring
-the memory device's ECS feature.
+Create a new 'struct cxl_mailbox' and move all mailbox related bits to
+it. This allows isolation of all CXL mailbox data in order to export
+some of the calls to external caller (fwctl) and avoid exporting of
+CXL driver specific bits such has device states.
 
-The Error Check Scrub (ECS) is a feature defined in JEDEC DDR5 SDRAM
-Specification (JESD79-5) and allows the DRAM to internally read, correct
-single-bit errors, and write back corrected data bits to the DRAM array
-while providing transparency to error counts.
-
-The DDR5 device contains number of memory media FRUs per device. The
-DDR5 ECS feature and thus the ECS control driver supports configuring
-the ECS parameters per FRU.
-
-The memory devices support ECS feature register with the EDAC ECS driver
-and thus with the generic EDAC RAS feature driver, which adds the sysfs
-ECS control interface. The ECS control attributes are exposed to
-userspace in /sys/bus/edac/devices/<dev-name>/ecs_fruX/.
-
-Generic EDAC ECS driver and the common sysfs ECS interface promotes
-unambiguous control from the userspace irrespective of the underlying
-devices, support ECS feature.
-
-The support for ECS feature is added separately because the DDR5 ECS
-features control attributes are dissimilar from those of the scrub
-feature.
-
-The sysfs ECS attr nodes would be present only if the client driver
-has implemented the corresponding attr callback function and pass
-in ops to the EDAC RAS feature driver during registration.
-
-Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- Documentation/ABI/testing/sysfs-edac-ecs |  78 +++++
- drivers/edac/Makefile                    |   2 +-
- drivers/edac/edac_device.c               |   3 +
- drivers/edac/edac_ecs.c                  | 376 +++++++++++++++++++++++
- include/linux/edac.h                     |  33 ++
- 5 files changed, 491 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/ABI/testing/sysfs-edac-ecs
- create mode 100755 drivers/edac/edac_ecs.c
+ MAINTAINERS                  |  1 +
+ drivers/cxl/core/mbox.c      | 48 ++++++++++++++++++---------
+ drivers/cxl/core/memdev.c    | 18 +++++++----
+ drivers/cxl/cxlmem.h         | 49 ++--------------------------
+ drivers/cxl/pci.c            | 58 +++++++++++++++++++--------------
+ drivers/cxl/pmem.c           |  4 ++-
+ include/linux/cxl/mailbox.h  | 63 ++++++++++++++++++++++++++++++++++++
+ tools/testing/cxl/test/mem.c | 27 ++++++++++------
+ 8 files changed, 163 insertions(+), 105 deletions(-)
+ create mode 100644 include/linux/cxl/mailbox.h
 
-diff --git a/Documentation/ABI/testing/sysfs-edac-ecs b/Documentation/ABI/testing/sysfs-edac-ecs
-new file mode 100644
-index 000000000000..1eb35acd4e5e
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-edac-ecs
-@@ -0,0 +1,78 @@
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		The sysfs EDAC bus devices /<dev-name>/ecs_fru* subdirectory
-+		belongs to the memory media ECS (Error Check Scrub) control
-+		feature, where <dev-name> directory corresponds to a device
-+		registered with the EDAC ECS driver and thus registered with
-+		the generic EDAC RAS driver too.
-+		/ecs_fru* belongs to the media FRUs (Field replaceable unit)
-+		under the memory device.
-+		The sysfs ECS attr nodes would be present only if the client
-+		driver has implemented the corresponding attr callback
-+		function and pass in ops to the EDAC RAS feature driver
-+		during registration.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/log_entry_type
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(RW) The log entry type of how the DDR5 ECS log is reported.
-+		00b - per DRAM.
-+		01b - per memory media FRU.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/log_entry_type_per_dram
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(RO) True if current log entry type is per DRAM.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/log_entry_type_per_memory_media
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(RO) True if current log entry type is per memory media FRU.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/mode
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(RW) The mode of how the DDR5 ECS counts the errors.
-+		0 - ECS counts rows with errors.
-+		1 - ECS counts codewords with errors.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/mode_counts_rows
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(RO) True if current mode is ECS counts rows with errors.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/mode_counts_codewords
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(RO) True if current mode is ECS counts codewords with errors.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/reset
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(WO) ECS reset ECC counter.
-+		0 - normal, ECC counter running actively.
-+		1 - reset ECC counter to the default value.
-+
-+What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/threshold
-+Date:		Oct 2024
-+KernelVersion:	6.12
-+Contact:	linux-edac@vger.kernel.org
-+Description:
-+		(RW) ECS threshold count per GB of memory cells.
-diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index fbf0e39ec678..62115eff6a9a 100644
---- a/drivers/edac/Makefile
-+++ b/drivers/edac/Makefile
-@@ -10,7 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 878dcd23b331..227c2b214f00 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5619,6 +5619,7 @@ F:	Documentation/driver-api/cxl
+ F:	drivers/cxl/
+ F:	include/linux/einj-cxl.h
+ F:	include/linux/cxl-event.h
++F:	include/linux/cxl/
+ F:	include/uapi/linux/cxl_mem.h
+ F:	tools/testing/cxl/
  
- edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
- edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
--edac_core-y	+= edac_scrub.o
-+edac_core-y	+= edac_scrub.o edac_ecs.o
+diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+index e5cdeafdf76e..216937ef9e07 100644
+--- a/drivers/cxl/core/mbox.c
++++ b/drivers/cxl/core/mbox.c
+@@ -244,16 +244,17 @@ static const char *cxl_mem_opcode_to_name(u16 opcode)
+ int cxl_internal_send_cmd(struct cxl_memdev_state *mds,
+ 			  struct cxl_mbox_cmd *mbox_cmd)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	size_t out_size, min_out;
+ 	int rc;
  
- edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
+-	if (mbox_cmd->size_in > mds->payload_size ||
+-	    mbox_cmd->size_out > mds->payload_size)
++	if (mbox_cmd->size_in > cxl_mbox->payload_size ||
++	    mbox_cmd->size_out > cxl_mbox->payload_size)
+ 		return -E2BIG;
  
-diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index 6381896b6424..9cac9ae75080 100644
---- a/drivers/edac/edac_device.c
-+++ b/drivers/edac/edac_device.c
-@@ -623,6 +623,9 @@ static int edac_dev_feat_init(struct device *parent,
- 		num = ras_feat->ecs_info.num_media_frus;
- 		dev_data->ecs_ops = ras_feat->ecs_ops;
- 		dev_data->private = ras_feat->ctx;
-+		ret = edac_ecs_get_desc(parent, attr_groups, num);
-+		if (ret)
-+			return ret;
- 		return num;
- 	case RAS_FEAT_PPR:
- 		dev_data->ppr_ops = ras_feat->ppr_ops;
-diff --git a/drivers/edac/edac_ecs.c b/drivers/edac/edac_ecs.c
-new file mode 100755
-index 000000000000..50915ab1e769
---- /dev/null
-+++ b/drivers/edac/edac_ecs.c
-@@ -0,0 +1,376 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * ECS driver supporting controlling on die error check scrub
-+ * (e.g. DDR5 ECS). The common sysfs ECS interface promotes
-+ * unambiguous access from the userspace.
-+ *
-+ * Copyright (c) 2024 HiSilicon Limited.
-+ */
-+
-+#define pr_fmt(fmt)     "EDAC ECS: " fmt
-+
-+#include <linux/edac.h>
-+
-+#define EDAC_ECS_FRU_NAME "ecs_fru"
-+
-+enum edac_ecs_attributes {
-+	ECS_LOG_ENTRY_TYPE,
-+	ECS_LOG_ENTRY_TYPE_PER_DRAM,
-+	ECS_LOG_ENTRY_TYPE_PER_MEMORY_MEDIA,
-+	ECS_MODE,
-+	ECS_MODE_COUNTS_ROWS,
-+	ECS_MODE_COUNTS_CODEWORDS,
-+	ECS_RESET,
-+	ECS_THRESHOLD,
-+	ECS_MAX_ATTRS
-+};
-+
-+struct edac_ecs_dev_attr {
-+	struct device_attribute dev_attr;
-+	int fru_id;
-+};
-+
-+struct edac_ecs_fru_context {
-+	char name[EDAC_FEAT_NAME_LEN];
-+	struct edac_ecs_dev_attr ecs_dev_attr[ECS_MAX_ATTRS];
-+	struct attribute *ecs_attrs[ECS_MAX_ATTRS + 1];
-+	struct attribute_group group;
-+};
-+
-+struct edac_ecs_context {
-+	u16 num_media_frus;
-+	struct edac_ecs_fru_context *fru_ctxs;
-+};
-+
-+#define to_ecs_dev_attr(_dev_attr)	\
-+	container_of(_dev_attr, struct edac_ecs_dev_attr, dev_attr)
-+
-+static ssize_t log_entry_type_show(struct device *ras_feat_dev,
-+				   struct device_attribute *attr,
-+				   char *buf)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	u32 val;
-+	int ret;
-+
-+	ret = ops->get_log_entry_type(ras_feat_dev->parent, ctx->ecs.private,
-+				      ecs_dev_attr->fru_id, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%u\n", val);
-+}
-+
-+static ssize_t log_entry_type_store(struct device *ras_feat_dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t len)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	long val;
-+	int ret;
-+
-+	ret = kstrtol(buf, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = ops->set_log_entry_type(ras_feat_dev->parent, ctx->ecs.private,
-+				      ecs_dev_attr->fru_id, val);
-+	if (ret)
-+		return ret;
-+
-+	return len;
-+}
-+
-+static ssize_t log_entry_type_per_dram_show(struct device *ras_feat_dev,
-+					    struct device_attribute *attr,
-+					    char *buf)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	u32 val;
-+	int ret;
-+
-+	ret = ops->get_log_entry_type_per_dram(ras_feat_dev->parent, ctx->ecs.private,
-+					       ecs_dev_attr->fru_id, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%u\n", val);
-+}
-+
-+static ssize_t log_entry_type_per_memory_media_show(struct device *ras_feat_dev,
-+						    struct device_attribute *attr,
-+						    char *buf)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	u32 val;
-+	int ret;
-+
-+	ret = ops->get_log_entry_type_per_memory_media(ras_feat_dev->parent,
-+						       ctx->ecs.private,
-+						       ecs_dev_attr->fru_id, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%u\n", val);
-+}
-+
-+static ssize_t mode_show(struct device *ras_feat_dev,
-+			 struct device_attribute *attr,
-+			 char *buf)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	u32 val;
-+	int ret;
-+
-+	ret = ops->get_mode(ras_feat_dev->parent, ctx->ecs.private,
-+			    ecs_dev_attr->fru_id, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%u\n", val);
-+}
-+
-+static ssize_t mode_store(struct device *ras_feat_dev,
-+			  struct device_attribute *attr,
-+			  const char *buf, size_t len)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	long val;
-+	int ret;
-+
-+	ret = kstrtol(buf, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = ops->set_mode(ras_feat_dev->parent, ctx->ecs.private,
-+			    ecs_dev_attr->fru_id, val);
-+	if (ret)
-+		return ret;
-+
-+	return len;
-+}
-+
-+static ssize_t mode_counts_rows_show(struct device *ras_feat_dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	u32 val;
-+	int ret;
-+
-+	ret = ops->get_mode_counts_rows(ras_feat_dev->parent, ctx->ecs.private,
-+					ecs_dev_attr->fru_id, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%u\n", val);
-+}
-+
-+static ssize_t mode_counts_codewords_show(struct device *ras_feat_dev,
-+					  struct device_attribute *attr,
-+					  char *buf)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	u32 val;
-+	int ret;
-+
-+	ret = ops->get_mode_counts_codewords(ras_feat_dev->parent, ctx->ecs.private,
-+					     ecs_dev_attr->fru_id, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%u\n", val);
-+}
-+
-+static ssize_t reset_store(struct device *ras_feat_dev,
-+			   struct device_attribute *attr,
-+			   const char *buf, size_t len)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	long val;
-+	int ret;
-+
-+	ret = kstrtol(buf, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = ops->reset(ras_feat_dev->parent, ctx->ecs.private,
-+			 ecs_dev_attr->fru_id, val);
-+	if (ret)
-+		return ret;
-+
-+	return len;
-+}
-+
-+static ssize_t threshold_show(struct device *ras_feat_dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	int ret;
-+	u32 val;
-+
-+	ret = ops->get_threshold(ras_feat_dev->parent, ctx->ecs.private,
-+				 ecs_dev_attr->fru_id, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%u\n", val);
-+}
-+
-+static ssize_t threshold_store(struct device *ras_feat_dev,
-+			       struct device_attribute *attr,
-+			       const char *buf, size_t len)
-+{
-+	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+	long val;
-+	int ret;
-+
-+	ret = kstrtol(buf, 0, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = ops->set_threshold(ras_feat_dev->parent, ctx->ecs.private,
-+				 ecs_dev_attr->fru_id, val);
-+	if (ret)
-+		return ret;
-+
-+	return len;
-+}
-+
-+static umode_t ecs_attr_visible(struct kobject *kobj,
-+				struct attribute *a, int attr_id)
-+{
-+	struct device *ras_feat_dev = kobj_to_dev(kobj);
-+	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-+	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-+
-+	switch (attr_id) {
-+	case ECS_LOG_ENTRY_TYPE:
-+		if (ops->get_log_entry_type && ops->set_log_entry_type)
-+			return a->mode;
-+		if (ops->get_log_entry_type)
-+			return 0444;
-+		return 0;
-+	case ECS_LOG_ENTRY_TYPE_PER_DRAM:
-+		return ops->get_log_entry_type_per_dram ? a->mode : 0;
-+	case ECS_LOG_ENTRY_TYPE_PER_MEMORY_MEDIA:
-+		return ops->get_log_entry_type_per_memory_media ? a->mode : 0;
-+	case ECS_MODE:
-+		if (ops->get_mode && ops->set_mode)
-+			return a->mode;
-+		if (ops->get_mode)
-+			return 0444;
-+		return 0;
-+	case ECS_MODE_COUNTS_ROWS:
-+		return ops->get_mode_counts_rows ? a->mode : 0;
-+	case ECS_MODE_COUNTS_CODEWORDS:
-+		return ops->get_mode_counts_codewords ? a->mode : 0;
-+	case ECS_RESET:
-+		return ops->reset ? a->mode : 0;
-+	case ECS_THRESHOLD:
-+		if (ops->get_threshold && ops->set_threshold)
-+			return a->mode;
-+		if (ops->get_threshold)
-+			return 0444;
-+		return 0;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+#define EDAC_ECS_ATTR_RO(_name, _fru_id)       \
-+	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RO(_name), \
-+				     .fru_id = _fru_id })
-+
-+#define EDAC_ECS_ATTR_WO(_name, _fru_id)       \
-+	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_WO(_name), \
-+				     .fru_id = _fru_id })
-+
-+#define EDAC_ECS_ATTR_RW(_name, _fru_id)       \
-+	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RW(_name), \
-+				     .fru_id = _fru_id })
-+
-+static int ecs_create_desc(struct device *ecs_dev,
-+			   const struct attribute_group **attr_groups,
-+			   u16 num_media_frus)
-+{
-+	struct edac_ecs_context *ecs_ctx;
-+	u32 fru;
-+
-+	ecs_ctx = devm_kzalloc(ecs_dev, sizeof(*ecs_ctx), GFP_KERNEL);
-+	if (!ecs_ctx)
-+		return -ENOMEM;
-+
-+	ecs_ctx->num_media_frus = num_media_frus;
-+	ecs_ctx->fru_ctxs = devm_kcalloc(ecs_dev, num_media_frus,
-+					 sizeof(*ecs_ctx->fru_ctxs),
-+					 GFP_KERNEL);
-+	if (!ecs_ctx->fru_ctxs)
-+		return -ENOMEM;
-+
-+	for (fru = 0; fru < num_media_frus; fru++) {
-+		struct edac_ecs_fru_context *fru_ctx = &ecs_ctx->fru_ctxs[fru];
-+		struct attribute_group *group = &fru_ctx->group;
-+		int i;
-+
-+		fru_ctx->ecs_dev_attr[0] = EDAC_ECS_ATTR_RW(log_entry_type, fru);
-+		fru_ctx->ecs_dev_attr[1] = EDAC_ECS_ATTR_RO(log_entry_type_per_dram, fru);
-+		fru_ctx->ecs_dev_attr[2] = EDAC_ECS_ATTR_RO(log_entry_type_per_memory_media, fru);
-+		fru_ctx->ecs_dev_attr[3] = EDAC_ECS_ATTR_RW(mode, fru);
-+		fru_ctx->ecs_dev_attr[4] = EDAC_ECS_ATTR_RO(mode_counts_rows, fru);
-+		fru_ctx->ecs_dev_attr[5] = EDAC_ECS_ATTR_RO(mode_counts_codewords, fru);
-+		fru_ctx->ecs_dev_attr[6] = EDAC_ECS_ATTR_WO(reset, fru);
-+		fru_ctx->ecs_dev_attr[7] = EDAC_ECS_ATTR_RW(threshold, fru);
-+		for (i = 0; i < ECS_MAX_ATTRS; i++)
-+			fru_ctx->ecs_attrs[i] = &fru_ctx->ecs_dev_attr[i].dev_attr.attr;
-+
-+		sprintf(fru_ctx->name, "%s%d", EDAC_ECS_FRU_NAME, fru);
-+		group->name = fru_ctx->name;
-+		group->attrs = fru_ctx->ecs_attrs;
-+		group->is_visible  = ecs_attr_visible;
-+
-+		attr_groups[fru] = group;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * edac_ecs_get_desc - get EDAC ECS descriptors
-+ * @ecs_dev: client device, supports ECS feature
-+ * @attr_groups: pointer to attrribute group container
-+ * @num_media_frus: number of media FRUs in the device
-+ *
-+ * Returns 0 on success, error otherwise.
-+ */
-+int edac_ecs_get_desc(struct device *ecs_dev,
-+		      const struct attribute_group **attr_groups,
-+		      u16 num_media_frus)
-+{
-+	if (!ecs_dev || !attr_groups || !num_media_frus)
-+		return -EINVAL;
-+
-+	return ecs_create_desc(ecs_dev, attr_groups, num_media_frus);
-+}
-diff --git a/include/linux/edac.h b/include/linux/edac.h
-index aae8262b9863..90cb90cf5272 100644
---- a/include/linux/edac.h
-+++ b/include/linux/edac.h
-@@ -704,10 +704,43 @@ int edac_scrub_get_desc(struct device *scrub_dev,
- 			const struct attribute_group **attr_groups,
- 			u8 instance);
+ 	out_size = mbox_cmd->size_out;
+ 	min_out = mbox_cmd->min_out;
+-	rc = mds->mbox_send(mds, mbox_cmd);
++	rc = cxl_mbox->mbox_send(cxl_mbox, mbox_cmd);
+ 	/*
+ 	 * EIO is reserved for a payload size mismatch and mbox_send()
+ 	 * may not return this error.
+@@ -353,6 +354,7 @@ static int cxl_mbox_cmd_ctor(struct cxl_mbox_cmd *mbox,
+ 			     struct cxl_memdev_state *mds, u16 opcode,
+ 			     size_t in_size, size_t out_size, u64 in_payload)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	*mbox = (struct cxl_mbox_cmd) {
+ 		.opcode = opcode,
+ 		.size_in = in_size,
+@@ -374,7 +376,7 @@ static int cxl_mbox_cmd_ctor(struct cxl_mbox_cmd *mbox,
  
-+/**
-+ * struct ecs_ops - ECS device operations (all elements optional)
-+ * @get_log_entry_type: read the log entry type value.
-+ * @set_log_entry_type: set the log entry type value.
-+ * @get_log_entry_type_per_dram: read the log entry type per dram value.
-+ * @get_log_entry_type_memory_media: read the log entry type per memory media value.
-+ * @get_mode: read the mode value.
-+ * @set_mode: set the mode value.
-+ * @get_mode_counts_rows: read the mode counts rows value.
-+ * @get_mode_counts_codewords: read the mode counts codewords value.
-+ * @reset: reset the ECS counter.
-+ * @get_threshold: read the threshold value.
-+ * @set_threshold: set the threshold value.
-+ */
-+struct edac_ecs_ops {
-+	int (*get_log_entry_type)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-+	int (*set_log_entry_type)(struct device *dev, void *drv_data, int fru_id, u32 val);
-+	int (*get_log_entry_type_per_dram)(struct device *dev, void *drv_data,
-+					   int fru_id, u32 *val);
-+	int (*get_log_entry_type_per_memory_media)(struct device *dev, void *drv_data,
-+						   int fru_id, u32 *val);
-+	int (*get_mode)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-+	int (*set_mode)(struct device *dev, void *drv_data, int fru_id, u32 val);
-+	int (*get_mode_counts_rows)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-+	int (*get_mode_counts_codewords)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-+	int (*reset)(struct device *dev, void *drv_data, int fru_id, u32 val);
-+	int (*get_threshold)(struct device *dev, void *drv_data, int fru_id, u32 *threshold);
-+	int (*set_threshold)(struct device *dev, void *drv_data, int fru_id, u32 threshold);
-+};
+ 	/* Prepare to handle a full payload for variable sized output */
+ 	if (out_size == CXL_VARIABLE_PAYLOAD)
+-		mbox->size_out = mds->payload_size;
++		mbox->size_out = cxl_mbox->payload_size;
+ 	else
+ 		mbox->size_out = out_size;
+ 
+@@ -398,6 +400,8 @@ static int cxl_to_mem_cmd_raw(struct cxl_mem_command *mem_cmd,
+ 			      const struct cxl_send_command *send_cmd,
+ 			      struct cxl_memdev_state *mds)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
 +
- struct edac_ecs_ex_info {
- 	u16 num_media_frus;
+ 	if (send_cmd->raw.rsvd)
+ 		return -EINVAL;
+ 
+@@ -406,7 +410,7 @@ static int cxl_to_mem_cmd_raw(struct cxl_mem_command *mem_cmd,
+ 	 * gets passed along without further checking, so it must be
+ 	 * validated here.
+ 	 */
+-	if (send_cmd->out.size > mds->payload_size)
++	if (send_cmd->out.size > cxl_mbox->payload_size)
+ 		return -EINVAL;
+ 
+ 	if (!cxl_mem_raw_command_allowed(send_cmd->raw.opcode))
+@@ -494,6 +498,7 @@ static int cxl_validate_cmd_from_user(struct cxl_mbox_cmd *mbox_cmd,
+ 				      struct cxl_memdev_state *mds,
+ 				      const struct cxl_send_command *send_cmd)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_mem_command mem_cmd;
+ 	int rc;
+ 
+@@ -505,7 +510,7 @@ static int cxl_validate_cmd_from_user(struct cxl_mbox_cmd *mbox_cmd,
+ 	 * supports, but output can be arbitrarily large (simply write out as
+ 	 * much data as the hardware provides).
+ 	 */
+-	if (send_cmd->in.size > mds->payload_size)
++	if (send_cmd->in.size > cxl_mbox->payload_size)
+ 		return -EINVAL;
+ 
+ 	/* Sanitize and construct a cxl_mem_command */
+@@ -591,6 +596,7 @@ static int handle_mailbox_cmd_from_user(struct cxl_memdev_state *mds,
+ 					u64 out_payload, s32 *size_out,
+ 					u32 *retval)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct device *dev = mds->cxlds.dev;
+ 	int rc;
+ 
+@@ -601,7 +607,7 @@ static int handle_mailbox_cmd_from_user(struct cxl_memdev_state *mds,
+ 		cxl_mem_opcode_to_name(mbox_cmd->opcode),
+ 		mbox_cmd->opcode, mbox_cmd->size_in);
+ 
+-	rc = mds->mbox_send(mds, mbox_cmd);
++	rc = cxl_mbox->mbox_send(cxl_mbox, mbox_cmd);
+ 	if (rc)
+ 		goto out;
+ 
+@@ -659,11 +665,12 @@ int cxl_send_cmd(struct cxl_memdev *cxlmd, struct cxl_send_command __user *s)
+ static int cxl_xfer_log(struct cxl_memdev_state *mds, uuid_t *uuid,
+ 			u32 *size, u8 *out)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	u32 remaining = *size;
+ 	u32 offset = 0;
+ 
+ 	while (remaining) {
+-		u32 xfer_size = min_t(u32, remaining, mds->payload_size);
++		u32 xfer_size = min_t(u32, remaining, cxl_mbox->payload_size);
+ 		struct cxl_mbox_cmd mbox_cmd;
+ 		struct cxl_mbox_get_log log;
+ 		int rc;
+@@ -752,17 +759,18 @@ static void cxl_walk_cel(struct cxl_memdev_state *mds, size_t size, u8 *cel)
+ 
+ static struct cxl_mbox_get_supported_logs *cxl_get_gsl(struct cxl_memdev_state *mds)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_mbox_get_supported_logs *ret;
+ 	struct cxl_mbox_cmd mbox_cmd;
+ 	int rc;
+ 
+-	ret = kvmalloc(mds->payload_size, GFP_KERNEL);
++	ret = kvmalloc(cxl_mbox->payload_size, GFP_KERNEL);
+ 	if (!ret)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	mbox_cmd = (struct cxl_mbox_cmd) {
+ 		.opcode = CXL_MBOX_OP_GET_SUPPORTED_LOGS,
+-		.size_out = mds->payload_size,
++		.size_out = cxl_mbox->payload_size,
+ 		.payload_out = ret,
+ 		/* At least the record number field must be valid */
+ 		.min_out = 2,
+@@ -910,6 +918,7 @@ static int cxl_clear_event_record(struct cxl_memdev_state *mds,
+ 				  enum cxl_event_log_type log,
+ 				  struct cxl_get_event_payload *get_pl)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_mbox_clear_event_payload *payload;
+ 	u16 total = le16_to_cpu(get_pl->record_count);
+ 	u8 max_handles = CXL_CLEAR_EVENT_MAX_HANDLES;
+@@ -920,8 +929,8 @@ static int cxl_clear_event_record(struct cxl_memdev_state *mds,
+ 	int i;
+ 
+ 	/* Payload size may limit the max handles */
+-	if (pl_size > mds->payload_size) {
+-		max_handles = (mds->payload_size - sizeof(*payload)) /
++	if (pl_size > cxl_mbox->payload_size) {
++		max_handles = (cxl_mbox->payload_size - sizeof(*payload)) /
+ 			      sizeof(__le16);
+ 		pl_size = struct_size(payload, handles, max_handles);
+ 	}
+@@ -979,6 +988,7 @@ static int cxl_clear_event_record(struct cxl_memdev_state *mds,
+ static void cxl_mem_get_records_log(struct cxl_memdev_state *mds,
+ 				    enum cxl_event_log_type type)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_memdev *cxlmd = mds->cxlds.cxlmd;
+ 	struct device *dev = mds->cxlds.dev;
+ 	struct cxl_get_event_payload *payload;
+@@ -995,7 +1005,7 @@ static void cxl_mem_get_records_log(struct cxl_memdev_state *mds,
+ 			.payload_in = &log_type,
+ 			.size_in = sizeof(log_type),
+ 			.payload_out = payload,
+-			.size_out = mds->payload_size,
++			.size_out = cxl_mbox->payload_size,
+ 			.min_out = struct_size(payload, records, 0),
+ 		};
+ 
+@@ -1328,6 +1338,7 @@ int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
+ 		       struct cxl_region *cxlr)
+ {
+ 	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlmd->cxlds);
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_mbox_poison_out *po;
+ 	struct cxl_mbox_poison_in pi;
+ 	int nr_records = 0;
+@@ -1346,7 +1357,7 @@ int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
+ 			.opcode = CXL_MBOX_OP_GET_POISON,
+ 			.size_in = sizeof(pi),
+ 			.payload_in = &pi,
+-			.size_out = mds->payload_size,
++			.size_out = cxl_mbox->payload_size,
+ 			.payload_out = po,
+ 			.min_out = struct_size(po, record, 0),
+ 		};
+@@ -1382,7 +1393,9 @@ static void free_poison_buf(void *buf)
+ /* Get Poison List output buffer is protected by mds->poison.lock */
+ static int cxl_poison_alloc_buf(struct cxl_memdev_state *mds)
+ {
+-	mds->poison.list_out = kvmalloc(mds->payload_size, GFP_KERNEL);
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
++
++	mds->poison.list_out = kvmalloc(cxl_mbox->payload_size, GFP_KERNEL);
+ 	if (!mds->poison.list_out)
+ 		return -ENOMEM;
+ 
+@@ -1411,6 +1424,7 @@ EXPORT_SYMBOL_NS_GPL(cxl_poison_state_init, CXL);
+ struct cxl_memdev_state *cxl_memdev_state_create(struct device *dev)
+ {
+ 	struct cxl_memdev_state *mds;
++	struct cxl_mailbox *cxl_mbox;
+ 
+ 	mds = devm_kzalloc(dev, sizeof(*mds), GFP_KERNEL);
+ 	if (!mds) {
+@@ -1418,7 +1432,9 @@ struct cxl_memdev_state *cxl_memdev_state_create(struct device *dev)
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+-	mutex_init(&mds->mbox_mutex);
++	cxl_mbox = &mds->cxlds.cxl_mbox;
++	mutex_init(&cxl_mbox->mbox_mutex);
++
+ 	mutex_init(&mds->event.log_lock);
+ 	mds->cxlds.dev = dev;
+ 	mds->cxlds.reg_map.host = dev;
+diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+index 0277726afd04..05bb84cb1274 100644
+--- a/drivers/cxl/core/memdev.c
++++ b/drivers/cxl/core/memdev.c
+@@ -58,7 +58,7 @@ static ssize_t payload_max_show(struct device *dev,
+ 
+ 	if (!mds)
+ 		return sysfs_emit(buf, "\n");
+-	return sysfs_emit(buf, "%zu\n", mds->payload_size);
++	return sysfs_emit(buf, "%zu\n", cxlds->cxl_mbox.payload_size);
+ }
+ static DEVICE_ATTR_RO(payload_max);
+ 
+@@ -124,15 +124,16 @@ static ssize_t security_state_show(struct device *dev,
+ {
+ 	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+ 	struct cxl_dev_state *cxlds = cxlmd->cxlds;
++	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
+ 	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
+ 	unsigned long state = mds->security.state;
+ 	int rc = 0;
+ 
+ 	/* sync with latest submission state */
+-	mutex_lock(&mds->mbox_mutex);
++	mutex_lock(&cxl_mbox->mbox_mutex);
+ 	if (mds->security.sanitize_active)
+ 		rc = sysfs_emit(buf, "sanitize\n");
+-	mutex_unlock(&mds->mbox_mutex);
++	mutex_unlock(&cxl_mbox->mbox_mutex);
+ 	if (rc)
+ 		return rc;
+ 
+@@ -829,12 +830,13 @@ static enum fw_upload_err cxl_fw_prepare(struct fw_upload *fwl, const u8 *data,
+ {
+ 	struct cxl_memdev_state *mds = fwl->dd_handle;
+ 	struct cxl_mbox_transfer_fw *transfer;
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 
+ 	if (!size)
+ 		return FW_UPLOAD_ERR_INVALID_SIZE;
+ 
+ 	mds->fw.oneshot = struct_size(transfer, data, size) <
+-			    mds->payload_size;
++			    cxl_mbox->payload_size;
+ 
+ 	if (cxl_mem_get_fw_info(mds))
+ 		return FW_UPLOAD_ERR_HW_ERROR;
+@@ -854,6 +856,7 @@ static enum fw_upload_err cxl_fw_write(struct fw_upload *fwl, const u8 *data,
+ {
+ 	struct cxl_memdev_state *mds = fwl->dd_handle;
+ 	struct cxl_dev_state *cxlds = &mds->cxlds;
++	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
+ 	struct cxl_memdev *cxlmd = cxlds->cxlmd;
+ 	struct cxl_mbox_transfer_fw *transfer;
+ 	struct cxl_mbox_cmd mbox_cmd;
+@@ -877,7 +880,7 @@ static enum fw_upload_err cxl_fw_write(struct fw_upload *fwl, const u8 *data,
+ 	 * sizeof(*transfer) is 128.  These constraints imply that @cur_size
+ 	 * will always be 128b aligned.
+ 	 */
+-	cur_size = min_t(size_t, size, mds->payload_size - sizeof(*transfer));
++	cur_size = min_t(size_t, size, cxl_mbox->payload_size - sizeof(*transfer));
+ 
+ 	remaining = size - cur_size;
+ 	size_in = struct_size(transfer, data, cur_size);
+@@ -1059,16 +1062,17 @@ EXPORT_SYMBOL_NS_GPL(devm_cxl_add_memdev, CXL);
+ static void sanitize_teardown_notifier(void *data)
+ {
+ 	struct cxl_memdev_state *mds = data;
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct kernfs_node *state;
+ 
+ 	/*
+ 	 * Prevent new irq triggered invocations of the workqueue and
+ 	 * flush inflight invocations.
+ 	 */
+-	mutex_lock(&mds->mbox_mutex);
++	mutex_lock(&cxl_mbox->mbox_mutex);
+ 	state = mds->security.sanitize_node;
+ 	mds->security.sanitize_node = NULL;
+-	mutex_unlock(&mds->mbox_mutex);
++	mutex_unlock(&cxl_mbox->mbox_mutex);
+ 
+ 	cancel_delayed_work_sync(&mds->security.poll_dwork);
+ 	sysfs_put(state);
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index afb53d058d62..19609b708b09 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -8,6 +8,7 @@
+ #include <linux/rcuwait.h>
+ #include <linux/cxl-event.h>
+ #include <linux/node.h>
++#include <linux/cxl/mailbox.h>
+ #include "cxl.h"
+ 
+ /* CXL 2.0 8.2.8.5.1.1 Memory Device Status Register */
+@@ -105,42 +106,6 @@ static inline struct cxl_ep *cxl_ep_load(struct cxl_port *port,
+ 	return xa_load(&port->endpoints, (unsigned long)&cxlmd->dev);
+ }
+ 
+-/**
+- * struct cxl_mbox_cmd - A command to be submitted to hardware.
+- * @opcode: (input) The command set and command submitted to hardware.
+- * @payload_in: (input) Pointer to the input payload.
+- * @payload_out: (output) Pointer to the output payload. Must be allocated by
+- *		 the caller.
+- * @size_in: (input) Number of bytes to load from @payload_in.
+- * @size_out: (input) Max number of bytes loaded into @payload_out.
+- *            (output) Number of bytes generated by the device. For fixed size
+- *            outputs commands this is always expected to be deterministic. For
+- *            variable sized output commands, it tells the exact number of bytes
+- *            written.
+- * @min_out: (input) internal command output payload size validation
+- * @poll_count: (input) Number of timeouts to attempt.
+- * @poll_interval_ms: (input) Time between mailbox background command polling
+- *                    interval timeouts.
+- * @return_code: (output) Error code returned from hardware.
+- *
+- * This is the primary mechanism used to send commands to the hardware.
+- * All the fields except @payload_* correspond exactly to the fields described in
+- * Command Register section of the CXL 2.0 8.2.8.4.5. @payload_in and
+- * @payload_out are written to, and read from the Command Payload Registers
+- * defined in CXL 2.0 8.2.8.4.8.
+- */
+-struct cxl_mbox_cmd {
+-	u16 opcode;
+-	void *payload_in;
+-	void *payload_out;
+-	size_t size_in;
+-	size_t size_out;
+-	size_t min_out;
+-	int poll_count;
+-	int poll_interval_ms;
+-	u16 return_code;
+-};
+-
+ /*
+  * Per CXL 3.0 Section 8.2.8.4.5.1
+  */
+@@ -438,6 +403,7 @@ struct cxl_dev_state {
+ 	struct resource ram_res;
+ 	u64 serial;
+ 	enum cxl_devtype type;
++	struct cxl_mailbox cxl_mbox;
  };
  
-+int edac_ecs_get_desc(struct device *ecs_dev,
-+		      const struct attribute_group **attr_groups,
-+		      u16 num_media_frus);
- /*
-  * EDAC device feature information structure
+ /**
+@@ -448,11 +414,8 @@ struct cxl_dev_state {
+  * the functionality related to that like Identify Memory Device and Get
+  * Partition Info
+  * @cxlds: Core driver state common across Type-2 and Type-3 devices
+- * @payload_size: Size of space for payload
+- *                (CXL 2.0 8.2.8.4.3 Mailbox Capabilities Register)
+  * @lsa_size: Size of Label Storage Area
+  *                (CXL 2.0 8.2.9.5.1.1 Identify Memory Device)
+- * @mbox_mutex: Mutex to synchronize mailbox access.
+  * @firmware_version: Firmware version for the memory device.
+  * @enabled_cmds: Hardware commands found enabled in CEL.
+  * @exclusive_cmds: Commands that are kernel-internal only
+@@ -470,17 +433,13 @@ struct cxl_dev_state {
+  * @poison: poison driver state info
+  * @security: security driver state info
+  * @fw: firmware upload / activation state
+- * @mbox_wait: RCU wait for mbox send completely
+- * @mbox_send: @dev specific transport for transmitting mailbox commands
+  *
+  * See CXL 3.0 8.2.9.8.2 Capacity Configuration and Label Storage for
+  * details on capacity parameters.
   */
+ struct cxl_memdev_state {
+ 	struct cxl_dev_state cxlds;
+-	size_t payload_size;
+ 	size_t lsa_size;
+-	struct mutex mbox_mutex; /* Protects device mailbox and firmware */
+ 	char firmware_version[0x10];
+ 	DECLARE_BITMAP(enabled_cmds, CXL_MEM_COMMAND_ID_MAX);
+ 	DECLARE_BITMAP(exclusive_cmds, CXL_MEM_COMMAND_ID_MAX);
+@@ -500,10 +459,6 @@ struct cxl_memdev_state {
+ 	struct cxl_poison_state poison;
+ 	struct cxl_security_state security;
+ 	struct cxl_fw_state fw;
+-
+-	struct rcuwait mbox_wait;
+-	int (*mbox_send)(struct cxl_memdev_state *mds,
+-			 struct cxl_mbox_cmd *cmd);
+ };
+ 
+ static inline struct cxl_memdev_state *
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index 4be35dc22202..faf6f5a49368 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -124,6 +124,7 @@ static irqreturn_t cxl_pci_mbox_irq(int irq, void *id)
+ 	u16 opcode;
+ 	struct cxl_dev_id *dev_id = id;
+ 	struct cxl_dev_state *cxlds = dev_id->cxlds;
++	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
+ 	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
+ 
+ 	if (!cxl_mbox_background_complete(cxlds))
+@@ -132,13 +133,13 @@ static irqreturn_t cxl_pci_mbox_irq(int irq, void *id)
+ 	reg = readq(cxlds->regs.mbox + CXLDEV_MBOX_BG_CMD_STATUS_OFFSET);
+ 	opcode = FIELD_GET(CXLDEV_MBOX_BG_CMD_COMMAND_OPCODE_MASK, reg);
+ 	if (opcode == CXL_MBOX_OP_SANITIZE) {
+-		mutex_lock(&mds->mbox_mutex);
++		mutex_lock(&cxl_mbox->mbox_mutex);
+ 		if (mds->security.sanitize_node)
+ 			mod_delayed_work(system_wq, &mds->security.poll_dwork, 0);
+-		mutex_unlock(&mds->mbox_mutex);
++		mutex_unlock(&cxl_mbox->mbox_mutex);
+ 	} else {
+ 		/* short-circuit the wait in __cxl_pci_mbox_send_cmd() */
+-		rcuwait_wake_up(&mds->mbox_wait);
++		rcuwait_wake_up(&cxl_mbox->mbox_wait);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+@@ -152,8 +153,9 @@ static void cxl_mbox_sanitize_work(struct work_struct *work)
+ 	struct cxl_memdev_state *mds =
+ 		container_of(work, typeof(*mds), security.poll_dwork.work);
+ 	struct cxl_dev_state *cxlds = &mds->cxlds;
++	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
+ 
+-	mutex_lock(&mds->mbox_mutex);
++	mutex_lock(&cxl_mbox->mbox_mutex);
+ 	if (cxl_mbox_background_complete(cxlds)) {
+ 		mds->security.poll_tmo_secs = 0;
+ 		if (mds->security.sanitize_node)
+@@ -167,7 +169,7 @@ static void cxl_mbox_sanitize_work(struct work_struct *work)
+ 		mds->security.poll_tmo_secs = min(15 * 60, timeout);
+ 		schedule_delayed_work(&mds->security.poll_dwork, timeout * HZ);
+ 	}
+-	mutex_unlock(&mds->mbox_mutex);
++	mutex_unlock(&cxl_mbox->mbox_mutex);
+ }
+ 
+ /**
+@@ -192,17 +194,20 @@ static void cxl_mbox_sanitize_work(struct work_struct *work)
+  * not need to coordinate with each other. The driver only uses the primary
+  * mailbox.
+  */
+-static int __cxl_pci_mbox_send_cmd(struct cxl_memdev_state *mds,
++static int __cxl_pci_mbox_send_cmd(struct cxl_mailbox *cxl_mbox,
+ 				   struct cxl_mbox_cmd *mbox_cmd)
+ {
+-	struct cxl_dev_state *cxlds = &mds->cxlds;
++	struct cxl_dev_state *cxlds = container_of(cxl_mbox,
++						   struct cxl_dev_state,
++						   cxl_mbox);
++	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
+ 	void __iomem *payload = cxlds->regs.mbox + CXLDEV_MBOX_PAYLOAD_OFFSET;
+ 	struct device *dev = cxlds->dev;
+ 	u64 cmd_reg, status_reg;
+ 	size_t out_len;
+ 	int rc;
+ 
+-	lockdep_assert_held(&mds->mbox_mutex);
++	lockdep_assert_held(&cxl_mbox->mbox_mutex);
+ 
+ 	/*
+ 	 * Here are the steps from 8.2.8.4 of the CXL 2.0 spec.
+@@ -315,10 +320,10 @@ static int __cxl_pci_mbox_send_cmd(struct cxl_memdev_state *mds,
+ 
+ 		timeout = mbox_cmd->poll_interval_ms;
+ 		for (i = 0; i < mbox_cmd->poll_count; i++) {
+-			if (rcuwait_wait_event_timeout(&mds->mbox_wait,
+-				       cxl_mbox_background_complete(cxlds),
+-				       TASK_UNINTERRUPTIBLE,
+-				       msecs_to_jiffies(timeout)) > 0)
++			if (rcuwait_wait_event_timeout(&cxl_mbox->mbox_wait,
++						       cxl_mbox_background_complete(cxlds),
++						       TASK_UNINTERRUPTIBLE,
++						       msecs_to_jiffies(timeout)) > 0)
+ 				break;
+ 		}
+ 
+@@ -360,7 +365,7 @@ static int __cxl_pci_mbox_send_cmd(struct cxl_memdev_state *mds,
+ 		 */
+ 		size_t n;
+ 
+-		n = min3(mbox_cmd->size_out, mds->payload_size, out_len);
++		n = min3(mbox_cmd->size_out, cxl_mbox->payload_size, out_len);
+ 		memcpy_fromio(mbox_cmd->payload_out, payload, n);
+ 		mbox_cmd->size_out = n;
+ 	} else {
+@@ -370,14 +375,14 @@ static int __cxl_pci_mbox_send_cmd(struct cxl_memdev_state *mds,
+ 	return 0;
+ }
+ 
+-static int cxl_pci_mbox_send(struct cxl_memdev_state *mds,
++static int cxl_pci_mbox_send(struct cxl_mailbox *cxl_mbox,
+ 			     struct cxl_mbox_cmd *cmd)
+ {
+ 	int rc;
+ 
+-	mutex_lock_io(&mds->mbox_mutex);
+-	rc = __cxl_pci_mbox_send_cmd(mds, cmd);
+-	mutex_unlock(&mds->mbox_mutex);
++	mutex_lock_io(&cxl_mbox->mbox_mutex);
++	rc = __cxl_pci_mbox_send_cmd(cxl_mbox, cmd);
++	mutex_unlock(&cxl_mbox->mbox_mutex);
+ 
+ 	return rc;
+ }
+@@ -385,6 +390,7 @@ static int cxl_pci_mbox_send(struct cxl_memdev_state *mds,
+ static int cxl_pci_setup_mailbox(struct cxl_memdev_state *mds, bool irq_avail)
+ {
+ 	struct cxl_dev_state *cxlds = &mds->cxlds;
++	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
+ 	const int cap = readl(cxlds->regs.mbox + CXLDEV_MBOX_CAPS_OFFSET);
+ 	struct device *dev = cxlds->dev;
+ 	unsigned long timeout;
+@@ -392,6 +398,7 @@ static int cxl_pci_setup_mailbox(struct cxl_memdev_state *mds, bool irq_avail)
+ 	u64 md_status;
+ 	u32 ctrl;
+ 
++	cxl_mbox->host = dev;
+ 	timeout = jiffies + mbox_ready_timeout * HZ;
+ 	do {
+ 		md_status = readq(cxlds->regs.memdev + CXLMDEV_STATUS_OFFSET);
+@@ -417,8 +424,8 @@ static int cxl_pci_setup_mailbox(struct cxl_memdev_state *mds, bool irq_avail)
+ 		return -ETIMEDOUT;
+ 	}
+ 
+-	mds->mbox_send = cxl_pci_mbox_send;
+-	mds->payload_size =
++	cxl_mbox->mbox_send = cxl_pci_mbox_send;
++	cxl_mbox->payload_size =
+ 		1 << FIELD_GET(CXLDEV_MBOX_CAP_PAYLOAD_SIZE_MASK, cap);
+ 
+ 	/*
+@@ -428,16 +435,16 @@ static int cxl_pci_setup_mailbox(struct cxl_memdev_state *mds, bool irq_avail)
+ 	 * there's no point in going forward. If the size is too large, there's
+ 	 * no harm is soft limiting it.
+ 	 */
+-	mds->payload_size = min_t(size_t, mds->payload_size, SZ_1M);
+-	if (mds->payload_size < 256) {
++	cxl_mbox->payload_size = min_t(size_t, cxl_mbox->payload_size, SZ_1M);
++	if (cxl_mbox->payload_size < 256) {
+ 		dev_err(dev, "Mailbox is too small (%zub)",
+-			mds->payload_size);
++			cxl_mbox->payload_size);
+ 		return -ENXIO;
+ 	}
+ 
+-	dev_dbg(dev, "Mailbox payload sized %zu", mds->payload_size);
++	dev_dbg(dev, "Mailbox payload sized %zu", cxl_mbox->payload_size);
+ 
+-	rcuwait_init(&mds->mbox_wait);
++	rcuwait_init(&cxl_mbox->mbox_wait);
+ 	INIT_DELAYED_WORK(&mds->security.poll_dwork, cxl_mbox_sanitize_work);
+ 
+ 	/* background command interrupts are optional */
+@@ -578,9 +585,10 @@ static void free_event_buf(void *buf)
+  */
+ static int cxl_mem_alloc_event_buf(struct cxl_memdev_state *mds)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_get_event_payload *buf;
+ 
+-	buf = kvmalloc(mds->payload_size, GFP_KERNEL);
++	buf = kvmalloc(cxl_mbox->payload_size, GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
+ 	mds->event.buf = buf;
+diff --git a/drivers/cxl/pmem.c b/drivers/cxl/pmem.c
+index 4ef93da22335..3985ff9ce70e 100644
+--- a/drivers/cxl/pmem.c
++++ b/drivers/cxl/pmem.c
+@@ -102,13 +102,15 @@ static int cxl_pmem_get_config_size(struct cxl_memdev_state *mds,
+ 				    struct nd_cmd_get_config_size *cmd,
+ 				    unsigned int buf_len)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
++
+ 	if (sizeof(*cmd) > buf_len)
+ 		return -EINVAL;
+ 
+ 	*cmd = (struct nd_cmd_get_config_size){
+ 		.config_size = mds->lsa_size,
+ 		.max_xfer =
+-			mds->payload_size - sizeof(struct cxl_mbox_set_lsa),
++			cxl_mbox->payload_size - sizeof(struct cxl_mbox_set_lsa),
+ 	};
+ 
+ 	return 0;
+diff --git a/include/linux/cxl/mailbox.h b/include/linux/cxl/mailbox.h
+new file mode 100644
+index 000000000000..654df6175828
+--- /dev/null
++++ b/include/linux/cxl/mailbox.h
+@@ -0,0 +1,63 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright(c) 2024 Intel Corporation. */
++#ifndef __CXL_MBOX_H__
++#define __CXL_MBOX_H__
++
++#include <linux/auxiliary_bus.h>
++
++/**
++ * struct cxl_mbox_cmd - A command to be submitted to hardware.
++ * @opcode: (input) The command set and command submitted to hardware.
++ * @payload_in: (input) Pointer to the input payload.
++ * @payload_out: (output) Pointer to the output payload. Must be allocated by
++ *		 the caller.
++ * @size_in: (input) Number of bytes to load from @payload_in.
++ * @size_out: (input) Max number of bytes loaded into @payload_out.
++ *            (output) Number of bytes generated by the device. For fixed size
++ *            outputs commands this is always expected to be deterministic. For
++ *            variable sized output commands, it tells the exact number of bytes
++ *            written.
++ * @min_out: (input) internal command output payload size validation
++ * @poll_count: (input) Number of timeouts to attempt.
++ * @poll_interval_ms: (input) Time between mailbox background command polling
++ *                    interval timeouts.
++ * @return_code: (output) Error code returned from hardware.
++ *
++ * This is the primary mechanism used to send commands to the hardware.
++ * All the fields except @payload_* correspond exactly to the fields described in
++ * Command Register section of the CXL 2.0 8.2.8.4.5. @payload_in and
++ * @payload_out are written to, and read from the Command Payload Registers
++ * defined in CXL 2.0 8.2.8.4.8.
++ */
++struct cxl_mbox_cmd {
++	u16 opcode;
++	void *payload_in;
++	void *payload_out;
++	size_t size_in;
++	size_t size_out;
++	size_t min_out;
++	int poll_count;
++	int poll_interval_ms;
++	u16 return_code;
++};
++
++/**
++ * struct cxl_mailbox - context for CXL mailbox operations
++ * @host: device that hosts the mailbox
++ * @adev: auxiliary device for fw-ctl
++ * @payload_size: Size of space for payload
++ *                (CXL 3.1 8.2.8.4.3 Mailbox Capabilities Register)
++ * @mbox_mutex: mutex protects device mailbox and firmware
++ * @mbox_wait: rcuwait for mailbox
++ * @mbox_send: @dev specific transport for transmitting mailbox commands
++ */
++struct cxl_mailbox {
++	struct device *host;
++	struct auxiliary_device adev; /* For fw-ctl */
++	size_t payload_size;
++	struct mutex mbox_mutex; /* lock to protect mailbox context */
++	struct rcuwait mbox_wait;
++	int (*mbox_send)(struct cxl_mailbox *cxl_mbox, struct cxl_mbox_cmd *cmd);
++};
++
++#endif
+diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+index 129f179b0ac5..1829b626bb40 100644
+--- a/tools/testing/cxl/test/mem.c
++++ b/tools/testing/cxl/test/mem.c
+@@ -8,6 +8,7 @@
+ #include <linux/delay.h>
+ #include <linux/sizes.h>
+ #include <linux/bits.h>
++#include <linux/cxl/mailbox.h>
+ #include <asm/unaligned.h>
+ #include <crypto/sha2.h>
+ #include <cxlmem.h>
+@@ -534,6 +535,7 @@ static int mock_gsl(struct cxl_mbox_cmd *cmd)
+ 
+ static int mock_get_log(struct cxl_memdev_state *mds, struct cxl_mbox_cmd *cmd)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_mbox_get_log *gl = cmd->payload_in;
+ 	u32 offset = le32_to_cpu(gl->offset);
+ 	u32 length = le32_to_cpu(gl->length);
+@@ -542,7 +544,7 @@ static int mock_get_log(struct cxl_memdev_state *mds, struct cxl_mbox_cmd *cmd)
+ 
+ 	if (cmd->size_in < sizeof(*gl))
+ 		return -EINVAL;
+-	if (length > mds->payload_size)
++	if (length > cxl_mbox->payload_size)
+ 		return -EINVAL;
+ 	if (offset + length > sizeof(mock_cel))
+ 		return -EINVAL;
+@@ -617,12 +619,13 @@ void cxl_mockmem_sanitize_work(struct work_struct *work)
+ {
+ 	struct cxl_memdev_state *mds =
+ 		container_of(work, typeof(*mds), security.poll_dwork.work);
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 
+-	mutex_lock(&mds->mbox_mutex);
++	mutex_lock(&cxl_mbox->mbox_mutex);
+ 	if (mds->security.sanitize_node)
+ 		sysfs_notify_dirent(mds->security.sanitize_node);
+ 	mds->security.sanitize_active = false;
+-	mutex_unlock(&mds->mbox_mutex);
++	mutex_unlock(&cxl_mbox->mbox_mutex);
+ 
+ 	dev_dbg(mds->cxlds.dev, "sanitize complete\n");
+ }
+@@ -631,6 +634,7 @@ static int mock_sanitize(struct cxl_mockmem_data *mdata,
+ 			 struct cxl_mbox_cmd *cmd)
+ {
+ 	struct cxl_memdev_state *mds = mdata->mds;
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	int rc = 0;
+ 
+ 	if (cmd->size_in != 0)
+@@ -648,14 +652,14 @@ static int mock_sanitize(struct cxl_mockmem_data *mdata,
+ 		return -ENXIO;
+ 	}
+ 
+-	mutex_lock(&mds->mbox_mutex);
++	mutex_lock(&cxl_mbox->mbox_mutex);
+ 	if (schedule_delayed_work(&mds->security.poll_dwork,
+ 				  msecs_to_jiffies(mdata->sanitize_timeout))) {
+ 		mds->security.sanitize_active = true;
+ 		dev_dbg(mds->cxlds.dev, "sanitize issued\n");
+ 	} else
+ 		rc = -EBUSY;
+-	mutex_unlock(&mds->mbox_mutex);
++	mutex_unlock(&cxl_mbox->mbox_mutex);
+ 
+ 	return rc;
+ }
+@@ -1333,10 +1337,13 @@ static int mock_activate_fw(struct cxl_mockmem_data *mdata,
+ 	return -EINVAL;
+ }
+ 
+-static int cxl_mock_mbox_send(struct cxl_memdev_state *mds,
++static int cxl_mock_mbox_send(struct cxl_mailbox *cxl_mbox,
+ 			      struct cxl_mbox_cmd *cmd)
+ {
+-	struct cxl_dev_state *cxlds = &mds->cxlds;
++	struct cxl_dev_state *cxlds = container_of(cxl_mbox,
++						   struct cxl_dev_state,
++						   cxl_mbox);
++	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
+ 	struct device *dev = cxlds->dev;
+ 	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
+ 	int rc = -EIO;
+@@ -1460,6 +1467,7 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ 	struct cxl_memdev_state *mds;
+ 	struct cxl_dev_state *cxlds;
+ 	struct cxl_mockmem_data *mdata;
++	struct cxl_mailbox *cxl_mbox;
+ 	int rc;
+ 
+ 	mdata = devm_kzalloc(dev, sizeof(*mdata), GFP_KERNEL);
+@@ -1487,9 +1495,10 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mds))
+ 		return PTR_ERR(mds);
+ 
++	cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	mdata->mds = mds;
+-	mds->mbox_send = cxl_mock_mbox_send;
+-	mds->payload_size = SZ_4K;
++	cxl_mbox->mbox_send = cxl_mock_mbox_send;
++	cxl_mbox->payload_size = SZ_4K;
+ 	mds->event.buf = (struct cxl_get_event_payload *) mdata->event_buf;
+ 	INIT_DELAYED_WORK(&mds->security.poll_dwork, cxl_mockmem_sanitize_work);
+ 
 -- 
 2.34.1
 
