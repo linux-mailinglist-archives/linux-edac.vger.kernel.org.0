@@ -1,123 +1,265 @@
-Return-Path: <linux-edac+bounces-1864-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1865-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15CC3976A49
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Sep 2024 15:17:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E06A9977CFE
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2024 12:12:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B3531C21472
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Sep 2024 13:17:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A83C1F293ED
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Sep 2024 10:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00371A706B;
-	Thu, 12 Sep 2024 13:17:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60DCE1D7E4B;
+	Fri, 13 Sep 2024 10:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QBRNsFuG"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="JJY1XJ8L"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1AE1A2641;
-	Thu, 12 Sep 2024 13:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38A51BD00C;
+	Fri, 13 Sep 2024 10:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726147055; cv=none; b=jt0JKfIv9jXHJt7Yb0H8pFZc9H1ZhUaMiqV5fH141K/V65P7hGnUjAg8PzDsDTWTZaFngrts0ScmjOr2VJa5PJkhqt71NPY+2Z3H0e9wwr3jedYt/LEF+Gk/qC5DbaM1O7vYyMlQnaovyoZmrbgS4eeTIi3m3cixBkn95l4hA64=
+	t=1726222335; cv=none; b=Qy7TS8PB8TTzRFyoVp/ehoRhwAjq18wubrW4wH0H8uETsr2fbt6ZU7IhGiI3VC5iJeDc9nFhJDb1qU2yZJb8418npuGGlu/ZL8QRTqvM5HkFcZpbIxQPI1HQGXEP1kp23IO+vAO9hPNOIKFry2C93gOB3ODY7VfqZKOmF9/qgCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726147055; c=relaxed/simple;
-	bh=K1r5aTSERKfF00tNzsjXwR4UzRjP0fmcaifJ7kHqDfU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=LcuXmhRM1sUKs+xQ/QZz9T4Xq4YHJ3qCnQMP+vTSO8S1NFZFG4S+0Wl+81yNE10NikFAdRgqFwJ5QAQ2BPn05euF8lHndomsCsLaIZZbkR106Y+Su0aUqhRwTJcn0GwcjK/8XzP3hqo5+Chk1Z64CI/Gpq0reftxmymDeqK3SNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QBRNsFuG; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42cb806623eso8277135e9.2;
-        Thu, 12 Sep 2024 06:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726147052; x=1726751852; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVCiz+GfbXXcZjaWdHj1FGnRfFqmbDnDvMXfgNHyN9c=;
-        b=QBRNsFuGiuJiVc/p3MVgYJNru9ydz3pbFKn1A33IH/bWSe3ZFmyt+aEs8ndjcZy34h
-         X1Y9KGEqtp9TdgEJPgwH6JzY7cm4mIenbRg1DM+jrZu5GlgItTDqC0ODWyIZWjHhoBIQ
-         t1PEqN2d2CxT9b3bpJbUc0x/veTJ5mtTaSfg9jkUlSmwvyTYGCx6Hrh8Yhn9rmlC4eG5
-         Vdg10ri5yYFhZTblKxYVftJ9nHPmtHqo2WMP/L7ke3Eve5YLqI+Dhp9W8ATHCGLVfN1v
-         hqmqkjXSQo+FSP8gfwJUPiImjV6IYDM96tKldqJzHHK7GuoV5Mgi3nCCoQ29KgDfbnzX
-         xBUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726147052; x=1726751852;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HVCiz+GfbXXcZjaWdHj1FGnRfFqmbDnDvMXfgNHyN9c=;
-        b=oQseJuVBSy3D95kz27j6zBkke9RRCeU+VC7C0isrQcMztCKvqTwpP4dZcc8j4xB8fT
-         cmcRDuQKeX742UkbsyM9a4piwN1lt7z7OR/t1KALMzA9xxlW1H5dybw4M8/t6iiAg+xY
-         Gszz8eQbX6hKngNXxXHjfJbOPfWpfhnNkRWohpjEAc3qBpfR0h/R0X9Vs8oOdATo/HRE
-         fZlQ7VmN8gBptBMAV5G0KO67YqR0Kh+OkeZx54TDEMJygf6s+9zTX3qrdPxEERq4Rgr0
-         lYEV6aoFP6Wsb2uNjpjnmwTf1wBzxm2BoONv2SMwQQPpy4uqgoPXoM8GmfOJ2rh/pIA9
-         SLKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUexfw0hQ6aO1HKSKaF8y4YfpmwPRsTFnCU5eE8UcaQUTIO565DN7b9l0NP5SLFEMHaxrJ5DXjItPRG@vger.kernel.org, AJvYcCWnYLshiMGmnmAcnM86sTxdeqdHLynsl+xnSd59ZuU15VZ7MDsJRI1XMca/onSU843MBhhJle2S5iSQbcPh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze8CzELCwGFgkOpYys0YhxlQhBZpGRdfg3v1y1xA/bIX+PGYeL
-	UV8SrjP29CA/3kedwjUgG7CcDp1DiIP2HUpngtx8DpOXitnRiOjU
-X-Google-Smtp-Source: AGHT+IGinFsn/IDIoimF7gK6JCHIlBd9EvXDNaB9+t+mIHn7EPvmjRWe3N7Si/my4wteiQ6feV4waw==
-X-Received: by 2002:a05:600c:4ecb:b0:42c:b8c9:16cb with SMTP id 5b1f17b1804b1-42cdb4e6aecmr21661315e9.5.1726147051905;
-        Thu, 12 Sep 2024 06:17:31 -0700 (PDT)
-Received: from localhost (craw-09-b2-v4wan-169726-cust2117.vm24.cable.virginm.net. [92.238.24.70])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42caeb8ada3sm170610095e9.43.2024.09.12.06.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 06:17:30 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-edac@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] EDAC, pnd2: Make read-only const array intlv static
-Date: Thu, 12 Sep 2024 14:17:30 +0100
-Message-Id: <20240912131730.588673-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1726222335; c=relaxed/simple;
+	bh=662V56QWViFIlp4gb+aLqLrTxGX17BcMSp70REF+ZWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lr70UdTcqIsrABE2H4JbOGGBcploq0cXyBAsqwBye1CgzGragWu2q81Jjxeee4zSB8QJiZ6lNxIibPTmroUG1DNXQkUuuWSjOeygijC/mIAvP+a6sbnFJsEkTpMp22W/gPs+UW8nnD/764b+ZnhvPzUUOUMqasT5ZLBPZfcNY1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=JJY1XJ8L; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D1FC840E0289;
+	Fri, 13 Sep 2024 10:12:03 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id WrLjSCCCXrfh; Fri, 13 Sep 2024 10:12:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1726222318; bh=yWZvK7qK3CvlJ6DKacE32zmSE6s7LldG87vSA0J6Ufs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JJY1XJ8LrTQfzftmybO3y10RT0bdb6reSxeOmziCztzicO5RpTW9BWBEo9DiRMXim
+	 9h3i/9CMB+VtKeNKJ5fywSSYFxM2IE7Kq91+w3Fd6KTdT+AikkKB/h/bsgL8ff9owh
+	 mP/BLVegzf3taqokqrxIFtXElf8zjI8I2054zRT/sLITDcNvi0gQEPY1YCY4HitKJs
+	 Ni44wdch9Alyr548bVNHcym8BV+BsYrd0/2RIMkK2dD1Zn+/VW1e/qgo9gMf03gdra
+	 orehy+ZcK3IL/ZRYhjOEkizZP/r1phDPrmlTk+zfT3PhC5DBO1c5T0NmwEMSgJuL1i
+	 H/ZgmVkAVG42luPxmfcC1daDbCmS+cDJiLs7dWyA6FuLGpXYljV8nWvYU//1MkME4E
+	 Is/9Tzk+yMSDagg1mjsuveYa1HPVAuTQIEkf4wHlF02GWFGAnW924U8koCL9OC0xaW
+	 MFdwmnsB8MHlOaBrylwC4MkX07IoD9bo1mjeA9TBfLkL5vHJbKMM4n/SPv9d16exsP
+	 zERL9t0p+J3sFW+u5w1Gb/aih8pYpFq1nmWnvhiB2UJBCnOePrcypB71LCYR7xa2U8
+	 o8d/nGds08I/vD9rIvpWqS+s9rlYMk7QpY3j6i0OaT7OBt8zH7FTqSlD9ROl2xk2Vm
+	 9VqfBQk1S1m1CYslfmIWPz9c=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 56E6E40E0288;
+	Fri, 13 Sep 2024 10:11:44 +0000 (UTC)
+Date: Fri, 13 Sep 2024 12:11:37 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	chenhuacai@kernel.org, linux-edac@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@xen0n.name, tony.luck@intel.com, james.morse@arm.com,
+	mchehab@kernel.org, rric@kernel.org, loongarch@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] Loongarch: EDAC driver for loongson memory
+ controller
+Message-ID: <20240913101137.GHZuQP2WzlkvJ5gG2F@fat_crate.local>
+References: <20240909032124.18819-1-zhaoqunqin@loongson.cn>
+ <20240909032124.18819-3-zhaoqunqin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240909032124.18819-3-zhaoqunqin@loongson.cn>
 
-Don't populate the const read-only array intlv on the stack at
-run time, instead make it static.
+On Mon, Sep 09, 2024 at 11:21:24AM +0800, Zhao Qunqin wrote:
+> Subject: Re: [PATCH v4 2/2] Loongarch: EDAC driver for loongson memory controller
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/edac/pnd2_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+			EDAC/loongson: Add EDAC driver ...
 
-diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index f93f2f2b1cf2..af14c8a3279f 100644
---- a/drivers/edac/pnd2_edac.c
-+++ b/drivers/edac/pnd2_edac.c
-@@ -372,7 +372,7 @@ static int gen_asym_mask(struct b_cr_slice_channel_hash *p,
- 			 struct b_cr_asym_mem_region1_mchbar *as1,
- 			 struct b_cr_asym_2way_mem_region_mchbar *as2way)
- {
--	const int intlv[] = { 0x5, 0xA, 0x3, 0xC };
-+	static const int intlv[] = { 0x5, 0xA, 0x3, 0xC };
- 	int mask = 0;
- 
- 	if (as2way->asym_2way_interleave_enable)
-@@ -489,7 +489,7 @@ static int dnv_get_registers(void)
-  */
- static int get_registers(void)
- {
--	const int intlv[] = { 10, 11, 12, 12 };
-+	static const int intlv[] = { 10, 11, 12, 12 };
- 
- 	if (RD_REG(&tolud, b_cr_tolud_pci) ||
- 		RD_REG(&touud_lo, b_cr_touud_lo_pci) ||
+> Reports single bit errors (CE) only.
+> 
+> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
+> ---
+
+...
+
+> diff --git a/drivers/edac/loongson_edac.c b/drivers/edac/loongson_edac.c
+> new file mode 100644
+> index 000000000..b89d6e0e7
+> --- /dev/null
+> +++ b/drivers/edac/loongson_edac.c
+> @@ -0,0 +1,182 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2024 Loongson Technology Corporation Limited.
+> + */
+> +
+> +#include <linux/edac.h>
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "edac_module.h"
+> +
+> +enum ecc_index {
+> +	ECC_SET = 0,
+> +	ECC_RESERVED,
+> +	ECC_COUNT,
+> +	ECC_CS_COUNT,
+> +	ECC_CODE,
+> +	ECC_ADDR,
+> +	ECC_DATA0,
+> +	ECC_DATA1,
+> +	ECC_DATA2,
+> +	ECC_DATA3,
+> +};
+> +
+> +struct loongson_edac_pvt {
+> +	u64 *ecc_base;
+> +	int last_ce_count;
+> +};
+> +
+> +static void loongson_update_ce_count(struct mem_ctl_info *mci,
+
+Drop the loongson_ prefix from all static functions.
+
+Also, align function arguments on the opening brace.
+
+> +					int chan,
+> +					int new)
+> +{
+> +	int add;
+> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
+
+The EDAC tree preferred ordering of variable declarations at the
+beginning of a function is reverse fir tree order::
+
+	struct long_struct_name *descriptive_name;
+	unsigned long foo, bar;
+	unsigned int tmp;
+	int ret;
+
+The above is faster to parse than the reverse ordering::
+
+	int ret;
+	unsigned int tmp;
+	unsigned long foo, bar;
+	struct long_struct_name *descriptive_name;
+
+And even more so than random ordering::
+
+	unsigned long foo, bar;
+	int ret;
+	struct long_struct_name *descriptive_name;
+	unsigned int tmp;
+
+> +
+> +	add = new - pvt->last_ce_count;
+> +
+> +	/* Store the new value */
+
+Drop all those obvious comments.
+
+> +	pvt->last_ce_count = new;
+> +
+> +	/* device resume or any other exceptions*/
+
+No clue what that means.
+
+Also,  the check goes right under the assignment.
+
+> +	if (add < 0)
+> +		return;
+> +
+> +	/*updated the edac core */
+
+Useless comment.
+
+> +	if (add != 0) {
+
+	if (!add)
+		return;
+
+and now you can save yourself an indentation level:
+
+	edac_mc_...(
+
+> +		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, add,
+> +					0, 0, 0,
+> +					chan, 0, -1, "error", "");
+> +		edac_mc_printk(mci, KERN_INFO, "add: %d", add);
+> +	}
+> +}
+> +
+> +static int loongson_read_ecc(struct mem_ctl_info *mci)
+> +{
+> +	u64 ecc;
+> +	int cs = 0;
+> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
+> +
+> +	if (!pvt->ecc_base)
+> +		return pvt->last_ce_count;
+> +
+> +	ecc = pvt->ecc_base[ECC_CS_COUNT];
+> +	cs += ecc & 0xff;		// cs0
+> +	cs += (ecc >> 8) & 0xff;	// cs1
+> +	cs += (ecc >> 16) & 0xff;	// cs2
+> +	cs += (ecc >> 24) & 0xff;	// cs3
+
+No side comments pls - put them over the line.
+
+> +
+> +	return cs;
+> +}
+> +
+> +static void loongson_edac_check(struct mem_ctl_info *mci)
+> +{
+> +	loongson_update_ce_count(mci, 0, loongson_read_ecc(mci));
+
+Drop this silly wrapper.
+
+> +}
+> +
+> +static int get_dimm_config(struct mem_ctl_info *mci)
+> +{
+> +	u32 size, npages;
+> +	struct dimm_info *dimm;
+> +
+> +	/* size not used */
+> +	size = -1;
+> +	npages = MiB_TO_PAGES(size);
+> +
+> +	dimm = edac_get_dimm(mci, 0, 0, 0);
+> +	dimm->nr_pages = npages;
+> +	snprintf(dimm->label, sizeof(dimm->label),
+> +			"MC#%uChannel#%u_DIMM#%u",
+> +			mci->mc_idx, 0, 0);
+
+Align arguments on the opening brace.
+
+> +	dimm->grain = 8;
+> +
+> +	return 0;
+> +}
+
+...
+
+
 -- 
-2.39.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
