@@ -1,94 +1,79 @@
-Return-Path: <linux-edac+bounces-1876-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1877-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 899F99790BC
-	for <lists+linux-edac@lfdr.de>; Sat, 14 Sep 2024 14:09:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AB03979A7A
+	for <lists+linux-edac@lfdr.de>; Mon, 16 Sep 2024 06:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B1B6B21BC5
-	for <lists+linux-edac@lfdr.de>; Sat, 14 Sep 2024 12:09:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D372C1F23611
+	for <lists+linux-edac@lfdr.de>; Mon, 16 Sep 2024 04:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A35441CF7BF;
-	Sat, 14 Sep 2024 12:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A62393CF74;
+	Mon, 16 Sep 2024 04:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b="DXr0NoB7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AG+C0Vp8"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from sender4-pp-o94.zoho.com (sender4-pp-o94.zoho.com [136.143.188.94])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058471CDA0A
-	for <linux-edac@vger.kernel.org>; Sat, 14 Sep 2024 12:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.94
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726315767; cv=pass; b=biKtrR6p7W2VEC75XbU3ESW8oXtzNWyBtV8Pnaf7jTivbb8GyQAReAD643jTVfnxyHYH1FQSKuq7YTT61kD2xySEWlhXr6HIvRZhmPkUSSTZ7niJRZufZrauAm1UAAcKq/NjTpIClgXRWV29e0uRg7loRt5W5sWAj+zqfqI6xso=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726315767; c=relaxed/simple;
-	bh=42EXMLcisJ8Z+L8mNlyM2A24o4B489hvVDGi9Y0YGX8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=foe29S03i557JtFbpI+fIPVdKWyI0h02zO7AqbPS8ZZk3//45qBSz3+itWcFw6eLdspOdmXIsh2mkgnVvyp2JRMkn0E35fg9coNwWbQT8gLG3xEz810PAYB005AGGLVNFaYZUpCfddl1vTgMydmidEMI+dosLxUU2oY4/nkX9IA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b=DXr0NoB7; arc=pass smtp.client-ip=136.143.188.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1726315762; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=nUKw5VkvrK0U5dmOpuMEK3SNeEmS1xnLcAE8eXx2A4Ffdgpv8ZCFQbCie9QUNdb5xncS9SgITIVcyh2g6/sdLZgsQ/b4P05UWJIpPDsYkdEby0++A4WAeqKAiUAemtBCXWKh6Mt2yD7ELWnhQ7JWjjwAf6//j3eaBVOrKZyNtJI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1726315762; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=GNWchvDqRQkV67alPN4g3jw03Ts8SJ5WUAOm57KUp/o=; 
-	b=i5tULCic6MovO5+DRdQbrur8eg8dVpOyPjrJzh3PHsSLm6xagKz8Lp68wj+9bwkMwQrJMq/THnk4CdG35yo/OTqUCNHdDSs9laPQkQox8VrA/wnvrlRXzkSXwJ5gN7Gh+ThNaCS5eacBBschLPqqE6rm3O/2OLgiyzBUDVZHpjQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=safinaskar@zohomail.com;
-	dmarc=pass header.from=<safinaskar@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726315762;
-	s=zm2022; d=zohomail.com; i=safinaskar@zohomail.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
-	bh=GNWchvDqRQkV67alPN4g3jw03Ts8SJ5WUAOm57KUp/o=;
-	b=DXr0NoB7EcB3F07UzhDh8gnvKYr0jX/IPv2T5oFgJYhA7SUqpMYmNNgktM9UM4jn
-	fd+7X1Tees9ZNpvaicECQgqyif+HY197NJY2Tvv5kH6lykMrUvjnj/WS+c48ZqybZa3
-	CQyS3kRYZQO3u16fuXlmjGAISCChB3niZ7j8jHMA=
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1726315761187732.0486470175704; Sat, 14 Sep 2024 05:09:21 -0700 (PDT)
-Received: from  [212.73.77.104] by mail.zoho.com
-	with HTTP;Sat, 14 Sep 2024 05:09:21 -0700 (PDT)
-Date: Sat, 14 Sep 2024 16:09:21 +0400
-From: Askar Safin <safinaskar@zohomail.com>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: "linux-edac" <linux-edac@vger.kernel.org>
-Message-ID: <191f0700e16.e4ac896383888.3692757560429165043@zohomail.com>
-In-Reply-To: <SJ1PR11MB60836E226A36DD482E284796FC652@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <191ec4abfe4.ee5cf21f77536.5289498031536692169@zohomail.com> <SJ1PR11MB60836E226A36DD482E284796FC652@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Subject: RE: Is it true that uncorrectable ECC errors always crash the
- system? (I want this) It seems my system is unsupported in edac
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6814834CC4;
+	Mon, 16 Sep 2024 04:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726462510; cv=none; b=XnXRq26kyjdtbK4QJe4kpTwKmMK7ZysTJbSUGCDiJgOA05GJMbjaK6nXX3QUqVSl8Qi1TU0HpMNGkMNJuXgzoLNFD7QFkkItkzEyjSxDPPgkbhaddU7to+s+qVYTyksjw1w4WKP5wbqSu/jIoEKySX4GAYn6BhHIuA0Jt6aRdXE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726462510; c=relaxed/simple;
+	bh=Z8N1/F3KpXA/voPxWSAajOuZyHweZSsBUEP7ZKw407k=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=fJQoaJH/9cWypQzQOvu+papRnJphgi3cbK3fqo1nxmz0yqpzY2L6djVnhI24DPuhxAEK6HRn18qqD2vIiIjjaTQU8vD2u2wOZZTu557RsvLDoL/Y6R8jSSliiVLRhHIzk9PguQVGmT/H8V6llLb1RG7BHsnz5GJv/btVy/Gi0+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AG+C0Vp8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF1F3C4CEC4;
+	Mon, 16 Sep 2024 04:55:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726462510;
+	bh=Z8N1/F3KpXA/voPxWSAajOuZyHweZSsBUEP7ZKw407k=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=AG+C0Vp8BSvrPK54z/BB9sZCFUYTYEAZ4w/JNtrZsL2elbpIcn+35U3OnVRWvB7su
+	 42o651mObx83Wk17x3pr1yXY7JH1Nhw/I4JsAPx8NX0/jlB5vx0OSGGi4SlHX7A3ME
+	 6YK+H556eQXJc1LpIIqF27f8r1SgRgHWP4uhSIN+Dy0+EvSeviTWYWFV+BrLXiQJyS
+	 Pd/wCwJz3mOC3qhupNcNTc8XYnu+ENFgiWLctSzilvSJnvnzdWMLvKYArIzj2Gr+Xf
+	 5saML5Aj+wd5vq8B8km0xT1RHE2Rrx0NKLdd/qK9n/qVOVMmbPXbOpToO9mXbt8NCP
+	 6Hk9Is7AoBNog==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE03F3809A80;
+	Mon, 16 Sep 2024 04:55:12 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC updates for v6.12
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240909090302.GAZt65xhBpCvrrefhl@fat_crate.local>
+References: <20240909090302.GAZt65xhBpCvrrefhl@fat_crate.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240909090302.GAZt65xhBpCvrrefhl@fat_crate.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.12
+X-PR-Tracked-Commit-Id: 92f8358bce13da0b2c37122573a2b2d7de0071df
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7dfc15c47372e8bf8a693ca3dfaaec33a68ee116
+Message-Id: <172646251123.3235832.3824649219070543148.pr-tracker-bot@kernel.org>
+Date: Mon, 16 Sep 2024 04:55:11 +0000
+To: Borislav Petkov <bp@alien8.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-Feedback-ID: rr08011227245ef99a967210550c76aede0000f861756c9f24e170399611bcaf1c89ee9d9b537349034ed7f8:zu08011227a9bc071f2b7d245eae6c405b0000edf2bd8d482592d5982a92b873d6e8bce613bc25ae9050b90d:rf0801122c9ffce0e957fb682f904af07c0000a58041df19f82795a3b7ff11382505499313a73ad66a6726015c6157d5b8:ZohoMail
 
-Thanks for answer!
+The pull request you sent on Mon, 9 Sep 2024 11:03:02 +0200:
 
- ---- On Fri, 13 Sep 2024 21:05:15 +0400  Luck, Tony  wrote --- 
- > I'm not sure which model processor is in your 7780 system.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.12
 
-I have "13th Gen Intel(R) Core(TM) i9-13950HX" (from /proc/cpuinfo)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7dfc15c47372e8bf8a693ca3dfaaec33a68ee116
 
- > "Xeon" CPUs often support recovery from uncorrected memory errors.
+Thank you!
 
-?!?! How this is possible?
-
---
-Askar Safin
-https://types.pl/@safinaskar
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
