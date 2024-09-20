@@ -1,142 +1,133 @@
-Return-Path: <linux-edac+bounces-1902-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1903-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 352F197D476
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Sep 2024 12:50:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D58F997D4DE
+	for <lists+linux-edac@lfdr.de>; Fri, 20 Sep 2024 13:35:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F138F28394F
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Sep 2024 10:50:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D476B2365C
+	for <lists+linux-edac@lfdr.de>; Fri, 20 Sep 2024 11:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F481442E3;
-	Fri, 20 Sep 2024 10:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF0E13D529;
+	Fri, 20 Sep 2024 11:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BdWgq8SJ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C939013C683
-	for <linux-edac@vger.kernel.org>; Fri, 20 Sep 2024 10:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE26D24B4A;
+	Fri, 20 Sep 2024 11:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726829381; cv=none; b=fOJX7ZRd73VoDc5ObLqp2UErHBHK00D7k1KHtzTJEzs2aB5S4a/87LfHp3YXf2xmi06sni/SQo07uWISlq+bhzAoj59kk937MTqWSy2wOsSo4TsxDWzF+djWeIxtNzycYfekck4BkVFFPYxg4FCVpWbCiU5JLuj4SWHMlr3eCFQ=
+	t=1726832112; cv=none; b=m499YkNCIz7wZVo+kpY9x6116JXY5VGqoBbU/uIZf8QP8+EO7UQ8bZtw5Ew/xuSm/Y7woPAmmxSbqnB4/3xm2iY/9pnucCen+G3o+h0PRBGJIMh+61mJbP06J/KgXjWw9zOFVtQs88FaP5EjQQFlpWaCbvt0L7tTBsnMw8q52Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726829381; c=relaxed/simple;
-	bh=76X4WGDb7fXflCuGB1Z3/sPBMa3Yo5I8KilmZWq1wzo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=c3nUVV58ReAcTMzbE671FxcUg2Ae2B0lh01OzESfjFacL6CsDG+09oSLV3kJK15SHtksrxPqy5dKoWRGRnuKgbe+cjcsoJE4FhKx7Z72SwzYdEERUy93UABh22k1EwSzrTvzua2fc0J21vy7wWtaOBQwhf4Pw/NS85YhZkMMjB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1726829366-1eb14e31a9113e30001-QCVQLf
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id hmcmp4N4PbGYAws8 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 20 Sep 2024 18:49:27 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from ZXSHMBX2.zhaoxin.com (10.28.252.164) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 20 Sep
- 2024 18:49:26 +0800
-Received: from ZXSHMBX2.zhaoxin.com ([fe80::d4e0:880a:d21:684d]) by
- ZXSHMBX2.zhaoxin.com ([fe80::d4e0:880a:d21:684d%4]) with mapi id
- 15.01.2507.039; Fri, 20 Sep 2024 18:49:26 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from [10.32.65.165] (10.32.65.165) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 20 Sep
- 2024 18:42:20 +0800
-Message-ID: <7a80b9f5-9503-45fa-bbf4-d0dfa97688ff@zhaoxin.com>
-Date: Fri, 20 Sep 2024 18:42:22 +0800
+	s=arc-20240116; t=1726832112; c=relaxed/simple;
+	bh=zQ5iM5k6GIU+AK5anD56YHmGTiqTiNOqalEcNMllZGo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=F19JqFbd4WvaVNxYJlWxKEAuHGhfVPMGMYL1CHIK4nhdRR6szUxodH9Xzo+G0lHs7HMKa2AJUU+OchB6MU9usA6dRN9J/Okk1sgOHQHqznFNA7XdIibGwOT9MJ1GapknfNQ55uZpTapA0GuzaGrIuuSznMSAGLSOAgLReYTWMpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BdWgq8SJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E68DBC4CEC3;
+	Fri, 20 Sep 2024 11:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726832111;
+	bh=zQ5iM5k6GIU+AK5anD56YHmGTiqTiNOqalEcNMllZGo=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=BdWgq8SJ2lfmexGOinqSNJ7KTTER9GBlcMO1r2/mh0d5RvNRQltH0QGldPd83qHqz
+	 MAEO0XtNS+tc3F+4ngBm0HC+Ir7xxVhB1HFY+23UH5zRY3w81D70HOt8p2wlKbxfyx
+	 y4Mx4h9471GfwaNlK5fxw2BpV6uzeVnk7xPuUBohaE9vJYDmIINz4muvTeg979pqXP
+	 adE1/FxhvliYxUSfImsNiuu17FawHKd5MvHJKYtLgzIC7ia+llY9dvr6bkU6GhjUGD
+	 144Oww8VP59IcX8tqiZhCussXXNjpN3ifVblloZFdzKZyS8HGbW9bJqhduYC1iThDy
+	 zJm/02/kjuFbA==
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] x86/mce: Add CMCI storm switching support for
- Zhaoxin
-To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "Luck,
- Tony" <tony.luck@intel.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>
-X-ASG-Orig-Subj: Re: [PATCH v3 3/3] x86/mce: Add CMCI storm switching support for
- Zhaoxin
-CC: "CobeChen@zhaoxin.com" <CobeChen@zhaoxin.com>, "TimGuo@zhaoxin.com"
-	<TimGuo@zhaoxin.com>, "LeoLiu-oc@zhaoxin.com" <LeoLiu-oc@zhaoxin.com>, "Lyle
- Li" <LyleLi@zhaoxin.com>
-References: <20240910092652.13354-1-TonyWWang-oc@zhaoxin.com>
- <20240918055436.15551-1-TonyWWang-oc@zhaoxin.com>
- <20240918055436.15551-4-TonyWWang-oc@zhaoxin.com>
- <CY8PR11MB71344BE2857EA522CF71DBA1896C2@CY8PR11MB7134.namprd11.prod.outlook.com>
-Content-Language: en-US
-From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-In-Reply-To: <CY8PR11MB71344BE2857EA522CF71DBA1896C2@CY8PR11MB7134.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Moderation-Data: 9/20/2024 6:49:24 PM
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1726829366
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1503
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.130712
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 20 Sep 2024 14:35:07 +0300
+Message-Id: <D4B2W6MR4585.3IS3HYGQ6GM6O@kernel.org>
+Cc: <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+ <linux-edac@vger.kernel.org>, <x86@kernel.org>, <justin.he@arm.com>,
+ <ardb@kernel.org>, <ying.huang@intel.com>, <ashish.kalra@amd.com>,
+ <baolin.wang@linux.alibaba.com>, <tglx@linutronix.de>,
+ <dave.hansen@linux.intel.com>, <lenb@kernel.org>, <hpa@zytor.com>,
+ <robert.moore@intel.com>, <lvying6@huawei.com>, <xiexiuqi@huawei.com>,
+ <zhuo.song@linux.alibaba.com>
+Subject: Re: [PATCH v13 1/3] ACPI: APEI: send SIGBUS to current task if
+ synchronous memory error not recovered
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Shuai Xue" <xueshuai@linux.alibaba.com>, <mark.rutland@arm.com>,
+ <catalin.marinas@arm.com>, <mingo@redhat.com>, <robin.murphy@arm.com>,
+ <Jonathan.Cameron@Huawei.com>, <bp@alien8.de>, <rafael@kernel.org>,
+ <wangkefeng.wang@huawei.com>, <tanxiaofei@huawei.com>,
+ <mawupeng1@huawei.com>, <tony.luck@intel.com>, <linmiaohe@huawei.com>,
+ <naoya.horiguchi@nec.com>, <james.morse@arm.com>, <tongtiangen@huawei.com>,
+ <gregkh@linuxfoundation.org>, <will@kernel.org>
+X-Mailer: aerc 0.18.2
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20240920043027.21907-2-xueshuai@linux.alibaba.com>
+In-Reply-To: <20240920043027.21907-2-xueshuai@linux.alibaba.com>
 
+On Fri Sep 20, 2024 at 7:30 AM EEST, Shuai Xue wrote:
+> Synchronous error was detected as a result of user-space process accessin=
+g
+> a 2-bit uncorrected error. The CPU will take a synchronous error exceptio=
+n
+> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue =
+a
+> memory_failure() work which poisons the related page, unmaps the page, an=
+d
+> then sends a SIGBUS to the process, so that a system wide panic can be
+> avoided.
+>
+> However, no memory_failure() work will be queued when abnormal synchronou=
+s
+> errors occur. These errors can include situations such as invalid PA,
+> unexpected severity, no memory failure config support, invalid GUID
+> section, etc. In such case, the user-space process will trigger SEA again=
+.
+> This loop can potentially exceed the platform firmware threshold or even
+> trigger a kernel hard lockup, leading to a system reboot.
+>
+> Fix it by performing a force kill if no memory_failure() work is queued
+> for synchronous errors.
+>
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+>  drivers/acpi/apei/ghes.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 623cc0cb4a65..93eb11482832 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -801,6 +801,16 @@ static bool ghes_do_proc(struct ghes *ghes,
+>  		}
+>  	}
+> =20
+> +	/*
+> +	 * If no memory failure work is queued for abnormal synchronous
+> +	 * errors, do a force kill.
+> +	 */
+> +	if (sync && !queued) {
+> +		pr_err("%s:%d: hardware memory corruption (SIGBUS)\n",
+> +			current->comm, task_pid_nr(current));
+> +		force_sig(SIGBUS);
+> +	}
+> +
+>  	return queued;
+>  }
+> =20
 
+Looks good to me!
 
-On 2024/9/20 17:17, Zhuo, Qiuxu wrote:
-> 
->> From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
->> [...]
->> Subject: [PATCH v3 3/3] x86/mce: Add CMCI storm switching support for
->> [...]
->> --- a/arch/x86/kernel/cpu/mce/zhaoxin.c
->> +++ b/arch/x86/kernel/cpu/mce/zhaoxin.c
->> @@ -63,3 +63,21 @@ void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
->> {
->>        intel_clear_lmce();
->>   }
->> +
->> +void mce_zhaoxin_handle_storm(int bank, bool on) {
->> +     unsigned long flags;
->> +     u64 val;
->> +
->> +     raw_spin_lock_irqsave(&cmci_discover_lock, flags);
->> +     rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
->> +     if (on) {
->> +             val &= ~(MCI_CTL2_CMCI_EN |
->> MCI_CTL2_CMCI_THRESHOLD_MASK);
->> +             val |= CMCI_STORM_THRESHOLD;
->> +     } else {
->> +             val &= ~MCI_CTL2_CMCI_THRESHOLD_MASK;
->> +             val |= (MCI_CTL2_CMCI_EN | cmci_threshold[bank]);
->> +     }
->> +     wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
->> +     raw_spin_unlock_irqrestore(&cmci_discover_lock, flags); }
-> 
-> Are there any reasons or comments why it needs to disable/enable the CMCI interrupt
-> here during a CMCI storm on/off? If not, then reuse mce_intel_handle_storm() to avoid
-> duplicating the code.
-> 
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-As explained in another email.
-The reason is actually mentioned in the cover letter: "because Zhaoxin's 
-UCR error is not reported through CMCI", and we want to disable CMCI 
-interrupt when CMCI storm happened.
-
-Sincerely
-TonyWWang-oc
+BR, Jarkko
 
