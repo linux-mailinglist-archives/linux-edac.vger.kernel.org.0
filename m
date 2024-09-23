@@ -1,168 +1,137 @@
-Return-Path: <linux-edac+bounces-1911-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1912-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BBF997E513
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 05:42:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE82097E6B5
+	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 09:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C0AE2817D3
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 03:42:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C4801F20FD1
+	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 07:37:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAF68C1A;
-	Mon, 23 Sep 2024 03:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDADB4F602;
+	Mon, 23 Sep 2024 07:37:28 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D69D8F66
-	for <linux-edac@vger.kernel.org>; Mon, 23 Sep 2024 03:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535D21D52B
+	for <linux-edac@vger.kernel.org>; Mon, 23 Sep 2024 07:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727062966; cv=none; b=EDF+geKIOFGahZZOX7T4iAXfNxnYrrSEQ2323L53MxgXreVTu6M/DAUAi3YPxSdvvdp0vHyxvwtWVZnDU0csFXGcq9Pzo34OZiGPzLVxqzFUGyQU1gvrHI2zM7j3TzdwCMRIbwiqMmVDwEBDjB7jInvzhx07O2SdsXuIodmCGwo=
+	t=1727077048; cv=none; b=PlyNap/YZFI2n/Lg9tLD/sGScheewN5i+nZW2y6MAZo9D/hb9mPsHflFmbXv+pKH255DwE5bfUruDfsYJK02ykxQj2EW/ClrXfpJmXXRu3fnSt6byclkMfqWl8JMGZoJD7QShdSiSwWD/36qEcIrRVsfnXHTrR3gLcJmnUAEhJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727062966; c=relaxed/simple;
-	bh=eEGT1Vj+xoUWXnOzGW4bgCBN9bGO37na6FBJ+sfwfMg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=M3x7CceUJcTGntn/2uxG3y4dG6IjzLrE1+WSSECcXB/0nC3ePMj2Z7qRsJSJrBbUMcbeHMknRKXR+NXkASivlc+OO/1+neRL97GcQPkEmSw47Ao3RVsV7Htd3svidOJ+bbsfElnB0jtBHvgWp8Vw/KS90uICkp3MLruGK9Pbi90=
+	s=arc-20240116; t=1727077048; c=relaxed/simple;
+	bh=dPvSQqvqu8v8ffvNZW4QajwsVPbXcvLCE3MDFU7L8v4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=X3Cru0ghTiGUw9Z0i7pSRo6zJFcFvMg/IrTOMOaWjUXs1glOcuJAZLIG6bCbHqmm/7R7boThFR0Ipi+EcX5YjhXLRmMnHN6fWxq7/QjrJ6Kb1MrCTPvaTmqedWmj9IquHGdoqhXWRFTEE51bKq7TPyeWDJZ98ScJCvVfvolR/Pc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1727062217-086e236b0900d80001-QCVQLf
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id 4O77gCJUFKSGBsNz (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 23 Sep 2024 11:30:18 +0800 (CST)
+X-ASG-Debug-ID: 1727077030-086e236b0800f40001-QCVQLf
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id 9sMIDwAWllpDgD8h (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 23 Sep 2024 15:37:10 +0800 (CST)
 X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from ZXSHMBX2.zhaoxin.com (10.28.252.164) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from ZXSHMBX2.zhaoxin.com (10.28.252.164) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 23 Sep
- 2024 11:30:17 +0800
+ 2024 15:37:09 +0800
 Received: from ZXSHMBX2.zhaoxin.com ([fe80::d4e0:880a:d21:684d]) by
  ZXSHMBX2.zhaoxin.com ([fe80::d4e0:880a:d21:684d%4]) with mapi id
- 15.01.2507.039; Mon, 23 Sep 2024 11:30:17 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from [10.32.65.165] (10.32.65.165) by ZXBJMBX03.zhaoxin.com
+ 15.01.2507.039; Mon, 23 Sep 2024 15:37:09 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from localhost.localdomain (10.32.65.165) by ZXBJMBX03.zhaoxin.com
  (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 23 Sep
- 2024 11:23:03 +0800
-Message-ID: <271465a0-7719-4cae-899a-dbf58a3d174a@zhaoxin.com>
-Date: Mon, 23 Sep 2024 11:23:00 +0800
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 23 Sep
+ 2024 15:33:07 +0800
+From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+To: <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+	<tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>
+CC: <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>, <LeoLiu-oc@zhaoxin.com>,
+	Lyle Li <LyleLi@zhaoxin.com>
+Subject: [PATCH v4 0/4] x86/mce: Add Zhaoxin MCE support and remove
+Date: Mon, 23 Sep 2024 15:33:07 +0800
+X-ASG-Orig-Subj: [PATCH v4 0/4] x86/mce: Add Zhaoxin MCE support and remove
+Message-ID: <20240923073311.4290-1-TonyWWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240918055436.15551-1-TonyWWang-oc@zhaoxin.com>
+References: <20240918055436.15551-1-TonyWWang-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] x86/mce: Add CMCI storm switching support for
- Zhaoxin
-From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-X-ASG-Orig-Subj: Re: [PATCH v3 3/3] x86/mce: Add CMCI storm switching support for
- Zhaoxin
-To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "Luck,
- Tony" <tony.luck@intel.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>
-CC: "CobeChen@zhaoxin.com" <CobeChen@zhaoxin.com>, "TimGuo@zhaoxin.com"
-	<TimGuo@zhaoxin.com>, "LeoLiu-oc@zhaoxin.com" <LeoLiu-oc@zhaoxin.com>, "Lyle
- Li" <LyleLi@zhaoxin.com>
-References: <20240910092652.13354-1-TonyWWang-oc@zhaoxin.com>
- <20240918055436.15551-1-TonyWWang-oc@zhaoxin.com>
- <20240918055436.15551-4-TonyWWang-oc@zhaoxin.com>
- <CY8PR11MB71344BE2857EA522CF71DBA1896C2@CY8PR11MB7134.namprd11.prod.outlook.com>
- <7a80b9f5-9503-45fa-bbf4-d0dfa97688ff@zhaoxin.com>
- <CY8PR11MB713412D068F202057A71CDE8896C2@CY8PR11MB7134.namprd11.prod.outlook.com>
- <acf35354-ab97-4441-828f-daf7affa20ac@zhaoxin.com>
-Content-Language: en-US
-In-Reply-To: <acf35354-ab97-4441-828f-daf7affa20ac@zhaoxin.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+Content-Type: text/plain
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
  ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Moderation-Data: 9/23/2024 11:30:15 AM
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1727062218
+X-Moderation-Data: 9/23/2024 3:37:08 PM
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1727077030
 X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
 X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
 X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2229
+X-Barracuda-Scan-Msg-Size: 1895
+X-Barracuda-BRTS-Status: 1
 X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
 X-Barracuda-Spam-Score: -2.02
 X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.130834
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.130843
 	Rule breakdown below
 	 pts rule name              description
 	---- ---------------------- --------------------------------------------------
 
-Resend this mail because I received the message: Undelivered Mail=20
-Returned to Sender
+From: Lyle Li <LyleLi@zhaoxin.com>
 
-On 2024/9/20 20:09, Tony W Wang-oc wrote:
->=20
->=20
-> On 2024/9/20 19:44, Zhuo, Qiuxu wrote:
->>
->>
->>> From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
->>> [...]
->>>>> --- a/arch/x86/kernel/cpu/mce/zhaoxin.c
->>>>> +++ b/arch/x86/kernel/cpu/mce/zhaoxin.c
->>>>> @@ -63,3 +63,21 @@ void mce_zhaoxin_feature_clear(struct cpuinfo_x86
->>>>> *c) {
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 intel_clear_lmce();
->>>>> =C2=A0=C2=A0 }
->>>>> +
->>>>> +void mce_zhaoxin_handle_storm(int bank, bool on) {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long flags;
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 u64 val;
->>>>> +
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 raw_spin_lock_irqsave(&cmci_discover_lock, =
-flags);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 if (on) {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 val &=3D ~(MCI_CTL2_CMCI_EN |
->>>>> MCI_CTL2_CMCI_THRESHOLD_MASK);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 val |=3D CMCI_STORM_THRESHOLD;
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 } else {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 val &=3D ~MCI_CTL2_CMCI_THRESHOLD_MASK;
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 val |=3D (MCI_CTL2_CMCI_EN | cmci_threshold[bank]);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 raw_spin_unlock_irqrestore(&cmci_discover_l=
-ock, flags); }
->>>>
->>>> Are there any reasons or comments why it needs to disable/enable the
->>>> CMCI interrupt here during a CMCI storm on/off? If not, then reuse
->>>> mce_intel_handle_storm() to avoid duplicating the code.
->>>>
->>>
->>> As explained in another email.
->>> The reason is actually mentioned in the cover letter: "because=20
->>> Zhaoxin's UCR
->>> error is not reported through CMCI", and we want to disable CMCI=20
->>> interrupt
->>> when CMCI storm happened.
->>
->> So, this is just you want to disable CMCI when a CMCI storm happens.
->> This doesn't explain much to me.
->> What's the problem if not disable CMCI when a CMCI storm happens?
->>
->=20
-> In practice, we have encountered a lot of CE errors such as DRAM CE=20
-> errors, so it feels safer to disable CMCI interrupt than to set a large=20
-> threshold. At the same time, Zhaoxin's UCR is not reported through CMCI,=
-=20
-> so we implemented like this.
->=20
-> Sincerely
-> TonyWWang-oc
->=20
+Zhaoxin consists of two vendors, X86_VENDOR_ZHAOXIN and
+X86_VENDOR_CENTAUR, so add the centaur vendor to support
+Zhaoxin MCA in mce/core.c and mce/intel.c.
+
+Since all major vendors do not disable MCA_CTL after initialization,
+functions that disable error reporting should be removed in mce/core.c.
+
+For the sake of code standardization, add zhaoxin.c to
+override the Zhaoxin MCA code.
+
+Zhaoxin CPUs support CMCI compatible with Intel, because
+Zhaoxin's UCR error is not reported through CMCI, and in
+order to be compatible with intel's CMCI code, so add Zhaoxin
+CMCI storm toggle to support the new CMCI storm switching
+in mce/intel.c, mce/zhaoxin.c, mce/threshold.c, and mce/internal.h.
+
+v3->v4:
+ - Remove functions that disable error reporting (patch 2/4)
+
+v2->v3:
+ - Consolidate the MCA code for Zhaoxin and Centaur regarding the
+   broadcast MCE configuration (patch 3/4)
+
+v1->v2:
+ - Fix multiple definition of "mce_zhaoxin_feature_init" (patch 3/4)
+ - Fix multiple definition of "mce_zhaoxin_feature_clear" (patch 3/4)
+ - Fix multiple definition of "mce_zhaoxin_handle_storm" (patch 4/4)
+
+Lyle Li (4):
+  x86/mce: Add centaur vendor to support Zhaoxin MCA
+  x86/mce: Remove functions that disable error reporting
+  x86/mce: Add zhaoxin.c to support Zhaoxin MCA
+  x86/mce: Add CMCI storm switching support for Zhaoxin
+
+ arch/x86/Kconfig                    |   8 ++
+ arch/x86/kernel/cpu/mce/Makefile    |   2 +-
+ arch/x86/kernel/cpu/mce/core.c      | 116 ++--------------------------
+ arch/x86/kernel/cpu/mce/intel.c     |   8 +-
+ arch/x86/kernel/cpu/mce/internal.h  |  14 +++-
+ arch/x86/kernel/cpu/mce/threshold.c |   4 +
+ arch/x86/kernel/cpu/mce/zhaoxin.c   |  83 ++++++++++++++++++++
+ 7 files changed, 120 insertions(+), 115 deletions(-)
+ create mode 100644 arch/x86/kernel/cpu/mce/zhaoxin.c
+
+--=20
+2.34.1
+
 
