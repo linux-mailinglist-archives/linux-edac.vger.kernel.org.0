@@ -1,50 +1,50 @@
-Return-Path: <linux-edac+bounces-1915-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1916-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4707897E6BC
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 09:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED18F97E6BD
+	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 09:38:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6885F1C21114
-	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 07:38:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C7001C21122
+	for <lists+linux-edac@lfdr.de>; Mon, 23 Sep 2024 07:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514B778B50;
-	Mon, 23 Sep 2024 07:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE95A4EB5E;
+	Mon, 23 Sep 2024 07:37:53 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD4761674
-	for <linux-edac@vger.kernel.org>; Mon, 23 Sep 2024 07:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD1B41C77
+	for <linux-edac@vger.kernel.org>; Mon, 23 Sep 2024 07:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727077057; cv=none; b=lodbpk6rw2oQvuMWGiAlY5HU9qaGAyZX19NOAzDhND/gT/Xq/PwzJOAJPoHcv/nrEIT2XhG9LYXf9WtK0Bwp6xouXvINAnjMXqbPwNy5X+von11uG5bly9D9eDKDi+CPSSRFqSWQ+QZU20U/eXWV2hNu5565QdICrqmV08EGGHA=
+	t=1727077073; cv=none; b=H/5S0EcCLkz0X7qtZwmGRlDH0eX2csZSTmmx9cZ6iWn2q1UtheN4XCgSy68T/wai2qwShdGSdiHRArBo4rmH5I8TP/K89t9S5R0Rz5HkKEIpLTEMEbONbUoLrWxR4CPenvH3HaDbUb/IDFh/92cAW4kX5C1QMLx65xIYMLxNCg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727077057; c=relaxed/simple;
-	bh=B+tOrXIIZpHSYlzbdMvnT9dwYLTtph5q8LQ8mMDMlJ4=;
+	s=arc-20240116; t=1727077073; c=relaxed/simple;
+	bh=uSEca6JWjWX9jnpE6/DSLp+NX6IlRbe0St6DrkY4mSc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gMWFsfPvPf3HtphqafFNa87k51jUm10YApQDy24c7kN5BiVXegYm1lzeFYuc3nUmv/eN8CG7oGa4fdwC7A0kD1bnGw/h0c7780k7VFzFEvTvhPlxpUVc8tDYvqbnkCE0VR8PEq93lxMsa5IS1iuY3TVOJlRFYJy5GD5E910tuKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
+	 MIME-Version:Content-Type; b=YjFAhcZ0kkhUaJV4Cn7caS6rJFrT7oaKI3C8sxUj7jTJb1D03m1VsJkOtKZdTb5Ol9EQFViQfei/2xH72ZTr+l1Scyr8IVeYV/R+34JdpjMXlKnEkCQfnS1Aql20UpCIDtj9Ka4gV7GDm0W/llQIEGokIGUvXEfB/wQQ6dmR1y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1727077052-1eb14e31a6116750001-QCVQLf
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id vM5oTHHvsPs4Tluo (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 23 Sep 2024 15:37:32 +0800 (CST)
+X-ASG-Debug-ID: 1727077064-086e236b0500f40001-QCVQLf
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id g4wH4ThCyntH2GFK (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 23 Sep 2024 15:37:44 +0800 (CST)
 X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
 X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
 Received: from ZXSHMBX2.zhaoxin.com (10.28.252.164) by ZXSHMBX3.zhaoxin.com
  (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 23 Sep
- 2024 15:37:32 +0800
+ 2024 15:37:44 +0800
 Received: from ZXSHMBX2.zhaoxin.com ([fe80::d4e0:880a:d21:684d]) by
  ZXSHMBX2.zhaoxin.com ([fe80::d4e0:880a:d21:684d%4]) with mapi id
- 15.01.2507.039; Mon, 23 Sep 2024 15:37:32 +0800
+ 15.01.2507.039; Mon, 23 Sep 2024 15:37:44 +0800
 X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
 Received: from localhost.localdomain (10.32.65.165) by ZXBJMBX03.zhaoxin.com
  (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 23 Sep
- 2024 15:33:13 +0800
+ 2024 15:33:15 +0800
 From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 To: <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
 	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
@@ -52,10 +52,10 @@ To: <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
 	<linux-edac@vger.kernel.org>
 CC: <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>, <LeoLiu-oc@zhaoxin.com>,
 	Lyle Li <LyleLi@zhaoxin.com>
-Subject: [PATCH v4 3/4] x86/mce: Add zhaoxin.c to support Zhaoxin MCA
-Date: Mon, 23 Sep 2024 15:33:10 +0800
-X-ASG-Orig-Subj: [PATCH v4 3/4] x86/mce: Add zhaoxin.c to support Zhaoxin MCA
-Message-ID: <20240923073311.4290-4-TonyWWang-oc@zhaoxin.com>
+Subject: [PATCH v4 4/4] x86/mce: Add CMCI storm switching support for Zhaoxin
+Date: Mon, 23 Sep 2024 15:33:11 +0800
+X-ASG-Orig-Subj: [PATCH v4 4/4] x86/mce: Add CMCI storm switching support for Zhaoxin
+Message-ID: <20240923073311.4290-5-TonyWWang-oc@zhaoxin.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240923073311.4290-1-TonyWWang-oc@zhaoxin.com>
 References: <20240918055436.15551-1-TonyWWang-oc@zhaoxin.com>
@@ -70,248 +70,144 @@ Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
  ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Moderation-Data: 9/23/2024 3:37:30 PM
+X-Moderation-Data: 9/23/2024 3:37:41 PM
 X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1727077052
+X-Barracuda-Start-Time: 1727077064
 X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
 X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 6821
+X-Barracuda-Scan-Msg-Size: 4332
 X-Barracuda-BRTS-Status: 1
 X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
 X-Barracuda-Spam-Score: -2.02
 X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.130842
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.130843
 	Rule breakdown below
 	 pts rule name              description
 	---- ---------------------- --------------------------------------------------
 
 From: Lyle Li <LyleLi@zhaoxin.com>
 
-For the sake of code standardization, add zhaoxin.c to
-override the Zhaoxin MCA code.
+Zhaoxin CPUs support CMCI compatible with Intel, because
+Zhaoxin's UCR error is not reported through CMCI, and in
+order to be compatible with intel's CMCI code, so add Zhaoxin
+CMCI storm toggle to support the new CMCI storm switching
+in mce/intel.c, mce/zhaoxin.c, mce/threshold.c, and mce/internal.h.
 
 Signed-off-by: Lyle Li <LyleLi@zhaoxin.com>
 Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 ---
- arch/x86/Kconfig                   |  8 ++++
- arch/x86/kernel/cpu/mce/Makefile   |  2 +-
- arch/x86/kernel/cpu/mce/core.c     | 57 --------------------------
- arch/x86/kernel/cpu/mce/internal.h |  7 ++++
- arch/x86/kernel/cpu/mce/zhaoxin.c  | 65 ++++++++++++++++++++++++++++++
- 5 files changed, 81 insertions(+), 58 deletions(-)
- create mode 100644 arch/x86/kernel/cpu/mce/zhaoxin.c
+ arch/x86/kernel/cpu/mce/intel.c     |  5 ++---
+ arch/x86/kernel/cpu/mce/internal.h  |  7 ++++++-
+ arch/x86/kernel/cpu/mce/threshold.c |  4 ++++
+ arch/x86/kernel/cpu/mce/zhaoxin.c   | 18 ++++++++++++++++++
+ 4 files changed, 30 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 1d7122a18..b908cdfb9 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1171,6 +1171,14 @@ config X86_MCE_INTEL
- 	  Additional support for intel specific MCE features such as
- 	  the thermal monitor.
+diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/inte=
+l.c
+index b7e67f4f7..aa75e2848 100644
+--- a/arch/x86/kernel/cpu/mce/intel.c
++++ b/arch/x86/kernel/cpu/mce/intel.c
+@@ -45,7 +45,7 @@ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
+  * cmci_discover_lock protects against parallel discovery attempts
+  * which could race against each other.
+  */
+-static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
++DEFINE_RAW_SPINLOCK(cmci_discover_lock);
 =20
-+config X86_MCE_ZHAOXIN
-+	def_bool y
-+	prompt "Zhaoxin MCE features"
-+	depends on X86_MCE_INTEL
-+	help
-+	  Additional support for zhaoxin specific MCE features such as
-+	  the corrected machine check interrupt.
-+
- config X86_MCE_AMD
- 	def_bool y
- 	prompt "AMD MCE features"
-diff --git a/arch/x86/kernel/cpu/mce/Makefile b/arch/x86/kernel/cpu/mce/Mak=
-efile
-index 015856abd..2e863e78d 100644
---- a/arch/x86/kernel/cpu/mce/Makefile
-+++ b/arch/x86/kernel/cpu/mce/Makefile
-@@ -5,7 +5,7 @@ obj-$(CONFIG_X86_ANCIENT_MCE)	+=3D winchip.o p5.o
- obj-$(CONFIG_X86_MCE_INTEL)	+=3D intel.o
- obj-$(CONFIG_X86_MCE_AMD)	+=3D amd.o
- obj-$(CONFIG_X86_MCE_THRESHOLD) +=3D threshold.o
--
-+obj-$(CONFIG_X86_MCE_ZHAOXIN)   +=3D zhaoxin.o
- mce-inject-y			:=3D inject.o
- obj-$(CONFIG_X86_MCE_INJECT)	+=3D mce-inject.o
+ /*
+  * On systems that do support CMCI but it's disabled, polling for MCEs can
+@@ -61,7 +61,7 @@ static DEFINE_SPINLOCK(cmci_poll_lock);
+  * MCi_CTL2 threshold for each bank when there is no storm.
+  * Default value for each bank may have been set by BIOS.
+  */
+-static u16 cmci_threshold[MAX_NR_BANKS];
++u16 cmci_threshold[MAX_NR_BANKS];
 =20
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.=
-c
-index 1654133da..37d4b6cd4 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1963,17 +1963,6 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_=
-x86 *c)
- 			mce_flags.skx_repmov_quirk =3D 1;
- 	}
+ /*
+  * High threshold to limit CMCI rate during storms. Max supported is
+@@ -73,7 +73,6 @@ static u16 cmci_threshold[MAX_NR_BANKS];
+  * to corrected errors, so keeping CMCI enabled means that uncorrected
+  * errors will still be processed in a timely fashion.
+  */
+-#define CMCI_STORM_THRESHOLD	32749
 =20
--	if (c->x86_vendor =3D=3D X86_VENDOR_ZHAOXIN) {
--		/*
--		 * All newer Zhaoxin CPUs support MCE broadcasting. Enable
--		 * synchronization with a one second timeout.
--		 */
--		if (c->x86 > 6 || (c->x86_model =3D=3D 0x19 || c->x86_model =3D=3D 0x1f)=
-) {
--			if (cfg->monarch_timeout < 0)
--				cfg->monarch_timeout =3D USEC_PER_SEC;
--		}
--	}
--
- 	if (cfg->monarch_timeout < 0)
- 		cfg->monarch_timeout =3D 0;
- 	if (cfg->bootlog !=3D 0)
-@@ -2016,49 +2005,6 @@ static void __mcheck_cpu_init_early(struct cpuinfo_x=
-86 *c)
- 	}
- }
-=20
--static void mce_centaur_feature_init(struct cpuinfo_x86 *c)
--{
--	struct mca_config *cfg =3D &mca_cfg;
--
--	 /*
--	  * All newer Centaur CPUs support MCE broadcasting. Enable
--	  * synchronization with a one second timeout.
--	  */
--	if ((c->x86 =3D=3D 6 && c->x86_model =3D=3D 0xf && c->x86_stepping >=3D 0=
-xe) ||
--	     c->x86 > 6) {
--		if (cfg->monarch_timeout < 0)
--			cfg->monarch_timeout =3D USEC_PER_SEC;
--	}
--}
--
--static void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c)
--{
--	struct mce_bank *mce_banks =3D this_cpu_ptr(mce_banks_array);
--
--	/*
--	 * These CPUs have MCA bank 8 which reports only one error type called
--	 * SVAD (System View Address Decoder). The reporting of that error is
--	 * controlled by IA32_MC8.CTL.0.
--	 *
--	 * If enabled, prefetching on these CPUs will cause SVAD MCE when
--	 * virtual machines start and result in a system  panic. Always disable
--	 * bank 8 SVAD error by default.
--	 */
--	if ((c->x86 =3D=3D 7 && c->x86_model =3D=3D 0x1b) ||
--	    (c->x86_model =3D=3D 0x19 || c->x86_model =3D=3D 0x1f)) {
--		if (this_cpu_read(mce_num_banks) > 8)
--			mce_banks[8].ctl =3D 0;
--	}
--
--	intel_init_cmci();
--	intel_init_lmce();
--}
--
--static void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
--{
--	intel_clear_lmce();
--}
--
- static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ static int cmci_supported(int *banks)
  {
- 	switch (c->x86_vendor) {
-@@ -2076,9 +2022,6 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x=
-86 *c)
- 		break;
-=20
- 	case X86_VENDOR_CENTAUR:
--		mce_centaur_feature_init(c);
--		break;
--
- 	case X86_VENDOR_ZHAOXIN:
- 		mce_zhaoxin_feature_init(c);
- 		break;
 diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/i=
 nternal.h
-index 01f8f0396..836e56027 100644
+index 836e56027..086b833c5 100644
 --- a/arch/x86/kernel/cpu/mce/internal.h
 +++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -334,4 +334,11 @@ static __always_inline u32 mca_msr_reg(int bank, enum =
-mca_msr reg)
+@@ -7,7 +7,7 @@
+=20
+ #include <linux/device.h>
+ #include <asm/mce.h>
+-
++#include <linux/spinlock.h>
+ enum severity_level {
+ 	MCE_NO_SEVERITY,
+ 	MCE_DEFERRED_SEVERITY,
+@@ -334,11 +334,16 @@ static __always_inline u32 mca_msr_reg(int bank, enum=
+ mca_msr reg)
  }
 =20
  extern void (*mc_poll_banks)(void);
-+#ifdef CONFIG_X86_MCE_ZHAOXIN
-+void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c);
-+void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c);
-+#else
-+static inline void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c) { }
-+static inline void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c) { }
-+#endif
++#define CMCI_STORM_THRESHOLD    32749
++extern raw_spinlock_t cmci_discover_lock;
++extern u16 cmci_threshold[MAX_NR_BANKS];
+ #ifdef CONFIG_X86_MCE_ZHAOXIN
+ void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c);
+ void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c);
++void mce_zhaoxin_handle_storm(int bank, bool on);
+ #else
+ static inline void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c) { }
+ static inline void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c) { }
++static inline void mce_zhaoxin_handle_storm(int bank, bool on) { }
+ #endif
  #endif /* __X86_MCE_INTERNAL_H__ */
+diff --git a/arch/x86/kernel/cpu/mce/threshold.c b/arch/x86/kernel/cpu/mce/=
+threshold.c
+index 89e31e1e5..200280387 100644
+--- a/arch/x86/kernel/cpu/mce/threshold.c
++++ b/arch/x86/kernel/cpu/mce/threshold.c
+@@ -63,6 +63,10 @@ static void mce_handle_storm(unsigned int bank, bool on)
+ 	case X86_VENDOR_INTEL:
+ 		mce_intel_handle_storm(bank, on);
+ 		break;
++	case X86_VENDOR_ZHAOXIN:
++	case X86_VENDOR_CENTAUR:
++		mce_zhaoxin_handle_storm(bank, on);
++		break;
+ 	}
+ }
+=20
 diff --git a/arch/x86/kernel/cpu/mce/zhaoxin.c b/arch/x86/kernel/cpu/mce/zh=
 aoxin.c
-new file mode 100644
-index 000000000..de69c560f
---- /dev/null
+index de69c560f..994b8520a 100644
+--- a/arch/x86/kernel/cpu/mce/zhaoxin.c
 +++ b/arch/x86/kernel/cpu/mce/zhaoxin.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Zhaoxin specific MCE features
-+ * Author: Lyle Li
-+ */
-+#include <asm/msr.h>
-+#include "internal.h"
+@@ -63,3 +63,21 @@ void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
+ {
+ 	intel_clear_lmce();
+ }
 +
-+static void mce_zhaoxin_apply_mce_broadcast(struct cpuinfo_x86 *c)
++void mce_zhaoxin_handle_storm(int bank, bool on)
 +{
-+	struct mca_config *cfg =3D &mca_cfg;
++	unsigned long flags;
++	u64 val;
 +
-+	/* Older CPUs do not do MCE broadcast */
-+	if (c->x86 < 6)
-+		return;
-+	/*
-+	 * All newer Zhaoxin and Centaur CPUs support MCE broadcasting. Enable
-+	 * synchronization with a one second timeout.
-+	 */
-+	if (c->x86 > 6)
-+		goto mce_broadcast;
-+
-+	if (c->x86_vendor =3D=3D X86_VENDOR_CENTAUR) {
-+		if (c->x86_model =3D=3D 0xf && c->x86_stepping >=3D 0xe)
-+			goto mce_broadcast;
-+	} else if (c->x86_vendor =3D=3D X86_VENDOR_ZHAOXIN) {
-+		if (c->x86_model =3D=3D 0x19 || c->x86_model =3D=3D 0x1f)
-+			goto mce_broadcast;
++	raw_spin_lock_irqsave(&cmci_discover_lock, flags);
++	rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
++	if (on) {
++		val &=3D ~(MCI_CTL2_CMCI_EN | MCI_CTL2_CMCI_THRESHOLD_MASK);
++		val |=3D CMCI_STORM_THRESHOLD;
++	} else {
++		val &=3D ~MCI_CTL2_CMCI_THRESHOLD_MASK;
++		val |=3D (MCI_CTL2_CMCI_EN | cmci_threshold[bank]);
 +	}
-+
-+	return;
-+
-+mce_broadcast:
-+	if (cfg->monarch_timeout <=3D 0)
-+		cfg->monarch_timeout =3D USEC_PER_SEC;
-+}
-+
-+void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c)
-+{
-+	struct mce_bank *mce_banks =3D this_cpu_ptr(mce_banks_array);
-+
-+	/*
-+	 * These CPUs have MCA bank 8 which reports only one error type called
-+	 * SVAD (System View Address Decoder). The reporting of that error is
-+	 * controlled by IA32_MC8.CTL.0.
-+	 *
-+	 * If enabled, prefetching on these CPUs will cause SVAD MCE when
-+	 * virtual machines start and result in a system  panic. Always disable
-+	 * bank 8 SVAD error by default.
-+	 */
-+	if ((c->x86 =3D=3D 7 && c->x86_model =3D=3D 0x1b) ||
-+	    (c->x86_model =3D=3D 0x19 || c->x86_model =3D=3D 0x1f)) {
-+		if (this_cpu_read(mce_num_banks) > 8)
-+			mce_banks[8].ctl =3D 0;
-+	}
-+
-+	mce_zhaoxin_apply_mce_broadcast(c);
-+	intel_init_cmci();
-+	intel_init_lmce();
-+}
-+
-+void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
-+{
-+	intel_clear_lmce();
++	wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
++	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
 +}
 --=20
 2.34.1
