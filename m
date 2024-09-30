@@ -1,708 +1,399 @@
-Return-Path: <linux-edac+bounces-1929-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1930-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AAC398890D
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Sep 2024 18:29:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AF1298996F
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Sep 2024 05:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB7DD1C20E1A
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Sep 2024 16:28:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3FF3B2223A
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Sep 2024 03:25:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2BF1BBBE3;
-	Fri, 27 Sep 2024 16:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ReRKx0+/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F66F2EAE5;
+	Mon, 30 Sep 2024 03:25:04 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D4C23B0;
-	Fri, 27 Sep 2024 16:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FED438396;
+	Mon, 30 Sep 2024 03:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727454535; cv=none; b=EOiPU53XlJ477oGkwNKl4hM+gGJBzuQH53kSlWjjc4it4jx45JltJ7maXg6L/gM2/E9JAEXwHb0qfYSQ3cmEYXdgS0kZNxaHjccBDBnyxtBnNBeSa7g2arHYeGsIgDZRhQAWW2KeOON4iBg7XQym+1CSmnM7/XfOFUqYT+ln3UI=
+	t=1727666704; cv=none; b=eJ60PdMjJ/anM1u08Pkrw5+lYcqhd9UFHVrlu7890Xtz43G3ekZ6ow08hIkdtP9+5jL8xJC3NATb/xeFE6oFhwOJVbQmQLWmJbRmqu9BO/1NhXeRXCx++sCrT69foOzuE9ZSb8lXFYdiP8q/lPLPZvPOotz1NzsT0qy5VooCiUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727454535; c=relaxed/simple;
-	bh=kyDtcizW7sNPzjSbDi5pQUXHDiCMp3l3pIMdroUU2Ks=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RxU+jKUY6WLBcFzqZjpuBvwkZyveX38uy40TuS39btx0obTRHojK8bIjYauKpYr3p8NxQu7VwxLMUF/WG3zgN9aKglFuJ3gzWx4aCXTi/0cIH3H6DxWrOsCQECzD/ZIZnYBsVhQapvSN7QY1PCB+PfW5j+1GPPwHnaDAr5o4EnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ReRKx0+/; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71781f42f75so2093374b3a.1;
-        Fri, 27 Sep 2024 09:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727454532; x=1728059332; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XmIiCLkR/hkbzh0Ky2BJfmPZA/6tjepSUj176wg07uI=;
-        b=ReRKx0+/XqrS0SP4NmsUJY29pKQ+wzpdhlulBAswJYCfINVgF4RCxHKBr/HAVDrFeT
-         Ct1d/ARKAnF4PsP21oP74zv77Zh+QUxi0qXahdqvKS4tdn9YxkptCMSqeCtV0UHXHpbl
-         i5k85UaXU5nDIrAa9evnNC2pj9l/jwjICwUGGv7LNBgwW6+HPUAFvFZEDomgrx8cPk44
-         hKAXxJSxUD3Vgb7j4jFB4V+8dMqwbLdzLZjJilqf6rvRgAfuBTBNVGPdPbcMLyhpCdO9
-         6Z5iXF2xwJXv+iEXrP5H4fqmQ6nfq/B08mjgbh0TPRR70soPTJS5Toe3GR7ZHQRZKIor
-         0HPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727454532; x=1728059332;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XmIiCLkR/hkbzh0Ky2BJfmPZA/6tjepSUj176wg07uI=;
-        b=dHuFwagFPqifEZQv2BZkcEDd59tATVaHiXVxXEcZZxdzntFbABgjS/obHeh6z3Sbia
-         Dr4fmbIGGEDw/nXvgaL9gws0urqhkwKDAp2DYCkjSHdIPd03L7qPYUDbRh3dLbk8Nz6h
-         CU4e5bsaNuzOHDnsZGx2GSc4cNfo411RtjqzqsoLZJf5kfzWsNlg9O3b9VM651WTHuFB
-         pLczSN0fezT19jpaiEAGS3pCgKD3qC9h5LNckRC9YULWVL/D8N3dlDN0hcxYmHL6Lbak
-         PrCiP6kJllrhsFETSP+KcUer4iUuLaQ4vHchBjlR7X4OvmY1VY/GRPWaAvdz9bE+5V/4
-         RudA==
-X-Forwarded-Encrypted: i=1; AJvYcCWlK2tljcGCfq76EY4IZlaXPQITotbAczenxP3sgeSfeWRto5ic/jDJYVBj8RClib4sZ+mQ1ppxXS/z@vger.kernel.org, AJvYcCWxG6L0wZnZzCVisLFlOpHP5IXlubj3izSquuDVsAdMwD3MYuCl5YruO2WI2C5257z2IyqaX3kJWwwEH9p+@vger.kernel.org, AJvYcCXqbd6sGrapJP6P1muN79ZN2RnySWzowB5+fkwMJWZ72B0n17YYxSPJ91bWSc5XNE95pIYcTy47PvYH@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ2C74Z1Mb8bIxK21l90RfWtExL3shqDkrQaDo/4i69CE65aBA
-	4HcirehsqQ6pddv3vIoSYcsVV4Kp/PgIVUrDuBU/V6SqMPDidIek
-X-Google-Smtp-Source: AGHT+IH0hXfvwUyP4i0u5tkGuAWbw7RYFw/5d1PvH6bNcpziaUfRFT1Jvu57c3dC0xoCKi8oEEFghw==
-X-Received: by 2002:a05:6a00:2e95:b0:717:8ee0:4ea1 with SMTP id d2e1a72fcca58-71b25daa3bamr7374367b3a.0.1727454532160;
-        Fri, 27 Sep 2024 09:28:52 -0700 (PDT)
-Received: from fan ([2601:646:8f03:9fee:e914:22c1:3fcb:d442])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b26538728sm1778511b3a.214.2024.09.27.09.28.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 09:28:51 -0700 (PDT)
-From: Fan Ni <nifan.cxl@gmail.com>
-X-Google-Original-From: Fan Ni <fan.ni@samsung.com>
-Date: Fri, 27 Sep 2024 09:28:23 -0700
-To: shiju.jose@huawei.com
-Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bp@alien8.de, tony.luck@intel.com,
-	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
-	dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
-	duenwen@google.com, mike.malvestuto@intel.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	wbs@os.amperecomputing.com, nifan.cxl@gmail.com, jgroves@micron.com,
-	vsalve@micron.com, tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
-	wanghuiqiang@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH v12 03/17] EDAC: Add EDAC ECS control driver
-Message-ID: <ZvbdJ-srtqxynefn@fan>
-References: <20240911090447.751-1-shiju.jose@huawei.com>
- <20240911090447.751-4-shiju.jose@huawei.com>
+	s=arc-20240116; t=1727666704; c=relaxed/simple;
+	bh=L74EFNmBJ+BoRuTlV9M9pl97yZnpubHkwY2PpjTKtvo=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=PwpCCooCfSavKspt+sCxQbt2DaAUE7kn5zOZ0IPVAkoAjGL0C8YqiKYQP8fTjTht1NLx6bS3BnI9bvzzzpMHGEykXm95DOZhJVYQoZnVo2w80N8B31A05TDbGk/Y0/tyIfYtyrztgUG7vbMou7hgximVrFy7w0Nj4iJg5LGQgdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8DxxrAJGvpmDl8EAA--.4294S3;
+	Mon, 30 Sep 2024 11:24:57 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front2 (Coremail) with SMTP id qciowMBxOsYGGvpmLtcYAA--.22697S2;
+	Mon, 30 Sep 2024 11:24:54 +0800 (CST)
+Subject: Re: [PATCH v5 2/2] Loongarch: EDAC driver for loongson memory
+ controller
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ chenhuacai@kernel.org, bp@alien8.de, tony.luck@intel.com,
+ linux-edac@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@xen0n.name, james.morse@arm.com,
+ mchehab@kernel.org, rric@kernel.org, loongarch@lists.linux.dev
+References: <20240925024038.9844-1-zhaoqunqin@loongson.cn>
+ <20240925024038.9844-3-zhaoqunqin@loongson.cn>
+ <20240925101331.00000e63@Huawei.com>
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Message-ID: <2b8b6384-4c6b-b49d-b88e-93c1390017e4@loongson.cn>
+Date: Mon, 30 Sep 2024 11:24:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911090447.751-4-shiju.jose@huawei.com>
+In-Reply-To: <20240925101331.00000e63@Huawei.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qciowMBxOsYGGvpmLtcYAA--.22697S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW3AryrCF1kWF48Xry7ZFykXrc_yoWfAF43pF
+	98Aa15Cr48tr17AwsYvryUuF1Yvws7KF12k3y3tay29r9Fyrykur9Yqry2kFn7CryDGrW0
+	va4rKwsruF4YkrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j0mhrUUU
+	UU=
 
-On Wed, Sep 11, 2024 at 10:04:32AM +0100, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Add EDAC ECS (Error Check Scrub) control driver supports configuring
-s/supports/to support/
-> the memory device's ECS feature.
-> 
-> The Error Check Scrub (ECS) is a feature defined in JEDEC DDR5 SDRAM
-> Specification (JESD79-5) and allows the DRAM to internally read, correct
-> single-bit errors, and write back corrected data bits to the DRAM array
-> while providing transparency to error counts.
-> 
-> The DDR5 device contains number of memory media FRUs per device. The
-> DDR5 ECS feature and thus the ECS control driver supports configuring
-> the ECS parameters per FRU.
-> 
-> The memory devices support ECS feature register with the EDAC ECS driver
-> and thus with the generic EDAC RAS feature driver, which adds the sysfs
-> ECS control interface. The ECS control attributes are exposed to
-> userspace in /sys/bus/edac/devices/<dev-name>/ecs_fruX/.
-> 
-> Generic EDAC ECS driver and the common sysfs ECS interface promotes
-> unambiguous control from the userspace irrespective of the underlying
-> devices, support ECS feature.
-s/, support/which support/   ???
-> 
-> The support for ECS feature is added separately because the DDR5 ECS
-> features control attributes are dissimilar from those of the scrub
-> feature.
-> 
-> The sysfs ECS attr nodes would be present only if the client driver
-> has implemented the corresponding attr callback function and pass
-s/pass/passed/
-> in ops to the EDAC RAS feature driver during registration.
-> 
-> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
->  Documentation/ABI/testing/sysfs-edac-ecs |  78 +++++
->  drivers/edac/Makefile                    |   2 +-
->  drivers/edac/edac_device.c               |   3 +
->  drivers/edac/edac_ecs.c                  | 376 +++++++++++++++++++++++
->  include/linux/edac.h                     |  33 ++
->  5 files changed, 491 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-edac-ecs
->  create mode 100755 drivers/edac/edac_ecs.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-edac-ecs b/Documentation/ABI/testing/sysfs-edac-ecs
-> new file mode 100644
-> index 000000000000..1eb35acd4e5e
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-edac-ecs
-> @@ -0,0 +1,78 @@
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*
 
-Maybe s/ecs_fru*/ecs_fruX/?? 
+ÔÚ 2024/9/25 ÏÂÎç5:13, Jonathan Cameron Ð´µÀ:
+> On Wed, 25 Sep 2024 10:40:38 +0800
+> Zhao Qunqin <zhaoqunqin@loongson.cn> wrote:
+>
+>> Reports single bit errors (CE) only.
+>>
+>> Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
+> Hi. A few quick comments inline
+>
+> Jonathan
+>
+>> ---
+>> Changes in v5:
+>> 	- Drop the loongson_ prefix from all static functions.
+>> 	- Align function arguments on the opening brace.
+>> 	- Drop useless comments and useless wrapper. Drop side comments.
+>> 	- Reorder variable declarations.
+>>
+>> Changes in v4:
+>> 	- None
+>>
+>> Changes in v3:
+>> 	- Addressed review comments raised by Krzysztof and Huacai
+>>
+>> Changes in v2:
+>> 	- Addressed review comments raised by Krzysztof
+>>
+>>   MAINTAINERS                  |   1 +
+>>   arch/loongarch/Kconfig       |   1 +
+>>   drivers/edac/Kconfig         |   8 ++
+>>   drivers/edac/Makefile        |   1 +
+>>   drivers/edac/loongson_edac.c | 168 +++++++++++++++++++++++++++++++++++
+>>   5 files changed, 179 insertions(+)
+>>   create mode 100644 drivers/edac/loongson_edac.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 6cc8cfc8f..5b4526638 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -13242,6 +13242,7 @@ M:	Zhao Qunqin <zhaoqunqin@loongson.cn>
+>>   L:	linux-edac@vger.kernel.org
+>>   S:	Maintained
+>>   F:	Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-edac.yaml
+>> +F:	drivers/edac/loongson_edac.c
+>>   
+>>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>> index 70f169210..9c135f1a2 100644
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -181,6 +181,7 @@ config LOONGARCH
+>>   	select PCI_MSI_ARCH_FALLBACKS
+>>   	select PCI_QUIRKS
+>>   	select PERF_USE_VMALLOC
+>> +	select EDAC_SUPPORT
+>>   	select RTC_LIB
+>>   	select SPARSE_IRQ
+>>   	select SYSCTL_ARCH_UNALIGN_ALLOW
+>> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+>> index 81af6c344..719bb6ca7 100644
+>> --- a/drivers/edac/Kconfig
+>> +++ b/drivers/edac/Kconfig
+>> @@ -564,5 +564,13 @@ config EDAC_VERSAL
+>>   	  Support injecting both correctable and uncorrectable errors
+>>   	  for debugging purposes.
+>>   
+>> +config EDAC_LOONGSON3
+>> +	tristate "Loongson-3 Memory Controller"
+>> +	depends on LOONGARCH || COMPILE_TEST
+>> +	help
+>> +	  Support for error detection and correction on the Loongson-3
+>> +	  family memory controller. This driver reports single bit
+>> +	  errors (CE) only. Loongson-3A5000/3C5000/3D5000/3C5000L/3A6000/3C6000
+>> +	  are compatible.
+>>   
+>>   endif # EDAC
+>> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+>> index faf310eec..e72ca1be4 100644
+>> --- a/drivers/edac/Makefile
+>> +++ b/drivers/edac/Makefile
+>> @@ -88,3 +88,4 @@ obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
+>>   obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
+>>   obj-$(CONFIG_EDAC_ZYNQMP)		+= zynqmp_edac.o
+>>   obj-$(CONFIG_EDAC_VERSAL)		+= versal_edac.o
+>> +obj-$(CONFIG_EDAC_LOONGSON3)		+= loongson_edac.o
+>> diff --git a/drivers/edac/loongson_edac.c b/drivers/edac/loongson_edac.c
+>> new file mode 100644
+>> index 000000000..2721dfba5
+>> --- /dev/null
+>> +++ b/drivers/edac/loongson_edac.c
+>> @@ -0,0 +1,168 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2024 Loongson Technology Corporation Limited.
+>> + */
+>> +
+>> +#include <linux/edac.h>
+>> +#include <linux/module.h>
+>> +#include <linux/init.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include "edac_module.h"
+>> +
+>> +enum ecc_index {
+>> +	ECC_SET = 0,
+>> +	ECC_RESERVED,
+>> +	ECC_COUNT,
+>> +	ECC_CS_COUNT,
+>> +	ECC_CODE,
+>> +	ECC_ADDR,
+>> +	ECC_DATA0,
+>> +	ECC_DATA1,
+>> +	ECC_DATA2,
+>> +	ECC_DATA3,
+>> +};
+>> +
+>> +struct loongson_edac_pvt {
+>> +	u64 *ecc_base;
+>> +	int last_ce_count;
+>> +};
+>> +
+>> +static int read_ecc(struct mem_ctl_info *mci)
+>> +{
+>> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
+>> +	u64 ecc;
+>> +	int cs;
+>> +
+>> +	if (!pvt->ecc_base)
+>> +		return pvt->last_ce_count;
+>> +
+>> +	ecc = pvt->ecc_base[ECC_CS_COUNT];
+>> +	/* cs0 -- cs3 */
+>> +	cs = ecc & 0xff;
+>> +	cs += (ecc >> 8) & 0xff;
+>> +	cs += (ecc >> 16) & 0xff;
+>> +	cs += (ecc >> 24) & 0xff;
+> This smells like an endian swap.
+> swab32() or is this fixing a wrong endian register?
+> In which case b32_to_cpu()
+Not an endian swap. Just add up the values of the lowest four bytes.
+>
+>> +
+>> +	return cs;
+>> +}
+>> +
+>> +static void edac_check(struct mem_ctl_info *mci)
+>> +{
+>> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
+>> +	int new, add;
+>> +
+>> +	new = read_ecc(mci);
+>> +	add = new - pvt->last_ce_count;
+>> +	pvt->last_ce_count = new;
+>> +	if (add <= 0)
+> This has be a little confused. Either this counter can
+> wrap in which case why drop out here, or it can't in which case
+> does < occur?
+The ce count of loongson memory controller should only increase.
+>
+>> +		return;
+>> +
+>> +	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, add,
+>> +			     0, 0, 0, 0, 0, -1, "error", "");
+>> +	edac_mc_printk(mci, KERN_INFO, "add: %d", add);
+>> +}
+>> +
+>> +static int get_dimm_config(struct mem_ctl_info *mci)
+>> +{
+>> +	struct dimm_info *dimm;
+>> +	u32 size, npages;
+>> +
+>> +	/* size not used */
+>> +	size = -1;
+>> +	npages = MiB_TO_PAGES(size);
+>> +
+>> +	dimm = edac_get_dimm(mci, 0, 0, 0);
+>> +	dimm->nr_pages = npages;
+>> +	snprintf(dimm->label, sizeof(dimm->label),
+>> +		 "MC#%uChannel#%u_DIMM#%u", mci->mc_idx, 0, 0);
+>> +	dimm->grain = 8;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void pvt_init(struct mem_ctl_info *mci, u64 *vbase)
+>> +{
+>> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
+>> +
+>> +	pvt->ecc_base = vbase;
+>> +	pvt->last_ce_count = read_ecc(mci);
+>> +}
+>> +
+>> +static int edac_probe(struct platform_device *pdev)
+>> +{
+>> +	struct edac_mc_layer layers[2];
+>> +	struct loongson_edac_pvt *pvt;
+>> +	struct mem_ctl_info *mci;
+>> +	u64 *vbase;
+>> +	int ret;
+>> +
+>> +	vbase = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(vbase))
+>> +		return PTR_ERR(vbase);
+>> +
+>> +	/* allocate a new MC control structure */
+>> +	layers[0].type = EDAC_MC_LAYER_CHANNEL;
+>> +	layers[0].size = 1;
+>> +	layers[0].is_virt_csrow = false;
+>> +	layers[1].type = EDAC_MC_LAYER_SLOT;
+>> +	layers[1].size = 1;
+>> +	layers[1].is_virt_csrow = true;
+> Could move this to a c99 style
+>
+> 	struct edac_mc_layer layers[2] = {
+> 		{
+> 			.type = EDAC_MC_LAYER_CHANNEL,
+> 			.size = 1,
+> 			.is_virt_csrow = false,
+> 		}, {
+> 			.type = EDAC_MC_LAYER_SLOT,
+> 			.size = 1,
+> 			is_virt_csrow = true,
+> 		}
+> 	};
+> Not particularly important though.
+>
+>> +	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(*pvt));
+>> +	if (mci == NULL)
+> Probably !mci is sufficient but I'm not sure on local edac style.
+>
+>> +		return -ENOMEM;
+>> +
+>> +	mci->mc_idx = edac_device_alloc_index();
+>> +	mci->mtype_cap = MEM_FLAG_RDDR4;
+>> +	mci->edac_ctl_cap = EDAC_FLAG_NONE;
+>> +	mci->edac_cap = EDAC_FLAG_NONE;
+>> +	mci->mod_name = "loongson_edac.c";
+>> +	mci->ctl_name = "loongson_edac_ctl";
+>> +	mci->dev_name = "loongson_edac_dev";
+>> +	mci->ctl_page_to_phys = NULL;
+>> +	mci->pdev = &pdev->dev;
+>> +	mci->error_desc.grain = 8;
+>> +	/* Set the function pointer to an actual operation function */
+>> +	mci->edac_check = edac_check;
+> Similar to above, can initialize this structure more cleanly
+> using
+>
+> 	*mci = (struct mem_ctl_info) {
+> 		.mc_idx = edac_device_alloc_index,
+> 	...
+> 	};
+>> +
+>> +	pvt_init(mci, vbase);
+>> +	get_dimm_config(mci);
+>> +
+>> +	ret = edac_mc_add_mc(mci);
+> I'd be tempted to use devm_add_action_or_cleanup() for this and the
+> alloc above, but not common in edac but it is done in al_mc_edac.c if
+> you want an example.
+Your idea is great, but I don't think it's necessary to make things so 
+complicated
+>> +	if (ret) {
+>> +		edac_dbg(0, "MC: failed edac_mc_add_mc()\n");
+>> +		edac_mc_free(mci);
+>> +		return ret;
+>> +	}
+>> +	edac_op_state = EDAC_OPSTATE_POLL;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void edac_remove(struct platform_device *pdev)
+>> +{
+>> +	struct mem_ctl_info *mci = edac_mc_del_mc(&pdev->dev);
+>> +
+>> +	if (mci)
+>> +		edac_mc_free(mci);
+> Very odd if you got to remove and edac_mc_del_mc() failed.
+> Do we need this check?  At least some drivers (I checked a few
+> at random) don't check this.
 
-The same for below.
+Yes, odd if edac_mc_del_mc() failed. Dose it better to add a check just 
+in case
 
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		The sysfs EDAC bus devices /<dev-name>/ecs_fru* subdirectory
-> +		belongs to the memory media ECS (Error Check Scrub) control
-> +		feature, where <dev-name> directory corresponds to a device
-> +		registered with the EDAC ECS driver and thus registered with
-> +		the generic EDAC RAS driver too.
-> +		/ecs_fru* belongs to the media FRUs (Field replaceable unit)
-> +		under the memory device.
-> +		The sysfs ECS attr nodes would be present only if the client
-> +		driver has implemented the corresponding attr callback
-> +		function and pass in ops to the EDAC RAS feature driver
-s/pass/passed/
+edac_mc_del_mc() failed ?
 
-Fan
-> +		during registration.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/log_entry_type
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) The log entry type of how the DDR5 ECS log is reported.
-> +		00b - per DRAM.
-> +		01b - per memory media FRU.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/log_entry_type_per_dram
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RO) True if current log entry type is per DRAM.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/log_entry_type_per_memory_media
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RO) True if current log entry type is per memory media FRU.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/mode
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) The mode of how the DDR5 ECS counts the errors.
-> +		0 - ECS counts rows with errors.
-> +		1 - ECS counts codewords with errors.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/mode_counts_rows
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RO) True if current mode is ECS counts rows with errors.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/mode_counts_codewords
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RO) True if current mode is ECS counts codewords with errors.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/reset
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(WO) ECS reset ECC counter.
-> +		0 - normal, ECC counter running actively.
-> +		1 - reset ECC counter to the default value.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fru*/threshold
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) ECS threshold count per GB of memory cells.
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index fbf0e39ec678..62115eff6a9a 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -10,7 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
->  
->  edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
->  edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
-> -edac_core-y	+= edac_scrub.o
-> +edac_core-y	+= edac_scrub.o edac_ecs.o
->  
->  edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
->  
-> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-> index 6381896b6424..9cac9ae75080 100644
-> --- a/drivers/edac/edac_device.c
-> +++ b/drivers/edac/edac_device.c
-> @@ -623,6 +623,9 @@ static int edac_dev_feat_init(struct device *parent,
->  		num = ras_feat->ecs_info.num_media_frus;
->  		dev_data->ecs_ops = ras_feat->ecs_ops;
->  		dev_data->private = ras_feat->ctx;
-> +		ret = edac_ecs_get_desc(parent, attr_groups, num);
-> +		if (ret)
-> +			return ret;
->  		return num;
->  	case RAS_FEAT_PPR:
->  		dev_data->ppr_ops = ras_feat->ppr_ops;
-> diff --git a/drivers/edac/edac_ecs.c b/drivers/edac/edac_ecs.c
-> new file mode 100755
-> index 000000000000..50915ab1e769
-> --- /dev/null
-> +++ b/drivers/edac/edac_ecs.c
-> @@ -0,0 +1,376 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * ECS driver supporting controlling on die error check scrub
-> + * (e.g. DDR5 ECS). The common sysfs ECS interface promotes
-> + * unambiguous access from the userspace.
-> + *
-> + * Copyright (c) 2024 HiSilicon Limited.
-> + */
-> +
-> +#define pr_fmt(fmt)     "EDAC ECS: " fmt
-> +
-> +#include <linux/edac.h>
-> +
-> +#define EDAC_ECS_FRU_NAME "ecs_fru"
-> +
-> +enum edac_ecs_attributes {
-> +	ECS_LOG_ENTRY_TYPE,
-> +	ECS_LOG_ENTRY_TYPE_PER_DRAM,
-> +	ECS_LOG_ENTRY_TYPE_PER_MEMORY_MEDIA,
-> +	ECS_MODE,
-> +	ECS_MODE_COUNTS_ROWS,
-> +	ECS_MODE_COUNTS_CODEWORDS,
-> +	ECS_RESET,
-> +	ECS_THRESHOLD,
-> +	ECS_MAX_ATTRS
-> +};
-> +
-> +struct edac_ecs_dev_attr {
-> +	struct device_attribute dev_attr;
-> +	int fru_id;
-> +};
-> +
-> +struct edac_ecs_fru_context {
-> +	char name[EDAC_FEAT_NAME_LEN];
-> +	struct edac_ecs_dev_attr ecs_dev_attr[ECS_MAX_ATTRS];
-> +	struct attribute *ecs_attrs[ECS_MAX_ATTRS + 1];
-> +	struct attribute_group group;
-> +};
-> +
-> +struct edac_ecs_context {
-> +	u16 num_media_frus;
-> +	struct edac_ecs_fru_context *fru_ctxs;
-> +};
-> +
-> +#define to_ecs_dev_attr(_dev_attr)	\
-> +	container_of(_dev_attr, struct edac_ecs_dev_attr, dev_attr)
-> +
-> +static ssize_t log_entry_type_show(struct device *ras_feat_dev,
-> +				   struct device_attribute *attr,
-> +				   char *buf)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = ops->get_log_entry_type(ras_feat_dev->parent, ctx->ecs.private,
-> +				      ecs_dev_attr->fru_id, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t log_entry_type_store(struct device *ras_feat_dev,
-> +				    struct device_attribute *attr,
-> +				    const char *buf, size_t len)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	long val;
-> +	int ret;
-> +
-> +	ret = kstrtol(buf, 0, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = ops->set_log_entry_type(ras_feat_dev->parent, ctx->ecs.private,
-> +				      ecs_dev_attr->fru_id, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return len;
-> +}
-> +
-> +static ssize_t log_entry_type_per_dram_show(struct device *ras_feat_dev,
-> +					    struct device_attribute *attr,
-> +					    char *buf)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = ops->get_log_entry_type_per_dram(ras_feat_dev->parent, ctx->ecs.private,
-> +					       ecs_dev_attr->fru_id, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t log_entry_type_per_memory_media_show(struct device *ras_feat_dev,
-> +						    struct device_attribute *attr,
-> +						    char *buf)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = ops->get_log_entry_type_per_memory_media(ras_feat_dev->parent,
-> +						       ctx->ecs.private,
-> +						       ecs_dev_attr->fru_id, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t mode_show(struct device *ras_feat_dev,
-> +			 struct device_attribute *attr,
-> +			 char *buf)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = ops->get_mode(ras_feat_dev->parent, ctx->ecs.private,
-> +			    ecs_dev_attr->fru_id, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t mode_store(struct device *ras_feat_dev,
-> +			  struct device_attribute *attr,
-> +			  const char *buf, size_t len)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	long val;
-> +	int ret;
-> +
-> +	ret = kstrtol(buf, 0, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = ops->set_mode(ras_feat_dev->parent, ctx->ecs.private,
-> +			    ecs_dev_attr->fru_id, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return len;
-> +}
-> +
-> +static ssize_t mode_counts_rows_show(struct device *ras_feat_dev,
-> +				     struct device_attribute *attr,
-> +				     char *buf)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = ops->get_mode_counts_rows(ras_feat_dev->parent, ctx->ecs.private,
-> +					ecs_dev_attr->fru_id, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t mode_counts_codewords_show(struct device *ras_feat_dev,
-> +					  struct device_attribute *attr,
-> +					  char *buf)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = ops->get_mode_counts_codewords(ras_feat_dev->parent, ctx->ecs.private,
-> +					     ecs_dev_attr->fru_id, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t reset_store(struct device *ras_feat_dev,
-> +			   struct device_attribute *attr,
-> +			   const char *buf, size_t len)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	long val;
-> +	int ret;
-> +
-> +	ret = kstrtol(buf, 0, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = ops->reset(ras_feat_dev->parent, ctx->ecs.private,
-> +			 ecs_dev_attr->fru_id, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return len;
-> +}
-> +
-> +static ssize_t threshold_show(struct device *ras_feat_dev,
-> +			      struct device_attribute *attr, char *buf)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = ops->get_threshold(ras_feat_dev->parent, ctx->ecs.private,
-> +				 ecs_dev_attr->fru_id, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%u\n", val);
-> +}
-> +
-> +static ssize_t threshold_store(struct device *ras_feat_dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf, size_t len)
-> +{
-> +	struct edac_ecs_dev_attr *ecs_dev_attr = to_ecs_dev_attr(attr);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +	long val;
-> +	int ret;
-> +
-> +	ret = kstrtol(buf, 0, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = ops->set_threshold(ras_feat_dev->parent, ctx->ecs.private,
-> +				 ecs_dev_attr->fru_id, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return len;
-> +}
-> +
-> +static umode_t ecs_attr_visible(struct kobject *kobj,
-> +				struct attribute *a, int attr_id)
-> +{
-> +	struct device *ras_feat_dev = kobj_to_dev(kobj);
-> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
-> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
-> +
-> +	switch (attr_id) {
-> +	case ECS_LOG_ENTRY_TYPE:
-> +		if (ops->get_log_entry_type && ops->set_log_entry_type)
-> +			return a->mode;
-> +		if (ops->get_log_entry_type)
-> +			return 0444;
-> +		return 0;
-> +	case ECS_LOG_ENTRY_TYPE_PER_DRAM:
-> +		return ops->get_log_entry_type_per_dram ? a->mode : 0;
-> +	case ECS_LOG_ENTRY_TYPE_PER_MEMORY_MEDIA:
-> +		return ops->get_log_entry_type_per_memory_media ? a->mode : 0;
-> +	case ECS_MODE:
-> +		if (ops->get_mode && ops->set_mode)
-> +			return a->mode;
-> +		if (ops->get_mode)
-> +			return 0444;
-> +		return 0;
-> +	case ECS_MODE_COUNTS_ROWS:
-> +		return ops->get_mode_counts_rows ? a->mode : 0;
-> +	case ECS_MODE_COUNTS_CODEWORDS:
-> +		return ops->get_mode_counts_codewords ? a->mode : 0;
-> +	case ECS_RESET:
-> +		return ops->reset ? a->mode : 0;
-> +	case ECS_THRESHOLD:
-> +		if (ops->get_threshold && ops->set_threshold)
-> +			return a->mode;
-> +		if (ops->get_threshold)
-> +			return 0444;
-> +		return 0;
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +#define EDAC_ECS_ATTR_RO(_name, _fru_id)       \
-> +	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RO(_name), \
-> +				     .fru_id = _fru_id })
-> +
-> +#define EDAC_ECS_ATTR_WO(_name, _fru_id)       \
-> +	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_WO(_name), \
-> +				     .fru_id = _fru_id })
-> +
-> +#define EDAC_ECS_ATTR_RW(_name, _fru_id)       \
-> +	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RW(_name), \
-> +				     .fru_id = _fru_id })
-> +
-> +static int ecs_create_desc(struct device *ecs_dev,
-> +			   const struct attribute_group **attr_groups,
-> +			   u16 num_media_frus)
-> +{
-> +	struct edac_ecs_context *ecs_ctx;
-> +	u32 fru;
-> +
-> +	ecs_ctx = devm_kzalloc(ecs_dev, sizeof(*ecs_ctx), GFP_KERNEL);
-> +	if (!ecs_ctx)
-> +		return -ENOMEM;
-> +
-> +	ecs_ctx->num_media_frus = num_media_frus;
-> +	ecs_ctx->fru_ctxs = devm_kcalloc(ecs_dev, num_media_frus,
-> +					 sizeof(*ecs_ctx->fru_ctxs),
-> +					 GFP_KERNEL);
-> +	if (!ecs_ctx->fru_ctxs)
-> +		return -ENOMEM;
-> +
-> +	for (fru = 0; fru < num_media_frus; fru++) {
-> +		struct edac_ecs_fru_context *fru_ctx = &ecs_ctx->fru_ctxs[fru];
-> +		struct attribute_group *group = &fru_ctx->group;
-> +		int i;
-> +
-> +		fru_ctx->ecs_dev_attr[0] = EDAC_ECS_ATTR_RW(log_entry_type, fru);
-> +		fru_ctx->ecs_dev_attr[1] = EDAC_ECS_ATTR_RO(log_entry_type_per_dram, fru);
-> +		fru_ctx->ecs_dev_attr[2] = EDAC_ECS_ATTR_RO(log_entry_type_per_memory_media, fru);
-> +		fru_ctx->ecs_dev_attr[3] = EDAC_ECS_ATTR_RW(mode, fru);
-> +		fru_ctx->ecs_dev_attr[4] = EDAC_ECS_ATTR_RO(mode_counts_rows, fru);
-> +		fru_ctx->ecs_dev_attr[5] = EDAC_ECS_ATTR_RO(mode_counts_codewords, fru);
-> +		fru_ctx->ecs_dev_attr[6] = EDAC_ECS_ATTR_WO(reset, fru);
-> +		fru_ctx->ecs_dev_attr[7] = EDAC_ECS_ATTR_RW(threshold, fru);
-> +		for (i = 0; i < ECS_MAX_ATTRS; i++)
-> +			fru_ctx->ecs_attrs[i] = &fru_ctx->ecs_dev_attr[i].dev_attr.attr;
-> +
-> +		sprintf(fru_ctx->name, "%s%d", EDAC_ECS_FRU_NAME, fru);
-> +		group->name = fru_ctx->name;
-> +		group->attrs = fru_ctx->ecs_attrs;
-> +		group->is_visible  = ecs_attr_visible;
-> +
-> +		attr_groups[fru] = group;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * edac_ecs_get_desc - get EDAC ECS descriptors
-> + * @ecs_dev: client device, supports ECS feature
-> + * @attr_groups: pointer to attrribute group container
-> + * @num_media_frus: number of media FRUs in the device
-> + *
-> + * Returns 0 on success, error otherwise.
-> + */
-> +int edac_ecs_get_desc(struct device *ecs_dev,
-> +		      const struct attribute_group **attr_groups,
-> +		      u16 num_media_frus)
-> +{
-> +	if (!ecs_dev || !attr_groups || !num_media_frus)
-> +		return -EINVAL;
-> +
-> +	return ecs_create_desc(ecs_dev, attr_groups, num_media_frus);
-> +}
-> diff --git a/include/linux/edac.h b/include/linux/edac.h
-> index aae8262b9863..90cb90cf5272 100644
-> --- a/include/linux/edac.h
-> +++ b/include/linux/edac.h
-> @@ -704,10 +704,43 @@ int edac_scrub_get_desc(struct device *scrub_dev,
->  			const struct attribute_group **attr_groups,
->  			u8 instance);
->  
-> +/**
-> + * struct ecs_ops - ECS device operations (all elements optional)
-> + * @get_log_entry_type: read the log entry type value.
-> + * @set_log_entry_type: set the log entry type value.
-> + * @get_log_entry_type_per_dram: read the log entry type per dram value.
-> + * @get_log_entry_type_memory_media: read the log entry type per memory media value.
-> + * @get_mode: read the mode value.
-> + * @set_mode: set the mode value.
-> + * @get_mode_counts_rows: read the mode counts rows value.
-> + * @get_mode_counts_codewords: read the mode counts codewords value.
-> + * @reset: reset the ECS counter.
-> + * @get_threshold: read the threshold value.
-> + * @set_threshold: set the threshold value.
-> + */
-> +struct edac_ecs_ops {
-> +	int (*get_log_entry_type)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-> +	int (*set_log_entry_type)(struct device *dev, void *drv_data, int fru_id, u32 val);
-> +	int (*get_log_entry_type_per_dram)(struct device *dev, void *drv_data,
-> +					   int fru_id, u32 *val);
-> +	int (*get_log_entry_type_per_memory_media)(struct device *dev, void *drv_data,
-> +						   int fru_id, u32 *val);
-> +	int (*get_mode)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-> +	int (*set_mode)(struct device *dev, void *drv_data, int fru_id, u32 val);
-> +	int (*get_mode_counts_rows)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-> +	int (*get_mode_counts_codewords)(struct device *dev, void *drv_data, int fru_id, u32 *val);
-> +	int (*reset)(struct device *dev, void *drv_data, int fru_id, u32 val);
-> +	int (*get_threshold)(struct device *dev, void *drv_data, int fru_id, u32 *threshold);
-> +	int (*set_threshold)(struct device *dev, void *drv_data, int fru_id, u32 threshold);
-> +};
-> +
->  struct edac_ecs_ex_info {
->  	u16 num_media_frus;
->  };
->  
-> +int edac_ecs_get_desc(struct device *ecs_dev,
-> +		      const struct attribute_group **attr_groups,
-> +		      u16 num_media_frus);
->  /*
->   * EDAC device feature information structure
->   */
-> -- 
-> 2.34.1
-> 
 
--- 
-Fan Ni
+Thanks,
+
+Zhao Qunqin
+
+>
+>> +}
+>> +
+>> +static const struct of_device_id loongson_edac_of_match[] = {
+>> +	{ .compatible = "loongson,ls3a5000-mc-edac", },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, loongson_edac_of_match);
+>> +
+>> +static struct platform_driver loongson_edac_driver = {
+>> +	.probe		= edac_probe,
+>> +	.remove		= edac_remove,
+>> +	.driver		= {
+>> +		.name	= "loongson-mc-edac",
+>> +		.of_match_table = loongson_edac_of_match,
+>> +	},
+>> +};
+>> +module_platform_driver(loongson_edac_driver);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_AUTHOR("Zhao Qunqin <zhaoqunqin@loongson.cn>");
+>> +MODULE_DESCRIPTION("EDAC driver for loongson memory controller");
+
 
