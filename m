@@ -1,198 +1,190 @@
-Return-Path: <linux-edac+bounces-1959-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1960-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F63298E0F3
-	for <lists+linux-edac@lfdr.de>; Wed,  2 Oct 2024 18:35:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DABA98F6FD
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Oct 2024 21:29:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA85C1F2353D
-	for <lists+linux-edac@lfdr.de>; Wed,  2 Oct 2024 16:35:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01F2D282B0C
+	for <lists+linux-edac@lfdr.de>; Thu,  3 Oct 2024 19:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99B21D0BAE;
-	Wed,  2 Oct 2024 16:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A051ABED9;
+	Thu,  3 Oct 2024 19:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lhwb1CGJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wle+WsjV"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2049.outbound.protection.outlook.com [40.107.237.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5B31CFEA3;
-	Wed,  2 Oct 2024 16:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727886924; cv=fail; b=N9m3Xy+YZz38k3YGkE3VIyyw3xIzPXddfoSkrJPABM0ah1kvcwTk8AY9OTx6tSzfmO7m0sypwoIzERY8cChZX2tBhCdYrx8GrdBzChOvgr4xtnuq7PzadJM4xqC1YIztSnLtYXfDBfzjPYSF+ATOVq79oWkslmVSbd6hMvVKld4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727886924; c=relaxed/simple;
-	bh=saIwAPf6j/40I9a6x7db5svLfSbsWOZE/UYDvYdIHKo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=g6B4cj5zbEDkbln2IUC0ZYZ/j803BRUP/IMHXO/anji5iuCWwn84KdqG+2YGyL3TC1acehuADZzNbyjlA8h8/GpvlUxbZI28wqU4TYHBptdnan/AP+gEpoRYzedJBAF4qVrNx5EvnxPGBX0YFWo4WDVGvkjGgtJzokcHK73YUhU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lhwb1CGJ; arc=fail smtp.client-ip=40.107.237.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CDxOjxGn4+lhGmuUB1l/BfBy8py27/uxPCaCEgxALtqqLhWZ+S5BN63lkhOCkSGiuYihkKmguYUEe/Iwhfv8sza/sHJQ7pdpJb1xt0XWX0w4pKjc4FHmb89Ed18ISPNwfmyMSAp45MxaikG+7mjaDNT5+TA9H/9V6Ip1C/DBOOSe25WcW71ATxVEwtamVg7xD0ubaXIDGbZhD+9fQgwBgau3tTfYPrNumdXFRz8oFrsVGIPn7Exd6PbBEpZIrIlYcAd1yyGwzGYLbfeJi1RP0S03WZcEj49mvn/yyTZX9Lp9lJQLpqha0LBd4K561R1iOcjIxOc4wBZM1QDS8SLOCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=atl8pZhb1k6vrgfuaTPwTd+YR0wir6GpqewyhHD5SgQ=;
- b=idD3yPineBsninwNeqUtYpMuQi7UKwa4NYaolHQMp2iJopdPDYY5TRbnrFZLoqBFLwNgWyhSMW7wmgbG6A7Abr0fwULR7+8+QFlnqMm5VIRKCRprNAASaU5gOHKWaDHLTD4LEBO94sm2HMoTRZSlNBh4mbGjyBbhLG8Pj2SvVzs1hQ403a29v/kpiyBEDh6FDLbd4+KoWyx/uoSffzIiskjRHP4kCMnEozS3XbroCUq5c6VwU+mj7iYS7JnwqGIHfL4eySOMMExm+syekOmnoHZY8lzyxSjbCemzgYAs20Z7aAWPZh3MoTMpIszdkOSndES7Eq/LMrF2eEK11DcTHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=atl8pZhb1k6vrgfuaTPwTd+YR0wir6GpqewyhHD5SgQ=;
- b=lhwb1CGJfYYnitDnMaAcOV2uIUiD5Ny0X7lGxRgIE4jBX/Srg/Hoa0AXtT/kL121egbKdXc4mmgEau+A6wiccYEF3rSURY6ZG3tJ6uEC4Q2XJvYrT9D+BzcZ42CmcqWHvKTRswjDUDyAerQEynPeuBRLUVrEjD3QP2dkEnZyXUw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
- by PH0PR12MB7960.namprd12.prod.outlook.com (2603:10b6:510:287::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.25; Wed, 2 Oct
- 2024 16:35:20 +0000
-Received: from CH0PR12MB5388.namprd12.prod.outlook.com
- ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
- ([fe80::a363:f18a:cdd1:9607%6]) with mapi id 15.20.8026.016; Wed, 2 Oct 2024
- 16:35:19 +0000
-Message-ID: <bb69e3a6-6cbe-4e94-936d-5ad0e5b19f19@amd.com>
-Date: Wed, 2 Oct 2024 11:35:16 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/5] tracing: Add __print_dynamic_array() helper
-Content-Language: en-US
-To: Steven Rostedt <rostedt@goodmis.org>, Avadhut Naik <avadhut.naik@amd.com>
-Cc: x86@kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, bp@alien8.de, tony.luck@intel.com,
- rafael@kernel.org, tglx@linutronix.de, mingo@redhat.com, lenb@kernel.org,
- mchehab@kernel.org, james.morse@arm.com, airlied@gmail.com,
- yazen.ghannam@amd.com, john.allen@amd.com
-References: <20241001181617.604573-1-avadhut.naik@amd.com>
- <20241001181617.604573-3-avadhut.naik@amd.com>
- <20241002110641.3575c632@gandalf.local.home>
- <20241002122903.24e591bd@gandalf.local.home>
-From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <20241002122903.24e591bd@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN6PR08CA0031.namprd08.prod.outlook.com
- (2603:10b6:805:66::44) To CH0PR12MB5388.namprd12.prod.outlook.com
- (2603:10b6:610:d7::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBFD1A7AF6
+	for <linux-edac@vger.kernel.org>; Thu,  3 Oct 2024 19:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727983787; cv=none; b=FUPxsY8akGa15w/A+UITKmaf45XYbJZq1By5i43OWd+LQ87XuShWFPmkLpKwOey4fMf6h5Gznpgs460eyEh0jUrmdT3DbzR75ykfX5DQiWzkLYDIyT0fF0TPliWjyk1r8CJchaC7WbqHmIXIZ8vfke7xs0HnTaExCTF3Xce2HRs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727983787; c=relaxed/simple;
+	bh=D7aETJPp/4LYnMzoSV8oLPYP8GD1T23jKxm2T/OKYCM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jzgh6tuw2Z9aAGDZVY2OQ91rzkGweXmPAkofHbYTeW5dUm/VRo+LIYXRns6YPkKB5oY4neGGmE2RJd8IrC0ogqcMIxkoIBo2ubkngwBwkXYmnHeccNxrO2PCoO+xZn7+drVv6kAmFgmTTnQG+wVFtp1g5jJvPZuhiSkiaaL4Hw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wle+WsjV; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42cddc969daso1947855e9.1
+        for <linux-edac@vger.kernel.org>; Thu, 03 Oct 2024 12:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727983783; x=1728588583; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=T7UrvI5Fkk+44il/XysRntO10uEYOYRnW9FgVarUVGs=;
+        b=wle+WsjVYujZtyzcqiir0rugZheg6pH1ymwDTiuAtqtj/bsOItDBULvCPqHS26JH8C
+         DD8HmTXh3v4jt0XV5A0eBY404tYnjK9mJd7PPOcDNK5DYx5l6VT/QrdOeUUoiOa6JPAP
+         FRdNfuZQIKTUuzcRMpapWcptr3YKCA2NrVhZINXqKqjuqUsnylCZ5W2R/qAtG+a28suQ
+         HwnJbNX2gcK9J1DAV1A/OKIIei7MXLYsn6FoV1GwNKkdSvfbMmI9JrsTNYXrDO04KmKG
+         9DEA4Od9IWEAl9kXQPoxK9TeptRsdGUzcViHp/XHNxwSRBX28J3T+sT+DZ8Pu6zLtj2d
+         neXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727983783; x=1728588583;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T7UrvI5Fkk+44il/XysRntO10uEYOYRnW9FgVarUVGs=;
+        b=e9h2gLJHtF/8MALCDRiqKw1OtU6jTpujQqKg9ed1dIwAHiIaGLqO+Li23gs34vMEzd
+         MIxvVEB+tR3jpP7wE0BuHc9wM1pzMdkEQka7dyAFOkTPyacUJZvVZtNld7SUtvvvXsiH
+         iqoqtusSF9nqY8F6h0ATZdGJNQhq0usohiQlE6mHxi92/OU+t64mNQuAzi2buH5xrm9J
+         /A0Eka3UhNckuJDLzu4SPLdQ+2/TjdgWvHg8XWn7Hesz00vofBXkI85UfZpOh6PgnPc3
+         oeXUpG7iZXFGpgRB62lWYq0HleVdxW2FR7Dr/Y0UzQB41XpSSgSagm3963AesEs08pBe
+         qdGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWHcW1J/pcZ6KU3Z9bkcuGrFHMeM5KDuqFhF0U/VMx7XcMDLp5QKhUTS97sx93mry3ObNCdNQ/8lNdM@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfbqfrrVFP+6Nb/iFXXp31nyytIHSAza8g0WY9bvwLvExon7NO
+	IZxZGCL63g/jV+a0BTd0veQNXtJ6wCpJq/JgUPzx5od/FVT6EoTDBfeDxS4L8GM=
+X-Google-Smtp-Source: AGHT+IEchPL6usDj9NEuF/JHyYPwezdupbMRzhwo6o14mcPVGjV8lwDrJxyiDlYqShHKviSeWv32pQ==
+X-Received: by 2002:a05:600c:3b1a:b0:42c:b9c8:2ba9 with SMTP id 5b1f17b1804b1-42f85af0d24mr393255e9.6.1727983783124;
+        Thu, 03 Oct 2024 12:29:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.211.167])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f85a5f56csm698455e9.1.2024.10.03.12.29.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Oct 2024 12:29:41 -0700 (PDT)
+Message-ID: <a4e39207-fe4d-4242-9f32-c50910b9c319@linaro.org>
+Date: Thu, 3 Oct 2024 21:29:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|PH0PR12MB7960:EE_
-X-MS-Office365-Filtering-Correlation-Id: 391e09a0-bf62-4b51-8807-08dce30033f0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TnFxT0NvNWpQcWpJL2o0L1MvZTlEZHBwMUpmNkh5eXFMSk5OdWRMc0k4NnZW?=
- =?utf-8?B?UWhRTmFjNkRWeFNrcE1PUCt2M1BzaDdnTXN2K09VcXozcFMwS2ZMVndKa0FU?=
- =?utf-8?B?R0UxeG8yazFPM2lTY0J0YStueDUvZGR3OVlsTHNUMmVEa0NpbWxqUHp1TCs5?=
- =?utf-8?B?eTFhaWtYUjIzY1dUZC9Na00wbElxSFE4aDVDRUEvOFh0WUY1dG1yQXlIUFAx?=
- =?utf-8?B?MUpEcld4NisxTjg3T0RLS1BsalB6QjZiOFpPSVdDKzZudVdrcEh2NU5Ccmt4?=
- =?utf-8?B?NExPbGtZcDhEWEZzVk1qc3ZDYXBTZmwyQnppcFFIeUhDWW9YejNVZzMvQ1Jj?=
- =?utf-8?B?ck05OTdocDlGMUpEcE5MaXNxY2dERS94V0hOVWh1ZWR1dFVobXZNckgzdkhp?=
- =?utf-8?B?d0krSHgycGRsRDdIczVFSUtZK2hoV1NTT3VlWGpsejc4a3pGNkdjYmlSeE1T?=
- =?utf-8?B?MzcwSUJsNzJtZkx0MWtCWXVWMVcweElqaFBuUWcxRzdsQW1KT0JFL1Aza0ti?=
- =?utf-8?B?WEtVcm9qTmxNamxsc1JtWGpUMlByZFNuVWdIdlRqUWl6MjIxV1l1YVFnMUxP?=
- =?utf-8?B?UmxHVC9mSHdBWTgreHZHK2djVDR4THdWbFoxbkZmZU0rYVAyQ2VVNkVBWEhh?=
- =?utf-8?B?QUhPZmRPd2hEWldoTExDN1BuYUx4TlhFM2diRnU5ZXF0ZllYRHlYVlc1VkJD?=
- =?utf-8?B?UXQyRmp3allvSUVvUEFWRnVFUzRjYVZ1N3dwRVlwdWQzNXQvOC8yZlNuVmJW?=
- =?utf-8?B?b1hscmw2dGxkNmZqOTFCVFNFRkpJODZFTnl1YXBlalM0aHlvWU5VeGNxUjFB?=
- =?utf-8?B?N3IwQmtMMEtaRDl6d0RGbjNlTDJzekVHOWZKd2xrRHlmTkNKOElZTWFpRVF3?=
- =?utf-8?B?WkhvK1J6RUNQMGw2T0QxUXB5V3EzbURxSG1zRVBNTGlOZGRrUkF4ZExOYnBX?=
- =?utf-8?B?NlVSM0pqeFhkd1hwbkxXVGxNS1pSM243RUVqSXBUbWtFTWlRbzROY3lJRVVY?=
- =?utf-8?B?UUIrRVJLNHNHTjVyV0ZwWWhKRlFjeWlFZVJja0dtWkRWSmVybDJnR1hLOU50?=
- =?utf-8?B?N0hHTVBQTzVaMWdiNFBhc0lGZEVyaHdHRURpY0dzVGpCdmVBWjkzSmpkWDdF?=
- =?utf-8?B?ZjhwUEJyTUI1bENLbHEzc0hqVFJ2R3hJVitPWWg1eEx4akdiejhxT2NrSERa?=
- =?utf-8?B?VU5iYlV6d2FDVTlLRkJwcWlXYWd5SE1EVmdYN1RPRzJReVQ0SEFBMVIvckdE?=
- =?utf-8?B?ZlluS0djM003Q2xSeW9TalpKc05pQjF1WnFHcVErMzJKKzR0QXFJNFVZK0VD?=
- =?utf-8?B?ajAxcC9oZE02VjUrRjB5MUxVZjNhMUZFRXVxMkZBSHlGVXY5TGJ1SGd0UWo3?=
- =?utf-8?B?VVZ2L2VuWjdGdXRFcGJwTnNEbnJTNDBFYjNuTXQ0NkRiaEs2QlVRaHZ1T0hr?=
- =?utf-8?B?cFNmbHAxQWZUU1hlaVpZcjJIYkRhcG92SllmRVhCM2xRSmxsZzdKQnNGdkYv?=
- =?utf-8?B?UHRlaXByRC9UOHBRbjREemJFVWU2UnNFSUo0WU5sakpyZVM3dWZIaFdzR0Zh?=
- =?utf-8?B?Tlplbi92Mm1LaUlXY2Rxamt4ekt1OXNKZmo3RW8vUUM1YTIrQUh4bEQ0bTJz?=
- =?utf-8?B?MmZtYVNIYTQrUFhkTGJiMllxeUZyYXpGa3hkZUExTnMwSjQyNmxKSTBtRTRN?=
- =?utf-8?B?N2tKM3hxWVdjM244Y0QrNnQzeHR0d1p5MnBiYUx3UUd5V3dxeEpLSXFBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?R1lXcW43ZFJnUG9kMHFUbUZFcEVzVnozSUI2MFhxdDJiU3lxUkFDZytCaUYx?=
- =?utf-8?B?ZDA1cWUrNHVVV3JmSHFJNS9nM2pKbExuWDZKenF2SG9RZ05sTVIxUk4rNjJh?=
- =?utf-8?B?RjZtMHdITmNEeGhISWRtSmxubnR0bG80N2V1U3Y2UHdYS0xBcXFoLzR4WVRx?=
- =?utf-8?B?ZEVLbCtGbGRrdmJxdFhjYTI4QWFmdFVWeDhLMU5keUg5OW16SWdLMmFvb21s?=
- =?utf-8?B?KzNvQnl1Zk9mekNycjd1cEcwdWllaU1yanJEbGJ4bXkza01iMjNJOFdadmRp?=
- =?utf-8?B?WkFQdXFRdGxlbTFUM04zL0NvVUNnTDJWb3J5RGxsc05hUUQ0c3BIejBXQi9S?=
- =?utf-8?B?aCtleXcrSlZwajhMTUxrWnpUdHE3ZTJEREg0bElsOE9MYkROdVN2QXhzMURI?=
- =?utf-8?B?UWIrSG9RV21xTXVyRklMY2lwdlkzRWdvS1RMVTFLN0NlVzdUYWZjMUxveEFQ?=
- =?utf-8?B?amNWV2tjMTdJaSttZktSdUl6U1RRRVJvRVV4cGlYRERPQTd0MFpVUThqL1Vn?=
- =?utf-8?B?NmVhZmZsSFUxbXZZR1FReEZyOUdBUHl1Y2Ntc25tcWJETDNCL0hLWllEM2FX?=
- =?utf-8?B?UHk0eTR3d0hsRzdRcjFGMVlON1QrMjIxRmFENjJXeElKVWRGZ1FKRXFTaDRo?=
- =?utf-8?B?ZVRDN0s0dUlhYjZQL21SbTNWWm9DUUZOaml0WW91b2NRbE9GN2lxSU9nVnR6?=
- =?utf-8?B?ek00ekJEbHU5NU1JTjNTNmxBLzN1TXk3RnFLWERnNXdoL0VKbHZsNmRBdzY1?=
- =?utf-8?B?Rkk0Ris0Ny9qVUtoYlJST1lLQW9yTXRSanl5bHV0RW5OKzNnNURyVW9SNTdI?=
- =?utf-8?B?SWk5Yno5Um1KcURLb0R4NVdhODIrN2xvbE1IVXpPaWZHM1U5Mk1xZFhaR0pP?=
- =?utf-8?B?SFREVDIra0dnMDNFQUZNUFpoT3ZYUytsSFVkUzBZZXhvMzQyTGp3MDJXMkRo?=
- =?utf-8?B?VHU1dTFoclFKaDdrTVBiZzhaT25udG1wdkZ2Tng5MzF2bGk3aGQ0NE9vVWNR?=
- =?utf-8?B?N05nKzFWZHVna0tBbGw1VURGWHJnUVZTbVNHanI0cVhEVEdFbm9xZThLOThS?=
- =?utf-8?B?QitnSWNIcjl5emxjRXIrbUJnemdoOERtNW5LamRqOC9xVEJxK2ZxTzA4cjl0?=
- =?utf-8?B?RlFrQTZmZjJ3Zmc0VTMvV2xTSTd4bmNjQW04YVhHYStEaTRDUVVmVnpPaUU0?=
- =?utf-8?B?WTBiUzBTZTluMUloSzg0ZksvSUdJdHpURTZwTkQvTklqVncrQUR0VXhZYmFm?=
- =?utf-8?B?UDBOOFMxWG5zRjBtZlBnd0tKWkxuZjBjQTRIZGRYenFibE9uQmZXNk1malN3?=
- =?utf-8?B?Y2V3OFlFY1RHTmJpdVBHY0hzR1dDeXc3dTluZDBFOTRaV3c0MXJzOC9MR0Rs?=
- =?utf-8?B?TUlQa0JCbGtKeGNmeDNkdTJkdUZoazlBWEtZUXlpZ0RzM3lTRTRwOVQrQWxY?=
- =?utf-8?B?STFpdjh6a1FjbWJyS1FvR0szRzBuQ1RGemlweEFiNm5HdkdhNzVrV0ZIOXVX?=
- =?utf-8?B?QUxHdGxiL2dUT1dnVC9lQXlZYzFxVDNROXFHekthZ2NUNzJVcFJxMldSTlRU?=
- =?utf-8?B?NlAwZ3M2S1ptZExFR3A5cHpzdUZ6OHNoOEk3bDVIa29GYXRMeUVsYi8rZFJw?=
- =?utf-8?B?UXA4NngrR1BmSUdBZU53VzRoaUtTWnhJTkQreWlBZHRzQ0E0MlZ3V3N6d2Jh?=
- =?utf-8?B?Sk5TVHYzR0Y0aVpOV1prV2h0ZkI1aUtnVko4b3krL0hOMEQ5clF0RkZrK21O?=
- =?utf-8?B?NFNRK0gyenRVR2p3SUtKMHhGdEZwaEM4cnczcWRHQ3dyNCs2c0tCT2pMNFk2?=
- =?utf-8?B?SzhueDVtM3lOZHk4Vk1lS0xlT21Ha1dZejlhOGU5MmdUeldraWd0UFBtNkFW?=
- =?utf-8?B?cXJYaWN0bmJjZkZiK2FENW4zNzNuaE5lbjd1UUpxNHR5Zit6Tmp4Vi9FM0s0?=
- =?utf-8?B?Zlg5SGVnSUIrSThUVElIelhkbHVuVW5GQWNHcld5V3pWWUZmMzcrSDhiMDRq?=
- =?utf-8?B?T2tKYmVSbHhJRzNvL3NOTkMrbmZreU55WkRmZndzZSs1SktqRzk5L3JBVmp0?=
- =?utf-8?B?N2k2elFWVko3ZS82RnN2cXc3cWhSRE5vbHl2anpHK0wvMUl6NjBsVG01K05w?=
- =?utf-8?Q?hNG7J7ukpIoruUVX901UDOFvi?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 391e09a0-bf62-4b51-8807-08dce30033f0
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2024 16:35:19.2806
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KrJVZfDe07mUN+ogZz/O20mTXWdrX+tdWWeG7aGHP2v8tqYTqtci1kc0lIKAqdKQds+diH0mPGAeQE29uw6fXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7960
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] EDAC: MAINTAINERS: move FSL DDR EDAC maintainer York Sun
+ to Credits
+To: Frank Li <Frank.li@nxp.com>
+Cc: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+ James Morse <james.morse@arm.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Robert Richter <rric@kernel.org>,
+ linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+ York Sun <york.sun@nxp.com>
+References: <20241002105211.43276-1-krzysztof.kozlowski@linaro.org>
+ <Zv1fsvP5b3a5Vz4l@lizhi-Precision-Tower-5810>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <Zv1fsvP5b3a5Vz4l@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 10/2/2024 11:29, Steven Rostedt wrote:
-> On Wed, 2 Oct 2024 11:06:41 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
->> I'm currently adding code where I need this patch too ;-)
+On 02/10/2024 16:58, Frank Li wrote:
+> On Wed, Oct 02, 2024 at 12:52:11PM +0200, Krzysztof Kozlowski wrote:
+>> Last email from York Sun is from 2019, so move him to Credits, which
+>> makes Freescale/NXP DDR EDAC driver orphaned.
 >>
->> I can make a branch that only has this patch based off of v6.12-rc1 where
->> we can both use it. Can we do that?
+>> Suggested-by: Borislav Petkov <bp@alien8.de>
+>> Cc: York Sun <york.sun@nxp.com>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  CREDITS     | 4 ++++
+>>  MAINTAINERS | 3 +--
+>>  2 files changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/CREDITS b/CREDITS
+>> index d439f5a1bc00..77b4760142f6 100644
+>> --- a/CREDITS
+>> +++ b/CREDITS
+>> @@ -3795,6 +3795,10 @@ S: Department of Zoology, University of Washington
+>>  S: Seattle, WA  98195-1800
+>>  S: USA
+>>
+>> +N: York Sun
+>> +E: york.sun@nxp.com
+>> +D: Freescale DDR EDAC
+>> +
+>>  N: Eugene Surovegin
+>>  E: ebs@ebshome.net
+>>  W: https://kernel.ebshome.net/
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index a77770cd96b8..b9e2824d7ebb 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -8130,9 +8130,8 @@ S:	Maintained
+>>  F:	drivers/edac/e7xxx_edac.c
+>>
+>>  EDAC-FSL_DDR
+>> -M:	York Sun <york.sun@nxp.com>
+>>  L:	linux-edac@vger.kernel.org
+>> -S:	Maintained
+>> +S:	Orphaned
+>>  F:	drivers/edac/fsl_ddr_edac.*
 > 
-> I take this back. I'm doing something a little different (updating ftrace
-> specific events, which has their own macros).
-> 
-> Feel free to keep using it and pulling it into your tree.
-> 
-Okay, thanks!
-> -- Steve
+> i.MX still use it,  I am volunteer to maintain this driver.
+> Also please add imx@lists.linux.dev
 
--- 
-Thanks,
-Avadhut Naik
+Sure, thanks, I will send v2.
+
+Best regards,
+Krzysztof
+
 
