@@ -1,126 +1,130 @@
-Return-Path: <linux-edac+bounces-1990-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-1992-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BC4C997586
-	for <lists+linux-edac@lfdr.de>; Wed,  9 Oct 2024 21:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE44D998C67
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2024 17:54:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 165CE1F22813
-	for <lists+linux-edac@lfdr.de>; Wed,  9 Oct 2024 19:23:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54EB41F23E8D
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Oct 2024 15:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3071117837F;
-	Wed,  9 Oct 2024 19:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961171C3F34;
+	Thu, 10 Oct 2024 15:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="LoX1egWX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eZJ+W72Q"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091351714A5;
-	Wed,  9 Oct 2024 19:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCA31917FB;
+	Thu, 10 Oct 2024 15:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728501779; cv=none; b=pH4YjeYpHcEOE+rREkhWuev5PgRQBobItbrJGfvy6oE+Qv30c8wBoGyvD+YYMjYoIidlMkolRcLsaCEr3qIGd+OkU3brIgp04D2hivlQV4MT8BVcEWMiTNPxpOWwAm7zMYjVWbzLrPpMQ40uiX3egPRrAYmdTRhwdSX66MjujmU=
+	t=1728575618; cv=none; b=kmGoiEEXy3lVUbOPc781gQmjuSyFf5t3ZLSuvgp8XUH9gJ4ZwVgjk6y4noGp3C8hJUkgZEbESOHROsW8JU7IFM+nQYeleU9QnBiIrTTYShg0aY43jv7lsS81PadMQqqWInCRYj4HwzrwMxw9qH43cDqynX2PqR/CUtNJAig922s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728501779; c=relaxed/simple;
-	bh=68MlPt2FmdqlZvjTx3dO1Nr6d8Bi+A3lDI3oCIC23ZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YeLyGLl36uykW9kYfu5BSyIlrz0lUrDfWbrbGkNo3mPlDgjKFIh0tKV/g+wsYQbjJ8TbXzbhm5vQUEv4ZGz11uB+Ije58U4UhvgNTXhWca+seMiHcABeSILwn41+q5kyq2KsFe3pTiywMxRa4XKV7mwMMhoHNJbWn4xdt6VRpZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=LoX1egWX; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AF02140E021E;
-	Wed,  9 Oct 2024 19:22:54 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Qfk0Fl5xrSLP; Wed,  9 Oct 2024 19:22:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1728501768; bh=8xGJ1I642Bej1YYAfHVN3HEC/SQoBeK/jSb2L/ehR94=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LoX1egWX/cKLa3MvCUkvvP0PGzMMdQm4pO5As13C/5RwJtARIeqSZ3z+QQziUoPrO
-	 OXBbLAWFf9R+gvefw0N9mNtViF6QXneQD8/NSoT/gqPactVtCdk+S1lnL7hvU2tIcr
-	 H2GZQQODp0TkvAna7eNDdDy44+nu68sTIX5KZZa90KnPgqS1NcrD4oIN+BRecZEJPc
-	 OSyLtDlgtiWcX+75vhRdry73iZk6J62mkb/XhsEYHdcohQqRdFAcUhtu7tHP6CcKzB
-	 ZRiPHgW89HEroEP28MHy8ZzBmWxlRBO9xp+Mh6t6esAzEevo7hjyRpJlBoLszCxx2g
-	 gxjnrVD5MQ58MHhNk1BR9VLXiXot+4+lJEC7BLX9qj2A+aUZPw22OX6861ZOfzdimp
-	 F8rafzJH0XzSE3snfsGYLk6b4j+VhPYoKtm+sBjO4+zZ6b2UwmD/otceNtwbHKUr2Y
-	 nLLYYQZUqDuyAuG8+48CsaD3NgoVtYLUFEoVsUJZctvaUZBtObQsoLy1ig2+oANa4d
-	 9Bnyfb11n6mJ90LMFbMjOfBD69PMNHIT4bGtfO17zQY/wjaEWJ3F7hTlOqbPrdLP4V
-	 6vHwggHmlsTpsjYdh0Y/HZaIBbn0n/UXSjtYqv4O8YwD85Dpqo7msKsae6lX2pkDLw
-	 tO+xkqF4Ck9Yxu5Tb8wv0U+c=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1EBDA40E0163;
-	Wed,  9 Oct 2024 19:22:24 +0000 (UTC)
-Date: Wed, 9 Oct 2024 21:22:17 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Frank Li <Frank.li@nxp.com>
-Cc: York Sun <york.sun@nxp.com>, Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Priyanka Singh <priyanka.singh@nxp.com>,
-	Sherry Sun <sherry.sun@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-	Ye Li <ye.li@nxp.com>, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 0/6] EDAC: fsl-ddr, add imx9 support
-Message-ID: <20241009192217.GPZwbX6V_PL26Hq6-6@fat_crate.local>
-References: <20240709-imx95_edac-v1-0-3e9c146c1b01@nxp.com>
- <ZvsNJrxF6TpUC6ws@lizhi-Precision-Tower-5810>
- <20241002090834.GAZv0Nkp5YKcy86UmZ@fat_crate.local>
- <ZwalsAJdaHjtD1/E@lizhi-Precision-Tower-5810>
- <20241009162038.GNZwatVpTr9rOEyfQs@fat_crate.local>
- <ZwbL7iM2SV5cMb3d@lizhi-Precision-Tower-5810>
+	s=arc-20240116; t=1728575618; c=relaxed/simple;
+	bh=b68TMNixbJy7Wtf4/eoCaCNV0RHGXTaO6jAyhchzRFk=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=Q0VT+mbwm6QMOjdxajeGZw0S8myUK/+q4QsGFobStKiEfmI6pWYzlOU1zQiTsWKUQuRa63oyEGjnoQQow7WFtwTc43xNJZYf1VYd5h0loYNy8TfVXkj8+GILeBbQVMii44cS8cBEP9FRQvWTKtQeC8lEDeGc143XWn3aZ3RDqbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eZJ+W72Q; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728575617; x=1760111617;
+  h=from:to:cc:subject:date:message-id;
+  bh=b68TMNixbJy7Wtf4/eoCaCNV0RHGXTaO6jAyhchzRFk=;
+  b=eZJ+W72QPzG1N2tuaViiXW5xR3nGxdqWOTOCeuCFaAxEwXl5AIwK6djZ
+   8gxhNdDH0Ehsi/8aJKe3dtK4Sf2MWB1EYAPxb7ApAtbP/Ltogpf+GG2yq
+   3faapVUDMA9/xFfecRUl06bnSGlxsfUH+bPA7qqvGmZERBGVKrvAkKIV3
+   O+maqJsZcXGDek8xSTAnSZmRsxjECHLjDvJF1+LXb5GfZwGD3qwEEAOFA
+   62535AkymeWe3R4fwPPWc8RmVLBOA3u/psplUri6wTeQgx0j9guYEiHym
+   XxHRflLaQSUiJLyutgi5cVcwbOZx1Xq9OV94ZSHKhz90vNV0wnvMytCaI
+   Q==;
+X-CSE-ConnectionGUID: otw229xdQ+i91D7dygG0lg==
+X-CSE-MsgGUID: 2yi5AJ/hQO+qfEJN+5mY1Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="31643414"
+X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
+   d="scan'208";a="31643414"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 08:53:37 -0700
+X-CSE-ConnectionGUID: Mt0Zb7ozRhGLwMLoG+5vuw==
+X-CSE-MsgGUID: Bai38vZrSU6/zkNvc+ntDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
+   d="scan'208";a="81221635"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 08:53:33 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: tony.luck@intel.com,
+	bp@alien8.de
+Cc: tglx@linutronix.de,
+	dave.hansen@linux.intel.com,
+	mingo@redhat.com,
+	hpa@zytor.com,
+	x86@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	qiuxu.zhuo@intel.com
+Subject: [PATCH 00/10] Clean up some x86/mce code
+Date: Thu, 10 Oct 2024 23:31:52 +0800
+Message-Id: <20241010153202.30876-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZwbL7iM2SV5cMb3d@lizhi-Precision-Tower-5810>
 
-On Wed, Oct 09, 2024 at 02:31:10PM -0400, Frank Li wrote:
-> Generally, 7-10 days is reasonable frequent to ask. Contributor also takes
-> their time and efforts to make kernel better. Why they have to endure a
-> questioning
+1. Clean up some x86/mce code as below. No functional changes intended.
 
-You're asking me about your patches! I'm enduring questioning!
+    - Simplify some code.
 
-> or accusatory tone!
+    - Remove some unnecessary code.
 
-Where is that accusatory tone exactly? Please point me to it.
+    - Improve readability for some code.
 
-> These patches was already takes more than 3 months. I ask just because
-> avoid to hold for the another 3 months just because some none technical
-> reason.
+    - Fix some typos.
 
-I'm sorry that you have to hold for three months. I, like all maintainers, am
-swamped with work for the next 10 years. You asking every 7-10 days does not
-really help.
+    [ Reduce the text segment size by ~116 bytes. ]
 
-You're on the TODO list and I will get to your patches when I get to them.
+2. Pass the following basic tests:
 
+   - Compile test.
+
+   - Correctable/uncorrectable memory errors can be notified via CMCI/MCE interrupts.
+
+   - Correctable/uncorrectable memory errors can be dispatched to the mcelog daemon and the EDAC driver.
+
+   [ Tested on an Intel Sapphire Rapids server. ]
+
+3. This patch series is based on v6.12-rc2.
+
+Qiuxu Zhuo (10):
+  x86/mce/dev-mcelog: Use xchg() to get and clear the flags
+  x86/mce/intel: Use MCG_BANKCNT_MASK instead of 0xff
+  x86/mce: Make several functions return bool
+  x86/mce/threshold: Remove the redundant this_cpu_dec_return()
+  x86/mce/genpool: Make mce_gen_pool_create() return explicit error codes
+  x86/mce: Convert multiple if () statements into a switch() statement
+  x86/mce: Remove the unnecessary {}
+  x86/mce: Remove the redundant zeroing assignments
+  x86/mce/amd: Remove unnecessary NULL pointer initializations
+  x86/mce: Fix typos in comments
+
+ arch/x86/include/asm/mce.h           |  4 +--
+ arch/x86/kernel/cpu/mce/amd.c        | 18 +++++------
+ arch/x86/kernel/cpu/mce/core.c       | 47 ++++++++++++++--------------
+ arch/x86/kernel/cpu/mce/dev-mcelog.c | 11 ++-----
+ arch/x86/kernel/cpu/mce/genpool.c    |  8 ++---
+ arch/x86/kernel/cpu/mce/intel.c      | 11 ++++---
+ arch/x86/kernel/cpu/mce/threshold.c  |  2 +-
+ 7 files changed, 46 insertions(+), 55 deletions(-)
+
+
+base-commit: 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
