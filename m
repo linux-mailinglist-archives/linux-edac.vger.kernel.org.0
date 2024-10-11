@@ -1,68 +1,68 @@
-Return-Path: <linux-edac+bounces-2006-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2007-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CDC099A7C3
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2024 17:32:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B88E99A7C6
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2024 17:32:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD6AB1C236F0
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2024 15:32:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AD1A1F252F0
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Oct 2024 15:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2AC3196DA4;
-	Fri, 11 Oct 2024 15:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C71198822;
+	Fri, 11 Oct 2024 15:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="MztvPEz5"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ag0tOMSZ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2079.outbound.protection.outlook.com [40.107.20.79])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2070.outbound.protection.outlook.com [40.107.105.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBBE1957E2;
-	Fri, 11 Oct 2024 15:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18306197A68;
+	Fri, 11 Oct 2024 15:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.70
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728660719; cv=fail; b=kDJecrP0nG60lIePhz4k2Y7cDq8jmWkBqaopt+XDqiG8i2bslsvht03Ugf+HtlLsxq0bTJEavJhTFxAP8XeuliUH3jS1Qm+FDnp5y2MqgUEgncDev0PrlG0OWzWglDYZRM2rkJm3FcR8jFX79qbYASeUX8xdwqKg3AhmVgrpLuk=
+	t=1728660726; cv=fail; b=Xq/e5CojxKX9vr9twpROMOUyHZeV1LA5AMz+kkRS3pDYniS29+AMyxa/LJ6OzzlZt48VW9y9yf4yr+T56VCI0oY8T/qZy59TF5yAnyimi6mjdWulIh8yRMbvHbpILmcASjjcF2RSh4yMfgXEwobif97SJHWyY0E5HUuZ7Pai7XI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728660719; c=relaxed/simple;
-	bh=tWA2t7dYpkCGQPCP1WcAIC7H3OdUmQUbtGujuyE7dVw=;
+	s=arc-20240116; t=1728660726; c=relaxed/simple;
+	bh=bYOSUeH8Tsfygywx3VBHrQIC4eU9dzx5J8svyPSfkS4=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=pB41+O57mhj62TFg4nWG7phJ/ncsNxIagKU96e4sEpUVovppr4bgt3jQcuHd60OZWDX9r6YfGMNf6y6q2uPs0BLHXP7OWOd7yFiS2nBTb7c3y7SxY3nHCdNdDtG/BwYbTLItxgoDLA18UUta+P0q88QLlA72Nh4/iTkc+2LgGOg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=MztvPEz5; arc=fail smtp.client-ip=40.107.20.79
+	 To:Cc:MIME-Version; b=Yj0NaoCtoaD/ErZuZR3UQfX3NY0XfzXSL9jIsVsXMH0GEj5LKfJfWF6oE892clORwX67XLylRoZT7+8Dh/wTDAiIH4n6OzTHIiJ5mcQ33Yon1eMglTg5swGVSH+pA5pKFB2TS1BGY44Q2j07y4q/Dgzgw04WGyJ8OloyJTih1t4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ag0tOMSZ; arc=fail smtp.client-ip=40.107.105.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JMlW8/s+aa0AZBC4bo7Vf0lW1J5HZ1ItCqylPjcRhvTSMI+yU9qrzP+sgAqizo4Kj/i7ANOQsUCj03PfHWd6am/X8G/XTTS5Y8z4mbC/1C+bwhzuBFhbJQKMccaJcOMi9gB7/gZAxQ3bUeJUW4cWuf/mqqfMchZVVVPGh3eCVCISvlJj6dWb9rDVoDsz2peRcQPRSKZiqxcAz7uFATtu6ZnlbQMMSnF6NP0E/CjoBw3NKrYntcEnBY9orVtPyRCsSVi+NfXOJmDtjl/ZvieQNXlIbpanGXAuOU1aE57VbBOZlW69xObLQu8vrcneoRvwH+/uPZBJsC+XOfaOI6jNJA==
+ b=rEoOWXwahvR1BJEW3+lpHQb9Sa+iAmQEKMrpS58P585zcGFosZHqBSpcP0lPnXgaRrMl+FTqBPLQG4KlSP08yxYYHuvrWRndA2MrjIq27ttCxSj1Qx/gOV6S75haaVIRd/zozkFqEycfUDVNJZzGI+iXBKEus2mxabwPEO/gDZtMvfF5ForICAnTBwZa1Gja5JctlZQ6yjNFLECBbnv1sMgJ7Sf80gT4QBh1I2Nt1P7xEqcvTWt9NhE4NiH7MAWpFj7fg0GDzZxAgro8Aa3FEwm/oSJFmV8SnEWmcRfi3UQXTNpMHxYVnCyqGm0n1U+g9HRURJwEZdhYE8XJnwFbKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oWWIgflstIVDXTjDGLYnl7metuS73gQMf9j95c82+E0=;
- b=AfNKGjJk70sjxjWT1u6INCtYyWeunol4tjK7CD0o5pIXg5uzuRDX58jKRjQWnzp1SpXsDli1nM1iWaw6CfUJ+2REzLx0KuB2C3vf1Rc4UNT+JVfr5U2eip8mVsJFQJJ65TLVQCfTHBeA3jHlXIut8LsWqvfOLUgMxr+0S3LjNIrgaEnNeDElJJ6yv0mUDG9nE9frdrmKvuaUbEICXoLUdG/1ILwaMmwwsEtjEtUtip28f5S5eBAVjLjIO34wQEZJTCjwAxAnZuXCaQ8XvVmw5hdGA7OdpKr96LVzv7UU38VPQLMHRuZHbzCfSQocvXh9eBde5wX4TBmE4BVtVjDVow==
+ bh=oThGc+PInWWFzFHWkQtWRVZUx01s9iDEryoUEl8TSD8=;
+ b=cJ7YKl+/OdZ60XmzS/yLQ6+TFWYNi46QMCmp/LzP5grU/IFY60rrZmWE+DOD2C/qvGWj2iEmbNVYxRxm1/vq/MYMcBQa8YN73CtwGNYj4nGoA535IBY7xD9Uz+w+b3ubwQINKUDl2rhY+wau/RZDG2vvbABFt/Y2vtl1fSaqcatjyTe24X5PxYR3vjXeXDXquNfL3w6u9QDsEqUgyvDVcvfD5CGgF2kBv6dmnvD4yBJAqhFBzr/7LUDjZQQUoq1j/NM4yYQBWaxHQj7GdZv0yqMEP0S5iCcKXno8JKz77S3Eg9Xlt+OxsrxEchrT6/uTFFSOp9TKNucSaywEQruU5w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oWWIgflstIVDXTjDGLYnl7metuS73gQMf9j95c82+E0=;
- b=MztvPEz5iIrSku1WFfgIbQg4/N0lxtiEPtvNrB181SUNfcwKFhHzpVfmf535C8EGeUSSGeib1uiWSvAL6tNg/jx16wdDjzMkDFIS5XxJY58Hcow/iFb8XVjlN3HYBWIuG6UVsono+65yWvEsasuPRKqJkEsxYKobmDo4Deyv4VlRubZCG9mX1AhS9F/5XTVonaEtJ5M7JUPTQ6MCH327Yi1Ig5I5bdrWXRSQlPp5Tgu4Rw6iFHK/NJvo1ogGYvprjc/LvHG5xQQE/1uJOzh9BZcdHD6ktDFnzz9MqQNq4QIzIdYiTMdYKTaPlY2flFUOM2vi+iuXRYc5URr/dSxBuw==
+ bh=oThGc+PInWWFzFHWkQtWRVZUx01s9iDEryoUEl8TSD8=;
+ b=ag0tOMSZeGlCwY6HqL++k36OfWBb5CKMV/bPK0/5hIHCoIqn/1swExmBkvp43b4ShqySsy+yk+3n8g5KczbdH64l06Q5rw6vjGpsXPdoF4zQ2JlnpUn/chEL3rCOJTZFuN+9oUqdAX87/T9ZY/+cOq9i2fEKboxYx2BqVMmRzCxHCHGYQ/7M2vWG9fOrfDCGE6q/JMTGlWElhiWn6NgXhii4y5Rcsgn1CewgHRgBgmY8wbm47o7IzvbsUxvZoJKTzCazXD1OyJYMdC6iiGj8OJEeTnmcIu6V+jKbkzHzfftAqvPcxVdflZu5gokTXAk7YZfo/LHac4dmSARVX+4a0w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by AM7PR04MB7064.eurprd04.prod.outlook.com (2603:10a6:20b:118::21) with
+ by VE1PR04MB7360.eurprd04.prod.outlook.com (2603:10a6:800:1a3::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.20; Fri, 11 Oct
- 2024 15:31:54 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.23; Fri, 11 Oct
+ 2024 15:32:00 +0000
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.8048.013; Fri, 11 Oct 2024
- 15:31:54 +0000
+ 15:32:00 +0000
 From: Frank Li <Frank.Li@nxp.com>
-Date: Fri, 11 Oct 2024 11:31:29 -0400
-Subject: [PATCH v2 1/6] EDAC/fsl_ddr: Pass down fsl_mc_pdata in ddr_in32()
- and ddr_out32()
+Date: Fri, 11 Oct 2024 11:31:30 -0400
+Subject: [PATCH v2 2/6] EDAC/fsl_ddr: Move global variables into struct
+ fsl_mc_pdata
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241011-imx95_edac-v2-1-011b68290951@nxp.com>
+Message-Id: <20241011-imx95_edac-v2-2-011b68290951@nxp.com>
 References: <20241011-imx95_edac-v2-0-011b68290951@nxp.com>
 In-Reply-To: <20241011-imx95_edac-v2-0-011b68290951@nxp.com>
 To: York Sun <york.sun@nxp.com>, Borislav Petkov <bp@alien8.de>, 
@@ -79,11 +79,11 @@ Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
  imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
  Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.13-dev-e586c
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1728660703; l=8457;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1728660703; l=3246;
  i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=tWA2t7dYpkCGQPCP1WcAIC7H3OdUmQUbtGujuyE7dVw=;
- b=I229zlgU2anPbvLij1cNUj64GMxTUvyazyq5Wyp0/AqlTYU5gx71QGZhHN0QgziCfhpJ2cJaz
- mfGEa/rp+ayCugzBn75mIiqFgDJHPfRIfhA7xTSpJBbwG5Sx89aN3Xa
+ bh=bYOSUeH8Tsfygywx3VBHrQIC4eU9dzx5J8svyPSfkS4=;
+ b=Jr4ZBVdjm68AQYMozrhBBkHuOgXtkZe2yfQsG4tul8HwMEu9Uo4auwEhsTkM3jvVp+pVnWdqK
+ GiUBeH7crjmAohu8MLvaUbS/kQCKODv1F1SqrqywQjvgjyJV5/5ZJCK
 X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
  pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
 X-ClientProxiedBy: BY3PR04CA0014.namprd04.prod.outlook.com
@@ -96,333 +96,193 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM7PR04MB7064:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65113d73-0a4c-47ca-49f0-08dcea09d609
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VE1PR04MB7360:EE_
+X-MS-Office365-Filtering-Correlation-Id: a58a03ec-8828-41d7-0cd3-08dcea09d92a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|7416014|376014|366016|1800799024|38350700014|921020;
+	BCL:0;ARA:13230040|52116014|376014|366016|7416014|1800799024|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cGU3OFdOem1VaUtvRjBQREdvRU9Qd3lMMmpxYlhXQldJN3A1QUhMcDBraDFk?=
- =?utf-8?B?MGtZVmR4RFBuWmt4TnhlS254TnZvUjRoMnVmVURPUlFaaVlQdUJIU3Q2Q29N?=
- =?utf-8?B?cHNWUC9RcUFSNGgvakdTb0wrd1FBWDQrNCtWbTV3NFJVeHM5dXdCYTNDckQ1?=
- =?utf-8?B?RzVFOWYvbFhiZG9oSlN2OVlWeklQbjg3dW9oTVNDT2NBZDJENm43NXRMR1Ew?=
- =?utf-8?B?aHhKQlM2Vi80aTNXK1N3Q3VCWTRnNVJuSCtzWUxqVnh5bEV3STJvSVdEaWJS?=
- =?utf-8?B?QWxtdkhoaXFnZ2h1cmwzWXJta2xhNU1qRHlid1J6Um15TWxzVkk1SmdnU0NZ?=
- =?utf-8?B?M0xKZmhFWWI4TUJBSnFqNVYwNkMrYVFFUWgwdTdIWUVoQW5uNW9lVDdtR0g0?=
- =?utf-8?B?SFZsR1ZzdzE2QUJuUGxkTERSbHhycHJuRHlyM0Q0Z2RDQnNVMm5CNXlHY3RU?=
- =?utf-8?B?eGYwM3lwNk5TMWxOUkw5d2RBSGdYS0JYa29LQ3NDNTdjZUE1elh2dGpjbVgx?=
- =?utf-8?B?bk5BS2RrME92dzBTbERSUURTMUgrTkJIcmlYSFpDaFBIWWgrRURySE5KWEpY?=
- =?utf-8?B?WkxkYk9MWitYd1ZjUWRMWDdkci9nSmM5cVdYRzZLa3FNS3lzTWt1YklLemVn?=
- =?utf-8?B?UzlsRFhrYWhWUTliNFQzLzY0Um04TXM3NVJ4c2kxcGtwYzNMci9waHh5TzFx?=
- =?utf-8?B?SHdHUUhzemc5VXRQcmYwYlNEYUtsNXVHQTFHTGVSN2lWS2doaDVzdzhhSThZ?=
- =?utf-8?B?SGltUittWnYxNnE3WGg3T25EQkg5djJXK2c3dU9CTnZyc3VvVStjSXAvL2VV?=
- =?utf-8?B?V3RadGp1c2RjQ2Y2NHIxekhUNTcxWlYwenV4MFRyZHhZRk1mOHBqMnlGSGNs?=
- =?utf-8?B?cElvMkd5U2k3Z3d4RlN1NHZzb09UU0cwNjBNYlZhakJJc09OWUpwTWd0K0xG?=
- =?utf-8?B?UlFScnZYYWhWa1p5Rms3eXkrTVpFRjlJTlVEeDdIN1Zqd2Z2RGlsaXBXZWMy?=
- =?utf-8?B?RTUvRGptWFBDbUhFeGJiZzhKcERTdkZ1RVJIRmNMV1lzWU5IZit4Mm5KTTM5?=
- =?utf-8?B?WXpyUUhoK1Q4M3lnM2lsNUhJbkhZc09OVlV5RVJmSmlVaGpyZ3I1L3VKNTEr?=
- =?utf-8?B?U0w5SFRVaWhKdldISHNkUFAzbE9uRzhTRTFHZ1A2MXFLVGFEUnJNS1Jnb0d4?=
- =?utf-8?B?KzVNcnhKZ3pCa1VITzBWSy8rZkVDcS9CTUpQK01YM3RRcmZnN2tock9xZHRE?=
- =?utf-8?B?cGdEYm43YTUvejVFYjMyWUJFQU1VOEx0NWNlOTdlV2hpRU9qL05XZGtZa3E5?=
- =?utf-8?B?ZGZpRW9DaG1mOGE0ZHgwb1V4TmRGLzVGd2UvcGJuN1JlODZPUWdid2ozSmcv?=
- =?utf-8?B?YlJVdldZZHRjcHJMS0pPcG1PM25jdmJDcUZjRjRsTUFkSXBrQXprWVBVL1Bl?=
- =?utf-8?B?SDVubDlFemhmZkl0QXFIS0Y0Y2p5UkJqekp3VGVlUnRpOHl2aTlVRm9xZWRZ?=
- =?utf-8?B?TFJuckc4c3FpSmNocHZXM2dldGY2RG9hT0pQZGlkOVp3RENXcklFcVJza3V6?=
- =?utf-8?B?WGxzYVBiOUZPY0Z4M2ZuVDZDdUJnUWRhWmpMM1FhK0c4cmRrQjRncEJXeW9U?=
- =?utf-8?B?Z3l0VzRuWU5Kays0VlpkZmorRGlzcTBuekN2dTZSVWRsb3VvWmpycHNNRHdU?=
- =?utf-8?B?bkh0VlE0VFNLYWwySDNtSlV5Q2dsQ2ZFUEJob0krc1Z0ZWRhODVhancycmg1?=
- =?utf-8?B?Ri9kVzRXQ1FGZ0JVTEZiTmFyd1pnZkNYakZQSkZZV3RJT1F4c3k1eVhPQUVJ?=
- =?utf-8?Q?NEbBOJMdpeyKDLCCIwRLdUnNzThcCx2O65too=3D?=
+	=?utf-8?B?S1ZFVGpFdk9RQkt3dEp6RkZoNThqOUpFeklPQm1WVktITDRka01yZmpHTHgv?=
+ =?utf-8?B?QWNwSjZocm1pOWdvRk9YS3c2dU9lbGl1TlZxMmhuVE4rNzFnSlBjY2ZjbU9F?=
+ =?utf-8?B?UDN4RURTK1diNXFEalNNQXNHYlVTeXNkVUVVaW5qMFRFOFZjelZuVmtBUy9F?=
+ =?utf-8?B?VXRCaVhZNTkwY2xBeElEN0lqQ3Q4VmgyYlVrUVRTUnN5a1BNcC9KZjdBdDdL?=
+ =?utf-8?B?RnpkWnJwZWNNckZpdUIvU3M0VVFHZjJpcTRuZG41d0lKQjNCT3Nodkp3YjJz?=
+ =?utf-8?B?UGVuQzlsTmhWdFhuOE9YQWl0SzlWMzhOdVlxYjJ0N2pPUUM0a2R3MUtWTE55?=
+ =?utf-8?B?SnlRcU9BZ3ZCVktRYWY1alc2bkpVSnd2My85MmdFbURNT0IxeVRycGZRNDB6?=
+ =?utf-8?B?YlhOVDl5eTBBbFZ2SDROU3lHU3doMWQyVUlLZkw3ZWVvTTRPelI2bHJJZDQv?=
+ =?utf-8?B?MkZDUUpEaTh1aFptVTVmdEpZMGptQU9hR25SWnVhSUgrZlFrZWxaR25GL1Rj?=
+ =?utf-8?B?Q2N2cE5aRmdDVEJjVW1KQXhqc21ncm9DYjRZQnQ4L01sVjZnUGdySDVGODVm?=
+ =?utf-8?B?ZnRzbmNveDRTUWpGMjd3ZWd1N3l4ekNmOXpIMnNzbFNNbEtTNkdSc2orQmJQ?=
+ =?utf-8?B?MkJYS0g2NVBkblBYTlBJdXlCdCtFcXpvKzZ1WnVqdkVyMzg2L0pMV0ZzZXlI?=
+ =?utf-8?B?ekRpbFdiSnR5S1N6a2Z4RWlUSjdnTE1vOTRQMm9pSjRPK3ZXdUR2ZTBQSmhJ?=
+ =?utf-8?B?d0g1OVdVZXpxVDgzcHRieGE3Ri9SQWsvVG0zSFYzbnZuYW5yYVFoREFtTzlI?=
+ =?utf-8?B?Nk9vaVMzbXo0d3NLMVR6UENHb2RDNysvYVhNdnlWYmxHbkZHelFzcDllVkh4?=
+ =?utf-8?B?RnIzNHVQSlRoQ3NoTlVzZFBFUGo2VEV6RGlBR3owK255WUhvdzVtWnlNejhD?=
+ =?utf-8?B?aWNia0pyRXMydHBDbHB2T3dyZy9MQzdTZGk5L0MxSkV0R0tCSXdITExuOExv?=
+ =?utf-8?B?d3I2Nm1vUE92Zk1hYitQUHB3aG12V0tnNXZWVlVlUVVyUDNEUTEvQWFLN0lW?=
+ =?utf-8?B?aXdwNnNtV016MklRRHZ4SHJMdjRnRFZvY1RHa1hvTmt4RmlGd1pHd21qMFM3?=
+ =?utf-8?B?VWpELzdaUnJoQVVYbzFGbnVGZzdycXFQWkRkTXpabmM3QnpkK1JEV3RqbXpM?=
+ =?utf-8?B?WUhFRTk2Uk54bWU1K3VxQktoMmkzV0liR3dBRE1Yd2xnZ08zWjdoc3owN3Zp?=
+ =?utf-8?B?WXRwSGtxcE5qUDZIbU5CTTZEdnVtOGNIZlpSV3ZtOEF2OGZKcXZ1RFZXeEov?=
+ =?utf-8?B?Mll0TjJkNnNBL09ORnpEcnlaWHlHTFFVaXNwcWFreVdzckJ2Yi9vUGg3QnFO?=
+ =?utf-8?B?YWFTMDRid0ZvMzd3aUtsMDZwcmxkTmJmdGpWUFBuZTM1WHh5eU5zVzltcERv?=
+ =?utf-8?B?N0FGa25BTStWanNRRVhmTjBuMG9TdE50dWZMdEpCSHpzVzg5Zmp5RUxyMExp?=
+ =?utf-8?B?am9sR2k2ZVQ5bXlBQ1NrSGovYk1uYlBGQjVsVVB3TzhqR1Nyenk2ejc4TGtG?=
+ =?utf-8?B?Sk05QXM0aTh0czE2L1E4U0ZMK2o5YTVMY2tzeUFITXFHdkVUZ01xbTlZdDV2?=
+ =?utf-8?B?aHBUTnRmMlFicWVGKzBvYXVPcGFZazk3N05Gay9jMFdURUhSUkYyNFhBdmZ1?=
+ =?utf-8?B?UncycU1VYkUzcEFvWHh4dHZJVG01Nm9wbXNYakk4ek1rZVMxMHI4V2crd1gr?=
+ =?utf-8?B?WkZzQjkreFVkaFpaNTNsWkc1T2ZnRjVWUkJ1dXVCMWtQRTBqY1dqUDh4RExl?=
+ =?utf-8?Q?d+lDZXZF56QkkSDNZ44Y92hZdXI6OX3KdizMI=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(376014)(366016)(1800799024)(38350700014)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(7416014)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?N1A1cVh4YXhkcHllalgxM3VveEhseXpySmdJVWNYWlgzZUczRVpuN3libm1K?=
- =?utf-8?B?NFFIckIzbjJKTVE2U1pKWlhIa0FUY3FWNmpQSnl6c2t5dE5qTjF4d2xscTBx?=
- =?utf-8?B?R2NiK0w3NHM4T2R0M29lVHl2RmJhQ0VEUG51NGUwcmxuTU1kTmIxT0cwTFlL?=
- =?utf-8?B?QkJSZXpZRWt4NG5kUkxDY1ZiWUlDWjQwWHdXMHdnV00xMXBsM0dGRlB5VFpT?=
- =?utf-8?B?bnZvanFuU2tySzhEMmdUUkRlNHpYN2JzL3RkeE54S2FPNXR4ZFZJTW1EVEM3?=
- =?utf-8?B?QVFOSDQzSWFiaTdWVUxSM3ZGR3o2M0labHVGNG9aUnZtdzBGUTBQQzBqSnZt?=
- =?utf-8?B?emxqcVIzc3RKR245Vlo4N3dYNllFS1ArclZIZ3ZBM1hFT09WUXRFT0ppamRr?=
- =?utf-8?B?OCtSMFBQUzU2VWJQa1hHUEptMDAydUdiS1lka015eGVZZGttbHk3d1VncVpM?=
- =?utf-8?B?MEgzeVUyVTJjUFNYdXFRYmdabkxvOUtQcS9wN2lrb2Rta1FkUVhkZUtoSmRY?=
- =?utf-8?B?bVJPWFFwZTlYS0pKNnBHbzJMTkdLQjRRUTN3M3RHUEZZNVZkNUI5MjdiaHBM?=
- =?utf-8?B?eXFiMkp4NElGc3cxdkxpMklOTFVEUm9FS0VFSVRGWnpJS1RDNlc3RnJiUTRZ?=
- =?utf-8?B?ZDZrenpIR1JLTExDNXVCdG5lUnBrVjNBRWZRb3RXSC9TeFlpcUJZU0NBUUFV?=
- =?utf-8?B?MTZwQ2hUby9ncjZGTzRJanZOWEhpZmw4VldiM2lmbjdFSG9zQ1BlMm4xUW9k?=
- =?utf-8?B?UWJMWnJ0RzFCeFhiOXpxeUxvdzJuQ0VzcWswREkvSkNSL3ZiY0J2c2dadWo1?=
- =?utf-8?B?SUhjSlBLWml4TE5yVXNiZkR3QjB2eEdjQ1J2bUQ5U3oxTDY3OUtraXFuY1Uv?=
- =?utf-8?B?U2UwNXBsNHhWa0RuSGdhczJWS3oyd0drYVA1SjZvMnJheXBNTCtPRkFzKy9G?=
- =?utf-8?B?U1QvZUdZTThEb2Q0Z1kyQ1BHczJxRXpudHZ1QWhjdHNuZVRNK0RNY01wRDNs?=
- =?utf-8?B?d0lwdDNnRkg5TWJXbUgrenNJYUt0a0xaZ21IT3UyT2gyUmVScjVJNFdpY0cw?=
- =?utf-8?B?aHFQZHdSdXVGK2VZUDArdlNjb2pnVHN5OVNmVlFPTlVyd2o0NTV5NDZ5U1NH?=
- =?utf-8?B?MHpTSE54MUFLL1JxUk8zQnJic0FSNGNYSTJWRnpxSVdzU2xTQ3lGWE05c21x?=
- =?utf-8?B?VXJvQVFvZmJXdFFGTUZheVhxWjRtMlF1NTBmWUh6QzZUOTlxSlduaUM4emFH?=
- =?utf-8?B?Y2NvOCtuaFJTUEpxWitMS25sVy8wMTRlMkdFM21uZCtFQnFyVGQyQ0lmSWxp?=
- =?utf-8?B?SXk4dllqWm9xcXZpNE9RZkhTZFBJWHFWN1pYVVE1bzRKdXE4TkFJVjhuTnhp?=
- =?utf-8?B?RWFFTkFkZFIyYXJkcVZNYWo3SDcrdGpBVVpCZ1Fnd240a1g0M2tJeTNXaDFO?=
- =?utf-8?B?Z2tzbERLdDVQVFBPZUJJbW8xRjF6K1dUTzhEV0wybW01ekdWem9QL0FXWG1u?=
- =?utf-8?B?cVc3RjloajNiNHJZakF6SGhLcGhKNmcrdkxrcERJeWR1dmtoS2RtbTlndXFM?=
- =?utf-8?B?Qm5TQjZUeWxOYWpMSi9ZN3IyTzZmQ21pVkJSc2U3NGJCMDdsMG1qWEpTZ1pC?=
- =?utf-8?B?b0gzR09GOVR3amRvaXZMRjZzK3NnUFlURXBVck53SWp5RUxyR05ScmVoeDdr?=
- =?utf-8?B?dDBXWndFcVZKSDZTMUUvTnhrblhBVEplT0FQUWE4bExiSzQzSUZiWWtKQ240?=
- =?utf-8?B?LzhxMVBvZlcrTDB5ZHVZM3EvUWdhRkdPK1BHdU95QjVWQ3RtYzdGdjNueElG?=
- =?utf-8?B?b3BHQUdZVmE2RkEwWlAyMTZsSTVkZU51NUVtWVcyMUhmaVhNZStNaCtiSnIx?=
- =?utf-8?B?VXhJdGRKMjhQTVlnZ2UvZllSMHJqZk5IaW9oTDdrbjZaQ1ZvWmV0WmVKOWlR?=
- =?utf-8?B?dDJYOGFRNU9YUG1Wd1AzUDF5eVhaeXFXQWwzdHkwYmYvSEtTY1Y5OEg4cGlq?=
- =?utf-8?B?L0tibmQ2WjFzbWx3ODB5NkpQY1k4aFRaQnVJYUZrWk43SXJueFR5NXRyZktV?=
- =?utf-8?B?NGdNbi9vM3ZLelFSZ1ZjaU1SeVFXejVmc3dCdEx0T3draVcwM3d0L0pMSW5n?=
- =?utf-8?Q?2WEd49SjoZn7+i8/kKCAzzN4a?=
+	=?utf-8?B?Y0Jac21tZW9JbW5wK1pwek9WSjNJY2xRWUg5WEY4b3NIRmRuSHdvUWl4WndJ?=
+ =?utf-8?B?elFnemY3TTFSbWt0VVZ6NVFmQ0t2aitrT3drdEcxR2F1ODhvWE1YUW4wamwx?=
+ =?utf-8?B?eUdyR1ZjVnJaQ25VV3BvTlNzTkNNQVpmdTlnOGlhN0pzYnlweDRPdElCTzlj?=
+ =?utf-8?B?R2xvNms3NERXYkY0ejB6elpmTDdDL2FGWTNscjRpemo3cVk4cGRCenM4Z2Z1?=
+ =?utf-8?B?WWVLbkNkM1JoQkJ2WS9HQVhxS0R2Mi9YUDhRckd4eEF5ZWx1RnZERjBxaGdh?=
+ =?utf-8?B?dUJXTi9zcDF3Q2loMzZvRmhBV0dta1BTc1dVcnRVeTlJNEdQdzdzanpjOVhW?=
+ =?utf-8?B?Tmt2MDdKWmdBWnBUTEl0UHArNWpsRFdqcllxdVUyWVJ4R0FFUGZrYnJlY2dT?=
+ =?utf-8?B?VUtpdVpVVk9rM0V0ekJKNk84bmJxRHNURjlFRDBGWTY2cDNnRFlHeHhXVEhO?=
+ =?utf-8?B?eGhzc000SndpbG12L3M4cXEybmZJaE1pYWlRVFo0akVCR0pNZ3FLOW5Xdllw?=
+ =?utf-8?B?T3pCTDFqMlBNOEJFVHBEdGZuUFplaUFtOFBycTR4RjRtN0ZTbk1iV0gwemI5?=
+ =?utf-8?B?cC9UQnZrbGZXbWx3NU1EOEpXNHEzWENPSVU3ZFFTajBKV200MmpSdHRMVU1I?=
+ =?utf-8?B?aEY0aG53QzZkMkpLaWtPYTBWS1U4bjJhOE10dzhiRkZML3JuWjg4bmZ2Ym1Q?=
+ =?utf-8?B?RXZSZTJZTkdpWThUR1pLSEphRU81QTMvYjNpamRlQjhPVFNlQ09OM1JZclU4?=
+ =?utf-8?B?dWFBWm1QK0VEeXhoOVhRZCt2VUtjRnlsUXltUnhuekJCSWpZZUQwZFNVQjRX?=
+ =?utf-8?B?SEFWRDY0b2d5a1l1U0FMVlVkYlZEUkpGK0xJVlI2WFltU1liYzBNdjYzTG1r?=
+ =?utf-8?B?TnFSVURBalZJV0lUQlUxNHhURkpuQnA4Uk1PUkZQbmNDKzErNW5QK29DalUy?=
+ =?utf-8?B?T25yN2FYZWdlWXlVVmtFb1A0b3NQcklOT2dwYTIwa3Q1TzNTOXBqekxLTUlr?=
+ =?utf-8?B?azBZdm04MDFCV0hzeEJPWnpiNzh6TXVxSHBLRExELzFTNmNWSlJseVZBbFNZ?=
+ =?utf-8?B?Ly9KK3Y5T2JLbm1nM0xuMFNZUW9ZWm5QNmF1b016UDVUWXd6Qm5nTkFFYklm?=
+ =?utf-8?B?akEzNFdSakw2bk8wMmZTK0h5clFBUDgxRmhnSEF2Rk8yQnU3ZXkxWGZRSjds?=
+ =?utf-8?B?UmJ1OUE5WWkxbStQTTFrV000WE9RbDBNbS94akp6czVvZFYrc0ZQOXhTbVJW?=
+ =?utf-8?B?YTBESmJTSDFNS0ZvdS9vNUp5NVVCZkp6L3Y2STVncmpqbkVjdVd4b3VUQmdx?=
+ =?utf-8?B?bytJYVhPQ1R3cXBjVlYyRFNnL2FIbk9nMlJJejhaY3F3OU9UU0JPM0pTWHV4?=
+ =?utf-8?B?aGlveEp5YVJiWGVnUyt0c3kzajhTeWNYTlR6cTFuUzdtMmkrZSttQVJwZFNY?=
+ =?utf-8?B?TmtWTTZTZjlrMlBoQWl5L3FjOGR0NHVPbWVaeXhKVHR1alo4SFJ5MXQyUFhn?=
+ =?utf-8?B?MGl4d0UxS09rV0MxcTUydVRqOHpWVlU4SldTVG9iMEVYK0JISlVVbDFhcFRY?=
+ =?utf-8?B?czFjUm1HeXRQUHowNTBETEE3ZW9NK0R2RkNyOVZLQ3RkaGlXRUFPc1hvSXRZ?=
+ =?utf-8?B?Q2lZUlB5L1J5bzl4UWtZY3grRmNQN2tWcjY2aHJnWHY1Ym80dUJ3bkFzQVNj?=
+ =?utf-8?B?RnlJTC9HT1RUMFFlcUExdVFWZTBEMzdKSHRPUnFFVTFZbExKcmZSYWxiYnNh?=
+ =?utf-8?B?a253cFBQeXpmTlNnWFlYeFdSNUdPWGpiT3RCKzNUelVRb0ZKMzdpakIybmtj?=
+ =?utf-8?B?cjJBUmVwbzNpMjlxak5nT0M3THQ0NDdJcHFyRFpKNkRPNlVDR2xwNitnb1lj?=
+ =?utf-8?B?Y09RZ1N6REpxNWVia2tFSUdrVDVZeUpOaTlTZzRJbTJJcE85Q29PZGg4UnNO?=
+ =?utf-8?B?bGUrNGJMLzBDNmxJSTVQMUhGcS84OENMRHF6NFpyVlVQSVQ2ZEQ5akZPWEVP?=
+ =?utf-8?B?dHZvZWVKRnFaOUdxTXU0d0czZlE0dzYrQ25HUHAraVRONmo1VEkraFNpb2U3?=
+ =?utf-8?B?aDFwVkxXbTRlYmVLYW1XWmJQY3hIMlgyaFRpU3VMTzE5RlhtZXk4WURRQWkz?=
+ =?utf-8?Q?0hMIVOI08gzqBwDTstX9p54ps?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65113d73-0a4c-47ca-49f0-08dcea09d609
+X-MS-Exchange-CrossTenant-Network-Message-Id: a58a03ec-8828-41d7-0cd3-08dcea09d92a
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2024 15:31:54.7271
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2024 15:32:00.0664
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ShSsbeseJKCZ+yntuCUGoY1kVabxTWaIshAzKovM4mZ+tfN91p3aUrZPysq9ukvlCnIcE7uTeaiV+KUX5xvrdw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7064
+X-MS-Exchange-CrossTenant-UserPrincipalName: bNuusndbDpAAtiRZGmMBiy3+0/o3zzKz3e2qf/miMXWs4oQGVdxFwPA5OZ71/janMXY8aBw9KRoOsX5l8CPA5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7360
 
-Pass down `fsl_mc_pdata` in helper functions `ddr_in32()` and `ddr_out32()`
-to prepare for adding iMX9 support. The iMX9 has a slightly different
-register layout.
+Move global variables into the struct `fsl_mc_pdata` to handle systems with
+multiple DDR controllers.
 
 No functional change.
 
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
-Change from v1 to v2
-- update commit message.
-- fix a build error.
+- rework commit message.
 ---
- drivers/edac/fsl_ddr_edac.c | 64 ++++++++++++++++++++++++---------------------
- 1 file changed, 34 insertions(+), 30 deletions(-)
+ drivers/edac/fsl_ddr_edac.c | 21 +++++++++------------
+ drivers/edac/fsl_ddr_edac.h |  3 +++
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
-index d148d262d0d4d..9924c6b816648 100644
+index 9924c6b816648..7a9fb1202f1a0 100644
 --- a/drivers/edac/fsl_ddr_edac.c
 +++ b/drivers/edac/fsl_ddr_edac.c
-@@ -35,13 +35,17 @@ static u32 orig_ddr_err_disable;
- static u32 orig_ddr_err_sbe;
- static bool little_endian;
+@@ -31,22 +31,18 @@
  
--static inline u32 ddr_in32(void __iomem *addr)
-+static inline u32 ddr_in32(struct fsl_mc_pdata *pdata, unsigned int off)
+ static int edac_mc_idx;
+ 
+-static u32 orig_ddr_err_disable;
+-static u32 orig_ddr_err_sbe;
+-static bool little_endian;
+-
+ static inline u32 ddr_in32(struct fsl_mc_pdata *pdata, unsigned int off)
  {
-+	void __iomem *addr = pdata->mc_vbase + off;
-+
- 	return little_endian ? ioread32(addr) : ioread32be(addr);
+ 	void __iomem *addr = pdata->mc_vbase + off;
+ 
+-	return little_endian ? ioread32(addr) : ioread32be(addr);
++	return pdata->little_endian ? ioread32(addr) : ioread32be(addr);
  }
  
--static inline void ddr_out32(void __iomem *addr, u32 value)
-+static inline void ddr_out32(struct fsl_mc_pdata *pdata, unsigned int off, u32 value)
+ static inline void ddr_out32(struct fsl_mc_pdata *pdata, unsigned int off, u32 value)
  {
-+	void __iomem *addr = pdata->mc_vbase + off;
-+
- 	if (little_endian)
+ 	void __iomem *addr = pdata->mc_vbase + off;
+ 
+-	if (little_endian)
++	if (pdata->little_endian)
  		iowrite32(value, addr);
  	else
-@@ -60,7 +64,7 @@ static ssize_t fsl_mc_inject_data_hi_show(struct device *dev,
- 	struct mem_ctl_info *mci = to_mci(dev);
- 	struct fsl_mc_pdata *pdata = mci->pvt_info;
- 	return sprintf(data, "0x%08x",
--		       ddr_in32(pdata->mc_vbase + FSL_MC_DATA_ERR_INJECT_HI));
-+		       ddr_in32(pdata, FSL_MC_DATA_ERR_INJECT_HI));
- }
+ 		iowrite32be(value, addr);
+@@ -511,7 +507,7 @@ int fsl_mc_err_probe(struct platform_device *op)
+ 	 * Get the endianness of DDR controller registers.
+ 	 * Default is big endian.
+ 	 */
+-	little_endian = of_property_read_bool(op->dev.of_node, "little-endian");
++	pdata->little_endian = of_property_read_bool(op->dev.of_node, "little-endian");
  
- static ssize_t fsl_mc_inject_data_lo_show(struct device *dev,
-@@ -70,7 +74,7 @@ static ssize_t fsl_mc_inject_data_lo_show(struct device *dev,
- 	struct mem_ctl_info *mci = to_mci(dev);
- 	struct fsl_mc_pdata *pdata = mci->pvt_info;
- 	return sprintf(data, "0x%08x",
--		       ddr_in32(pdata->mc_vbase + FSL_MC_DATA_ERR_INJECT_LO));
-+		       ddr_in32(pdata, FSL_MC_DATA_ERR_INJECT_LO));
- }
- 
- static ssize_t fsl_mc_inject_ctrl_show(struct device *dev,
-@@ -80,7 +84,7 @@ static ssize_t fsl_mc_inject_ctrl_show(struct device *dev,
- 	struct mem_ctl_info *mci = to_mci(dev);
- 	struct fsl_mc_pdata *pdata = mci->pvt_info;
- 	return sprintf(data, "0x%08x",
--		       ddr_in32(pdata->mc_vbase + FSL_MC_ECC_ERR_INJECT));
-+		       ddr_in32(pdata, FSL_MC_ECC_ERR_INJECT));
- }
- 
- static ssize_t fsl_mc_inject_data_hi_store(struct device *dev,
-@@ -97,7 +101,7 @@ static ssize_t fsl_mc_inject_data_hi_store(struct device *dev,
- 		if (rc)
- 			return rc;
- 
--		ddr_out32(pdata->mc_vbase + FSL_MC_DATA_ERR_INJECT_HI, val);
-+		ddr_out32(pdata, FSL_MC_DATA_ERR_INJECT_HI, val);
- 		return count;
- 	}
- 	return 0;
-@@ -117,7 +121,7 @@ static ssize_t fsl_mc_inject_data_lo_store(struct device *dev,
- 		if (rc)
- 			return rc;
- 
--		ddr_out32(pdata->mc_vbase + FSL_MC_DATA_ERR_INJECT_LO, val);
-+		ddr_out32(pdata, FSL_MC_DATA_ERR_INJECT_LO, val);
- 		return count;
- 	}
- 	return 0;
-@@ -137,7 +141,7 @@ static ssize_t fsl_mc_inject_ctrl_store(struct device *dev,
- 		if (rc)
- 			return rc;
- 
--		ddr_out32(pdata->mc_vbase + FSL_MC_ECC_ERR_INJECT, val);
-+		ddr_out32(pdata, FSL_MC_ECC_ERR_INJECT, val);
- 		return count;
- 	}
- 	return 0;
-@@ -286,7 +290,7 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
- 	int bad_data_bit;
- 	int bad_ecc_bit;
- 
--	err_detect = ddr_in32(pdata->mc_vbase + FSL_MC_ERR_DETECT);
-+	err_detect = ddr_in32(pdata, FSL_MC_ERR_DETECT);
- 	if (!err_detect)
- 		return;
- 
-@@ -295,14 +299,14 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
- 
- 	/* no more processing if not ECC bit errors */
- 	if (!(err_detect & (DDR_EDE_SBE | DDR_EDE_MBE))) {
--		ddr_out32(pdata->mc_vbase + FSL_MC_ERR_DETECT, err_detect);
-+		ddr_out32(pdata, FSL_MC_ERR_DETECT, err_detect);
- 		return;
- 	}
- 
--	syndrome = ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_ECC);
-+	syndrome = ddr_in32(pdata, FSL_MC_CAPTURE_ECC);
- 
- 	/* Mask off appropriate bits of syndrome based on bus width */
--	bus_width = (ddr_in32(pdata->mc_vbase + FSL_MC_DDR_SDRAM_CFG) &
-+	bus_width = (ddr_in32(pdata, FSL_MC_DDR_SDRAM_CFG) &
- 		     DSC_DBW_MASK) ? 32 : 64;
- 	if (bus_width == 64)
- 		syndrome &= 0xff;
-@@ -310,8 +314,8 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
- 		syndrome &= 0xffff;
- 
- 	err_addr = make64(
--		ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_EXT_ADDRESS),
--		ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_ADDRESS));
-+		ddr_in32(pdata, FSL_MC_CAPTURE_EXT_ADDRESS),
-+		ddr_in32(pdata, FSL_MC_CAPTURE_ADDRESS));
- 	pfn = err_addr >> PAGE_SHIFT;
- 
- 	for (row_index = 0; row_index < mci->nr_csrows; row_index++) {
-@@ -320,8 +324,8 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
- 			break;
- 	}
- 
--	cap_high = ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_DATA_HI);
--	cap_low = ddr_in32(pdata->mc_vbase + FSL_MC_CAPTURE_DATA_LO);
-+	cap_high = ddr_in32(pdata, FSL_MC_CAPTURE_DATA_HI);
-+	cap_low = ddr_in32(pdata, FSL_MC_CAPTURE_DATA_LO);
- 
- 	/*
- 	 * Analyze single-bit errors on 64-bit wide buses
-@@ -367,7 +371,7 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
- 				     row_index, 0, -1,
- 				     mci->ctl_name, "");
- 
--	ddr_out32(pdata->mc_vbase + FSL_MC_ERR_DETECT, err_detect);
-+	ddr_out32(pdata, FSL_MC_ERR_DETECT, err_detect);
- }
- 
- static irqreturn_t fsl_mc_isr(int irq, void *dev_id)
-@@ -376,7 +380,7 @@ static irqreturn_t fsl_mc_isr(int irq, void *dev_id)
- 	struct fsl_mc_pdata *pdata = mci->pvt_info;
- 	u32 err_detect;
- 
--	err_detect = ddr_in32(pdata->mc_vbase + FSL_MC_ERR_DETECT);
-+	err_detect = ddr_in32(pdata, FSL_MC_ERR_DETECT);
- 	if (!err_detect)
- 		return IRQ_NONE;
- 
-@@ -396,7 +400,7 @@ static void fsl_ddr_init_csrows(struct mem_ctl_info *mci)
- 	u32 cs_bnds;
- 	int index;
- 
--	sdram_ctl = ddr_in32(pdata->mc_vbase + FSL_MC_DDR_SDRAM_CFG);
-+	sdram_ctl = ddr_in32(pdata, FSL_MC_DDR_SDRAM_CFG);
- 
- 	sdtype = sdram_ctl & DSC_SDTYPE_MASK;
- 	if (sdram_ctl & DSC_RD_EN) {
-@@ -444,7 +448,7 @@ static void fsl_ddr_init_csrows(struct mem_ctl_info *mci)
- 		csrow = mci->csrows[index];
- 		dimm = csrow->channels[0]->dimm;
- 
--		cs_bnds = ddr_in32(pdata->mc_vbase + FSL_MC_CS_BNDS_0 +
-+		cs_bnds = ddr_in32(pdata, FSL_MC_CS_BNDS_0 +
- 				   (index * FSL_MC_CS_BNDS_OFS));
- 
- 		start = (cs_bnds & 0xffff0000) >> 16;
-@@ -531,7 +535,7 @@ int fsl_mc_err_probe(struct platform_device *op)
- 		goto err;
- 	}
- 
--	sdram_ctl = ddr_in32(pdata->mc_vbase + FSL_MC_DDR_SDRAM_CFG);
-+	sdram_ctl = ddr_in32(pdata, FSL_MC_DDR_SDRAM_CFG);
- 	if (!(sdram_ctl & DSC_ECC_EN)) {
- 		/* no ECC */
- 		pr_warn("%s: No ECC DIMMs discovered\n", __func__);
-@@ -558,11 +562,11 @@ int fsl_mc_err_probe(struct platform_device *op)
+ 	res = of_address_to_resource(op->dev.of_node, 0, &r);
+ 	if (res) {
+@@ -562,7 +558,7 @@ int fsl_mc_err_probe(struct platform_device *op)
  	fsl_ddr_init_csrows(mci);
  
  	/* store the original error disable bits */
--	orig_ddr_err_disable = ddr_in32(pdata->mc_vbase + FSL_MC_ERR_DISABLE);
--	ddr_out32(pdata->mc_vbase + FSL_MC_ERR_DISABLE, 0);
-+	orig_ddr_err_disable = ddr_in32(pdata, FSL_MC_ERR_DISABLE);
-+	ddr_out32(pdata, FSL_MC_ERR_DISABLE, 0);
+-	orig_ddr_err_disable = ddr_in32(pdata, FSL_MC_ERR_DISABLE);
++	pdata->orig_ddr_err_disable = ddr_in32(pdata, FSL_MC_ERR_DISABLE);
+ 	ddr_out32(pdata, FSL_MC_ERR_DISABLE, 0);
  
  	/* clear all error bits */
--	ddr_out32(pdata->mc_vbase + FSL_MC_ERR_DETECT, ~0);
-+	ddr_out32(pdata, FSL_MC_ERR_DETECT, ~0);
- 
- 	res = edac_mc_add_mc_with_groups(mci, fsl_ddr_dev_groups);
- 	if (res) {
-@@ -571,15 +575,15 @@ int fsl_mc_err_probe(struct platform_device *op)
- 	}
- 
- 	if (edac_op_state == EDAC_OPSTATE_INT) {
--		ddr_out32(pdata->mc_vbase + FSL_MC_ERR_INT_EN,
-+		ddr_out32(pdata, FSL_MC_ERR_INT_EN,
+@@ -579,8 +575,8 @@ int fsl_mc_err_probe(struct platform_device *op)
  			  DDR_EIE_MBEE | DDR_EIE_SBEE);
  
  		/* store the original error management threshold */
--		orig_ddr_err_sbe = ddr_in32(pdata->mc_vbase +
-+		orig_ddr_err_sbe = ddr_in32(pdata,
- 					    FSL_MC_ERR_SBE) & 0xff0000;
+-		orig_ddr_err_sbe = ddr_in32(pdata,
+-					    FSL_MC_ERR_SBE) & 0xff0000;
++		pdata->orig_ddr_err_sbe = ddr_in32(pdata,
++						   FSL_MC_ERR_SBE) & 0xff0000;
  
  		/* set threshold to 1 error per interrupt */
--		ddr_out32(pdata->mc_vbase + FSL_MC_ERR_SBE, 0x10000);
-+		ddr_out32(pdata, FSL_MC_ERR_SBE, 0x10000);
- 
- 		/* register interrupts */
- 		pdata->irq = platform_get_irq(op, 0);
-@@ -620,12 +624,12 @@ void fsl_mc_err_remove(struct platform_device *op)
- 	edac_dbg(0, "\n");
- 
- 	if (edac_op_state == EDAC_OPSTATE_INT) {
--		ddr_out32(pdata->mc_vbase + FSL_MC_ERR_INT_EN, 0);
-+		ddr_out32(pdata, FSL_MC_ERR_INT_EN, 0);
+ 		ddr_out32(pdata, FSL_MC_ERR_SBE, 0x10000);
+@@ -628,8 +624,9 @@ void fsl_mc_err_remove(struct platform_device *op)
  	}
  
--	ddr_out32(pdata->mc_vbase + FSL_MC_ERR_DISABLE,
-+	ddr_out32(pdata, FSL_MC_ERR_DISABLE,
- 		  orig_ddr_err_disable);
--	ddr_out32(pdata->mc_vbase + FSL_MC_ERR_SBE, orig_ddr_err_sbe);
-+	ddr_out32(pdata, FSL_MC_ERR_SBE, orig_ddr_err_sbe);
+ 	ddr_out32(pdata, FSL_MC_ERR_DISABLE,
+-		  orig_ddr_err_disable);
+-	ddr_out32(pdata, FSL_MC_ERR_SBE, orig_ddr_err_sbe);
++		  pdata->orig_ddr_err_disable);
++	ddr_out32(pdata, FSL_MC_ERR_SBE, pdata->orig_ddr_err_sbe);
++
  
  	edac_mc_del_mc(&op->dev);
  	edac_mc_free(mci);
+diff --git a/drivers/edac/fsl_ddr_edac.h b/drivers/edac/fsl_ddr_edac.h
+index c0994a2a003c2..de66f9822fba1 100644
+--- a/drivers/edac/fsl_ddr_edac.h
++++ b/drivers/edac/fsl_ddr_edac.h
+@@ -70,6 +70,9 @@ struct fsl_mc_pdata {
+ 	int edac_idx;
+ 	void __iomem *mc_vbase;
+ 	int irq;
++	u32 orig_ddr_err_disable;
++	u32 orig_ddr_err_sbe;
++	bool little_endian;
+ };
+ int fsl_mc_err_probe(struct platform_device *op);
+ void fsl_mc_err_remove(struct platform_device *op);
 
 -- 
 2.34.1
