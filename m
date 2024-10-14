@@ -1,107 +1,129 @@
-Return-Path: <linux-edac+bounces-2036-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2039-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D34999C69D
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 12:01:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5429799C9A9
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 14:04:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6BC21F229A1
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 10:01:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19C5A289013
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 12:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B767158870;
-	Mon, 14 Oct 2024 10:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a6GzxhkQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D029E19F418;
+	Mon, 14 Oct 2024 12:04:41 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1573CA48;
-	Mon, 14 Oct 2024 10:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1F9E158853;
+	Mon, 14 Oct 2024 12:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728900069; cv=none; b=CcfcWWfPSeQmnnbPuxlCIpsouF4F8vaL5laap547+4G06c2NDmhKpDHmHGjA8XHKwF8bheS2FSoBBvpYrbS4tSFBwksx7eggG2+1jWe9+L0erHnxGW4lsXUOrUlXA+qdX9BwNoAGPLbKEX/oW9sXHejxUnBUVJ9fIyUSKJXO9ps=
+	t=1728907481; cv=none; b=DTbGw4tIwCooXNU7YLykb3986JPPeE9QqnDhaqFlIU6nT9hPagnVfRsZScVNk5BXRhzjPYcCD6Afg+c1ZCAPnBARVjm12Thq5KHRseiq1FcOhJyT2DWsjZEnuFrK0yM/95TzY34/iLJLgiOVvEa1uykejRooEr7xsSCnWup7Wg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728900069; c=relaxed/simple;
-	bh=UNS2MVwFWUAjxnME6SOqf6B7sXg8vJ2mbNhPcUcqDDQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gwPJF78Ol1cfoPNrg/Z/aCe8VNLzCAkUZ0ibALNWyOut4/pCXWZpqX1BqdhhyvSi5c+8oMZBeP1Zd42+SShgo17OAwNhw3IpHudUZn9lp94ZaHZcUmZpa88+T/IAE3maKzYAtRfmew/5pFbyErd71UihjvyMaS+wXU6kcOdFzu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a6GzxhkQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9843EC4CED1;
-	Mon, 14 Oct 2024 10:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728900068;
-	bh=UNS2MVwFWUAjxnME6SOqf6B7sXg8vJ2mbNhPcUcqDDQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=a6GzxhkQ4eautPtzLeyU/2aqESv/18Ee0gObqeR5iPOIjpU9OBuR+5FyLX/s2bBhI
-	 HwS01+WoWVIK6HT5ZnDbqBLiYASNA+JuQYbxZxDsCjLtgMXnJlyOxmeO5zuSQaDSqw
-	 9jOBAzZGMKiGNJPjw08kmkh5xOpx7pl7mYdbIfQ30Y52YfrjsqD/963RAPjpqFlPxV
-	 KHl4iSQeP7ge8d+zGsa8v0Tn4PLh9u2lHJ/Apsjkg9jn90QtM/OJnx3KqPMUtpWJlm
-	 Qn2ddGaVoCFE54mLxBnyTSgqFtt8EjMa4ze1KJuKKCZzgcLFXlOS9nSRr4i1e7PQOr
-	 HDJSJ1F48Obew==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539e1543ab8so3679261e87.2;
-        Mon, 14 Oct 2024 03:01:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVbpwTcZOWYrP8fnWcPLjSWQVtyiNB8Tz7wInztT9Tn88irFhhSu4Vn5b7STuyk11+fk/9JyjGW0Fyj@vger.kernel.org, AJvYcCW3ROYDzOCjeToxf//49kSNmU2RsyepSZl6dIKa1lQZvF4vLddUpULqKaFKIvrvuxV+Wu6Kgzuapni9wqhu@vger.kernel.org, AJvYcCWzmU1nVG/lmn6HUEo/YdQePBulXOeKzjc08q+SVo/Y9BhXVSBALNtbfEZDPnQa+ZMhPrcBVwBrR+1CnA==@vger.kernel.org, AJvYcCXsD2RK3rgBIRzkJOC+7B0GQKTMdpuy+EdHI4DuBGghSUiSjjp/s1KgCLwRr1xbqVQltYxgA0SqzfSW@vger.kernel.org, AJvYcCXyqmYbGc1Iq+SfgwRk6UeUDRX6zGWGojitfaG/tPOTJpEjs//JbJuuPfL3wztrblfREveWh5CF+QUO@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjQpvmDrbhb/a2sJZ3izP6MmPoMwU5QLZMQX4XAJdwSulCQE8f
-	rOEbA+6APkcpEAQmdjxw7009YRYq+7GR3EXxUN5MDKsWMgZkWP4JTq2T3vK8uIisI3Y/M/AqBJU
-	5oPDY+/yf0x4iklyQJJ7bTNSEXsc=
-X-Google-Smtp-Source: AGHT+IHQHJpa3JQRRAOQ2EbKcF3gvrh9bS5qYKnSRZDxhtEZKuUYMLy6xhfIzk3zgOavhyTTW1zVFEtyd3KDITjvTqI=
-X-Received: by 2002:a05:6512:3b27:b0:539:8fbd:5218 with SMTP id
- 2adb3069b0e04-539e5728316mr3615537e87.56.1728900066993; Mon, 14 Oct 2024
- 03:01:06 -0700 (PDT)
+	s=arc-20240116; t=1728907481; c=relaxed/simple;
+	bh=fg3fTJ5VYz/p+QTt7x8s+mXKsYLH63g3EFVGYZqcGlE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3q10rUXETgqY5GREnulYqZwsMLdURqZ6yIgoSyo5SiOEl8De0bRS22KKqIR0ilXsuMIteNckX/RPUyjZVz8y42EF08oOIrzSb7SrIUfaC8M/78pAtCE71ri4iQt5j+Tlk5GWug6qBNO6SkyAAMgiC+PMEE1ajmX1fKlG2FZ7/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1t0GMH-0005eb-00; Mon, 14 Oct 2024 10:23:17 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 4F922C0161; Mon, 14 Oct 2024 10:23:09 +0200 (CEST)
+Date: Mon, 14 Oct 2024 10:23:09 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+	linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] MAINTAINERS: Retire Ralf Baechle
+Message-ID: <ZwzU7c9qlxxKckGI@alpha.franken.de>
+References: <alpine.DEB.2.21.2410131952550.40463@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2410132006220.40463@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1725429659.git.mchehab+huawei@kernel.org> <20241011115707.GCZwkSk5ybx-s9AqMM@fat_crate.local>
-In-Reply-To: <20241011115707.GCZwkSk5ybx-s9AqMM@fat_crate.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 14 Oct 2024 12:00:56 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGQSgeshrns7-EwTkG_c1dHgaxaVxO_FxWumdFx6m4vRQ@mail.gmail.com>
-Message-ID: <CAMj1kXGQSgeshrns7-EwTkG_c1dHgaxaVxO_FxWumdFx6m4vRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] Fix issues with ARM Processor CPER records
-To: Borislav Petkov <bp@alien8.de>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, James Morse <james.morse@arm.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Tony Luck <tony.luck@intel.com>, linux-acpi@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-edac@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2410132006220.40463@angie.orcam.me.uk>
 
-On Fri, 11 Oct 2024 at 13:57, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, Sep 04, 2024 at 08:07:13AM +0200, Mauro Carvalho Chehab wrote:
-> > Jason Tian (1):
-> >   RAS: Report all ARM processor CPER information to userspace
-> >
-> > Mauro Carvalho Chehab (4):
-> >   efi/cper: Adjust infopfx size to accept an extra space
-> >   efi/cper: Add a new helper function to print bitmasks
-> >   efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
-> >   docs: efi: add CPER functions to driver-api
-> >
-> >  .../driver-api/firmware/efi/index.rst         | 11 +++-
-> >  drivers/acpi/apei/ghes.c                      | 27 ++++----
-> >  drivers/firmware/efi/cper-arm.c               | 52 ++++++++--------
-> >  drivers/firmware/efi/cper.c                   | 62 ++++++++++++++++++-
-> >  drivers/ras/ras.c                             | 41 +++++++++++-
-> >  include/linux/cper.h                          | 12 ++--
-> >  include/linux/ras.h                           | 16 ++++-
-> >  include/ras/ras_event.h                       | 48 ++++++++++++--
-> >  8 files changed, 210 insertions(+), 59 deletions(-)
->
-> With the issues to patch 1 fixed:
->
-> Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
->
-> I'm presuming this'll go through Ard's tree. Alternatively, I can pick it up
-> too with Ard's ack.
->
+On Sun, Oct 13, 2024 at 08:34:44PM +0100, Maciej W. Rozycki wrote:
+> Ralf Baechle has been inactive for years now and the linux-mips.org site 
+> has gone down.  No replacement contact information is available.  Thomas 
+> has been kind enough to step up as a maintainer for EDAC-CAVIUM OCTEON 
+> and IOC3 ETHERNET DRIVER.
+> 
+> Update MAINTAINERS, CREDITS, and .get_maintainer.ignore accordingly.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> ---
+>  .get_maintainer.ignore |    1 +
+>  CREDITS                |    5 +++++
+>  MAINTAINERS            |   13 +++++--------
+>  3 files changed, 11 insertions(+), 8 deletions(-)
+> 
+> linux-maintainers-ralf.diff
+> Index: linux-macro/.get_maintainer.ignore
+> ===================================================================
+> --- linux-macro.orig/.get_maintainer.ignore
+> +++ linux-macro/.get_maintainer.ignore
+> @@ -3,3 +3,4 @@ Alan Cox <root@hraefn.swansea.linux.org.
+>  Christoph Hellwig <hch@lst.de>
+>  Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+>  Marc Gonzalez <marc.w.gonzalez@free.fr>
+> +Ralf Baechle <ralf@linux-mips.org>
+> Index: linux-macro/CREDITS
+> ===================================================================
+> --- linux-macro.orig/CREDITS
+> +++ linux-macro/CREDITS
+> @@ -185,6 +185,11 @@ P: 1024/AF7B30C1 CF 97 C2 CC 6D AE A7 FE
+>  D: Linux/MIPS port
+>  D: Linux/68k hacker
+>  D: AX25 maintainer
+> +D: EDAC-CAVIUM OCTEON maintainer
+> +D: IOC3 ETHERNET DRIVER maintainer
+> +D: NETROM NETWORK LAYER maintainer
+> +D: ROSE NETWORK LAYER maintainer
+> +D: TURBOCHANNEL SUBSYSTEM maintainer
+>  S: Hauptstrasse 19
+>  S: 79837 St. Blasien
+>  S: Germany
+> Index: linux-macro/MAINTAINERS
+> ===================================================================
+> --- linux-macro.orig/MAINTAINERS
+> +++ linux-macro/MAINTAINERS
+> @@ -8081,10 +8081,10 @@ S:	Maintained
+>  F:	drivers/edac/highbank*
+>  
+>  EDAC-CAVIUM OCTEON
+> -M:	Ralf Baechle <ralf@linux-mips.org>
+> +M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>  L:	linux-edac@vger.kernel.org
+>  L:	linux-mips@vger.kernel.org
+> -S:	Supported
+> +S:	Maintained
+>  F:	drivers/edac/octeon_edac*
+>  
+>  EDAC-CAVIUM THUNDERX
+> @@ -11902,7 +11902,7 @@ F:	Documentation/devicetree/bindings/iio
+>  F:	drivers/iio/gyro/mpu3050*
+>  
+>  IOC3 ETHERNET DRIVER
+> -M:	Ralf Baechle <ralf@linux-mips.org>
+> +M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>  L:	linux-mips@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/net/ethernet/sgi/ioc3-eth.c
+> @@ -16043,9 +16043,8 @@ F:	net/netfilter/
+>  F:	tools/testing/selftests/net/netfilter/
 
-Either works for me.
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Mauro: please put all maintainers on cc of the code you are touching - thanks.
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
