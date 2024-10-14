@@ -1,45 +1,45 @@
-Return-Path: <linux-edac+bounces-2048-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2049-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B9ED99D2FE
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 17:32:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCA0799D3B4
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 17:43:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0EEE1F24F01
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 15:32:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5FAF1C240DF
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 15:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBCE21BFE0D;
-	Mon, 14 Oct 2024 15:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C311B85D0;
+	Mon, 14 Oct 2024 15:41:05 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EC11D0490;
-	Mon, 14 Oct 2024 15:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999E51ADFF9;
+	Mon, 14 Oct 2024 15:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728919748; cv=none; b=EfWM/OTl4Yu4pHfwTYMcevkJ1kqy+VxIlOki2vX0UNoPkKscWXMqaI/wwDc5wRopK5URaDzbl1Cg63/TT7LFXvQnLK1fimK0/9AsZXLpA4B3RZKjvonTUOj9S/qXG8uSE8VN1gcNS/bD92VcUwh4mxkszxk29sdJ+Ae/MiEpse8=
+	t=1728920465; cv=none; b=XKHEYnx3WjXztXBuHTq96qA2mHKWbONfCuwCsKZKvASnJ21AY2iYPjggXmoYFFqhmbYKxQ2yM7kV1FnynSaFWxnNKF1FMLgNQtGppHixFpL2juA9hzhMOpBlj58gO1ydvMrOaWOGsJjhRJoYnTpM0NSxL74zxv/YsizzmIM40R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728919748; c=relaxed/simple;
-	bh=UGy2SwRvnSWU52bBfkJxu3GqglzWihxSmimXlWUaqnY=;
+	s=arc-20240116; t=1728920465; c=relaxed/simple;
+	bh=kWirdfy8Sq4ERX3554ZRHJH8UMECSWQ9Y6eB3rtp2yE=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oAeCiTQ2PtvYbyZeMnNHiqhrp/u23xP5OEdV2MQHyx9dDbhAMQHFuUo3QbKfnPsZmNGGHS9KU1zVLyE24TIV0wEQKZdSK3W1Qdi0JBx4cDC5SYz4ozz0j15JGG4coZazEqOvjH19JfYr1FtBIqo8JY7djw6n5LSD7ZSlnyfSih4=
+	 MIME-Version:Content-Type; b=Qm0w6sIdvuCPzj3s9s6lE5XwmVQ/vWDYug78r2e0E/6nqXJPEpEfcGeZ3EmSJFunF+c8GVFcLwhKIVuil8Tj3wmIPBI6lYNpklo6kbqrh5YU8xYBQFLNmheuOEju+xwW7FpzopgwSu7s+kjw7zhs7lrY0/iLXaZY4NWUMrd8h1w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XS1Lh1Zr4z6G9YN;
-	Mon, 14 Oct 2024 23:27:24 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XS1cX1gncz6GC8t;
+	Mon, 14 Oct 2024 23:39:24 +0800 (CST)
 Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1145A140A77;
-	Mon, 14 Oct 2024 23:28:59 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 1A5CF1401F4;
+	Mon, 14 Oct 2024 23:40:59 +0800 (CST)
 Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
  (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 14 Oct
- 2024 17:28:57 +0200
-Date: Mon, 14 Oct 2024 16:28:56 +0100
+ 2024 17:40:57 +0200
+Date: Mon, 14 Oct 2024 16:40:55 +0100
 From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To: <shiju.jose@huawei.com>
 CC: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
@@ -58,12 +58,12 @@ CC: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
 	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
 	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [PATCH v13 10/18] cxl/memfeature: Add CXL memory device patrol
- scrub control feature
-Message-ID: <20241014162856.00007752@Huawei.com>
-In-Reply-To: <20241009124120.1124-11-shiju.jose@huawei.com>
+Subject: Re: [PATCH v13 11/18] cxl/memfeature: Add CXL memory device ECS
+ control feature
+Message-ID: <20241014164055.00002019@Huawei.com>
+In-Reply-To: <20241009124120.1124-12-shiju.jose@huawei.com>
 References: <20241009124120.1124-1-shiju.jose@huawei.com>
-	<20241009124120.1124-11-shiju.jose@huawei.com>
+	<20241009124120.1124-12-shiju.jose@huawei.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
@@ -74,262 +74,194 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
  frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, 9 Oct 2024 13:41:11 +0100
+On Wed, 9 Oct 2024 13:41:12 +0100
 <shiju.jose@huawei.com> wrote:
 
 > From: Shiju Jose <shiju.jose@huawei.com>
 > 
-> CXL spec 3.1 section 8.2.9.9.11.1 describes the device patrol scrub control
-> feature. The device patrol scrub proactively locates and makes corrections
-> to errors in regular cycle.
-> 
-> Allow specifying the number of hours within which the patrol scrub must be
-> completed, subject to minimum and maximum limits reported by the device.
-> Also allow disabling scrub allowing trade-off error rates against
-> performance.
-> 
-> Add support for CXL memory device based patrol scrub control.
-> Register with EDAC device driver , which gets the scrub attr descriptors
-> from EDAC scrub and exposes sysfs scrub control attributes to the
-> userspace. For example CXL device based scrub control for the CXL mem0
-> device is exposed in /sys/bus/edac/devices/cxl_mem0/scrubX/
-> 
-> Also add support for region based CXL memory patrol scrub control.
-> CXL memory region may be interleaved across one or more CXL memory devices.
-> For example region based scrub control for CXL region1 is exposed in
-> /sys/bus/edac/devices/cxl_region1/scrubX/
-> 
-> Open Questions:
-> Q1: CXL 3.1 spec defined patrol scrub control feature at CXL memory devices
-> with supporting set scrub cycle and enable/disable scrub. but not based on
-> HPA range. Thus presently scrub control for a region is implemented based
-> on all associated CXL memory devices.
-
-That is exactly what I'd expect.
-
-> What is the exact use case for the CXL region based scrub control?
-> How the HPA range, which Dan asked for region based scrubbing is used?
-> Does spec change is required for patrol scrub control feature with support
-> for setting the HPA range?
-
-Can't discuss future spec here :(  + we should support current specification
-even if it is changing (can't say if it is!)
-
-This came up at LPC briefly. The HPA range is only useful as a userspace
-short cut to find the right control.  So not necessary initially for
-the reason you state - we can't control it.
-
-Whilst we may scrub by region, it's just a way to control scrubbing of
-a set of interleaved devices.  So what you have here is fine as it
-stands.
+> CXL spec 3.1 section 8.2.9.9.11.2 describes the DDR5 ECS (Error Check
+> Scrub) control feature.
+> The Error Check Scrub (ECS) is a feature defined in JEDEC DDR5 SDRAM
+> Specification (JESD79-5) and allows the DRAM to internally read, correct
+> single-bit errors, and write back corrected data bits to the DRAM array
+> while providing transparency to error counts.
+I never understood the 'transparency to error counts'.
+Maybe from software point of view 
+'while reporting error counts to the host'.
+Unless anyone else can figure out what that text from the CXL spec
+means? (I'm guessing it is cut and paste from the JEDEC spec)
 
 > 
-> Q2: Both CXL device based and CXL region based scrub control would be
-> enabled at the same time in a system?
-
-Typically no, but we should make the interface do something consistent.
-
-1) Go with highest scrub frequency requested via either path.
-2) Go with latest scrub frequency to be requested.
-
-Given it is a corner case I don't think we care which.
-
-The device based scrub is appropriate for 'pre use' scrub control
-to find out if we have dodgy hardware.
-Region scrub is the logical thing to do once it is in use. In some
-cases the region will include the whole of all devices in an interleave
-set.
-
-So I don't see either of these questions as a blocker on current
-implementation.
-
+> The ECS control allows the requester to change the log entry type, the ECS
+> threshold count provided that the request is within the definition
+> specified in DDR5 mode registers, change mode between codeword mode and
+> row count mode, and reset the ECS counter.
 > 
-> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Register with EDAC device driver, which gets the ECS attr descriptors
+> from the EDAC ECS and expose sysfs ECS control attributes to userspace.
+> For example ECS control for the memory media FRU 0 in CXL mem0 device is
+> in /sys/bus/edac/devices/cxl_mem0/ecs_fruX/
+fru0?
+> 
 > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-A few trivial things inline.
+
+A few little things in line. In general looks good to me.
 
 > ---
->  Documentation/edac/edac-scrub.rst |  74 ++++++
->  drivers/cxl/Kconfig               |  18 ++
->  drivers/cxl/core/Makefile         |   1 +
->  drivers/cxl/core/memfeature.c     | 383 ++++++++++++++++++++++++++++++
->  drivers/cxl/core/region.c         |   6 +
->  drivers/cxl/cxlmem.h              |   7 +
->  drivers/cxl/mem.c                 |   4 +
->  7 files changed, 493 insertions(+)
->  create mode 100644 Documentation/edac/edac-scrub.rst
->  create mode 100644 drivers/cxl/core/memfeature.c
+>  drivers/cxl/core/memfeature.c | 467 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 461 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/edac/edac-scrub.rst b/Documentation/edac/edac-scrub.rst
-> new file mode 100644
-> index 000000000000..243035957e99
-> --- /dev/null
-> +++ b/Documentation/edac/edac-scrub.rst
-> @@ -0,0 +1,74 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===================
-> +EDAC Scrub control
-> +===================
-> +
-> +Copyright (c) 2024 HiSilicon Limited.
-> +
-> +:Author:   Shiju Jose <shiju.jose@huawei.com>
-> +:License:  The GNU Free Documentation License, Version 1.2
-> +          (dual licensed under the GPL v2)
-> +:Original Reviewers:
-> +
-> +- Written for: 6.12
-
-Update to 6.13
-
-> +- Updated for:
-
-> diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> index 99b5c25be079..b717a152d2a5 100644
-> --- a/drivers/cxl/Kconfig
-> +++ b/drivers/cxl/Kconfig
-> @@ -145,4 +145,22 @@ config CXL_REGION_INVALIDATION_TEST
->  	  If unsure, or if this kernel is meant for production environments,
->  	  say N.
->  
-> +config CXL_RAS_FEAT
-> +	tristate "CXL: Memory RAS features"
-> +	depends on CXL_PCI
-> +	depends on CXL_MEM
-> +	depends on EDAC
-> +	help
-> +	  The CXL memory RAS feature control is optional allows host to control
-> +	  the RAS features configurations of CXL Type 3 devices.
-> +
-> +	  Registers with the EDAC device subsystem to expose control attributes
-> +	  of CXL memory device's RAS features to the user.
-> +	  Provides interface functions to support configuring the CXL memory
-> +	  device's RAS features.
-> +
-> +	  Say 'y/n' to enable/disable CXL.mem device'ss RAS features control.
-
-'s or s' but not 'ss
-(singular or plural forms)
-
-> +	  See section 8.2.9.9.11 of CXL 3.1 specification for the detailed
-> +	  information of CXL memory device features.
-> +
->  endif
-
 > diff --git a/drivers/cxl/core/memfeature.c b/drivers/cxl/core/memfeature.c
-> new file mode 100644
-> index 000000000000..84d6e887a4fa
-> --- /dev/null
+> index 84d6e887a4fa..567406566c77 100644
+> --- a/drivers/cxl/core/memfeature.c
 > +++ b/drivers/cxl/core/memfeature.c
-> @@ -0,0 +1,383 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * CXL memory RAS feature driver.
-> + *
-> + * Copyright (c) 2024 HiSilicon Limited.
-> + *
-> + *  - Supports functions to configure RAS features of the
-> + *    CXL memory devices.
-> + *  - Registers with the EDAC device subsystem driver to expose
-> + *    the features sysfs attributes to the user for configuring
-> + *    CXL memory RAS feature.
-> + */
-> +
-> +#define pr_fmt(fmt)	"CXL MEM FEAT: " fmt
-> +
-> +#include <cxlmem.h>
-> +#include <linux/cleanup.h>
-> +#include <linux/limits.h>
-> +#include <cxl.h>
+> @@ -19,7 +19,7 @@
+>  #include <cxl.h>
+>  #include <linux/edac.h>
+>  
+> -#define CXL_DEV_NUM_RAS_FEATURES	1
+> +#define CXL_DEV_NUM_RAS_FEATURES	2
+>  #define CXL_DEV_HOUR_IN_SECS	3600
+>  
+>  #define CXL_SCRUB_NAME_LEN	128
+> @@ -309,6 +309,420 @@ static const struct edac_scrub_ops cxl_ps_scrub_ops = {
+>  	.set_cycle_duration = cxl_patrol_scrub_write_scrub_cycle,
+>  };
+>  
+> +/* CXL DDR5 ECS control definitions */
+> +static const uuid_t cxl_ecs_uuid =
+> +	UUID_INIT(0xe5b13f22, 0x2328, 0x4a14, 0xb8, 0xba, 0xb9, 0x69, 0x1e,     \
 
-Reorder includes to put the cxl ones at the end and others
-in alphabetical order.
+Why the \?
 
-> +#include <linux/edac.h>
->
-> +static int cxl_ps_get_attrs(struct device *dev, void *drv_data,
-> +			    struct cxl_memdev_ps_params *params)
+> +		  0x89, 0x33, 0x86);
+> +
+
+
+> +
+> +#define	CXL_ECS_LOG_ENTRY_TYPE_MASK	GENMASK(1, 0)
+> +#define	CXL_ECS_REALTIME_REPORT_CAP_MASK	BIT(0)
+> +#define	CXL_ECS_THRESHOLD_COUNT_MASK	GENMASK(2, 0)
+> +#define	CXL_ECS_MODE_MASK	BIT(3)
+
+That name is a little generic. Maybe CXL_ECS_COUNT_MODE_MASK ?
+
+> +#define	CXL_ECS_RESET_COUNTER_MASK	BIT(4)
+> +
+> +static const u16 ecs_supp_threshold[] = { 0, 0, 0, 256, 1024, 4096 };
+> +
+> +enum {
+> +	ECS_LOG_ENTRY_TYPE_DRAM = 0x0,
+> +	ECS_LOG_ENTRY_TYPE_MEM_MEDIA_FRU = 0x1,
+> +};
+> +
+> +enum {
+> +	ECS_THRESHOLD_256 = 3,
+> +	ECS_THRESHOLD_1024 = 4,
+> +	ECS_THRESHOLD_4096 = 5,
+> +};
+Perhaps move this above the ecs_supp_threshold array and use
+static const ecs_supp_threshold[] = {
+	[ECS_THRESHOLD_256] = 256,
+	[ECS_THRESHOLD_1024] = 1024,
+	[ECS_THRESHOLD_4096] = 4096,
+};
+which will fill the zeros in for you. You don't care about them anyway
+as they are undefined values.
+
+> +
+> +enum cxl_ecs_mode {
+> +	ECS_MODE_COUNTS_ROWS = 0,
+> +	ECS_MODE_COUNTS_CODEWORDS = 1,
+> +};
+
+> +
+> +static int cxl_mem_ecs_set_attrs(struct device *dev, void *drv_data, int fru_id,
+> +				 struct cxl_ecs_params *params, u8 param_type)
 > +{
-> +	struct cxl_patrol_scrub_context *cxl_ps_ctx = drv_data;
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_dev_state *cxlds;
-> +	struct cxl_memdev_state *mds;
-> +	u16 min_scrub_cycle = 0;
-> +	int i, ret;
+> +	struct cxl_ecs_context *cxl_ecs_ctx = drv_data;
+> +	struct cxl_memdev *cxlmd = cxl_ecs_ctx->cxlmd;
+> +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> +	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
+> +	struct cxl_ecs_fru_rd_attrs *fru_rd_attrs;
+> +	struct cxl_ecs_fru_wr_attrs *fru_wr_attrs;
+> +	size_t rd_data_size, wr_data_size;
+> +	u16 num_media_frus, count;
+> +	size_t data_size;
+> +	int ret;
 > +
-> +	if (cxl_ps_ctx->cxlr) {
-> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-> +		struct cxl_region_params *p = &cxlr->params;
+> +	num_media_frus = cxl_ecs_ctx->num_media_frus;
+> +	rd_data_size = cxl_ecs_ctx->get_feat_size;
+> +	wr_data_size = cxl_ecs_ctx->set_feat_size;
+> +	struct cxl_ecs_rd_attrs *rd_attrs __free(kfree) =
+> +				kmalloc(rd_data_size, GFP_KERNEL);
+> +	if (!rd_attrs)
+> +		return -ENOMEM;
 > +
-> +		for (i = p->interleave_ways - 1; i >= 0; i--) {
-> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +
-> +			cxlmd = cxled_to_memdev(cxled);
-> +			cxlds = cxlmd->cxlds;
-> +			mds = to_cxl_memdev_state(cxlds);
-> +			ret = cxl_mem_ps_get_attrs(mds, params);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (params->min_scrub_cycle_hrs > min_scrub_cycle)
-> +				min_scrub_cycle = params->min_scrub_cycle_hrs;
-> +		}
-> +		params->min_scrub_cycle_hrs = min_scrub_cycle;
-> +		return 0;
-> +	}
-> +	cxlmd = cxl_ps_ctx->cxlmd;
-> +	cxlds = cxlmd->cxlds;
-> +	mds = to_cxl_memdev_state(cxlds);
-> +
-See below - this is the similar example I refer to.
+> +	data_size = cxl_get_feature(mds, cxl_ecs_uuid,
+> +				    CXL_GET_FEAT_SEL_CURRENT_VALUE,
+> +				    rd_attrs, rd_data_size);
+> +	if (!data_size)
+> +		return -EIO;
 
-> +	return cxl_mem_ps_get_attrs(mds, params);
+blank line here as the next line isn't part of this allocate / check
+errors block.
+
+> +	struct cxl_ecs_wr_attrs *wr_attrs __free(kfree) =
+> +					kmalloc(wr_data_size, GFP_KERNEL);
+> +	if (!wr_attrs)
+> +		return -ENOMEM;
+> +
+> +	/* Fill writable attributes from the current attributes read
+CXL uses 
+	/*
+	 * Fill writable 
+style for multiline comments.
+ 
+> +	 * for all the media FRUs.
+> +	 */
+
+
+
+> +static int cxl_ecs_get_mode_counts_rows(struct device *dev, void *drv_data,
+> +					int fru_id, u32 *val)
+> +{
+> +	struct cxl_ecs_params params;
+> +	int ret;
+> +
+> +	ret = cxl_mem_ecs_get_attrs(dev, drv_data, fru_id, &params);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (params.mode == ECS_MODE_COUNTS_ROWS)
+> +		*val = 1;
+> +	else
+> +		*val = 0;
+> +
+> +	return 0;
 > +}
-
 > +
-> +static int cxl_ps_set_attrs(struct device *dev, void *drv_data,
-> +			    struct cxl_memdev_ps_params *params,
-> +			    enum cxl_scrub_param param_type)
+> +static int cxl_ecs_get_mode_counts_codewords(struct device *dev, void *drv_data,
+> +					     int fru_id, u32 *val)
 > +{
-> +	struct cxl_patrol_scrub_context *cxl_ps_ctx = drv_data;
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_dev_state *cxlds;
-> +	struct cxl_memdev_state *mds;
-> +	int ret, i;
-> +
-> +	if (cxl_ps_ctx->cxlr) {
-> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-> +		struct cxl_region_params *p = &cxlr->params;
-> +
-> +		for (i = p->interleave_ways - 1; i >= 0; i--) {
-> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +
-> +			cxlmd = cxled_to_memdev(cxled);
-> +			cxlds = cxlmd->cxlds;
-> +			mds = to_cxl_memdev_state(cxlds);
-> +			ret = cxl_mem_ps_set_attrs(dev, drv_data, mds,
-> +						   params, param_type);
-> +			if (ret)
-> +				return ret;
-> +		}
+> +	struct cxl_ecs_params params;
+> +	int ret;
 
-Maybe return here?
+This form is pretty common. Maybe worth some macros like
+you have in the edac side of things?
 
-> +	} else {
-> +		cxlmd = cxl_ps_ctx->cxlmd;
-> +		cxlds = cxlmd->cxlds;
-> +		mds = to_cxl_memdev_state(cxlds);
 > +
-> +		return cxl_mem_ps_set_attrs(dev, drv_data, mds, params, param_type);
-
-Then indent of this hunk can drop. Similar to the case above.
-
-> +	}
+> +	ret = cxl_mem_ecs_get_attrs(dev, drv_data, fru_id, &params);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (params.mode == ECS_MODE_COUNTS_CODEWORDS)
+> +		*val = 1;
+> +	else
+> +		*val = 0;
 > +
 > +	return 0;
 > +}
