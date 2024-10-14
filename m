@@ -1,45 +1,45 @@
-Return-Path: <linux-edac+bounces-2044-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2045-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEF9B99CE58
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 16:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6E7799D0A0
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 17:05:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97A211F23CE6
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 14:42:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D1D11F21271
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 15:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73191AB525;
-	Mon, 14 Oct 2024 14:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A77E119E806;
+	Mon, 14 Oct 2024 15:05:30 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378ED20EB;
-	Mon, 14 Oct 2024 14:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F37E1BDC3;
+	Mon, 14 Oct 2024 15:05:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728916967; cv=none; b=oIq9ixxiJkW2ldnbxS66Idv6jNz1YhIceyp9aAcKLIYCczTnwHla7SquC3ssDHQhLL8YFwCZjN+NTln1joaMqnV3neFc6FwL6jqsTPBFtr/ZSY/OzpvNJnuzP67VRx0buvr6dW4f0rAMUIwG/ANUU73epCRz1n1mTe7kB44iXSQ=
+	t=1728918330; cv=none; b=jA2DPyGhJVagNutnVUOpduZxbvIwf65CC+F2SniSmWumjHWhj/tUKqWQKBoHgvdg+3FITpR1Mknl1cUzsiC76jfi3fi9rzHReOz6YYFsxa/jglcRBPmLzfWqOECgfXv1CcjJMLTzrrq1nTZiNTWWIRsQABB4s8CfmEAP903ruPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728916967; c=relaxed/simple;
-	bh=RSNRR2r08+yny9EY39TfsT1UKltcCVUbC34wSkBYbRk=;
+	s=arc-20240116; t=1728918330; c=relaxed/simple;
+	bh=YHZMg+7IqKiBHfICbs4pNan2XPI4Cd1Z6BpmSGsUcWs=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f8oLWiB6zAw/hQgdvigL0xGC7wPtNmWJDvT+IyF9K0o8X6MkaJr3RNDrhkMKagsqISwViesSG0Fd6sCCcuDTPLC5t9gZ9UWWMAgswP2d497/Pxz3lQP3DyAchGGOAERvHR34pGIw1k5z0UFjXA6w6k6iaBiIBDDSSKQakW0JeHo=
+	 MIME-Version:Content-Type; b=bgvdYAcxlxq9OL/wzC0G47L93G4gIhJCBBQw9EEVqZShgrmhgMGbP98WEPILQKU95JJ9qkBH+qnCKvWQKCW6cNntN/Dy/+WJ0GUWbZt3y8X7yzBjsAsZqJawLLYyYj4fpxwOfMcgxJ06TWpQbbAEiR6ihcLPyQmvAYgVbXFKKmw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XS0KG6Nxwz6GC8c;
-	Mon, 14 Oct 2024 22:41:06 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XS0mB6X2qz6L6XG;
+	Mon, 14 Oct 2024 23:00:58 +0800 (CST)
 Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8F831140A77;
-	Mon, 14 Oct 2024 22:42:41 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 323FD1400CA;
+	Mon, 14 Oct 2024 23:05:26 +0800 (CST)
 Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
  (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 14 Oct
- 2024 16:42:40 +0200
-Date: Mon, 14 Oct 2024 15:42:38 +0100
+ 2024 17:05:24 +0200
+Date: Mon, 14 Oct 2024 16:05:23 +0100
 From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To: <shiju.jose@huawei.com>
 CC: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
@@ -58,12 +58,12 @@ CC: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
 	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
 	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [PATCH v13 05/18] cxl: Move mailbox related bits to the same
- context
-Message-ID: <20241014154238.000055a3@Huawei.com>
-In-Reply-To: <20241009124120.1124-6-shiju.jose@huawei.com>
+Subject: Re: [PATCH v13 07/18] cxl: Add Get Supported Features command for
+ kernel usage
+Message-ID: <20241014160523.00007897@Huawei.com>
+In-Reply-To: <20241009124120.1124-8-shiju.jose@huawei.com>
 References: <20241009124120.1124-1-shiju.jose@huawei.com>
-	<20241009124120.1124-6-shiju.jose@huawei.com>
+	<20241009124120.1124-8-shiju.jose@huawei.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
@@ -74,40 +74,31 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
  frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, 9 Oct 2024 13:41:06 +0100
+On Wed, 9 Oct 2024 13:41:08 +0100
 <shiju.jose@huawei.com> wrote:
 
 > From: Dave Jiang <dave.jiang@intel.com>
 > 
-> Create a new 'struct cxl_mailbox' and move all mailbox related bits to
-> it. This allows isolation of all CXL mailbox data in order to export
-> some of the calls to external kernel callers and avoid exporting of CXL
-> driver specific bits such has device states. The allocation of
-> 'struct cxl_mailbox' is also split out with cxl_mailbox_create() so the
-Ira called this out in the v4 posting from Dave.
-Change text to say cxl_mailbox_init()
-
-> mailbox can be created independently.
+> CXL spec r3.1 8.2.9.6.1 Get Supported Features (Opcode 0500h)
+> The command retrieve the list of supported device-specific features
+> (identified by UUID) and general information about each Feature.
 > 
-> Reviewed-by: Fan Ni <fan.ni@samsung.com>
-> Reviewed-by: Alejandro Lucero <alucerop@amd.com>
-> Reviewed-by: Alison Schofield <alison.schofield@intel.com>
-> Link: https://patch.msgid.link/20240724185649.2574627-2-dave.jiang@intel.com
+> The driver will retrieve the feature entries in order to make checks and
+> provide information for the Get Feature and Set Feature command. One of
+> the main piece of information retrieved are the effects a Set Feature
+> command would have for a particular feature.
+> 
+> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 
-That link is to an old version.
-https://lore.kernel.org/linux-cxl/20240905223711.1990186-1-dave.jiang@intel.com/
-Is what you have in the cover letter change log so needs to be that here
-as well.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-I'll review this on Dave's thread rather than here.   Dave, we'll need
-a immutable branch for this one once you think it's ready for queuing up.
+This comes from the fwctl series and that will take a while to settle
+down so we should be fine taking this directly as part of this series.
 
-If we can do that soon that would be good as it's either gating this
-series and is a precursor for the type2 stuff.
-If we are sure only this stuff will make the coming merge window
-(crosses fingers) then we an take it via Borislav's tree
-- perhaps we should discuss this on the sync call tomorrow.
+
+
 
