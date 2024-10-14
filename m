@@ -1,171 +1,200 @@
-Return-Path: <linux-edac+bounces-2064-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2065-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FB0399D648
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 20:17:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FA3B99D693
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 20:33:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A4271C22303
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 18:17:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BDD01F23180
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 18:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1881C9EBF;
-	Mon, 14 Oct 2024 18:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7136719E7ED;
+	Mon, 14 Oct 2024 18:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="MTPMgIde"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BR2REfG6"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2709B1FAA;
-	Mon, 14 Oct 2024 18:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728929845; cv=none; b=Q0dQkZLOosDf+NFWgQgzNCVPA24MtVqeANyQjUX+/EVE/WvoU28VdTsMYeSc3e8Uj2KyLmJY1HV9IPAQ0VbYgcuQS78no7BwjOwx/3sxJBkKqtk5A47YjY0P+7QrbyMIy/fz6Sn9xF8Q2NfW9hmwV0yXxncgVDFMFkbBVVPlZao=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728929845; c=relaxed/simple;
-	bh=P3Pzj722a0qn2KFz7CJfgBKO+JfL3dlBqaxecPwjeek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aSs82ZBhn5+N8AOCnxg7RPAvs3WBgKgijn/zeTWxQCG1xBCF7x4RRpZ0+/Nv+nQMwA99vBOPHJcbFeQcBWC/uxprHUHOXelGeQ+uH7KWq5lG0KFFf+tVLzMMS8CtqghMa8o7xU77ozdzeBWtkscH+QwAGjJzx4JVSGaGjUZdI7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=MTPMgIde; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9DA5440E0184;
-	Mon, 14 Oct 2024 18:17:20 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id FdZTbS5Yi9uB; Mon, 14 Oct 2024 18:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1728929835; bh=rRulwwslaCiKpYQiRcp3k5u/GU44D2gHabFxhCGCe2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MTPMgIdelKAHQlU+HXCBeAaSxV0Ui/L3cr6Xmo31ldIIcLmnP7D4yadrMwJr3I6DK
-	 x5aRFKCygueVgCT4ABt6WkPjIxfTQtJzn8scvo7XLEWuY0MP3ryR+G1mU5+x39zRxy
-	 0qTqJs2sr8nTWfEW4A7rDf55zuMOCqrTx65nAnEaRGkxsw+Xeq3XJopNq+hv2+NZ0w
-	 zEtzEVBvFR4S5lKwKvOmwJ/gr9Samx+3Pmtkg+yd1ffZCRx3J4xoSKA9Xwh4LhGBzY
-	 EssseZkPgIMoGB/ZkMXGcSdK2LhUYkqOfWJVZTz/ztw+PpEio9q6ZDI27wv3pvAxon
-	 P1VUpTRXcW/ouQ1U+cD96In1NZp4abLzIxWHUDR8XuYHvnY+Szuk1LxXSS5hvNVYH6
-	 SFjQD+1N7hCHFHBbVRfzIvxQ2EUjsCIMzYOn1y9Iw6g6YO+hbBU5DodBMmsoOQl4zF
-	 tzxkkFFTbOiwpmsu+zHwtih92WPYNA0LSE+Yq/iMZu8XiVlF7LoVHuwaTYeM+H8hOB
-	 MA0rljcPbgb5E6hGaRfnWzViLNb/ASRRL2utzBls+bEOA/tWIKGttv/AneXcKt0gzT
-	 0Cxt6mJKJ/wkS+n5PXZ2t+zpKTrmVwtv6Da+sWW5OQBbWRvQISXRcNnQh8lsey/uOZ
-	 yPUGFx3OJTY7fvqQ4Y2BFTLk=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E5E4140E0163;
-	Mon, 14 Oct 2024 18:16:52 +0000 (UTC)
-Date: Mon, 14 Oct 2024 20:16:47 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: York Sun <york.sun@nxp.com>, Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Priyanka Singh <priyanka.singh@nxp.com>,
-	Sherry Sun <sherry.sun@nxp.com>, Li Yang <leoyang.li@nxp.com>
-Subject: Re: [PATCH v2 3/6] EDAC/fsl_ddr: Fix bad bit shift operations
-Message-ID: <20241014181647.GQZw1gDwIhBdnFnleH@fat_crate.local>
-References: <20241011-imx95_edac-v2-0-011b68290951@nxp.com>
- <20241011-imx95_edac-v2-3-011b68290951@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02AD231C95;
+	Mon, 14 Oct 2024 18:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728930834; cv=fail; b=JgFsN4CZQtZ9QxEjXSZ0KNys7Xz4M1tnD/gwNYM7mJQmJ9VF7eMkP9GjHNxgI6t67qUtVvxOn5Kuu05pBiTvGlP7K+VfbE/feYe74OdMXUPVyD/yispfkv67KaeV/fJk+awANX366wJmpufP2ZSbiCBchHwQ0FJ9WG5Y68Cokjw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728930834; c=relaxed/simple;
+	bh=Jw6o+BNJoEs3DNVG6YN3rjz5x6ARx/WdxepxwYjjdl4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=TZ01N+eWW1+zD5LsXn+R5HYQRZOEk+EPpxEdZe/vZMlB3FSFztBLgoFBhIza24Zx7iw0ZQ/7XD3dob9Kw4y/vYVLRVnsyTy4Mf1QhhrhiLwaWq6/vpK3DLNtoKracd9FZLZBTzkJFtIWRfZMN/HgopqRC3Zo9MjgLguAy6T/G0k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BR2REfG6; arc=fail smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728930833; x=1760466833;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Jw6o+BNJoEs3DNVG6YN3rjz5x6ARx/WdxepxwYjjdl4=;
+  b=BR2REfG6J1ev8KeAExmAiM8zgT8SbszzFfzxiQmiswFIIv9fwj1s6wOj
+   /wl1zZkQ970LglkpYdFnj8Jg/2fWcGEjBtv3+p70CeeQiPq0iy76aXFWW
+   4317b6U+r7J0TUBEjuBEMWfrZFy8K7TU6zgASdcAd87uZIMQTDR49dCue
+   d6cgBwvtpgzdZl+eegE3/Jt1+zhXwKrLpIYIBYcASer6zXDRLUfLheD4x
+   +G6BjmdbAaMDsoMipBsTtq/OuETnrjeuPcOgjv9IewMX0O5vC1b1j9MUv
+   Y5n/hnoG0nZwfZ7k37aei7SU0XBfoEq3B480Al7cEp+xH7ls5g8N8v7CJ
+   A==;
+X-CSE-ConnectionGUID: CqcTaZ+uTUOkypmKQR69kA==
+X-CSE-MsgGUID: yle5aZd9Rw+eastN+Vchfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="50826478"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="50826478"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 11:33:52 -0700
+X-CSE-ConnectionGUID: 9P6S1+T8Q+CpsLnDBhaeqg==
+X-CSE-MsgGUID: xNdLsMhTQ0GC1B7H14b1fA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; 
+   d="scan'208";a="82214531"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Oct 2024 11:33:52 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 14 Oct 2024 11:33:51 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Mon, 14 Oct 2024 11:33:51 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 14 Oct 2024 11:33:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GtA65dFEvH7TGoeXzC0uRE15SR5p7xN6N/uv9kKAIifgOflVQIafVDgAAaU7Yhi0f91M1N9GIJsjjMQWsD2GP2d/PcA3qn83xdHA9yYFbV84yppQtcXuxKG+Li69Xzd/pNI+yIMfJHQvHsulQmvSZVmmTnTch3BG8A6xFIh6jcpc4aNGoYbnWKgGkqowXmqt8Nrb35oy204x3ZeGM+ZQE7HU/uF6BQigg7MNx+9IbQY4nKEFLaEoOJnT9wfMzKPAh/STNsIAFduAFlZGRA9ct7pwINcyB+mmGhJuOBjmjPGvORBv4qiySqziyID7cVV2H4LCnbjObr427M8dUR4+bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jw6o+BNJoEs3DNVG6YN3rjz5x6ARx/WdxepxwYjjdl4=;
+ b=SXvJdFJmP+ghbU1Da2RFGloDhz7W1IWyaTL3DQByvPJiTIjMzM7Dno8EAvhFMZAuNvCgGgFbErzVhPkofI3scSzCug9UIcNfAmPp3mxG0MKW4dCBOX5L72U4w4fZ0QtOs49it9zSNW6isUAQl7OK1yA0VFK3vd0nYhvYhqJ+WpZyL885M27DzFnvNUJNnkkbbg+cmf28+jehT+aDVujc6J46qX0b0emzATqdW8sh6MyAK5wrw96Y7lrw0e74Uw/e84rdq9mUy0cNsxfEZGVgm6noRTJgjWkpV51N5/FtRaXIbX/fsr7tS43WC7VlTiGef7v2OXdUqtw2/vyM3T+BRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Mon, 14 Oct
+ 2024 18:33:49 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::acfd:b7e:b73b:9361]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::acfd:b7e:b73b:9361%4]) with mapi id 15.20.8048.020; Mon, 14 Oct 2024
+ 18:33:49 +0000
+From: "Luck, Tony" <tony.luck@intel.com>
+To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+CC: "Li, Lili" <lili.li@intel.com>, Borislav Petkov <bp@alien8.de>, "James
+ Morse" <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/1] EDAC/igen6: Add Intel Panther Lake-H SoCs support
+Thread-Topic: [PATCH 1/1] EDAC/igen6: Add Intel Panther Lake-H SoCs support
+Thread-Index: AQHbHHmG2K6qdGwTGEKhfsmJHzAHD7KGlgDg
+Date: Mon, 14 Oct 2024 18:33:49 +0000
+Message-ID: <SJ1PR11MB6083B18DFC9A6CE3A4D0586DFC442@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20241012071439.54165-1-qiuxu.zhuo@intel.com>
+In-Reply-To: <20241012071439.54165-1-qiuxu.zhuo@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|PH0PR11MB4855:EE_
+x-ms-office365-filtering-correlation-id: fa9177aa-3ca1-4813-e1f4-08dcec7ebf12
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?QuU0ewfc7FXS0ystYk7acUPQOWJRXA3f3UlPzA+8+Xp1JnO6NHWvlpoXJTZM?=
+ =?us-ascii?Q?ywgcTTnbU4POBv4RnpN4v0GrDA4Xc26WcXpdT5JJuzjrvLMe/weKzob3hCg3?=
+ =?us-ascii?Q?7wFYBPnftNJZ4aKjYfmQrR0kFhgvqIu/wMboJgS82A2P1izsj//kcPykI4R5?=
+ =?us-ascii?Q?Ic0lyv8nvIOVFPD7HhnqIcEBXo5nP0ZcZ1rnXdVg7ETTQAqyTHDHptA3VmK8?=
+ =?us-ascii?Q?xjDNcnZQVOc8QHpUWyEjhzewDpGOgRdRy9w2TE0St6l+IDcnw8U+QBtEQis6?=
+ =?us-ascii?Q?2K3a+1w6rTFbIPRmg1Odo4uhS4ozYdlKI9Dq1MhywulmCQgfSsr26J5tbQ5+?=
+ =?us-ascii?Q?iJlWg2fgT+DLR9/ZqYdONc86xR268YZRbtbOWlhBfUMPYq6Po53MZBD/NZCD?=
+ =?us-ascii?Q?YiVwOK+67Ri6fUri9Pbq7GYozUhLMtlhlhXM1fUl8GCpT1mR/ayQL833YPnh?=
+ =?us-ascii?Q?pmWIlZF4SRP1CSm2L3AC0JTckvhc43T17v9twFSsftRwOP5J5zjK0jA9g5Aq?=
+ =?us-ascii?Q?RiZE+UPq5uouKGXCITn+vAXVjQhNjF2xL6F3gpbxBhhOQRUH6RLMI3tcssg2?=
+ =?us-ascii?Q?5eCt/6sI0rhihbNkh5xW8quO0f75t5UdJ8NcxT6MP91PPXESkUqijW7kBL82?=
+ =?us-ascii?Q?CajTaXYUWZWtK/aYf7a7PVQ/rNL3E7FLOU5vvJP/hHGxx+a3gQY155j5YPoK?=
+ =?us-ascii?Q?3Jbx0pZxfYGxhZxJLp7g5NKu4I1oYdEOpWGZVgqxDMV896GJwGDfW6POQLFr?=
+ =?us-ascii?Q?LdpVBkfQmhkua+R6xHdIkI4s6lzwKFcsarUYnI3nQlcQWF5fOjGj+iBVjuf1?=
+ =?us-ascii?Q?moOupz8naGsRr/5wNO4yJPMN1RHTNS+xwrESAZhLzzgyxNhE6JwfzcreY0z5?=
+ =?us-ascii?Q?WaxNLjoLjj8vhxGOc5o7ByVQB56+/jBLS8pdLti0Patkp8sSW7OpGHbYQZGu?=
+ =?us-ascii?Q?eeerRJeTaXSgDuuJdtp+JCmCbog0iuQZFceBzl3974JecilbwKxZfctDT88L?=
+ =?us-ascii?Q?Mf4+gFlT2Ms68bmQTuULRPGzat+tO/Vlsi75L7tIKqizQ5drv9ILIjFfy1Pv?=
+ =?us-ascii?Q?R6Fv8xHG+mDX3bIaFQyN45OsiauWu2UNbNyNVep8WV9GRg2QfzM6ZonFRkJd?=
+ =?us-ascii?Q?2uNtAFh0Fvk7bKrRkoxfLp+TaQh37U+AVSSXvH51+2RbrlH57PlbWHia7a3v?=
+ =?us-ascii?Q?zeC8tJgekldPxhGMxLy0wQPbVsu+jE60pTvzqGKleP+9e0+audjkqQ1H5mBX?=
+ =?us-ascii?Q?J0GhNchKZDEHTmPcxU4dBrUJzkFWcZOljQ0thF7Vgz8iaAyAmqK7fampT6HT?=
+ =?us-ascii?Q?b8SympOJNN0VuK+Nn8wHAXXpj/9lg0kkVEpnxg4bR5ggJg=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RABAYoUFl9Vl60px4OoeD+RvdaatS7L2kj3kJkHbcPCUZYh0ZliOA017Ay2Q?=
+ =?us-ascii?Q?UWIYm3i6Ux6HZx1oFVZ0qwYI9ZIG9r99Bqwbc8+NyoOAcPdKKAzqYaMbCIhw?=
+ =?us-ascii?Q?P4pa82WrRscJwvwadHDA6bzMgA6ekeYtVCU5Z3ZQAeo8FGl/EUm+8tLrd/v3?=
+ =?us-ascii?Q?worry8R89lcj3nRHPaIAqiV3Npv+mm/oCdCn5fRSVU0/vgsofbpLdpm+R+jM?=
+ =?us-ascii?Q?hUlv9Zz+csgXDg6jWMbtPim3JUo0kHnNod1xuzzMHmtXZFqh39zj+0PbJ3SW?=
+ =?us-ascii?Q?rFHO1VwFi5ti+sLpinwIA2cEGFVKHsG29WvRbAgZRP5FhHu7iHOptvxm5GFA?=
+ =?us-ascii?Q?Hs8ZUWK3ZSFHj1Pc2AfrTN+ZmdiPa6j48KkHPIzD0+ycJ/rb0ILcxFdaf+xj?=
+ =?us-ascii?Q?KMtfdjAJIqQILLM8giZDtbyfwlRVGKg/dzSAxCkAQkRL0j+ZzOLV7HWyock2?=
+ =?us-ascii?Q?7q4GL49mWR+wv4PTZrt7svKf1gCeVsXCcyAOr2LzPyWa1aDDkE3RdTkgDBjC?=
+ =?us-ascii?Q?LhaFf0gR7P6OqqWlKLl2YfybsDuxpw/QggMI5DTXXiJoxvYujGzM1t5592lt?=
+ =?us-ascii?Q?lyj2eojeRnxAwZZAmbtbgQ2yqGqF3ag4rRPZN9ZqPSs2qWE6twBKjvvojqrq?=
+ =?us-ascii?Q?SvVM5+Z/+zqzF/Sr4pBYscn/IqTXK270QC1dPOY93LUMzadMLYXbUto7E6/J?=
+ =?us-ascii?Q?VmTTrgrRs+JFgz7vO5M3hniqTWhRIduOHQCT9VIIIo3IiNJVQDFboxvM0rYl?=
+ =?us-ascii?Q?Q4bfv5V/ubT5sTBQpH7Q4YmCi66D3TueUBPOZ97PSWvk1UOWbTzDyQ2cBAxJ?=
+ =?us-ascii?Q?dPWBpJmH9jLQ5WQCOEjfFePCK5L/+yUVjOz0iyOe0gDqwfPCnp5z7h+ZkocI?=
+ =?us-ascii?Q?dQdyqrke56EWadd3AFlsbiMFzdNANRh05QfSns4QlJVIwRZfsyPdsqwKAww/?=
+ =?us-ascii?Q?0tPE09Pext6qMdGvrm8H/yvc9ozrVsKwrUNAdB3atU7nupSjevIOpslzvA4/?=
+ =?us-ascii?Q?zbC8U2/3y0JE+TN8ZUZyfjc5OzU94yHbWbB8WRlw50hh1K4pqPRUHcsjeQ1b?=
+ =?us-ascii?Q?3m44YFEIAbDaZaUurd4t3X51nHlShXmt+A6d+eM/RQZgrp0Xr22/VH2TqCyK?=
+ =?us-ascii?Q?KYyStHVD+FK3FBZpw4b9Tes+sDKyCefLNvmm0qYgtctE2ovSezC/Et5snFXy?=
+ =?us-ascii?Q?E9m7YIwWXxj2l6wQFh+e7r4vcWcIGoDXtwp2tQbLcxXZGiu+RIvkdagMGFiV?=
+ =?us-ascii?Q?zU2qHVBA2hL/4GQbEc3hL/syxEOOcXlJ00LYB0Xn8UVL7gY+Inv6ctGXGneW?=
+ =?us-ascii?Q?HeONegbW3/iRhdSzuI7+YMjr4PX9oTQax0WXgbDNLfU30LDRoY+AVhnh7Q3X?=
+ =?us-ascii?Q?yDtjYZaf1Eg+JoZD3/xLJRF+wnt0sx9dytAhoElrG/RNRoE7hnJgBYK0lByk?=
+ =?us-ascii?Q?EFldrKlttzQplvQDC07XLYdqdaf27JPvN7nF56qVa13CvtXD5WDSN6AXLED9?=
+ =?us-ascii?Q?4URKbv+d2L9dcjCXzrIOECNW0AU/aQFR5m50G4bAvnj7FxHMhHzRmhMiNpYx?=
+ =?us-ascii?Q?kgOomG08+yoRlo3Tkh2copEw0XXDTSQ2qHn5Mm2V?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241011-imx95_edac-v2-3-011b68290951@nxp.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa9177aa-3ca1-4813-e1f4-08dcec7ebf12
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Oct 2024 18:33:49.5244
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Qme9+BLxD+2QhiosSZUOqe7fwWNx4CzNqRhTTeRA0frHNnx+au/BReHRqgbEMXavlq7WG4JU/8SAkACZbN3myA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4855
+X-OriginatorOrg: intel.com
 
-On Fri, Oct 11, 2024 at 11:31:31AM -0400, Frank Li wrote:
-> From: Priyanka Singh <priyanka.singh@nxp.com>
-> 
-> Fix undefined behavior caused by left-shifting a negative value in the
-> expression:
-> 
->     cap_high ^ (1 << (bad_data_bit - 32))
-> 
-> The variable `bad_data_bit` ranges from 0 to 63. When `bad_data_bit` is
-> less than 32, `bad_data_bit - 32` becomes negative, and left-shifting by a
-> negative value in C is undefined behavior.
-> 
-> Fix this by checking the range of `bad_data_bit` before performing the
-> shift.
-> 
-> Fixes: ea2eb9a8b620 ("EDAC, fsl-ddr: Separate FSL DDR driver from MPC85xx")
+> Panther Lake-H SoCs share same IBECC registers with Meteor Lake-P
+> SoCs. Add Panther Lake-H SoC compute die IDs for EDAC support.
+>
+> Signed-off-by: Lili Li <lili.li@intel.com>
 
-Is this an urgent fix which needs to go to stable or someone just caught it
-from code review?
+Applied to edac-misc branch of RAS tree.
 
-Does it trigger in real life, IOW?
+Thanks
 
-> Signed-off-by: Priyanka Singh <priyanka.singh@nxp.com>
-> Reviewed-by: Sherry Sun <sherry.sun@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/edac/fsl_ddr_edac.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
-> index 7a9fb1202f1a0..ccc13c2adfd6f 100644
-> --- a/drivers/edac/fsl_ddr_edac.c
-> +++ b/drivers/edac/fsl_ddr_edac.c
-> @@ -338,11 +338,18 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
->  			fsl_mc_printk(mci, KERN_ERR,
->  				"Faulty ECC bit: %d\n", bad_ecc_bit);
->  
-> -		fsl_mc_printk(mci, KERN_ERR,
-> -			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-> -			cap_high ^ (1 << (bad_data_bit - 32)),
-> -			cap_low ^ (1 << bad_data_bit),
-> -			syndrome ^ (1 << bad_ecc_bit));
-> +		if ((bad_data_bit > 0 && bad_data_bit < 32) && bad_ecc_bit > 0) {
-> +			fsl_mc_printk(mci, KERN_ERR,
-> +				      "Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-> +				      cap_high, cap_low ^ (1 << bad_data_bit),
-> +				      syndrome ^ (1 << bad_ecc_bit));
-> +		}
-> +		if (bad_data_bit >= 32 && bad_ecc_bit > 0) {
-> +			fsl_mc_printk(mci, KERN_ERR,
-> +				      "Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-> +				      cap_high ^ (1 << (bad_data_bit - 32)),
-> +				      cap_low, syndrome ^ (1 << bad_ecc_bit));
-> +		}
-
-This is getting unnecessarily clumsy than it should be. Please do the
-following:
-
-	if (bad_data_bit != 1 && bad_ecc_bit != -1) {
-
-		// prep the values you need to print
-
-		// do an exactly one fsl_mc_printk() with the prepared values.
-
-	}
-
-Not have 4 fsl_mc_printks with a bunch of silly if-checks in front.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-Tony
 
