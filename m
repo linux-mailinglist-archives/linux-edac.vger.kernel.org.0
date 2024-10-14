@@ -1,168 +1,171 @@
-Return-Path: <linux-edac+bounces-2063-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2064-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3060B99D621
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 20:06:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FB0399D648
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 20:17:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 623C01C22187
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 18:06:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A4271C22303
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Oct 2024 18:17:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015D01C7608;
-	Mon, 14 Oct 2024 18:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1881C9EBF;
+	Mon, 14 Oct 2024 18:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqw2IT6y"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="MTPMgIde"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DE085260;
-	Mon, 14 Oct 2024 18:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2709B1FAA;
+	Mon, 14 Oct 2024 18:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728929213; cv=none; b=APgTdvzUmi26JLKmno6R2xqRIfz++bkI7584nn15n2MzyqX5kQXomXSUGld8yoBwEsfVV4R2jLChWyq1oQHWOrf+KaMJwps8NPpBBxfF1MsyCtbtyD7VHehtr/c/iabM38nBK+/3ATWvq8y665rLbEHSejxGxype+bx/f2eFTH4=
+	t=1728929845; cv=none; b=Q0dQkZLOosDf+NFWgQgzNCVPA24MtVqeANyQjUX+/EVE/WvoU28VdTsMYeSc3e8Uj2KyLmJY1HV9IPAQ0VbYgcuQS78no7BwjOwx/3sxJBkKqtk5A47YjY0P+7QrbyMIy/fz6Sn9xF8Q2NfW9hmwV0yXxncgVDFMFkbBVVPlZao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728929213; c=relaxed/simple;
-	bh=328xf27GjivinbPRZ7hRzDtoHLMfZyHs/8hq0LBb480=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a7ThTrgO4/RxyMArSDEat62KO4nqxQi67/MDDXIBSAFJSeGfSbGe/x1QjFvZlL1npNz0SoZE96V/qhC7fJgoXL4V2Rj3j/stzeKSPXNfYryiq3AeL2uVxeMCwW3qT6ooBRVFCu4p1yg3CwEAKam12qL1j2VGGUmm/rS5NiKVmgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqw2IT6y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F79FC4CED9;
-	Mon, 14 Oct 2024 18:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728929213;
-	bh=328xf27GjivinbPRZ7hRzDtoHLMfZyHs/8hq0LBb480=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aqw2IT6yHheGJ7fz18ra7eVQ8O0cRQrNgKjHLslffeYq89nIvV9M3LebbF9D1CS2d
-	 jx20LqApzwQAW6UMnCDzs7DlBfRt97swT330IXPpysEkfm4jHGMUeI4YGdy6M9DC8s
-	 PxYmkDLKeTlNHjoI03bE+K50GV+GymRCcCSIECbFqaOVZ8R+2YcYGnxLF1F9BBZhF+
-	 15iRHHbPyf7ZWfaEudEpMGqNg4AlIHFkebvkpfpweU0FTO0SeZUQ8sC6OWIDRqj02I
-	 0ckHCDU0GFVpgaWJeklXzl/+/iQVMLS0Z4uC+85oOQdmHd0eh2iwUYdiGlAX6zAv5O
-	 j5fkXaPR3O1gw==
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3e4d53fbe0dso2507176b6e.3;
-        Mon, 14 Oct 2024 11:06:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUyFIdaW7qs/iO1Fk2KqY9bNYn0vs67Yp0TPlIaGpI3jEZUr+jj3nQ47CCT90pSXylHLTL7AlLsY8Xp@vger.kernel.org, AJvYcCVY/dRivoJIxgMwuWMOwMwMXqJHnuDBmw/J+e6XfRdFN70bbxPvkR6gIIOuo8AFZMeylfAj8OfDbrw9@vger.kernel.org, AJvYcCWG4Jr1sHRQ1scUbOm8WF0kxSyWKMDY0GXvICyTUuhN7CVzHgZUKBqXCWaztrSgI7oBQlbOCrvai32pLWCy@vger.kernel.org, AJvYcCXCfNXEsjeP5gakSGe8O12ykMzxOLlBoOp8IrtBF6Uk0IKOR3lhmX0bVwbbukJNYwqKM5WXTlcRLCauBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzpqwev5N0QEnYxZAc1kNnVREeVe1V4C/smZCrctZ5aN150IgRW
-	8FACS/sxvPqqIWB38caCjYJJssb2JPkpDhAMwSmm+YEuHFopUH3U/TZw0QyPlljp8rbgZZi/F0e
-	BX7mcUaJl8YlTc9fLTxkuPWaF4Qs=
-X-Google-Smtp-Source: AGHT+IGQGwT6cXGmJK8qwoh50vsACcMeRbM+96UyfnnpM9FQSznkvhAcjB/uDWXvr+/SF+GzDS6sTWMArbOPvqmwa/o=
-X-Received: by 2002:a05:6871:299:b0:260:e3fa:ab8d with SMTP id
- 586e51a60fabf-28887477812mr5317452fac.37.1728929212580; Mon, 14 Oct 2024
- 11:06:52 -0700 (PDT)
+	s=arc-20240116; t=1728929845; c=relaxed/simple;
+	bh=P3Pzj722a0qn2KFz7CJfgBKO+JfL3dlBqaxecPwjeek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aSs82ZBhn5+N8AOCnxg7RPAvs3WBgKgijn/zeTWxQCG1xBCF7x4RRpZ0+/Nv+nQMwA99vBOPHJcbFeQcBWC/uxprHUHOXelGeQ+uH7KWq5lG0KFFf+tVLzMMS8CtqghMa8o7xU77ozdzeBWtkscH+QwAGjJzx4JVSGaGjUZdI7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=MTPMgIde; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9DA5440E0184;
+	Mon, 14 Oct 2024 18:17:20 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id FdZTbS5Yi9uB; Mon, 14 Oct 2024 18:17:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1728929835; bh=rRulwwslaCiKpYQiRcp3k5u/GU44D2gHabFxhCGCe2k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MTPMgIdelKAHQlU+HXCBeAaSxV0Ui/L3cr6Xmo31ldIIcLmnP7D4yadrMwJr3I6DK
+	 x5aRFKCygueVgCT4ABt6WkPjIxfTQtJzn8scvo7XLEWuY0MP3ryR+G1mU5+x39zRxy
+	 0qTqJs2sr8nTWfEW4A7rDf55zuMOCqrTx65nAnEaRGkxsw+Xeq3XJopNq+hv2+NZ0w
+	 zEtzEVBvFR4S5lKwKvOmwJ/gr9Samx+3Pmtkg+yd1ffZCRx3J4xoSKA9Xwh4LhGBzY
+	 EssseZkPgIMoGB/ZkMXGcSdK2LhUYkqOfWJVZTz/ztw+PpEio9q6ZDI27wv3pvAxon
+	 P1VUpTRXcW/ouQ1U+cD96In1NZp4abLzIxWHUDR8XuYHvnY+Szuk1LxXSS5hvNVYH6
+	 SFjQD+1N7hCHFHBbVRfzIvxQ2EUjsCIMzYOn1y9Iw6g6YO+hbBU5DodBMmsoOQl4zF
+	 tzxkkFFTbOiwpmsu+zHwtih92WPYNA0LSE+Yq/iMZu8XiVlF7LoVHuwaTYeM+H8hOB
+	 MA0rljcPbgb5E6hGaRfnWzViLNb/ASRRL2utzBls+bEOA/tWIKGttv/AneXcKt0gzT
+	 0Cxt6mJKJ/wkS+n5PXZ2t+zpKTrmVwtv6Da+sWW5OQBbWRvQISXRcNnQh8lsey/uOZ
+	 yPUGFx3OJTY7fvqQ4Y2BFTLk=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E5E4140E0163;
+	Mon, 14 Oct 2024 18:16:52 +0000 (UTC)
+Date: Mon, 14 Oct 2024 20:16:47 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: York Sun <york.sun@nxp.com>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	Priyanka Singh <priyanka.singh@nxp.com>,
+	Sherry Sun <sherry.sun@nxp.com>, Li Yang <leoyang.li@nxp.com>
+Subject: Re: [PATCH v2 3/6] EDAC/fsl_ddr: Fix bad bit shift operations
+Message-ID: <20241014181647.GQZw1gDwIhBdnFnleH@fat_crate.local>
+References: <20241011-imx95_edac-v2-0-011b68290951@nxp.com>
+ <20241011-imx95_edac-v2-3-011b68290951@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241009124120.1124-1-shiju.jose@huawei.com> <20241009124120.1124-13-shiju.jose@huawei.com>
- <20241014164339.00003e73@Huawei.com> <2024101410-turf-junior-7739@gregkh>
- <2024101451-reword-animation-2179@gregkh> <20241014181654.00005180@Huawei.com>
-In-Reply-To: <20241014181654.00005180@Huawei.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 14 Oct 2024 20:06:40 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j-mwZmuciSTaL8MyAp530y=n9HbQ=uVvcnvGLR1n+YuQ@mail.gmail.com>
-Message-ID: <CAJZ5v0j-mwZmuciSTaL8MyAp530y=n9HbQ=uVvcnvGLR1n+YuQ@mail.gmail.com>
-Subject: Re: [PATCH v13 12/18] platform: Add __free() based cleanup function
- for platform_device_put
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, shiju.jose@huawei.com, 
-	linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	bp@alien8.de, tony.luck@intel.com, rafael@kernel.org, lenb@kernel.org, 
-	mchehab@kernel.org, dan.j.williams@intel.com, dave@stgolabs.net, 
-	dave.jiang@intel.com, alison.schofield@intel.com, vishal.l.verma@intel.com, 
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com, 
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com, 
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com, 
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com, 
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com, 
-	duenwen@google.com, gthelen@google.com, wschwartz@amperecomputing.com, 
-	dferguson@amperecomputing.com, wbs@os.amperecomputing.com, 
-	nifan.cxl@gmail.com, tanxiaofei@huawei.com, prime.zeng@hisilicon.com, 
-	roberto.sassu@huawei.com, kangkang.shen@futurewei.com, 
-	wanghuiqiang@huawei.com, linuxarm@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241011-imx95_edac-v2-3-011b68290951@nxp.com>
 
-On Mon, Oct 14, 2024 at 7:17=E2=80=AFPM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Mon, 14 Oct 2024 18:04:37 +0200
-> Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> > On Mon, Oct 14, 2024 at 06:00:51PM +0200, Greg KH wrote:
-> > > On Mon, Oct 14, 2024 at 04:43:39PM +0100, Jonathan Cameron wrote:
-> > > > On Wed, 9 Oct 2024 13:41:13 +0100
-> > > > <shiju.jose@huawei.com> wrote:
-> > > >
-> > > > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > >
-> > > > > Add __free() based cleanup function for platform_device_put().
-> > > > >
-> > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> > > > > ---
-> > > > >  include/linux/platform_device.h | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/include/linux/platform_device.h b/include/linux/plat=
-form_device.h
-> > > > > index d422db6eec63..606533b88f44 100644
-> > > > > --- a/include/linux/platform_device.h
-> > > > > +++ b/include/linux/platform_device.h
-> > > > > @@ -232,6 +232,7 @@ extern int platform_device_add_data(struct pl=
-atform_device *pdev,
-> > > > >  extern int platform_device_add(struct platform_device *pdev);
-> > > > >  extern void platform_device_del(struct platform_device *pdev);
-> > > > >  extern void platform_device_put(struct platform_device *pdev);
-> > > > > +DEFINE_FREE(platform_device_put, struct platform_device *, if (_=
-T) platform_device_put(_T))
-> > > > >
-> > > > >  struct platform_driver {
-> > > > >         int (*probe)(struct platform_device *);
-> > > >
-> > > > +CC Greg KH and Rafael.
-> > > >
-> > > > Makes sure to include them on v14 as this needs review from a drive=
-r core point
-> > > > of view I think.
-> > >
-> > > Why is this needed for a platform device?  This feels like you will h=
-ave
-> > > to do more work to "keep" the reference on the normal path than you t=
-o
-> > > today to release the reference on the error path, right?  Have a poin=
-ter
-> > > to a patch that uses this?
-> >
-> > Ah, is it this one:
-> >       https://lore.kernel.org/all/20241014164955.00003439@Huawei.com/
-> > ?
-> >
-> > If so, no, that's an abuse of a platform device, don't do that, make a
-> > REAL device on the bus that this device lives on.  If it doesn't live o=
-n
-> > a real bus, then put it on the virtual bus but do NOT abuse the platfor=
-m
-> > device layer for something like this.
->
-> Ok.  Probably virtual bus it is then.  Rafael, what do you think makes se=
-nse
-> for a 'feature' that is described only by an ACPI table (here RAS2)?
-> Kind of similar(ish) to say IORT.
+On Fri, Oct 11, 2024 at 11:31:31AM -0400, Frank Li wrote:
+> From: Priyanka Singh <priyanka.singh@nxp.com>
+> 
+> Fix undefined behavior caused by left-shifting a negative value in the
+> expression:
+> 
+>     cap_high ^ (1 << (bad_data_bit - 32))
+> 
+> The variable `bad_data_bit` ranges from 0 to 63. When `bad_data_bit` is
+> less than 32, `bad_data_bit - 32` becomes negative, and left-shifting by a
+> negative value in C is undefined behavior.
+> 
+> Fix this by checking the range of `bad_data_bit` before performing the
+> shift.
+> 
+> Fixes: ea2eb9a8b620 ("EDAC, fsl-ddr: Separate FSL DDR driver from MPC85xx")
 
-Good question.
+Is this an urgent fix which needs to go to stable or someone just caught it
+from code review?
 
-I guess it depends on whether or not there are any registers to access
-or AML to interact with.  If so, I think that a platform device makes
-sense.
+Does it trigger in real life, IOW?
 
-> My thinking on a platform device was that this could be described
-> in DSDT and would have ended up as one. No idea why it isn't.
-> Maybe it predated the resource stuff that lets you use PCC channels
-> from methods under devices. Anyhow, it's not something I care about
-> so virtual bus is fine by me.
+> Signed-off-by: Priyanka Singh <priyanka.singh@nxp.com>
+> Reviewed-by: Sherry Sun <sherry.sun@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/edac/fsl_ddr_edac.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+> index 7a9fb1202f1a0..ccc13c2adfd6f 100644
+> --- a/drivers/edac/fsl_ddr_edac.c
+> +++ b/drivers/edac/fsl_ddr_edac.c
+> @@ -338,11 +338,18 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
+>  			fsl_mc_printk(mci, KERN_ERR,
+>  				"Faulty ECC bit: %d\n", bad_ecc_bit);
+>  
+> -		fsl_mc_printk(mci, KERN_ERR,
+> -			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
+> -			cap_high ^ (1 << (bad_data_bit - 32)),
+> -			cap_low ^ (1 << bad_data_bit),
+> -			syndrome ^ (1 << bad_ecc_bit));
+> +		if ((bad_data_bit > 0 && bad_data_bit < 32) && bad_ecc_bit > 0) {
+> +			fsl_mc_printk(mci, KERN_ERR,
+> +				      "Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
+> +				      cap_high, cap_low ^ (1 << bad_data_bit),
+> +				      syndrome ^ (1 << bad_ecc_bit));
+> +		}
+> +		if (bad_data_bit >= 32 && bad_ecc_bit > 0) {
+> +			fsl_mc_printk(mci, KERN_ERR,
+> +				      "Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
+> +				      cap_high ^ (1 << (bad_data_bit - 32)),
+> +				      cap_low, syndrome ^ (1 << bad_ecc_bit));
+> +		}
+
+This is getting unnecessarily clumsy than it should be. Please do the
+following:
+
+	if (bad_data_bit != 1 && bad_ecc_bit != -1) {
+
+		// prep the values you need to print
+
+		// do an exactly one fsl_mc_printk() with the prepared values.
+
+	}
+
+Not have 4 fsl_mc_printks with a bunch of silly if-checks in front.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
