@@ -1,239 +1,113 @@
-Return-Path: <linux-edac+bounces-2071-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2072-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6AA799E2F3
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 11:41:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D9A499E313
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 11:49:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F11C61C21A04
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 09:41:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F2471C21BB3
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 09:49:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6F41DF261;
-	Tue, 15 Oct 2024 09:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E63241DF261;
+	Tue, 15 Oct 2024 09:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Z+6wr2fC"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367281D9A5E;
-	Tue, 15 Oct 2024 09:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA1818B488;
+	Tue, 15 Oct 2024 09:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728985269; cv=none; b=MgxWxByAM0yTL7jMKFhIgI1BKsFcES43ydZq2xYm8cjuopTaAQ7IQeId+lQISMAJPaxK+lxdnxtzHNxQVyxgZHtl18WAHCVtAM5TUJyaFLdf1yKaObfEw29ww41dWO1W2ThpiicJURiyTVlNK15sk2LDY1h0+ILMwc7nfegAhJg=
+	t=1728985759; cv=none; b=V0eC1/3IfXzICI4j8IkWr0QfClzNg05VZWt1WAHIxoceOAcbNFVpDZ5rMUYfKUaAqJO0GgN45buAe/3LvxD+P3ZKiYxdP5mEsBNwNlbnOgmTBE57DVuLbZIGSEKZmt/Ngl8G+Sus9oNGqBp0gG7GzUK07RCFIkBpRM+0kAhERJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728985269; c=relaxed/simple;
-	bh=FaMkIbfDLpy4ZXa/GfZAki4C2K6F1bBRcy+cHlNEsMA=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sydSxGdl4J9tfOLpnmepK90TzjilIMPU+xQgbjQtU1dmBr4okcNDM/bWz+Sf5CFRJGJXajlIVFNroKEGbaYmv0o1aH1Is/MutVReADzMKjdbYaxWJUYqfw41GDl+gaIxuoAYCTv9WYM+ie8WacBZL7Fj7X6ovz7MaWDN6jRT5cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XSTZd2llVz6FH5T;
-	Tue, 15 Oct 2024 17:39:21 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 86E5A140AA7;
-	Tue, 15 Oct 2024 17:40:58 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 15 Oct
- 2024 11:40:56 +0200
-Date: Tue, 15 Oct 2024 10:40:54 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, <linuxarm@huawei.com>
-CC: Greg KH <gregkh@linuxfoundation.org>, <shiju.jose@huawei.com>,
-	<linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<lenb@kernel.org>, <mchehab@kernel.org>, <dan.j.williams@intel.com>,
-	<dave@stgolabs.net>, <dave.jiang@intel.com>, <alison.schofield@intel.com>,
-	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>, <david@redhat.com>,
-	<Vilas.Sridharan@amd.com>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
-	<rientjes@google.com>, <jiaqiyan@google.com>, <Jon.Grimm@amd.com>,
-	<dave.hansen@linux.intel.com>, <naoya.horiguchi@nec.com>,
-	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
-	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
-	<gthelen@google.com>, <wschwartz@amperecomputing.com>,
-	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
-	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
-	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
-	<wanghuiqiang@huawei.com>
-Subject: Re: [PATCH v13 12/18] platform: Add __free() based cleanup function
- for platform_device_put
-Message-ID: <20241015104021.00002906@huawei.com>
-In-Reply-To: <20241015101025.00005305@Huawei.com>
-References: <20241009124120.1124-1-shiju.jose@huawei.com>
-	<20241009124120.1124-13-shiju.jose@huawei.com>
-	<20241014164339.00003e73@Huawei.com>
-	<2024101410-turf-junior-7739@gregkh>
-	<2024101451-reword-animation-2179@gregkh>
-	<20241014181654.00005180@Huawei.com>
-	<CAJZ5v0j-mwZmuciSTaL8MyAp530y=n9HbQ=uVvcnvGLR1n+YuQ@mail.gmail.com>
-	<20241015101025.00005305@Huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1728985759; c=relaxed/simple;
+	bh=pkfmR86OLnLflTvdgJ9gzMh0Z9LchJNRWECKaDZz6OQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uUaISoqcT/AmLxGCvyX4DCnYerUdbwJ1TSxShaxhllqQqxEEKsd1oGOwkr3insAytlVLPgqtrGC5SmSbwdh//rgtZCeVvI77cMoZ4DOHYsFOGUAXy/7hkF3OoC8s6etllP+03SUL5we0L4IIy+vA2n9YTkHc32xAHP582iE7sUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Z+6wr2fC; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6977440E01A5;
+	Tue, 15 Oct 2024 09:49:13 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id RDGTe0vdMgzz; Tue, 15 Oct 2024 09:49:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1728985748; bh=Lwyk6dqtr7douMO9sTb0q4k/d7+lucp4olJGes24ZKM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z+6wr2fCWcN7NxjV2gLBlDR2ZIkUsxGW2YbCCNhqTlDNBF4TOlJkO9MMzGG/n0RqP
+	 J+RZnIeo2TkRdUofHSjYHykMbIkt6ZmHK9eMatG214fJA+UHJihZ2sGqNSGwf6Yv14
+	 0IidpmyhCSWEuhRjGT4hGJjwj1vtreCKPUwivoMvul7R70TwHF+G7iRT4DHvi/mhWm
+	 FOxC8EWptJXFTlm3OinccDTT0S5U9Nw0tNS0473cBMEnsz9lZ085tD2taDrjGXFVPs
+	 Sef6eziy8AOJaBQ7eoXNmhsISYRSL669ChJ+hxVjza1yh8VSpJ73kRWd3R+pfLnwC3
+	 26F/CbH2fap/1qOse7+4fwUfDHG9tDWu2LhfCA9R/eXIxB2Yjc23Mc0phc6E8LCMed
+	 3rH1/CqduFpOkivyQmmq6+Bd6Nu98Pzt6Wi6pmseQKJiqquBRYG3S2GQjljXyJ/j9l
+	 +PuOkL342QMGILMrvynG6aKz4FjJYIYLA8HclFIFLjcVA3Lt1eHudgSM6eWuuWvPqh
+	 XQcg5TXFke3trKS378NfW27ym2eHK5SNM27g9YiOdm51jsGTVwFdXBjxvg74/Zi6Dq
+	 z19oYO8B0lw+DKw7QRB1pjKwwC/uL76tWCYO1krDO12tUoUhHZ5/5FaPdi6FYJTK7L
+	 Wo0wuQD/3mPZrq2AAJ/ALP0s=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 695D740E0184;
+	Tue, 15 Oct 2024 09:48:49 +0000 (UTC)
+Date: Tue, 15 Oct 2024 11:48:43 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc: Avadhut Naik <avadhut.naik@amd.com>, "x86@kernel.org" <x86@kernel.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Luck, Tony" <tony.luck@intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"airlied@gmail.com" <airlied@gmail.com>,
+	"yazen.ghannam@amd.com" <yazen.ghannam@amd.com>,
+	"john.allen@amd.com" <john.allen@amd.com>,
+	"avadnaik@amd.com" <avadnaik@amd.com>
+Subject: Re: [PATCH v5 1/5] x86/mce: Add wrapper for struct mce to export
+ vendor specific info
+Message-ID: <20241015094843.GAZw46e6KKVjigUatc@fat_crate.local>
+References: <20241001181617.604573-1-avadhut.naik@amd.com>
+ <20241001181617.604573-2-avadhut.naik@amd.com>
+ <CY8PR11MB713406B2C492D55428397AFA89452@CY8PR11MB7134.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CY8PR11MB713406B2C492D55428397AFA89452@CY8PR11MB7134.namprd11.prod.outlook.com>
 
-On Tue, 15 Oct 2024 10:10:25 +0100
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+On Tue, Oct 15, 2024 at 06:53:41AM +0000, Zhuo, Qiuxu wrote:
+> The word 'mce' isn't too long. IMHO using 'mce' instead of 'm' as
+> a variable name is more meaningful :-).
+> 
+>     struct mce mce;
 
-> On Mon, 14 Oct 2024 20:06:40 +0200
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->=20
-> > On Mon, Oct 14, 2024 at 7:17=E2=80=AFPM Jonathan Cameron
-> > <Jonathan.Cameron@huawei.com> wrote:
-> > >
-> > > On Mon, 14 Oct 2024 18:04:37 +0200
-> > > Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > =20
-> > > > On Mon, Oct 14, 2024 at 06:00:51PM +0200, Greg KH wrote: =20
-> > > > > On Mon, Oct 14, 2024 at 04:43:39PM +0100, Jonathan Cameron wrote:=
- =20
-> > > > > > On Wed, 9 Oct 2024 13:41:13 +0100
-> > > > > > <shiju.jose@huawei.com> wrote:
-> > > > > > =20
-> > > > > > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > > >
-> > > > > > > Add __free() based cleanup function for platform_device_put().
-> > > > > > >
-> > > > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > > > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> > > > > > > ---
-> > > > > > >  include/linux/platform_device.h | 1 +
-> > > > > > >  1 file changed, 1 insertion(+)
-> > > > > > >
-> > > > > > > diff --git a/include/linux/platform_device.h b/include/linux/=
-platform_device.h
-> > > > > > > index d422db6eec63..606533b88f44 100644
-> > > > > > > --- a/include/linux/platform_device.h
-> > > > > > > +++ b/include/linux/platform_device.h
-> > > > > > > @@ -232,6 +232,7 @@ extern int platform_device_add_data(struc=
-t platform_device *pdev,
-> > > > > > >  extern int platform_device_add(struct platform_device *pdev);
-> > > > > > >  extern void platform_device_del(struct platform_device *pdev=
-);
-> > > > > > >  extern void platform_device_put(struct platform_device *pdev=
-);
-> > > > > > > +DEFINE_FREE(platform_device_put, struct platform_device *, i=
-f (_T) platform_device_put(_T))
-> > > > > > >
-> > > > > > >  struct platform_driver {
-> > > > > > >         int (*probe)(struct platform_device *); =20
-> > > > > >
-> > > > > > +CC Greg KH and Rafael.
-> > > > > >
-> > > > > > Makes sure to include them on v14 as this needs review from a d=
-river core point
-> > > > > > of view I think. =20
-> > > > >
-> > > > > Why is this needed for a platform device?  This feels like you wi=
-ll have
-> > > > > to do more work to "keep" the reference on the normal path than y=
-ou to
-> > > > > today to release the reference on the error path, right?  Have a =
-pointer
-> > > > > to a patch that uses this? =20
-> > > >
-> > > > Ah, is it this one:
-> > > >       https://lore.kernel.org/all/20241014164955.00003439@Huawei.co=
-m/
-> > > > ?
-> > > >
-> > > > If so, no, that's an abuse of a platform device, don't do that, mak=
-e a
-> > > > REAL device on the bus that this device lives on.  If it doesn't li=
-ve on
-> > > > a real bus, then put it on the virtual bus but do NOT abuse the pla=
-tform
-> > > > device layer for something like this. =20
-> > >
-> > > Ok.  Probably virtual bus it is then.  Rafael, what do you think make=
-s sense
-> > > for a 'feature' that is described only by an ACPI table (here RAS2)?
-> > > Kind of similar(ish) to say IORT. =20
-> >=20
-> > Good question.
-> >=20
-> > I guess it depends on whether or not there are any registers to access
-> > or AML to interact with.  If so, I think that a platform device makes
-> > sense.
->=20
-> Unfortunately still a gray area I think.
->=20
-> This does access mailbox memory addresses, but they are provided
-> by an existing platform device, so maybe platform device for this
-> device is still inappropriate :(
->=20
-> What this uses is:
-> PCC channel (mailbox in memory + doorbells, etc but that is indirectly
-> provided as a service via reference in ACPI to the PCCT table entry
-> allowing this to find the mailbox device - which is a platform
-> device drivers/mailbox/pcc.c).
-> Because it's all spec defined content in the mailbox messages, we don't
-> have the more flexible (and newer I think) 'register' via operation region
-> stuff in AML.
->=20
-> A wrinkle though.  The mailbox data is mapped into this driver via
-> an acpi_os_ioremap() call. =20
->=20
-> So I'm thinking we don't have a strong reason for a platform device
-> other than 'similarity' to other examples.  Never the strongest reason!
->=20
-> We'll explore alternatives and see what they end up looking like.
->=20
-> Jonathan
->=20
+No, this is not better. Because sometimes it is ambiguous whether the struct
+"mce" is meant or the variable "mce".
 
-Greg,
+-- 
+Regards/Gruss,
+    Boris.
 
-I'm struggling a little to figure out how you envision the virtual bus
-working here.  So before we spend too much time implementing the wrong thing
-as it feels non trivial, let me check my understanding.
-
-Would this mean registering a ras2 bus via subsys_virtual_register().
-(Similar to done for memory tiers)
-
-On that we'd then add all the devices: one per RAS2 PCC descriptor (these
-are one per independent feature). Each feature has its own mailbox sub
-channel (via a reference to the PCC mailbox devices .
-Typically you have one of these per feature type per numa node, but
-that isn't guaranteed.  That will then need wiring up with bus->probe() etc
-so that the RAS2 edac feature drivers can find this later and bind to it to
-register with edac etc.
-
-So spinning up a full new bus, to support this?  I'm not against that.
-We could use auxbus I guess but that is at least described
-with the intent that it is for subfeatures of a device and here we don't ha=
-ve
-a top level device (unless we make one for the RAS2 ACPI table which would
-be odd).
-
-So effectively a new subsystem bus?
-
-Jonathan
-
-
-
->=20
->=20
-> >=20
-> > > My thinking on a platform device was that this could be described
-> > > in DSDT and would have ended up as one. No idea why it isn't.
-> > > Maybe it predated the resource stuff that lets you use PCC channels
-> > > from methods under devices. Anyhow, it's not something I care about
-> > > so virtual bus is fine by me. =20
-> >=20
->=20
->=20
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
