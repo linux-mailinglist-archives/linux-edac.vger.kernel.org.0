@@ -1,283 +1,156 @@
-Return-Path: <linux-edac+bounces-2077-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2078-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5997099EF4C
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 16:20:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF19999F02F
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 16:53:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1AE7B226FC
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 14:20:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 838D7281A55
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 14:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F001AF0D6;
-	Tue, 15 Oct 2024 14:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FA61C4A2B;
+	Tue, 15 Oct 2024 14:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="LhEqlfvw"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3B11FC7C5;
-	Tue, 15 Oct 2024 14:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FC21AF0D5;
+	Tue, 15 Oct 2024 14:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729001997; cv=none; b=kc/qnq8OynDW28Mg19/pYAciO9H/8dQT+VYd1iJbaN2D07Urjls/bF4NwTu3nIDnAt3+envagGY58MWqR4K5IhiPbyoMT+FRXRQHmyz+jfYXac7pqcKWqTEFYvtL++z/Hy5WdkmW5xTuVhsZUVvKW/bTph41A9e6FFzRvJrgmPc=
+	t=1729003994; cv=none; b=NBz2Ei23O+42dveaRsOFc7uyq+5ARkaAHGsmP0ca7aLqrIFMGnM4qyOHht8zhilwVGvukf7uzwvGs0B2vju72n3i2neTHxogRiLSiPQkW3dXOp5R9v+U2x2iVk67OmxELHHxyuHE8fC+hjOBBhhYXo8mhb13tQ/+1PqJv7RIKsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729001997; c=relaxed/simple;
-	bh=aqHNt3iQfilfvRhIjR14io5ihbIDCEGdtCVSSCiwwLI=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dVn8ChwBYJIaazfa8Q06l0Ocf7wsUABo+x1MClq4ej3lok1iMkOho/D64COfVw4M8P4TVoI/NqADdJBFFZEnu2bueXZBD7R7a2vfASK9hQ6KfFz2Kdvl9i9YpfVR24wXxtUGcIWvxJUIN+Lcka4vnLHOFGH9qm213wIEHwBwQ/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XSbnc48G8z6HJby;
-	Tue, 15 Oct 2024 22:19:16 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 360FC1400D9;
-	Tue, 15 Oct 2024 22:19:51 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 15 Oct
- 2024 16:19:49 +0200
-Date: Tue, 15 Oct 2024 15:19:47 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Greg KH <gregkh@linuxfoundation.org>, <linuxarm@huawei.com>,
-	<shiju.jose@huawei.com>, <linux-edac@vger.kernel.org>,
-	<linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
-	<tony.luck@intel.com>, <lenb@kernel.org>, <mchehab@kernel.org>,
-	<dan.j.williams@intel.com>, <dave@stgolabs.net>, <dave.jiang@intel.com>,
-	<alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-	<ira.weiny@intel.com>, <david@redhat.com>, <Vilas.Sridharan@amd.com>,
-	<leo.duran@amd.com>, <Yazen.Ghannam@amd.com>, <rientjes@google.com>,
-	<jiaqiyan@google.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
-	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
-	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
-	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
-	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
-	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
-	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
-	<wanghuiqiang@huawei.com>
-Subject: Re: [PATCH v13 12/18] platform: Add __free() based cleanup function
- for platform_device_put
-Message-ID: <20241015151947.00006a4f@Huawei.com>
-In-Reply-To: <CAJZ5v0iyc5gvpXjpZdmv-vh8+haPENz+UBXVSF6UDBCRT12fMg@mail.gmail.com>
-References: <20241009124120.1124-1-shiju.jose@huawei.com>
-	<20241009124120.1124-13-shiju.jose@huawei.com>
-	<20241014164339.00003e73@Huawei.com>
-	<2024101410-turf-junior-7739@gregkh>
-	<2024101451-reword-animation-2179@gregkh>
-	<20241014181654.00005180@Huawei.com>
-	<CAJZ5v0j-mwZmuciSTaL8MyAp530y=n9HbQ=uVvcnvGLR1n+YuQ@mail.gmail.com>
-	<20241015101025.00005305@Huawei.com>
-	<20241015104021.00002906@huawei.com>
-	<2024101517-bubbling-deploy-1be0@gregkh>
-	<CAJZ5v0iyc5gvpXjpZdmv-vh8+haPENz+UBXVSF6UDBCRT12fMg@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1729003994; c=relaxed/simple;
+	bh=TXL5ECwjpaQl9xrzbHeNrLMJad9K2tD5pt8Y+USrQcg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ICvIUtd2ICUBh1ekMqkUf1TDcuBZD9U71aJFcE3fUYSsvL2BaFU2qUhT972KVpYKga+qdGIIK3OmWnU4g57oZOYUN42z4oHB9sqGCvWmCV5W3JOf+9SI/YMqd7vNqqdf2ycC9VbEVv1P9DKjiJ4Lh2PYGBrNSWegjepNghtZv70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=LhEqlfvw; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A679740E0194;
+	Tue, 15 Oct 2024 14:53:09 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id eTQLnIpnaaak; Tue, 15 Oct 2024 14:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1729003984; bh=IWu4dX3tvzxOwCtQqhtsDrxvJqZWaM0N7YGfox1xlSc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LhEqlfvwFailZ+MIpmFomDMYfFNQnVJTcMpPK31TtPGDjT2YbTH4rgGG4Pj02chhX
+	 7j66HnnZKf2bL+ontS+YzhtVtau4PD5ulUpVwt2fWWV2e/2QeYyyOMPAIj5HJsJSFM
+	 LOF/Osf1rGG2PQTvJG7B1Lq5bKTC8Ss7ap+G89YWLZt2hY90ExdDn8JMiG6lUt6iS4
+	 E7JEPDfrKGJq74CsZYzogfEGXit681oxix7iQ1nkr+Zh4Er+8WkpYkjjTU0Q7Hq7n0
+	 PREPPsbfQStwnfjsayZfUR7hJwa85PyNkjyDLxp8NU2DeiOsmvNedzSgn2eRbwHDoA
+	 Yhb9ZFhIN9tHHEYAR6T4eiTmlzzPsmRHgRDuQ3TUb/yMIfpiOPcChGgAK8mMKy60Tq
+	 7IAqvVEEQ42bPAENIriDrf6/miWqu6jKNuUqwGClT2Ef27azW7RhmMv7k8o8qrGxeE
+	 57r5uELf1Z6ZVWUZVb8FSpapTICC7EFUvGakVW3G6lV5DdBk346BgckLC4pWhTohFP
+	 5g2vhZxW14hWs2VjBM3B7r390mhDgRxt53thdFQ6Uw0jaycMmEJNlgqJF63REaQomp
+	 yxzsM4jcw/elUs79mvLMaybJ6Feskdqfl5ex5AglQfvmi8KkRdr8NfHWgOARSs5NRH
+	 jKYYjBC9wGkgNnD0XlBPK+VU=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 571FC40E0169;
+	Tue, 15 Oct 2024 14:52:42 +0000 (UTC)
+Date: Tue, 15 Oct 2024 16:52:34 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: York Sun <york.sun@nxp.com>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, Ye Li <ye.li@nxp.com>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH v2 5/6] EDAC/fsl_ddr: Add support for i.MX9 DDR controller
+Message-ID: <20241015145234.GRZw6BsqnIbaGWMzG_@fat_crate.local>
+References: <20241011-imx95_edac-v2-0-011b68290951@nxp.com>
+ <20241011-imx95_edac-v2-5-011b68290951@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241011-imx95_edac-v2-5-011b68290951@nxp.com>
 
-On Tue, 15 Oct 2024 15:32:28 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On Fri, Oct 11, 2024 at 11:31:33AM -0400, Frank Li wrote:
+> From: Ye Li <ye.li@nxp.com>
+> 
+> Add support for the i.MX9 DDR controller, which has different register
+> offsets and some function changes compared to the existing fsl_ddr
+> controller. The ECC and error injection functions are almost the same, so
+> update and reuse the driver for i.MX9. A special type 'TYPE_IMX9' is added
+> specifically for the i.MX9 controller to distinguish the differences.
+> 
+> Signed-off-by: Ye Li <ye.li@nxp.com>
+> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/edac/fsl_ddr_edac.c    | 48 ++++++++++++++++++++++++++++++++++++------
+>  drivers/edac/fsl_ddr_edac.h    | 10 +++++++++
+>  drivers/edac/layerscape_edac.c |  1 +
+>  3 files changed, 53 insertions(+), 6 deletions(-)
 
-> On Tue, Oct 15, 2024 at 12:17=E2=80=AFPM Greg KH <gregkh@linuxfoundation.=
-org> wrote:
-> >
-> > On Tue, Oct 15, 2024 at 10:40:54AM +0100, Jonathan Cameron wrote: =20
-> > > On Tue, 15 Oct 2024 10:10:25 +0100
-> > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> > > =20
-> > > > On Mon, 14 Oct 2024 20:06:40 +0200
-> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > =20
-> > > > > On Mon, Oct 14, 2024 at 7:17=E2=80=AFPM Jonathan Cameron
-> > > > > <Jonathan.Cameron@huawei.com> wrote: =20
-> > > > > >
-> > > > > > On Mon, 14 Oct 2024 18:04:37 +0200
-> > > > > > Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > > =20
-> > > > > > > On Mon, Oct 14, 2024 at 06:00:51PM +0200, Greg KH wrote: =20
-> > > > > > > > On Mon, Oct 14, 2024 at 04:43:39PM +0100, Jonathan Cameron =
-wrote: =20
-> > > > > > > > > On Wed, 9 Oct 2024 13:41:13 +0100
-> > > > > > > > > <shiju.jose@huawei.com> wrote:
-> > > > > > > > > =20
-> > > > > > > > > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > > > > > >
-> > > > > > > > > > Add __free() based cleanup function for platform_device=
-_put().
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawe=
-i.com>
-> > > > > > > > > > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> > > > > > > > > > ---
-> > > > > > > > > >  include/linux/platform_device.h | 1 +
-> > > > > > > > > >  1 file changed, 1 insertion(+)
-> > > > > > > > > >
-> > > > > > > > > > diff --git a/include/linux/platform_device.h b/include/=
-linux/platform_device.h
-> > > > > > > > > > index d422db6eec63..606533b88f44 100644
-> > > > > > > > > > --- a/include/linux/platform_device.h
-> > > > > > > > > > +++ b/include/linux/platform_device.h
-> > > > > > > > > > @@ -232,6 +232,7 @@ extern int platform_device_add_data=
-(struct platform_device *pdev,
-> > > > > > > > > >  extern int platform_device_add(struct platform_device =
-*pdev);
-> > > > > > > > > >  extern void platform_device_del(struct platform_device=
- *pdev);
-> > > > > > > > > >  extern void platform_device_put(struct platform_device=
- *pdev);
-> > > > > > > > > > +DEFINE_FREE(platform_device_put, struct platform_devic=
-e *, if (_T) platform_device_put(_T))
-> > > > > > > > > >
-> > > > > > > > > >  struct platform_driver {
-> > > > > > > > > >         int (*probe)(struct platform_device *); =20
-> > > > > > > > >
-> > > > > > > > > +CC Greg KH and Rafael.
-> > > > > > > > >
-> > > > > > > > > Makes sure to include them on v14 as this needs review fr=
-om a driver core point
-> > > > > > > > > of view I think. =20
-> > > > > > > >
-> > > > > > > > Why is this needed for a platform device?  This feels like =
-you will have
-> > > > > > > > to do more work to "keep" the reference on the normal path =
-than you to
-> > > > > > > > today to release the reference on the error path, right?  H=
-ave a pointer
-> > > > > > > > to a patch that uses this? =20
-> > > > > > >
-> > > > > > > Ah, is it this one:
-> > > > > > >       https://lore.kernel.org/all/20241014164955.00003439@Hua=
-wei.com/
-> > > > > > > ?
-> > > > > > >
-> > > > > > > If so, no, that's an abuse of a platform device, don't do tha=
-t, make a
-> > > > > > > REAL device on the bus that this device lives on.  If it does=
-n't live on
-> > > > > > > a real bus, then put it on the virtual bus but do NOT abuse t=
-he platform
-> > > > > > > device layer for something like this. =20
-> > > > > >
-> > > > > > Ok.  Probably virtual bus it is then.  Rafael, what do you thin=
-k makes sense
-> > > > > > for a 'feature' that is described only by an ACPI table (here R=
-AS2)?
-> > > > > > Kind of similar(ish) to say IORT. =20
-> > > > >
-> > > > > Good question.
-> > > > >
-> > > > > I guess it depends on whether or not there are any registers to a=
-ccess
-> > > > > or AML to interact with.  If so, I think that a platform device m=
-akes
-> > > > > sense. =20
-> > > >
-> > > > Unfortunately still a gray area I think.
-> > > >
-> > > > This does access mailbox memory addresses, but they are provided
-> > > > by an existing platform device, so maybe platform device for this
-> > > > device is still inappropriate :(
-> > > >
-> > > > What this uses is:
-> > > > PCC channel (mailbox in memory + doorbells, etc but that is indirec=
-tly
-> > > > provided as a service via reference in ACPI to the PCCT table entry
-> > > > allowing this to find the mailbox device - which is a platform
-> > > > device drivers/mailbox/pcc.c).
-> > > > Because it's all spec defined content in the mailbox messages, we d=
-on't
-> > > > have the more flexible (and newer I think) 'register' via operation=
- region
-> > > > stuff in AML.
-> > > >
-> > > > A wrinkle though.  The mailbox data is mapped into this driver via
-> > > > an acpi_os_ioremap() call.
-> > > >
-> > > > So I'm thinking we don't have a strong reason for a platform device
-> > > > other than 'similarity' to other examples.  Never the strongest rea=
-son!
-> > > >
-> > > > We'll explore alternatives and see what they end up looking like.
-> > > >
-> > > > Jonathan
-> > > > =20
-> > >
-> > > Greg,
-> > >
-> > > I'm struggling a little to figure out how you envision the virtual bus
-> > > working here.  So before we spend too much time implementing the wron=
-g thing
-> > > as it feels non trivial, let me check my understanding.
-> > >
-> > > Would this mean registering a ras2 bus via subsys_virtual_register().
-> > > (Similar to done for memory tiers) =20
-> >
-> > It should show up under /sys/devices/virtual/ is what I mean.
-> > =20
-> > > On that we'd then add all the devices: one per RAS2 PCC descriptor (t=
-hese
-> > > are one per independent feature). Each feature has its own mailbox sub
-> > > channel (via a reference to the PCC mailbox devices .
-> > > Typically you have one of these per feature type per numa node, but
-> > > that isn't guaranteed.  That will then need wiring up with bus->probe=
-() etc
-> > > so that the RAS2 edac feature drivers can find this later and bind to=
- it to
-> > > register with edac etc.
-> > >
-> > > So spinning up a full new bus, to support this?  I'm not against that=
-. =20
-> >
-> > No, again, see how the stuff that shows up in /sys/devices/virtual
-> > works, that should be much simpler.
-> >
-> > But really, as this is a "bus", just make a new one.  I don't understand
-> > why ACPI isn't creating your devices for you, as this is ACPI code,
-> > perhaps just fix that up instead?  That would make much more sense to
-> > me... =20
->=20
-> Because it is a data-only table, not AML.
->=20
-> It looks to me like this could be an auxiliary device, similar to the
-> Intel VSEC driver: see intel_vsec_add_aux() etc.
->=20
+checking file drivers/edac/fsl_ddr_edac.c
+Hunk #1 FAILED at 31.
+Hunk #2 succeeded at 442 (offset 4 lines).
+Hunk #3 succeeded at 478 (offset 4 lines).
+Hunk #4 succeeded at 492 (offset 4 lines).
+Hunk #5 succeeded at 520 (offset 4 lines).
+Hunk #6 succeeded at 550 (offset 4 lines).
+Hunk #7 succeeded at 577 (offset 4 lines).
+1 out of 7 hunks FAILED
+checking file drivers/edac/fsl_ddr_edac.h
+Hunk #3 FAILED at 71.
+1 out of 3 hunks FAILED
+checking file drivers/edac/layerscape_edac.c
 
-That was in the other branch of the thread abbreviated as auxbus.
-My concern with that approach is we have no parent device and the
-auxiliary bus is always described as being for sub parts of a
-compound device. In the intel_vsec case there is always a parent
-pci device or platform device.
+What tree have you created your patches against?
 
-I don't think there is any functional requirement for a real parent,
-it just feels like abuse given the stated purpose of auxiliary bus.
-Greg, auxiliary bus or separate acpi_ras2 bus feel better to you?
+> diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+> index ccc13c2adfd6f..3e4c2869a07cd 100644
+> --- a/drivers/edac/fsl_ddr_edac.c
+> +++ b/drivers/edac/fsl_ddr_edac.c
+> @@ -31,16 +31,28 @@
+>  
+>  static int edac_mc_idx;
 
-We'd need to parent it off something to avoid the check in
-auxiliary_device_init() + all devices should have a parent anyway.
+I see here:
 
-I was thinking we could use the virtual device, but can only
-get the kobj for that (there is no device), so nope - need a parent.
-platform_device! (only kidding ;)
+|static int edac_mc_idx;
+|
+|static u32 orig_ddr_err_disable; 
+|static u32 orig_ddr_err_sbe;
+|static bool little_endian;
+|
+|static inline u32 ddr_in32(struct fsl_mc_pdata *pdata, unsigned int off)
 
-So my thinking is we are back with a new bus.
+and you don't have those in your diff.
 
-Jonathan
+What's up?
 
+-- 
+Regards/Gruss,
+    Boris.
 
-
-> Cheers, Rafael
->=20
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
