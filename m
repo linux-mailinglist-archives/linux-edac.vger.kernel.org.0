@@ -1,292 +1,142 @@
-Return-Path: <linux-edac+bounces-2095-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2096-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254CB9A07EF
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 12:59:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6F79A0AC3
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 14:53:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E350B25DBB
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 10:59:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C36D280EA8
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 12:53:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3147F2076B5;
-	Wed, 16 Oct 2024 10:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1EC1F8189;
+	Wed, 16 Oct 2024 12:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FCrxX8Yo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M5wDCbOf"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B061C07F9;
-	Wed, 16 Oct 2024 10:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A35206945;
+	Wed, 16 Oct 2024 12:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729076375; cv=none; b=fytCDZvXu6Si/UyDizwyJPfzlVLqLuqyOWCgpfzNh48adgEMFo9TbE6S1H8CHwI76plUnRLCqp3tuvsCeX3tv/ACLX9az3OkboHzKhvo6d1Ucxq4viELZ2NMAynLzLhVMUOt1BDy5KKqbhweg+obJpQFKdau4pIMqS3PY84Oae0=
+	t=1729083220; cv=none; b=X7EH9HkQG/0S3XKNKA8aNpW6qU55ioWtddZNAFkvOapQBNd8nSRy7rDpaa339ueJnmv8nFWgtHTN/PschMc6mQDZNcjSahH2+rRP22vW10zY5XqgO3PDWDWi/TVgljkpamHqUeOP+Q7hMlJcuI8bA4orP42loIJIfW5B4SwwY/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729076375; c=relaxed/simple;
-	bh=z6QRm0J2I++VLMK4orPSe4kHg6UZzQ44XST8c0Wy+aQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i+DNENOyolJZHdruhpD9ZEbEv0Xg0aleqTjjUTrYN5b4cOzx2ctwdWd1ghrmBXlP+w9asexMFUa1ySa3/BKLnbXoF1RNwgyhaOEkXhR4IzJH22Ksp56jTDB7lhRPaV8iPtjN2bcvGjPaGq8hgQOafoJ9E6/1+RXnRTHxsY+ZSRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FCrxX8Yo reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6A8AE40E0198;
-	Wed, 16 Oct 2024 10:59:27 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id H-8ABRph_QdB; Wed, 16 Oct 2024 10:59:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1729076361; bh=zv5a7UXvwk4zGhwGx+Twn4ugNezq5/Up+qwxz+Hta1U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FCrxX8YoQ/0ZHFOf4iWtfypQOEK/v75QEQqJ4SCZSvzWZ6ndsHmWNi5BSVB3wDZsH
-	 ghUpOMJMJU0c7Lk59YRlV8HC+kKwfmzEkLDx9ShZgxBS/wSkiAkc1fo+s0dEL+qgBI
-	 Ft6c7lrtmoWtqZyksnii6gHt0u6RrGxL5NfWtyeAk7wHSSFZb1PW1WN3IA0BaYiNSW
-	 ppG7DJp6ZCsJ/SJySvir3y4W4nIQJx0+QDMC142tXw8u4WifNm/coXUNYyPWiMEtS2
-	 v6geuGqyprz5T3/yD1ymW+QS4/Us0w9DZ6507bTKISm81TyhbMbfwNG5l+sr6BD2sV
-	 lNw7XDM7eCV+Ka6zhbJmZFtty7T1DnBZQRJyaqwPP1y4CDOz/5ehRWJ8lMgqH8bGK/
-	 5CE8GXtjuoBKQNbJZ9cvpKeAmhGAQoen6Nz38IJQwg0fBjcGKonYfrXUAjPb3SlqIN
-	 sPCcYWGsvpU03dWQTW0PtcWJkez3oCQ0m5UlwrDqvhzM48ikXuUQpmlrxQwDztE5P8
-	 tfrGwtyJiAT7QUSbX0HXPJxj7hqg5WmPQ/8lvYOJKm61S2P1zmF7CPPZXzvyOO11/m
-	 GFCt+qosgfObsqGmYBn/tX69pJ5KGO+z3b42BcfTb6kgmY/M5vz5sMO6N5Ga/Pw1ZY
-	 QbIE8Eew44X1U944NxCePlIs=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4D10C40E021A;
-	Wed, 16 Oct 2024 10:58:38 +0000 (UTC)
-Date: Wed, 16 Oct 2024 12:58:32 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: shiju.jose@huawei.com
-Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com,
-	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
-	dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
-	duenwen@google.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
-	wanghuiqiang@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH v13 01/18] EDAC: Add support for EDAC device features
- control
-Message-ID: <20241016105832.GSZw-cWDOFweQMWRgZ@fat_crate.local>
-References: <20241009124120.1124-1-shiju.jose@huawei.com>
- <20241009124120.1124-2-shiju.jose@huawei.com>
+	s=arc-20240116; t=1729083220; c=relaxed/simple;
+	bh=MYdWvQMzNgVnn/YA/XsqtsTxzmfDhV3ZeuC9irRKkZo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Z0S1lH9eK4ZijehYTDkmxv6N5/kG4Dl8N0tsm6TEV5s71VXL11buHxzOMO4BUpST5Zn5GY16F+0WeLB5gDJvBVf4sBLuYn56EG3fZ50a2MYrZ83/mKz3R+8J1E2f+cNXNWVqJ/oRni3iWNB1NPBiBw6FCKrHO6So/I1KdNJ0Whg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M5wDCbOf; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729083219; x=1760619219;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=MYdWvQMzNgVnn/YA/XsqtsTxzmfDhV3ZeuC9irRKkZo=;
+  b=M5wDCbOfFVnmEfZS/+f5x0OdFh5yS3IEl1LAamyXM7bYALq9fmiTONLb
+   JPKL1Ek7dibMThjS/y9a+uI6QcI6ilh1kuw4wISPnpaTZsrkVraOmGcQW
+   1B/c4AMKeMiJt1taMQ3m56n4p5YgZTJdbK7Vn6ZNxtsgMoXINbRTmn6lH
+   86uoHnpB1zYCdSg48fdHVxSeCwaAlN4tosS2Wat9k4GMV0u/z7IcjjLsj
+   0F5olpxlzNrX1rqb5hkfhD2hDgFZ6yWAAfs0P99wUTTUdq5Jcoc7xlnNS
+   cWWTdF3GwzCNKujvpQIruq8ohj4bdC/L8ErgOb0BDyl+ZqkkVpJ8o8bqY
+   Q==;
+X-CSE-ConnectionGUID: x4lvyTXrT3CiVI2jjstn+g==
+X-CSE-MsgGUID: +RsLRAIASXSbnoQvk35MMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="32217415"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="32217415"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 05:53:37 -0700
+X-CSE-ConnectionGUID: FpEVZkUBTiuaE7VkGSUH+A==
+X-CSE-MsgGUID: mNZbp9+vR2m+7+31tecn3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
+   d="scan'208";a="82761539"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 05:53:29 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: tony.luck@intel.com,
+	bp@alien8.de
+Cc: tglx@linutronix.de,
+	dave.hansen@linux.intel.com,
+	mingo@redhat.com,
+	hpa@zytor.com,
+	x86@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	qiuxu.zhuo@intel.com
+Subject: [PATCH v2 00/10] x86/mce: Clean up some x86/mce code
+Date: Wed, 16 Oct 2024 20:30:26 +0800
+Message-Id: <20241016123036.21366-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20241010153202.30876-1-qiuxu.zhuo@intel.com>
+References: <20241010153202.30876-1-qiuxu.zhuo@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241009124120.1124-2-shiju.jose@huawei.com>
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 09, 2024 at 01:41:02PM +0100, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
->=20
-> Add generic EDAC device features control supports registering
-> RAS features supported in the system. Driver exposes features
-> control attributes to userspace in
-> /sys/bus/edac/devices/<dev-name>/<ras-feature>/
+1. Clean up some x86/mce code as below. No functional changes intended.
 
-Chatgpt prompt:
+    - Simplify some code.
 
-| Please check the grammar in this English text: "Add generic EDAC device
-| features control supports registering RAS features supported in the sys=
-tem.
-| Driver exposes features control attributes to userspace in
-| /sys/bus/edac/devices/<dev-name>/<ras-"feature>/
+    - Remove some unnecessary code.
 
-Response:
+    - Improve readability for some code.
 
-| Here=E2=80=99s a corrected version of the text:
-|=20
-| "Add generic EDAC device feature control support for registering RAS fe=
-atures
-| supported in the system. The driver exposes feature control attributes =
-to
-| userspace in /sys/bus/edac/devices/<dev-name>/<ras-feature>/."
-|=20
-| Changes made:
-|=20
-| * "features control" was changed to "feature control" for consistency a=
-nd
-| clarity.
-|=20
-| * "supports registering" was changed to "support for registering" to ma=
-tch the
-| structure of the sentence.
-|=20
-| * Added "The" at the beginning of the second sentence for better flow.
-|=20
-| * Corrected the syntax around the file path to ensure clarity and prope=
-r
-| * punctuation.
+    - Fix some typos.
 
-Please run all your commit text through some LLM AI as they're apparently=
- good
-enough now to help me in correcting grammar.
-=20
-> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
->  drivers/edac/edac_device.c | 105 +++++++++++++++++++++++++++++++++++++
->  include/linux/edac.h       |  32 +++++++++++
->  2 files changed, 137 insertions(+)
->=20
-> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-> index 621dc2a5d034..0b8aa8150239 100644
-> --- a/drivers/edac/edac_device.c
-> +++ b/drivers/edac/edac_device.c
-> @@ -570,3 +570,108 @@ void edac_device_handle_ue_count(struct edac_devi=
-ce_ctl_info *edac_dev,
->  		      block ? block->name : "N/A", count, msg);
->  }
->  EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
-> +
-> +/* EDAC device feature */
-> +static void edac_dev_release(struct device *dev)
-> +{
-> +	struct edac_dev_feat_ctx *ctx =3D container_of(dev, struct edac_dev_f=
-eat_ctx, dev);
-> +
-> +	kfree(ctx->dev.groups);
-> +	kfree(ctx);
-> +}
-> +
-> +const struct device_type edac_dev_type =3D {
-> +	.name =3D "edac_dev",
-> +	.release =3D edac_dev_release,
-> +};
-> +
-> +static void edac_dev_unreg(void *data)
-> +{
-> +	device_unregister(data);
-> +}
-> +
-> +/**
-> + * edac_dev_register - register device for RAS features with EDAC
-> + * @parent: client device.
+    [ Reduce the text segment size by ~116 bytes. ]
 
-If this is a client device, why is the variable called "parent" and not
-"client"?
+2. Pass the following basic tests:
 
-I.e.,
+   - Compile test.
 
-	struct device *client;
+   - Correctable/uncorrectable memory errors can be notified via CMCI/MCE interrupts.
 
-For clarity and simplicity.
+   - Correctable/uncorrectable memory errors can be dispatched to the mcelog daemon and the EDAC driver.
 
-Or call it "parent" because you do:
+   [ Tested on an Intel Sapphire Rapids server. ]
 
-	ctx->dev.parent =3D parent;
+3. This patch series is based on v6.12-rc3.
 
-and forget "client" altogether.
+4. Changes in v2:
 
-> + * @name: client device's name.
-> + * @private: parent driver's data to store in the context if any.
-> + * @num_features: number of RAS features to register.
-> + * @ras_features: list of RAS features to register.
-> + *
-> + * Return:
-> + *  * %0       - Success.
-> + *  * %-EINVAL - Invalid parameters passed.
-> + *  * %-ENOMEM - Dynamic memory allocation failed.
-> + *
-> + * The new edac_dev_feat_ctx would be freed automatically.
+   - Collect "Reviewed-by:" tags for patch {1-8,10}.
 
-Why is this important to call out here?
+   - Update the commit message of patch 9 to include the names of all
+     variables that don't need NULL pointer initializations.
 
-It is a common coding pattern of freeing resources in the release functio=
-n...
+Thanks Tony for reviewing this patch series.
 
-> + */
-> +int edac_dev_register(struct device *parent, char *name,
-> +		      void *private, int num_features,
-> +		      const struct edac_dev_feature *ras_features)
-> +{
-> +	const struct attribute_group **ras_attr_groups;
-> +	struct edac_dev_feat_ctx *ctx;
-> +	int attr_gcnt =3D 0;
-> +	int ret, feat;
-> +
-> +	if (!parent || !name || !num_features || !ras_features)
-> +		return -EINVAL;
-> +
-> +	/* Double parse to make space for attributes */
-> +	for (feat =3D 0; feat < num_features; feat++) {
-> +		switch (ras_features[feat].ft_type) {
-> +		/* Add feature specific code */
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	ctx =3D kzalloc(sizeof(*ctx), GFP_KERNEL);
-> +	if (!ctx)
-> +		return -ENOMEM;
-> +
-> +	ctx->dev.parent =3D parent;
-> +	ctx->private =3D private;
-> +
-> +	ras_attr_groups =3D kcalloc(attr_gcnt + 1, sizeof(*ras_attr_groups), =
-GFP_KERNEL);
-> +	if (!ras_attr_groups) {
-> +		ret =3D -ENOMEM;
-> +		goto ctx_free;
-> +	}
-> +
-> +	attr_gcnt =3D 0;
-> +	for (feat =3D 0; feat < num_features; feat++, ras_features++) {
-> +		switch (ras_features->ft_type) {
-> +		/* Add feature specific code */
-> +		default:
-> +			ret =3D -EINVAL;
-> +			goto groups_free;
-> +		}
-> +	}
-> +
-> +	ras_attr_groups[attr_gcnt] =3D NULL;
-> +	ctx->dev.bus =3D edac_get_sysfs_subsys();
-> +	ctx->dev.type =3D &edac_dev_type;
-> +	ctx->dev.groups =3D ras_attr_groups;
-> +	dev_set_drvdata(&ctx->dev, ctx);
-> +
-> +	ret =3D dev_set_name(&ctx->dev, name);
-> +	if (ret)
-> +		goto groups_free;
-> +
-> +	ret =3D device_register(&ctx->dev);
-> +	if (ret) {
-> +		put_device(&ctx->dev);
-> +		goto groups_free;
-> +		return ret;
-		^^^^^^^^^^
+Qiuxu Zhuo (10):
+  x86/mce/dev-mcelog: Use xchg() to get and clear the flags
+  x86/mce/intel: Use MCG_BANKCNT_MASK instead of 0xff
+  x86/mce: Make several functions return bool
+  x86/mce/threshold: Remove the redundant this_cpu_dec_return()
+  x86/mce/genpool: Make mce_gen_pool_create() return explicit error codes
+  x86/mce: Convert multiple if () statements into a switch() statement
+  x86/mce: Remove the unnecessary {}
+  x86/mce: Remove the redundant zeroing assignments
+  x86/mce/amd: Remove unnecessary NULL pointer initializations
+  x86/mce: Fix typos in comments
 
-Come again?!
+ arch/x86/include/asm/mce.h           |  4 +--
+ arch/x86/kernel/cpu/mce/amd.c        | 18 +++++------
+ arch/x86/kernel/cpu/mce/core.c       | 47 ++++++++++++++--------------
+ arch/x86/kernel/cpu/mce/dev-mcelog.c | 11 ++-----
+ arch/x86/kernel/cpu/mce/genpool.c    |  8 ++---
+ arch/x86/kernel/cpu/mce/intel.c      | 11 ++++---
+ arch/x86/kernel/cpu/mce/threshold.c  |  2 +-
+ 7 files changed, 46 insertions(+), 55 deletions(-)
 
-There's code after a "goto"?
 
---=20
-Regards/Gruss,
-    Boris.
+base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
+-- 
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
