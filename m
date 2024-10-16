@@ -1,311 +1,343 @@
-Return-Path: <linux-edac+bounces-2092-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2093-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 145F89A019B
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 08:42:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EE219A04E9
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 11:00:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6448AB25177
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 06:42:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80EBD1F268C3
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 09:00:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3C51B0137;
-	Wed, 16 Oct 2024 06:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2K2QBi94"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDD14204F94;
+	Wed, 16 Oct 2024 09:00:11 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A02A18C93B;
-	Wed, 16 Oct 2024 06:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.83
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729060896; cv=fail; b=MLcd7otf0i/V3GBJ16Khux6wd4yxC/HLpn3OjyESIvAGl1ay3SpH3I7w3hSlynl2j7r6+j68BTIwNOUW1kQ5yTy3laMQKK6Wtz0yinZ7vQDyEvdj91Zk21jnyPhY4cXiuqQnF51LEQGZ2v2qum/qdnUgv9iKXr0jt9v3HAhHAn0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729060896; c=relaxed/simple;
-	bh=nZnTfP7D/JUBZ48e6ireRnopg1bzWIyrHbRnPBdRIV0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sfFDwYrjEd33g/A59sS7cH2EHDaOiggFhjwatPCBPDRmSFR+R99UNc+O4zk9MAiruZZLQF5K8CYskrByINcqN5z8QkuKXYdFCf2FOQ+YVWs489a4zs9cZXgzaInlVzTkgFhhu7/jNxWgiP3gnGEb/s4nB515fmV7WvaFo+ixGn4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2K2QBi94; arc=fail smtp.client-ip=40.107.93.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=R8gPO74Vfu5Q4e+2ZSkNVMyneNkoNTAnOkeqoZYnxGwqUFKCJ58K5ADmqEo1U8PBKj7Mz0AAr3gBvlrKIZmqlPoev351oZKy/3tLbONg5/lV8vCW4hueivpQR3LzVyWvyhHWpWa51vra89+YnrTTcKriCki7rZukoQS3J1sPCuaN8FZ0yq3vtGCfAJYIT9550SDxDZpBmXFzdhC8XlEieW4LlmDXMNM7ZaDyr5Njoq3ECefZw1uG4lMLLFls/i1tZf5GdFSamTVnYPQZOP/qBafpO+T0Bi1Rb65mhyla7Gvg5Gza5Bqp3kgUDjgZIJNqA/cTpitQN5C4KQfn24tZ7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=94vue54+OnYWJRo8fRs+9t/0+QadbO5lCOwTy6UU7ws=;
- b=QBlx6hDa3KpFZCWXlqf2QK8bp470X9DUl8znvBRQz33NUPvSjfZCAHmbZyI7hOlWEsp5ML+QNpFZ8LTxLFQDuWb2ktBwjJSpTBJNTvXoTNe7TP1c+3kEEcI8M+AcNofBjnbi8HUYoBd6NMdnPInRHYi1RgxZlNpKWCJ90AAS9VDg953DkjMVl9IlBl2InJx6/7LXldvx+dWIc5g6wtVncq71qsK2awYk2qClLHtLYT97I4pNs+FMSjLIiZGiF/8ToyTxpX7nZGuPwJkZ3K0hNzki7cznL5fToW7VCv6no3o/63lUZ+YLQsw84tdB7h2NwQi0Zc5dAvIoVTa3f8S1kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=94vue54+OnYWJRo8fRs+9t/0+QadbO5lCOwTy6UU7ws=;
- b=2K2QBi94qtLBwCR76oaW8cyZelzmId1hRLaVcOi8in5wHF7AJWynD0xOySd0mizwVuwAaaNAnprM8QypuYkU/37ZVsnrtMC9xOzUDMIwE1IRuJvpYI6TOlqX/+4AP9CGhvA4qyqD+GMSv5xNaZ53qAK48IMv3BED0BPKdXRjoRE=
-Received: from CH5PR04CA0011.namprd04.prod.outlook.com (2603:10b6:610:1f4::27)
- by SN7PR12MB6792.namprd12.prod.outlook.com (2603:10b6:806:267::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Wed, 16 Oct
- 2024 06:41:30 +0000
-Received: from CH1PEPF0000AD7C.namprd04.prod.outlook.com
- (2603:10b6:610:1f4:cafe::cf) by CH5PR04CA0011.outlook.office365.com
- (2603:10b6:610:1f4::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.17 via Frontend
- Transport; Wed, 16 Oct 2024 06:41:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH1PEPF0000AD7C.mail.protection.outlook.com (10.167.244.84) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8069.17 via Frontend Transport; Wed, 16 Oct 2024 06:41:29 +0000
-Received: from titanite-d354host.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 16 Oct 2024 01:41:28 -0500
-From: Avadhut Naik <avadhut.naik@amd.com>
-To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<qiuxu.zhuo@intel.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-	<rostedt@goodmis.org>, <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
-	<john.allen@amd.com>, <avadhut.naik@amd.com>
-Subject: [PATCH v6 5/5] EDAC/mce_amd: Add support for FRU Text in MCA
-Date: Wed, 16 Oct 2024 06:36:31 +0000
-Message-ID: <20241016064021.2773618-6-avadhut.naik@amd.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241016064021.2773618-1-avadhut.naik@amd.com>
-References: <20241016064021.2773618-1-avadhut.naik@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5411C6F55;
+	Wed, 16 Oct 2024 09:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729069211; cv=none; b=X+16r0HpuTLCWETHxalGflC/+azkzNhFjSzgs09P1C97z244Sx4/Ogsq0TCfaXx8B4klweEfDmu+0W/9l/d9/Z+tfcTejUhvD1GG+Ik/+MgcaIldrlbPIDwG5FJmcuKdpG/+exHgY7CMi1D9RPRbqj9wRfmR7Yd74QL6/ajwHcU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729069211; c=relaxed/simple;
+	bh=Z8vYqfcihPahyj6XkwjiIM4tnoQjxhP9bBwIwwT90C4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LGZukVFs+LKB3HCfZDlVprBHxCD5U7VThfW55f39M+uiPl8tJth4sjTjHTyLLqy4sI+o2AwwsRkEnc5F+hEPe8n6K7UzVLSis1Mj3rzK6082iyjiQxIlvdpD3LYFMqCEkOPe2APKdHO2cocbG15LG8NhygCeu4bMxm/lFWzzk4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XT4cx6f2mz67ntN;
+	Wed, 16 Oct 2024 16:58:25 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3079E140B67;
+	Wed, 16 Oct 2024 17:00:06 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 16 Oct
+ 2024 11:00:04 +0200
+Date: Wed, 16 Oct 2024 10:00:03 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Greg KH <gregkh@linuxfoundation.org>, <linuxarm@huawei.com>,
+	<shiju.jose@huawei.com>, <linux-edac@vger.kernel.org>,
+	<linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <lenb@kernel.org>, <mchehab@kernel.org>,
+	<dan.j.williams@intel.com>, <dave@stgolabs.net>, <dave.jiang@intel.com>,
+	<alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+	<ira.weiny@intel.com>, <david@redhat.com>, <Vilas.Sridharan@amd.com>,
+	<leo.duran@amd.com>, <Yazen.Ghannam@amd.com>, <rientjes@google.com>,
+	<jiaqiyan@google.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
+	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, Sudeep Holla <sudeep.holla@arm.com>, Jassi Brar
+	<jassisinghbrar@gmail.com>
+Subject: Re: [PATCH v13 12/18] platform: Add __free() based cleanup function
+ for platform_device_put
+Message-ID: <20241016100003.000072fd@Huawei.com>
+In-Reply-To: <CAJZ5v0iRzFQ4EaHKjs0oirmh1HpkONz--JKYB3oLrT84A+XXzA@mail.gmail.com>
+References: <20241009124120.1124-1-shiju.jose@huawei.com>
+	<20241009124120.1124-13-shiju.jose@huawei.com>
+	<20241014164339.00003e73@Huawei.com>
+	<2024101410-turf-junior-7739@gregkh>
+	<2024101451-reword-animation-2179@gregkh>
+	<20241014181654.00005180@Huawei.com>
+	<CAJZ5v0j-mwZmuciSTaL8MyAp530y=n9HbQ=uVvcnvGLR1n+YuQ@mail.gmail.com>
+	<20241015101025.00005305@Huawei.com>
+	<20241015104021.00002906@huawei.com>
+	<2024101517-bubbling-deploy-1be0@gregkh>
+	<CAJZ5v0iyc5gvpXjpZdmv-vh8+haPENz+UBXVSF6UDBCRT12fMg@mail.gmail.com>
+	<20241015151947.00006a4f@Huawei.com>
+	<CAJZ5v0iRzFQ4EaHKjs0oirmh1HpkONz--JKYB3oLrT84A+XXzA@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7C:EE_|SN7PR12MB6792:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a0ea322-0a85-4f17-b11b-08dcedad911c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|376014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?dCRmVQUqesNw57Jj1wQmpeJCGQvJPMI2mHDblS/QnFhJ5vYT7svzbRKWkdD3?=
- =?us-ascii?Q?Oz1IA/O5Synw5/1pFEYmxUnCR6Z52VfcmfYZXswKtgLvbjRSkcsTyEAzayDd?=
- =?us-ascii?Q?DjQ2GyAGTXZov4pHDO/1MTd+ATNOmvYxWUWqPhRqIhknb39PJAjipVyMZjNx?=
- =?us-ascii?Q?bJbBQpoeaEjVMSz4y09jEXo7cF3RTOlMwV1mslplANi/9fzUln4UMHRRf3xm?=
- =?us-ascii?Q?itXVuJhK1YPI3557UyB+m+OsIHB6yxDD0tM0LyWwEjI3utTshpZPjvomVMOq?=
- =?us-ascii?Q?D5BzilBLYkUntVllqeAmjJwnqaB2iYxNEE6YmqQInoyCcL134ancQWIjKbme?=
- =?us-ascii?Q?pBS9UHNxiHNHYesPuy1kCG0cT/SK2UNfvUV78uCZWLhzpPGovP0ArqyQ6gME?=
- =?us-ascii?Q?zrMEmunNZF/XKqmDeBu+yGT8OWAQ8tvKNmxZ+Q+t9OehEsA0oRF6rJNDBMnx?=
- =?us-ascii?Q?TVchM5D+DSFUD7hLsABrSLsikRcMpazchiTlI/PYfGR+TaQ476UaAPvAl5Qx?=
- =?us-ascii?Q?WKf3BkxSVu0fqNbqtsoOfFCdE20pnHyzp7rh7nMwAUYzd3NGKHAICIq90PkS?=
- =?us-ascii?Q?hSreO8OYJw1j9eG83GMF47kt22TTaMPonMV0JZhngHAWwajgTe/GxjlUy2ll?=
- =?us-ascii?Q?1ipBFuds4l4nWpBRiw2j/RQBSdoZg3KvyOSziwBTv8KKg0DfjspXN2EzFrwp?=
- =?us-ascii?Q?V0IvNvrCz/OvHB4KovE9qn1s5AU0hnyyTvvDCEtRm7CtBM4BcKFckWM1sQEk?=
- =?us-ascii?Q?b60nJwL4ybNN+0jPQmQC/luNt+RbEvaxoHSX2l4CC+qlwGtc0z4UeZftZMMf?=
- =?us-ascii?Q?8BvsUYBlh2bo4GYKKQ180guiBV3Y0lj1gEHSHZXd6kGtQA4AXDgUX8jzxtHZ?=
- =?us-ascii?Q?TDNcJgKqD2PuleRGMx75EsxOTEt5lYFkcapaZ8JgNDyIv8qj6nnX2ZLPotwP?=
- =?us-ascii?Q?aPFjnILuAcT3lyF1aCE50V4OO3tva7iJiMapC6RukCpkxav0/iUAlNzo+yGb?=
- =?us-ascii?Q?qrBaCBjfSDrdQLvuF1OfIan48dsTxTSuon5BWuX5A0ejWScVY/s6InTnD6nt?=
- =?us-ascii?Q?rsNakYOFRaSthk0tpORZnyO64Q8jH/AeILwkoL06CgxbNe1I0r1MCQKOX5Q4?=
- =?us-ascii?Q?z66Me9oBRQM+U/t6AYysBjqzJ4IZ2C93EY2wOlp2Bw2IKi6Pn3gBTRicCL+P?=
- =?us-ascii?Q?SJJv8ie+d7p8Xz87fP16QoQ8zHRJvtDAB/0SXTLFYUZs/83+BD9cyJggRn1T?=
- =?us-ascii?Q?cktt9AW4fdJpXtRQ9qI5mbTXUxgZzaAoyTacD/zBsVnJotqqS7Yk5VNw52Yo?=
- =?us-ascii?Q?9JapfTAxRhh2oF3Cn5MLdX4pwTNhsH77SqQNbONk9OU8KX4zGDv0GyJo7dyy?=
- =?us-ascii?Q?g7wALxkgRopkabJ4egYOPfawMH3P?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 06:41:29.8532
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a0ea322-0a85-4f17-b11b-08dcedad911c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH1PEPF0000AD7C.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6792
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+On Tue, 15 Oct 2024 17:35:31 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-A new "FRU Text in MCA" feature is defined where the Field Replaceable
-Unit (FRU) Text for a device is represented by a string in the new
-MCA_SYND1 and MCA_SYND2 registers. This feature is supported per MCA
-bank, and it is advertised by the McaFruTextInMca bit (MCA_CONFIG[9]).
+> On Tue, Oct 15, 2024 at 4:19=E2=80=AFPM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
+> >
+> > On Tue, 15 Oct 2024 15:32:28 +0200
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > =20
+> > > On Tue, Oct 15, 2024 at 12:17=E2=80=AFPM Greg KH <gregkh@linuxfoundat=
+ion.org> wrote: =20
+> > > >
+> > > > On Tue, Oct 15, 2024 at 10:40:54AM +0100, Jonathan Cameron wrote: =
+=20
+> > > > > On Tue, 15 Oct 2024 10:10:25 +0100
+> > > > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> > > > > =20
+> > > > > > On Mon, 14 Oct 2024 20:06:40 +0200
+> > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > > > > =20
+> > > > > > > On Mon, Oct 14, 2024 at 7:17=E2=80=AFPM Jonathan Cameron
+> > > > > > > <Jonathan.Cameron@huawei.com> wrote: =20
+> > > > > > > >
+> > > > > > > > On Mon, 14 Oct 2024 18:04:37 +0200
+> > > > > > > > Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > > > > =20
+> > > > > > > > > On Mon, Oct 14, 2024 at 06:00:51PM +0200, Greg KH wrote: =
+=20
+> > > > > > > > > > On Mon, Oct 14, 2024 at 04:43:39PM +0100, Jonathan Came=
+ron wrote: =20
+> > > > > > > > > > > On Wed, 9 Oct 2024 13:41:13 +0100
+> > > > > > > > > > > <shiju.jose@huawei.com> wrote:
+> > > > > > > > > > > =20
+> > > > > > > > > > > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > > > > > > > >
+> > > > > > > > > > > > Add __free() based cleanup function for platform_de=
+vice_put().
+> > > > > > > > > > > >
+> > > > > > > > > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@h=
+uawei.com>
+> > > > > > > > > > > > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> > > > > > > > > > > > ---
+> > > > > > > > > > > >  include/linux/platform_device.h | 1 +
+> > > > > > > > > > > >  1 file changed, 1 insertion(+)
+> > > > > > > > > > > >
+> > > > > > > > > > > > diff --git a/include/linux/platform_device.h b/incl=
+ude/linux/platform_device.h
+> > > > > > > > > > > > index d422db6eec63..606533b88f44 100644
+> > > > > > > > > > > > --- a/include/linux/platform_device.h
+> > > > > > > > > > > > +++ b/include/linux/platform_device.h
+> > > > > > > > > > > > @@ -232,6 +232,7 @@ extern int platform_device_add_=
+data(struct platform_device *pdev,
+> > > > > > > > > > > >  extern int platform_device_add(struct platform_dev=
+ice *pdev);
+> > > > > > > > > > > >  extern void platform_device_del(struct platform_de=
+vice *pdev);
+> > > > > > > > > > > >  extern void platform_device_put(struct platform_de=
+vice *pdev);
+> > > > > > > > > > > > +DEFINE_FREE(platform_device_put, struct platform_d=
+evice *, if (_T) platform_device_put(_T))
+> > > > > > > > > > > >
+> > > > > > > > > > > >  struct platform_driver {
+> > > > > > > > > > > >         int (*probe)(struct platform_device *); =20
+> > > > > > > > > > >
+> > > > > > > > > > > +CC Greg KH and Rafael.
+> > > > > > > > > > >
+> > > > > > > > > > > Makes sure to include them on v14 as this needs revie=
+w from a driver core point
+> > > > > > > > > > > of view I think. =20
+> > > > > > > > > >
+> > > > > > > > > > Why is this needed for a platform device?  This feels l=
+ike you will have
+> > > > > > > > > > to do more work to "keep" the reference on the normal p=
+ath than you to
+> > > > > > > > > > today to release the reference on the error path, right=
+?  Have a pointer
+> > > > > > > > > > to a patch that uses this? =20
+> > > > > > > > >
+> > > > > > > > > Ah, is it this one:
+> > > > > > > > >       https://lore.kernel.org/all/20241014164955.00003439=
+@Huawei.com/
+> > > > > > > > > ?
+> > > > > > > > >
+> > > > > > > > > If so, no, that's an abuse of a platform device, don't do=
+ that, make a
+> > > > > > > > > REAL device on the bus that this device lives on.  If it =
+doesn't live on
+> > > > > > > > > a real bus, then put it on the virtual bus but do NOT abu=
+se the platform
+> > > > > > > > > device layer for something like this. =20
+> > > > > > > >
+> > > > > > > > Ok.  Probably virtual bus it is then.  Rafael, what do you =
+think makes sense
+> > > > > > > > for a 'feature' that is described only by an ACPI table (he=
+re RAS2)?
+> > > > > > > > Kind of similar(ish) to say IORT. =20
+> > > > > > >
+> > > > > > > Good question.
+> > > > > > >
+> > > > > > > I guess it depends on whether or not there are any registers =
+to access
+> > > > > > > or AML to interact with.  If so, I think that a platform devi=
+ce makes
+> > > > > > > sense. =20
+> > > > > >
+> > > > > > Unfortunately still a gray area I think.
+> > > > > >
+> > > > > > This does access mailbox memory addresses, but they are provided
+> > > > > > by an existing platform device, so maybe platform device for th=
+is
+> > > > > > device is still inappropriate :(
+> > > > > >
+> > > > > > What this uses is:
+> > > > > > PCC channel (mailbox in memory + doorbells, etc but that is ind=
+irectly
+> > > > > > provided as a service via reference in ACPI to the PCCT table e=
+ntry
+> > > > > > allowing this to find the mailbox device - which is a platform
+> > > > > > device drivers/mailbox/pcc.c).
+> > > > > > Because it's all spec defined content in the mailbox messages, =
+we don't
+> > > > > > have the more flexible (and newer I think) 'register' via opera=
+tion region
+> > > > > > stuff in AML.
+> > > > > >
+> > > > > > A wrinkle though.  The mailbox data is mapped into this driver =
+via
+> > > > > > an acpi_os_ioremap() call.
+> > > > > >
+> > > > > > So I'm thinking we don't have a strong reason for a platform de=
+vice
+> > > > > > other than 'similarity' to other examples.  Never the strongest=
+ reason!
+> > > > > >
+> > > > > > We'll explore alternatives and see what they end up looking lik=
+e.
+> > > > > >
+> > > > > > Jonathan
+> > > > > > =20
+> > > > >
+> > > > > Greg,
+> > > > >
+> > > > > I'm struggling a little to figure out how you envision the virtua=
+l bus
+> > > > > working here.  So before we spend too much time implementing the =
+wrong thing
+> > > > > as it feels non trivial, let me check my understanding.
+> > > > >
+> > > > > Would this mean registering a ras2 bus via subsys_virtual_registe=
+r().
+> > > > > (Similar to done for memory tiers) =20
+> > > >
+> > > > It should show up under /sys/devices/virtual/ is what I mean.
+> > > > =20
+> > > > > On that we'd then add all the devices: one per RAS2 PCC descripto=
+r (these
+> > > > > are one per independent feature). Each feature has its own mailbo=
+x sub
+> > > > > channel (via a reference to the PCC mailbox devices .
+> > > > > Typically you have one of these per feature type per numa node, b=
+ut
+> > > > > that isn't guaranteed.  That will then need wiring up with bus->p=
+robe() etc
+> > > > > so that the RAS2 edac feature drivers can find this later and bin=
+d to it to
+> > > > > register with edac etc.
+> > > > >
+> > > > > So spinning up a full new bus, to support this?  I'm not against =
+that. =20
+> > > >
+> > > > No, again, see how the stuff that shows up in /sys/devices/virtual
+> > > > works, that should be much simpler.
+> > > >
+> > > > But really, as this is a "bus", just make a new one.  I don't under=
+stand
+> > > > why ACPI isn't creating your devices for you, as this is ACPI code,
+> > > > perhaps just fix that up instead?  That would make much more sense =
+to
+> > > > me... =20
+> > >
+> > > Because it is a data-only table, not AML.
+> > >
+> > > It looks to me like this could be an auxiliary device, similar to the
+> > > Intel VSEC driver: see intel_vsec_add_aux() etc.
+> > > =20
+> >
+> > That was in the other branch of the thread abbreviated as auxbus.
+> > My concern with that approach is we have no parent device and the
+> > auxiliary bus is always described as being for sub parts of a
+> > compound device. In the intel_vsec case there is always a parent
+> > pci device or platform device.
+> >
+> > I don't think there is any functional requirement for a real parent,
+> > it just feels like abuse given the stated purpose of auxiliary bus.
+> > Greg, auxiliary bus or separate acpi_ras2 bus feel better to you?
+> >
+> > We'd need to parent it off something to avoid the check in
+> > auxiliary_device_init() + all devices should have a parent anyway. =20
+>=20
+> Wouldn't that be the platform device providing the mailbox memory
+> addresses mentioned in one of the previous messages?
 
-The FRU Text is populated dynamically for each individual error state
-(MCA_STATUS, MCA_ADDR, et al.). This handles the case where an MCA bank
-covers multiple devices, for example, a Unified Memory Controller (UMC)
-bank that manages two DIMMs.
+Added Sudeep and Jassi given this feels like we'd need their input
+to consider doing this.
 
-Since MCA_CONFIG[9] is instrumental in decoding FRU Text, it has to be
-exported through the mce_record tracepoint so that userspace tools like
-the rasdaemon can determine if FRU Text has been reported through the
-MCA_SYND1 and MCA_SYND2 registers and output it.
+Hmm. Probably works, though it will be a little inelegant as we'll have
+a discovery path unrelated to the mailbox provider discovery path
+that then instantiates children of the mailbox device. This is just
+one consumer of the mailbox device. It feels not too bad for this particular
+combination at all because RAS2 entries don't have any other resources
+so unlike many PCC channel users we wouldn't be introduce devices with
+wider scope than the mailbox parent device (note I think there is only
+device for all PCC in the system - each actual mailbox is a PCC subspace).
 
-[Yazen: Add Avadhut as co-developer for wrapper changes.]
+1) Mailbox path:
+	acpi_pcc_probe() in drivers/mailbox/pcc.c via postcore_init_call()
+ 	Checks there are PCC channels in PCCT ACPI table.
+	Instantiates a platform device and binds that via
+	platform_create_bundle()
+	Probes the available channels and stashes all the info
+	about them in arrays associated with that platform device.
+	Calls mbox_controller_register() which sounds like as
+	class registration but isn't. That just puts it on
+	LIST_HEAD(mbox_cons) so that it can be searched for
+	by consumers of this channel.
+2) RAS2 parsing (tweaked version of patch 13)
+	acpi_ras2_probe() currently via a late_initcall()
+	Checks for RAS2 table and for each RAS2 PCC descriptor and
+	gets a channel from the appropriate mailbox via
+	pcc_mbox_request_channel() giving us a struct pcc_mbox_chan.
+	Then we would need to get from there to the platform device
+	that represents all the mailboxes.
+	pcc_mbox->mchan->mbox_controller->dev is it I think.
+	Finally we parent our new device off that.
 
-Co-developed-by: Avadhut Naik <avadhut.naik@amd.com>
-Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
----
-Changes in v2:
-[1] https://lore.kernel.org/linux-edac/20240521125434.1555845-1-yazen.ghannam@amd.com/
-[2] https://lore.kernel.org/linux-edac/20240523155641.2805411-1-yazen.ghannam@amd.com/
+What do people think of this vs option of spinning a new bus/acpi_ras2
+and no parent relationship between a ras2 feature entry the PCC
+platform device - just a client of mailbox relationship
+(effectively what is in patch 13, but with devices on a new bus rather
+than as platform_device)
+https://lore.kernel.org/all/20241009124120.1124-14-shiju.jose@huawei.com/
+is that patch.
 
-1. Drop dependencies on sets [1] and [2] above and rebase on top of
-tip/master.
+Jonathan
 
-Changes in v3:
-1. Modify commit message per feedback provided.
-2. Remove call to memset() for the string frutext. Instead, just ensure
-that it is NULL terminated.
-2. Fix SoB chain to properly reflect the patch path.
 
-Changes in v4:
-1. Rebase on top of tip/master to avoid merge conflicts.
 
-Changes in v5:
-1. No changes except rebasing on top of tip/master.
 
-Changes in v6:
-1. No changes except rebasing on top of tip/master.
----
- arch/x86/include/asm/mce.h     |  2 ++
- arch/x86/kernel/cpu/mce/amd.c  |  1 +
- arch/x86/kernel/cpu/mce/apei.c |  2 ++
- arch/x86/kernel/cpu/mce/core.c |  3 +++
- drivers/edac/mce_amd.c         | 21 ++++++++++++++-------
- 5 files changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index c2466b20fe79..72a69ad7d692 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -61,6 +61,7 @@
-  *  - TCC bit is present in MCx_STATUS.
-  */
- #define MCI_CONFIG_MCAX		0x1
-+#define MCI_CONFIG_FRUTEXT	BIT_ULL(9)
- #define MCI_IPID_MCATYPE	0xFFFF0000
- #define MCI_IPID_HWID		0xFFF
- 
-@@ -213,6 +214,7 @@ struct mce_hw_err {
- 		struct {
- 			u64 synd1;		/* MCA_SYND1 MSR */
- 			u64 synd2;		/* MCA_SYND2 MSR */
-+			u64 config;		/* MCA_CONFIG MSR */
- 		} amd;
- 	} vendor;
- };
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 6ca80fff1fea..65ace034af08 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -796,6 +796,7 @@ static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
- 
- 	if (mce_flags.smca) {
- 		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), m->ipid);
-+		rdmsrl(MSR_AMD64_SMCA_MCx_CONFIG(bank), err.vendor.amd.config);
- 
- 		if (m->status & MCI_STATUS_SYNDV) {
- 			rdmsrl(MSR_AMD64_SMCA_MCx_SYND(bank), m->synd);
-diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index 0a89947e47bc..19a1c72fc2bf 100644
---- a/arch/x86/kernel/cpu/mce/apei.c
-+++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -155,6 +155,8 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 		fallthrough;
- 	/* MCA_CONFIG */
- 	case 4:
-+		err.vendor.amd.config = *(i_mce + 3);
-+		fallthrough;
- 	/* MCA_MISC0 */
- 	case 3:
- 		m->misc = *(i_mce + 2);
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index b7f4a49a1053..923983009c61 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -208,6 +208,8 @@ static void __print_mce(struct mce_hw_err *err)
- 			pr_cont("SYND2 %llx ", err->vendor.amd.synd2);
- 		if (m->ipid)
- 			pr_cont("IPID %llx ", m->ipid);
-+		if (err->vendor.amd.config)
-+			pr_cont("CONFIG %llx ", err->vendor.amd.config);
- 	}
- 
- 	pr_cont("\n");
-@@ -681,6 +683,7 @@ static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
- 
- 	if (mce_flags.smca) {
- 		m->ipid = mce_rdmsrl(MSR_AMD64_SMCA_MCx_IPID(i));
-+		err->vendor.amd.config = mce_rdmsrl(MSR_AMD64_SMCA_MCx_CONFIG(i));
- 
- 		if (m->status & MCI_STATUS_SYNDV) {
- 			m->synd = mce_rdmsrl(MSR_AMD64_SMCA_MCx_SYND(i));
-diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-index 194d9fd47d20..d69a1466f0bc 100644
---- a/drivers/edac/mce_amd.c
-+++ b/drivers/edac/mce_amd.c
-@@ -795,6 +795,7 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
- 	struct mce *m = (struct mce *)data;
- 	struct mce_hw_err *err = to_mce_hw_err(m);
- 	unsigned int fam = x86_family(m->cpuid);
-+	u64 mca_config = err->vendor.amd.config;
- 	int ecc;
- 
- 	if (m->kflags & MCE_HANDLED_CEC)
-@@ -814,11 +815,7 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
- 		((m->status & MCI_STATUS_PCC)	? "PCC"	  : "-"));
- 
- 	if (boot_cpu_has(X86_FEATURE_SMCA)) {
--		u32 low, high;
--		u32 addr = MSR_AMD64_SMCA_MCx_CONFIG(m->bank);
--
--		if (!rdmsr_safe(addr, &low, &high) &&
--		    (low & MCI_CONFIG_MCAX))
-+		if (mca_config & MCI_CONFIG_MCAX)
- 			pr_cont("|%s", ((m->status & MCI_STATUS_TCC) ? "TCC" : "-"));
- 
- 		pr_cont("|%s", ((m->status & MCI_STATUS_SYNDV) ? "SyndV" : "-"));
-@@ -853,8 +850,18 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
- 
- 		if (m->status & MCI_STATUS_SYNDV) {
- 			pr_cont(", Syndrome: 0x%016llx\n", m->synd);
--			pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
--				 err->vendor.amd.synd1, err->vendor.amd.synd2);
-+			if (mca_config & MCI_CONFIG_FRUTEXT) {
-+				char frutext[17];
-+
-+				frutext[16] = '\0';
-+				memcpy(&frutext[0], &err->vendor.amd.synd1, 8);
-+				memcpy(&frutext[8], &err->vendor.amd.synd2, 8);
-+
-+				pr_emerg(HW_ERR "FRU Text: %s", frutext);
-+			} else {
-+				pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
-+					 err->vendor.amd.synd1, err->vendor.amd.synd2);
-+			}
- 		}
- 
- 		pr_cont("\n");
--- 
-2.43.0
 
 
