@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-2088-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2089-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B92699A0187
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 08:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A57079A018A
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 08:41:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D32271C22EF7
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 06:40:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9D4F1C22EF1
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 06:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CCE18E05E;
-	Wed, 16 Oct 2024 06:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23D918FDBB;
+	Wed, 16 Oct 2024 06:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="U9UldFQR"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="N7lqM6hc"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2050.outbound.protection.outlook.com [40.107.93.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9049F18DF85;
-	Wed, 16 Oct 2024 06:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAD918E772;
+	Wed, 16 Oct 2024 06:40:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729060855; cv=fail; b=ZDhQ7Z3ODBkBUw0PRmBskL2T/7tC1h/ohih6yTUi4XS0HheihAbSRif1bA9PHuwGrs41MujEkVo805ih2rLJgHRfLgZXCIcP2ZrI1o8b4J8kXVjiqg6E2J5hwsyAfFC5iz2JSkjwUgg16mJLMucinWwYkEUjJuSbyb40TcNagqM=
+	t=1729060861; cv=fail; b=p5q5xI33W3TjCypcTIKIPQrvSTP7J/iqJjdiGuFmtHAqhRSZqFCYMZ3LSOlIN/9vrn3uptNn92nQNBJKdWM2xIL5NhYAseaC6Zj25DHdDeTlBZoR54UJeRtIfXr6bOtv0O2MgglTBHOMhZf9z90xyO0qW0k/wcs2c/XRkt1Yqzo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729060855; c=relaxed/simple;
-	bh=5c9/lybIm0RJWxMD6k3bbZnw2cvOlh2eJ6dMy6HAjb8=;
+	s=arc-20240116; t=1729060861; c=relaxed/simple;
+	bh=DTfb0uGQayCvWjqEt4i31wuQGtxzu0I08PRjt09FOMU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Hl9ckW5KsJAvUa3MpnqzcEPpH28U7zuJbtXXvcBRoG9Su7Qw/AwLB1sIMO5RSoFYM7hRGkMuV3fMuKM4jRYNTAX7Jw4n+EVdN7q1yFA6T0fHDnkwtz8JA9k6oe0Bj8tRoBbJsKEcyQtEnFS7qZVUlslETVQs29dfC8+JszZMe6Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=U9UldFQR; arc=fail smtp.client-ip=40.107.94.80
+	 MIME-Version:Content-Type; b=vFN/4DQdd79k2HCZCL1OtGnGg7b80Lr/HLUvLQkcU6eDp4z3Nf6bPVs+59ccEfKx4MiTZ8mbLd4R/qArSM39YumiskkfO2pzq/IHCUH63f7CG+rszlfxS4S3AtyjexS21OsYTFGSlxmbLvDcsuYrzCxUTaLF0/yltF/JyJJxefc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=N7lqM6hc; arc=fail smtp.client-ip=40.107.93.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IstYSMkNgvOiLymlrroaLGp7CfZx8KyZBkNREsxxz3BzMe+GvnTK5RsBxfAsj0fni/lHhLhbZ2RDWiCqB5Mmq2yscrvF466FsvNxzfbIdI1Xp9Nn+zN21yC5V0Mlt9U6pgcifpnU2q03lrW3DsmXcyfY6gj1wHuXaLJAGlVMTCAM5bpOHdXmQKCRZKXBp3YuCFK/rHbCNEwE3v3/wE4TUW6PHq+Mczzhak+suXgLsGBKqaKjoHwzOqsh2KUo27HZjjD0iU7jLGKRHuO6oS2zIT9FknqfVNE2Yi5vvh46KTNQfQoW2wEYqQvoSVhtcB3K18U2imydbrE5TMQnV1HBNQ==
+ b=Z5cbQ4O7s+V9B1E+ZVsnszukNmJSFcENDDp5gnDsp/MtgFhJq0rV8u6F9pOvZziLpMSwtgSllTKE5OnDsvBBSArWmmrgl2si4Y5PElL02JuwLBd1HRxf1Jg/0uxh+MeATEJelccx8PtC4kR/0adHb/V8PB/24dZUGme1bRRzJOF1PQpyWrHcR5jbsD9rD4R8NkOgLWZcBPjcUsoVOh5V/2dfMN9IjGdZiRekqnCQCUOc9W6AHV/vqldr3t6x75UH7DV450CKSB1be+vzAdcAeNXGEzvlTjexswR9VmNwJ4t5c2Dp8bh0kFHv11Wtjss2R/u5LBcTWGE46uH/3zk5cw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1Y63iHOZay9feeaqKDbdzIJnZjWhw2Et7AOFpbptsoE=;
- b=LQNzLtn4BtPVd9OxqqPM0Lap+wWyKVnmkmdR1mfFIr5elExokRUOeLt8mcZBdTlLC6Gd/P9UMdXjGbE7ScwLYuLvUVfKG/blo3s7IcOodhxOaj4VW7BxTnQI1azcqk6oF2aIEPQR3/G9f4+N+swjZyvF6ze4fJ0HwBVNo1GrqJ3o/ZwedpKAVDtiN6Hef+a7OSp7GnzwJnvxOXLmXo/Cqgf//4FiieqlgyxTbQZ9AykG39C9pXvhvG9xIq47q3N3X4iGXa8J/tcqs2PZ4jxhXIDKVxoFUwyvz7eUuahXjFUfm+MTF/Phgn4qW+yAV8+C5VDEkJYMj0c6u/0AXSLWOw==
+ bh=nz1Xoj/I0knZANwUAIsJGVl0XaNhR5UKK2csbKTeHsg=;
+ b=Dz0FdF3C2JElo7IZIhcQ2/0/fnqPf2ewvtH+ML1qwbfnigOqCCOO7NWiPm5VSFTDLA7ukg+tYBgOOG/i8UFbuWkxnCGA8az7CVrtaV0UO3bYeq/EdOoDV6aZxmSMllIUvPPXy4t+Ui9ZaA6TdWUXw1gGRlLP3Up62m52FlQ0OaMKMDf8d2vGZ7dYOQqwCYu72jOckdvlfxH/uTFOIs/ZF/qLHaANSkn/WOudC3UdeeUVaxpdy3unKBP8sGi31fOQy8mZ6ijYxZRSl+xpMW5M0Wwjj7mUkkpVMeInBpTHHfUE4C7emuP2WhJlyGOkIssq6nbY+83xafm1V8GT1uKpfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Y63iHOZay9feeaqKDbdzIJnZjWhw2Et7AOFpbptsoE=;
- b=U9UldFQRgl/mvsI/hvBb5exb9NirxhO9quqWwyYnAlKoZVMEY9gK5Z39lLwbkBAioutDWhtFwBH+fN470lX8WZXv9yFN940ZtPpmiOznoHPqjsUtA3aWvMkXTMCRTPLVFrdPe2Of7UOededHgLzj+olheQWlVC7cRiTejrtLzGY=
-Received: from CH2PR10CA0029.namprd10.prod.outlook.com (2603:10b6:610:4c::39)
- by MN0PR12MB6030.namprd12.prod.outlook.com (2603:10b6:208:3ce::6) with
+ bh=nz1Xoj/I0knZANwUAIsJGVl0XaNhR5UKK2csbKTeHsg=;
+ b=N7lqM6hcoXjXRnOumrbSzxOxJbKUiRpjtALMFOQpwlNx6Et/LVu61KXf26TB1ujXRYhMgFYcLlInU8Ek4qwv5y2PtpRdaEjqKXbq7Xq4cnsiOc8k2dWOyoMl6AuHG6DM6+/WncHcBGeCYdPVhTixlEdDLLFc3nSovkdkfSV7fFA=
+Received: from CH2PR20CA0022.namprd20.prod.outlook.com (2603:10b6:610:58::32)
+ by SJ2PR12MB7963.namprd12.prod.outlook.com (2603:10b6:a03:4c1::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Wed, 16 Oct
- 2024 06:40:46 +0000
-Received: from CH1PEPF0000AD7E.namprd04.prod.outlook.com
- (2603:10b6:610:4c:cafe::d8) by CH2PR10CA0029.outlook.office365.com
- (2603:10b6:610:4c::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.24; Wed, 16 Oct
+ 2024 06:40:56 +0000
+Received: from CH1PEPF0000AD7F.namprd04.prod.outlook.com
+ (2603:10b6:610:58:cafe::e2) by CH2PR20CA0022.outlook.office365.com
+ (2603:10b6:610:58::32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18 via Frontend
- Transport; Wed, 16 Oct 2024 06:40:45 +0000
+ Transport; Wed, 16 Oct 2024 06:40:56 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH1PEPF0000AD7E.mail.protection.outlook.com (10.167.244.87) with Microsoft
+ CH1PEPF0000AD7F.mail.protection.outlook.com (10.167.244.88) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8069.17 via Frontend Transport; Wed, 16 Oct 2024 06:40:44 +0000
+ 15.20.8069.17 via Frontend Transport; Wed, 16 Oct 2024 06:40:56 +0000
 Received: from titanite-d354host.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 16 Oct 2024 01:40:43 -0500
+ 15.1.2507.39; Wed, 16 Oct 2024 01:40:55 -0500
 From: Avadhut Naik <avadhut.naik@amd.com>
 To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
 	<linux-trace-kernel@vger.kernel.org>
@@ -77,9 +77,9 @@ CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
 	<qiuxu.zhuo@intel.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
 	<rostedt@goodmis.org>, <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
 	<john.allen@amd.com>, <avadhut.naik@amd.com>
-Subject: [PATCH v6 1/5] x86/mce: Add wrapper for struct mce to export vendor specific info
-Date: Wed, 16 Oct 2024 06:36:27 +0000
-Message-ID: <20241016064021.2773618-2-avadhut.naik@amd.com>
+Subject: [PATCH v6 2/5] tracing: Add __print_dynamic_array() helper
+Date: Wed, 16 Oct 2024 06:36:28 +0000
+Message-ID: <20241016064021.2773618-3-avadhut.naik@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241016064021.2773618-1-avadhut.naik@amd.com>
 References: <20241016064021.2773618-1-avadhut.naik@amd.com>
@@ -95,1049 +95,136 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7E:EE_|MN0PR12MB6030:EE_
-X-MS-Office365-Filtering-Correlation-Id: 08e49afe-9bcd-496d-3abd-08dcedad7654
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7F:EE_|SJ2PR12MB7963:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4606fadd-36b1-4d01-2a68-08dcedad7d05
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014|7416014;
+	BCL:0;ARA:13230040|82310400026|36860700013|7416014|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ECPjAjw3B8ecGoMPGvYfmiSAV3JqrOYSNTLBHjd+S09NufrZwbzNcWBoSji1?=
- =?us-ascii?Q?zmvmARImQ9+/wJ/xAgr5DzddaxqTgeJ5xfDORPZ+aN1Xy8KVcDo3HREzOII7?=
- =?us-ascii?Q?uOHE5opi0vu7oumaeMO6PNK99fR1pXBpBm4euKwAlBdxu1xp3qgwIQDlo50j?=
- =?us-ascii?Q?geuHjqXNPneJ9jSFgSoLNCOnAb5QhSRUvCZ9JyDM/4VGSN6UT5dqRXWeGPoe?=
- =?us-ascii?Q?rqFRSuHaHPmwx259FJ1LqRSr07PdZZYPLZr1V+mtZvtdkJ8eu4EnKol51iKY?=
- =?us-ascii?Q?nRYyIWuy9YuDS8N+bd6G5niubewfJYlLeXBKlNT8bdcb+kxYUQQa/kJ53Z/y?=
- =?us-ascii?Q?jJHxxoxzwV3qT8xgwJ1b7TbB88BfcSoUP79wn+I4ZwM9lEbz9/USi9dewKX6?=
- =?us-ascii?Q?L4zzukZDVkh+NOMGVZo5ri1tE7yFjlg9vPqKQ/vnhdDsOvDIcjPYBExKqq7j?=
- =?us-ascii?Q?1qDgzby9xDQUJuGdG7xtc+oNETbyjOLeVfD+ioSTpjvPwTd/MOBpFh0D+aBQ?=
- =?us-ascii?Q?cAgRG5VsmzwnR8XRNyXMbnQviU9aDthwKiNJfeF4b1/KvoPOc+VPkC5QxIO7?=
- =?us-ascii?Q?RfkgOfUM9HsuU5Cpq94+zvz3TPkdKopPymE/H0T6aoedbLxxhST0WThMJ6u7?=
- =?us-ascii?Q?2CQWDiAU2lzWBYWltKOKHqjONf6HWSDtVPyETDf/XRMt4sR4QEafqhjA9YOw?=
- =?us-ascii?Q?yZA3txv4agAw86zvMNBTWQAk/8SOuq9oKA0IOCyUP4cSzSBuzuOpRYp+ndy0?=
- =?us-ascii?Q?4FBOsaxmFUWnNwFFbXJg+hDOupaWu7f/Hv1FfhAAIXZRYgq2DiUtG6MUtdoi?=
- =?us-ascii?Q?e6xpHSVNrg1e7TqUddinlcrhbGq33a854QmwS9wsuXHyv0LRVi5qf/FLBgBS?=
- =?us-ascii?Q?i3i2pqpqeFwIhCGYL5f9pJ0GBPlvKkoxlB+O576oemtiaMIJBL25La6Eq2lg?=
- =?us-ascii?Q?fZo3D9VQ1IMfeoOXf/Cuo6hINedOpD6s8DoKGFQfwMrAZqws/3Z8TOdW9zQb?=
- =?us-ascii?Q?d08RIuk7Mrk5pG8y/tBIXfdByXkl04T98krsLKsq86WzYmO10laJFqHpn1mN?=
- =?us-ascii?Q?uExnETL9ghf9yZZhPS0Kon1MLtRkgwoUZBjdoXNPDWuDMC2992+lNCv5tbeh?=
- =?us-ascii?Q?z9nQ06Ff+NwvvbBMxajIPd3rN0MZgoeKYsjh+zsB2SvXGiotorkO4DLI8v/m?=
- =?us-ascii?Q?VtsrwZEER57Q3vRTt+Z7ZqCcCSiRRrv/l+KQSCOPplIO92hKzEDdXA08Ml8Z?=
- =?us-ascii?Q?hvBCvQkQylgIJIMHRc3ZKKESHL+U8UDPDr0OkfMwoobx/lTKBa4UoqBtHGEk?=
- =?us-ascii?Q?Qebfs1T2RemVnXrbtcaDRRDFhVIMzVDNZaO0zI1D0cXmG5oMXivq/qhjs9R9?=
- =?us-ascii?Q?A7IAAry78KwsZ+uobTRLendILRp3?=
+	=?us-ascii?Q?aP2RTGnzTbGeA6KOFhhpOZlzF4vumJg+5DADq5FeLu4ufOM8Tc72q61uksx0?=
+ =?us-ascii?Q?tOhh0JdzIz4dTLQgCNJuP325CGna/Up++wu5sQOVPkZg/bcsCsUTjm++gcxN?=
+ =?us-ascii?Q?XpF6wr9/0dBYbjDO3RCzK57PEId9oGzO+P1N1pR7vlshWxM5Wik0doETMnMQ?=
+ =?us-ascii?Q?ph3TZrrwNaxrg/HfxtuPnhaGqg1DoZqkPiHTJ4cSvWiSfpahck4AQGyCh2+K?=
+ =?us-ascii?Q?VyFBXwW8wm3PsHnlAFLWlS1alUIQsmmjTvpSmvAStoIAmUcxjFtagS0WtSdg?=
+ =?us-ascii?Q?HBnMWAB66mJ7eyj890H8y61GSRsWNalIYxx+hNHu3Cess9jhm/BVrTvt+04V?=
+ =?us-ascii?Q?uvrrsqVyRDR5mhpB/m5eq5b8TXkGcQSteKjZzIzp2VfNZp28RELFzzlvjf8F?=
+ =?us-ascii?Q?BWtQtqb9QryUgar1LDnh0zQgf6f8N9Qul421zp+t9HRbpjV2JHOupwGBF+JU?=
+ =?us-ascii?Q?ExpzLxGAW3EdGX/xAuog2GSW/ZtDxG4IsmL77uXCDCoiAKsmZs9XwVAYyW6y?=
+ =?us-ascii?Q?vgtX+x5XmdmtjfJfziaJjfXbS+VZYLI8qFXhUl2JzpFw6BO9VVDQ8ceEHP71?=
+ =?us-ascii?Q?Se4RH1gbDS6evT0f8q6GLXbIW7i6cIyIPeob5yO/npvfIKg/iaP/1cQfotwF?=
+ =?us-ascii?Q?tErwx+F9ETmaDRYZsJBone+5A7xPcD6qdFUz3nxFMj+poi01zsza26iGdYya?=
+ =?us-ascii?Q?I2u/SCazAZ72vl6aKggSKdPCHMxMrgS7dmyvTZm4QbX6J0x+jMYUUPpYx33R?=
+ =?us-ascii?Q?RkC3W74zmGAVvjiLO9pnTsMFb5c+LwaPiNbKuSyHuETpcQrGhqHnc3EJEEkM?=
+ =?us-ascii?Q?OCo1nUrEpFuSuPV9aBJ3PW79MJRQHdwSym/3ezVKeP83yxtEfDy/LElqVgdJ?=
+ =?us-ascii?Q?VVNRWSr4uTeR5JMU58b/zr5uwymskyeB6yBAKdzHqVa3vMJKZ3g2z6kgOURU?=
+ =?us-ascii?Q?9amuPGaOxHF5qO9yxRckZq9z1fG0wKlTMRJvS2ihOnuMpHZang6Q6oDFxOwT?=
+ =?us-ascii?Q?Gf7IsW5PrZsrfUMFCKouh75T6zcddK5qtn8I1QEu6gkKmhoDNKa+IedPVYFL?=
+ =?us-ascii?Q?lwOlQGt9aFOEqk/iVa+krnitZ9syMxfYqr/zS40KGp2FudHb7LDfjJJbZhR3?=
+ =?us-ascii?Q?OjmBMrvrwGxODd7kKfFuTNdjJbANYZfCIhzo6oYoSCidBXT84p8Cjhdq9BJK?=
+ =?us-ascii?Q?yZIC2QV6xcJLuGQB1p5f++Ew5o/4znjhY2MKszMPCbVOxAvUdJl9SGkvvmMT?=
+ =?us-ascii?Q?a1w/7fR/LUWGCT03f+cuyDchfUOMgC1V1nugsk8XrdMJIHWgfkdPwyyTU/Cu?=
+ =?us-ascii?Q?TICkgTrlaiwNpthLzkSHpFvaEJmW1kn8zMSvLLghBf6EcDXszgf8Pzgw10e0?=
+ =?us-ascii?Q?bbX1E5w=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 06:40:44.9343
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 06:40:56.1602
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08e49afe-9bcd-496d-3abd-08dcedad7654
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4606fadd-36b1-4d01-2a68-08dcedad7d05
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH1PEPF0000AD7E.namprd04.prod.outlook.com
+	CH1PEPF0000AD7F.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6030
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7963
 
-Currently, exporting new additional machine check error information
-involves adding new fields for the same at the end of the struct mce.
-This additional information can then be consumed through mcelog or
-tracepoint.
+From: Steven Rostedt <rostedt@goodmis.org>
 
-However, as new MSRs are being added (and will be added in the future)
-by CPU vendors on their newer CPUs with additional machine check error
-information to be exported, the size of struct mce will balloon on some
-CPUs, unnecessarily, since those fields are vendor-specific. Moreover,
-different CPU vendors may export the additional information in varying
-sizes.
+When printing a dynamic array in a trace event, the method is rather ugly.
+It has the format of:
 
-The problem particularly intensifies since struct mce is exposed to
-userspace as part of UAPI. It's bloating through vendor-specific data
-should be avoided to limit the information being sent out to userspace.
+  __print_array(__get_dynamic_array(array),
+            __get_dynmaic_array_len(array) / el_size, el_size)
 
-Add a new structure mce_hw_err to wrap the existing struct mce. The same
-will prevent its ballooning since vendor-specifc data, if any, can now be
-exported through a union within the wrapper structure and through
-__dynamic_array in mce_record tracepoint.
+Since dynamic arrays are known to the tracing infrastructure, create a
+helper macro that does the above for you.
 
-Furthermore, new internal kernel fields can be added to the wrapper
-struct without impacting the user space API.
+  __print_dynamic_array(array, el_size)
 
-[Yazen: Add last commit message paragraph.]
+Which would expand to the same output.
 
-Suggested-by: Borislav Petkov (AMD) <bp@alien8.de>
-Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 ---
-Changes in v2:
-[1] https://lore.kernel.org/linux-edac/20240521125434.1555845-1-yazen.ghannam@amd.com/
-[2] https://lore.kernel.org/linux-edac/20240523155641.2805411-1-yazen.ghannam@amd.com/
-
-1. Drop dependencies on sets [1] and [2] above and rebase on top of
-tip/master.
-
-Changes in v3:
-1. Move wrapper changes required in mce_read_aux() and mce_no_way_out()
-to this patch from the second patch.
-2. Fix SoB chain to properly reflect the patch path.
-
-Changes in v4:
-1. Rebase on of tip/master to avoid merge conflicts.
-2. Resolve kernel test robot's warning on the use of memset() in
-do_machine_check().
-
 Changes in v5:
-1. No changes except rebasing on top of tip/master.
+Patch introduced in the series.
 
 Changes in v6:
-1. Rebase on top of tip/master.
-2. Introduce to_mce_hw_err macro to eliminate changes required in notifier
-chain callback functions, especially callback functions of EDAC drivers.
-3. Change third parameter of __mc_scan_banks() to a pointer to the new
-wrapper structure and make the required changes accordingly.
+No changes other than rebasing on top of tip/master.
 ---
- arch/x86/include/asm/mce.h         |  14 +-
- arch/x86/kernel/cpu/mce/amd.c      |  27 ++--
- arch/x86/kernel/cpu/mce/apei.c     |  45 ++++---
- arch/x86/kernel/cpu/mce/core.c     | 205 ++++++++++++++++-------------
- arch/x86/kernel/cpu/mce/genpool.c  |  18 +--
- arch/x86/kernel/cpu/mce/inject.c   |   4 +-
- arch/x86/kernel/cpu/mce/internal.h |   4 +-
- include/trace/events/mce.h         |  42 +++---
- 8 files changed, 200 insertions(+), 159 deletions(-)
+ include/trace/stages/stage3_trace_output.h | 8 ++++++++
+ include/trace/stages/stage7_class_define.h | 1 +
+ samples/trace_events/trace-events-sample.h | 7 ++++++-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 3b9970117a0f..4e45f45673a3 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -187,6 +187,16 @@ enum mce_notifier_prios {
- 	MCE_PRIO_HIGHEST = MCE_PRIO_CEC
- };
+diff --git a/include/trace/stages/stage3_trace_output.h b/include/trace/stages/stage3_trace_output.h
+index c1fb1355d309..8e3215093e1f 100644
+--- a/include/trace/stages/stage3_trace_output.h
++++ b/include/trace/stages/stage3_trace_output.h
+@@ -119,6 +119,14 @@
+ 		trace_print_array_seq(p, array, count, el_size);	\
+ 	})
  
-+/**
-+ * struct mce_hw_err - Hardware Error Record.
-+ * @m:		Machine Check record.
-+ */
-+struct mce_hw_err {
-+	struct mce m;
-+};
++#undef __print_dynamic_array
++#define __print_dynamic_array(array, el_size)				\
++	({								\
++		__print_array(__get_dynamic_array(array),		\
++			      __get_dynamic_array_len(array) / el_size,	\
++			      el_size);					\
++	})
 +
-+#define	to_mce_hw_err(mce) container_of(mce, struct mce_hw_err, m)
-+
- struct notifier_block;
- extern void mce_register_decode_chain(struct notifier_block *nb);
- extern void mce_unregister_decode_chain(struct notifier_block *nb);
-@@ -221,8 +231,8 @@ static inline int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
- 					     u64 lapic_id) { return -EINVAL; }
- #endif
- 
--void mce_prep_record(struct mce *m);
--void mce_log(struct mce *m);
-+void mce_prep_record(struct mce_hw_err *err);
-+void mce_log(struct mce_hw_err *err);
- DECLARE_PER_CPU(struct device *, mce_device);
- 
- /* Maximum number of MCA banks per CPU. */
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 14bf8c232e45..5b4d266500b2 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -778,29 +778,30 @@ bool amd_mce_usable_address(struct mce *m)
- 
- static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
- {
--	struct mce m;
-+	struct mce_hw_err err;
-+	struct mce *m = &err.m;
- 
--	mce_prep_record(&m);
-+	mce_prep_record(&err);
- 
--	m.status = status;
--	m.misc   = misc;
--	m.bank   = bank;
--	m.tsc	 = rdtsc();
-+	m->status = status;
-+	m->misc   = misc;
-+	m->bank   = bank;
-+	m->tsc	 = rdtsc();
- 
--	if (m.status & MCI_STATUS_ADDRV) {
--		m.addr = addr;
-+	if (m->status & MCI_STATUS_ADDRV) {
-+		m->addr = addr;
- 
--		smca_extract_err_addr(&m);
-+		smca_extract_err_addr(m);
- 	}
- 
- 	if (mce_flags.smca) {
--		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), m.ipid);
-+		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), m->ipid);
- 
--		if (m.status & MCI_STATUS_SYNDV)
--			rdmsrl(MSR_AMD64_SMCA_MCx_SYND(bank), m.synd);
-+		if (m->status & MCI_STATUS_SYNDV)
-+			rdmsrl(MSR_AMD64_SMCA_MCx_SYND(bank), m->synd);
- 	}
- 
--	mce_log(&m);
-+	mce_log(&err);
- }
- 
- DEFINE_IDTENTRY_SYSVEC(sysvec_deferred_error)
-diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index 3885fe05f01e..7f582b4ca1ca 100644
---- a/arch/x86/kernel/cpu/mce/apei.c
-+++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -28,7 +28,8 @@
- 
- void apei_mce_report_mem_error(int severity, struct cper_sec_mem_err *mem_err)
- {
--	struct mce m;
-+	struct mce_hw_err err;
-+	struct mce *m;
- 	int lsb;
- 
- 	if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))
-@@ -44,22 +45,23 @@ void apei_mce_report_mem_error(int severity, struct cper_sec_mem_err *mem_err)
- 	else
- 		lsb = PAGE_SHIFT;
- 
--	mce_prep_record(&m);
--	m.bank = -1;
-+	mce_prep_record(&err);
-+	m = &err.m;
-+	m->bank = -1;
- 	/* Fake a memory read error with unknown channel */
--	m.status = MCI_STATUS_VAL | MCI_STATUS_EN | MCI_STATUS_ADDRV | MCI_STATUS_MISCV | 0x9f;
--	m.misc = (MCI_MISC_ADDR_PHYS << 6) | lsb;
-+	m->status = MCI_STATUS_VAL | MCI_STATUS_EN | MCI_STATUS_ADDRV | MCI_STATUS_MISCV | 0x9f;
-+	m->misc = (MCI_MISC_ADDR_PHYS << 6) | lsb;
- 
- 	if (severity >= GHES_SEV_RECOVERABLE)
--		m.status |= MCI_STATUS_UC;
-+		m->status |= MCI_STATUS_UC;
- 
- 	if (severity >= GHES_SEV_PANIC) {
--		m.status |= MCI_STATUS_PCC;
--		m.tsc = rdtsc();
-+		m->status |= MCI_STATUS_PCC;
-+		m->tsc = rdtsc();
- 	}
- 
--	m.addr = mem_err->physical_addr;
--	mce_log(&m);
-+	m->addr = mem_err->physical_addr;
-+	mce_log(&err);
- }
- EXPORT_SYMBOL_GPL(apei_mce_report_mem_error);
- 
-@@ -67,8 +69,9 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- {
- 	const u64 *i_mce = ((const u64 *) (ctx_info + 1));
- 	bool apicid_found = false;
-+	struct mce_hw_err err;
- 	unsigned int cpu;
--	struct mce m;
-+	struct mce *m;
- 
- 	if (!boot_cpu_has(X86_FEATURE_SMCA))
- 		return -EINVAL;
-@@ -108,18 +111,20 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 	if (!apicid_found)
- 		return -EINVAL;
- 
--	mce_prep_record_common(&m);
--	mce_prep_record_per_cpu(cpu, &m);
-+	m = &err.m;
-+	memset(&err, 0, sizeof(struct mce_hw_err));
-+	mce_prep_record_common(m);
-+	mce_prep_record_per_cpu(cpu, m);
- 
--	m.bank = (ctx_info->msr_addr >> 4) & 0xFF;
--	m.status = *i_mce;
--	m.addr = *(i_mce + 1);
--	m.misc = *(i_mce + 2);
-+	m->bank = (ctx_info->msr_addr >> 4) & 0xFF;
-+	m->status = *i_mce;
-+	m->addr = *(i_mce + 1);
-+	m->misc = *(i_mce + 2);
- 	/* Skipping MCA_CONFIG */
--	m.ipid = *(i_mce + 4);
--	m.synd = *(i_mce + 5);
-+	m->ipid = *(i_mce + 4);
-+	m->synd = *(i_mce + 5);
- 
--	mce_log(&m);
-+	mce_log(&err);
- 
- 	return 0;
- }
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2a938f429c4d..d3ac1a738b2e 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -88,7 +88,7 @@ struct mca_config mca_cfg __read_mostly = {
- 	.monarch_timeout = -1
- };
- 
--static DEFINE_PER_CPU(struct mce, mces_seen);
-+static DEFINE_PER_CPU(struct mce_hw_err, hw_errs_seen);
- static unsigned long mce_need_notify;
- 
- /*
-@@ -119,8 +119,6 @@ BLOCKING_NOTIFIER_HEAD(x86_mce_decoder_chain);
- 
- void mce_prep_record_common(struct mce *m)
- {
--	memset(m, 0, sizeof(struct mce));
--
- 	m->cpuid	= cpuid_eax(1);
- 	m->cpuvendor	= boot_cpu_data.x86_vendor;
- 	m->mcgcap	= __rdmsr(MSR_IA32_MCG_CAP);
-@@ -138,9 +136,12 @@ void mce_prep_record_per_cpu(unsigned int cpu, struct mce *m)
- 	m->socketid	= topology_physical_package_id(cpu);
- }
- 
--/* Do initial initialization of a struct mce */
--void mce_prep_record(struct mce *m)
-+/* Do initial initialization of struct mce_hw_err */
-+void mce_prep_record(struct mce_hw_err *err)
- {
-+	struct mce *m = &err->m;
-+
-+	memset(err, 0, sizeof(struct mce_hw_err));
- 	mce_prep_record_common(m);
- 	mce_prep_record_per_cpu(smp_processor_id(), m);
- }
-@@ -148,9 +149,9 @@ void mce_prep_record(struct mce *m)
- DEFINE_PER_CPU(struct mce, injectm);
- EXPORT_PER_CPU_SYMBOL_GPL(injectm);
- 
--void mce_log(struct mce *m)
-+void mce_log(struct mce_hw_err *err)
- {
--	if (!mce_gen_pool_add(m))
-+	if (!mce_gen_pool_add(err))
- 		irq_work_queue(&mce_irq_work);
- }
- EXPORT_SYMBOL_GPL(mce_log);
-@@ -171,8 +172,10 @@ void mce_unregister_decode_chain(struct notifier_block *nb)
- }
- EXPORT_SYMBOL_GPL(mce_unregister_decode_chain);
- 
--static void __print_mce(struct mce *m)
-+static void __print_mce(struct mce_hw_err *err)
- {
-+	struct mce *m = &err->m;
-+
- 	pr_emerg(HW_ERR "CPU %d: Machine Check%s: %Lx Bank %d: %016Lx\n",
- 		 m->extcpu,
- 		 (m->mcgstatus & MCG_STATUS_MCIP ? " Exception" : ""),
-@@ -214,9 +217,11 @@ static void __print_mce(struct mce *m)
- 		m->microcode);
- }
- 
--static void print_mce(struct mce *m)
-+static void print_mce(struct mce_hw_err *err)
- {
--	__print_mce(m);
-+	struct mce *m = &err->m;
-+
-+	__print_mce(err);
- 
- 	if (m->cpuvendor != X86_VENDOR_AMD && m->cpuvendor != X86_VENDOR_HYGON)
- 		pr_emerg_ratelimited(HW_ERR "Run the above through 'mcelog --ascii'\n");
-@@ -251,7 +256,7 @@ static const char *mce_dump_aux_info(struct mce *m)
- 	return NULL;
- }
- 
--static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
-+static noinstr void mce_panic(const char *msg, struct mce_hw_err *final, char *exp)
- {
- 	struct llist_node *pending;
- 	struct mce_evt_llist *l;
-@@ -282,20 +287,22 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
- 	pending = mce_gen_pool_prepare_records();
- 	/* First print corrected ones that are still unlogged */
- 	llist_for_each_entry(l, pending, llnode) {
--		struct mce *m = &l->mce;
-+		struct mce_hw_err *err = &l->err;
-+		struct mce *m = &err->m;
- 		if (!(m->status & MCI_STATUS_UC)) {
--			print_mce(m);
-+			print_mce(err);
- 			if (!apei_err)
- 				apei_err = apei_write_mce(m);
- 		}
- 	}
- 	/* Now print uncorrected but with the final one last */
- 	llist_for_each_entry(l, pending, llnode) {
--		struct mce *m = &l->mce;
-+		struct mce_hw_err *err = &l->err;
-+		struct mce *m = &err->m;
- 		if (!(m->status & MCI_STATUS_UC))
- 			continue;
--		if (!final || mce_cmp(m, final)) {
--			print_mce(m);
-+		if (!final || mce_cmp(m, &final->m)) {
-+			print_mce(err);
- 			if (!apei_err)
- 				apei_err = apei_write_mce(m);
- 		}
-@@ -303,12 +310,12 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
- 	if (final) {
- 		print_mce(final);
- 		if (!apei_err)
--			apei_err = apei_write_mce(final);
-+			apei_err = apei_write_mce(&final->m);
- 	}
- 	if (exp)
- 		pr_emerg(HW_ERR "Machine check: %s\n", exp);
- 
--	memmsg = mce_dump_aux_info(final);
-+	memmsg = mce_dump_aux_info(&final->m);
- 	if (memmsg)
- 		pr_emerg(HW_ERR "Machine check: %s\n", memmsg);
- 
-@@ -323,9 +330,9 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
- 		 * panic.
- 		 */
- 		if (kexec_crash_loaded()) {
--			if (final && (final->status & MCI_STATUS_ADDRV)) {
-+			if (final && (final->m.status & MCI_STATUS_ADDRV)) {
- 				struct page *p;
--				p = pfn_to_online_page(final->addr >> PAGE_SHIFT);
-+				p = pfn_to_online_page(final->m.addr >> PAGE_SHIFT);
- 				if (p)
- 					SetPageHWPoison(p);
- 			}
-@@ -445,16 +452,18 @@ static noinstr void mce_wrmsrl(u32 msr, u64 v)
-  * check into our "mce" struct so that we can use it later to assess
-  * the severity of the problem as we read per-bank specific details.
-  */
--static noinstr void mce_gather_info(struct mce *m, struct pt_regs *regs)
-+static noinstr void mce_gather_info(struct mce_hw_err *err, struct pt_regs *regs)
- {
-+	struct mce *m;
- 	/*
- 	 * Enable instrumentation around mce_prep_record() which calls external
- 	 * facilities.
- 	 */
- 	instrumentation_begin();
--	mce_prep_record(m);
-+	mce_prep_record(err);
- 	instrumentation_end();
- 
-+	m = &err->m;
- 	m->mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
- 	if (regs) {
- 		/*
-@@ -574,13 +583,13 @@ EXPORT_SYMBOL_GPL(mce_is_correctable);
- static int mce_early_notifier(struct notifier_block *nb, unsigned long val,
- 			      void *data)
- {
--	struct mce *m = (struct mce *)data;
-+	struct mce_hw_err *err = to_mce_hw_err(data);
- 
--	if (!m)
-+	if (!err)
- 		return NOTIFY_DONE;
- 
- 	/* Emit the trace record: */
--	trace_mce_record(m);
-+	trace_mce_record(err);
- 
- 	set_bit(0, &mce_need_notify);
- 
-@@ -624,13 +633,13 @@ static struct notifier_block mce_uc_nb = {
- static int mce_default_notifier(struct notifier_block *nb, unsigned long val,
- 				void *data)
- {
--	struct mce *m = (struct mce *)data;
-+	struct mce_hw_err *err = to_mce_hw_err(data);
- 
--	if (!m)
-+	if (!err)
- 		return NOTIFY_DONE;
- 
--	if (mca_cfg.print_all || !m->kflags)
--		__print_mce(m);
-+	if (mca_cfg.print_all || !(err->m.kflags))
-+		__print_mce(err);
- 
- 	return NOTIFY_DONE;
- }
-@@ -644,8 +653,10 @@ static struct notifier_block mce_default_nb = {
- /*
-  * Read ADDR and MISC registers.
-  */
--static noinstr void mce_read_aux(struct mce *m, int i)
-+static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
- {
-+	struct mce *m = &err->m;
-+
- 	if (m->status & MCI_STATUS_MISCV)
- 		m->misc = mce_rdmsrl(mca_msr_reg(i, MCA_MISC));
- 
-@@ -692,26 +703,28 @@ DEFINE_PER_CPU(unsigned, mce_poll_count);
- void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
- {
- 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
--	struct mce m;
-+	struct mce_hw_err err;
-+	struct mce *m;
- 	int i;
- 
- 	this_cpu_inc(mce_poll_count);
- 
--	mce_gather_info(&m, NULL);
-+	mce_gather_info(&err, NULL);
-+	m = &err.m;
- 
- 	if (flags & MCP_TIMESTAMP)
--		m.tsc = rdtsc();
-+		m->tsc = rdtsc();
- 
- 	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
- 		if (!mce_banks[i].ctl || !test_bit(i, *b))
- 			continue;
- 
--		m.misc = 0;
--		m.addr = 0;
--		m.bank = i;
-+		m->misc = 0;
-+		m->addr = 0;
-+		m->bank = i;
- 
- 		barrier();
--		m.status = mce_rdmsrl(mca_msr_reg(i, MCA_STATUS));
-+		m->status = mce_rdmsrl(mca_msr_reg(i, MCA_STATUS));
- 
- 		/*
- 		 * Update storm tracking here, before checking for the
-@@ -721,17 +734,17 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
- 		 * storm status.
- 		 */
- 		if (!mca_cfg.cmci_disabled)
--			mce_track_storm(&m);
-+			mce_track_storm(m);
- 
- 		/* If this entry is not valid, ignore it */
--		if (!(m.status & MCI_STATUS_VAL))
-+		if (!(m->status & MCI_STATUS_VAL))
- 			continue;
- 
- 		/*
- 		 * If we are logging everything (at CPU online) or this
- 		 * is a corrected error, then we must log it.
- 		 */
--		if ((flags & MCP_UC) || !(m.status & MCI_STATUS_UC))
-+		if ((flags & MCP_UC) || !(m->status & MCI_STATUS_UC))
- 			goto log_it;
- 
- 		/*
-@@ -741,20 +754,20 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
- 		 * everything else.
- 		 */
- 		if (!mca_cfg.ser) {
--			if (m.status & MCI_STATUS_UC)
-+			if (m->status & MCI_STATUS_UC)
- 				continue;
- 			goto log_it;
- 		}
- 
- 		/* Log "not enabled" (speculative) errors */
--		if (!(m.status & MCI_STATUS_EN))
-+		if (!(m->status & MCI_STATUS_EN))
- 			goto log_it;
- 
- 		/*
- 		 * Log UCNA (SDM: 15.6.3 "UCR Error Classification")
- 		 * UC == 1 && PCC == 0 && S == 0
- 		 */
--		if (!(m.status & MCI_STATUS_PCC) && !(m.status & MCI_STATUS_S))
-+		if (!(m->status & MCI_STATUS_PCC) && !(m->status & MCI_STATUS_S))
- 			goto log_it;
- 
- 		/*
-@@ -768,20 +781,20 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
- 		if (flags & MCP_DONTLOG)
- 			goto clear_it;
- 
--		mce_read_aux(&m, i);
--		m.severity = mce_severity(&m, NULL, NULL, false);
-+		mce_read_aux(&err, i);
-+		m->severity = mce_severity(m, NULL, NULL, false);
- 		/*
- 		 * Don't get the IP here because it's unlikely to
- 		 * have anything to do with the actual error location.
- 		 */
- 
--		if (mca_cfg.dont_log_ce && !mce_usable_address(&m))
-+		if (mca_cfg.dont_log_ce && !mce_usable_address(m))
- 			goto clear_it;
- 
- 		if (flags & MCP_QUEUE_LOG)
--			mce_gen_pool_add(&m);
-+			mce_gen_pool_add(&err);
- 		else
--			mce_log(&m);
-+			mce_log(&err);
- 
- clear_it:
- 		/*
-@@ -905,9 +918,10 @@ static __always_inline void quirk_zen_ifu(int bank, struct mce *m, struct pt_reg
-  * Do a quick check if any of the events requires a panic.
-  * This decides if we keep the events around or clear them.
-  */
--static __always_inline int mce_no_way_out(struct mce *m, char **msg, unsigned long *validp,
-+static __always_inline int mce_no_way_out(struct mce_hw_err *err, char **msg, unsigned long *validp,
- 					  struct pt_regs *regs)
- {
-+	struct mce *m = &err->m;
- 	char *tmp = *msg;
- 	int i;
- 
-@@ -925,7 +939,7 @@ static __always_inline int mce_no_way_out(struct mce *m, char **msg, unsigned lo
- 
- 		m->bank = i;
- 		if (mce_severity(m, regs, &tmp, true) >= MCE_PANIC_SEVERITY) {
--			mce_read_aux(m, i);
-+			mce_read_aux(err, i);
- 			*msg = tmp;
- 			return 1;
- 		}
-@@ -1017,6 +1031,7 @@ static noinstr int mce_timed_out(u64 *t, const char *msg)
- static void mce_reign(void)
- {
- 	int cpu;
-+	struct mce_hw_err *err = NULL;
- 	struct mce *m = NULL;
- 	int global_worst = 0;
- 	char *msg = NULL;
-@@ -1027,11 +1042,13 @@ static void mce_reign(void)
- 	 * Grade the severity of the errors of all the CPUs.
- 	 */
- 	for_each_possible_cpu(cpu) {
--		struct mce *mtmp = &per_cpu(mces_seen, cpu);
-+		struct mce_hw_err *etmp = &per_cpu(hw_errs_seen, cpu);
-+		struct mce *mtmp = &etmp->m;
- 
- 		if (mtmp->severity > global_worst) {
- 			global_worst = mtmp->severity;
--			m = &per_cpu(mces_seen, cpu);
-+			err = &per_cpu(hw_errs_seen, cpu);
-+			m = &err->m;
- 		}
- 	}
- 
-@@ -1043,7 +1060,7 @@ static void mce_reign(void)
- 	if (m && global_worst >= MCE_PANIC_SEVERITY) {
- 		/* call mce_severity() to get "msg" for panic */
- 		mce_severity(m, NULL, &msg, true);
--		mce_panic("Fatal machine check", m, msg);
-+		mce_panic("Fatal machine check", err, msg);
- 	}
- 
- 	/*
-@@ -1060,11 +1077,11 @@ static void mce_reign(void)
- 		mce_panic("Fatal machine check from unknown source", NULL, NULL);
- 
- 	/*
--	 * Now clear all the mces_seen so that they don't reappear on
-+	 * Now clear all the hw_errs_seen so that they don't reappear on
- 	 * the next mce.
- 	 */
- 	for_each_possible_cpu(cpu)
--		memset(&per_cpu(mces_seen, cpu), 0, sizeof(struct mce));
-+		memset(&per_cpu(hw_errs_seen, cpu), 0, sizeof(struct mce_hw_err));
- }
- 
- static atomic_t global_nwo;
-@@ -1268,12 +1285,13 @@ static noinstr bool mce_check_crashing_cpu(void)
- }
- 
- static __always_inline int
--__mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *final,
--		unsigned long *toclear, unsigned long *valid_banks, int no_way_out,
--		int *worst)
-+__mc_scan_banks(struct mce_hw_err *err, struct pt_regs *regs,
-+		struct mce_hw_err *final, unsigned long *toclear,
-+		unsigned long *valid_banks, int no_way_out, int *worst)
- {
- 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
- 	struct mca_config *cfg = &mca_cfg;
-+	struct mce *m = &err->m;
- 	int severity, i, taint = 0;
- 
- 	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
-@@ -1319,7 +1337,7 @@ __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *final,
- 		if (severity == MCE_NO_SEVERITY)
- 			continue;
- 
--		mce_read_aux(m, i);
-+		mce_read_aux(err, i);
- 
- 		/* assuming valid severity level != 0 */
- 		m->severity = severity;
-@@ -1329,17 +1347,17 @@ __mc_scan_banks(struct mce *m, struct pt_regs *regs, struct mce *final,
- 		 * done in #MC context, where instrumentation is disabled.
- 		 */
- 		instrumentation_begin();
--		mce_log(m);
-+		mce_log(err);
- 		instrumentation_end();
- 
- 		if (severity > *worst) {
--			*final = *m;
-+			*final = *err;
- 			*worst = severity;
- 		}
- 	}
- 
- 	/* mce_clear_state will clear *final, save locally for use later */
--	*m = *final;
-+	*err = *final;
- 
- 	return taint;
- }
-@@ -1399,8 +1417,9 @@ static void kill_me_never(struct callback_head *cb)
- 		set_mce_nospec(pfn);
- }
- 
--static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callback_head *))
-+static void queue_task_work(struct mce_hw_err *err, char *msg, void (*func)(struct callback_head *))
- {
-+	struct mce *m = &err->m;
- 	int count = ++current->mce_count;
- 
- 	/* First call, save all the details */
-@@ -1414,11 +1433,12 @@ static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callba
- 
- 	/* Ten is likely overkill. Don't expect more than two faults before task_work() */
- 	if (count > 10)
--		mce_panic("Too many consecutive machine checks while accessing user data", m, msg);
-+		mce_panic("Too many consecutive machine checks while accessing user data",
-+			  err, msg);
- 
- 	/* Second or later call, make sure page address matches the one from first call */
- 	if (count > 1 && (current->mce_addr >> PAGE_SHIFT) != (m->addr >> PAGE_SHIFT))
--		mce_panic("Consecutive machine checks to different user pages", m, msg);
-+		mce_panic("Consecutive machine checks to different user pages", err, msg);
- 
- 	/* Do not call task_work_add() more than once */
- 	if (count > 1)
-@@ -1467,8 +1487,10 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	int worst = 0, order, no_way_out, kill_current_task, lmce, taint = 0;
- 	DECLARE_BITMAP(valid_banks, MAX_NR_BANKS) = { 0 };
- 	DECLARE_BITMAP(toclear, MAX_NR_BANKS) = { 0 };
--	struct mce m, *final;
-+	struct mce_hw_err *final;
-+	struct mce_hw_err err;
- 	char *msg = NULL;
-+	struct mce *m;
- 
- 	if (unlikely(mce_flags.p5))
- 		return pentium_machine_check(regs);
-@@ -1506,13 +1528,14 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 
- 	this_cpu_inc(mce_exception_count);
- 
--	mce_gather_info(&m, regs);
--	m.tsc = rdtsc();
-+	mce_gather_info(&err, regs);
-+	m = &err.m;
-+	m->tsc = rdtsc();
- 
--	final = this_cpu_ptr(&mces_seen);
--	*final = m;
-+	final = this_cpu_ptr(&hw_errs_seen);
-+	final = &err;
- 
--	no_way_out = mce_no_way_out(&m, &msg, valid_banks, regs);
-+	no_way_out = mce_no_way_out(&err, &msg, valid_banks, regs);
- 
- 	barrier();
- 
-@@ -1521,15 +1544,15 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	 * Assume the worst for now, but if we find the
- 	 * severity is MCE_AR_SEVERITY we have other options.
- 	 */
--	if (!(m.mcgstatus & MCG_STATUS_RIPV))
-+	if (!(m->mcgstatus & MCG_STATUS_RIPV))
- 		kill_current_task = 1;
- 	/*
- 	 * Check if this MCE is signaled to only this logical processor,
- 	 * on Intel, Zhaoxin only.
- 	 */
--	if (m.cpuvendor == X86_VENDOR_INTEL ||
--	    m.cpuvendor == X86_VENDOR_ZHAOXIN)
--		lmce = m.mcgstatus & MCG_STATUS_LMCES;
-+	if (m->cpuvendor == X86_VENDOR_INTEL ||
-+	    m->cpuvendor == X86_VENDOR_ZHAOXIN)
-+		lmce = m->mcgstatus & MCG_STATUS_LMCES;
- 
- 	/*
- 	 * Local machine check may already know that we have to panic.
-@@ -1540,12 +1563,12 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	 */
- 	if (lmce) {
- 		if (no_way_out)
--			mce_panic("Fatal local machine check", &m, msg);
-+			mce_panic("Fatal local machine check", &err, msg);
- 	} else {
- 		order = mce_start(&no_way_out);
- 	}
- 
--	taint = __mc_scan_banks(&m, regs, final, toclear, valid_banks, no_way_out, &worst);
-+	taint = __mc_scan_banks(&err, regs, final, toclear, valid_banks, no_way_out, &worst);
- 
- 	if (!no_way_out)
- 		mce_clear_state(toclear);
-@@ -1560,7 +1583,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 				no_way_out = worst >= MCE_PANIC_SEVERITY;
- 
- 			if (no_way_out)
--				mce_panic("Fatal machine check on current CPU", &m, msg);
-+				mce_panic("Fatal machine check on current CPU", &err, msg);
- 		}
- 	} else {
- 		/*
-@@ -1572,8 +1595,8 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		 * make sure we have the right "msg".
- 		 */
- 		if (worst >= MCE_PANIC_SEVERITY) {
--			mce_severity(&m, regs, &msg, true);
--			mce_panic("Local fatal machine check!", &m, msg);
-+			mce_severity(m, regs, &msg, true);
-+			mce_panic("Local fatal machine check!", &err, msg);
- 		}
- 	}
- 
-@@ -1591,16 +1614,16 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		goto out;
- 
- 	/* Fault was in user mode and we need to take some action */
--	if ((m.cs & 3) == 3) {
-+	if ((m->cs & 3) == 3) {
- 		/* If this triggers there is no way to recover. Die hard. */
- 		BUG_ON(!on_thread_stack() || !user_mode(regs));
- 
--		if (!mce_usable_address(&m))
--			queue_task_work(&m, msg, kill_me_now);
-+		if (!mce_usable_address(m))
-+			queue_task_work(&err, msg, kill_me_now);
- 		else
--			queue_task_work(&m, msg, kill_me_maybe);
-+			queue_task_work(&err, msg, kill_me_maybe);
- 
--	} else if (m.mcgstatus & MCG_STATUS_SEAM_NR) {
-+	} else if (m->mcgstatus & MCG_STATUS_SEAM_NR) {
- 		/*
- 		 * Saved RIP on stack makes it look like the machine check
- 		 * was taken in the kernel on the instruction following
-@@ -1612,8 +1635,8 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		 * not occur there. Mark the page as poisoned so it won't
- 		 * be added to free list when the guest is terminated.
- 		 */
--		if (mce_usable_address(&m)) {
--			struct page *p = pfn_to_online_page(m.addr >> PAGE_SHIFT);
-+		if (mce_usable_address(m)) {
-+			struct page *p = pfn_to_online_page(m->addr >> PAGE_SHIFT);
- 
- 			if (p)
- 				SetPageHWPoison(p);
-@@ -1628,13 +1651,13 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		 * corresponding exception handler which would do that is the
- 		 * proper one.
- 		 */
--		if (m.kflags & MCE_IN_KERNEL_RECOV) {
-+		if (m->kflags & MCE_IN_KERNEL_RECOV) {
- 			if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
--				mce_panic("Failed kernel mode recovery", &m, msg);
-+				mce_panic("Failed kernel mode recovery", &err, msg);
- 		}
- 
--		if (m.kflags & MCE_IN_KERNEL_COPYIN)
--			queue_task_work(&m, msg, kill_me_never);
-+		if (m->kflags & MCE_IN_KERNEL_COPYIN)
-+			queue_task_work(&err, msg, kill_me_never);
- 	}
- 
- out:
-diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
-index 4284749ec803..504d89724ecd 100644
---- a/arch/x86/kernel/cpu/mce/genpool.c
-+++ b/arch/x86/kernel/cpu/mce/genpool.c
-@@ -31,15 +31,15 @@ static LLIST_HEAD(mce_event_llist);
-  */
- static bool is_duplicate_mce_record(struct mce_evt_llist *t, struct mce_evt_llist *l)
- {
-+	struct mce_hw_err *err1, *err2;
- 	struct mce_evt_llist *node;
--	struct mce *m1, *m2;
- 
--	m1 = &t->mce;
-+	err1 = &t->err;
- 
- 	llist_for_each_entry(node, &l->llnode, llnode) {
--		m2 = &node->mce;
-+		err2 = &node->err;
- 
--		if (!mce_cmp(m1, m2))
-+		if (!mce_cmp(&err1->m, &err2->m))
- 			return true;
- 	}
- 	return false;
-@@ -73,9 +73,9 @@ struct llist_node *mce_gen_pool_prepare_records(void)
- 
- void mce_gen_pool_process(struct work_struct *__unused)
- {
-+	struct mce *mce;
- 	struct llist_node *head;
- 	struct mce_evt_llist *node, *tmp;
--	struct mce *mce;
- 
- 	head = llist_del_all(&mce_event_llist);
- 	if (!head)
-@@ -83,7 +83,7 @@ void mce_gen_pool_process(struct work_struct *__unused)
- 
- 	head = llist_reverse_order(head);
- 	llist_for_each_entry_safe(node, tmp, head, llnode) {
--		mce = &node->mce;
-+		mce = &node->err.m;
- 		blocking_notifier_call_chain(&x86_mce_decoder_chain, 0, mce);
- 		gen_pool_free(mce_evt_pool, (unsigned long)node, sizeof(*node));
- 	}
-@@ -94,11 +94,11 @@ bool mce_gen_pool_empty(void)
- 	return llist_empty(&mce_event_llist);
- }
- 
--int mce_gen_pool_add(struct mce *mce)
-+int mce_gen_pool_add(struct mce_hw_err *err)
- {
- 	struct mce_evt_llist *node;
- 
--	if (filter_mce(mce))
-+	if (filter_mce(&err->m))
- 		return -EINVAL;
- 
- 	if (!mce_evt_pool)
-@@ -110,7 +110,7 @@ int mce_gen_pool_add(struct mce *mce)
- 		return -ENOMEM;
- 	}
- 
--	memcpy(&node->mce, mce, sizeof(*mce));
-+	memcpy(&node->err, err, sizeof(*err));
- 	llist_add(&node->llnode, &mce_event_llist);
- 
- 	return 0;
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 49ed3428785d..c65a5c4e2f22 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -502,6 +502,7 @@ static void prepare_msrs(void *info)
- 
- static void do_inject(void)
- {
-+	struct mce_hw_err err;
- 	u64 mcg_status = 0;
- 	unsigned int cpu = i_mce.extcpu;
- 	u8 b = i_mce.bank;
-@@ -517,7 +518,8 @@ static void do_inject(void)
- 		i_mce.status |= MCI_STATUS_SYNDV;
- 
- 	if (inj_type == SW_INJ) {
--		mce_log(&i_mce);
-+		err.m = i_mce;
-+		mce_log(&err);
- 		return;
- 	}
- 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 43c7f3b71df5..84f810598231 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -26,12 +26,12 @@ extern struct blocking_notifier_head x86_mce_decoder_chain;
- 
- struct mce_evt_llist {
- 	struct llist_node llnode;
--	struct mce mce;
-+	struct mce_hw_err err;
- };
- 
- void mce_gen_pool_process(struct work_struct *__unused);
- bool mce_gen_pool_empty(void);
--int mce_gen_pool_add(struct mce *mce);
-+int mce_gen_pool_add(struct mce_hw_err *err);
- int mce_gen_pool_init(void);
- struct llist_node *mce_gen_pool_prepare_records(void);
- 
-diff --git a/include/trace/events/mce.h b/include/trace/events/mce.h
-index f0f7b3cb2041..65aba1afcd07 100644
---- a/include/trace/events/mce.h
-+++ b/include/trace/events/mce.h
-@@ -19,9 +19,9 @@
- 
- TRACE_EVENT(mce_record,
- 
--	TP_PROTO(struct mce *m),
-+	TP_PROTO(struct mce_hw_err *err),
- 
--	TP_ARGS(m),
-+	TP_ARGS(err),
- 
- 	TP_STRUCT__entry(
- 		__field(	u64,		mcgcap		)
-@@ -46,25 +46,25 @@ TRACE_EVENT(mce_record,
+ #undef __print_hex_dump
+ #define __print_hex_dump(prefix_str, prefix_type,			\
+ 			 rowsize, groupsize, buf, len, ascii)		\
+diff --git a/include/trace/stages/stage7_class_define.h b/include/trace/stages/stage7_class_define.h
+index bcb960d16fc0..fcd564a590f4 100644
+--- a/include/trace/stages/stage7_class_define.h
++++ b/include/trace/stages/stage7_class_define.h
+@@ -22,6 +22,7 @@
+ #undef __get_rel_cpumask
+ #undef __get_rel_sockaddr
+ #undef __print_array
++#undef __print_dynamic_array
+ #undef __print_hex_dump
+ #undef __get_buf
+ 
+diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
+index 55f9a3da92d5..999f78d380ae 100644
+--- a/samples/trace_events/trace-events-sample.h
++++ b/samples/trace_events/trace-events-sample.h
+@@ -319,7 +319,7 @@ TRACE_EVENT(foo_bar,
+ 		__assign_cpumask(cpum, cpumask_bits(mask));
  	),
  
- 	TP_fast_assign(
--		__entry->mcgcap		= m->mcgcap;
--		__entry->mcgstatus	= m->mcgstatus;
--		__entry->status		= m->status;
--		__entry->addr		= m->addr;
--		__entry->misc		= m->misc;
--		__entry->synd		= m->synd;
--		__entry->ipid		= m->ipid;
--		__entry->ip		= m->ip;
--		__entry->tsc		= m->tsc;
--		__entry->ppin		= m->ppin;
--		__entry->walltime	= m->time;
--		__entry->cpu		= m->extcpu;
--		__entry->cpuid		= m->cpuid;
--		__entry->apicid		= m->apicid;
--		__entry->socketid	= m->socketid;
--		__entry->cs		= m->cs;
--		__entry->bank		= m->bank;
--		__entry->cpuvendor	= m->cpuvendor;
--		__entry->microcode	= m->microcode;
-+		__entry->mcgcap		= err->m.mcgcap;
-+		__entry->mcgstatus	= err->m.mcgstatus;
-+		__entry->status		= err->m.status;
-+		__entry->addr		= err->m.addr;
-+		__entry->misc		= err->m.misc;
-+		__entry->synd		= err->m.synd;
-+		__entry->ipid		= err->m.ipid;
-+		__entry->ip		= err->m.ip;
-+		__entry->tsc		= err->m.tsc;
-+		__entry->ppin		= err->m.ppin;
-+		__entry->walltime	= err->m.time;
-+		__entry->cpu		= err->m.extcpu;
-+		__entry->cpuid		= err->m.cpuid;
-+		__entry->apicid		= err->m.apicid;
-+		__entry->socketid	= err->m.socketid;
-+		__entry->cs		= err->m.cs;
-+		__entry->bank		= err->m.bank;
-+		__entry->cpuvendor	= err->m.cpuvendor;
-+		__entry->microcode	= err->m.microcode;
- 	),
+-	TP_printk("foo %s %d %s %s %s %s %s (%s) (%s) %s", __entry->foo, __entry->bar,
++	TP_printk("foo %s %d %s %s %s %s %s %s (%s) (%s) %s", __entry->foo, __entry->bar,
  
- 	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx, ADDR: %016Lx, MISC: %016Lx, SYND: %016Lx, RIP: %02x:<%016Lx>, TSC: %llx, PPIN: %llx, vendor: %u, CPUID: %x, time: %llu, socket: %u, APIC: %x, microcode: %x",
+ /*
+  * Notice here the use of some helper functions. This includes:
+@@ -363,6 +363,11 @@ TRACE_EVENT(foo_bar,
+ 		  __print_array(__get_dynamic_array(list),
+ 				__get_dynamic_array_len(list) / sizeof(int),
+ 				sizeof(int)),
++
++/*     A shortcut is to use __print_dynamic_array for dynamic arrays */
++
++		  __print_dynamic_array(list, sizeof(int)),
++
+ 		  __get_str(str), __get_str(lstr),
+ 		  __get_bitmask(cpus), __get_cpumask(cpum),
+ 		  __get_str(vstr))
 -- 
 2.43.0
 
