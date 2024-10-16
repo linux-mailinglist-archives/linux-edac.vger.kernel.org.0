@@ -1,229 +1,251 @@
-Return-Path: <linux-edac+bounces-2086-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2087-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99F4699F6A2
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 20:59:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42AE99A0185
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 08:40:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1E0E1C23215
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Oct 2024 18:59:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E363E28726D
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 06:40:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFF81F81BD;
-	Tue, 15 Oct 2024 18:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3304F18E057;
+	Wed, 16 Oct 2024 06:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="KYPZfuge"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gs6PwG/c"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2073.outbound.protection.outlook.com [40.107.22.73])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2047.outbound.protection.outlook.com [40.107.102.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C1E1CACE5;
-	Tue, 15 Oct 2024 18:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C6B18BBAA;
+	Wed, 16 Oct 2024 06:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729018549; cv=fail; b=f2jNSuXF5sbci+7pfekjGmWsK4vdvIUXR9ZXcUrvP8XZTXTeyaV/G//+6GbheyvrD+asHZdN1q1HIgdSOAMG8uAtzn1UnY/1T+n7yPEczH/K9KqboJ8usNTDJpE9/f6PAjhy35HzsyxCWEd/vmXwq1mh8hGCkV/tMwiIhd+7hMY=
+	t=1729060839; cv=fail; b=JH0AmBze5ZtPx+kEWzp59wtJgIfo3j0V7jqkj5Z7nY6ioRNc5XkzVnfPKDjYXtxKzCvCOXVosz7ql26Guq2eA1NypI0eoQX2cQ0MSVXZF/KniJpY6UcNAPpiS5G6cwMzTJSE2evikpwIH9QWE8zeOPg0wmV43F2cgMEvvhDgayE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729018549; c=relaxed/simple;
-	bh=K9UYbLJTGY5SaADU+2PRNCfswNkN0Os+75miVLSXYDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=InFkaL8wuTTFm5t2KiPUXehgkZFVpFSQYVATTqp4fI9Onyr28xh1c34dZ5+RVlg23qUrR0x1M4ehCe9J6zsEginjsqIg0CNkxQ7rKUNhCFWGGIoBYKrQTONnDkkd+pbI9DlQm+7eOTmf4GejskE6cX8114EKNomN0NrBVzfnZqk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=KYPZfuge; arc=fail smtp.client-ip=40.107.22.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1729060839; c=relaxed/simple;
+	bh=OfPH7tx8fa0VFboE0bOn5XWLqjZURA51eVuSl13M5JM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tP/UacQ6GKmAc1nThqFQm1YfRNqR3E3gbcHVEtAevfLVTgmOwutCKoSRG0aGqZGk6qKZSA8pc2ur0DHaTJqOavfVIip9TqjL7Ror1hixEq8CrRGhL3cBzkx59PPcDXGnaEgvFsngro7RryWIf41Q138Bau6M02DyM2nKNq13xoM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gs6PwG/c; arc=fail smtp.client-ip=40.107.102.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=J7cWTKYJMPo5XtcgrW905NyWm3ZKHyFHj5tMHEnVFBh2ZIs2SPpVEOJnOoB3bzNlaxQocYPt6yZNHYTw+E8tjW1ANoFYsgLDmuqgqoaKElPXVdmGTn2E8zVrGINQuFyMb3goSZ+3vVfoYku7IDW+vuGMsO/t3iev9zpux8kcJIgTtVtVO3f0oj3hpZcl3ML8UCCQIvc6JZhCRD63iq4chBY2rB4L9CET5zTDgL1rjxUSAncW6VJTdUEl2DBNqldGL+DI3nB1R4wRVHZxlqlMmbnveg7+qGcN5CikMLqIcsXFPba0k2A0d7T3Be8Z/v+NiwOdMHs7Xrt+KL56XgshCw==
+ b=cSzyLuGY6NCxRxfR+aJvilLY2rbpQnA7ZcmgGp3rWAqSVwgnTJKgltEMry1c0e/mAaiUmKExtovkNWY+wYk5INxDPwtZzcuAPgtMfundmkaYLWiybJ+2cIx5Gc1ptruqWEUJ0NsDyRbaLm+S9QwkLh2EVZ7ACqgwHSL8A7R6oJpjuCd/pdHJkW40fyRM8M7FkuulrlhKSz0D0tmPhgVImzBCkP6UhQZRCzR6EQcttcdNmoyUSVM+9ivmU0wBXITR0Ufjp6Rdhq6G+bH8fCB5q6zi0IHWWU48UgXM7GUOJ2M5qSkwhl8zVrpCgJY2UCskQ3Qg1eG9ReU9ezlYiCIMKA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DRbbPwbnvKdB/Bf2XvCfXupfZBhkFrlmh3R4k4Sxx6M=;
- b=xo7YNeN68BJxqjWh6zyQ2LkAQca2MH/86ijEwFHXCiwP97TpCyXtu2CBmHJsrzSoUJlk1FgCgHFev7bVrq0s/JM3zTaqQltmxCYlQ4Wzg6Gq/QDeDwgqFCk6Z51hMXZtrtPLoYd2Kxr6dmkUzpagvrwNfHa8OTkSHHm+hQnCydR1AZvN51svHPJyYjZT3u6f/qpduLoodmvDIAhoD27B5V79PGcdbgp8WSII7rVCdje2kRQaPynXcJ1hjiTBcKZIpHKEl8sy9JgVNiLF6taLJGuoEEYz3zYZM0PAG96Tw3qvL7lmcESKb1F9YCfPYTtP3TmzxvDfrIAmvRdqqBb9LQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ bh=sXMbcBFZLFqVNuBtqC7v6BQ9ff/H7NZoeF2XG/B9WZY=;
+ b=poVuhDjBA8MORxbM44sr2RjDxMYdoxWf5/jJrLBKgbjtFHMW+rynTvTstfeu8hjFJExf3pf1CkIM9TQ6DbcpPg2cDQtu8mPPyrlLR8wBgywZbGv+KxKAofNCH+qzAH+Pmy2bMsXbyu1n7dHBxlcsm2cTppAAt9Y5IyrdqBePrZmcx+UOIw/jPyCvt9DCcpgJkYErmCiRjiEp/TnkedZ7QBkhv6u9Ar7p2pZ40S+BzATCRR1TQc02+ne5DgnEQ7VY8F0e6zFYgxcFKzyZX1D5nQoS3RbL9vll9x6uMXERKw9yqUwJk+WsWOIVZCU6vwnIcSiDazkqsWsrdDlc6jWw/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DRbbPwbnvKdB/Bf2XvCfXupfZBhkFrlmh3R4k4Sxx6M=;
- b=KYPZfugenM1W+dGZoMQWAM65HGoJ3BBmiow9lURO8p2XWiWszPvetOvWpKqPvdgitkBiTnNBzXaEDZKCH5d02nRO02SXrRUF1YGSuoD+hIqSAt4IEDBjW7ummYyvaP+ieedRzNUcxwkcfs3b31YboAz7sAie40STH8SEPMC0IhGJlAfTlhqUJzC5gxYA7mJSWvCVfD9XPtG6YTLahclidG2VAYoJWAYWbsuAP4hrxd5/nmMo7hK3a3IKxk6fm8MUYhUW2rZP7ycDm+CePYVx5Bae7Ry+vpXyQwzV5jyX9PcJLToirYK/uDbB1bJuya2DuIV+bhnpIUg29bUhn7CWhQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by AM9PR04MB7506.eurprd04.prod.outlook.com (2603:10a6:20b:281::14) with
+ bh=sXMbcBFZLFqVNuBtqC7v6BQ9ff/H7NZoeF2XG/B9WZY=;
+ b=gs6PwG/cpUQFVL0lFbw+VLqmJjt6dSEHfJRXALSg53ECY62vX5rRbASNroihzROSD/+HAovp/bT0ABbCH5QUsjhEdAgryxDrZRvovlv1EGeMVz9lNtjFlJk5Ds+/HmjThEKkijBkSBNvZI++mD3dXXbj70zYYeynBR79EkPsvkU=
+Received: from CH2PR12CA0029.namprd12.prod.outlook.com (2603:10b6:610:57::39)
+ by SN7PR12MB6791.namprd12.prod.outlook.com (2603:10b6:806:268::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Tue, 15 Oct
- 2024 18:55:44 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.8069.016; Tue, 15 Oct 2024
- 18:55:44 +0000
-Date: Tue, 15 Oct 2024 14:55:34 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: York Sun <york.sun@nxp.com>, Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Priyanka Singh <priyanka.singh@nxp.com>,
-	Sherry Sun <sherry.sun@nxp.com>, Li Yang <leoyang.li@nxp.com>
-Subject: Re: [PATCH v2 3/6] EDAC/fsl_ddr: Fix bad bit shift operations
-Message-ID: <Zw66phYPxM85AfHP@lizhi-Precision-Tower-5810>
-References: <20241011-imx95_edac-v2-0-011b68290951@nxp.com>
- <20241011-imx95_edac-v2-3-011b68290951@nxp.com>
- <20241014181647.GQZw1gDwIhBdnFnleH@fat_crate.local>
- <Zw6K3dlsnlhV3F/6@lizhi-Precision-Tower-5810>
- <20241015161139.GEZw6UO2txZVBXffKc@fat_crate.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241015161139.GEZw6UO2txZVBXffKc@fat_crate.local>
-X-ClientProxiedBy: BY3PR04CA0027.namprd04.prod.outlook.com
- (2603:10b6:a03:217::32) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.25; Wed, 16 Oct
+ 2024 06:40:33 +0000
+Received: from CH1PEPF0000AD7E.namprd04.prod.outlook.com
+ (2603:10b6:610:57:cafe::68) by CH2PR12CA0029.outlook.office365.com
+ (2603:10b6:610:57::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18 via Frontend
+ Transport; Wed, 16 Oct 2024 06:40:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH1PEPF0000AD7E.mail.protection.outlook.com (10.167.244.87) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8069.17 via Frontend Transport; Wed, 16 Oct 2024 06:40:33 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 16 Oct 2024 01:40:32 -0500
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
+	<qiuxu.zhuo@intel.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<rostedt@goodmis.org>, <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
+	<john.allen@amd.com>, <avadhut.naik@amd.com>
+Subject: [PATCH v6 0/5] MCE wrapper and support for new SMCA syndrome MSRs
+Date: Wed, 16 Oct 2024 06:36:26 +0000
+Message-ID: <20241016064021.2773618-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM9PR04MB7506:EE_
-X-MS-Office365-Filtering-Correlation-Id: 850a0423-b751-42b2-fa36-08dced4af92a
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7E:EE_|SN7PR12MB6791:EE_
+X-MS-Office365-Filtering-Correlation-Id: 756b1701-f75e-4aaf-769a-08dcedad6f79
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|52116014|7416014|376014|1800799024|38350700014;
+	BCL:0;ARA:13230040|36860700013|7416014|376014|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?dgKjBmD7KS0Ozqy2c+nle+9OZw3RDkgWd5mdTTzJLVhoLL7R23XTW5f3AyzH?=
- =?us-ascii?Q?BUGGhNXXuEf+htfqDxjgr4ymrKEq8tKxXmtD9OJy0wBaS7aOJWyKbpiRuzQn?=
- =?us-ascii?Q?hrgjrozu0j0k65X31QmStDbZ4EHT3WQIdnQbIRuh0v+6lA8KOobhHFYaABMZ?=
- =?us-ascii?Q?T1KQSwz0LS12p0AXUZidcLQzT/7a5p5ivLTtNw+rpBNiqHcT8O7+kvTBjqal?=
- =?us-ascii?Q?w0HM3Agq6hgfnnqs48C/Kr3j/P4eYuPTHEqqJAk1EP12L7cz1zrN9npMeiFN?=
- =?us-ascii?Q?ZeeNaf8wmL57jqQxKmF4gQrgimOJjNGTfcolLIAUhfAKQOwBtnrrt734fMIg?=
- =?us-ascii?Q?BOGAx+niuIkM5VyACDCZ4Y0mwb6VPEhw+DpjhrsDoZVSGJ+EdJfIzh3QsQTu?=
- =?us-ascii?Q?pYDd88XXcGgYzsLEMncHadq7LmmD7KcMtK0HliUPtHMeXbWQw9afuRFBWMzQ?=
- =?us-ascii?Q?akQvKOiaHaA5AaouGDkDUwKXmZTTe3583Pbzd8ymsKGZ20ElGTUnNjqJQnfk?=
- =?us-ascii?Q?GeBfJ4wd7urCPUpRZ0TKDD+z3XpD0coWQQ/pAZ4UC0doUZImC2Z5j0DfX9jL?=
- =?us-ascii?Q?ROMS9W3RnBqK39Sh4GifVz35r+kEj3IdhiWL0weJWdOpuRKrhhqaXn1qYTQ7?=
- =?us-ascii?Q?0F3/kuB3XhEwMlZf664E+sBYVCt/cT97g0qTJ7uX12I92Cf1xCDGn4IXSGve?=
- =?us-ascii?Q?6O1ceAd9SnMY4NXEVUfayD630z83K6/GaAOo6YFkIC66Fn1fQpXpOYQBbIYP?=
- =?us-ascii?Q?r0r8dlNkWfpucELOH3H24SJMMWbV4gH9ywjWIamzX3W06qZvHOxckZuqlUcU?=
- =?us-ascii?Q?K2Djlw3NRwzKivMZe2Pjm67JzUDIQSd/0DDqQOHOqkCLyIACFuNeNs+FFtRx?=
- =?us-ascii?Q?99O5qItb+IrrUb1e9CFDSxZcW0ZSZEwuG0+tJa2Sqz4VwW0xWnA/QfuYOyBs?=
- =?us-ascii?Q?ziaeuagg+5iTKxTlbLVPza9Uhto3OKjPCVMLZ01i5r5eklE0G/plmkek7Tss?=
- =?us-ascii?Q?z7xDNzHgxgvWKHt1kDll8noQRX1OZA8iWzO4NdVcm2/gWCWrvMUUaGvjlr4c?=
- =?us-ascii?Q?uQ/AOOeBLZGTg/7vC4TFHqCSTYkPJoxErR0T264GmkevVY/RN6yrMzQOsMjh?=
- =?us-ascii?Q?wn1MpqyJGQy4ZJrEv4xa7+yBt4ndJjW0hHKzpWKx/tZ/dHlWO/cFQwzzjAQG?=
- =?us-ascii?Q?h/jRccMRoOBEe8eInsVe8ZUzbUPNBi8oKxXLP1mdVSVc+eshDd4Fri62oc73?=
- =?us-ascii?Q?X1S0yzaduy3MIJ2Jv1IBhVpvm5E5Pr59JnRQnoZZp+xMRJ3ifcMb9IBo0Y8g?=
- =?us-ascii?Q?pvHFhctJjfaw/4HbwaVvvJDvCQHshE1OvmfZKb7CweBqhw=3D=3D?=
+	=?us-ascii?Q?qUXVpuco2pGJ9yNVJ8034s1heZuhYNyRj0xB+kDRvx5p3BXgOGD0hQ1LxZkI?=
+ =?us-ascii?Q?snHr3YZjAiQ/ps9g/X70oPbOK+AlYo5iMVSmgrhqoEzKCVZ3Zbzx2yjuGUHv?=
+ =?us-ascii?Q?p6AHwbTPaZJYc8xSIzu35nc2Ccn4eTIX3bGyW4WJQjUzcmwh4A1hsDv5E+MI?=
+ =?us-ascii?Q?0f0cJEToH2fX/UyAsSmDUGcES3dZNS0OXDoGkoyKC/vwhk6Wbc3Qyhi7O9Fr?=
+ =?us-ascii?Q?qkc++ZM5wvwrK4ieN8nF7ypdv5/HUDr/oqLnvFeH0CGgP39lB1U05UpsI/2r?=
+ =?us-ascii?Q?0Gx+PB835wB8nG7ijnTQNKsG/k8eqO+icUX3wDXnZit1QtXuVUwav+qbDbOU?=
+ =?us-ascii?Q?CE4PGvVcLiucKehy9J4KIPS66vlOdYrmYivjUkk8azNgwLtwjXioslCyAmgd?=
+ =?us-ascii?Q?BWPbHcQ2xrhM2OwQQtgMcjYhc1pABjzAJW9KjzBDu1FnanGWqfnh2glV6fuD?=
+ =?us-ascii?Q?8GncHdN9cU2E0xc/9qMIjZ17R4Il0rpSFUNW/sExAvp8tqxLwy/Ve47FCJ0g?=
+ =?us-ascii?Q?+98NkRv+DhhnnM04EM2ZAE7WkG0mbwTOXZNGLjVj23L/0OMDCaFp39VrjLMU?=
+ =?us-ascii?Q?Ox832ED9kOouECcCQocXkM6NawBJMiJ2l+2TOo+BUXl6zzSUeywKinxwkgcJ?=
+ =?us-ascii?Q?QNC9HY2zsqmTyZt6VMynmjMFfW0gz4PfIflejgLos5AEWSRrOVdP3ZAq78kr?=
+ =?us-ascii?Q?xfUA2DxNF7M6mh9e4VgaRH+2PoTRI+LlcMENITrgCceVlN5Ixj/wTv3vruQA?=
+ =?us-ascii?Q?6a+8KN9TiDIqFPexAoDTbZ3YyqWF2SIpa0hCdqcxwOKVj20TZ6JcqqQJjMwi?=
+ =?us-ascii?Q?5EYQS7ANjbNiI9JapYzacJWVjoB3JGaMxMlJTiaMXnGUZZKVNxmo/M18FDWU?=
+ =?us-ascii?Q?CJaBxnd1YRZU9YrwRcrge/u3YPuzF9Jian3P2JUcyIBycA7HRsgWPBB5UXmY?=
+ =?us-ascii?Q?EG68wjNlvOZIms2TqJ+nlA86sjFXLXMKwQTGLhM+yFNzmnXks8H2REvyWw/h?=
+ =?us-ascii?Q?MGnTVSKcYEcGlmCrnm3mK5gLwkVD45SYgZgEwYygqgDcSmLAguJSFwNoCBH6?=
+ =?us-ascii?Q?2i6t63pTiq06rH/lbmabI5Jt6SWz9Kge4yL6exJxNkJslLBAjtu1ws7ACkZR?=
+ =?us-ascii?Q?S3AqyeqC7h+KU62hKNDMxP4hzKOfovQsp4SGrikZE7elJ17ykg09WvKoGQvY?=
+ =?us-ascii?Q?HzOCiLddza1kVBtbL6pdFxYk6Zr5xHyaEe8pDANQvBKHCaaPu37C9PVK1TCu?=
+ =?us-ascii?Q?Tq623CmFyaEmqMfTHxRQHatKtX85w49d8ReDCheCOixP3E7Fz08YiS37W9rf?=
+ =?us-ascii?Q?pY8NGQyR4TBiwpOXD3md98Ph8V9k+6/xofjRygknkGnqGe7SsrFJysMJKSWs?=
+ =?us-ascii?Q?Pc/Yi1X+kRbikcraSFLF/18A2877?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(7416014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DKKHIx6SqJD5k4Y0QAdizviQCxcGCjvajiRZ6mgzbhvKs8DBk6ixy9bdpMqo?=
- =?us-ascii?Q?Yuy4vb2WWmYpNGR3Y/fD/KBRhQ1JBijO2yrepsSMjA2ATtyq+7SWN4qbIuEA?=
- =?us-ascii?Q?c+uUJtTIdnKJt5A20Hzl/eoMj47LFnol8+hHK1hTLoHCKPWWSrFwYNP446nu?=
- =?us-ascii?Q?zxh9vX3UVROBw1LxglpTGK70XNfQzwOFG8zvpZ9DJ0kJHCFKOJXvMiN/218v?=
- =?us-ascii?Q?RGTPTPiOkhXAEsBnKXKgFsvx3iGem6iRITHEt5TfQ6RCaWvMFVPTbWF9RrYm?=
- =?us-ascii?Q?dZ7DgJRGk/ZZU/L8iU5QP0GDZVD2PO8/eoqVhqfyBZ8yvBF0c5s99Ppmp95d?=
- =?us-ascii?Q?w8Emwvp5nAS8MHQ+kSspuUFh8XRF9fEjI/lXeEo0mrVm1LIPL9OuVHYY7yxd?=
- =?us-ascii?Q?nI3lckP2MQ+YvIqGR8sSTnrS1/JebacrrEvwHniibeqCffCi7kxsksDkYqur?=
- =?us-ascii?Q?5va412g8wm2qQeKOcZeV3iq3vPu121V3rcu6ayWnfgSsdo7lVS0mp0sVZgUa?=
- =?us-ascii?Q?z3HHIoAEa1egQNT0uhZ9DFzYpaIEzNUsJ+8mhQPKV0DeJSkiO/Nf4mjFH0Fr?=
- =?us-ascii?Q?Me/NVg2ifc117KJ+PCrS8MIcVYQcrepL6+wHQFGJ/G4LQmGXGj7sZUBWYsGT?=
- =?us-ascii?Q?w6SjZHrW34zccb10rl2+gCnGJk6qhCyc0Jd8tgjWSqtpR1l1UdMbxy+1dURq?=
- =?us-ascii?Q?9UzckawlS3WZuOSBFF/uU/izizm0Wng38oHE8qUo4b1is+8ZQrTMNkA4Z/YC?=
- =?us-ascii?Q?+JlmjRtQzuEDBayOcm0d4Fm7IlWgQK7HfVlIBP2Ud+EKW1f94POpV/95wmJr?=
- =?us-ascii?Q?Js9rbvejRZ87ALOrRFlnu8QP+14SPldKWx9YrqDmplIU4PeqthcyU/Mqlrjh?=
- =?us-ascii?Q?FrB/+kItcEAtdilXsZXPEzl7aiPqXCFJysqle+D4285ZM+x8fdxqsFy1tLoF?=
- =?us-ascii?Q?XLAziNHJKifQfYCNXKVd3T+bi4V2Ooh4FBvXvYsh2QBaKrH1PDAY+b1s690z?=
- =?us-ascii?Q?kSUtVr79rubP/DR8fMJU+kzFMdxSA6DunnxAk5yQVTTOJZ0PSpFoV9uhrdz0?=
- =?us-ascii?Q?hr4J+Z/u/mXUBk/r9qP8PE51pNh2MOigtXN5ZbQUHWRV95lJgZPmWDXq/R2D?=
- =?us-ascii?Q?NIDtap455zhfnOkg2pA7mDUlDTR93QhMdpAcq5L998375aj+w6CqGZQFdbVe?=
- =?us-ascii?Q?oCCUeKKXcPaf+KKw7se79qwCgOXJcN6sD1/OmRAqvO1yOXOkpVp4VzzG8neq?=
- =?us-ascii?Q?OtNcjiqYUZSea8S6CzpFVSdpbCC1RHcRqS3t10J3rLJDTW2gdgAhOFI4/HA0?=
- =?us-ascii?Q?NxfEYFIKlPlQdH/BPFMcQEi3fjlFHk1Y2XuR+/Da70y+VV8P/BSx9xfoRFwC?=
- =?us-ascii?Q?ewqR+0v1i0UxcDiD1TDTzEH/t6siFrJ/UGOCUIvgLNEgJdGj/fFVSWdc9fLe?=
- =?us-ascii?Q?3Kz8qpdF+0LWshjar7UtR83G9ZftJrplHbCnheExsLb5p/Nq36lLNwxyU4Pa?=
- =?us-ascii?Q?blmmzQVybBu8PrPysaf9UGhqcFbqAf1x8sJtmhjOZFSjHt3oa9nbeqFW2EUR?=
- =?us-ascii?Q?cbOs42nBtRiN1diEqKe4w+PuIlsY9GP5qtuDMXuL?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 850a0423-b751-42b2-fa36-08dced4af92a
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2024 18:55:44.4700
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 06:40:33.4342
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: htZzNPTmBYr6XvlBVh9LebDlNyhEhaFYoS6UlVDezRoKK5kGIonWdC/hY98paaTq4Z0x/+kOkRbPtQ56Nd5/DQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7506
+X-MS-Exchange-CrossTenant-Network-Message-Id: 756b1701-f75e-4aaf-769a-08dcedad6f79
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD7E.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6791
 
-On Tue, Oct 15, 2024 at 06:11:39PM +0200, Borislav Petkov wrote:
-> On Tue, Oct 15, 2024 at 11:31:41AM -0400, Frank Li wrote:
-> > I don't think it is urgent. In most system the return value is 0. I am not
-> > sure who caught it because patch already exist at downstream tree for a
-> > whole.
->
-> That current patch looks like it needs rethinking and making it sane - see
-> below.
->
-> > > > diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
-> > > > index 7a9fb1202f1a0..ccc13c2adfd6f 100644
-> > > > --- a/drivers/edac/fsl_ddr_edac.c
-> > > > +++ b/drivers/edac/fsl_ddr_edac.c
-> > > > @@ -338,11 +338,18 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
-> > > >  			fsl_mc_printk(mci, KERN_ERR,
-> > > >  				"Faulty ECC bit: %d\n", bad_ecc_bit);
-> > > >
-> > > > -		fsl_mc_printk(mci, KERN_ERR,
-> > > > -			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-> > > > -			cap_high ^ (1 << (bad_data_bit - 32)),
-> > > > -			cap_low ^ (1 << bad_data_bit),
-> > > > -			syndrome ^ (1 << bad_ecc_bit));
-> > > > +		if ((bad_data_bit > 0 && bad_data_bit < 32) && bad_ecc_bit > 0) {
-> > > > +			fsl_mc_printk(mci, KERN_ERR,
-> > > > +				      "Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-> > > > +				      cap_high, cap_low ^ (1 << bad_data_bit),
-> > > > +				      syndrome ^ (1 << bad_ecc_bit));
-> > > > +		}
-> > > > +		if (bad_data_bit >= 32 && bad_ecc_bit > 0) {
-> > > > +			fsl_mc_printk(mci, KERN_ERR,
-> > > > +				      "Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-> > > > +				      cap_high ^ (1 << (bad_data_bit - 32)),
-> > > > +				      cap_low, syndrome ^ (1 << bad_ecc_bit));
-> > > > +		}
-> > >
-> > > This is getting unnecessarily clumsy than it should be. Please do the
-> > > following:
-> > >
-> > > 	if (bad_data_bit != 1 && bad_ecc_bit != -1) {
-> > >
-> > > 		// prep the values you need to print
-> > >
-> > > 		// do an exactly one fsl_mc_printk() with the prepared values.
-> > >
-> > > 	}
-> > >
-> > > Not have 4 fsl_mc_printks with a bunch of silly if-checks in front.
->
-> You missed the most important feedback. See above. ^^^^^^^
+This patchset adds a new wrapper for struct mce to prevent its bloating
+and export vendor specific error information. Additionally, support is
+also introduced for two new "syndrome" MSRs used in newer AMD Scalable
+MCA (SMCA) systems. Also, a new "FRU Text in MCA" feature that uses these
+new "syndrome" MSRs has been addded.
 
-Sorry, will fix at next version.
+Patch 1 adds the new wrapper structure mce_hw_err for the struct mce
+while also modifying the mce_record tracepoint to use the new wrapper.
 
-Frank
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Patch 2 introduces a new helper function, __print_dynamic_array(), for
+logging dynamic arrays through tracepoints.
+
+Patch 3 adds support for the new "syndrome" registers. They are read/printed
+wherever the existing MCA_SYND register is used.
+
+Patch 4 updates the function that pulls MCA information from UEFI x86
+Common Platform Error Records (CPERs) to handle systems that support the
+new registers.
+
+Patch 5 adds support to the AMD MCE decoder module to detect and use the
+"FRU Text in MCA" feature which leverages the new registers.
+
+NOTE:
+
+This set was initially submitted as part of the larger MCA Updates set.
+
+v1: https://lore.kernel.org/linux-edac/20231118193248.1296798-1-yazen.ghannam@amd.com/
+v2: https://lore.kernel.org/linux-edac/20240404151359.47970-1-yazen.ghannam@amd.com/
+
+However, since the MCA Updates set has been split up into smaller sets,
+this set, going forward, will be submitted independently.
+
+Having said that, this set set depends on and applies cleanly on top of
+the below two sets.
+
+[1] https://lore.kernel.org/linux-edac/20240521125434.1555845-1-yazen.ghannam@amd.com/
+[2] https://lore.kernel.org/linux-edac/20240523155641.2805411-1-yazen.ghannam@amd.com/
+
+Changes in v2:
+ - Drop dependencies on sets [1] and [2] above and rebase on top of
+   tip/master.
+
+Changes in v3:
+ - Move wrapper changes required in mce_read_aux() and mce_no_way_out()
+   from second patch to the first patch.
+ - Modify commit messages for second and fourth patch per feedback
+   received.
+ - Add comments to explain purpose of the new wrapper structure.
+ - Incorporate suggested touchup in the third patch.
+ - Remove call to memset() for the frutext string in the fourth patch.
+   Instead, just ensure that the string is NULL terminated.
+ - Fix SoB chains on all patches to properly reflect the patch path.
+
+Changes in v4:
+ - Resolve kernel test robot's warning on the use of memset() in
+   do_machine_check().
+ - Rebase on top of tip/master to avoid merge conflicts.
+
+Changes in v5:
+ - Introduce a new helper function __print_dynamic_array() for logging
+   dynamic arrays through tracepoints.
+ - Remove "len" field from the modified mce_record tracepoint since the
+   length of a dynamic array can be fetched from its metadata.
+ - Substitute __print_array() with __print_dynamic_array().
+
+Changes in v6:
+ - Introduce to_mce_hw_err macro to eliminate changes required in notifier
+   chain callback functions.
+ - Use the above macro in amd_decode_mce() notifier chain callback.
+ - Change third parameter of __mc_scan_banks() to a pointer to the new
+   wrapper, struct mce_hw_err.
+ - Rebase on top of tip/master.
+
+Links:
+v1: https://lore.kernel.org/linux-edac/20240530211620.1829453-1-avadhut.naik@amd.com/
+v2: https://lore.kernel.org/linux-edac/20240625195624.2565741-1-avadhut.naik@amd.com/
+v3: https://lore.kernel.org/linux-edac/20240730185406.3709876-1-avadhut.naik@amd.com/T/#t
+v4: https://lore.kernel.org/linux-edac/20240815211635.1336721-1-avadhut.naik@amd.com/
+v5: https://lore.kernel.org/linux-edac/20241001181617.604573-1-avadhut.naik@amd.com/
+
+Avadhut Naik (2):
+  x86/mce: Add wrapper for struct mce to export vendor specific info
+  x86/mce, EDAC/mce_amd: Add support for new MCA_SYND{1,2} registers
+
+Steven Rostedt (1):
+  tracing: Add __print_dynamic_array() helper
+
+Yazen Ghannam (2):
+  x86/mce/apei: Handle variable register array size
+  EDAC/mce_amd: Add support for FRU Text in MCA
+
+ arch/x86/include/asm/mce.h                 |  38 +++-
+ arch/x86/include/uapi/asm/mce.h            |   3 +-
+ arch/x86/kernel/cpu/mce/amd.c              |  31 +--
+ arch/x86/kernel/cpu/mce/apei.c             | 109 ++++++++---
+ arch/x86/kernel/cpu/mce/core.c             | 217 ++++++++++++---------
+ arch/x86/kernel/cpu/mce/genpool.c          |  18 +-
+ arch/x86/kernel/cpu/mce/inject.c           |   4 +-
+ arch/x86/kernel/cpu/mce/internal.h         |   4 +-
+ drivers/edac/mce_amd.c                     |  25 ++-
+ include/trace/events/mce.h                 |  49 ++---
+ include/trace/stages/stage3_trace_output.h |   8 +
+ include/trace/stages/stage7_class_define.h |   1 +
+ samples/trace_events/trace-events-sample.h |   7 +-
+ 13 files changed, 334 insertions(+), 180 deletions(-)
+
+
+base-commit: c65649d7deaf077c9dd4141a7414f215b9ea3f88
+-- 
+2.43.0
+
 
