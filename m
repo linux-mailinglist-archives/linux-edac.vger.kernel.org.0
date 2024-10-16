@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-2091-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2092-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D9BD9A0197
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 08:41:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 145F89A019B
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 08:42:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2E4A1C2307D
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 06:41:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6448AB25177
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 06:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07C8F190073;
-	Wed, 16 Oct 2024 06:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3C51B0137;
+	Wed, 16 Oct 2024 06:41:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="UwsQX+yE"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2K2QBi94"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2058.outbound.protection.outlook.com [40.107.95.58])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EDA18EFC6;
-	Wed, 16 Oct 2024 06:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A02A18C93B;
+	Wed, 16 Oct 2024 06:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.83
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729060885; cv=fail; b=fjvzbax7skLKyeKkMONWabp0+ccqigZGkftsLcm9VFJ29HD4i6Rr4EhNEiw3rqyOyDtS4At7BcZFFw5zjRP7EDkjjQlqA9GNwBArCw2rJI9gX3ApmV3Ybt8g9TBYVQaTC2cgxxI41dVkGeabnt54D/NDh6vm+IPmG2tIjy+gAWw=
+	t=1729060896; cv=fail; b=MLcd7otf0i/V3GBJ16Khux6wd4yxC/HLpn3OjyESIvAGl1ay3SpH3I7w3hSlynl2j7r6+j68BTIwNOUW1kQ5yTy3laMQKK6Wtz0yinZ7vQDyEvdj91Zk21jnyPhY4cXiuqQnF51LEQGZ2v2qum/qdnUgv9iKXr0jt9v3HAhHAn0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729060885; c=relaxed/simple;
-	bh=XqCbOOrvi+svqVSKGm2QJiKnyX7RX0IQBv8Eq3BszO0=;
+	s=arc-20240116; t=1729060896; c=relaxed/simple;
+	bh=nZnTfP7D/JUBZ48e6ireRnopg1bzWIyrHbRnPBdRIV0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aYXub35eFHeoxH2vEBgLbsODVxh4TjQ48becaXYDVrgbE3d0QmsNvektna0eDW6gSjqHbmzdUjGMtygLAgUPXgq8yIiY3l1VekueYlGeRdmvq4rIxIiJ2q/gTB85rvmGBXLD1BpdoWriw4P0wifrGC/5Nvta3jZvT7+kGZmT+ks=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=UwsQX+yE; arc=fail smtp.client-ip=40.107.95.58
+	 MIME-Version:Content-Type; b=sfFDwYrjEd33g/A59sS7cH2EHDaOiggFhjwatPCBPDRmSFR+R99UNc+O4zk9MAiruZZLQF5K8CYskrByINcqN5z8QkuKXYdFCf2FOQ+YVWs489a4zs9cZXgzaInlVzTkgFhhu7/jNxWgiP3gnGEb/s4nB515fmV7WvaFo+ixGn4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2K2QBi94; arc=fail smtp.client-ip=40.107.93.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SFBT077ZIPGr6AP1IU0mm0DiZY3nZikQhkVYjKT6wFtR0CI4oQV6BEAvuPWY9sAJJhjnwtsgwavIcgCBUeaICJf0Mq83YdvTaG+rtuehdMt822kans7XuCagXZ/UqWemigJ+8r+OTYR6PtvprR6B0JgNiQktbbCffpgOgPYdk+nQgyW3q4BgMWmoEPM7dOlcJ9lqz2cVLQpOsP4W9zCDyq+r4Jcdc10RUY5Dk5OvcfHHb3aLOi8rYacn4olwja+79sb8vlIcuTYwmAj+Io69kkJOj0Q9ET7ocF3Q538x0spUCMa0mcD3j/uDXMIrNsNawby1DNAoqmHuvgsaVrSf4g==
+ b=R8gPO74Vfu5Q4e+2ZSkNVMyneNkoNTAnOkeqoZYnxGwqUFKCJ58K5ADmqEo1U8PBKj7Mz0AAr3gBvlrKIZmqlPoev351oZKy/3tLbONg5/lV8vCW4hueivpQR3LzVyWvyhHWpWa51vra89+YnrTTcKriCki7rZukoQS3J1sPCuaN8FZ0yq3vtGCfAJYIT9550SDxDZpBmXFzdhC8XlEieW4LlmDXMNM7ZaDyr5Njoq3ECefZw1uG4lMLLFls/i1tZf5GdFSamTVnYPQZOP/qBafpO+T0Bi1Rb65mhyla7Gvg5Gza5Bqp3kgUDjgZIJNqA/cTpitQN5C4KQfn24tZ7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P+jeQwQKmM7MccpRbqvURQNkRhKDWlbgPsQMoa1iFrI=;
- b=Y6uRvtKMRsMY4X+Ng8/1MqG4Gnxy9d4vsGEvtzFJabNSec8ahSElXAK6oq4oVo/klOpRo6vYolBhOT1lU3eJjwNc+tItVhQOmx2or5da1TZZn0fZnDGx/e6+VH8odLrSOgwwBa6LzGve1t4yd4O7qUti6RwisJdqPE7utMwG6uR2w6qnOt2YUx6CmUYQIyrYi4050W334a0LAMveKpqkpwh7BxBaUgStF8/68fPN/DIKNIm53w1TvByPhPhtkoMXZp8ZydFkaIay9PAIqqyUU8WA88OGSWBIh6BATdLWzX1dlFVrW3yjc34DdN4Ya9s9JvIVGNHvp+JJ72B3FjqsIw==
+ bh=94vue54+OnYWJRo8fRs+9t/0+QadbO5lCOwTy6UU7ws=;
+ b=QBlx6hDa3KpFZCWXlqf2QK8bp470X9DUl8znvBRQz33NUPvSjfZCAHmbZyI7hOlWEsp5ML+QNpFZ8LTxLFQDuWb2ktBwjJSpTBJNTvXoTNe7TP1c+3kEEcI8M+AcNofBjnbi8HUYoBd6NMdnPInRHYi1RgxZlNpKWCJ90AAS9VDg953DkjMVl9IlBl2InJx6/7LXldvx+dWIc5g6wtVncq71qsK2awYk2qClLHtLYT97I4pNs+FMSjLIiZGiF/8ToyTxpX7nZGuPwJkZ3K0hNzki7cznL5fToW7VCv6no3o/63lUZ+YLQsw84tdB7h2NwQi0Zc5dAvIoVTa3f8S1kg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P+jeQwQKmM7MccpRbqvURQNkRhKDWlbgPsQMoa1iFrI=;
- b=UwsQX+yEQMyXtbzpBZpMQfbAXDT2B8rxhZo2L4NPGtltGDX3iUdeBmYzl9x73tjLczSnCA0gIUCS2+NcIpfxhYL6Sm3xGy6uy5KhkhBoS8ZMniT3Tp25Hhs5ytuFSRe6EWbg89uHhS2aDEWxpWHxGi8m22bFOMKmbyf5YpJF058=
-Received: from CH0PR03CA0113.namprd03.prod.outlook.com (2603:10b6:610:cd::28)
- by CH3PR12MB9455.namprd12.prod.outlook.com (2603:10b6:610:1c1::20) with
+ bh=94vue54+OnYWJRo8fRs+9t/0+QadbO5lCOwTy6UU7ws=;
+ b=2K2QBi94qtLBwCR76oaW8cyZelzmId1hRLaVcOi8in5wHF7AJWynD0xOySd0mizwVuwAaaNAnprM8QypuYkU/37ZVsnrtMC9xOzUDMIwE1IRuJvpYI6TOlqX/+4AP9CGhvA4qyqD+GMSv5xNaZ53qAK48IMv3BED0BPKdXRjoRE=
+Received: from CH5PR04CA0011.namprd04.prod.outlook.com (2603:10b6:610:1f4::27)
+ by SN7PR12MB6792.namprd12.prod.outlook.com (2603:10b6:806:267::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.26; Wed, 16 Oct
- 2024 06:41:20 +0000
-Received: from CH1PEPF0000AD82.namprd04.prod.outlook.com
- (2603:10b6:610:cd:cafe::81) by CH0PR03CA0113.outlook.office365.com
- (2603:10b6:610:cd::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Wed, 16 Oct
+ 2024 06:41:30 +0000
+Received: from CH1PEPF0000AD7C.namprd04.prod.outlook.com
+ (2603:10b6:610:1f4:cafe::cf) by CH5PR04CA0011.outlook.office365.com
+ (2603:10b6:610:1f4::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.17 via Frontend
- Transport; Wed, 16 Oct 2024 06:41:20 +0000
+ Transport; Wed, 16 Oct 2024 06:41:29 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH1PEPF0000AD82.mail.protection.outlook.com (10.167.244.91) with Microsoft
+ CH1PEPF0000AD7C.mail.protection.outlook.com (10.167.244.84) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8069.17 via Frontend Transport; Wed, 16 Oct 2024 06:41:20 +0000
+ 15.20.8069.17 via Frontend Transport; Wed, 16 Oct 2024 06:41:29 +0000
 Received: from titanite-d354host.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 16 Oct 2024 01:41:17 -0500
+ 15.1.2507.39; Wed, 16 Oct 2024 01:41:28 -0500
 From: Avadhut Naik <avadhut.naik@amd.com>
 To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
 	<linux-trace-kernel@vger.kernel.org>
@@ -77,9 +77,9 @@ CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
 	<qiuxu.zhuo@intel.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
 	<rostedt@goodmis.org>, <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
 	<john.allen@amd.com>, <avadhut.naik@amd.com>
-Subject: [PATCH v6 4/5] x86/mce/apei: Handle variable register array size
-Date: Wed, 16 Oct 2024 06:36:30 +0000
-Message-ID: <20241016064021.2773618-5-avadhut.naik@amd.com>
+Subject: [PATCH v6 5/5] EDAC/mce_amd: Add support for FRU Text in MCA
+Date: Wed, 16 Oct 2024 06:36:31 +0000
+Message-ID: <20241016064021.2773618-6-avadhut.naik@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241016064021.2773618-1-avadhut.naik@amd.com>
 References: <20241016064021.2773618-1-avadhut.naik@amd.com>
@@ -95,79 +95,67 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD82:EE_|CH3PR12MB9455:EE_
-X-MS-Office365-Filtering-Correlation-Id: a59b22fc-ad6b-4667-cb0b-08dcedad8b6a
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7C:EE_|SN7PR12MB6792:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a0ea322-0a85-4f17-b11b-08dcedad911c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700013|82310400026|1800799024;
+	BCL:0;ARA:13230040|36860700013|7416014|376014|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?P3IAY92Ufdd8fBpdfy5tHZufBaoSpAaB9yBHX6G2YK6YmOt3BbFDZpQOK7gW?=
- =?us-ascii?Q?hYoAKf28kRvQPRJHyeiOxdsNlnoPdQBNoKI64HaLoowR+uLDoiNaitK2uE4n?=
- =?us-ascii?Q?4G/D8lVs3HnTz6xZ2t5vopsvMPrZ6MM9alPBsuZheyJ3E8tWVhxAn1A8Qx9L?=
- =?us-ascii?Q?NuKBC5xKdl4t6pDkeASZwVlWq1MfcIfxrd6xVBAFsizHl4j/saYBvIgTHY38?=
- =?us-ascii?Q?70NvKhF03xMTRuHPzMvXT5Pj0bLLhyAQ5wOKlmwZhW4iSnGxLiCAYBi7fc5E?=
- =?us-ascii?Q?KfKUNKYjvgOOcC3wHNBtqa7udOxO1dEKvcI+WVS0TNoYbiTBvpjtuuJbSBok?=
- =?us-ascii?Q?+OUxPkuGG/IqS+BDq1SmSiZBBswUBswNpWklxlEb/VtzXtmWAnrwVH9fSxcS?=
- =?us-ascii?Q?xszvf3yl4UAtwryM4gmzOvchv7rdmeYm4LMwk6A/0l8DmI3YvduIt7bFvJXC?=
- =?us-ascii?Q?ub5iIPN0CvymjK4iIpoCIRYVz09d/xRH5lC/q4mFaJ++4aXZ2SZhsuBWrfEZ?=
- =?us-ascii?Q?J+eY2pX4kNMYJz0IbNc6+cCmTBImUU0v1T9yXARlDlVRvbCBZ47bTruitOst?=
- =?us-ascii?Q?lz3ak+p12LfZFnzjN22WdAUq43hF9JVqp92V1n6icL4WL2+mjdmZP0AwOSrM?=
- =?us-ascii?Q?B7SsPcmkMZp+nbf1HQsoISTNr2QLcJpqMoLGNq+Q+urAyWJ6MLv0+hvMe24r?=
- =?us-ascii?Q?ZO3x8xx2DOZAAJCp+0Z7mmnNLiGrAag98G+eYCJ5Dk1h6B4lLQrq3SnVH4uD?=
- =?us-ascii?Q?44uBtYOBFSnJzuLVaJZbq87+QaN83GAjWIfbeLlMjHx0VKkFNwpM1ljOK6qx?=
- =?us-ascii?Q?IfRUK9Nm1GsLoxGbO7H4z6ZrlGIiCG6xohwrr557YM0qBB0YGwT09wb+EjG3?=
- =?us-ascii?Q?znhyvwh+/PWpuyGrc2dHU2LtT4pGzkr+OZTrcRm7fVMJnztMUY8BYDwINOyX?=
- =?us-ascii?Q?5l4bdj8qJGpZdH7jSlfHGNm0NqvrlPy25vGpKTZwc+nt9C3JcUdhxF7ah+De?=
- =?us-ascii?Q?tPj+YAmPx5IjMMsibuD9Nu0S0mh7SUv0ITcbPETUWOOZKwhyALPX/ussiAk4?=
- =?us-ascii?Q?sthRxNqB+xE4wEl24DViWxMTzBZ3pwp4u9Rk1pGCP2/rsL5ZQVCv1xYZSR0j?=
- =?us-ascii?Q?RhFQrw7A4YNHHS3KJBiRLIm96JjF+qtBy2mtDVAmFdUp04zX+qeKI6mWYJy6?=
- =?us-ascii?Q?UNFDaOK3qKLzUqTpLq1qGH5FJODYRNQC4M5OWYGqnKZdlDFiQDDMf0USFHt5?=
- =?us-ascii?Q?xYhVJVx6RHkm8DUWyfY8XCIwJrcj68uy+zcKYoeugUsdpbMp6YLYpmQwMF+W?=
- =?us-ascii?Q?pwGtz2MUqZrPYBbzLpL/gjlDMmX6BV8q6vPTDwP+akZEROco3uADTLG4q2DV?=
- =?us-ascii?Q?u4zyY28EbSd1wIK2y9fpplDK6WNH?=
+	=?us-ascii?Q?dCRmVQUqesNw57Jj1wQmpeJCGQvJPMI2mHDblS/QnFhJ5vYT7svzbRKWkdD3?=
+ =?us-ascii?Q?Oz1IA/O5Synw5/1pFEYmxUnCR6Z52VfcmfYZXswKtgLvbjRSkcsTyEAzayDd?=
+ =?us-ascii?Q?DjQ2GyAGTXZov4pHDO/1MTd+ATNOmvYxWUWqPhRqIhknb39PJAjipVyMZjNx?=
+ =?us-ascii?Q?bJbBQpoeaEjVMSz4y09jEXo7cF3RTOlMwV1mslplANi/9fzUln4UMHRRf3xm?=
+ =?us-ascii?Q?itXVuJhK1YPI3557UyB+m+OsIHB6yxDD0tM0LyWwEjI3utTshpZPjvomVMOq?=
+ =?us-ascii?Q?D5BzilBLYkUntVllqeAmjJwnqaB2iYxNEE6YmqQInoyCcL134ancQWIjKbme?=
+ =?us-ascii?Q?pBS9UHNxiHNHYesPuy1kCG0cT/SK2UNfvUV78uCZWLhzpPGovP0ArqyQ6gME?=
+ =?us-ascii?Q?zrMEmunNZF/XKqmDeBu+yGT8OWAQ8tvKNmxZ+Q+t9OehEsA0oRF6rJNDBMnx?=
+ =?us-ascii?Q?TVchM5D+DSFUD7hLsABrSLsikRcMpazchiTlI/PYfGR+TaQ476UaAPvAl5Qx?=
+ =?us-ascii?Q?WKf3BkxSVu0fqNbqtsoOfFCdE20pnHyzp7rh7nMwAUYzd3NGKHAICIq90PkS?=
+ =?us-ascii?Q?hSreO8OYJw1j9eG83GMF47kt22TTaMPonMV0JZhngHAWwajgTe/GxjlUy2ll?=
+ =?us-ascii?Q?1ipBFuds4l4nWpBRiw2j/RQBSdoZg3KvyOSziwBTv8KKg0DfjspXN2EzFrwp?=
+ =?us-ascii?Q?V0IvNvrCz/OvHB4KovE9qn1s5AU0hnyyTvvDCEtRm7CtBM4BcKFckWM1sQEk?=
+ =?us-ascii?Q?b60nJwL4ybNN+0jPQmQC/luNt+RbEvaxoHSX2l4CC+qlwGtc0z4UeZftZMMf?=
+ =?us-ascii?Q?8BvsUYBlh2bo4GYKKQ180guiBV3Y0lj1gEHSHZXd6kGtQA4AXDgUX8jzxtHZ?=
+ =?us-ascii?Q?TDNcJgKqD2PuleRGMx75EsxOTEt5lYFkcapaZ8JgNDyIv8qj6nnX2ZLPotwP?=
+ =?us-ascii?Q?aPFjnILuAcT3lyF1aCE50V4OO3tva7iJiMapC6RukCpkxav0/iUAlNzo+yGb?=
+ =?us-ascii?Q?qrBaCBjfSDrdQLvuF1OfIan48dsTxTSuon5BWuX5A0ejWScVY/s6InTnD6nt?=
+ =?us-ascii?Q?rsNakYOFRaSthk0tpORZnyO64Q8jH/AeILwkoL06CgxbNe1I0r1MCQKOX5Q4?=
+ =?us-ascii?Q?z66Me9oBRQM+U/t6AYysBjqzJ4IZ2C93EY2wOlp2Bw2IKi6Pn3gBTRicCL+P?=
+ =?us-ascii?Q?SJJv8ie+d7p8Xz87fP16QoQ8zHRJvtDAB/0SXTLFYUZs/83+BD9cyJggRn1T?=
+ =?us-ascii?Q?cktt9AW4fdJpXtRQ9qI5mbTXUxgZzaAoyTacD/zBsVnJotqqS7Yk5VNw52Yo?=
+ =?us-ascii?Q?9JapfTAxRhh2oF3Cn5MLdX4pwTNhsH77SqQNbONk9OU8KX4zGDv0GyJo7dyy?=
+ =?us-ascii?Q?g7wALxkgRopkabJ4egYOPfawMH3P?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 06:41:20.2987
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 06:41:29.8532
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a59b22fc-ad6b-4667-cb0b-08dcedad8b6a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a0ea322-0a85-4f17-b11b-08dcedad911c
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH1PEPF0000AD82.namprd04.prod.outlook.com
+	CH1PEPF0000AD7C.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9455
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6792
 
 From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-ACPI Boot Error Record Table (BERT) is being used by the kernel to
-report errors that occurred in a previous boot. On some modern AMD
-systems, these very errors within the BERT are reported through the
-x86 Common Platform Error Record (CPER) format which consists of one
-or more Processor Context Information Structures. These context
-structures provide a starting address and represent an x86 MSR range
-in which the data constitutes a contiguous set of MSRs starting from,
-and including the starting address.
+A new "FRU Text in MCA" feature is defined where the Field Replaceable
+Unit (FRU) Text for a device is represented by a string in the new
+MCA_SYND1 and MCA_SYND2 registers. This feature is supported per MCA
+bank, and it is advertised by the McaFruTextInMca bit (MCA_CONFIG[9]).
 
-It's common, for AMD systems that implement this behavior, that the
-MSR range represents the MCAX register space used for the Scalable MCA
-feature. The apei_smca_report_x86_error() function decodes and passes
-this information through the MCE notifier chain. However, this function
-assumes a fixed register size based on the original HW/FW implementation.
+The FRU Text is populated dynamically for each individual error state
+(MCA_STATUS, MCA_ADDR, et al.). This handles the case where an MCA bank
+covers multiple devices, for example, a Unified Memory Controller (UMC)
+bank that manages two DIMMs.
 
-This assumption breaks with the addition of two new MCAX registers viz.
-MCA_SYND1 and MCA_SYND2. These registers are added at the end of the
-MCAX register space, so they won't be included when decoding the CPER
-data.
-
-Rework apei_smca_report_x86_error() to support a variable register array
-size. This covers any case where the MSR context information starts at
-the MCAX address for MCA_STATUS and ends at any other register within
-the MCAX register space.
-
-Add code comments indicating the MCAX register at each offset.
+Since MCA_CONFIG[9] is instrumental in decoding FRU Text, it has to be
+exported through the mce_record tracepoint so that userspace tools like
+the rasdaemon can determine if FRU Text has been reported through the
+MCA_SYND1 and MCA_SYND2 registers and output it.
 
 [Yazen: Add Avadhut as co-developer for wrapper changes.]
 
@@ -184,7 +172,9 @@ Changes in v2:
 tip/master.
 
 Changes in v3:
-1. Incorporate suggested touchup.
+1. Modify commit message per feedback provided.
+2. Remove call to memset() for the string frutext. Instead, just ensure
+that it is NULL terminated.
 2. Fix SoB chain to properly reflect the patch path.
 
 Changes in v4:
@@ -196,111 +186,125 @@ Changes in v5:
 Changes in v6:
 1. No changes except rebasing on top of tip/master.
 ---
- arch/x86/kernel/cpu/mce/apei.c | 72 +++++++++++++++++++++++++++-------
- 1 file changed, 58 insertions(+), 14 deletions(-)
+ arch/x86/include/asm/mce.h     |  2 ++
+ arch/x86/kernel/cpu/mce/amd.c  |  1 +
+ arch/x86/kernel/cpu/mce/apei.c |  2 ++
+ arch/x86/kernel/cpu/mce/core.c |  3 +++
+ drivers/edac/mce_amd.c         | 21 ++++++++++++++-------
+ 5 files changed, 22 insertions(+), 7 deletions(-)
 
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index c2466b20fe79..72a69ad7d692 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -61,6 +61,7 @@
+  *  - TCC bit is present in MCx_STATUS.
+  */
+ #define MCI_CONFIG_MCAX		0x1
++#define MCI_CONFIG_FRUTEXT	BIT_ULL(9)
+ #define MCI_IPID_MCATYPE	0xFFFF0000
+ #define MCI_IPID_HWID		0xFFF
+ 
+@@ -213,6 +214,7 @@ struct mce_hw_err {
+ 		struct {
+ 			u64 synd1;		/* MCA_SYND1 MSR */
+ 			u64 synd2;		/* MCA_SYND2 MSR */
++			u64 config;		/* MCA_CONFIG MSR */
+ 		} amd;
+ 	} vendor;
+ };
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 6ca80fff1fea..65ace034af08 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -796,6 +796,7 @@ static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
+ 
+ 	if (mce_flags.smca) {
+ 		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), m->ipid);
++		rdmsrl(MSR_AMD64_SMCA_MCx_CONFIG(bank), err.vendor.amd.config);
+ 
+ 		if (m->status & MCI_STATUS_SYNDV) {
+ 			rdmsrl(MSR_AMD64_SMCA_MCx_SYND(bank), m->synd);
 diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index 7f582b4ca1ca..0a89947e47bc 100644
+index 0a89947e47bc..19a1c72fc2bf 100644
 --- a/arch/x86/kernel/cpu/mce/apei.c
 +++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -68,9 +68,9 @@ EXPORT_SYMBOL_GPL(apei_mce_report_mem_error);
- int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- {
- 	const u64 *i_mce = ((const u64 *) (ctx_info + 1));
-+	unsigned int cpu, num_regs;
- 	bool apicid_found = false;
- 	struct mce_hw_err err;
--	unsigned int cpu;
- 	struct mce *m;
+@@ -155,6 +155,8 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
+ 		fallthrough;
+ 	/* MCA_CONFIG */
+ 	case 4:
++		err.vendor.amd.config = *(i_mce + 3);
++		fallthrough;
+ 	/* MCA_MISC0 */
+ 	case 3:
+ 		m->misc = *(i_mce + 2);
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index b7f4a49a1053..923983009c61 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -208,6 +208,8 @@ static void __print_mce(struct mce_hw_err *err)
+ 			pr_cont("SYND2 %llx ", err->vendor.amd.synd2);
+ 		if (m->ipid)
+ 			pr_cont("IPID %llx ", m->ipid);
++		if (err->vendor.amd.config)
++			pr_cont("CONFIG %llx ", err->vendor.amd.config);
+ 	}
  
- 	if (!boot_cpu_has(X86_FEATURE_SMCA))
-@@ -89,16 +89,12 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 		return -EINVAL;
+ 	pr_cont("\n");
+@@ -681,6 +683,7 @@ static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
  
- 	/*
--	 * The register array size must be large enough to include all the
--	 * SMCA registers which need to be extracted.
--	 *
- 	 * The number of registers in the register array is determined by
- 	 * Register Array Size/8 as defined in UEFI spec v2.8, sec N.2.4.2.2.
--	 * The register layout is fixed and currently the raw data in the
--	 * register array includes 6 SMCA registers which the kernel can
--	 * extract.
-+	 * Sanity-check registers array size.
- 	 */
--	if (ctx_info->reg_arr_size < 48)
-+	num_regs = ctx_info->reg_arr_size >> 3;
-+	if (!num_regs)
- 		return -EINVAL;
+ 	if (mce_flags.smca) {
+ 		m->ipid = mce_rdmsrl(MSR_AMD64_SMCA_MCx_IPID(i));
++		err->vendor.amd.config = mce_rdmsrl(MSR_AMD64_SMCA_MCx_CONFIG(i));
  
- 	for_each_possible_cpu(cpu) {
-@@ -117,12 +113,60 @@ int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
- 	mce_prep_record_per_cpu(cpu, m);
+ 		if (m->status & MCI_STATUS_SYNDV) {
+ 			m->synd = mce_rdmsrl(MSR_AMD64_SMCA_MCx_SYND(i));
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index 194d9fd47d20..d69a1466f0bc 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -795,6 +795,7 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
+ 	struct mce *m = (struct mce *)data;
+ 	struct mce_hw_err *err = to_mce_hw_err(m);
+ 	unsigned int fam = x86_family(m->cpuid);
++	u64 mca_config = err->vendor.amd.config;
+ 	int ecc;
  
- 	m->bank = (ctx_info->msr_addr >> 4) & 0xFF;
--	m->status = *i_mce;
--	m->addr = *(i_mce + 1);
--	m->misc = *(i_mce + 2);
--	/* Skipping MCA_CONFIG */
--	m->ipid = *(i_mce + 4);
--	m->synd = *(i_mce + 5);
+ 	if (m->kflags & MCE_HANDLED_CEC)
+@@ -814,11 +815,7 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
+ 		((m->status & MCI_STATUS_PCC)	? "PCC"	  : "-"));
+ 
+ 	if (boot_cpu_has(X86_FEATURE_SMCA)) {
+-		u32 low, high;
+-		u32 addr = MSR_AMD64_SMCA_MCx_CONFIG(m->bank);
+-
+-		if (!rdmsr_safe(addr, &low, &high) &&
+-		    (low & MCI_CONFIG_MCAX))
++		if (mca_config & MCI_CONFIG_MCAX)
+ 			pr_cont("|%s", ((m->status & MCI_STATUS_TCC) ? "TCC" : "-"));
+ 
+ 		pr_cont("|%s", ((m->status & MCI_STATUS_SYNDV) ? "SyndV" : "-"));
+@@ -853,8 +850,18 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
+ 
+ 		if (m->status & MCI_STATUS_SYNDV) {
+ 			pr_cont(", Syndrome: 0x%016llx\n", m->synd);
+-			pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
+-				 err->vendor.amd.synd1, err->vendor.amd.synd2);
++			if (mca_config & MCI_CONFIG_FRUTEXT) {
++				char frutext[17];
 +
-+	/*
-+	 * The SMCA register layout is fixed and includes 16 registers.
-+	 * The end of the array may be variable, but the beginning is known.
-+	 * Cap the number of registers to expected max (15).
-+	 */
-+	if (num_regs > 15)
-+		num_regs = 15;
++				frutext[16] = '\0';
++				memcpy(&frutext[0], &err->vendor.amd.synd1, 8);
++				memcpy(&frutext[8], &err->vendor.amd.synd2, 8);
 +
-+	switch (num_regs) {
-+	/* MCA_SYND2 */
-+	case 15:
-+		err.vendor.amd.synd2 = *(i_mce + 14);
-+		fallthrough;
-+	/* MCA_SYND1 */
-+	case 14:
-+		err.vendor.amd.synd1 = *(i_mce + 13);
-+		fallthrough;
-+	/* MCA_MISC4 */
-+	case 13:
-+	/* MCA_MISC3 */
-+	case 12:
-+	/* MCA_MISC2 */
-+	case 11:
-+	/* MCA_MISC1 */
-+	case 10:
-+	/* MCA_DEADDR */
-+	case 9:
-+	/* MCA_DESTAT */
-+	case 8:
-+	/* reserved */
-+	case 7:
-+	/* MCA_SYND */
-+	case 6:
-+		m->synd = *(i_mce + 5);
-+		fallthrough;
-+	/* MCA_IPID */
-+	case 5:
-+		m->ipid = *(i_mce + 4);
-+		fallthrough;
-+	/* MCA_CONFIG */
-+	case 4:
-+	/* MCA_MISC0 */
-+	case 3:
-+		m->misc = *(i_mce + 2);
-+		fallthrough;
-+	/* MCA_ADDR */
-+	case 2:
-+		m->addr = *(i_mce + 1);
-+		fallthrough;
-+	/* MCA_STATUS */
-+	case 1:
-+		m->status = *i_mce;
-+	}
++				pr_emerg(HW_ERR "FRU Text: %s", frutext);
++			} else {
++				pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
++					 err->vendor.amd.synd1, err->vendor.amd.synd2);
++			}
+ 		}
  
- 	mce_log(&err);
- 
+ 		pr_cont("\n");
 -- 
 2.43.0
 
