@@ -1,225 +1,292 @@
-Return-Path: <linux-edac+bounces-2094-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2095-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 086529A07B7
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 12:46:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 254CB9A07EF
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 12:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C6591C2714A
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 10:46:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E350B25DBB
+	for <lists+linux-edac@lfdr.de>; Wed, 16 Oct 2024 10:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A2B206E84;
-	Wed, 16 Oct 2024 10:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3147F2076B5;
+	Wed, 16 Oct 2024 10:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FCrxX8Yo"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7306321E3B8;
-	Wed, 16 Oct 2024 10:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B061C07F9;
+	Wed, 16 Oct 2024 10:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729075577; cv=none; b=mtuqnu8HAhHLBj/4DLrHKWTwW/kjplLSSeuVay0DSxoeFnXGEWpx5SCvakrLScB1hlmYkOgh62qLob99jkG99RK3LCbjhy8F53XtFk5vCfzc6jTbTYg2XDKlAg9ZwJMGeC8jJ+dX3fBlIfJuxVQr/VrY4cS5/fXNnUGJ5LT2FyQ=
+	t=1729076375; cv=none; b=fytCDZvXu6Si/UyDizwyJPfzlVLqLuqyOWCgpfzNh48adgEMFo9TbE6S1H8CHwI76plUnRLCqp3tuvsCeX3tv/ACLX9az3OkboHzKhvo6d1Ucxq4viELZ2NMAynLzLhVMUOt1BDy5KKqbhweg+obJpQFKdau4pIMqS3PY84Oae0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729075577; c=relaxed/simple;
-	bh=jO6MRbN3ZeNzo6YHbcUcHI9022JVn7wLoMMSv5ZFYEg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=eRDvnpa0mE0mnQuv9T3tm/+ooCAHoF4+7WpYq3cHMWh20pSIVz8yjMr4ZRF3sjNwgrKNeHh1ze9osxAnkZWaxVZRubpKYAMUKpGHDs5prHMq+kEi0hDvtJVzLZr0aJnZG0RN5BPHvudJwp4z1AHD9o6iOlMfCF5Aj/uuwBZVa90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XT6vz38Gvz6LDLb;
-	Wed, 16 Oct 2024 18:41:35 +0800 (CST)
-Received: from frapeml100005.china.huawei.com (unknown [7.182.85.132])
-	by mail.maildlp.com (Postfix) with ESMTPS id 49EF9140B63;
-	Wed, 16 Oct 2024 18:46:05 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml100005.china.huawei.com (7.182.85.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 16 Oct 2024 12:46:05 +0200
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Wed, 16 Oct 2024 12:46:05 +0200
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Srinivasulu Opensrc <sthanneeru.opensrc@micron.com>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-cxl@vger.kernel.org"
-	<linux-cxl@vger.kernel.org>
-CC: Srinivasulu Thanneeru <sthanneeru@micron.com>, Ajay Joshi
-	<ajayjoshi@micron.com>, Senthil Thangaraj <sthangaraj@micron.com>, "Vandana
- Salve" <vsalve@micron.com>
-Subject: RE: [RFC PATCH] rasdaemon: Add page offline support for cxl memory
-Thread-Topic: [RFC PATCH] rasdaemon: Add page offline support for cxl memory
-Thread-Index: AdseIOfbJEKPvJ5+RCqFn2Wf/RSCygBjlkbw
-Date: Wed, 16 Oct 2024 10:46:04 +0000
-Message-ID: <9ba3aa9d658f48dbb443b36380b61f05@huawei.com>
-References: <a4cdc0ddd56c450c9bfa1d950a3a37ac@micron.com>
-In-Reply-To: <a4cdc0ddd56c450c9bfa1d950a3a37ac@micron.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1729076375; c=relaxed/simple;
+	bh=z6QRm0J2I++VLMK4orPSe4kHg6UZzQ44XST8c0Wy+aQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i+DNENOyolJZHdruhpD9ZEbEv0Xg0aleqTjjUTrYN5b4cOzx2ctwdWd1ghrmBXlP+w9asexMFUa1ySa3/BKLnbXoF1RNwgyhaOEkXhR4IzJH22Ksp56jTDB7lhRPaV8iPtjN2bcvGjPaGq8hgQOafoJ9E6/1+RXnRTHxsY+ZSRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FCrxX8Yo reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6A8AE40E0198;
+	Wed, 16 Oct 2024 10:59:27 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id H-8ABRph_QdB; Wed, 16 Oct 2024 10:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1729076361; bh=zv5a7UXvwk4zGhwGx+Twn4ugNezq5/Up+qwxz+Hta1U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FCrxX8YoQ/0ZHFOf4iWtfypQOEK/v75QEQqJ4SCZSvzWZ6ndsHmWNi5BSVB3wDZsH
+	 ghUpOMJMJU0c7Lk59YRlV8HC+kKwfmzEkLDx9ShZgxBS/wSkiAkc1fo+s0dEL+qgBI
+	 Ft6c7lrtmoWtqZyksnii6gHt0u6RrGxL5NfWtyeAk7wHSSFZb1PW1WN3IA0BaYiNSW
+	 ppG7DJp6ZCsJ/SJySvir3y4W4nIQJx0+QDMC142tXw8u4WifNm/coXUNYyPWiMEtS2
+	 v6geuGqyprz5T3/yD1ymW+QS4/Us0w9DZ6507bTKISm81TyhbMbfwNG5l+sr6BD2sV
+	 lNw7XDM7eCV+Ka6zhbJmZFtty7T1DnBZQRJyaqwPP1y4CDOz/5ehRWJ8lMgqH8bGK/
+	 5CE8GXtjuoBKQNbJZ9cvpKeAmhGAQoen6Nz38IJQwg0fBjcGKonYfrXUAjPb3SlqIN
+	 sPCcYWGsvpU03dWQTW0PtcWJkez3oCQ0m5UlwrDqvhzM48ikXuUQpmlrxQwDztE5P8
+	 tfrGwtyJiAT7QUSbX0HXPJxj7hqg5WmPQ/8lvYOJKm61S2P1zmF7CPPZXzvyOO11/m
+	 GFCt+qosgfObsqGmYBn/tX69pJ5KGO+z3b42BcfTb6kgmY/M5vz5sMO6N5Ga/Pw1ZY
+	 QbIE8Eew44X1U944NxCePlIs=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4D10C40E021A;
+	Wed, 16 Oct 2024 10:58:38 +0000 (UTC)
+Date: Wed, 16 Oct 2024 12:58:32 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: shiju.jose@huawei.com
+Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, tony.luck@intel.com,
+	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
+	dan.j.williams@intel.com, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, vishal.l.verma@intel.com,
+	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
+	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
+	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
+	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
+	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
+	duenwen@google.com, gthelen@google.com,
+	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
+	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
+	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+	wanghuiqiang@huawei.com, linuxarm@huawei.com
+Subject: Re: [PATCH v13 01/18] EDAC: Add support for EDAC device features
+ control
+Message-ID: <20241016105832.GSZw-cWDOFweQMWRgZ@fat_crate.local>
+References: <20241009124120.1124-1-shiju.jose@huawei.com>
+ <20241009124120.1124-2-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241009124120.1124-2-shiju.jose@huawei.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Srinivas,
+On Wed, Oct 09, 2024 at 01:41:02PM +0100, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+>=20
+> Add generic EDAC device features control supports registering
+> RAS features supported in the system. Driver exposes features
+> control attributes to userspace in
+> /sys/bus/edac/devices/<dev-name>/<ras-feature>/
 
-Please see few comments inline,
+Chatgpt prompt:
 
->-----Original Message-----
->From: Srinivasulu Opensrc <sthanneeru.opensrc@micron.com>
->Sent: 14 October 2024 11:11
->To: mchehab@kernel.org; linux-edac@vger.kernel.org; linux-
->cxl@vger.kernel.org
->Cc: Srinivasulu Thanneeru <sthanneeru@micron.com>; Ajay Joshi
-><ajayjoshi@micron.com>; Senthil Thangaraj <sthangaraj@micron.com>;
->Vandana Salve <vsalve@micron.com>
->Subject: [RFC PATCH] rasdaemon: Add page offline support for cxl memory
->
->From: Srinivasulu Thanneeru <sthanneeru.opensrc@micron.com>
->
->CXL Type 3 device implements a threshold for corrected errors as described=
- in
->CXL 3.1 specification section 8.2.9.9.11.3. Device can set the threshold f=
-ield in
->the DRAM event descriptor when it detects corrected errors that meet or
->exceed the threshold value.
-1. Better mentioning Spec section and table for DRAM Event Record.
+| Please check the grammar in this English text: "Add generic EDAC device
+| features control supports registering RAS features supported in the sys=
+tem.
+| Driver exposes features control attributes to userspace in
+| /sys/bus/edac/devices/<dev-name>/<ras-"feature>/
 
-2. Section 8.2.9.2.1.1 Table 8-45 General Media Event Record  has threshold=
- event bit
-in memory event descriptor field. May need similar page offline support for=
- General Media
-Event Record too?
+Response:
 
-3. General question, Is the threshold check for the corrected errors in a C=
-XL device
-    always supported/enabled? If yes, please ignore following question.
-    If not,
-  1. Do we need to store the corrected errors reported using ras_record_pag=
-e_error()
-     when threshold check is not enabled?  and page would be offline when t=
-he total CE count
-    exceeds threshold.val by the ras-page-isolation.
-      Not sure how rasdaemon get information whether threshold check is ena=
-bled/supported?
-      May be from Advanced Programmable Corrected Volatile Memory Error Thr=
-eshold Feature?=20
->
->This patch is intended to offline pages for corrected memory errors when t=
-he
->device sets the threshold in the DRAM event descriptor.
->This helps prevent corrected errors from becoming uncorrected.
->
->Record the hpa for given dpa, then do page offline for hpa when corrected
->errors threshold is set.
->
->Signed-off-by: Srinivasulu Thanneeru <sthanneeru.opensrc@micron.com>
->---
-> ras-cxl-handler.c    | 14 ++++++++++++++
-> ras-page-isolation.c |  7 +++++++
-> ras-page-isolation.h |  1 +
-> ras-record.h         |  1 +
-> 4 files changed, 23 insertions(+)
->
->diff --git a/ras-cxl-handler.c b/ras-cxl-handler.c index 037c19c..c163c6f =
-100644
->--- a/ras-cxl-handler.c
->+++ b/ras-cxl-handler.c
->@@ -13,6 +13,7 @@
->
-> #include "ras-cxl-handler.h"
-> #include "ras-logger.h"
->+#include "ras-page-isolation.h"
-> #include "ras-record.h"
-> #include "ras-report.h"
-> #include "types.h"
->@@ -897,6 +898,12 @@ int ras_cxl_dram_event_handler(struct trace_seq *s,
-> 	if (trace_seq_printf(s, "dpa:0x%llx ", (unsigned long long)ev.dpa) <=3D =
-0)
-> 		return -1;
->
->+	if (tep_get_field_val(s, event, "hpa", record, &val, 1) < 0)
->+		return -1;
->+	ev.hpa =3D val;
->+	if (trace_seq_printf(s, "hpa:0x%llx ", (unsigned long long)ev.hpa) <=3D =
-0)
->+		return -1;
->+
-Support for the new fields in cxl_general_media and cxl_dram events  includ=
-ing 'hpa' had
-submitted in August in the following pull request.
-https://github.com/mchehab/rasdaemon/pull/178
-https://github.com/mchehab/rasdaemon/pull/178/commits/0b396b47d740c88fbd890=
-213f2d9d56e566e0671=20
-> 	if (tep_get_field_val(s,  event, "dpa_flags", record, &val, 1) < 0)
-> 		return -1;
-> 	ev.dpa_flags =3D val;
->@@ -1005,6 +1012,13 @@ int ras_cxl_dram_event_handler(struct trace_seq *s,
-> 		}
-> 	}
->
->+#ifdef HAVE_MEMORY_CE_PFA
->+	/* Page offline for CE when threeshold is set */
->+	if (!(ev.descriptor & CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT)
->&&
->+	     (ev.descriptor & CXL_GMER_EVT_DESC_THRESHOLD_EVENT))
-I think alignment should match open parenthesis.
->+		ras_hw_threshold_pageoffline(ev.hpa);
->+#endif
->+
-> 	/* Insert data into the SGBD */
-> #ifdef HAVE_SQLITE3
-> 	ras_store_cxl_dram_event(ras, &ev);
->diff --git a/ras-page-isolation.c b/ras-page-isolation.c index bb6b777..6e=
-b45d0
->100644
->--- a/ras-page-isolation.c
->+++ b/ras-page-isolation.c
->@@ -338,3 +338,10 @@ void ras_record_page_error(unsigned long long addr,
->unsigned int count, time_t t
-> 		page_record(pr, count, time);
-> 	}
-> }
->+
->+void ras_hw_threshold_pageoffline(unsigned long long addr) {
->+	time_t now =3D time(NULL);
->+
->+	ras_record_page_error(addr, threshold.val, now); }
->diff --git a/ras-page-isolation.h b/ras-page-isolation.h index 73c9157..ed=
-2f661
->100644
->--- a/ras-page-isolation.h
->+++ b/ras-page-isolation.h
->@@ -57,5 +57,6 @@ struct isolation {
-> void ras_page_account_init(void);
-> void ras_record_page_error(unsigned long long addr,
-> 			   unsigned int count, time_t time);
->+void ras_hw_threshold_pageoffline(unsigned long long addr);
->
-> #endif
->diff --git a/ras-record.h b/ras-record.h index bd861ff..d4969d1 100644
->--- a/ras-record.h
->+++ b/ras-record.h
->@@ -203,6 +203,7 @@ struct ras_cxl_general_media_event {  struct
->ras_cxl_dram_event {
-> 	struct ras_cxl_event_common_hdr hdr;
-> 	uint64_t dpa;
->+	uint64_t hpa;
-> 	uint8_t dpa_flags;
-> 	uint8_t descriptor;
-> 	uint8_t type;
->--
->2.46.2
->
-Thanks,
-Shiju
+| Here=E2=80=99s a corrected version of the text:
+|=20
+| "Add generic EDAC device feature control support for registering RAS fe=
+atures
+| supported in the system. The driver exposes feature control attributes =
+to
+| userspace in /sys/bus/edac/devices/<dev-name>/<ras-feature>/."
+|=20
+| Changes made:
+|=20
+| * "features control" was changed to "feature control" for consistency a=
+nd
+| clarity.
+|=20
+| * "supports registering" was changed to "support for registering" to ma=
+tch the
+| structure of the sentence.
+|=20
+| * Added "The" at the beginning of the second sentence for better flow.
+|=20
+| * Corrected the syntax around the file path to ensure clarity and prope=
+r
+| * punctuation.
+
+Please run all your commit text through some LLM AI as they're apparently=
+ good
+enough now to help me in correcting grammar.
+=20
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> ---
+>  drivers/edac/edac_device.c | 105 +++++++++++++++++++++++++++++++++++++
+>  include/linux/edac.h       |  32 +++++++++++
+>  2 files changed, 137 insertions(+)
+>=20
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 621dc2a5d034..0b8aa8150239 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -570,3 +570,108 @@ void edac_device_handle_ue_count(struct edac_devi=
+ce_ctl_info *edac_dev,
+>  		      block ? block->name : "N/A", count, msg);
+>  }
+>  EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
+> +
+> +/* EDAC device feature */
+> +static void edac_dev_release(struct device *dev)
+> +{
+> +	struct edac_dev_feat_ctx *ctx =3D container_of(dev, struct edac_dev_f=
+eat_ctx, dev);
+> +
+> +	kfree(ctx->dev.groups);
+> +	kfree(ctx);
+> +}
+> +
+> +const struct device_type edac_dev_type =3D {
+> +	.name =3D "edac_dev",
+> +	.release =3D edac_dev_release,
+> +};
+> +
+> +static void edac_dev_unreg(void *data)
+> +{
+> +	device_unregister(data);
+> +}
+> +
+> +/**
+> + * edac_dev_register - register device for RAS features with EDAC
+> + * @parent: client device.
+
+If this is a client device, why is the variable called "parent" and not
+"client"?
+
+I.e.,
+
+	struct device *client;
+
+For clarity and simplicity.
+
+Or call it "parent" because you do:
+
+	ctx->dev.parent =3D parent;
+
+and forget "client" altogether.
+
+> + * @name: client device's name.
+> + * @private: parent driver's data to store in the context if any.
+> + * @num_features: number of RAS features to register.
+> + * @ras_features: list of RAS features to register.
+> + *
+> + * Return:
+> + *  * %0       - Success.
+> + *  * %-EINVAL - Invalid parameters passed.
+> + *  * %-ENOMEM - Dynamic memory allocation failed.
+> + *
+> + * The new edac_dev_feat_ctx would be freed automatically.
+
+Why is this important to call out here?
+
+It is a common coding pattern of freeing resources in the release functio=
+n...
+
+> + */
+> +int edac_dev_register(struct device *parent, char *name,
+> +		      void *private, int num_features,
+> +		      const struct edac_dev_feature *ras_features)
+> +{
+> +	const struct attribute_group **ras_attr_groups;
+> +	struct edac_dev_feat_ctx *ctx;
+> +	int attr_gcnt =3D 0;
+> +	int ret, feat;
+> +
+> +	if (!parent || !name || !num_features || !ras_features)
+> +		return -EINVAL;
+> +
+> +	/* Double parse to make space for attributes */
+> +	for (feat =3D 0; feat < num_features; feat++) {
+> +		switch (ras_features[feat].ft_type) {
+> +		/* Add feature specific code */
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	ctx =3D kzalloc(sizeof(*ctx), GFP_KERNEL);
+> +	if (!ctx)
+> +		return -ENOMEM;
+> +
+> +	ctx->dev.parent =3D parent;
+> +	ctx->private =3D private;
+> +
+> +	ras_attr_groups =3D kcalloc(attr_gcnt + 1, sizeof(*ras_attr_groups), =
+GFP_KERNEL);
+> +	if (!ras_attr_groups) {
+> +		ret =3D -ENOMEM;
+> +		goto ctx_free;
+> +	}
+> +
+> +	attr_gcnt =3D 0;
+> +	for (feat =3D 0; feat < num_features; feat++, ras_features++) {
+> +		switch (ras_features->ft_type) {
+> +		/* Add feature specific code */
+> +		default:
+> +			ret =3D -EINVAL;
+> +			goto groups_free;
+> +		}
+> +	}
+> +
+> +	ras_attr_groups[attr_gcnt] =3D NULL;
+> +	ctx->dev.bus =3D edac_get_sysfs_subsys();
+> +	ctx->dev.type =3D &edac_dev_type;
+> +	ctx->dev.groups =3D ras_attr_groups;
+> +	dev_set_drvdata(&ctx->dev, ctx);
+> +
+> +	ret =3D dev_set_name(&ctx->dev, name);
+> +	if (ret)
+> +		goto groups_free;
+> +
+> +	ret =3D device_register(&ctx->dev);
+> +	if (ret) {
+> +		put_device(&ctx->dev);
+> +		goto groups_free;
+> +		return ret;
+		^^^^^^^^^^
+
+Come again?!
+
+There's code after a "goto"?
+
+--=20
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
