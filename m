@@ -1,185 +1,96 @@
-Return-Path: <linux-edac+bounces-2119-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2120-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAFED9A1B60
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 09:10:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7DFC9A1D55
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 10:37:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AD052871A4
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 07:10:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C14A31C21601
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 08:37:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6DD81C1ADA;
-	Thu, 17 Oct 2024 07:10:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFkfVQ+8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3B81D3648;
+	Thu, 17 Oct 2024 08:37:45 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98583155A24;
-	Thu, 17 Oct 2024 07:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729149004; cv=fail; b=JPFmOIaovlUpDeK+IClq0clzsIHO1aMbE/q68nyedRSQ4aHSVVPHnNlS/ZfkA5mLlytRQBzl4Lg/LWpK1fDxCkIgjNbKFCA/A+JI9psYRCeftIDhMkFDTaQJ/1duvE5WEzyCL4fG1IAK/VqFSm5EqbfF10pZaRsA0QL/aCFefKg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729149004; c=relaxed/simple;
-	bh=83iPzY82t1xGrRnKn7WKTeciO96iMoK8QuhahtUvZKk=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABA4762EB;
+	Thu, 17 Oct 2024 08:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729154265; cv=none; b=OpPNn4dyVSVu4qstPfBkGYXaA0dD0Hx8yQTah6P51iJKlsa8D4/Uzj5Ct2tA9bZXkqc5LM8hR7wsyoDr8baDtnZC3/gOcdKPdL438q58lJyA6hLIWFNTUoS8e5KmlAMkeU8kL1naO/ACki/eW/vDqqGFM5br3DohRSPGHQ3NNHY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729154265; c=relaxed/simple;
+	bh=WoYkazkHU6AwGRAFRR6XpGrloyKBMWmwP2W1nHF6/ss=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=SJvoKp9ZNmC5K0dfyZa6T4A48yYeAaB9QJfehpylD/zk1edQYbnMu2Mlx0oZU7IirmvFfMwHBUP1xzQUd21WrOfIiA64wW6j606WI3LSAAK3HiHqexZjSx+mslFmfcTVQ+Cjqn9+/HzTKs48AD2s1E0cuvaBFYmvuvqtrMxgirU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFkfVQ+8; arc=fail smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729149002; x=1760685002;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=83iPzY82t1xGrRnKn7WKTeciO96iMoK8QuhahtUvZKk=;
-  b=WFkfVQ+8T1t9anME4z5tCMyZ1rPGdOPJmb04lPyFW6wjGYD+Bk1Xs+iC
-   eGnBZy40GokZ3slrFx64If07I0YWI5R+UaUWV2svDhURRkzliz0QZasA4
-   M01hV0ib9qEQCggcPeGDcEcciGwvIUReC3/lzeaKgug3K/1tXx47NJX+5
-   bArtGjNOkz1gbparfwzCJLTj8sY6RZEJic+CT7r9A6uJ8AB1WgZghmsbc
-   Lbk5a/OuCi23nDpi6kq5+QOHI+WPObcAUQ1wM63cos09knp8Lr8fQrRkq
-   53U/8GJWwG4HLIpn+H0GMnYKql80GqPKp93b7qodfTqQNlhkWk+v9GJ5p
-   Q==;
-X-CSE-ConnectionGUID: sZcLjq9wS4OTCcbQnXqXow==
-X-CSE-MsgGUID: 2kJqAGDoSSGJ+e4hg1eeOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="32550306"
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="32550306"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 00:10:01 -0700
-X-CSE-ConnectionGUID: nk2skwJqQV+vfe5YLk/2fA==
-X-CSE-MsgGUID: Rw0SoNWgRLOKqMiIdUiDcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="83110026"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 17 Oct 2024 00:10:01 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 17 Oct 2024 00:10:00 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 17 Oct 2024 00:10:00 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Thu, 17 Oct 2024 00:10:00 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.48) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+	 Content-Type:MIME-Version; b=ni5JDQrTPBNTWb2cOZMxW7w2Rt1v/+T6TRGH6Hrazg+pzJ1SW1mQoT31OJDvc4iGZTElXlSXaEKGeO26gPQwUhLFyFTT9Amu+YYHhQVYuU82XYD/WtxaT/cKDBqJ4sCNkKgyJMrFC9tbbvsOnQ2466F58E0wH6XdJB9aR0jwiqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XTh1J1KV5z6LD8T;
+	Thu, 17 Oct 2024 16:33:08 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 791C71400F4;
+	Thu, 17 Oct 2024 16:37:39 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 17 Oct 2024 00:09:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=amYyyg0UuXEN4g4xfbsMSqi35EuWETi55LnX2SLEIvKxQNqlksZjq4gBT8mpacPcSR5F+6f3FvXLUIEHMMXa2l0rPax1ErUalQ0HjYKeaS8j+2hmO6s+ZmKWYoFsE2HB7KdDxC/FWjYI+9QGXdWqRBeZXZXDZB5x7ppNwRiFsJ3UBJ9QJXkhW0zMrAHyUx/WebMppi72NG/MswrTiQB1/GKPNdT59AemWK2J3rkzr9sIUJMJUm3fAOmLLyKp6CuW4biKufc4UJWrLTPkJxnaE+0mQq3NCZy174IL31dAu18rtwehheIFpiYPznpzyQN8axbucYTSoh5VQrVCO/tVVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E7bzGNLwhbiMIGk4hwDoCDEywqkW1Io6kbpFAHbzXwM=;
- b=YwObQcBt+cUy90R3ck5iy6WX1a/P/QbhvTVwY1cup6no4eBgX6SEBzdpVbQo2YrxDh+Od699hqWpozoS1vQuX7BiFnu5LwSpab8kyXBvCpsn3NWx8lXjepKoBsIzhUWta/7bfxLoRtb8LfU/jucQkhHemQ+szO2maahVVuZ1k/DfOzfDKjpkP/BmSEhFAfYvAEs0UVHQuA+XTfuIN/BMTr430o3cV2pHfX0spqKTQNvI4vGCvUfnVm9VbrlfIOM/jHAKrQS1Dn9C3A5iGwj+mfFe+cgEl9PUPlh6xJgu5mZq3H0pSAoJ9I+e9b0ZJSvVr+rcyEQDxZgexDfmXocOgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
- by MN0PR11MB6160.namprd11.prod.outlook.com (2603:10b6:208:3c8::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Thu, 17 Oct
- 2024 07:09:56 +0000
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d%7]) with mapi id 15.20.8069.016; Thu, 17 Oct 2024
- 07:09:56 +0000
-From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To: Avadhut Naik <avadhut.naik@amd.com>, "x86@kernel.org" <x86@kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"bp@alien8.de" <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
-	<mingo@redhat.com>, "rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>, "yazen.ghannam@amd.com"
-	<yazen.ghannam@amd.com>, "john.allen@amd.com" <john.allen@amd.com>
-Subject: RE: [PATCH v6 3/5] x86/mce, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
-Thread-Topic: [PATCH v6 3/5] x86/mce, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
-Thread-Index: AQHbH5ZrAuU8UmdKFkOX3yhViLnZqrKKhOjA
-Date: Thu, 17 Oct 2024 07:09:56 +0000
-Message-ID: <CY8PR11MB7134178B954B4DFFF6AEF81689472@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <20241016064021.2773618-1-avadhut.naik@amd.com>
- <20241016064021.2773618-4-avadhut.naik@amd.com>
-In-Reply-To: <20241016064021.2773618-4-avadhut.naik@amd.com>
-Accept-Language: en-US
+ 15.1.2507.39; Thu, 17 Oct 2024 10:37:39 +0200
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Thu, 17 Oct 2024 10:37:39 +0200
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Jonathan Cameron <jonathan.cameron@huawei.com>
+CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+	"tony.luck@intel.com" <tony.luck@intel.com>, "rafael@kernel.org"
+	<rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
+	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
+	"dave.jiang@intel.com" <dave.jiang@intel.com>, "alison.schofield@intel.com"
+	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
+	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v13 01/18] EDAC: Add support for EDAC device features
+ control
+Thread-Topic: [PATCH v13 01/18] EDAC: Add support for EDAC device features
+ control
+Thread-Index: AQHbGkjIT8EMR4nHhkSztyssI50yp7KGMcmAgAMn9YA=
+Date: Thu, 17 Oct 2024 08:37:38 +0000
+Message-ID: <9431b46fefec4f87bcd5e7999b97ed00@huawei.com>
+References: <20241009124120.1124-1-shiju.jose@huawei.com>
+	<20241009124120.1124-2-shiju.jose@huawei.com>
+ <20241014151829.00000e7f@Huawei.com>
+In-Reply-To: <20241014151829.00000e7f@Huawei.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|MN0PR11MB6160:EE_
-x-ms-office365-filtering-correlation-id: 1d3ed506-5bd0-47d2-a64c-08dcee7ab4d4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018;
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?RclloHBfbz2Rj/laSsJk8IdBzrs8Rl8aKhbuwEWH5XOPTO7YhBTuDtXvo3?=
- =?iso-8859-1?Q?zCbK2cekQq9waK9szZ/f5UWaX3AeHitz377cVNlf/jEbxZb+MfSo4RHgyV?=
- =?iso-8859-1?Q?javkLqzHAPShK66igFt3qBpOXmCb/x0d6lFW74bmW6hIsZs/BDgYaFfxYa?=
- =?iso-8859-1?Q?hsTzk6pDbwAMdG4HlgtKMRF1o3qyqzfILqi5524OrJtUgP1TWi5siGI3Bd?=
- =?iso-8859-1?Q?xdwY/I+OANhK4EfmbOOtWDte/2E9cbMKm5nBx9NoLdBi51Ta4GzqJaV0lS?=
- =?iso-8859-1?Q?6ezLjW+5+V6zYULkYFh/bVs7h3YilU20G4fsSFWLHdiTMA8tvuJWp698XN?=
- =?iso-8859-1?Q?VyQp+/P4xGOs4yuk8yEFTYgEbnI1R15Z504NCE52RCs1hg57ieOvjhYPP/?=
- =?iso-8859-1?Q?fNQBvP0SXlOZKbeI+AoZQH1Abdjcrl+6k6xJg9KeJw2yT9XHKq2//l++zr?=
- =?iso-8859-1?Q?3zQTY7JO5zyXnWAaDMCNgTOS2d5cdRDB01WcXXfCpJEd+MksiuNmI4XyQJ?=
- =?iso-8859-1?Q?mrLDPbMmy4A6S4XYdxt8ZDNZfWTxQixbgXiPSyzYUjqGLIGiVhBB1q+qMo?=
- =?iso-8859-1?Q?USrsozIcieDzjVaSSvc4vMhRfco0N+5sbkmYl9gabVHW2PQKXR2o9SS8+x?=
- =?iso-8859-1?Q?vwK2xCrEhhvHAYUivPzxqBL/tW0sVEo+asShwG2YlIygghIRSh8fRaCUOO?=
- =?iso-8859-1?Q?re3rPXlaEAibUS/FYe9lHwApM3QVnjJ65OXz2ely1o8Tj87Bw9qwufyqso?=
- =?iso-8859-1?Q?Fv/zrewlqgV8rHYsp4Fnl6ydfnPvrdWbyeDg377oUUPTODq9R7gPQobvpN?=
- =?iso-8859-1?Q?0tJDrJwrRFsQE8R+TUdt5n4vLtwQDoTOLg7ZfjMpSYK97SmiM7xIF23U+2?=
- =?iso-8859-1?Q?iWgDgDxEtYwoT1YAly3mNQ5ZJBEH9S0lqqE50sg960NL83mmzD1bPwPGan?=
- =?iso-8859-1?Q?V69igj014sCiipl41p5U6qeH7EVnrhJ0LS9ZxsTnNaTL0xOThViQuz8rC0?=
- =?iso-8859-1?Q?0aeI0mlbPMsOMswzFohiwbXH4oDAYXWIm7IAU8qjEKIa7g9XlHGLNhMGyv?=
- =?iso-8859-1?Q?KNVe7VLJNJsEk3aUudgDWlJlqnf1JPtrzeIyM5+VmMixiErGxH8G4BGF48?=
- =?iso-8859-1?Q?9aEOrCIkLT7XvulS8y9PPpDKEsy3Mz5jjhYS/Lanq6a1oM5UQ2oDiFQvba?=
- =?iso-8859-1?Q?Upwmw5OW9wFZP4Zv+3myHk37EKHKHoI6X7GARMykkuH89uWF9r/DC53r+u?=
- =?iso-8859-1?Q?+2Yk3i2FWWXHSUnmFqQsY+4RVf0x5Gchl6RgRXoXvBYBhpCovMPgl9WZj9?=
- =?iso-8859-1?Q?Umrm0BfcAN2gFcCe7tr4NaLUCEsuRR/SRSNru5SHEBhBiALQm43FrszHrV?=
- =?iso-8859-1?Q?Yyc9hsyUD/swWK87CSe8Mjgo4XOQ6cLQQOJGIff9DHd4jlZ5POl6w=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?gHzB2oZNW2todiA1XZ8XiOgNcYCRlOSf0cmSFZTgomZak/BRptzug4b0da?=
- =?iso-8859-1?Q?ctVS460KsEufbYFZVrK/5KYHB56/dQ+b4yrM4n3jbqKOHZwQrFvpUapQ5h?=
- =?iso-8859-1?Q?/eQ4CHV3FSxLPcquCUL1OtEe4+I4AZpMnUc+OPiFpP4+ceeO4JPzMJfOBJ?=
- =?iso-8859-1?Q?SPWczSgq8JwvD0rb5IC8W3rzVG/WecLexk7ol8kE0FHBDhb8bkvdt3h7YB?=
- =?iso-8859-1?Q?BsDfHTluDClbYlc/ZuW8Z9vjd4665A/7RBsQm6zHCHMNSiizs9Olv2zZ16?=
- =?iso-8859-1?Q?eUIYL7O77A2K1Jx6vC46vIWpMJFtPpy6rf2xPx1oD/fC6FWN8Yncsr/Sfa?=
- =?iso-8859-1?Q?K+hQSKuDdFjT+VpgcUp8PmCDKI42SD1vsrhrd0ACsx/O2IkjXC2g/Pe9x6?=
- =?iso-8859-1?Q?DVmHM+sz1o48W5dhukufmvJXL3I3JKhMWDlEnPLxBrqg87yyD7PW9NP80w?=
- =?iso-8859-1?Q?ISSrryaXDDQwm92eVQ0Vw/4GUpDV5cSrVVhtuMifdnKVTOScrTKqJ4bXMN?=
- =?iso-8859-1?Q?SqX+crtzxZ/f8/xOg89nqseaaUUHSROsNanNCZyunIQfqYd9gC0XQ/KzKD?=
- =?iso-8859-1?Q?u2n0cMwdGzfnS7dEZCxhsehUn1kIGyrJ5u/YnRZsO1ieORR7upQM2YdNOi?=
- =?iso-8859-1?Q?hLMOIKuLyHInaoBJnIIcsh/8dFdEirF4X3pR3oU2a1eCQFQoWJ9ocHzUCz?=
- =?iso-8859-1?Q?NhreqqwA33juiIPGpdn9zBJb3grgqZlyJqfdHgGyLQ31hWrbc6tDo7jqG7?=
- =?iso-8859-1?Q?NrUX5OX4ZHX4JkEXqc+lHzwO5cGjj8S7tYw3Ss4aOJflQABwZtQQp2dkmH?=
- =?iso-8859-1?Q?ejYdlyVT3aTYdDOl2TBcGpXSSoiamPdMaWMGPCkJ1xHduB3NJAFiIShjlX?=
- =?iso-8859-1?Q?ns/jO/fuICk25DIzJ9lcZZ1JQLhcKVdTVAU5RZUBDExpz1ikLd7EmGoqJ+?=
- =?iso-8859-1?Q?axZfy5EEphDrAjcu4XKVp+bZXDeQQdbTQu27+1gxFAKZjVr/JzygsnGUkA?=
- =?iso-8859-1?Q?g+DGEcw/rdaT+NaTowcNupLMro3B6gtTP3AGrpEJORZr1hTNcDSifylx+N?=
- =?iso-8859-1?Q?dMKZs+yMlIh5vR7AqupVOjklPy7gy38gOl5y7Vph29Keo7v6gh4fcIMky8?=
- =?iso-8859-1?Q?OH08qimMAcAsymU7PGOGOjPA/XZ5p31jC1DpLCgU4VmQlNXY5p7zMYXzhv?=
- =?iso-8859-1?Q?/k5sC2nMTEzLdzkn28CnEB5QWfP+H0cCf9CWhOOEHaCqKptOulcJF1qBzR?=
- =?iso-8859-1?Q?96DhG6iaZUsujRFfRiakxN7Z0DTOM0kZCPiKP07ylBX9G8wwX/WpDlHt1t?=
- =?iso-8859-1?Q?WG5JbHN5h+lnIbNplWfRW90tquYt/p1EqHiPJ0JIsRHJ9fZWOxgOHBmjMX?=
- =?iso-8859-1?Q?FJUWepogCu5lZL++DVltu+aYiBHDXsGtg72zKjiSVc98wIqo8hzd5ebGCI?=
- =?iso-8859-1?Q?+tUgBv5X/FVZ/u2rmSPeq0D1TLAVtW43rnI18bM9bIyqnwU6uFWwJztfjo?=
- =?iso-8859-1?Q?PuLK1PYOKgLT6Kure1Qssu+3MBEKSjImwnYlVxNmth0i7J/R1nUmZYOg9a?=
- =?iso-8859-1?Q?qdIyKiY9RAvjtdEr/OOe61YrRapkubrPLfcMm/Sc298h0eVrksIZv3xU7o?=
- =?iso-8859-1?Q?7idqv8Sk5BD+Nl/dmKFJ1BErqdNeAf37cJ?=
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -187,66 +98,155 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d3ed506-5bd0-47d2-a64c-08dcee7ab4d4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2024 07:09:56.6724
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xCArVpRnxlBlPAm7hfO07iH/EpMjVJHTPFYtnQ8SKIpF122FRKpGOIHBfMoVPl6i94Y2K943GvrsyuslXw37Dg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6160
-X-OriginatorOrg: intel.com
 
-> From: Avadhut Naik <avadhut.naik@amd.com>
-> [...]
-> --- a/include/trace/events/mce.h
-> +++ b/include/trace/events/mce.h
-> @@ -43,6 +43,7 @@ TRACE_EVENT(mce_record,
->  		__field(	u8,		bank		)
->  		__field(	u8,		cpuvendor	)
->  		__field(	u32,		microcode	)
-> +		__dynamic_array(u8, v_data, sizeof(err->vendor))
->  	),
->=20
->  	TP_fast_assign(
-> @@ -65,9 +66,10 @@ TRACE_EVENT(mce_record,
->  		__entry->bank		=3D err->m.bank;
->  		__entry->cpuvendor	=3D err->m.cpuvendor;
->  		__entry->microcode	=3D err->m.microcode;
-> +		memcpy(__get_dynamic_array(v_data), &err->vendor,
-> +sizeof(err->vendor));
->  	),
->=20
-> -	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx,
-> ADDR: %016Lx, MISC: %016Lx, SYND: %016Lx, RIP: %02x:<%016Lx>, TSC: %llx,
-> PPIN: %llx, vendor: %u, CPUID: %x, time: %llu, socket: %u, APIC: %x,
-> microcode: %x",
-> +	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016llx, IPID: %016llx,
-> +ADDR: %016llx, MISC: %016llx, SYND: %016llx, RIP: %02x:<%016llx>, TSC:
-> +%llx, PPIN: %llx, vendor: %u, CPUID: %x, time: %llu, socket: %u, APIC:
-> +%x, microcode: %x, vendor data: %s",
->  		__entry->cpu,
->  		__entry->mcgcap, __entry->mcgstatus,
->  		__entry->bank, __entry->status,
-> @@ -83,7 +85,8 @@ TRACE_EVENT(mce_record,
->  		__entry->walltime,
->  		__entry->socketid,
->  		__entry->apicid,
-> -		__entry->microcode)
-> +		__entry->microcode,
-> +		__print_dynamic_array(v_data, 8))
+Hi Jonathan,=20
 
-What is the 2nd parameter '8'=A0about?=20
+>-----Original Message-----
+>From: Jonathan Cameron <jonathan.cameron@huawei.com>
+>Sent: 14 October 2024 15:18
+>To: Shiju Jose <shiju.jose@huawei.com>
+>Cc: linux-edac@vger.kernel.org; linux-cxl@vger.kernel.org; linux-
+>acpi@vger.kernel.org; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
+>bp@alien8.de; tony.luck@intel.com; rafael@kernel.org; lenb@kernel.org;
+>mchehab@kernel.org; dan.j.williams@intel.com; dave@stgolabs.net;
+>dave.jiang@intel.com; alison.schofield@intel.com; vishal.l.verma@intel.com=
+;
+>ira.weiny@intel.com; david@redhat.com; Vilas.Sridharan@amd.com;
+>leo.duran@amd.com; Yazen.Ghannam@amd.com; rientjes@google.com;
+>jiaqiyan@google.com; Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
+>naoya.horiguchi@nec.com; james.morse@arm.com; jthoughton@google.com;
+>somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
+>duenwen@google.com; gthelen@google.com;
+>wschwartz@amperecomputing.com; dferguson@amperecomputing.com;
+>wbs@os.amperecomputing.com; nifan.cxl@gmail.com; tanxiaofei
+><tanxiaofei@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>; Roberto
+>Sassu <roberto.sassu@huawei.com>; kangkang.shen@futurewei.com;
+>wanghuiqiang <wanghuiqiang@huawei.com>; Linuxarm
+><linuxarm@huawei.com>
+>Subject: Re: [PATCH v13 01/18] EDAC: Add support for EDAC device features
+>control
+>
+>On Wed, 9 Oct 2024 13:41:02 +0100
+><shiju.jose@huawei.com> wrote:
+>
+>> From: Shiju Jose <shiju.jose@huawei.com>
+>>
+>> Add generic EDAC device features control supports registering RAS
+>> features supported in the system. Driver exposes features control
+>> attributes to userspace in
+>> /sys/bus/edac/devices/<dev-name>/<ras-feature>/
+>>
+>> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+>Hi Shiju,
+>
+>Spotted a few minor bugs in here that I'd missed in internal review :( See=
+ below.
+>
+>Jonathan
 
-The 2nd parameter is about the element size.=20
-The element type is 'u8', as defined above.=20
-Therefore:
+Thanks for reviewing.
+>
+>> ---
+>>  drivers/edac/edac_device.c | 105
+>+++++++++++++++++++++++++++++++++++++
+>>  include/linux/edac.h       |  32 +++++++++++
+>>  2 files changed, 137 insertions(+)
+>>
+>> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+>> index 621dc2a5d034..0b8aa8150239 100644
+>> --- a/drivers/edac/edac_device.c
+>> +++ b/drivers/edac/edac_device.c
+>
+>
+>> +
+>> +/**
+>> + * edac_dev_register - register device for RAS features with EDAC
+>> + * @parent: client device.
+>> + * @name: client device's name.
+>> + * @private: parent driver's data to store in the context if any.
+>> + * @num_features: number of RAS features to register.
+>> + * @ras_features: list of RAS features to register.
+>> + *
+>> + * Return:
+>> + *  * %0       - Success.
+>> + *  * %-EINVAL - Invalid parameters passed.
+>> + *  * %-ENOMEM - Dynamic memory allocation failed.
+>> + *
+>> + * The new edac_dev_feat_ctx would be freed automatically.
+>> + */
+>> +int edac_dev_register(struct device *parent, char *name,
+>> +		      void *private, int num_features,
+>> +		      const struct edac_dev_feature *ras_features) {
+>
+>...
+>
+>> +	ret =3D device_register(&ctx->dev);
+>> +	if (ret) {
+>> +		put_device(&ctx->dev);
+>> +		goto groups_free;
+>> +		return ret;
+>
+>Unreachable line. However, shouldn't have the goto here as put_device() sh=
+ould
+>result in the release being called in which case this is a double free. So=
+ drop the
+>goto and keep the return.
+Fixed.
+>
+>
+>> +	}
+>> +
+>> +	return devm_add_action_or_reset(parent, edac_dev_unreg, &ctx->dev);
+>> +
+>> +groups_free:
+>> +	kfree(ras_attr_groups);
+>> +ctx_free:
+>> +	kfree(ctx);
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(edac_dev_register);
+>> diff --git a/include/linux/edac.h b/include/linux/edac.h index
+>> b4ee8961e623..1db008a82690 100644
+>> --- a/include/linux/edac.h
+>> +++ b/include/linux/edac.h
+>> @@ -661,4 +661,36 @@ static inline struct dimm_info
+>> *edac_get_dimm(struct mem_ctl_info *mci,
+>
+>
+>> +/* EDAC device feature information structure */ struct edac_dev_data
+>> +{
+>> +	u8 instance;
+>> +	void *private;
+>> +};
+>> +
+>> +struct device;
+>
+>That forwards def doesn't work as this header needs to include enough
+>information to establish layout of struct edac_dev_feat_ctx.
+>Header already includes linux/device.h so just drop this.
+Deleted.
+>
+>
+>> +
+>> +struct edac_dev_feat_ctx {
+>> +	struct device dev;
+>> +	void *private;
+>> +};
+>> +
+>> +struct edac_dev_feature {
+>> +	enum edac_dev_feat ft_type;
+>> +	u8 instance;
+>> +	void *ctx;
+>> +};
+>> +
+>> +int edac_dev_register(struct device *parent, char *dev_name,
+>> +		      void *parent_pvt_data, int num_features,
+>> +		      const struct edac_dev_feature *ras_features);
+>>  #endif /* _LINUX_EDAC_H_ */
 
-    __print_dynamic_array(v_data, sizeof(u8)))
-   =20
--Qiuxu
 
-[...]
+Thanks,
+Shiju
 
