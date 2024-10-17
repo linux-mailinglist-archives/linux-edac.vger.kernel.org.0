@@ -1,59 +1,59 @@
-Return-Path: <linux-edac+bounces-2120-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2121-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7DFC9A1D55
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 10:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BB019A1D57
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 10:38:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C14A31C21601
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 08:37:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C4021C218E2
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Oct 2024 08:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3B81D3648;
-	Thu, 17 Oct 2024 08:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 135651D416E;
+	Thu, 17 Oct 2024 08:37:59 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABA4762EB;
-	Thu, 17 Oct 2024 08:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5C51D097C;
+	Thu, 17 Oct 2024 08:37:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729154265; cv=none; b=OpPNn4dyVSVu4qstPfBkGYXaA0dD0Hx8yQTah6P51iJKlsa8D4/Uzj5Ct2tA9bZXkqc5LM8hR7wsyoDr8baDtnZC3/gOcdKPdL438q58lJyA6hLIWFNTUoS8e5KmlAMkeU8kL1naO/ACki/eW/vDqqGFM5br3DohRSPGHQ3NNHY=
+	t=1729154279; cv=none; b=TzRw/6AIa2rWpQT0krVzds8dytKB9yM5QYm5zP9Y5WXJpW7llwOm8dYbGrNPkK7eNUAbfBtKMimXnfvMHmN1IaT5Ewps4bvjmGvmpcT7IJc6W3Zrlz0As8Hok3tfuo9AmTRL6DU+rERf8jHswEOrhplbNydTkTjmSDWUQa7Rd8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729154265; c=relaxed/simple;
-	bh=WoYkazkHU6AwGRAFRR6XpGrloyKBMWmwP2W1nHF6/ss=;
+	s=arc-20240116; t=1729154279; c=relaxed/simple;
+	bh=V1Nxm3PFFy1wfn7H+Vz/8ZFWFV7bYvzpYltoz5NJiGY=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ni5JDQrTPBNTWb2cOZMxW7w2Rt1v/+T6TRGH6Hrazg+pzJ1SW1mQoT31OJDvc4iGZTElXlSXaEKGeO26gPQwUhLFyFTT9Amu+YYHhQVYuU82XYD/WtxaT/cKDBqJ4sCNkKgyJMrFC9tbbvsOnQ2466F58E0wH6XdJB9aR0jwiqY=
+	 Content-Type:MIME-Version; b=jxySWyerGjrmDSf7gfmpA1oSgAvFmrGnAPhgu0cdRXBoGhLMEPPrVAtxlH6w+2MLlZ/ooDD+OY4YDxo9YlWHGQBiKWq8EFYlQZUbMW/Kvnf0E+NZ66gY6FF9EACfRKsZjCw+I/ifAG7UhNFh+r107gc7DkrtYfPb7cuj3j39KDA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XTh1J1KV5z6LD8T;
-	Thu, 17 Oct 2024 16:33:08 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 791C71400F4;
-	Thu, 17 Oct 2024 16:37:39 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XTh605KJKz6K9C4;
+	Thu, 17 Oct 2024 16:37:12 +0800 (CST)
+Received: from frapeml100007.china.huawei.com (unknown [7.182.85.133])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7DB13140119;
+	Thu, 17 Oct 2024 16:37:52 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
+ frapeml100007.china.huawei.com (7.182.85.133) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 17 Oct 2024 10:37:39 +0200
+ 15.1.2507.39; Thu, 17 Oct 2024 10:37:52 +0200
 Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
  frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Thu, 17 Oct 2024 10:37:39 +0200
+ Thu, 17 Oct 2024 10:37:51 +0200
 From: Shiju Jose <shiju.jose@huawei.com>
-To: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Borislav Petkov <bp@alien8.de>
 CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
 	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
 	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
 	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "rafael@kernel.org"
-	<rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
+	<linux-kernel@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
 	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
 	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"dave.jiang@intel.com" <dave.jiang@intel.com>, "alison.schofield@intel.com"
+	"Jonathan Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
+	<dave.jiang@intel.com>, "alison.schofield@intel.com"
 	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
 	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
 	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
@@ -79,13 +79,13 @@ Subject: RE: [PATCH v13 01/18] EDAC: Add support for EDAC device features
  control
 Thread-Topic: [PATCH v13 01/18] EDAC: Add support for EDAC device features
  control
-Thread-Index: AQHbGkjIT8EMR4nHhkSztyssI50yp7KGMcmAgAMn9YA=
-Date: Thu, 17 Oct 2024 08:37:38 +0000
-Message-ID: <9431b46fefec4f87bcd5e7999b97ed00@huawei.com>
+Thread-Index: AQHbGkjIT8EMR4nHhkSztyssI50yp7KJHpUAgABGrZA=
+Date: Thu, 17 Oct 2024 08:37:51 +0000
+Message-ID: <b59606d95d384e43900587b25dec1a4e@huawei.com>
 References: <20241009124120.1124-1-shiju.jose@huawei.com>
-	<20241009124120.1124-2-shiju.jose@huawei.com>
- <20241014151829.00000e7f@Huawei.com>
-In-Reply-To: <20241014151829.00000e7f@Huawei.com>
+ <20241009124120.1124-2-shiju.jose@huawei.com>
+ <20241016105832.GSZw-cWDOFweQMWRgZ@fat_crate.local>
+In-Reply-To: <20241016105832.GSZw-cWDOFweQMWRgZ@fat_crate.local>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -99,21 +99,23 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Hi Jonathan,=20
+Hi Boris,
+
+Thanks for the comments.
 
 >-----Original Message-----
->From: Jonathan Cameron <jonathan.cameron@huawei.com>
->Sent: 14 October 2024 15:18
+>From: Borislav Petkov <bp@alien8.de>
+>Sent: 16 October 2024 11:59
 >To: Shiju Jose <shiju.jose@huawei.com>
 >Cc: linux-edac@vger.kernel.org; linux-cxl@vger.kernel.org; linux-
 >acpi@vger.kernel.org; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
->bp@alien8.de; tony.luck@intel.com; rafael@kernel.org; lenb@kernel.org;
->mchehab@kernel.org; dan.j.williams@intel.com; dave@stgolabs.net;
->dave.jiang@intel.com; alison.schofield@intel.com; vishal.l.verma@intel.com=
-;
->ira.weiny@intel.com; david@redhat.com; Vilas.Sridharan@amd.com;
->leo.duran@amd.com; Yazen.Ghannam@amd.com; rientjes@google.com;
->jiaqiyan@google.com; Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
+>tony.luck@intel.com; rafael@kernel.org; lenb@kernel.org;
+>mchehab@kernel.org; dan.j.williams@intel.com; dave@stgolabs.net; Jonathan
+>Cameron <jonathan.cameron@huawei.com>; dave.jiang@intel.com;
+>alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.com;
+>david@redhat.com; Vilas.Sridharan@amd.com; leo.duran@amd.com;
+>Yazen.Ghannam@amd.com; rientjes@google.com; jiaqiyan@google.com;
+>Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
 >naoya.horiguchi@nec.com; james.morse@arm.com; jthoughton@google.com;
 >somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
 >duenwen@google.com; gthelen@google.com;
@@ -126,28 +128,54 @@ Hi Jonathan,=20
 >Subject: Re: [PATCH v13 01/18] EDAC: Add support for EDAC device features
 >control
 >
->On Wed, 9 Oct 2024 13:41:02 +0100
-><shiju.jose@huawei.com> wrote:
->
+>On Wed, Oct 09, 2024 at 01:41:02PM +0100, shiju.jose@huawei.com wrote:
 >> From: Shiju Jose <shiju.jose@huawei.com>
 >>
 >> Add generic EDAC device features control supports registering RAS
 >> features supported in the system. Driver exposes features control
 >> attributes to userspace in
 >> /sys/bus/edac/devices/<dev-name>/<ras-feature>/
->>
+>
+>Chatgpt prompt:
+>
+>| Please check the grammar in this English text: "Add generic EDAC
+>| device features control supports registering RAS features supported in t=
+he
+>system.
+>| Driver exposes features control attributes to userspace in
+>| /sys/bus/edac/devices/<dev-name>/<ras-"feature>/
+>
+>Response:
+>
+>| Here's a corrected version of the text:
+>|
+>| "Add generic EDAC device feature control support for registering RAS
+>| features supported in the system. The driver exposes feature control
+>| attributes to userspace in /sys/bus/edac/devices/<dev-name>/<ras-feature=
+>/."
+>|
+>| Changes made:
+>|
+>| * "features control" was changed to "feature control" for consistency
+>| and clarity.
+>|
+>| * "supports registering" was changed to "support for registering" to
+>| match the structure of the sentence.
+>|
+>| * Added "The" at the beginning of the second sentence for better flow.
+>|
+>| * Corrected the syntax around the file path to ensure clarity and
+>| proper
+>| * punctuation.
+>
+>Please run all your commit text through some LLM AI as they're apparently =
+good
+>enough now to help me in correcting grammar.
+Will do.
+>
 >> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 >> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 >> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
->Hi Shiju,
->
->Spotted a few minor bugs in here that I'd missed in internal review :( See=
- below.
->
->Jonathan
-
-Thanks for reviewing.
->
 >> ---
 >>  drivers/edac/edac_device.c | 105
 >+++++++++++++++++++++++++++++++++++++
@@ -158,12 +186,49 @@ Thanks for reviewing.
 >> index 621dc2a5d034..0b8aa8150239 100644
 >> --- a/drivers/edac/edac_device.c
 >> +++ b/drivers/edac/edac_device.c
->
->
+>> @@ -570,3 +570,108 @@ void edac_device_handle_ue_count(struct
+>edac_device_ctl_info *edac_dev,
+>>  		      block ? block->name : "N/A", count, msg);  }
+>> EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
+>> +
+>> +/* EDAC device feature */
+>> +static void edac_dev_release(struct device *dev) {
+>> +	struct edac_dev_feat_ctx *ctx =3D container_of(dev, struct
+>> +edac_dev_feat_ctx, dev);
+>> +
+>> +	kfree(ctx->dev.groups);
+>> +	kfree(ctx);
+>> +}
+>> +
+>> +const struct device_type edac_dev_type =3D {
+>> +	.name =3D "edac_dev",
+>> +	.release =3D edac_dev_release,
+>> +};
+>> +
+>> +static void edac_dev_unreg(void *data) {
+>> +	device_unregister(data);
+>> +}
 >> +
 >> +/**
 >> + * edac_dev_register - register device for RAS features with EDAC
 >> + * @parent: client device.
+>
+>If this is a client device, why is the variable called "parent" and not "c=
+lient"?
+>
+>I.e.,
+>
+>	struct device *client;
+>
+>For clarity and simplicity.
+>
+>Or call it "parent" because you do:
+>
+>	ctx->dev.parent =3D parent;
+>
+>and forget "client" altogether.
+Changed to "parent".=20
+>
 >> + * @name: client device's name.
 >> + * @private: parent driver's data to store in the context if any.
 >> + * @num_features: number of RAS features to register.
@@ -175,77 +240,85 @@ Thanks for reviewing.
 >> + *  * %-ENOMEM - Dynamic memory allocation failed.
 >> + *
 >> + * The new edac_dev_feat_ctx would be freed automatically.
+>
+>Why is this important to call out here?
+>
+>It is a common coding pattern of freeing resources in the release function=
+...
+Deleted.
+>
 >> + */
 >> +int edac_dev_register(struct device *parent, char *name,
 >> +		      void *private, int num_features,
 >> +		      const struct edac_dev_feature *ras_features) {
->
->...
->
+>> +	const struct attribute_group **ras_attr_groups;
+>> +	struct edac_dev_feat_ctx *ctx;
+>> +	int attr_gcnt =3D 0;
+>> +	int ret, feat;
+>> +
+>> +	if (!parent || !name || !num_features || !ras_features)
+>> +		return -EINVAL;
+>> +
+>> +	/* Double parse to make space for attributes */
+>> +	for (feat =3D 0; feat < num_features; feat++) {
+>> +		switch (ras_features[feat].ft_type) {
+>> +		/* Add feature specific code */
+>> +		default:
+>> +			return -EINVAL;
+>> +		}
+>> +	}
+>> +
+>> +	ctx =3D kzalloc(sizeof(*ctx), GFP_KERNEL);
+>> +	if (!ctx)
+>> +		return -ENOMEM;
+>> +
+>> +	ctx->dev.parent =3D parent;
+>> +	ctx->private =3D private;
+>> +
+>> +	ras_attr_groups =3D kcalloc(attr_gcnt + 1, sizeof(*ras_attr_groups),
+>GFP_KERNEL);
+>> +	if (!ras_attr_groups) {
+>> +		ret =3D -ENOMEM;
+>> +		goto ctx_free;
+>> +	}
+>> +
+>> +	attr_gcnt =3D 0;
+>> +	for (feat =3D 0; feat < num_features; feat++, ras_features++) {
+>> +		switch (ras_features->ft_type) {
+>> +		/* Add feature specific code */
+>> +		default:
+>> +			ret =3D -EINVAL;
+>> +			goto groups_free;
+>> +		}
+>> +	}
+>> +
+>> +	ras_attr_groups[attr_gcnt] =3D NULL;
+>> +	ctx->dev.bus =3D edac_get_sysfs_subsys();
+>> +	ctx->dev.type =3D &edac_dev_type;
+>> +	ctx->dev.groups =3D ras_attr_groups;
+>> +	dev_set_drvdata(&ctx->dev, ctx);
+>> +
+>> +	ret =3D dev_set_name(&ctx->dev, name);
+>> +	if (ret)
+>> +		goto groups_free;
+>> +
 >> +	ret =3D device_register(&ctx->dev);
 >> +	if (ret) {
 >> +		put_device(&ctx->dev);
 >> +		goto groups_free;
 >> +		return ret;
+>		^^^^^^^^^^
 >
->Unreachable line. However, shouldn't have the goto here as put_device() sh=
-ould
->result in the release being called in which case this is a double free. So=
- drop the
->goto and keep the return.
+>Come again?!
+>
+>There's code after a "goto"?
 Fixed.
 >
+>--
+>Regards/Gruss,
+>    Boris.
 >
->> +	}
->> +
->> +	return devm_add_action_or_reset(parent, edac_dev_unreg, &ctx->dev);
->> +
->> +groups_free:
->> +	kfree(ras_attr_groups);
->> +ctx_free:
->> +	kfree(ctx);
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL_GPL(edac_dev_register);
->> diff --git a/include/linux/edac.h b/include/linux/edac.h index
->> b4ee8961e623..1db008a82690 100644
->> --- a/include/linux/edac.h
->> +++ b/include/linux/edac.h
->> @@ -661,4 +661,36 @@ static inline struct dimm_info
->> *edac_get_dimm(struct mem_ctl_info *mci,
->
->
->> +/* EDAC device feature information structure */ struct edac_dev_data
->> +{
->> +	u8 instance;
->> +	void *private;
->> +};
->> +
->> +struct device;
->
->That forwards def doesn't work as this header needs to include enough
->information to establish layout of struct edac_dev_feat_ctx.
->Header already includes linux/device.h so just drop this.
-Deleted.
->
->
->> +
->> +struct edac_dev_feat_ctx {
->> +	struct device dev;
->> +	void *private;
->> +};
->> +
->> +struct edac_dev_feature {
->> +	enum edac_dev_feat ft_type;
->> +	u8 instance;
->> +	void *ctx;
->> +};
->> +
->> +int edac_dev_register(struct device *parent, char *dev_name,
->> +		      void *parent_pvt_data, int num_features,
->> +		      const struct edac_dev_feature *ras_features);
->>  #endif /* _LINUX_EDAC_H_ */
-
+>https://people.kernel.org/tglx/notes-about-netiquette
 
 Thanks,
 Shiju
