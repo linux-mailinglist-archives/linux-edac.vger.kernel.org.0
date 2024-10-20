@@ -1,104 +1,170 @@
-Return-Path: <linux-edac+bounces-2158-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2159-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49EFC9A51C6
-	for <lists+linux-edac@lfdr.de>; Sun, 20 Oct 2024 02:25:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 048169A51F7
+	for <lists+linux-edac@lfdr.de>; Sun, 20 Oct 2024 04:05:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8255B1C20DE3
-	for <lists+linux-edac@lfdr.de>; Sun, 20 Oct 2024 00:25:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A5F0283EA7
+	for <lists+linux-edac@lfdr.de>; Sun, 20 Oct 2024 02:05:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEF5EBE;
-	Sun, 20 Oct 2024 00:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C51F23C9;
+	Sun, 20 Oct 2024 02:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="gLy8RHAM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I/iShMfq"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C517E1;
-	Sun, 20 Oct 2024 00:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8484A28E7;
+	Sun, 20 Oct 2024 02:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729383941; cv=none; b=uytO6mkXzLrw8FX5ppU76BdparhqvEt0HzfOlkFoMyra0Ennod+i7xIFChysYQoRfGiN2jjDKuHQMvTU822fALP8SHuEmNUUA+RKkQ1PDvbN0XwLOWideSHGAeVQUPe8/f13oP7AHo2mBMHUvmgyltFOD2lqFVv4vmUPa2Y2U7g=
+	t=1729389919; cv=none; b=EQQs3hhToXMAsBr2JnDmsctEQ5g3B+wXOyTUph29d4MBUx+K3wW0cz+/jIz7mgigyWujKc6zXB0oVlcTkVIQY9hkjKLm8jg35QSNJC0j9fLycpTBMFIxiR+uZKZpydWydSLLHxpaQEUutL9+kgtB+XR2q3vWM7fjzSfK/VksjVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729383941; c=relaxed/simple;
-	bh=MNshfbPvWfiA+uzt1SanT9VGg8mSTiW+KVEqWw0LFrc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Bz+jdZzgvUxZA4tacuT9YUhr4BE1mlFlmQ5SvPdkJOdDITHvxqMomHn3dBj3c07mN8kApZU1/6ekayxxPOFCuxEZbi9GyNEBFsFTBHOmhUBdhrEQho8kS0eD8pSE5E0ncLfYaQkRysugWVg0Hm2qq0wZyLAKzEOP2ANHI/NvMCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=gLy8RHAM; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 49K0P4Oo3759355
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sat, 19 Oct 2024 17:25:05 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 49K0P4Oo3759355
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024101701; t=1729383906;
-	bh=MNshfbPvWfiA+uzt1SanT9VGg8mSTiW+KVEqWw0LFrc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=gLy8RHAM9G0kfZxjcctOh/+pO2RK1Jpc5qa1cHc99fagEJ0Y7l4Rvht67zHMSEZ75
-	 Dd0EGyHJh7LKlBSsXgnEOshD4/jAvAN/bijsxatUq0Upoq4hYlGWweZ2amcZlz2y9D
-	 bXfhf07+b7vMEOgc59DvNKOV+lywqlwiGPg6u0NhIeYVw6UvLYET8zy0TXpkKVh5SA
-	 SZX7bDQfHrghTqLwf7SjQdYdZ94w4+wjlWSf3ojTsGQjwD5rnZ+8Du0vLdfs1apfRs
-	 bdoSw+YmbESeKxNAfDIUGpEg8+W/BuLDHfpQKBMfeaU+AFPDVf7GdG6d6Loj6176DA
-	 0UWlrA+J6yPJQ==
-Date: Sat, 19 Oct 2024 17:25:03 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>, "bp@alien8.de" <bp@alien8.de>
-CC: "tglx@linutronix.de" <tglx@linutronix.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?US-ASCII?Q?RE=3A_=5BPATCH_v2_08/10=5D_x86/mce=3A_Remov?=
- =?US-ASCII?Q?e_the_redundant_zeroing_assignments?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CY8PR11MB7134A69052C691C9B2812F2189412@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <20241010153202.30876-1-qiuxu.zhuo@intel.com> <20241016123036.21366-1-qiuxu.zhuo@intel.com> <20241016123036.21366-9-qiuxu.zhuo@intel.com> <f5d4d763-0fa2-4d84-8501-28d8cd8a1dde@intel.com> <CY8PR11MB71344BDC1A3AB4454FE9446A89412@CY8PR11MB7134.namprd11.prod.outlook.com> <36673130-7548-4BE5-8E70-ACC100A0BDBF@zytor.com> <CY8PR11MB7134A69052C691C9B2812F2189412@CY8PR11MB7134.namprd11.prod.outlook.com>
-Message-ID: <E0031941-4ADB-4BEC-A913-4E74B88A60CA@zytor.com>
+	s=arc-20240116; t=1729389919; c=relaxed/simple;
+	bh=83M22/fJyGB1tR9/miY2c43dp32t29qIpAheq1Shv50=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JEYLbObj4UKfjXbDdulgGdCLTIPUgN3y65gFbLzDqLlDR41ylXW/VRgMOeJLcFe5Vt/aTF5R5PbLGgZ3UNGLv4R5uXmCpKQOb0djGuK3wgnGV6GrksD4Sj8nckiI/DOGAeeavLyezGPe0EdyTyr9aKo0anxzzUaAjxNEis6WjHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I/iShMfq; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729389916; x=1760925916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=83M22/fJyGB1tR9/miY2c43dp32t29qIpAheq1Shv50=;
+  b=I/iShMfqbx/5f6ItSc731NO/agK2hD6BxjT1ELZUIFLW20hiW0rN8KwE
+   axoNUciY3DxKPOhp4E4jwbJGGHerWsAFKsTRByiUR/r0DSsYWnsKaj00T
+   6OFtMLyhCjK2p6DQZGa53cOHSShe7AxYOyJvfPFKgtkLGWspZXgJO1KKC
+   XhctvW+6dQxtjpCremHGFtXQMyLLsXqcyWYxj3AQQ3CkoPrsccGUuAI7w
+   Kc9A4SRY3CZYDZ33ep5iapWvoVrjYVE4ktiiCYE1pdWXtpTCa4cGT/emO
+   NpP34M/jHsrVGrC32+qCCrp5nZgE80bjjmCg4Yh/Ut74AgAvABkPWfPcr
+   A==;
+X-CSE-ConnectionGUID: AzfcmKExTZGjfxIe+LvhDw==
+X-CSE-MsgGUID: elnmzJ2HRyKhWTGY642cjQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="39517322"
+X-IronPort-AV: E=Sophos;i="6.11,217,1725346800"; 
+   d="scan'208";a="39517322"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 19:05:15 -0700
+X-CSE-ConnectionGUID: 3XsXIaETS8iLPcmLmKlhqA==
+X-CSE-MsgGUID: mL48R6XcR/2dOcW6NfDUFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,217,1725346800"; 
+   d="scan'208";a="79351368"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 19 Oct 2024 19:05:11 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t2LJc-000Pm9-1K;
+	Sun, 20 Oct 2024 02:05:08 +0000
+Date: Sun, 20 Oct 2024 10:04:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhao Qunqin <zhaoqunqin@loongson.cn>, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, chenhuacai@kernel.org,
+	bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
+	mchehab@kernel.org, rric@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-edac@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@xen0n.name, loongarch@lists.linux.dev,
+	Jonathan.Cameron@huawei.com, Zhao Qunqin <zhaoqunqin@loongson.cn>
+Subject: Re: [PATCH v6 RESEND 2/2] EDAC: Add EDAC driver for loongson memory
+ controller
+Message-ID: <202410200949.GpnHSLfV-lkp@intel.com>
+References: <20241018014542.27283-3-zhaoqunqin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241018014542.27283-3-zhaoqunqin@loongson.cn>
 
-On October 19, 2024 1:30:04 AM PDT, "Zhuo, Qiuxu" <qiuxu=2Ezhuo@intel=2Ecom=
-> wrote:
->> From: H=2E Peter Anvin <hpa@zytor=2Ecom>
->> [=2E=2E=2E]
->>=20
->> Keep in mind that usually the compiler will remove redundant assignment=
-s,
->> and if they are too obscure for the compiler to discover, they are prob=
-ably too
->> subtle for programmers to not introduce bugs in the future =2E=2E=2E
->
->Thanks, H=2EPeter=2E
->
->This is a good tip to quickly check whether a cleanup of removing unneces=
-sary
->assignments changes the function=2E If there is no difference in the text=
- before and
->after the cleanup, then it's OK=2E Otherwise, the cleanup probably change=
-s the=20
->function in an unintended way=2E
->
->-Qiuxu
->
+Hi Zhao,
 
-Yes and no=2E Deleting things like redundant reinitialization should only =
-be done if it makes the code clearer=2E You can think of the redundant stat=
-ements as comments/asserts=2E
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 61124f42dcaa30f58a8b47a2b69ddb80260677c7]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhao-Qunqin/dt-bindings-EDAC-for-ls3a5000-memory-controller/20241018-094803
+base:   61124f42dcaa30f58a8b47a2b69ddb80260677c7
+patch link:    https://lore.kernel.org/r/20241018014542.27283-3-zhaoqunqin%40loongson.cn
+patch subject: [PATCH v6 RESEND 2/2] EDAC: Add EDAC driver for loongson memory controller
+config: arm64-randconfig-r113-20241019 (https://download.01.org/0day-ci/archive/20241020/202410200949.GpnHSLfV-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 14.1.0
+reproduce: (https://download.01.org/0day-ci/archive/20241020/202410200949.GpnHSLfV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410200949.GpnHSLfV-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/edac/loongson_edac.c:100:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long [usertype] *vbase @@     got void [noderef] __iomem * @@
+   drivers/edac/loongson_edac.c:100:15: sparse:     expected unsigned long long [usertype] *vbase
+   drivers/edac/loongson_edac.c:100:15: sparse:     got void [noderef] __iomem *
+
+vim +100 drivers/edac/loongson_edac.c
+
+    91	
+    92	static int edac_probe(struct platform_device *pdev)
+    93	{
+    94		struct edac_mc_layer layers[2];
+    95		struct loongson_edac_pvt *pvt;
+    96		struct mem_ctl_info *mci;
+    97		u64 *vbase;
+    98		int ret;
+    99	
+ > 100		vbase = devm_platform_ioremap_resource(pdev, 0);
+   101		if (IS_ERR(vbase))
+   102			return PTR_ERR(vbase);
+   103	
+   104		/* allocate a new MC control structure */
+   105		layers[0].type = EDAC_MC_LAYER_CHANNEL;
+   106		layers[0].size = 1;
+   107		layers[0].is_virt_csrow = false;
+   108		layers[1].type = EDAC_MC_LAYER_SLOT;
+   109		layers[1].size = 1;
+   110		layers[1].is_virt_csrow = true;
+   111		mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, sizeof(*pvt));
+   112		if (mci == NULL)
+   113			return -ENOMEM;
+   114	
+   115		mci->mc_idx = edac_device_alloc_index();
+   116		mci->mtype_cap = MEM_FLAG_RDDR4;
+   117		mci->edac_ctl_cap = EDAC_FLAG_NONE;
+   118		mci->edac_cap = EDAC_FLAG_NONE;
+   119		mci->mod_name = "loongson_edac.c";
+   120		mci->ctl_name = "loongson_edac_ctl";
+   121		mci->dev_name = "loongson_edac_dev";
+   122		mci->ctl_page_to_phys = NULL;
+   123		mci->pdev = &pdev->dev;
+   124		mci->error_desc.grain = 8;
+   125		/* Set the function pointer to an actual operation function */
+   126		mci->edac_check = edac_check;
+   127	
+   128		pvt_init(mci, vbase);
+   129		get_dimm_config(mci);
+   130	
+   131		ret = edac_mc_add_mc(mci);
+   132		if (ret) {
+   133			edac_dbg(0, "MC: failed edac_mc_add_mc()\n");
+   134			edac_mc_free(mci);
+   135			return ret;
+   136		}
+   137		edac_op_state = EDAC_OPSTATE_POLL;
+   138	
+   139		return 0;
+   140	}
+   141	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
