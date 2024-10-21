@@ -1,470 +1,180 @@
-Return-Path: <linux-edac+bounces-2162-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2163-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 198A19A63B8
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2024 12:38:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 354BC9A6E02
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2024 17:22:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90E511F22EFB
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2024 10:38:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9E79282CD2
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Oct 2024 15:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE481E6DFE;
-	Mon, 21 Oct 2024 10:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64EEC126BFC;
+	Mon, 21 Oct 2024 15:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="YmbcqTIq"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="a+YNRUWG"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060.outbound.protection.outlook.com [40.107.237.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143221E3776
-	for <linux-edac@vger.kernel.org>; Mon, 21 Oct 2024 10:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729506901; cv=none; b=LFKd+ErqyEIK5OrpNeQ0dZfLnxH/G5tVrbK+YFhbHnarLCEG935vZowvFTOWcPU4jV66RSpSI/3yFmQhvmFk14V6NBX3h7oYdE49wZIbiGDxurEpXlnqHQGQ0jE/zl2Mzre70QJYaRzgSdFbkwB8d4SW3VcRFvYbIRVzpeG7kAU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729506901; c=relaxed/simple;
-	bh=65E0ZewdJqwEsvmJz9YxgY3P5L7qxQRB+oE3SPgAYiQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VQxSkJ2rHTcnSaSo91qeggvLaU5i+6zlZTNDY1HZBNXhuG79RKvokL2gbKJaCGBM2oTcmFJ/kkjyxM40sYZPT9pVF+qcuXW3GZq9aRtQ9xI/U3t/wkstZlcOlWHw2zMuumAsN6meKwIjC9GePcpGD94YHQZbXWQhmSHkQkrKU5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=YmbcqTIq; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5c903f5bd0eso11549a12.3
-        for <linux-edac@vger.kernel.org>; Mon, 21 Oct 2024 03:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729506896; x=1730111696; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NP/Dvav3hJyK2Si+NRH3ijMX51PBbJ+ScnVT/BCS2mk=;
-        b=YmbcqTIqUcilL03J4RNe43BnwbDFwTplCq0JLZ3b2acpFfuAzgOb37NYy/R9H1iXhv
-         iNe1RPuvEriuPSMQ2TayCGq5TuZZxmFmouyDP1naqwhwwPkvX3Zg12k+dPGxftlmx5hP
-         4cxN76wAxeqiE7Obmhu7AZkICVZMdCwRvR1yocwte6A48CLf4WTej1M4k0EYHixiC4OK
-         nsc9ziE4gpoEZG45e1CTNPP1cmKCh8vVmBBcNau623N+mspDL27kfN6MCQZb+6nv67IQ
-         eqE3qKqBIO1BtVuyKY8cW4gTnXQAgSnvK2KEVObDbje0eULWISKdJHanSc7kpuES9wzY
-         otiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729506896; x=1730111696;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NP/Dvav3hJyK2Si+NRH3ijMX51PBbJ+ScnVT/BCS2mk=;
-        b=auDTN/64xOkzTe8d/ePyI8N7MkTVxtNFzOzr4jgBUXv+N/3sMVpZt2vWn0ZJ+VEyZO
-         RS/snBe7922BuDvUUJuEd7W//rxm9EAGSr/HBma/Lv0BFZKPeM8t7DRr2vcmt/KohpmB
-         KHioTkPZExjGDi6izjqzRxmJwOPkAvWQ/CkihUTOGhPLpOP2Bm6k+thvL/K62ss7pLUw
-         OIguRzs4xsG54ykvEef0TbNCgcZSRytF83U6fZrsg684c0RbGw+IqiY/HPloD2HEaEZq
-         TsctaWqIBAa5VWHouhHETdDwgCjsQjbA1/1Zd4e9DGv4E3CIa0+RB5m+7FDIgmHYjusT
-         yj1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWLnjT9UtK4MEZDSNY7foMEGoz51H0U551vcH6CuHOkZhCc9otQ3J3ipVEF+Op09MKJJd7kmv/lVcFi@vger.kernel.org
-X-Gm-Message-State: AOJu0YyG6m3NydW2IUkWWPRInLo9MJvd7InnAU/xekQPNaTVfIICQ+xb
-	mPJ8Hz38ydKuT9tSnKGsY8YdCg8eOvZGZmmw+ydHKZf6x4I8WvfF8XK/LccQlik=
-X-Google-Smtp-Source: AGHT+IGwXs/qFMGVGb361pl9aOEnuyFuPq1uxXTj6HPbewGwen+pdT0vcm3xa+5KgDjYsQXeClIGHg==
-X-Received: by 2002:a17:906:4788:b0:a99:5cd5:5b9c with SMTP id a640c23a62f3a-a9a69baab1cmr989756766b.36.1729506896225;
-        Mon, 21 Oct 2024 03:34:56 -0700 (PDT)
-Received: from localhost (p50915d2d.dip0.t-ipconnect.de. [80.145.93.45])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a91571ea5sm185545766b.160.2024.10.21.03.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2024 03:34:55 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>
-Cc: James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-edac@vger.kernel.org
-Subject: [PATCH] edac: Switch back to struct platform_driver::remove()
-Date: Mon, 21 Oct 2024 12:34:50 +0200
-Message-ID: <20241021103449.402453-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDC280025;
+	Mon, 21 Oct 2024 15:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729524140; cv=fail; b=Je5K6sTV4BPjk7ojYMiKkP6LdSkvYU1gWZOaWVQ7A6F2iAGr+Lhx1YRz3e1ea2Kx93ivtEIJa5Xim9yPR/eqk8sDc8/JD12S6Fisu3Sx82ZcaAqlrTHIagXwxNmYT3oj5tuAe6lMF0+VG1226hp98Sj17i41vmuT6QAeMizSbWo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729524140; c=relaxed/simple;
+	bh=tsI4cl9qmx6aAEpZ6CCuCu793xcEZ1MgujWyeDuOd1Q=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jUgvM+TmT3aLCmTJDF30ETVxcGCmSfnlAG9TlOMS3DfZFQZV8GWNcioRpsQfZcF0qLHE1r5Lams+X001HnnXN0u1GOyqTyb46Kf7Ty1WgZUfc50pIvw+4ax3CTqQbi7J1/ifSPM6i82/R88upveIhIMgzgfST4CDEumotFgfKL8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=a+YNRUWG; arc=fail smtp.client-ip=40.107.237.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xTl1t/uIfSbo66/A+WxprKpnuJcKHx7KDGMUfIwCjG3j+cDm+Au6IuLP75qcnCfa2IpxI4xWmVloZPzHkjp2yZi/h7auP/w4TCMgDL3rBUbVa9LuCJfUapvjSp8RD03qSOM8sOX7uhBayaEh8zvsAB3eka52Vcn6PBy726795fAg/+RX88dBOCTaLNsl+8ShB2hzdJW3ZDWAZ9dz9jMNWDyGBF+Wu4eQ+KCpks6Hz6RPQ8XJtuXsnXqCc2Qk8J+gZFOX//L7aXnCGn/0FxB4mzhGIW1r0q7lYsfokWei8/6As8DvCkITEOy0dGZAQZQvdcAmV0reKJOWiwTdJZ74Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AXKm/m67ODqCkMzK2GtWLC/I+v2qYA/Nfpot+c2Mwxg=;
+ b=l5+Xnx4YlXDvFvMw70Lx8lCekw9o2xvu8l/sZMPRbFGSns7OE+oo4TjJN+doFW1mLZ46tk3y/VJWopssX79agQQoCevoNPz6gTJpeF7HnDQhhF52mw844/IfcoHF0kDdj1dmj+kZ991zCNUeZvmS5tosybK/1M0SRaBM6kmDS2AIfK/HqyE4IyxLPTMAwtwOb2DKkoY+nXCoFBRnm9wCqvHI/6qgyT/nETik8qaLYjztqiYnd0sznS/kuNyr9G3BCjY+O7n8fPj35s0/zSHqWfY2E0pNqeJlXELywbdpZJILcWagNpILTM+ejoF5lPn3zRonspcKAieJEGl/Dh/m3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AXKm/m67ODqCkMzK2GtWLC/I+v2qYA/Nfpot+c2Mwxg=;
+ b=a+YNRUWGYmN0XgTcap6Ox9bNXIQHVgK2lNHEVNzPWqr6rMLXq6/CeN7EIgRfhoXu5e+p58dcCO17mCmm4cXWTsyqHIm3SgN7e7TVQ1Ay59nYTWafeWxHTkOemVmVAe7ZKc9DpcHHgpCfSgcco9jHsBRlTwQh695u6LnPKEvITYE=
+Received: from MN2PR15CA0050.namprd15.prod.outlook.com (2603:10b6:208:237::19)
+ by SJ0PR12MB7005.namprd12.prod.outlook.com (2603:10b6:a03:486::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Mon, 21 Oct
+ 2024 15:22:11 +0000
+Received: from BL6PEPF0001AB4D.namprd04.prod.outlook.com
+ (2603:10b6:208:237:cafe::69) by MN2PR15CA0050.outlook.office365.com
+ (2603:10b6:208:237::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.29 via Frontend
+ Transport; Mon, 21 Oct 2024 15:22:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB4D.mail.protection.outlook.com (10.167.242.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8093.14 via Frontend Transport; Mon, 21 Oct 2024 15:22:10 +0000
+Received: from purico-9eb2host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 21 Oct
+ 2024 10:22:09 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: <bp@alien8.de>, <tony.luck@intel.com>, <linux-edac@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
+	<john.allen@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH] RAS/AMD/ATL: Add debug prints for DF register reads
+Date: Mon, 21 Oct 2024 15:21:58 +0000
+Message-ID: <20241021152158.2525669-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13983; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=65E0ZewdJqwEsvmJz9YxgY3P5L7qxQRB+oE3SPgAYiQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBnFi5J8khCiOKe95de6UkgDVUxVaNwUvg/O9b4m M1g+qCFUZyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZxYuSQAKCRCPgPtYfRL+ TrvZCACzR5GPfFGZJKb1DWJRDIjY2i93nF6xWUvq694jY0X0pOWDxwOCV2SgCF4wtyeChAc7fsy JU7h5omL8uMtnMoYwyX0WhJEvuy7RT6n9c7BgYDf0X2QjOcpBYO53lzw1lX1w8PV3kj2omdOvIr VFF/oNh6yToJ165EXHXPujYADjmpDwye7P73W3/tsYmahMipCtZYYAAaVjGook/GAiImr7NNaix 5uYRgKje+3IWOqbIDN2sJlzjhiMnhY+pwVEdQMVudQY5W1r0HpirhaCnXz2Cyrn9wuZfVOIn1wS aDJy6Dt98MFB4IGHgbyxcHDRUx+XKRd1x/tNqygAJw0iNcIK
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4D:EE_|SJ0PR12MB7005:EE_
+X-MS-Office365-Filtering-Correlation-Id: e12e6829-246f-4f06-6690-08dcf1e42204
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?XNhVNix+HH10kCsQKaU7aNrfTJwE6NYXtLCn2qBVIlEKSnzAH+U/V+QbjQ3z?=
+ =?us-ascii?Q?KiRNz0tVw3EEy/w2uY0FrFVTE06+YB1nfZTQUwnFcMWLa5sbB+JeDIAd3Y9D?=
+ =?us-ascii?Q?EhRuoOB3dVofN9r1qOXo2t6VCIZjB3BJ5eXCP9PUyYxtaODpVmLFgLUJwNAu?=
+ =?us-ascii?Q?RQvBWqwBgvlDPWqEVyCjLaBEVPeDgmjHTkstLFYzN1GJIdN+q2u/v1Nh1v7w?=
+ =?us-ascii?Q?plKHdRSTcV1F8Ya76Cc9zBOh8lp5brcqXkGN6tOEGR5Ktbwm3Y9N1C9yOsfC?=
+ =?us-ascii?Q?El/HuR8VhJ/1ZJMceHB3lUO6B34TnylNA8dtayr+BJmQVK1DOMJW9ZchAElf?=
+ =?us-ascii?Q?r1Ba68HVUCjowRWRq6nFFchJ74ZvgEqHGHp+Uf7lsRHLmUqYO8vDrB1X2Unb?=
+ =?us-ascii?Q?CPjdGniwHJZIuzaDDrOAO5cXRE6TbSIxgzPtkPhhHFdLW4FWNQCSKu323fYz?=
+ =?us-ascii?Q?/4cw5aLyGo0/qZ1CtgD2NZJ2WSO3SSztGvsOVqUHlLJFD9EgyA1QVhbZuHiC?=
+ =?us-ascii?Q?HJ1lcTA2Lnvxdo9CGvxCOW2oS8hwRQOXCGG7M+2eNorqe4ltxp5kSp2ItJDc?=
+ =?us-ascii?Q?CHTEoC5RG1yam1kpGlob9FOk9y21ihU+7prRQWUXKeUyPQRglrQK5+FdjFl3?=
+ =?us-ascii?Q?Ap4tRkeqzVlHT+X0d2o25qTI6TdHVaz8N/ND5jmg0kATm0LYoawyV/V7QoJn?=
+ =?us-ascii?Q?ARQWaLX2S8PHXrsJtP7KmwuKEkAF8t+tbAqzbbeFBJWmFcRJnb0e8Te3a9pC?=
+ =?us-ascii?Q?YLnGSBQAIufQugv4DDx5SKEgLdRZCdU97DeSCuCzNYQqsUqsv/zz/xESD0J4?=
+ =?us-ascii?Q?7n85eSdNulm/kREM7Rq++kyFePevQPFHKl4y1p+WQPKV5WvdDRTEmN5Lc2na?=
+ =?us-ascii?Q?pMVJJBSdLh49xoZDmt/ALjK5FdBDcahqwAfv/TiJxaGmWDbVeFSJxCQO5m/0?=
+ =?us-ascii?Q?hGhQ5hhO4S1+mlzAB9W6dTeiRYwCoVWdQvAOhTlK0r4n5cHj3z/zTvjY7E4t?=
+ =?us-ascii?Q?htmAfqnZtb9HkKOSrrvhuNmIY9+b7zlfKKmsAo8kcxc2AmN85+/N7JzMvVaG?=
+ =?us-ascii?Q?GmgsOD+tbzn5h9DE0TDXorhA+F/tSoeMhapSHQsUgDw8VCct6Rd3MyHFeXrS?=
+ =?us-ascii?Q?o5/U3XWtj5NxdSp76eS+DU4gjYtcxaQvernV/qfGVCaQ5LPBwOLYFVVeqf/d?=
+ =?us-ascii?Q?CuTZ493VDYEdjdaPvuWC0xMbm/861cHgyQdSQKIq8D8nQIdPjgqBWy1zcHRC?=
+ =?us-ascii?Q?w+324friMYTyGjyloptKamFoNTpFHoHwPA6HT6Z0h84ieZrzOyE86zMEGa0q?=
+ =?us-ascii?Q?4H05sOwElmXKcjrhlE1gdkWzu9JoJFvPH0Z7us6EIm+S0P3KWojIJQRiLU3G?=
+ =?us-ascii?Q?YW0G2YkqWedei00zUOTcnSBz0UGicjcz3QooyqavnTBnTZ6CWQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2024 15:22:10.4537
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e12e6829-246f-4f06-6690-08dcf1e42204
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB4D.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7005
 
-After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-return void") .remove() is (again) the right callback to implement for
-platform drivers.
+The ATL will fail early if the DF register access fails due to missing
+PCI IDs in the amd_nb code. There aren't any clear indicators on why the
+ATL will fail to load in this case.
 
-Convert all platform drivers below drivers/edac to use .remove(),
-with the eventual goal to drop struct platform_driver::remove_new(). As
-.remove() and .remove_new() have the same prototypes, conversion is done
-by just changing the structure member name in the driver initializer.
+Add a couple of debug print statements to highlight reasons for failure.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+A common scenario is missing support for new hardware. If the ATL fails
+to load on a system, and there is interest to support it, then dynamic
+debugging can be enabled to help find the cause for failure. If there is
+no interest in supporting ATL on a new system, then these failures will
+be silent.
+
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
-Hello,
+ drivers/ras/amd/atl/access.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-given the simplicity of the individual changes I do this all in a single
-patch. I you don't agree, please tell and I will happily split it.
-
-It's based on today's next, feel free to drop changes that result in a
-conflict when you come around to apply this. I'll care for the fallout
-at a later time then. (Having said that, if you use b4 am -3 and git am
--3, there should be hardly any conflict.)
-
-Note I didn't Cc: all the individual driver maintainers to not trigger
-sending limits and spam filters.
-
-Best regards
-Uwe
-
- drivers/edac/altera_edac.c      | 6 +++---
- drivers/edac/armada_xp_edac.c   | 4 ++--
- drivers/edac/aspeed_edac.c      | 2 +-
- drivers/edac/bluefield_edac.c   | 2 +-
- drivers/edac/cell_edac.c        | 2 +-
- drivers/edac/cpc925_edac.c      | 2 +-
- drivers/edac/dmc520_edac.c      | 2 +-
- drivers/edac/highbank_l2_edac.c | 2 +-
- drivers/edac/highbank_mc_edac.c | 2 +-
- drivers/edac/layerscape_edac.c  | 2 +-
- drivers/edac/mpc85xx_edac.c     | 6 +++---
- drivers/edac/npcm_edac.c        | 2 +-
- drivers/edac/octeon_edac-l2c.c  | 2 +-
- drivers/edac/octeon_edac-lmc.c  | 2 +-
- drivers/edac/octeon_edac-pc.c   | 2 +-
- drivers/edac/octeon_edac-pci.c  | 2 +-
- drivers/edac/qcom_edac.c        | 2 +-
- drivers/edac/synopsys_edac.c    | 2 +-
- drivers/edac/ti_edac.c          | 2 +-
- drivers/edac/versal_edac.c      | 2 +-
- drivers/edac/xgene_edac.c       | 2 +-
- drivers/edac/zynqmp_edac.c      | 2 +-
- 22 files changed, 27 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index fe89f5c4837f..4394918a809a 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -482,7 +482,7 @@ static const struct dev_pm_ops altr_sdram_pm_ops = {
+diff --git a/drivers/ras/amd/atl/access.c b/drivers/ras/amd/atl/access.c
+index ee4661ed28ba..c2334f8f9add 100644
+--- a/drivers/ras/amd/atl/access.c
++++ b/drivers/ras/amd/atl/access.c
+@@ -70,12 +70,16 @@ static int __df_indirect_read(u16 node, u8 func, u16 reg, u8 instance_id, u32 *l
+ 	u32 ficaa = 0;
  
- static struct platform_driver altr_sdram_edac_driver = {
- 	.probe = altr_sdram_probe,
--	.remove_new = altr_sdram_remove,
-+	.remove = altr_sdram_remove,
- 	.driver = {
- 		.name = "altr_sdram_edac",
- #ifdef CONFIG_PM
-@@ -815,8 +815,8 @@ static void altr_edac_device_remove(struct platform_device *pdev)
- }
+ 	node = get_accessible_node(node);
+-	if (node >= amd_nb_num())
++	if (node >= amd_nb_num()) {
++		pr_debug("Node %u is out of bounds\n", node);
+ 		goto out;
++	}
  
- static struct platform_driver altr_edac_device_driver = {
--	.probe =  altr_edac_device_probe,
--	.remove_new = altr_edac_device_remove,
-+	.probe = altr_edac_device_probe,
-+	.remove = altr_edac_device_remove,
- 	.driver = {
- 		.name = "altr_edac_device",
- 		.of_match_table = altr_edac_device_of_match,
-diff --git a/drivers/edac/armada_xp_edac.c b/drivers/edac/armada_xp_edac.c
-index 589bc81f1249..d64248fcf4c0 100644
---- a/drivers/edac/armada_xp_edac.c
-+++ b/drivers/edac/armada_xp_edac.c
-@@ -364,7 +364,7 @@ static void axp_mc_remove(struct platform_device *pdev)
+ 	F4 = node_to_amd_nb(node)->link;
+-	if (!F4)
++	if (!F4) {
++		pr_debug("DF function 4 not found\n");
+ 		goto out;
++	}
  
- static struct platform_driver axp_mc_driver = {
- 	.probe = axp_mc_probe,
--	.remove_new = axp_mc_remove,
-+	.remove = axp_mc_remove,
- 	.driver = {
- 		.name = "armada_xp_mc_edac",
- 		.of_match_table = of_match_ptr(axp_mc_of_match),
-@@ -579,7 +579,7 @@ static void aurora_l2_remove(struct platform_device *pdev)
- 
- static struct platform_driver aurora_l2_driver = {
- 	.probe = aurora_l2_probe,
--	.remove_new = aurora_l2_remove,
-+	.remove = aurora_l2_remove,
- 	.driver = {
- 		.name = "aurora_l2_edac",
- 		.of_match_table = of_match_ptr(aurora_l2_of_match),
-diff --git a/drivers/edac/aspeed_edac.c b/drivers/edac/aspeed_edac.c
-index 157a480eb761..dadb8acbee3d 100644
---- a/drivers/edac/aspeed_edac.c
-+++ b/drivers/edac/aspeed_edac.c
-@@ -387,7 +387,7 @@ static struct platform_driver aspeed_driver = {
- 		.of_match_table = aspeed_of_match
- 	},
- 	.probe		= aspeed_probe,
--	.remove_new	= aspeed_remove
-+	.remove		= aspeed_remove
- };
- module_platform_driver(aspeed_driver);
- 
-diff --git a/drivers/edac/bluefield_edac.c b/drivers/edac/bluefield_edac.c
-index 0e539c107351..b4f2e30317cb 100644
---- a/drivers/edac/bluefield_edac.c
-+++ b/drivers/edac/bluefield_edac.c
-@@ -344,7 +344,7 @@ static struct platform_driver bluefield_edac_mc_driver = {
- 		.acpi_match_table = bluefield_mc_acpi_ids,
- 	},
- 	.probe = bluefield_edac_mc_probe,
--	.remove_new = bluefield_edac_mc_remove,
-+	.remove = bluefield_edac_mc_remove,
- };
- 
- module_platform_driver(bluefield_edac_mc_driver);
-diff --git a/drivers/edac/cell_edac.c b/drivers/edac/cell_edac.c
-index 2000f66fbf5c..c2420e2287ff 100644
---- a/drivers/edac/cell_edac.c
-+++ b/drivers/edac/cell_edac.c
-@@ -246,7 +246,7 @@ static struct platform_driver cell_edac_driver = {
- 		.name	= "cbe-mic",
- 	},
- 	.probe		= cell_edac_probe,
--	.remove_new	= cell_edac_remove,
-+	.remove		= cell_edac_remove,
- };
- 
- static int __init cell_edac_init(void)
-diff --git a/drivers/edac/cpc925_edac.c b/drivers/edac/cpc925_edac.c
-index eb702bc3aa29..9c9e4369c041 100644
---- a/drivers/edac/cpc925_edac.c
-+++ b/drivers/edac/cpc925_edac.c
-@@ -1027,7 +1027,7 @@ static void cpc925_remove(struct platform_device *pdev)
- 
- static struct platform_driver cpc925_edac_driver = {
- 	.probe = cpc925_probe,
--	.remove_new = cpc925_remove,
-+	.remove = cpc925_remove,
- 	.driver = {
- 		   .name = "cpc925_edac",
- 	}
-diff --git a/drivers/edac/dmc520_edac.c b/drivers/edac/dmc520_edac.c
-index 5e52d31db3b8..64a4d0a07032 100644
---- a/drivers/edac/dmc520_edac.c
-+++ b/drivers/edac/dmc520_edac.c
-@@ -640,7 +640,7 @@ static struct platform_driver dmc520_edac_driver = {
- 	},
- 
- 	.probe = dmc520_edac_probe,
--	.remove_new = dmc520_edac_remove
-+	.remove = dmc520_edac_remove
- };
- 
- module_platform_driver(dmc520_edac_driver);
-diff --git a/drivers/edac/highbank_l2_edac.c b/drivers/edac/highbank_l2_edac.c
-index 282ca6535f8f..24f163ff323f 100644
---- a/drivers/edac/highbank_l2_edac.c
-+++ b/drivers/edac/highbank_l2_edac.c
-@@ -128,7 +128,7 @@ static void highbank_l2_err_remove(struct platform_device *pdev)
- 
- static struct platform_driver highbank_l2_edac_driver = {
- 	.probe = highbank_l2_err_probe,
--	.remove_new = highbank_l2_err_remove,
-+	.remove = highbank_l2_err_remove,
- 	.driver = {
- 		.name = "hb_l2_edac",
- 		.of_match_table = hb_l2_err_of_match,
-diff --git a/drivers/edac/highbank_mc_edac.c b/drivers/edac/highbank_mc_edac.c
-index 1c5b888ab11d..a8879d72d064 100644
---- a/drivers/edac/highbank_mc_edac.c
-+++ b/drivers/edac/highbank_mc_edac.c
-@@ -261,7 +261,7 @@ static void highbank_mc_remove(struct platform_device *pdev)
- 
- static struct platform_driver highbank_mc_edac_driver = {
- 	.probe = highbank_mc_probe,
--	.remove_new = highbank_mc_remove,
-+	.remove = highbank_mc_remove,
- 	.driver = {
- 		.name = "hb_mc_edac",
- 		.of_match_table = hb_ddr_ctrl_of_match,
-diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
-index 0d42c1238908..1d2e17576ded 100644
---- a/drivers/edac/layerscape_edac.c
-+++ b/drivers/edac/layerscape_edac.c
-@@ -27,7 +27,7 @@ MODULE_DEVICE_TABLE(of, fsl_ddr_mc_err_of_match);
- 
- static struct platform_driver fsl_ddr_mc_err_driver = {
- 	.probe = fsl_mc_err_probe,
--	.remove_new = fsl_mc_err_remove,
-+	.remove = fsl_mc_err_remove,
- 	.driver = {
- 		.name = "fsl_ddr_mc_err",
- 		.of_match_table = fsl_ddr_mc_err_of_match,
-diff --git a/drivers/edac/mpc85xx_edac.c b/drivers/edac/mpc85xx_edac.c
-index d0266cbcbeda..a45dc6b35ede 100644
---- a/drivers/edac/mpc85xx_edac.c
-+++ b/drivers/edac/mpc85xx_edac.c
-@@ -323,7 +323,7 @@ static const struct platform_device_id mpc85xx_pci_err_match[] = {
- 
- static struct platform_driver mpc85xx_pci_err_driver = {
- 	.probe = mpc85xx_pci_err_probe,
--	.remove_new = mpc85xx_pci_err_remove,
-+	.remove = mpc85xx_pci_err_remove,
- 	.id_table = mpc85xx_pci_err_match,
- 	.driver = {
- 		.name = "mpc85xx_pci_err",
-@@ -627,7 +627,7 @@ MODULE_DEVICE_TABLE(of, mpc85xx_l2_err_of_match);
- 
- static struct platform_driver mpc85xx_l2_err_driver = {
- 	.probe = mpc85xx_l2_err_probe,
--	.remove_new = mpc85xx_l2_err_remove,
-+	.remove = mpc85xx_l2_err_remove,
- 	.driver = {
- 		.name = "mpc85xx_l2_err",
- 		.of_match_table = mpc85xx_l2_err_of_match,
-@@ -656,7 +656,7 @@ MODULE_DEVICE_TABLE(of, mpc85xx_mc_err_of_match);
- 
- static struct platform_driver mpc85xx_mc_err_driver = {
- 	.probe = fsl_mc_err_probe,
--	.remove_new = fsl_mc_err_remove,
-+	.remove = fsl_mc_err_remove,
- 	.driver = {
- 		.name = "mpc85xx_mc_err",
- 		.of_match_table = mpc85xx_mc_err_of_match,
-diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
-index 2e2133b784e9..e60a99eb8cfb 100644
---- a/drivers/edac/npcm_edac.c
-+++ b/drivers/edac/npcm_edac.c
-@@ -531,7 +531,7 @@ static struct platform_driver npcm_edac_driver = {
- 		.of_match_table = npcm_edac_of_match,
- 	},
- 	.probe = edac_probe,
--	.remove_new = edac_remove,
-+	.remove = edac_remove,
- };
- 
- module_platform_driver(npcm_edac_driver);
-diff --git a/drivers/edac/octeon_edac-l2c.c b/drivers/edac/octeon_edac-l2c.c
-index 2adb9c8093f8..e6b1595a3cb5 100644
---- a/drivers/edac/octeon_edac-l2c.c
-+++ b/drivers/edac/octeon_edac-l2c.c
-@@ -194,7 +194,7 @@ static void octeon_l2c_remove(struct platform_device *pdev)
- 
- static struct platform_driver octeon_l2c_driver = {
- 	.probe = octeon_l2c_probe,
--	.remove_new = octeon_l2c_remove,
-+	.remove = octeon_l2c_remove,
- 	.driver = {
- 		   .name = "octeon_l2c_edac",
- 	}
-diff --git a/drivers/edac/octeon_edac-lmc.c b/drivers/edac/octeon_edac-lmc.c
-index 4112c2ee34b8..f7176b95b4fe 100644
---- a/drivers/edac/octeon_edac-lmc.c
-+++ b/drivers/edac/octeon_edac-lmc.c
-@@ -312,7 +312,7 @@ static void octeon_lmc_edac_remove(struct platform_device *pdev)
- 
- static struct platform_driver octeon_lmc_edac_driver = {
- 	.probe = octeon_lmc_edac_probe,
--	.remove_new = octeon_lmc_edac_remove,
-+	.remove = octeon_lmc_edac_remove,
- 	.driver = {
- 		   .name = "octeon_lmc_edac",
- 	}
-diff --git a/drivers/edac/octeon_edac-pc.c b/drivers/edac/octeon_edac-pc.c
-index d9eeb40d2784..aa1219db0b17 100644
---- a/drivers/edac/octeon_edac-pc.c
-+++ b/drivers/edac/octeon_edac-pc.c
-@@ -130,7 +130,7 @@ static void co_cache_error_remove(struct platform_device *pdev)
- 
- static struct platform_driver co_cache_error_driver = {
- 	.probe = co_cache_error_probe,
--	.remove_new = co_cache_error_remove,
-+	.remove = co_cache_error_remove,
- 	.driver = {
- 		   .name = "octeon_pc_edac",
- 	}
-diff --git a/drivers/edac/octeon_edac-pci.c b/drivers/edac/octeon_edac-pci.c
-index 4d368af2c5f0..c4f3bc33a971 100644
---- a/drivers/edac/octeon_edac-pci.c
-+++ b/drivers/edac/octeon_edac-pci.c
-@@ -97,7 +97,7 @@ static void octeon_pci_remove(struct platform_device *pdev)
- 
- static struct platform_driver octeon_pci_driver = {
- 	.probe = octeon_pci_probe,
--	.remove_new = octeon_pci_remove,
-+	.remove = octeon_pci_remove,
- 	.driver = {
- 		   .name = "octeon_pci_edac",
- 	}
-diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-index a9a8ba067007..04c42c83a2ba 100644
---- a/drivers/edac/qcom_edac.c
-+++ b/drivers/edac/qcom_edac.c
-@@ -407,7 +407,7 @@ MODULE_DEVICE_TABLE(platform, qcom_llcc_edac_id_table);
- 
- static struct platform_driver qcom_llcc_edac_driver = {
- 	.probe = qcom_llcc_edac_probe,
--	.remove_new = qcom_llcc_edac_remove,
-+	.remove = qcom_llcc_edac_remove,
- 	.driver = {
- 		.name = "qcom_llcc_edac",
- 	},
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index d7416166fd8a..5ed32a3299c4 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -1488,7 +1488,7 @@ static struct platform_driver synps_edac_mc_driver = {
- 		   .of_match_table = synps_edac_match,
- 		   },
- 	.probe = mc_probe,
--	.remove_new = mc_remove,
-+	.remove = mc_remove,
- };
- 
- module_platform_driver(synps_edac_mc_driver);
-diff --git a/drivers/edac/ti_edac.c b/drivers/edac/ti_edac.c
-index 29723c9592f7..39cc2ef9cac4 100644
---- a/drivers/edac/ti_edac.c
-+++ b/drivers/edac/ti_edac.c
-@@ -322,7 +322,7 @@ static void ti_edac_remove(struct platform_device *pdev)
- 
- static struct platform_driver ti_edac_driver = {
- 	.probe = ti_edac_probe,
--	.remove_new = ti_edac_remove,
-+	.remove = ti_edac_remove,
- 	.driver = {
- 		   .name = EDAC_MOD_NAME,
- 		   .of_match_table = ti_edac_of_match,
-diff --git a/drivers/edac/versal_edac.c b/drivers/edac/versal_edac.c
-index a556d23e8261..5a43b5d43ca2 100644
---- a/drivers/edac/versal_edac.c
-+++ b/drivers/edac/versal_edac.c
-@@ -1186,7 +1186,7 @@ static struct platform_driver xilinx_ddr_edac_mc_driver = {
- 		.of_match_table = xlnx_edac_match,
- 	},
- 	.probe = mc_probe,
--	.remove_new = mc_remove,
-+	.remove = mc_remove,
- };
- 
- module_platform_driver(xilinx_ddr_edac_mc_driver);
-diff --git a/drivers/edac/xgene_edac.c b/drivers/edac/xgene_edac.c
-index fd87f1b2c145..699c7d29d80c 100644
---- a/drivers/edac/xgene_edac.c
-+++ b/drivers/edac/xgene_edac.c
-@@ -1989,7 +1989,7 @@ MODULE_DEVICE_TABLE(of, xgene_edac_of_match);
- 
- static struct platform_driver xgene_edac_driver = {
- 	.probe = xgene_edac_probe,
--	.remove_new = xgene_edac_remove,
-+	.remove = xgene_edac_remove,
- 	.driver = {
- 		.name = "xgene-edac",
- 		.of_match_table = xgene_edac_of_match,
-diff --git a/drivers/edac/zynqmp_edac.c b/drivers/edac/zynqmp_edac.c
-index c9dc78d8c824..cdffc9e4194d 100644
---- a/drivers/edac/zynqmp_edac.c
-+++ b/drivers/edac/zynqmp_edac.c
-@@ -455,7 +455,7 @@ static struct platform_driver zynqmp_ocm_edac_driver = {
- 		   .of_match_table = zynqmp_ocm_edac_match,
- 		   },
- 	.probe = edac_probe,
--	.remove_new = edac_remove,
-+	.remove = edac_remove,
- };
- 
- module_platform_driver(zynqmp_ocm_edac_driver);
-
-base-commit: 63b3ff03d91ae8f875fe8747c781a521f78cde17
+ 	/* Enable instance-specific access. */
+ 	if (instance_id != DF_BROADCAST) {
 -- 
-2.45.2
+2.43.0
 
 
