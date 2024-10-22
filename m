@@ -1,211 +1,191 @@
-Return-Path: <linux-edac+bounces-2176-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2177-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B35919A9545
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 03:11:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 191159A9EE1
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 11:45:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A981B21DAE
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 01:11:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 301351C21FC5
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 09:45:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C60142AB3;
-	Tue, 22 Oct 2024 01:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9D26199EA7;
+	Tue, 22 Oct 2024 09:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bC3gFGbM"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="dZT4i07S"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DA7323D;
-	Tue, 22 Oct 2024 01:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D158145B22;
+	Tue, 22 Oct 2024 09:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729559510; cv=none; b=YLWl7NsmvU3kaxdEcMoKHGkugwyXMG57DeTVmHapbPLrP4+nUpkMaIMwE0jvuoO6CSHElvOnTVU0YSGoQ8/0esQYSJFmNw2T0/E9LE1DyVPK1oPmvUa7TKCFNU8UqTx7LjQ0Pl1AmBfBkKHWv4EMkKI95Yvr9uGDi7MC3xR+AXA=
+	t=1729590307; cv=none; b=nkB1XX6aIUSAbS0yd0GhLPIPybtvvy9VdTbpUKg/kmYiwyy5fQiEg1yCnCtzdH9bwWA76169yH7aC15sMHUNzh6s5KqL9LYCgzNmVCX21QxNxSrQyLBsd1CyzLteL1lek1YoT4Gwl9N4wlr8qGqFSg9TFMzm8MR1FXSXpHvUVJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729559510; c=relaxed/simple;
-	bh=dyaqIfWu5jk9N2YZ1V36RrpXXNxAHtG8g2KDweEv5es=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d1uUWDFZBsn394QeLStBJFWfVRJNhzts9VZ0MsoNOlkZrP/ZZlbkiiDqrwotVgmqRKm+iGR5zTxTT1h7BpgjRy/Voiq/LZ4fckmL9GCEk06m//o6ff+C26QqxVqP8GnXDM+Iz1eAepCb0d/rvKLYSu4s8utBGqedYRNr7YsXqfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bC3gFGbM; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1729559503; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Su0JCUUNtQowa7ZUF9W/JcsQXW+zdoUv4LGM6ZfbIrs=;
-	b=bC3gFGbMrgwot0glVG484iR6MOclDdfrgbMLWEbjCCWYCe5XNus7ounxXcWYetdISXL4ROkPn5M9SuSvS6Ucsdry1OHSOKs/OAjfnLtf7V4zFanOmaPnwV1posy9CX1D9/EIUxmk0OZaD3mvEE8muqWwW4CcGheHsa9hRkmvbKo=
-Received: from 30.246.160.103(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WHfusch_1729559498 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 22 Oct 2024 09:11:40 +0800
-Message-ID: <05a8d26b-b023-426f-879c-7d33be4a6406@linux.alibaba.com>
-Date: Tue, 22 Oct 2024 09:11:37 +0800
+	s=arc-20240116; t=1729590307; c=relaxed/simple;
+	bh=GlLoCR43om/v9r9E86LKKa/FKLNVx5CmjA/L9r7EudA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DAjKdOUVkl8UiH+tStsRdEFqwzUb3ptdjO8aEDK4Wqqaz4oia7W270K/s8Qbl23PpfmgLoCrMO2uVLDZuBKLiGL5OGp0OMS5+sReUgY9+8lIi1fmxbrsm3ppaqRSwQKVM6az7ikJCwNhTLolSM8c6meIRB+UVp5ua2rucVrmzJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=dZT4i07S; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id CE43640E0219;
+	Tue, 22 Oct 2024 09:45:02 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id llMr0-Ydhu4W; Tue, 22 Oct 2024 09:44:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1729590298; bh=rDNfhvCyWnIJtBt/cVyjCF1IKMrba30fvxrKzlQyRNs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dZT4i07Sd+NwwdlM4Axx/COyVdbGqXuEhvR6he0hLYxXRFe0FIaYuiMD7NRITkFBW
+	 N97SKZCxFfkoD5+2izcSf4d4x7g+JKQNhA4kiw+Ro50bMczvm7S3XiMLp2n83pUvPI
+	 1AOTD523p78tUkdxbO9KdoL35Q0F2og8hsDmzYCanCmsKgVUmASpio0wMn8C0fDhIi
+	 LN/OD3IpSO1gOtRYUFKc1Sdl1WM0vcRZbOranUmqvxz01pXPmtC3h56Grso7sYfX5w
+	 HH8FBLE9ppoiq0yQHQPNHdXfsQ1o4U2Jd220koiACcuP0bchUe4iszoI81ugsclF+k
+	 QW4jKmfjCnGfws8gCIBjuEUzu1VSppMzSggiigf/1gD3kVGIUHfBe0IlcViVUGUnYh
+	 iFlnm0Lm0z12q8OD7TeCX8thTlzh5hmcXPE4N23uCAopTBXIGZdR9A8BCG81qKC0eC
+	 on39IgcW8yzdN6hcZkeDldE1/DzOx8/d/Ifzism909UUEsMqu5+NG1ieCUlAR11IDU
+	 XvHRjlP3NWKhvsepBCPKUwwumeY8neN8LPfJAB9jop8dfbWPp0nEYRATRQmb3DZ5IG
+	 KkgcKcavZ1Yx9vn24jymDLwIHszHC4Ies1z1CWWV6Qsda/rzVUDoVMoq2SN9yA3hmF
+	 Rw2YyJhryeh2WiIZVZ5KDEPk=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C3E4940E015F;
+	Tue, 22 Oct 2024 09:44:34 +0000 (UTC)
+Date: Tue, 22 Oct 2024 11:44:29 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: York Sun <york.sun@nxp.com>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Priyanka Singh <priyanka.singh@nxp.com>,
+	Sherry Sun <sherry.sun@nxp.com>, Li Yang <leoyang.li@nxp.com>
+Subject: Re: [PATCH v3 3/6] EDAC/fsl_ddr: Fix bad bit shift operations
+Message-ID: <20241022094429.GFZxdz_QNHHr_DCPp3@fat_crate.local>
+References: <20241016-imx95_edac-v3-0-86ae6fc2756a@nxp.com>
+ <20241016-imx95_edac-v3-3-86ae6fc2756a@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 3/3] ACPI: APEI: handle synchronous exceptions in task
- work
-To: mark.rutland@arm.com, catalin.marinas@arm.com, mingo@redhat.com,
- robin.murphy@arm.com, Jonathan.Cameron@Huawei.com, bp@alien8.de,
- rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
- mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
- naoya.horiguchi@nec.com, james.morse@arm.com, tongtiangen@huawei.com,
- gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
- ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
- baolin.wang@linux.alibaba.com, tglx@linutronix.de,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20241014084240.18614-4-xueshuai@linux.alibaba.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20241014084240.18614-4-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241016-imx95_edac-v3-3-86ae6fc2756a@nxp.com>
 
-Hi, Jarkko,
+On Wed, Oct 16, 2024 at 04:31:11PM -0400, Frank Li wrote:
+> From: Priyanka Singh <priyanka.singh@nxp.com>
+> 
+> Fix undefined behavior caused by left-shifting a negative value in the
+> expression:
+> 
+>     cap_high ^ (1 << (bad_data_bit - 32))
+> 
+> The variable 'bad_data_bit' ranges from 0 to 63. When 'bad_data_bit' is
+> less than 32, 'bad_data_bit - 32' becomes negative, and left-shifting by a
+> negative value in C is undefined behavior.
+> 
+> Fix this by combining 'cap_high' and 'cap_low' into a 64-bit variable.
+> 
+> Fixes: ea2eb9a8b620 ("EDAC, fsl-ddr: Separate FSL DDR driver from MPC85xx")
+> Signed-off-by: Priyanka Singh <priyanka.singh@nxp.com>
+> Reviewed-by: Sherry Sun <sherry.sun@nxp.com>
 
+You can't keep Reviewed-by tags when you change a patch considerably: Documentation/process/submitting-patches.rst
 
-在 2024/10/14 16:42, Shuai Xue 写道:
-> The memory uncorrected error could be signaled by asynchronous interrupt
-> (specifically, SPI in arm64 platform), e.g. when an error is detected by
-> a background scrubber, or signaled by synchronous exception
-> (specifically, data abort excepction in arm64 platform), e.g. when a CPU
-> tries to access a poisoned cache line. Currently, both synchronous and
-> asynchronous error use memory_failure_queue() to schedule
-> memory_failure() exectute in kworker context.
-> 
-> As a result, when a user-space process is accessing a poisoned data, a
-> data abort is taken and the memory_failure() is executed in the kworker
-> context:
-> 
->    - will send wrong si_code by SIGBUS signal in early_kill mode, and
->    - can not kill the user-space in some cases resulting a synchronous
->      error infinite loop
-> 
-> Issue 1: send wrong si_code in early_kill mode
-> 
-> Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
-> MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
-> could be used to determine whether a synchronous exception occurs on
-> ARM64 platform.  When a synchronous exception is detected, the kernel is
-> expected to terminate the current process which has accessed poisoned
-> page. This is done by sending a SIGBUS signal with an error code
-> BUS_MCEERR_AR, indicating an action-required machine check error on
-> read.
-> 
-> However, when kill_proc() is called to terminate the processes who have
-> the poisoned page mapped, it sends the incorrect SIGBUS error code
-> BUS_MCEERR_AO because the context in which it operates is not the one
-> where the error was triggered.
-> 
-> To reproduce this problem:
-> 
->    #sysctl -w vm.memory_failure_early_kill=1
->    vm.memory_failure_early_kill = 1
-> 
->    # STEP2: inject an UCE error and consume it to trigger a synchronous error
->    #einj_mem_uc single
->    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->    injecting ...
->    triggering ...
->    signal 7 code 5 addr 0xffffb0d75000
->    page not present
->    Test passed
-> 
-> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO
-> error and it is not fact.
-> 
-> After this patch:
-> 
->    # STEP1: enable early kill mode
->    #sysctl -w vm.memory_failure_early_kill=1
->    vm.memory_failure_early_kill = 1
->    # STEP2: inject an UCE error and consume it to trigger a synchronous error
->    #einj_mem_uc single
->    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->    injecting ...
->    triggering ...
->    signal 7 code 4 addr 0xffffb0d75000
->    page not present
->    Test passed
-> 
-> The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR
-> error as we expected.
-> 
-> Issue 2: a synchronous error infinite loop
-> 
-> If a user-space process, e.g. devmem, a poisoned page which has been set
-> HWPosion flag, kill_accessing_process() is called to send SIGBUS to the
-> current processs with error info. Because the memory_failure() is
-> executed in the kworker contex, it will just do nothing but return
-> EFAULT. So, devmem will access the posioned page and trigger an
-> excepction again, resulting in a synchronous error infinite loop. Such
-> loop may cause platform firmware to exceed some threshold and reboot
-> when Linux could have recovered from this error.
-> 
-> To reproduce this problem:
-> 
->    # STEP 1: inject an UCE error, and kernel will set HWPosion flag for related page
->    #einj_mem_uc single
->    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->    injecting ...
->    triggering ...
->    signal 7 code 4 addr 0xffffb0d75000
->    page not present
->    Test passed
-> 
->    # STEP 2: access the same page and it will trigger a synchronous error infinite loop
->    devmem 0x4092d55b400
-> 
-> To fix above two issues, queue memory_failure() as a task_work so that it runs in
-> the context of the process that is actually consuming the poisoned data.
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+
+What does that SOB tag mean?
+
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 > ---
->   drivers/acpi/apei/ghes.c | 78 +++++++++++++++++++++++-----------------
->   include/acpi/ghes.h      |  3 --
->   include/linux/mm.h       |  1 -
->   mm/memory-failure.c      | 13 -------
->   4 files changed, 45 insertions(+), 50 deletions(-)
+>  drivers/edac/fsl_ddr_edac.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index f2ee28c44d7a..95e9520eb803 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -467,28 +467,42 @@ static void ghes_clear_estatus(struct ghes *ghes,
->   }
->   
->   /*
-> - * Called as task_work before returning to user-space.
-> - * Ensure any queued work has been done before we return to the context that
-> - * triggered the notification.
-> + * struct ghes_task_work - for synchronous RAS event
-> + *
-> + * @twork:                callback_head for task work
-> + * @pfn:                  page frame number of corrupted page
-> + * @flags:                work control flags
-> + *
-> + * Structure to pass task work to be handled before
-> + * returning to user-space via task_work_add().
->    */
+> diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+> index 7a9fb1202f1a0..846a4ba25342a 100644
+> --- a/drivers/edac/fsl_ddr_edac.c
+> +++ b/drivers/edac/fsl_ddr_edac.c
+> @@ -328,6 +328,9 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
+>  	 * TODO: Add support for 32-bit wide buses
+>  	 */
+>  	if ((err_detect & DDR_EDE_SBE) && (bus_width == 64)) {
+> +		u64 cap = (u64)cap_high << 32 | (u64)cap_low;
+> +		u32 s = syndrome;
+> +
+>  		sbe_ecc_decode(cap_high, cap_low, syndrome,
+>  				&bad_data_bit, &bad_ecc_bit);
+>  
+> @@ -338,11 +341,15 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
+>  			fsl_mc_printk(mci, KERN_ERR,
+>  				"Faulty ECC bit: %d\n", bad_ecc_bit);
+>  
+> +		if (bad_data_bit >= 0)
 
+>= 0 implies != -1, right?
 
-Do you have any futer comments about this patch? Any comments are
-welcomed. If not, are you happy to explictly give the reveiwed-by tag?
+IOW?
 
-Best Regard,
-Shuai
+diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+index 846a4ba25342..fe822cb9b562 100644
+--- a/drivers/edac/fsl_ddr_edac.c
++++ b/drivers/edac/fsl_ddr_edac.c
+@@ -328,24 +328,21 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
+ 	 * TODO: Add support for 32-bit wide buses
+ 	 */
+ 	if ((err_detect & DDR_EDE_SBE) && (bus_width == 64)) {
+-		u64 cap = (u64)cap_high << 32 | (u64)cap_low;
++		u64 cap = (u64)cap_high << 32 | cap_low;
+ 		u32 s = syndrome;
+ 
+ 		sbe_ecc_decode(cap_high, cap_low, syndrome,
+ 				&bad_data_bit, &bad_ecc_bit);
+ 
+-		if (bad_data_bit != -1)
+-			fsl_mc_printk(mci, KERN_ERR,
+-				"Faulty Data bit: %d\n", bad_data_bit);
+-		if (bad_ecc_bit != -1)
+-			fsl_mc_printk(mci, KERN_ERR,
+-				"Faulty ECC bit: %d\n", bad_ecc_bit);
+-
+-		if (bad_data_bit >= 0)
++		if (bad_data_bit >= 0) {
++			fsl_mc_printk(mci, KERN_ERR, "Faulty Data bit: %d\n", bad_data_bit);
+ 			cap ^= 1ULL << bad_data_bit;
++		}
+ 
+-		if (bad_ecc_bit >= 0)
++		if (bad_ecc_bit >= 0) {
++			fsl_mc_printk(mci, KERN_ERR, "Faulty ECC bit: %d\n", bad_ecc_bit);
+ 			s ^= 1 << bad_ecc_bit;
++		}
+ 
+ 		fsl_mc_printk(mci, KERN_ERR,
+ 			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
