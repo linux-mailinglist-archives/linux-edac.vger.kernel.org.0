@@ -1,241 +1,311 @@
-Return-Path: <linux-edac+bounces-2184-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2185-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB5269AB5D0
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 20:12:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C7D9AB666
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 21:06:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCD761C20E75
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 18:12:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9A34B2141C
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 19:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4AD11C9B79;
-	Tue, 22 Oct 2024 18:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BDC1C9ECC;
+	Tue, 22 Oct 2024 19:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LOzUGQfH"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="QCuIUCEj"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46ACC1BE23F;
-	Tue, 22 Oct 2024 18:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729620769; cv=fail; b=aJjDpSl91EUL5zlddoxnFxWgTYmkAYCWlu4aa1pEvRcU/C2XTyZTOLvDy0d9AvcrmDK7qe0MDL4Zj75Lynaj18wnu+m9v3X27tMO7OqRtotV8mOsXAN83M3Z/Pe/ljwqeEArmisPI2loH6ZEl21pwyn07W3VXqPk2CDzwzAEK3A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729620769; c=relaxed/simple;
-	bh=D9mZ9x0Pfc24W8wEbHUmMiqZlAvNFtMlq0YP6ICTgLs=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=uNCnIMqFWGnp8MqtVFN+GWwLKC3gHknSp9sg/5bbz+jzg9w2FrwLczYDaVJ+ZeHLMh7Lx6dXTZSSh2JhBdwvGx4zfHrLWxANMUxDWUnqR3kL6q+UAB1TXfgEp5YmecVdWKRmwMpGpBhIk16nCAUa9YIsC/kVCoe8Nxz6KWQonW4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LOzUGQfH; arc=fail smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729620768; x=1761156768;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=D9mZ9x0Pfc24W8wEbHUmMiqZlAvNFtMlq0YP6ICTgLs=;
-  b=LOzUGQfHAcDNa1f6ZKtp2VKL4dxqiTVKCTwclypoUvGqUducqTq3HOOX
-   ghC27eYXy37dO9De94o4Wa2i7GkB03TkTikxL3RR5jAZIPbhOy37Ze1eJ
-   2ei9vthYAb/fob8aJldp97GGCLuPd/l9F4Wf3BjPzOcZU6z3fl9r02qW2
-   y6WaITEHWdfwfNhScPNpaA0WF3wDgaNRLeqg+bzD4GAwspN963UB3+zrs
-   XP7qD2lWdyKq0sQ2JOUW5Sar/GLjLvh5vuKj6/k7+SyOVqu3BawNHvn9G
-   Qu9Dk/9KoPkRaVM47QxYLBR747R4NP/Q4JKAC84RN5cG/wyPF8QvGviCv
-   A==;
-X-CSE-ConnectionGUID: E4gPgc+YS6uBs8S4aALj7Q==
-X-CSE-MsgGUID: KEnJSWRnThyQBdZxnKzn0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="39755740"
-X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="39755740"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 11:12:44 -0700
-X-CSE-ConnectionGUID: 0cyWwmyFSD+73bylhKVBJQ==
-X-CSE-MsgGUID: ABOd5jD+SfmJ+cVeUWoAhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="79962351"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 22 Oct 2024 11:12:44 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 22 Oct 2024 11:12:43 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Tue, 22 Oct 2024 11:12:43 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 22 Oct 2024 11:12:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qieiPGg8yzs0+A3TZ04FysqUDeUexN6i3ENZVGPZ2o/zMeJHMc//8bYiG1UsM5dz9bNmbN+kzwg1E0mXKQjMVbA4gsIXzoJdIAd9MAnXkZWBHfxR+UyQD7B730nk9p61i+PpNGovNqUI4z6bSLEafLaeRdO/vJ/Yky8eCMZX0OThY+V6UetXRSbQUzuymUsX7OFaeehBNAdzPtjvQktJq9r6t6lZmYXEGamVHp5bf1pgMMe+tRAMXFEuXZOMdhWdyfA6hN+ZZ14hNOgir98Ke3lf418qr5pt9HzHQIchYYs4dbuVAh/Ltm/zCRuMSUEsFeGArK2AUgJbEArBX7BuRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iAxMlnIGkojl4Ip3A9pd7xzacxoL+Z7sI+71tEehdEE=;
- b=n/D9rV1x+R1LOvFQ/Tz3r1abY29Trl15d2vqX8p58OE5tZl/VYdhxd8IjhTRuodpk4wap3dO/SHdBxNewdDvta0LS1yfRfvsp/NAdhAlOzTjLnP+CPip6XH7JT29ADVgpTvFbnC3GN42do04nBU+jJbNHzuPtjG3RUEcCtBopip5PooJYxmf6hGXeez3vpX1JTkTIXtyCa6YB9dBv5X4iem42l8PWv9ro7P0cOuN7GWkQTOuqx+OIhUg6ODmEvruA+04Zb2mIXCjY71H+xUGML5xYDHfF11sxVrJAaAd0RJVcarCZTlQcwhrmu6JJczpAxkn/9TixC7NtI5l+ozkLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by SN7PR11MB8282.namprd11.prod.outlook.com (2603:10b6:806:269::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Tue, 22 Oct
- 2024 18:12:40 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b%5]) with mapi id 15.20.8048.020; Tue, 22 Oct 2024
- 18:12:40 +0000
-Message-ID: <201aca5b-fdbd-465f-b008-0f7c1ed10b60@intel.com>
-Date: Tue, 22 Oct 2024 11:12:39 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/10] x86/mce: Convert multiple if () statements into
- a switch() statement
-To: Dave Hansen <dave.hansen@intel.com>, "Luck, Tony" <tony.luck@intel.com>,
-	"Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-CC: "bp@alien8.de" <bp@alien8.de>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"mingo@redhat.com" <mingo@redhat.com>, "hpa@zytor.com" <hpa@zytor.com>,
-	"x86@kernel.org" <x86@kernel.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-References: <20241010153202.30876-1-qiuxu.zhuo@intel.com>
- <20241016123036.21366-1-qiuxu.zhuo@intel.com>
- <20241016123036.21366-7-qiuxu.zhuo@intel.com>
- <c928d9aa-1609-4f5f-943c-fec72091e989@intel.com>
- <ZxLBwO4HkkJG4WYn@agluck-desk3.sc.intel.com>
- <2d011a77-a46e-4589-ae91-80d8d29e4124@intel.com>
- <CY8PR11MB71348AA655274E611CFFFE6C89412@CY8PR11MB7134.namprd11.prod.outlook.com>
- <SJ1PR11MB6083262976EDEC69FFF449FAFC432@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <88e77a00-ad62-4670-9d4e-a146bd8b420c@intel.com>
- <SJ1PR11MB60832636201CA40AD13C02C1FC432@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <7a902c13-bfdf-4319-9e31-81c199ecf65c@intel.com>
- <SJ1PR11MB6083E463572AC9E110A7199FFC432@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <42d59ea5-5b36-49cd-b04a-4480064fff02@intel.com>
- <8489127b-1292-475d-b67a-b0fc868d8a4b@intel.com>
-Content-Language: en-US
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <8489127b-1292-475d-b67a-b0fc868d8a4b@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0148.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::33) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2401C9DD3;
+	Tue, 22 Oct 2024 19:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729623956; cv=none; b=FancA4/vNEsrsx3Rt/w7v76m0JfpKVAFM71pMG1GRAT9/ARYYhoH0yMwBJRAUBk+ROTP4Ic7sJpJKdf0qCxg8/YAqAIsyODWasIYnfwAfBmrW6tr+udf+1i5SUHNQde4Q4dx4/DQqeATDUhljvgOnzz+N+gW1gh2s0JH0FuMq7Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729623956; c=relaxed/simple;
+	bh=Wn0mViEOFlicqTJRkmLe1dsuAo5+z2xIhCVNhEWGFyQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=od+ViT9bcIusMTSGfnMASxGaE35Bd5g7Lly2eUchywWtj/VOJgFMxp49NzAJW11O2cGzALabmtoT/88lVKzcPw7rLDDC6T9/f1owSCcY1b/7pmH75WsHz7ke6FBu84QYglbzttB+7t6ix+u3RstJT4CNjFIwthkTAOVKM51mayE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=QCuIUCEj; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B99F240E0198;
+	Tue, 22 Oct 2024 19:05:49 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id q3aQ9N_t_KX4; Tue, 22 Oct 2024 19:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1729623944; bh=ppGZ1xT0ZqqGN7Q64cHQWTKY4xHYzn5soCR639b+QDo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QCuIUCEjsFCP18Md2JNqMqIn1FwuwkZ2vZnBwxxUmRu0qMG2llbF1LFHGb1ZpD46G
+	 vFcAVNROerVPlayap1OFa/NFoym1ZlY5A0idJcdPJk9XwpuedUSimvD2v4FzEVjU2C
+	 vF40FFj6uOHNBfH04Vn6nAfHNURxDBwssmQ9T+EYn498FqZpIrXoMMSsGH9t5X5WgH
+	 +i50AsUiLvbjF5vnDfaA/zDFtSkVp0rxR5wi2Peg8BfO4e05snsr4FzG1idjIHBuYx
+	 VueK1zwtMdEVkS3scEeGe3EnUa2ri4iQjyGrw2HifTOOkh5lUmr8HxFAJhR5LW2hTb
+	 o/6MnHpPXXGcNo4KwuZQVUK958nSPa0WKU6BB6DvTCEel7TJ+hcfWtzrzkD6oLN/OA
+	 IdR1y/BguKgE40mGAssz3hq1PrAk8bKPPSd7f44TetrU4yKX3K+oeKQA05VsjqHZo9
+	 3tnheR6/o515Bu7XeH4kS2YPnqCuZmKrxyfKWkLjTfnn82P+Cncm3GtT6lj40yuTRy
+	 0ZVLrjzGSM+LvUUFuYH/ooTeYOE9pf/zXqe5On30mJistYc+EC7ZDEluVHdvRkdoYr
+	 +2Lu8jmdp+go0EE3FBx6MP1E/DDbq7Bf6UfFPW3TXe1hkDIKDCM12gbXNEveoqV1xa
+	 oWAJYSJeKVcKHM9Y32+NwBN0=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 29F7340E015F;
+	Tue, 22 Oct 2024 19:05:01 +0000 (UTC)
+Date: Tue, 22 Oct 2024 21:04:54 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: shiju.jose@huawei.com
+Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, tony.luck@intel.com,
+	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
+	dan.j.williams@intel.com, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, vishal.l.verma@intel.com,
+	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
+	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
+	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
+	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
+	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
+	duenwen@google.com, gthelen@google.com,
+	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
+	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
+	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+	wanghuiqiang@huawei.com, linuxarm@huawei.com
+Subject: Re: [PATCH v13 02/18] EDAC: Add scrub control feature
+Message-ID: <20241022190454.GIZxf3VkmLVR-JLeUc@fat_crate.local>
+References: <20241009124120.1124-1-shiju.jose@huawei.com>
+ <20241009124120.1124-3-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|SN7PR11MB8282:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3f9df08-5b5f-4423-cdf0-08dcf2c51dfd
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?WHFWOUtPWExQclBFRnRwbS9ZcW1hallsOWRZZzNvcWlDNFNmMXBRVDB3SnJl?=
- =?utf-8?B?Rm42cExzN0ZnK3R5czlHck9kT3kzalY3bXh6akl3ZVlyZTFYVlRQVGowaGVj?=
- =?utf-8?B?YjNUd0VreDBHV2NvRmJFSXpJRUI3OE9KdzZrWW1XYmlib1FsQktXVzFObDVE?=
- =?utf-8?B?UEFsbzk0Mm44TUc5cGNXTFRLekNxVFhLWGJKUyt5RzVFWndDT1YwUGF6ZzBI?=
- =?utf-8?B?U3hHWDRwZVhaaTROcDY0M0tVUU1yN3F4YUJXemFZbnlRcmIrSzY1TWxiY3d1?=
- =?utf-8?B?eS92Q1NIdTJod1ovdjc1QWtmWTF0NW4yYVkzbW1ibzZDemtGMW4reDZuTTJw?=
- =?utf-8?B?TzVYVGdzdlEreWxyRUZNMmpQT0ZuM1JUQ09qSlA4bHBVWXRocUIwdHlsT3dP?=
- =?utf-8?B?bk5ONXV0bnJLM2x1UjFReWxwc0pvWDJHZ1hyYS9HZEcrdHUzdnRCZjR1ZmxG?=
- =?utf-8?B?YXhOUEhrWGUrNWdaNzNTc0g1YVF4enorYUVnc3FPdnBrUXp5VkJ6b2hyNmds?=
- =?utf-8?B?ZTUrMm9LSDE3dEFoUUlqc1NkNnNoOGk2WEh1czhYbW5xVTl6d1N0WSsxVUpF?=
- =?utf-8?B?RW1Ma0NtaTFKbkNoTXFKTGVER0pmbTlUTTRmMm9KT1NyKy9ycVoweWliVXFj?=
- =?utf-8?B?aU12aUlQYVVjaklPUGV1QUZUOUtTbFRVVFhodW9tWlZJNW02eGF3Z0R4V2Mz?=
- =?utf-8?B?N2U5NDQyZ2ZyVmFSWkMxSDJNSHIrOXQ3bitxUDZ2TDVvZkpYazlyNzE3R1Qr?=
- =?utf-8?B?eDhIRUluNGppZU14NjRGWXQ2UlhtMGRHZWNRbXNEdG1QcVUzdkM5YTRhODJu?=
- =?utf-8?B?dXFaZEpnNDRBU1NtNGlyL01pMjhicVFHMXhKck9tNnFCNFFqZ1haYkZFL3lx?=
- =?utf-8?B?Tmgvb3F4TGRwZGdVRlllMjRiQnZJV01hY1dCWkVnanpHQ0dhcjlTY3hMY3Z1?=
- =?utf-8?B?KzJ2VTdMZHp0OHlKSnhMbU1QNUs5YkkreWVnSXltdnFaaFFieWJyT3BvVmtW?=
- =?utf-8?B?ak5nZE1OSXJ1dkw4dGFrWWdhbmRKUGpGVGU1K1NpWDdTN0R1MHBHR016ZUdU?=
- =?utf-8?B?d3NTcU9xMk5wM1NkRWdEZGg4ejZuR2NURXRNTEVHNkNtSk5wbGU2VnB5Z1g5?=
- =?utf-8?B?K1EreWQzSXBhTm5XWnI1M2RRd2V0T3I5c2xaVjhqUlFFNTZjNDZGbytNY09s?=
- =?utf-8?B?SEdoVEwwRjJLVFQwUjJzMDJkSTMvc29PcFVhTThTTDNwK0J6S0locjR1Q3Jk?=
- =?utf-8?B?Y2hmUkVqbkw5YjZEOE1NcWlYNXliejJkUHAwRE1Tb0dJZGNYaDIzOXVuR0JR?=
- =?utf-8?B?OW1OaVdWL1FWcVJpSnVZdXhKNzI5UldyWDdEcXZKWEtkUzJxbmhqNzVCd2dU?=
- =?utf-8?B?VXFKTTdUdVFzV2hQVFE5VGFieEJGUTBFVndiOE9NU3RDa1FWL3VpU1lvK0J3?=
- =?utf-8?B?VU9lbzd6ZGdYSHFEbG5jSm12VkdtVW1ZYUFHRWtLbzMzY2VwYmtodDc2eDdr?=
- =?utf-8?B?dzlBNkdzeXlXdE1rcmd2em56M25PVEhxQ2VCOHBpMkZ5ZHlncWpWZ1dTK3V6?=
- =?utf-8?B?L0toMlpBOTRBbWJjalpaeDBzU0dBOTZweTJCeVBHOWRkN09jeXFLTHR0R1Nz?=
- =?utf-8?B?SjJPYWl0N05Za3JQRXJHUVluZ0lLYng3Yms0STkrTHNJcXBqeXE2REtFaFVv?=
- =?utf-8?B?SlZhSlZHU0JhUzhQekp0aGFNdGwrT09LWXVYQkVReWlDTmkyeWdQYStUanl6?=
- =?utf-8?Q?kYBbP58+P160uMU9cwmQJiMV3nhRiaGrIW9PQTf?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFpiazhyeDJMNldlUXhjSCtCQXgyaDJXd0d0STRpanZURnIzbmtVUHBIUDR3?=
- =?utf-8?B?Q0VzSytQTFJhVzdpdVliaklTTmc1M21xMS8vano2OEZvVWQ5U1IwLzZFa1pG?=
- =?utf-8?B?ZjdMODhrbzViOGhPRTlJSWN6WUtpaEtsYk45cVMyQ0hFc2YzV3dsRXVMRmdw?=
- =?utf-8?B?ejk2SHh6UFlpZDFVR3FPOUhQT0QvWjluZ3h1RUExOFREVGY4Y2FHeWU2RUtU?=
- =?utf-8?B?M3dETTZBRjdXYXZjZHBKMTJ4REQ0SDFWZlBrRzBzTE9PZ2cyMnM5WGtQYU0w?=
- =?utf-8?B?RTZOTHJuZUVjN1k1VDV4NlpSa3hkaGh0NFVTNllZNG9XM21TaitzT3hBUTlR?=
- =?utf-8?B?SmY5RitVZHZZcmQyYk1SS0kweVMyeDJOM3RGYUlYM3JNMnk5RC9CVVZmT3hV?=
- =?utf-8?B?YmZGb3RnOUc3TVdRbDRaMURKNzZ5VU4rNzdGU004NjJmY0pMNHdDY3B4Z1Ju?=
- =?utf-8?B?Tk5oeWgzcldtb3JnRmsyQVVuRm03TDB1a290elJSWEhzVXBXcW9lMElIUUpL?=
- =?utf-8?B?L21TK1U5N1lCY1lJdjBKQWxBcGpQY1paeUNQVkNyTFdEQ1czNUFBNXQ5aGU2?=
- =?utf-8?B?a090anFiakhHemM4eUNEeUhuWGM0V3UvYTNIa2VZUmlNb3hXR0FtRjNWL2Rx?=
- =?utf-8?B?dzFWcGhGaytvYzE2OGdPbXc1c3d4SzMyVXJzUkNFbTZJTUZrNHRBNUhRVmhH?=
- =?utf-8?B?VlVWL3JTeWpJMUZnWDVlQ2t5b0gvNlRhMUJJNDF2UnFtV01xNkdtZHEzVS9j?=
- =?utf-8?B?VUdteDRBdnVKd0lEYmlhbjRVbjZ2SEZOZk9WNHNQZ3h1RXhGZ0pHUXRqRUdM?=
- =?utf-8?B?b3MyOEpQbGZNTm8wd1A4K0tPNW5sNVhubERXZ1lJZU1nNWxnRG10TnZNMWhl?=
- =?utf-8?B?TzJjeEdTc0xwc05hdy9YYXMyZ25CcFdZWnJGZGtpSmd2NDQ0Z2tNRjA2b0Jn?=
- =?utf-8?B?TGN6N3EwZjE2UDk1R25obEt5R25vcnpid2h3VnoveWhzVDUwM0ZTbExja3lF?=
- =?utf-8?B?dVlyYXY0L1E1UmhacmcwYzBBaTd5eGk5U2NNT0NxaWFOTlUrckNvTTFKRnlh?=
- =?utf-8?B?M1F3VzJ5THFhUWIxVEQ3aGQxcWFWbzZjS0tyTHdPcXp6Q1IrbmVXd3JvOWJG?=
- =?utf-8?B?c2s0T255bC9EWWhFUEdqQWNCUzdBWFRKWXk0VjE0cFBzSFplOE1jRkczc1NK?=
- =?utf-8?B?RGIrZEpMRi80Mjd3ZTRzNU5JNmZqS09kemhjblI5dDREclA2WE1RTXgyR1JQ?=
- =?utf-8?B?S0VjZWV4T1dQYlNZZlVTWm1hMUcrR0pES0h5SHBxYUxzaHY1cnFONm90cjFr?=
- =?utf-8?B?NUhwNGk3TG51MVRGLzA2UDBCM1pGVGttWmdDYlRQQUh0dGN1NnRmc3lXWHg2?=
- =?utf-8?B?bFNaend2TGc5T092aXRtNUJBdXk0dFR4bHBnSUtMQmpZdUtnLzRHOFNhM1RF?=
- =?utf-8?B?ZVFkc2pLSUlJbnRXc0R2NkIrRURsUDNTUGF4MW5uU3RUS1Q0K085Y0twMFAz?=
- =?utf-8?B?dGZ3ZTB2L2I5WmdaenlibkVEVXgzTW1kSmUxRDdNaW5nZzVsZTBCeTZSVWJ1?=
- =?utf-8?B?Y21vZUdheUdWcUhFcU8vT1NKZklXYWpBTmNLT2o0MnRnYmhTWHdFWlovYi9z?=
- =?utf-8?B?Qm1SbUVpU1NlSUNzWGxqUHdIdnlldVcxbkJKRWJJa3hQaTU4eTZKM29mK2Er?=
- =?utf-8?B?UmlBWlNjY08zYldqckpDWHBmZGs4ay9WNTBRMEh3eUlCN2RJU2dTSDZEc21S?=
- =?utf-8?B?MEd6andDbU9SSUNCMXJvalFYZ004bEJ0YnF5bHNrcUszVkpxTmYwb2tDV3hL?=
- =?utf-8?B?eHgxaHFvalhkekEyRWpMQmRIbDFKeFk5aVl3TE42NHhISzRwQVBJeHlXc2hT?=
- =?utf-8?B?a1BDUWcyakxWU0RTZXlzbTdqb1RSQWlPY3RITnV5QXIrTXVvdHJ1RVAxd0p6?=
- =?utf-8?B?WDNmM1hCYlVEb2liaFQ1TXVOdVp2MnQ4VC9YaFNUMHdOb2ZRdHJxMGUvSU9v?=
- =?utf-8?B?TnpCRUp6RFlHWTlVREJON1hMSHhxcnlSc3JKSC9wQWc2bVF5akFtS0lYNDYy?=
- =?utf-8?B?a1U4ZktBTlZxOFpuOWRWcHBwaWRDZEpsZ1k3TG0rNER1NjNHanFjajdvMFhr?=
- =?utf-8?Q?4daCvWV3WD/qaOVfAAmUBtTr6?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3f9df08-5b5f-4423-cdf0-08dcf2c51dfd
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 18:12:40.6843
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HGz77mUIMHkmBC20lpGyQMqtcMYy0fA8thbpVt1LHWbNGAeK3guj+TXD1caEenLq+0XxAR07ylwkqNDh7IWgvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB8282
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241009124120.1124-3-shiju.jose@huawei.com>
 
-On 10/21/2024 5:17 PM, Dave Hansen wrote:
+On Wed, Oct 09, 2024 at 01:41:03PM +0100, shiju.jose@huawei.com wrote:
+> diff --git a/Documentation/ABI/testing/sysfs-edac-scrub b/Documentation/ABI/testing/sysfs-edac-scrub
+> new file mode 100644
+> index 000000000000..b4f8f0bba17b
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-edac-scrub
+> @@ -0,0 +1,69 @@
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		The sysfs EDAC bus devices /<dev-name>/scrubX subdirectory
+> +		belongs to an instance of memory scrub control feature,
+> +		where <dev-name> directory corresponds to a device/memory
+> +		region registered with the EDAC device driver for the
+> +		scrub control feature.
+> +		The sysfs scrub attr nodes would be present only if the
+> +		client driver has implemented the corresponding attr
+> +		callback function and passed in ops to the EDAC RAS feature
+> +		driver during registration.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/addr_range_base
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) The base of the address range of the memory region
+> +		to be scrubbed (on-demand scrubbing).
 
-> We only have a handful of these and they're mostly for early family 6
-> things.  I bet there's less than half a dozen.
-> 
+Why does this sound more complicated than it is?
 
-You are right. There don't seem to be many unbounded model checks for
-Intel family 6. I could only find 3.
+Why isn't this simply "addr" and the next one "size"?
 
-early_init_intel() -> constant_tsc - Tony found out that it is harmless
-since it got it's own enumeration later on.
+On-demand scrubbing should scrub at address "addr" and "size" bytes. Can't get
+any simpler than that.
 
-should_io_be_busy() and acpi_processor_power_init_bm_check() also seem
-to be for older platforms and probably no longer applicable. I'll reach
-out to the power folks to confirm.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/addr_range_size
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) The size of the address range of the memory region
+> +		to be scrubbed (on-demand scrubbing).
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/enable_background
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) Start/Stop background(patrol) scrubbing if supported.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/enable_on_demand
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) Start/Stop on-demand scrubbing the memory region
+> +		if supported.
 
-Maybe if we just add an upper bound to these checks then we don't to
-worry about carrying them forward with the newer family 6 models and
-upcoming family 19 models.
+Why do you need a separate "enable" flag?
+
+Why can't it be: "writing into "addr" starts the on-demand scrubbing"?
+
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/min_cycle_duration
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RO) Supported minimum scrub cycle duration in seconds
+> +		by the memory scrubber.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/max_cycle_duration
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RO) Supported maximum scrub cycle duration in seconds
+> +		by the memory scrubber.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/current_cycle_duration
+> +Date:		Oct 2024
+> +KernelVersion:	6.12
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) The current scrub cycle duration in seconds and must be
+> +		within the supported range by the memory scrubber.
+
+What are those three good for and why are they exposed?
+
+> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+> index 4edfb83ffbee..a96a74de8b9e 100644
+> --- a/drivers/edac/Makefile
+> +++ b/drivers/edac/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
+>  
+>  edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
+>  edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
+> +edac_core-y	+= scrub.o
+>  
+>  edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
+>  
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 0b8aa8150239..0c9da55d18bc 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -576,6 +576,7 @@ static void edac_dev_release(struct device *dev)
+>  {
+>  	struct edac_dev_feat_ctx *ctx = container_of(dev, struct edac_dev_feat_ctx, dev);
+>  
+> +	kfree(ctx->scrub);
+>  	kfree(ctx->dev.groups);
+>  	kfree(ctx);
+>  }
+> @@ -610,7 +611,9 @@ int edac_dev_register(struct device *parent, char *name,
+>  		      const struct edac_dev_feature *ras_features)
+>  {
+>  	const struct attribute_group **ras_attr_groups;
+> +	struct edac_dev_data *dev_data;
+>  	struct edac_dev_feat_ctx *ctx;
+> +	int scrub_cnt = 0, scrub_inst = 0;
+>  	int attr_gcnt = 0;
+>  	int ret, feat;
+
+The EDAC tree preferred ordering of variable declarations at the
+beginning of a function is reverse fir tree order::
+
+	struct long_struct_name *descriptive_name;
+	unsigned long foo, bar;
+	unsigned int tmp;
+	int ret;
+
+The above is faster to parse than the reverse ordering::
+
+	int ret;
+	unsigned int tmp;
+	unsigned long foo, bar;
+	struct long_struct_name *descriptive_name;
+
+And even more so than random ordering::
+
+	unsigned long foo, bar;
+	int ret;
+	struct long_struct_name *descriptive_name;
+	unsigned int tmp;
+
+>  
+> @@ -620,7 +623,10 @@ int edac_dev_register(struct device *parent, char *name,
+>  	/* Double parse to make space for attributes */
+>  	for (feat = 0; feat < num_features; feat++) {
+>  		switch (ras_features[feat].ft_type) {
+> -		/* Add feature specific code */
+> +		case RAS_FEAT_SCRUB:
+> +			attr_gcnt++;
+> +			scrub_cnt++;
+> +			break;
+>  		default:
+>  			return -EINVAL;
+>  		}
+> @@ -639,13 +645,36 @@ int edac_dev_register(struct device *parent, char *name,
+>  		goto ctx_free;
+>  	}
+>  
+> +	if (scrub_cnt) {
+> +		ctx->scrub = kcalloc(scrub_cnt, sizeof(*ctx->scrub), GFP_KERNEL);
+> +		if (!ctx->scrub) {
+> +			ret = -ENOMEM;
+> +			goto groups_free;
+> +		}
+> +	}
+> +
+>  	attr_gcnt = 0;
+>  	for (feat = 0; feat < num_features; feat++, ras_features++) {
+>  		switch (ras_features->ft_type) {
+> -		/* Add feature specific code */
+> +		case RAS_FEAT_SCRUB:
+> +			if (!ras_features->scrub_ops)
+> +				continue;
+
+Continue?
+
+I think fail. What is a scrub feature good for if it doesn't have ops?
+
+> +			if (scrub_inst != ras_features->instance)
+> +				goto data_mem_free;
+> +			dev_data = &ctx->scrub[scrub_inst];
+> +			dev_data->instance = scrub_inst;
+> +			dev_data->scrub_ops = ras_features->scrub_ops;
+> +			dev_data->private = ras_features->ctx;
+> +			ret = edac_scrub_get_desc(parent, &ras_attr_groups[attr_gcnt],
+> +						  ras_features->instance);
+> +			if (ret)
+> +				goto data_mem_free;
+> +			scrub_inst++;
+> +			attr_gcnt++;
+> +			break;
+>  		default:
+>  			ret = -EINVAL;
+> -			goto groups_free;
+> +			goto data_mem_free;
+>  		}
+>  	}
+>  
+
+...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
