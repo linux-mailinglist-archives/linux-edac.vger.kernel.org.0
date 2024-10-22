@@ -1,311 +1,261 @@
-Return-Path: <linux-edac+bounces-2185-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2186-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71C7D9AB666
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 21:06:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AFE19AB712
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 21:42:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9A34B2141C
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 19:05:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 279A22849C3
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 19:42:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BDC1C9ECC;
-	Tue, 22 Oct 2024 19:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93DD1CB512;
+	Tue, 22 Oct 2024 19:42:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="QCuIUCEj"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qAPWIx8F"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2051.outbound.protection.outlook.com [40.107.243.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2401C9DD3;
-	Tue, 22 Oct 2024 19:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729623956; cv=none; b=FancA4/vNEsrsx3Rt/w7v76m0JfpKVAFM71pMG1GRAT9/ARYYhoH0yMwBJRAUBk+ROTP4Ic7sJpJKdf0qCxg8/YAqAIsyODWasIYnfwAfBmrW6tr+udf+1i5SUHNQde4Q4dx4/DQqeATDUhljvgOnzz+N+gW1gh2s0JH0FuMq7Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729623956; c=relaxed/simple;
-	bh=Wn0mViEOFlicqTJRkmLe1dsuAo5+z2xIhCVNhEWGFyQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=od+ViT9bcIusMTSGfnMASxGaE35Bd5g7Lly2eUchywWtj/VOJgFMxp49NzAJW11O2cGzALabmtoT/88lVKzcPw7rLDDC6T9/f1owSCcY1b/7pmH75WsHz7ke6FBu84QYglbzttB+7t6ix+u3RstJT4CNjFIwthkTAOVKM51mayE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=QCuIUCEj; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B99F240E0198;
-	Tue, 22 Oct 2024 19:05:49 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id q3aQ9N_t_KX4; Tue, 22 Oct 2024 19:05:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1729623944; bh=ppGZ1xT0ZqqGN7Q64cHQWTKY4xHYzn5soCR639b+QDo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QCuIUCEjsFCP18Md2JNqMqIn1FwuwkZ2vZnBwxxUmRu0qMG2llbF1LFHGb1ZpD46G
-	 vFcAVNROerVPlayap1OFa/NFoym1ZlY5A0idJcdPJk9XwpuedUSimvD2v4FzEVjU2C
-	 vF40FFj6uOHNBfH04Vn6nAfHNURxDBwssmQ9T+EYn498FqZpIrXoMMSsGH9t5X5WgH
-	 +i50AsUiLvbjF5vnDfaA/zDFtSkVp0rxR5wi2Peg8BfO4e05snsr4FzG1idjIHBuYx
-	 VueK1zwtMdEVkS3scEeGe3EnUa2ri4iQjyGrw2HifTOOkh5lUmr8HxFAJhR5LW2hTb
-	 o/6MnHpPXXGcNo4KwuZQVUK958nSPa0WKU6BB6DvTCEel7TJ+hcfWtzrzkD6oLN/OA
-	 IdR1y/BguKgE40mGAssz3hq1PrAk8bKPPSd7f44TetrU4yKX3K+oeKQA05VsjqHZo9
-	 3tnheR6/o515Bu7XeH4kS2YPnqCuZmKrxyfKWkLjTfnn82P+Cncm3GtT6lj40yuTRy
-	 0ZVLrjzGSM+LvUUFuYH/ooTeYOE9pf/zXqe5On30mJistYc+EC7ZDEluVHdvRkdoYr
-	 +2Lu8jmdp+go0EE3FBx6MP1E/DDbq7Bf6UfFPW3TXe1hkDIKDCM12gbXNEveoqV1xa
-	 oWAJYSJeKVcKHM9Y32+NwBN0=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 29F7340E015F;
-	Tue, 22 Oct 2024 19:05:01 +0000 (UTC)
-Date: Tue, 22 Oct 2024 21:04:54 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: shiju.jose@huawei.com
-Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com,
-	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
-	dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
-	duenwen@google.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
-	wanghuiqiang@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH v13 02/18] EDAC: Add scrub control feature
-Message-ID: <20241022190454.GIZxf3VkmLVR-JLeUc@fat_crate.local>
-References: <20241009124120.1124-1-shiju.jose@huawei.com>
- <20241009124120.1124-3-shiju.jose@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D758C1A2547;
+	Tue, 22 Oct 2024 19:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729626143; cv=fail; b=jkPXOyFZh2LRxDEvQKEfhmbBwuINBnTpGTXgrlaLwUAaDOsS2RGTaW+xC6hoPcUBoo9FmGpVDlkjNvSGkIFYGBpCoX5yg9fjYb+bV/8UEeojXO8Yj00+sP15wP6Vq8ES9gNwXyROnX+zjca89weaXvlHeP8ic1ld572wfDYbrMY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729626143; c=relaxed/simple;
+	bh=hD6g1RuI8DboAtdoGiDaqhlO/pu4+ntreUChx6I5aaE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vt6ngx0OZO9B7yPPCkROEnFK3SdgGHLQ+/JEbIJejfpNGt8Wb+faShowdLlK6vkrKb71owThLDma7W2AVgKDcJCvCsgk4LRty1n0CFWYtSoXjrQkjmugjSC2bJpSaxYKSDWP3HHMBF7o6NEr+YzqxBtoONrnprqGC8ZIGmo+9z0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qAPWIx8F; arc=fail smtp.client-ip=40.107.243.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=chwU+NS2Gb5WuIroAl4xa2dFPXfDPsl0cbmwHe9ZuDBi/byd8HcPGxIQ22JTFK8DiCR5hP7nSUiXf6ZbSWXXqITRakSw3mpPU6Ton9qC/30Mj/FInovZ+ExRZ7e+Y5Y+xPBr0MYVEotM19WtJLgAT9albVVlhijUVIJhCApSVQ4XgNYWPaxs47XIlqKsOx3Ov/Ha7ndmRpLOQFRG3VgU5BJSaSDpj35bP4oQLneSGfXqy/9jXdWjRero2JcmDwQ9+BWd5ecgBPi9m3Cs91HQ0iYvOcbWIHFrpiIPp6pvyaIRoxMJDOpGbuAcnXFtkss6Q55d8aD9lo+Kmlp7HeJz5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sSxr08FMIH5I2zUA5rY080r77IIqXLmdvXWinhS+Cls=;
+ b=X3UXVqu4j1uv52YOeGj4wl4oOwuixa2ATfUSlrIHf6HqWK1zLcaf0kbtVpKeV/yGu04eDc8Ba6gYzqI+1E4H20D8nGOwxjOsI8UMeewZGTNV6CPrhSZYotqHYVG08MkhVgt1VNtJ8XyDR6Lxx5fzxcPSyBZ8ddcyOZ/0fG7EHlOTDL3g9HTmjt1TSj7YZ6XNT2fNdzs56uqYZ/slea1Nyu5xNYphsa8DBuxz6Tut9rvER2xct+8oqlVpTX7epnYxuHh7eAbVkyB6UUvMEel8eEh0yfDCaN29nwnPTjUJrrO/eT25kBtipMQgRXE3JwvY0n5EG65vtAb0jmwogmeAuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sSxr08FMIH5I2zUA5rY080r77IIqXLmdvXWinhS+Cls=;
+ b=qAPWIx8Fuk4YFSbAPwZTpAySBSVvMd0raMZ9AC2J6ZXjWEr8y7z4w56VOCFR/qTGINr/hDrM9lOwGZjqYs+oWKhd8z+xNdR7c8aPFqB0Zj8JtizuVevb9npx47R+Qa11LJzryUcuJfsuUEWbJ1eIPke9lnQ1iPwukRjTyOQ705M=
+Received: from SJ0PR13CA0099.namprd13.prod.outlook.com (2603:10b6:a03:2c5::14)
+ by DS0PR12MB6583.namprd12.prod.outlook.com (2603:10b6:8:d1::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Tue, 22 Oct
+ 2024 19:42:14 +0000
+Received: from MWH0EPF000989E9.namprd02.prod.outlook.com
+ (2603:10b6:a03:2c5:cafe::82) by SJ0PR13CA0099.outlook.office365.com
+ (2603:10b6:a03:2c5::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16 via Frontend
+ Transport; Tue, 22 Oct 2024 19:42:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MWH0EPF000989E9.mail.protection.outlook.com (10.167.241.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8093.14 via Frontend Transport; Tue, 22 Oct 2024 19:42:11 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 22 Oct 2024 14:42:09 -0500
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
+	<qiuxu.zhuo@intel.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<rostedt@goodmis.org>, <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
+	<john.allen@amd.com>, <avadhut.naik@amd.com>
+Subject: [PATCH v7 0/5] MCE wrapper and support for new SMCA syndrome MSRs
+Date: Tue, 22 Oct 2024 19:36:26 +0000
+Message-ID: <20241022194158.110073-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241009124120.1124-3-shiju.jose@huawei.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E9:EE_|DS0PR12MB6583:EE_
+X-MS-Office365-Filtering-Correlation-Id: 024351f1-0838-4394-7ec0-08dcf2d19f2b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?jmS4+b4B9mGsxsyBrgeXonDe/Nb1RuREOUJdReFw9aQrcFe9oq73x+ZcCXD9?=
+ =?us-ascii?Q?ZF/ZsxXBZBlkb+N/yUYnj54dRYgypN5fojRHWgB63F+QtuDgj4i51TPAlL+M?=
+ =?us-ascii?Q?yox+AZRmacbqSDiaHDbnrTzStMz50fxEuwy7DPbF4OtKs1v/XyMs0Y3kvI+0?=
+ =?us-ascii?Q?3Pb+0S32vdMKi8P5Odleo85JuN40xt1StLM2fpJeHt8GPLNm1VXISkS6uXlJ?=
+ =?us-ascii?Q?a5VFpB4y6b0rTLCIUvr+Xuy1Rz9aLwRLtoh1E8q6I1vtr/e3LmIFsErlt4Et?=
+ =?us-ascii?Q?pn8jHk0CTUIDAYw1ejdiXBep+7tO27JQBtY5lKNN6EJBh8ysdNx43nnVY4b2?=
+ =?us-ascii?Q?h9H4B9D9zqaki9oibYk07PW17KFpdZ77YFFl2bucMCqd1bbD/WXHWutTrLom?=
+ =?us-ascii?Q?tmi8R18Bd2dxWvfDORQdtlyeGf0e78f7w9mn51mSpOFhIiIP24AymOvKPHk2?=
+ =?us-ascii?Q?x8tipS57Vnuz6O2hmFTU/HD6T0v+MuJmrWadX0XMWyXmLWfQc2n+htt0Yz8/?=
+ =?us-ascii?Q?xvWejPfQuItJSWK36K0gAWEzybd3OofY8XuGfBMpRwpnn6rROHtoeyju+a4a?=
+ =?us-ascii?Q?c2zCZ11CLZf0q9ibo80YOtWMrFapzEZcAv4Ck5nl+WTTs3cekiCQDwE/OzAJ?=
+ =?us-ascii?Q?HwSoYpLibnINAXVwFZBT8I73QRRLsQ+eQLPDGWpB6iy7kMlvqh4oOsZ8/8ix?=
+ =?us-ascii?Q?hlf+bpDX9Jp5VJIKqUtIiO5hfhJhevxM5fmNg6r6rNG8eU6sONZd5kOLN2ea?=
+ =?us-ascii?Q?diw5cYfrp9bJ8MoLplhElYKCSzX0FQt75Pp5QJlZ4/h0Y6om38+XygHalT2y?=
+ =?us-ascii?Q?jBtSsBIErEYwEPcj83sGazm+sYgepRGdUxHbFfeKS3nexkMs5GxV9A7W4hSZ?=
+ =?us-ascii?Q?N4LUspcTwETkT0WPP6XY/UYke75llCZdoinDwSuxwa7NMifNszVW/2SLkQ4C?=
+ =?us-ascii?Q?PEcw0wzLJ7YBOngOxunXAjW/S7xKnjgHjSJ4IZvgDg/zKLtyZRm9SRsTh0NR?=
+ =?us-ascii?Q?e+ZnLWgS7p8qGWomyVVswB+oLpEmNq+h3aOZRxKYD+7dppvjjMYtjDODgYFz?=
+ =?us-ascii?Q?5hWJDZxS4YIFrUx4YyXokSI+pp8ZEsSN0zZcwsr10wKWbbSEDwYPnKXTWldH?=
+ =?us-ascii?Q?M88OTt2Pn33sdZP1B724/X9pMn481DdE+y8KIIeDCzPJO2j1MihBMogY7Kob?=
+ =?us-ascii?Q?iIbJH2qL56kG6k8MGwSbzj8MYwqNKKQe+4klnpIT7Mthb26ZW7KwkVuwbwnX?=
+ =?us-ascii?Q?ZJ7/OkcAxaa4s9ZJtu7PLb9Ltc1JxtC++53PTUHqNafvSUSuuI3JtPkVYAoP?=
+ =?us-ascii?Q?mIViQXgsbwS4w5iTqf/umdPsA1sKiYcEU2g11ZOF+xM/JxQit4Dj4axyhQog?=
+ =?us-ascii?Q?bs1uD6hZ5vaSoD6KMRaMqRIz9IoX6DfJSLrLjEcjeyKfgi1pKsxDOia5UqFD?=
+ =?us-ascii?Q?ntHBQSpuP7U=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 19:42:11.0407
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 024351f1-0838-4394-7ec0-08dcf2d19f2b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000989E9.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6583
 
-On Wed, Oct 09, 2024 at 01:41:03PM +0100, shiju.jose@huawei.com wrote:
-> diff --git a/Documentation/ABI/testing/sysfs-edac-scrub b/Documentation/ABI/testing/sysfs-edac-scrub
-> new file mode 100644
-> index 000000000000..b4f8f0bba17b
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-edac-scrub
-> @@ -0,0 +1,69 @@
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		The sysfs EDAC bus devices /<dev-name>/scrubX subdirectory
-> +		belongs to an instance of memory scrub control feature,
-> +		where <dev-name> directory corresponds to a device/memory
-> +		region registered with the EDAC device driver for the
-> +		scrub control feature.
-> +		The sysfs scrub attr nodes would be present only if the
-> +		client driver has implemented the corresponding attr
-> +		callback function and passed in ops to the EDAC RAS feature
-> +		driver during registration.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/addr_range_base
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) The base of the address range of the memory region
-> +		to be scrubbed (on-demand scrubbing).
+This patchset adds a new wrapper for struct mce to prevent its bloating
+and export vendor specific error information. Additionally, support is
+also introduced for two new "syndrome" MSRs used in newer AMD Scalable
+MCA (SMCA) systems. Also, a new "FRU Text in MCA" feature that uses these
+new "syndrome" MSRs has been addded.
 
-Why does this sound more complicated than it is?
+Patch 1 adds the new wrapper structure mce_hw_err for the struct mce
+while also modifying the mce_record tracepoint to use the new wrapper.
+ 
+Patch 2 introduces a new helper function, __print_dynamic_array(), for
+logging dynamic arrays through tracepoints.
+ 
+Patch 3 adds support for the new "syndrome" registers. They are read/printed
+wherever the existing MCA_SYND register is used.
+ 
+Patch 4 updates the function that pulls MCA information from UEFI x86
+Common Platform Error Records (CPERs) to handle systems that support the
+new registers.
+ 
+Patch 5 adds support to the AMD MCE decoder module to detect and use the
+"FRU Text in MCA" feature which leverages the new registers.
+ 
+NOTE:
 
-Why isn't this simply "addr" and the next one "size"?
+This set was initially submitted as part of the larger MCA Updates set.
 
-On-demand scrubbing should scrub at address "addr" and "size" bytes. Can't get
-any simpler than that.
+v1: https://lore.kernel.org/linux-edac/20231118193248.1296798-1-yazen.ghannam@amd.com/
+v2: https://lore.kernel.org/linux-edac/20240404151359.47970-1-yazen.ghannam@amd.com/
+However, since the MCA Updates set has been split up into smaller sets,
+this set, going forward, will be submitted independently.
 
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/addr_range_size
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) The size of the address range of the memory region
-> +		to be scrubbed (on-demand scrubbing).
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/enable_background
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) Start/Stop background(patrol) scrubbing if supported.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/enable_on_demand
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) Start/Stop on-demand scrubbing the memory region
-> +		if supported.
+Having said that, this set set depends on and applies cleanly on top ofthe below two sets.
 
-Why do you need a separate "enable" flag?
+[1] https://lore.kernel.org/linux-edac/20240521125434.1555845-1-yazen.ghannam@amd.com/
+[2] https://lore.kernel.org/linux-edac/20240523155641.2805411-1-yazen.ghannam@amd.com/
 
-Why can't it be: "writing into "addr" starts the on-demand scrubbing"?
+Changes in v2: 
+ - Drop dependencies on sets [1] and [2] above and rebase on top of
+   tip/master.
+  
+Changes in v3:
+ - Move wrapper changes required in mce_read_aux() and mce_no_way_out()
+   from second patch to the first patch.
+ - Modify commit messages for second and fourth patch per feedback
+   received.
+ - Add comments to explain purpose of the new wrapper structure.
+ - Incorporate suggested touchup in the third patch.
+ - Remove call to memset() for the frutext string in the fourth patch.
+   Instead, just ensure that the string is NULL terminated.
+ - Fix SoB chains on all patches to properly reflect the patch path.
 
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/min_cycle_duration
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RO) Supported minimum scrub cycle duration in seconds
-> +		by the memory scrubber.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/max_cycle_duration
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RO) Supported maximum scrub cycle duration in seconds
-> +		by the memory scrubber.
-> +
-> +What:		/sys/bus/edac/devices/<dev-name>/scrubX/current_cycle_duration
-> +Date:		Oct 2024
-> +KernelVersion:	6.12
-> +Contact:	linux-edac@vger.kernel.org
-> +Description:
-> +		(RW) The current scrub cycle duration in seconds and must be
-> +		within the supported range by the memory scrubber.
+Changes in v4:
+ - Resolve kernel test robot's warning on the use of memset() in
+   do_machine_check().
+ - Rebase on top of tip/master to avoid merge conflicts.
 
-What are those three good for and why are they exposed?
+Changes in v5:
+ - Introduce a new helper function __print_dynamic_array() for logging
+   dynamic arrays through tracepoints.
+ - Remove "len" field from the modified mce_record tracepoint since the
+   length of a dynamic array can be fetched from its metadata.
+ - Substitute __print_array() with __print_dynamic_array().
 
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index 4edfb83ffbee..a96a74de8b9e 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -10,6 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
->  
->  edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
->  edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
-> +edac_core-y	+= scrub.o
->  
->  edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
->  
-> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-> index 0b8aa8150239..0c9da55d18bc 100644
-> --- a/drivers/edac/edac_device.c
-> +++ b/drivers/edac/edac_device.c
-> @@ -576,6 +576,7 @@ static void edac_dev_release(struct device *dev)
->  {
->  	struct edac_dev_feat_ctx *ctx = container_of(dev, struct edac_dev_feat_ctx, dev);
->  
-> +	kfree(ctx->scrub);
->  	kfree(ctx->dev.groups);
->  	kfree(ctx);
->  }
-> @@ -610,7 +611,9 @@ int edac_dev_register(struct device *parent, char *name,
->  		      const struct edac_dev_feature *ras_features)
->  {
->  	const struct attribute_group **ras_attr_groups;
-> +	struct edac_dev_data *dev_data;
->  	struct edac_dev_feat_ctx *ctx;
-> +	int scrub_cnt = 0, scrub_inst = 0;
->  	int attr_gcnt = 0;
->  	int ret, feat;
+Changes in v6:
+ - Introduce to_mce_hw_err macro to eliminate changes required in notifier
+   chain callback functions.
+ - Use the above macro in amd_decode_mce() notifier chain callback.
+ - Change third parameter of __mc_scan_banks() to a pointer to the new
+   wrapper, struct mce_hw_err.
+ - Rebase on top of tip/master.
 
-The EDAC tree preferred ordering of variable declarations at the
-beginning of a function is reverse fir tree order::
+Changes in v7:
+ - Fix initialization of struct mce_hw_err *final in do_machine_check().
+ - Add parenthesis around el_size parameter in __print_dynamic_array
+   macro.
+ - Add Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com> tag.
+ - Change second parameter of __print_dynamic_array from 8 to sizeof(u8)
+   to ensure that the dynamic array is parsed using a u8 pointer instead
+   of u64 pointer.
+ - Rebase on top of tip/master.
 
-	struct long_struct_name *descriptive_name;
-	unsigned long foo, bar;
-	unsigned int tmp;
-	int ret;
+Links:
+v1: https://lore.kernel.org/linux-edac/20240530211620.1829453-1-avadhut.naik@amd.com/
+v2: https://lore.kernel.org/linux-edac/20240625195624.2565741-1-avadhut.naik@amd.com/
+v3: https://lore.kernel.org/linux-edac/20240730185406.3709876-1-avadhut.naik@amd.com/T/#t
+v4: https://lore.kernel.org/linux-edac/20240815211635.1336721-1-avadhut.naik@amd.com/
+v5: https://lore.kernel.org/linux-edac/20241001181617.604573-1-avadhut.naik@amd.com/
+v6: https://lore.kernel.org/linux-edac/20241016064021.2773618-1-avadhut.naik@amd.com/
 
-The above is faster to parse than the reverse ordering::
+Avadhut Naik (2):
+  x86/mce: Add wrapper for struct mce to export vendor specific info
+  x86/mce, EDAC/mce_amd: Add support for new MCA_SYND{1,2} registers
 
-	int ret;
-	unsigned int tmp;
-	unsigned long foo, bar;
-	struct long_struct_name *descriptive_name;
+Steven Rostedt (1):
+  tracing: Add __print_dynamic_array() helper
 
-And even more so than random ordering::
+Yazen Ghannam (2):
+  x86/mce/apei: Handle variable register array size
+  EDAC/mce_amd: Add support for FRU Text in MCA
 
-	unsigned long foo, bar;
-	int ret;
-	struct long_struct_name *descriptive_name;
-	unsigned int tmp;
+ arch/x86/include/asm/mce.h                 |  38 +++-
+ arch/x86/include/uapi/asm/mce.h            |   3 +-
+ arch/x86/kernel/cpu/mce/amd.c              |  31 +--
+ arch/x86/kernel/cpu/mce/apei.c             | 109 ++++++++---
+ arch/x86/kernel/cpu/mce/core.c             | 217 ++++++++++++---------
+ arch/x86/kernel/cpu/mce/genpool.c          |  18 +-
+ arch/x86/kernel/cpu/mce/inject.c           |   4 +-
+ arch/x86/kernel/cpu/mce/internal.h         |   4 +-
+ drivers/edac/mce_amd.c                     |  25 ++-
+ include/trace/events/mce.h                 |  49 ++---
+ include/trace/stages/stage3_trace_output.h |   8 +
+ include/trace/stages/stage7_class_define.h |   1 +
+ samples/trace_events/trace-events-sample.h |   7 +-
+ 13 files changed, 334 insertions(+), 180 deletions(-)
 
->  
-> @@ -620,7 +623,10 @@ int edac_dev_register(struct device *parent, char *name,
->  	/* Double parse to make space for attributes */
->  	for (feat = 0; feat < num_features; feat++) {
->  		switch (ras_features[feat].ft_type) {
-> -		/* Add feature specific code */
-> +		case RAS_FEAT_SCRUB:
-> +			attr_gcnt++;
-> +			scrub_cnt++;
-> +			break;
->  		default:
->  			return -EINVAL;
->  		}
-> @@ -639,13 +645,36 @@ int edac_dev_register(struct device *parent, char *name,
->  		goto ctx_free;
->  	}
->  
-> +	if (scrub_cnt) {
-> +		ctx->scrub = kcalloc(scrub_cnt, sizeof(*ctx->scrub), GFP_KERNEL);
-> +		if (!ctx->scrub) {
-> +			ret = -ENOMEM;
-> +			goto groups_free;
-> +		}
-> +	}
-> +
->  	attr_gcnt = 0;
->  	for (feat = 0; feat < num_features; feat++, ras_features++) {
->  		switch (ras_features->ft_type) {
-> -		/* Add feature specific code */
-> +		case RAS_FEAT_SCRUB:
-> +			if (!ras_features->scrub_ops)
-> +				continue;
 
-Continue?
-
-I think fail. What is a scrub feature good for if it doesn't have ops?
-
-> +			if (scrub_inst != ras_features->instance)
-> +				goto data_mem_free;
-> +			dev_data = &ctx->scrub[scrub_inst];
-> +			dev_data->instance = scrub_inst;
-> +			dev_data->scrub_ops = ras_features->scrub_ops;
-> +			dev_data->private = ras_features->ctx;
-> +			ret = edac_scrub_get_desc(parent, &ras_attr_groups[attr_gcnt],
-> +						  ras_features->instance);
-> +			if (ret)
-> +				goto data_mem_free;
-> +			scrub_inst++;
-> +			attr_gcnt++;
-> +			break;
->  		default:
->  			ret = -EINVAL;
-> -			goto groups_free;
-> +			goto data_mem_free;
->  		}
->  	}
->  
-
-...
-
+base-commit: d7ec15ce8bdc955ce383123c4f01ad0a8155fb90
 -- 
-Regards/Gruss,
-    Boris.
+2.43.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
