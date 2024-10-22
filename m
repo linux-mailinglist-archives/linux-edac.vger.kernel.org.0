@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-2188-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2189-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3086D9AB716
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 21:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB2729AB71B
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 21:43:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE8291F24182
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 19:43:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B0461F24125
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 19:43:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75FA1CC14A;
-	Tue, 22 Oct 2024 19:42:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E071CBEA9;
+	Tue, 22 Oct 2024 19:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zk6OIsjB"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qztKvnon"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2080.outbound.protection.outlook.com [40.107.220.80])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2047.outbound.protection.outlook.com [40.107.95.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D4C1CBEBE;
-	Tue, 22 Oct 2024 19:42:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E571CBEA4;
+	Tue, 22 Oct 2024 19:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729626160; cv=fail; b=ownPH8c/swUO4Ao8l+ndJYcT+z8gG4RUWLg/KZTIRQfjYtPh2SYHvnRC5QOD4Zzc78vli1uGvSdsjUlgLOfuITE74Rr7KyCsgDG3ASnY8+K+qEFD7iX8J3RdL8NBfCDWIKyBuw3RNtQMxqM5mv0yv3mk379hrtTgyEBAJ0GnEG0=
+	t=1729626177; cv=fail; b=cxt7OJdxOROGgglZ0LSgbjxNIweKqVwSgFy3o61pZC5QA3qNJFcvWDMmDDjyC+M3hC5cw7HyDNXVTzgiTbGUwnHl7iSR2hlgxqmjq1TpUxjX9Q5gYE/EpasYHNnmr3LuddYRqehLTskg3MrqSqd7SArQV8c5W2eMsJtMyp+Swps=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729626160; c=relaxed/simple;
-	bh=+p3FZ9tuqUwudT2pgTVSrmLaB5UvxyZoUapZxDNJQbs=;
+	s=arc-20240116; t=1729626177; c=relaxed/simple;
+	bh=kOGx/P6fumAv39z/vhTTgWrpfFufoTn32JK5PAa+Xwg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KUWFSuRbeKPIMtW2EYxu7fRZ9gqv7NXceCi7zDPQV4BrQ6mrPdipciKbw8pXNHttT6Fl44kNk05uwOPzi9RVWS4eQh/v/IZEZ4LYQjDM3+TYdBdfAf/iZlfLUN264Zl5/xMcKhRKV+OB+w53QoqbWaRQVuKtPonuE4JREQpxPfI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=zk6OIsjB; arc=fail smtp.client-ip=40.107.220.80
+	 MIME-Version:Content-Type; b=ugk2S1JbUGDrekCLMlKtiR53nil4rRSZMZMzzcJQcVKqX+HRI/Zx2gbNCOqDB8HS2wmtNGT8sQxXPdnTw2/7G3QB/60OtR+Pr5C/asq9w7PKY6lffddiKTUwuRzUzgYc60xpRk+womwzjXjbFvdXud9iD61IvWon3ngmTErcuJw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qztKvnon; arc=fail smtp.client-ip=40.107.95.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rRIzZahdLGXggE8ZiNj1FdEuBxe50kBPuRMZGjDy8VbUSYT+cWTI5XRZ/bGxoEzlBM2zr0szlVkfs5SEIwurnaw75SJX5YxpFTtXTd8ZAPIVXtQFQOqXXxrP+iHxsr3pfYwxB3XSHrX4mCPiF0sHwBprvh4EIjn2tXYEEsGlpCVvmKxDfn8PlNTp4TOZgBQi4n+UugmhZOkS91On+P4hcMRWiZkVkimdmkyViJxgl9LBgcJiAbBoPBprJInoWvYAU23gB+9/0WZPrJQl/FWmHHpHo3JOB0GHYiMC7P7S7nZl+xxpg0WS7LZ4+6PbJjYglT4iVlgKaOx0+i+SQ7uwuQ==
+ b=HDlCQNWpH/VyYVdLWeKr09OLqzx3wPTr4cv6Pwp/1F2YryFyASIJrCulVwu/LQdZbZXMAsCTIftUuyEIqtU6Tqnhqm865Xl+yugtgY8fZkxI7h4kiFN6v+7rD98dNySJBcHT98ThxgSAydEX3GkCLr90JU1eqCO/856TA1t1VbFdZFkWC8rSNblOfASfxOcjAtzDf1p+tBnoyi8fAeVhGeyk8unZFEEkPmPT7RfPF6vLuH9eI3+sNcSaQEPSVqrrhRrjl3tXgeVJEh5h89HUR1i3l8UJWhxb1pEEX/Vnw0ZM1Mxy002SN/+ORqKRRwRyKWqb9VF6cqM1CaK3z0Tspg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pu8AQQlOesqy8qCKYnE5LpKyJKGVwMXwnPedQzvGqYc=;
- b=wh6H4SYiIUxLCx6HSegPzYIchN2jAE6FX8nzFN4Z+Ti9Y0aCvcST1nsJqJNdK20DbjFOziWM35fWWKlUbptTmGO/SWD2ka4Bvy43s/VKo/zPjCy0wIcWC+jXqMhxXWCWNIPLGYCBG0rm9QlhImZH6keo7EUtO2EJjrkBwaCTWJPfilgZr2jA1wzSGp215LIo5X9OUZwNYHxlyf6o4A0iBlPjmM+El4XR1/Gui+MJn5cvDaqfAA2ZJ3auTZUAM4yLIx1XT5K2YTWhKgUyQDZQ6gYaR4/NyLlLVN6hzOUNIbV+F+B5ApuMzwK8fNWcSiH6a4mECeZ4hWQL366hYznB0g==
+ bh=HzS2wsJYFy7vV+z0Y4DrnCfvDjnqJSNWkFEcQol+/V8=;
+ b=kzHtPzCY/nad/zCqoZ2wTAEFS1xol7CWhO45wbPUFvVfGvvmW+4SYvpvsCkEreIMooSYYhO2STcQoWFRALJjAY6JYCodI/K1qkKN9DPG1ZRFYUK2MY7RZ+zJTWxqhdQRU2ri0Iz3jEWj79CMDVaviqlz6s6lmFnSpCLK1+Koq2WdUHpTP7+IMlt22VekqOiiWR1KBRMnvBnkg/rlae+/yQ9zOjPCijA5da7OUBD22FSXHnNPYFkIq0s0Tnwscem+Eryf9upbu9fVbO0xOy9Lov5NUzAapvzxuGgiZR1B/bmvzLK6SZ1KiVjNdVh2j/IGF5b8rrgR9ra/keInaFAOmA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pu8AQQlOesqy8qCKYnE5LpKyJKGVwMXwnPedQzvGqYc=;
- b=zk6OIsjBWIgfeGKlczM+SGW2RMhx4QmiSRCRQct0LtPn2nKLr/a//zW7gfPEC9gSPpJzPGBCZ/sGLfNBerKfuvvr+GSc5rVFk4dm1YvCxmC+WkH5S8e+qp3zBrjhsxcWpoax3BIi8njvhOwB3/SmFfYcRv6ZT+u1mA28KvrRM+E=
-Received: from BYAPR02CA0006.namprd02.prod.outlook.com (2603:10b6:a02:ee::19)
- by DS0PR12MB8786.namprd12.prod.outlook.com (2603:10b6:8:149::17) with
+ bh=HzS2wsJYFy7vV+z0Y4DrnCfvDjnqJSNWkFEcQol+/V8=;
+ b=qztKvnonHvgu1wK4oT56C+3DBxzSj6Gd9LF7/78Ohq9PoT066u4Y3Tui2niQmvKybQw5lja2wxLmjQcrlKJTQua6AS49JlkO16a9UY80UEHsQDaVVe3nmpTKedIumXTCrsIEAHoNOpaD7S6gb5DNc33RNnakHiJeANtmju1EkEA=
+Received: from BYAPR02CA0028.namprd02.prod.outlook.com (2603:10b6:a02:ee::41)
+ by LV8PR12MB9136.namprd12.prod.outlook.com (2603:10b6:408:18e::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.17; Tue, 22 Oct
- 2024 19:42:34 +0000
+ 2024 19:42:50 +0000
 Received: from MWH0EPF000989EC.namprd02.prod.outlook.com
- (2603:10b6:a02:ee:cafe::80) by BYAPR02CA0006.outlook.office365.com
- (2603:10b6:a02:ee::19) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:a02:ee:cafe::23) by BYAPR02CA0028.outlook.office365.com
+ (2603:10b6:a02:ee::41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16 via Frontend
- Transport; Tue, 22 Oct 2024 19:42:34 +0000
+ Transport; Tue, 22 Oct 2024 19:42:50 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,11 +65,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  MWH0EPF000989EC.mail.protection.outlook.com (10.167.241.139) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8093.14 via Frontend Transport; Tue, 22 Oct 2024 19:42:33 +0000
+ 15.20.8093.14 via Frontend Transport; Tue, 22 Oct 2024 19:42:49 +0000
 Received: from titanite-d354host.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 22 Oct 2024 14:42:32 -0500
+ 15.1.2507.39; Tue, 22 Oct 2024 14:42:48 -0500
 From: Avadhut Naik <avadhut.naik@amd.com>
 To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
 	<linux-trace-kernel@vger.kernel.org>
@@ -77,9 +77,9 @@ CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
 	<qiuxu.zhuo@intel.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
 	<rostedt@goodmis.org>, <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
 	<john.allen@amd.com>, <avadhut.naik@amd.com>
-Subject: [PATCH v7 2/5] tracing: Add __print_dynamic_array() helper
-Date: Tue, 22 Oct 2024 19:36:28 +0000
-Message-ID: <20241022194158.110073-3-avadhut.naik@amd.com>
+Subject: [PATCH v7 3/5] x86/mce, EDAC/mce_amd: Add support for new MCA_SYND{1,2} registers
+Date: Tue, 22 Oct 2024 19:36:29 +0000
+Message-ID: <20241022194158.110073-4-avadhut.naik@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241022194158.110073-1-avadhut.naik@amd.com>
 References: <20241022194158.110073-1-avadhut.naik@amd.com>
@@ -95,143 +95,280 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989EC:EE_|DS0PR12MB8786:EE_
-X-MS-Office365-Filtering-Correlation-Id: 507c4a33-8f90-4066-f703-08dcf2d1ac96
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989EC:EE_|LV8PR12MB9136:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8415452b-5876-4c08-fb89-08dcf2d1b63c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|1800799024|36860700013|376014|82310400026;
+	BCL:0;ARA:13230040|36860700013|376014|7416014|1800799024|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?WIBdB9AbH28Kso6UwvaLh1UyhkZ8wyALygAa9GNwCQtdG0k858MAW8L/Ac8p?=
- =?us-ascii?Q?cbxeCiI6hWX0AQmBcYUm9+Gp2qWdtG6jskFczyqxiFN1crH9fl9Zj0X+e/HU?=
- =?us-ascii?Q?/XWoY/p0fyv+7UzPmZ6/PWeSjHO9rTZ2O7BkN4gBcualT3GyRQ5sF9+ME9DG?=
- =?us-ascii?Q?dFdZSxdorOWo/L42vFSD1H/tHSH3OtkyrPZYhKgV5f3soKw3OfZz35/JCP+X?=
- =?us-ascii?Q?ypXq7A7nmNgNuSy0Dy5nLee0d2qG2untW8+J5uQFMm6Qox9Jhx0M+GYIYxP/?=
- =?us-ascii?Q?wkneeueZKf2YPlgJ7H7+6inTh3WNFHMWik71u9s1N770yDE/9ygqRQTTVC9a?=
- =?us-ascii?Q?+dVYAoMUfvlKKaPhW5mOzGNnEqv249zwInp+5GEyh1QJeqms0zIm30WIGlYM?=
- =?us-ascii?Q?ziLJsrGAh2+vETPnr2wN5vFPcXgMjTpH4YzUJBfeI82q3belGU4ObzyIWS65?=
- =?us-ascii?Q?0x3vUr1AsPR3gRjfODFRyUrgmCULJTDUq4SIQtcOE3NUZ5m2tjiX18XUkMVJ?=
- =?us-ascii?Q?oALJVKgsKWQXBHPzg5JUcob0rpKOL0FP/g/LYGeDkphaUL+PBMuF/JnTWAkX?=
- =?us-ascii?Q?Gt30vj3E8OoiYqSaKS1sNXwfOWSCv3TIRbD84Ws/ZNeIF04UW7KjyeI7a89K?=
- =?us-ascii?Q?gG3cmZnxCS9qFVqm1vAu2oIyXD1KpOdgB28o81vdiB6otcUEyQG2IqrZuZCR?=
- =?us-ascii?Q?Jroz3Kz1Zn4uCcXs6DrCCD0w6QNOA8qRXHkHBJfN3QcnfD8HYuLXvbOV09Vq?=
- =?us-ascii?Q?ZchNVKBVHzOHI6gIaYlxgBLV3XzJjhtDtUrKhfXpuFnJ1ZTicxbyndd/5sif?=
- =?us-ascii?Q?6Hdry7AUj9jvVTfNcZE50d8b/QGmcXkZlm35amD+N5+h0PR72iaJ8vZv+EHv?=
- =?us-ascii?Q?QYQQdS2fwyBsQd9pSWRd4lT3Lk3BRznSG05UmuK6bSN43/skt0T+4YE0XR98?=
- =?us-ascii?Q?p4m1Zc3Nr+pTcTG4+MeYWSO9yoXcvXuJmeLkR7BhwtgOk4gLZt5XGyz5peAm?=
- =?us-ascii?Q?iqF48z9KOsQL+QCLAfrA5cJzSzdbcdLFIu1sC65diwDT32wjyo9fuUzG/mnW?=
- =?us-ascii?Q?xRWafCoalUA6ET/BRdudWpg+qWcK7oKFP7bybrBvNVIOmRqbARhIjAt6VAj9?=
- =?us-ascii?Q?lFgT7Guv2LPhZljs8Hfju55vfGtNeMJrkTgSoLjkGqQgTnKvbSqIjLkbYA19?=
- =?us-ascii?Q?nJ6QZ7tERQ9plfSJxBliO+NqKWcAuFXUCK90vt85fQwNC+lkxMkDR8xRYG5r?=
- =?us-ascii?Q?n9CFyO9caEuPjOHK63x82L98kbLUfmio2wju4JZ4I+H4xmNseC6KvlrFOMIO?=
- =?us-ascii?Q?ExqLDj5V5s04nU9UOLanux9I/HK8qWYZLfFIsENDsXOe6APIryWjmJ2SR2zw?=
- =?us-ascii?Q?taV3zTDYETQWMRWRPd80j/oz1ZtPwL5gxZffENwmQjFCaHK6Hw=3D=3D?=
+	=?us-ascii?Q?7cwxsVYN4M0/V55dq2fbg+sstcRydK1Cq8GNmTKlTLZd06ho3NixnIcwwxYs?=
+ =?us-ascii?Q?yCdhurl+imJty+bmwZ1KS4051UVYKoXRCpcxLSCwYVYsiR3CmSOlVkxmvnKu?=
+ =?us-ascii?Q?nhtqzKEoJNt6/bZ6Txj0L2GS4p8nGnsTo9drGzXgWU6/CHxNVtSqGMRECYGJ?=
+ =?us-ascii?Q?1kIeixSvRsQWnOdOlUDLarLVud6JM5fdbtYNbFG2KBWN86wAiwJgcYGH8qnt?=
+ =?us-ascii?Q?wuGeLSWfYItPLS5oHfnzm0TsdhsswXW/hYQMYRQ0QMIPY7ND0NKp5O2Xv5AN?=
+ =?us-ascii?Q?/v+IdMeKhjFN1tRzYOFp9t4jrr/NqMZaO4kkCOD94Lekqh/ps3cqbhLGRX+5?=
+ =?us-ascii?Q?50X0vbFsHoQI8/6en8/MICSpSPVaTRjRbuaszgb0sH3ne572rqA87cJNI+m+?=
+ =?us-ascii?Q?8Z3eFhgXpCFOacDnEDDwh4tuiV5X25VqGwJIBa03Os8OHGmN2RT9Kfw9sXIu?=
+ =?us-ascii?Q?hQG/GtS6iClGuGH/mMHxeDA+Q4cuTyEVn68W4BLGlKOsKCZV4rbqlsZ7QVrh?=
+ =?us-ascii?Q?zrzSGLnIEJvnexHVOexWXCgXQRmIBjhYTf7TW2SVikN/2m/hBmXcfXo78umt?=
+ =?us-ascii?Q?1rcMH1vSUtpTidmQOEOxNrvxq5dpzaM1xcUG9PC+gVQNdLsUQkvFaR2NSECS?=
+ =?us-ascii?Q?JIta1BQJLGea1MugRui2QIce7zhW/o+pfWxTJ2xdC8siW8gZiZgW4NMayZLw?=
+ =?us-ascii?Q?B+7QMisJ7BOHWXDzrChfZUH3adxS6pqGjgbCvNPEnya3cYmvTY15uJRC+okW?=
+ =?us-ascii?Q?ZYNcd5eiW+/E5SxLWhtCs+0QPTtABiKS0ABuJfb/9iwRNPGKzHeoDR1wC5BH?=
+ =?us-ascii?Q?q7n++XmUMiNO9dy7PZEnXo+v4R40CdtlIXVdvZgZkV+Qy3gpwDQTD9Qkb6G4?=
+ =?us-ascii?Q?2ZIgy9V8SbVL7OPNlChTvO+IW9UnlO/zgY2gRa7mlCxICnWVouoWzgPIrDhp?=
+ =?us-ascii?Q?yPgqcpPcDHbQ7nBsLfO7O8r2h11ZkdzNPkqfjsmm9TLmDth929w+azwyaFFV?=
+ =?us-ascii?Q?eESLdNXFrEFME4lq6U/nySM4VFaeCNE9QzySFcR31G8u0HBSCoubAPL1v8EK?=
+ =?us-ascii?Q?7nqIJzCTkuwCf3Tr65TZw/yx0oAaL2ClQVT8PzA7Vx+XX92Mrdk123ekA3p5?=
+ =?us-ascii?Q?Jfmibs2JBqOwq033iPUMCjVQavlgR7esRPeR2SIBl/E6KpB3mazJ/qJX03tp?=
+ =?us-ascii?Q?kl368ROkr/7gyJfbOYigqaR0oY8CaLKdVTafDJG9/7Cfzirpeopc2WFPMexm?=
+ =?us-ascii?Q?NcQHt/fQgGMTSyuPOSqkJmqJ6B0jNvyY60mfhGelLVpcZvMjZnoDtTervjSX?=
+ =?us-ascii?Q?uuXDXz0Uq9XsIgh7rcyYNcM81Kw3haeuu2gszbgwuDy9/Wr5c1Su5sL8O2Sf?=
+ =?us-ascii?Q?NU1pz7XHxUohAo8Mg4UJdKEAjbVA2O7Qe2Db8kwLgW3ypJq7vn9qnJvHvgxB?=
+ =?us-ascii?Q?9zXIYss959Y=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 19:42:33.5866
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 19:42:49.7741
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 507c4a33-8f90-4066-f703-08dcf2d1ac96
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8415452b-5876-4c08-fb89-08dcf2d1b63c
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	MWH0EPF000989EC.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8786
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9136
 
-From: Steven Rostedt <rostedt@goodmis.org>
+Starting with Zen4, AMD's Scalable MCA systems incorporate two new
+registers: MCA_SYND1 and MCA_SYND2.
 
-When printing a dynamic array in a trace event, the method is rather ugly.
-It has the format of:
+These registers will include supplemental error information in addition
+to the existing MCA_SYND register. The data within these registers is
+considered valid if MCA_STATUS[SyndV] is set.
 
-  __print_array(__get_dynamic_array(array),
-            __get_dynmaic_array_len(array) / el_size, el_size)
+Userspace error decoding tools like the rasdaemon gather related hardware
+error information through the tracepoints. As such, these two registers
+should be exported through the mce_record tracepoint so that tools like
+rasdaemon can parse them and output the supplemental error information
+like FRU Text contained in them.
 
-Since dynamic arrays are known to the tracing infrastructure, create a
-helper macro that does the above for you.
+[Yazen: Drop Yazen's Co-developed-by tag and moved SoB tag.]
 
-  __print_dynamic_array(array, el_size)
-
-Which would expand to the same output.
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 ---
+Changes in v2:
+[1] https://lore.kernel.org/linux-edac/20240521125434.1555845-1-yazen.ghannam@amd.com/
+[2] https://lore.kernel.org/linux-edac/20240523155641.2805411-1-yazen.ghannam@amd.com/
+
+1. Drop dependencies on sets [1] and [2] above and rebase on top of
+tip/master.
+
+Changes in v3:
+1. Move wrapper changes required in mce_read_aux() and mce_no_way_out()
+from this patch to the first patch.
+2. Add comments to explain the new wrapper's purpose.
+3. Modify commit message per feedback received.
+4. Fix SoB chain to properly reflect the patch path.
+
+Changes in v4:
+1. Rebase on top of tip/master to avoid merge conflicts.
+
 Changes in v5:
-Patch introduced in the series.
+1. Remove "len" field since the length of a dynamic array can be fetched
+from its metadata.
+2. Substitute __print_array() with __print_dynamic_array().
 
 Changes in v6:
-No changes other than rebasing on top of tip/master.
+1. Rebase on top of tip/master.
+2. Use the newly introduced to_mce_hw_err macro in amd_decode_mce().
 
 Changes in v7:
 1. Rebase on top of tip/master.
-2. Added parenthesis around el_size parameter in macro.
-3. Remove Cc (to Avadhut Naik) tag.
-4. Add Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com> tag.
+2. Change second parameter of __print_dynamic_array from 8 to sizeof(u8)
+to ensure that the dynamic array is parsed using a u8 pointer instead of
+u64 pointer.
 ---
- include/trace/stages/stage3_trace_output.h | 8 ++++++++
- include/trace/stages/stage7_class_define.h | 1 +
- samples/trace_events/trace-events-sample.h | 7 ++++++-
- 3 files changed, 15 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/mce.h      | 22 ++++++++++++++++++++++
+ arch/x86/include/uapi/asm/mce.h |  3 ++-
+ arch/x86/kernel/cpu/mce/amd.c   |  5 ++++-
+ arch/x86/kernel/cpu/mce/core.c  |  9 ++++++++-
+ drivers/edac/mce_amd.c          |  8 ++++++--
+ include/trace/events/mce.h      |  7 +++++--
+ 6 files changed, 47 insertions(+), 7 deletions(-)
 
-diff --git a/include/trace/stages/stage3_trace_output.h b/include/trace/stages/stage3_trace_output.h
-index c1fb1355d309..1e7b0bef95f5 100644
---- a/include/trace/stages/stage3_trace_output.h
-+++ b/include/trace/stages/stage3_trace_output.h
-@@ -119,6 +119,14 @@
- 		trace_print_array_seq(p, array, count, el_size);	\
- 	})
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 4e45f45673a3..c2466b20fe79 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -122,6 +122,9 @@
+ #define MSR_AMD64_SMCA_MC0_DESTAT	0xc0002008
+ #define MSR_AMD64_SMCA_MC0_DEADDR	0xc0002009
+ #define MSR_AMD64_SMCA_MC0_MISC1	0xc000200a
++/* Registers MISC2 to MISC4 are at offsets B to D. */
++#define MSR_AMD64_SMCA_MC0_SYND1	0xc000200e
++#define MSR_AMD64_SMCA_MC0_SYND2	0xc000200f
+ #define MSR_AMD64_SMCA_MCx_CTL(x)	(MSR_AMD64_SMCA_MC0_CTL + 0x10*(x))
+ #define MSR_AMD64_SMCA_MCx_STATUS(x)	(MSR_AMD64_SMCA_MC0_STATUS + 0x10*(x))
+ #define MSR_AMD64_SMCA_MCx_ADDR(x)	(MSR_AMD64_SMCA_MC0_ADDR + 0x10*(x))
+@@ -132,6 +135,8 @@
+ #define MSR_AMD64_SMCA_MCx_DESTAT(x)	(MSR_AMD64_SMCA_MC0_DESTAT + 0x10*(x))
+ #define MSR_AMD64_SMCA_MCx_DEADDR(x)	(MSR_AMD64_SMCA_MC0_DEADDR + 0x10*(x))
+ #define MSR_AMD64_SMCA_MCx_MISCy(x, y)	((MSR_AMD64_SMCA_MC0_MISC1 + y) + (0x10*(x)))
++#define MSR_AMD64_SMCA_MCx_SYND1(x)	(MSR_AMD64_SMCA_MC0_SYND1 + 0x10*(x))
++#define MSR_AMD64_SMCA_MCx_SYND2(x)	(MSR_AMD64_SMCA_MC0_SYND2 + 0x10*(x))
  
-+#undef __print_dynamic_array
-+#define __print_dynamic_array(array, el_size)				\
-+	({								\
-+		__print_array(__get_dynamic_array(array),		\
-+			      __get_dynamic_array_len(array) / (el_size), \
-+			      (el_size));				\
-+	})
+ #define XEC(x, mask)			(((x) >> 16) & mask)
+ 
+@@ -190,9 +195,26 @@ enum mce_notifier_prios {
+ /**
+  * struct mce_hw_err - Hardware Error Record.
+  * @m:		Machine Check record.
++ * @vendor:	Vendor-specific error information.
++ *
++ * Vendor-specific fields should not be added to struct mce.
++ * Instead, vendors should export their vendor-specific data
++ * through their structure in the vendor union below.
++ *
++ * AMD's vendor data is parsed by error decoding tools for
++ * supplemental error information. Thus, current offsets of
++ * existing fields must be maintained.
++ * Only add new fields at the end of AMD's vendor structure.
+  */
+ struct mce_hw_err {
+ 	struct mce m;
 +
- #undef __print_hex_dump
- #define __print_hex_dump(prefix_str, prefix_type,			\
- 			 rowsize, groupsize, buf, len, ascii)		\
-diff --git a/include/trace/stages/stage7_class_define.h b/include/trace/stages/stage7_class_define.h
-index bcb960d16fc0..fcd564a590f4 100644
---- a/include/trace/stages/stage7_class_define.h
-+++ b/include/trace/stages/stage7_class_define.h
-@@ -22,6 +22,7 @@
- #undef __get_rel_cpumask
- #undef __get_rel_sockaddr
- #undef __print_array
-+#undef __print_dynamic_array
- #undef __print_hex_dump
- #undef __get_buf
++	union vendor_info {
++		struct {
++			u64 synd1;		/* MCA_SYND1 MSR */
++			u64 synd2;		/* MCA_SYND2 MSR */
++		} amd;
++	} vendor;
+ };
  
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index 55f9a3da92d5..999f78d380ae 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -319,7 +319,7 @@ TRACE_EVENT(foo_bar,
- 		__assign_cpumask(cpum, cpumask_bits(mask));
+ #define	to_mce_hw_err(mce) container_of(mce, struct mce_hw_err, m)
+diff --git a/arch/x86/include/uapi/asm/mce.h b/arch/x86/include/uapi/asm/mce.h
+index db9adc081c5a..cb6b48a7c22b 100644
+--- a/arch/x86/include/uapi/asm/mce.h
++++ b/arch/x86/include/uapi/asm/mce.h
+@@ -8,7 +8,8 @@
+ /*
+  * Fields are zero when not available. Also, this struct is shared with
+  * userspace mcelog and thus must keep existing fields at current offsets.
+- * Only add new fields to the end of the structure
++ * Only add new, shared fields to the end of the structure.
++ * Do not add vendor-specific fields.
+  */
+ struct mce {
+ 	__u64 status;		/* Bank's MCi_STATUS MSR */
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 5b4d266500b2..6ca80fff1fea 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -797,8 +797,11 @@ static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
+ 	if (mce_flags.smca) {
+ 		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), m->ipid);
+ 
+-		if (m->status & MCI_STATUS_SYNDV)
++		if (m->status & MCI_STATUS_SYNDV) {
+ 			rdmsrl(MSR_AMD64_SMCA_MCx_SYND(bank), m->synd);
++			rdmsrl(MSR_AMD64_SMCA_MCx_SYND1(bank), err.vendor.amd.synd1);
++			rdmsrl(MSR_AMD64_SMCA_MCx_SYND2(bank), err.vendor.amd.synd2);
++		}
+ 	}
+ 
+ 	mce_log(&err);
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 3611366d56b7..fca23fe16abe 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -202,6 +202,10 @@ static void __print_mce(struct mce_hw_err *err)
+ 	if (mce_flags.smca) {
+ 		if (m->synd)
+ 			pr_cont("SYND %llx ", m->synd);
++		if (err->vendor.amd.synd1)
++			pr_cont("SYND1 %llx ", err->vendor.amd.synd1);
++		if (err->vendor.amd.synd2)
++			pr_cont("SYND2 %llx ", err->vendor.amd.synd2);
+ 		if (m->ipid)
+ 			pr_cont("IPID %llx ", m->ipid);
+ 	}
+@@ -678,8 +682,11 @@ static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
+ 	if (mce_flags.smca) {
+ 		m->ipid = mce_rdmsrl(MSR_AMD64_SMCA_MCx_IPID(i));
+ 
+-		if (m->status & MCI_STATUS_SYNDV)
++		if (m->status & MCI_STATUS_SYNDV) {
+ 			m->synd = mce_rdmsrl(MSR_AMD64_SMCA_MCx_SYND(i));
++			err->vendor.amd.synd1 = mce_rdmsrl(MSR_AMD64_SMCA_MCx_SYND1(i));
++			err->vendor.amd.synd2 = mce_rdmsrl(MSR_AMD64_SMCA_MCx_SYND2(i));
++		}
+ 	}
+ }
+ 
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index 8130c3dc64da..194d9fd47d20 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -793,6 +793,7 @@ static int
+ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
+ {
+ 	struct mce *m = (struct mce *)data;
++	struct mce_hw_err *err = to_mce_hw_err(m);
+ 	unsigned int fam = x86_family(m->cpuid);
+ 	int ecc;
+ 
+@@ -850,8 +851,11 @@ amd_decode_mce(struct notifier_block *nb, unsigned long val, void *data)
+ 	if (boot_cpu_has(X86_FEATURE_SMCA)) {
+ 		pr_emerg(HW_ERR "IPID: 0x%016llx", m->ipid);
+ 
+-		if (m->status & MCI_STATUS_SYNDV)
+-			pr_cont(", Syndrome: 0x%016llx", m->synd);
++		if (m->status & MCI_STATUS_SYNDV) {
++			pr_cont(", Syndrome: 0x%016llx\n", m->synd);
++			pr_emerg(HW_ERR "Syndrome1: 0x%016llx, Syndrome2: 0x%016llx",
++				 err->vendor.amd.synd1, err->vendor.amd.synd2);
++		}
+ 
+ 		pr_cont("\n");
+ 
+diff --git a/include/trace/events/mce.h b/include/trace/events/mce.h
+index 65aba1afcd07..c1c50df9ecfd 100644
+--- a/include/trace/events/mce.h
++++ b/include/trace/events/mce.h
+@@ -43,6 +43,7 @@ TRACE_EVENT(mce_record,
+ 		__field(	u8,		bank		)
+ 		__field(	u8,		cpuvendor	)
+ 		__field(	u32,		microcode	)
++		__dynamic_array(u8, v_data, sizeof(err->vendor))
  	),
  
--	TP_printk("foo %s %d %s %s %s %s %s (%s) (%s) %s", __entry->foo, __entry->bar,
-+	TP_printk("foo %s %d %s %s %s %s %s %s (%s) (%s) %s", __entry->foo, __entry->bar,
+ 	TP_fast_assign(
+@@ -65,9 +66,10 @@ TRACE_EVENT(mce_record,
+ 		__entry->bank		= err->m.bank;
+ 		__entry->cpuvendor	= err->m.cpuvendor;
+ 		__entry->microcode	= err->m.microcode;
++		memcpy(__get_dynamic_array(v_data), &err->vendor, sizeof(err->vendor));
+ 	),
  
- /*
-  * Notice here the use of some helper functions. This includes:
-@@ -363,6 +363,11 @@ TRACE_EVENT(foo_bar,
- 		  __print_array(__get_dynamic_array(list),
- 				__get_dynamic_array_len(list) / sizeof(int),
- 				sizeof(int)),
-+
-+/*     A shortcut is to use __print_dynamic_array for dynamic arrays */
-+
-+		  __print_dynamic_array(list, sizeof(int)),
-+
- 		  __get_str(str), __get_str(lstr),
- 		  __get_bitmask(cpus), __get_cpumask(cpum),
- 		  __get_str(vstr))
+-	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016Lx, IPID: %016Lx, ADDR: %016Lx, MISC: %016Lx, SYND: %016Lx, RIP: %02x:<%016Lx>, TSC: %llx, PPIN: %llx, vendor: %u, CPUID: %x, time: %llu, socket: %u, APIC: %x, microcode: %x",
++	TP_printk("CPU: %d, MCGc/s: %llx/%llx, MC%d: %016llx, IPID: %016llx, ADDR: %016llx, MISC: %016llx, SYND: %016llx, RIP: %02x:<%016llx>, TSC: %llx, PPIN: %llx, vendor: %u, CPUID: %x, time: %llu, socket: %u, APIC: %x, microcode: %x, vendor data: %s",
+ 		__entry->cpu,
+ 		__entry->mcgcap, __entry->mcgstatus,
+ 		__entry->bank, __entry->status,
+@@ -83,7 +85,8 @@ TRACE_EVENT(mce_record,
+ 		__entry->walltime,
+ 		__entry->socketid,
+ 		__entry->apicid,
+-		__entry->microcode)
++		__entry->microcode,
++		__print_dynamic_array(v_data, sizeof(u8)))
+ );
+ 
+ #endif /* _TRACE_MCE_H */
 -- 
 2.43.0
 
