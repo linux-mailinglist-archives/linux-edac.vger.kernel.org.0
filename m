@@ -1,90 +1,81 @@
-Return-Path: <linux-edac+bounces-2181-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2182-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3A609AB3A4
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 18:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 274A99AB454
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 18:49:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E0BF1F213FD
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 16:17:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D251F1F242CB
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Oct 2024 16:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7FB1A76D2;
-	Tue, 22 Oct 2024 16:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 611B41A2C0B;
+	Tue, 22 Oct 2024 16:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ZGRL2LX4"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="S6UFHexB"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556EE136345;
-	Tue, 22 Oct 2024 16:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F7042AB3;
+	Tue, 22 Oct 2024 16:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729613843; cv=none; b=n5FfaQ1jyqcVfpmJHkUnm758c15dTyeckV7eneTeAVB9g9dqhxnIpZjJmDr8gLTnwawpB9jms7VKG0VIAFOA+siM83XqLLYwWWMd3uobibihMMw0RJ/MOXcWDxi6AMiPB1j5eFh55maM8ld+u61qRGmJVX/t0BvK+s2VuB7v350=
+	t=1729615775; cv=none; b=bFGdCfJVtlr7u0+zM2NvWZyM+y4XKOIttrieJtptGknxaITqMfAIfCIM6BY0Gz7nIkxItQd3WRxjacLvJPBUeVqXNM0Rw71qiLHhFYJzp9PMGqg3zfjvRza0JQDHpkd8sYzA2vaCEC9RFiuEQHV4wvc0RNstcbaekKl9JNxJkYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729613843; c=relaxed/simple;
-	bh=OFG7HFBoDbhMI8g7Y0r6Mn6NKm9OxNRgu1rPCmMM3zw=;
+	s=arc-20240116; t=1729615775; c=relaxed/simple;
+	bh=ICvT8RpV1qd+YIsjY+QS1cd6ai3dN7EaS8nQHXhtvYk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OYIBRDi9a4D3eO6oT4hPx4UioF3L0P5kxcWo8V7ld+PDJncSZAM20JA4cOcZKjmhgmfOKSkB9JNLW+/KuMUcK9RwjaH2KMQaIvmN0Qm5KaZP8iroQ6Z9ub+Xfl2xT+lYU0Q8UpdxhYQ+rrWqJBMKEnL8oWHvQPuWnfzMskg+ehw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ZGRL2LX4; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yl2jDwIAsCROSfoEq94Scl1ONj/zdLaKimjaqT8w0zpFutxqN/RPtl26MNZvPy/Uf8LUdHkX6hDcPcVu/cRDKNT8Fo9Om8xcr4JLtEdXdnru9H7sskIbuB2nJCwPAnsUD/9f9PFEH8OvP7nrlDKiQGLhZxXBHCHQhhCpUZlP3Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=S6UFHexB; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AF6B740E0184;
-	Tue, 22 Oct 2024 16:17:17 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 55A3840E015F;
+	Tue, 22 Oct 2024 16:49:31 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id SxRAUl6Qx8eO; Tue, 22 Oct 2024 16:17:14 +0000 (UTC)
+	with ESMTP id kaJDnbAG4aFq; Tue, 22 Oct 2024 16:49:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1729613832; bh=7VI+P72dXu6jlbrLu+mj4ToB+LSegaKux0yMSJVY1L8=;
+	t=1729615767; bh=bbYbBXq+isrp7dFKrzxr/HSX1y0vpqPhU2T4/MO12K8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZGRL2LX47xj4+x5nUWTk6qLQo0uorMLfWGLV54Sqml8sjmkqbcJ8lduVAy5s0SFRI
-	 e9fN4jrQGgHvrUT45siw4x++tGpUCPZ2dXTRG/aWB4TpMd0z4eS6JKjVb93lx85vqw
-	 8nQuuIJlm+7G67mXuBlMNzOAcY0s4Z/LbuDosAcy7n14ISoHzI+nKBYgSu7SkToTmU
-	 k/qGEXRG/t7R83envtCR74bZDzIHWJgBJKBAlR5Ytob4BPjyYhR6TRlSnkimlgyz+X
-	 OYSwvnxwn4+fgkAN5PZXfK+xE4ux9fKE2VFvVBeWT8H8uXtn6Iczis0+Zf0KEDc//j
-	 OQytNdiHdZcTxd23G5bFWRkEDlv+4hnmqqIJo0Es8CCFhzAhw6enA0vll6rPxjgfdn
-	 AmpEOU3psFsEYAMlXT2RGQLWbgeuqsgisFybtrYftqTErq52ofk/Hulnt1KLGImc+Q
-	 pFCheKGYViGDP178iRmUpokm2dtLigY020fKdn14msl4XOe4N0qy35OFpOce0NF1Kg
-	 HfF4HnI4AasTC3UafDxPNSWJ3g1/qev5iS12Fwx3D+Oye8Nicae8E1YjBqI+SiE2Gx
-	 Fgzfq9LhnJ9OkEU4XxJDlYP+qMnJy6dQkMXeZXGGTbqnOyMLTcxXlbuxFYSr9l753q
-	 k6TWNR8XDnB9w9uw0PVV3zH8=
+	b=S6UFHexB6bJKTL/O/ArozLgtgbyMgW4T+7DRZyISMhqId69wZeEuA2/6H/K34HxBQ
+	 Pf1I1s4pnMo549YIeWBFqppORIv3AAvYzYi6arhKBNa/KGfjIoKHBkiVrhKTmztJDK
+	 o24UqJ2AGg+lF+E6F+FphJGMZY7XIWDw9I4C+ulrgGNWsy9BQtCBqS9rdnRawfUH3h
+	 0GF1KIHiiEcVGPVS8OprfSpcDnOQgwwqVgHIcZQi1rnAgHtenYSj+PSRCT5vYk9Gx5
+	 oNedEl1ZMv1J4zAbVabzTYtDQGLO9NJN7hP4S2EUPtMbsMPbbuaJ/jr/B5tHnoZh6E
+	 5VUj47jq0BI8ABAIwJbeuR6Fu1nTAVmu58fG81SDdeV+1qYhqiY3V98zTt9xjDVfbK
+	 mZoSFINomfhAYI+U7Q0qokOgnV4vfj5laRMO6T9WxRTRTTOZYlmk7du75TTZFVgOVK
+	 ie4WTfWWpDJKLE5GRA9tse9cF4zbj5X4oKtfQYXNHvY3R/vvsnPmBXqaGuWnzFroXP
+	 l/xevGVg62x8a+bSbuK41UpIqBw05vVgjHFzzfYJvMKJjNWOewzT0u8JffimVv0EhY
+	 mVHO4pIXs7B+eN8PPHU2mj5IwJyjfYDpR9/mN5F2byobB41UsgDm/l1aEGQGMR8mRy
+	 0LNdQSAEqshpu9pruGRLEyd0=
 Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 46AC040E0194;
-	Tue, 22 Oct 2024 16:16:49 +0000 (UTC)
-Date: Tue, 22 Oct 2024 18:16:42 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4DA1640E0198;
+	Tue, 22 Oct 2024 16:49:19 +0000 (UTC)
+Date: Tue, 22 Oct 2024 18:49:11 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Frank Li <Frank.li@nxp.com>
-Cc: York Sun <york.sun@nxp.com>, Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Priyanka Singh <priyanka.singh@nxp.com>,
-	Sherry Sun <sherry.sun@nxp.com>, Li Yang <leoyang.li@nxp.com>
-Subject: Re: [PATCH v3 3/6] EDAC/fsl_ddr: Fix bad bit shift operations
-Message-ID: <20241022161642.GJZxfP6kbzHPahW3oe@fat_crate.local>
-References: <20241016-imx95_edac-v3-0-86ae6fc2756a@nxp.com>
- <20241016-imx95_edac-v3-3-86ae6fc2756a@nxp.com>
- <20241022094429.GFZxdz_QNHHr_DCPp3@fat_crate.local>
- <ZxfEvxA+0iMKBZh4@lizhi-Precision-Tower-5810>
+To: David Thompson <davthompson@nvidia.com>
+Cc: Shravan Ramani <shravankr@nvidia.com>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"rric@kernel.org" <rric@kernel.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] EDAC/bluefield: Use Arm SMC for EMI access on
+ BlueField-2
+Message-ID: <20241022164911.GKZxfXh5tmjIJkShzf@fat_crate.local>
+References: <20241021233013.18405-1-davthompson@nvidia.com>
+ <20241022123240.GGZxebaKRONhSThUCC@fat_crate.local>
+ <PH7PR12MB5902E36788A73447C8DA10DCC74C2@PH7PR12MB5902.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -93,70 +84,14 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZxfEvxA+0iMKBZh4@lizhi-Precision-Tower-5810>
+In-Reply-To: <PH7PR12MB5902E36788A73447C8DA10DCC74C2@PH7PR12MB5902.namprd12.prod.outlook.com>
 
-On Tue, Oct 22, 2024 at 11:29:03AM -0400, Frank Li wrote:
-> > You can't keep Reviewed-by tags when you change a patch considerably: Documentation/process/submitting-patches.rst
-> 
-> Sorry, I omitted it since it is nxp internal reviewer. Do I need repost
-> it?
+On Tue, Oct 22, 2024 at 01:33:01PM +0000, David Thompson wrote:
+> I reviewed the changes you have made to my v3.  Looks good to me.
 
-No, I can zap it.
+Thanks.
 
-> > > Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> >
-> > What does that SOB tag mean?
-> 
-> It is original nxp layerscape platform maintainer. He leave NXP recently
-> and some item in MAINTANERS already been removed. It intents to fix
-> layerscape platform problem at beginning. And orginal patch have his SOB.
-> So I kept as original one.
-
-Ok.
-
-You forgot to comment on this part:
-
-> > >= 0 implies != -1, right?
-> >
-> > IOW?
-> >
-> > diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
-> > index 846a4ba25342..fe822cb9b562 100644
-> > --- a/drivers/edac/fsl_ddr_edac.c
-> > +++ b/drivers/edac/fsl_ddr_edac.c
-> > @@ -328,24 +328,21 @@ static void fsl_mc_check(struct mem_ctl_info *mci)
-> >  	 * TODO: Add support for 32-bit wide buses
-> >  	 */
-> >  	if ((err_detect & DDR_EDE_SBE) && (bus_width == 64)) {
-> > -		u64 cap = (u64)cap_high << 32 | (u64)cap_low;
-> > +		u64 cap = (u64)cap_high << 32 | cap_low;
-> >  		u32 s = syndrome;
-> >
-> >  		sbe_ecc_decode(cap_high, cap_low, syndrome,
-> >  				&bad_data_bit, &bad_ecc_bit);
-> >
-> > -		if (bad_data_bit != -1)
-> > -			fsl_mc_printk(mci, KERN_ERR,
-> > -				"Faulty Data bit: %d\n", bad_data_bit);
-> > -		if (bad_ecc_bit != -1)
-> > -			fsl_mc_printk(mci, KERN_ERR,
-> > -				"Faulty ECC bit: %d\n", bad_ecc_bit);
-> > -
-> > -		if (bad_data_bit >= 0)
-> > +		if (bad_data_bit >= 0) {
-> > +			fsl_mc_printk(mci, KERN_ERR, "Faulty Data bit: %d\n", bad_data_bit);
-> >  			cap ^= 1ULL << bad_data_bit;
-> > +		}
-> >
-> > -		if (bad_ecc_bit >= 0)
-> > +		if (bad_ecc_bit >= 0) {
-> > +			fsl_mc_printk(mci, KERN_ERR, "Faulty ECC bit: %d\n", bad_ecc_bit);
-> >  			s ^= 1 << bad_ecc_bit;
-> > +		}
-> >
-> >  		fsl_mc_printk(mci, KERN_ERR,
-> >  			"Expected Data / ECC:\t%#8.8x_%08x / %#2.2x\n",
-> >
+Now queued.
 
 -- 
 Regards/Gruss,
