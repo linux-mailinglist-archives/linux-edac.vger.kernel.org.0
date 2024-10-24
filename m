@@ -1,229 +1,423 @@
-Return-Path: <linux-edac+bounces-2228-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2229-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A553D9ADBA9
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 07:50:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD0C9ADCD3
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 08:57:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 349BF1F20F35
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 05:50:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 084721C21D84
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 06:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62ED172BDF;
-	Thu, 24 Oct 2024 05:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1802D189B9B;
+	Thu, 24 Oct 2024 06:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SoCuA2UO"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=reimar.doeffinger@gmx.de header.b="tzP19X4m"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8E41714CA;
-	Thu, 24 Oct 2024 05:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729749005; cv=fail; b=otPS6WxsWYbAPS0M8x0I8hwI+6uU9yhouwXIZnuF/evRfiMXZPy/OLDKjc8ekv8h6Kry2EUbOylKBX4IleuMPRfAVNMHV2FTynAUgAN9kBPSyGBKB0hEDPOtypnJqSu8C6euiDXOpHDXaxD2DnuI0iKun9ecUFW6JdfiGVHFZD4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729749005; c=relaxed/simple;
-	bh=F06vtAE8e+biRwF9Y4EYzEJTd8tkyUUySzG4H2hv48w=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=aSSF/UxzpdpcZi3c5ROEMusKblGuvy/8q3om6ZkGlc+zvZZjd7DNGwKDiwYPaCJBGuctR+t1zhqi5+RLDxKeBsHm5ufLQgVOJ5kpuu98U4onQdMvqF3yco3ivPVeDgpPr+yTI/Jy07OXCWTqR3Zb6+dkertx5z5vThmgccfmOsM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SoCuA2UO; arc=fail smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729749004; x=1761285004;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=F06vtAE8e+biRwF9Y4EYzEJTd8tkyUUySzG4H2hv48w=;
-  b=SoCuA2UOzoB8P3jA+VvmRD48YPSRpf6u7X7aCV/qd1iTqc0CsiSF+abe
-   Rcp3Nclm1yR4AUCUpxGEYVKq5SU9rm/S7Zns7o29QBg8cAwvfM9KtGR70
-   uEgSXduOCcY3lzmlIjn/YeyQ9+XulPq9du9VZixizWnoZdCwgMQxItZ8t
-   RtgqSZrcgJFm+/seqTIwQjaqTPX7AdVIyI3dO+yYUAinOAhilSkU6bUaI
-   kguxd7jJ31Im7mhCdvtMKtcDNnKNGiU8G7YS641Mg8CCGcolOzJo8BEAz
-   BPneoq5oZ72jYPCzutGnwMdAeU0yMpip5Iop4N5q0SQ9jRwXSITebc/NX
-   Q==;
-X-CSE-ConnectionGUID: 0cJFKGR5RDGATlWrDH7ymg==
-X-CSE-MsgGUID: R+kodfGNTlixJCGiTrnO8g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11234"; a="54767680"
-X-IronPort-AV: E=Sophos;i="6.11,228,1725346800"; 
-   d="scan'208";a="54767680"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 22:50:03 -0700
-X-CSE-ConnectionGUID: oBcUzxCoT6+5Slu7lGwoww==
-X-CSE-MsgGUID: 6uishX+YTmaAzCbq1b7tjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,228,1725346800"; 
-   d="scan'208";a="103809809"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 23 Oct 2024 22:50:02 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 23 Oct 2024 22:50:01 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Wed, 23 Oct 2024 22:50:01 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 23 Oct 2024 22:50:01 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iFq2giBfoLPCpaIpfSADe6CaO/NGnpNyTocOdIq6KKYrMI8W4MiyT+rtIVFw4Lc5FCnwjlLvV/2K8ixJ5qfmKspDfYaq5WgMCpldGgECvIpk1O01AF2p9CKlMeXwrLy+TIP7AJB5bFYuV3kTbP15fpikAJl7OSf/Fh+gIh+lAxbUvYfHsPEQQZ2LD403gT8VASInZwEUlzffxpdJQYssw+8hTqeG9DS3/lk7gMWAv1iRPWHe/YDnoJSyzYm6RrKkTIk8PzoM6hgx5ih/jIkNrd3nIJKcS50MuDKXfddNQuDSH2x6Z/wyf7ljgMKWUdzmGPVtz5kKiKFmwnyJzaJQqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c2xYStNsD34c0wY7gzPyNWr8zyCSwjWgqtNhebt+yYs=;
- b=AV75hX5MBPb2qEOKhSxH2ClBtOPRIW41Dd7Nrr2LFgfkpvK/Ls+gIkp/PpA6OjdXAjpeTDJ1lHqz2UAR617sGmmFxKW7kyQ2bxXmpICJiad2Sy7W8fHH8SLdRyG++lKqtqL0vm4mGq5R+YxaubI8vbRX2rlpYIg3fYKHLFsUCbZcBAEG6Tjddj2WbRXVqQdVBeuIahrA3Z7+77rTOy5OgLduXmTN1v4nPFHTOcGIrQ7NhROrvbZK14mxYVkwThl2t8Bi6DMP7pvBw5fCh3Y2dbHZtD/4ra2rh0uMjX1Hcjm3W/3ouontz99Xj7pqVeqeIm4w3Kx7phMjabh1B/3/vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
- by LV2PR11MB6000.namprd11.prod.outlook.com (2603:10b6:408:17c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Thu, 24 Oct
- 2024 05:49:59 +0000
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d%7]) with mapi id 15.20.8093.014; Thu, 24 Oct 2024
- 05:49:59 +0000
-From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To: Avadhut Naik <avadhut.naik@amd.com>, "x86@kernel.org" <x86@kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"bp@alien8.de" <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
-	<mingo@redhat.com>, "rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>, "yazen.ghannam@amd.com"
-	<yazen.ghannam@amd.com>, "john.allen@amd.com" <john.allen@amd.com>
-Subject: RE: [PATCH v7 5/5] EDAC/mce_amd: Add support for FRU Text in MCA
-Thread-Topic: [PATCH v7 5/5] EDAC/mce_amd: Add support for FRU Text in MCA
-Thread-Index: AQHbJLqqoSEHCnqnXkmP9yN1EoZKBbKVZ3eA
-Date: Thu, 24 Oct 2024 05:49:58 +0000
-Message-ID: <CY8PR11MB71343897FBA9B277ED5454E8894E2@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <20241022194158.110073-1-avadhut.naik@amd.com>
- <20241022194158.110073-6-avadhut.naik@amd.com>
-In-Reply-To: <20241022194158.110073-6-avadhut.naik@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|LV2PR11MB6000:EE_
-x-ms-office365-filtering-correlation-id: 6b9dd589-ebb0-4292-7cc8-08dcf3efb20c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?5Uky7AV3Zw3AGXVzJ928dHE4dM+xI4J3kS3dhygr2Jb0hz5zAuVeTiKfu0fi?=
- =?us-ascii?Q?RFWVgjbWZ5K5o0i3Kp4nCH2wtDsgYd4eAkMApXctOqjvk7HZWFzF0VThRvdH?=
- =?us-ascii?Q?xAF2WwBh4GLljHlUa4sSYKPBp0cdiWEAQiOb9NdutFOxYCI9cxMaTTLiV//o?=
- =?us-ascii?Q?CaGX3tiJRPuiPfYLeuOUa0K33hADe54JXJAyfeSIC3t//6TI4vPd8CfrXpaR?=
- =?us-ascii?Q?GztGthqFgx5fmJ3w/oijmtFvKevlt7Jj0syjcVaNG1Dsaoqa6a/1mc1yNzsQ?=
- =?us-ascii?Q?TL1cS09ogilFpMA65h64US4j9v5FjutMDGFUSV7pkMCQfwsuQx/AhXYhXJV8?=
- =?us-ascii?Q?4+8xGDypFNzYfQT+X/d7sKMhDzZa8BwCnYvRQFoHjn+6Or+yOjNja6MpPxk3?=
- =?us-ascii?Q?6+o9ph62RURfcyME/tRdhSiKugZ5V9ffrcYWnbx+TuN5JU8KW5cTvrEyEsJs?=
- =?us-ascii?Q?BQ4LXTurB1R8ixjA5TWlRo6z4gPJ66j3YNb/qf3GRrhPlhHKN8bOHp64EqIr?=
- =?us-ascii?Q?8uyNWtNIAljoYAIPYsPYJQG2zeOduRlB60NdAhnAItzUx3D421CegRvKFAis?=
- =?us-ascii?Q?zGZAaphr6kTev/763hhGAY7EzNOVUs96Bjg/d2Q7VNweERLlkMbyuwc3Brk7?=
- =?us-ascii?Q?/fScpsWHrDOXEEQb8/fye710enPC/UwfAgd6L886aGsjOcYPVFwhh6TKLtli?=
- =?us-ascii?Q?XUuSmOvkbjI58YOALEwHfHxeQYXDoZf9xQw+l18s6B4MNv7ZQ+A1k7kuQmK+?=
- =?us-ascii?Q?MYEIWVSZ6S1MLgFnU8xzkfh/0djw8H5ho471BHwkxn1hDs6Jsy8CQVzEN84l?=
- =?us-ascii?Q?T+w/xSRDGfvrA7D1wEgrL0VGONTuAeW37Ftd8JdsLT2m1j3ZmLoYYB6nR8Sj?=
- =?us-ascii?Q?NZFjesfAAbN5Qm913yXeU5v8VZz9ul9zf/hUJ9mkRBQBmAKO0J5HADjCHDXt?=
- =?us-ascii?Q?XVuSzUWkCVWRbRbZgBx36H3GIURjdiuCoHnLDbdonBFFve3UljHdJEodd5uC?=
- =?us-ascii?Q?XJeQxD/wdcNOomGwor1gvzfkYFYlt0IyoTP6Q7YcYaooFq/3ESvLardthdrW?=
- =?us-ascii?Q?Z4lRupEjIZpTu1sRJuema5JB6NQ5d7sO7Po5mTTFRbfME68Ys7KFp/zs/Fnz?=
- =?us-ascii?Q?YKBKmOCs90zat3B/CnHc78BgH+RQG2001GrkcCQ5f+lqdu1UVU+k4mJZ6nRf?=
- =?us-ascii?Q?W4Pr7RpKFAqkKWxQ1nx0gsEl3LssH2geNrSR5GB/zmVjX49r7kxDPgVzEHNh?=
- =?us-ascii?Q?3gtsiZPuJk0JeyhdWJbwN93aQO/MDAqH/GDsIasLbR6umezWLup1i9PT4Sxz?=
- =?us-ascii?Q?xf+4nhjU+KOork9ZYFMAfAtWez91J9vsh2yR6gC5BVfw+YAXOf3dTbNlK8U2?=
- =?us-ascii?Q?glvl3S0=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XHql3/qQbUsnNNZEJyLKLa86vRjWQF/XRDL5HEHmRWzaWtiptb0PXbnzUizc?=
- =?us-ascii?Q?JbM0875owjtUkC2f5pZIQLNuI/BNVepBqzfc0oq8XoYZyOHtk/eF8kpsZf6b?=
- =?us-ascii?Q?uRNfZX8mM1lNM2SY/OTlhlVzxvPnVGYgYCo8l6KN9v/0zHFpk1P7PaL9Zx8f?=
- =?us-ascii?Q?2sxsrezM4o+nBXIW6Swqd1ZiHMcX4IGeH7sWC82cSdSETT3VEaVMzmRU/+HN?=
- =?us-ascii?Q?vbVMPeP6xtzk8KonyXlprMntSINe8Re3bY11sURluouBj0dqlAd/TDc/Eagd?=
- =?us-ascii?Q?uF3+gxY0W0eYq6tkwYeEiH2xqlZHvY3hntMcGZzIEGXpV+nGWd6thaNLVvmL?=
- =?us-ascii?Q?xhsH4X8JtOGp8o/NpjZ13LOmmPPAQZf+tX8fUtDw9lgYshpQqdNAVKKJ+Piy?=
- =?us-ascii?Q?plkkBG4jQlPL/izpOXK2Qx50zbxFFgUtMDQNZ7S84DK4rTogdVebNSOH+FmN?=
- =?us-ascii?Q?D/DgVIvtiD4Z1n7eoy4BTvs79cdOrPvrJwh/Vxp74OBvbUGY6zHuJ//TQtlE?=
- =?us-ascii?Q?aDslsJFTMFK5KrSd3JHD/CBDgtsXA/yL2ocgz9U1D+o6KtAXi5pX2OYYpgn6?=
- =?us-ascii?Q?WmcwloPQd4DC21bonR87dJTva/YFt09W8ERoPD3UEt8CxwcQswnAV8leFCq1?=
- =?us-ascii?Q?6HDTxEFkPspBsb579TrcTMOM8w1nnTAtAjoD+pMJh8m57bebwfUSEo3aeQBn?=
- =?us-ascii?Q?NxKjeuiThxOq8qCd7TQBKt5uLxhFdPJVBShss6ZgZTtlUsvbvNdUC0YOYRHo?=
- =?us-ascii?Q?0LlVA/AgQlTsGJRYFI3iX82kk4+YQhI9KYzKQq4zAE1pwtXWk0e/kopFliIg?=
- =?us-ascii?Q?Tr8r08Kr4zXtuIYep7CfhS54gMxS83BwbUMtKe2JeVNHW54S/l+t56qFhVve?=
- =?us-ascii?Q?wQnnO3rXXzipsNYI15BVhLmUhazjgAwpBtxtMdh8R0HSdLqufraRzQnv6Sn1?=
- =?us-ascii?Q?idSHAybt8MPktyva3A1CUbevBIVfvWpdQVmVjC6ndykmWofWFULk+K+m+HkC?=
- =?us-ascii?Q?yRhIq9W8oUi1GDAdUuiitL+S4xqIpJ8mBThemm+bCTfcYKme7ZjcwDDQibwt?=
- =?us-ascii?Q?K6XYOmIqRPY0WsL1qUIEmcqJ0cFELeGum3wZ61ZucbHMIkFClTSydgksuLRO?=
- =?us-ascii?Q?Cegh1cT2nidF2PzgX4AI4jam1K7Ng9peGR5+JERx7+8Rj/EgJhsYHJNnpYTK?=
- =?us-ascii?Q?svXFsirnwpi49Mln3wZo6++mb/ZmLNvrSrrEUmf6i7ifCrk1+Lt72jH7vNwo?=
- =?us-ascii?Q?kLK1t9f0VzuOFIGMhmvMwToymJ530JkveeLV4Mbp8Val4tfJ/GBGx9FtBmxK?=
- =?us-ascii?Q?j6pKxaR09047Ju+S5AQ/5qb17QWeUs1HI+VtpuOcA3uX4wKXGvFL5NbpAw+z?=
- =?us-ascii?Q?9pDMYQtkaNCSmBcY9JbrgHfBnOCik217RrlVKPBKI++4U0AhMUc+momOBU+e?=
- =?us-ascii?Q?oFFobsI1pzG6fqSCPFFo57b+62P1ecEWLHcFLQo+MCeWCjDtFEiZF70hXEVq?=
- =?us-ascii?Q?MG9RVeQOWAuXrrBfCUDtXiEsnnhlUiRw3YeRmTto1mFvJamElYCQDG8De75l?=
- =?us-ascii?Q?DohvmqKLCY7Tm/VwRPMHECms+b2W+Eb2QUr3qaQM?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9201662F4;
+	Thu, 24 Oct 2024 06:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729753021; cv=none; b=TQFaOSPYz3vpjaHp/DeX6agbi9/vPWdhOkVefIkZ0K5hQnPrToGvpKFxZWix0e8e/pfIiHikePcmb94BmQZFzy6nOrGTB8OF/Vo1aD/gRYeuKQVTgsHW7x+ZcUla3k1Das9nftzvB6nSSbjOZvlpZs4mr4fESJj1Y4Q/6vXw9D8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729753021; c=relaxed/simple;
+	bh=wdgD6qvXSVO8H0q9V3v24HaTgfvhkQIOWPYzBuOxHw8=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=crP+5+ds7LXYvoYhk4hoCXwqffJ3lF3lB8egIakW5VhVEMeoo0JEAjzokwjSIIT7gJn/TVAbwEwpuOIm7ZdbwtuclwUYxFQQA6LLUVZw7MJqTW6guMPrGrhiqfwrXbYI0nUOIcu7gp1tbr9rwMRwHvv3fgzYvUQjSH9LzNehaPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=reimar.doeffinger@gmx.de header.b=tzP19X4m; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1729752930; x=1730357730;
+	i=reimar.doeffinger@gmx.de;
+	bh=dbq90nrq8LfkX1Ug149kdQ8PEHRPGRI4rzHx8hOaEss=;
+	h=X-UI-Sender-Class:Content-Type:Mime-Version:Subject:From:
+	 In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:
+	 References:To:cc:content-transfer-encoding:content-type:date:from:
+	 message-id:mime-version:reply-to:subject:to;
+	b=tzP19X4mYfx99tlCYHElzIncUINmjJmY64Tvzhy+puX0CUzTnpXtaEFP3En+UVSW
+	 Im89H+yOxexeu/ER0tskm6M+g5FXhTgNuy9PgEyxPszxM+XXsU3rtubJEuo66VR6b
+	 Gt4vbmF3OnPk7HedzlokO8v5wr69CC/kRspI+/8vQr+6rNTyJehsV+FR6Waz3wJfb
+	 4HHDb1/43DKfrPaTFpvT8ez05Uu0bsh0FpWWvXVHGwdwjM5hvy8j3cxJ3lQ8RSTD6
+	 3VwCl3sjRXSsS6HJvJrZQyrf2Cuy40/MMgo8V5chzJFcsc3D7lqXjDxiKIlSTby1c
+	 FGzmM/YA+oOsOGL0bw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from smtpclient.apple ([155.4.74.59]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1McYCb-1tbXPo3PDR-00m2mo; Thu, 24
+ Oct 2024 08:55:29 +0200
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b9dd589-ebb0-4292-7cc8-08dcf3efb20c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2024 05:49:58.9262
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MTCKhTX+4XqkQB5ZH0WpqnA56CshPqp8nDUpzRYTj4XAYnaUoiNvEE3WIDJ4iLEgGBrhV3PRzYaJ5UFoQL+dHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR11MB6000
-X-OriginatorOrg: intel.com
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3818.100.11.1.3\))
+Subject: Re: linux: Goodbye from a Linux community volunteer
+From: =?utf-8?Q?Reimar_D=C3=B6ffinger?= <Reimar.Doeffinger@gmx.de>
+In-Reply-To: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+Date: Thu, 24 Oct 2024 08:55:05 +0200
+Cc: Jon Mason <jdmason@kudzu.us>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Allen Hubbe <allenbh@gmail.com>,
+ ntb@lists.linux.dev,
+ Andy Shevchenko <andy@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Kory Maincent <kory.maincent@bootlin.com>,
+ Cai Huoqing <cai.huoqing@linux.dev>,
+ dmaengine@vger.kernel.org,
+ Mark Brown <broonie@kernel.org>,
+ linux-spi@vger.kernel.org,
+ Damien Le Moal <dlemoal@kernel.org>,
+ linux-ide@vger.kernel.org,
+ Paul Burton <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ linux-mips@vger.kernel.org,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ linux-pci@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Andrew Lunn <andrew@lunn.ch>,
+ Russell King <linux@armlinux.org.uk>,
+ Vladimir Oltean <olteanv@gmail.com>,
+ Keguang Zhang <keguang.zhang@gmail.com>,
+ Yanteng Si <siyanteng@loongson.cn>,
+ netdev@vger.kernel.org,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org,
+ Borislav Petkov <bp@alien8.de>,
+ linux-edac@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-serial@vger.kernel.org,
+ Andrew Halaney <ajhalaney@gmail.com>,
+ Nikita Travkin <nikita@trvn.ru>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Alexander Shiyan <shc_work@mail.ru>,
+ Dmitry Kozlov <xeb@mail.ru>,
+ Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Evgeniy Dushistov <dushistov@mail.ru>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ Nikita Shubin <nikita.shubin@maquefel.me>,
+ linux-renesas-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D454EE83-DFB9-4A2D-821E-EF709350D5BB@gmx.de>
+References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+To: Serge Semin <fancer.lancer@gmail.com>
+X-Mailer: Apple Mail (2.3818.100.11.1.3)
+X-Provags-ID: V03:K1:k3CVh5UwL8Pr/QS58KpuV8k33BndHnbC3H+BIpo/1DJWFypIkuS
+ N/hzcr7X8i2LvFoAEfWjMCcex7w3EYtjq2rYvFLATE7ycsPjRqZZ4VMdu0mv4o6o2XPEV6f
+ qG5/X5qwYvrM0UlAeg26MiHfER5UCJzK7uI5qY+nWXMqmQL1YyNU4yLTagqVf9pDO4vDvxt
+ 98ZLb+QsQUf5paugVVstQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:92UNTiVAadM=;4dqRgDg6n4gLXT6FjhukD/0b6+W
+ cAxvAWlthP+w/cgMg25Gt0gR4wH+rWwx+h1AiMjjme5RKv++iqKL0xjNBp5BM/7/Hwnpe3UYm
+ o8Vkwq66DyBaEqk3xacLhdkpkdGKTXtG++OgKShHJt3uhBdBq41d9crk8vRrBbPwKPTMbswSm
+ J6OzXOOOmi+01thCwy4mlqNnVeoifHAPabt8eX7s/0hNffoJNhFjHa1NUsWFkSrQAoNOU0E8+
+ NEtxofXAieUtzVvocrNDFaWTgCbEGhbXjHYQ3AcMPHDkJfTEC4wfl7lJIUa2xbOtqifTqzeTj
+ aF7XzVjxoVihSzQeGztEynTuma4d8SK3cNYpQ12c6/EH0NtEdhH0qYuPfDYq0JPvY9eoosSPj
+ ASljvkH7D/Xfxdu+kJ88aWu7TBbUF2oVE11gSTi6u0ZrDSYQFf2lvinhldkIIOLKw1tuDui3X
+ 5XB0CjikMWKr8iOtmdUjBbD9wAc64IQw2BPOny3Meon+nVUTZXQGvwHGvY83O0tDNepZgceyQ
+ /Nw6RoeWqH26gkVfxV28vRjfpvCfgOL+2T5gj8nuMHdEqL8yvjUA0x133sFmvA90DfsE8tij5
+ wMUerleYmMgeDpxf2+C3zNNYAXEfCtrTuTQ3hOW4fkaRq3+qsRj7twmFyNzyRugmvBmDB02Il
+ cYnFmPdNFN8VYURjGdOce1sIKREajABwRlfLyt0wBKTxhKvHTEjo25YHlURfWakMUMsPBDNw2
+ p0sdYF3h6d8d2Rq7tFGONj5aO+BbeVqqnW/hM9zNatKsA6yIpDC8E6t1oVfp/Thkl7XbYEpBs
+ 9bvjbNbLISJBRd0RxLlRiGog==
 
-> From: Avadhut Naik <avadhut.naik@amd.com>
-> [...]
-> Subject: [PATCH v7 5/5] EDAC/mce_amd: Add support for FRU Text in MCA
->=20
-> From: Yazen Ghannam <yazen.ghannam@amd.com>
->=20
-> A new "FRU Text in MCA" feature is defined where the Field Replaceable Un=
-it
-> (FRU) Text for a device is represented by a string in the new
-> MCA_SYND1 and MCA_SYND2 registers. This feature is supported per MCA
-> bank, and it is advertised by the McaFruTextInMca bit (MCA_CONFIG[9]).
->=20
-> The FRU Text is populated dynamically for each individual error state
-> (MCA_STATUS, MCA_ADDR, et al.). This handles the case where an MCA bank
-> covers multiple devices, for example, a Unified Memory Controller (UMC)
-> bank that manages two DIMMs.
->=20
-> Since MCA_CONFIG[9] is instrumental in decoding FRU Text, it has to be
-> exported through the mce_record tracepoint so that userspace tools like t=
-he
-> rasdaemon can determine if FRU Text has been reported through the
-> MCA_SYND1 and MCA_SYND2 registers and output it.
->=20
-> [Yazen: Add Avadhut as co-developer for wrapper changes.]
->=20
-> Co-developed-by: Avadhut Naik <avadhut.naik@amd.com>
-> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+Hello Serge!
+I do not have many contributions to show to give it extra weight nor do
+I actually know you.
+Nevertheless I still wanted to say thank you for your nice message even =
+if
+it is for a sad occasion, and share your sentiment of hoping
+for more pleasant circumstances.
 
-LGTM.
+Best regards,
+Reimar
 
-    Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+(and apologies if anyone is annoyed by the wide CC list, but I think =
+it's
+important for at least some thank yous to be public and nobody else =
+seems
+to have written one yet)
+
+> On 24 Oct 2024, at 06:27, Serge Semin <fancer.lancer@gmail.com> wrote:
+>=20
+> Hello Linux-kernel community,
+>=20
+> I am sure you have already heard the news caused by the recent Greg' =
+commit
+> 6e90b675cf942e ("MAINTAINERS: Remove some entries due to various =
+compliance
+> requirements."). As you may have noticed the change concerned some of =
+the
+> Ru-related developers removal from the list of the official kernel =
+maintainers,
+> including me.
+>=20
+> The community members rightly noted that the _quite_ short commit log =
+contained
+> very vague terms with no explicit change justification. No matter how =
+hard I
+> tried to get more details about the reason, alas the senior maintainer =
+I was
+> discussing the matter with haven't given an explanation to what =
+compliance
+> requirements that was. I won't cite the exact emails text since it was =
+a private
+> messaging, but the key words are "sanctions", "sorry", "nothing I can =
+do", "talk
+> to your (company) lawyer"... I can't say for all the guys affected by =
+the
+> change, but my work for the community has been purely _volunteer_ for =
+more than
+> a year now (and less than half of it had been payable before that). =
+For that
+> reason I have no any (company) lawyer to talk to, and honestly after =
+the way the
+> patch has been merged in I don't really want to now. Silently, behind =
+everyone's
+> back, _bypassing_ the standard patch-review process, with no affected
+> developers/subsystem notified - it's indeed the worse way to do what =
+has been
+> done. No gratitude, no credits to the developers for all these years =
+of the
+> devoted work for the community. No matter the reason of the situation =
+but
+> haven't we deserved more than that? Adding to the GREDITS file at =
+least, no?..
+>=20
+> I can't believe the kernel senior maintainers didn't consider that the =
+patch
+> wouldn't go unnoticed, and the situation might get out of control with
+> unpredictable results for the community, if not straight away then in =
+the middle
+> or long term perspective. I am sure there have been plenty ways to =
+solve the
+> problem less harmfully, but they decided to take the easiest path. =
+Alas what's
+> done is done. A bifurcation point slightly initiated a year ago has =
+just been
+> fully implemented. The reason of the situation is obviously in the =
+political
+> ground which in this case surely shatters a basement the community has =
+been built
+> on in the first place. If so then God knows what might be next (who =
+else might
+> be sanctioned...), but the implemented move clearly sends a bad signal =
+to the
+> Linux community new comers, to the already working volunteers and =
+hobbyists like
+> me.
+>=20
+> Thus even if it was still possible for me to send patches or perform =
+some
+> reviews, after what has been done my motivation to do that as a =
+volunteer has
+> simply vanished. (I might be doing a commercial upstreaming in future =
+though).
+> But before saying goodbye I'd like to express my gratitude to all the =
+community
+> members I have been lucky to work with during all these years. =
+Specifically:
+>=20
+> NTB-folks, Jon, Dave, Allen. NTB was my starting point in the kernel =
+upstream
+> work. Thanks for the initial advices and despite of very-very-very =
+tough reviews
+> with several complete patchset refactorings, I learned a lot back =
+then. That
+> experience helped me afterwards. Thanks a lot for that. BTW since then =
+I've got
+> several thank-you letters for the IDT NTB and IDT EEPROM drivers. If =
+not for you
+> it wouldn't have been possible.
+>=20
+> Andy, it's hard to remember who else would have given me more on my =
+Linux kernel
+> journey as you have. We first met in the I2C subsystem review of my DW =
+I2C
+> driver patches. Afterwards we've got to be frequently meeting here and =
+there -
+> GPIO, SPI, TTY, DMA, NET, etc, clean/fixes/features patch(set)s. Quite =
+heat
+> discussions in your first reviews drove me crazy really. But all the =
+time we
+> managed to come up with some consensus somehow. And you never quit the
+> discussions calmly explaining your point over and over. You never =
+refused to
+> provide more detailed justification to your requests/comments even =
+though you
+> didn't have to. Thanks to that I learned how to be patient to =
+reviewers
+> and reviewees. And of course thank you for the Linux-kernel knowledges =
+and all
+> the tips and tricks you shared.
+>=20
+> * Andy, please note due to the situation I am not going to work on my =
+DW DMAC
+> fixes patchset anymore. So if you ever wish to have DW UART stably =
+working with the
+> DW DMA-engine driver, then feel free to pick the series up:
+> Link: =
+https://lore.kernel.org/dmaengine/20240911184710.4207-1-fancer.lancer@gmai=
+l.com/
+>=20
+> Linus (Walleij), after you merged one of my pretty much heavy patchset =
+in you
+> suggested to me to continue the DW APB GPIO driver maintaining. It was =
+a first
+> time I was asked to maintain a not-my driver. Thank you for the trust. =
+I'll
+> never forget that.
+>=20
+> Mark, thank you very much for entrusting the DW APB SSI driver =
+maintenance to
+> me. I've put a lot of efforts into making it more generic and less =
+errors-prune,
+> especially when it comes working under a DMA-engine control or working =
+in the
+> mem-ops mode. I am sure the results have been beneficial to a lot of =
+DW
+> SPI-controller users since then.
+>=20
+> Damien, our first and last meeting was at my generic AHCI-platform and =
+DW AHCI
+> SATA driver patches review. You didn't make it a quick and easy path. =
+But still
+> all the reviews comments were purely on the technical basis, and the =
+patches
+> were eventually merged in. Thank you for your time and experience I've =
+got from
+> the reviews.
+>=20
+> Paul, Thomas, Arnd, Jiaxun, we met several times in the mailing list =
+during my
+> MIPS P5600 patches and just generic MIPS patches review. It was always =
+a
+> pleasure to discuss the matters with such brilliant experts in the =
+field. Alas
+> I've spent too much time working on the patches for another subsystems =
+and
+> failed to submit all the MIPS-related bits. Sorry I didn't keep my =
+promise, but
+> as you can see the circumstances have suddenly drawn its own deadline.
+>=20
+> Bjorn, Mani, we were working quite a lot with you in the framework of =
+the DW
+> PCIe RC drivers. You reviewed my patches. I helped you to review =
+another patches
+> for some time. Despite of some arguing it was always a pleasure to =
+work with
+> you.  Mani, special thanks for the cooperative DW eDMA driver =
+maintenance. I
+> think we were doing a great work together.
+>=20
+> Paolo, Jakub, David, Andrew, Vladimir, Russell. The network subsystem =
+and
+> particularly the STMMAC driver (no doubt the driver sucks) have turned =
+to be a
+> kind of obstacle on which my current Linux-kernel activity has =
+stopped. I really
+> hope that at least in some way my help with the incoming STMMAC and DW =
+XPCS
+> patches reviews lightened up your maintainance duty. I know Russell =
+might
+> disagree, but I honestly think that all our discussions were useful =
+after all,
+> at least for me. I also think we did a great work working together =
+with Russell
+> on the DW GMAC/QoS ETH PCS patches. Hopefully you'll find a time to =
+finish it up
+> after all.=20
+>=20
+> Rob, Krzysztof, from your reviews I've learned a lot about the most =
+hardwary part
+> of the kernel - DT sources and DT-bindings. All your comments have =
+been laconic
+> and straight to the point. That made reviews quick and easy. Thank you =
+very
+> much for that.
+>=20
+> Guenter, special thanks for reviewing and accepting my patches to the =
+hwmon and
+> watchdog subsystems. It was pleasure to be working with you.
+>=20
+> Borislav, we disagreed and argued a lot. So my DW uMCTL2 DDRC EDAC =
+patches even
+> got stuck in limbo for quite a long time. Anyway thank you for the =
+time
+> you spent reviewing my patches and trying to explain your point.
+>=20
+> * Borislav, it looks like I won't be able to work on my Synopsys EDAC =
+patchsets
+> anymore. If you or somebody else could pick them up and finish up the =
+work it
+> would be great (you can find it in the lore archive). The patches =
+convert the
+> mainly Zynq(MP)-specific Synopsys EDAC driver to supporting the =
+generic DW
+> uMCTL2 DDRC. It would be very beneficial for each platform based on =
+that
+> controller.
+>=20
+> Greg, we met several times in the mailing lists. You reviewed my =
+patches sent
+> for the USB and TTY subsystems, and all the time the process was =
+straight,
+> highly professional, and simpler than in the most of my other case.
+> Thank you very much for that.
+>=20
+> Yoshihiro, Keguang, Yanteng, Kory, Cai and everybody I was lucky to =
+meet in the
+> kernel mailing lists, but forgot to mention here. Thank you for the =
+time spent
+> for our cooperative work on making the Linux kernel better. It was a =
+pleasure to
+> meet you here.
+>=20
+> I also wish to say huge thanks to the community members trying to
+> defend the kicked off maintainers and for support you expressed in
+> these days. It means a lot.
+>=20
+> A little bit statics of my kernel-work at the end:
+>=20
+> Signed-off patches: 518
+> Reviewed and Acked patches: 253
+> Tested patches: 80
+>=20
+> You might say not the greatest achievement for seven years comparing =
+to some
+> other developers. Perhaps. But I meant each of these tags, be sure.
+>=20
+> I guess that's it. If you ever need some info or consultation =
+regarding the
+> drivers I used to maintain or the respective hardware or the Synopsys =
+IP-cores
+> (about which I've got quite comprehensive knowledge by this time), =
+feel free to
+> reach me out via this email. I am always willing to help to the =
+community
+> members.
+>=20
+> Hope we'll meet someday in more pleasant circumstances and drink a
+> couple or more beers together. But now it's time to say good bye.
+> Sorry for a long-read text. I wish good luck on your Linux-way.
+>=20
+> Best Regards,
+> -Serge(y)
+>=20
 
 
