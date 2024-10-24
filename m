@@ -1,420 +1,137 @@
-Return-Path: <linux-edac+bounces-2230-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2231-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 842CB9ADDB9
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 09:33:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 710C89ADF0A
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 10:21:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04B4F1F225DB
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 07:33:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2754728A5D7
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 08:21:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC271AB6FA;
-	Thu, 24 Oct 2024 07:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F2831B392C;
+	Thu, 24 Oct 2024 08:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NPYBlPus"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vzmcv6M/"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C1F1AAE2C
-	for <linux-edac@vger.kernel.org>; Thu, 24 Oct 2024 07:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57FC1AF0BC
+	for <linux-edac@vger.kernel.org>; Thu, 24 Oct 2024 08:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729755181; cv=none; b=srh788AqCAJj7qhZIAHBtnMPyHRxC2SWsk7mBNSJJ7d+SpD1lNrFaGRyn0pJtPfRy55UdQ017S1nHZsUcgMlR0cHdY3eyxUqUDp0qMR0Ri5EUJTPHo8Jle+mswUTqWgQdYtlbSpN6ytzwV7J2BNGQdMSAfv7v1obuj84RBubNjc=
+	t=1729758052; cv=none; b=HOIwd0gFA+zSnJXfcPQ/CBOTeNzH01LP03F8SMK4fVea0skT9xi8wdihMm+k40UA5OxcYa4UaMNHokc0RHfk+Ko2jXYsjUq5/ts2E+E3NWgU0xAieT/P+p+OG7wuacLr6edJRjWyKZij9/9j5tMKE2is9k9VjnlR3y+dI3aS3L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729755181; c=relaxed/simple;
-	bh=xJk9DEO+3X/GcCNVC4idOyP3Q8DzjJsvWHkQBNNuUiI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FxyATZYeyeaEBn5pJ8Axo2MVElU8R108xut13Y6cx1dZkSnv3czi8uCxVfRgF/czd4dRQuk3f4fNVLj3/YuDxWz63GvDYP/RdBtqAMIINpj8Fnmi8q2dyQGulv/eDTgCCAdxBOSsRrSBsxZ0Y0hgQKC9n/ldJw8xmbeuw1agI0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NPYBlPus; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729755177;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6QtnlkYe/1PnWLS5Ii6raZ83O0JHoz7C7QG5MqJpjr0=;
-	b=NPYBlPus2ErWhnfc5pjFKNkzb04Mij/NUKYpingANTTyjfd8F2sZtyToBjKi4+VCoCUcOn
-	D97Ffl5OhPC8DCSLkZvtg42uPcner62C5jIUEhYrpjuRx/63sDT1vj06tGhrt+F1dTpG6p
-	M6+2Ot0UMofKiqq/CVqPK7OgHDS3fGA=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-85-lIa8mSD3OfW6LJt60UDqsQ-1; Thu, 24 Oct 2024 03:32:55 -0400
-X-MC-Unique: lIa8mSD3OfW6LJt60UDqsQ-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-6e5bdb9244eso10424877b3.2
-        for <linux-edac@vger.kernel.org>; Thu, 24 Oct 2024 00:32:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729755174; x=1730359974;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+	s=arc-20240116; t=1729758052; c=relaxed/simple;
+	bh=L+l/EN+WevNRX8zlMqajghYzv+6O7kk5ph+3ZCVzq78=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=U81rCTkmykh/y62O6Crz2RqOhNP+o4bkVHRq60JY+bGEjF6pom3S2A8/JwKkZ/gsxo3/olyakIIeA0kjuY9fIn+ar/GsU27roUA4iRa2O46Cuflvif/N0SlCWaIFgK1hVXCEooWQIqgTYn2hQB3Am/XKwTsjQ6ZjYFjZlyVkpi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vzmcv6M/; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-37d462c91a9so399601f8f.2
+        for <linux-edac@vger.kernel.org>; Thu, 24 Oct 2024 01:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729758049; x=1730362849; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6QtnlkYe/1PnWLS5Ii6raZ83O0JHoz7C7QG5MqJpjr0=;
-        b=hP3Tph3P4b+h/3O2Frn3lmhzuT+ewJmbPFxrBx5m3ZMWrpjE7gHTFcA9zzeBSugftr
-         DNj/LrFHzYPkZB2bNVvOTjmRKMXjICS7CbnatnwkknsL8B/mhdc3e0EB2FQPHGECyS6m
-         MmvaGzTWhqybUY+T/+vkBX6blPEOoHbNOwgN/jk3vNRv3WIoNR1BQGRYKR9reE+h+W0j
-         QHfepPq8qYTGkPnMOdHDsg4rEpLwRZGNZfYAqPn+ERAxmbQFOeRkKZedeyUZgRNapkw6
-         QOrWZOnuElkwsw8jDAEwZHvYMw3naKqc1TUXpDirG8xPSY0e80E8syOCxAAFSBCo9wku
-         i9rw==
-X-Forwarded-Encrypted: i=1; AJvYcCWNOU80NGsFKuBfoguhLXGhbQIs+RDtBwEy9KLHk5AR0pGpT1XFp8/0Uxa1s9hOrSqFCYoAfMZMStS7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8bs9Kx4BnQUSEIfseyWyyF8haXHfxwcBvfYEe0zhDknMNFPnF
-	7ujsKyxNVxzoxZR6d91v0da9snz8mSrKmk9DspYVcjJFZ7IZKQBRKkmXRRXRQI3/qkSTjLoUIVT
-	XCSL177fHC01R38GS3paWd64CBu0ihsbpWIMI1/5DnI/3x9Jimd1s7m3utUU=
-X-Received: by 2002:a05:690c:6e03:b0:6db:cf6c:a7c4 with SMTP id 00721157ae682-6e866331c20mr10690547b3.45.1729755174543;
-        Thu, 24 Oct 2024 00:32:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFwjzENxysw+j7YRfDKeQxYY43g6inqzMz9Yd8c7a5bPrsRFqYGaOrxa6Un2MKjvPM7S1dLyw==
-X-Received: by 2002:a05:690c:6e03:b0:6db:cf6c:a7c4 with SMTP id 00721157ae682-6e866331c20mr10690047b3.45.1729755174061;
-        Thu, 24 Oct 2024 00:32:54 -0700 (PDT)
-Received: from dhcp-64-16.muc.redhat.com (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6ce008ac8f1sm47141046d6.26.2024.10.24.00.32.47
+        bh=e2kiKp4RgrfPbI2NGuX12q84a3Rc1kCYks5Y0FQbopU=;
+        b=vzmcv6M/RWqSnW9AteqJ8Xec1r9airLBXb2VaVzBq0cAzJ3pQEVqJ9LtCkjD6DuBUf
+         mJOb6tNubWzgTfE29N7JzfBPTWdJyvji3aQIybrViRWS1U5wWt2fottIJXkFljA3LwIN
+         v0v+urje4TzJj2htdHkC9/QwvzK/z7KrcfgCuO8w2AdBn1rDQZO0HpBjzKvoM9rrxM0M
+         OFx+kUViK9OWF6AVo0hVsrDnn57DyzPdpxR6SshkCtZGGvvqLAt1qQjn9rVRrhacY73o
+         RKBx7Oc00OW7DHo68SrVceaGnoqQtXzntOLCKr9wvel5cwPK/etM5LRqPVPHZVlwQzt4
+         BLTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729758049; x=1730362849;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2kiKp4RgrfPbI2NGuX12q84a3Rc1kCYks5Y0FQbopU=;
+        b=ovs1Js08R6197Cx9BeEK0EJZlHdkk786uSq4h5jBFq0P/mnxXExwhGguramF9u7zVD
+         AEuhj2f7URj+JNPdeLb7sueK0yRDnbK8jEwoetFFm2/pBsOsTTOGNFS7AF4MTVd4CSw6
+         dbMIBmqXUG/WBo8MSojcK/ma90NIKD+7x4cqPgZNJur0k+h4Q90wa4dQR87WlnoWq/Fi
+         om8ZAMwrmWocQoYOBvLnEC82Po+8DVUjpk7N9Psup9EtvgtzD8wBbAElHIfsocvabVuI
+         f3HwLqtYZDCY63r6Nvfkk69xXylcIDkjj6ZLDx5FFqWOIy5p0BMMdL0qfPnZrbXJPyrI
+         VBxw==
+X-Gm-Message-State: AOJu0Ywd/cMDraI6uXTiz9jTkZDculK2egBkwFNFClmTOMIJ9+jliWgY
+	5qs8+MrvLWyKZRswAszIhTbseDvql7x37+h/QCH9DnV5nwpk3SfO98iKiSctia7dWB6+37T/kpe
+	o
+X-Google-Smtp-Source: AGHT+IEvT9dQpTZIFHUAzEIeUPyd/DpWd5v1CScFEIgzYUC5kIUWRh7H3hQKeApzCVFurxMGWx4RGw==
+X-Received: by 2002:a05:6000:4598:b0:37d:46f4:35 with SMTP id ffacd0b85a97d-37efcf84a6bmr3204504f8f.45.1729758048938;
+        Thu, 24 Oct 2024 01:20:48 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a584f7sm10703548f8f.53.2024.10.24.01.20.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 00:32:53 -0700 (PDT)
-Message-ID: <7be870fc2b2fa01b89708208c78cc041029252aa.camel@redhat.com>
-Subject: Re: linux: Goodbye from a Linux community volunteer
-From: Philipp Stanner <pstanner@redhat.com>
-To: Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>, 
- Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
- ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Kory Maincent
- <kory.maincent@bootlin.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
- dmaengine@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
- linux-spi@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
- linux-ide@vger.kernel.org, Paul Burton <paulburton@kernel.org>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Arnd Bergmann <arnd@arndb.de>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>,  linux-mips@vger.kernel.org, Bjorn
- Helgaas <bhelgaas@google.com>, Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>, Yoshihiro Shimoda
- <yoshihiro.shimoda.uh@renesas.com>,  linux-pci@vger.kernel.org, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>, Russell King
- <linux@armlinux.org.uk>, Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>, 
- netdev@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
- linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>, 
- linux-edac@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,  linux-serial@vger.kernel.org
-Cc: Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>, 
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Alexander Shiyan
- <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,  Sergey Shtylyov
- <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>, Geert
- Uytterhoeven <geert@linux-m68k.org>, Sergio Paracuellos
- <sergio.paracuellos@gmail.com>,  Nikita Shubin <nikita.shubin@maquefel.me>,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 24 Oct 2024 09:32:46 +0200
-In-Reply-To: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
-References: 
-	<2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+        Thu, 24 Oct 2024 01:20:48 -0700 (PDT)
+Date: Thu, 24 Oct 2024 11:20:45 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Shravan Kumar Ramani <sramani@mellanox.com>
+Cc: linux-edac@vger.kernel.org
+Subject: [bug report] EDAC, mellanox: Add ECC support for BlueField DDR4
+Message-ID: <046bf689-9a2b-4993-b8ca-927d7d2a0cc5@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 2024-10-24 at 07:27 +0300, Serge Semin wrote:
-> Hello Linux-kernel community,
->=20
-> I am sure you have already heard the news caused by the recent Greg'
-> commit
-> 6e90b675cf942e ("MAINTAINERS: Remove some entries due to various
-> compliance
-> requirements."). As you may have noticed the change concerned some of
-> the
-> Ru-related developers removal from the list of the official kernel
-> maintainers,
-> including me.
->=20
-> The community members rightly noted that the _quite_ short commit log
-> contained
-> very vague terms with no explicit change justification. No matter how
-> hard I
-> tried to get more details about the reason, alas the senior
-> maintainer I was
-> discussing the matter with haven't given an explanation to what
-> compliance
-> requirements that was. I won't cite the exact emails text since it
-> was a private
-> messaging, but the key words are "sanctions", "sorry", "nothing I can
-> do", "talk
-> to your (company) lawyer"... I can't say for all the guys affected by
-> the
-> change, but my work for the community has been purely _volunteer_ for
-> more than
-> a year now (and less than half of it had been payable before that).
-> For that
-> reason I have no any (company) lawyer to talk to, and honestly after
-> the way the
-> patch has been merged in I don't really want to now. Silently, behind
-> everyone's
-> back, _bypassing_ the standard patch-review process, with no affected
-> developers/subsystem notified - it's indeed the worse way to do what
-> has been
-> done. No gratitude, no credits to the developers for all these years
-> of the
-> devoted work for the community. No matter the reason of the situation
-> but
-> haven't we deserved more than that? Adding to the GREDITS file at
-> least, no?..
->=20
-> I can't believe the kernel senior maintainers didn't consider that
-> the patch
-> wouldn't go unnoticed, and the situation might get out of control
-> with
-> unpredictable results for the community, if not straight away then in
-> the middle
-> or long term perspective. I am sure there have been plenty ways to
-> solve the
-> problem less harmfully, but they decided to take the easiest path.
-> Alas what's
-> done is done. A bifurcation point slightly initiated a year ago has
-> just been
-> fully implemented. The reason of the situation is obviously in the
-> political
-> ground which in this case surely shatters a basement the community
-> has been built
-> on in the first place. If so then God knows what might be next (who
-> else might
-> be sanctioned...), but the implemented move clearly sends a bad
-> signal to the
-> Linux community new comers, to the already working volunteers and
-> hobbyists like
-> me.
+Hello Shravan Kumar Ramani,
 
-I'm also quite shocked and even baffled about how this has been
-handled. This is not how leaders should communicate difficult or big
-decisions. It's the most disappointing event I have witnessed in the
-project.
+Commit 82413e562ea6 ("EDAC, mellanox: Add ECC support for BlueField
+DDR4") from Jun 25, 2019 (linux-next), leads to the following Smatch
+static checker warning:
 
-There is the form and there is the content =E2=80=93 about the content one
-cannot do much, when the state he or his organization resides in gives
-an order.
+drivers/edac/bluefield_edac.c:205 bluefield_gather_report_ecc() error: uninitialized symbol 'dram_syndrom'.
+drivers/edac/bluefield_edac.c:219 bluefield_gather_report_ecc() error: uninitialized symbol 'dram_additional_info'.
+drivers/edac/bluefield_edac.c:231 bluefield_gather_report_ecc() error: uninitialized symbol 'edea0'.
+drivers/edac/bluefield_edac.c:231 bluefield_gather_report_ecc() error: uninitialized symbol 'edea1'.
+drivers/edac/bluefield_edac.c:256 bluefield_edac_check() error: uninitialized symbol 'ecc_count'.
 
-But about the form one can indeed do much. No "Thank you!", no "I hope
-we can work together again once the world has become sane(r)"... srsly,
-what the hell.
+drivers/edac/bluefield_edac.c
+    173 static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
+    174                                         int error_cnt,
+    175                                         int is_single_ecc)
+    176 {
+    177         struct bluefield_edac_priv *priv = mci->pvt_info;
+    178         u32 dram_additional_info, err_prank, edea0, edea1;
+    179         u32 ecc_latch_select, dram_syndrom, serr, derr, syndrom;
+    180         enum hw_event_mc_err_type ecc_type;
+    181         u64 ecc_dimm_addr;
+    182         int ecc_dimm, err;
+    183 
+    184         ecc_type = is_single_ecc ? HW_EVENT_ERR_CORRECTED :
+    185                                    HW_EVENT_ERR_UNCORRECTED;
+    186 
+    187         /*
+    188          * Tell the External Memory Interface to populate the relevant
+    189          * registers with information about the last ECC error occurrence.
+    190          */
+    191         ecc_latch_select = MLXBF_ECC_LATCH_SEL__START;
+    192         err = bluefield_edac_writel(priv, MLXBF_ECC_LATCH_SEL, ecc_latch_select);
+    193         if (err)
+    194                 dev_err(priv->dev, "ECC latch select write failed.\n");
+    195 
+    196         /*
+    197          * Verify that the ECC reported info in the registers is of the
+    198          * same type as the one asked to report. If not, just report the
+    199          * error without the detailed information.
+    200          */
+    201         err = bluefield_edac_readl(priv, MLXBF_SYNDROM, &dram_syndrom);
+    202         if (err)
+    203                 dev_err(priv->dev, "DRAM syndrom read failed.\n");
 
-No idea why they felt the need to do it that way, but it certainly is
-not the open source way, neither is it decent or honorable.
+If bluefield_edac_readl() fails then dram_syndrom is uninitialized.
 
+    204 
+--> 205         serr = FIELD_GET(MLXBF_SYNDROM__SERR, dram_syndrom);
+    206         derr = FIELD_GET(MLXBF_SYNDROM__DERR, dram_syndrom);
+    207         syndrom = FIELD_GET(MLXBF_SYNDROM__SYN, dram_syndrom);
 
-That said, thank you for all your work, Serge!
-
-I believe that nothing that has been accomplished with a candid mindset
-and decent intentions is ever done for nothing, although it often pays
-off way differently than expected.
-So I hope this will be the case for you, too.
-
-Take care,
-Philipp
-
-
->=20
-> Thus even if it was still possible for me to send patches or perform
-> some
-> reviews, after what has been done my motivation to do that as a
-> volunteer has
-> simply vanished. (I might be doing a commercial upstreaming in future
-> though).
-> But before saying goodbye I'd like to express my gratitude to all the
-> community
-> members I have been lucky to work with during all these years.
-> Specifically:
->=20
-> NTB-folks, Jon, Dave, Allen. NTB was my starting point in the kernel
-> upstream
-> work. Thanks for the initial advices and despite of very-very-very
-> tough reviews
-> with several complete patchset refactorings, I learned a lot back
-> then. That
-> experience helped me afterwards. Thanks a lot for that. BTW since
-> then I've got
-> several thank-you letters for the IDT NTB and IDT EEPROM drivers. If
-> not for you
-> it wouldn't have been possible.
->=20
-> Andy, it's hard to remember who else would have given me more on my
-> Linux kernel
-> journey as you have. We first met in the I2C subsystem review of my
-> DW I2C
-> driver patches. Afterwards we've got to be frequently meeting here
-> and there -
-> GPIO, SPI, TTY, DMA, NET, etc, clean/fixes/features patch(set)s.
-> Quite heat
-> discussions in your first reviews drove me crazy really. But all the
-> time we
-> managed to come up with some consensus somehow. And you never quit
-> the
-> discussions calmly explaining your point over and over. You never
-> refused to
-> provide more detailed justification to your requests/comments even
-> though you
-> didn't have to. Thanks to that I learned how to be patient to
-> reviewers
-> and reviewees. And of course thank you for the Linux-kernel
-> knowledges and all
-> the tips and tricks you shared.
->=20
-> * Andy, please note due to the situation I am not going to work on my
-> DW DMAC
-> fixes patchset anymore. So if you ever wish to have DW UART stably
-> working with the
-> DW DMA-engine driver, then feel free to pick the series up:
-> Link:
-> https://lore.kernel.org/dmaengine/20240911184710.4207-1-fancer.lancer@gma=
-il.com/
->=20
-> Linus (Walleij), after you merged one of my pretty much heavy
-> patchset in you
-> suggested to me to continue the DW APB GPIO driver maintaining. It
-> was a first
-> time I was asked to maintain a not-my driver. Thank you for the
-> trust. I'll
-> never forget that.
->=20
-> Mark, thank you very much for entrusting the DW APB SSI driver
-> maintenance to
-> me. I've put a lot of efforts into making it more generic and less
-> errors-prune,
-> especially when it comes working under a DMA-engine control or
-> working in the
-> mem-ops mode. I am sure the results have been beneficial to a lot of
-> DW
-> SPI-controller users since then.
->=20
-> Damien, our first and last meeting was at my generic AHCI-platform
-> and DW AHCI
-> SATA driver patches review. You didn't make it a quick and easy path.
-> But still
-> all the reviews comments were purely on the technical basis, and the
-> patches
-> were eventually merged in. Thank you for your time and experience
-> I've got from
-> the reviews.
->=20
-> Paul, Thomas, Arnd, Jiaxun, we met several times in the mailing list
-> during my
-> MIPS P5600 patches and just generic MIPS patches review. It was
-> always a
-> pleasure to discuss the matters with such brilliant experts in the
-> field. Alas
-> I've spent too much time working on the patches for another
-> subsystems and
-> failed to submit all the MIPS-related bits. Sorry I didn't keep my
-> promise, but
-> as you can see the circumstances have suddenly drawn its own
-> deadline.
->=20
-> Bjorn, Mani, we were working quite a lot with you in the framework of
-> the DW
-> PCIe RC drivers. You reviewed my patches. I helped you to review
-> another patches
-> for some time. Despite of some arguing it was always a pleasure to
-> work with
-> you.=C2=A0 Mani, special thanks for the cooperative DW eDMA driver
-> maintenance. I
-> think we were doing a great work together.
->=20
-> Paolo, Jakub, David, Andrew, Vladimir, Russell. The network subsystem
-> and
-> particularly the STMMAC driver (no doubt the driver sucks) have
-> turned to be a
-> kind of obstacle on which my current Linux-kernel activity has
-> stopped. I really
-> hope that at least in some way my help with the incoming STMMAC and
-> DW XPCS
-> patches reviews lightened up your maintainance duty. I know Russell
-> might
-> disagree, but I honestly think that all our discussions were useful
-> after all,
-> at least for me. I also think we did a great work working together
-> with Russell
-> on the DW GMAC/QoS ETH PCS patches. Hopefully you'll find a time to
-> finish it up
-> after all.=20
->=20
-> Rob, Krzysztof, from your reviews I've learned a lot about the most
-> hardwary part
-> of the kernel - DT sources and DT-bindings. All your comments have
-> been laconic
-> and straight to the point. That made reviews quick and easy. Thank
-> you very
-> much for that.
->=20
-> Guenter, special thanks for reviewing and accepting my patches to the
-> hwmon and
-> watchdog subsystems. It was pleasure to be working with you.
->=20
-> Borislav, we disagreed and argued a lot. So my DW uMCTL2 DDRC EDAC
-> patches even
-> got stuck in limbo for quite a long time. Anyway thank you for the
-> time
-> you spent reviewing my patches and trying to explain your point.
->=20
-> * Borislav, it looks like I won't be able to work on my Synopsys EDAC
-> patchsets
-> anymore. If you or somebody else could pick them up and finish up the
-> work it
-> would be great (you can find it in the lore archive). The patches
-> convert the
-> mainly Zynq(MP)-specific Synopsys EDAC driver to supporting the
-> generic DW
-> uMCTL2 DDRC. It would be very beneficial for each platform based on
-> that
-> controller.
->=20
-> Greg, we met several times in the mailing lists. You reviewed my
-> patches sent
-> for the USB and TTY subsystems, and all the time the process was
-> straight,
-> highly professional, and simpler than in the most of my other case.
-> Thank you very much for that.
->=20
-> Yoshihiro, Keguang, Yanteng, Kory, Cai and everybody I was lucky to
-> meet in the
-> kernel mailing lists, but forgot to mention here. Thank you for the
-> time spent
-> for our cooperative work on making the Linux kernel better. It was a
-> pleasure to
-> meet you here.
->=20
-> I also wish to say huge thanks to the community members trying to
-> defend the kicked off maintainers and for support you expressed in
-> these days. It means a lot.
->=20
-> A little bit statics of my kernel-work at the end:
->=20
-> Signed-off patches:		518
-> Reviewed and Acked patches:	253
-> Tested patches:			80
->=20
-> You might say not the greatest achievement for seven years comparing
-> to some
-> other developers. Perhaps. But I meant each of these tags, be sure.
->=20
-> I guess that's it. If you ever need some info or consultation
-> regarding the
-> drivers I used to maintain or the respective hardware or the Synopsys
-> IP-cores
-> (about which I've got quite comprehensive knowledge by this time),
-> feel free to
-> reach me out via this email. I am always willing to help to the
-> community
-> members.
->=20
-> Hope we'll meet someday in more pleasant circumstances and drink a
-> couple or more beers together. But now it's time to say good bye.
-> Sorry for a long-read text. I wish good luck on your Linux-way.
->=20
-> Best Regards,
-> -Serge(y)
->=20
-
+regards,
+dan carpenter
 
