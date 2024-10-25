@@ -1,224 +1,187 @@
-Return-Path: <linux-edac+bounces-2283-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2284-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 874EB9B044F
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 15:39:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 658B99B04C2
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 15:57:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F03F1F239FF
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 13:39:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 889591C20E70
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 13:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D181FB884;
-	Fri, 25 Oct 2024 13:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA0B420103C;
+	Fri, 25 Oct 2024 13:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TzUt3tKJ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jnK+725G"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E4C1F7566;
-	Fri, 25 Oct 2024 13:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729863573; cv=none; b=OIj3Y4GPZWvdjEJO1HMmv5F4rUa/bW8fROhlJ/tl5gvX2VDShThgX8huBbnBZe6GmiMwEI1Rk3AFmtoWkHbZVwT0hgLN9ea2pWeIAGAJu92BWzvXBU/Sxb3OduD9whWGaBrj5lIBKNF4BCLtbkkmWxC5ekKdAawIq/HgLPw/QKo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729863573; c=relaxed/simple;
-	bh=/HnzH8LIxgCAWX0/LLh1puQjwqcQ1NSbusIo7Y2Mm3Q=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=gu2G+DRsc/IDw/hI/yWgdzXNE6/dQ7fZkL9yPY3JaeUb0WyF/L1EJe8pDJ3o31w2qMRWD4he0UO9BTSGQftLYoOkWd3hOA9C+mG4R8q0xVRlWAJweAxGPS/MxXwVf7vpF65TVf0jrGQtbgVY3xyL0NqL9Vqva0EeNgQmMrQpPB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TzUt3tKJ; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729863571; x=1761399571;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=/HnzH8LIxgCAWX0/LLh1puQjwqcQ1NSbusIo7Y2Mm3Q=;
-  b=TzUt3tKJKFyWLwOZpsSNOr/CnNVKenZRKHG7W7CnzmIvtePLpj65CEuU
-   i4u/9oKhYKSrhXR/JTgJHIcyNSgqvDtCrYYWdGpQTkJPZxZITte1aymn8
-   STXIxnuchSQd/hrem4IxS7CRquATMxqGrmJIvg2frEEIFa4qI7O+0VKrd
-   UUkPIbkGLiB9X9jAg6EeXYkzSpxAQl3fcDpOU6hFU505upV33xK7C+Cc9
-   /7YDBgL5qNQSRaWNZ+O50IhUirpZXMsEqTajvWj8Bx/7y5ZDs/ChO9aMc
-   4YFLLhUE9E23MS5lPKBSydenv0cT8kXujCpplEglmYBWV1Ide7PwAZkwi
-   Q==;
-X-CSE-ConnectionGUID: uVvo5VE1Q9egw6uoeGAbIA==
-X-CSE-MsgGUID: 8uQtQPinRPihbf92JuzMWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="33229180"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="33229180"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:39:30 -0700
-X-CSE-ConnectionGUID: 2L9XHif8SVm9IHuMKA3KaQ==
-X-CSE-MsgGUID: m60xT2EDQUCcPtzhB4axHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="111752941"
-Received: from ettammin-desk.ger.corp.intel.com (HELO localhost) ([10.245.244.225])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:39:25 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 25 Oct 2024 16:39:21 +0300 (EEST)
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-cc: linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com, 
-    john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com, 
-    Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com, 
-    linux@roeck-us.net, clemens@ladisch.de, 
-    Hans de Goede <hdegoede@redhat.com>, linux-pci@vger.kernel.org, 
-    linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-    naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
-Subject: Re: [PATCH 14/16] x86/amd_smn, platform/x86/amd/hsmp: Have HSMP use
- SMN
-In-Reply-To: <20241024160625.GC965@yaz-khff2.amd.com>
-Message-ID: <d44f45c1-a550-de07-d1fa-91dfe0adb47f@linux.intel.com>
-References: <20241023172150.659002-1-yazen.ghannam@amd.com> <20241023172150.659002-15-yazen.ghannam@amd.com> <2797ecc5-935d-21a2-bb43-273a7eae3a12@linux.intel.com> <20241024160625.GC965@yaz-khff2.amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17C51FB886;
+	Fri, 25 Oct 2024 13:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729864585; cv=fail; b=G8x6OnBX2eTps6/kO9UitChjJyUuHQhLf5h2mGDDa6GE7jKka8FaOh00P/Sx12s5tZMjw2RqsLsPRblN6c/EkuPL+8jI2TorJut/HC5CAS5q7yCCBW7Qu19fPCmCazCIaF1D1VcwFcY5U9P8XwL9FTt4NsDTbqZdZuSU77+JUO8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729864585; c=relaxed/simple;
+	bh=geMda866BnS5Ue13GJ7eD5lQEFOAakoIIM7KYgqf1As=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=FdDxRD07dYEQOzJS2JkcpCkalfsLadMhG9HLJujrXFi3a0XLV0tR4L3EStHVQ/6qYk6xOxZKhkCXKhYfp0iIQMrz1KAhgtIDezCHoZzkl90592bGI5QcOdxicmPR1oaZuUb+jqfvrlWwG9yXsb6G9dTz1NoXMMK6BWkWsT/tLXM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jnK+725G; arc=fail smtp.client-ip=40.107.244.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DKl0JW6PXmhSl7vgJMx8gBVHGts4YIGXMg4Rct67xtvOEVw8JqDNurf4VdTysUp/tBv/Fc9CG0sy5x5NLycHOEepIPXAt4eUv/RBYusOHqw+mGN+Cs/QTcvM6bFfSLS/LpMkpeiO067WNpqprmoLGhvz8OT8bGSXb0imk38IfZJBZsL51fcSf3oZSykcJ2GzmdjexYdvilKkUaM48/Iaf20cGqpPEpmaTUVIgfzqjJksRZLTFn7g0ktco8cwrxCEhT+w6piMFlFaK0codsCwV0bykM94gSYnLNiSMK0Fngi/A9zKH5K8pb1QFG1edlYc6EPANBDHl6Su/E1rDaruVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xQKAqtvl3HeRwcp5xQytBxV5ThNic30WnE7kginhiIE=;
+ b=cfotV9Z4V/5YtAknFxjk75INkk6A49z6xl4LXZ6TtsW+Qa3Wppab40iq0uUontXDS6sY7JfYK7r9lI6H0pY6Iu//IXUsA1npqnQnqfhr4aPfMoYpHbnS1hWdVo4Jk75WLAFZdhETpt2SGug5cNXHv+B+hvw3nZplNe+ORW12RZ8annvRle3S6keicPc1SI2MyDiJd8NX2urR6XEDtI++KZC/Zi/qYSGO3zqSfdDrB429tKibismf41S/UdpJTh2UgRnmkUCCl0tdJTsPRtYJ0YBjIM6OplJSh+/on1Yb4KscZ+0thauv95qsNqThpBGghT32HjmMWYnpHRz8UxVcYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xQKAqtvl3HeRwcp5xQytBxV5ThNic30WnE7kginhiIE=;
+ b=jnK+725Gd66fJmtUXVors+hYXZgy+m3Ye9D03kNiUfj2fMiNZrMyo+CWDU9l23jffLK736ilJg9M2uDlb2saGOymuJq3GN5YiiQfLd9xYEFjDV+Q9EuC40oGblchmfLjr9nOGqE48Aa4vIu3kuf1gpx+3Ryr694yq6ZhKG5ea3E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ DM4PR12MB6160.namprd12.prod.outlook.com (2603:10b6:8:a7::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.18; Fri, 25 Oct 2024 13:56:21 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%5]) with mapi id 15.20.8093.018; Fri, 25 Oct 2024
+ 13:56:20 +0000
+Date: Fri, 25 Oct 2024 09:56:16 -0400
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] RAS/AMD/FMPM: Remove some dead code
+Message-ID: <20241025135616.GA407109@yaz-khff2.amd.com>
+References: <6b914abf-b3ce-4baa-b4d7-f8da9a840a3f@stanley.mountain>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b914abf-b3ce-4baa-b4d7-f8da9a840a3f@stanley.mountain>
+X-ClientProxiedBy: MN2PR11CA0027.namprd11.prod.outlook.com
+ (2603:10b6:208:23b::32) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-983401245-1729863561=:946"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|DM4PR12MB6160:EE_
+X-MS-Office365-Filtering-Correlation-Id: d30b894f-0ee0-46de-d4e4-08dcf4fcce01
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?F4JzKHZHoTRK4gQDdt2owh1ztd1FTq8tLBGAi4rfVTJoeqTI3mRZHJh6SGMI?=
+ =?us-ascii?Q?pxKCzKGBMIbUIJw5req1Rvs7Gxh19VmUJlYu3cVUrdkR5kdA4SmmecD1fCO4?=
+ =?us-ascii?Q?tE0dpmGJlqP+/7OEJBbfAnK734GoLkaSX6fxlF8YBPPTFqoc+8pbuoeKhxby?=
+ =?us-ascii?Q?1wJ7167JfbmQSNYvs0Rh68hNpzIvDGDuGlkgBeN+MfHxFH6JTqPp/jWzqw0X?=
+ =?us-ascii?Q?RnHcosTIkQ7C9ZmgUGyHmA0U4ziuXZRlSyeIJp5aSaK62qHkqnjqEFS//htP?=
+ =?us-ascii?Q?KUOec1jzTNcIG7ZefElhb7t+9OVMc7DKpqK4jaYEilFgVkKKM9X5sVOO1dkV?=
+ =?us-ascii?Q?uPm4GDOrk9jHQkx+OF79IMzwj+O0UCrbLRvHxpQdxZZsOtLxu65Q9jR7kT6x?=
+ =?us-ascii?Q?ucwY4SeqEZlhNBXc+DLCdKXvl7/Pwtf8yr/Au3XWVuJZ5h2+7XasuCo4n5EG?=
+ =?us-ascii?Q?ZolwlB+n5ppaEupn3YPiMQZC9h+eRINbIr2Y4DVnm5feSIqDCCancahEBeY1?=
+ =?us-ascii?Q?uF/XsTcHQHbVuIL6F14rmKmzeZ1p6PYsIaZU5lHwR2KnqSQUKGoXR+JCFsoP?=
+ =?us-ascii?Q?SM7eGwSFy90Cfr7BCQdoo98gKLqkL/slosxJ9aB20ikPO8/Q+qToof0OzSWZ?=
+ =?us-ascii?Q?I/x6VoPg9NGLZcbWe0J3k65koSHHS0HOUjURMJIhJ8a2k4mJbf6/wGR4OxHC?=
+ =?us-ascii?Q?7a2nrQPONZM7sNpA60JPPMZm3DWVO9yBu0m3p0npxKKqP04Q6GtGer+QFPxT?=
+ =?us-ascii?Q?bdJ3IGAsyGDu551PCMYnK6a+6xq63Duk/vNkLTWg2uA9nRvfU48XMv+GDWcI?=
+ =?us-ascii?Q?d1q0aMqykE3NGhrn8qnKBgbrYd7HMrbl6djBgS3gMDkrRD8qFf/MYdijbL2Y?=
+ =?us-ascii?Q?hpUjyA0k79hR/veLHt0q4iz4YRJpUlyJeqykpP28QMjGAOdKvPgEaass5lN2?=
+ =?us-ascii?Q?kkww3DGbD1INtCm+SaDkoOF0R2VvxS9BKehkvg0bJG66ePwFAFRcSm8//kiX?=
+ =?us-ascii?Q?BynqpZpEJgU2XC65/XrZkdqeU8cnTYpDG0Ye2sBwBLB9gfJEhhM1TYFTF1zu?=
+ =?us-ascii?Q?W49NfQDYx/zkARZSJT1IVSnHPrWrzcraXBBDma6binJLd8mCDO7s+aDNNU2A?=
+ =?us-ascii?Q?OVtr9bdQfA2cVz4EX/u4o454UUhPKBLlmPmuaEUzpyNSSWZy2smHHvgT2C3x?=
+ =?us-ascii?Q?gtEFi2EKyP3eFFqEY2qafu88SHCtmvyOOtS13njZUYvJarSpBmsOCnObmJ+l?=
+ =?us-ascii?Q?x3dmfcFk5RO6Pl9/THyV+OVjnYhVw9g1t7nVOPvg4VOYxLqJfYBcpQ/1iFFZ?=
+ =?us-ascii?Q?VVJ5ufEAzvWmuHxIMiHaDtlg?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?e1guw+0QVcT63xUdKUc1Ci8p7cqKbmksZncng45XfvRolSqCTFqwsBbPORWs?=
+ =?us-ascii?Q?vZIknd07EuanlBkY4EBEE+qyNCv7ckwRyzsseGjx9xxUQ/N5pgZO+taGQSKA?=
+ =?us-ascii?Q?jlwbC9ZVgC25kiBd++3CYlW5Lu6wJ3Ta6Ghmym6s72+3qIo4IBcMqmFsmBfU?=
+ =?us-ascii?Q?ii6bpCPpqaARmKTT0mT4OSAF0EHF/9laKRjyvozPWdlh57y4AzZ88tfPTLWK?=
+ =?us-ascii?Q?Cwx1paSbdpbCdF+Ef1KXxkUOOxgKAX/PHbQouRzoN7tA926R58EdIRIY91OY?=
+ =?us-ascii?Q?66s1utA/5cspSSU3RENGgRjbE7QAXe53nkmHcBKSzr20YM7Y6avYEQMqkeSl?=
+ =?us-ascii?Q?G+37JCfBGz8nAdF9qLst/E3qcvN7xpPpSyRk7arwtRLHzMgfemwi0Q+D5zcy?=
+ =?us-ascii?Q?JaT3oSBrHqx9Cu/B6D6PWRQFVQloO3x1diMcfuqI9qseklabAwlC3xtW+ZOi?=
+ =?us-ascii?Q?YZL94n4FWgBVOO0qyEdFesGhgOgLs+S37w+FekDP3nWLQNVOkmglvGzPFvcr?=
+ =?us-ascii?Q?3OB69mWMf1GiV4ycEMz31VZYj8UXiBHOgepFlytCqEAd4GUZqJdSKxb6GH4R?=
+ =?us-ascii?Q?iRc0BVYLX1ofGcJjWCY/F2yWcyF92rgsJINbJ3km60jVkgA9rta3MpA198Z6?=
+ =?us-ascii?Q?DOyp/TiLlJgUTRnpNqZnFOQbFqsDVjAGGydGX+52jL8jk1B2QiqF+1N39vTa?=
+ =?us-ascii?Q?S4yHKA5rsDf1Kkm6jxaBQsu5TLACso2wCOspNXJt15MfWmULncg+AM+LQSdj?=
+ =?us-ascii?Q?OHS2kGHBn0sQTCWb/1u4tjfB/Im0hZKDo60NBMX6TzBg+TtMB3wYR6tva/ZA?=
+ =?us-ascii?Q?L9c0jrnwHnscefbtbGr0Gy+8bgQ+hsvkw/v/vxDZcsfX30FMhS4Q09veIqdh?=
+ =?us-ascii?Q?YWMqHPVwN7ueG97XaJrolGeZY0dr9lgNsdqcE2uM17IqgGgsuhQyphRhfDOM?=
+ =?us-ascii?Q?Abk4NTHkIlCwMsGSFK2T+ZscpM+g1K1+CqviErDbYy/YEs7JQkg9x/itYm+N?=
+ =?us-ascii?Q?BRsexQhxH/3Dl3NKct9xbH/Oi3fzauRaR6AfWqKFDE104aLDPVh8PeNR0Pa2?=
+ =?us-ascii?Q?4V3saH2RqEZpfpskaje0aBw011PmVfg4UbrPA+4R/U0I4nzWG8PnNvB2woCS?=
+ =?us-ascii?Q?5QZpHlkinLKXvC9v6gftz/p7ddPenfhh5UMSotKmnfvPgEv+TG704AT7oWWZ?=
+ =?us-ascii?Q?y4y2iYa/fBaQHvI342DLphmKrhgjFjzfYSJpGboJIB+/vtPaGQvqYWV32R3n?=
+ =?us-ascii?Q?vutrTUO4/njgB4MlprVK0XhIjBGysvaL/N+17fEYR8EcMLN1TLSJUqPHjPTX?=
+ =?us-ascii?Q?BeXG8Yb+sXD2bUXEfMgn+X4E9AFbdP+pb/ocKGvnD4UB6EBqewyINEpsHVF2?=
+ =?us-ascii?Q?p9u9Bx8GtcZWaLS+9J/v6Vgney/9P9/OIFFhyvRdOfuToNnvQdNJPD1/ZZmd?=
+ =?us-ascii?Q?9ww/Mz7OG7tw9OKiJ2HjWLsxAJWnpInxJEu/PfkCdvn2Lb94ZwxGClH2hAIT?=
+ =?us-ascii?Q?hIrjKrSWbekC+L334juCbbwuaD6ehQbekD+2g7X/+XFojeNs7c4P3V4Hdl3A?=
+ =?us-ascii?Q?csmn/5opvIbpOTTrZXc3GvZeU7Hvvui3xKKxDFJY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d30b894f-0ee0-46de-d4e4-08dcf4fcce01
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2024 13:56:20.6819
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zfzCYqvgWJQ9yJ+lBoEBOxhYG8TMWqqFZ3F0ZLlnXufjb/RVj92BQhiWQCXS5Lb9NQhUycWcLtk3f3csLi6/NA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6160
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Fri, Oct 25, 2024 at 10:08:34AM +0300, Dan Carpenter wrote:
+> Debugfs functions don't return NULL, they return error pointers.  Debugfs
+> functions are slightly unusual because they're not supposed to be checked
+> for errors in the normal case.  Delete these checks.
+> 
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+>  drivers/ras/amd/fmpm.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
+> index 90de737fbc90..3cde1fe17a7a 100644
+> --- a/drivers/ras/amd/fmpm.c
+> +++ b/drivers/ras/amd/fmpm.c
+> @@ -956,12 +956,7 @@ static void setup_debugfs(void)
+>  		return;
+>  
+>  	fmpm_dfs_dir = debugfs_create_dir("fmpm", dfs);
+> -	if (!fmpm_dfs_dir)
+> -		return;
+> -
+>  	fmpm_dfs_entries = debugfs_create_file("entries", 0400, fmpm_dfs_dir, NULL, &fmpm_fops);
+> -	if (!fmpm_dfs_entries)
+> -		debugfs_remove(fmpm_dfs_dir);
+>  }
+>  
+>  static const struct x86_cpu_id fmpm_cpuids[] = {
+> -- 
 
---8323328-983401245-1729863561=:946
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Seems like we had the same idea. :)
 
-On Thu, 24 Oct 2024, Yazen Ghannam wrote:
+https://lore.kernel.org/r/20241024155503.GA965@yaz-khff2.amd.com
 
-> On Thu, Oct 24, 2024 at 04:23:55PM +0300, Ilpo J=E4rvinen wrote:
-> > On Wed, 23 Oct 2024, Yazen Ghannam wrote:
-> >=20
-> > > The HSMP interface is just an SMN interface with different offsets.
-> > >=20
-> > > Define an HSMP wrapper in the SMN code and have the HSMP platform dri=
-ver
-> > > use that rather than a local solution.
-> > >=20
-> > > Also, remove the "root" member from AMD_NB, since there are no more
-> > > users of it.
-> > >=20
-> > > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> > > ---
-> > >  arch/x86/include/asm/amd_nb.h    |  1 -
-> > >  arch/x86/include/asm/amd_smn.h   |  3 +++
-> > >  arch/x86/kernel/amd_nb.c         |  1 -
-> > >  arch/x86/kernel/amd_smn.c        |  9 +++++++++
-> > >  drivers/platform/x86/amd/Kconfig |  2 +-
-> > >  drivers/platform/x86/amd/hsmp.c  | 32 +++++-------------------------=
---
-> > >  6 files changed, 18 insertions(+), 30 deletions(-)
-> > >=20
-> > > diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd=
-_nb.h
-> > > index 55c03d3495bc..cbe31e316e39 100644
-> > > --- a/arch/x86/include/asm/amd_nb.h
-> > > +++ b/arch/x86/include/asm/amd_nb.h
-> > > @@ -27,7 +27,6 @@ struct amd_l3_cache {
-> > >  };
-> > > =20
-> > >  struct amd_northbridge {
-> > > -=09struct pci_dev *root;
-> > >  =09struct pci_dev *misc;
-> > >  =09struct pci_dev *link;
-> > >  =09struct amd_l3_cache l3_cache;
-> > > diff --git a/arch/x86/include/asm/amd_smn.h b/arch/x86/include/asm/am=
-d_smn.h
-> > > index 6850de69f863..f0eb12859c42 100644
-> > > --- a/arch/x86/include/asm/amd_smn.h
-> > > +++ b/arch/x86/include/asm/amd_smn.h
-> > > @@ -8,4 +8,7 @@
-> > >  int __must_check amd_smn_read(u16 node, u32 address, u32 *value);
-> > >  int __must_check amd_smn_write(u16 node, u32 address, u32 value);
-> > > =20
-> > > +/* Should only be used by the HSMP driver. */
-> > > +int __must_check amd_smn_hsmp_rdwr(u16 node, u32 address, u32 *value=
-, bool write);
-> > > +
-> > >  #endif /* _ASM_X86_AMD_SMN_H */
-> > > diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-> > > index 10cdeddeda02..4c22317a6dfe 100644
-> > > --- a/arch/x86/kernel/amd_nb.c
-> > > +++ b/arch/x86/kernel/amd_nb.c
-> > > @@ -73,7 +73,6 @@ static int amd_cache_northbridges(void)
-> > >  =09amd_northbridges.nb =3D nb;
-> > > =20
-> > >  =09for (i =3D 0; i < amd_northbridges.num; i++) {
-> > > -=09=09node_to_amd_nb(i)->root =3D amd_node_get_root(i);
-> > >  =09=09node_to_amd_nb(i)->misc =3D amd_node_get_func(i, 3);
-> > >  =09=09node_to_amd_nb(i)->link =3D amd_node_get_func(i, 4);
-> > >  =09}
-> > > diff --git a/arch/x86/kernel/amd_smn.c b/arch/x86/kernel/amd_smn.c
-> > > index 997fd3edd9c0..527dda8e3a2b 100644
-> > > --- a/arch/x86/kernel/amd_smn.c
-> > > +++ b/arch/x86/kernel/amd_smn.c
-> > > @@ -18,6 +18,9 @@ static DEFINE_MUTEX(smn_mutex);
-> > >  #define SMN_INDEX_OFFSET=090x60
-> > >  #define SMN_DATA_OFFSET=09=090x64
-> > > =20
-> > > +#define HSMP_INDEX_OFFSET=090xc4
-> > > +#define HSMP_DATA_OFFSET=090xc8
-> > > +
-> > >  /*
-> > >   * SMN accesses may fail in ways that are difficult to detect here i=
-n the called
-> > >   * functions amd_smn_read() and amd_smn_write(). Therefore, callers =
-must do
-> > > @@ -100,6 +103,12 @@ int __must_check amd_smn_write(u16 node, u32 add=
-ress, u32 value)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(amd_smn_write);
-> > > =20
-> > > +int __must_check amd_smn_hsmp_rdwr(u16 node, u32 address, u32 *value=
-, bool write)
-> > > +{
-> > > +=09return __amd_smn_rw(HSMP_INDEX_OFFSET, HSMP_DATA_OFFSET, node, ad=
-dress, value, write);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(amd_smn_hsmp_rdwr);
-> > > +
-> > >  static int amd_cache_roots(void)
-> > >  {
-> > >  =09u16 node, num_nodes =3D amd_num_nodes();
-> > > diff --git a/drivers/platform/x86/amd/Kconfig b/drivers/platform/x86/=
-amd/Kconfig
-> > > index f88682d36447..e100b315c62b 100644
-> > > --- a/drivers/platform/x86/amd/Kconfig
-> > > +++ b/drivers/platform/x86/amd/Kconfig
-> > > @@ -8,7 +8,7 @@ source "drivers/platform/x86/amd/pmc/Kconfig"
-> > > =20
-> > >  config AMD_HSMP
-> > >  =09tristate "AMD HSMP Driver"
-> > > -=09depends on AMD_NB && X86_64 && ACPI
-> > > +=09depends on AMD_SMN && X86_64 && ACPI
-> > >  =09help
-> > >  =09  The driver provides a way for user space tools to monitor and m=
-anage
-> > >  =09  system management functionality on EPYC server CPUs from AMD.
-> > > diff --git a/drivers/platform/x86/amd/hsmp.c b/drivers/platform/x86/a=
-md/hsmp.c
-> > > index 8fcf38eed7f0..544efb0255c0 100644
-> > > --- a/drivers/platform/x86/amd/hsmp.c
-> > > +++ b/drivers/platform/x86/amd/hsmp.c
-> >=20
-> > FYI, there has been major restructuring done for this driver in=20
-> > pdx86/for-next.
-> >
->=20
-> Yep, no problem. I can rebase these changes on top of those.
->=20
-> Any comments on the general approach?
-
-I deemed looking deeper into the patch waste of my time due to the=20
-expected changes, so no comments at this time.
-
---=20
- i.
-
---8323328-983401245-1729863561=:946--
+Thanks,
+Yazen
 
