@@ -1,126 +1,150 @@
-Return-Path: <linux-edac+bounces-2277-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2266-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B6679AF809
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 05:12:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6128C9AF7CC
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 05:01:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7E42B2270C
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 03:12:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21633282FDE
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 03:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2FF18BC30;
-	Fri, 25 Oct 2024 03:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7119118B47A;
+	Fri, 25 Oct 2024 03:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bYCp1dmD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FLqQCNOz"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9810F18BBB6;
-	Fri, 25 Oct 2024 03:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F15175D56;
+	Fri, 25 Oct 2024 03:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729825905; cv=none; b=kTeq83xijreDv4PVLyvVShxv5PGrShRhIkIZ6jf4ltSiMmoMnQjJDc4NV/129yS5cgLOOi2U80vePVL2E5UvPJUet6+PPjOXfVSrl9QTKHnJLqPO3/2tA+hh8LPnUWUGT5PRAEx1dtvUmgyB+GjY+NB8wK+SY2cMVXGVwvi6Ly8=
+	t=1729825272; cv=none; b=ct32Bu03ozxO2Odx+8e5XUGTCl3raBuj/eCanWS/2joIMYITIMu9LJ/9mP/oKKwkvLKIpu5NWI0SJ3gQ4ggWuM+teKU4il01xVLF5gLjZFnkFu7iVPchz1IMERD1ERGgCMSfFM9qPoyGc2Vu+DAEkxc4iFBg0e4zwTvZ6J0nNCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729825905; c=relaxed/simple;
-	bh=V8zzovwYy1ulp14Q8Qe/O8aSZptBzsbTOCd71cVBp4I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=OOkp/9U6onfwObjC0mgcG5sYxgLvujBRapakIwOFgwNoAYiBL99hmn8XHz2YS++ozbaM0up+ZeV+30ssszAJOuiEdOz8cXgrdq/I9u01aFCetiQORwN1pXPjvEX9oS20x0Gw+fB1mxkfxAYPAqde2f/HRiNgIUtyDKUnz760fR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bYCp1dmD; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729825904; x=1761361904;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=V8zzovwYy1ulp14Q8Qe/O8aSZptBzsbTOCd71cVBp4I=;
-  b=bYCp1dmDgzLmkdq2+lJgamKzEkp7EvM0RIY+XpA6LRkPEQvd23UX/MJ5
-   /7vy6Ux6V4sd29VsW16XfCYMnqloPZPQn9imULyjrsapRvKGPl8KRolet
-   ph3C/Eej2kK735v1qbMsxVgvkLQysmC2QaVtvac5X7igE6GU8I91Oj2Jc
-   xkC4HorF/snc4YuM/1NO5d2xMNJOB3GDlG2YvGlytbdGMEsLDLFkWNg8+
-   yJhYQ1OZERkvssGlbfzfgMUxXxlkMQLy3lXIQ+8FjNA5oveYwZd4qB71v
-   0zPUkuQpTh8ABgyKw+MWAN9iatAs1CXb9qB90kwSKKE2xhS5Q9Dxg29vc
-   A==;
-X-CSE-ConnectionGUID: VaPi1RcWRYKXJb8S3nSQew==
-X-CSE-MsgGUID: vR6pP9ldQz+ZWsOokuNM1g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="29385719"
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="29385719"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 20:11:43 -0700
-X-CSE-ConnectionGUID: 94i8JjGsSQCes6WDUO6cgg==
-X-CSE-MsgGUID: FNjHbGCwTWWVLrjUzfpr2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="80449907"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 20:11:42 -0700
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: bp@alien8.de,
-	tony.luck@intel.com
-Cc: tglx@linutronix.de,
-	dave.hansen@linux.intel.com,
-	mingo@redhat.com,
-	hpa@zytor.com,
-	x86@kernel.org,
+	s=arc-20240116; t=1729825272; c=relaxed/simple;
+	bh=6MTJVFMqnnCJNbM2dONSU/ki5kij5KTFX4y1XsBSR7o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EEXtMH/7LHLY/4ml85GKi6EQY1OjLTXnSebhoo1LVBYT9vEGsxEbmpuF7hxtZKx7IiR/cCGOVQTLakazUIt3bTBSJk7RTuW4juNQtcsFH2AMVoGPmGkGswBauXR8Pqu3KpOJUoneW2eGla4bl9qH4O6oceCL5WmJqI7aah/YLos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FLqQCNOz; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c9c28c1e63so1841873a12.0;
+        Thu, 24 Oct 2024 20:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729825269; x=1730430069; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6MTJVFMqnnCJNbM2dONSU/ki5kij5KTFX4y1XsBSR7o=;
+        b=FLqQCNOz+aLWAmnlIrQLVA5+tnfEUR8GbNAKiDnhdf6xqLZdvJnkQBxPUyt6WShLCr
+         36AWJQlZz00vcnEyhruScAQfWZAJt7S57R7go5IgsOmcxFY1Xc0j6/1w9YKeDrBqgx7d
+         dxTXzA+skRlOac6CZbc1JtO0bqtGmhhSrruUrb9VehPbx8BYSgnHWUQ1/jVsEAzaQMzq
+         4GEaIy/mEQK9VP8HNjaZTTqViibCcRZOMn2LaskNcVRBdU1u+zfpuuEJx7+gs5EqJgVO
+         hGrKIv522g/dicK18lph39oIgGsSk//D4+yQSv41PWO4/ofieiXQwN6UT1eujmmWH6ut
+         oJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729825269; x=1730430069;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6MTJVFMqnnCJNbM2dONSU/ki5kij5KTFX4y1XsBSR7o=;
+        b=f0GkccfI2Aw0zN/bufZ8NhsS/ppUh6T8p7MoNXjlftVS3GAHIYe4Fz6oXYAIkL2i/H
+         LaQ68AcJKsshWVTlla+KAAfg0mP8dhOnFwzAHfDcPTNOVVvfQ6GPCSj4wYCBkIJaG+Xi
+         FWpyMiC02d8lTL0DVzYqjV/AEQ/jKPhJRI34YZman5cyS9GyY80264B2QUPlkp6I/lxY
+         CjAxIB4sgOJLLrZKhkuaVTC8UljwFVYeMf1vUiLQwfe5XvsjDht0r4mSuYVmETDqLwRf
+         22zwU68HH4hgJmpm6ZepdPFS4coJEaStIaqceA5EZyvuXSPIizKks+MIp8MdHQzp5KHj
+         SvDA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0jOCH3SlLcPZAjRQZt+TCOS/8hR3+RKSoA/cQLhEX58zMDHPDoL5FVfwOuUkAE7TVJEA70ZsFq945WIxA@vger.kernel.org, AJvYcCUAKSwyScRmcn9xhiPolxb+y3uSHKIa8cptD+eH3ydLZh0jmBKjx+jBlf/2whYfNQQ23Lp8ZqvHuIQE@vger.kernel.org, AJvYcCUJTXrjxqf1bb89eyVvM5fu67mwI3EYCF10fMkJYFJFi0bkVRCfibemlrAsEeAh6h2rihOhQk0RKt0=@vger.kernel.org, AJvYcCVSp7o67nV4UOdrAcWv5v3DOoX3e4vKfPwjqQT8qvn8Yr8uvgVdSqbhDIqFHlFTLorNV+26bvVDkfRsDmOl@vger.kernel.org, AJvYcCVYtuwumXyfAPBHzVFolQk/n1G8QyKzJCB3sy0Zt2KBVkFKI2HO4O98gOTYj2RucGVp8dAYXK00Baehc0M=@vger.kernel.org, AJvYcCWD0LeA1cNQt1b5F+EOiJbULTRIl3N/D+EzZJxrVAIi6XZk6mfYWwEKCvpxjCJRUbAZ76YG2zPDQ2Dv7A==@vger.kernel.org, AJvYcCWfijIDJjwXNa/2Dd2dekN5PVUz18TgF5o/xlG2CZUF6rtvHprkXEax0yP8ON/iYNpHxqFYtAEY@vger.kernel.org, AJvYcCWtBZcxkbMg8TfMEpFhEug7Vx0G5esnQgDHFcXf82z0NypItNF2oF4m5xJtBh7jMyKP7H95gZVI+yp99g==@vger.kernel.org, AJvYcCX33YEBa7R2BMs7QaocMaG67r8/assMY3M8lNa4gS/MoSYPMSj4j5AJPYWmQadrSobKurLPbo8iDZdf@vger.kernel.org, AJvYcCX656ZNZpEgwuyr8CJDuPwxP8SYyXM2
+ i2J/mePhG+i6x24tOaWlCnW5U8+k3gi3Ovy52RGhYjDmQD+BSHZ1rFCXvI8=@vger.kernel.org, AJvYcCXFbxyndUwDrPTQk9svhLUFolnPnl1TOmjSUPnjFdA/rXQe6Q/UZbOd+VRU34TxplZvt5jk5VHttIJa@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXfZqHDaF0hwMs2T93sqG3XIzhK4XqiGix+h9WyV4G2YWmDDKV
+	mFoJrzTJmy7QspGgD/6pjasQVo+qSRaD0fRTYnaQ3cn1O4W4VPvJ
+X-Google-Smtp-Source: AGHT+IG9lTruoJuiWvD3/I0nGa0uNZQNR6Vtf4xab40cqpRDyyMRJml+6D/43J5oPu7AIVVa2dAxUA==
+X-Received: by 2002:a05:6402:84a:b0:5cb:674f:b0a2 with SMTP id 4fb4d7f45d1cf-5cb8b1b1f0amr5688194a12.36.1729825268315;
+        Thu, 24 Oct 2024 20:01:08 -0700 (PDT)
+Received: from localhost.localdomain ([92.60.187.5])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cbb631b0bcsm121582a12.60.2024.10.24.20.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 20:01:06 -0700 (PDT)
+From: Oleksiy Protas <elfy.ua@gmail.com>
+To: d.milivojevic@gmail.com
+Cc: ajhalaney@gmail.com,
+	allenbh@gmail.com,
+	andrew@lunn.ch,
+	andriy.shevchenko@linux.intel.com,
+	andy@kernel.org,
+	arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	broonie@kernel.org,
+	cai.huoqing@linux.dev,
+	dave.jiang@intel.com,
+	davem@davemloft.net,
+	dlemoal@kernel.org,
+	dmaengine@vger.kernel.org,
+	dushistov@mail.ru,
+	elfy.ua@gmail.com,
+	fancer.lancer@gmail.com,
+	geert@linux-m68k.org,
+	gregkh@linuxfoundation.org,
+	ink@jurassic.park.msu.ru,
+	jdmason@kudzu.us,
+	jiaxun.yang@flygoat.com,
+	keguang.zhang@gmail.com,
+	kory.maincent@bootlin.com,
+	krzk@kernel.org,
+	kuba@kernel.org,
 	linux-edac@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-ide@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	qiuxu.zhuo@intel.com
-Subject: [PATCH v3 10/10] x86/mce: Fix typos
-Date: Fri, 25 Oct 2024 10:46:02 +0800
-Message-Id: <20241025024602.24318-11-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20241025024602.24318-1-qiuxu.zhuo@intel.com>
-References: <20241016123036.21366-1-qiuxu.zhuo@intel.com>
- <20241025024602.24318-1-qiuxu.zhuo@intel.com>
+	linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux@armlinux.org.uk,
+	linux@roeck-us.net,
+	manivannan.sadhasivam@linaro.org,
+	netdev@vger.kernel.org,
+	nikita.shubin@maquefel.me,
+	nikita@trvn.ru,
+	ntb@lists.linux.dev,
+	olteanv@gmail.com,
+	pabeni@redhat.com,
+	paulburton@kernel.org,
+	robh@kernel.org,
+	s.shtylyov@omp.ru,
+	sergio.paracuellos@gmail.com,
+	shc_work@mail.ru,
+	siyanteng@loongson.cn,
+	tsbogend@alpha.franken.de,
+	xeb@mail.ru,
+	yoshihiro.shimoda.uh@renesas.com
+Subject: Re: linux: Goodbye from a Linux community volunteer
+Date: Fri, 25 Oct 2024 06:01:02 +0300
+Message-ID: <20241025030102.319485-1-elfy.ua@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <CALtW_ahkg9W0wm09cxkJxiSQCH=42smeK=fqh5cQ9sRSNsjeXA@mail.gmail.com>
+References: <CALtW_ahkg9W0wm09cxkJxiSQCH=42smeK=fqh5cQ9sRSNsjeXA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Fix typos in comments.
+Brate Dragane,
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
-Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
-Changes in v3:
-  - Collect "Reviewed-by:" from Nikolay & Sohil.
-  - Remove the detail typos from the commit message (Sohil).
+I was not aware of the fact that either Raytheon or Boeing are directly supplying the Russian invasion. That would be a concerning development indeed.
 
-Changes in v2:
-  - Collect "Reviewed-by:" from Tony.
+If you possess any information of that being the case, I urge you to contact GUR anonymously at their official whistleblowing email: gur_official@proton.me
 
- arch/x86/kernel/cpu/mce/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thank you for your diligence, only together we can stop the war.
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index f57a68b53f29..4c4558ed4736 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1120,7 +1120,7 @@ static noinstr int mce_start(int *no_way_out)
- 	} else {
- 		/*
- 		 * Subject: Now start the scanning loop one by one in
--		 * the original callin order.
-+		 * the original calling order.
- 		 * This way when there are any shared banks it will be
- 		 * only seen by one CPU before cleared, avoiding duplicates.
- 		 */
-@@ -1888,7 +1888,7 @@ static void apply_quirks_amd(struct cpuinfo_x86 *c)
- 	/* This should be disabled by the BIOS, but isn't always */
- 	if (c->x86 == 15 && this_cpu_read(mce_num_banks) > 4) {
- 		/*
--		 * disable GART TBL walk error reporting, which
-+		 * disable GART TLB walk error reporting, which
- 		 * trips off incorrectly with the IOMMU & 3ware
- 		 * & Cerberus:
- 		 */
--- 
-2.17.1
-
+Kind regards,
+Olekiy
 
