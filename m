@@ -1,239 +1,228 @@
-Return-Path: <linux-edac+bounces-2305-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2306-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48F6A9B1313
-	for <lists+linux-edac@lfdr.de>; Sat, 26 Oct 2024 01:13:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 121ED9B1332
+	for <lists+linux-edac@lfdr.de>; Sat, 26 Oct 2024 01:29:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A33C3B21B95
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 23:13:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34E471C20B56
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 23:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5050C1DE2AC;
-	Fri, 25 Oct 2024 23:13:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Q9cmzzpg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3834A213130;
+	Fri, 25 Oct 2024 23:29:13 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D31217F2C;
-	Fri, 25 Oct 2024 23:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.218
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77FB217F5A;
+	Fri, 25 Oct 2024 23:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729898012; cv=none; b=sZX9yVziZBgSvOg418709NNZTTby4RNDtNX+FwYRWe1di6Es25wXpp1cnWTnp/nWQRvyzPfPOO1E4VXWdaII8852S6XjwK6a48q3bqi8FX5pAdyhXDEzk2i19bTjWLiAfY/gQlan6GK68FRMLnyc0qAlVR0ldIibxY9kQJRhEr4=
+	t=1729898953; cv=none; b=D2YokWKFdCCZ4T2vgpc3y37WNUb4bvUmaYtJrmIQNbU54C2+cya9swwl7rqKT3lX5im/0pU7aX3c8A7I6ZOUaLz8i5rJaegAVLiJcutY1CBM8RBgGHNPivtc+P17TOhpd7v+PNS9kUX9hHHObRuGTNnGqnncoKGNQ8AbJDU+2bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729898012; c=relaxed/simple;
-	bh=gtJlAddndmd/4ZutUXPUp23tBUavCcBIZHXWBTvsy5U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rKUJNZnE3PAfkbYVayY5I/Zsvg8Q0mrJH1FRUQWID7fHXhSvhLSlPJLIUGjxvRFj5ZN/DPBbodlX3vEF8koFnrHqBIw/oc2JoSMcVJNlJqsbxQimQU1n/kiMmOERRLnE20Jq4FBkKDTs6QbaC4sOItJeo8HJgExCbsHADnhfjl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Q9cmzzpg; arc=none smtp.client-ip=99.78.197.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1729898009; x=1761434009;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iEneAqKTZ3Xv2tJZavyIel5bzddHvy7/jEFA9lznCds=;
-  b=Q9cmzzpgU9GJ1X4yDZFDYaKTAsZ/5LgDDEXzMWi0OllgxLhaqMl3HueH
-   hStjv7z35gjuNaXrU0jqlxK8zCEAkTDt6GloRTWQ0aMjGTrtKznHY8/IS
-   FN1EtiG1Q0avucq3Fj9sIIU8lktFKyMC+4aK7DO7RfWdl7/m7jVtBLvjU
-   s=;
-X-IronPort-AV: E=Sophos;i="6.11,233,1725321600"; 
-   d="scan'208";a="346864134"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 23:13:27 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [10.0.38.20:45881]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.28.125:2525] with esmtp (Farcaster)
- id 68ba6d59-4651-44b6-8e27-f8b5e8ba96fb; Fri, 25 Oct 2024 23:13:27 +0000 (UTC)
-X-Farcaster-Flow-ID: 68ba6d59-4651-44b6-8e27-f8b5e8ba96fb
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 25 Oct 2024 23:13:26 +0000
-Received: from 6c7e67c6786f.amazon.com (10.106.100.6) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Fri, 25 Oct 2024 23:13:23 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <x86@kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, "Thomas
- Gleixner" <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, "Benjamin
- Herrenschmidt" <benh@amazon.com>, Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: WARNING in lmce_supported() during reboot.
-Date: Fri, 25 Oct 2024 16:13:20 -0700
-Message-ID: <20241025231320.45417-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1729898953; c=relaxed/simple;
+	bh=YC1ur3rD2DyN+uRVHTHhyHkpdBYRKxJblz3Bjr/pcC4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TFXQYiS262I/NvqUCf0k1YjgMiWyc4w99rYfu4Z+HX35WoFyZxnyYiIZYOgAyLhs3Rz6V+f/aZ0Mrz2Bk+d0bD5VZuS3wW7eMZJQIL+Qv0jwDpQi0itGrfZEaMMcvLJ4BoED4sG/B/rV9H7AGMQEITXn5hRTo9gtUQC7MzPEjR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from [IPv6:::1] (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 49PNQFLF021315;
+	Fri, 25 Oct 2024 18:26:16 -0500
+Message-ID: <ab54f94827d200ac8a05b4ee180895b0cbd55014.camel@kernel.crashing.org>
+Subject: Re: WARNING in lmce_supported() during reboot.
+From: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>, x86@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen
+	 <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Date: Sat, 26 Oct 2024 10:26:15 +1100
+In-Reply-To: <20241025231320.45417-1-kuniyu@amazon.com>
+References: <20241025231320.45417-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWB001.ant.amazon.com (10.13.138.82) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-Hello x86 maintainers,
+T24gRnJpLCAyMDI0LTEwLTI1IGF0IDE2OjEzIC0wNzAwLCBLdW5peXVraSBJd2FzaGltYSB3cm90
+ZToKPiBIZWxsbyB4ODYgbWFpbnRhaW5lcnMsCj4gCj4gV2UgaGF2ZSBzZWVuIHRoZSBzcGxhdCBi
+ZWxvdyBmZXcgdGltZXMgd2hlbiBqdXN0IHJlYm9vdGluZyBob3N0cy4KPiAKPiBJdCByYXJlbHkg
+aGFwcGVucyBhbmQgc2VlbXMgYSB0aW1pbmcgcmVsYXRlZCwgc28gd2UgZG9uJ3QgaGF2ZSBhCj4g
+cmVwcm9kdWNlci4KPiAKPiBPdXIga2VybmVsIHNvdXJjZSBpbiB0aGUgc3BsYXQgaXMgaGVyZSwK
+PiBodHRwczovL2dpdGh1Yi5jb20vYW1hem9ubGludXgvbGludXgvdHJlZS9rZXJuZWwtNi4xLjYx
+LTg1LjE0MS5hbXpuMjAyMwo+IAo+IGFuZCB0aGUgdHJpZ2dlcmVkIFdBUk5fT05fT05DRSgpIGlu
+IGxtY2Vfc3VwcG9ydGVkKCkgaXMgaGVyZS4KPiBodHRwczovL2dpdGh1Yi5jb20vYW1hem9ubGlu
+dXgvbGludXgvYmxvYi9rZXJuZWwtNi4xLjYxLTg1LjE0MS5hbXpuMjAyMy9hcmNoL3g4Ni9rZXJu
+ZWwvY3B1L21jZS9pbnRlbC5jI0wxMjQKCihzd2l0Y2hpbmcgdG8gbXkgbGttbC9zcGFtIGZyaWVu
+ZGx5IGVtYWlsKQoKSSBhbHNvIGhpdCBpdCB3aXRoIDYuMS4xMTItMTIyLjE4OS5hbXpuMjAyMy54
+ODZfNjQKCkNoZWVycywKQmVuLgoKPiBEbyB5b3UgaGF2ZSBhbnkgaGludCA/Cj4gCj4gVGhhbmtz
+IGluIGFkdmFuY2UuCj4gCj4gCj4gQUNQSTogUE06IFByZXBhcmluZyB0byBlbnRlciBzeXN0ZW0g
+c2xlZXAgc3RhdGUgUzUKPiByZWJvb3Q6IFJlc3RhcnRpbmcgc3lzdGVtCj4gcmVib290OiBtYWNo
+aW5lIHJlc3RhcnQKPiAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0tLS0tLS0KPiBXQVJO
+SU5HOiBDUFU6IDEgUElEOiAwIGF0IGFyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2ludGVsLmM6MTI0
+Cj4gbG1jZV9zdXBwb3J0ZWQgKGFyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2ludGVsLmM6MTI0Cj4g
+YXJjaC94ODYva2VybmVsL2NwdS9tY2UvaW50ZWwuYzo5OSkgCj4gTW9kdWxlcyBsaW5rZWQgaW46
+IGliX2NvcmUgYmluZm10X21pc2MgZXh0NCBjcmMxNiBtYmNhY2hlIGpiZDIgc3VucnBjCj4gbW91
+c2VkZXYgYXRrYmQgcHNtb3VzZSBnaGFzaF9jbG11bG5pX2ludGVsIHZpdmFsZGlfZm1hcCBsaWJw
+czIKPiBhZXNuaV9pbnRlbCBjcnlwdG9fc2ltZCBjcnlwdGQgaTgwNDIgc2VyaW8gZW5hIGJ1dHRv
+biBzY2hfZnFfY29kZWwKPiBkbV9tb2QgZnVzZSBjb25maWdmcyBkYXggbG9vcCBkbWlfc3lzZnMg
+c2ltcGxlZHJtIGRybV9zaG1lbV9oZWxwZXIKPiBkcm1fa21zX2hlbHBlciBjZmJmaWxscmVjdCBz
+eXNjb3B5YXJlYSBjZmJpbWdibHQgc3lzZmlsbHJlY3QKPiBzeXNpbWdibHQgZmJfc3lzX2ZvcHMg
+Y2ZiY29weWFyZWEgZHJtIGkyY19jb3JlCj4gZHJtX3BhbmVsX29yaWVudGF0aW9uX3F1aXJrcyBi
+YWNrbGlnaHQgZmIgY3JjMzJfcGNsbXVsIGNyYzMyY19pbnRlbAo+IGZiZGV2IGVmaXZhcmZzCj4g
+SGFyZHdhcmUgbmFtZTogQW1hem9uIEVDMiBjNmkuNHhsYXJnZS8sIEJJT1MgMS4wIDEwLzE2LzIw
+MTcKPiBSSVA6IDAwMTA6bG1jZV9zdXBwb3J0ZWQgKGFyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2lu
+dGVsLmM6MTI0Cj4gYXJjaC94ODYva2VybmVsL2NwdS9tY2UvaW50ZWwuYzo5OSkgCj4gQ29kZTog
+ODEgZmIgMDAgMDAgMDAgMDkgNzUgZGEgYjkgM2EgMDAgMDAgMDAgMGYgMzIgNDggYzEgZTIgMjAg
+NDggMDkKPiBjMiA0OCA4OSBkMyA2NiA5MCA0OCA4OSBkOCA0OCBjMSBlOCAxNCA4MyBlMCAwMSA4
+MyBlMyAwMSA3NSBiYSA8MGY+Cj4gMGIgMzEgYzAgZWIgYjQgMzEgZDIgNDggODkgZGUgYmYgM2Eg
+MDAgMDAgMDAgZTggNmIgZTYgNTcgMDAgZWIKPiBBbGwgY29kZQo+ID09PT09PT09Cj4gwqDCoCAw
+Ogk4MSBmYiAwMCAwMCAwMCAwOcKgwqDCoMKgCWNtcMKgwqDCoCAkMHg5MDAwMDAwLCVlYngKPiDC
+oMKgIDY6CTc1IGRhwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJam5lwqDCoMKgIDB4
+ZmZmZmZmZmZmZmZmZmZlMgo+IMKgwqAgODoJYjkgM2EgMDAgMDAgMDDCoMKgwqDCoMKgwqDCoAlt
+b3bCoMKgwqAgJDB4M2EsJWVjeAo+IMKgwqAgZDoJMGYgMzLCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoAlyZG1zcgo+IMKgwqAgZjoJNDggYzEgZTIgMjDCoMKgwqDCoMKgwqDCoMKgwqDC
+oAlzaGzCoMKgwqAgJDB4MjAsJXJkeAo+IMKgIDEzOgk0OCAwOSBjMsKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgCW9ywqDCoMKgwqAgJXJheCwlcmR4Cj4gwqAgMTY6CTQ4IDg5IGQzwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAJbW92wqDCoMKgICVyZHgsJXJieAo+IMKgIDE5Ogk2NiA5MMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCXhjaGfCoMKgICVheCwlYXgKPiDCoCAxYjoJNDgg
+ODkgZDjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAltb3bCoMKgwqAgJXJieCwlcmF4Cj4gwqAg
+MWU6CTQ4IGMxIGU4IDE0wqDCoMKgwqDCoMKgwqDCoMKgwqAJc2hywqDCoMKgICQweDE0LCVyYXgK
+PiDCoCAyMjoJODMgZTAgMDHCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAlhbmTCoMKgwqAgJDB4
+MSwlZWF4Cj4gwqAgMjU6CTgzIGUzIDAxwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJYW5kwqDC
+oMKgICQweDEsJWVieAo+IMKgIDI4Ogk3NSBiYcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgCWpuZcKgwqDCoCAweGZmZmZmZmZmZmZmZmZmZTQKPiDCoCAyYToqCTBmIDBiwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJdWQyCQk8LS0gdHJhcHBpbmcKPiBpbnN0cnVjdGlvbgo+
+IMKgIDJjOgkzMSBjMMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCXhvcsKgwqDCoCAl
+ZWF4LCVlYXgKPiDCoCAyZToJZWIgYjTCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAlq
+bXDCoMKgwqAgMHhmZmZmZmZmZmZmZmZmZmU0Cj4gwqAgMzA6CTMxIGQywqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAJeG9ywqDCoMKgICVlZHgsJWVkeAo+IMKgIDMyOgk0OCA4OSBkZcKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCW1vdsKgwqDCoCAlcmJ4LCVyc2kKPiDCoCAzNToJYmYg
+M2EgMDAgMDAgMDDCoMKgwqDCoMKgwqDCoAltb3bCoMKgwqAgJDB4M2EsJWVkaQo+IMKgIDNhOgll
+OCA2YiBlNiA1NyAwMMKgwqDCoMKgwqDCoMKgCWNhbGzCoMKgIDB4NTdlNmFhCj4gwqAgM2Y6CWVi
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJLmJ5dGUgMHhlYgo+IAo+IENv
+ZGUgc3RhcnRpbmcgd2l0aCB0aGUgZmF1bHRpbmcgaW5zdHJ1Y3Rpb24KPiA9PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Cj4gwqDCoCAwOgkwZiAwYsKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgCXVkMgo+IMKgwqAgMjoJMzEgYzDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoAl4b3LCoMKgwqAgJWVheCwlZWF4Cj4gwqDCoCA0OgllYiBiNMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCWptcMKgwqDCoCAweGZmZmZmZmZmZmZmZmZmYmEK
+PiDCoMKgIDY6CTMxIGQywqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJeG9ywqDCoMKg
+ICVlZHgsJWVkeAo+IMKgwqAgODoJNDggODkgZGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAlt
+b3bCoMKgwqAgJXJieCwlcnNpCj4gwqDCoCBiOgliZiAzYSAwMCAwMCAwMMKgwqDCoMKgwqDCoMKg
+CW1vdsKgwqDCoCAkMHgzYSwlZWRpCj4gwqAgMTA6CWU4IDZiIGU2IDU3IDAwwqDCoMKgwqDCoMKg
+wqAJY2FsbMKgwqAgMHg1N2U2ODAKPiDCoCAxNToJZWLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoAkuYnl0ZSAweGViCj4gUlNQOiAwMDE4OmZmZmZhMThmMDAxNTRmYjggRUZM
+QUdTOiAwMDAxMDA0Ngo+IFJBWDogMDAwMDAwMDAwMDAwMDAwMCBSQlg6IDAwMDAwMDAwMDAwMDAw
+MDAgUkNYOiAwMDAwMDAwMDAwMDAwMDNhCj4gUkRYOiAwMDAwMDAwMDAwMDAwMDAwIFJTSTogMDAw
+MDAwMDAwMDAwMDBmZiBSREk6IGZmZmY5NjVjZmUyNTk5YzAKPiBSQlA6IDAwMDAwMDAwMDAwMDAw
+MDEgUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogMDAwMDAwMDAwMDAwMDAwMAo+IFIxMDogMDAw
+MDAwMDAwMDAwMDAwMCBSMTE6IGZmZmZhMThmMDAxNTRmZjggUjEyOiAwMDAwMDAwMDAwMDAwMDAx
+Cj4gUjEzOiAwMDAwMDAwMDAwMDAwMDAwIFIxNDogMDAwMDAwMDAwMDAwMDAwMCBSMTU6IDAwMDAw
+MDAwMDAwMDAwMDAKPiBGUzrCoCAwMDAwMDAwMDAwMDAwMDAwKDAwMDApIEdTOmZmZmY5NjVjZmUy
+NDAwMDAoMDAwMCkKPiBrbmxHUzowMDAwMDAwMDAwMDAwMDAwCj4gQ1M6wqAgMDAxMCBEUzogMDAw
+MCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMKPiBDUjI6IDAwMDA3Zjg0ODVkZmJhMzAg
+Q1IzOiAwMDAwMDAwMzg5YTEwMDAzIENSNDogMDAwMDAwMDAwMDc3MDZlMAo+IERSMDogMDAwMDAw
+MDAwMDAwMDAwMCBEUjE6IDAwMDAwMDAwMDAwMDAwMDAgRFIyOiAwMDAwMDAwMDAwMDAwMDAwCj4g
+RFIzOiAwMDAwMDAwMDAwMDAwMDAwIERSNjogMDAwMDAwMDBmZmZlMGZmMCBEUjc6IDAwMDAwMDAw
+MDAwMDA0MDAKPiBQS1JVOiA1NTU1NTU1NAo+IENhbGwgVHJhY2U6Cj4gPElSUT4KPiA/IHNob3df
+dHJhY2VfbG9nX2x2bCAoYXJjaC94ODYva2VybmVsL2R1bXBzdGFjay5jOjI1OSkgCj4gPyBzaG93
+X3RyYWNlX2xvZ19sdmwgKGFyY2gveDg2L2tlcm5lbC9kdW1wc3RhY2suYzoyNTkpIAo+ID8gbWNl
+X2ludGVsX2ZlYXR1cmVfY2xlYXIgKGFyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2ludGVsLmM6NDY1
+Cj4gYXJjaC94ODYva2VybmVsL2NwdS9tY2UvaW50ZWwuYzo1MDIpIAo+ID8gbG1jZV9zdXBwb3J0
+ZWQgKGFyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2ludGVsLmM6MTI0Cj4gYXJjaC94ODYva2VybmVs
+L2NwdS9tY2UvaW50ZWwuYzo5OSkgCj4gPyBfX3dhcm4gKGtlcm5lbC9wYW5pYy5jOjY3MikgCj4g
+PyBsbWNlX3N1cHBvcnRlZCAoYXJjaC94ODYva2VybmVsL2NwdS9tY2UvaW50ZWwuYzoxMjQKPiBh
+cmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9pbnRlbC5jOjk5KSAKPiA/IHJlcG9ydF9idWcgKGxpYi9i
+dWcuYzoyMDEgbGliL2J1Zy5jOjIxOSkgCj4gPyBoYW5kbGVfYnVnIChhcmNoL3g4Ni9rZXJuZWwv
+dHJhcHMuYzozMjQpIAo+ID8gZXhjX2ludmFsaWRfb3AgKGFyY2gveDg2L2tlcm5lbC90cmFwcy5j
+OjM0NSAoZGlzY3JpbWluYXRvciAxKSkgCj4gPyBhc21fZXhjX2ludmFsaWRfb3AgKC4vYXJjaC94
+ODYvaW5jbHVkZS9hc20vaWR0ZW50cnkuaDo1NjgpIAo+ID8gbG1jZV9zdXBwb3J0ZWQgKGFyY2gv
+eDg2L2tlcm5lbC9jcHUvbWNlL2ludGVsLmM6MTI0Cj4gYXJjaC94ODYva2VybmVsL2NwdS9tY2Uv
+aW50ZWwuYzo5OSkgCj4gPyBjbGVhcl9sb2NhbF9BUElDICguL2FyY2gveDg2L2luY2x1ZGUvYXNt
+L2FwaWMuaDozOTMKPiBhcmNoL3g4Ni9rZXJuZWwvYXBpYy9hcGljLmM6MTE5MikgCj4gbWNlX2lu
+dGVsX2ZlYXR1cmVfY2xlYXIgKGFyY2gveDg2L2tlcm5lbC9jcHUvbWNlL2ludGVsLmM6NDY1Cj4g
+YXJjaC94ODYva2VybmVsL2NwdS9tY2UvaW50ZWwuYzo1MDIpIAo+IHN0b3BfdGhpc19jcHUgKGFy
+Y2gveDg2L2tlcm5lbC9wcm9jZXNzLmM6NzgwKSAKPiBfX3N5c3ZlY19yZWJvb3QgKGFyY2gveDg2
+L2tlcm5lbC9zbXAuYzoxNDApIAo+IHN5c3ZlY19yZWJvb3QgKGFyY2gveDg2L2tlcm5lbC9zbXAu
+YzoxMzYgKGRpc2NyaW1pbmF0b3IgMTQpKSAKPiA8L0lSUT4KPiA8VEFTSz4KPiBhc21fc3lzdmVj
+X3JlYm9vdCAoLi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9pZHRlbnRyeS5oOjY1NikgCj4gUklQOiAw
+MDEwOmFjcGlfaWRsZV9kb19lbnRyeSAoLi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9pcnFmbGFncy5o
+OjQwCj4gLi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9pcnFmbGFncy5oOjc1Cj4gZHJpdmVycy9hY3Bp
+L3Byb2Nlc3Nvcl9pZGxlLmM6MTEzIGRyaXZlcnMvYWNwaS9wcm9jZXNzb3JfaWRsZS5jOjU3Mikg
+Cj4gQ29kZTogNzUgMDggNDggOGIgMTUgYjEgODEgZGYgMDIgZWQgYzMgY2MgY2MgY2MgY2MgNjUg
+NDggOGIgMDQgMjUgMDAKPiBmZiAwMSAwMCA0OCA4YiAwMCBhOCAwOCA3NSBlYiA2NiA5MCAwZiAw
+MCAyZCA1OCBjOCA2YSAwMCBmYiBmNCA8ZmE+Cj4gYzMgY2MgY2MgY2MgY2MgZTkgMDEgZmMgZmYg
+ZmYgOTAgMGYgMWYgNDQgMDAgMDAgNDEgNTYgNDEgNTUgNDEKPiBBbGwgY29kZQo+ID09PT09PT09
+Cj4gwqDCoCAwOgk3NSAwOMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCWpuZcKgwqDC
+oCAweGEKPiDCoMKgIDI6CTQ4IDhiIDE1IGIxIDgxIGRmIDAywqAJbW92wqDCoMKgIDB4MmRmODFi
+MSglcmlwKSwlcmR4wqDCoMKgwqDCoMKgwqAgIwo+IDB4MmRmODFiYQo+IMKgwqAgOToJZWTCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAlpbsKgwqDCoMKgICglZHgpLCVlYXgK
+PiDCoMKgIGE6CWMzwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJcmV0Cj4g
+wqDCoCBiOgljY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCWludDMKPiDC
+oMKgIGM6CWNjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJaW50Mwo+IMKg
+wqAgZDoJY2PCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAlpbnQzCj4gwqDC
+oCBlOgljY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCWludDMKPiDCoMKg
+IGY6CTY1IDQ4IDhiIDA0IDI1IDAwIGZmwqAJbW92wqDCoMKgICVnczoweDFmZjAwLCVyYXgKPiDC
+oCAxNjoJMDEgMDAgCj4gwqAgMTg6CTQ4IDhiIDAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJ
+bW92wqDCoMKgICglcmF4KSwlcmF4Cj4gwqAgMWI6CWE4IDA4wqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAJdGVzdMKgwqAgJDB4OCwlYWwKPiDCoCAxZDoJNzUgZWLCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoAlqbmXCoMKgwqAgMHhhCj4gwqAgMWY6CTY2IDkwwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJeGNoZ8KgwqAgJWF4LCVheAo+IMKgIDIxOgkwZiAwMCAy
+ZCA1OCBjOCA2YSAwMMKgCXZlcnfCoMKgIDB4NmFjODU4KCVyaXApwqDCoMKgwqDCoMKgwqAgIwo+
+IDB4NmFjODgwCj4gwqAgMjg6CWZiwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAJc3RpCj4gwqAgMjk6CWY0wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJ
+aGx0Cj4gwqAgMmE6KglmYcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCWNs
+aQkJPC0tIHRyYXBwaW5nCj4gaW5zdHJ1Y3Rpb24KPiDCoCAyYjoJYzPCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoAlyZXQKPiDCoCAyYzoJY2PCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoAlpbnQzCj4gwqAgMmQ6CWNjwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAJaW50Mwo+IMKgIDJlOgljY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgCWludDMKPiDCoCAyZjoJY2PCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoAlpbnQzCj4gwqAgMzA6CWU5IDAxIGZjIGZmIGZmwqDCoMKgwqDCoMKgwqAJ
+am1wwqDCoMKgIDB4ZmZmZmZmZmZmZmZmZmMzNgo+IMKgIDM1Ogk5MMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgCW5vcAo+IMKgIDM2OgkwZiAxZiA0NCAwMCAwMMKgwqDCoMKg
+wqDCoMKgCW5vcGzCoMKgIDB4MCglcmF4LCVyYXgsMSkKPiDCoCAzYjoJNDEgNTbCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoAlwdXNowqDCoCAlcjE0Cj4gwqAgM2Q6CTQxIDU1wqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJcHVzaMKgwqAgJXIxMwo+IMKgIDNmOgk0McKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCXJleC5CCj4gCj4gQ29kZSBzdGFydGlu
+ZyB3aXRoIHRoZSBmYXVsdGluZyBpbnN0cnVjdGlvbgo+ID09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0KPiDCoMKgIDA6CWZhwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAJY2xpCj4gwqDCoCAxOgljM8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgCXJldAo+IMKgwqAgMjoJY2PCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoAlpbnQzCj4gwqDCoCAzOgljY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgCWludDMKPiDCoMKgIDQ6CWNjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAJaW50Mwo+IMKgwqAgNToJY2PCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoAlpbnQzCj4gwqDCoCA2OgllOSAwMSBmYyBmZiBmZsKgwqDCoMKgwqDCoMKgCWptcMKg
+wqDCoCAweGZmZmZmZmZmZmZmZmZjMGMKPiDCoMKgIGI6CTkwwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAJbm9wCj4gwqDCoCBjOgkwZiAxZiA0NCAwMCAwMMKgwqDCoMKgwqDC
+oMKgCW5vcGzCoMKgIDB4MCglcmF4LCVyYXgsMSkKPiDCoCAxMToJNDEgNTbCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoAlwdXNowqDCoCAlcjE0Cj4gwqAgMTM6CTQxIDU1wqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAJcHVzaMKgwqAgJXIxMwo+IMKgIDE1Ogk0McKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCXJleC5CCj4gUlNQOiAwMDE4OmZmZmZhMThm
+MDAwYWZlNzAgRUZMQUdTOiAwMDAwMDI0Ngo+IFJBWDogMDAwMDAwMDAwMDAwNDAwMCBSQlg6IGZm
+ZmY5NjU2MDNkOTI0MDAgUkNYOiA0MDAwMDAwMDAwMDAwMDAwCj4gUkRYOiBmZmZmOTY1Y2ZlMjQw
+MDAwIFJTSTogZmZmZjk2NTYwMTQ3ODgwMCBSREk6IGZmZmY5NjU2MDE0Nzg4NjQKPiBSQlA6IDAw
+MDAwMDAwMDAwMDAwMDEgUjA4OiBmZmZmZmZmZmI2MjE4MmMwIFIwOTogMDAwMDAwMDAwMDAwMDAw
+MAo+IFIxMDogMDAwMDAwMDAwMDAwMjcwMyBSMTE6IDAwMDAwMDAwMDAwMTk5M2QgUjEyOiAwMDAw
+MDAwMDAwMDAwMDAxCj4gUjEzOiBmZmZmZmZmZmI2MjE4MzQwIFIxNDogMDAwMDAwMDAwMDAwMDAw
+MSBSMTU6IDAwMDAwMDAwMDAwMDAwMDAKPiBhY3BpX2lkbGVfZW50ZXIgKGRyaXZlcnMvYWNwaS9w
+cm9jZXNzb3JfaWRsZS5jOjcxMSAoZGlzY3JpbWluYXRvciAzKSkKPiBjcHVpZGxlX2VudGVyX3N0
+YXRlIChkcml2ZXJzL2NwdWlkbGUvY3B1aWRsZS5jOjIzOSkgCj4gY3B1aWRsZV9lbnRlciAoZHJp
+dmVycy9jcHVpZGxlL2NwdWlkbGUuYzozNTgpIAo+IGNwdWlkbGVfaWRsZV9jYWxsIChrZXJuZWwv
+c2NoZWQvaWRsZS5jOjI0MCkgCj4gZG9faWRsZSAoa2VybmVsL3NjaGVkL2lkbGUuYzozMDUpIAo+
+IGNwdV9zdGFydHVwX2VudHJ5IChrZXJuZWwvc2NoZWQvaWRsZS5jOjQwMCAoZGlzY3JpbWluYXRv
+ciAxKSkgCj4gc3RhcnRfc2Vjb25kYXJ5IChhcmNoL3g4Ni9rZXJuZWwvc21wYm9vdC5jOjIxNQo+
+IGFyY2gveDg2L2tlcm5lbC9zbXBib290LmM6MjQ5KSAKPiBzZWNvbmRhcnlfc3RhcnR1cF82NF9u
+b192ZXJpZnkgKGFyY2gveDg2L2tlcm5lbC9oZWFkXzY0LlM6MzU4KSAKPiA8L1RBU0s+Cj4gLS0t
+WyBlbmQgdHJhY2UgMDAwMDAwMDAwMDAwMDAwMCBdLS0tCgo=
 
-We have seen the splat below few times when just rebooting hosts.
-
-It rarely happens and seems a timing related, so we don't have a
-reproducer.
-
-Our kernel source in the splat is here,
-https://github.com/amazonlinux/linux/tree/kernel-6.1.61-85.141.amzn2023
-
-and the triggered WARN_ON_ONCE() in lmce_supported() is here.
-https://github.com/amazonlinux/linux/blob/kernel-6.1.61-85.141.amzn2023/arch/x86/kernel/cpu/mce/intel.c#L124
-
-Do you have any hint ?
-
-Thanks in advance.
-
-
-ACPI: PM: Preparing to enter system sleep state S5
-reboot: Restarting system
-reboot: machine restart
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 0 at arch/x86/kernel/cpu/mce/intel.c:124 lmce_supported (arch/x86/kernel/cpu/mce/intel.c:124 arch/x86/kernel/cpu/mce/intel.c:99) 
-Modules linked in: ib_core binfmt_misc ext4 crc16 mbcache jbd2 sunrpc mousedev atkbd psmouse ghash_clmulni_intel vivaldi_fmap libps2 aesni_intel crypto_simd cryptd i8042 serio ena button sch_fq_codel dm_mod fuse configfs dax loop dmi_sysfs simpledrm drm_shmem_helper drm_kms_helper cfbfillrect syscopyarea cfbimgblt sysfillrect sysimgblt fb_sys_fops cfbcopyarea drm i2c_core drm_panel_orientation_quirks backlight fb crc32_pclmul crc32c_intel fbdev efivarfs
-Hardware name: Amazon EC2 c6i.4xlarge/, BIOS 1.0 10/16/2017
-RIP: 0010:lmce_supported (arch/x86/kernel/cpu/mce/intel.c:124 arch/x86/kernel/cpu/mce/intel.c:99) 
-Code: 81 fb 00 00 00 09 75 da b9 3a 00 00 00 0f 32 48 c1 e2 20 48 09 c2 48 89 d3 66 90 48 89 d8 48 c1 e8 14 83 e0 01 83 e3 01 75 ba <0f> 0b 31 c0 eb b4 31 d2 48 89 de bf 3a 00 00 00 e8 6b e6 57 00 eb
-All code
-========
-   0:	81 fb 00 00 00 09    	cmp    $0x9000000,%ebx
-   6:	75 da                	jne    0xffffffffffffffe2
-   8:	b9 3a 00 00 00       	mov    $0x3a,%ecx
-   d:	0f 32                	rdmsr
-   f:	48 c1 e2 20          	shl    $0x20,%rdx
-  13:	48 09 c2             	or     %rax,%rdx
-  16:	48 89 d3             	mov    %rdx,%rbx
-  19:	66 90                	xchg   %ax,%ax
-  1b:	48 89 d8             	mov    %rbx,%rax
-  1e:	48 c1 e8 14          	shr    $0x14,%rax
-  22:	83 e0 01             	and    $0x1,%eax
-  25:	83 e3 01             	and    $0x1,%ebx
-  28:	75 ba                	jne    0xffffffffffffffe4
-  2a:*	0f 0b                	ud2		<-- trapping instruction
-  2c:	31 c0                	xor    %eax,%eax
-  2e:	eb b4                	jmp    0xffffffffffffffe4
-  30:	31 d2                	xor    %edx,%edx
-  32:	48 89 de             	mov    %rbx,%rsi
-  35:	bf 3a 00 00 00       	mov    $0x3a,%edi
-  3a:	e8 6b e6 57 00       	call   0x57e6aa
-  3f:	eb                   	.byte 0xeb
-
-Code starting with the faulting instruction
-===========================================
-   0:	0f 0b                	ud2
-   2:	31 c0                	xor    %eax,%eax
-   4:	eb b4                	jmp    0xffffffffffffffba
-   6:	31 d2                	xor    %edx,%edx
-   8:	48 89 de             	mov    %rbx,%rsi
-   b:	bf 3a 00 00 00       	mov    $0x3a,%edi
-  10:	e8 6b e6 57 00       	call   0x57e680
-  15:	eb                   	.byte 0xeb
-RSP: 0018:ffffa18f00154fb8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 000000000000003a
-RDX: 0000000000000000 RSI: 00000000000000ff RDI: ffff965cfe2599c0
-RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: ffffa18f00154ff8 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff965cfe240000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8485dfba30 CR3: 0000000389a10003 CR4: 00000000007706e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
-<IRQ>
-? show_trace_log_lvl (arch/x86/kernel/dumpstack.c:259) 
-? show_trace_log_lvl (arch/x86/kernel/dumpstack.c:259) 
-? mce_intel_feature_clear (arch/x86/kernel/cpu/mce/intel.c:465 arch/x86/kernel/cpu/mce/intel.c:502) 
-? lmce_supported (arch/x86/kernel/cpu/mce/intel.c:124 arch/x86/kernel/cpu/mce/intel.c:99) 
-? __warn (kernel/panic.c:672) 
-? lmce_supported (arch/x86/kernel/cpu/mce/intel.c:124 arch/x86/kernel/cpu/mce/intel.c:99) 
-? report_bug (lib/bug.c:201 lib/bug.c:219) 
-? handle_bug (arch/x86/kernel/traps.c:324) 
-? exc_invalid_op (arch/x86/kernel/traps.c:345 (discriminator 1)) 
-? asm_exc_invalid_op (./arch/x86/include/asm/idtentry.h:568) 
-? lmce_supported (arch/x86/kernel/cpu/mce/intel.c:124 arch/x86/kernel/cpu/mce/intel.c:99) 
-? clear_local_APIC (./arch/x86/include/asm/apic.h:393 arch/x86/kernel/apic/apic.c:1192) 
-mce_intel_feature_clear (arch/x86/kernel/cpu/mce/intel.c:465 arch/x86/kernel/cpu/mce/intel.c:502) 
-stop_this_cpu (arch/x86/kernel/process.c:780) 
-__sysvec_reboot (arch/x86/kernel/smp.c:140) 
-sysvec_reboot (arch/x86/kernel/smp.c:136 (discriminator 14)) 
-</IRQ>
-<TASK>
-asm_sysvec_reboot (./arch/x86/include/asm/idtentry.h:656) 
-RIP: 0010:acpi_idle_do_entry (./arch/x86/include/asm/irqflags.h:40 ./arch/x86/include/asm/irqflags.h:75 drivers/acpi/processor_idle.c:113 drivers/acpi/processor_idle.c:572) 
-Code: 75 08 48 8b 15 b1 81 df 02 ed c3 cc cc cc cc 65 48 8b 04 25 00 ff 01 00 48 8b 00 a8 08 75 eb 66 90 0f 00 2d 58 c8 6a 00 fb f4 <fa> c3 cc cc cc cc e9 01 fc ff ff 90 0f 1f 44 00 00 41 56 41 55 41
-All code
-========
-   0:	75 08                	jne    0xa
-   2:	48 8b 15 b1 81 df 02 	mov    0x2df81b1(%rip),%rdx        # 0x2df81ba
-   9:	ed                   	in     (%dx),%eax
-   a:	c3                   	ret
-   b:	cc                   	int3
-   c:	cc                   	int3
-   d:	cc                   	int3
-   e:	cc                   	int3
-   f:	65 48 8b 04 25 00 ff 	mov    %gs:0x1ff00,%rax
-  16:	01 00 
-  18:	48 8b 00             	mov    (%rax),%rax
-  1b:	a8 08                	test   $0x8,%al
-  1d:	75 eb                	jne    0xa
-  1f:	66 90                	xchg   %ax,%ax
-  21:	0f 00 2d 58 c8 6a 00 	verw   0x6ac858(%rip)        # 0x6ac880
-  28:	fb                   	sti
-  29:	f4                   	hlt
-  2a:*	fa                   	cli		<-- trapping instruction
-  2b:	c3                   	ret
-  2c:	cc                   	int3
-  2d:	cc                   	int3
-  2e:	cc                   	int3
-  2f:	cc                   	int3
-  30:	e9 01 fc ff ff       	jmp    0xfffffffffffffc36
-  35:	90                   	nop
-  36:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  3b:	41 56                	push   %r14
-  3d:	41 55                	push   %r13
-  3f:	41                   	rex.B
-
-Code starting with the faulting instruction
-===========================================
-   0:	fa                   	cli
-   1:	c3                   	ret
-   2:	cc                   	int3
-   3:	cc                   	int3
-   4:	cc                   	int3
-   5:	cc                   	int3
-   6:	e9 01 fc ff ff       	jmp    0xfffffffffffffc0c
-   b:	90                   	nop
-   c:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  11:	41 56                	push   %r14
-  13:	41 55                	push   %r13
-  15:	41                   	rex.B
-RSP: 0018:ffffa18f000afe70 EFLAGS: 00000246
-RAX: 0000000000004000 RBX: ffff965603d92400 RCX: 4000000000000000
-RDX: ffff965cfe240000 RSI: ffff965601478800 RDI: ffff965601478864
-RBP: 0000000000000001 R08: ffffffffb62182c0 R09: 0000000000000000
-R10: 0000000000002703 R11: 000000000001993d R12: 0000000000000001
-R13: ffffffffb6218340 R14: 0000000000000001 R15: 0000000000000000
-acpi_idle_enter (drivers/acpi/processor_idle.c:711 (discriminator 3)) 
-cpuidle_enter_state (drivers/cpuidle/cpuidle.c:239) 
-cpuidle_enter (drivers/cpuidle/cpuidle.c:358) 
-cpuidle_idle_call (kernel/sched/idle.c:240) 
-do_idle (kernel/sched/idle.c:305) 
-cpu_startup_entry (kernel/sched/idle.c:400 (discriminator 1)) 
-start_secondary (arch/x86/kernel/smpboot.c:215 arch/x86/kernel/smpboot.c:249) 
-secondary_startup_64_no_verify (arch/x86/kernel/head_64.S:358) 
-</TASK>
----[ end trace 0000000000000000 ]---
 
