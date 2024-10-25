@@ -1,242 +1,116 @@
-Return-Path: <linux-edac+bounces-2286-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2287-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 931F29B0605
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 16:41:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71B209B0807
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 17:24:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B65641C21434
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 14:41:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9556E1C2130F
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 15:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 270C220102B;
-	Fri, 25 Oct 2024 14:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADC421A4AF;
+	Fri, 25 Oct 2024 15:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsLuE4Yu"
+	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="m2JsUbw4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EF91FB89A;
-	Fri, 25 Oct 2024 14:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6225B21A4BD
+	for <linux-edac@vger.kernel.org>; Fri, 25 Oct 2024 15:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729867257; cv=none; b=M/Gy4NtPGO/82MAB5dl8+ZhxOc4hxZJCWuaaMjt4Q4wsC7VCdRwE63dJpbuJQKvqm3BTdfRixuieSQ7cVZLyUW/07Y5RFUt1IXn5xJPeaCjH4U0HUCACT4tSmJ2ZmVNcYlQIRzJmOjOnO7uLXdpCWx5uVUcGkUdAlPVyP9mlBHI=
+	t=1729869631; cv=none; b=PAMLc4Ei23uSO5DzyOHv8Bzv63gez25FnjzMKx6iyqbEpuAYUcxeJycSYG/sMcslDD7FkRVY1MtxfckFXfZV5K2fpyVx5xq98Uc9gn6FQ2BarrkfFvT4tcGIDB2N23LkEetz9Tg2qu3j96KT7fJakaLyVIV2U7vHZahuebJy6nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729867257; c=relaxed/simple;
-	bh=dsMthO8Jrb9+1L6ZnDBu1t1OOQmY7jYi7dCIH4VZXdU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=LSyyhzggLpzzD3dgSDimIdYxRq6ahFzgNo4A8I+NuPtyQA7UeQnWYJyWmwrbTXxNabqD7mEkRMhJSxRs7kjOBon9wxqkSy9ZkBbHNUDmv8eMzKQg0yNErhxRw4vgvgV96u0gbkYhdxWTL805znLqEHzWUgR1SFe3GKWadqs2PxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsLuE4Yu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79BFC4CEC3;
-	Fri, 25 Oct 2024 14:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729867256;
-	bh=dsMthO8Jrb9+1L6ZnDBu1t1OOQmY7jYi7dCIH4VZXdU=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=DsLuE4YuLKTOMLwG4QbYcC/9yEVkwhUZJSvX6byCliyWU1yve4qV6bXccnRnvPJjy
-	 hQt9TUaaD7vnPRgsNPSzA3knTTqaiRHdpAtWkgBqS3hwh5QYRN+DbjGSEPva2RuCai
-	 S6ywofDYDrnJ+cXFONwgAVuS0pjNLNS/pXX0O3fciG6Gin4qYttjqZf49GswGeVLQJ
-	 DIrSm19K/gfKrz+D7PFEVz8ZPZnZb4oJYVv2REqZnDHGgzX8ISatwGSkevd3Vz9wDK
-	 bZb70FzWq0oht19nQCS1hq2gcSqpV5A+b4J84N48CQCj1MggHe/KcTucXhYFuNf0x+
-	 rio8u6IbkoRCQ==
+	s=arc-20240116; t=1729869631; c=relaxed/simple;
+	bh=Cp9FSnTlH6bdvVMpEKMvRbQ5i2H60iAjX87XIB2uWE0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=extsI6sPIFLLqA3tu/LXLcnXAC5HSc0W13yALTzCix446Y5tFFGy/AoD6wxsH6yaYy4q167GhxgL3u59nv0DJy656BliTyMTTuN//S8Q+2DOKr9HEJOpMBDeAjV8fDWbE4JMFGDBIT29fFi9VbPeVE94nlK7dCxIfD4tVZZW0Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=m2JsUbw4; arc=none smtp.client-ip=18.9.28.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+Received: from cwcc.thunk.org (pool-173-48-115-113.bstnma.fios.verizon.net [173.48.115.113])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 49PFI2GF026443
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Oct 2024 11:18:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1729869491; bh=+3/YlMW+NiPuVTOTB6zPtTx6MGg/Ovh8Uq4NZbG/uyg=;
+	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
+	b=m2JsUbw4V9BzTChzyhXxKEonx709PC2kGcGmxOyqq/Dj3J1OQmlaWKfLaXMPcQlWI
+	 U1cD1pwfhERmeC1yoJG56VdEwJjIdfJXbbc9NxpD4mFr2EgBZO88LobYOF7KSMheAD
+	 xunW+jK+TKd7G9GXDY3GTgrNXRVyn4XHUU6SwE5d1CAqUAXIbNAh+GPw9DFs+I2Rui
+	 zcuKXf08A4qwIfnZF1P/9xNKQ0Yvwio7iAn8Ve3EPqzqdy0OHAe7vYUjTmCfpFEqiX
+	 SnsQD60MMQgAoU2n8Afic9+mpasu+2+bjSavmaTe6RZYXijBNPFAAahQ4RcBOdQK0R
+	 l5HWypBd+18tQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 28BF715C0329; Fri, 25 Oct 2024 11:18:02 -0400 (EDT)
+Date: Fri, 25 Oct 2024 11:18:02 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc: Hantong Chen <cxwdyx620@gmail.com>, james.bottomley@hansenpartnership.com,
+        ajhalaney@gmail.com, allenbh@gmail.com, andrew@lunn.ch,
+        andriy.shevchenko@linux.intel.com, andy@kernel.org, arnd@arndb.de,
+        bhelgaas@google.com, bp@alien8.de, broonie@kernel.org,
+        cai.huoqing@linux.dev, dave.jiang@intel.com, davem@davemloft.net,
+        dlemoal@kernel.org, dmaengine@vger.kernel.org, dushistov@mail.ru,
+        fancer.lancer@gmail.com, geert@linux-m68k.org,
+        gregkh@linuxfoundation.org, ink@jurassic.park.msu.ru, jdmason@kudzu.us,
+        jiaxun.yang@flygoat.com, keguang.zhang@gmail.com,
+        kory.maincent@bootlin.com, krzk@kernel.org, kuba@kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux@armlinux.org.uk, linux@roeck-us.net,
+        manivannan.sadhasivam@linaro.org, netdev@vger.kernel.org,
+        nikita.shubin@maquefel.me, nikita@trvn.ru, ntb@lists.linux.dev,
+        olteanv@gmail.com, pabeni@redhat.com, paulburton@kernel.org,
+        robh@kernel.org, s.shtylyov@omp.ru, sergio.paracuellos@gmail.com,
+        shc_work@mail.ru, siyanteng@loongson.cn, tsbogend@alpha.franken.de,
+        xeb@mail.ru, yoshihiro.shimoda.uh@renesas.com, phoronix@phoronix.com
+Subject: Re: linux: Goodbye from a Linux community volunteer
+Message-ID: <20241025151802.GC3307207@mit.edu>
+References: <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
+ <20241024165650.174-1-cxwdyx620@gmail.com>
+ <20241024173504.GN3204734@mit.edu>
+ <cc264780-0c16-4209-8736-ada156994eaa@metux.net>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Oct 2024 17:40:52 +0300
-Message-Id: <D54YRGZ47LLS.2BGS3F7T80DF4@kernel.org>
-Cc: <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
- <linux-edac@vger.kernel.org>, <x86@kernel.org>, <justin.he@arm.com>,
- <ardb@kernel.org>, <ying.huang@intel.com>, <ashish.kalra@amd.com>,
- <baolin.wang@linux.alibaba.com>, <tglx@linutronix.de>,
- <dave.hansen@linux.intel.com>, <lenb@kernel.org>, <hpa@zytor.com>,
- <robert.moore@intel.com>, <lvying6@huawei.com>, <xiexiuqi@huawei.com>,
- <zhuo.song@linux.alibaba.com>
-Subject: Re: [PATCH v14 3/3] ACPI: APEI: handle synchronous exceptions in
- task work
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Shuai Xue" <xueshuai@linux.alibaba.com>, <mark.rutland@arm.com>,
- <catalin.marinas@arm.com>, <mingo@redhat.com>, <robin.murphy@arm.com>,
- <Jonathan.Cameron@Huawei.com>, <bp@alien8.de>, <rafael@kernel.org>,
- <wangkefeng.wang@huawei.com>, <tanxiaofei@huawei.com>,
- <mawupeng1@huawei.com>, <tony.luck@intel.com>, <linmiaohe@huawei.com>,
- <naoya.horiguchi@nec.com>, <james.morse@arm.com>, <tongtiangen@huawei.com>,
- <gregkh@linuxfoundation.org>, <will@kernel.org>
-X-Mailer: aerc 0.18.2
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20241014084240.18614-4-xueshuai@linux.alibaba.com>
- <05a8d26b-b023-426f-879c-7d33be4a6406@linux.alibaba.com>
-In-Reply-To: <05a8d26b-b023-426f-879c-7d33be4a6406@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc264780-0c16-4209-8736-ada156994eaa@metux.net>
 
-On Tue Oct 22, 2024 at 4:11 AM EEST, Shuai Xue wrote:
-> Hi, Jarkko,
->
->
-> =E5=9C=A8 2024/10/14 16:42, Shuai Xue =E5=86=99=E9=81=93:
-> > The memory uncorrected error could be signaled by asynchronous interrup=
-t
-> > (specifically, SPI in arm64 platform), e.g. when an error is detected b=
-y
-> > a background scrubber, or signaled by synchronous exception
-> > (specifically, data abort excepction in arm64 platform), e.g. when a CP=
-U
-> > tries to access a poisoned cache line. Currently, both synchronous and
-> > asynchronous error use memory_failure_queue() to schedule
-> > memory_failure() exectute in kworker context.
-> >=20
-> > As a result, when a user-space process is accessing a poisoned data, a
-> > data abort is taken and the memory_failure() is executed in the kworker
-> > context:
-> >=20
-> >    - will send wrong si_code by SIGBUS signal in early_kill mode, and
-> >    - can not kill the user-space in some cases resulting a synchronous
-> >      error infinite loop
-> >=20
-> > Issue 1: send wrong si_code in early_kill mode
-> >=20
-> > Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
-> > MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRE=
-D
-> > could be used to determine whether a synchronous exception occurs on
-> > ARM64 platform.  When a synchronous exception is detected, the kernel i=
-s
-> > expected to terminate the current process which has accessed poisoned
-> > page. This is done by sending a SIGBUS signal with an error code
-> > BUS_MCEERR_AR, indicating an action-required machine check error on
-> > read.
-> >=20
-> > However, when kill_proc() is called to terminate the processes who have
-> > the poisoned page mapped, it sends the incorrect SIGBUS error code
-> > BUS_MCEERR_AO because the context in which it operates is not the one
-> > where the error was triggered.
-> >=20
-> > To reproduce this problem:
-> >=20
-> >    #sysctl -w vm.memory_failure_early_kill=3D1
-> >    vm.memory_failure_early_kill =3D 1
-> >=20
-> >    # STEP2: inject an UCE error and consume it to trigger a synchronous=
- error
-> >    #einj_mem_uc single
-> >    0: single   vaddr =3D 0xffffb0d75400 paddr =3D 4092d55b400
-> >    injecting ...
-> >    triggering ...
-> >    signal 7 code 5 addr 0xffffb0d75000
-> >    page not present
-> >    Test passed
-> >=20
-> > The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_A=
-O
-> > error and it is not fact.
-> >=20
-> > After this patch:
-> >=20
-> >    # STEP1: enable early kill mode
-> >    #sysctl -w vm.memory_failure_early_kill=3D1
-> >    vm.memory_failure_early_kill =3D 1
-> >    # STEP2: inject an UCE error and consume it to trigger a synchronous=
- error
-> >    #einj_mem_uc single
-> >    0: single   vaddr =3D 0xffffb0d75400 paddr =3D 4092d55b400
-> >    injecting ...
-> >    triggering ...
-> >    signal 7 code 4 addr 0xffffb0d75000
-> >    page not present
-> >    Test passed
-> >=20
-> > The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_A=
-R
-> > error as we expected.
-> >=20
-> > Issue 2: a synchronous error infinite loop
-> >=20
-> > If a user-space process, e.g. devmem, a poisoned page which has been se=
-t
-> > HWPosion flag, kill_accessing_process() is called to send SIGBUS to the
-> > current processs with error info. Because the memory_failure() is
-> > executed in the kworker contex, it will just do nothing but return
-> > EFAULT. So, devmem will access the posioned page and trigger an
-> > excepction again, resulting in a synchronous error infinite loop. Such
-> > loop may cause platform firmware to exceed some threshold and reboot
-> > when Linux could have recovered from this error.
-> >=20
-> > To reproduce this problem:
-> >=20
-> >    # STEP 1: inject an UCE error, and kernel will set HWPosion flag for=
- related page
-> >    #einj_mem_uc single
-> >    0: single   vaddr =3D 0xffffb0d75400 paddr =3D 4092d55b400
-> >    injecting ...
-> >    triggering ...
-> >    signal 7 code 4 addr 0xffffb0d75000
-> >    page not present
-> >    Test passed
-> >=20
-> >    # STEP 2: access the same page and it will trigger a synchronous err=
-or infinite loop
-> >    devmem 0x4092d55b400
-> >=20
-> > To fix above two issues, queue memory_failure() as a task_work so that =
-it runs in
-> > the context of the process that is actually consuming the poisoned data=
-.
-> >=20
-> > Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> > Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-> > Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> > Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
-> > Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> > ---
-> >   drivers/acpi/apei/ghes.c | 78 +++++++++++++++++++++++----------------=
--
-> >   include/acpi/ghes.h      |  3 --
-> >   include/linux/mm.h       |  1 -
-> >   mm/memory-failure.c      | 13 -------
-> >   4 files changed, 45 insertions(+), 50 deletions(-)
-> >=20
-> > diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> > index f2ee28c44d7a..95e9520eb803 100644
-> > --- a/drivers/acpi/apei/ghes.c
-> > +++ b/drivers/acpi/apei/ghes.c
-> > @@ -467,28 +467,42 @@ static void ghes_clear_estatus(struct ghes *ghes,
-> >   }
-> >  =20
-> >   /*
-> > - * Called as task_work before returning to user-space.
-> > - * Ensure any queued work has been done before we return to the contex=
-t that
-> > - * triggered the notification.
-> > + * struct ghes_task_work - for synchronous RAS event
-> > + *
-> > + * @twork:                callback_head for task work
-> > + * @pfn:                  page frame number of corrupted page
-> > + * @flags:                work control flags
-> > + *
-> > + * Structure to pass task work to be handled before
-> > + * returning to user-space via task_work_add().
-> >    */
->
->
-> Do you have any futer comments about this patch? Any comments are
-> welcomed. If not, are you happy to explictly give the reveiwed-by tag?
+On Fri, Oct 25, 2024 at 03:35:37PM +0200, Enrico Weigelt, metux IT consult wrote:
+> 
+> Okay, great. I'm fully on your side: let's sanction all countries that
+> like to wage wars of aggressions against other countries and kick out
+> all maintainers from there.
 
-Sorry I've been busy switching to a new job.
+Sanctions are imposed by Governments --- for example, the US,
+European, Japan, Switzerland, Norway, etc.  Not Linux developers, nor
+Russian troll farms, nor Russia's useful idiots on the internet.  It's
+not up to anyone on this mail thread.
 
-I read this now through and both commit messages and the code changes
-look sane to me so I guess I don't have any problem with that:
+I see from your country code in your signature that you apparently
+live in Germany.  Please note that if you violate Germany's laws and
+regulations, whether it's by supplying bomb-making technical
+assistance to a terrorist group, or lending technical assistance to
+sanctioned entities directly or indirectly controlled by the Russian
+Military-Intelligence, you could be subject to civil or criminal
+penalties.  And that's not up to me; it's up to your elected leaders
+and Germany's judicial system.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+If you don't like this, I cordially invite you to exercise your
+democratic rights and make your opinions known to your fellow citizens
+and to your elected politicians.
 
->
-> Best Regard,
-> Shuai
-
-BR, Jarkko
+      	      		       	       - Ted
 
