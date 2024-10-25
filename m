@@ -1,162 +1,182 @@
-Return-Path: <linux-edac+bounces-2264-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2265-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F039AF534
-	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 00:19:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE3F9AF6E2
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 03:35:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 498FEB22254
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Oct 2024 22:19:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48E711F22471
+	for <lists+linux-edac@lfdr.de>; Fri, 25 Oct 2024 01:35:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F151218325;
-	Thu, 24 Oct 2024 22:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DhhXnaZn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05C24D8A3;
+	Fri, 25 Oct 2024 01:34:56 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57D81FC7EB;
-	Thu, 24 Oct 2024 22:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1625F1173F
+	for <linux-edac@vger.kernel.org>; Fri, 25 Oct 2024 01:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729808340; cv=none; b=LjHAPNET9qP3kJh5zyNWKym5KqObyNOSvtxNvkKp/gbAMzAbb9qfNMUM8k3yJumE7ND1wBkvfmtBeiRAN/xlHeMMtC+Vwpb4tvQc+r7aiTt9UqLLfhrzzlQlNG6fo55TJIpnYbT3Wcj8OKJdvnIBrCD80sDdzFzcRE1B6f2KKHw=
+	t=1729820096; cv=none; b=k8SdXgTtKn7/ACTjoGTgwV6U1gqP/ch73dcQA6qCtJw9IBxJ4xivRXuBt73Kp37RqAGj952g5CHRD3tNkDz7Dk5vnKTOFTgE8SHfS/eUR1iGyqXpqouO+ifQsC0sTrZ4apIvPOfqAHSnwfN0PeK1Z4tlDATmyKVYnfW3xEvy1IY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729808340; c=relaxed/simple;
-	bh=vDsh5gpvk/2IqOsb7+xosgN2aF11yxwV+U87nf0ujFI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WyuE3prdFB1jZ55aSwUkisbXZDuAxU/W+/1pIZipiUyIKUsZU5ekOU3M9pEGZQz5qZaH/zZH/rp5AF3FFE0OPBodCmr91PZyS4EUqZwFBWcsgn65udLG29wVU0bPFWhR59qFOgWbkLnSsRQn/7R+41NX97SoLaN/ZtoYDFD4054=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DhhXnaZn; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729808339; x=1761344339;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vDsh5gpvk/2IqOsb7+xosgN2aF11yxwV+U87nf0ujFI=;
-  b=DhhXnaZnG5OifDiux/zTPyTSqLj5isrLz5Pg0GgthxDs7usbNaKLnxuL
-   iowCDXkWSfuYMbQf+FDkWpEdK1DMPSthFDHquEFh9JvlPkdqn76KRmZtt
-   G3L1rP2pROnEhAnseRlO230fsf8iOL8gSN2IUcf4IEmbxKxpEmWo6WgD1
-   VfUB5uAbxIdiGfY+rPG4tZiaVRCF8VBPp3SwQ5XS5TnI3xRSVTWWF/RsQ
-   PZLrptOmiIvXJQVYIdcFSRBfwiEMp2v/Qxuvctv4qsSvtPgMcGb3Nuvf7
-   0DSirDqkJ8nAJ+PT722Y61drpE9Mr3FSkk+iUBbKmTuUvTkT+6hx7jR/q
-   A==;
-X-CSE-ConnectionGUID: OL9x8MQTQwSdPrFn7GzQrw==
-X-CSE-MsgGUID: H/76eD4SSoyy6v9D8dVj7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="46948267"
-X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
-   d="scan'208";a="46948267"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 15:18:58 -0700
-X-CSE-ConnectionGUID: UIQc4rxxT5GJ7aBLLInsfA==
-X-CSE-MsgGUID: KFrkXFfcSWGGsjSziGi5hQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
-   d="scan'208";a="80835959"
-Received: from kinlongk-mobl1.amr.corp.intel.com (HELO [10.124.221.135]) ([10.124.221.135])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 15:18:57 -0700
-Message-ID: <1a56307f-f280-4ce6-878e-98923ddc2102@intel.com>
-Date: Thu, 24 Oct 2024 15:18:56 -0700
+	s=arc-20240116; t=1729820096; c=relaxed/simple;
+	bh=TTzDSsWEppcu/nZkSt3d2iocms+cZC1EGEDS8DYsZT0=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=iQX3YDa/fu+i580vVKT82ZY9pelze2O8fk87d4u2FqtpIlZ+wsz/8IQWBjDTfW7i8o2rzUQkZA9LcdYQlWrjWUO59BZzjCAciQn/dOaWy0jSJ38KvqecJpyxASSx0hPRCa+rgZf1QgyCyTikKI8xjehvxQCG8ocJcT41OFRsYFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XZQJ31HXjzdkJY;
+	Fri, 25 Oct 2024 09:32:19 +0800 (CST)
+Received: from dggpemf100006.china.huawei.com (unknown [7.185.36.228])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4944018010F;
+	Fri, 25 Oct 2024 09:34:50 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemf100006.china.huawei.com (7.185.36.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 25 Oct 2024 09:34:49 +0800
+Subject: Re: [PATCH 1/1] RAS/AMD/FMPM: Fix return value check in
+ setup_debugfs()
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+CC: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	<linux-edac@vger.kernel.org>
+References: <20241023070508.275-1-thunder.leizhen@huawei.com>
+ <20241024155503.GA965@yaz-khff2.amd.com>
+From: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <a9097bce-72f2-07a9-0343-f39ae779f25d@huawei.com>
+Date: Fri, 25 Oct 2024 09:34:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/10] x86/mce: Convert multiple if () statements into
- a switch() statement
-To: Sohil Mehta <sohil.mehta@intel.com>, "Luck, Tony" <tony.luck@intel.com>,
- "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-Cc: "bp@alien8.de" <bp@alien8.de>, "tglx@linutronix.de" <tglx@linutronix.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "mingo@redhat.com" <mingo@redhat.com>, "hpa@zytor.com" <hpa@zytor.com>,
- "x86@kernel.org" <x86@kernel.org>,
- "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20241010153202.30876-1-qiuxu.zhuo@intel.com>
- <20241016123036.21366-1-qiuxu.zhuo@intel.com>
- <20241016123036.21366-7-qiuxu.zhuo@intel.com>
- <c928d9aa-1609-4f5f-943c-fec72091e989@intel.com>
- <ZxLBwO4HkkJG4WYn@agluck-desk3.sc.intel.com>
- <2d011a77-a46e-4589-ae91-80d8d29e4124@intel.com>
- <CY8PR11MB71348AA655274E611CFFFE6C89412@CY8PR11MB7134.namprd11.prod.outlook.com>
- <SJ1PR11MB6083262976EDEC69FFF449FAFC432@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <c9ffb6b0-9c75-4990-afb5-33094d049570@intel.com>
- <CY8PR11MB7134E2BD84013EF41F8F5AC8894D2@CY8PR11MB7134.namprd11.prod.outlook.com>
- <CY8PR11MB7134DED56F51E59273F3B063894E2@CY8PR11MB7134.namprd11.prod.outlook.com>
- <SJ1PR11MB608380793D6F55A62332E0D1FC4E2@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <dcfdba92-7004-413d-8011-12771636d11f@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20241024155503.GA965@yaz-khff2.amd.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <dcfdba92-7004-413d-8011-12771636d11f@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemf100006.china.huawei.com (7.185.36.228)
 
-On 10/24/24 14:31, Sohil Mehta wrote:
-> @@ -1924,6 +1924,10 @@ static void apply_quirks_intel(struct cpuinfo_x86 *c)
->         struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
->         struct mca_config *cfg = &mca_cfg;
+
+
+On 2024/10/24 23:55, Yazen Ghannam wrote:
+> Hi Zhen Lei,
 > 
-> +       /* Older CPUs (prior to family 6) don't need quirks. */
-> +       if (c->x86_vfm < INTEL_PENTIUM_PRO)
-> +               return;
+> Thanks for the patch.
+> 
+> The subject line does not need to include 1/1 for a single patch.
 
-In case anyone grumbles, this is one of those expressions that's not
-perfect, but I think it's quite good enough in practice.
+OK
 
-It wouldn't work if we ever (for instance) moved 'vendor' to be less
-significant bits than 'model'.  Or on a CPU that claimed to be family=6
-but model=0.  But Intel never (as far as I know) sold a CPU like that,
-so it's probably only possible in a VM where these checks are rather
-worthless anyway.
+> 
+> On Wed, Oct 23, 2024 at 03:05:08PM +0800, Zhen Lei wrote:
+>> Fix the incorrect return value check for debugfs_create_dir() and
+>> debugfs_create_file(), which returns ERR_PTR(-ERROR) instead of NULL
+> 
+> Yes, the return value check is incorrect. But I think the solution is
+> simpler. Please see the patch at the end.
 
-In short, I think >=INTEL_PENTIUM_PRO is a great check that can mean
-"family 6 or later" almost anywhere.
+According to the description of debugfs_create_dir(), the modification
+scheme you provide is more appropriate. By the way, fmpm_dfs_entries is
+unused now, should be removed.
+
+> 
+>> when it fails. In addition, fmpm_dfs_dir should be set to NULL after
+>> being reclaimed.
+>>
+> 
+> Why is this needed?
+
+Habitual, sorry, I did not analyze the code carefully before, this
+operation is not needed here.
+
+> 
+>> Fixes: 7d19eea51757 ("RAS/AMD/FMPM: Add debugfs interface to print record entries")
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  drivers/ras/amd/fmpm.c | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
+>> index 90de737fbc90978..b1cffbde6d319ed 100644
+>> --- a/drivers/ras/amd/fmpm.c
+>> +++ b/drivers/ras/amd/fmpm.c
+>> @@ -956,12 +956,14 @@ static void setup_debugfs(void)
+>>  		return;
+>>  
+>>  	fmpm_dfs_dir = debugfs_create_dir("fmpm", dfs);
+>> -	if (!fmpm_dfs_dir)
+>> +	if (IS_ERR(fmpm_dfs_dir))
+>>  		return;
+>>  
+>>  	fmpm_dfs_entries = debugfs_create_file("entries", 0400, fmpm_dfs_dir, NULL, &fmpm_fops);
+>> -	if (!fmpm_dfs_entries)
+>> +	if (IS_ERR(fmpm_dfs_entries)) {
+>>  		debugfs_remove(fmpm_dfs_dir);
+>> +		fmpm_dfs_dir = NULL;
+>> +	}
+>>  }
+>>
+> 
+> I think the intention here is correct. But the solution is to just
+> remove the error checks entirely.
+> 
+> Thanks,
+> Yazen
+> 
+> 
+>>From 75869583bec8eb95d062cecedc4278bead8a293a Mon Sep 17 00:00:00 2001
+> From: Yazen Ghannam <yazen.ghannam@amd.com>
+> Date: Thu, 24 Oct 2024 10:06:54 -0400
+> Subject: [PATCH] RAS/AMD/ATL: Simplify debugfs init
+> 
+> Drop return value checks as debugfs API says most drivers should ignore
+> errors. Issues between creation steps are automatically handled by the
+> debugfs code.
+> 
+> Also, add a code comment highlighting why a valid ras debugfs dentry is
+> needed.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>  drivers/ras/amd/fmpm.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
+> index 90de737fbc90..3965963d9164 100644
+> --- a/drivers/ras/amd/fmpm.c
+> +++ b/drivers/ras/amd/fmpm.c
+> @@ -952,16 +952,15 @@ static void setup_debugfs(void)
+>  {
+>  	struct dentry *dfs = ras_get_debugfs_root();
+>  
+> +	/*
+> +	 * Ensure there's a ras debugfs directory so the fmpm files aren't populated in
+> +	 * the root debugfs directory.
+> +	 */
+>  	if (!dfs)
+>  		return;
+>  
+>  	fmpm_dfs_dir = debugfs_create_dir("fmpm", dfs);
+> -	if (!fmpm_dfs_dir)
+> -		return;
+> -
+>  	fmpm_dfs_entries = debugfs_create_file("entries", 0400, fmpm_dfs_dir, NULL, &fmpm_fops);
+> -	if (!fmpm_dfs_entries)
+> -		debugfs_remove(fmpm_dfs_dir);
+>  }
+>  
+>  static const struct x86_cpu_id fmpm_cpuids[] = {
+> 
+
+-- 
+Regards,
+  Zhen Lei
 
