@@ -1,402 +1,425 @@
-Return-Path: <linux-edac+bounces-2315-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2316-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844A59B2A05
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 09:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 334519B2EBD
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 12:23:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F409B1C2130E
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 08:12:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D8161C21C50
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 11:23:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5AB1192B6B;
-	Mon, 28 Oct 2024 08:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95CB51DE3DF;
+	Mon, 28 Oct 2024 11:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Mr0mPB1u"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="CK3gJwuD"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62DA318D65C;
-	Mon, 28 Oct 2024 08:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17F61DE2B0;
+	Mon, 28 Oct 2024 11:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730103126; cv=none; b=IQRqneRtGdD2JIqyXvFbNxdkmqkCEB1t3tqLnBTZZ0/gLcgDve6gTZa3Hu4V74t9PMKmE8vLdCNdJmKp2crwQ0+9ippzf+z99IGQ9ALSFsb2/lSh08VPUKWzpu224MA3bLc2dyT6jQ2pyw5vvAYyrcZZPHQUSkx53VRFRq0gFB0=
+	t=1730114260; cv=none; b=CG3lAZDKUKh5w9dsKRZDqQttVZ49DJQd4bCVI1locKMxIiApmReVqsCeX9doS73y/2LymkBUkcnHnBsUBceoga32EJoSemLBihez15whaDzKlykzOER47Q8Ab4a9I9Ij6QUWESkv39eek6K9JrYUbSjNxXRNSYYhNuLDcu2uyAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730103126; c=relaxed/simple;
-	bh=E5X2/+tdCWtjhr4LR0vxw7flF3lDLDJvHmsC4cYI9v0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jBuxsCKxcPlDoBfK9vN+hGsh0MCGA42n2uZ+wpFyy3kHuv9Gjlmkrv8lTzlYqw4StGOYvX281w1jlfj4Xe6U0Y/XXmeltNTwxDyLUlkrjeGBCtib1urjE+smuOA1pqf6LtImLe4/WtTCdaDI9RPnVZrcRsclZX/84+PTdU/XULM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Mr0mPB1u; arc=none smtp.client-ip=115.124.30.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1730103120; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=AkBjQaDenIgyvgTsbGEmC1sX39xUoE7KW2fliOWq8rI=;
-	b=Mr0mPB1uJrzzL6uXttABPGwbXFO6J3ZYC500kScEVj1K/VJl6vMZo8itIjAg/eWe/xFQ5UcZndGoFTYVGJXtVB5iVNIFozDtkPPPOdeUTbhc7tnDgp0PZNLA6D8cyXZXrngUpLlVmwfE/Ejxu+4AkN7XyOkzrKGwUvHdVsLV5bg=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WI0hO5e_1730103117 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 28 Oct 2024 16:11:58 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: mark.rutland@arm.com,
-	catalin.marinas@arm.com,
-	mingo@redhat.com,
-	robin.murphy@arm.com,
-	Jonathan.Cameron@Huawei.com,
-	bp@alien8.de,
-	rafael@kernel.org,
-	wangkefeng.wang@huawei.com,
-	tanxiaofei@huawei.com,
-	mawupeng1@huawei.com,
-	tony.luck@intel.com,
-	linmiaohe@huawei.com,
-	naoya.horiguchi@nec.com,
-	james.morse@arm.com,
-	tongtiangen@huawei.com,
-	gregkh@linuxfoundation.org,
-	will@kernel.org,
-	jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org,
-	linux-edac@vger.kernel.org,
-	x86@kernel.org,
-	xueshuai@linux.alibaba.com,
-	justin.he@arm.com,
-	ardb@kernel.org,
-	ying.huang@intel.com,
-	ashish.kalra@amd.com,
-	baolin.wang@linux.alibaba.com,
-	tglx@linutronix.de,
-	dave.hansen@linux.intel.com,
-	lenb@kernel.org,
-	hpa@zytor.com,
-	robert.moore@intel.com,
-	lvying6@huawei.com,
-	xiexiuqi@huawei.com,
-	zhuo.song@linux.alibaba.com
-Subject: [PATCH v15 3/3] ACPI: APEI: handle synchronous exceptions in task work
-Date: Mon, 28 Oct 2024 16:11:42 +0800
-Message-ID: <20241028081142.66028-4-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+	s=arc-20240116; t=1730114260; c=relaxed/simple;
+	bh=nI0ZCe9B8XTcVwbcRJwTIt3xdf75VCwrbvkULJxMMy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KGlz1TOAaclPqUvVpydguOySdHGpLLcc1tCqSuPH7sKQvqpkZSuJPjnfbfbCIQRHUiSGw/8e49pRw9gAazLQtp5yvCY95b6Mhidv5oU1ecMEYGE5d19vv9W0zEcdHtYkHoHOnuIIJw7bCAVxGacIO6BnYbeyDuX6irMdKKFBcgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=CK3gJwuD; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A16B940E0198;
+	Mon, 28 Oct 2024 11:17:34 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id YWBf7PxV-zBo; Mon, 28 Oct 2024 11:17:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1730114249; bh=aQXjtMdPxcXQFLTjo1thwq4DHI1V42PctDkGBJnF/+0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CK3gJwuDuQBnlCE3o4SDY3/5iCsHbLCzO+vHjzamHleWqt+WYcO69bJsAASLHJC2q
+	 ti8RqEMlzOcv7Ux5ntYx8kAML4pLXzsvb1YxnYJuPspbRxqXKEl1mTguckHzn3Sl+G
+	 AUHvfxed+jn0CulXbHZq8twP4W+uDZ5sleZ5pW0W1X7mnBjwyRtIIukyWwhovog2yS
+	 CSNAQldYCihVxHRyGcn2WyWSLfnZEUdry5qSIp4KwlU141nOaW1S1/5p2g5/rYpXuf
+	 GyS6fOrlsWBGJAtd2wyQaVU4d+ZpRSZhlR3VpvXPRYkDHtPqaSbydAaHh5lwxHgBXu
+	 r9Xaf8d4tUDu7AyY54XoyTP/42bt7WCv1lgLY2pRdnCW2LNHfJeCVVMbeuqDOH3Nil
+	 vwgVyFBnSnB30uEfmEnTPEfCKjeM5p1Hc25hHnxPxf3MumAXCK2HYpvFiT/dtI3CGf
+	 Ij8WVjFgHfEicgmitayL1N2E4FueQgJWMU6bAq6j2QKwK8oSI4kpYM1c655qNxMpgS
+	 M8MTk1nUUCYSigSBEV2G629H1aOll/cax7kFcWBvmw0wY6R+cdqyB5/RvI3OjlTFjF
+	 uxPYhCQUrHlx2jzyO49OBSQGkvavl+8FNIhfdobnAPlb8WaRUPASwogUjvYM84LJf1
+	 TbrkOTRm3H3ec7oEOYG7tTfw=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 26F0C40E01A5;
+	Mon, 28 Oct 2024 11:16:43 +0000 (UTC)
+Date: Mon, 28 Oct 2024 12:16:37 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: shiju.jose@huawei.com
+Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, tony.luck@intel.com,
+	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
+	dan.j.williams@intel.com, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, gregkh@linuxfoundation.org,
+	sudeep.holla@arm.com, jassisinghbrar@gmail.com,
+	dave.jiang@intel.com, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com, david@redhat.com,
+	Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
+	rientjes@google.com, jiaqiyan@google.com, Jon.Grimm@amd.com,
+	dave.hansen@linux.intel.com, naoya.horiguchi@nec.com,
+	james.morse@arm.com, jthoughton@google.com, somasundaram.a@hpe.com,
+	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
+	gthelen@google.com, wschwartz@amperecomputing.com,
+	dferguson@amperecomputing.com, wbs@os.amperecomputing.com,
+	nifan.cxl@gmail.com, tanxiaofei@huawei.com,
+	prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
+	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com,
+	linuxarm@huawei.com
+Subject: Re: [PATCH v14 03/14] EDAC: Add ECS control feature
+Message-ID: <20241028111637.GSZx9yleFPOjTklIVr@fat_crate.local>
+References: <20241025171356.1377-1-shiju.jose@huawei.com>
+ <20241025171356.1377-4-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241025171356.1377-4-shiju.jose@huawei.com>
 
-The memory uncorrected error could be signaled by asynchronous interrupt
-(specifically, SPI in arm64 platform), e.g. when an error is detected by
-a background scrubber, or signaled by synchronous exception
-(specifically, data abort exception in arm64 platform), e.g. when a CPU
-tries to access a poisoned cache line. Currently, both synchronous and
-asynchronous error use memory_failure_queue() to schedule
-memory_failure() to exectute in a kworker context.
+On Fri, Oct 25, 2024 at 06:13:44PM +0100, shiju.jose@huawei.com wrote:
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/log_entry_type
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) The log entry type of how the DDR5 ECS log is reported.
+> +		00b - per DRAM.
+> +		01b - per memory media FRU.
 
-As a result, when a user-space process is accessing a poisoned data, a
-data abort is taken and the memory_failure() is executed in the kworker
-context, memory_failure():
+If the conversion function here is kstrtoul(), why are those values not "0"
+and "1" but in binary format?
 
-  - will send wrong si_code by SIGBUS signal in early_kill mode, and
-  - can not kill the user-space in some cases resulting a synchronous
-    error infinite loop
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/log_entry_type_per_dram
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RO) True if current log entry type is per DRAM.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/log_entry_type_per_memory_media
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RO) True if current log entry type is per memory media FRU.
 
-Issue 1: send wrong si_code in early_kill mode
+What's the point of those two if log_entry_type already gives you the same
+info?
 
-Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
-MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
-could be used to determine whether a synchronous exception occurs on
-ARM64 platform.  When a synchronous exception is detected, the kernel is
-expected to terminate the current process which has accessed poisoned
-page. This is done by sending a SIGBUS signal with an error code
-BUS_MCEERR_AR, indicating an action-required machine check error on
-read.
+And the filename length is a bit too much...
 
-However, when kill_proc() is called to terminate the processes who have
-the poisoned page mapped, it sends the incorrect SIGBUS error code
-BUS_MCEERR_AO because the context in which it operates is not the one
-where the error was triggered.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/mode
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) The mode of how the DDR5 ECS counts the errors.
+> +		0 - ECS counts rows with errors.
+> +		1 - ECS counts codewords with errors.
 
-To reproduce this problem:
+Now we have "0" and "1"s. Oh well.
 
-  #sysctl -w vm.memory_failure_early_kill=1
-  vm.memory_failure_early_kill = 1
+What are "rows", what are "codewords"? Explain them here pls for the user.
 
-  # STEP2: inject an UCE error and consume it to trigger a synchronous error
-  #einj_mem_uc single
-  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-  injecting ...
-  triggering ...
-  signal 7 code 5 addr 0xffffb0d75000
-  page not present
-  Test passed
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/mode_counts_rows
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RO) True if current mode is ECS counts rows with errors.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/mode_counts_codewords
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RO) True if current mode is ECS counts codewords with errors.
 
-The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO
-error and it is not the fact.
+Same question as above - redundant files.
 
-After this patch:
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/reset
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(WO) ECS reset ECC counter.
+> +		1 - reset ECC counter to the default value.
 
-  # STEP1: enable early kill mode
-  #sysctl -w vm.memory_failure_early_kill=1
-  vm.memory_failure_early_kill = 1
-  # STEP2: inject an UCE error and consume it to trigger a synchronous error
-  #einj_mem_uc single
-  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-  injecting ...
-  triggering ...
-  signal 7 code 4 addr 0xffffb0d75000
-  page not present
-  Test passed
+1 or any value?
 
-The si_code (code 4) from einj_mem_uc indicates that it is a BUS_MCEERR_AR
-error as we expected.
+Looks like any to me...
 
-Issue 2: a synchronous error infinite loop
+You should restrict it to "1" in case you want to extend this interface with
+"2" in the future, for example, doing something a bit different.
 
-If a user-space process, e.g. devmem, accesses a poisoned page for which
-the HWPoison flag is set, kill_accessing_process() is called to send
-SIGBUS to current processs with error info. Because the memory_failure()
-is executed in the kworker context, it will just do nothing but return
-EFAULT. So, devmem will access the posioned page and trigger an
-exception again, resulting in a synchronous error infinite loop. Such
-exception loop may cause platform firmware to exceed some threshold and
-reboot when Linux could have recovered from this error.
+> +
+> +What:		/sys/bus/edac/devices/<dev-name>/ecs_fruX/threshold
+> +Date:		Jan 2025
+> +KernelVersion:	6.13
+> +Contact:	linux-edac@vger.kernel.org
+> +Description:
+> +		(RW) ECS threshold count per gigabits of memory cells.
 
-To reproduce this problem:
+That definitely needs more explanation.
 
-  # STEP 1: inject an UCE error, and kernel will set HWPosion flag for related page
-  #einj_mem_uc single
-  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-  injecting ...
-  triggering ...
-  signal 7 code 4 addr 0xffffb0d75000
-  page not present
-  Test passed
+> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+> index 188501e676c7..b24c2c112d9c 100644
+> --- a/drivers/edac/Makefile
+> +++ b/drivers/edac/Makefile
+> @@ -10,7 +10,7 @@ obj-$(CONFIG_EDAC)			:= edac_core.o
+>  
+>  edac_core-y	:= edac_mc.o edac_device.o edac_mc_sysfs.o
+>  edac_core-y	+= edac_module.o edac_device_sysfs.o wq.o
+> -edac_core-y	+= scrub.o
+> +edac_core-y	+= scrub.o ecs.o
+>  
+>  edac_core-$(CONFIG_EDAC_DEBUG)		+= debugfs.o
+>  
+> diff --git a/drivers/edac/ecs.c b/drivers/edac/ecs.c
+> new file mode 100755
+> index 000000000000..a2b64d7bf6b6
+> --- /dev/null
+> +++ b/drivers/edac/ecs.c
+> @@ -0,0 +1,240 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Generic ECS driver in order to support control the on die
+> + * error check scrub (e.g. DDR5 ECS).
 
-  # STEP 2: access the same page and it will trigger a synchronous error infinite loop
-  devmem 0x4092d55b400
+This sentence needs grammar check.
 
-To fix above two issues, queue memory_failure() as a task_work so that
-it runs in the context of the process that is actually consuming the
-poisoned data.
+> The common sysfs ECS
+> + * interface abstracts the control of an arbitrary ECS
+> + * functionality to a common set of functions.
+> + *
+> + * Copyright (c) 2024 HiSilicon Limited.
+> + */
+> +
 
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- drivers/acpi/apei/ghes.c | 77 +++++++++++++++++++++++-----------------
- include/acpi/ghes.h      |  3 --
- include/linux/mm.h       |  1 -
- mm/memory-failure.c      | 13 -------
- 4 files changed, 44 insertions(+), 50 deletions(-)
+#undef pr_fmt
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index f2ee28c44d7a..7b8fd6aa2448 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -467,28 +467,41 @@ static void ghes_clear_estatus(struct ghes *ghes,
- }
- 
- /*
-- * Called as task_work before returning to user-space.
-- * Ensure any queued work has been done before we return to the context that
-- * triggered the notification.
-+ * struct ghes_task_work - for synchronous RAS event
-+ *
-+ * @twork:                callback_head for task work
-+ * @pfn:                  page frame number of corrupted page
-+ * @flags:                work control flags
-+ *
-+ * Structure to pass task work to be handled before
-+ * returning to user-space via task_work_add().
-  */
--static void ghes_kick_task_work(struct callback_head *head)
-+struct ghes_task_work {
-+	struct callback_head twork;
-+	u64 pfn;
-+	int flags;
-+};
-+
-+static void memory_failure_cb(struct callback_head *twork)
- {
--	struct acpi_hest_generic_status *estatus;
--	struct ghes_estatus_node *estatus_node;
--	u32 node_len;
-+	struct ghes_task_work *twcb = container_of(twork, struct ghes_task_work, twork);
-+	int ret;
- 
--	estatus_node = container_of(head, struct ghes_estatus_node, task_work);
--	if (IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
--		memory_failure_queue_kick(estatus_node->task_work_cpu);
-+	ret = memory_failure(twcb->pfn, twcb->flags);
-+	gen_pool_free(ghes_estatus_pool, (unsigned long)twcb, sizeof(*twcb));
- 
--	estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
--	node_len = GHES_ESTATUS_NODE_LEN(cper_estatus_len(estatus));
--	gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len);
-+	if (!ret || ret == -EHWPOISON || ret == -EOPNOTSUPP)
-+		return;
-+
-+	pr_err("%#llx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
-+			twcb->pfn, current->comm, task_pid_nr(current));
-+	force_sig(SIGBUS);
- }
- 
- static bool ghes_do_memory_failure(u64 physical_addr, int flags)
- {
- 	unsigned long pfn;
-+	struct ghes_task_work *twcb;
- 
- 	if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
- 		return false;
-@@ -501,6 +514,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
- 		return false;
- 	}
- 
-+	if (flags == MF_ACTION_REQUIRED && current->mm) {
-+		twcb = (void *)gen_pool_alloc(ghes_estatus_pool, sizeof(*twcb));
-+		if (!twcb)
-+			return false;
-+
-+		twcb->pfn = pfn;
-+		twcb->flags = flags;
-+		init_task_work(&twcb->twork, memory_failure_cb);
-+		task_work_add(current, &twcb->twork, TWA_RESUME);
-+		return true;
-+	}
-+
- 	memory_failure_queue(pfn, flags);
- 	return true;
- }
-@@ -745,7 +770,7 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
- }
- EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, CXL);
- 
--static bool ghes_do_proc(struct ghes *ghes,
-+static void ghes_do_proc(struct ghes *ghes,
- 			 const struct acpi_hest_generic_status *estatus)
- {
- 	int sev, sec_sev;
-@@ -810,8 +835,6 @@ static bool ghes_do_proc(struct ghes *ghes,
- 			current->comm, task_pid_nr(current));
- 		force_sig(SIGBUS);
- 	}
--
--	return queued;
- }
- 
- static void __ghes_print_estatus(const char *pfx,
-@@ -1113,9 +1136,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 	struct ghes_estatus_node *estatus_node;
- 	struct acpi_hest_generic *generic;
- 	struct acpi_hest_generic_status *estatus;
--	bool task_work_pending;
- 	u32 len, node_len;
--	int ret;
- 
- 	llnode = llist_del_all(&ghes_estatus_llist);
- 	/*
-@@ -1130,25 +1151,16 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 		estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
- 		len = cper_estatus_len(estatus);
- 		node_len = GHES_ESTATUS_NODE_LEN(len);
--		task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
-+
-+		ghes_do_proc(estatus_node->ghes, estatus);
-+
- 		if (!ghes_estatus_cached(estatus)) {
- 			generic = estatus_node->generic;
- 			if (ghes_print_estatus(NULL, generic, estatus))
- 				ghes_estatus_cache_add(generic, estatus);
- 		}
--
--		if (task_work_pending && current->mm) {
--			estatus_node->task_work.func = ghes_kick_task_work;
--			estatus_node->task_work_cpu = smp_processor_id();
--			ret = task_work_add(current, &estatus_node->task_work,
--					    TWA_RESUME);
--			if (ret)
--				estatus_node->task_work.func = NULL;
--		}
--
--		if (!estatus_node->task_work.func)
--			gen_pool_free(ghes_estatus_pool,
--				      (unsigned long)estatus_node, node_len);
-+		gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
-+			      node_len);
- 
- 		llnode = next;
- 	}
-@@ -1209,7 +1221,6 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
- 
- 	estatus_node->ghes = ghes;
- 	estatus_node->generic = ghes->generic;
--	estatus_node->task_work.func = NULL;
- 	estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
- 
- 	if (__ghes_read_estatus(estatus, buf_paddr, fixmap_idx, len)) {
-diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-index be1dd4c1a917..ebd21b05fe6e 100644
---- a/include/acpi/ghes.h
-+++ b/include/acpi/ghes.h
-@@ -35,9 +35,6 @@ struct ghes_estatus_node {
- 	struct llist_node llnode;
- 	struct acpi_hest_generic *generic;
- 	struct ghes *ghes;
--
--	int task_work_cpu;
--	struct callback_head task_work;
- };
- 
- struct ghes_estatus_cache {
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index ecf63d2b0582..a1286053dd29 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3923,7 +3923,6 @@ enum mf_flags {
- int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
- 		      unsigned long count, int mf_flags);
- extern int memory_failure(unsigned long pfn, int flags);
--extern void memory_failure_queue_kick(int cpu);
- extern int unpoison_memory(unsigned long pfn);
- extern atomic_long_t num_poisoned_pages __read_mostly;
- extern int soft_offline_page(unsigned long pfn, int flags);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 1c5098f32d48..c86e10e5c839 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2496,19 +2496,6 @@ static void memory_failure_work_func(struct work_struct *work)
- 	}
- }
- 
--/*
-- * Process memory_failure work queued on the specified CPU.
-- * Used to avoid return-to-userspace racing with the memory_failure workqueue.
-- */
--void memory_failure_queue_kick(int cpu)
--{
--	struct memory_failure_cpu *mf_cpu;
--
--	mf_cpu = &per_cpu(memory_failure_cpu, cpu);
--	cancel_work_sync(&mf_cpu->work);
--	memory_failure_work_func(&mf_cpu->work);
--}
--
- static int __init memory_failure_init(void)
- {
- 	struct memory_failure_cpu *mf_cpu;
+> +#define pr_fmt(fmt)     "EDAC ECS: " fmt
+
+Grep the tree for examples how to do that properly.
+
+Also, this pr_fmt looks unused.
+
+> +static umode_t ecs_attr_visible(struct kobject *kobj, struct attribute *a, int attr_id)
+> +{
+> +	struct device *ras_feat_dev = kobj_to_dev(kobj);
+> +	struct edac_dev_feat_ctx *ctx = dev_get_drvdata(ras_feat_dev);
+> +	const struct edac_ecs_ops *ops = ctx->ecs.ecs_ops;
+> +
+> +	switch (attr_id) {
+> +	case ECS_LOG_ENTRY_TYPE:
+> +		if (ops->get_log_entry_type)  {
+> +			if (ops->set_log_entry_type)
+> +				return a->mode;
+> +			else
+> +				return 0444;
+
+What is the goal for the access mode of all those sysfs entries? I sure hope
+it is going to be root-only no-matter what. I don't want normal users to cause
+scrub activity. Please make sure your whole set does that.
+
+> +		}
+> +		break;
+> +	case ECS_LOG_ENTRY_TYPE_PER_DRAM:
+> +		if (ops->get_log_entry_type_per_dram)
+> +			return a->mode;
+> +		break;
+> +	case ECS_LOG_ENTRY_TYPE_PER_MEMORY_MEDIA:
+> +		if (ops->get_log_entry_type_per_memory_media)
+> +			return a->mode;
+> +		break;
+> +	case ECS_MODE:
+> +		if (ops->get_mode) {
+> +			if (ops->set_mode)
+> +				return a->mode;
+> +			else
+> +				return 0444;
+> +		}
+> +		break;
+> +	case ECS_MODE_COUNTS_ROWS:
+> +		if (ops->get_mode_counts_rows)
+> +			return a->mode;
+> +		break;
+> +	case ECS_MODE_COUNTS_CODEWORDS:
+> +		if (ops->get_mode_counts_codewords)
+> +			return a->mode;
+> +		break;
+> +	case ECS_RESET:
+> +		if (ops->reset)
+> +			return a->mode;
+> +		break;
+> +	case ECS_THRESHOLD:
+> +		if (ops->get_threshold) {
+> +			if (ops->set_threshold)
+> +				return a->mode;
+> +			else
+> +				return 0444;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +#define EDAC_ECS_ATTR_RO(_name, _fru_id)       \
+> +	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RO(_name), \
+> +				     .fru_id = _fru_id })
+> +
+> +#define EDAC_ECS_ATTR_WO(_name, _fru_id)       \
+> +	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_WO(_name), \
+> +				     .fru_id = _fru_id })
+> +
+> +#define EDAC_ECS_ATTR_RW(_name, _fru_id)       \
+> +	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RW(_name), \
+> +				     .fru_id = _fru_id })
+> +
+> +static int ecs_create_desc(struct device *ecs_dev,
+> +			   const struct attribute_group **attr_groups, u16 num_media_frus)
+> +{
+> +	struct edac_ecs_context *ecs_ctx;
+> +	u32 fru;
+> +
+> +	ecs_ctx = devm_kzalloc(ecs_dev, sizeof(*ecs_ctx), GFP_KERNEL);
+> +	if (!ecs_ctx)
+> +		return -ENOMEM;
+> +
+> +	ecs_ctx->num_media_frus = num_media_frus;
+> +	ecs_ctx->fru_ctxs = devm_kcalloc(ecs_dev, num_media_frus,
+> +					 sizeof(*ecs_ctx->fru_ctxs),
+> +					 GFP_KERNEL);
+> +	if (!ecs_ctx->fru_ctxs)
+> +		return -ENOMEM;
+> +
+> +	for (fru = 0; fru < num_media_frus; fru++) {
+> +		struct edac_ecs_fru_context *fru_ctx = &ecs_ctx->fru_ctxs[fru];
+> +		struct attribute_group *group = &fru_ctx->group;
+> +		int i;
+> +
+> +		fru_ctx->ecs_dev_attr[ECS_LOG_ENTRY_TYPE] = EDAC_ECS_ATTR_RW(log_entry_type, fru);
+> +		fru_ctx->ecs_dev_attr[ECS_LOG_ENTRY_TYPE_PER_DRAM] =
+> +					EDAC_ECS_ATTR_RO(log_entry_type_per_dram, fru);
+> +		fru_ctx->ecs_dev_attr[ECS_LOG_ENTRY_TYPE_PER_MEMORY_MEDIA] =
+> +					EDAC_ECS_ATTR_RO(log_entry_type_per_memory_media, fru);
+> +		fru_ctx->ecs_dev_attr[ECS_MODE] = EDAC_ECS_ATTR_RW(mode, fru);
+> +		fru_ctx->ecs_dev_attr[ECS_MODE_COUNTS_ROWS] =
+> +					EDAC_ECS_ATTR_RO(mode_counts_rows, fru);
+> +		fru_ctx->ecs_dev_attr[ECS_MODE_COUNTS_CODEWORDS] =
+> +					EDAC_ECS_ATTR_RO(mode_counts_codewords, fru);
+> +		fru_ctx->ecs_dev_attr[ECS_RESET] = EDAC_ECS_ATTR_WO(reset, fru);
+> +		fru_ctx->ecs_dev_attr[ECS_THRESHOLD] = EDAC_ECS_ATTR_RW(threshold, fru);
+
+Clearly too long variable and define names. Shorten pls.
+
+Also, a new line here:
+
+<---
+
+
+> +		for (i = 0; i < ECS_MAX_ATTRS; i++)
+> +			fru_ctx->ecs_attrs[i] = &fru_ctx->ecs_dev_attr[i].dev_attr.attr;
+> +
+> +		sprintf(fru_ctx->name, "%s%d", EDAC_ECS_FRU_NAME, fru);
+> +		group->name = fru_ctx->name;
+> +		group->attrs = fru_ctx->ecs_attrs;
+> +		group->is_visible  = ecs_attr_visible;
+> +
+> +		attr_groups[fru] = group;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * edac_ecs_get_desc - get EDAC ECS descriptors
+> + * @ecs_dev: client device, supports ECS feature
+> + * @attr_groups: pointer to attribute group container
+> + * @num_media_frus: number of media FRUs in the device
+> + *
+> + * Return:
+> + *  * %0	- Success.
+> + *  * %-EINVAL	- Invalid parameters passed.
+> + *  * %-ENOMEM	- Dynamic memory allocation failed.
+> + */
+> +int edac_ecs_get_desc(struct device *ecs_dev,
+> +		      const struct attribute_group **attr_groups, u16 num_media_frus)
+> +{
+> +	if (!ecs_dev || !attr_groups || !num_media_frus)
+> +		return -EINVAL;
+> +
+> +	return ecs_create_desc(ecs_dev, attr_groups, num_media_frus);
+> +}
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 91552271b34a..5fc3ec7f25eb 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -626,6 +626,9 @@ int edac_dev_register(struct device *parent, char *name,
+>  			attr_gcnt++;
+>  			scrub_cnt++;
+>  			break;
+> +		case RAS_FEAT_ECS:
+> +			attr_gcnt += ras_features[feat].ecs_info.num_media_frus;
+> +			break;
+>  		default:
+>  			return -EINVAL;
+>  		}
+> @@ -667,6 +670,18 @@ int edac_dev_register(struct device *parent, char *name,
+>  			scrub_inst++;
+>  			attr_gcnt++;
+>  			break;
+> +		case RAS_FEAT_ECS:
+> +			if (!ras_features->ecs_ops)
+> +				goto data_mem_free;
+
+<---- newline here.
+
+> +			dev_data = &ctx->ecs;
+> +			dev_data->ecs_ops = ras_features->ecs_ops;
+> +			dev_data->private = ras_features->ctx;
+> +			ret = edac_ecs_get_desc(parent, &ras_attr_groups[attr_gcnt],
+> +						ras_features->ecs_info.num_media_frus);
+> +			if (ret)
+> +				goto data_mem_free;
+
+Ditto.
+
+> +			attr_gcnt += ras_features->ecs_info.num_media_frus;
+> +			break;
+>  		default:
+>  			ret = -EINVAL;
+>  			goto data_mem_free;
+
 -- 
-2.39.3
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
