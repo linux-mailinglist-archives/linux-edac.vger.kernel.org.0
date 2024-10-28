@@ -1,130 +1,314 @@
-Return-Path: <linux-edac+bounces-2311-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2312-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12B329B171F
-	for <lists+linux-edac@lfdr.de>; Sat, 26 Oct 2024 12:36:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B7B69B2A00
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 09:12:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC150283B17
-	for <lists+linux-edac@lfdr.de>; Sat, 26 Oct 2024 10:36:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73A361F20FF7
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 08:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617541D27A6;
-	Sat, 26 Oct 2024 10:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6080D18DF86;
+	Mon, 28 Oct 2024 08:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="N1VizaKd"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Ut3Z+CSU"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6891D0E23;
-	Sat, 26 Oct 2024 10:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E00818D64F;
+	Mon, 28 Oct 2024 08:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729938991; cv=none; b=nc8HKdQ30hapLoWu93vc+xEC7b7wSGn9upyzSbdlC0bTVDU8cZCPdPaKqAs5kmgcrsnz/Eyiyx+UT4Ny03JK3zwlipoga5qJtbVGKf1GkQa9ttqfT9fdb8VOiyNSXTmLBvAv50OkpxkA47KZyi3SI7Ke+d/+Mx7Uy9I6DawIBYs=
+	t=1730103123; cv=none; b=Mo6xFUwFReLaVlKIJvwtShz77O882HtxKNZ1ibwWRCqUAUYr90qq04dv4AcW4W1T4DsKJ3j53oN8mtKkyyeVVXRm6of/qwRbWmRJbjOlpu4sn/qKt0J45iS8K7cS4CN6iYGOEw+qEZ/J2ikkmZARf240OBWUKRD4wUSPI3HVwYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729938991; c=relaxed/simple;
-	bh=xOP0RBv4LcWrWdWWJIfZyUUrJbDEehyxMDYxK5HToBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fP5wMNNZ0KJVMcNoTPd5c34N3+AYkIFtm6Al9MVlg2nDDf2ahXwgruWQDqM35tgRkAUpcUIfWEmprZ2iHa1cl6i/we9CFdMzmu5AFLWIIHGPaf4BRfRze0wLxc3iVq9TALgicX/wfY50jVfbWt1/IJoWttPOc0XuUns5zxpLLNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=N1VizaKd; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id BE51340E0194;
-	Sat, 26 Oct 2024 10:36:22 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id QsfRxQkhLaRv; Sat, 26 Oct 2024 10:36:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1729938977; bh=m/UJBUXYW5lVSHFFedycWJpRrNGkg0U0rad07TvvJbs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N1VizaKdFhUz3gwTEK7lK3NCHkqosJduyF+R7fA9e6SgYIwCc4tp4mTAFQgCTwiYL
-	 FwgK/KCxgGmslBO+xlp/TPJel8Yac91DuH/pV8yymJ01fzLU9g6q6ImJIrv1TNT7Cm
-	 YRFrJEFyMhT1ju4MGgOQ/x3Jqz8yyFlP+jzgpNQIe/k4NIDHgPOmb3ekEk5yvyV43a
-	 xIrMHIHzkwTkWjEniZC987r647fUG65bPyKN6f2gga6aLgaqMoeXbYs60SaNYVXNj0
-	 Xi5NyubgRpTvvN5H2WBpLShcXVD2iNRW7nPVBeTLuTasWA5Xc2tivajIz8VY6OM1j5
-	 Yo9kiZXs2Xcs93kqzKx27PMDYeT3IlWe/Q52NXJPl0qeF+G40Buh0S+NT7IWNSaZ7z
-	 UAW6Kd8810gmdtjNuZQwYLG1nNKva735A8O/wJxzHtV4KbnmrpcUO4nN7rfMEocDJE
-	 UYVVkNnyJcicddF2dJgbyaWbByowNHRH5ayMCLKiXWQAep7PJJAkjkLDLvn1k+/RXR
-	 TOFPGr3pQ4HCiumRUkD5817MdbHqZ0opu/ROUl9CU5xUABFhfGKP9krHlO4SrG4d49
-	 LGsjlC20OVs5X1Azc/jxEkNvusZnhiZB6XHvgXbf7BLw2i1y3usFTJI3ZI7wxM/Ic/
-	 3ZbXGnPu/MS1nqs/fe3uroFU=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2DC0F40E0169;
-	Sat, 26 Oct 2024 10:35:31 +0000 (UTC)
-Date: Sat, 26 Oct 2024 12:35:25 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: shiju.jose@huawei.com
-Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com,
-	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
-	dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, gregkh@linuxfoundation.org,
-	sudeep.holla@arm.com, jassisinghbrar@gmail.com,
-	dave.jiang@intel.com, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com, david@redhat.com,
-	Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
-	rientjes@google.com, jiaqiyan@google.com, Jon.Grimm@amd.com,
-	dave.hansen@linux.intel.com, naoya.horiguchi@nec.com,
-	james.morse@arm.com, jthoughton@google.com, somasundaram.a@hpe.com,
-	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
-	gthelen@google.com, wschwartz@amperecomputing.com,
-	dferguson@amperecomputing.com, wbs@os.amperecomputing.com,
-	nifan.cxl@gmail.com, tanxiaofei@huawei.com,
-	prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
-	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com,
-	linuxarm@huawei.com
-Subject: Re: [PATCH v14 00/14] EDAC: Scrub: introduce generic EDAC RAS
- control feature driver + CXL/ACPI-RAS2 drivers
-Message-ID: <20241026103525.GRZxzF7c-n1jUi7byt@fat_crate.local>
-References: <20241025171356.1377-1-shiju.jose@huawei.com>
+	s=arc-20240116; t=1730103123; c=relaxed/simple;
+	bh=kOCgUv9DgYHGNlc+X615HUZyfHnfXa5nj1iW6BSsB3g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PNRWY9q8lSfZMWyCfyiOWKtsE8PrXToX4JwmuDgRgPMsi597upNeoqSzBC3PbhQXVvcgagUnidFNYDPjKTvm7g8areMm2M7ZCVCmgONRZEMNEfGKIKZTBEnmQINWRn12e9aipOh2zwdwRN53bvD+vZWPBAVl7drPjbbvT90cL/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Ut3Z+CSU; arc=none smtp.client-ip=115.124.30.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1730103115; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=kz1bEvA7VXtmAuXqxNZFdw1lMIGBr0W4tcAPHXWmHcc=;
+	b=Ut3Z+CSUj6picDw3incm7qZA1oYXVEOQUOL0ilb8nAMXD5zJ0ItIACNpBvQDBBfD2k8OpqwDzDFW7rW2HZGg9fhpfMUgjdEDDNBvMMSG6ckJtXZUTDF8Ipf21Z4RyURoFDPE7LyS1jLtbCOA8r0OdyN1uTZCB5lylUxD1AJCdjA=
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WI0hO2X_1730103111 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 28 Oct 2024 16:11:53 +0800
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+To: mark.rutland@arm.com,
+	catalin.marinas@arm.com,
+	mingo@redhat.com,
+	robin.murphy@arm.com,
+	Jonathan.Cameron@Huawei.com,
+	bp@alien8.de,
+	rafael@kernel.org,
+	wangkefeng.wang@huawei.com,
+	tanxiaofei@huawei.com,
+	mawupeng1@huawei.com,
+	tony.luck@intel.com,
+	linmiaohe@huawei.com,
+	naoya.horiguchi@nec.com,
+	james.morse@arm.com,
+	tongtiangen@huawei.com,
+	gregkh@linuxfoundation.org,
+	will@kernel.org,
+	jarkko@kernel.org
+Cc: linux-acpi@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	linux-edac@vger.kernel.org,
+	x86@kernel.org,
+	xueshuai@linux.alibaba.com,
+	justin.he@arm.com,
+	ardb@kernel.org,
+	ying.huang@intel.com,
+	ashish.kalra@amd.com,
+	baolin.wang@linux.alibaba.com,
+	tglx@linutronix.de,
+	dave.hansen@linux.intel.com,
+	lenb@kernel.org,
+	hpa@zytor.com,
+	robert.moore@intel.com,
+	lvying6@huawei.com,
+	xiexiuqi@huawei.com,
+	zhuo.song@linux.alibaba.com
+Subject: [PATCH v15 0/3] ACPI: APEI: handle synchronous errors in task work
+Date: Mon, 28 Oct 2024 16:11:39 +0800
+Message-ID: <20241028081142.66028-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241025171356.1377-1-shiju.jose@huawei.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 25, 2024 at 06:13:41PM +0100, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Previously known as "ras: scrub: introduce subsystem + CXL/ACPI-RAS2 drivers".
-> 
-> Augmenting EDAC for controlling RAS features
-> ============================================
-> The proposed expansion of EDAC for controlling RAS features and
-> exposing features control attributes to userspace in sysfs.
-> Some Examples:
->  - Scrub control
->  - Error Check Scrub (ECS) control
->  - ACPI RAS2 features
->  - Post Package Repair (PPR) control
->  - Memory Sparing Repair control etc.
+## Changes Log
+changes since v14:
+- add reviewed-by tags from Jarkko and Jonathan
+- remove local variable and use twcb->pfn
 
-The non-patchset handling information, i.e., the documentation of the feature
-and those nice graphics in this 0th mail should go into 
+changes since v13:
+- add reviewed-by tag from Jarkko
+- rename task_work to ghes_task_work (per Jarkko)
 
-Documentation/edac/scrub.rst
+changes since v12:
+- tweak error message for force kill (per Jarkko)
+- fix comments style (per Jarkko)
+- fix commit log typo (per Jarko)
 
-(yeah, no "edac-" prefix to the filename) for future reference.
+changes since v11:
+- rebase to Linux 6.11-rc6
+- fix grammer and typo in commit log (per Borislav)
+- remove `sync_` perfix of `sync_task_work`  (per Borislav)
+- comments flags and description of `task_work`  (per Borislav)
 
-Thx.
+changes since v10:
+- rebase to v6.8-rc2
+
+changes since v9:
+- split patch 2 to address exactly one issue in one patch (per Borislav)
+- rewrite commit log according to template (per Borislav)
+- pickup reviewed-by tag of patch 1 from James Morse
+- alloc and free twcb through gen_pool_{alloc, free) (Per James)
+- rewrite cover letter
+
+changes since v8:
+- remove the bug fix tag of patch 2 (per Jarkko Sakkinen)
+- remove the declaration of memory_failure_queue_kick (per Naoya Horiguchi)
+- rewrite the return value comments of memory_failure (per Naoya Horiguchi)
+
+changes since v7:
+- rebase to Linux v6.6-rc2 (no code changed)
+- rewritten the cover letter to explain the motivation of this patchset
+
+changes since v6:
+- add more explicty error message suggested by Xiaofei
+- pick up reviewed-by tag from Xiaofei
+- pick up internal reviewed-by tag from Baolin
+
+changes since v5 by addressing comments from Kefeng:
+- document return value of memory_failure()
+- drop redundant comments in call site of memory_failure() 
+- make ghes_do_proc void and handle abnormal case within it
+- pick up reviewed-by tag from Kefeng Wang 
+
+changes since v4 by addressing comments from Xiaofei:
+- do a force kill only for abnormal sync errors
+
+changes since v3 by addressing comments from Xiaofei:
+- do a force kill for abnormal memory failure error such as invalid PA,
+unexpected severity, OOM, etc
+- pcik up tested-by tag from Ma Wupeng
+
+changes since v2 by addressing comments from Naoya:
+- rename mce_task_work to sync_task_work
+- drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+- add steps to reproduce this problem in cover letter
+
+changes since v1:
+- synchronous events by notify type
+- Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
+
+## Cover Letter
+
+There are two major types of uncorrected recoverable (UCR) errors :
+
+- Synchronous error: The error is detected and raised at the point of the
+  consumption in the execution flow, e.g. when a CPU tries to access
+  a poisoned cache line. The CPU will take a synchronous error exception
+  such as Synchronous External Abort (SEA) on Arm64 and Machine Check
+  Exception (MCE) on X86. OS requires to take action (for example, offline
+  failure page/kill failure thread) to recover this uncorrectable error.
+
+- Asynchronous error: The error is detected out of processor execution
+  context, e.g. when an error is detected by a background scrubber. Some data
+  in the memory are corrupted. But the data have not been consumed. OS is
+  optional to take action to recover this uncorrectable error.
+
+Currently, both synchronous and asynchronous error use
+memory_failure_queue() to schedule memory_failure() exectute in kworker
+context. As a result, when a user-space process is accessing a poisoned
+data, a data abort is taken and the memory_failure() is executed in the
+kworker context:
+
+  - will send wrong si_code by SIGBUS signal in early_kill mode, and
+  - can not kill the user-space in some cases resulting a synchronous
+    error infinite loop
+
+Issue 1: send wrong si_code in early_kill mode
+
+Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
+MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
+could be used to determine whether a synchronous exception occurs on
+ARM64 platform.  When a synchronous exception is detected, the kernel is
+expected to terminate the current process which has accessed poisoned
+page. This is done by sending a SIGBUS signal with an error code
+BUS_MCEERR_AR, indicating an action-required machine check error on
+read.
+
+However, when kill_proc() is called to terminate the processes who have
+the poisoned page mapped, it sends the incorrect SIGBUS error code
+BUS_MCEERR_AO because the context in which it operates is not the one
+where the error was triggered.
+
+To reproduce this problem:
+
+  # STEP1: enable early kill mode
+  #sysctl -w vm.memory_failure_early_kill=1
+  vm.memory_failure_early_kill = 1
+
+  # STEP2: inject an UCE error and consume it to trigger a synchronous error
+  #einj_mem_uc single
+  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+  injecting ...
+  triggering ...
+  signal 7 code 5 addr 0xffffb0d75000
+  page not present
+  Test passed
+
+The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO
+error and it is not fact.
+
+To fix it, queue memory_failure() as a task_work so that it runs in
+the context of the process that is actually consuming the poisoned data.
+
+After this patch set:
+
+  # STEP1: enable early kill mode
+  #sysctl -w vm.memory_failure_early_kill=1
+  vm.memory_failure_early_kill = 1
+
+  # STEP2: inject an UCE error and consume it to trigger a synchronous error
+  #einj_mem_uc single
+  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+  injecting ...
+  triggering ...
+  signal 7 code 4 addr 0xffffb0d75000
+  page not present
+  Test passed
+
+The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR
+error as we expected.
+
+Issue 2: a synchronous error infinite loop due to memory_failure() failed
+
+If a user-space process, e.g. devmem, a poisoned page which has been set
+HWPosion flag, kill_accessing_process() is called to send SIGBUS to the
+current processs with error info. Because the memory_failure() is
+executed in the kworker contex, it will just do nothing but return
+EFAULT. So, devmem will access the posioned page and trigger an
+excepction again, resulting in a synchronous error infinite loop. Such
+loop may cause platform firmware to exceed some threshold and reboot
+when Linux could have recovered from this error.
+
+To reproduce this problem:
+
+  # STEP 1: inject an UCE error, and kernel will set HWPosion flag for related page
+  #einj_mem_uc single
+  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+  injecting ...
+  triggering ...
+  signal 7 code 4 addr 0xffffb0d75000
+  page not present
+  Test passed
+
+  # STEP 2: access the same page and it will trigger a synchronous error infinite loop
+  devmem 0x4092d55b400
+
+To fix it, if memory_failure() failed, perform a force kill to current process.
+
+Issue 3: a synchronous error infinite loop due to no memory_failure() queued
+
+No memory_failure() work is queued unless all bellow preconditions check passed:
+
+- `if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))` in ghes_handle_memory_failure()
+- `if (flags == -1)` in ghes_handle_memory_failure()
+- `if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))` in ghes_do_memory_failure()
+- `if (!pfn_valid(pfn) && !arch_is_platform_page(physical_addr)) ` in ghes_do_memory_failure()
+
+If the preconditions are not passed, the user-space process will trigger SEA again.
+This loop can potentially exceed the platform firmware threshold or even
+trigger a kernel hard lockup, leading to a system reboot.
+
+To fix it, if no memory_failure() queued, perform a force kill to current process.
+
+And the the memory errors triggered in kernel-mode[5], also relies on this
+patchset to kill the failure thread.
+
+Lv Ying and XiuQi from Huawei also proposed to address similar problem[2][4].
+Acknowledge to discussion with them.
+
+[1] Add ARMv8 RAS virtualization support in QEMU https://patchew.org/QEMU/20200512030609.19593-1-gengdongjiu@huawei.com/
+[2] https://lore.kernel.org/lkml/20221205115111.131568-3-lvying6@huawei.com/
+[3] https://lkml.kernel.org/r/20220914064935.7851-1-xueshuai@linux.alibaba.com
+[4] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
+[5] https://patchwork.kernel.org/project/linux-arm-kernel/cover/20240528085915.1955987-1-tongtiangen@huawei.com/
+
+Shuai Xue (3):
+  ACPI: APEI: send SIGBUS to current task if synchronous memory error
+    not recovered
+  mm: memory-failure: move return value documentation to function
+    declaration
+  ACPI: APEI: handle synchronous exceptions in task work
+
+ arch/x86/kernel/cpu/mce/core.c |  7 ---
+ drivers/acpi/apei/ghes.c       | 85 +++++++++++++++++++++-------------
+ include/acpi/ghes.h            |  3 --
+ include/linux/mm.h             |  1 -
+ mm/memory-failure.c            | 22 +++------
+ 5 files changed, 59 insertions(+), 59 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.39.3
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
