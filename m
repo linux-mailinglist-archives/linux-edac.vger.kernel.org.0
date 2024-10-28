@@ -1,112 +1,139 @@
-Return-Path: <linux-edac+bounces-2317-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2318-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C1EF9B314D
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 14:07:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C9459B3536
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 16:46:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 991EEB20AEC
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 13:07:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CA3F282C46
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Oct 2024 15:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4798B1DA10B;
-	Mon, 28 Oct 2024 13:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38FA21DD0E9;
+	Mon, 28 Oct 2024 15:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="eeT5KRSU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fVlT5111"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988042AE8C;
-	Mon, 28 Oct 2024 13:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360011D79A6;
+	Mon, 28 Oct 2024 15:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730120843; cv=none; b=fVl/wZ6621vYZWucdzq1tngsrLJ1Qlkxf/pFoCkU0gB2HzrtPqtJMQ4zBYecNQCU6lVR/+1i5d7EZfYrx/pyUF9ETB1t3OD0YfW4S1hUTmPsUBCaWBOU3fRXWEMMwb3DN6a2kTNaBTyytmo8PIMlGY5XqxxQy96GHqPzOt6eo9E=
+	t=1730130369; cv=none; b=KLSVGnAmd7qq9r4bTRgy41J9k+IZjWElqC8RS8JYhfSUEocgsWSQLOHmqZyNNfiUopYNPN/gFXVze1vbNm7D0my1FuwZVjsYGvVriTdkv6tz6n1mOERVZ+ANYMhUmSE6TWLyFKf9r81hPY8/Y8+7zx462roiVEbuoVaRKjdH6Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730120843; c=relaxed/simple;
-	bh=EAf+q/0bHB6df79KwR1+x1+/r4GFQp9Y3COiC0gEsXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PTzuhA+RxcpgPlH1LFDlvCOMsTxZuW7qrbNBL9lkcB6JPj3G4k/79wInj87N73SPi/Hby8F873jlvcVF0f5yvUhptUDp9noGd9wwMR5wrro5/wx0TK624/yriy1f7wdl1MXZjB7P3SLSqZTz7ULh0eJHw/eh13OLv2t8JXRz3fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=eeT5KRSU; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0D5EE40E0219;
-	Mon, 28 Oct 2024 13:07:16 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 3l4fyaIPtlg5; Mon, 28 Oct 2024 13:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730120831; bh=YckLSljqu9xEozoNAj4eikFtKDm8vIiY4UFulPKns2Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eeT5KRSUa6E5MVhXjs85bZZ09byRJVaBa7+bzh25kYTwoeD77FeQOc7axye+y5RD3
-	 o3d33Fq9r7RVxo37C1I8ihs4/qk750igPU39XiYelCUJNqQPBcVAJj5f3EizGF75P3
-	 okT47E9aaKmJu7rhLIw7EgeSX7MT79iWjgYpcHC7O/+3ycE/rRlXor3VR3/P67ZTxt
-	 4bwDJQwbKijdJLTJiLL9WHo8LFeVdRnLAchaGbianoZcGln1seuAzrXcJctmtYeRFp
-	 xdECguV251uG2JbuQCmc885MGJ+r2jv2E0KjbvgFaZZGjLGDY4J3Mfp+gbNmo6dJm1
-	 GOtEnPCyi99pPjVe6SXVFDuv6IH+68YY50hPyxoTUbiX01JogqEKGgZvW6vx042MMr
-	 ua23L4MzcjVqzwZdYAmg9XaVm4gPxd7D693CWmoW/AUdaPjo3o3af/hnOK8zz/XtIx
-	 4Uh8iaclZ/bf4qTghMF3w+K8pYGxZ9JN27g46TvnFsS/5Re8Tj+AS3KkOu+JoJ1kAF
-	 Oiju3+xKBnjYWId/7Ghpr+BCWKtkfvutqsP91jcTzS+uZ4VXH3sz+xfyfDxpUVVoD/
-	 4U002cGf5JIbRqdcNKIDclKwyMhkuRjQHRCtz9ndr1JL8TgoMlRT5X2lzlIx1c1Khp
-	 1KgOtoiKdVWcegt2s4EED1tQ=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9B26540E0184;
-	Mon, 28 Oct 2024 13:07:02 +0000 (UTC)
-Date: Mon, 28 Oct 2024 14:06:56 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc: tony.luck@intel.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
-	mingo@redhat.com, hpa@zytor.com, x86@kernel.org,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/10] x86/mce: Make several functions return bool and
- rename a function
-Message-ID: <20241028130656.GTZx-McByoo3wsR3__@fat_crate.local>
-References: <20241016123036.21366-1-qiuxu.zhuo@intel.com>
- <20241025024602.24318-1-qiuxu.zhuo@intel.com>
- <20241025024602.24318-4-qiuxu.zhuo@intel.com>
+	s=arc-20240116; t=1730130369; c=relaxed/simple;
+	bh=zQ0nkZewO9LUaj4pg5mC3fibDFKz+nR1/LTmJcZ88UA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fawA0sRanckr2H6mZ5MhifkG5v2HWIbrSncV7knINiRUFAYVDixYd+3qsM+6PWoiLynDJVVoq0NzqmetbbPRzB9eykN8bOpsmDxmHlOokkp6Om1kAnmd3n31ccZD0eSkZC+/8VqmM1TrINgU62jymBLrYvVQ2d1CdcRuU1wv0gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fVlT5111; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730130367; x=1761666367;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zQ0nkZewO9LUaj4pg5mC3fibDFKz+nR1/LTmJcZ88UA=;
+  b=fVlT5111V6Xuw3zyoSankCzG2D465D445+Wf426dhqj15LyPUcK+28wK
+   NWkWjBc5u+R07NAwvPyknkYC614SiXDsXh4KiOy+2KqVOx56cTr6m/naW
+   H1zLs2kN1whQv9qpBzc4WYeS01avJU073HZrrXCFkKDIoIXWZUzixUEc8
+   3oVoePnVIYIjydhNRQVtbwGmikLXpyLsS+eDOyeLxPButd1GQAtH/RyAd
+   M8ZKvaYDnAKpg9Zs3Bwqgbk4FDHb8xDt+gh/DwPAQDJfjGCS+p61izSvy
+   dwIuNkA3QtgI+eply8k2AaKuuTQiTOmmZdkSDkga3ND41PHL3fxjNQvlO
+   g==;
+X-CSE-ConnectionGUID: IHl1yRwUSFS0YtsO6rZKdw==
+X-CSE-MsgGUID: 2r1QOKCATliObmNRBDDYmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11239"; a="29163438"
+X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
+   d="scan'208";a="29163438"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 08:46:06 -0700
+X-CSE-ConnectionGUID: 6KvqN4XhTQKsuevqqilpiQ==
+X-CSE-MsgGUID: Axaa4WgbRgacyB1nmvzQlQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
+   d="scan'208";a="81549825"
+Received: from jairdeje-mobl1.amr.corp.intel.com (HELO [10.124.222.158]) ([10.124.222.158])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 08:46:06 -0700
+Message-ID: <628d6329-05cf-4bf1-b571-361d07b3266e@intel.com>
+Date: Mon, 28 Oct 2024 08:46:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241025024602.24318-4-qiuxu.zhuo@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: WARNING in lmce_supported() during reboot.
+To: Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, x86@kernel.org,
+ linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Alex Graf <graf@amazon.de>
+References: <20241025231320.45417-1-kuniyu@amazon.com>
+ <e1c50570-1b5b-40d2-bab3-05e9ead51a57@intel.com>
+ <7080ee37ce53d5559ba85f72a0ff59b4bc5a083d.camel@kernel.crashing.org>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <7080ee37ce53d5559ba85f72a0ff59b4bc5a083d.camel@kernel.crashing.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 25, 2024 at 10:45:55AM +0800, Qiuxu Zhuo wrote:
-> @@ -1748,7 +1748,7 @@ static void mce_timer_delete_all(void)
->   * Can be called from interrupt context, but not from machine check/NMI
->   * context.
->   */
-> -int mce_notify_irq(void)
-> +bool mce_notify_user(void)
+On 10/25/24 19:33, Benjamin Herrenschmidt wrote:
+> This is a KVM/Nitro guest, so the CPU is somewhat virtualized, but
+> /proc/cpuinfo says: Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz
 
-So why are you not fixing the comment above it too then?
+Oh, if it's a guest, I'd be 100% pointing fingers at some piece of the
+VMM.  While it's possible that the guest kernel screwed this up, it's
+not immediately obvious how it might do that.
 
-Have you audited all the code to make sure this function is not called from
-IRQ context anymore?
 
-Did you do git archeology to find out why it was called "_irq" at all in the
-first place and why is it ok to change the name and adjust the comment above
-it now?
-
-In any case, this change needs to be a separate patch along with all the
-explanations why is it ok to rename it.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
