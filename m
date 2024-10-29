@@ -1,696 +1,216 @@
-Return-Path: <linux-edac+bounces-2327-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2328-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1EC79B4F54
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 17:32:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F4E49B4FFD
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 18:00:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB40D1C2114D
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 16:32:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A5081F22F05
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 17:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30ABB19A2A3;
-	Tue, 29 Oct 2024 16:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZmyiOhYq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 387B41CC8BD;
+	Tue, 29 Oct 2024 17:00:40 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F2519992C;
-	Tue, 29 Oct 2024 16:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD3D82876;
+	Tue, 29 Oct 2024 17:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730219521; cv=none; b=HsY9ysbG7GsAQPsLsMJcJKKm3HbVRC4t+6zufLD29UwNtaFSNSudOv1CcDDctdJ1B8UlqgUyO2WQbVb4gubvOhCk4RmO3/uKuRw1SA1Z5CasH0hal0p6BKewhXT1yLK2iydjsoq+ooZ6fl1djr4avb37GnullNNwIfWBbHMLu+k=
+	t=1730221240; cv=none; b=ixYu/PjTyF/J/TPI5EaLx+4Z63AvvHT0lp8Mer94dZgNn/w0/IpDvJP66OUztx1sRr0ZmXybwqd3Ob1ysWLb3gO44nDbTz15yGxTv7qNm+nRIjrweq358ofcPiCPGTfA/c3zhne+bKPvg6JhC+dtKjIK75xZvk+abfoN4ubYXps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730219521; c=relaxed/simple;
-	bh=xi3dBgTsffDvk3s0H99fJEsLD40uhpn0yfxAoqXYveE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jea799/YQkeEQVdJNsSlUMvT2llEZNzZe6k26M+tsdJPT0WAJIYk16teHHCeZfGZqLCzsFez1qGLPi1gkDVi7Porst6/6bqJi003+AWACe3qz0S7PiCenFc9QmDcgFgoPzScf6DPohJ6TEdlFdrvopl7OD+uP4H44/KOkujFku8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZmyiOhYq; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730219517; x=1761755517;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xi3dBgTsffDvk3s0H99fJEsLD40uhpn0yfxAoqXYveE=;
-  b=ZmyiOhYqbTGQlLBqpxIaNMZlVBtVK2gZubIGOi3TwNDJbMRn3nkJiRbc
-   Cy8e9hQ80+woF0ciMLzYNFbQlUmRt1VeGX4juj0VKUIJoh1g8sYgPYA8/
-   GYTM563nWNc9WxjiLhjv8u4LrSURsL7zTtXnsdIgtyavnrDZA4n2+PsNU
-   Dax5M3ecG18acMFSSYjbmmyXctv+p+7HlEKlnG4FQgZmqZ1TPphAyOUwZ
-   MTAQPcoz+v254o3MKumAbdONAuRkNZEaaQdjm8WkgblisoT6OBeUOZave
-   1ydAxNAvZfJRXkjafxaJhJq8fv9za8TCgBH75GdTJ8FsuZTmnVJNufuKH
-   g==;
-X-CSE-ConnectionGUID: aviMvTDcR9KUz5c+0HyEMg==
-X-CSE-MsgGUID: xqSZpf79QGGPzkuechMRBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="33800930"
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="33800930"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 09:31:56 -0700
-X-CSE-ConnectionGUID: UD1fiwzdRKuw9mzGCn//og==
-X-CSE-MsgGUID: VSbo+yEkTauu2FUGhPrYdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="85967749"
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.125.108.71]) ([10.125.108.71])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 09:31:52 -0700
-Message-ID: <3a007a70-136b-4a45-8dd2-d33725ea96bc@intel.com>
-Date: Tue, 29 Oct 2024 09:31:51 -0700
+	s=arc-20240116; t=1730221240; c=relaxed/simple;
+	bh=YTlJbbrj6Jok3RfWhMxRSCWu4ilkic69q1ZaEUZ95kg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=OXZrfNwgTTpERTpKlrNGNlaFdfv2yg9VQNrN/kr1AUyZK4m17mUPOZD/jvw8FbUwEvCxzRERGcip35qf4uPxHPZFX6B6fwnd8JbtClfsdbcA0zpdvp10Dk5ZPjzFfsT3FkGzj87c/E9Qh+BL1OqnXNFgmqfC/YiaQDmJIVEBKP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XdGbg3SnJz6L74s;
+	Wed, 30 Oct 2024 00:55:43 +0800 (CST)
+Received: from frapeml100006.china.huawei.com (unknown [7.182.85.201])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5DAE6140C72;
+	Wed, 30 Oct 2024 01:00:33 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml100006.china.huawei.com (7.182.85.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 29 Oct 2024 18:00:33 +0100
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Tue, 29 Oct 2024 18:00:33 +0100
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Dave Jiang <dave.jiang@intel.com>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC: "bp@alien8.de" <bp@alien8.de>, "tony.luck@intel.com"
+	<tony.luck@intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>, "mchehab@kernel.org"
+	<mchehab@kernel.org>, "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+	"dave@stgolabs.net" <dave@stgolabs.net>, Jonathan Cameron
+	<jonathan.cameron@huawei.com>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+	"jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
+	"alison.schofield@intel.com" <alison.schofield@intel.com>,
+	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>, "ira.weiny@intel.com"
+	<ira.weiny@intel.com>, "david@redhat.com" <david@redhat.com>,
+	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>, "leo.duran@amd.com"
+	<leo.duran@amd.com>, "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
+	<jiaqiyan@google.com>, "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>, "james.morse@arm.com"
+	<james.morse@arm.com>, "jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>, "erdemaktas@google.com"
+	<erdemaktas@google.com>, "pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>, "gthelen@google.com"
+	<gthelen@google.com>, "wschwartz@amperecomputing.com"
+	<wschwartz@amperecomputing.com>, "dferguson@amperecomputing.com"
+	<dferguson@amperecomputing.com>, "wbs@os.amperecomputing.com"
+	<wbs@os.amperecomputing.com>, "nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v14 07/14] cxl/memfeature: Add CXL memory device patrol
+ scrub control feature
+Thread-Topic: [PATCH v14 07/14] cxl/memfeature: Add CXL memory device patrol
+ scrub control feature
+Thread-Index: AQHbJwFiEsGT6VLXSEWw7XeCpRer7rKd4VaAgAAVoeA=
+Date: Tue, 29 Oct 2024 17:00:32 +0000
+Message-ID: <e6aed765394b4822ad5a70018c87ef1f@huawei.com>
+References: <20241025171356.1377-1-shiju.jose@huawei.com>
+ <20241025171356.1377-8-shiju.jose@huawei.com>
+ <3a007a70-136b-4a45-8dd2-d33725ea96bc@intel.com>
+In-Reply-To: <3a007a70-136b-4a45-8dd2-d33725ea96bc@intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 07/14] cxl/memfeature: Add CXL memory device patrol
- scrub control feature
-To: shiju.jose@huawei.com, linux-edac@vger.kernel.org,
- linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org
-Cc: bp@alien8.de, tony.luck@intel.com, rafael@kernel.org, lenb@kernel.org,
- mchehab@kernel.org, dan.j.williams@intel.com, dave@stgolabs.net,
- jonathan.cameron@huawei.com, gregkh@linuxfoundation.org,
- sudeep.holla@arm.com, jassisinghbrar@gmail.com, alison.schofield@intel.com,
- vishal.l.verma@intel.com, ira.weiny@intel.com, david@redhat.com,
- Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
- rientjes@google.com, jiaqiyan@google.com, Jon.Grimm@amd.com,
- dave.hansen@linux.intel.com, naoya.horiguchi@nec.com, james.morse@arm.com,
- jthoughton@google.com, somasundaram.a@hpe.com, erdemaktas@google.com,
- pgonda@google.com, duenwen@google.com, gthelen@google.com,
- wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
- wbs@os.amperecomputing.com, nifan.cxl@gmail.com, tanxiaofei@huawei.com,
- prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
- kangkang.shen@futurewei.com, wanghuiqiang@huawei.com, linuxarm@huawei.com
-References: <20241025171356.1377-1-shiju.jose@huawei.com>
- <20241025171356.1377-8-shiju.jose@huawei.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20241025171356.1377-8-shiju.jose@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-
-
-On 10/25/24 10:13 AM, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> CXL spec 3.1 section 8.2.9.9.11.1 describes the device patrol scrub control
-> feature. The device patrol scrub proactively locates and makes corrections
-> to errors in regular cycle.
-> 
-> Allow specifying the number of hours within which the patrol scrub must be
-> completed, subject to minimum and maximum limits reported by the device.
-> Also allow disabling scrub allowing trade-off error rates against
-> performance.
-> 
-> Add support for patrol scrub control on CXL memory devices.
-> Register with the EDAC device driver, which retrieves the scrub attribute
-> descriptors from EDAC scrub and exposes the sysfs scrub control attributes
-> to userspace. For example, scrub control for the CXL memory device
-> "cxl_mem0" is exposed in /sys/bus/edac/devices/cxl_mem0/scrubX/.
-> 
-> Additionally, add support for region-based CXL memory patrol scrub control.
-> CXL memory regions may be interleaved across one or more CXL memory
-> devices. For example, region-based scrub control for "cxl_region1" is
-> exposed in /sys/bus/edac/devices/cxl_region1/scrubX/.
-> 
-> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
->  Documentation/edac/edac-scrub.rst |  74 ++++++
->  drivers/cxl/Kconfig               |  18 ++
->  drivers/cxl/core/Makefile         |   1 +
->  drivers/cxl/core/memfeature.c     | 381 ++++++++++++++++++++++++++++++
->  drivers/cxl/core/region.c         |   6 +
->  drivers/cxl/cxlmem.h              |   7 +
->  drivers/cxl/mem.c                 |   4 +
->  7 files changed, 491 insertions(+)
->  create mode 100644 Documentation/edac/edac-scrub.rst
->  create mode 100644 drivers/cxl/core/memfeature.c
-> 
-> diff --git a/Documentation/edac/edac-scrub.rst b/Documentation/edac/edac-scrub.rst
-> new file mode 100644
-> index 000000000000..4aad4974b208
-> --- /dev/null
-> +++ b/Documentation/edac/edac-scrub.rst
-> @@ -0,0 +1,74 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===================
-> +EDAC Scrub control
-> +===================
-> +
-> +Copyright (c) 2024 HiSilicon Limited.
-> +
-> +:Author:   Shiju Jose <shiju.jose@huawei.com>
-> +:License:  The GNU Free Documentation License, Version 1.2
-> +          (dual licensed under the GPL v2)
-> +:Original Reviewers:
-> +
-> +- Written for: 6.13
-> +- Updated for:
-> +
-> +Introduction
-> +------------
-> +The EDAC enhancement for RAS featurues exposes interfaces for controlling
-> +the memory scrubbers in the system. The scrub device drivers in the
-> +system register with the EDAC scrub. The driver exposes the
-> +scrub controls to user in the sysfs.
-> +
-> +The File System
-> +---------------
-> +
-> +The control attributes of the registered scrubber instance could be
-> +accessed in the /sys/bus/edac/devices/<dev-name>/scrub*/
-> +
-> +sysfs
-> +-----
-> +
-> +Sysfs files are documented in
-> +`Documentation/ABI/testing/sysfs-edac-scrub-control`.
-> +
-> +Example
-> +-------
-> +
-> +The usage takes the form shown in this example::
-> +
-> +1. CXL memory device patrol scrubber
-> +1.1 device based
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/min_cycle_duration
-> +3600
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/max_cycle_duration
-> +918000
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/current_cycle_duration
-> +43200
-> +root@localhost:~# echo 54000 > /sys/bus/edac/devices/cxl_mem0/scrub0/current_cycle_duration
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/current_cycle_duration
-> +54000
-> +root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
-> +1
-> +root@localhost:~# echo 0 > /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
-> +0
-> +
-> +1.2. region based
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/min_cycle_duration
-> +3600
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/max_cycle_duration
-> +918000
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/current_cycle_duration
-> +43200
-> +root@localhost:~# echo 54000 > /sys/bus/edac/devices/cxl_region0/scrub0/current_cycle_duration
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/current_cycle_duration
-> +54000
-> +root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
-> +1
-> +root@localhost:~# echo 0 > /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
-> +root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
-> +0
-> diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> index 29c192f20082..6d79fb3e772e 100644
-> --- a/drivers/cxl/Kconfig
-> +++ b/drivers/cxl/Kconfig
-> @@ -145,4 +145,22 @@ config CXL_REGION_INVALIDATION_TEST
->  	  If unsure, or if this kernel is meant for production environments,
->  	  say N.
->  
-> +config CXL_RAS_FEAT
-> +	tristate "CXL: Memory RAS features"
-> +	depends on CXL_PCI
-> +	depends on CXL_MEM
-> +	depends on EDAC
-> +	help
-> +	  The CXL memory RAS feature control is optional and allows host to
-> +	  control the RAS features configurations of CXL Type 3 devices.
-> +
-> +	  It registers with the EDAC device subsystem to expose control
-> +	  attributes of CXL memory device's RAS features to the user.
-> +	  It provides interface functions to support configuring the CXL
-> +	  memory device's RAS features.
-> +
-> +	  Say 'y/m/n' to enable/disable control of the CXL.mem device's RAS features.
-> +	  See section 8.2.9.9.11 of CXL 3.1 specification for the detailed
-> +	  information of CXL memory device features.
-> +
->  endif
-> diff --git a/drivers/cxl/core/Makefile b/drivers/cxl/core/Makefile
-> index 9259bcc6773c..2a3c7197bc23 100644
-> --- a/drivers/cxl/core/Makefile
-> +++ b/drivers/cxl/core/Makefile
-> @@ -16,3 +16,4 @@ cxl_core-y += pmu.o
->  cxl_core-y += cdat.o
->  cxl_core-$(CONFIG_TRACING) += trace.o
->  cxl_core-$(CONFIG_CXL_REGION) += region.o
-> +cxl_core-$(CONFIG_CXL_RAS_FEAT) += memfeature.o
-> diff --git a/drivers/cxl/core/memfeature.c b/drivers/cxl/core/memfeature.c
-> new file mode 100644
-> index 000000000000..8fff00f62f8c
-> --- /dev/null
-> +++ b/drivers/cxl/core/memfeature.c
-> @@ -0,0 +1,381 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * CXL memory RAS feature driver.
-> + *
-> + * Copyright (c) 2024 HiSilicon Limited.
-> + *
-> + *  - Supports functions to configure RAS features of the
-> + *    CXL memory devices.
-> + *  - Registers with the EDAC device subsystem driver to expose
-> + *    the features sysfs attributes to the user for configuring
-> + *    CXL memory RAS feature.
-> + */
-> +
-> +#define pr_fmt(fmt)	"CXL MEM FEAT: " fmt
-> +
-> +#include <linux/cleanup.h>
-> +#include <linux/edac.h>
-> +#include <linux/limits.h>
-> +#include <cxl.h>
-> +#include <cxlmem.h>
-> +
-> +#define CXL_DEV_NUM_RAS_FEATURES	1
-> +#define CXL_DEV_HOUR_IN_SECS	3600
-> +
-> +#define CXL_SCRUB_NAME_LEN	128
-> +
-> +/* CXL memory patrol scrub control definitions */
-> +static const uuid_t cxl_patrol_scrub_uuid =
-> +	UUID_INIT(0x96dad7d6, 0xfde8, 0x482b, 0xa7, 0x33, 0x75, 0x77, 0x4e, 0x06, 0xdb, 0x8a);
-> +
-> +/* CXL memory patrol scrub control functions */
-> +struct cxl_patrol_scrub_context {
-> +	u8 instance;
-> +	u16 get_feat_size;
-> +	u16 set_feat_size;
-> +	u8 get_version;
-> +	u8 set_version;
-> +	u16 set_effects;
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_region *cxlr;
-> +};
-> +
-> +/**
-> + * struct cxl_memdev_ps_params - CXL memory patrol scrub parameter data structure.
-> + * @enable:     [IN & OUT] enable(1)/disable(0) patrol scrub.
-> + * @scrub_cycle_changeable: [OUT] scrub cycle attribute of patrol scrub is changeable.
-> + * @scrub_cycle_hrs:    [IN] Requested patrol scrub cycle in hours.
-> + *                      [OUT] Current patrol scrub cycle in hours.
-> + * @min_scrub_cycle_hrs:[OUT] minimum patrol scrub cycle in hours supported.
-> + */
-> +struct cxl_memdev_ps_params {
-> +	bool enable;
-> +	bool scrub_cycle_changeable;
-> +	u16 scrub_cycle_hrs;
-> +	u16 min_scrub_cycle_hrs;
-> +};
-> +
-> +enum cxl_scrub_param {
-> +	CXL_PS_PARAM_ENABLE,
-> +	CXL_PS_PARAM_SCRUB_CYCLE,
-> +};
-> +
-> +#define	CXL_MEMDEV_PS_SCRUB_CYCLE_CHANGE_CAP_MASK	BIT(0)
-> +#define	CXL_MEMDEV_PS_SCRUB_CYCLE_REALTIME_REPORT_CAP_MASK	BIT(1)
-> +#define	CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK	GENMASK(7, 0)
-> +#define	CXL_MEMDEV_PS_MIN_SCRUB_CYCLE_MASK	GENMASK(15, 8)
-> +#define	CXL_MEMDEV_PS_FLAG_ENABLED_MASK	BIT(0)
-> +
-> +struct cxl_memdev_ps_rd_attrs {
-> +	u8 scrub_cycle_cap;
-> +	__le16 scrub_cycle_hrs;
-> +	u8 scrub_flags;
-> +}  __packed;
-> +
-> +struct cxl_memdev_ps_wr_attrs {
-> +	u8 scrub_cycle_hrs;
-> +	u8 scrub_flags;
-> +}  __packed;
-> +
-> +static int cxl_mem_ps_get_attrs(struct cxl_memdev_state *mds,
-> +				struct cxl_memdev_ps_params *params)
-> +{
-> +	size_t rd_data_size = sizeof(struct cxl_memdev_ps_rd_attrs);
-> +	size_t data_size;
-> +	struct cxl_memdev_ps_rd_attrs *rd_attrs __free(kfree) =
-> +						kmalloc(rd_data_size, GFP_KERNEL);
-> +	if (!rd_attrs)
-> +		return -ENOMEM;
-> +
-> +	data_size = cxl_get_feature(mds, cxl_patrol_scrub_uuid,
-> +				    CXL_GET_FEAT_SEL_CURRENT_VALUE,
-> +				    rd_attrs, rd_data_size);
-> +	if (!data_size)
-> +		return -EIO;
-> +
-> +	params->scrub_cycle_changeable = FIELD_GET(CXL_MEMDEV_PS_SCRUB_CYCLE_CHANGE_CAP_MASK,
-> +						   rd_attrs->scrub_cycle_cap);
-> +	params->enable = FIELD_GET(CXL_MEMDEV_PS_FLAG_ENABLED_MASK,
-> +				   rd_attrs->scrub_flags);
-> +	params->scrub_cycle_hrs = FIELD_GET(CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK,
-> +					    rd_attrs->scrub_cycle_hrs);
-> +	params->min_scrub_cycle_hrs = FIELD_GET(CXL_MEMDEV_PS_MIN_SCRUB_CYCLE_MASK,
-> +						rd_attrs->scrub_cycle_hrs);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_ps_get_attrs(struct device *dev, void *drv_data,
-
-Would a union be better than a void *drv_data for all the places this is used as a parameter? How many variations of this are there?
-
-DJ
-
-> +			    struct cxl_memdev_ps_params *params)
-> +{
-> +	struct cxl_patrol_scrub_context *cxl_ps_ctx = drv_data;
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_dev_state *cxlds;
-> +	struct cxl_memdev_state *mds;
-> +	u16 min_scrub_cycle = 0;
-> +	int i, ret;
-> +
-> +	if (cxl_ps_ctx->cxlr) {
-> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-> +		struct cxl_region_params *p = &cxlr->params;
-> +
-> +		for (i = p->interleave_ways - 1; i >= 0; i--) {
-> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +
-> +			cxlmd = cxled_to_memdev(cxled);
-> +			cxlds = cxlmd->cxlds;
-> +			mds = to_cxl_memdev_state(cxlds);
-> +			ret = cxl_mem_ps_get_attrs(mds, params);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (params->min_scrub_cycle_hrs > min_scrub_cycle)
-> +				min_scrub_cycle = params->min_scrub_cycle_hrs;
-> +		}
-> +		params->min_scrub_cycle_hrs = min_scrub_cycle;
-> +		return 0;
-> +	}
-> +	cxlmd = cxl_ps_ctx->cxlmd;
-> +	cxlds = cxlmd->cxlds;
-> +	mds = to_cxl_memdev_state(cxlds);
-> +
-> +	return cxl_mem_ps_get_attrs(mds, params);
-> +}
-> +
-> +static int cxl_mem_ps_set_attrs(struct device *dev, void *drv_data,
-> +				struct cxl_memdev_state *mds,
-> +				struct cxl_memdev_ps_params *params,
-> +				enum cxl_scrub_param param_type)
-> +{
-> +	struct cxl_patrol_scrub_context *cxl_ps_ctx = drv_data;
-> +	struct cxl_memdev_ps_wr_attrs wr_attrs;
-> +	struct cxl_memdev_ps_params rd_params;
-> +	int ret;
-> +
-> +	ret = cxl_mem_ps_get_attrs(mds, &rd_params);
-> +	if (ret) {
-> +		dev_err(dev, "Get cxlmemdev patrol scrub params failed ret=%d\n",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	switch (param_type) {
-> +	case CXL_PS_PARAM_ENABLE:
-> +		wr_attrs.scrub_flags = FIELD_PREP(CXL_MEMDEV_PS_FLAG_ENABLED_MASK,
-> +						  params->enable);
-> +		wr_attrs.scrub_cycle_hrs = FIELD_PREP(CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK,
-> +						      rd_params.scrub_cycle_hrs);
-> +		break;
-> +	case CXL_PS_PARAM_SCRUB_CYCLE:
-> +		if (params->scrub_cycle_hrs < rd_params.min_scrub_cycle_hrs) {
-> +			dev_err(dev, "Invalid CXL patrol scrub cycle(%d) to set\n",
-> +				params->scrub_cycle_hrs);
-> +			dev_err(dev, "Minimum supported CXL patrol scrub cycle in hour %d\n",
-> +				rd_params.min_scrub_cycle_hrs);
-> +			return -EINVAL;
-> +		}
-> +		wr_attrs.scrub_cycle_hrs = FIELD_PREP(CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK,
-> +						      params->scrub_cycle_hrs);
-> +		wr_attrs.scrub_flags = FIELD_PREP(CXL_MEMDEV_PS_FLAG_ENABLED_MASK,
-> +						  rd_params.enable);
-> +		break;
-> +	}
-> +
-> +	ret = cxl_set_feature(mds, cxl_patrol_scrub_uuid,
-> +			      cxl_ps_ctx->set_version,
-> +			      &wr_attrs, sizeof(wr_attrs),
-> +			      CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET);
-> +	if (ret) {
-> +		dev_err(dev, "CXL patrol scrub set feature failed ret=%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_ps_set_attrs(struct device *dev, void *drv_data,
-> +			    struct cxl_memdev_ps_params *params,
-> +			    enum cxl_scrub_param param_type)
-> +{
-> +	struct cxl_patrol_scrub_context *cxl_ps_ctx = drv_data;
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_dev_state *cxlds;
-> +	struct cxl_memdev_state *mds;
-> +	int ret, i;
-> +
-> +	if (cxl_ps_ctx->cxlr) {
-> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-> +		struct cxl_region_params *p = &cxlr->params;
-> +
-> +		for (i = p->interleave_ways - 1; i >= 0; i--) {
-> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +
-> +			cxlmd = cxled_to_memdev(cxled);
-> +			cxlds = cxlmd->cxlds;
-> +			mds = to_cxl_memdev_state(cxlds);
-> +			ret = cxl_mem_ps_set_attrs(dev, drv_data, mds,
-> +						   params, param_type);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +		return 0;
-> +	}
-> +	cxlmd = cxl_ps_ctx->cxlmd;
-> +	cxlds = cxlmd->cxlds;
-> +	mds = to_cxl_memdev_state(cxlds);
-> +
-> +	return cxl_mem_ps_set_attrs(dev, drv_data, mds, params, param_type);
-> +}
-> +
-> +static int cxl_patrol_scrub_get_enabled_bg(struct device *dev, void *drv_data, bool *enabled)
-> +{
-> +	struct cxl_memdev_ps_params params;
-> +	int ret;
-> +
-> +	ret = cxl_ps_get_attrs(dev, drv_data, &params);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*enabled = params.enable;
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_patrol_scrub_set_enabled_bg(struct device *dev, void *drv_data, bool enable)
-> +{
-> +	struct cxl_memdev_ps_params params = {
-> +		.enable = enable,
-> +	};
-> +
-> +	return cxl_ps_set_attrs(dev, drv_data, &params, CXL_PS_PARAM_ENABLE);
-> +}
-> +
-> +static int cxl_patrol_scrub_read_min_scrub_cycle(struct device *dev, void *drv_data,
-> +						 u32 *min)
-> +{
-> +	struct cxl_memdev_ps_params params;
-> +	int ret;
-> +
-> +	ret = cxl_ps_get_attrs(dev, drv_data, &params);
-> +	if (ret)
-> +		return ret;
-> +	*min = params.min_scrub_cycle_hrs * CXL_DEV_HOUR_IN_SECS;
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_patrol_scrub_read_max_scrub_cycle(struct device *dev, void *drv_data,
-> +						 u32 *max)
-> +{
-> +	*max = U8_MAX * CXL_DEV_HOUR_IN_SECS; /* Max set by register size */
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_patrol_scrub_read_scrub_cycle(struct device *dev, void *drv_data,
-> +					     u32 *scrub_cycle_secs)
-> +{
-> +	struct cxl_memdev_ps_params params;
-> +	int ret;
-> +
-> +	ret = cxl_ps_get_attrs(dev, drv_data, &params);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*scrub_cycle_secs = params.scrub_cycle_hrs * CXL_DEV_HOUR_IN_SECS;
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_patrol_scrub_write_scrub_cycle(struct device *dev, void *drv_data,
-> +					      u32 scrub_cycle_secs)
-> +{
-> +	struct cxl_memdev_ps_params params = {
-> +		.scrub_cycle_hrs = scrub_cycle_secs / CXL_DEV_HOUR_IN_SECS,
-> +	};
-> +
-> +	return cxl_ps_set_attrs(dev, drv_data, &params, CXL_PS_PARAM_SCRUB_CYCLE);
-> +}
-> +
-> +static const struct edac_scrub_ops cxl_ps_scrub_ops = {
-> +	.get_enabled_bg = cxl_patrol_scrub_get_enabled_bg,
-> +	.set_enabled_bg = cxl_patrol_scrub_set_enabled_bg,
-> +	.get_min_cycle = cxl_patrol_scrub_read_min_scrub_cycle,
-> +	.get_max_cycle = cxl_patrol_scrub_read_max_scrub_cycle,
-> +	.get_cycle_duration = cxl_patrol_scrub_read_scrub_cycle,
-> +	.set_cycle_duration = cxl_patrol_scrub_write_scrub_cycle,
-> +};
-> +
-> +int cxl_mem_ras_features_init(struct cxl_memdev *cxlmd, struct cxl_region *cxlr)
-> +{
-> +	struct edac_dev_feature ras_features[CXL_DEV_NUM_RAS_FEATURES];
-> +	struct cxl_patrol_scrub_context *cxl_ps_ctx;
-> +	char cxl_dev_name[CXL_SCRUB_NAME_LEN];
-> +	struct cxl_feat_entry feat_entry;
-> +	struct cxl_memdev_state *mds;
-> +	struct cxl_dev_state *cxlds;
-> +	int num_ras_features = 0;
-> +	u8 scrub_inst = 0;
-> +	int rc, i;
-> +
-> +	if (cxlr) {
-> +		struct cxl_region_params *p = &cxlr->params;
-> +
-> +		for (i = p->interleave_ways - 1; i >= 0; i--) {
-> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +
-> +			cxlmd = cxled_to_memdev(cxled);
-> +			cxlds = cxlmd->cxlds;
-> +			mds = to_cxl_memdev_state(cxlds);
-> +			memset(&feat_entry, 0, sizeof(feat_entry));
-> +			rc = cxl_get_supported_feature_entry(mds, &cxl_patrol_scrub_uuid,
-> +							     &feat_entry);
-> +			if (rc < 0)
-> +				return rc;
-> +			if (!(feat_entry.attr_flags & CXL_FEAT_ENTRY_FLAG_CHANGABLE))
-> +				return -EOPNOTSUPP;
-> +		}
-> +	} else {
-> +		cxlds = cxlmd->cxlds;
-> +		mds = to_cxl_memdev_state(cxlds);
-> +		rc = cxl_get_supported_feature_entry(mds, &cxl_patrol_scrub_uuid,
-> +						     &feat_entry);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		if (!(feat_entry.attr_flags & CXL_FEAT_ENTRY_FLAG_CHANGABLE))
-> +			return -EOPNOTSUPP;
-> +	}
-> +
-> +	cxl_ps_ctx = devm_kzalloc(&cxlmd->dev, sizeof(*cxl_ps_ctx), GFP_KERNEL);
-> +	if (!cxl_ps_ctx)
-> +		return -ENOMEM;
-> +
-> +	*cxl_ps_ctx = (struct cxl_patrol_scrub_context) {
-> +		.get_feat_size = feat_entry.get_feat_size,
-> +		.set_feat_size = feat_entry.set_feat_size,
-> +		.get_version = feat_entry.get_feat_ver,
-> +		.set_version = feat_entry.set_feat_ver,
-> +		.set_effects = feat_entry.set_effects,
-> +		.instance = scrub_inst++,
-> +	};
-> +	if (cxlr) {
-> +		snprintf(cxl_dev_name, sizeof(cxl_dev_name),
-> +			 "cxl_region%d", cxlr->id);
-> +		cxl_ps_ctx->cxlr = cxlr;
-> +	} else {
-> +		snprintf(cxl_dev_name, sizeof(cxl_dev_name),
-> +			 "%s_%s", "cxl", dev_name(&cxlmd->dev));
-> +		cxl_ps_ctx->cxlmd = cxlmd;
-> +	}
-> +
-> +	ras_features[num_ras_features].ft_type = RAS_FEAT_SCRUB;
-> +	ras_features[num_ras_features].instance = cxl_ps_ctx->instance;
-> +	ras_features[num_ras_features].scrub_ops = &cxl_ps_scrub_ops;
-> +	ras_features[num_ras_features].ctx = cxl_ps_ctx;
-> +	num_ras_features++;
-> +
-> +	return edac_dev_register(&cxlmd->dev, cxl_dev_name, NULL,
-> +				 num_ras_features, ras_features);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_mem_ras_features_init, CXL);
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index e701e4b04032..4292765606cd 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -3443,6 +3443,12 @@ static int cxl_region_probe(struct device *dev)
->  					p->res->start, p->res->end, cxlr,
->  					is_system_ram) > 0)
->  			return 0;
-> +
-> +		rc = cxl_mem_ras_features_init(NULL, cxlr);
-> +		if (rc)
-> +			dev_warn(&cxlr->dev, "CXL RAS features init for region_id=%d failed\n",
-> +				 cxlr->id);
-> +
->  		return devm_cxl_add_dax_region(cxlr);
->  	default:
->  		dev_dbg(&cxlr->dev, "unsupported region mode: %d\n",
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index fb356be8b426..9259c5d70a65 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -933,6 +933,13 @@ int cxl_trigger_poison_list(struct cxl_memdev *cxlmd);
->  int cxl_inject_poison(struct cxl_memdev *cxlmd, u64 dpa);
->  int cxl_clear_poison(struct cxl_memdev *cxlmd, u64 dpa);
->  
-> +#if IS_ENABLED(CONFIG_CXL_RAS_FEAT)
-> +int cxl_mem_ras_features_init(struct cxl_memdev *cxlmd, struct cxl_region *cxlr);
-> +#else
-> +static inline int cxl_mem_ras_features_init(struct cxl_memdev *cxlmd, struct cxl_region *cxlr)
-> +{ return 0; }
-> +#endif
-> +
->  #ifdef CONFIG_CXL_SUSPEND
->  void cxl_mem_active_inc(void);
->  void cxl_mem_active_dec(void);
-> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> index a9fd5cd5a0d2..23ef99e02182 100644
-> --- a/drivers/cxl/mem.c
-> +++ b/drivers/cxl/mem.c
-> @@ -116,6 +116,10 @@ static int cxl_mem_probe(struct device *dev)
->  	if (!cxlds->media_ready)
->  		return -EBUSY;
->  
-> +	rc = cxl_mem_ras_features_init(cxlmd, NULL);
-> +	if (rc)
-> +		dev_warn(&cxlmd->dev, "CXL RAS features init failed\n");
-> +
->  	/*
->  	 * Someone is trying to reattach this device after it lost its port
->  	 * connection (an endpoint port previously registered by this memdev was
-
+DQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IERhdmUgSmlhbmcgPGRhdmUu
+amlhbmdAaW50ZWwuY29tPg0KPlNlbnQ6IDI5IE9jdG9iZXIgMjAyNCAxNjozMg0KPlRvOiBTaGlq
+dSBKb3NlIDxzaGlqdS5qb3NlQGh1YXdlaS5jb20+OyBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9y
+ZzsgbGludXgtDQo+Y3hsQHZnZXIua2VybmVsLm9yZzsgbGludXgtYWNwaUB2Z2VyLmtlcm5lbC5v
+cmc7IGxpbnV4LW1tQGt2YWNrLm9yZzsgbGludXgtDQo+a2VybmVsQHZnZXIua2VybmVsLm9yZw0K
+PkNjOiBicEBhbGllbjguZGU7IHRvbnkubHVja0BpbnRlbC5jb207IHJhZmFlbEBrZXJuZWwub3Jn
+OyBsZW5iQGtlcm5lbC5vcmc7DQo+bWNoZWhhYkBrZXJuZWwub3JnOyBkYW4uai53aWxsaWFtc0Bp
+bnRlbC5jb207IGRhdmVAc3Rnb2xhYnMubmV0OyBKb25hdGhhbg0KPkNhbWVyb24gPGpvbmF0aGFu
+LmNhbWVyb25AaHVhd2VpLmNvbT47IGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnOw0KPnN1ZGVl
+cC5ob2xsYUBhcm0uY29tOyBqYXNzaXNpbmdoYnJhckBnbWFpbC5jb207IGFsaXNvbi5zY2hvZmll
+bGRAaW50ZWwuY29tOw0KPnZpc2hhbC5sLnZlcm1hQGludGVsLmNvbTsgaXJhLndlaW55QGludGVs
+LmNvbTsgZGF2aWRAcmVkaGF0LmNvbTsNCj5WaWxhcy5TcmlkaGFyYW5AYW1kLmNvbTsgbGVvLmR1
+cmFuQGFtZC5jb207IFlhemVuLkdoYW5uYW1AYW1kLmNvbTsNCj5yaWVudGplc0Bnb29nbGUuY29t
+OyBqaWFxaXlhbkBnb29nbGUuY29tOyBKb24uR3JpbW1AYW1kLmNvbTsNCj5kYXZlLmhhbnNlbkBs
+aW51eC5pbnRlbC5jb207IG5hb3lhLmhvcmlndWNoaUBuZWMuY29tOw0KPmphbWVzLm1vcnNlQGFy
+bS5jb207IGp0aG91Z2h0b25AZ29vZ2xlLmNvbTsgc29tYXN1bmRhcmFtLmFAaHBlLmNvbTsNCj5l
+cmRlbWFrdGFzQGdvb2dsZS5jb207IHBnb25kYUBnb29nbGUuY29tOyBkdWVud2VuQGdvb2dsZS5j
+b207DQo+Z3RoZWxlbkBnb29nbGUuY29tOyB3c2Nod2FydHpAYW1wZXJlY29tcHV0aW5nLmNvbTsN
+Cj5kZmVyZ3Vzb25AYW1wZXJlY29tcHV0aW5nLmNvbTsgd2JzQG9zLmFtcGVyZWNvbXB1dGluZy5j
+b207DQo+bmlmYW4uY3hsQGdtYWlsLmNvbTsgdGFueGlhb2ZlaSA8dGFueGlhb2ZlaUBodWF3ZWku
+Y29tPjsgWmVuZ3RhbyAoQikNCj48cHJpbWUuemVuZ0BoaXNpbGljb24uY29tPjsgUm9iZXJ0byBT
+YXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPjsNCj5rYW5na2FuZy5zaGVuQGZ1dHVyZXdl
+aS5jb207IHdhbmdodWlxaWFuZyA8d2FuZ2h1aXFpYW5nQGh1YXdlaS5jb20+Ow0KPkxpbnV4YXJt
+IDxsaW51eGFybUBodWF3ZWkuY29tPg0KPlN1YmplY3Q6IFJlOiBbUEFUQ0ggdjE0IDA3LzE0XSBj
+eGwvbWVtZmVhdHVyZTogQWRkIENYTCBtZW1vcnkgZGV2aWNlIHBhdHJvbA0KPnNjcnViIGNvbnRy
+b2wgZmVhdHVyZQ0KPg0KPg0KPg0KPk9uIDEwLzI1LzI0IDEwOjEzIEFNLCBzaGlqdS5qb3NlQGh1
+YXdlaS5jb20gd3JvdGU6DQo+PiBGcm9tOiBTaGlqdSBKb3NlIDxzaGlqdS5qb3NlQGh1YXdlaS5j
+b20+DQo+Pg0KPj4gQ1hMIHNwZWMgMy4xIHNlY3Rpb24gOC4yLjkuOS4xMS4xIGRlc2NyaWJlcyB0
+aGUgZGV2aWNlIHBhdHJvbCBzY3J1Yg0KPj4gY29udHJvbCBmZWF0dXJlLiBUaGUgZGV2aWNlIHBh
+dHJvbCBzY3J1YiBwcm9hY3RpdmVseSBsb2NhdGVzIGFuZCBtYWtlcw0KPj4gY29ycmVjdGlvbnMg
+dG8gZXJyb3JzIGluIHJlZ3VsYXIgY3ljbGUuDQo+Pg0KPj4gQWxsb3cgc3BlY2lmeWluZyB0aGUg
+bnVtYmVyIG9mIGhvdXJzIHdpdGhpbiB3aGljaCB0aGUgcGF0cm9sIHNjcnViDQo+PiBtdXN0IGJl
+IGNvbXBsZXRlZCwgc3ViamVjdCB0byBtaW5pbXVtIGFuZCBtYXhpbXVtIGxpbWl0cyByZXBvcnRl
+ZCBieSB0aGUNCj5kZXZpY2UuDQo+PiBBbHNvIGFsbG93IGRpc2FibGluZyBzY3J1YiBhbGxvd2lu
+ZyB0cmFkZS1vZmYgZXJyb3IgcmF0ZXMgYWdhaW5zdA0KPj4gcGVyZm9ybWFuY2UuDQo+Pg0KPj4g
+QWRkIHN1cHBvcnQgZm9yIHBhdHJvbCBzY3J1YiBjb250cm9sIG9uIENYTCBtZW1vcnkgZGV2aWNl
+cy4NCj4+IFJlZ2lzdGVyIHdpdGggdGhlIEVEQUMgZGV2aWNlIGRyaXZlciwgd2hpY2ggcmV0cmll
+dmVzIHRoZSBzY3J1Yg0KPj4gYXR0cmlidXRlIGRlc2NyaXB0b3JzIGZyb20gRURBQyBzY3J1YiBh
+bmQgZXhwb3NlcyB0aGUgc3lzZnMgc2NydWINCj4+IGNvbnRyb2wgYXR0cmlidXRlcyB0byB1c2Vy
+c3BhY2UuIEZvciBleGFtcGxlLCBzY3J1YiBjb250cm9sIGZvciB0aGUNCj4+IENYTCBtZW1vcnkg
+ZGV2aWNlICJjeGxfbWVtMCIgaXMgZXhwb3NlZCBpbg0KPi9zeXMvYnVzL2VkYWMvZGV2aWNlcy9j
+eGxfbWVtMC9zY3J1YlgvLg0KPj4NCj4+IEFkZGl0aW9uYWxseSwgYWRkIHN1cHBvcnQgZm9yIHJl
+Z2lvbi1iYXNlZCBDWEwgbWVtb3J5IHBhdHJvbCBzY3J1YiBjb250cm9sLg0KPj4gQ1hMIG1lbW9y
+eSByZWdpb25zIG1heSBiZSBpbnRlcmxlYXZlZCBhY3Jvc3Mgb25lIG9yIG1vcmUgQ1hMIG1lbW9y
+eQ0KPj4gZGV2aWNlcy4gRm9yIGV4YW1wbGUsIHJlZ2lvbi1iYXNlZCBzY3J1YiBjb250cm9sIGZv
+ciAiY3hsX3JlZ2lvbjEiIGlzDQo+PiBleHBvc2VkIGluIC9zeXMvYnVzL2VkYWMvZGV2aWNlcy9j
+eGxfcmVnaW9uMS9zY3J1YlgvLg0KPj4NCj4+IENvLWRldmVsb3BlZC1ieTogSm9uYXRoYW4gQ2Ft
+ZXJvbiA8Sm9uYXRoYW4uQ2FtZXJvbkBodWF3ZWkuY29tPg0KPj4gU2lnbmVkLW9mZi1ieTogSm9u
+YXRoYW4gQ2FtZXJvbiA8Sm9uYXRoYW4uQ2FtZXJvbkBodWF3ZWkuY29tPg0KPj4gU2lnbmVkLW9m
+Zi1ieTogU2hpanUgSm9zZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPj4gLS0tDQo+PiAgRG9j
+dW1lbnRhdGlvbi9lZGFjL2VkYWMtc2NydWIucnN0IHwgIDc0ICsrKysrKw0KPj4gIGRyaXZlcnMv
+Y3hsL0tjb25maWcgICAgICAgICAgICAgICB8ICAxOCArKw0KPj4gIGRyaXZlcnMvY3hsL2NvcmUv
+TWFrZWZpbGUgICAgICAgICB8ICAgMSArDQo+PiAgZHJpdmVycy9jeGwvY29yZS9tZW1mZWF0dXJl
+LmMgICAgIHwgMzgxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPj4gIGRyaXZlcnMv
+Y3hsL2NvcmUvcmVnaW9uLmMgICAgICAgICB8ICAgNiArDQo+PiAgZHJpdmVycy9jeGwvY3hsbWVt
+LmggICAgICAgICAgICAgIHwgICA3ICsNCj4+ICBkcml2ZXJzL2N4bC9tZW0uYyAgICAgICAgICAg
+ICAgICAgfCAgIDQgKw0KPj4gIDcgZmlsZXMgY2hhbmdlZCwgNDkxIGluc2VydGlvbnMoKykNCj4+
+ICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9lZGFjL2VkYWMtc2NydWIucnN0ICBj
+cmVhdGUgbW9kZQ0KPj4gMTAwNjQ0IGRyaXZlcnMvY3hsL2NvcmUvbWVtZmVhdHVyZS5jDQo+Pg0K
+Pj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZWRhYy9lZGFjLXNjcnViLnJzdA0KPj4gYi9E
+b2N1bWVudGF0aW9uL2VkYWMvZWRhYy1zY3J1Yi5yc3QNCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
+DQo+PiBpbmRleCAwMDAwMDAwMDAwMDAuLjRhYWQ0OTc0YjIwOA0KPj4gLS0tIC9kZXYvbnVsbA0K
+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9lZGFjL2VkYWMtc2NydWIucnN0DQo+PiBAQCAtMCwwICsx
+LDc0IEBADQo+PiArLi4gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4+ICsNClsu
+Li5dDQoNCj4+ICtzdGF0aWMgaW50IGN4bF9tZW1fcHNfZ2V0X2F0dHJzKHN0cnVjdCBjeGxfbWVt
+ZGV2X3N0YXRlICptZHMsDQo+PiArCQkJCXN0cnVjdCBjeGxfbWVtZGV2X3BzX3BhcmFtcyAqcGFy
+YW1zKSB7DQo+PiArCXNpemVfdCByZF9kYXRhX3NpemUgPSBzaXplb2Yoc3RydWN0IGN4bF9tZW1k
+ZXZfcHNfcmRfYXR0cnMpOw0KPj4gKwlzaXplX3QgZGF0YV9zaXplOw0KPj4gKwlzdHJ1Y3QgY3hs
+X21lbWRldl9wc19yZF9hdHRycyAqcmRfYXR0cnMgX19mcmVlKGtmcmVlKSA9DQo+PiArCQkJCQkJ
+a21hbGxvYyhyZF9kYXRhX3NpemUsDQo+R0ZQX0tFUk5FTCk7DQo+PiArCWlmICghcmRfYXR0cnMp
+DQo+PiArCQlyZXR1cm4gLUVOT01FTTsNCj4+ICsNCj4+ICsJZGF0YV9zaXplID0gY3hsX2dldF9m
+ZWF0dXJlKG1kcywgY3hsX3BhdHJvbF9zY3J1Yl91dWlkLA0KPj4gKwkJCQkgICAgQ1hMX0dFVF9G
+RUFUX1NFTF9DVVJSRU5UX1ZBTFVFLA0KPj4gKwkJCQkgICAgcmRfYXR0cnMsIHJkX2RhdGFfc2l6
+ZSk7DQo+PiArCWlmICghZGF0YV9zaXplKQ0KPj4gKwkJcmV0dXJuIC1FSU87DQo+PiArDQo+PiAr
+CXBhcmFtcy0+c2NydWJfY3ljbGVfY2hhbmdlYWJsZSA9DQo+RklFTERfR0VUKENYTF9NRU1ERVZf
+UFNfU0NSVUJfQ1lDTEVfQ0hBTkdFX0NBUF9NQVNLLA0KPj4gKwkJCQkJCSAgIHJkX2F0dHJzLT5z
+Y3J1Yl9jeWNsZV9jYXApOw0KPj4gKwlwYXJhbXMtPmVuYWJsZSA9DQo+RklFTERfR0VUKENYTF9N
+RU1ERVZfUFNfRkxBR19FTkFCTEVEX01BU0ssDQo+PiArCQkJCSAgIHJkX2F0dHJzLT5zY3J1Yl9m
+bGFncyk7DQo+PiArCXBhcmFtcy0+c2NydWJfY3ljbGVfaHJzID0NCj5GSUVMRF9HRVQoQ1hMX01F
+TURFVl9QU19DVVJfU0NSVUJfQ1lDTEVfTUFTSywNCj4+ICsJCQkJCSAgICByZF9hdHRycy0+c2Ny
+dWJfY3ljbGVfaHJzKTsNCj4+ICsJcGFyYW1zLT5taW5fc2NydWJfY3ljbGVfaHJzID0NCj5GSUVM
+RF9HRVQoQ1hMX01FTURFVl9QU19NSU5fU0NSVUJfQ1lDTEVfTUFTSywNCj4+ICsJCQkJCQlyZF9h
+dHRycy0+c2NydWJfY3ljbGVfaHJzKTsNCj4+ICsNCj4+ICsJcmV0dXJuIDA7DQo+PiArfQ0KPj4g
+Kw0KPj4gK3N0YXRpYyBpbnQgY3hsX3BzX2dldF9hdHRycyhzdHJ1Y3QgZGV2aWNlICpkZXYsIHZv
+aWQgKmRydl9kYXRhLA0KPg0KPldvdWxkIGEgdW5pb24gYmUgYmV0dGVyIHRoYW4gYSB2b2lkICpk
+cnZfZGF0YSBmb3IgYWxsIHRoZSBwbGFjZXMgdGhpcyBpcyB1c2VkIGFzIGENCj5wYXJhbWV0ZXI/
+IEhvdyBtYW55IHZhcmlhdGlvbnMgb2YgdGhpcyBhcmUgdGhlcmU/DQo+DQo+REoNCkhpIERhdmUs
+DQoNCkNhbiB5b3UgZ2l2ZSBtb3JlIGluZm8gb24gdGhpcyBnaXZlbiB0aGlzIGlzIGEgZ2VuZXJp
+YyBjYWxsYmFjayBmb3IgdGhlIHNjcnViIGNvbnRyb2wgYW5kIGVhY2gNCmltcGxlbWVudGF0aW9u
+IHdpbGwgaGF2ZSBpdHMgb3duIGNvbnRleHQgc3RydWN0IChmb3IgZWcuIHN0cnVjdCBjeGxfcGF0
+cm9sX3NjcnViX2NvbnRleHQgaGVyZQ0KZm9yIENYTCBzY3J1YiBjb250cm9sKSwgd2hpY2ggaW4g
+dHVybiB3aWxsIGJlIHBhc3NlZCBpbiBhbmQgb3V0IGFzIG9wYXF1ZSBkYXRhLg0KDQpUaGFua3Ms
+DQpTaGlqdQ0KPg0KPj4gKwkJCSAgICBzdHJ1Y3QgY3hsX21lbWRldl9wc19wYXJhbXMgKnBhcmFt
+cykgew0KPj4gKwlzdHJ1Y3QgY3hsX3BhdHJvbF9zY3J1Yl9jb250ZXh0ICpjeGxfcHNfY3R4ID0g
+ZHJ2X2RhdGE7DQo+PiArCXN0cnVjdCBjeGxfbWVtZGV2ICpjeGxtZDsNCj4+ICsJc3RydWN0IGN4
+bF9kZXZfc3RhdGUgKmN4bGRzOw0KPj4gKwlzdHJ1Y3QgY3hsX21lbWRldl9zdGF0ZSAqbWRzOw0K
+Pj4gKwl1MTYgbWluX3NjcnViX2N5Y2xlID0gMDsNCj4+ICsJaW50IGksIHJldDsNCj4+ICsNCj4+
+ICsJaWYgKGN4bF9wc19jdHgtPmN4bHIpIHsNCj4+ICsJCXN0cnVjdCBjeGxfcmVnaW9uICpjeGxy
+ID0gY3hsX3BzX2N0eC0+Y3hscjsNCj4+ICsJCXN0cnVjdCBjeGxfcmVnaW9uX3BhcmFtcyAqcCA9
+ICZjeGxyLT5wYXJhbXM7DQo+PiArDQo+PiArCQlmb3IgKGkgPSBwLT5pbnRlcmxlYXZlX3dheXMg
+LSAxOyBpID49IDA7IGktLSkgew0KPj4gKwkJCXN0cnVjdCBjeGxfZW5kcG9pbnRfZGVjb2RlciAq
+Y3hsZWQgPSBwLT50YXJnZXRzW2ldOw0KPj4gKw0KPj4gKwkJCWN4bG1kID0gY3hsZWRfdG9fbWVt
+ZGV2KGN4bGVkKTsNCj4+ICsJCQljeGxkcyA9IGN4bG1kLT5jeGxkczsNCj4+ICsJCQltZHMgPSB0
+b19jeGxfbWVtZGV2X3N0YXRlKGN4bGRzKTsNCj4+ICsJCQlyZXQgPSBjeGxfbWVtX3BzX2dldF9h
+dHRycyhtZHMsIHBhcmFtcyk7DQo+PiArCQkJaWYgKHJldCkNCj4+ICsJCQkJcmV0dXJuIHJldDsN
+Cj4+ICsNCj4+ICsJCQlpZiAocGFyYW1zLT5taW5fc2NydWJfY3ljbGVfaHJzID4gbWluX3NjcnVi
+X2N5Y2xlKQ0KPj4gKwkJCQltaW5fc2NydWJfY3ljbGUgPSBwYXJhbXMtDQo+Pm1pbl9zY3J1Yl9j
+eWNsZV9ocnM7DQo+PiArCQl9DQo+PiArCQlwYXJhbXMtPm1pbl9zY3J1Yl9jeWNsZV9ocnMgPSBt
+aW5fc2NydWJfY3ljbGU7DQo+PiArCQlyZXR1cm4gMDsNCj4+ICsJfQ0KPj4gKwljeGxtZCA9IGN4
+bF9wc19jdHgtPmN4bG1kOw0KPj4gKwljeGxkcyA9IGN4bG1kLT5jeGxkczsNCj4+ICsJbWRzID0g
+dG9fY3hsX21lbWRldl9zdGF0ZShjeGxkcyk7DQo+PiArDQo+PiArCXJldHVybiBjeGxfbWVtX3Bz
+X2dldF9hdHRycyhtZHMsIHBhcmFtcyk7IH0NCj4+ICsNClsuLi5dDQo+DQoNCg==
 
