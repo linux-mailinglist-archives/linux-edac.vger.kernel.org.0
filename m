@@ -1,110 +1,219 @@
-Return-Path: <linux-edac+bounces-2323-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2324-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F6E9B4D0B
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 16:09:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A441E9B4E70
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 16:48:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AED5AB22825
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 15:09:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E3901F238E5
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 15:48:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A832819258A;
-	Tue, 29 Oct 2024 15:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB926195B33;
+	Tue, 29 Oct 2024 15:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="iPqZJMWP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gh4vP0AI"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E211885BD;
-	Tue, 29 Oct 2024 15:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F10F195F04;
+	Tue, 29 Oct 2024 15:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730214559; cv=none; b=tgdeHTEV6hjKikIASlLon3/nhh4fHbh20oy7dTCGqzTV/l256J4vjbm8tW+MXMw4KMDjNiXtUl/sQRFE6Ba7vhzTFtT3pybWAzdBDEm5t8Mg8n4PRwwipOLXnigyyAsY9HBgLSLau+tIdAh9mtKbOdMfAK/9iEyj3AOTdVvojzc=
+	t=1730216879; cv=none; b=Xfcmz/2xtm5FQSl12UoM+gOvEY0sesdeW9QMAQaIIiFVe73WxE0K4SnqHh+Ybi+HcCG1DbAQyGbqMm2yuUEUdvOzJBaXkzuilbiuc5B8oIohLKa2GWEJn+vOPwmq9t7YPJr2eEkvKMGsSQfldLroV7QIc4xLTnbPvsia+VJQHLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730214559; c=relaxed/simple;
-	bh=Uu7MSsIfwM/nK86sCizAjmT3qbPGspNamKH58t1cCtc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tyqaEQRa2zlHYVj4KAm4nuL2RCQvbJxi0atzuONwIXq9HQ61JfyQ2Yz0FLeZeRB8ZybYE5v3dqjytqkbaqvFZjeGnBoqW1XKISTQ+eH3/CSACvSQuBOUJ1MbIeHhJFx8O9XJBNgUdBD+8G8v3SmPw6GcjcylhhWP5mzFhDMrVjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=iPqZJMWP; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7B99D40E0191;
-	Tue, 29 Oct 2024 15:09:14 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id UpTCgdSWcxWY; Tue, 29 Oct 2024 15:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730214550; bh=CGpcOAn8UHlSL3WE5rbvoEk8vV1upCzgOQR+a5Jg3zw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iPqZJMWP/S97Nw3qt0o9eoCnSWA0S5IDfZgXGAEtZQ7JZWnosysRxl+HGVtwoGUDq
-	 +jCfzuzv6y8wrw84eZ18870uqv8Fjyxpl3DixUrwno6AP9ikM0/qQTn6R+uIN+yEve
-	 aSyl5n6iZmq3s+w8MIUIDTedEpgvJeGNNpL8gxyySd0YolqY8l97DSFa3wpb7cbGBx
-	 IhcwlV0Qml8Tymeq8EFT+PcsDfCG7cpM7cM0lUhyDa3u+wP5I3p+PqKdzbK0WY8CfQ
-	 Ud8ZIfFZj7hILM02w8A4I9ypSPnZH8eBr0rdQeRXOw0JrZp8fwM8RPbM8w7AOe7CNr
-	 TwLHRBgdKJh3p2egKaVB2EaVEjjVaB0soGOBUZVHK8wi6EDX2zyzDLVSw4pvqO3j/t
-	 PmT6bBBIWguwUsk2La+8SbgbEsaMrIkwEEcxJAut/d9BSKX7rBZ5KituH3bUdBe6IH
-	 AIui1ceCdOEGc8IjUzBLWtxRPZ8tdLRs3uBgN2QkauRlEfM3qkGzptraA2n3xfjgud
-	 ui73I8Fi54+uW8qOnoq0hqGjMEEGZPnXixtvpktbVta1g959eDcsQOGQXwNDnYrTN6
-	 96M2oubTs2pilfIE/35/3JQm6AQXZav8+IafheJvSgDsbTKbxxRuEQApGD81J55wU/
-	 I0NTZEfjkQl0Ovif27+b2MRg=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DCA8F40E0192;
-	Tue, 29 Oct 2024 15:08:48 +0000 (UTC)
-Date: Tue, 29 Oct 2024 16:08:47 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
-	john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com,
-	Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com,
-	linux@roeck-us.net, clemens@ladisch.de, hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
-Subject: Re: [PATCH 03/16] x86/amd_nb: Clean up early_is_amd_nb()
-Message-ID: <20241029150847.GLZyD6f-Hk6pRTEt2c@fat_crate.local>
-References: <20241023172150.659002-1-yazen.ghannam@amd.com>
- <20241023172150.659002-4-yazen.ghannam@amd.com>
- <20241025155830.GQZxvAJkJnfLfNpSRx@fat_crate.local>
- <20241029143928.GA1011322@yaz-khff2.amd.com>
+	s=arc-20240116; t=1730216879; c=relaxed/simple;
+	bh=1r7A7ww7pBafTuQhRqV8UGyD9vtwIwKAIJ+slSK3Huo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e7X0ErKpSLsn2zZR+gyzAmj3hog/TZGzuNo64SYKvmqUsOjBDGjhPgm7cuAT3fLMxd+x5Mltcc+OHkJpmDQ3OTWKqNHw7O42NbtGAMPFf8JQ7SfTZCn0syrhKVL2N2gJvxS0Tn2tN9FW616Zsf2n/anB/exPoeJu+1PHR2QywaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gh4vP0AI; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730216877; x=1761752877;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1r7A7ww7pBafTuQhRqV8UGyD9vtwIwKAIJ+slSK3Huo=;
+  b=Gh4vP0AI5Sra2qpiFAKJtsQZs8QaPxQtmCx0IcHt0CMRsoeCehZiKuum
+   kSQQOrhGCYA+jsVTXMLKLCbGjatRTLZWo3ZHOBMum/nIk5r25JqTbhGH8
+   MP9pGPki2I5ZmEY27qOsQyGcdhVVbxT/gBudRAy6TgWR3c4Y8ZmkTSHdL
+   vVAZGFZMDXZ5UvIkvDTF9GYgx3Ccz7RR+BhjeIqzYUi1SyGRuiIdkCtnb
+   bllf0/ng39/dZyv+VrNzzzsTIp2qPI4ag7yOoFfM4uww9Fy3DECLrIFY+
+   PamjqvDpzzvKeN25s+xfXu8a+EQafm7mgouyokg9uQMrclHS8QCAneZ1Q
+   g==;
+X-CSE-ConnectionGUID: 0zhCKl19QeKFP5amqKNYcg==
+X-CSE-MsgGUID: MvcSMe6YQbuOvXxcs9g9qA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="55271699"
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="55271699"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 08:47:56 -0700
+X-CSE-ConnectionGUID: V5pPOSHlTGSDjrkfWJdvXQ==
+X-CSE-MsgGUID: A3P6Yq5GSUSlKa7JmZm7uQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="112817297"
+Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.125.108.71]) ([10.125.108.71])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 08:47:53 -0700
+Message-ID: <c0081406-b320-4495-9a32-f4cc3e881920@intel.com>
+Date: Tue, 29 Oct 2024 08:47:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241029143928.GA1011322@yaz-khff2.amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 05/14] cxl/mbox: Add GET_FEATURE mailbox command
+To: shiju.jose@huawei.com, linux-edac@vger.kernel.org,
+ linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org
+Cc: bp@alien8.de, tony.luck@intel.com, rafael@kernel.org, lenb@kernel.org,
+ mchehab@kernel.org, dan.j.williams@intel.com, dave@stgolabs.net,
+ jonathan.cameron@huawei.com, gregkh@linuxfoundation.org,
+ sudeep.holla@arm.com, jassisinghbrar@gmail.com, alison.schofield@intel.com,
+ vishal.l.verma@intel.com, ira.weiny@intel.com, david@redhat.com,
+ Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
+ rientjes@google.com, jiaqiyan@google.com, Jon.Grimm@amd.com,
+ dave.hansen@linux.intel.com, naoya.horiguchi@nec.com, james.morse@arm.com,
+ jthoughton@google.com, somasundaram.a@hpe.com, erdemaktas@google.com,
+ pgonda@google.com, duenwen@google.com, gthelen@google.com,
+ wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
+ wbs@os.amperecomputing.com, nifan.cxl@gmail.com, tanxiaofei@huawei.com,
+ prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
+ kangkang.shen@futurewei.com, wanghuiqiang@huawei.com, linuxarm@huawei.com
+References: <20241025171356.1377-1-shiju.jose@huawei.com>
+ <20241025171356.1377-6-shiju.jose@huawei.com>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20241025171356.1377-6-shiju.jose@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 29, 2024 at 10:39:28AM -0400, Yazen Ghannam wrote:
-> How can I enable this check myself?
 
-It is part of my silly patch checking script:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/log/?h=vp
+On 10/25/24 10:13 AM, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> Add support for GET_FEATURE mailbox command.
+> 
+> CXL spec 3.1 section 8.2.9.6 describes optional device specific features.
+> The settings of a feature can be retrieved using Get Feature command.
+> CXL spec 3.1 section 8.2.9.6.2 describes Get Feature command.
+> 
+> Reviewed-by: Fan Ni <fan.ni@samsung.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 
-in here:
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> ---
+>  drivers/cxl/core/mbox.c | 41 +++++++++++++++++++++++++++++++++++++++++
+>  drivers/cxl/cxlmem.h    | 26 ++++++++++++++++++++++++++
+>  2 files changed, 67 insertions(+)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index 5045960e3bfe..3cd4bce2872d 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -970,6 +970,47 @@ int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_get_supported_feature_entry, CXL);
+>  
+> +size_t cxl_get_feature(struct cxl_memdev_state *mds, const uuid_t feat_uuid,
+> +		       enum cxl_get_feat_selection selection,
+> +		       void *feat_out, size_t feat_out_size)
+> +{
+> +	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+> +	size_t data_to_rd_size, size_out;
+> +	struct cxl_mbox_get_feat_in pi;
+> +	struct cxl_mbox_cmd mbox_cmd;
+> +	size_t data_rcvd_size = 0;
+> +	int rc;
+> +
+> +	if (!feat_out || !feat_out_size)
+> +		return 0;
+> +
+> +	size_out = min(feat_out_size, cxl_mbox->payload_size);
+> +	pi.uuid = feat_uuid;
+> +	pi.selection = selection;
+> +	do {
+> +		data_to_rd_size = min(feat_out_size - data_rcvd_size,
+> +				      cxl_mbox->payload_size);
+> +		pi.offset = cpu_to_le16(data_rcvd_size);
+> +		pi.count = cpu_to_le16(data_to_rd_size);
+> +
+> +		mbox_cmd = (struct cxl_mbox_cmd) {
+> +			.opcode = CXL_MBOX_OP_GET_FEATURE,
+> +			.size_in = sizeof(pi),
+> +			.payload_in = &pi,
+> +			.size_out = size_out,
+> +			.payload_out = feat_out + data_rcvd_size,
+> +			.min_out = data_to_rd_size,
+> +		};
+> +		rc = cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);
+> +		if (rc < 0 || !mbox_cmd.size_out)
+> +			return 0;
+> +		data_rcvd_size += mbox_cmd.size_out;
+> +	} while (data_rcvd_size < feat_out_size);
+> +
+> +	return data_rcvd_size;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_get_feature, CXL);
+> +
+>  /**
+>   * cxl_enumerate_cmds() - Enumerate commands for a device.
+>   * @mds: The driver data for the operation
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index f88b10188632..0c152719669a 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -531,6 +531,7 @@ enum cxl_opcode {
+>  	CXL_MBOX_OP_CLEAR_LOG           = 0x0403,
+>  	CXL_MBOX_OP_GET_SUP_LOG_SUBLIST = 0x0405,
+>  	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
+> +	CXL_MBOX_OP_GET_FEATURE		= 0x0501,
+>  	CXL_MBOX_OP_IDENTIFY		= 0x4000,
+>  	CXL_MBOX_OP_GET_PARTITION_INFO	= 0x4100,
+>  	CXL_MBOX_OP_SET_PARTITION_INFO	= 0x4101,
+> @@ -856,6 +857,28 @@ struct cxl_mbox_get_sup_feats_out {
+>  	struct cxl_feat_entry ents[] __counted_by_le(supported_feats);
+>  } __packed;
+>  
+> +/*
+> + * Get Feature CXL 3.1 Spec 8.2.9.6.2
+> + */
+> +
+> +/*
+> + * Get Feature input payload
+> + * CXL rev 3.1 section 8.2.9.6.2 Table 8-99
+> + */
+> +enum cxl_get_feat_selection {
+> +	CXL_GET_FEAT_SEL_CURRENT_VALUE,
+> +	CXL_GET_FEAT_SEL_DEFAULT_VALUE,
+> +	CXL_GET_FEAT_SEL_SAVED_VALUE,
+> +	CXL_GET_FEAT_SEL_MAX
+> +};
+> +
+> +struct cxl_mbox_get_feat_in {
+> +	uuid_t uuid;
+> +	__le16 offset;
+> +	__le16 count;
+> +	u8 selection;
+> +}  __packed;
+> +
+>  int cxl_internal_send_cmd(struct cxl_mailbox *cxl_mbox,
+>  			  struct cxl_mbox_cmd *cmd);
+>  int cxl_dev_state_identify(struct cxl_memdev_state *mds);
+> @@ -919,4 +942,7 @@ void cxl_dpa_debug(struct seq_file *file, struct cxl_dev_state *cxlds);
+>  int cxl_get_supported_features(struct cxl_memdev_state *mds);
+>  int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *feat_uuid,
+>  				    struct cxl_feat_entry *feat_entry_out);
+> +size_t cxl_get_feature(struct cxl_memdev_state *mds, const uuid_t feat_uuid,
+> +		       enum cxl_get_feat_selection selection,
+> +		       void *feat_out, size_t feat_out_size);
+>  #endif /* __CXL_MEM_H__ */
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/tree/.tip/bin/vp.py?h=vp
-
-but it probably isn't ready for public consumption yet.
-
-I probably should try to package it properly when there's time...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
