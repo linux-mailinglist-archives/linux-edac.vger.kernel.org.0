@@ -1,102 +1,296 @@
-Return-Path: <linux-edac+bounces-2330-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2331-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B6B59B51BE
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 19:27:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F48C9B51E1
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 19:32:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13C1A1F2411C
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 18:27:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1524F1F21122
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Oct 2024 18:32:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9511EF92F;
-	Tue, 29 Oct 2024 18:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C38081D95BE;
+	Tue, 29 Oct 2024 18:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="NRdVOEee"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OWRv2bVW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2623C4AEE0;
-	Tue, 29 Oct 2024 18:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE5A2107;
+	Tue, 29 Oct 2024 18:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730226453; cv=none; b=c4WFV2woBppWrsW6KHLN1Kfv5HZJkTXIszA7KUgVUL9hCgB+kZRUm3T0Nc5pkEROrariJ3B3v/7+Apbahi5lbs05Q5ah/kHXYsvwek2DWGgyxPP3zMxuwwDpJsEuxPGvzA+2JsyvMg2MN1IsnxG+LGbTZ2sArNosmSmB71UMluc=
+	t=1730226775; cv=none; b=h1JbijC/a1V1xeSR58r1ybu1yMrALRzd2G1622lWz41llexZXbHaoMmCvpkCCH57Ow0qf/prgMlughMpj0cC5jkvi79VMsAJmpcaf2Dsl+IKpulbnIWxO15mFBn7ccoHVFjc+/8ca/xjutpgFBJnoEQONGaJY0mizB5spPxz/fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730226453; c=relaxed/simple;
-	bh=+SYgD8vmIHWiHT6Ff8bGR73OaAHjMoWhTzcOSGvpvGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ec+Gw550MV8e++gALkK+L3fCwFRW+gBtNkcVsfzEs5KGN4pRPzatDInWPTQnVlNGU+mm4BYh5FX4KARDdkZUO+sSk7hP5Vkvx5CzQGb33R6twyvSXRGfrj7dv97MiA8tDmkh86y5bMSVuL0hcXNiNC0wrBvaaEXjoJhj+cF4Cr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=NRdVOEee; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B8DE840E0191;
-	Tue, 29 Oct 2024 18:27:28 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id iTY6gpNzZzCY; Tue, 29 Oct 2024 18:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730226444; bh=ClvKqaK5sXpYch1y3GXnuSurnZmqrMv5MdJmz3HckIc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NRdVOEeeiC5qCmKrllCNE9cRwDMn5WjrL+e3gjnUrRJ6etQx+cOlO+vSUCfOlc4PB
-	 usAr8rXFgUFzf9uNxGekewHp+dVFcX9zbylp8nW6MIkeTl3lvCoLofcMksyO+zCwu4
-	 8QRjICSjKXui+kLtlST2AuBynzKHgOAYgMzsokAN1scFINx/xYraIztWrt5He/cq20
-	 N2iz/gZ5cAT5+9VAYFrBliGvUeYEIrjXu8j3oRkTCnAV3ei+B3q4oeZQpoWD1Z/udl
-	 X6VZ7mh6L/4M6DPdXc7ARsifIzGtnZSS/9uahq8mRiPPo51l4dTGXoK5Sc3SwXmqq/
-	 FkXMAzftPI5R4tDcod2i6N4JSE2lBI34cQrwUC/zVnCnTnSXTKJhXo+5z9K7cVb/wG
-	 fIv3/GCBtk43fIdpn15Aazd7DfyHQbrt+faEoi7ioQUZpje3jI3VmSNjEEBSPDZ3uR
-	 HKXPjyKXhtKMGL02DgddhRAuzfchKhXfG1hGYguP4ZB/V9a9aKkenWFGlnvJBLmeUe
-	 2qhHpYluT2wLoBYvgFqan3Jgu5cyMzTxrU7KB7maHTYD41C8ADTqM+VUagxNr4/64Y
-	 ZYsrPtsgZsLSAGh2YBHnDJUL4NxRZPdSoxEDwUo7fCPi9bszbOp+S56xQvxFbfzNJU
-	 4JF1T8OBIq488b1DNyg31bvU=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6AF0040E0033;
-	Tue, 29 Oct 2024 18:27:10 +0000 (UTC)
-Date: Tue, 29 Oct 2024 19:27:04 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: "Naik, Avadhut" <avadnaik@amd.com>
-Cc: linux-kernel@vger.kernel.org, tony.luck@intel.com, qiuxu.zhuo@intel.com,
-	tglx@linutronix.de, mingo@redhat.com, rostedt@goodmis.org,
-	mchehab@kernel.org, yazen.ghannam@amd.com, john.allen@amd.com,
-	linux-trace-kernel@vger.kernel.org,
-	Avadhut Naik <avadhut.naik@amd.com>, x86@kernel.org,
-	linux-edac@vger.kernel.org
-Subject: Re: [PATCH v7 0/5] MCE wrapper and support for new SMCA syndrome MSRs
-Message-ID: <20241029182704.GRZyEo-MgqCwpoFJhR@fat_crate.local>
-References: <20241022194158.110073-1-avadhut.naik@amd.com>
- <eb851a8c-73ee-4828-a0e3-2a021d56ad2b@amd.com>
+	s=arc-20240116; t=1730226775; c=relaxed/simple;
+	bh=2iCf5LaYMYP0f6vDDdCjb6d/lEtrQIo0CxHWClhvTwk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jOHuznvuRtguVy8jpMI2T1mvxWMxIJWxUOGKJcVPYXGD9Cu5CImZtX4z83hrl7gfd1Gi+7+heJ2GsLMyFytffiKsQ3jKOKBLBfuSqLQPXPGV7Mt2pbBdwtl395P18j9moC6uJKJLgkinw/1cIpYCM1qJSUF2h4NFbcX38mqzjxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OWRv2bVW; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730226773; x=1761762773;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2iCf5LaYMYP0f6vDDdCjb6d/lEtrQIo0CxHWClhvTwk=;
+  b=OWRv2bVWi3nwlPmDg1Q0OqEBOKqT52hLha5WYQUQ7CZNkKMYCvgVRXRu
+   LD95OCRtCUNFEqlA+yrhAdGrCKA8NVnI+Z1TyeBfSMliSWOFowIChVmBm
+   Q4rO7JAVDsqr9/vTGLixUMM5jinbZ/dUsV6TmPEG+jbb/9qeC0wMO1lvq
+   kTrjMMt46sYvIGq7E4Wua/Nt+3uu/g6my++ehsXylBccJoYSllZBSxMMK
+   oUg6x5L6KXn9vPeBn+xsvk8PcZ55SumiCpu2vLqWYrpj2KvCwTg3CBBCC
+   wHaKOlYgbpd/lTmny02bGk2/g5kYxBN9oT6vBX8b/8GEJOmiINfJLen23
+   A==;
+X-CSE-ConnectionGUID: ELHcOYmSSbqQbBu0Dd42Yg==
+X-CSE-MsgGUID: 9Sg8ZTNtSAq7oWhjFHjI7g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="33685476"
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="33685476"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:32:52 -0700
+X-CSE-ConnectionGUID: QUD7wlVIRaeHgKopSSyAiQ==
+X-CSE-MsgGUID: +5zIdsocS/GhuVYEbXDLfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="112856060"
+Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.125.108.71]) ([10.125.108.71])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:32:49 -0700
+Message-ID: <67b569b0-1cd5-44e0-8465-064b41a1afd8@intel.com>
+Date: Tue, 29 Oct 2024 11:32:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <eb851a8c-73ee-4828-a0e3-2a021d56ad2b@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 07/14] cxl/memfeature: Add CXL memory device patrol
+ scrub control feature
+To: Shiju Jose <shiju.jose@huawei.com>,
+ "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+ "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+ "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc: "bp@alien8.de" <bp@alien8.de>, "tony.luck@intel.com"
+ <tony.luck@intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
+ "lenb@kernel.org" <lenb@kernel.org>, "mchehab@kernel.org"
+ <mchehab@kernel.org>, "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+ "dave@stgolabs.net" <dave@stgolabs.net>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+ "jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
+ "alison.schofield@intel.com" <alison.schofield@intel.com>,
+ "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+ "ira.weiny@intel.com" <ira.weiny@intel.com>,
+ "david@redhat.com" <david@redhat.com>,
+ "Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
+ "leo.duran@amd.com" <leo.duran@amd.com>,
+ "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+ "rientjes@google.com" <rientjes@google.com>,
+ "jiaqiyan@google.com" <jiaqiyan@google.com>,
+ "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+ "james.morse@arm.com" <james.morse@arm.com>,
+ "jthoughton@google.com" <jthoughton@google.com>,
+ "somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+ "erdemaktas@google.com" <erdemaktas@google.com>,
+ "pgonda@google.com" <pgonda@google.com>,
+ "duenwen@google.com" <duenwen@google.com>,
+ "gthelen@google.com" <gthelen@google.com>,
+ "wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+ "dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+ "wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+ "nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+ tanxiaofei <tanxiaofei@huawei.com>, "Zengtao (B)"
+ <prime.zeng@hisilicon.com>, Roberto Sassu <roberto.sassu@huawei.com>,
+ "kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+ wanghuiqiang <wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>
+References: <20241025171356.1377-1-shiju.jose@huawei.com>
+ <20241025171356.1377-8-shiju.jose@huawei.com>
+ <3a007a70-136b-4a45-8dd2-d33725ea96bc@intel.com>
+ <e6aed765394b4822ad5a70018c87ef1f@huawei.com>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <e6aed765394b4822ad5a70018c87ef1f@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 29, 2024 at 01:14:16PM -0500, Naik, Avadhut wrote:
-> Any further feedback on this set?
-> If not, can this please be considered for merging in?
 
-You're on the to-review list which is ever-growing. :-(
 
-While waiting, how about you review some other people's code? Whatever you
-find interesting on lkml or somewhere else...
+On 10/29/24 10:00 AM, Shiju Jose wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Dave Jiang <dave.jiang@intel.com>
+>> Sent: 29 October 2024 16:32
+>> To: Shiju Jose <shiju.jose@huawei.com>; linux-edac@vger.kernel.org; linux-
+>> cxl@vger.kernel.org; linux-acpi@vger.kernel.org; linux-mm@kvack.org; linux-
+>> kernel@vger.kernel.org
+>> Cc: bp@alien8.de; tony.luck@intel.com; rafael@kernel.org; lenb@kernel.org;
+>> mchehab@kernel.org; dan.j.williams@intel.com; dave@stgolabs.net; Jonathan
+>> Cameron <jonathan.cameron@huawei.com>; gregkh@linuxfoundation.org;
+>> sudeep.holla@arm.com; jassisinghbrar@gmail.com; alison.schofield@intel.com;
+>> vishal.l.verma@intel.com; ira.weiny@intel.com; david@redhat.com;
+>> Vilas.Sridharan@amd.com; leo.duran@amd.com; Yazen.Ghannam@amd.com;
+>> rientjes@google.com; jiaqiyan@google.com; Jon.Grimm@amd.com;
+>> dave.hansen@linux.intel.com; naoya.horiguchi@nec.com;
+>> james.morse@arm.com; jthoughton@google.com; somasundaram.a@hpe.com;
+>> erdemaktas@google.com; pgonda@google.com; duenwen@google.com;
+>> gthelen@google.com; wschwartz@amperecomputing.com;
+>> dferguson@amperecomputing.com; wbs@os.amperecomputing.com;
+>> nifan.cxl@gmail.com; tanxiaofei <tanxiaofei@huawei.com>; Zengtao (B)
+>> <prime.zeng@hisilicon.com>; Roberto Sassu <roberto.sassu@huawei.com>;
+>> kangkang.shen@futurewei.com; wanghuiqiang <wanghuiqiang@huawei.com>;
+>> Linuxarm <linuxarm@huawei.com>
+>> Subject: Re: [PATCH v14 07/14] cxl/memfeature: Add CXL memory device patrol
+>> scrub control feature
+>>
+>>
+>>
+>> On 10/25/24 10:13 AM, shiju.jose@huawei.com wrote:
+>>> From: Shiju Jose <shiju.jose@huawei.com>
+>>>
+>>> CXL spec 3.1 section 8.2.9.9.11.1 describes the device patrol scrub
+>>> control feature. The device patrol scrub proactively locates and makes
+>>> corrections to errors in regular cycle.
+>>>
+>>> Allow specifying the number of hours within which the patrol scrub
+>>> must be completed, subject to minimum and maximum limits reported by the
+>> device.
+>>> Also allow disabling scrub allowing trade-off error rates against
+>>> performance.
+>>>
+>>> Add support for patrol scrub control on CXL memory devices.
+>>> Register with the EDAC device driver, which retrieves the scrub
+>>> attribute descriptors from EDAC scrub and exposes the sysfs scrub
+>>> control attributes to userspace. For example, scrub control for the
+>>> CXL memory device "cxl_mem0" is exposed in
+>> /sys/bus/edac/devices/cxl_mem0/scrubX/.
+>>>
+>>> Additionally, add support for region-based CXL memory patrol scrub control.
+>>> CXL memory regions may be interleaved across one or more CXL memory
+>>> devices. For example, region-based scrub control for "cxl_region1" is
+>>> exposed in /sys/bus/edac/devices/cxl_region1/scrubX/.
+>>>
+>>> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>>> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>>> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+>>> ---
+>>>  Documentation/edac/edac-scrub.rst |  74 ++++++
+>>>  drivers/cxl/Kconfig               |  18 ++
+>>>  drivers/cxl/core/Makefile         |   1 +
+>>>  drivers/cxl/core/memfeature.c     | 381 ++++++++++++++++++++++++++++++
+>>>  drivers/cxl/core/region.c         |   6 +
+>>>  drivers/cxl/cxlmem.h              |   7 +
+>>>  drivers/cxl/mem.c                 |   4 +
+>>>  7 files changed, 491 insertions(+)
+>>>  create mode 100644 Documentation/edac/edac-scrub.rst  create mode
+>>> 100644 drivers/cxl/core/memfeature.c
+>>>
+>>> diff --git a/Documentation/edac/edac-scrub.rst
+>>> b/Documentation/edac/edac-scrub.rst
+>>> new file mode 100644
+>>> index 000000000000..4aad4974b208
+>>> --- /dev/null
+>>> +++ b/Documentation/edac/edac-scrub.rst
+>>> @@ -0,0 +1,74 @@
+>>> +.. SPDX-License-Identifier: GPL-2.0
+>>> +
+> [...]
+> 
+>>> +static int cxl_mem_ps_get_attrs(struct cxl_memdev_state *mds,
+>>> +				struct cxl_memdev_ps_params *params) {
+>>> +	size_t rd_data_size = sizeof(struct cxl_memdev_ps_rd_attrs);
+>>> +	size_t data_size;
+>>> +	struct cxl_memdev_ps_rd_attrs *rd_attrs __free(kfree) =
+>>> +						kmalloc(rd_data_size,
+>> GFP_KERNEL);
+>>> +	if (!rd_attrs)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	data_size = cxl_get_feature(mds, cxl_patrol_scrub_uuid,
+>>> +				    CXL_GET_FEAT_SEL_CURRENT_VALUE,
+>>> +				    rd_attrs, rd_data_size);
+>>> +	if (!data_size)
+>>> +		return -EIO;
+>>> +
+>>> +	params->scrub_cycle_changeable =
+>> FIELD_GET(CXL_MEMDEV_PS_SCRUB_CYCLE_CHANGE_CAP_MASK,
+>>> +						   rd_attrs->scrub_cycle_cap);
+>>> +	params->enable =
+>> FIELD_GET(CXL_MEMDEV_PS_FLAG_ENABLED_MASK,
+>>> +				   rd_attrs->scrub_flags);
+>>> +	params->scrub_cycle_hrs =
+>> FIELD_GET(CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK,
+>>> +					    rd_attrs->scrub_cycle_hrs);
+>>> +	params->min_scrub_cycle_hrs =
+>> FIELD_GET(CXL_MEMDEV_PS_MIN_SCRUB_CYCLE_MASK,
+>>> +						rd_attrs->scrub_cycle_hrs);
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int cxl_ps_get_attrs(struct device *dev, void *drv_data,
+>>
+>> Would a union be better than a void *drv_data for all the places this is used as a
+>> parameter? How many variations of this are there?
+>>
+>> DJ
+> Hi Dave,
+> 
+> Can you give more info on this given this is a generic callback for the scrub control and each
+> implementation will have its own context struct (for eg. struct cxl_patrol_scrub_context here
+> for CXL scrub control), which in turn will be passed in and out as opaque data.
 
-Thx.
+Mainly I'm just seeing a lot of calls with (void *). Just asking if we want to make it a union that contains 'struct cxl_patrol_scrub_context' and etc.
 
--- 
-Regards/Gruss,
-    Boris.
+> 
+> Thanks,
+> Shiju
+>>
+>>> +			    struct cxl_memdev_ps_params *params) {
+>>> +	struct cxl_patrol_scrub_context *cxl_ps_ctx = drv_data;
+>>> +	struct cxl_memdev *cxlmd;
+>>> +	struct cxl_dev_state *cxlds;
+>>> +	struct cxl_memdev_state *mds;
+>>> +	u16 min_scrub_cycle = 0;
+>>> +	int i, ret;
+>>> +
+>>> +	if (cxl_ps_ctx->cxlr) {
+>>> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
+>>> +		struct cxl_region_params *p = &cxlr->params;
+>>> +
+>>> +		for (i = p->interleave_ways - 1; i >= 0; i--) {
+>>> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
+>>> +
+>>> +			cxlmd = cxled_to_memdev(cxled);
+>>> +			cxlds = cxlmd->cxlds;
+>>> +			mds = to_cxl_memdev_state(cxlds);
+>>> +			ret = cxl_mem_ps_get_attrs(mds, params);
+>>> +			if (ret)
+>>> +				return ret;
+>>> +
+>>> +			if (params->min_scrub_cycle_hrs > min_scrub_cycle)
+>>> +				min_scrub_cycle = params-
+>>> min_scrub_cycle_hrs;
+>>> +		}
+>>> +		params->min_scrub_cycle_hrs = min_scrub_cycle;
+>>> +		return 0;
+>>> +	}
+>>> +	cxlmd = cxl_ps_ctx->cxlmd;
+>>> +	cxlds = cxlmd->cxlds;
+>>> +	mds = to_cxl_memdev_state(cxlds);
+>>> +
+>>> +	return cxl_mem_ps_get_attrs(mds, params); }
+>>> +
+> [...]
+>>
+> 
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
