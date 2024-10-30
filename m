@@ -1,144 +1,211 @@
-Return-Path: <linux-edac+bounces-2344-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2345-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 207C39B6367
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 13:53:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D58D19B642A
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 14:33:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFD08B21912
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 12:52:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94CE72820C8
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 13:32:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5843D1E3772;
-	Wed, 30 Oct 2024 12:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B4D1E47BC;
+	Wed, 30 Oct 2024 13:32:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="kQk9UYHB"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51DA4D8A7;
-	Wed, 30 Oct 2024 12:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5455F3FB31;
+	Wed, 30 Oct 2024 13:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730292767; cv=none; b=Y3JV3jAPWtCR8ugTt7w9m627t+6PLnEAI+43oIB4KcXEOzZYpneMBHuZfKNiGOMUyJKj8b9yiyNAJ6CTYgEDHNKTIWBbHB9hb2tTbj66DSPPkTWk82nJoLi8LxqCcW8NG3bz+fYUzmeyDoBrf8CVsUgvIYmhGz2G78srvMtrvF0=
+	t=1730295177; cv=none; b=b3Gyyajsyn1EtS2ZsT6FWqH4+vcFYLCn+xy+PStnkljRqT2o2JfTItXC+vqYrdXNIAuIM0C+fTGL8HdVXF8sUb6A37+12BbLo1/MqvGp3kB1Fd8TfTcQ/HwidNz+uPDOkHZIEhypWbXhV8f86IUMqv8gJ1NR0j7Kwm3K4na5Qtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730292767; c=relaxed/simple;
-	bh=6FmvHYArbP9A5eMkduasERmZjhT6W53BfofWfnRc/y8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NOAQDTQASnYMmEUnWpzmJMmn212gNR00Q7FT9F0B0CIk7IoTm9HcoNN/4gx8il/szkcXsdzY3HrqD0bBU0yQh//SkHLeBAas9ICC9gBiwQo1Tx7EsfeP7h7XtJ3j9KTQMj9V/aQtTKLEedXUDaEtIfIyvsiVM4zWjHaU33o9IAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Xdn604437z6K6YJ;
-	Wed, 30 Oct 2024 20:50:16 +0800 (CST)
-Received: from frapeml500006.china.huawei.com (unknown [7.182.85.219])
-	by mail.maildlp.com (Postfix) with ESMTPS id 969AB140429;
-	Wed, 30 Oct 2024 20:52:41 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml500006.china.huawei.com (7.182.85.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 30 Oct 2024 13:52:41 +0100
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Wed, 30 Oct 2024 13:52:41 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Borislav Petkov <bp@alien8.de>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
-	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"Jonathan Cameron" <jonathan.cameron@huawei.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"sudeep.holla@arm.com" <sudeep.holla@arm.com>, "jassisinghbrar@gmail.com"
-	<jassisinghbrar@gmail.com>, "dave.jiang@intel.com" <dave.jiang@intel.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>, "ira.weiny@intel.com"
-	<ira.weiny@intel.com>, "david@redhat.com" <david@redhat.com>,
-	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>, "leo.duran@amd.com"
-	<leo.duran@amd.com>, "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
-	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
-	<jiaqiyan@google.com>, "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>, "james.morse@arm.com"
-	<james.morse@arm.com>, "jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>, "erdemaktas@google.com"
-	<erdemaktas@google.com>, "pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>, "gthelen@google.com"
-	<gthelen@google.com>, "wschwartz@amperecomputing.com"
-	<wschwartz@amperecomputing.com>, "dferguson@amperecomputing.com"
-	<dferguson@amperecomputing.com>, "wbs@os.amperecomputing.com"
-	<wbs@os.amperecomputing.com>, "nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
-	tanxiaofei <tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
-	"Roberto Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v14 07/14] cxl/memfeature: Add CXL memory device patrol
- scrub control feature
-Thread-Topic: [PATCH v14 07/14] cxl/memfeature: Add CXL memory device patrol
- scrub control feature
-Thread-Index: AQHbJwFiEsGT6VLXSEWw7XeCpRer7rKeH9CAgAEnCgA=
-Date: Wed, 30 Oct 2024 12:52:41 +0000
-Message-ID: <35c697489f2b486482ddc42d435861e4@huawei.com>
-References: <20241025171356.1377-1-shiju.jose@huawei.com>
- <20241025171356.1377-8-shiju.jose@huawei.com>
- <20241029201527.GTZyFCX_foMR_GouGN@fat_crate.local>
-In-Reply-To: <20241029201527.GTZyFCX_foMR_GouGN@fat_crate.local>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1730295177; c=relaxed/simple;
+	bh=JuJGGbUyMfw/WGeLkAnhDnD/P9fXPIrb7LuOlDybwzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IJcOEpWEgtqw3O2xmdLS0BPhdedkYrZpgKnGiV0rfUAtvW1ajajXQzuAPIJf4YY2vU3DU7m6Ttxzqv7pqNHlDo2DH5GRp2nP5Qq7Vqo6iFvnV/lBJd1eWtDGlFmDM3XyuzTitcUSHuGriCJlRuCqla6GnXt54+n9dLu1t0goUHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=kQk9UYHB; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 20CBA40E0191;
+	Wed, 30 Oct 2024 13:32:52 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 1k9kVbCppEif; Wed, 30 Oct 2024 13:32:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1730295166; bh=uisbDX9mYhfxWZr7rzArxjasxG+HKkFeR2Cbs8jZP4s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kQk9UYHBBlGORP2bFWpYk15SniW7fkrukGEhBEUcCcM6yaUeRsarxslwrlPa7/6Xo
+	 3ZrSd4YF40hdWgNwPxS/7ZmQ5DIGK69AP2FvvbI1NKvz74SJxeUKWXBqBQQnfCfO26
+	 Jh1cCn8tn5aDWP2VUNInYw6MYGWX/BhuA1CI+q+IMSZ4Itgp9EK58E0gMYD9bcqvRw
+	 +koejIV3t5jWXvdQSXVpGqsdvStfzljhfslGr7ACUqQm1QTwmGKb4PfU6QP4RhbdEY
+	 hob+bBqbEJWkyKEVzHaZtUQFoXeGznflNnW1IJE/cKWQnQNWd2Z4UgFecurgpNH0FW
+	 lEhBrfz1eYz9icN0VdNy17VKqLbGpSutd9r/239nFT+kYo1h/ijjE6gi3byRUnOOn+
+	 YfoMWNLMRTeTprYwWLwvoXwhfYVi2avfQqEYgidQVsYTMMYIqccpEENAqZCkRMAQAg
+	 /5f8744cfUZ1uHMJc4dpdOS4P4ep7ttpOtmPqdGyeGLoSiahFqft20U+vCfAftRaqm
+	 lwCU/sYJSiATbL9S4MYbhZeRv576XeMfXWZ1p/KiGEixkOjaP0a8SLe2N091S3scDn
+	 f8ozxNYsYlJzECX0Qmav0b90sHD0opakIP8/lszoeRD74lUDw/9XT7y1lZEaM9lFMG
+	 4ukX8c/wA4we7tN8WpITEOxc=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 955DE40E019C;
+	Wed, 30 Oct 2024 13:32:33 +0000 (UTC)
+Date: Wed, 30 Oct 2024 14:32:27 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Avadhut Naik <avadhut.naik@amd.com>
+Cc: x86@kernel.org, linux-edac@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, qiuxu.zhuo@intel.com, tglx@linutronix.de,
+	mingo@redhat.com, rostedt@goodmis.org, mchehab@kernel.org,
+	yazen.ghannam@amd.com, john.allen@amd.com
+Subject: Re: [PATCH v7 1/5] x86/mce: Add wrapper for struct mce to export
+ vendor specific info
+Message-ID: <20241030133227.GDZyI1a5rheucn86qc@fat_crate.local>
+References: <20241022194158.110073-1-avadhut.naik@amd.com>
+ <20241022194158.110073-2-avadhut.naik@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241022194158.110073-2-avadhut.naik@amd.com>
 
-DQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IEJvcmlzbGF2IFBldGtvdiA8
-YnBAYWxpZW44LmRlPg0KPlNlbnQ6IDI5IE9jdG9iZXIgMjAyNCAyMDoxNQ0KPlRvOiBTaGlqdSBK
-b3NlIDxzaGlqdS5qb3NlQGh1YXdlaS5jb20+DQo+Q2M6IGxpbnV4LWVkYWNAdmdlci5rZXJuZWwu
-b3JnOyBsaW51eC1jeGxAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj5hY3BpQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgtbW1Aa3ZhY2sub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0K
-PnRvbnkubHVja0BpbnRlbC5jb207IHJhZmFlbEBrZXJuZWwub3JnOyBsZW5iQGtlcm5lbC5vcmc7
-DQo+bWNoZWhhYkBrZXJuZWwub3JnOyBkYW4uai53aWxsaWFtc0BpbnRlbC5jb207IGRhdmVAc3Rn
-b2xhYnMubmV0OyBKb25hdGhhbg0KPkNhbWVyb24gPGpvbmF0aGFuLmNhbWVyb25AaHVhd2VpLmNv
-bT47IGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnOw0KPnN1ZGVlcC5ob2xsYUBhcm0uY29tOyBq
-YXNzaXNpbmdoYnJhckBnbWFpbC5jb207IGRhdmUuamlhbmdAaW50ZWwuY29tOw0KPmFsaXNvbi5z
-Y2hvZmllbGRAaW50ZWwuY29tOyB2aXNoYWwubC52ZXJtYUBpbnRlbC5jb207IGlyYS53ZWlueUBp
-bnRlbC5jb207DQo+ZGF2aWRAcmVkaGF0LmNvbTsgVmlsYXMuU3JpZGhhcmFuQGFtZC5jb207IGxl
-by5kdXJhbkBhbWQuY29tOw0KPllhemVuLkdoYW5uYW1AYW1kLmNvbTsgcmllbnRqZXNAZ29vZ2xl
-LmNvbTsgamlhcWl5YW5AZ29vZ2xlLmNvbTsNCj5Kb24uR3JpbW1AYW1kLmNvbTsgZGF2ZS5oYW5z
-ZW5AbGludXguaW50ZWwuY29tOw0KPm5hb3lhLmhvcmlndWNoaUBuZWMuY29tOyBqYW1lcy5tb3Jz
-ZUBhcm0uY29tOyBqdGhvdWdodG9uQGdvb2dsZS5jb207DQo+c29tYXN1bmRhcmFtLmFAaHBlLmNv
-bTsgZXJkZW1ha3Rhc0Bnb29nbGUuY29tOyBwZ29uZGFAZ29vZ2xlLmNvbTsNCj5kdWVud2VuQGdv
-b2dsZS5jb207IGd0aGVsZW5AZ29vZ2xlLmNvbTsNCj53c2Nod2FydHpAYW1wZXJlY29tcHV0aW5n
-LmNvbTsgZGZlcmd1c29uQGFtcGVyZWNvbXB1dGluZy5jb207DQo+d2JzQG9zLmFtcGVyZWNvbXB1
-dGluZy5jb207IG5pZmFuLmN4bEBnbWFpbC5jb207IHRhbnhpYW9mZWkNCj48dGFueGlhb2ZlaUBo
-dWF3ZWkuY29tPjsgWmVuZ3RhbyAoQikgPHByaW1lLnplbmdAaGlzaWxpY29uLmNvbT47IFJvYmVy
-dG8NCj5TYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPjsga2FuZ2thbmcuc2hlbkBmdXR1
-cmV3ZWkuY29tOw0KPndhbmdodWlxaWFuZyA8d2FuZ2h1aXFpYW5nQGh1YXdlaS5jb20+OyBMaW51
-eGFybQ0KPjxsaW51eGFybUBodWF3ZWkuY29tPg0KPlN1YmplY3Q6IFJlOiBbUEFUQ0ggdjE0IDA3
-LzE0XSBjeGwvbWVtZmVhdHVyZTogQWRkIENYTCBtZW1vcnkgZGV2aWNlIHBhdHJvbA0KPnNjcnVi
-IGNvbnRyb2wgZmVhdHVyZQ0KPg0KPk9uIEZyaSwgT2N0IDI1LCAyMDI0IGF0IDA2OjEzOjQ4UE0g
-KzAxMDAsIHNoaWp1Lmpvc2VAaHVhd2VpLmNvbSB3cm90ZToNCj4+IGRpZmYgLS1naXQgYS9Eb2N1
-bWVudGF0aW9uL2VkYWMvZWRhYy1zY3J1Yi5yc3QNCj4+IGIvRG9jdW1lbnRhdGlvbi9lZGFjL2Vk
-YWMtc2NydWIucnN0DQo+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPj4gaW5kZXggMDAwMDAwMDAw
-MDAwLi40YWFkNDk3NGIyMDgNCj4+IC0tLSAvZGV2L251bGwNCj4+ICsrKyBiL0RvY3VtZW50YXRp
-b24vZWRhYy9lZGFjLXNjcnViLnJzdA0KPj4gQEAgLTAsMCArMSw3NCBAQA0KPj4gKy4uIFNQRFgt
-TGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+PiArDQpbLi4uXQ0KPj4gKzENCj4+ICtyb290
-QGxvY2FsaG9zdDp+IyBlY2hvIDAgPg0KPj4gKy9zeXMvYnVzL2VkYWMvZGV2aWNlcy9jeGxfcmVn
-aW9uMC9zY3J1YjAvZW5hYmxlX2JhY2tncm91bmQNCj4+ICtyb290QGxvY2FsaG9zdDp+IyBjYXQN
-Cj4+ICsvc3lzL2J1cy9lZGFjL2RldmljZXMvY3hsX3JlZ2lvbjAvc2NydWIwL2VuYWJsZV9iYWNr
-Z3JvdW5kDQo+PiArMA0KPg0KPlRoaXMgZmlsZSdzIGFkZGl0aW9uIGJlbG9uZ3MgdG8gc29tZSBF
-REFDIHBhdGNoIGluIHRoZSBzZXJpZXMsIG5vdCBoZXJlLg0KSSB3aWxsIGRvLg0KPg0KPkl0IGNv
-dWxkIGJlIGEgc2VwYXJhdGUsIGxhc3QgcGF0Y2ggaW4gdGhlIHNlcmllcyB0b28sIG9uY2UgZXZl
-cnl0aGluZyBpcyBzZXR0bGVkLg0KPg0KPlRoeC4NCj4NCj4tLQ0KPlJlZ2FyZHMvR3J1c3MsDQo+
-ICAgIEJvcmlzLg0KDQpUaGFua3MsDQpTaGlqdQ0K
+On Tue, Oct 22, 2024 at 07:36:27PM +0000, Avadhut Naik wrote:
+> Currently, exporting new additional machine check error information
+> involves adding new fields for the same at the end of the struct mce.
+> This additional information can then be consumed through mcelog or
+> tracepoint.
+> 
+> However, as new MSRs are being added (and will be added in the future)
+> by CPU vendors on their newer CPUs with additional machine check error
+> information to be exported, the size of struct mce will balloon on some
+> CPUs, unnecessarily, since those fields are vendor-specific. Moreover,
+> different CPU vendors may export the additional information in varying
+> sizes.
+> 
+> The problem particularly intensifies since struct mce is exposed to
+> userspace as part of UAPI. It's bloating through vendor-specific data
+> should be avoided to limit the information being sent out to userspace.
+> 
+> Add a new structure mce_hw_err to wrap the existing struct mce. The same
+> will prevent its ballooning since vendor-specifc data, if any, can now be
+
+Unknown word [vendor-specifc] in commit message.
+
+Please introduce a spellchecker into your patch creation workflow.
+
+Also:
+
+The tip-tree preferred ordering of variable declarations at the
+beginning of a function is reverse fir tree order::
+
+	struct long_struct_name *descriptive_name;
+	unsigned long foo, bar;
+	unsigned int tmp;
+	int ret;
+
+The above is faster to parse than the reverse ordering::
+
+	int ret;
+	unsigned int tmp;
+	unsigned long foo, bar;
+	struct long_struct_name *descriptive_name;
+
+And even more so than random ordering::
+
+	unsigned long foo, bar;
+	int ret;
+	struct long_struct_name *descriptive_name;
+	unsigned int tmp;
+
+diff ontop of yours:
+
+---
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 3611366d56b7..28e28b69d84d 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1030,11 +1030,11 @@ static noinstr int mce_timed_out(u64 *t, const char *msg)
+  */
+ static void mce_reign(void)
+ {
+-	int cpu;
+ 	struct mce_hw_err *err = NULL;
+ 	struct mce *m = NULL;
+ 	int global_worst = 0;
+ 	char *msg = NULL;
++	int cpu;
+ 
+ 	/*
+ 	 * This CPU is the Monarch and the other CPUs have run
+@@ -1291,8 +1291,8 @@ __mc_scan_banks(struct mce_hw_err *err, struct pt_regs *regs,
+ {
+ 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
+ 	struct mca_config *cfg = &mca_cfg;
+-	struct mce *m = &err->m;
+ 	int severity, i, taint = 0;
++	struct mce *m = &err->m;
+ 
+ 	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
+ 		arch___clear_bit(i, toclear);
+@@ -1419,8 +1419,8 @@ static void kill_me_never(struct callback_head *cb)
+ 
+ static void queue_task_work(struct mce_hw_err *err, char *msg, void (*func)(struct callback_head *))
+ {
+-	struct mce *m = &err->m;
+ 	int count = ++current->mce_count;
++	struct mce *m = &err->m;
+ 
+ 	/* First call, save all the details */
+ 	if (count == 1) {
+diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
+index 504d89724ecd..d0be6dda0c14 100644
+--- a/arch/x86/kernel/cpu/mce/genpool.c
++++ b/arch/x86/kernel/cpu/mce/genpool.c
+@@ -73,9 +73,9 @@ struct llist_node *mce_gen_pool_prepare_records(void)
+ 
+ void mce_gen_pool_process(struct work_struct *__unused)
+ {
+-	struct mce *mce;
+-	struct llist_node *head;
+ 	struct mce_evt_llist *node, *tmp;
++	struct llist_node *head;
++	struct mce *mce;
+ 
+ 	head = llist_del_all(&mce_event_llist);
+ 	if (!head)
+diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
+index c65a5c4e2f22..313fe682db33 100644
+--- a/arch/x86/kernel/cpu/mce/inject.c
++++ b/arch/x86/kernel/cpu/mce/inject.c
+@@ -502,9 +502,9 @@ static void prepare_msrs(void *info)
+ 
+ static void do_inject(void)
+ {
++	unsigned int cpu = i_mce.extcpu;
+ 	struct mce_hw_err err;
+ 	u64 mcg_status = 0;
+-	unsigned int cpu = i_mce.extcpu;
+ 	u8 b = i_mce.bank;
+ 
+ 	i_mce.tsc = rdtsc_ordered();
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
