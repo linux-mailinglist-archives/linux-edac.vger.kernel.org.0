@@ -1,56 +1,55 @@
-Return-Path: <linux-edac+bounces-2349-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2350-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D2BE9B6631
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 15:42:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 987109B66ED
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 16:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0336D1F21BF1
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 14:42:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 575AA28278F
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 15:03:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA131EF95E;
-	Wed, 30 Oct 2024 14:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A50B31F8919;
+	Wed, 30 Oct 2024 15:03:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="pVLNb/Zu"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="qomTIikI"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B24B672;
-	Wed, 30 Oct 2024 14:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2009F200CA2;
+	Wed, 30 Oct 2024 15:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730299324; cv=none; b=IdwG8VIBvJX8aZZwjrHaRVVvrLsSLa5Q9XpUCvqGGJgP9d7hr8As5Ir7BGX/BgRdp/TacbAKnvmJgDLQPg6k+Xf7KsMgzTEh9GSVXP9J5R0aecg8AYzuGYWryDBE9sgopYkBSooK0TpGYlLu6OU0ErxuZ1ynxuO9+WdJDTFzZAY=
+	t=1730300611; cv=none; b=fSLnKluJDFy8cQ5uINPhoHsKjosiiOTeF6XdRmLU/BB5HZ7On6Tto8iPB2AXUMJizjICbB/tfMHL/a8XKleFweHtFz4876vlwDvxfH7QLFP6wg1tOvRaQi+WtJwBF3pR6F4d9bRXMcsoAoiv2tdtLxDBBByIiQBGZXf2516TNkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730299324; c=relaxed/simple;
-	bh=0xq5+svYIejF1GKfVoLp6LlzglGNcusoL7m0UN9Vuzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HgotEVh3s9fTegc8Kh8/1q0Va+NZg8Y8C3jXoH+RSkjyCUW1AlkfJenceyINplV0g21AFO79CM3q7J83CVSj8GKnNTcoD2lL52T0Uc1Df3tNEc+YL4Ii/Gh77IkChdD6wgwREzWLFJ0HnZ7t0roDWZBKbsFG04OTvFppsIqH4SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=pVLNb/Zu; arc=none smtp.client-ip=212.227.15.19
+	s=arc-20240116; t=1730300611; c=relaxed/simple;
+	bh=NAJDFpr9nmdU19C3JKcxMzbLsCujnceVqhZ/RKnEwwg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Af+TFKHbaNb+31NyYomIGXM73EbTT6cTqSu98SsoWPf9nOox0LZkrVYTYwFp+I+wNaLYmJk8frvjgX/RPZmzBKdUFVwnUGYm49zXP0bFaKHdfny3PyILmseqRbzytFLMMDTu/p8ax9QRp+1oc96YfhX0b314DFEoItACsgBOMu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=qomTIikI; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1730299241; x=1730904041; i=metux@gmx.de;
-	bh=0xq5+svYIejF1GKfVoLp6LlzglGNcusoL7m0UN9Vuzc=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=pVLNb/ZuHRr1Pn+Pjp2jG3tYW4IlU/Y+hBQ+152btxdt66p35TIqTsTT49ZFaw6Z
-	 um5WIqCBjgJTKH3xGelsZoSGOrO0d2uDFPCvDhBYYlsDla33B/7m9n8AWEEajnQDp
-	 uShiFqkUN3/VN8NW8b+9imhYqgXCa5Hx0K1cFX0is/AQxGb6go2D72hxjmQ68AknA
-	 bsZ2U9jZZrY7XRdmo+vhoFCgZbOS22vdxHB2cn9i8D+F26Q5aAnfoMNqGyVjF1mio
-	 3CYSYXdgy+XrjkIdgZ4LFIHz8HinXxQM/HP680zmiVBeOjldun9lmV7PDaPFV7VnR
-	 zbEYWzuIummDuFIJDg==
+	s=s31663417; t=1730300534; x=1730905334; i=metux@gmx.de;
+	bh=NAJDFpr9nmdU19C3JKcxMzbLsCujnceVqhZ/RKnEwwg=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=qomTIikI/OgfmxAbFKh1e8iCRJShu7EnlgU5G434TkB+7QieI60zcRnRQmNHY7mL
+	 26XECiyiNu12zXTWRy2asSgHeF6VwbBHM3aDnQ3uox6d+N5j3vyz2V29nf9ZEHI/7
+	 qUlSXTqxVipxXZ1JSehQTzpHDHQPSPiL/eaweFb8E7BUCEPOvfqCWNoLR7qjkN1j/
+	 p49vWpG4avdBGfWZrfUUn1QQPJYBKupzAA27zZiM0BrIysUJtE3I4oi18t2KU2Jgp
+	 NR5BKuTzLj4AssNq/jcoRi8JEym9/1eHXVRmJDUQ/Hacah+zbe10IoOhncuicwk4Q
+	 B7fK/ijaayh5nLVM0A==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.178] ([95.114.207.188]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWRVh-1tLH4l3NLX-00UIow; Wed, 30
- Oct 2024 15:40:41 +0100
-Message-ID: <0d385451-6882-4919-8c47-1b360dbfc2d4@gmx.de>
-Date: Wed, 30 Oct 2024 15:40:57 +0100
+Received: from [192.168.1.178] ([77.2.112.201]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5wPh-1tCUne2tcR-003w9y; Wed, 30
+ Oct 2024 16:02:13 +0100
+Message-ID: <0369c687-db33-4665-b3dc-143000ef2e47@gmx.de>
+Date: Wed, 30 Oct 2024 16:02:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -58,98 +57,99 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux: Goodbye from a Linux community volunteer
-To: =?UTF-8?Q?Dragan_Milivojevi=C4=87?= <d.milivojevic@gmail.com>,
- Andy Shevchenko <andy@kernel.org>
-Cc: Peter Cai <peter@typeblog.net>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>,
- Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
- ntb@lists.linux.dev, Kory Maincent <kory.maincent@bootlin.com>,
- Cai Huoqing <cai.huoqing@linux.dev>, dmaengine@vger.kernel.org,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
- Paul Burton <paulburton@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
- linux-pci@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
- Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>,
- netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
- linux-edac@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-serial@vger.kernel.org, Andrew Halaney <ajhalaney@gmail.com>,
- Nikita Travkin <nikita@trvn.ru>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Nikita Shubin <nikita.shubin@maquefel.me>,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
- Linus Torvalds <torvalds@linux-foundation.org>
-References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
- <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
- <6beb4070-1946-4387-bd0e-34608a76b19e@typeblog.net>
- <CALtW_agj1rurb3DRrPd9o2mkfku5fq_M3CEKY5sW+Zz7shKYHA@mail.gmail.com>
- <ZxqK75WdFBod0rZ9@smile.fi.intel.com>
- <CALtW_ajKAYYwYVGnEArPWz_XaCkEiMFwpoCtzeiO1OLbAk77Sw@mail.gmail.com>
-Content-Language: tl
+Subject: Re: Maintainers now blocked from kernel.org mail access [WAS Re:
+ linux: Goodbye from a Linux community volunteer]
 From: metux <metux@gmx.de>
-In-Reply-To: <CALtW_ajKAYYwYVGnEArPWz_XaCkEiMFwpoCtzeiO1OLbAk77Sw@mail.gmail.com>
+To: Hantong Chen <cxwdyx620@gmail.com>, tytso@mit.edu
+Cc: ajhalaney@gmail.com, allenbh@gmail.com, andrew@lunn.ch,
+ andriy.shevchenko@linux.intel.com, andy@kernel.org, arnd@arndb.de,
+ bhelgaas@google.com, bp@alien8.de, broonie@kernel.org,
+ cai.huoqing@linux.dev, dave.jiang@intel.com, davem@davemloft.net,
+ dlemoal@kernel.org, dmaengine@vger.kernel.org, dushistov@mail.ru,
+ fancer.lancer@gmail.com, geert@linux-m68k.org, gregkh@linuxfoundation.org,
+ ink@jurassic.park.msu.ru, james.bottomley@hansenpartnership.com,
+ jdmason@kudzu.us, jiaxun.yang@flygoat.com, keguang.zhang@gmail.com,
+ kory.maincent@bootlin.com, krzk@kernel.org, kuba@kernel.org,
+ linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux@armlinux.org.uk, linux@roeck-us.net,
+ manivannan.sadhasivam@linaro.org, netdev@vger.kernel.org,
+ nikita.shubin@maquefel.me, nikita@trvn.ru, ntb@lists.linux.dev,
+ olteanv@gmail.com, pabeni@redhat.com, paulburton@kernel.org,
+ robh@kernel.org, s.shtylyov@omp.ru, sergio.paracuellos@gmail.com,
+ shc_work@mail.ru, siyanteng@loongson.cn, tsbogend@alpha.franken.de,
+ xeb@mail.ru, yoshihiro.shimoda.uh@renesas.com
+References: <20241024173504.GN3204734@mit.edu>
+ <20241024181917.1119-1-cxwdyx620@gmail.com>
+ <e3559794-ab4a-48f2-8c28-52ef46258051@metux.net>
+Content-Language: tl
+In-Reply-To: <e3559794-ab4a-48f2-8c28-52ef46258051@metux.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:OcaI0MgLZANUz/sgtgPUoWCFpAIiw9s1BR7zIWC9hSVK/3u0w1C
- EmjrTPrNIpJOHRhqUky0yMcGGPRfxY/t3zfIu+ZGJqJX9Zs9s7tKmfRMp0x3/P4eAOQjZsF
- 6aXf+MCHd8GC61j8+Shh0zIlaciPo5djqE4HxSmFtvoWodF9CmrwLsA7BZwYK5Pgt7STN/K
- dYRxlcTUlrU3Htf1k5ERg==
+X-Provags-ID: V03:K1:jSWmplSFQgV90c2A0bkkvj2t8ExnIUMHHQD7NlbYYqtnVH71j/A
+ Pj4uZIi6YPufmEMjudXa4dJHIygmTV1wIFJJkHGM+GIBFRAfnlev+sgkCZr+MF54lQRidxS
+ bkG2HCXJq0essmv69s27h4WdycA0Rnb+4K1fnTHuD/qBR+mEDSBS53MElG91weJLYtaeg5k
+ OTPFgaQ3fak8gIXNj4JDQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:yH4Fl1yjr84=;qFDqc+qa7t/oEadwViPVtxqohRU
- 2Tl44NvyL3GLkYPfcMVu0RDaLiKcPzOYKO1Z5ddYoN7pbF3Ri5FFPTBK3PTkur2LMFJi1DA0k
- o5tesBh/h1NImAty93KlTFaQabP3LGjlyYa2y+PXT458anjXhH7PYevb9R4t8toJ9CIC4kZ+9
- aGMQuH5tHeM6P6qwGFtjMM/5OUWZ188Ap32NZOpQHHQhzpjL1HtY+ApAOCuiZnFKJaFA00Opi
- rjDMiqaDikHYqoxsUIwNq4Cbsm847YsylGC+tiPIDrbv3e/ZfLkWsr4/FafZlQnIArn3mz4cg
- PjY6nvGr1UtkL7yKu2fA2CTgU1jczVG5qfj7KOX1oHauWtmV9gEiBeU+EtuWbmpDX+5g1goh5
- UkFcDi0v6Ar855c6NsWM2Lv4lJrPhENfZN9b06I2qcxmzReDbDpM77v9WPiA+IkP4KgaVs+W4
- gTEBpsacOs7y4K8t6A2ua3XGWUdJr/pfEl3oFW77TfJN/yfUgs0rlm33Rv1ZEAJi2n/rUM00y
- DzcECiDUOBw2AoKGRhPHou0vl8BJxGztD1LdMzPa/QLqyd6v0CNkCj2IuIZPsFE41JC+K223h
- Z4hmnaRpQWT43l0er0VpjTQCzsfuyGR1W6XZ4RZEO/RkOR0YJXr8YY8NvvaCnRiJa5eWzNiD0
- J0sdVqmz8f/RWmmNSckcciimVLb93jbRyOufvrMB5Yp5H/8DjqJijhqU3Eu3kz/IxeFHJwNkb
- kJPNAZ2V0kPJ+X/f3w0a6uB88WLK6R1t8svCm/TJeOCpNTIx6whA2FS9+n/BOY+DV+aGj+sdN
- 7yD9Kwomp+XMmp5CC06ahKUOR8R7rvXX6P2ZkfUASEu8E=
+UI-OutboundReport: notjunk:1;M01:P0:WLKWUYisdM4=;2yNj/laS7SIY5FYvJFi4MhOmvxZ
+ pHFbD0J1kye994bqbqLhdCTnBHW8Ug5JybvfzVUSlvhHAACTecoQE51xKKnV5hpKkUhCo8yLr
+ /EvJ6VglOAgdSAY02WiKyUBPuOArNFiBamR/Fukdo2XJTgsXt550Q9Uu3s0mVOwxlXCMnWMns
+ Fn7g+nMUVDwZg2peIk913PvjXMFh4d9Lkvh3kvC90QEiN4qogLfcOyB8IyykJPV3DQeeXp5hf
+ +MrDjTpn28aqOi4W0rgu+IoyVD3neDdXwidld0Di4C2B0Xjeof79KSNCRhE6HCopzETXFL3/P
+ Eq20+VJdDS4NGHO7dtKR96RqKlqckwmu3AywKAhNuZLL3xf4qG/GG7lFzucn1PmOwB9qzuDQ0
+ T83E1gkoEctHd2TIp9iZslkwtRvZoLEaBVqlMchJ2WhOacIxu0B7j2GBH/lqButUW3kxkamyr
+ QKLpEtwiYtP4mMfbOjHeKNuT587VBOcJ0soGtjcr5abLWdDOKEep1at+A6hNDrbBSP1f6/IBo
+ BK+2+hzwJ3piZW/Yn1eaXBx6/3MBI0Lr+ftdHokUiS61Mp+GLxSd3NlP9E5Ud6tWQlNEOE+TO
+ 3A3+h1iPb9qNj+J4fjqMCG2p0nA6l58zMiSBfI4P0CjndwksOOuTcigJ6T1hzsfD+NMuWWKR6
+ sAOmiaHvt7qnuiw6srIxEdbhvlRklDpq1Rv8Lrce6Ts8Z8qBYDnh7sqT0QOx+5KI9Lsu5iX3q
+ 5le4iVFFC4QhG4eqQ5l+1SnoJ0wgVAVlJ5k6YKhwZo8jzqS56dXAir9zu5tn+DGzJFsWUTgbd
+ rbwM2pncFYXiGznL6foV5OhA==
 
-On 24.10.24 21:46, Dragan Milivojevi=C4=87 wrote:
+Resending with another address, since the other one is
+hard-blocked / censored by kernel.org mail server.
 
-> How about your hat off to the people in the Donbas,
-> ~12K of them that had died from Ukrainian artillery fire,
-> that were under imminent threat of being overrun by
-> the Ukrainian forces in February 2022? Are you going
-> to scream about Russian propaganda when I link
-> the OSCE reports about a 10 fold increase in attacks
-> at that same time?
-
-Let's also add the Serbia. The one that had been attacked by the North
-Atlantic Terror Organisation under the pretext of allged "ethnical
-cleansing". One day before NATO (including Germany, btw) started it's
-war of aggression, the German military intelligence said: "there's
-*STILL* *NO SIGN* of ethnical cleansing done by the Serbs".
-
-Have been developers / maintainers coming from NATO countries been
-banned from the kernel ? And have critics been hard-banned on the
-Linux project's mail servers for just criticising the leadership ?
-(that happened to me few days agao - let that sink in: a maintianer
-being blocked from mailing to any Linux maillist nor individuals !)
-
-The best thing we, the FOSS community, can do is STAY OUT of those
-conflicts, no matter what. Otherwise FOSS becomes POSS - politware,
-exactly what now happened to Linux.
-
-
-=2D-mtx
+On 30.10.24 15:33, Enrico Weigelt, metux IT consult wrote:
+> On 24.10.24 20:19, Hantong Chen wrote:
+>
+>> What LF and Linus done will inevitably create a climate of fear where
+>> contributors and maintainers from the *Countries of Particular Concern*
+>> feels endangered.
+>
+> And it's getting worse:
+>
+> They're now blocking mail traffic on kernel.org, even from maintainers.
+> (my whole company is hard-marked as "spam"). Anything @kernel.org -
+> lists as well as invidual inboxes.
+>
+> Still in the process of compiling evidence report. Anybody out there
+> who's affected too, let me know - will be added to the report.
+>
+> I wonder when this one will be blocked, too. (I've still got many more
+> left).
+>
+>> This is clearly NOT what contributors truly want. People from around
+>> the world
+>> once firmly believed that Linux was a free and open-source project.
+>> However,
+>> Greg's commit and Linus' response deeply disappoint them.
+>
+> Indeed. The trust that had been bulit up in decades is now finally
+> destroyed - just by a few mails.
+>
+> Linux has been turned into POSS, politware.
+>
+>> Open-source projects might be international, but the people or
+>> organizations
+>> controlling them are not. This is the source of concern and
+>> disappointment.
+>
+> That's why those projects should never depend on just a few individuals
+> or organisations in one specific country.
+>
+>
+>
+> --mtx
+>
 
