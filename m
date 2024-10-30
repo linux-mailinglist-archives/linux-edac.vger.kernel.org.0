@@ -1,211 +1,275 @@
-Return-Path: <linux-edac+bounces-2345-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2346-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D58D19B642A
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 14:33:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 229629B6543
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 15:08:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94CE72820C8
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 13:32:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 463191C2091B
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Oct 2024 14:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B4D1E47BC;
-	Wed, 30 Oct 2024 13:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B724B1EBFFD;
+	Wed, 30 Oct 2024 14:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="kQk9UYHB"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="vgaX79LA"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2050.outbound.protection.outlook.com [40.107.223.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5455F3FB31;
-	Wed, 30 Oct 2024 13:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730295177; cv=none; b=b3Gyyajsyn1EtS2ZsT6FWqH4+vcFYLCn+xy+PStnkljRqT2o2JfTItXC+vqYrdXNIAuIM0C+fTGL8HdVXF8sUb6A37+12BbLo1/MqvGp3kB1Fd8TfTcQ/HwidNz+uPDOkHZIEhypWbXhV8f86IUMqv8gJ1NR0j7Kwm3K4na5Qtc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730295177; c=relaxed/simple;
-	bh=JuJGGbUyMfw/WGeLkAnhDnD/P9fXPIrb7LuOlDybwzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IJcOEpWEgtqw3O2xmdLS0BPhdedkYrZpgKnGiV0rfUAtvW1ajajXQzuAPIJf4YY2vU3DU7m6Ttxzqv7pqNHlDo2DH5GRp2nP5Qq7Vqo6iFvnV/lBJd1eWtDGlFmDM3XyuzTitcUSHuGriCJlRuCqla6GnXt54+n9dLu1t0goUHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=kQk9UYHB; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 20CBA40E0191;
-	Wed, 30 Oct 2024 13:32:52 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 1k9kVbCppEif; Wed, 30 Oct 2024 13:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730295166; bh=uisbDX9mYhfxWZr7rzArxjasxG+HKkFeR2Cbs8jZP4s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kQk9UYHBBlGORP2bFWpYk15SniW7fkrukGEhBEUcCcM6yaUeRsarxslwrlPa7/6Xo
-	 3ZrSd4YF40hdWgNwPxS/7ZmQ5DIGK69AP2FvvbI1NKvz74SJxeUKWXBqBQQnfCfO26
-	 Jh1cCn8tn5aDWP2VUNInYw6MYGWX/BhuA1CI+q+IMSZ4Itgp9EK58E0gMYD9bcqvRw
-	 +koejIV3t5jWXvdQSXVpGqsdvStfzljhfslGr7ACUqQm1QTwmGKb4PfU6QP4RhbdEY
-	 hob+bBqbEJWkyKEVzHaZtUQFoXeGznflNnW1IJE/cKWQnQNWd2Z4UgFecurgpNH0FW
-	 lEhBrfz1eYz9icN0VdNy17VKqLbGpSutd9r/239nFT+kYo1h/ijjE6gi3byRUnOOn+
-	 YfoMWNLMRTeTprYwWLwvoXwhfYVi2avfQqEYgidQVsYTMMYIqccpEENAqZCkRMAQAg
-	 /5f8744cfUZ1uHMJc4dpdOS4P4ep7ttpOtmPqdGyeGLoSiahFqft20U+vCfAftRaqm
-	 lwCU/sYJSiATbL9S4MYbhZeRv576XeMfXWZ1p/KiGEixkOjaP0a8SLe2N091S3scDn
-	 f8ozxNYsYlJzECX0Qmav0b90sHD0opakIP8/lszoeRD74lUDw/9XT7y1lZEaM9lFMG
-	 4ukX8c/wA4we7tN8WpITEOxc=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 955DE40E019C;
-	Wed, 30 Oct 2024 13:32:33 +0000 (UTC)
-Date: Wed, 30 Oct 2024 14:32:27 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Avadhut Naik <avadhut.naik@amd.com>
-Cc: x86@kernel.org, linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, qiuxu.zhuo@intel.com, tglx@linutronix.de,
-	mingo@redhat.com, rostedt@goodmis.org, mchehab@kernel.org,
-	yazen.ghannam@amd.com, john.allen@amd.com
-Subject: Re: [PATCH v7 1/5] x86/mce: Add wrapper for struct mce to export
- vendor specific info
-Message-ID: <20241030133227.GDZyI1a5rheucn86qc@fat_crate.local>
-References: <20241022194158.110073-1-avadhut.naik@amd.com>
- <20241022194158.110073-2-avadhut.naik@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778DB1E8852;
+	Wed, 30 Oct 2024 14:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730297298; cv=fail; b=GAavtmoF4Zx3yHVIhtJ3YDpcf57PIZzUWD9k8o9xFQj3oqvOxYIRgpy7d/3CHaWvRBPXNVtsSBKcuhBtetYXnxTycmPpUAiwcV7kwXTb+uuZqX3JG1glO2YI0vmy1SYD9IisiOb+OMxmo/jINv2p3ay4YZpRIhK0g+zRe855VYM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730297298; c=relaxed/simple;
+	bh=fKDT8m0Tpwde3XwQ9ai0smhInczbHkFSRalDiuKqWJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ZfB5sUbNSSt2LJ5W8N/Gsdm3ak5DEfyYcA1xUXSa7b8lRzMjN/cgZZOJoiXdhgvWSsxPjI+pwV5IFh7M50pVdRia8jamXfXpEZqSiO+dIAvXWFa1CA60NAKDFr3wfe1Z+TUWHxnPe2x8a28iWZr/gKGd4RnEqU4/t4O/VVAMXwA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=vgaX79LA; arc=fail smtp.client-ip=40.107.223.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=toZ2zyhbm+HTURdR799zx0vicCt3iXQg0iaWtQzZBBIdkxsxqkW56fthavy4UDfvW8V+OqZXwOQ1RyFiZ2veGy48Llrohyn12SIg7UqeJVlRsCF3aeWKtjYgvwRGqIjq+N6UxHypO0kgTIYGrD3T8ss+oEKTwsoVh+eLi3FUixX+BksYglyrjMjynmhzXHvxymGKRtghKmt5SfEA75sUroPNP1qOUtXsKJKOzDAZ3pclrGqUDaF/SkWOLzS+GHmKAqhwjIyRG+qIcFl1/k0+OlwaLlWo7wqrc6kErMDSRBOJhwTHBQq8rkO5s/NsRENCCCCoK7DRdTwb3bRxjDjejA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i1VGAIjtyOZj3l+Nm8c9yBiAlT/A1tIaKvR70BfaEoc=;
+ b=A8rGwcKh3kp+tXMslUiS8kSrmWPmB7u0JYPQEjEYLbNyttlOAebgyC0OSTLVCYKM5lLmrFrPeKnAoeDkbWkTqzMGu9ABD6j0pIjOZPbCpdBMJH60y0NDGTziK46816F+pIU1u2jgO6E9Tags9yBQjxqUZWHbzJ3d9CxiOXSmK3/+rjliJAEGsvpgTw2OVO0PzQdmVJHBLOGqFlxTJk98krG0vCQRAT8F4X6fj9+tWeu3blxRbjdaaZhwoCSjU/WbpMrwxHDLVyEgJJV6FTM5sM/kU/PpDYXfFrnP967jDCUAmvmhqbXsJ9sooYKt0ys6mqxUPHd+Tes+1R+KEA2mbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i1VGAIjtyOZj3l+Nm8c9yBiAlT/A1tIaKvR70BfaEoc=;
+ b=vgaX79LA96KzWX7zeND6mA2vFte/dd/Q88rKEo3lYQhRgYWbigIs0uaNOKQbkD4dWdK3czngXx6Pfdl11Yg12jbnKRq74wuDIbDBbLUgWhez9MpyIU9J8i2wbg9MyvxiN/LHH/rOFQvDGCDA03WRFuRCDI0ClH4vXA9snVpD+9A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ DS0PR12MB8816.namprd12.prod.outlook.com (2603:10b6:8:14f::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.32; Wed, 30 Oct 2024 14:08:11 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%5]) with mapi id 15.20.8093.023; Wed, 30 Oct 2024
+ 14:08:11 +0000
+Date: Wed, 30 Oct 2024 10:08:00 -0400
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: mark.rutland@arm.com, catalin.marinas@arm.com, mingo@redhat.com,
+	robin.murphy@arm.com, Jonathan.Cameron@huawei.com, bp@alien8.de,
+	rafael@kernel.org, wangkefeng.wang@huawei.com,
+	tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
+	linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com,
+	tongtiangen@huawei.com, gregkh@linuxfoundation.org, will@kernel.org,
+	jarkko@kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+	linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
+	ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
+	baolin.wang@linux.alibaba.com, tglx@linutronix.de,
+	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
+	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
+	zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v15 1/3] ACPI: APEI: send SIGBUS to current task if
+ synchronous memory error not recovered
+Message-ID: <20241030140800.GA1288714@yaz-khff2.amd.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+ <20241028081142.66028-2-xueshuai@linux.alibaba.com>
+ <20241029204848.GA1229628@yaz-khff2.amd.com>
+ <d62d775e-08e3-4a2d-88a8-437a4c04ebd3@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d62d775e-08e3-4a2d-88a8-437a4c04ebd3@linux.alibaba.com>
+X-ClientProxiedBy: MN2PR08CA0020.namprd08.prod.outlook.com
+ (2603:10b6:208:239::25) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241022194158.110073-2-avadhut.naik@amd.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|DS0PR12MB8816:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef0abb20-2aea-46de-1f2a-08dcf8ec49b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?U0hyeVpreFpxZkV4YnI4ZVdIdlBoVjE5dWNVUUd4UFhUYmlYcGNtMWtjOXBu?=
+ =?utf-8?B?QlZLTU5zWnlscmYwNlA0a3RzbG9PcEpxcGtzYldITVhUSklQTHpvdGcvNXRD?=
+ =?utf-8?B?Rm5WOFJKZm1vWDJLQS92S0ZIeUMwN1Y4ZXNMVXhWZW9xMnhFakRpTDY4VWsz?=
+ =?utf-8?B?UFEwR2s1SmhuL3hWSWc0VzdFMlR0WXNYUUZ4ZnRLY0ZoS0pqcFJ1eENGZGM4?=
+ =?utf-8?B?eVBDaVp2cXN6OWJCVnptRUpkdVRUNFZzNHZ5TnR0MmhQaTZRUkprVmpSVG16?=
+ =?utf-8?B?UDNlWUM1UW1ZYjRNS1N4aW9NZjdiMmxKWERrVVJiSWY1MXczUENMZGUzWURX?=
+ =?utf-8?B?cnlCbzg4eEM5TGNGUDlkU2V5ekNjRHFtdHdXMlYrd2lqdE9tTWJZNTlxUmJ4?=
+ =?utf-8?B?K0V3NGtZYjExbGpzaTNGc2JHMmluVnRNeTJDb1dpVW9uUnIvKzZQdHBHUDlN?=
+ =?utf-8?B?YjFQRnFaeUdSTm1ZZlhKMDVLMHdjYURoaTZyeDRGYml1c3hDUjVYbG11NHg0?=
+ =?utf-8?B?aXVhRnlyTjI0TllxNS9CWXAwQ3U3a1daMXFOeXk2TStYNUg1d0NpNTFQQS9S?=
+ =?utf-8?B?bUlLVkc0bXRkdTI3TUJZL1ZNcW1OKzdJY3JvZlQxVDMrd3Q2dHdQeGZjZUMy?=
+ =?utf-8?B?VUxMdW1VWjk5K2hOdklta1pIZkk2eHE0enViSnhHRk4xNFhOMERDcHMzSm80?=
+ =?utf-8?B?S0VndGlzWVdEVjNFUWZZcmZ0bUFiaW5iSS9yZVRGaFc3R3Q1emRkUUVvWk5U?=
+ =?utf-8?B?TngwenhDV0M3UU1lUVM4bHhRSlFQV09CbmRLU1o0RjhFNW54cGxxejM1cG45?=
+ =?utf-8?B?STJ5VWtQeUJrbHpaR0FrUXJlaXdvRnA4Zzd5TEtZK0xydll1ZkM2eVdtbXZv?=
+ =?utf-8?B?R0UxOGk5UGVlaFBJQzFtOUdLdUJCSysrS1BtRkMwT01tOEJZanNwMjlQZENW?=
+ =?utf-8?B?QU1YSzVRTGYzQkNwalJ4NkIxenlTYnhLUFdpcnQrMXk3ZWFhS25za2dZbkFN?=
+ =?utf-8?B?ZGhuTHRyWkJ1bGdWeXhnZ1lYRmpEWWFLVytQUXpnbDBiMWQzV2lmRnhnUlJ0?=
+ =?utf-8?B?Y0Y2SkZ2djE3NW1OdnJuVHRsNDB0Vmk0WjJtRkt1TlJEM1FLdjRZVXZ5cFlT?=
+ =?utf-8?B?Zk9ZZ3RDeE9WV2VlWU9VRktxYTYvK2xuak9GcjM3RWtORmloRFprQnovWVVX?=
+ =?utf-8?B?RllqaENtMnd0TUYrTDdqUFpIaWFaYTRWZVZZVGlKeGIxc0hMRkt1YmtmWCsw?=
+ =?utf-8?B?YUgxdzFmaVY4SUFzOVVxbkdheno4Z2g4Wng1T0hSN0V5L3cxb3RtWXNzQU9G?=
+ =?utf-8?B?RWJVbVRCTUhQNXpnQnRHY1dPcllWU0ZralNkQ3oxTlZ6WEd5YW1wRzI5bVNH?=
+ =?utf-8?B?K1JsNkdRYmVYS1dXWXFzOU1tSlFyRFk3ejdRVVdrUlZzVjV0dnVBZUt1NGtN?=
+ =?utf-8?B?N2g1NHBER3EvQUM1MGRoeC9IajVwdXFTS05CYXp5eFRNUndtbDdYVDUrdGFD?=
+ =?utf-8?B?RitTcVloYkVVeDBxclZFRlV2czlVWnAzRDlvcStrcWdQb2ZvYzFzbFc0WEFU?=
+ =?utf-8?B?QWRsaVhWcjNUWC9tcS9mQmZjd0lVWjl0VEwzYjZvdXhkcXY1aEVSMWtPdWow?=
+ =?utf-8?B?RUNBWDRYM0FFN3I5eUYvSUdoTFFpanFLc2lpZ3UxcUJSZlBvWThoTXVjdnZG?=
+ =?utf-8?B?a01mSGRuV28yV1BLUXdGaGJCOE83RkNrTVV2NzdrNTNaVlV2b3FJMFBraEo5?=
+ =?utf-8?Q?ryPLrBnCm5gtuDVrj9iUxBoNp8B3D+twMKE+N6G?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ckxCeEhmM2FVOWZyTk9Kc1I5ek9hK0E0ZHB2V1p5cytmYkJCaDlFMUpzT3ZE?=
+ =?utf-8?B?MEgzSmY4Yk4xei96OFpKSzlud1F0UTJJZG5lUEo3Vmx5a2czVWtjbitDV25U?=
+ =?utf-8?B?UTNsS09ZR3pLWktweUUrQUJvRzBtWkx1YWlRazJEcXdodEtWdEZLNFlha1ZE?=
+ =?utf-8?B?Y0RRSWE0U1NuSGdFb3dSYitOUU1selB2MHBtclpjNTlOem1mcjY2U3k0d1VN?=
+ =?utf-8?B?WmpHUlVrTVZ4RTZhRjR0c0cxdThndzJ4elZzRmlsYlRva29SMEtLSG82b2lo?=
+ =?utf-8?B?WmpNYVJoU2VqNUd2R3JteFNRdFpxWFdmQmY1d0FXUWU2a3pNektjTVFzbEhy?=
+ =?utf-8?B?dmdORE1XS3laL25tT2tXL0pnekNLSFFFM0wvZUEzaXlxZ2E1cGhQN3dkcDlZ?=
+ =?utf-8?B?OWVmcFpXRTRabVZOeVlEUXFwVVVIZTVtWG1zY0lhaW5DQVNsc0RhalVuN2Zj?=
+ =?utf-8?B?d2YrQys5Nkx1L1VPd3hSQTlvc2pqODA5TGNZWk9FcElxZ3pKSzFnWGpKTzRH?=
+ =?utf-8?B?WDFnK09zZzJIT3RFZ1ZFSjh1QmNhTDJhZ25zcjRVUjFMOFZYOTgva3JBK1ht?=
+ =?utf-8?B?d0lybWdJOGsvend3UnNKcVkrdk5LZlkyT0JaVmVsbDNtODdzN3JSd1QyR1h3?=
+ =?utf-8?B?WVd2UTBnN1lXcGJGQWFhR0xIS2tGMmV4aHp1ZkZqZkZESVhiYkQ1eklKaFJX?=
+ =?utf-8?B?Ulc0OWVWV0ZPbVI3VWFWaGtGdExEN21LTWczQ3k4ZVd3NTFMTEtnc3ZNdzVM?=
+ =?utf-8?B?eXFaRzZmdUNoWjMzeVo4MGJLRm56T3ZacVBYQm4rM0NHRGVpb2Vhb2FucWtS?=
+ =?utf-8?B?bkpaWVNYMnpzbG1EQzRVb0tMYWVxODQ2ZVJtWkE2eXZtaWRxcmg1MmhlejhX?=
+ =?utf-8?B?c2hyQVBnSFdSZE8ySUZ5cHNVVVZSellJcGlYcDRPZzFyZU40dWpmVm9LS1ZL?=
+ =?utf-8?B?bWpPc2xjVmxlbUFweFgxWHp4RUZpQkxVUlJOc0llelFOZzNoczJUTjFnUUwv?=
+ =?utf-8?B?YXpCWFFWWE55bWpTMHo2VWd2QXBySXpTNlBCTmtoWGVBbnJhKzZ0RkJMNXRE?=
+ =?utf-8?B?bUczNGRaTGJERGJLVW5UQzZaOUQ4VVJKQ1lueURGZzhrL1JCandVcnJPTExE?=
+ =?utf-8?B?OENxcHdCMURIMFpPN3R2dUJuWUplZk0vM3cvUUthbDcyNUEvcldYbE1hQmYz?=
+ =?utf-8?B?cysycFgwZTVwUWxxSkFHdDJ0SzFuWGszRzA4THpySitXT1p5VFlJc05FZWgx?=
+ =?utf-8?B?bC9XRHA5QWN0ZnpzcDlya1A1K3dMZmFzbmRtME9LYVl1NFEyUDRYZkducm5z?=
+ =?utf-8?B?ZEswWGNOTnNTT25oYk5RZlE2RHk1QjBJcVc1aFlMQlN0Yk93d0ZWajJ6T3Nn?=
+ =?utf-8?B?TDlzVFlzZUJzV2JETE03VURNWm5nT05sQjQzYVV4NTUzSXJrYzgxTUxrVG9U?=
+ =?utf-8?B?REVtRXJWWExUdEEwelJRUzE0Mm5PWHVwUmdNWXhjUHFISUJGVjFzYnR3UzZk?=
+ =?utf-8?B?MVVxUnZjWXQrTEFQQzg4UGVxU3JGWU04WGtVQkh6WWtWdDBVanpQZ3dxOXV6?=
+ =?utf-8?B?WkxxcXlmM282S1lMWHF2ZlV6Nk9BeVVSYWNGN3U2UmM3S1FHb3B3ZlA4UzZy?=
+ =?utf-8?B?WkV1Ynp6WkJwV04xOEJUOHhBZHNUYzFFWStHSnZOKzBnMjYvdGdZZUZzWjNp?=
+ =?utf-8?B?c3VZZnlYS0YyYk9SVWJxWTlOZFhXWmVtQnN2UUQ1dnNYOVQrUTQ3TjM2S0xo?=
+ =?utf-8?B?c2w3R0VHS2xWUWIxYTFHZ1JwY1ZNT0ZHRHd0MTM2cFJscnNEVitKYmJIeHBJ?=
+ =?utf-8?B?UmRJQlIwbjI0RHVwUEJUY1hBYkdnT3JsK1BVVFgzek5ibHBpSVI1MTlxcUtx?=
+ =?utf-8?B?RUxCWjdWbkF5Nm52NzRPdnllbzk2WnJLMG1yaXhFekU4dFhGSnBnWXJ6VDZr?=
+ =?utf-8?B?ZTc3dWJtd0dTQVVvcElvT01oMzBFc3luOW1oSGhFM3I3dTBBSjhLYUdGd2ln?=
+ =?utf-8?B?Y0Q4N0NqdDVJWkMwdXNZczlkUlNuQW9DWHFwWU9GaGlIcElza0Y1ZHZPR1FR?=
+ =?utf-8?B?UkxBQTA3TFcyZTJkRWhJV3dlcitkeDNKTElNTHZEQndBcXJQcnFWUi8xQmFD?=
+ =?utf-8?Q?5i1poYGyveHeesXm1IkwQ4E82?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef0abb20-2aea-46de-1f2a-08dcf8ec49b9
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2024 14:08:11.4775
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yZp+NSdVs/GedZXTDi98F1PKZFSV08S2HFI0vJ3Eu6lno+K8KNB78WfiVjx6U+VccaBqEdYwY05X0+YlikEOCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8816
 
-On Tue, Oct 22, 2024 at 07:36:27PM +0000, Avadhut Naik wrote:
-> Currently, exporting new additional machine check error information
-> involves adding new fields for the same at the end of the struct mce.
-> This additional information can then be consumed through mcelog or
-> tracepoint.
+On Wed, Oct 30, 2024 at 09:54:00AM +0800, Shuai Xue wrote:
 > 
-> However, as new MSRs are being added (and will be added in the future)
-> by CPU vendors on their newer CPUs with additional machine check error
-> information to be exported, the size of struct mce will balloon on some
-> CPUs, unnecessarily, since those fields are vendor-specific. Moreover,
-> different CPU vendors may export the additional information in varying
-> sizes.
 > 
-> The problem particularly intensifies since struct mce is exposed to
-> userspace as part of UAPI. It's bloating through vendor-specific data
-> should be avoided to limit the information being sent out to userspace.
+> 在 2024/10/30 04:48, Yazen Ghannam 写道:
+> > On Mon, Oct 28, 2024 at 04:11:40PM +0800, Shuai Xue wrote:
+> > > Synchronous error was detected as a result of user-space process accessing
+> > > a 2-bit uncorrected error. The CPU will take a synchronous error exception
+> > > such as Synchronous External Abort (SEA) on Arm64. The kernel will queue a
+> > > memory_failure() work which poisons the related page, unmaps the page, and
+> > > then sends a SIGBUS to the process, so that a system wide panic can be
+> > > avoided.
+> > > 
+> > > However, no memory_failure() work will be queued when abnormal synchronous
+> > > errors occur. These errors can include situations such as invalid PA,
+> > > unexpected severity, no memory failure config support, invalid GUID
+> > > section, etc. In such case, the user-space process will trigger SEA again.
+> > > This loop can potentially exceed the platform firmware threshold or even
+> > > trigger a kernel hard lockup, leading to a system reboot.
+> > > 
+> > > Fix it by performing a force kill if no memory_failure() work is queued
+> > > for synchronous errors.
+> > > 
+> > > Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > ---
+> > >   drivers/acpi/apei/ghes.c | 10 ++++++++++
+> > >   1 file changed, 10 insertions(+)
+> > > 
+> > > diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> > > index ada93cfde9ba..f2ee28c44d7a 100644
+> > > --- a/drivers/acpi/apei/ghes.c
+> > > +++ b/drivers/acpi/apei/ghes.c
+> > > @@ -801,6 +801,16 @@ static bool ghes_do_proc(struct ghes *ghes,
+> > >   		}
+> > >   	}
+> > > +	/*
+> > > +	 * If no memory failure work is queued for abnormal synchronous
+> > > +	 * errors, do a force kill.
+> > > +	 */
+> > > +	if (sync && !queued) {
+> > > +		pr_err("%s:%d: hardware memory corruption (SIGBUS)\n",
+> > > +			current->comm, task_pid_nr(current));
+> > 
+> > I think it would help to include the GHES_PFX to indicate where this
+> > message is coming from. The pr_fmt() macro could also be introduced
+> > instead.
 > 
-> Add a new structure mce_hw_err to wrap the existing struct mce. The same
-> will prevent its ballooning since vendor-specifc data, if any, can now be
+> Yes, GHES_PFX is a effective prefix and will be consistent to other message
+> in GHES driver. Will add it in next version.
+> 
+> What do you mean about pr_fmt()?
 
-Unknown word [vendor-specifc] in commit message.
+This can be used to set a prefix for an entire section of code. The
+pr_*() macros will pick it up without needing to include a prefix for
+each call.
 
-Please introduce a spellchecker into your patch creation workflow.
+This is described in "Documentation/core-api/printk-basics.rst".
 
-Also:
+> 
+> > 
+> > Also, you may want to include the HW_ERR prefix. Not all kernel messages
+> > related to hardware errors have this prefix today. But maybe that should
+> > be changed so there is more consistent messaging.
+> > 
+> 
+> Do we really need a HW_ERR prefix? The other case which use HW_ERR prefix
+> are for hardware registers. The messages which send SIGBUS does
+> not include HW_ERR, e.g. in kill_proc(), kill_procs().
+> 
+>     pr_err("%#lx: Sending SIGBUS to %s:%d due to hardware memory
+> corruption\n",...
+>     pr_err("%#lx: forcibly killing %s:%d because of failure to unmap
+> corrupted page\n",...
+> 
+>
 
-The tip-tree preferred ordering of variable declarations at the
-beginning of a function is reverse fir tree order::
+Correct, HW_ERR isn't used there. My interpretation is that it can be
+used whenever an event is due to a hardware error (real or simulated).
+This is a very clear message to a user.
 
-	struct long_struct_name *descriptive_name;
-	unsigned long foo, bar;
-	unsigned int tmp;
-	int ret;
+It may be redundant in some cases (like here where the message already
+says "hardware memory corruption"). But I think it would be go to use it
+anyway for consistency.
 
-The above is faster to parse than the reverse ordering::
+I think other relevant places in the kernel should also be updated. But
+that is beyond this patch, and I don't expect it to be done here and
+now.
 
-	int ret;
-	unsigned int tmp;
-	unsigned long foo, bar;
-	struct long_struct_name *descriptive_name;
-
-And even more so than random ordering::
-
-	unsigned long foo, bar;
-	int ret;
-	struct long_struct_name *descriptive_name;
-	unsigned int tmp;
-
-diff ontop of yours:
-
----
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 3611366d56b7..28e28b69d84d 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1030,11 +1030,11 @@ static noinstr int mce_timed_out(u64 *t, const char *msg)
-  */
- static void mce_reign(void)
- {
--	int cpu;
- 	struct mce_hw_err *err = NULL;
- 	struct mce *m = NULL;
- 	int global_worst = 0;
- 	char *msg = NULL;
-+	int cpu;
- 
- 	/*
- 	 * This CPU is the Monarch and the other CPUs have run
-@@ -1291,8 +1291,8 @@ __mc_scan_banks(struct mce_hw_err *err, struct pt_regs *regs,
- {
- 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
- 	struct mca_config *cfg = &mca_cfg;
--	struct mce *m = &err->m;
- 	int severity, i, taint = 0;
-+	struct mce *m = &err->m;
- 
- 	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
- 		arch___clear_bit(i, toclear);
-@@ -1419,8 +1419,8 @@ static void kill_me_never(struct callback_head *cb)
- 
- static void queue_task_work(struct mce_hw_err *err, char *msg, void (*func)(struct callback_head *))
- {
--	struct mce *m = &err->m;
- 	int count = ++current->mce_count;
-+	struct mce *m = &err->m;
- 
- 	/* First call, save all the details */
- 	if (count == 1) {
-diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
-index 504d89724ecd..d0be6dda0c14 100644
---- a/arch/x86/kernel/cpu/mce/genpool.c
-+++ b/arch/x86/kernel/cpu/mce/genpool.c
-@@ -73,9 +73,9 @@ struct llist_node *mce_gen_pool_prepare_records(void)
- 
- void mce_gen_pool_process(struct work_struct *__unused)
- {
--	struct mce *mce;
--	struct llist_node *head;
- 	struct mce_evt_llist *node, *tmp;
-+	struct llist_node *head;
-+	struct mce *mce;
- 
- 	head = llist_del_all(&mce_event_llist);
- 	if (!head)
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index c65a5c4e2f22..313fe682db33 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -502,9 +502,9 @@ static void prepare_msrs(void *info)
- 
- static void do_inject(void)
- {
-+	unsigned int cpu = i_mce.extcpu;
- 	struct mce_hw_err err;
- 	u64 mcg_status = 0;
--	unsigned int cpu = i_mce.extcpu;
- 	u8 b = i_mce.bank;
- 
- 	i_mce.tsc = rdtsc_ordered();
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Yazen
 
