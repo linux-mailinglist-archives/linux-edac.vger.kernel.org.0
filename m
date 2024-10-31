@@ -1,95 +1,80 @@
-Return-Path: <linux-edac+bounces-2374-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2375-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 900759B78C4
-	for <lists+linux-edac@lfdr.de>; Thu, 31 Oct 2024 11:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C3B39B7976
+	for <lists+linux-edac@lfdr.de>; Thu, 31 Oct 2024 12:15:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B462B1C21A5A
-	for <lists+linux-edac@lfdr.de>; Thu, 31 Oct 2024 10:37:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E2DA1C20873
+	for <lists+linux-edac@lfdr.de>; Thu, 31 Oct 2024 11:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5FB199246;
-	Thu, 31 Oct 2024 10:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B487F1993B2;
+	Thu, 31 Oct 2024 11:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="jGyx9i3X"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="gnnaMnss"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBDA198E83;
-	Thu, 31 Oct 2024 10:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E0413DB99;
+	Thu, 31 Oct 2024 11:15:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730371034; cv=none; b=eqETrnEb/kc9uR2y+50iLgbOYSAaiRLdjAfLz/IX2H+AhfM1i5J2N+zH1w6G1vgo1M0poaUkfoTNCH3Alxq3NZ+RtR9DNSKTEkJJKmB3boBfX21MfLCVViCUCeOac2cDQasP+ijlpz3GGoF4WCbCVf0JUV1t4RsujfFk47GTjpM=
+	t=1730373341; cv=none; b=o9hSUrEGB5VRMHHrBfA9649p76iFs0v7pr/DLcHA5yWjSY1CNnKvkq0GMLWbYnUuTs9tmIfiRUgyzosNRg8I1bU2Hr/QX1SCPVIT43GMPJUJ7um/6e2SmZMB+fqSqMoOLNhJUc1lRAwflHVLHrHU1MekTuleLAxZm/RO70IjgYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730371034; c=relaxed/simple;
-	bh=W62nW6o6roRgMZ6ptHYz8UTa1gqyavSGW73urSteeZQ=;
+	s=arc-20240116; t=1730373341; c=relaxed/simple;
+	bh=cnxrShd8egeuggH2MUREYrryY7UEfBJB45aOUcY6el8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jTSDnTNt6XSl7XSave/He3OgJFUsPaorbfXIJYaWoqQkYv8EQpfsh+YL9+EN6muGkTKOiEZXvSKc+ys31sJDNQm5D0r6N7UUlpsHTzIhhCS+uaXf9jiRrwhhONts8eRFZafkTGXQISEa1byvv1F8vTiwaHkgX76JZsV2Iga+8Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=jGyx9i3X; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=dk1LOaJH9P8nmmzdojqAivsWxpCDkpEeviPDdahcT7PtfnXf+s9v/Urmc8iY9W5ry55fnooanX4pndg74E4JiRzxb4kkddQWithCKH+xIoxCjSo9xnYRA0CopqLDrGtiKb4l0otFjxJaV1Fd0rrJNHlU3uPoxM65VzjSQl6fAR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=gnnaMnss; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AA6C940E015F;
-	Thu, 31 Oct 2024 10:37:09 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id C5DE640E0028;
+	Thu, 31 Oct 2024 11:15:36 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id m9VOAnQDlvFp; Thu, 31 Oct 2024 10:37:06 +0000 (UTC)
+	with ESMTP id 0ve0OhI2yM8A; Thu, 31 Oct 2024 11:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730371026; bh=Zoic+05z1WWqcWTpj/byU2dnEVpHhQVwPQpp8yGsvFM=;
+	t=1730373331; bh=byN1H8y1tWnzMdNx6+Ui4XRnmn6lYDerMw/dcXPaHWQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jGyx9i3XA2zDPhvjxO8Pbo8QDnQo4jKeeV35GnVMO1YQFXHF2R1NhW9SD5QGNX9jA
-	 b0ISQVdT2RbepTV/FBA2HmhiTutn8ivVBMePT0pCy9TbIMcq80iqP6sWRNFjLiiLO8
-	 i9S32o8IFOsYzEilbQoTppu3G7pTPwTysIpz3V0MRCXClOFbkY99TAuHIuPrNbVxXi
-	 hytf7Gw6Cb6YDouFXPnVp6j44ifzJ+s7Ihytu7HjoCesvLy2jxFJXX+HiGAvoJAWrn
-	 V9hKCjYK8ZWaDEwLpXQLu/lulEXVMGgDAOsdtnbBNqiAaNGWx5ti0+rVu1IAui9Mn8
-	 xKuEvij5Ig0Gr/U3G69wrAIwRE+iau68JrW1GPO5LrFzkxFbhPGN0VKTD5B1/jMr/d
-	 9F/9dywo4Ljij1FqpAOBfHfbPw37OWueSaGv3SlN/pE0ldWABD9Yy7rrYmbBlntnys
-	 FQolom8Wzqxrlr0tY3IS1HppV699YWFV8eGPiDTS5TE3VW2FywfijGVQAyjJKbHJAJ
-	 vYSYs29Mo/IOBZiP586sL22mEwnsMubEEc/eGlA+hHysDZirYst50a+02ElHc01BPY
-	 EslxuwMrfaaUkGdUNCr7Fqnxuo5u3G9IFFs3XEFzfA8zDfiJKwZBON6y93xhJ5eYJs
-	 V/AwSV+dPWWLU/9VKtbX3d4A=
+	b=gnnaMnss/gqMVuzKyF/vEPXnZB3W6/YiiCck0PeUI3JrUmGbyqY1exwX8G/RICIFh
+	 jk8PEj2ySPWJ3ot4k53erWEQ+gFILwrCff6EzsQvNUQmpO3YEOV6fjnRmjqR+coEcd
+	 zxN/yg2A9HrLZMQYjnk4l+8ykkL70X58gEM8W1bVO4TA2AWnmFwn67mrnb1lFkzQNv
+	 O+trjiUorhg5tGI5tONB+9THEOLTdsbmM2JYuXygLrwz2GCxy3m2HO/wyGD/kwnSzq
+	 I1l45rh9QUMOOvmpQ+nkgZ0F1zeaeQfu/BP1pzxbq4oSh49YxkUmoG6U/dLPR2bDl5
+	 o44NeaFL61ExXZk9PoawHejYBvGFnfA7g458WozFqix0ydhTYOPuGMN+B791MNfC7i
+	 CqGxXhcpe5i1UpAKo0TYHzk+TNW7M8YGMdsh4lLXkuDUddbYQYD0faE6nLFSunHr9x
+	 fqIcoRpJBVOfbQyV8FTI4xWNUBPsms0esAiwgIXXeE0d8ZkUzXSMsA8VwWumVcgQpm
+	 O1TGQ7WeUwFPIoVXKZTI8S4lQfqSOVFkIy7egcD2p1y+O1awNj1ph330s8VWlR8V32
+	 lvIpFG49uCkOFaXzO6iDdJrq235u1RqxtUBriJaYeta2hzz05hx3OjRCOzJOJREfKl
+	 iNymN09MeAsoPPVuHNUaBN70=
 Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DDDBA40E019C;
-	Thu, 31 Oct 2024 10:36:43 +0000 (UTC)
-Date: Thu, 31 Oct 2024 11:36:42 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6CFF340E021C;
+	Thu, 31 Oct 2024 11:15:10 +0000 (UTC)
+Date: Thu, 31 Oct 2024 12:15:05 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Luck, Tony" <tony.luck@intel.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"avadhut.naik@amd.com" <avadhut.naik@amd.com>,
-	"john.allen@amd.com" <john.allen@amd.com>,
-	"mario.limonciello@amd.com" <mario.limonciello@amd.com>,
-	"bhelgaas@google.com" <bhelgaas@google.com>,
-	"Shyam-sundar.S-k@amd.com" <Shyam-sundar.S-k@amd.com>,
-	"richard.gong@amd.com" <richard.gong@amd.com>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@roeck-us.net" <linux@roeck-us.net>,
-	"clemens@ladisch.de" <clemens@ladisch.de>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>,
-	"ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
-	"naveenkrishna.chatradhi@amd.com" <naveenkrishna.chatradhi@amd.com>,
-	"carlos.bilbao.osdev@gmail.com" <carlos.bilbao.osdev@gmail.com>
-Subject: Re: [PATCH 02/16] x86/amd_nb: Restrict init function to AMD-based
- systems
-Message-ID: <20241031103642.GCZyNdumQSdi76CA3w@fat_crate.local>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com,
+	Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com,
+	linux@roeck-us.net, clemens@ladisch.de, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
+Subject: Re: [PATCH 05/16] x86/amd_nb: Simplify function 4 search
+Message-ID: <20241031111505.GHZyNmuQ79m-enfCgI@fat_crate.local>
 References: <20241023172150.659002-1-yazen.ghannam@amd.com>
- <20241023172150.659002-3-yazen.ghannam@amd.com>
- <CY8PR11MB71340D079448528FD548F73289552@CY8PR11MB7134.namprd11.prod.outlook.com>
+ <20241023172150.659002-6-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -98,13 +83,23 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CY8PR11MB71340D079448528FD548F73289552@CY8PR11MB7134.namprd11.prod.outlook.com>
+In-Reply-To: <20241023172150.659002-6-yazen.ghannam@amd.com>
 
-On Thu, Oct 31, 2024 at 08:09:14AM +0000, Zhuo, Qiuxu wrote:
-> This function could fail and return an error.
-> Is an early return with an error code needed if this function fails?
+On Wed, Oct 23, 2024 at 05:21:39PM +0000, Yazen Ghannam wrote:
+> Use the newly added helper function to look up a CPU/Node function to
+> find "function 4" devices.
+> 
+> This avoids the need to regularly add new PCI IDs for basic discovery.
+> The unique PCI IDs are still useful in case of quirks or functional
+> changes. And they should be used only in such a manner.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> ---
+>  arch/x86/include/asm/amd_nb.h |  1 +
+>  arch/x86/kernel/amd_nb.c      | 66 ++---------------------------------
+>  2 files changed, 4 insertions(+), 63 deletions(-)
 
-No, grep for amd_northbridges.num checks in the code.
+Nice cleanup.
 
 -- 
 Regards/Gruss,
