@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-2401-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2402-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E5BF9B8DB2
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2024 10:21:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 826E09B8DB7
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2024 10:22:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F8B31F246AA
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2024 09:21:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42477284686
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2024 09:22:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B5291A073A;
-	Fri,  1 Nov 2024 09:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 199EB1A0AFB;
+	Fri,  1 Nov 2024 09:18:43 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856761A01B0;
-	Fri,  1 Nov 2024 09:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1E319F437;
+	Fri,  1 Nov 2024 09:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730452719; cv=none; b=ilixsMoWktvq4naelSTkFTfizdv8SA2oox520WKT/8oX+Gb4UHWzO7PzC8X0S3+QEp1MvQetdsfkF2xED90V+mnunPiqkF65ghsOIDWppu6h8SnjJyCU7ek/Kk1UrUvk0/s8ArtrCZz+VlNoTtmqYrou2Ic8XhE0Ar68w3MogOk=
+	t=1730452723; cv=none; b=as9lvzbc5D8oJBsv1D5omYDjhVhpj/KhS4CtQFQiUFzMAfzAfeJ0sltUmj+gCfwOLdznxxtdcD8wPoqVT2qt+asK8ZJJJzbTcbqTif45F0acojsljLvTZLv7wd7zPXv40SKqlfnpSxNoTwXYGcxNPxUx/FAMYWPe05/vP78bR0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730452719; c=relaxed/simple;
-	bh=fIO2unomTFkQZxfdeEloOpni6nApyuINGZYfZOibEOo=;
+	s=arc-20240116; t=1730452723; c=relaxed/simple;
+	bh=miqxuLoHl2YVbn6sbhF0k2wOoQVI5CsTr2GZNUX9TS0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O8aeQ+hxy64urvXAggiRaWQchrHuPkGyjE1TM78p0K7nZ+Q/GQZLEaqB+Js4nAw5IkmyfVejTL7Vira8zzbqjXIyqgtUhssXQk3L33T/WAX/sqHX5bT8Sh0wCvmJZ6fjaQA06obH8tfjn5DB7s0sj0ZNnteuNHVIQ11MhPJOQps=
+	 MIME-Version:Content-Type; b=WEwJ4xHR2UlXU7teNjk5pXOHSinx7++0SSqWCXysleGS2obaoNeetMIYF/IQVrPg7L0jH9sp7OUIFTYg8ix2FwBb+/URwua6l4Ln20jB5fVbHJ4ySl7QBoljfXYJ2lQ1+yiTuBryNP1VwxQguMiSwae4gh8AwOJlbxUgivNgzXI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XfwFt498Xz6K7N4;
-	Fri,  1 Nov 2024 17:16:02 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XfwFx6jqsz6K7MW;
+	Fri,  1 Nov 2024 17:16:05 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id 84B281404FC;
-	Fri,  1 Nov 2024 17:18:33 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id D669114058E;
+	Fri,  1 Nov 2024 17:18:36 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.171.129) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 1 Nov 2024 10:18:31 +0100
+ 15.1.2507.39; Fri, 1 Nov 2024 10:18:34 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
@@ -60,9 +60,9 @@ CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v15 14/15] cxl/memfeature: Add CXL memory device memory sparing control feature
-Date: Fri, 1 Nov 2024 09:17:32 +0000
-Message-ID: <20241101091735.1465-15-shiju.jose@huawei.com>
+Subject: [PATCH v15 15/15] EDAC: Add documentation for RAS feature control
+Date: Fri, 1 Nov 2024 09:17:33 +0000
+Message-ID: <20241101091735.1465-16-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20241101091735.1465-1-shiju.jose@huawei.com>
 References: <20241101091735.1465-1-shiju.jose@huawei.com>
@@ -79,605 +79,781 @@ X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Memory sparing is defined as a repair function that replaces a portion of
-memory with a portion of functional memory at that same DPA. The subclasses
-for this operation vary in terms of the scope of the sparing being
-performed. The cacheline sparing subclass refers to a sparing action that
-can replace a full cacheline. Row sparing is provided as an alternative to
-PPR sparing functions and its scope is that of a single DDR row. Bank
-sparing allows an entire bank to be replaced. Rank sparing is defined as
-an operation in which an entire DDR rank is replaced.
-
-Memory sparing maintenance operations may be supported by CXL devices
-that implement CXL.mem protocol. A sparing maintenance operation requests
-the CXL device to perform a repair operation on its media.
-For example, a CXL device with DRAM components that support memory sparing
-features may implement sparing maintenance operations.
-
-The host may issue a query command by setting query resources flag in the
-input payload (CXL spec 3.1 Table 8-105) to determine availability of
-sparing resources for a given address. In response to a query request,
-the device shall report the resource availability by producing the memory
-sparing event record (CXL spec 3.1 Table 8-48) in which the Channel, Rank,
-Nibble Mask, Bank Group, Bank, Row, Column, Sub-Channel fields are a copy
-of the values specified in the request.
-
-During the execution of a sparing maintenance operation, a CXL memory
-device:
-- May or may not retain data
-- May or may not be able to process CXL.mem requests correctly.
-These CXL memory device capabilities are specified by restriction flags
-in the memory sparing feature readable attributes.
-
-When a CXL device identifies a failure on a memory component, the device
-may inform the host about the need for a memory sparing maintenance
-operation by using an Event Record, where the maintenance needed flag may
-set. The event record specifies some of the DPA, Channel, Rank, Nibble
-Mask, Bank Group, Bank, Row, Column, Sub-Channel fields that should be
-repaired. The userspace tool requests for maintenance operation if the
-number of corrected error reported on a CXL.mem media exceeds error
-threshold.
-
-CXL spec 3.1 section 8.2.9.7.1.4 describes the device's memory sparing
-maintenance operation feature.
-
-CXL spec 3.1 section 8.2.9.7.2.3 describes the memory sparing feature
-discovery and configuration.
-
-Add support for controlling CXL memory device memory sparing feature.
-Register with EDAC driver, which gets the memory repair attr descriptors
-from the EDAC memory repair driver and exposes sysfs repair control
-attributes for memory sparing to the userspace. For example CXL memory
-sparing control for the CXL mem0 device is exposed in
-/sys/bus/edac/devices/cxl_mem0/mem_repairX/
-
-Use case
-========
-1. CXL device identifies a failure in a memory component, report to
-   userspace in a CXL generic/DRAM trace event.
-2. Rasdaemon process the trace event and issue query request in sysfs to
-check resources available for memory sparing if either of the following
-conditions met.
- - number of corrected error reported on a CXL.mem media exceeds error
-threshold
- - maintenance needed flag set in the event record.
-3. CXL device shall report the resource availability by producing the
-memory sparing event record in which the channel, rank, nibble mask, bank
-Group, bank, row, column, sub-channel fields are a copy of the values
-specified in the request. The query resource command shall return error
-(invalid input) if the controller does not support reporting resource is
-available.
-4. Rasdaemon process the memory sparing trace event and issue repair
-request for memory sparing.
-
-Kernel CXL driver shall report memory sparing event record to the userspace
-with the resource availability in order rasdaemon to process the event
-record and issue a repair request in sysfs for the memory sparing operation
-in the CXL device.
-
-Tested for memory sparing control feature with
-   "hw/cxl: Add memory sparing control feature"
-   Repository: "https://gitlab.com/shiju.jose/qemu.git"
-   Branch: cxl-ras-features-2024-10-24
+Add Documentation for expansion of EDAC for controlling RAS features.
 
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- drivers/cxl/core/memfeature.c | 485 +++++++++++++++++++++++++++++++++-
- 1 file changed, 484 insertions(+), 1 deletion(-)
+ Documentation/edac/features.rst      | 102 +++++++
+ Documentation/edac/index.rst         |  12 +
+ Documentation/edac/memory_repair.rst | 230 ++++++++++++++++
+ Documentation/edac/scrub.rst         | 393 +++++++++++++++++++++++++++
+ 4 files changed, 737 insertions(+)
+ create mode 100644 Documentation/edac/features.rst
+ create mode 100644 Documentation/edac/index.rst
+ create mode 100644 Documentation/edac/memory_repair.rst
+ create mode 100644 Documentation/edac/scrub.rst
 
-diff --git a/drivers/cxl/core/memfeature.c b/drivers/cxl/core/memfeature.c
-index 9238ad10766e..071c9e1c17df 100644
---- a/drivers/cxl/core/memfeature.c
-+++ b/drivers/cxl/core/memfeature.c
-@@ -18,7 +18,7 @@
- #include <cxlmem.h>
- #include "core.h"
- 
--#define CXL_DEV_NUM_RAS_FEATURES	3
-+#define CXL_DEV_NUM_RAS_FEATURES	7
- #define CXL_DEV_HOUR_IN_SECS	3600
- 
- #define CXL_SCRUB_NAME_LEN	128
-@@ -938,9 +938,454 @@ static const struct edac_mem_repair_ops cxl_sppr_ops = {
- 	.do_repair = cxl_do_ppr,
- };
- 
-+/* CXL memory sparing control definitions */
-+/* See CXL rev 3.1 @8.2.9.7.2 Table 8-110 Maintenance Operation */
-+#define CXL_CACHELINE_SPARING_UUID UUID_INIT(0x96C33386, 0x91dd, 0x44c7, 0x9e, 0xcb,    \
-+		  0xfd, 0xaf, 0x65, 0x03, 0xba, 0xc4)
-+#define CXL_ROW_SPARING_UUID UUID_INIT(0x450ebf67, 0xb135, 0x4f97, 0xa4, 0x98,    \
-+		  0xc2, 0xd5, 0x7f, 0x27, 0x9b, 0xed)
-+#define CXL_BANK_SPARING_UUID UUID_INIT(0x78b79636, 0x90ac, 0x4b64, 0xa4, 0xef,    \
-+		  0xfa, 0xac, 0x5d, 0x18, 0xa8, 0x63)
-+#define CXL_RANK_SPARING_UUID  UUID_INIT(0x34dbaff5, 0x0552, 0x4281, 0x8f, 0x76,    \
-+		  0xda, 0x0b, 0x5e, 0x7a, 0x76, 0xa7)
+diff --git a/Documentation/edac/features.rst b/Documentation/edac/features.rst
+new file mode 100644
+index 000000000000..5e855952136b
+--- /dev/null
++++ b/Documentation/edac/features.rst
+@@ -0,0 +1,102 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+enum cxl_mem_sparing_granularity {
-+	CXL_MEM_SPARING_CACHELINE,
-+	CXL_MEM_SPARING_ROW,
-+	CXL_MEM_SPARING_BANK,
-+	CXL_MEM_SPARING_RANK,
-+	CXL_MEM_SPARING_MAX
-+};
++============================================
++Augmenting EDAC for controlling RAS features
++============================================
 +
-+struct cxl_mem_sparing_context {
-+	uuid_t repair_uuid;
-+	u8 instance;
-+	u16 get_feat_size;
-+	u16 set_feat_size;
-+	u8 get_version;
-+	u8 set_version;
-+	u16 set_effects;
-+	struct cxl_memdev *cxlmd;
-+	enum edac_mem_repair_type repair_type;
-+	enum edac_mem_repair_persist_mode persist_mode;
-+	enum cxl_mem_sparing_granularity granularity;
-+	bool dpa_support;
-+	u64 dpa;
-+	u8 channel;
-+	u8 rank;
-+	u32 nibble_mask;
-+	u8 bank_group;
-+	u8 bank;
-+	u32 row;
-+	u16 column;
-+	u8 sub_channel;
-+};
++Copyright (c) 2024 HiSilicon Limited.
 +
-+struct cxl_memdev_sparing_params {
-+	u8 op_class;
-+	u8 op_subclass;
-+	bool cap_safe_when_in_use;
-+	bool cap_hard_sparing;
-+	bool cap_soft_sparing;
-+};
++:Author:   Shiju Jose <shiju.jose@huawei.com>
++:License:  The GNU Free Documentation License, Version 1.2
++          (dual licensed under the GPL v2)
++:Original Reviewers:
 +
-+enum cxl_mem_sparing_param_type {
-+	CXL_MEM_SPARING_PARAM_DO_QUERY,
-+	CXL_MEM_SPARING_PARAM_DO_REPAIR,
-+};
++- Written for: 6.13
 +
-+#define CXL_MEMDEV_SPARING_RD_CAP_SAFE_IN_USE_MASK BIT(0)
-+#define CXL_MEMDEV_SPARING_RD_CAP_HARD_SPARING_MASK BIT(1)
-+#define CXL_MEMDEV_SPARING_RD_CAP_SOFT_SPARING_MASK BIT(2)
++Introduction
++------------
++The expansion of EDAC for controlling RAS features and exposing features
++control attributes to userspace via sysfs. Some Examples:
 +
-+#define CXL_MEMDEV_SPARING_WR_DEVICE_INITIATED_MASK BIT(0)
++* Scrub control
 +
-+#define CXL_MEMDEV_SPARING_QUERY_RESOURCE_FLAG BIT(0)
-+#define CXL_MEMDEV_SET_HARD_SPARING_FLAG BIT(1)
-+#define CXL_MEMDEV_SPARING_SUB_CHANNEL_VALID_FLAG BIT(2)
-+#define CXL_MEMDEV_SPARING_NIB_MASK_VALID_FLAG BIT(3)
++* Error Check Scrub (ECS) control
 +
-+/* See CXL rev 3.1 @8.2.9.7.2.3 Table 8-119 Memory Sparing Feature Readable Attributes */
-+struct cxl_memdev_sparing_rd_attrs {
-+	struct cxl_memdev_repair_rd_attrs_hdr hdr;
-+	u8 rsvd;
-+	__le16 restriction_flags;
-+}  __packed;
++* ACPI RAS2 features
 +
-+/* See CXL rev 3.1 @8.2.9.7.2.3 Table 8-120 Memory Sparing Feature Writable Attributes */
-+struct cxl_memdev_sparing_wr_attrs {
-+	__le16 op_mode;
-+}  __packed;
++* Post Package Repair (PPR) control
 +
-+/* See CXL rev 3.1 @8.2.9.7.1.4 Table 8-105 Memory Sparing Input Payload */
-+struct cxl_memdev_sparing_in_payload {
-+	u8 flags;
-+	u8 channel;
-+	u8 rank;
-+	u8 nibble_mask[3];
-+	u8 bank_group;
-+	u8 bank;
-+	u8 row[3];
-+	u16 column;
-+	u8 sub_channel;
-+}  __packed;
++* Memory Sparing Repair control etc.
 +
-+static int cxl_mem_sparing_get_attrs(struct device *dev,
-+				     struct cxl_mem_sparing_context *cxl_sparing_ctx,
-+				     struct cxl_memdev_sparing_params *params)
-+{
-+	struct cxl_memdev *cxlmd = cxl_sparing_ctx->cxlmd;
-+	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-+	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
-+	size_t rd_data_size = sizeof(struct cxl_memdev_sparing_rd_attrs);
-+	size_t data_size;
-+	struct cxl_memdev_sparing_rd_attrs *rd_attrs __free(kfree) =
-+				kmalloc(rd_data_size, GFP_KERNEL);
-+	if (!rd_attrs)
-+		return -ENOMEM;
++High level design is illustrated in the following diagram::
 +
-+	data_size = cxl_get_feature(mds, cxl_sparing_ctx->repair_uuid,
-+				    CXL_GET_FEAT_SEL_CURRENT_VALUE,
-+				    rd_attrs, rd_data_size);
-+	if (!data_size)
-+		return -EIO;
++         _______________________________________________
++        |   Userspace - Rasdaemon                       |
++        |  _____________                                |
++        | | RAS CXL mem |      _______________          |
++        | |error handler|---->|               |         |
++        | |_____________|     | RAS dynamic   |         |
++        |  _____________      | scrub, memory |         |
++        | | RAS memory  |---->| repair control|         |
++        | |error handler|     |_______________|         |
++        | |_____________|          |                    |
++        |__________________________|____________________|
++                                   |
++                                   |
++    _______________________________|______________________________
++   |     Kernel EDAC extension for | controlling RAS Features     |
++   | ______________________________|____________________________  |
++   || EDAC Core          Sysfs EDAC| Bus                        | |
++   ||    __________________________|_________     _____________ | |
++   ||   |/sys/bus/edac/devices/<dev>/scrubX/ |   | EDAC device || |
++   ||   |/sys/bus/edac/devices/<dev>/ecsX/   |<->| EDAC MC     || |
++   ||   |/sys/bus/edac/devices/<dev>/repairX |   | EDAC sysfs  || |
++   ||   |____________________________________|   |_____________|| |
++   ||                           EDAC|Bus                        | |
++   ||                               |                           | |
++   ||    __________ Get feature     |      Get feature          | |
++   ||   |          |desc   _________|______ desc  __________    | |
++   ||   |EDAC scrub|<-----| EDAC device    |     |          |   | |
++   ||   |__________|      | driver- RAS    |---->| EDAC mem |   | |
++   ||    __________       | feature control|     | repair   |   | |
++   ||   |          |<-----|________________|     |__________|   | |
++   ||   |EDAC ECS  |    Register RAS|features                   | |
++   ||   |__________|                |                           | |
++   ||         ______________________|_____________              | |
++   ||_________|_______________|__________________|______________| |
++   |   _______|____    _______|_______       ____|__________      |
++   |  |            |  | CXL mem driver|     | Client driver |     |
++   |  | ACPI RAS2  |  | scrub, ECS,   |     | memory repair |     |
++   |  | driver     |  | sparing, PPR  |     | features      |     |
++   |  |____________|  |_______________|     |_______________|     |
++   |        |                 |                    |              |
++   |________|_________________|____________________|______________|
++            |                 |                    |
++    ________|_________________|____________________|______________
++   |     ___|_________________|____________________|_______       |
++   |    |                                                  |      |
++   |    |            Platform HW and Firmware              |      |
++   |    |__________________________________________________|      |
++   |______________________________________________________________|
 +
-+	params->op_class = rd_attrs->hdr.op_class;
-+	params->op_subclass = rd_attrs->hdr.op_subclass;
-+	params->cap_safe_when_in_use = FIELD_GET(CXL_MEMDEV_SPARING_RD_CAP_SAFE_IN_USE_MASK,
-+						 rd_attrs->restriction_flags) ^ 1;
-+	params->cap_hard_sparing = FIELD_GET(CXL_MEMDEV_SPARING_RD_CAP_HARD_SPARING_MASK,
-+					     rd_attrs->restriction_flags);
-+	params->cap_soft_sparing = FIELD_GET(CXL_MEMDEV_SPARING_RD_CAP_SOFT_SPARING_MASK,
-+					     rd_attrs->restriction_flags);
 +
-+	return 0;
-+}
++1. EDAC Features components - Create feature specific descriptors.
++For example, EDAC scrub, EDAC ECS, EDAC memory repair in the above
++diagram.
 +
-+static int cxl_mem_do_sparing_op(struct device *dev,
-+				 struct cxl_mem_sparing_context *cxl_sparing_ctx,
-+				 struct cxl_memdev_sparing_params *rd_params,
-+				 enum cxl_mem_sparing_param_type param_type)
-+{
-+	struct cxl_memdev_sparing_in_payload sparing_pi;
-+	struct cxl_memdev *cxlmd = cxl_sparing_ctx->cxlmd;
-+	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-+	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlds);
-+	int ret;
++2. EDAC device driver for controlling RAS Features - Get feature's attribute
++descriptors from EDAC RAS feature component and registers device's RAS
++features with EDAC bus and exposes the features control attributes via
++the sysfs EDAC bus. For example, /sys/bus/edac/devices/<dev-name>/<feature>X/
 +
-+	if (!rd_params->cap_safe_when_in_use && cxl_sparing_ctx->dpa) {
-+		/* Check if DPA is mapped */
-+		if (cxl_dpa_to_region(cxlmd, cxl_sparing_ctx->dpa)) {
-+			dev_err(dev, "CXL can't do sparing as DPA is mapped\n");
-+			return -EBUSY;
-+		}
-+	}
-+	memset(&sparing_pi, 0, sizeof(sparing_pi));
-+	if (param_type == CXL_MEM_SPARING_PARAM_DO_QUERY) {
-+		sparing_pi.flags = CXL_MEMDEV_SPARING_QUERY_RESOURCE_FLAG;
-+	} else {
-+		sparing_pi.flags =
-+			FIELD_PREP(CXL_MEMDEV_SPARING_QUERY_RESOURCE_FLAG, 0);
-+		/* Do need set hard sparing, sub-channel & nb mask flags for query? */
-+		if (cxl_sparing_ctx->persist_mode == EDAC_MEM_REPAIR_HARD)
-+			sparing_pi.flags |=
-+				FIELD_PREP(CXL_MEMDEV_SET_HARD_SPARING_FLAG, 1);
-+		if (cxl_sparing_ctx->sub_channel)
-+			sparing_pi.flags |=
-+				FIELD_PREP(CXL_MEMDEV_SPARING_SUB_CHANNEL_VALID_FLAG, 1);
-+		if (cxl_sparing_ctx->nibble_mask)
-+			sparing_pi.flags |=
-+				FIELD_PREP(CXL_MEMDEV_SPARING_NIB_MASK_VALID_FLAG, 1);
-+	}
-+	/* Common atts for all memory sparing types */
-+	sparing_pi.channel = cxl_sparing_ctx->channel;
-+	sparing_pi.rank = cxl_sparing_ctx->rank;
-+	*((u32 *)&sparing_pi.nibble_mask[0]) = cxl_sparing_ctx->nibble_mask;
++3. RAS dynamic feature controller - Userspace sample modules in rasdaemon for
++dynamic scrub/repair control to issue scrubbing/repair when excess number
++of corrected memory errors are reported in a short span of time.
 +
-+	if (cxl_sparing_ctx->repair_type == EDAC_TYPE_CACHELINE_MEM_SPARING ||
-+	    cxl_sparing_ctx->repair_type == EDAC_TYPE_ROW_MEM_SPARING ||
-+	    cxl_sparing_ctx->repair_type == EDAC_TYPE_BANK_MEM_SPARING) {
-+		sparing_pi.bank_group = cxl_sparing_ctx->bank_group;
-+		sparing_pi.bank = cxl_sparing_ctx->bank;
-+	}
-+	if (cxl_sparing_ctx->repair_type == EDAC_TYPE_CACHELINE_MEM_SPARING ||
-+	    cxl_sparing_ctx->repair_type == EDAC_TYPE_ROW_MEM_SPARING)
-+		*((u32 *)&sparing_pi.row[0]) = cxl_sparing_ctx->row;
-+	if (cxl_sparing_ctx->repair_type == EDAC_TYPE_CACHELINE_MEM_SPARING) {
-+		sparing_pi.column = cxl_sparing_ctx->column;
-+		sparing_pi.sub_channel = cxl_sparing_ctx->sub_channel;
-+	}
++RAS features
++------------
++1. Memory Scrub
++Memory scrub features are documented in `Documentation/edac/scrub.rst`.
 +
-+	ret = cxl_do_maintenance(mds, rd_params->op_class, rd_params->op_subclass,
-+				 &sparing_pi, sizeof(sparing_pi));
-+	if (ret) {
-+		dev_err(dev, "CXL do mem sparing failed ret=%d\n", ret);
-+		cxl_sparing_ctx->dpa = 0;
-+		cxl_sparing_ctx->nibble_mask = 0;
-+		cxl_sparing_ctx->bank_group = 0;
-+		cxl_sparing_ctx->bank = 0;
-+		cxl_sparing_ctx->rank = 0;
-+		cxl_sparing_ctx->row = 0;
-+		cxl_sparing_ctx->column = 0;
-+		cxl_sparing_ctx->channel = 0;
-+		cxl_sparing_ctx->sub_channel = 0;
-+		return ret;
-+	}
++2. Memory Repair
++Memory repair features are documented in `Documentation/edac/memory_repair.rst`.
+diff --git a/Documentation/edac/index.rst b/Documentation/edac/index.rst
+new file mode 100644
+index 000000000000..d6778f4562dd
+--- /dev/null
++++ b/Documentation/edac/index.rst
+@@ -0,0 +1,12 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+	return 0;
-+}
++==============
++EDAC Subsystem
++==============
 +
-+static int cxl_mem_sparing_set_attrs(struct device *dev,
-+				     struct cxl_mem_sparing_context *ctx,
-+				     enum cxl_mem_sparing_param_type param_type)
-+{
-+	struct cxl_memdev_sparing_params rd_params;
-+	int ret;
++.. toctree::
++   :maxdepth: 1
 +
-+	ret = cxl_mem_sparing_get_attrs(dev, ctx, &rd_params);
-+	if (ret) {
-+		dev_err(dev, "Get cxlmemdev sparing params failed ret=%d\n",
-+			ret);
-+		return ret;
-+	}
++   features
++   memory_repair
++   scrub
+diff --git a/Documentation/edac/memory_repair.rst b/Documentation/edac/memory_repair.rst
+new file mode 100644
+index 000000000000..ad7f869e0b15
+--- /dev/null
++++ b/Documentation/edac/memory_repair.rst
+@@ -0,0 +1,230 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+	switch (param_type) {
-+	case CXL_MEM_SPARING_PARAM_DO_QUERY:
-+	case CXL_MEM_SPARING_PARAM_DO_REPAIR:
-+		ret = down_read_interruptible(&cxl_region_rwsem);
-+		if (ret)
-+			return ret;
-+		ret = down_read_interruptible(&cxl_dpa_rwsem);
-+		if (ret) {
-+			up_read(&cxl_region_rwsem);
-+			return ret;
-+		}
-+		ret = cxl_mem_do_sparing_op(dev, ctx, &rd_params, param_type);
-+		up_read(&cxl_dpa_rwsem);
-+		up_read(&cxl_region_rwsem);
-+		return ret;
-+	default:
-+		return -EINVAL;
-+	}
-+}
++==========================
++EDAC Memory Repair Control
++==========================
 +
-+#define CXL_SPARING_GET_ATTR(attrib, data_type)					\
-+static int cxl_mem_sparing_get_##attrib(struct device *dev, void *drv_data,	\
-+					data_type *val)				\
-+{										\
-+	struct cxl_mem_sparing_context *ctx = drv_data;				\
-+										\
-+	*val = ctx->attrib;							\
-+										\
-+	return 0;								\
-+}
-+CXL_SPARING_GET_ATTR(repair_type, u32)
-+CXL_SPARING_GET_ATTR(persist_mode, u32)
-+CXL_SPARING_GET_ATTR(dpa_support, u32)
-+CXL_SPARING_GET_ATTR(dpa, u64)
-+CXL_SPARING_GET_ATTR(nibble_mask, u64)
-+CXL_SPARING_GET_ATTR(bank_group, u32)
-+CXL_SPARING_GET_ATTR(bank, u32)
-+CXL_SPARING_GET_ATTR(rank, u32)
-+CXL_SPARING_GET_ATTR(row, u64)
-+CXL_SPARING_GET_ATTR(column, u32)
-+CXL_SPARING_GET_ATTR(channel, u32)
-+CXL_SPARING_GET_ATTR(sub_channel, u32)
++Copyright (c) 2024 HiSilicon Limited.
 +
-+#define CXL_SPARING_SET_ATTR(attrib, data_type)					\
-+static int cxl_mem_sparing_set_##attrib(struct device *dev, void *drv_data,	\
-+					data_type val)				\
-+{										\
-+	struct cxl_mem_sparing_context *ctx = drv_data;				\
-+										\
-+	ctx->attrib = val;							\
-+										\
-+	return 0;								\
-+}
-+CXL_SPARING_SET_ATTR(nibble_mask, u64)
-+CXL_SPARING_SET_ATTR(bank_group, u32)
-+CXL_SPARING_SET_ATTR(bank, u32)
-+CXL_SPARING_SET_ATTR(rank, u32)
-+CXL_SPARING_SET_ATTR(row, u64)
-+CXL_SPARING_SET_ATTR(column, u32)
-+CXL_SPARING_SET_ATTR(channel, u32)
-+CXL_SPARING_SET_ATTR(sub_channel, u32)
++:Author:   Shiju Jose <shiju.jose@huawei.com>
++:License:  The GNU Free Documentation License, Version 1.2
++          (dual licensed under the GPL v2)
++:Original Reviewers:
 +
-+static int cxl_mem_sparing_get_persist_mode_avail(struct device *dev, void *drv_data,
-+						  char *buf)
-+{
-+	struct cxl_mem_sparing_context *ctx = drv_data;
-+	struct cxl_memdev_sparing_params params;
-+	int ret;
++- Written for: 6.13
 +
-+	ret = cxl_mem_sparing_get_attrs(dev, ctx, &params);
-+	if (ret)
-+		return ret;
++Introduction
++------------
++Memory devices may support memory repair and maintenance operations to
++perform repairs on faulty memory media. Various types of memory repair
++features are available, such as Post Package Repair (PPR) and memory
++sparing.
 +
-+	if (params.cap_soft_sparing && params.cap_hard_sparing)
-+		return sysfs_emit(buf, "%u,%u\n", EDAC_MEM_REPAIR_SOFT, EDAC_MEM_REPAIR_HARD);
-+	else if (params.cap_soft_sparing)
-+		return sysfs_emit(buf, "%u\n", EDAC_MEM_REPAIR_SOFT);
-+	else if (params.cap_hard_sparing)
-+		return sysfs_emit(buf, "%u\n", EDAC_MEM_REPAIR_HARD);
-+	else
-+		return sysfs_emit(buf, "Not Supported\n");
-+}
++Post Package Repair(PPR)
++~~~~~~~~~~~~~~~~~~~~~~~~
++PPR maintenance operation requests the memory device to perform a repair
++operation on its media if supported. A memory device may support two types
++of PPR: Hard PPR (hPPR), for a permanent row repair and Soft PPR (sPPR),
++for a temporary row repair. sPPR is much faster than hPPR, but the repair
++is lost with a power cycle. During the execution of a PPR maintenance
++operation, a memory device, may or may not retain data and may or may not
++be able to process memory requests correctly. sPPR maintenance operation
++may be executed at runtime, if data is retained and memory requests are
++correctly processed. hPPR maintenance operation may be executed only at
++boot because data would not be retained. In CXL devices, sPPR and hPPR
++repair operations may be supported (CXL spec rev 3.1 sections 8.2.9.7.1.2
++and 8.2.9.7.1.3).
 +
-+static int cxl_mem_sparing_set_persist_mode(struct device *dev, void *drv_data, u32 persist_mode)
-+{
-+	struct cxl_mem_sparing_context *ctx = drv_data;
++Memory Sparing
++~~~~~~~~~~~~~~
++Memory sparing is defined as a repair function that replaces a portion of
++memory with a portion of functional memory at that same DPA. User space
++tool, e.g. rasdaemon, may request the sparing operation for a given
++address for which the uncorrectable error is reported. In CXL,
++(CXL spec 3.1 section 8.2.9.7.1.4) subclasses for sparing operation vary
++in terms of the scope of the sparing being performed. Cacheline sparing
++subclass refers to a sparing action that can replace a full cacheline.
++Row sparing is provided as an alternative to PPR sparing functions and its
++scope is that of a single DDR row. Bank sparing allows an entire bank to
++be replaced. Rank sparing is defined as an operation in which an entire
++DDR rank is replaced.
 +
-+	switch (persist_mode) {
-+	case EDAC_MEM_REPAIR_SOFT:
-+		ctx->persist_mode = EDAC_MEM_REPAIR_SOFT;
-+		return 0;
-+	case EDAC_MEM_REPAIR_HARD:
-+		ctx->persist_mode = EDAC_MEM_REPAIR_HARD;
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
++Use cases of generic memory repair features control
++---------------------------------------------------
 +
-+static int cxl_get_mem_sparing_safe_when_in_use(struct device *dev, void *drv_data,
-+						u32 *safe)
-+{
-+	struct cxl_mem_sparing_context *ctx = drv_data;
-+	struct cxl_memdev_sparing_params params;
-+	int ret;
++1. The Soft PPR (sPPR), Hard PPR (hPPR), and memory-sparing features share
++similar control interfaces. Therefore, there is a need for a standardized,
++generic sysfs repair control that is exposed to userspace and used by
++administrators, scripts, and tools.
 +
-+	ret = cxl_mem_sparing_get_attrs(dev, ctx, &params);
-+	if (ret)
-+		return ret;
++2. When a CXL device detects a failure in a memory component, it may inform
++the host of the need for a repair maintenance operation by using an event
++record where the "maintenance needed" flag is set. The event record
++specifies the DPA that requires repair. The kernel reports the corresponding
++CXL general media or DRAM trace event to userspace, and userspace tools
++(e.g., rasdaemon) initiate a repair maintenance operation in response to
++the device request using the sysfs repair control.
 +
-+	*safe = params.cap_safe_when_in_use;
++3. Userspace tools, such as rasdaemon, may request a PPR/sparing on a memory
++region when an uncorrected memory error or an excess of corrected memory
++errors is reported on that memory.
 +
-+	return 0;
-+}
++4. Multiple PPR/sparing instances may be present per memory device.
 +
-+static int cxl_mem_sparing_set_dpa(struct device *dev, void *drv_data, u64 dpa)
-+{
-+	struct cxl_mem_sparing_context *ctx = drv_data;
++The File System
++---------------
 +
-+	if (!dpa)
-+		return -EINVAL;
++The control attributes of a registered scrubber instance could be
++accessed in the
 +
-+	ctx->dpa = dpa;
++/sys/bus/edac/devices/<dev-name>/mem_repairX/
 +
-+	return 0;
-+}
++sysfs
++-----
 +
-+static int cxl_do_query_mem_sparing(struct device *dev, void *drv_data)
-+{
-+	struct cxl_mem_sparing_context *ctx = drv_data;
++Sysfs files are documented in
 +
-+	return cxl_mem_sparing_set_attrs(dev, ctx, CXL_MEM_SPARING_PARAM_DO_QUERY);
-+}
++`Documentation/ABI/testing/sysfs-edac-memory-repair`.
 +
-+static int cxl_do_mem_sparing(struct device *dev, void *drv_data)
-+{
-+	struct cxl_mem_sparing_context *ctx = drv_data;
++Example
++-------
 +
-+	return cxl_mem_sparing_set_attrs(dev, ctx, CXL_MEM_SPARING_PARAM_DO_REPAIR);
-+}
++The usage takes the form shown in this example:
 +
-+#define RANK_OPS \
-+	.get_repair_type = cxl_mem_sparing_get_repair_type, \
-+	.get_persist_mode_avail = cxl_mem_sparing_get_persist_mode_avail, \
-+	.get_persist_mode = cxl_mem_sparing_get_persist_mode, \
-+	.set_persist_mode = cxl_mem_sparing_set_persist_mode, \
-+	.get_repair_safe_when_in_use = cxl_get_mem_sparing_safe_when_in_use, \
-+	.get_dpa_support = cxl_mem_sparing_get_dpa_support, \
-+	.get_dpa = cxl_mem_sparing_get_dpa, \
-+	.set_dpa = cxl_mem_sparing_set_dpa, \
-+	.get_nibble_mask = cxl_mem_sparing_get_nibble_mask, \
-+	.set_nibble_mask = cxl_mem_sparing_set_nibble_mask, \
-+	.get_rank = cxl_mem_sparing_get_rank, \
-+	.set_rank = cxl_mem_sparing_set_rank, \
-+	.get_channel = cxl_mem_sparing_get_channel, \
-+	.set_channel = cxl_mem_sparing_set_channel, \
-+	.do_query = cxl_do_query_mem_sparing, \
-+	.do_repair = cxl_do_mem_sparing
++1. CXL memory device sPPR
 +
-+#define BANK_OPS \
-+	RANK_OPS, \
-+	.get_bank_group = cxl_mem_sparing_get_bank_group, \
-+	.set_bank_group = cxl_mem_sparing_set_bank_group, \
-+	.get_bank = cxl_mem_sparing_get_bank, \
-+	.set_bank = cxl_mem_sparing_set_bank
++# read capabilities
 +
-+#define ROW_OPS \
-+	BANK_OPS, \
-+	.get_row = cxl_mem_sparing_get_row, \
-+	.set_row = cxl_mem_sparing_set_row
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/dpa_support
 +
-+#define CACHELINE_OPS \
-+	ROW_OPS, \
-+	.get_column = cxl_mem_sparing_get_column, \
-+	.set_column = cxl_mem_sparing_set_column, \
-+	.get_sub_channel = cxl_mem_sparing_get_sub_channel, \
-+	.set_sub_channel = cxl_mem_sparing_set_sub_channel
++1
 +
-+static const struct edac_mem_repair_ops cxl_rank_sparing_ops = {
-+	RANK_OPS,
-+};
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/nibble_mask
 +
-+static const struct edac_mem_repair_ops cxl_bank_sparing_ops = {
-+	BANK_OPS,
-+};
++0x0
 +
-+static const struct edac_mem_repair_ops cxl_row_sparing_ops = {
-+	ROW_OPS,
-+};
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/persist_mode_avail
 +
-+static const struct edac_mem_repair_ops cxl_cacheline_sparing_ops = {
-+	CACHELINE_OPS,
-+};
++0
 +
-+struct cxl_mem_sparing_desc {
-+	const uuid_t repair_uuid;
-+	enum edac_mem_repair_type repair_type;
-+	enum edac_mem_repair_persist_mode persist_mode;
-+	enum cxl_mem_sparing_granularity granularity;
-+	const struct edac_mem_repair_ops *repair_ops;
-+};
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/persist_mode
 +
-+static const struct cxl_mem_sparing_desc mem_sparing_desc[] = {
-+	{
-+		.repair_uuid = CXL_CACHELINE_SPARING_UUID,
-+		.repair_type = EDAC_TYPE_CACHELINE_MEM_SPARING,
-+		.persist_mode = EDAC_MEM_REPAIR_SOFT,
-+		.granularity = CXL_MEM_SPARING_CACHELINE,
-+		.repair_ops = &cxl_cacheline_sparing_ops,
-+	},
-+	{
-+		.repair_uuid = CXL_ROW_SPARING_UUID,
-+		.repair_type = EDAC_TYPE_ROW_MEM_SPARING,
-+		.persist_mode = EDAC_MEM_REPAIR_SOFT,
-+		.granularity = CXL_MEM_SPARING_ROW,
-+		.repair_ops = &cxl_row_sparing_ops,
-+	},
-+	{
-+		.repair_uuid = CXL_BANK_SPARING_UUID,
-+		.repair_type = EDAC_TYPE_BANK_MEM_SPARING,
-+		.persist_mode = EDAC_MEM_REPAIR_SOFT,
-+		.granularity = CXL_MEM_SPARING_BANK,
-+		.repair_ops = &cxl_bank_sparing_ops,
-+	},
-+	{
-+		.repair_uuid = CXL_RANK_SPARING_UUID,
-+		.repair_type = EDAC_TYPE_RANK_MEM_SPARING,
-+		.persist_mode = EDAC_MEM_REPAIR_SOFT,
-+		.granularity = CXL_MEM_SPARING_RANK,
-+		.repair_ops = &cxl_rank_sparing_ops,
-+	},
-+};
++0
 +
- int cxl_mem_ras_features_init(struct cxl_memdev *cxlmd, struct cxl_region *cxlr)
- {
- 	struct edac_dev_feature ras_features[CXL_DEV_NUM_RAS_FEATURES];
-+	struct cxl_mem_sparing_context *cxl_sparing_ctx;
- 	struct cxl_patrol_scrub_context *cxl_ps_ctx;
- 	char cxl_dev_name[CXL_SCRUB_NAME_LEN];
- 	struct cxl_ppr_context *cxl_sppr_ctx;
-@@ -1081,6 +1526,44 @@ int cxl_mem_ras_features_init(struct cxl_memdev *cxlmd, struct cxl_region *cxlr)
- 	num_ras_features++;
- 
- feat_sppr_done:
-+	/* CXL memory sparing */
-+	for (i = 0; i < CXL_MEM_SPARING_MAX; i++) {
-+		rc = cxl_get_supported_feature_entry(mds, &mem_sparing_desc[i].repair_uuid,
-+						     &feat_entry);
-+		if (rc < 0)
-+			continue;
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/repair_type
 +
-+		if (!(feat_entry.attr_flags & CXL_FEAT_ENTRY_FLAG_CHANGABLE))
-+			continue;
++0
 +
-+		cxl_sparing_ctx = devm_kzalloc(&cxlmd->dev, sizeof(*cxl_sparing_ctx),
-+					       GFP_KERNEL);
-+		if (!cxl_sparing_ctx)
-+			goto feat_sparing_done;
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/repair_safe_when_in_use
 +
-+		*cxl_sparing_ctx = (struct cxl_mem_sparing_context) {
-+			.repair_uuid = mem_sparing_desc[i].repair_uuid,
-+			.get_feat_size = feat_entry.get_feat_size,
-+			.set_feat_size = feat_entry.set_feat_size,
-+			.get_version = feat_entry.get_feat_ver,
-+			.set_version = feat_entry.set_feat_ver,
-+			.set_effects = feat_entry.set_effects,
-+			.cxlmd = cxlmd,
-+			.repair_type = mem_sparing_desc[i].repair_type,
-+			.persist_mode = mem_sparing_desc[i].persist_mode,
-+			.granularity = mem_sparing_desc[i].granularity,
-+			.dpa_support = true,
-+			.instance = repair_inst++,
-+		};
-+		ras_features[num_ras_features].ft_type = RAS_FEAT_MEM_REPAIR;
-+		ras_features[num_ras_features].instance = cxl_sparing_ctx->instance;
-+		ras_features[num_ras_features].mem_repair_ops =
-+						mem_sparing_desc[i].repair_ops;
-+		ras_features[num_ras_features].ctx = cxl_sparing_ctx;
-+		num_ras_features++;
-+	}
++1
 +
-+feat_sparing_done:
- 	return edac_dev_register(&cxlmd->dev, cxl_dev_name, NULL,
- 				 num_ras_features, ras_features);
- }
++# set and readback attributes
++
++root@localhost:~# echo 0x8a2d > /sys/bus/edac/devices/cxl_mem0/mem_repair0/nibble_mask
++
++root@localhost:~# echo 0x300000 >  /sys/bus/edac/devices/cxl_mem0/mem_repair0/dpa
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/dpa
++
++0x300000
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/nibble_mask
++
++0x8a2d
++
++# issue repair operations
++
++# query and reapir return error if unsupported/failed.
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_mem0/mem_repair0/query
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_mem0/mem_repair0/repair
++
++1.2. CXL memory sparing
++
++# read capabilities
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/repair_type
++
++2
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/dpa_support
++
++1
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/persist_mode_avail
++
++0,1
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/persist_mode
++
++0
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/repair_safe_when_in_use
++
++1
++
++#set and readback attributes
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/bank_group
++
++root@localhost:~# echo 3 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/bank
++
++root@localhost:~# echo 2 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/channel
++
++root@localhost:~# echo  7 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/rank
++
++root@localhost:~# echo 0x4fb9 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/row
++
++root@localhost:~# echo 5 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/sub_channel
++
++root@localhost:~# echo 11 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/column
++
++root@localhost:~# echo 0x85c2 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/nibble_mask
++
++root@localhost:~# echo 0x700000 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/dpa
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/bank_group
++
++1
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/bank
++
++3
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/channel
++
++2
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/rank
++
++7
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/row
++
++0x4fb9
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/sub_channel
++
++5
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/column
++
++11
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/nibble_mask
++
++0x85c2
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/dpa
++
++0x700000
++
++# issue repair operations
++
++# query and repair return error if unsupported/failed.
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/query
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_mem0/mem_repair1/repair
+diff --git a/Documentation/edac/scrub.rst b/Documentation/edac/scrub.rst
+new file mode 100644
+index 000000000000..d316f98604ad
+--- /dev/null
++++ b/Documentation/edac/scrub.rst
+@@ -0,0 +1,393 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++===================
++EDAC Scrub Control
++===================
++
++Copyright (c) 2024 HiSilicon Limited.
++
++:Author:   Shiju Jose <shiju.jose@huawei.com>
++:License:  The GNU Free Documentation License, Version 1.2
++          (dual licensed under the GPL v2)
++:Original Reviewers:
++
++- Written for: 6.13
++
++Introduction
++------------
++Increasing DRAM size and cost have made memory subsystem reliability an
++important concern. These modules are used where potentially corrupted data
++could cause expensive or fatal issues. Memory errors are among the top
++hardware failures that cause server and workload crashes.
++
++Memory scrubbing is a feature where an ECC (Error-Correcting Code) engine
++reads data from each memory media location, corrects with an ECC if
++necessary and writes the corrected data back to the same memory media
++location.
++
++The memory DIMMs can be scrubbed at a configurable rate to detect
++uncorrected memory errors and attempt recovery from detected errors,
++providing the following benefits.
++
++* Proactively scrubbing memory DIMMs reduces the chance of a correctable error becoming uncorrectable.
++
++* When detected, uncorrected errors caught in unallocated memory pages are isolated and prevented from being allocated to an application or the OS.
++
++* This reduces the likelihood of software or hardware products encountering memory errors.
++
++There are 2 types of memory scrubbing:
++
++1. Background (patrol) scrubbing of the RAM while the RAM is otherwise
++idle.
++
++2. On-demand scrubbing for a specific address range or region of memory.
++
++Several types of interfaces to hardware memory scrubbers have been
++identified, such as CXL memory device patrol scrub, CXL DDR5 ECS, ACPI
++RAS2 memory scrubbing, and ACPI NVDIMM ARS (Address Range Scrub).
++
++The scrub control varies between different memory scrubbers. To allow
++for standard userspace tooling there is a need to present these controls
++with a standard ABI.
++
++The control mechanisms vary across different memory scrubbers. To enable
++standardized userspace tooling, there is a need to present these controls
++through a standardized ABI.
++
++Introduce a generic memory EDAC scrub control that allows users to manage
++underlying scrubbers in the system through a standardized sysfs scrub
++control interface. This common sysfs scrub control interface abstracts the
++management of various scrubbing functionalities into a unified set of
++functions.
++
++Use cases of common scrub control feature
++-----------------------------------------
++1. Several types of interfaces for hardware (HW) memory scrubbers have
++been identified, including the CXL memory device patrol scrub, CXL DDR5
++ECS, ACPI RAS2 memory scrubbing features, ACPI NVDIMM ARS (Address Range
++Scrub), and software-based memory scrubbers. Some of these scrubbers
++support control over patrol (background) scrubbing (e.g., ACPI RAS2, CXL)
++and/or on-demand scrubbing (e.g., ACPI RAS2, ACPI ARS). However, the scrub
++control interfaces vary between memory scrubbers, highlighting the need for
++a standardized, generic sysfs scrub control interface that is accessible to
++userspace for administration and use by scripts/tools.
++
++2. User-space scrub controls allow users to disable scrubbing if necessary,
++for example, to disable background patrol scrubbing or adjust the scrub
++rate for performance-aware operations where background activities need to
++be minimized or disabled.
++
++3. User-space tools enable on-demand scrubbing for specific address ranges,
++provided that the scrubber supports this functionality.
++
++4. User-space tools can also control memory DIMM scrubbing at a configurable
++scrub rate via sysfs scrub controls. This approach offers several benefits:
++
++* Detects uncorrectable memory errors early, before user access to affected memory, helping facilitate recovery.
++
++* Reduces the likelihood of correctable errors developing into uncorrectable errors.
++
++5. Policy control for hotplugged memory is necessary because there may not
++be a system-wide BIOS or similar control to manage scrub settings for a CXL
++device added after boot. Determining these settings is a policy decision,
++balancing reliability against performance, so userspace should control it.
++Therefore, a unified interface is recommended for handling this function in
++a way that aligns with other similar interfaces, rather than creating a
++separate one.
++
++Scrubbing features
++------------------
++Comparison of various scrubbing features::
++
++ ................................................................
++ .              .   ACPI    . CXL patrol.  CXL ECS  .  ARS      .
++ .  Name        .   RAS2    . scrub     .           .           .
++ ................................................................
++ .              .           .           .           .           .
++ . On-demand    . Supported . No        . No        . Supported .
++ . Scrubbing    .           .           .           .           .
++ .              .           .           .           .           .
++ ................................................................
++ .              .           .           .           .           .
++ . Background   . Supported . Supported . Supported . No        .
++ . scrubbing    .           .           .           .           .
++ .              .           .           .           .           .
++ ................................................................
++ .              .           .           .           .           .
++ . Mode of      . Scrub ctrl. per device. per memory.  Unknown  .
++ . scrubbing    . per NUMA  .           . media     .           .
++ .              . domain.   .           .           .           .
++ ................................................................
++ .              .           .           .           .           .
++ . Query scrub  . Supported . Supported . Supported . Supported .
++ . capabilities .           .           .           .           .
++ .              .           .           .           .           .
++ ................................................................
++ .              .           .           .           .           .
++ . Setting      . Supported . No        . No        . Supported .
++ . address range.           .           .           .           .
++ .              .           .           .           .           .
++ ................................................................
++ .              .           .           .           .           .
++ . Setting      . Supported . Supported . No        . No        .
++ . scrub rate   .           .           .           .           .
++ .              .           .           .           .           .
++ ................................................................
++ .              .           .           .           .           .
++ . Unit for     . Not       . in hours  . No        . No        .
++ . scrub rate   . Defined   .           .           .           .
++ .              .           .           .           .           .
++ ................................................................
++ .              . Supported .           .           .           .
++ . Scrub        . on-demand . No        . No        . Supported .
++ . status/      . scrubbing .           .           .           .
++ . Completion   . only      .           .           .           .
++ ................................................................
++ . UC error     .           .CXL general.CXL general. ACPI UCE  .
++ . reporting    . Exception .media/DRAM .media/DRAM . notify and.
++ .              .           .event/media.event/media. query     .
++ .              .           .scan?      .scan?      . ARS status.
++ ................................................................
++ .              .           .           .           .           .
++ . Support for  . Supported . Supported . Supported . No        .
++ . EDAC control .           .           .           .           .
++ .              .           .           .           .           .
++ ................................................................
++
++CXL Memory Scrubbing features
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++CXL spec r3.1 section 8.2.9.9.11.1 describes the memory device patrol scrub
++control feature. The device patrol scrub proactively locates and makes
++corrections to errors in regular cycle. The patrol scrub control allows the
++request to configure patrol scrubber's input configurations.
++
++The patrol scrub control allows the requester to specify the number of
++hours in which the patrol scrub cycles must be completed, provided that
++the requested number is not less than the minimum number of hours for the
++patrol scrub cycle that the device is capable of. In addition, the patrol
++scrub controls allow the host to disable and enable the feature in case
++disabling of the feature is needed for other purposes such as
++performance-aware operations which require the background operations to be
++turned off.
++
++Error Check Scrub (ECS)
++~~~~~~~~~~~~~~~~~~~~~~~
++CXL spec r3.1 section 8.2.9.9.11.2 describes the Error Check Scrub (ECS)
++is a feature defined in JEDEC DDR5 SDRAM Specification (JESD79-5) and
++allows the DRAM to internally read, correct single-bit errors, and write
++back corrected data bits to the DRAM array while providing transparency
++to error counts.
++
++The DDR5 device contains number of memory media FRUs per device. The
++DDR5 ECS feature and thus the ECS control driver supports configuring
++the ECS parameters per FRU.
++
++ACPI RAS2 Hardware-based Memory Scrubbing
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ACPI spec 6.5 section 5.2.21 ACPI RAS2 describes ACPI RAS2 table
++provides interfaces for platform RAS features and supports independent
++RAS controls and capabilities for a given RAS feature for multiple
++instances of the same component in a given system.
++Memory RAS features apply to RAS capabilities, controls and operations
++that are specific to memory. RAS2 PCC sub-spaces for memory-specific RAS
++features have a Feature Type of 0x00 (Memory).
++
++The platform can use the hardware-based memory scrubbing feature to expose
++controls and capabilities associated with hardware-based memory scrub
++engines. The RAS2 memory scrubbing feature supports following as per spec,
++
++* Independent memory scrubbing controls for each NUMA domain, identified using its proximity domain.
++
++* Provision for background (patrol) scrubbing of the entire memory system, as well as on-demand scrubbing for a specific region of memory.
++
++ACPI Address Range Scrubbing(ARS)
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ACPI spec 6.5 section 9.19.7.2 describes Address Range Scrubbing(ARS).
++ARS allows the platform to communicate memory errors to system software.
++This capability allows system software to prevent accesses to addresses
++with uncorrectable errors in memory. ARS functions manage all NVDIMMs
++present in the system. Only one scrub can be in progress system wide
++at any given time.
++Following functions are supported as per the specification.
++
++1. Query ARS Capabilities for a given address range, indicates platform
++supports the ACPI NVDIMM Root Device Unconsumed Error Notification.
++
++2. Start ARS triggers an Address Range Scrub for the given memory range.
++Address scrubbing can be done for volatile memory, persistent memory, or both.
++
++3. Query ARS Status command allows software to get the status of ARS,
++including the progress of ARS and ARS error record.
++
++4. Clear Uncorrectable Error.
++
++5. Translate SPA
++
++6. ARS Error Inject etc.
++
++The kernel supports an existing control for ARS and ARS is currently not
++supported in EDAC.
++
++The File System
++---------------
++
++The control attributes of a registered scrubber instance could be
++accessed in the
++
++/sys/bus/edac/devices/<dev-name>/scrubX/
++
++sysfs
++-----
++
++Sysfs files are documented in
++
++`Documentation/ABI/testing/sysfs-edac-scrub`.
++
++`Documentation/ABI/testing/sysfs-edac-ecs`.
++
++Example
++-------
++
++The usage takes the form shown in this example:
++
++1. CXL memory device patrol scrubber
++
++1.1 device based
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/min_cycle_duration
++
++3600
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/max_cycle_duration
++
++918000
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/current_cycle_duration
++
++43200
++
++root@localhost:~# echo 54000 > /sys/bus/edac/devices/cxl_mem0/scrub0/current_cycle_duration
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/current_cycle_duration
++
++54000
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
++
++1
++
++root@localhost:~# echo 0 > /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/scrub0/enable_background
++
++0
++
++1.2. region based
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/min_cycle_duration
++
++3600
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/max_cycle_duration
++
++918000
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/current_cycle_duration
++
++43200
++
++root@localhost:~# echo 54000 > /sys/bus/edac/devices/cxl_region0/scrub0/current_cycle_duration
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/current_cycle_duration
++
++54000
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
++
++1
++
++root@localhost:~# echo 0 > /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
++
++root@localhost:~# cat /sys/bus/edac/devices/cxl_region0/scrub0/enable_background
++
++0
++
++2. RAS2
++
++2.1 On demand scrubbing for a specific memory region.
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/min_cycle_duration
++
++3600
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/max_cycle_duration
++
++86400
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
++
++36000
++
++# Readback 'addr', non-zero - demand scrub is in progress, zero - scrub is finished.
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
++
++0
++
++root@localhost:~# echo 54000 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
++
++root@localhost:~# echo 0x150000 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/size
++
++# Write 'addr' starts demand scrubbing, please make sure other attributes are set prior to that.
++
++root@localhost:~# echo 0x120000 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
++
++54000
++
++# Readback 'addr', non-zero - demand scrub is in progress, zero - scrub is finished.
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
++
++0x120000
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
++
++0
++
++2.2 Background scrubbing the entire memory
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/min_cycle_duration
++
++3600
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/max_cycle_duration
++
++86400
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
++
++36000
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
++
++0
++
++root@localhost:~# echo 10800 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
++
++root@localhost:~# echo 1 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
++
++1
++
++root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
++
++10800
++
++root@localhost:~# echo 0 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
 -- 
 2.34.1
 
