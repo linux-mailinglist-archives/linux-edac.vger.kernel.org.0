@@ -1,165 +1,245 @@
-Return-Path: <linux-edac+bounces-2405-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2406-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 779F09B999A
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2024 21:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5150A9B9D75
+	for <lists+linux-edac@lfdr.de>; Sat,  2 Nov 2024 07:30:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A92C31C2133A
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Nov 2024 20:43:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 878491C212E9
+	for <lists+linux-edac@lfdr.de>; Sat,  2 Nov 2024 06:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F711DDC10;
-	Fri,  1 Nov 2024 20:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED32514601C;
+	Sat,  2 Nov 2024 06:30:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aiven.io header.i=@aiven.io header.b="G4s/cPrr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hH0halQ3"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083CA1E0DE9
-	for <linux-edac@vger.kernel.org>; Fri,  1 Nov 2024 20:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730493795; cv=none; b=VUvCpOrx+6wnOuDr1bXX72pwgXOFt8rRlb3o/x56BlQVZ6nphUy6WEsHgMlbOJSgGpa3+TNht+rNPbyuDWbzbxKcZWN5qoc7MhXXeXj3hBDCtFBK2AtcCTBiueaghBtOi7yhrbwOkKYiotppPGgsM+1jv65jsWuVstcpaHqfLtM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730493795; c=relaxed/simple;
-	bh=ptzQA79PsQ8k8tjkG25pELUgNwGO2fEO4/lbiHnHhpc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GsNe0CvQSU33sN6DrUAJika6ebwpxTch65R5fgWvc2k2dIiarJ1pFZu+e7k/D11MMOs2A4oZZwtCUUtgVBQUUHKhMPj0gXD2BFtvStj9ZqW6xb8VXk5myJs1cOOdPiEXdTe62vUMwodusUJxOAbdwgeQquibAXlPgNitjqvoDuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aiven.io; spf=pass smtp.mailfrom=aiven.io; dkim=pass (1024-bit key) header.d=aiven.io header.i=@aiven.io header.b=G4s/cPrr; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aiven.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aiven.io
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539e8607c2aso2535480e87.3
-        for <linux-edac@vger.kernel.org>; Fri, 01 Nov 2024 13:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aiven.io; s=google; t=1730493792; x=1731098592; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M9pVXfF7qpg0nDqZ4UjEIaEqqU2lYYTS28zjXtmZEQ4=;
-        b=G4s/cPrrpU6q5HYxy45AmbYhRIAlibVUycVCT/VlUgwW94fNewZvHxFX4A6KCo4IDv
-         y8Rgcb5b8FRTOUSYri4yxxjfmcOFkUi7ZPDalJPU9IcKkVfoIJKjwhZWlJNLR9ClsWUe
-         rPHK9AiVbK4FWDLqrUw+dqMTD7aFLrOnZngPw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730493792; x=1731098592;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M9pVXfF7qpg0nDqZ4UjEIaEqqU2lYYTS28zjXtmZEQ4=;
-        b=OaB+NegZHtDaWtXXYEdrvaoJELypcTxwzkFvTWexCyCcSJbmOEr/SpNe8/TCNSnhoE
-         i0iCVmiVPsmiVvOXIFr7DWayMjKZI6YorQjmd/W3TohueSnrQ+DJFrWLmOxA/iPfWcfS
-         GvUJojK5RQAecGmIA0Ez2AzHGklT/9vGvogQKlBXSM5MIa5/7A8pXgb3oE3Lhoaa3cpW
-         he6XQ++QjulYJf2WXfT6mUsnHtd9k1s/fN5K2IejY9cQC1vSjfoNZMmuTELXjT5e/ZP0
-         eRZv3Zm8PlkxFVAhbkHTtDAa10K8rjkT4vTzVSrsgvw4b0mKur9hHlw2xRjJ61N5xdcL
-         Vnsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpywpJoXPkFJkeHMYBrSNl8CHxXBcex1hSUVGU/MrggP8zxhKYuiYAMsPLlod8hLAnqDHt4Ve1BaS5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIsY4jmRv0P8+KiPrEI82Lxy1IRZ9OKD+bCm4Ky1WazJxbl7NW
-	5i2tukTl1svbrcv9LDaxu9WckKPUzcO0L++jHyF47ZLbICjv8mG2nLqF1ophGviCuLv/ikfO8lj
-	Eb37OhA==
-X-Google-Smtp-Source: AGHT+IFvB04kMnWVtmkoHKEOl1lrJ4xRWng1c5xgCee6TgrGwVnOQCTmp6GgRvGhGjCb2j9SqaIkcA==
-X-Received: by 2002:a05:6512:3b2b:b0:52e:f99e:5dd1 with SMTP id 2adb3069b0e04-53b3491cd1emr12776294e87.47.1730493792017;
-        Fri, 01 Nov 2024 13:43:12 -0700 (PDT)
-Received: from ox.aiven-management.aivencloud.com (n114-74-229-70.bla3.nsw.optusnet.com.au. [114.74.229.70])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211056edb4csm25014455ad.58.2024.11.01.13.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 13:43:11 -0700 (PDT)
-From: Orange Kao <orange@aiven.io>
-To: tony.luck@intel.com,
-	qiuxu.zhuo@intel.com
-Cc: bp@alien8.de,
-	james.morse@arm.com,
-	orange@kaosy.org,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mchehab@kernel.org,
-	rric@kernel.org,
-	Orange Kao <orange@aiven.io>
-Subject: [PATCH 2/2] EDAC/igen6: Add polling support
-Date: Fri,  1 Nov 2024 20:41:14 +0000
-Message-ID: <20241101204211.414664-3-orange@aiven.io>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241101204211.414664-1-orange@aiven.io>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED89130E4A;
+	Sat,  2 Nov 2024 06:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730529048; cv=fail; b=rsOjA/XAUkkPrUpMvYmZuoyZdtraT673zlzzMhpvBiPTNoLDsFlkdTS/0FdBnty4IRwD1B1GM1OqCqE51HljGvICpDmxez5k9w3tzgr0A5pedqrOtSjJ63xGLwc1I43hISb7pjH3cTVAFjIgJq68BtZcjRBApHSuzWIVT2Xyrwg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730529048; c=relaxed/simple;
+	bh=MXMepXCSX8cqCGLs3/3DvoTkWLkIfRkzcH0J8H5hp0c=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=PmVCQl+JpdyLIKZrQuvSdltM4XKnfNZIvHLd/Dep2+GOgHYB195MtyCY3553mwwgrrD3yDYGl6x39tW1kosJwF+Li5O+pidvEd5VShnOjXby0e+PHvSl/BHlCGPSlkzJ0ydVR9dA2/9Fh1fpp1adahbvG2vqvDxcqdyZ5BoGtV8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hH0halQ3; arc=fail smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730529047; x=1762065047;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=MXMepXCSX8cqCGLs3/3DvoTkWLkIfRkzcH0J8H5hp0c=;
+  b=hH0halQ3N3Le66egeqI1xyTusg1U8CDNv2yth0zkwTYx9hMPH1IFXjbv
+   P4igwDVgisSZxeLI7LSPJDWvZyDTIp/hg/kxMX8ttnkQ+tMf4mMXcNyi9
+   BkN/wS972dfxh+u54L5p/CQOUB/V4YCPmaXs+Lj1xEwO+OrRJOucWJUIZ
+   KG+aJmEl5bR76nmtboP8YnggxlGlG+xYgQs0qD4JkGnwJ0Kc/ZADLc1wY
+   hNqzsVagPUAGxDKS4irL9cs11OVzQWE0Ta52pr5nTJH+egRvUbWyHTUFU
+   qR4SthlgHfTV61y1oiYDgAc+O1GTV4t1tRcwKW2dYxpKrKLGTRAI5g6Q2
+   Q==;
+X-CSE-ConnectionGUID: Gpdoy1qySCeYqRp2h5OPlA==
+X-CSE-MsgGUID: xfgKbZ1nQcCWjYkyeQivIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="40925870"
+X-IronPort-AV: E=Sophos;i="6.11,252,1725346800"; 
+   d="scan'208";a="40925870"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 23:30:47 -0700
+X-CSE-ConnectionGUID: 38ASYyaITcecytGba3pDRA==
+X-CSE-MsgGUID: 8NJwnysTSC+9Fsv//eg1tg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,252,1725346800"; 
+   d="scan'208";a="83279567"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 01 Nov 2024 23:30:46 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Fri, 1 Nov 2024 23:30:45 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Fri, 1 Nov 2024 23:30:45 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.49) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Fri, 1 Nov 2024 23:30:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RY4Nn8onSJuiS8qM7Bk4Cx8zQ0By7MSGgrWqYgvZG95yfKrcFeg5Hk1ZHglu0RRvPL1hGerLnIpJtqy7+22xFXPMTj/vYAoHeJ2GvpDOXYW4bu0a9rPaLbzXCuYDAYmAG17AE9Cx2DXih3zd0DL8RZEf3XpbWBG04rtQ0FrzNJQQshK5WNv3qqXhtHgDEDZMORJdbwhYy466cZGTpvk+SH+eTgxKcQsNBfSUgUAIftGQ6VID2//YiP1vpWphKCxDTcK/bE8TOUdtv05J2Mow38g7boatO/6QZjww2vZ5Oj6gy4LcViGdJ84IUYdRexIAZQElcnsvDFQmBXsdvOr6Fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MXMepXCSX8cqCGLs3/3DvoTkWLkIfRkzcH0J8H5hp0c=;
+ b=lswqxBA/ok2TLSYkXktXpjQ1Quh5IXilTt508+jyrMCZjHCIxlGicGcgdL4n1lAlpIf8VSNc553VCRcD+ELFebSWTSSi87OxdDxoZkJgWU62u0aty6rtpl3jCIePBsElJCKOI9buA6Xd1smdQV1N9iAmwI6S2J5J0LJX5N4H6jZLrODl9vlHmsqOeu79D34uTkXYw9CK/xi3B7ArmEu/P/kshViFOgBBFkTExhrRWBf0mEZMsD6AXHku8IWl4WUTkxGgmFXNFsidcjbB9whkP+59GssjkE/39U6KoAF4WE9DN2w2mq+R0gN+nSiV341MMOQ5/wL9vQjIhSUyNkz56A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
+ by SA1PR11MB5945.namprd11.prod.outlook.com (2603:10b6:806:239::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.24; Sat, 2 Nov
+ 2024 06:30:37 +0000
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::cd87:9086:122c:be3d%4]) with mapi id 15.20.8114.015; Sat, 2 Nov 2024
+ 06:30:37 +0000
+From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+To: Orange Kao <orange@aiven.io>, "Luck, Tony" <tony.luck@intel.com>
+CC: "bp@alien8.de" <bp@alien8.de>, "james.morse@arm.com"
+	<james.morse@arm.com>, "orange@kaosy.org" <orange@kaosy.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "rric@kernel.org"
+	<rric@kernel.org>
+Subject: RE: [PATCH 0/2] EDAC/igen6: Avoid segmentation fault and add polling
+ support
+Thread-Topic: [PATCH 0/2] EDAC/igen6: Avoid segmentation fault and add polling
+ support
+Thread-Index: AQHbLJ6czBGP13h7n0aPlwt+x2ZjLLKjhYLw
+Date: Sat, 2 Nov 2024 06:30:37 +0000
+Message-ID: <CY8PR11MB713490E8FA1E7BA99204854489572@CY8PR11MB7134.namprd11.prod.outlook.com>
 References: <20241101204211.414664-1-orange@aiven.io>
+In-Reply-To: <20241101204211.414664-1-orange@aiven.io>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|SA1PR11MB5945:EE_
+x-ms-office365-filtering-correlation-id: a3eb2841-1d86-466a-7058-08dcfb07dd41
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?BdoBgMZaGiyCpfZs6mXE87MGyvzIHYiuWGE6E7TNSVDulyNBVQI7onABdTE5?=
+ =?us-ascii?Q?tSW1JxBEyUBrcvfDxmfiEZoPXEWcgvYhdIuPkASCVMcd3mRHOurpTytHEm56?=
+ =?us-ascii?Q?AeDAyvtOqVJJMaNYIGex3s322TsoEV23e2Qn9ycf7PUVkFLzVnO1rmuWN4U+?=
+ =?us-ascii?Q?Vk37E7NBFvSwIfT2sN8BqDGIhXhqXnltBCt1lnQFZQrjMqDWe3K61LfDSZdj?=
+ =?us-ascii?Q?2PhPkKf1/4sAultMCX6XqoXEM0wq5y0GUBZF3YqetCXChd+Ilx4dWK3sW78n?=
+ =?us-ascii?Q?/+19gLwZ7t4OY7QYV/k88e1emwyDZCXGqNjhS8nHM80JUr7tJ5LcF5392PlT?=
+ =?us-ascii?Q?KLwCQYtJiQLOUfNsrXpLASlJzd9KTLnouen+8dHkrU6JAlWUKG8iNelBvF03?=
+ =?us-ascii?Q?dKyhm002DZ7zb/v1ynXbY8/pLEqchZ+SmKW1mOJZdBCMbjmnWF97V3Vls4M5?=
+ =?us-ascii?Q?D/HbyrHDY5+/4wWH4ckxNtpKYJ7/JbUNBf7nh7ibiBixbtFxab9VCLnZIgEL?=
+ =?us-ascii?Q?gUzU/0GVhyXN9CKnE/QHFvuNKx5cSsUgBttKofBL7aGVFm5YdSVoZ2n2dYDe?=
+ =?us-ascii?Q?S1d7goif6tuu2x5629wa2uePlD8osCMONqIwacfJJwiBG8PqisRqpPm3m+Np?=
+ =?us-ascii?Q?c8onQzPwEGbd3ymV1XG0BlOcmoBOZ8hXof0hdwgzW3rqb+idRcAuVHklhxYp?=
+ =?us-ascii?Q?WVn6cx4/4QGSUAFUhKxO7qXJRMm1V5XkXvfSDq9lA9wNQHURLia6zGEC7wmb?=
+ =?us-ascii?Q?gNp76NNacJmFemrRJU8Ba5DJx7lIMLYK2GmmgXlkngxOMVGKIZ4b3g13kTBy?=
+ =?us-ascii?Q?FnTFX/gpIawHY6D+G65wFort/tzJFh1V/42dweV9Y48MycMhzTyOCwK7BOLs?=
+ =?us-ascii?Q?urYTeAbAA8LpE2dHuTl82SUJhL5yr/n13KJn/mEYg8x4zX9HD4uH0x3ifBIZ?=
+ =?us-ascii?Q?Q9EpQz+YUQSP6DTJ/mLnubo547zv3narfdKlR/xFoUF7uqFuK6etjDbWw60d?=
+ =?us-ascii?Q?T5o/kRlIaOTFwgIg20A/OTStUGsVUrE11l6qCLuZzl0/k++0SypJqua9Ge3H?=
+ =?us-ascii?Q?2UTbgelYnIQ5PLFrDed13tQlWUNuId2nlBEmyqEjoAQqoSqQpsjvEQMH/sZE?=
+ =?us-ascii?Q?npvCIt6ssxlJA7WmHcmlpBWyQx8ctKabgcVMdCu5+WsXhbEOpbjv/jdpO3sw?=
+ =?us-ascii?Q?q/r9aNxPHjOqLNvOBIU/aJwjmGLfs2VOM/vRU/IjrKiwgvKYe7qUufj5CHki?=
+ =?us-ascii?Q?54rE/ELhRmc+Yp4xuIAkbs8hrSnaVnjZ797gp/a0DbV1vF1+YN5ruxFBqnNI?=
+ =?us-ascii?Q?iUleSbMwjYHeLZsGR/Jql39LAriEn9lAKM4JcffdtRedIqLklDudm0Q6KJPM?=
+ =?us-ascii?Q?Qr84Qfo=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8DDGHYMHQhHaWOFySJkO9n7xrbN0JrzDHCyQTTYarrq8kdvzL4S5bpY2Tozm?=
+ =?us-ascii?Q?x0/RXtxtNah2r2TVQ9qehL/RPkSFikCPkCL8abVBdm1+B3LIo2fI71ksgE59?=
+ =?us-ascii?Q?z1OJ/Sk94KEfeVkL5mFw6HtIIOEblQIHLO4/eHDaOrb4ExOAbfInL+yJ1ubm?=
+ =?us-ascii?Q?Lp8pfTWq9LIOujOjjIhkBA8AtcfiHm1u2yWFh2KO/2Q6VZG8sHEPsZXXYCdg?=
+ =?us-ascii?Q?RSo1sCZGJeLx0A9kqgc5o54s3YCugEd+9C4o1T0PO1TdCB5LamL5MgJFRF8C?=
+ =?us-ascii?Q?BFnYVHK6Fk18BMULj4aZsMjEbu39I8+MuWSsK1vmGBzvvqU2M65yo+6FBs5V?=
+ =?us-ascii?Q?naACilL+jh3nkiA86FHOPRj9KoN8jqj2jXcRo5Y+AUkvY6yo6QNhVG1EvqzA?=
+ =?us-ascii?Q?TdixHtZ8jSif8oYHmIse3Sd6DOKqCRt+90EY/jTkTT3UxQKchCImyb+2AEU6?=
+ =?us-ascii?Q?A6tiEBBBMqDvG4Lt0ucMoCrZViX1/hwjiKFSOvcOKn2Sqfx9uUJKjaoOLgEK?=
+ =?us-ascii?Q?7wn2fJ1AytvG4DsRQ35LFUXUfBxfiOHGSVqb4Lt6yG81BRH+xXUGOZVHEpT+?=
+ =?us-ascii?Q?H7axkajSFn28GtlLfbJohZUiW3s67RD7/dfs+54HmW4gB0SG5i/jpZR6BGF3?=
+ =?us-ascii?Q?rpuYl2h43IRzcuJ48SdMAN/q3eKbtFI/UKzFZQoIKQKGZ4SpMVuCFywPqqRT?=
+ =?us-ascii?Q?bgApubaHMvFkLbOBFBQMd2enWxnOAqGoTEmE8OdmLnWdk7JsBtfMpVjn8pog?=
+ =?us-ascii?Q?c4Kef9TOIpsAY5vs6/i5pSxSv6QBSxSo3xK2lGhMSWwsJHWI5afbuagQamg7?=
+ =?us-ascii?Q?q5C9m2Mw29jH80OMs64RfB0jl+cERKMR3lEzAoPMr1B0779EFb+SAwaGYkDr?=
+ =?us-ascii?Q?LBEtkbi68lBHXIDQ69QSGowyYyk1fatHETYHuL1iTAcbrjdkLBxvs0hwtBxB?=
+ =?us-ascii?Q?951w5WnfflMr5aThIHd0Jq+qUo9eBfvtMgpQaEaAEBNZI9WA7pgB3G+QJX7o?=
+ =?us-ascii?Q?dNqw1rk2fPcHPZtoaBBIvYc8bwA8tsmN+swSAihI/wfCyHQaubEHmjdkahFb?=
+ =?us-ascii?Q?flLVOth56Ld4AFzhgm59BucD6PI0FT8FbOGe82aPSYV4znklJ0W2/+ziDODx?=
+ =?us-ascii?Q?Ml9cNaxe2z/hVIRtR8XeniXQ4IDpnByiHw4FGvQgezhF4eANM3Fw+DtPGWGE?=
+ =?us-ascii?Q?3eb+yKemsookxtQicErNSowhQpLrfClHUEZDbclP8XpwkuwPooKgtAodGPnD?=
+ =?us-ascii?Q?j83O/eCH9giEznFfdUMEFBbQQBOL811ge8BgbSzggcwbEOehJr0egBDX2pDT?=
+ =?us-ascii?Q?mLYQec4fNcYrQqvgpeEI95OR13CHk4th4N6OMLVHsJUe3wIh7J8GSrbA9lMy?=
+ =?us-ascii?Q?MozduCecu7ObIQ0G8bLw3C/UEwCF9mtN9sLCsw805XIC7xrFnyuubxwjgt8w?=
+ =?us-ascii?Q?MxjAoDttKgccffsan/4M5JsdCSuL2OKU2i3X8qY8RbPAm/mjdyTnUMKGpuQK?=
+ =?us-ascii?Q?jVpk8oWVt+X8rL57Mf4OMtZR5dIa/R+Vn6fku18JfV5pYw2audS/BheKWREq?=
+ =?us-ascii?Q?lSoy1RbCIB/YZgmE9TB3QJ+xdu5QbbYKtQm3oYFR?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3eb2841-1d86-466a-7058-08dcfb07dd41
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2024 06:30:37.4654
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VAa5sNKWBbz5DksEMCvYGwrD9Hvssa1lQ9uRmj1NMgtiw8IBwuzADYgP9FnUmr+uTMbfCkFTdnq7su1z5ruwNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB5945
+X-OriginatorOrg: intel.com
 
-I have a PC with Intel N100 (with PCI device 8086:461c, DID_ADL_N_SKU4)
-but interrupt does not seems to work, even with the following
-configuration in BIOS. I am not sure if this is caused by a BIOS bug or
-not.
+> From: Orange Kao <orange@aiven.io>
+> [...]
+> Subject: [PATCH 0/2] EDAC/igen6: Avoid segmentation fault and add polling
+> support
+>=20
+> Hello. This is Orange from Aiven Australia. I want to propose two patches=
+ to
+> fix a bug that affects my machine with Intel N100.
 
-    In-Band ECC Support: Enabled
-    In-Band ECC Operation Mode: 2 (make all requests protected and
-                                  ignore range checks)
-    IBECC Error Injection Control: Inject Correctable Error on insertion
-                                   counter
-    Error Injaction Insertion Count: 251658240 (0xf000000)
+Hi Orange, welcome!=20
+Feel free to propose your patches. :-)
 
-This commit tried to add polling support.
----
- drivers/edac/igen6_edac.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+> Patch 1: Avoid segmentation fault during rmmod Patch 2: Add polling suppo=
+rt
+>=20
+> The detailed reproduce steps has been documented in kernel bugzilla 21936=
+0.
+> Summary below
+>=20
+> I have a PC with Intel N100 (with PCI device 8086:461c, DID_ADL_N_SKU4 in
+> igen6_edac.c) with a BIOS/UEFI that allows me to enable IBECC and error
+> injection.
+>=20
+> Interrupt seems not working in Linux, but it seems able to detect the err=
+or
+> when "modprobe igen6_edac". I am not sure if this is a BIOS bug or not, b=
+ut I
+> have no access to BIOS source code. So I tried to implement polling, and =
+it
+> seems to work. My proposal in patch 2.
 
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index 07dacf8c10be..5027070410a5 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -1170,6 +1170,19 @@ static int igen6_pci_setup(struct pci_dev *pdev, u64 *mchbar)
- 	return -ENODEV;
- }
- 
-+static void igen6_check(struct mem_ctl_info *mci)
-+{
-+	struct igen6_imc *imc = mci->pvt_info;
-+
-+	/* errsts_clear() isn't NMI-safe. Delay it in the IRQ context */
-+	u64 ecclog = ecclog_read_and_clear(imc);
-+	if (!ecclog)
-+		return;
-+	if (!ecclog_gen_pool_add(imc->mc, ecclog))
-+		irq_work_queue(&ecclog_irq_work);
-+
-+}
-+
- static int igen6_register_mci(int mc, u64 mchbar, struct pci_dev *pdev)
- {
- 	struct edac_mc_layer layers[2];
-@@ -1211,6 +1224,9 @@ static int igen6_register_mci(int mc, u64 mchbar, struct pci_dev *pdev)
- 	mci->edac_cap = EDAC_FLAG_SECDED;
- 	mci->mod_name = EDAC_MOD_STR;
- 	mci->dev_name = pci_name(pdev);
-+	if (edac_op_state == EDAC_OPSTATE_POLL) {
-+		mci->edac_check = igen6_check;
-+	}
- 	mci->pvt_info = &igen6_pvt->imc[mc];
- 
- 	imc = mci->pvt_info;
-@@ -1450,7 +1466,9 @@ static int __init igen6_init(void)
- 	if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
- 		return -EBUSY;
- 
--	edac_op_state = EDAC_OPSTATE_NMI;
-+	if (edac_op_state == EDAC_OPSTATE_INVAL) {
-+		edac_op_state = EDAC_OPSTATE_NMI;
-+	}
- 
- 	rc = pci_register_driver(&igen6_driver);
- 	if (rc)
-@@ -1474,3 +1492,6 @@ module_exit(igen6_exit);
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Qiuxu Zhuo");
- MODULE_DESCRIPTION("MC Driver for Intel client SoC using In-Band ECC");
-+
-+module_param(edac_op_state, int, 0444);
-+MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI. Default=1");
--- 
-2.47.0
+Good proposal.=20
 
+> Also "rmmod igen6_edac" can trigger segmentation fault. It seems caused b=
+y
+> double kfree on the same memory address. I tried to fix it in patch 1.
+
+Good finding.=20
+
+> Thanks for considering this. I am new to this area so I could be wrong, a=
+nd I
+> might need extra help and guidance.
+
+You've already done well in this analysis and in providing patches. :-)
+I'll review and add some minor comments to your patches.=20
+If they're OK with you, please re-send the patches after=20
+resolving the comments.=20
+
+Thank you for your cooperation.
+
+-Qiuxu
 
