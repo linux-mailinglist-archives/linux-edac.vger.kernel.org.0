@@ -1,93 +1,174 @@
-Return-Path: <linux-edac+bounces-2428-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2429-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A4929BBA91
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 17:49:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6B59BBBF8
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 18:31:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E453128232F
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 16:49:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DC581C2179D
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 17:31:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B8501C232B;
-	Mon,  4 Nov 2024 16:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C8B1C4A25;
+	Mon,  4 Nov 2024 17:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="VFCeAjLs"
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="HZU/vwnq"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1380F1C07F1;
-	Mon,  4 Nov 2024 16:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB4B33FE;
+	Mon,  4 Nov 2024 17:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730738949; cv=none; b=Z2Au8ClgzSDYkdUYVOkvlFHR235/bUe0BbAVttjKVu0roPrX1a6K5ZPUd8wbgnwzLrEaBqG2vp7PfitXhSC8BeDtJONUTwQYGOXhWhy4mzi2EIOj9sW34zaxmsOG6YGuj3GOjjdGpg/E0StetffGQnWPFo1QhjozTUPTc58f+0M=
+	t=1730741502; cv=none; b=tnJTelJhJa7/yedjGA/DsMdKWlyiI9yfLozPbaoUAcIeWbQ5K1Wxrg2Ehi58SFcFiLMmHLFt2omB66txUbfe3A0LRot85SB+kyeBur3390X8pnID2OOlcwKuEJeyP6NnMCufGt4cdmDu4NwpQHu5x5LAx6BX8xk43xYXARW0JYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730738949; c=relaxed/simple;
-	bh=7Pn8Oi0n7WRC7x0SqsrwXg9RE680+0oqFcWaW1t/kC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ou8NDMuFG0+u8KdbMNXC2+Grz0yTQLODjh0C1xvlqw8RSLEW/a5rWJ7QJYHMQxLQVTiBp1ClmRn1CWZ/AHLYXF63GoUAAFYRYCtxPdf8UVEkTf+Qk5jhnW0ZAeXJfMWD8x8y9HN3THoOAaly0ymMrwK8JA5NtK2Zn0Hh9UXHDyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=VFCeAjLs; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id BDCEA40E0220;
-	Mon,  4 Nov 2024 16:49:02 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id zKoHjBiZQc7Y; Mon,  4 Nov 2024 16:48:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730738938; bh=BCYoC9IrOjIFECP/0oh9vzrE4nH5oG2SejugrTWJKKg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VFCeAjLsOo6yNluwXI8/C9pyCQMKfBCJaAZrq4SFcA5X1Lgz17htG3v5GHOFeYcI7
-	 p+vGHW9ueYucylAOtRCnxMokHjGGfhAxwM9JS30ubh9h/tejJp8YLA+aX2evngNRJu
-	 /WUTcIjYH0X+GgldsDTHA7aWmcNqitw312OZ1CwY+Btq3DFDFLI4uvif4492VT2Tsl
-	 s9ez03OlYTjt5H3m/9yU35G5zhNsHfGt4dgaTEJSUifYxC7nx/CZWdtUBquCh4mWqP
-	 KTt1XQjIRRnbmJnY6+4rdtbhAfD4cfc6cYGZ/Ru4RYsRFXbjRFiY1cdHBmiVmVyFuB
-	 O+3BIkEcU6Jq9QteCquogOOQ0v0PQyamiS5VpRSNk/k3Vjr10WT8mjXCBFNgtp/Oh+
-	 sUSOI6zJBGgBGvFpBuwqUBkmnWFbvPL4AzlRPqmtrWtXZQ1BLlO1cfCmF2E0XQxulQ
-	 0vvOgMYoHiKDuHcMtSnQorCEBzIpQZmzQcnW6L9yuXahfS9TBJbeLAZ6TzYh8ug3Dg
-	 6R16xuE632Zk1cC/pSEjEEiwdZ4nXXw0ODoxRjalESMJVPDQpjn2FtOsL3+TaLBco8
-	 +/6Dq42DKeklm9wRhCTSNPo66SyFhwV8x1mk8CEdlhaLZ0nO7ZLNTRS8z6pt7Pw6ML
-	 6BAn+pSPx1CCm7hcqmoRp2uw=
-Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 41D2540E0263;
-	Mon,  4 Nov 2024 16:48:54 +0000 (UTC)
-Date: Mon, 4 Nov 2024 17:48:47 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Jason Baron <jbaron@akamai.com>
-Cc: James Ye <jye836@gmail.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/ie31200: Add Kaby Lake-S dual-core host bridge ID
-Message-ID: <20241104164847.GFZyj670ngFSLWm6u9@fat_crate.local>
-References: <20240824120622.46226-1-jye836@gmail.com>
- <20241104160425.GEZyjwiRx74PEqiZRl@fat_crate.local>
- <b990a1a9-97e5-469a-8469-0ea5bdc0fc03@akamai.com>
+	s=arc-20240116; t=1730741502; c=relaxed/simple;
+	bh=bYzYZdsD09k9H9vNOFAKrDzxYOLUH/boa/o6ZxGnDUQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KAWAAcy1dfLa6pDNmJkgICJqnHg3MjxEeqDOAstz8IUIEXleCiQjpe68yUlTATFR9/Zu57ocSbrD0Eu6XB0tUCaSsgoBjoXEw1TH+7FXU0KdCwqr5z7mwi1S8VjXPAIFrgUhVnrRmZPgc2lscgR+T6e4ahNbBipLtCkjEIZDCD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=HZU/vwnq; arc=none smtp.client-ip=67.231.149.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
+Received: from pps.filterd (m0050093.ppops.net [127.0.0.1])
+	by m0050093.ppops.net-00190b01. (8.18.1.2/8.18.1.2) with ESMTP id 4A43o4Pd018918;
+	Mon, 4 Nov 2024 16:15:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=jan2016.eng;
+	 bh=xbU1LFREWTfRbTBmJqp9eANiCr7DLO90j6gn0Jv/yAQ=; b=HZU/vwnqpigv
+	LNtbFEBYtSHEgXPNM8z0wpE8vUGQzfQh4wSe2GuG/dnuhgNcv1mofIF1mXmA5N64
+	Z5HM4QwKf8kV7V1b+sVOclIMAN3sZPcehezSDUWJ3VGb75wHBHEkCjxVq7q0e3pI
+	YK5s9gyeYixxaDLCVIEqiztU/bocZbhBZj+PlRqxY9Mx1fjsPaKLYdXpPOT/oBA3
+	sIlL9kVaahF8wQRYuSTRJZ+M0ufmkqsuZgOLxTx+m8gsr6w+P+o5X5uYzJiLb8hb
+	1YMU1EzOivLe+9Q6g3/emJrFOGnqHZlDOLlnG8lfyF6yalv3wY48vUSq+owgBVm7
+	Wp5QdZTOOA==
+Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60] (may be forged))
+	by m0050093.ppops.net-00190b01. (PPS) with ESMTPS id 42ncx5y93w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 Nov 2024 16:15:52 +0000 (GMT)
+Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
+	by prod-mail-ppoint5.akamai.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Fndfu031127;
+	Mon, 4 Nov 2024 08:15:50 -0800
+Received: from prod-mail-relay11.akamai.com ([172.27.118.250])
+	by prod-mail-ppoint5.akamai.com (PPS) with ESMTP id 42nj28jx6x-1;
+	Mon, 04 Nov 2024 08:15:50 -0800
+Received: from [100.64.0.1] (prod-aoa-csiteclt14.bos01.corp.akamai.com [172.27.97.51])
+	by prod-mail-relay11.akamai.com (Postfix) with ESMTP id ED0D733D2E;
+	Mon,  4 Nov 2024 16:15:49 +0000 (GMT)
+Message-ID: <b990a1a9-97e5-469a-8469-0ea5bdc0fc03@akamai.com>
+Date: Mon, 4 Nov 2024 11:15:49 -0500
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b990a1a9-97e5-469a-8469-0ea5bdc0fc03@akamai.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] EDAC/ie31200: Add Kaby Lake-S dual-core host bridge ID
+To: Borislav Petkov <bp@alien8.de>
+Cc: James Ye <jye836@gmail.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20240824120622.46226-1-jye836@gmail.com>
+ <20241104160425.GEZyjwiRx74PEqiZRl@fat_crate.local>
+Content-Language: en-US
+From: Jason Baron <jbaron@akamai.com>
+In-Reply-To: <20241104160425.GEZyjwiRx74PEqiZRl@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-04_14,2024-11-04_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ adultscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2411040137
+X-Proofpoint-GUID: HrqapkTOmbBlp8XH--qhC1zyleWft4dA
+X-Proofpoint-ORIG-GUID: HrqapkTOmbBlp8XH--qhC1zyleWft4dA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 clxscore=1011
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=866 priorityscore=1501
+ impostorscore=0 malwarescore=0 suspectscore=0 adultscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411040137
 
-On Mon, Nov 04, 2024 at 11:15:49AM -0500, Jason Baron wrote:
-> Sorry, seems fine...
+On 11/4/24 11:04 AM, Borislav Petkov wrote:
+> !-------------------------------------------------------------------|
+>    This Message Is From an External Sender
+>    This message came from outside your organization.
+> |-------------------------------------------------------------------!
 > 
-> Acked-by: Jason Baron <jbaron@akamai.com>
+> Jason,
+> 
+> ack/nak?
+> 
 
-Queued, thanks.
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Sorry, seems fine...
+
+Acked-by: Jason Baron <jbaron@akamai.com>
+
+
+Thanks,
+
+-Jason
+
+
+> On Sat, Aug 24, 2024 at 10:06:22PM +1000, James Ye wrote:
+>> Add device ID for dual-core Kaby Lake-S processors e.g. i3-7100.
+>>
+>> Signed-off-by: James Ye <jye836@gmail.com>
+>> ---
+>>   drivers/edac/ie31200_edac.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+>> index 9ef13570f2e5..4fc16922dc1a 100644
+>> --- a/drivers/edac/ie31200_edac.c
+>> +++ b/drivers/edac/ie31200_edac.c
+>> @@ -19,7 +19,8 @@
+>>    * 0c04: Xeon E3-1200 v3/4th Gen Core Processor DRAM Controller
+>>    * 0c08: Xeon E3-1200 v3 Processor DRAM Controller
+>>    * 1918: Xeon E3-1200 v5 Skylake Host Bridge/DRAM Registers
+>> - * 5918: Xeon E3-1200 Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
+>> + * 590f: Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
+>> + * 5918: Xeon E3-1200 v6/7th Gen Core Processor Host Bridge/DRAM Registers
+>>    * 190f: 6th Gen Core Dual-Core Processor Host Bridge/DRAM Registers
+>>    * 191f: 6th Gen Core Quad-Core Processor Host Bridge/DRAM Registers
+>>    * 3e..: 8th/9th Gen Core Processor Host Bridge/DRAM Registers
+>> @@ -67,7 +68,8 @@
+>>   #define PCI_DEVICE_ID_INTEL_IE31200_HB_8  0x190F
+>>   #define PCI_DEVICE_ID_INTEL_IE31200_HB_9  0x1918
+>>   #define PCI_DEVICE_ID_INTEL_IE31200_HB_10 0x191F
+>> -#define PCI_DEVICE_ID_INTEL_IE31200_HB_11 0x5918
+>> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_11 0x590f
+>> +#define PCI_DEVICE_ID_INTEL_IE31200_HB_12 0x5918
+>>   
+>>   /* Coffee Lake-S */
+>>   #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK 0x3e00
+>> @@ -88,6 +90,7 @@
+>>   	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_9) ||                        \
+>>   	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_10) ||                       \
+>>   	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_11) ||                       \
+>> +	 ((did) == PCI_DEVICE_ID_INTEL_IE31200_HB_12) ||                       \
+>>   	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
+>>   	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
+>>   
+>> @@ -587,6 +590,7 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
+>>   	{ PCI_VEND_DEV(INTEL, IE31200_HB_9),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+>>   	{ PCI_VEND_DEV(INTEL, IE31200_HB_10),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+>>   	{ PCI_VEND_DEV(INTEL, IE31200_HB_11),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+>> +	{ PCI_VEND_DEV(INTEL, IE31200_HB_12),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+>>   	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+>>   	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_2),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+>>   	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_3),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+>> -- 
+>> 2.46.0
+>>
+>>
+> 
 
