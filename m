@@ -1,66 +1,66 @@
-Return-Path: <linux-edac+bounces-2423-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2424-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B06C9BB797
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 15:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D083E9BB7D3
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 15:30:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F5F2281839
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 14:24:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94CD8286331
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Nov 2024 14:30:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7CE14D2B1;
-	Mon,  4 Nov 2024 14:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C04C1AC8AE;
+	Mon,  4 Nov 2024 14:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BTprzF+H"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DmpTyiC4"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5E122AD0C;
-	Mon,  4 Nov 2024 14:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0742AE93;
+	Mon,  4 Nov 2024 14:30:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730730247; cv=none; b=OuVd0DF47yHbIgwzE0epvtqX4FF89LZn+iue7S4TrVKprO9BVfagZCRR3+C6qZq/GtXarx4CodXBHjd77SZDmumDMT8X1ZmFnt2VET/9yRdmngkeeSgZXrKSOWXhNQmhAUUHetJvDEkK1J/qV37aty89kEuCEM5pXu/k9kF684w=
+	t=1730730630; cv=none; b=M2OQ8eCH8nhvg1agveSfQmsagRHBw29Ewtqrcpu4RmgNltUS3dV14X0U66iAqwLt8Ru9IhQ7gfGuSvH9AYbgUO80izn/RROCCKQxsGEiE7mQc823EaLIW6ygau/Xs7NnpugGma4SnRAy9DJJIHshpVuh5cJFXyVn8kLv6FqZtR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730730247; c=relaxed/simple;
-	bh=dFWMHWo1n5jFkTLEUAVg6+FBsVNcLtsbTmw+hxSsSmw=;
+	s=arc-20240116; t=1730730630; c=relaxed/simple;
+	bh=ob7Ymv2VtFIWc3A9FGPeqHYSg5qYODu1P4mcfNOJwDY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qXJsFON9L8kU7MODZmhl17W8rKTRaCZx8+2XqdQg4FkMc98IUXP53nmhJeZTWwWT4DyPCrcYKCa82J832fq2GCG4/OB8OgrJaLUS0/xM5EwuNLLCq8/qLMTGkeGnk9//Jhy0u4uFlQW5Aa9kacxXENLhBxKEGcb5awfkIdww3qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=BTprzF+H; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=e5HIJ/eWF2KzNzdtIulR0wjynA3luHpuCkGlT0MOmixUNGMrjg1QnTnp0mXGFZvPiYbF78sH9uv372jnJsqMaLeRO3SDJD43acOsHxX0xouv0HKSRYnTLxLgj4onBZWlCbgj+pVlwM6AOmUYp8YwlXn7NKD7FBAaKLUpmkY9fcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DmpTyiC4; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1BA5F40E0220;
-	Mon,  4 Nov 2024 14:24:02 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3CC5040E0220;
+	Mon,  4 Nov 2024 14:30:24 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id zjlq6e9v7tSE; Mon,  4 Nov 2024 14:23:58 +0000 (UTC)
+	with ESMTP id B6WcrwVm8o4Z; Mon,  4 Nov 2024 14:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730730238; bh=mi5Jlho0Cd1trC6Apgms9J9UjhU9YxE55TxITVhcGDA=;
+	t=1730730620; bh=r7TPsYnu7shSZRrjt86Hei071WcOU4iKf7oZwIKF00U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BTprzF+H/KnxeUjxe1V78yt8x8Ryu4cvLGuCPnpk+JGrHPkEXSqLx6EEZF13dmWln
-	 NHSkRWUtZrgtdLfDeKaQIVncgUONUMoIJw52ez6QyjCvAEYgTl54RRRr6eRRWFEosC
-	 VKu6KpzpG3Gaa2m6DeL0a+M0Y1lJKDdmhdBSt5SWffUY3WoEW9nTRmOw/5iNpTtSmv
-	 leAmMYbWarYLpTnHVjGrgype7jNesZMufPPEGs/f/m1mUC4upRvOeT9pRMxkHUh8l8
-	 4EioiWaUPHhLZHlG3GsXPHl10CnZIPMt5VvbpLZH+Nlj/P4aihVQY1UZ8lYn5FkkvP
-	 sxvNgL3WWRppFFKtmQuh+qaggjTddCs3iOYHE63n4CFwn6WPgQrirxJ6eHJFcMh3Gi
-	 HOMxSAWjZUQyyDzgmJHAe9odawbSO8InmDefynhdfPjUl0CsBtb/6BJJd8QI6YNk/B
-	 lIc0N6v5Ufd9Mjh4f2uxOCVLpkSG/tlGYNH5iDmfzi2EiVvgpuFcYBWiz4+jbVnEG/
-	 scJwf7RvgTS9Aq9ntzLleKwQj2tb+Jth8N/2IIXZL4PnZhtryBRIFBn3i1geFe6kWj
-	 kyKH4DtrwCrkyyejgU2wZD8wTfyIRwDMZ4nZjoyx0f37c3tRCLD03lwANyepVPt9JC
-	 zGtah/pJ2TkxdJwUxegzuCNA=
+	b=DmpTyiC4e4k/hOuVIVm0mbOFwL6hhkpI5na2QLF9fNHDEYsXj4a9vv6VYK5aJI3v7
+	 AkVD7FpZ30Hob/88JRMpEqKvQzDdABvfqtPO9p3IwAb4CyTkbilOYDw/ifR2cQtSH7
+	 mBwurJ/nKdCa8FeSF65VXAQ0T8NFLLpSRWSue3Jn+/GW9P2LDH48tYrmYWdKc1A/2/
+	 kmQuJZ2Cy7zENnQI0pjzw4ctK5scJiw3WkwYZiUcrOAQpGxmuobm9VYQw0/30JI55F
+	 sY7ATdCvTeTWdTyhhjfdDCEQbMkpnyHKezJgdIJMSRGuRdlF9mmqR/Xoebynj3D+uY
+	 Xaj9Q8CNLW6w0QQzK4lSKqAmRC/drKtp6FW23XAdIxm+LECZpIexndeGeUzWAFJk0u
+	 XdAJN5gl3/iCHMWQgaLrYwLECzWJQI4mRVJS0FV5p+RMFfyn9SNa5Qr0kjHZ4a7yZ1
+	 7fST4PZaRhws4Z0+Fh45vUEYeU2/8H1PyO2uXxh+dTk7QgfifP3gj1lKUIHaXi8fhc
+	 Mn6uNwQf+TJfIz9epVy+duT8irWjPDtrI+EhdZ6r1GqZYr+dNSy6j3+cBXGAaQSP4H
+	 dM8zIx2G9TALYkH7BClAJdyMTnD3gwwWsAFFNKJXtFH257VC9Wkb6cBe7KChon1P4P
+	 rGjZq34yuH0lcLvS4SWQskWo=
 Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D191540E0163;
-	Mon,  4 Nov 2024 14:23:36 +0000 (UTC)
-Date: Mon, 4 Nov 2024 15:23:29 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 37F8D40E0261;
+	Mon,  4 Nov 2024 14:29:59 +0000 (UTC)
+Date: Mon, 4 Nov 2024 15:29:58 +0100
 From: Borislav Petkov <bp@alien8.de>
 To: Yazen Ghannam <yazen.ghannam@amd.com>
 Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -71,11 +71,11 @@ Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
 	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
 	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
 	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
-Subject: Re: [PATCH 09/16] x86/amd_nb, x86/amd_node: Simplify
- amd_pci_dev_to_node_id()
-Message-ID: <20241104142329.GUZyjY4Zwb6WyB2JYv@fat_crate.local>
+Subject: Re: [PATCH 10/16] x86/amd_nb: Move SMN access code to a new amd_smn
+ driver
+Message-ID: <20241104142958.GVZyjaZtONnLIJAUo7@fat_crate.local>
 References: <20241023172150.659002-1-yazen.ghannam@amd.com>
- <20241023172150.659002-10-yazen.ghannam@amd.com>
+ <20241023172150.659002-11-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -84,23 +84,30 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241023172150.659002-10-yazen.ghannam@amd.com>
+In-Reply-To: <20241023172150.659002-11-yazen.ghannam@amd.com>
 
-On Wed, Oct 23, 2024 at 05:21:43PM +0000, Yazen Ghannam wrote:
-> diff --git a/arch/x86/include/asm/amd_node.h b/arch/x86/include/asm/amd_node.h
-> index 419a0ad13ef2..8e473a293706 100644
-> --- a/arch/x86/include/asm/amd_node.h
-> +++ b/arch/x86/include/asm/amd_node.h
-> @@ -30,4 +30,10 @@ static inline u16 amd_num_nodes(void)
->  	return topology_amd_nodes_per_pkg() * topology_max_packages();
->  }
+On Wed, Oct 23, 2024 at 05:21:44PM +0000, Yazen Ghannam wrote:
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index ba5252d8e21c..a03ffa5b6bb1 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -3128,6 +3128,9 @@ config AMD_NODE
+>  	def_bool y
+>  	depends on CPU_SUP_AMD && PCI
 >  
-> +/* Caller must ensure the input is an AMD node device. */
+> +config AMD_SMN
+> +	def_bool y
+> +	depends on AMD_NODE
 
-You can ensure that yourself by checking the PCI vendor in the PCI device,
-right?
+Why is this a separate compilation unit and not part of amd_node.c? Especially
+if it depends on it.
 
-IOW, pdev->vendor...
+I don't see the real need for having smaller compilation units. Both the node
+and the smn stuff will end up being built-in in 99% of the configs. So why are
+we making separate Kconfig items and yadda yadda?
+
+Just do a single amd_node and that's it. We can always split later, if really
+needed.
 
 -- 
 Regards/Gruss,
