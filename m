@@ -1,153 +1,120 @@
-Return-Path: <linux-edac+bounces-2463-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2464-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B6089BF444
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 18:28:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1905C9BF86D
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 22:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1B821F24313
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 17:28:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6F382840A0
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 21:23:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0A820651F;
-	Wed,  6 Nov 2024 17:28:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D53F1D90B6;
+	Wed,  6 Nov 2024 21:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=aiven.io header.i=@aiven.io header.b="ItebCpsV"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D704713541B;
-	Wed,  6 Nov 2024 17:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2E21D63F8
+	for <linux-edac@vger.kernel.org>; Wed,  6 Nov 2024 21:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730914131; cv=none; b=np1XuhGngVNj4Zo+PY1fhmOLUKGq0GyWUTt+jQbiEmstTG9TtiyDKraugk0j57FkSClwRy4y7JoHxuliXb/G3sSnbZ1KsKQgIeoYYasvCogtcn0aEtuKNWn1p/UU9eB0HDueEfrqRrsMBdtz7t4G0+HVXOsZnwnf4fsxLDtAHOQ=
+	t=1730928197; cv=none; b=LJw0tlX3o7HT/NUoyqrf4zzNUJdcR2RnY+QKjfEEEwTCgNc4C6aJqKgds13lNK9e6piloj6EHcPAzbhauakRx3IBaKga1Lvc0a5yt+lCtvtcNrUb2DlKy1cOZ4DWV0MgYQB7UbCOVOP7mLSBJys6UXWeBRaRLcFVZAdK7P1AjSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730914131; c=relaxed/simple;
-	bh=665+N82pws8qPypIy9h7Aefyz4JxCj/33OeQ/iQlk68=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=KVC9ks95VTeK8qKrejM/v4BpKEk2vNFzwgHIuIT/YogH5eVrbNf0ZCkP0WYoFyuMymZP5RY1pgGcTBVCL1u3MT15oG0XyFhJANvAR9HM0FmvdBVvQbKpGsyAdLid0G+59gXChPgNv6w513xDIRB8rusmjCUtnk/tomg95xCZxtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XkBts0XcVz6K7Hy;
-	Thu,  7 Nov 2024 01:25:57 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id E3E71140B33;
-	Thu,  7 Nov 2024 01:28:44 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 6 Nov 2024 18:28:44 +0100
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Wed, 6 Nov 2024 18:28:44 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Dave Jiang <dave.jiang@intel.com>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-cxl@vger.kernel.org"
-	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC: "bp@alien8.de" <bp@alien8.de>, "tony.luck@intel.com"
-	<tony.luck@intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-	"dave@stgolabs.net" <dave@stgolabs.net>, Jonathan Cameron
-	<jonathan.cameron@huawei.com>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-	"jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>, "ira.weiny@intel.com"
-	<ira.weiny@intel.com>, "david@redhat.com" <david@redhat.com>,
-	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>, "leo.duran@amd.com"
-	<leo.duran@amd.com>, "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
-	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
-	<jiaqiyan@google.com>, "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>, "james.morse@arm.com"
-	<james.morse@arm.com>, "jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>, "erdemaktas@google.com"
-	<erdemaktas@google.com>, "pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>, "gthelen@google.com"
-	<gthelen@google.com>, "wschwartz@amperecomputing.com"
-	<wschwartz@amperecomputing.com>, "dferguson@amperecomputing.com"
-	<dferguson@amperecomputing.com>, "wbs@os.amperecomputing.com"
-	<wbs@os.amperecomputing.com>, "nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
-	tanxiaofei <tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v15 13/15] cxl/memfeature: Add CXL memory device sPPR
- control feature
-Thread-Topic: [PATCH v15 13/15] cxl/memfeature: Add CXL memory device sPPR
- control feature
-Thread-Index: AQHbLD8E5jWI1EDDu0C0+SJpWS5APLKpGmUAgAFvVgA=
-Date: Wed, 6 Nov 2024 17:28:44 +0000
-Message-ID: <987130b3079d4afcbe67b04627e619a1@huawei.com>
-References: <20241101091735.1465-1-shiju.jose@huawei.com>
- <20241101091735.1465-14-shiju.jose@huawei.com>
- <827fe047-a456-48b4-9db1-d28c184b9cb3@intel.com>
-In-Reply-To: <827fe047-a456-48b4-9db1-d28c184b9cb3@intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1730928197; c=relaxed/simple;
+	bh=U2i4d0ltICF/+70KkScTf5AWsmvfByR9kQmrJbRsOcc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AFlqsIjFYcbdqs5eHrhkGclnV+mKZrr6FknsUqPuMTrjwQTXVgUKa6IFN4NRcAnIbplN8a2sKHmQYQszUlc8PrL86iEGyzmCOHnMxPaquLaT5GmIpZh6xi2wOuqpOVhLbh+/NtaUqzfW7Ka9slClTuYtqGZ/bltB6GWxwxISHfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aiven.io; spf=pass smtp.mailfrom=aiven.io; dkim=pass (1024-bit key) header.d=aiven.io header.i=@aiven.io header.b=ItebCpsV; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aiven.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aiven.io
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-37d43a9bc03so137047f8f.2
+        for <linux-edac@vger.kernel.org>; Wed, 06 Nov 2024 13:23:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aiven.io; s=google; t=1730928194; x=1731532994; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xmvNN6gesL90wm4yphATi3h7Pns2kBBZ4GSb280H7Oo=;
+        b=ItebCpsVCJMFBUG+It6d0ouVyg85a8VWKMOtj6BLWJMA0MOTJ5AMAHWoOLZngcGeoF
+         nImLg8FJ5N5lrNN2Mnq8eOI6jTonFy5TGFh+mb6lgjSLstp3XMJKDicvrOLc83gkx0+/
+         e3eJjRTk56kUktttcT+iJ2ak4VZFZtnv4qUkQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730928194; x=1731532994;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xmvNN6gesL90wm4yphATi3h7Pns2kBBZ4GSb280H7Oo=;
+        b=RjxiOL1L/4dGEc7Sz8xiKzz4SoH6LOP03w+AhY5y/sjGWLSB+IKF28wlPmGW/fkbod
+         IqSCE2AohqJ7bRKPtcofhAxKxUTRYIUPqGaKzJRWpgDzUYs8bhTk6d+Lp/BYuRFdYZDr
+         61yM9jTtbrRtluei07PReGZyHTmyfLwyRwR8PkVHe34+XYOY4OaRbGWQsQ16Dspn8roy
+         X567Z9GDOU3ijgsEMKzI1aNpT6ZOPBRHd18BM1XSTuEZW9hbtAjqDMGOYCPZYT0ryiwp
+         3WITDp+pGb3GF64zxMYgceyCJgO1jY+jGggqUZRGTcgpq9V526nFTuf42Qku9GYB3Fj+
+         fnpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXcx2LJmrdQvseTdPvYz0l2pEbJz44NFvE6EzNbW/a+9/U7uUNRNiWjpQ1RE3eckOxGJnG70NKhd3oc@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqnysXn6rXqlKFzSS2kusNDodK14/7P5SG7FUKr7ZrjUbET/Mo
+	L46dO6XfVwBl6tkbWdZ2F1FhLHi+7s8ujydHDDWNrNFHldLKjx7aZs687j1NeFU=
+X-Google-Smtp-Source: AGHT+IFOH1fZS7r2xCtxhzRmFDfp0bLlLooQZDFMXKH6gRzno8hFIF3XfaxktR5N9V1g12TGoQiL9Q==
+X-Received: by 2002:a05:6000:1f8c:b0:374:ba23:4b3f with SMTP id ffacd0b85a97d-381c7a484e7mr19608917f8f.9.1730928194104;
+        Wed, 06 Nov 2024 13:23:14 -0800 (PST)
+Received: from [10.0.8.225] (n114-74-229-70.bla3.nsw.optusnet.com.au. [114.74.229.70])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee7688e38dsm7377127a12.22.2024.11.06.13.23.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Nov 2024 13:23:13 -0800 (PST)
+Message-ID: <9c7b9fad-408d-4767-9aeb-4e2333b0ece9@aiven.io>
+Date: Wed, 6 Nov 2024 21:23:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] EDAC/igen6: Allow setting edac_op_state
+To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, "Luck, Tony" <tony.luck@intel.com>
+Cc: "bp@alien8.de" <bp@alien8.de>, "james.morse@arm.com"
+ <james.morse@arm.com>, "orange@kaosy.org" <orange@kaosy.org>,
+ "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "mchehab@kernel.org" <mchehab@kernel.org>, "rric@kernel.org"
+ <rric@kernel.org>
+References: <20241106114024.941659-1-orange@aiven.io>
+ <20241106114024.941659-4-orange@aiven.io>
+ <CY8PR11MB7134C2A2328E5B8B3285C81489532@CY8PR11MB7134.namprd11.prod.outlook.com>
+Content-Language: en-AU
+From: Orange Kao <orange@aiven.io>
+In-Reply-To: <CY8PR11MB7134C2A2328E5B8B3285C81489532@CY8PR11MB7134.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-DQo+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj5Gcm9tOiBEYXZlIEppYW5nIDxkYXZlLmpp
-YW5nQGludGVsLmNvbT4NCj5TZW50OiAwNSBOb3ZlbWJlciAyMDI0IDIwOjMyDQo+VG86IFNoaWp1
-IEpvc2UgPHNoaWp1Lmpvc2VAaHVhd2VpLmNvbT47IGxpbnV4LWVkYWNAdmdlci5rZXJuZWwub3Jn
-OyBsaW51eC0NCj5jeGxAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hY3BpQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtbW1Aa3ZhY2sub3JnOyBsaW51eC0NCj5rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+
-Q2M6IGJwQGFsaWVuOC5kZTsgdG9ueS5sdWNrQGludGVsLmNvbTsgcmFmYWVsQGtlcm5lbC5vcmc7
-IGxlbmJAa2VybmVsLm9yZzsNCj5tY2hlaGFiQGtlcm5lbC5vcmc7IGRhbi5qLndpbGxpYW1zQGlu
-dGVsLmNvbTsgZGF2ZUBzdGdvbGFicy5uZXQ7IEpvbmF0aGFuDQo+Q2FtZXJvbiA8am9uYXRoYW4u
-Y2FtZXJvbkBodWF3ZWkuY29tPjsgZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7DQo+c3VkZWVw
-LmhvbGxhQGFybS5jb207IGphc3Npc2luZ2hicmFyQGdtYWlsLmNvbTsgYWxpc29uLnNjaG9maWVs
-ZEBpbnRlbC5jb207DQo+dmlzaGFsLmwudmVybWFAaW50ZWwuY29tOyBpcmEud2VpbnlAaW50ZWwu
-Y29tOyBkYXZpZEByZWRoYXQuY29tOw0KPlZpbGFzLlNyaWRoYXJhbkBhbWQuY29tOyBsZW8uZHVy
-YW5AYW1kLmNvbTsgWWF6ZW4uR2hhbm5hbUBhbWQuY29tOw0KPnJpZW50amVzQGdvb2dsZS5jb207
-IGppYXFpeWFuQGdvb2dsZS5jb207IEpvbi5HcmltbUBhbWQuY29tOw0KPmRhdmUuaGFuc2VuQGxp
-bnV4LmludGVsLmNvbTsgbmFveWEuaG9yaWd1Y2hpQG5lYy5jb207DQo+amFtZXMubW9yc2VAYXJt
-LmNvbTsganRob3VnaHRvbkBnb29nbGUuY29tOyBzb21hc3VuZGFyYW0uYUBocGUuY29tOw0KPmVy
-ZGVtYWt0YXNAZ29vZ2xlLmNvbTsgcGdvbmRhQGdvb2dsZS5jb207IGR1ZW53ZW5AZ29vZ2xlLmNv
-bTsNCj5ndGhlbGVuQGdvb2dsZS5jb207IHdzY2h3YXJ0ekBhbXBlcmVjb21wdXRpbmcuY29tOw0K
-PmRmZXJndXNvbkBhbXBlcmVjb21wdXRpbmcuY29tOyB3YnNAb3MuYW1wZXJlY29tcHV0aW5nLmNv
-bTsNCj5uaWZhbi5jeGxAZ21haWwuY29tOyB0YW54aWFvZmVpIDx0YW54aWFvZmVpQGh1YXdlaS5j
-b20+OyBaZW5ndGFvIChCKQ0KPjxwcmltZS56ZW5nQGhpc2lsaWNvbi5jb20+OyBSb2JlcnRvIFNh
-c3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+Ow0KPmthbmdrYW5nLnNoZW5AZnV0dXJld2Vp
-LmNvbTsgd2FuZ2h1aXFpYW5nIDx3YW5naHVpcWlhbmdAaHVhd2VpLmNvbT47DQo+TGludXhhcm0g
-PGxpbnV4YXJtQGh1YXdlaS5jb20+DQo+U3ViamVjdDogUmU6IFtQQVRDSCB2MTUgMTMvMTVdIGN4
-bC9tZW1mZWF0dXJlOiBBZGQgQ1hMIG1lbW9yeSBkZXZpY2Ugc1BQUg0KPmNvbnRyb2wgZmVhdHVy
-ZQ0KPg0KPg0KPg0KPk9uIDExLzEvMjQgMjoxNyBBTSwgc2hpanUuam9zZUBodWF3ZWkuY29tIHdy
-b3RlOg0KPj4gRnJvbTogU2hpanUgSm9zZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPj4NCj4+
-IFBvc3QgUGFja2FnZSBSZXBhaXIgKFBQUikgbWFpbnRlbmFuY2Ugb3BlcmF0aW9ucyBtYXkgYmUg
-c3VwcG9ydGVkIGJ5DQo+PiBDWEwgZGV2aWNlcyB0aGF0IGltcGxlbWVudCBDWEwubWVtIHByb3Rv
-Y29sLiBBIFBQUiBtYWludGVuYW5jZQ0KPj4gb3BlcmF0aW9uIHJlcXVlc3RzIHRoZSBDWEwgZGV2
-aWNlIHRvIHBlcmZvcm0gYSByZXBhaXIgb3BlcmF0aW9uIG9uIGl0cyBtZWRpYS4NCj4+IEZvciBl
-eGFtcGxlLCBhIENYTCBkZXZpY2Ugd2l0aCBEUkFNIGNvbXBvbmVudHMgdGhhdCBzdXBwb3J0IFBQ
-Ug0KPj4gZmVhdHVyZXMgbWF5IGltcGxlbWVudCBQUFIgTWFpbnRlbmFuY2Ugb3BlcmF0aW9ucy4g
-RFJBTSBjb21wb25lbnRzDQo+bWF5DQo+PiBzdXBwb3J0IHR3byB0eXBlcyBvZiBQUFI6IEhhcmQg
-UFBSIChoUFBSKSwgZm9yIGEgcGVybWFuZW50IHJvdyByZXBhaXIsDQo+PiBhbmQgU29mdCBQUFIg
-KHNQUFIpLCBmb3IgYSB0ZW1wb3Jhcnkgcm93IHJlcGFpci4gc1BQUiBpcyBtdWNoIGZhc3Rlcg0K
-Pj4gdGhhbiBoUFBSLCBidXQgdGhlIHJlcGFpciBpcyBsb3N0IHdpdGggYSBwb3dlciBjeWNsZS4N
-Cj4+DQpbLi4uXQ0KPj4gK2VudW0gY3hsX3Bwcl9wYXJhbSB7DQo+PiArCUNYTF9QUFJfUEFSQU1f
-RE9fUVVFUlksDQo+PiArCUNYTF9QUFJfUEFSQU1fRE9fUFBSLA0KPj4gK307DQo+PiArDQo+PiAr
-LyogU2VlIENYTCByZXYgMy4xIEA4LjIuOS43LjIuMSBUYWJsZSA4LTExMyBzUFBSIEZlYXR1cmUg
-UmVhZGFibGUNCj4+ICtBdHRyaWJ1dGVzICovDQo+PiArLyogU2VlIENYTCByZXYgMy4xIEA4LjIu
-OS43LjIuMiBUYWJsZSA4LTExNiBoUFBSIEZlYXR1cmUgUmVhZGFibGUNCj5BdHRyaWJ1dGVzICov
-DQo+PiArI2RlZmluZQlDWExfTUVNREVWX1BQUl9RVUVSWV9SRVNPVVJDRV9GTEFHIEJJVCgwKQ0K
-Pg0KPkFyZSBhbGwgdGhlIGV4dHJhIHNwYWNlcyBhZnRlciAjZGVmaW5lIGludGVuZGVkPw0KDQpG
-aXhlZC4NCj4NCj5ESg0KPg0KPj4gKw0KPj4gKyNkZWZpbmUgQ1hMX01FTURFVl9QUFJfREVWSUNF
-X0lOSVRJQVRFRF9NQVNLIEJJVCgwKSAjZGVmaW5lDQpbLi4uXQ0KPj4gK2ZlYXRfc3Bwcl9kb25l
-Og0KPj4gIAlyZXR1cm4gZWRhY19kZXZfcmVnaXN0ZXIoJmN4bG1kLT5kZXYsIGN4bF9kZXZfbmFt
-ZSwgTlVMTCwNCj4+ICAJCQkJIG51bV9yYXNfZmVhdHVyZXMsIHJhc19mZWF0dXJlcyk7ICB9DQo+
-DQoNClRoYW5rcywNClNoaWp1DQo=
+On 6/11/24 13:04, Zhuo, Qiuxu wrote:
+>> From: Orange Kao <orange@aiven.io>
+>> [...]
+>> Subject: [PATCH 3/3] EDAC/igen6: Allow setting edac_op_state
+>>
+>> Current implementation does not allow users to set edac_op_state. As a
+>> result, if a user needs to test different edac_op_state, they need to compile
+>> the kernel.
+>>
+>> This commit accepts module parameter edac_op_state which makes it easier
+>> for users to test IBECC on their hardware.
+> 
+> An SoC's (with the IBECC feature) memory error reporting type is determined.
+> Switching from NMI to Machine Check or vice versa for a given SoC is pointless
+> in the real world.
+> 
+> Additionally, the interrupt mode is preferred over the polling mode unless
+> the interrupt cannot work, as in the case you reported.
+> 
+> [ Sometimes, no choice is the best choice :-). ]
+> 
+> -Qiuxu
+
+Thank you Qiuxu and Boris. Good to know. I don't have any "actual" use 
+case so please exclude patch 3.
+
+Thanks
 
