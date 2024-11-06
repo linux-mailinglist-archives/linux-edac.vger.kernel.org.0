@@ -1,148 +1,103 @@
-Return-Path: <linux-edac+bounces-2456-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2457-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45DAE9BDE9B
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 07:12:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD9249BE5C8
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 12:41:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A9C4282010
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 06:12:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7297D280CB6
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 11:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FAC21922E1;
-	Wed,  6 Nov 2024 06:12:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086FD1DED66;
+	Wed,  6 Nov 2024 11:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bA5Wgbxz"
+	dkim=pass (1024-bit key) header.d=aiven.io header.i=@aiven.io header.b="J9u4KoBu"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F048D1922D8;
-	Wed,  6 Nov 2024 06:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143B857333
+	for <linux-edac@vger.kernel.org>; Wed,  6 Nov 2024 11:40:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730873553; cv=none; b=RLgzTwDC7ULh444A8Ap+5bIqPxboBTdO+HYc9lAwg0btd7jsO11eBXzMacHFHom7DJM1vIgzPhzYmfA7cCDgFIqwmfsSCbL6AjqtWeznigBTboAz+uP8KScGWsL4/MhCOtMDZVH5FIfgJ5ecGNc0/9Ap3euTgW0HYRT06vjIaMg=
+	t=1730893261; cv=none; b=uRvQFMc6bsVIJEYPTVXfAPZa9Yuywau2e2eZmENwjIad43OOr9Wu/I+XUKKng1f8F2BVBruKtK2nU1KyLTXvzhy6tP8yzvKe9lgufgGPWagalZQS3dm2wcLB4sn8Bs242W0Lb8E8CCsRXvrrPJ3be7H+mZr9PQEj21YzR92I0qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730873553; c=relaxed/simple;
-	bh=D0JUw2XPORngfrUnmh8daZdEZBtqjSX+Eg0u7JDObeI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C3RgcA3G9/9tUy85uQT/q3HAAVOugz0ZnLYChNc5Y+eJpkG5+U1+OgS4ZGtks/zAd33WCDNmKM4duFvG0hwbnk+fc3v/5HDxPgNv5jIZ14ChzjM7eGmOhcud1maNWoJVVYKHV0rT1Hr5h+a3vAOPKZHWL/qf44cNLxlu/kPh0H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bA5Wgbxz; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1730873542; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=F1x8diBjxJZ/wui4j6BD6zQoh/rM6nkCqZnmZjoErlo=;
-	b=bA5WgbxzsEjmnuiwqp+S1YnVdLU6xmpUJqru8ye8glTWbTLwYPbL11IR4s2mU5rp8NpM8FRF2+aYM8DaErDKvaLxV/Ae5QiMLAjAIkMEPx5Pq/WmnRUogUQAK3dyJqpq/yeC08qBr3eqTJQB+FeaAU5KkeT221MiIh2ow278cXE=
-Received: from 30.246.162.170(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WIqAQVZ_1730873538 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 06 Nov 2024 14:12:19 +0800
-Message-ID: <4decd52b-a2c9-4e04-9793-4d1553689b92@linux.alibaba.com>
-Date: Wed, 6 Nov 2024 14:12:17 +0800
+	s=arc-20240116; t=1730893261; c=relaxed/simple;
+	bh=lR3BHzYJ+UyV5g9B+Lpd5GZdOu4D7coiM+7Iq9nUw/A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f1Nj85VZsKOnl+lLnSZDoutCVuMsBRTedbu7itlt40GgA6XVWdlH4jJ4vZTlPaGteRxRoOdcJsRKU4kNGjeJeIxiDxRe4hPRWHrSA8EFFS1L13J56sQQvgohdTMdWc0D/2jx6Nitlh53l9rX/Ss4re5HzV+rCqGf7QM/0xTQvvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aiven.io; spf=pass smtp.mailfrom=aiven.io; dkim=pass (1024-bit key) header.d=aiven.io header.i=@aiven.io header.b=J9u4KoBu; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aiven.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aiven.io
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539fbe22ac0so6652847e87.2
+        for <linux-edac@vger.kernel.org>; Wed, 06 Nov 2024 03:40:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aiven.io; s=google; t=1730893258; x=1731498058; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ySISSvlzxGmhoArGiKFmusnd5mBhAFrK+lrvasOrzrU=;
+        b=J9u4KoBug/iW+3tmd4aho9CTqL+2qTUSky8XchTKsjhELKtlrmHIu9Eyz9gZPrEnsb
+         KXkoqCsP1w5dizeHaBUxANWFCQCr70k3laR4o/kYO1Ex0KnNvW2K4lCKyc32I36GoEaQ
+         Bq4R+roe42KcUvyX2pLNPG9QPAR6izBl/CLVg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730893258; x=1731498058;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ySISSvlzxGmhoArGiKFmusnd5mBhAFrK+lrvasOrzrU=;
+        b=TuAPMF59Jw9souPI7lMnvLmG7ClcS/KUZ4jANGBhlVXf8422Mbohk7kvqh7rtfdWyi
+         ot9HN+07/YycDvWPvuFQ/BnHDa+hCMomWu9tiyhgFW3z4zsJELqS25jh2Jz9ezgWFbAu
+         j9YvDpZdHAJZJAAOgiivupWUz2eudNsyCRhJM7E/dZyuI9ZQ/rp+N1rBrqPU6aE0AfLM
+         IXxkiD569Fkd1Ic7pzy4xHl8XIb6QGlXEAOYHmh3RPWS2Fgpt6vPxMYmishNhkCxXzvH
+         F1va2wDeYiveAyKOqTLz0nKWZAgFV8o6Kfwd+ZwMJUx552tfXIPyX4BICHFCO762noTi
+         4JjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWD4+QxhLW1TgbjrP7GWGAUPELvWYsKFn3jWvZqYkQ9T3YtNcuGmBMm91c9fXmW+BX30E6JOrs3vZ+l@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywic+3WIY5YXUOvw9Rs1bEn0VqagDqaO6XqykCAyPTMp415o153
+	AKagGoOwCT5nzxSq/Qe3G54xZ0G0aCfnSgJnrP1Br9RvieWsQ+1VWQaVUew/Eks=
+X-Google-Smtp-Source: AGHT+IGCHVL6P1HXUIFeV1W/f48tEQy51ZzoJzKtvWFdHm5yoh0RdI0mYxcLchXItqfbpw/xnKBozQ==
+X-Received: by 2002:a05:6512:398d:b0:533:711:35be with SMTP id 2adb3069b0e04-53b348e154fmr20203489e87.26.1730893258143;
+        Wed, 06 Nov 2024 03:40:58 -0800 (PST)
+Received: from ox.aiven-management.aivencloud.com (n114-74-229-70.bla3.nsw.optusnet.com.au. [114.74.229.70])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057d3f87sm93796755ad.249.2024.11.06.03.40.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2024 03:40:57 -0800 (PST)
+From: Orange Kao <orange@aiven.io>
+To: tony.luck@intel.com,
+	qiuxu.zhuo@intel.com
+Cc: bp@alien8.de,
+	james.morse@arm.com,
+	orange@kaosy.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mchehab@kernel.org,
+	rric@kernel.org
+Subject: [PATCH 0/3] EDAC/igen6: Add polling support and allow setting edac_op_state
+Date: Wed,  6 Nov 2024 11:35:44 +0000
+Message-ID: <20241106114024.941659-1-orange@aiven.io>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 2/3] mm: memory-failure: move return value
- documentation to function declaration
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: mark.rutland@arm.com, catalin.marinas@arm.com, mingo@redhat.com,
- robin.murphy@arm.com, Jonathan.Cameron@huawei.com, bp@alien8.de,
- rafael@kernel.org, wangkefeng.wang@huawei.com, tanxiaofei@huawei.com,
- mawupeng1@huawei.com, tony.luck@intel.com, linmiaohe@huawei.com,
- naoya.horiguchi@nec.com, james.morse@arm.com, tongtiangen@huawei.com,
- gregkh@linuxfoundation.org, will@kernel.org, jarkko@kernel.org,
- linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
- ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
- baolin.wang@linux.alibaba.com, tglx@linutronix.de,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com
-References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
- <20241104015430.98599-3-xueshuai@linux.alibaba.com>
- <20241105151847.GF916505@yaz-khff2.amd.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20241105151847.GF916505@yaz-khff2.amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Thank you Qiuxu and Boris.
+
+Here is the updated patch. I would like to propose that we keep the 
+edac_op_state as a module parameter. Because it would allow users (regardless of
+CPU SKU) to test different options on their machine without compiling their own
+kernel. I hope this could lower the entry barrier and make it easier for them to
+test IBECC.
+
+Patch 1: Initialize edac_op_state according to the configuration data
+Patch 2: Add polling support
+Patch 3: Allow setting edac_op_state
+
+Thanks. Please let me know if there is anything I should improve or if anything
+does not make sense.
 
 
-在 2024/11/5 23:18, Yazen Ghannam 写道:
-> On Mon, Nov 04, 2024 at 09:54:29AM +0800, Shuai Xue wrote:
->> Part of return value comments for memory_failure() were originally
->> documented at the call site. Move those comments to the function
->> declaration to improve code readability and to provide developers with
->> immediate access to function usage and return information.
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> ---
->>   arch/x86/kernel/cpu/mce/core.c | 7 -------
->>   mm/memory-failure.c            | 9 ++++++---
->>   2 files changed, 6 insertions(+), 10 deletions(-)
->>
->> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
->> index 2a938f429c4d..c90d8fcd246a 100644
->> --- a/arch/x86/kernel/cpu/mce/core.c
->> +++ b/arch/x86/kernel/cpu/mce/core.c
->> @@ -1373,13 +1373,6 @@ static void kill_me_maybe(struct callback_head *cb)
->>   		return;
->>   	}
->>   
->> -	/*
->> -	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
->> -	 * to the current process with the proper error info,
->> -	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
->> -	 *
->> -	 * In both cases, no further processing is required.
->> -	 */
->>   	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
->>   		return;
->>   
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 96ce31e5a203..1c5098f32d48 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2209,9 +2209,12 @@ static void kill_procs_now(struct page *p, unsigned long pfn, int flags,
->>    * Must run in process context (e.g. a work queue) with interrupts
->>    * enabled and no spinlocks held.
->>    *
->> - * Return: 0 for successfully handled the memory error,
->> - *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
->> - *         < 0(except -EOPNOTSUPP) on failure.
->> + * Return:
->> + *   0             - success,
-> 
-> One more obvious one from this function:
-> 
-> 	-ENXIO        - memory not managed by the kernel
-
-Yes, will fix it.
-
-> 
->> + *   -EOPNOTSUPP   - hwpoison_filter() filtered the error event,
->> + *   -EHWPOISON    - the page was already poisoned, potentially
->> + *                   kill process,
->> + *   other negative values - failure.
->>    */
->>   int memory_failure(unsigned long pfn, int flags)
->>   {
->> -- 
-> 
-> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> 
-> Thanks,
-> Yazen
-
-Thank you for valuable comments.
-Shuai
 
