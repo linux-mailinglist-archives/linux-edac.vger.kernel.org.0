@@ -1,453 +1,221 @@
-Return-Path: <linux-edac+bounces-2465-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2466-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B359F9BFA39
-	for <lists+linux-edac@lfdr.de>; Thu,  7 Nov 2024 00:34:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 993A29C04F0
+	for <lists+linux-edac@lfdr.de>; Thu,  7 Nov 2024 12:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74127283F05
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Nov 2024 23:34:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 580BC28178F
+	for <lists+linux-edac@lfdr.de>; Thu,  7 Nov 2024 11:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F23020CCF3;
-	Wed,  6 Nov 2024 23:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD3020ADC1;
+	Thu,  7 Nov 2024 11:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BsKD38Ak"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eBRE6Zck"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB108168BD;
-	Wed,  6 Nov 2024 23:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730936097; cv=none; b=qgirOg8rAgte/L8eFa+VY35IbY+XRzJzVPWDFnshjHfjzrtyi7BJEc8fmoZne7MASsXZ8tbGir7lK8fqIlaByAe4NH5XEMrwSizRT3a7TO6C/IBm0mIxrodp8SfhLjmpVqT4j72M99f1mtF1bQR3BuGVQNIgPJBGvGORTGhxZI4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730936097; c=relaxed/simple;
-	bh=eSWnXMt84uuSKv4n1E/4P/zRZgnj3xbM9RKn/bEzlmg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z619IIwy3YJwVkeuLnKcP+az9t7TL4/8JsLXgrSMThbeTZrcxY6iB4XqMsqzTpbMq91yR9J3YdPBWuDc6pLxaRk6cvtOa4K4D3rRP7kLjljU087cByNGDlA+bnE2hQpkXUdMVQIjEmaWA8I2Zth3tTOss3go5nJRrWreylaNl60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BsKD38Ak; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256CF20ADC8;
+	Thu,  7 Nov 2024 11:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730980440; cv=fail; b=SgCPZEy0CRMgm+uLRp9uqOnGwrtaUB2mcquUQOdzloT688cX1Q5jVe8Rbw9gte5IJYnc1gySWLX8sbzCSjQRTljS+B+H9spw15Kd/DghMQxcOK7oRj7vhY4X6vlBymTF8zEVJGWY1i7IYTcbl1BP68T5XhYqE+OVbcqdGXJDTzc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730980440; c=relaxed/simple;
+	bh=TQSuaWjBesOCLLi7fO3/NzabFjvDB/iPMeVYiLtTrsM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=nEgHmVYLnwo5bD22427M++eDIJF352MWycGrReUaHTZ940JnmxT/1a3fRUfnprFlD88sLemOZhh5ER8g8MooSlNym4o5nsZtp3XKlExTFXl7MM5NenQuRY3nfHwLquBsifV0S3HQqMGl4CVI2JqSNS7fDSaU//U8cgoMcaIbKXE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eBRE6Zck; arc=fail smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730936095; x=1762472095;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eSWnXMt84uuSKv4n1E/4P/zRZgnj3xbM9RKn/bEzlmg=;
-  b=BsKD38AkrULm+wr/zQ9BPWj/Th71Jlc8hELZfr8kp/iga8RUwf85eMqX
-   /J+PKkZY0cKZtphZr3IqDifpRuO6wJ7Z057lUP1Z57BV/rg1h4DPtrx7d
-   FYvZM/MxjpUEeCXYQvjAau4J7f30AcfN7AuisKDjlGCLZdT8faARXi/Qd
-   9OWgLo277GX2xR8getPyHAlZ5GjsXnAMagdrc/DEvk6uImihefUpaPU3b
-   LI10lE6FnNQ9gXCt1zZS3iEifCWYAa68F2FOpFvNf/MG/CEZfK7/khZ4G
-   srOnZmc+Wv4FrTRWAEvway4mU8c3sBQmsseSrPPVY6JdstL+PcZ9KEk0o
-   Q==;
-X-CSE-ConnectionGUID: 7+WQTGzNRFy/00KuDUOY4w==
-X-CSE-MsgGUID: kTqo1h6UTqyOMrnV/nzpTg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="53317603"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="53317603"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 15:34:54 -0800
-X-CSE-ConnectionGUID: NF0vpozUQTikJA2BFFTzYg==
-X-CSE-MsgGUID: o1lNPTweSA64xESvsANXgw==
+  t=1730980440; x=1762516440;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=TQSuaWjBesOCLLi7fO3/NzabFjvDB/iPMeVYiLtTrsM=;
+  b=eBRE6ZckKRZj4UIxBiKzRzo86/2t6Sqd2GXLwt0RmXar4SeCVe88n3Fx
+   U7lBn+82kf74c0xxTlX1XQWtTGatsVOQPHhusfuVJ1/njxyVUfzyRxocH
+   02g2yGHRxUys3LMr3nvSIXz2r9XTS3+6enMtS+E4QyhUUuPSDWu1hgEX7
+   eLb5z/4VvLq1fwb3gJ7lKB1PaggxX7+NLnImoucgOWF1Db25UMqSB1GVW
+   u1Sd+dNGq4c+k1th3rm0CfEXBbtfpmC7bOTVk/5SrYk6MgxwbIZc+awDn
+   5mYAz13GXhPryHM0CE1PPvY3do7t1P13HQjkAtNYu3hxko72qh8x8bEFc
+   w==;
+X-CSE-ConnectionGUID: X1mmHn5eS6uQP4qZlJCFGg==
+X-CSE-MsgGUID: b2kEUND3QjOJVW8sExGWZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="34592987"
+X-IronPort-AV: E=Sophos;i="6.12,265,1728975600"; 
+   d="scan'208";a="34592987"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 03:53:59 -0800
+X-CSE-ConnectionGUID: 9e62zgmySWKifK6823hInQ==
+X-CSE-MsgGUID: +BComSkWTdq5PZHKZCY5dQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,264,1725346800"; 
-   d="scan'208";a="84912598"
-Received: from ehanks-mobl1.amr.corp.intel.com (HELO [10.125.110.92]) ([10.125.110.92])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 15:34:51 -0800
-Message-ID: <49228a3c-23b0-4aac-9c7f-e605045e3c8f@intel.com>
-Date: Wed, 6 Nov 2024 16:34:49 -0700
+X-IronPort-AV: E=Sophos;i="6.12,265,1728975600"; 
+   d="scan'208";a="84984396"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa009.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 Nov 2024 03:53:58 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 7 Nov 2024 03:53:58 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 7 Nov 2024 03:53:58 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 7 Nov 2024 03:53:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gaI4KYIZaECYD+z9NzWhwkN+wxdgpUUWCl/MZidnMG1B7lDd4elPpuex22VFObxFmeGfYwZP/M+1IjGkMd1zePKUGPY4l15MLodUT1HXZk1oJCvFQfIrVFl9Tk1xbp9L6czTuQE1V7RRM3ospbEdYcEgjEmgdtoyfeMowt8R/NVMkq3n9VevY22yiy1MH0Fw4cQ15MgHfsqB+5TpaKGojHe8+wD61yRYRLUmeCis0s2k/QwEESoSJPKuV4whSeCPB/W9RDlgJg/vpTvPKL7PGJbJYGvmghxeZYkI1lWpZc/J152juE9BdECvvBIKzekaJQ9zS1L8UTVRoeiuioTe1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qq4Fi92sncY63A8N17TVM9Eg3EAhRxUvKGRPg5Cxh8o=;
+ b=jjxtY8qocg09FN6wanxXB/nADyUayvW8LZBr0Vns52PeHvF892c+yRQFDDEzv2Y1YPDtKvooV2FEncVcy9Yx1NyAG3q1o/KXTFXniE9UCmM+vKug6VRZVKlMle8LyZ7myPQwyXwQN81/DrqZkk4ijaDIjUB+P9KzVes7FDr+8NfKuXhxiPVX2MtYreP1FjV5+55rnjWkH/XLmXdE9Kw1u56Q673/P56kw10wz9uXT0uRU9wNzW30CMVO78Xntdym8dnEKoKRMyMxrPi18H41+B1utkWPogBcPor+5YJdXV1SefYY86aq07MQUwgOEFZa3TRVakfckRQuHhPlBO7a3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
+ by SA1PR11MB8576.namprd11.prod.outlook.com (2603:10b6:806:3b5::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.23; Thu, 7 Nov
+ 2024 11:53:51 +0000
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::cd87:9086:122c:be3d%4]) with mapi id 15.20.8114.028; Thu, 7 Nov 2024
+ 11:53:51 +0000
+From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+To: Orange Kao <orange@aiven.io>, "Luck, Tony" <tony.luck@intel.com>
+CC: "bp@alien8.de" <bp@alien8.de>, "james.morse@arm.com"
+	<james.morse@arm.com>, "orange@kaosy.org" <orange@kaosy.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "rric@kernel.org"
+	<rric@kernel.org>
+Subject: RE: [PATCH 2/3] EDAC/igen6: Add polling support
+Thread-Topic: [PATCH 2/3] EDAC/igen6: Add polling support
+Thread-Index: AQHbMEDdOOErzlMS/0uupyaAcmloUrKrtojw
+Date: Thu, 7 Nov 2024 11:53:51 +0000
+Message-ID: <CY8PR11MB7134A6E8A5B8CFE1699CD9A7895C2@CY8PR11MB7134.namprd11.prod.outlook.com>
+References: <20241106114024.941659-1-orange@aiven.io>
+ <20241106114024.941659-3-orange@aiven.io>
+In-Reply-To: <20241106114024.941659-3-orange@aiven.io>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|SA1PR11MB8576:EE_
+x-ms-office365-filtering-correlation-id: d916513c-4bcb-4f49-7bb0-08dcff22d914
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?Aix654JcXyL8rbhPEs4f7UexdAgw+SdQbGND3qiNuTdbdwk1ndcpd7tHnIu4?=
+ =?us-ascii?Q?EYHalpbt7ER82GbbtHV0PsZ9KRZpAeNoGX8OYUUhFkJsGGRAeJmoCkWdqzD/?=
+ =?us-ascii?Q?Tqto802howzI02huoAo/fKk5VROMxfqcIkxOf/GqI6I2hGJ4HgxKPGNMc3Eh?=
+ =?us-ascii?Q?14a6gHRVs7CWJrq0E9QBt5XUWOG+X5u84NjhyV+EN/R9LMTZVqyewFB7OwaL?=
+ =?us-ascii?Q?cHLCDoonI02OmcJQahQBn+94bv+QlUGuvrRH+Y2eJEQKwRWYYmr1QI5dXJCb?=
+ =?us-ascii?Q?FYvmp4sXVEWh8SLc0LA2HQID0+m4h5hrAFpe4/rQ/goaH5MtAagMDhZRhhbZ?=
+ =?us-ascii?Q?8uThHKjYMAwjWOphEk8IBzrtB89oYTfr8euZa4qPn1LsJkkLa79TIcLZ6XgC?=
+ =?us-ascii?Q?vn4u76cYGpcKbvRvcV+OBqAeFZSMrfbuzZZihe8l8N1t42xvSrpAnbpxT6eO?=
+ =?us-ascii?Q?TYYFfLTOZx3zF4O6hWFev7Oe97AYX2En3coduv5Vkx31W1nx5bzb/M0SjIi4?=
+ =?us-ascii?Q?kuRKI1/1CYlC1UXktG5lTwEGz7OMQs7hZWEyqESC0+KSPqv/k68jO2E4ECn7?=
+ =?us-ascii?Q?RrFcLRkcUKUw6Zv24s6qdWVyvfUbNan3Z0Uqs40T23ikWFoEv1B3MQUzoMx9?=
+ =?us-ascii?Q?TcQEYB4GAKt49tjJfsAT1yph7g5OADkgmSHsz6Md6lcvVWf4/Z7odOTQFmtB?=
+ =?us-ascii?Q?1H+73GjabA/ed/5Qo1oT1NkYibGYl1AJbroTrqv8EoUW4Iaj3X73FdfiZMBM?=
+ =?us-ascii?Q?ssPg+SReNP4C5nceBdJ1w2+cm5slg0Kfie+6OQNO5WCJJyNl+TeoRQ8S2661?=
+ =?us-ascii?Q?M9z6t8qhwVUtZWt4ucJT/8LJrW/MvCWzaGzmiKuDfT+6MraeXSxBTEy8+Gs5?=
+ =?us-ascii?Q?pXAmrn+giBWb+7DuWHMA4zeV/lpI61IH0DGy3LyFMgo5gPofO2HOa0fKMBXv?=
+ =?us-ascii?Q?DZK6TirxShXBPLWufQIgGLUBlG2CxAljfRIoy/oloecoXrWcyts49KDHURtQ?=
+ =?us-ascii?Q?KjuWnziyrqL9hZVlcrdiLXsOqaRDwr3VomvLZu41/KXzfIfFv2doRzs3LEfp?=
+ =?us-ascii?Q?P75zGvD8rx/wLrqOm6Ht5D/4bZimyNHC5p13ELW4Bg6kCFPa89a/37z3vFrj?=
+ =?us-ascii?Q?2jEdhrgeP3DTcvfXYqT9e9HvHbuAjJkrd7Xw5yul0Q/uE0yI2izoM7gSxWrY?=
+ =?us-ascii?Q?OtsZMY2a04K1dAuEpWto+wm95RyBHaF5J/3kfc4JE2aSJLwbaYmpXT+EOaL/?=
+ =?us-ascii?Q?JF0vuWn4QqY9qqiChKW/M8n1GJcpsNKzu8lKQgt61MkXiphC8vLNoe3xOp/u?=
+ =?us-ascii?Q?qRo1rIBEjbCIYkc/PACng4M/xACIJ4DT4N3RMkS2tf82SAwZaGsKtqWZCJ60?=
+ =?us-ascii?Q?VlmWQow=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?os+De3HXxGXRj14Up0vP6hbjiSo35Rygw+C0gmN6mykudr8/hmdTLhwLGult?=
+ =?us-ascii?Q?DEDGksPkxyjRTc5Qxlpr1RXHOlmAD4ly/sqSG3CHe46JENtdSQxUtrMrYjUF?=
+ =?us-ascii?Q?po/RDSp5BgGKnwUDB3qxDaBHNxYC0jE7+NmSZtsXU2TiPPUlJh7bwTqbZM6K?=
+ =?us-ascii?Q?l/3OiNYJYeTfNabYWg35fQKKIPF4xOe9KqRHttno3+4OFd5YsDEN2Py+6GHV?=
+ =?us-ascii?Q?1Xt5RQMDSrwtqgHOG9gkLvrsDCcX9YVT3kLkb2IcBI/KKWhgZE1h8P5pBJ9o?=
+ =?us-ascii?Q?Epq24hIQEgUXs4RD+KEfk21SblQqNF0z6MwBSpo/WYyFt185b9HdOFTPrG/g?=
+ =?us-ascii?Q?ngkHidh69QrVP2jhLQVyIMvy0aYbfM1pBc4CzKGAFlec+6Ce5Qi4cO7BTjbl?=
+ =?us-ascii?Q?HgUTOro2P7aVoxhpREkIEftZWCQd9LApl5CoiK0zOyhdV25XE+N3FmhVAlt5?=
+ =?us-ascii?Q?x+DEVwtBBy/Zv+5lgxOldAJdbUJTJfbSWYJbrYVWtU2/1H0qnhzgFRkgtHEo?=
+ =?us-ascii?Q?fCu3aFHXicjSzmuBBkt5F9yxGnaG7kSzPkt3dlTxLULe/MvSwL4m+tkKoDhL?=
+ =?us-ascii?Q?7AzKoJ2JWkiKB06T9NAPhnAbBY0dshSARafZ1uckUkFwbwbYvt4s4kt2fMRX?=
+ =?us-ascii?Q?7BrhVfRzDTbDQOqMlvk2OBCFBDmVzRpbkOGqyElax2tP5zvGs2oeSujgVxQI?=
+ =?us-ascii?Q?GE8TVswMCpb7b3qzOHTT37Bkw2ER1pAOl6wN1l7yH5ONNyDcuc+hmv4IGkB9?=
+ =?us-ascii?Q?Pie6ZkMaMdX+NFstRlzYAsH1HyJI0eRl5CruzCKa4GoHeSJBEkA1/4ddKrPA?=
+ =?us-ascii?Q?znM99W7bXhfbwhNZNXgUp3Ikn5OApx0i9+UzUmsDw85ujH0+quDz+XRdZZGW?=
+ =?us-ascii?Q?JO+GJHQr4TO0y0DiDVjwW1cJpMkUIVv8U866jfUVQrOSfy4XQHPE+nvwzbeb?=
+ =?us-ascii?Q?8HtzNZfYcVy9AZ9f59dDVKAOR/GMkyZnG3f36Q+wAuR1XzAExSuFCPDBavTa?=
+ =?us-ascii?Q?5VOvwrCb3oozfTLWJQ433LQD5bYLbvTIMNSEpupBMZlnyke2saH+f9wSBcXY?=
+ =?us-ascii?Q?sxek+u2Z5F9absHtu98QjaM8FMllqWo4LKcVk5Rm3YVqckfx1XUPQsUHJE2t?=
+ =?us-ascii?Q?yTGXH7m0Y3IiDHuVRx8Tj0qfuRhJAnecBXGlOwMcsVBaW1TiJTJJW/Bxjf5a?=
+ =?us-ascii?Q?o3dziXraGyvYEF6RpmCPBXcKulQYFGyhjEXsnoPrdTystEZKD3baCTkfy2Wv?=
+ =?us-ascii?Q?swBNJkj0uyfZfUx0VTVFOtqCtvsmwvJorpXqU4WcQDliZWYmMLDdHrBWKIWr?=
+ =?us-ascii?Q?6wyGhyiIlAzRr4cToRzEgSVsZCswx1A0hHtlotWsoypCGBf//dTPBgh2YRmy?=
+ =?us-ascii?Q?O6TF/0GKcOcJbds1eYIkHZsuENgEKKqKjBTfdFSfCopQllqYW+Pvq4oGn8tT?=
+ =?us-ascii?Q?yDxvBYOPRK3Y4aTA6lpKpfRChGjiy0LQ+rAa3rF6x3O8Pg3S7eodLQEZpPVo?=
+ =?us-ascii?Q?JwVdJJDtJLs70tg3qpZFbB16xvEjXwppMLl+9au41QUz3IrZPB6oZ5MeBF90?=
+ =?us-ascii?Q?Ai5uNyoTVmwuhS7vCiFS7iM1LvV+6hsLqhfJH/n7?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 04/15] cxl: Add Get Supported Features command for
- kernel usage
-To: shiju.jose@huawei.com, linux-edac@vger.kernel.org,
- linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org
-Cc: bp@alien8.de, tony.luck@intel.com, rafael@kernel.org, lenb@kernel.org,
- mchehab@kernel.org, dan.j.williams@intel.com, dave@stgolabs.net,
- jonathan.cameron@huawei.com, gregkh@linuxfoundation.org,
- sudeep.holla@arm.com, jassisinghbrar@gmail.com, alison.schofield@intel.com,
- vishal.l.verma@intel.com, ira.weiny@intel.com, david@redhat.com,
- Vilas.Sridharan@amd.com, leo.duran@amd.com, Yazen.Ghannam@amd.com,
- rientjes@google.com, jiaqiyan@google.com, Jon.Grimm@amd.com,
- dave.hansen@linux.intel.com, naoya.horiguchi@nec.com, james.morse@arm.com,
- jthoughton@google.com, somasundaram.a@hpe.com, erdemaktas@google.com,
- pgonda@google.com, duenwen@google.com, gthelen@google.com,
- wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
- wbs@os.amperecomputing.com, nifan.cxl@gmail.com, tanxiaofei@huawei.com,
- prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
- kangkang.shen@futurewei.com, wanghuiqiang@huawei.com, linuxarm@huawei.com
-References: <20241101091735.1465-1-shiju.jose@huawei.com>
- <20241101091735.1465-5-shiju.jose@huawei.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20241101091735.1465-5-shiju.jose@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d916513c-4bcb-4f49-7bb0-08dcff22d914
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2024 11:53:51.5436
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NPOmrulMpG3XL6fDkf/GFgO+pjxd23FMFnYRF8kRcj4ENCB0b4q/ujnRt2RJuo/na2l55Ix2SbnxrZC4z1xNGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8576
+X-OriginatorOrg: intel.com
 
+> From: Orange Kao <orange@aiven.io>
+> Sent: Wednesday, November 6, 2024 7:36 PM
+> To: Luck, Tony <tony.luck@intel.com>; Zhuo, Qiuxu <qiuxu.zhuo@intel.com>
+> Cc: bp@alien8.de; james.morse@arm.com; orange@kaosy.org; linux-
+> edac@vger.kernel.org; linux-kernel@vger.kernel.org; mchehab@kernel.org;
+> rric@kernel.org; Orange Kao <orange@aiven.io>
+> Subject: [PATCH 2/3] EDAC/igen6: Add polling support
+>=20
+> Some PCs with Intel N100 (with PCI device 8086:461c, DID_ADL_N_SKU4)
+> experienced issues with error interrupts not working, even with the follo=
+wing
+> configuration in the BIOS.
+>=20
+>     In-Band ECC Support: Enabled
+>     In-Band ECC Operation Mode: 2 (make all requests protected and
+>                                    ignore range checks)
+>     IBECC Error Injection Control: Inject Correctable Error on insertion
+>                                    counter
+>     Error Injection Insertion Count: 251658240 (0xf000000)
+>=20
+> Add polling mode support for these machines to ensure that memory error
+> events are handled.
+>=20
+> Signed-off-by: Orange Kao <orange@aiven.io>
 
+LGTM. Thanks!
 
-On 11/1/24 2:17 AM, shiju.jose@huawei.com wrote:
-> From: Dave Jiang <dave.jiang@intel.com>
-> 
-> CXL spec r3.1 8.2.9.6.1 Get Supported Features (Opcode 0500h)
-> The command retrieve the list of supported device-specific features
-> (identified by UUID) and general information about each Feature.
-> 
-> The driver will retrieve the feature entries in order to make checks and
-> provide information for the Get Feature and Set Feature command. One of
-> the main piece of information retrieved are the effects a Set Feature
-> command would have for a particular feature.
-> 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-> Co-developed-by: Shiju Jose <shiju.jose@huawei.com>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-
-Found couple endien conversion changes below:
-
-> ---
->  drivers/cxl/core/mbox.c      | 175 +++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxlmem.h         |  47 ++++++++++
->  drivers/cxl/pci.c            |   4 +
->  include/cxl/mailbox.h        |   4 +
->  include/uapi/linux/cxl_mem.h |   1 +
->  5 files changed, 231 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 5175138c4fb7..5045960e3bfe 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -67,6 +67,7 @@ static struct cxl_mem_command cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] = {
->  	CXL_CMD(SET_SHUTDOWN_STATE, 0x1, 0, 0),
->  	CXL_CMD(GET_SCAN_MEDIA_CAPS, 0x10, 0x4, 0),
->  	CXL_CMD(GET_TIMESTAMP, 0, 0x8, 0),
-> +	CXL_CMD(GET_SUPPORTED_FEATURES, 0x8, CXL_VARIABLE_PAYLOAD, 0),
->  };
->  
->  /*
-> @@ -795,6 +796,180 @@ static const uuid_t log_uuid[] = {
->  	[VENDOR_DEBUG_UUID] = DEFINE_CXL_VENDOR_DEBUG_UUID,
->  };
->  
-> +static void cxl_free_features(void *features)
-> +{
-> +	kvfree(features);
-> +}
-> +
-> +static int cxl_get_supported_features_count(struct cxl_dev_state *cxlds)
-> +{
-> +	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
-> +	struct cxl_mbox_get_sup_feats_out mbox_out;
-> +	struct cxl_mbox_get_sup_feats_in mbox_in;
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	int rc;
-> +
-> +	memset(&mbox_in, 0, sizeof(mbox_in));
-> +	mbox_in.count = sizeof(mbox_out);
-
-mbox_in.count = cpu_to_le32(sizeof(mbox_out));
-
-> +	memset(&mbox_out, 0, sizeof(mbox_out));
-> +	mbox_cmd = (struct cxl_mbox_cmd) {
-> +		.opcode = CXL_MBOX_OP_GET_SUPPORTED_FEATURES,
-> +		.size_in = sizeof(mbox_in),
-> +		.payload_in = &mbox_in,
-> +		.size_out = sizeof(mbox_out),
-> +		.payload_out = &mbox_out,
-> +		.min_out = sizeof(mbox_out),
-> +	};
-> +	rc = cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);
-> +	if (rc < 0)
-> +		return rc;
-> +
-> +	cxl_mbox->num_features = le16_to_cpu(mbox_out.supported_feats);
-> +	if (!cxl_mbox->num_features)
-> +		return -ENOENT;
-> +
-> +	return 0;
-> +}
-> +
-> +int cxl_get_supported_features(struct cxl_memdev_state *mds)
-> +{
-> +	int remain_feats, max_size, max_feats, start, rc;
-> +	struct cxl_dev_state *cxlds = &mds->cxlds;
-> +	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
-> +	int feat_size = sizeof(struct cxl_feat_entry);
-> +	struct cxl_mbox_get_sup_feats_out *mbox_out;
-> +	struct cxl_mbox_get_sup_feats_in mbox_in;
-> +	int hdr_size = sizeof(*mbox_out);
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	struct cxl_mem_command *cmd;
-> +	void *ptr;
-> +
-> +	/* Get supported features is optional, need to check */
-> +	cmd = cxl_mem_find_command(CXL_MBOX_OP_GET_SUPPORTED_FEATURES);
-> +	if (!cmd)
-> +		return -EOPNOTSUPP;
-> +	if (!test_bit(cmd->info.id, mds->enabled_cmds))
-> +		return -EOPNOTSUPP;
-> +
-> +	rc = cxl_get_supported_features_count(cxlds);
-> +	if (rc)
-> +		return rc;
-> +
-> +	struct cxl_feat_entry *entries __free(kvfree) =
-> +		kvmalloc(cxl_mbox->num_features * feat_size, GFP_KERNEL);
-> +
-> +	if (!entries)
-> +		return -ENOMEM;
-> +
-> +	cxl_mbox->entries = no_free_ptr(entries);
-> +	rc = devm_add_action_or_reset(cxl_mbox->host, cxl_free_features,
-> +				      cxl_mbox->entries);
-> +	if (rc)
-> +		return rc;
-> +
-> +	max_size = cxl_mbox->payload_size - hdr_size;
-> +	/* max feat entries that can fit in mailbox max payload size */
-> +	max_feats = max_size / feat_size;
-> +	ptr = &cxl_mbox->entries[0];
-> +
-> +	mbox_out = kvmalloc(cxl_mbox->payload_size, GFP_KERNEL);
-> +	if (!mbox_out)
-> +		return -ENOMEM;
-> +
-> +	start = 0;
-> +	remain_feats = cxl_mbox->num_features;
-> +	do {
-> +		int retrieved, alloc_size, copy_feats;
-  +		int num_entries;
-> +
-> +		if (remain_feats > max_feats) {
-> +			alloc_size = sizeof(*mbox_out) + max_feats * feat_size;
-> +			remain_feats = remain_feats - max_feats;
-> +			copy_feats = max_feats;
-> +		} else {
-> +			alloc_size = sizeof(*mbox_out) + remain_feats * feat_size;
-> +			copy_feats = remain_feats;
-> +			remain_feats = 0;
-> +		}
-> +
-> +		memset(&mbox_in, 0, sizeof(mbox_in));
-> +		mbox_in.count = alloc_size;
-> +		mbox_in.start_idx = start;
-mbox_in.count = cpu_to_le32(alloc_size);
-mbox_in.start_idx = cpu_to_le16(start);
-
-
-> +		memset(mbox_out, 0, alloc_size);
-> +		mbox_cmd = (struct cxl_mbox_cmd) {
-> +			.opcode = CXL_MBOX_OP_GET_SUPPORTED_FEATURES,
-> +			.size_in = sizeof(mbox_in),
-> +			.payload_in = &mbox_in,
-> +			.size_out = alloc_size,
-> +			.payload_out = mbox_out,
-> +			.min_out = hdr_size,
-> +		};
-> +		rc = cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);
-> +		if (rc < 0)
-> +			goto err;
-> +		if (mbox_cmd.size_out <= hdr_size) {
-> +			rc = -ENXIO;
-> +			goto err;
-> +		}
-> +
-> +		/*
-> +		 * Make sure retrieved out buffer is multiple of feature
-> +		 * entries.
-> +		 */
-> +		retrieved = mbox_cmd.size_out - hdr_size;
-> +		if (retrieved % feat_size) {
-> +			rc = -ENXIO;
-> +			goto err;
-> +		}
-> +
-
-  +		num_entries = le16_to_cpu(mbox_out->num_entries);
-> +		/*
-> +		 * If the reported output entries * defined entry size !=
-> +		 * retrieved output bytes, then the output package is incorrect.
-> +		 */
-> +		if (mbox_out->num_entries * feat_size != retrieved) {
-if (num_entries * feat_size != retrieved) {
-> +			rc = -ENXIO;
-> +			goto err;
-> +		}
-> +
-> +		memcpy(ptr, mbox_out->ents, retrieved);
-> +		ptr += retrieved;
-> +		/*
-> +		 * If the number of output entries is less than expected, add the
-> +		 * remaining entries to the next batch.
-> +		 */
-> +		remain_feats += copy_feats - mbox_out->num_entries;
-> +		start += mbox_out->num_entries;
-remain_feat += copy_feats - num_entries;
-start += num_entries;
-
-> +	} while (remain_feats);
-> +
-> +	kfree(mbox_out);
-> +	return 0;
-> +
-> +err:
-> +	kfree(mbox_out);
-> +	cxl_mbox->num_features = 0;
-> +	return rc;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_get_supported_features, CXL);
-> +
-> +int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *feat_uuid,
-> +				    struct cxl_feat_entry *feat_entry_out)
-> +{
-> +	struct cxl_dev_state *cxlds = &mds->cxlds;
-> +	struct cxl_feat_entry *feat_entry;
-> +	int count;
-> +
-> +	/* Check CXL dev supports the feature */
-> +	feat_entry = &cxlds->cxl_mbox.entries[0];
-> +	for (count = 0; count < cxlds->cxl_mbox.num_features; count++, feat_entry++) {
-> +		if (uuid_equal(&feat_entry->uuid, feat_uuid)) {
-> +			memcpy(feat_entry_out, feat_entry, sizeof(*feat_entry_out));
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_get_supported_feature_entry, CXL);
-> +
->  /**
->   * cxl_enumerate_cmds() - Enumerate commands for a device.
->   * @mds: The driver data for the operation
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 2a25d1957ddb..f88b10188632 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -530,6 +530,7 @@ enum cxl_opcode {
->  	CXL_MBOX_OP_GET_LOG_CAPS	= 0x0402,
->  	CXL_MBOX_OP_CLEAR_LOG           = 0x0403,
->  	CXL_MBOX_OP_GET_SUP_LOG_SUBLIST = 0x0405,
-> +	CXL_MBOX_OP_GET_SUPPORTED_FEATURES	= 0x0500,
->  	CXL_MBOX_OP_IDENTIFY		= 0x4000,
->  	CXL_MBOX_OP_GET_PARTITION_INFO	= 0x4100,
->  	CXL_MBOX_OP_SET_PARTITION_INFO	= 0x4101,
-> @@ -813,6 +814,48 @@ enum {
->  	CXL_PMEM_SEC_PASS_USER,
->  };
->  
-> +/* Get Supported Features (0x500h) CXL r3.1 8.2.9.6.1 */
-> +struct cxl_mbox_get_sup_feats_in {
-> +	__le32 count;
-> +	__le16 start_idx;
-> +	u8 reserved[2];
-> +} __packed;
-> +
-> +/* Supported Feature Entry : Payload out attribute flags */
-> +#define CXL_FEAT_ENTRY_FLAG_CHANGABLE	BIT(0)
-> +#define CXL_FEAT_ENTRY_FLAG_DEEPEST_RESET_PERSISTENCE_MASK	GENMASK(3, 1)
-> +#define CXL_FEAT_ENTRY_FLAG_PERSIST_ACROSS_FIRMWARE_UPDATE	BIT(4)
-> +#define CXL_FEAT_ENTRY_FLAG_SUPPORT_DEFAULT_SELECTION	BIT(5)
-> +#define CXL_FEAT_ENTRY_FLAG_SUPPORT_SAVED_SELECTION	BIT(6)
-> +
-> +enum cxl_feat_attr_value_persistence {
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_NONE,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_CXL_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_HOT_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_WARM_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_COLD_RESET,
-> +	CXL_FEAT_ATTR_VALUE_PERSISTENCE_MAX
-> +};
-> +
-> +struct cxl_feat_entry {
-> +	uuid_t uuid;
-> +	__le16 id;
-> +	__le16 get_feat_size;
-> +	__le16 set_feat_size;
-> +	__le32 attr_flags;
-> +	u8 get_feat_ver;
-> +	u8 set_feat_ver;
-> +	__le16 set_effects;
-> +	u8 reserved[18];
-> +} __packed;
-> +
-> +struct cxl_mbox_get_sup_feats_out {
-> +	__le16 num_entries;
-> +	__le16 supported_feats;
-> +	u8 reserved[4];
-> +	struct cxl_feat_entry ents[] __counted_by_le(supported_feats);
-> +} __packed;
-> +
->  int cxl_internal_send_cmd(struct cxl_mailbox *cxl_mbox,
->  			  struct cxl_mbox_cmd *cmd);
->  int cxl_dev_state_identify(struct cxl_memdev_state *mds);
-> @@ -872,4 +915,8 @@ struct cxl_hdm {
->  struct seq_file;
->  struct dentry *cxl_debugfs_create_dir(const char *dir);
->  void cxl_dpa_debug(struct seq_file *file, struct cxl_dev_state *cxlds);
-> +
-> +int cxl_get_supported_features(struct cxl_memdev_state *mds);
-> +int cxl_get_supported_feature_entry(struct cxl_memdev_state *mds, const uuid_t *feat_uuid,
-> +				    struct cxl_feat_entry *feat_entry_out);
->  #endif /* __CXL_MEM_H__ */
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index 188412d45e0d..5c2926eec3c3 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -887,6 +887,10 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> +	rc = cxl_get_supported_features(mds);
-> +	if (rc)
-> +		dev_dbg(&pdev->dev, "No features enumerated.\n");
-> +
->  	rc = cxl_set_timestamp(mds);
->  	if (rc)
->  		return rc;
-> diff --git a/include/cxl/mailbox.h b/include/cxl/mailbox.h
-> index bacd111e75f1..cc66afec3473 100644
-> --- a/include/cxl/mailbox.h
-> +++ b/include/cxl/mailbox.h
-> @@ -14,6 +14,8 @@ struct cxl_mbox_cmd;
->   * @mbox_mutex: mutex protects device mailbox and firmware
->   * @mbox_wait: rcuwait for mailbox
->   * @mbox_send: @dev specific transport for transmitting mailbox commands
-> + * @num_features: number of supported features
-> + * @entries: list of supported feature entries.
->   */
->  struct cxl_mailbox {
->  	struct device *host;
-> @@ -21,6 +23,8 @@ struct cxl_mailbox {
->  	struct mutex mbox_mutex; /* lock to protect mailbox context */
->  	struct rcuwait mbox_wait;
->  	int (*mbox_send)(struct cxl_mailbox *cxl_mbox, struct cxl_mbox_cmd *cmd);
-> +	int num_features;
-> +	struct cxl_feat_entry *entries;
->  };
->  
->  int cxl_mailbox_init(struct cxl_mailbox *cxl_mbox, struct device *host);
-> diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
-> index c6c0fe27495d..bd2535962f70 100644
-> --- a/include/uapi/linux/cxl_mem.h
-> +++ b/include/uapi/linux/cxl_mem.h
-> @@ -50,6 +50,7 @@
->  	___C(GET_LOG_CAPS, "Get Log Capabilities"),			  \
->  	___C(CLEAR_LOG, "Clear Log"),					  \
->  	___C(GET_SUP_LOG_SUBLIST, "Get Supported Logs Sub-List"),	  \
-> +	___C(GET_SUPPORTED_FEATURES, "Get Supported Features"),		  \
->  	___C(MAX, "invalid / last command")
->  
->  #define ___C(a, b) CXL_MEM_COMMAND_ID_##a
-
+    Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
