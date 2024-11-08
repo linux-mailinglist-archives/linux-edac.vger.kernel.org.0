@@ -1,237 +1,150 @@
-Return-Path: <linux-edac+bounces-2474-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2475-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 371DA9C1E59
-	for <lists+linux-edac@lfdr.de>; Fri,  8 Nov 2024 14:48:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D5BA9C2243
+	for <lists+linux-edac@lfdr.de>; Fri,  8 Nov 2024 17:40:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E283F283258
-	for <lists+linux-edac@lfdr.de>; Fri,  8 Nov 2024 13:47:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F2321F2613B
+	for <lists+linux-edac@lfdr.de>; Fri,  8 Nov 2024 16:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB021F131F;
-	Fri,  8 Nov 2024 13:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40330194082;
+	Fri,  8 Nov 2024 16:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="leOpUCHa"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045DF1F4700;
-	Fri,  8 Nov 2024 13:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93B519259B;
+	Fri,  8 Nov 2024 16:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731073641; cv=none; b=bLDXc8jzXlcRy3OSNQUZ/OYmnLLvd7JAWfMvq5P4UUvv3QxMzsHsoKxiMAajk6gLf2pZWKrnyC5LOcrdxZUMnxTrL+RrGVTx1OS7CBXjClCq6vN3Q2Hwze1PrdIYetyA3psC01aHkFUQuB3Nuv549YJLrKJ/Cm2Y4ueEqMBamtw=
+	t=1731084050; cv=none; b=X3rN45oHc0E/LFiaKHxGsgrC1Bctjix8opUeQLARiWY5RiMV+TPxZ0H4Cf7K3W0U+BKzC+vYVCGQ5DJLNu8HY8ljCn8NxxtPUKtbvGOJLlx4devIa9/w5AFG0B2fwyVH6IGdWSuDCCLmr23nNO81DO9v9Hx/2v8H4ZoBAp07mvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731073641; c=relaxed/simple;
-	bh=8knQ7wE4fQq4x8sY3mGFsnXaStycaIQDHgUGvkXqYZk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NZpOeuoVsRIC7ZVA9h6gw4fvimFE6lNxdFfW9ZnCZPuG2rDj2XBTh9CmuoGHeHnZr/5S9uiHl367s3SxPjoMceU9oN5vhfZ1dwXlx0I4x/BLqPlKCipNxhCnOI5x+sdOoZWiNLeAVGePCEYeEpdT5oDLg1OjimZSrfrqQTmSasw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XlKvd3Mp6z6K95G;
-	Fri,  8 Nov 2024 21:45:33 +0800 (CST)
-Received: from frapeml100008.china.huawei.com (unknown [7.182.85.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 96EED140133;
-	Fri,  8 Nov 2024 21:47:16 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml100008.china.huawei.com (7.182.85.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 8 Nov 2024 14:47:16 +0100
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Fri, 8 Nov 2024 14:47:16 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Fan Ni <nifan.cxl@gmail.com>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "rafael@kernel.org"
-	<rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
-	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"Jonathan Cameron" <jonathan.cameron@huawei.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"sudeep.holla@arm.com" <sudeep.holla@arm.com>, "jassisinghbrar@gmail.com"
-	<jassisinghbrar@gmail.com>, "dave.jiang@intel.com" <dave.jiang@intel.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>, "ira.weiny@intel.com"
-	<ira.weiny@intel.com>, "david@redhat.com" <david@redhat.com>,
-	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>, "leo.duran@amd.com"
-	<leo.duran@amd.com>, "Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
-	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
-	<jiaqiyan@google.com>, "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>, "james.morse@arm.com"
-	<james.morse@arm.com>, "jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>, "erdemaktas@google.com"
-	<erdemaktas@google.com>, "pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>, "gthelen@google.com"
-	<gthelen@google.com>, "wschwartz@amperecomputing.com"
-	<wschwartz@amperecomputing.com>, "dferguson@amperecomputing.com"
-	<dferguson@amperecomputing.com>, "wbs@os.amperecomputing.com"
-	<wbs@os.amperecomputing.com>, tanxiaofei <tanxiaofei@huawei.com>, "Zengtao
- (B)" <prime.zeng@hisilicon.com>, "Roberto Sassu" <roberto.sassu@huawei.com>,
-	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>, wanghuiqiang
-	<wanghuiqiang@huawei.com>, Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v15 02/15] EDAC: Add scrub control feature
-Thread-Topic: [PATCH v15 02/15] EDAC: Add scrub control feature
-Thread-Index: AQHbLD7vCzL+HgVM6Umrx0HY63Gx9LKsgzCAgADs7ZA=
-Date: Fri, 8 Nov 2024 13:47:16 +0000
-Message-ID: <f6b1be9f02b94bc6a05ba4494e5b973b@huawei.com>
-References: <20241101091735.1465-1-shiju.jose@huawei.com>
-	<20241101091735.1465-3-shiju.jose@huawei.com> <Zy1dAazN9OPR0POI@fan>
-In-Reply-To: <Zy1dAazN9OPR0POI@fan>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1731084050; c=relaxed/simple;
+	bh=XstB/DxOJh0mY+nZ9Wa3sD7MLYUdmMNRWMK97jb7eO8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OduSeOMi0P4rz2DjRzXCeySr6JJlkWaHu6RSbQ0+9Z0WTCyIJIMQjStFbRK2tS18cUQWkDNrSwXeaeryjHhurD+zCCPVe+/x6DccQFzADuGyy3NjbvLXjjPF2oBrcoSlFLa+jlqXTkMxwja+9K5UpTZ96Gy71MmQP7+uhPpVUe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=leOpUCHa; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-72041ff06a0so1981622b3a.2;
+        Fri, 08 Nov 2024 08:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731084048; x=1731688848; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=foAKHueKakmGx21Z8mUk39ZoAzKz8ZJ2u7GMFSwYgME=;
+        b=leOpUCHa1ug1FW8esF09tDLn18aDP3dnK5D+brUWbyghKdUzPxjmOrr+187fOlOaF5
+         qQ9BhnLfqPNBnMtysZ/Xr7NnMv1V7wcBzvLabGpRrhAOXlcEWhkZw/LCHIA6+uRPSUxi
+         tx5iKyuGPNMaFGSji75b5IKzuMGVxkxaFQl0vksjv/0rAbtQfUXM+tFRYQSkeVsJFUcj
+         zb68djatl13hKYooCSbMnMqLThynCPzkjGGcezseRug59bMOq06UP4NGaHYN5hW3FRus
+         SThFGN/iq9uGTyL4fP1j5tDRxUXeb93okp+7AgKd1LJOqDaAccTpsRIZh1KHyIRN+MBo
+         oQuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731084048; x=1731688848;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=foAKHueKakmGx21Z8mUk39ZoAzKz8ZJ2u7GMFSwYgME=;
+        b=Mzc8vT9L7BRv8bSuUgv78CbNxeeUR29sqvUHuslA+O1st0uLISvXOsAbiYhZTmzdaW
+         Y2Ca8OOLl/Mu23vZrMTzCBQPBomaCf8r7J5hO05kK99Q6yUpgDkujkgssl+L+coo2v7D
+         yqMYy2QhZcg3lDZKHuzZpaSQdPPjcP1+TVEE6l+yJy32FajxT6UrZlE73yYRlItmWKWb
+         3ABNckEnUgUBPiSVf+X5QiAbbN/l7Mxj/kYYJSFjkhfI3skGyAgD48kO8+sMQICzwwRt
+         l2R8Uidgjp4UPWfABSzU4CoBrJ6foDtCKMfGeVyRQJQ5oXPsycz5lfa1JAqQdH2pUzmY
+         RPJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV0Eh+P3kD/xliO+tPmUjV2yCVZ4OnmAyY9dJiJwD+qQ6Lhm7xtsKic/9MCzreyDq8+9fU8bWMVBgtwOxM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvhiy/MXIIk6B79aQw1p3EkfGIMnx5sGQBCb+GX547209wmW9y
+	qQXVacWr1ayyusAC0LeQk0OvI1qQDmGvg2JmrJ09Pl5v7W9k2Aa6nO/62WyhoR0=
+X-Google-Smtp-Source: AGHT+IEh62gVm7iFC2/UDZAZxKq9iUTcruyCuPBxJv+wrsmBDEw6n/LzZ3yawfyfe3/DBDampZ1Rrw==
+X-Received: by 2002:aa7:888c:0:b0:71e:cf8:d6f1 with SMTP id d2e1a72fcca58-724132c4d71mr4810778b3a.14.1731084047630;
+        Fri, 08 Nov 2024 08:40:47 -0800 (PST)
+Received: from Emma ([2401:4900:1c94:8072:5054:ff:fe53:2787])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407a56a4asm3993154b3a.187.2024.11.08.08.40.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Nov 2024 08:40:46 -0800 (PST)
+From: Karan Sanghavi <karansanghvi98@gmail.com>
+Date: Fri, 08 Nov 2024 16:40:41 +0000
+Subject: [PATCH v2] RAS/AMD/ATL: Fix unintended sign extension issue from
+ coverity
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241108-coverity1593397signextension-v2-1-4acdf3968d2d@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAg/LmcC/42NQQ6CMBBFr0JmbQ1TWhFX3sOwwDLAJNKaljQQ0
+ rtbOIHL95P3/g6BPFOAR7GDp8iBnc0gLwWYqbMjCe4zgyylQiyVMC5mY9lQN1XV1IFHS+tC9hB
+ FfTfNWxqJvUbIia+ngdcz/2ozTxwW57fzLeKx/hmOKFAoM3R005VEVT7HuePP1bgZ2pTSDzn70
+ erIAAAA
+To: Yazen Ghannam <Yazen.Ghannam@amd.com>, Tony Luck <tony.luck@intel.com>, 
+ Borislav Petkov <bp@alien8.de>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Karan Sanghavi <karansanghvi98@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1731084043; l=1751;
+ i=karansanghvi98@gmail.com; s=20241017; h=from:subject:message-id;
+ bh=XstB/DxOJh0mY+nZ9Wa3sD7MLYUdmMNRWMK97jb7eO8=;
+ b=24Sz8zuhuUFhBvLvAlwgL9dnrayB/T8hZgUa1UnfNG7UcAMVUpfEbGETBAo3NuUDW7UAAiVhC
+ mWUrI9qbW/pBYWqfFJz9mnh24LJxJ8gDAHmLO7EIhm80xQMoDFK8E/F
+X-Developer-Key: i=karansanghvi98@gmail.com; a=ed25519;
+ pk=UAcbefT1C06npNVDJHdgpPqTm4WE9IhaA1fmJb3A37Y=
 
+This error is reported by coverity scan stating as
 
->-----Original Message-----
->From: Fan Ni <nifan.cxl@gmail.com>
->Sent: 08 November 2024 00:36
->To: Shiju Jose <shiju.jose@huawei.com>
->Cc: linux-edac@vger.kernel.org; linux-cxl@vger.kernel.org; linux-
->acpi@vger.kernel.org; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
->bp@alien8.de; tony.luck@intel.com; rafael@kernel.org; lenb@kernel.org;
->mchehab@kernel.org; dan.j.williams@intel.com; dave@stgolabs.net; Jonathan
->Cameron <jonathan.cameron@huawei.com>; gregkh@linuxfoundation.org;
->sudeep.holla@arm.com; jassisinghbrar@gmail.com; dave.jiang@intel.com;
->alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.com;
->david@redhat.com; Vilas.Sridharan@amd.com; leo.duran@amd.com;
->Yazen.Ghannam@amd.com; rientjes@google.com; jiaqiyan@google.com;
->Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
->naoya.horiguchi@nec.com; james.morse@arm.com; jthoughton@google.com;
->somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
->duenwen@google.com; gthelen@google.com;
->wschwartz@amperecomputing.com; dferguson@amperecomputing.com;
->wbs@os.amperecomputing.com; nifan.cxl@gmail.com; tanxiaofei
-><tanxiaofei@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>; Roberto
->Sassu <roberto.sassu@huawei.com>; kangkang.shen@futurewei.com;
->wanghuiqiang <wanghuiqiang@huawei.com>; Linuxarm
-><linuxarm@huawei.com>
->Subject: Re: [PATCH v15 02/15] EDAC: Add scrub control feature
->
->On Fri, Nov 01, 2024 at 09:17:20AM +0000, shiju.jose@huawei.com wrote:
->> From: Shiju Jose <shiju.jose@huawei.com>
->>
->> Add a generic EDAC scrub control to manage memory scrubbers in the syste=
-m.
->> Devices with a scrub feature register with the EDAC device driver,
->> which retrieves the scrub descriptor from the EDAC scrub driver and
->> exposes the sysfs scrub control attributes for a scrub instance to
->> userspace at /sys/bus/edac/devices/<dev-name>/scrubX/.
->>
->> The common sysfs scrub control interface abstracts the control of
->> arbitrary scrubbing functionality into a common set of functions. The
->> sysfs scrub attribute nodes are only present if the client driver has
->> implemented the corresponding attribute callback function and passed
->> the
->> operations(ops) to the EDAC device driver during registration.
->>
->> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
->> ---
->
->Minor comments inline.
->
->>  Documentation/ABI/testing/sysfs-edac-scrub |  74 ++++++++
->>  drivers/edac/Makefile                      |   1 +
->>  drivers/edac/edac_device.c                 |  40 +++-
->>  drivers/edac/scrub.c                       | 209 +++++++++++++++++++++
->>  include/linux/edac.h                       |  34 ++++
->>  5 files changed, 354 insertions(+), 4 deletions(-)  create mode
->> 100644 Documentation/ABI/testing/sysfs-edac-scrub
->>  create mode 100755 drivers/edac/scrub.c
->>
->> diff --git a/Documentation/ABI/testing/sysfs-edac-scrub
->> b/Documentation/ABI/testing/sysfs-edac-scrub
->> new file mode 100644
->> index 000000000000..d8d11165ff2a
->> --- /dev/null
->> +++ b/Documentation/ABI/testing/sysfs-edac-scrub
->
->...
->
->> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
->> index e9229b5f8afe..cd700a64406e 100644
->> --- a/drivers/edac/edac_device.c
->> +++ b/drivers/edac/edac_device.c
->> @@ -576,6 +576,7 @@ static void edac_dev_release(struct device *dev)
->> {
->>  	struct edac_dev_feat_ctx *ctx =3D container_of(dev, struct
->> edac_dev_feat_ctx, dev);
->>
->> +	kfree(ctx->scrub);
->>  	kfree(ctx->dev.groups);
->>  	kfree(ctx);
->>  }
->> @@ -609,6 +610,8 @@ int edac_dev_register(struct device *parent, char
->*name,
->>  		      const struct edac_dev_feature *ras_features)  {
->>  	const struct attribute_group **ras_attr_groups;
->> +	int scrub_cnt =3D 0, scrub_inst =3D 0;
->> +	struct edac_dev_data *dev_data;
->>  	struct edac_dev_feat_ctx *ctx;
->>  	int attr_gcnt =3D 0;
->>  	int ret, feat;
->> @@ -619,7 +622,10 @@ int edac_dev_register(struct device *parent, char
->*name,
->>  	/* Double parse to make space for attributes */
->>  	for (feat =3D 0; feat < num_features; feat++) {
->>  		switch (ras_features[feat].ft_type) {
->> -		/* Add feature specific code */
->> +		case RAS_FEAT_SCRUB:
->> +			attr_gcnt++;
->> +			scrub_cnt++;
->> +			break;
->>  		default:
->>  			return -EINVAL;
->>  		}
->> @@ -635,13 +641,37 @@ int edac_dev_register(struct device *parent, char
->*name,
->>  		goto ctx_free;
->>  	}
->>
->> +	if (scrub_cnt) {
->> +		ctx->scrub =3D kcalloc(scrub_cnt, sizeof(*ctx->scrub),
->GFP_KERNEL);
->> +		if (!ctx->scrub) {
->> +			ret =3D -ENOMEM;
->> +			goto groups_free;
->> +		}
->> +	}
->> +
->>  	attr_gcnt =3D 0;
->
->If we use scrub_cnt the same way as we use attr_gcnt, we do not need
->scrub_inst.
+CID 1593397: (#1 of 1): Unintended sign extension (SIGN_EXTENSION)
+sign_extension: Suspicious implicit sign extension: pc
+with type u16 (16 bits, unsigned) is promoted in
+pc << bit_shifts.pc to type int (32 bits, signed),
+then sign-extended to type unsigned long (64 bits, unsigned).
+If pc << bit_shifts.pc is greater than 0x7FFFFFFF,
+the upper bits of the result will all be 1.
 
-Hi Fan,
-Thanks for suggestion. Modified and done the same for EDAC memory repair fe=
-ature as well.=20
->
->Fan
->>  	for (feat =3D 0; feat < num_features; feat++, ras_features++) {
->>  		switch (ras_features->ft_type) {
->> -		/* Add feature specific code */
-[...]
->--
->Fan Ni
->
-Thanks,
-Shiju
+Following the code styleof the file, assigning the u16
+value to u32 variable and using it for the bit wise
+operation, thus ensuring no unintentional sign
+extension occurs.
+
+Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+---
+Coverity  Link: 
+https://scan7.scan.coverity.com/#/project-view/51975/11354?selectedIssue=1593397
+---
+Changes in v2:
+- Assigning pc value to temp variable before left shifting as mentioned
+  in feedback rather then typecasting pc to u32. 
+- Link to v1: https://lore.kernel.org/r/20241104-coverity1593397signextension-v1-1-4cfae6532140@gmail.com
+---
+ drivers/ras/amd/atl/umc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+index dc8aa12f63c8..3f4b1f31e14f 100644
+--- a/drivers/ras/amd/atl/umc.c
++++ b/drivers/ras/amd/atl/umc.c
+@@ -293,7 +293,8 @@ static unsigned long convert_dram_to_norm_addr_mi300(unsigned long addr)
+ 	}
+ 
+ 	/* PC bit */
+-	addr |= pc << bit_shifts.pc;
++	temp = pc;
++	addr |= temp << bit_shifts.pc;
+ 
+ 	/* SID bits */
+ 	for (i = 0; i < NUM_SID_BITS; i++) {
+
+---
+base-commit: 81983758430957d9a5cb3333fe324fd70cf63e7e
+change-id: 20241104-coverity1593397signextension-78c9b2c21d51
+
+Best regards,
+-- 
+Karan Sanghavi <karansanghvi98@gmail.com>
+
 
