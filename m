@@ -1,73 +1,53 @@
-Return-Path: <linux-edac+bounces-2477-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2478-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A1DC9C2724
-	for <lists+linux-edac@lfdr.de>; Fri,  8 Nov 2024 22:44:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE159C2EF8
+	for <lists+linux-edac@lfdr.de>; Sat,  9 Nov 2024 18:53:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3186D1F22211
-	for <lists+linux-edac@lfdr.de>; Fri,  8 Nov 2024 21:44:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABDB32820DE
+	for <lists+linux-edac@lfdr.de>; Sat,  9 Nov 2024 17:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC0D1D0F4F;
-	Fri,  8 Nov 2024 21:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DXkGgN3b"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B4B19DF48;
+	Sat,  9 Nov 2024 17:53:00 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1071F29CF4;
-	Fri,  8 Nov 2024 21:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542C8145A16;
+	Sat,  9 Nov 2024 17:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731102256; cv=none; b=RySMF7S6mgAblHw+RVtdWu2h/kPdxVZ/lXtPu2DvNTt4fHg/D71bomKjssIP6EYbZVq/x/NziWNnGXcP2kuZdQC5kKBLpfs87H4DLDIbItfKwC6HgIxELEOTV14krmqTb+OEkJzrpJhKjfdt9MnfGT8xvh2XLA2cSln//L395Dk=
+	t=1731174780; cv=none; b=fOCCshMeGhZAPqJmusEWXll5D9Lr9AddpgRlaOXaJeMLzIlJuRBd2H32bdSEwx2zPR/X5B5o6jAJXSbZhsfAcuPuhJWZs1aavqvMOOG6IgHjy4OIcQ1d1cp6fFdlJO20Z2Du8TnNzA4W9U+7sLaWWWLS3r4g/5LfHyvD7ZWIeH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731102256; c=relaxed/simple;
-	bh=VB+gY+PFxC4e1ZtPRzr2NzXsymkWcC8sVnNla/bXKII=;
+	s=arc-20240116; t=1731174780; c=relaxed/simple;
+	bh=8XAejHONwBv8Djr5AYLz5T89/opOHAwxD+hHigv5kIQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gs0d/Jx/7MU84bPqXLdYI14FlrlK9AQR+y2J3YJNX9UXo/b/piJW2NCtyifj7qL0w0HlBqkd/8kuSm2I8ukjoa3qsglOtmerKZMj+qgaXHRSgMe5vivXLJSTZSe3QK8Pktm2gH6g0CbYznYtNdYUZI5DtY4qxw9S1M3XZN/swU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DXkGgN3b; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731102255; x=1762638255;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VB+gY+PFxC4e1ZtPRzr2NzXsymkWcC8sVnNla/bXKII=;
-  b=DXkGgN3b/B7ylrAzE/2Tr/liwQDH+E0V0IFb2cnG1qmDcRe8tWvGKLdI
-   TKUkw+V3C1dqX5wNayIg0SyH3DdI7tORpRZW2qBQK4/xhBbIx425Z5DqP
-   vq8EKzo9ezLSKNFp9GhUpPo/VQ7f+TBFpIfQNAk/rqLQQezSCsdz9e+CC
-   vBvUbmeE2/MDqioex3N6A3mUH9HlWV2dr6Skq3MTcBPM59RvGmMyeMD8I
-   fcUXmW8Mvx1wzWcUoHJYfYAvdX+LO4lxjmENMzjQIlNNe1VaoGLx1w6bQ
-   0unYtfRyIvs+4h9W3Su2tP5dv70sDk+n26FsN1jSab26pJCm/pZOeS4Yv
-   g==;
-X-CSE-ConnectionGUID: MBuAJYKoT1mFyIKoVyfVkA==
-X-CSE-MsgGUID: Nf7Fu2OVQtCe/AtP6k8NiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="41623529"
-X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
-   d="scan'208";a="41623529"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 13:44:13 -0800
-X-CSE-ConnectionGUID: X6qWQIdfRkWvXHg6LE3qyQ==
-X-CSE-MsgGUID: l4c12TMDTuuLKNMdHduHbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
-   d="scan'208";a="90367888"
-Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.70])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 13:44:13 -0800
-Date: Fri, 8 Nov 2024 13:44:12 -0800
-From: Tony Luck <tony.luck@intel.com>
-To: Orange Kao <orange@aiven.io>
-Cc: qiuxu.zhuo@intel.com, bp@alien8.de, james.morse@arm.com,
-	orange@kaosy.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org
-Subject: Re: [PATCH 0/3] EDAC/igen6: Add polling support and allow setting
- edac_op_state
-Message-ID: <Zy6GLJwyZCuGwdni@agluck-desk3>
-References: <20241106114024.941659-1-orange@aiven.io>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GtyLHHigV3Q66dDK8WIkKl1Tmwrkep29Tl3PwK29vqD2klLf0ik3UH+6LoZ9UfLcDr6gRvm21IeV1Qf4uIM+xbjTVRo3HWmREsoYaXzxSQ8zatpMd75G2BnryVYA7T6sbOiNmNWbDwEsKF2ScKTfhCdsu67OtI3J0r5vzeTwRCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id A8DF8300000A1;
+	Sat,  9 Nov 2024 18:52:47 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 8234018F614; Sat,  9 Nov 2024 18:52:47 +0100 (CET)
+Date: Sat, 9 Nov 2024 18:52:47 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org, bhelgaas@google.com,
+	tony.luck@intel.com, bp@alien8.de
+Subject: Re: [RFC PATCH] PCI: pciehp: Generate a RAS tracepoint for hotplug
+ event
+Message-ID: <Zy-hbwLohwf-_hCN@wunner.de>
+References: <20241108030939.75354-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -76,26 +56,50 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241106114024.941659-1-orange@aiven.io>
+In-Reply-To: <20241108030939.75354-1-xueshuai@linux.alibaba.com>
 
-On Wed, Nov 06, 2024 at 11:35:44AM +0000, Orange Kao wrote:
-> Thank you Qiuxu and Boris.
-> 
-> Here is the updated patch. I would like to propose that we keep the 
-> edac_op_state as a module parameter. Because it would allow users (regardless of
-> CPU SKU) to test different options on their machine without compiling their own
-> kernel. I hope this could lower the entry barrier and make it easier for them to
-> test IBECC.
-> 
-> Patch 1: Initialize edac_op_state according to the configuration data
-> Patch 2: Add polling support
+On Fri, Nov 08, 2024 at 11:09:39AM +0800, Shuai Xue wrote:
+> --- a/drivers/pci/hotplug/pciehp_ctrl.c
+> +++ b/drivers/pci/hotplug/pciehp_ctrl.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/types.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/pci.h>
+> +#include <ras/ras_event.h>
+>  #include "pciehp.h"
 
-Applied patches 1 & 2 to RAS tree. Thanks
+Hm, why does the TRACE_EVENT() definition have to live in ras_event.h?
+Why not, say, in pciehp.h?
 
-> Patch 3: Allow setting edac_op_state
 
-As discussed on mailing list, not taking this one as there
-is no real use case.
+> @@ -245,6 +246,8 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+>  		if (events & PCI_EXP_SLTSTA_PDC)
+>  			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+>  				  slot_name(ctrl));
+> +		trace_pciehp_event(dev_name(&ctrl->pcie->port->dev),
+> +				   slot_name(ctrl), ON_STATE, events);
+>  		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
+>  		break;
+>  	default:
 
--Tony
+I'd suggest using pci_name() instead of dev_name() as it's a little shorter.
+
+Passing ON_STATE here isn't always accurate because there's
+"case BLINKINGOFF_STATE" with a fallthrough preceding the
+above code block.
+
+Wouldn't it be more readable to just log the event that occured
+as a string, e.g. "Surprise Removal" (and "Insertion" or "Hot Add"
+for the other trace event you're introducing) instead of the state?
+
+Otherwise you see "ON_STATE" in the log but that's actually the
+*old* value so you have to mentally convert this to "previously ON,
+so now must be transitioning to OFF".
+
+I'm fine with adding trace points to pciehp, I just want to make sure
+we do it in a way that's easy to parse for admins.
+
+Thanks,
+
+Lukas
 
