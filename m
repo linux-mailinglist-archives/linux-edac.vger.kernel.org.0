@@ -1,62 +1,62 @@
-Return-Path: <linux-edac+bounces-2488-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2489-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 731679C3865
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 07:33:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 468B49C3869
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 07:33:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A2421C21C1C
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 06:33:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0839D282344
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 06:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E062D14F9F8;
-	Mon, 11 Nov 2024 06:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FF1156644;
+	Mon, 11 Nov 2024 06:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mOTg8iSe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P3XWLy5Y"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D895154C04;
-	Mon, 11 Nov 2024 06:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6170155393;
+	Mon, 11 Nov 2024 06:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731306800; cv=none; b=nCkwzGVxz8fsKrnKiCz9fCWYhhbRg9qmmOTzSXBOufpEqp/abWO2YsNOZWwy8AaSrAam5C6hSN3b+khbuDHgfBi/Osvd0M0OQxDWhLfg2eSGNA2z41lYQhrWZ5hqpTb32IbaOvb2pGgsHw/MpuF967ALHpZy0qtkXTaCR1S5uYA=
+	t=1731306823; cv=none; b=TWQmF+z7pPJnyMWZU+X03vcK9QFyiL8ZHOZBJxRtpM5xm6uW3vGtpU+XKAIUTCdMyW6D9SOuVIlQy0UTjC7aMgZG19nPUeDghHvi1nszq3+LkkboqPLrXpEEfx6nwGI5kmUdu2SNlvm6sxLM3SIA84fACpIlAosszwG7Hpv+VEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731306800; c=relaxed/simple;
-	bh=fQ1REpPVnxbGxt0F0k8GS43rEvIgAVP3kRKZoGubAUk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=C+WvOafCx3JtvXtj6XQsKhQy9AqoQVG1EQO21CypQHhPK/hiC65Yot+cJD3lbirqXVAiICtvdp3FX/RVjygjqGi4JhLipGhrytwcWJknss3iNRxOdeeBOqo8S7BhlFC+cxeEAi6jNtqqBrJbactQZ11hoZA7c0JnGUpBcJD/olY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mOTg8iSe; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1731306823; c=relaxed/simple;
+	bh=b1qZB/jInl4tIhQyBG6A+5h2D5DrJJwk5eo3gXZ12Ak=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=NflSzp3xoR0yhauQ7ANz5PfvR7A9nJkPyabjCJv9lgU/yKz2XFy03Qh7Zqvm2KLEhifJlQqRNjFfJcB92ETkqHjUO1V1TFtsaMQ9Pw8A0fzciI4WGYYiAzy8mOUyqNA+8fqZU4Gkr+hVCJkH9BzjI0dXX/UPv0lbu05VSVV72sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P3XWLy5Y; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731306799; x=1762842799;
+  t=1731306822; x=1762842822;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=fQ1REpPVnxbGxt0F0k8GS43rEvIgAVP3kRKZoGubAUk=;
-  b=mOTg8iSe/8DjUqBtW1x+S5lNfJslVEafwOIAgtr7EiS4NiK8jbYrSxnU
-   fJWN1ohJ27qmdP+0ijZTWWgDfx6FDO/BKUpIqucm6EIgD0iHOHmzo4wN1
-   1fFkrESnisdI7VwiMmKzBE3NNDCIBGORT3FKQ7CqoVaGgA77Rf2/CeyL9
-   vtiCIRAErrzs6ngPEwOs3l7mEIm7FgTkHuEJgeBPEyUE6PghDzhSBqAJ0
-   lbSlN2PLRxPisUwsxo8UWoBZ+VyW0O4XHSlQQW3Xuz+U8QlWcAP3JXS+3
-   UZQ7hhVAbu5ubyYbdyq3yygyE5f63wE/8TAJLM8yROIjwmWTVK0GLskVy
-   Q==;
-X-CSE-ConnectionGUID: qmETxzUyTmuEmSyZhvUz2Q==
-X-CSE-MsgGUID: oVN7FEJ4RRyoL+owvEal/Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11252"; a="41715534"
+  bh=b1qZB/jInl4tIhQyBG6A+5h2D5DrJJwk5eo3gXZ12Ak=;
+  b=P3XWLy5YpfpY4BnWrlXCut5+urvEICIQe9bWQZg37Nos+G+7v8A0Oevq
+   7IUG1sJTFk8dCJeS/TUI3C5q2U3TlMhvoXNN6KworNZKtrbEWBQCn+K7m
+   ViTqY+xYPBDCdRg6XE5ZInKxeU4TKUvLbeoob8JZkNgCZBUt4osEoTqDU
+   MdQ6Yp67D3t5kNVp7driH6zUdgQ6Ffn8SnFiiqv3Oh+xIvP1bqeXk3rlW
+   kI49tAhtvHHqDhIkyX5FMfun+22u8Iw27gGE54+gi1cWOAazpf3xkEmYP
+   rBiQr15pPycnMexwKp+X+W5rsP8kLyb67oQI2kkLUdCBcRQsLVzAsbyuy
+   w==;
+X-CSE-ConnectionGUID: YmdY5y4fS++fC9twWYkDWA==
+X-CSE-MsgGUID: Ceoda23nRZ+N1reVPtGK+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11252"; a="41715585"
 X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
-   d="scan'208";a="41715534"
+   d="scan'208";a="41715585"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2024 22:33:18 -0800
-X-CSE-ConnectionGUID: /uZihFakSx+3y8FRD1XhhA==
-X-CSE-MsgGUID: Lc2DZRnDSm6ShDFmF1hkdg==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2024 22:33:41 -0800
+X-CSE-ConnectionGUID: Ckhl+3h6T1Snp1myqG4UgQ==
+X-CSE-MsgGUID: Ne2UeJ9dTKaUMOrUnHxt2A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
-   d="scan'208";a="117684633"
+   d="scan'208";a="117684672"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2024 22:33:15 -0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2024 22:33:38 -0800
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: bp@alien8.de,
 	tony.luck@intel.com
@@ -71,9 +71,9 @@ Cc: tglx@linutronix.de,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	qiuxu.zhuo@intel.com
-Subject: [PATCH v4 3/8] x86/mce: Make four functions return bool
-Date: Mon, 11 Nov 2024 14:04:23 +0800
-Message-Id: <20241111060428.44258-4-qiuxu.zhuo@intel.com>
+Subject: [PATCH v4 4/8] x86/mce: Break up __mcheck_cpu_apply_quirks()
+Date: Mon, 11 Nov 2024 14:04:24 +0800
+Message-Id: <20241111060428.44258-5-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
 References: <20241025024602.24318-1-qiuxu.zhuo@intel.com>
@@ -84,175 +84,234 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-Make those functions whose callers only care about success or failure
-return a boolean value for better readability. Also, update the call
-sites accordingly.
+From: Tony Luck <tony.luck@intel.com>
 
-No functional changes.
+Split each vendor specific part into its own helper function.
 
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
 Changes in v4:
+  - Add necessary blank lines in apply_quirks_amd() (Yazen).
+  - Use 'mca_cfg' instead of 'cfg' in apply_quirks_*(). (Yazen).
+
+Changes in v3:
   - New patch.
 
- arch/x86/kernel/cpu/mce/core.c     | 12 ++++++------
- arch/x86/kernel/cpu/mce/genpool.c  | 29 ++++++++++++++---------------
- arch/x86/kernel/cpu/mce/internal.h |  4 ++--
- 3 files changed, 22 insertions(+), 23 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 192 ++++++++++++++++++---------------
+ 1 file changed, 104 insertions(+), 88 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 167965bd2ac0..ce6fe5e20805 100644
+index ce6fe5e20805..3855ec2ed0e0 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -151,7 +151,7 @@ EXPORT_PER_CPU_SYMBOL_GPL(injectm);
- 
- void mce_log(struct mce_hw_err *err)
- {
--	if (!mce_gen_pool_add(err))
-+	if (mce_gen_pool_add(err))
- 		irq_work_queue(&mce_irq_work);
- }
- EXPORT_SYMBOL_GPL(mce_log);
-@@ -1911,14 +1911,14 @@ static void __mcheck_cpu_check_banks(void)
+@@ -1910,101 +1910,117 @@ static void __mcheck_cpu_check_banks(void)
+ 	}
  }
  
++static void apply_quirks_amd(struct cpuinfo_x86 *c)
++{
++	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
++
++	/* This should be disabled by the BIOS, but isn't always */
++	if (c->x86 == 15 && this_cpu_read(mce_num_banks) > 4) {
++		/*
++		 * disable GART TBL walk error reporting, which
++		 * trips off incorrectly with the IOMMU & 3ware
++		 * & Cerberus:
++		 */
++		clear_bit(10, (unsigned long *)&mce_banks[4].ctl);
++	}
++
++	if (c->x86 < 0x11 && mca_cfg.bootlog < 0) {
++		/*
++		 * Lots of broken BIOS around that don't clear them
++		 * by default and leave crap in there. Don't log:
++		 */
++		mca_cfg.bootlog = 0;
++	}
++
++	/*
++	 * Various K7s with broken bank 0 around. Always disable
++	 * by default.
++	 */
++	if (c->x86 == 6 && this_cpu_read(mce_num_banks) > 0)
++		mce_banks[0].ctl = 0;
++
++	/*
++	 * overflow_recov is supported for F15h Models 00h-0fh
++	 * even though we don't have a CPUID bit for it.
++	 */
++	if (c->x86 == 0x15 && c->x86_model <= 0xf)
++		mce_flags.overflow_recov = 1;
++
++	if (c->x86 >= 0x17 && c->x86 <= 0x1A)
++		mce_flags.zen_ifu_quirk = 1;
++}
++
++static void apply_quirks_intel(struct cpuinfo_x86 *c)
++{
++	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
++
++	/*
++	 * SDM documents that on family 6 bank 0 should not be written
++	 * because it aliases to another special BIOS controlled
++	 * register.
++	 * But it's not aliased anymore on model 0x1a+
++	 * Don't ignore bank 0 completely because there could be a
++	 * valid event later, merely don't write CTL0.
++	 */
++	if (c->x86 == 6 && c->x86_model < 0x1A && this_cpu_read(mce_num_banks) > 0)
++		mce_banks[0].init = false;
++
++	/*
++	 * All newer Intel systems support MCE broadcasting. Enable
++	 * synchronization with a one second timeout.
++	 */
++	if ((c->x86 > 6 || (c->x86 == 6 && c->x86_model >= 0xe)) &&
++	    mca_cfg.monarch_timeout < 0)
++		mca_cfg.monarch_timeout = USEC_PER_SEC;
++
++	/*
++	 * There are also broken BIOSes on some Pentium M and
++	 * earlier systems:
++	 */
++	if (c->x86 == 6 && c->x86_model <= 13 && mca_cfg.bootlog < 0)
++		mca_cfg.bootlog = 0;
++
++	if (c->x86_vfm == INTEL_SANDYBRIDGE_X)
++		mce_flags.snb_ifu_quirk = 1;
++
++	/*
++	 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
++	 * rep movs.
++	 */
++	if (c->x86_vfm == INTEL_SKYLAKE_X)
++		mce_flags.skx_repmov_quirk = 1;
++}
++
++static void apply_quirks_zhaoxin(struct cpuinfo_x86 *c)
++{
++	/*
++	 * All newer Zhaoxin CPUs support MCE broadcasting. Enable
++	 * synchronization with a one second timeout.
++	 */
++	if (c->x86 > 6 || (c->x86_model == 0x19 || c->x86_model == 0x1f)) {
++		if (mca_cfg.monarch_timeout < 0)
++			mca_cfg.monarch_timeout = USEC_PER_SEC;
++	}
++}
++
  /* Add per CPU specific workarounds here */
--static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
-+static bool __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ static bool __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
  {
- 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
+-	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
  	struct mca_config *cfg = &mca_cfg;
  
- 	if (c->x86_vendor == X86_VENDOR_UNKNOWN) {
+-	if (c->x86_vendor == X86_VENDOR_UNKNOWN) {
++	switch (c->x86_vendor) {
++	case X86_VENDOR_UNKNOWN:
  		pr_info("unknown CPU type - not enabling MCE support\n");
--		return -EOPNOTSUPP;
-+		return false;
+ 		return false;
+-	}
+-
+-	/* This should be disabled by the BIOS, but isn't always */
+-	if (c->x86_vendor == X86_VENDOR_AMD) {
+-		if (c->x86 == 15 && this_cpu_read(mce_num_banks) > 4) {
+-			/*
+-			 * disable GART TBL walk error reporting, which
+-			 * trips off incorrectly with the IOMMU & 3ware
+-			 * & Cerberus:
+-			 */
+-			clear_bit(10, (unsigned long *)&mce_banks[4].ctl);
+-		}
+-		if (c->x86 < 0x11 && cfg->bootlog < 0) {
+-			/*
+-			 * Lots of broken BIOS around that don't clear them
+-			 * by default and leave crap in there. Don't log:
+-			 */
+-			cfg->bootlog = 0;
+-		}
+-		/*
+-		 * Various K7s with broken bank 0 around. Always disable
+-		 * by default.
+-		 */
+-		if (c->x86 == 6 && this_cpu_read(mce_num_banks) > 0)
+-			mce_banks[0].ctl = 0;
+-
+-		/*
+-		 * overflow_recov is supported for F15h Models 00h-0fh
+-		 * even though we don't have a CPUID bit for it.
+-		 */
+-		if (c->x86 == 0x15 && c->x86_model <= 0xf)
+-			mce_flags.overflow_recov = 1;
+-
+-		if (c->x86 >= 0x17 && c->x86 <= 0x1A)
+-			mce_flags.zen_ifu_quirk = 1;
+-
+-	}
+-
+-	if (c->x86_vendor == X86_VENDOR_INTEL) {
+-		/*
+-		 * SDM documents that on family 6 bank 0 should not be written
+-		 * because it aliases to another special BIOS controlled
+-		 * register.
+-		 * But it's not aliased anymore on model 0x1a+
+-		 * Don't ignore bank 0 completely because there could be a
+-		 * valid event later, merely don't write CTL0.
+-		 */
+-
+-		if (c->x86 == 6 && c->x86_model < 0x1A && this_cpu_read(mce_num_banks) > 0)
+-			mce_banks[0].init = false;
+-
+-		/*
+-		 * All newer Intel systems support MCE broadcasting. Enable
+-		 * synchronization with a one second timeout.
+-		 */
+-		if ((c->x86 > 6 || (c->x86 == 6 && c->x86_model >= 0xe)) &&
+-			cfg->monarch_timeout < 0)
+-			cfg->monarch_timeout = USEC_PER_SEC;
+-
+-		/*
+-		 * There are also broken BIOSes on some Pentium M and
+-		 * earlier systems:
+-		 */
+-		if (c->x86 == 6 && c->x86_model <= 13 && cfg->bootlog < 0)
+-			cfg->bootlog = 0;
+-
+-		if (c->x86_vfm == INTEL_SANDYBRIDGE_X)
+-			mce_flags.snb_ifu_quirk = 1;
+-
+-		/*
+-		 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
+-		 * rep movs.
+-		 */
+-		if (c->x86_vfm == INTEL_SKYLAKE_X)
+-			mce_flags.skx_repmov_quirk = 1;
+-	}
+-
+-	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
+-		/*
+-		 * All newer Zhaoxin CPUs support MCE broadcasting. Enable
+-		 * synchronization with a one second timeout.
+-		 */
+-		if (c->x86 > 6 || (c->x86_model == 0x19 || c->x86_model == 0x1f)) {
+-			if (cfg->monarch_timeout < 0)
+-				cfg->monarch_timeout = USEC_PER_SEC;
+-		}
++	case X86_VENDOR_AMD:
++		apply_quirks_amd(c);
++		break;
++	case X86_VENDOR_INTEL:
++		apply_quirks_intel(c);
++		break;
++	case X86_VENDOR_ZHAOXIN:
++		apply_quirks_zhaoxin(c);
++		break;
  	}
  
- 	/* This should be disabled by the BIOS, but isn't always */
-@@ -2012,7 +2012,7 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
- 	if (cfg->bootlog != 0)
- 		cfg->panic_timeout = 30;
- 
--	return 0;
-+	return true;
- }
- 
- static bool __mcheck_cpu_ancient_init(struct cpuinfo_x86 *c)
-@@ -2279,12 +2279,12 @@ void mcheck_cpu_init(struct cpuinfo_x86 *c)
- 
- 	__mcheck_cpu_cap_init();
- 
--	if (__mcheck_cpu_apply_quirks(c) < 0) {
-+	if (!__mcheck_cpu_apply_quirks(c)) {
- 		mca_cfg.disabled = 1;
- 		return;
- 	}
- 
--	if (mce_gen_pool_init()) {
-+	if (!mce_gen_pool_init()) {
- 		mca_cfg.disabled = 1;
- 		pr_emerg("Couldn't allocate MCE records pool!\n");
- 		return;
-diff --git a/arch/x86/kernel/cpu/mce/genpool.c b/arch/x86/kernel/cpu/mce/genpool.c
-index d0be6dda0c14..3ca9c007a666 100644
---- a/arch/x86/kernel/cpu/mce/genpool.c
-+++ b/arch/x86/kernel/cpu/mce/genpool.c
-@@ -94,64 +94,63 @@ bool mce_gen_pool_empty(void)
- 	return llist_empty(&mce_event_llist);
- }
- 
--int mce_gen_pool_add(struct mce_hw_err *err)
-+bool mce_gen_pool_add(struct mce_hw_err *err)
- {
- 	struct mce_evt_llist *node;
- 
- 	if (filter_mce(&err->m))
--		return -EINVAL;
-+		return false;
- 
- 	if (!mce_evt_pool)
--		return -EINVAL;
-+		return false;
- 
- 	node = (void *)gen_pool_alloc(mce_evt_pool, sizeof(*node));
- 	if (!node) {
- 		pr_warn_ratelimited("MCE records pool full!\n");
--		return -ENOMEM;
-+		return false;
- 	}
- 
- 	memcpy(&node->err, err, sizeof(*err));
- 	llist_add(&node->llnode, &mce_event_llist);
- 
--	return 0;
-+	return true;
- }
- 
--static int mce_gen_pool_create(void)
-+static bool mce_gen_pool_create(void)
- {
- 	int mce_numrecords, mce_poolsz, order;
- 	struct gen_pool *gpool;
--	int ret = -ENOMEM;
- 	void *mce_pool;
- 
- 	order = order_base_2(sizeof(struct mce_evt_llist));
- 	gpool = gen_pool_create(order, -1);
- 	if (!gpool)
--		return ret;
-+		return false;
- 
- 	mce_numrecords = max(MCE_MIN_ENTRIES, num_possible_cpus() * MCE_PER_CPU);
- 	mce_poolsz = mce_numrecords * (1 << order);
- 	mce_pool = kmalloc(mce_poolsz, GFP_KERNEL);
- 	if (!mce_pool) {
- 		gen_pool_destroy(gpool);
--		return ret;
-+		return false;
- 	}
--	ret = gen_pool_add(gpool, (unsigned long)mce_pool, mce_poolsz, -1);
--	if (ret) {
-+
-+	if (gen_pool_add(gpool, (unsigned long)mce_pool, mce_poolsz, -1)) {
- 		gen_pool_destroy(gpool);
- 		kfree(mce_pool);
--		return ret;
-+		return false;
- 	}
- 
- 	mce_evt_pool = gpool;
- 
--	return ret;
-+	return true;
- }
- 
--int mce_gen_pool_init(void)
-+bool mce_gen_pool_init(void)
- {
- 	/* Just init mce_gen_pool once. */
- 	if (mce_evt_pool)
--		return 0;
-+		return true;
- 
- 	return mce_gen_pool_create();
- }
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 84f810598231..95a504ece43e 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -31,8 +31,8 @@ struct mce_evt_llist {
- 
- void mce_gen_pool_process(struct work_struct *__unused);
- bool mce_gen_pool_empty(void);
--int mce_gen_pool_add(struct mce_hw_err *err);
--int mce_gen_pool_init(void);
-+bool mce_gen_pool_add(struct mce_hw_err *err);
-+bool mce_gen_pool_init(void);
- struct llist_node *mce_gen_pool_prepare_records(void);
- 
- int mce_severity(struct mce *a, struct pt_regs *regs, char **msg, bool is_excp);
+ 	if (cfg->monarch_timeout < 0)
 -- 
 2.17.1
 
