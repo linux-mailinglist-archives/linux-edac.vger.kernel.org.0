@@ -1,333 +1,241 @@
-Return-Path: <linux-edac+bounces-2484-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2494-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D831C9C383A
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 07:10:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6A809C3D41
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 12:30:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BEF71F21FB6
-	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 06:10:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96E3C284FB7
+	for <lists+linux-edac@lfdr.de>; Mon, 11 Nov 2024 11:30:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2F015625A;
-	Mon, 11 Nov 2024 06:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 485EA197A81;
+	Mon, 11 Nov 2024 11:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="SuhjY9Xn"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5594614AD2B;
-	Mon, 11 Nov 2024 06:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77374189BBB;
+	Mon, 11 Nov 2024 11:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731305427; cv=none; b=iKJT9FWhqXZn8hGuGiK04EyH/c0zLHPtEmo5410MBlNNaybO+pAM9v7xLlVqXvD/BCnIMiopWg+D6fKcEMYsk8RHz5U3mttbuAuLs4PsbmZnSviGQd+H6HsN+FUK784/0jnZHNoeUos84wc9pF0NyrQ9SVHK8cvkqMKT/wl7Nj4=
+	t=1731324565; cv=none; b=h9OmmAzsFi4RtSMxthjmYk87RAigsXQb5ROmSPrAqcZbmjEIi+igJr7Cqyjs2kb/wQneo/P0RRZkyfUKrvWz8sayjtL4Hehnj6/zSIfShlO8Pu46I618e+pPHYcHrK2WmCliFOb0QL1Gvxx1gXTMrUZ6QjMLgm2MzO8ndEdQCQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731305427; c=relaxed/simple;
-	bh=f2NbwPXqxW63uyCT1gVOEA09X0GWSykxyW3//sCUmBs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J/rBnc1Ep4vtEqNgRaGiHm4RsKIgdkLgiePQdo1fZY10pmn3uCZEcrO7K45f4aJ6D08t4p0ybb7fo4mcbA8VX45LA8SVO52NADiwaYqNHXPgpAFVpEGFiwC0xsdAKcfyPa1B+fbI25xX3daAgU0wkLd2lZICbWiXDyCQBOvF+8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.40.54.90])
-	by gateway (Coremail) with SMTP id _____8BxeeDHnzFnrjw7AA--.50736S3;
-	Mon, 11 Nov 2024 14:10:15 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.40.54.90])
-	by front1 (Coremail) with SMTP id qMiowMBxnkfDnzFn0ABRAA--.10185S4;
-	Mon, 11 Nov 2024 14:10:14 +0800 (CST)
-From: Zhao Qunqin <zhaoqunqin@loongson.cn>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	chenhuacai@kernel.org,
-	bp@alien8.de
-Cc: linux-edac@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel@xen0n.name,
-	tony.luck@intel.com,
-	james.morse@arm.com,
-	mchehab@kernel.org,
-	rric@kernel.org,
-	loongarch@lists.linux.dev,
-	Zhao Qunqin <zhaoqunqin@loongson.cn>
-Subject: [PATCH v7 2/2] EDAC: Add EDAC driver for loongson memory controller
-Date: Mon, 11 Nov 2024 14:09:39 +0800
-Message-Id: <20241111060939.5349-3-zhaoqunqin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20241111060939.5349-1-zhaoqunqin@loongson.cn>
-References: <20241111060939.5349-1-zhaoqunqin@loongson.cn>
+	s=arc-20240116; t=1731324565; c=relaxed/simple;
+	bh=5cgp7iaZi8tgG12DuQYS4WxE3EZhYIb7ihHP94ue5g4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S+nVyKDgKgIHU6Uah9clMYVcdklsES2q5Twwygg/1w6//t59ctBMj2kM3zMAqo8shOBRS01aWahSF5N7KCIjchFEIM7CZZoGzpQVNZEMbR2RRJMwK1wguLCTw0z4lI7Satj7rTZ+00gWbspWQQCw+Zv7/yskIKhZ8U2E2ePieZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=SuhjY9Xn; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7B3C040E01FE;
+	Mon, 11 Nov 2024 11:29:19 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id LH789wugla_b; Mon, 11 Nov 2024 11:29:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1731324553; bh=JihSgH5EEo1zZNt1PcMAqI+W39owOYa2GO/ORFME5H8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SuhjY9XnZ61YUXJC4uvZeRaxLqOrfY2JaVRfozxcZVCcQQoiMIzqFT+q9PDTupY4u
+	 Hz6vFjCezBUMp1Z9ilVs57fs5c6sOSvIgddWYN9XDQQbbHztkqGCUGJnu53EOeNcgV
+	 8xqOueQtp8xg415nHLXdvfrxQ0hxs+W7Rsj2K/Hha8+z9Wpqlt6/OUzOamqctNuVc6
+	 JEhLX+Zm2Uc8Y98c0WDxXUTOa+N3VASdpO9X12FoJ1MKyMVs8g5ps+Bjn7R5OsEuvm
+	 AzdopQYAzqqcC9Vv6zbV2pQAydaDbwevNcOHJGMg73p9bJcofd6iGewT0XED0AvR3Q
+	 cqzSB/hrFEJm9E2wnLLW24/0vbwSxWAbbL1+SDPKBoNr3A47OcbR9RBX56CY2dKTbv
+	 M75Mj7BP7raefAdBGWvIMkUYisRxJ3AsO2Mn5plb8jx6zaoxz3Tx1DhOfR2wKD51kq
+	 FmJ+KskVIy4cHuZqfCBB7FPAQC+gcPEnKb5lhfiWjkwJR7/qjrg4Bx4kkui9Mfgz6S
+	 tQhlJQofepQFryNPWV4eDH4/4QJcNt0cWG699kJQkKCK/fWqHHPYDxKe4BRbKJqddS
+	 v2Z7IqzW1qI2QfQyWdntY6GwFMG/gtHUeUYkCQLXd0A4SK+bD7GxMCW1/J3dk9/p6o
+	 rCqL4WPLRSj3eru4yUfxmUXk=
+Received: from zn.tnic (p200300ea973a31c3329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:973a:31c3:329c:23ff:fea6:a903])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C093040E015F;
+	Mon, 11 Nov 2024 11:28:26 +0000 (UTC)
+Date: Mon, 11 Nov 2024 12:28:19 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+	"dave@stgolabs.net" <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+	"jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
+	"dave.jiang@intel.com" <dave.jiang@intel.com>,
+	"alison.schofield@intel.com" <alison.schofield@intel.com>,
+	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+	"ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"david@redhat.com" <david@redhat.com>,
+	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
+	"leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+	"erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>,
+	"gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>,
+	"Zengtao (B)" <prime.zeng@hisilicon.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+	wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>
+Subject: Re: [PATCH v15 11/15] EDAC: Add memory repair control feature
+Message-ID: <20241111112819.GCZzHqUz1Sz-vcW09c@fat_crate.local>
+References: <20241101091735.1465-1-shiju.jose@huawei.com>
+ <20241101091735.1465-12-shiju.jose@huawei.com>
+ <20241104061554.GOZyhmmo9melwI0c6q@fat_crate.local>
+ <1ac30acc16ab42c98313c20c79988349@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMBxnkfDnzFn0ABRAA--.10185S4
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3ArW8AF4xWF4xXFyrtr1rKrX_yoWxZw1kpF
-	n8Aw1fGr48tr43CwsayrWUuF15Cwn2ga42yay7A3ya93srAryDZr95tFW2yF1DCrykJrW3
-	Xa4rKwsrCF4DCwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-	6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4YLvDUUUU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1ac30acc16ab42c98313c20c79988349@huawei.com>
 
-Reports single bit errors (CE) only.
+On Mon, Nov 04, 2024 at 01:05:31PM +0000, Shiju Jose wrote:
+> More detailed explanation of PPR and memory sparing and use cases was added
+> in Documentation/edac/memory_repair.rst, which is part of the last common
+> patch ("EDAC: Add documentation for RAS feature control") added for
+> documentation of various RAS features supported in this series. Was not sure
+> the file to be part of this patch or not.
 
-Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
----
-Changes in v7:
-	- Fix sparse's "incorrect type in assignment"
-	- Clean up coding style
+If the commit message doesn't contain a justification for a patch's existence,
+why do you even bother sending it?
 
-Changes in v6:
-	- Change the Kconfig name to CONFIG_EDAC_LOONGSON
+IOW, no redirections pls - just state here what the use case is in short. You
+can always go nuts into details in the docs.
 
-Changes in v5:
-	- Drop the loongson_ prefix from all static functions.
-	- Align function arguments on the opening brace.
-	- Drop useless comments and useless wrapper. Drop side comments.
-	- Reorder variable declarations.
+> persist_mode used to readback the value of persist_mode presently set.  For
+> eg.  1 - soft memory sparing for a sparing instance, though the CXL memory
+> device supports both soft and hard sparing, which is configurable.
+> persist_mode_avail used to return the temporary and permanent repair
+> capability of the device.  
 
-Changes in v4:
-	- None
+Wait, sysfs does a one value per file thing. What does persist_mode_avail
+give?
 
-Changes in v3:
-	- Addressed review comments raised by Krzysztof and Huacai
+Surely you can't dump a list of all available modes...
 
-Changes in v2:
-	- Addressed review comments raised by Krzysztof
+From that doc:
 
- MAINTAINERS                  |   1 +
- arch/loongarch/Kconfig       |   1 +
- drivers/edac/Kconfig         |   8 ++
- drivers/edac/Makefile        |   1 +
- drivers/edac/loongson_edac.c | 156 +++++++++++++++++++++++++++++++++++
- 5 files changed, 167 insertions(+)
- create mode 100644 drivers/edac/loongson_edac.c
+root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair0/persist_mode_avail
+0
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8c7d565b3..cd47c63e0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13402,6 +13402,7 @@ M:	Zhao Qunqin <zhaoqunqin@loongson.cn>
- L:	linux-edac@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/edac/loongson,ls3a5000-mc-edac.yaml
-+F:	drivers/edac/loongson_edac.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
- M:	Sathya Prakash <sathya.prakash@broadcom.com>
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index bb35c34f8..10b9ba587 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -185,6 +185,7 @@ config LOONGARCH
- 	select PCI_MSI_ARCH_FALLBACKS
- 	select PCI_QUIRKS
- 	select PERF_USE_VMALLOC
-+	select EDAC_SUPPORT
- 	select RTC_LIB
- 	select SPARSE_IRQ
- 	select SYSCTL_ARCH_UNALIGN_ALLOW
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 81af6c344..1cf432102 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -564,5 +564,13 @@ config EDAC_VERSAL
- 	  Support injecting both correctable and uncorrectable errors
- 	  for debugging purposes.
- 
-+config EDAC_LOONGSON
-+	tristate "Loongson Memory Controller"
-+	depends on LOONGARCH || COMPILE_TEST
-+	help
-+	  Support for error detection and correction on the Loongson
-+	  family memory controller. This driver reports single bit
-+	  errors (CE) only. Loongson-3A5000/3C5000/3D5000/3C5000L/3A6000/3C6000
-+	  are compatible.
- 
- endif # EDAC
-diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index faf310eec..f8bdbc895 100644
---- a/drivers/edac/Makefile
-+++ b/drivers/edac/Makefile
-@@ -88,3 +88,4 @@ obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
- obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
- obj-$(CONFIG_EDAC_ZYNQMP)		+= zynqmp_edac.o
- obj-$(CONFIG_EDAC_VERSAL)		+= versal_edac.o
-+obj-$(CONFIG_EDAC_LOONGSON)		+= loongson_edac.o
-diff --git a/drivers/edac/loongson_edac.c b/drivers/edac/loongson_edac.c
-new file mode 100644
-index 000000000..0a062a008
---- /dev/null
-+++ b/drivers/edac/loongson_edac.c
-@@ -0,0 +1,154 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2024 Loongson Technology Corporation Limited.
-+ */
-+
-+#include <linux/edac.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/platform_device.h>
-+#include "edac_module.h"
-+
-+#define ECC_CS_COUNT_REG	0x18
-+
-+struct loongson_edac_pvt {
-+	void __iomem *ecc_base;
-+	int last_ce_count;
-+};
-+
-+static int read_ecc(struct mem_ctl_info *mci)
-+{
-+	struct loongson_edac_pvt *pvt = mci->pvt_info;
-+	u64 ecc;
-+	int cs;
-+
-+	if (!pvt->ecc_base)
-+		return pvt->last_ce_count;
-+
-+	ecc = readq(pvt->ecc_base + ECC_CS_COUNT_REG);
-+	/* cs0 -- cs3 */
-+	cs = ecc & 0xff;
-+	cs += (ecc >> 8) & 0xff;
-+	cs += (ecc >> 16) & 0xff;
-+	cs += (ecc >> 24) & 0xff;
-+
-+	return cs;
-+}
-+
-+static void edac_check(struct mem_ctl_info *mci)
-+{
-+	struct loongson_edac_pvt *pvt = mci->pvt_info;
-+	int new, add;
-+
-+	new = read_ecc(mci);
-+	add = new - pvt->last_ce_count;
-+	pvt->last_ce_count = new;
-+	if (add <= 0)
-+		return;
-+
-+	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, add,
-+			     0, 0, 0, 0, 0, -1, "error", "");
-+	edac_mc_printk(mci, KERN_INFO, "add: %d", add);
-+}
-+
-+static void dimm_config_init(struct mem_ctl_info *mci)
-+{
-+	struct dimm_info *dimm;
-+	u32 size, npages;
-+
-+	/* size not used */
-+	size = -1;
-+	npages = MiB_TO_PAGES(size);
-+
-+	dimm = edac_get_dimm(mci, 0, 0, 0);
-+	dimm->nr_pages = npages;
-+	snprintf(dimm->label, sizeof(dimm->label),
-+		 "MC#%uChannel#%u_DIMM#%u", mci->mc_idx, 0, 0);
-+	dimm->grain = 8;
-+}
-+
-+static void pvt_init(struct mem_ctl_info *mci, void __iomem *vbase)
-+{
-+	struct loongson_edac_pvt *pvt = mci->pvt_info;
-+
-+	pvt->ecc_base = vbase;
-+	pvt->last_ce_count = read_ecc(mci);
-+}
-+
-+static int edac_probe(struct platform_device *pdev)
-+{
-+	struct edac_mc_layer layers[2];
-+	struct mem_ctl_info *mci;
-+	void __iomem *vbase;
-+	int ret;
-+
-+	vbase = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(vbase))
-+		return PTR_ERR(vbase);
-+
-+	/* allocate a new MC control structure */
-+	layers[0].type = EDAC_MC_LAYER_CHANNEL;
-+	layers[0].size = 1;
-+	layers[0].is_virt_csrow = false;
-+	layers[1].type = EDAC_MC_LAYER_SLOT;
-+	layers[1].size = 1;
-+	layers[1].is_virt_csrow = true;
-+	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-+			    sizeof(struct loongson_edac_pvt));
-+	if (mci == NULL)
-+		return -ENOMEM;
-+
-+	mci->mc_idx = edac_device_alloc_index();
-+	mci->mtype_cap = MEM_FLAG_RDDR4;
-+	mci->edac_ctl_cap = EDAC_FLAG_NONE;
-+	mci->edac_cap = EDAC_FLAG_NONE;
-+	mci->mod_name = "loongson_edac.c";
-+	mci->ctl_name = "loongson_edac_ctl";
-+	mci->dev_name = "loongson_edac_dev";
-+	mci->ctl_page_to_phys = NULL;
-+	mci->pdev = &pdev->dev;
-+	mci->error_desc.grain = 8;
-+	/* Set the function pointer to an actual operation function */
-+	mci->edac_check = edac_check;
-+
-+	pvt_init(mci, vbase);
-+	dimm_config_init(mci);
-+
-+	ret = edac_mc_add_mc(mci);
-+	if (ret) {
-+		edac_dbg(0, "MC: failed edac_mc_add_mc()\n");
-+		edac_mc_free(mci);
-+		return ret;
-+	}
-+	edac_op_state = EDAC_OPSTATE_POLL;
-+
-+	return 0;
-+}
-+
-+static void edac_remove(struct platform_device *pdev)
-+{
-+	struct mem_ctl_info *mci = edac_mc_del_mc(&pdev->dev);
-+
-+	if (mci)
-+		edac_mc_free(mci);
-+}
-+
-+static const struct of_device_id loongson_edac_of_match[] = {
-+	{ .compatible = "loongson,ls3a5000-mc-edac", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, loongson_edac_of_match);
-+
-+static struct platform_driver loongson_edac_driver = {
-+	.probe		= edac_probe,
-+	.remove		= edac_remove,
-+	.driver		= {
-+		.name	= "loongson-mc-edac",
-+		.of_match_table = loongson_edac_of_match,
-+	},
-+};
-+module_platform_driver(loongson_edac_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Zhao Qunqin <zhaoqunqin@loongson.cn>");
-+MODULE_DESCRIPTION("EDAC driver for loongson memory controller");
+Does that mean only sPPR is available?
+
+If only one mode is available, why am I even querying things? There's no other
+option.
+
+Catch my drift?
+
+> Also I will update here with more details which was given in the last part
+> of this document about DPA.  Some memory devices (For eg. a CXL memory
+> device) may expect the Device Physical Address(DPA) for a repair operation
+> instead of Host Physical Address(HPA), because it may not have an active
+> mapping in the main host address physical address map.  'dpa_support'
+> attribute used to return this info to the user.  
+
+All this stuff needs to be documented properly and especially how one is
+supposed to use this interface. Not have people go read CXL specs just to be
+able to even try to use this. I'd like to see clear steps in the docs what to
+do and what they mean.
+
+> The nibble mask actually for CXL memory PPR and memory sparing operations,
+> which is reported by the device in DRAM Event Record and to the userspace in the
+> CXL DRAM trace event.
+> Please see the details from the spec.
+
+This is *exactly* what I mean!
+
+If I have to see the spec in order to use an interface, than that's a major
+fail.
+
+> I was not sure add or not these CXL specific details in this EDAC document.
+
+So that document should contain enough info on how to use the interface. You
+can always put links to the spec giving people further reading but some
+initial how-do-I-use-this-damn-thing example should be there so that people
+can find their way around this.
+
+> The visibility of these control attributes to the user  in sysfs is decided
+> by the is_visible() callback in the EDAC, which in turn depends on a memory
+> device support or not the control of a repair attribute. 
+
+That still doesn't answer my question: what are valid values I can put in all
+those?
+
+Try as many as I can until one sticks?
+
+This is not a good interface.
+
+And since sysfs does one-value-per-file, dumping ranges here is kinda wrong.
+
+> This attribute used request to determine availability of resources for a repair operation
+> (For eg. memory PPR and sparing operation) for a given address and memory attributes set.
+> The device may return result for this request in different ways.
+> For example, in CXL device request query resource command for a,  
+> 1. PPR operation returns resource availability as a return code of the command. 
+> 2. memory sparing operation, the device will report the resource availability by producing a
+> Memory Sparing Event Record and  memory sparing trace event to the userspace.
+> 
+> May be 'dry-run' better name instead of query?
+
+Maybe this should not exist at all: my simple thinking would say that
+determining whether resources are available should be part of the actual
+repair operation. If none are there, it should return "no resources
+available". If there are, it should simply use them and do the repair.
+
+Exposing this as an explicit step sounds silly.
+
+> >Yeh, this needs to be part of the interface and not hidden in some obscure doc.
+> Adding this info in Documentation/edac/memory_repair.rst is sufficient? 
+
+Yap, for example. You can always concentrate the whole documentation there and
+point to it from everywhere else.
+
+> The details of the repairing control was added in
+> Documentation/edac/memory_repair.rst, which is part of the common
+> patch ("EDAC: Add documentation for RAS feature control").
+
+Ok, point to it pls in this doc so that people can find it.
+
+Thx.
+
 -- 
-2.43.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
