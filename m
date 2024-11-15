@@ -1,187 +1,358 @@
-Return-Path: <linux-edac+bounces-2552-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2553-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE07C9C8BE3
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Nov 2024 14:33:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FC299CDA1B
+	for <lists+linux-edac@lfdr.de>; Fri, 15 Nov 2024 08:56:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A1941F22D28
-	for <lists+linux-edac@lfdr.de>; Thu, 14 Nov 2024 13:33:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C237B20522
+	for <lists+linux-edac@lfdr.de>; Fri, 15 Nov 2024 07:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC85F9E6;
-	Thu, 14 Nov 2024 13:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="T5g2Oc5o"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C805C188A3A;
+	Fri, 15 Nov 2024 07:56:14 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748F83FC7;
-	Thu, 14 Nov 2024 13:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3018D174EE4;
+	Fri, 15 Nov 2024 07:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731591232; cv=none; b=jbxOBzMHjCqqFxk6YUSGwAp1U6JJ4DnMHDaVJH/e8lgTX7qoKktc+nAgm+dTwLC3/5Wlt9aylu6b5Mm56ssNYFQnDLsvzN8KmqQhvL9P9lSDAlWLgLrevOrWRuvmtEyOeO8eGAeks93Rwd9bljyiTWixu7J4OIT2hLfPGV7VEM4=
+	t=1731657374; cv=none; b=NHKoLPT/NTsocUjrS+kdqJgOpH0OhnLiqP20XYW7pxSxMbOFX8F0e584oug+xKBh+0DXAi5NMIl6nFgqWW1YITRBMzVrX0cmLLI6nbN5mwv2+WTlOgqvNYh/adzzGWYiZ1aGlkiHsC2VH9B+YlfH2MmJmWI2p5rgjACNKZbMVs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731591232; c=relaxed/simple;
-	bh=2xiJu4tCdfug0kLfNZ2FHlvGQ+fuMB/tEE3osYDVWMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eeryZMLwVP3URCfma4+TICDR+BOWz7uL6V2OzFnI+C+3qyqCFm2qFccr3eju2pIIMpEBRxw/BUZ0OWaAa0NA1c6XwoIamQdy5kfz29OdgGDbs95PdoNXT41sXmwJf7Dsc/BVEzoM/K4s4x4v3RnroDY+ldSrJVfdZbyLfTN/Xo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=T5g2Oc5o; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 58C6B40E0219;
-	Thu, 14 Nov 2024 13:33:47 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 316gSpFbc922; Thu, 14 Nov 2024 13:33:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1731591221; bh=GZYwjf6zGx9udTtaH3+hhtQ6x1jYJyXBlIbM0yeiO5g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T5g2Oc5o69eG3jsf6mBpCHztBXlMBpkivbs/iA7wr1T6ClhAWkJsmSRRjmrQuYZ0t
-	 qLxNWWb+LKMqSf8OTEQ0PE7TKpejtVjlDHOv+EDfMPeiwMHeCA6wbhA9pLvyeCVjRp
-	 aLtgiK9sAA47jt57Dn+YJ25TpjwHSU0w7lyQNEuzSKwnLDpySW8/NVLngNjNSzpEDm
-	 6Y88BlzR3QbNs30cqoJzAoh93ciRZY6gcf2bCRQi/CMX7opH8bT9lBmWlKW7wXSMNj
-	 8/c1EKHGTE5ZSR2czipKQmruxgoIdUwVwaeX2DYMRxJB2cCqPOp9mjR0TvQ1+kYA4i
-	 kQYRmXbK4VBSddFVX3esmsEBTfmlt/bf4o5m8ihWNtxjvL7c41fUEj8TQrMQkYj2h5
-	 Z419ubN4v1W/twM5eU31nd6wqlSh51cIrYcuB4cgYEpngFX19TShYzeNig9xTtFbvJ
-	 49IRcATSuyUwk2Ks+hcs4kJ1Rhz0SzaR09uXtUJs0EAIi6d27TnhBl0VMF6paTn4jR
-	 PhSve6VOw5mkIfOq7jxLF0qugh4+d/HMWIMoon8fR7m18XJATaxEFs34tuqA1u/lv9
-	 PskfU5eXhWr3Juu9iohU55XdnVotErWAurcfV3CYSP058ooVVoxQgUQmdV0Wo8NeHf
-	 wANn36QRtKuVGTc2m6QeMJ5c=
-Received: from zn.tnic (p200300ea973a314f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:973a:314f:329c:23ff:fea6:a903])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8B18940E0163;
-	Thu, 14 Nov 2024 13:32:54 +0000 (UTC)
-Date: Thu, 14 Nov 2024 14:32:49 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Shiju Jose <shiju.jose@huawei.com>
-Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"tony.luck@intel.com" <tony.luck@intel.com>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>,
-	"dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-	"dave@stgolabs.net" <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-	"jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
-	"dave.jiang@intel.com" <dave.jiang@intel.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-	"ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"david@redhat.com" <david@redhat.com>,
-	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
-	"leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
-	"rientjes@google.com" <rientjes@google.com>,
-	"jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
-	"erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>,
-	"gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
-	tanxiaofei <tanxiaofei@huawei.com>,
-	"Zengtao (B)" <prime.zeng@hisilicon.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
-	wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: Re: [PATCH v15 11/15] EDAC: Add memory repair control feature
-Message-ID: <20241114133249.GEZzX8ATNyc_Xw1L52@fat_crate.local>
-References: <20241101091735.1465-1-shiju.jose@huawei.com>
- <20241101091735.1465-12-shiju.jose@huawei.com>
- <20241104061554.GOZyhmmo9melwI0c6q@fat_crate.local>
- <1ac30acc16ab42c98313c20c79988349@huawei.com>
- <20241111112819.GCZzHqUz1Sz-vcW09c@fat_crate.local>
- <7fd81b442ba3477787f5342e69adbb96@huawei.com>
+	s=arc-20240116; t=1731657374; c=relaxed/simple;
+	bh=XAMeUncRlZwG/5Mc5pyd9Qbhh/IujhIkbiONNMjlHkE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ev2w48Z1mqvkMRjEAEsIhsPGZBHJDFQaTknPbG0lU8u+KjqRQl7TicJIgtBdiCdv7NWpH9fl869f7YsYx53csdwi1I1I5c34x49APfaBTXRcrqT/FZPskEFnMbt58NbGcPFDeow4qgn07jWeuAXP8oy0XxzENWfE12YJQ0O+Gpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.40.49.17])
+	by gateway (Coremail) with SMTP id _____8Bx366S_jZnOTA+AA--.18142S3;
+	Fri, 15 Nov 2024 15:56:02 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.40.49.17])
+	by front1 (Coremail) with SMTP id qMiowMAxVcCR_jZntWxWAA--.19030S2;
+	Fri, 15 Nov 2024 15:56:01 +0800 (CST)
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+To: chenhuacai@kernel.org,
+	kernel@xen0n.name,
+	bp@alien8.de,
+	tony.luck@intel.com,
+	james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org
+Cc: linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	xry111@xry111.site,
+	Markus.Elfring@web.de,
+	Jonathan.Cameron@Huawei.com,
+	Zhao Qunqin <zhaoqunqin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V10] EDAC: Add EDAC driver for loongson memory controller
+Date: Fri, 15 Nov 2024 15:55:56 +0800
+Message-Id: <20241115075556.7349-1-zhaoqunqin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7fd81b442ba3477787f5342e69adbb96@huawei.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAxVcCR_jZntWxWAA--.19030S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxtr1kGFyDGr1kGFWkKFW3urX_yoW3WF1kpF
+	45Cw1fGr48tr43Can3ArWUuF15uwsa9a42vay7A3yY93srA34DXryktFW2yF9rCrWDJrW3
+	Xa4rKa1DCF4DCwbCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
 
-On Mon, Nov 11, 2024 at 04:54:48PM +0000, Shiju Jose wrote:
-> Presently, 0 (soft memory repair) and 1 (hard memory repair),  depends on
-> which mode/s a memory device is supported. 
+Add ECC support for Loongson SoC DDR controller. This
+driver reports single bit errors (CE) only.
 
-What if the device supports more than one mode?
+Only ACPI firmware is supported.
 
-> However for CXL memory sparing feature, the persistent mode is configurable at runtime
-> for a memory sparing instance, thus both soft and hard sparing are supported.
-> Example given for CXL memory sparing feature in Documentation/edac/memory_repair.rst,
-> root@localhost:~# cat /sys/bus/edac/devices/cxl_mem0/mem_repair1/persist_mode_avail
-> 0,1
+Signed-off-by: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+Changes in v10:
+	- Changed acpi_device_id to "LOON0010"
 
-Ok, and how is the user supposed to know what those mean?
+Changes in v9:
+	- Still using readq() and included "linux/io-64-nonatomic-lo-hi.h"
+	  to avoid the compiler's waring.
+	- Used alpha-betical order when selecting symbol and including
+	  header file.
 
-> Kernel sysfs doc mentioned about array of values as follows, though not seen much examples. 
-> https://docs.kernel.org/filesystems/sysfs.html
-> "Attributes should be ASCII text files, preferably with only one value per file. It is noted that
-> it may not be efficient to contain only one value per file, so it is socially acceptable to express
-> an array of values of the same type."
+Changes in v8:
+	- Used readl() instead of readq()
+	- Used acpi_device_id instead of of_device_id, then removed
+	  dt-bindings
 
-True story. Ok, so there's an exception to that rule.
+Changes in v7:
+	- Fixed sparse's "incorrect type in assignment"
+	- Cleaned up coding style
 
-> The values of these attributes are specific to device and portion of the memory to repair. 
-> For example, In CXL repair features,
-> CXL memory device identifies a failure on a memory component, device provides the corresponding
-> values of the attributes (DPA, channel, rank, nibble mask, bank group, bank, row, column or sub-channel etc)
-> in an event record to the host and to the userspace in the corresponding trace event.  
-> Userspace shall use these values for the query resource availability and repair operations.
+Changes in v6:
+	- Changed the Kconfig name to CONFIG_EDAC_LOONGSON
 
-I don't think you're answering my question. Lemme try again:
+Changes in v5:
+	- Dropepd the loongson_ prefix from all static functions.
+	- Aligned function arguments on the opening brace.
+	- Dropepd useless comments and useless wrapper. Dropped side
+	  comments.
+	- Reordered variable declarations.
 
-I am on a machine with such an interface. I do
+Changes in v4:
+	- None
 
-echo 0xdeadbeef > /sys/devices...
--EINVAL
+Changes in v3:
+	- Addressed review comments raised by Krzysztof and Huacai
 
-echo 0xface > ...
--EINVAL
+Changes in v2:
+	- Addressed review comments raised by Krzysztof
 
-How do I know what the allowed ranges are?
+ MAINTAINERS                  |   6 ++
+ arch/loongarch/Kconfig       |   1 +
+ drivers/edac/Kconfig         |   8 ++
+ drivers/edac/Makefile        |   1 +
+ drivers/edac/loongson_edac.c | 156 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 172 insertions(+)
+ create mode 100644 drivers/edac/loongson_edac.c
 
-> This will work for the CXL PPR feature where the result of the query operation for resources  availability
-> return to the command, however for the CXL memory sparing features,  the result of the query resources 
-> availability command returned later in a Memory Sparing Event Record from the device. 
-> Userspace shall issue repair operation with the attributes values received on the Memory Sparing trace event.
-> Thus for the CXL memory sparing feature, query for resources availability and repair operation 
-> cannot be combined.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e9659a5a7..b36a45051 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13397,6 +13397,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+ F:	drivers/thermal/loongson2_thermal.c
+ 
++LOONGSON EDAC DRIVER
++M:	Zhao Qunqin <zhaoqunqin@loongson.cn>
++L:	linux-edac@vger.kernel.org
++S:	Maintained
++F:	drivers/edac/loongson_edac.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index bb35c34f8..33052526b 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -79,6 +79,7 @@ config LOONGARCH
+ 	select BUILDTIME_TABLE_SORT
+ 	select COMMON_CLK
+ 	select CPU_PM
++	select EDAC_SUPPORT
+ 	select EFI
+ 	select GENERIC_CLOCKEVENTS
+ 	select GENERIC_CMOS_UPDATE
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 81af6c344..433c33785 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -564,5 +564,13 @@ config EDAC_VERSAL
+ 	  Support injecting both correctable and uncorrectable errors
+ 	  for debugging purposes.
+ 
++config EDAC_LOONGSON
++	tristate "Loongson Memory Controller"
++	depends on (LOONGARCH && ACPI) || COMPILE_TEST
++	help
++	  Support for error detection and correction on the Loongson
++	  family memory controller. This driver reports single bit
++	  errors (CE) only. Loongson-3A5000/3C5000/3D5000/3A6000/3C6000
++	  are compatible.
+ 
+ endif # EDAC
+diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+index faf310eec..f8bdbc895 100644
+--- a/drivers/edac/Makefile
++++ b/drivers/edac/Makefile
+@@ -88,3 +88,4 @@ obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
+ obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
+ obj-$(CONFIG_EDAC_ZYNQMP)		+= zynqmp_edac.o
+ obj-$(CONFIG_EDAC_VERSAL)		+= versal_edac.o
++obj-$(CONFIG_EDAC_LOONGSON)		+= loongson_edac.o
+diff --git a/drivers/edac/loongson_edac.c b/drivers/edac/loongson_edac.c
+new file mode 100644
+index 000000000..29607972f
+--- /dev/null
++++ b/drivers/edac/loongson_edac.c
+@@ -0,0 +1,156 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2024 Loongson Technology Corporation Limited.
++ */
++
++#include <linux/acpi.h>
++#include <linux/edac.h>
++#include <linux/init.h>
++#include <linux/io-64-nonatomic-lo-hi.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include "edac_module.h"
++
++#define ECC_CS_COUNT_REG	0x18
++
++struct loongson_edac_pvt {
++	void __iomem *ecc_base;
++	int last_ce_count;
++};
++
++static int read_ecc(struct mem_ctl_info *mci)
++{
++	struct loongson_edac_pvt *pvt = mci->pvt_info;
++	u64 ecc;
++	int cs;
++
++	if (!pvt->ecc_base)
++		return pvt->last_ce_count;
++
++	ecc = readq(pvt->ecc_base + ECC_CS_COUNT_REG);
++	/* cs0 -- cs3 */
++	cs = ecc & 0xff;
++	cs += (ecc >> 8) & 0xff;
++	cs += (ecc >> 16) & 0xff;
++	cs += (ecc >> 24) & 0xff;
++
++	return cs;
++}
++
++static void edac_check(struct mem_ctl_info *mci)
++{
++	struct loongson_edac_pvt *pvt = mci->pvt_info;
++	int new, add;
++
++	new = read_ecc(mci);
++	add = new - pvt->last_ce_count;
++	pvt->last_ce_count = new;
++	if (add <= 0)
++		return;
++
++	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, add,
++			     0, 0, 0, 0, 0, -1, "error", "");
++	edac_mc_printk(mci, KERN_INFO, "add: %d", add);
++}
++
++static void dimm_config_init(struct mem_ctl_info *mci)
++{
++	struct dimm_info *dimm;
++	u32 size, npages;
++
++	/* size not used */
++	size = -1;
++	npages = MiB_TO_PAGES(size);
++
++	dimm = edac_get_dimm(mci, 0, 0, 0);
++	dimm->nr_pages = npages;
++	snprintf(dimm->label, sizeof(dimm->label),
++		 "MC#%uChannel#%u_DIMM#%u", mci->mc_idx, 0, 0);
++	dimm->grain = 8;
++}
++
++static void pvt_init(struct mem_ctl_info *mci, void __iomem *vbase)
++{
++	struct loongson_edac_pvt *pvt = mci->pvt_info;
++
++	pvt->ecc_base = vbase;
++	pvt->last_ce_count = read_ecc(mci);
++}
++
++static int edac_probe(struct platform_device *pdev)
++{
++	struct edac_mc_layer layers[2];
++	struct mem_ctl_info *mci;
++	void __iomem *vbase;
++	int ret;
++
++	vbase = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(vbase))
++		return PTR_ERR(vbase);
++
++	/* allocate a new MC control structure */
++	layers[0].type = EDAC_MC_LAYER_CHANNEL;
++	layers[0].size = 1;
++	layers[0].is_virt_csrow = false;
++	layers[1].type = EDAC_MC_LAYER_SLOT;
++	layers[1].size = 1;
++	layers[1].is_virt_csrow = true;
++	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
++			    sizeof(struct loongson_edac_pvt));
++	if (mci == NULL)
++		return -ENOMEM;
++
++	mci->mc_idx = edac_device_alloc_index();
++	mci->mtype_cap = MEM_FLAG_RDDR4;
++	mci->edac_ctl_cap = EDAC_FLAG_NONE;
++	mci->edac_cap = EDAC_FLAG_NONE;
++	mci->mod_name = "loongson_edac.c";
++	mci->ctl_name = "loongson_edac_ctl";
++	mci->dev_name = "loongson_edac_dev";
++	mci->ctl_page_to_phys = NULL;
++	mci->pdev = &pdev->dev;
++	mci->error_desc.grain = 8;
++	/* Set the function pointer to an actual operation function */
++	mci->edac_check = edac_check;
++
++	pvt_init(mci, vbase);
++	dimm_config_init(mci);
++
++	ret = edac_mc_add_mc(mci);
++	if (ret) {
++		edac_dbg(0, "MC: failed edac_mc_add_mc()\n");
++		edac_mc_free(mci);
++		return ret;
++	}
++	edac_op_state = EDAC_OPSTATE_POLL;
++
++	return 0;
++}
++
++static void edac_remove(struct platform_device *pdev)
++{
++	struct mem_ctl_info *mci = edac_mc_del_mc(&pdev->dev);
++
++	if (mci)
++		edac_mc_free(mci);
++}
++
++static const struct acpi_device_id loongson_edac_acpi_match[] = {
++	{"LOON0010", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, loongson_edac_acpi_match);
++
++static struct platform_driver loongson_edac_driver = {
++	.probe		= edac_probe,
++	.remove		= edac_remove,
++	.driver		= {
++		.name	= "loongson-mc-edac",
++		.acpi_match_table = loongson_edac_acpi_match,
++	},
++};
++module_platform_driver(loongson_edac_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Zhao Qunqin <zhaoqunqin@loongson.cn>");
++MODULE_DESCRIPTION("EDAC driver for loongson memory controller");
 
-What happens if the resources availability changes between the query and the
-start of the repair operation?
-
-The cat catches fire?
-
+base-commit: e14232afa94445e03fc3a0291b07a68f3408c120
 -- 
-Regards/Gruss,
-    Boris.
+2.43.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
