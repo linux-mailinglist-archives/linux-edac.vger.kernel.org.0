@@ -1,91 +1,121 @@
-Return-Path: <linux-edac+bounces-2556-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2557-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E78B99CFF98
-	for <lists+linux-edac@lfdr.de>; Sat, 16 Nov 2024 16:40:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63A5F9D0EC7
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Nov 2024 11:42:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78140B23AC1
-	for <lists+linux-edac@lfdr.de>; Sat, 16 Nov 2024 15:40:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2789C2829C5
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Nov 2024 10:42:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE0613A26F;
-	Sat, 16 Nov 2024 15:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E30D19413C;
+	Mon, 18 Nov 2024 10:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fwbuuQfb"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="JvWhmqmR"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4612E80BEC
-	for <linux-edac@vger.kernel.org>; Sat, 16 Nov 2024 15:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59E31DFFB;
+	Mon, 18 Nov 2024 10:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731771632; cv=none; b=gV7piUwA9XHPJj97sVxV5lyeLqGS8O0+OgbHvJHx0f7V+7gopsI8RuSgdAz+OMv8IEdOWMbJLb0vjNBhMHklLwoWbr5HlKY76DuY5PdMTmJuHgiehx23dAfJezXyvF0Z5ckUOBSK7D9SeJugLQn8hNIaymLnzHw+xxfMdyC1nGc=
+	t=1731926525; cv=none; b=SJWeID9IcqCnxH9FNlG46pTPj2fJw64X+NVKQM0n4KGZQg3fwWZMDEVmTJbPB31299AsGIlH9kNg1yR7JTfWjZSgMNmBrr6UVazLaFiAIc+HlT5gIpuCoef1klyLhGcGSx32+o45vGhpLU4FKnScnPE7DfDdyixSMa7vX9mtOhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731771632; c=relaxed/simple;
-	bh=Wd+7kLQISUZlzyPvYmSUTVOb8NV4Vyd3OpsFXw6X7a0=;
-	h=From:Message-ID:To:Subject:Date:MIME-Version:Content-Type; b=F5mb3YLJJnosYAXyFXUCb9wiGje/sPm4ck20uqm5F1+ZW+P0cdYEVWHQuEtVkSAomvNEJVooGqjPtJI1deTW41v15IRw871tdxRi10yE4IMQA13RK37011CQpCoIhVn/9V5D61oyfNDev97CgiHYKNNo6H0/fMeGj5+xLJL6540=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fwbuuQfb; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2ea45dac86eso217961a91.3
-        for <linux-edac@vger.kernel.org>; Sat, 16 Nov 2024 07:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731771630; x=1732376430; darn=vger.kernel.org;
-        h=mime-version:date:subject:to:reply-to:message-id:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XHEOkgJ64rwJ+cv0sVIqPUmbc8l+iTifR7HzGzNced0=;
-        b=fwbuuQfbAvIFDnvTqyswSlpt/dYgo8Gpx9pXIDrfv487/qNDlKRhEU7RrZz67d9hqA
-         NMvvoJWqfsO6DpHJx18AuYE7jO7RnPgaD15X/ertJRYyKuPElJIfYRShzGIgKskA7Uhd
-         VlbtQ0mAjcUi/uCn8w4d7ubZ0ANKPq1XcBj1cBNw+3JuCrFARF2b9BucnQKQUKPZmIJT
-         4mPQ4gOxtpQvhOJ8B1+kmCfhIg/7l7lEhCzFmTwMejZmwB9JYkoy9/7ZW+yesfHZ2pQ6
-         aCOW6S8iIs0sTzE/h896kNE4hXmcOecrF1d7WnXPN11OeN1PneHynz9DxvecWuWVyIOB
-         NqFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731771630; x=1732376430;
-        h=mime-version:date:subject:to:reply-to:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XHEOkgJ64rwJ+cv0sVIqPUmbc8l+iTifR7HzGzNced0=;
-        b=OP78kOvhXm+YZdB/NjdSgfCUfW9GjCskrAzGL6UyjKJucDS/hwCq6/isVDnFNbGZd3
-         kAGtb6F4j8/u+/LDdxrYnS4aJOGi15RjYb3e0t2LPR6AoJ1bR2mz4nR2ngPQlfCV2kK0
-         i29/488rtiq2HQNHD1As/WxHuMlPnOBd3vBvKYhqG91Vq0RUghnEIBA3jNNRBW7uwPLc
-         lj6jIy3me11ddZq1P/Sy5oIxznTjnltmr7P8snYWm7c8VL5yV/9k9DKDFPbhjU41zY4K
-         Q8qHh1UsDlD9WNWNLglWJWH+SLaxdgV08cJWyraetmiqRSGMX5nX/EndUzl/BYuJI6qt
-         uMcg==
-X-Gm-Message-State: AOJu0Yz1ZLAW1paoGxFDEL+xmg6d9CzDt8YwUpDEysWKHi9h0F0lLO0O
-	F8m87Iar45sE4kpvh4NrUKUeO9RqGCV7WYDEbEp3qMdeMtHaAgRqw4788A==
-X-Google-Smtp-Source: AGHT+IG0h3xZGlIZmhboWcU4NVCtNzBzV8gY1/zOEoaXr14mAEIT+nBi8AO5+Dq7+G9gKOOsyYA4Sg==
-X-Received: by 2002:a17:90b:48cc:b0:2e2:a029:3b4b with SMTP id 98e67ed59e1d1-2ea1556c981mr7239868a91.28.1731771629963;
-        Sat, 16 Nov 2024 07:40:29 -0800 (PST)
-Received: from [103.67.163.162] ([103.67.163.162])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea024949a4sm4635141a91.11.2024.11.16.07.40.28
-        for <linux-edac@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 16 Nov 2024 07:40:28 -0800 (PST)
-From: "Van. HR" <vipinrawat07674@gmail.com>
-X-Google-Original-From: "Van. HR" <infodesk@information.com>
-Message-ID: <0adf78ff24f8074c89daac667ce89dbe09645c06f891952d48b407ebd2727246@mx.google.com>
-Reply-To: dirofdptvancollin@gmail.com
-To: linux-edac@vger.kernel.org
-Subject: Nov:16:24
-Date: Sat, 16 Nov 2024 10:40:26 -0500
+	s=arc-20240116; t=1731926525; c=relaxed/simple;
+	bh=/pmGenI2wO3JTNxmubF24thm679YUhSXwuotCg6tHFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Re9rdPujXdL2/PdrYjO7r8jQdT0bRyH5u7K8nc/U99eIjLiWHFbx2YwPfibln78joil2lrsg/JcgHloTM0MUmYM5rR/EHtrU1mmvqvwBiNuT0eYPrhp152Oq8Zi7p5POpyUC3Y4ODh39iupZpep/7skiUJjCkHdXYXqFY8QohVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=JvWhmqmR; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2708040E019C;
+	Mon, 18 Nov 2024 10:41:59 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id OvAE2aXAax_E; Mon, 18 Nov 2024 10:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1731926513; bh=DmWtgi2Qz0m6ZoT7qjh0PUC9+yoNEpuOT/5+gLqTlk0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JvWhmqmRUL7hkytSCadEsftyQZKStLgnKxQ7agUehRPUm1ZpVWnixa4PPWp1SIqoe
+	 B0enESfQMM4tBv8OGr3oljiDEJy53Cput7Tbtpo5l/yTEOABbGS7lsX40nOSy78mGK
+	 uN0kaY126B8moeEx1Kd74aXQBfWrqZULBxXSJmSBS1T4XQwhnX17MBMiHfLy+w1ynD
+	 tk7kA0N+oLs6kJpgaVSP1Af169qh2I7ULbzp9bu6xvTzh+h/48BIdqnxwWT8k+6sET
+	 xpqjcnpnUrKE5vtHnoDTSbyVZONtyWW7D8zJpnZmmTHWbh/KiNv+MMvRGTCVQ9Zx/Z
+	 J5daFgDpW47r1bpgQQPSyduzz085tzUxHbLWXX7NAKwUbY0hrUnvd0zFLUK1AiRg8X
+	 rTm1iGsHtQsMyBztWeLmr2FSQgr1FZUZTmGDJfunx4IgtvVcJjwH12+05OAy3T+Srr
+	 cX7AGw5UVQPhXz2KTTn6TWzFHlIRIXbRVkc5wbh7/TvrKxJ+aND6IwipLlv25LlrnH
+	 jHHOMYePIE22wYsbcwEXa3F7LylXwFh8Tt07LFZBesr5abbc0KxkiLCwudeTg9XjAQ
+	 eGqnrrFfxj4NMxqUcqEiRoUAoel5a0PUXnFILzlBIairHJVl1TPu2mKq4K99nFb8GG
+	 Hej1E+d6sW5YH7KdeqVs6lQg=
+Received: from zn.tnic (pd9530b86.dip0.t-ipconnect.de [217.83.11.134])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 165CA40E0163;
+	Mon, 18 Nov 2024 10:41:48 +0000 (UTC)
+Date: Mon, 18 Nov 2024 11:41:42 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, tony.luck@intel.com
+Subject: Re: [PATCH] EDAC/powerpc: Remove PPC_MAPLE drivers
+Message-ID: <20241118104142.GAZzsZ5vcY_Vv3GvY-@fat_crate.local>
+References: <20241112084134.411964-1-mpe@ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241112084134.411964-1-mpe@ellerman.id.au>
 
-Hello,
-I am a private investment consultant representing the interest of a multinational  conglomerate that wishes to place funds into a trust management portfolio.
+On Tue, Nov 12, 2024 at 07:41:34PM +1100, Michael Ellerman wrote:
+> These two drivers are only buildable for the powerpc "maple" platform
+> (CONFIG_PPC_MAPLE), which has now been removed, see
+> commit 62f8f307c80e ("powerpc/64: Remove maple platform").
+> 
+> Remove the drivers.
+> 
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> ---
+>  drivers/edac/Kconfig        |  18 --
+>  drivers/edac/Makefile       |   2 -
+>  drivers/edac/amd8111_edac.c | 596 ------------------------------------
+>  drivers/edac/amd8111_edac.h | 118 -------
+>  drivers/edac/amd8131_edac.c | 358 ----------------------
+>  drivers/edac/amd8131_edac.h | 107 -------
+>  6 files changed, 1199 deletions(-)
+>  delete mode 100644 drivers/edac/amd8111_edac.c
+>  delete mode 100644 drivers/edac/amd8111_edac.h
+>  delete mode 100644 drivers/edac/amd8131_edac.c
+>  delete mode 100644 drivers/edac/amd8131_edac.h
+> 
+> The removal commit is in the powerpc/next branch:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=next
+> 
+> I can take this via the powerpc tree if that's easiest, let me know.
 
-Please indicate your interest for additional information.
+Yes, please do. 
 
-Regards,
+I've been meaning to reply to you but then gazillion things interrupted me and
+... you know how it is. Sorry.
 
-Van Collin.
+Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
 
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
