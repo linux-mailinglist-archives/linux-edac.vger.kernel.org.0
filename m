@@ -1,73 +1,72 @@
-Return-Path: <linux-edac+bounces-2557-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2558-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63A5F9D0EC7
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Nov 2024 11:42:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DC229D0FEB
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Nov 2024 12:44:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2789C2829C5
-	for <lists+linux-edac@lfdr.de>; Mon, 18 Nov 2024 10:42:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A7981F22D7F
+	for <lists+linux-edac@lfdr.de>; Mon, 18 Nov 2024 11:44:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E30D19413C;
-	Mon, 18 Nov 2024 10:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBEF1946DA;
+	Mon, 18 Nov 2024 11:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="JvWhmqmR"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="OzVNxIiz"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59E31DFFB;
-	Mon, 18 Nov 2024 10:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CD0188A0D;
+	Mon, 18 Nov 2024 11:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731926525; cv=none; b=SJWeID9IcqCnxH9FNlG46pTPj2fJw64X+NVKQM0n4KGZQg3fwWZMDEVmTJbPB31299AsGIlH9kNg1yR7JTfWjZSgMNmBrr6UVazLaFiAIc+HlT5gIpuCoef1klyLhGcGSx32+o45vGhpLU4FKnScnPE7DfDdyixSMa7vX9mtOhs=
+	t=1731930239; cv=none; b=mVb/u2NOLS9QYZjGFbm7dIMVGDm2ttaZVnndYNHjTrf8/mWjAkhwK+kqY9/KmBWFDULz7p4lVzcPIlrlg4V786wasAyz4/XsNX0NWM9BQ+Q25AiUlQwzJ3O6rPcsHw+e1OdsT8BATEcdfOaIMBxco2vF5yXfm/MhwtHAoBw4LHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731926525; c=relaxed/simple;
-	bh=/pmGenI2wO3JTNxmubF24thm679YUhSXwuotCg6tHFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Re9rdPujXdL2/PdrYjO7r8jQdT0bRyH5u7K8nc/U99eIjLiWHFbx2YwPfibln78joil2lrsg/JcgHloTM0MUmYM5rR/EHtrU1mmvqvwBiNuT0eYPrhp152Oq8Zi7p5POpyUC3Y4ODh39iupZpep/7skiUJjCkHdXYXqFY8QohVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=JvWhmqmR; arc=none smtp.client-ip=65.109.113.108
+	s=arc-20240116; t=1731930239; c=relaxed/simple;
+	bh=TwKBlDPWto5qUMoY6Ex07TeBDc1LB+82jYTKWT+EUOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kZmoo+6QnjdhJ3rOa7DK8OUgNekkuSYayQpK0Z2By2Pmuv7nJAJxhHAds3Fou2+6xZlovyzJseFuDo8JmhI0kRTvF57yFVfXR1269OBsFBTr44cmPd4BAYC5KOwF75jKjzD9q0qB3i3M4RxgmP2wDWS4u51p0/pkyzE5x7A67Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=OzVNxIiz; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2708040E019C;
-	Mon, 18 Nov 2024 10:41:59 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0D1B440E015F;
+	Mon, 18 Nov 2024 11:43:52 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id OvAE2aXAax_E; Mon, 18 Nov 2024 10:41:55 +0000 (UTC)
+	with ESMTP id 2DULiPkMLEzc; Mon, 18 Nov 2024 11:43:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1731926513; bh=DmWtgi2Qz0m6ZoT7qjh0PUC9+yoNEpuOT/5+gLqTlk0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JvWhmqmRUL7hkytSCadEsftyQZKStLgnKxQ7agUehRPUm1ZpVWnixa4PPWp1SIqoe
-	 B0enESfQMM4tBv8OGr3oljiDEJy53Cput7Tbtpo5l/yTEOABbGS7lsX40nOSy78mGK
-	 uN0kaY126B8moeEx1Kd74aXQBfWrqZULBxXSJmSBS1T4XQwhnX17MBMiHfLy+w1ynD
-	 tk7kA0N+oLs6kJpgaVSP1Af169qh2I7ULbzp9bu6xvTzh+h/48BIdqnxwWT8k+6sET
-	 xpqjcnpnUrKE5vtHnoDTSbyVZONtyWW7D8zJpnZmmTHWbh/KiNv+MMvRGTCVQ9Zx/Z
-	 J5daFgDpW47r1bpgQQPSyduzz085tzUxHbLWXX7NAKwUbY0hrUnvd0zFLUK1AiRg8X
-	 rTm1iGsHtQsMyBztWeLmr2FSQgr1FZUZTmGDJfunx4IgtvVcJjwH12+05OAy3T+Srr
-	 cX7AGw5UVQPhXz2KTTn6TWzFHlIRIXbRVkc5wbh7/TvrKxJ+aND6IwipLlv25LlrnH
-	 jHHOMYePIE22wYsbcwEXa3F7LylXwFh8Tt07LFZBesr5abbc0KxkiLCwudeTg9XjAQ
-	 eGqnrrFfxj4NMxqUcqEiRoUAoel5a0PUXnFILzlBIairHJVl1TPu2mKq4K99nFb8GG
-	 Hej1E+d6sW5YH7KdeqVs6lQg=
+	t=1731930227; bh=5utdCM8Zl8kLwYkNyCmXrpE9uKkf1ZAvCdSEtJSzNKQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=OzVNxIizEInNjKjgUXLR/6LKDh8awijG+7prSh37p/dCD9eimAbJUbmIac0X7qq2N
+	 8Y2KXFf/nrvGUgPxTDk71kwCjlufBmwSURVlCv8q+jLnUpdcOAFMKcF4vVTDkv6t2v
+	 thlcJLkUo3uKKtvt/W0NE/aMMn9gFrysbIBG0C/IEv5BXKIJkU8URtEialRMdLzh6S
+	 0vKZSJoAT00jfW9AXJiL1jwT/8W24EmXd941BgUvl8XHcB2YheIujeeiwMP8KukrOE
+	 5aUibfTWcMepheiv33H7SobFhzLiFUUsrnx9Pkh2JoVJlI5W4+X/HfMPEQ2kNHTS1r
+	 Q6UwyNFzlGFeqIIrlFvG4qf0ZCd62PfBiDsksNtJp6msyBR9Me77XpGHwJOs6C9jM0
+	 tZAD6OQEN3f7hjXL6/ySvkQpAtMIOudIUnZxvQdM+wkKGvGqR5IUGa54hfIlfjfJe3
+	 5xGyzaZzJgYAKyQjCB8eKxW+8ga6Ow07SBAxopLEifmFmEt5+RyhgBtLHXARFNX6wU
+	 3X8wVFiibfGsvADWkrFPs1peKvgkQ9+ERSljRbCUQw1VfersfjJdvF+/2dgaGRjMiD
+	 4AiG38CbsZWaMVDEPYxConzvEX+pE4DqFv/U7ZRnUS5p+pQMo+D/0La/3tRd9Huzmx
+	 yKo+iosQGdm+u/K24XFUDqyU=
 Received: from zn.tnic (pd9530b86.dip0.t-ipconnect.de [217.83.11.134])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 165CA40E0163;
-	Mon, 18 Nov 2024 10:41:48 +0000 (UTC)
-Date: Mon, 18 Nov 2024 11:41:42 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 94ADC40E019C;
+	Mon, 18 Nov 2024 11:43:44 +0000 (UTC)
+Date: Mon, 18 Nov 2024 12:43:43 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com
-Subject: Re: [PATCH] EDAC/powerpc: Remove PPC_MAPLE drivers
-Message-ID: <20241118104142.GAZzsZ5vcY_Vv3GvY-@fat_crate.local>
-References: <20241112084134.411964-1-mpe@ellerman.id.au>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.13
+Message-ID: <20241118114343.GAZzsob_d_C5sYNHUn@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -76,42 +75,99 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241112084134.411964-1-mpe@ellerman.id.au>
 
-On Tue, Nov 12, 2024 at 07:41:34PM +1100, Michael Ellerman wrote:
-> These two drivers are only buildable for the powerpc "maple" platform
-> (CONFIG_PPC_MAPLE), which has now been removed, see
-> commit 62f8f307c80e ("powerpc/64: Remove maple platform").
-> 
-> Remove the drivers.
-> 
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> ---
->  drivers/edac/Kconfig        |  18 --
->  drivers/edac/Makefile       |   2 -
->  drivers/edac/amd8111_edac.c | 596 ------------------------------------
->  drivers/edac/amd8111_edac.h | 118 -------
->  drivers/edac/amd8131_edac.c | 358 ----------------------
->  drivers/edac/amd8131_edac.h | 107 -------
->  6 files changed, 1199 deletions(-)
->  delete mode 100644 drivers/edac/amd8111_edac.c
->  delete mode 100644 drivers/edac/amd8111_edac.h
->  delete mode 100644 drivers/edac/amd8131_edac.c
->  delete mode 100644 drivers/edac/amd8131_edac.h
-> 
-> The removal commit is in the powerpc/next branch:
->   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=next
-> 
-> I can take this via the powerpc tree if that's easiest, let me know.
+Hi Linus,
 
-Yes, please do. 
-
-I've been meaning to reply to you but then gazillion things interrupted me and
-... you know how it is. Sorry.
-
-Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
+please pull the EDAC pile for v6.13.
 
 Thx.
+
+---
+
+The following changes since commit 42f7652d3eb527d03665b09edac47f85fb600924:
+
+  Linux 6.12-rc4 (2024-10-20 15:19:38 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.13
+
+for you to fetch changes up to 1b38da0115598e30cc7cdd84761fc427c18b281f:
+
+  Merge branch 'edac-misc' into edac-updates (2024-11-18 11:33:23 +0100)
+
+----------------------------------------------------------------
+- Add support for Bluefield-2 SOCs to bluefield_edac
+
+- Add support for Intel Panther Lake-H to igen6_edac
+
+- Add polling support to igen6_edac as some Intel M100 chips have trouble with
+  error interrupts
+
+- Add Kaby Lake-S support to ie31200_edac
+
+- Fix memory source detection in the SKX common module which is used by
+  a couple of Intel EDAC drivers
+
+- Add support for the NXP i.MX9 memory controller to fsl_edac
+
+- The usual fixes and cleanups all over the place
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (1):
+      Merge branch 'edac-misc' into edac-updates
+
+David Thompson (2):
+      EDAC/bluefield: Fix potential integer overflow
+      EDAC/bluefield: Use Arm SMC for EMI access on BlueField-2
+
+Frank Li (3):
+      EDAC/fsl_ddr: Pass down fsl_mc_pdata in ddr_in32() and ddr_out32()
+      EDAC/fsl_ddr: Move global variables into struct fsl_mc_pdata
+      dt-bindings: memory: fsl: Add compatible string nxp,imx9-memory-controller
+
+James Ye (1):
+      EDAC/ie31200: Add Kaby Lake-S dual-core host bridge ID
+
+Krzysztof Kozlowski (1):
+      MAINTAINERS: Change FSL DDR EDAC maintainership
+
+Lili Li (1):
+      EDAC/igen6: Add Intel Panther Lake-H SoCs support
+
+Orange Kao (2):
+      EDAC/igen6: Avoid segmentation fault on module unload
+      EDAC/igen6: Add polling support
+
+Priyanka Singh (1):
+      EDAC/fsl_ddr: Fix bad bit shift operations
+
+Qiuxu Zhuo (3):
+      EDAC/skx_common: Differentiate memory error sources
+      EDAC/{skx_common,i10nm}: Fix incorrect far-memory error source indicator
+      EDAC/igen6: Initialize edac_op_state according to the configuration data
+
+Yazen Ghannam (1):
+      RAS/AMD/ATL: Add debug prints for DF register reads
+
+Ye Li (1):
+      EDAC/fsl_ddr: Add support for i.MX9 DDR controller
+
+ CREDITS                                            |   4 +
+ .../bindings/memory-controllers/fsl/fsl,ddr.yaml   |  31 +++-
+ MAINTAINERS                                        |   3 +-
+ drivers/edac/bluefield_edac.c                      | 170 ++++++++++++++++++---
+ drivers/edac/fsl_ddr_edac.c                        | 141 +++++++++++------
+ drivers/edac/fsl_ddr_edac.h                        |  13 ++
+ drivers/edac/i10nm_base.c                          |   1 +
+ drivers/edac/ie31200_edac.c                        |   8 +-
+ drivers/edac/igen6_edac.c                          |  49 +++++-
+ drivers/edac/layerscape_edac.c                     |   1 +
+ drivers/edac/skx_common.c                          |  57 ++++---
+ drivers/edac/skx_common.h                          |   8 +
+ drivers/ras/amd/atl/access.c                       |   8 +-
+ 13 files changed, 398 insertions(+), 96 deletions(-)
+
 
 -- 
 Regards/Gruss,
