@@ -1,70 +1,69 @@
-Return-Path: <linux-edac+bounces-2561-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2562-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64B3E9D25F4
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2024 13:33:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51A559D2600
+	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2024 13:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8125B29C6B
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2024 12:33:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09A681F226F2
+	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2024 12:37:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961A71C4A30;
-	Tue, 19 Nov 2024 12:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850DD1CBA1A;
+	Tue, 19 Nov 2024 12:37:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="W8sZ6T2E"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="HLV69bqH"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0477F13B780;
-	Tue, 19 Nov 2024 12:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767D513B780;
+	Tue, 19 Nov 2024 12:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732019615; cv=none; b=Fe2UOh1+JR/fmThQfv/K/uxyu6BopZweNxyCJ1AqceXptVSb55Y5sn4/bjyfs8MnmlWwKD+1+k45TtC82bvGgjslcN4EVihy2xb5pPnx7NWm1TtOP2DO0BGQJ3kXOTVzf0yspXf4YFl1tqkiLTX1LstRcsx6ix7kRJhCxYKm9KA=
+	t=1732019874; cv=none; b=eesP1P9F0FHrH8raYBGAPmJpF86H0Sr7MI9AfUdV+W7lmHGzAXm1cYBIlAhDxb5NxUM0b22XcILT7TZlrANoPQeCySJigG/eGy8WsJ5pD119VbfEHOrKp9oDgj5GHAk+oLijUq8VCmIccxrwmZq3Jz9okzpu2VY/Z3BC6sM/OX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732019615; c=relaxed/simple;
-	bh=wYtKX1gkgU2eRIj2wm+HXUb+JU30L2HyOtpCN5Pw1oA=;
+	s=arc-20240116; t=1732019874; c=relaxed/simple;
+	bh=SLn98ioub+iMNwf/pV/eo5IlGgC5pW4cy3AFahRwgdM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JtPbDfZOzkTXLEWvmDf+mYhstcfnXW1jrT5yeu8nHWMOh2psodaKbqwFp+E4V1ItjskbU141x/7GG5ujd4anwynJJgAuffR8SPLIkE+teUm4yUkJV5y/zi2KEFRZYRrVjm2EZWgGl/iCcPdzREfd4f0liUs44HEPoT8w/Fzw4N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=W8sZ6T2E; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=YbXZzZ0mKopzz5qfcSosZp+0J8o8NQxMTi8k6pAvyrL0gX6b11euQO+ffezjGfEE+xDjyxQKE1pBTY+wxxBS5fQUVSkUsAYHDoa6XxYMPCh5A2h+pgMBzfcPb8lOF7/TPfHGWcplW/3t5kuIdgkNsn3jAar1H01RF83NYoxylW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=HLV69bqH; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 022F740E0261;
-	Tue, 19 Nov 2024 12:33:30 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8D91840E0263;
+	Tue, 19 Nov 2024 12:37:49 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 0Ow-6GcQPyy3; Tue, 19 Nov 2024 12:33:26 +0000 (UTC)
+	with ESMTP id EeAmpnxGTl59; Tue, 19 Nov 2024 12:37:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1732019605; bh=rEP0FuldgnSoZBuL4zUQZ5eTxYEpIWQlSPv8f8rZbdo=;
+	t=1732019864; bh=9msUNrWXEC3mX7pDT4bRGAge3h56G8tJeE9EQBQ1Y5U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W8sZ6T2ELT2tzGmP5OQFsooPkBrvRYFx+pP3+FbfossFsby3YKB9l/S/afxPXCHlD
-	 r0qeAyfr97DtKVCTtoDzylXnparGjta3OXlgTb+RdnfvEiXTnPdy9wMJp6Zs1W3X8y
-	 hj5tJb2crG7mGfafLUqruCQUJCRFPYEm5kDcyHZ731obfZErF1fjpw660MarATpitp
-	 0hbFbmxCYMogmhLrFTUU2gCfbQUGgF0KlNN0lJmL2MEAdF5WnGTuM1kvurrk0wOwrQ
-	 TdcqPAMEfEXq5E4dHdeZA0a9+SxudSC9ZU5jOttgs8IqSUF/U0+2oKSHp5rqlXcgaF
-	 h/BmC8OcE6l3u8DBcMpExrmmL3FlriEDz9NusjOC4KwTU2CRo/z0Q+Inc7ctbmhrrr
-	 vTZ7EeTYZjIDMpARPn3nF0OKRAPGV/+UzWZbU75amFBO9VkeVp14PlvmODtXe/fujP
-	 UBjnNZ0A0kLamktz/QQufj1lFK1rphOZWFYpOxtyg6rGOypE9axZv30BpDObmkNSzZ
-	 bwqNTt3kAEITo3H0hs7U3dt2x2hE/cObcNBZZb9pqFzNUGZ6RQrVtTSjrAEf4Lg6HT
-	 7Qu+q9Q4Pj+Dny9MwlPaCdMveNXXAUEMH6RQK6iqpmVAMmKkPQBB4Kep0eTP8Oc9Gg
-	 RwH+4hSSKG8FoDZyCt/rseBo=
+	b=HLV69bqHTjs9bY2eVTquOscV9cgfcrIVEM2MzDalEn89hAY4Pw/y/AizBd2/hO70O
+	 Vc/+rpyhRPIbYRCJxNEilPYLKGmdkR7iqT+mxumS280SHQdnktLkaNdCHu6ANvbwhO
+	 CaRmnVLR8aOlNFOkt9/X9u4tpRQ0MGd87TRi1DOJBOoYedaWoB6rZWU0/gO9Gdc78h
+	 kshaJuLwxbLvNxoeEqmy1MAYLm2CSJavoHxFlFINGk4PuywN/agTbCfE3bclwWJ5/z
+	 uaEJ9dcfeDX+rTli7C1CF8v8DboZGHdr2f/59KqR6PhbBJAtccnG7Hywb7+CR63oVw
+	 MKrYy2tcnspENaeRjnI8SqwM7ISzSAYwDTZfc1t5ue27X5NJrXfm67tLOHMxB+RJVu
+	 XMK9qx3PCAPRzb6dU7kxYbCQ/4hlWUgRRKpEF/mzwCAwarC7ktttLKKNuZp55jJ71P
+	 wt31ptsnCFQrwtovGvUiqUA+dZMEF0Ro6+hciHcX9VkhnXd6nq+8Y2qfaA+NT89Nbo
+	 dUheNOmBThnPQTcnhZ7KlVvvfiz8whMnXqDJE46iJysJoTPWp9rsss+lFM8lx3pWVy
+	 6gRFxSpZd5p/rxr1mx+YOXkEkbVg4zOO8PJ1daG76wNL3f+nvdYdZFkF9kdRqNVhaE
+	 2L6q71mhMpWwTUMO9S2HXmDs=
 Received: from zn.tnic (pd9530b86.dip0.t-ipconnect.de [217.83.11.134])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AAC4540E015F;
-	Tue, 19 Nov 2024 12:32:38 +0000 (UTC)
-Date: Tue, 19 Nov 2024 13:32:33 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 04C5B40E0269;
+	Tue, 19 Nov 2024 12:36:58 +0000 (UTC)
+Date: Tue, 19 Nov 2024 13:36:57 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Shiju Jose <shiju.jose@huawei.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
 	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
 	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
 	"linux-mm@kvack.org" <linux-mm@kvack.org>,
@@ -75,6 +74,7 @@ Cc: Shiju Jose <shiju.jose@huawei.com>,
 	"mchehab@kernel.org" <mchehab@kernel.org>,
 	"dan.j.williams@intel.com" <dan.j.williams@intel.com>,
 	"dave@stgolabs.net" <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
 	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
 	"sudeep.holla@arm.com" <sudeep.holla@arm.com>,
 	"jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
@@ -109,7 +109,7 @@ Cc: Shiju Jose <shiju.jose@huawei.com>,
 	wanghuiqiang <wanghuiqiang@huawei.com>,
 	Linuxarm <linuxarm@huawei.com>
 Subject: Re: [PATCH v15 11/15] EDAC: Add memory repair control feature
-Message-ID: <20241119123233.GBZzyFYfEttuJjfr6D@fat_crate.local>
+Message-ID: <20241119123657.GCZzyGaZIExvUHPLKL@fat_crate.local>
 References: <20241101091735.1465-1-shiju.jose@huawei.com>
  <20241101091735.1465-12-shiju.jose@huawei.com>
  <20241104061554.GOZyhmmo9melwI0c6q@fat_crate.local>
@@ -117,7 +117,7 @@ References: <20241101091735.1465-1-shiju.jose@huawei.com>
  <20241111112819.GCZzHqUz1Sz-vcW09c@fat_crate.local>
  <7fd81b442ba3477787f5342e69adbb96@huawei.com>
  <20241114133249.GEZzX8ATNyc_Xw1L52@fat_crate.local>
- <20241115121415.00005c76@huawei.com>
+ <fa5d6bdd08104cf1a09c4960a0f9bc46@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -126,24 +126,23 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241115121415.00005c76@huawei.com>
+In-Reply-To: <fa5d6bdd08104cf1a09c4960a0f9bc46@huawei.com>
 
-On Fri, Nov 15, 2024 at 12:14:15PM +0000, Jonathan Cameron wrote:
-> We could drop the query for now and bring it back later once more of the surrounding
-> infrastructure becomes clearer.  To me it's a useful feature, but I appreciate
-> this is early days and we shouldn't always try for all the bells and whistles on
-> day 1.
+On Fri, Nov 15, 2024 at 12:21:16PM +0000, Shiju Jose wrote:
+> >Ok, and how is the user supposed to know what those mean?
+> 
+> Print in  string format?, may be as 'persist'/'volatile'? 
 
-Agreed.
+That sounds like an abuse of sysfs (Greg?) to me and even if it were possible,
+you need explanation what those strings mean.
 
-Let's add this only when it is really really needed and it cannot be part of
-the actual repair flow. Right now it can be an implicit step of the repair
-where latter is first tried, and if it works, it is actually done.
+> I am  fine with adding the support for expose the ranges of these,
+> but makes more sense to do it when a driver surfaces that can do it.
 
-Then, if it really really turns out that one needs the "try" thing as an
-explicit step, we can then actually carve it out.
+So how do you envision to do it otherwise? The user is supposed to guess the
+ranges?
 
-Thx.
+That's not a good UI IMO.
 
 -- 
 Regards/Gruss,
