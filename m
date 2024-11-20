@@ -1,79 +1,108 @@
-Return-Path: <linux-edac+bounces-2563-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2565-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E833A9D2F89
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2024 21:35:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 745EB9D37BF
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Nov 2024 11:00:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD09F283369
-	for <lists+linux-edac@lfdr.de>; Tue, 19 Nov 2024 20:35:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E76E1F22A95
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Nov 2024 10:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95221D0B9E;
-	Tue, 19 Nov 2024 20:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSsmMggD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0166219E83C;
+	Wed, 20 Nov 2024 10:00:25 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91850148FE8;
-	Tue, 19 Nov 2024 20:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2ACB17BB2E;
+	Wed, 20 Nov 2024 10:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732048520; cv=none; b=SNBVN52hIiNQzCYSEcFVOQwFl3R638fvQuGqf7PnQE/1WHk5XS/FjhjCyUXA/MbjQ7/wfE2MLBtSDMh4YL20OoBU3wrf4w+spf550Vc5en++cxgK2uYZexcwzxllPHWey1LvWUWGOraF62BZ55ZZCYBLswE1nMZBonsGDBeEgp0=
+	t=1732096824; cv=none; b=lFZSapcR52qO8Gugo2bM7aXHR5jiXsRRGeuzO5RmiCwgSYlOR9Iy1gTWvX3RtaMnRzwiTWPcHLWOOqzw+M1TI00tEduuiNwrJgRJ7k/WA2kUpyPB45O1aD57YO1X40yeNcR76BxprL/D7ULp+ZL3vAnavDG3evn0BYHZZwjZIEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732048520; c=relaxed/simple;
-	bh=SNpXsaFeZE6YYA77ltDYXQ9lY6uqCUzcNugqmI0UTCs=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=dJXzYl/dBwhr6//NhSU4vbbh7XXAPOu01yytYw++xaovJUBBiiGPZ+ffYcRcEmAeu0Irpoet0DIDeRcVGwXt1Pj+blYOyos3cysgF0L4KJj2w95xvVZ2/ozlc8yhKs31iqQMS8y26DGnMh1ISRPzP5xg4XrEOQugQsKfG7CwKXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rSsmMggD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 704CBC4CECF;
-	Tue, 19 Nov 2024 20:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732048520;
-	bh=SNpXsaFeZE6YYA77ltDYXQ9lY6uqCUzcNugqmI0UTCs=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=rSsmMggDlt9P858FfJFJrgSVC0qubXNvpPpQaKcl60cIu3ylfkP4zHTmoNxR7Heu2
-	 6LQLMQ2X6UPmYfm7tQtedRGeRzBX6nZHuKyPRm6EIAtdi4Jven25PMhtQGhwzPgoGb
-	 a+lpXLth48lz1gYLclGz0GbTHvbwVhm4G6/EhtgbQQcSF9DYkvoEhiijKiXfPOQfe8
-	 fzCaIYrp6/WJghidyYvbQars5+qmXOjM0jPwWSojtn3u2U6G6yudJe1j+yTMNU5KBZ
-	 bqiR2PGlQLfilxrbpSoBkNo0XsoqsLz7aGCh09Dqlk4+ur9y8J4lZQSNRNaq7dB/Ox
-	 xhFh6DSNBFiRA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 348E43809A80;
-	Tue, 19 Nov 2024 20:35:33 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC updates for v6.13
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20241118114343.GAZzsob_d_C5sYNHUn@fat_crate.local>
-References: <20241118114343.GAZzsob_d_C5sYNHUn@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20241118114343.GAZzsob_d_C5sYNHUn@fat_crate.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.13
-X-PR-Tracked-Commit-Id: 1b38da0115598e30cc7cdd84761fc427c18b281f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 77286b868f93a590313b449b25a49ef2ad0c0308
-Message-Id: <173204853180.680579.15234578676758821318.pr-tracker-bot@kernel.org>
-Date: Tue, 19 Nov 2024 20:35:31 +0000
-To: Borislav Petkov <bp@alien8.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1732096824; c=relaxed/simple;
+	bh=gJuYhytfzP1s0tqg6XZMauahlV3fdl16xGguFwiZfn0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gATOP37chyy2/Rh6VqCJZva5T9YQSWlKkinKTL5FR1OqvGe+d6fB55i++h21XKc4zfyeaK/LKPsGB4W6+7oukRuVwdn1vEsST8Cny0lNxwvZmYXZ2F5FkWzkUwUxDs/ync+jYp5EMPl97wnx5TqdaldxHuWIoEz/rh2LCzqTmAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XtcKm0HKzz6L74b;
+	Wed, 20 Nov 2024 17:59:56 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id 402EA140F41;
+	Wed, 20 Nov 2024 18:00:18 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.247.212) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 20 Nov 2024 11:00:17 +0100
+From: <shiju.jose@huawei.com>
+To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+	<mchehab@kernel.org>, <dave.jiang@intel.com>, <dan.j.williams@intel.com>,
+	<jonathan.cameron@huawei.com>, <alison.schofield@intel.com>,
+	<nifan.cxl@gmail.com>, <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+	<dave@stgolabs.net>
+CC: <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>, <shiju.jose@huawei.com>
+Subject: [PATCH 00/13] rasdaemon: cxl: Update CXL event logging and recording to CXL spec rev 3.1
+Date: Wed, 20 Nov 2024 09:59:10 +0000
+Message-ID: <20241120095923.1891-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
-The pull request you sent on Mon, 18 Nov 2024 12:43:43 +0100:
+From: Shiju Jose <shiju.jose@huawei.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.13
+1. Update CXL event logging and recording for CXL spec rev 3.1 and for the
+following and corresponding kernel CXL trace events changes.
+https://lore.kernel.org/lkml/20241120093745.1847-1-shiju.jose@huawei.com/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/77286b868f93a590313b449b25a49ef2ad0c0308
+2. Add following fixes.
+ - Fix logging of memory event type field of DRAM trace event.
+ - Fix mismatch in 'region' field's name with that in kernel DRAM trace
+   event.
 
-Thank you!
+Shiju Jose (13):
+  rasdaemon: cxl: Fix logging of memory event type of DRAM trace event
+  rasdaemon: cxl: Fix mismatch in region field's name with kernel DRAM
+    trace event
+  rasdaemon: cxl: Add automatic indexing for storing CXL fields in
+    SQLite database
+  rasdaemon: cxl: Update common event to CXL spec rev 3.1
+  rasdaemon: cxl: Add Component Identifier formatting for CXL spec rev
+    3.1
+  rasdaemon: cxl: Update CXL general media event to CXL spec rev 3.1
+  rasdaemon: cxl: Update CXL DRAM event to CXL spec rev 3.1
+  rasdaemon: cxl: Update memory module event to CXL spec rev 3.1
+  rasdaemon: ras-mc-ctl: Fix logging of memory event type in CXL DRAM
+    error table
+  rasdaemon: ras-mc-ctl: Update logging of common event data to align
+    with CXL spec rev 3.1
+  rasdaemon: ras-mc-ctl: Update logging of CXL general media event data
+    to align with CXL spec rev 3.1
+  rasdaemon: ras-mc-ctl: Update logging of CXL DRAM event data to align
+    with CXL spec rev 3.1
+  rasdaemon: ras-mc-ctl: Update logging of CXL memory module data to
+    align with CXL spec rev 3.1
+
+ ras-cxl-handler.c  | 262 ++++++++++++++++++++++++++++++++++++++++++---
+ ras-record.c       | 181 ++++++++++++++++++++-----------
+ ras-record.h       |  21 ++++
+ ras-report.c       |  30 ++++--
+ util/ras-mc-ctl.in | 194 ++++++++++++++++++++++++++++-----
+ 5 files changed, 583 insertions(+), 105 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.0
+
 
