@@ -1,104 +1,115 @@
-Return-Path: <linux-edac+bounces-2581-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2582-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43CEA9D4C0B
-	for <lists+linux-edac@lfdr.de>; Thu, 21 Nov 2024 12:34:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1A199D4DF6
+	for <lists+linux-edac@lfdr.de>; Thu, 21 Nov 2024 14:43:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3EA51F227FD
-	for <lists+linux-edac@lfdr.de>; Thu, 21 Nov 2024 11:34:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 881FE1F219C8
+	for <lists+linux-edac@lfdr.de>; Thu, 21 Nov 2024 13:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D21FB1CEAAC;
-	Thu, 21 Nov 2024 11:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ZSycXVH6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF5071D7E57;
+	Thu, 21 Nov 2024 13:43:20 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07401C578C;
-	Thu, 21 Nov 2024 11:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FBA1D5CCD;
+	Thu, 21 Nov 2024 13:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732188889; cv=none; b=DN8aqKEtNOgVn0MlgL2KaH2uH1Y9hoBHshXp/F0b4sApsWQvlV+MdLncZcCDJh1tjW+QzvhCNErBVySR/iWTteCqdMR2i0UI1j6NKdMpg5ecLE/t9IA0PCGd6C6/uLMxAntDVTXnGDxhVucQ+lfhOSF2/0FozAK8hTBuqjJ9nGY=
+	t=1732196600; cv=none; b=mSwCIKD4ZdZ357bh1x6Kj76sML/3+2YNXVoHiTEPh9aLO10HN3LVF7uRjcG1AzO75um6Dr7jzBg47Dm5MZ5jZegSVvFiWDLgHnkUz5Q/cXdtrQI2L/nn55TWgYKOTzzcCkGWk4uOJlMJxyKjSz/2rF1I2dPlKa7nPDQ7j1W/ChI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732188889; c=relaxed/simple;
-	bh=vucmF/xedC4wjhdZeZ8wYdcTFDxnTsuYOSrTji52vVA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V3bTVbZAifKBBDCIXoSK9LyjQtMf5yvmsIgtLBvBFxLMSSEyrjXZeTkeStPrshhUskt7VdxiOHSwhvhkimeUMWMcQ8+LmZWEgT8W+N/dd9RNJ6igWoYp0RfG0gcVrTX/cMIjyXQOXjG4EiLevzTJMEJDwYq1YdBfBuPJiSb8ouA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ZSycXVH6; arc=none smtp.client-ip=115.124.30.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1732188876; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=tInUvV9amHF6Ghq811sNVWZAtZ7ilPNUqZfPT4F1Dh4=;
-	b=ZSycXVH6C0oe/M1Ber23hbbme6aVdaeiYyIHOuwTqYI/qMM8VQtEN2m12MajUAkG/5LKZHIMuwcbzExoY0qM61YZffEK5cXtMtOsABvfLGeA/SVCTwV6SQTZ81sQEm5Hx6eAExmzRu8Ek6uMWiz7EOJFHKNum2MMK9HM4n0eybE=
-Received: from 30.246.161.197(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WJwtBb2_1732188873 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 21 Nov 2024 19:34:35 +0800
-Message-ID: <7002248c-f3af-42aa-ba42-a65cd738ae37@linux.alibaba.com>
-Date: Thu, 21 Nov 2024 19:34:31 +0800
+	s=arc-20240116; t=1732196600; c=relaxed/simple;
+	bh=t1xS6VPnNXhFDtO31L5INNt/+JTUA64GJsQLsWahz44=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AG7pvr9N1KTYlytyRbvcNwWa8Hb/of5vsl+hwkBSfx0+ndekZidf+qEhUqf62ZDA7Na8Hn53OtAqUEngaJ6+ZboGPt3nGILM24VYwMXt8ylmlxxB4j4mUHASffDxTc4We7rZgVKWIjQiLPN1Rujy24ScM8JQrfkEBj4D8yqOeH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07634C4CECC;
+	Thu, 21 Nov 2024 13:43:17 +0000 (UTC)
+Date: Thu, 21 Nov 2024 08:43:54 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bhelgaas@google.com,
+ tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
+ davem@davemloft.net, anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
+ peterz@infradead.org
+Subject: Re: [PATCH v3] PCI: hotplug: Add a generic RAS tracepoint for
+ hotplug event
+Message-ID: <20241121084354.4a554829@gandalf.local.home>
+In-Reply-To: <7002248c-f3af-42aa-ba42-a65cd738ae37@linux.alibaba.com>
+References: <20241120124328.19111-1-xueshuai@linux.alibaba.com>
+	<Zz786zZljAy2J5i7@wunner.de>
+	<7002248c-f3af-42aa-ba42-a65cd738ae37@linux.alibaba.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-To: Lukas Wunner <lukas@wunner.de>
-Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de, rostedt@goodmis.org,
- mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
- naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
- mark.rutland@arm.com, peterz@infradead.org
-References: <20241120124328.19111-1-xueshuai@linux.alibaba.com>
- <Zz786zZljAy2J5i7@wunner.de>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <Zz786zZljAy2J5i7@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Thu, 21 Nov 2024 19:34:31 +0800
+Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
+> Sure, I can reorganize the directory. You have two optional proposals:
+> 
+> 1. /sys/kernel/debug/tracing/events/pci_hp_event
 
-在 2024/11/21 17:27, Lukas Wunner 写道:
-> On Wed, Nov 20, 2024 at 08:43:28PM +0800, Shuai Xue wrote:
->> $ echo 1 > /sys/kernel/debug/tracing/events/hotplug/pci_hp_event/enable
->                                                ^^^^^^^
-> I think this should now be "pci_hotplug" because you've renamed the
-> TRACE_SYSTEM in v3.
+I'm guessing the above has TRACING_SYSTEM = pci_hp_event ? That is, the
+above is a system and not an event.
 
-Yes, you are right. Will fix it.
+> 2. /sys/kernel/debug/tracing/events/pci/pci_hp_event
+
+Whereas here, it's an event.
 
 > 
-> I'm wondering if we'll have other categories besides "pci_hp_event"
-> below "pci_hotplug".  Maybe not.  Is it possible to omit the "pci_hotplug"
-> and make "pci_hp_event" top level?  Or should this be grouped below "pci"
-> instead of "pci_hotplug"?  I'm somewhat at a loss here as I'm not
-> familiar with the conventions used in the tracing subsystem.
+> I personally prefer the second approach. However, I'll defer the final decision
+> to the tracing subsystem maintainer, considering their expertise and
+> familiarity with the existing conventions.
 
-Sure, I can reorganize the directory. You have two optional proposals:
+Normally the system is determined by the users of the tracing
+infrastructure and not the tracing maintainers. But I can give you some
+guidelines.
 
-1. /sys/kernel/debug/tracing/events/pci_hp_event
-2. /sys/kernel/debug/tracing/events/pci/pci_hp_event
+The "system" level:
 
-I personally prefer the second approach. However, I'll defer the final decision
-to the tracing subsystem maintainer, considering their expertise and
-familiarity with the existing conventions.
+  /sys/kernel/tracing/events/<system>
 
-> 
->  From a PCI hotplug perspective, this patch LGTM, so:
-> 
-> Reviewed-by: Lukas Wunner <lukas@wunner.de>
+is just a way to group like events making it easier to enable them all at once:
+
+ echo 1 > /sys/kernel/tracing/events/<system>/enable
+
+or
+
+  trace-cmd start -e <system>
+
+The name of the "system" should be something that all the events underneath
+represent. Note, although events in two different systems can have the same
+name, it's best to try to keep them all unique. That's because if you have:
 
 
-Thank you.
+ systemA/foo  and systemB/foo
 
-Best Regards,
-Shuai
+If you add to the kernel command line: trace_event=foo
+it will enable both events. Although that could be fixed with: trace_event=systemA:foo
+
+Note: trace_event=systemA  would enable all systemA events at boot.
+
+That said, is all these events going to be related to hotplug? If so, you
+probably want "hotplug" or "hp" in the system name. If you make it just
+"pci", then it will be expected that all the events will be related to PCI
+in general.
+
+Does that help?
+
+-- Steve
+
 
