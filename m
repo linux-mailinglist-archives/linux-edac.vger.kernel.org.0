@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-2617-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2618-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D1389D63D2
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C01429D63D3
 	for <lists+linux-edac@lfdr.de>; Fri, 22 Nov 2024 19:07:25 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 133B9161617
-	for <lists+linux-edac@lfdr.de>; Fri, 22 Nov 2024 18:07:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DB25B27F62
+	for <lists+linux-edac@lfdr.de>; Fri, 22 Nov 2024 18:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42F691E1C08;
-	Fri, 22 Nov 2024 18:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF04A1E22E3;
+	Fri, 22 Nov 2024 18:05:07 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE561DFDAF;
-	Fri, 22 Nov 2024 18:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4B51E1C35;
+	Fri, 22 Nov 2024 18:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732298705; cv=none; b=eZzhzP5FTqIVQnWW/Ny6fAdTlMPk46/2hit474MfM8EkHSu0zruTFQWEGbxGSOLCusOUI0UFSJOi9v+K2sLlawY5PXNoQ5GzBSKuhM5BGJue+1w9WIiMPrDAcsRhOc8WwP35t6NyXYyfANSc5u1wPd7paXMjeCIMeq0nnv7v2w8=
+	t=1732298707; cv=none; b=gV5rokdbF/ayReyP2EomwZPlCOFiZsWwPb0AmPWv/am+whDNbVhDDC0tK1NWXhj0v6l04u6IRoZVbMnKpFyD9xcdFIJGDBislodeNzAEJLLr66bA1Mn0qlcsCqs40UHzLyZnvYmEQF/U0sWzW2j7nbyFZVSQwtx3U8ukkcfMlUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732298705; c=relaxed/simple;
-	bh=yfwWg9uor1m1hAtLiG8mEBFVi6R+1pN8J78XPdrWdJE=;
+	s=arc-20240116; t=1732298707; c=relaxed/simple;
+	bh=3iO38idGHHnZIEDzBNblLTucqnxBukjeIC0P/Cfa3Ic=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=beX4xuANeyQOzkkGZd/kdqJdc+t0yiFC77z1yPRmaF5I9ZnUMTbEbMn5+zXCMixJHML9FwY8KN92XTvvQ1wQNTt+rK4R//mHKGCP8Y0Wpp5TvXh/Emw6giCW4BlIOmjIDMGy/t6m2PIAEPgFNIXmHAO3baBh9X3adlW6JLI4VN8=
+	 MIME-Version:Content-Type; b=CJf8NWEiu7YU/0ktueJfxlTaTAp75VTtjTMRxgAPUgsvae/VVnQJsS1GA2WhHBsvfqyH01pU+lanxm//MbzF3ofbMxaVRh5voQtD27iqpPcLbLZxWbGK/TgDBWVJL3I4keag91ZYNirWcB7Ob6MBDnEuLSuVXcT0VZxQOEmdUoc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Xw30302jPz6LCdy;
-	Sat, 23 Nov 2024 02:04:35 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Xw2xr2SQqz6K94W;
+	Sat, 23 Nov 2024 02:02:40 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id C0E5514010C;
-	Sat, 23 Nov 2024 02:05:00 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id A5FD314010C;
+	Sat, 23 Nov 2024 02:05:03 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.171.16) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 22 Nov 2024 19:04:58 +0100
+ 15.1.2507.39; Fri, 22 Nov 2024 19:05:01 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
@@ -58,9 +58,9 @@ CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v17 09/18] cxl: Add Set Feature command support for user submission
-Date: Fri, 22 Nov 2024 18:04:06 +0000
-Message-ID: <20241122180416.1932-10-shiju.jose@huawei.com>
+Subject: [PATCH v17 10/18] cxl: Add UUIDs for the CXL RAS features
+Date: Fri, 22 Nov 2024 18:04:07 +0000
+Message-ID: <20241122180416.1932-11-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20241122180416.1932-1-shiju.jose@huawei.com>
 References: <20241122180416.1932-1-shiju.jose@huawei.com>
@@ -77,44 +77,69 @@ X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
 
 From: Dave Jiang <dave.jiang@intel.com>
 
-Add enumeration of Set Feature mailbox command for the kernel to recognize
-the command being passed in from user space.
-
-CXL spec r3.1 8.2.9.6.3 Set Feature (Opcode 0502h)
-
-The feature requested is identified by specific UUID.
+Add UUIDs for the CXL RAS features to a common file.
 
 Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- drivers/cxl/core/mbox.c      | 1 +
- include/uapi/linux/cxl_mem.h | 1 +
- 2 files changed, 2 insertions(+)
+ include/cxl/features.h | 48 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 include/cxl/features.h
 
-diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index c29bf0e1f12c..117205f45d7c 100644
---- a/drivers/cxl/core/mbox.c
-+++ b/drivers/cxl/core/mbox.c
-@@ -69,6 +69,7 @@ static struct cxl_mem_command cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] = {
- 	CXL_CMD(GET_TIMESTAMP, 0, 0x8, 0),
- 	CXL_CMD(GET_SUPPORTED_FEATURES, 0x8, CXL_VARIABLE_PAYLOAD, 0),
- 	CXL_CMD(GET_FEATURE, 0x15, CXL_VARIABLE_PAYLOAD, 0),
-+	CXL_CMD(SET_FEATURE, CXL_VARIABLE_PAYLOAD, 0, 0),
- };
- 
- /*
-diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
-index 90dcb9723997..469dd481795f 100644
---- a/include/uapi/linux/cxl_mem.h
-+++ b/include/uapi/linux/cxl_mem.h
-@@ -52,6 +52,7 @@
- 	___C(GET_SUP_LOG_SUBLIST, "Get Supported Logs Sub-List"),	  \
- 	___C(GET_SUPPORTED_FEATURES, "Get Supported Features"),		  \
- 	___C(GET_FEATURE, "Get Feature"),				  \
-+	___C(SET_FEATURE, "Set Feature"),				  \
- 	___C(MAX, "invalid / last command")
- 
- #define ___C(a, b) CXL_MEM_COMMAND_ID_##a
+diff --git a/include/cxl/features.h b/include/cxl/features.h
+new file mode 100644
+index 000000000000..8a6c464ee571
+--- /dev/null
++++ b/include/cxl/features.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright(c) 2024 Intel Corporation. */
++#ifndef __CXL_FEATS_H_
++#define __CXL_FEATS_H_
++
++#include <linux/uuid.h>
++
++/*
++ * Patrol scrub control CXL 3.1 Spec 8.2.9.9.11.1 Table 8-206
++ */
++#define CXL_FEAT_PATROL_SCRUB_UUID						\
++	UUID_INIT(0x96dad7d6, 0xfde8, 0x482b, 0xa7, 0x33, 0x75, 0x77, 0x4e,	\
++		  0x06, 0xdb, 0x8a)
++
++/*
++ * DDR5 ECS control CXL 3.1 Spec 8.2.9.9.11.2 Table 8-209
++ */
++#define CXL_FEAT_ECS_UUID							\
++	UUID_INIT(0xe5b13f22, 0x2328, 0x4a14, 0xb8, 0xba, 0xb9, 0x69, 0x1e,	\
++		  0x89, 0x33, 0x86)
++
++/*
++ * CXL maintenance operations CXL 3.1 Spec 8.2.9.7.2 Table 8-110
++ */
++#define CXL_FEAT_SPPR_UUID							\
++	UUID_INIT(0x892ba475, 0xfad8, 0x474e, 0x9d, 0x3e, 0x69, 0x2c, 0x91,	\
++		  0x75, 0x68, 0xbb)
++
++#define CXL_FEAT_HPPR_UUID							\
++	UUID_INIT(0x80ea4521, 0x786f, 0x4127, 0xaf, 0xb1, 0xec, 0x74, 0x59,	\
++		  0xfb, 0x0e, 0x24)
++
++#define CXL_FEAT_CACHELINE_SPARING_UUID						\
++	UUID_INIT(0x96C33386, 0x91dd, 0x44c7, 0x9e, 0xcb, 0xfd, 0xaf, 0x65,	\
++		  0x03, 0xba, 0xc4)
++
++#define CXL_FEAT_ROW_SPARING_UUID						\
++	UUID_INIT(0x450ebf67, 0xb135, 0x4f97, 0xa4, 0x98, 0xc2, 0xd5, 0x7f,	\
++		  0x27, 0x9b, 0xed)
++
++#define CXL_FEAT_BANK_SPARING_UUID						\
++	UUID_INIT(0x78b79636, 0x90ac, 0x4b64, 0xa4, 0xef, 0xfa, 0xac, 0x5d,	\
++		  0x18, 0xa8, 0x63)
++
++#define CXL_FEAT_RANK_SPARING_UUID						\
++	UUID_INIT(0x34dbaff5, 0x0552, 0x4281, 0x8f, 0x76, 0xda, 0x0b, 0x5e,	\
++		  0x7a, 0x76, 0xa7)
++#endif
 -- 
 2.43.0
 
