@@ -1,276 +1,154 @@
-Return-Path: <linux-edac+bounces-2627-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2628-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 002E79D68E4
-	for <lists+linux-edac@lfdr.de>; Sat, 23 Nov 2024 12:36:57 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91D369D6A48
+	for <lists+linux-edac@lfdr.de>; Sat, 23 Nov 2024 17:44:54 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2DA4281B13
-	for <lists+linux-edac@lfdr.de>; Sat, 23 Nov 2024 11:36:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25B8A16180F
+	for <lists+linux-edac@lfdr.de>; Sat, 23 Nov 2024 16:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBD9189BB3;
-	Sat, 23 Nov 2024 11:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B4A1139D1B;
+	Sat, 23 Nov 2024 16:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="htMqEKuo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlnFaSdW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1443F4A0A;
-	Sat, 23 Nov 2024 11:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24B217C2;
+	Sat, 23 Nov 2024 16:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732361814; cv=none; b=jubgPwxdk7R4n96WENKHCuZx7dV8HswpYZPvPv6RUN0ez/DkRvsJhZkxs6ZRM36pOC0fRwFLmOuVSQW9byB/3GdA6tNUbWjB2G4JGAS3JqnvGYzUypWtcPC+zOZV86OgP9k2XXp8uQw3crkVvVBnhqvS7EKAgT9G6Ah9tHuoJcM=
+	t=1732380289; cv=none; b=LIRS1Hl6tRoMHaiuHqst3JRRUSz5qPTq2O+PivDKOVm0//y+NRzAtWAvsv51EnogaiYJdiXvQzZHXXq9nGEZL9noE3hIM/1EyWOzZH0FkaxptQALNm/TSgOpbqtkt4afuzpkRdlS9MonklCMxM3FdGj05aq7iNyRnRXnxvd0Ds8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732361814; c=relaxed/simple;
-	bh=YkIphRuUwyG+kwmOIpvCmaA/uQWf8vLkyyyGb79ZLSI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OuIUv/dkcWmCCqBL+wkAr1T6VR+H4ynaw3/eI9QfiS+0A7vp+q56YOEooN0T1xo7sHegSHCjb41CB13Z3z+LghsgNXNEycbxYQ+m5FED6jQIw4v1m3epfLjV1XH82eL1GZLEwBo8S1qTNkAblqRpOC9cSwomY8MQ13a4Cosp0go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=htMqEKuo; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1732361802; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=UQVkuDSsfa6qhnqUzaRuxWOioIPLIGwd3nPZ/n+mi9s=;
-	b=htMqEKuoN4aBsB/wEddAsPd1FIlLbCgjRz2qYJRQtH+KjheFxUsCDIrRFvv8c0EN3T7kfUTJdq6jMKpHZAa+XL1j/9FtwHPznKb6U/EHL5rWwUO1ORjdEkrxZw3OTyT3AeOPXAxXeH39Sa98HtYZgVUH5/Jgl36uiPoHNHsY4bs=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WK1Mj7a_1732361477 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Sat, 23 Nov 2024 19:31:18 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: rostedt@goodmis.org,
-	lukas@wunner.de,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: bhelgaas@google.com,
-	tony.luck@intel.com,
-	bp@alien8.de,
-	xueshuai@linux.alibaba.com,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	oleg@redhat.com,
-	naveen@kernel.org,
-	davem@davemloft.net,
-	anil.s.keshavamurthy@intel.com,
-	mark.rutland@arm.com,
-	peterz@infradead.org
-Subject: [PATCH v4] PCI: hotplug: Add a generic RAS tracepoint for hotplug event
-Date: Sat, 23 Nov 2024 19:31:08 +0800
-Message-ID: <20241123113108.29722-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1732380289; c=relaxed/simple;
+	bh=CxtPnF3g926VPClgLAxkiaL7rxCiMryhQt3b8SJmi2E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KkY60ZHUWlnpv8XI6P1Ui8IAumgL5EAg7FhaAZwGsL/x3yxSgYUy3UBQ0QZgRcxRb4FTcBkI+FwjjAnWFFbcRu0XdqmVJqp0NfFxNdbdojdorLNxyU5nLdc0HXEwWz05SsqfuByHpG4wM/WJpe171fn7Azb31PdN+GzCxxfoV9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlnFaSdW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80159C4CECD;
+	Sat, 23 Nov 2024 16:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732380289;
+	bh=CxtPnF3g926VPClgLAxkiaL7rxCiMryhQt3b8SJmi2E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dlnFaSdW9JEjxAwPAHJUCJupCTXHpTwt+B9+fbki0tvkwRDIb6SEmEQMa8JNJJydi
+	 7Yk4VXWO5qB5vRtoFZ23oFkGh1AFlsjguuzQkLB3EkcEKyu0bBVcRwyXMwgROPmdlA
+	 6H5qPyTRumTU2N5w4tqtJ9pLVztxm3KVcCeFjSSzrlbipBfUFGO9ipneYz0fOfyOI7
+	 wnREmduLaTxFn4gYPsUTBYN+P9Y5ilULTKZG5v+M02D/rexdgCn7izahmpfnC5xatA
+	 ZfbYmTQCI3eF3E+H/SVMaxwyXs0GbKmZLWks9DmCQI3jjU8qyIKgR4iR0O90LSAnNM
+	 M5i3G/sn6qGWg==
+Date: Sat, 23 Nov 2024 17:44:46 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-edac@vger.kernel.org, git@amd.com, krzk@kernel.or, robh@kernel.org, 
+	conor+dt@kernel.org, bp@alien8.de, tony.luck@intel.com, james.morse@arm.com, 
+	mchehab@kernel.org, rric@kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: memory-controllers: Add support for
+ Versal NET EDAC
+Message-ID: <uw5yvotdr4u5uau7bqjj2qdmkf5ay2bm7km3zhqunbixzljlw6@wi6cujvdhesk>
+References: <20241122100625.24571-1-shubhrajyoti.datta@amd.com>
+ <20241122100625.24571-2-shubhrajyoti.datta@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241122100625.24571-2-shubhrajyoti.datta@amd.com>
 
-Hotplug events are critical indicators for analyzing hardware health,
-particularly in AI supercomputers where surprise link downs can
-significantly impact system performance and reliability. The failure
-characterization analysis illustrates the significance of failures
-caused by the Infiniband link errors. Meta observes that 2% in a machine
-learning cluster and 6% in a vision application cluster of Infiniband
-failures co-occur with GPU failures, such as falling off the bus, which
-may indicate a correlation with PCIe.[1]
+On Fri, Nov 22, 2024 at 03:36:23PM +0530, Shubhrajyoti Datta wrote:
+> Add device tree bindings for AMD Versal NET EDAC for DDR controller.
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> ---
+> 
 
-To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
-tracepoint for hotplug event to help healthy check, and generate
-tracepoints for pcie hotplug event. To monitor these tracepoints in
-userspace, e.g. with rasdaemon, put `enum pci_hotplug_event` in uapi
-header.
+Use tools to create cc-list, like b4 or:
+https://github.com/krzk/tools/blob/master/linux/.bash_aliases_linux#L92
+so you won't make a typo in my email.
 
-The output like below:
-$ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
-$ cat /sys/kernel/debug/tracing/trace_pipe
-           <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
+>  .../amd,versalnet-edac.yaml                   | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/amd,versalnet-edac.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/amd,versalnet-edac.yaml b/Documentation/devicetree/bindings/memory-controllers/amd,versalnet-edac.yaml
+> new file mode 100644
+> index 000000000000..22a4669c46b6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/amd,versalnet-edac.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/memory-controllers/amd,versalnet-edac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AMD Versal NET EDAC
 
-           <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
+s/EDAC/Memory Controller
+or something similar, I guess.
 
-[1]https://arxiv.org/abs/2410.21680
+> +
+> +maintainers:
+> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> +
+> +description:
+> +  The integrated DDR Memory Controllers (DDRMCs) support both DDR4 and LPDDR4/
+> +  4X memory interfaces. Versal NET DDR memory controller has an optional ECC support
+> +  which correct single bit ECC errors and detect double bit ECC errors.
+> +  It also has support for reporting other errors like MMCM (Mixed-Mode Clock
+> +  Manager) errors and General software errors.
+> +
+> +properties:
+> +  compatible:
+> +    const: amd,versalnet-edac
 
-Suggested-by: Lukas Wunner <lukas@wunner.de>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Reviewed-by: Lukas Wunner <lukas@wunner.de>
----
-changes sincel v3:
-- rename TRACING_SYSTEM from pci_hotplug to pci
-- add Reviewed-by tag from Lukas
-- add Suggested-by tag from Lukas and Steven
----
- drivers/pci/hotplug/pciehp_ctrl.c | 33 ++++++++++++---
- drivers/pci/hotplug/trace.h       | 68 +++++++++++++++++++++++++++++++
- include/uapi/linux/pci.h          |  7 ++++
- 3 files changed, 102 insertions(+), 6 deletions(-)
- create mode 100644 drivers/pci/hotplug/trace.h
+Why using different name than all others? Keep consistent stuff for
+your SoCs.
 
-diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
-index dcdbfcf404dd..c836462ff067 100644
---- a/drivers/pci/hotplug/pciehp_ctrl.c
-+++ b/drivers/pci/hotplug/pciehp_ctrl.c
-@@ -21,6 +21,9 @@
- #include <linux/pci.h>
- #include "pciehp.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include "trace.h"
-+
- /* The following routines constitute the bulk of the
-    hotplug controller logic
-  */
-@@ -239,12 +242,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
- 	case ON_STATE:
- 		ctrl->state = POWEROFF_STATE;
- 		mutex_unlock(&ctrl->state_lock);
--		if (events & PCI_EXP_SLTSTA_DLLSC)
-+		if (events & PCI_EXP_SLTSTA_DLLSC) {
- 			ctrl_info(ctrl, "Slot(%s): Link Down\n",
- 				  slot_name(ctrl));
--		if (events & PCI_EXP_SLTSTA_PDC)
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_LINK_DOWN);
-+		}
-+		if (events & PCI_EXP_SLTSTA_PDC) {
- 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
- 				  slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_CARD_NOT_PRESENT);
-+		}
- 		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
- 		break;
- 	default:
-@@ -264,6 +275,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
- 					      INDICATOR_NOOP);
- 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
- 				  slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_CARD_NOT_PRESENT);
- 		}
- 		mutex_unlock(&ctrl->state_lock);
- 		return;
-@@ -276,12 +290,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
- 	case OFF_STATE:
- 		ctrl->state = POWERON_STATE;
- 		mutex_unlock(&ctrl->state_lock);
--		if (present)
-+		if (present) {
- 			ctrl_info(ctrl, "Slot(%s): Card present\n",
- 				  slot_name(ctrl));
--		if (link_active)
--			ctrl_info(ctrl, "Slot(%s): Link Up\n",
--				  slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_CARD_PRESENT);
-+		}
-+		if (link_active) {
-+			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_LINK_UP);
-+		}
- 		ctrl->request_result = pciehp_enable_slot(ctrl);
- 		break;
- 	default:
-diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
-new file mode 100644
-index 000000000000..5b60cd7bcffb
---- /dev/null
-+++ b/drivers/pci/hotplug/trace.h
-@@ -0,0 +1,68 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_HW_EVENT_PCI_HP_H
-+
-+#include <linux/tracepoint.h>
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM pci
-+
-+#define PCI_HOTPLUG_EVENT					\
-+	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
-+	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
-+	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
-+	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
-+
-+/* Enums require being exported to userspace, for user tool parsing */
-+#undef EM
-+#undef EMe
-+#define EM(a, b)	TRACE_DEFINE_ENUM(a);
-+#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
-+
-+PCI_HOTPLUG_EVENT
-+
-+/*
-+ * Now redefine the EM() and EMe() macros to map the enums to the strings
-+ * that will be printed in the output.
-+ */
-+#undef EM
-+#undef EMe
-+#define EM(a, b)	{a, b},
-+#define EMe(a, b)	{a, b}
-+
-+TRACE_EVENT(pci_hp_event,
-+
-+	TP_PROTO(const char *port_name,
-+		 const char *slot,
-+		 const int event),
-+
-+	TP_ARGS(port_name, slot, event),
-+
-+	TP_STRUCT__entry(
-+		__string(	port_name,	port_name	)
-+		__string(	slot,		slot		)
-+		__field(	int,		event	)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(port_name);
-+		__assign_str(slot);
-+		__entry->event = event;
-+	),
-+
-+	TP_printk("%s slot:%s, event:%s\n",
-+		__get_str(port_name),
-+		__get_str(slot),
-+		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
-+	)
-+);
-+
-+#endif /* _TRACE_HW_EVENT_PCI_HP_H */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH  ../../drivers/pci/hotplug
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE trace
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
-diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
-index a769eefc5139..4f150028965d 100644
---- a/include/uapi/linux/pci.h
-+++ b/include/uapi/linux/pci.h
-@@ -39,4 +39,11 @@
- #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
- #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
- 
-+enum pci_hotplug_event {
-+	PCI_HOTPLUG_LINK_UP,
-+	PCI_HOTPLUG_LINK_DOWN,
-+	PCI_HOTPLUG_CARD_PRESENT,
-+	PCI_HOTPLUG_CARD_NOT_PRESENT,
-+};
-+
- #endif /* _UAPILINUX_PCI_H */
--- 
-2.39.3
+Also, s/edac/memory-controller/, depending what this stuff really is.
+
+> +
+> +  amd,dwidth:
+> +    description:
+> +      DDR memory controller device width.
+
+Use existing properties.
+
+
+> +    enum: [16, 32]
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  amd,num-chans:
+> +    description:
+> +      Number of channels.
+
+Use existing properties, e.g. some of the DDR schemas describing memory.
+Look how other bindings describe actual chips.
+
+> +    enum: [1, 2]
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  amd,num-rank:
+> +    description:
+> +      Number of rank.
+> +    enum: [1, 2, 4]
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +required:
+> +  - compatible
+
+Eh, no resources? How do you talk with the hardware? This looks way too
+Linuxy...
+
+Best regards,
+Krzysztof
 
 
