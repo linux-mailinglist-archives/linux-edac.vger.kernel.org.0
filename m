@@ -1,286 +1,179 @@
-Return-Path: <linux-edac+bounces-2629-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2630-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D7589D6A52
-	for <lists+linux-edac@lfdr.de>; Sat, 23 Nov 2024 17:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3A799D6D1E
+	for <lists+linux-edac@lfdr.de>; Sun, 24 Nov 2024 09:45:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AAE5281A15
-	for <lists+linux-edac@lfdr.de>; Sat, 23 Nov 2024 16:49:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31F202812E0
+	for <lists+linux-edac@lfdr.de>; Sun, 24 Nov 2024 08:45:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9484EB50;
-	Sat, 23 Nov 2024 16:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81D0183CBE;
+	Sun, 24 Nov 2024 08:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvwIJKwl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JzeLvblt"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B829125B9;
-	Sat, 23 Nov 2024 16:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5438A154430;
+	Sun, 24 Nov 2024 08:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732380581; cv=none; b=OxnsNDAbA9Vt8SimJb2ojhH+XfqSbTiJVd/Ai1z6s5Trjc9OughW57iTKrhLFE3mMVTAHXbcBSMCk4FiydMo5aCR/KCpZFJgX8EfTeY4LK75HcmkNMAirKBR8A2/fFfxDP5HVAtwCGRbfZ+tsBO58IbUmpmrGLVrSyqzZp3j6Ww=
+	t=1732437920; cv=none; b=QhoiMW02L4NWJ81+sVOUoeVs4okVGisB1D4lI5OTsNrHJy+KaqoladLz0TfRKxi9wsXs4d1Atp/RYzBhT+WSOuzdRCegA4oQFadTk1D3GP/4ol/ZTFL/LWpRRoQ1hE+bs13xwl9fAu9I6LYJ0GAnGcKZE0AO8IttTMhOOqSvpOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732380581; c=relaxed/simple;
-	bh=B1KIgU2isjJTKVuNXyXyTbNnTlMSO6X5FDflqG/k0S4=;
+	s=arc-20240116; t=1732437920; c=relaxed/simple;
+	bh=L/B960ZUK6oFm9KX0F36Ar23lhXDaLZlEJftm6qhPso=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AqkgG3hfoWVuf4yWHb+SVHfK2Lu73yN5M38jOYQOAZUNQuDrvLkmdHsmrctfPsF57sekDI5otBAsbZnsWtNQ4hkvWroa/qIxyodVOkTxD+dggz2ByI5/K/xO6J8fz/7aSagu3k8i80w8EGGIYUHeJYVdy3t3zftgbX+taaQ7uHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dvwIJKwl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1466C4CECD;
-	Sat, 23 Nov 2024 16:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732380580;
-	bh=B1KIgU2isjJTKVuNXyXyTbNnTlMSO6X5FDflqG/k0S4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dvwIJKwlFX6MKBUrKCWtoEL6TfHll2FlQoMCo9HI8+HRmkeGaZcXJKAAL8LHit8ye
-	 y+eovBtxZezZF2YxkEg6hoN08BsrGTxxcCAmVLoAlq0Pp3iyAAsh/7QieuzXY/rWyF
-	 tfYQQkH+/Zt85UN3/+a/Gs0DcpjntjVjwQtNK0X/GXGzQ1qd/Tb2WLR/78jOXlnqEi
-	 bwGF0CPlnlvTd1athuQeL10tUZFpbykeDlXetn9P4LeDGMaibc7Jev3KRs98/be6z8
-	 3SS4kbuKrtM1K+OBsZh3fHehCCqFw6sHi8e7LEUNy0cNNw766SzdO/fEqPReL6FC9b
-	 ZDVU42Uyq6QhA==
-Date: Sat, 23 Nov 2024 17:49:37 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-edac@vger.kernel.org, git@amd.com, krzk@kernel.or, robh@kernel.org, 
-	conor+dt@kernel.org, bp@alien8.de, tony.luck@intel.com, james.morse@arm.com, 
-	mchehab@kernel.org, rric@kernel.org
-Subject: Re: [PATCH 3/3] EDAC: Versal NET: Add support for error notification
-Message-ID: <6zhoh5mqzrzqf4mq7lbahwtqvw45dpaqsqd7kj3tkfvencaftu@3r7yculmy4ex>
-References: <20241122100625.24571-1-shubhrajyoti.datta@amd.com>
- <20241122100625.24571-4-shubhrajyoti.datta@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=G67IuukITvdESw6PPcI5a1XpBiF6vtni4tJaz3SV+auosBgG1JsOu4QR6gvToCcVxgp+07VVUsIqUvZTvlxA5Uo2JvSpOVzO32sGh6w0PStk4Y7MAPYB+fhR0gUnDYqzpKX7I+zOeMeYFbmb8qRDyl8NUBf2hI3q3x2zHDqKVEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JzeLvblt; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ed91d2a245so1196015a91.3;
+        Sun, 24 Nov 2024 00:45:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732437918; x=1733042718; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3R9OsxCdswWtlB5Por3GdbqaxblTmykUB0v1B3P99UI=;
+        b=JzeLvblt7bxF7t9Y5oRDwyv/Qp5BvoUMfouKvp+6Ly5wkzjBqVx263EdCxP9Jm1hiG
+         XyAWE8lOv3yj0PSsq1EQ1bMfiaOrrWzKYIa7BKmqIZPeBUzu0/IWVQq2ywQwd4PMIQh7
+         slQ5v8wUBgBtCiv2ML/iZwIm+ZjjSJ+LsXcjE6IB3+OFebDv17AxvealibRDtYElMgzN
+         /6fkf/SXYIrf3XJ3Al1M0Msk6/eG1YevR0N0qcjWL3+KfgXcj9e2V79jLUzpEFzCe+99
+         /OreQhxsfLM3NtIOFfMVJxB9YFmeh4HkJzoqoyyneDsmhBCWqwror1SwRe36q+yL74fi
+         V9Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732437918; x=1733042718;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3R9OsxCdswWtlB5Por3GdbqaxblTmykUB0v1B3P99UI=;
+        b=qWKk/m5wkMlZQCPKL39Y4+0O/OESpV0Miz3aOCQBJD5f39T6zpT2a/2uzw9Y69sSrm
+         62LX7jsVHbM2W8xGBjEWtstQ0NQbOXWWQtv6PFVZazI5as5vUrsNaLJdTCjrgJVGHj9U
+         RB119NbEn7yLCqBK9ywWNShXX6hsuN46le9vbvmEBbZuPZTUWJ4UpZ93gcghXWsZAtAE
+         Cn7hqJSuoG4Zs13pdQ5M5f6aexI4iJjAEOWOr4167pXmaoSa7pqVcvsSQnTxVeI98oAf
+         PHNE1aFl5psm79oC0clEuj8WXs+gYn68mG6tanLD/tgbxdR0ZXjthixnEcTXVeM5ABaL
+         do7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWGtUgv6xu8u3o7nxydvtnWg0BEwiWIrZzCF1Dd8f1Ydf2pq9u6O0ouZL5nAtXs3bygvRvvHzpKDZa6@vger.kernel.org, AJvYcCXj8HAM8czaL4+rgJbpcJ85/5bdQcmAhO0KIhxhTbiqeR/+WhY4q0G12cXNYlMBJ2rax4W2J6JP50SmRBs0@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBnjsuwvGHO10nOfREdEZxRN8Do4Mx9pQVZp5opgKgFWnIvfWi
+	CqoEsZ5pWJNNHAAvdV136mYoPD8wgPlvcb6rFnJL36NrGA8zifMHYrL+VjchNEI=
+X-Gm-Gg: ASbGncukXVRdOm07q8EzLYZ60tufM+3H7yp3OWq9Rx4Onz3Zi50PpvW/yW0N9W9RoFP
+	/Vn/TQas5d1nFkxVYA9Ep3yhQFm8caFnym+gUyqF5dOj5sGyqhVDmnVwjgPn0Je/nGzk5XqeKAb
+	jDPDtV4yaNuqg0hBuPZIKeQzgdv8yWWdAC96ZVrUqOI25NMm9Kf5IsKUWm4QEdNSFilyq4jUXvx
+	aSVr/mT3AR/qASjZuRgyIi5/ga+L129XCkK72cRuVLpIScV
+X-Google-Smtp-Source: AGHT+IF08mzNjuHFHUY0zKduhPc0J8Ocms15OD2nzc8IrMpNhK8aCJJY8eODgIBd6HYn+E3GsMpQ5g==
+X-Received: by 2002:a17:90b:3bc5:b0:2ea:98f1:c17b with SMTP id 98e67ed59e1d1-2eb0e024bf6mr10340580a91.5.1732437918387;
+        Sun, 24 Nov 2024 00:45:18 -0800 (PST)
+Received: from Emma ([2401:4900:1c21:cadf:5054:ff:fe53:2787])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2eb0d0600b2sm4454626a91.44.2024.11.24.00.45.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Nov 2024 00:45:17 -0800 (PST)
+Date: Sun, 24 Nov 2024 08:45:12 +0000
+From: Karan Sanghavi <karansanghvi98@gmail.com>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2] RAS/AMD/ATL: Fix unintended sign extension issue from
+ coverity
+Message-ID: <4shdmryv5gq7lwc6zp5riiiaoatgfv7fji4isuhnbwvkoliiqb@uwwlt5n2juuq>
+References: <20241108-coverity1593397signextension-v2-1-4acdf3968d2d@gmail.com>
+ <20241112150419.GA3017802@yaz-khff2.amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241122100625.24571-4-shubhrajyoti.datta@amd.com>
+In-Reply-To: <20241112150419.GA3017802@yaz-khff2.amd.com>
 
-On Fri, Nov 22, 2024 at 03:36:25PM +0530, Shubhrajyoti Datta wrote:
-> The Versal NET edac listens to the notifications from NMC(Network
-> management controller) on rpmsg. The driver registers on the error_edac
-> channel. Send a RAS event trace upon a notification. On reading
-> the notification the user space application can decide on the response.
-> A sysfs reset entry is created for the same that sends an acknowledgment
-> back to the NMC. For reporting events register to the RAS framework. For
-> memory mc events are used other events use non-standard events.
+On Tue, Nov 12, 2024 at 10:04:19AM -0500, Yazen Ghannam wrote:
+> On Fri, Nov 08, 2024 at 04:40:41PM +0000, Karan Sanghavi wrote:
+> > This error is reported by coverity scan stating as
+> > 
+> > CID 1593397: (#1 of 1): Unintended sign extension (SIGN_EXTENSION)
+> > sign_extension: Suspicious implicit sign extension: pc
+> > with type u16 (16 bits, unsigned) is promoted in
+> > pc << bit_shifts.pc to type int (32 bits, signed),
+> > then sign-extended to type unsigned long (64 bits, unsigned).
+> > If pc << bit_shifts.pc is greater than 0x7FFFFFFF,
+> > the upper bits of the result will all be 1.
+> > 
+> > Following the code styleof the file, assigning the u16
 > 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> ---
+> styleof -> style of
 > 
->  .../ABI/testing/sysfs-driver-versalnet-edac   |   11 +
->  drivers/edac/Kconfig                          |    9 +
->  drivers/edac/Makefile                         |    1 +
->  drivers/edac/versalnet_rpmsg_edac.c           | 1321 +++++++++++++++++
->  4 files changed, 1342 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-versalnet-edac
->  create mode 100644 drivers/edac/versalnet_rpmsg_edac.c
+> > value to u32 variable and using it for the bit wise
+> > operation, thus ensuring no unintentional sign
+> > extension occurs.
+> >
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-versalnet-edac b/Documentation/ABI/testing/sysfs-driver-versalnet-edac
-> new file mode 100644
-> index 000000000000..598a6c6cef39
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-versalnet-edac
-> @@ -0,0 +1,11 @@
-> +What:		/sys/devices/system/edac/.../reset
-> +Date:		Nov 2024
-> +Contact:	shubhrajyoti.datta@amd.com
-> +Description:
-> +		Writing 1/2 to this file will send a reset request to the NMC (Network
-> +		Management Controller). 1 will request a SRST (Soft reset) and 2 will
-> +		request a POR ( Power-On Reset).
-> +
-> +		For example::
-> +
-> +		  # echo 1 > /sys/devices/system/edac/.../reset
-
-ABI docs are always separate patches.
-
-Anyway, sysfs entry to reset memory is a NAK.
-
-NAK.
-
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 81af6c344d6b..c3e0644aed0d 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -564,5 +564,14 @@ config EDAC_VERSAL
->  	  Support injecting both correctable and uncorrectable errors
->  	  for debugging purposes.
->  
-> +config EDAC_VERSALNET
-> +	tristate "AMD Versal NET EDAC"
-
-No dependency on ARCH? Is this for OF platforms?
-
-> +	depends on CDX_CONTROLLER
-> +	help
-> +	  Support for error detection and correction on the AMD Versal NET DDR
-> +	  memory controller.
-> +
-> +	  The memory controller supports single bit error correction, double bit
-> +	  error detection. Report various errors to the userspace.
->  
->  endif # EDAC
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index faf310eec4a6..7b1a8525c021 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -88,3 +88,4 @@ obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
->  obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
->  obj-$(CONFIG_EDAC_ZYNQMP)		+= zynqmp_edac.o
->  obj-$(CONFIG_EDAC_VERSAL)		+= versal_edac.o
-> +obj-$(CONFIG_EDAC_VERSALNET)		+= versalnet_rpmsg_edac.o
-
-...
-
-> +};
-> +
-> +/* The driver should have only one instance */
-> +static int probe_once;
-
-Oh, no, this is just poor coding and design style. Such stuff is a big
-warning sign. How, really, how, OF platform could have two instances?
-
-...
-
-> +static int mc_probe(struct platform_device *pdev)
-> +{
-> +	struct edac_mc_layer layers[2];
-> +	u32 num_chans, rank, dwidth;
-> +	struct mem_ctl_info *mci;
-> +	struct edac_priv *priv;
-> +	int rc;
-> +
-> +	rc = device_property_read_u32(&pdev->dev, "amd,rank", &rank);
-> +	if (rc < 0) {
-> +		dev_err(&pdev->dev, "unable to read rank property");
-> +		return rc;
-> +	}
-> +
-> +	rc = device_property_read_u32(&pdev->dev, "amd,num-chans", &num_chans);
-> +	if (rc < 0) {
-> +		dev_err(&pdev->dev, "unable to read num-chans property");
-> +		return rc;
-> +	}
-> +
-> +	rc = device_property_read_u32(&pdev->dev, "amd,dwidth", &dwidth);
-> +	if (rc < 0) {
-> +		dev_err(&pdev->dev, "unable to read dwidth property");
-> +		return rc;
-> +	}
-> +
-> +	mutex_lock(&vnet_edac_lock);
-> +	if (probe_once) {
-
-Not possible. Drop. Fix your DTS (and the binding) instead.
-
-> +		rc = -ENODEV;
-> +		goto free_lock;
-> +	}
-> +
-> +	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-> +	layers[0].size = rank;
-> +	layers[0].is_virt_csrow = true;
-> +	layers[1].type = EDAC_MC_LAYER_CHANNEL;
-> +	layers[1].size = num_chans;
-> +	layers[1].is_virt_csrow = false;
-> +
-> +	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-> +			    sizeof(struct edac_priv));
-> +	if (!mci) {
-> +		edac_printk(KERN_ERR, EDAC_MC,
-> +			    "Failed memory allocation for mc instance\n");
-> +		rc = -ENOMEM;
-> +		goto free_lock;
-> +	}
-> +
-> +	priv = mci->pvt_info;
-> +	priv->dwidth = dwidth;
-> +
-> +	mc_init(mci, pdev);
-> +
-> +	rc = edac_mc_add_mc(mci);
-> +	if (rc) {
-> +		edac_printk(KERN_ERR, EDAC_MC,
-> +			    "Failed to register with EDAC core\n");
-> +		goto free_edac_mc;
-> +	}
-> +
-> +	amd_rpmsg_id_table[0].driver_data = (kernel_ulong_t)mci;
-> +	INIT_WORK(&priv->work, amd_rpmsg_post_probe_work);
-> +	rc = register_rpmsg_driver(&amd_rpmsg_driver);
-> +	if (rc) {
-> +		edac_printk(KERN_ERR, EDAC_MC,
-> +			    "Failed to register RPMsg driver: %d\n", rc);
-> +		goto del_edac_mc;
-> +	}
-> +
-> +	rc = device_create_file(&mci->dev, &dev_attr_reset);
-> +	if (rc < 0)
-> +		goto unregister;
-> +
-> +	probe_once = 1;
-> +	mutex_unlock(&vnet_edac_lock);
-> +
-> +	return 0;
-> +
-> +unregister:
-> +	unregister_rpmsg_driver(&amd_rpmsg_driver);
-> +del_edac_mc:
-> +	edac_mc_del_mc(&pdev->dev);
-> +free_edac_mc:
-> +	edac_mc_free(mci);
-> +free_lock:
-> +	mutex_unlock(&vnet_edac_lock);
-> +
-> +	return rc;
-> +}
-> +
-> +static void mc_remove(struct platform_device *pdev)
-> +{
-> +	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-> +
-> +	mutex_lock(&vnet_edac_lock);
-> +	probe_once = 0;
-> +	unregister_rpmsg_driver(&amd_rpmsg_driver);
-> +	edac_mc_del_mc(&pdev->dev);
-> +	edac_mc_free(mci);
-> +	mutex_unlock(&vnet_edac_lock);
-> +}
-> +
-> +static const struct of_device_id amd_edac_match[] = {
-> +	{ .compatible = "amd,versalnet-edac", },
-> +	{
-> +		/* end of table */
-
-Really? No, drop.
-
-> +	}
-> +};
-> +MODULE_DEVICE_TABLE(of, amd_edac_match);
-> +
-> +static struct platform_driver amd_ddr_edac_mc_driver = {
-> +	.driver = {
-> +		.name = "amd-ddrmc-edac",
-> +		.of_match_table = amd_edac_match,
-> +	},
-> +	.probe = mc_probe,
-> +	.remove = mc_remove,
-> +};
-> +
-> +module_platform_driver(amd_ddr_edac_mc_driver);
-> +
-> +MODULE_AUTHOR("AMD Inc");
-> +MODULE_DESCRIPTION("AMD DDRMC ECC driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.17.1
+> Please make sure you use an imperative voice here. For example, "assign
+> the value...and use it...". This should read like you are giving
+> commands.
 > 
+> > Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+> 
+> Overall, looks good to me.
+> 
+> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> 
+> Thanks,
+> Yazen
+> 
+> > ---
+> > Coverity  Link: 
+> > https://scan7.scan.coverity.com/#/project-view/51975/11354?selectedIssue=1593397
+> > ---
+> > Changes in v2:
+> > - Assigning pc value to temp variable before left shifting as mentioned
+> >   in feedback rather then typecasting pc to u32. 
+> > - Link to v1: https://lore.kernel.org/r/20241104-coverity1593397signextension-v1-1-4cfae6532140@gmail.com
+> > ---
+> >  drivers/ras/amd/atl/umc.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+> > index dc8aa12f63c8..3f4b1f31e14f 100644
+> > --- a/drivers/ras/amd/atl/umc.c
+> > +++ b/drivers/ras/amd/atl/umc.c
+> > @@ -293,7 +293,8 @@ static unsigned long convert_dram_to_norm_addr_mi300(unsigned long addr)
+> >  	}
+> >  
+> >  	/* PC bit */
+> > -	addr |= pc << bit_shifts.pc;
+> > +	temp = pc;
+> > +	addr |= temp << bit_shifts.pc;
+> >  
+> >  	/* SID bits */
+> >  	for (i = 0; i < NUM_SID_BITS; i++) {
+> > 
+> > ---
+> > base-commit: 81983758430957d9a5cb3333fe324fd70cf63e7e
+> > change-id: 20241104-coverity1593397signextension-78c9b2c21d51
+> > 
+> > Best regards,
+> > -- 
+> > Karan Sanghavi <karansanghvi98@gmail.com>
+> >
+
+Dear Yazen,
+
+I hope this email finds you well. 
+I'm following up on the patch I recently submitted linked below.
+https://lore.kernel.org/all/20241108-coverity1593397signextension-v2-1-4acdf3968d2d@gmail.com/
+
+I noticed it hasn't been applied yet, and I wanted to see if there was 
+anything else needed from my end. 
+Please let me know if any further information or modifications are required.
+I appreciate your time and feedback.  
+
+Thank you! 
+
+Sincerely,
+Karan.
 
