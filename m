@@ -1,154 +1,161 @@
-Return-Path: <linux-edac+bounces-2642-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2643-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58FC89E5248
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Dec 2024 11:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B2C19E532B
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Dec 2024 11:58:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33C6D166AF4
-	for <lists+linux-edac@lfdr.de>; Thu,  5 Dec 2024 10:30:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 293AD167480
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Dec 2024 10:58:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01171D5CFF;
-	Thu,  5 Dec 2024 10:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7891D4607;
+	Thu,  5 Dec 2024 10:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fmpZEejG"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="O0Z4eszH"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D81A1D5AC9;
-	Thu,  5 Dec 2024 10:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965351D8DE8
+	for <linux-edac@vger.kernel.org>; Thu,  5 Dec 2024 10:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733394599; cv=none; b=twNJI2lvmCyKPmZ/cV+y5lfw3NRXfk2SS85ng3Qyrumm6xKEUHGyjPZy/NmvcXXlZBl/Pfpg5i2u2KPxoyMbck588Yyi7/nhl4v/EbYL2mqsa3qEWFcgMvPmTEzsfVcMfRqBn0lJwil4IgnUAB58p6Gd2omC85jvkVwezPg9M4c=
+	t=1733396285; cv=none; b=Pkd9c9NfSRbXVCyzxW5pu5arTMcfvWOoPhYfNs/Tn6Iw0164oN+uwDZp8i5owCduPFG8KvP3CRJahwxEA2xXssj91wqeuak0XHOt5Ezkax43fdP9L9SMftTUy9UKoerBPJBCw4reSxKDhlqqG7e1IQ+x/YOTchAaUdehIEAP358=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733394599; c=relaxed/simple;
-	bh=QHDM0wNinR00LodXRJjv7/LI1YF1zZjdx17O0E+assg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=WFvj6aY7T/W+l5dYPKu5UO0yU5/XNLS/XXtUjtyaBdswJKGV7JLlO0cZ525DMHMRMCzG4JuOgNGDJIe6zr8qkZWZYco5wmJ62qOUAjgRqur+T6KYXCcyUOp1X6upt8ipOoxRkIrWHIZrn8U+GE4c0AmpfTbK+SFBr9/vyg2UqqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fmpZEejG; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B59x9lq031441;
-	Thu, 5 Dec 2024 10:29:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Wq1H4m+TvIZrKAm720V3ELgWHc9sgwnhrbPpxtdoHEk=; b=fmpZEejG3/D7/8JB
-	IJjRABkH35du9Lhy0R/qb/c5Yi7YqqeEGBsMXbdRjVWcQmATNNDNRtfTOAakPQ4k
-	CS5mYBXfi5bRTTMk9H3KkSiBHJeZXd5YolbGuh1nb3LyaZoz4v8+64Cc7TH4j5Zw
-	a4p5SCosos82PIkX82mIRrUAR6jSa51OLraZvle1rPVx25+Tf2hr3r6PzycTNJLD
-	1tGSxuFwH91Couo+QK890SiM0f+xH1uqueIL6p6g77kA1LbToLJoZ17pV1Pv1dOY
-	UDpZEGE49f09N0+DqyuIEcGnvndFIkDsQdgEkIEGeB2GRHKunHkwKKaZEDN9jLeT
-	LZHYMA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43ba140308-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Dec 2024 10:29:14 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B5ATDjT016102
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Dec 2024 10:29:13 GMT
-Received: from [10.214.66.218] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 5 Dec 2024
- 02:29:09 -0800
-Message-ID: <a47a11be-377f-489f-a4dd-fd9b4ddc1a98@quicinc.com>
-Date: Thu, 5 Dec 2024 15:59:06 +0530
+	s=arc-20240116; t=1733396285; c=relaxed/simple;
+	bh=BUl96l5hoJvj09h20wDnj/veQYHqaKmniZqjrv28g9A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VUrHyN1+Uwf8+xcSI3+km6B3vmFpuzSOycc+tsi5jf3yzQ5dGa57UGz96AGmcJlniBl+RM4bqvunVQdf6LXzbhtNodt1bFqqZLenzRguwLXBeKufpWdwgiEgssEVVnHTSR9qyPP1El9v1mU0jiHAVrCMO1g6+J5tJhngip6ZCJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=O0Z4eszH; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7258cf297d4so740604b3a.2
+        for <linux-edac@vger.kernel.org>; Thu, 05 Dec 2024 02:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1733396283; x=1734001083; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XSRnnX5MigbfA7DvywfPuE7f6sgzsM2APKn3A+6tU5M=;
+        b=O0Z4eszHTsh2UB23TaOtK8Uu4e/EjVxuxY8Mv5/Yygi+rYRzozlie1PPz/0OOc6xiY
+         ZYW2/QxRYOQOMBJJtWpnMZQ9dLlcSBHTgzJ0nwpsLHxdQUbsv5WOl8PjnPpT68xEVbqB
+         CSSY8gPsfbsWYK6+0LZytzYpLPunreNg4v+hgH1pQTs+FovCJXfln4zyQEEy4T3MrpZ+
+         u5xX91+3i6wxo6G+h9dWqLk/R9TENcoZPIpALGfsEGJF007mF43yccSTEgMlI7sY8V1e
+         1efiwT15xdiJOB8glvYP3hYhbBiRlWuFBbGSPK4yBgjAcwBpkBgTg3wnc1PKsHkAcdki
+         +Q0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733396283; x=1734001083;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XSRnnX5MigbfA7DvywfPuE7f6sgzsM2APKn3A+6tU5M=;
+        b=OAPrH7nC9v6r8xrTPXnUki/dwGB/G7ZRHeYaKh27nFTPR0pdotgPHy7ZNKX3GqB3up
+         WA3+nBuJSQUjjEjJiJvfti7+a4xGiPI14GirDo+psl3X8deL1DmD5+qop320gnAkgEhA
+         EuPEpTIc6fEmJFoA7O4bSoMPEVoGbJWeEkzoJQRM+y/8lHVXuXRzGISZDYqMst8EzVtU
+         pwe+mo20t1LIwhyLbk3RALAgdRP0dC0N//1T+QWSelZpc7DCVkAPi0dEPCbvaIv8IrP1
+         kZ/5QUZ1gGj3kjiimyws4wkcJ4I2vAk8oIZOEDuZ57AqoB9wiZEtsfY4ntz+PeGS+6pF
+         o+Cw==
+X-Gm-Message-State: AOJu0YyOQ75ORUsHCjhIi0FzZt5Bg5EsYC4i7dFOQuzc6NZXSmYA3qlT
+	6aUefOlQJpouSORLF+nIp4CjqFH40E5Pz/tdWCqYQwW+9w6oGNwyltj7ZsP1UrYzb5MjNoo9Zsj
+	omGA=
+X-Gm-Gg: ASbGncuXoqtv7XcO5u2R/atlpcxoHpmenMUYNbIJd4Rowwu91TMb4CD9BcI37hYzg9P
+	luXlTZGg2fS8DK7ieeWj8LY4sV/uiarUO/zTkIyFE8vn48GD6OcXdtUXyH1QQrBf0thVr4pb9ae
+	F6ziSrLBxIEQGfLCJMgvx8r3DvWoUq/JwLlW71rv9OHMbdNQURF5JRdMipV43o3T+ea/+4aJ7cw
+	cElHftD3jyeyi+pCsGSdB2b1XUlHD8ObbxZleKWsexU/9hC3ZYAR1a6fwVnwZfxk0M/3xVCy3o3
+	9fuWK3C1cRxztAICX8V6ZAEu6LHoXEXz3Qed
+X-Google-Smtp-Source: AGHT+IHvGXlpo10YsJQqhosmAbsXgZAH1gf7krJgBqdWkWeFx5oEnkdHFYoE3/XH+wGQTDak2gePjw==
+X-Received: by 2002:a05:6a00:3cd5:b0:725:9ec3:7ed9 with SMTP id d2e1a72fcca58-7259ec3812bmr2477287b3a.21.1733396282848;
+        Thu, 05 Dec 2024 02:58:02 -0800 (PST)
+Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a2a904dfsm979914b3a.95.2024.12.05.02.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 02:58:02 -0800 (PST)
+From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+To: talel@amazon.com,
+	bp@alien8.de,
+	tony.luck@intel.com,
+	james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org
+Cc: linux-edac@vger.kernel.org,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Subject: [PATCH] edac: al_mc: free mem_ctl_info on error path in .probe()
+Date: Thu,  5 Dec 2024 19:57:54 +0900
+Message-Id: <20241205105754.3408880-1-joe@pf.is.s.u-tokyo.ac.jp>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] qcom: llcc/edac: Correct interrupt enable register
- configuration
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <manivannan.sadhasivam@linaro.org>, <bp@alien8.de>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>,
-        <andy.gross@linaro.org>, <vnkgutta@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20241119064608.12326-1-quic_kbajaj@quicinc.com>
- <zkqjyuem3ykeona7p7n6ejkndaxrnpfxjbk33nkzqjjyktoqpw@3b77c4jjdqhd>
-Content-Language: en-US
-From: Komal Bajaj <quic_kbajaj@quicinc.com>
-In-Reply-To: <zkqjyuem3ykeona7p7n6ejkndaxrnpfxjbk33nkzqjjyktoqpw@3b77c4jjdqhd>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QL8mNsrzWj-b6NqZe4aW7CL1bxx54ciD
-X-Proofpoint-ORIG-GUID: QL8mNsrzWj-b6NqZe4aW7CL1bxx54ciD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- phishscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412050074
+Content-Transfer-Encoding: 8bit
 
+In al_mc_edac_probe(), the mem_ctl_info allocated by edac_mc_alloc() is
+not freed in the error path, resulting in a memory leak. Add a
+edac_mc_free() call to fix this.
 
-On 11/20/2024 5:29 PM, Dmitry Baryshkov wrote:
-> On Tue, Nov 19, 2024 at 12:16:08PM +0530, Komal Bajaj wrote:
->> The previous implementation incorrectly configured the cmn_interrupt_2_enable
->> register for interrupt handling. Using cmn_interrupt_2_enable to configure Tag,
->> Data RAM ECC interrupts would lead to issues like double handling of the
->> interrupts (EL1 and EL3) as cmn_interrupt_2_enable is meant to be configured
->> for interrupts which needs to be handled by EL3.
-> This reads as if it was possible to write EL3-related register from EL1.
-> Is it true?
+Fixes: e23a7cdeb3da ("EDAC/al-mc-edac: Add Amazon's Annapurna Labs Memory Controller driver")
+Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+---
+ drivers/edac/al_mc_edac.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/edac/al_mc_edac.c b/drivers/edac/al_mc_edac.c
+index 178b9e581a72..3908e999f4ff 100644
+--- a/drivers/edac/al_mc_edac.c
++++ b/drivers/edac/al_mc_edac.c
+@@ -240,7 +240,7 @@ static int al_mc_edac_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_add_action_or_reset(&pdev->dev, devm_al_mc_edac_free, mci);
+ 	if (ret)
+-		return ret;
++		goto free;
+ 
+ 	platform_set_drvdata(pdev, mci);
+ 	al_mc = mci->pvt_info;
+@@ -288,12 +288,12 @@ static int al_mc_edac_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev,
+ 			"fail to add memory controller device (%d)\n",
+ 			ret);
+-		return ret;
++		goto free;
+ 	}
+ 
+ 	ret = devm_add_action_or_reset(&pdev->dev, devm_al_mc_edac_del, &pdev->dev);
+ 	if (ret)
+-		return ret;
++		goto free;
+ 
+ 	if (al_mc->irq_ue > 0) {
+ 		ret = devm_request_irq(&pdev->dev,
+@@ -306,7 +306,7 @@ static int al_mc_edac_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"failed to request UE IRQ %d (%d)\n",
+ 				al_mc->irq_ue, ret);
+-			return ret;
++			goto free;
+ 		}
+ 	}
+ 
+@@ -321,11 +321,15 @@ static int al_mc_edac_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"failed to request CE IRQ %d (%d)\n",
+ 				al_mc->irq_ce, ret);
+-			return ret;
++			goto free;
+ 		}
+ 	}
+ 
+ 	return 0;
++
++free:
++	edac_mc_free(mci);
++	return ret;
+ }
+ 
+ static const struct of_device_id al_mc_edac_of_match[] = {
+-- 
+2.34.1
 
-Both EL1 and EL3 can access the LLCC "cmn_interrupt_2_enable" register, 
-but configuring the register from both
-EL1 & EL3 shouldn't be done as the register is meant to be configured 
-from EL3. There was a bug in HPG which was
-fixed recently on not to configure the register from EL1.
-
-Thanks
-Komal
-
-
->> EL1 LLCC EDAC driver needs to use cmn_interrupt_0_enable register to
->> configure Tag, Data RAM ECC interrupts instead of cmn_interrupt_2_enable.
->>
->> Fixes: 27450653f1db ("drivers: edac: Add EDAC driver support for QCOM SoCs")
->> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
->> ---
->>   drivers/edac/qcom_edac.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
->> index a9a8ba067007..0fd7a777fe7d 100644
->> --- a/drivers/edac/qcom_edac.c
->> +++ b/drivers/edac/qcom_edac.c
->> @@ -95,7 +95,7 @@ static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_b
->>   	 * Configure interrupt enable registers such that Tag, Data RAM related
->>   	 * interrupts are propagated to interrupt controller for servicing
->>   	 */
->> -	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
->> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_0_enable,
->>   				 TRP0_INTERRUPT_ENABLE,
->>   				 TRP0_INTERRUPT_ENABLE);
->>   	if (ret)
->> @@ -113,7 +113,7 @@ static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_b
->>   	if (ret)
->>   		return ret;
->>
->> -	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
->> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_0_enable,
->>   				 DRP0_INTERRUPT_ENABLE,
->>   				 DRP0_INTERRUPT_ENABLE);
->>   	if (ret)
->> --
->> 2.46.0
->>
 
