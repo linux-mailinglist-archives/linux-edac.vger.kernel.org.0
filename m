@@ -1,231 +1,92 @@
-Return-Path: <linux-edac+bounces-2677-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2678-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 218CE9E98DA
-	for <lists+linux-edac@lfdr.de>; Mon,  9 Dec 2024 15:30:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DDE99E9F5C
+	for <lists+linux-edac@lfdr.de>; Mon,  9 Dec 2024 20:22:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C309B18882DE
-	for <lists+linux-edac@lfdr.de>; Mon,  9 Dec 2024 14:29:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69049188353F
+	for <lists+linux-edac@lfdr.de>; Mon,  9 Dec 2024 19:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 255451E9B2E;
-	Mon,  9 Dec 2024 14:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9746019343B;
+	Mon,  9 Dec 2024 19:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JMT1UCzr"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FA21B042A;
-	Mon,  9 Dec 2024 14:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62AE140E5F;
+	Mon,  9 Dec 2024 19:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733754503; cv=none; b=VXyBcIq3ItRD9avgdUYJd1emwPOGurp8+jIZRP64dsd/xfvEp96rQ3R3siyvvm5+POQJe/TS9biBzPRGIfFeeCelNvd5L23Z79qF5ijbA8NMVgC2I9ba9Wn9+rmNNG0qBNm1Ub0ZCa1+BANmZqHi+6dPm6r1kxxPAd3zh0tAUfo=
+	t=1733772169; cv=none; b=tfQA4m12RiOAflgAV4xtx+gnDpYXC4bP5TvnASd9xmJeWUmt5Xg8YmzkZ1U/ekYB3xBOzRwOVl+4K15UNw9Fh2fm4eOyVPIeb34qLf0mMRZX/mjxoDlYMWOEpVFG+Rc+Y/HHtsBrxJTf7BsRA1iCjod+jcrAyqqZUNxVKPjKG4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733754503; c=relaxed/simple;
-	bh=cJxXhlIIJ0DTJ1Yc/e3CZ2CGOJB3TvumN3JmbMWYa8A=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=qI5nNsDZnIAOGjtgwxKRblZRgCC5bUtSwxVpqrd3tM/pwvEn1+rb8UZGGjHH3oUkQePUch3lbqW+iiPxC70sJKfxxxElWv898TQhAi4EGVPdcOYT/nph5g6mNNuDKejoPOZcULXNsizmtPjeDf2dXV4SF2HhN31kO8NRupSw5ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Y6PHP3XSbz6GCM3;
-	Mon,  9 Dec 2024 22:23:45 +0800 (CST)
-Received: from frapeml100008.china.huawei.com (unknown [7.182.85.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id A8C831400DD;
-	Mon,  9 Dec 2024 22:28:16 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml100008.china.huawei.com (7.182.85.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 9 Dec 2024 15:28:16 +0100
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Mon, 9 Dec 2024 15:28:16 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Dan Williams <dan.j.williams@intel.com>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-cxl@vger.kernel.org"
-	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC: "bp@alien8.de" <bp@alien8.de>, "tony.luck@intel.com"
-	<tony.luck@intel.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, "dave@stgolabs.net" <dave@stgolabs.net>, "Jonathan
- Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
-	<dave.jiang@intel.com>, "alison.schofield@intel.com"
-	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
-	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
-	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
-	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v17 05/18] cxl: Add Get Supported Features command for
- kernel usage
-Thread-Topic: [PATCH v17 05/18] cxl: Add Get Supported Features command for
- kernel usage
-Thread-Index: AQHbPQkFb4DhmQwolUmt5xqDd6N+ZLLZxDuAgAQrVZA=
-Date: Mon, 9 Dec 2024 14:28:16 +0000
-Message-ID: <e72011454204462eb8ccf10eef56106c@huawei.com>
-References: <20241122180416.1932-1-shiju.jose@huawei.com>
- <20241122180416.1932-6-shiju.jose@huawei.com>
- <67536f6987656_10a08329480@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <67536f6987656_10a08329480@dwillia2-xfh.jf.intel.com.notmuch>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1733772169; c=relaxed/simple;
+	bh=C0gBHd/YEru+HA07RGqBl/D5dp3U0EbP0FzqcTx+lNc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZtqB7e46d6A9fyPhdpEhqK4poJcVGnfb/79w2dpIxU8ZOsBi0v9wb2W4zTm1N7xslF/JBJb+w3tqC7X/7ZTj2w/R2j+va8/xazzPiz8aWxyDSOt00QFgFGxvpTeF4IQ/T8uhT/20rNVSEMM8abYHtdkovutOH4LYQxYHDQ3l9WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JMT1UCzr; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733772167; x=1765308167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C0gBHd/YEru+HA07RGqBl/D5dp3U0EbP0FzqcTx+lNc=;
+  b=JMT1UCzrqzTWjApO7jChO8SeEpqHPmlHGh/1N0D0u0CqFAiZyXzDwhIT
+   6O+vHIS8bKu7BXtFyyDRfhoxstvgyQSZDQB32BhkY+Oi8FznjMNusixIz
+   RjsHTFLcrS1csfFx+24N6QPtOoF0p/PtnZ+Q1OLVJNTycG0nFnq1ADBs/
+   W15P8Jcnf4A/8dZkcdyvXyLGHNBODom/8rDDbztQM4MXGbNk+puzE32Fw
+   c4zfLLdHj3EpSa0GxDTwJu4k96peLZkJkD/jdcKSOafz/0adWSVj9CO8Z
+   dmwJv700WYXnWpj7Byq6D+bzHV9+ssKXtfN4XGlxJBtChf0Vf94K0bdHL
+   A==;
+X-CSE-ConnectionGUID: Rz8LK8jfQOWvn3pzd9sLOQ==
+X-CSE-MsgGUID: TaJ+XbH3TnecauATRe98eQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="34235669"
+X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
+   d="scan'208";a="34235669"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 11:22:47 -0800
+X-CSE-ConnectionGUID: 5eWYcxSOQ8afoHaRD+RIIw==
+X-CSE-MsgGUID: IHDo5b/VQmefBgjn7pjZWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="100205286"
+Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.70])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 11:22:47 -0800
+Date: Mon, 9 Dec 2024 11:22:45 -0800
+From: "Luck, Tony" <tony.luck@intel.com>
+To: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, Yi Lai <yi1.lai@intel.com>,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] EDAC/i10nm: Add Intel Clearwater Forest server
+ support
+Message-ID: <Z1dDhYLE4rcK0tIm@agluck-desk3>
+References: <20241203022038.72873-1-qiuxu.zhuo@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241203022038.72873-1-qiuxu.zhuo@intel.com>
 
->-----Original Message-----
->From: Dan Williams <dan.j.williams@intel.com>
->Sent: 06 December 2024 21:41
->To: Shiju Jose <shiju.jose@huawei.com>; linux-edac@vger.kernel.org; linux-
->cxl@vger.kernel.org; linux-acpi@vger.kernel.org; linux-mm@kvack.org; linux=
--
->kernel@vger.kernel.org
->Cc: bp@alien8.de; tony.luck@intel.com; rafael@kernel.org; lenb@kernel.org;
->mchehab@kernel.org; dan.j.williams@intel.com; dave@stgolabs.net; Jonathan
->Cameron <jonathan.cameron@huawei.com>; dave.jiang@intel.com;
->alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.com;
->david@redhat.com; Vilas.Sridharan@amd.com; leo.duran@amd.com;
->Yazen.Ghannam@amd.com; rientjes@google.com; jiaqiyan@google.com;
->Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
->naoya.horiguchi@nec.com; james.morse@arm.com; jthoughton@google.com;
->somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
->duenwen@google.com; gthelen@google.com;
->wschwartz@amperecomputing.com; dferguson@amperecomputing.com;
->wbs@os.amperecomputing.com; nifan.cxl@gmail.com; tanxiaofei
-><tanxiaofei@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>; Roberto
->Sassu <roberto.sassu@huawei.com>; kangkang.shen@futurewei.com;
->wanghuiqiang <wanghuiqiang@huawei.com>; Linuxarm
-><linuxarm@huawei.com>; Shiju Jose <shiju.jose@huawei.com>
->Subject: Re: [PATCH v17 05/18] cxl: Add Get Supported Features command for
->kernel usage
->
->shiju.jose@ wrote:
->> From: Dave Jiang <dave.jiang@intel.com>
->>
->> CXL spec r3.1 8.2.9.6.1 Get Supported Features (Opcode 0500h) The
->> command retrieve the list of supported device-specific features
->> (identified by UUID) and general information about each Feature.
->>
->> The driver will retrieve the feature entries in order to make checks
->> and provide information for the Get Feature and Set Feature command.
->> One of the main piece of information retrieved are the effects a Set
->> Feature command would have for a particular feature.
->>
->> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
->> Co-developed-by: Shiju Jose <shiju.jose@huawei.com>
->> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
->> ---
->>  drivers/cxl/core/mbox.c      | 179 +++++++++++++++++++++++++++++++++++
->>  drivers/cxl/cxlmem.h         |  44 +++++++++
->>  drivers/cxl/pci.c            |   4 +
->>  include/cxl/mailbox.h        |   4 +
->>  include/uapi/linux/cxl_mem.h |   1 +
->>  5 files changed, 232 insertions(+)
->
->Hi Shiju,
->
->So I commented yesterday on this patch that is also duplicated in Dave's s=
-eries
->have a merge order ordering plan to propose.
+On Tue, Dec 03, 2024 at 10:20:38AM +0800, Qiuxu Zhuo wrote:
+> Clearwater Forest is the successor to Sierra Forest. Add Clearwater
+> Forest CPU model ID for EDAC support.
+> 
+> Tested-by: Yi Lai <yi1.lai@intel.com>
+> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-Hi Dan,
+Applied to RAS tree for v6.14 merge. Thanks.
 
-Thanks for the suggestions.
-I tested your suggestions for CXL features commands in the fwctl series, in=
- the EDAC CXL features setup,
-as replied.=20
->
->> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c index
->> 880ac1dba3cc..c5d4c7df2f99 100644
->> --- a/drivers/cxl/core/mbox.c
->> +++ b/drivers/cxl/core/mbox.c
->> @@ -67,6 +67,7 @@ static struct cxl_mem_command
->cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] =3D {
->>  	CXL_CMD(SET_SHUTDOWN_STATE, 0x1, 0, 0),
->>  	CXL_CMD(GET_SCAN_MEDIA_CAPS, 0x10, 0x4, 0),
->>  	CXL_CMD(GET_TIMESTAMP, 0, 0x8, 0),
->> +	CXL_CMD(GET_SUPPORTED_FEATURES, 0x8, CXL_VARIABLE_PAYLOAD,
->0),
->
->As I mention on the CXL FWCTL alias of this path, for kernel-internal only=
- usage
->by definition that means a CXL command id does not need to be defined.
-I tried removing  these definitions for  get_supported_features, get_featur=
-e and set_feature
-from cxl_mem_command[] and build and worked fine for the EDAC CXL features.
-
-For cxl_get_supported_features() to work , I removed following check.
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-int cxl_get_supported_features(struct cxl_dev_state *cxlds) {
-	int remain_feats, max_size, max_feats, start, rc;
-[...]
-
-	/* Get supported features is optional, need to check */
-	cmd =3D cxl_mem_find_command(CXL_MBOX_OP_GET_SUPPORTED_FEATURES);
-	if (!cmd)
-		return -EOPNOTSUPP;
-	if (!test_bit(cmd->info.id, cxl_mbox->enabled_cmds))
-		return -EOPNOTSUPP;
-[...]
-}
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=20
->
->Setting that aside, the place where CXL EDAC and CXL FWCTL series can unif=
-y is
->on the definition of the cxl_{get,set}_features() helpers proposed in this=
- series
->for kernel-internal submission of CXL FEATURES commands. I think Dave's se=
-ries
->should ingest cxl_{get,set}_features(), go in first since it does not have=
- cross-
->subsystem entanglements, and then you can build reuse that infrastructure =
-to
->finalize the CXL scrub implementation.
-Agree. I will reuse merged features infrastructure for the EDAC CXL feature=
-s.
-
->
->The missing piece in my mind to make cxl_{get,set}_features() usable with =
-the
->CXL FWCTL path is likely to make it be able to support copying in / out of=
- __user
->buffers. To me that looks like updating
->cxl_internal_send_cmd() to use copy_{to,from}_sockptr() internally so that=
- it is
->independent of the kernel vs user buffer concern from CXL EDAC vs CXL FWCT=
-L
->callers.
-Ok.
-
-Thanks,
-Shiju
+-Tony
 
