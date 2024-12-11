@@ -1,180 +1,158 @@
-Return-Path: <linux-edac+bounces-2686-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2687-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B91839EBBBD
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2024 22:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E31B9ECAD8
+	for <lists+linux-edac@lfdr.de>; Wed, 11 Dec 2024 12:08:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E7E5188A1CD
-	for <lists+linux-edac@lfdr.de>; Tue, 10 Dec 2024 21:21:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8C151887077
+	for <lists+linux-edac@lfdr.de>; Wed, 11 Dec 2024 11:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30866230272;
-	Tue, 10 Dec 2024 21:21:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5020F1EE7A5;
+	Wed, 11 Dec 2024 11:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eOZ/+Fax"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Hqtl/3ey"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2050.outbound.protection.outlook.com [40.107.94.50])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2CC23ED4A;
-	Tue, 10 Dec 2024 21:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733865666; cv=fail; b=O2WcHmPoNtLZJEmsCLH6K5vFE8DJwHBRhtECVVV93t5VAzF+AqI0v/Yz3u1UHNDKkdkqLEqm/lqLUqq42Opy/Y+T6kCv2ql4OqfdWsPBSpBHF/OhaTL1VbdKq7gA7Wr20qnfs2OZaNeynXH+perayGJKCxqlEk0R6BVpfquGOFY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733865666; c=relaxed/simple;
-	bh=KK46q87D2ss9hwnAizGe1YGRZVP6KD+gdbvfJebaWUg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RveddAFU2X0SOAFB8cGZYmbxd5MZpra03pL6JK3h8/hBwzT0vgTkRS43FjTdYE+56sbZ7x9mslr3QiJOPmRbeg+BBjKnyqqeOvDgqS2H6chey5UROC8urxh4rzB+gHtKByxmDgxVS1MSoOlmWnbtSUYLFps3sJRHD0Ge670GErU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=eOZ/+Fax; arc=fail smtp.client-ip=40.107.94.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TC+cDlcQpMxqIQJ8USxkkiW/ExWWdSrlIJ2HvYN0/eTBY5SCZp2LIxJGAymfVB9YtlXnVdi4M1MVlP3vXc3EI7LS7bYWbzGDMVI/zxRxqYEUfzhQfw1w5MJ/I/0MLlh4qMcuUHfYIcGGwL92yacs45oG1h1CfHT8zP99S0K/exucq8YOXgw+7y9oStC/JcVqAHX99k2ZmO/yLDlkAhqqyMjRe+de4LrID1jP8hAB8t1GtZF1fwYOHG+PA+RrRD1YxHD1/PEZF+Do6wZWMoHp0h6gX4QCC2X0Wc+osEf6aJPIqg3tVERA21il5P5bRcS3srpngvDppOPvtSUZcA3JYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A9U9pcpRyxMvHWHyy4oe4D3i2rH00rxEDypyzL6imoQ=;
- b=Z+3tUy7iIWLhPayp8GdgJ6Rku1zEKEUUBnjMhwFbwF+Ux7xcUW5ieI3eKyCJXNBDvSnqtiS8MtYKLZocDCBcTMmaRFWdEQ28akqjunb9kr3IGPhLYA31zKBXzDD4EKuxzh9/x+Hb9oRyoMRc0X+1PACDiYCzOG2h1CxVfpn7j7Qn6l9TOzWXrU/o1isX23z+iKGUUZbU1jSIqq7AIIe3zc2LS7vy32p0AZ0AT9gHcgmeUiS5NtACfWvcUfWiQCfLF5IOO6MYB5re10M8/ARV5WCifFPkQsAZ43RAWCjDm8oSwZ/08LYraVWJitCD2uXQXda1998chliozXyroS2RAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A9U9pcpRyxMvHWHyy4oe4D3i2rH00rxEDypyzL6imoQ=;
- b=eOZ/+Fax4nfBQ30tGJ5cCNxsPI+KgsGqXpos5CrbuZYfb0frYM1yzKzsmBmIOWEe1wcYKgIpwIg8BTwlqdQHeT5wAKst+ucjwrH5szeySuYKWibKRbKysuog1djbQrNg0tf3KdVL6xiCwuGgXXVY+79Th9wwVzanp3cNyTRrtGU=
-Received: from SA9PR13CA0149.namprd13.prod.outlook.com (2603:10b6:806:27::34)
- by CY8PR12MB8068.namprd12.prod.outlook.com (2603:10b6:930:75::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.12; Tue, 10 Dec
- 2024 21:21:01 +0000
-Received: from SA2PEPF00003AE4.namprd02.prod.outlook.com
- (2603:10b6:806:27:cafe::6e) by SA9PR13CA0149.outlook.office365.com
- (2603:10b6:806:27::34) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8251.13 via Frontend Transport; Tue,
- 10 Dec 2024 21:21:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF00003AE4.mail.protection.outlook.com (10.167.248.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8251.15 via Frontend Transport; Tue, 10 Dec 2024 21:21:00 +0000
-Received: from titanite-d354host.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 10 Dec 2024 15:20:59 -0600
-From: Avadhut Naik <avadhut.naik@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <yazen.ghannam@amd.com>,
-	<avadhut.naik@amd.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] EDAC/amd64: Fix possible module load failure on some UMC usage combinations
-Date: Tue, 10 Dec 2024 21:20:00 +0000
-Message-ID: <20241210212054.3895697-1-avadhut.naik@amd.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6716239BCB;
+	Wed, 11 Dec 2024 11:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733915277; cv=none; b=r8jc7fdqjtMIxopfh3UIfhVH92QmJSdwBUKrFmWPGLbmbq0cMHEK9B7UEfMBRHZHBxqkVmXdqp+6xMPF736p7yJNtqrkZSMv/0JvLE8znWXhGiV/lHGdkRYhBqB/BL2rhrrbcpQiQ+5FfcCBcfMrd+xwJMJSvw2NK88Q2Ssev7k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733915277; c=relaxed/simple;
+	bh=n198s/UJEM/yqZRmrp9/HGyXPvrMj2GvOxWx1wlC8zM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rdl5KzYvrgh0c/uAopfS68wX4kffzAIFEBTznCetB6cyo3IUZfmLWW5pgLNYZL1y6rj6xdC7K1lllAg1panVpjnNDUf+zB6XhIox/dZh4CenExaTZDsuqdhDSZq53t6k18kUG5C0Gm1cL8aEOOtJOzqJ36DsUdtd+TxdDMIwg7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Hqtl/3ey; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3BDC540E02BA;
+	Wed, 11 Dec 2024 11:07:46 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 2wimx1OvP8D4; Wed, 11 Dec 2024 11:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1733915261; bh=IFkwIihJ/VvJUWe2kYbkC4m9Ruw5N5k+UnlEEIErv/k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Hqtl/3ey6lJnax02mpg0CmfgnmVr4RvNjze557kJhSmT+qAktB5UTOGpH9ESBG7Hd
+	 5N2SJDSNUeJ1KlIjN+54w3TeW7+RkdHBrOYDUTH2AEhlHRcH6AKoKLqMhTi7Q8djRb
+	 4eeOvdI6La8RPw/rie2i6BasKU1KCkfQE/RmY3Ltmpe9Q33PLMdz+ttgOvl7xJfZI3
+	 nuPYvNlBmds3AcYe6eGYaaOjgd7BFr+uo4BedoyJw41ePFuc+DNvF/HWz4Ny2kRBVk
+	 QW5Pvp3mPw/jIQErhmK8w2nceNTuRy+7pNJHj67ri+NDDQQ/yefl9Vu+m/uaRUxMij
+	 pXDJmAGfmByEw0vgrMS0DmU6ueSvn8+SmY0ipWrLHswE9Z3N1y2XXEYyuM+AT2vS9y
+	 atXRF9ALZS3RJ+AcNWbeXw4jcYQgj2JoWuuKzs/FhGZLZmJlBZQCJ1fGfpfWkRCAGO
+	 9zGEqbp6sJVs75HkEqppwP00HMPFJKjt2Pbb/ce+61B0J/lhl9lWLl23oAsMRmAdNh
+	 NyGg7lOXhHeijY1EQNBvYje4O6HEZl43jYdljKtaXWH18LjE1mQt1VodOgkAfrK+0O
+	 b+lYkMt1RYkVXjPVMEcv4pOPbhnvyhtJwlGvSFKZdymjGZZCK//4TF5nMR28z3MTYe
+	 1L6g00LTZHQYVaQvJLMNQ17I=
+Received: from zn.tnic (p200300EA971f930C329C23FfFEa6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:930c:329c:23ff:fea6:a903])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4F95840E0266;
+	Wed, 11 Dec 2024 11:07:37 +0000 (UTC)
+Date: Wed, 11 Dec 2024 12:07:29 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Avadhut Naik <avadhut.naik@amd.com>, yazen.ghannam@amd.com
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] EDAC/amd64: Fix possible module load failure on some
+ UMC usage combinations
+Message-ID: <20241211110729.GAZ1lycaGYmjgNDGv9@fat_crate.local>
+References: <20241210212054.3895697-1-avadhut.naik@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE4:EE_|CY8PR12MB8068:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2acd5618-3937-4198-25f5-08dd19608bbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BYuI7I3kVzprLfvUUSz3RhUddpgQhEacIv/9NxtVD8G6vHc+kL03EJSZui0c?=
- =?us-ascii?Q?o7t+kIhGT6QqYPzwJD4URD9Wb+xTEhJFh/hlmnPbjCLyPYRobUc5Bu2Z9v8L?=
- =?us-ascii?Q?asllTsZmdfSmLG0TaQOUc9wDYLauK5wJfxrmk0MOCEFRqSavZN88dgInAtSS?=
- =?us-ascii?Q?cKnqDNaffTmWQYSOqsK7U19zilsfAi67IlEe5A4h7a2GF28QQJ8gwlHXaHYi?=
- =?us-ascii?Q?niwk4VDl7NzvoHsUSAKGduB25XPUkRYvJNEXCY2QnHdQjVOj+UlTsB2/SUMS?=
- =?us-ascii?Q?vO14cDB6QkTXZ8xT9Z7Y4ZkrAnpaKfik9Ipvj5QmJSjloLMZA034YC/1E1YE?=
- =?us-ascii?Q?rnYcQye3pvwzjg2u78K4XTQaglsE63wwwRdnwS+nW955E/jbyE48lj598qdZ?=
- =?us-ascii?Q?lGSHJPp2ofx5WbNibupUrcdH804faKbJD6zcZu5qTwItUFXsFwfQemIJQJZF?=
- =?us-ascii?Q?YUCvkapsv1m/QPHsCHry9j/6E8WGsko5vb3g8tbXwbGJxVB9GubSZEh4/Epb?=
- =?us-ascii?Q?umpN0EyV8axNqEKzl+VL2uLc2j2e5VIIy7JNUh9xg91f7Tpip+Xx4jqSm7eP?=
- =?us-ascii?Q?MpDfvA3Nn/pVtmLGl4NFUzDccvWuJpNvmcQrVKTZ1HkAu0kTSlx1xuL08s6D?=
- =?us-ascii?Q?S+UpktvxYIJ3wQgQCDifZWko4wIcypJcs04yBusJo6ida7KhPsgdA7gdrnOs?=
- =?us-ascii?Q?Nf4t3IRGm1ATCD/GQan1Xz2hcvy2beDoud5tSpe2wh7aS0LR5kCL3i1XvqzP?=
- =?us-ascii?Q?QNyYjZbh9Aijhn5rqH9DKabN0caINVmjD+e4HKMhHv8KdcEga3ChaBNmwO8k?=
- =?us-ascii?Q?Mbt4ZxjBG6E5ObUvHFBmjch4FxH683qu0hw060YmKXFjo8MOTVANN0DYleld?=
- =?us-ascii?Q?G0e/bpurK1Q7pRcV60l0aJQ14xAuaZxilcWIgJPqLzME10YV56JzEQEAI5ov?=
- =?us-ascii?Q?PDICPeDuRcrwhcD28wNDDcwkrVkimn17/rHNoo2tzieYx2TJv4mByu0evFqb?=
- =?us-ascii?Q?pf17shKpmbLCZa44konkNOhnnsm/oAwVKMuH+X2FRwetn2exdwkuYk603JqA?=
- =?us-ascii?Q?u1cDcZLLcsFqtGhWMCQZOLsJnXC5D+n0tJMVH/oHwLplAwu49YFV2DBOgIjd?=
- =?us-ascii?Q?xJEuQDsi/JeRiGpOOdaKoSKdoHJCMj8J2p/0SR50x7dpy+aUrC015keAyBrE?=
- =?us-ascii?Q?cGyurwXnGVWoUmI9OWmbxPtX9EnEoYyn201vXm/ZA17SlOGamc8pxoucYEZ8?=
- =?us-ascii?Q?ffzfZ17K0RnqIWWhMOjwfBgCreGoNQBPxhUeHKqnlCISk4KZj7yeC8PKtN1G?=
- =?us-ascii?Q?E5XyWiTOIEQ7mEj/37K/IY2UdwZXTD/51Wy0KTa2QCxPUd6ef34ElB2r2cHZ?=
- =?us-ascii?Q?5krXm1r3iCpeyw3F5ADGKG03gxtQOe6vBTBpMu8dAq0YTKgPNVmuwN6H6RGd?=
- =?us-ascii?Q?ZA2dT2ax7apJxHk4u99PK3h3dvByJenJ?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2024 21:21:00.7746
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2acd5618-3937-4198-25f5-08dd19608bbe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AE4.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8068
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241210212054.3895697-1-avadhut.naik@amd.com>
 
-Starting Zen4, AMD SOCs have 12 Unified Memory Controllers (UMCs) per
-socket.
+On Tue, Dec 10, 2024 at 09:20:00PM +0000, Avadhut Naik wrote:
+> Starting Zen4, AMD SOCs have 12 Unified Memory Controllers (UMCs) per
+> socket.
+> 
+> When the amd64_edac module is being loaded, these UMCs are traversed to
+> determine if they have SdpInit (SdpCtrl[31]) and EccEnabled (UmcCapHi[30])
+> bits set and create masks in umc_en_mask and ecc_en_mask respectively.
+> 
+> However, the current data type of these variables is u8. As a result, if
+> only the last 4 UMCs (UMC8 - UMC11) of the system have been utilized,
+> umc_ecc_enabled() will return false. Consequently, the module may fail to
+> load on these systems.
+> 
+> Fixes: e2be5955a886 ("EDAC/amd64: Add support for AMD Family 19h Models 10h-1Fh and A0h-AFh")
+> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+> Cc: stable@vger.kernel.org
+> ---
+> Changes in v2:
+> 1. Change data type of variables from u16 to int. (Boris)
+> 2. Modify commit message per feedback. (Boris)
+> 3. Add Fixes: and CC:stable tags. (Boris)
+> ---
+>  drivers/edac/amd64_edac.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> index ddfbdb66b794..b1c034214a8d 100644
+> --- a/drivers/edac/amd64_edac.c
+> +++ b/drivers/edac/amd64_edac.c
+> @@ -3362,7 +3362,7 @@ static bool dct_ecc_enabled(struct amd64_pvt *pvt)
+>  
+>  static bool umc_ecc_enabled(struct amd64_pvt *pvt)
+>  {
+> -	u8 umc_en_mask = 0, ecc_en_mask = 0;
+> +	int umc_en_mask = 0, ecc_en_mask = 0;
+>  	u16 nid = pvt->mc_node_id;
+>  	struct amd64_umc *umc;
+>  	u8 ecc_en = 0, i;
 
-When the amd64_edac module is being loaded, these UMCs are traversed to
-determine if they have SdpInit (SdpCtrl[31]) and EccEnabled (UmcCapHi[30])
-bits set and create masks in umc_en_mask and ecc_en_mask respectively.
+Hmm, looking at that whole function, it looks kinda clumsy to me. If the point
+is to check whether at least one UMC is enabled, why aren't we doing simply
+that instead of those silly masks?
 
-However, the current data type of these variables is u8. As a result, if
-only the last 4 UMCs (UMC8 - UMC11) of the system have been utilized,
-umc_ecc_enabled() will return false. Consequently, the module may fail to
-load on these systems.
+Yazen? Did you think about checking anything else here, in addition?
 
-Fixes: e2be5955a886 ("EDAC/amd64: Add support for AMD Family 19h Models 10h-1Fh and A0h-AFh")
-Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
-Cc: stable@vger.kernel.org
----
-Changes in v2:
-1. Change data type of variables from u16 to int. (Boris)
-2. Modify commit message per feedback. (Boris)
-3. Add Fixes: and CC:stable tags. (Boris)
----
- drivers/edac/amd64_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Because if not, this can be written as simple as:
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index ddfbdb66b794..b1c034214a8d 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3362,7 +3362,7 @@ static bool dct_ecc_enabled(struct amd64_pvt *pvt)
- 
- static bool umc_ecc_enabled(struct amd64_pvt *pvt)
- {
--	u8 umc_en_mask = 0, ecc_en_mask = 0;
-+	int umc_en_mask = 0, ecc_en_mask = 0;
- 	u16 nid = pvt->mc_node_id;
- 	struct amd64_umc *umc;
- 	u8 ecc_en = 0, i;
+static bool umc_ecc_enabled(struct amd64_pvt *pvt)
+{
+        u16 nid = pvt->mc_node_id;
+        struct amd64_umc *umc;
+        bool ecc_en = false; 
+        int i;
 
-base-commit: f84722cbed6c2b2094ad8bbe48be2c5900752935
+        /* Check whether at least one UMC is enabled: */
+        for_each_umc(i) {
+                umc = &pvt->umc[i];
+                
+                if (umc->sdp_ctrl & UMC_SDP_INIT && 
+                    umc->umc_cap_hi & UMC_ECC_ENABLED) {
+                        ecc_en = true;
+                        break; 
+                }       
+        }
+
+        edac_dbg(3, "Node %d: DRAM ECC %s.\n", nid, (ecc_en ? "enabled" : "disabled"));
+        
+        return ecc_en;
+}
+
+Thx.
+
 -- 
-2.43.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
