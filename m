@@ -1,62 +1,62 @@
-Return-Path: <linux-edac+bounces-2695-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2696-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 896CD9EE828
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 15:02:04 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3FE99EE82D
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 15:03:09 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48AF1283C24
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 14:01:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E96BB1888939
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 14:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128EC2135B9;
-	Thu, 12 Dec 2024 14:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2DC62135B9;
+	Thu, 12 Dec 2024 14:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9QUDKqS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePL0ia6f"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5772AF0E;
-	Thu, 12 Dec 2024 14:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C4A2AF0E;
+	Thu, 12 Dec 2024 14:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734012110; cv=none; b=kw3gybzWBPUE9TyY8VbPlE27vriN1RD7J7rB50epjZR75vv8YxWjvOv5nvRXyI56lZr+KEQOari9m4Y1Qc/MIwH4i39631b+2ZGkohmL0lcvt6zulMoC+2FI1JsjVyHie10dQidW1UOm/q1Wvut/uQOUFzArGZLfPUPjtSGWTRc=
+	t=1734012179; cv=none; b=kndVHT+/YGAs+r63eQVAGkMm1idtVp8y7BXWkHCtA7kpFxWXS45+/JLpotRr2NZUzUe8b4VYjVq9kV4CJRxdzdMbyn9jmPbPJoyMrjtljqDNKadopoEwXQofdHNwFHJSfCpTSwxQjsBMOFogIqQh1XdedN4oIWULQKsUEQ6EyyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734012110; c=relaxed/simple;
-	bh=yN/7NKXaf5IZNycRjgggOT1nDFQtfPh/uUsMn3hE7f8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=p9/GjuzK1eJAyk6SIqCdiLa7S6rt5OoNAo5s/8oP9fD+GbJSXANF33Ec5K3EM5r4nsGDQEKWNoVxr5/ReXN46jGlni9fVyIwa3006IjqEDoKv+3S+Fl0SAs4loy85qjA+wYL6azkhxr0kaOh354u0+8moSfnWw3eD+6AON1sW2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9QUDKqS; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1734012179; c=relaxed/simple;
+	bh=DmdYTP32GF7FMD0V8FptK4pVHw0QjiNU7SvaxwERjtE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=QJuGx2QJmmH+8fneYyXSj6WOyUTxclOUWdjOj9fgSCBJ7rNx2ZmdRMO6XKisEqhqi9VItP0CR8YMzfErfY022oiT4QUdDoIj1TOJOWGmAuoNbfqZPc+y2IlNABfs9yJDzkL3WImOJFjz2kh62QqQ5xX0VX+VEBxsbCrrrUPdRUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePL0ia6f; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734012109; x=1765548109;
+  t=1734012178; x=1765548178;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=yN/7NKXaf5IZNycRjgggOT1nDFQtfPh/uUsMn3hE7f8=;
-  b=M9QUDKqSDsqL8D5r8BBTqCMwqlC9Zq23su7VReIk38v3L0rYhJSPC4VF
-   4fzmqWVunuy8usnsAE4Aialdo2zlS9tpn/if6MoYfKaP1atY3iEFTt6mX
-   0WRAsx3NoeHqprZNcpp3pM45YMxl/mCQ7ozBaJTtTPdQVaXiVqb1mVuVq
-   5NmTZnNq6/3H0G66J2nLcOF9V70HSQkhJe6W+CFXhNLytB256LpelWuV0
-   1uZTcBK3xpHZ6id95mHUk+3quMAWGMnOhXbYARt3SiFDX8mXLnJ5ApEHw
-   +VH/pHV927N/z0tv/Xb/0LBm/6LXZT3sEndbtclw9lUrZJ6lTC2i9IFFX
+  bh=DmdYTP32GF7FMD0V8FptK4pVHw0QjiNU7SvaxwERjtE=;
+  b=ePL0ia6fgSW0L3Z1R11mE4m9OXA/0ixRFYwlCEaI1hBsDG8EkmW102Wh
+   cypaweGnb8V4Ccv43uTLEutUm7uYI+M7s0vnfnaVXMd2rZhW2eKV864r/
+   5SUY4p5LWwippQuzzH4ddHt2az5AuRsD4BnBPXNav478WMxG/WBWERUso
+   Z+8R4WWD+obg5wzrJb1LByTaGgI/t2UkHs/xZzDj4b0x5/uaBGi44i7vn
+   ZXaRc3YU7korLJGgSB/oSdP4h2rwHuK7BT+ZQoI1Zk5qRZkroBcFQwDqZ
+   m1fUuQduB4ybz05GEUdG5vLkTnsCEYLSBXOkBoxlcNajjhvbu8DfwfLCv
    Q==;
-X-CSE-ConnectionGUID: BvhCFUhrS3iL8M+4hg5HIA==
-X-CSE-MsgGUID: PbybUNiHRTexrwo4BrU5mw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="34154678"
+X-CSE-ConnectionGUID: oiIFklUfTeaa22CstmnMIA==
+X-CSE-MsgGUID: n4yMmg0SSneF8NhRIX49+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="34154972"
 X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
-   d="scan'208";a="34154678"
+   d="scan'208";a="34154972"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:01:48 -0800
-X-CSE-ConnectionGUID: zR7yJjqeSky8LGXbZK2fJQ==
-X-CSE-MsgGUID: LYTh2geKQdOmMwUj/dizOA==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:02:56 -0800
+X-CSE-ConnectionGUID: 6srgGy58StuaSWtLR+dUzA==
+X-CSE-MsgGUID: VF+k8lvQRUqjGbfzCYmcAQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
-   d="scan'208";a="96464973"
+   d="scan'208";a="96465385"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:01:45 -0800
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:02:53 -0800
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: bp@alien8.de,
 	tony.luck@intel.com
@@ -71,86 +71,214 @@ Cc: tglx@linutronix.de,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	qiuxu.zhuo@intel.com
-Subject: [PATCH v5 0/7] Clean up some x86/mce code
-Date: Thu, 12 Dec 2024 22:00:56 +0800
-Message-Id: <20241212140103.66964-1-qiuxu.zhuo@intel.com>
+Subject: [PATCH v5 1/7] x86/mce: Make several functions return bool
+Date: Thu, 12 Dec 2024 22:00:57 +0800
+Message-Id: <20241212140103.66964-2-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
+In-Reply-To: <20241212140103.66964-1-qiuxu.zhuo@intel.com>
 References: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
+ <20241212140103.66964-1-qiuxu.zhuo@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-Clean up some x86/mce code as below. No functional changes intended.
-  - Simplify some code.
-  - Remove some unnecessary code.
-  - Improve readability for some code.
-  - Convert some family/model mixed checks to VFM-based checks.
+Make several functions that return 0 or 1 return a boolean value for
+better readability.
 
-Pass the following basic tests:
-  - Tested on an Intel Sapphire Rapids server.
-  - Compile test.
-  - System boot test.
-  - Correctable/uncorrectable memory errors can be notified via CMCI/MCE interrupts.
-  - Correctable/uncorrectable memory errors can be dispatched to the mcelog daemon and the EDAC driver.
+No functional changes are intended.
 
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
 Changes in v5:
-  - Collect "Reviewed-by:" from Sohil & Yazen.
-  - Drop "Fix typos" patch.
-  - 0003: Update the commit message with mention the polarities of the return values are flipped.
-  - 0005: Reduce 'if (mce_num_banks > 0)' to 'if (mce_num_banks)'.
-  - 0006: Combine AMD and HYGON feature initialization and remove mce_hygon_feature_init().
+   - No changes.
 
 Changes in v4:
-  - Drop the first two patches as they've landed in the TIP ras/core branch.
-  - Drop "Make mce_gen_pool_create() return explicit error codes" patch.
-  - 0001: Don't rename mce_notify_irq().
-  - 0003: New patch. Make four functions return bool.
-  - 0004: Add necessary blank lines and directly use 'mca_cfg'.
+  - Don't rename mce_notify_irq() - Boris.
 
 Changes in v3:
   - Collect "Reviewed-by:" from Nikolay & Sohil.
-  - Drop the "x86/mce: Remove the redundant zeroing assignments" patch.
-  - 0003: Rename mce_notify_irq() to mce_notify_user().
-  - 0005: Move the 'int ret' variable along with the other int variables.
-  - 0006: New patch. Break up __mcheck_cpu_apply_quirks().
-  - 0007: New patch. Convert family/model mixed checks to VFM-based checks.
-  - 0009: Remove the variables' names from the commit message.
-  - 0010: Remove the detail typos from the commit message.
+  - Rename mce_notify_irq() to mce_notify_user() (Sohil).
 
 Changes in v2:
   - Collect "Reviewed-by:" from Tony.
-  - Update the commit message of patch 9 to include the names of all
-    variables that don't need NULL pointer initializations.
 
-This series is based on v6.13-rc2.
+ arch/x86/include/asm/mce.h      |  4 ++--
+ arch/x86/kernel/cpu/mce/amd.c   | 10 +++++-----
+ arch/x86/kernel/cpu/mce/core.c  | 22 +++++++++++-----------
+ arch/x86/kernel/cpu/mce/intel.c |  9 +++++----
+ 4 files changed, 23 insertions(+), 22 deletions(-)
 
-Thanks Thomas, Boris, Tony, Dave, Sohil, Yazen, and Nikolay for your review and discussion on this series.
-
-Qiuxu Zhuo (6):
-  x86/mce: Make several functions return bool
-  x86/mce/threshold: Remove the redundant this_cpu_dec_return()
-  x86/mce: Make four functions return bool
-  x86/mce: Convert family/model mixed checks to VFM-based checks
-  x86/mce: Remove the redundant mce_hygon_feature_init()
-  x86/mce/amd: Remove unnecessary NULL pointer initializations
-
-Tony Luck (1):
-  x86/mce: Break up __mcheck_cpu_apply_quirks()
-
- arch/x86/include/asm/mce.h          |   6 +-
- arch/x86/kernel/cpu/mce/amd.c       |  18 +--
- arch/x86/kernel/cpu/mce/core.c      | 237 +++++++++++++++-------------
- arch/x86/kernel/cpu/mce/genpool.c   |  29 ++--
- arch/x86/kernel/cpu/mce/intel.c     |   9 +-
- arch/x86/kernel/cpu/mce/internal.h  |   4 +-
- arch/x86/kernel/cpu/mce/threshold.c |   2 +-
- 7 files changed, 158 insertions(+), 147 deletions(-)
-
-
-base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 4543cf2eb5e8..ea9ca7689f6b 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -276,7 +276,7 @@ static inline void cmci_rediscover(void) {}
+ static inline void cmci_recheck(void) {}
+ #endif
+ 
+-int mce_available(struct cpuinfo_x86 *c);
++bool mce_available(struct cpuinfo_x86 *c);
+ bool mce_is_memory_error(struct mce *m);
+ bool mce_is_correctable(struct mce *m);
+ bool mce_usable_address(struct mce *m);
+@@ -296,7 +296,7 @@ enum mcp_flags {
+ 
+ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b);
+ 
+-int mce_notify_irq(void);
++bool mce_notify_irq(void);
+ 
+ DECLARE_PER_CPU(struct mce, injectm);
+ 
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 6ca80fff1fea..018874b554cb 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -381,7 +381,7 @@ static bool lvt_interrupt_supported(unsigned int bank, u32 msr_high_bits)
+ 	return msr_high_bits & BIT(28);
+ }
+ 
+-static int lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
++static bool lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
+ {
+ 	int msr = (hi & MASK_LVTOFF_HI) >> 20;
+ 
+@@ -389,7 +389,7 @@ static int lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
+ 		pr_err(FW_BUG "cpu %d, failed to setup threshold interrupt "
+ 		       "for bank %d, block %d (MSR%08X=0x%x%08x)\n", b->cpu,
+ 		       b->bank, b->block, b->address, hi, lo);
+-		return 0;
++		return false;
+ 	}
+ 
+ 	if (apic != msr) {
+@@ -399,15 +399,15 @@ static int lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
+ 		 * was set is reserved. Return early here:
+ 		 */
+ 		if (mce_flags.smca)
+-			return 0;
++			return false;
+ 
+ 		pr_err(FW_BUG "cpu %d, invalid threshold interrupt offset %d "
+ 		       "for bank %d, block %d (MSR%08X=0x%x%08x)\n",
+ 		       b->cpu, apic, b->bank, b->block, b->address, hi, lo);
+-		return 0;
++		return false;
+ 	}
+ 
+-	return 1;
++	return true;
+ };
+ 
+ /* Reprogram MCx_MISC MSR behind this threshold bank. */
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 7fb5556a0b53..167965bd2ac0 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -492,10 +492,10 @@ static noinstr void mce_gather_info(struct mce_hw_err *err, struct pt_regs *regs
+ 	}
+ }
+ 
+-int mce_available(struct cpuinfo_x86 *c)
++bool mce_available(struct cpuinfo_x86 *c)
+ {
+ 	if (mca_cfg.disabled)
+-		return 0;
++		return false;
+ 	return cpu_has(c, X86_FEATURE_MCE) && cpu_has(c, X86_FEATURE_MCA);
+ }
+ 
+@@ -1778,7 +1778,7 @@ static void mce_timer_delete_all(void)
+  * Can be called from interrupt context, but not from machine check/NMI
+  * context.
+  */
+-int mce_notify_irq(void)
++bool mce_notify_irq(void)
+ {
+ 	/* Not more than two messages every minute */
+ 	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
+@@ -1789,9 +1789,9 @@ int mce_notify_irq(void)
+ 		if (__ratelimit(&ratelimit))
+ 			pr_info(HW_ERR "Machine check events logged\n");
+ 
+-		return 1;
++		return true;
+ 	}
+-	return 0;
++	return false;
+ }
+ EXPORT_SYMBOL_GPL(mce_notify_irq);
+ 
+@@ -2015,25 +2015,25 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 	return 0;
+ }
+ 
+-static int __mcheck_cpu_ancient_init(struct cpuinfo_x86 *c)
++static bool __mcheck_cpu_ancient_init(struct cpuinfo_x86 *c)
+ {
+ 	if (c->x86 != 5)
+-		return 0;
++		return false;
+ 
+ 	switch (c->x86_vendor) {
+ 	case X86_VENDOR_INTEL:
+ 		intel_p5_mcheck_init(c);
+ 		mce_flags.p5 = 1;
+-		return 1;
++		return true;
+ 	case X86_VENDOR_CENTAUR:
+ 		winchip_mcheck_init(c);
+ 		mce_flags.winchip = 1;
+-		return 1;
++		return true;
+ 	default:
+-		return 0;
++		return false;
+ 	}
+ 
+-	return 0;
++	return false;
+ }
+ 
+ /*
+diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+index b3cd2c61b11d..f863df0ff42c 100644
+--- a/arch/x86/kernel/cpu/mce/intel.c
++++ b/arch/x86/kernel/cpu/mce/intel.c
+@@ -75,12 +75,12 @@ static u16 cmci_threshold[MAX_NR_BANKS];
+  */
+ #define CMCI_STORM_THRESHOLD	32749
+ 
+-static int cmci_supported(int *banks)
++static bool cmci_supported(int *banks)
+ {
+ 	u64 cap;
+ 
+ 	if (mca_cfg.cmci_disabled || mca_cfg.ignore_ce)
+-		return 0;
++		return false;
+ 
+ 	/*
+ 	 * Vendor check is not strictly needed, but the initial
+@@ -89,10 +89,11 @@ static int cmci_supported(int *banks)
+ 	 */
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL &&
+ 	    boot_cpu_data.x86_vendor != X86_VENDOR_ZHAOXIN)
+-		return 0;
++		return false;
+ 
+ 	if (!boot_cpu_has(X86_FEATURE_APIC) || lapic_get_maxlvt() < 6)
+-		return 0;
++		return false;
++
+ 	rdmsrl(MSR_IA32_MCG_CAP, cap);
+ 	*banks = min_t(unsigned, MAX_NR_BANKS, cap & MCG_BANKCNT_MASK);
+ 	return !!(cap & MCG_CMCI_P);
 -- 
 2.17.1
 
