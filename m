@@ -1,62 +1,62 @@
-Return-Path: <linux-edac+bounces-2701-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2702-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23DFF9EE84E
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 15:05:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BEAC9EE851
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 15:05:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D7B21682F6
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 14:04:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABE99167CB1
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 14:04:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB6A42153EF;
-	Thu, 12 Dec 2024 14:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C004215795;
+	Thu, 12 Dec 2024 14:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H6d7QD9E"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eMA5e9ZO"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D60215188;
-	Thu, 12 Dec 2024 14:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8729621505C;
+	Thu, 12 Dec 2024 14:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734012266; cv=none; b=ruOJQgVK+6wH35c0gOYU3k/662j2lqzyN6A0B2pM1WlPmYYFgm2u6lvMHWjFxYQh4cqRFa8gWpkRq8ggRv1cMaopxv+/VJsipjIKPWzMcSHiIlMz9x2WTHoO0yRaj5iXzIpAQID9l8LvnMwdoNub/rGHI11kKWgM8/KSMd6s/FE=
+	t=1734012271; cv=none; b=MDgIHAROHpYZtf7CI8L6fxjrAkuaO0WpoNlH13KlQikoX79lAufL7rtVhHkrRKHM0p+bHsXuo7NZLNfVTuPR/z27FLohGw2T/oaVQJiErNBG/OaQ46b+LCuJ1zOj2jnj0EAYioQEJ13fxK/ZBdnoqpUCwp8BB+hj9F63m2FEqyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734012266; c=relaxed/simple;
-	bh=JAjG1ocGNBjy11UcEoLMWl8vcDfQWxElwDAlTf8j6nw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=kxWycNMqoU5VrvqNxh8fV15OUMEmf2BmPHCffVVa12sDn5PYBAJl3D2jkL9QYkVXPhcUfhdLWp5SiBmfoGxKuSI1i+Ptc8iyHibxQnC8DQhhWvaSjeXffFP2hJSTRpOyEnOgItjUzgMBomLPcc7oKKNRSH+VTWBMie8c+uqnS9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H6d7QD9E; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1734012271; c=relaxed/simple;
+	bh=dRZuCgzkF8LRP0FHf8Z/ipBUnEl/jt69NXlBHfdeevU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=SKXldqVbFFCLk+R7qVRGFPhJ5tNmip/hdImV5T6cSu0dAT/V7NYIgcs53adOB3QikLElhanTPi9Fiuvb0uTPgS9GPZa0LQRfoTnv7sXgpPA6jZoJ0S5bYrMoecfiPnQ1pJ/q4n0DAuY/XzvMTZLzxzppGSBd2EKkE3n6eOaI7s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eMA5e9ZO; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734012265; x=1765548265;
+  t=1734012270; x=1765548270;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=JAjG1ocGNBjy11UcEoLMWl8vcDfQWxElwDAlTf8j6nw=;
-  b=H6d7QD9EHWmeRBdeYDUrAXPTs3E6T0wFSXNFXnJGMFS9KFxwdKmG67yo
-   ard+1PaU44SjBFwxl9vIUZjqd5phXNrbUKpieqo4Ttemc2YpgyWbn7JB0
-   nUFLZMhoh8hC6MI+VQl/gHl/i3jg8FkgmU1kw+rMBv26OpKXYRAMr0L8S
-   YahXbQu+wu+KJgdwNeYDLSdKBWfmtcvd+s2phoKDRy0/j5aLx+MefpMWo
-   TSuglJMerkc30RpGHJ99ZJEbJcLZ5JH19znUxZdDZOCCykraZhPnaHV0S
-   +bQXm1QmjafLl5nLl4+kusUQSCoyWF21oDpxR+dOaqWVFn9I/p2SsMmn0
-   A==;
-X-CSE-ConnectionGUID: nskkjHhqSu678MgTT3A43w==
-X-CSE-MsgGUID: TPtYfHCBS5GL/2zaFumbxw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="34155268"
+  bh=dRZuCgzkF8LRP0FHf8Z/ipBUnEl/jt69NXlBHfdeevU=;
+  b=eMA5e9ZOavNyGYDsQ2gPIbYcG0XU/zdru0oiLpFbvLPFEfgmlWw5C4W+
+   bv4r3pyOyTAhOFoBq4m+3io5iVY4SvBZnoep/iv4p1jMqvGzdyHumsF+X
+   JvowGUR+ZvUCXQDQXj6zuzfPAZnmdRG98wJfoTLrNShRnQp6vP/xgUMpe
+   dJwEaXZxEmKlEerxANEyIF0BRkbBtvi4j3NXnW3Y/OSG+j9OXe/H0ZtIv
+   0V6L/yOgt2Q9hiCiJieBg8u9hc1UvwwK7no3DNnc2SiiPLJ1U1Cx/UUNw
+   ydzlO6wo8PtxeAlSbwsF22T8M4+dEIS1lcORM5Y4bM1fvmi1Kg9oi2JST
+   g==;
+X-CSE-ConnectionGUID: jGpUyJo4SpOOoZVhBcK0RA==
+X-CSE-MsgGUID: K8Z5iJ/FTZiYOeUoSL2uiw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="34155317"
 X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
-   d="scan'208";a="34155268"
+   d="scan'208";a="34155317"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:03:53 -0800
-X-CSE-ConnectionGUID: uJq4lcnFTcWHf167sw/7BQ==
-X-CSE-MsgGUID: lGvI3aS+RkWkFGukAX/LQg==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:04:00 -0800
+X-CSE-ConnectionGUID: 0f2cORRfTDq8hXg94djBGg==
+X-CSE-MsgGUID: LgLEob6QTJKK7undv+4DzA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
-   d="scan'208";a="96465605"
+   d="scan'208";a="96465621"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:03:49 -0800
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:03:56 -0800
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: bp@alien8.de,
 	tony.luck@intel.com
@@ -71,9 +71,9 @@ Cc: tglx@linutronix.de,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	qiuxu.zhuo@intel.com
-Subject: [PATCH v5 6/7] x86/mce: Remove the redundant mce_hygon_feature_init()
-Date: Thu, 12 Dec 2024 22:01:02 +0800
-Message-Id: <20241212140103.66964-7-qiuxu.zhuo@intel.com>
+Subject: [PATCH v5 7/7] x86/mce/amd: Remove unnecessary NULL pointer initializations
+Date: Thu, 12 Dec 2024 22:01:03 +0800
+Message-Id: <20241212140103.66964-8-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20241212140103.66964-1-qiuxu.zhuo@intel.com>
 References: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
@@ -84,53 +84,61 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-Get HYGON to directly call mce_amd_feature_init() and remove the
-redundant mce_hygon_feature_init().
+Remove unnecessary NULL pointer initializations from variables that
+are already initialized before use.
 
-Suggested-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
 Changes in v5:
-  - New patch.
+ - Collect "Reviewed-by:" Yazen.
 
- arch/x86/include/asm/mce.h     | 2 --
- arch/x86/kernel/cpu/mce/core.c | 8 ++------
- 2 files changed, 2 insertions(+), 8 deletions(-)
+Changes in v4:
+ - No changes.
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index ea9ca7689f6b..eb2db07ef39c 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -386,8 +386,6 @@ static inline bool amd_mce_is_memory_error(struct mce *m)		{ return false; };
- static inline void mce_amd_feature_init(struct cpuinfo_x86 *c)		{ }
- #endif
+Changes in v3:
+ - Collect "Reviewed-by:" Nikolay & Sohil.
+ - Remove the variables' names from the commit message (Sohil).
+
+ arch/x86/kernel/cpu/mce/amd.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 018874b554cb..c79a82912d38 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -921,8 +921,8 @@ static void log_and_reset_block(struct threshold_block *block)
+  */
+ static void amd_threshold_interrupt(void)
+ {
+-	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
+ 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
++	struct threshold_block *first_block, *block, *tmp;
+ 	unsigned int bank, cpu = smp_processor_id();
  
--static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)	{ return mce_amd_feature_init(c); }
--
- unsigned long copy_mc_fragile_handle_tail(char *to, char *from, unsigned len);
+ 	/*
+@@ -1201,8 +1201,7 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ static int __threshold_add_blocks(struct threshold_bank *b)
+ {
+ 	struct list_head *head = &b->blocks->miscj;
+-	struct threshold_block *pos = NULL;
+-	struct threshold_block *tmp = NULL;
++	struct threshold_block *pos, *tmp;
+ 	int err = 0;
  
- #endif /* _ASM_X86_MCE_H */
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index f90cbcb31a62..0dc00c9894c7 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2118,14 +2118,10 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
- 		mce_intel_feature_init(c);
- 		break;
+ 	err = kobject_add(&b->blocks->kobj, b->kobj, b->blocks->kobj.name);
+@@ -1312,8 +1311,7 @@ static void deallocate_threshold_blocks(struct threshold_bank *bank)
  
--	case X86_VENDOR_AMD: {
-+	case X86_VENDOR_AMD:
-+	case X86_VENDOR_HYGON:
- 		mce_amd_feature_init(c);
- 		break;
--		}
--
--	case X86_VENDOR_HYGON:
--		mce_hygon_feature_init(c);
--		break;
+ static void __threshold_remove_blocks(struct threshold_bank *b)
+ {
+-	struct threshold_block *pos = NULL;
+-	struct threshold_block *tmp = NULL;
++	struct threshold_block *pos, *tmp;
  
- 	case X86_VENDOR_CENTAUR:
- 		mce_centaur_feature_init(c);
+ 	kobject_put(b->kobj);
+ 
 -- 
 2.17.1
 
