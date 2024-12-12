@@ -1,104 +1,157 @@
-Return-Path: <linux-edac+bounces-2694-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2695-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBA119ED77B
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Dec 2024 21:50:18 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2890D16869B
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Dec 2024 20:50:14 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B4A220ADC5;
-	Wed, 11 Dec 2024 20:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="gVk+ePN0"
-X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 896CD9EE828
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 15:02:04 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1691C5F3E;
-	Wed, 11 Dec 2024 20:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733950213; cv=none; b=fii9AxXJzLw9WM6dDTaBC+IDEaZXQlSfrwxUaeNaY8SgUAOzCks85JYgdRNGc35ICLA55kI9ev21dPe5sI45oac927Lj8V90JsTp/ibxd4ZpIUakv5UPqRurcFLYmAc2pPYpWNMOALjPgy7ggbAaiIcQZsZLSOQ5ZiPlAvgc+C4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733950213; c=relaxed/simple;
-	bh=HTbeRQiKIaA6UA7J4/YeKXyk+WUyi3SWZzNc5m/UtOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J76ZjsrX6kZYMbi6kbBcX3Gg6mwvb2/NMAacJkfMzPOORS4aycNwoqr5HnEbaawW5YYuddVVQKYceqfTbfQ2i6+YBhUBxk2G+z0TShXgGPT91bp9OW/joBR5okdmBexWzZpJJrNgtmxUE7zRvqVOrmcZCOIK6HrCvngiC/TP1Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=gVk+ePN0; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2328540E0169;
-	Wed, 11 Dec 2024 20:50:09 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Fh_FKKPk_VCT; Wed, 11 Dec 2024 20:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1733950205; bh=/PKPUJilw4Rela49D1Ua0zpMYCS8TP7uFi3G3iM8L4A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gVk+ePN03rfwP84SdiIEQXtEVyAaA0Ie/Qru6DWfhrZmY3DhCfLtfLa5YK3knlCD+
-	 yAF9mnClcGUlxHepQsM/sc9IpG3NxNVP0G4rH6odoxnC644mwMvcmKXEnTsvAOZvIx
-	 iws+qPROfQw0bL1kx56zrPlHD6VFL4Nz0rUaDwMyp68HzQX2c/8q78K7kt/OO5Bb6x
-	 ioWYlD2zllEufk0+DIwApDk/a9P2+JpzsqbYyGtZ1nVCWrqmB6S9lZxy40KnPBzoul
-	 RxWtIdNCf6hk6HIM2jcgrnpzpldcFJViPbhFqqOYahI6MbIqMpfn6fyfuj/KTaKe7Y
-	 nVtvnaNg05e0nxleEwVJUkiWLMTYIDCiuw20aVzr9X7Y7fTHlCco011oZUI0hgr7xC
-	 ovako6r6z381wuvGdBFSYksGv1Xx2YNMHEAuBBsrixfucZ1zsAqkMiMTQEr6rn/Qwt
-	 w7uYTxM122Nd1yvfIqwvmp4JBqwBATeuVVpobiazYhSIdV6ZHsJtltyiuLijeH2nnU
-	 ZbynF74+XkoEvTGZo1oHxLFG8llh4tVW1qNCJZRm5XG/UC9IJLaKcU44eoIRPSN9U1
-	 AbILf24YAiL2WdznoQUU26Dm0+neMqerZy4dQiiJKhHFDasM59aJvMtDen/JhcQbA7
-	 hrUmid6SQqSH7XlHYhY5eQHk=
-Received: from zn.tnic (p200300Ea971F93ce329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:93ce:329c:23ff:fea6:a903])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48AF1283C24
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 14:01:53 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128EC2135B9;
+	Thu, 12 Dec 2024 14:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9QUDKqS"
+X-Original-To: linux-edac@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 337D440E02B9;
-	Wed, 11 Dec 2024 20:50:00 +0000 (UTC)
-Date: Wed, 11 Dec 2024 21:49:54 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: "Naik, Avadhut" <avadnaik@amd.com>
-Cc: Avadhut Naik <avadhut.naik@amd.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v2] EDAC/amd64: Fix possible module load failure on some
- UMC usage combinations
-Message-ID: <20241211204954.GIZ1n68g3aNTD87EdH@fat_crate.local>
-References: <20241210212054.3895697-1-avadhut.naik@amd.com>
- <20241211110729.GAZ1lycaGYmjgNDGv9@fat_crate.local>
- <20241211154637.GA1923270@yaz-khff2.amd.com>
- <20241211185109.GFZ1nfHQBJB4rdXXSI@fat_crate.local>
- <28fb96f2-726c-4a86-a72b-cdfdcac9bce0@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5772AF0E;
+	Thu, 12 Dec 2024 14:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734012110; cv=none; b=kw3gybzWBPUE9TyY8VbPlE27vriN1RD7J7rB50epjZR75vv8YxWjvOv5nvRXyI56lZr+KEQOari9m4Y1Qc/MIwH4i39631b+2ZGkohmL0lcvt6zulMoC+2FI1JsjVyHie10dQidW1UOm/q1Wvut/uQOUFzArGZLfPUPjtSGWTRc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734012110; c=relaxed/simple;
+	bh=yN/7NKXaf5IZNycRjgggOT1nDFQtfPh/uUsMn3hE7f8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=p9/GjuzK1eJAyk6SIqCdiLa7S6rt5OoNAo5s/8oP9fD+GbJSXANF33Ec5K3EM5r4nsGDQEKWNoVxr5/ReXN46jGlni9fVyIwa3006IjqEDoKv+3S+Fl0SAs4loy85qjA+wYL6azkhxr0kaOh354u0+8moSfnWw3eD+6AON1sW2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9QUDKqS; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734012109; x=1765548109;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=yN/7NKXaf5IZNycRjgggOT1nDFQtfPh/uUsMn3hE7f8=;
+  b=M9QUDKqSDsqL8D5r8BBTqCMwqlC9Zq23su7VReIk38v3L0rYhJSPC4VF
+   4fzmqWVunuy8usnsAE4Aialdo2zlS9tpn/if6MoYfKaP1atY3iEFTt6mX
+   0WRAsx3NoeHqprZNcpp3pM45YMxl/mCQ7ozBaJTtTPdQVaXiVqb1mVuVq
+   5NmTZnNq6/3H0G66J2nLcOF9V70HSQkhJe6W+CFXhNLytB256LpelWuV0
+   1uZTcBK3xpHZ6id95mHUk+3quMAWGMnOhXbYARt3SiFDX8mXLnJ5ApEHw
+   +VH/pHV927N/z0tv/Xb/0LBm/6LXZT3sEndbtclw9lUrZJ6lTC2i9IFFX
+   Q==;
+X-CSE-ConnectionGUID: BvhCFUhrS3iL8M+4hg5HIA==
+X-CSE-MsgGUID: PbybUNiHRTexrwo4BrU5mw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="34154678"
+X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
+   d="scan'208";a="34154678"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:01:48 -0800
+X-CSE-ConnectionGUID: zR7yJjqeSky8LGXbZK2fJQ==
+X-CSE-MsgGUID: LYTh2geKQdOmMwUj/dizOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
+   d="scan'208";a="96464973"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:01:45 -0800
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: bp@alien8.de,
+	tony.luck@intel.com
+Cc: tglx@linutronix.de,
+	dave.hansen@linux.intel.com,
+	mingo@redhat.com,
+	hpa@zytor.com,
+	yazen.ghannam@amd.com,
+	sohil.mehta@intel.com,
+	nik.borisov@suse.com,
+	x86@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	qiuxu.zhuo@intel.com
+Subject: [PATCH v5 0/7] Clean up some x86/mce code
+Date: Thu, 12 Dec 2024 22:00:56 +0800
+Message-Id: <20241212140103.66964-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
+References: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <28fb96f2-726c-4a86-a72b-cdfdcac9bce0@amd.com>
 
-On Wed, Dec 11, 2024 at 01:18:39PM -0600, Naik, Avadhut wrote:
-> Yes, this fixes the issue of module not loading with some UMC
-> configurations.
+Clean up some x86/mce code as below. No functional changes intended.
+  - Simplify some code.
+  - Remove some unnecessary code.
+  - Improve readability for some code.
+  - Convert some family/model mixed checks to VFM-based checks.
 
-Thanks!
+Pass the following basic tests:
+  - Tested on an Intel Sapphire Rapids server.
+  - Compile test.
+  - System boot test.
+  - Correctable/uncorrectable memory errors can be notified via CMCI/MCE interrupts.
+  - Correctable/uncorrectable memory errors can be dispatched to the mcelog daemon and the EDAC driver.
 
-> If relevant, then for the below patch:
-> 
-> Tested-by: Avadhut Naik <avadhut.naik@amd.com>
-> Reviewed-by: Avadhut Naik <avadhut.naik@amd.com>
+Changes in v5:
+  - Collect "Reviewed-by:" from Sohil & Yazen.
+  - Drop "Fix typos" patch.
+  - 0003: Update the commit message with mention the polarities of the return values are flipped.
+  - 0005: Reduce 'if (mce_num_banks > 0)' to 'if (mce_num_banks)'.
+  - 0006: Combine AMD and HYGON feature initialization and remove mce_hygon_feature_init().
 
-Added.
+Changes in v4:
+  - Drop the first two patches as they've landed in the TIP ras/core branch.
+  - Drop "Make mce_gen_pool_create() return explicit error codes" patch.
+  - 0001: Don't rename mce_notify_irq().
+  - 0003: New patch. Make four functions return bool.
+  - 0004: Add necessary blank lines and directly use 'mca_cfg'.
 
+Changes in v3:
+  - Collect "Reviewed-by:" from Nikolay & Sohil.
+  - Drop the "x86/mce: Remove the redundant zeroing assignments" patch.
+  - 0003: Rename mce_notify_irq() to mce_notify_user().
+  - 0005: Move the 'int ret' variable along with the other int variables.
+  - 0006: New patch. Break up __mcheck_cpu_apply_quirks().
+  - 0007: New patch. Convert family/model mixed checks to VFM-based checks.
+  - 0009: Remove the variables' names from the commit message.
+  - 0010: Remove the detail typos from the commit message.
+
+Changes in v2:
+  - Collect "Reviewed-by:" from Tony.
+  - Update the commit message of patch 9 to include the names of all
+    variables that don't need NULL pointer initializations.
+
+This series is based on v6.13-rc2.
+
+Thanks Thomas, Boris, Tony, Dave, Sohil, Yazen, and Nikolay for your review and discussion on this series.
+
+Qiuxu Zhuo (6):
+  x86/mce: Make several functions return bool
+  x86/mce/threshold: Remove the redundant this_cpu_dec_return()
+  x86/mce: Make four functions return bool
+  x86/mce: Convert family/model mixed checks to VFM-based checks
+  x86/mce: Remove the redundant mce_hygon_feature_init()
+  x86/mce/amd: Remove unnecessary NULL pointer initializations
+
+Tony Luck (1):
+  x86/mce: Break up __mcheck_cpu_apply_quirks()
+
+ arch/x86/include/asm/mce.h          |   6 +-
+ arch/x86/kernel/cpu/mce/amd.c       |  18 +--
+ arch/x86/kernel/cpu/mce/core.c      | 237 +++++++++++++++-------------
+ arch/x86/kernel/cpu/mce/genpool.c   |  29 ++--
+ arch/x86/kernel/cpu/mce/intel.c     |   9 +-
+ arch/x86/kernel/cpu/mce/internal.h  |   4 +-
+ arch/x86/kernel/cpu/mce/threshold.c |   2 +-
+ 7 files changed, 158 insertions(+), 147 deletions(-)
+
+
+base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
