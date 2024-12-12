@@ -1,217 +1,355 @@
-Return-Path: <linux-edac+bounces-2705-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2706-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB2A9EFAAE
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 19:20:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D41629EFB98
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 19:53:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29077168D6F
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 18:18:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B08818801E7
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Dec 2024 18:53:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CAE522C37C;
-	Thu, 12 Dec 2024 18:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ECD0189520;
+	Thu, 12 Dec 2024 18:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VTSxv8gk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c/2eDDCN"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCFE22EA07;
-	Thu, 12 Dec 2024 18:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734026981; cv=fail; b=uBhZ9sgeaV71RIc50z4QtRYfX216YW20eU+ZZJqgxL5qMYIHUmlp6C7Kn8vIMCpwr03NJIy2acSY7uZpIk+zDQAiwFxqZKlsIrMRWd9c6YFEPRWdrEqM7nUvz0A/VYEk7VTpnurJjIS129JJDj1PquyiSyaNQCEk6haOVZMHj6o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734026981; c=relaxed/simple;
-	bh=K1atChhkfmOdO7DxVjEp1WQ/8ky6EGTxZBwZglfN6YE=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=k+Yec053JF6bp0plw70sPbXfssktKgL2kURVlcR+lVXjUna4wCiI+feww6OD5CxmkOfPBSdUa8Y39mfEu+fLbyx1PTM/Szk1RR0t9lSUenlTYc2eIbkoxzgxgbHj1MpPFKH981oxHAwP2N+E6LBeKFk//1qiYgDOm9DIUjDNVgc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VTSxv8gk; arc=fail smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA1017BB24;
+	Thu, 12 Dec 2024 18:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734029438; cv=none; b=F+/yqHI4rt/00CROuKOgQ4xLSA37SstOBFrw+K0xUfcZSXl7fzyK2tqN/i/DA1hjN0xWogW/uOhUMXq5zgf5jSck5/soLh4ebdzKrv83KD1ZQMWMPUEnQTHpYoHgknQ68QSy0SM1YAV8lTj8zAfMnA79Uz1EZXopfWFQsWuwPeI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734029438; c=relaxed/simple;
+	bh=p9bA66pZOpKTZ3BG47197HY61HOlTBJKFfSf6XIO0NY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=tSO232bUTLAQVBgUunvupdsHiLmenuYXlHtSenkaR7NQMbLTONaPUfrnLL3CDUaYZyeengqsrms1eJC+u0SGhwA+G92vhURS0pnZhVBL3VIZ/f9VnRdnU34Za58V0RRNagqsEBE1v3AxWSm7lGbrBOiyHo27t6wPSWd/FyLhTYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c/2eDDCN; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734026980; x=1765562980;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=K1atChhkfmOdO7DxVjEp1WQ/8ky6EGTxZBwZglfN6YE=;
-  b=VTSxv8gkunVOoa7qM3bdkJTo112/1IqW8waLEr1vGah7IHclb2rtHPBp
-   fkSUGaliMFbBNB6gxJUHNpXRxBGathIz5wYjn5Ut3877jexuBE5BtVxyS
-   egMyqZXX3vf1dtm1GSx4KVvMjVJpHjYrXZE72qdq6E+s6Uw+AMrv2v1Yt
-   oNYEklTBGwzPN4A2nbca7cJ+y+dbTKn6ju925zReOsgqViAOHCBXypdYI
-   vIhcvy66yIiw8gH0fNKvCTKJFJjJnwHrdEsFmDG/4hH6f6pGtRcDKo6Mb
-   Rq+o+7fjg1ue1XNCIN2oDuLC6MW9y1HyNvkkXeGEYIIM6f7jsSf7W1gfl
-   Q==;
-X-CSE-ConnectionGUID: KAKiiOUcRsaHcYbY59OkCw==
-X-CSE-MsgGUID: legymUp1QWOF29QHS2BceA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="45071164"
-X-IronPort-AV: E=Sophos;i="6.12,229,1728975600"; 
-   d="scan'208";a="45071164"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 10:09:39 -0800
-X-CSE-ConnectionGUID: iM3MJpesSEmkLih58eHQ0Q==
-X-CSE-MsgGUID: hYaIB2OxQ1KCgZbUlpA7fA==
+  t=1734029437; x=1765565437;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=p9bA66pZOpKTZ3BG47197HY61HOlTBJKFfSf6XIO0NY=;
+  b=c/2eDDCN1Y0Uw8G3zTNmQ1eRrhdTS74Ay6TQoU666arCYx/6w935fDPR
+   uppwVI4+Li8lmqsDIm8U8dX4Ph+Ri8PaCeEoPczAVIUrSqsJxjtZ9S14O
+   2M/4HQ6CM9J/nqfOBwPyHPUkuKSzs5Dpu7sonH/8+CAq3GcZWkvAbsgCV
+   vlHX0nDkAQ1D5gyXSLeOaO+timbMCtzQfQkqJehzlPTW11iVqQG0M4qgT
+   45uK+vvCy9M7yHlJc0rCWcvzwfH72yYScxI4CKkhwetjDvjhY+L9CZU03
+   tD9xLomuemK4wXvL1++DKuUCtT6WrXnmIhskBNfUSpFuPqioByxRD33a3
+   w==;
+X-CSE-ConnectionGUID: gl1ivLK0TJCFAqRotgHUkw==
+X-CSE-MsgGUID: 2MHTZd/sSg2FI2deUpxlVA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="44939421"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="44939421"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 10:50:36 -0800
+X-CSE-ConnectionGUID: Pil/ZD2PR4yGZRBu7izqAA==
+X-CSE-MsgGUID: +gIHjsm1RDWJolss8VKBoQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="127303228"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Dec 2024 10:09:34 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Thu, 12 Dec 2024 10:09:28 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Thu, 12 Dec 2024 10:09:28 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 12 Dec 2024 10:09:25 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qa+JF94WI/jSGmzFTDWtTGR4CzMGuPskeyMjAFtXEkFu2NrdvlZgI2MR9+XtaBv+5MJPwL/4OSYMdeVGzdaswombjyNWU520lclQv0xiNwgQb9wucg8rU3oCMM+C+P50ZJ9JRUEBY+y5fhY0bcoYu3vOEIUEWH9yvxat25RlYrE8J7NRVOLX6C5JDV5ADOTDGSI1Hcr0j0rpF/gUlgMqBvZBCg0tYlxRELCnY2XeB6RIGPugdf2Ef3aGJc13vEqwU2tKgfjTwIckrf3ZQovzA3LXIMfaPOw6Ufdc0Jn+rAGpMiySuY2nVbM1Mxfg5HqrcmkwCfdm0shWxduhyMZ/pQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bvflYMs9o+n4DI/oG4mp8w7nIQgNZxIKb8e4seNZYec=;
- b=mdpme3HjCH81146ra7tEAz+4p0zMRmBxKnfqSCFt+TuvvaXoyy0aAocjNazcIE6Hp5xVFfmhsYtIaP4jYc94f7n/Cx1SZE6ODt3sFqwVErVjRDDpLMVQHqu8Nvluewgn7jc3ntYj/6H2hNO5oViIE8Y9VZLo7U/yjE6jI1nkZy07jLbohjHQv2z9tJ3juDVhZaLBVynfUzfk9T9TeJGpbeeQ7dMgNYU5HlhzLGCcSMiAULBlfp5MljhiyIJHMsMJ35AbZA2C0R+MC6qdQicawGEOWF5hjcAKz07SH43KePUM2R0eXV8YTKHIDu//ZVo4+oemSQS0S/zNEwHGsMOGcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by MW4PR11MB6838.namprd11.prod.outlook.com (2603:10b6:303:213::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.14; Thu, 12 Dec
- 2024 18:08:42 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b%3]) with mapi id 15.20.8207.020; Thu, 12 Dec 2024
- 18:08:42 +0000
-Message-ID: <a4179200-bbf7-4f38-ab7a-d52bb74d70a8@intel.com>
-Date: Thu, 12 Dec 2024 10:08:41 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 6/7] x86/mce: Remove the redundant
- mce_hygon_feature_init()
-To: Qiuxu Zhuo <qiuxu.zhuo@intel.com>, <bp@alien8.de>, <tony.luck@intel.com>
-CC: <tglx@linutronix.de>, <dave.hansen@linux.intel.com>, <mingo@redhat.com>,
-	<hpa@zytor.com>, <yazen.ghannam@amd.com>, <nik.borisov@suse.com>,
-	<x86@kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
- <20241212140103.66964-1-qiuxu.zhuo@intel.com>
- <20241212140103.66964-7-qiuxu.zhuo@intel.com>
-Content-Language: en-US
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20241212140103.66964-7-qiuxu.zhuo@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0087.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::32) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+   d="scan'208";a="133689637"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.137])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 10:50:30 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 12 Dec 2024 20:50:26 +0200 (EET)
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+cc: x86@kernel.org, tony.luck@intel.com, mario.limonciello@amd.com, 
+    bhelgaas@google.com, jdelvare@suse.com, linux@roeck-us.net, 
+    clemens@ladisch.de, Shyam-sundar.S-k@amd.com, 
+    Hans de Goede <hdegoede@redhat.com>, naveenkrishna.chatradhi@amd.com, 
+    suma.hegde@amd.com, LKML <linux-kernel@vger.kernel.org>, 
+    linux-edac@vger.kernel.org, linux-pci@vger.kernel.org, 
+    linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2.1] x86/amd_node, platform/x86/amd/hsmp: Have HSMP use
+ SMN through AMD_NODE
+In-Reply-To: <20241212172711.1944927-1-yazen.ghannam@amd.com>
+Message-ID: <65375593-f2e0-e03b-7e7f-ad8be58772d4@linux.intel.com>
+References:  <20241212172711.1944927-1-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|MW4PR11MB6838:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9b726784-8bfa-4412-340c-08dd1ad802cf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?WGsyOVVrWU5tSUNNNzBaZzVRL3g2amNrYXJsSWc1NjBZbmZLSGNJTElEeTE5?=
- =?utf-8?B?TmN1SlVlTkw0VjdWVGptTjB5NUd6UVpuWTNIaTlqZ2h0Skd0S3E5VUFDZnI3?=
- =?utf-8?B?ajg2aXU4T2ZzQVdiWWR0bU1OWXJkNHB6RDFRNEJGRkxlZ1JhaWpVSy9Ccis5?=
- =?utf-8?B?RE5GakZvcEFlcFlmUUpnSzVjWTRmVlk0REs4VjYxME90TDcvenN0dTV3dVBC?=
- =?utf-8?B?eXNOUXZ3VGxDY0FlWmhoZDZsblF1Ty9BdGJZM2JNMlJaUTQvV1hRUFdhTUZJ?=
- =?utf-8?B?ZVNJVlVOVG1qR0VCblh0U1l2OWNQaW90N2hmUFRQbVEycXFJU2VtRENyaGMv?=
- =?utf-8?B?SVhlc1hFZDNlcnU4Z3VNOFhmdDRtRlU5SWpOaUNwcThKRnVQR2ZoVkk0ZmV0?=
- =?utf-8?B?MWJBdEJNaXk0WDA0UHNKL0ZmdUZzWHRidGgzZDJnSmhvQlZOMk9XOU10RDh6?=
- =?utf-8?B?TThzUTdaY1hFdEVqTDdKSGluN0hBdmEyRDVDd2Mwd1d0b24xb2QxNGZxZTNM?=
- =?utf-8?B?Sm5sUFFMeUV5OG45SmlNRk9NeTV6bHNaSVBWQkFmZU1OZXJ2NFVGN1I4TGU2?=
- =?utf-8?B?VjRvWVYxVStFZWtFNzFsYzIrRHhqNytwYWtBSU9CdUErRGRLdmM0eW16RWNK?=
- =?utf-8?B?TUJlWEhLdnZXK1RwaUdNeFRkMGdaVFZIQ21lOVRDZGhnQTQ1NGJmdnE3WGZ3?=
- =?utf-8?B?Qmd3ZE1oL2dTL0M1UG1nNHQ5Wm5hemFZWjdoamNSRzNudXNWWVcydVcxRzBW?=
- =?utf-8?B?NUw2OGxrVHdUNEk1YWZLQ0hncklMY0ZKdzVudjVHUUpBcTZaNXczb0ZjUU8z?=
- =?utf-8?B?blB2Vlo0c01Xc1hIdnlwaVpmVld3MDVLRThFa1B2eDhGOUdRWGRkQlp6SWkv?=
- =?utf-8?B?Ykk3aU5RTTBFNjFCbGZwcVRhVnNsUjRITzkyNDJScnh1UXBNeVppYjlzME4v?=
- =?utf-8?B?dlBSODNZWUd0eGFWcms1YUx3NzlMQ3FVSDZXYVJIZXB0UTNib1RvMGVKR0hV?=
- =?utf-8?B?RDBCZlZoMXAzOVd1WGVvN1FuYVRWcmJCUDMzRlZGWjdhRUhIT1JBeldLREhx?=
- =?utf-8?B?aXp0U3RaZmpSWWhlTnhQcmJHWDlLRlZiVDg1Ykg1TWVYaGprSzRwaVladHF4?=
- =?utf-8?B?cmZpM3VnMFVqQ1p5cVA2S1B1ai9tUXE3UHYwSi9TeUpIRXB2bnlNck9saGdD?=
- =?utf-8?B?eVlsbGQrSlZtZFBsSGlvenJ5K0dKbWJWWGVpek9ZRE0rczA0Q2Y4SXVZbE9a?=
- =?utf-8?B?VittbXFURnJVNGw3TUhVTHhYdmpOVVZWSGt4aHhUWmJSYy9QbUpYK09rdzMy?=
- =?utf-8?B?Q1ZqaEhuc3ZtK2VRL0s2YUNpR1dZWkdnRHRiZW95SUQ5ajcra2F0azFhM3M1?=
- =?utf-8?B?a0FWSjdRcDFIbFlBMmRjUTBacFNZUkxrd2lneG9IOTFoblpJL1BRUkdUVVpT?=
- =?utf-8?B?dDlwRUV3ZHg0L2Z3WVBBYk5CY0NsdHlmMisxdmNpaXlBMFU4eHZwazNQdnYy?=
- =?utf-8?B?ZHQ5OG5kM2hDeklHSkMyTHViMVRRblJwekJESEh6ZUZPODNEa2xPeDFLL1pl?=
- =?utf-8?B?TXcxQWl4ekphbUprbjVnOXVSS2J3d1lsMW9pZE0rNHJuZEZ1Z3Z6WTRvdWJ1?=
- =?utf-8?B?eHNCazE5azFuQjVzOGcvcitjL0lCTkUrYncvZ1dBUEdOYi9SaVVZRENtVTBE?=
- =?utf-8?B?dGZhN1ZLVS95NkN2M3BSZFZoQ1kwaUhPdUJsV25vSjFJWE9rN0EvZm04NmM2?=
- =?utf-8?B?QkdRbTN2VFZ6T1FhZVRuTm1EOTJvYzFYUWRYTWFuYzdWRmVoc2x2bTBQK0py?=
- =?utf-8?B?Q1ZHeXVpNkpEbDhRSHFsUT09?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjhsSkZXOFJmK3FHL3pSeDhjTkczbUEvV2c2K0ozTE9pcHlGYTJKbnozK2dN?=
- =?utf-8?B?MXNMTTJVLzhTcmdvd3NhTWk4S3FyWWMvVFZYVkFmckdYai9QYUZRNURha2R0?=
- =?utf-8?B?ZkdyZ1BwRk94VXhoQzB4Ukw0bnBUNlUwUWJKSFJaeGhrWVNRdW9US0Z5bzBO?=
- =?utf-8?B?a2ZObTc1ei8yN05WVm1qckhjcnR1UGFmdFA0RVh3YUxhd3NFUjNZN0JNK3k1?=
- =?utf-8?B?emJKUmhnMTc3cVhnYlJHMmZWRTJjOE1XeDNZZlR6Ri9OVFpWZWJlQUgyRXJw?=
- =?utf-8?B?Vyt4b21teW93Z3A2S0dWTVd2T0tONG5vbXpJRDgyYUxxT2NXSHJYaitRU2Zm?=
- =?utf-8?B?aG5ldWsrRVVWNHZoMnlCOThZc09EQUlScUF0dFZYdWYrbTB0UTM3WWlQY0d0?=
- =?utf-8?B?ZjZxRFgyc2hsNGxMSU4xL0kvNTg1RmJIMjJHNkhOVGdyay94S2VWblkrREJW?=
- =?utf-8?B?aEpVQUppMmRQclNpSVdoVnU5WmMvUDZvZFBtS0ZDR1FWbWR5RURKN1FtWHhx?=
- =?utf-8?B?QVR4TVp5SGV1bHg2UGp5U3lXSVV0am1TQlhabWFRMlF4RlNzZDFJWXNVRWVz?=
- =?utf-8?B?VGV4K2NvNmxuSGZnVGh4RWQwZlVRcE5rV3pDN00yUU5meFZ3MFdVUlI2ckIv?=
- =?utf-8?B?dDJ4UG9WcHhUL3N2bFIrV3hhRUllUmw2NjhTbGhqWjZjMkU0Q3lHYmdWMUkv?=
- =?utf-8?B?UjFmQzdVdm83M3RRZGo0S2pVNnNJalB6bmtHRUVVNGNGcWlPVXpiKzlmQitT?=
- =?utf-8?B?a3ZibStYNHVQL1ZzZmVBQlJweERCWmkwNU9GREkwU1NVRUo3amNkUkROZHFC?=
- =?utf-8?B?L2tUZWprN0FiMU5Wd05TVUh2enBIYTRDZElMdnhkeTBacldJUHJJK0x4NVlv?=
- =?utf-8?B?cHBKaC9zWmt6R1BKL2hBTmpGd2luTzJlaTNxZ0pyZEJ4THd5a0hOUFNHVUZW?=
- =?utf-8?B?ZG9uaUdTRnYyVVp5UkZHanlhVlllZ1JsL0luandyOWdvaWVwYUowb0RVaUJC?=
- =?utf-8?B?dmRpd09xWFU4K3hXekxIVG5tdW9NWGQ4TG10Z3J1aUZZMTVZN0dzbVgyOEh4?=
- =?utf-8?B?RW1kRm9hZWxPbmE1b1ljQkJRd3hIbkVFV3Q5VkdnZ3Fsd2xoSVY5SXZMeWgr?=
- =?utf-8?B?aUJnWUdkVWpma1lackJvK093SjZlV1BJLzNseGZrbks3Tkgzb3BMeWJxelc1?=
- =?utf-8?B?eXdId0p1ZlloUW1KdVBNbXV5RnpjcmRDU1ZGNWJMbStSYTlKMmlzYU0vN2gv?=
- =?utf-8?B?YjZxeUROL01jUVZEYTZhcDhCb2ZIU28yNGlRdnRyditaWDhNMVFZSWQyWmN1?=
- =?utf-8?B?VXZZZU8vTDh3bmtEd2JhS1FJdTRMUDVXNUl4ek1oR09zQkpsajVKdWphbE5Y?=
- =?utf-8?B?QmNsWjhWN0pYNVErUmt0dllLZlArTWs1MU1pTDJYczBjWWx3aFdNYUs2MEZn?=
- =?utf-8?B?RXduSERBWGRBdFRSMmhTcnJnT2ZkdFNzTnhqZGNyaUdBOG9ldzBTSkVoVkha?=
- =?utf-8?B?azlWTEtFcTZUS0p5Y21IWWFMKzM4blo2QTRtZndXVVJ0N3BoVjV5UWFER0li?=
- =?utf-8?B?UnFtTm5OeHhNV1pTTFp1SHpBdXpOcjI4NnZ0R0x1cGFxUEdUUUVkK2VZQ3FX?=
- =?utf-8?B?czBYa2pTdVZTSDFiWHcxNnh4YVBjcE5rcElzS1BpdU0wYzd2ZDVzMVQ2aWl3?=
- =?utf-8?B?Q2xoeHBYeGFpaTVIYS9rZ0h0bktkT2ZDbGplRVczbWxoNms1WUF6TWhVMDEv?=
- =?utf-8?B?ZFNTVUJuY1pqTmNlcGt2S1ROenVaYUZtTk1ZSkZiOEtQYkFuazdHekFxcW81?=
- =?utf-8?B?bkgwYmxzSk5wQXJiODRwc05YZGtac2JZN0lwR3FUQUxVZXRQSTFKYm14dHlG?=
- =?utf-8?B?OWZYT3ZRR21NLzlsRTYwK2NZUUFheVVaTmpubVF0ZUFZY2puZzdXcGdHMFNQ?=
- =?utf-8?B?eE55L3RqWUM2TWRncHBQbnVrWks5U0tSSTU0alFETTgyekl2TmJhVDR4UUds?=
- =?utf-8?B?bytGUDJiNm1VUnZNOThmUUdDcjBlZTBUUVFReU5md3cxS3RLUjM5bFpkZy9W?=
- =?utf-8?B?U2V2bWRxRG5lVHBQNzdyN0IxSmEzcVprd2RSTVhsbDlUREQwUmpJZkdwL0Rh?=
- =?utf-8?Q?WUVy96CURdCKj4kxQj2N0oYHX?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b726784-8bfa-4412-340c-08dd1ad802cf
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2024 18:08:42.0377
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5BbxSRYgUdebONMnHlP5zI/NERJR7ryEu7zH1VYhjEsXtark11dWrlakz6ibQD91WUu3T+xZy5/ST3naXBnbSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6838
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=US-ASCII
 
-On 12/12/2024 6:01 AM, Qiuxu Zhuo wrote:
-> Get HYGON to directly call mce_amd_feature_init() and remove the
-> redundant mce_hygon_feature_init().
+On Thu, 12 Dec 2024, Yazen Ghannam wrote:
+
+> The HSMP interface is just an SMN interface with different offsets.
 > 
-> Suggested-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> Define an HSMP wrapper in the SMN code and have the HSMP platform driver
+> use that rather than a local solution.
+> 
+> Also, remove the "root" member from AMD_NB, since there are no more
+> users of it.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 > ---
+> 
+> Notes:
+>     Link:
+>     https://lore.kernel.org/20241206161210.163701-15-yazen.ghannam@amd.com
+>     
+>     v2->v2.1:
+>     * Include static_assert() and comment for sysfs attributes.
+>     
+>     v1->v2:
+>     * Rebase on recent HSMP rework.
+> 
+>  arch/x86/include/asm/amd_nb.h         |  1 -
+>  arch/x86/include/asm/amd_node.h       |  3 +++
+>  arch/x86/kernel/amd_nb.c              |  1 -
+>  arch/x86/kernel/amd_node.c            |  9 +++++++
+>  drivers/platform/x86/amd/hsmp/Kconfig |  2 +-
+>  drivers/platform/x86/amd/hsmp/acpi.c  |  7 +++---
+>  drivers/platform/x86/amd/hsmp/hsmp.c  |  1 -
+>  drivers/platform/x86/amd/hsmp/hsmp.h  |  3 ---
+>  drivers/platform/x86/amd/hsmp/plat.c  | 35 +++++++++------------------
+>  9 files changed, 28 insertions(+), 34 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
+> index 4c4efb93045e..adfa0854cf2d 100644
+> --- a/arch/x86/include/asm/amd_nb.h
+> +++ b/arch/x86/include/asm/amd_nb.h
+> @@ -27,7 +27,6 @@ struct amd_l3_cache {
+>  };
+>  
+>  struct amd_northbridge {
+> -	struct pci_dev *root;
+>  	struct pci_dev *misc;
+>  	struct pci_dev *link;
+>  	struct amd_l3_cache l3_cache;
+> diff --git a/arch/x86/include/asm/amd_node.h b/arch/x86/include/asm/amd_node.h
+> index 113ad3e8ee40..5fe9c6537434 100644
+> --- a/arch/x86/include/asm/amd_node.h
+> +++ b/arch/x86/include/asm/amd_node.h
+> @@ -33,4 +33,7 @@ static inline u16 amd_num_nodes(void)
+>  int __must_check amd_smn_read(u16 node, u32 address, u32 *value);
+>  int __must_check amd_smn_write(u16 node, u32 address, u32 value);
+>  
+> +/* Should only be used by the HSMP driver. */
+> +int __must_check amd_smn_hsmp_rdwr(u16 node, u32 address, u32 *value, bool write);
+> +
+>  #endif /*_ASM_X86_AMD_NODE_H_*/
+> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+> index 2729e99806ec..3a20312062af 100644
+> --- a/arch/x86/kernel/amd_nb.c
+> +++ b/arch/x86/kernel/amd_nb.c
+> @@ -73,7 +73,6 @@ static int amd_cache_northbridges(void)
+>  	amd_northbridges.nb = nb;
+>  
+>  	for (i = 0; i < amd_northbridges.num; i++) {
+> -		node_to_amd_nb(i)->root = amd_node_get_root(i);
+>  		node_to_amd_nb(i)->misc = amd_node_get_func(i, 3);
+>  		node_to_amd_nb(i)->link = amd_node_get_func(i, 4);
+>  	}
+> diff --git a/arch/x86/kernel/amd_node.c b/arch/x86/kernel/amd_node.c
+> index d2ec7fd555c5..65045f223c10 100644
+> --- a/arch/x86/kernel/amd_node.c
+> +++ b/arch/x86/kernel/amd_node.c
+> @@ -97,6 +97,9 @@ static DEFINE_MUTEX(smn_mutex);
+>  #define SMN_INDEX_OFFSET	0x60
+>  #define SMN_DATA_OFFSET		0x64
+>  
+> +#define HSMP_INDEX_OFFSET	0xc4
+> +#define HSMP_DATA_OFFSET	0xc8
+> +
+>  /*
+>   * SMN accesses may fail in ways that are difficult to detect here in the called
+>   * functions amd_smn_read() and amd_smn_write(). Therefore, callers must do
+> @@ -179,6 +182,12 @@ int __must_check amd_smn_write(u16 node, u32 address, u32 value)
+>  }
+>  EXPORT_SYMBOL_GPL(amd_smn_write);
+>  
+> +int __must_check amd_smn_hsmp_rdwr(u16 node, u32 address, u32 *value, bool write)
+> +{
+> +	return __amd_smn_rw(HSMP_INDEX_OFFSET, HSMP_DATA_OFFSET, node, address, value, write);
+> +}
+> +EXPORT_SYMBOL_GPL(amd_smn_hsmp_rdwr);
+> +
+>  static int amd_cache_roots(void)
+>  {
+>  	u16 node, num_nodes = amd_num_nodes();
+> diff --git a/drivers/platform/x86/amd/hsmp/Kconfig b/drivers/platform/x86/amd/hsmp/Kconfig
+> index 7d10d4462a45..d6f7a62d55b5 100644
+> --- a/drivers/platform/x86/amd/hsmp/Kconfig
+> +++ b/drivers/platform/x86/amd/hsmp/Kconfig
+> @@ -7,7 +7,7 @@ config AMD_HSMP
+>  	tristate
+>  
+>  menu "AMD HSMP Driver"
+> -	depends on AMD_NB || COMPILE_TEST
+> +	depends on AMD_NODE || COMPILE_TEST
+>  
+>  config AMD_HSMP_ACPI
+>  	tristate "AMD HSMP ACPI device driver"
+> diff --git a/drivers/platform/x86/amd/hsmp/acpi.c b/drivers/platform/x86/amd/hsmp/acpi.c
+> index e981d45e1c12..28565ca78afd 100644
+> --- a/drivers/platform/x86/amd/hsmp/acpi.c
+> +++ b/drivers/platform/x86/amd/hsmp/acpi.c
+> @@ -10,7 +10,6 @@
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+>  #include <asm/amd_hsmp.h>
+> -#include <asm/amd_nb.h>
+>  
+>  #include <linux/acpi.h>
+>  #include <linux/device.h>
+> @@ -24,6 +23,8 @@
+>  
+>  #include <uapi/asm-generic/errno-base.h>
+>  
+> +#include <asm/amd_node.h>
+> +
+>  #include "hsmp.h"
+>  
+>  #define DRIVER_NAME		"amd_hsmp"
+> @@ -321,8 +322,8 @@ static int hsmp_acpi_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	if (!hsmp_pdev->is_probed) {
+> -		hsmp_pdev->num_sockets = amd_nb_num();
+> -		if (hsmp_pdev->num_sockets == 0 || hsmp_pdev->num_sockets > MAX_AMD_SOCKETS)
+> +		hsmp_pdev->num_sockets = amd_num_nodes();
+> +		if (hsmp_pdev->num_sockets == 0 || hsmp_pdev->num_sockets > MAX_AMD_NUM_NODES)
+>  			return -ENODEV;
+>  
+>  		hsmp_pdev->sock = devm_kcalloc(&pdev->dev, hsmp_pdev->num_sockets,
+> diff --git a/drivers/platform/x86/amd/hsmp/hsmp.c b/drivers/platform/x86/amd/hsmp/hsmp.c
+> index 227b4ad4a51a..e04c613ad5d6 100644
+> --- a/drivers/platform/x86/amd/hsmp/hsmp.c
+> +++ b/drivers/platform/x86/amd/hsmp/hsmp.c
+> @@ -8,7 +8,6 @@
+>   */
+>  
+>  #include <asm/amd_hsmp.h>
+> -#include <asm/amd_nb.h>
+>  
+>  #include <linux/acpi.h>
+>  #include <linux/delay.h>
+> diff --git a/drivers/platform/x86/amd/hsmp/hsmp.h b/drivers/platform/x86/amd/hsmp/hsmp.h
+> index e852f0a947e4..af8b21f821d6 100644
+> --- a/drivers/platform/x86/amd/hsmp/hsmp.h
+> +++ b/drivers/platform/x86/amd/hsmp/hsmp.h
+> @@ -21,8 +21,6 @@
+>  
+>  #define HSMP_ATTR_GRP_NAME_SIZE	10
+>  
+> -#define MAX_AMD_SOCKETS 8
+> -
+>  #define HSMP_CDEV_NAME		"hsmp_cdev"
+>  #define HSMP_DEVNODE_NAME	"hsmp"
+>  
+> @@ -41,7 +39,6 @@ struct hsmp_socket {
+>  	void __iomem *virt_base_addr;
+>  	struct semaphore hsmp_sem;
+>  	char name[HSMP_ATTR_GRP_NAME_SIZE];
+> -	struct pci_dev *root;
+>  	struct device *dev;
+>  	u16 sock_ind;
+>  	int (*amd_hsmp_rdwr)(struct hsmp_socket *sock, u32 off, u32 *val, bool rw);
+> diff --git a/drivers/platform/x86/amd/hsmp/plat.c b/drivers/platform/x86/amd/hsmp/plat.c
+> index a61f815c9f80..32921092b0c8 100644
+> --- a/drivers/platform/x86/amd/hsmp/plat.c
+> +++ b/drivers/platform/x86/amd/hsmp/plat.c
+> @@ -10,7 +10,6 @@
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+>  #include <asm/amd_hsmp.h>
+> -#include <asm/amd_nb.h>
+>  
+>  #include <linux/device.h>
+>  #include <linux/module.h>
+> @@ -18,6 +17,8 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/sysfs.h>
+>  
+> +#include <asm/amd_node.h>
+> +
+>  #include "hsmp.h"
+>  
+>  #define DRIVER_NAME		"amd_hsmp"
+> @@ -34,28 +35,12 @@
+>  #define SMN_HSMP_MSG_RESP	0x0010980
+>  #define SMN_HSMP_MSG_DATA	0x00109E0
+>  
+> -#define HSMP_INDEX_REG		0xc4
+> -#define HSMP_DATA_REG		0xc8
+> -
+>  static struct hsmp_plat_device *hsmp_pdev;
+>  
+>  static int amd_hsmp_pci_rdwr(struct hsmp_socket *sock, u32 offset,
+>  			     u32 *value, bool write)
+>  {
+> -	int ret;
+> -
+> -	if (!sock->root)
+> -		return -ENODEV;
+> -
+> -	ret = pci_write_config_dword(sock->root, HSMP_INDEX_REG,
+> -				     sock->mbinfo.base_addr + offset);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = (write ? pci_write_config_dword(sock->root, HSMP_DATA_REG, *value)
+> -		     : pci_read_config_dword(sock->root, HSMP_DATA_REG, value));
+> -
+> -	return ret;
+> +	return amd_smn_hsmp_rdwr(sock->sock_ind, sock->mbinfo.base_addr + offset, value, write);
+>  }
+>  
+>  static ssize_t hsmp_metric_tbl_plat_read(struct file *filp, struct kobject *kobj,
+> @@ -95,7 +80,12 @@ static umode_t hsmp_is_sock_attr_visible(struct kobject *kobj,
+>   * Static array of 8 + 1(for NULL) elements is created below
+>   * to create sysfs groups for sockets.
+>   * is_bin_visible function is used to show / hide the necessary groups.
+> + *
+> + * Validate the maximum number against MAX_AMD_NUM_NODES. If this changes,
+> + * then the attributes and groups below must be adjusted.
+>   */
+> +static_assert(MAX_AMD_NUM_NODES == 8);
 
-Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
+Please also add the #include for it.
+
+-- 
+ i.
+
+>  #define HSMP_BIN_ATTR(index, _list)					\
+>  static struct bin_attribute attr##index = {				\
+>  	.attr = { .name = HSMP_METRICS_TABLE_NAME, .mode = 0444},	\
+> @@ -159,10 +149,7 @@ static int init_platform_device(struct device *dev)
+>  	int ret, i;
+>  
+>  	for (i = 0; i < hsmp_pdev->num_sockets; i++) {
+> -		if (!node_to_amd_nb(i))
+> -			return -ENODEV;
+>  		sock = &hsmp_pdev->sock[i];
+> -		sock->root			= node_to_amd_nb(i)->root;
+>  		sock->sock_ind			= i;
+>  		sock->dev			= dev;
+>  		sock->mbinfo.base_addr		= SMN_HSMP_BASE;
+> @@ -305,11 +292,11 @@ static int __init hsmp_plt_init(void)
+>  		return -ENOMEM;
+>  
+>  	/*
+> -	 * amd_nb_num() returns number of SMN/DF interfaces present in the system
+> +	 * amd_num_nodes() returns number of SMN/DF interfaces present in the system
+>  	 * if we have N SMN/DF interfaces that ideally means N sockets
+>  	 */
+> -	hsmp_pdev->num_sockets = amd_nb_num();
+> -	if (hsmp_pdev->num_sockets == 0 || hsmp_pdev->num_sockets > MAX_AMD_SOCKETS)
+> +	hsmp_pdev->num_sockets = amd_num_nodes();
+> +	if (hsmp_pdev->num_sockets == 0 || hsmp_pdev->num_sockets > MAX_AMD_NUM_NODES)
+>  		return ret;
+>  
+>  	ret = platform_driver_register(&amd_hsmp_driver);
+> 
 
