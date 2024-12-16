@@ -1,198 +1,121 @@
-Return-Path: <linux-edac+bounces-2720-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2721-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C98CF9F2FE3
-	for <lists+linux-edac@lfdr.de>; Mon, 16 Dec 2024 12:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D5019F3210
+	for <lists+linux-edac@lfdr.de>; Mon, 16 Dec 2024 14:57:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ED921888789
-	for <lists+linux-edac@lfdr.de>; Mon, 16 Dec 2024 11:56:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C5471883CF7
+	for <lists+linux-edac@lfdr.de>; Mon, 16 Dec 2024 13:57:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADB60204577;
-	Mon, 16 Dec 2024 11:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1EEA205ABE;
+	Mon, 16 Dec 2024 13:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="R7A4dX9P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CvNmGMQ6"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BD0204579;
-	Mon, 16 Dec 2024 11:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF97B29CA;
+	Mon, 16 Dec 2024 13:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734350180; cv=none; b=gbxBB4cteYX9TA7X1uPVVDQ5fKvggZW5TQydJSe4+1NkNYnGNNz+SrtIf4UVAW8ISe+VRphBmw21sVuJ6gpPCSjicFLxF6GWeWOKSFNeJZx/m6T9ROBT9VjObXqdYuTaK4/37UCtSFwpKRvi36S6Z4BBzqrOY1JYFFoxmobYAeg=
+	t=1734357452; cv=none; b=QU+PGKfC7ntNoP0R1MaNyM2FxnoMTR1M5H+pKmOI2Zn2Hsq11s5izX+ewi7IRctT+WThSzCM+iT8iraDtlml6KoLZAJtgY948Ud+MDZ4lL6NJEpDyxi8Z7OcPIYAZeyTvSD/ReMuTAU6/J33zkD1rIXjhwmPQzZjIfiBq1Z3L5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734350180; c=relaxed/simple;
-	bh=OKPLTQHxIuUahfuatylu+8JAUqFjImAX8tPtEshEgDM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ejMuQMcJY91b/tGsZpRunHKh8EOl06AJ4M3ugFSVWIWhsr6Sidp/fN8xzbkumYAATLNBN3ev+yVt/5FRc62Nfc/jFsyU95FcGN+JsDzpYyjImHoszKeuE0E23azKGFCxSG63Mt6b/xNymmC93rH23C1my/yHO9bXHmz2F791gEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=R7A4dX9P; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 400BD40E0266;
-	Mon, 16 Dec 2024 11:56:15 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id jl2PoPUHnDkL; Mon, 16 Dec 2024 11:56:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1734350170; bh=rYh3Vo4Y6Cn3XYiD3KvUWwt/WV0Vv7KQwFCZjgxQ7rY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R7A4dX9P1IScVfb33XC4RQNy0URmuHQkdq5GjLGiEI0TQ5itVj5qopQ5swmf+3e4a
-	 M9TGovU8mxakF3MnUrobGPUBnxnUm2WA5LdkrEMgyVOBEBcCyQQ5xucOFImQ+n3sza
-	 7eZf2PH9fYnmAN6UIm7FDq1r912QcTsHLgb6nhi9wNwGgLX9Q1iWFHoitGyufh+FaI
-	 OoQoyydcFJy/YF4+zLf08N0U7pTr6yktBnDLtkkyJc+svJs0stz1NSGkJjRqqhk8DR
-	 N2tkkY6TrWISHOFiJEwpCP0eU/sotQNqzexbnzsXVtwIKoM0DvhPZXXfERBHcYsLSs
-	 O++ZX6CvOocqtWuI1F8JvC00xUtrtko417tHLKNs0OJ1sz/lkLj8obn0ZdB7BZMsss
-	 A7q3VpTxfHIt7HHEdvYjCSFPM/6Q5uZQ88q5dN3OYRbDm8ciIbHOiUiD27OIFa201y
-	 o//CBl5yMwrAYwkV23IitIYNNy6zoj+hDNxJ3pGqaNuzOmYbFM09fDOWxUU0zIu7Vm
-	 HDBLc8uHZxCdbl/OB3P6kIdauCniA23i2cJd32Mi7UPIneLChJwxGyo6T5sqa3WaQh
-	 3i50lhOHT492p2Z2HrPTdIC9uuRP+sGXjZPu1ZloHYHVz4SOzmh9qXjv0YcNICvRa2
-	 5Sd5VXOY6JV9YqOS+EfqgqAU=
-Received: from zn.tnic (p200300ea971f937d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:937d:329c:23ff:fea6:a903])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1497140E0269;
-	Mon, 16 Dec 2024 11:55:56 +0000 (UTC)
-Date: Mon, 16 Dec 2024 12:55:46 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Zhao Qunqin <zhaoqunqin@loongson.cn>
-Cc: chenhuacai@kernel.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel@xen0n.name,
-	tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-	rric@kernel.org, loongarch@lists.linux.dev, xry111@xry111.site,
-	Markus.Elfring@web.de, Jonathan.Cameron@huawei.com,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH V10 RESEND] EDAC: Add EDAC driver for loongson memory
- controller
-Message-ID: <20241216115546.GHZ2AVQi9u5lABWboE@fat_crate.local>
-References: <20241216013351.15432-1-zhaoqunqin@loongson.cn>
+	s=arc-20240116; t=1734357452; c=relaxed/simple;
+	bh=asW/rEU97Lhupbtp+ldMp9ntQdvITH9HiMPFa8DHXXU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=mjypnTvzrP0IL366geKqEU+B8JzOIRSXN/Kzkt/vxtnYl2FY39e61Yo279x9y24jbgn+0cv5FcqhWx/avif59qPR43qk3fLeaVNC+ouDPYlfScAD7GnmV6HEZjr43mt2rvGcdd7JOqAVOadSiTRC2fPkaAH1Cv29+prhv7l0lsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CvNmGMQ6; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734357451; x=1765893451;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=asW/rEU97Lhupbtp+ldMp9ntQdvITH9HiMPFa8DHXXU=;
+  b=CvNmGMQ6AYqJjGOyKKU6MoQACL9olKgfBKDe/64qjkJCd3T8i039axKt
+   ufHiaOc4KD2xpMQJYkluiLzmXNVT/qOfhRtTUtYKbtaU0IURqvgn2U115
+   9puY2fSfOR68tsv82fGgrqOsw4fujVDV1qErjd+9xlUa986u9802u6PfX
+   JSD+gLuajdfzvvEgQ1R27cKDn6iCUERMhmNpbYVTnxbGYr0O1gTmTx+56
+   JKDAftrsPCGdnAWDzqZHQ4y0neC9sbpfctM23ttVQJ8a44Res9EUo2ZES
+   cOcBrnhVckRJw44MHyGWuwg1sv8UpvrYiN8YZIoQwnO/Sq+evUSndGiJk
+   Q==;
+X-CSE-ConnectionGUID: eWgx9HNnRAyfqGGWPMA4mw==
+X-CSE-MsgGUID: Qh8+q7+2QX2eMtlP3MXnoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="22327530"
+X-IronPort-AV: E=Sophos;i="6.12,238,1728975600"; 
+   d="scan'208";a="22327530"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 05:57:30 -0800
+X-CSE-ConnectionGUID: XOBIYAXUQuSw0lBEwcrp+A==
+X-CSE-MsgGUID: 76n3K51WRmioP0fo0HJzmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,238,1728975600"; 
+   d="scan'208";a="96971982"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.29])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 05:57:25 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 16 Dec 2024 15:57:23 +0200 (EET)
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+cc: x86@kernel.org, tony.luck@intel.com, mario.limonciello@amd.com, 
+    bhelgaas@google.com, jdelvare@suse.com, linux@roeck-us.net, 
+    clemens@ladisch.de, Shyam-sundar.S-k@amd.com, 
+    Hans de Goede <hdegoede@redhat.com>, naveenkrishna.chatradhi@amd.com, 
+    suma.hegde@amd.com, LKML <linux-kernel@vger.kernel.org>, 
+    linux-edac@vger.kernel.org, linux-pci@vger.kernel.org, 
+    linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2.1] x86/amd_node, platform/x86/amd/hsmp: Have HSMP use
+ SMN through AMD_NODE
+In-Reply-To: <20241212214637.GA80677@yaz-khff2.amd.com>
+Message-ID: <ff59d4e9-15da-37b3-1a8c-1ae688fa4094@linux.intel.com>
+References: <20241212172711.1944927-1-yazen.ghannam@amd.com> <65375593-f2e0-e03b-7e7f-ad8be58772d4@linux.intel.com> <20241212214637.GA80677@yaz-khff2.amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241216013351.15432-1-zhaoqunqin@loongson.cn>
+Content-Type: multipart/mixed; boundary="8323328-1223704678-1734357443=:941"
 
-On Mon, Dec 16, 2024 at 09:33:51AM +0800, Zhao Qunqin wrote:
-> +LOONGSON EDAC DRIVER
-> +M:	Zhao Qunqin <zhaoqunqin@loongson.cn>
-> +L:	linux-edac@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/edac/loongson_edac.c
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-If you add yourself as a maintainer, I'd expect you to review and/or ack
-patches for your driver so that I can pick them up.
+--8323328-1223704678-1734357443=:941
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-> +config EDAC_LOONGSON
-> +	tristate "Loongson Memory Controller"
-> +	depends on (LOONGARCH && ACPI) || COMPILE_TEST
+On Thu, 12 Dec 2024, Yazen Ghannam wrote:
 
-The COMPILE_TEST thing would mean that you'll make sure this driver always
-builds on other arches and it doesn't break randconfig builds of people. If it
-happens too often and no one is fixing it, I'll remove the COMPILE_TEST.
+> On Thu, Dec 12, 2024 at 08:50:26PM +0200, Ilpo J=E4rvinen wrote:
+> > On Thu, 12 Dec 2024, Yazen Ghannam wrote:
+> > > @@ -95,7 +80,12 @@ static umode_t hsmp_is_sock_attr_visible(struct ko=
+bject *kobj,
+> > >   * Static array of 8 + 1(for NULL) elements is created below
+> > >   * to create sysfs groups for sockets.
+> > >   * is_bin_visible function is used to show / hide the necessary grou=
+ps.
+> > > + *
+> > > + * Validate the maximum number against MAX_AMD_NUM_NODES. If this ch=
+anges,
+> > > + * then the attributes and groups below must be adjusted.
+> > >   */
+> > > +static_assert(MAX_AMD_NUM_NODES =3D=3D 8);
+> >=20
+> > Please also add the #include for it.
+> >
+>=20
+> Just to confirm, you mean for static_assert()?
+>=20
+>   #include <linux/build_bug.h>
 
-> +	help
-> +	  Support for error detection and correction on the Loongson
-> +	  family memory controller. This driver reports single bit
-> +	  errors (CE) only. Loongson-3A5000/3C5000/3D5000/3A6000/3C6000
-> +	  are compatible.
->  
->  endif # EDAC
+I saw you already made that change but yes, it is what I meant.
 
-> +static int read_ecc(struct mem_ctl_info *mci)
-> +{
-> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
-> +	u64 ecc;
-> +	int cs;
-> +
-> +	if (!pvt->ecc_base)
+--=20
+ i.
 
-When can that even happen? You're initializing it properly in pvt_init().
-
-> +		return pvt->last_ce_count;
-> +
-> +	ecc = readq(pvt->ecc_base + ECC_CS_COUNT_REG);
-> +	/* cs0 -- cs3 */
-> +	cs = ecc & 0xff;
-> +	cs += (ecc >> 8) & 0xff;
-> +	cs += (ecc >> 16) & 0xff;
-> +	cs += (ecc >> 24) & 0xff;
-> +
-> +	return cs;
-> +}
-> +
-> +static void edac_check(struct mem_ctl_info *mci)
-> +{
-> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
-> +	int new, add;
-> +
-> +	new = read_ecc(mci);
-> +	add = new - pvt->last_ce_count;
-> +	pvt->last_ce_count = new;
-
-That last_ce_count is just silly. Kill it.
-
-> +	if (add <= 0)
-> +		return;
-> +
-> +	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, add,
-> +			     0, 0, 0, 0, 0, -1, "error", "");
-> +	edac_mc_printk(mci, KERN_INFO, "add: %d", add);
-
-"add"? What are you adding? Error count?
-
-No need.
-
-> +static int edac_probe(struct platform_device *pdev)
-> +{
-> +	struct edac_mc_layer layers[2];
-> +	struct mem_ctl_info *mci;
-> +	void __iomem *vbase;
-> +	int ret;
-> +
-> +	vbase = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(vbase))
-> +		return PTR_ERR(vbase);
-> +
-> +	/* allocate a new MC control structure */
-> +	layers[0].type = EDAC_MC_LAYER_CHANNEL;
-> +	layers[0].size = 1;
-> +	layers[0].is_virt_csrow = false;
-> +	layers[1].type = EDAC_MC_LAYER_SLOT;
-> +	layers[1].size = 1;
-> +	layers[1].is_virt_csrow = true;
-> +	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-> +			    sizeof(struct loongson_edac_pvt));
-> +	if (mci == NULL)
-> +		return -ENOMEM;
-> +
-> +	mci->mc_idx = edac_device_alloc_index();
-> +	mci->mtype_cap = MEM_FLAG_RDDR4;
-> +	mci->edac_ctl_cap = EDAC_FLAG_NONE;
-> +	mci->edac_cap = EDAC_FLAG_NONE;
-> +	mci->mod_name = "loongson_edac.c";
-> +	mci->ctl_name = "loongson_edac_ctl";
-> +	mci->dev_name = "loongson_edac_dev";
-> +	mci->ctl_page_to_phys = NULL;
-> +	mci->pdev = &pdev->dev;
-> +	mci->error_desc.grain = 8;
-> +	/* Set the function pointer to an actual operation function */
-
-Remove that obvious comment.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--8323328-1223704678-1734357443=:941--
 
