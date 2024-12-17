@@ -1,384 +1,199 @@
-Return-Path: <linux-edac+bounces-2729-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2730-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B99649F4022
-	for <lists+linux-edac@lfdr.de>; Tue, 17 Dec 2024 02:41:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92F999F40B7
+	for <lists+linux-edac@lfdr.de>; Tue, 17 Dec 2024 03:26:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD25C167CDC
-	for <lists+linux-edac@lfdr.de>; Tue, 17 Dec 2024 01:41:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D87441883084
+	for <lists+linux-edac@lfdr.de>; Tue, 17 Dec 2024 02:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C40D53389;
-	Tue, 17 Dec 2024 01:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="KC29tSKm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810BD13BAD5;
+	Tue, 17 Dec 2024 02:26:12 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106E479CD;
-	Tue, 17 Dec 2024 01:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE7D12F375;
+	Tue, 17 Dec 2024 02:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734399692; cv=none; b=H/dDXJJUEqZhdxkKnBmcLqDJoBV34lm7oux1HkNBrOJqK3gOcNM6LY5oWRIrCQMghJ6hwC7kn1OQCHK0slOPowPg/sDOOm9y3e4Dc3INr/kigCyN16cUdDpI1oNn/VexZQwxZF/rqWiRR4FhCZmA/no3czxESzDEpqOLR4XTre4=
+	t=1734402372; cv=none; b=bVlPGlenrt0fGhNf4uPiFfVKglyEgm0D/9cvMi6/+cm0n9jfL0rGEfrl6NqIMBkzp9WhXIDT3J2KJ2+Z92fXGk8vybVeOzkKJVHC2rQAsU7V/WrVym7gNakPi5vFaoP3hqMueRdDKiTJQnRkDqrbAEzMeucBkTOzRy9I3zWEntY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734399692; c=relaxed/simple;
-	bh=SPpFf5VwR3SGTLqdj40gmM7zGUjEz5W7fnB5fSbgyDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ps7bPBivwVNG66zkIKcLxhdSANFo2ZA5makVkll6Ni6uTx3y2WvJZDcgmlSrwqMxvR/lm3DIz8Cnwo3xUWUIFDgkwWHI1pHUV6bgSPRQtwZo8FGdzGY3ZK7q9WnqIpxHP4bhlR+nQZ+L2OdxVx/mGdKNuV4O80MmNDW9Bx24TK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=KC29tSKm; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1734399681; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=1wr8aDe7GjDB5Kp4DGPjbGDaTM/a+mrqZeQFmnsgb9s=;
-	b=KC29tSKmkZw/LugUDrg/1EtKfVIzKYLcSmh3yczuHBaFqmrAf2/GtRzrg5vgX2AN4W2QGCR/3WizWfh7PXiG0zoUNHvXU4Lys4NsYEzi8gEH3RGjHGaAlfZOb8Zg/dB+iaZVKmR9kf77J/eATtxvkJyPCxi12xU5aSfZDj0mY70=
-Received: from 30.246.161.240(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WLghEcF_1734399677 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 17 Dec 2024 09:41:19 +0800
-Message-ID: <8a8511f3-ace1-4187-8030-55a72573c63d@linux.alibaba.com>
-Date: Tue, 17 Dec 2024 09:41:17 +0800
+	s=arc-20240116; t=1734402372; c=relaxed/simple;
+	bh=kdDaiTNEfIt7Rl9g4y1oqqYwy61EJNOPtOr3m3Q2zPU=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=hXXWQNg8LG9lldwC1pEzITiCk0BkjsoVNiG0cdbH/YdDrcqy0Gq4whM4djWnbqzyhZP1nBJtAgtapbxtCR/l7JgrAW4Ra631ypwPWrvPyveVVoqzY535VmBTNXa5HO/tWZfL3dOXKGXPkAnYa9R3U+LrTsYgnk7ps9HRN8iz7eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8AxquE_4WBn555XAA--.43626S3;
+	Tue, 17 Dec 2024 10:26:07 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMAxL+E74WBnCeyFAA--.16426S2;
+	Tue, 17 Dec 2024 10:26:05 +0800 (CST)
+Subject: Re: [PATCH V10 RESEND] EDAC: Add EDAC driver for loongson memory
+ controller
+To: Borislav Petkov <bp@alien8.de>
+Cc: chenhuacai@kernel.org, linux-edac@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@xen0n.name, tony.luck@intel.com,
+ james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+ loongarch@lists.linux.dev, xry111@xry111.site, Markus.Elfring@web.de,
+ Jonathan.Cameron@huawei.com, Huacai Chen <chenhuacai@loongson.cn>
+References: <20241216013351.15432-1-zhaoqunqin@loongson.cn>
+ <20241216115546.GHZ2AVQi9u5lABWboE@fat_crate.local>
+From: Zhao Qunqin <zhaoqunqin@loongson.cn>
+Message-ID: <2d4e5bd0-34dc-d781-3bd6-9eb7be2c1b17@loongson.cn>
+Date: Tue, 17 Dec 2024 10:25:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v17 3/3] ACPI: APEI: handle synchronous exceptions in task
- work
-To: jane.chu@oracle.com, yazen.ghannam@amd.com, mark.rutland@arm.com,
- catalin.marinas@arm.com, mingo@redhat.com, robin.murphy@arm.com,
- Jonathan.Cameron@Huawei.com, bp@alien8.de, rafael@kernel.org,
- linux-arm-kernel@lists.infradead.org, wangkefeng.wang@huawei.com,
- tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
- linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com,
- tongtiangen@huawei.com, gregkh@linuxfoundation.org, will@kernel.org,
- jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
- ardb@kernel.org, ying.huang@intel.com, ashish.kalra@amd.com,
- baolin.wang@linux.alibaba.com, tglx@linutronix.de,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com
-References: <20241202030527.20586-1-xueshuai@linux.alibaba.com>
- <20241202030527.20586-4-xueshuai@linux.alibaba.com>
- <d7adcb58-7a1d-4f0b-a55d-40c12ca60b02@oracle.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <d7adcb58-7a1d-4f0b-a55d-40c12ca60b02@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20241216115546.GHZ2AVQi9u5lABWboE@fat_crate.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMAxL+E74WBnCeyFAA--.16426S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxCFW8Wry8uw43Kw4UJw4rtFc_yoW5Kw1kpr
+	98CanFkr4jqr17Gw40qryqvF15Zrs2yr9Iy39xJa4YkwnIyr1xW395ta12krnakrn8tr1f
+	Za45Grn7u3WDKFgCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUU
+	U==
 
 
+在 2024/12/16 下午7:55, Borislav Petkov 写道:
+> On Mon, Dec 16, 2024 at 09:33:51AM +0800, Zhao Qunqin wrote:
+>> +LOONGSON EDAC DRIVER
+>> +M:	Zhao Qunqin <zhaoqunqin@loongson.cn>
+>> +L:	linux-edac@vger.kernel.org
+>> +S:	Maintained
+>> +F:	drivers/edac/loongson_edac.c
+> If you add yourself as a maintainer, I'd expect you to review and/or ack
+> patches for your driver so that I can pick them up.
+OK. I can review the patches for this driver.
+>
+>> +config EDAC_LOONGSON
+>> +	tristate "Loongson Memory Controller"
+>> +	depends on (LOONGARCH && ACPI) || COMPILE_TEST
+> The COMPILE_TEST thing would mean that you'll make sure this driver always
+> builds on other arches and it doesn't break randconfig builds of people. If it
+> happens too often and no one is fixing it, I'll remove the COMPILE_TEST.
+There have indeed been build errors on other arches. So i will remove it.
+>> +	help
+>> +	  Support for error detection and correction on the Loongson
+>> +	  family memory controller. This driver reports single bit
+>> +	  errors (CE) only. Loongson-3A5000/3C5000/3D5000/3A6000/3C6000
+>> +	  are compatible.
+>>   
+>>   endif # EDAC
+>> +static int read_ecc(struct mem_ctl_info *mci)
+>> +{
+>> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
+>> +	u64 ecc;
+>> +	int cs;
+>> +
+>> +	if (!pvt->ecc_base)
+> When can that even happen? You're initializing it properly in pvt_init().
+Will remove this check.
+>> +		return pvt->last_ce_count;
+>> +
+>> +	ecc = readq(pvt->ecc_base + ECC_CS_COUNT_REG);
+>> +	/* cs0 -- cs3 */
+>> +	cs = ecc & 0xff;
+>> +	cs += (ecc >> 8) & 0xff;
+>> +	cs += (ecc >> 16) & 0xff;
+>> +	cs += (ecc >> 24) & 0xff;
+>> +
+>> +	return cs;
+>> +}
+>> +
+>> +static void edac_check(struct mem_ctl_info *mci)
+>> +{
+>> +	struct loongson_edac_pvt *pvt = mci->pvt_info;
+>> +	int new, add;
+>> +
+>> +	new = read_ecc(mci);
+>> +	add = new - pvt->last_ce_count;
+>> +	pvt->last_ce_count = new;
+> That last_ce_count is just silly. Kill it.
 
-在 2024/12/17 07:53, jane.chu@oracle.com 写道:
-> 
-> On 12/1/2024 7:05 PM, Shuai Xue wrote:
->> The memory uncorrected error could be signaled by asynchronous interrupt
->> (specifically, SPI in arm64 platform), e.g. when an error is detected by
->> a background scrubber, or signaled by synchronous exception
->> (specifically, data abort exception in arm64 platform), e.g. when a CPU
->> tries to access a poisoned cache line. Currently, both synchronous and
->> asynchronous error use memory_failure_queue() to schedule
->> memory_failure() to exectute in a kworker context.
->>
->> As a result, when a user-space process is accessing a poisoned data, a
->> data abort is taken and the memory_failure() is executed in the kworker
->> context, memory_failure():
->>
->>    - will send wrong si_code by SIGBUS signal in early_kill mode, and
->>    - can not kill the user-space in some cases resulting a synchronous
->>      error infinite loop
->>
->> Issue 1: send wrong si_code in early_kill mode
->>
->> Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
->> MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
->> could be used to determine whether a synchronous exception occurs on
->> ARM64 platform.  When a synchronous exception is detected, the kernel is
->> expected to terminate the current process which has accessed poisoned
->> page. This is done by sending a SIGBUS signal with an error code
->> BUS_MCEERR_AR, indicating an action-required machine check error on
->> read.
->>
->> However, when kill_proc() is called to terminate the processes who have
->> the poisoned page mapped, it sends the incorrect SIGBUS error code
->> BUS_MCEERR_AO because the context in which it operates is not the one
->> where the error was triggered.
->>
->> To reproduce this problem:
->>
->>    #sysctl -w vm.memory_failure_early_kill=1
->>    vm.memory_failure_early_kill = 1
->>
->>    # STEP2: inject an UCE error and consume it to trigger a synchronous error
->>    #einj_mem_uc single
->>    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->>    injecting ...
->>    triggering ...
->>    signal 7 code 5 addr 0xffffb0d75000
->>    page not present
->>    Test passed
->>
->> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO
->> error and it is not the fact.
->>
->> After this patch:
->>
->>    # STEP1: enable early kill mode
->>    #sysctl -w vm.memory_failure_early_kill=1
->>    vm.memory_failure_early_kill = 1
->>    # STEP2: inject an UCE error and consume it to trigger a synchronous error
->>    #einj_mem_uc single
->>    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->>    injecting ...
->>    triggering ...
->>    signal 7 code 4 addr 0xffffb0d75000
->>    page not present
->>    Test passed
->>
->> The si_code (code 4) from einj_mem_uc indicates that it is a BUS_MCEERR_AR
->> error as we expected.
->>
->> Issue 2: a synchronous error infinite loop
->>
->> If a user-space process, e.g. devmem, accesses a poisoned page for which
->> the HWPoison flag is set, kill_accessing_process() is called to send
->> SIGBUS to current processs with error info. Because the memory_failure()
->> is executed in the kworker context, it will just do nothing but return
->> EFAULT. So, devmem will access the posioned page and trigger an
->> exception again, resulting in a synchronous error infinite loop. Such
->> exception loop may cause platform firmware to exceed some threshold and
->> reboot when Linux could have recovered from this error.
->>
->> To reproduce this problem:
->>
->>    # STEP 1: inject an UCE error, and kernel will set HWPosion flag for related page
->>    #einj_mem_uc single
->>    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->>    injecting ...
->>    triggering ...
->>    signal 7 code 4 addr 0xffffb0d75000
->>    page not present
->>    Test passed
->>
->>    # STEP 2: access the same page and it will trigger a synchronous error infinite loop
->>    devmem 0x4092d55b400
->>
->> To fix above two issues, queue memory_failure() as a task_work so that
->> it runs in the context of the process that is actually consuming the
->> poisoned data.
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> Tested-by: Ma Wupeng <mawupeng1@huawei.com>
->> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->> Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
->> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> ---
->>   drivers/acpi/apei/ghes.c | 77 +++++++++++++++++++++++-----------------
->>   include/acpi/ghes.h      |  3 --
->>   include/linux/mm.h       |  1 -
->>   mm/memory-failure.c      | 13 -------
->>   4 files changed, 44 insertions(+), 50 deletions(-)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 106486bdfefc..70f2ee3ad1a8 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -467,28 +467,41 @@ static void ghes_clear_estatus(struct ghes *ghes,
->>   }
->>   /*
->> - * Called as task_work before returning to user-space.
->> - * Ensure any queued work has been done before we return to the context that
->> - * triggered the notification.
->> + * struct ghes_task_work - for synchronous RAS event
->> + *
->> + * @twork:                callback_head for task work
->> + * @pfn:                  page frame number of corrupted page
->> + * @flags:                work control flags
->> + *
->> + * Structure to pass task work to be handled before
->> + * returning to user-space via task_work_add().
->>    */
->> -static void ghes_kick_task_work(struct callback_head *head)
->> +struct ghes_task_work {
->> +    struct callback_head twork;
->> +    u64 pfn;
->> +    int flags;
->> +};
->> +
->> +static void memory_failure_cb(struct callback_head *twork)
->>   {
->> -    struct acpi_hest_generic_status *estatus;
->> -    struct ghes_estatus_node *estatus_node;
->> -    u32 node_len;
->> +    struct ghes_task_work *twcb = container_of(twork, struct ghes_task_work, twork);
->> +    int ret;
->> -    estatus_node = container_of(head, struct ghes_estatus_node, task_work);
->> -    if (IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
->> -        memory_failure_queue_kick(estatus_node->task_work_cpu);
->> +    ret = memory_failure(twcb->pfn, twcb->flags);
->> +    gen_pool_free(ghes_estatus_pool, (unsigned long)twcb, sizeof(*twcb));
->> -    estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->> -    node_len = GHES_ESTATUS_NODE_LEN(cper_estatus_len(estatus));
->> -    gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len);
->> +    if (!ret || ret == -EHWPOISON || ret == -EOPNOTSUPP)
->> +        return;
->> +
->> +    pr_err("%#llx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
->> +            twcb->pfn, current->comm, task_pid_nr(current));
->> +    force_sig(SIGBUS);
->>   }
->>   static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>   {
->>       unsigned long pfn;
->> +    struct ghes_task_work *twcb;
->>       if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
->>           return false;
->> @@ -501,6 +514,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>           return false;
->>       }
->> +    if (flags == MF_ACTION_REQUIRED && current->mm) {
->> +        twcb = (void *)gen_pool_alloc(ghes_estatus_pool, sizeof(*twcb));
->> +        if (!twcb)
->> +            return false;
->> +
->> +        twcb->pfn = pfn;
->> +        twcb->flags = flags;
->> +        init_task_work(&twcb->twork, memory_failure_cb);
->> +        task_work_add(current, &twcb->twork, TWA_RESUME);
->> +        return true;
->> +    }
->> +
->>       memory_failure_queue(pfn, flags);
->>       return true;
->>   }
->> @@ -745,7 +770,7 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
->>   }
->>   EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, CXL);
->> -static bool ghes_do_proc(struct ghes *ghes,
->> +static void ghes_do_proc(struct ghes *ghes,
->>                const struct acpi_hest_generic_status *estatus)
->>   {
->>       int sev, sec_sev;
->> @@ -811,8 +836,6 @@ static bool ghes_do_proc(struct ghes *ghes,
->>               current->comm, task_pid_nr(current));
->>           force_sig(SIGBUS);
->>       }
->> -
->> -    return queued;
->>   }
->>   static void __ghes_print_estatus(const char *pfx,
->> @@ -1114,9 +1137,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>       struct ghes_estatus_node *estatus_node;
->>       struct acpi_hest_generic *generic;
->>       struct acpi_hest_generic_status *estatus;
->> -    bool task_work_pending;
->>       u32 len, node_len;
->> -    int ret;
->>       llnode = llist_del_all(&ghes_estatus_llist);
->>       /*
->> @@ -1131,25 +1152,16 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>           estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->>           len = cper_estatus_len(estatus);
->>           node_len = GHES_ESTATUS_NODE_LEN(len);
->> -        task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
->> +
->> +        ghes_do_proc(estatus_node->ghes, estatus);
->> +
->>           if (!ghes_estatus_cached(estatus)) {
->>               generic = estatus_node->generic;
->>               if (ghes_print_estatus(NULL, generic, estatus))
->>                   ghes_estatus_cache_add(generic, estatus);
->>           }
->> -
->> -        if (task_work_pending && current->mm) {
->> -            estatus_node->task_work.func = ghes_kick_task_work;
->> -            estatus_node->task_work_cpu = smp_processor_id();
->> -            ret = task_work_add(current, &estatus_node->task_work,
->> -                        TWA_RESUME);
->> -            if (ret)
->> -                estatus_node->task_work.func = NULL;
->> -        }
->> -
->> -        if (!estatus_node->task_work.func)
->> -            gen_pool_free(ghes_estatus_pool,
->> -                      (unsigned long)estatus_node, node_len);
->> +        gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
->> +                  node_len);
->>           llnode = next;
->>       }
->> @@ -1210,7 +1222,6 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
->>       estatus_node->ghes = ghes;
->>       estatus_node->generic = ghes->generic;
->> -    estatus_node->task_work.func = NULL;
->>       estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->>       if (__ghes_read_estatus(estatus, buf_paddr, fixmap_idx, len)) {
->> diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
->> index be1dd4c1a917..ebd21b05fe6e 100644
->> --- a/include/acpi/ghes.h
->> +++ b/include/acpi/ghes.h
->> @@ -35,9 +35,6 @@ struct ghes_estatus_node {
->>       struct llist_node llnode;
->>       struct acpi_hest_generic *generic;
->>       struct ghes *ghes;
->> -
->> -    int task_work_cpu;
->> -    struct callback_head task_work;
->>   };
->>   struct ghes_estatus_cache {
->> diff --git a/include/linux/mm.h b/include/linux/mm.h
->> index c39c4945946c..aa4246c7c23e 100644
->> --- a/include/linux/mm.h
->> +++ b/include/linux/mm.h
->> @@ -3936,7 +3936,6 @@ enum mf_flags {
->>   int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
->>                 unsigned long count, int mf_flags);
->>   extern int memory_failure(unsigned long pfn, int flags);
->> -extern void memory_failure_queue_kick(int cpu);
->>   extern int unpoison_memory(unsigned long pfn);
->>   extern atomic_long_t num_poisoned_pages __read_mostly;
->>   extern int soft_offline_page(unsigned long pfn, int flags);
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 14c316d7d38d..e0adb665d07b 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2499,19 +2499,6 @@ static void memory_failure_work_func(struct work_struct *work)
->>       }
->>   }
->> -/*
->> - * Process memory_failure work queued on the specified CPU.
->> - * Used to avoid return-to-userspace racing with the memory_failure workqueue.
->> - */
->> -void memory_failure_queue_kick(int cpu)
->> -{
->> -    struct memory_failure_cpu *mf_cpu;
->> -
->> -    mf_cpu = &per_cpu(memory_failure_cpu, cpu);
->> -    cancel_work_sync(&mf_cpu->work);
->> -    memory_failure_work_func(&mf_cpu->work);
->> -}
->> -
->>   static int __init memory_failure_init(void)
->>   {
->>       struct memory_failure_cpu *mf_cpu;
-> 
-> Looks good.
-> 
-> Reviewed-by: Jane Chu <jane.chu@oracle.com>
-> 
-> -jane
-> 
+Then  I  can't calculate the error count added since the last check,  cause
 
-Thanks.
+what record in Loongson's ECC register is  the error count  from reset of
 
-Best Regards,
-Shuai
+the memory controller.
+
+>> +	if (add <= 0)
+>> +		return;
+>> +
+>> +	edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, add,
+>> +			     0, 0, 0, 0, 0, -1, "error", "");
+>> +	edac_mc_printk(mci, KERN_INFO, "add: %d", add);
+> "add"? What are you adding? Error count?
+>
+> No need.
+Will remove this printk.
+>> +static int edac_probe(struct platform_device *pdev)
+>> +{
+>> +	struct edac_mc_layer layers[2];
+>> +	struct mem_ctl_info *mci;
+>> +	void __iomem *vbase;
+>> +	int ret;
+>> +
+>> +	vbase = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(vbase))
+>> +		return PTR_ERR(vbase);
+>> +
+>> +	/* allocate a new MC control structure */
+>> +	layers[0].type = EDAC_MC_LAYER_CHANNEL;
+>> +	layers[0].size = 1;
+>> +	layers[0].is_virt_csrow = false;
+>> +	layers[1].type = EDAC_MC_LAYER_SLOT;
+>> +	layers[1].size = 1;
+>> +	layers[1].is_virt_csrow = true;
+>> +	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
+>> +			    sizeof(struct loongson_edac_pvt));
+>> +	if (mci == NULL)
+>> +		return -ENOMEM;
+>> +
+>> +	mci->mc_idx = edac_device_alloc_index();
+>> +	mci->mtype_cap = MEM_FLAG_RDDR4;
+>> +	mci->edac_ctl_cap = EDAC_FLAG_NONE;
+>> +	mci->edac_cap = EDAC_FLAG_NONE;
+>> +	mci->mod_name = "loongson_edac.c";
+>> +	mci->ctl_name = "loongson_edac_ctl";
+>> +	mci->dev_name = "loongson_edac_dev";
+>> +	mci->ctl_page_to_phys = NULL;
+>> +	mci->pdev = &pdev->dev;
+>> +	mci->error_desc.grain = 8;
+>> +	/* Set the function pointer to an actual operation function */
+> Remove that obvious comment.
+
+OK
+
+Thanks for taking the time to review.
+
+Best regards
+
+>
+
 
