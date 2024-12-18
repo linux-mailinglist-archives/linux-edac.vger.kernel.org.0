@@ -1,147 +1,173 @@
-Return-Path: <linux-edac+bounces-2738-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2739-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FCA59F6857
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2024 15:26:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A8E29F69E1
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2024 16:20:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 490EE7A16E8
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2024 14:26:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C6B7162DE6
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Dec 2024 15:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362031C2304;
-	Wed, 18 Dec 2024 14:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7BD41BEF88;
+	Wed, 18 Dec 2024 15:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="chvdzgvx"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SuMgaRI2"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8023270819;
-	Wed, 18 Dec 2024 14:25:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734531902; cv=none; b=tuoH6c+Yi8SXV2CqoXEAu0MY65B1fGM7mbpv9M53vrP1baqpxvCyELdb05s+BrATkPQO6N9CcrYBJJv6w3QFOyyghVieRcePY+qSG0nNavaaZnfKSHKEyJW1agtRtSWfCHhLSzkDpWLodwOttmK6K7bhr0olVXF9aw9IfVpLRqg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734531902; c=relaxed/simple;
-	bh=jXV7XyJRmu6HSpyyngB1vqa+GMDUyf2VJ19KpM94/gU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=QpOpySKcAiQ5doXyuuf0p0FVSi7h2zHy4w32TrZbCKUP4ybsiD2mej/U0yGHl7bpMDcfXhNWNY4sY5+jY7p0P+VOPLN5LamrIPM2JVT+rFszm69DdsNN0Jhwd8ckWSojIQbvUCn/VMn6sUZiVTnugzDH0X0JUNHGFaHs1JfsF98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=chvdzgvx; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734531901; x=1766067901;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=jXV7XyJRmu6HSpyyngB1vqa+GMDUyf2VJ19KpM94/gU=;
-  b=chvdzgvx1EcQf8OWC7kFicO2U8l8Jxm1O/zSrHLd6vjyXrOv8i9u6OeK
-   aFkjuiYsS5bRScK55LsJpqiKaIzDqIwuEs5MpVgDL7wDzkLi/90rPDcj5
-   pCPP5IRvOMulZ/ENQ+WzBgIrQZ2/qZ0oNsDZ4+9SCooeKim+taUSxN9j1
-   KmbyvhtyPDt9D/0MfxtDk2vr2X6PiIcC49ZheHGH6IWcmRKFJy3waEQ//
-   f5h503gPJrZ3uKA/6BgLIOeh0nYtj+xnK7bVD16o/TUl4YHIIkBFwa2dG
-   cJcufanjveSr0hU9GY5UfHrdQnOXzi2g6Qges3/O9BI+xj5YnYRnZf/S/
-   w==;
-X-CSE-ConnectionGUID: YHPtWxDoQOWb9040rwSWOw==
-X-CSE-MsgGUID: rebR7kzMRLWjxUYxtHJiEg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="38685438"
-X-IronPort-AV: E=Sophos;i="6.12,244,1728975600"; 
-   d="scan'208";a="38685438"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 06:25:00 -0800
-X-CSE-ConnectionGUID: RHbH0LbbQEKEF3SQ2pyDSw==
-X-CSE-MsgGUID: 9XnzB4UkSN2aOMnrmYKyFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="98696671"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.138])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 06:24:57 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 18 Dec 2024 16:24:53 +0200 (EET)
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-cc: Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org, 
-    Lukas Wunner <lukas@wunner.de>, Borislav Petkov <bp@alien8.de>, 
-    linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linuxppc-dev@lists.ozlabs.org, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-    Oliver O'Halloran <oohall@gmail.com>, Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH 0/3] PCI: Add support for logging Flit Mode TLPs
- (PCIe6)
-In-Reply-To: <20241217214929.GA1121691@yaz-khff2.amd.com>
-Message-ID: <bbd52a2b-a97f-7825-c271-0f470b75df1b@linux.intel.com>
-References: <20240614150921.29724-1-ilpo.jarvinen@linux.intel.com> <20241217214929.GA1121691@yaz-khff2.amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A19E1BEF60;
+	Wed, 18 Dec 2024 15:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734535223; cv=fail; b=K1qgbapv6M1cQX6ysyCeFJ6IL5KRuK94eWK8lEaperwretMqyUGfNKOYzTp5kHtKz66vY22Ndj+CRNysNaZEi3Qj6fGUMRSTCqCVDSOaVatFiSXmrGuXDG5XtilL0Ezw4t6BXNDDblz6k51jte/5ryQio0ia0rxlXiu3TBRQWAg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734535223; c=relaxed/simple;
+	bh=20+IADKQG/Gyc7fufnUgAjInR99rPPoL69KugxqAaGs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=MYu2K2g9Md5tBY2MDlgD5YYFjPymnSmq30xbrvPTqVlLgZVAwsct1PXR8rLA13yEk6OrnrwKZA5Rjm8+20kuXFNCDwyvePukIrhKTDX1KAwUwxLttqS2UoothGkbCplMOZaEUmqOxQNqoqqgjQjR+R/S9ZqDo8WA7oEo3ISG4BQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SuMgaRI2; arc=fail smtp.client-ip=40.107.243.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cIcxZTPpI4Gs0RAfu+0jZ/Wy55WoTJToKtKj9/UgAsgwEcCHMncBA0q97r+ybrDFOKJgFA8a4u44odEuW1sNQO5z+NaOBZ9z24LKmvGNbZ4DIMo8BRyXOdr5snGFKAox6vW86ASLzNVnwXkRJvMWTWb7otIq9KPqLoo4H6C1ZS/u1CaEJpycsaY2t4U2KCMkc1XL5XXr7w+0abtvbabNL9eCr8SKqYz0nA5zZCce1Nr7ZD4y2+ZS8AH/fmOKfukWIr6Ky+VIMCpxpSxuQ3qYOZkKMj8oQq2K5y4q1oEbeIMsWe5J1coYhXS8vdIgR8rbYAww9VqJpiiL30LGF4qcwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3x6wsBSDILdzKXinXNhdsjrvQxiYQDson6i11BiO/ZQ=;
+ b=vOArVI0BBYysV4ygYWtnWj/pG0K8cSEIiFFinfTza2byP8gb2Ubz91RZ0TSaawXOx1kZ6DbvJA65rslEbHSmfRWoBrcG3RW4S8TtXs1/Mrp2Opyh5AUHk5Diyg0prX7EqjbI93b3LXJtj9fznHGFRM7gTs9Ka6PMTXdVUaVyJj3RLtqQHmc5LjoGLd4k7LtWjPo/ljWgooYmOW03p3YyatBZe4fOVQvZZgYbLTepuCO1FknuYRYTg4N4U79gt1LET0CFzx8QnEgMEwv2J4mK62eaIwgFEJ5FgFAeE1jeAPhIi0OTHAahsFIVNlJBisTZLmiGeA6F/tdLVoKYDr14aA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3x6wsBSDILdzKXinXNhdsjrvQxiYQDson6i11BiO/ZQ=;
+ b=SuMgaRI2ney9en01iJKERrxFJIYzjwj3ZH6stPg5ybMjSKhlrmI2d8VBSUUX7EyGy3LINgHmZxLotuAqJw251Wdr2kqPzW6RtX20Qe/jBJZC4YS3qwp/Qq0kKL+nJVfbNaHXmGi5TmgonkT5eCut+gC7oF42nem2tfkM00tEsBg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ SA1PR12MB7222.namprd12.prod.outlook.com (2603:10b6:806:2bf::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.13; Wed, 18 Dec
+ 2024 15:20:19 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%6]) with mapi id 15.20.8251.015; Wed, 18 Dec 2024
+ 15:20:19 +0000
+Date: Wed, 18 Dec 2024 10:20:15 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc: bp@alien8.de, tony.luck@intel.com, tglx@linutronix.de,
+	dave.hansen@linux.intel.com, mingo@redhat.com, hpa@zytor.com,
+	sohil.mehta@intel.com, nik.borisov@suse.com, x86@kernel.org,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/7] x86/mce: Make several functions return bool
+Message-ID: <20241218152015.GA1155365@yaz-khff2.amd.com>
+References: <20241111060428.44258-1-qiuxu.zhuo@intel.com>
+ <20241212140103.66964-1-qiuxu.zhuo@intel.com>
+ <20241212140103.66964-2-qiuxu.zhuo@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241212140103.66964-2-qiuxu.zhuo@intel.com>
+X-ClientProxiedBy: BN0PR04CA0160.namprd04.prod.outlook.com
+ (2603:10b6:408:eb::15) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-666698470-1734529599=:939"
-Content-ID: <57976c77-cac9-bb7b-8590-a5b03a24285f@linux.intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|SA1PR12MB7222:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7730ce8b-0d5e-42b4-7bea-08dd1f777b88
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?/LxTx+uz5bplcKLco81iGQECmGEZn4S0cWQ13sCEemdhxdhuzN+ivGZBcsh5?=
+ =?us-ascii?Q?emVIIyW9XlxeSvhIj11SiDHOAVe1H05ic+bDBiazKHQy0BeQH4FscnjqSQce?=
+ =?us-ascii?Q?72vWCelNTXkrmXFf2QIEqZj9nDxmumAjTHL397vaGPEKm9SaEQmuk6N+I3qf?=
+ =?us-ascii?Q?jOdWdouJQpMItKH+/ZPw81lPtPIGevk3HCCnTblhHxK6Z9ltEdEfTNMeflsK?=
+ =?us-ascii?Q?r5DYJbeUUQBM3awFYuwO96zjqSl/VjS5uiUO9N5J8x460OX5WyeGHTrHESYE?=
+ =?us-ascii?Q?TavmOj8bOBrdgkI8Nsp7mKETCSsG/GowzBgd5CNNjrscXn7K+kQ7fMu893OP?=
+ =?us-ascii?Q?yN8fomlU6RMJf2cc3v5FumNm31GpNmOYLyCnZ2NcJ5gHTFdloQfZ21PPutsd?=
+ =?us-ascii?Q?jH90zBN3j8KPmbx34rZJ/Hg1SNi8ysTSP7MWjfY1nYuBSthgT2j+mTXHvuAx?=
+ =?us-ascii?Q?8RIPW5oe9wJVYXJEmRiLLbeiYTZAisWkxxYSGvkE2yyCmH8Y+kOF4mPnozaj?=
+ =?us-ascii?Q?M0WmRRlL+0X59XSRpMXSM6qQIqN+oQ3h0A7XM11zjMUZTLmp/tVWrGQjqooC?=
+ =?us-ascii?Q?BNYtojRRu4uZj25pK7t0rBIH0CZSqiNt55uAlFO+L2lmBsbn2LW/J6HKyzyH?=
+ =?us-ascii?Q?EkqdiRta/1Rrf7b/lG8eOqTIWzjFZE94EFsiiXsDQasbgkftnVdHtxvm2hiD?=
+ =?us-ascii?Q?vDERweZBuaWdhN0r4GX5vIkG+DdcMaTlEY8CDF+KBgxdOo7o3ysT0sFfalxt?=
+ =?us-ascii?Q?BHPyzCOGrfUGhc8PaX0vJIkE+I6GQbgwLFmEhQgKQN59iBnC0wtY8sxnzHjw?=
+ =?us-ascii?Q?VwiN1Bfweia/cWanh58c20XDfTC2biUePMayZNCtUeloHVBXfRCseIRYqnGT?=
+ =?us-ascii?Q?p+BEE2OjBZQlzsotJ8ffT63dVKpgc12fzIOJJ8qkPN40ZJThxAHtVzahD3tA?=
+ =?us-ascii?Q?9qlOx+blWP7Sh2Af29lZnWWEGdKw1BEmSl4JI2jQ9CY2r3FM7QmGgcyQTbg+?=
+ =?us-ascii?Q?ABXPKhNccVIobhYy5Uou1GUXsfdqrp+LrlXgIJpkXUMQetS1m76ammKRzwmw?=
+ =?us-ascii?Q?55FdAR2CxEYqitAmiuG0jPVEBUg0XGmzvH2ulmLvOcxU+MLUrXE2tc2O4Ojp?=
+ =?us-ascii?Q?+8VLD0MZnbJQBaZSvausRh3dzZwyMAium9oHigi+1N05K2Ds6NuwhX2ya/GE?=
+ =?us-ascii?Q?3+6O9PuMVO3DqD/LvcbJ9YqJAlZnHgoN1mQFo4gzITfCVUX3YPK6btiiDF2n?=
+ =?us-ascii?Q?WmcSWdI0tEaE1pBl2DUGEJkthoMO1TQm+F5eMfKJnJSnn/nNDLMyv0I3impQ?=
+ =?us-ascii?Q?yAH4bUW5gWtv3ME/ncMwC4nOkwjwa5yOyHXHFB/AmTCSxtME9bogvPT+qftS?=
+ =?us-ascii?Q?kA7V5o/fV7OLAvE4//mEa7ZTnMwi?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?o198TQF4Q6iCgwnsyZBAllWoT0TdiediP3LKVEmz4edPLUqb9R+CpEquDXlH?=
+ =?us-ascii?Q?CIwIB6fet3JNjUcpvImcYNllgmK6M3PUBmJGjIP2U7pS98TZHIsScrD05wwn?=
+ =?us-ascii?Q?NNvTaSXxMAOQ6faZLVxS5Gz/ZmnM1hnKadoHvzTOSTAWQP2EaphdOcCewPta?=
+ =?us-ascii?Q?vr+sKhssyBF+G85TvajORiQuxODklXug7P1T4DoL0/TjTd7uxfZyP5ZPR9y2?=
+ =?us-ascii?Q?SbCOf4eboGbug+s8owhH5C8HUDpJ1Rb8hNln3lCgiEbX15A4NWMYnIKtf5Y/?=
+ =?us-ascii?Q?/cxwe1zTlaEYWSC/eT0n3nM6HcUGmGPJAYhkp55HNSn1Dv6/fZ0wfIepGoom?=
+ =?us-ascii?Q?keatOHYlreCi4WNuB7wsGNAW9h4u19nj6WqiCx1/pRLH6Oq797d9wh2yqsw3?=
+ =?us-ascii?Q?bdORp6XQw0jTNDHPsrCtcwPMpBz0oR/UNSaHPlfthFYyMabbdnCtAHgB4Vgm?=
+ =?us-ascii?Q?uLiLqMND2IfP+/nsMJ5rPqxYcpic10cF7aDPzMx0iL6lLYaNTVxQBOHCJWko?=
+ =?us-ascii?Q?cIe1xNffONbZC/moGa/UxI7iAw55aE9QxcACbzZqx8vv57X/OK4BJBfuDHqB?=
+ =?us-ascii?Q?t7rMiBzroyK8sxiDO9ZTZRk49JG8cyswgoXlU3ZVrBj7cImG9SE4t9PWuaMs?=
+ =?us-ascii?Q?ciIUQeyHJYdF/RR/5n1x/9NyvA557fuEYMhSYnvWX89xvA1KDQmlZDmp/LLX?=
+ =?us-ascii?Q?C2I/bTO/f40p2snRfH0+TEx6G2e8F7ucf/HRtRE0YopNT/lAGXDO2lNUwcd6?=
+ =?us-ascii?Q?azmomunb2HfAxUBATP/zYE4YFMNq1NT/GJfqJtfxBNhvt3nfjmjt7tKN1PKC?=
+ =?us-ascii?Q?butAuGKehcl2PUi4tWuL5UaT9icSdXAFpsO60IS2UtPkiyuPNQUX1Sv1WXY7?=
+ =?us-ascii?Q?gu306GXp7L8iFr7jyL1/aKItwuASmNn2aT1hOJBbeTgqleHKQf8rXK999eoT?=
+ =?us-ascii?Q?sKHltn206AVQSaMOlHJaOWZVCgyBA4INqSDA6MRlB9TvbU+mh8+hSxc16iBn?=
+ =?us-ascii?Q?lChXIsjKEYJIKdcTqaM1ZUfaAvsnvz36Aj0q/nn4Cbh8A/TDm7XpHO4Yc67V?=
+ =?us-ascii?Q?Tu8GGBMMI5mn5FXtkj7ShQ0md/vIQaIONkVPk2L2oJ2uedIkjZQDuHNMwOTQ?=
+ =?us-ascii?Q?RLJpKkTRvRmsiaQe3h5lzlkQqYjWCy3gPvNu6sb4wxoWxOpx9yIRT44vdllZ?=
+ =?us-ascii?Q?tCNOv5z3iYu6WsYcMyYYLSONCWmJr4fAv7Q8COgPIRdhqChau33WV43ST21d?=
+ =?us-ascii?Q?SW214hmVoGeDH6z71t1/I2ksoSa9mJXFWxF8wkWsq6hBHCW69KvW0rpv6ZOH?=
+ =?us-ascii?Q?onDUryyJBilFJBL6GVln3cWFaDThzupO+OnGLoYLxK3scTCZOHkMMyYl5w4J?=
+ =?us-ascii?Q?qLpcQTiH/Ws5VOVPp4zDulq/s9uC+8AcTfNIWIXHl/PAbLG/f12SOcaIHY0w?=
+ =?us-ascii?Q?emW58nMhmPxtI/sOQZ7VuU25VsDHj/2yqaVn0i1NBZl937e3HAaPlZc2XN3w?=
+ =?us-ascii?Q?pmdKPlwk10AnOsCm1U/b50ThvprsyQ7+Di8cLByt2YIsbKoUEaka2aduNfid?=
+ =?us-ascii?Q?UmxMw4V664X3Dj80iNz6x+SwuuStFV3PN4hbsA4j?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7730ce8b-0d5e-42b4-7bea-08dd1f777b88
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2024 15:20:19.2466
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dMqbwrhRLkFrDuPKXOKOf4sHhoXjumy1IWd/C8nHF0AzOH5uNEWnSRmt9W2uS8fUAjDuH+IbkXqs2PPjTdehCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7222
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Thu, Dec 12, 2024 at 10:00:57PM +0800, Qiuxu Zhuo wrote:
+> Make several functions that return 0 or 1 return a boolean value for
+> better readability.
+> 
+> No functional changes are intended.
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+> Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
+> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
---8323328-666698470-1734529599=:939
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <e7996e2e-a4e3-0dc0-b045-a62823a48f7a@linux.intel.com>
+Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
-On Tue, 17 Dec 2024, Yazen Ghannam wrote:
-
-> On Fri, Jun 14, 2024 at 06:09:18PM +0300, Ilpo J=E4rvinen wrote:
-> > This series adds support for Flit Mode (PCIe6). The series is built on
-> > top of the TLP Logging refactoring series:
-> >=20
-> >   https://lore.kernel.org/linux-pci/20240514113109.6690-1-ilpo.jarvinen=
-@linux.intel.com/
-> >=20
-> > Important note to maintainer: The series carries
-> > pcie_update_link_speed() refactoring change that is almost identical
-> > with a patch in the PCIe BW controller series. The patch itself is
-> > basically the same but the context has minor difference. This will need
-> > to be considered if applying both series within the same kernel cycle.
-> >=20
-> > Ilpo J=E4rvinen (3):
-> >   PCI: Refactor pcie_update_link_speed()
-> >   PCI: Track Flit Mode Status & print it with link status
-> >   PCI: Handle TLP Log in Flit mode
-> >=20
-> >  drivers/pci/hotplug/pciehp_hpc.c |  5 +--
-> >  drivers/pci/pci.c                | 12 ++++---
-> >  drivers/pci/pci.h                | 13 ++++++--
-> >  drivers/pci/pcie/aer.c           |  4 ++-
-> >  drivers/pci/pcie/dpc.c           | 23 ++++++++++---
-> >  drivers/pci/pcie/tlp.c           | 57 ++++++++++++++++++++++----------
-> >  drivers/pci/probe.c              | 13 +++++---
-> >  include/linux/aer.h              | 13 ++++++--
-> >  include/linux/pci.h              |  1 +
-> >  include/ras/ras_event.h          | 12 +++----
-> >  include/uapi/linux/pci_regs.h    |  6 +++-
-> >  11 files changed, 112 insertions(+), 47 deletions(-)
->
-> Is there any new development on this feature? Or is it on hold while any
-> spec oversights are worked out in the PCI-SIG?
-
-As far as I know, the series is not on hold. It just tends to take time=20
-from Bjorn to get patches applied (and I don't want to pressure=20
-maintainers with frequent pings). But I think it might help if you would=20
-kindly review the patches. :-)
-
-And of course this series depends on the TLP cleanup series that has to=20
-be applied first (but hopefully that happens soon enough).
-
-When it comes to the spec oversight, we concluded with Lukas Wunner that=20
-even if DPC capability would eventually get a flag to indicate in which=20
-mode the TLP was logged we cannot assume the flags is always there. Thus,=
-=20
-this link Flit mode status tracking has to be done anyway. I know it's not=
-=20
-ideal because at least in theory the state kept by the kernel could be=20
-stale but there seems to no way around that given how the spec is.
-
---=20
- i.
---8323328-666698470-1734529599=:939--
+Thanks,
+Yazen
 
