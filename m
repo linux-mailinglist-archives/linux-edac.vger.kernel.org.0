@@ -1,122 +1,147 @@
-Return-Path: <linux-edac+bounces-2774-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2775-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B789A008D0
-	for <lists+linux-edac@lfdr.de>; Fri,  3 Jan 2025 12:43:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F241EA009B1
+	for <lists+linux-edac@lfdr.de>; Fri,  3 Jan 2025 14:02:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE0113A4707
-	for <lists+linux-edac@lfdr.de>; Fri,  3 Jan 2025 11:42:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6315164494
+	for <lists+linux-edac@lfdr.de>; Fri,  3 Jan 2025 13:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66171F8F11;
-	Fri,  3 Jan 2025 11:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="aAhBqa4i"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D931FA168;
+	Fri,  3 Jan 2025 13:02:23 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2FB1C9DF0;
-	Fri,  3 Jan 2025 11:42:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07991FA826;
+	Fri,  3 Jan 2025 13:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735904577; cv=none; b=QNyABIfVKuFkABUkIzZorVFaaWQwK32cOrenaycNeP6/2073QlRudsqeoFp3DbigrVTV1xffOxI/2vEu4wJf0rE4pT0GJ1ByCkNjeCEwq1T7e/SFJGGroDawHe4ep9m5f62Q4OEXJ1CjQZE7Itxf1ztxXLkp2S7p3rf9xo3z9Ts=
+	t=1735909343; cv=none; b=rqtRkAbd+Ivtg7pdj03otviRN6K/44GEI8ENY1l239qkd5EuS3rNV0UMa9ySRctRQLWbNa6TB8WpM2bL7PolGbxUlFw5DCfazFcjmsWB0Qc9OBSn30lOJN2i1cYFEJ+VTASDJlxrn+qJ0J4BZbGeEGkD42o7y2Go/MVQFLudKjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735904577; c=relaxed/simple;
-	bh=Uv99LYTK0zUbacU0U6he7tjsya8rnMgHbBh+fS2b2jw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=itNAb4TSK+cUsUum3Iwyf4qzPxSVe94Wfrjbjkd1pcT6PuzV95hTIY82E/R31qyVU2qq8TnvmxDXtCc+ukoH2uuHdMfwep8O/a9SIyH8czsCS8W+1jjqO3tx1VI+xmnxl/OziQXQQ2rSjHlNOa75zIw2S2BUrAU0EeBvjHHFlow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=aAhBqa4i; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 28BB840E021C;
-	Fri,  3 Jan 2025 11:42:46 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id tnfMMyzi7jTQ; Fri,  3 Jan 2025 11:42:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1735904557; bh=dS9aeDbA2J+XdXLCPiJmDBE8ECZ7zdxygk6M6pb3jI0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aAhBqa4iddBtH6YyXT2qQ5M4szH55349aTo4zCkRpwy1ggI/dcZ8APuZSAfRLD7yS
-	 Zf4JcLzQYkibsnDeUclDFD9g99GRvv+b2+vCf6ulJL58ykliLrgjGgJUXvBp+4VpIt
-	 wvbg/tbGpMkWlCcn/sqSSbW8Ygn5DOkHjAhGD/hNyk0XC+mYq12e7OCljJUobTMVON
-	 9G0rEZPQHFvUImHNC1EjJ9waZOokmzhW5GvC+r8mXC1LqpWWb4Ki5uGUz7QCZAMne3
-	 ++5l0w+M3qJONf5e4qohmq43oOI+w6V9NMpWp9n8qgF5m1w3VXMEYFzvgNAJRaD97L
-	 qYU7gCP/41vYeAGqayzNZzgofB5uxhU+/mVurlhIhBjEjb3tp5sKl31uaW9NAwqJyB
-	 hKZRcvhAdOTPjyTaNARMbgFNDAYUTaS0jOuhVBJ/RxFFReeajXjenrFh3tBOVd4tTf
-	 5Bnkw086E/0neelC0ykQXy2p8a8tChVp8LimHSpP++7S7J+w1DpiQNE4SC8aeAModH
-	 7/Mkw8BoBGF8olQirsgkGge+BjDNoSwUKgwzsqV3p4q+AQQ5dU8dFSZPEha7+0OHli
-	 vVkCTmGM47waNZerIHlaqHqtGE4KGknpNWksLnZuCnsaL2vTSIuMQTqRmVC6bqy5QX
-	 ENIoQvgqd9+T4Elpu3Rsz98s=
-Received: from zn.tnic (p200300Ea971F93bA329c23Fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:93ba:329c:23ff:fea6:a903])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F123840E01C5;
-	Fri,  3 Jan 2025 11:41:53 +0000 (UTC)
-Date: Fri, 3 Jan 2025 12:41:45 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: shiju.jose@huawei.com
-Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com,
-	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
-	dan.j.williams@intel.com, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
-	duenwen@google.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
-	wanghuiqiang@huawei.com, linuxarm@huawei.com
+	s=arc-20240116; t=1735909343; c=relaxed/simple;
+	bh=LkcB2FxoHHUQrXN3mm00p6wM76Ru+nWNH+b3LTICErU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t/jgaHrkCHLTwHwYcodfp0X+I19JodanRjW0/JAObARNlNzW/HAu1UFRBJrjatTfS5/yrc5k0tuaqcxgskEZfxxOuvVE9MdmPZ6DzHbjKzqrnD5KDfvc6D+Xmo2rcianc+WYBlmd1qYe1yFX50QrmeN1IsMe6DE5WtGz3CcDKOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YPkBp2Pl7z6K9L3;
+	Fri,  3 Jan 2025 20:57:54 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id E3021140367;
+	Fri,  3 Jan 2025 21:02:15 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 3 Jan
+ 2025 14:02:14 +0100
+Date: Fri, 3 Jan 2025 13:02:13 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: <shiju.jose@huawei.com>, <linux-edac@vger.kernel.org>,
+	<linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
+	<rafael@kernel.org>, <lenb@kernel.org>, <mchehab@kernel.org>,
+	<dan.j.williams@intel.com>, <dave@stgolabs.net>, <dave.jiang@intel.com>,
+	<alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+	<ira.weiny@intel.com>, <david@redhat.com>, <Vilas.Sridharan@amd.com>,
+	<leo.duran@amd.com>, <Yazen.Ghannam@amd.com>, <rientjes@google.com>,
+	<jiaqiyan@google.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
+	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
 Subject: Re: [PATCH v17 00/18] EDAC: Scrub: introduce generic EDAC RAS
  control feature driver + CXL/ACPI-RAS2 drivers
-Message-ID: <20250103114109.GAZ3fM1dEsyBSn9lWA@fat_crate.local>
+Message-ID: <20250103130213.00006abd@huawei.com>
+In-Reply-To: <20250103114109.GAZ3fM1dEsyBSn9lWA@fat_crate.local>
 References: <20241122180416.1932-1-shiju.jose@huawei.com>
+	<20250103114109.GAZ3fM1dEsyBSn9lWA@fat_crate.local>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241122180416.1932-1-shiju.jose@huawei.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100011.china.huawei.com (7.191.174.247) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Fri, Nov 22, 2024 at 06:03:57PM +0000, shiju.jose@huawei.com wrote:
->  drivers/edac/Makefile                         |    1 +
->  drivers/edac/ecs.c                            |  207 +++
->  drivers/edac/edac_device.c                    |  183 ++
->  drivers/edac/mem_repair.c                     |  492 +++++
->  drivers/edac/scrub.c                          |  209 +++
->  drivers/ras/Kconfig                           |   10 +
->  drivers/ras/Makefile                          |    1 +
->  drivers/ras/acpi_ras2.c                       |  385 ++++
->  include/acpi/ras2_acpi.h                      |   45 +
->  include/cxl/features.h                        |   48 +
->  include/cxl/mailbox.h                         |   45 +-
->  include/linux/edac.h                          |  238 +++
->  include/uapi/linux/cxl_mem.h                  |    3 +
+On Fri, 3 Jan 2025 12:41:45 +0100
+Borislav Petkov <bp@alien8.de> wrote:
 
-So what's the plan here? Am I supposed to merge the EDAC/RAS bits through the
-RAS tree and then give folks an immutable branch or how do we want to proceed
-here?
+> On Fri, Nov 22, 2024 at 06:03:57PM +0000, shiju.jose@huawei.com wrote:
+> >  drivers/edac/Makefile                         |    1 +
+> >  drivers/edac/ecs.c                            |  207 +++
+> >  drivers/edac/edac_device.c                    |  183 ++
+> >  drivers/edac/mem_repair.c                     |  492 +++++
+> >  drivers/edac/scrub.c                          |  209 +++
+> >  drivers/ras/Kconfig                           |   10 +
+> >  drivers/ras/Makefile                          |    1 +
+> >  drivers/ras/acpi_ras2.c                       |  385 ++++
+> >  include/acpi/ras2_acpi.h                      |   45 +
+> >  include/cxl/features.h                        |   48 +
+> >  include/cxl/mailbox.h                         |   45 +-
+> >  include/linux/edac.h                          |  238 +++
+> >  include/uapi/linux/cxl_mem.h                  |    3 +  
+> 
+> So what's the plan here? Am I supposed to merge the EDAC/RAS bits through the
+> RAS tree and then give folks an immutable branch or how do we want to proceed
+> here?
+> 
 
--- 
-Regards/Gruss,
-    Boris.
+Dave Jiang / Rafael, what would work best for the two of you?
 
-https://people.kernel.org/tglx/notes-about-netiquette
+To me Boris' suggestion makes sense, particularly as that
+avoids the complexity of CXL get/set features being in multiple series.
+
+I think the split that would make sense is:
+
+EDAC immutable branch for:
+ 1: EDAC: Add support for EDAC device features control
+ 2: Add scrub control feature
+ 3: EDAC: Add ECS control feature
+ 15: EDAC: Add memory repair control feature
+
+ACPI merges EDAC immutable +
+ 13: ACPI:RAS2: Add ACPI RAS2 driver
+ 14: ras: mem: Add memory ACPI RAS2 driver
+
+CXL merges EDAC immutable +
+ 4: cxl: Refactor user ioctl command path from mds to mailbox
+ 5: cxl: Add Get Supported Features command for kernel usage 
+ 6: cxl/mbox: Add GET_FEATURE mailbox command
+ 7: cxl: Add Get Feature command support for user submission
+ 8: cxl/mbox: Add SET_FEATURE mailbox command
+ 9: cxl: Add Set Feature command support for user submission
+ 10: cxl: Add UUIDs for the CXL RAS features
+ 11: cxl/memfeature: Add CXL memory device patrol scrub control feature
+ 12: cxl/memfeature: Add CXL memory device ECS control feature
+ 16: cxl/mbox: Add support for PERFORM_MAINTENANCE mailbox command
+ 17: cxl/memfeature: Add CXL memory device soft PPR control feature
+ 18: cxl/memfeature: Add CXL memory device memory sparing control feature
+
+That does mean that the actual drivers/edac/ specific drivers land
+via the ACPI and CXL trees only, but without another layer of immutable branches
+we can't avoid that. Might cause merge conflicts in Kconfig/Makefiles but otherwise
+shouldn't be too bad.
+
+There is going to be some noise in documentation as examples are added
+to the docs with the actual drivers (whereas generic docs are introduced
+with the infrastructure).  I think that will work out though.
+Shiju, could you spin this ordering up and check it all works
+(incorporating Dave's updates to the GET / SET feature)?
+
+Thanks,
+
+Jonathan
 
