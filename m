@@ -1,1546 +1,860 @@
-Return-Path: <linux-edac+bounces-2791-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2792-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BB7DA01EE7
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 06:35:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAEFFA024DA
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 13:11:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D40B16237A
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 05:35:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08022188546A
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 12:11:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 639721B412B;
-	Mon,  6 Jan 2025 05:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yZxWJqzI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8971DDA14;
+	Mon,  6 Jan 2025 12:11:34 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2044.outbound.protection.outlook.com [40.107.95.44])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552FB18EFC1;
-	Mon,  6 Jan 2025 05:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736141723; cv=fail; b=qfTkw5p/V3z4ooBTcRidNXt5LxhZyBnBBeGGKsw+3iRTMRzezNMnAjXXlIP7ZI9Xy8v6CRDgbi97G0JzGgkejiwgHsWKjpiPKVNPZJF4AWXPZIrGp+RPwSsBdzoBkoQm+6ryLASBw54CDxXoU2zr6vRdyobGD3Vu5IIAWPmGBcE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736141723; c=relaxed/simple;
-	bh=MVDqK/pDFuqaRu8Ikl/J/8CXMe+ry7d6qaW0YCcIf2A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L786E1S+rrlBjfoTu9VlMT2aRkEwOag2eeq+RdWoRuV2YskgliwL9iuwh6nHsSzjPgWFjOhbx94/yPjKpNssJHdi0RGdW6iXHsSeAHU5+i+zrfSSAxr4igsaH5wgHu7BO36jrLiKx9Tpd281/ztJxenC4aeDtLwDeN526yM2HKo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yZxWJqzI; arc=fail smtp.client-ip=40.107.95.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NP/XqK1kx1eeGOC7UvJPH/DG3yqncsMWLxaPaGjxV8uYpipsE3zPMYskwEOE/E0R3BjJFZ+yp5oTazS/+Yf11fvW6pwzSvkSu+BbsS3iRNJ/fE2GLSPZT2eQZGyXXDx+7Bl2UT9+NUn3IyhWdSBsMjHoyiYOGBOBWsJDA7yVguWAIdrkYZkUoeL1QCRxd689cnfpKyPF+WEkliU8RB2Zq6Im687mTHEkMrbef+G9/smiathEb4yWwkEoAnz4hzqpJZbsdSQjr2WoTJSC0RQy/6P5uYoJCL4Hxi73c/XM1ptFMFa131rAdq0I0jxhr0aFkxbifrVFu5e0jCy382hIHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lOs588uJeTeHO/hOT0c8qEVP0CQT6pM1Murgqcy0e2g=;
- b=uyw5Slu91uHDrx/g3FAaLzkM1W32FMHbeLCfXmSHDSbFjnRjDWAImnA19dTolZH414XGfLd6BXoqhcKpsOQMN60bXTmqoOqyGrjfMOaEyFJ1nKbdG0ndRMOyT37vhn7swQe+DJFv3T3NyvYzAkQtT07JgWQrUTvODofRSj7/NMTzAG03YUEXg4bi1/lgm5emoaSs/wVBN7MU3iqPwUY9YQQPvbdEaLJb/w03PD9/2JRTG6vuSCabUFTPDFbfwESn19mziXEkgRpEz0gFa4YL7HsVTDwWqXPlfcGFpMg5AsWwFU0A731LRbHT/EBMnQ8zS9DRmzQ5TkVpJrXkObjDMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lOs588uJeTeHO/hOT0c8qEVP0CQT6pM1Murgqcy0e2g=;
- b=yZxWJqzIpaUJpO4iJQiUHsIAzUj9Lh8a6zvOsd52fo72l5M3bWNRUzE6sbK2ZfMl/X7eg0tl6M9pCbIv1cmLMZ1B8aCFcwKTDAdw9ZUE5QCBST80yCj4taxIDyb2TTXLUc0JfQ5dsBOgGNerGlfq1pAK9w0r8HVUy+9wmYY1aXk=
-Received: from BYAPR05CA0005.namprd05.prod.outlook.com (2603:10b6:a03:c0::18)
- by MN0PR12MB6272.namprd12.prod.outlook.com (2603:10b6:208:3c0::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.17; Mon, 6 Jan
- 2025 05:34:59 +0000
-Received: from CO1PEPF000044F5.namprd05.prod.outlook.com
- (2603:10b6:a03:c0:cafe::d3) by BYAPR05CA0005.outlook.office365.com
- (2603:10b6:a03:c0::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8314.7 via Frontend Transport; Mon, 6
- Jan 2025 05:34:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044F5.mail.protection.outlook.com (10.167.241.75) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8335.7 via Frontend Transport; Mon, 6 Jan 2025 05:34:58 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 5 Jan
- 2025 23:34:57 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 5 Jan
- 2025 23:34:55 -0600
-Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Sun, 5 Jan 2025 23:34:52 -0600
-From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Borislav Petkov <bp@alien8.de>, Tony Luck
-	<tony.luck@intel.com>, James Morse <james.morse@arm.com>, "Mauro Carvalho
- Chehab" <mchehab@kernel.org>, Robert Richter <rric@kernel.org>, "Shubhrajyoti
- Datta" <shubhrajyoti.datta@amd.com>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-edac@vger.kernel.org>
-CC: <git@amd.com>
-Subject: [PATCH v5 5/5] EDAC: Versal NET: Add support for error notification
-Date: Mon, 6 Jan 2025 11:03:58 +0530
-Message-ID: <20250106053358.21664-6-shubhrajyoti.datta@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250106053358.21664-1-shubhrajyoti.datta@amd.com>
-References: <20250106053358.21664-1-shubhrajyoti.datta@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B01156C76;
+	Mon,  6 Jan 2025 12:11:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736165494; cv=none; b=AFQuS3QWh1PpexwUNwUlddGce7ylIo4mKN1MtfOrAYxeEhBgnTBJaQIj4fIPdH2b48X33j5DblLFw2n6h2nWJ81Va3+/hGq6wVGt4FY4chjz3NoUX98JOovFoMx6kMfkpkZPZ1JcIUkWegcSLU4WRr0lcfI0RkRjek/ccDBcav8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736165494; c=relaxed/simple;
+	bh=MfQUPoD1vkFDD1O9yWRBQtyLwBKbRYYE0hBOeoB4aAo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ClhIc6eqIdFrgb9rbC4gEzg7XCHkrsE1t5ea3V/HBLuiwcpA9Wag7n71Hb+HF1fT1H4B/DZbqNnX9brjBEzqmWZIBtJ7bvvtFD780iAgjN5IZPVHamBNhDd1eH/zxf5FQm0jeaNdWNF4tqTCYaOS6mvRfKTYC51biJmgbdE/b50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YRXwX6Qjfz6K9ZV;
+	Mon,  6 Jan 2025 20:06:52 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7A8FB140A08;
+	Mon,  6 Jan 2025 20:11:22 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.170.95) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 6 Jan 2025 13:11:20 +0100
+From: <shiju.jose@huawei.com>
+To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
+	<lenb@kernel.org>, <mchehab@kernel.org>, <dan.j.williams@intel.com>,
+	<dave@stgolabs.net>, <jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
+	<alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+	<ira.weiny@intel.com>, <david@redhat.com>, <Vilas.Sridharan@amd.com>,
+	<leo.duran@amd.com>, <Yazen.Ghannam@amd.com>, <rientjes@google.com>,
+	<jiaqiyan@google.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
+	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <yazen.ghannam@amd.com>, <tanxiaofei@huawei.com>,
+	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
+	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
+	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
+Subject: [PATCH v18 00/19] EDAC: Scrub: introduce generic EDAC RAS control feature driver + CXL/ACPI-RAS2 drivers
+Date: Mon, 6 Jan 2025 12:09:56 +0000
+Message-ID: <20250106121017.1620-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F5:EE_|MN0PR12MB6272:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ff211cb-4338-4a3f-d0b7-08dd2e13dbb8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|1800799024|376014|82310400026|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?foLGnahE0iKxvtL1qqjE+gonampAcYDKlDNoXtmi4n8UGsV1sF9YoSuLw/mD?=
- =?us-ascii?Q?Dh1G/fn8J85Xetq4nYt9OdHQxCokRrl1T6dIHhML/aZyWri1OwQbIHO8xo2f?=
- =?us-ascii?Q?s6NkS+ZkzXe0MAMk9mJI/p33l4OlW1knFH5j8tjqTGY1TUtfQlD5tcI12PgG?=
- =?us-ascii?Q?QFCiOfbZ/r/we72qNumyj95U2kWh6ezW7I78p2Iow/ds5BMJ6vNjj9DzT3Fa?=
- =?us-ascii?Q?w1WKPAUw6uWyr/gDEk2hfDs3R40Q4q42fMQQX6baKGs4UBoE5FC7eizx/6Ww?=
- =?us-ascii?Q?/fy7ap1WqIoyFKriUdGXIreRygJTll+Tt5vO9EzhXc+dfoKw5ilykxaEqJn6?=
- =?us-ascii?Q?IPIMP1/1j2l+GffxGbZc6FvCPaWOKd2mwLpZr18SV+HBAiSWL140/LX9e2lv?=
- =?us-ascii?Q?aFgTcoNbLeCWoZKznAAFlIuBc7UoK3hV1mlOuqmyFCqu74zhMYQcQ4vFVjOs?=
- =?us-ascii?Q?I2mliWmEKXYh102XgPF9Ov9PVYcUxdiuwPNV+2FV//4UD86qyOiaFfqDuym6?=
- =?us-ascii?Q?MpsJRPNX05ArBtPZJWhXmN717eRlouCE+DTTtLn45y7OobTGL9f6p1y+7rdj?=
- =?us-ascii?Q?WRy3HmQia/1wMRX61HfitzidsArweTy11+y+ncDyyNev6IisJaJP+07b4AUr?=
- =?us-ascii?Q?fOGr80J491WKxrdOynRvrwbbuBg0uYbxdzDs1m/JgQWlaNCY/l41VP4yGBqf?=
- =?us-ascii?Q?llkXM1XhtaVBoADMmw4NHglFqMsYLLxDgUelDbj9nqvxD+lvqFxVnSFMVX0m?=
- =?us-ascii?Q?7+1BiK7NGx0mbhPomcyZy6UHQ7crj+DsFbHBMhiRIpIl6d0ixo8ugLThvC8d?=
- =?us-ascii?Q?X7gIfm7hLv0QJVI/mhPc6Y4R5F8H7gPLROzAnPOmnIh00pwXGIOCqBMuRwxC?=
- =?us-ascii?Q?1GWVZleIEiGKkgiQNHunrxBa7vzsxYRJKpbSTcfFxynl01H6jm3jxv5eMTre?=
- =?us-ascii?Q?XhAZ4ui+X7T9gUWQ+eNiQR8DH7bypuPL/8AlvlaueR52TFVs3jsmi99mzPG5?=
- =?us-ascii?Q?CP0Vrdnb5+cE4thSa9n1nv/wAUg4N/4SHtTDnftwOTchtiYXnQbJpjmCyFiS?=
- =?us-ascii?Q?OBnby9sSfdS8tIio18ckfgEujJlkFIBV5XYaZb/gnqJgkxmvVrNKf8SR7m4d?=
- =?us-ascii?Q?lMYCBjMBy5MuxxK1n1mfDDs853x86cU72OanAfuj7hTfwSPq4JOD2yJV8RrG?=
- =?us-ascii?Q?438NjUZ87LMddGp2a4OHx8LadKDeNI+DpjZpnM5HEXVjAAoA7Kg1fqtcytRR?=
- =?us-ascii?Q?8CxbHt8LRxj7ZLgJ8M//X9PGnf+LQPzM+Qx1Dq71gfPa50veBqJRrD0M/XMy?=
- =?us-ascii?Q?G03u+Gt3F7mLGObbM/9sIFYVnxyiGb2SlWGwyiPB+c5yZDiw0Kkxi8cltCuI?=
- =?us-ascii?Q?DOLvHaeyJhyi2Wdm1MPLD+f+eA9ZIdow84fsuH8dM0mwwjHe/xFDUF9fDyZl?=
- =?us-ascii?Q?HFPn3GS7vEYAnBeBvrLGngeeuRwUHRYWhPOTWb5bTquu7LttodyzbunivFmf?=
- =?us-ascii?Q?/fejte0ZSIyyImHX6b8Q7hy+GNn6X2cMfFgm?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(1800799024)(376014)(82310400026)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2025 05:34:58.0494
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ff211cb-4338-4a3f-d0b7-08dd2e13dbb8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044F5.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6272
+X-ClientProxiedBy: lhrpeml100011.china.huawei.com (7.191.174.247) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
-The Versal NET edac listens to the notifications from NMC(Network
-management controller) on rpmsg. The driver registers on the error_edac
-channel. Send a RAS event trace upon a notification. On reading
-the notification the user space application can decide on the response.
-A sysfs reset entry is created for the same that sends an acknowledgment
-back to the NMC. For reporting events register to the RAS framework. For
-memory mc events are used other events use non-standard events.
+From: Shiju Jose <shiju.jose@huawei.com>
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
----
+Previously known as "ras: scrub: introduce subsystem + CXL/ACPI-RAS2 drivers".
 
-Changes in v5:
-Update the compatible
-Update the handle_error documentation
+Augmenting EDAC for controlling RAS features
+============================================
+The proposed expansion of EDAC for controlling RAS features and
+exposing features control attributes to userspace in sysfs.
+Some Examples:
+ - Scrub control
+ - Error Check Scrub (ECS) control
+ - ACPI RAS2 features
+ - Post Package Repair (PPR) control
+ - Memory Sparing Repair control etc.
 
-Changes in v4:
-Update the compatible
-
-Changes in v3:
-make remove void
-
-Changes in v2:
-- remove reset
-- Add the remote proc requests
-- remove probe_once
-- reorder the rpmsg registration
-- the data width , rank and number of channel is read from message.
-
- drivers/edac/Kconfig                |    9 +
- drivers/edac/Makefile               |    1 +
- drivers/edac/versalnet_rpmsg_edac.c | 1325 +++++++++++++++++++++++++++
- 3 files changed, 1335 insertions(+)
- create mode 100644 drivers/edac/versalnet_rpmsg_edac.c
-
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 06f7b43a6f78..4241936a8e7a 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -546,5 +546,14 @@ config EDAC_VERSAL
- 	  Support injecting both correctable and uncorrectable errors
- 	  for debugging purposes.
+High level design is illustrated in the following diagram.
  
-+config EDAC_VERSALNET
-+	tristate "AMD Versal NET EDAC"
-+	depends on CDX_CONTROLLER && ARCH_ZYNQMP
-+	help
-+	  Support for error detection and correction on the AMD Versal NET DDR
-+	  memory controller.
-+
-+	  The memory controller supports single bit error correction, double bit
-+	  error detection. Report various errors to the userspace.
- 
- endif # EDAC
-diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-index f9cf19d8d13d..a8328522f9c3 100644
---- a/drivers/edac/Makefile
-+++ b/drivers/edac/Makefile
-@@ -86,3 +86,4 @@ obj-$(CONFIG_EDAC_DMC520)		+= dmc520_edac.o
- obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
- obj-$(CONFIG_EDAC_ZYNQMP)		+= zynqmp_edac.o
- obj-$(CONFIG_EDAC_VERSAL)		+= versal_edac.o
-+obj-$(CONFIG_EDAC_VERSALNET)		+= versalnet_rpmsg_edac.o
-diff --git a/drivers/edac/versalnet_rpmsg_edac.c b/drivers/edac/versalnet_rpmsg_edac.c
-new file mode 100644
-index 000000000000..a54911f07c67
---- /dev/null
-+++ b/drivers/edac/versalnet_rpmsg_edac.c
-@@ -0,0 +1,1325 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * AMD Versal NET memory controller driver
-+ * Copyright (C) 2024 Advanced Micro Devices, Inc.
-+ */
-+
-+#include <linux/edac.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/ras.h>
-+#include <linux/rpmsg.h>
-+#include <linux/sizes.h>
-+#include <ras/ras_event.h>
-+#include <linux/remoteproc.h>
-+
-+#include "edac_module.h"
-+#include "../cdx/cdx.h"
-+#include "../cdx/controller/mcdi_functions.h"
-+#include "../cdx/controller/mcdi.h"
-+#include "../cdx/controller/mc_cdx_pcol.h"
-+
-+/* Granularity of reported error in bytes */
-+#define DDRMC5_EDAC_ERR_GRAIN			1
-+#define MC_CMD_EDAC_GET_DDR_CONFIG_IN_LEN	4 /* 4 bytes */
-+
-+#define DDRMC5_EDAC_MSG_SIZE			256
-+
-+#define DDRMC5_IRQ_CE_MASK			GENMASK(18, 15)
-+#define DDRMC5_IRQ_UE_MASK			GENMASK(14, 11)
-+
-+#define DDRMC5_RANK_1_MASK			GENMASK(11, 6)
-+#define MASK_24					GENMASK(29, 24)
-+#define MASK_0					GENMASK(5, 0)
-+
-+#define DDRMC5_LRANK_1_MASK			GENMASK(11, 6)
-+#define DDRMC5_LRANK_2_MASK			GENMASK(17, 12)
-+#define DDRMC5_BANK1_MASK			GENMASK(11, 6)
-+#define DDRMC5_GRP_0_MASK			GENMASK(17, 12)
-+#define DDRMC5_GRP_1_MASK			GENMASK(23, 18)
-+
-+#define ECCR_UE_CE_ADDR_HI_ROW_MASK		GENMASK(10, 0)
-+
-+#define DDRMC5_MAX_ROW_CNT			18
-+#define DDRMC5_MAX_COL_CNT			11
-+#define DDRMC5_MAX_RANK_CNT			2
-+#define DDRMC5_MAX_LRANK_CNT			4
-+#define DDRMC5_MAX_BANK_CNT			2
-+#define DDRMC5_MAX_GRP_CNT			3
-+
-+#define DDRMC5_REGHI_ROW			7
-+#define DDRMC5_EACHBIT				1
-+#define DDRMC5_ERR_TYPE_CE			0
-+#define DDRMC5_ERR_TYPE_UE			1
-+#define DDRMC5_HIGH_MEM_EN			BIT(20)
-+#define DDRMC5_MEM_MASK				GENMASK(19, 0)
-+#define DDRMC5_X16_BASE				256
-+#define DDRMC5_X16_ECC				32
-+#define DDRMC5_X16_SIZE				(DDRMC5_X16_BASE + DDRMC5_X16_ECC)
-+#define DDRMC5_X32_SIZE				576
-+#define DDRMC5_HIMEM_BASE			(256 * SZ_1M)
-+#define DDRMC5_ILC_HIMEM_EN			BIT(28)
-+#define DDRMC5_ILC_MEM				GENMASK(27, 0)
-+#define DDRMC5_INTERLEAVE_SEL			GENMASK(3, 0)
-+#define DDRMC5_BUS_WIDTH_MASK			GENMASK(19, 18)
-+#define DDRMC5_NUM_CHANS_MASK			BIT(17)
-+#define DDRMC5_RANK_MASK			GENMASK(15, 14)
-+#define DDRMC5_DWIDTH_MASK			GENMASK(5, 4)
-+
-+#define AMD_MIN_BUF_LEN				0x28
-+#define AMD_ERROR_LEVEL				2
-+#define AMD_ERRORID				3
-+#define TOTAL_ERR_LENGTH			5
-+#define AMD_MSG_ERR_OFFSET			8
-+#define AMD_MSG_ERR_LENGTH			9
-+#define AMD_ERR_DATA				10
-+#define MCDI_RESPONSE				0xFF
-+
-+#define ERR_NOTIFICATION_MAX			96
-+#define REG_MAX					152
-+#define ADEC_MAX				152
-+#define NUM_CONTROLLERS				8
-+#define REGS_PER_CONTROLLER			19
-+#define ADEC_NUM				19
-+#define MC_CMD_EDAC_GET_OVERALL_DDR_CONFIG	2
-+#define BUFFER_SZ				80
-+
-+#define XDDR5_BUS_WIDTH_64			0
-+#define XDDR5_BUS_WIDTH_32			1
-+#define XDDR5_BUS_WIDTH_16			2
-+
-+/**
-+ * struct ecc_error_info - ECC error log information.
-+ * @burstpos:		Burst position.
-+ * @lrank:		Logical Rank number.
-+ * @rank:		Rank number.
-+ * @group:		Group number.
-+ * @bank:		Bank number.
-+ * @col:		Column number.
-+ * @row:		Row number.
-+ * @rowhi:		Row number higher bits.
-+ * @i:			ECC error info.
-+ */
-+union ecc_error_info {
-+	struct {
-+		u32 burstpos:3;
-+		u32 lrank:4;
-+		u32 rank:2;
-+		u32 group:3;
-+		u32 bank:2;
-+		u32 col:11;
-+		u32 row:7;
-+		u32 rowhi;
-+	};
-+	u64 i;
-+} __packed;
-+
-+union edac_info {
-+	struct {
-+		u32 row0:6;
-+		u32 row1:6;
-+		u32 row2:6;
-+		u32 row3:6;
-+		u32 row4:6;
-+		u32 reserved:2;
-+	};
-+	struct {
-+		u32 col1:6;
-+		u32 col2:6;
-+		u32 col3:6;
-+		u32 col4:6;
-+		u32 col5:6;
-+		u32 reservedcol:2;
-+	};
-+	u32 i;
-+} __packed;
-+
-+/**
-+ * struct ack - Acknowledgment information to report.
-+ * @error_level:	Error level.
-+ * @error_id:		Error id ectable error log information.
-+ * @next_action:	Next action to be taken.
-+ */
-+struct ack {
-+	u32 error_level;
-+	u32 error_id;
-+	u32 next_action;
-+};
-+
-+/**
-+ * struct ecc_status - ECC status information to report.
-+ * @ceinfo:	Correctable error log information.
-+ * @ueinfo:	Uncorrectable error log information.
-+ * @channel:	Channel number.
-+ * @error_type:	Error type information.
-+ */
-+struct ecc_status {
-+	union ecc_error_info ceinfo[2];
-+	union ecc_error_info ueinfo[2];
-+	u8 channel;
-+	u8 error_type;
-+};
-+
-+/**
-+ * struct edac_priv - DDR memory controller private instance data.
-+ * @message:		Buffer for framing the event specific info.
-+ * @ce_cnt:		Correctable error count.
-+ * @ue_cnt:		UnCorrectable error count.
-+ * @stat:		ECC status information.
-+ * @lrank_bit:		Bit shifts for lrank bit.
-+ * @rank_bit:		Bit shifts for rank bit.
-+ * @row_bit:		Bit shifts for row bit.
-+ * @col_bit:		Bit shifts for column bit.
-+ * @bank_bit:		Bit shifts for bank bit.
-+ * @grp_bit:		Bit shifts for group bit.
-+ * @error_id:		The error id.
-+ * @error_level:	The error level.
-+ * @dwidth:		The dwidth.
-+ * @part_len:		The subpart of the message received.
-+ * @regs:		The registers sent on the rpmsg.
-+ * @adec:		Address decode registers.
-+ * @mci:		Memory controller interface.
-+ * @ept:		rpmsg endpoint.
-+ * @mcdi:		The mcdi handle.
-+ * @work:		The work queue.
-+ * @xfer_done:		The completion indicator for the rpmsg.
-+ */
-+struct edac_priv {
-+	char message[DDRMC5_EDAC_MSG_SIZE];
-+	u32 ce_cnt;
-+	u32 ue_cnt;
-+	struct ecc_status stat;
-+	u32 lrank_bit[4];
-+	u32 rank_bit[2];
-+	u32 row_bit[18];
-+	u32 col_bit[11];
-+	u32 bank_bit[2];
-+	u32 grp_bit[3];
-+	u32 error_id;
-+	u32 error_level;
-+	enum dev_type dwidth;
-+	u32 part_len;
-+	u32 regs[REG_MAX];
-+	u32 adec[ADEC_MAX];
-+	struct mem_ctl_info *mci;
-+	struct rpmsg_endpoint *ept;
-+	struct cdx_mcdi *mcdi;
-+	struct work_struct work;
-+	struct completion xfer_done;
-+};
-+
-+enum error_ids {
-+	BOOT_CR = 0,
-+	BOOT_NCR = 1,
-+	FW_CR = 2,
-+	FW_NCR = 3,
-+	GSW_CR = 4,
-+	GSW_NCR = 5,
-+	CFU = 6,
-+	CFRAME = 7,
-+	PSM_CR = 8,
-+	PSM_NCR = 9,
-+	DDRMC5_MB_CR = 10,
-+	DDRMC5_MB_NCR = 11,
-+	NOCTYPE_CR = 12,
-+	NOCTYPE_NCR = 13,
-+	NOCUSER = 14,
-+	MMCM = 15,
-+	HNICX_CR = 16,
-+	HNICX_NCR = 17,
-+	DDRMC5_CR = 18,
-+	DDRMC5_NCR = 19,
-+	GT_CR = 20,
-+	GT_NCR = 21,
-+	PLSYSMON_CR = 22,
-+	PLSYSMON_NCR = 23,
-+	PL0 = 24,
-+	PL1 = 25,
-+	PL2 = 26,
-+	PL3 = 27,
-+	NPI_ROOT = 28,
-+	SSIT_ERR3 = 29,
-+	SSIT_ERR4 = 30,
-+	SSIT_ERR5 = 31,
-+	PMC_APB = 32,
-+	PMC_ROM = 33,
-+	MB_FATAL0 = 34,
-+	MB_FATAL1 = 35,
-+	PMC_CR = 36,
-+	PMC_NCR = 37,
-+	PMC_SMON0 = 39,
-+	PMC_SMON1 = 40,
-+	PMC_SMON2 = 41,
-+	PMC_SMON3 = 42,
-+	PMC_SMON4 = 43,
-+	PMC_SMON8 = 47,
-+	PMC_SMON9 = 48,
-+	CFI = 49,
-+	CFRAME_SEU_CRC = 50,
-+	CFRAME_SEU_ECC = 51,
-+	PMX_WWDT = 52,
-+	RTC_ALARM = 54,
-+	NPLL = 55,
-+	PPLL = 56,
-+	CLK_MON = 57,
-+	INT_PMX_CORR_ERR = 59,
-+	INT_PMX_UNCORR_ERR = 60,
-+	SSIT_ERR0 = 61,
-+	SSIT_ERR1 = 62,
-+	SSIT_ERR2 = 63,
-+	IOU_CR = 64,
-+	IOU_NCR = 65,
-+	DFX_UXPT_ACT = 66,
-+	DICE_CDI_PAR = 67,
-+	DEVIK_PRIV = 68,
-+	NXTSW_CDI_PAR = 69,
-+	DEVAK_PRIV = 70,
-+	DME_PUB_X = 71,
-+	DME_PUB_Y = 72,
-+	DEVAK_PUB_X = 73,
-+	DEVAK_PUB_Y = 74,
-+	DEVIK_PUB_X = 75,
-+	DEVIK_PUB_Y = 76,
-+	PCR_PAR = 77,
-+	PS_SW_CR = 96,
-+	PS_SW_NCR = 97,
-+	PSM_B_CR = 98,
-+	PSM_B_NCR = 99,
-+	MB_FATAL = 100,
-+	PSMX_CHK = 103,
-+	APLL1_LOCK = 104,
-+	APLL2_LOCK = 105,
-+	RPLL_LOCK = 106,
-+	FLXPLL_LOCK = 107,
-+	INT_PSM_CR = 108,
-+	INT_PSM_NCR = 109,
-+	USB_ERR = 110,
-+	LPX_DFX = 111,
-+	INT_LPD_CR = 113,
-+	INT_LPD_NCR = 114,
-+	INT_OCM_CR = 115,
-+	INT_OCM_NCR = 116,
-+	INT_FPD_CR = 117,
-+	INT_FPD_NCR = 118,
-+	INT_IOU_CR = 119,
-+	INT_IOU_NCR = 120,
-+	RPU_CLUSTERA_LS = 121,
-+	RPU_CLUSTERB_LS = 122,
-+	GIC_AXI = 123,
-+	GIC_ECC = 124,
-+	CPM_CR = 125,
-+	CPM_NCR = 126,
-+	FPD_CPI = 127,
-+	FPD_SWDT0 = 128,
-+	FPD_SWDT1 = 129,
-+	FPD_SWDT2 = 130,
-+	FPD_SWDT3 = 131,
-+	FPX_SPLITTER0_MEM_ERR = 132,
-+	FPX_SPLITTER0_AXI_ERR = 133,
-+	FPX_SPLITTER1_MEM_ERR = 134,
-+	FPX_SPLITTER1_AXI_ERR = 135,
-+	FPX_SPLITTER2_MEM_ERR = 136,
-+	FPX_SPLITTER2_AXI_ERR = 137,
-+	FPX_SPLITTER3_MEM_ERR = 138,
-+	FPX_SPLITTER3_AXI_ERR = 139,
-+	APU0 = 140,
-+	APU1 = 141,
-+	APU2 = 142,
-+	APU3 = 143,
-+	LPX_WWDT0 = 144,
-+	LPX_WWDT1 = 145,
-+	ADMA_LS_ERR = 146,
-+	IPI_ERR = 147,
-+	OCM0_CORR_ERR = 148,
-+	OCM1_CORR_ERR = 149,
-+	OCM0_UNCORR_ERR = 150,
-+	OCM1_UNCORR_ERR = 151,
-+	LPX_AFIFS_CORR_ERR = 152,
-+	LPX_AFIFS_UNCORR_ERR = 153,
-+	LPX_GLITCH_DET0 = 154,
-+	LPX_GLITCH_DET1 = 155,
-+	NOC_NMU_FIREWALL_WR_ERR = 156,
-+	NOC_NMU_FIREWALL_RD_ERR = 157,
-+	NOC_NSU_FIREWALL_ERR = 158,
-+	RPUA0_CORR_ERR = 163,
-+	RPUA0_MISC1 = 166,
-+	RPUA0_MISC2 = 167,
-+	RPUA1_CORR_ERR = 168,
-+	RPUA1_FATAL_ERR = 169,
-+	RPUA1_TIMEOUT_ERR = 170,
-+	RPUA1_MISC1 = 171,
-+	RPUA1_MISC2 = 172,
-+	RPUB0_CORR_ERR = 173,
-+	RPUB0_FATAL_ERR = 174,
-+	RPUB0_TIMEOUT_ERR = 175,
-+	RPUB0_MISC1 = 176,
-+	RPUB0_MISC2 = 177,
-+	RPUB1_CORR_ERR = 178,
-+	RPUB1_FATAL_ERR = 179,
-+	RPUB1_TIMEOUT_ERR = 180,
-+	RPUB1_MISC1 = 181,
-+	RPUB1_MISC2 = 182,
-+	RPU_PCIL_ERR = 184,
-+	FPX_AFIFS_CORR_ERR = 185,
-+	FPX_AFIFS_UNCORR_ERR = 186,
-+	FPD_CMN_1_ERR = 187,
-+	FPD_CMN_2_ERR = 188,
-+	FPD_CMN_3_ERR = 189,
-+	FPD_CML_ERR = 190,
-+	FPD_INTWRAP_ERR = 191,
-+	FPD_REST_MON_ERR = 192,
-+	LPD_MON_ERR = 193,
-+	AFIFM_FATAL_ERR = 194,
-+	LPX_AFIFM_NONFATAL_ERR = 195,
-+	FPX_AFIFM0_NONFATAL_ERR = 196,
-+	FPX_AFIFM1_NONFATAL_ERR = 197,
-+	FPX_AFIFM2_NONFATAL_ERR = 198,
-+	FPX_AFIFM3_NONFATAL_ERR = 199,
-+	RPU_CLUSTERA_ERR = 200,
-+	RPU_CLUSTERB_ERR = 201,
-+	HB_MON_0 = 224,
-+	HB_MON_1 = 225,
-+	HB_MON_2 = 226,
-+	HB_MON_3 = 227,
-+	PLM_EXCEPTION = 228,
-+	PCR_LOG_UPDATE = 230,
-+	ERROR_CRAM_CE = 231,
-+	ERROR_CRAM_UE = 232,
-+	ERROR_NPI_UE = 233,
-+};
-+
-+enum adec_info {
-+	CONF = 0,
-+	ADEC0,
-+	ADEC1,
-+	ADEC2,
-+	ADEC3,
-+	ADEC4,
-+	ADEC5,
-+	ADEC6,
-+	ADEC7,
-+	ADEC8,
-+	ADEC9,
-+	ADEC10,
-+	ADEC11,
-+	ADEC12,
-+	ADEC13,
-+	ADEC14,
-+	ADEC15,
-+	ADEC16,
-+	ADECILC,
-+};
-+
-+enum reg_info {
-+	ISR = 0,
-+	IMR,
-+	ECCR0_ERR_STATUS,
-+	ECCR0_ADDR_LO,
-+	ECCR0_ADDR_HI,
-+	ECCR0_DATA_LO,
-+	ECCR0_DATA_HI,
-+	ECCR0_PAR,
-+	ECCR1_ERR_STATUS,
-+	ECCR1_ADDR_LO,
-+	ECCR1_ADDR_HI,
-+	ECCR1_DATA_LO,
-+	ECCR1_DATA_HI,
-+	ECCR1_PAR,
-+	XMPU_ERR,
-+	XMPU_ERR_ADDR_L0,
-+	XMPU_ERR_ADDR_HI,
-+	XMPU_ERR_AXI_ID,
-+	ADEC_CHK_ERR_LOG,
-+};
-+
-+static void get_ddr_ce_error_info(u32 *error_data, struct edac_priv *priv)
-+{
-+	u32 regval, par, reghi;
-+	struct ecc_status *p;
-+
-+	p = &priv->stat;
-+
-+	regval = error_data[ECCR0_ADDR_HI];
-+	reghi = regval & ECCR_UE_CE_ADDR_HI_ROW_MASK;
-+	regval = error_data[ECCR0_ADDR_LO];
-+	p->ceinfo[0].i = regval | (u64)reghi << 32;
-+
-+	par = error_data[ECCR0_PAR];
-+	edac_dbg(2, "ERR DATA: 0x%08X%08X ERR DATA PARITY: 0x%08X\n",
-+		 reghi, regval, par);
-+
-+	regval = error_data[ECCR1_ADDR_LO];
-+	reghi = error_data[ECCR1_ADDR_HI];
-+	p->ceinfo[1].i = regval | (u64)reghi << 32;
-+
-+	par = error_data[ECCR1_PAR];
-+	edac_dbg(2, "ERR DATA: 0x%08X%08X ERR DATA PARITY: 0x%08X\n",
-+		 reghi, regval, par);
-+}
-+
-+static void get_ddr_ue_error_info(u32 error_data[REGS_PER_CONTROLLER], struct edac_priv *priv)
-+{
-+	u32 regval, par, reghi;
-+	struct ecc_status *p;
-+
-+	p = &priv->stat;
-+
-+	regval = error_data[ECCR0_ADDR_LO];
-+	reghi = error_data[ECCR0_ADDR_HI];
-+	par = error_data[ECCR0_PAR];
-+
-+	p->ueinfo[0].i = regval | (u64)reghi << 32;
-+
-+	edac_dbg(2, "ERR DATA: 0x%08X%08X ERR DATA PARITY: 0x%08X\n",
-+		 reghi, regval, par);
-+
-+	regval = error_data[ECCR1_ADDR_LO];
-+	reghi = error_data[ECCR1_ADDR_HI];
-+	p->ueinfo[1].i = regval | (u64)reghi << 32;
-+	par = error_data[ECCR1_PAR];
-+
-+	edac_dbg(2, "ERR DATA: 0x%08X%08X ERR DATA PARITY: 0x%08X\n",
-+		 reghi, regval, par);
-+}
-+
-+static bool get_ddr_ue_info(u32 error_data[REGS_PER_CONTROLLER], struct edac_priv *priv)
-+{
-+	u32 eccr0_val, eccr1_val, isr;
-+	struct ecc_status *p;
-+
-+	p = &priv->stat;
-+
-+	isr = error_data[ISR];
-+	if (!(isr & DDRMC5_IRQ_UE_MASK))
-+		return false;
-+
-+	eccr0_val = error_data[ECCR0_ERR_STATUS];
-+	eccr1_val = error_data[ECCR1_ERR_STATUS];
-+
-+	if (!eccr0_val && !eccr1_val)
-+		return false;
-+
-+	if (!eccr0_val)
-+		p->channel = 1;
-+	else
-+		p->channel = 0;
-+
-+	get_ddr_ue_error_info(error_data, priv);
-+
-+	return true;
-+}
-+
-+static bool get_ddr_ce_info(u32 error_data[REGS_PER_CONTROLLER], struct edac_priv *priv)
-+{
-+	u32 eccr0_val, eccr1_val, isr;
-+	struct ecc_status *p;
-+
-+	p = &priv->stat;
-+
-+	isr = error_data[ISR];
-+	if (!(isr & DDRMC5_IRQ_CE_MASK))
-+		return false;
-+
-+	eccr0_val = error_data[ECCR0_ERR_STATUS];
-+	eccr1_val = error_data[ECCR1_ERR_STATUS];
-+
-+	if (!eccr0_val && !eccr1_val)
-+		return false;
-+
-+	if (!eccr0_val)
-+		p->channel = 1;
-+	else
-+		p->channel = 0;
-+
-+	get_ddr_ce_error_info(error_data, priv);
-+
-+	return true;
-+}
-+
-+/**
-+ * convert_to_physical - Convert to physical address.
-+ * @priv:	DDR memory controller private instance data.
-+ * @pinf:	ECC error info structure.
-+ * @controller:	Controller number of the DDRMC5
-+ *
-+ * Return: Physical address of the DDR memory.
-+ */
-+static unsigned long convert_to_physical(struct edac_priv *priv,
-+					 union ecc_error_info pinf,
-+					 int controller)
-+{
-+	u32 index, row, blk, rsh_req_addr, interleave, ilc_base_ctrl_add, ilc_himem_en, reg, offset;
-+	u64 high_mem_base, high_mem_offset, low_mem_offset, ilcmem_base;
-+	unsigned long err_addr = 0, addr;
-+
-+	row = pinf.rowhi << DDRMC5_REGHI_ROW | pinf.row;
-+	offset = controller * ADEC_NUM;
-+
-+	for (index = 0; index < DDRMC5_MAX_ROW_CNT; index++) {
-+		err_addr |= (row & BIT(0)) << priv->row_bit[index];
-+		row >>= DDRMC5_EACHBIT;
-+	}
-+
-+	for (index = 0; index < DDRMC5_MAX_COL_CNT; index++) {
-+		err_addr |= (pinf.col & BIT(0)) << priv->col_bit[index];
-+		pinf.col >>= DDRMC5_EACHBIT;
-+	}
-+
-+	for (index = 0; index < DDRMC5_MAX_BANK_CNT; index++) {
-+		err_addr |= (pinf.bank & BIT(0)) << priv->bank_bit[index];
-+		pinf.bank >>= DDRMC5_EACHBIT;
-+	}
-+
-+	for (index = 0; index < DDRMC5_MAX_GRP_CNT; index++) {
-+		err_addr |= (pinf.group & BIT(0)) << priv->grp_bit[index];
-+		pinf.group >>= DDRMC5_EACHBIT;
-+	}
-+
-+	for (index = 0; index < DDRMC5_MAX_RANK_CNT; index++) {
-+		err_addr |= (pinf.rank & BIT(0)) << priv->rank_bit[index];
-+		pinf.rank >>= DDRMC5_EACHBIT;
-+	}
-+
-+	for (index = 0; index < DDRMC5_MAX_LRANK_CNT; index++) {
-+		err_addr |= (pinf.lrank & BIT(0)) << priv->lrank_bit[index];
-+		pinf.lrank >>= DDRMC5_EACHBIT;
-+	}
-+
-+	high_mem_base = (priv->adec[ADEC2 + offset] & DDRMC5_MEM_MASK) * DDRMC5_HIMEM_BASE;
-+	interleave = priv->adec[ADEC13 + offset] & DDRMC5_INTERLEAVE_SEL;
-+
-+	high_mem_offset = priv->adec[ADEC3 + offset] & DDRMC5_MEM_MASK;
-+	low_mem_offset = priv->adec[ADEC1 + offset] & DDRMC5_MEM_MASK;
-+	reg = priv->adec[ADEC14 + offset];
-+	ilc_himem_en = !!(reg & DDRMC5_ILC_HIMEM_EN);
-+	ilcmem_base = (reg & DDRMC5_ILC_MEM) * SZ_1M;
-+	if (ilc_himem_en)
-+		ilc_base_ctrl_add = ilcmem_base - high_mem_offset;
-+	else
-+		ilc_base_ctrl_add = ilcmem_base - low_mem_offset;
-+
-+	if (priv->dwidth == DEV_X16) {
-+		blk = err_addr / DDRMC5_X16_SIZE;
-+		rsh_req_addr = (blk << 8) + ilc_base_ctrl_add;
-+		err_addr = rsh_req_addr * interleave * 2;
-+	} else {
-+		blk = err_addr / DDRMC5_X32_SIZE;
-+		rsh_req_addr = (blk << 9) + ilc_base_ctrl_add;
-+		err_addr = rsh_req_addr * interleave * 2;
-+	}
-+
-+	if ((priv->adec[ADEC2 + offset] & DDRMC5_HIGH_MEM_EN) && err_addr >= high_mem_base)
-+		addr = err_addr - high_mem_offset;
-+	else
-+		addr = err_addr - low_mem_offset;
-+
-+	return addr;
-+}
-+
-+/**
-+ * handle_error - Handle Correctable and Uncorrectable errors.
-+ * @priv:	DDR memory controller private instance data.
-+ * @stat:	ECC status structure.
-+ * @controller:	Controller number of the DDRMC5
-+ *
-+ * Handles ECC correctable and uncorrectable errors.
-+ */
-+static void handle_error(struct edac_priv  *priv, struct ecc_status *stat, int controller)
-+{
-+	struct mem_ctl_info *mci = priv->mci;
-+	union ecc_error_info pinf;
-+	unsigned long pa;
-+	phys_addr_t pfn;
-+	int err;
-+
-+	if (stat->error_type == DDRMC5_ERR_TYPE_CE) {
-+		priv->ce_cnt++;
-+		pinf = stat->ceinfo[stat->channel];
-+		snprintf(priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type:%s Addr at %lx\n",
-+			 "CE", convert_to_physical(priv, pinf, controller));
-+
-+		edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
-+				     1, 0, 0, 0, 0, 0, -1,
-+				     priv->message, "");
-+	}
-+
-+	if (stat->error_type == DDRMC5_ERR_TYPE_UE) {
-+		priv->ue_cnt++;
-+		pinf = stat->ueinfo[stat->channel];
-+		snprintf(priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type:%s Addr at %lx\n",
-+			 "UE", convert_to_physical(priv, pinf, controller));
-+
-+		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci,
-+				     1, 0, 0, 0, 0, 0, -1,
-+				     priv->message, "");
-+		pa = convert_to_physical(priv, pinf, controller);
-+		pfn = PHYS_PFN(pa);
-+
-+		if (IS_ENABLED(CONFIG_MEMORY_FAILURE)) {
-+			err = memory_failure(pfn, MF_ACTION_REQUIRED);
-+			if (err)
-+				edac_dbg(2, "In fail of memory_failure %d\n", err);
-+			else
-+				edac_dbg(2, "Page at PA 0x%lx is hardware poisoned\n", pa);
-+		}
-+	}
-+
-+	memset(stat, 0, sizeof(*stat));
-+}
-+
-+/**
-+ * init_csrows - Initialize the csrow data.
-+ * @mci:	EDAC memory controller instance.
-+ *
-+ * Initialize the chip select rows associated with the EDAC memory
-+ * controller instance.
-+ */
-+static void init_csrows(struct mem_ctl_info *mci)
-+{
-+	struct edac_priv *priv = mci->pvt_info;
-+	struct csrow_info *csi;
-+	struct dimm_info *dimm;
-+	u32 row;
-+	int ch;
-+
-+	for (row = 0; row < mci->nr_csrows; row++) {
-+		csi = mci->csrows[row];
-+		for (ch = 0; ch < csi->nr_channels; ch++) {
-+			dimm = csi->channels[ch]->dimm;
-+			dimm->edac_mode = EDAC_SECDED;
-+			dimm->mtype = MEM_DDR4;
-+			dimm->grain = DDRMC5_EDAC_ERR_GRAIN;
-+			dimm->dtype = priv->dwidth;
-+		}
-+	}
-+}
-+
-+/**
-+ * mc_init - Initialize one driver instance.
-+ * @mci:	EDAC memory controller instance.
-+ * @pdev:	platform device.
-+ *
-+ * Perform initialization of the EDAC memory controller instance and
-+ * related driver-private data associated with the memory controller the
-+ * instance is bound to.
-+ */
-+static void mc_init(struct mem_ctl_info *mci, struct platform_device *pdev)
-+{
-+	mci->pdev = &pdev->dev;
-+	platform_set_drvdata(pdev, mci);
-+
-+	/* Initialize controller capabilities and configuration */
-+	mci->mtype_cap = MEM_FLAG_DDR5;
-+	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_SECDED;
-+	mci->scrub_cap = SCRUB_HW_SRC;
-+	mci->scrub_mode = SCRUB_NONE;
-+
-+	mci->edac_cap = EDAC_FLAG_SECDED;
-+	mci->ctl_name = "amd_ddr_controller";
-+	mci->dev_name = dev_name(&pdev->dev);
-+	mci->mod_name = "amd_edac";
-+
-+	edac_op_state = EDAC_OPSTATE_INT;
-+
-+	init_csrows(mci);
-+}
-+
-+#define to_mci(k) container_of(k, struct mem_ctl_info, dev)
-+
-+static int amd_rpmsg_send(struct cdx_mcdi *cdx_mcdi,
-+			  const struct cdx_dword *hdr, size_t hdr_len,
-+			  const struct cdx_dword *sdu, size_t sdu_len)
-+{
-+	unsigned char *send_buf;
-+	int ret;
-+
-+	send_buf = kzalloc(hdr_len + sdu_len, GFP_KERNEL);
-+	if (!send_buf)
-+		return -ENOMEM;
-+
-+	memcpy(send_buf, hdr, hdr_len);
-+	memcpy(send_buf + hdr_len, sdu, sdu_len);
-+
-+	ret = rpmsg_send(cdx_mcdi->ept, send_buf, hdr_len + sdu_len);
-+	kfree(send_buf);
-+	return ret;
-+}
-+
-+static unsigned int amd_mcdi_rpc_timeout(struct cdx_mcdi *cdx, unsigned int cmd)
-+{
-+	return MCDI_RPC_TIMEOUT;
-+}
-+
-+static void amd_mcdi_request(struct cdx_mcdi *cdx,
-+			     const struct cdx_dword *hdr, size_t hdr_len,
-+			     const struct cdx_dword *sdu, size_t sdu_len)
-+{
-+	if (amd_rpmsg_send(cdx, hdr, hdr_len, sdu, sdu_len))
-+		dev_err(&cdx->rpdev->dev, "Failed to send rpmsg data\n");
-+}
-+
-+static const struct cdx_mcdi_ops mcdi_ops = {
-+	.mcdi_rpc_timeout = amd_mcdi_rpc_timeout,
-+	.mcdi_request = amd_mcdi_request,
-+};
-+
-+static int get_ddr_config(u32 index, u32 *buffer, struct cdx_mcdi *amd_mcdi)
-+{
-+	size_t outlen;
-+	int ret;
-+
-+	MCDI_DECLARE_BUF(inbuf, MC_CMD_EDAC_GET_DDR_CONFIG_IN_LEN);
-+	MCDI_DECLARE_BUF(outbuf, BUFFER_SZ);
-+
-+	MCDI_SET_DWORD(inbuf, EDAC_GET_DDR_CONFIG_IN_CONTROLLER_INDEX, index);
-+
-+	ret = cdx_mcdi_rpc(amd_mcdi, MC_CMD_EDAC_GET_DDR_CONFIG, inbuf, sizeof(inbuf),
-+			   outbuf, sizeof(outbuf), &outlen);
-+	if (ret)
-+		return ret;
-+	memcpy(buffer, MCDI_PTR(outbuf, EDAC_GET_DDR_CONFIG_OUT_REGISTER_VALUES), (ADEC_NUM * 4));
-+	return 0;
-+}
-+
-+static int amd_setup_mcdi(struct edac_priv *edac_priv)
-+{
-+	struct cdx_mcdi *amd_mcdi;
-+	int ret, i;
-+
-+	amd_mcdi = kzalloc(sizeof(*amd_mcdi), GFP_KERNEL);
-+	if (!amd_mcdi)
-+		return -ENOMEM;
-+
-+	/* Store the MCDI ops */
-+	amd_mcdi->mcdi_ops = &mcdi_ops;
-+	/* MCDI FW: Initialize the FW path */
-+	ret = cdx_mcdi_init(amd_mcdi);
-+	if (ret)
-+		return ret;
-+
-+	amd_mcdi->ept = edac_priv->ept;
-+	edac_priv->mcdi = amd_mcdi;
-+
-+	for (i = 0; i < NUM_CONTROLLERS; i++)
-+		get_ddr_config(i, &edac_priv->adec[ADEC_NUM * i], amd_mcdi);
-+
-+	complete(&edac_priv->xfer_done);
-+	return 0;
-+}
-+
-+static inline void process_bit(struct edac_priv *priv, unsigned int start, u32 regval)
-+{
-+	union edac_info rows;
-+
-+	rows.i = regval;
-+	priv->row_bit[start] = rows.row0;
-+	priv->row_bit[start + 1] = rows.row1;
-+	priv->row_bit[start + 2] = rows.row2;
-+	priv->row_bit[start + 3] = rows.row3;
-+	priv->row_bit[start + 4] = rows.row4;
-+}
-+
-+static void setup_row_address_map(struct edac_priv *priv, u32 *error_data)
-+{
-+	union edac_info rows;
-+	u32 regval;
-+
-+	regval = error_data[ADEC6];
-+	process_bit(priv, 0, regval);
-+
-+	regval = error_data[ADEC7];
-+	process_bit(priv, 5, regval);
-+
-+	regval = error_data[ADEC8];
-+	process_bit(priv, 10, regval);
-+
-+	regval = error_data[ADEC9];
-+	rows.i = regval;
-+
-+	priv->row_bit[15] = rows.row0;
-+	priv->row_bit[16] = rows.row1;
-+	priv->row_bit[17] = rows.row2;
-+}
-+
-+static void setup_column_address_map(struct edac_priv *priv, u32 *error_data)
-+{
-+	union edac_info cols;
-+	u32 regval;
-+
-+	regval = error_data[ADEC9];
-+	priv->col_bit[0] = FIELD_GET(MASK_24, regval);
-+
-+	regval = error_data[ADEC10];
-+	cols.i = regval;
-+	priv->col_bit[1] = cols.col1;
-+	priv->col_bit[2] = cols.col2;
-+	priv->col_bit[3] = cols.col3;
-+	priv->col_bit[4] = cols.col4;
-+	priv->col_bit[5] = cols.col5;
-+
-+	regval = error_data[ADEC11];
-+	cols.i = regval;
-+	priv->col_bit[6] = cols.col1;
-+	priv->col_bit[7] = cols.col2;
-+	priv->col_bit[8] = cols.col3;
-+	priv->col_bit[9] = cols.col4;
-+	priv->col_bit[10] = cols.col5;
-+}
-+
-+static void setup_bank_grp_ch_address_map(struct edac_priv *priv, u32 *error_data)
-+{
-+	u32 regval;
-+
-+	regval = error_data[ADEC12];
-+	priv->bank_bit[0] = (regval & MASK_0);
-+	priv->bank_bit[1] = FIELD_GET(DDRMC5_BANK1_MASK, regval);
-+	priv->grp_bit[0] = FIELD_GET(DDRMC5_GRP_0_MASK, regval);
-+	priv->grp_bit[1] = FIELD_GET(DDRMC5_GRP_1_MASK, regval);
-+	priv->grp_bit[2] = FIELD_GET(MASK_24, regval);
-+}
-+
-+static void setup_rank_lrank_address_map(struct edac_priv *priv, u32 *error_data)
-+{
-+	u32 regval;
-+
-+	regval = error_data[ADEC4];
-+	priv->rank_bit[0] = (regval & MASK_0);
-+	priv->rank_bit[1] = FIELD_GET(DDRMC5_RANK_1_MASK, regval);
-+
-+	regval = error_data[ADEC5];
-+	priv->lrank_bit[0] = (regval & MASK_0);
-+	priv->lrank_bit[1] = FIELD_GET(DDRMC5_LRANK_1_MASK, regval);
-+	priv->lrank_bit[2] = FIELD_GET(DDRMC5_LRANK_2_MASK, regval);
-+	priv->lrank_bit[3] = FIELD_GET(MASK_24, regval);
-+}
-+
-+/**
-+ * setup_address_map - Set Address Map by querying ADDRMAP registers.
-+ * @priv:	DDR memory controller private instance data.
-+ * @error_data:	The address decode error data.
-+ *
-+ * Set Address Map by querying ADDRMAP registers.
-+ *
-+ * Return: none.
-+ */
-+static void setup_address_map(struct edac_priv *priv, u32 *error_data)
-+{
-+	setup_row_address_map(priv, error_data);
-+
-+	setup_column_address_map(priv, error_data);
-+
-+	setup_bank_grp_ch_address_map(priv, error_data);
-+
-+	setup_rank_lrank_address_map(priv, error_data);
-+}
-+
-+static inline bool is_response(u8 *data)
-+{
-+	return (data[0] == MCDI_RESPONSE);
-+}
-+
-+static const guid_t amd_versalnet_guid = GUID_INIT(0x82678888, 0xa556, 0x44f2,
-+						 0xb8, 0xb4, 0x45, 0x56, 0x2e,
-+						 0x8c, 0x5b, 0xec);
-+
-+static int amd_rpmsg_cb(struct rpmsg_device *rpdev, void *data,
-+			int len, void *priv, u32 src)
-+{
-+	struct edac_priv *edac_priv = dev_get_drvdata(&rpdev->dev);
-+	const guid_t *sec_type = &guid_null;
-+	u32 length, offset, error_id;
-+	u32 *result = (u32 *)data;
-+	struct ecc_status *p;
-+	int i, j, k, sec_sev;
-+	u32 *adec_data;
-+
-+	if (is_response(data)) {
-+		cdx_mcdi_process_cmd(edac_priv->mcdi, (struct cdx_dword *)data, len);
-+		return 0;
-+	}
-+
-+	sec_sev = result[AMD_ERROR_LEVEL];
-+	error_id = result[AMD_ERRORID];
-+	length = result[AMD_MSG_ERR_LENGTH];
-+	offset = result[AMD_MSG_ERR_OFFSET];
-+
-+	if (result[TOTAL_ERR_LENGTH] > length) {
-+		if (!edac_priv->part_len)
-+			edac_priv->part_len = length;
-+		else
-+			edac_priv->part_len += length;
-+		/*
-+		 * The data can come in 2 stretches. Construct the regs from 2
-+		 * messages the offset indicates the offset from which the data is to
-+		 * be taken
-+		 */
-+		for (i = 0 ; i < length; i++) {
-+			k = offset + i;
-+			j = AMD_ERR_DATA + i;
-+			edac_priv->regs[k] = result[j];
-+		}
-+		if (edac_priv->part_len < result[TOTAL_ERR_LENGTH])
-+			return 0;
-+	}
-+
-+	edac_priv->error_id = error_id;
-+	edac_priv->error_level = result[AMD_ERROR_LEVEL];
-+
-+	switch (error_id) {
-+	case HNICX_CR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: HNICX Correctable Error");
-+		break;
-+	case HNICX_NCR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: HNICX Non-correctable Error");
-+		break;
-+	case FPX_SPLITTER0_MEM_ERR:
-+	case FPX_SPLITTER0_AXI_ERR:
-+	case FPX_SPLITTER1_MEM_ERR:
-+	case FPX_SPLITTER1_AXI_ERR:
-+	case FPX_SPLITTER2_MEM_ERR:
-+	case FPX_SPLITTER2_AXI_ERR:
-+	case FPX_SPLITTER3_MEM_ERR:
-+	case FPX_SPLITTER3_AXI_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: FPX SPLITTER Error %d", error_id);
-+		break;
-+	case LPX_AFIFS_CORR_ERR:
-+	case LPX_AFIFS_UNCORR_ERR:
-+	case LPX_AFIFM_NONFATAL_ERR:
-+	case FPX_AFIFM0_NONFATAL_ERR:
-+	case FPX_AFIFM1_NONFATAL_ERR:
-+	case FPX_AFIFM2_NONFATAL_ERR:
-+	case FPX_AFIFM3_NONFATAL_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: AFIFM Error %d", error_id);
-+		break;
-+	case FPX_AFIFS_CORR_ERR:
-+	case FPX_AFIFS_UNCORR_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: AFIFS Error");
-+		break;
-+	/* PL Errors */
-+	case PLSYSMON_NCR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: PL Sysmon Non-Correctable Error");
-+		break;
-+	case PLSYSMON_CR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: PL Sysmon Correctable Error");
-+		break;
-+	case GSW_NCR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: General Software Non-Correctable Error");
-+		break;
-+	case MMCM:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: MMCM Error");
-+		break;
-+	case LPX_GLITCH_DET0:
-+	case LPX_GLITCH_DET1:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: LPX glitch Error %d", error_id);
-+		break;
-+	/* Firmware error */
-+	case INT_PSM_CR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: PSM Correctable Error");
-+		break;
-+	case INT_PMX_CORR_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: PMC correctable Error");
-+		break;
-+	case INT_PMX_UNCORR_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: PMC Un correctable Error");
-+		break;
-+	case PMC_SMON4:
-+	case PMC_SMON8:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: PMC Sysmon Error");
-+		break;
-+	/* RPU Errors */
-+	case RPUA0_CORR_ERR:
-+	case RPUA0_MISC1:
-+	case RPUA0_MISC2:
-+	case RPUA1_CORR_ERR:
-+	case RPUA1_FATAL_ERR:
-+	case RPUA1_TIMEOUT_ERR:
-+	case RPUA1_MISC1:
-+	case RPUA1_MISC2:
-+	case RPUB0_CORR_ERR:
-+	case RPUB0_FATAL_ERR:
-+	case RPUB0_TIMEOUT_ERR:
-+	case RPUB0_MISC1:
-+	case RPUB0_MISC2:
-+	case RPUB1_CORR_ERR:
-+	case RPUB1_FATAL_ERR:
-+	case RPUB1_TIMEOUT_ERR:
-+	case RPUB1_MISC1:
-+	case RPUB1_MISC2:
-+	case RPU_PCIL_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: RPU Error %d", error_id);
-+		break;
-+	/* Memory Errors */
-+	case OCM0_CORR_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: OCM0 correctable Error %d", error_id);
-+		break;
-+	case OCM1_CORR_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: OCM1 correctable Error %d", error_id);
-+		break;
-+	case OCM0_UNCORR_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: OCM0 Un-correctable Error %d ", error_id);
-+		break;
-+	case OCM1_UNCORR_ERR:
-+		snprintf(edac_priv->message, DDRMC5_EDAC_MSG_SIZE,
-+			 "Error type: OCM1 Un-correctable Error %d", error_id);
-+		break;
-+	case DDRMC5_CR:
-+		p = &edac_priv->stat;
-+		p->error_type = DDRMC5_ERR_TYPE_CE;
-+		for (i = 0 ; i < NUM_CONTROLLERS; i++) {
-+			if (get_ddr_ce_info(&edac_priv->regs[i * REGS_PER_CONTROLLER], edac_priv)) {
-+				adec_data = edac_priv->adec + ADEC_NUM * i;
-+				setup_address_map(edac_priv, adec_data);
-+				handle_error(edac_priv, &edac_priv->stat, i);
-+			}
-+		}
-+		return 0;
-+	case DDRMC5_NCR:
-+		p = &edac_priv->stat;
-+		p->error_type = DDRMC5_ERR_TYPE_UE;
-+		for (i = 0 ; i < NUM_CONTROLLERS; i++) {
-+			if (get_ddr_ue_info(&edac_priv->regs[i * REGS_PER_CONTROLLER], edac_priv)) {
-+				adec_data = edac_priv->adec + ADEC_NUM * i;
-+				setup_address_map(edac_priv, adec_data);
-+				handle_error(edac_priv, &edac_priv->stat, i);
-+			}
-+		}
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	length = result[TOTAL_ERR_LENGTH] * 4; /* Convert to bytes */
-+	log_non_standard_event(sec_type, &amd_versalnet_guid, edac_priv->message,
-+			       sec_sev, (void *)&result[AMD_ERR_DATA], length);
-+
-+	return 0;
-+}
-+
-+static struct rpmsg_device_id amd_rpmsg_id_table[] = {
-+	{ .name = "error_ipc" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(rpmsg, amd_rpmsg_id_table);
-+
-+static void amd_rpmsg_post_probe_work(struct work_struct *work)
-+{
-+	struct edac_priv *priv;
-+
-+	priv = container_of(work, struct edac_priv, work);
-+	amd_setup_mcdi(priv);
-+}
-+
-+static int amd_rpmsg_probe(struct rpmsg_device *rpdev)
-+{
-+	struct rpmsg_channel_info chinfo = {0};
-+	struct edac_priv *pg;
-+
-+	pg = (struct edac_priv *)amd_rpmsg_id_table[0].driver_data;
-+	chinfo.src = RPMSG_ADDR_ANY;
-+	chinfo.dst = rpdev->dst; /* NMC */
-+	strscpy(chinfo.name, amd_rpmsg_id_table[0].name,
-+		strlen(amd_rpmsg_id_table[0].name));
-+
-+	pg->ept = rpmsg_create_ept(rpdev, amd_rpmsg_cb, NULL, chinfo);
-+	if (!pg->ept)
-+		return dev_err_probe(&rpdev->dev, -ENXIO,
-+			      "Failed to create ept for channel %s\n",
-+			      chinfo.name);
-+
-+	dev_set_drvdata(&rpdev->dev, pg);
-+
-+	schedule_work(&pg->work);
-+
-+	return 0;
-+}
-+
-+static void amd_rpmsg_remove(struct rpmsg_device *rpdev)
-+{
-+	struct mem_ctl_info *mci = dev_get_drvdata(&rpdev->dev);
-+	struct edac_priv *edac_priv = mci->pvt_info;
-+
-+	flush_work(&edac_priv->mcdi->work);
-+	rpmsg_destroy_ept(edac_priv->ept);
-+	dev_set_drvdata(&rpdev->dev, NULL);
-+}
-+
-+static struct rpmsg_driver amd_rpmsg_driver = {
-+	.drv.name = KBUILD_MODNAME,
-+	.probe = amd_rpmsg_probe,
-+	.remove = amd_rpmsg_remove,
-+	.callback = amd_rpmsg_cb,
-+	.id_table = amd_rpmsg_id_table,
-+};
-+
-+/**
-+ * get_dwidth - Return the controller memory width.
-+ * @width:	data width read from the config reg.
-+ *
-+ * Get the EDAC device type width appropriate for the controller
-+ * configuration.
-+ *
-+ * Return: a device type width enumeration.
-+ */
-+static enum dev_type get_dwidth(u32 width)
-+{
-+	enum dev_type dt;
-+
-+	switch (width) {
-+	case XDDR5_BUS_WIDTH_16:
-+		dt = DEV_X16;
-+		break;
-+	case XDDR5_BUS_WIDTH_32:
-+		dt = DEV_X32;
-+		break;
-+	case XDDR5_BUS_WIDTH_64:
-+		dt = DEV_X64;
-+		break;
-+	default:
-+		dt = DEV_UNKNOWN;
-+	}
-+
-+	return dt;
-+}
-+
-+static int mc_probe(struct platform_device *pdev)
-+{
-+	unsigned long time_left, wait_jiffies;
-+	u32 num_chans, rank, dwidth, config;
-+	struct device_node *r5_core_node;
-+	struct edac_mc_layer layers[2];
-+	struct mem_ctl_info *mci;
-+	struct edac_priv *priv;
-+	struct rproc *rp;
-+	enum dev_type dt;
-+	int rc, i;
-+
-+	r5_core_node = of_parse_phandle(pdev->dev.of_node, "amd,rproc", 0);
-+	if (!r5_core_node) {
-+		dev_err(&pdev->dev, "amd,rproc: invalid phandle\n");
-+		return -EINVAL;
-+	}
-+
-+	rp = rproc_get_by_phandle(r5_core_node->phandle);
-+	if (!rp)
-+		return -EPROBE_DEFER;
-+
-+	rc = rproc_boot(rp);
-+	if (rc) {
-+		dev_err(&pdev->dev, "Failed to attach to remote processor\n");
-+		rproc_put(rp);
-+		return rc;
-+	}
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	amd_rpmsg_id_table[0].driver_data = (kernel_ulong_t)priv;
-+	INIT_WORK(&priv->work, amd_rpmsg_post_probe_work);
-+	init_completion(&priv->xfer_done);
-+	rc = register_rpmsg_driver(&amd_rpmsg_driver);
-+	if (rc) {
-+		edac_printk(KERN_ERR, EDAC_MC,
-+			    "Failed to register RPMsg driver: %d\n", rc);
-+		goto free_rproc;
-+	}
-+	wait_jiffies = msecs_to_jiffies(10000);
-+	time_left = wait_for_completion_timeout(&priv->xfer_done, wait_jiffies);
-+	if (time_left == 0)
-+		goto free_rpmsg;
-+
-+	for (i = 0; i < NUM_CONTROLLERS; i++) {
-+		config = priv->adec[CONF + i];
-+		num_chans = FIELD_GET(DDRMC5_NUM_CHANS_MASK, config);
-+		rank = FIELD_GET(DDRMC5_RANK_MASK, config);
-+		rank = 1 << rank;
-+		dwidth = FIELD_GET(DDRMC5_BUS_WIDTH_MASK, config);
-+		dt = get_dwidth(dwidth);
-+		if (dt != DEV_UNKNOWN)
-+			break;
-+	}
-+	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-+	layers[0].size = rank;
-+	layers[0].is_virt_csrow = true;
-+	layers[1].type = EDAC_MC_LAYER_CHANNEL;
-+	layers[1].size = num_chans;
-+	layers[1].is_virt_csrow = false;
-+
-+	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-+			    sizeof(struct edac_priv));
-+	if (!mci) {
-+		edac_printk(KERN_ERR, EDAC_MC,
-+			    "Failed memory allocation for mc instance\n");
-+		rc = -ENOMEM;
-+		goto free_rproc;
-+	}
-+	priv->mci = mci;
-+
-+	priv->dwidth = dt;
-+	mc_init(mci, pdev);
-+	rc = edac_mc_add_mc(mci);
-+	if (rc) {
-+		edac_printk(KERN_ERR, EDAC_MC,
-+			    "Failed to register with EDAC core\n");
-+		goto free_edac_mc;
-+	}
-+
-+	return 0;
-+
-+free_edac_mc:
-+	edac_mc_free(mci);
-+free_rpmsg:
-+	unregister_rpmsg_driver(&amd_rpmsg_driver);
-+free_rproc:
-+	rproc_shutdown(rp);
-+	return rc;
-+}
-+
-+static void mc_remove(struct platform_device *pdev)
-+{
-+	struct mem_ctl_info *mci = platform_get_drvdata(pdev);
-+	struct edac_priv *priv = mci->pvt_info;
-+
-+	unregister_rpmsg_driver(&amd_rpmsg_driver);
-+	edac_mc_del_mc(&pdev->dev);
-+	edac_mc_free(mci);
-+	rproc_shutdown(priv->mcdi->r5_rproc);
-+}
-+
-+static const struct of_device_id amd_edac_match[] = {
-+	{ .compatible = "amd,versal-net-ddrmc5", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, amd_edac_match);
-+
-+static struct platform_driver amd_ddr_edac_mc_driver = {
-+	.driver = {
-+		.name = "amd-ddrmc-edac",
-+		.of_match_table = amd_edac_match,
-+	},
-+	.probe = mc_probe,
-+	.remove = mc_remove,
-+};
-+
-+module_platform_driver(amd_ddr_edac_mc_driver);
-+
-+MODULE_AUTHOR("AMD Inc");
-+MODULE_DESCRIPTION("AMD DDRMC ECC driver");
-+MODULE_LICENSE("GPL");
+         _______________________________________________
+        |   Userspace - Rasdaemon                       |
+        |  ____________                                 |
+        | | RAS CXL    |       _______________          | 
+        | | Err Handler|----->|               |         |
+        | |____________|      | RAS Dynamic   |         |
+        |  ____________       | Scrub, Memory |         |
+        | | RAS Memory |----->| Repair Control|         |
+        | | Err Handler|      |_______________|         |
+        | |____________|           |                    |
+        |__________________________|____________________|                              
+                                   |
+                                   |
+    _______________________________|______________________________
+   |   Kernel EDAC based SubSystem | for RAS Features Control     |
+   | ______________________________|____________________________  |
+   || EDAC Core          Sysfs EDAC| Bus                        | |
+   ||    __________________________|________ _    _____________ | |
+   ||   |/sys/bus/edac/devices/<dev>/scrubX/ |   | EDAC Device || |
+   ||   |/sys/bus/edac/devices/<dev>/ecsX/   |<->| EDAC MC     || |
+   ||   |/sys/bus/edac/devices/<dev>/repairX |   | EDAC Sysfs  || |
+   ||   |____________________________________|   |_____________|| |
+   ||                               | EDAC Bus                  | |
+   ||               Get             |       Get                 | |
+   ||    __________ Features       |   Features __________    | |
+   ||   |          |Descs  _________|______ Descs|          |   | |
+   ||   |EDAC Scrub|<-----| EDAC Device    |     | EDAC Mem |   | |
+   ||   |__________|      | Driver- RAS    |---->| Repair   |   | |
+   ||    __________       | Feature Control|     |__________|   | |
+   ||   |          |<-----|________________|                    | |
+   ||   |EDAC ECS  |   Register RAS | Features                  | |
+   ||   |__________|                |                           | |
+   ||         ______________________|_________                  | |
+   ||_________|_____________|________________|__________________| |
+   |   _______|____    _____|_________   ____|_________           |
+   |  |            |  | CXL Mem Driver| | Client Driver|          |
+   |  | ACPI RAS2  |  | Sparing, PPR, | | Mem Repair   |          |
+   |  | Driver     |  | Scrub, ECS    | | Features     |          |
+   |  |____________|  |_______________| |______________|          |
+   |        |              |              |                       |
+   |________|______________|______________|_______________________|
+            |              |              |                     
+     _______|______________|______________|_______________________
+    |     __|______________|_ ____________|____________ ____      |
+    |    |                                                  |     |
+    |    |            Platform HW and Firmware              |     |
+    |    |__________________________________________________|     |
+    |_____________________________________________________________|                             
+
+1. EDAC RAS Features components - Create feature specific descriptors.
+   for example, EDAC scrub, EDAC ECS, EDAC memory repair in the above
+   diagram. 
+2. EDAC device driver for controlling RAS Features - Get feature's attr
+   descriptors from EDAC RAS feature component and registers device's
+   RAS features with EDAC bus and expose the feature's sysfs attributes
+   under the sysfs EDAC bus.
+3. RAS dynamic scrub controller - Userspace sample module added for scrub
+   control in rasdaemon to issue scrubbing when excess number of memory
+   errors are reported in a short span of time.
+
+The added EDAC feature specific components (e.g. EDAC scrub, EDAC ECS,
+EDAC memory repair etc) do callbacks to  the parent driver (e.g. CXL
+driver, ACPI RAS driver etc) for the controls rather than just letting the
+caller deal with it because of the following reasons.
+1. Enforces a common API across multiple implementations can do that
+   via review, but that's not generally gone well in the long run for
+   subsystems that have done it (several have later moved to callback
+   and feature list based approaches).
+2. Gives a path for 'intercepting' in the EDAC feature driver.
+   An example for this is that we could intercept PPR repair calls
+   and sanity check that the memory in question is offline before
+   passing back to the underlying code.  Sure we could rely on doing
+   that via some additional calls from the parent driver, but the
+   ABI will get messier.
+3. (Speculative) we may get in kernel users of some features in the
+   long run.
+
+More details of the common RAS features are described in the following
+sections.
+
+Memory Scrubbing
+================
+Increasing DRAM size and cost has made memory subsystem reliability
+an important concern. These modules are used where potentially
+corrupted data could cause expensive or fatal issues. Memory errors are
+one of the top hardware failures that cause server and workload crashes.
+
+Memory scrub is a feature where an ECC engine reads data from
+each memory media location, corrects with an ECC if necessary and
+writes the corrected data back to the same memory media location.
+
+The memory DIMMs could be scrubbed at a configurable rate to detect
+uncorrected memory errors and attempts to recover from detected memory
+errors providing the following benefits.
+- Proactively scrubbing memory DIMMs reduces the chance of a correctable
+  error becoming uncorrectable.
+- Once detected, uncorrected errors caught in unallocated memory pages are
+  isolated and prevented from being allocated to an application or the OS.
+- The probability of software/hardware products encountering memory
+  errors is reduced.
+Some details of background can be found in Reference [5].
+
+There are 2 types of memory scrubbing,
+1. Background (patrol) scrubbing of the RAM whilst the RAM is otherwise
+   idle.
+2. On-demand scrubbing for a specific address range/region of memory.
+
+There are several types of interfaces to HW memory scrubbers
+identified such as ACPI NVDIMM ARS(Address Range Scrub), CXL memory
+device patrol scrub, CXL DDR5 ECS, ACPI RAS2 memory scrubbing.
+
+The scrub control varies between different memory scrubbers. To allow
+for standard userspace tooling there is a need to present these controls
+with a standard ABI.
+
+Introduce generic memory EDAC scrub control which allows user to control
+underlying scrubbers in the system via generic sysfs scrub control
+interface. The common sysfs scrub control interface abstracts the control
+of an arbitrary scrubbing functionality to a common set of functions.
+
+Use case of common scrub control feature
+========================================
+1. There are several types of interfaces to HW memory scrubbers identified
+   such as ACPI NVDIMM ARS(Address Range Scrub), CXL memory device patrol
+   scrub, CXL DDR5 ECS, ACPI RAS2 memory scrubbing features and software
+   based memory scrubber(discussed in the community Reference [5]).
+   Also some scrubbers support controlling (background) patrol scrubbing
+   (ACPI RAS2, CXL) and/or on-demand scrubbing(ACPI RAS2, ACPI ARS).
+   However the scrub controls varies between memory scrubbers. Thus there
+   is a requirement for a standard generic sysfs scrub controls exposed
+   to userspace for the seamless control of the HW/SW scrubbers in
+   the system by admin/scripts/tools etc.
+2. Scrub controls in user space allow the user to disable the scrubbing
+   in case disabling of the background patrol scrubbing or changing the
+   scrub rate are needed for other purposes such as performance-aware
+   operations which requires the background operations to be turned off
+   or reduced.
+3. Allows to perform on-demand scrubbing for specific address range if
+   supported by the scrubber.
+4. User space tools controls scrub the memory DIMMs regularly at a
+   configurable scrub rate using the sysfs scrub controls discussed help,
+   - to detect uncorrectable memory errors early before user accessing memory,
+     which helps to recover the detected memory errors.
+   - reduces the chance of a correctable error becoming uncorrectable.
+5. Policy control for hotplugged memory. There is not necessarily a system
+   wide bios or similar in the loop to control the scrub settings on a CXL
+   device that wasn't there at boot. What that setting should be is a policy
+   decision as we are trading of reliability vs performance - hence it should
+   be in control of userspace. As such, 'an' interface is needed. Seems more
+   sensible to try and unify it with other similar interfaces than spin
+   yet another one.
+
+The draft version of userspace code added in rasdaemon for dynamic scrub
+control, based on frequency of memory errors reported to userspace, tested
+for CXL device based patrol scrubbing feature and ACPI RAS2 based
+scrubbing feature.
+
+https://github.com/shijujose4/rasdaemon/tree/ras_feature_control
+
+ToDO: For memory repair features, such as PPR, memory sparing, rasdaemon
+collates records and decides to replace a row if there are lots of
+corrected errors, or a single uncorrected error or error record received
+with maintenance request flag set as in some CXL event records.
+
+Comparison of scrubbing features
+================================
+ ................................................................
+ .              .   ACPI    . CXL patrol.  CXL ECS  .  ARS      .
+ .  Name        .   RAS2    . scrub     .           .           .
+ ................................................................
+ .              .           .           .           .           .
+ . On-demand    . Supported . No        . No        . Supported .
+ . Scrubbing    .           .           .           .           .
+ .              .           .           .           .           .  
+ ................................................................
+ .              .           .           .           .           .
+ . Background   . Supported . Supported . Supported . No        .
+ . scrubbing    .           .           .           .           .
+ .              .           .           .           .           .
+ ................................................................
+ .              .           .           .           .           .
+ . Mode of      . Scrub ctrl. per device. per memory.  Unknown  .
+ . scrubbing    . per NUMA  .           . media     .           .
+ .              . domain.   .           .           .           .
+ ................................................................
+ .              .           .           .           .           . 
+ . Query scrub  . Supported . Supported . Supported . Supported .       
+ . capabilities .           .           .           .           .
+ .              .           .           .           .           .
+ ................................................................
+ .              .           .           .           .           . 
+ . Setting      . Supported . No        . No        . Supported .       
+ . address range.           .           .           .           .
+ .              .           .           .           .           .
+ ................................................................
+ .              .           .           .           .           . 
+ . Setting      . Supported . Supported . No        . No        .       
+ . scrub rate   .           .           .           .           .
+ .              .           .           .           .           .
+ ................................................................
+ .              .           .           .           .           . 
+ . Unit for     . Not       . in hours  . No        . No        .       
+ . scrub rate   . Defined   .           .           .           .
+ .              .           .           .           .           .
+ ................................................................
+ .              . Supported .           .           .           .
+ . Scrub        . on-demand . No        . No        . Supported .
+ . status/      . scrubbing .           .           .           .
+ . Completion   . only      .           .           .           .
+ ................................................................
+ . UC error     .           .CXL general.CXL general. ACPI UCE  .
+ . reporting    . Exception .media/DRAM .media/DRAM . notify and.
+ .              .           .event/media.event/media. query     .
+ .              .           .scan?      .scan?      . ARS status.
+ ................................................................
+ .              .           .           .           .           .      
+ . Clear UC     .  No       . No        .  No       . Supported .
+ . error        .           .           .           .           .
+ .              .           .           .           .           .  
+ ................................................................
+ .              .           .           .           .           .
+ . Translate    . No        . No        . No        . Supported .
+ . *(1)SPA to   .           .           .           .           .
+ . *(2)DPA      .           .           .           .           .  
+ ................................................................
+
+*(1) - SPA - System Physical Address. See section 9.19.7.8
+       Function Index 5 - Translate SPA of ACPI spec r6.5.  
+*(2) - DPA - Device Physical Address. See section 9.19.7.8
+       Function Index 5 - Translate SPA of ACPI spec r6.5.  
+
+CXL Memory Scrubbing features
+=============================
+CXL spec r3.1 section 8.2.9.9.11.1 describes the memory device patrol scrub
+control feature. The device patrol scrub proactively locates and makes
+corrections to errors in regular cycle. The patrol scrub control allows the
+request to configure patrol scrubber's input configurations.
+
+The patrol scrub control allows the requester to specify the number of
+hours in which the patrol scrub cycles must be completed, provided that
+the requested number is not less than the minimum number of hours for the
+patrol scrub cycle that the device is capable of. In addition, the patrol
+scrub controls allow the host to disable and enable the feature in case
+disabling of the feature is needed for other purposes such as
+performance-aware operations which require the background operations to be
+turned off.
+
+The Error Check Scrub (ECS) is a feature defined in JEDEC DDR5 SDRAM
+Specification (JESD79-5) and allows the DRAM to internally read, correct
+single-bit errors, and write back corrected data bits to the DRAM array
+while providing transparency to error counts.
+
+The DDR5 device contains number of memory media FRUs per device. The
+DDR5 ECS feature and thus the ECS control driver supports configuring
+the ECS parameters per FRU.
+
+ACPI RAS2 Hardware-based Memory Scrubbing
+=========================================
+ACPI spec 6.5 section 5.2.21 ACPI RAS2 describes ACPI RAS2 table
+provides interfaces for platform RAS features and supports independent
+RAS controls and capabilities for a given RAS feature for multiple
+instances of the same component in a given system.
+Memory RAS features apply to RAS capabilities, controls and operations
+that are specific to memory. RAS2 PCC sub-spaces for memory-specific RAS
+features have a Feature Type of 0x00 (Memory).
+
+The platform can use the hardware-based memory scrubbing feature to expose
+controls and capabilities associated with hardware-based memory scrub
+engines. The RAS2 memory scrubbing feature supports following as per spec,
+ - Independent memory scrubbing controls for each NUMA domain, identified
+   using its proximity domain.
+   Note: However AmpereComputing has single entry repeated as they have
+         centralized controls.
+ - Provision for background (patrol) scrubbing of the entire memory system,
+   as well as on-demand scrubbing for a specific region of memory.
+
+ACPI Address Range Scrubbing(ARS)
+================================
+ARS allows the platform to communicate memory errors to system software.
+This capability allows system software to prevent accesses to addresses
+with uncorrectable errors in memory. ARS functions manage all NVDIMMs
+present in the system. Only one scrub can be in progress system wide
+at any given time.
+Following functions are supported as per the specification.
+1. Query ARS Capabilities for a given address range, indicates platform
+   supports the ACPI NVDIMM Root Device Unconsumed Error Notification.
+2. Start ARS triggers an Address Range Scrub for the given memory range.
+   Address scrubbing can be done for volatile memory, persistent memory,
+   or both.
+3. Query ARS Status command allows software to get the status of ARS,  
+   including the progress of ARS and ARS error record.
+4. Clear Uncorrectable Error.
+5. Translate SPA
+6. ARS Error Inject etc.
+Note: Support for ARS is not added in this series because to reduce the
+line of code for review and could be added after initial code is merged. 
+We'd like feedback on whether this is of interest to ARS community?
+
+Post Package Repair(PPR)
+========================
+PPR (Post Package Repair) maintenance operation requests the memory device
+to perform a repair operation on its media if supported. A memory device
+may support two types of PPR: Hard PPR (hPPR), for a permanent row repair,
+and Soft PPR (sPPR), for a temporary row repair. sPPR is much faster than
+hPPR, but the repair is lost with a power cycle. During the execution of a
+PPR maintenance operation, a memory device, may or may not retain data and
+may or may not be able to process memory requests correctly. sPPR maintenance
+operation may be executed at runtime, if data is retained and memory requests
+are correctly processed. hPPR maintenance operation may be executed only at
+boot because data would not be retained.
+
+Use cases of common PPR control feature
+=======================================
+1. The Soft PPR (sPPR) and Hard PPR (hPPR) share similar control interfaces,
+thus there is a requirement for a standard generic sysfs PPR controls exposed
+to userspace for the seamless control of the PPR features in the system by the
+admin/scripts/tools etc.
+2. When a CXL device identifies a failure on a memory component, the device
+may inform the host about the need for a PPR maintenance operation by using
+an event record, where the maintenance needed flag is set. The event record
+specifies the DPA that should be repaired. Kernel reports the corresponding
+cxl general media or DRAM trace event to userspace. The userspace tool,
+for reg. rasdaemon initiate a PPR maintenance operation in response to a
+device request using the sysfs PPR control.
+3. User space tools, for eg. rasdaemon, do request PPR on a memory region
+when uncorrected memory error or excess corrected memory errors reported
+on that memory.
+4. Likely multiple instances of PPR present per memory device.
+
+Memory Sparing
+==============
+Memory sparing is defined as a repair function that replaces a portion of
+memory with a portion of functional memory at that same DPA. User space
+tool, e.g. rasdaemon, may request the sparing operation for a given
+address for which the uncorrectable error is reported. In CXL,
+(CXL spec 3.1 section 8.2.9.7.1.4) subclasses for sparing operation vary
+in terms of the scope of the sparing being performed. The cacheline sparing
+subclass refers to a sparing action that can replace a full cacheline.
+Row sparing is provided as an alternative to PPR sparing functions and its
+scope is that of a single DDR row. Bank sparing allows an entire bank to
+be replaced. Rank sparing is defined as an operation in which an entire
+DDR rank is replaced.
+
+Series adds,
+1. EDAC device driver extended for controlling RAS features, EDAC scrub
+   driver, EDAC ECS driver, EDAC memory repair driver supports memory
+   scrub control, ECS control, memory repair(PPR, sparing) control
+   respectively.
+2. Several common patches from Dave's cxl/fwctl series.   
+3. Support for CXL feature mailbox commands, which is used by CXL device
+   scrubbing and memory repair features. 
+4. CXL features driver supporting patrol scrub control (device and
+   region based).
+   
+5. CXL features driver supporting ECS control feature.
+6. ACPI RAS2 driver adds OS interface for RAS2 communication through
+   PCC mailbox and extracts ACPI RAS2 feature table (RAS2) and
+   create platform device for the RAS memory features, which binds
+   to the memory ACPI RAS2 driver.
+7. Memory ACPI RAS2 driver gets the PCC subspace for communicating
+   with the ACPI compliant platform supports ACPI RAS2. Add callback
+   functions and registers with EDAC device to support user to
+   control the HW patrol scrubbers exposed to the kernel via the
+   ACPI RAS2 table.
+8. Support for CXL maintenance mailbox command, which is used by
+   CXL device memory repair feature.   
+9. CXL features driver supporting PPR control feature.
+10. CXL features driver supporting memory sparing control feature.
+    Note: There are other PPR, memory sparing drivers to come.
+
+Open Questions based on feedbacks from the community:
+1. Leo: Standardize unit for scrub rate, for example ACPI RAS2 does not define
+   unit for the scrub rate. RAS2 clarification needed. 
+2. Jonathan:
+   - Any need for discoverability of capability to scan different regions,
+   such as global PA space to userspace. Left as future extension.
+   - For EDAC memory repair, control attribute for granularity(cache/row//bank/rank)
+     is needed?
+
+3. Jiaqi:
+   - STOP_PATROL_SCRUBBER from RAS2 must be blocked and, must not be exposed to
+     OS/userspace. Stopping patrol scrubber is unacceptable for platform where
+     OEM has enabled patrol scrubber, because the patrol scrubber is a key part
+     of logging and is repurposed for other RAS actions.
+   If the OEM does not want to expose this control, they should lock it down so the
+   interface is not exposed to the OS. These features are optional after all.
+   - "Requested Address Range"/"Actual Address Range" (region to scrub) is a
+      similarly bad thing to expose in RAS2.
+   If the OEM does not want to expose this, they should lock it down so the
+   interface is not exposed to the OS. These features are optional after all.
+   As per LPC discussion, support for stop and attributes for addr range
+   to be exposed to the userspace. 
+4. Borislav: 
+   - How the scrub control exposed to userspace will be used?
+     POC added in rasdaemon with dynamic scrub control for CXL memory media
+     errors and memory errors reported to userspace.
+     https://github.com/shijujose4/rasdaemon/tree/scrub_control_6_june_2024
+   - Is the scrub interface is sufficient for the use cases?
+   - Who is going to use scrub controls tools/admin/scripts?
+     1) Rasdaemon for dynamic control
+     2) Udev script for more static 'defaults' on hotplug etc.
+5. PPR   
+   - For PPR, rasdaemon collates records and decides to replace a row if there
+     are lots of corrected errors, or a single uncorrected error or error record
+     received with maintenance request flag set as in CXL DRAM error record.
+   - sPPR more or less startup only (so faking hPPR) or actually useful
+     in a running system (if not the safe version that keeps everything
+     running whilst replacement is ongoing)
+   - Is future proofing for multiple PPR units useful given we've mashed
+     together hPPR and sPPR for CXL.
+
+Implementation
+==============
+1. Linux kernel
+Version 17 of kernel implementations of RAS features control is available in,
+https://github.com/shijujose4/linux.git
+Branch: edac-enhancement-ras-features_v18
+
+Note: Took updated patches for CXL feature infrastructure and feature commands
+   from Dave's cxl/features branch.
+   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/log/?h=cxl/features
+   
+   Apologise to Dave for not waiting enough for permission to sendout his patches
+   in this series because of rush. 
+
+2. QEMU emulation
+QEMU for CXL RAS features implementation is available in, 
+https://gitlab.com/shiju.jose/qemu.git
+Branch: cxl-ras-features-2024-10-24
+
+3. Userspace rasdaemon
+The draft version of userspace sample code for dynamic scrub control,
+based on frequency of memory errors reported to userspace, is added
+in rasdaemon and enabled, tested for CXL device based patrol scrubbing
+feature and ACPI RAS2 based scrubbing feature. This required updation
+for the latest sysfs scrub interface.
+https://github.com/shijujose4/rasdaemon/tree/ras_feature_control
+
+ToDO: For PPR, rasdaemon collates records and decides to replace a row if there
+are lots of corrected errors, or a single uncorrected error or error
+record received with maintenance request flag set as in CXL DRAM error
+record.
+  
+References:
+1. ACPI spec r6.5 section 5.2.21 ACPI RAS2.
+2. ACPI spec r6.5 section 9.19.7.2 ARS.
+3. CXL spec  r3.1 8.2.9.9.11.1 Device patrol scrub control feature
+4. CXL spec  r3.1 8.2.9.9.11.2 DDR5 ECS feature
+5. CXL spec  r3.1 8.2.9.7.1.1 PPR Maintenance Operations
+6. CXL spec  r3.1 8.2.9.7.2.1 sPPR Feature Discovery and Configuration
+7. CXL spec  r3.1 8.2.9.7.2.2 hPPR Feature Discovery and Configuration
+8. Background information about kernel support for memory scan, memory
+   error detection and ACPI RASF.
+   https://lore.kernel.org/all/20221103155029.2451105-1-jiaqiyan@google.com/
+9. Discussions on RASF:
+   https://lore.kernel.org/lkml/20230915172818.761-1-shiju.jose@huawei.com/#r 
+
+Changes
+=======
+v17 -> v18:
+1. Rebased to kernel version 6.13-rc5
+2. Reordered patches for feedback from Jonathan on v17.
+3.
+3.1 Took updated patches for CXL feature infrastructure and feature commands
+   from Dave's cxl/features branch.
+   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/log/?h=cxl/features
+   Updated, debug and tested CXL RAS features.
+   
+   Apologise to Dave for not waiting enough for permission to sendout his patches
+   in this series because of rush.    
+   
+3.2. RAS features in the cxl/core/memfeature.c updated for interface
+     changes in the CXL feature commands.
+4. Modified ACPI RAS2 code for the recent interface changes in the
+   PCC mbox code.
+
+v16 -> v17:
+1. 
+1.1 Took several patches for CXL feature commands from Dave's 
+   fwctl/cxl series and add fixes pointed by Jonathan in those patches.
+1.2. cxl/core/memfeature.c updated for interface changes in the
+   Get Supported Feature, Get Feature and Set Feature functions.
+1.3. Used the UUID's for RAS features in CXL features code from
+     include/cxl/features.h    
+2. Changes based on feedbacks from Boris
+ - Added attributes in EDAC memory repair to return the range for DPA
+   and other control attributes, and added callback functions for the
+   DPA range in CXL PPR and memory sparing code, which is the only one
+   supported in the CXL.
+ - Removed 'query' attribute for memory repair feature.
+
+v15 -> v16:
+1. Changes and Fixes for feedbacks from Boris
+ - Modified documentations and interface file for EDAC memory repair
+   to add more details and use cases.
+ - Merged documentations to corresponding patches instead of common patch
+   for full documentation for better readability.
+ - Removed 'persist_mode_avail' attribute for memory repair feature.
+2. Changes for feedback from Dave Jiang
+ - Dave suggested helper function for ECS initialization in cxl/core/memfeature.c,
+   which added for all CXl RAS features, scrub, ECS, PPR and memory sparing features.
+ - Fixed endian conversion pointed by Dave in CXL memory sparing. Also I fixed
+     similar in CXL scrub, ECS and PPR features.
+3. Changes for feedback from Ni Fan.
+ - Fixed a memory leak in edac_dev_register() for memory repair feature
+   and few suggestions by Ni Fan.
+
+v14 -> v15:
+1. Changes and Fixes for feedbacks from Boris
+  - Added documentations for edac features, scrub and memory_repair etc
+    and placed in a separate patch.
+  - Deleted extra 2 attributes for EDAC ECS log_entry_type_per_* and
+    mode_counts_*.
+  - Rsolved issues reported in Documentation/ABI/testing/sysfs-edac-ecs.
+  - Deleted unused pr_ftmt() from few files.
+  - Fixed some formating issues EDAC ECS code and similar in other files. 
+    etc.
+2. Change for feedback from Dave Jiang
+  - In CXL code for patrol scrub control, Dave suggested replace
+    void *drv_data with a union of parameters in cxl_ps_get_attrs() and
+    similar functions.
+    This is fixed by replacing void *drv_data with corresponding context
+    structure(struct cxl_patrol_scrub_context) in CXL local functions as
+    struct cxl_patrol_scrub_context difficult and can't be visible in
+    generic EDAC control interface. Similar changes are made for CXL ECS,
+    CXL PPR and CXL memory sparing local functions.
+
+v13 -> v14:
+1. Changes and Fixes for feedback from Boris
+  - Check grammar of patch description.
+  - Changed scrub control attributes for memory scrub range to "addr" and "size".
+  - Fixed unreached code in edac_dev_register(). 
+  - Removed enable_on_demand attribute from EDAC scrub control and modified
+    RAS2 driver for the same.
+  - Updated ABI documentation for EDAC scrub control.
+    etc.
+
+2. Changes for feedback from Greg/Rafael/Jonathan for ACPI RAS2
+  - Replaced platform device creation and binding with
+    auxiliary device creation and binding with ACPI RAS2
+    memory auxiliary driver.
+
+3. Changes and Fixes for feedback from Jonathan
+  - Fixed unreached code in edac_dev_register(). 
+  - Optimize callback functions in CXL ECS using macros.
+  - Add readback attributes for the EDAC memory repair feature
+    and add support in the CXL driver for PPR and memory sparing.
+  - Add refactoring in the CXL driver for PPR and memory sparing
+    for query/repair maintenance commands.
+  - Add cxl_dpa_to_region_locked() function.  
+  - Some more cleanups in the ACPI RAS2 and RAS2 memory drivers.
+    etc.
+
+4. Changes and Fixes for feedback from Ni Fan
+   - Fixed compilation error - cxl_mem_ras_features_init refined, when CXL components
+     build as module.
+
+5. Optimize callback functions in CXL memory sparing using macros.
+   etc.
+   
+v12 -> v13:
+1. Changes and Fixes for feedback from Boris
+  - Function edac_dev_feat_init() merge with edac_dev_register()
+  - Add macros in EDAC feature specific code for repeated code.
+  - Correct spelling mistakes.
+  - Removed feature specific code from the patch "EDAC: Add support
+    for EDAC device features control"
+2. Changes for feedbacks from Dave Jiang
+   - Move fields num_features and entries to struct cxl_mailbox,
+     in "cxl: Add Get Supported Features command for kernel usage"
+   - Use series from 
+     https://lore.kernel.org/linux-cxl/20240905223711.1990186-1-dave.jiang@intel.com/   
+3. Changes and Fixes for feedback from Ni Fan
+   - In documentation scrub* to scrubX, ecs_fru* to ecs_fruX
+   - Corrected some grammar mistakes in the patch headers.
+   - Fixed an error print for min_scrub_cycle_hrs in the CXL patrol scrub
+     code.
+   - Improved an error print in the CXL ECS code.
+   - bool -> tristate for config CXL_RAS_FEAT
+4. Add support for CXL memory sparing feature.
+5. Add common EDAC memory repair driver for controlling memory repair
+   features, PPR, memory sparing etc.
+
+v11 -> v12:
+1. Changes and Fixes for feedback from Boris mainly for
+    patch "EDAC: Add support for EDAC device features control"
+    and other generic comments.
+
+2. Took CXL patches from Dave Jiang for "Add Get Supported Features
+   command for kernel usage" and other related patches. Merged helper
+   functions from this series to the above patch. Modifications of
+   CXL code in this series due to refactoring of CXL mailbox in Dave's
+   patches.
+
+3. Modified EDAC scrub control code to support multiple scrub instances
+   per device.
+
+v10 -> v11:
+1. Feedback from Borislav:
+   - Add generic EDAC code for control device features to
+     /drivers/edac/edac_device.c.
+   - Add common structure in edac for device feature's data.
+   
+2. Some more optimizations in generic EDAC code for control
+   device features.
+
+3. Changes for feedback from Fan for ACPI RAS2 memory driver.
+
+4. Add support for control memory PPR (Post Package Repair) features
+   in EDAC.
+   
+5. Add support for maintenance command in the CXL mailbox code,
+   which is needed for support PPR features in CXL driver.  
+
+6. Add support for control memory PPR (Post Package Repair) features
+   and do perform PPR maintenance operation in CXL driver.
+
+7. Rename drivers/cxl/core/memscrub.c to drivers/cxl/core/memfeature.c
+
+v9 -> v10:
+1. Feedback from Mauro Carvalho Chehab:
+   - Changes suggested in EDAC RAS feature driver.
+     use uppercase for enums, if else to switch-case, documentation for
+     static scrub and ecs init functions etc.
+   - Changes suggested in EDAC scrub.
+     unit of scrub cycle hour to seconds.
+     attribute node cycle_in_hours_available to min_cycle_duration and 
+     max_cycle_duration.
+     attribute node cycle_in_hours to current_cycle_duration.
+     Use base 0 for kstrtou64() and kstrtol() functions.
+     etc.
+   - Changes suggested in EDAC ECS.
+     uppercase for enums
+     add ABI documentation. etc
+        
+2. Feedback from Fan:
+   - Changes suggested in EDAC RAS feature driver.
+     use uppercase for enums, change if...else to switch-case. 
+     some optimization in edac_ras_dev_register() function
+     add missing goto free_ctx
+   - Changes suggested in the code for feature commands.  
+   - CXL driver scrub and ECS code
+     use uppercase for enums, fix typo, use enum type for mode
+     fix lonf lines etc.
+       
+v8 -> v9:
+1. Feedback from Borislav:
+   - Add scrub control driver to the EDAC on feedback from Borislav.
+   - Changed DEVICE_ATTR_..() static.
+   - Changed the write permissions for scrub control sysfs files as
+     root-only.
+2. Feedback from Fan:
+   - Optimized cxl_get_feature() function by using min() and removed
+     feat_out_min_size.
+   - Removed unreached return from cxl_set_feature() function.
+   - Changed the term  "rate" to "cycle_in_hours" in all the
+     scrub control code.
+   - Allow cxl_mem_probe() continue if cxl_mem_patrol_scrub_init() fail,
+     with just a debug warning.
+      
+3. Feedback from Jonathan:
+   - Removed patch __free() based cleanup function for acpi_put_table.
+     and added fix in the acpi RAS2 driver.
+
+4. Feedback from Dan Williams:
+   - Allow cxl_mem_probe() continue if cxl_mem_patrol_scrub_init() fail,
+     with just a debug warning.
+   - Add support for CXL region based scrub control.
+
+5. Feedback from Daniel Ferguson on RAS2 drivers:
+    In the ACPI RAS2 driver,
+  - Incorporated the changes given for clearing error reported.
+  - Incorporated the changes given for check the Set RAS Capability
+    status and return an appropriate error.
+    In the RAS2 memory driver,
+  - Added more checks for start/stop bg and on-demand scrubbing
+    so that addr range in cache do not get cleared and restrict
+    permitted operations during scrubbing.
+
+History for v1 to v8 is available here.
+https://lore.kernel.org/lkml/20240726160556.2079-1-shiju.jose@huawei.com/
+
+
+
+Dave Jiang (6):
+  cxl: Refactor user ioctl command path from mds to mailbox
+  cxl: Add skeletal features driver
+  cxl: Enumerate feature commands
+  cxl: Add Get Supported Features command for kernel usage
+  cxl: Add features driver attribute to emit number of features
+    supported
+  cxl: Setup exclusive CXL features that are reserved for the kernel
+
+Shiju Jose (13):
+  EDAC: Add support for EDAC device features control
+  EDAC: Add scrub control feature
+  EDAC: Add ECS control feature
+  EDAC: Add memory repair control feature
+  ACPI:RAS2: Add ACPI RAS2 driver
+  ras: mem: Add memory ACPI RAS2 driver
+  cxl/mbox: Add GET_FEATURE mailbox command
+  cxl/mbox: Add SET_FEATURE mailbox command
+  cxl/memfeature: Add CXL memory device patrol scrub control feature
+  cxl/memfeature: Add CXL memory device ECS control feature
+  cxl/mbox: Add support for PERFORM_MAINTENANCE mailbox command
+  cxl/memfeature: Add CXL memory device soft PPR control feature
+  cxl/memfeature: Add CXL memory device memory sparing control feature
+
+ Documentation/ABI/testing/sysfs-edac-ecs      |   63 +
+ .../ABI/testing/sysfs-edac-memory-repair      |  244 +++
+ Documentation/ABI/testing/sysfs-edac-scrub    |   74 +
+ Documentation/edac/features.rst               |  102 ++
+ Documentation/edac/index.rst                  |   12 +
+ Documentation/edac/memory_repair.rst          |  249 +++
+ Documentation/edac/scrub.rst                  |  393 ++++
+ drivers/acpi/Kconfig                          |   11 +
+ drivers/acpi/Makefile                         |    1 +
+ drivers/acpi/ras2.c                           |  407 ++++
+ drivers/cxl/Kconfig                           |   25 +
+ drivers/cxl/Makefile                          |    3 +
+ drivers/cxl/core/Makefile                     |    2 +
+ drivers/cxl/core/core.h                       |    7 +-
+ drivers/cxl/core/features.c                   |  287 +++
+ drivers/cxl/core/mbox.c                       |  167 +-
+ drivers/cxl/core/memdev.c                     |   22 +-
+ drivers/cxl/core/memfeature.c                 | 1631 +++++++++++++++++
+ drivers/cxl/core/port.c                       |    3 +
+ drivers/cxl/core/region.c                     |    6 +
+ drivers/cxl/cxl.h                             |    3 +
+ drivers/cxl/cxlmem.h                          |   67 +-
+ drivers/cxl/features.c                        |  215 +++
+ drivers/cxl/mem.c                             |    5 +
+ drivers/cxl/pci.c                             |   19 +
+ drivers/edac/Makefile                         |    1 +
+ drivers/edac/ecs.c                            |  207 +++
+ drivers/edac/edac_device.c                    |  183 ++
+ drivers/edac/mem_repair.c                     |  492 +++++
+ drivers/edac/scrub.c                          |  209 +++
+ drivers/ras/Kconfig                           |   10 +
+ drivers/ras/Makefile                          |    1 +
+ drivers/ras/acpi_ras2.c                       |  385 ++++
+ include/acpi/ras2_acpi.h                      |   45 +
+ include/cxl/features.h                        |  171 ++
+ include/cxl/mailbox.h                         |   45 +-
+ include/linux/edac.h                          |  238 +++
+ tools/testing/cxl/Kbuild                      |    1 +
+ 38 files changed, 5909 insertions(+), 97 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-edac-ecs
+ create mode 100644 Documentation/ABI/testing/sysfs-edac-memory-repair
+ create mode 100644 Documentation/ABI/testing/sysfs-edac-scrub
+ create mode 100644 Documentation/edac/features.rst
+ create mode 100644 Documentation/edac/index.rst
+ create mode 100644 Documentation/edac/memory_repair.rst
+ create mode 100644 Documentation/edac/scrub.rst
+ create mode 100755 drivers/acpi/ras2.c
+ create mode 100644 drivers/cxl/core/features.c
+ create mode 100644 drivers/cxl/core/memfeature.c
+ create mode 100644 drivers/cxl/features.c
+ create mode 100755 drivers/edac/ecs.c
+ create mode 100755 drivers/edac/mem_repair.c
+ create mode 100755 drivers/edac/scrub.c
+ create mode 100644 drivers/ras/acpi_ras2.c
+ create mode 100644 include/acpi/ras2_acpi.h
+ create mode 100644 include/cxl/features.h
+
 -- 
-2.17.1
+2.43.0
 
 
