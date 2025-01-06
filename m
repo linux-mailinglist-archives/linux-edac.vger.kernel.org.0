@@ -1,161 +1,270 @@
-Return-Path: <linux-edac+bounces-2813-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2814-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19636A0287A
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 15:48:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3723EA02AF1
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 16:39:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0408F160EFC
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 14:48:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A617B1881A70
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 15:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFD7786353;
-	Mon,  6 Jan 2025 14:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 756B31607AA;
+	Mon,  6 Jan 2025 15:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="C7RfAviP"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1999286323;
-	Mon,  6 Jan 2025 14:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736174898; cv=none; b=GDh0Nr5UyaHoWQo8RPBhjUOR02Onw7trnj7DyL7NBfTyO0iM+6X+lGRICo16zr4UbXdFY8NWCzTO250Rri0aie89hnyhF2368PFPw01uVHFWXlvtZLpS1BlVwImjis08P8AkFRXlZBgFQK0R+ZLP9jQiAZjExyBDDhk0DXx5qP4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736174898; c=relaxed/simple;
-	bh=DTRXv9ZerDho46tzA6hKyLXYv/6LhgDpHLe6fjmjJT8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=JVwNj4bmW+74hVFEN0XbxPA6YZJ+hMiEnJYAjDJVZ2BdROxz9QlgYn3cnElNfwt33zji/9icBLRQAgFAtzCNusD/1ZpK66yZIXu7XPOk+2ScbzUKnShKNHMgTP6dBv040ShNXjE24iZXQMXuOR6rAhyFTYJkscYQe/6TkJgsAiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YRcPW3dhFz6K5cC;
-	Mon,  6 Jan 2025 22:43:43 +0800 (CST)
-Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6E06214022E;
-	Mon,  6 Jan 2025 22:48:13 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml500005.china.huawei.com (7.182.85.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 6 Jan 2025 15:48:12 +0100
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Mon, 6 Jan 2025 15:48:12 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8865C200A3;
+	Mon,  6 Jan 2025 15:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736177933; cv=fail; b=oddDDF5f7HqL4IaD1II+dMElmT1ukOh1Cb1JbjFi1zUVIawVEjGDb+mgulxpmlsfq5xE1o31vRyhTiN/y56lHahd+LiWMN9A03DRwQyxNWhtxD6KhCh6rPuEZYAlwjhto0hqpBoF6nPIDovOVzNofXsDRzmMNF7HNxvObZ8zins=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736177933; c=relaxed/simple;
+	bh=B0fTpYwBx4wLlExgdwWFeVDEw2CZczwMfiADLfyNiRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qYCWAUdyQ2S68v2eSzI64yEJz2uBRCDq+PW4SneoKmO8pHNAXviXhYoZ8EO788ZSEy3JwcfHoWEoIeI1Tkp+1VLT7VE5IsaIfP7xIWS3edbua6AcRSCHdoGWwQJwrSfYhoJXAWCVWOL96wSO5CcQuweMxB2E+/hho5GuXk97Tbs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=C7RfAviP; arc=fail smtp.client-ip=40.107.220.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=o0xtNLM8tbw+IPG6jP2KKwIx/I9P6tPzuUJooNSf6MWwWEgIbMwd6iGn6yFDEnWIzOajdIADkqbU0Pft4c5RAipCQnG7mCCyf439XU4CClbp6OvkY19POvY3greDXPRQ9MLcjX/1xo4vEUoo+huIvY/NWnb2ybIObw3udalO6Og9hdEnn5HDKIHyyVC5E9nPVuSGRpN20Mrw4pq6jx85YvVFIOBVsrODbWifaR5jpwCTNJnFvF7v95jebqDxiqQBLc11TkykNxNI/iSD2bKYbcl+J9Wl7Hp0vPjKNbZX+PzSOUIjcfuKtqDNEJoxUA0hEILswwmEvTF2f15ePUHauQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S0t3DxbBvqJrp8zNsDAuiTBmWsUhR67YyswaueDYtnM=;
+ b=Au1VJq05cvI9bziItbLQ7h0SmJ7omurxioFJ8KlcdODJ4iFArhsESokwq8nTOZ9aqsWFWX6BsbIoUihB5w+y/UVUydeRr+lNVbT1bQN4YAJXrA1JyFfDSO3D+mTZbrZk8l99c9pP4pk/cjG/J4MbKOUl5XubcWfx0xx1YZLjxQSu5MwRqf701/oNbVpAqexFPGOCUPe/t1CXgBN/Hw170YqjTjwI9Nt/57/+1RFsEeQZLXUuABWn0GpJaZcwXAkUZB1uRLDMEVBqHOLz+e8fJ4E6eL6XZALLzlsxg8upkqFvxfSUG/R0TNoW8K4a+oviHJaclqo0ezWT0ebSzoowKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S0t3DxbBvqJrp8zNsDAuiTBmWsUhR67YyswaueDYtnM=;
+ b=C7RfAviPahXOGt7JymrzcT7w1DOjlqtyIehxhObW+CwjzV/QIdoOQe3n/GYCmWRRuRCExtJJfjOlC3XRxZ9ASf1I7pd5Oxr7HhLdCGhkwp5nsZqBoUc0upfFE/E8I5Ipe62EK5x1wv7fkZzIQ5eVluZt6fz/c3q0FxJ5vlIejhI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ LV2PR12MB5919.namprd12.prod.outlook.com (2603:10b6:408:173::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.17; Mon, 6 Jan
+ 2025 15:38:44 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%6]) with mapi id 15.20.8314.015; Mon, 6 Jan 2025
+ 15:38:44 +0000
+Date: Mon, 6 Jan 2025 10:38:39 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 To: Borislav Petkov <bp@alien8.de>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
-	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"Jonathan Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
-	<dave.jiang@intel.com>, "alison.schofield@intel.com"
-	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
-	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
-	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
-	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v18 01/19] EDAC: Add support for EDAC device features
- control
-Thread-Topic: [PATCH v18 01/19] EDAC: Add support for EDAC device features
- control
-Thread-Index: AQHbYDQbvBfnsLyISku/NcTTFtbfhrMJrx8AgAAi3FA=
-Date: Mon, 6 Jan 2025 14:48:12 +0000
-Message-ID: <072a03a818d94c6abd606ab5e0833002@huawei.com>
-References: <20250106121017.1620-1-shiju.jose@huawei.com>
- <20250106121017.1620-2-shiju.jose@huawei.com>
- <20250106133736.GDZ3vcoEBa-lJwqAxL@fat_crate.local>
-In-Reply-To: <20250106133736.GDZ3vcoEBa-lJwqAxL@fat_crate.local>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Clemens Ladisch <clemens@ladisch.de>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
+	Suma Hegde <suma.hegde@amd.com>, linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2 00/16] AMD NB and SMN rework
+Message-ID: <20250106153839.GA631754@yaz-khff2.amd.com>
+References: <20241206161210.163701-1-yazen.ghannam@amd.com>
+ <20250103214925.GJZ3hbZb5xEQ2wltln@fat_crate.local>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250103214925.GJZ3hbZb5xEQ2wltln@fat_crate.local>
+X-ClientProxiedBy: BN9PR03CA0041.namprd03.prod.outlook.com
+ (2603:10b6:408:fb::16) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|LV2PR12MB5919:EE_
+X-MS-Office365-Filtering-Correlation-Id: e076ca1f-c20e-4f82-310c-08dd2e683445
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?GVrskfW3Q+t0Ht2KGICsYWrQesSVIzwHPF2zMuZG9x0cHnzZyoTbpDIFh2XZ?=
+ =?us-ascii?Q?NtNEj0VulcSvcnCtza6yvLuIXZ2cdHu6nZYDeSrE9AkeUsOOjN4noiM+GffQ?=
+ =?us-ascii?Q?jY52lJgmVcQALF3XLkCZfC3MM7Ji+kkO0u+I7wX1SSelzxTY3ODArnYV0hkN?=
+ =?us-ascii?Q?ib/8GWDDjk7EGM+2LwkxVuiYxuJv5ulNmulllKNjEIS6HW1FmHrAR5hayLEB?=
+ =?us-ascii?Q?SmC6ORZkY17tJNa5GaYkJ1sZP9iKDg/p9olo8UzvSOD2A5Hm9mgJA4wK2iMo?=
+ =?us-ascii?Q?bVb+IgiA/1t4h0vfy6cdrvLhOBO1aIhZXp8zxdyiHWWJztc+0nw9rM8VGIch?=
+ =?us-ascii?Q?ZR56u6jl5rX1LfJKt0vYpPWmfnohmlNpW6TbZhf9ThydAJ2O28+j3ZBQBrvJ?=
+ =?us-ascii?Q?0ll2Y2dHicyuId/owy2HdPPXJNyRDtuNp0tfquGehlkHIAvl3pPMYXK9Vh+D?=
+ =?us-ascii?Q?WffGvyzIMPQO4P+tt17PNtpojhB8xZPL+Q0X2QAuAl1rx7Myp/Ecjdl1GhlW?=
+ =?us-ascii?Q?t5Iqrxn9sDbFLJtOKkRUzbxQpSBH1eks+yk2WO0/uY3s/9jog6xtWFAsQkvL?=
+ =?us-ascii?Q?XjM0ZNfL0InzxI5p0Wj9sm7zglWs+bRtfkgNrIFO+zUT0IQ4YGgvz2Q3nEax?=
+ =?us-ascii?Q?GDV14iSZ7jlMQLdcAlyIh61PTcHMsWrrBu2vcHgbQaBZfJYU4gF+ydMmNTAZ?=
+ =?us-ascii?Q?8++J/8cn9gJzzmJCc9E4NF57CBrw8P8GADcHdmFAhZjZoHOxnG7vzcYI7+xC?=
+ =?us-ascii?Q?WQL4qxiVjS33stKHxm4xEbt7fWAZqDlFsxCo/DjPK2ZaH8VHiCaK3wXw/tSD?=
+ =?us-ascii?Q?cc/5M2pOdcKHKgCp65rLUGEWs1Nho0EKRXQM7pBWqpXVlOTWc1jMo+9NLFJU?=
+ =?us-ascii?Q?MgpQBsu9Q1b0BqbsQ/Go639LhV/736bjyZXX6gj1nmO8VF5M5xmzbF4cVRja?=
+ =?us-ascii?Q?19ciLTG5ZQINaHAPi4NUaj29hneEKOuZstHh9vuK/HoAaIeU4sbid8rFcxqO?=
+ =?us-ascii?Q?NUmVYTY7e3kvoUBUqSh4UfEk6r+p80tWuLX5R/DltiFNk+WoePC+wZ5fDvdv?=
+ =?us-ascii?Q?ZOIkqiJ/FPb2BapI9FoHI1CEyvj6tQf/EYWd5txN2mJGNGuB1j/3tGtF/apS?=
+ =?us-ascii?Q?OymWmhtxiIpQhJO6Tv0ZPlIoba/zvGaLiVPNmKH/np5SvT5QOdhM6qMhOfNw?=
+ =?us-ascii?Q?WVBxPIY2kXm4Mz06ISLSnakuKJvm4SUp4httsVyeStyyYor7ulWmgYXfBFQ5?=
+ =?us-ascii?Q?z6jIpDS1dEeDrjeaH8B7eX9T6yFfrANTTklc0TBlm8fljeQgyFEpB00ithb6?=
+ =?us-ascii?Q?U8J8MmF/QkpDex1W+qz9OiG7vSeYgOvlNOX/bWtZgGNcbGpZ6Eonh8Hrynkd?=
+ =?us-ascii?Q?TT3QcPAFA8VC8p/+Ol9zcoVj3P8V?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?z53ACA9rmtwqQDbQCVIDpkSRxB2NQw7mdfw+ej6Y5F54eTqE7wf0ewDR6LNa?=
+ =?us-ascii?Q?bOCianAOn6iozIyg4a+NuQlOnAwvBmgFRX3lw4Ir/j3KuCCOlG9yy1Ao1d/3?=
+ =?us-ascii?Q?kz0IZWzD6VxgnCTJ+NFD4J9LaGrJK5IStvmzxxdCpoTBvKTMLUJaHZidv78o?=
+ =?us-ascii?Q?tQ74fPadUHq4YojCrwoEjvnYQtjTUUMevQ2oU9NTdTFKHZzMmv3rVUDqGiEM?=
+ =?us-ascii?Q?OCcM0XWF+Z3AwxQVk1aYeBZFlYjbl2WMHz+p1H379hvU6TMFLlrNeWN0RWBu?=
+ =?us-ascii?Q?1L8zelrZY6VWoKNpeH8lsyCtlBUq1FPr0TrJoqFM901iK5kk3aEjEuOdMvCU?=
+ =?us-ascii?Q?lQII2d0LVuuqFSMrHH0dZjk8fkOlLBnLTrT2GKyKfw+HQ9at6961Xt1vHv9F?=
+ =?us-ascii?Q?LrNQGExShJ4BV3RD9EhzbR4DFyWYikwjSD4YRP2JvHYeiPd24VXumvKZer4b?=
+ =?us-ascii?Q?GhrUMSACV4HiL6KOE5A04yAkeWKx+eEYUmCCY4IRoT5F7FGAzajPednIXPX6?=
+ =?us-ascii?Q?2ndUhEW/S2vhVeR+vIEu5veQDk88S4ZauzfGXkjUE1G1Q4jcw9T6qQbVtHfB?=
+ =?us-ascii?Q?h454Bbtmpjh6x1ILaYTzC8+dUN9DRPsCRaACTn1dPqncxUXBY5Pk2AgMQB/2?=
+ =?us-ascii?Q?PJPiXFZypfDqKYDez5072JwDjpeYsMVhrBu/oohsXapcJNijslPNFsWvYNQs?=
+ =?us-ascii?Q?VQDzqmAY6yreYmuxmMTER1BaHnVhYHrZk5Siyn65WDNwCyGjw6FBHlCFt9SM?=
+ =?us-ascii?Q?wpyhkGGJsS7iq8IoO0Dslxn0bIXhrBSUL28DsadCJeI26Yj+5Gnw+Vejf73E?=
+ =?us-ascii?Q?INNb3WE5wCSQrz9sw3+ifsjx/qiRf954hr40qzxkgE22OCKCjmf4tdlzf77L?=
+ =?us-ascii?Q?xTSzOUfddU66btPgDQuHg0lP4+FegorhSdj04B/aqGPH1duXgWuwav8/nqFZ?=
+ =?us-ascii?Q?wHDiaiK850y9SMxV1ED1Wnd/67TWyCOl/t3GDQDLLqZx5zqCLuZPqKvahyQ7?=
+ =?us-ascii?Q?zeqzJO99JnYLmeyYWZmjMPimN2kOWHzvsb6Ga2R1kfnre0IDvxXp/r/wnP5N?=
+ =?us-ascii?Q?Fhw4MqiLFRabnNDoKOTD2w/MoTeWrpppmOwi7xZ4UZNafn9It+WXRVkK/p6f?=
+ =?us-ascii?Q?/sYS9dHXDttZQQGCzH8AbJbIEQZK/7oysegPeyTVci4QtJFOVxzAejkZhHxT?=
+ =?us-ascii?Q?dJngzEDKMEoWoBf/GwopqSS9mEBnYDdcK7Caopko4LH4KA4B2lok2tq/WIq3?=
+ =?us-ascii?Q?XOcOAadmNjXaEFb38BiAtmz8OYHNKUbtyjtLSR+Ko4tkwruzyQ1ZIHpssuUk?=
+ =?us-ascii?Q?bubGiWDZBm2G/lo72epiXE424A6nCQxufs12mV/mt7nWX7qLQVtCSf/uRqP+?=
+ =?us-ascii?Q?65tn8GrCPmHtnzXgYkdza/3vK7kEROma/wZ8oKFbplF92ruM6SE7DYl3ujSd?=
+ =?us-ascii?Q?ZhkGJTXAQIXUS+G/XXb5KGAlFatnVf/oC2sMX5N+/tDFiDtGLSMmj8n5ydkb?=
+ =?us-ascii?Q?MMPGhnqCH3AZBu7IV37wVdFfjOs0iAo3ENvK2Y6KQM3p1KMvbdmURmPIc/39?=
+ =?us-ascii?Q?voVO+mbCcBqRWKn2wzYkzI2aJt4HPpFhBkf4LfFt?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e076ca1f-c20e-4f82-310c-08dd2e683445
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2025 15:38:44.7784
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GdlfFxMU3B7yCR+oNX41BNN63GvgdQteJ6F2isKknxrDKmjbqAUvRQeK2BtFqV0hSlddTTQahswUEXeetaMG5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5919
 
-DQo+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj5Gcm9tOiBCb3Jpc2xhdiBQZXRrb3YgPGJw
-QGFsaWVuOC5kZT4NCj5TZW50OiAwNiBKYW51YXJ5IDIwMjUgMTM6MzgNCj5UbzogU2hpanUgSm9z
-ZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPkNjOiBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtY3hsQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+YWNwaUB2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LW1tQGt2YWNrLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj50
-b255Lmx1Y2tAaW50ZWwuY29tOyByYWZhZWxAa2VybmVsLm9yZzsgbGVuYkBrZXJuZWwub3JnOw0K
-Pm1jaGVoYWJAa2VybmVsLm9yZzsgZGFuLmoud2lsbGlhbXNAaW50ZWwuY29tOyBkYXZlQHN0Z29s
-YWJzLm5ldDsgSm9uYXRoYW4NCj5DYW1lcm9uIDxqb25hdGhhbi5jYW1lcm9uQGh1YXdlaS5jb20+
-OyBkYXZlLmppYW5nQGludGVsLmNvbTsNCj5hbGlzb24uc2Nob2ZpZWxkQGludGVsLmNvbTsgdmlz
-aGFsLmwudmVybWFAaW50ZWwuY29tOyBpcmEud2VpbnlAaW50ZWwuY29tOw0KPmRhdmlkQHJlZGhh
-dC5jb207IFZpbGFzLlNyaWRoYXJhbkBhbWQuY29tOyBsZW8uZHVyYW5AYW1kLmNvbTsNCj5ZYXpl
-bi5HaGFubmFtQGFtZC5jb207IHJpZW50amVzQGdvb2dsZS5jb207IGppYXFpeWFuQGdvb2dsZS5j
-b207DQo+Sm9uLkdyaW1tQGFtZC5jb207IGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbTsNCj5u
-YW95YS5ob3JpZ3VjaGlAbmVjLmNvbTsgamFtZXMubW9yc2VAYXJtLmNvbTsganRob3VnaHRvbkBn
-b29nbGUuY29tOw0KPnNvbWFzdW5kYXJhbS5hQGhwZS5jb207IGVyZGVtYWt0YXNAZ29vZ2xlLmNv
-bTsgcGdvbmRhQGdvb2dsZS5jb207DQo+ZHVlbndlbkBnb29nbGUuY29tOyBndGhlbGVuQGdvb2ds
-ZS5jb207DQo+d3NjaHdhcnR6QGFtcGVyZWNvbXB1dGluZy5jb207IGRmZXJndXNvbkBhbXBlcmVj
-b21wdXRpbmcuY29tOw0KPndic0Bvcy5hbXBlcmVjb21wdXRpbmcuY29tOyBuaWZhbi5jeGxAZ21h
-aWwuY29tOyB0YW54aWFvZmVpDQo+PHRhbnhpYW9mZWlAaHVhd2VpLmNvbT47IFplbmd0YW8gKEIp
-IDxwcmltZS56ZW5nQGhpc2lsaWNvbi5jb20+OyBSb2JlcnRvDQo+U2Fzc3UgPHJvYmVydG8uc2Fz
-c3VAaHVhd2VpLmNvbT47IGthbmdrYW5nLnNoZW5AZnV0dXJld2VpLmNvbTsNCj53YW5naHVpcWlh
-bmcgPHdhbmdodWlxaWFuZ0BodWF3ZWkuY29tPjsgTGludXhhcm0NCj48bGludXhhcm1AaHVhd2Vp
-LmNvbT4NCj5TdWJqZWN0OiBSZTogW1BBVENIIHYxOCAwMS8xOV0gRURBQzogQWRkIHN1cHBvcnQg
-Zm9yIEVEQUMgZGV2aWNlIGZlYXR1cmVzDQo+Y29udHJvbA0KPg0KPk9uIE1vbiwgSmFuIDA2LCAy
-MDI1IGF0IDEyOjA5OjU3UE0gKzAwMDAsIHNoaWp1Lmpvc2VAaHVhd2VpLmNvbSB3cm90ZToNCj4+
-ICtpbnQgZWRhY19kZXZfcmVnaXN0ZXIoc3RydWN0IGRldmljZSAqcGFyZW50LCBjaGFyICpuYW1l
-LA0KPj4gKwkJICAgICAgdm9pZCAqcHJpdmF0ZSwgaW50IG51bV9mZWF0dXJlcywNCj4+ICsJCSAg
-ICAgIGNvbnN0IHN0cnVjdCBlZGFjX2Rldl9mZWF0dXJlICpyYXNfZmVhdHVyZXMpIHsNCj4+ICsJ
-Y29uc3Qgc3RydWN0IGF0dHJpYnV0ZV9ncm91cCAqKnJhc19hdHRyX2dyb3VwczsNCj4+ICsJc3Ry
-dWN0IGVkYWNfZGV2X2ZlYXRfY3R4ICpjdHg7DQo+PiArCWludCBhdHRyX2djbnQgPSAwOw0KPj4g
-KwlpbnQgcmV0LCBmZWF0Ow0KPj4gKw0KPj4gKwlpZiAoIXBhcmVudCB8fCAhbmFtZSB8fCAhbnVt
-X2ZlYXR1cmVzIHx8ICFyYXNfZmVhdHVyZXMpDQo+PiArCQlyZXR1cm4gLUVJTlZBTDsNCj4+ICsN
-Cj4+ICsJLyogRG91YmxlIHBhcnNlIHRvIG1ha2Ugc3BhY2UgZm9yIGF0dHJpYnV0ZXMgKi8NCj4+
-ICsJZm9yIChmZWF0ID0gMDsgZmVhdCA8IG51bV9mZWF0dXJlczsgZmVhdCsrKSB7DQo+PiArCQlz
-d2l0Y2ggKHJhc19mZWF0dXJlc1tmZWF0XS5mdF90eXBlKSB7DQo+PiArCQkvKiBBZGQgZmVhdHVy
-ZSBzcGVjaWZpYyBjb2RlICovDQo+PiArCQlkZWZhdWx0Og0KPj4gKwkJCXJldHVybiAtRUlOVkFM
-Ow0KPj4gKwkJfQ0KPj4gKwl9DQo+PiArDQo+PiArCWN0eCA9IGt6YWxsb2Moc2l6ZW9mKCpjdHgp
-LCBHRlBfS0VSTkVMKTsNCj4+ICsJaWYgKCFjdHgpDQo+PiArCQlyZXR1cm4gLUVOT01FTTsNCj4+
-ICsNCj4+ICsJcmFzX2F0dHJfZ3JvdXBzID0ga2NhbGxvYyhhdHRyX2djbnQgKyAxLCBzaXplb2Yo
-KnJhc19hdHRyX2dyb3VwcyksDQo+R0ZQX0tFUk5FTCk7DQo+PiArCWlmICghcmFzX2F0dHJfZ3Jv
-dXBzKSB7DQo+PiArCQlyZXQgPSAtRU5PTUVNOw0KPj4gKwkJZ290byBjdHhfZnJlZTsNCj4+ICsJ
-fQ0KPj4gKw0KPj4gKwlhdHRyX2djbnQgPSAwOw0KPj4gKwlmb3IgKGZlYXQgPSAwOyBmZWF0IDwg
-bnVtX2ZlYXR1cmVzOyBmZWF0KyssIHJhc19mZWF0dXJlcysrKSB7DQo+PiArCQlzd2l0Y2ggKHJh
-c19mZWF0dXJlcy0+ZnRfdHlwZSkgew0KPj4gKwkJLyogQWRkIGZlYXR1cmUgc3BlY2lmaWMgY29k
-ZSAqLw0KPj4gKwkJZGVmYXVsdDoNCj4+ICsJCQlyZXQgPSAtRUlOVkFMOw0KPj4gKwkJCWdvdG8g
-Z3JvdXBzX2ZyZWU7DQo+PiArCQl9DQo+PiArCX0NCj4+ICsNCj4+ICsJY3R4LT5kZXYucGFyZW50
-ID0gcGFyZW50Ow0KPj4gKwljdHgtPmRldi5idXMgPSBlZGFjX2dldF9zeXNmc19zdWJzeXMoKTsN
-Cj4+ICsJY3R4LT5kZXYudHlwZSA9ICZlZGFjX2Rldl90eXBlOw0KPj4gKwljdHgtPmRldi5ncm91
-cHMgPSByYXNfYXR0cl9ncm91cHM7DQo+PiArCWN0eC0+cHJpdmF0ZSA9IHByaXZhdGU7DQo+PiAr
-CWRldl9zZXRfZHJ2ZGF0YSgmY3R4LT5kZXYsIGN0eCk7DQo+PiArDQo+PiArCXJldCA9IGRldl9z
-ZXRfbmFtZSgmY3R4LT5kZXYsIG5hbWUpOw0KPj4gKwlpZiAocmV0KQ0KPj4gKwkJZ290byBncm91
-cHNfZnJlZTsNCj4+ICsNCj4+ICsJcmV0ID0gZGV2aWNlX3JlZ2lzdGVyKCZjdHgtPmRldik7DQo+
-PiArCWlmIChyZXQpIHsNCj4+ICsJCXB1dF9kZXZpY2UoJmN0eC0+ZGV2KTsNCj4+ICsJCXJldHVy
-biByZXQ7DQo+DQo+V2hvIGlzIGZyZWVpbmcgY3R4IGFuZCByYXNfYXR0cl9ncm91cHMgd2hlbiB5
-b3UgcmV0dXJuIGhlcmU/DQoNCkhpIEJvcmlzLA0KDQpjdHggYW5kIHJhc19hdHRyX2dyb3VwcyBh
-cmUgZnJlZWQgaW4gdGhlIGNhbGxiYWNrDQpmdW5jdGlvbiAgZm9yIHJlbGVhc2UgIGVkYWNfZGV2
-X3JlbGVhc2Uoc3RydWN0IGRldmljZSAqZGV2KS4NCg0KVGhhbmtzLA0KU2hpanUNCg0KPg0KPi0t
-DQo+UmVnYXJkcy9HcnVzcywNCj4gICAgQm9yaXMuDQo+DQo+aHR0cHM6Ly9wZW9wbGUua2VybmVs
-Lm9yZy90Z2x4L25vdGVzLWFib3V0LW5ldGlxdWV0dGUNCg0K
+On Fri, Jan 03, 2025 at 10:49:25PM +0100, Borislav Petkov wrote:
+> On Fri, Dec 06, 2024 at 04:11:53PM +0000, Yazen Ghannam wrote:
+> > Hi all,
+> > 
+> > The theme of this set is decoupling the "AMD node" concept from the
+> > legacy northbridge support.
+> > 
+> > Additionally, AMD System Management Network (SMN) access code is
+> > decoupled and expanded too.
+> > 
+> > Patches 1-3 begin reducing the scope of AMD_NB.
+> > 
+> > Patches 4-9 begin moving generic AMD node support out of AMD_NB.
+> > 
+> > Patches 10-13 move SMN support out of AMD_NB and do some refactoring.
+> > 
+> > Patch 14 has HSMP reuse SMN functionality.
+> > 
+> > Patches 15-16 address userspace access to SMN.
+> 
+> So I took the first patch and then booting the first 13 with the intention to
+> queue them while the remaining three are still being discussed, is causing the
+> below in my guest.
+> 
+> .config is attached, I've pushed the branch here too, if you wanna test with
+> it:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/log/?h=tip-x86-misc
+> 
+> [    0.897060] cirrus 0000:00:01.0: [drm] fb0: cirrusdrmfb frame buffer device
+> [    0.900310] BUG: kernel NULL pointer dereference, address: 00000000000000c4
+> [    0.902551] #PF: supervisor read access in kernel mode
+> [    0.904096] #PF: error_code(0x0000) - not-present page
+> [    0.904268] PGD 0 P4D 0 
+> [    0.904268] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+> [    0.904268] CPU: 0 UID: 0 PID: 20 Comm: cpuhp/0 Not tainted 6.13.0-rc1+ #1
+> [    0.904268] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2023.11-8 02/21/2024
+> [    0.904268] RIP: 0010:pci_read_config_dword+0x9/0x40
+> [    0.904268] Code: 00 00 e9 8a f9 57 00 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 <8b> 87 c4 00 00 00 48 89 d1 83 f8 03 74 10 8b 47 38 48 8b 7f 10 89
+> [    0.904268] RSP: 0018:ffffc9000012fcd8 EFLAGS: 00010246
+> [    0.904268] RAX: 0000000000000000 RBX: ffff88800d296640 RCX: 000000000000003f
+> [    0.904268] RDX: ffffc9000012fce4 RSI: 00000000000001c4 RDI: 0000000000000000
+> [    0.904268] RBP: ffffc9000012fd60 R08: 0000000000000040 R09: 0000000000000010
+> [    0.904268] R10: ffff88800daa1eb0 R11: fffffffffff8dc6f R12: 0000000040000163
+> [    0.904268] R13: ffffc9000012fd60 R14: 0000000000000000 R15: ffff88807d62fc90
+> [    0.904268] FS:  0000000000000000(0000) GS:ffff88807d600000(0000) knlGS:0000000000000000
+> [    0.904268] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    0.904268] CR2: 00000000000000c4 CR3: 0000000002c1a000 CR4: 00000000003506f0
+> [    0.904268] Call Trace:
+> [    0.904268]  <TASK>
+> [    0.904268]  ? __die+0x31/0x80
+> [    0.904268]  ? page_fault_oops+0x15d/0x4f0
+> [    0.904268]  ? srso_return_thunk+0x5/0x5f
+> [    0.904268]  ? ttwu_queue_wakelist+0xf7/0x100
+> [    0.904268]  ? exc_page_fault+0x78/0x150
+> [    0.904268]  ? asm_exc_page_fault+0x26/0x30
+> [    0.904268]  ? pci_read_config_dword+0x9/0x40
+> [    0.904268]  ? srso_return_thunk+0x5/0x5f
+> [    0.904268]  amd_init_l3_cache.part.0+0x6a/0x110
+> [    0.904268]  cpuid4_cache_lookup_regs+0xcf/0x2a0
+> [    0.904268]  populate_cache_leaves+0x6f/0x530
+> [    0.904268]  ? srso_return_thunk+0x5/0x5f
+> [    0.904268]  ? dl_server_stop+0x2f/0x40
+> [    0.904268]  ? srso_return_thunk+0x5/0x5f
+> [    0.904268]  detect_cache_attributes+0x97/0x330
+> [    0.904268]  ? __pfx_cacheinfo_cpu_online+0x10/0x10
+> [    0.904268]  cacheinfo_cpu_online+0x22/0x250
+> [    0.904268]  ? srso_return_thunk+0x5/0x5f
+> [    0.904268]  ? __pfx_cacheinfo_cpu_online+0x10/0x10
+> [    0.904268]  cpuhp_invoke_callback+0x10f/0x480
+> [    0.904268]  ? try_to_wake_up+0x23b/0x540
+> [    0.904268]  cpuhp_thread_fun+0xd4/0x160
+> [    0.904268]  smpboot_thread_fn+0xdd/0x1f0
+> [    0.904268]  ? __pfx_smpboot_thread_fn+0x10/0x10
+> [    0.904268]  kthread+0xca/0xf0
+> [    0.904268]  ? __pfx_kthread+0x10/0x10
+> [    0.904268]  ret_from_fork+0x50/0x60
+> [    0.904268]  ? __pfx_kthread+0x10/0x10
+> [    0.904268]  ret_from_fork_asm+0x1a/0x30
+> [    0.904268]  </TASK>
+> [    0.904268] Modules linked in:
+> [    0.904268] CR2: 00000000000000c4
+> [    0.904268] ---[ end trace 0000000000000000 ]---
+> [    0.904268] RIP: 0010:pci_read_config_dword+0x9/0x40
+> [    0.904268] Code: 00 00 e9 8a f9 57 00 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 <8b> 87 c4 00 00 00 48 89 d1 83 f8 03 74 10 8b 47 38 48 8b 7f 10 89
+> [    0.988792] RSP: 0018:ffffc9000012fcd8 EFLAGS: 00010246
+> [    0.988792] RAX: 0000000000000000 RBX: ffff88800d296640 RCX: 000000000000003f
+> [    0.988792] RDX: ffffc9000012fce4 RSI: 00000000000001c4 RDI: 0000000000000000
+> [    0.988792] RBP: ffffc9000012fd60 R08: 0000000000000040 R09: 0000000000000010
+> [    0.992761] R10: ffff88800daa1eb0 R11: fffffffffff8dc6f R12: 0000000040000163
+> [    0.992761] R13: ffffc9000012fd60 R14: 0000000000000000 R15: ffff88807d62fc90
+> [    0.992761] FS:  0000000000000000(0000) GS:ffff88807d600000(0000) knlGS:0000000000000000
+> [    0.996772] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    0.996772] CR2: 00000000000000c4 CR3: 0000000002c1a000 CR4: 00000000003506f0
+> [    0.996772] note: cpuhp/0[20] exited with irqs disabled
+> [    1.680874] tsc: Refined TSC clocksource calibration: 3700.028 MHz
+> [    1.683128] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x6aaae08e541, max_idle_ns: 881590514464 ns
+> [    1.688137] clocksource: Switched to clocksource tsc
+> 
+> 
+
+Can you please share the guest parameters?
+
+Thanks,
+Yazen
 
