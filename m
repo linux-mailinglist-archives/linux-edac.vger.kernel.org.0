@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-2798-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2799-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E7ADA024EE
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 13:12:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCAA8A024F1
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 13:13:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26DB73A52C4
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 12:12:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEB74164E08
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Jan 2025 12:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 956E21DE3D6;
-	Mon,  6 Jan 2025 12:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE091DE4EC;
+	Mon,  6 Jan 2025 12:11:46 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE671DE3A9;
-	Mon,  6 Jan 2025 12:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B351DE4C1;
+	Mon,  6 Jan 2025 12:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736165503; cv=none; b=LMWjq8hMAYDI4nN6roOJbMebLKP/lfHip7acXhrUr0RamkaaIScDcQreukEKzVWirC/qdW6pjBDLxLYm7lqRWYqARDmcWAQwir/h66wbvqLtp4i+58MdBn0Q2De2RQMwxZxC0jmO++fz5T+GQDhO2XtWE9wjKBDZz2WYMxR/1N4=
+	t=1736165506; cv=none; b=sOmMBRybxwfWWMB2cdvfDBUCFqZ7nSI0FU8UJHQOH2vB3MkFwIiSIMkYdHztGkhz5nuzL4IJwofu0skShT0zpq0PeVGuFnUwfY9NpnXbta2SZMUH/sO4qqyhEVOFZKAnb36Z1PRaV3RCHnHUJ5+26IHLX0T7l0EkV8h0jqE1RYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736165503; c=relaxed/simple;
-	bh=oNI1xtCHCoHwukhtok7qvchX2r9Hn+K0Cm37y+GM40E=;
+	s=arc-20240116; t=1736165506; c=relaxed/simple;
+	bh=9ghl6dFo70AjLm0q5c0/PgvIOKkspGUcBLb/5yXrAww=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mk3SWGbtQTQ0K0XFnFc2VOMiZpHpnPTPIRl3Kzj3u5ITH3Nd+yoq+Ur168vMfDDoFJect9TEaKPR0ZN6EEeEMIwYblCPUmE1e4nCunDNhIz+Ay5GXt19hBctIlfjKueFb8lXmlQwATZWC/pX/NLoXkCtSMY8RnkwLKnOlV9KJM8=
+	 MIME-Version:Content-Type; b=V6cwosvTOjhuI/G5RfjY68qRG0xFD0jxCy0yiywlupsFKRAkoKBnxI7W6H22MSsFiNTRtmhmk3gQCU2lG2JC7c3DhR3w69YemZas4NZodlnL9gTv8yfh+J+qXwwV2lICYSp++B7go9D2EbbD5w4GFalDHY3DPzJBdJbQyIk1pes=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YRY0H32DSz6LD8Z;
-	Mon,  6 Jan 2025 20:10:07 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YRXww38NRz6K9Zt;
+	Mon,  6 Jan 2025 20:07:12 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2D421140D26;
-	Mon,  6 Jan 2025 20:11:39 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 03E2A1408F9;
+	Mon,  6 Jan 2025 20:11:42 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.170.95) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 6 Jan 2025 13:11:37 +0100
+ 15.1.2507.39; Mon, 6 Jan 2025 13:11:39 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
@@ -58,9 +58,9 @@ CC: <bp@alien8.de>, <tony.luck@intel.com>, <rafael@kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v18 06/19] ras: mem: Add memory ACPI RAS2 driver
-Date: Mon, 6 Jan 2025 12:10:02 +0000
-Message-ID: <20250106121017.1620-7-shiju.jose@huawei.com>
+Subject: [PATCH v18 07/19] cxl: Refactor user ioctl command path from mds to mailbox
+Date: Mon, 6 Jan 2025 12:10:03 +0000
+Message-ID: <20250106121017.1620-8-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20250106121017.1620-1-shiju.jose@huawei.com>
 References: <20250106121017.1620-1-shiju.jose@huawei.com>
@@ -75,541 +75,504 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100011.china.huawei.com (7.191.174.247) To
  frapeml500007.china.huawei.com (7.182.85.172)
 
-From: Shiju Jose <shiju.jose@huawei.com>
+From: Dave Jiang <dave.jiang@intel.com>
 
-Memory ACPI RAS2 auxiliary driver binds to the auxiliary device
-add by the ACPI RAS2 table parser.
+With 'struct cxl_mailbox' context introduced, the helper functions
+cxl_query_cmd() and cxl_send_cmd() can take a cxl_mailbox directly
+rather than a cxl_memdev parameter. Refactor to use cxl_mailbox
+directly.
 
-Driver uses a PCC subspace for communicating with the ACPI compliant
-platform.
-
-Device with ACPI RAS2 scrub feature registers with EDAC device driver,
-which retrieves the scrub descriptor from EDAC scrub and exposes
-the scrub control attributes for RAS2 scrub instance to userspace in
-/sys/bus/edac/devices/acpi_ras_mem0/scrubX/.
-
-Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
 ---
- Documentation/edac/scrub.rst |  81 ++++++++
- drivers/ras/Kconfig          |  10 +
- drivers/ras/Makefile         |   1 +
- drivers/ras/acpi_ras2.c      | 385 +++++++++++++++++++++++++++++++++++
- 4 files changed, 477 insertions(+)
- create mode 100644 drivers/ras/acpi_ras2.c
+ drivers/cxl/core/core.h   |  6 ++-
+ drivers/cxl/core/mbox.c   | 91 +++++++++++++++++++--------------------
+ drivers/cxl/core/memdev.c | 22 +++++++---
+ drivers/cxl/cxlmem.h      | 40 -----------------
+ include/cxl/mailbox.h     | 41 +++++++++++++++++-
+ 5 files changed, 103 insertions(+), 97 deletions(-)
 
-diff --git a/Documentation/edac/scrub.rst b/Documentation/edac/scrub.rst
-index 5640f9aeee38..f86645c7f0af 100644
---- a/Documentation/edac/scrub.rst
-+++ b/Documentation/edac/scrub.rst
-@@ -244,3 +244,84 @@ Sysfs files are documented in
- `Documentation/ABI/testing/sysfs-edac-scrub`.
+diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+index 800466f96a68..23761340e65c 100644
+--- a/drivers/cxl/core/core.h
++++ b/drivers/cxl/core/core.h
+@@ -4,6 +4,8 @@
+ #ifndef __CXL_CORE_H__
+ #define __CXL_CORE_H__
  
- `Documentation/ABI/testing/sysfs-edac-ecs`.
++#include <cxl/mailbox.h>
 +
-+Examples
-+--------
-+
-+The usage takes the form shown in these examples:
-+
-+1. ACPI RAS2
-+
-+1.1 On demand scrubbing for a specific memory region.
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/min_cycle_duration
-+
-+3600
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/max_cycle_duration
-+
-+86400
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-+
-+36000
-+
-+# Readback 'addr', non-zero - demand scrub is in progress, zero - scrub is finished.
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
-+
-+0
-+
-+root@localhost:~# echo 54000 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-+
-+root@localhost:~# echo 0x150000 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/size
-+
-+# Write 'addr' starts demand scrubbing, please make sure other attributes are set prior to that.
-+
-+root@localhost:~# echo 0x120000 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-+
-+54000
-+
-+# Readback 'addr', non-zero - demand scrub is in progress, zero - scrub is finished.
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
-+
-+0x120000
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/addr
-+
-+0
-+
-+1.2 Background scrubbing the entire memory
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/min_cycle_duration
-+
-+3600
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/max_cycle_duration
-+
-+86400
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-+
-+36000
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
-+
-+0
-+
-+root@localhost:~# echo 10800 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-+
-+root@localhost:~# echo 1 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
-+
-+1
-+
-+root@localhost:~# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-+
-+10800
-+
-+root@localhost:~# echo 0 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
-diff --git a/drivers/ras/Kconfig b/drivers/ras/Kconfig
-index fc4f4bb94a4c..b77790bdc73a 100644
---- a/drivers/ras/Kconfig
-+++ b/drivers/ras/Kconfig
-@@ -46,4 +46,14 @@ config RAS_FMPM
- 	  Memory will be retired during boot time and run time depending on
- 	  platform-specific policies.
+ extern const struct device_type cxl_nvdimm_bridge_type;
+ extern const struct device_type cxl_nvdimm_type;
+ extern const struct device_type cxl_pmu_type;
+@@ -65,9 +67,9 @@ static inline void cxl_region_exit(void)
  
-+config MEM_ACPI_RAS2
-+	tristate "Memory ACPI RAS2 driver"
-+	depends on ACPI_RAS2
-+	depends on EDAC
-+	help
-+	  The driver binds to the platform device added by the ACPI RAS2
-+	  table parser. Use a PCC channel subspace for communicating with
-+	  the ACPI compliant platform to provide control of memory scrub
-+	  parameters to the user via the EDAC scrub.
-+
- endif
-diff --git a/drivers/ras/Makefile b/drivers/ras/Makefile
-index 11f95d59d397..a0e6e903d6b0 100644
---- a/drivers/ras/Makefile
-+++ b/drivers/ras/Makefile
-@@ -2,6 +2,7 @@
- obj-$(CONFIG_RAS)	+= ras.o
- obj-$(CONFIG_DEBUG_FS)	+= debugfs.o
- obj-$(CONFIG_RAS_CEC)	+= cec.o
-+obj-$(CONFIG_MEM_ACPI_RAS2)	+= acpi_ras2.o
+ struct cxl_send_command;
+ struct cxl_mem_query_commands;
+-int cxl_query_cmd(struct cxl_memdev *cxlmd,
++int cxl_query_cmd(struct cxl_mailbox *cxl_mbox,
+ 		  struct cxl_mem_query_commands __user *q);
+-int cxl_send_cmd(struct cxl_memdev *cxlmd, struct cxl_send_command __user *s);
++int cxl_send_cmd(struct cxl_mailbox *cxl_mailbox, struct cxl_send_command __user *s);
+ void __iomem *devm_cxl_iomap_block(struct device *dev, resource_size_t addr,
+ 				   resource_size_t length);
  
- obj-$(CONFIG_RAS_FMPM)	+= amd/fmpm.o
- obj-y			+= amd/atl/
-diff --git a/drivers/ras/acpi_ras2.c b/drivers/ras/acpi_ras2.c
-new file mode 100644
-index 000000000000..6c5772d60f22
---- /dev/null
-+++ b/drivers/ras/acpi_ras2.c
-@@ -0,0 +1,385 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * ACPI RAS2 memory driver
+diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+index 548564c770c0..bdb8f060f2c1 100644
+--- a/drivers/cxl/core/mbox.c
++++ b/drivers/cxl/core/mbox.c
+@@ -349,40 +349,40 @@ static bool cxl_payload_from_user_allowed(u16 opcode, void *payload_in)
+ 	return true;
+ }
+ 
+-static int cxl_mbox_cmd_ctor(struct cxl_mbox_cmd *mbox,
+-			     struct cxl_memdev_state *mds, u16 opcode,
++static int cxl_mbox_cmd_ctor(struct cxl_mbox_cmd *mbox_cmd,
++			     struct cxl_mailbox *cxl_mbox, u16 opcode,
+ 			     size_t in_size, size_t out_size, u64 in_payload)
+ {
+-	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+-	*mbox = (struct cxl_mbox_cmd) {
++	*mbox_cmd = (struct cxl_mbox_cmd) {
+ 		.opcode = opcode,
+ 		.size_in = in_size,
+ 	};
+ 
+ 	if (in_size) {
+-		mbox->payload_in = vmemdup_user(u64_to_user_ptr(in_payload),
+-						in_size);
+-		if (IS_ERR(mbox->payload_in))
+-			return PTR_ERR(mbox->payload_in);
+-
+-		if (!cxl_payload_from_user_allowed(opcode, mbox->payload_in)) {
+-			dev_dbg(mds->cxlds.dev, "%s: input payload not allowed\n",
++		mbox_cmd->payload_in = vmemdup_user(u64_to_user_ptr(in_payload),
++						    in_size);
++		if (IS_ERR(mbox_cmd->payload_in))
++			return PTR_ERR(mbox_cmd->payload_in);
++
++		if (!cxl_payload_from_user_allowed(opcode,
++						   mbox_cmd->payload_in)) {
++			dev_dbg(cxl_mbox->host, "%s: input payload not allowed\n",
+ 				cxl_mem_opcode_to_name(opcode));
+-			kvfree(mbox->payload_in);
++			kvfree(mbox_cmd->payload_in);
+ 			return -EBUSY;
+ 		}
+ 	}
+ 
+ 	/* Prepare to handle a full payload for variable sized output */
+ 	if (out_size == CXL_VARIABLE_PAYLOAD)
+-		mbox->size_out = cxl_mbox->payload_size;
++		mbox_cmd->size_out = cxl_mbox->payload_size;
+ 	else
+-		mbox->size_out = out_size;
++		mbox_cmd->size_out = out_size;
+ 
+-	if (mbox->size_out) {
+-		mbox->payload_out = kvzalloc(mbox->size_out, GFP_KERNEL);
+-		if (!mbox->payload_out) {
+-			kvfree(mbox->payload_in);
++	if (mbox_cmd->size_out) {
++		mbox_cmd->payload_out = kvzalloc(mbox_cmd->size_out, GFP_KERNEL);
++		if (!mbox_cmd->payload_out) {
++			kvfree(mbox_cmd->payload_in);
+ 			return -ENOMEM;
+ 		}
+ 	}
+@@ -397,10 +397,8 @@ static void cxl_mbox_cmd_dtor(struct cxl_mbox_cmd *mbox)
+ 
+ static int cxl_to_mem_cmd_raw(struct cxl_mem_command *mem_cmd,
+ 			      const struct cxl_send_command *send_cmd,
+-			      struct cxl_memdev_state *mds)
++			      struct cxl_mailbox *cxl_mbox)
+ {
+-	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+-
+ 	if (send_cmd->raw.rsvd)
+ 		return -EINVAL;
+ 
+@@ -415,7 +413,7 @@ static int cxl_to_mem_cmd_raw(struct cxl_mem_command *mem_cmd,
+ 	if (!cxl_mem_raw_command_allowed(send_cmd->raw.opcode))
+ 		return -EPERM;
+ 
+-	dev_WARN_ONCE(mds->cxlds.dev, true, "raw command path used\n");
++	dev_WARN_ONCE(cxl_mbox->host, true, "raw command path used\n");
+ 
+ 	*mem_cmd = (struct cxl_mem_command) {
+ 		.info = {
+@@ -431,7 +429,7 @@ static int cxl_to_mem_cmd_raw(struct cxl_mem_command *mem_cmd,
+ 
+ static int cxl_to_mem_cmd(struct cxl_mem_command *mem_cmd,
+ 			  const struct cxl_send_command *send_cmd,
+-			  struct cxl_memdev_state *mds)
++			  struct cxl_mailbox *cxl_mbox)
+ {
+ 	struct cxl_mem_command *c = &cxl_mem_commands[send_cmd->id];
+ 	const struct cxl_command_info *info = &c->info;
+@@ -446,11 +444,11 @@ static int cxl_to_mem_cmd(struct cxl_mem_command *mem_cmd,
+ 		return -EINVAL;
+ 
+ 	/* Check that the command is enabled for hardware */
+-	if (!test_bit(info->id, mds->enabled_cmds))
++	if (!test_bit(info->id, cxl_mbox->enabled_cmds))
+ 		return -ENOTTY;
+ 
+ 	/* Check that the command is not claimed for exclusive kernel use */
+-	if (test_bit(info->id, mds->exclusive_cmds))
++	if (test_bit(info->id, cxl_mbox->exclusive_cmds))
+ 		return -EBUSY;
+ 
+ 	/* Check the input buffer is the expected size */
+@@ -479,7 +477,7 @@ static int cxl_to_mem_cmd(struct cxl_mem_command *mem_cmd,
+ /**
+  * cxl_validate_cmd_from_user() - Check fields for CXL_MEM_SEND_COMMAND.
+  * @mbox_cmd: Sanitized and populated &struct cxl_mbox_cmd.
+- * @mds: The driver data for the operation
++ * @cxl_mbox: CXL mailbox context
+  * @send_cmd: &struct cxl_send_command copied in from userspace.
+  *
+  * Return:
+@@ -494,10 +492,9 @@ static int cxl_to_mem_cmd(struct cxl_mem_command *mem_cmd,
+  * safe to send to the hardware.
+  */
+ static int cxl_validate_cmd_from_user(struct cxl_mbox_cmd *mbox_cmd,
+-				      struct cxl_memdev_state *mds,
++				      struct cxl_mailbox *cxl_mbox,
+ 				      const struct cxl_send_command *send_cmd)
+ {
+-	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_mem_command mem_cmd;
+ 	int rc;
+ 
+@@ -514,24 +511,23 @@ static int cxl_validate_cmd_from_user(struct cxl_mbox_cmd *mbox_cmd,
+ 
+ 	/* Sanitize and construct a cxl_mem_command */
+ 	if (send_cmd->id == CXL_MEM_COMMAND_ID_RAW)
+-		rc = cxl_to_mem_cmd_raw(&mem_cmd, send_cmd, mds);
++		rc = cxl_to_mem_cmd_raw(&mem_cmd, send_cmd, cxl_mbox);
+ 	else
+-		rc = cxl_to_mem_cmd(&mem_cmd, send_cmd, mds);
++		rc = cxl_to_mem_cmd(&mem_cmd, send_cmd, cxl_mbox);
+ 
+ 	if (rc)
+ 		return rc;
+ 
+ 	/* Sanitize and construct a cxl_mbox_cmd */
+-	return cxl_mbox_cmd_ctor(mbox_cmd, mds, mem_cmd.opcode,
++	return cxl_mbox_cmd_ctor(mbox_cmd, cxl_mbox, mem_cmd.opcode,
+ 				 mem_cmd.info.size_in, mem_cmd.info.size_out,
+ 				 send_cmd->in.payload);
+ }
+ 
+-int cxl_query_cmd(struct cxl_memdev *cxlmd,
++int cxl_query_cmd(struct cxl_mailbox *cxl_mbox,
+ 		  struct cxl_mem_query_commands __user *q)
+ {
+-	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlmd->cxlds);
+-	struct device *dev = &cxlmd->dev;
++	struct device *dev = cxl_mbox->host;
+ 	struct cxl_mem_command *cmd;
+ 	u32 n_commands;
+ 	int j = 0;
+@@ -552,9 +548,9 @@ int cxl_query_cmd(struct cxl_memdev *cxlmd,
+ 	cxl_for_each_cmd(cmd) {
+ 		struct cxl_command_info info = cmd->info;
+ 
+-		if (test_bit(info.id, mds->enabled_cmds))
++		if (test_bit(info.id, cxl_mbox->enabled_cmds))
+ 			info.flags |= CXL_MEM_COMMAND_FLAG_ENABLED;
+-		if (test_bit(info.id, mds->exclusive_cmds))
++		if (test_bit(info.id, cxl_mbox->exclusive_cmds))
+ 			info.flags |= CXL_MEM_COMMAND_FLAG_EXCLUSIVE;
+ 
+ 		if (copy_to_user(&q->commands[j++], &info, sizeof(info)))
+@@ -569,7 +565,7 @@ int cxl_query_cmd(struct cxl_memdev *cxlmd,
+ 
+ /**
+  * handle_mailbox_cmd_from_user() - Dispatch a mailbox command for userspace.
+- * @mds: The driver data for the operation
++ * @cxl_mbox: The mailbox context for the operation.
+  * @mbox_cmd: The validated mailbox command.
+  * @out_payload: Pointer to userspace's output payload.
+  * @size_out: (Input) Max payload size to copy out.
+@@ -590,13 +586,12 @@ int cxl_query_cmd(struct cxl_memdev *cxlmd,
+  *
+  * See cxl_send_cmd().
+  */
+-static int handle_mailbox_cmd_from_user(struct cxl_memdev_state *mds,
++static int handle_mailbox_cmd_from_user(struct cxl_mailbox *cxl_mbox,
+ 					struct cxl_mbox_cmd *mbox_cmd,
+ 					u64 out_payload, s32 *size_out,
+ 					u32 *retval)
+ {
+-	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+-	struct device *dev = mds->cxlds.dev;
++	struct device *dev = cxl_mbox->host;
+ 	int rc;
+ 
+ 	dev_dbg(dev,
+@@ -633,10 +628,9 @@ static int handle_mailbox_cmd_from_user(struct cxl_memdev_state *mds,
+ 	return rc;
+ }
+ 
+-int cxl_send_cmd(struct cxl_memdev *cxlmd, struct cxl_send_command __user *s)
++int cxl_send_cmd(struct cxl_mailbox *cxl_mbox, struct cxl_send_command __user *s)
+ {
+-	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlmd->cxlds);
+-	struct device *dev = &cxlmd->dev;
++	struct device *dev = cxl_mbox->host;
+ 	struct cxl_send_command send;
+ 	struct cxl_mbox_cmd mbox_cmd;
+ 	int rc;
+@@ -646,11 +640,11 @@ int cxl_send_cmd(struct cxl_memdev *cxlmd, struct cxl_send_command __user *s)
+ 	if (copy_from_user(&send, s, sizeof(send)))
+ 		return -EFAULT;
+ 
+-	rc = cxl_validate_cmd_from_user(&mbox_cmd, mds, &send);
++	rc = cxl_validate_cmd_from_user(&mbox_cmd, cxl_mbox, &send);
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = handle_mailbox_cmd_from_user(mds, &mbox_cmd, send.out.payload,
++	rc = handle_mailbox_cmd_from_user(cxl_mbox, &mbox_cmd, send.out.payload,
+ 					  &send.out.size, &send.retval);
+ 	if (rc)
+ 		return rc;
+@@ -724,6 +718,7 @@ static int cxl_xfer_log(struct cxl_memdev_state *mds, uuid_t *uuid,
+  */
+ static void cxl_walk_cel(struct cxl_memdev_state *mds, size_t size, u8 *cel)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_cel_entry *cel_entry;
+ 	const int cel_entries = size / sizeof(*cel_entry);
+ 	struct device *dev = mds->cxlds.dev;
+@@ -737,7 +732,7 @@ static void cxl_walk_cel(struct cxl_memdev_state *mds, size_t size, u8 *cel)
+ 		int enabled = 0;
+ 
+ 		if (cmd) {
+-			set_bit(cmd->info.id, mds->enabled_cmds);
++			set_bit(cmd->info.id, cxl_mbox->enabled_cmds);
+ 			enabled++;
+ 		}
+ 
+@@ -807,6 +802,7 @@ static const uuid_t log_uuid[] = {
+  */
+ int cxl_enumerate_cmds(struct cxl_memdev_state *mds)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
+ 	struct cxl_mbox_get_supported_logs *gsl;
+ 	struct device *dev = mds->cxlds.dev;
+ 	struct cxl_mem_command *cmd;
+@@ -845,7 +841,7 @@ int cxl_enumerate_cmds(struct cxl_memdev_state *mds)
+ 		/* In case CEL was bogus, enable some default commands. */
+ 		cxl_for_each_cmd(cmd)
+ 			if (cmd->flags & CXL_CMD_FLAG_FORCE_ENABLE)
+-				set_bit(cmd->info.id, mds->enabled_cmds);
++				set_bit(cmd->info.id, cxl_mbox->enabled_cmds);
+ 
+ 		/* Found the required CEL */
+ 		rc = 0;
+@@ -1448,6 +1444,7 @@ struct cxl_memdev_state *cxl_memdev_state_create(struct device *dev)
+ 	mutex_init(&mds->event.log_lock);
+ 	mds->cxlds.dev = dev;
+ 	mds->cxlds.reg_map.host = dev;
++	mds->cxlds.cxl_mbox.host = dev;
+ 	mds->cxlds.reg_map.resource = CXL_RESOURCE_NONE;
+ 	mds->cxlds.type = CXL_DEVTYPE_CLASSMEM;
+ 	mds->ram_perf.qos_class = CXL_QOS_CLASS_INVALID;
+diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+index ae3dfcbe8938..2e2e035abdaa 100644
+--- a/drivers/cxl/core/memdev.c
++++ b/drivers/cxl/core/memdev.c
+@@ -564,9 +564,11 @@ EXPORT_SYMBOL_NS_GPL(is_cxl_memdev, "CXL");
+ void set_exclusive_cxl_commands(struct cxl_memdev_state *mds,
+ 				unsigned long *cmds)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
++
+ 	down_write(&cxl_memdev_rwsem);
+-	bitmap_or(mds->exclusive_cmds, mds->exclusive_cmds, cmds,
+-		  CXL_MEM_COMMAND_ID_MAX);
++	bitmap_or(cxl_mbox->exclusive_cmds, cxl_mbox->exclusive_cmds,
++		  cmds, CXL_MEM_COMMAND_ID_MAX);
+ 	up_write(&cxl_memdev_rwsem);
+ }
+ EXPORT_SYMBOL_NS_GPL(set_exclusive_cxl_commands, "CXL");
+@@ -579,9 +581,11 @@ EXPORT_SYMBOL_NS_GPL(set_exclusive_cxl_commands, "CXL");
+ void clear_exclusive_cxl_commands(struct cxl_memdev_state *mds,
+ 				  unsigned long *cmds)
+ {
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
++
+ 	down_write(&cxl_memdev_rwsem);
+-	bitmap_andnot(mds->exclusive_cmds, mds->exclusive_cmds, cmds,
+-		      CXL_MEM_COMMAND_ID_MAX);
++	bitmap_andnot(cxl_mbox->exclusive_cmds, cxl_mbox->exclusive_cmds,
++		      cmds, CXL_MEM_COMMAND_ID_MAX);
+ 	up_write(&cxl_memdev_rwsem);
+ }
+ EXPORT_SYMBOL_NS_GPL(clear_exclusive_cxl_commands, "CXL");
+@@ -656,11 +660,14 @@ static struct cxl_memdev *cxl_memdev_alloc(struct cxl_dev_state *cxlds,
+ static long __cxl_memdev_ioctl(struct cxl_memdev *cxlmd, unsigned int cmd,
+ 			       unsigned long arg)
+ {
++	struct cxl_memdev_state *mds = to_cxl_memdev_state(cxlmd->cxlds);
++	struct cxl_mailbox *cxl_mbox = &mds->cxlds.cxl_mbox;
++
+ 	switch (cmd) {
+ 	case CXL_MEM_QUERY_COMMANDS:
+-		return cxl_query_cmd(cxlmd, (void __user *)arg);
++		return cxl_query_cmd(cxl_mbox, (void __user *)arg);
+ 	case CXL_MEM_SEND_COMMAND:
+-		return cxl_send_cmd(cxlmd, (void __user *)arg);
++		return cxl_send_cmd(cxl_mbox, (void __user *)arg);
+ 	default:
+ 		return -ENOTTY;
+ 	}
+@@ -994,10 +1001,11 @@ static void cxl_remove_fw_upload(void *fwl)
+ int devm_cxl_setup_fw_upload(struct device *host, struct cxl_memdev_state *mds)
+ {
+ 	struct cxl_dev_state *cxlds = &mds->cxlds;
++	struct cxl_mailbox *cxl_mbox = &cxlds->cxl_mbox;
+ 	struct device *dev = &cxlds->cxlmd->dev;
+ 	struct fw_upload *fwl;
+ 
+-	if (!test_bit(CXL_MEM_COMMAND_ID_GET_FW_INFO, mds->enabled_cmds))
++	if (!test_bit(CXL_MEM_COMMAND_ID_GET_FW_INFO, cxl_mbox->enabled_cmds))
+ 		return 0;
+ 
+ 	fwl = firmware_upload_register(THIS_MODULE, dev, dev_name(dev),
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index 2a25d1957ddb..a0a49809cd76 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -106,42 +106,6 @@ static inline struct cxl_ep *cxl_ep_load(struct cxl_port *port,
+ 	return xa_load(&port->endpoints, (unsigned long)&cxlmd->dev);
+ }
+ 
+-/**
+- * struct cxl_mbox_cmd - A command to be submitted to hardware.
+- * @opcode: (input) The command set and command submitted to hardware.
+- * @payload_in: (input) Pointer to the input payload.
+- * @payload_out: (output) Pointer to the output payload. Must be allocated by
+- *		 the caller.
+- * @size_in: (input) Number of bytes to load from @payload_in.
+- * @size_out: (input) Max number of bytes loaded into @payload_out.
+- *            (output) Number of bytes generated by the device. For fixed size
+- *            outputs commands this is always expected to be deterministic. For
+- *            variable sized output commands, it tells the exact number of bytes
+- *            written.
+- * @min_out: (input) internal command output payload size validation
+- * @poll_count: (input) Number of timeouts to attempt.
+- * @poll_interval_ms: (input) Time between mailbox background command polling
+- *                    interval timeouts.
+- * @return_code: (output) Error code returned from hardware.
+- *
+- * This is the primary mechanism used to send commands to the hardware.
+- * All the fields except @payload_* correspond exactly to the fields described in
+- * Command Register section of the CXL 2.0 8.2.8.4.5. @payload_in and
+- * @payload_out are written to, and read from the Command Payload Registers
+- * defined in CXL 2.0 8.2.8.4.8.
+- */
+-struct cxl_mbox_cmd {
+-	u16 opcode;
+-	void *payload_in;
+-	void *payload_out;
+-	size_t size_in;
+-	size_t size_out;
+-	size_t min_out;
+-	int poll_count;
+-	int poll_interval_ms;
+-	u16 return_code;
+-};
+-
+ /*
+  * Per CXL 3.0 Section 8.2.8.4.5.1
+  */
+@@ -461,8 +425,6 @@ static inline struct cxl_dev_state *mbox_to_cxlds(struct cxl_mailbox *cxl_mbox)
+  * @lsa_size: Size of Label Storage Area
+  *                (CXL 2.0 8.2.9.5.1.1 Identify Memory Device)
+  * @firmware_version: Firmware version for the memory device.
+- * @enabled_cmds: Hardware commands found enabled in CEL.
+- * @exclusive_cmds: Commands that are kernel-internal only
+  * @total_bytes: sum of all possible capacities
+  * @volatile_only_bytes: hard volatile capacity
+  * @persistent_only_bytes: hard persistent capacity
+@@ -485,8 +447,6 @@ struct cxl_memdev_state {
+ 	struct cxl_dev_state cxlds;
+ 	size_t lsa_size;
+ 	char firmware_version[0x10];
+-	DECLARE_BITMAP(enabled_cmds, CXL_MEM_COMMAND_ID_MAX);
+-	DECLARE_BITMAP(exclusive_cmds, CXL_MEM_COMMAND_ID_MAX);
+ 	u64 total_bytes;
+ 	u64 volatile_only_bytes;
+ 	u64 persistent_only_bytes;
+diff --git a/include/cxl/mailbox.h b/include/cxl/mailbox.h
+index bacd111e75f1..cc894f07a435 100644
+--- a/include/cxl/mailbox.h
++++ b/include/cxl/mailbox.h
+@@ -3,12 +3,49 @@
+ #ifndef __CXL_MBOX_H__
+ #define __CXL_MBOX_H__
+ #include <linux/rcuwait.h>
++#include <uapi/linux/cxl_mem.h>
+ 
+-struct cxl_mbox_cmd;
++/**
++ * struct cxl_mbox_cmd - A command to be submitted to hardware.
++ * @opcode: (input) The command set and command submitted to hardware.
++ * @payload_in: (input) Pointer to the input payload.
++ * @payload_out: (output) Pointer to the output payload. Must be allocated by
++ *		 the caller.
++ * @size_in: (input) Number of bytes to load from @payload_in.
++ * @size_out: (input) Max number of bytes loaded into @payload_out.
++ *            (output) Number of bytes generated by the device. For fixed size
++ *            outputs commands this is always expected to be deterministic. For
++ *            variable sized output commands, it tells the exact number of bytes
++ *            written.
++ * @min_out: (input) internal command output payload size validation
++ * @poll_count: (input) Number of timeouts to attempt.
++ * @poll_interval_ms: (input) Time between mailbox background command polling
++ *                    interval timeouts.
++ * @return_code: (output) Error code returned from hardware.
 + *
-+ * Copyright (c) 2024 HiSilicon Limited.
-+ *
++ * This is the primary mechanism used to send commands to the hardware.
++ * All the fields except @payload_* correspond exactly to the fields described in
++ * Command Register section of the CXL 2.0 8.2.8.4.5. @payload_in and
++ * @payload_out are written to, and read from the Command Payload Registers
++ * defined in CXL 2.0 8.2.8.4.8.
 + */
-+
-+#define pr_fmt(fmt)	"MEMORY ACPI RAS2: " fmt
-+
-+#include <linux/bitfield.h>
-+#include <linux/edac.h>
-+#include <linux/platform_device.h>
-+#include <acpi/ras2_acpi.h>
-+
-+#define RAS2_DEV_NUM_RAS_FEATURES	1
-+
-+#define RAS2_SUPPORT_HW_PARTOL_SCRUB	BIT(0)
-+#define RAS2_TYPE_PATROL_SCRUB	0x0000
-+
-+#define RAS2_GET_PATROL_PARAMETERS	0x01
-+#define	RAS2_START_PATROL_SCRUBBER	0x02
-+#define	RAS2_STOP_PATROL_SCRUBBER	0x03
-+
-+#define RAS2_PATROL_SCRUB_SCHRS_IN_MASK	GENMASK(15, 8)
-+#define RAS2_PATROL_SCRUB_EN_BACKGROUND	BIT(0)
-+#define RAS2_PATROL_SCRUB_SCHRS_OUT_MASK	GENMASK(7, 0)
-+#define RAS2_PATROL_SCRUB_MIN_SCHRS_OUT_MASK	GENMASK(15, 8)
-+#define RAS2_PATROL_SCRUB_MAX_SCHRS_OUT_MASK	GENMASK(23, 16)
-+#define RAS2_PATROL_SCRUB_FLAG_SCRUBBER_RUNNING	BIT(0)
-+
-+#define RAS2_SCRUB_NAME_LEN      128
-+#define RAS2_HOUR_IN_SECS    3600
-+
-+struct acpi_ras2_ps_shared_mem {
-+	struct acpi_ras2_shared_memory common;
-+	struct acpi_ras2_patrol_scrub_parameter params;
++struct cxl_mbox_cmd {
++	u16 opcode;
++	void *payload_in;
++	void *payload_out;
++	size_t size_in;
++	size_t size_out;
++	size_t min_out;
++	int poll_count;
++	int poll_interval_ms;
++	u16 return_code;
 +};
-+
-+static int ras2_is_patrol_scrub_support(struct ras2_mem_ctx *ras2_ctx)
-+{
-+	struct acpi_ras2_shared_memory __iomem *common = (void *)
-+						ras2_ctx->pcc_comm_addr;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	common->set_capabilities[0] = 0;
-+
-+	return common->features[0] & RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+}
-+
-+static int ras2_update_patrol_scrub_params_cache(struct ras2_mem_ctx *ras2_ctx)
-+{
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+						ras2_ctx->pcc_comm_addr;
-+	int ret;
-+
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	ps_sm->params.patrol_scrub_command = RAS2_GET_PATROL_PARAMETERS;
-+
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "failed to read parameters\n");
-+		return ret;
-+	}
-+
-+	ras2_ctx->min_scrub_cycle = FIELD_GET(RAS2_PATROL_SCRUB_MIN_SCHRS_OUT_MASK,
-+					      ps_sm->params.scrub_params_out);
-+	ras2_ctx->max_scrub_cycle = FIELD_GET(RAS2_PATROL_SCRUB_MAX_SCHRS_OUT_MASK,
-+					      ps_sm->params.scrub_params_out);
-+	if (!ras2_ctx->bg) {
-+		ras2_ctx->base = ps_sm->params.actual_address_range[0];
-+		ras2_ctx->size = ps_sm->params.actual_address_range[1];
-+	}
-+	ras2_ctx->scrub_cycle_hrs = FIELD_GET(RAS2_PATROL_SCRUB_SCHRS_OUT_MASK,
-+					      ps_sm->params.scrub_params_out);
-+
-+	return 0;
-+}
-+
-+/* Context - lock must be held */
-+static int ras2_get_patrol_scrub_running(struct ras2_mem_ctx *ras2_ctx,
-+					 bool *running)
-+{
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+						ras2_ctx->pcc_comm_addr;
-+	int ret;
-+
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	ps_sm->params.patrol_scrub_command = RAS2_GET_PATROL_PARAMETERS;
-+
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "failed to read parameters\n");
-+		return ret;
-+	}
-+
-+	*running = ps_sm->params.flags & RAS2_PATROL_SCRUB_FLAG_SCRUBBER_RUNNING;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_read_min_scrub_cycle(struct device *dev, void *drv_data,
-+					      u32 *min)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+
-+	*min = ras2_ctx->min_scrub_cycle * RAS2_HOUR_IN_SECS;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_read_max_scrub_cycle(struct device *dev, void *drv_data,
-+					      u32 *max)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+
-+	*max = ras2_ctx->max_scrub_cycle * RAS2_HOUR_IN_SECS;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_cycle_read(struct device *dev, void *drv_data,
-+				    u32 *scrub_cycle_secs)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+
-+	*scrub_cycle_secs = ras2_ctx->scrub_cycle_hrs * RAS2_HOUR_IN_SECS;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_cycle_write(struct device *dev, void *drv_data,
-+				     u32 scrub_cycle_secs)
-+{
-+	u8 scrub_cycle_hrs = scrub_cycle_secs / RAS2_HOUR_IN_SECS;
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+
-+	if (running)
-+		return -EBUSY;
-+
-+	if (scrub_cycle_hrs < ras2_ctx->min_scrub_cycle ||
-+	    scrub_cycle_hrs > ras2_ctx->max_scrub_cycle)
-+		return -EINVAL;
-+
-+	ras2_ctx->scrub_cycle_hrs = scrub_cycle_hrs;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_read_addr(struct device *dev, void *drv_data, u64 *base)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+	int ret;
-+
-+	/*
-+	 * When BG scrubbing is enabled the actual address range is not valid.
-+	 * Return -EBUSY now unless find out a method to retrieve actual full PA range.
-+	 */
-+	if (ras2_ctx->bg)
-+		return -EBUSY;
-+
-+	/*
-+	 * When demand scrubbing is finished firmware must reset actual
-+	 * address range to 0. Otherwise userspace assumes demand scrubbing
-+	 * is in progress.
-+	 */
-+	ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+	if (ret)
-+		return ret;
-+	*base = ras2_ctx->base;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_read_size(struct device *dev, void *drv_data, u64 *size)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+	int ret;
-+
-+	if (ras2_ctx->bg)
-+		return -EBUSY;
-+
-+	ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+	if (ret)
-+		return ret;
-+	*size = ras2_ctx->size;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_write_addr(struct device *dev, void *drv_data, u64 base)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+						ras2_ctx->pcc_comm_addr;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	if (ras2_ctx->bg)
-+		return -EBUSY;
-+
-+	if (!base || !ras2_ctx->size) {
-+		dev_warn(ras2_ctx->dev,
-+			 "%s: Invalid address range, base=0x%llx "
-+			 "size=0x%llx\n", __func__,
-+			 base, ras2_ctx->size);
-+		return -ERANGE;
-+	}
-+
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+
-+	if (running)
-+		return -EBUSY;
-+
-+	ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_SCHRS_IN_MASK;
-+	ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_SCHRS_IN_MASK,
-+						    ras2_ctx->scrub_cycle_hrs);
-+	ps_sm->params.requested_address_range[0] = base;
-+	ps_sm->params.requested_address_range[1] = ras2_ctx->size;
-+	ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_EN_BACKGROUND;
-+	ps_sm->params.patrol_scrub_command = RAS2_START_PATROL_SCRUBBER;
-+
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "Failed to start demand scrubbing\n");
-+		return ret;
-+	}
-+
-+	return ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+}
-+
-+static int ras2_hw_scrub_write_size(struct device *dev, void *drv_data, u64 size)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+
-+	if (running)
-+		return -EBUSY;
-+
-+	if (!size) {
-+		dev_warn(dev, "%s: Invalid address range size=0x%llx\n",
-+			 __func__, size);
-+		return -EINVAL;
-+	}
-+
-+	ras2_ctx->size = size;
-+
-+	return 0;
-+}
-+
-+static int ras2_hw_scrub_set_enabled_bg(struct device *dev, void *drv_data, bool enable)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+	struct acpi_ras2_ps_shared_mem __iomem *ps_sm = (void *)
-+						ras2_ctx->pcc_comm_addr;
-+	bool running;
-+	int ret;
-+
-+	guard(mutex)(&ras2_ctx->lock);
-+	ps_sm->common.set_capabilities[0] = RAS2_SUPPORT_HW_PARTOL_SCRUB;
-+	ret = ras2_get_patrol_scrub_running(ras2_ctx, &running);
-+	if (ret)
-+		return ret;
-+	if (enable) {
-+		if (ras2_ctx->bg || running)
-+			return -EBUSY;
-+		ps_sm->params.requested_address_range[0] = 0;
-+		ps_sm->params.requested_address_range[1] = 0;
-+		ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_SCHRS_IN_MASK;
-+		ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_SCHRS_IN_MASK,
-+							    ras2_ctx->scrub_cycle_hrs);
-+		ps_sm->params.patrol_scrub_command = RAS2_START_PATROL_SCRUBBER;
-+	} else {
-+		if (!ras2_ctx->bg)
-+			return -EPERM;
-+		if (!ras2_ctx->bg && running)
-+			return -EBUSY;
-+		ps_sm->params.patrol_scrub_command = RAS2_STOP_PATROL_SCRUBBER;
-+	}
-+	ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_EN_BACKGROUND;
-+	ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_EN_BACKGROUND,
-+						    enable);
-+	ret = ras2_send_pcc_cmd(ras2_ctx, RAS2_PCC_CMD_EXEC);
-+	if (ret) {
-+		dev_err(ras2_ctx->dev, "Failed to %s background scrubbing\n",
-+			enable ? "enable" : "disable");
-+		return ret;
-+	}
-+	if (enable) {
-+		ras2_ctx->bg = true;
-+		/* Update the cache to account for rounding of supplied parameters and similar */
-+		ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+	} else {
-+		ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+		ras2_ctx->bg = false;
-+	}
-+
-+	return ret;
-+}
-+
-+static int ras2_hw_scrub_get_enabled_bg(struct device *dev, void *drv_data, bool *enabled)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = drv_data;
-+
-+	*enabled = ras2_ctx->bg;
-+
-+	return 0;
-+}
-+
-+static const struct edac_scrub_ops ras2_scrub_ops = {
-+	.read_addr = ras2_hw_scrub_read_addr,
-+	.read_size = ras2_hw_scrub_read_size,
-+	.write_addr = ras2_hw_scrub_write_addr,
-+	.write_size = ras2_hw_scrub_write_size,
-+	.get_enabled_bg = ras2_hw_scrub_get_enabled_bg,
-+	.set_enabled_bg = ras2_hw_scrub_set_enabled_bg,
-+	.get_min_cycle = ras2_hw_scrub_read_min_scrub_cycle,
-+	.get_max_cycle = ras2_hw_scrub_read_max_scrub_cycle,
-+	.get_cycle_duration = ras2_hw_scrub_cycle_read,
-+	.set_cycle_duration = ras2_hw_scrub_cycle_write,
-+};
-+
-+static int ras2_probe(struct auxiliary_device *auxdev,
-+		      const struct auxiliary_device_id *id)
-+{
-+	struct ras2_mem_ctx *ras2_ctx = container_of(auxdev, struct ras2_mem_ctx, adev);
-+	struct edac_dev_feature ras_features[RAS2_DEV_NUM_RAS_FEATURES];
-+	char scrub_name[RAS2_SCRUB_NAME_LEN];
-+	int num_ras_features = 0;
-+	int ret;
-+
-+	if (!ras2_is_patrol_scrub_support(ras2_ctx))
-+		return -EOPNOTSUPP;
-+
-+	ret = ras2_update_patrol_scrub_params_cache(ras2_ctx);
-+	if (ret)
-+		return ret;
-+
-+	snprintf(scrub_name, sizeof(scrub_name), "acpi_ras_mem%d",
-+		 ras2_ctx->id);
-+
-+	ras_features[num_ras_features].ft_type = RAS_FEAT_SCRUB;
-+	ras_features[num_ras_features].instance = ras2_ctx->instance;
-+	ras_features[num_ras_features].scrub_ops = &ras2_scrub_ops;
-+	ras_features[num_ras_features].ctx = ras2_ctx;
-+	num_ras_features++;
-+
-+	return edac_dev_register(&auxdev->dev, scrub_name, NULL,
-+				 num_ras_features, ras_features);
-+}
-+
-+static const struct auxiliary_device_id ras2_mem_dev_id_table[] = {
-+	{ .name = RAS2_AUX_DEV_NAME "." RAS2_MEM_DEV_ID_NAME, },
-+	{ },
-+};
-+
-+MODULE_DEVICE_TABLE(auxiliary, ras2_mem_dev_id_table);
-+
-+static struct auxiliary_driver ras2_mem_driver = {
-+	.name = RAS2_MEM_DEV_ID_NAME,
-+	.probe = ras2_probe,
-+	.id_table = ras2_mem_dev_id_table,
-+};
-+module_auxiliary_driver(ras2_mem_driver);
-+
-+MODULE_IMPORT_NS("ACPI_RAS2");
-+MODULE_DESCRIPTION("ACPI RAS2 memory driver");
-+MODULE_LICENSE("GPL");
+ 
+ /**
+  * struct cxl_mailbox - context for CXL mailbox operations
+  * @host: device that hosts the mailbox
++ * @enabled_cmds: mailbox commands that are enabled by the driver
++ * @exclusive_cmds: mailbox commands that are exclusive to the kernel
+  * @payload_size: Size of space for payload
+  *                (CXL 3.1 8.2.8.4.3 Mailbox Capabilities Register)
+  * @mbox_mutex: mutex protects device mailbox and firmware
+@@ -17,6 +54,8 @@ struct cxl_mbox_cmd;
+  */
+ struct cxl_mailbox {
+ 	struct device *host;
++	DECLARE_BITMAP(enabled_cmds, CXL_MEM_COMMAND_ID_MAX);
++	DECLARE_BITMAP(exclusive_cmds, CXL_MEM_COMMAND_ID_MAX);
+ 	size_t payload_size;
+ 	struct mutex mbox_mutex; /* lock to protect mailbox context */
+ 	struct rcuwait mbox_wait;
 -- 
 2.43.0
 
