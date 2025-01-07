@@ -1,409 +1,151 @@
-Return-Path: <linux-edac+bounces-2822-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2824-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17423A0399E
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2025 09:18:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0746FA03AF1
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2025 10:23:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F29801609B3
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2025 08:18:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AEF8188316A
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Jan 2025 09:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7AE71DE4F1;
-	Tue,  7 Jan 2025 08:17:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="UOqkVHm3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7952E1DE894;
+	Tue,  7 Jan 2025 09:23:26 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCC31E0E13;
-	Tue,  7 Jan 2025 08:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB07647;
+	Tue,  7 Jan 2025 09:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736237874; cv=none; b=H0is5m1tP5FRAB+N6KYWSIJXl9JOWr4tLQ801AvSPSFHc2ti8mkehkK6eloysAWiXx6WO4uhvlJKCrPcmgAPbw4Rr2j+8TVGHhetCTFO9tOHsv0JxBUpo+wYUWWxQwEepcabfkAYBEE2sS8nxBAj2b0YQC0M+SFnHlvNVVfaBdQ=
+	t=1736241806; cv=none; b=KXDJPOdxXGyvaQzc/U+XuPIp8ty4Trw08Bh4ljMq4mh/gpea1FQpfgFSpsVCqDXKfmdXV8Fw5TAQrUxwnaG3wLbAHRw7XH8Zb5lu02Xss6LdeqrAxxdrJakeKndVESnVjPAiT/9kxRIzdsFj8B1+2/dZCo4ALsEkNcuyrXVfDhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736237874; c=relaxed/simple;
-	bh=J8+nxMQ+JuRlwwRxEOzpzQs+dfWktH6ULxXJ8KAfphs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jzeIFskHQRKL7lasVN84LKCrNhbC+gv6AiLP1r5xEYC2304bSqKokHgxGSUf3tv7cjINMSKa5XRugvorLdNGDB2Zq6zH38eu+/2VJlLq3EIjOoPaSWHeN/Cf9AsvJGh5+dk6GgByneeeim9ZW+OAKTLCS6hY3yr7AB7GJNgKgJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=UOqkVHm3; arc=none smtp.client-ip=115.124.30.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1736237868; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=rVGasGlP2qaqHjm+cUU7drqtAQgLCI7PJLkwGbZhVtw=;
-	b=UOqkVHm3bsr6ZYbRridTlkIE6ZQ3X/4k69sMrTMnK78YY8pt4SFBwK01ERC8owNq8v1EFmdX3wd1Tl9ALAh8AreslfQk3SojOtK9bRXl+Vp8GjKU2CdacP3ShiuaLZZCu49RioWMDXl1EFFbIELk+wRWATtPUGA2rrEWJApZTHM=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WNA-B5m_1736237864 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 07 Jan 2025 16:17:46 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: yazen.ghannam@amd.com,
-	mark.rutland@arm.com,
-	catalin.marinas@arm.com,
-	mingo@redhat.com,
-	robin.murphy@arm.com,
-	Jonathan.Cameron@Huawei.com,
-	bp@alien8.de,
-	rafael@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	wangkefeng.wang@huawei.com,
-	tanxiaofei@huawei.com,
-	mawupeng1@huawei.com,
-	tony.luck@intel.com,
-	linmiaohe@huawei.com,
-	naoya.horiguchi@nec.com,
-	james.morse@arm.com,
-	tongtiangen@huawei.com,
-	gregkh@linuxfoundation.org,
-	will@kernel.org,
-	jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org,
-	linux-edac@vger.kernel.org,
-	x86@kernel.org,
-	xueshuai@linux.alibaba.com,
-	justin.he@arm.com,
-	ardb@kernel.org,
-	ying.huang@linux.alibaba.com,
-	ashish.kalra@amd.com,
-	baolin.wang@linux.alibaba.com,
-	tglx@linutronix.de,
-	dave.hansen@linux.intel.com,
-	lenb@kernel.org,
-	hpa@zytor.com,
-	robert.moore@intel.com,
-	lvying6@huawei.com,
-	xiexiuqi@huawei.com,
-	zhuo.song@linux.alibaba.com
-Subject: [PATCH v18 3/3] ACPI: APEI: handle synchronous exceptions in task work
-Date: Tue,  7 Jan 2025 16:17:35 +0800
-Message-ID: <20250107081735.16159-4-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20250107081735.16159-1-xueshuai@linux.alibaba.com>
-References: <20250107081735.16159-1-xueshuai@linux.alibaba.com>
+	s=arc-20240116; t=1736241806; c=relaxed/simple;
+	bh=PIZYC/3Ty+YjyfGidIWLDZXYkQdxxNH49WPDSunZ9ws=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=j8uRqMQCgAdqfeJoTiFE4YQehmQSq5forEfWJdZLraaT3IcWI2DhhL8m4JyZIvsFMkWkvEmk6mywVveIdAUICRuZF73K6c0weJ/xnnZ9vx8irrRse66vyms9sivGtkClzfHwwWgUhkn8IF00aGH4C+frgd/UBfqmz7bbLaB2BDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YS5CZ6q8lz6M4Lm;
+	Tue,  7 Jan 2025 17:21:46 +0800 (CST)
+Received: from frapeml100008.china.huawei.com (unknown [7.182.85.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 11C9E1403A8;
+	Tue,  7 Jan 2025 17:23:20 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml100008.china.huawei.com (7.182.85.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 7 Jan 2025 10:23:19 +0100
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Tue, 7 Jan 2025 10:23:19 +0100
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
+	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
+	"Jonathan Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
+	<dave.jiang@intel.com>, "alison.schofield@intel.com"
+	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
+	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v18 02/19] EDAC: Add scrub control feature
+Thread-Topic: [PATCH v18 02/19] EDAC: Add scrub control feature
+Thread-Index: AQHbYDQd8xBjK3PZSkqZdrlJ+rHfL7MJ1jmAgABIhvCAALyTAIAALgLg
+Date: Tue, 7 Jan 2025 09:23:19 +0000
+Message-ID: <bb8154e6c78d440bb807ff9b6bfd7a0f@huawei.com>
+References: <20250106121017.1620-1-shiju.jose@huawei.com>
+ <20250106121017.1620-3-shiju.jose@huawei.com>
+ <20250106155733.GAZ3v9bQspKvdi3lZE@fat_crate.local>
+ <36665b7bf4974020a34d08a7ddf6d554@huawei.com>
+ <20250107073204.GBZ3zYdOtWEbieKXiU@fat_crate.local>
+In-Reply-To: <20250107073204.GBZ3zYdOtWEbieKXiU@fat_crate.local>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The memory uncorrected error could be signaled by asynchronous interrupt
-(specifically, SPI in arm64 platform), e.g. when an error is detected by
-a background scrubber, or signaled by synchronous exception
-(specifically, data abort exception in arm64 platform), e.g. when a CPU
-tries to access a poisoned cache line. Currently, both synchronous and
-asynchronous error use memory_failure_queue() to schedule
-memory_failure() to exectute in a kworker context.
-
-As a result, when a user-space process is accessing a poisoned data, a
-data abort is taken and the memory_failure() is executed in the kworker
-context, memory_failure():
-
-  - will send wrong si_code by SIGBUS signal in early_kill mode, and
-  - can not kill the user-space in some cases resulting a synchronous
-    error infinite loop
-
-Issue 1: send wrong si_code in early_kill mode
-
-Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
-MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
-could be used to determine whether a synchronous exception occurs on
-ARM64 platform.  When a synchronous exception is detected, the kernel is
-expected to terminate the current process which has accessed poisoned
-page. This is done by sending a SIGBUS signal with an error code
-BUS_MCEERR_AR, indicating an action-required machine check error on
-read.
-
-However, when kill_proc() is called to terminate the processes who have
-the poisoned page mapped, it sends the incorrect SIGBUS error code
-BUS_MCEERR_AO because the context in which it operates is not the one
-where the error was triggered.
-
-To reproduce this problem:
-
-  #sysctl -w vm.memory_failure_early_kill=1
-  vm.memory_failure_early_kill = 1
-
-  # STEP2: inject an UCE error and consume it to trigger a synchronous error
-  #einj_mem_uc single
-  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-  injecting ...
-  triggering ...
-  signal 7 code 5 addr 0xffffb0d75000
-  page not present
-  Test passed
-
-The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO
-error and it is not the fact.
-
-After this patch:
-
-  # STEP1: enable early kill mode
-  #sysctl -w vm.memory_failure_early_kill=1
-  vm.memory_failure_early_kill = 1
-  # STEP2: inject an UCE error and consume it to trigger a synchronous error
-  #einj_mem_uc single
-  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-  injecting ...
-  triggering ...
-  signal 7 code 4 addr 0xffffb0d75000
-  page not present
-  Test passed
-
-The si_code (code 4) from einj_mem_uc indicates that it is a BUS_MCEERR_AR
-error as we expected.
-
-Issue 2: a synchronous error infinite loop
-
-If a user-space process, e.g. devmem, accesses a poisoned page for which
-the HWPoison flag is set, kill_accessing_process() is called to send
-SIGBUS to current processs with error info. Because the memory_failure()
-is executed in the kworker context, it will just do nothing but return
-EFAULT. So, devmem will access the posioned page and trigger an
-exception again, resulting in a synchronous error infinite loop. Such
-exception loop may cause platform firmware to exceed some threshold and
-reboot when Linux could have recovered from this error.
-
-To reproduce this problem:
-
-  # STEP 1: inject an UCE error, and kernel will set HWPosion flag for related page
-  #einj_mem_uc single
-  0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
-  injecting ...
-  triggering ...
-  signal 7 code 4 addr 0xffffb0d75000
-  page not present
-  Test passed
-
-  # STEP 2: access the same page and it will trigger a synchronous error infinite loop
-  devmem 0x4092d55b400
-
-To fix above two issues, queue memory_failure() as a task_work so that
-it runs in the context of the process that is actually consuming the
-poisoned data.
-
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Jane Chu <jane.chu@oracle.com>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- drivers/acpi/apei/ghes.c | 81 +++++++++++++++++++++++-----------------
- include/acpi/ghes.h      |  3 --
- include/linux/mm.h       |  1 -
- mm/memory-failure.c      | 13 -------
- 4 files changed, 46 insertions(+), 52 deletions(-)
-
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 0e643e26c8ad..324fe9d306e6 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -466,28 +466,41 @@ static void ghes_clear_estatus(struct ghes *ghes,
- 		ghes_ack_error(ghes->generic_v2);
- }
- 
--/*
-- * Called as task_work before returning to user-space.
-- * Ensure any queued work has been done before we return to the context that
-- * triggered the notification.
-+/**
-+ * struct ghes_task_work - for synchronous RAS event
-+ *
-+ * @twork:                callback_head for task work
-+ * @pfn:                  page frame number of corrupted page
-+ * @flags:                work control flags
-+ *
-+ * Structure to pass task work to be handled before
-+ * returning to user-space via task_work_add().
-  */
--static void ghes_kick_task_work(struct callback_head *head)
-+struct ghes_task_work {
-+	struct callback_head twork;
-+	u64 pfn;
-+	int flags;
-+};
-+
-+static void memory_failure_cb(struct callback_head *twork)
- {
--	struct acpi_hest_generic_status *estatus;
--	struct ghes_estatus_node *estatus_node;
--	u32 node_len;
-+	struct ghes_task_work *twcb = container_of(twork, struct ghes_task_work, twork);
-+	int ret;
- 
--	estatus_node = container_of(head, struct ghes_estatus_node, task_work);
--	if (IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
--		memory_failure_queue_kick(estatus_node->task_work_cpu);
-+	ret = memory_failure(twcb->pfn, twcb->flags);
-+	gen_pool_free(ghes_estatus_pool, (unsigned long)twcb, sizeof(*twcb));
- 
--	estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
--	node_len = GHES_ESTATUS_NODE_LEN(cper_estatus_len(estatus));
--	gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len);
-+	if (!ret || ret == -EHWPOISON || ret == -EOPNOTSUPP)
-+		return;
-+
-+	pr_err("%#llx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
-+			twcb->pfn, current->comm, task_pid_nr(current));
-+	force_sig(SIGBUS);
- }
- 
- static bool ghes_do_memory_failure(u64 physical_addr, int flags)
- {
-+	struct ghes_task_work *twcb;
- 	unsigned long pfn;
- 
- 	if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
-@@ -501,6 +514,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
- 		return false;
- 	}
- 
-+	if (flags == MF_ACTION_REQUIRED && current->mm) {
-+		twcb = (void *)gen_pool_alloc(ghes_estatus_pool, sizeof(*twcb));
-+		if (!twcb)
-+			return false;
-+
-+		twcb->pfn = pfn;
-+		twcb->flags = flags;
-+		init_task_work(&twcb->twork, memory_failure_cb);
-+		task_work_add(current, &twcb->twork, TWA_RESUME);
-+		return true;
-+	}
-+
- 	memory_failure_queue(pfn, flags);
- 	return true;
- }
-@@ -745,8 +770,8 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
- }
- EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, "CXL");
- 
--static bool ghes_do_proc(struct ghes *ghes,
--			 const struct acpi_hest_generic_status *estatus)
-+static void ghes_do_proc(struct ghes *ghes,
-+ 			 const struct acpi_hest_generic_status *estatus)
- {
- 	int sev, sec_sev;
- 	struct acpi_hest_generic_data *gdata;
-@@ -811,8 +836,6 @@ static bool ghes_do_proc(struct ghes *ghes,
- 			current->comm, task_pid_nr(current));
- 		force_sig(SIGBUS);
- 	}
--
--	return queued;
- }
- 
- static void __ghes_print_estatus(const char *pfx,
-@@ -1114,9 +1137,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 	struct ghes_estatus_node *estatus_node;
- 	struct acpi_hest_generic *generic;
- 	struct acpi_hest_generic_status *estatus;
--	bool task_work_pending;
- 	u32 len, node_len;
--	int ret;
- 
- 	llnode = llist_del_all(&ghes_estatus_llist);
- 	/*
-@@ -1131,25 +1152,16 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 		estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
- 		len = cper_estatus_len(estatus);
- 		node_len = GHES_ESTATUS_NODE_LEN(len);
--		task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
-+
-+		ghes_do_proc(estatus_node->ghes, estatus);
-+
- 		if (!ghes_estatus_cached(estatus)) {
- 			generic = estatus_node->generic;
- 			if (ghes_print_estatus(NULL, generic, estatus))
- 				ghes_estatus_cache_add(generic, estatus);
- 		}
--
--		if (task_work_pending && current->mm) {
--			estatus_node->task_work.func = ghes_kick_task_work;
--			estatus_node->task_work_cpu = smp_processor_id();
--			ret = task_work_add(current, &estatus_node->task_work,
--					    TWA_RESUME);
--			if (ret)
--				estatus_node->task_work.func = NULL;
--		}
--
--		if (!estatus_node->task_work.func)
--			gen_pool_free(ghes_estatus_pool,
--				      (unsigned long)estatus_node, node_len);
-+		gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
-+			      node_len);
- 
- 		llnode = next;
- 	}
-@@ -1210,7 +1222,6 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
- 
- 	estatus_node->ghes = ghes;
- 	estatus_node->generic = ghes->generic;
--	estatus_node->task_work.func = NULL;
- 	estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
- 
- 	if (__ghes_read_estatus(estatus, buf_paddr, fixmap_idx, len)) {
-diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-index be1dd4c1a917..ebd21b05fe6e 100644
---- a/include/acpi/ghes.h
-+++ b/include/acpi/ghes.h
-@@ -35,9 +35,6 @@ struct ghes_estatus_node {
- 	struct llist_node llnode;
- 	struct acpi_hest_generic *generic;
- 	struct ghes *ghes;
--
--	int task_work_cpu;
--	struct callback_head task_work;
- };
- 
- struct ghes_estatus_cache {
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index b1c3db9cf355..850165eaebfe 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3947,7 +3947,6 @@ enum mf_flags {
- int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
- 		      unsigned long count, int mf_flags);
- extern int memory_failure(unsigned long pfn, int flags);
--extern void memory_failure_queue_kick(int cpu);
- extern int unpoison_memory(unsigned long pfn);
- extern atomic_long_t num_poisoned_pages __read_mostly;
- extern int soft_offline_page(unsigned long pfn, int flags);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 14c316d7d38d..e0adb665d07b 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2499,19 +2499,6 @@ static void memory_failure_work_func(struct work_struct *work)
- 	}
- }
- 
--/*
-- * Process memory_failure work queued on the specified CPU.
-- * Used to avoid return-to-userspace racing with the memory_failure workqueue.
-- */
--void memory_failure_queue_kick(int cpu)
--{
--	struct memory_failure_cpu *mf_cpu;
--
--	mf_cpu = &per_cpu(memory_failure_cpu, cpu);
--	cancel_work_sync(&mf_cpu->work);
--	memory_failure_work_func(&mf_cpu->work);
--}
--
- static int __init memory_failure_init(void)
- {
- 	struct memory_failure_cpu *mf_cpu;
--- 
-2.39.3
-
+Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogQm9yaXNsYXYgUGV0a292IDxicEBh
+bGllbjguZGU+DQo+U2VudDogMDcgSmFudWFyeSAyMDI1IDA3OjMyDQo+VG86IFNoaWp1IEpvc2Ug
+PHNoaWp1Lmpvc2VAaHVhd2VpLmNvbT4NCj5DYzogbGludXgtZWRhY0B2Z2VyLmtlcm5lbC5vcmc7
+IGxpbnV4LWN4bEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPmFjcGlAdmdlci5rZXJuZWwub3Jn
+OyBsaW51eC1tbUBrdmFjay5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+dG9u
+eS5sdWNrQGludGVsLmNvbTsgcmFmYWVsQGtlcm5lbC5vcmc7IGxlbmJAa2VybmVsLm9yZzsNCj5t
+Y2hlaGFiQGtlcm5lbC5vcmc7IGRhbi5qLndpbGxpYW1zQGludGVsLmNvbTsgZGF2ZUBzdGdvbGFi
+cy5uZXQ7IEpvbmF0aGFuDQo+Q2FtZXJvbiA8am9uYXRoYW4uY2FtZXJvbkBodWF3ZWkuY29tPjsg
+ZGF2ZS5qaWFuZ0BpbnRlbC5jb207DQo+YWxpc29uLnNjaG9maWVsZEBpbnRlbC5jb207IHZpc2hh
+bC5sLnZlcm1hQGludGVsLmNvbTsgaXJhLndlaW55QGludGVsLmNvbTsNCj5kYXZpZEByZWRoYXQu
+Y29tOyBWaWxhcy5TcmlkaGFyYW5AYW1kLmNvbTsgbGVvLmR1cmFuQGFtZC5jb207DQo+WWF6ZW4u
+R2hhbm5hbUBhbWQuY29tOyByaWVudGplc0Bnb29nbGUuY29tOyBqaWFxaXlhbkBnb29nbGUuY29t
+Ow0KPkpvbi5HcmltbUBhbWQuY29tOyBkYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb207DQo+bmFv
+eWEuaG9yaWd1Y2hpQG5lYy5jb207IGphbWVzLm1vcnNlQGFybS5jb207IGp0aG91Z2h0b25AZ29v
+Z2xlLmNvbTsNCj5zb21hc3VuZGFyYW0uYUBocGUuY29tOyBlcmRlbWFrdGFzQGdvb2dsZS5jb207
+IHBnb25kYUBnb29nbGUuY29tOw0KPmR1ZW53ZW5AZ29vZ2xlLmNvbTsgZ3RoZWxlbkBnb29nbGUu
+Y29tOw0KPndzY2h3YXJ0ekBhbXBlcmVjb21wdXRpbmcuY29tOyBkZmVyZ3Vzb25AYW1wZXJlY29t
+cHV0aW5nLmNvbTsNCj53YnNAb3MuYW1wZXJlY29tcHV0aW5nLmNvbTsgbmlmYW4uY3hsQGdtYWls
+LmNvbTsgdGFueGlhb2ZlaQ0KPjx0YW54aWFvZmVpQGh1YXdlaS5jb20+OyBaZW5ndGFvIChCKSA8
+cHJpbWUuemVuZ0BoaXNpbGljb24uY29tPjsgUm9iZXJ0bw0KPlNhc3N1IDxyb2JlcnRvLnNhc3N1
+QGh1YXdlaS5jb20+OyBrYW5na2FuZy5zaGVuQGZ1dHVyZXdlaS5jb207DQo+d2FuZ2h1aXFpYW5n
+IDx3YW5naHVpcWlhbmdAaHVhd2VpLmNvbT47IExpbnV4YXJtDQo+PGxpbnV4YXJtQGh1YXdlaS5j
+b20+DQo+U3ViamVjdDogUmU6IFtQQVRDSCB2MTggMDIvMTldIEVEQUM6IEFkZCBzY3J1YiBjb250
+cm9sIGZlYXR1cmUNCj4NCj5PbiBNb24sIEphbiAwNiwgMjAyNSBhdCAwNzozNDo0MVBNICswMDAw
+LCBTaGlqdSBKb3NlIHdyb3RlOg0KPj4gTXkgdW5kZXJzdGFuZGluZyBpcyB0aGF0IHlvdSBtZWFu
+dCB0aGUgZm9sbG93aW5nIGNoYW5nZXMgKGRpZmYgdG8gdGhpcw0KPj4gcGF0Y2gpLCBmb3Igc2Ny
+dWI/ICAoYW5kIHNpbWlsYXIgZm9yIG90aGVyIGZlYXR1cmVzKS4gIFBsZWFzZSBsZXQgbWUNCj4+
+IGtub3cgaWYgeW91IG5lZWQgYW55IGNvcnJlY3Rpb25zLg0KPg0KPlllcywgc29tZXRoaW5nIGxp
+a2UgdGhhdCBleGNlcHQgInNlbGVjdCIgaXMgZXZpbCBhbmQgc2hvdWxkIGJlIHVzZWQgb25seSB3
+aGVuIHRoZQ0KPml0ZW1zIGl0IHNlbGVjdHMgZG8gbm90IHB1bGwgaW4gbW9yZSBzdHVmZi4gQW5k
+IHNpbmNlIHNjcnViIGlzIGFsbCBvcHRpb25hbCwgaXQgc2hvdWxkDQo+YWxsIGJlIGRlcGVuZHMu
+DQoNClN1cmUuDQo+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9lZGFjL0tjb25maWcgYi9kcml2
+ZXJzL2VkYWMvS2NvbmZpZyBpbmRleA0KPj4gMDZmN2I0M2E2Zjc4Li43MDliZDdhZDgwMTUgMTAw
+NjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2VkYWMvS2NvbmZpZw0KPj4gKysrIGIvZHJpdmVycy9lZGFj
+L0tjb25maWcNCj4+IEBAIC05LDYgKzksMTQgQEAgY29uZmlnIEVEQUNfQVRPTUlDX1NDUlVCICBj
+b25maWcgRURBQ19TVVBQT1JUDQo+PiAgCWJvb2wNCj4+DQo+PiArY29uZmlnIEVEQUNfRkVBVF9T
+Q1JVQg0KPg0KPkVEQUNfU0NSVUIgaXMgcGVyZmVjdGx5IGZpbmUuDQoNClN1cmUuIEkgd2lsbCBj
+aGFuZ2UuDQo+DQo+PiArCWJvb2wNCj4+ICsJaGVscA0KPj4gKwkgIFRoZSBFREFDIHNjcnViIGZl
+YXR1cmUgaXMgb3B0aW9uYWwgYW5kIGlzIGRlc2lnbmVkIHRvIGNvbnRyb2wgdGhlDQo+PiArCSAg
+bWVtb3J5IHNjcnViYmVycyBpbiB0aGUgc3lzdGVtLiBUaGUgY29tbW9uIHN5c2ZzIHNjcnViIGlu
+dGVyZmFjZQ0KPj4gKwkgIGFic3RyYWN0cyB0aGUgY29udHJvbCBvZiB2YXJpb3VzIGFyYml0cmFy
+eSBzY3J1YmJpbmcgZnVuY3Rpb25hbGl0aWVzDQo+PiArCSAgaW50byBhIHVuaWZpZWQgc2V0IG9m
+IGZ1bmN0aW9ucy4NCj4NCj5UaGlzIHNob3VsZCBjb21lLi4uDQo+DQo+PiArDQo+PiAgbWVudWNv
+bmZpZyBFREFDDQo+PiAgCXRyaXN0YXRlICJFREFDIChFcnJvciBEZXRlY3Rpb24gQW5kIENvcnJl
+Y3Rpb24pIHJlcG9ydGluZyINCj4+ICAJZGVwZW5kcyBvbiBIQVNfSU9NRU0gJiYgRURBQ19TVVBQ
+T1JUICYmIFJBUw0KPg0KPi4uLiBpbiBoZXJlIGFzIGl0IGlzIHBhcnQgb2YgRURBQy4NCg0KSSB3
+aWxsIG1vdmUgaW4gaGVyZS4gDQo+DQo+VGh4Lg0KPg0KPi0tDQo+UmVnYXJkcy9HcnVzcywNCj4g
+ICAgQm9yaXMuDQo+DQo+aHR0cHM6Ly9wZW9wbGUua2VybmVsLm9yZy90Z2x4L25vdGVzLWFib3V0
+LW5ldGlxdWV0dGUNCg0KVGhhbmtzLA0KU2hpanUNCg0K
 
