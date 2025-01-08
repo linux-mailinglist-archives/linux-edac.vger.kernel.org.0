@@ -1,157 +1,131 @@
-Return-Path: <linux-edac+bounces-2845-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2846-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0E95A05610
-	for <lists+linux-edac@lfdr.de>; Wed,  8 Jan 2025 10:04:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 791E1A060BE
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Jan 2025 16:52:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E97D3A39A4
-	for <lists+linux-edac@lfdr.de>; Wed,  8 Jan 2025 09:04:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C7193AB26E
+	for <lists+linux-edac@lfdr.de>; Wed,  8 Jan 2025 15:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A70301DFE0F;
-	Wed,  8 Jan 2025 09:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XN+6NTKr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5F91FECBB;
+	Wed,  8 Jan 2025 15:47:23 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E4014B95A;
-	Wed,  8 Jan 2025 09:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D69199E88;
+	Wed,  8 Jan 2025 15:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736327080; cv=none; b=gRiuHL/99mMdeEVWkp+0+R668cMgl0IjL1zJb3HWz1RtzEOcjG8XmTFVtfjOQAHR+ES4VHT7vxrAdmXmw5nCDanWZyNqNgtu6543W6fF7+e3V2TYaA74wWZEVM7mIIs775ERmut3S4xg8K7OyW9IHfCOQYzEi6gKOL9WC6l6Edw=
+	t=1736351243; cv=none; b=Zy2ADWkPibGnFmLnwTv+qTbyT+cDwv43H2S4QBVZMZbzUME5aSR4/7nx0K0ML4sbsVE3KcyF6C7A+pXiQKfwlqCoRq29v4+YLKUQOt7vRCuFDdo45/XV4RuH6v6wbMMjUvpvyufR54bWlGMWaBmSJ3rpDe9MsQMzD0xyguSO8+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736327080; c=relaxed/simple;
-	bh=xNR/nXvwFudfyaWoOBM9ZGvzX6rok5QN+Q64OKRxbZw=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KJYfO2K+o1lask7x9bD+5xJh97I0S1cYkcoiR0bumfYx43L0/wK3+Xb2rF+cuc243dcySmoGbowGm8m/7O2jmIQapkdYxCvEAzaxPo4+ko8W4LlSV1jDSHJKKeMJ1McFq4jnseO8QXDaPLKQyV/syDlmsHRXoiQ2B2BVYdJBJgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XN+6NTKr; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1736327068; h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type;
-	bh=ijIs5T/si3GfhX3wBZjJciP7Ftp7BZ+lLRzqIm/A8wc=;
-	b=XN+6NTKrDrsIMMrwOM9OKRS6VRdU4tXnj9nhNbV6Kq2paYwS3N97iqeXqtVDrfqd2EJOJiWpN2uLwoZYeW9HmJrHszPZgIpy57vt0TiJcFeUrysif85uDfijRYItYsLTiNsNFrG+wQf6Z8/ySk/MRSYLoiZIUBEgWU4siWka4AU=
-Received: from 30.246.161.230(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WNDVWZy_1736327065 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 08 Jan 2025 17:04:27 +0800
-Message-ID: <309dd6e6-53ec-4f82-94ca-242941bd7136@linux.alibaba.com>
-Date: Wed, 8 Jan 2025 17:04:25 +0800
+	s=arc-20240116; t=1736351243; c=relaxed/simple;
+	bh=zDpT+gRVw3ELu9IymByX8B241qWFr6AedVaSCEJOKhg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=l+nfhTcSyPSqWoGtoOduU0xBC6kT+a1jWNIl34F0bFMM1TIOMKsuR/RKHU2+1sVtRcSjNgmUuEIAV5NP2zCiJG2hFSVQE6/bQFWuZ86Unmn09TLCTwTHe7GEOL4niwq/wTM+fToMReKHn5fwj9UzkfUxJ8o9RoEcU//VuTsPaRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YSscX4smRz6HJTY;
+	Wed,  8 Jan 2025 23:42:36 +0800 (CST)
+Received: from frapeml100008.china.huawei.com (unknown [7.182.85.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 61C09140C72;
+	Wed,  8 Jan 2025 23:47:12 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml100008.china.huawei.com (7.182.85.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 8 Jan 2025 16:47:12 +0100
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Wed, 8 Jan 2025 16:47:12 +0100
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
+	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
+	"Jonathan Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
+	<dave.jiang@intel.com>, "alison.schofield@intel.com"
+	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
+	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v18 02/19] EDAC: Add scrub control feature
+Thread-Topic: [PATCH v18 02/19] EDAC: Add scrub control feature
+Thread-Index: AQHbYDQd8xBjK3PZSkqZdrlJ+rHfL7MJ1jmAgABIhvCAALyTAIACKh5w
+Date: Wed, 8 Jan 2025 15:47:12 +0000
+Message-ID: <46b4e35b722740a59b946fa1c0562ac6@huawei.com>
+References: <20250106121017.1620-1-shiju.jose@huawei.com>
+ <20250106121017.1620-3-shiju.jose@huawei.com>
+ <20250106155733.GAZ3v9bQspKvdi3lZE@fat_crate.local>
+ <36665b7bf4974020a34d08a7ddf6d554@huawei.com>
+ <20250107073204.GBZ3zYdOtWEbieKXiU@fat_crate.local>
+In-Reply-To: <20250107073204.GBZ3zYdOtWEbieKXiU@fat_crate.local>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-Subject: Re: [PATCH v4] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: rostedt@goodmis.org, lukas@wunner.de, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bhelgaas@google.com,
- tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
- davem@davemloft.net, anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
- peterz@infradead.org
-References: <20250107231943.GA189869@bhelgaas>
-In-Reply-To: <20250107231943.GA189869@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-
-
-在 2025/1/8 07:19, Bjorn Helgaas 写道:
-> On Sat, Nov 23, 2024 at 07:31:08PM +0800, Shuai Xue wrote:
->> Hotplug events are critical indicators for analyzing hardware health,
->> particularly in AI supercomputers where surprise link downs can
->> significantly impact system performance and reliability. The failure
->> characterization analysis illustrates the significance of failures
->> caused by the Infiniband link errors. Meta observes that 2% in a machine
->> learning cluster and 6% in a vision application cluster of Infiniband
->> failures co-occur with GPU failures, such as falling off the bus, which
->> may indicate a correlation with PCIe.[1]
->>
->> To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
->> tracepoint for hotplug event to help healthy check, and generate
->> tracepoints for pcie hotplug event. To monitor these tracepoints in
->> userspace, e.g. with rasdaemon, put `enum pci_hotplug_event` in uapi
->> header.
->>
->> The output like below:
->> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
->> $ cat /sys/kernel/debug/tracing/trace_pipe
->>             <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
->>
->>             <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
->>
->> [1]https://arxiv.org/abs/2410.21680
-> 
-> Doesn't apply on pci/main (v6.13-rc1); can you rebase it?
-
-Sure. Do you mean Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
-   branch main
-
-> 
-> s/pcie/PCIe/ in English text.
-
-Will fix it.
-
-> 
-> Probably more detail than necessary about AI supercomputers,
-> Infiniband, vision applications, etc.  This is a very generic issue.
-
-Agreed. It is generic. Are you asking for the first background paragraph to be
-deleted?
-
-> 
-> "Falling off the bus" doesn't really mean anything to me.  I suppose
-> it's another way to describe a "link down" event that leads to UR
-> errors when trying to access the device?
-
-Sorry for the confusion. "Falling off the bus" is a common error for NVIDIA GPU
-observed in production. The GPU driver will log a such message when GPU is not
-accessible. And we also see many hotplug event like bellow:
-
-[12945750.691652] pcieport 0000:42:02.0: pciehp: Slot(65): Link Down
-[12945750.691655] pcieport 0000:42:02.0: pciehp: Slot(65): Card not present
-
-> https://docs.nvidia.com/deploy/xid-errors/index.html#xid-79-gpu-has-fallen-off-the-bus
-
-> 
-> I'm guessing that monitoring these via rasdaemon requires more than
-> just adding "enum pci_hotplug_event"?  Or does rasdaemon read
-> include/uapi/linux/pci.h and automagically incorporate new events?
-> Maybe there's at least a rebuild involved?
-
-Yes, a rebuild is needed. Rasdaemon has a basic infrastructure to manually
-register a tracepoint event handler. For example, for this new event, we can
-register to handle pci_hp_event:
-
-     rc = add_event_handler(ras, pevent, page_size, "pci", "pci_hp_event",
-			   ras_pci_hp_event_handler, NULL, PCI_HOTPLUG_EVENT);
-
-> 
-> Anything in the arxiv link that is specifically relevant to this patch
-> needs to be in the commit log itself.  But I think there's already
-> enough information here to motivate this change, and whatever is in
-> the arxiv link may be of general interest, but is probably not
-> required to justify, understand, or debug this useful functionality.
-
-I see, will remove the arxiv link.
-
-> 
-> Bjorn
-
-Thank you for quick reply.
-
-Best Regards,
-Shuai
+Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogQm9yaXNsYXYgUGV0a292IDxicEBh
+bGllbjguZGU+DQpbLi4uXQ0KPlN1YmplY3Q6IFJlOiBbUEFUQ0ggdjE4IDAyLzE5XSBFREFDOiBB
+ZGQgc2NydWIgY29udHJvbCBmZWF0dXJlDQo+DQo+T24gTW9uLCBKYW4gMDYsIDIwMjUgYXQgMDc6
+MzQ6NDFQTSArMDAwMCwgU2hpanUgSm9zZSB3cm90ZToNCj4+IE15IHVuZGVyc3RhbmRpbmcgaXMg
+dGhhdCB5b3UgbWVhbnQgdGhlIGZvbGxvd2luZyBjaGFuZ2VzIChkaWZmIHRvIHRoaXMNCj4+IHBh
+dGNoKSwgZm9yIHNjcnViPyAgKGFuZCBzaW1pbGFyIGZvciBvdGhlciBmZWF0dXJlcykuICBQbGVh
+c2UgbGV0IG1lDQo+PiBrbm93IGlmIHlvdSBuZWVkIGFueSBjb3JyZWN0aW9ucy4NCj4NCj5ZZXMs
+IHNvbWV0aGluZyBsaWtlIHRoYXQgZXhjZXB0ICJzZWxlY3QiIGlzIGV2aWwgYW5kIHNob3VsZCBi
+ZSB1c2VkIG9ubHkgd2hlbiB0aGUNCj5pdGVtcyBpdCBzZWxlY3RzIGRvIG5vdCBwdWxsIGluIG1v
+cmUgc3R1ZmYuIEFuZCBzaW5jZSBzY3J1YiBpcyBhbGwgb3B0aW9uYWwsIGl0IHNob3VsZA0KPmFs
+bCBiZSBkZXBlbmRzLg0KPg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZWRhYy9LY29uZmlnIGIv
+ZHJpdmVycy9lZGFjL0tjb25maWcgaW5kZXgNCj4+IDA2ZjdiNDNhNmY3OC4uNzA5YmQ3YWQ4MDE1
+IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9lZGFjL0tjb25maWcNCj4+ICsrKyBiL2RyaXZlcnMv
+ZWRhYy9LY29uZmlnDQo+PiBAQCAtOSw2ICs5LDE0IEBAIGNvbmZpZyBFREFDX0FUT01JQ19TQ1JV
+QiAgY29uZmlnIEVEQUNfU1VQUE9SVA0KPj4gIAlib29sDQo+Pg0KPj4gK2NvbmZpZyBFREFDX0ZF
+QVRfU0NSVUINCj4NCj5FREFDX1NDUlVCIGlzIHBlcmZlY3RseSBmaW5lLg0KPg0KPj4gKwlib29s
+DQo+PiArCWhlbHANCj4+ICsJICBUaGUgRURBQyBzY3J1YiBmZWF0dXJlIGlzIG9wdGlvbmFsIGFu
+ZCBpcyBkZXNpZ25lZCB0byBjb250cm9sIHRoZQ0KPj4gKwkgIG1lbW9yeSBzY3J1YmJlcnMgaW4g
+dGhlIHN5c3RlbS4gVGhlIGNvbW1vbiBzeXNmcyBzY3J1YiBpbnRlcmZhY2UNCj4+ICsJICBhYnN0
+cmFjdHMgdGhlIGNvbnRyb2wgb2YgdmFyaW91cyBhcmJpdHJhcnkgc2NydWJiaW5nIGZ1bmN0aW9u
+YWxpdGllcw0KPj4gKwkgIGludG8gYSB1bmlmaWVkIHNldCBvZiBmdW5jdGlvbnMuDQo+DQo+VGhp
+cyBzaG91bGQgY29tZS4uLg0KPg0KPj4gKw0KPj4gIG1lbnVjb25maWcgRURBQw0KPj4gIAl0cmlz
+dGF0ZSAiRURBQyAoRXJyb3IgRGV0ZWN0aW9uIEFuZCBDb3JyZWN0aW9uKSByZXBvcnRpbmciDQo+
+PiAgCWRlcGVuZHMgb24gSEFTX0lPTUVNICYmIEVEQUNfU1VQUE9SVCAmJiBSQVMNCj4NCj4uLi4g
+aW4gaGVyZSBhcyBpdCBpcyBwYXJ0IG9mIEVEQUMuDQo+DQo+VGh4Lg0KPg0KSGkgQm9yaXMsDQoN
+CkkgIGhhdmUgaW5jb3Jwb3JhdGVkIHlvdXIgc3VnZ2VzdGlvbnMgZm9yIHRoZSBuZXh0IHZlcnNp
+b24uICANCkhvd2V2ZXIgYmVmb3JlIHNlbmRpbmcgbmV4dCB2ZXJzaW9uLCBJIGFtIHdvbmRlcmlu
+ZyBhcmUgeW91IHBsYW5uaW5nIGZvciBmdXJ0aGVyIHJldmlldyBvbg0KdGhpcyB2MTggc2VyaWVz
+IGFuZCBnaXZpbmcgYW55IG90aGVyIGZlZWRiYWNrcz8gICAgIA0KDQpUaGFua3MsDQpTaGlqdQ0K
 
