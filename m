@@ -1,47 +1,100 @@
-Return-Path: <linux-edac+bounces-2857-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2858-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A846A07FD5
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2025 19:35:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9402A083AE
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2025 00:51:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81CBA162732
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2025 18:35:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60CCC188BDCA
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2025 23:52:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01D019922F;
-	Thu,  9 Jan 2025 18:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C293E2063D4;
+	Thu,  9 Jan 2025 23:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fcfJP4/u"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B9813B2B8;
-	Thu,  9 Jan 2025 18:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736447698; cv=none; b=k9urQ4YQDyo+ehiTRi9xO+qWR0XzkFIOOndm7/6IqYSGguSEx6fx75Qc5jC2al5S8vxCldF+CavxAE1ReYpCdhs2u7/VlgSfzaan3iTF4+68VfWT+1SfeVIJv1XC5WWWHimn28xrDVA+odinxDYxpQYgIBEum6d/JMVUt1/hYx8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736447698; c=relaxed/simple;
-	bh=S54WHLS3HOplqLcg789znsO+qN6VM9K4pzw2t67YItQ=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m1yiB+hnu2VTko0HGndXmESkbluWM5BFgmI2CkrtgackCyBmmJtMF8PacCAvhiQL2IdshPdi/e/9upGa/8WROqqzgmdAV8Nxkk0X+CAqs1Cb3ViFwewin1mDFz8EKApuUlG2fE1J1cbeiWupeH51OKp4Y4X92qAvC5ArsBItMyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YTYHT2wlcz6JBDN;
-	Fri, 10 Jan 2025 02:30:13 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 482AC14038F;
-	Fri, 10 Jan 2025 02:34:52 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 9 Jan
- 2025 19:34:50 +0100
-Date: Thu, 9 Jan 2025 18:34:48 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Borislav Petkov <bp@alien8.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10A218132A;
+	Thu,  9 Jan 2025 23:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736466713; cv=fail; b=ARTlJWSr6l+flr/Ej9O+pN12Ajhq2/F6NtykvOEkPIBuWgQTthVgx8nrvfGSUC/Mx/YOahnXC+QejAog0tflKujSr2lwI2t8M2p0zANk2mBLegRcnbjriBnGbEFUIuPvgWuv/JDSgChcs/c7mP5remHVqN1pp8U2daxv9/AQdG0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736466713; c=relaxed/simple;
+	bh=hDXv5ZXic8UzhpmsU8Dhuha7Llxi470A1xfccdqiOXo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=D/kGcnHq9v7gpro11Is6XfNALCrgk/D90SnchKl9pToMCY7PSlE4b35sZ80Go8P/meOhAMV9pBfl0oYPnuv0fmrcB6u38kLyyzxCtw2/81VHlkfqV8o9u45ylzj90NTm5tLnt92PV+GcXjQhPrTy1KBYnMZBIXZfv47ykqtHL3s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fcfJP4/u; arc=fail smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736466712; x=1768002712;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=hDXv5ZXic8UzhpmsU8Dhuha7Llxi470A1xfccdqiOXo=;
+  b=fcfJP4/uAtAHwxVhEuFHSMzXom9rQa15TXbuSl4Qkvp7qmPqsY9b7vYN
+   DzPLO1Ve9NmNVMmfv9UkXrOpQABQa9ltsuL7KIZ54X/L/EJEmVXbsja8T
+   yQTYEltTO6fb9nq4rEGo3ZIE4t/x8e0LxR1zuPqo8atqSmIzHFAg4t+oQ
+   MZLi2DzOikveG5OAK1l2OqZWnFRpuI2u723K2yQ15fSMLkui/IN7RRms4
+   CuTkuNv77AsDIriv8BOJLW5SaFX8bbKdMaP5yESxnqyEd9+4nj0Oedu+t
+   iWhmzEXDYXw7x5yxRHTvKo/lRTLCFU1asX2urwpHLT9az0HImJHm2AwWK
+   w==;
+X-CSE-ConnectionGUID: rkIk6YsLRY+fez32uiYlpg==
+X-CSE-MsgGUID: oL7NKXfpRhSkYapFJ5L4bQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="36035918"
+X-IronPort-AV: E=Sophos;i="6.12,302,1728975600"; 
+   d="scan'208";a="36035918"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 15:51:49 -0800
+X-CSE-ConnectionGUID: ic549LJtT1qaSvYjQi3P7A==
+X-CSE-MsgGUID: oO7JVlyFQSyTdV8IdC9B1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="108604479"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Jan 2025 15:51:49 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Thu, 9 Jan 2025 15:51:48 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Thu, 9 Jan 2025 15:51:48 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Thu, 9 Jan 2025 15:51:48 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Xr7KV1Ek1uI4lMHJBpASMpT6ELG+OENnQzHBQnn4HIZ9OGtTGIgMe5XjF7STxt1NDFeP66oxnmqWLG14D+QC8IRljCE5CPBxOHNN+M7aTXgRCn6HoYWG9E0BrbARyOc5YFE7gYkAxsUhyvvX0sdqtzHELpYb9RhMpLDNYyqm2gLkiT+3acyZD50SD/E2iey55gMOP5M7n64oQafC4OQUYvuw1BfmDZIgFT6qB2OpGgAAGlSc2V1x/irroRGzfGuXTC6F8/ZzkAV8S7OMzTaVIlP3cHCMl6Ucea38BsQ0NYbm4de6UGCLc1fl0pXubpjEvKQnLBz83Oj6OKx8ajnHPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vOlxWkqqOaeFKa/NzPMh7bKbxaiutdKDhAGkCw3vxTg=;
+ b=YtW5ZrQdGPWrJCYJdXEoEiqoqJZXBX1qq++Uq/XD1HmMjMjfybEgoqNuFoS6j0K7KDW219nDosg0FLud5ZuVjL/vFFIOdwNTsssp9gs5wWwjPLAwJn8q+JkPY7IUOUCWATvH842AfiOHWxSBIYMREWj/0gZEULKynQjbSLk5UP9fAt5dtNl0e727LduK+dyNwwsj9Le6Kh5Df+muirC1PhQAFP9e8LDewD0PstbVkvr723di3wtU8WLNlURyPNpl74gjWtBVNQjH7PpnJCXysy8imMPPrhUbxOLuD1oCjwHpmiS0nIjYKQjr7aQALDpPtCAfAcOlU3FTyh6Go1KW9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SJ0PR11MB5103.namprd11.prod.outlook.com (2603:10b6:a03:2d3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.12; Thu, 9 Jan
+ 2025 23:51:46 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8%4]) with mapi id 15.20.8314.015; Thu, 9 Jan 2025
+ 23:51:46 +0000
+Date: Thu, 9 Jan 2025 15:51:39 -0800
+From: Dan Williams <dan.j.williams@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Borislav Petkov
+	<bp@alien8.de>
 CC: Shiju Jose <shiju.jose@huawei.com>, "linux-edac@vger.kernel.org"
 	<linux-edac@vger.kernel.org>, "linux-cxl@vger.kernel.org"
 	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
@@ -74,206 +127,145 @@ CC: Shiju Jose <shiju.jose@huawei.com>, "linux-edac@vger.kernel.org"
 	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
 	Linuxarm <linuxarm@huawei.com>
 Subject: Re: [PATCH v18 04/19] EDAC: Add memory repair control feature
-Message-ID: <20250109183448.000059ec@huawei.com>
-In-Reply-To: <20250109161902.GDZ3_29rH-sQMV4n0N@fat_crate.local>
+Message-ID: <6780610bc33e9_9b92294cd@dwillia2-mobl3.amr.corp.intel.com.notmuch>
 References: <20250106121017.1620-1-shiju.jose@huawei.com>
-	<20250106121017.1620-5-shiju.jose@huawei.com>
-	<20250109091915.GAZ3-Uk3rkuh38cQyy@fat_crate.local>
-	<3b2d4275d1d24dbeacee0f192ac4d69b@huawei.com>
-	<20250109123222.GBZ3_B1g3Esgu1-MPi@fat_crate.local>
-	<20250109142433.00004ea7@huawei.com>
-	<20250109151854.GCZ3_o3rf6S24qUbtB@fat_crate.local>
-	<20250109160159.00002add@huawei.com>
-	<20250109161902.GDZ3_29rH-sQMV4n0N@fat_crate.local>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+ <20250106121017.1620-5-shiju.jose@huawei.com>
+ <20250109091915.GAZ3-Uk3rkuh38cQyy@fat_crate.local>
+ <3b2d4275d1d24dbeacee0f192ac4d69b@huawei.com>
+ <20250109123222.GBZ3_B1g3Esgu1-MPi@fat_crate.local>
+ <20250109142433.00004ea7@huawei.com>
+ <20250109151854.GCZ3_o3rf6S24qUbtB@fat_crate.local>
+ <20250109160159.00002add@huawei.com>
+ <20250109161902.GDZ3_29rH-sQMV4n0N@fat_crate.local>
+ <20250109183448.000059ec@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250109183448.000059ec@huawei.com>
+X-ClientProxiedBy: MW4PR03CA0324.namprd03.prod.outlook.com
+ (2603:10b6:303:dd::29) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- frapeml500008.china.huawei.com (7.182.85.71)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SJ0PR11MB5103:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99ea234c-fe44-4edb-721d-08dd31089352
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?8q5oJBXYApkB3pPw20By34JiJUGT8yHnHgMpqN/4F7JEEJ13Mi64idPkAa7T?=
+ =?us-ascii?Q?n2BuZpDHmlgFN6C18gDCwcDiCKXfSWWlvp9wZJtY4r+l7FOthIDmdH67wupR?=
+ =?us-ascii?Q?XRIDRqVQ3MtHjgpKCIKJIWOp6Eu9V+lKfWxTH/MmQDOzLYr67wwk4JIyo5Np?=
+ =?us-ascii?Q?9onoCzUrf78IyhA4Rh1S5Cf/U5n4jrqpukePTz2TostP8IcjB5nQjPKXVEGY?=
+ =?us-ascii?Q?1BC5A0iYr65K/nlnMyzX9WwJFQD49pL8WEzhNkajHwV71tn+kMzmHO/WGFHb?=
+ =?us-ascii?Q?qOQwADHoruLIDW5MMesYebZyhKgbbzb/XdEGjpAu2CEMM/3TJkklnbxsATgN?=
+ =?us-ascii?Q?lwD2Z4wth1ke0C9KBpuhbN8Xcxu4ekyYzYofN+6DRxHKiTOPNbX50aThJcgY?=
+ =?us-ascii?Q?t+XUGhYVk5sLl5YlAokzmlBhsuzqqLVpV5jXJR6Z6Ae71xoaxwK+eeIuQV2P?=
+ =?us-ascii?Q?0UYfgefesMwSJU1tH0zKXpFwY66hH92MZz3CtEsiJdXVrUICCoSIl0eLD9GC?=
+ =?us-ascii?Q?+EsCX7uyLNByaiBwWK3fwS9yhguaKexazMD7UkR5xSGk/i1pzK89cEh7rhuU?=
+ =?us-ascii?Q?/o/LCOzCY2tTR5sJNmDPk2NlU6M51W4KDm4XB2rdHs0RM1Cgrr78nu1QLQWL?=
+ =?us-ascii?Q?toUkr5mT6sYsI+KivxhIIEk2FwdshqRk6qOriQ7Pxp5B5uzJPNmlnR+XoZnL?=
+ =?us-ascii?Q?GwNN6fA79f7/muCQLDElyt4MqFgBKX0fGD+D9onvAqg0hQZYZtRMmz31GcYc?=
+ =?us-ascii?Q?MX3VjO7/l3UPZwe3+DrMY8NotSCZQyPXhOxRfoa71fob5/99Yy0KCRX5DC6Q?=
+ =?us-ascii?Q?XsRrQ8YmLo97+Qo3d3/hXh2p1/XaDgvTE2HF+rzTLWp5hPp5l32UPNx4kkz1?=
+ =?us-ascii?Q?Gh/B+M0kbLpByGAntkl2zXzlqWu71lYpDwxcw+R6VFXvTIYUKmhpqhSOgn+x?=
+ =?us-ascii?Q?N1hQlD8gg6LsznPPnhKI5zIMu1b/xKk1/0YWNlmV/u1RFx7IMZaoMwjqPBKY?=
+ =?us-ascii?Q?jmfpbtcBXhpKstho33Ux5mcTU4YgGDIxbuzPjaCkDOeA3XM2+y+KgbO0ULKD?=
+ =?us-ascii?Q?OYC7vgVEr6BP7m1P1tMviO/1cdlcKK5DsjDRBU0eXYITk73yuYdzrKquLkVN?=
+ =?us-ascii?Q?mvOBiEMB8MCxqakmIF+g+LUlQT1my6ELv3Cboi9sNAxTm7Kd+hEbdHgrbT+Y?=
+ =?us-ascii?Q?/ucULkcC1QzHM6mDoRWiu+n1wgQu/bkIzUJz+pXno/i21NVrGo8LribymuhG?=
+ =?us-ascii?Q?BywrbgyPttX7Mgdi4xFSjVq9izH37Q5qR2l1mjbyf/anOI9CzJDnED2OCuM1?=
+ =?us-ascii?Q?31pZf3TZi4AuiqKICn2zPi+L0TgbOl4jowXlYwpk1clw8RAG/5saX8A6gFdu?=
+ =?us-ascii?Q?GO8/fVcsEk1aF/6ZkqyVfxEEZ3gX?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zEofbUfJXNH0o/atKx6oTP4kQ53NFZPKq4wfE11RWp0tYGiXhvKIdyT/Mnjq?=
+ =?us-ascii?Q?9mA+CZjThKVEIOE7QzmnreDBkEw145OfoLcsGcACR6o5TjabAVQUlDetJDTB?=
+ =?us-ascii?Q?vCOmb2u6wnk5Fe9mao1YccYrhAicH5rIWDj4WjXqXiq5jszIYJsrC86lhOOv?=
+ =?us-ascii?Q?2R4u/oddjg07P88PVXw7F2N91U2iC/27MZxk1GUE55EKpquYSotvLtpE3gLG?=
+ =?us-ascii?Q?KqrApI8aFrgReLRZWfjo42pwoO8zkRqk7KkluxkpPX/UHhyN96z6StGk+YQb?=
+ =?us-ascii?Q?viQ6Yrv3M3xrt6i8qK4A7nKhaZRGibV2WHxFIr40+K83ab8DBc7mn9GtTTRH?=
+ =?us-ascii?Q?+hTx/4VGmhlYdIoX9u+b8liP+4p/WbiUp/JMrgrG/0yYBKOX192pLBczGlTk?=
+ =?us-ascii?Q?UmyY4jQuJMuJxK8BkIZxdo1s20pbK0jdrQtA38x1WKPVhODvfsX3rFogghga?=
+ =?us-ascii?Q?yASkzSpJf0XPL5S/w6rEybtoK+/PW03J+pmeKechK5SF9bhx3jaA+GKTDkAy?=
+ =?us-ascii?Q?Bgi6h1TvhtFuAu/3alO7v3z9fyPiyfYLKTVkaMxh5wKIUz5N1X4M4eyKcBeT?=
+ =?us-ascii?Q?wJt9J1BTCrIaz+yWtfcZN0yFzxGSxj1i/YKq/It7nAqnlhSrAu9/6nCf+508?=
+ =?us-ascii?Q?pN/YwLZB1A1Njtimp5LWF7lVAEDKB3bx6Qg/tTmTAEJ2ecnGEJZDzP9OHuGS?=
+ =?us-ascii?Q?TnHjRWJWUPsJVwr3YGNAXHogifCsskbamSje6uQQKoXBI5DxTEqfiA4ytRGm?=
+ =?us-ascii?Q?U8dSvbOHGtiBHAgh5esUIeXYgX5EgGjxykhOWn192GHzRAkMjvJTmwYTMp5+?=
+ =?us-ascii?Q?8J39wBH9BLJ7npE+k5nEDv/eA2+DWNLD94j2KJiDq42YvRDjEKgPhM05kbW6?=
+ =?us-ascii?Q?/mQdnY8x2loCuMBJEBJ87qHn8FquScaZqT6RTbZmvrVfOq5dkf3+X9vtKOG4?=
+ =?us-ascii?Q?9tlqn7TLt8rX6uOISyjUcezMekKCY5j4jJppc2uyBti8wnj5T7UKwL+C0q2+?=
+ =?us-ascii?Q?fqspHxDvm/PjOkX9AY/55Ir1h8BMgIVZJIr2i6+GKDVO33H4EOfREyg6NtoE?=
+ =?us-ascii?Q?02cvdsWZJDRs9QkbpHccY4GWlwBKXCW3rTF51yyP3VZbk7w2HPhpUG99ex2s?=
+ =?us-ascii?Q?kOfkiNZ+gFUmPA8jESDzAqrgFMDbgA7EgNUHaMY4Jm/5jQMv7b9al3HBBnwA?=
+ =?us-ascii?Q?rKAHrNKCs2J+hwcN+FJKIywGrNQp72vcqNpU4LqEqNo62Kf9Azhg7QJOCeXK?=
+ =?us-ascii?Q?Uoipk0TbT8gn6axeKzcNlFl+6GmsHAHlEWeAcxzUBLnkFS0gLze8aOiCMbqW?=
+ =?us-ascii?Q?RcXe9+NGtb9p4Y2n7gLrudSwI5VnT7XswA3PKz5T3kY054FANu154M1LBhPz?=
+ =?us-ascii?Q?ukc410vhuI/tRjGVtHhXvKunW1QpHI/P64MYsqFsHTHSkBgOg1xYpem+Cg8S?=
+ =?us-ascii?Q?eX6tovKh1QoSf4VqDmbYRj6lFTKGsnp/f7+7T9IkgL+/MolLdPoNb0/Gl2h8?=
+ =?us-ascii?Q?MgXXqiNCdwKqKeOpEVzZ6WCHe32FqDxDBgKfcqYCGZA3IYepQjI429/+9UDn?=
+ =?us-ascii?Q?4SAFUDrWC35qWKKB0hmRp5NRKwSA/Ih1gDWj1LfP980yFQPIoGHyMBs2e/lf?=
+ =?us-ascii?Q?kg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99ea234c-fe44-4edb-721d-08dd31089352
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2025 23:51:46.0200
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: trtjteCPl0n0iHZ4MQB7pXhvcr/SP7ZLw9VEViOiIIsyPxAsOKIeKbCDx7Ueehn+UH9F4SzX0B+sl60g34kC9R2mpzGXsTCyj7CmzET4evA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5103
+X-OriginatorOrg: intel.com
 
-On Thu, 9 Jan 2025 17:19:02 +0100
-Borislav Petkov <bp@alien8.de> wrote:
-	
-> On Thu, Jan 09, 2025 at 04:01:59PM +0000, Jonathan Cameron wrote:
-> > Ok. To me the fact it's not a single write was relevant. Seems not
-> > in your mental model of how this works.  For me a single write
-> > that you cannot query back is fine, setting lots of parameters and
-> > being unable to query any of them less so.  I guess you disagree.  
-> 
-> Why can't you query it back?
-> 
-> grep -r . /sysfs/dir/
-> 
-> All files' values have been previously set and should still be there on
-> a read, I'd strongly hope. Your ->read routines should give the values back.
+Jonathan Cameron wrote:
+> Ok. Best path is drop the available range support then (so no min_ max_ or
+> anything to replace them for now).
 
-Today you can.  Seems we are talking cross purposes.
+I think less is more in this case.
 
-I'm confused. I thought your proposal was for "bank" attribute to present an
-allowed range on read.
-"bank" attribute is currently written to and read back as the value of the bank on which
-to conduct a repair.  Maybe this disconnect is down to the fact max_ and min_
-attributes should have been marked as RO in the docs. They aren't controls,
-just presentation of limits to userspace.
+The hpa, dpa, nibble, column, channel, bank, rank, row... ABI looks too
+wide for userspace to have a chance at writing a competent tool. At
+least I am struggling with where to even begin with those ABIs if I was
+asked to write a tool. Does a tool already exist for those?
 
-Was intent a separate bank_range type attribute rather than max_bank, min_bank?
-One of those would be absolutely fine (similar to the _available attributes
-in IIO - I added those years ago to meet a similar need and we've never had
-any issues with those).
+Some questions that read on those ABIs are:
 
-> 
-> > In interests of progress I'm not going to argue further. No one is
-> > going to use this interface by hand anyway so the lost of useability
-> > I'm seeing doesn't matter a lot.  
-> 
-> I had the suspicion that this user interface is not really going to be used by
-> a user but by a tool. But then if you don't have a tool, you're lost.
-> 
-> This is one of the reasons why you can control ftrace directly on the shell
-> too - without a tool. This is very useful in certain cases where you cannot
-> run some userspace tools.
+1/ What if the platform has translation between HPA (CXL decode) and SPA
+(physical addresses reported in trace points that PIO and DMA see)?
 
-I fully agree. What I was saying was in response to me thinking you wanted it
-to not be possible to read back the user set values (overlapping uses of
-single bank attribute which wasn't what you meant). That is useful for a user
-wanting to do the cat /sys/... that you mention above, but not vital if they are
-directly reading the tracepoints for the error records and poking the
-sysfs interface.
+2/ What if memory is interleaved across repair domains? 
 
-Given it seems I misunderstood that suggestion, ignore my reply to that
-as irrelevant.
- 
-> 
-> > In at least the CXL case I'm fairly sure most of them are not discoverable.
-> > Until you see errors you have no idea what the memory topology is.  
-> 
-> Ok.
-> 
-> > For that you'd need to have a path to read back what happened.  
-> 
-> So how is this scrubbing going to work? You get an error, you parse it for all
-> the attributes and you go and write those attributes into the scrub interface
-> and it starts scrubbing?
+3/ What if the device does not use DDR terminology / topology terms for
+repair?
 
-Repair not scrubbing. They are different things we should keep separate,
-scrub corrects the value, if it can, but doesn't change the underlying memory to
-new memory cells to avoid repeated errors. Replacing scrub with repair 
-(which I think was the intent here)...
+I expect the flow rasdaemon would want is that the current PFA (leaky
+bucket Pre-Failure Analysis) decides that the number of soft-offlines it
+has performed exceeds some threshold and it wants to attempt to repair
+memory.
 
-You get error records that describe the error seen in hardware, write back the
-values into this interface and tell it to repair the memory.  This is not
-necessarily a synchronous or immediate thing - instead typically based on
-trend analysis.
+However, what is missing today for volatile memory is that some failures
+can be repaired with in-band writes and some failures need heavier
+hammers like Post-Package-Repair to actively swap in whole new banks of
+memory. So don't we need something like "soft-offline-undo" on the way
+to PPR?
 
-As an example, the decision might be that bit of ram threw up 3 errors
-over a month including multiple system reboots (for other reasons) and
-that is over some threshold so we use a spare memory line to replace it.
+So, yes, +1 to simpler for now where software effectively just needs to
+deal with a handful of "region repair" buttons and the semantics of
+those are coarse and sub-optimal. Wait for a future where a tool author
+says, "we have had good success getting bulk offlined pages back into
+service, but now we need this specific finer grained kernel interface to
+avoid wasting spare banks prematurely".
 
-> 
-> But then why do you even need the interface at all?
-> 
-> Why can't the kernel automatically collect all those attributes and start the
-> scrubbing automatically - no need for any user interaction...?
-> 
-> So why do you *actually* even need user interaction here and why can't the
-> kernel be smart enough to start the scrub automatically?
+Anything more complex than a set of /sys/devices/system/memory/
+devices has a /sys/bus/edac/devices/devX/repair button, feels like a
+generation ahead of where the initial sophistication needs to lie.
 
-Short answer, it needs to be very smart and there isn't a case of one size
-fits all - hence suggested approach of making it a user space problem.
-
-There are hardware autonomous solutions and ones handled by host firmware.
-That is how repair is done in many servers - at most software sees a slightly
-latency spike as the memory is repaired under the hood. Some CXL devices
-will do this as well. Those CXL devices may provide an additional repair
-interface for the less clear cut decisions that need more data processing
-/ analysis than the device firmware is doing. Other CXL devices will take
-the view the OS is best placed to make all the decisions - those sometimes
-will give a 'maintenance needed' indication in the error records but that
-is still a hint the host may or may not take any notice of.
-
-Given in the systems being considered here, software is triggering the repair,
-we want to allow for policy in the decision. In simple cases we could push
-that policy into the kernel e.g. just repair the moment we see an error record.
-
-These repair resources are very limited in number, so immediately repairing
-may a bad idea. We want to build up a history of errors before making
-such a decision.  That can be done in kernel. 
-
-The decision to repair memory is heavily influenced by policy and time considerations
-against device resource constraints.
-
-Some options that are hard to do in kernel.
-
-1. Typical asynchronous error report for a corrected error.
-
-   Tells us memory had an error (perhaps from a scrubbing engine on the device
-   running checks). No need to take action immediately. Instead build up more data
-   over time and if lots of errors occur make decision to repair as no we are sure it
-   is worth doing rather than a single random event. We may tune scrubbing engines
-   to check this memory more frequently and adjust our data analysis to take that
-   into account for setting thresholds etc.
-   When an admin considers it a good time to take action, offline the memory and
-   repair before bringing it back into use (sometimes by rebooting the machine).
-   Sometimes repair can be triggered in a software transparent way, sometimes not.
-   This also applies to uncorrectable errors though in that case you can't necessarily
-   repair it without ever seeing a synchronous poison with all the impacts that has.
-
-2. Soft repair across boots.  We are actually storing the error records, then only
-   applying the fix on reboot before using the memory - so maintaining a list
-   of bad memory and saving it to a file to read back on boot. We could provide
-   another kernel interface to get this info and reinject it after reboot instead
-   of doing it in userspace but that is another ABI to design.
-
-3. Complex policy across fleets.  A lot of work is going on around prediction techniques
-   that may change the local policy on each node dependent on the overall reliability
-   patterns of a particular batch of devices and local characteristics, service guarantees
-   etc. If it is hard repair, then once you've run out you need schedule an engineer
-   out to replace the DIMM. All complex inputs to the decision.
-
-Similar cases like CPU offlining on repeated errors are done in userspace (e.g.
-RAS Daemon) for similar reasons of long term data gathering and potentially
-complex algorithms.
-  
-> 
-> > Ok. Then can we just drop the range discoverability entirely or we go with
-> > your suggestion and do not support read back of what has been
-> > requested but instead have the reads return a range if known or "" /
-> > return -EONOTSUPP if simply not known?  
-> 
-> Probably.
-
-Too many options in the above paragraph so just to check...  Probably to which?
-If it's a separate attribute from the one we write the control so then
-we do what is already done here and don't present the interface at all if
-the range isn't discoverable.
-
-> 
-> > I can live with that though to me we are heading in the direction of
-> > a less intuitive interface to save a small number of additional files.  
-> 
-> This is not the point. I already alluded to this earlier - we're talking about
-> a user visible interface which, once it goes out, it is cast in stone forever.
-> 
-> So those files better have a good reason to exist...
-> 
-> And if we're not sure yet, we can upstream only those which are fine now and
-> then continue discussing the rest.
-
-Ok. Best path is drop the available range support then (so no min_ max_ or
-anything to replace them for now).
-
-Added bonus is we don't have to rush this conversation and can make sure we
-come to the right solution driven by use cases.
-
-Jonathan
-
-> HTH.
-> 
-
+That said, I do not closely follow ras tooling to say whether someone
+has already identified the critical need for a fine grained repair ABI?
 
