@@ -1,271 +1,151 @@
-Return-Path: <linux-edac+bounces-2849-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2850-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01450A06BB6
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2025 03:56:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7104CA07152
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2025 10:20:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA1E17A227B
-	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2025 02:56:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AB361882D56
+	for <lists+linux-edac@lfdr.de>; Thu,  9 Jan 2025 09:20:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20CF22D052;
-	Thu,  9 Jan 2025 02:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A005215063;
+	Thu,  9 Jan 2025 09:20:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XPaQAJ4O"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hKgpMKJ2"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B080CBE5E;
-	Thu,  9 Jan 2025 02:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F87F20409B;
+	Thu,  9 Jan 2025 09:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736391370; cv=none; b=A4DbrNOH47MIWnfUgo+jNt6aGdKCBVL1uMnkpJiO43lI2e263KvyddYGYrhZ527WkAxuryiZr3zr9669QCXo9Q2hlKJM32l3oLttdoxyvhKK2uMO1fJR4JBXTnru7OxIoHAnWslY+R7+XJIgSzm7kleKG63LGaUdiL8qqpToUgI=
+	t=1736414416; cv=none; b=PeQMqtQaArYsRqPkpueIWCIrOKKMaFwCYiXjdEvSEcyY5fy7kqu336O481pH9gcDiDA7Zg1+7dLknf9PkHz4avQy03AyC2DPKIAJxxsv16YU9a2LxyH6WlfWtrmXC7LhT4v3KdRODv5dLeEhkGFXccnLhzGJWYrfAaFBJvcnAzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736391370; c=relaxed/simple;
-	bh=DY0igs/dhdaHbbehV+HhtDvFbjt4thTtUud7ttxtbiA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DJ9LR3uqVAz4jEAeYN1KS+Y7ZEscQNYeXilwg2RrbMdF9Xa4CQ4SxbuuJ7T4U7MkIbED6bC5MWYwgok5ONwjFNbCu0ozRz69mgNGD8hZr5FxmB8Ut+IeQ1PXaMXglb2tYKZoHZPg/lNLl2kD4NRuoWK6FEJMmNDQ2tXi6OpfU1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XPaQAJ4O; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1736391358; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=nj1+miAktKQTpu/dk3YJ7CMYPibZJ96Wttc63fN35eE=;
-	b=XPaQAJ4OafBUJFDtC8Y2UHktKPaj37UrButzPlz4AcpJeYgkCJrjhHzL/oGWjqzN2BLzAdhig/6+JKERRRzb7dVcPDqPtuBNJcOSxOqUR0LqT3mafv9DFtS3nETetJl9AblUqecLffOA82CIhoUMtPRiFbqJEbiFtJj6sDML0KI=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WNFgyoE_1736391344 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Jan 2025 10:55:56 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: rostedt@goodmis.org,
-	lukas@wunner.de,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	helgaas@kernel.org
-Cc: bhelgaas@google.com,
-	tony.luck@intel.com,
-	bp@alien8.de,
-	xueshuai@linux.alibaba.com,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	oleg@redhat.com,
-	naveen@kernel.org,
-	davem@davemloft.net,
-	anil.s.keshavamurthy@intel.com,
-	mark.rutland@arm.com,
-	peterz@infradead.org,
-	tianruidong@linux.alibaba.com
-Subject: [PATCH v5] PCI: hotplug: Add a generic RAS tracepoint for hotplug event
-Date: Thu,  9 Jan 2025 10:55:43 +0800
-Message-ID: <20250109025543.56830-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1736414416; c=relaxed/simple;
+	bh=DSekVNnU9bNNLJoMnzH7oBnrcvwVSWUmhIFOwagR6qk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T2xBCHWOCB5cpvTLhlkbn2nm4lOKMORDhJn8gxrfYwEgO34G8Y0gpcQhml2gW06+7WQaclxUJ8mf4KOrIyCyKcWPeRNpISL0nUUKGfD0m6WEQW7uUxIAYl+s5I591rBdyCPj3ZB7gHHLxP6U0xBIr0CfnB+EEiA8htZVHo4XM+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hKgpMKJ2; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id BEAEB40E0289;
+	Thu,  9 Jan 2025 09:20:09 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id l-d59qMPqdD8; Thu,  9 Jan 2025 09:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1736414405; bh=LD6Fod+6Pr95sk9Mi4pDaHYRb4hj3jfrssJ789s5mN8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hKgpMKJ2nNwD+QLd9aQPpp2hi/PyZjEg14CxdVWJCaSEaeSXnOR8USnWk5GrJOTC5
+	 dexMAGS/rpcQT1WLSPHx93W+k2hZ9hHW6JR3vY/Okxq6ZOVZaoLETIkCXJl7NMOgf6
+	 jhFdnrARkqoaC6pqm+BcTMAdJ/zyNzxhDbFDfXhsBdw0ztoGYY4pbgwzfxIDWUbcUq
+	 +B6/icQkLUwmgkuJGqULBRouhIXbilK3SNlO2aWW5jTAvAK9zOO10sW3jsS1CRZHyU
+	 mcWFnMgUPvOq+A8Gd1DOsdFQt/m+2WSPSgS7P6bIMbKHcTWKZLqrxiziHtQgsXNQSg
+	 UwNGv9C66DpAlE095fu1ZECkV80rddlpErX4eJm0eV7dDd2vE+tdavqghKTydY82vy
+	 IYJncSGhprtrUNB08V9WE1DpPTtZqwHK3C/1Yqzo17SY6RR7GNDwYN81graPzon8Bj
+	 kvl1w/5Q/z8TJgajQUHStgeXjartB/+lnAWLYpbqTYYhikK+I9WhQH8H+WFqHqs7kz
+	 bpB3/4RHyMaX2ewh5aoGk/UcIboxAh5dF0Y3/cJrXE7CBbKeJDUx8PcE6+LYex4f7K
+	 7gjP8S6v3WVjIXS5tqszGKip43wgfhp5jja6UT4SIzLQomtjqY0nKk2OCMsh3lZSLO
+	 Q7NXVdDO10VcMT1lCc+Matb8=
+Received: from zn.tnic (p200300ea971f938f329c23fFFea6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:938f:329c:23ff:fea6:a903])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D30E740E01F9;
+	Thu,  9 Jan 2025 09:19:21 +0000 (UTC)
+Date: Thu, 9 Jan 2025 10:19:15 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: shiju.jose@huawei.com
+Cc: linux-edac@vger.kernel.org, linux-cxl@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, tony.luck@intel.com,
+	rafael@kernel.org, lenb@kernel.org, mchehab@kernel.org,
+	dan.j.williams@intel.com, dave@stgolabs.net,
+	jonathan.cameron@huawei.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, vishal.l.verma@intel.com,
+	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
+	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
+	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
+	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
+	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
+	duenwen@google.com, gthelen@google.com,
+	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
+	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
+	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+	wanghuiqiang@huawei.com, linuxarm@huawei.com
+Subject: Re: [PATCH v18 04/19] EDAC: Add memory repair control feature
+Message-ID: <20250109091915.GAZ3-Uk3rkuh38cQyy@fat_crate.local>
+References: <20250106121017.1620-1-shiju.jose@huawei.com>
+ <20250106121017.1620-5-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250106121017.1620-5-shiju.jose@huawei.com>
 
-Hotplug events are critical indicators for analyzing hardware health,
-particularly in AI supercomputers where surprise link downs can
-significantly impact system performance and reliability.
+On Mon, Jan 06, 2025 at 12:10:00PM +0000, shiju.jose@huawei.com wrote:
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_hpa
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_dpa
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_nibble_mask
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_bank_group
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_bank
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_rank
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_row
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_column
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_channel
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/min_sub_channel
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_hpa
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_dpa
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_nibble_mask
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_bank_group
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_bank
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_rank
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_row
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_column
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_channel
+> +What:		/sys/bus/edac/devices/<dev-name>/mem_repairX/max_sub_channel
 
-To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
-tracepoint for hotplug event to help healthy check, and generate
-tracepoints for pcie hotplug event. Add enum pci_hotplug_event in
-include/uapi/linux/pci.h so applications like rasdaemon can register
-tracepoint event handlers for it.
+So this is new. I don't remember seeing that when I looked at your patches
+the last time.
 
-The output like below:
+Looks like you have all those attributes and now you've decided to add a min
+and max for each one, in addition. And UI-wise it is a madness as there are
+gazillion single-value files now.
 
-$ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
-$ cat /sys/kernel/debug/tracing/trace_pipe
-    <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
+"Attributes should be ASCII text files, preferably with only one value per
+file. It is noted that it may not be efficient to contain only one value per
+file, so it is socially acceptable to express an array of values of the same
+type."
 
-    <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
+So you don't need those - you can simply express each attribute as a range:
 
-Suggested-by: Lukas Wunner <lukas@wunner.de>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Reviewed-by: Lukas Wunner <lukas@wunner.de>
----
-change log since v4:
-- rebase to pci/main (v6.13-rc1) (per Bjorn)
-- rewrite commit log with generic motivation (per Bjorn)
----
- drivers/pci/hotplug/pciehp_ctrl.c | 33 ++++++++++++---
- drivers/pci/hotplug/trace.h       | 68 +++++++++++++++++++++++++++++++
- include/uapi/linux/pci.h          |  7 ++++
- 3 files changed, 102 insertions(+), 6 deletions(-)
- create mode 100644 drivers/pci/hotplug/trace.h
+echo "1:2" > /sys/bus/edac/devices/<dev-name>/mem_repairX/bank
 
-diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
-index d603a7aa7483..f9beb4d3a9b8 100644
---- a/drivers/pci/hotplug/pciehp_ctrl.c
-+++ b/drivers/pci/hotplug/pciehp_ctrl.c
-@@ -23,6 +23,9 @@
- #include "../pci.h"
- #include "pciehp.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include "trace.h"
-+
- /* The following routines constitute the bulk of the
-    hotplug controller logic
-  */
-@@ -244,12 +247,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
- 	case ON_STATE:
- 		ctrl->state = POWEROFF_STATE;
- 		mutex_unlock(&ctrl->state_lock);
--		if (events & PCI_EXP_SLTSTA_DLLSC)
-+		if (events & PCI_EXP_SLTSTA_DLLSC) {
- 			ctrl_info(ctrl, "Slot(%s): Link Down\n",
- 				  slot_name(ctrl));
--		if (events & PCI_EXP_SLTSTA_PDC)
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_LINK_DOWN);
-+		}
-+		if (events & PCI_EXP_SLTSTA_PDC) {
- 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
- 				  slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_CARD_NOT_PRESENT);
-+		}
- 		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
- 		break;
- 	default:
-@@ -269,6 +280,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
- 					      INDICATOR_NOOP);
- 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
- 				  slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_CARD_NOT_PRESENT);
- 		}
- 		mutex_unlock(&ctrl->state_lock);
- 		return;
-@@ -281,12 +295,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
- 	case OFF_STATE:
- 		ctrl->state = POWERON_STATE;
- 		mutex_unlock(&ctrl->state_lock);
--		if (present)
-+		if (present) {
- 			ctrl_info(ctrl, "Slot(%s): Card present\n",
- 				  slot_name(ctrl));
--		if (link_active)
--			ctrl_info(ctrl, "Slot(%s): Link Up\n",
--				  slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_CARD_PRESENT);
-+		}
-+		if (link_active) {
-+			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
-+			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-+					   slot_name(ctrl),
-+					   PCI_HOTPLUG_LINK_UP);
-+		}
- 		ctrl->request_result = pciehp_enable_slot(ctrl);
- 		break;
- 	default:
-diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
-new file mode 100644
-index 000000000000..5b60cd7bcffb
---- /dev/null
-+++ b/drivers/pci/hotplug/trace.h
-@@ -0,0 +1,68 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_HW_EVENT_PCI_HP_H
-+
-+#include <linux/tracepoint.h>
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM pci
-+
-+#define PCI_HOTPLUG_EVENT					\
-+	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
-+	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
-+	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
-+	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
-+
-+/* Enums require being exported to userspace, for user tool parsing */
-+#undef EM
-+#undef EMe
-+#define EM(a, b)	TRACE_DEFINE_ENUM(a);
-+#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
-+
-+PCI_HOTPLUG_EVENT
-+
-+/*
-+ * Now redefine the EM() and EMe() macros to map the enums to the strings
-+ * that will be printed in the output.
-+ */
-+#undef EM
-+#undef EMe
-+#define EM(a, b)	{a, b},
-+#define EMe(a, b)	{a, b}
-+
-+TRACE_EVENT(pci_hp_event,
-+
-+	TP_PROTO(const char *port_name,
-+		 const char *slot,
-+		 const int event),
-+
-+	TP_ARGS(port_name, slot, event),
-+
-+	TP_STRUCT__entry(
-+		__string(	port_name,	port_name	)
-+		__string(	slot,		slot		)
-+		__field(	int,		event	)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(port_name);
-+		__assign_str(slot);
-+		__entry->event = event;
-+	),
-+
-+	TP_printk("%s slot:%s, event:%s\n",
-+		__get_str(port_name),
-+		__get_str(slot),
-+		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
-+	)
-+);
-+
-+#endif /* _TRACE_HW_EVENT_PCI_HP_H */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH  ../../drivers/pci/hotplug
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE trace
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
-diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
-index a769eefc5139..4f150028965d 100644
---- a/include/uapi/linux/pci.h
-+++ b/include/uapi/linux/pci.h
-@@ -39,4 +39,11 @@
- #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
- #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
- 
-+enum pci_hotplug_event {
-+	PCI_HOTPLUG_LINK_UP,
-+	PCI_HOTPLUG_LINK_DOWN,
-+	PCI_HOTPLUG_CARD_PRESENT,
-+	PCI_HOTPLUG_CARD_NOT_PRESENT,
-+};
-+
- #endif /* _UAPILINUX_PCI_H */
+or if you wanna scrub only one bank:
+
+echo "1:1" > /sys/bus/edac/devices/<dev-name>/mem_repairX/bank
+
+What is the use case of that thing?
+
+Someone might find it useful so let's add it preemptively?
+
+Pfff.
+
 -- 
-2.39.3
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
