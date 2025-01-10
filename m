@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-2865-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2866-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4228A0904B
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2025 13:27:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DACBA0904D
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2025 13:28:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D729D3A9D93
-	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2025 12:27:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FA98188D183
+	for <lists+linux-edac@lfdr.de>; Fri, 10 Jan 2025 12:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0D520E308;
-	Fri, 10 Jan 2025 12:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C7E20E321;
+	Fri, 10 Jan 2025 12:27:06 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38A220E018;
-	Fri, 10 Jan 2025 12:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C223C20E037;
+	Fri, 10 Jan 2025 12:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736512025; cv=none; b=D2NCi8atqj7y/jLG6DU1Zm81aaj5VMeGAkgeF6Q6YGdnkUI6Ugi17tukIR8ocnlrrvKoKN5E3XUhLfNlM1vY8Ovsq3jg4mdxjreGKREpzC17OtcmnfSnHhuY85xVO3v7wqhgpMlYXB/3AZMzSP1QbhSrHn4cdHcK9NgwZBOx2Yw=
+	t=1736512026; cv=none; b=MPh+5BKl8513SHft8SGkyHE3gd4rnuhq+q6Y1GZx5/fori2DSDvHoPBhEqL0PhaW9V3pNrVX2hssBLf9uCTwcq9ggQLvY1kHePvxyajpBRrDGSIDmXYQEyNis0BQ0aujKbI1246bkp9N+2+eUUiO4NvzSCSRq+fIJqXVEqK3tcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736512025; c=relaxed/simple;
-	bh=Vfy9aaGwcwHZb2jj1zP48NPULghryttaCsUwyIEtK9A=;
+	s=arc-20240116; t=1736512026; c=relaxed/simple;
+	bh=Sxmjj9o2liu2LwG1wqw3lIFVItvm4ukGf+7fA9Xx11Y=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JifvqAzlGiPdzLAVmheK97RMi0cfU+pd/9y1v61Hc3R0VPJKuYNEkTquvBvQB5a7Nt16o5Z4M0EBpMFhJ9uwMeget3VST2vXmVlKTH/nVOoKncyHUmRvKPyrHwbohlqLeiEBxUuacYgZyoxh1jUZHXk3Y3pC93UwgsCq80AWq6s=
+	 MIME-Version:Content-Type; b=le9TsuXrCu3E6xRIsd5bXjLYfFPuWIVszgzwibAAxH8GP7/3QcvGxyjtdSgrIbsp1RQqT1z1ajvHCQRFiC5UmW66TRXAlMVl3A6XgMPFGRD2aQavKrUpjOu+JAu7byB94cOwaCK3DkWC6UyN9B25ePqpPxu6MzEBHrga9wTglfA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YV1841DG8z6GFmG;
-	Fri, 10 Jan 2025 20:25:24 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YV14Z01NJz6K939;
+	Fri, 10 Jan 2025 20:22:22 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id D62251406AC;
-	Fri, 10 Jan 2025 20:27:01 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 0375F14022E;
+	Fri, 10 Jan 2025 20:27:03 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.170.14) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 10 Jan 2025 13:27:00 +0100
+ 15.1.2507.39; Fri, 10 Jan 2025 13:27:02 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<mchehab@kernel.org>, <dave.jiang@intel.com>, <dan.j.williams@intel.com>,
@@ -47,9 +47,9 @@ To: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
 	<dave@stgolabs.net>
 CC: <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
 	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v2 05/14] rasdaemon: cxl: Update common event to CXL spec rev 3.1
-Date: Fri, 10 Jan 2025 12:26:31 +0000
-Message-ID: <20250110122641.1668-6-shiju.jose@huawei.com>
+Subject: [PATCH v2 06/14] rasdaemon: cxl: Add Component Identifier formatting for CXL spec rev 3.1
+Date: Fri, 10 Jan 2025 12:26:32 +0000
+Message-ID: <20250110122641.1668-7-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20250110122641.1668-1-shiju.jose@huawei.com>
 References: <20250110122641.1668-1-shiju.jose@huawei.com>
@@ -66,141 +66,85 @@ X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-CXL spec 3.1 section 8.2.9.2.1 Table 8-42, Common Event Record format has
-updated with Maintenance Operation Subclass information.
+Add Component Identifier formatting for CXL spec rev 3.1, Section
+8.2.9.2.1, Table 8-44.
 
-Add updates in rasdaemon CXL event handler for the above spec change
-and for the corresponding changes in kernel CXL common trace event
-implementation.
+Add helper function to print component ID, parse and log PLDM entity ID
+and resource ID.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- ras-cxl-handler.c | 10 +++++++++-
- ras-record.c      |  5 +++++
- ras-record.h      |  1 +
- ras-report.c      |  6 ++++--
- 4 files changed, 19 insertions(+), 3 deletions(-)
+ ras-cxl-handler.c | 41 +++++++++++++++++++++++++++++++++++++++++
+ ras-record.h      |  3 +++
+ 2 files changed, 44 insertions(+)
 
 diff --git a/ras-cxl-handler.c b/ras-cxl-handler.c
-index 7d4fc9f..d16eaef 100644
+index d16eaef..80afa9f 100644
 --- a/ras-cxl-handler.c
 +++ b/ras-cxl-handler.c
-@@ -575,18 +575,20 @@ int ras_cxl_overflow_event_handler(struct trace_seq *s,
+@@ -573,6 +573,47 @@ int ras_cxl_overflow_event_handler(struct trace_seq *s,
+ 	return 0;
+ }
  
++/*
++ * Component ID Format
++ * CXL 3.1 section 8.2.9.2.1; Table 8-44
++ */
++#define CXL_PLDM_COMPONENT_ID_ENTITY_VALID	BIT(0)
++#define CXL_PLDM_COMPONENT_ID_RES_VALID		BIT(1)
++static const struct  cxl_event_flags cxl_pldm_comp_id_flags[] = {
++	{ .bit = CXL_PLDM_COMPONENT_ID_ENTITY_VALID, .flag = "PLDM Entity ID" },
++	{ .bit = CXL_PLDM_COMPONENT_ID_RES_VALID, .flag = "Resource ID" },
++};
++
++static int ras_cxl_print_component_id(struct trace_seq *s, uint8_t *comp_id,
++				      uint8_t *entity_id, uint8_t *res_id)
++{
++	int i;
++
++	if (comp_id[0] & CXL_PLDM_COMPONENT_ID_ENTITY_VALID) {
++		if (trace_seq_printf(s, "PLDM Entity ID:") <= 0)
++			return -1;
++		for (i = 1; i < 7; i++) {
++			if (trace_seq_printf(s, "%02x ", comp_id[i]) <= 0)
++				return -1;
++		}
++		if (entity_id)
++			memcpy(entity_id, &comp_id[1], CXL_PLDM_ENTITY_ID_LEN);
++	}
++
++	if (comp_id[0] & CXL_PLDM_COMPONENT_ID_RES_VALID) {
++		if (trace_seq_printf(s, "Resource ID:") <= 0)
++			return -1;
++		for (i = 7; i < 11; i++) {
++			if (trace_seq_printf(s, "%02x ", comp_id[i]) <= 0)
++				return -1;
++		}
++		if (res_id)
++			memcpy(res_id, &comp_id[7], CXL_PLDM_RES_ID_LEN);
++	}
++
++	return 0;
++}
++
  /*
   * Common Event Record Format
-- * CXL 3.0 section 8.2.9.2.1; Table 8-42
-+ * CXL 3.1 section 8.2.9.2.1; Table 8-43
-  */
- #define CXL_EVENT_RECORD_FLAG_PERMANENT		BIT(2)
- #define CXL_EVENT_RECORD_FLAG_MAINT_NEEDED	BIT(3)
- #define CXL_EVENT_RECORD_FLAG_PERF_DEGRADED	BIT(4)
- #define CXL_EVENT_RECORD_FLAG_HW_REPLACE	BIT(5)
-+#define CXL_EVENT_RECORD_FLAG_MAINT_OP_SUB_CLASS_VALID	BIT(6)
- 
- static const struct  cxl_event_flags cxl_hdr_flags[] = {
- 	{ .bit = CXL_EVENT_RECORD_FLAG_PERMANENT, .flag = "PERMANENT_CONDITION" },
- 	{ .bit = CXL_EVENT_RECORD_FLAG_MAINT_NEEDED, .flag = "MAINTENANCE_NEEDED" },
- 	{ .bit = CXL_EVENT_RECORD_FLAG_PERF_DEGRADED, .flag = "PERFORMANCE_DEGRADED" },
- 	{ .bit = CXL_EVENT_RECORD_FLAG_HW_REPLACE, .flag = "HARDWARE_REPLACEMENT_NEEDED" },
-+	{ .bit = CXL_EVENT_RECORD_FLAG_MAINT_OP_SUB_CLASS_VALID, .flag = "MAINT_OP_SUB_CLASS_VALID" },
- };
- 
- static int handle_ras_cxl_common_hdr(struct trace_seq *s,
-@@ -670,6 +672,12 @@ static int handle_ras_cxl_common_hdr(struct trace_seq *s,
- 	if (trace_seq_printf(s, "hdr_maint_op_class:%u ", hdr->hdr_maint_op_class) <= 0)
- 		return -1;
- 
-+	if (tep_get_field_val(s,  event, "hdr_maint_op_sub_class", record, &val, 1) < 0)
-+		return -1;
-+	hdr->hdr_maint_op_sub_class = val;
-+	if (trace_seq_printf(s, "hdr_maint_op_sub_class:%u ", hdr->hdr_maint_op_sub_class) <= 0)
-+		return -1;
-+
- 	return 0;
- }
- 
-diff --git a/ras-record.c b/ras-record.c
-index 3d95f97..f680ebe 100644
---- a/ras-record.c
-+++ b/ras-record.c
-@@ -797,6 +797,7 @@ static int ras_store_cxl_common_hdr(sqlite3_stmt *stmt, struct ras_cxl_event_com
- 	sqlite3_bind_text(stmt, idx++, hdr->hdr_timestamp, -1, NULL);
- 	sqlite3_bind_int(stmt, idx++, hdr->hdr_length);
- 	sqlite3_bind_int(stmt, idx++, hdr->hdr_maint_op_class);
-+	sqlite3_bind_int(stmt, idx++, hdr->hdr_maint_op_sub_class);
- 
- 	return idx;
- }
-@@ -818,6 +819,7 @@ static const struct db_fields cxl_generic_event_fields[] = {
- 	{ .name = "hdr_ts",		.type = "TEXT" },
- 	{ .name = "hdr_length",		.type = "INTEGER" },
- 	{ .name = "hdr_maint_op_class",	.type = "INTEGER" },
-+	{ .name = "hdr_maint_op_sub_class",	.type = "INTEGER" },
- 	{ .name = "data",		.type = "BLOB" },
- };
- 
-@@ -874,6 +876,7 @@ static const struct db_fields cxl_general_media_event_fields[] = {
- 	{ .name = "hdr_ts",		.type = "TEXT" },
- 	{ .name = "hdr_length",		.type = "INTEGER" },
- 	{ .name = "hdr_maint_op_class",	.type = "INTEGER" },
-+	{ .name = "hdr_maint_op_sub_class",	.type = "INTEGER" },
- 	{ .name = "dpa",		.type = "INTEGER" },
- 	{ .name = "dpa_flags",		.type = "INTEGER" },
- 	{ .name = "descriptor",		.type = "INTEGER" },
-@@ -953,6 +956,7 @@ static const struct db_fields cxl_dram_event_fields[] = {
- 	{ .name = "hdr_ts",		.type = "TEXT" },
- 	{ .name = "hdr_length",		.type = "INTEGER" },
- 	{ .name = "hdr_maint_op_class",	.type = "INTEGER" },
-+	{ .name = "hdr_maint_op_sub_class",	.type = "INTEGER" },
- 	{ .name = "dpa",		.type = "INTEGER" },
- 	{ .name = "dpa_flags",		.type = "INTEGER" },
- 	{ .name = "descriptor",		.type = "INTEGER" },
-@@ -1039,6 +1043,7 @@ static const struct db_fields cxl_memory_module_event_fields[] = {
- 	{ .name = "hdr_ts",		.type = "TEXT" },
- 	{ .name = "hdr_length",		.type = "INTEGER" },
- 	{ .name = "hdr_maint_op_class",	.type = "INTEGER" },
-+	{ .name = "hdr_maint_op_sub_class",	.type = "INTEGER" },
- 	{ .name = "event_type",		.type = "INTEGER" },
- 	{ .name = "health_status",	.type = "INTEGER" },
- 	{ .name = "media_status",	.type = "INTEGER" },
+  * CXL 3.1 section 8.2.9.2.1; Table 8-43
 diff --git a/ras-record.h b/ras-record.h
-index cd549a1..2a0124a 100644
+index 2a0124a..a3a88eb 100644
 --- a/ras-record.h
 +++ b/ras-record.h
-@@ -179,6 +179,7 @@ struct ras_cxl_event_common_hdr {
- 	char hdr_timestamp[64];
- 	uint8_t hdr_length;
- 	uint8_t hdr_maint_op_class;
-+	uint8_t hdr_maint_op_sub_class;
- };
+@@ -137,6 +137,9 @@ struct ras_cxl_poison_event {
+ #define CXL_EVENT_GEN_MED_COMP_ID_SIZE	0x10
+ #define CXL_EVENT_DER_CORRECTION_MASK_SIZE	0x20
  
- struct ras_cxl_generic_event {
-diff --git a/ras-report.c b/ras-report.c
-index bc77d04..7e974b9 100644
---- a/ras-report.c
-+++ b/ras-report.c
-@@ -507,7 +507,8 @@ static int set_cxl_generic_event_backtrace(char *buf, struct ras_cxl_generic_eve
- 		"hdr_related_handle=0x%x\n"
- 		"hdr_timestamp=%s\n"
- 		"hdr_length=%u\n"
--		"hdr_maint_op_class=%u\n",
-+		"hdr_maint_op_class=%u\n"
-+		"hdr_maint_op_sub_class=%u\n",
- 		ev->hdr.timestamp,
- 		ev->hdr.memdev,
- 		ev->hdr.host,
-@@ -519,7 +520,8 @@ static int set_cxl_generic_event_backtrace(char *buf, struct ras_cxl_generic_eve
- 		ev->hdr.hdr_related_handle,
- 		ev->hdr.hdr_timestamp,
- 		ev->hdr.hdr_length,
--		ev->hdr.hdr_maint_op_class);
-+		ev->hdr.hdr_maint_op_class,
-+		ev->hdr.hdr_maint_op_sub_class);
- 
- 	return 0;
- }
++#define CXL_PLDM_ENTITY_ID_LEN	6
++#define CXL_PLDM_RES_ID_LEN	4
++
+ struct ras_cxl_aer_ue_event {
+ 	char timestamp[64];
+ 	const char *memdev;
 -- 
 2.43.0
 
