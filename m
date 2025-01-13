@@ -1,398 +1,140 @@
-Return-Path: <linux-edac+bounces-2882-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2883-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E72E9A0BB56
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2025 16:13:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90DFAA0BC28
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2025 16:36:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61A3B7A00E0
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2025 15:11:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC65D163AF8
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2025 15:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A47120AF9F;
-	Mon, 13 Jan 2025 15:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKwmiEQF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B8D29D19;
+	Mon, 13 Jan 2025 15:36:48 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655781FBBCE;
-	Mon, 13 Jan 2025 15:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AFD24022D;
+	Mon, 13 Jan 2025 15:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736780783; cv=none; b=L3zlugTDsh4zb3UzdYEDcxCpC84lX0K+2IR8nR37taiSQ/BGahoyzfi/xgLBYdV9cTkhAmz1dLl6jtR+oNf/EgL8ZdXUqQlSSFQjLi/xPQKfPT+7WUNv8mKf+gupZxnQOnVgtzDDzIWw5qdGBSq/hRrSOtQUMHwN64lHPfgASlo=
+	t=1736782608; cv=none; b=Dvwlv0Yjuhua7I3rLO7dOKGQ9MJwFlSwXoP/YMt7UHTRd/XIjcboOFCh6i52vnbbZ4U93eENiD18Q1Rx3lPvFEgRauLgoXafp7VmFltcqSpGJW+VZ+1PcDO+ll+rUTSIxoT3kv9S7ShmQot6tMJIm5JQHY0jZs+L4lIpXl8ExPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736780783; c=relaxed/simple;
-	bh=Q6YNGAd5oAgIkJE8XOKMMjMWOnnhVSZc7mV1uRa9eU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Lqhaz6A7pQ4kxlLRAezwwuk1p3N9pi2vAHenDu3kQLboXfDO4l1fVTEvS9Aw8/jhfLF+TF/A531hE5ffg54q4XIYvsL/IXLondw7z7g20lKQFa/wyv38KxzyBgNG+WndcHRM0bKZpYRJj+f1kzLiwAO1rxny1ywUBI+bsZVDsCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKwmiEQF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F84C4CED6;
-	Mon, 13 Jan 2025 15:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736780782;
-	bh=Q6YNGAd5oAgIkJE8XOKMMjMWOnnhVSZc7mV1uRa9eU4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mKwmiEQFH+u83kqAX+1ajwy6vYukC3GWU4c9TYhA38TUl4fjyLblNawhzrsFMotVa
-	 yuumUJl8YcD3zMOH+yNcUgSt/HQ1cbYFGLCrsfTmjgRHOyVOH0UW3dozciHjaMHdxW
-	 ekYLrku36WRipmcBZSeasWJxBj2v9hR795cH3/m7QjLiFSjBwVMGWhA7Z6bsjw0DFa
-	 Gk1Si5Zm/DgYNdUD9X/xZ+Uf/staSKmHdXVuBRYXut0l8m7QpJkrmPBUKfajjnN5KO
-	 l1QkplfKyzsorCL10m/B0kxsgqgkr0AfgjNIjjyvMV4R3LGgb6SyL5326kpsKHgdyK
-	 or8fp0Tzaa7MA==
-Date: Mon, 13 Jan 2025 16:06:11 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: <shiju.jose@huawei.com>
-Cc: <linux-edac@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
- <linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
- <rafael@kernel.org>, <lenb@kernel.org>, <mchehab@kernel.org>,
- <dan.j.williams@intel.com>, <dave@stgolabs.net>,
- <jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
- <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
- <ira.weiny@intel.com>, <david@redhat.com>, <Vilas.Sridharan@amd.com>,
- <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>, <rientjes@google.com>,
- <jiaqiyan@google.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
- <naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
- <somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
- <duenwen@google.com>, <gthelen@google.com>,
- <wschwartz@amperecomputing.com>, <dferguson@amperecomputing.com>,
- <wbs@os.amperecomputing.com>, <nifan.cxl@gmail.com>,
- <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
- <roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
- <wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [PATCH v18 01/19] EDAC: Add support for EDAC device features
- control
-Message-ID: <20250113160611.39bdf3b3@foz.lan>
-In-Reply-To: <20250106121017.1620-2-shiju.jose@huawei.com>
+	s=arc-20240116; t=1736782608; c=relaxed/simple;
+	bh=eEwMLBEJDiouZFR7egtIpWRy+6Clfe3WU4BlzjyK91c=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Isnd3DfWEeZAtfdnpqxrSqDqB8LTPXBf2I5TXiWMINMKdfXQYPPxXEQBu8AhegQVUOVFMeQfcPoDFVMgHP8uZTePXUUkC3g/l7tOp/AFqoMbxZaXI7tQZCHI52qGktHB8Zy9c2mZTkKwz3BmwhdlnPNkG+ph/bwPX3VFaXqXLgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YWxCp5KpJz6K6ZF;
+	Mon, 13 Jan 2025 23:35:18 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id D0DC2140A70;
+	Mon, 13 Jan 2025 23:36:42 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 13 Jan
+ 2025 16:36:41 +0100
+Date: Mon, 13 Jan 2025 15:36:39 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-mm@kvack.org>,
+	<vishal.l.verma@intel.com>
+CC: <shiju.jose@huawei.com>, <linux-edac@vger.kernel.org>,
+	<linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <rafael@kernel.org>, <lenb@kernel.org>,
+	<mchehab@kernel.org>, <dan.j.williams@intel.com>, <dave@stgolabs.net>,
+	<dave.jiang@intel.com>, <alison.schofield@intel.com>, <ira.weiny@intel.com>,
+	<david@redhat.com>, <Vilas.Sridharan@amd.com>, <leo.duran@amd.com>,
+	<Yazen.Ghannam@amd.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
+	<Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
+	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
+Subject: Re: [PATCH v18 00/19] EDAC: Scrub: introduce generic EDAC RAS
+ control feature driver + CXL/ACPI-RAS2 drivers
+Message-ID: <20250113153639.00003dfa@huawei.com>
+In-Reply-To: <20250113154634.4e831d66@foz.lan>
 References: <20250106121017.1620-1-shiju.jose@huawei.com>
-	<20250106121017.1620-2-shiju.jose@huawei.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	<20250113154634.4e831d66@foz.lan>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-Em Mon, 6 Jan 2025 12:09:57 +0000
-<shiju.jose@huawei.com> escreveu:
 
-> From: Shiju Jose <shiju.jose@huawei.com>
+> >    
+> > 5. CXL features driver supporting ECS control feature.
+> > 6. ACPI RAS2 driver adds OS interface for RAS2 communication through
+> >    PCC mailbox and extracts ACPI RAS2 feature table (RAS2) and
+> >    create platform device for the RAS memory features, which binds
+> >    to the memory ACPI RAS2 driver.
+> > 7. Memory ACPI RAS2 driver gets the PCC subspace for communicating
+> >    with the ACPI compliant platform supports ACPI RAS2. Add callback
+> >    functions and registers with EDAC device to support user to
+> >    control the HW patrol scrubbers exposed to the kernel via the
+> >    ACPI RAS2 table.
+> > 8. Support for CXL maintenance mailbox command, which is used by
+> >    CXL device memory repair feature.   
+> > 9. CXL features driver supporting PPR control feature.
+> > 10. CXL features driver supporting memory sparing control feature.
+> >     Note: There are other PPR, memory sparing drivers to come.  
 > 
-> Add generic EDAC device feature controls supporting the registration
-> of RAS features available in the system. The driver exposes control
-> attributes for these features to userspace in
-> /sys/bus/edac/devices/<dev-name>/<ras-feature>/
+> The text above should be inside Documentation, and not on patch 0.
 > 
-> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-> ---
->  Documentation/edac/features.rst |  94 ++++++++++++++++++++++++++++++
->  Documentation/edac/index.rst    |  10 ++++
->  drivers/edac/edac_device.c      | 100 ++++++++++++++++++++++++++++++++
->  include/linux/edac.h            |  28 +++++++++
->  4 files changed, 232 insertions(+)
->  create mode 100644 Documentation/edac/features.rst
->  create mode 100644 Documentation/edac/index.rst
+> A big description like that makes hard to review this series. It is
+> also easier to review the text after having it parsed by kernel doc
+> build specially for summary tables like the "Comparison of scrubbing 
+> features", which deserves ReST links processed by Sphinx to the 
+> corresponding definitions of the terms that are be compared there.
+
+Whilst I fully agree that having a huge cover letter makes for a burden
+for any reviewer coming to the series, this is here at specific request
+of reviewers.  We can look at keeping more of it in documentation though
+it's a bit white paper like in comparison with what I'd normally expect
+to see in kernel documentation.
+
 > 
-> diff --git a/Documentation/edac/features.rst b/Documentation/edac/features.rst
-> new file mode 100644
-> index 000000000000..f32f259ce04d
-> --- /dev/null
-> +++ b/Documentation/edac/features.rst
-> @@ -0,0 +1,94 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> > Open Questions based on feedbacks from the community:
+> > 1. Leo: Standardize unit for scrub rate, for example ACPI RAS2 does not define
+> >    unit for the scrub rate. RAS2 clarification needed.   
+> 
+> I noticed the same when reviewing a patch series for rasdaemon. Ideally,
+> ACPI requires an errata defining what units are expected for scrub rate.
 
-SPDX should match what's written there, e. g.
+There is a code first ACPI ECN that indeed adds units.  That is accepted
+for next ACPI specification release.
 
-	.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.2-no-invariants-or-later
+Seems the tianocore bugzilla is unhelpfully down for a migration
+but it should be id 1013 at bugzilla.tianocore.com
 
-Please notice that GNU FDL family contains both open source and non-open
-source licenses. The open-source one is this:
+That adds a detailed description of what the scrub rate settings mean but
+we may well still have older platforms where the scaling is arbitrary.
+The units defined are sufficient to map to whatever presentation we like.
 
-	https://spdx.org/licenses/GFDL-1.2-no-invariants-or-later.html
+> 
+> While ACPI doesn't define it, better to not add support for it - or be
+> conservative using a low granularity for it (like using minutes instead 
+> of hours).
 
-E.g. it is a the license permits changing the entire document in
-the future, as there's no invariant parts on it.
+I don't mind changing this, though for systems we are aware of default scrub
+is typically once or twice in 24 hours.
 
-> +
-> +============================================
-> +Augmenting EDAC for controlling RAS features
-> +============================================
-> +
-> +Copyright (c) 2024 HiSilicon Limited.
+Jonathan
 
-2024-2025?
-
-> +
-> +:Author:   Shiju Jose <shiju.jose@huawei.com>
-> +:License:  The GNU Free Documentation License, Version 1.2
-> +          (dual licensed under the GPL v2)
-
-You need to define if invariant parts are allowed or not, e. g.:
-
-	:License: The GNU Free Documentation License, Version 1.2 without Invariant Sections, Front-Cover Texts nor Back-Cover Texts.
-		  (dual licensed under the GPL v2)
-
-
-> +:Original Reviewers:
-> +
-> +- Written for: 6.14
-> +
-> +Introduction
-> +------------
-> +The expansion of EDAC for controlling RAS features and exposing features
-> +control attributes to userspace via sysfs. Some Examples:
-> +
-> +* Scrub control
-> +
-> +* Error Check Scrub (ECS) control
-> +
-> +* ACPI RAS2 features
-> +
-> +* Post Package Repair (PPR) control
-> +
-> +* Memory Sparing Repair control etc.
-> +
-> +High level design is illustrated in the following diagram::
-> +
-> +         _______________________________________________
-> +        |   Userspace - Rasdaemon                       |
-> +        |  _____________                                |
-> +        | | RAS CXL mem |      _______________          |
-> +        | |error handler|---->|               |         |
-> +        | |_____________|     | RAS dynamic   |         |
-> +        |  _____________      | scrub, memory |         |
-> +        | | RAS memory  |---->| repair control|         |
-> +        | |error handler|     |_______________|         |
-> +        | |_____________|          |                    |
-> +        |__________________________|____________________|
-> +                                   |
-> +                                   |
-> +    _______________________________|______________________________
-> +   |     Kernel EDAC extension for | controlling RAS Features     |
-> +   | ______________________________|____________________________  |
-> +   || EDAC Core          Sysfs EDAC| Bus                        | |
-> +   ||    __________________________|_________     _____________ | |
-> +   ||   |/sys/bus/edac/devices/<dev>/scrubX/ |   | EDAC device || |
-> +   ||   |/sys/bus/edac/devices/<dev>/ecsX/   |<->| EDAC MC     || |
-> +   ||   |/sys/bus/edac/devices/<dev>/repairX |   | EDAC sysfs  || |
-> +   ||   |____________________________________|   |_____________|| |
-> +   ||                           EDAC|Bus                        | |
-> +   ||                               |                           | |
-> +   ||    __________ Get feature     |      Get feature          | |
-> +   ||   |          |desc   _________|______ desc  __________    | |
-> +   ||   |EDAC scrub|<-----| EDAC device    |     |          |   | |
-> +   ||   |__________|      | driver- RAS    |---->| EDAC mem |   | |
-> +   ||    __________       | feature control|     | repair   |   | |
-> +   ||   |          |<-----|________________|     |__________|   | |
-> +   ||   |EDAC ECS  |    Register RAS|features                   | |
-> +   ||   |__________|                |                           | |
-> +   ||         ______________________|_____________              | |
-> +   ||_________|_______________|__________________|______________| |
-> +   |   _______|____    _______|_______       ____|__________      |
-> +   |  |            |  | CXL mem driver|     | Client driver |     |
-> +   |  | ACPI RAS2  |  | scrub, ECS,   |     | memory repair |     |
-> +   |  | driver     |  | sparing, PPR  |     | features      |     |
-> +   |  |____________|  |_______________|     |_______________|     |
-> +   |        |                 |                    |              |
-> +   |________|_________________|____________________|______________|
-> +            |                 |                    |
-> +    ________|_________________|____________________|______________
-> +   |     ___|_________________|____________________|_______       |
-> +   |    |                                                  |      |
-> +   |    |            Platform HW and Firmware              |      |
-> +   |    |__________________________________________________|      |
-> +   |______________________________________________________________|
-> +
-> +
-> +1. EDAC Features components - Create feature specific descriptors.
-> +For example, EDAC scrub, EDAC ECS, EDAC memory repair in the above
-> +diagram.
-> +
-> +2. EDAC device driver for controlling RAS Features - Get feature's attribute
-> +descriptors from EDAC RAS feature component and registers device's RAS
-> +features with EDAC bus and exposes the features control attributes via
-> +the sysfs EDAC bus. For example, /sys/bus/edac/devices/<dev-name>/<feature>X/
-> +
-> +3. RAS dynamic feature controller - Userspace sample modules in rasdaemon for
-> +dynamic scrub/repair control to issue scrubbing/repair when excess number
-> +of corrected memory errors are reported in a short span of time.
-> diff --git a/Documentation/edac/index.rst b/Documentation/edac/index.rst
-> new file mode 100644
-> index 000000000000..b6c265a4cffb
-> --- /dev/null
-> +++ b/Documentation/edac/index.rst
-> @@ -0,0 +1,10 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +==============
-> +EDAC Subsystem
-> +==============
-> +
-> +.. toctree::
-> +   :maxdepth: 1
-> +
-> +   features
-> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-> index 621dc2a5d034..9fce46dd7405 100644
-> --- a/drivers/edac/edac_device.c
-> +++ b/drivers/edac/edac_device.c
-> @@ -570,3 +570,103 @@ void edac_device_handle_ue_count(struct edac_device_ctl_info *edac_dev,
->  		      block ? block->name : "N/A", count, msg);
->  }
->  EXPORT_SYMBOL_GPL(edac_device_handle_ue_count);
-> +
-> +static void edac_dev_release(struct device *dev)
-> +{
-> +	struct edac_dev_feat_ctx *ctx = container_of(dev, struct edac_dev_feat_ctx, dev);
-> +
-> +	kfree(ctx->dev.groups);
-> +	kfree(ctx);
-> +}
-> +
-> +const struct device_type edac_dev_type = {
-> +	.name = "edac_dev",
-> +	.release = edac_dev_release,
-> +};
-> +
-> +static void edac_dev_unreg(void *data)
-> +{
-> +	device_unregister(data);
-> +}
-> +
-> +/**
-> + * edac_dev_register - register device for RAS features with EDAC
-> + * @parent: parent device.
-> + * @name: parent device's name.
-> + * @private: parent driver's data to store in the context if any.
-> + * @num_features: number of RAS features to register.
-> + * @ras_features: list of RAS features to register.
-> + *
-> + * Return:
-> + *  * %0       - Success.
-> + *  * %-EINVAL - Invalid parameters passed.
-> + *  * %-ENOMEM - Dynamic memory allocation failed.
-> + *
-> + */
-> +int edac_dev_register(struct device *parent, char *name,
-> +		      void *private, int num_features,
-> +		      const struct edac_dev_feature *ras_features)
-> +{
-> +	const struct attribute_group **ras_attr_groups;
-> +	struct edac_dev_feat_ctx *ctx;
-> +	int attr_gcnt = 0;
-> +	int ret, feat;
-> +
-> +	if (!parent || !name || !num_features || !ras_features)
-> +		return -EINVAL;
-> +
-> +	/* Double parse to make space for attributes */
-> +	for (feat = 0; feat < num_features; feat++) {
-> +		switch (ras_features[feat].ft_type) {
-> +		/* Add feature specific code */
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-> +	if (!ctx)
-> +		return -ENOMEM;
-> +
-> +	ras_attr_groups = kcalloc(attr_gcnt + 1, sizeof(*ras_attr_groups), GFP_KERNEL);
-> +	if (!ras_attr_groups) {
-> +		ret = -ENOMEM;
-> +		goto ctx_free;
-> +	}
-> +
-> +	attr_gcnt = 0;
-> +	for (feat = 0; feat < num_features; feat++, ras_features++) {
-> +		switch (ras_features->ft_type) {
-> +		/* Add feature specific code */
-> +		default:
-> +			ret = -EINVAL;
-> +			goto groups_free;
-> +		}
-> +	}
-> +
-> +	ctx->dev.parent = parent;
-> +	ctx->dev.bus = edac_get_sysfs_subsys();
-> +	ctx->dev.type = &edac_dev_type;
-> +	ctx->dev.groups = ras_attr_groups;
-> +	ctx->private = private;
-> +	dev_set_drvdata(&ctx->dev, ctx);
-> +
-> +	ret = dev_set_name(&ctx->dev, name);
-> +	if (ret)
-> +		goto groups_free;
-> +
-> +	ret = device_register(&ctx->dev);
-> +	if (ret) {
-> +		put_device(&ctx->dev);
-
-> +		return ret;
-
-As register failed, you need to change it to a goto groups_free,
-as edac_dev_release() won't be called.
-
-> +	}
-> +
-> +	return devm_add_action_or_reset(parent, edac_dev_unreg, &ctx->dev);
-> +
-> +groups_free:
-> +	kfree(ras_attr_groups);
-> +ctx_free:
-> +	kfree(ctx);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(edac_dev_register);
-> diff --git a/include/linux/edac.h b/include/linux/edac.h
-> index b4ee8961e623..521b17113d4d 100644
-> --- a/include/linux/edac.h
-> +++ b/include/linux/edac.h
-> @@ -661,4 +661,32 @@ static inline struct dimm_info *edac_get_dimm(struct mem_ctl_info *mci,
->  
->  	return mci->dimms[index];
->  }
-> +
-> +#define EDAC_FEAT_NAME_LEN	128
-
-This macro was not used on this patch.
-
-> +
-> +/* RAS feature type */
-> +enum edac_dev_feat {
-> +	RAS_FEAT_MAX
-> +};
-> +
-> +/* EDAC device feature information structure */
-> +struct edac_dev_data {
-> +	u8 instance;
-> +	void *private;
-> +};
-> +
-> +struct edac_dev_feat_ctx {
-> +	struct device dev;
-> +	void *private;
-> +};
-> +
-> +struct edac_dev_feature {
-> +	enum edac_dev_feat ft_type;
-> +	u8 instance;
-> +	void *ctx;
-> +};
-> +
-> +int edac_dev_register(struct device *parent, char *dev_name,
-> +		      void *parent_pvt_data, int num_features,
-> +		      const struct edac_dev_feature *ras_features);
->  #endif /* _LINUX_EDAC_H_ */
-
-Thanks,
-Mauro
 
