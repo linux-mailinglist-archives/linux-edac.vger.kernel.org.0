@@ -1,179 +1,184 @@
-Return-Path: <linux-edac+bounces-2887-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2888-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91597A0C2CE
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2025 21:55:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83AB7A1036A
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Jan 2025 10:56:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B59241888F4A
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Jan 2025 20:55:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E9403A0476
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Jan 2025 09:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442931CEEAA;
-	Mon, 13 Jan 2025 20:55:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D8B28EC8C;
+	Tue, 14 Jan 2025 09:55:50 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCEB1C3038;
-	Mon, 13 Jan 2025 20:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5C624022A;
+	Tue, 14 Jan 2025 09:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736801707; cv=none; b=CPISBkXK30ak+SzGFl22Hk2YrOLaNEFiznWTTyRqKfEynI646TXnWqpVmDxwYoSxIQMxhzFg6FViQh20rTHloSV9gyKOI0OFS1zCK2RNsMQlUi5yrD4N11KEFOERK5SZj1UTrBfLc33Ym1axx8c8BV99HcwcluHWqZsIoBUoT/E=
+	t=1736848549; cv=none; b=npsR9s4TnBW2lHtTlvzPSZE8J5zKpKQufgfO0sWkRU/nQqD1Y2XVtXrebHGR0Z12Bv0PcINv11UflH1sNSqtYyTcRWvSXAQM6Yrwvtv9KBab8Y+8BjkVZ77NIYnINFiQjx8kEfEmUfMmXxScRvVeDZew9bV5D3yQ9ES/hDT4nus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736801707; c=relaxed/simple;
-	bh=6bMWu777N3S6Mqw6qsW3g6f/h0LX2c+kc+7vAg5rOD4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EtpD2I27O7i/Ye+mOAiED6HYLQymwmoLG5loCduIuuV0RjrzzN/xpH3W6PxR+KSfBcjqfm35A9Tgyx4lrnlUyuAj3aC8lceFFDiRoh/GCvIzWo479szlkwc03lWdTkBQkU9LMfA+YOwtRStO61oaHZO6OqY+tnAJfJtMqSBPzKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2BFCC4CEDD;
-	Mon, 13 Jan 2025 20:55:04 +0000 (UTC)
-Date: Mon, 13 Jan 2025 15:55:03 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: lukas@wunner.de, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
- bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
- mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
- naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
- mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v5] PCI: hotplug: Add a generic RAS tracepoint for
- hotplug event
-Message-ID: <20250113155503.71467082@gandalf.local.home>
-In-Reply-To: <20250109025543.56830-1-xueshuai@linux.alibaba.com>
-References: <20250109025543.56830-1-xueshuai@linux.alibaba.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1736848549; c=relaxed/simple;
+	bh=dsLh30IhvkvphPhjqjdBvsc5bfCeMYtIGH3mBHUzOY0=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OL47NjTPal6XVd89ucq3V9AdbPBnO+1CKUQR+3P8TtDX4Gzu+ctFnB2T7FPEO9QKe2cLADkZlAyc2hCBHgHRZ8shdTFf7k8BtjupFCQIlWXqklGOyf7trCrMpj97PIsoBktc3FZRfRRZ0fPc1bsy/v/d9mep5VZ2Us26Sx8R7P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YXPbY1PMRz6LDKg;
+	Tue, 14 Jan 2025 17:54:01 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9D0DE140B3C;
+	Tue, 14 Jan 2025 17:55:44 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 14 Jan
+ 2025 10:55:42 +0100
+Date: Tue, 14 Jan 2025 09:55:41 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+CC: <shiju.jose@huawei.com>, <linux-edac@vger.kernel.org>,
+	<linux-cxl@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <rafael@kernel.org>, <lenb@kernel.org>,
+	<mchehab@kernel.org>, <dan.j.williams@intel.com>, <dave@stgolabs.net>,
+	<dave.jiang@intel.com>, <alison.schofield@intel.com>,
+	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>, <david@redhat.com>,
+	<Vilas.Sridharan@amd.com>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
+	<rientjes@google.com>, <jiaqiyan@google.com>, <Jon.Grimm@amd.com>,
+	<dave.hansen@linux.intel.com>, <naoya.horiguchi@nec.com>,
+	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
+	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
+	<gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, <linuxarm@huawei.com>
+Subject: Re: [PATCH v18 01/19] EDAC: Add support for EDAC device features
+ control
+Message-ID: <20250114095541.000000a1@huawei.com>
+In-Reply-To: <20250113160611.39bdf3b3@foz.lan>
+References: <20250106121017.1620-1-shiju.jose@huawei.com>
+	<20250106121017.1620-2-shiju.jose@huawei.com>
+	<20250113160611.39bdf3b3@foz.lan>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Thu,  9 Jan 2025 10:55:43 +0800
-Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
-> diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
-> new file mode 100644
-> index 000000000000..5b60cd7bcffb
-> --- /dev/null
-> +++ b/drivers/pci/hotplug/trace.h
-> @@ -0,0 +1,68 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_HW_EVENT_PCI_HP_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM pci
-> +
-> +#define PCI_HOTPLUG_EVENT					\
-> +	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
-> +	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
-> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
-> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
+> > +int edac_dev_register(struct device *parent, char *name,
+> > +		      void *private, int num_features,
+> > +		      const struct edac_dev_feature *ras_features)
+> > +{
+> > +	const struct attribute_group **ras_attr_groups;
+> > +	struct edac_dev_feat_ctx *ctx;
+> > +	int attr_gcnt = 0;
+> > +	int ret, feat;
+> > +
+> > +	if (!parent || !name || !num_features || !ras_features)
+> > +		return -EINVAL;
+> > +
+> > +	/* Double parse to make space for attributes */
+> > +	for (feat = 0; feat < num_features; feat++) {
+> > +		switch (ras_features[feat].ft_type) {
+> > +		/* Add feature specific code */
+> > +		default:
+> > +			return -EINVAL;
+> > +		}
+> > +	}
+> > +
+> > +	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+> > +	if (!ctx)
+> > +		return -ENOMEM;
+> > +
+> > +	ras_attr_groups = kcalloc(attr_gcnt + 1, sizeof(*ras_attr_groups), GFP_KERNEL);
+> > +	if (!ras_attr_groups) {
+> > +		ret = -ENOMEM;
+> > +		goto ctx_free;
+> > +	}
+> > +
+> > +	attr_gcnt = 0;
+> > +	for (feat = 0; feat < num_features; feat++, ras_features++) {
+> > +		switch (ras_features->ft_type) {
+> > +		/* Add feature specific code */
+> > +		default:
+> > +			ret = -EINVAL;
+> > +			goto groups_free;
+> > +		}
+> > +	}
+> > +
+> > +	ctx->dev.parent = parent;
+> > +	ctx->dev.bus = edac_get_sysfs_subsys();
+> > +	ctx->dev.type = &edac_dev_type;
+> > +	ctx->dev.groups = ras_attr_groups;
+> > +	ctx->private = private;
+> > +	dev_set_drvdata(&ctx->dev, ctx);
+> > +
+> > +	ret = dev_set_name(&ctx->dev, name);
+> > +	if (ret)
+> > +		goto groups_free;
+> > +
+> > +	ret = device_register(&ctx->dev);
+> > +	if (ret) {
+> > +		put_device(&ctx->dev);  
+> 
+> > +		return ret;  
+> 
+> As register failed, you need to change it to a goto groups_free,
+> as edac_dev_release() won't be called.
 
-Since you are creating these enums in this patch, you can also do a
-shortcut here too. Instead of doing the define here, move it to
-include/uapi/linux/pci.h:
+Boris called this one out as well, so seems it is not that well understood.
+I've also tripped over this in the past and it's one of the most common
+things I catch in reviews of code calling this stuff.
 
-> +
-> +/* Enums require being exported to userspace, for user tool parsing */
-> +#undef EM
-> +#undef EMe
-> +#define EM(a, b)	TRACE_DEFINE_ENUM(a);
-> +#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
-> +
-> +PCI_HOTPLUG_EVENT
-> +
-> +/*
-> + * Now redefine the EM() and EMe() macros to map the enums to the strings
-> + * that will be printed in the output.
-> + */
-> +#undef EM
-> +#undef EMe
-> +#define EM(a, b)	{a, b},
-> +#define EMe(a, b)	{a, b}
-> +
-> +TRACE_EVENT(pci_hp_event,
-> +
-> +	TP_PROTO(const char *port_name,
-> +		 const char *slot,
-> +		 const int event),
-> +
-> +	TP_ARGS(port_name, slot, event),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(	port_name,	port_name	)
-> +		__string(	slot,		slot		)
-> +		__field(	int,		event	)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(port_name);
-> +		__assign_str(slot);
-> +		__entry->event = event;
-> +	),
-> +
-> +	TP_printk("%s slot:%s, event:%s\n",
-> +		__get_str(port_name),
-> +		__get_str(slot),
-> +		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
-> +	)
-> +);
-> +
-> +#endif /* _TRACE_HW_EVENT_PCI_HP_H */
-> +
-> +#undef TRACE_INCLUDE_PATH
-> +#define TRACE_INCLUDE_PATH  ../../drivers/pci/hotplug
-> +#undef TRACE_INCLUDE_FILE
-> +#define TRACE_INCLUDE_FILE trace
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
-> index a769eefc5139..4f150028965d 100644
-> --- a/include/uapi/linux/pci.h
-> +++ b/include/uapi/linux/pci.h
-> @@ -39,4 +39,11 @@
->  #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
->  #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
->  
-> +enum pci_hotplug_event {
-> +	PCI_HOTPLUG_LINK_UP,
-> +	PCI_HOTPLUG_LINK_DOWN,
-> +	PCI_HOTPLUG_CARD_PRESENT,
-> +	PCI_HOTPLUG_CARD_NOT_PRESENT,
-> +};
+As discussed offline, it will be called. The device_register() docs
+make it clear that whether or not that call succeeds reference counting
+is enabled and put_device() is the correct way to free resources.
 
-Instead of defining the enum as you did above, if you have the define of
-the enums here, you could do:
+The actual depends on the fact that device_register() is just a helper
+defined as
 
-#define PCI_HOTPLUG_EVENT					\
-	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
-	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
-	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
-	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
+device_initialize();
+return device_add();
 
-#undef EM
-#undef EMe
-#define EM(a, b)	a,
-#define EMe(a, b)	a,
+So for reasons lost to history (I guess there are cases where other cleanup
+needs to happen before the release) it does not handle side effects
+of device_initialize() on an error in device_add().  
 
-enum pci_hotplug_event {
-	PCI_HOTPLUG_EVENT
-};
+device_initialize() has called
+-> kobject_init(&dev->kobj, &device_type);
+ -> kref_init_internal(kobj) + sets ktype (which has the release callback)
 
-Then you only have one place to worry about adding new enums ;-)
+kref_init_internal() sets the reference counter to 1
 
--- Steve
+Hence when we do a device_put() in the error path, the reference counter drops
+to 0 and the release from the ktype is called.  Here that is edac_dev_release();
 
-> +
->  #endif /* _UAPILINUX_PCI_H */
+If you want to verify replace device_register() with device_initialize() then
+call put_device().
+
+If we were going back in history, I'd suggest device_register() should be side
+effect free and call put_device() on error and any driver that needs to handle
+other stuff before the release should just not use it. I guess that ship
+long sailed and maybe there are other reasons I've not thought of.
+
+I took a quick look and seems to go back into at least the 2.5 era.
+
+Jonathan
+
+
 
 
