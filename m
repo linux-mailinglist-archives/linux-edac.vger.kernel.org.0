@@ -1,216 +1,203 @@
-Return-Path: <linux-edac+bounces-2910-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2911-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8769DA1182E
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 04:59:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A293CA119C7
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 07:38:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E726C7A2E47
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 03:59:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C13D5188A1BF
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 06:38:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4520B22E3E6;
-	Wed, 15 Jan 2025 03:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4391622F850;
+	Wed, 15 Jan 2025 06:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Z1RGllAp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ho2KYGh1"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCEE15250F;
-	Wed, 15 Jan 2025 03:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736913564; cv=none; b=O75EVqIQIkMQ72l4iT75rU2Gk/kOB4F8r+XefiO2x4/nkshLmdGnwDvsV468rYDH3ZmlCgyMSm7ar2ZuLiIPXbN7N2+vOsnsgl4uHCN0ggFe62IMDwVNUjgn6KImAjeyl0KITAFu6vu+/CkvHaeclGXvrMCiyjStYI50O3VKRkY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736913564; c=relaxed/simple;
-	bh=YSMVJrCT/K9bRLlVREyx8tgq/wp+53dMWevCY5rjL7c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WT+FaPEYQGYlMx9PCV5xbUnyIR7/q5Df8WMrcCxV/kSkqAMIc67etdW0Xs4EaA0+hofsKCig+QqkycAgJfbxTBUH4sSmNKYvcOgeiAGEXGa9x8u1U5ZY73TNTTDvukKgOSpstscFhG8RCUR8mjJ2JlLBDjyOnk5ghkmD58CxszQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Z1RGllAp; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1736913558; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=sLPV+YjmBUB7qzPZOw2oCEKHmFVeZyvMf7EqOBBlrrQ=;
-	b=Z1RGllAp6JlgwNT+kR1iUYdVwdql1nnuCnHbEXG2bvnz3YEeJ44tyI0tb5adKQp32swL01W2CpoUSrZm90CPDi6ley0N+pyx0gciBb1RagaTb5XWXG4l01dkTYPyEyIh8ztajJN4DgWaEovXvgPnLB2oRm+TKyo9N0rudylFH10=
-Received: from 30.246.161.230(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WNh5jLY_1736913554 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Jan 2025 11:59:15 +0800
-Message-ID: <7b482de1-fa19-45d6-bd05-f1c3ebb77192@linux.alibaba.com>
-Date: Wed, 15 Jan 2025 11:59:13 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D6822F3A0;
+	Wed, 15 Jan 2025 06:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736923083; cv=fail; b=sbIu5NldzO+3eBhhLXSdOP/2CD0ncFlRl1RbE61Kj7DkworIZ7fof08h+9zwIr147lBRCCHoOJBIlEaIpEaip89EmqBqv5WZZlJqLrfqwGQU2eJHWH/NVAwPtxVMU7G/F6ShqBQBqlmYh2erKpEBCvDTK/JgnJiK9UXP1/YRaIo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736923083; c=relaxed/simple;
+	bh=cnAtmFym7cqcsnBetfox5EikvYpD1aJmwgv9UC2UZ58=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Gl10CAVaOa212SnFTPmuNhB87QOs/qITEtQqMsEhx9ZKDsKzLRIzJ4J/qZwzeEfi8mCapQrnAnpgiDQmxNQsumD7qq763Ct6LeobZSKCcTdUNRYPnQun8RKjbbajZJ7nbdmVjHZZdP3VvPFS8BjT+rF9+MQ/YlPE8LurMvCZT6w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ho2KYGh1; arc=fail smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736923081; x=1768459081;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=cnAtmFym7cqcsnBetfox5EikvYpD1aJmwgv9UC2UZ58=;
+  b=ho2KYGh1M/1rTMTHLLZP/U64lPjU9T1rX7ms0dppOJ7b0xDRCMXht63Y
+   HJkFmvrTpckuYN0kKpN8lyN0R+pHsxMEfqDJpnu0klunCxB4NBsvXBJGC
+   L1oC9WlH6Yl95b3y+ePynb7AP73Rj/HNYJWn+RloL9Z7NwKJwA4/ri5cU
+   rG2exvLXEquY2+wMp7fz4iNuFrD3JrWDpCjBUOfN5ceYdHaBREljFHSck
+   DqxLgzCI6PPNsA4FNqMgs/liwT4Y1ta7yePVikpB882FJhjxnnILk5mlE
+   Vz9xdrQzF7VSw7t5hPBaYYFNS+zu3g34SynnlX1/2wcjxWDoMTrghG8+C
+   A==;
+X-CSE-ConnectionGUID: 5qRDmX/CQkqHtAz5Cx92aQ==
+X-CSE-MsgGUID: 65w6fXChQ76IOrFk++qJOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="59727218"
+X-IronPort-AV: E=Sophos;i="6.12,316,1728975600"; 
+   d="scan'208";a="59727218"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 22:38:01 -0800
+X-CSE-ConnectionGUID: epE3/I2FSRuottgdQ6mkIw==
+X-CSE-MsgGUID: HaltSqlgSWamYELAQBlKcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,316,1728975600"; 
+   d="scan'208";a="105223662"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Jan 2025 22:38:00 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Tue, 14 Jan 2025 22:37:59 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Tue, 14 Jan 2025 22:37:59 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.48) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Tue, 14 Jan 2025 22:37:59 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Brq00CvxEYh895x+hV3ulCFBrMstCk1Vi03csQlnGjEahbq5RKRKzD4vhryqMgxZi+lQFxwLCYEqcM8JiYLLaiPryzJni/1aUx/fR+8gywhGLZmHhLgNAcXrd/vfyZfolHooGcYEthq3CdiE2mWlv5UzuFmSfgzesnVuUY/z4lKZcWd7BZeEXxuAqpsLsOS+/nM/4/9/RGPCwdh519wSKbpL7Nrvu9wf5DqxgsncBqZ2Y8Y7opjhZxRsNH6ICu2sWJN+Kzi335bgACE6GIfTDhqhAzyEX1C0ijkg+Wa5nAYKDzlc3fx1CaY+5e620iWFuODFicmShQWKmsgUR1l8mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7gnjP7/SgRnTYfTALMvHHBtlr3IXWmFusJD87pY0N1w=;
+ b=C1SiFZtNUP2QvNUm22cPByyBZpadzg82W+8/ich/dF+7mIyb2VgI62IwYGkhBAqtlSzsTDXzYxh+LWV2yoItxscwfoOBlPObvUQgg0VKWZRds4Z2XHOmskGqrqDQ1S5ja1Xw07HwRgCsXjJLW5YUvAzhRw3q0p4xN/bo+yKNBWyZFERS6Y8TCVSmpaam+x+/G5ui03GsoSXjTgdpoLj9Jxit0+BlCfd4mqF96Tf8DFu/vCKYGQq5jv9OILXtS2owiOuzmguJyWmZeTd7F6ONQJ+xwUC6REBvzEfGS6x2gdccLPX7ef404uJ3vdDtA9ywJJCqfex+C8XTHUd69D49nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
+ by IA0PR11MB8418.namprd11.prod.outlook.com (2603:10b6:208:487::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Wed, 15 Jan
+ 2025 06:37:52 +0000
+Received: from CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
+ ([fe80::cd87:9086:122c:be3d%5]) with mapi id 15.20.8356.010; Wed, 15 Jan 2025
+ 06:37:52 +0000
+From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+To: Nikolay Borisov <nik.borisov@suse.com>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>
+CC: "x86@kernel.org" <x86@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "bp@alien8.de" <bp@alien8.de>
+Subject: RE: [PATCH 0/3] Cleanup mce_notify_irq usage
+Thread-Topic: [PATCH 0/3] Cleanup mce_notify_irq usage
+Thread-Index: AQHbZqKpMczfMbECdE6svCd3+rMHirMXYVPw
+Date: Wed, 15 Jan 2025 06:37:52 +0000
+Message-ID: <CY8PR11MB71349D74B4BBB90E0EBDDD9989192@CY8PR11MB7134.namprd11.prod.outlook.com>
+References: <20250114163722.34850-1-nik.borisov@suse.com>
+In-Reply-To: <20250114163722.34850-1-nik.borisov@suse.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|IA0PR11MB8418:EE_
+x-ms-office365-filtering-correlation-id: 994690a3-d710-4d1e-bd94-08dd352f22d7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?HdxE1B3SAvAO2p5QSOn1b35/chfJm/zC1fbTcsxN0RlcYTwOuTUUA2hWNvLs?=
+ =?us-ascii?Q?qI/s+mWR5fs/sm9C7C7NeDTKE4QwjSeSbe/49L3F1yQrXJRWm/5v0QSfY2J2?=
+ =?us-ascii?Q?u7vj6vcsa6URKRRQJ56VMxVjJuyppHEkB1QWTOpv0gmZq9V2DL3mRkeSGJ8I?=
+ =?us-ascii?Q?pKtGAk8G2O1Rnceh8WVCrRcpYUrPH2Lj39pdj/OGj16+QsY1xH5eK/ACwTYQ?=
+ =?us-ascii?Q?+EOBGBIkuEPRlOgLoPoQRHnmm69ocEGshT8CnfyrSlTPLf+5zc1gknFSuMBX?=
+ =?us-ascii?Q?vozT1LZAxP2fPec0YGlFwtMYAOlluz39Qq9fGMJJJuuiZx0VAMHRA5UyiGdl?=
+ =?us-ascii?Q?yThS+SnjEL96XpL8jqI+5xcHH8PxbfvlXZx0+0OEz/9QDZ6BoBNYwhPdslKi?=
+ =?us-ascii?Q?HQ20ggQ+RDASHXa1X6N8/GzU+fIfXv7855pYQwQT05t0q8l5d/JeBDdpvOy1?=
+ =?us-ascii?Q?2BOsHGdXqzKTJKLQ4x+puFfItaRCzjFgsAnjNjlNjbIJbDdl8r4uqSd5JOTp?=
+ =?us-ascii?Q?BTvYhlJiHWipimEBWNvcc+OevK2wjVaYcMtSE9SjwjWe3zKoQXjzGHkwZjSQ?=
+ =?us-ascii?Q?ZqGaj2AKaYjJV0R+rwXf7436v7YkSI9fBwrpTkh7R6EszfgsC+f4CrmE6EBV?=
+ =?us-ascii?Q?VFQTtpdTkX0WKwjojD8+Do2bQVEEi2QVfFOs+Yy4SBHrLuLa9iVRQBClwbvf?=
+ =?us-ascii?Q?I/VcRNkfBqXNrgEmeTDZPj0kWrs6szte5kXHWuLZA+laqvNaJWSPALAl/TKJ?=
+ =?us-ascii?Q?BXSp/N9anyRerUwXL9iRot2NMNC9smwMs/iD80rmZwQ7Owb/kUkhzF4XbdD6?=
+ =?us-ascii?Q?bS+GRR5vZxhSI03lL6Weuu3gSqBNTSllMc4LhgsqcHqntH5bnIk3jTcNuuWn?=
+ =?us-ascii?Q?Rn2YqIEjxSue1pOGKdOiBsuPSTtr0B14fPoBey+IgsnHcAxbiXcxiyPcqOUb?=
+ =?us-ascii?Q?UU6e02yoXC+c3BGoP5OJAA9x02Dgve4AzMrSEw7b4pKwIBoWNjQ0p1dFNA8E?=
+ =?us-ascii?Q?Hdca73+n6zuU8YFUzgLtPmSITqSasKaYvmaWE75KvRSUc7w9Kz5BfS79Tk7/?=
+ =?us-ascii?Q?SoVYNTp7iLp/DhkHOS8aUOeqeZIFcarY0MwADqVtDAlBbNHzFjoMMG0Naa0R?=
+ =?us-ascii?Q?SvOxjdjgWeO6Q7/2izVheGs5yw/sukw4146rVlU4r434ja9AsnMvhkk67Dwz?=
+ =?us-ascii?Q?hlSq/9RRlQLScTfc6xzu5d0lQ1Guwns6acyNs1OoeIFE6IMvZnSQt07dcRJw?=
+ =?us-ascii?Q?TfovjElv2zt75k38Xrcb11dvRRp8Nim3Iyg1K+CoqiPDO62Dimk/bZjbKgyM?=
+ =?us-ascii?Q?8n997QXATMJyRlA5cxqooH1M5Y3Ii+qTgZXICUXRGd1MqkvLHjrIDy9N6NVd?=
+ =?us-ascii?Q?eftNzdWXfGTqJ+6iRHP4psrBuXDc57htbF12EiBLpb1KZWXuMwhSOdeBNC8c?=
+ =?us-ascii?Q?P1HH2NdtHVnfWLFPfemorqDyl+HVNbiZ?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mD884jAc0aSmulq4y65BaTx7qCo4IV1eHbX465LgK+mrSX1YT7LzM3XD+WN3?=
+ =?us-ascii?Q?xirfvDyyNEkCVDKenLS4Sl4E9NhfK36Ob2NC54/TGhLx+cujwgM43u1Yst6d?=
+ =?us-ascii?Q?XjyOYVt2k8T2NTunX6Nnj2T5F2rJnoeJW7v42ZFqNU8STip5c6UL6yX42Yyr?=
+ =?us-ascii?Q?oACEyk3rnJjmAOJDinfLUQvO9LdHnUpg6d9SMCM+fgz3lUgRnTUebiWVLZw+?=
+ =?us-ascii?Q?vs5LVGwM5INKV8ZyV+17dNABB3zaWCWy9vDjT3u8W5mT4yvMgLxgJBC9DTnw?=
+ =?us-ascii?Q?OGa0VjfX+ZpYya28b/Yv2EPgQqg74cgomLRp+ht35EUdw3863/4EJ0jricgX?=
+ =?us-ascii?Q?EGK19J4KnW3k6DOUsgJmgIcrap1RFjskUBwDYHJdCYn/p5VojNXrhHjyQDbT?=
+ =?us-ascii?Q?xLGwM0eqMACOvTKBwH1rl5bWS6JGojts3qXPIFjt5LONOHxxcscECpwVhd18?=
+ =?us-ascii?Q?v1x3QHHEZIMODc1tjaF9t1IsncDi8U7P6iVfuQviscOombIaFKD28g+LvBDU?=
+ =?us-ascii?Q?zqWvP1XX9rK76lNbDPAZr1eXPxU9vaY3dnMY0UwUV0oOIizC6TD2tDK8FuR5?=
+ =?us-ascii?Q?5C2ptTy8LViUZvI65z8HRoMn7vak90DzTdRc4mrSvgSqfc76tmWqegp3VvIn?=
+ =?us-ascii?Q?d5BaP1WOs4U98B6dsMM0w2WikcS0ZsJTzCCD+RKfBtMNXCnZLiYTItTa0BKC?=
+ =?us-ascii?Q?3uoqWoQQRJyv2ruhHUTcGEsU57e2sv8eikRkMLUfuDwXrkKmp4AWgU7aOpyD?=
+ =?us-ascii?Q?YmkC/y8eFBIerNlMhDlfWMmcC26StBFp4X/SKT/wlfwxCRScFWwEfDNyLqwM?=
+ =?us-ascii?Q?ql8QwNKCWsgHMiWQ+n6vTwCTKp3Nf9LODp3F8THJSK3sbrfNPkl9x7wQVm2s?=
+ =?us-ascii?Q?qG7ml6I2SNJ5gii2mJ8p0OJcsR20fIgi4SOWBJ5WZF7/fDuZt2Ft9kYZZReR?=
+ =?us-ascii?Q?GTqnfTJKO09GiKifV6mJ4qV0NjUe2IYjNoGaSrPijj+MFZgNVgSf1tEfS9Zp?=
+ =?us-ascii?Q?B7oAlkn+caWJCQ4T9xLBEwSYJfO+Nx9qmo6u93K7WwZroPFVJCGdW7gFaNuX?=
+ =?us-ascii?Q?XWV67O4t1E/A2KGJnnbw1q40UGHpmO15yJTUqZQF80/V/QGTf7FxtJudXwnA?=
+ =?us-ascii?Q?E24hmuBmKkCu5jv8nUTmA5ocCgiVBpZZIk6snDinlxFZWsFXxFN1/Fs2B0Tm?=
+ =?us-ascii?Q?LuCe20+eV0ywVIjaVmlSijysguIacYEUJWMhMOtCrcIUuitZ2LZrtq2FCAjV?=
+ =?us-ascii?Q?3dgFvYE0kPB0hWiTdqeS9VMHsgT37vUWOLbnojiRemN9faQicCHq9OepRUTb?=
+ =?us-ascii?Q?O9pvtnruwnjUCYzWINlAoBz+JS5sgJrOjlBoqsF87YSGV3bBezsqQzPyfy8v?=
+ =?us-ascii?Q?v+xzsbpPvNGKbCsjd4biJTHPjswStO0uptuA6NFBUbUyYrY9xyRidPudiwOB?=
+ =?us-ascii?Q?WwiywP24qPGtf3yeFHMTDML0X/aQOVrl+3xEqpeZUpQr3hiIUQ/OvmVtrLhR?=
+ =?us-ascii?Q?iMIs0ODAYkbnmViLsnEYK9umgM28BYvmiM8ZqONPF377pMu8CiMMkFBYw9eb?=
+ =?us-ascii?Q?JIbcIEaIEhB1ksPS+lravcr/hxN8mda0fQGGPGkA?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-To: Steven Rostedt <rostedt@goodmis.org>, Lukas Wunner <lukas@wunner.de>
-Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- helgaas@kernel.org, bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
- mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
- naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
- mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
-References: <20250115013753.49126-1-xueshuai@linux.alibaba.com>
- <20250114214103.6b45d30d@gandalf.local.home>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20250114214103.6b45d30d@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 994690a3-d710-4d1e-bd94-08dd352f22d7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2025 06:37:52.0345
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: duz0+gJmNSJNjOApHIHEh1i7ribPs/Wcgvsk62cEQpJhHAcF/FLjOsydqvCTfx1ANo6KPOFSngBLb7wR+tiR4w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB8418
+X-OriginatorOrg: intel.com
 
+> From: Nikolay Borisov <nik.borisov@suse.com>
+> Sent: Wednesday, January 15, 2025 12:37 AM
+> To: linux-edac@vger.kernel.org
+> Cc: x86@kernel.org; linux-kernel@vger.kernel.org; bp@alien8.de; Nikolay
+> Borisov <nik.borisov@suse.com>
+> Subject: [PATCH 0/3] Cleanup mce_notify_irq usage
 
+I tried to apply this series on top of the ras/core branch of the TIP tree,=
+ but there were some conflicts.=20
+Would it be better to rebase this series on top of the ras/core branch of t=
+he TIP tree?
 
-在 2025/1/15 10:41, Steven Rostedt 写道:
-> On Wed, 15 Jan 2025 09:37:53 +0800
-> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
-> 
->> +#define CREATE_TRACE_POINTS
->> +#include "trace.h"
->> +
->>   /* The following routines constitute the bulk of the
->>      hotplug controller logic
->>    */
->> @@ -244,12 +247,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->>   	case ON_STATE:
->>   		ctrl->state = POWEROFF_STATE;
->>   		mutex_unlock(&ctrl->state_lock);
->> -		if (events & PCI_EXP_SLTSTA_DLLSC)
->> +		if (events & PCI_EXP_SLTSTA_DLLSC) {
->>   			ctrl_info(ctrl, "Slot(%s): Link Down\n",
->>   				  slot_name(ctrl));
->> -		if (events & PCI_EXP_SLTSTA_PDC)
->> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
->> +					   slot_name(ctrl),
->> +					   PCI_HOTPLUG_LINK_DOWN);
-> 
-> Hmm, can't you just pass in the ctrl pointer to the tracepoint?
-> 
-> 			trace_pci_hp_event(ctrl, PCI_HOTPLUG_LINK_DOWN);
-> 
->> +		}
->> +		if (events & PCI_EXP_SLTSTA_PDC) {
->>   			ctrl_info(ctrl, "Slot(%s): Card not present\n",
->>   				  slot_name(ctrl));
->> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
->> +					   slot_name(ctrl),
->> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
->> +		}
->>   		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
->>   		break;
->>   	default:
->> @@ -269,6 +280,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->>   					      INDICATOR_NOOP);
->>   			ctrl_info(ctrl, "Slot(%s): Card not present\n",
->>   				  slot_name(ctrl));
->> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
->> +					   slot_name(ctrl),
->> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
->>   		}
->>   		mutex_unlock(&ctrl->state_lock);
->>   		return;
->> @@ -281,12 +295,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->>   	case OFF_STATE:
->>   		ctrl->state = POWERON_STATE;
->>   		mutex_unlock(&ctrl->state_lock);
->> -		if (present)
->> +		if (present) {
->>   			ctrl_info(ctrl, "Slot(%s): Card present\n",
->>   				  slot_name(ctrl));
->> -		if (link_active)
->> -			ctrl_info(ctrl, "Slot(%s): Link Up\n",
->> -				  slot_name(ctrl));
->> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
->> +					   slot_name(ctrl),
->> +					   PCI_HOTPLUG_CARD_PRESENT);
->> +		}
->> +		if (link_active) {
->> +			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
->> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
->> +					   slot_name(ctrl),
->> +					   PCI_HOTPLUG_LINK_UP);
->> +		}
->>   		ctrl->request_result = pciehp_enable_slot(ctrl);
->>   		break;
->>   	default:
->> diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
->> new file mode 100644
->> index 000000000000..1415ac505cb5
->> --- /dev/null
->> +++ b/drivers/pci/hotplug/trace.h
->> @@ -0,0 +1,45 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
->> +#define _TRACE_HW_EVENT_PCI_HP_H
->> +
->> +#include <linux/tracepoint.h>
->> +
->> +#undef TRACE_SYSTEM
->> +#define TRACE_SYSTEM pci
->> +
->> +TRACE_EVENT(pci_hp_event,
->> +
->> +	TP_PROTO(const char *port_name,
->> +		 const char *slot,
->> +		 const int event),
->> +
->> +	TP_ARGS(port_name, slot, event),
->> +
->> +	TP_STRUCT__entry(
->> +		__string(	port_name,	port_name	)
->> +		__string(	slot,		slot		)
->> +		__field(	int,		event	)
-> 
-> Then the above would be:
-> 
-> 	TP_PROTO(struct controller *ctrl, int event),
-> 
-> // don't really need a const int there
-> 
-> 	TP_ARGS(ctrl, event),
-> 
-> 	TP_STRUCT__entry(
-> 		__string(	port_name,	pci_name(ctrl->pcie->port)	)
-> 		__string(	slot,		slot_name(ctrl)			)
-> 		__field(	int,		event				)
-> 
-> and everything else could be the same.
-
-Maybe it's not a good idea.
-
-I think pci_hp_event is a generic event for pciehp, shpchp, octep_hp, etc. But
-each hotplug driver has different `struct controller` and slot_name(). For
-example:
-
-// drivers/pci/hotplug/pciehp.h
-static inline const char *slot_name(struct controller *ctrl)
-{
-	return hotplug_slot_name(&ctrl->hotplug_slot);
-}
-
-// drivers/pci/hotplug/shpchp.h
-static inline const char *slot_name(struct slot *slot)
-{
-	return hotplug_slot_name(&slot->hotplug_slot);
-}
-
-So, IMHO, pass port_name and slot_name from each driver is more simple.
-
-+ @Lukas for hotplug part.
-
-> 
-> -- Steve
-> 
-> 
-
-Thanks.
-
-Best Regards,
-Shuai
-
+  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git   ras/core
 
