@@ -1,158 +1,109 @@
-Return-Path: <linux-edac+bounces-2914-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2917-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE3FAA11B06
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 08:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6F1A11E25
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 10:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 085EF188A6DE
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 07:37:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22A55188D773
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 09:36:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 345C822F84F;
-	Wed, 15 Jan 2025 07:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sLSZk/Ph";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sLSZk/Ph"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D5D824169F;
+	Wed, 15 Jan 2025 09:33:52 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F1122F166;
-	Wed, 15 Jan 2025 07:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030FD241690;
+	Wed, 15 Jan 2025 09:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736926627; cv=none; b=BHDYsFRXkbjUGMMXvaLcYSr8MUTwPDwLzRlFekHWFebwXr2hhGOgagFijIJGJVuStfpgju7XUjNTQrH4kGmjdzLhtGpDVeuseGTAy3/V71Rb7oAvFWwbKiU6rmBlkxba0loi+JX6Zz0Sfh/+XHQHUX61c7pQ63Aw40vDoTx/e9w=
+	t=1736933632; cv=none; b=K/nJzbI0GrusO5HoVdNW3rXE1QC6E3rD1p0z9ik0PdrDFNKJBmraV+p1YdzmGNgIIp40uJ62f1CY9hDy/UNpiXj7Cm4PFL7ai8viIcmv02Ks5b0ws8c6kmpPFsJTbBqaOQHyb5MRMMeG4B8Vl0mycnbw5DuHiY5CxBSWv3dGriE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736926627; c=relaxed/simple;
-	bh=Ta7/wk8PG440NjsU9HbIWpLwKT0+QfOFmgb13BivgPw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H091Jl/Yk5v74ucelZtkZIDJ9YV/o7kDDiueynnDOAZZsWUV9K81OuW+Ehvsfuimt6cIfIOwDy3Gx8DpAfg1cuJT4dNi9pakRfBRA5lUbdRUmdWCgV57cmlcF2aOfYV6T6m39IRvAhGMgaBkVSKlU/c1pyl+6OhLBtkmte2ZWcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sLSZk/Ph; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sLSZk/Ph; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	s=arc-20240116; t=1736933632; c=relaxed/simple;
+	bh=rPedh11dT0oJwg/Xb4ToTc99PKg9NVbmT6XR5tCk/p8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rP7abd2A8LAgyNtw4wPCrM9SSusyXXWL86YWz3Apj7sZYdd8J382Z9pd1di/S5Ma3amjlnE+kYkruckAY3wZqy9aNnKc+b/7wNLMhM9+hUcyG1CUdl6fznH3BJOu62Q4ZxLQKiAsLaFV2mC+CVXf04DXg0E7gTbrp5Ov3tV/41o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 46EBE1F460;
-	Wed, 15 Jan 2025 07:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1736926618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xdZROEtM/+x4f3o7nUlSSNxFgZRPyRGQwqI+al79wGw=;
-	b=sLSZk/Ph+bW1hN11VhI5yC75K4kttDvyFj40xvqjfuhzkMZAGo1IubuVx3wvgTsCmljZLV
-	QTeKOPct/jRC2VJZkbU1uWIPGL8WGqL2n1tG4aEVd5sJWmUZL1SU6He5RUC9vhr3b06Int
-	2oi8ah4UyH3pKv/lZDgUgjC5v9ac3wU=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b="sLSZk/Ph"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1736926618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xdZROEtM/+x4f3o7nUlSSNxFgZRPyRGQwqI+al79wGw=;
-	b=sLSZk/Ph+bW1hN11VhI5yC75K4kttDvyFj40xvqjfuhzkMZAGo1IubuVx3wvgTsCmljZLV
-	QTeKOPct/jRC2VJZkbU1uWIPGL8WGqL2n1tG4aEVd5sJWmUZL1SU6He5RUC9vhr3b06Int
-	2oi8ah4UyH3pKv/lZDgUgjC5v9ac3wU=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F311813A8A;
-	Wed, 15 Jan 2025 07:36:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 2LgmOZllh2crawAAD6G6ig
-	(envelope-from <nik.borisov@suse.com>); Wed, 15 Jan 2025 07:36:57 +0000
-From: Nikolay Borisov <nik.borisov@suse.com>
-To: linux-edac@vger.kernel.org
-Cc: x86@kernel.org,
-	linux-kernel@vger.kernel.org,
-	bp@alien8.de,
-	Nikolay Borisov <nik.borisov@suse.com>
-Subject: [RESEND PATCH 3/3] x86/mce: Make mce_notify_irq() depend on CONFIG_X86_MCELOG_LEGACY
-Date: Wed, 15 Jan 2025 09:36:40 +0200
-Message-ID: <20250115073640.77099-4-nik.borisov@suse.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250115073640.77099-1-nik.borisov@suse.com>
-References: <20250114163722.34850-1-nik.borisov@suse.com>
- <20250115073640.77099-1-nik.borisov@suse.com>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout2.hostsharing.net (Postfix) with ESMTPS id DBFEA2800BB78;
+	Wed, 15 Jan 2025 10:33:39 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id CAD094EE5E5; Wed, 15 Jan 2025 10:33:39 +0100 (CET)
+Date: Wed, 15 Jan 2025 10:33:39 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
+	bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+	oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
+	anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
+	peterz@infradead.org, tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v6] PCI: hotplug: Add a generic RAS tracepoint for
+ hotplug event
+Message-ID: <Z4eA866i9eup6os3@wunner.de>
+References: <20250115013753.49126-1-xueshuai@linux.alibaba.com>
+ <20250114214103.6b45d30d@gandalf.local.home>
+ <7b482de1-fa19-45d6-bd05-f1c3ebb77192@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 46EBE1F460
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	TO_DN_SOME(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_EQ_ENVFROM(0.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b482de1-fa19-45d6-bd05-f1c3ebb77192@linux.alibaba.com>
 
-mce_notify_irq() really depends on the legacy mcelog being enabled as
-otherwise mce_work_trigger() will never schedule the trigger work as
-mce_helper can't be set unless CONFIG_X86_MCELOG_LEGACY is defined.
+On Wed, Jan 15, 2025 at 11:59:13AM +0800, Shuai Xue wrote:
+> 2025/1/15 10:41, Steven Rostedt:
+> > On Wed, 15 Jan 2025 09:37:53 +0800 Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+> > > +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+> > > +					   slot_name(ctrl),
+> > > +					   PCI_HOTPLUG_LINK_DOWN);
+> > 
+> > Hmm, can't you just pass in the ctrl pointer to the tracepoint?
+> > 
+> > 			trace_pci_hp_event(ctrl, PCI_HOTPLUG_LINK_DOWN);
+> > 
+> > Then the above would be:
+> > 
+> > 	TP_PROTO(struct controller *ctrl, int event),
+> > 
+> > 	TP_ARGS(ctrl, event),
+> > 
+> > 	TP_STRUCT__entry(
+> > 		__string(	port_name,	pci_name(ctrl->pcie->port)	)
+> > 		__string(	slot,		slot_name(ctrl)			)
+> > 		__field(	int,		event				)
+> > 
+> > and everything else could be the same.
+> 
+> Maybe it's not a good idea.
+> 
+> I think pci_hp_event is a generic event for pciehp, shpchp, octep_hp, etc.
+> But each hotplug driver has different `struct controller` and slot_name().
+[...]
+> So, IMHO, pass port_name and slot_name from each driver is more simple.
+> 
+> + @Lukas for hotplug part.
 
-Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
----
- arch/x86/kernel/cpu/mce/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+You're right Shuai, there's several hotplug drivers in drivers/pci/hotplug/
+and pciehp is just one of them.  It's quite possible that other drivers
+besides pciehp will want to add trace points as well.  For consistency,
+the trace event definitions need to work for all drivers.
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 89625ff79c3b..b21aa1494da0 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -591,6 +591,7 @@ EXPORT_SYMBOL_GPL(mce_is_correctable);
-  */
- static int mce_notify_irq(void)
- {
-+#ifdef CONFIG_X86_MCELOG_LEGACY
- 	/* Not more than two messages every minute */
- 	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
+Thanks,
 
-@@ -602,7 +603,7 @@ static int mce_notify_irq(void)
-
- 		return 1;
- 	}
--
-+#endif
- 	return 0;
- }
-
---
-2.43.0
-
+Lukas
 
