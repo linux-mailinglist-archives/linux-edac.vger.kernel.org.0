@@ -1,72 +1,72 @@
-Return-Path: <linux-edac+bounces-2915-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2916-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 377BBA11B08
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 08:37:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 904CDA11B0B
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 08:37:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13DB5167F7F
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 07:37:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADE83188A76A
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 07:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6157E22FAD4;
-	Wed, 15 Jan 2025 07:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE202309A0;
+	Wed, 15 Jan 2025 07:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="N82z6qv3";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="N82z6qv3"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="JKOj6eqP";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="VUF1kOTK"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCD222F3A6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EA622D4FE;
 	Wed, 15 Jan 2025 07:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736926627; cv=none; b=OVseD+TwmLDoBWRKhSiPa9bi1ye6m8N+nFXXen1P+Cck92KrEfnTOfV++++TcPiYP1FTQv1UrSRnCLpeT+mK+PIY8O3njx4BV43/P2p1kahPr4qkT1A2BgyXmOtnznWfuK9NQLZLjc8ZX06m4MGxiFKYa+QCgYiioWP/irGsXKU=
+	t=1736926628; cv=none; b=Ci6VuDBKJxJ8p6CZ59NULTBh6tMSA6t3PXIeOG8jKVYImHu3zqmlYy9N0rRaWpR1COjY4QUWbADbXFxJ0cOeKFFXitWVevJBA+eivwvvhZDZhIPw7WdAg56+LPHO9a4ZqCe7Q1yYU7VUbrrGZsa4v2/VAdp2TTeYX6EsUCw+mCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736926627; c=relaxed/simple;
-	bh=D9h+tiP6JEtTHxSESOuMYqrrbcn5T1XnU7EvIPm8XQc=;
+	s=arc-20240116; t=1736926628; c=relaxed/simple;
+	bh=bubQLImu65flm70/on3dCd1WlrM2MFBB+nax2hDQYEY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UxVUz3yML1pUSxfwCWFlCGk7w9GchZDMRI30aaKEXHNT2KHfqQy3VGjxPhMnbtjOy3wSY4sqfdFr1wJc6WX6wUxW+9oEggvUbR106CzDCMqrW1ZjcfEp/h9k+aJ5eLok4fBWPBV4yrWwWGDd0R9FL9Tmn5lIN1aJONdpr6wUZr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=N82z6qv3; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=N82z6qv3; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=czY8hmClYcBG1qAljthIqhbdlFz6AUXqMwVnBKwmpDZPYuIW8vM+Zyqkem6ggL8xafzUqlXoxLC66FgV5vVEh9U2xriiKMRRC2hzF85TQqrsBraUoli7/ilUFJ+WdXhWFCq+IyVSeFwnfMt48KIL7/mjXN9l3HMxW/++XpxD21U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=JKOj6eqP; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=VUF1kOTK; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 98F692120C;
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E5A4F1F45B;
 	Wed, 15 Jan 2025 07:36:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1736926617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1736926618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sTH09SYz9NCYnEC36lz1B8Y+6XSMOmWFsvL3TMrAlMg=;
-	b=N82z6qv3dVAl4m10RlESBOF1LvESR2yUHjAxpo7DxMkHKrGs6LVVloBZ5eBKmGUQcX6g4h
-	nfX5kv+V35La6KfJBItPVoSii8fQU/LLfsnTclP1/PO9NK/AND9l2IeCRcrqa+3ET655qJ
-	t/2Ixk+0Nk+ZilAEace2f6k6ZnTHY1E=
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=N82z6qv3
+	bh=AmtiGEU5nfa2ZQGUM1wqI1t2aka/xCLqXqV6hlPOiB0=;
+	b=JKOj6eqPV2eDiAvpRTf/hXyrTRNpvNRik/kHRrwNyrUany9AD/g9H4I4qpDHoB3yxArYnq
+	bk4ySEqdhblwaPDvdCyxyrbuQmmFrHtpRBhunHRBMgx0EnO/rUvs90OM8wOQMgSN9RYlw1
+	s+PAiaSv9gXd0MHZcqVxUy0N2vxbOqc=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=VUF1kOTK
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
 	t=1736926617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sTH09SYz9NCYnEC36lz1B8Y+6XSMOmWFsvL3TMrAlMg=;
-	b=N82z6qv3dVAl4m10RlESBOF1LvESR2yUHjAxpo7DxMkHKrGs6LVVloBZ5eBKmGUQcX6g4h
-	nfX5kv+V35La6KfJBItPVoSii8fQU/LLfsnTclP1/PO9NK/AND9l2IeCRcrqa+3ET655qJ
-	t/2Ixk+0Nk+ZilAEace2f6k6ZnTHY1E=
+	bh=AmtiGEU5nfa2ZQGUM1wqI1t2aka/xCLqXqV6hlPOiB0=;
+	b=VUF1kOTKylB70/RENyiKvGCKgWvECiElxT5kaNn5GD+bUUj+8NcPIS2qtKSftEryMZi+Zj
+	i1v66EZLnpp/c962+c/psCFbCZkdLNYbkJkGUDKD8liBgg1G7snVL9CXX5NGxzwr0BP4Ep
+	xURJ7N+iUGqtK55pgQm9nynUatu26Vo=
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4728313A8A;
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9D5E4139CB;
 	Wed, 15 Jan 2025 07:36:57 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +NcbD5llh2crawAAD6G6ig
+	id mIIWJJllh2crawAAD6G6ig
 	(envelope-from <nik.borisov@suse.com>); Wed, 15 Jan 2025 07:36:57 +0000
 From: Nikolay Borisov <nik.borisov@suse.com>
 To: linux-edac@vger.kernel.org
@@ -74,9 +74,9 @@ Cc: x86@kernel.org,
 	linux-kernel@vger.kernel.org,
 	bp@alien8.de,
 	Nikolay Borisov <nik.borisov@suse.com>
-Subject: [RESEND PATCH 1/3] x86/mce/inject: Remova call to mce_notify_irq()
-Date: Wed, 15 Jan 2025 09:36:38 +0200
-Message-ID: <20250115073640.77099-2-nik.borisov@suse.com>
+Subject: [RESEND PATCH 2/3] x86/mce: Make mce_notify_irq() static
+Date: Wed, 15 Jan 2025 09:36:39 +0200
+Message-ID: <20250115073640.77099-3-nik.borisov@suse.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250115073640.77099-1-nik.borisov@suse.com>
 References: <20250114163722.34850-1-nik.borisov@suse.com>
@@ -88,10 +88,11 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 98F692120C
-X-Spam-Level: 
+X-Rspamd-Queue-Id: E5A4F1F45B
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
+	BAYES_HAM(-3.00)[100.00%];
 	MID_CONTAINS_FROM(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	R_MISSING_CHARSET(0.50)[];
@@ -116,47 +117,94 @@ X-Spamd-Result: default: False [-3.01 / 50.00];
 	RCVD_TLS_ALL(0.00)[];
 	DKIM_TRACE(0.00)[suse.com:+];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Flag: NO
+X-Spam-Level: 
 
-The call is actually a noop because when the MCE is raised the early
-notifier is the only call site that correctly calls mce_notify_irq()
-because it also sets mce_need_notify. So let's just remove this call,
-which allows to unexport mce_notify_irq.
+It's no longer used outside of core.c so let's make it static. No
+functional changes.
 
 Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
 ---
- arch/x86/kernel/cpu/mce/core.c   | 1 -
- arch/x86/kernel/cpu/mce/inject.c | 1 -
- 2 files changed, 2 deletions(-)
+ arch/x86/include/asm/mce.h     |  2 --
+ arch/x86/kernel/cpu/mce/core.c | 43 +++++++++++++++++-----------------
+ 2 files changed, 22 insertions(+), 23 deletions(-)
 
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index eb2db07ef39c..6c77c03139f7 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -296,8 +296,6 @@ enum mcp_flags {
+
+ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b);
+
+-bool mce_notify_irq(void);
+-
+ DECLARE_PER_CPU(struct mce, injectm);
+
+ /* Disable CMCI/polling for MCA bank claimed by firmware */
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 0dc00c9894c7..23e5e7f7c554 100644
+index 23e5e7f7c554..89625ff79c3b 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1793,7 +1793,6 @@ bool mce_notify_irq(void)
- 	}
- 	return false;
+@@ -584,6 +584,28 @@ bool mce_is_correctable(struct mce *m)
  }
--EXPORT_SYMBOL_GPL(mce_notify_irq);
+ EXPORT_SYMBOL_GPL(mce_is_correctable);
 
++/*
++ * Notify the user(s) about new machine check events.
++ * Can be called from interrupt context, but not from machine check/NMI
++ * context.
++ */
++static int mce_notify_irq(void)
++{
++	/* Not more than two messages every minute */
++	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
++
++	if (test_and_clear_bit(0, &mce_need_notify)) {
++		mce_work_trigger();
++
++		if (__ratelimit(&ratelimit))
++			pr_info(HW_ERR "Machine check events logged\n");
++
++		return 1;
++	}
++
++	return 0;
++}
++
+ static int mce_early_notifier(struct notifier_block *nb, unsigned long val,
+ 			      void *data)
+ {
+@@ -1773,27 +1795,6 @@ static void mce_timer_delete_all(void)
+ 		del_timer_sync(&per_cpu(mce_timer, cpu));
+ }
+
+-/*
+- * Notify the user(s) about new machine check events.
+- * Can be called from interrupt context, but not from machine check/NMI
+- * context.
+- */
+-bool mce_notify_irq(void)
+-{
+-	/* Not more than two messages every minute */
+-	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
+-
+-	if (test_and_clear_bit(0, &mce_need_notify)) {
+-		mce_work_trigger();
+-
+-		if (__ratelimit(&ratelimit))
+-			pr_info(HW_ERR "Machine check events logged\n");
+-
+-		return true;
+-	}
+-	return false;
+-}
+-
  static void __mcheck_cpu_mce_banks_init(void)
  {
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 313fe682db33..06e3cf7229ce 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -229,7 +229,6 @@ static int raise_local(void)
- 	} else if (m->status) {
- 		pr_info("Starting machine check poll CPU %d\n", cpu);
- 		raise_poll(m);
--		mce_notify_irq();
- 		pr_info("Machine check poll done on CPU %d\n", cpu);
- 	} else
- 		m->finished = 0;
+ 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
 --
 2.43.0
 
