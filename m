@@ -1,72 +1,72 @@
-Return-Path: <linux-edac+bounces-2916-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2914-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 904CDA11B0B
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 08:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE3FAA11B06
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 08:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADE83188A76A
-	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 07:37:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 085EF188A6DE
+	for <lists+linux-edac@lfdr.de>; Wed, 15 Jan 2025 07:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE202309A0;
-	Wed, 15 Jan 2025 07:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 345C822F84F;
+	Wed, 15 Jan 2025 07:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="JKOj6eqP";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="VUF1kOTK"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sLSZk/Ph";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sLSZk/Ph"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EA622D4FE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F1122F166;
 	Wed, 15 Jan 2025 07:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736926628; cv=none; b=Ci6VuDBKJxJ8p6CZ59NULTBh6tMSA6t3PXIeOG8jKVYImHu3zqmlYy9N0rRaWpR1COjY4QUWbADbXFxJ0cOeKFFXitWVevJBA+eivwvvhZDZhIPw7WdAg56+LPHO9a4ZqCe7Q1yYU7VUbrrGZsa4v2/VAdp2TTeYX6EsUCw+mCQ=
+	t=1736926627; cv=none; b=BHDYsFRXkbjUGMMXvaLcYSr8MUTwPDwLzRlFekHWFebwXr2hhGOgagFijIJGJVuStfpgju7XUjNTQrH4kGmjdzLhtGpDVeuseGTAy3/V71Rb7oAvFWwbKiU6rmBlkxba0loi+JX6Zz0Sfh/+XHQHUX61c7pQ63Aw40vDoTx/e9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736926628; c=relaxed/simple;
-	bh=bubQLImu65flm70/on3dCd1WlrM2MFBB+nax2hDQYEY=;
+	s=arc-20240116; t=1736926627; c=relaxed/simple;
+	bh=Ta7/wk8PG440NjsU9HbIWpLwKT0+QfOFmgb13BivgPw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=czY8hmClYcBG1qAljthIqhbdlFz6AUXqMwVnBKwmpDZPYuIW8vM+Zyqkem6ggL8xafzUqlXoxLC66FgV5vVEh9U2xriiKMRRC2hzF85TQqrsBraUoli7/ilUFJ+WdXhWFCq+IyVSeFwnfMt48KIL7/mjXN9l3HMxW/++XpxD21U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=JKOj6eqP; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=VUF1kOTK; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version; b=H091Jl/Yk5v74ucelZtkZIDJ9YV/o7kDDiueynnDOAZZsWUV9K81OuW+Ehvsfuimt6cIfIOwDy3Gx8DpAfg1cuJT4dNi9pakRfBRA5lUbdRUmdWCgV57cmlcF2aOfYV6T6m39IRvAhGMgaBkVSKlU/c1pyl+6OhLBtkmte2ZWcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sLSZk/Ph; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sLSZk/Ph; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E5A4F1F45B;
-	Wed, 15 Jan 2025 07:36:57 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 46EBE1F460;
+	Wed, 15 Jan 2025 07:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
 	t=1736926618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AmtiGEU5nfa2ZQGUM1wqI1t2aka/xCLqXqV6hlPOiB0=;
-	b=JKOj6eqPV2eDiAvpRTf/hXyrTRNpvNRik/kHRrwNyrUany9AD/g9H4I4qpDHoB3yxArYnq
-	bk4ySEqdhblwaPDvdCyxyrbuQmmFrHtpRBhunHRBMgx0EnO/rUvs90OM8wOQMgSN9RYlw1
-	s+PAiaSv9gXd0MHZcqVxUy0N2vxbOqc=
+	bh=xdZROEtM/+x4f3o7nUlSSNxFgZRPyRGQwqI+al79wGw=;
+	b=sLSZk/Ph+bW1hN11VhI5yC75K4kttDvyFj40xvqjfuhzkMZAGo1IubuVx3wvgTsCmljZLV
+	QTeKOPct/jRC2VJZkbU1uWIPGL8WGqL2n1tG4aEVd5sJWmUZL1SU6He5RUC9vhr3b06Int
+	2oi8ah4UyH3pKv/lZDgUgjC5v9ac3wU=
 Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=VUF1kOTK
+	dkim=pass header.d=suse.com header.s=susede1 header.b="sLSZk/Ph"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1736926617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1736926618; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AmtiGEU5nfa2ZQGUM1wqI1t2aka/xCLqXqV6hlPOiB0=;
-	b=VUF1kOTKylB70/RENyiKvGCKgWvECiElxT5kaNn5GD+bUUj+8NcPIS2qtKSftEryMZi+Zj
-	i1v66EZLnpp/c962+c/psCFbCZkdLNYbkJkGUDKD8liBgg1G7snVL9CXX5NGxzwr0BP4Ep
-	xURJ7N+iUGqtK55pgQm9nynUatu26Vo=
+	bh=xdZROEtM/+x4f3o7nUlSSNxFgZRPyRGQwqI+al79wGw=;
+	b=sLSZk/Ph+bW1hN11VhI5yC75K4kttDvyFj40xvqjfuhzkMZAGo1IubuVx3wvgTsCmljZLV
+	QTeKOPct/jRC2VJZkbU1uWIPGL8WGqL2n1tG4aEVd5sJWmUZL1SU6He5RUC9vhr3b06Int
+	2oi8ah4UyH3pKv/lZDgUgjC5v9ac3wU=
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9D5E4139CB;
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F311813A8A;
 	Wed, 15 Jan 2025 07:36:57 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id mIIWJJllh2crawAAD6G6ig
+	id 2LgmOZllh2crawAAD6G6ig
 	(envelope-from <nik.borisov@suse.com>); Wed, 15 Jan 2025 07:36:57 +0000
 From: Nikolay Borisov <nik.borisov@suse.com>
 To: linux-edac@vger.kernel.org
@@ -74,9 +74,9 @@ Cc: x86@kernel.org,
 	linux-kernel@vger.kernel.org,
 	bp@alien8.de,
 	Nikolay Borisov <nik.borisov@suse.com>
-Subject: [RESEND PATCH 2/3] x86/mce: Make mce_notify_irq() static
-Date: Wed, 15 Jan 2025 09:36:39 +0200
-Message-ID: <20250115073640.77099-3-nik.borisov@suse.com>
+Subject: [RESEND PATCH 3/3] x86/mce: Make mce_notify_irq() depend on CONFIG_X86_MCELOG_LEGACY
+Date: Wed, 15 Jan 2025 09:36:40 +0200
+Message-ID: <20250115073640.77099-4-nik.borisov@suse.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250115073640.77099-1-nik.borisov@suse.com>
 References: <20250114163722.34850-1-nik.borisov@suse.com>
@@ -88,11 +88,10 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: E5A4F1F45B
-X-Spam-Score: -3.01
-X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 46EBE1F460
+X-Spam-Level: 
 X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
+	BAYES_HAM(-3.00)[99.99%];
 	MID_CONTAINS_FROM(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	R_MISSING_CHARSET(0.50)[];
@@ -117,94 +116,42 @@ X-Spamd-Result: default: False [-3.01 / 50.00];
 	RCVD_TLS_ALL(0.00)[];
 	DKIM_TRACE(0.00)[suse.com:+];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
 X-Spam-Flag: NO
-X-Spam-Level: 
 
-It's no longer used outside of core.c so let's make it static. No
-functional changes.
+mce_notify_irq() really depends on the legacy mcelog being enabled as
+otherwise mce_work_trigger() will never schedule the trigger work as
+mce_helper can't be set unless CONFIG_X86_MCELOG_LEGACY is defined.
 
 Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
 ---
- arch/x86/include/asm/mce.h     |  2 --
- arch/x86/kernel/cpu/mce/core.c | 43 +++++++++++++++++-----------------
- 2 files changed, 22 insertions(+), 23 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index eb2db07ef39c..6c77c03139f7 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -296,8 +296,6 @@ enum mcp_flags {
-
- void machine_check_poll(enum mcp_flags flags, mce_banks_t *b);
-
--bool mce_notify_irq(void);
--
- DECLARE_PER_CPU(struct mce, injectm);
-
- /* Disable CMCI/polling for MCA bank claimed by firmware */
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 23e5e7f7c554..89625ff79c3b 100644
+index 89625ff79c3b..b21aa1494da0 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -584,6 +584,28 @@ bool mce_is_correctable(struct mce *m)
- }
- EXPORT_SYMBOL_GPL(mce_is_correctable);
-
-+/*
-+ * Notify the user(s) about new machine check events.
-+ * Can be called from interrupt context, but not from machine check/NMI
-+ * context.
-+ */
-+static int mce_notify_irq(void)
-+{
-+	/* Not more than two messages every minute */
-+	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
-+
-+	if (test_and_clear_bit(0, &mce_need_notify)) {
-+		mce_work_trigger();
-+
-+		if (__ratelimit(&ratelimit))
-+			pr_info(HW_ERR "Machine check events logged\n");
-+
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
- static int mce_early_notifier(struct notifier_block *nb, unsigned long val,
- 			      void *data)
+@@ -591,6 +591,7 @@ EXPORT_SYMBOL_GPL(mce_is_correctable);
+  */
+ static int mce_notify_irq(void)
  {
-@@ -1773,27 +1795,6 @@ static void mce_timer_delete_all(void)
- 		del_timer_sync(&per_cpu(mce_timer, cpu));
++#ifdef CONFIG_X86_MCELOG_LEGACY
+ 	/* Not more than two messages every minute */
+ 	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
+
+@@ -602,7 +603,7 @@ static int mce_notify_irq(void)
+
+ 		return 1;
+ 	}
+-
++#endif
+ 	return 0;
  }
 
--/*
-- * Notify the user(s) about new machine check events.
-- * Can be called from interrupt context, but not from machine check/NMI
-- * context.
-- */
--bool mce_notify_irq(void)
--{
--	/* Not more than two messages every minute */
--	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
--
--	if (test_and_clear_bit(0, &mce_need_notify)) {
--		mce_work_trigger();
--
--		if (__ratelimit(&ratelimit))
--			pr_info(HW_ERR "Machine check events logged\n");
--
--		return true;
--	}
--	return false;
--}
--
- static void __mcheck_cpu_mce_banks_init(void)
- {
- 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
 --
 2.43.0
 
