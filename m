@@ -1,126 +1,156 @@
-Return-Path: <linux-edac+bounces-2928-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2929-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34461A15B7A
-	for <lists+linux-edac@lfdr.de>; Sat, 18 Jan 2025 06:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 58A28A15C74
+	for <lists+linux-edac@lfdr.de>; Sat, 18 Jan 2025 12:09:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF601188963F
-	for <lists+linux-edac@lfdr.de>; Sat, 18 Jan 2025 05:13:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCBC61887C97
+	for <lists+linux-edac@lfdr.de>; Sat, 18 Jan 2025 11:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0562284D02;
-	Sat, 18 Jan 2025 05:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97E8615FD01;
+	Sat, 18 Jan 2025 11:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HERuR3em"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Ve0lf8Wj"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2179739FD9;
-	Sat, 18 Jan 2025 05:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984BC126C18;
+	Sat, 18 Jan 2025 11:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737177210; cv=none; b=g8HcAReC+jYCN5OvMZFh8HgiKinqFrXLfZL3igf24LuXW2oN0+9V94/TcwuTxUe348WSDXnO9PSE2ztnB6kXPne538ga0Q4KoSIJIHB+R4m7nybznmAdViZymFUE9edUR+Tmlb7Kd4bRtlG7AFrPonO9FJM+1L2EOmqyu/LfZDQ=
+	t=1737198579; cv=none; b=mPi7xl5xoCelBa+S6Xm3fkGu8VGUF4C9FmIkdzj75avDVuG4+egXifK6Ue2sMaufwiPN1ZIDcxiS6M6FN07wx+9vrO42RqouStBHLdXvM348/RmxL3BTxWLnUnX0o2G6smunKHu0mmR1ahm5+zHK8pPlBO1qKP6u0nASJads+PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737177210; c=relaxed/simple;
-	bh=qrqjIdPc4T8eUdQHTfJmEtboo7rW8s3cxOidyzMOpkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lVnC1ynrwoIi2OT+nSrOnhSOzv1JrXltLCdr+Ii/KI3LwOSymKaoAdQpQUAlhYY2c6PGxQOed9NIqP0YTxqkSp7Azc30ZQ1uxZFu7W1Khebrsj0ok1oRml64DVQNpYxlnbYyHsrAlYYrb/xc+v49maFApy0i0DV4Jkk/tHbL+s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HERuR3em; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737177209; x=1768713209;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qrqjIdPc4T8eUdQHTfJmEtboo7rW8s3cxOidyzMOpkI=;
-  b=HERuR3emHBwCjYjyRAdAZX+lvjFX8XXOgjiI4HcI2YYYwNvoV3fnc09g
-   zad/0nrK3b81+ZyDUZPQVwyA1SJ+49W9rT7yLm7lBxqwF6b5sPg8JdNHc
-   c1OPT52evGW73rr4yttkXmVH1XsmOab0L+/VCQjdd8ZuShtGB7kmhZcvi
-   OPSZBYZJSUHOD8fXumM+suge42o2e8cW1QVV8igr0yf1tJb2mY2SMhW9K
-   oo6sWY10E0450jlGEQRXLhpBBh3dGGY6YY+4lLu6j4/oqVNk5BCS2tb1R
-   4/TwqvagLGbhBFvCubOQecHPRW8vFl1pFBy9hzJ1Qr3AMTQoNDLq3QWh0
-   w==;
-X-CSE-ConnectionGUID: NQc5+eYcQw6Ywv86gPvYDA==
-X-CSE-MsgGUID: KJxENMHiQTSnyhZNpBor8Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="41548473"
-X-IronPort-AV: E=Sophos;i="6.13,214,1732608000"; 
-   d="scan'208";a="41548473"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 21:13:29 -0800
-X-CSE-ConnectionGUID: PR2naFDUQxaDMLm0e9wFyg==
-X-CSE-MsgGUID: F/8lLk9mQrSh4a+OLurkyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,214,1732608000"; 
-   d="scan'208";a="136826982"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 17 Jan 2025 21:13:24 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tZ197-000U71-1f;
-	Sat, 18 Jan 2025 05:13:21 +0000
-Date: Sat, 18 Jan 2025 13:13:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shuai Xue <xueshuai@linux.alibaba.com>, rostedt@goodmis.org,
-	lukas@wunner.de, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, helgaas@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
-	xueshuai@linux.alibaba.com, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
-	davem@davemloft.net, anil.s.keshavamurthy@intel.com,
-	mark.rutland@arm.com, peterz@infradead.org,
-	tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v6] PCI: hotplug: Add a generic RAS tracepoint for
- hotplug event
-Message-ID: <202501181212.7IZfQ160-lkp@intel.com>
-References: <20250115013753.49126-1-xueshuai@linux.alibaba.com>
+	s=arc-20240116; t=1737198579; c=relaxed/simple;
+	bh=/RP/y0VzEc7l3rlxelm69dHgxhfCVSW7oEytkB95P+Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kU3jSqBT2dnqPYTpurbd5JQzJI8OAtBjb+E5ahOfZNIXhFblC1ZvHq62Fw/T5PtFDboxgpcun2bhQXiwsKIiRl/tnrLOv0vCeZ7mil0X3tGWimSnvKDmRANBNEh3HxmxBVsVcq7GzoFA/7Rbksk/gahlVRHDfH5T79XS7eqYyTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Ve0lf8Wj; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 19CF740E0376;
+	Sat, 18 Jan 2025 11:09:33 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id kdEyycIHLOIL; Sat, 18 Jan 2025 11:09:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1737198569; bh=E7yArSeJJYIlTrb4H7Kl9AdqhVtIlzeoln/zez6MT3M=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Ve0lf8WjSR7tMxXm1yTdPIBL8YVf6U1oul1pmqAy/axBNsl4RGljYmmVuYU6kvLnK
+	 STKlhZpEJUznhrG50AeaJOQ9S9qi+O5kCB++Las9W9ayzxtbg8xpPIu745cf2CC289
+	 zR3ZbLiQemrTNILWs28JA1slBzI1e02xQSodoYnb7HsNZxk9XCrAG4yzO5Jgzl6YeU
+	 4oyQOknP3ouWURaHcOhaJhFUsWIyfe13cmQhLAQrGPvfOouT1LuFDKQwdg9VolnLbc
+	 Gq4xOHREXY7Pr04+JpxKwK1toQdcRQvymJpnpykaHkgcAmCG2CXeAQrvYzo+fcDYTM
+	 TaXd0UpDKCUo6Yf2e4HWN5Gaji+YNnRUHxL1d/s3fbEkTScTLa9d0FUIiDyX+6JrB3
+	 7LcjYBQj1gTSKkrM1wlGF97fPpnMkAVrUAn7DRzTkb5lUqMtyUClvASpxpap6ziH7A
+	 2sFyrEKSpjtgSGe4svnSzogDnKfZifBIx/wct2H2G2+bP4CcvNVbNUlHhnJ5JziZcD
+	 nsqmOh6qRzxy+c12QmKTRJ10qhgEZ67m57x2Rw0Gw7mRYysSNaBfsA5k33m8shGOyd
+	 RDuyEWD3/Bm9WeeEEAIEeNIe2sS1Rp4jSQ/V034K8V6xJ2Vn5UPtbV5GahON1sMGle
+	 2fgFAD29Cu/HJqn1vJu6Ha4A=
+Received: from zn.tnic (p200300ea971F9362329C23fFfEa6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:9362:329c:23ff:fea6:a903])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5D7E040E0289;
+	Sat, 18 Jan 2025 11:09:26 +0000 (UTC)
+Date: Sat, 18 Jan 2025 12:09:17 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.14
+Message-ID: <20250118110917.GAZ4uL3XJE4ICoZfx8@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250115013753.49126-1-xueshuai@linux.alibaba.com>
 
-Hi Shuai,
+Hi Linus,
 
-kernel test robot noticed the following build errors:
+please pull the accumulated EDAC lineup for v6.14.
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v6.13-rc7 next-20250117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thx.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shuai-Xue/PCI-hotplug-Add-a-generic-RAS-tracepoint-for-hotplug-event/20250115-094016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20250115013753.49126-1-xueshuai%40linux.alibaba.com
-patch subject: [PATCH v6] PCI: hotplug: Add a generic RAS tracepoint for hotplug event
-config: i386-buildonly-randconfig-004-20250116 (https://download.01.org/0day-ci/archive/20250118/202501181212.7IZfQ160-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501181212.7IZfQ160-lkp@intel.com/reproduce)
+---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501181212.7IZfQ160-lkp@intel.com/
+The following changes since commit fac04efc5c793dccbd07e2d59af9f90b7fc0dca4:
 
-All errors (new ones prefixed by >>):
+  Linux 6.13-rc2 (2024-12-08 14:03:39 -0800)
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/pci.h:22:10: fatal error: 'linux/tracepoint.h' file not found
-      22 | #include <linux/tracepoint.h>
-         |          ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac_updates_for_v6.14
+
+for you to fetch changes up to 368736db4d1c317ad065a1c827b09cfac942e05a:
+
+  Merge remote-tracking branches 'ras/edac-drivers' and 'ras/edac-misc' into edac-updates (2025-01-17 19:36:27 +0100)
+
+----------------------------------------------------------------
+- Remove the EDAC PowerPC Cell driver due to the removal of the IBM Cell
+  blades support
+
+- Add a new EDAC driver for Loongson SoCs which reports single-bit correctable
+  errors
+
+- Extend the SKX and i10NM EDAC drivers to support UV systems which can have
+  more than 8 nodes
+
+- Add Intel Clearwater Forest server support to i10nm_edac
+
+- Minor fix
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (1):
+      Merge remote-tracking branches 'ras/edac-drivers' and 'ras/edac-misc' into edac-updates
+
+Kyle Meyer (1):
+      EDAC/{i10nm,skx,skx_common}: Support UV systems
+
+Michael Ellerman (1):
+      EDAC/cell: Remove powerpc Cell driver
+
+Qiuxu Zhuo (1):
+      EDAC/i10nm: Add Intel Clearwater Forest server support
+
+Yan Zhen (1):
+      EDAC: Fix typos in comments
+
+Zhao Qunqin (1):
+      EDAC: Add an EDAC driver for the Loongson memory controller
+
+ MAINTAINERS                         |   6 +
+ arch/loongarch/Kconfig              |   1 +
+ arch/powerpc/configs/cell_defconfig |   1 -
+ drivers/edac/Kconfig                |  16 +-
+ drivers/edac/Makefile               |   3 +-
+ drivers/edac/cell_edac.c            | 281 ------------------------------------
+ drivers/edac/edac_mc.c              |   2 +-
+ drivers/edac/edac_mc_sysfs.c        |   6 +-
+ drivers/edac/i10nm_base.c           |  12 +-
+ drivers/edac/i5000_edac.c           |   8 +-
+ drivers/edac/loongson_edac.c        | 157 ++++++++++++++++++++
+ drivers/edac/skx_base.c             |   9 +-
+ drivers/edac/skx_common.c           |  47 ++++--
+ drivers/edac/skx_common.h           |   3 +-
+ 14 files changed, 222 insertions(+), 330 deletions(-)
+ delete mode 100644 drivers/edac/cell_edac.c
+ create mode 100644 drivers/edac/loongson_edac.c
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
