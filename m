@@ -1,124 +1,126 @@
-Return-Path: <linux-edac+bounces-2927-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2928-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85CA6A13F09
-	for <lists+linux-edac@lfdr.de>; Thu, 16 Jan 2025 17:15:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34461A15B7A
+	for <lists+linux-edac@lfdr.de>; Sat, 18 Jan 2025 06:13:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E40287A52DE
-	for <lists+linux-edac@lfdr.de>; Thu, 16 Jan 2025 16:14:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF601188963F
+	for <lists+linux-edac@lfdr.de>; Sat, 18 Jan 2025 05:13:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3754622BAD9;
-	Thu, 16 Jan 2025 16:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0562284D02;
+	Sat, 18 Jan 2025 05:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="KiasD7Lt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HERuR3em"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF32D22A7FA
-	for <linux-edac@vger.kernel.org>; Thu, 16 Jan 2025 16:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2179739FD9;
+	Sat, 18 Jan 2025 05:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737044098; cv=none; b=i+jK3xlkH9FZt1nwq0VvpazwjZ082FDM+PaMXrRBSMbh0hrT9ZzUVHcCIFUrx2Rb0ISKU2VQTX2SoSZAPDxDtWSGGAtxsZXblhKQcqoAdwPgfVgcFELK9ittxafxX82ePhlAI3dDzSlBbD3+j6f2IFwL1MYbor3oeFZWmkAjfJI=
+	t=1737177210; cv=none; b=g8HcAReC+jYCN5OvMZFh8HgiKinqFrXLfZL3igf24LuXW2oN0+9V94/TcwuTxUe348WSDXnO9PSE2ztnB6kXPne538ga0Q4KoSIJIHB+R4m7nybznmAdViZymFUE9edUR+Tmlb7Kd4bRtlG7AFrPonO9FJM+1L2EOmqyu/LfZDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737044098; c=relaxed/simple;
-	bh=TF/rE5gO8F+6ECzTVonK6BvUAyoSxu7YIxsQjT2VTo4=;
+	s=arc-20240116; t=1737177210; c=relaxed/simple;
+	bh=qrqjIdPc4T8eUdQHTfJmEtboo7rW8s3cxOidyzMOpkI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eJfQVKYZpXMAl0WveNMoUSrzSk+a/VKujN5/FNmrBG8Nv7ALVf0qhoLLBB2BuomZA6kEJLUKsCuOnlmRWcGQapkE31ZRTv5c0xS3SJjyJGvj/tDODypZtnQ3FFFNJL6qb3IekuCroYVtC9Vr/4Wen3DJ0IlMt5+oujjVYl8R5s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=KiasD7Lt; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A437140E0289;
-	Thu, 16 Jan 2025 16:14:53 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id DSpXVCCTm0WF; Thu, 16 Jan 2025 16:14:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1737044089; bh=4cbtXMLzyPopkztv6BQOuugSdO0Hp2ZJ/CR118F3wDE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KiasD7Ltwg0G/SI2EIAC+122DCxFU9a5tvYr/5rEiIw5Rk518f/QKDhVcZieo1NL7
-	 Zo/HitIcvRaEAYzL9/0WF5r0aKcKdvRVotnU2itLnd0WYWTu+X8IUZpZd4mqmQRoK7
-	 f9TjPLGUHlLQpaGO5Cjb2zPfzgPlH/BRo4Tm5mtgklbFVC/NUZcaKDMrDNYIqSWDru
-	 2fPKzb0Ku/nBGjk6h9LusDshF+EEnK2rUMezcQcLF0ylLr5YkK+cG467m5qEN8EKMD
-	 N22h1xlZ9XjHh6quo7eN6WpUIm//TI24G6w0wSGy5P6hQHzzf8HHc3E0sGpkMGJBo2
-	 nmNmHoGZsXXCo3KxzoJkd1mbIAgLsgO5t0atXAms697kQgUEkwkW9qtRefvgqkmGYo
-	 +D/9cnzrxdd4kUpx3Tt3nLUgRINQmzqg+RhPHEW4N8L4sc25xlH9dyQCYSddNEDEWJ
-	 aFgsH9NBgP+CZf6nPJBcgGc7CIpOyJ5KoDyQdiHeqpQpale0U8Ims1enTAvijjrL+d
-	 htZMPJS4BiDknjUywCNGux+fCjvZGRIUAcMXIDmp7eWl/ncPTsQwu/hjcZgF0gdgcU
-	 pBb2XYdNlWUc3YvaHbxcDH4fNUxMabBfKNcQSfpu2hzYHQyRcu5hpTeaqcHQfn4J+C
-	 inbcteCotyFFuf+Fepd94VDY=
-Received: from zn.tnic (p200300ea971f934f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:934f:329c:23ff:fea6:a903])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9787240E0288;
-	Thu, 16 Jan 2025 16:14:43 +0000 (UTC)
-Date: Thu, 16 Jan 2025 17:14:36 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linuxppc-dev@lists.ozlabs.org, arnd@arndb.de, jk@ozlabs.org,
-	segher@kernel.crashing.org, linux-edac@vger.kernel.org
-Subject: Re: [PATCH v2 23/25] EDAC/cell: Remove powerpc Cell driver
-Message-ID: <20250116161436.GEZ4kwbBSanEBdIb5c@fat_crate.local>
-References: <20241218105523.416573-1-mpe@ellerman.id.au>
- <20241218105523.416573-23-mpe@ellerman.id.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lVnC1ynrwoIi2OT+nSrOnhSOzv1JrXltLCdr+Ii/KI3LwOSymKaoAdQpQUAlhYY2c6PGxQOed9NIqP0YTxqkSp7Azc30ZQ1uxZFu7W1Khebrsj0ok1oRml64DVQNpYxlnbYyHsrAlYYrb/xc+v49maFApy0i0DV4Jkk/tHbL+s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HERuR3em; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737177209; x=1768713209;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qrqjIdPc4T8eUdQHTfJmEtboo7rW8s3cxOidyzMOpkI=;
+  b=HERuR3emHBwCjYjyRAdAZX+lvjFX8XXOgjiI4HcI2YYYwNvoV3fnc09g
+   zad/0nrK3b81+ZyDUZPQVwyA1SJ+49W9rT7yLm7lBxqwF6b5sPg8JdNHc
+   c1OPT52evGW73rr4yttkXmVH1XsmOab0L+/VCQjdd8ZuShtGB7kmhZcvi
+   OPSZBYZJSUHOD8fXumM+suge42o2e8cW1QVV8igr0yf1tJb2mY2SMhW9K
+   oo6sWY10E0450jlGEQRXLhpBBh3dGGY6YY+4lLu6j4/oqVNk5BCS2tb1R
+   4/TwqvagLGbhBFvCubOQecHPRW8vFl1pFBy9hzJ1Qr3AMTQoNDLq3QWh0
+   w==;
+X-CSE-ConnectionGUID: NQc5+eYcQw6Ywv86gPvYDA==
+X-CSE-MsgGUID: KJxENMHiQTSnyhZNpBor8Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="41548473"
+X-IronPort-AV: E=Sophos;i="6.13,214,1732608000"; 
+   d="scan'208";a="41548473"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 21:13:29 -0800
+X-CSE-ConnectionGUID: PR2naFDUQxaDMLm0e9wFyg==
+X-CSE-MsgGUID: F/8lLk9mQrSh4a+OLurkyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,214,1732608000"; 
+   d="scan'208";a="136826982"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 17 Jan 2025 21:13:24 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tZ197-000U71-1f;
+	Sat, 18 Jan 2025 05:13:21 +0000
+Date: Sat, 18 Jan 2025 13:13:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shuai Xue <xueshuai@linux.alibaba.com>, rostedt@goodmis.org,
+	lukas@wunner.de, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, helgaas@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
+	xueshuai@linux.alibaba.com, mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
+	davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+	mark.rutland@arm.com, peterz@infradead.org,
+	tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v6] PCI: hotplug: Add a generic RAS tracepoint for
+ hotplug event
+Message-ID: <202501181212.7IZfQ160-lkp@intel.com>
+References: <20250115013753.49126-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241218105523.416573-23-mpe@ellerman.id.au>
+In-Reply-To: <20250115013753.49126-1-xueshuai@linux.alibaba.com>
 
-On Wed, Dec 18, 2024 at 09:55:11PM +1100, Michael Ellerman wrote:
-> This driver can no longer be built since support for IBM Cell Blades was
-> removed, in particular PPC_CELL_COMMON.
-> 
-> Remove the driver.
-> 
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> ---
-> v2: Rebase.
-> 
-> Cc: linux-edac@vger.kernel.org
-> 
->  drivers/edac/Kconfig     |   8 --
->  drivers/edac/Makefile    |   2 -
->  drivers/edac/cell_edac.c | 281 ---------------------------------------
->  3 files changed, 291 deletions(-)
->  delete mode 100644 drivers/edac/cell_edac.c
+Hi Shuai,
 
-You forgot a spot:
+kernel test robot noticed the following build errors:
 
-diff --git a/arch/powerpc/configs/cell_defconfig b/arch/powerpc/configs/cell_defconfig
-index 53f43a34e1a9..b33f0034990c 100644
---- a/arch/powerpc/configs/cell_defconfig
-+++ b/arch/powerpc/configs/cell_defconfig
-@@ -168,7 +168,6 @@ CONFIG_INFINIBAND_MTHCA=m
- CONFIG_INFINIBAND_IPOIB=m
- CONFIG_INFINIBAND_IPOIB_DEBUG_DATA=y
- CONFIG_EDAC=y
--CONFIG_EDAC_CELL=y
- CONFIG_UIO=m
- CONFIG_EXT2_FS=y
- CONFIG_EXT4_FS=y
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master v6.13-rc7 next-20250117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Queued with that hunk added.
+url:    https://github.com/intel-lab-lkp/linux/commits/Shuai-Xue/PCI-hotplug-Add-a-generic-RAS-tracepoint-for-hotplug-event/20250115-094016
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250115013753.49126-1-xueshuai%40linux.alibaba.com
+patch subject: [PATCH v6] PCI: hotplug: Add a generic RAS tracepoint for hotplug event
+config: i386-buildonly-randconfig-004-20250116 (https://download.01.org/0day-ci/archive/20250118/202501181212.7IZfQ160-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501181212.7IZfQ160-lkp@intel.com/reproduce)
 
-Thx.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501181212.7IZfQ160-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/linux/pci.h:22:10: fatal error: 'linux/tracepoint.h' file not found
+      22 | #include <linux/tracepoint.h>
+         |          ^~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
