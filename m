@@ -1,480 +1,659 @@
-Return-Path: <linux-edac+bounces-2935-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2936-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F1FFA18511
-	for <lists+linux-edac@lfdr.de>; Tue, 21 Jan 2025 19:16:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC038A18812
+	for <lists+linux-edac@lfdr.de>; Wed, 22 Jan 2025 00:01:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31F9F18839C8
-	for <lists+linux-edac@lfdr.de>; Tue, 21 Jan 2025 18:16:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F0E116A04B
+	for <lists+linux-edac@lfdr.de>; Tue, 21 Jan 2025 23:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5FA1F5403;
-	Tue, 21 Jan 2025 18:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC7CD1E9B0A;
+	Tue, 21 Jan 2025 23:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="OAUxalRU"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11020121.outbound.protection.outlook.com [52.101.56.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2846519F424;
-	Tue, 21 Jan 2025 18:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737483404; cv=none; b=I9VmxYPIdMnfmUu/9p/vMb97yNkqI6vZ43xSOJ/i0Pk7gLTxLcSb3UPDXu+2gsQ+2m7vsTdR7qOcReHXngpHTW/wtM8fVH9U3vkIBtK3oK6cTrmH+AuGVDejAnfdfrPxbcozT62x/tbagEHCUyeW5dCol/CQA6iq1rwcqWJjhdg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737483404; c=relaxed/simple;
-	bh=gjwpNw5OGaTBwscHmvWr0PiuOtX46QpIj9dpYx/ror4=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T9skBAO2DMXR28mh01J3GIFeoktakOzZlIBLmTjco0QQeKROCSRceUhEruCA+LZxJV8BI22M4UZydJZWRNy6PHxXAw6noQm8X5EQoiahRIgdKrTJe5E9J9kcAHm4yeq8PMJN7IvCTAYPTOZda/wPZxTrtGyO/wA386b6uNMGW0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YcwPy6XZzz6K9K3;
-	Wed, 22 Jan 2025 02:16:22 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8AB7B1400DB;
-	Wed, 22 Jan 2025 02:16:36 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 21 Jan
- 2025 19:16:34 +0100
-Date: Tue, 21 Jan 2025 18:16:32 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Borislav Petkov <bp@alien8.de>
-CC: Shiju Jose <shiju.jose@huawei.com>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-cxl@vger.kernel.org"
-	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "rafael@kernel.org"
-	<rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
-	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"dave.jiang@intel.com" <dave.jiang@intel.com>, "alison.schofield@intel.com"
-	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
-	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
-	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
-	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>, Vandana Salve <vsalve@micron.com>
-Subject: Re: [PATCH v18 04/19] EDAC: Add memory repair control feature
-Message-ID: <20250121181632.0000637c@huawei.com>
-In-Reply-To: <20250121161653.GAZ4_IdYDQ9_-QoEvn@fat_crate.local>
-References: <20250109091915.GAZ3-Uk3rkuh38cQyy@fat_crate.local>
-	<3b2d4275d1d24dbeacee0f192ac4d69b@huawei.com>
-	<20250109123222.GBZ3_B1g3Esgu1-MPi@fat_crate.local>
-	<20250109142433.00004ea7@huawei.com>
-	<20250109151854.GCZ3_o3rf6S24qUbtB@fat_crate.local>
-	<20250109160159.00002add@huawei.com>
-	<20250109161902.GDZ3_29rH-sQMV4n0N@fat_crate.local>
-	<20250109183448.000059ec@huawei.com>
-	<20250111171243.GCZ4Kmi5xMtY2ktCHm@fat_crate.local>
-	<20250113110740.00003a7c@huawei.com>
-	<20250121161653.GAZ4_IdYDQ9_-QoEvn@fat_crate.local>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E381714A5;
+	Tue, 21 Jan 2025 23:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.121
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737500481; cv=fail; b=uzLLr8YhhqhzH3sSVcD/fODa/N2LchppJzLS3gd6Vegy9X/2Ma+5H66GUtQ8WlFQ32MUw6XYtNoGcT6l36Y8h508BzX5Z6fE56QSwUwTkekdRKKllnaCP/zOeAGbmvoFldTUMo44Nir0N9HlyL8+JVhMa+hPmjSTOciQyoK9Pk8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737500481; c=relaxed/simple;
+	bh=GQUAD72A2kclcHjhI4KwK5GMnh0/5rOZSvLuSaY5EX4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=O6GYE5Rd+gLmWrbfyKkjJs2/J+48XMlIU6g+uIOeKLcbHmjGvRVG2eWckLqqN0AyqP+GLMcnknJrpd5fDIAWcJxnysXGr96xU4fwap2Y0hzK3ovMELErLCn/tmy8/INo8U9FMKpVboD8cyKjbDNgX0Z1yiIIowff+Qste0v0SxA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=OAUxalRU; arc=fail smtp.client-ip=52.101.56.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=a/8btaL8RW2g/ZMBP56NfvnPRa3bbcROvsx9kw9yHYyP3tPN6bIOU/Wx1W1KdR2mUSQIfHFm9XqQ9vEGE+bUEaIa615Lk3Ou0F4p4uwDGbaU2d2I3nAhJdVxqWiS9yMRwOdEc/Rpor0Jmg84rUUIL+D2Y9u/RzPEciF7A5CA49OdyjYnRV8OGqlpEAleY2FkkooBXh788MOV6D6DaDHTAS4Q1KN2H5e6xX3Xvj4XYB6JeFSBToxQA/UQWhh/TSwm92llddq20T/pyGDKelKPGFJrJpP6hqA9todYPqfsqDt0+/g/MinkjahR3IzVxQuWvqjtsV81vfQebtdvuihjyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uBzu3VHF/3/ri/1ju2GAVvkCEAb/RpYjvjm6xQB29FU=;
+ b=k3QE0q1ZIO53wFHDj6Vr9l1orc9fcvriXtyRfvNu0A4TWhtOljLLusy8nVdpo4crQaSDQFg715v8sziLLfkwtxE/Wd71SoneHCIv9iZRZhv4h+5lc3phmxBN085Dbb1selL4obr+3OAcELN9BUGW4f6Wpzk7JWHH2Wg+bpv8h97ofk+AdbePgEOreRa6Z+52FNunup7KJDzVCp/w9+bl5cnwfvtxOpkjKZxMqN54Y1eZEvI9iJM0f+8xSlCE++wJn3nbKt06kXnmlZxgOO3hnaLagnQRDR/ErZoI5WlBCGS/RNcEjRsS2yD3gK9h927jfamXJVdO0CxEjnLDA2Q11w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uBzu3VHF/3/ri/1ju2GAVvkCEAb/RpYjvjm6xQB29FU=;
+ b=OAUxalRUEPvo01Y9UXDGkmOaWBSQVIF3Th4MuFvHY/atzkyqqHxYXH8+cucgkWMcGomBxuTamPR+vysVyOqSpWhCc46DDWTWJZRj+Od0XEiPRbK/8OmqHQK6op/O/H3wr9iJ7oOcOe3SvR6sTppDHg/2tXUZc94qpnnvwQSnK2o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SA3PR01MB8473.prod.exchangelabs.com (2603:10b6:806:397::12) by
+ CH2PR01MB9134.prod.exchangelabs.com (2603:10b6:610:27f::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8377.11; Tue, 21 Jan 2025 23:01:13 +0000
+Received: from SA3PR01MB8473.prod.exchangelabs.com
+ ([fe80::46d7:1d3a:dc9c:69c3]) by SA3PR01MB8473.prod.exchangelabs.com
+ ([fe80::46d7:1d3a:dc9c:69c3%3]) with mapi id 15.20.8377.009; Tue, 21 Jan 2025
+ 23:01:13 +0000
+Message-ID: <a562f557-0530-4e29-b0d0-78d4441e06e1@os.amperecomputing.com>
+Date: Tue, 21 Jan 2025 15:01:07 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 05/19] ACPI:RAS2: Add ACPI RAS2 driver
+To: shiju.jose@huawei.com, linux-edac@vger.kernel.org,
+ linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org
+Cc: bp@alien8.de, tony.luck@intel.com, rafael@kernel.org, lenb@kernel.org,
+ mchehab@kernel.org, dan.j.williams@intel.com, dave@stgolabs.net,
+ jonathan.cameron@huawei.com, dave.jiang@intel.com,
+ alison.schofield@intel.com, vishal.l.verma@intel.com, ira.weiny@intel.com,
+ david@redhat.com, Vilas.Sridharan@amd.com, leo.duran@amd.com,
+ Yazen.Ghannam@amd.com, rientjes@google.com, jiaqiyan@google.com,
+ Jon.Grimm@amd.com, dave.hansen@linux.intel.com, naoya.horiguchi@nec.com,
+ james.morse@arm.com, jthoughton@google.com, somasundaram.a@hpe.com,
+ erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
+ gthelen@google.com, wschwartz@amperecomputing.com,
+ dferguson@amperecomputing.com, wbs@os.amperecomputing.com,
+ nifan.cxl@gmail.com, tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+ roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+ wanghuiqiang@huawei.com, linuxarm@huawei.com
+References: <20250106121017.1620-1-shiju.jose@huawei.com>
+ <20250106121017.1620-6-shiju.jose@huawei.com>
+Content-Language: en-US
+From: Daniel Ferguson <danielf@os.amperecomputing.com>
+In-Reply-To: <20250106121017.1620-6-shiju.jose@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0143.namprd03.prod.outlook.com
+ (2603:10b6:303:8c::28) To SA3PR01MB8473.prod.exchangelabs.com
+ (2603:10b6:806:397::12)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- frapeml500008.china.huawei.com (7.182.85.71)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR01MB8473:EE_|CH2PR01MB9134:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa60e0da-bcc2-47d0-e09f-08dd3a6f809c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|52116014|366016|7053199007|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Z1dtV3BOU3RxdVhZRkZMOW15djZmUzNmKzdTQmlRQ05HRVFUYnRET3NMSG9q?=
+ =?utf-8?B?a2VPbTV4dU9rUlBYS2JLbitFRjZFM1R3T1JtWjcxamZBSU5KS0R2SHBZclBa?=
+ =?utf-8?B?NEIvRC93MnE0dDVYU293TDk5REdSVnZFdEZvdWhRTVZqWVJwK2pSK09EVXNO?=
+ =?utf-8?B?NnRUejN5cG52azhqVExHWlZVQmJJZ3NaK1RIKzUwSkFnRDZGWjkvbFB0MEFK?=
+ =?utf-8?B?K2VsQ3VDVzFKeXM5aWFvOHl0MHRXWGNkditIUzlCY2Q4M2FiT2NGN2JqZExh?=
+ =?utf-8?B?ZXRrY0Vncy9MaEpjUzRCdjQwcFhlZ2N0YWdvZFVOZGl1aERjazNYdXhnOXRE?=
+ =?utf-8?B?VUxLbGdkOVpkMW05WkJ0ajB4eVF2bGZaV3h4c3JNU25xN2Y2NVRlUDlEYUdZ?=
+ =?utf-8?B?ZE95ajFOQy84b2VSRVhpbXhwYjVucDZoM1Z1U3RwaUJxd3IrdzFZMi9SSGJx?=
+ =?utf-8?B?TGNmWUp2TDkrWkpiWE5LZmpsSzJKcjhmZzYzWGc4b2R0NzJrZTE0NEJydkJx?=
+ =?utf-8?B?dVN6SGlHc1NpRXpkbWFCMmhBcFpIUEd2NFRTUGc2UjR3SGh2MHpzbTdIOWpx?=
+ =?utf-8?B?cWZUNHlZRElpY0JiYVNOT2FxS0M0b1FTSzg3Vkswd1VhamwrZTFGQ0RmZHdQ?=
+ =?utf-8?B?dVg5bjNlaHJBWGpta2thNnM3R29vbm1peC8zSHRBaWtoRHVqZVhQYlowRzBx?=
+ =?utf-8?B?WXp3bHdRWUZqak90TWpKUjl0dit3VTBKWWxmNmZmQUtUMHMrVGJXNDFZMWtL?=
+ =?utf-8?B?NVhRejFFS3ExaUs3QWc0czlZQnNGeldnYTVSNjJDTlA4c3pKdTdnWHZlNXNn?=
+ =?utf-8?B?dGk4ZytWNU5VMWlWSUFLK3hvQ3lsZWoxd1hTcVlYK0tVTDVldHlndlBIUGtH?=
+ =?utf-8?B?T2hUc2V1UFY4Y3FFcWI4MlhUSnhYUWJ1am5NWGNFV1NTNFRvZHV5RDIzYjlQ?=
+ =?utf-8?B?L3A1WmJPd0JUcStxNHFVa01BM2kvMW5SakdhdGpIMEp6WGNYaUVMNjBsNURi?=
+ =?utf-8?B?RDBDbVpyQ0tlNHhDZ3lUVGRKdDV2aTVUeEI0THJwK1hFbUxJMFZRUlYyMHVr?=
+ =?utf-8?B?enFSMUlSRkMrM2tjVzUrWC9NK3dwaEVNczB0WDBhSERwdjB6WFRua2ZmTEdV?=
+ =?utf-8?B?VDJjUWh5ZDBKM0VJUERWcEQxbFBoUThpRHB1cHRNQ1hSUFd1RnMrS21CN3pW?=
+ =?utf-8?B?bXdLaXhYd1N6RXBEQTZ6ODdHclR2aFAvUHFEdEdHc0t5R1g4c21EWVIxOU1x?=
+ =?utf-8?B?U0JkQzdydmlZMXZpblp0YkFiUjFoTzJzL3Yvb3h2dkZ1ekhOSGJrclh0NDhj?=
+ =?utf-8?B?Z0FJUy9tb3dKYWlsY2lHY2d5c0pvbml1Y2RFOGswKzU4S1NqNzU5NzBmZ1ZB?=
+ =?utf-8?B?MHhpWkZ1RU5pWlg2N2xjSHVUekxRT2EyUjZibk9jYldRemtUeHJRSHpraHps?=
+ =?utf-8?B?Z2lRekFoNDViczcxVEQ0ak1MVWpSWWhoZkRmTGxoTStJamsyY1E3YzBMTW9l?=
+ =?utf-8?B?U2sxdkhqaUN1YldRUkNpc0UrWHlHVUc3ZjB3VWV3SzA2U1ovRGxnSTRrcUNW?=
+ =?utf-8?B?L3JpbVI3Ym1vRzZZZGdzaDUzMnoyRGlkY2l6cUN3SGxBOG1PQ25SbkVVU3lF?=
+ =?utf-8?B?allzVC8zVE9vazRYYkpjd3NBcVlvMUNUUkl3bmUwTnY4b3RtQ1pHVFJnR2N2?=
+ =?utf-8?B?T2g1dEt3OHVGMysvNCt2djJnOUpFUllhVGdtY01CSTVHcEY2QmZ5MW5UdlBu?=
+ =?utf-8?B?dmY0VlMwdFpOQVpLOU1HRFp2MEY3TTNZZVZSbFJEaC9Yb3grcy9mNmxFNC9O?=
+ =?utf-8?B?aWxoL3l4Z1daUzNQTVFQVnVwcnBhaVB2YjhLc094K2M0blR0RmR3dTdRU2JB?=
+ =?utf-8?B?TnU3ZEJRYnBBMFZOT2dyWnlHbndpRUdKOFhVampGTXp5c0NvUXZ1R0JMTzI0?=
+ =?utf-8?Q?6UVsyTbkQSkSnTjQVVJs079I/DO0V99v?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR01MB8473.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(52116014)(366016)(7053199007)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NDFGMk9JWDBrbkpUVlQycFB5aXdoNmRsQ0dTRGJXTTFYZTFZSk5pcm1Yd3da?=
+ =?utf-8?B?UU1BR20rK3FOUHExZW5JT0dqY24yUTg2cVltK0ZOYkZZYm5iWVVHZWdadUU1?=
+ =?utf-8?B?SCt5Yk0ySmhtZGt4azVQZEhaaHBIMnB3NUdIdVQ4bG1qb1MrOWQyK0lLMnA0?=
+ =?utf-8?B?NEpjR1dTQzQ4aTFqODYwRy92dFA3aXZrRk04T0pZUisxTHRSbER4T2dKc0lp?=
+ =?utf-8?B?Q2Q4UEVMbld4YlVsT2wrMjBMMk5vYWxBSnAwd2cvVDBsMUhCeFp2c1E2Z0lE?=
+ =?utf-8?B?KzhtdmljbWFXcU4rK0t3eitCYTNPTUs1clo2MXc1SlFoUkVCM0krYXZDakVP?=
+ =?utf-8?B?WTJYbWNSbGNYRHVqV2duS1JGOENOSjRlQS9xR1RiM0pXMW4rYlNZMjF0Q3gr?=
+ =?utf-8?B?TFRONHFpdHJCMUtIVmpVUFYyVG5tb1lMZngrc1hVcHgxb0ZWaVhuMzNkV1RI?=
+ =?utf-8?B?V3VObnZva0YwUHBRWE9UQUdJWkNQZnk4Zjh6THdLSnZxaURodC9CZERlOHZw?=
+ =?utf-8?B?TW9lWSt0RUc2RU53bFVhRzVkZWQwODlwbXFWbUZ5cnVuc1prWTZxQzR3V1k0?=
+ =?utf-8?B?VmUyS1VGSzJkSDRGdmNUNXFFM0NNMEkvWURWN3lNVzZ1R0IwN0Q1WVZTS0VJ?=
+ =?utf-8?B?RDZ0ZlEycm9ya2FidVI2VGxPdEJId2FtTWFnTW5RM2wxZ3NheHJ6c3dpVDg5?=
+ =?utf-8?B?TG51eG1IaFRlZzNpZVZETWlZd0poMVMyQWR0TkFUUmFTdXZBQlBKbVA0QUUz?=
+ =?utf-8?B?T1JVQThoWm50bG5URDY5cldxUmdtZU5DNDY3QUIzTFBETWlvam5uOHFJNzY4?=
+ =?utf-8?B?SUNrMnhyRUUvT2ZJR050S2M4cldQZlNtM2MzSEhqK0pZZ1VJa3E5UlY3WjUx?=
+ =?utf-8?B?ZXhvWDRKWEJMaGlGWjVsRlJvTnpVeHRnNk5SaWR0VWdVaU5UVm5BMnVCaXRP?=
+ =?utf-8?B?S0k2dmw3TXE3S0t5dXlZL1RyQnNYd2VNMVNnc2EzY25mbGpocVl2dzNCRVV6?=
+ =?utf-8?B?dWlVRnNuK0FTZVR5NFVHVVE0dVJBd1NXeHVpQVpsYm5lbHFCRjVtSG9IT0Vz?=
+ =?utf-8?B?MWZxNHdyRjFEcFJjaThBWm8rejR1R01ocnhjd2xkN1hjeUlOSDBhcHhDeVUv?=
+ =?utf-8?B?UEZPMW5nanBIbklZWjZOalhnYWNQV1VFZHczZkxXZGNwK0lRSTFLUzVnVmgy?=
+ =?utf-8?B?dlRqMzFrbERXcFA4TDhqdGdkelRBRG1wL0owdUFaRHREVXpPenlQMFVNRUhs?=
+ =?utf-8?B?K2ZGNTR1K3pvSjBaVnJ5bzMzem9ORk16T2NGcW9NMm1oSE5OSUNDeHRUVjA2?=
+ =?utf-8?B?VzA2TGh2RGJFSjc1QVYydzhOdUk5V0N2czlNOGl0eFNaM3k1OHV4eTEvOGlR?=
+ =?utf-8?B?bU9mRmdYNTcvcStpRlBLOHd3dkZuNEVVV0dCTTl3NjU5WWg3VUZrNUhLdGRu?=
+ =?utf-8?B?RkRiM1N0S2kvODRLZTBkMm9yQlV6N29zYUJTR0N4YjVWdVp5UWFuejA2Wm0w?=
+ =?utf-8?B?K1k0eEp5dysyMEYwK1orcTAxMkREc2NjU0pJMHRlcFd4SkVuMU1Bek5lRUcw?=
+ =?utf-8?B?UXd5ZitKR1RpS0NHaXdHU0hpakRUbU9ORHg5ZW9HT0J0dEx0Z1BNWjBVdm82?=
+ =?utf-8?B?UFd4UWQ1SnZudEJMVGxQZWM0M0tVaHlGZWlzRmQvT2UvcVdQUjRieHo0RWtj?=
+ =?utf-8?B?NTI1NHhnVW93bzlGZENCd3RBZXNkNk5VRjZET0FUOWhWamdhMXdaOGE1K1Zq?=
+ =?utf-8?B?TjNrQXNmQWNndFdOMVpIaUR0aXl6ekUrRllaemplSDh3b0JtcWd3NUd5QTBD?=
+ =?utf-8?B?dmdFbTZjYnlQYTdvOWtEaXloTU1BQUFoVm5EL29XcFZqNkJwSUtzeTJ5NVpl?=
+ =?utf-8?B?ZjhTdW52SzlySU03MGFOQ2JSY1Z1RWVNeG02K3lCYzRXZVo5aG9aWUdlbTJX?=
+ =?utf-8?B?QndYS1NncjlWMjJRMVp5Wkg4VnN5cG5ONC9STklKMC9peWJwWnN1NG1xbS9Z?=
+ =?utf-8?B?L2FIeUZwaVU1NHBmRklWT2FkOG93STdrVEdJQUx3WVdmNTJuTXBDZ1FqZzBt?=
+ =?utf-8?B?d01kRHlYaVBDeGhJV1MxY3pBUHZjellwWUF3dlM0bzMzU3pUaVZacHRONE8x?=
+ =?utf-8?B?bVc1TnpFeE5oZEdyMHcwalRuL215UTFvWDdKS1BEWk5NVERscVEvbHhBU29K?=
+ =?utf-8?Q?gB69W92xoKIIBZBlqnjDTTM=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa60e0da-bcc2-47d0-e09f-08dd3a6f809c
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR01MB8473.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2025 23:01:13.1843
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2bylRyjVClVV+9ecK8Rh5T7nb3s39neYJoHO8fxAEzQPY68NNblC10pCPqaRLjQTh7hOUrKv6DRbYjia2C9zpLvxVH5us9OmRg8SQ7nzhWgIJDjy8q2pEIoZY+rF/ZBZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR01MB9134
 
-On Tue, 21 Jan 2025 17:16:53 +0100
-Borislav Petkov <bp@alien8.de> wrote:
 
-> On Mon, Jan 13, 2025 at 11:07:40AM +0000, Jonathan Cameron wrote:
-> > We can do that if you prefer.  I'm not that fussed how this is handled
-> > because, for tooling at least, I don't see why we'd ever read it.
-> > It's for human parsing only and the above is fine.  
-> 
-Note we are dropping the min / max stuff in most cases as it was only
-added as it seems to be our misguided attempt to resolve an earlier
-review comment. That reduces some of the complexity and wasn't useful anyway.
 
-We are also splitting the patch set up differently so maybe we can
-move the discussion on to the 'extended' case for repair without also
-blocking the simple memory address based one.
+On 1/6/2025 4:10 AM, shiju.jose@huawei.com wrote:
+> +static int ras2_report_cap_error(u32 cap_status)
+> +{
+> +	switch (cap_status) {
+> +	case ACPI_RAS2_NOT_VALID:
+> +	case ACPI_RAS2_NOT_SUPPORTED:
+> +		return -EPERM;
+> +	case ACPI_RAS2_BUSY:
+> +		return -EBUSY;
+> +	case ACPI_RAS2_FAILED:
+> +	case ACPI_RAS2_ABORTED:
+> +	case ACPI_RAS2_INVALID_DATA:
+> +		return -EINVAL;
+> +	default: /* 0 or other, Success */
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int ras2_check_pcc_chan(struct ras2_pcc_subspace *pcc_subspace)
+> +{
+> +	struct acpi_ras2_shared_memory __iomem *generic_comm_base = pcc_subspace->pcc_comm_addr;
+> +	ktime_t next_deadline = ktime_add(ktime_get(), pcc_subspace->deadline);
+> +	u32 cap_status;
+> +	u16 status;
+> +	u32 ret;
+> +
+> +	while (!ktime_after(ktime_get(), next_deadline)) {
+> +		/*
+> +		 * As per ACPI spec, the PCC space will be initialized by
+> +		 * platform and should have set the command completion bit when
+> +		 * PCC can be used by OSPM
+> +		 */
+> +		status = readw_relaxed(&generic_comm_base->status);
+> +		if (status & RAS2_PCC_CMD_ERROR) {
+> +			cap_status = readw_relaxed(&generic_comm_base->set_capabilities_status);
+> +			ret = ras2_report_cap_error(cap_status);
 
-> Is there even a concrete use case for humans currently? Because if not, we
-> might as well not do it at all and keep it simple.
+There is some new information:
 
-Clearly we need to provide more evidence of use cases: 'Show us your code'
-seems to apply here.  We'll do that over the next few weeks.
+The Scrub parameter block intends to get its own Status field, and the
+set_capabilities_status field is being deprecated. This also causes a
+revision bump in the spec.
 
-The concrete use case is repair of CXL memory devices using sparing,
-based on simple algorithms applied to the data RAS Daemon already has.
-The interface for the reasons discussed in the long thread with Dan
-is the minimum required to provide the information needed to allow
-for two use cases.  We enumerated them explicitly in the discussion with
-Dan because they possibly affected 'safety'.
+See [1]
 
-1) Power up, pre memory online, (typically non persistent) repair of
-   known bad memory.  There are two interface options for this, inject
-   the prior mapping from device physical address space (host address
-   is not necessarily relevant here as no address decoders have been
-   programmed yet in CXL - that happens as part of the flow to bring
-   the memory up), or use the information that userspace already has
-   (bank, rank etc) to select what memory is to be replaced with
-   spare capacity.
-   
-   Given the injection interface and the repair interface have to
-   convey the same data, the interface complexity is identical and
-   we might as well have a single step 'repair' rather than
-     1. Inject prior records then
-     2. Pass a physical address that is matched to one of those records.
-   
-   There are no security related concerns here as we always treat this
-   as new memory and zero it etc as part of onlining.
+Assuming this change is ratified (not guaranteed, still pending):
+This change implies that we cannot centrally decode errors, as is done
+here and now. Instead error decoding must be done after some
+feature-specific routine calls ras2_send_pcc_cmd. It should be the case
+that each new feature, moving forward, will likely have their own status.
 
-2) Online case.  Here the restriction Dan proposed was that we 'check'
-   that we have seen an error record on this boot that matches the full
-   description.  That is matching both the physical address and the
-   topology (as that mapping can change from boot to boot, but not whilst
-   the memory is in use). This doesn't prevent any use case we have
-   come up with yet because, if we are making a post initial onlining
-   decision to repair we can assume there is a new error record that
-   provided new information on which we are acting.  Hence the kernel
-   had the information to check.
+Please see my follow up comment on [PATCH v18 06/19]
 
-   Whilst I wasn't convinced that we had a definite security
-   problem without this protection, it requires minimal changes and doesn't
-   block the flows we care about so we are fine with adding this check.
+---
+[1] https://github.com/tianocore/edk2/issues/10540
+---
 
-> 
-> All I see is an avalanche of sysfs nodes and I'm questioning the usefulness of
-> the interface and what's the 30K ft big picture for all this.
+> +
+> +			status &= ~RAS2_PCC_CMD_ERROR;
+> +			writew_relaxed(status, &generic_comm_base->status);
+> +			return ret;
+> +		}
+> +		if (status & RAS2_PCC_CMD_COMPLETE)
+> +			return 0;
+> +		/*
+> +		 * Reducing the bus traffic in case this loop takes longer than
+> +		 * a few retries.
+> +		 */
+> +		msleep(10);
+> +	}
+> +
+> +	return -EIO;
+> +}
+> +
+> +/**
+> + * ras2_send_pcc_cmd() - Send RAS2 command via PCC channel
+> + * @ras2_ctx:	pointer to the RAS2 context structure
+> + * @cmd:	command to send
+> + *
+> + * Returns: 0 on success, an error otherwise
+> + */
+> +int ras2_send_pcc_cmd(struct ras2_mem_ctx *ras2_ctx, u16 cmd)
+> +{
+> +	struct ras2_pcc_subspace *pcc_subspace = ras2_ctx->pcc_subspace;
+> +	struct acpi_ras2_shared_memory *generic_comm_base = pcc_subspace->pcc_comm_addr;
+> +	static ktime_t last_cmd_cmpl_time, last_mpar_reset;
+> +	struct mbox_chan *pcc_channel;
+> +	unsigned int time_delta;
+> +	static int mpar_count;
+> +	int ret;
+> +
+> +	guard(mutex)(&ras2_pcc_subspace_lock);
+> +	ret = ras2_check_pcc_chan(pcc_subspace);
+> +	if (ret < 0)
+> +		return ret;
+> +	pcc_channel = pcc_subspace->pcc_chan->mchan;
+> +
+> +	/*
+> +	 * Handle the Minimum Request Turnaround Time(MRTT)
+> +	 * "The minimum amount of time that OSPM must wait after the completion
+> +	 * of a command before issuing the next command, in microseconds"
+> +	 */
+> +	if (pcc_subspace->pcc_mrtt) {
+> +		time_delta = ktime_us_delta(ktime_get(), last_cmd_cmpl_time);
+> +		if (pcc_subspace->pcc_mrtt > time_delta)
+> +			udelay(pcc_subspace->pcc_mrtt - time_delta);
+> +	}
+> +
+> +	/*
+> +	 * Handle the non-zero Maximum Periodic Access Rate(MPAR)
+> +	 * "The maximum number of periodic requests that the subspace channel can
+> +	 * support, reported in commands per minute. 0 indicates no limitation."
+> +	 *
+> +	 * This parameter should be ideally zero or large enough so that it can
+> +	 * handle maximum number of requests that all the cores in the system can
+> +	 * collectively generate. If it is not, we will follow the spec and just
+> +	 * not send the request to the platform after hitting the MPAR limit in
+> +	 * any 60s window
+> +	 */
+> +	if (pcc_subspace->pcc_mpar) {
+> +		if (mpar_count == 0) {
+> +			time_delta = ktime_ms_delta(ktime_get(), last_mpar_reset);
+> +			if (time_delta < 60 * MSEC_PER_SEC) {
+> +				dev_dbg(ras2_ctx->dev,
+> +					"PCC cmd not sent due to MPAR limit");
+> +				return -EIO;
+> +			}
+> +			last_mpar_reset = ktime_get();
+> +			mpar_count = pcc_subspace->pcc_mpar;
+> +		}
+> +		mpar_count--;
+> +	}
+> +
+> +	/* Write to the shared comm region. */
+> +	writew_relaxed(cmd, &generic_comm_base->command);
+> +
+> +	/* Flip CMD COMPLETE bit */
+> +	writew_relaxed(0, &generic_comm_base->status);
+> +
+> +	/* Ring doorbell */
+> +	ret = mbox_send_message(pcc_channel, &cmd);
+> +	if (ret < 0) {
+> +		dev_err(ras2_ctx->dev,
+> +			"Err sending PCC mbox message. cmd:%d, ret:%d\n",
+> +			cmd, ret);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * If Minimum Request Turnaround Time is non-zero, we need
+> +	 * to record the completion time of both READ and WRITE
+> +	 * command for proper handling of MRTT, so we need to check
+> +	 * for pcc_mrtt in addition to CMD_READ
+> +	 */
+> +	if (cmd == RAS2_PCC_CMD_EXEC || pcc_subspace->pcc_mrtt) {
+> +		ret = ras2_check_pcc_chan(pcc_subspace);
+> +		if (pcc_subspace->pcc_mrtt)
+> +			last_cmd_cmpl_time = ktime_get();
+> +	}
+> +
+> +	if (pcc_channel->mbox->txdone_irq)
+> +		mbox_chan_txdone(pcc_channel, ret);
+> +	else
+> +		mbox_client_txdone(pcc_channel, ret);
+> +
+> +	return ret >= 0 ? 0 : ret;
+> +}
+> +EXPORT_SYMBOL_GPL(ras2_send_pcc_cmd);
+> +
+> +static int ras2_register_pcc_channel(struct ras2_mem_ctx *ras2_ctx, int pcc_subspace_id)
+> +{
+> +	struct ras2_pcc_subspace *pcc_subspace;
+> +	struct pcc_mbox_chan *pcc_chan;
+> +	struct mbox_client *mbox_cl;
+> +
+> +	if (pcc_subspace_id < 0)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&ras2_pcc_subspace_lock);
+> +	list_for_each_entry(pcc_subspace, &ras2_pcc_subspaces, elem) {
+> +		if (pcc_subspace->pcc_subspace_id == pcc_subspace_id) {
+> +			ras2_ctx->pcc_subspace = pcc_subspace;
+> +			pcc_subspace->ref_count++;
+> +			mutex_unlock(&ras2_pcc_subspace_lock);
+> +			return 0;
+> +		}
+> +	}
+> +	mutex_unlock(&ras2_pcc_subspace_lock);
+> +
+> +	pcc_subspace = kcalloc(1, sizeof(*pcc_subspace), GFP_KERNEL);
+> +	if (!pcc_subspace)
+> +		return -ENOMEM;
+> +	mbox_cl = &pcc_subspace->mbox_client;
+> +	mbox_cl->knows_txdone = true;
+> +
+> +	pcc_chan = pcc_mbox_request_channel(mbox_cl, pcc_subspace_id);
+> +	if (IS_ERR(pcc_chan)) {
+> +		kfree(pcc_subspace);
+> +		return PTR_ERR(pcc_chan);
+> +	}
+> +	*pcc_subspace = (struct ras2_pcc_subspace) {
+> +		.pcc_subspace_id = pcc_subspace_id,
+> +		.pcc_chan = pcc_chan,
+> +		.pcc_comm_addr = acpi_os_ioremap(pcc_chan->shmem_base_addr,
+> +						 pcc_chan->shmem_size),
+> +		.deadline = ns_to_ktime(RAS2_NUM_RETRIES *
+> +					pcc_chan->latency *
+> +					NSEC_PER_USEC),
+> +		.pcc_mrtt = pcc_chan->min_turnaround_time,
+> +		.pcc_mpar = pcc_chan->max_access_rate,
+> +		.mbox_client = {
+> +			.knows_txdone = true,
+> +		},
+> +		.pcc_channel_acquired = true,
+> +	};
+> +	mutex_lock(&ras2_pcc_subspace_lock);
+> +	list_add(&pcc_subspace->elem, &ras2_pcc_subspaces);
+> +	pcc_subspace->ref_count++;
+> +	mutex_unlock(&ras2_pcc_subspace_lock);
+> +	ras2_ctx->pcc_subspace = pcc_subspace;
+> +	ras2_ctx->pcc_comm_addr = pcc_subspace->pcc_comm_addr;
+> +	ras2_ctx->dev = pcc_chan->mchan->mbox->dev;
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_IDA(ras2_ida);
+> +static void ras2_remove_pcc(struct ras2_mem_ctx *ras2_ctx)
+> +{
+> +	struct ras2_pcc_subspace *pcc_subspace = ras2_ctx->pcc_subspace;
+> +
+> +	guard(mutex)(&ras2_pcc_subspace_lock);
+> +	if (pcc_subspace->ref_count > 0)
+> +		pcc_subspace->ref_count--;
+> +	if (!pcc_subspace->ref_count) {
+> +		list_del(&pcc_subspace->elem);
+> +		pcc_mbox_free_channel(pcc_subspace->pcc_chan);
+> +		kfree(pcc_subspace);
+> +	}
+> +}
+> +
+> +static void ras2_release(struct device *device)
+> +{
+> +	struct auxiliary_device *auxdev = container_of(device, struct auxiliary_device, dev);
+> +	struct ras2_mem_ctx *ras2_ctx = container_of(auxdev, struct ras2_mem_ctx, adev);
+> +
+> +	ida_free(&ras2_ida, auxdev->id);
+> +	ras2_remove_pcc(ras2_ctx);
+> +	kfree(ras2_ctx);
+> +}
+> +
+> +static struct ras2_mem_ctx *ras2_add_aux_device(char *name, int channel)
+> +{
+> +	struct ras2_mem_ctx *ras2_ctx;
+> +	int id, ret;
+> +
+> +	ras2_ctx = kzalloc(sizeof(*ras2_ctx), GFP_KERNEL);
+> +	if (!ras2_ctx)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	mutex_init(&ras2_ctx->lock);
+> +
+> +	ret = ras2_register_pcc_channel(ras2_ctx, channel);
+> +	if (ret < 0) {
+> +		pr_debug("failed to register pcc channel ret=%d\n", ret);
+> +		goto ctx_free;
+> +	}
+> +
+> +	id = ida_alloc(&ras2_ida, GFP_KERNEL);
+> +	if (id < 0) {
+> +		ret = id;
+> +		goto pcc_free;
+> +	}
+> +	ras2_ctx->id = id;
+> +	ras2_ctx->adev.id = id;
+> +	ras2_ctx->adev.name = RAS2_MEM_DEV_ID_NAME;
+> +	ras2_ctx->adev.dev.release = ras2_release;
+> +	ras2_ctx->adev.dev.parent = ras2_ctx->dev;
+> +
+> +	ret = auxiliary_device_init(&ras2_ctx->adev);
+> +	if (ret)
+> +		goto ida_free;
+> +
+> +	ret = auxiliary_device_add(&ras2_ctx->adev);
+> +	if (ret) {
+> +		auxiliary_device_uninit(&ras2_ctx->adev);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	return ras2_ctx;
+> +
+> +ida_free:
+> +	ida_free(&ras2_ida, id);
+> +pcc_free:
+> +	ras2_remove_pcc(ras2_ctx);
+> +ctx_free:
+> +	kfree(ras2_ctx);
+> +	return ERR_PTR(ret);
+> +}
+> +
+> +static int __init ras2_acpi_init(void)
+> +{
+> +	struct acpi_table_header *pAcpiTable = NULL;
+> +	struct acpi_ras2_pcc_desc *pcc_desc_list;
+> +	struct acpi_table_ras2 *pRas2Table;
+> +	struct ras2_mem_ctx *ras2_ctx;
+> +	int pcc_subspace_id;
+> +	acpi_size ras2_size;
+> +	acpi_status status;
+> +	u8 count = 0, i;
+> +	int ret = 0;
+> +
+> +	status = acpi_get_table("RAS2", 0, &pAcpiTable);
+> +	if (ACPI_FAILURE(status) || !pAcpiTable) {
+> +		pr_err("ACPI RAS2 driver failed to initialize, get table failed\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ras2_size = pAcpiTable->length;
+> +	if (ras2_size < sizeof(struct acpi_table_ras2)) {
+> +		pr_err("ACPI RAS2 table present but broken (too short #1)\n");
+> +		ret = -EINVAL;
+> +		goto free_ras2_table;
+> +	}
+> +
+> +	pRas2Table = (struct acpi_table_ras2 *)pAcpiTable;
+> +	if (pRas2Table->num_pcc_descs <= 0) {
+> +		pr_err("ACPI RAS2 table does not contain PCC descriptors\n");
+> +		ret = -EINVAL;
+> +		goto free_ras2_table;
+> +	}
+> +
+> +	pcc_desc_list = (struct acpi_ras2_pcc_desc *)(pRas2Table + 1);
+> +	/* Double scan for the case of only one actual controller */
+> +	pcc_subspace_id = -1;
+> +	count = 0;
+> +	for (i = 0; i < pRas2Table->num_pcc_descs; i++, pcc_desc_list++) {
+> +		if (pcc_desc_list->feature_type != RAS2_FEATURE_TYPE_MEMORY)
+> +			continue;
+> +		if (pcc_subspace_id == -1) {
+> +			pcc_subspace_id = pcc_desc_list->channel_id;
+> +			count++;
+> +		}
+> +		if (pcc_desc_list->channel_id != pcc_subspace_id)
+> +			count++;
+> +	}
+> +	/*
+> +	 * Workaround for the client platform with multiple scrub devices
+> +	 * but uses single PCC subspace for communication.
+> +	 */
+> +	if (count == 1) {
+> +		/* Add auxiliary device and bind ACPI RAS2 memory driver */
+> +		ras2_ctx = ras2_add_aux_device(RAS2_MEM_DEV_ID_NAME, pcc_subspace_id);
+> +		if (IS_ERR(ras2_ctx)) {
+> +			ret = PTR_ERR(ras2_ctx);
+> +			goto free_ras2_table;
+> +		}
+> +		acpi_put_table(pAcpiTable);
+> +		return 0;
+> +	}
+> +
+> +	pcc_desc_list = (struct acpi_ras2_pcc_desc *)(pRas2Table + 1);
+> +	count = 0;
+> +	for (i = 0; i < pRas2Table->num_pcc_descs; i++, pcc_desc_list++) {
+> +		if (pcc_desc_list->feature_type != RAS2_FEATURE_TYPE_MEMORY)
+> +			continue;
+> +		pcc_subspace_id = pcc_desc_list->channel_id;
+> +		/* Add auxiliary device and bind ACPI RAS2 memory driver */
+> +		ras2_ctx = ras2_add_aux_device(RAS2_MEM_DEV_ID_NAME, pcc_subspace_id);
+> +		if (IS_ERR(ras2_ctx)) {
+> +			ret = PTR_ERR(ras2_ctx);
+> +			goto free_ras2_table;
+> +		}
+> +	}
+> +
+> +free_ras2_table:
+> +	acpi_put_table(pAcpiTable);
+> +	return ret;
+> +}
+> +late_initcall(ras2_acpi_init)
+> diff --git a/include/acpi/ras2_acpi.h b/include/acpi/ras2_acpi.h
+> new file mode 100644
+> index 000000000000..7b32407ae2af
+> --- /dev/null
+> +++ b/include/acpi/ras2_acpi.h
+> @@ -0,0 +1,45 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * RAS2 ACPI driver header file
+> + *
+> + * (C) Copyright 2014, 2015 Hewlett-Packard Enterprises
+> + *
+> + * Copyright (c) 2024 HiSilicon Limited
+> + */
+> +
+> +#ifndef _RAS2_ACPI_H
+> +#define _RAS2_ACPI_H
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/mailbox_client.h>
+> +#include <linux/mutex.h>
+> +#include <linux/types.h>
+> +
+> +#define RAS2_PCC_CMD_COMPLETE	BIT(0)
+> +#define RAS2_PCC_CMD_ERROR	BIT(2)
+> +
+> +/* RAS2 specific PCC commands */
+> +#define RAS2_PCC_CMD_EXEC 0x01
+> +
+> +#define RAS2_AUX_DEV_NAME "ras2"
+> +#define RAS2_MEM_DEV_ID_NAME "acpi_ras2_mem"
+> +
+> +/* Data structure RAS2 table */
+> +struct ras2_mem_ctx {
+> +	struct auxiliary_device adev;
+> +	/* Lock to provide mutually exclusive access to PCC channel */
+> +	struct mutex lock;
+> +	int id;
+> +	u8 instance;
+> +	bool bg;
+> +	u64 base, size;
+> +	u8 scrub_cycle_hrs, min_scrub_cycle, max_scrub_cycle;
+> +	struct device *dev;
+> +	struct device *scrub_dev;
+> +	void *pcc_subspace;
+> +	struct acpi_ras2_shared_memory __iomem *pcc_comm_addr;
+> +};
 
-Ok. We'll put together an example script / RASdaemon code to show how
-it is used. I think you may be surprised at how simple this is and hopefully
-that will show that the interface is appropriate.
 
-> 
-> If this all is just wishful thinking on the part of how this is going to be
-> used, then I agree with Dan: less is more. But I need to read the rest of that
-> thread when there's time.
-> 
+Could we break the ras2_mem_ctx structure up a little bit so that when
+we add a new feature, it will be easier to add a new context?
 
-I'll let Dan speak for himself, but my understanding is that what
-Dan is focused on is safety and other than tidying up a little isn't
-proposing an significant interface change.
+In the following example, we show what it *might* look like if we add
+another feature (Address Translation). But the ask here, is to split the
+ras2_mem_ctx structure into two structures: ras2_mem_scrub_ctx  and
+ras2_mem_ctx.
 
-> ...
-> > Repair cam be a feature of the DIMMs themselves or it can be a feature
-> > of the memory controller. It is basically replacing them with spare
-> > memory from somewhere else (usually elsewhere on same DIMMs that have
-> > a bit of spare capacity for this).  Bit like a hot spare in a RAID setup.  
-> 
-> Ooh, this is what you call repair. That's using a spare rank or so, under
-> which I know it as one example.
-> 
-> What I thought you mean with repair is what you mean with "correct". Ok,
-> I see.
-> 
-> > In some other systems the OS gets the errors and is responsible for making
-> > the decision.  
-> 
-> This decision has been kept away from the OS in my world so far. So yes, the
-> FW doing all the RAS recovery work is more like it. And the FW is the better
-> agent in some sense because it has a lot more intimate knowledge of the
-> platform. However...
-> 
-> > Sticking to the corrected error case (uncorrected handling
-> > is going to require a lot more work given we've lost data, Dan asked about that
-> > in the other branch of the thread), the OS as a whole (kernel + userspace)
-> > gets the error records and makes the policy decision to repair based on
-> > assessment of risk vs resource availability to make a repair.
-> > 
-> > Two reasons for this
-> > 1) Hardware isn't necessarily capable of repairing autonomously as
-> >    other actions may be needed (memory traffic to some granularity of
-> >    memory may need to be stopped to avoid timeouts). Note there are many
-> >    graduations of this from A) can do it live with no visible effect, through
-> >    B) offline a page, to C) offlining the whole device.
-> > 2) Policy can be a lot more sophisticated than a BMC can do.  
-> 
-> ... yes, that's why you can't rely only on the FW to do recovery but involve
-> the OS too. Basically what I've been saying all those years. Oh well...
+struct ras2_mem_address_translation_ctx {
+	struct device *at_dev;
+	...
+};
 
-This we agree on.
+struct ras2_mem_scrub_ctx {
+	struct device *scrub_dev;
+	bool bg;
+	u64 base, size;
+	u8 scrub_cycle_hrs, min_scrub_cycle, max_scrub_cycle;
+};
 
-> 
-> > In some cases perhaps, but another very strong driver is that policy is involved.
-> > 
-> > We can either try put a complex design in firmware and poke it with N opaque
-> > parameters from a userspace tool or via some out of band method or we can put
-> > the algorithm in userspace where it can be designed to incorporate lessons learnt
-> > over time.  We will start simple and see what is appropriate as this starts
-> > to get used in large fleets.  This stuff is a reasonable target for AI type
-> > algorithms etc that we aren't going to put in the kernel.
-> > 
-> > Doing this at all is a reliability optimization, normally it isn't required for
-> > correct operation.  
-> 
-> I'm not saying you should put an AI engine into the kernel - all I'm saying
-> is, the stuff which the kernel can decide itself without user input doesn't
-> need user input. Only toggle: the kernel should do this correction and/or
-> repair automatically or not.
 
-This we disagree on. For this persistent case in particular these are limited
-resources. Once you have used them all you can't do it again.  Using them
-carefully is key. An exception is mentioned below as a possible extension but
-it relies on a specific subset of allowed device functionality and only
-covers some use cases (so it's an extra, not a replacement for what this
-set does).
+/* Data structure RAS2 table */
+struct ras2_mem_ctx {
+	struct auxiliary_device adev;
+	/* Lock to provide mutually exclusive access to PCC channel */
+	struct mutex lock;
+	int id;
+	u8 instance;
+	struct device *dev;
+	void *pcc_subspace;
+	struct acpi_ras2_shared_memory __iomem *pcc_comm_addr;
 
-> 
-> What is clear here is that you can't design an interface properly right now
-> for algorithms which you don't have yet. And there's experience missing from
-> running this in large fleets.
-
-With the decision algorithms in userspace, we can design the userspace to kernel
-interface because we don't care about the algorithm choice - only what it needs
-to control which is well defined. Algorithms will start simple and then
-we'll iterate but it won't need changes in this interface because none of it
-is connected to how we use the data.
-
-> 
-> But the interface you're adding now will remain forever cast in stone. Just
-> for us to realize one day that we're not really using it but it is sitting out
-> there dead in the water and we can't retract it. Or we're not using it as
-> originally designed but differently and we need this and that hack to make it
-> work for the current sensible use case.
-> 
-> So the way it looks to me right now is, you want this to be in debugfs. You
-> want to go nuts there, collect experience, algorithms, lessons learned etc and
-> *then*, the parts which are really useful and sensible should be moved to
-> sysfs and cast in stone. But not preemptively like that.
-
-In general an ABI that is used is cast in stone. To my understanding there
-is nothing special about debugfs.  If we introduce a regression in tooling
-that uses that interface are we actually any better off than sysfs?
-https://lwn.net/Articles/309298/ was a good article on this a while back.
-
-Maybe there has been a change of opinion on this that I missed.
-
-> 
-> > Offline has no permanent cost and no limit on number of times you can
-> > do it. Repair is definitely a limited resource and may permanently use
-> > up that resource (discoverable as a policy wants to know that too!)
-> > In some cases once you run out of repair resources you have to send an
-> > engineer to replace the memory before you can do it again.  
-> 
-> Yes, and until you can do that and because cloud doesn't want to *ever*
-> reboot, you must do diminished but still present machine capabilities by
-> offlining pages and cordoning off faulty hw, etc, etc.
-
-Absolutely though the performance impact of punching holes in memory over
-time is getting some cloud folk pushing back because they can't get their
-1GIB pages to put under a VM.  Mind you that's not particularly relevant
-to this thread.
-
-> 
-> > Ok. I guess it is an option (I wasn't aware of that work).
-> > 
-> > I was thinking that was far more complex to deal with than just doing it in
-> > userspace tooling. From a quick look that solution seems to rely on ACPI ERSR
-> > infrastructure to provide that persistence that we won't generally have but
-> > I suppose we can read it from the filesystem or other persistent stores.
-> > We'd need to be a lot more general about that as can't make system assumptions
-> > that can be made in AMD specific code.
-> > 
-> > So could be done, I don't think it is a good idea in this case, but that
-> > example does suggest it is possible.  
-> 
-> You can look at this as specialized solutions. Could they be more general?
-> Ofc. But we don't have a general RAS architecture which is vendor-agnostic.
-
-It could perhaps be made more general, but so far I'm not seeing why we would
-do this for this particular feature.  It does seem like an interesting avenue
-to investigate more generally.
-
-The use cases discussed in the thread with Dan do not require injection of
-prior records.  Mauro called out his view that complex policy should not be
-in the kernel as well and as you have gathered I fully agree with him on
-that!
-
-> 
-> > In approach we are targetting, there is no round trip situation.  We let the kernel
-> > deal with any synchronous error just fine and run it's existing logic
-> > to offline problematic memory.  That needs to be timely and to carry on operating
-> > exactly as it always has.
-> > 
-> > In parallel with that we gather the error reports that we will already be
-> > gathering and run analysis on those.  From that we decide if a memory is likely to fail
-> > again and perform a sparing operation if appropriate.
-> > Effectively this is 'free'. All the information is already there in userspace
-> > and already understood by tools like rasdaemon, we are not expanding that
-> > reporting interface at all.  
-> 
-> That is fair. I think you can do that even now if the errors logged have
-> enough hw information to classify them and use them for predictive analysis.
-
-Definitely.  In general (outside of CXL in particular) we think there are
-some gaps that we'll look to address in future, but that's simple stuff
-for another patch series.
-
-> 
-> > Ok.  It seems you correlate number of files with complexity.  
-> 
-> No, wrong. I'm looking at the interface and am wondering how is this going to
-> be used and whether it is worth it to have it cast in stone forever.
-
-Ok.  I'm not concerned by this because of the alignment with old specifications
-going back a long way.  I'm not sure of the history of the CXL definition but
-it is near identical to the UEFI CPER records that have been in use a long time.
-For me that convinces me that this form of device description is pretty general
-and stable.  I'm sure we'll get small new things over time (sub-channel came
-with DDR5 for example) but those are minor additions.
-
-> 
-> > I correlated difficulty of understanding those files with complexity.
-> > Everyone one of the files is clearly defined and aligned with long history
-> > of how to describe DRAM (see how long CPER records have used these
-> > fields for example - they go back to the beginning).  
-> 
-> Ok, then pls point me to the actual use cases how those files are going to be
-> used or they are used already.
-
-For this we'll do as we did for scrub control and send a patch set adding tooling
-to RASdaemon and/or if more appropriate a script along side it.  My fault,
-I falsely thought this one was more obvious and we could leave that until
-this landed. Seems not!
-
-> 
-> > I'm all in favor of building an interface up by providing minimum first
-> > and then adding to it, but here what is proposed is the minimum for basic
-> > functionality and the alternative of doing the whole thing in kernel both
-> > puts complexity in the wrong place and restricts us in what is possible.  
-> 
-> There's another point to consider: if this is the correct and proper solution
-> for *your* fleet, that doesn't necessarily mean it is the correct and
-> generic solution for *everybody* using the kernel. So you can imagine that I'd
-> like to have a generic solution which can maximally include everyone instead
-> of *some* special case only.
-
-This I agree on. However, if CXL takes off (and there seems to be agreement
-it will to some degree at least) then this interface is fully general for any spec
-compliant device. It would be nice to have visibility of more OS managed
-repair interfaces but for now I can only see one other and that is more
-similar to PPR in CXL which is device/host physical address based.
-So we have 3 examples on which to build generalizations, but only one fits
-the model we are discussing here (which is the second part of repair
-support in v19 patch set).
-
-> 
-> > To some degree but I think there is a major mismatch in what we think
-> > this is for.
-> > 
-> > What I've asked Shiju to look at is splitting the repair infrastructure
-> > into two cases so that maybe we can make partial progress:
-> > 
-> > 1) Systems that support repair by Physical Address
-> >  - Covers Post Package Repair for CXL
-> > 
-> > 2) Systems that support repair by description of the underlying hardware
-> > - Covers Memory Sparing interfaces for CXL. 
-> > 
-> > We need both longer term anyway, but maybe 1 is less controversial simply
-> > on basis it has fewer control parameters
-> > 
-> > This still fundamentally puts the policy in userspace where I
-> > believe it belongs.  
-> 
-> Ok, this is more concrete. Let's start with those. Can I have some more
-> details on how this works pls and who does what? Is it generic enough?
-
-Sure. We can definitely do that.  We have this split in v19 (just undergoing
-some final docs tidy up etc, should be posted soon).
-
-> 
-> If not, can it live in debugfs for now? See above what I mean about this.
-> 
-> Big picture: what is the kernel's role here? To be a parrot to carry data
-> back'n'forth or can it simply do clear-cut decisions itself without the need
-> for userspace involvement?
-
-With the additional 'safety' checks Dan has asked for the kernel requirement
-(beyond a standardized interface / place to look for the controls etc) is
-now responsible for ensuring that a request to repair memory that is online
-matches up with an error record that we have received. First instance of this
-will be CXL native error handling based.  For now we've made this device
-specific because exactly what needs checking depends on the type of repair
-implementation.
-
-My intent was that the kernel never makes decisions for this feature.
-
-Potentially in future we could relax that to allow it to do so for a few
-usecases - the non persistent ones, where it could be considered
-a way to avoid offlining a page.  I see that as a much more complex case
-though than the userspace managed handling so one for future work.
-It only applies on some subset of devices and there are not enough in
-the market yet for us to know if that is going to be commonly supported.
-They will support repair, but whether they allow online repair rather
-than only offline is yet to be seen. That question corresponds to a
-single attribute in sysfs and a couple of checks in the driver code
-but changes whether the second usecase above is possible.
-
-Early devices and the ones in a few years time may make different
-decisions on this. All options are covered by this driver (autonomous
-repair is covered for free as nothing to do!)
-
-Online sparing to avoid offline is a cute idea only at the moment.
-
-> 
-> So far I get the idea that this is something for your RAS needs. This should
-> have general usability for the rest of the kernel users - otherwise it should
-> remain a vendor-specific solution until it is needed by others and can be
-> generalized.
-
-CXL is not vendor specific. Our other driver that I keep referring
-to as 'coming soon' is though.  I'll see if I can get a few memory
-device manufacturers to specifically stick their hands up that they
-care about this. As an example we presented on this topic with
-Micron at the LPC CXL uconf (+CC Vandana).  I don't have access
-to Micron parts so this isn't just Huawei using Micron, we simply had two
-proposals on the same topic so combined the sessions.  We have a CXL
-open source sync call in an hour so I'll ask there.
-
-> 
-> Also, can already existing solutions in the kernel be generalized so that you
-> can use them too and others can benefit from your improvements?
-
-Maybe for the follow on topic of non persistent repair as a path to
-avoid offlining memory detected as bad. Maybe that counts
-as generalization (rather than extension).  But that's not covering
-our usecase of restablishing the offline at boot, or the persistent
-usecases.  So it's a value add feature for a follow up effort,
-not a baseline one which is the intent of this patch set.
-
-> 
-> I hope this makes more sense.
-
-Thanks for taking time to continue the discussion and I think we
-are converging somewhat even if there is further to go.
-
-Jonathan
-> 
-> Thx.
-> 
+	struct ras2_mem_scrub_ctx scrub;
+	struct ras2_mem_address_translation_ctx at;
+};
 
 
