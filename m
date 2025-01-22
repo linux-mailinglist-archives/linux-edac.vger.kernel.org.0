@@ -1,208 +1,330 @@
-Return-Path: <linux-edac+bounces-2942-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2943-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43A63A19866
-	for <lists+linux-edac@lfdr.de>; Wed, 22 Jan 2025 19:25:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D53CA19913
+	for <lists+linux-edac@lfdr.de>; Wed, 22 Jan 2025 20:16:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7C257A083A
-	for <lists+linux-edac@lfdr.de>; Wed, 22 Jan 2025 18:25:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 705E23A2EAE
+	for <lists+linux-edac@lfdr.de>; Wed, 22 Jan 2025 19:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85DF4215784;
-	Wed, 22 Jan 2025 18:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C035F21519C;
+	Wed, 22 Jan 2025 19:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lwTWWve4"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Scp14krE"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01422153FF;
-	Wed, 22 Jan 2025 18:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737570291; cv=fail; b=msepKUB07uEznxNXTYB7tgrt4EKxd2FS520bk6I0iPjMjxYIYep4KpmoL4rQxi6WrXq4qRl7lid4o/lqMNCY9fsn07U4m8YY74+j+VdYKrq3Q5XdWAOgBqHB1qkVHccWsQZZdHzOm26khOAV426kJ4CdcumhcPmpHlwO8UtKdvg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737570291; c=relaxed/simple;
-	bh=hAizieb+0CGqmwFTQNOoVmks/27KhHRZtWShFFdp8ms=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=TZ5cTiH2RoUYkKPoSz0Di2Fp5Qll/ivb7FackFHLAzd3BEo/4bf06cWUkBZ2ytvrW2drjRu8oflX0syTl22DEMBIqH1A1WERYsWIR2wYCA468JAAchiJX9R0pHwTGL29+0RotDwWQVZWqChdj9c+7Sx7bA6+XJSt/rILO4XOYCY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lwTWWve4; arc=fail smtp.client-ip=40.107.93.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Hs2yHrKdnYxiMqjK8jHN4ohgbMk489w4+tSuyFVq2fsDKviyyi0w9lEUsKW8DzAvMQqeQP9xBY6JPle8T7Y7r+F5ETzkTALpKNCQMwAZnjK/C06zPagBYkOkjVfqDcv4KFLS2vJJTrE5xzur8jprqLtJhI1vZLbcEhVH7KwJKihnutS2LyfzH0h07HIPJ6jFXXElameeV1aK1t3z6HY6ZXnIoG/1hkSxHLvi0YhUikC6TSM5ndXjKSRBCH+GSqpTNrjlXM4g/RC9uYoeyX0mL+rSkmMEKKABwO/pZ9hJb34eBIhEsFckSWE/HAnqD71BMjV6pJT/r24lq01vz/TxFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ygtLdLfCy5incxE8OIBpgH/pV+BOS7S0gl6oITDqXAw=;
- b=DI0H0dks6dgPS2fNvk8xZIZZuxwp5f4tbIO84wOJ3bD/GR23wLYLUe9dK4FsDv9Qh9D8aJQKj08hSQbVFrcmo9yiBaI75x7ocDB1Z6OO8RPNxapX91M9sznrjEwfW0n1OEU7Jn2+hX/ZbaFWg0H0iVLowrNjcAAS8S6Ec/suQPqiiPHRt2uA2OGcw2nGUUftE5B4nkvVUi1zIlXPdT6fCXaex5KeycacRrSgtQ8ORG7+X11R5Q/3STnPEGzEpdCDUh+qfewIMvyb9tJUE1EHaKzc76tDqyuYmnulrAjnSQLhUxRuq4lBNa1zpemgTnaLszhL+Zy8Lhq6LWu69z9gag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ygtLdLfCy5incxE8OIBpgH/pV+BOS7S0gl6oITDqXAw=;
- b=lwTWWve4AfA5W2ZeIBB0IMAB9XKXDeyssIN+VEs6lLSDVGlDcIAiAyAc+ZMINsJ6O1pkGikMJF2smjJeXU1j2NBF52RgiyduaDAgN+S2s1c0Y8S7y61Jbh/6+olrfHilmNQeUpAn+IUgR22ksb6efGb8ZxROrqJQGKIOZ4olB1o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- SJ0PR12MB6783.namprd12.prod.outlook.com (2603:10b6:a03:44e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.21; Wed, 22 Jan
- 2025 18:24:47 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f%5]) with mapi id 15.20.8377.009; Wed, 22 Jan 2025
- 18:24:46 +0000
-Date: Wed, 22 Jan 2025 13:24:38 -0500
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Nikolay Borisov <nik.borisov@suse.com>
-Cc: linux-edac@vger.kernel.org, x86@kernel.org,
-	linux-kernel@vger.kernel.org, bp@alien8.de
-Subject: Re: [RESEND PATCH 1/3] x86/mce/inject: Remova call to
- mce_notify_irq()
-Message-ID: <20250122182438.GA464145@yaz-khff2.amd.com>
-References: <20250114163722.34850-1-nik.borisov@suse.com>
- <20250115073640.77099-1-nik.borisov@suse.com>
- <20250115073640.77099-2-nik.borisov@suse.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250115073640.77099-2-nik.borisov@suse.com>
-X-ClientProxiedBy: BN9PR03CA0596.namprd03.prod.outlook.com
- (2603:10b6:408:10d::31) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10875215182;
+	Wed, 22 Jan 2025 19:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737573368; cv=none; b=KwrFcrq/hKcH/JGKx5sTMsRyc03rH/s7F+rhKkOjDEI39u2Rvxtx+PO+jldg8mUTDPPTTRF0FUd5ComYhlJvfbc7dW1Dhr3T3ydPujXu1LqsDH41+gTBlnJmjwci5hZIqU5b0+HCMd07lUwJNBv0SOsYzuc7QWDKwUZ3rHpO6/c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737573368; c=relaxed/simple;
+	bh=v6YV9eIDsJMLS4oejIi8jAG2xTfl0sZ+XRNDM7u25to=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sALCZJpAviFsPTlvd0zjKG2YsQPPNKd9oxOnIbH7RgcRFgD4GtZ2/ClE++fg7fvtxoQZJBGctKH/1tuzDyI8BA2PzD3WafcQ6XojuvpSjNB6hb+SSW8zVhEwwCBz1LhDTqI8+ZB+NNOEk0L7iWvinC+xV+249J7M+n/DFcBw1AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Scp14krE; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2C9E040E0194;
+	Wed, 22 Jan 2025 19:10:12 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 7gbpTtE4YNEk; Wed, 22 Jan 2025 19:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1737573007; bh=Tcb2Z6DGVFgByVLZsGDzi5H0qUPxCY9mavsd9VzPlvs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Scp14krEEXpmv7pRF0EklohRi6aP0zbh/s92cJ440j7InvtCw0KkFgctx/FlD9gvY
+	 ASsaGlYI5lhfgarZFSME4UptgQVYyVGwg39T+OVXA9T9oi2Pcu7g5A36xnaBxpV3mU
+	 swk5OSaimu3YGKMetCAyA03blAN0B3qx+CiaiAT94ycERupkLgh6zghmFSnDlWMyNh
+	 dARMKMC9LuWhIIZW0rV96Gm+4i2jMahLwzEADxtZTIAR6owiN5aiWR6bEAU18bQRfC
+	 T3snd8Rh/r2uL5TpmXttWgZNy8Kwj/KEAeUyo9sQ9Emyd53bVo6EWPAkWRRGsDYYXk
+	 3KbP2vIncRcJX+L82yUpIN56G3j9IZWDz2t2tFP8RA3EP4qWPvCSmPiIKaOKiS5AQA
+	 SnNcLVEoYq4gIJuAFtFSM65VtjfdKrdEbn6Rz6vo694oHvgdonB6EsKpwMvtat2Hoj
+	 pRyiVOdKcZUh+sxwJp1iLtPmB+Kbm5JW9uRKvLbafbgAtDnyiPbAPH9zgY45Xns93W
+	 DL1vzGD3QDtvPt7R5MAL/SY6bvoC6yGfH79vMl7EA9nAADHraGFb1o1Zkg4TF5g/Pp
+	 jk7X1IhIQ1yh8yvnapK4oJEKRdGnzMSiTw6hOP8jR+McoWEDwBOD/U29KIr7X2zSRq
+	 G1wsyO4EhemY7RkmXtZbAUqs=
+Received: from zn.tnic (pd953008e.dip0.t-ipconnect.de [217.83.0.142])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 365FB40E01C5;
+	Wed, 22 Jan 2025 19:09:23 +0000 (UTC)
+Date: Wed, 22 Jan 2025 20:09:17 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Shiju Jose <shiju.jose@huawei.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+	"dave@stgolabs.net" <dave@stgolabs.net>,
+	"dave.jiang@intel.com" <dave.jiang@intel.com>,
+	"alison.schofield@intel.com" <alison.schofield@intel.com>,
+	"vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+	"ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"david@redhat.com" <david@redhat.com>,
+	"Vilas.Sridharan@amd.com" <Vilas.Sridharan@amd.com>,
+	"leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+	"erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>,
+	"gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>,
+	"Zengtao (B)" <prime.zeng@hisilicon.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+	wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>, Vandana Salve <vsalve@micron.com>
+Subject: Re: [PATCH v18 04/19] EDAC: Add memory repair control feature
+Message-ID: <20250122190917.GDZ5FCXetp9--djyQ6@fat_crate.local>
+References: <20250109123222.GBZ3_B1g3Esgu1-MPi@fat_crate.local>
+ <20250109142433.00004ea7@huawei.com>
+ <20250109151854.GCZ3_o3rf6S24qUbtB@fat_crate.local>
+ <20250109160159.00002add@huawei.com>
+ <20250109161902.GDZ3_29rH-sQMV4n0N@fat_crate.local>
+ <20250109183448.000059ec@huawei.com>
+ <20250111171243.GCZ4Kmi5xMtY2ktCHm@fat_crate.local>
+ <20250113110740.00003a7c@huawei.com>
+ <20250121161653.GAZ4_IdYDQ9_-QoEvn@fat_crate.local>
+ <20250121181632.0000637c@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|SJ0PR12MB6783:EE_
-X-MS-Office365-Filtering-Correlation-Id: 929280b5-4e7b-4199-ff79-08dd3b120cc0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Y83guTVWeJsXwgu1vI2wCUmEWgEeMpSyGjmCmXSY8EXqtP61pXDkHBFWZkPI?=
- =?us-ascii?Q?Uzi7rypJa3cZ6SMxzArWib0JrtgmoD/neQUDsgCfOhRT7q03yfMPcuB+lqM+?=
- =?us-ascii?Q?GDirMBduMMJkFxJ5H+fJ12cWMRl/ZhOf3P2XN8vf6B92vzONrIl8FeTCJwzp?=
- =?us-ascii?Q?bSGgTg/UiyD3mAXddyzpsScbqpVLH3FNCgT/TML4LE6kADnZqBfupCDJ4R5t?=
- =?us-ascii?Q?ACyuDbLivL2An0UEDoY8x5bILPKeEuAeY4qycjV8A/6hNmQT3pkVad0x+ss+?=
- =?us-ascii?Q?saMAQws0Nv/YlQucQptWB3Rj/TcqwEfu+zkZYu7JypNomVkbgm6PDzTxYEQk?=
- =?us-ascii?Q?nT/uP6sCHvbJ8emT7aPxk1LfJmT1ynIEOZwLrb8224eVEfu1WsOaL4VnP7BL?=
- =?us-ascii?Q?HsqPba5ZG3uMe/K8FVEmtS6I+WlyFDqLyUgo3kqJi9liKW7b6jBHIVwVVliu?=
- =?us-ascii?Q?sjogNDslMJ2jH9FxnhxKkk5R0s+6yGC2150DL4R3ZFap5axTvvCuUMjnA2yQ?=
- =?us-ascii?Q?GUzxS1bTLOVad/Oa6w/hFLzH8gbEML7eMh/Wt4DdG8U1ZSqNqa3B0sFHZuMb?=
- =?us-ascii?Q?LCkZS5GdaSWwZgma3+QB6VE5XRqqZl7PTAApl9BTB9gfKVPXT9TN9HKhHxDa?=
- =?us-ascii?Q?nni8WX5AHHKGm1rQOttAQmMKovAiONwsZSFIh9r87QF57FEQ3Jotj6z9w7lC?=
- =?us-ascii?Q?JKvJjbhTexRony8HWVuTwhdOYf6Gm+ITqUrC2pYzbZngY39a4ZPXZLAp/m4q?=
- =?us-ascii?Q?80hAy8ujnSmKwfKrSkGqt8XByWraw3qKtwR206gyksigEp1TJU3EzG9zcDW9?=
- =?us-ascii?Q?5R9sEN8ompEBFhLFWpN8MMgsQO0OdCyKakuNQgeQ720z5yn+6FuY79WOMt83?=
- =?us-ascii?Q?zkqDCSdTn4XPbdFLCxQTDWiy3ly1DUVaXopLkmnvH8cSrSUhcstAFxe5lmt+?=
- =?us-ascii?Q?5Am3baLv2GVTAj6ILhfmN/+cGqop/lK54D0kH4kinLf+g85yd95LE7y2DRrI?=
- =?us-ascii?Q?j6/EMAquS4+sbOyu+Cs4Jib/NbzInurkj/H79n/cvlKQzoJJcVUaPsGuJdSq?=
- =?us-ascii?Q?uxcZiZ5znJsZdmwCmr5BmxmiblJKXXa31vOtUkOcRGEWGscTWLj6TrjTVgDc?=
- =?us-ascii?Q?RwlDzv1o3rwXmgRr/5XVfUM0bqbXQwyi0ZuxEQviqD502OW0PUlGVoE0lJmJ?=
- =?us-ascii?Q?5As3LB+8HEzLZpp/j4Yv4jzdfr+RR4MFB+GCFXm0/gN+io3FVzrV4+LHg+ev?=
- =?us-ascii?Q?aex1zaJEqZjjl8XimEQLp6WLlx1Ka5e5O60AFk2wdJ2pRS3MOEIfSJxbcLfc?=
- =?us-ascii?Q?FleOnO2fPMjpCm9LC6rpGLcijM9Fwf+RpYwoHGJ/8W1LxrRe1UoUobDkxGw5?=
- =?us-ascii?Q?iN7kmivHLQz5J4VjELxS0wHRLr1s?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ufOcyv5kdE1tA8WBTxCbBvkiRyDm8O8f/KwDwfvVh+mapVRuda+BnZY8k0hB?=
- =?us-ascii?Q?UQ+mB39o7cPrd5TaVz6WFX5vtZvR/4U7phcZS6GXnOyin9SQtcfPifZquyhu?=
- =?us-ascii?Q?YefdUq3ASJKGO3kYIWsFGPMILs7vY+gHeJ360ukyajffpClmfmSVyUHEdFzr?=
- =?us-ascii?Q?gLJuzp8VUuk/uMhEKHkcnIdFfNY6oM5OZhsT5odB9Eyi+p2lEzNHHu8R0cUj?=
- =?us-ascii?Q?6Va6EXv9OYOu0IJG/Hd6iFgWbpUWdKXcfZqHKwqfKfOHgpspwKyL+nlrE1g2?=
- =?us-ascii?Q?r7FD+8Y1Fa+ohm+DpOtNWsBP1Ufr917GNWubC+sXua36CZ1IQPNazz59Bn9f?=
- =?us-ascii?Q?Z1DQK+KQwU0Qfuj7ayW4GfPNP9pLy5EkyinpnZ58ZandyIXhmebpHCxrcmjJ?=
- =?us-ascii?Q?8yP21Qubi/KgnbwlyshHwc6Xhx+XAYMF+dWVxEIjCeh+ePXHagD7d93x9GsJ?=
- =?us-ascii?Q?Ckmdna1no+SKNNLDiuaiPlm7Xw4xWuSNB/q0YCQPPOkjK9r/0X5Zt6yImz3i?=
- =?us-ascii?Q?mSGEqGLefrS8urcXpZ6orRLZ+97Iy7RMfeiAKes8RD4SSGvfOKfbIJuF/bdD?=
- =?us-ascii?Q?RyaYofPZ8IBGA1Ms2W5bWQNKOE/F5oQEliUF53Sjvv9q59E9ARaLQzTrIku9?=
- =?us-ascii?Q?9r/av6w4KMUJwzZMQlTL2do+01vXgWX3+w+VQAjwJz1+ySKR5cohAtpNxVup?=
- =?us-ascii?Q?Cpvj980A2Litp22cn9o4geIaIyJRI7G5Qd0Jq4NSlS8UoqjTO0/Di2YXm5VY?=
- =?us-ascii?Q?6luKMoG2Kxo/33bnCGQzUcnPlkvWFeyk7rBXKfFlzBaSJRm59G07sBXeuS8W?=
- =?us-ascii?Q?9Gd65POB4frjYohnGvT6liyDpm4v9slR4vDzxwYvc/2j6Iv9Pt/mctQKkaji?=
- =?us-ascii?Q?0njroY4lrX5/j5USDu4U5lAGyjxWj9S4Y0jooQQgqi3SQ2drKErYmoorUFof?=
- =?us-ascii?Q?dfIak5/yPUuE7U8Ll2HQeq3ysrQohA5AS81i66Uqg62am2JqRL3Ri/5Vu7Wj?=
- =?us-ascii?Q?5Xase2XPBX3j9pPnoVYpZ3GlGuE4kwNmtLflGcaYRKOjBxQjqgqgPd6mAYv2?=
- =?us-ascii?Q?fPU9+EzmH6RNASdGQztrtRsxOj+jKe6Wl+dPRN5k+UVFnT/IWb+y8mRFieDF?=
- =?us-ascii?Q?e2WuYSDswnqxVaM1OUPkBLSxkU62fAoeGZTNzrUiY83S7NZQ5Iuscp8xzTCb?=
- =?us-ascii?Q?TjLCOvIZaNDoxp0EeHOFfXsSwDoiZcZs3ajFI3ZIYBxYN2WYALm/S6TKXgV4?=
- =?us-ascii?Q?eE1RzC14znCdWtusvZNMRuuoC4cmAi2Qdl8R2ZQr9bJilLSMW8TLIuWQQX4I?=
- =?us-ascii?Q?9ecAPQoC3Cgpp7QaTlrvu0OCsh3440u3JC+uFNv8q0pXxRE8WdRyjdGpE30s?=
- =?us-ascii?Q?uGbRXoFj8CsqmD2nPQ2pq8hhvp5WX/ehSmnoWy1EnDn0U3X+rZeSm5z3SWP4?=
- =?us-ascii?Q?LW6qEsz82rGBFRL6zVEjrEdxFjQPDEDQmtVi35Zz7y1H+c6DPCyIDhCJu8fq?=
- =?us-ascii?Q?UA0GuxCfdJPBdxRewSMfPCYeaxeUfM5I78PVlySyuDeyxG5AG5b4SEXeuWpC?=
- =?us-ascii?Q?aXYPquRe5ub/X8isWpD+Zv81uNmutWOw4MLVI6wm?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 929280b5-4e7b-4199-ff79-08dd3b120cc0
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2025 18:24:46.8466
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2tCXPbtedLP4a5AIjf2tt2Ku+9oPAHb50nteJyvgTDlIwHlS70ua9DDEjO/gCPfguBmMmMVabLmmBU8DUt4r7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6783
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250121181632.0000637c@huawei.com>
 
-On Wed, Jan 15, 2025 at 09:36:38AM +0200, Nikolay Borisov wrote:
+On Tue, Jan 21, 2025 at 06:16:32PM +0000, Jonathan Cameron wrote:
+> Clearly we need to provide more evidence of use cases: 'Show us your code'
+> seems to apply here.  We'll do that over the next few weeks.
 
-Hi Nikolay,
+Thanks.
 
-There is a typo in the $SUBJECT.
-
-> The call is actually a noop because when the MCE is raised the early
-> notifier is the only call site that correctly calls mce_notify_irq()
-> because it also sets mce_need_notify. So let's just remove this call,
-> which allows to unexport mce_notify_irq.
+> based on simple algorithms applied to the data RAS Daemon already has.
+> The interface for the reasons discussed in the long thread with Dan
+> is the minimum required to provide the information needed to allow
+> for two use cases.  We enumerated them explicitly in the discussion with
+> Dan because they possibly affected 'safety'.
 > 
+> 1) Power up, pre memory online, (typically non persistent) repair of
+>    known bad memory.
 
-The commit message should be in passive and imperative voice.
+Lemme make sure I understand this: during boot you simply know from somewhere
+that a certain rank (let's use rank for simplicity's sake) is faulty. Before
+you online the memory, you simply replace that rank in the logic so that the
+system uses the spare rank while the faulty rank is disabled.
 
-"So let's just remove this..." -> "Remove this..."
+>    There are two interface options for this, inject the prior mapping from
+>    device physical address space (host address is not necessarily relevant
+>    here as no address decoders have been programmed yet in CXL - that
+>    happens as part of the flow to bring the memory up), or use the
+>    information that userspace already has (bank, rank etc) to select what
+>    memory is to be replaced with spare capacity.
 
-> Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
-> ---
->  arch/x86/kernel/cpu/mce/core.c   | 1 -
->  arch/x86/kernel/cpu/mce/inject.c | 1 -
->  2 files changed, 2 deletions(-)
+Ok, so this is all CXL-specific because this use case relies on userspace
+being present. Which means you cannot really use this for DIMMs used during
+boot. So if DIMMs, those should be online-able later, when userspace is there.
+
+>    Given the injection interface and the repair interface have to
+>    convey the same data, the interface complexity is identical and
+>    we might as well have a single step 'repair' rather than
+>      1. Inject prior records then
+
+What exactly is this injecting? The faulty rank? Which then would cause the
+respective driver to go and do that repairing.
+
+Which then means that you can online that device after rasdaemon has loaded
+and has the required info to online it.
+
+Which then means, rasdaemon needs to be part of the device onlining process.
+
+I'm simply conjecturing here - I guess I'll see your detailed use case later.
+
+>      2. Pass a physical address that is matched to one of those records.
+
+I don't know what that one does.
+
+>    There are no security related concerns here as we always treat this
+>    as new memory and zero it etc as part of onlining.
+
+Right, goes without saying.
+
+> 2) Online case.  Here the restriction Dan proposed was that we 'check'
+>    that we have seen an error record on this boot that matches the full
+>    description.  That is matching both the physical address and the
+>    topology (as that mapping can change from boot to boot, but not whilst
+>    the memory is in use). This doesn't prevent any use case we have
+>    come up with yet because, if we are making a post initial onlining
+>    decision to repair we can assume there is a new error record that
+>    provided new information on which we are acting.  Hence the kernel
+>    had the information to check.
 > 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 0dc00c9894c7..23e5e7f7c554 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1793,7 +1793,6 @@ bool mce_notify_irq(void)
->  	}
->  	return false;
->  }
-> -EXPORT_SYMBOL_GPL(mce_notify_irq);
+>    Whilst I wasn't convinced that we had a definite security
+>    problem without this protection, it requires minimal changes and doesn't
+>    block the flows we care about so we are fine with adding this check.
+
+I need more detail on that 2nd case - lemme read that other subthread.
+
+> Ok. We'll put together an example script / RASdaemon code to show how
+> it is used. I think you may be surprised at how simple this is and hopefully
+> that will show that the interface is appropriate.
+
+That sounds good, thanks.
+
+> This we disagree on. For this persistent case in particular these are limited
+> resources. Once you have used them all you can't do it again.  Using them
+> carefully is key. An exception is mentioned below as a possible extension but
+> it relies on a specific subset of allowed device functionality and only
+> covers some use cases (so it's an extra, not a replacement for what this
+> set does).
+
+By "this persistent case" you mean collecting logs per error address,
+collating them and massaging them or hunting them through a neural network to
+recognize potential patterns and then act upon them?
+
+In any case, I don't mean that - I mean something simple like: "after X errors
+on address Y, offline page Z." Like we do with .../ras/cec.c. Ofc you can't
+put really complex handling in the kernel and why would you - it must be *the*
+best thing after sliced bread to impose that on everyone.
+
+All I'm saying is, simple logic like that can be in the kernel if it is useful
+in the general case. You don't *have* to carry all logic in some userspace
+daemon - the kernel can be smart too :-)
+
+> With the decision algorithms in userspace, we can design the userspace to kernel
+> interface because we don't care about the algorithm choice - only what it needs
+> to control which is well defined. Algorithms will start simple and then
+> we'll iterate but it won't need changes in this interface because none of it
+> is connected to how we use the data.
+
+Are you saying that this interface you have right now is the necessary and
+sufficient set of sysfs nodes which will be enough for most algorithms in
+userspace?
+
+And you won't have to change it because you realize down the road that it is
+not enough?
+
+> In general an ABI that is used is cast in stone. To my understanding there
+> is nothing special about debugfs.  If we introduce a regression in tooling
+> that uses that interface are we actually any better off than sysfs?
+> https://lwn.net/Articles/309298/ was a good article on this a while back.
 > 
->  static void __mcheck_cpu_mce_banks_init(void)
->  {
-> diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-> index 313fe682db33..06e3cf7229ce 100644
-> --- a/arch/x86/kernel/cpu/mce/inject.c
-> +++ b/arch/x86/kernel/cpu/mce/inject.c
-> @@ -229,7 +229,6 @@ static int raise_local(void)
->  	} else if (m->status) {
->  		pr_info("Starting machine check poll CPU %d\n", cpu);
->  		raise_poll(m);
-> -		mce_notify_irq();
+> Maybe there has been a change of opinion on this that I missed.
 
-With this change, there are no users of mce_notify_irq() outside of
-mce/core.c. So you could go further and make the function static to
-core.c.
+I don't think so and I can see that article's point. So let's cut to the
+chase: what are we going to do when the sysfs or debugfs nodes you've added
+become insufficient and you or someone else needs to change them in the
+future, for their specific use case?
 
-In other words, you could squash the second patch into this one.
+The last paragraph of that article basically sums it up pretty nicely.
 
-Thanks,
-Yazen
+> Absolutely though the performance impact of punching holes in memory over
+> time is getting some cloud folk pushing back because they can't get their
+> 1GIB pages to put under a VM.  Mind you that's not particularly relevant
+> to this thread.
+
+What is relevant to this thread is the fact that you can't simply reboot as
+a RAS recovery action. Not in all cases.
+
+> For this we'll do as we did for scrub control and send a patch set adding tooling
+> to RASdaemon and/or if more appropriate a script along side it.  My fault,
+> I falsely thought this one was more obvious and we could leave that until
+> this landed. Seems not!
+
+Sorry, I can't always guess the use case by looking solely at the sysfs nodes.
+
+> This I agree on. However, if CXL takes off (and there seems to be agreement
+> it will to some degree at least) then this interface is fully general for any spec
+> compliant device.
+
+Ok, sounds good.
+
+> Sure. We can definitely do that.  We have this split in v19 (just undergoing
+> some final docs tidy up etc, should be posted soon).
+
+Thx.
+
+You don't have to rush it - we have merge window anyway.
+
+> Early devices and the ones in a few years time may make different
+> decisions on this. All options are covered by this driver (autonomous
+> repair is covered for free as nothing to do!)
+
+Don't forget devices which deviate from the spec because they were implemented
+wrong. It happens and we have to support them because no one else cares but
+people have already paid for them and want to use them.
+
+> CXL is not vendor specific. Our other driver that I keep referring
+> to as 'coming soon' is though.  I'll see if I can get a few memory
+> device manufacturers to specifically stick their hands up that they
+> care about this. As an example we presented on this topic with
+> Micron at the LPC CXL uconf (+CC Vandana).  I don't have access
+> to Micron parts so this isn't just Huawei using Micron, we simply had two
+> proposals on the same topic so combined the sessions.  We have a CXL
+> open source sync call in an hour so I'll ask there.
+
+Having hw vendors agree on a single driver and Linux implementing it would be
+ofc optimal.
+
+> Maybe for the follow on topic of non persistent repair as a path to
+> avoid offlining memory detected as bad. Maybe that counts
+> as generalization (rather than extension).  But that's not covering
+> our usecase of restablishing the offline at boot, or the persistent
+> usecases.  So it's a value add feature for a follow up effort,
+> not a baseline one which is the intent of this patch set.
+
+Ok, I think this whole pile should simply be in two parts: generic, CXL-spec
+implementing, vendor-agnostic pieces and vendor-specific drivers which use
+that.
+
+It'll be lovely if vendors could agree on this interface you're proposing but
+I won't hold my breath...
+
+> Thanks for taking time to continue the discussion and I think we
+> are converging somewhat even if there is further to go.
+
+Yap, I think so. A lot of things got cleared up for me too, so thanks too.
+I'm sure you know what the important things are that we need to pay attention
+when it comes to designing this with a broader audience in mind.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
