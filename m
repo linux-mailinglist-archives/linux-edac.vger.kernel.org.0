@@ -1,223 +1,456 @@
-Return-Path: <linux-edac+bounces-2967-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-2968-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C558A289CB
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Feb 2025 13:01:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7747AA2AA21
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Feb 2025 14:40:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F95E7A16D9
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Feb 2025 12:00:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0559216159B
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Feb 2025 13:40:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 408D521D595;
-	Wed,  5 Feb 2025 12:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hB2MkDWU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE2241EA7F4;
+	Thu,  6 Feb 2025 13:39:59 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFBE151986;
-	Wed,  5 Feb 2025 12:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738756860; cv=fail; b=siThSR7HtlkWfJ4Vx7kO4dXCAVRo9NdEHhHoXxPRvmI+/Gt47QRxy71tV5HYuWSJK0IZdeCWa/yiDxufyCB9fA7Vl5InCSfQQ6co+pdl8z0gSPaWeaCk6WVpE5obw4nH88Twywc8IrLy9ErRRtrs2EPbsSVqHVwDGs0hO1cv4hY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738756860; c=relaxed/simple;
-	bh=tkrJaCWjwsjXI/cIA4nUFakAYvIcIyeqPX/2KGAbb40=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=f3+SQrG56JqsEA1QmZFCgEyxIYzf+Uy15n8i0m7IgHjC91urchBVH+Xdne4BJbgMvr0P2lyPG8LpeJN2a6p9g6rkFPXusL7ayq8itdI/FqyoSHeZ/+Fob5qqY1xmbz+QivhmCT3quJ5I1VFgCwPLTee3CDDZUaGO+VbJTlIbv0U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hB2MkDWU; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738756859; x=1770292859;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=tkrJaCWjwsjXI/cIA4nUFakAYvIcIyeqPX/2KGAbb40=;
-  b=hB2MkDWULst9LBSUy5iueUtz7lFM2SaKjLzvGhTkVlCXCwDYUlwRe/Yf
-   QWqHWtjNkBq562Ag+ud4vLuqvnOYYPGtiXMB90lo0RH8kdigCj8Xkom2j
-   yRoLpw1xu2TU/cJH7U1wFwVi0YOASv40/ZuvLPQPzuR//3k0bXKxBwtD5
-   Ql7v26ssRoSJ9+yV5QmXfg75tSO9yUpJP9uY+LJX+vR3VWjk1hcRe2a6A
-   VsNf7ou9hkGvJzF23i7xVTwETOu2DE9Cn6uRxwAyvwu7v1hhYyYMgcLQT
-   rwcJPhr9gYszvscMkOl3AehBSx2wYbNeGZx7/Il6K/XcTyzVHauKRIaL2
-   A==;
-X-CSE-ConnectionGUID: SkTyWwugRKexlyrScSXaRA==
-X-CSE-MsgGUID: pJK2By1CS/aKcElHWkTmRQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39582911"
-X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="39582911"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 04:00:53 -0800
-X-CSE-ConnectionGUID: g+TYB1HhS42oqQ/Q0sU10A==
-X-CSE-MsgGUID: xonKn630QaKXDqPTWObM6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110733719"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa010.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Feb 2025 04:00:51 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 5 Feb 2025 04:00:51 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Wed, 5 Feb 2025 04:00:51 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.48) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Wed, 5 Feb 2025 04:00:50 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=X9Y/sOLGLRmR1cC1p/B+lnXQbENPvnfJJiv28EIEbP4hcPqG0IXkZVP4J/ojwMscgmqxrQdXqbVOMwSstZYwKKNQ4/6Homw6P5og7oAuxeu2RW2DUuKSVGnsG6Y4Bq9oYOMvg8M5lumx8ESlxwp/66MfC3bwE0xpOD4+y/268W2nj644nQp2TS2mcc7/9tHN9GyCkVkAQPYN3JfMnYk/HrtzSvNI6CPXikgyc+SmQ/HqzSS9Dz+eFxH5ssI+fUxX+ngNW7Ne01YrEWhyT+J1Totjw5nh0ywfcMUuk28uEiKx2C2Dx5j2h2griMG7GbARz+9NjLAAAq02gP0rLaBTCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T7tplkOZlNSNjKQEoj8Pg8sgxBfQ6WqWgMXga2hz4CU=;
- b=St8p5kUvqCfP3EcvTWF07egcWKfyhek0vVHSaETEfDyj/CtD3nhipdjZTWlv1x6A+vixTlUWRK3BtrxcGgZRxVUVA3CQmPWcs7fCN8C5IAKMVrNmsT7fc/a7gYJ05nhJKxLKc1q7XFb7ppQZlr+QjFdbSb4fciYY7o0ZCuniOD39/JTWdmhPuYY2S9XNVVUUqZ0rsPz0RWkibRx5xeJDDt5pF1Q++p+xbDyjyJ4KeVRByLsHMP469iwxbfL+VlUcJxYDT9VD3CG6XRXk1oKmrT6XSVOv5X8iuyxU5pEJkYS2Jp4WeXFLbBLxPrRrdzTDc2sEefXjP8jCl4Ww949rRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
- by SA1PR11MB8596.namprd11.prod.outlook.com (2603:10b6:806:3b5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.24; Wed, 5 Feb
- 2025 12:00:43 +0000
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d%4]) with mapi id 15.20.8398.025; Wed, 5 Feb 2025
- 12:00:42 +0000
-From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To: Thorsten Blum <thorsten.blum@linux.dev>, Yazen Ghannam
-	<yazen.ghannam@amd.com>, Borislav Petkov <bp@alien8.de>, "Luck, Tony"
-	<tony.luck@intel.com>, James Morse <james.morse@arm.com>, "Mauro Carvalho
- Chehab" <mchehab@kernel.org>, Robert Richter <rric@kernel.org>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] EDAC: Simplify return statement in dct_ecc_enabled()
-Thread-Topic: [PATCH] EDAC: Simplify return statement in dct_ecc_enabled()
-Thread-Index: AQHbdKrKacEMiqdgt0yjuwQETRxmC7M4oJkA
-Date: Wed, 5 Feb 2025 12:00:42 +0000
-Message-ID: <CY8PR11MB7134F69FBDBC05FEC0C4815089F72@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <20250201130953.1377-2-thorsten.blum@linux.dev>
-In-Reply-To: <20250201130953.1377-2-thorsten.blum@linux.dev>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|SA1PR11MB8596:EE_
-x-ms-office365-filtering-correlation-id: 1a7e0c74-37af-4079-5215-08dd45dcb776
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?3rt7VeMMqrO8SYIyEQDkg587Th6KD7FLI2e7/LnysnA1t/KnL3Mk63L8yrXK?=
- =?us-ascii?Q?yJpJd23LuiDQokXUvHSvgWQbvNtT8S1tUwUyppvvjAo9/hrLXrH2/h9K2qEv?=
- =?us-ascii?Q?yZrIlCGSmGDVSV3uuTmk/sZ6d7Zrey28gFj5lMdT+1RQWLnk9699ky+DK6K5?=
- =?us-ascii?Q?kXhCwE0ZJqYqF88VMOmj3acd1X8teKPd/WELUhut0iGExEFKDuMY2l4jHhLC?=
- =?us-ascii?Q?JRORbnT1mWKJWEISHbdLnQSpUUxbWVmpYavRfO/qdhggSscPhuMvl9D0tTGc?=
- =?us-ascii?Q?u6VlQuGLyBneY3q76/VfvNLbNOWbwH9ufqlW5KeZLkyN2ePj+sQw1LGUSIi9?=
- =?us-ascii?Q?YjuSwGjhKFnwboQsDxuYmNEMCWxleV9reIUdHF/04tjfd9m/pYgyvDfHK0p0?=
- =?us-ascii?Q?UrQwA1JTF7b1E3BEwIG6SEZwC2h8ejMb5xljm0F5irGzNuxKgbi8tMNEx3uf?=
- =?us-ascii?Q?mBqcQZ/TC+JjGFm18EFqFROFnkpLD4XBNjKneVGfDKHPokqRp43eCvpL02yb?=
- =?us-ascii?Q?zqDf7Q5LNIFNeZUMoFxHGOFib5GL65r32eSfvGL1mQ46s2c8rP68E3RBUhea?=
- =?us-ascii?Q?/Xseh5uiO/Qsb2vrUXw4rRZ9Plxo/+D7JOU2wD+cO1oV9Ylxgpqlkv8hzo98?=
- =?us-ascii?Q?qf3pCTXv3uoeG8tPfjqdx3eDi6mR5ec6uUPa3AmMBkTDsVqlqLvzKmVa9Ib4?=
- =?us-ascii?Q?E8CVMdxBo0YDxDREU1W7o242CEF62cgl25ld3CInqTj1KYRMFRER/EhpaszC?=
- =?us-ascii?Q?Cz1VDlAP/WnM+raEK74xPz2OPOBO36SuUu1l2OLrJ7cLlps12drZGdUDj4Nz?=
- =?us-ascii?Q?rjjND6d3Q4TgEzTYRCvaNtZMZ6Tl9xsJ6uIM6HvvbxHiVOBAvZ6jLagwYb2n?=
- =?us-ascii?Q?a5CAn/fixJiJLYfqqN9a8uBLGGuiWIA9LuLxXKLdAlQ1betFUqoFMdI9vLHb?=
- =?us-ascii?Q?OXDqWXCRQ0mU9iVsEKelqZ7x49R2mIP35pWNWP15K6lEMg7QKtyCA1Thbxa2?=
- =?us-ascii?Q?AfZUH7QbBnBlJCI1rPNLri0WhSRC/zGlIgXFoIOsgNeUJmQz7Mm8vy0Hd9ty?=
- =?us-ascii?Q?ilGmYuqUAkq7AdP7ofAJSs6ph57lXvSk9fxmg+EuWfURSCn2yAlklhapHq91?=
- =?us-ascii?Q?W9k9w+r7+mMNQKybNaJiNx8pFnHU5pAZeMm5gKcJBuI4+egrkhKs5Zv+jIKi?=
- =?us-ascii?Q?unB9l1vdh5jSJnu3kl+SCYQY3Dtzaz3unR+9vnNVWjCDK0luOzCtFxbBGQnz?=
- =?us-ascii?Q?nhnC/cuK/hXcYRtX78B/9uOMywYzHUjzU0HU3zcgO4Cg2ZCLaJaVKC7Iu/gk?=
- =?us-ascii?Q?62+MXgDBACjczRYbtmrInndhNC9ymI8YhOgMrJqHkoG9sVZK5uOljRnXyLQs?=
- =?us-ascii?Q?VqvqOO7kyQiJQhnkSrjknGYG1C6ccgxQN8rZDNGfY1ySe0Yof7r8oYUkSOVo?=
- =?us-ascii?Q?9wWmJmwBW+FclTr4keqSrxD2Vrnx/0jW?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?q0WE7YTX7KP3mFEDfsG5O4by3g29MqGzEM+sRqwpgvMAKt0kEP5VHehD4GPm?=
- =?us-ascii?Q?H+qq+HppsxC597YeM+BafVNnf6c16jd6FXsTOWD/RGqDz1uRISOBtVwDQ3ZV?=
- =?us-ascii?Q?j7H5zysjChW/2ShZG9UTIbWeB2n3dwriOdaFyFkHMEeeoredL8/eD1VBx73N?=
- =?us-ascii?Q?oZ79RBQgP8G5stnJI7rJCZtCmdyEM/PMBmnI19tuEjZrU7efvzSRECkA6Yns?=
- =?us-ascii?Q?YgQesDlOQnUpmANYjmfOnDY/pyRTAh3Wj3K/1R9RAP+zGIWbhpRo+BlFfBHA?=
- =?us-ascii?Q?XHihpb97mo/WX8Rlb2izo2NXAHmidGDhEIJE0ulKI5SUGfAjgD5hxECkOQY6?=
- =?us-ascii?Q?MvY7Zfwg6ldFx4Fbxlki+vnAN5o7Gw9jKK4eHYvPUSSQZX6tZM6KZ/3EshbS?=
- =?us-ascii?Q?Ap81cYazBMd3vNYt/vRSObXm3fZcv5AL5/8KrhBJvLqW4Fbmc8qsI3EMFZND?=
- =?us-ascii?Q?dF7ELwQ2DiItiLgmtbfTU18yGdP6FAdkFNBtxgbQVjrex/uFmEZ6oHyuWKxQ?=
- =?us-ascii?Q?UMbvObXAhO7I/Ypn6jPHizE6EH4W6YVnbf4gTemjDYJHcwJKzjtnlpTuadda?=
- =?us-ascii?Q?qABYaJ3dVotvJf2jBp2j7jmPWo8vBI+nf/+81VuE/+AePcXAAHJbNpwQC4sN?=
- =?us-ascii?Q?xpA4xvnl7XGSlyaFBB90dG4f/3voi2EEnmYrHdkRfCv6muAcfDD11BmptnOw?=
- =?us-ascii?Q?m5+IgwQlKHeuvCLB1cmEcuYTL6pVt0VJecdfHSwopeHj+DeP2/NoZ/CmxSDM?=
- =?us-ascii?Q?UaJo5vd87rC/534SPIBfu4VVkYEpv7LB0ZSjM12ln+giFStPx7FGZAPzej72?=
- =?us-ascii?Q?w1gujqAd5kqSHMqdrkH24dvdjRX1nE26o5sWIOBwN3+JqEYOwb3zeGdpGrxv?=
- =?us-ascii?Q?rJ/RzuVyC0b+GSacYjN2K/Yw3w3A+qYDOb07zl5Ds1nmCKa9j4Fiq8y8RBES?=
- =?us-ascii?Q?X8H4D2BF9qVMqWtBAD7sVhToKFlIRJw3x0EEgap3iBsKbxlMDoNP2g/110dy?=
- =?us-ascii?Q?Zl7/oSys30ah7d2Z9glB54VMJj9pu5br+QD5ebTSMBK4FroL5+2GO9ocOyRL?=
- =?us-ascii?Q?+hrwT45LqLSVkBBnuqyHCFDtlbB+VirYeCFka/eRde5yjXORJVdu3JpVyyei?=
- =?us-ascii?Q?HJBiRZYDMU+G2gSoBcvLgybg7J/bs5uh1n2Bl+sW8WjuPEo2hBIW3lgOvP38?=
- =?us-ascii?Q?K5yC5DeoI+yQ7W45Xqen9YuBp9P470zbDqF32l/ElqzH5FWVLkk0s/gFcm7H?=
- =?us-ascii?Q?TzMboGPmDCU8XNyVazeHEWEiBi/32tXyQVs3UNZHGpVyLqgHDZCL/l0elw1J?=
- =?us-ascii?Q?3y0xX8CjfMdRSytj8RVru/hqYOr93leubnkOs3feXq/p9g3c+NsRv57ZDLVV?=
- =?us-ascii?Q?8TtLOVPXch2+LZyY2kXmvI1yQ1LtNAcLsnK0vE0EJ3HwqB9fxPw7+OD02SUK?=
- =?us-ascii?Q?MmDQybgVeYbpmyZbSeWM0JBpphoDHEhSGTnLENuco2ni2wGy4L3Xf+hFL9X8?=
- =?us-ascii?Q?KWFLo95pzdz+cRZ2EQ5yhmw+95APb1Ih7d30Sa77OOJT67fl+fRtr3cO499p?=
- =?us-ascii?Q?akuhapffYKaUFQ/DXj4f2VI9A8SxcDG65uZDLMyN?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93280199B9;
+	Thu,  6 Feb 2025 13:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738849199; cv=none; b=quR4xXibHlGZYswrInb5h0a4RC6Jgx1G7uwAkJbZEJ3PRCzrRC/BLamkElOo8WPbU/UY7gdZ9egslOFgvFsiaQYdPCB+zWaLzNnvrOeHVN96RE99RMONlixpIETU7WDarRpsDzzDbg/BlRXhwZCT8SPj4FnWi1giAP9FgY/nrOg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738849199; c=relaxed/simple;
+	bh=jbXs/lv0vv0lH8Vf0t9mbt1SDGzSRadJ5Oa/D6J+dao=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Uy79WKyuhClIHqEn9sQvuoBRfN9KHrfMaQbmbjMsydYYwrfQRWrKxI6eIC+7uY72zlouyMclnfOHkvJ97CLta0AFFpYtjPdnN9cu8HhR9ccFPJqmg5GxzG5CehRma1Xgyvwbpdu32wwDVb8/XLU2m9ITY37DHbPZ16xipd9t16I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YpdVQ27F3z6HJcf;
+	Thu,  6 Feb 2025 21:38:54 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id A3EDB140520;
+	Thu,  6 Feb 2025 21:39:52 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 6 Feb
+ 2025 14:39:51 +0100
+Date: Thu, 6 Feb 2025 13:39:49 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: Shiju Jose <shiju.jose@huawei.com>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>, "rafael@kernel.org"
+	<rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
+	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
+	"dave.jiang@intel.com" <dave.jiang@intel.com>, "alison.schofield@intel.com"
+	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
+	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>, Vandana Salve <vsalve@micron.com>
+Subject: Re: [PATCH v18 04/19] EDAC: Add memory repair control feature
+Message-ID: <20250206133949.00006dd6@huawei.com>
+In-Reply-To: <20250122190917.GDZ5FCXetp9--djyQ6@fat_crate.local>
+References: <20250109123222.GBZ3_B1g3Esgu1-MPi@fat_crate.local>
+	<20250109142433.00004ea7@huawei.com>
+	<20250109151854.GCZ3_o3rf6S24qUbtB@fat_crate.local>
+	<20250109160159.00002add@huawei.com>
+	<20250109161902.GDZ3_29rH-sQMV4n0N@fat_crate.local>
+	<20250109183448.000059ec@huawei.com>
+	<20250111171243.GCZ4Kmi5xMtY2ktCHm@fat_crate.local>
+	<20250113110740.00003a7c@huawei.com>
+	<20250121161653.GAZ4_IdYDQ9_-QoEvn@fat_crate.local>
+	<20250121181632.0000637c@huawei.com>
+	<20250122190917.GDZ5FCXetp9--djyQ6@fat_crate.local>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a7e0c74-37af-4079-5215-08dd45dcb776
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Feb 2025 12:00:42.9404
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WJ7VP1XFBcnmhzryN4b9DZw/NxKvm5T04xSlEmChUr8AdbQHLRtA8xyIxtDMVY5ubbJukrOcnFwJ7j9NPKne7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8596
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-> From: Thorsten Blum <thorsten.blum@linux.dev>
-> [...]
-> Subject: [PATCH] EDAC: Simplify return statement in dct_ecc_enabled()
->=20
-> Simplify the return statement to improve the code's readability.
->=20
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  drivers/edac/amd64_edac.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->=20
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c index
-> 8414ceb43e4a..1f106b4fafdf 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -3355,10 +3355,7 @@ static bool dct_ecc_enabled(struct amd64_pvt
-> *pvt)
->=20
->  	edac_dbg(3, "Node %d: DRAM ECC %s.\n", nid, (ecc_en ? "enabled" :
-> "disabled"));
->=20
-> -	if (!ecc_en || !nb_mce_en)
-> -		return false;
-> -	else
-> -		return true;
-> +	return ecc_en && nb_mce_en;
->  }
+On Wed, 22 Jan 2025 20:09:17 +0100
+Borislav Petkov <bp@alien8.de> wrote:
 
-LGTM. Thanks!
+> On Tue, Jan 21, 2025 at 06:16:32PM +0000, Jonathan Cameron wrote:
+> > Clearly we need to provide more evidence of use cases: 'Show us your code'
+> > seems to apply here.  We'll do that over the next few weeks.  
+> 
+> Thanks.
 
-   Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Shiju is just finalizing a v19 + the userspace code.  So may make
+sense to read this reply only after that is out!
+
+> 
+> > based on simple algorithms applied to the data RAS Daemon already has.
+> > The interface for the reasons discussed in the long thread with Dan
+> > is the minimum required to provide the information needed to allow
+> > for two use cases.  We enumerated them explicitly in the discussion with
+> > Dan because they possibly affected 'safety'.
+> > 
+> > 1) Power up, pre memory online, (typically non persistent) repair of
+> >    known bad memory.  
+> 
+> Lemme make sure I understand this: during boot you simply know from somewhere
+> that a certain rank (let's use rank for simplicity's sake) is faulty. Before
+> you online the memory, you simply replace that rank in the logic so that the
+> system uses the spare rank while the faulty rank is disabled.
+
+Yes.
+
+> 
+> >    There are two interface options for this, inject the prior mapping from
+> >    device physical address space (host address is not necessarily relevant
+> >    here as no address decoders have been programmed yet in CXL - that
+> >    happens as part of the flow to bring the memory up), or use the
+> >    information that userspace already has (bank, rank etc) to select what
+> >    memory is to be replaced with spare capacity.  
+> 
+> Ok, so this is all CXL-specific because this use case relies on userspace
+> being present. Which means you cannot really use this for DIMMs used during
+> boot. So if DIMMs, those should be online-able later, when userspace is there.
+
+In this case yes, this isn't appropriate for general purpose DIMMs.
+It's not CXL Specific as such but that is the most common type of device
+providing expansion / memory pooling type facilities today and those
+are the most common forms of memory not needed at boot (I don't think
+NVDIMMS ever supported PPR etc).
+
+> 
+> >    Given the injection interface and the repair interface have to
+> >    convey the same data, the interface complexity is identical and
+> >    we might as well have a single step 'repair' rather than
+> >      1. Inject prior records then  
+> 
+> What exactly is this injecting? The faulty rank? Which then would cause the
+> respective driver to go and do that repairing.
+
+For this comment I was referring letting the kernel do the
+stats gathering etc. We would need to put back records from a previous boot.
+That requires almost the same interface as just telling it to repair.
+Note the address to physical memory mapping is not stable across boots
+so we can't just provide a physical address, we need full description.
+
+> 
+> Which then means that you can online that device after rasdaemon has loaded
+> and has the required info to online it.
+> 
+> Which then means, rasdaemon needs to be part of the device onlining process.
+
+Yes. For this flow (sort of)  The PoC / proposal is a boot script rather
+than rasdaemon but it uses the rasdaemon DB.
+
+It would definitely be interesting to explore other options in addition to
+this.  Perhaps we get some firmware interface standardization to ask the
+firmware if it can repair stuff before the memory is in use.  Might work
+for cases where the firmware knows enough about them to do the repair.
+
+> 
+> I'm simply conjecturing here - I guess I'll see your detailed use case later.
+> 
+> >      2. Pass a physical address that is matched to one of those records.  
+> 
+> I don't know what that one does.
+
+This was about practical restrictions on interface simplification.
+If we have prior records pushed back into the kernel, we could then 'find' the
+data we need to repair by looking it up by physical address.  In v19 we do
+that for records from this boot if the memory is online.  This is
+part of the sanity check Dan asked for to harden against userspace
+repairing something based on stale data, but it is specific to the CXL
+driver. More generally that sanity check may not be needed if PA to
+actual memory mapping is a stable thing.
+> 
+> >    There are no security related concerns here as we always treat this
+> >    as new memory and zero it etc as part of onlining.  
+> 
+> Right, goes without saying.
+> 
+> > 2) Online case.  Here the restriction Dan proposed was that we 'check'
+> >    that we have seen an error record on this boot that matches the full
+> >    description.  That is matching both the physical address and the
+> >    topology (as that mapping can change from boot to boot, but not whilst
+> >    the memory is in use). This doesn't prevent any use case we have
+> >    come up with yet because, if we are making a post initial onlining
+> >    decision to repair we can assume there is a new error record that
+> >    provided new information on which we are acting.  Hence the kernel
+> >    had the information to check.
+> > 
+> >    Whilst I wasn't convinced that we had a definite security
+> >    problem without this protection, it requires minimal changes and doesn't
+> >    block the flows we care about so we are fine with adding this check.  
+> 
+> I need more detail on that 2nd case - lemme read that other subthread.
+> 
+> > Ok. We'll put together an example script / RASdaemon code to show how
+> > it is used. I think you may be surprised at how simple this is and hopefully
+> > that will show that the interface is appropriate.  
+> 
+> That sounds good, thanks.
+> 
+> > This we disagree on. For this persistent case in particular these are limited
+> > resources. Once you have used them all you can't do it again.  Using them
+> > carefully is key. An exception is mentioned below as a possible extension but
+> > it relies on a specific subset of allowed device functionality and only
+> > covers some use cases (so it's an extra, not a replacement for what this
+> > set does).  
+> 
+> By "this persistent case" you mean collecting logs per error address,
+> collating them and massaging them or hunting them through a neural network to
+> recognize potential patterns and then act upon them?
+
+Ah. No not that. I was just meaning the case where it is hard PPR. (hence
+persistent for all time) Once you've done it you can't go back so after
+N uses, any more errors mean you need a new device ASAP. That is as decision
+with a very different threshold to soft PPR where it's a case of you
+do it until you run out of spares, then you fall back to offlining
+pages.  Next boot you get your spares back again and may use them
+differently this time.
+
+> 
+> In any case, I don't mean that - I mean something simple like: "after X errors
+> on address Y, offline page Z." Like we do with .../ras/cec.c. Ofc you can't
+> put really complex handling in the kernel and why would you - it must be *the*
+> best thing after sliced bread to impose that on everyone.
+> 
+> All I'm saying is, simple logic like that can be in the kernel if it is useful
+> in the general case. You don't *have* to carry all logic in some userspace
+> daemon - the kernel can be smart too :-)
+
+True enough. I'm not against doing things in kernel in some cases.  Even
+then I want the controls to allow user space to do more complex things.
+Even in the cases where the devices suggests repair, we may not want to for
+reasons that device can't know about.
+
+> 
+> > With the decision algorithms in userspace, we can design the userspace to kernel
+> > interface because we don't care about the algorithm choice - only what it needs
+> > to control which is well defined. Algorithms will start simple and then
+> > we'll iterate but it won't need changes in this interface because none of it
+> > is connected to how we use the data.  
+> 
+> Are you saying that this interface you have right now is the necessary and
+> sufficient set of sysfs nodes which will be enough for most algorithms in
+> userspace?
+> 
+> And you won't have to change it because you realize down the road that it is
+> not enough?
+> 
+
+The interface provides all the data, and all the controls to match.
+
+Sure, something new might come along that needs additional controls (subchannel
+for DDR5 showed up recently for instance and are in v19) but that extension
+should be easy and fit within the ABI.  Those new 'features' will need
+kernel changes and matching rasdaemon changes anyway as there is new data
+in the error records so this sort of extension should be fine.
+
+
+> > In general an ABI that is used is cast in stone. To my understanding there
+> > is nothing special about debugfs.  If we introduce a regression in tooling
+> > that uses that interface are we actually any better off than sysfs?
+> > https://lwn.net/Articles/309298/ was a good article on this a while back.
+> > 
+> > Maybe there has been a change of opinion on this that I missed.  
+> 
+> I don't think so and I can see that article's point. So let's cut to the
+> chase: what are we going to do when the sysfs or debugfs nodes you've added
+> become insufficient and you or someone else needs to change them in the
+> future, for their specific use case?
+> 
+> The last paragraph of that article basically sums it up pretty nicely.
+
+Agreed. We need an interface we can support indefinitely - there is nothing
+different between doing it sysfs or debugfs. That should be
+extensible in a clean fashion to support new data and matching control.
+
+We don't have to guarantee that interface supports something 'new' though
+as our crystal balls aren't perfect, but we do want to make extending to
+cover the new straight forward.
+
+> 
+> > Absolutely though the performance impact of punching holes in memory over
+> > time is getting some cloud folk pushing back because they can't get their
+> > 1GIB pages to put under a VM.  Mind you that's not particularly relevant
+> > to this thread.  
+> 
+> What is relevant to this thread is the fact that you can't simply reboot as
+> a RAS recovery action. Not in all cases.
+
+Agreed.  We still have the option to soft offline the memory if there is no
+other choice.
+
+> 
+> > For this we'll do as we did for scrub control and send a patch set adding tooling
+> > to RASdaemon and/or if more appropriate a script along side it.  My fault,
+> > I falsely thought this one was more obvious and we could leave that until
+> > this landed. Seems not!  
+> 
+> Sorry, I can't always guess the use case by looking solely at the sysfs nodes.
+> 
+> > This I agree on. However, if CXL takes off (and there seems to be agreement
+> > it will to some degree at least) then this interface is fully general for any spec
+> > compliant device.  
+> 
+> Ok, sounds good.
+> 
+> > Sure. We can definitely do that.  We have this split in v19 (just undergoing
+> > some final docs tidy up etc, should be posted soon).  
+> 
+> Thx.
+> 
+> You don't have to rush it - we have merge window anyway.
+> 
+> > Early devices and the ones in a few years time may make different
+> > decisions on this. All options are covered by this driver (autonomous
+> > repair is covered for free as nothing to do!)  
+> 
+> Don't forget devices which deviate from the spec because they were implemented
+> wrong. It happens and we have to support them because no one else cares but
+> people have already paid for them and want to use them.
+
+Mostly for CXL stuff we've so far avoided that in the upstream code,
+but it is indeed the case that quirks will turn up :(
+
+I'd hope the majority can be handled in the CXL specific driver or
+by massaging the error records on their way out of the kernel.
+For now we have constrained records to have to be complete as defined
+by the spec, but I can definitely see we might have a 1 rank only device
+that doesn't set the valid bit in the error record for rank.
+In discussion with Shiju, we decided that's a case we'll solve in the
+driver if it turns out to be relevant.  Maybe we'd quirk the error
+report to fill in the missing data for that device, or maybe we'd
+relax the constraints on parameters when doing an online repair.
+That's a question to resolve if anyone ever builds it!
+
+> 
+> > CXL is not vendor specific. Our other driver that I keep referring
+> > to as 'coming soon' is though.  I'll see if I can get a few memory
+> > device manufacturers to specifically stick their hands up that they
+> > care about this. As an example we presented on this topic with
+> > Micron at the LPC CXL uconf (+CC Vandana).  I don't have access
+> > to Micron parts so this isn't just Huawei using Micron, we simply had two
+> > proposals on the same topic so combined the sessions.  We have a CXL
+> > open source sync call in an hour so I'll ask there.  
+> 
+> Having hw vendors agree on a single driver and Linux implementing it would be
+> ofc optimal.
+> 
+> > Maybe for the follow on topic of non persistent repair as a path to
+> > avoid offlining memory detected as bad. Maybe that counts
+> > as generalization (rather than extension).  But that's not covering
+> > our usecase of restablishing the offline at boot, or the persistent
+> > usecases.  So it's a value add feature for a follow up effort,
+> > not a baseline one which is the intent of this patch set.  
+> 
+> Ok, I think this whole pile should simply be in two parts: generic, CXL-spec
+> implementing, vendor-agnostic pieces and vendor-specific drivers which use
+> that.
+
+There is room for vendor specific drivers in that longer term and it
+is happening in the CXL core to move from just supporting spec
+complaint type 3 devices (the ones that use the class code)
+to supporting accelerators (network cards, GPUs etc with local memory).
+What we have here is vbuilt on the CXL core that provides services to
+all those drivers. The actual opt in etc is coming from the type
+3 device driver calling the registration call after finding the
+hardware reports the relevant commands.
+
+Overall the CXL subsystem is evolving to allow more reuse for accelerators.
+Until recently the only public devices where type 3 memory only, so it
+was a guessing game on where those spits should be.  Alejandro and others
+are now fleshing that out.  So far no sign of memory repair on those
+devices, but if they support it and use standard interfaces, then all good.
+
+(for type 2 support)
+https://lore.kernel.org/linux-cxl/20250205151950.25268-1-alucerop@amd.com/T/#t
+
+> 
+> It'll be lovely if vendors could agree on this interface you're proposing but
+> I won't hold my breath...
+
+True enough that vendors will do silly things.  However, if they want Linux
+support for a CXL memory device out of the box the only option they
+have is the driver stack that binds to the class code.
+Dan and the rest of us are pushing back very hard (possibly too hard)
+on vendor defined interfaces etc.  If we don't see at least an effort
+to standardize them (not necessarily in the CXL spec, but somewhere)
+then their chances of getting upstream support is near 0. There have
+been a few 'discussions' about exceptions to this in the past.
+
+Their only option might be fwctl for a few things with it's taints
+etc.  The controls used for this set are explicitly excluded from being
+used via fwctl:
+
+https://lore.kernel.org/linux-cxl/20250204220430.4146187-1-dave.jiang@intel.com/T/#ma478ae9d7529f31ec6f08c2e98432d5721ca0b0e
+
+If a vendor wants to do their own thing then good luck to them but don't expect
+the standard software stack to work.  So far I have seen no sign of anyone
+doing a non compliant memory expansion device and there are quite a
+few spec compliant ones.
+
+We will get weird memory devices with accelerators perhaps but then that
+memory won't be treated as normal memory anyway and likely has a custom
+RAS solution.  If they do use the spec defined commands, then this
+support should work fine. Just needs a call from their drive to hook
+it up.
+
+It might not be the best analogy, but I think of the CXL type 3 device
+spec as being similar to NVME. There are lots of options, but most people
+will run one standard driver.  There may be custom features but the
+device better be compatible with the NVME driver if they advertise
+the class code (there are compliance suites etc)
+
+> 
+> > Thanks for taking time to continue the discussion and I think we
+> > are converging somewhat even if there is further to go.  
+> 
+> Yap, I think so. A lot of things got cleared up for me too, so thanks too.
+> I'm sure you know what the important things are that we need to pay attention
+> when it comes to designing this with a broader audience in mind.
+
+I'll encourage a few more memory vendor folk (who have visibility
+of more specific implementations / use cases than me) to take another
+look at v19 and the user space tooling.  Hopefully they will point
+out any remaining holes.
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Thx.
+> 
+
 
