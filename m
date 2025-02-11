@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-3015-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3012-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99F50A30330
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Feb 2025 07:02:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3451AA3032B
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Feb 2025 07:02:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA6873A712E
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Feb 2025 06:02:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71C767A1252
+	for <lists+linux-edac@lfdr.de>; Tue, 11 Feb 2025 06:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106021E9B1F;
-	Tue, 11 Feb 2025 06:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A6EB1E3DD3;
+	Tue, 11 Feb 2025 06:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SWOQVs3U"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="sPAB7Qcp"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8DD1E98E0;
-	Tue, 11 Feb 2025 06:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4360E26BD98;
+	Tue, 11 Feb 2025 06:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739253736; cv=none; b=J/CZD8kFk/04HgCD7UTzlFOGGFw+m9/GRSwBYTft6VPOE/E/QnEMtz+/yxjctyQ6oQdmGXaetZEwmAbAuBaLL3DMAuzHuEbIzaEPqcuvgwRdnj9q1aGsBIpsE5vAzpsvtNY5T8Fu/OwESIbp6x19zGfMT+W4DskSeNL9CqmCXAw=
+	t=1739253731; cv=none; b=lMMS4+Ja9GPeICUsMOh90UrYdAGKlhHxcONwBd/ZSwU9b1T77oVArf9/nOvsu3R3WuCCdS3VP1bWiXZ5SKoDXTn3SptCR+N7adz1dksfexvWKOKLqT8izs1MQaf/PwUPcEOq25LUNND+UKlKqnfbysSLVKNQ3kNX91AFpPrFBDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739253736; c=relaxed/simple;
-	bh=81q/DV3sv7VktlDJT+CNqXu1nzzdokAh44tOdxj2jyk=;
+	s=arc-20240116; t=1739253731; c=relaxed/simple;
+	bh=9TlBQFKfgo8qm9vvVdscR3v2j2Y9oifJALzQb7jwKBM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e86C1BdT8UiuBfKNOeqHm90tgs7bxdNR74ePKX8/REtrXLzxBV6jmGAC7x8cn5KHU3Iy9fHVaejHnvfyH2tDMOkvGJ+DyNzM7xM2Avm3uSfQOXHxY3VTKa9QmvnyTXAK+ZGCs+uBW5PdmpEcAnQGVTMjTPB4uvAoLIkdlT/Ki90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SWOQVs3U; arc=none smtp.client-ip=115.124.30.111
+	 MIME-Version; b=GhYvSUDc7nD6sfKivz4yF+rg2vrSIDE9yUB03Ty1+UDOMXLS3f/GV/XzJ0GIpEKXH3fr9l0jPA7qUjne1M9wWefWG+zTAaX/skOuUngQ+Lg2fIgYioUVBbla1lX5M/MRGJlMlbSDxxoq4C9OW2xPw5l1pXQmhzaqJz0roWyLA90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=sPAB7Qcp; arc=none smtp.client-ip=115.124.30.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1739253725; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=v4nYqPoOVXQKgJH/YSunWnnMJy+4Q4FHZPFcfZOd/Xs=;
-	b=SWOQVs3UO/UVmOpGPp6I+vbXqV7/yE/iU/AU301VgZhUg7QRGPr+FD+paHllSyiaiPyLGVpV915xW44/MdH21RyBO+atRmkiXNaLZOb1cVw1Fm5B2Tiwn3kjm7vAA7Az5FHsstl8662GT/of8twB4F4gpqFqyCk5t3uauRBpUok=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WPFiSHq_1739253722 cluster:ay36)
+	t=1739253726; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=tlo8q8j4Pp6YSO9Kcn8UqITwpqL/bxjMQZvrf+MMEtk=;
+	b=sPAB7QcpRbwxVaM08+jD4tRIeDfIyOhBCHLXsmCt4x9+58IR5Gb4iEUWOmjlJ6RM1HhRrZ0P7p5QoiUaFqELWljdnO6ISDJGYB4V28EH85rBz+iRVFDdTyB6SUsWOP2yf9mQpz+Oz5w2YTWyUstXmTrVENpZhRAoL4MEfWO1qXI=
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WPFiSI3_1739253723 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Tue, 11 Feb 2025 14:02:03 +0800
+          Tue, 11 Feb 2025 14:02:04 +0800
 From: Shuai Xue <xueshuai@linux.alibaba.com>
 To: tony.luck@intel.com,
 	bp@alien8.de,
@@ -55,9 +55,9 @@ Cc: tglx@linutronix.de,
 	linux-mm@kvack.org,
 	baolin.wang@linux.alibaba.com,
 	tianruidong@linux.alibaba.com
-Subject: [PATCH v1 1/4] x86/mce: Collect error message for severities below MCE_PANIC_SEVERITY
-Date: Tue, 11 Feb 2025 14:01:57 +0800
-Message-ID: <20250211060200.33845-2-xueshuai@linux.alibaba.com>
+Subject: [PATCH v1 2/4] x86/mce: dump error msg from severities
+Date: Tue, 11 Feb 2025 14:01:58 +0800
+Message-ID: <20250211060200.33845-3-xueshuai@linux.alibaba.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20250211060200.33845-1-xueshuai@linux.alibaba.com>
 References: <20250211060200.33845-1-xueshuai@linux.alibaba.com>
@@ -69,57 +69,27 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, mce_no_way_out() only collects error messages when the error
-severity is equal to `MCE_PANIC_SEVERITY`. To improve diagnostics,
-modify the behavior to also collect error messages when the severity is
-less than `MCE_PANIC_SEVERITY`.
+The message in severities is useful for identifying the type of MCE that
+has occurred; dump it if it is valid.
 
 Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 ---
- arch/x86/kernel/cpu/mce/core.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 0dc00c9894c7..2919a077cd66 100644
+index 2919a077cd66..c1319db45b0a 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -925,11 +925,12 @@ static __always_inline void quirk_zen_ifu(int bank, struct mce *m, struct pt_reg
-  * Do a quick check if any of the events requires a panic.
-  * This decides if we keep the events around or clear them.
-  */
--static __always_inline int mce_no_way_out(struct mce_hw_err *err, char **msg, unsigned long *validp,
--					  struct pt_regs *regs)
-+static __always_inline bool mce_no_way_out(struct mce_hw_err *err, char **msg,
-+					   unsigned long *validp,
-+					   struct pt_regs *regs)
- {
- 	struct mce *m = &err->m;
--	char *tmp = *msg;
-+	char *tmp = *msg, cur_sev = MCE_NO_SEVERITY, sev;
- 	int i;
+@@ -1456,6 +1456,8 @@ static void queue_task_work(struct mce_hw_err *err, char *msg, void (*func)(stru
+ 	if (count > 1)
+ 		return;
  
- 	for (i = 0; i < this_cpu_read(mce_num_banks); i++) {
-@@ -945,13 +946,17 @@ static __always_inline int mce_no_way_out(struct mce_hw_err *err, char **msg, un
- 			quirk_zen_ifu(i, m, regs);
- 
- 		m->bank = i;
--		if (mce_severity(m, regs, &tmp, true) >= MCE_PANIC_SEVERITY) {
-+		sev = mce_severity(m, regs, &tmp, true);
-+		if (sev >= cur_sev) {
- 			mce_read_aux(err, i);
- 			*msg = tmp;
--			return 1;
-+			cur_sev = sev;
- 		}
-+
-+		if (cur_sev == MCE_PANIC_SEVERITY)
-+			return true;
- 	}
--	return 0;
-+	return false;
++	if (msg)
++		pr_err("%s\n", msg);
+ 	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
  }
  
- /*
 -- 
 2.39.3
 
