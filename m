@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-3070-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3071-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C311A34AA9
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 17:49:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA8CCA34ADF
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 17:55:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBF317A551B
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 16:49:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD8D3189392E
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 16:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BC824BBE3;
-	Thu, 13 Feb 2025 16:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C60324BC16;
+	Thu, 13 Feb 2025 16:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="koHpa8Mg"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="WuMgT9nm"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7540A23A9B1;
-	Thu, 13 Feb 2025 16:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB1C24A07F;
+	Thu, 13 Feb 2025 16:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739465204; cv=fail; b=HN4YLnH67kB5766vwvoYBwJ+9GYPZfVQ4gj6CqwtF8SczS2fXK8EL/iquBSQriEnAUN3fnOiaVKsccHfJf+AnqgQAq8tbVfVPvzcaEOtbEL62LiCgk6htSTC6KSj4P/WXtJJ5BmyvpvbPZPhv1LVu3DRdMshfwoVquC5ZVjEE3k=
+	t=1739465206; cv=fail; b=A1igFubnPstzcn44IGnB2RJpQ05dKSWrJscMMthPVuv7W241/C5gGiNAMgg7XUTFScZ8AgdDDZjDutPYsQDbNM6vjhXxnyWXuFyTBNdDf0DOxqEcevmnMdU/Pag+orEYlmqJNsvRIVz5c6I06j+KzVNd5AMVTslm1sSjVY1ar8k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739465204; c=relaxed/simple;
-	bh=pIGouNrBrgQE1IShgio3lOXTbc0eVeztt08HuGL4TfU=;
+	s=arc-20240116; t=1739465206; c=relaxed/simple;
+	bh=BhZZcLFoKQAdMkMmFELmW1N9G9LNSvTgVpjjpFjz69g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Dvrg+i0vuYTdj/XFCrVQCtwrDkd63H+NoeDywuBBnwmGoDCJLH9jH+T1tXBndwv3gjrw4OZga+TwzE73PUSgWDZOAZ+M51zfCkntSZ/F2ikjqPehtSHkVT38IWYRVJDEzXUEFxrvQ5vCDfltencz/6G5RSqA8QPJQe4U75mDKAk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=koHpa8Mg; arc=fail smtp.client-ip=40.107.93.89
+	 In-Reply-To:To:CC; b=SCOZQrFktJoQPsIjWleyrvntixx7LkznsvyTSpa5E8M/Ft4c4qIELrtyM3Q/ZSxqq6mDhC90Oq6GpEXDj9knZHK3t6cF+f2FhYedS+UyopuSTY0nUXjsfOorkq0dw1248292jfWjZiT8Gzm0EcLymhk7bAUe6H/AjInVKexBLGo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=WuMgT9nm; arc=fail smtp.client-ip=40.107.237.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=n6MHYnEj3Ynykw/fcTTaMcqEeVgfpuQgem9xrQzwXBOnauziJOG6S2CPfvydHPTdXo0e+p4l5Frh4p+WACyrbHWqRjC4OflbKiLFcBNRm424IC/6CfXNvt4x2JFoe704kP9CcJ7rjid8vl8Y6zb2J42BIN5Bv7HvRPfrmhGeY0D29+dZJ6a1Z+2iY21lCaxaJw1F7ELKL80UbUMRcqi8mTead+JepvhjXFgpKwMGBK4Vfme6muxeJvHgLIWrdDWB5Bi6jn2uyIqfhB/SEJBPR09Jf4MukMzNFdIunWh2w/wVCQacOz9mJB0mdojDe+fn7IJYOxo6GkiEMAhZsBIPjw==
+ b=KSvMCTDd76a+TZ7eYnIFux2tYlzeaijP3UPeqzHe1mcPWjXpI/HaD6ObVN3vPXwMujvj4dQZmC+6eSgN8wcUgpKIVrXn7SUJoqda0xmqKLkvoK4RU+rJmBwu2yJ88OZkppjtDTHkALnkwbcVj5v83k5L95aGlR4PNaTHaovw50n2i9MLr9o6PuheUQoll+RYvoz18xg+4d78NW2UYiWf7RhyucDVMEr/1VUXaur9cjQ/TQrY4lCi180z2tjDssZJwzCFuHlnpXm7Qd8qWQfYDWiefoH+rcXZ3kBasZv0JGmH0tQSe58QrzQ8dESHm3tDwJMWSmATCvMqdPl/KEjSEA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aL/eoI9gdvAHWIyFSQ63X8BBFGzAWEk43yIz3N+OEIo=;
- b=FSUiiSGFUCaIuAOgDayGl6laLysxlRoNMlIjIGoJnFgBbGI+xWhNK7Y2jobx5/oJfAyNKALC6a+SvIFcB6HEmVZA8aowmf/cBF9E1gRn2Gt/AP4nOGALtMtWxYsjekJArVLoWz8xQBkZmCSFVgAGkC1Zsv6CtYD1ndBCP3s6/8B0+QRDIX7BpbRItFdb+ash1qvmHHfL++D3SeRIUFQQcG+pQWHJZ4iW/dym9ZhgzkPkDQHaSvbFmaszQulnUt/5/wBKhg4t0RtzvyDhwA9y8KBkPK/EIYdX95rm4DIqLP3e25P8D/MbeoCT/TrbfCPXzx+2TBeTIKTFPiPBGZC/gw==
+ bh=EdQm7SIHcSe1uXMNVnAAU6u3V2g+InCXjQZGY7+mwu8=;
+ b=ZbWa7Y32j7Mdb9LNn/Wt3Jt25T6p3w/J4xA74PlC8Qk4x7e5UyNJc1IAR2RxOrVjno4/g37bHvY9hZoZkhx6MwBFUH+OXn8RS+Uzewig7zvt/2HsSry8QrDfautWgHOnMmC39qTk6XCsqk71dYv80t+Y7Hvaw/A/U1cZHXe5ptNNgiAbrMAUdZxi/QO1B1eaKLGOuLvt8zM4cG+8iZyxLI36MAWtaIGq+CMKzU27nD+kUr71Lpw+hvtnAd/Af+fZJs6V6eAUHShW0vP4eH38OaJnG9OJ4/x3qporzGLGFx/rbr0uCwWp00IYePMkGP8gaoFN0hz61WC3MjecTS1dmw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aL/eoI9gdvAHWIyFSQ63X8BBFGzAWEk43yIz3N+OEIo=;
- b=koHpa8Mgx4FwFFyK1bIxVxSlZAup6NxldwHVs0Vv60auuXQQ+Vkkv8wV8enYXkmKp+VhN4NnecajvrC2MkJuibe2dqhZ94p/Zdavyq5zq31h1JVVDxIO8HqlUoC0IBtlKGimbtdkJsKAsKVxcITycXMXJHBZyf3+pWrLpBnHZCI=
-Received: from DM6PR11CA0021.namprd11.prod.outlook.com (2603:10b6:5:190::34)
- by PH8PR12MB7207.namprd12.prod.outlook.com (2603:10b6:510:225::14) with
+ bh=EdQm7SIHcSe1uXMNVnAAU6u3V2g+InCXjQZGY7+mwu8=;
+ b=WuMgT9nm6/a5OckZqGCsw4v84inN0f62pZ/XounSnUwGxf/5S7gM/Fj8o4Z+wupqpuvfQiehAuvr/GD8oFXOuL0fsjXu2LC8p/b7j9eBtkzoK3Xb7HklE6tWjghZXSFp9pAVMhlG+ESxwJscmV49Gt+AfydGmGMDqdFONSTstOg=
+Received: from DM6PR11CA0015.namprd11.prod.outlook.com (2603:10b6:5:190::28)
+ by CH2PR12MB9519.namprd12.prod.outlook.com (2603:10b6:610:27c::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.14; Thu, 13 Feb
- 2025 16:46:36 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.13; Thu, 13 Feb
+ 2025 16:46:37 +0000
 Received: from DS1PEPF0001709C.namprd05.prod.outlook.com
- (2603:10b6:5:190:cafe::84) by DM6PR11CA0021.outlook.office365.com
- (2603:10b6:5:190::34) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:5:190:cafe::b5) by DM6PR11CA0015.outlook.office365.com
+ (2603:10b6:5:190::28) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.13 via Frontend Transport; Thu,
- 13 Feb 2025 16:46:35 +0000
+ 13 Feb 2025 16:46:37 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,14 +65,15 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DS1PEPF0001709C.mail.protection.outlook.com (10.167.18.106) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8445.10 via Frontend Transport; Thu, 13 Feb 2025 16:46:35 +0000
+ 15.20.8445.10 via Frontend Transport; Thu, 13 Feb 2025 16:46:37 +0000
 Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 13 Feb
- 2025 10:46:30 -0600
+ 2025 10:46:31 -0600
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 13 Feb 2025 16:46:02 +0000
-Subject: [PATCH v2 13/16] x86/mce: Unify AMD DFR handler with MCA Polling
+Date: Thu, 13 Feb 2025 16:46:03 +0000
+Subject: [PATCH v2 14/16] x86/mce/amd: Enable interrupt vectors once
+ per-CPU on SMCA systems
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,7 +82,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250213-wip-mca-updates-v2-13-3636547fe05f@amd.com>
+Message-ID: <20250213-wip-mca-updates-v2-14-3636547fe05f@amd.com>
 References: <20250213-wip-mca-updates-v2-0-3636547fe05f@amd.com>
 In-Reply-To: <20250213-wip-mca-updates-v2-0-3636547fe05f@amd.com>
 To: <x86@kernel.org>, Tony Luck <tony.luck@intel.com>
@@ -93,317 +94,307 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0001709C:EE_|PH8PR12MB7207:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac5bb5b7-8aec-4e77-375d-08dd4c4dfa43
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001709C:EE_|CH2PR12MB9519:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1fbb56e8-b491-4421-773a-08dd4c4dfb87
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014;
+	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YW9HS1Vkd20wcklXVE9naHY4eStuN1ZJckxZUTRlMXlzajBYM0RzNU1NWDNV?=
- =?utf-8?B?UkJBYUN5YWxEUS9ZajlJbmJ4bE91R0ZLNmUrb3FIWXZnZ1MyZTBaZzF3YkFJ?=
- =?utf-8?B?VHhrMEdIbTVyek5DMllDTitDNWFqTGVYazJ1QzBsWWkxN0hRZCtGZkpweEYv?=
- =?utf-8?B?OVd2RTZGM2F0T0NQeFFUV2hHZk5xYWpSNzJ0dFRoSHQrV0JFb2dreFZGWGMv?=
- =?utf-8?B?bG4zQWZuT3BPWnJPTExEaG9JWFp6elJSbHFvNmhoOG8vamdoVXpVcE0vaFlO?=
- =?utf-8?B?c0RlL0dlcE5kY0gybFllWUVya3ZZRmxhQ3JWM1p2RFNuNkJ6NlpYRzdGRzBV?=
- =?utf-8?B?eSt2QXI1UGFoRDRoRTJiYXFmL0NIUlFkd1VjcS81TFJ2VW00cG9VUnkrTllh?=
- =?utf-8?B?NmZJVWFoT1ZCTW1La1RWMWJVbkNmVlBVY245QWt2dkJnV2w3TTN6Rng2MEQy?=
- =?utf-8?B?Uncxa1pyQjY5MVdEVmpsSWRVb1lRUU5BY2xoMUVUeDErZ1ZEUmtFV2hiSmc0?=
- =?utf-8?B?QkVFUFEwRSt6T0pRRG5RblF6R2QvZHFkakcrT2VIeWVaeE5NWThlem5DL2VV?=
- =?utf-8?B?aEd3c241d2ltQzZxTDZ3eUpTR0dGdHQrWDVkZ1RkYWE5OGV4QndtSmxYcGwy?=
- =?utf-8?B?NjJnSjUxTUZ6cFpmeVRmK0xpNkQ3WGdCTWFJb0tlWjhzUjFGeUl5VzdCUFVa?=
- =?utf-8?B?R0wweDArR0VNakJ1NTNHdytzQjRFbXl5TmZrUE9OSnJyNGhhbXRseUg4aEJy?=
- =?utf-8?B?WW5iOW4za1F5dHJpNXB0UzhEN3VROXZYcjdOVWxJUjczelRUTmRyZzVkOEYz?=
- =?utf-8?B?c2VSLzBjdG1sd0hCUDBNU2lXdERSTjdQZlNKamlzL3BnTkNFVThXSXZ0UURU?=
- =?utf-8?B?aEphbGg5bDFjRStFUExMbmlET3hNeVNtNVhCZHZVSHovTWt1akFPRUxVazU3?=
- =?utf-8?B?UXBMdU8rdmJodXNKMEtQdEh3OEV2R0tib2d1UmE4WTV3eVRrTDE3ZGdnZkRL?=
- =?utf-8?B?SFMybEo3M3NyN0VQZWVhZW8yM0QxUDRMVG11MVZIeGdxS3lhMzd4dGRYL3Zo?=
- =?utf-8?B?Sm0yRFUyeWk0WHMvMmtVOGF0QzZBY2lHSUdMNHR2bFdLMWRXem5kSVpCQ3ln?=
- =?utf-8?B?STVPN1hYOE5FZURQdG9QS0pjUlBZaEluRGd3TmVIK1NhTmJLUnZia3dJNUNx?=
- =?utf-8?B?QWV5Nm1RV2w2WUdjcmRXUHFBYUhtQWptTTgwRmozZEVZb3Z2U1lDYktYWFp5?=
- =?utf-8?B?TUJacmdvQnJiN3ZuZkwxTitVY0dwSXBOUlphbzI0L2JVMHdvaHlta3J2dVJP?=
- =?utf-8?B?S0s4WHk0VTdiazJtbGRtQkozOUZ5M0JGV3IzdVREQ1V6cDJoaGlWbGQ0WG1Q?=
- =?utf-8?B?clFYckl6Z29UZVlmbTdGR2doaWw2bTRod25VTktzZ2JqN09NZm5DT1VURk9G?=
- =?utf-8?B?YkdiMjBWTE9QZmU3NEdwVjB1VGVGcm9oRk1jdDdia2FXVlJyU2VDMG90Qk5W?=
- =?utf-8?B?OXFnZjVrV2xOV0F0UEJ5emIrTENFd2NQTXBMM0d0ZVB4M1JhZ3NLN0lMNjUy?=
- =?utf-8?B?ekhGMlFUcEpaSThhUG0ydHBkRU5VZkYrTGNUNzdCaUU0Y1FyQmxKZXcrM3ZZ?=
- =?utf-8?B?MVc1YjJ6am1zVUdESUI1UkhJbkh0VVpCUk9MdUxxNXZPNEhRRzQ3VW01UEZS?=
- =?utf-8?B?WUVoSGNRMWlKMVNCbWEvdk0vajlCMXp0QiszZVE3NGJ1RS9WalRrQldya0sx?=
- =?utf-8?B?SE4wVldzcHBobUU4T1NMU3dub2JUSnJxamV0NCtkL2tpOGFQT2M2QmJ4VUk2?=
- =?utf-8?B?eGZZbnVTVWFaQnh1bjZSb3U4VlVrOW1zbFp2NzNlQ2xlZnR2eHdpWDdjaENE?=
- =?utf-8?B?NXAxeEtLYk5qS285WlFOMzI5ei9Db29VV1RqUDVtVERDTkc4V0kxRy9OQjh2?=
- =?utf-8?B?dkd5cERBL1ZQc1VoOEEvWml0V2VXQzhvaFcrMndZTjVSdnVYY0NMSW9SUnR4?=
- =?utf-8?Q?Pd41d8PdLuJ6iCWK1ZXW+9Ac/9ch9s=3D?=
+	=?utf-8?B?cTVYdGo4VCtCM0k3V0lleXJNYlpYMEhzemNHU21SRHVDK1RrVU01L1RJdy93?=
+ =?utf-8?B?N01KT0ZiVHBBYVRzQXJkNnFEaTg0SUdXeFd3WGVLcnNqK3RjY3ZwR3MxSk9w?=
+ =?utf-8?B?UUhrZTVpR2VoSWIwZmZzY0MwS0FSVURBYmJ1Z1d5L0J2MTN2SW43VlBiNnZ1?=
+ =?utf-8?B?Nk9OOFU0cDREOTVBRFIvTk90bVRPTEw4VDIzNG9iVFVkYytVSlEwNjZna281?=
+ =?utf-8?B?WENiQmdaVW5vTjlkMUV1QmVEWUwxWWhMbDI1QUIyTGpDQUYyaHgvSXd5SWFX?=
+ =?utf-8?B?Tkdka3N6YkRWL3RvRllvWllqSzlia1VwSkphdVZjRDh6UXBmQ1UrQzZ4ZW5Z?=
+ =?utf-8?B?MUVYVmFnaGVJd2JrRmdPb0hVa0t5Mk1ta3E1RGNkTU1QWW8zVUFXRTZWcFFi?=
+ =?utf-8?B?NG9GNFI3VzJCOXZxam82aDhNZFVLekd5Wm5vbTg4V3d1b3phTDgrbW5hemUy?=
+ =?utf-8?B?bHkrQ3F4VlpwZHhDcTJTaGZpb3FJZ1hsWUxOTU5WRnBwbjBkSk9oVC9WVm9q?=
+ =?utf-8?B?MGRkRVFzdkdsa0NXMGErTVRhdU5YdEpjRHNlSExLK2x4bzZvb0pqUUc4TnZh?=
+ =?utf-8?B?bU9mZ3V1VHFHdWwzL2tMUG9haWVSNkZFcTR1YlRhL05ENDZadDhkekVNckls?=
+ =?utf-8?B?d1B5OVQyZkljSHNuVFppSm1MNVk2UU9Sak45Mkc0OWxLZ0ViNmhieUhuK3Nx?=
+ =?utf-8?B?WWdoMmJsK0ZCN3pKb1AvaTBQZzNtNDdGeE4zdjcxUDFHMmU2dFFROFRiV2dE?=
+ =?utf-8?B?WUVKTVVPOUdmaldmTVBFQnZpMzNIZWxtMzdIVUpVQ1hPZ0pIZ0duS1RmTk1W?=
+ =?utf-8?B?bjFSNkc1NDBUUjl5QW5UMkwwSGkybStUOUZQZkJWbHZTYS84QjhQN3RWNHg5?=
+ =?utf-8?B?cWllQlV2Q3dwaEd6cENBOTFpdXBaUG8xbUt2S3lhT1V5bU9adlNXQ3l1TDBL?=
+ =?utf-8?B?NE9UQU5yeU1ycjRnSXN2YnpzcnZwQWkyTVhIWlF5MnpOTVl6YlBLOS9YQ3kz?=
+ =?utf-8?B?VlJrSTArSmRBODRjTXFhcXlRRGozbks2V2Jwc0NCV2U5UnBMaWgxUXlseFFh?=
+ =?utf-8?B?aGk0aVhTdWZTMFRSb0tUbGp0Z3JqQWYvbTQzdWtOTFJmY0JZeWZrOHRDKzRz?=
+ =?utf-8?B?SnFoVDRvR1A4Y3JOQWxMeUMyaG5LaWFDTkhBL081enZ5Nk9QeWFHWTZURkVE?=
+ =?utf-8?B?U2xJN2dOalN2NHRqY2NUTHNyRzQwcktOL0RyNHhRY0d0Zm9zT1JZci9qS3lK?=
+ =?utf-8?B?NDlVTC8zSThpaHBlR2lFbE0zWk52UExqM0JtRlQ2VHZEZ1FBcWhtR3JuTGda?=
+ =?utf-8?B?Vm1GbVpLQndyNUNyNWcwcUl6TXRwdDRMNzRQQ3VycUNBTktlZGZCU0xxOWNW?=
+ =?utf-8?B?ZDRSRW1QejYvOTRlU1ZRaVFZczNkVXhwd04rcENrZGFMdENGcnNaRUt1cjZk?=
+ =?utf-8?B?UHYxcXBTKytkRFYrc09jWDZKVHRmZnpUU3B2VHhRT2VPRENJejdwVTlQRlAw?=
+ =?utf-8?B?dDRmdTZuR3hES0trSmJIdE9uTHFjOGVkdjNsVHBKSnRWem0zdm11anNaV3lI?=
+ =?utf-8?B?VzhMQlp6OWUzRHRLc1c3OEVMUDB1UGFCbnFrSm14a2dkNGc5ZG9RZFhzVVkx?=
+ =?utf-8?B?cHdMWHVKSXB4bGx1SDA3eFNvcnE5Z1hoVXduK1pQYjhlVE5OMit0UVBTdlkz?=
+ =?utf-8?B?ZVg2Rk5nM0ovN2tHaS8zaTFXRjVYRHpoMmI4VVQ1Z0Y4WEVPTDRrdDNmS1RC?=
+ =?utf-8?B?MFpuUTgvSmJqUEI5ckdubFQzaG4wZlUxUXk0TFpKaXpwZXE3eXlkU0NwOTk4?=
+ =?utf-8?B?SmlCQi9wN1ZQS3FKcytYZjR0elFvTU1ScGdVWkRiaVlUUzI0VFZDN25zcG9Z?=
+ =?utf-8?B?RjhadzNLMmRaQm9FQ1FhV0xWRVIzdFdhYUtUdmxrTHNtWXR1ZHhRTW5MNDQ1?=
+ =?utf-8?B?L3JLUDhsRmc3R0FPczdGZGwweURPZmZ5MGEreVZDaDNpaWU5YkQreDF2Qi9G?=
+ =?utf-8?Q?A6ZEJWVOO/bDZuh+yZzyF3embc9My4=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024)(13003099007);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2025 16:46:35.0286
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2025 16:46:37.1692
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac5bb5b7-8aec-4e77-375d-08dd4c4dfa43
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fbb56e8-b491-4421-773a-08dd4c4dfb87
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	DS1PEPF0001709C.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7207
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB9519
 
-AMD systems optionally support a deferred error interrupt. The interrupt
-should be used as another signal to trigger MCA polling. This is similar
-to how other MCA interrupts are handled.
+Scalable MCA systems have a per-CPU register that gives the APIC LVT
+offset for the thresholding and deferred error interrupts.
 
-Deferred errors do not require any special handling related to the
-interrupt, e.g. resetting or rearming the interrupt, etc.
+Currently, this register is read once to set up the deferred error
+interrupt and then read again for each thresholding block. Furthermore,
+the APIC LVT registers are configured each time, but they only need to
+be configured once per-CPU.
 
-However, Scalable MCA systems include a pair of registers, MCA_DESTAT
-and MCA_DEADDR, that should be checked for valid errors. This check
-should be done whenever MCA registers are polled. Currently, the
-deferred error interrupt does this check, but the MCA polling function
-does not.
+Move the APIC LVT setup to the early part of CPU init, so that the
+registers are set up once. Also, this ensures that the kernel is ready
+to service the interrupts before the individual error sources (each MCA
+bank) are enabled.
 
-Call the MCA polling function when handling the deferred error
-interrupt. This keeps all "polling" cases in a common function.
-
-Call the polling function only for banks that have the deferred error
-interrupt enabled.
-
-Add an SMCA status check helper. This will do the same status check and
-register clearing that the interrupt handler has done. And it extends
-the common polling flow to find AMD deferred errors.
-
-Remove old code whose functionality is already covered in the common MCA
-code.
+Apply this change only to SMCA systems to avoid breaking any legacy
+behavior. The deferred error interrupt is technically advertised by the
+SUCCOR feature. However, this was first made available on SMCA systems.
+Therefore, only set up the deferred error interrupt on SMCA systems and
+simplify the code.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 
 Notes:
     Link:
-    https://lore.kernel.org/r/20240523155641.2805411-8-yazen.ghannam@amd.com
+    https://lore.kernel.org/r/20240523155641.2805411-9-yazen.ghannam@amd.com
     
     v1->v2:
-    * Keep code comment.
-    * Log directly from helper function rather than pass values.
+    * Use new per-CPU struct.
+    * Don't set up interrupt vectors.
 
- arch/x86/kernel/cpu/mce/amd.c  | 103 ++---------------------------------------
- arch/x86/kernel/cpu/mce/core.c |  58 +++++++++++++++++++++++
- 2 files changed, 63 insertions(+), 98 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c | 113 ++++++++++++++++++------------------------
+ 1 file changed, 48 insertions(+), 65 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 5e491dbdeecc..5f547f5b3de0 100644
+index 5f547f5b3de0..75a48f484815 100644
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -56,6 +56,7 @@ static bool thresholding_irq_en;
+@@ -43,9 +43,6 @@
+ /* Deferred error settings */
+ #define MSR_CU_DEF_ERR		0xC0000410
+ #define MASK_DEF_LVTOFF		0x000000F0
+-#define MASK_DEF_INT_TYPE	0x00000006
+-#define DEF_LVT_OFF		0x2
+-#define DEF_INT_TYPE_APIC	0x2
  
+ /* Scalable MCA: */
+ 
+@@ -57,6 +54,8 @@ static bool thresholding_irq_en;
  struct mce_amd_cpu_data {
  	mce_banks_t     thr_intr_banks;
-+	mce_banks_t     dfr_intr_banks;
+ 	mce_banks_t     dfr_intr_banks;
++	bool		thr_intr_en;
++	bool		dfr_intr_en;
  };
  
  static DEFINE_PER_CPU_READ_MOSTLY(struct mce_amd_cpu_data, mce_amd_data);
-@@ -300,8 +301,10 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
+@@ -271,6 +270,7 @@ void (*deferred_error_int_vector)(void) = default_deferred_error_interrupt;
+ 
+ static void smca_configure(unsigned int bank, unsigned int cpu)
+ {
++	struct mce_amd_cpu_data *data = this_cpu_ptr(&mce_amd_data);
+ 	u8 *bank_counts = this_cpu_ptr(smca_bank_counts);
+ 	const struct smca_hwid *s_hwid;
+ 	unsigned int i, hwid_mcatype;
+@@ -301,8 +301,8 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
  		 * APIC based interrupt. First, check that no interrupt has been
  		 * set.
  		 */
--		if ((low & BIT(5)) && !((high >> 5) & 0x3))
-+		if ((low & BIT(5)) && !((high >> 5) & 0x3)) {
-+			__set_bit(bank, this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
+-		if ((low & BIT(5)) && !((high >> 5) & 0x3)) {
+-			__set_bit(bank, this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
++		if ((low & BIT(5)) && !((high >> 5) & 0x3) && data->dfr_intr_en) {
++			__set_bit(bank, data->dfr_intr_banks);
  			high |= BIT(5);
-+		}
+ 		}
  
- 		this_cpu_ptr(mce_banks_array)[bank].lsb_in_status = !!(low & BIT(8));
- 
-@@ -794,37 +797,6 @@ bool amd_mce_usable_address(struct mce *m)
- 	return false;
- }
- 
--static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
--{
--	struct mce_hw_err err;
--	struct mce *m = &err.m;
--
--	mce_prep_record(&err);
--
--	m->status = status;
--	m->misc   = misc;
--	m->bank   = bank;
--	m->tsc	 = rdtsc();
--
--	if (m->status & MCI_STATUS_ADDRV) {
--		m->addr = addr;
--
--		smca_extract_err_addr(m);
--	}
--
--	if (mce_flags.smca) {
--		rdmsrl(MSR_AMD64_SMCA_MCx_IPID(bank), m->ipid);
--
--		if (m->status & MCI_STATUS_SYNDV) {
--			rdmsrl(MSR_AMD64_SMCA_MCx_SYND(bank), m->synd);
--			rdmsrl(MSR_AMD64_SMCA_MCx_SYND1(bank), err.vendor.amd.synd1);
--			rdmsrl(MSR_AMD64_SMCA_MCx_SYND2(bank), err.vendor.amd.synd2);
--		}
--	}
--
--	mce_log(&err);
--}
--
- DEFINE_IDTENTRY_SYSVEC(sysvec_deferred_error)
+@@ -378,6 +378,14 @@ static bool lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
  {
- 	trace_deferred_error_apic_entry(DEFERRED_ERROR_VECTOR);
-@@ -834,75 +806,10 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_deferred_error)
- 	apic_eoi();
- }
+ 	int msr = (hi & MASK_LVTOFF_HI) >> 20;
  
--/*
-- * Returns true if the logged error is deferred. False, otherwise.
-- */
--static inline bool
--_log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
--{
--	u64 status, addr = 0;
--
--	rdmsrl(msr_stat, status);
--	if (!(status & MCI_STATUS_VAL))
--		return false;
--
--	if (status & MCI_STATUS_ADDRV)
--		rdmsrl(msr_addr, addr);
--
--	__log_error(bank, status, addr, misc);
--
--	wrmsrl(msr_stat, 0);
--
--	return status & MCI_STATUS_DEFERRED;
--}
--
--static bool _log_error_deferred(unsigned int bank, u32 misc)
--{
--	if (!_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
--			     mca_msr_reg(bank, MCA_ADDR), misc))
--		return false;
--
--	/*
--	 * Non-SMCA systems don't have MCA_DESTAT/MCA_DEADDR registers.
--	 * Return true here to avoid accessing these registers.
--	 */
--	if (!mce_flags.smca)
--		return true;
--
--	/* Clear MCA_DESTAT if the deferred error was logged from MCA_STATUS. */
--	wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(bank), 0);
--	return true;
--}
--
--/*
-- * We have three scenarios for checking for Deferred errors:
-- *
-- * 1) Non-SMCA systems check MCA_STATUS and log error if found.
-- * 2) SMCA systems check MCA_STATUS. If error is found then log it and also
-- *    clear MCA_DESTAT.
-- * 3) SMCA systems check MCA_DESTAT, if error was not found in MCA_STATUS, and
-- *    log it.
-- */
--static void log_error_deferred(unsigned int bank)
--{
--	if (_log_error_deferred(bank, 0))
--		return;
--
--	/*
--	 * Only deferred errors are logged in MCA_DE{STAT,ADDR} so just check
--	 * for a valid error.
--	 */
--	_log_error_bank(bank, MSR_AMD64_SMCA_MCx_DESTAT(bank),
--			      MSR_AMD64_SMCA_MCx_DEADDR(bank), 0);
--}
--
- /* APIC interrupt handler for deferred errors */
- static void amd_deferred_error_interrupt(void)
- {
--	unsigned int bank;
--
--	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank)
--		log_error_deferred(bank);
-+	machine_check_poll(MCP_TIMESTAMP, &this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
- }
- 
- static void reset_block(struct threshold_block *block)
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index b26eb576e413..9502e8d3fee7 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -692,6 +692,61 @@ static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
- 
- DEFINE_PER_CPU(unsigned, mce_poll_count);
- 
-+/*
-+ * We have three scenarios for checking for Deferred errors:
-+ *
-+ * 1) Non-SMCA systems check MCA_STATUS and log error if found.
-+ * 2) SMCA systems check MCA_STATUS. If error is found then log it and also
-+ *    clear MCA_DESTAT.
-+ * 3) SMCA systems check MCA_DESTAT, if error was not found in MCA_STATUS, and
-+ *    log it.
-+ */
-+static bool smca_should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
-+{
-+	struct mce *m = &err->m;
-+
 +	/*
-+	 * If this is a deferred error found in MCA_STATUS, then clear
-+	 * the redundant data from the MCA_DESTAT register.
++	 * On SMCA CPUs, LVT offset is programmed at a different MSR, and
++	 * the BIOS provides the value. The original field where LVT offset
++	 * was set is reserved. Return early here:
 +	 */
-+	if (m->status & MCI_STATUS_VAL) {
-+		if (m->status & MCI_STATUS_DEFERRED)
-+			mce_wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(m->bank), 0);
-+
-+		return true;
-+	}
-+
-+	/*
-+	 * If the MCA_DESTAT register has valid data, then use
-+	 * it as the status register.
-+	 */
-+	m->status = mce_rdmsrl(MSR_AMD64_SMCA_MCx_DESTAT(m->bank));
-+
-+	if (!(m->status & MCI_STATUS_VAL))
++	if (mce_flags.smca)
 +		return false;
 +
-+	/*
-+	 * Gather all relevant data now and log the record before clearing
-+	 * the deferred status register. This avoids needing to go back to
-+	 * the polling function for these actions.
-+	 */
-+	mce_read_aux(err, m->bank);
+ 	if (apic < 0) {
+ 		pr_err(FW_BUG "cpu %d, failed to setup threshold interrupt "
+ 		       "for bank %d, block %d (MSR%08X=0x%x%08x)\n", b->cpu,
+@@ -386,14 +394,6 @@ static bool lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
+ 	}
+ 
+ 	if (apic != msr) {
+-		/*
+-		 * On SMCA CPUs, LVT offset is programmed at a different MSR, and
+-		 * the BIOS provides the value. The original field where LVT offset
+-		 * was set is reserved. Return early here:
+-		 */
+-		if (mce_flags.smca)
+-			return false;
+-
+ 		pr_err(FW_BUG "cpu %d, invalid threshold interrupt offset %d "
+ 		       "for bank %d, block %d (MSR%08X=0x%x%08x)\n",
+ 		       b->cpu, apic, b->bank, b->block, b->address, hi, lo);
+@@ -474,41 +474,6 @@ static int setup_APIC_mce_threshold(int reserved, int new)
+ 	return reserved;
+ }
+ 
+-static int setup_APIC_deferred_error(int reserved, int new)
+-{
+-	if (reserved < 0 && !setup_APIC_eilvt(new, DEFERRED_ERROR_VECTOR,
+-					      APIC_EILVT_MSG_FIX, 0))
+-		return new;
+-
+-	return reserved;
+-}
+-
+-static void deferred_error_interrupt_enable(struct cpuinfo_x86 *c)
+-{
+-	u32 low = 0, high = 0;
+-	int def_offset = -1, def_new;
+-
+-	if (rdmsr_safe(MSR_CU_DEF_ERR, &low, &high))
+-		return;
+-
+-	def_new = (low & MASK_DEF_LVTOFF) >> 4;
+-	if (!(low & MASK_DEF_LVTOFF)) {
+-		pr_err(FW_BUG "Your BIOS is not setting up LVT offset 0x2 for deferred error IRQs correctly.\n");
+-		def_new = DEF_LVT_OFF;
+-		low = (low & ~MASK_DEF_LVTOFF) | (DEF_LVT_OFF << 4);
+-	}
+-
+-	def_offset = setup_APIC_deferred_error(def_offset, def_new);
+-	if ((def_offset == def_new) &&
+-	    (deferred_error_int_vector != amd_deferred_error_interrupt))
+-		deferred_error_int_vector = amd_deferred_error_interrupt;
+-
+-	if (!mce_flags.smca)
+-		low = (low & ~MASK_DEF_INT_TYPE) | DEF_INT_TYPE_APIC;
+-
+-	wrmsr(MSR_CU_DEF_ERR, low, high);
+-}
+-
+ static u32 smca_get_block_address(unsigned int bank, unsigned int block,
+ 				  unsigned int cpu)
+ {
+@@ -551,7 +516,6 @@ prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
+ 			int offset, u32 misc_high)
+ {
+ 	unsigned int cpu = smp_processor_id();
+-	u32 smca_low, smca_high;
+ 	struct threshold_block b;
+ 	int new;
+ 
+@@ -571,18 +535,10 @@ prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
+ 	__set_bit(bank, this_cpu_ptr(&mce_amd_data)->thr_intr_banks);
+ 	b.interrupt_enable = 1;
+ 
+-	if (!mce_flags.smca) {
+-		new = (misc_high & MASK_LVTOFF_HI) >> 20;
+-		goto set_offset;
+-	}
+-
+-	/* Gather LVT offset for thresholding: */
+-	if (rdmsr_safe(MSR_CU_DEF_ERR, &smca_low, &smca_high))
+-		goto out;
+-
+-	new = (smca_low & SMCA_THR_LVT_OFF) >> 12;
++	if (mce_flags.smca)
++		goto done;
+ 
+-set_offset:
++	new = (misc_high & MASK_LVTOFF_HI) >> 20;
+ 	offset = setup_APIC_mce_threshold(offset, new);
+ 	if (offset == new)
+ 		thresholding_irq_en = true;
+@@ -590,7 +546,6 @@ prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
+ done:
+ 	mce_threshold_block_init(&b, offset);
+ 
+-out:
+ 	return offset;
+ }
+ 
+@@ -659,6 +614,32 @@ static void disable_err_thresholding(struct cpuinfo_x86 *c, unsigned int bank)
+ 		wrmsrl(MSR_K7_HWCR, hwcr);
+ }
+ 
++/*
++ * Enable the APIC LVT interrupt vectors once per-CPU. This should be done before hardware is
++ * ready to send interrupts.
++ *
++ * Individual error sources are enabled later during per-bank init.
++ */
++static void smca_enable_interrupt_vectors(void)
++{
++	struct mce_amd_cpu_data *data = this_cpu_ptr(&mce_amd_data);
++	u64 mca_intr_cfg, offset;
 +
-+	if (m->status & MCI_STATUS_ADDRV)
-+		m->addr = mce_rdmsrl(MSR_AMD64_SMCA_MCx_DEADDR(m->bank));
++	if (!mce_flags.smca || !mce_flags.succor)
++		return;
 +
-+	smca_extract_err_addr(m);
-+	m->severity = mce_severity(m, NULL, NULL, false);
++	if (rdmsrl_safe(MSR_CU_DEF_ERR, &mca_intr_cfg))
++		return;
 +
-+	if (flags & MCP_QUEUE_LOG)
-+		mce_gen_pool_add(err);
-+	else
-+		mce_log(err);
++	offset = (mca_intr_cfg & SMCA_THR_LVT_OFF) >> 12;
++	if (!setup_APIC_eilvt(offset, THRESHOLD_APIC_VECTOR, APIC_EILVT_MSG_FIX, 0))
++		data->thr_intr_en = true;
 +
-+	mce_wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(m->bank), 0);
-+	return false;
++	offset = (mca_intr_cfg & MASK_DEF_LVTOFF) >> 4;
++	if (!setup_APIC_eilvt(offset, DEFERRED_ERROR_VECTOR, APIC_EILVT_MSG_FIX, 0))
++		data->dfr_intr_en = true;
 +}
 +
- /*
-  * Newer Intel systems that support software error
-  * recovery need to make additional checks. Other
-@@ -718,6 +773,9 @@ static bool should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
+ static void amd_apply_quirks(struct cpuinfo_x86 *c)
  {
- 	struct mce *m = &err->m;
+ 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
+@@ -690,11 +671,16 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
  
-+	if (mce_flags.smca)
-+		return smca_should_log_poll_error(flags, err);
+ 	amd_apply_quirks(c);
+ 	mce_flags.amd_threshold	 = 1;
++	smca_enable_interrupt_vectors();
+ 
+ 	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
+-		if (mce_flags.smca)
++		if (mce_flags.smca) {
+ 			smca_configure(bank, cpu);
+ 
++			if (!this_cpu_ptr(&mce_amd_data)->thr_intr_en)
++				continue;
++		}
 +
- 	/* If this entry is not valid, ignore it. */
- 	if (!(m->status & MCI_STATUS_VAL))
- 		return false;
+ 		disable_err_thresholding(c, bank);
+ 
+ 		for (block = 0; block < NR_BLOCKS; ++block) {
+@@ -715,9 +701,6 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
+ 			offset = prepare_threshold_block(bank, block, address, offset, high);
+ 		}
+ 	}
+-
+-	if (mce_flags.succor)
+-		deferred_error_interrupt_enable(c);
+ }
+ 
+ void mce_smca_cpu_init(void)
 
 -- 
 2.43.0
