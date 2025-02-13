@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-3059-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3060-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A05A34AC2
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 17:52:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20E0AA34B18
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 18:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87D4018970B2
-	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 16:47:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D25B23BD6F1
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Feb 2025 16:47:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675891411DE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C38AF2222CC;
 	Thu, 13 Feb 2025 16:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="j0E1HHyk"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="iR7Vv82O"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2071.outbound.protection.outlook.com [40.107.236.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE6128A2BA;
-	Thu, 13 Feb 2025 16:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E2628A2C3;
+	Thu, 13 Feb 2025 16:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739465192; cv=fail; b=rYjrnoSZTzKegtUHNrK6iYrlpXahc3bIbFwx0qLxtTjvfYzHRtFYRAkbLIfkcMkPfXLHZbYPanQhvUl6Gavmoq+3qhWriUFvl5oC37pVlfkpacMvC9VcyjfozUmWPcve/bfhpn+9xRfrLrKtTw2oaKMAhsxh0TmyKidIMIAP0Zc=
+	t=1739465192; cv=fail; b=aEHAolqCGaPlSji2En3D8oE4HNKOPySSKSfvG/96b6O8gkZyHoXRip6q8Z7JZ2fiVV2Ep0kpLKQunDcw7R/U2Gbmc23eNkl3SFICVljx3KJdFpYMC1uWcYrVtAjFUKm71vyArGVoF1Fz7sOAOnabGuXQv4FBELyooEVnE3nsxgc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1739465192; c=relaxed/simple;
-	bh=OyB6R/SPNcRydbbvB9SpKXBlq4MA7R8ifeAoX/LZVU8=;
+	bh=I0wS9mLTzfC9jHClfhqphwtYE3X5ADwwzbit1+AvpcY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=qNyGJjG03E0WWv05dr8b+GlbaepzD2ajb2uyZF8iOrpv03CzJIdfdfeqGxJoKcYa+AC1rGO5bFOLLM4+JkDBVwsO0z3CDqjVl/mEKdHairLaeDuMrrWbHcRJbxYSuRbilGoOO2OZRmA5JVJSxQX0UPR/wI/J4zVXZ9CdJps9KcU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=j0E1HHyk; arc=fail smtp.client-ip=40.107.220.48
+	 In-Reply-To:To:CC; b=Nh8Ve18ZpYeNV1+fvQvYhqxPdk6DmKEb2TzQ6Cq9oD36cRdPNE3RXiKuAct+UjpVlN7fwUhhNiu2exThjo4BAY42cJZvFfKlk9Mb6bxIg8x1kzbuGQYCub10y6b80rYV/ZQS4k/gvEMLTBGPIzUJfvyomJS1U1J3J3YdPF/igKg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=iR7Vv82O; arc=fail smtp.client-ip=40.107.236.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cxg9kUXRioKEvY4HX0Dmm8JIzsVv4hCWaoEJOwoVoDEGD0ctTdUNZZBWKxxuttwL6u7KFqpADLRiESsgAmTfZqmSve4FKNUXG8Z0sFTPmIKKHwtkLK/hwA5sFTdESu0Yn4WWQub5LSBeTFJMlDM2DHw9lG+8bxBLTMIiTMIrEqRh44Yezcw5MgkdLMtY9mTDnbYeQYQrh/6BmOYD5Pho9HuhyiS7TSWiPQFVUXvL9vli/EDjXqYLxuHN2JglPjiJOa+jjkLA9IBiP6Ocr8SXJ99Qx6DmKPxSHfN9i7R8TokH8bgDvb4myHmcOiqCWFxJeBZWJbQF6Ayts9vX/WiaCw==
+ b=g8IuPxo8SCZKXKH8R2NDEN4T2Mzwz78pUOD3SD91CeovURQb+nBSgLxdaJEoJf43vVKxoUP+mN1DN7MBWJuNzlBrgS+UwHt+XlPgZoEIpWsCD8g00mc3lgG0CcBHCkzV8c87FIVxYNzx/pxSB2yE96+U2ZnN12n7+S/JgFlWWbJg9UJQgyNVEnpqZ7cAusqhzY/05ILVJTAzzQPXNSpIr1vj9zldsmHMVRfoXfvKM34kKE3Dh0ySaBKMdUYEpxXN4+4oLdvS3GVLODD96wiBYJ1cwVsgVgQn5FkwxqT8qUBsuAU6Yi6s7JYVQtnDqEjU8VI/xf6EXZSFjqDM81nMRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eYjq4Yplv4Rp0LjLe+ZbUbPlID7+tQ9ewTvcbKpenz4=;
- b=N0OKWGXUU+k0UtfJw4lwtGUQlTTBoXGd5gc6yH/i85vpQOkwFZal87ayhgffdT9xZ/xogQFA49d9eKTnL2pVpL7iIYKyy80m++W1F/PGGl/Hx/6Cy6PMTtXhHN1LCRKHKEUeONtnKsLRE5IwRgNh9AXD5Fwy97dfVG2mW2bKwOI7D1OeNIVaE7U3OQ+si3g52Je/It8qc7Bo3N8H5IZe5dwiz7HaM95/6ccUWUpAVJIrWXT6qHwK/vew1JexpiLb/0KaIbMCcVW/pWteZR4GOPlIBJC4OUQh8TyU3g/A/mGmICBbxh5zUnawp426I0QFyj/+T/OrpOPh0E74aFzgdw==
+ bh=j/MAulw+nx45Sd9u2XMpsglLZgoZxizyg8+kY6go08I=;
+ b=DrB4IDvVU4/XnoyhCdPd6TmGPPziv3bBdYmwNOA+RUJnJcdJw/eUwxhVi6xpPYIW7FbXOuaex4Jl34V6N/nDfv91L2D+VL9zYQ3p9EYRiaVXzKyCUV+gQqJwSAk7RSAPbsdftN3gf8qyc9llq5+K/0rfbE+igCRz0C/woSWXR8GQhsL1vOYkn/Pm4gdj1uVhUB1xK0KmifOd4aQXBzbcx0YIgLnCSR7lTx0ZlM4jDMi+6H+LbPajZB8mkWyTc2euv6Kl0rCCnmR8+AlaaGFxsH11CqXwx156bQYRxGO5RpjO+xSLdO1UEkTUg+4mPmWN64q+5OSg7lpfqC8nrxvKrg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eYjq4Yplv4Rp0LjLe+ZbUbPlID7+tQ9ewTvcbKpenz4=;
- b=j0E1HHykIWq8kJzfokSimmpYVDcGA/ZEZ7P8FM5OQAmL1X8ThDgOvohrZZiO44k8JUoLDxzdHI+JuVYH5jiI80JMjx0BqcpEnNyn3WaeL+Ek+gR4iZsyOvfO74JmtmCkWYRfx54p7kuHU8dPbNen2507eev72yoVznznGmRNs1g=
-Received: from DM6PR11CA0019.namprd11.prod.outlook.com (2603:10b6:5:190::32)
- by DM3PR12MB9351.namprd12.prod.outlook.com (2603:10b6:8:1ac::9) with
+ bh=j/MAulw+nx45Sd9u2XMpsglLZgoZxizyg8+kY6go08I=;
+ b=iR7Vv82OKvhp4Y3OrZ8O0xVY5AWCubSk10cxlsz3h6zSkhdc0PMjLgki+EIQ7HEt2jbWHJ/xhTOUF6LetTjf0O2fkNuAWHQrIu0qrsnhFxp0ZixDtRpM9bZIlimrZYtzWd2GXN2mvq5lhPQy55LT17HGmsvitcm1FzJaewwzGu8=
+Received: from DM6PR11CA0024.namprd11.prod.outlook.com (2603:10b6:5:190::37)
+ by CH3PR12MB9078.namprd12.prod.outlook.com (2603:10b6:610:196::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.11; Thu, 13 Feb
- 2025 16:46:26 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.16; Thu, 13 Feb
+ 2025 16:46:27 +0000
 Received: from DS1PEPF0001709C.namprd05.prod.outlook.com
- (2603:10b6:5:190:cafe::cf) by DM6PR11CA0019.outlook.office365.com
- (2603:10b6:5:190::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.14 via Frontend Transport; Thu,
- 13 Feb 2025 16:46:26 +0000
+ (2603:10b6:5:190:cafe::4f) by DM6PR11CA0024.outlook.office365.com
+ (2603:10b6:5:190::37) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.16 via Frontend Transport; Thu,
+ 13 Feb 2025 16:46:27 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,14 +65,14 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DS1PEPF0001709C.mail.protection.outlook.com (10.167.18.106) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8445.10 via Frontend Transport; Thu, 13 Feb 2025 16:46:26 +0000
+ 15.20.8445.10 via Frontend Transport; Thu, 13 Feb 2025 16:46:27 +0000
 Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 13 Feb
- 2025 10:46:24 -0600
+ 2025 10:46:25 -0600
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 13 Feb 2025 16:45:52 +0000
-Subject: [PATCH v2 03/16] x86/mce/amd: Remove smca_banks_map
+Date: Thu, 13 Feb 2025 16:45:53 +0000
+Subject: [PATCH v2 04/16] x86/mce/amd: Put list_head in threshold_bank
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,7 +81,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250213-wip-mca-updates-v2-3-3636547fe05f@amd.com>
+Message-ID: <20250213-wip-mca-updates-v2-4-3636547fe05f@amd.com>
 References: <20250213-wip-mca-updates-v2-0-3636547fe05f@amd.com>
 In-Reply-To: <20250213-wip-mca-updates-v2-0-3636547fe05f@amd.com>
 To: <x86@kernel.org>, Tony Luck <tony.luck@intel.com>
@@ -93,78 +93,72 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0001709C:EE_|DM3PR12MB9351:EE_
-X-MS-Office365-Filtering-Correlation-Id: ad09244b-a369-4356-71b3-08dd4c4df54c
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001709C:EE_|CH3PR12MB9078:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3621fbe7-7a50-455e-1f84-08dd4c4df59b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
+	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MERzeHhHM3ZUY29nYW9sL3FIWDk3ajQ0VU1zakNBemxUOUpxR2hNeHBwdVBO?=
- =?utf-8?B?U0JYczZRSDh4S0hTRHp6QW9vTjVGV2ZkNVltZlltaFhsNklTSkRxL21XYnk2?=
- =?utf-8?B?UWI5ajN5MUs1MDlNZjdNd3R0NklDVkdQUWhSbzlzT0hGK3NXWjM1cFArdWw3?=
- =?utf-8?B?aEdVaUZQeTVxTG9HOUlyblBHMjBTbFg1Z0dudmRaRGJuc2VDZ2RFR3VUZVJE?=
- =?utf-8?B?ZnVLM0VlQnZUZDFWc1RrZjJCN09sMkJ1NDFRRjk3QlUwVWpyUDJiV2V0bXA5?=
- =?utf-8?B?dlJieFgzTGg0dThvcnR6ZURXaitnenEzQ0YzdFo3THVxN3FpdzFHUTgyL1BM?=
- =?utf-8?B?dFpIOTZuZThwSDdqTS9XTHFHcURyYnJMYVljRmRWZUNWUWQ1anpuM3JpejNq?=
- =?utf-8?B?RnQvRkNpRkdOb2UxbG0vNHo3eGhOMkxHcFcvNjBUc2cwdXhSeThZVGdGejdS?=
- =?utf-8?B?YlYrUituZEgxS3cvbTV1U1R5K1JJN21zaXh6OXFZSkhmaXNZRCtZMitFdFU0?=
- =?utf-8?B?cjZLZlBjaEY1N2VITDRMRk5NMCtIMnI4NjMyS0VHLzY5L0tQb2RyK05oZVdL?=
- =?utf-8?B?VWxxay9UcEs2OVlzZ2JDZWU5RTNLUGtER24vS2gyS1hhZUtHWjZCSGN1L1Bl?=
- =?utf-8?B?aSsvRlNnbFEza2haaWFRM3gxcHNQbklXZ2UyMWRDelZiTHVPZURWS2RUVldS?=
- =?utf-8?B?WGFnckNsVlZBTFpqZWFJZ2xwcTdxbXlFUjZDNTN6WllhRVozTDBIMjQzdUpx?=
- =?utf-8?B?RFE3NmNmUUYvWGg5WlZucVpiR2x4Z1g4WHZrWG01L2MyVllTVW9QRHBiZ0VE?=
- =?utf-8?B?Y3RjWEhrZ1lQemZCSkJqejZCQ3FoU3ZKVGd4TVBDQnJ5K0JhbFNPV3RLT1Fj?=
- =?utf-8?B?QnhNMjZyTG5BTnV6TzlFeSsvR21LNXhJb255Q05wRXJNVUExT0h2ZVVRTWZZ?=
- =?utf-8?B?U3ZPeDl3emx3U1RUdmNEY2pKeWRzTVhGVWNDMXpNblBzbWhiWWZpL2toNnFn?=
- =?utf-8?B?WGJsaGxLWHhNRmdtSE04RUZCU1dTQnhjZEIrWFJDRWN2bGZkZTQwd2dYOUF0?=
- =?utf-8?B?YXE0RUMzaTYrTm5FS1AwdG5LVlpvMU4xclBVUllmWW5KdG1zcVl1eEJPVzNs?=
- =?utf-8?B?TG41WlhRNGF3QXJIL2VudmN3U0NZOUtNdWlPbjdCamRjcE5oRmo5TWF1MSth?=
- =?utf-8?B?Z0ZaekdOT2EyU0hGSVh1djR0NTZxa1dHaXI5YlN0eXhycUowWElwam0rNSti?=
- =?utf-8?B?bjlZNjZXeThLVDFZSzVWcVA3RCtVMkVRWUo0V0thL1I2NXlGVEl5bXd2eVhG?=
- =?utf-8?B?L2Y4NXRDUGRucnZ1TFRDTTZjUUM1TEdOeGR0UVFXU2lGQkVkaVhaNFZSMGZ4?=
- =?utf-8?B?Yms3dHZWUk1scnQrTVlndzhkUjU3Z0dsajJjeFdMblBXdGQwRndoaXA2ODFx?=
- =?utf-8?B?LzY3a1NUcjY3cHFWeVV1WG9pWDdBOTJaaFdwVXhKTlB6bkt4MlZyVEp4Qmc0?=
- =?utf-8?B?Y1NKUkdndEFYaUJMTVFUcUNtZzZJTVVmVE53S0ZZcVAwdFdOVDJZRWJqbWFy?=
- =?utf-8?B?SXNaR2cvajJEelN0b0FLTGFVcU1SWCs1QUlGRkFOeXJvQS92RlkrZHFnUkIx?=
- =?utf-8?B?QUEwaHlyL01raTNzVGFBRnVoQ09MMVdBa2wvMnhFQ1p3bUF2WDUyOXU4TXlZ?=
- =?utf-8?B?K3RFWXlUYXNyWmtiRnFrb0tOU1hrQjJqVCtzQnp0b3grUTJYT05SZTRRNnky?=
- =?utf-8?B?RHV4UXVhZWVSWnJqUFlnOTFQTHczV3Rsd1RUZnBadVdycDJ2d2EzUGt1V2JX?=
- =?utf-8?B?SlFzS0szVlR5OFlMZ1c3TnhMU1Q5UWdYbkJPRVk4Z0hCaGNUNEdkdTBIaEFu?=
- =?utf-8?B?VEQ2S3RFcGh2MXducGZLdHRpL0IyaGw1MDdNRk1neCtBZE9nVXZMQjVNQ0hL?=
- =?utf-8?B?S3Qrak54ZUVJSEZsVVp5ZnFmZlJ6Q0tTb3dwMFZuMFhWNURlSkNxbS9rbjVt?=
- =?utf-8?Q?PGB7M8EG7AqVNWTLFxxnSovs3pkg4Q=3D?=
+	=?utf-8?B?bjZkRmRKTE4rVjNDSnhtdkFtbkE5YTFrZXFLWjhWU3JIamcwQjNKcWFCRmRl?=
+ =?utf-8?B?YkVFZVRLb1drWE5Nbld6ay82SGdpN1pzWCttS3Y4MTVmLzVTRmZhWXhSakVv?=
+ =?utf-8?B?Z3RHd0g4dzZXN3c4YndqWEtmNjJrYzZJc3NId1F6cTB2eWQ2Sjl3azRLY1NX?=
+ =?utf-8?B?b3gzSlBscHVGdWdPalE1WlBwbytzWHNzRTFURk1wSDh0U0YxRVFIcDFPVjJm?=
+ =?utf-8?B?VG5waWpMMm43aG5IWEt1cG1pU0hSRThvTGhPczY1SWowMzZ3VEU0TTJnQUxO?=
+ =?utf-8?B?SFZSSkh3NWNxS0hQUElycXRtSzk5dzFmZXhWVjFiWE0zeUczaHBYbkJ5QU1K?=
+ =?utf-8?B?Uktnd2UzaGpHL2t4QmNNSEFibWtkeWlDSDFxbEdsTlYxanpxQXRUTGZtUXR0?=
+ =?utf-8?B?em5waWxrZkVrZ0pHL2wrWWsyV0RJcUFzaGtWcVluQStsaDdNQ1lWS3BBdDBO?=
+ =?utf-8?B?cDN4TjRZQldja012YlNCd1AwTG5KMVJNV1BUSTFPWit4Y3VqNkpHa1FlTzNk?=
+ =?utf-8?B?L1FoSXRhdEJhN1lTeCt0MzhVdWg1bytVWTdmZm9tSHdXNU1sN21ZdDNIa21u?=
+ =?utf-8?B?U2phRytCMUxmbHhyWG5EZFdsZ2lhMlByYUNuR3hUTWh6bTkzN1d0Ky91SVVQ?=
+ =?utf-8?B?clJKRnlVYUM3L1hqUUZnTk15d0Z0M3dQekxVOUpqcDVVVC9CR3NSa2FFNVRN?=
+ =?utf-8?B?cHh2YmFCdS8rbUtpZHJrc1FIWVdZbkY4NnIxMStnaHU1cXdwRzZGOE5wK2Fu?=
+ =?utf-8?B?SzNYbXVpNlBHNHNqQ256M3J3WkcxeS8xcVpTZnpMdjBVYW1RNFYxTHBTL2Q0?=
+ =?utf-8?B?cnFhd3NlTmFqN2hBNUc1SjgrdVlWMnRPUlIxK1ZRdEZtUkhtMzczc3hIRnJI?=
+ =?utf-8?B?Wlh0ZkEwdEZHYWQ1aFowS1RsSnRBbUxyVWdLV3lVVmc4QnVFOFFnQjQ0Z1NT?=
+ =?utf-8?B?WkdzOTlEYTVxajNkNGFLWnBrd3VLMDluUTFjQUtIT1NzbHdGUWc5MDFEcmta?=
+ =?utf-8?B?aXpYbGMrVWdPQkwzaVpqS1FYL0dJUjlLMUhrYVVyV3JtUFJUbWQwUGJhMHVp?=
+ =?utf-8?B?eExqRUJRelJmeUcvWHcvTVo1VmF1VHVQTDNwSCszM00zVmxUcTA4UElHd3JU?=
+ =?utf-8?B?ayt6YVR4WjJXNlVXMHNhYkorbDRET0JJNWI4K20xRXFRbkN0QkVEWTIxaVo4?=
+ =?utf-8?B?ZExNY0V4bFNHYmdIMlRLV3J1eFExSGVKMjFsTzUyTzc1TWJEcTA4RGNjUk5S?=
+ =?utf-8?B?U1pnanNJSmliczA5S2tIRVRUanBRTHc0d1F2Sis4Mmh2ZEFySzl0SUZEY2da?=
+ =?utf-8?B?YXAxMVZ1YjM3OE5yZjNKQVFpeUsyaWhYakpDY3VNd0M1bHE5TU1idUhWays3?=
+ =?utf-8?B?eWFTSjFBTzlIVHU0OGU0NWQyWG5GRFh5U2FHc21tQ3dGbDJsSDVDMDcvSVJs?=
+ =?utf-8?B?VjlNLy92dkRIOVJWd0I2WlhFRnl3aUEwWGpZRUxibEt0dnorWlJ3a0JsOHNj?=
+ =?utf-8?B?cXJvdWx0aDYrY2JueTRoa0Z2ZENVbENiM1BIaGhRdCtmTHllZ3Z6TDd6OGJD?=
+ =?utf-8?B?dkkzMFFweUQ0a1lhdWIxZjFZTG5DdHpBai9DSWZtWCt0Ry9QbGx2OGxmR2VV?=
+ =?utf-8?B?UStmalRVQlR6Y0QxeU1paGNCbG9tVFdLQkhmWXZtTW5LSjVwVFhzOVo3Rk80?=
+ =?utf-8?B?QTRhckpDbEFad2hFSi9jbzRSc05xU3ovc1RLeTFxWDJibnVwV2hKaU4yeHBP?=
+ =?utf-8?B?QVRwV1lFNHRyR2xtQ2NZRGo5ZVd0S1RiRFkxRUJTVnorNFp0cGM0TFJGYUR1?=
+ =?utf-8?B?aUpnM0RqZWZBUFovZjlOdHp4bXFaTnhsNUZzRzZwVlZHZm9lbTluZkVZT0Fa?=
+ =?utf-8?B?bFBNZnJFcmt0UVVmTU9MVVd0N1BDbFJjRVdMdXAvdEhEcnkyeWZiaWdBdk9s?=
+ =?utf-8?B?aW1mL0R0NkUzenJyd1k2c2tKRHN0SDdNaGlJdnArNTVBaloyVkkyZURPQVdY?=
+ =?utf-8?Q?fPqf5vfwBmsQD2ohKbMsDm795M0oVY=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2025 16:46:26.7005
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2025 16:46:27.2161
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad09244b-a369-4356-71b3-08dd4c4df54c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3621fbe7-7a50-455e-1f84-08dd4c4df59b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	DS1PEPF0001709C.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9351
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9078
 
-The MCx_MISC0[BlkPtr] field was used on legacy systems to hold a
-register offset for the next MCx_MISC* register. In this way, an
-implementation-specific number of registers can be discovered at
-runtime.
+The threshold_bank structure is a container for one or more
+threshold_block structures. Currently, the container has a single
+pointer to the 'first' threshold_block structure which then has a linked
+list of the remaining threshold_block structures.
 
-The MCAX/SMCA register space simplifies this by always including
-the MCx_MISC[1-4] registers. The MCx_MISC0[BlkPtr] field is used to
-indicate (true/false) whether any MCx_MISC[1-4] registers are present.
-But it does not indicate which ones nor how many. Therefore, all the
-registers are accessed and their bits are checked.
+This results in an extra level of indirection where the 'first' block is
+checked before iterating over the remaining blocks.
 
-AMD systems generally enforce a Read-as-Zero/Writes-Ignored policy for
-unused registers. Therefore, there is no harm to read an unused
-register. This is already done in practice for most of the MCx_MISC
-registers.
-
-Remove the smca_banks_map variable as it is effectively redundant.
+Remove the indirection by including the head of the block list in the
+threshold_bank structure which already acts as a container for all the
+bank's thresholding blocks.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
@@ -173,71 +167,108 @@ Notes:
     v1->v2:
     * New in v2.
 
- arch/x86/kernel/cpu/mce/amd.c | 30 ------------------------------
- 1 file changed, 30 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c | 43 ++++++++++++-------------------------------
+ 1 file changed, 12 insertions(+), 31 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 4ea691006c3b..f8ad40c5c887 100644
+index f8ad40c5c887..df8984aac1c6 100644
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -252,9 +252,6 @@ static DEFINE_PER_CPU(struct threshold_bank **, threshold_banks);
+@@ -241,7 +241,8 @@ struct threshold_block {
+ 
+ struct threshold_bank {
+ 	struct kobject		*kobj;
+-	struct threshold_block	*blocks;
++	/* List of threshold blocks within this MCA bank. */
++	struct list_head	miscj;
+ };
+ 
+ static DEFINE_PER_CPU(struct threshold_bank **, threshold_banks);
+@@ -901,9 +902,9 @@ static void log_and_reset_block(struct threshold_block *block)
   */
- static DEFINE_PER_CPU(u64, bank_map);
- 
--/* Map of banks that have more than MCA_MISC0 available. */
--static DEFINE_PER_CPU(u64, smca_misc_banks_map);
--
- static void amd_threshold_interrupt(void);
- static void amd_deferred_error_interrupt(void);
- 
-@@ -264,28 +261,6 @@ static void default_deferred_error_interrupt(void)
- }
- void (*deferred_error_int_vector)(void) = default_deferred_error_interrupt;
- 
--static void smca_set_misc_banks_map(unsigned int bank, unsigned int cpu)
--{
--	u32 low, high;
--
--	/*
--	 * For SMCA enabled processors, BLKPTR field of the first MISC register
--	 * (MCx_MISC0) indicates presence of additional MISC regs set (MISC1-4).
--	 */
--	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_CONFIG(bank), &low, &high))
--		return;
--
--	if (!(low & MCI_CONFIG_MCAX))
--		return;
--
--	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_MISC(bank), &low, &high))
--		return;
--
--	if (low & MASK_BLKPTR_LO)
--		per_cpu(smca_misc_banks_map, cpu) |= BIT_ULL(bank);
--
--}
--
- static void smca_configure(unsigned int bank, unsigned int cpu)
+ static void amd_threshold_interrupt(void)
  {
- 	u8 *bank_counts = this_cpu_ptr(smca_bank_counts);
-@@ -326,8 +301,6 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 		wrmsr(smca_config, low, high);
+-	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
+-	struct threshold_bank **bp = this_cpu_read(threshold_banks);
++	struct threshold_bank **bp = this_cpu_read(threshold_banks), *thr_bank;
+ 	unsigned int bank, cpu = smp_processor_id();
++	struct threshold_block *block, *tmp;
+ 
+ 	/*
+ 	 * Validate that the threshold bank has been initialized already. The
+@@ -917,16 +918,11 @@ static void amd_threshold_interrupt(void)
+ 		if (!(per_cpu(bank_map, cpu) & BIT_ULL(bank)))
+ 			continue;
+ 
+-		first_block = bp[bank]->blocks;
+-		if (!first_block)
++		thr_bank = bp[bank];
++		if (!thr_bank)
+ 			continue;
+ 
+-		/*
+-		 * The first block is also the head of the list. Check it first
+-		 * before iterating over the rest.
+-		 */
+-		log_and_reset_block(first_block);
+-		list_for_each_entry_safe(block, tmp, &first_block->miscj, miscj)
++		list_for_each_entry_safe(block, tmp, &thr_bank->miscj, miscj)
+ 			log_and_reset_block(block);
+ 	}
+ }
+@@ -1145,13 +1141,7 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ 		default_attrs[2] = NULL;
  	}
  
--	smca_set_misc_banks_map(bank, cpu);
+-	INIT_LIST_HEAD(&b->miscj);
 -
- 	if (rdmsr_safe(MSR_AMD64_SMCA_MCx_IPID(bank), &low, &high)) {
- 		pr_warn("Failed to read MCA_IPID for bank %d\n", bank);
- 		return;
-@@ -532,9 +505,6 @@ static u32 smca_get_block_address(unsigned int bank, unsigned int block,
- 	if (!block)
- 		return MSR_AMD64_SMCA_MCx_MISC(bank);
+-	/* This is safe as @tb is not visible yet */
+-	if (tb->blocks)
+-		list_add(&b->miscj, &tb->blocks->miscj);
+-	else
+-		tb->blocks = b;
++	list_add(&b->miscj, &tb->miscj);
  
--	if (!(per_cpu(smca_misc_banks_map, cpu) & BIT_ULL(bank)))
--		return 0;
--
- 	return MSR_AMD64_SMCA_MCx_MISCy(bank, block - 1);
+ 	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
+ 	if (err)
+@@ -1202,6 +1192,8 @@ static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
+ 		goto out_free;
+ 	}
+ 
++	INIT_LIST_HEAD(&b->miscj);
++
+ 	err = allocate_threshold_blocks(cpu, b, bank, 0, mca_msr_reg(bank, MCA_MISC));
+ 	if (err)
+ 		goto out_kobj;
+@@ -1222,26 +1214,15 @@ static void threshold_block_release(struct kobject *kobj)
+ 	kfree(to_block(kobj));
  }
  
+-static void deallocate_threshold_blocks(struct threshold_bank *bank)
++static void threshold_remove_bank(struct threshold_bank *bank)
+ {
+ 	struct threshold_block *pos, *tmp;
+ 
+-	list_for_each_entry_safe(pos, tmp, &bank->blocks->miscj, miscj) {
++	list_for_each_entry_safe(pos, tmp, &bank->miscj, miscj) {
+ 		list_del(&pos->miscj);
+ 		kobject_put(&pos->kobj);
+ 	}
+ 
+-	kobject_put(&bank->blocks->kobj);
+-}
+-
+-static void threshold_remove_bank(struct threshold_bank *bank)
+-{
+-	if (!bank->blocks)
+-		goto out_free;
+-
+-	deallocate_threshold_blocks(bank);
+-
+-out_free:
+ 	kobject_put(bank->kobj);
+ 	kfree(bank);
+ }
 
 -- 
 2.43.0
