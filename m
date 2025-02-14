@@ -1,202 +1,149 @@
-Return-Path: <linux-edac+bounces-3088-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3089-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BD74A35BC8
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2025 11:50:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 083AFA35EEC
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2025 14:25:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F7E67A36A1
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2025 10:49:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AC2B171D1F
+	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2025 13:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07B3245002;
-	Fri, 14 Feb 2025 10:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19917265CB1;
+	Fri, 14 Feb 2025 13:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ctv0z7XD"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B5815198D;
-	Fri, 14 Feb 2025 10:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DED264A88
+	for <linux-edac@vger.kernel.org>; Fri, 14 Feb 2025 13:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739530197; cv=none; b=ElruiMxhMnvBOVZUUPAnP7CD61JqCV7wqYsf9ob4fCyZZKsSMUynPBfeXzZAaIi1TGDsMafnaJt4Dkd7MpZy2RdCHppUfwk9CqiPUm5vBYRiaIeDj0WLcsz5W1EqOAXRPgpVlNwcmOKvTPGknZds+N5m3E2100nngnI3PIj8TlM=
+	t=1739539130; cv=none; b=tRZIULbEUjfBQYd+qIzjGBty2xpzLuds8JwCMOjjoZmtacswRsOlnOCK1Uf+tCyI11HbyIPJF9yd0UcAHztGWR2BTUX5O2KjXBNuxwQWBQHrTo9LS8ha3tLKQlZ3B95KVue0BAX60lg7WNGGk/rDHYUgvomOifiiDmcEHFlP6fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739530197; c=relaxed/simple;
-	bh=nTLGQRv9+Dmv04TXYESDtBUvopxmV+9Gvf73k4K56rs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=hJ44cjtWjEu+fgIV1Sko1tKXnldxz96ftCkt1m3twmVBG4/L+2hYeZUpCdWZ6HxV8k5SK5ZE7shGNP0vSZo3+1A1nmd0joyncpe0WOilxCb7bHGTMohX6LbnVVmJYFXCNv8t3VfDD6NMq0Ol8H7DLJlIJJkHD3f24xCyJl05v1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YvTHz4wLdz6L4t9;
-	Fri, 14 Feb 2025 18:46:39 +0800 (CST)
-Received: from frapeml100007.china.huawei.com (unknown [7.182.85.133])
-	by mail.maildlp.com (Postfix) with ESMTPS id E1DB31400DA;
-	Fri, 14 Feb 2025 18:49:45 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml100007.china.huawei.com (7.182.85.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 14 Feb 2025 11:49:45 +0100
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Fri, 14 Feb 2025 11:49:45 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Fan Ni <nifan.cxl@gmail.com>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "rafael@kernel.org"
-	<rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
-	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
-	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
-	"Jonathan Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
-	<dave.jiang@intel.com>, "alison.schofield@intel.com"
-	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
-	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
-	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
-	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v20 02/15] EDAC: Add scrub control feature
-Thread-Topic: [PATCH v20 02/15] EDAC: Add scrub control feature
-Thread-Index: AQHbfVudPqq/NHwN4UqlQ2GJSWClwrNFsryAgADmw2A=
-Date: Fri, 14 Feb 2025 10:49:45 +0000
-Message-ID: <4bf20362774e4a7cb9387f97f43fff9c@huawei.com>
-References: <20250212143654.1893-1-shiju.jose@huawei.com>
- <20250212143654.1893-3-shiju.jose@huawei.com>
- <67ae6587.170a0220.2d3544.9687@mx.google.com>
-In-Reply-To: <67ae6587.170a0220.2d3544.9687@mx.google.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1739539130; c=relaxed/simple;
+	bh=pToG4Ksx6o1gvuZY9Gnggq0zrKIa+mtMW6XKamS6PUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SgRzUJCbI7jjjdQAomglz+4xCyPOH5QD6ZTb0T3pcWID4S78EKCGDSrQaUaea4iLkbzW83M/y/c593cvSPcT0Q1Kt2bVerbY87EJMsK+xrpFZNsBCQeMDlAf/8VpVw6NJzJoeiivJYheG8SmBtR3S+C52Aw4ZDbzY9AlfbVNI04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ctv0z7XD; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-219f8263ae0so34366325ad.0
+        for <linux-edac@vger.kernel.org>; Fri, 14 Feb 2025 05:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739539127; x=1740143927; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UIFBSo0KZ65tGs7lIwblNS9Ead+3QceXTUKjiZlNVB8=;
+        b=ctv0z7XDuXK31acl9Devz0DHtUVZ3OKiM/qZGpi4P7YQjA5VxyuHJWoei3OQG2YNzt
+         Rg8vJ9t9t5wemGYZs8kL1aPvfR1AHMUBKqo2yJ3tcobva2pkiKFUkOO6XDUm82s+Kzla
+         qfxId+xZqpCpQdeZnfHQf+mTzlw7YPVLpy2kMBA2h6qOY7d2exzHYP+/sTSCYAzwEhaS
+         DaUsm/LD3+S1NvEPeOFZkJ4GyGzxe3jSZtEZLJO1GYS5TxIchAn543+h8R034+mtfnBP
+         Ii/wQGcOWrjzh8op1Psicu5G9uUIPmmfyJzQnXV7My2ubez36cZLnHL+ua7sA3Ve7cEZ
+         a9jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739539127; x=1740143927;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UIFBSo0KZ65tGs7lIwblNS9Ead+3QceXTUKjiZlNVB8=;
+        b=YmRCfQJjSq6gFwSz4nsIu0jtsLN2sY8J/EHkYG0fU9vs8Ys9M04BpuOAIefrrYoXGq
+         P3ES4iaqnJ0fzKKtAU6lHu3a3OTshTtHWCYyoHAa9vQQ4iN/nKA87TpFHyw6NQiezWjm
+         t/PJnOs8WgCk/jebjrjCCQL2SZJG8qR8U24HUVWBC+GcH6pBbRmSX7HYwJ57NGlH7IRx
+         GuKDKvITpRZBknp72UICMKhoLqZ78BWivIVKklxgPCdBfZKuAatuCaH1yocL0CdFFyAx
+         WXw9BQb5w27qOgjp2I8Q1pg3mgCIrnvNfPQqap+HstZsRYC57R7gugzoguv//IiSR98k
+         6ZUg==
+X-Forwarded-Encrypted: i=1; AJvYcCWnDNhg1VWFQl5+52aF6IWIQLl3WzxnZ7wEbdFnFcP3c6YQMZtbQ5610Wi3+KmouaVO3zxzGrtN7CkQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBwixHwlJSkK2q6weTiGxRef7+qNoIDCnEguTp20LrnymiTkZh
+	9H55/4qzd+i4VgKSxi8SRyhHTn4/xd6K+K4vhsF0Wk30UZbG0XqFPdVIfRLt+A==
+X-Gm-Gg: ASbGncsAzQ+mtR9a/cG/arcq9u7W9q591XZmRJ3+fZzHMpDP7T9bok7pNEt1MAVHEzU
+	620rZXvEmZ7l9ec4jkYbVWmxRr2wbOfHgMLPl+3dgBW7zTEOftiY2UlcCkJRmmGTmFjVtS7MGeF
+	vkk2gBGTIK+NRiUw/1JGeAzvFRr12rLCMmczK12KyrL1ACYL/IL9jw9sYN0ZTGn6xgO/D4KTUqB
+	W9q7m70xmjb7cH0wd+I/OONPJtvKSXyWhwYMyO4655iyyS/IAC4ExfelOl8d5VpTT2o0VqsNqG6
+	n6iXBXdVMfMK7BSoF6tPVlGcQt6Dt9o=
+X-Google-Smtp-Source: AGHT+IEEFI+Q6slwYq+gvb8gGXdWQdiInLwAAJ5utThRzTzCUAO3SUSNbGpqXGLiGQM61ve1oAUoYA==
+X-Received: by 2002:a17:902:e887:b0:220:e8a1:c819 with SMTP id d9443c01a7336-220e8a1cb06mr72616895ad.34.1739539127170;
+        Fri, 14 Feb 2025 05:18:47 -0800 (PST)
+Received: from thinkpad ([2409:40f4:304f:ad8a:250c:8408:d2ac:10db])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d53491ecsm28668465ad.9.2025.02.14.05.18.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2025 05:18:46 -0800 (PST)
+Date: Fri, 14 Feb 2025 18:48:40 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Komal Bajaj <quic_kbajaj@quicinc.com>
+Cc: bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
+	mchehab@kernel.org, rric@kernel.org, andy.gross@linaro.org,
+	vnkgutta@codeaurora.org, linux-arm-msm@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] qcom: llcc/edac: Correct interrupt enable register
+ configuration
+Message-ID: <20250214131840.desyshjr3dbb5lyl@thinkpad>
+References: <20241119064608.12326-1-quic_kbajaj@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241119064608.12326-1-quic_kbajaj@quicinc.com>
 
+On Tue, Nov 19, 2024 at 12:16:08PM +0530, Komal Bajaj wrote:
+> The previous implementation incorrectly configured the cmn_interrupt_2_enable
+> register for interrupt handling. Using cmn_interrupt_2_enable to configure Tag,
+> Data RAM ECC interrupts would lead to issues like double handling of the
+> interrupts (EL1 and EL3) as cmn_interrupt_2_enable is meant to be configured
+> for interrupts which needs to be handled by EL3.
+> 
+> EL1 LLCC EDAC driver needs to use cmn_interrupt_0_enable register to
+> configure Tag, Data RAM ECC interrupts instead of cmn_interrupt_2_enable.
+> 
 
->-----Original Message-----
->From: Fan Ni <nifan.cxl@gmail.com>
->Sent: 13 February 2025 21:35
->To: Shiju Jose <shiju.jose@huawei.com>
->Cc: linux-edac@vger.kernel.org; linux-cxl@vger.kernel.org; linux-
->acpi@vger.kernel.org; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
->linux-doc@vger.kernel.org; bp@alien8.de; tony.luck@intel.com;
->rafael@kernel.org; lenb@kernel.org; mchehab@kernel.org;
->dan.j.williams@intel.com; dave@stgolabs.net; Jonathan Cameron
-><jonathan.cameron@huawei.com>; dave.jiang@intel.com;
->alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.com;
->david@redhat.com; Vilas.Sridharan@amd.com; leo.duran@amd.com;
->Yazen.Ghannam@amd.com; rientjes@google.com; jiaqiyan@google.com;
->Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
->naoya.horiguchi@nec.com; james.morse@arm.com; jthoughton@google.com;
->somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
->duenwen@google.com; gthelen@google.com;
->wschwartz@amperecomputing.com; dferguson@amperecomputing.com;
->wbs@os.amperecomputing.com; nifan.cxl@gmail.com; tanxiaofei
-><tanxiaofei@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>; Roberto
->Sassu <roberto.sassu@huawei.com>; kangkang.shen@futurewei.com;
->wanghuiqiang <wanghuiqiang@huawei.com>; Linuxarm
-><linuxarm@huawei.com>
->Subject: Re: [PATCH v20 02/15] EDAC: Add scrub control feature
->
->On Wed, Feb 12, 2025 at 02:36:40PM +0000, shiju.jose@huawei.com wrote:
->> From: Shiju Jose <shiju.jose@huawei.com>
->>
->> Add a generic EDAC scrub control to manage memory scrubbers in the syste=
-m.
->> Devices with a scrub feature register with the EDAC device driver,
->> which retrieves the scrub descriptor from the EDAC scrub driver and
->> exposes the sysfs scrub control attributes for a scrub instance to
->> userspace at /sys/bus/edac/devices/<dev-name>/scrubX/.
->>
->> The common sysfs scrub control interface abstracts the control of
->> arbitrary scrubbing functionality into a common set of functions. The
->> sysfs scrub attribute nodes are only present if the client driver has
->> implemented the corresponding attribute callback function and passed
->> the
->> operations(ops) to the EDAC device driver during registration.
->>
->> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> Tested-by: Daniel Ferguson <danielf@os.amperecomputing.com>
->> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
->> ---
->>  Documentation/ABI/testing/sysfs-edac-scrub |  69 ++++++
->>  Documentation/edac/features.rst            |   6 +
->>  Documentation/edac/index.rst               |   1 +
->>  Documentation/edac/scrub.rst               | 259 +++++++++++++++++++++
->>  drivers/edac/Kconfig                       |   9 +
->>  drivers/edac/Makefile                      |   2 +
->>  drivers/edac/edac_device.c                 |  41 +++-
->>  drivers/edac/scrub.c                       | 209 +++++++++++++++++
->>  include/linux/edac.h                       |  43 ++++
->>  9 files changed, 635 insertions(+), 4 deletions(-)  create mode
->> 100644 Documentation/ABI/testing/sysfs-edac-scrub
->>  create mode 100644 Documentation/edac/scrub.rst  create mode 100755
->> drivers/edac/scrub.c
->
->LGTM.
->
->Just one question, for min/max/current_cycle_duration attributes, is there=
- a
->reason why seconds are used instead of hours directly as mentioned in the =
-spec.
->That confused me a little bit when I tested to modify the current_cycle_du=
-ration
->with some value not multiple of 3600 and found the value read back is not =
-the
->same as that just written.
->
-Hi Fan,
+Cc: stable@vger.kernel.org
 
-Thanks for reviewing and testing.
-The unit for the scrub cycle attributes has been chosen as a small unit, se=
-conds,=20
-since the EDAC scrub interface is a common interface and the unit may vary =
-across=20
-various hardware scrub interfaces.
-In the CXL scrub control feature, the scrub cycle is represented in hours. =
-Therefore,=20
-the scrub cycle is internally converted to hours, and the rounded value in =
-hours,=20
-which is set in the device, is returned when read back.
+> Fixes: 27450653f1db ("drivers: edac: Add EDAC driver support for QCOM SoCs")
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
 
->With that in mind,=09
->
->Tested-by: Fan Ni <fan.ni@samsung.com>
->
->
->>
-[...]
->> --
->> 2.43.0
->>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Thanks,
-Shiju
+- Mani
+
+> ---
+>  drivers/edac/qcom_edac.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> index a9a8ba067007..0fd7a777fe7d 100644
+> --- a/drivers/edac/qcom_edac.c
+> +++ b/drivers/edac/qcom_edac.c
+> @@ -95,7 +95,7 @@ static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_b
+>  	 * Configure interrupt enable registers such that Tag, Data RAM related
+>  	 * interrupts are propagated to interrupt controller for servicing
+>  	 */
+> -	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_0_enable,
+>  				 TRP0_INTERRUPT_ENABLE,
+>  				 TRP0_INTERRUPT_ENABLE);
+>  	if (ret)
+> @@ -113,7 +113,7 @@ static int qcom_llcc_core_setup(struct llcc_drv_data *drv, struct regmap *llcc_b
+>  	if (ret)
+>  		return ret;
+> 
+> -	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_2_enable,
+> +	ret = regmap_update_bits(llcc_bcast_regmap, drv->edac_reg_offset->cmn_interrupt_0_enable,
+>  				 DRP0_INTERRUPT_ENABLE,
+>  				 DRP0_INTERRUPT_ENABLE);
+>  	if (ret)
+> --
+> 2.46.0
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
