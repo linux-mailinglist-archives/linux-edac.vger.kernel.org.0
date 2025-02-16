@@ -1,78 +1,74 @@
-Return-Path: <linux-edac+bounces-3092-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3093-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F48EA36665
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2025 20:45:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBBC0A37576
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Feb 2025 17:11:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A9F53B2579
-	for <lists+linux-edac@lfdr.de>; Fri, 14 Feb 2025 19:45:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88A661884B24
+	for <lists+linux-edac@lfdr.de>; Sun, 16 Feb 2025 16:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D041946DA;
-	Fri, 14 Feb 2025 19:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5DE1990D9;
+	Sun, 16 Feb 2025 16:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Q1LeBU57"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PEFfnEHC"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFBE1C8615;
-	Fri, 14 Feb 2025 19:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D89194A53;
+	Sun, 16 Feb 2025 16:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739562339; cv=none; b=qrfVDVmhaZiarRn/TsvLnGvH//txVDuzQbNwetXfWVi29oRpCp4efXn0HlHNwsOc5YYLghUPDaduWJA6orCWcTTLeD3eHkD6dwYx34nfI6G7UYhWEjT0YTvoLeENWwBAs4OKcEXsUi/uDilkkVsG5fhcq/dTMU93NVk/Zlb9jBI=
+	t=1739722275; cv=none; b=COddczwegI6+GhWnmFS+smlztb7ZXUi406kURvk4eJwxfNw2Xo3MhcBgNtlL2kHOk2OuyVqdRJkPz59g3rjSTHZD4vkcuJ+9PS/cUF7rLeWjkKa05L7x7Ea/JbBLI3ccYMbtNlRpxFEWlMv9uQJTZdJg6+azTDMhEU8LaPvHtn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739562339; c=relaxed/simple;
-	bh=RZm17bftE0tukyw0ZkF6+6r9zOThRKcBthxha9QvyYc=;
+	s=arc-20240116; t=1739722275; c=relaxed/simple;
+	bh=5d9qWiM6oV4TkIef8p61OFJAOWXEpIu/WUmR93U/7UE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NveDNIxLLKXxnl1dD51o0qHqHn2rmfD23X+MX4otGtJsRj06U3eS1ujwqOqjfqxaEf9VCH7pNdh47i2xpSl3XWcEsVd7BXWVSKmejDN+UxTIscpMv10bq2iRtnVtMwxcrOSjf6Mm2whSMF2aw1rtSsxJiL3YzBHvO0FdgydwLPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Q1LeBU57; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=RX/pJqYKVAQ+eh57fhQVBKw25gKJf8J99dLQ7zvrt1M0NEqeovjchJaKqbrGm9YcjhX3n8A54YtjTtUgqilnmrl6oGnllfLqm/RH1zDEZpvc5Ug7o3vH040hj86jMUvXDhqw/3K1bQg8BB0psaf+Ixx5NgC4b0mkrzrJHwnitJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PEFfnEHC; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D246040E0177;
-	Fri, 14 Feb 2025 19:45:26 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1837540E0184;
+	Sun, 16 Feb 2025 16:11:08 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id lKZg66ZpciT5; Fri, 14 Feb 2025 19:45:23 +0000 (UTC)
+	with ESMTP id ZSwyIVpKrW68; Sun, 16 Feb 2025 16:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1739562321; bh=3cGuQ2sRU+0eqUm5YRCYlYqOBZM80IxVgwSxc9d08V0=;
+	t=1739722260; bh=luSirJF7K4cUJRWwOshzBSweonnX9rGzh1rKpdTw8nI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q1LeBU57EqNGWpNF86xMvwQCOyLuoKii8ODPv52GPjx4j5+bGYLdDnElqT8gxOc8Q
-	 8i/qslY81FclOVFcssyMVlh8C92FCx0szFTiKK+LahBL16RcyalmG27Vw+r8qmJrvt
-	 jsn5mSOqx05VKmLKyCT7g61JkvmhJc5SQ5ORpsER8lidXDabJWeDI1xMuNqgh3WkDW
-	 Kn0jh6IlH28szD71/i75THhTXspbUvJeQMJJsGoTbZeTfJiSN98b7q02GqMwcqSthX
-	 RSXZKQTb9BPYWcJv1/SsVBqzKzng1I9D8/X5w2ZTBjqSAxSADYvcBedQQ6324sD19S
-	 J1o+9N6F/5qYkFO7Lmq/pMJJF0UVZOSfFLVfg5vi2UCp71+fNa8Ml/MfPhIKsZBN+V
-	 JJKyItRCxw+MwCZOczGRTo+vCXQoTttQdJc6BPCesDbnxy+60czg4Q//eNargAo74G
-	 6GHrU9GJxe36lDJYSnp5xF/TOut2ODHdTeD/PR856+Z/sOzf5qu6Bh/JyJXLBcGcey
-	 QeUz2yQ6p+yQKo1xL3ux93WhPujxym8UP12+FfIU27yRxf2zbB9BFsupjV/sXteCGa
-	 h1tWN48dGwBrc2Ebz24PA/qvxeo/LVi3MNRiZuQ5uqjfGRLmcOFTWl88Ej7EeZrUcY
-	 hMN/FuLO9EoTWzFgjoxWS9hM=
+	b=PEFfnEHCQf9kVZ4A92FOyFG0qb0pT3WIMIbS/3X9apO0vTLZmtGU++iig5lkG8a2c
+	 MC/yWKSMHKbkHiv0oxS3riWDhzjp9we/iCR9sYABuHf3zHUwc71c9l0OOq9Eetxclc
+	 Uv7yoF60c7gItrOxPkDgPBNEvBEaK4Qbu4+KQrgxWXIZQVIgCMwM0ARI0AMrH3QxqN
+	 R1449Vs4HB9y6XYHPTqYPldg9xV5wq2vlTvfbNlyrVZrFl74aKeQbfNh7TZH+vXDpe
+	 zq9Fn6MNKKtbVrz9Rm73AIvIzd9WbpVuSrwbo1eZxLWbr18m2pl3ez7F7rkI652VcH
+	 eXElsuJ211dXQI/SMbWW4RxlkRKHFaYRnKSrq56UH73MexL3SFeGIBpakFboaoiuCl
+	 g116LA+th/+y3MyF258lu/c++qO4t8jHz16T/O9XOiOtd32MWOyem47VfAHZ+JSSgA
+	 E63tGx6eUUoMnI6zEPGh7cZ5vLaS2835OJXg6cRCLOpZwzjWyeW59MzkTSPy9cFL8b
+	 /tuw4EWqnXG0l7weabuFprp1Z0uxsuAybnZ4t+3f0IxxErdY4Qm+PojBt3rJYWWrCy
+	 FfSB6hS9EjrOOs7DrZNUtdDWmLYn5tPP2n20b8DuF/RRJuKiu29U8fklrwP5xhphFu
+	 GjypBwoAXYTrUbdQ2zKAi5JA=
 Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8088440E016A;
-	Fri, 14 Feb 2025 19:45:10 +0000 (UTC)
-Date: Fri, 14 Feb 2025 20:45:02 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C3AA040E015F;
+	Sun, 16 Feb 2025 16:10:55 +0000 (UTC)
+Date: Sun, 16 Feb 2025 17:10:50 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: Komal Bajaj <quic_kbajaj@quicinc.com>, tony.luck@intel.com,
-	james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-	andy.gross@linaro.org, vnkgutta@codeaurora.org,
-	linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] qcom: llcc/edac: Correct interrupt enable register
- configuration
-Message-ID: <20250214194502.GAZ6-dPgSc-QEEdufv@fat_crate.local>
-References: <20241119064608.12326-1-quic_kbajaj@quicinc.com>
- <20250214131840.desyshjr3dbb5lyl@thinkpad>
+To: Nikolay Borisov <nik.borisov@suse.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	x86@kernel.org, tony.luck@intel.com
+Subject: Re: [PATCH v2 1/3] x86/mce/inject: Remove call to mce_notify_irq()
+Message-ID: <20250216161050.GBZ7IOCofLUUelomR4@fat_crate.local>
+References: <20250210154707.114219-1-nik.borisov@suse.com>
+ <20250210154707.114219-2-nik.borisov@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,28 +77,33 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250214131840.desyshjr3dbb5lyl@thinkpad>
+In-Reply-To: <20250210154707.114219-2-nik.borisov@suse.com>
 
-On Fri, Feb 14, 2025 at 06:48:40PM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Nov 19, 2024 at 12:16:08PM +0530, Komal Bajaj wrote:
-> > The previous implementation incorrectly configured the cmn_interrupt_2_enable
-> > register for interrupt handling. Using cmn_interrupt_2_enable to configure Tag,
-> > Data RAM ECC interrupts would lead to issues like double handling of the
-> > interrupts (EL1 and EL3) as cmn_interrupt_2_enable is meant to be configured
-> > for interrupts which needs to be handled by EL3.
-> > 
-> > EL1 LLCC EDAC driver needs to use cmn_interrupt_0_enable register to
-> > configure Tag, Data RAM ECC interrupts instead of cmn_interrupt_2_enable.
-> > 
+On Mon, Feb 10, 2025 at 05:47:04PM +0200, Nikolay Borisov wrote:
+> The call is actually a noop because when the MCE is raised the early
+> notifier is the only call site that correctly calls mce_notify_irq()
+> because it also sets mce_need_notify. Remove this call and as a result
+> make mce_notify_irq() static
 > 
-> Cc: stable@vger.kernel.org
-> 
-> > Fixes: 27450653f1db ("drivers: edac: Add EDAC driver support for QCOM SoCs")
-> > Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> 
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
+> ---
+>  arch/x86/include/asm/mce.h       |  2 --
+>  arch/x86/kernel/cpu/mce/core.c   | 44 ++++++++++++++++----------------
+>  arch/x86/kernel/cpu/mce/inject.c |  1 -
+>  3 files changed, 22 insertions(+), 25 deletions(-)
 
-Applied, thanks.
+So what you're looking at are the remnants of the old soft-inject of MCE
+errors. And it seems that we lost some of that functionality along the way and
+no one has noticed because, well, it seems no one uses it anymore.
+
+In order to understand how this thing was supposed to work, checkout
+
+ea149b36c7f5 ("x86, mce: add basic error injection infrastructure")
+
+and follow what raise_mce() does and pay attention to notify_user which is
+what mce_need_notify was called back then.
+
+Remember to have fun :-P
 
 -- 
 Regards/Gruss,
