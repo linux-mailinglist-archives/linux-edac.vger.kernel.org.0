@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-3096-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3097-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F4D2A37B6C
-	for <lists+linux-edac@lfdr.de>; Mon, 17 Feb 2025 07:34:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD3B4A37B70
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Feb 2025 07:34:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B33D168E4F
-	for <lists+linux-edac@lfdr.de>; Mon, 17 Feb 2025 06:33:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9210F16C04A
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Feb 2025 06:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A201922C6;
-	Mon, 17 Feb 2025 06:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9358F196DB1;
+	Mon, 17 Feb 2025 06:33:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ceuTCBZS"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="CUttw4BX"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E8917BB35;
-	Mon, 17 Feb 2025 06:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1ED218BC1D;
+	Mon, 17 Feb 2025 06:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739774027; cv=none; b=QkvkkoWC4tBpfgBGLvc7QvNOLZgwzZ88oQhnxcXEDEBI+YfoIZzVgo1EBEmmyj6rs1pJWe/gajaPijSFmJyGdnfkGmXPirnWDUEVW859TfWpFqWg99TPcb9kYlLXsuXQ9OZhCAY9MJSY06yRSw37J4g8MRrLPb2twJQiyCoNoV0=
+	t=1739774028; cv=none; b=gfumYF96HjqSIHXUJdBXlYKd3Y+HsjLb3JwLdk77x6gm6iWLptr6xgeM/pEfMR5QQgAz3k2BjWS1wup/tvBuotSRg+tlypBsxHI+96YCODjDtefTW0Czwnrx9H5LXvaAz3RUNb7Coe/Kc4i/s53L+6+tVvtG9aElhwy6hqTve3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739774027; c=relaxed/simple;
-	bh=P/M1Ieu6akgZJqbuDK2tDFNnLXRTcQzmj/Hk9rvHtAA=;
+	s=arc-20240116; t=1739774028; c=relaxed/simple;
+	bh=tyeqZc+X0WuP8uiwjOV0n9F+Fr+cwMxePx3EJVi8JHY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BZvRDiDxH3xB9Z0iKLubuKoeQDzafbbiBlmdnAwsZsV+AtQ9ltBCsUeOUjymLmkZSCDCZY3AhTojHcUEkMfHdSJTslj8ZSCjDSe6L9Pe/8LhBQcy6K+zYYpwTrHP9W0sePChDjJLD21tArAN77cL6sMB2YOwm142zTwi8e1Zyio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ceuTCBZS; arc=none smtp.client-ip=115.124.30.113
+	 MIME-Version; b=jEd+XihoGJg1ZSjLXxXGwSr8cv5RUKkGKn3j0X39OviTVnblfFUblsNBL1AOMfe1xFwPVEnPPAwhWHWNmEy49lPG6CqVFuhz1TUOg6+LhJbBFkuSmftOAUDRWeWtNjcMRCb0FJhUHJatbxj0P5EUm8LQ3dYMqvrOsXkJ79VKmCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=CUttw4BX; arc=none smtp.client-ip=115.124.30.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1739774022; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=nVZg/Xi0EFgJwO78HVQQzmH5TmzN10gdAW21xjQG3r4=;
-	b=ceuTCBZSvIcvKrK8/rvcF6MEAimkrZA/RXC5ONxzaRWFXxn5kctpxXX/oJz6KfYXH0PzHolPRxkt9F64OKdrQ5yyiNd+cBK41i6azKYcdHNFeXQsCcm0dGUM0TIEkaRyC0OfBvH8LPujGxNJjsfSpeSPoXzKfsrECP76Er8CbqM=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WPb1mQ2_1739774019 cluster:ay36)
+	t=1739774023; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=vvMi8bcBgppidelzMl/TigrL5YZhFRFfYcEROd+lYRc=;
+	b=CUttw4BX2Tfeg8MVmM77B3AvtOGqbsysc202/jGw7+0lMGAs/ut0QlyEP+jfnWrmeztmtBTNvagnKqNgGnBzTxKM7/NIUykck9+jpTI8dzoxLVa61qXmKOV+Znyronry3e/R5qs2SxKm3uDc1UGQbABKeSOCumXvsy1iiuqTyPQ=
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WPb1mQP_1739774021 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Mon, 17 Feb 2025 14:33:40 +0800
+          Mon, 17 Feb 2025 14:33:41 +0800
 From: Shuai Xue <xueshuai@linux.alibaba.com>
 To: tony.luck@intel.com,
 	bp@alien8.de,
@@ -57,9 +57,9 @@ Cc: tglx@linutronix.de,
 	linux-mm@kvack.org,
 	baolin.wang@linux.alibaba.com,
 	tianruidong@linux.alibaba.com
-Subject: [PATCH v2 3/5] x86/mce: add EX_TYPE_EFAULT_REG as in-kernel recovery context to fix copy-from-user operations regression
-Date: Mon, 17 Feb 2025 14:33:33 +0800
-Message-ID: <20250217063335.22257-4-xueshuai@linux.alibaba.com>
+Subject: [PATCH v2 4/5] mm/hwpoison: Fix incorrect "not recovered" report for recovered clean pages
+Date: Mon, 17 Feb 2025 14:33:34 +0800
+Message-ID: <20250217063335.22257-5-xueshuai@linux.alibaba.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20250217063335.22257-1-xueshuai@linux.alibaba.com>
 References: <20250217063335.22257-1-xueshuai@linux.alibaba.com>
@@ -71,84 +71,71 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 4c132d1d844a ("x86/futex: Remove .fixup usage") introduced a new
-extable fixup type, EX_TYPE_EFAULT_REG, and later patches updated the
-extable fixup type for copy-from-user operations, changing it from
-EX_TYPE_UACCESS to EX_TYPE_EFAULT_REG.
+When an uncorrected memory error is consumed there is a race between
+the CMCI from the memory controller reporting an uncorrected error
+with a UCNA signature, and the core reporting and SRAR signature
+machine check when the data is about to be consumed.
 
-Specifically, commit 99641e094d6c ("x86/uaccess: Remove .fixup usage")
-altered the extable fixup type for the get_user family, while commit
-4c132d1d844a ("x86/futex: Remove .fixup usage") addressed the futex
-operations. This change inadvertently caused a regression where the error
-context for some copy-from-user operations no longer functions as an
-in-kernel recovery context, leading to kernel panics with the message:
-"Machine check: Data load in unrecoverable area of kernel."
+If the CMCI wins that race, the page is marked poisoned when
+uc_decode_notifier() calls memory_failure(). For dirty pages,
+memory_failure() invokes try_to_unmap() with the TTU_HWPOISON flag,
+converting the PTE to a hwpoison entry. As a result,
+kill_accessing_process():
 
-To fix the regression, add EX_TYPE_EFAULT_REG as a in-kernel recovery
-context for copy-from-user operations.
+- call walk_page_range() and return 1 regardless of whether
+  try_to_unmap() succeeds or fails,
+- call kill_proc() to make sure a SIGBUS is sent
+- return -EHWPOISON to indicate that SIGBUS is already sent to the
+  process and kill_me_maybe() doesn't have to send it again.
 
+However, for clean pages, the TTU_HWPOISON flag is cleared, leaving the
+PTE unchanged and not converted to a hwpoison entry. Conversely, for
+clean pages where PTE entries are not marked as hwpoison,
+kill_accessing_process() returns -EFAULT, causing kill_me_maybe() to
+send a SIGBUS.
+
+Console log looks like this:
+
+    Memory failure: 0x827ca68: corrupted page was clean: dropped without side effects
+    Memory failure: 0x827ca68: recovery action for clean LRU page: Recovered
+    Memory failure: 0x827ca68: already hardware poisoned
+    mce: Memory error not recovered
+
+To fix it, return 0 for "corrupted page was clean", preventing an
+unnecessary SIGBUS.
+
+Fixes: 046545a661af ("mm/hwpoison: fix error page recovered but reported "not recovered"")
 Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Fixes: 4c132d1d844a ("x86/futex: Remove .fixup usage")
 Cc: stable@vger.kernel.org
 ---
- arch/x86/kernel/cpu/mce/severity.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ mm/memory-failure.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index dac4d64dfb2a..14c2d71c3ce1 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -16,6 +16,7 @@
- #include <asm/traps.h>
- #include <asm/insn.h>
- #include <asm/insn-eval.h>
-+#include <linux/extable.h>
- 
- #include "internal.h"
- 
-@@ -285,7 +286,8 @@ static bool is_copy_from_user(struct pt_regs *regs)
-  */
- static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- {
--	int fixup_type;
-+	const struct exception_table_entry *e;
-+	int fixup_type, imm;
- 	bool copy_user;
- 
- 	if ((m->cs & 3) == 3)
-@@ -294,9 +296,14 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- 	if (!mc_recoverable(m->mcgstatus))
- 		return IN_KERNEL;
- 
-+	e = search_exception_tables(m->ip);
-+	if (!e)
-+		return IN_KERNEL;
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 995a15eb67e2..b037952565be 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -881,12 +881,17 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+ 	mmap_read_lock(p->mm);
+ 	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwpoison_walk_ops,
+ 			      (void *)&priv);
++	/*
++	 * ret = 1 when CMCI wins, regardless of whether try_to_unmap()
++	 * succeeds or fails, then kill the process with SIGBUS.
++	 * ret = 0 when poison page is a clean page and it's dropped, no
++	 * SIGBUS is needed.
++	 */
+ 	if (ret == 1 && priv.tk.addr)
+ 		kill_proc(&priv.tk, pfn, flags);
+-	else
+-		ret = 0;
+ 	mmap_read_unlock(p->mm);
+-	return ret > 0 ? -EHWPOISON : -EFAULT;
 +
- 	/* Allow instrumentation around external facilities usage. */
- 	instrumentation_begin();
--	fixup_type = ex_get_fixup_type(m->ip);
-+	fixup_type = FIELD_GET(EX_DATA_TYPE_MASK, e->data);
-+	imm  = FIELD_GET(EX_DATA_IMM_MASK,  e->data);
- 	copy_user  = is_copy_from_user(regs);
- 	instrumentation_end();
++	return ret > 0 ? -EHWPOISON : 0;
+ }
  
-@@ -304,9 +311,13 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- 	case EX_TYPE_UACCESS:
- 		if (!copy_user)
- 			return IN_KERNEL;
--		m->kflags |= MCE_IN_KERNEL_COPYIN;
--		fallthrough;
--
-+		m->kflags |= MCE_IN_KERNEL_COPYIN | MCE_IN_KERNEL_RECOV;
-+		return IN_KERNEL_RECOV;
-+	case EX_TYPE_IMM_REG:
-+		if (!copy_user || imm != -EFAULT)
-+			return IN_KERNEL;
-+		m->kflags |= MCE_IN_KERNEL_COPYIN | MCE_IN_KERNEL_RECOV;
-+		return IN_KERNEL_RECOV;
- 	case EX_TYPE_FAULT_MCE_SAFE:
- 	case EX_TYPE_DEFAULT_MCE_SAFE:
- 		m->kflags |= MCE_IN_KERNEL_RECOV;
+ /*
 -- 
 2.39.3
 
