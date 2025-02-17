@@ -1,113 +1,112 @@
-Return-Path: <linux-edac+bounces-3093-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3099-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBBC0A37576
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Feb 2025 17:11:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2D4BA37B6F
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Feb 2025 07:34:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88A661884B24
-	for <lists+linux-edac@lfdr.de>; Sun, 16 Feb 2025 16:11:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D69287A2087
+	for <lists+linux-edac@lfdr.de>; Mon, 17 Feb 2025 06:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5DE1990D9;
-	Sun, 16 Feb 2025 16:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D01C190482;
+	Mon, 17 Feb 2025 06:34:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PEFfnEHC"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="L9pVeS6U"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D89194A53;
-	Sun, 16 Feb 2025 16:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0E0190055;
+	Mon, 17 Feb 2025 06:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739722275; cv=none; b=COddczwegI6+GhWnmFS+smlztb7ZXUi406kURvk4eJwxfNw2Xo3MhcBgNtlL2kHOk2OuyVqdRJkPz59g3rjSTHZD4vkcuJ+9PS/cUF7rLeWjkKa05L7x7Ea/JbBLI3ccYMbtNlRpxFEWlMv9uQJTZdJg6+azTDMhEU8LaPvHtn0=
+	t=1739774040; cv=none; b=AIJhIrbZhjYOQijEqFG1ZuHhFppmOGdOwSpT27Qk3xu/TSUmMFRFvVr+zRF7KQVHlq/CzEL+qFJlVs70Ypl6f5ezahxtbVfarVMBPWKSzAx8jfzAEsvaxyOeuRbuiM4h9fzSdhGG3PjVownN5SrqPmCZFGpziM4Rb/5Drf9GpQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739722275; c=relaxed/simple;
-	bh=5d9qWiM6oV4TkIef8p61OFJAOWXEpIu/WUmR93U/7UE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RX/pJqYKVAQ+eh57fhQVBKw25gKJf8J99dLQ7zvrt1M0NEqeovjchJaKqbrGm9YcjhX3n8A54YtjTtUgqilnmrl6oGnllfLqm/RH1zDEZpvc5Ug7o3vH040hj86jMUvXDhqw/3K1bQg8BB0psaf+Ixx5NgC4b0mkrzrJHwnitJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PEFfnEHC; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1837540E0184;
-	Sun, 16 Feb 2025 16:11:08 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ZSwyIVpKrW68; Sun, 16 Feb 2025 16:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1739722260; bh=luSirJF7K4cUJRWwOshzBSweonnX9rGzh1rKpdTw8nI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PEFfnEHCQf9kVZ4A92FOyFG0qb0pT3WIMIbS/3X9apO0vTLZmtGU++iig5lkG8a2c
-	 MC/yWKSMHKbkHiv0oxS3riWDhzjp9we/iCR9sYABuHf3zHUwc71c9l0OOq9Eetxclc
-	 Uv7yoF60c7gItrOxPkDgPBNEvBEaK4Qbu4+KQrgxWXIZQVIgCMwM0ARI0AMrH3QxqN
-	 R1449Vs4HB9y6XYHPTqYPldg9xV5wq2vlTvfbNlyrVZrFl74aKeQbfNh7TZH+vXDpe
-	 zq9Fn6MNKKtbVrz9Rm73AIvIzd9WbpVuSrwbo1eZxLWbr18m2pl3ez7F7rkI652VcH
-	 eXElsuJ211dXQI/SMbWW4RxlkRKHFaYRnKSrq56UH73MexL3SFeGIBpakFboaoiuCl
-	 g116LA+th/+y3MyF258lu/c++qO4t8jHz16T/O9XOiOtd32MWOyem47VfAHZ+JSSgA
-	 E63tGx6eUUoMnI6zEPGh7cZ5vLaS2835OJXg6cRCLOpZwzjWyeW59MzkTSPy9cFL8b
-	 /tuw4EWqnXG0l7weabuFprp1Z0uxsuAybnZ4t+3f0IxxErdY4Qm+PojBt3rJYWWrCy
-	 FfSB6hS9EjrOOs7DrZNUtdDWmLYn5tPP2n20b8DuF/RRJuKiu29U8fklrwP5xhphFu
-	 GjypBwoAXYTrUbdQ2zKAi5JA=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C3AA040E015F;
-	Sun, 16 Feb 2025 16:10:55 +0000 (UTC)
-Date: Sun, 16 Feb 2025 17:10:50 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Nikolay Borisov <nik.borisov@suse.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	x86@kernel.org, tony.luck@intel.com
-Subject: Re: [PATCH v2 1/3] x86/mce/inject: Remove call to mce_notify_irq()
-Message-ID: <20250216161050.GBZ7IOCofLUUelomR4@fat_crate.local>
-References: <20250210154707.114219-1-nik.borisov@suse.com>
- <20250210154707.114219-2-nik.borisov@suse.com>
+	s=arc-20240116; t=1739774040; c=relaxed/simple;
+	bh=kdu/4bLC3UQrdhqz+ozlX4h5tv4w8WukwNTq+M/36mg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B4D0FDPN/JAcZ+bGgqTO/wYVBTTx8EW/QEhkpZUbET8phTUso5CgR8Ly7BwAErIMrmIsHjQgJAzJXPMeeCZRq5FzPvyYCxtwSFA5SOSkSXqGX6FM0//C97aHc8Qt90a5v6MYtaYpkdNpemzSFUIArGBqoQisAh66q/u8s/OfyIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=L9pVeS6U; arc=none smtp.client-ip=47.90.199.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1739774019; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=L0A7nBKDZctlChxPK/eFP1Sa0tw/MzJN7M2cddhGNjI=;
+	b=L9pVeS6UXH3C9YU8vzZkj685OZ4XZqd3TSZcGXIZ5MrGyviD+DNHDZX9Jt7vtvosjTPMd1ETHyv1YF9f5ln5dqYk69mmplsx7BVBzcvh3JwxpEOB8OdGkNS88wMyolW+U4wK0cUTi0K9BXj6MOsdEp6R15HKX3BGluQ3jVHUSPs=
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WPb1mNR_1739774015 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Feb 2025 14:33:37 +0800
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+To: tony.luck@intel.com,
+	bp@alien8.de,
+	nao.horiguchi@gmail.com
+Cc: tglx@linutronix.de,
+	mingo@redhat.com,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	linmiaohe@huawei.com,
+	akpm@linux-foundation.org,
+	peterz@infradead.org,
+	jpoimboe@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	baolin.wang@linux.alibaba.com,
+	tianruidong@linux.alibaba.com
+Subject: [PATCH v2 0/5] mm/hwpoison: Fix regressions in memory failure handling
+Date: Mon, 17 Feb 2025 14:33:30 +0800
+Message-ID: <20250217063335.22257-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250210154707.114219-2-nik.borisov@suse.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 10, 2025 at 05:47:04PM +0200, Nikolay Borisov wrote:
-> The call is actually a noop because when the MCE is raised the early
-> notifier is the only call site that correctly calls mce_notify_irq()
-> because it also sets mce_need_notify. Remove this call and as a result
-> make mce_notify_irq() static
-> 
-> Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
-> ---
->  arch/x86/include/asm/mce.h       |  2 --
->  arch/x86/kernel/cpu/mce/core.c   | 44 ++++++++++++++++----------------
->  arch/x86/kernel/cpu/mce/inject.c |  1 -
->  3 files changed, 22 insertions(+), 25 deletions(-)
+changes singce v1:
+- Patch 1: Fix cur_sev and sev type to `int` per Tony
+- Patch 4: Fix return value to 0 for clean pages per Miaohe
+- Patch 5: pick return value comments of memory-failure()
 
-So what you're looking at are the remnants of the old soft-inject of MCE
-errors. And it seems that we lost some of that functionality along the way and
-no one has noticed because, well, it seems no one uses it anymore.
+This patch addresses three regressions identified in memory failure
+handling, as discovered using ras-tools[1]:
 
-In order to understand how this thing was supposed to work, checkout
+- `./einj_mem_uc copyin -f`
+- `./einj_mem_uc futex -f`
+- `./einj_mem_uc instr`
 
-ea149b36c7f5 ("x86, mce: add basic error injection infrastructure")
+The regressions in the copyin and futex cases were caused by the
+replacement of `EX_TYPE_UACCESS` with `EX_TYPE_EFAULT_REG` in some
+copy-from-user operations, leading to kernel panics. The instr case
+regression resulted from the PTE entry not being marked as hwpoison,
+causing the system to send unnecessary SIGBUS signals.
 
-and follow what raise_mce() does and pay attention to notify_user which is
-what mce_need_notify was called back then.
+These fixes ensure proper handling of memory errors and prevent kernel
+panics and unnecessary signal dispatch.
 
-Remember to have fun :-P
+[1]https://git.kernel.org/pub/scm/linux/kernel/git/aegl/ras-tools.git
+
+Shuai Xue (5):
+  x86/mce: Collect error message for severities below MCE_PANIC_SEVERITY
+  x86/mce: dump error msg from severities
+  x86/mce: add EX_TYPE_EFAULT_REG as in-kernel recovery context to fix
+    copy-from-user operations regression
+  mm/hwpoison: Fix incorrect "not recovered" report for recovered clean
+    pages
+  mm: memory-failure: move return value documentation to function
+    declaration
+
+ arch/x86/kernel/cpu/mce/core.c     | 26 +++++++++++++-------------
+ arch/x86/kernel/cpu/mce/severity.c | 21 ++++++++++++++++-----
+ mm/memory-failure.c                | 21 +++++++++++++++------
+ 3 files changed, 44 insertions(+), 24 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.39.3
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
