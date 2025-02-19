@@ -1,153 +1,125 @@
-Return-Path: <linux-edac+bounces-3148-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3149-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88C21A3B1AF
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 07:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 134F3A3B202
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 08:13:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E87F1726DE
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 06:34:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC75F173517
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 07:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569B21B6D0F;
-	Wed, 19 Feb 2025 06:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC5B1C07FC;
+	Wed, 19 Feb 2025 07:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="nWm0g8/S"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E141B425D;
-	Wed, 19 Feb 2025 06:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21691C07F6;
+	Wed, 19 Feb 2025 07:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739946897; cv=none; b=HpRnZrSU/EERrdpchd/uUViviML0V8pGz22mWi+eQZnBrARa3SZBV6XJ5XV+Z397WPw3o40AxIS9Y9ly/3vC1435816rPi8RuP+yLaiqyWe+njBxlDgLIS4URWHCTovUMzB8phPwfypeNjsefBgisKaeedtyptXIgnVvgy5Env0=
+	t=1739949202; cv=none; b=AJfVNG4b6kyaa9w/F/BCPAp3+/A6zcfKEUyJjmwKUpgigBkGp0J1LYSGUFr2WshuMxn18MO/O6D3R6jXzZ8C2MDzSokdr39fHkTk1FlXSx3GvmEmNbFJnE0pKNeCs3Ke8W27wKj7a0r2Uv8AtR6VlB/+QVgrdzT0sNCUQy+FWdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739946897; c=relaxed/simple;
-	bh=Nkk4tLvZQI67voOW8z5AeTYS2qk07OSNLO01/1b3FM4=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=YW6yNT4zYD8uryOehXxaH9qjj4usz1c6mcl6nhY1UNvkxc3YxBJYQ3kw/a1YzMKhWJOemBfQ7p/I7fVUKdH4y1WWxTmtt9pkyFfn5pa8No+QnjkqTnc7ECbr24L1jEVZIAloQAnyuK9We2PAilUaKZrZjxp7P16OjCb6irrBrZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4YyRMr1d4vz1Y1t2;
-	Wed, 19 Feb 2025 14:30:16 +0800 (CST)
-Received: from kwepemd200019.china.huawei.com (unknown [7.221.188.193])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0897A140159;
-	Wed, 19 Feb 2025 14:34:52 +0800 (CST)
-Received: from [10.173.127.72] (10.173.127.72) by
- kwepemd200019.china.huawei.com (7.221.188.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 19 Feb 2025 14:34:50 +0800
-Subject: Re: [PATCH v2 4/5] mm/hwpoison: Fix incorrect "not recovered" report
- for recovered clean pages
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-CC: <tglx@linutronix.de>, <mingo@redhat.com>, <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>, <hpa@zytor.com>, <akpm@linux-foundation.org>,
-	<peterz@infradead.org>, <jpoimboe@kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-	<baolin.wang@linux.alibaba.com>, <tianruidong@linux.alibaba.com>,
-	<tony.luck@intel.com>, <bp@alien8.de>, <nao.horiguchi@gmail.com>
-References: <20250217063335.22257-1-xueshuai@linux.alibaba.com>
- <20250217063335.22257-5-xueshuai@linux.alibaba.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <ddd769c2-a17d-9e34-822d-66f72bd654ac@huawei.com>
-Date: Wed, 19 Feb 2025 14:34:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1739949202; c=relaxed/simple;
+	bh=mVgqgalZxh98OYlrB0DCV8GNZFm710rtMlcq+mkJ2DE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FIcHaAKdAdLBvnLzMBkFCtk1Y6NERlvCzOYn26BcEWeTK0k441h4IrIN6gYXXrVMUOCI+q4MVW0/wSPzw9ab0+ufuZwz/hJnKuCRBs1ykF31vsAUGBqHMA4qE8isNfpLvETUTtOwbSqVzT0Dz1z/+pO+ELlKWe1rJr5f4EtCBXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=nWm0g8/S; arc=none smtp.client-ip=115.124.30.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1739949187; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=z3ce28cI/UYUnnn8SipU968k3tBURYYhJt6vjOG3Rvw=;
+	b=nWm0g8/SgVYKn1MhK6m6rsly/cKKbQf5lscL2JPN7l9KO5uQPFW6FmtB4QLELtIVY2FivmbYWiuk13HgYUYS8u+khVew6iBYfqo6vZIXvGr48PQP03B+GJ5Nmtr0tzK8jp4/A6fvez4hWxrU8C2LPCPo0TU1pVsnVYqdltfaRYY=
+Received: from 30.246.161.128(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WPoMl3s_1739949185 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 19 Feb 2025 15:13:06 +0800
+Message-ID: <a122d218-9326-482c-8347-64d8ff719c7c@linux.alibaba.com>
+Date: Wed, 19 Feb 2025 15:13:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20250217063335.22257-5-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemd200019.china.huawei.com (7.221.188.193)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] mm/hwpoison: Fix regressions in memory failure
+ handling
+To: Borislav Petkov <bp@alien8.de>
+Cc: tony.luck@intel.com, nao.horiguchi@gmail.com, tglx@linutronix.de,
+ mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+ hpa@zytor.com, linmiaohe@huawei.com, akpm@linux-foundation.org,
+ peterz@infradead.org, jpoimboe@kernel.org, linux-edac@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ baolin.wang@linux.alibaba.com, tianruidong@linux.alibaba.com
+References: <20250217063335.22257-1-xueshuai@linux.alibaba.com>
+ <20250218082727.GCZ7REb7OG6NTAY-V-@fat_crate.local>
+ <7393bcfb-fe94-4967-b664-f32da19ae5f9@linux.alibaba.com>
+ <20250218122417.GHZ7R78fPm32jKYUlx@fat_crate.local>
+ <02164ab7-c65b-4b2e-8686-5539bdcb8f43@linux.alibaba.com>
+ <20250218131753.GIZ7SIgRZBJokysBeX@fat_crate.local>
+ <4b52e6cd-1315-4b0b-8b6e-95a3d4ed96cc@linux.alibaba.com>
+ <20250218153138.GLZ7Sn2inSAgMo1aAM@fat_crate.local>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20250218153138.GLZ7Sn2inSAgMo1aAM@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2025/2/17 14:33, Shuai Xue wrote:
-> When an uncorrected memory error is consumed there is a race between
-> the CMCI from the memory controller reporting an uncorrected error
-> with a UCNA signature, and the core reporting and SRAR signature
-> machine check when the data is about to be consumed.
-> 
-> If the CMCI wins that race, the page is marked poisoned when
-> uc_decode_notifier() calls memory_failure(). For dirty pages,
-> memory_failure() invokes try_to_unmap() with the TTU_HWPOISON flag,
-> converting the PTE to a hwpoison entry. As a result,
-> kill_accessing_process():
-> 
-> - call walk_page_range() and return 1 regardless of whether
->   try_to_unmap() succeeds or fails,
-> - call kill_proc() to make sure a SIGBUS is sent
-> - return -EHWPOISON to indicate that SIGBUS is already sent to the
->   process and kill_me_maybe() doesn't have to send it again.
-> 
-> However, for clean pages, the TTU_HWPOISON flag is cleared, leaving the
-> PTE unchanged and not converted to a hwpoison entry. Conversely, for
-> clean pages where PTE entries are not marked as hwpoison,
-> kill_accessing_process() returns -EFAULT, causing kill_me_maybe() to
-> send a SIGBUS.
-> 
-> Console log looks like this:
-> 
->     Memory failure: 0x827ca68: corrupted page was clean: dropped without side effects
->     Memory failure: 0x827ca68: recovery action for clean LRU page: Recovered
->     Memory failure: 0x827ca68: already hardware poisoned
->     mce: Memory error not recovered
-> 
-> To fix it, return 0 for "corrupted page was clean", preventing an
-> unnecessary SIGBUS.
-> 
-> Fixes: 046545a661af ("mm/hwpoison: fix error page recovered but reported "not recovered"")
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Cc: stable@vger.kernel.org
-> ---
->  mm/memory-failure.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 995a15eb67e2..b037952565be 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -881,12 +881,17 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
->  	mmap_read_lock(p->mm);
->  	ret = walk_page_range(p->mm, 0, TASK_SIZE, &hwpoison_walk_ops,
->  			      (void *)&priv);
-> +	/*
-> +	 * ret = 1 when CMCI wins, regardless of whether try_to_unmap()
-> +	 * succeeds or fails, then kill the process with SIGBUS.
-> +	 * ret = 0 when poison page is a clean page and it's dropped, no
-> +	 * SIGBUS is needed.
-> +	 */
->  	if (ret == 1 && priv.tk.addr)
->  		kill_proc(&priv.tk, pfn, flags);
-> -	else
-> -		ret = 0;
->  	mmap_read_unlock(p->mm);
-> -	return ret > 0 ? -EHWPOISON : -EFAULT;
-> +
-> +	return ret > 0 ? -EHWPOISON : 0;
 
-The caller kill_me_maybe will do set_mce_nospec + sync_core again.
 
-static void kill_me_maybe(struct callback_head *cb)
-{
-	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
-	int flags = MF_ACTION_REQUIRED;
-	...
-	ret = memory_failure(pfn, flags);
-	if (!ret) {
-		set_mce_nospec(pfn);
-		sync_core();
-		return;
-	}
+在 2025/2/18 23:31, Borislav Petkov 写道:
+> On Tue, Feb 18, 2025 at 09:53:17PM +0800, Shuai Xue wrote:
+>> The regression is reported by end user and we also observed in the production.
+> 
+> Where is that report? How many times do I have to ask about different aspects
+> of your patches until you explain the *whole* picture?
 
-Is this expected?
+Sorry, I can not provide the internal report.
 
-Thanks.
-.
+Thank you for your continued attention to this matter.
+
+I appreciate your thoroughness, and I'd like to clarify a few points: I've made
+every effort to explain the issue comprehensively in my previous responses,
+following your previous instructions. And I do not have a more bigger picture.
+My picture is not introducing a new feature but addressing a regression caused
+by previous commits and improving system reliability. The root cause and its
+impact are detailed in patches 3 and 4.
+
+> 
+>> [5056863.064239] task: ffff8837d2a2a0c0 task.stack: ffffc90065814000
+>> [5056863.137299] RIP: 0010:[<ffffffff813ad231>]  [<ffffffff813ad231>] __get_user_8+0x21/0x2b
+>> ...
+>> [5056864.512018] Call Trace:
+> 
+> This tells me exactly 0 - I see some truncated stack trace.
+> 
+>> Sorry, I did not get your point.
+> 
+> I don't get your text either. Until this is explained and debugged properly,
+> it is not going anywhere.
+> 
+
+Tony helped to answer this answer. If you are a asking for how futex trigger a
+poison and handle it, hope bellow callstack helps.
+
+futex(2)
+     do_futex
+         futex_wait
+	    __futex_wait
+	        futex_wait_setup
+    		    get_user // return -EFAULT to top futex(2)
+
+I've strived to provide all the relevant information within the constraints I'm
+operating under. If there are specific aspects you feel need further
+clarification, please let me know, and I'll do my best to address them.
+
+Thank you for your patience and guidance throughout this process. I look
+forward to your feedback and to moving this patch forward.
+
+Shuai
 
