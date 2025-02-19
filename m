@@ -1,78 +1,79 @@
-Return-Path: <linux-edac+bounces-3159-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3160-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A121A3C492
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 17:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1369CA3C4BE
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 17:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABE8617C4B3
-	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 16:09:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1AFD1630A8
+	for <lists+linux-edac@lfdr.de>; Wed, 19 Feb 2025 16:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253131FE456;
-	Wed, 19 Feb 2025 16:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620BC1FA267;
+	Wed, 19 Feb 2025 16:16:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qu9kB1Ak"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gutzDP0b"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2055.outbound.protection.outlook.com [40.107.102.55])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831B21FE444;
-	Wed, 19 Feb 2025 16:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B17E748F;
+	Wed, 19 Feb 2025 16:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.75
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739981378; cv=fail; b=jzv7fchn/FQ7NNUTIfDCS0x5ww32Wu0OTyEOAj5RhsqdD6aEev0x/5lWYedRyElIJc04ItKMgtb/UllJckJi4WZ1MN6gbzwogqp2mkcVKAg7VQ2haZIFtKjY9CtawdO2qDnZzH7o/QpyzvzD219ySKzlqnY70+Xb3Id1w1AeUV8=
+	t=1739981818; cv=fail; b=g7YBDmpDHVw6qb++gLjpAOG0tqQ9/P1a/PgsryWlTgM5zKOPHsuBnvNnJpBTgs+WLLpqPXUNe6szcTz8kkz70eFPaGAVwX0/STOp3kna/92by9+qmlJkLUdh0er83Ltz+8KdL9WmVaarjNEydXT2sGWptZ/S+9yi1xo0D+3c2dQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739981378; c=relaxed/simple;
-	bh=wIIV7DVH+D6qxPCDe2YghgNLs62kiqAaS6lrAgmKqAw=;
+	s=arc-20240116; t=1739981818; c=relaxed/simple;
+	bh=BTz5yUDWl0+RlXgf1xpS5apwEwdeWzXEVSdXbZrm368=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Owcwp/raNuOd/H8vJZCfo+T60l7kenS0FqLucDjsYSgOW8vWqmy0PVQXPlEVjskEE8rHwqUWK7/1oAHJsrGim+zj/ff30G81Cs85Tsz57jAqg1suvt3yvZAAHJQWNmz65lq2hrC5xpNKGiPlK01pQp0o0C5KpgCybJOQVvIgrMY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qu9kB1Ak; arc=fail smtp.client-ip=40.107.102.55
+	 Content-Disposition:In-Reply-To:MIME-Version; b=q0nmxJmys+z3yEIVvmlBdfOxnn8SK0kR4zdFFgl7jaMAUSGmY6G0gHCb6hIcYza5AFXRpYFf9PiID0U6qxA/vEjm6yd5OSfdT2BUcubvpgHdnQHnzYjG8pCAOGwIHAYfvoBs0/s8WIOH4jWeSKNZyza+W3G3U0B6WiUoKLHsrSw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gutzDP0b; arc=fail smtp.client-ip=40.107.93.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xiSdbTB2/4UAnJN6qRd/kk5XfODCCNZ6bb27yIv/AeUbhbnHN58v5tlCiO7mWA88Uexeo7xWB7aLw5KJQ1CLJAfmW9VUWgiiWA7z3wltgjj6Mf+YypySwEnDBY5nRhmvTiGTEnUQzUtfggF69a2DGfMw5vrxjwAsLtbB7Flx+FXrz1d7xvwLkCHTCCLFHi/5If/8IfBZw70J1+MXDRm7T5fXiQOVq5hPbyDCqSR8BSglWPYYa5X2qYhA8mnYqqmSoJ+vmqTYn6V8Hp5YexBZRW0lgR8ZH/tK+uQJ4NNxRtcIj8DM0o+xvAfDdMX34RlWgL+U2MgGc2FD3o9NcEeJvA==
+ b=EIgk5m7XvXYehyWEbrg4NXeHALdnkPQcsn8PkgawapRWvAjwWMNiqww5brZjk6eFXLOtJrEv8r/ejgHCttaEjWDQMk8j59jSMk3Mcevmm9lQf73zUbM8ishtVSyUPa3sfNXPHU3DvmXkSpY3ut4ILb64ViBPDztELQFzBkJSvRbnzyV/0xUpiA2/z5YIIKRcwk68v80xcbuTHmLjMqDBxGm8L9hSc9ibOddixx02zncO1M4TNmJ4KUEp5i9JQNmWt2zvPqrEL3O3AO9q6Xdhy048HgEni5czIQqBb1Dj5oEned9TbqcqpVaolmFGLZsHHBUl9jJD2iWZr03teQNWDQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bk3UWQ1mGQFQT90ILSU9VgaDgrXzpXv4QqdbbQGcK0A=;
- b=yJztIqXjwePHYtmPMrkTb579cMS1rgR7PnbM0hZqIYcY47Ve7PQlPboq7myT+iW5WBrY0Zb906uZuAanpRT/ebH8UwrBICUCCY+S489S9JixO/WHcm2xutYyIC4qbfAR4tNxnxU1W07nCUBqaqwhvuXFiDAj1xxN//tp5Js2V2NjNMsjnhM2izqXvQhFDsN/v01sOf6ZAEAOWCXvkH/KU85cTybwuovsmzdiGhb/Lh22bF3JK04l9C/2OCW2fOGfYD+JpjJJA2wUhUUBpPP2fUC+zEweErYlh5A64+cqhHVvmTmAmzXauRLKO2ezDWwbg+dLYTx+Dv4jNb+FLOudKg==
+ bh=kg3B5Bv8J8T6M3Qd3Co1cw75mOgzoKQ4bmbwYNf4oOI=;
+ b=g2kmTQZKSsY3I6/K0rpmU/qojt97E3QNgTvflLOW/mmiIT8Mq7+Tud5m0lNUBtle+iJUuoPP+ROjTKXdfl4l4fNqI0KeZehI+0kkBtgFdGLry2fKHMsN7CJ3aju5aZ2pav7PHJtU76KyOjxHS8/53+kVzI7b3X4SIM3COj4q6uXKKTQWssJuSY0+yOuaeuAO2vyOFjgy5HzziN/zpXxBJdwTK7pDmT3RsJ85u6czgmGbVMxZdJX9+uaaAUv3Mtkv8vLU3KNYOJj3I+B/yAxoAIEWCyILKedv9exnuNZ5BTaO5Xy5bQrcaBTAKHMwVtjYH6NUiG/ChVSUzk+heMxOiA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bk3UWQ1mGQFQT90ILSU9VgaDgrXzpXv4QqdbbQGcK0A=;
- b=qu9kB1AkAcQhMW4zwZrAugTcxyyo0QJ583itWlKm7xiGePYL0OAZZ0T6f5kqYGMNs3ErjkbeA5+Vu059752qvTWivOJ+gDMUEWa6szAIFXEuYadPlPTlTsG7ePRT/iX2mRHdAh1FlYZBXDdLjloEROgaAznU9djv7CHEnrWMQx0=
+ bh=kg3B5Bv8J8T6M3Qd3Co1cw75mOgzoKQ4bmbwYNf4oOI=;
+ b=gutzDP0biGz1b4KV+HS3P6TUeEN9bG2y7gKpT48mf9S7qrMlU+KMQkRta7vOLq08w7sXhBfbZWqCk8hoZpwVpv933w709UdLdzHQiWyzrfx2Bs43JozrHYWsVQkEsdjhMKhEK85++ih6A19029Jh512RyfMxemMMEncszuAbpG8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- MW4PR12MB7384.namprd12.prod.outlook.com (2603:10b6:303:22b::15) with
+ IA1PR12MB6650.namprd12.prod.outlook.com (2603:10b6:208:3a1::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Wed, 19 Feb
- 2025 16:09:34 +0000
+ 2025 16:16:53 +0000
 Received: from DM4PR12MB6373.namprd12.prod.outlook.com
  ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
  ([fe80::12f7:eff:380b:589f%5]) with mapi id 15.20.8445.017; Wed, 19 Feb 2025
- 16:09:34 +0000
-Date: Wed, 19 Feb 2025 11:09:30 -0500
+ 16:16:51 +0000
+Date: Wed, 19 Feb 2025 11:16:47 -0500
 From: Yazen Ghannam <yazen.ghannam@amd.com>
 To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
 Cc: "x86@kernel.org" <x86@kernel.org>, "Luck, Tony" <tony.luck@intel.com>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
 	"Smita.KoralahalliChannabasappa@amd.com" <Smita.KoralahalliChannabasappa@amd.com>
-Subject: Re: [PATCH v2 13/16] x86/mce: Unify AMD DFR handler with MCA Polling
-Message-ID: <20250219160930.GF337534@yaz-khff2.amd.com>
+Subject: Re: [PATCH v2 14/16] x86/mce/amd: Enable interrupt vectors once
+ per-CPU on SMCA systems
+Message-ID: <20250219161647.GG337534@yaz-khff2.amd.com>
 References: <20250213-wip-mca-updates-v2-0-3636547fe05f@amd.com>
- <20250213-wip-mca-updates-v2-13-3636547fe05f@amd.com>
- <CY8PR11MB7134EE8E03532382B8FC23F389FA2@CY8PR11MB7134.namprd11.prod.outlook.com>
+ <20250213-wip-mca-updates-v2-14-3636547fe05f@amd.com>
+ <CY8PR11MB713437893EB56A76A5685A6489FA2@CY8PR11MB7134.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CY8PR11MB7134EE8E03532382B8FC23F389FA2@CY8PR11MB7134.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BN9P221CA0025.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:408:10a::22) To DM4PR12MB6373.namprd12.prod.outlook.com
+In-Reply-To: <CY8PR11MB713437893EB56A76A5685A6489FA2@CY8PR11MB7134.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BN9P222CA0019.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:408:10c::24) To DM4PR12MB6373.namprd12.prod.outlook.com
  (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -81,133 +82,257 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|MW4PR12MB7384:EE_
-X-MS-Office365-Filtering-Correlation-Id: c4098f2b-4a70-4499-a6ca-08dd50ffccbe
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|IA1PR12MB6650:EE_
+X-MS-Office365-Filtering-Correlation-Id: 167f9af3-1c5c-49ad-0451-08dd5100d173
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7Ko3xaMXTk/D1BDg1xGfyKqm34UDOofwvArgFRB/7veellMv/ajU30qI8wc6?=
- =?us-ascii?Q?wJ24DrYxuySEKMSDwMAAtl6YnmnpAU9qDXeTN0kzrodX7c24pYL14BIjRjjQ?=
- =?us-ascii?Q?dwsPJko5rKudCLwxt8JvlIEqO3LyQNOXlEMqtHYJx04EmpjpGZ28lZKOdPRu?=
- =?us-ascii?Q?BETgd9pdMKS5VzXMq9U3HDM+VAex4X+d/9+Jbk1CRdoFI4CQsV9P20NlsRTa?=
- =?us-ascii?Q?cppsTmV4DyHVwdlyjAtRZyvOxqIwNLx4JwogiyhA/ZRgCvVc3DAVdpKJw3gq?=
- =?us-ascii?Q?6JusUnYSWQPte5qOoe/ac9R6zHHMykDx9xhw1Hckimv9Yt70CMjP43s9RWgm?=
- =?us-ascii?Q?ByMeFyD0KxvdW/oGLJrejjQ8Roh9v8Js1bXQTG7YiH2x9yIHv0XvX2iNjqM4?=
- =?us-ascii?Q?ehQ7JqqAJIQvUDDuceP0Hx8BLCmEcOpQEklLjtBXLE03farbVZ1R0aHYpODo?=
- =?us-ascii?Q?bXliiPilP5anituKlldHKhih11LPZOgALdq2ejH/lzjyZNBqpouc4/HzvDie?=
- =?us-ascii?Q?nK1MK90BcKbuFWxHDJz3q1gXDc30xAIDHOifO7TDpecg1v4cGhG4Sxe3zYoW?=
- =?us-ascii?Q?SkIcIcK5qkvNXwk7bI68nzwl2JsFaLDh4ueVpSiGgOBoO+lXPSbzHMf1l+2t?=
- =?us-ascii?Q?IbgXNSPfsx4V2aWN1eFhkGvryuA/sEErM60tMVPA5bk8JVq8YE7ybqbINDXW?=
- =?us-ascii?Q?D+fAHW6w/tG9+ou+5AUYJfkO0810dgYMtDtr7/XmfA+2/pEwL3lficKeMxUt?=
- =?us-ascii?Q?YybONG9+HSGGYoghqOnM4tRaPA9yTt5VQCoLR6mC3PoeHwtI7mcoTiX0K+ri?=
- =?us-ascii?Q?VkvwcWojWNxeEx8k72Tel+aoij4tqTX7f65HUbR8Ne1OUgK7Wqwxmf+jY3j2?=
- =?us-ascii?Q?+pz/V3d0EAZ2rl9PpXq9DijLW1ZaZc0HWW06tsRpvwbrwkMpc2Em3lGTBDS3?=
- =?us-ascii?Q?xDQiT+PpVc1mBmDOxsvNHzw6B03JOftAXw6Jpy4SapXA4wjXVfWs1/6CuKA4?=
- =?us-ascii?Q?V5F42WE0MMkn7dX0fqoz/Kc84XLf5LDEAtlXokjNxPFTTMrijmMWnUJnHMPI?=
- =?us-ascii?Q?Uh/eIW0R0bv/GyEerTGAgf3LCS0TljgcBWDzWKWZv8o693dXV6iuQNzUTz28?=
- =?us-ascii?Q?Cab6+HydgdLjXbxjC8gYCHTvHHstkfkN4fBJyKFKxho/dAWvvQocdV3a5kkZ?=
- =?us-ascii?Q?rW1cD11+azQdWLwOhJxmO38JQ9FLAleYU8VQvSX/RL7bXxMhMgWudbqS2fAn?=
- =?us-ascii?Q?TMoVWh+T77Q98R8aFcIeyQuNn5/jBb8nBtphLpmf4QDzsHlnuUSttno6jm49?=
- =?us-ascii?Q?nALV5MqoY1zBQUj1wnAjStV70IeY8I+23Hd33SbJ8M2qTSHxtmLIk3xM7DUt?=
- =?us-ascii?Q?utAro//KRr4tYrINNwDxUFajE3/v?=
+	=?us-ascii?Q?Zm9u4m9aUGplRmMPgfTRcDEuIaQuDgOYdeohJ3k0rxCiOk+2tI/oHZTqdzhs?=
+ =?us-ascii?Q?m8Xr9J5Zd6kgh3uo+tqncVcCyK+//pGTy2C3kxoPgvWbbZH5pfJaouDR7TT1?=
+ =?us-ascii?Q?4vZ6jtdypaZwPpxD9SR+otzuh51IG5lNYXZD7NL3nUn7yDL8xWz3qwDcwRkL?=
+ =?us-ascii?Q?D1VJhV2MN0diloiNAYamYF4JP0XUkmYQjqNJ4nxdKPNBpT9IN7eRfpqpAjY2?=
+ =?us-ascii?Q?vRahWa/nUuxsluT0Qag8twQaKYi7H8E4to6a7SJj/eMKr6/jk81UD/iRZ4y7?=
+ =?us-ascii?Q?PoQxSZQdLocji5FJrYHnBeSI+oyPoOYhgfEA2yZKeCBf23WTqeUiTuLqx4P9?=
+ =?us-ascii?Q?vEnznGYihpYu+r1zAm+gzB0drMdT9tcUeDm0ik3RKa61r8BWXW96FupIuBjs?=
+ =?us-ascii?Q?4Ca1aPJgY4JT9qNvtdXYgufye8HmJU2UrD4l6CG0uww517VVsXgzMz0Km+ox?=
+ =?us-ascii?Q?dR2vhKFTHp7xvC30ByPUa8dKujF7AfcBPHQkIr5VDAXrF1LdiG5vbWTO1p+r?=
+ =?us-ascii?Q?Ni+D64nDvMaw/pSAUAs4M03rI93d8ZlUp+tM9oZqg7KLgyQGrwM6+0mJ+Yx1?=
+ =?us-ascii?Q?daQSiKoPSTJaDDFcaNtew8gW0E54CDp9D3dsyBpejnRR89Yvm8XSmtrKcmjd?=
+ =?us-ascii?Q?arV06vtUDwDvIeXMSMCh1hS0ekTwiXkB5TS5s70xXJBUeTvw20f0WsHyEEmW?=
+ =?us-ascii?Q?tI3AeaNFcadVrzyEZN2aBG8EgoPSgXzjKlaFjj4RBkM96KYA7QGNxp18wu+F?=
+ =?us-ascii?Q?aZqIn7+zwsrNAu+ODqDCkDj2lfK+OkYzwgM85JL8ENt4RY9lobmoQ9xPAiIh?=
+ =?us-ascii?Q?mE57JQdl8L+DJBIYr15wIZ6ID2Yo6klYRiq0R4wEXc0nOfezIwo7Ydb4fXk1?=
+ =?us-ascii?Q?2e8/vt/Kjq/yu4/HFUSxM39mz0J9EeEz1bKVSfEPL7RCZ5M09KqPlGxCi+CQ?=
+ =?us-ascii?Q?cvqp/JWf1tMaCiyLylcMIHorpReQkLrsSSG/x2Hj4pom0BjvA4hvGoVio0Nz?=
+ =?us-ascii?Q?lEO0Ng579+ttuwk0HGxI8JxoIAnrXVHa/F/k2IeIiSTgY0izItqBA1aAiLpF?=
+ =?us-ascii?Q?S4QjdFgkqcSEHEa5fG0v9lixBzphh3b10dCpvp+CycvMA5r3Ke+xIKz7zMz4?=
+ =?us-ascii?Q?cVNHWVidcWjmtP0E2QGcwcpslLHuH76pAyylb0GMmWd08rdS/hoaXKMqP0CP?=
+ =?us-ascii?Q?U9l9y1dI9mhrVWSiWTZMPWUcDVAH+3GPQsgwVqUqU9HIYQGwc+r02P4krnE8?=
+ =?us-ascii?Q?VZVlg+wOWZxpiu9XjaoJPXwFQkBtQoyB/vCT0LRj1k6tlcrSvbbdPuvm0pff?=
+ =?us-ascii?Q?dGHkS4ajm7WqWSnFuCtCVBY+tbPaqezQFc7Ju04/DsXfIooANB2cTC4Rs0qM?=
+ =?us-ascii?Q?sNRTIPhtaFXomDCRMYB1AFHz0MEV?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?GKGjav+nWT6EMCIlIXDKsUW/ApSlDpiVXphiP2T49jrA+WLLJsNusV3mQ38s?=
- =?us-ascii?Q?oyGNqnLKw/oM2LPE65hCedmtZZypMxp8tnSG147NcSmtY7XlHyn1824GYHmr?=
- =?us-ascii?Q?2Z0FjCRsX4qAv8I57qwdV59e9a/l1mlZ9l6jKzplKf57EiEJsA9+r2PCmeOl?=
- =?us-ascii?Q?vjJpq18jhUNhTSj6XeOD3eWvCSwzsFs0EypXGljEJHG4Uw8/7OpZKOEbcaLs?=
- =?us-ascii?Q?4p7larszY/+BX8Pvlp421TaGtHYpwpYyU73iiUjXWIv1LLDaYe3aa1wnPMt3?=
- =?us-ascii?Q?Qvx3Gi7tlk1vbdcJyZ82fVFIoRJNCAuMNVUj76e0W5dvurcz8CI2gNtCtR9/?=
- =?us-ascii?Q?TQEzN3I0kUHEppHF+NXBpQ4JlNQAwDV6D+EFsC1exWC7mgte4TyoWUOPkWIY?=
- =?us-ascii?Q?CE8LK3WfcGM0Q3YZ5EuW4bP1omMSI9p1ocxGMkS9p0c4+d7fgteekpSq26oY?=
- =?us-ascii?Q?S3tmWzhZ5lSF8yWA0YVC6bd9pnfWGnzqJ7KNFpqUwn+F7vklqTlkkNu849Sp?=
- =?us-ascii?Q?x8Hus34HqMOAcOUi41myIWCZzrOAwPqzj/qzpuYAzyLhBdQ7CoG1m+E5hjYW?=
- =?us-ascii?Q?ANB95lwZdVqWml3CCU0TPyjTwaxK+AXQ71HRsxtwpEj5KO6ls5BhapfuLWFO?=
- =?us-ascii?Q?Puf9XZbYdMOGbuebUTAkzD9lBKxPoq9lE5bHYWzsmtD8cIB+LcuKLH8FnHQh?=
- =?us-ascii?Q?TMJDBxBrkBIGVpBarQ3ecMfU/g5gSeRkDpLqJaxvtwNDkT182E/HEsSCi/Bd?=
- =?us-ascii?Q?jvNbED5H1Jyp7Ta8HF7dwrRJQCNM7BDbe2wDxwy+4cy1gob17p6vLW3qK9MM?=
- =?us-ascii?Q?jwAaEXPBmcucNvGKTxa60lk1TyP094dmC5QvFM0vgwBTdwIP7xJaK9xp0SEs?=
- =?us-ascii?Q?3nZ3dGoH+LgyCjIAY7dQsoVyinVntnYv2EeLJ6cZprybX7tUW+t7f2CoQh4S?=
- =?us-ascii?Q?6x6i/U6ipRDBXIMs3QFEwpICFC1ULpUpSThgIdqiXq9gniq+2uu8GOClaY8j?=
- =?us-ascii?Q?d0afE7Ep7mZNyRnyMb/yLk5nEKE0ZLm59Ofe/hU1bxIjeDqy72t/I7xsvBJP?=
- =?us-ascii?Q?x8pS1SdI6d3NCkP0PXIdPXJq3zfAmncLbZDm1vJNrP5gvN0w9HzJSfU61sQw?=
- =?us-ascii?Q?ENeNimqODLD0c3j/0vFEJpJZSnb5H62apZKXCRl45ZGSLmbhG1N5OJl0Qxth?=
- =?us-ascii?Q?IeSl9N04atLCF8Q6s+qUxomTYi3G5LlvtmYC43pkZ/Tv3kJ9Vfq1rnpDQp9y?=
- =?us-ascii?Q?IpmFdyQSI6X9IHtfHFPratFWJd29QkO9ulMRzDGIo/I33R5IEugLqxyW3Jeq?=
- =?us-ascii?Q?yoqgex4ps1267Tqs0Cwx5W/KlYR9BHQzrUj0rsGJF0sE+NzIBSKPzw+1T0U+?=
- =?us-ascii?Q?GHx3s39PfshoAOUSfIGFjh0OKD2+15Guq+hthRHAHU5dL6Ohe8GGkNYY4LvD?=
- =?us-ascii?Q?AxJMsvOPFz2/Hc44v8X/oWTjJQYuewHptJ4FxWFiaAttfszg/BuD1GWWEAiX?=
- =?us-ascii?Q?A3Zn455+XBEzXEMeZd32gK2Z7Mock02AggIvC3zoSSlYErN4/3hJclDuH3CV?=
- =?us-ascii?Q?U4UtE/BSHOYB/p3ht/RLItJAM7IXwYHdGJEAXo2d?=
+	=?us-ascii?Q?T8OJJGAoK3JhnLyQIWtmEEGk+BRKZNByrMJWIdq7GQPWtxJ9GjZQYB5Kg7Sy?=
+ =?us-ascii?Q?KCRbLPN6HrMNXgpRPwU+9OsqO1fU+W2TtBGepvWlU2GPmhATu172wKPGHfbC?=
+ =?us-ascii?Q?p39JZe2E+w9aJ3n/JrTcZEX+WlxBQyl7HikstNdWn6MmYSnLMCdG7HMY8Sqs?=
+ =?us-ascii?Q?t1XCdkZ/qjuuqUJ32PBl7cYx8tgfbiyE0wmEuEJytCf5juzeNMSB1/FSEyNo?=
+ =?us-ascii?Q?cySnorgAh9DWAfDgV34yX/l/4BUuh7IFwHAg6Nr9YlJPsjk2XTC7D/dgvDn3?=
+ =?us-ascii?Q?mz23GeaCaKq0hK50XfGXV9LBoyFTbWkznAUznpS4EQVA54VxH5INWSVTBfsf?=
+ =?us-ascii?Q?4ugNz9kUNHXVfpZ8GVBWwRXTleFdjvimrWzg/8SwvtICc1M9Bxpw5FiitGqO?=
+ =?us-ascii?Q?0UjGtpWZD5MKCV2gaB4YPCcGJyN7EAWpiRLfJ1W5H6ohz3MQJCpO/2sXTwGF?=
+ =?us-ascii?Q?QNfC0QV9CaZzPA35ZixJB05R8M5a3W8WLbOgu9n9eblhysfKqv4TT6W4NO4i?=
+ =?us-ascii?Q?GklLgnF7W4lEjx1Li2PXvbXVbF9AcLkywgIZJ1IJU+Ju9u+RsKz+eeVhHZdg?=
+ =?us-ascii?Q?CXm2yLY9ke9hyFQPoKn1Ej2y+VTKG3XDIw6DnmgAgrp/EG+ELvb9VFeKxb2R?=
+ =?us-ascii?Q?7IKX3MNK8eoEYaCrJ0DPi1uRpOGM2VUQdWTW+4N+7S7Ek1bxe5UI7b9vjEDG?=
+ =?us-ascii?Q?0uuSVbqiP4JIUkiMmtKXAX66NL8v6UUoXVmgLNf7UQS7Eckh/o/tRryviFAd?=
+ =?us-ascii?Q?ev0K3JbhZZVhgYCjrUmn8wlyV+iWnyldFKl94EjrXvtnA2xCbRfyx4NOzIPy?=
+ =?us-ascii?Q?Hu1xxnARbYCPPuU/Lzsi5c1HOski/PqSEUKYNXbXQLpcVg08ShHYY1RbChlt?=
+ =?us-ascii?Q?6bV7JRZ6Yjoy98gUZ9AqSr2I2TLyQndLK5wuk8jHPEt//FXMy7PODpoRS+PG?=
+ =?us-ascii?Q?Lkk8D7A3qLDCIa/SCcpOA4AE2Q9UAap4pShMZMkIXDzfSHbRG3vI76cDI7t2?=
+ =?us-ascii?Q?PK96PiIOyX+bzjc8+RtPIRT3op+NDA9GfEGyXnCnqbwDsXlqeuhizOy/hSTn?=
+ =?us-ascii?Q?wxw5/vxFADOfzUfHGsLpATXlFTG7/mOk8zrFZXcwdHUeGD5yo5jf2aeFBjVi?=
+ =?us-ascii?Q?/MjJg6SJ+1HTfpV83moT2z4cdZZGLKdAZwmhPZipKETIcD26KPvood8Z0/WQ?=
+ =?us-ascii?Q?OgipZHIGld6xhH2XIcfIcPZB1fVgInKYRnJONpYwNopPqxJeWZ+jxCJWZ0VL?=
+ =?us-ascii?Q?euO8vXdX2mLDzJWVdbDUQwKz7KvhXTDZGr7ehcufI26VwmHzxQZQ0CDFehOF?=
+ =?us-ascii?Q?gHWPJoNWtMj6zkznRcJxcK1Ib/bc+DcW+cYQVk/ctz/nYkbHJ2GmlUDX/9V8?=
+ =?us-ascii?Q?gv78EqrUVlJrJqOghzyXjcjeV0xxUHbO7YntUbH63ER2WDNkGVx1qIK6f6FT?=
+ =?us-ascii?Q?CvAwfcFuL9P8kLGR43YJyolby7IODm0tMzP5+70X5/D5GMdNrKOYcyCUZsMD?=
+ =?us-ascii?Q?PVUaQr12HFj/3wPz0Bo50m8FBaKaM4w6s8JEOt7KEowCHxeBLkZIyzD2Qqbm?=
+ =?us-ascii?Q?BN+1PvbBjOVwigxlLhqDYLdCMuxWF6VqZ/ISrHO7?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4098f2b-4a70-4499-a6ca-08dd50ffccbe
+X-MS-Exchange-CrossTenant-Network-Message-Id: 167f9af3-1c5c-49ad-0451-08dd5100d173
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 16:09:33.9786
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 16:16:51.4277
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PF/4zmYO2QdNLosvqpgeDXjZC5aeE6Qtw/NVm1SY+92xUnj6ZkYEhHMWkoUjD4gzaRJ0rrZZI6SYOKZH7VSLFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7384
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZVZ1/MPoOhAc5bBjvcSrUh3J2gvYmiGjA2gLNO3Am4XuhpdX2QhjmLqhqvQKeze9D0g0EeuTNnRnpk6zRrSLjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6650
 
-On Tue, Feb 18, 2025 at 07:37:18AM +0000, Zhuo, Qiuxu wrote:
+On Tue, Feb 18, 2025 at 08:23:22AM +0000, Zhuo, Qiuxu wrote:
 > > From: Yazen Ghannam <yazen.ghannam@amd.com>
 > > [...]
-> > +static bool smca_should_log_poll_error(enum mcp_flags flags, struct
-> > +mce_hw_err *err) {
-> > +	struct mce *m = &err->m;
-> > +
-> > +	/*
-> > +	 * If this is a deferred error found in MCA_STATUS, then clear
-> > +	 * the redundant data from the MCA_DESTAT register.
-> > +	 */
-> > +	if (m->status & MCI_STATUS_VAL) {
-> > +		if (m->status & MCI_STATUS_DEFERRED)
-> > +			mce_wrmsrl(MSR_AMD64_SMCA_MCx_DESTAT(m-
-> > >bank), 0);
-> > +
-> > +		return true;
-> > +	}
-> > +
-> > +	/*
-> > +	 * If the MCA_DESTAT register has valid data, then use
-> > +	 * it as the status register.
-> > +	 */
-> > +	m->status = mce_rdmsrl(MSR_AMD64_SMCA_MCx_DESTAT(m-
-> > >bank));
-> > +
-> > +	if (!(m->status & MCI_STATUS_VAL))
-> > +		return false;
-> > +
-> > +	/*
-> > +	 * Gather all relevant data now and log the record before clearing
-> > +	 * the deferred status register. This avoids needing to go back to
-> > +	 * the polling function for these actions.
-> > +	 */
-> > +	mce_read_aux(err, m->bank);
-> > +
-> > +	if (m->status & MCI_STATUS_ADDRV)
-> > +		m->addr =
-> > mce_rdmsrl(MSR_AMD64_SMCA_MCx_DEADDR(m->bank));
-> > +
-> > +	smca_extract_err_addr(m);
-> > +	m->severity = mce_severity(m, NULL, NULL, false);
-> > +
+> > behavior. The deferred error interrupt is technically advertised by the SUCCOR
+> > feature. However, this was first made available on SMCA systems.
+> > Therefore, only set up the deferred error interrupt on SMCA systems and
+> > simplify the code.
 > 
-> Is the following check in machine_check_poll() needed before 
-> queuing/logging AMD's deferred error?
+> Does this description imply that:
 > 
->        if (mca_cfg.dont_log_ce && !mce_usable_address(m))
->              //Just clear MCA_STATUS, but not queue/log errors.
+>     if mce_flags.succor = true, then mce_flags.smca must also be true.
 > 
 
-Good question. Deferred errors are uncorrectable errors that don't need
-immediate action. They are not correctable errors, so the 'dont_log_ce'
-flag shouldn't apply.
+No, they are independent features. However, in practice (on production
+systems) SMCA systems also support SUCCOR.
+
+> > 
+> > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> > [...]
+> > -static void deferred_error_interrupt_enable(struct cpuinfo_x86 *c) -{
+> > -	u32 low = 0, high = 0;
+> > -	int def_offset = -1, def_new;
+> > -
+> > -	if (rdmsr_safe(MSR_CU_DEF_ERR, &low, &high))
+> > -		return;
+> > -
+> > -	def_new = (low & MASK_DEF_LVTOFF) >> 4;
+> > -	if (!(low & MASK_DEF_LVTOFF)) {
+> > -		pr_err(FW_BUG "Your BIOS is not setting up LVT offset 0x2 for
+> > deferred error IRQs correctly.\n");
+> > -		def_new = DEF_LVT_OFF;
+> > -		low = (low & ~MASK_DEF_LVTOFF) | (DEF_LVT_OFF << 4);
+> > -	}
+> 
+> This code is missing from this patch.
+> Expected?
+> 
+
+Yes, this old code is replaced by smca_enable_interrupt_vectors().
+
+> > -
+> > -	def_offset = setup_APIC_deferred_error(def_offset, def_new);
+> > -	if ((def_offset == def_new) &&
+> > -	    (deferred_error_int_vector != amd_deferred_error_interrupt))
+> > -		deferred_error_int_vector = amd_deferred_error_interrupt;
+> > -
+> > -	if (!mce_flags.smca)
+> > -		low = (low & ~MASK_DEF_INT_TYPE) | DEF_INT_TYPE_APIC;
+> > -
+> > -	wrmsr(MSR_CU_DEF_ERR, low, high);
+> > -}
+> > -
+> 
+> This code is missing from this patch.
+> Expected?
+> 
+
+Yes, same as above.
+
+> >  static u32 smca_get_block_address(unsigned int bank, unsigned int block,
+> >  				  unsigned int cpu)
+> >  {
+> > @@ -551,7 +516,6 @@ prepare_threshold_block(unsigned int bank, unsigned
+> > int block, u32 addr,
+> >  			int offset, u32 misc_high)
+> >  {
+> >  	unsigned int cpu = smp_processor_id();
+> > -	u32 smca_low, smca_high;
+> >  	struct threshold_block b;
+> >  	int new;
+> > 
+> > @@ -571,18 +535,10 @@ prepare_threshold_block(unsigned int bank,
+> > unsigned int block, u32 addr,
+> >  	__set_bit(bank, this_cpu_ptr(&mce_amd_data)->thr_intr_banks);
+> >  	b.interrupt_enable = 1;
+> > 
+> > -	if (!mce_flags.smca) {
+> > -		new = (misc_high & MASK_LVTOFF_HI) >> 20;
+> > -		goto set_offset;
+> > -	}
+> > -
+> > -	/* Gather LVT offset for thresholding: */
+> > -	if (rdmsr_safe(MSR_CU_DEF_ERR, &smca_low, &smca_high))
+> > -		goto out;
+> > -
+> > -	new = (smca_low & SMCA_THR_LVT_OFF) >> 12;
+> > +	if (mce_flags.smca)
+> > +		goto done;
+> > 
+> > -set_offset:
+> > +	new = (misc_high & MASK_LVTOFF_HI) >> 20;
+> >  	offset = setup_APIC_mce_threshold(offset, new);
+> >  	if (offset == new)
+> >  		thresholding_irq_en = true;
+> > @@ -590,7 +546,6 @@ prepare_threshold_block(unsigned int bank, unsigned
+> > int block, u32 addr,
+> >  done:
+> >  	mce_threshold_block_init(&b, offset);
+> > 
+> > -out:
+> >  	return offset;
+> >  }
+> > 
+> > @@ -659,6 +614,32 @@ static void disable_err_thresholding(struct
+> > cpuinfo_x86 *c, unsigned int bank)
+> >  		wrmsrl(MSR_K7_HWCR, hwcr);
+> >  }
+> > 
+> > +/*
+> > + * Enable the APIC LVT interrupt vectors once per-CPU. This should be
+> > +done before hardware is
+> > + * ready to send interrupts.
+> > + *
+> > + * Individual error sources are enabled later during per-bank init.
+> > + */
+> > +static void smca_enable_interrupt_vectors(void)
+> > +{
+> > +	struct mce_amd_cpu_data *data = this_cpu_ptr(&mce_amd_data);
+> > +	u64 mca_intr_cfg, offset;
+> > +
+> > +	if (!mce_flags.smca || !mce_flags.succor)
+> > +		return;
+> > +
+> 
+> In the old code, the deferred IRQ setup just depends on mce_flags.succor,
+> But now it depends on: mce_flags.smca && mce_flags.succor.
+> Is this expected?
+> 
+
+Yes, this is described in the quoted part of the commit message above.
+
+> > +	if (rdmsrl_safe(MSR_CU_DEF_ERR, &mca_intr_cfg))
+> > +		return;
+> > +
+> > +	offset = (mca_intr_cfg & SMCA_THR_LVT_OFF) >> 12;
+> > +	if (!setup_APIC_eilvt(offset, THRESHOLD_APIC_VECTOR,
+> > APIC_EILVT_MSG_FIX, 0))
+> > +		data->thr_intr_en = true;
+> > +
+> > +	offset = (mca_intr_cfg & MASK_DEF_LVTOFF) >> 4;
+> > +	if (!setup_APIC_eilvt(offset, DEFERRED_ERROR_VECTOR,
+> > APIC_EILVT_MSG_FIX, 0))
+> > +		data->dfr_intr_en = true;
+> > +}
+> > +
+> >  static void amd_apply_quirks(struct cpuinfo_x86 *c)  {
+> >  	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array); @@
+> > -690,11 +671,16 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
+> > 
+> >  	amd_apply_quirks(c);
+> >  	mce_flags.amd_threshold	 = 1;
+> > +	smca_enable_interrupt_vectors();
+> > 
+> >  	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
+> > -		if (mce_flags.smca)
+> > +		if (mce_flags.smca) {
+> >  			smca_configure(bank, cpu);
+> > 
+> > +			if (!this_cpu_ptr(&mce_amd_data)->thr_intr_en)
+> > +				continue;
+> > +		}
+> > +
+> >  		disable_err_thresholding(c, bank);
+> > 
+> >  		for (block = 0; block < NR_BLOCKS; ++block) { @@ -715,9
+> > +701,6 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
+> >  			offset = prepare_threshold_block(bank, block,
+> > address, offset, high);
+> >  		}
+> >  	}
+> > -
+> > -	if (mce_flags.succor)
+> > -		deferred_error_interrupt_enable(c);
+> 
+> The old code to set up deferred error IRQ just depends on mce_flags.succor,
+> > [...]
+
+Correct, this is the same reasoning as above.
 
 Thanks,
 Yazen
