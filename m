@@ -1,182 +1,293 @@
-Return-Path: <linux-edac+bounces-3179-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3180-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C31C4A3ED06
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2025 07:52:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF17CA3F8E6
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2025 16:34:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCF1D3B67B6
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2025 06:52:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1709042297C
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Feb 2025 15:32:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978201FC7C6;
-	Fri, 21 Feb 2025 06:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902B1216607;
+	Fri, 21 Feb 2025 15:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="KR6NbsZo"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=amd.com header.i=@amd.com header.b="4jbDMvuW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2073.outbound.protection.outlook.com [40.107.236.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861F745948;
-	Fri, 21 Feb 2025 06:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740120760; cv=none; b=ZsLdhwGMEU1w4eyQ2VWGRvaCPhGvTf7vr5eehlvFijczz/cFBeIKQhk7i6R2ehQVE62ag7HC0lsUIMvNF4YwKAdob6nEVscsyDUcOyLKA07naVGN3DNXnZrfTNw7vPEHF0A/CcNELzaV+XgHQUQEqg24Vi4Yf6/Trlpcv7yzUxs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740120760; c=relaxed/simple;
-	bh=/12jEPiLRqlltL/nDh/QR9kLZro+Iv5ZrHFnWhRK2uY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QQ46BziYT7wHslwxOB5pg+KMUwQSy7mFTf3swMYhNJtj5512XR4l84PUxEEMsgcv/m2QNyrF0uPDd12YFiAYD3W3R+IL6p3rsSmfIPz71FtST67AMBnWdCbNgsh6ZmcKPmtOFPZy1k13FmoaeTFSxXYoElLbgHYRPaoU9NvYzow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=KR6NbsZo; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1740120748; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=oZUpS/ivXDgL9A5kntB0JwVQqbeL7smqaFnK4yBbM34=;
-	b=KR6NbsZodesxkyvr9RHg9ZhB9BxhZd1OHTZr+DIQfWKqZ6xZSmEpP8DkHG770n7XHzL3Ity16q6ZDS5BXxzqJW596b2/99w66X1qr6VpR6gOpFFZdcumzW9ltzu+S5FDc8T8ieS4pDs0WgB2MpKUrJjWL1mMByp/BwM11ZuLE6g=
-Received: from 30.246.161.128(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WPvN845_1740120745 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 21 Feb 2025 14:52:26 +0800
-Message-ID: <5ff00e53-957b-4a4e-a893-f83c4995c1ed@linux.alibaba.com>
-Date: Fri, 21 Feb 2025 14:52:24 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949B7213256;
+	Fri, 21 Feb 2025 15:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740151801; cv=fail; b=C+CHG4EqaqYVMDJzdZ5RRKmB3gTq/VTtQpSg/hghUo520eR05Wokr4jEDq4O20/gVmg+bTU3pndL4GUQFsGmgLZH3aaumMeR1rQhy0bIw7+i6jrc/9IPtVbiDfxrBeLcfwzjEeudp2N/afftFqYzKuGYIbPefP6MuopGb1JXlX8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740151801; c=relaxed/simple;
+	bh=e0cGIVek4uCeSzWo7pyVO5l+uUUO9wtP7kq03vuhREE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=BhT0jgd3ahBVVHl/EG2O94QieGnmJvInJNlFOTZikVq7cx+IVtwuohaKVV6ivttrihDrOdHEznD6oa+0/mxtdELbSd+TFGSAKds4esIDVK+rabYiZSJ0O6LaqKUso5iXqzCY4q4T+SJ8PzBU1s1hKcBZCqJ43aJ9k5CNxsScZAI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=fail (1024-bit key) header.d=amd.com header.i=@amd.com header.b=4jbDMvuW reason="signature verification failed"; arc=fail smtp.client-ip=40.107.236.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qAkIGcbvXfupr95QNYuUdZVMcz/qNR8Y3DolypbYium5m/kfs+PZSYbjsyBN+WzWv1bivud6iLo/1M+arWbf06c/qDUN7YJq1jLs9VtwxeyYVuyGWeBLkZyVirmMCx1hv5cXuwscGCkmimuE1QwN0fsRJxz6rWBU5gyxq55Ez/M1f4aU9+rG2WRKl0/0oXR0mDfxR12d7lR1vxjYpQsKHe945X381ViijUqQc14kPkpensS9N98OxaW4vdUAys127zsOMs75zdNPIPNBpbogNbyMeZlrc9pvod1Lv1JT0zE0/iVzhrHo/jjQX+GBhHIdran6/NQPjcHZlY4I9aNVIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3aZoXArHo0CjeNsNhMgAtONYyjCqjZMQfEkUxxzfaA8=;
+ b=yvW/qpd3/WY1RERkcbIjtHLR6ldmoDgi8fRhIw/H7LNWetLBix+Au5fjC2dQWMCl4dkJ4D53beN5Czzrpvi8SPGZkm1Hc8Z1ZRR1KqoPLWMagIalnQpD1h0Geg7FELgHw3Wjlndc50Y4DiAOpyzpM4Slv1FO2sYhixoZ3AvqsAz/va8hGIqBBvrjUgnMHTvGLTTTPJmS/N2gVGUnpqWI5gsD9DCeS6hBLkBhBAmSHcYgmPOdGVRIE9whOJ5EtwA9S7JKBokFWA9MVOIC/brN9qozgSv/O3VHWLhLcriLLmDnKVJsJELD+2Lj5r7mTw9UWVxHLevmtbUx+ut5mcDrIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3aZoXArHo0CjeNsNhMgAtONYyjCqjZMQfEkUxxzfaA8=;
+ b=4jbDMvuW0J9KpyOy4UW+A+jp+oQEa90UDkfJQ3/n+4UcKni1TurHj+6OpsjJiQt+zz0+LssEX3xgkXlI9Vf/NHjlUZyzel0szNGAo/d9Bo1XEuliXxgR6XPdH9Sewlo6DL/AWOiJNAiyBDTofKRyGGSMVhff+dES9hiXPtwVKGk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ PH7PR12MB9076.namprd12.prod.outlook.com (2603:10b6:510:2f6::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.16; Fri, 21 Feb
+ 2025 15:29:56 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%5]) with mapi id 15.20.8466.015; Fri, 21 Feb 2025
+ 15:29:56 +0000
+Date: Fri, 21 Feb 2025 10:29:48 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+	Lukas Wunner <lukas@wunner.de>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+	linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v2 1/2] PCI: Track Flit Mode Status & print it with link
+ status
+Message-ID: <20250221152948.GA926653@yaz-khff2.amd.com>
+References: <20250207161836.2755-1-ilpo.jarvinen@linux.intel.com>
+ <20250207161836.2755-2-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250207161836.2755-2-ilpo.jarvinen@linux.intel.com>
+X-ClientProxiedBy: BN7PR06CA0040.namprd06.prod.outlook.com
+ (2603:10b6:408:34::17) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/5] x86/mce: add EX_TYPE_EFAULT_REG as in-kernel
- recovery context to fix copy-from-user operations regression
-To: Peter Zijlstra <peterz@infradead.org>, Borislav Petkov <bp@alien8.de>,
- "Luck, Tony" <tony.luck@intel.com>
-Cc: nao.horiguchi@gmail.com, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- linmiaohe@huawei.com, akpm@linux-foundation.org, jpoimboe@kernel.org,
- linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, baolin.wang@linux.alibaba.com,
- tianruidong@linux.alibaba.com
-References: <20250217063335.22257-1-xueshuai@linux.alibaba.com>
- <20250217063335.22257-4-xueshuai@linux.alibaba.com>
- <20250218125408.GD40464@noisy.programming.kicks-ass.net>
- <1ff716d3-eb3d-477e-ae30-1abe97eee01b@linux.alibaba.com>
- <20250218141535.GC34567@noisy.programming.kicks-ass.net>
- <20250218164800.GNZ7S5wL1A4dTaySOP@fat_crate.local>
- <20250219104037.GG40464@noisy.programming.kicks-ass.net>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20250219104037.GG40464@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|PH7PR12MB9076:EE_
+X-MS-Office365-Filtering-Correlation-Id: cdc801a5-64fc-4712-a935-08dd528c989e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?sgfK64rED3Ytk7iq+jiK9ed164pcFSc99ia7RQeWu64Eu79r24MTkg25Un?=
+ =?iso-8859-1?Q?4/DJ5r5QB9Yn9Vxcvde3zawOsXzLReMTXrvSZv3gXB6df8H1Etllb2DOcc?=
+ =?iso-8859-1?Q?CI9utkrZNnkHj1Mo7V/BNOaCkid2Egccyh3zjv8MJOf19G/Rs1IOF9AsaH?=
+ =?iso-8859-1?Q?8giwFaahtMaJYZFVU6LMZCGoLDOHK0XEaQ3c7kBhT/Nnqjss4sbS65ojih?=
+ =?iso-8859-1?Q?sRj50Wh3hLkLumITTZQ5luz6vsWG9N6gdFVaIsiG+ZVMg3YClLoadhOYpG?=
+ =?iso-8859-1?Q?qSx9Fxzqfe+RFcLXQFBwxTF1+AA3wf+3rCHfaCZsb0s19CncPeI9dz9ulC?=
+ =?iso-8859-1?Q?670DujvS0wMk1s7WDufNxnIVWXWmGQWS9csEvYvJoxgnTzGDl7AUPthn0U?=
+ =?iso-8859-1?Q?Xe0h2+MJNvEMQK5S8TPadeb1MLC4zFtQGzLiuvmE6+S/SaI15LOg3gy7FH?=
+ =?iso-8859-1?Q?Slu36YbuCkFhv7o/DtXhtpNXtWWNPYnVragoTGaSnT0DQBOsjBIBjSZRN3?=
+ =?iso-8859-1?Q?02qrppXc1lZm1nz9M01ifbiC3/O00gur1liLJPWmfRczzNedBCVMzV5w8u?=
+ =?iso-8859-1?Q?eZfCjgZIB8UWMuvnX0h9v9PZpYNYdWmNp5LbPfMOdljnwzdCDMBAg1TyU0?=
+ =?iso-8859-1?Q?vJOuWuRuFuH+M8N8MzDtSM3bb/nLM8xTePwtCgxVsHIoeV+EuJZP6sqHMV?=
+ =?iso-8859-1?Q?8YcCrypEeWZs+Xkiv9bjBMW99AHnrMukrWa629q8AAmkSMM+9CceOrEfNo?=
+ =?iso-8859-1?Q?EZIty+Vt+YtwTMSVNmrVd99wzFGgjgqqAhZDzfhQu7MwlwcfMrA6EGz1Vz?=
+ =?iso-8859-1?Q?mJhSwbuwuH2oUZfoMCQ9DoovbUFso22ZfAQeOj4rZ0h2IQgdOo3LDyKSIj?=
+ =?iso-8859-1?Q?FgtE8/lvNc0RwCXb2hlLbCyOLWDOaTINE415ZWJMjHovGwXoJTtuan/fV9?=
+ =?iso-8859-1?Q?qHksEFmMQaykdpY+Z7eTG/ncAnxg3zippIRlgaKltuuo/hUh3e5N9ds5lr?=
+ =?iso-8859-1?Q?iPRyFwMWJD2JbcBT5658vciq4qKLfZCHsnwqaqCOcOcBTfAKd34EuE9C1O?=
+ =?iso-8859-1?Q?tlR2KIxBWoZxw9HfaKfMxOrMHOM1QMKzKh1Zg24ja4AXqJISvjuZGuqlFj?=
+ =?iso-8859-1?Q?v8X6NogEKpafqPkROyVvEaT9hu5kdB1lBlZKRjnR2dE8knOGUa3oXWpIdc?=
+ =?iso-8859-1?Q?By+fR7omvfe9q9RQtyCUtbRr11Y16CI0F3Col9WplQLpjDapsbRhdAsWCg?=
+ =?iso-8859-1?Q?2/oTXdst+LjOrE5qFehU3EdNw7mXC/BghMqMgGpx60Y9tmrlFx5CL52sOJ?=
+ =?iso-8859-1?Q?QoKZB8u10n3tyHc7cbpMMTvgHJGG1kKDSERUBavODOMlmq385EVW9/0gzt?=
+ =?iso-8859-1?Q?VP3RuGPGWT4ZLQwINAiRcllwv2EXM59UTFoBuquy6ZMAdFYtFCMSP6YjVY?=
+ =?iso-8859-1?Q?Fz8VmHX30pPRxKlA?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?DsnmIGD9h4UKWNdCLD1NTnV4aRTF/hr6qrg3V4+nafso9mAShOv9CYsJ4U?=
+ =?iso-8859-1?Q?Qav8unVIqj759jPUY0PJK8FIA/u8KRvLtvpmrtCxT1DHYl+Y27VgnTOMh6?=
+ =?iso-8859-1?Q?wEXeEw/lQlxCNCIMLKHJmbE6ZtRnOcoV8aHghWQlzf7mOi3dkS5TfkRH5w?=
+ =?iso-8859-1?Q?UJ0fLpNyWrCaMcToVZ6eEpSPmn0B2/VP2ykeBhBXGFlEHgbPvLXY/pBAaL?=
+ =?iso-8859-1?Q?ptyQRd1FnYJGy9gXKauy375palYX1yja89EYDDCtughXT5mRbrldEkcdTh?=
+ =?iso-8859-1?Q?ig5xf/BHPUFNN+VedFawBiLhz4E193K6Q6oxf2Gnk+CmpKR9rVpwsXJ4av?=
+ =?iso-8859-1?Q?qZ+w9Q11+hqhFNI2TsKzL0ZpSm869XoiOugIZBnKnvDSbern1+DkoxLO8H?=
+ =?iso-8859-1?Q?ssFlYaZobYu2Yl0GVot4ChgxjDFnofS+SiKLb/pgfOnCeCZ3l77YzxceHR?=
+ =?iso-8859-1?Q?68LVD0uQhnmwiRl4EvBlN/mVyEYea6zm8Z7K+hPRweKDpiazcTDLZ7S0oj?=
+ =?iso-8859-1?Q?5nkm3l4EDWzjbjaKK1vXcOJdlVS6lCEIvN1EWifI8nyEOAQhlRK8esHuKO?=
+ =?iso-8859-1?Q?ytnxY7c/1Ar1WZRIDNgTiyGzQxzyApuci/IqCfmCaygG39gnk4PDfv2tZm?=
+ =?iso-8859-1?Q?RQrBrShdbiRUNKXx4M8TTaxfgH1BXAsCc/vgPnLFwW78XC05DhzAt7QVqd?=
+ =?iso-8859-1?Q?HZFOuVJBaOWa1df+y61iWec1NZoBbGajnFYYS68HR+n60ODDmVVW7kKlC3?=
+ =?iso-8859-1?Q?3d8wweu5HaGtDUA6rDZ6iGkMNNT0vtHk4opPfSQcOpO2efHNjf+cB+fZy8?=
+ =?iso-8859-1?Q?wV+yjJ0GJ6UfHDcwdVb5PMJlixxy4Lf6h731Ab2ExBQa7FKyRNg7mOWI2D?=
+ =?iso-8859-1?Q?j5oN6dj9hsljPqf/0utVEgkqubTsmNOz1Mw7TgFBgSrI1gbZrc6iDWJaN6?=
+ =?iso-8859-1?Q?iIfVDQRa4Xz5Z1zR2v8ktWveAHxUNZYXe0pj8LgozdPCmvotGu4hiC2Xwa?=
+ =?iso-8859-1?Q?8chU6yOeTJ3q6UKa55lHpMuck02PL0qhQIqmwJhLyO7ElrOWWYzvnYcnxo?=
+ =?iso-8859-1?Q?y2hflgZV3WDxZiAHr7NoPfcgr1XHCwtTDFBf6miSj2rg+vqF83f17m6ni7?=
+ =?iso-8859-1?Q?6Or+8QuiLOWWS7E8jz1uX8yBHRaOM6PnpjcmbZHk3umVnV9M2faDSmrFiu?=
+ =?iso-8859-1?Q?VLHnFFQYQd54hApWVzVurFf+3J1t0BH0npKBb3CvC1u7LD/5L5HeNEKf15?=
+ =?iso-8859-1?Q?WTgw9+J+jIOGoA6k7bc6enlojmEIZT3QgOJMd8G91FnGkB5MTx9HlawSF7?=
+ =?iso-8859-1?Q?W0rcuOpPZHwz0qD/BwapfP4aF85RZuKkPgWbnytyajqch594wYvroFzJVS?=
+ =?iso-8859-1?Q?S3QHVt3JLfzCRa1xie8/IMMJGA3o/YDfp4X2KxgeYwjDQ0a/n6He7V/HzF?=
+ =?iso-8859-1?Q?gmo4BhEF1uPLV+WTN3HrZqLqejdpy8xjaPi0nweJU7FwM9XOEsfUnxCkXK?=
+ =?iso-8859-1?Q?o7417WWMk8BouWWIv/9xTa/TILtSVBclTvnMTDB1aoVjzsrAOM9ntYCuyI?=
+ =?iso-8859-1?Q?PA8roPAcHvThamOlGdULcmIHoeKfLOUvcLob2pj9pIKbhtey0D1LsQmMFg?=
+ =?iso-8859-1?Q?kxIpO4hmhWwUdLXSLUpQZvZthSn+CI7m1P?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdc801a5-64fc-4712-a935-08dd528c989e
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2025 15:29:56.7489
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bLBvqK7YIAQOnfi4vxQz93ft9gYBELMJiMzt/vUajpyG4f45mi1GHVNn1bSG3VrpB/n1BbdLDopLNLOsMD/YNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9076
 
+On Fri, Feb 07, 2025 at 06:18:35PM +0200, Ilpo Järvinen wrote:
+> PCIe r6.0 added Flit mode that mainly alters HW behavior but some OS
+> visible changes are also because of it. The OS visible changes include
 
+The first sentence reads oddly. Maybe a slight change?
 
-åœ¨ 2025/2/19 18:40, Peter Zijlstra å†™é“:
-> On Tue, Feb 18, 2025 at 05:48:00PM +0100, Borislav Petkov wrote:
->> On Tue, Feb 18, 2025 at 03:15:35PM +0100, Peter Zijlstra wrote:
->>> diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
->>> index dac4d64dfb2a..cfdae25eacd7 100644
->>> --- a/arch/x86/kernel/cpu/mce/severity.c
->>> +++ b/arch/x86/kernel/cpu/mce/severity.c
->>> @@ -301,18 +301,19 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
->>>   	instrumentation_end();
->>>   
->>>   	switch (fixup_type) {
->>> -	case EX_TYPE_UACCESS:
->>> -		if (!copy_user)
->>> -			return IN_KERNEL;
->>> -		m->kflags |= MCE_IN_KERNEL_COPYIN;
->>> -		fallthrough;
->>> -
->>>   	case EX_TYPE_FAULT_MCE_SAFE:
->>>   	case EX_TYPE_DEFAULT_MCE_SAFE:
->>>   		m->kflags |= MCE_IN_KERNEL_RECOV;
->>>   		return IN_KERNEL_RECOV;
->>>   
->>>   	default:
->>> +		if (copy_user) {
->>
->> As said on chat, if we can make is_copy_from_user() *always* correctly detect
->> user access, then sure but I'm afraid EX_TYPE_UACCESS being generated at the
->> handful places where we do user memory access is there for a reason as it
->> makes it pretty explicit.
+"...but there are some OS visible changes because of it."
+
+> differences in the layout of some capabilities and interpretation of
+> the TLP headers (in diagnostics situations).
 > 
-> Thing is, we have copy routines that do not know if its user or not.
-> is_copy_from_user() must be reliable.
+> To be able to determine which mode the PCIe link is using, store the
+> Flit Mode Status (PCIe r6.1 sec 7.5.3.20) information in addition to
+> the link speed into struct pci_bus in pcie_update_link_speed().
 > 
-> Anyway, if you all really want to go all funny, try the below.
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/pci/hotplug/pciehp_hpc.c |  5 +++--
+>  drivers/pci/pci.c                | 12 ++++++++----
+>  drivers/pci/pci.h                |  3 ++-
+>  drivers/pci/probe.c              |  5 +++--
+>  include/linux/pci.h              |  1 +
+>  5 files changed, 17 insertions(+), 9 deletions(-)
 > 
-> Someone has to go and stick some EX_FLAG_USER on things, but I just
-> really don't believe that's doing to be useful. Because while you're
-> doing that, you should also audit if is_copy_from_user() will catch it
-> and if it does, you don't need the tag.
-> 
-> See how much tags you end up with..
+> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
+> index bb5a8d9f03ad..10130ac9f979 100644
+> --- a/drivers/pci/hotplug/pciehp_hpc.c
+> +++ b/drivers/pci/hotplug/pciehp_hpc.c
+> @@ -292,7 +292,7 @@ int pciehp_check_link_status(struct controller *ctrl)
+>  {
+>  	struct pci_dev *pdev = ctrl_dev(ctrl);
+>  	bool found;
+> -	u16 lnk_status;
+> +	u16 lnk_status, linksta2;
+>  
+>  	if (!pcie_wait_for_link(pdev, true)) {
+>  		ctrl_info(ctrl, "Slot(%s): No link\n", slot_name(ctrl));
+> @@ -319,7 +319,8 @@ int pciehp_check_link_status(struct controller *ctrl)
+>  		return -1;
+>  	}
+>  
+> -	__pcie_update_link_speed(ctrl->pcie->port->subordinate, lnk_status);
+> +	pcie_capability_read_word(pdev, PCI_EXP_LNKSTA2, &linksta2);
+> +	__pcie_update_link_speed(ctrl->pcie->port->subordinate, lnk_status, linksta2);
+>  
+>  	if (!found) {
+>  		ctrl_info(ctrl, "Slot(%s): No device found\n",
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 869d204a70a3..313c66863752 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -6190,21 +6190,25 @@ void __pcie_print_link_status(struct pci_dev *dev, bool verbose)
+>  	enum pci_bus_speed speed, speed_cap;
+>  	struct pci_dev *limiting_dev = NULL;
+>  	u32 bw_avail, bw_cap;
+> +	char *flit_mode = "";
+>  
+>  	bw_cap = pcie_bandwidth_capable(dev, &speed_cap, &width_cap);
+>  	bw_avail = pcie_bandwidth_available(dev, &limiting_dev, &speed, &width);
+>  
+> +	if (dev->bus && dev->bus->flit_mode)
+> +		flit_mode = ", in Flit mode";
+> +
+>  	if (bw_avail >= bw_cap && verbose)
+> -		pci_info(dev, "%u.%03u Gb/s available PCIe bandwidth (%s x%d link)\n",
+> +		pci_info(dev, "%u.%03u Gb/s available PCIe bandwidth (%s x%d link)%s\n",
+>  			 bw_cap / 1000, bw_cap % 1000,
+> -			 pci_speed_string(speed_cap), width_cap);
+> +			 pci_speed_string(speed_cap), width_cap, flit_mode);
+>  	else if (bw_avail < bw_cap)
+> -		pci_info(dev, "%u.%03u Gb/s available PCIe bandwidth, limited by %s x%d link at %s (capable of %u.%03u Gb/s with %s x%d link)\n",
+> +		pci_info(dev, "%u.%03u Gb/s available PCIe bandwidth, limited by %s x%d link at %s (capable of %u.%03u Gb/s with %s x%d link)%s\n",
+>  			 bw_avail / 1000, bw_avail % 1000,
+>  			 pci_speed_string(speed), width,
+>  			 limiting_dev ? pci_name(limiting_dev) : "<unknown>",
+>  			 bw_cap / 1000, bw_cap % 1000,
+> -			 pci_speed_string(speed_cap), width_cap);
+> +			 pci_speed_string(speed_cap), width_cap, flit_mode);
 
-Agreed, I think the key point whether the error context is in a read from user
-memory. We do not care about the ex-type if we know its a MOV
-reading from userspace.
+Does the "Flit mode" message *need* to go into these lines? Could it be
+its own message?
 
-is_copy_from_user() return true when both of the following two checks are
-true:
+ +#include <linux/string_choices.h>
 
-- the current instruction is copy
-- source address is user memory
-
-If copy_user is true, we set
-
-m->kflags |= MCE_IN_KERNEL_COPYIN | MCE_IN_KERNEL_RECOV;
-
-Then do_machine_check will try fixup_exception first.
-
-	/*
-	 * Handle an MCE which has happened in kernel space but from
-	 * which the kernel can recover: ex_has_fault_handler() has
-	 * already verified that the rIP at which the error happened is
-	 * a rIP from which the kernel can recover (by jumping to
-	 * recovery code specified in _ASM_EXTABLE_FAULT()) and the
-	 * corresponding exception handler which would do that is the
-	 * proper one.
-	 */
-	if (m->kflags & MCE_IN_KERNEL_RECOV) {
-		if (!fixup_exception(regs, X86_TRAP_MC, 0, 0))
-			mce_panic("Failed kernel mode recovery", &err, msg);
-	}
-
-	if (m->kflags & MCE_IN_KERNEL_COPYIN)
-		queue_task_work(&err, msg, kill_me_never);
-
-So Peter's code is fine to me.
-
----
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index dac4d64dfb2a..cb021058165f 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -300,13 +300,12 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
-  	copy_user  = is_copy_from_user(regs);
-  	instrumentation_end();
+ @@ -6190,21 +6190,25 @@ void __pcie_print_link_status(struct pci_dev *dev, bool verbose)
+  	enum pci_bus_speed speed, speed_cap;
+  	struct pci_dev *limiting_dev = NULL;
+  	u32 bw_avail, bw_cap;
   
--	switch (fixup_type) {
--	case EX_TYPE_UACCESS:
--		if (!copy_user)
--			return IN_KERNEL;
--		m->kflags |= MCE_IN_KERNEL_COPYIN;
--		fallthrough;
-+	if (copy_user) {
-+		m->kflags |= MCE_IN_KERNEL_COPYIN | MCE_IN_KERNEL_COPYIN;
-+		return IN_KERNEL_RECOV
-+	}
+  	bw_cap = pcie_bandwidth_capable(dev, &speed_cap, &width_cap);
+  	bw_avail = pcie_bandwidth_available(dev, &limiting_dev, &speed, &width);
   
-+	switch (fixup_type) {
-  	case EX_TYPE_FAULT_MCE_SAFE:
-  	case EX_TYPE_DEFAULT_MCE_SAFE:
-  		m->kflags |= MCE_IN_KERNEL_RECOV;
+ +	if (dev->bus)
+ +		pci_info(dev, "Flit mode: %s\n", str_enabled_disabled(dev->bus->flit_mode);
+ +
+  	if (bw_avail >= bw_cap && verbose)
+ 		pci_info(dev, "%u.%03u Gb/s available PCIe bandwidth (%s x%d link)\n",
+  			 bw_cap / 1000, bw_cap % 1000,
+ 			 pci_speed_string(speed_cap), width_cap);
+  	else if (bw_avail < bw_cap)
+ 		pci_info(dev, "%u.%03u Gb/s available PCIe bandwidth, limited by %s x%d link at %s (capable of %u.%03u Gb/s with %s x%d link)\n",
+  			 bw_avail / 1000, bw_avail % 1000,
+  			 pci_speed_string(speed), width,
+  			 limiting_dev ? pci_name(limiting_dev) : "<unknown>",
+  			 bw_cap / 1000, bw_cap % 1000,
+ 			 pci_speed_string(speed_cap), width_cap);
 
+>  }
+>  
+>  /**
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 01e51db8d285..9c6a4a980678 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -406,9 +406,10 @@ const char *pci_speed_string(enum pci_bus_speed speed);
+>  void __pcie_print_link_status(struct pci_dev *dev, bool verbose);
+>  void pcie_report_downtraining(struct pci_dev *dev);
+>  
+> -static inline void __pcie_update_link_speed(struct pci_bus *bus, u16 linksta)
+> +static inline void __pcie_update_link_speed(struct pci_bus *bus, u16 linksta, u16 linksta2)
+>  {
+>  	bus->cur_bus_speed = pcie_link_speed[linksta & PCI_EXP_LNKSTA_CLS];
+> +	bus->flit_mode = linksta2 & PCI_EXP_LNKSTA2_FLIT;
 
-Is that ok? Please correct me if I missed anyting.
+Can we align on the '='?
 
-Thanks.
-Shuai
+Thanks,
+Yazen
 
