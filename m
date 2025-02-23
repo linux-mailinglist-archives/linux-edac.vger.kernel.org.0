@@ -1,116 +1,79 @@
-Return-Path: <linux-edac+bounces-3184-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3185-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70439A40DF4
-	for <lists+linux-edac@lfdr.de>; Sun, 23 Feb 2025 11:07:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3D8A411A6
+	for <lists+linux-edac@lfdr.de>; Sun, 23 Feb 2025 21:32:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCD713B58AB
-	for <lists+linux-edac@lfdr.de>; Sun, 23 Feb 2025 10:06:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C677F188CF27
+	for <lists+linux-edac@lfdr.de>; Sun, 23 Feb 2025 20:32:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D272036F0;
-	Sun, 23 Feb 2025 10:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F5F623A982;
+	Sun, 23 Feb 2025 20:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="gdvWJm3i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="paXMvqph"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2A71FECC5;
-	Sun, 23 Feb 2025 10:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67367B64A;
+	Sun, 23 Feb 2025 20:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740305216; cv=none; b=qdZ6ciJCFj6v7vMtCh7JzUAo0i642gOn3YUKQbR6uJb27ZQmz5T3J5g8DG8p5qGfaD60A7+Vi0klGEDpK53m3x+84XzYVr8jmZuhFmU8P1tvHGQqHTTJS3lBXfXk4Czn36OWQb6w94ukNDTfvEtpWR75A050VCVckj9uVewfess=
+	t=1740342763; cv=none; b=TOgOz5GvLqvjy4LEHnKgnnzdwr/lmLKZEasrmRC4SMsfpGBynpEPfw3/u5ab8XifmihbgSR2OBYF1Q/HlT/gmLn77HrIGaF3DHgnJFg9By6QS1pzCG4BNdqhZJOTS+4Gt4YuS4MoS49Uaz6x+ckRNAhnnaO9MopK1p9B5iNSwCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740305216; c=relaxed/simple;
-	bh=oSy18XAki1+6x8dW7QY7IgnNHl+k43vT3kfv5uUDAF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=B43s6kQdwK3OFl2TP7bKP8ioXdiYEEQKJKhnk7PeftOI1Sf57g6YVJ67ioysDfLThoyLD3kENrVKebpEa4d4OyW+LihN6hRzX3eSMY17rnCRT9IsuieGiM42L6rzd9UMY9N+dDMdqIoNdcV2TlxneajgIyd8ZtvOXYEvi/V9bSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=gdvWJm3i; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D865840E01AD;
-	Sun, 23 Feb 2025 10:06:48 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ty4w8bSL0XT6; Sun, 23 Feb 2025 10:06:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1740305204; bh=2PiOQrVk3cndOooItUZakJvKkilYjGZbUj7JS9r51f4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=gdvWJm3ipC46PpSR0u9Iyff+k+N+fora2pEXxjEOlIiZ79DP1uNlqXnQ/9oyNDWKd
-	 rmh/T/Dm0SZppa/eDkuVCkpv1DFQU9HSHOjvaUVR4e+sJpVl0bRHyLzWVu3roNPX70
-	 JlJPEWqwCBYmOc6+MCdPNmgvrU1CbsE2FDm4SjCII9nRRRtE2g075hvifJ05+tbgGi
-	 C6k0Vc7ICY/SJPWK97XxB1NAsB2DvD2RFCplX2Vao4zY+m8cNyJm/of9XpGcaQ1wuV
-	 3u2o6Cku5s/8LuWB3Kb33u8oQpzMSkCpMcZEmihFHv4CAuc1lZHB8wiMzU8QHQ7znA
-	 7drlzgImxrJkxWGDRFT+7tJZ4thexuvoXDA+nl83VPMK8qXI42Saec/X5Zq2EmWpbj
-	 BRKczwPH/OCb6IJ0xKkUKUTWkUnWNF7QuviS1I42ZZmut9MJT/Kzu5cPsRQ9nTdn6F
-	 MxyXhvWvwXrrIQtMHzKS5oA/CndZT7wQAoNiUF2bbVH96vUq1YKDXSltSGko2iVoiS
-	 k+oww7R0OTiImCd9QVNGF/D258uCIpNFXNZoMgQLS5Q58XQ3drFsJZijD3UJ6rI6q3
-	 oEZuOmtNXxszGKPyzFjCTpr1OJDQF27mluq1euzD7CLX/x3d6cGjiGKMP1UyzSR8j1
-	 HXEdV0i5B6hXwX/bN73kfRXE=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 80B2640E0176;
-	Sun, 23 Feb 2025 10:06:41 +0000 (UTC)
-Date: Sun, 23 Feb 2025 11:06:33 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC/urgent for v6.14-rc4
-Message-ID: <20250223100633.GAZ7rzKTBKLL0-bqMn@fat_crate.local>
+	s=arc-20240116; t=1740342763; c=relaxed/simple;
+	bh=i6Jm4qE64VOM1DaJjXn3iv835TtFEqshmpOvz7YEcB4=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=eAuf6zGFsNGTYGUMKe/DchfKPEWZ5bz6kTaBSGnTh1ko2s1tP7tjoZgavSsK/jtwniCxSZroKntXaB4eyr5VO1oRI6dW+5ISxKuvDxXNO/SMHG0NdrBTGeeOFQCkLSaqbltNQ5cdGMqJaN6pZ/7L0AhkSgAd5OiiMWHip97i6KU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=paXMvqph; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B2EC4CEDD;
+	Sun, 23 Feb 2025 20:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740342762;
+	bh=i6Jm4qE64VOM1DaJjXn3iv835TtFEqshmpOvz7YEcB4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=paXMvqphsopbAjzmVYOwmKECYRURQtcK+wyJqVQ1wQGrBhOTHS2goR9IMufHD8AS4
+	 lPOlR7mTxuPeNGBAhaDHLOmABpuF9s9vTs8+86jYq4dv98EdxsJZohNAkzBixaIGlf
+	 KOBuf2SnDcQXhZwDyvFIJr0pjAqropKJctsZ6/f1sjOshpRPJIROLFzPdgQ/EXa7l4
+	 9uVxbafVbWEmp6QUcSed4Ui5ru7lhiW4tR7OPkJUwQ5Abnreo6U0AmDAltKkluWLol
+	 M20csdb//yjWTybJbwgl+WUEf6MxD/MXxgQnU2ukiHwzdnkj5aqTxLfh/+v+1nZBrR
+	 4UfCDqKnnbUMg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70EBE380AAF9;
+	Sun, 23 Feb 2025 20:33:15 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC/urgent for v6.14-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250223100633.GAZ7rzKTBKLL0-bqMn@fat_crate.local>
+References: <20250223100633.GAZ7rzKTBKLL0-bqMn@fat_crate.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20250223100633.GAZ7rzKTBKLL0-bqMn@fat_crate.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.14_rc4
+X-PR-Tracked-Commit-Id: c158647c107358bf1be579f98e4bb705c1953292
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ad328a3785a24a7e7a8053b06139a6bfb42d0280
+Message-Id: <174034279397.2614901.4162057167037693433.pr-tracker-bot@kernel.org>
+Date: Sun, 23 Feb 2025 20:33:13 +0000
+To: Borislav Petkov <bp@alien8.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 
-Hi Linus,
+The pull request you sent on Sun, 23 Feb 2025 11:06:33 +0100:
 
-please pull a single EDAC urgent fix for v6.14-rc4.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.14_rc4
 
-Thx.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ad328a3785a24a7e7a8053b06139a6bfb42d0280
 
----
-
-The following changes since commit a64dcfb451e254085a7daee5fe51bf22959d52d3:
-
-  Linux 6.14-rc2 (2025-02-09 12:45:03 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.14_rc4
-
-for you to fetch changes up to c158647c107358bf1be579f98e4bb705c1953292:
-
-  EDAC/qcom: Correct interrupt enable register configuration (2025-02-14 20:36:11 +0100)
-
-----------------------------------------------------------------
-- Have qcom_edac use the correct interrupt enable register to configure
-  the RAS interrupt lines
-
-----------------------------------------------------------------
-Komal Bajaj (1):
-      EDAC/qcom: Correct interrupt enable register configuration
-
- drivers/edac/qcom_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
