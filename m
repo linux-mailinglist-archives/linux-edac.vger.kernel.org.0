@@ -1,225 +1,115 @@
-Return-Path: <linux-edac+bounces-3201-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3202-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3BB2A442FA
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Feb 2025 15:38:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45467A452C6
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2025 03:07:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 912A4189D964
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Feb 2025 14:34:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FAD43AC49C
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2025 02:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE0326A091;
-	Tue, 25 Feb 2025 14:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A241FFC44;
+	Wed, 26 Feb 2025 02:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="BdfXwWQg";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="BdfXwWQg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GizMn7ss"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DFB2673BC
-	for <linux-edac@vger.kernel.org>; Tue, 25 Feb 2025 14:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94F147F4A;
+	Wed, 26 Feb 2025 02:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740494038; cv=none; b=iqpsBono4GJMpTC2v/0n2IipauDNNGlboNmBjTp+/giyvxSgelCahycRLFY8ptUHU+s9nQqMYNL3sMe9Dfgey06+UhpEEnNzRBuaBtTnGoYjijuciYXkL0oZXoXNHfQRpN9x2U9Gzmgt+l6OlyzZWnRtPEkq4Mh4LbMnXsdNR64=
+	t=1740535430; cv=none; b=APTk6krYMKlfAe/S4YPe4wc/lzJSnQBTsMt0NAybAmO1vKkG6T1Ss0GnrluyJVdkM0sa+eTyncLurkz1EenjkHodiHgQ5+B/hhK7MaIROTOeor6kH+rQ5NU8XopohR3pdyvkASf9MjAlLr4DhwJuTG8Tr3txZgEtNi+oKRjZUXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740494038; c=relaxed/simple;
-	bh=y/7H7svuQhmEhNFttv1mv2/KR3wQrbEIXhadF/7FapY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S7w72M8hPpj5gQsZuyQ4X0dzPJQ8KgsWm8Dw9VEYEuXJ+VBZzHRJChGOdr5+7sXlOIS7CWjUXmWf8rlQcyx595Fv4n8zdvLG/kAy8lDnyq9nLUW38KfZY0VCVmZW552UyUpMOFtAQoTSxx2Z/CeBMa0KnD8eMk3m2w6Xbucpaec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=BdfXwWQg; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=BdfXwWQg; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 5FA5421114;
-	Tue, 25 Feb 2025 14:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1740494034; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=6+bz9Vw3AFnrTxdhG7VUTZozdaE5vtXI0uRnfm0qD3M=;
-	b=BdfXwWQgoSsum+BlXiV0CrgfPXru0ztALbI7wZ8Q9oR6K+Su0MPSUlsKkL/+T4qqb2DIN4
-	9oKSiucC7bgj4ueTSpJWLRjKciB1ZryfztiSFOe6/i68ZCy0+YxcHDrzmKN5NLO1IdoVBC
-	QjDgDJ2kPEzAFGegtuWLh8DHZhdPuko=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1740494034; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=6+bz9Vw3AFnrTxdhG7VUTZozdaE5vtXI0uRnfm0qD3M=;
-	b=BdfXwWQgoSsum+BlXiV0CrgfPXru0ztALbI7wZ8Q9oR6K+Su0MPSUlsKkL/+T4qqb2DIN4
-	9oKSiucC7bgj4ueTSpJWLRjKciB1ZryfztiSFOe6/i68ZCy0+YxcHDrzmKN5NLO1IdoVBC
-	QjDgDJ2kPEzAFGegtuWLh8DHZhdPuko=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EF1B513888;
-	Tue, 25 Feb 2025 14:33:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 8LHTN9HUvWfcFQAAD6G6ig
-	(envelope-from <nik.borisov@suse.com>); Tue, 25 Feb 2025 14:33:53 +0000
-From: Nikolay Borisov <nik.borisov@suse.com>
-To: linux-edac@vger.kernel.org
-Cc: bp@alien8.de,
-	qiuxu.zhuo@intel.com,
-	x86@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nikolay Borisov <nik.borisov@suse.com>
-Subject: [PATCH v3] x86/mce/inject: Remove call to mce_notify_irq()
-Date: Tue, 25 Feb 2025 16:33:48 +0200
-Message-ID: <20250225143348.268469-1-nik.borisov@suse.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1740535430; c=relaxed/simple;
+	bh=8eCh4A5o3GNS8GRHee/m7J2MLUsmPbtSX21L8prJpzA=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=azr7Lz/aznEWViaEbBLbc+IrFKfdmt2une2eOdsFO4YLDTs4OV7Y28KHrddxX1zHkwei3gowzhWenlQgilPQ2qt6wtxh8A6oDYdGvmKvwPoPJRtkAxJsU9Gzx7mT4x1a8uOn8AMpdDeoCGKcnmIX8X5MBvwTBge2LxG52jLARCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GizMn7ss; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740535429; x=1772071429;
+  h=from:to:cc:subject:date:message-id;
+  bh=8eCh4A5o3GNS8GRHee/m7J2MLUsmPbtSX21L8prJpzA=;
+  b=GizMn7ssMdb8LuZUAleQSijdudrFCM7SnHQ1tZ9SIoqjB68b7OHUTWNt
+   e6r2BMKx4L0d2F0gzqvWuQwAaNDCVk8/PqwDeq7f0YLU4x45URJd6kkhG
+   y2mdWrdmpwRh7BMawDfeZbkXlz0F2bDR9U7JfdunJMOn7IVyQDw0o3T+a
+   jThV/zgMaCpzPib63j7aDtOp+R4rB+oOyJR6c0gMFHRmGqdXwsihRJSg1
+   NMJ/YfLmA1H4lhYC7uXkZjB+4Yt/WMTcZIGe0DpUcTxY0JbroYcyJJVns
+   B3Y4J9zOkIhmIVgX92UaWMbolKcd0qP8LIb5drMJTdkeyCOS2YK7t+su1
+   w==;
+X-CSE-ConnectionGUID: lDcKveKbTeKXLLuXUB5r8Q==
+X-CSE-MsgGUID: 8x7JDsSGQoW3Ah2LB9FQxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="28959508"
+X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
+   d="scan'208";a="28959508"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 18:03:25 -0800
+X-CSE-ConnectionGUID: lYJwZv5fS5aVrfSlm/S+zQ==
+X-CSE-MsgGUID: k9+x47KkTAGzldJF3ZrpZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
+   d="scan'208";a="121179524"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 18:03:22 -0800
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Jason Baron <jbaron@akamai.com>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Gary Wang <gary.c.wang@intel.com>,
+	Yi Lai <yi1.lai@intel.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] EDAC/ie31200: Add EDAC support for Intel Raptor Lake-S SoCs
+Date: Wed, 26 Feb 2025 09:51:51 +0800
+Message-Id: <20250226015202.36576-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:email,imap1.dmz-prg2.suse.org:helo];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
 
-The call to mce_notify_irq() has been there since the initial version of
-the soft inject mce machinery, introduced in ea149b36c7f5 ("x86,
-mce: add basic error injection infrastructure"). At that time it was
-functional since injecting an MCE resulted in the following call chain:
+This series refactors the ie31200_edac driver to add EDAC support for Intel
+client SoCs with multiple memory controllers and out-of-band ECC capability.
+The first SoC with multiple memory controllers to be added is Raptor Lake-S.
 
-    raise_mce()
-      ->machine_check_poll()
-          ->mce_log() - sets notfiy_user_bit
-    ->mce_notify_user() (current mce_notify_irq) consumed the bit and called the
-    usermode helper.
+Patch 0001 ~ 0005: Bug fixes and cleanup.
+Patch 0006 ~ 0009: Refactor and make resource data configurable.
+Patch 0010 ~ 0011: Add EDAC support for Raptor Lake-S.
 
-However, with the introduction of 011d82611172 ("RAS: Add a Corrected Errors Collector")
-the code got moved around and the usermode helper began to be called
-via the early notifier (mce_first_notifier()) rendering the call in
-raise_local() defunct as the mce_need_notify bit (ex notify_user) is
-only being set from the early notifier.
+This series is on top of:
 
-Remove the noop call and make mce_notify_irq static. No functional
-changes.
+  https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
 
-Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
----
- arch/x86/include/asm/mce.h       |  2 --
- arch/x86/kernel/cpu/mce/core.c   | 44 ++++++++++++++++----------------
- arch/x86/kernel/cpu/mce/inject.c |  1 -
- 3 files changed, 22 insertions(+), 25 deletions(-)
+Qiuxu Zhuo (11):
+  EDAC/ie31200: Fix the size of EDAC_MC_LAYER_CHIP_SELECT layer
+  EDAC/ie31200: Fix the DIMM size mask for several SoCs
+  EDAC/ie31200: Fix the error path order of ie31200_init()
+  EDAC/ie31200: Fix the 3rd parameter name of *populate_dimm_info()
+  EDAC/ie31200: Simplify the pci_device_id table
+  EDAC/ie31200: Make the memory controller resources configurable
+  EDAC/ie31200: Make struct dimm_data contain decoded information
+  EDAC/ie31200: Fold the two channel loops into one loop
+  EDAC/ie31200: Break up ie31200_probe1()
+  EDAC/ie31200: Add Intel Raptor Lake-S SoCs support
+  EDAC/ie31200: Switch Raptor Lake-S to interrupt mode
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index eb2db07ef39c..6c77c03139f7 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -296,8 +296,6 @@ enum mcp_flags {
- 
- void machine_check_poll(enum mcp_flags flags, mce_banks_t *b);
- 
--bool mce_notify_irq(void);
--
- DECLARE_PER_CPU(struct mce, injectm);
- 
- /* Disable CMCI/polling for MCA bank claimed by firmware */
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 0dc00c9894c7..1f14c3308b6b 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -584,6 +584,28 @@ bool mce_is_correctable(struct mce *m)
- }
- EXPORT_SYMBOL_GPL(mce_is_correctable);
- 
-+/*
-+ * Notify the user(s) about new machine check events.
-+ * Can be called from interrupt context, but not from machine check/NMI
-+ * context.
-+ */
-+static bool mce_notify_irq(void)
-+{
-+	/* Not more than two messages every minute */
-+	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
-+
-+	if (test_and_clear_bit(0, &mce_need_notify)) {
-+		mce_work_trigger();
-+
-+		if (__ratelimit(&ratelimit))
-+			pr_info(HW_ERR "Machine check events logged\n");
-+
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- static int mce_early_notifier(struct notifier_block *nb, unsigned long val,
- 			      void *data)
- {
-@@ -1773,28 +1795,6 @@ static void mce_timer_delete_all(void)
- 		del_timer_sync(&per_cpu(mce_timer, cpu));
- }
- 
--/*
-- * Notify the user(s) about new machine check events.
-- * Can be called from interrupt context, but not from machine check/NMI
-- * context.
-- */
--bool mce_notify_irq(void)
--{
--	/* Not more than two messages every minute */
--	static DEFINE_RATELIMIT_STATE(ratelimit, 60*HZ, 2);
--
--	if (test_and_clear_bit(0, &mce_need_notify)) {
--		mce_work_trigger();
--
--		if (__ratelimit(&ratelimit))
--			pr_info(HW_ERR "Machine check events logged\n");
--
--		return true;
--	}
--	return false;
--}
--EXPORT_SYMBOL_GPL(mce_notify_irq);
--
- static void __mcheck_cpu_mce_banks_init(void)
- {
- 	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 313fe682db33..06e3cf7229ce 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -229,7 +229,6 @@ static int raise_local(void)
- 	} else if (m->status) {
- 		pr_info("Starting machine check poll CPU %d\n", cpu);
- 		raise_poll(m);
--		mce_notify_irq();
- 		pr_info("Machine check poll done on CPU %d\n", cpu);
- 	} else
- 		m->finished = 0;
+ drivers/edac/Kconfig        |   2 +-
+ drivers/edac/ie31200_edac.c | 637 ++++++++++++++++++++++--------------
+ 2 files changed, 387 insertions(+), 252 deletions(-)
+
+
+base-commit: b3205f5a415b88d73b18130af1bacefd876de8bf
 -- 
-2.43.0
+2.17.1
 
 
