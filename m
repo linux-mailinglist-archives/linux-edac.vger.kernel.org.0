@@ -1,62 +1,62 @@
-Return-Path: <linux-edac+bounces-3203-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3204-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF97AA452A4
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2025 03:04:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1969DA452AA
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2025 03:05:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 596EE18840EE
-	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2025 02:04:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 519CA164DEE
+	for <lists+linux-edac@lfdr.de>; Wed, 26 Feb 2025 02:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A68C19D89E;
-	Wed, 26 Feb 2025 02:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1ACF1C8637;
+	Wed, 26 Feb 2025 02:04:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yf879iAU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="liHXNcTA"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EB71624C5;
-	Wed, 26 Feb 2025 02:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D8E199385;
+	Wed, 26 Feb 2025 02:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740535456; cv=none; b=RnYzJBMgDgoC4gkTjqcbdKZOoecRrQQBnYqA1HA6XvRD5O8Eso/QTy06ugvzDtDsnMZMZBn5BzBsehBlLXPyMM1CtBRY5yYhFgoWAXWAUEehI1p/aI60FXQolWsUHKzLdM9xZ4weUY6QRAhaz9PWI7uPymfscZWMu8K5bNrlo7Q=
+	t=1740535473; cv=none; b=sDlcXS8oiietzSOFOLt9R6Hw9QYv57ixkefK7xMHzWH+WRGivOE1L9hEB7BER42jWH+6KFe0DfxBA3WhtaYtab/lZemP9nAhiDx/yHAcJBpHE5do+bYJgd39PB4saFGn/UmzVb0IARnEW/ZNCJA12OXLWYyrUHNkpSzs7G0gPkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740535456; c=relaxed/simple;
-	bh=Dw+Ixr0LHrrDVbNYIne8xDE2qD1/zkynIYYfHWFfDX8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Z9OqxIgyLH3wT0U8hB/b5nownc8BMAdgD7BlpI/olrjNeKFIiirl4ndOPl24JZzlDLyHCtEl0DAlW4K5JwcJg4Dfdvz3NF3Knk9X28QVH0KS+flk7U2v5v+6Jz4aNwE4T9v3Jey+19fwPXICpp+EmoipkuayRPOkxo8kxSllQIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yf879iAU; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1740535473; c=relaxed/simple;
+	bh=/plrjoiyViL8qm20mRh5hX1XMCaQmgbUZ0EyqHHpfrc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ImCulm/RynY32slB1mV2oXUgbid1gNzqwyvw+mfLdsQ+rj9lUZLU9ixX/JiDQjdmEzlju0uQK7Cfx24m8YrObFyZgrzsG2S1Zhj9op9Kc2Gv/nhtomk3jyJSlY/5oxlkby6OnAkcAj54Ft8c+L+IQzQOfmpWLU/WEA4D+3C49+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=liHXNcTA; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740535454; x=1772071454;
+  t=1740535472; x=1772071472;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Dw+Ixr0LHrrDVbNYIne8xDE2qD1/zkynIYYfHWFfDX8=;
-  b=Yf879iAUxgkN7nXye13spCJlqK68o8wC9QmzUQj4ap5HyNOCqPUlitbn
-   CUwaCWxN9uAp6PvPtvSGaAc6879dV+GmmNwHAtKZ2rF361ZQB8VeCEzHu
-   PKi50gvZp3SYbh55asl0p8Q5+0o+cuwS+8ver/MX1vhi9HVGJGbQK98uy
-   AFNoklRAuiEnwQxLVM84gynzBM9eXhfEhN1/aSqdNLtwivPwFeuO8woQ/
-   SINC3IwCJZvcbnTdtX7FcMDs95ONSyjPPqfQg0/I7t9iiCa9WRAIVh8DF
-   CKzFt77QMJJzOuAkNBjvI6w9JI+TQqs4nNSLX1Bsf8cTgMkMUsIKeqaZX
-   g==;
-X-CSE-ConnectionGUID: 8AQVaap5RxGLUyE6Z4xjeA==
-X-CSE-MsgGUID: qTtX83NWQ7qXh0IGJcLc9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="28959627"
+  bh=/plrjoiyViL8qm20mRh5hX1XMCaQmgbUZ0EyqHHpfrc=;
+  b=liHXNcTARzmlgPgqefOTn9/S8YMLkwzjpG5/Z23dLgbK5nkhaD5gMjux
+   77d4X0d6KAswCNC3cHyZyMlZ+MDGRdOMTv3d1Dcy26lplF7yI8WxnV5d1
+   w2F4V0zpwLlYRhuGMET7DktsrHnp9v1/OiBTptDj3k9eMFvX0JgmJy6MQ
+   99jkklCj4wpbumTgTNmq1aFQbji7fXpG7M5MmPx5z5PhzoXpUlyv81PHo
+   x05nAbzkdlGsBVfGy46QzK3a+nIa3H/HrfFg4iUItpYTGmNVr9sA3AOrY
+   WZ5S0goDGM+K7FDffvb8t8W05fkfxxNA5i8p8xeDI/e2OQTylKjld52eM
+   w==;
+X-CSE-ConnectionGUID: M5BH4evRTsuy7+O8H0wf9Q==
+X-CSE-MsgGUID: n0TfKTxRQnCuACjAmK1Zww==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="28959696"
 X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="28959627"
+   d="scan'208";a="28959696"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 18:04:12 -0800
-X-CSE-ConnectionGUID: EOdt6HwQQBqG3brAIefJVg==
-X-CSE-MsgGUID: I+M5L7v/QumiKBnFLyfX6A==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 18:04:31 -0800
+X-CSE-ConnectionGUID: ucqXGFujTau9UhWJ1Q1fXA==
+X-CSE-MsgGUID: nZFKpUpOQk6lVWlwIDBY8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="121179866"
+   d="scan'208";a="121180058"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 18:03:59 -0800
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 18:04:29 -0800
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: Tony Luck <tony.luck@intel.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -69,9 +69,9 @@ Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
 	Yi Lai <yi1.lai@intel.com>,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 01/11] EDAC/ie31200: Fix the size of EDAC_MC_LAYER_CHIP_SELECT layer
-Date: Wed, 26 Feb 2025 09:51:52 +0800
-Message-Id: <20250226015202.36576-2-qiuxu.zhuo@intel.com>
+Subject: [PATCH 02/11] EDAC/ie31200: Fix the DIMM size mask for several SoCs
+Date: Wed, 26 Feb 2025 09:51:53 +0800
+Message-Id: <20250226015202.36576-3-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250226015202.36576-1-qiuxu.zhuo@intel.com>
 References: <20250226015202.36576-1-qiuxu.zhuo@intel.com>
@@ -81,39 +81,37 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-The EDAC_MC_LAYER_CHIP_SELECT layer pertains to the rank, not the DIMM.
-Fix its size to reflect the number of ranks instead of the number of DIMMs.
-Also delete the unused macros IE31200_{DIMMS,RANKS}.
+The DIMM size mask for {Sky, Kaby, Coffee} Lake is not bits{7:0},
+but bits{5:0}. Fix it.
 
-Fixes: 7ee40b897d18 ("ie31200_edac: Introduce the driver")
+Fixes: 953dee9bbd24 ("EDAC, ie31200_edac: Add Skylake support")
 Tested-by: Gary Wang <gary.c.wang@intel.com>
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- drivers/edac/ie31200_edac.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/edac/ie31200_edac.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index c6188de13c00..10301e17014c 100644
+index 10301e17014c..2886866cb457 100644
 --- a/drivers/edac/ie31200_edac.c
 +++ b/drivers/edac/ie31200_edac.c
-@@ -94,8 +94,6 @@
- 	 (((did) & PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK) ==                 \
- 	  PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_MASK))
- 
--#define IE31200_DIMMS			4
--#define IE31200_RANKS			8
- #define IE31200_RANKS_PER_CHANNEL	4
- #define IE31200_DIMMS_PER_CHANNEL	2
- #define IE31200_CHANNELS		2
-@@ -428,7 +426,7 @@ static int ie31200_probe1(struct pci_dev *pdev, int dev_idx)
- 
- 	nr_channels = how_many_channels(pdev);
- 	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
--	layers[0].size = IE31200_DIMMS;
-+	layers[0].size = IE31200_RANKS_PER_CHANNEL;
- 	layers[0].is_virt_csrow = true;
- 	layers[1].type = EDAC_MC_LAYER_CHANNEL;
- 	layers[1].size = nr_channels;
+@@ -165,6 +165,7 @@
+ #define IE31200_MAD_DIMM_0_OFFSET		0x5004
+ #define IE31200_MAD_DIMM_0_OFFSET_SKL		0x500C
+ #define IE31200_MAD_DIMM_SIZE			GENMASK_ULL(7, 0)
++#define IE31200_MAD_DIMM_SIZE_SKL		GENMASK_ULL(5, 0)
+ #define IE31200_MAD_DIMM_A_RANK			BIT(17)
+ #define IE31200_MAD_DIMM_A_RANK_SHIFT		17
+ #define IE31200_MAD_DIMM_A_RANK_SKL		BIT(10)
+@@ -378,7 +379,7 @@ static void __iomem *ie31200_map_mchbar(struct pci_dev *pdev)
+ static void __skl_populate_dimm_info(struct dimm_data *dd, u32 addr_decode,
+ 				     int chan)
+ {
+-	dd->size = (addr_decode >> (chan << 4)) & IE31200_MAD_DIMM_SIZE;
++	dd->size = (addr_decode >> (chan << 4)) & IE31200_MAD_DIMM_SIZE_SKL;
+ 	dd->dual_rank = (addr_decode & (IE31200_MAD_DIMM_A_RANK_SKL << (chan << 4))) ? 1 : 0;
+ 	dd->x16_width = ((addr_decode & (IE31200_MAD_DIMM_A_WIDTH_SKL << (chan << 4))) >>
+ 				(IE31200_MAD_DIMM_A_WIDTH_SKL_SHIFT + (chan << 4)));
 -- 
 2.17.1
 
