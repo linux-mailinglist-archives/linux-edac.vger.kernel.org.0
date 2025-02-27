@@ -1,144 +1,129 @@
-Return-Path: <linux-edac+bounces-3222-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3223-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9FA2A48A17
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Feb 2025 21:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F044A48BAF
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Feb 2025 23:39:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FC38188FA10
-	for <lists+linux-edac@lfdr.de>; Thu, 27 Feb 2025 20:48:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C8A0188BBB5
+	for <lists+linux-edac@lfdr.de>; Thu, 27 Feb 2025 22:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D229422D4CD;
-	Thu, 27 Feb 2025 20:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FKkN3q9v"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCAC922B5BC;
+	Thu, 27 Feb 2025 22:39:22 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9391AF0C9;
-	Thu, 27 Feb 2025 20:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A6C21884A;
+	Thu, 27 Feb 2025 22:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740689303; cv=none; b=KQUDGe42m2St1AzfGFJibPb5MtdOD9RxCs8fLxMaqEqNxDfWKMtkZEY0ZHsC9ZjH70ZVqAj/R2wm6oRNyhYvkHE6QY+FYymH4EaBFP8GFq/3IERIpSbzu8n6Sbj4WgbAfg+pwtg4YLcmUi4fO0upNpYJoEAjp6QqWy1+4U47JwE=
+	t=1740695962; cv=none; b=bPsjoJs50ATHwhgGic4oCl0XE3VrU3ZPJ1V2FEaAHX5Um4f50nbB738mdmYYw/C4Le+mQik25+EOntyjHcPj/7SOXmeT2NtwQQfI3PvNXCHSNCh0UJjDKR6VHBibzYHPhbYPIiYyuah4Kv5JwQX2yXNA8PdVzcQnHW2S9IZQZ7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740689303; c=relaxed/simple;
-	bh=E6vjaBz8GluSuB4mgoO/H4qAMkQzsqIUytDC2yfntdg=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=VB/HXortfa4w4GMBSYvUyYrH0yRF4G3JLiLcBrMbnt00BYzAY9HgM7int4s9JWWwOtHIha4q7jzu+n1vbL4VzkgN8/6Ql9O4fylmOs0buCzmqlRUJaRGKuLH02S2NOkGFlh8FGGU7qeBOwrLIg4YeyK/tWtmAHMxoLxmOQqncCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FKkN3q9v; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4358E40E0202;
-	Thu, 27 Feb 2025 20:48:18 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id mV4CUirKJE3p; Thu, 27 Feb 2025 20:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1740689291; bh=L7HiZKIxRCTs4Kcv2wAxMWKLoQxNiMilxiOAZTJGudA=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=FKkN3q9vAGnWvHH428XdiS8/qL5hKhzaYZ/HOJc2oNVZ1ua571fZ1lQQhebMRYOJQ
-	 xQAwaF2xglljH8B04dWSRzheneb+oDnp8dhFMOjXtaIblAkxOHmPbhjAnDtbLqMpeP
-	 9pF9CWgu7B9sDGvePzMN5sSzxdF5j/HB3g6ezFBiXM8l1NXOiVtkQhyxWQalNqmydW
-	 Ke2r656u5wFDLAKaGQz2AfY+GLQSxsVV6/mYNv2USkmgSs6UBmKa/vVXA6PmpdFrEu
-	 QN88mGWbdD8ew4FJTUcEJLfTBjsqzhckmcHai9tV9fUBEA+dvg8Meaqs/4De27sjhz
-	 w3adp2BovXAX1kp+Fp2jtY+bKCACIUxHZ/bpco809QJdiSAAPiTXplHkLG9EgO2toF
-	 F52MtPVew5BFUK919d5BlO4EIxR9r9++5ofCe1sLoyzIZGq46zc4930XDnfjewa/7/
-	 Y0jIK9GV9tEd+07jzRLh+vHQM3FdbB8ZDENONjlKeMTu1VDXOesbSAxZOamE6JFBfF
-	 N+jAnyoJh892jYd+CNoTwhkN9E7WKbjkfFxIOVWxALTxW0pz7fiXlFIxoxit/dBIrp
-	 R9CynF5dgsQhIiXr3tyrUxOLa0bT6IZSTaAoMdnhuIXDcpx+fdrXJjONOXrc5GjoU4
-	 wX0vcZC8haCztGTrVT5g+UM4=
-Received: from [IPv6:::1] (unknown [IPv6:2a02:3033:266:d506:45ad:ba23:3ebb:9784])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B17A840E01A1;
-	Thu, 27 Feb 2025 20:48:05 +0000 (UTC)
-Date: Thu, 27 Feb 2025 21:48:01 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-CC: x86@kernel.org, Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 06/16] x86/mce: Remove __mcheck_cpu_init_early()
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20250227195933.GA936031@yaz-khff2.amd.com>
-References: <20250213-wip-mca-updates-v2-0-3636547fe05f@amd.com> <20250213-wip-mca-updates-v2-6-3636547fe05f@amd.com> <20250227152500.GAZ8CDzEBRWBUukmcl@fat_crate.local> <20250227163148.GA785742@yaz-khff2.amd.com> <DE184F9D-EF80-4A88-9275-C900C4AA13D2@alien8.de> <20250227195933.GA936031@yaz-khff2.amd.com>
-Message-ID: <7D626975-3F9C-4B7F-A1E7-FAB3B02964DC@alien8.de>
+	s=arc-20240116; t=1740695962; c=relaxed/simple;
+	bh=UyowPfBVfNOfzdNPEUjRU3fb1usW618po+kEbU1iFPs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tMoIg8lHchNwqoiNUXy6aPDXN7nRiILDPRqOczugwvAO6H/T67xEwbV/cEm4Sd6mvAq6kJU/M/W6sSHII25coOtv/I+Kz7z8UC+PvN64MRrLTzLRX0zjySUptr3j4mHvHBz7Mq//54iEdUyJvTIX+61AOUXaUeAxxpkxuJv/4E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Z3mRx1qTwz6K9HS;
+	Fri, 28 Feb 2025 06:37:17 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id B10AF1400DA;
+	Fri, 28 Feb 2025 06:39:16 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.149.240) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 27 Feb 2025 23:39:14 +0100
+From: <shiju.jose@huawei.com>
+To: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
+	<dave@stgolabs.net>, <jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
+	<alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+	<ira.weiny@intel.com>, <david@redhat.com>, <Vilas.Sridharan@amd.com>
+CC: <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <rafael@kernel.org>, <lenb@kernel.org>,
+	<mchehab@kernel.org>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
+	<rientjes@google.com>, <jiaqiyan@google.com>, <Jon.Grimm@amd.com>,
+	<dave.hansen@linux.intel.com>, <naoya.horiguchi@nec.com>,
+	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
+	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
+	<gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <yazen.ghannam@amd.com>, <tanxiaofei@huawei.com>,
+	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
+	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
+	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
+Subject: [PATCH 0/8] cxl: support CXL memory RAS features
+Date: Thu, 27 Feb 2025 22:38:07 +0000
+Message-ID: <20250227223816.2036-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
-On February 27, 2025 8:59:33 PM GMT+01:00, Yazen Ghannam <yazen=2Eghannam@a=
-md=2Ecom> wrote:
->On Thu, Feb 27, 2025 at 08:33:19PM +0100, Borislav Petkov wrote:
->> On February 27, 2025 5:31:48 PM GMT+01:00, Yazen Ghannam <yazen=2Eghann=
-am@amd=2Ecom> wrote:
->> >On Thu, Feb 27, 2025 at 04:25:00PM +0100, Borislav Petkov wrote:
->> >> On Thu, Feb 13, 2025 at 04:45:55PM +0000, Yazen Ghannam wrote:
->> >> > Also, move __mcheck_cpu_init_generic() after
->> >> > __mcheck_cpu_init_prepare_banks() so that MCA is enabled after the=
- first
->> >> > MCA polling event=2E
->> >>=20
->> >> The reason being?
->> >>=20
->> >> Precaution?
->> >>=20
->> >> It was this way since forever, why are you moving it now? Any partic=
-ular
->> >> reason?
->> >>=20
->> >
->> >1) To read/clear old errors before turning on MCA=2E The updated
->> >__mcheck_cpu_init_prepare_banks() function does this for the MCi_CTL
->> >registers=2E This patch does this for the MCG_CTL register too=2E
->> >
->> >2) To ensure that vendor-specific setup is finished beforehand also=2E
->>=20
->> That doesn't answer my question=2E All of the above gets done even with=
-out shuffling the order=2E=2E=2E
->>=20
->>=20
->
->MCA banks can start logging errors once MCG_CTL is set=2E The AMD docs sa=
-y
->"The operating system must initialize the MCA_CONFIG registers prior to
->initialization of the MCA_CTL registers=2E"
->
->"The MCA_CTL registers must be initialized prior to enabling the error
->reporting banks in MCG_CTL"=2E
->
->However, the Intel docs "Machine-Check Initialization Pseudocode" say
->MCG_CTL first then MCi_CTL=2E
->
->But both agree that CR4=2EMCE should be set last=2E
->
->We have an old thread on the topic that led to this patch=2E
->https://lore=2Ekernel=2Eorg/all/YqJHwXkg3Ny9fI3s@yaz-fattaah/
->
->And it seemed okay at the time=2E
->https://lore=2Ekernel=2Eorg/all/YrnTMmwl5TrHwT9J@zn=2Etnic/
->
->I don't think anything much has changed since then, so I included the
->old patch again in this set=2E
->
->Thanks,
->Yazen
+From: Shiju Jose <shiju.jose@huawei.com>
 
-This is exactly what needs to be in the commit message - why is the change=
- being done=2E=20
---=20
-Sent from a small device: formatting sucks and brevity is inevitable=2E 
+Support for CXL memory RAS features: patrol scrub, ECS, soft-PPR and
+memory sparing.
+
+This CXL series was part of the EDAC series [1].
+
+The code is based on cxl.git: next branch [2] merged with ras.git: edac-cxl
+branch [3].
+
+1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
+2. https://web.git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/log/?h=next
+3. https://web.git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-cxl
+
+Userspace code for CXL memory repair features [4] and
+sample boot-script for CXL memory repair [5].
+
+[4]: https://lore.kernel.org/lkml/20250207143028.1865-1-shiju.jose@huawei.com/
+[5]: https://lore.kernel.org/lkml/20250207143028.1865-5-shiju.jose@huawei.com/
+
+Shiju Jose (8):
+  cxl: Add helper function to retrieve a feature entry
+  cxl/memfeature: Add CXL memory device patrol scrub control feature
+  cxl/memfeature: Add CXL memory device ECS control feature
+  cxl/mbox: Add support for PERFORM_MAINTENANCE mailbox command
+  cxl/region: Add helper function to determine memory is online
+  cxl: Support for finding memory operation attributes from the current
+    boot
+  cxl/memfeature: Add CXL memory device soft PPR control feature
+  cxl/memfeature: Add CXL memory device memory sparing control feature
+
+ Documentation/edac/memory_repair.rst |  103 ++
+ Documentation/edac/scrub.rst         |   64 +
+ drivers/cxl/Kconfig                  |   20 +
+ drivers/cxl/core/Makefile            |    1 +
+ drivers/cxl/core/core.h              |   11 +
+ drivers/cxl/core/features.c          |   20 +
+ drivers/cxl/core/mbox.c              |   45 +-
+ drivers/cxl/core/memdev.c            |    9 +
+ drivers/cxl/core/memfeatures.c       | 1728 ++++++++++++++++++++++++++
+ drivers/cxl/core/ras.c               |  151 +++
+ drivers/cxl/core/region.c            |   15 +
+ drivers/cxl/cxlmem.h                 |   82 ++
+ drivers/cxl/mem.c                    |    4 +
+ drivers/cxl/pci.c                    |    3 +
+ drivers/edac/mem_repair.c            |    9 +
+ include/linux/edac.h                 |    7 +
+ 16 files changed, 2270 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/cxl/core/memfeatures.c
+ create mode 100644 drivers/cxl/core/ras.c
+
+-- 
+2.43.0
+
 
