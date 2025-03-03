@@ -1,90 +1,73 @@
-Return-Path: <linux-edac+bounces-3253-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3254-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B581CA4BC83
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 11:38:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DB20A4C3E3
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 15:52:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDEDD3ACE0C
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 10:36:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B3F47A1E50
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 14:51:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1871F1513;
-	Mon,  3 Mar 2025 10:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE8D2139B2;
+	Mon,  3 Mar 2025 14:52:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="CIeizD2K"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="h7JjHMgD"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547DA23F383;
-	Mon,  3 Mar 2025 10:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EF820F07D;
+	Mon,  3 Mar 2025 14:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740998189; cv=none; b=IhiOdTUStJHhVOW9/yf8BjdUXxKVgZpJYQoG17cY/JV5Myo6AjmmaGSuNIie94s23ld4KYAd0BcDuChqz7hO8xk4Sa+5otou2d57Vy8nPpA937TQZgyPx8R0EsVL2UlqHIEoVowDbPkpElqTmTt8jLVbP0VWcdmrREkq9cP60lQ=
+	t=1741013568; cv=none; b=J4uSn+lPqTyv6ELGUFQM0d1hL3sygVQrtOZArB8VWakB6fVnFKy7XulW+dXTGdwrulZd+ZzUqBsTOaPZ/uK0gua0LMXwrlwpkoTZ6nwfGkJg2oAoV1570ADTkfuANav2INwgnH5lXvoQ7cN3xgGf/sRXCtxCxdKodFiW12bNJEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740998189; c=relaxed/simple;
-	bh=N3sPKcpbk+N345Z6QfXw1a68D9uC0IXP2GiFiY2vjV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j8B+cx1QCludubWhoJ5eKe+mVfzOY6WGyR1tzRy3RFULimmx48v2WXc+3C9BY/fTpirJkv1SyAcDF0vng0CwoH5IOQcRFxYulqv0HMh80JkHjBEf5OlayxftQ8FKMIWarvFCdBMXPBlo+eGoO1ioARRdP7Mly4u5oFd7V9LcVn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=CIeizD2K; arc=none smtp.client-ip=65.109.113.108
+	s=arc-20240116; t=1741013568; c=relaxed/simple;
+	bh=m8LqLgUKcSZmyeWPSBwRlyO6eYdEV0wMI/HPPxv5yRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=Jj0Btj0Kqx/MwDDlqyL/jPjMuKckLUyhWPd7bkgdQlO3fUcPRBNRfnoiFqRVwOJBgYCyT135P/7+oCEKobgjbJeZRmp7ho3Wdsd141T/YL1oUafWOmgoEvVTSqSIKFK7iXcE+dk6Pi3e/Wiip4qZ0V/kLaor/OhEYu+GYl4R5M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=h7JjHMgD; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AE1BE40E0202;
-	Mon,  3 Mar 2025 10:36:23 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B400040E0214;
+	Mon,  3 Mar 2025 14:52:42 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id bd2HeietVv99; Mon,  3 Mar 2025 10:36:20 +0000 (UTC)
+	with ESMTP id ONsOBIKd_0m5; Mon,  3 Mar 2025 14:52:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1740998178; bh=XNI3SnVJolAxVhmPjt2JrEwot6jN/8zHjxYEktMG+4Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CIeizD2KFeTbtYEKdnNDnpUDBbCjZpqwAkO17eGwBzpecuIzivjikXY8+BLNqxtL2
-	 TfnD+4lmhvBtg1RPiedflnah3OqDiwlBEBTHScYraeZze7/vUBJVWbqOtLh/XIEfjf
-	 vn/H+X1OHwlS2JlD8EBWQMFyYz/AgvkAOLcqLSgOtfU4Szlas4X45SSXuDPsVsV4Do
-	 Q7ZFUIHAXlbqcNetihj/DrGOUoaMkmc9qwyrh5qv72T88BBIbMpkWzY1kvcEiCVVWH
-	 F+vMqJ1sz3KLAeG2gLiG+Q+iwVsztkq8WEwP8NTNzwMyDJSXxV3GowCo7DzwWVSuyS
-	 rTwrDZtqJWLGIi3sq8VTlwCqmYP1JEhwzQMkNt+zboA+0kjJp/ufc0cVIsN9uWI5rT
-	 KADNathwh6qa4OElEeBSQ+KHdgd5GosTf/1l4FXVgdfjUUW0j2W5RIklyg3XpjXNn9
-	 8UoqEkzjBKx7RzqCx7/fG+/iIAANKeTrCYJv5O0dqlv8dcqZXFbR/QHjgYSuPpvGTV
-	 zqweiOFcXs/A/sbIvjqzKFK/yw9U/5dTi1XPNk4jyk8uMBmgV8ICdpd0kzMELYqAmK
-	 JdJnxk878YZy4HeTp+fgj+qZ/OFOXuPRXHUaXQS3+x4U6yPqmh0o+MOSmbIAM1magZ
-	 KbUuiDvnDuZkQIiP7vXiu4eo=
+	t=1741013558; bh=3Y1lYbvSoDqOWPOG8r6c7lDbEcR6+kXVb8wrSf7bgGM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=h7JjHMgD03Cyet05MwSAe2uxgzEQiEJESaeSSIfMztot3GylrZdpvfDJxywFCcQJN
+	 t+B2CQ8ukEDjG3NcNMIO3Pblo06e10Ws+SgYf/jpBDF0T75WqEPhCDPAiSUplCAY68
+	 sXWEixID3AZ38mz0p9HMwrXRD5UwEVuIFcRCyyM2iuzQJV7hpewWdfMAx/jcnnf3A8
+	 ZxPQ7XypVqiAa5n7K49ZykA7vG4FyX07sDMzMSuNsdPAwTJc1LUQ6KAFGs9/BHjhUM
+	 2BECmgDEAH4x3kPuFui38eXQOCU1uYix+7xc9Akxhbsvfzi+dr2P16v8QVxmv6Hz9Z
+	 4dh+QnsIqxYNNj3NWdPyB5vVRKkgFjZ2mSoWiXtiHQLtk6LKbn4kaNsRFk1fsj3bhU
+	 s02l2877iCCFFG0mUE+pdhWZqDW2VIkWhh5B6JgiGKF8rfKfoCCYexloDQkYR3BH+3
+	 AEZJhKE4HZIjL4y04k2TrMcsvgoLWOZJ3tF811hcsh1IMT++/I4mFuqRSNcPLjpyrc
+	 fAsRaRF7/iQsrYI9BIhoREewwVPMCjVcRzl28igc/pxPqRbPwPZKFWsdRsayeKvHHT
+	 Zw7vWBlDg0eAO1kV1Lb8PLpIS/uwoNJ8pb6znu40V0lKKHtI2TwCGzPwRd3AyIHhe6
+	 vAjnO2z0Kx4IMKZW0iJJLRpQ=
 Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CAC8940E01D1;
-	Mon,  3 Mar 2025 10:35:34 +0000 (UTC)
-Date: Mon, 3 Mar 2025 11:35:29 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1756340E020E;
+	Mon,  3 Mar 2025 14:52:33 +0000 (UTC)
+Date: Mon, 3 Mar 2025 15:52:26 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: shiju.jose@huawei.com, linux-edac@vger.kernel.org,
-	linux-acpi@vger.kernel.org, rafael@kernel.org, tony.luck@intel.com,
-	lenb@kernel.org, mchehab@kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	j.williams@intel.com, dave@stgolabs.net, dave.jiang@intel.com,
-	alison.schofield@intel.com, vishal.l.verma@intel.com,
-	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
-	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
-	duenwen@google.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
-	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
-	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
-	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
-	wanghuiqiang@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH linux-next 0/2] ACPI: Add support for ACPI RAS2 feature
- table
-Message-ID: <20250303103529.GBZ8WF8flezRahE-1h@fat_crate.local>
-References: <20250228122752.2062-1-shiju.jose@huawei.com>
- <20250303173538.000007cd@huawei.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>,
+	David Thompson <davthompson@nvidia.com>
+Cc: Shravan Kumar Ramani <sramani@mellanox.com>, linux-edac@vger.kernel.org,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [bug report] EDAC, mellanox: Add ECC support for BlueField DDR4
+Message-ID: <20250303145226.GCZ8XCKkC0YSLHXycB@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -93,37 +76,84 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250303173538.000007cd@huawei.com>
+In-Reply-To: <046bf689-9a2b-4993-b8ca-927d7d2a0cc5@stanley.mountain>
 
-On Mon, Mar 03, 2025 at 05:35:38PM +0800, Jonathan Cameron wrote:
-> Borislav via ras.git, or Rafael via acpi.git?  I don't really
-> have any preference other than making sure it doesn't fall down
-> the cracks!
+On Thu, Oct 24, 2024 at 11:20:45AM +0300, Dan Carpenter wrote:
+> Hello Shravan Kumar Ramani,
+> 
+> Commit 82413e562ea6 ("EDAC, mellanox: Add ECC support for BlueField
+> DDR4") from Jun 25, 2019 (linux-next), leads to the following Smatch
+> static checker warning:
+> 
+> drivers/edac/bluefield_edac.c:205 bluefield_gather_report_ecc() error: uninitialized symbol 'dram_syndrom'.
+> drivers/edac/bluefield_edac.c:219 bluefield_gather_report_ecc() error: uninitialized symbol 'dram_additional_info'.
+> drivers/edac/bluefield_edac.c:231 bluefield_gather_report_ecc() error: uninitialized symbol 'edea0'.
+> drivers/edac/bluefield_edac.c:231 bluefield_gather_report_ecc() error: uninitialized symbol 'edea1'.
+> drivers/edac/bluefield_edac.c:256 bluefield_edac_check() error: uninitialized symbol 'ecc_count'.
+> 
+> drivers/edac/bluefield_edac.c
+>     173 static void bluefield_gather_report_ecc(struct mem_ctl_info *mci,
+>     174                                         int error_cnt,
+>     175                                         int is_single_ecc)
+>     176 {
+>     177         struct bluefield_edac_priv *priv = mci->pvt_info;
+>     178         u32 dram_additional_info, err_prank, edea0, edea1;
+>     179         u32 ecc_latch_select, dram_syndrom, serr, derr, syndrom;
+>     180         enum hw_event_mc_err_type ecc_type;
+>     181         u64 ecc_dimm_addr;
+>     182         int ecc_dimm, err;
+>     183 
+>     184         ecc_type = is_single_ecc ? HW_EVENT_ERR_CORRECTED :
+>     185                                    HW_EVENT_ERR_UNCORRECTED;
+>     186 
+>     187         /*
+>     188          * Tell the External Memory Interface to populate the relevant
+>     189          * registers with information about the last ECC error occurrence.
+>     190          */
+>     191         ecc_latch_select = MLXBF_ECC_LATCH_SEL__START;
+>     192         err = bluefield_edac_writel(priv, MLXBF_ECC_LATCH_SEL, ecc_latch_select);
+>     193         if (err)
+>     194                 dev_err(priv->dev, "ECC latch select write failed.\n");
+>     195 
+>     196         /*
+>     197          * Verify that the ECC reported info in the registers is of the
+>     198          * same type as the one asked to report. If not, just report the
+>     199          * error without the detailed information.
+>     200          */
+>     201         err = bluefield_edac_readl(priv, MLXBF_SYNDROM, &dram_syndrom);
+>     202         if (err)
+>     203                 dev_err(priv->dev, "DRAM syndrom read failed.\n");
+> 
+> If bluefield_edac_readl() fails then dram_syndrom is uninitialized.
+> 
+>     204 
+> --> 205         serr = FIELD_GET(MLXBF_SYNDROM__SERR, dram_syndrom);
+>     206         derr = FIELD_GET(MLXBF_SYNDROM__DERR, dram_syndrom);
+>     207         syndrom = FIELD_GET(MLXBF_SYNDROM__SYN, dram_syndrom);
+> 
 
-It's probably easier if I take it.
+This looks forgotten.
 
-However, just from a cursory look, it would need some scrubbing. There's stuff
-like:
+I'm thinking of:
 
-+               ps_sm->params.requested_address_range[0] = 0;
-+               ps_sm->params.requested_address_range[1] = 0;
-+               ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_SCHRS_IN_MASK;
-+               ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_SCHRS_IN_MASK,
-+                                                           ras2_ctx->scrub_cycle_hrs);
-+               ps_sm->params.patrol_scrub_command = RAS2_START_PATROL_SCRUBBER;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8e0736dc2ee0..061149ade8c0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8222,8 +8222,7 @@ F:	Documentation/devicetree/bindings/edac/aspeed-sdram-edac.txt
+ F:	drivers/edac/aspeed_edac.c
+ 
+ EDAC-BLUEFIELD
+-M:	Shravan Kumar Ramani <shravankr@nvidia.com>
+-S:	Supported
++S:	Orphan
+ F:	drivers/edac/bluefield_edac.c
+ 
+ EDAC-CALXEDA
 
+but lemme Cc people who have touched this recently first.
 
-which definitely needs shortening. There's no need for a wholly written out
-"requested_address_range". I know variables should have meaningfull names but
-writing fiction shouldn't be either.
-
-+static int ras2_acpi_parse_table(struct acpi_table_header *pAcpiTable)
-
-Yuck, CamelCase?!
-
-And I'm pretty sure if I start looking more, I'll find more funky stuff.
-
-HTH.
+Thx.
 
 -- 
 Regards/Gruss,
