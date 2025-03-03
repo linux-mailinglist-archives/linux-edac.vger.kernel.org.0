@@ -1,194 +1,133 @@
-Return-Path: <linux-edac+bounces-3252-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3253-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC5C8A4BBE9
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 11:21:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B581CA4BC83
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 11:38:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A556F1890A7D
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 10:21:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDEDD3ACE0C
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Mar 2025 10:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 176CE1F0E34;
-	Mon,  3 Mar 2025 10:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1871F1513;
+	Mon,  3 Mar 2025 10:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="CIeizD2K"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB531EDA04;
-	Mon,  3 Mar 2025 10:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547DA23F383;
+	Mon,  3 Mar 2025 10:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740997297; cv=none; b=tdR5lQNGrdVWS5SAWs5gQ4Z2b2aHEQL5QS/uLFmAdbQsRpPbJU+667KIzEz2mAEmA31HywegkJ1LfIMUKNi3SNnbFOnGEE1e/Q3xKCpPw+Rp8YFo+jCDY4NVBXP3p9dKF5IFNh5Fi8mX/u5YF2yvRq+OKlmx0mok/PnDt6Y4ruA=
+	t=1740998189; cv=none; b=IhiOdTUStJHhVOW9/yf8BjdUXxKVgZpJYQoG17cY/JV5Myo6AjmmaGSuNIie94s23ld4KYAd0BcDuChqz7hO8xk4Sa+5otou2d57Vy8nPpA937TQZgyPx8R0EsVL2UlqHIEoVowDbPkpElqTmTt8jLVbP0VWcdmrREkq9cP60lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740997297; c=relaxed/simple;
-	bh=a2xSJ3T1g8IXcDpYxc901qp4tAn/pEbOH9ZKAL1qU7U=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Z447CwWm+yrqV3ZWc6vrIR8ru6Fb3td3ZKi0NGqXFJ+BIdXk4j8scitc9HTAZUhjU8UvSBMiCYKgLYyKTttgDxahUQoNz0PAh9z+IvwaNo2JgJGCx1VNb9OYMdj1mzbI/+H7e2Jha/R8+TiWx/nGZk7RSKZJkhKpUKrIdJGidH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Z5vtd4j18z6K9SC;
-	Mon,  3 Mar 2025 18:19:21 +0800 (CST)
-Received: from frapeml100006.china.huawei.com (unknown [7.182.85.201])
-	by mail.maildlp.com (Postfix) with ESMTPS id 01139140A70;
-	Mon,  3 Mar 2025 18:21:31 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml100006.china.huawei.com (7.182.85.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 3 Mar 2025 11:21:30 +0100
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Mon, 3 Mar 2025 11:21:30 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Jonathan Cameron <jonathan.cameron@huawei.com>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"rafael@kernel.org" <rafael@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "lenb@kernel.org"
-	<lenb@kernel.org>, "mchehab@kernel.org" <mchehab@kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-cxl@vger.kernel.org"
-	<linux-cxl@vger.kernel.org>, "j.williams@intel.com" <j.williams@intel.com>,
-	"dave@stgolabs.net" <dave@stgolabs.net>, "dave.jiang@intel.com"
-	<dave.jiang@intel.com>, "alison.schofield@intel.com"
-	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
-	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
-	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
-	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
-	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH linux-next 0/2] ACPI: Add support for ACPI RAS2 feature
+	s=arc-20240116; t=1740998189; c=relaxed/simple;
+	bh=N3sPKcpbk+N345Z6QfXw1a68D9uC0IXP2GiFiY2vjV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j8B+cx1QCludubWhoJ5eKe+mVfzOY6WGyR1tzRy3RFULimmx48v2WXc+3C9BY/fTpirJkv1SyAcDF0vng0CwoH5IOQcRFxYulqv0HMh80JkHjBEf5OlayxftQ8FKMIWarvFCdBMXPBlo+eGoO1ioARRdP7Mly4u5oFd7V9LcVn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=CIeizD2K; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AE1BE40E0202;
+	Mon,  3 Mar 2025 10:36:23 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id bd2HeietVv99; Mon,  3 Mar 2025 10:36:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1740998178; bh=XNI3SnVJolAxVhmPjt2JrEwot6jN/8zHjxYEktMG+4Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CIeizD2KFeTbtYEKdnNDnpUDBbCjZpqwAkO17eGwBzpecuIzivjikXY8+BLNqxtL2
+	 TfnD+4lmhvBtg1RPiedflnah3OqDiwlBEBTHScYraeZze7/vUBJVWbqOtLh/XIEfjf
+	 vn/H+X1OHwlS2JlD8EBWQMFyYz/AgvkAOLcqLSgOtfU4Szlas4X45SSXuDPsVsV4Do
+	 Q7ZFUIHAXlbqcNetihj/DrGOUoaMkmc9qwyrh5qv72T88BBIbMpkWzY1kvcEiCVVWH
+	 F+vMqJ1sz3KLAeG2gLiG+Q+iwVsztkq8WEwP8NTNzwMyDJSXxV3GowCo7DzwWVSuyS
+	 rTwrDZtqJWLGIi3sq8VTlwCqmYP1JEhwzQMkNt+zboA+0kjJp/ufc0cVIsN9uWI5rT
+	 KADNathwh6qa4OElEeBSQ+KHdgd5GosTf/1l4FXVgdfjUUW0j2W5RIklyg3XpjXNn9
+	 8UoqEkzjBKx7RzqCx7/fG+/iIAANKeTrCYJv5O0dqlv8dcqZXFbR/QHjgYSuPpvGTV
+	 zqweiOFcXs/A/sbIvjqzKFK/yw9U/5dTi1XPNk4jyk8uMBmgV8ICdpd0kzMELYqAmK
+	 JdJnxk878YZy4HeTp+fgj+qZ/OFOXuPRXHUaXQS3+x4U6yPqmh0o+MOSmbIAM1magZ
+	 KbUuiDvnDuZkQIiP7vXiu4eo=
+Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CAC8940E01D1;
+	Mon,  3 Mar 2025 10:35:34 +0000 (UTC)
+Date: Mon, 3 Mar 2025 11:35:29 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: shiju.jose@huawei.com, linux-edac@vger.kernel.org,
+	linux-acpi@vger.kernel.org, rafael@kernel.org, tony.luck@intel.com,
+	lenb@kernel.org, mchehab@kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+	j.williams@intel.com, dave@stgolabs.net, dave.jiang@intel.com,
+	alison.schofield@intel.com, vishal.l.verma@intel.com,
+	ira.weiny@intel.com, david@redhat.com, Vilas.Sridharan@amd.com,
+	leo.duran@amd.com, Yazen.Ghannam@amd.com, rientjes@google.com,
+	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
+	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
+	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
+	duenwen@google.com, gthelen@google.com,
+	wschwartz@amperecomputing.com, dferguson@amperecomputing.com,
+	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
+	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+	wanghuiqiang@huawei.com, linuxarm@huawei.com
+Subject: Re: [PATCH linux-next 0/2] ACPI: Add support for ACPI RAS2 feature
  table
-Thread-Topic: [PATCH linux-next 0/2] ACPI: Add support for ACPI RAS2 feature
- table
-Thread-Index: AQHbidw989DsJKt5skazfuISb8i7/7NhGsIAgAAbu7A=
-Date: Mon, 3 Mar 2025 10:21:30 +0000
-Message-ID: <ed550760111d4061869949c90598ff5b@huawei.com>
+Message-ID: <20250303103529.GBZ8WF8flezRahE-1h@fat_crate.local>
 References: <20250228122752.2062-1-shiju.jose@huawei.com>
  <20250303173538.000007cd@huawei.com>
-In-Reply-To: <20250303173538.000007cd@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250303173538.000007cd@huawei.com>
 
->-----Original Message-----
->From: Jonathan Cameron <jonathan.cameron@huawei.com>
->Sent: 03 March 2025 09:36
->To: Shiju Jose <shiju.jose@huawei.com>
->Cc: linux-edac@vger.kernel.org; linux-acpi@vger.kernel.org; rafael@kernel.=
-org;
->bp@alien8.de; tony.luck@intel.com; lenb@kernel.org; mchehab@kernel.org;
->linux-mm@kvack.org; linux-kernel@vger.kernel.org; linux-cxl@vger.kernel.or=
-g;
->j.williams@intel.com; dave@stgolabs.net; dave.jiang@intel.com;
->alison.schofield@intel.com; vishal.l.verma@intel.com; ira.weiny@intel.com;
->david@redhat.com; Vilas.Sridharan@amd.com; leo.duran@amd.com;
->Yazen.Ghannam@amd.com; rientjes@google.com; jiaqiyan@google.com;
->Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
->naoya.horiguchi@nec.com; james.morse@arm.com; jthoughton@google.com;
->somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
->duenwen@google.com; gthelen@google.com;
->wschwartz@amperecomputing.com; dferguson@amperecomputing.com;
->wbs@os.amperecomputing.com; nifan.cxl@gmail.com; tanxiaofei
-><tanxiaofei@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>; Roberto
->Sassu <roberto.sassu@huawei.com>; kangkang.shen@futurewei.com;
->wanghuiqiang <wanghuiqiang@huawei.com>; Linuxarm
-><linuxarm@huawei.com>
->Subject: Re: [PATCH linux-next 0/2] ACPI: Add support for ACPI RAS2 featur=
-e
->table
->
->On Fri, 28 Feb 2025 12:27:48 +0000
-><shiju.jose@huawei.com> wrote:
->
->> From: Shiju Jose <shiju.jose@huawei.com>
->>
->> Add support for ACPI RAS2 feature table (RAS2) defined in the ACPI 6.5
->> specification, section 5.2.21 and RAS2 HW based memory scrubbing feature=
-.
->>
->> ACPI RAS2 patches were part of the EDAC series [1].
->
->Whilst linux-next now contains the EDAC patches, we shouldn't base a featu=
-re
->submission on it.  This should be the same as you did for the CXL tree wit=
-h a
->statement that it depends on
->
->https://web.git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=3De=
-dac-cxl
->
->which is the immutable tag / branch Borislav provided.
+On Mon, Mar 03, 2025 at 05:35:38PM +0800, Jonathan Cameron wrote:
+> Borislav via ras.git, or Rafael via acpi.git?  I don't really
+> have any preference other than making sure it doesn't fall down
+> the cracks!
 
-Hi Jonathan,
+It's probably easier if I take it.
 
-These RAS2 patches are applied cleanly, built and tested fine in the=20
-immutable ras.git: 'edac-cxl' branch Borislav provided.=20
-(https://web.git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=3De=
-dac-cxl).
+However, just from a cursory look, it would need some scrubbing. There's stuff
+like:
 
-Thanks,
-Shiju
->
->I doubt there is anything else hitting this code so shouldn't be any need =
-to rebase
->(I could be wrong though!)
->
->Assuming everyone is happy with this series, who is going to pick it up?
->
->Borislav via ras.git, or Rafael via acpi.git?  I don't really have any pre=
-ference
->other than making sure it doesn't fall down the cracks!
->
->Jonathan
->
->>
->> 1.
->> https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@hua
->> wei.com/
->>
->> Shiju Jose (2):
->>   ACPI:RAS2: Add ACPI RAS2 driver
->>   ras: mem: Add memory ACPI RAS2 driver
->>
->>  Documentation/edac/scrub.rst |  73 ++++++
->>  drivers/acpi/Kconfig         |  11 +
->>  drivers/acpi/Makefile        |   1 +
->>  drivers/acpi/ras2.c          | 417 +++++++++++++++++++++++++++++++++++
->>  drivers/ras/Kconfig          |  11 +
->>  drivers/ras/Makefile         |   1 +
->>  drivers/ras/acpi_ras2.c      | 383 ++++++++++++++++++++++++++++++++
->>  include/acpi/ras2_acpi.h     |  47 ++++
->>  8 files changed, 944 insertions(+)
->>  create mode 100755 drivers/acpi/ras2.c  create mode 100644
->> drivers/ras/acpi_ras2.c  create mode 100644 include/acpi/ras2_acpi.h
->>
++               ps_sm->params.requested_address_range[0] = 0;
++               ps_sm->params.requested_address_range[1] = 0;
++               ps_sm->params.scrub_params_in &= ~RAS2_PATROL_SCRUB_SCHRS_IN_MASK;
++               ps_sm->params.scrub_params_in |= FIELD_PREP(RAS2_PATROL_SCRUB_SCHRS_IN_MASK,
++                                                           ras2_ctx->scrub_cycle_hrs);
++               ps_sm->params.patrol_scrub_command = RAS2_START_PATROL_SCRUBBER;
 
+
+which definitely needs shortening. There's no need for a wholly written out
+"requested_address_range". I know variables should have meaningfull names but
+writing fiction shouldn't be either.
+
++static int ras2_acpi_parse_table(struct acpi_table_header *pAcpiTable)
+
+Yuck, CamelCase?!
+
+And I'm pretty sure if I start looking more, I'll find more funky stuff.
+
+HTH.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
