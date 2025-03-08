@@ -1,64 +1,64 @@
-Return-Path: <linux-edac+bounces-3316-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3317-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02FDCA5778C
-	for <lists+linux-edac@lfdr.de>; Sat,  8 Mar 2025 02:48:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13950A5779A
+	for <lists+linux-edac@lfdr.de>; Sat,  8 Mar 2025 03:09:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 822AE1887205
-	for <lists+linux-edac@lfdr.de>; Sat,  8 Mar 2025 01:48:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13E553B3FBC
+	for <lists+linux-edac@lfdr.de>; Sat,  8 Mar 2025 02:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B32378F43;
-	Sat,  8 Mar 2025 01:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D888C146A72;
+	Sat,  8 Mar 2025 02:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FEbc5Shj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P0iwvmpu"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4217A4C9F;
-	Sat,  8 Mar 2025 01:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824D74C74;
+	Sat,  8 Mar 2025 02:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741398503; cv=none; b=G3I6pAJPjUEuc9pV59KTros4SGrxlE844QYixRUbwj8x9uH7KR44Qqr1YXwsVN/vasOaqt6ajmJnETzjU8RMrKFFyVzbN6bRvN9G4s/zmSSqOYZPGhAvfBbTrCOagEfzHxwG1qi3/zo94GlCyPKPpd/libtwRCMSptgq0WEm3qE=
+	t=1741399767; cv=none; b=AK/xgog0tSWgOXBbQI+iRsAD0ztZ7NhmZGr7FyPfFaqrRke1WyVWAg7NUE73ofJHtIL+hQ+1MIW72C+rFyctCFX4x4hhS+izlQaqFXWRKdUHhoOKLjQxepORZOx8BpymHBaip0PjWx2+/hPewVzIMjcPjPe7e5HZOiCj71qm6bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741398503; c=relaxed/simple;
-	bh=33/GF+zRlq2xnIN/f2zSmMFCuYusedV0G5v+qkiM8iY=;
+	s=arc-20240116; t=1741399767; c=relaxed/simple;
+	bh=RrmYg2+41IboMImIfWfQLPjGz1QCPIHMrK5PBY1dNxM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bVuOhfRsx3zBSxqoYd7FJJSq0VbCGC2pKE3GNEEfltalCZB+ANb3eqoEewZrtHnUgjQvrZZOQa1SRtaBoJXtpeEa3O+asl7U93vsfwFGTu4wd/Zd5Zou/Lm/WAQ2CJuLhvoG3RskuPiV8z0X2K1Lw+jS1sx0rHkumtYc2FJBguo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FEbc5Shj; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=EvEFBOeDWiq6sCfzKVTcaiQ2EOrjil59sh+uT6UyeakFILYAoej94CKJLjg3d6XctdPaiCvcJa4ZRaOgSQn1uWS0mnjgpRc2F4ez9g/HjykZeTWMeP3TkKUFR9PxMCORkuwgY/IFJQ2zoDtz4dFRW+s3pYrRy1N/PHW7e1hq+4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P0iwvmpu; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741398498; x=1772934498;
+  t=1741399766; x=1772935766;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=33/GF+zRlq2xnIN/f2zSmMFCuYusedV0G5v+qkiM8iY=;
-  b=FEbc5ShjG5xVu4YYCbzpd6KG9mAZmHAYrK+aeTHkxBL/9LUb78LS8rc0
-   nPHLVCQGFlG6axLNNUfhDP9uLulNXliecUiFhAX70GpfKqdgjavTWOz5M
-   KH8AQbEl/cq9HAYDtZyQIEPjGa9x+5scClUNiWxlSf1VhAaEp8quWEaYh
-   CbqvOVoqJQg3/7q1YRdQLL+J9lVqeWRRMqINuPKTRJyx4dh11gmpYFLRL
-   V5ZaPFardbK3z0h2JZDN3pke/3QA0nZZ6b72GTCtohlMZuBWQrerMX7GP
-   mwAEXDvQs2EDWV3/zHdgrNUpBT6uYuPqsOMJE8ZoZXIU0I/968Iea6UeW
-   g==;
-X-CSE-ConnectionGUID: EpEMZIABSb+n05NAFcNXqw==
-X-CSE-MsgGUID: Gg7iI1ceQjqIgPtZpAbSgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11366"; a="30037723"
+  bh=RrmYg2+41IboMImIfWfQLPjGz1QCPIHMrK5PBY1dNxM=;
+  b=P0iwvmpu/5R8B+PczqWpqTaBDycL8SscLa6ynA+5gPeaz3Y9Mv3IDZ6U
+   87d1u/If5h3bq8UkfKoS190a3ulFknm66kyvDCsHn4+A5fD3uVzWcMwA9
+   mMsfvhyyQaeKBpdnTcS3U3zPZiYXQnPptpXDPyzV53DZTkXW+woWg1uPy
+   1iTU4fU/yoCInMT+P9xylxfN9hKs+HQKfxAeTeOXImvVyADnwRNVrZW/Y
+   M59rjBz5xtbt2CpTzPXpiG7QjEMTtspA9YTfgYFElU2SbdnYxKDPgUwbj
+   aqRrYkTzhlmjZIWFGXyXkHo5WOQBlgS5Kw7fVwEDNqDZCSFR4iEmD0ik9
+   w==;
+X-CSE-ConnectionGUID: /J+H1p75R32fDh31BYkSwg==
+X-CSE-MsgGUID: RhdotCvsQb+05RaNR3Rd8g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11366"; a="53855464"
 X-IronPort-AV: E=Sophos;i="6.14,230,1736841600"; 
-   d="scan'208";a="30037723"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 17:48:17 -0800
-X-CSE-ConnectionGUID: o+MtEFLDSxy5hVpewTMf6w==
-X-CSE-MsgGUID: 1Zigs2F7RKmK0p2WooquOw==
+   d="scan'208";a="53855464"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 18:09:25 -0800
+X-CSE-ConnectionGUID: NXYAootqRy2/FAZaBcm9og==
+X-CSE-MsgGUID: IZrcTHB8QtWn/ujyp6UZ7Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,230,1736841600"; 
-   d="scan'208";a="119966640"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="124706884"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2.lan) ([10.125.110.159])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 17:48:15 -0800
-Date: Fri, 7 Mar 2025 17:48:13 -0800
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 18:09:22 -0800
+Date: Fri, 7 Mar 2025 18:09:20 -0800
 From: Alison Schofield <alison.schofield@intel.com>
 To: shiju.jose@huawei.com
 Cc: linux-cxl@vger.kernel.org, dan.j.williams@intel.com, dave@stgolabs.net,
@@ -78,11 +78,11 @@ Cc: linux-cxl@vger.kernel.org, dan.j.williams@intel.com, dave@stgolabs.net,
 	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
 	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
 	wanghuiqiang@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH 3/8] cxl/memfeature: Add CXL memory device ECS control
- feature
-Message-ID: <Z8uh3aYDJ7-VbOyG@aschofie-mobl2.lan>
+Subject: Re: [PATCH 6/8] cxl: Support for finding memory operation attributes
+ from the current boot
+Message-ID: <Z8um0DcVyKra2vYa@aschofie-mobl2.lan>
 References: <20250227223816.2036-1-shiju.jose@huawei.com>
- <20250227223816.2036-4-shiju.jose@huawei.com>
+ <20250227223816.2036-7-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -91,50 +91,31 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227223816.2036-4-shiju.jose@huawei.com>
+In-Reply-To: <20250227223816.2036-7-shiju.jose@huawei.com>
 
-On Thu, Feb 27, 2025 at 10:38:10PM +0000, shiju.jose@huawei.com wrote:
+On Thu, Feb 27, 2025 at 10:38:13PM +0000, shiju.jose@huawei.com wrote:
 > From: Shiju Jose <shiju.jose@huawei.com>
-
+>
 snip
 
-Next 2 macros have line continuation chars at 81 and 89.
-Please pull into column 80 or less.
+> diff --git a/drivers/cxl/core/ras.c b/drivers/cxl/core/ras.c
+> new file mode 100644
+> index 000000000000..65994eec1037
+> --- /dev/null
+> +++ b/drivers/cxl/core/ras.c
+> @@ -0,0 +1,151 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * CXL RAS driver.
+> + *
+> + * Copyright (c) 2025 HiSilicon Limited.
+> + *
+> + */
 
-> 
-> +#define CXL_ECS_GET_ATTR(attrib)						\
-> +static int cxl_ecs_get_##attrib(struct device *dev, void *drv_data,		\
-> +				int fru_id, u32 *val)				\
-> +{										\
-> +	struct cxl_ecs_context *ctx = drv_data;					\
-> +	struct cxl_ecs_params params;						\
-> +	int ret;								\
-> +										\
-> +	ret = cxl_mem_ecs_get_attrs(dev, ctx, fru_id, &params);			\
-> +	if (ret)								\
-> +		return ret;							\
-> +										\
-> +	*val = params.attrib;							\
-> +										\
-> +	return 0;								\
-> +}
-> +
-> +CXL_ECS_GET_ATTR(log_entry_type)
-> +CXL_ECS_GET_ATTR(count_mode)
-> +CXL_ECS_GET_ATTR(threshold)
-> +
-> +#define CXL_ECS_SET_ATTR(attrib, param_type)						\
-> +static int cxl_ecs_set_##attrib(struct device *dev, void *drv_data,			\
-> +				int fru_id, u32 val)					\
-> +{											\
-> +	struct cxl_ecs_context *ctx = drv_data;						\
-> +	struct cxl_ecs_params params = {						\
-> +		.attrib = val,								\
-> +	};										\
-> +											\
-> +	return cxl_mem_ecs_set_attrs(dev, ctx, fru_id, &params, (param_type));		\
-> +}
+Please use the same 2-line header format as other .c files in this
+directory.
 
-snip
+Why is this GPL-2.0-or-later when all others are GPL-2.0-only?
+
 
 
