@@ -1,62 +1,62 @@
-Return-Path: <linux-edac+bounces-3326-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3327-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D03C3A589FE
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 02:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0033A58A00
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 02:29:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1ACBA188CAAF
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 01:29:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D6B9188C882
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 01:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7AB155398;
-	Mon, 10 Mar 2025 01:28:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DE214A0BC;
+	Mon, 10 Mar 2025 01:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CGLfCGk1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7hfoQ+R"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC51E155C97;
-	Mon, 10 Mar 2025 01:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E74914A098;
+	Mon, 10 Mar 2025 01:29:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741570128; cv=none; b=T5yswIAG+ZwnBVmXvBbgE5D93W546JtreB0PRMwq5wA70cKOT0OENKaZHWJwbZN0TlGXxgtVFdUplLMa3h8iRDnhDMXvoHK7bk33rHtiNY6qAcvzRpowO4Ag5zd2rKVzPbwdPU0DVlN9/PdVTI/ars/YJI9bd/c3XvpJXexhZ9M=
+	t=1741570144; cv=none; b=mo4Ik4fBPa8jJWONuhN6KvoQZOn2SJnQjB79mBd041pgJ0elQqp1NiIJ08Ig6D9LeQvRfqPzS2WezgTUXgO40Gu5o3ga4Fl58y910veyjXhRrBNzcb3QMGzInr3JIzLhxUYDuJeZvb5bo9U+z2Gx3P/K1De1KQx/H9pFyU8RipU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741570128; c=relaxed/simple;
-	bh=w72dBbrnDbiWFsnN4ftFTj+2NIjaVkLrIkSukcDB6c0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=e2de6Oyvezbvjv7w1GT4ULfhpEIG+O0wn7FwRMr/ZM/2EWqizs+XIZT4OxYdTHsYQCwPwukJUseFwYdIHpau1J+8L568eyTD3Rbr30Ww4lQ0O8jqcgLupTcRu/6UJKy6WTbtrPbnQm6PKP4TEpSvB78m1hlQqvo9R7WZzHaueFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CGLfCGk1; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1741570144; c=relaxed/simple;
+	bh=jST+CAkMJaE+g4Yh4Uo6TqgzKlns8eutGQHcovr48r8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=rykK9G3CtZRixNhkBgqo11oarfc+5am5M7J97iznHiaE3sq0p9chPjvGalQiDDKqAsklIpZ5e/X1jTDl7xnE3KWtEqbeFRdFrNYAbCwVYM01m/uyRkKWWb0kswVr+VyGTeP2zo1jtp9LekgY2uP9AP0r1ZiUJcAxCiFBNh/GA2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d7hfoQ+R; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741570127; x=1773106127;
+  t=1741570143; x=1773106143;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=w72dBbrnDbiWFsnN4ftFTj+2NIjaVkLrIkSukcDB6c0=;
-  b=CGLfCGk1YbiR2I9oKQ2IyL57NLcMiJTHPIRG+IH/Ly/3YYEOad3Y0bap
-   5fEDDKbuyjisJtHXPAJTAg7+AyN9EAOLhh2g6WUUK61qqoq1jfGIuA+iA
-   L3GIHkdwnFUJLdItOU9gBR86aZW2ywQXEIJ38GKBkXys+avn99J3pVZH9
-   34Qr4Mz31wA9ZtFlJaIA+OEKgF9FV9qtLygb5U5kTPGTBj+h+Ec3yHAoW
-   QVYYwyNWW8rwHDSFM717ImBNmJ0mM3WDElgjUvA/cv9mEBobPjzieNvTq
-   cfpgnObLNuEKYLCcfoNDj1WUg71j1pkxAK+fPA5VzvEYey37ZRCCFEUlS
-   Q==;
-X-CSE-ConnectionGUID: G/UtOWYhStS2Bo3hINSWJw==
-X-CSE-MsgGUID: Ns3aj1HmTV2LqdG5RXdf0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="67914574"
+  bh=jST+CAkMJaE+g4Yh4Uo6TqgzKlns8eutGQHcovr48r8=;
+  b=d7hfoQ+RyaVfQYxMG5wEeg5jVKC2lPFcPpxO668jWWdg6rtXQIM4RcgD
+   8hFDHn4T9EbG3qG4kIhkRKQiuDF5C4D6NuXvUfB9i0b6Uo1xkUKsHInvp
+   nWQtipseLULSPIVPjJ2WquSCe1MTpSRgGbNZM//bJ/VQSJgWnLzwW3Prk
+   ydTSgs1stWc5tGYbRzpuUcPECB8IRpq1I+zkDEAT+VHCOozNfyusK/AZc
+   blyWjU1aJOhT+etplEg60TYp2gKwAhHTi9h14FXGckHE5yAHOVvyySMXa
+   ghfwLA46HFWcxun0AmuPbi7g1YIu2ae10ODbKxdZ8qd56tYIViW8721XC
+   w==;
+X-CSE-ConnectionGUID: uGQKtpToTzSQaEIpsdt0uA==
+X-CSE-MsgGUID: 6wamp6iHSg2GbOcr7fGWcw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="67914582"
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="67914574"
+   d="scan'208";a="67914582"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:28:46 -0700
-X-CSE-ConnectionGUID: hSAUBM1CQaW9HlXRiYjatA==
-X-CSE-MsgGUID: EoCmjiZ7QxakmRNedNwhRQ==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:29:03 -0700
+X-CSE-ConnectionGUID: oRkbitZQS1OkWxlkiIa0cg==
+X-CSE-MsgGUID: RVxcgI/iQYq4SsqIvOB0gQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="124925519"
+   d="scan'208";a="124925546"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:28:43 -0700
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:29:00 -0700
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: Tony Luck <tony.luck@intel.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -69,9 +69,9 @@ Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
 	Yi Lai <yi1.lai@intel.com>,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 04/11] EDAC/ie31200: Fix the 3rd parameter name of *populate_dimm_info()
-Date: Mon, 10 Mar 2025 09:14:04 +0800
-Message-Id: <20250310011411.31685-5-qiuxu.zhuo@intel.com>
+Subject: [PATCH v2 05/11] EDAC/ie31200: Simplify the pci_device_id table
+Date: Mon, 10 Mar 2025 09:14:05 +0800
+Message-Id: <20250310011411.31685-6-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250310011411.31685-1-qiuxu.zhuo@intel.com>
 References: <20250226015202.36576-1-qiuxu.zhuo@intel.com>
@@ -82,64 +82,71 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-The 3rd parameter of *populate_dimm_info() pertains to the DIMM index
-within a channel, not the channel index. Fix the parameter name to dimm
-to reflect its actual purpose.
+Use PCI_VDEVICE() to simplify the pci_device_id table.
 
 No functional changes intended.
 
 Tested-by: Gary Wang <gary.c.wang@intel.com>
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- drivers/edac/ie31200_edac.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/edac/ie31200_edac.c | 44 ++++++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index a8dd55ec52ce..35f4e8e46ca2 100644
+index 35f4e8e46ca2..4e1f85dc1679 100644
 --- a/drivers/edac/ie31200_edac.c
 +++ b/drivers/edac/ie31200_edac.c
-@@ -377,29 +377,29 @@ static void __iomem *ie31200_map_mchbar(struct pci_dev *pdev)
+@@ -576,28 +576,28 @@ static void ie31200_remove_one(struct pci_dev *pdev)
  }
  
- static void __skl_populate_dimm_info(struct dimm_data *dd, u32 addr_decode,
--				     int chan)
-+				     int dimm)
- {
--	dd->size = (addr_decode >> (chan << 4)) & IE31200_MAD_DIMM_SIZE_SKL;
--	dd->dual_rank = (addr_decode & (IE31200_MAD_DIMM_A_RANK_SKL << (chan << 4))) ? 1 : 0;
--	dd->x16_width = ((addr_decode & (IE31200_MAD_DIMM_A_WIDTH_SKL << (chan << 4))) >>
--				(IE31200_MAD_DIMM_A_WIDTH_SKL_SHIFT + (chan << 4)));
-+	dd->size = (addr_decode >> (dimm << 4)) & IE31200_MAD_DIMM_SIZE_SKL;
-+	dd->dual_rank = (addr_decode & (IE31200_MAD_DIMM_A_RANK_SKL << (dimm << 4))) ? 1 : 0;
-+	dd->x16_width = ((addr_decode & (IE31200_MAD_DIMM_A_WIDTH_SKL << (dimm << 4))) >>
-+				(IE31200_MAD_DIMM_A_WIDTH_SKL_SHIFT + (dimm << 4)));
- }
- 
- static void __populate_dimm_info(struct dimm_data *dd, u32 addr_decode,
--				 int chan)
-+				 int dimm)
- {
--	dd->size = (addr_decode >> (chan << 3)) & IE31200_MAD_DIMM_SIZE;
--	dd->dual_rank = (addr_decode & (IE31200_MAD_DIMM_A_RANK << chan)) ? 1 : 0;
--	dd->x16_width = (addr_decode & (IE31200_MAD_DIMM_A_WIDTH << chan)) ? 1 : 0;
-+	dd->size = (addr_decode >> (dimm << 3)) & IE31200_MAD_DIMM_SIZE;
-+	dd->dual_rank = (addr_decode & (IE31200_MAD_DIMM_A_RANK << dimm)) ? 1 : 0;
-+	dd->x16_width = (addr_decode & (IE31200_MAD_DIMM_A_WIDTH << dimm)) ? 1 : 0;
- }
- 
--static void populate_dimm_info(struct dimm_data *dd, u32 addr_decode, int chan,
-+static void populate_dimm_info(struct dimm_data *dd, u32 addr_decode, int dimm,
- 			       bool skl)
- {
- 	if (skl)
--		__skl_populate_dimm_info(dd, addr_decode, chan);
-+		__skl_populate_dimm_info(dd, addr_decode, dimm);
- 	else
--		__populate_dimm_info(dd, addr_decode, chan);
-+		__populate_dimm_info(dd, addr_decode, dimm);
- }
- 
- 
+ static const struct pci_device_id ie31200_pci_tbl[] = {
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_1),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_2),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_3),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_4),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_5),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_6),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_7),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_8),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_9),      PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_10),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_11),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_12),     PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_1),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_2),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_3),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_4),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_5),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_6),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_7),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_8),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_9),  PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
+-	{ PCI_VEND_DEV(INTEL, IE31200_HB_CFL_10), PCI_ANY_ID, PCI_ANY_ID, 0, 0, IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_1), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_2), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_3), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_4), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_5), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_6), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_7), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_8), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_9), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_10), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_11), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_12), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_1), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_2), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_3), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_4), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_5), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_6), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_7), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_8), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_9), IE31200 },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_10), IE31200 },
+ 	{ 0, } /* 0 terminated list. */
+ };
+ MODULE_DEVICE_TABLE(pci, ie31200_pci_tbl);
 -- 
 2.17.1
 
