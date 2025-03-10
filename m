@@ -1,217 +1,159 @@
-Return-Path: <linux-edac+bounces-3334-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3335-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E2ACA58AFD
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 05:00:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 028CEA590DE
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 11:16:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C85B53A84E8
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 04:00:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A2B9188F673
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 10:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669B11B395F;
-	Mon, 10 Mar 2025 04:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="u76rC6KT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6071022578E;
+	Mon, 10 Mar 2025 10:16:36 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3184D199FBA;
-	Mon, 10 Mar 2025 04:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7975215B543;
+	Mon, 10 Mar 2025 10:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741579218; cv=none; b=BJ4li8xqogvj1hk9pTOSlTNPrajY1FzjdtfDkIUyzEavaB7EFRCjGSW+GSjpJtXhwh95PL9cdhnIwbYXu7Qu3HJ6T1HWHwp6ALRwVGpO7jDph0dhsixz2sFM+QN5rUuJNty8Xb1Ip/2Xe9FqzZXxUxS3pNwZ7Vf9R90bQy9YSGQ=
+	t=1741601796; cv=none; b=EiwEthtbFpTKfWQG184G5gS5tIzp3ASWevV3Wmu25MIA2eBemMTNZGzZths/a3R+AR4H09awH8x+ePE6o616WhBgaP2Vi0b807qEt649/R+o9NX4Qbte5b8N3EHUibIQ9T9kb+4/1+KoD21gGnnKRafUUDtZg4FsdRhwRZ5OhnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741579218; c=relaxed/simple;
-	bh=CROjvy/MKdJ5/RFwYmWjeYXRcyQwv00nYgwEaSCxdpg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MADYnCE1ZegzOuQ3nU3odqBVOGvTuWGRltL5Cf1GpeRDagMnUGCWNbB/coX2MZPOz29FV0sj4s5VLkRby2z9kH0r1eWK2UQgil5pM0bybVzbvWwuF0H7oGnvsapQ8xmxEVaAvXLythurWukTyudTXEkv6VjHAsPewSGPQh2O5b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=u76rC6KT; arc=none smtp.client-ip=47.90.199.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1741579199; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=uqEuDYBQyu1rVnaZ3FTs3Lz5M58Kfacepcx3ohjxnR0=;
-	b=u76rC6KTa1rpdODYJkH43Wh2UFTvlbMYJneWhhFH8ZfK97tZuVxB+S3xPDU1CO2jS7OZ0fDN/Hwbs/NFmGfJNU2K+KZLZkZPBDAlmhI4Tnpqa0K4lt+7wPyZXxTX4zv3wtCww8KzP2aT/ZnVaMu1biNVgN8nL1nRAxP3S86TYgo=
-Received: from 30.246.161.128(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WQym12P_1741579196 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 10 Mar 2025 11:59:57 +0800
-Message-ID: <deb6f0c4-77b8-431e-9b81-555a8344c750@linux.alibaba.com>
-Date: Mon, 10 Mar 2025 11:59:55 +0800
+	s=arc-20240116; t=1741601796; c=relaxed/simple;
+	bh=Pp92InC5gFyJ7GuSjZ4HIOHep6belOTPM6GU5HEuFBo=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=mL+vAg61vLNaslRznTnwYPGrroubOfTrell/Wq0vvQGxaRrqo52xn7cy5iJrh4vlyxTYI8r3uotolraM9vQZJyFGE1+4od47hyC+5nW015EkpAoMxrcMRmfcBCfzkF6yfqVrU0E+5klQkJp8HhimPFepcM+mXJyjF5cKe8d0qC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZBCQR60Gpz6M4mh;
+	Mon, 10 Mar 2025 18:13:19 +0800 (CST)
+Received: from frapeml500006.china.huawei.com (unknown [7.182.85.219])
+	by mail.maildlp.com (Postfix) with ESMTPS id EF6C8140B55;
+	Mon, 10 Mar 2025 18:16:24 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml500006.china.huawei.com (7.182.85.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 10 Mar 2025 11:16:24 +0100
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Mon, 10 Mar 2025 11:16:24 +0100
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Daniel Ferguson <danielf@os.amperecomputing.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+CC: "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "bp@alien8.de"
+	<bp@alien8.de>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "dan.j.williams@intel.com"
+	<dan.j.williams@intel.com>, "dave@stgolabs.net" <dave@stgolabs.net>,
+	"Jonathan Cameron" <jonathan.cameron@huawei.com>, "dave.jiang@intel.com"
+	<dave.jiang@intel.com>, "alison.schofield@intel.com"
+	<alison.schofield@intel.com>, "vishal.l.verma@intel.com"
+	<vishal.l.verma@intel.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"david@redhat.com" <david@redhat.com>, "Vilas.Sridharan@amd.com"
+	<Vilas.Sridharan@amd.com>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v20 00/15] EDAC: Scrub: introduce generic EDAC RAS control
+ feature driver + CXL/ACPI-RAS2 drivers
+Thread-Topic: [PATCH v20 00/15] EDAC: Scrub: introduce generic EDAC RAS
+ control feature driver + CXL/ACPI-RAS2 drivers
+Thread-Index: AQHbfVuaekLsP7SN9UOZsd1dS/TdhbNmfMuAgAXLMYA=
+Date: Mon, 10 Mar 2025 10:16:24 +0000
+Message-ID: <b954cf71abee477193b5a877d7f93542@huawei.com>
+References: <20250212143654.1893-1-shiju.jose@huawei.com>
+ <6d8e89d4-e0b8-4e89-8a18-6f9d4f2989ee@os.amperecomputing.com>
+In-Reply-To: <6d8e89d4-e0b8-4e89-8a18-6f9d4f2989ee@os.amperecomputing.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: lukas@wunner.de, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- helgaas@kernel.org, bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
- mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
- naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
- mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
-References: <20250109025543.56830-1-xueshuai@linux.alibaba.com>
- <20250113155503.71467082@gandalf.local.home>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20250113155503.71467082@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-
-
-在 2025/1/14 04:55, Steven Rostedt 写道:
-> On Thu,  9 Jan 2025 10:55:43 +0800
-> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
-> 
->> diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
->> new file mode 100644
->> index 000000000000..5b60cd7bcffb
->> --- /dev/null
->> +++ b/drivers/pci/hotplug/trace.h
->> @@ -0,0 +1,68 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
->> +#define _TRACE_HW_EVENT_PCI_HP_H
->> +
->> +#include <linux/tracepoint.h>
->> +
->> +#undef TRACE_SYSTEM
->> +#define TRACE_SYSTEM pci
->> +
->> +#define PCI_HOTPLUG_EVENT					\
->> +	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
->> +	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
->> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
->> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
-> 
-> Since you are creating these enums in this patch, you can also do a
-> shortcut here too. Instead of doing the define here, move it to
-> include/uapi/linux/pci.h:
-> 
->> +
->> +/* Enums require being exported to userspace, for user tool parsing */
->> +#undef EM
->> +#undef EMe
->> +#define EM(a, b)	TRACE_DEFINE_ENUM(a);
->> +#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
->> +
->> +PCI_HOTPLUG_EVENT
->> +
->> +/*
->> + * Now redefine the EM() and EMe() macros to map the enums to the strings
->> + * that will be printed in the output.
->> + */
->> +#undef EM
->> +#undef EMe
->> +#define EM(a, b)	{a, b},
->> +#define EMe(a, b)	{a, b}
->> +
->> +TRACE_EVENT(pci_hp_event,
->> +
->> +	TP_PROTO(const char *port_name,
->> +		 const char *slot,
->> +		 const int event),
->> +
->> +	TP_ARGS(port_name, slot, event),
->> +
->> +	TP_STRUCT__entry(
->> +		__string(	port_name,	port_name	)
->> +		__string(	slot,		slot		)
->> +		__field(	int,		event	)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__assign_str(port_name);
->> +		__assign_str(slot);
->> +		__entry->event = event;
->> +	),
->> +
->> +	TP_printk("%s slot:%s, event:%s\n",
->> +		__get_str(port_name),
->> +		__get_str(slot),
->> +		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
->> +	)
->> +);
->> +
->> +#endif /* _TRACE_HW_EVENT_PCI_HP_H */
->> +
->> +#undef TRACE_INCLUDE_PATH
->> +#define TRACE_INCLUDE_PATH  ../../drivers/pci/hotplug
->> +#undef TRACE_INCLUDE_FILE
->> +#define TRACE_INCLUDE_FILE trace
->> +
->> +/* This part must be outside protection */
->> +#include <trace/define_trace.h>
->> diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
->> index a769eefc5139..4f150028965d 100644
->> --- a/include/uapi/linux/pci.h
->> +++ b/include/uapi/linux/pci.h
->> @@ -39,4 +39,11 @@
->>   #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
->>   #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
->>   
->> +enum pci_hotplug_event {
->> +	PCI_HOTPLUG_LINK_UP,
->> +	PCI_HOTPLUG_LINK_DOWN,
->> +	PCI_HOTPLUG_CARD_PRESENT,
->> +	PCI_HOTPLUG_CARD_NOT_PRESENT,
->> +};
-> 
-> Instead of defining the enum as you did above, if you have the define of
-> the enums here, you could do:
-> 
-> #define PCI_HOTPLUG_EVENT					\
-> 	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
-> 	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
-> 	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
-> 	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
-> 
-> #undef EM
-> #undef EMe
-> #define EM(a, b)	a,
-> #define EMe(a, b)	a,
-> 
-> enum pci_hotplug_event {
-> 	PCI_HOTPLUG_EVENT
-> };
-> 
-> Then you only have one place to worry about adding new enums ;-)
-
-Hi, Steve,
-
-If I move PCI_HOTPLUG_EVENT into one place, `include/upai/linux/pci.h`,
-I need to include:
-
-     #include <linux/tracepoint.h>
-
-Then, kernel build fails with CONFIG_UAPI_HEADER_TEST=y:
-
-$ make -j128
-   DESCEND objtool
-   CALL    scripts/checksyscalls.sh
-   INSTALL libsubcmd_headers
-   HDRTEST usr/include/linux/pci.h
-In file included from <command-line>:32:
-./usr/include/linux/pci.h:22:10: fatal error: linux/tracepoint.h: No such file or directory
-    22 | #include <linux/tracepoint.h>
-       |          ^~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[4]: *** [usr/include/Makefile:85: usr/include/linux/pci.hdrtest] Error 1
-make[3]: *** [scripts/Makefile.build:465: usr/include] Error 2
-make[2]: *** [scripts/Makefile.build:465: usr] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/media/nvme/shawn.xs/kernels/linux/Makefile:1994: .] Error 2
-make: *** [Makefile:251: __sub-make] Error 2
-
-Do you have any objections that I reverted to this version v5?
-
-Thanks.
-Shuai
+Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogRGFuaWVsIEZlcmd1c29uIDxkYW5p
+ZWxmQG9zLmFtcGVyZWNvbXB1dGluZy5jb20+DQo+U2VudDogMDYgTWFyY2ggMjAyNSAxODoxOA0K
+PlRvOiBTaGlqdSBKb3NlIDxzaGlqdS5qb3NlQGh1YXdlaS5jb20+OyBsaW51eC1lZGFjQHZnZXIu
+a2VybmVsLm9yZzsgbGludXgtDQo+Y3hsQHZnZXIua2VybmVsLm9yZzsgbGludXgtYWNwaUB2Z2Vy
+Lmtlcm5lbC5vcmc7IGxpbnV4LW1tQGt2YWNrLm9yZzsgbGludXgtDQo+a2VybmVsQHZnZXIua2Vy
+bmVsLm9yZw0KPkNjOiBsaW51eC1kb2NAdmdlci5rZXJuZWwub3JnOyBicEBhbGllbjguZGU7IHRv
+bnkubHVja0BpbnRlbC5jb207DQo+cmFmYWVsQGtlcm5lbC5vcmc7IGxlbmJAa2VybmVsLm9yZzsg
+bWNoZWhhYkBrZXJuZWwub3JnOw0KPmRhbi5qLndpbGxpYW1zQGludGVsLmNvbTsgZGF2ZUBzdGdv
+bGFicy5uZXQ7IEpvbmF0aGFuIENhbWVyb24NCj48am9uYXRoYW4uY2FtZXJvbkBodWF3ZWkuY29t
+PjsgZGF2ZS5qaWFuZ0BpbnRlbC5jb207DQo+YWxpc29uLnNjaG9maWVsZEBpbnRlbC5jb207IHZp
+c2hhbC5sLnZlcm1hQGludGVsLmNvbTsgaXJhLndlaW55QGludGVsLmNvbTsNCj5kYXZpZEByZWRo
+YXQuY29tOyBWaWxhcy5TcmlkaGFyYW5AYW1kLmNvbTsgbGVvLmR1cmFuQGFtZC5jb207DQo+WWF6
+ZW4uR2hhbm5hbUBhbWQuY29tOyByaWVudGplc0Bnb29nbGUuY29tOyBqaWFxaXlhbkBnb29nbGUu
+Y29tOw0KPkpvbi5HcmltbUBhbWQuY29tOyBkYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb207DQo+
+bmFveWEuaG9yaWd1Y2hpQG5lYy5jb207IGphbWVzLm1vcnNlQGFybS5jb207IGp0aG91Z2h0b25A
+Z29vZ2xlLmNvbTsNCj5zb21hc3VuZGFyYW0uYUBocGUuY29tOyBlcmRlbWFrdGFzQGdvb2dsZS5j
+b207IHBnb25kYUBnb29nbGUuY29tOw0KPmR1ZW53ZW5AZ29vZ2xlLmNvbTsgZ3RoZWxlbkBnb29n
+bGUuY29tOw0KPndzY2h3YXJ0ekBhbXBlcmVjb21wdXRpbmcuY29tOyBkZmVyZ3Vzb25AYW1wZXJl
+Y29tcHV0aW5nLmNvbTsNCj53YnNAb3MuYW1wZXJlY29tcHV0aW5nLmNvbTsgbmlmYW4uY3hsQGdt
+YWlsLmNvbTsgdGFueGlhb2ZlaQ0KPjx0YW54aWFvZmVpQGh1YXdlaS5jb20+OyBaZW5ndGFvIChC
+KSA8cHJpbWUuemVuZ0BoaXNpbGljb24uY29tPjsgUm9iZXJ0bw0KPlNhc3N1IDxyb2JlcnRvLnNh
+c3N1QGh1YXdlaS5jb20+OyBrYW5na2FuZy5zaGVuQGZ1dHVyZXdlaS5jb207DQo+d2FuZ2h1aXFp
+YW5nIDx3YW5naHVpcWlhbmdAaHVhd2VpLmNvbT47IExpbnV4YXJtDQo+PGxpbnV4YXJtQGh1YXdl
+aS5jb20+DQo+U3ViamVjdDogUmU6IFtQQVRDSCB2MjAgMDAvMTVdIEVEQUM6IFNjcnViOiBpbnRy
+b2R1Y2UgZ2VuZXJpYyBFREFDIFJBUw0KPmNvbnRyb2wgZmVhdHVyZSBkcml2ZXIgKyBDWEwvQUNQ
+SS1SQVMyIGRyaXZlcnMNCj4NCj4+ICArLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0rLS0tLS0t
+LS0tLS0rLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0rDQo+PiAgfCAgICAgICAgICAgICAgfCAgICAg
+ICAgICAgfCAgICAgICAgICAgfCAgICAgICAgICAgfCAgICAgICAgICAgfA0KPj4gIHwgU2V0dGlu
+ZyAgICAgIHwgU3VwcG9ydGVkIHwgU3VwcG9ydGVkIHwgTm8gICAgICAgIHwgTm8gICAgICAgIHwN
+Cj4+ICB8IHNjcnViIHJhdGUgICB8ICAgICAgICAgICB8ICAgICAgICAgICB8ICAgICAgICAgICB8
+ICAgICAgICAgICB8DQo+PiAgfCAgICAgICAgICAgICAgfCAgICAgICAgICAgfCAgICAgICAgICAg
+fCAgICAgICAgICAgfCAgICAgICAgICAgfA0KPj4gICstLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0t
+LSstLS0tLS0tLS0tLSstLS0tLS0tLS0tLSstLS0tLS0tLS0tLSsNCj4+ICB8ICAgICAgICAgICAg
+ICB8ICAgICAgICAgICB8ICAgICAgICAgICB8ICAgICAgICAgICB8ICAgICAgICAgICB8DQo+PiAg
+fCBVbml0IGZvciAgICAgfCBOb3QgICAgICAgfCBpbiBob3VycyAgfCBObyAgICAgICAgfCBObyAg
+ICAgICAgfA0KPj4gIHwgc2NydWIgcmF0ZSAgIHwgRGVmaW5lZCAgIHwgICAgICAgICAgIHwgICAg
+ICAgICAgIHwgICAgICAgICAgIHwNCj4+ICB8ICAgICAgICAgICAgICB8ICAgICAgICAgICB8ICAg
+ICAgICAgICB8ICAgICAgICAgICB8ICAgICAgICAgICB8DQo+DQo+SXQgaXMgb3VyIG9waW5pb24g
+dGhhdCB0aGUgVW5pdCBmb3Igc2NydWIgcmF0ZSBzaG91bGQgYmUgdW5pdCBhZ25vc3RpYw0KPihp
+bXBsZW1lbnRhdGlvbiBkZWZpbmVkKSwgYW5kIGRlZmluaXRlbHkgbm90IHNwZWNpZmllZCBpbiBI
+b3Vycy4gV2UgYmVsaWV2ZSB0aGF0DQo+dGhlIHNwaXJpdCBvZiB0aGUgUkFTMiBzY3J1YiByYXRl
+IHdhcyBpbnRlbmRlZCB0byBiZSBpbXBsZW1lbnRhdGlvbiBkZWZpbmVkLg0KPg0KPkl0IHRha2Vz
+IG91ciBoYXJkd2FyZSBsZXNzIHRoYW4gYSBmZXcgc2Vjb25kcyB0byBzY3J1YiBhIHRvbiBvZiBt
+ZW1vcnkuDQpIaSBEYW5pZWwsIA0KDQpUaGUgdGFibGUgaWxsdXN0cmF0ZXMgdGhlIHVuaXQgZm9y
+IHRoZSBzY3J1YiByYXRlIG9mIHRoZSBBQ1BJIFJBUzIgc2NydWIgZmVhdHVyZSBhcyAiTm90IERl
+ZmluZWQiIGFjY29yZGluZyB0byB0aGUgQUNQSSA2LjUgc3BlY2lmaWNhdGlvbiwgYW5kIGZvciB0
+aGUgQ1hMIHNjcnViIGZlYXR1cmUsIGl0IGlzIGRlZmluZWQgYXMgImluIGhvdXJzIiBhY2NvcmRp
+bmcgdG8gdGhlIENYTCBzcGVjIHJldiAzLjIuDQoNCkN1cnJlbnRseSwgdGhlIFJBUzIgZHJpdmVy
+IGNvbnZlcnRzIHRoZSBzY3J1YiByYXRlIHNldCBpbiBzZWNvbmRzIHZpYSB0aGUgRURBQyBzY3J1
+YiBzeXNmcyB0byBob3VycyBhbmQgcGFzc2VzIGl0IHRvIHRoZSBmaXJtd2FyZSBpbiB0aGUgIGZp
+ZWxkOiBDb25maWd1cmUgU2NydWIgUGFyYW1ldGVycyAoSU5QVVQpIC0gQml0cyBbMTU6OF06IFJl
+cXVlc3RlZCBzY3J1YiByYXRlIG9mIFRhYmxlIDUuODc6IFBhcmFtZXRlciBCbG9jayBTdHJ1Y3R1
+cmUgZm9yIFBBVFJPTF9TQ1JVQi4NCg0KRGlkIHlvdSBtZWFuIHRoYXQgdGhlIFJBUzIgZHJpdmVy
+IG5lZWRzIHRvIHBhc3MgdGhlIHNjcnViIHJhdGUgaW4gc2Vjb25kcyB0byB0aGUgZmlybXdhcmU/
+ICB0aGVuIEkgdGhpbmsgdGhlIG1heCBzY3J1YiByYXRlIHN1cHBvcnRlZCBpcyBsaW1pdGVkIHRv
+IDI1NiBzZWNvbmRzPw0KDQpUaGFua3MsDQpTaGlqdQ0K
 
