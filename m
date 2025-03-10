@@ -1,297 +1,217 @@
-Return-Path: <linux-edac+bounces-3333-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3334-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07E21A58A12
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 02:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E2ACA58AFD
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 05:00:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C18E43A73B8
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 01:30:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C85B53A84E8
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 04:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D757F41C7F;
-	Mon, 10 Mar 2025 01:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669B11B395F;
+	Mon, 10 Mar 2025 04:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d73oH79L"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="u76rC6KT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1BE11CBA;
-	Mon, 10 Mar 2025 01:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3184D199FBA;
+	Mon, 10 Mar 2025 04:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741570238; cv=none; b=DOwc8ldJtcIIo2N9dosR9EvW/X6ln4uYV8ArQfrd8FyZjEjZAbbK9JY0FrBA4ugSlUoyuMHeOJpKROzR8YErrESCJ1USkgqF4pzcuqs3OXFRCNvk2sBQOzM8igddY9hKeTgv1/BoP2lSqkjD94RVXgfoaZGGTdNOfSgtO0DyVvg=
+	t=1741579218; cv=none; b=BJ4li8xqogvj1hk9pTOSlTNPrajY1FzjdtfDkIUyzEavaB7EFRCjGSW+GSjpJtXhwh95PL9cdhnIwbYXu7Qu3HJ6T1HWHwp6ALRwVGpO7jDph0dhsixz2sFM+QN5rUuJNty8Xb1Ip/2Xe9FqzZXxUxS3pNwZ7Vf9R90bQy9YSGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741570238; c=relaxed/simple;
-	bh=nY48KGtzim/Et7OdgnAyeUqF4DZ8WmMB2K4F0Yv9nwQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=bFbLH7XqGR7Gv+Mz1QE/FoZdCp19Q3eHCCQi7zCx8Tk1IP3GtBc7Nydqr7haBApdG1HJZLZTVuxKva9CJ6prhvLHF/Mt40Fyezu5qmZse2a7UUNhT+vROZjrQpsC8nq1QHfXT9G1n/f9E+u1sD8/OyQ8D9ZWN+iGOI3NAxVtJO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d73oH79L; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741570237; x=1773106237;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=nY48KGtzim/Et7OdgnAyeUqF4DZ8WmMB2K4F0Yv9nwQ=;
-  b=d73oH79LtJTY4rnMjCwfxFT/ja3C9A65BNPRgej+YrW/ZlmCiQfNhixs
-   kvVZ8M2Y9Z1+kpubFBQ/UGc5MJa1pqWkc0DVL5ShvOiYOsPRxT7aqWKtJ
-   u05zAi8Asl0pT5WDnTVxS1OlieN7EXJZkbOfl5SI6TQIPhxnXrZRHj1Cs
-   0pNhcK4zrZv3j1zfQStppkbOFi/TQQ5c+HAhGkqIsI6t6lDFtqT0qQNy3
-   4d72DlayYYjntqs6FWOvhGhy3c41Iz6CiTsIG+z6+rB1z3rnVNyv2K5UD
-   dSZVGI+ySOm+5Pj83lpef63LuwYqqgVs939Mx1v16Lj9zZ7+PtUh5LOSM
-   w==;
-X-CSE-ConnectionGUID: wjm/NnS8QeWMeFLavpMMCA==
-X-CSE-MsgGUID: WFefyQbDSp2/kKGHFcabSw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="67914686"
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="67914686"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:30:37 -0700
-X-CSE-ConnectionGUID: gfCIPxKZRBiaSXky6ed+9g==
-X-CSE-MsgGUID: aWPHqpWsS5S8WQEaSTRQIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="124925773"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:30:33 -0700
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Jason Baron <jbaron@akamai.com>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Gary Wang <gary.c.wang@intel.com>,
-	Yi Lai <yi1.lai@intel.com>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/11] EDAC/ie31200: Switch Raptor Lake-S to interrupt mode
-Date: Mon, 10 Mar 2025 09:14:11 +0800
-Message-Id: <20250310011411.31685-12-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250310011411.31685-1-qiuxu.zhuo@intel.com>
-References: <20250226015202.36576-1-qiuxu.zhuo@intel.com>
- <20250310011411.31685-1-qiuxu.zhuo@intel.com>
+	s=arc-20240116; t=1741579218; c=relaxed/simple;
+	bh=CROjvy/MKdJ5/RFwYmWjeYXRcyQwv00nYgwEaSCxdpg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MADYnCE1ZegzOuQ3nU3odqBVOGvTuWGRltL5Cf1GpeRDagMnUGCWNbB/coX2MZPOz29FV0sj4s5VLkRby2z9kH0r1eWK2UQgil5pM0bybVzbvWwuF0H7oGnvsapQ8xmxEVaAvXLythurWukTyudTXEkv6VjHAsPewSGPQh2O5b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=u76rC6KT; arc=none smtp.client-ip=47.90.199.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1741579199; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=uqEuDYBQyu1rVnaZ3FTs3Lz5M58Kfacepcx3ohjxnR0=;
+	b=u76rC6KTa1rpdODYJkH43Wh2UFTvlbMYJneWhhFH8ZfK97tZuVxB+S3xPDU1CO2jS7OZ0fDN/Hwbs/NFmGfJNU2K+KZLZkZPBDAlmhI4Tnpqa0K4lt+7wPyZXxTX4zv3wtCww8KzP2aT/ZnVaMu1biNVgN8nL1nRAxP3S86TYgo=
+Received: from 30.246.161.128(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WQym12P_1741579196 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 10 Mar 2025 11:59:57 +0800
+Message-ID: <deb6f0c4-77b8-431e-9b81-555a8344c750@linux.alibaba.com>
+Date: Mon, 10 Mar 2025 11:59:55 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] PCI: hotplug: Add a generic RAS tracepoint for hotplug
+ event
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: lukas@wunner.de, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ helgaas@kernel.org, bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
+ naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+ mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
+References: <20250109025543.56830-1-xueshuai@linux.alibaba.com>
+ <20250113155503.71467082@gandalf.local.home>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20250113155503.71467082@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Raptor Lake-S SoCs notify correctable memory errors via CMCI (Corrected
-Machine Check Interrupt). Switch Raptor Lake-S EDAC support from polling
-to interrupt mode by registering the callback to the MCE decode notifier
-chain.
 
-Note that as Raptor Lake-S SoCs may not recover from uncorrectable memory
-errors, the system will hang as soon as this type of error occurs, and the
-registered callback on the MCE decode chain will not be executed. This is
-the expected behavior.
 
-Tested-by: Gary Wang <gary.c.wang@intel.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- drivers/edac/Kconfig        |  2 +-
- drivers/edac/ie31200_edac.c | 83 ++++++++++++++++++++++++++++++++++---
- 2 files changed, 78 insertions(+), 7 deletions(-)
+在 2025/1/14 04:55, Steven Rostedt 写道:
+> On Thu,  9 Jan 2025 10:55:43 +0800
+> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+> 
+>> diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
+>> new file mode 100644
+>> index 000000000000..5b60cd7bcffb
+>> --- /dev/null
+>> +++ b/drivers/pci/hotplug/trace.h
+>> @@ -0,0 +1,68 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
+>> +#define _TRACE_HW_EVENT_PCI_HP_H
+>> +
+>> +#include <linux/tracepoint.h>
+>> +
+>> +#undef TRACE_SYSTEM
+>> +#define TRACE_SYSTEM pci
+>> +
+>> +#define PCI_HOTPLUG_EVENT					\
+>> +	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
+>> +	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
+>> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
+>> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
+> 
+> Since you are creating these enums in this patch, you can also do a
+> shortcut here too. Instead of doing the define here, move it to
+> include/uapi/linux/pci.h:
+> 
+>> +
+>> +/* Enums require being exported to userspace, for user tool parsing */
+>> +#undef EM
+>> +#undef EMe
+>> +#define EM(a, b)	TRACE_DEFINE_ENUM(a);
+>> +#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
+>> +
+>> +PCI_HOTPLUG_EVENT
+>> +
+>> +/*
+>> + * Now redefine the EM() and EMe() macros to map the enums to the strings
+>> + * that will be printed in the output.
+>> + */
+>> +#undef EM
+>> +#undef EMe
+>> +#define EM(a, b)	{a, b},
+>> +#define EMe(a, b)	{a, b}
+>> +
+>> +TRACE_EVENT(pci_hp_event,
+>> +
+>> +	TP_PROTO(const char *port_name,
+>> +		 const char *slot,
+>> +		 const int event),
+>> +
+>> +	TP_ARGS(port_name, slot, event),
+>> +
+>> +	TP_STRUCT__entry(
+>> +		__string(	port_name,	port_name	)
+>> +		__string(	slot,		slot		)
+>> +		__field(	int,		event	)
+>> +	),
+>> +
+>> +	TP_fast_assign(
+>> +		__assign_str(port_name);
+>> +		__assign_str(slot);
+>> +		__entry->event = event;
+>> +	),
+>> +
+>> +	TP_printk("%s slot:%s, event:%s\n",
+>> +		__get_str(port_name),
+>> +		__get_str(slot),
+>> +		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
+>> +	)
+>> +);
+>> +
+>> +#endif /* _TRACE_HW_EVENT_PCI_HP_H */
+>> +
+>> +#undef TRACE_INCLUDE_PATH
+>> +#define TRACE_INCLUDE_PATH  ../../drivers/pci/hotplug
+>> +#undef TRACE_INCLUDE_FILE
+>> +#define TRACE_INCLUDE_FILE trace
+>> +
+>> +/* This part must be outside protection */
+>> +#include <trace/define_trace.h>
+>> diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
+>> index a769eefc5139..4f150028965d 100644
+>> --- a/include/uapi/linux/pci.h
+>> +++ b/include/uapi/linux/pci.h
+>> @@ -39,4 +39,11 @@
+>>   #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
+>>   #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
+>>   
+>> +enum pci_hotplug_event {
+>> +	PCI_HOTPLUG_LINK_UP,
+>> +	PCI_HOTPLUG_LINK_DOWN,
+>> +	PCI_HOTPLUG_CARD_PRESENT,
+>> +	PCI_HOTPLUG_CARD_NOT_PRESENT,
+>> +};
+> 
+> Instead of defining the enum as you did above, if you have the define of
+> the enums here, you could do:
+> 
+> #define PCI_HOTPLUG_EVENT					\
+> 	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
+> 	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
+> 	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
+> 	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
+> 
+> #undef EM
+> #undef EMe
+> #define EM(a, b)	a,
+> #define EMe(a, b)	a,
+> 
+> enum pci_hotplug_event {
+> 	PCI_HOTPLUG_EVENT
+> };
+> 
+> Then you only have one place to worry about adding new enums ;-)
 
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 703522d5d6c3..19ad3c3b675d 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -196,7 +196,7 @@ config EDAC_I3200
- 
- config EDAC_IE31200
- 	tristate "Intel e312xx"
--	depends on PCI && X86
-+	depends on PCI && X86 && X86_MCE_INTEL
- 	help
- 	  Support for error detection and correction on the Intel
- 	  E3-1200 based DRAM controllers.
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 8c0a2beec537..204834149579 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -51,6 +51,7 @@
- #include <linux/edac.h>
- 
- #include <linux/io-64-nonatomic-lo-hi.h>
-+#include <asm/mce.h>
- #include "edac_module.h"
- 
- #define EDAC_MOD_STR "ie31200_edac"
-@@ -123,6 +124,7 @@ static int ie31200_registered = 1;
- 
- struct res_config {
- 	enum mem_type mtype;
-+	bool cmci;
- 	int imc_num;
- 	/* Host MMIO configuration register */
- 	u64 reg_mchbar_mask;
-@@ -172,6 +174,7 @@ struct ie31200_error_info {
- 	u16 errsts;
- 	u16 errsts2;
- 	u64 eccerrlog[IE31200_CHANNELS];
-+	u64 erraddr;
- };
- 
- static const struct ie31200_dev_info ie31200_devs[] = {
-@@ -327,13 +330,13 @@ static void ie31200_process_error_info(struct mem_ctl_info *mci,
- 		log = info->eccerrlog[channel];
- 		if (log & cfg->reg_eccerrlog_ue_mask) {
- 			edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1,
--					     0, 0, 0,
-+					     info->erraddr >> PAGE_SHIFT, 0, 0,
- 					     field_get(cfg->reg_eccerrlog_rank_mask, log),
- 					     channel, -1,
- 					     "ie31200 UE", "");
- 		} else if (log & cfg->reg_eccerrlog_ce_mask) {
- 			edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, 1,
--					     0, 0,
-+					     info->erraddr >> PAGE_SHIFT, 0,
- 					     field_get(cfg->reg_eccerrlog_syndrome_mask, log),
- 					     field_get(cfg->reg_eccerrlog_rank_mask, log),
- 					     channel, -1,
-@@ -342,14 +345,20 @@ static void ie31200_process_error_info(struct mem_ctl_info *mci,
- 	}
- }
- 
--static void ie31200_check(struct mem_ctl_info *mci)
-+static void __ie31200_check(struct mem_ctl_info *mci, struct mce *mce)
- {
- 	struct ie31200_error_info info;
- 
-+	info.erraddr = mce ? mce->addr : 0;
- 	ie31200_get_and_clear_error_info(mci, &info);
- 	ie31200_process_error_info(mci, &info);
- }
- 
-+static void ie31200_check(struct mem_ctl_info *mci)
-+{
-+	__ie31200_check(mci, NULL);
-+}
-+
- static void __iomem *ie31200_map_mchbar(struct pci_dev *pdev, struct res_config *cfg, int mc)
- {
- 	union {
-@@ -459,7 +468,7 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, in
- 	mci->mod_name = EDAC_MOD_STR;
- 	mci->ctl_name = ie31200_devs[mc].ctl_name;
- 	mci->dev_name = pci_name(pdev);
--	mci->edac_check = ie31200_check;
-+	mci->edac_check = cfg->cmci ? NULL : ie31200_check;
- 	mci->ctl_page_to_phys = NULL;
- 	priv = mci->pvt_info;
- 	priv->window = window;
-@@ -499,6 +508,58 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, in
- 	return ret;
- }
- 
-+static void mce_check(struct mce *mce)
-+{
-+	struct ie31200_priv *priv;
-+	int i;
-+
-+	for (i = 0; i < IE31200_IMC_NUM; i++) {
-+		priv = ie31200_pvt.priv[i];
-+		if (!priv)
-+			continue;
-+
-+		__ie31200_check(priv->mci, mce);
-+	}
-+}
-+
-+static int mce_handler(struct notifier_block *nb, unsigned long val, void *data)
-+{
-+	struct mce *mce = (struct mce *)data;
-+	char *type;
-+
-+	if (mce->kflags & MCE_HANDLED_CEC)
-+		return NOTIFY_DONE;
-+
-+	/*
-+	 * Ignore unless this is a memory related error.
-+	 * Don't check MCI_STATUS_ADDRV since it's not set on some CPUs.
-+	 */
-+	if ((mce->status & 0xefff) >> 7 != 1)
-+		return NOTIFY_DONE;
-+
-+	type = mce->mcgstatus & MCG_STATUS_MCIP ?  "Exception" : "Event";
-+
-+	edac_dbg(0, "CPU %d: Machine Check %s: 0x%llx Bank %d: 0x%llx\n",
-+		 mce->extcpu, type, mce->mcgstatus,
-+		 mce->bank, mce->status);
-+	edac_dbg(0, "TSC 0x%llx\n", mce->tsc);
-+	edac_dbg(0, "ADDR 0x%llx\n", mce->addr);
-+	edac_dbg(0, "MISC 0x%llx\n", mce->misc);
-+	edac_dbg(0, "PROCESSOR %u:0x%x TIME %llu SOCKET %u APIC 0x%x\n",
-+		 mce->cpuvendor, mce->cpuid, mce->time,
-+		 mce->socketid, mce->apicid);
-+
-+	mce_check(mce);
-+	mce->kflags |= MCE_HANDLED_EDAC;
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block ie31200_mce_dec = {
-+	.notifier_call	= mce_handler,
-+	.priority	= MCE_PRIO_EDAC,
-+};
-+
- static void ie31200_unregister_mcis(void)
- {
- 	struct ie31200_priv *priv;
-@@ -534,6 +595,13 @@ static int ie31200_probe1(struct pci_dev *pdev, struct res_config *cfg)
- 			goto fail_register;
- 	}
- 
-+	if (cfg->cmci) {
-+		mce_register_decode_chain(&ie31200_mce_dec);
-+		edac_op_state = EDAC_OPSTATE_INT;
-+	} else {
-+		edac_op_state = EDAC_OPSTATE_POLL;
-+	}
-+
- 	/* get this far and it's successful. */
- 	edac_dbg(3, "MC: success\n");
- 	return 0;
-@@ -560,9 +628,13 @@ static int ie31200_init_one(struct pci_dev *pdev,
- 
- static void ie31200_remove_one(struct pci_dev *pdev)
- {
-+	struct ie31200_priv *priv = ie31200_pvt.priv[0];
-+
- 	edac_dbg(0, "\n");
- 	pci_dev_put(mci_pdev);
- 	mci_pdev = NULL;
-+	if (priv->cfg->cmci)
-+		mce_unregister_decode_chain(&ie31200_mce_dec);
- 	ie31200_unregister_mcis();
- }
- 
-@@ -612,6 +684,7 @@ static struct res_config skl_cfg = {
- 
- struct res_config rpl_s_cfg = {
- 	.mtype				= MEM_DDR5,
-+	.cmci				= true,
- 	.imc_num			= 2,
- 	.reg_mchbar_mask		= GENMASK_ULL(41, 17),
- 	.reg_mchbar_window_size		= BIT_ULL(16),
-@@ -677,8 +750,6 @@ static int __init ie31200_init(void)
- 	int pci_rc, i;
- 
- 	edac_dbg(3, "MC:\n");
--	/* Ensure that the OPSTATE is set correctly for POLL or NMI */
--	opstate_init();
- 
- 	pci_rc = pci_register_driver(&ie31200_driver);
- 	if (pci_rc < 0)
--- 
-2.17.1
+Hi, Steve,
 
+If I move PCI_HOTPLUG_EVENT into one place, `include/upai/linux/pci.h`,
+I need to include:
+
+     #include <linux/tracepoint.h>
+
+Then, kernel build fails with CONFIG_UAPI_HEADER_TEST=y:
+
+$ make -j128
+   DESCEND objtool
+   CALL    scripts/checksyscalls.sh
+   INSTALL libsubcmd_headers
+   HDRTEST usr/include/linux/pci.h
+In file included from <command-line>:32:
+./usr/include/linux/pci.h:22:10: fatal error: linux/tracepoint.h: No such file or directory
+    22 | #include <linux/tracepoint.h>
+       |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[4]: *** [usr/include/Makefile:85: usr/include/linux/pci.hdrtest] Error 1
+make[3]: *** [scripts/Makefile.build:465: usr/include] Error 2
+make[2]: *** [scripts/Makefile.build:465: usr] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/media/nvme/shawn.xs/kernels/linux/Makefile:1994: .] Error 2
+make: *** [Makefile:251: __sub-make] Error 2
+
+Do you have any objections that I reverted to this version v5?
+
+Thanks.
+Shuai
 
