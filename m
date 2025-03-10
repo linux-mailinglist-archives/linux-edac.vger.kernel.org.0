@@ -1,62 +1,62 @@
-Return-Path: <linux-edac+bounces-3332-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3333-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC756A58A10
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 02:30:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07E21A58A12
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 02:30:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50E541882B4D
-	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 01:30:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C18E43A73B8
+	for <lists+linux-edac@lfdr.de>; Mon, 10 Mar 2025 01:30:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0DA1EF1D;
-	Mon, 10 Mar 2025 01:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D757F41C7F;
+	Mon, 10 Mar 2025 01:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FB3G1vj7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d73oH79L"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764E114AD29;
-	Mon, 10 Mar 2025 01:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1BE11CBA;
+	Mon, 10 Mar 2025 01:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741570223; cv=none; b=XupvHqiWAHGYdBNIx7xonbiHVhUQF6w9CIvll3SKBdo6jQ/gzulKfrA/2GeZgph5Z8aZig2GGQ4pi6E595BJ8Ew3zptOT0it7rhOO+TlUcXZLyFymQMOwI1rsU3/gZ8GXQTNwWeYbcP/UCre16wJytZBMNrTEyTb3S/cd/wkr3Y=
+	t=1741570238; cv=none; b=DOwc8ldJtcIIo2N9dosR9EvW/X6ln4uYV8ArQfrd8FyZjEjZAbbK9JY0FrBA4ugSlUoyuMHeOJpKROzR8YErrESCJ1USkgqF4pzcuqs3OXFRCNvk2sBQOzM8igddY9hKeTgv1/BoP2lSqkjD94RVXgfoaZGGTdNOfSgtO0DyVvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741570223; c=relaxed/simple;
-	bh=TbquSdQipnifkRTw70Pv3JzVUb0kE1lS9VYG1SF/MEA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=PyfeWojTrMNbHy4BmkhhNnAoAEAcbmeok5tgPwXMmL78TlD+U6+eUUSycmznvuqTvG4WFBxh6xONiuewfB5DBGSBFBSTCyIbLAfUSJvUyYmVo8whPOgPZW1VXyOeyQ8A3nw3ZE/ylY1+FmK1PSnV+FlLcVNxxYI4FGMsv0Cd8F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FB3G1vj7; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1741570238; c=relaxed/simple;
+	bh=nY48KGtzim/Et7OdgnAyeUqF4DZ8WmMB2K4F0Yv9nwQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=bFbLH7XqGR7Gv+Mz1QE/FoZdCp19Q3eHCCQi7zCx8Tk1IP3GtBc7Nydqr7haBApdG1HJZLZTVuxKva9CJ6prhvLHF/Mt40Fyezu5qmZse2a7UUNhT+vROZjrQpsC8nq1QHfXT9G1n/f9E+u1sD8/OyQ8D9ZWN+iGOI3NAxVtJO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d73oH79L; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741570222; x=1773106222;
+  t=1741570237; x=1773106237;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=TbquSdQipnifkRTw70Pv3JzVUb0kE1lS9VYG1SF/MEA=;
-  b=FB3G1vj7VtjoRi4ik3BHgT/sQe9mqcvzXVNK6ZUecH/rouTWBfq9Dr4h
-   Ju8ipWuzk4TpkxXpWDvqeeSiFo8UuVmx5nPmYR9WY9FCiBqr46+EKzgvO
-   ZTivUfKSPwErZl+R7x+mmowFiVBc9kKXTzCTXZipjOBVX5vxMOVMqCovz
-   xHSW9Z73UrqEqGtCrEyYYGkpAU5lt53nIzMNXBgjLHEENtLBS3k2GZ1Mb
-   eb2QaShW6wqpzrMzFqiFojnNH4R9TQAbh09eN9rtCyfM1ZpNcifT20q+u
-   FYc4oDmTvqL9aCR7iypOI48BLzC+FI/WbNVXC26SIAEsaPbFUBhozubhO
+  bh=nY48KGtzim/Et7OdgnAyeUqF4DZ8WmMB2K4F0Yv9nwQ=;
+  b=d73oH79LtJTY4rnMjCwfxFT/ja3C9A65BNPRgej+YrW/ZlmCiQfNhixs
+   kvVZ8M2Y9Z1+kpubFBQ/UGc5MJa1pqWkc0DVL5ShvOiYOsPRxT7aqWKtJ
+   u05zAi8Asl0pT5WDnTVxS1OlieN7EXJZkbOfl5SI6TQIPhxnXrZRHj1Cs
+   0pNhcK4zrZv3j1zfQStppkbOFi/TQQ5c+HAhGkqIsI6t6lDFtqT0qQNy3
+   4d72DlayYYjntqs6FWOvhGhy3c41Iz6CiTsIG+z6+rB1z3rnVNyv2K5UD
+   dSZVGI+ySOm+5Pj83lpef63LuwYqqgVs939Mx1v16Lj9zZ7+PtUh5LOSM
    w==;
-X-CSE-ConnectionGUID: m1a3AV7lQRCm7tTCQt0Jpw==
-X-CSE-MsgGUID: XPOJ8xUHQISPkF8sjunCJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="67914669"
+X-CSE-ConnectionGUID: wjm/NnS8QeWMeFLavpMMCA==
+X-CSE-MsgGUID: WFefyQbDSp2/kKGHFcabSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="67914686"
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="67914669"
+   d="scan'208";a="67914686"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:30:21 -0700
-X-CSE-ConnectionGUID: ZJu1YWs1RRm/JdzExUkXxA==
-X-CSE-MsgGUID: BiA6Cfp/RAC1yZyt01mp1g==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:30:37 -0700
+X-CSE-ConnectionGUID: gfCIPxKZRBiaSXky6ed+9g==
+X-CSE-MsgGUID: aWPHqpWsS5S8WQEaSTRQIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="124925740"
+   d="scan'208";a="124925773"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:30:18 -0700
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:30:33 -0700
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: Tony Luck <tony.luck@intel.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -69,9 +69,9 @@ Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
 	Yi Lai <yi1.lai@intel.com>,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/11] EDAC/ie31200: Add Intel Raptor Lake-S SoCs support
-Date: Mon, 10 Mar 2025 09:14:10 +0800
-Message-Id: <20250310011411.31685-11-qiuxu.zhuo@intel.com>
+Subject: [PATCH v2 11/11] EDAC/ie31200: Switch Raptor Lake-S to interrupt mode
+Date: Mon, 10 Mar 2025 09:14:11 +0800
+Message-Id: <20250310011411.31685-12-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250310011411.31685-1-qiuxu.zhuo@intel.com>
 References: <20250226015202.36576-1-qiuxu.zhuo@intel.com>
@@ -82,288 +82,118 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-The Intel Raptor Lake-S SoC contains two memory controllers with DDR5
-memory type and out-of-band ECC capability. The resource definitions of
-the memory controller are different from previous generations. One notable
-difference is that the PCI ERRSTS register is deprecated and is not used
-to indicate the presence of errors or to clear the MMIO-mapped ECC error
-log regsiters.
+Raptor Lake-S SoCs notify correctable memory errors via CMCI (Corrected
+Machine Check Interrupt). Switch Raptor Lake-S EDAC support from polling
+to interrupt mode by registering the callback to the MCE decode notifier
+chain.
 
-Extend the ie31200_edac driver to support multiple memory controllers,
-add a resource configuration table and use an MSR register to clear the
-ECC error log registers to provide EDAC support for Raptor Lake-S SoCs.
+Note that as Raptor Lake-S SoCs may not recover from uncorrectable memory
+errors, the system will hang as soon as this type of error occurs, and the
+registered callback on the MCE decode chain will not be executed. This is
+the expected behavior.
 
 Tested-by: Gary Wang <gary.c.wang@intel.com>
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 ---
- drivers/edac/ie31200_edac.c | 182 +++++++++++++++++++++++++++++-------
- 1 file changed, 149 insertions(+), 33 deletions(-)
+ drivers/edac/Kconfig        |  2 +-
+ drivers/edac/ie31200_edac.c | 83 ++++++++++++++++++++++++++++++++++---
+ 2 files changed, 78 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 703522d5d6c3..19ad3c3b675d 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -196,7 +196,7 @@ config EDAC_I3200
+ 
+ config EDAC_IE31200
+ 	tristate "Intel e312xx"
+-	depends on PCI && X86
++	depends on PCI && X86 && X86_MCE_INTEL
+ 	help
+ 	  Support for error detection and correction on the Intel
+ 	  E3-1200 based DRAM controllers.
 diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 70be0d00a188..8c0a2beec537 100644
+index 8c0a2beec537..204834149579 100644
 --- a/drivers/edac/ie31200_edac.c
 +++ b/drivers/edac/ie31200_edac.c
-@@ -84,9 +84,15 @@
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_9    0x3ec6
- #define PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_10   0x3eca
+@@ -51,6 +51,7 @@
+ #include <linux/edac.h>
  
--#define IE31200_RANKS_PER_CHANNEL	4
-+/* Raptor Lake-S */
-+#define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_1	0xa703
-+#define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_2	0x4640
-+#define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_3	0x4630
-+
-+#define IE31200_RANKS_PER_CHANNEL	8
- #define IE31200_DIMMS_PER_CHANNEL	2
- #define IE31200_CHANNELS		2
-+#define IE31200_IMC_NUM			2
+ #include <linux/io-64-nonatomic-lo-hi.h>
++#include <asm/mce.h>
+ #include "edac_module.h"
  
- /* Intel IE31200 register addresses - device 0 function 0 - DRAM Controller */
- #define IE31200_MCHBAR_LOW		0x48
-@@ -117,15 +123,20 @@ static int ie31200_registered = 1;
+ #define EDAC_MOD_STR "ie31200_edac"
+@@ -123,6 +124,7 @@ static int ie31200_registered = 1;
  
  struct res_config {
  	enum mem_type mtype;
-+	int imc_num;
++	bool cmci;
+ 	int imc_num;
  	/* Host MMIO configuration register */
  	u64 reg_mchbar_mask;
- 	u64 reg_mchbar_window_size;
- 	/* ECC error log register */
- 	u64 reg_eccerrlog_offset[IE31200_CHANNELS];
- 	u64 reg_eccerrlog_ce_mask;
-+	u64 reg_eccerrlog_ce_ovfl_mask;
- 	u64 reg_eccerrlog_ue_mask;
-+	u64 reg_eccerrlog_ue_ovfl_mask;
- 	u64 reg_eccerrlog_rank_mask;
- 	u64 reg_eccerrlog_syndrome_mask;
-+	/* MSR to clear ECC error log register */
-+	u32 msr_clear_eccerrlog_offset;
- 	/* DIMM characteristics register */
- 	u64 reg_mad_dimm_size_granularity;
- 	u64 reg_mad_dimm_offset[IE31200_CHANNELS];
-@@ -139,10 +150,18 @@ struct ie31200_priv {
- 	void __iomem *c0errlog;
- 	void __iomem *c1errlog;
- 	struct res_config *cfg;
-+	struct mem_ctl_info *mci;
-+	struct pci_dev *pdev;
-+	struct device dev;
+@@ -172,6 +174,7 @@ struct ie31200_error_info {
+ 	u16 errsts;
+ 	u16 errsts2;
+ 	u64 eccerrlog[IE31200_CHANNELS];
++	u64 erraddr;
  };
  
-+static struct ie31200_pvt {
-+	struct ie31200_priv *priv[IE31200_IMC_NUM];
-+} ie31200_pvt;
-+
- enum ie31200_chips {
- 	IE31200 = 0,
-+	IE31200_1 = 1,
- };
- 
- struct ie31200_dev_info {
-@@ -159,6 +178,9 @@ static const struct ie31200_dev_info ie31200_devs[] = {
- 	[IE31200] = {
- 		.ctl_name = "IE31200"
- 	},
-+	[IE31200_1] = {
-+		.ctl_name = "IE31200_1"
-+	},
- };
- 
- struct dimm_data {
-@@ -202,23 +224,54 @@ static bool ecc_capable(struct pci_dev *pdev)
- 	return true;
- }
- 
-+#define mci_to_pci_dev(mci)	(((struct ie31200_priv *)(mci)->pvt_info)->pdev)
-+
- static void ie31200_clear_error_info(struct mem_ctl_info *mci)
- {
-+	struct ie31200_priv *priv = mci->pvt_info;
-+	struct res_config *cfg = priv->cfg;
-+
-+	/*
-+	 * The PCI ERRSTS register is deprecated. Write the MSR to clear
-+	 * the ECC error log registers in all memory controllers.
-+	 */
-+	if (cfg->msr_clear_eccerrlog_offset) {
-+		if (wrmsr_safe(cfg->msr_clear_eccerrlog_offset,
-+			       cfg->reg_eccerrlog_ce_mask |
-+			       cfg->reg_eccerrlog_ce_ovfl_mask |
-+			       cfg->reg_eccerrlog_ue_mask |
-+			       cfg->reg_eccerrlog_ue_ovfl_mask, 0) < 0)
-+			ie31200_printk(KERN_ERR, "Failed to wrmsr.\n");
-+
-+		return;
-+	}
-+
- 	/*
- 	 * Clear any error bits.
- 	 * (Yes, we really clear bits by writing 1 to them.)
- 	 */
--	pci_write_bits16(to_pci_dev(mci->pdev), IE31200_ERRSTS,
-+	pci_write_bits16(mci_to_pci_dev(mci), IE31200_ERRSTS,
- 			 IE31200_ERRSTS_BITS, IE31200_ERRSTS_BITS);
- }
- 
- static void ie31200_get_and_clear_error_info(struct mem_ctl_info *mci,
- 					     struct ie31200_error_info *info)
- {
--	struct pci_dev *pdev;
-+	struct pci_dev *pdev = mci_to_pci_dev(mci);
- 	struct ie31200_priv *priv = mci->pvt_info;
- 
--	pdev = to_pci_dev(mci->pdev);
-+	/*
-+	 * The PCI ERRSTS register is deprecated, directly read the
-+	 * MMIO-mapped ECC error log registers.
-+	 */
-+	if (priv->cfg->msr_clear_eccerrlog_offset) {
-+		info->eccerrlog[0] = lo_hi_readq(priv->c0errlog);
-+		if (nr_channels == 2)
-+			info->eccerrlog[1] = lo_hi_readq(priv->c1errlog);
-+
-+		ie31200_clear_error_info(mci);
-+		return;
-+	}
- 
- 	/*
- 	 * This is a mess because there is no atomic way to read all the
-@@ -259,13 +312,15 @@ static void ie31200_process_error_info(struct mem_ctl_info *mci,
- 	int channel;
- 	u64 log;
- 
--	if (!(info->errsts & IE31200_ERRSTS_BITS))
--		return;
-+	if (!cfg->msr_clear_eccerrlog_offset) {
-+		if (!(info->errsts & IE31200_ERRSTS_BITS))
-+			return;
- 
--	if ((info->errsts ^ info->errsts2) & IE31200_ERRSTS_BITS) {
--		edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1, 0, 0, 0,
--				     -1, -1, -1, "UE overwrote CE", "");
--		info->errsts = info->errsts2;
-+		if ((info->errsts ^ info->errsts2) & IE31200_ERRSTS_BITS) {
-+			edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1, 0, 0, 0,
-+					     -1, -1, -1, "UE overwrote CE", "");
-+			info->errsts = info->errsts2;
-+		}
+ static const struct ie31200_dev_info ie31200_devs[] = {
+@@ -327,13 +330,13 @@ static void ie31200_process_error_info(struct mem_ctl_info *mci,
+ 		log = info->eccerrlog[channel];
+ 		if (log & cfg->reg_eccerrlog_ue_mask) {
+ 			edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1,
+-					     0, 0, 0,
++					     info->erraddr >> PAGE_SHIFT, 0, 0,
+ 					     field_get(cfg->reg_eccerrlog_rank_mask, log),
+ 					     channel, -1,
+ 					     "ie31200 UE", "");
+ 		} else if (log & cfg->reg_eccerrlog_ce_mask) {
+ 			edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, 1,
+-					     0, 0,
++					     info->erraddr >> PAGE_SHIFT, 0,
+ 					     field_get(cfg->reg_eccerrlog_syndrome_mask, log),
+ 					     field_get(cfg->reg_eccerrlog_rank_mask, log),
+ 					     channel, -1,
+@@ -342,14 +345,20 @@ static void ie31200_process_error_info(struct mem_ctl_info *mci,
  	}
+ }
  
- 	for (channel = 0; channel < nr_channels; channel++) {
-@@ -295,7 +350,7 @@ static void ie31200_check(struct mem_ctl_info *mci)
+-static void ie31200_check(struct mem_ctl_info *mci)
++static void __ie31200_check(struct mem_ctl_info *mci, struct mce *mce)
+ {
+ 	struct ie31200_error_info info;
+ 
++	info.erraddr = mce ? mce->addr : 0;
+ 	ie31200_get_and_clear_error_info(mci, &info);
  	ie31200_process_error_info(mci, &info);
  }
  
--static void __iomem *ie31200_map_mchbar(struct pci_dev *pdev, struct res_config *cfg)
-+static void __iomem *ie31200_map_mchbar(struct pci_dev *pdev, struct res_config *cfg, int mc)
++static void ie31200_check(struct mem_ctl_info *mci)
++{
++	__ie31200_check(mci, NULL);
++}
++
+ static void __iomem *ie31200_map_mchbar(struct pci_dev *pdev, struct res_config *cfg, int mc)
  {
  	union {
- 		u64 mchbar;
-@@ -309,6 +364,7 @@ static void __iomem *ie31200_map_mchbar(struct pci_dev *pdev, struct res_config
- 	pci_read_config_dword(pdev, IE31200_MCHBAR_LOW, &u.mchbar_low);
- 	pci_read_config_dword(pdev, IE31200_MCHBAR_HIGH, &u.mchbar_high);
- 	u.mchbar &= cfg->reg_mchbar_mask;
-+	u.mchbar += cfg->reg_mchbar_window_size * mc;
- 
- 	if (u.mchbar != (resource_size_t)u.mchbar) {
- 		ie31200_printk(KERN_ERR, "mmio space beyond accessible range (0x%llx)\n",
-@@ -333,7 +389,7 @@ static void populate_dimm_info(struct dimm_data *dd, u32 addr_decode, int dimm,
- }
- 
- static void ie31200_get_dimm_config(struct mem_ctl_info *mci, void __iomem *window,
--				    struct res_config *cfg)
-+				    struct res_config *cfg, int mc)
- {
- 	struct dimm_data dimm_info;
- 	struct dimm_info *dimm;
-@@ -347,8 +403,8 @@ static void ie31200_get_dimm_config(struct mem_ctl_info *mci, void __iomem *wind
- 
- 		for (j = 0; j < IE31200_DIMMS_PER_CHANNEL; j++) {
- 			populate_dimm_info(&dimm_info, addr_decode, j, cfg);
--			edac_dbg(0, "channel: %d, dimm: %d, size: %lld MiB, ranks: %d, DRAM chip type: %d\n",
--				 i, j, dimm_info.size >> 20,
-+			edac_dbg(0, "mc: %d, channel: %d, dimm: %d, size: %lld MiB, ranks: %d, DRAM chip type: %d\n",
-+				 mc, i, j, dimm_info.size >> 20,
- 				 dimm_info.ranks,
- 				 dimm_info.dtype);
- 
-@@ -370,7 +426,7 @@ static void ie31200_get_dimm_config(struct mem_ctl_info *mci, void __iomem *wind
- 	}
- }
- 
--static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg)
-+static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, int mc)
- {
- 	struct edac_mc_layer layers[2];
- 	struct ie31200_priv *priv;
-@@ -385,24 +441,23 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg)
- 	layers[1].type = EDAC_MC_LAYER_CHANNEL;
- 	layers[1].size = nr_channels;
- 	layers[1].is_virt_csrow = false;
--	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers,
-+	mci = edac_mc_alloc(mc, ARRAY_SIZE(layers), layers,
- 			    sizeof(struct ie31200_priv));
- 	if (!mci)
- 		return -ENOMEM;
- 
--	window = ie31200_map_mchbar(pdev, cfg);
-+	window = ie31200_map_mchbar(pdev, cfg, mc);
- 	if (!window) {
- 		ret = -ENODEV;
- 		goto fail_free;
- 	}
- 
- 	edac_dbg(3, "MC: init mci\n");
--	mci->pdev = &pdev->dev;
- 	mci->mtype_cap = BIT(cfg->mtype);
- 	mci->edac_ctl_cap = EDAC_FLAG_SECDED;
- 	mci->edac_cap = EDAC_FLAG_SECDED;
+@@ -459,7 +468,7 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, in
  	mci->mod_name = EDAC_MOD_STR;
--	mci->ctl_name = ie31200_devs[0].ctl_name;
-+	mci->ctl_name = ie31200_devs[mc].ctl_name;
+ 	mci->ctl_name = ie31200_devs[mc].ctl_name;
  	mci->dev_name = pci_name(pdev);
- 	mci->edac_check = ie31200_check;
+-	mci->edac_check = ie31200_check;
++	mci->edac_check = cfg->cmci ? NULL : ie31200_check;
  	mci->ctl_page_to_phys = NULL;
-@@ -411,8 +466,22 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg)
- 	priv->c0errlog = window + cfg->reg_eccerrlog_offset[0];
- 	priv->c1errlog = window + cfg->reg_eccerrlog_offset[1];
- 	priv->cfg = cfg;
-+	priv->mci = mci;
-+	priv->pdev = pdev;
-+	device_initialize(&priv->dev);
-+	/*
-+	 * The EDAC core uses mci->pdev (pointer to the structure device)
-+	 * as the memory controller ID. The SoCs attach one or more memory
-+	 * controllers to a single pci_dev (a single pci_dev->dev can
-+	 * correspond to multiple memory controllers).
-+	 *
-+	 * To make mci->pdev unique, assign pci_dev->dev to mci->pdev
-+	 * for the first memory controller and assign a unique priv->dev
-+	 * to mci->pdev for each additional memory controller.
-+	 */
-+	mci->pdev = mc ? &priv->dev : &pdev->dev;
- 
--	ie31200_get_dimm_config(mci, window, cfg);
-+	ie31200_get_dimm_config(mci, window, cfg, mc);
- 	ie31200_clear_error_info(mci);
- 
- 	if (edac_mc_add_mc(mci)) {
-@@ -421,6 +490,7 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg)
- 		goto fail_unmap;
- 	}
- 
-+	ie31200_pvt.priv[mc] = priv;
- 	return 0;
- fail_unmap:
- 	iounmap(window);
-@@ -429,9 +499,27 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg)
+ 	priv = mci->pvt_info;
+ 	priv->window = window;
+@@ -499,6 +508,58 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, in
  	return ret;
  }
  
-+static void ie31200_unregister_mcis(void)
++static void mce_check(struct mce *mce)
 +{
 +	struct ie31200_priv *priv;
-+	struct mem_ctl_info *mci;
 +	int i;
 +
 +	for (i = 0; i < IE31200_IMC_NUM; i++) {
@@ -371,118 +201,96 @@ index 70be0d00a188..8c0a2beec537 100644
 +		if (!priv)
 +			continue;
 +
-+		mci = priv->mci;
-+		edac_mc_del_mc(mci->pdev);
-+		iounmap(priv->window);
-+		edac_mc_free(mci);
++		__ie31200_check(priv->mci, mce);
 +	}
 +}
 +
- static int ie31200_probe1(struct pci_dev *pdev, struct res_config *cfg)
++static int mce_handler(struct notifier_block *nb, unsigned long val, void *data)
++{
++	struct mce *mce = (struct mce *)data;
++	char *type;
++
++	if (mce->kflags & MCE_HANDLED_CEC)
++		return NOTIFY_DONE;
++
++	/*
++	 * Ignore unless this is a memory related error.
++	 * Don't check MCI_STATUS_ADDRV since it's not set on some CPUs.
++	 */
++	if ((mce->status & 0xefff) >> 7 != 1)
++		return NOTIFY_DONE;
++
++	type = mce->mcgstatus & MCG_STATUS_MCIP ?  "Exception" : "Event";
++
++	edac_dbg(0, "CPU %d: Machine Check %s: 0x%llx Bank %d: 0x%llx\n",
++		 mce->extcpu, type, mce->mcgstatus,
++		 mce->bank, mce->status);
++	edac_dbg(0, "TSC 0x%llx\n", mce->tsc);
++	edac_dbg(0, "ADDR 0x%llx\n", mce->addr);
++	edac_dbg(0, "MISC 0x%llx\n", mce->misc);
++	edac_dbg(0, "PROCESSOR %u:0x%x TIME %llu SOCKET %u APIC 0x%x\n",
++		 mce->cpuvendor, mce->cpuid, mce->time,
++		 mce->socketid, mce->apicid);
++
++	mce_check(mce);
++	mce->kflags |= MCE_HANDLED_EDAC;
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block ie31200_mce_dec = {
++	.notifier_call	= mce_handler,
++	.priority	= MCE_PRIO_EDAC,
++};
++
+ static void ie31200_unregister_mcis(void)
  {
--	int ret;
-+	int i, ret;
- 
- 	edac_dbg(0, "MC:\n");
- 
-@@ -440,13 +528,19 @@ static int ie31200_probe1(struct pci_dev *pdev, struct res_config *cfg)
- 		return -ENODEV;
+ 	struct ie31200_priv *priv;
+@@ -534,6 +595,13 @@ static int ie31200_probe1(struct pci_dev *pdev, struct res_config *cfg)
+ 			goto fail_register;
  	}
  
--	ret = ie31200_register_mci(pdev, cfg);
--	if (ret)
--		return ret;
-+	for (i = 0; i < cfg->imc_num; i++) {
-+		ret = ie31200_register_mci(pdev, cfg, i);
-+		if (ret)
-+			goto fail_register;
++	if (cfg->cmci) {
++		mce_register_decode_chain(&ie31200_mce_dec);
++		edac_op_state = EDAC_OPSTATE_INT;
++	} else {
++		edac_op_state = EDAC_OPSTATE_POLL;
 +	}
- 
++
  	/* get this far and it's successful. */
  	edac_dbg(3, "MC: success\n");
  	return 0;
-+
-+fail_register:
-+	ie31200_unregister_mcis();
-+	return ret;
- }
- 
- static int ie31200_init_one(struct pci_dev *pdev,
-@@ -466,22 +560,15 @@ static int ie31200_init_one(struct pci_dev *pdev,
+@@ -560,9 +628,13 @@ static int ie31200_init_one(struct pci_dev *pdev,
  
  static void ie31200_remove_one(struct pci_dev *pdev)
  {
--	struct mem_ctl_info *mci;
--	struct ie31200_priv *priv;
--
++	struct ie31200_priv *priv = ie31200_pvt.priv[0];
++
  	edac_dbg(0, "\n");
  	pci_dev_put(mci_pdev);
  	mci_pdev = NULL;
--	mci = edac_mc_del_mc(&pdev->dev);
--	if (!mci)
--		return;
--	priv = mci->pvt_info;
--	iounmap(priv->window);
--	edac_mc_free(mci);
-+	ie31200_unregister_mcis();
++	if (priv->cfg->cmci)
++		mce_unregister_decode_chain(&ie31200_mce_dec);
+ 	ie31200_unregister_mcis();
  }
  
- static struct res_config snb_cfg = {
- 	.mtype				= MEM_DDR3,
-+	.imc_num			= 1,
- 	.reg_mchbar_mask		= GENMASK_ULL(38, 15),
- 	.reg_mchbar_window_size		= BIT_ULL(15),
- 	.reg_eccerrlog_offset[0]	= 0x40c8,
-@@ -503,6 +590,7 @@ static struct res_config snb_cfg = {
+@@ -612,6 +684,7 @@ static struct res_config skl_cfg = {
  
- static struct res_config skl_cfg = {
- 	.mtype				= MEM_DDR4,
-+	.imc_num			= 1,
- 	.reg_mchbar_mask		= GENMASK_ULL(38, 15),
- 	.reg_mchbar_window_size		= BIT_ULL(15),
- 	.reg_eccerrlog_offset[0]	= 0x4048,
-@@ -522,6 +610,31 @@ static struct res_config skl_cfg = {
- 	.reg_mad_dimm_width_mask[1]	= GENMASK(25, 24),
- };
+ struct res_config rpl_s_cfg = {
+ 	.mtype				= MEM_DDR5,
++	.cmci				= true,
+ 	.imc_num			= 2,
+ 	.reg_mchbar_mask		= GENMASK_ULL(41, 17),
+ 	.reg_mchbar_window_size		= BIT_ULL(16),
+@@ -677,8 +750,6 @@ static int __init ie31200_init(void)
+ 	int pci_rc, i;
  
-+struct res_config rpl_s_cfg = {
-+	.mtype				= MEM_DDR5,
-+	.imc_num			= 2,
-+	.reg_mchbar_mask		= GENMASK_ULL(41, 17),
-+	.reg_mchbar_window_size		= BIT_ULL(16),
-+	.reg_eccerrlog_offset[0]	= 0xe048,
-+	.reg_eccerrlog_offset[1]	= 0xe848,
-+	.reg_eccerrlog_ce_mask		= BIT_ULL(0),
-+	.reg_eccerrlog_ce_ovfl_mask	= BIT_ULL(1),
-+	.reg_eccerrlog_ue_mask		= BIT_ULL(2),
-+	.reg_eccerrlog_ue_ovfl_mask	= BIT_ULL(3),
-+	.reg_eccerrlog_rank_mask	= GENMASK_ULL(28, 27),
-+	.reg_eccerrlog_syndrome_mask	= GENMASK_ULL(23, 16),
-+	.msr_clear_eccerrlog_offset	= 0x791,
-+	.reg_mad_dimm_offset[0]		= 0xd80c,
-+	.reg_mad_dimm_offset[1]		= 0xd810,
-+	.reg_mad_dimm_size_granularity	= BIT_ULL(29),
-+	.reg_mad_dimm_size_mask[0]	= GENMASK(6, 0),
-+	.reg_mad_dimm_size_mask[1]	= GENMASK(22, 16),
-+	.reg_mad_dimm_rank_mask[0]	= GENMASK(10, 9),
-+	.reg_mad_dimm_rank_mask[1]	= GENMASK(27, 26),
-+	.reg_mad_dimm_width_mask[0]	= GENMASK(8, 7),
-+	.reg_mad_dimm_width_mask[1]	= GENMASK(25, 24),
-+};
-+
- static const struct pci_device_id ie31200_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_1), (kernel_ulong_t)&snb_cfg },
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_2), (kernel_ulong_t)&snb_cfg },
-@@ -545,6 +658,9 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_8), (kernel_ulong_t)&skl_cfg },
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_9), (kernel_ulong_t)&skl_cfg },
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_HB_CFL_10), (kernel_ulong_t)&skl_cfg },
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_1), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_2), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_3), (kernel_ulong_t)&rpl_s_cfg},
- 	{ 0, } /* 0 terminated list. */
- };
- MODULE_DEVICE_TABLE(pci, ie31200_pci_tbl);
+ 	edac_dbg(3, "MC:\n");
+-	/* Ensure that the OPSTATE is set correctly for POLL or NMI */
+-	opstate_init();
+ 
+ 	pci_rc = pci_register_driver(&ie31200_driver);
+ 	if (pci_rc < 0)
 -- 
 2.17.1
 
