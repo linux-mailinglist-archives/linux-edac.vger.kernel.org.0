@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-3382-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3383-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 392A1A6ACB6
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 19:06:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38FD9A6ACB9
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 19:06:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E7A71897036
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 18:06:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CBCF7B0AF0
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 18:05:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CB3227EBE;
-	Thu, 20 Mar 2025 18:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0812288EA;
+	Thu, 20 Mar 2025 18:05:44 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3956227EA7;
-	Thu, 20 Mar 2025 18:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA132288C0;
+	Thu, 20 Mar 2025 18:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742493941; cv=none; b=VYjT99u2KSqUu7+892xRkq3TPZXKWA3L7Z5exvuHlIUoCI7RKumsNtFRsJ+9O7XVAOwnY8GQ6m69jw7oEgFM/bRg0hhWwZJym30MQTN6B/zbvJ5h3sq2PLHUTmgAcGgKZ/9dDXYJf7mPv9tIrvF+2zkoURLgXs8Fsy2s2spSYiQ=
+	t=1742493943; cv=none; b=DNuPxg2YL0Ye3rdgxz2p2n4FNTeZzuxn5joqteyHZCoYWLu0ZOixuHOUgakd/kMYHAgIbC4YaJIJqPy0zsO5qg1lvMfQ63vEujgoW2LimCNQaBGUlUbR1Zp8gbdsmoBc5t9IA+MtQDSTsptqvsdnTjRZQcpZE/z96k7voTl+xi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742493941; c=relaxed/simple;
-	bh=pZvskOx5Yva5/Kj7rLDynxzs73a9DM7INm8rxrfzf2I=;
+	s=arc-20240116; t=1742493943; c=relaxed/simple;
+	bh=NYYXvZmu7N1U3fFV3semGfYseLiNbjTIuoHUk2V7rng=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gVxwlcHC3xrnlr0EVuOy7h6LMW8rnGobv1Iqopy3WxRwTNa5skdPg3DoEI29BaSEFMzw7/USZC48xNz9mKW5JNJlxcjiAgBzYXIdOcxISClPC8CIZXeJRz8RRimYlzpDbjJCIcTYcbRohQThcMJCSwflr9uy+Aho7HM+Yc1rPbM=
+	 MIME-Version:Content-Type; b=Oo9aZmDNFy2/Dtgx86h0badGNiI0wTuxIiv2GJAKYlPI3XFWKWQwD5RnNnz3S9oXDqe1xli/Z/SbQ/0VB6ylisl7t3CLcBknphe9nQ56dc6frHyzyeCMI+vTC5A/rAzvVcdJ/K6kRPz+IUSt3Q64RbiX7E+5MiC3hQRvVo7+w8Y=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZJYK62kznz6L5BZ;
-	Fri, 21 Mar 2025 02:00:42 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZJYMP0HjHz6K9M7;
+	Fri, 21 Mar 2025 02:02:41 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id DE60414050A;
-	Fri, 21 Mar 2025 02:05:36 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 8C0A91405A0;
+	Fri, 21 Mar 2025 02:05:39 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.156.145) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 20 Mar 2025 19:05:34 +0100
+ 15.1.2507.39; Thu, 20 Mar 2025 19:05:37 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
 	<dave@stgolabs.net>, <jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
@@ -58,9 +58,9 @@ CC: <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v2 3/8] cxl/edac: Add CXL memory device patrol scrub control feature
-Date: Thu, 20 Mar 2025 18:04:40 +0000
-Message-ID: <20250320180450.539-4-shiju.jose@huawei.com>
+Subject: [PATCH v2 4/8] cxl/edac: Add CXL memory device ECS control feature
+Date: Thu, 20 Mar 2025 18:04:41 +0000
+Message-ID: <20250320180450.539-5-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20250320180450.539-1-shiju.jose@huawei.com>
 References: <20250320180450.539-1-shiju.jose@huawei.com>
@@ -77,618 +77,421 @@ X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-CXL spec 3.2 section 8.2.10.9.11.1 describes the device patrol scrub
-control feature. The device patrol scrub proactively locates and makes
-corrections to errors in regular cycle.
+CXL spec 3.2 section 8.2.10.9.11.2 describes the DDR5 ECS (Error Check
+Scrub) control feature.
+The Error Check Scrub (ECS) is a feature defined in JEDEC DDR5 SDRAM
+Specification (JESD79-5) and allows the DRAM to internally read, correct
+single-bit errors, and write back corrected data bits to the DRAM array
+while providing transparency to error counts.
 
-Allow specifying the number of hours within which the patrol scrub must be
-completed, subject to minimum and maximum limits reported by the device.
-Also allow disabling scrub allowing trade-off error rates against
-performance.
+The ECS control allows the requester to change the log entry type, the ECS
+threshold count (provided the request falls within the limits specified in
+DDR5 mode registers), switch between codeword mode and row count mode, and
+reset the ECS counter.
 
-Add support for patrol scrub control on CXL memory devices.
-Register with the EDAC device driver, which retrieves the scrub attribute
-descriptors from EDAC scrub and exposes the sysfs scrub control attributes
-to userspace. For example, scrub control for the CXL memory device
-"cxl_mem0" is exposed in /sys/bus/edac/devices/cxl_mem0/scrubX/.
+Register with EDAC device driver, which retrieves the ECS attribute
+descriptors from the EDAC ECS and exposes the ECS control attributes to
+userspace via sysfs. For example, the ECS control for the memory media FRU0
+in CXL mem0 device is located at /sys/bus/edac/devices/cxl_mem0/ecs_fru0/
 
-Additionally, add support for region-based CXL memory patrol scrub control.
-CXL memory regions may be interleaved across one or more CXL memory
-devices. For example, region-based scrub control for "cxl_region1" is
-exposed in /sys/bus/edac/devices/cxl_region1/scrubX/.
-
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Fan Ni <fan.ni@samsung.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- drivers/cxl/Kconfig       |  25 ++
- drivers/cxl/core/Makefile |   1 +
- drivers/cxl/core/edac.c   | 474 ++++++++++++++++++++++++++++++++++++++
- drivers/cxl/core/region.c |   5 +
- drivers/cxl/cxlmem.h      |  10 +
- drivers/cxl/mem.c         |   4 +
- 6 files changed, 519 insertions(+)
- create mode 100644 drivers/cxl/core/edac.c
+ drivers/cxl/Kconfig     |   1 +
+ drivers/cxl/core/edac.c | 353 +++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 353 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-index 205547e5543a..b5ede1308425 100644
+index b5ede1308425..1c67bf844993 100644
 --- a/drivers/cxl/Kconfig
 +++ b/drivers/cxl/Kconfig
-@@ -113,6 +113,31 @@ config CXL_FEATURES
- 
- 	  If unsure say 'n'
- 
-+config CXL_EDAC_MEM_FEATURES
-+	bool "CXL: EDAC Memory Features"
-+	depends on EXPERT
-+	depends on CXL_MEM
-+	depends on CXL_FEATURES
-+	depends on EDAC >= CXL_BUS
-+	depends on EDAC_SCRUB
-+	help
-+	  The CXL EDAC memory feature control is optional and allows host
-+	  to control the EDAC memory features configurations of CXL memory
-+	  expander devices.
-+
-+	  When enabled 'cxl_mem' and 'cxl_region' EDAC devices are published
-+	  with memory scrub control attributes as described by
-+	  Documentation/ABI/testing/sysfs-edac-scrub.
-+
-+	  When enabled 'cxl_mem' EDAC devices are published with memory ECS
-+	  and repair control attributes as described by
-+	  Documentation/ABI/testing/sysfs-edac-ecs and
-+	  Documentation/ABI/testing/sysfs-edac-memory-repair respectively.
-+
-+	  Say 'y/m' if you have an expert need to change default settings
-+	  of a memory RAS feature established by the platform/device (eg.
-+	  scrub rates for the patrol scrub feature). otherwise say 'n'.
-+
- config CXL_PORT
- 	default CXL_BUS
- 	tristate
-diff --git a/drivers/cxl/core/Makefile b/drivers/cxl/core/Makefile
-index 139b349b3a52..9b86fb22e5de 100644
---- a/drivers/cxl/core/Makefile
-+++ b/drivers/cxl/core/Makefile
-@@ -19,4 +19,5 @@ cxl_core-y += ras.o
- cxl_core-$(CONFIG_TRACING) += trace.o
- cxl_core-$(CONFIG_CXL_REGION) += region.o
- cxl_core-$(CONFIG_CXL_FEATURES) += features.o
-+cxl_core-$(CONFIG_CXL_EDAC_MEM_FEATURES) += edac.o
- cxl_core-$(CONFIG_CXL_MCE) += mce.o
+@@ -120,6 +120,7 @@ config CXL_EDAC_MEM_FEATURES
+ 	depends on CXL_FEATURES
+ 	depends on EDAC >= CXL_BUS
+ 	depends on EDAC_SCRUB
++	depends on EDAC_ECS
+ 	help
+ 	  The CXL EDAC memory feature control is optional and allows host
+ 	  to control the EDAC memory features configurations of CXL memory
 diff --git a/drivers/cxl/core/edac.c b/drivers/cxl/core/edac.c
-new file mode 100644
-index 000000000000..5ec3535785e1
---- /dev/null
+index 5ec3535785e1..1110685ed41a 100644
+--- a/drivers/cxl/core/edac.c
 +++ b/drivers/cxl/core/edac.c
-@@ -0,0 +1,474 @@
-+// SPDX-License-Identifier: GPL-2.0-only
+@@ -19,7 +19,7 @@
+ #include <cxlmem.h>
+ #include "core.h"
+ 
+-#define CXL_NR_EDAC_DEV_FEATURES 1
++#define CXL_NR_EDAC_DEV_FEATURES 2
+ 
+ static struct rw_semaphore *cxl_acquire(struct rw_semaphore *rwsem)
+ {
+@@ -428,6 +428,350 @@ static int cxl_region_scrub_init(struct cxl_region *cxlr,
+ 	return 0;
+ }
+ 
 +/*
-+ * CXL EDAC memory feature driver.
-+ *
-+ * Copyright (c) 2024-2025 HiSilicon Limited.
-+ *
-+ *  - Supports functions to configure EDAC features of the
-+ *    CXL memory devices.
-+ *  - Registers with the EDAC device subsystem driver to expose
-+ *    the features sysfs attributes to the user for configuring
-+ *    CXL memory RAS feature.
++ * CXL DDR5 ECS control definitions.
 + */
-+
-+#include <linux/cleanup.h>
-+#include <linux/edac.h>
-+#include <linux/limits.h>
-+#include <cxl/features.h>
-+#include <cxl.h>
-+#include <cxlmem.h>
-+#include "core.h"
-+
-+#define CXL_NR_EDAC_DEV_FEATURES 1
-+
-+static struct rw_semaphore *cxl_acquire(struct rw_semaphore *rwsem)
-+{
-+	if (down_read_interruptible(rwsem))
-+		return NULL;
-+
-+	return rwsem;
-+}
-+
-+DEFINE_FREE(cxl_unlock, struct rw_semaphore *, if (_T) up_read(_T))
-+
-+/*
-+ * CXL memory patrol scrub control
-+ */
-+struct cxl_patrol_scrub_context {
-+	u8 instance;
++struct cxl_ecs_context {
++	u16 num_media_frus;
 +	u16 get_feat_size;
 +	u16 set_feat_size;
 +	u8 get_version;
 +	u8 set_version;
 +	u16 effects;
 +	struct cxl_memdev *cxlmd;
-+	struct cxl_region *cxlr;
++};
++
++enum {
++	CXL_ECS_PARAM_LOG_ENTRY_TYPE,
++	CXL_ECS_PARAM_THRESHOLD,
++	CXL_ECS_PARAM_MODE,
++	CXL_ECS_PARAM_RESET_COUNTER,
++};
++
++#define CXL_ECS_LOG_ENTRY_TYPE_MASK GENMASK(1, 0)
++#define CXL_ECS_REALTIME_REPORT_CAP_MASK BIT(0)
++#define CXL_ECS_THRESHOLD_COUNT_MASK GENMASK(2, 0)
++#define CXL_ECS_COUNT_MODE_MASK BIT(3)
++#define CXL_ECS_RESET_COUNTER_MASK BIT(4)
++#define CXL_ECS_RESET_COUNTER 1
++
++enum {
++	ECS_THRESHOLD_256 = 256,
++	ECS_THRESHOLD_1024 = 1024,
++	ECS_THRESHOLD_4096 = 4096,
++};
++
++enum {
++	ECS_THRESHOLD_IDX_256 = 3,
++	ECS_THRESHOLD_IDX_1024 = 4,
++	ECS_THRESHOLD_IDX_4096 = 5,
++};
++
++static const u16 ecs_supp_threshold[] = {
++	[ECS_THRESHOLD_IDX_256] = 256,
++	[ECS_THRESHOLD_IDX_1024] = 1024,
++	[ECS_THRESHOLD_IDX_4096] = 4096,
++};
++
++enum {
++	ECS_LOG_ENTRY_TYPE_DRAM = 0x0,
++	ECS_LOG_ENTRY_TYPE_MEM_MEDIA_FRU = 0x1,
++};
++
++enum cxl_ecs_count_mode {
++	ECS_MODE_COUNTS_ROWS = 0,
++	ECS_MODE_COUNTS_CODEWORDS = 1,
 +};
 +
 +/**
-+ * struct cxl_memdev_ps_params - CXL memory patrol scrub parameter data structure.
-+ * @enable:     [IN & OUT] enable(1)/disable(0) patrol scrub.
-+ * @scrub_cycle_changeable: [OUT] scrub cycle attribute of patrol scrub is changeable.
-+ * @scrub_cycle_hrs:    [IN] Requested patrol scrub cycle in hours.
-+ *                      [OUT] Current patrol scrub cycle in hours.
-+ * @min_scrub_cycle_hrs:[OUT] minimum patrol scrub cycle in hours supported.
++ * struct cxl_ecs_params - CXL memory DDR5 ECS parameter data structure.
++ * @threshold: ECS threshold count per GB of memory cells.
++ * @log_entry_type: ECS log entry type, per DRAM or per memory media FRU.
++ * @reset_counter: [IN] reset ECC counter to default value.
++ * @count_mode: codeword/row count mode
++ *		0 : ECS counts rows with errors
++ *		1 : ECS counts codeword with errors
 + */
-+struct cxl_memdev_ps_params {
-+	bool enable;
-+	bool scrub_cycle_changeable;
-+	u8 scrub_cycle_hrs;
-+	u8 min_scrub_cycle_hrs;
++struct cxl_ecs_params {
++	u16 threshold;
++	u8 log_entry_type;
++	u8 reset_counter;
++	enum cxl_ecs_count_mode count_mode;
 +};
-+
-+enum cxl_scrub_param {
-+	CXL_PS_PARAM_ENABLE,
-+	CXL_PS_PARAM_SCRUB_CYCLE,
-+};
-+
-+#define CXL_MEMDEV_PS_SCRUB_CYCLE_CHANGE_CAP_MASK BIT(0)
-+#define CXL_MEMDEV_PS_SCRUB_CYCLE_REALTIME_REPORT_CAP_MASK BIT(1)
-+#define CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK GENMASK(7, 0)
-+#define CXL_MEMDEV_PS_MIN_SCRUB_CYCLE_MASK GENMASK(15, 8)
-+#define CXL_MEMDEV_PS_FLAG_ENABLED_MASK BIT(0)
 +
 +/*
-+ * See CXL spec rev 3.2 @8.2.10.9.11.1 Table 8-222 Device Patrol Scrub Control
-+ * Feature Readable Attributes.
++ * See CXL spec rev 3.2 @8.2.10.9.11.2 Table 8-225 DDR5 ECS Control Feature
++ * Readable Attributes.
 + */
-+struct cxl_memdev_ps_rd_attrs {
-+	u8 scrub_cycle_cap;
-+	__le16 scrub_cycle_hrs;
-+	u8 scrub_flags;
++struct cxl_ecs_fru_rd_attrs {
++	u8 ecs_cap;
++	__le16 ecs_config;
++	u8 ecs_flags;
++} __packed;
++
++struct cxl_ecs_rd_attrs {
++	u8 ecs_log_cap;
++	struct cxl_ecs_fru_rd_attrs fru_attrs[];
 +} __packed;
 +
 +/*
-+ * See CXL spec rev 3.2 @8.2.10.9.11.1 Table 8-223 Device Patrol Scrub Control
-+ * Feature Writable Attributes.
++ * See CXL spec rev 3.2 @8.2.10.9.11.2 Table 8-226 DDR5 ECS Control Feature
++ * Writable Attributes.
 + */
-+struct cxl_memdev_ps_wr_attrs {
-+	u8 scrub_cycle_hrs;
-+	u8 scrub_flags;
++struct cxl_ecs_fru_wr_attrs {
++	__le16 ecs_config;
 +} __packed;
 +
-+static int cxl_mem_ps_get_attrs(struct cxl_mailbox *cxl_mbox,
-+				struct cxl_memdev_ps_params *params)
++struct cxl_ecs_wr_attrs {
++	u8 ecs_log_cap;
++	struct cxl_ecs_fru_wr_attrs fru_attrs[];
++} __packed;
++
++/*
++ * CXL DDR5 ECS control functions.
++ */
++static int cxl_mem_ecs_get_attrs(struct device *dev,
++				 struct cxl_ecs_context *cxl_ecs_ctx,
++				 int fru_id, struct cxl_ecs_params *params)
 +{
-+	size_t rd_data_size = sizeof(struct cxl_memdev_ps_rd_attrs);
-+	u16 scrub_cycle_hrs;
++	struct cxl_memdev *cxlmd = cxl_ecs_ctx->cxlmd;
++	struct cxl_mailbox *cxl_mbox = &cxlmd->cxlds->cxl_mbox;
++	struct cxl_ecs_fru_rd_attrs *fru_rd_attrs;
++	size_t rd_data_size;
++	u8 threshold_index;
 +	size_t data_size;
-+	struct cxl_memdev_ps_rd_attrs *rd_attrs __free(kfree) =
-+		kzalloc(rd_data_size, GFP_KERNEL);
++	u16 ecs_config;
++
++	rd_data_size = cxl_ecs_ctx->get_feat_size;
++
++	struct cxl_ecs_rd_attrs *rd_attrs __free(kvfree) =
++		kvzalloc(rd_data_size, GFP_KERNEL);
 +	if (!rd_attrs)
 +		return -ENOMEM;
 +
-+	data_size = cxl_get_feature(cxl_mbox, &CXL_FEAT_PATROL_SCRUB_UUID,
++	params->log_entry_type = 0;
++	params->threshold = 0;
++	params->count_mode = 0;
++	data_size = cxl_get_feature(cxl_mbox, &CXL_FEAT_ECS_UUID,
 +				    CXL_GET_FEAT_SEL_CURRENT_VALUE, rd_attrs,
 +				    rd_data_size, 0, NULL);
 +	if (!data_size)
 +		return -EIO;
 +
-+	params->scrub_cycle_changeable =
-+		FIELD_GET(CXL_MEMDEV_PS_SCRUB_CYCLE_CHANGE_CAP_MASK,
-+			  rd_attrs->scrub_cycle_cap);
-+	params->enable = FIELD_GET(CXL_MEMDEV_PS_FLAG_ENABLED_MASK,
-+				   rd_attrs->scrub_flags);
-+	scrub_cycle_hrs = le16_to_cpu(rd_attrs->scrub_cycle_hrs);
-+	params->scrub_cycle_hrs =
-+		FIELD_GET(CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK, scrub_cycle_hrs);
-+	params->min_scrub_cycle_hrs =
-+		FIELD_GET(CXL_MEMDEV_PS_MIN_SCRUB_CYCLE_MASK, scrub_cycle_hrs);
-+
++	fru_rd_attrs = rd_attrs->fru_attrs;
++	params->log_entry_type =
++		FIELD_GET(CXL_ECS_LOG_ENTRY_TYPE_MASK, rd_attrs->ecs_log_cap);
++	ecs_config = le16_to_cpu(fru_rd_attrs[fru_id].ecs_config);
++	threshold_index = FIELD_GET(CXL_ECS_THRESHOLD_COUNT_MASK, ecs_config);
++	params->threshold = ecs_supp_threshold[threshold_index];
++	params->count_mode = FIELD_GET(CXL_ECS_COUNT_MODE_MASK, ecs_config);
 +	return 0;
 +}
 +
-+static int cxl_ps_get_attrs(struct cxl_patrol_scrub_context *cxl_ps_ctx,
-+			    struct cxl_memdev_ps_params *params)
++static int cxl_mem_ecs_set_attrs(struct device *dev,
++				 struct cxl_ecs_context *cxl_ecs_ctx,
++				 int fru_id, struct cxl_ecs_params *params,
++				 u8 param_type)
 +{
-+	struct cxl_mailbox *cxl_mbox;
-+	struct cxl_memdev *cxlmd;
-+	u8 min_scrub_cycle = U8_MAX;
-+	int i, ret;
++	struct cxl_memdev *cxlmd = cxl_ecs_ctx->cxlmd;
++	struct cxl_mailbox *cxl_mbox = &cxlmd->cxlds->cxl_mbox;
++	struct cxl_ecs_fru_rd_attrs *fru_rd_attrs;
++	struct cxl_ecs_fru_wr_attrs *fru_wr_attrs;
++	size_t rd_data_size, wr_data_size;
++	u16 num_media_frus, count;
++	size_t data_size;
++	u16 ecs_config;
 +
-+	if (cxl_ps_ctx->cxlr) {
-+		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-+		struct cxl_region_params *p = &cxlr->params;
++	num_media_frus = cxl_ecs_ctx->num_media_frus;
++	rd_data_size = cxl_ecs_ctx->get_feat_size;
++	wr_data_size = cxl_ecs_ctx->set_feat_size;
++	struct cxl_ecs_rd_attrs *rd_attrs __free(kvfree) =
++		kvzalloc(rd_data_size, GFP_KERNEL);
++	if (!rd_attrs)
++		return -ENOMEM;
 +
-+		struct rw_semaphore *region_lock __free(cxl_unlock) =
-+			cxl_acquire(&cxl_region_rwsem);
-+		if (!region_lock)
-+			return -EINTR;
++	data_size = cxl_get_feature(cxl_mbox, &CXL_FEAT_ECS_UUID,
++				    CXL_GET_FEAT_SEL_CURRENT_VALUE, rd_attrs,
++				    rd_data_size, 0, NULL);
++	if (!data_size)
++		return -EIO;
 +
-+		for (i = 0; i < p->nr_targets; i++) {
-+			struct cxl_endpoint_decoder *cxled = p->targets[i];
++	struct cxl_ecs_wr_attrs *wr_attrs __free(kvfree) =
++		kvzalloc(wr_data_size, GFP_KERNEL);
++	if (!wr_attrs)
++		return -ENOMEM;
 +
-+			cxlmd = cxled_to_memdev(cxled);
-+			cxl_mbox = &cxlmd->cxlds->cxl_mbox;
-+			ret = cxl_mem_ps_get_attrs(cxl_mbox, params);
-+			if (ret)
-+				return ret;
++	/*
++	 * Fill writable attributes from the current attributes read
++	 * for all the media FRUs.
++	 */
++	fru_rd_attrs = rd_attrs->fru_attrs;
++	fru_wr_attrs = wr_attrs->fru_attrs;
++	wr_attrs->ecs_log_cap = rd_attrs->ecs_log_cap;
++	for (count = 0; count < num_media_frus; count++)
++		fru_wr_attrs[count].ecs_config = fru_rd_attrs[count].ecs_config;
 +
-+			min_scrub_cycle = min(params->min_scrub_cycle_hrs,
-+					      min_scrub_cycle);
-+		}
-+
-+		params->min_scrub_cycle_hrs = min_scrub_cycle;
-+		return 0;
-+	}
-+	cxl_mbox = &cxl_ps_ctx->cxlmd->cxlds->cxl_mbox;
-+
-+	return cxl_mem_ps_get_attrs(cxl_mbox, params);
-+}
-+
-+static int cxl_mem_ps_set_attrs(struct device *dev,
-+				struct cxl_patrol_scrub_context *cxl_ps_ctx,
-+				struct cxl_mailbox *cxl_mbox,
-+				struct cxl_memdev_ps_params *params,
-+				enum cxl_scrub_param param_type)
-+{
-+	struct cxl_memdev_ps_wr_attrs wr_attrs;
-+	struct cxl_memdev_ps_params rd_params;
-+	int ret;
-+
-+	ret = cxl_mem_ps_get_attrs(cxl_mbox, &rd_params);
-+	if (ret) {
-+		dev_dbg(dev,
-+			"Get cxlmemdev patrol scrub params failed ret=%d\n",
-+			ret);
-+		return ret;
-+	}
-+
++	/* Fill attribute to be set for the media FRU */
++	ecs_config = le16_to_cpu(fru_rd_attrs[fru_id].ecs_config);
 +	switch (param_type) {
-+	case CXL_PS_PARAM_ENABLE:
-+		wr_attrs.scrub_flags = FIELD_PREP(CXL_MEMDEV_PS_FLAG_ENABLED_MASK,
-+						  params->enable);
-+		wr_attrs.scrub_cycle_hrs =
-+			FIELD_PREP(CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK,
-+				   rd_params.scrub_cycle_hrs);
++	case CXL_ECS_PARAM_LOG_ENTRY_TYPE:
++		if (params->log_entry_type != ECS_LOG_ENTRY_TYPE_DRAM &&
++		    params->log_entry_type != ECS_LOG_ENTRY_TYPE_MEM_MEDIA_FRU)
++			return -EINVAL;
++
++		wr_attrs->ecs_log_cap = FIELD_PREP(CXL_ECS_LOG_ENTRY_TYPE_MASK,
++						   params->log_entry_type);
 +		break;
-+	case CXL_PS_PARAM_SCRUB_CYCLE:
-+		if (params->scrub_cycle_hrs < rd_params.min_scrub_cycle_hrs) {
++	case CXL_ECS_PARAM_THRESHOLD:
++		ecs_config &= ~CXL_ECS_THRESHOLD_COUNT_MASK;
++		switch (params->threshold) {
++		case ECS_THRESHOLD_256:
++			ecs_config |= FIELD_PREP(CXL_ECS_THRESHOLD_COUNT_MASK,
++						 ECS_THRESHOLD_IDX_256);
++			break;
++		case ECS_THRESHOLD_1024:
++			ecs_config |= FIELD_PREP(CXL_ECS_THRESHOLD_COUNT_MASK,
++						 ECS_THRESHOLD_IDX_1024);
++			break;
++		case ECS_THRESHOLD_4096:
++			ecs_config |= FIELD_PREP(CXL_ECS_THRESHOLD_COUNT_MASK,
++						 ECS_THRESHOLD_IDX_4096);
++			break;
++		default:
 +			dev_dbg(dev,
-+				"Invalid CXL patrol scrub cycle(%d) to set\n",
-+				params->scrub_cycle_hrs);
++				"Invalid CXL ECS scrub threshold count(%d) to set\n",
++				params->threshold);
 +			dev_dbg(dev,
-+				"Minimum supported CXL patrol scrub cycle in hour %d\n",
-+				rd_params.min_scrub_cycle_hrs);
++				"Supported scrub threshold counts: %u, %u, %u\n",
++				ECS_THRESHOLD_256, ECS_THRESHOLD_1024,
++				ECS_THRESHOLD_4096);
 +			return -EINVAL;
 +		}
-+		wr_attrs.scrub_cycle_hrs =
-+			FIELD_PREP(CXL_MEMDEV_PS_CUR_SCRUB_CYCLE_MASK,
-+				   params->scrub_cycle_hrs);
-+		wr_attrs.scrub_flags = FIELD_PREP(CXL_MEMDEV_PS_FLAG_ENABLED_MASK,
-+						  rd_params.enable);
 +		break;
-+	}
-+
-+	ret = cxl_set_feature(cxl_mbox, &CXL_FEAT_PATROL_SCRUB_UUID,
-+			      cxl_ps_ctx->set_version, &wr_attrs,
-+			      sizeof(wr_attrs),
-+			      CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET, 0,
-+			      NULL);
-+	if (ret) {
-+		dev_dbg(dev, "CXL patrol scrub set feature failed ret=%d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int cxl_ps_set_attrs(struct device *dev,
-+			    struct cxl_patrol_scrub_context *cxl_ps_ctx,
-+			    struct cxl_memdev_ps_params *params,
-+			    enum cxl_scrub_param param_type)
-+{
-+	struct cxl_mailbox *cxl_mbox;
-+	struct cxl_memdev *cxlmd;
-+	int ret, i;
-+
-+	if (cxl_ps_ctx->cxlr) {
-+		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-+		struct cxl_region_params *p = &cxlr->params;
-+
-+		struct rw_semaphore *region_lock __free(cxl_unlock) =
-+			cxl_acquire(&cxl_region_rwsem);
-+		if (!region_lock)
-+			return -EINTR;
-+
-+		for (i = 0; i < p->nr_targets; i++) {
-+			struct cxl_endpoint_decoder *cxled = p->targets[i];
-+
-+			cxlmd = cxled_to_memdev(cxled);
-+			cxl_mbox = &cxlmd->cxlds->cxl_mbox;
-+			ret = cxl_mem_ps_set_attrs(dev, cxl_ps_ctx, cxl_mbox,
-+						   params, param_type);
-+			if (ret)
-+				return ret;
++	case CXL_ECS_PARAM_MODE:
++		if (params->count_mode != ECS_MODE_COUNTS_ROWS &&
++		    params->count_mode != ECS_MODE_COUNTS_CODEWORDS) {
++			dev_dbg(dev, "Invalid CXL ECS scrub mode(%d) to set\n",
++				params->count_mode);
++			dev_dbg(dev,
++				"Supported ECS Modes: 0: ECS counts rows with errors,"
++				" 1: ECS counts codewords with errors\n");
++			return -EINVAL;
 +		}
++		ecs_config &= ~CXL_ECS_COUNT_MODE_MASK;
++		ecs_config |=
++			FIELD_PREP(CXL_ECS_COUNT_MODE_MASK, params->count_mode);
++		break;
++	case CXL_ECS_PARAM_RESET_COUNTER:
++		if (params->reset_counter != CXL_ECS_RESET_COUNTER)
++			return -EINVAL;
 +
-+		return 0;
++		ecs_config &= ~CXL_ECS_RESET_COUNTER_MASK;
++		ecs_config |= FIELD_PREP(CXL_ECS_RESET_COUNTER_MASK,
++					 params->reset_counter);
++		break;
++	default:
++		return -EINVAL;
 +	}
-+	cxl_mbox = &cxl_ps_ctx->cxlmd->cxlds->cxl_mbox;
++	fru_wr_attrs[fru_id].ecs_config = cpu_to_le16(ecs_config);
 +
-+	return cxl_mem_ps_set_attrs(dev, cxl_ps_ctx, cxl_mbox, params,
-+				    param_type);
++	return cxl_set_feature(cxl_mbox, &CXL_FEAT_ECS_UUID,
++			       cxl_ecs_ctx->set_version, wr_attrs, wr_data_size,
++			       CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET, 0,
++			       NULL);
 +}
 +
-+static int cxl_patrol_scrub_get_enabled_bg(struct device *dev, void *drv_data,
-+					   bool *enabled)
-+{
-+	struct cxl_patrol_scrub_context *ctx = drv_data;
-+	struct cxl_memdev_ps_params params;
-+	int ret;
++#define CXL_ECS_GET_ATTR(attrib)					    \
++	static int cxl_ecs_get_##attrib(struct device *dev, void *drv_data, \
++					int fru_id, u32 *val)		    \
++	{								    \
++		struct cxl_ecs_context *ctx = drv_data;			    \
++		struct cxl_ecs_params params;				    \
++		int ret;						    \
++									    \
++		ret = cxl_mem_ecs_get_attrs(dev, ctx, fru_id, &params);	    \
++		if (ret)						    \
++			return ret;					    \
++									    \
++		*val = params.attrib;					    \
++									    \
++		return 0;						    \
++	}
 +
-+	ret = cxl_ps_get_attrs(ctx, &params);
-+	if (ret)
-+		return ret;
++CXL_ECS_GET_ATTR(log_entry_type)
++CXL_ECS_GET_ATTR(count_mode)
++CXL_ECS_GET_ATTR(threshold)
 +
-+	*enabled = params.enable;
++#define CXL_ECS_SET_ATTR(attrib, param_type)				    \
++	static int cxl_ecs_set_##attrib(struct device *dev, void *drv_data, \
++					int fru_id, u32 val)		    \
++	{								    \
++		struct cxl_ecs_context *ctx = drv_data;			    \
++		struct cxl_ecs_params params = {			    \
++			.attrib = val,					    \
++		};							    \
++									    \
++		return cxl_mem_ecs_set_attrs(dev, ctx, fru_id, &params,	    \
++					     (param_type));		    \
++	}
++CXL_ECS_SET_ATTR(log_entry_type, CXL_ECS_PARAM_LOG_ENTRY_TYPE)
++CXL_ECS_SET_ATTR(count_mode, CXL_ECS_PARAM_MODE)
++CXL_ECS_SET_ATTR(reset_counter, CXL_ECS_PARAM_RESET_COUNTER)
++CXL_ECS_SET_ATTR(threshold, CXL_ECS_PARAM_THRESHOLD)
 +
-+	return 0;
-+}
-+
-+static int cxl_patrol_scrub_set_enabled_bg(struct device *dev, void *drv_data,
-+					   bool enable)
-+{
-+	struct cxl_patrol_scrub_context *ctx = drv_data;
-+	struct cxl_memdev_ps_params params = {
-+		.enable = enable,
-+	};
-+
-+	return cxl_ps_set_attrs(dev, ctx, &params, CXL_PS_PARAM_ENABLE);
-+}
-+
-+static int cxl_patrol_scrub_read_min_scrub_cycle(struct device *dev,
-+						 void *drv_data, u32 *min)
-+{
-+	struct cxl_patrol_scrub_context *ctx = drv_data;
-+	struct cxl_memdev_ps_params params;
-+	int ret;
-+
-+	ret = cxl_ps_get_attrs(ctx, &params);
-+	if (ret)
-+		return ret;
-+	*min = params.min_scrub_cycle_hrs * 3600;
-+
-+	return 0;
-+}
-+
-+static int cxl_patrol_scrub_read_max_scrub_cycle(struct device *dev,
-+						 void *drv_data, u32 *max)
-+{
-+	*max = U8_MAX * 3600; /* Max set by register size */
-+
-+	return 0;
-+}
-+
-+static int cxl_patrol_scrub_read_scrub_cycle(struct device *dev, void *drv_data,
-+					     u32 *scrub_cycle_secs)
-+{
-+	struct cxl_patrol_scrub_context *ctx = drv_data;
-+	struct cxl_memdev_ps_params params;
-+	int ret;
-+
-+	ret = cxl_ps_get_attrs(ctx, &params);
-+	if (ret)
-+		return ret;
-+
-+	*scrub_cycle_secs = params.scrub_cycle_hrs * 3600;
-+
-+	return 0;
-+}
-+
-+static int cxl_patrol_scrub_write_scrub_cycle(struct device *dev,
-+					      void *drv_data,
-+					      u32 scrub_cycle_secs)
-+{
-+	struct cxl_patrol_scrub_context *ctx = drv_data;
-+	struct cxl_memdev_ps_params params = {
-+		.scrub_cycle_hrs = scrub_cycle_secs / 3600,
-+	};
-+
-+	return cxl_ps_set_attrs(dev, ctx, &params, CXL_PS_PARAM_SCRUB_CYCLE);
-+}
-+
-+static const struct edac_scrub_ops cxl_ps_scrub_ops = {
-+	.get_enabled_bg = cxl_patrol_scrub_get_enabled_bg,
-+	.set_enabled_bg = cxl_patrol_scrub_set_enabled_bg,
-+	.get_min_cycle = cxl_patrol_scrub_read_min_scrub_cycle,
-+	.get_max_cycle = cxl_patrol_scrub_read_max_scrub_cycle,
-+	.get_cycle_duration = cxl_patrol_scrub_read_scrub_cycle,
-+	.set_cycle_duration = cxl_patrol_scrub_write_scrub_cycle,
++static const struct edac_ecs_ops cxl_ecs_ops = {
++	.get_log_entry_type = cxl_ecs_get_log_entry_type,
++	.set_log_entry_type = cxl_ecs_set_log_entry_type,
++	.get_mode = cxl_ecs_get_count_mode,
++	.set_mode = cxl_ecs_set_count_mode,
++	.reset = cxl_ecs_set_reset_counter,
++	.get_threshold = cxl_ecs_get_threshold,
++	.set_threshold = cxl_ecs_set_threshold,
 +};
 +
-+static int cxl_memdev_scrub_init(struct cxl_memdev *cxlmd,
-+				 struct edac_dev_feature *ras_feature,
-+				 u8 scrub_inst)
++static int cxl_memdev_ecs_init(struct cxl_memdev *cxlmd,
++			       struct edac_dev_feature *ras_feature)
 +{
-+	struct cxl_patrol_scrub_context *cxl_ps_ctx;
++	struct cxl_ecs_context *cxl_ecs_ctx;
 +	struct cxl_feat_entry *feat_entry;
++	int num_media_frus;
 +
-+	feat_entry = cxl_get_feature_entry(cxlmd->cxlds,
-+					   &CXL_FEAT_PATROL_SCRUB_UUID);
++	feat_entry = cxl_get_feature_entry(cxlmd->cxlds, &CXL_FEAT_ECS_UUID);
 +	if (!feat_entry)
 +		return -EOPNOTSUPP;
 +
 +	if (!(le32_to_cpu(feat_entry->flags) & CXL_FEATURE_F_CHANGEABLE))
 +		return -EOPNOTSUPP;
 +
-+	cxl_ps_ctx = devm_kzalloc(&cxlmd->dev, sizeof(*cxl_ps_ctx), GFP_KERNEL);
-+	if (!cxl_ps_ctx)
++	num_media_frus = (le16_to_cpu(feat_entry->get_feat_size) -
++			  sizeof(struct cxl_ecs_rd_attrs)) /
++			 sizeof(struct cxl_ecs_fru_rd_attrs);
++	if (!num_media_frus)
++		return -EOPNOTSUPP;
++
++	cxl_ecs_ctx =
++		devm_kzalloc(&cxlmd->dev, sizeof(*cxl_ecs_ctx), GFP_KERNEL);
++	if (!cxl_ecs_ctx)
 +		return -ENOMEM;
 +
-+	*cxl_ps_ctx = (struct cxl_patrol_scrub_context){
++	*cxl_ecs_ctx = (struct cxl_ecs_context){
 +		.get_feat_size = le16_to_cpu(feat_entry->get_feat_size),
 +		.set_feat_size = le16_to_cpu(feat_entry->set_feat_size),
 +		.get_version = feat_entry->get_feat_ver,
 +		.set_version = feat_entry->set_feat_ver,
 +		.effects = le16_to_cpu(feat_entry->effects),
-+		.instance = scrub_inst,
++		.num_media_frus = num_media_frus,
 +		.cxlmd = cxlmd,
 +	};
 +
-+	ras_feature->ft_type = RAS_FEAT_SCRUB;
-+	ras_feature->instance = cxl_ps_ctx->instance;
-+	ras_feature->scrub_ops = &cxl_ps_scrub_ops;
-+	ras_feature->ctx = cxl_ps_ctx;
++	ras_feature->ft_type = RAS_FEAT_ECS;
++	ras_feature->ecs_ops = &cxl_ecs_ops;
++	ras_feature->ctx = cxl_ecs_ctx;
++	ras_feature->ecs_info.num_media_frus = num_media_frus;
 +
 +	return 0;
 +}
 +
-+static int cxl_region_scrub_init(struct cxl_region *cxlr,
-+				 struct edac_dev_feature *ras_feature,
-+				 u8 scrub_inst)
-+{
-+	struct cxl_patrol_scrub_context *cxl_ps_ctx;
-+	struct cxl_region_params *p = &cxlr->params;
-+	struct cxl_feat_entry *feat_entry = NULL;
-+	struct cxl_memdev *cxlmd;
-+	int i;
-+
-+	/*
-+	 * The cxl_region_rwsem must be held if the code below is used in a context
-+	 * other than when the region is in the probe state, as shown here.
-+	 */
-+	for (i = 0; i < p->nr_targets; i++) {
-+		struct cxl_endpoint_decoder *cxled = p->targets[i];
-+
-+		cxlmd = cxled_to_memdev(cxled);
-+		feat_entry = cxl_get_feature_entry(cxlmd->cxlds,
-+						   &CXL_FEAT_PATROL_SCRUB_UUID);
-+		if (!feat_entry)
-+			return -EOPNOTSUPP;
-+
-+		if (!(le32_to_cpu(feat_entry->flags) &
-+		      CXL_FEATURE_F_CHANGEABLE))
-+			return -EOPNOTSUPP;
-+	}
-+
-+	cxl_ps_ctx = devm_kzalloc(&cxlr->dev, sizeof(*cxl_ps_ctx), GFP_KERNEL);
-+	if (!cxl_ps_ctx)
-+		return -ENOMEM;
-+
-+	*cxl_ps_ctx = (struct cxl_patrol_scrub_context){
-+		.get_feat_size = le16_to_cpu(feat_entry->get_feat_size),
-+		.set_feat_size = le16_to_cpu(feat_entry->set_feat_size),
-+		.get_version = feat_entry->get_feat_ver,
-+		.set_version = feat_entry->set_feat_ver,
-+		.effects = le16_to_cpu(feat_entry->effects),
-+		.instance = scrub_inst,
-+		.cxlr = cxlr,
-+	};
-+
-+	ras_feature->ft_type = RAS_FEAT_SCRUB;
-+	ras_feature->instance = cxl_ps_ctx->instance;
-+	ras_feature->scrub_ops = &cxl_ps_scrub_ops;
-+	ras_feature->ctx = cxl_ps_ctx;
-+
-+	return 0;
-+}
-+
-+int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
-+{
-+	struct edac_dev_feature ras_features[CXL_NR_EDAC_DEV_FEATURES];
-+	int num_ras_features = 0;
-+	u8 scrub_inst = 0;
-+	int rc;
-+
-+	rc = cxl_memdev_scrub_init(cxlmd, &ras_features[num_ras_features],
-+				   scrub_inst);
+ int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
+ {
+ 	struct edac_dev_feature ras_features[CXL_NR_EDAC_DEV_FEATURES];
+@@ -443,6 +787,13 @@ int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
+ 	if (rc != -EOPNOTSUPP)
+ 		num_ras_features++;
+ 
++	rc = cxl_memdev_ecs_init(cxlmd, &ras_features[num_ras_features]);
 +	if (rc < 0 && rc != -EOPNOTSUPP)
 +		return rc;
 +
 +	if (rc != -EOPNOTSUPP)
 +		num_ras_features++;
 +
-+	char *cxl_dev_name __free(kfree) =
-+		kasprintf(GFP_KERNEL, "cxl_%s", dev_name(&cxlmd->dev));
-+
-+	return edac_dev_register(&cxlmd->dev, cxl_dev_name, NULL,
-+				 num_ras_features, ras_features);
-+}
-+EXPORT_SYMBOL_NS_GPL(devm_cxl_memdev_edac_register, "CXL");
-+
-+int devm_cxl_region_edac_register(struct cxl_region *cxlr)
-+{
-+	struct edac_dev_feature ras_features[CXL_NR_EDAC_DEV_FEATURES];
-+	int num_ras_features = 0;
-+	u8 scrub_inst = 0;
-+	int rc;
-+
-+	rc = cxl_region_scrub_init(cxlr, &ras_features[num_ras_features],
-+				   scrub_inst);
-+	if (rc < 0)
-+		return rc;
-+
-+	num_ras_features++;
-+
-+	char *cxl_dev_name __free(kfree) =
-+		kasprintf(GFP_KERNEL, "cxl_%s", dev_name(&cxlr->dev));
-+
-+	return edac_dev_register(&cxlr->dev, cxl_dev_name, NULL,
-+				 num_ras_features, ras_features);
-+}
-+EXPORT_SYMBOL_NS_GPL(devm_cxl_region_edac_register, "CXL");
-diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-index b3260d433ec7..2aa6eb675fdf 100644
---- a/drivers/cxl/core/region.c
-+++ b/drivers/cxl/core/region.c
-@@ -3542,6 +3542,11 @@ static int cxl_region_probe(struct device *dev)
- 	case CXL_PARTMODE_PMEM:
- 		return devm_cxl_add_pmem_region(cxlr);
- 	case CXL_PARTMODE_RAM:
-+		rc = devm_cxl_region_edac_register(cxlr);
-+		if (rc)
-+			dev_dbg(&cxlr->dev, "CXL EDAC registration for region_id=%d failed\n",
-+				cxlr->id);
-+
- 		/*
- 		 * The region can not be manged by CXL if any portion of
- 		 * it is already online as 'System RAM'
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 3ec6b906371b..11fa98cc4d9c 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -853,6 +853,16 @@ int cxl_trigger_poison_list(struct cxl_memdev *cxlmd);
- int cxl_inject_poison(struct cxl_memdev *cxlmd, u64 dpa);
- int cxl_clear_poison(struct cxl_memdev *cxlmd, u64 dpa);
+ 	char *cxl_dev_name __free(kfree) =
+ 		kasprintf(GFP_KERNEL, "cxl_%s", dev_name(&cxlmd->dev));
  
-+#if IS_ENABLED(CONFIG_CXL_EDAC_MEM_FEATURES)
-+int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd);
-+int devm_cxl_region_edac_register(struct cxl_region *cxlr);
-+#else
-+static inline int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
-+{ return 0; }
-+static inline int devm_cxl_region_edac_register(struct cxl_region *cxlr)
-+{ return 0; }
-+#endif
-+
- #ifdef CONFIG_CXL_SUSPEND
- void cxl_mem_active_inc(void);
- void cxl_mem_active_dec(void);
-diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-index 9675243bd05b..6e6777b7bafb 100644
---- a/drivers/cxl/mem.c
-+++ b/drivers/cxl/mem.c
-@@ -180,6 +180,10 @@ static int cxl_mem_probe(struct device *dev)
- 			return rc;
- 	}
- 
-+	rc = devm_cxl_memdev_edac_register(cxlmd);
-+	if (rc)
-+		dev_dbg(dev, "CXL memdev EDAC registration failed rc=%d\n", rc);
-+
- 	/*
- 	 * The kernel may be operating out of CXL memory on this device,
- 	 * there is no spec defined way to determine whether this device
 -- 
 2.43.0
 
