@@ -1,264 +1,206 @@
-Return-Path: <linux-edac+bounces-3373-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3375-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0941A6A993
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 16:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B48B7A6AB5C
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 17:46:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C1CA8A26A6
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 15:18:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13CD9980614
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 16:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEFB41E5B61;
-	Thu, 20 Mar 2025 15:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B1A223311;
+	Thu, 20 Mar 2025 16:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtAZa04N"
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="IiU6msvZ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11011060.outbound.protection.outlook.com [40.93.199.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBCF14B08A;
-	Thu, 20 Mar 2025 15:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742483937; cv=none; b=OMRJ94PgOp+SNGi6FwFDwH7e0smL2GYZNvHn/GdwtWsM95NdwPtSjzDgMkW7TWf561ejRlZ+EFCq0SfzMPE9SzS4X+xqCXPYUyqXZSnvIJjnjOc8j5Jb85MSk5BPWSZ2BvpoV3yCxVFjOGNW6PB3PLdDsMMdF102CN/dUsUlPTk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742483937; c=relaxed/simple;
-	bh=1Z6H2iLvH3rXMt19HL+9taZFJeo/GqQ1pEgfLHm/VO8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ffiktKpYT0dnPb3VPhH6Sm1TN4G5d03h4CC18XgEdoplTGPtyEJXlXWskCd4aM4oBLny5hi/h9dDFcytLmXEJkgiu1VOJn0kVQPipu07hdvDFxYBTAd3BmVzoZA+CiSNSCKBMxLq796yUehzDn7kYiiW7KkRpEnOx2XOvNpfd0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtAZa04N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A232C4CEDD;
-	Thu, 20 Mar 2025 15:18:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742483936;
-	bh=1Z6H2iLvH3rXMt19HL+9taZFJeo/GqQ1pEgfLHm/VO8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=jtAZa04NkVALEmArILtqhgvGWzNrqybg3hrSGdZZ2VVAFhkXh1nT4jpUcZ4Kc2DDn
-	 0A6i4ERYcuiCeprXqYIMy4u4kiFrkwJYEeYsWv+53EA4mBSJ6BqBYD7yzk5jl0BW7F
-	 3K+uSeS65G8FFh9VmSyWsSaODa9u59R3cNyzrD/bWKcMoby2y3/LjyBnzNkYD+iJSL
-	 9QHQkLG/EQ0PXCuzUmTG72RV9mKDT4ZRjt1NiAC6yuM4pg17khef1prwdyUg+6q41R
-	 XwbECsZNkZ4re5+LVruYEIZ107+IH+Jq6zDSLtPqFFjlA4zbkDNY4cbCQwK98Zoq0c
-	 4mfWfzYas3b3w==
-From: Mark Brown <broonie@kernel.org>
-To: tglx@linutronix.de, "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: maz@kernel.org, linux-kernel@vger.kernel.org, 
- Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Abhinav Kumar <quic_abhinavk@quicinc.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Alexandre Ghiti <alex@ghiti.fr>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Alex Deucher <alexander.deucher@amd.com>, Alex Shi <alexs@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, amd-gfx@lists.freedesktop.org, 
- Amit Kucheria <amitk@kernel.org>, Anatolij Gustschin <agust@denx.de>, 
- Andi Shyti <andi.shyti@kernel.org>, 
- =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
- Andreas Kemnade <andreas@kemnade.info>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>, Andrew Lunn <andrew@lunn.ch>, 
- Andy Shevchenko <andy@kernel.org>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Antoine Tenart <atenart@kernel.org>, 
- Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
- Anup Patel <anup@brainfault.org>, Arnd Bergmann <arnd@arndb.de>, 
- asahi@lists.linux.dev, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Baruch Siach <baruch@tkos.co.il>, 
- Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
- Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>, 
- Bjorn Andersson <andersson@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- Borislav Petkov <bp@alien8.de>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Corentin Chary <corentin.chary@gmail.com>, 
- Daire McNamara <daire.mcnamara@microchip.com>, 
- Daniel Golle <daniel@makrotopia.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Daniel Mack <daniel@zonque.org>, 
- Daniel Palmer <daniel@thingy.jp>, Dave Hansen <dave.hansen@linux.intel.com>, 
- David Airlie <airlied@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
- DENG Qingfang <dqfext@gmail.com>, Dinh Nguyen <dinguyen@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Dongliang Mu <dzm91@hust.edu.cn>, Doug Berger <opendmb@gmail.com>, 
- dri-devel@lists.freedesktop.org, Eddie James <eajames@linux.ibm.com>, 
- Eric Dumazet <edumazet@google.com>, Fabio Estevam <festevam@gmail.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Geoff Levand <geoff@infradead.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Gregory Clement <gregory.clement@bootlin.com>, Guo Ren <guoren@kernel.org>, 
- Hans de Goede <hdegoede@redhat.com>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Haojian Zhuang <haojian.zhuang@linaro.org>, 
- Heiko Stuebner <heiko@sntech.de>, Herve Codina <herve.codina@bootlin.com>, 
- Hou Zhiqiang <Zhiqiang.Hou@nxp.com>, "H. Peter Anvin" <hpa@zytor.com>, 
- Huacai Chen <chenhuacai@kernel.org>, 
- Changhuang Liang <changhuang.liang@starfivetech.com>, 
- Chen-Yu Tsai <wens@csie.org>, "Chester A. Unal" <chester.a.unal@arinc9.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Chris Zankel <chris@zankel.net>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Imre Kaloz <kaloz@openwrt.org>, Ingo Molnar <mingo@redhat.com>, 
- Jakub Kicinski <kuba@kernel.org>, James Morse <james.morse@arm.com>, 
- Janne Grunau <j@jannau.net>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Jerome Brunet <jbrunet@baylibre.com>, 
- Jianjun Wang <jianjun.wang@mediatek.com>, 
- Jiawen Wu <jiawenwu@trustnetic.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Jim Quinlan <jim2101024@gmail.com>, Jingoo Han <jingoohan1@gmail.com>, 
- Joel Stanley <joel@jms.id.au>, Johannes Berg <johannes@sipsolutions.net>, 
- John Crispin <john@phrozen.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- Jonas Bonn <jonas@southpole.se>, Jonathan Cameron <jic23@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Jonathan Hunter <jonathanh@nvidia.com>, 
- =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
- Joyce Ooi <joyce.ooi@intel.com>, 
- Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>, 
- Keerthy <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
- Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
- Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, 
- Linus Walleij <linus.walleij@linaro.org>, Linus Walleij <linusw@kernel.org>, 
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org, 
- linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org, 
- linux-omap@vger.kernel.org, linux-pci@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-remoteproc@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
- linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
- loongarch@lists.linux.dev, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Ludovic Desroches <ludovic.desroches@microchip.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, "Luke D. Jones" <luke@ljones.dev>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- Mark-PK Tsai <mark-pk.tsai@mediatek.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Max Filippov <jcmvbkbc@gmail.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Mengyuan Lou <mengyuanlou@net-swift.com>, Michael Buesch <m@bues.ch>, 
- Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <michal.simek@amd.com>, 
- Miodrag Dinic <miodrag.dinic@mips.com>, Naveen N Rao <naveen@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Nicolas Saenz Julienne <nsaenz@kernel.org>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Nikhil Agarwal <nikhil.agarwal@amd.com>, Nipun Gupta <nipun.gupta@amd.com>, 
- Nishanth Menon <nm@ti.com>, =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Paolo Abeni <pabeni@redhat.com>, 
- Paul Cercueil <paul@crapouillou.net>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Peter Rosin <peda@axentia.se>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
- platform-driver-x86@vger.kernel.org, 
- Prasad Kumpatla <quic_pkumpatl@quicinc.com>, 
- Qiang Zhao <qiang.zhao@nxp.com>, Qin Jian <qinjian@cqplus1.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Randy Dunlap <rdunlap@infradead.org>, Ray Jui <rjui@broadcom.com>, 
- Rengarajan Sundararajan <Rengarajan.S@microchip.com>, 
- Richard Cochran <richardcochran@gmail.com>, 
- Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>, 
- Rob Clark <robdclark@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
- Robert Richter <rric@kernel.org>, Rob Herring <robh@kernel.org>, 
- Roger Quadros <rogerq@kernel.org>, Russell King <linux@armlinux.org.uk>, 
- Ryan Chen <ryan_chen@aspeedtech.com>, Ryder Lee <ryder.lee@mediatek.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Santosh Shilimkar <ssantosh@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Scott Branden <sbranden@broadcom.com>, Scott Wood <oss@buserror.net>, 
- Sean Paul <sean@poorly.run>, Sean Wang <sean.wang@kernel.org>, 
- Sean Wang <sean.wang@mediatek.com>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
- Shawn Guo <shawnguo@kernel.org>, Shawn Lin <shawn.lin@rock-chips.com>, 
- Siddharth Vadapalli <s-vadapalli@ti.com>, Simona Vetter <simona@ffwll.ch>, 
- Stafford Horne <shorne@gmail.com>, 
- Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, 
- Stephen Boyd <sboyd@kernel.org>, Sven Peter <sven@svenpeter.dev>, 
- Takashi Iwai <tiwai@suse.com>, Talel Shenhar <talel@amazon.com>, 
- Tero Kristo <kristo@kernel.org>, 
- Thangaraj Samynathan <Thangaraj.S@microchip.com>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Toan Le <toan@os.amperecomputing.com>, Tony Lindgren <tony@atomide.com>, 
- Tony Luck <tony.luck@intel.com>, UNGLinuxDriver@microchip.com, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Vignesh Raghavendra <vigneshr@ti.com>, Vineet Gupta <vgupta@kernel.org>, 
- Vladimir Oltean <olteanv@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, 
- WANG Xuerui <kernel@xen0n.name>, Woojung Huh <woojung.huh@microchip.com>, 
- x86@kernel.org, Yanteng Si <si.yanteng@linux.dev>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, 
- Zhang Rui <rui.zhang@intel.com>
-In-Reply-To: <20250319092951.37667-1-jirislaby@kernel.org>
-References: <20250319092951.37667-1-jirislaby@kernel.org>
-Subject: Re: (subset) [PATCH v2 00/57] irqdomain: Cleanups and
- Documentation
-Message-Id: <174248389026.68765.4225899402848645156.b4-ty@kernel.org>
-Date: Thu, 20 Mar 2025 15:18:10 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEB617591;
+	Thu, 20 Mar 2025 16:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.199.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742489207; cv=fail; b=A5YzFzH8h82z6kru+ixr2BXHngn7tjjeWEtgYN2NvI1n6a439kgZRSeYFTjaltRbp4d7SAj4teJXuZ+0w/BqjET5Acfz+h85QgS6pXESSgeaNf59fJColiA7ArJP4QbsvnZPsExUAboadVqWOQJg+y/z2hETbbOS2Mnv5i/BxRA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742489207; c=relaxed/simple;
+	bh=889gja+tVuFKeDX5ixH0Rwe5VOigh0XkpqOocHzqDZY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=CZquyBG6AD00s4nRqSq2zP6EKaIbqZj5k+W08+HdMYcW+KAtkSgI4Pqja8EN6co0CL03GbD5YrLEKBNcg2H5peENSwXDEwTj389s/mhWpWeiz3szfmxKgqV11LjTGwXwxHK7kq3RaAlGlkqg/Jrqts8qlqum+dCHEeap6Trvocg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=IiU6msvZ; arc=fail smtp.client-ip=40.93.199.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=soQBDGyj3i2jQMSNIPjPAmtnyp5gvNw/E037CS9U++e9R1VAtSX00Ye3NbJEL99QuvtOOucdZMhxDxlOXbuyU2Ui0OlnH19szuoFzr5tUEn1mUpvOQhNmnmefcUPnsSWDJ9MMGu/8y//uK7PZA9OsbTvLFAp4vX/fy3vkXVN6wuxUqgxICYGCLgymDcbi1sz6jnmm08d8BYBq/hzGjENd5F+dMygHhv5i6dsoC9F8MdM6XdMYtavVIJP+Xtf29UF1VH+YShluSvVlLZQ1TIgsDdhYb5crsfovYYMwTeNonjo/pA3Z47xka0pvkSNTBoy1iRx/v2Vh17zWvZx/Zbymw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JWMmIsD7Hq93yEQ+2l7UvzFucV40/ElJRlJMry1EpDY=;
+ b=HW2GT8gbWzD67/GTKU9u7WuyOTmFEjzHFt7HoCKHGotK8F+wd2cFs9iJtQLuTZl6R/zQrsXSb9kDAz7jJXGnFlooLJ/xoCJa0B69TBF4fyrlkRC5Yyiim9OmJFq9M132Rj3/pgC/ucNDR6p1sliXcnotqczuQPO54wX1Bacum/M+nw8tXTDLqRiseneVmrusop6MLMgcRVJ3cIwgLCTa9xvno5omxzp1AY7ACUSTUaUsyITdDbhW66Ej7NZ+YVp0qqLC11bI24IujvbxzefYLCc3UvaOOenh3BV3xCjhPKBI0M2LeNcnPGdoij9XJuhYW5ASxcMneiqP8EoZ52UwxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JWMmIsD7Hq93yEQ+2l7UvzFucV40/ElJRlJMry1EpDY=;
+ b=IiU6msvZwFbx3NczHcyRkyiz9RuW6lXW4ciey1qbAqb9F+/g2hdbPPx3jMc9TfDdWq4qrVOiONtmAOYg+z6SmoGsFqRJ2Q1VsIaei7TGy3n4PTYZRdCmUpX7C/+c7bWjhcTQvpBFGUrVdpkqmsWjN0gs5M0VK4ic/4+cTCLBUYL2/GV1vhrLYn/tGYRMvhcIzq1OPUxbYWeWV4/noaD67Hly+17XMFX7tlkeVP1tUf5yV8s8ahK89CVSONovO8L8SJ6jBZy/diA+mydF+Wwe0BA2EEeam8Od6H54Emc1khjGhTWTE076qw7xVIXraJOg2fu5A0wKHtVaLYJDCQXa4w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
+Received: from BYAPR03MB3461.namprd03.prod.outlook.com (2603:10b6:a02:b4::23)
+ by PH7PR03MB7003.namprd03.prod.outlook.com (2603:10b6:510:12e::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Thu, 20 Mar
+ 2025 16:46:42 +0000
+Received: from BYAPR03MB3461.namprd03.prod.outlook.com
+ ([fe80::706b:dd15:bc81:313c]) by BYAPR03MB3461.namprd03.prod.outlook.com
+ ([fe80::706b:dd15:bc81:313c%2]) with mapi id 15.20.8534.031; Thu, 20 Mar 2025
+ 16:46:41 +0000
+From: Matthew Gerlach <matthew.gerlach@altera.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	dinguyen@kernel.org,
+	bp@alien8.de,
+	tony.luck@intel.com,
+	james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org
+Cc: Matthew Gerlach <matthew.gerlach@altera.com>
+Subject: [PATCH 0/4] dt-bindings: edac: altera-s10: Convert to YAML
+Date: Thu, 20 Mar 2025 09:46:18 -0700
+Message-Id: <20250320164622.6971-1-matthew.gerlach@altera.com>
+X-Mailer: git-send-email 2.35.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR04CA0014.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::19) To BYAPR03MB3461.namprd03.prod.outlook.com
+ (2603:10b6:a02:b4::23)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR03MB3461:EE_|PH7PR03MB7003:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6bd7ffe1-1d2d-42a7-5dc7-08dd67cecaa4
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?5xjEGc8UAPs3vCOyWFht5Y6fyRe6vqTrmRJkjQwfhHG7RFUZwM0DlrqEoNQf?=
+ =?us-ascii?Q?67zJ0fjLiO/ZGf9uIo1ZjfPBcC3JUDq1Xd2ESWhOs3RLquJOyunw1TMAarQu?=
+ =?us-ascii?Q?TiLn64/FmeAS40AYI9HKgKgIHwKbUG+eNn6p99sZs0y1pNPlVtGrkF6jfjoS?=
+ =?us-ascii?Q?bin2ymlQSc1dVsu8KkDYbkF2hHIya+ZsbkOC28Mw/AzYlTr6/R+2AmVK1lqD?=
+ =?us-ascii?Q?HFZyXOcO2eQYF/IqJH84SaiMESnbN2V3jr3Ai5DdMU9pDONY8u1EnMeLj6uT?=
+ =?us-ascii?Q?od5xWBMm6p5mjik/RdX8ahS2XLxSKtAktlT0uvTuGj9v8ehV/OAmbvvzmtj1?=
+ =?us-ascii?Q?3llS/fm9jnTrRbnyQq4Lg9I8+qY7Uh+Ff0iGcjEZFulOwgy7pSpmnSLxtPPW?=
+ =?us-ascii?Q?LXJSE5hwRjIuMv1mUeyD3qeH7Uv9vec5dHU6R9iL4LS+5qOgfWPc4VdToF+Y?=
+ =?us-ascii?Q?R1q9oBC09NlUcqui3wJD33eL32knZ1+vFFHD7oEofryYjRl1L2gQvPmprS5K?=
+ =?us-ascii?Q?ItETmu8qGLLyy5zqzrwZxD+aZPV+vQSbijpbFmVbKrY79UgnB3q2W82NwQd8?=
+ =?us-ascii?Q?J5bpwKRwbG2hApsWeVO7kLGdzefsfS0SGuUSMxFA1xpkt8YudEAn80CSDLvl?=
+ =?us-ascii?Q?BFGBuvzEjPNMuMmxA9VH4jiHfzF9/CQm+AxpZWEhFULleOrH0f69NRfDYBzp?=
+ =?us-ascii?Q?F21rOFYEuTXVuKod/pG2AEBPgWIvzVwbCQUhoA9ary1cIAiNI4RFe7qDJjs0?=
+ =?us-ascii?Q?mCypZeoYto7fPCrqtPd7hiXY6UezoMCLD6mT3hHwi+8U9cb/HlKCQvbhleuE?=
+ =?us-ascii?Q?eKfAwxZ3s7EgcROY/rYW01aD6vhzFvu3pRmjCT8Be+aOANm1XgmH9ua1zrq6?=
+ =?us-ascii?Q?Faq2NEsO6xqHaFlmIX/lGW04MxfTwUtYBSANpO96uxObtITx/A2k4jQC+Mva?=
+ =?us-ascii?Q?Mp6cXlX9DdjwjFqRDxgSOJTsXDSj8jf95sCMpX6s8TDjIyGwOFba+lnd34rC?=
+ =?us-ascii?Q?a+gROm7bcm2DOdLi90/XDHThCjv4I0GpvNeWTz+vlPV8A14j+DHKBh6iLp7s?=
+ =?us-ascii?Q?oWJEU0fQ9GqNZBUWoDsGhueEnKt4CafiRe5owa/1CVjaNcjoCDvnpFIIhv3E?=
+ =?us-ascii?Q?/xxIJTDkxn8+Rs/kc2Q7xKYqxxp5mm51P0DAh05993Y912jdFhuZqbvbQ6D3?=
+ =?us-ascii?Q?TOzRBGnPVpX08QG/wDH5aYkKO8fmq6t6+FhaLLSw49rtifyV4tmU113hdnuI?=
+ =?us-ascii?Q?kIyLZSASnyfDPy5UfIOot9pikIrNxfRlerRJTRSJZrZC5XZ6Hv7EOPR5Q6wh?=
+ =?us-ascii?Q?yneVcszrY3MMsTfq1y4PKxf677/JYTbO6zsiWZn0LUd5w88vNGnaB7M6eKgh?=
+ =?us-ascii?Q?ThLzDwsRG+4220UDNLI028M/HLPfFLymgJ32wMfUnxcNcRifJhtS8SB7BWCr?=
+ =?us-ascii?Q?buPjtElU83w=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3461.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+Y9QJLwsGkJ75MxVwr8O4f/INQP6T9qx4O5iE88YK8DxmpSiwPlTndBtkW5w?=
+ =?us-ascii?Q?LfGRq9a4Kig2N6M2PXsrE1PkAsETXVE69JCSzrVa0+1p1461FkfnJH60uf9Y?=
+ =?us-ascii?Q?LeSkOPTRHk/B+FDWN2AZAyBVli4/IgnC3hFNMWHn80bRPD0sNsG9bSflAQ9O?=
+ =?us-ascii?Q?I7ACQjhzCktNRSnECj5Rlwia3gtxNOui0gJSuNuPz2W+NUMcEKqoovHbfX8L?=
+ =?us-ascii?Q?d55UtYy3o+XnDxq6aTg1DiX24RVPPnHi14T+2D5LaaSWVlGZrauI8O0bg1Mq?=
+ =?us-ascii?Q?5RuX/o4CSgQg3V+on67G8GBSMJH9EQ29iqkjlE0UdMp+E9J4rZWHsvG/JvI/?=
+ =?us-ascii?Q?uOfx+CYlyjtjklXvWt0WRRtsQRnOgK4xI/738LF9Jrr7KNsiuLPfSJdjlTFp?=
+ =?us-ascii?Q?PxKAW/p/mkZgxflDQTdXnp1ENBhGJXXSlsLmGXF7zBYHQOMOuNtlbIKLQfpE?=
+ =?us-ascii?Q?jItk8ikR9EW6iZJQQElcteckvGnR8x/RRW56y+920apbU2wLWkQ/7yzNnbsY?=
+ =?us-ascii?Q?gOkEzEkte6eIi/GCyk1O/8mTlO965X5ENU+iMcsGfiIHlSDSnB4+uvpt7UXg?=
+ =?us-ascii?Q?LkyPJRVJiG53hyKJ0syCEkK1iArSd1lEgrQJFMs5U0vR6CXv3UE5CneIdxBi?=
+ =?us-ascii?Q?4Y2pygH0QfHGe81t+r9e3RhUNqG/5U/yExeR97PeFS719QxtcFZWYHvX0UFL?=
+ =?us-ascii?Q?dQwz3bxMmeKbbvreimkGxBOPuncRbQzZArjO/eqCGQDorW4vComFUngZSfPC?=
+ =?us-ascii?Q?GjY3J5ti8iqnqk90s0I3LHP0qpku/UXd2qHacd6fRWivtiEyJAJXenJb0u8h?=
+ =?us-ascii?Q?Tt3fmyx0rT9F4Ejxly7MQl/3MTg2GUzsAWRoJmmZo18jfai16+YaeOsO/0p0?=
+ =?us-ascii?Q?4zgU33SDOqyZ1HX4a1j4hJRXvrhosuT1K++d84151LSm93/0vUSFH5jXrnow?=
+ =?us-ascii?Q?shYUgFhSIGafQLUFJAn4gVdd2VGeexlbfNg0QWcIXthk2WldUpBkyjv109Z9?=
+ =?us-ascii?Q?yA/eUqMigRtA7w7VAYC/LgGRiVua2XWUsHWysX/IOaYNELLNaBQM6jk5//E5?=
+ =?us-ascii?Q?WRESQDGmGAraSR9026Zdwxd3BieZDMUXV9yM5icVmkep2b7RhhXJWRqk0ezS?=
+ =?us-ascii?Q?F5O7pqil+9H2LrHgozZBfNCmmziTabouylsGk/GVRkaqSxWaSWh4/CTZrb0n?=
+ =?us-ascii?Q?IZ1tkfTaOUzJoGnLFsHzWeZ4C9Vv6laRzUT+9sgzNp8WePV5L+rh74lkDgzP?=
+ =?us-ascii?Q?nc7bvWUxr6uHOBuX94rF+P+7P0zUCYYWCciyZSsKh9pte6w8Ogw3ohPuq6EP?=
+ =?us-ascii?Q?mTVPJp1haOPvHUFxsHAQZUHvQQi0XpHMdzo5Bh+fE7MZhGe+zSo+DXqtmMab?=
+ =?us-ascii?Q?kSt7Cwadl849giS4JcgEOW72qrzvRWD+JHPbK6OiHVI4zMXvwmRbgZDy4t5O?=
+ =?us-ascii?Q?lD2B0rcL2kyC0FXeAoN2rv/w7MoOqMrj2iw+9Z+1a2x/kwSYFdWWqbWoXS8S?=
+ =?us-ascii?Q?+scNk/qlbn/X8sdbtZRi0i+9Z6TDQQGSAdlHhBNLuKv362fynmbQouvJdTxY?=
+ =?us-ascii?Q?QSWH5J7UnMvidY87WLtuCxkL64gKRTSsaXqF9GpC4Q9mIr+zjz12G8lpSKz8?=
+ =?us-ascii?Q?RQ=3D=3D?=
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bd7ffe1-1d2d-42a7-5dc7-08dd67cecaa4
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3461.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2025 16:46:41.8864
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RDNJ+7HjOQbeCID0QSzbPjl0pdCFb/Gk+U3d5nRowD3LHC8GtgXJ7IV0pQA0Jdq8rkU+RWWB/2AVK3sTWg4UjiLU2OWFWmWQ3wOKiHQ9YhQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR03MB7003
 
-On Wed, 19 Mar 2025 10:28:53 +0100, Jiri Slaby (SUSE) wrote:
-> tl;dr if patches are agreed upon, I ask subsys maintainers to take the
-> respective ones via their trees (as they are split per subsys), so that
-> the IRQ tree can take only the rest. That would minimize churn/conflicts
-> during merges.
-> 
-> ===
-> 
-> [...]
+This patch set creates a YAML device tree binding for the Altera Stratix10
+Error Detection and Correction component referred to as the ECC Manager. The
+peripheral subcomponents are the same hardware as the Arria10 implementation;
+so the YAML binding does not change compatible strings of the subcomponents.
+This more accurate hardware description requires some minor driver and DTSI/DTS
+changes.
 
-Applied to
+Patch 1:
+  Convert text device tree binding to YAML.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Patch 2:
+  Update driver to allow the peripheral subcomponents to be child nodes of
+  altr,socfpga-s10-ecc-manager.
 
-Thanks!
+Patch 3:
+  Update Agilex DTSI to use correct compatible strings for peripheral
+  subcomponents. 
 
-[35/57] irqdomain: sound: Switch to irq_domain_create_linear()
-        commit: 83eddf0116b09186f909bc643f2093f266f204ea
+Patch 4:
+  Update Stratix10 DTSI/DTS to use correct compatibles strings.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Matthew Gerlach (4):
+  dt-bindings: edac: altera-s10: Convert to YAML
+  EDAC, altera: update driver to reflect hw/yaml
+  arm64: dts: agilex: Update eccmgr in DTSI to reflect hw/yaml
+  arm64: dts: startix10: Update eccmgr in DTSI/DTS to reflect hw/yaml
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+ .../edac/altr,socfpga-s10-ecc-manager.yaml    | 228 ++++++++++++++++++
+ .../bindings/edac/socfpga-eccmgr.txt          | 150 ------------
+ MAINTAINERS                                   |   5 +
+ .../boot/dts/altera/socfpga_stratix10.dtsi    |  15 +-
+ .../dts/altera/socfpga_stratix10_socdk.dts    |   3 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi |  18 +-
+ drivers/edac/altera_edac.c                    |   3 +
+ 7 files changed, 248 insertions(+), 174 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/edac/altr,socfpga-s10-ecc-manager.yaml
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.35.3
 
 
