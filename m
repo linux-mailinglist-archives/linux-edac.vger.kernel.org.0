@@ -1,43 +1,44 @@
-Return-Path: <linux-edac+bounces-3379-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3380-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84D05A6ACB0
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 19:05:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7572A6ACB3
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 19:05:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED4DE1896A5D
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 18:05:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09F357B0D0A
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Mar 2025 18:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321371EB5D9;
-	Thu, 20 Mar 2025 18:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AABA2226D0A;
+	Thu, 20 Mar 2025 18:05:35 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28592AD20;
-	Thu, 20 Mar 2025 18:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F55C1DE3A8;
+	Thu, 20 Mar 2025 18:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742493934; cv=none; b=pT6LMTj/kCm5Xb+7V2W8lsU1McLTuU/4Yn1x3oB6EwvD8NXT7qme6C/97+yqGcOd16BvMTCbMCyToxn2B70zf9vonpba4WwXtZDb2G9OJPv8YZVwHNxfm/O911qzCHHlUqWsmoECQlGbo/CSVJH7wUfAk9uL9EsJObGpGnaqpFk=
+	t=1742493935; cv=none; b=cF7it1hFNfD2Zk4+j7k5O1Uy01qr+oCk3XkMTn6he32IgwhatiYVd3Bi7jd75qYQxEZQPqBtfYRAN9wjr6rb2/vNHSMHwtxmMXsLYUJdMi+TKS5uCtZ4/mSdaFUV6WogWAOPUNq48vlGbiqaa5cliuBl3R35mN6NvoZS5jEcHSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742493934; c=relaxed/simple;
-	bh=0t4PiwsiSc6juoFtUbzI40uzV16dx23LcTpGllWaXdM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aNYeOf076Cc6+aQRjzyhIN9C/x370xtes6Hm12ugA/q3b1x+xZ+yMTYP1syYWgeiL2kRWaX78gOHSy+GI+2jfJx9RxN2xdzEvKkWakVlOpo5CqgvZGd9PeMTqahHXRyhDXhQPtL/X1zufbLUADVWoOERUczc/l45yjH+sb+0ItM=
+	s=arc-20240116; t=1742493935; c=relaxed/simple;
+	bh=GtKULYl0mYctQnoh3gUdY0HmdBwjuAmD9xWw0mVxGPM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YN5eWHpj03ShKbWeN7bQejlXDKyzxhCF0w6/tqp4GESJl4Xi2oxS2hdn0oIHzGdkXkOS0dtjhUhf2UQVzf7MiViJicFlBFlkoFhA1dDFtAdzOPqtLcWGFvzhG53+m1uMfX7rlg+XBqfCS8Vs8hT5/J7u5HctM3QaXrVsLUjEz0Y=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZJYM93p9Wz6K9M6;
-	Fri, 21 Mar 2025 02:02:29 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZJYMD2qYjz6K99G;
+	Fri, 21 Mar 2025 02:02:32 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id 103481405A0;
-	Fri, 21 Mar 2025 02:05:28 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id E283B14050D;
+	Fri, 21 Mar 2025 02:05:30 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.156.145) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 20 Mar 2025 19:05:25 +0100
+ 15.1.2507.39; Thu, 20 Mar 2025 19:05:28 +0100
 From: <shiju.jose@huawei.com>
 To: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
 	<dave@stgolabs.net>, <jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
@@ -57,10 +58,12 @@ CC: <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<linuxarm@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v2 0/8] cxl: support CXL memory RAS features
-Date: Thu, 20 Mar 2025 18:04:37 +0000
-Message-ID: <20250320180450.539-1-shiju.jose@huawei.com>
+Subject: [PATCH v2 1/8] cxl: Add helper function to retrieve a feature entry
+Date: Thu, 20 Mar 2025 18:04:38 +0000
+Message-ID: <20250320180450.539-2-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
+In-Reply-To: <20250320180450.539-1-shiju.jose@huawei.com>
+References: <20250320180450.539-1-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -74,86 +77,64 @@ X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Support for CXL memory RAS features: patrol scrub, ECS, soft-PPR and
-memory sparing.
+Add helper function to retrieve a feature entry from the supported
+features list, if supported.
 
-This CXL series was part of the EDAC series [1].
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Fan Ni <fan.ni@samsung.com>
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+---
+ drivers/cxl/core/core.h     |  2 ++
+ drivers/cxl/core/features.c | 23 +++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
-The code is based on cxl.git next branch [2] merged with ras.git edac-cxl
-branch [3].
-
-1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
-2. https://web.git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/log/?h=next
-3. https://web.git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-cxl
-
-Userspace code for CXL memory repair features [4] and
-sample boot-script for CXL memory repair [5].
-
-[4]: https://lore.kernel.org/lkml/20250207143028.1865-1-shiju.jose@huawei.com/
-[5]: https://lore.kernel.org/lkml/20250207143028.1865-5-shiju.jose@huawei.com/
-
-Changes
-=======
-v1 -> v2:
-1. Feedbacks from Dan Williams on v1,
-   https://lore.kernel.org/linux-mm/20250307091137.00006a0a@huawei.com/T/
-  - Fixed lock issues in region scrubbing, added local cxl_acquire()
-    and cxl_unlock.
-  - Replaced CXL examples using cat and echo from EDAC .rst docs
-    with short description and ref to ABI docs. Also corrections
-    in existing descriptions as suggested by Dan.
-  - Add policy description for the scrub control feature.
-    However this may require inputs from CXL experts. 
-  - Replaced CONFIG_CXL_RAS_FEATURES with CONFIG_CXL_EDAC_MEM_FEATURES.
-  - Few changes to depends part of CONFIG_CXL_EDAC_MEM_FEATURES.
-  - Rename drivers/cxl/core/memfeatures.c as drivers/cxl/core/edac.c
-  - snprintf() -> kasprintf() in few places.
-  
-2. Feedbacks from Alison on v1,
-  - In cxl_get_feature_entry()(patch 1), return NULL on failures and
-    reintroduced checks in cxl_get_feature_entry().
-  - Changed logic in for loop in region based scrubbing code.
-  - Replace cxl_are_decoders_committed() to cxl_is_memdev_memory_online()
-    and add as a local function to drivers/cxl/core/edac.c
-  - Changed few multiline comments to single line comments.
-  - Removed unnecessary comments from the code.
-  - Reduced line length of few macros in ECS and memory repair code.
-  - In new files, changed "GPL-2.0-or-later" -> "GPL-2.0-only".
-  - Ran clang-format for new files and updated.                                                                                                                                                                       
-3. Changes for feedbacks from Jonathan on v1.
-  - Changed few multiline comments to single line comments.
-
-Shiju Jose (8):
-  cxl: Add helper function to retrieve a feature entry
-  EDAC: Update documentation for the CXL memory patrol scrub control
-    feature
-  cxl/edac: Add CXL memory device patrol scrub control feature
-  cxl/edac: Add CXL memory device ECS control feature
-  cxl/mbox: Add support for PERFORM_MAINTENANCE mailbox command
-  cxl: Support for finding memory operation attributes from the current
-    boot
-  cxl/memfeature: Add CXL memory device soft PPR control feature
-  cxl/memfeature: Add CXL memory device memory sparing control feature
-
- Documentation/edac/memory_repair.rst |   31 +
- Documentation/edac/scrub.rst         |   47 +
- drivers/cxl/Kconfig                  |   27 +
- drivers/cxl/core/Makefile            |    1 +
- drivers/cxl/core/core.h              |    2 +
- drivers/cxl/core/edac.c              | 1730 ++++++++++++++++++++++++++
- drivers/cxl/core/features.c          |   23 +
- drivers/cxl/core/mbox.c              |   45 +-
- drivers/cxl/core/memdev.c            |    9 +
- drivers/cxl/core/ras.c               |  145 +++
- drivers/cxl/core/region.c            |    5 +
- drivers/cxl/cxlmem.h                 |   73 ++
- drivers/cxl/mem.c                    |    4 +
- drivers/cxl/pci.c                    |    3 +
- drivers/edac/mem_repair.c            |    9 +
- include/linux/edac.h                 |    7 +
- 16 files changed, 2159 insertions(+), 2 deletions(-)
- create mode 100644 drivers/cxl/core/edac.c
-
+diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+index 1803aedb25ca..16bc717376fc 100644
+--- a/drivers/cxl/core/core.h
++++ b/drivers/cxl/core/core.h
+@@ -123,6 +123,8 @@ int cxl_ras_init(void);
+ void cxl_ras_exit(void);
+ 
+ #ifdef CONFIG_CXL_FEATURES
++struct cxl_feat_entry *cxl_get_feature_entry(struct cxl_dev_state *cxlds,
++					     const uuid_t *feat_uuid);
+ size_t cxl_get_feature(struct cxl_mailbox *cxl_mbox, const uuid_t *feat_uuid,
+ 		       enum cxl_get_feat_selection selection,
+ 		       void *feat_out, size_t feat_out_size, u16 offset,
+diff --git a/drivers/cxl/core/features.c b/drivers/cxl/core/features.c
+index 048ba4fc3538..202c8c21930c 100644
+--- a/drivers/cxl/core/features.c
++++ b/drivers/cxl/core/features.c
+@@ -203,6 +203,29 @@ int devm_cxl_setup_features(struct cxl_dev_state *cxlds)
+ }
+ EXPORT_SYMBOL_NS_GPL(devm_cxl_setup_features, "CXL");
+ 
++struct cxl_feat_entry *cxl_get_feature_entry(struct cxl_dev_state *cxlds,
++					     const uuid_t *feat_uuid)
++{
++	struct cxl_features_state *cxlfs = to_cxlfs(cxlds);
++	struct cxl_feat_entry *feat_entry;
++	int count;
++
++	if (!cxlfs || !cxlfs->entries || !cxlfs->entries->num_features)
++		return NULL;
++
++	/*
++	 * Retrieve the feature entry from the supported features list,
++	 * if the feature is supported.
++	 */
++	feat_entry = cxlfs->entries->ent;
++	for (count = 0; count < cxlfs->entries->num_features; count++, feat_entry++) {
++		if (uuid_equal(&feat_entry->uuid, feat_uuid))
++			return feat_entry;
++	}
++
++	return NULL;
++}
++
+ size_t cxl_get_feature(struct cxl_mailbox *cxl_mbox, const uuid_t *feat_uuid,
+ 		       enum cxl_get_feat_selection selection,
+ 		       void *feat_out, size_t feat_out_size, u16 offset,
 -- 
 2.43.0
 
