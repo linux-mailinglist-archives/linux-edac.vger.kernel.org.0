@@ -1,100 +1,89 @@
-Return-Path: <linux-edac+bounces-3448-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3449-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51DDDA77A10
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Apr 2025 13:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2B4FA77A47
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Apr 2025 14:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E425A3A11BD
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Apr 2025 11:51:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37DFC3AEB9D
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Apr 2025 11:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7EC1F91CD;
-	Tue,  1 Apr 2025 11:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=reox.at header.i=@reox.at header.b="0j02+H9N"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36711E5B78;
+	Tue,  1 Apr 2025 11:59:01 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from midgard.reox.at (midgard.reox.at [176.9.78.130])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D101FAC4A
-	for <linux-edac@vger.kernel.org>; Tue,  1 Apr 2025 11:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.78.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5D81F0985;
+	Tue,  1 Apr 2025 11:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743508292; cv=none; b=Im+G/OM2dCgHZeVCzld09oQubaApsrvdxWKzEyT8M5Wv4h/z6u7NJi/BywN/I7sA3znfjuKkewg1ltnF7F84y+taJ+35y6BKI41ffu23UW80+OXbzt6YRxM0peKNDlarQogRqbH2AyPcgJ42OOb0Hs2qpqOEl5sdKWgY5YbgnRU=
+	t=1743508741; cv=none; b=Bg3iOIkysA5BHNNN7HA4PTlmhmUNFR7+hSU3VewNPqt2WardVLW7rimAEB6TKsB9mCc7Ef5+QyGGuaerxEXYn6pMsYABMlwpXGHrYjfR+2/aVo300RCnUMhSbquSlRKXGDOog85fc0PpU3dS/+wI3soa8Z5ahfYQLBFSoHqVsMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743508292; c=relaxed/simple;
-	bh=cxbwAtqaEOa+x63VA6qhQH030ZMSEPhoQ8Yk3T3hKJI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ZRFAvr5iKQaDtcBpfBbvzdLtiK/eK6Q56V4udy9g7VCDbtLBjHRiAAhTZWCkfUMe4YsIJg2l1YT2WoqVnCyo2eNPlZkc/cs/8zhCYHDkFhLuwLKUDRQwjmE12ungXcjGAz8A9Ib8SuzmffE/G61Iabz8FgSPo4pWmlj3nvzQG8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=reox.at; spf=pass smtp.mailfrom=reox.at; dkim=pass (2048-bit key) header.d=reox.at header.i=@reox.at header.b=0j02+H9N; arc=none smtp.client-ip=176.9.78.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=reox.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=reox.at
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by midgard.reox.at (Postfix) with ESMTPSA id 1D91E1000FF;
-	Tue,  1 Apr 2025 13:44:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=reox.at; s=dkim2502;
-	t=1743507886;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ci4S47NYRiutenUi4gmT7W6Dks+GGKlLZri9iLI7pB8=;
-	b=0j02+H9NlujWjKN3KODvRoAuyhN3xzwWt4+OR5L9svH2N0i/QYiD1B+Ayx6u4HmQFKvnLH
-	X/aPeISiC9/EhN1wX4qQrXSPoNZXSHspY8P48onQ5GsQNCs8oEqHgCcpxCDQ2dWLdoCjHa
-	+VveWxbMD8bE6u27+wCXR2vD7j3cko7HP+IyV01xlFEk2T37kijgI6m4noeJk/VVHqPEWI
-	2Jlrcre1boEVsD3kp5d4aDXXW+Hu3Qq6ViwKZZaonC8OT2ticI4YEWD7rHbRRkqn3YUASs
-	9TRpe7ZdKHeLLatSbrKnB9KtGXtCgrKjDzxXb/RjbIZZ1fSSC7C+6FAyL8dLcw==
-Message-ID: <a1ed1aa7-96df-4c95-b818-4dd8f9da7c56@reox.at>
-Date: Tue, 1 Apr 2025 13:44:45 +0200
+	s=arc-20240116; t=1743508741; c=relaxed/simple;
+	bh=lYq3l/cDMp4M+zrUA88mCAEfodUAIB9xi+utvzYOls0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ASfEvXuXj2S/PAH2Y0c6HQhuPkCsDrY73FJp+GRkETONWTqtdHKMjJj+DOwZC3HaZ+bdG4FL8IIhDgs7RX0mhUsJQa0EyDJ3E8GwsV+8zTVWqLEmabn4ZZ15Mdt27LK9shNownMXZVAD3EVWLULgaOWiDYMjFPisIdoqV3nZZ4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZRmds5TJPz6L6tJ;
+	Tue,  1 Apr 2025 19:55:13 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id 11193140732;
+	Tue,  1 Apr 2025 19:58:51 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.146.185) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 1 Apr 2025 13:58:50 +0200
+From: <shiju.jose@huawei.com>
+To: <linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC: <bp@alien8.de>, <tony.luck@intel.com>, <mchehab@kernel.org>,
+	<sfr@canb.auug.org.au>, <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
+	<shiju.jose@huawei.com>
+Subject: [PATCH 1/1] EDAC: docs: Fix warning document isn't included in any toctree
+Date: Tue, 1 Apr 2025 12:58:23 +0100
+Message-ID: <20250401115823.573-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: mailinglist@reox.at
-Subject: Re: Memory controller not showing half of the memory?
-To: Borislav Petkov <bp@alien8.de>, =?UTF-8?Q?=C5=BDilvinas_=C5=BDaltiena?=
- <zilvinas@natrix.lt>
-Cc: yazen.ghannam@amd.com, linux-edac@vger.kernel.org,
- Avadhut Naik <avadhut.naik@amd.com>
-References: <20250317120702.GA7066@yaz-khff2.amd.com>
- <dbec22b6-00f2-498b-b70d-ab6f8a5ec87e@natrix.lt>
- <20250328152415.GCZ-a_HzI0zpcaLNWD@fat_crate.local>
-Content-Language: en-GB
-In-Reply-To: <20250328152415.GCZ-a_HzI0zpcaLNWD@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
+From: Shiju Jose <shiju.jose@huawei.com>
 
+Fix the build (htmldocs) warning: "Documentation/edac/index.rst: WARNING:
+document isn't included in any toctree".
 
-Am 28.03.2025 um 16:24 schrieb Borislav Petkov:
-> On Thu, Mar 20, 2025 at 11:38:58AM +0200, Žilvinas Žaltiena wrote:
->> Hello,
->>
->> I am also having this "half" memory problem - EDAC is showing 48GB instead
->> of 96GB, however otherwise whole 96GB are usable by OS.
-> 
-> Both of y'all folks encountering this issue, care to run the below patch?
-> 
-> https://lore.kernel.org/all/20250327210718.1640762-1-avadhut.naik@amd.com/
-> 
-> Thx.
-> 
+Fixes: db99ea5f2c03 ("EDAC: Add support for EDAC device features control")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/all/20250228185102.15842f8b@canb.auug.org.au/
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+---
+ Documentation/subsystem-apis.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-I tried to apply it on the current Bookworm Backports kernel (6.12.12) - 
-which seemed to work but I still get the same output, i.e., 32GB out of 
-64GB of RAM.
+diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
+index b52ad5b969d4..ff4fe8c936c8 100644
+--- a/Documentation/subsystem-apis.rst
++++ b/Documentation/subsystem-apis.rst
+@@ -71,6 +71,7 @@ Other subsystems
+ 
+    accounting/index
+    cpu-freq/index
++   edac/index
+    fpga/index
+    i2c/index
+    iio/index
+-- 
+2.43.0
 
-I may not have built the kernel correct though... I did not had an 
-environment to do that and just set one up. Or do I need a newer kernel 
-version to apply the patch to? Sorry for the noob questions...
-
-Best,
-Sebastian
 
