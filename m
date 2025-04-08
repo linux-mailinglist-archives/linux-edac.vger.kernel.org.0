@@ -1,197 +1,136 @@
-Return-Path: <linux-edac+bounces-3492-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3493-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 323BAA813BE
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 19:34:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9D31A813C5
+	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 19:35:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 721311BC001A
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 17:34:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C98B3A91FD
+	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 17:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F5C22F150;
-	Tue,  8 Apr 2025 17:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510E6237176;
+	Tue,  8 Apr 2025 17:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="e/454+UT"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="DGIa7MQr"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4598F4A00;
-	Tue,  8 Apr 2025 17:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1167222B8D2;
+	Tue,  8 Apr 2025 17:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744133629; cv=none; b=Ktvzr6ezFqq+seaDpbs8a1NKn6VMZKtyJP25TeZQvF18/JJ5NAqFL99BdHY4KSCq3tXbutV1OwYnEkoYATo+j76j6Uo3oToFkf9mMFBegel12L1uGeBfEqHbi1O2jGtRAgfmN1GYnFmHH0ntr14dTcgHwiYH81CmaS2Mkw3er+M=
+	t=1744133733; cv=none; b=aRBnG9Ei6nLT8ge1dxiRD+6WSlwic5JW9w3BeDTVQgrLd+ZmE6QeMQG0Zfp1Y93PQmeY/QN0KG4wfqt/tPS6z20GrxsRmbhyDuRmJNtC72SmJHD8k66Y0ydw/Zk9HulhTOtJpIXNGOXHDzn3BUyD4a56GZikjCGoW+L3GcYMExk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744133629; c=relaxed/simple;
-	bh=QREUDbQzRf7w9lKrG1xuyKIYiY6j3MZkE+jBRGcKgds=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JUuBr52eeKSppKA0fwegk2D0gB6X5x4KDlgHaWyIxr05BNhaIuCAFTYl8tjQT2cSAHOkKpLLTizPbw1zTqa8g84GDEZ99rW9lBKOX9QmrBZ/9lFwWmz3WN1zh+MrJ8l7YDOcCWAmsLsKx3xUpk87K987ASTm5OxH3f6Z7CBKufY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=e/454+UT; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 30E4940E019F;
-	Tue,  8 Apr 2025 17:33:44 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id xsSz-F8LuVwG; Tue,  8 Apr 2025 17:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1744133619; bh=g/LpMeFJ1yJcKe8WHOuBe0XU/0xiJE0+8BBgrwK6zts=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e/454+UTvh01ibtcfKTI29UTLb+WDh1aSkFZGtinowrYtExlXPQoLVZRnhrUR55Me
-	 nNmp1hiFyHfizx1SLyC/hj7ssS2ShjFiUcq3XOAawhCurtAZQ77ljVvzq4R/k2MDGa
-	 6QFUVRwN+Oc7ZXaT6xxHn10HizGCunDPJvig8Q8LZbYaTcxxbbv1bxIh/4kXhGS8iy
-	 LhWC4xrdrEFKCOU2ibDy+Kg+ta8K4fcLqzC3aJMuKAxaVQL3bOT9rf6udmzNy0Qfee
-	 v7a7e5z4l8rp4SlAkVgXhAXG3HG5pF8bqLzlR2FaniQFkZc9efNZxmQt2ZjvAoBhZE
-	 32lyCRb5XywmnT7ROEgVfaghYkIEn9cHgmaur/1mXcit/vDEjZsDXpi9/6SgP0XB/4
-	 n0lX98VE7ZScqe6H5xDyjpV4h9yDNaetJAIxh7Oxkaof8bhYnk/H4S5YVnM8jbxwV/
-	 Puq8a0JgHX4dKn3yAjssAhiLLlEc2UXdoY0rGJztVq4gikjxXH4lS7QoGxwPwTU2ap
-	 7DT4uTsZ0juM7lqiHKQVPV0X8kZMEYdN8Zel2fNh2zzTgl0buAoDl5Tc+ytUx+FZfs
-	 bFCsd/Uscuoc5fXUgzx63IZoV7ts6+0BjNO5la0x5OcesMfjR8H9OgTY9vx+09vI7q
-	 PvOJwHvKftxScnl2Wt138EKc=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5265C40E016D;
-	Tue,  8 Apr 2025 17:33:34 +0000 (UTC)
-Date: Tue, 8 Apr 2025 19:33:33 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
-	Muralidhara M K <muralidhara.mk@amd.com>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] RAS/AMD/{ATL,FMPM}: Get masked address
-Message-ID: <20250408173333.GEZ_Vd7V0hqJfBXFRu@fat_crate.local>
-References: <20250401-fix-fmpm-extra-records-v1-0-840bcf7a8ac5@amd.com>
- <20250401-fix-fmpm-extra-records-v1-2-840bcf7a8ac5@amd.com>
- <20250407132415.GCZ_PR_82FKBcsIuGr@fat_crate.local>
- <20250407151657.GA1948540@yaz-khff2.amd.com>
- <20250408101415.GEZ_T29wiuh-_sExlk@fat_crate.local>
- <20250408155242.GA2523543@yaz-khff2.amd.com>
+	s=arc-20240116; t=1744133733; c=relaxed/simple;
+	bh=voU6MwLZqCQnV0FdjD08dZZ9AHYyERMxnrmtBaVaoZ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gyoBIaMRcfwuNKJ8Tz/6DJR/Y8vWGt//kzkV6B9maaOAG/ixieOMulh+I4UsDTmQkbqlvLXju9dJqagOaEJfG4CUepHwNulAdRfKYmWRQquVEyqkdCeSQYRJV/UbUcQUjywPORgRGmHJTYWShbdtE9C0sqA7oqkIP1xQquLaRjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=DGIa7MQr; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 538HYKRg3088620
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 8 Apr 2025 10:34:21 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 538HYKRg3088620
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744133664;
+	bh=WkvwYM1YWnU4TAJ+J/9Vt8/Lh0xsIqteV787gUNx/Oo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DGIa7MQrPXWSVvRWGj8J9I9uLnNFKLmCzMcxqp9sA7nAoJC1WJHTTBphRx8Kv8ojG
+	 TFKk4S0MJqG1qE6jdToL7U6LViQMYDTnT6XmG6GZ/+eQjdbb1OSynNFMrpEtzEVoKZ
+	 g0KcbVkw9oMHB5iu0Rp5BEfOt7OQlb08CtRaOpdIjsTXVHGAxBTuXCRraYO5P9wS94
+	 8v73kdOA2NdbUZ2X6Zw6P5nUDUF44s5P31zcgszZbitLnPnn1PucZbcA7gNJNvVE5d
+	 daoTYgTnVa8ixFIdolcOCNPBmW+yivuG8gYwjhDdkQiDgWmAvrkZdHD6C59UDRz+ez
+	 9U2wrN1TZ2BKQ==
+Message-ID: <3b91a47c-e453-406a-815d-67c438d73a4d@zytor.com>
+Date: Tue, 8 Apr 2025 10:34:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250408155242.GA2523543@yaz-khff2.amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
+ native_wrmsrl()
+To: Ingo Molnar <mingo@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-edac@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-ide@vger.kernel.org, linux-pm@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, acme@kernel.org, namhyung@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20250331082251.3171276-1-xin@zytor.com>
+ <20250331082251.3171276-2-xin@zytor.com> <Z-pruogreCuU66wm@gmail.com>
+ <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com> <Z-ubVFyoOzwKhI53@gmail.com>
+ <7a503d55-db41-42da-8133-4a3dbbd36c7e@zytor.com> <Z-y4pGxgiP55lpOj@gmail.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <Z-y4pGxgiP55lpOj@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 08, 2025 at 11:52:42AM -0400, Yazen Ghannam wrote:
-> At the moment, FMPM only loads on MI300A. We can just have a local
-> function to mask the addresses. I was thinking we can have function
-> pointers to make things generic. But maybe we keep it simple until
-> really necessary by just using the MI300 version by default.
+On 4/1/2025 9:10 PM, Ingo Molnar wrote:
+> Yeah, I moved it over to:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git WIP.x86/msr
+> 
 
-Now you're talking! :-P
+Hi Ingo,
 
-> Please see patch below.
+Are you going to merge it into tip in this development cycle for the
+v6.16 merge window?
 
-... which I simplified even more.
-
-I'm thinking whoever is going to test fmpm on something else besides MI300A,
-they will have to extend this address masking thing and then we can cross that
-bridge when we get to it.
-
-So this is keeping it simple for now.
-
-Ack?
-
----
-
-commit 58029c39cdc54ac4f4dc40b4a9c05eed9f9b808a (HEAD -> refs/heads/edac-urgent)
-Author: Yazen Ghannam <yazen.ghannam@amd.com>
-Date:   Thu Feb 27 19:31:32 2025 +0000
-
-    RAS/AMD/FMPM: Get masked address
-    
-    Some operations require checking, or ignoring, specific bits in an address
-    value. For example, this can be comparing address values to identify unique
-    structures.
-    
-    Currently, the full address value is compared when filtering for duplicates.
-    This results in over counting and creation of extra records.  This gives the
-    impression that more unique events occurred than did in reality.
-    
-    Mask the address for physical rows on MI300.
-    
-      [ bp: Simplify. ]
-    
-    Fixes: 6f15e617cc99 ("RAS: Introduce a FRU memory poison manager")
-    Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-    Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-    Cc: stable@vger.kernel.org
-
-diff --git a/drivers/ras/amd/atl/internal.h b/drivers/ras/amd/atl/internal.h
-index f9be26d25348..d096b58cd0ae 100644
---- a/drivers/ras/amd/atl/internal.h
-+++ b/drivers/ras/amd/atl/internal.h
-@@ -362,4 +362,7 @@ static inline void atl_debug_on_bad_intlv_mode(struct addr_ctx *ctx)
- 	atl_debug(ctx, "Unrecognized interleave mode: %u", ctx->map.intlv_mode);
- }
- 
-+#define MI300_UMC_MCA_COL	GENMASK(5, 1)
-+#define MI300_UMC_MCA_ROW13	BIT(23)
-+
- #endif /* __AMD_ATL_INTERNAL_H__ */
-diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
-index cb8ace3d4e42..6e072b7667e9 100644
---- a/drivers/ras/amd/atl/umc.c
-+++ b/drivers/ras/amd/atl/umc.c
-@@ -229,7 +229,6 @@ int get_umc_info_mi300(void)
-  * Additionally, the PC and Bank bits may be hashed. This must be accounted for before
-  * reconstructing the normalized address.
-  */
--#define MI300_UMC_MCA_COL	GENMASK(5, 1)
- #define MI300_UMC_MCA_BANK	GENMASK(9, 6)
- #define MI300_UMC_MCA_ROW	GENMASK(24, 10)
- #define MI300_UMC_MCA_PC	BIT(25)
-@@ -360,7 +359,6 @@ static void _retire_row_mi300(struct atl_err *a_err)
-  *
-  * See MI300_UMC_MCA_ROW for the row bits in MCA_ADDR_UMC value.
-  */
--#define MI300_UMC_MCA_ROW13	BIT(23)
- static void retire_row_mi300(struct atl_err *a_err)
- {
- 	_retire_row_mi300(a_err);
-diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
-index 90de737fbc90..8877c6ff64c4 100644
---- a/drivers/ras/amd/fmpm.c
-+++ b/drivers/ras/amd/fmpm.c
-@@ -250,6 +250,13 @@ static bool rec_has_valid_entries(struct fru_rec *rec)
- 	return true;
- }
- 
-+/*
-+ * Row retirement is done on MI300 systems, and some bits are 'don't
-+ * care' for comparing addresses with unique physical rows.  This
-+ * includes all column bits and the row[13] bit.
-+ */
-+#define MASK_ADDR(addr)	((addr) & ~(MI300_UMC_MCA_ROW13 | MI300_UMC_MCA_COL))
-+
- static bool fpds_equal(struct cper_fru_poison_desc *old, struct cper_fru_poison_desc *new)
- {
- 	/*
-@@ -258,7 +265,7 @@ static bool fpds_equal(struct cper_fru_poison_desc *old, struct cper_fru_poison_
- 	 *
- 	 * Also, order the checks from most->least likely to fail to shortcut the code.
- 	 */
--	if (old->addr != new->addr)
-+	if (MASK_ADDR(old->addr) != MASK_ADDR(new->addr))
- 		return false;
- 
- 	if (old->hw_id != new->hw_id)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks!
+     Xin
 
