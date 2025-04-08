@@ -1,115 +1,108 @@
-Return-Path: <linux-edac+bounces-3486-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3487-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5829A7FB81
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 12:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA502A80C14
+	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 15:25:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF05A7A8C25
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 10:17:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9E877A801F
+	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 13:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8470267F49;
-	Tue,  8 Apr 2025 10:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EDDB2D600;
+	Tue,  8 Apr 2025 13:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PB+ziLz/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DDB58FXO"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1F7267F42;
-	Tue,  8 Apr 2025 10:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854D01EA65;
+	Tue,  8 Apr 2025 13:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744107277; cv=none; b=LinOkb2mYcubJWRKzf8kf+lntc2B2IUcBDdCRqy+/DPVxIlmyV2nZXrY+ybRlc66yAUeQ7REmMx7094D1+9qM5Wuzs7V3GgH+JbSwMPkK+gGVrg0JBQN59s9WrODcoJMblXWCyjXeECue2m4essuf9QQe+q809ObfhvkcLPg5ZE=
+	t=1744118723; cv=none; b=ZlLWRwEwGG7y22e5Elkl3/HHyPekiZyK1Tm/tj/WCkM3EHlgfYGa48VXE1Xfs5Wkv7PBabC8G3Hanw4nGAwRhKmwXzqfDtffjZOi+ezWEFv2AriOYGnkKzc5Xvtkd0EnZ0gzZd8jCHiArSHoS1jxxxAv5zvbX4bImOf94nZc3Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744107277; c=relaxed/simple;
-	bh=EE2UF08zeRk/Ooejon+VKCADk+3/i7Miu04z6sztAV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SthemAP7MOh1xnPMPLDaoNU2wFEgM4F+dvS9JeSvb1RIymncpmAaNZ6ABoXSH3lym2xchBDk1qpnywC320TQYUuw9dLEGNXB2w77uuwFxLzwRr3FTblKJfHAI/zDiQan6VDtGaFX6NJG72cPd3JbFGq4UeeKbRS7J5vICT3FyrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PB+ziLz/; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6592840E01A3;
-	Tue,  8 Apr 2025 10:14:30 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id GUgZhjc-BlNi; Tue,  8 Apr 2025 10:14:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1744107266; bh=C/J1EjJ7A2FdZlT0Q97w7fOk3eqcu450z0d9UrY4baA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PB+ziLz/o5sQuzHWF5wcG7GJ3qOspUR0YFto//2KPG5kJ2V8W6aYJKpwoK8dB1s/D
-	 gIynbVNJuH4D2gD3RkFIQupr6KrnWZfGpWduSy5Sk6hLkc+VyM2yNjUixJpJ0a/nzK
-	 dAqvUXt00LUzwKlNq5yLI4yhVEkG2/b/DdDdwZfn8k4DEqiKogC9Xwq9jEqXUYHKKB
-	 7fil83Wj1tQtl8VNf1mccdsf/k1Qn/2z1qYZdzoezk9BDXCFK30Yc60N+65mQMq7X2
-	 AxlsolpE/l0zIzRJ6cm7f2pmCCBov9IPR+ajsc49RD9bGfpHAPc5A5YvtUXTYjGvoI
-	 gk0Ucs0am2ooXQTs6PxANZ2bGJwKO1wuR88I0f44Cmy26gzTqQn217516MeGzKN8Xz
-	 zIA/1V9KXFIbQTlXnNDUO+/mi4OdVBGGayq32kpPzuFaY25Vm7zcgOidv7QqB+Fmeo
-	 imWXV5Sit10H4vHoEu56Kud74Xk50JhyY4khsPpcIr7+lQnL3Tjmcm7EKBh8QvPVqS
-	 Ns8VWnz9/LrxLmOUtjgcjDuH1Jm/Ga+iyuwQ6C1c/R+feOzwN5/+n/Z5StBOfvYJYe
-	 i2zqDWX1sO6ATAGuWE9TxlsQz4rz/NqzEO8zCXZCz+hcwRvuqVNczHwhnEbNVcCBRW
-	 2L6jecd+dt3qpVfJf2FGuFd0=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B41A640E019F;
-	Tue,  8 Apr 2025 10:14:21 +0000 (UTC)
-Date: Tue, 8 Apr 2025 12:14:15 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
-	Muralidhara M K <muralidhara.mk@amd.com>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] RAS/AMD/{ATL,FMPM}: Get masked address
-Message-ID: <20250408101415.GEZ_T29wiuh-_sExlk@fat_crate.local>
-References: <20250401-fix-fmpm-extra-records-v1-0-840bcf7a8ac5@amd.com>
- <20250401-fix-fmpm-extra-records-v1-2-840bcf7a8ac5@amd.com>
- <20250407132415.GCZ_PR_82FKBcsIuGr@fat_crate.local>
- <20250407151657.GA1948540@yaz-khff2.amd.com>
+	s=arc-20240116; t=1744118723; c=relaxed/simple;
+	bh=Sp3LVofHfZ5TNo81c5Y42e2eMP+sRv6Css2zbHW72OA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TJBC4TKzcszimPDrTxiJvvKo53wQs+KMuaXkN9AU/brbYEGbZAlXQAJ3TsQ/aBF66NQBRAv5SKjNo1HIgI4BO6/Y5qkgIWPdlxuz1vhl3HOryUZyhqBTF6VWFL2vSsZ8b9LOA6tfOs/iQianWDbZBdAPuNsDmZBTIO5YscStpHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DDB58FXO; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744118721; x=1775654721;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Sp3LVofHfZ5TNo81c5Y42e2eMP+sRv6Css2zbHW72OA=;
+  b=DDB58FXOuR7cnit+hUbQS9JXmrvVXfehEJevjptZ9j8ZMZ8Cvi+DCQV9
+   2yYHYuDSX0+FXExdV0FtodbkFrwdipHrn0GCLxG60k5FKLLOzpdPnsyy8
+   0sMowv0P8s1X6KcfGxwZZIJXxn6Ou77qboqQCQmbOo0Tmi3gjUxHwK0l2
+   OmNGTgDfNkdqcjyhG9p/vGISGMgsbfrFcS3eGj2pOOtQxwiVcmZoj6Jh5
+   7za03CQrlHWiRSwBGdG3rHVzu9Ry07q7G1u73TxAJNWErG9RxwY2lixfW
+   Rs1BOOymDgPmYNXDR15bagNsz604+Fbk8H8qOjgnw0GfSBc9D/BhgSZdl
+   g==;
+X-CSE-ConnectionGUID: xcuM277QQV6nnmoFwpMzAA==
+X-CSE-MsgGUID: jPEt5CgeRGKfWNMdvuplnw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="44799602"
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="44799602"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 06:25:21 -0700
+X-CSE-ConnectionGUID: Rm7B5lVETTySaDBxEENuSg==
+X-CSE-MsgGUID: 6iqx99pmRkqPAixo9eQuvg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,198,1739865600"; 
+   d="scan'208";a="159258205"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 06:25:18 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: Tony Luck <tony.luck@intel.com>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Yi Lai <yi1.lai@intel.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] EDAC/igen6: Add EDAC support for two Intel SoCs
+Date: Tue,  8 Apr 2025 21:24:52 +0800
+Message-ID: <20250408132455.489046-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250407151657.GA1948540@yaz-khff2.amd.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 07, 2025 at 11:16:57AM -0400, Yazen Ghannam wrote:
-> Okay, will do.
+Certain BIOS versions of Intel SoCs with In-Band ECC capability
+(e.g. Arizona Beach SoCs) may fuse off some memory controllers,
+causing the current igen6_edac driver to mistakenly register these
+absent controllers with the EDAC core.
 
-Yah, except that df_cfg crap needs an export now:
+Patch 1: Get the igen6_edac driver to skip absent memory controllers,
+         preventing erroneous registration with the EDAC core.
 
-ERROR: modpost: "df_cfg" [drivers/ras/amd/fmpm.ko] undefined!
-make[2]: *** [scripts/Makefile.modpost:147: Module.symvers] Error 1
-make[1]: *** [/mnt/kernel/kernel/linux/Makefile:1956: modpost] Error 2
-make: *** [Makefile:248: __sub-make] Error 2
+Patch 2: Add EDAC support for Intel Arizona Beach SoCs (for network computing).
+         This patch depends on Patch 1.
 
-Looking at the call chain how we land in that fpds_equal() in fmpm, can we
-read out from the error records themselves that those are from MI300 and not
-need df_cfg at all?
+Patch 3: Add EDAC support for Intel Amston Lake SoCs (for edge computing).
 
-There's a struct mce here:
+Qiuxu Zhuo (3):
+  EDAC/igen6: Skip the absent memory controllers
+  EDAC/igen6: Add Intel Arizona Beach SoCs support
+  EDAC/igen6: Add Intel Amston Lake SoCs support
 
-static void update_fru_record(struct fru_rec *rec, struct mce *m)
+ drivers/edac/igen6_edac.c | 86 +++++++++++++++++++++++++++++++--------
+ 1 file changed, 70 insertions(+), 16 deletions(-)
 
-which has CPUID for example.
 
-Otherwise we'll have to go back to your original thing if we're going to have
-to export *something*...
-
-Thx.
-
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
 -- 
-Regards/Gruss,
-    Boris.
+2.43.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
