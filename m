@@ -1,82 +1,79 @@
-Return-Path: <linux-edac+bounces-3494-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3495-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72E50A816A4
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 22:16:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC5AAA81C51
+	for <lists+linux-edac@lfdr.de>; Wed,  9 Apr 2025 07:49:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 158701B69C04
-	for <lists+linux-edac@lfdr.de>; Tue,  8 Apr 2025 20:13:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D4C01B6588A
+	for <lists+linux-edac@lfdr.de>; Wed,  9 Apr 2025 05:49:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EC3E2417D4;
-	Tue,  8 Apr 2025 20:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3827C1DD525;
+	Wed,  9 Apr 2025 05:49:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lFCZmHo9"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="UrTdP1Jf"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2044.outbound.protection.outlook.com [40.107.220.44])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2053.outbound.protection.outlook.com [40.107.223.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116B9158DD8;
-	Tue,  8 Apr 2025 20:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BA11DC992;
+	Wed,  9 Apr 2025 05:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744143064; cv=fail; b=bSJL3XDDyGZttEvlSQJdw4yeqzacuCRikRkjmoj2qF3PziQ5+PvOxb1UK5le+sSmXgoJEDtskbaw/akV1tITe9UcJ7hYqe/MRcqhk4Jn8ewZ8SXxbx6C1bWcDDXhXef0OMp27nqoRbCNHE9FF72vbgTXns8F/Rb2P5jAIvA5WCw=
+	t=1744177744; cv=fail; b=d2Krve2oBtJOS+HcbYXq0/rlu01NybOjrkZb2yplNSsUvlBVgvJc+gSlar3n4TZYo4bZwEpj3A9n+tSAzuewjymjT0oSUcCONwk9Vjj6h1YFY2MnZq4y6amhRp2s8i/IMfTN5srtoiPclUC4GV0FT2HJgXtghdcq5ocpFAnowhU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744143064; c=relaxed/simple;
-	bh=7UH+PesjkLGFu8SSLlaeND+4YM6XngCf67IGONxLr14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=jTDGlRNgHOxipvHVrtpTxYxjRyHwsN8GLIluR8lPUKHVYqm59GYH1HYYqLqHqMtR81SC4b+Bq9sIrn8uHlGgragMzPxDhIwUtvrfj1VvkGnTAfnRLpc8D5gKDqUHJGN0Up633nxT7EpRQpCWjcrClSRyRBgtfKIbQyWx/6LPllM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lFCZmHo9; arc=fail smtp.client-ip=40.107.220.44
+	s=arc-20240116; t=1744177744; c=relaxed/simple;
+	bh=+bjIsin8EzNg91yC0OiBugyICF+3ZiOYyRkE3mrCgEE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=aT4A1gt2/M1dBg1Raj2rtSiLyoAP7Mqo+wa/en9ghJEySHyzIHRw1OBi+9g85P5KNTe4sEObgPAFM6VhYYb5x0p1TMezwGGoEMsAVsgI22xEcDUvoZaHs7moD6pFwxRQaX228hd5TuqZbtSiLnaJXimkvFLNsGbEfsalROf70WE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=UrTdP1Jf; arc=fail smtp.client-ip=40.107.223.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rcxQsMJXyrBkSBv9grmQD/bCwpE8c+WjBvsDzH7vhfxxnFGj70IAVjE3iX34Y3ayv6VYAXfO5Xplkhslz0izjG6P628Wt+N+XFSFESRT2htWMm2zQAWSbBIVQJtImPIeympoAD9xEwWbJn+kD9pFTKDjkDWCIQQvxxws5VwuPBMtBx8GBMt2UQlPi9ZTTG3wgv66HGbmpA/BgSBjvqDFXs+RyWgHr0dcPmjl0LA8KwBaFWuj16BmpVpg7/VseGLVe4315ELT+F8MbQfFOqLK1qgc7rynHM3rm8437YNZmM/Rft2v3zo8jVhaBEBCjsfLz1UFcpAuDhoBS6vu6FmPxw==
+ b=RoQFhtDG5MuB4/1XpcjELBlrz8+SkCk8L83r8YU4JftsTmguQ30QfN1lPL97pK5qPkPgrUO1BSX7us3FuEV+MHtxXkSfN8sbo4FCWaLDj7t5JlnGnZpSixXNtF+9/5/bIPYMmmMTJSQAhNS+xz5xfiiZ+glTyHOE7sx7up1JrAFYX6tE9joP3kqKhUse0th+6pjWp7IX/lvKCAwt53XBVr5CBeQdQPfWJY8zfY5aeyS2MviIHtoUmMqwOYoera+sS1bOSyrKn6RRkTIyNQ6MjZ+G2J1vf+f/8VzhPMYlKeQGiETWOBvhVc4mPFgkKuyjJPmmK72NK905NB2Xv/t8Kg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C5nsupf6veIin5hvVyxITme/AzmpykAjLeH6kIF5BwE=;
- b=tMnZ2ngLlj70urAoCIXiVDFYBt579BKxAmFQm7nJNfknBHu5kaCp29sWAffOK9t0JI1KPslaAdjhOCNgYFpmZ5cymIxxdEtZrD417NDdndgLe8+5TtM5NevXi0zbJTNoR3VP6XOWqvO7yr77nk1oWu5ei1XHhMZZKL2zcDD+S/AupBWUp0LHswiTDVH2hOzj3VXHpDrkmOCmlgZyGCMhSdtcoanlTnbn6UFlTzB25dzRe8mt/aIs2gDxCAKVtKePQls1N5g9vvXZZ1jp2Xymoy4jyuQ3fxVzauRblctZjhAgQZY7y6z9kggLsVdf+/QJ3MKjmSs4j0qkStpgGuvzJQ==
+ bh=43NfRBzydiSvxdrmnyCp7wmYsibC1SwbEjie+7lOXpo=;
+ b=MJDwiEH679+HT7FeoVfYH0z4t6UV3OBNU2sTnDa0rGxrWAqdpgraS9mt2l9RHdsmyZZdJDGLBYn+CW9CKMP4nOvbwWY8z6qdiNrudSoiTedvg2DC8yQAQWJJOe12prPlr/GG+/2X2O2ZdaJvFld6q2i29OBmlkqR5Aw+XRxHNvPF0GnZD7bY7hd7xhwKyRmje1b5ORlgoFIRgk9nlAsUn+TCeUlYN68EupxQTZyBXW0igs4msURO6dM41ULrMBy+mdPbB2FGHsQjJg+u496gBN+zD3t5b3FNNZcRGTUU7yBEgstdm/Nk3NO5ioifE9ekNeivBef6Bi+zvfvPNufsHQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C5nsupf6veIin5hvVyxITme/AzmpykAjLeH6kIF5BwE=;
- b=lFCZmHo9AQ4chVXdXML/V6N/QEeiELA/R3LrmeqZDlOgRPsp5Zst0kcnOxOKT3TeAfWUCBnoTWNc4Ag8rfk4VvoNxYFV298qaCTfBsjZPUbxAmnWr12vh0aIcoRYWBvEPSifDPCO25RgT0rnTNFrpzrM9lZfRdhXJjrZ6cXZvYw=
+ bh=43NfRBzydiSvxdrmnyCp7wmYsibC1SwbEjie+7lOXpo=;
+ b=UrTdP1Jf7dH3pGp3sIcCQZu/IkJkKdllOlOwPQKlgJpEX36LVoY+8kCbpPuvFrI8o/ZGjfKTbPnu7Y05/JjveVx9h3I7j6nUsJs+49NOzsEscCab8yS12vY9lnYZ4kBINevJ36ez/zKS5Mwg9b9w0MyB6daLzK+W1PUENnSeTg8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- CH3PR12MB8935.namprd12.prod.outlook.com (2603:10b6:610:169::17) with
+Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
+ by DS7PR12MB5984.namprd12.prod.outlook.com (2603:10b6:8:7f::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.27; Tue, 8 Apr
- 2025 20:10:59 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f%7]) with mapi id 15.20.8583.043; Tue, 8 Apr 2025
- 20:10:58 +0000
-Date: Tue, 8 Apr 2025 16:10:55 -0400
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
-	Muralidhara M K <muralidhara.mk@amd.com>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] RAS/AMD/{ATL,FMPM}: Get masked address
-Message-ID: <20250408201055.GA2700280@yaz-khff2.amd.com>
-References: <20250401-fix-fmpm-extra-records-v1-0-840bcf7a8ac5@amd.com>
- <20250401-fix-fmpm-extra-records-v1-2-840bcf7a8ac5@amd.com>
- <20250407132415.GCZ_PR_82FKBcsIuGr@fat_crate.local>
- <20250407151657.GA1948540@yaz-khff2.amd.com>
- <20250408101415.GEZ_T29wiuh-_sExlk@fat_crate.local>
- <20250408155242.GA2523543@yaz-khff2.amd.com>
- <20250408173333.GEZ_Vd7V0hqJfBXFRu@fat_crate.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250408173333.GEZ_Vd7V0hqJfBXFRu@fat_crate.local>
-X-ClientProxiedBy: BN9PR03CA0208.namprd03.prod.outlook.com
- (2603:10b6:408:f9::33) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.34; Wed, 9 Apr
+ 2025 05:49:00 +0000
+Received: from CH0PR12MB5388.namprd12.prod.outlook.com
+ ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
+ ([fe80::a363:f18a:cdd1:9607%5]) with mapi id 15.20.8632.017; Wed, 9 Apr 2025
+ 05:49:00 +0000
+Message-ID: <642236b9-a19f-417b-bf1c-888ca54cecca@amd.com>
+Date: Wed, 9 Apr 2025 00:48:57 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] EDAC/amd64: Fix size calculation for Non-Power-of-Two
+ DIMMs
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, bp@alien8.de, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Avadhut Naik <avadhut.naik@amd.com>
+References: <20250327210718.1640762-1-avadhut.naik@amd.com>
+ <20250405005832.GA1625290@yaz-khff2.amd.com>
+Content-Language: en-US
+From: "Naik, Avadhut" <avadnaik@amd.com>
+In-Reply-To: <20250405005832.GA1625290@yaz-khff2.amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR04CA0199.namprd04.prod.outlook.com
+ (2603:10b6:806:126::24) To CH0PR12MB5388.namprd12.prod.outlook.com
+ (2603:10b6:610:d7::15)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -84,103 +81,325 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|CH3PR12MB8935:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5de462a6-5558-4eb9-81b4-08dd76d97a27
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|DS7PR12MB5984:EE_
+X-MS-Office365-Filtering-Correlation-Id: f09646c6-ff34-4ce5-5ba3-08dd772a39ab
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?F7o+g7WWbw5IauAk53MvRBprvRdmhiyTZye6K+vxhHkrx1zJcA4z1rKZ8Zob?=
- =?us-ascii?Q?GjHJ7WQeBluNyCAYeu7tNkg4AwEHJV+1tbIqoBfv/wGhkCs3P1p6TGhOV98w?=
- =?us-ascii?Q?KHyq1nNDT9Zxw1kVS+IDWp5qZ7RMIp7vAbtdL7J/+T0rOtdQXDj9lv0uwuj7?=
- =?us-ascii?Q?TJeJSsPK4HMD0Xkt+z7qm+A1gt0ytWNqtk1CkhAVnSAv3NKrdkX/H9ysrnnm?=
- =?us-ascii?Q?SPmxwf8zf9+LfXUHsgMCktMvTdTNtc0eea91teirf0s6QwTiZoIGw1mE067+?=
- =?us-ascii?Q?WR/cf8pxbJObushI0Q5kEJNJ8l6fjP7KTel+kz1NgZqcEpiOMXS7dqHHnWAy?=
- =?us-ascii?Q?6M39SevHmZ9MdypKeMsi7lXISUKt8WeuE8Kb94FQCnvEFWjUe1Z1F1gjGD0N?=
- =?us-ascii?Q?fwdHkXIaH+FQgF4dL6vvKLSZcbVfAsmD2XCSwcWvOHhn+5CDM92bd7hsnxo+?=
- =?us-ascii?Q?SeENoNBxzKTpDGNmGCxTJNJeqLAF2pemc6pR5lT+lHxhxdbpIcmxXyENFfEt?=
- =?us-ascii?Q?UrowYsufY4iOupzksRD6O8F8/c1QZMIe/Pm6ra2zqlL8+PkXz3MTZYdi5Cmr?=
- =?us-ascii?Q?V/XjwynIi8KFu/SK6FDW36jdskGoUS1InHKfpCGnTUm4kRIVyuVM9KIO+ZXx?=
- =?us-ascii?Q?wlM2WoWlio7zgZAtoUZwRzr442smbAu1gLR+8k8uYEe4me7MEHO+XoVATBp/?=
- =?us-ascii?Q?U2je3VU9s9TKPRAIqiGS3L55uwjNL/fyRoGgUwNSsYep3GUWzVXdk8jhacmF?=
- =?us-ascii?Q?hxchUHVZ+eEOHrjVJvMq8GXfXaj8m0URz/S/DP0lDFvWDa9+bzdlap7gHEjB?=
- =?us-ascii?Q?h8+QjParcdspvnfO312BJUTJTawB7ZV4tkCiKzLSWSdKe7UPdtkM7b/2Ncg8?=
- =?us-ascii?Q?2Zy/l2vDCDQ9z0PquEb9tGEBFPYWe6uA6JYy5dWaNgmnNUUcpDWbaJO6U/58?=
- =?us-ascii?Q?ZYdWNJqCzHUxKQ822yuanfSv+TV7NRZt/MwmbsFa+qyXYxQfaSkx+TEWVx2H?=
- =?us-ascii?Q?g/4aGGF1pBt5Qm0biHwtWO2wfquI6yg+xxBIKF1siBjxHF2nNKNmlnPKPB4G?=
- =?us-ascii?Q?t8Q3O4ZeeNleMk321bllc+aDYRwrb+341F7mi6kPPcxKLON7/hbfKdWlgI6L?=
- =?us-ascii?Q?xB7Ak7hZx2AdYaCYFPZ+ZxZf4Bc+BwVVXF9YrUIyhjys/B35YpLiQYI+MLRZ?=
- =?us-ascii?Q?nMHfOCXUrPuubrHiAAuQNm6YC1/qDAUUTQp1tzYmFsjmGFiKKwBIO8FVhbSX?=
- =?us-ascii?Q?SGjvdPNfPj+cW3FNKL5C6fhpoSzBEe4Um80F9474AsLATkU3Q4da9Ncvm+m1?=
- =?us-ascii?Q?4hIcyPJRsXlVErN2tAX0FYR0Oa3Pqjc3Xfwcbo9TYZphqSCgmReey+k+L2Qu?=
- =?us-ascii?Q?ut3SZJDwNgsG9o/8nELf0p+p3cmY?=
+	=?utf-8?B?U0lSVWphYzN6cHlaODZvWUdPRlc1ZmJGN0RSYk9QUDYva1JZVjE0VkxXTUJO?=
+ =?utf-8?B?Y3l1Nyt1cW91M29pblNFVEdhemhPelJ6Q1NGTmNrMW1WZ0VxU212MUVuTHZh?=
+ =?utf-8?B?YnZjT0xwUjIrZWtBUGJLMjByNUFFS0VFL1F6cnNRQnJrZytHSkdhVXByUCtW?=
+ =?utf-8?B?MGdiS1greUo1ZFNCMXRBNHg0bHZwZnZZakNubXd5bTRkNzZzQ3hySEJuNUtW?=
+ =?utf-8?B?eDJUcmlObXdtRG9nSDhYUkMxZldOckEyVDN6YTd3MkMwL0VEZkJUTGd0NlZ2?=
+ =?utf-8?B?VXhKNG9NNlYvNk1LKzMvaUE1dGxaakpFSThmN2NwMVo0bUtlcERSL1ZQTUpP?=
+ =?utf-8?B?YnJJcllrc205dkpTME82UWNabTVPbVJiOFhBN3JuTW1MU0Q5SisxZFJabita?=
+ =?utf-8?B?Q1kwckZIU3ZyNWVjY3ZkWmwxZXRPeElnUkZtOC82WkJicmxPOTR1YmV2eW4z?=
+ =?utf-8?B?d1dBSFFYU3hLSXhJa0xOVTZOUEpHYitjM2J4UDdCb3pRYXdJcGpGcitETFQx?=
+ =?utf-8?B?SjNOdVY2OSs5NWt6VDdVYUhwQlBNKzUrYjlRUG5xOUsyemhyWEpjazEvd1cv?=
+ =?utf-8?B?MEwzKzNGMXAvWmNSNU9oVXV3Ykw1cm04SkJqMjdWcUxod0NHNjVNRXROcklp?=
+ =?utf-8?B?eU11UDVlWXMrbmVVVVM1b0JkNXFDNiszVWlZZkRyTjFZMkM5OVp6MkdSeXJj?=
+ =?utf-8?B?VkpqYU9BNVF1dVVzVzlvOE5tV2FuZ0VjMG9pVlc1dnJNYUdNTkVDeXJuK0gy?=
+ =?utf-8?B?cnlieGtBUzNvdnN1Qll4Q2lSUVJpRkQzR0xxc0w3ZzZsSFVZaG9kdXpaUTNJ?=
+ =?utf-8?B?ekhjQktONkFBTS8wNytvR1M0WDl3U0dZYnZwcGVjZmQ2bUZXMHE0NHZHSTZM?=
+ =?utf-8?B?VFlMK1FCRnl0djQrb1hZcm5KbkI4STU0c09kZURkbjBTWnBYRTBhcnRjSlpi?=
+ =?utf-8?B?TndlUWdpL0RTNHh1L0k1cUFyMmJNQjNmTyt2ZW84QmpocTdtZzkyNExtL3BF?=
+ =?utf-8?B?cjdxS2VkQ2dlb0xKNVFDbWF0cXJkVUJ4VGhHbnZqZnJvazRhMFpxVWpGclpl?=
+ =?utf-8?B?NklaZ01ZVFFFa1FvaGhQWjJkeTArakdUUFFZMVpjcFlJS3NuMksvUEt5SVdY?=
+ =?utf-8?B?MkpoNng5ZDVGWWZJL21lSDRGVTBiVU55eHgvL3ZnYUZ2QWFvc3VzbHdJR0h3?=
+ =?utf-8?B?MlNtQ0hqcW9VOVV5a2lUQWJ4amFXVGlqVkYzTk5tQ2xGcGtDejRWT0dTTTI2?=
+ =?utf-8?B?UzNXcWdGREpQSk9mQmZmVVdqZzQrMUhWNGNpanJQbTNQc3ZpcExXZDcvMStF?=
+ =?utf-8?B?eExJaytuMGlXM0xTbXBua1F1TDhtYXNYVWNaaThqSDVPdU5VNnBnSC9XTklv?=
+ =?utf-8?B?NGZCdFNtblFXQ0lhN2dzcU0yWGdKT2hLWC90YjhUTUN2OE5XWEp4VVZwMTlj?=
+ =?utf-8?B?Vzczam04eXJlNVNUenNCNjJaL1ZvaVZHbmdiNnlLb29tbmMyUWVRNlgzdDdi?=
+ =?utf-8?B?OUJJQlJVcW8yblRtajRQdGdmbEMwc010Ym9iSlB3bVg5TkVyVS8yellNSmh2?=
+ =?utf-8?B?UkNER3EyNW45Nmhuc3ZqRUxRbUFGcmJldXdYbVJ5c0NBckN5RDB2cGdlR2Fs?=
+ =?utf-8?B?eWZpanZ2ZDU3SlN4eS9BekNFTlNDNG1IZkpZZkFvMThBK1liajJFSU5JZzh0?=
+ =?utf-8?B?V1JJcmJXaXZEYjllNzI0Y1JrUEdlMVlFZDc0b1g5di9nV2dUZHdrSUIzRzZo?=
+ =?utf-8?B?Nkw0S2w0RG5WTEkzdDJVeDFBRTJBOTRUVHNGcytrUXcvWjBhSGhuY3lrL21N?=
+ =?utf-8?B?aWc4WlAvYUU1NWRoZkY3SUt3aWc0dm1HTlR1NTBWd0N6NGZTVThEalM5TE05?=
+ =?utf-8?Q?LNNEPsYYiH7jJ?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?iX7GmfPnEiQy6xtlyTm+LvItgqQ0wOB62Um/THbuDqj/FtIkYrofcUt0E4Qp?=
- =?us-ascii?Q?JjBtQy8yu3Pp+n9Xx9CWN0t98oMgiXTZWGMd0otAouJPiKx61+82b4PznTPY?=
- =?us-ascii?Q?9Zyx+5qV6fWYvntKAIccNadOFTDsGwFyxHJGQAALZs7dSAKw3OYQH3W4Nz2f?=
- =?us-ascii?Q?mC6b/8mNKJx0FsAmiGJUKwWCVmlmWV7lldUbB/4gE3ll6yk+C+pj+F8LLNxj?=
- =?us-ascii?Q?eMB3I2hSVZ+YBvOuP9ApvGxnxugZC0X2n50lOexSxrwKRkf/Efj3TApFWkN3?=
- =?us-ascii?Q?pH4K7b9z6HXqj95JGBTcLY/8aQ1UmwmPY7PRlotJMiUu2pdfXCwuZCiHpq01?=
- =?us-ascii?Q?90TOxqLYmvVJ2sjGpBIQgJGAlgDa+l1ZC7MNKPD8NsfymZerFWd6i7C7ykUv?=
- =?us-ascii?Q?km7osDcO6X1sCzakcBemDUcL+fvzLW1reRqXEuo2PwgCRlVr8WasTCsScCXP?=
- =?us-ascii?Q?w0cmCVEWySRl6cbP+HldtGMvKXwtM0j6Iaf6SivctPLjMTci/nMs1Ize+6sM?=
- =?us-ascii?Q?/Ss8HASKYAXehgDuMbt+1SKLQH3GQFJZaR/5j/hhBIHDs06NCiEXga+KXowP?=
- =?us-ascii?Q?HqYc7bVMFJ4NVV1CNsoy/9IgsGxCXjRrZchCf32ZHPg0RGUQKcQBK5vHQwZb?=
- =?us-ascii?Q?rToQtWfyMyHx0Og75mXqaJ57EFIAFtkKovKUVe/nRYXOVV2CzLyLj3MXNMD3?=
- =?us-ascii?Q?Umvp3Q9LeBHF4hv70jl8jDUNHwv7joP8Wq69P9rVV0BaVmBYrn83ypPw9vcA?=
- =?us-ascii?Q?Vrzs6BE5cyPDVUKu7fC2ExFur+uo/Eh5wJgMDJ71hQZHHXozVZi+ilDivTIt?=
- =?us-ascii?Q?iH/gLLYPW2shu/gZcG8goVfAMn/kFCduz3sJqOlOrwAA7Er5QKa7P06iBAjU?=
- =?us-ascii?Q?JwMsmCPBBl0gW/oLmpqBPo4+jVEfOFPW/c7kA64rAPNqiwrNGJjDHn74a5zp?=
- =?us-ascii?Q?x5cBvcN4+gE456pusmLMIMG8zmpgLmnZ6QigRD/3lKB4FC0LTuRN2mnHHnAc?=
- =?us-ascii?Q?75CzRWW90/4gA6j8uM4RFSozJ7YHqWULWU4wmSY6hgfIWjX+ibzqNcbbVXBY?=
- =?us-ascii?Q?rjlJZ5MHTJaSXJ6lnQmOS5ZL+c657Eep+BkvSyQ8I0W4k26Iiq2e7RslWvR6?=
- =?us-ascii?Q?mMP18kcD0wZBfL5mVRTJMSdOQKJVn+BNKKvANONxGX6BVrWWGX3MdjAn1vNO?=
- =?us-ascii?Q?vqa3SUHXyjYopYinQAUmrttzlcwIcwHsCcohd1+mJ6o9+1XLXEWHJtVV1thx?=
- =?us-ascii?Q?WQVyvmLd0jBmaqmEYzXEQxszzVrBElDgMvHpQgebcGmNkuzaPmFNe8noVybz?=
- =?us-ascii?Q?vlM+Z1PzzbkyEaR7pBr8lQsAXxB3oTK2xK1IoAFB7qul/QhLxkVIs58F19wu?=
- =?us-ascii?Q?8b+Y1Lp9f7shRtrpKpOAKJPluTyTvZ6yVg0gwLDLaaNEfqgCOmPUEzvHsXx2?=
- =?us-ascii?Q?fm+zrZ4JZhIUGgG8EOZI4vT9ycQqqpWFS1r5sBIdRtTmwgxDSfrVnbEiAfjP?=
- =?us-ascii?Q?s82YkESo9OW5xtXcjULF/wAFi+Qe3DisxCW+KT1oIr8V8aDomcsgWEMkVd6a?=
- =?us-ascii?Q?LO42m3k9TzM6+GfpVPLCopbsnIVMjYPDnSD/1X4R?=
+	=?utf-8?B?VDVGa1U2Tjg3ckJQVWZuRTNqaUFkQlZQck1vdElBMVdKZ0FNdFNoVDhOUkNK?=
+ =?utf-8?B?YjZ1aUU3OFhCbmdZUGtFMTRjMEs0YnNZU0E3aHZYYlZvRVhJMGE0MHNOZWdQ?=
+ =?utf-8?B?bnlEb0JWekZxTFJSUDN5c0N4VXhELzhIVjF4RWVTV3JSRVppNWhQRFNpWHVT?=
+ =?utf-8?B?QmN3bzR6UHJTNStON0RkSE1TbGMrK1Z4cE9ock5uSm94ZUE2Zm4rZmJPd2F1?=
+ =?utf-8?B?WmJvdzZET2VqQzh0Z1I1aE1lWkxDT0hCWXJXQ2NsQVBmQWhSZHJCY2twbUxP?=
+ =?utf-8?B?Q3doTFVyWVdBaTY5czNQUUlBVGp2VGZPZnltWm1CdHIwWFUwTWRMSjF2RnIz?=
+ =?utf-8?B?UkNpcTM2SyszRE15aGZrNWhXRGhUbzN3UDh1WHZyWmdjckMwUzJoajFmWDJz?=
+ =?utf-8?B?eVpCSUEvZjFqUjhtYm5NQmphZlQvZWpNaVZsbHZWK2RQNmtCT3JUWlUza3Fx?=
+ =?utf-8?B?R0NtVEYyZmVScTBUU2kwaGgxNUs1Z2NoNHYzYU5xZFVJYllreGhXdmp0alYw?=
+ =?utf-8?B?ZVJlRzhXUnFzeU44QzA1R0p3RTFwZXZ0M1ZFZ2NBZTNNWDVxMEJaRENrZDll?=
+ =?utf-8?B?S3hzUTF6emx3ZVNReFFra1h1K2ZDZFVPMkdNYzNBNVhWcEhnWFlnZjdIb1ly?=
+ =?utf-8?B?MVhMakpjcWZ2VWNSalZLNmRVVjFSNGdkSVQrZndkVmMydjFCeG5pK09uN3F2?=
+ =?utf-8?B?NUYzMWRtZ1crSHU2YkFHeFk1VmczeXY4ZjYvK1UySUtEVzZVVjArUUFPWmZi?=
+ =?utf-8?B?SXo4eUhySFpPRzZEOEY5RHE1V2hKdFRHYjJ3TEtxVWp5NWd4cHFOd0QvemU4?=
+ =?utf-8?B?R3lleVdTN2hGU2MzaGxpc21iamxnNDFUZklRN1JJR0hhdThUN0VPQ0V4UVQx?=
+ =?utf-8?B?cS9sUDFQMFRkUjllbjFwRGVWclk3WWx5TzZXYWZ1UEdMRHMvRnZ6RlRHN2dD?=
+ =?utf-8?B?YXVtRjRvMEo1UGFtOHZoSy9YYzBiVlNCTitVKzJwMzNTaWNrN1dVdUZJRlBF?=
+ =?utf-8?B?a0lrTWlKMi9Cdk11UXZEeG1PNHBkWHZieEIrNzdpSGwwcmovRCswOXdYSm4w?=
+ =?utf-8?B?UG5ERzdlUHF2b3BqSHlRZFNrZjh2RThRUExma3ZDektxSnZGeTR4M3plRThr?=
+ =?utf-8?B?WWpBTUVvd1AzeUtsZjhnWG1DdUEvbTgzWEhGaGV0UEpEUUk1VE41SllIS2hE?=
+ =?utf-8?B?R1cwSlZNSFZCc0x5bit2cUlCRjAwUjdGUlc4bGg3aytvMWhOV04zcHF5YXFC?=
+ =?utf-8?B?OXN5NU9sYlVseENaWjdVM0RIZTljSVNTRlluTGNzcCtuR3ZodjlSMGF6ZC95?=
+ =?utf-8?B?QU4zalNMWE9hTFQra2Q2UzhndnVUeUZ0bGhqZVAxQ3hmUi9kS0hyVmVWN1Rw?=
+ =?utf-8?B?UFlmUENEb2dyNG81KytZc0RKMExpb0Qxa0YyRFFqVFcwRTJMcmNiVTlScmoy?=
+ =?utf-8?B?MlhnU1VrNVlBcVMva2tURXRUeG5TQm1hVUlIdnM1WVptQ3hDbzcwRk9BWG1v?=
+ =?utf-8?B?alI4TUhLcUp3dDdNaDVBdU84N1JheEsyWXlIWEdXRVlFMFZpSEhHcE9YZkZt?=
+ =?utf-8?B?RmpGT2orN3p1MEFRdTJCTHM0dkFHdG5wQnI4Tjd6K20xMlUzaldJTGtXREFM?=
+ =?utf-8?B?cVBzVTZZemt5UjZ4bFpNWFpteExuQlRRTlYxbmY1Ymwvc2c4ZDFabFZDaFJK?=
+ =?utf-8?B?NTZQdFhVMnV0S2puVkpmWWJKUk0wVzE1Mjl4eFVyWm1QeE96cS9LMWUvMUNy?=
+ =?utf-8?B?WDNnTHI4NFMybGRKWnI1RDN1c2ltY0tNVmtnbmF2OGI1Ykw5WHJTZFZjb3Qx?=
+ =?utf-8?B?dlRFRldyMk91R1BVeForNTJQZ2lBbFVhaEs0Z0c0b2hLS285ckhQTUtHWUNw?=
+ =?utf-8?B?Z2tlOWpGaytxVVN0UlcxRzEyQ28rVnRsRk80UzB6Ym5DUTBGdkdwYlBrcExv?=
+ =?utf-8?B?R05nWWhwclBVRHh1Y2JyQVI3MGJXcGNxN1RVUUhkK2VBbkFoMEhKanpQa2Mx?=
+ =?utf-8?B?Y1V2ZDhzZzdUSERpMjVHbnIvK0pJS2h6dnRZRXVRZDJUSTlBaXJ0NkRnZjZ2?=
+ =?utf-8?B?SkgvU0tQbnY1cVlmTlJjSDU0VS8rNkRjOVFVMGE0d0VkV1IwSjN3L0xaUTNk?=
+ =?utf-8?Q?TiUq3iE2zwaqT0+tMf7MpwIhi?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5de462a6-5558-4eb9-81b4-08dd76d97a27
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f09646c6-ff34-4ce5-5ba3-08dd772a39ab
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2025 20:10:58.8307
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 05:48:59.8533
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e11bCnzTvJh+g9ay01QuVcLkAxsn2P1YCBMuWej/jJE0khjG3X/LQ0maN7K0V9CeKsrIxiiblWN+v3KbuE9lsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8935
+X-MS-Exchange-CrossTenant-UserPrincipalName: fi8v82u7HcKDYPIW/GyXTJ8R2p3pAaBxGLRXpppU3HUqXJjmXtW6Bvyq7an75nH2EcC4vSTcCdSdrCjCtu+J5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5984
 
-On Tue, Apr 08, 2025 at 07:33:33PM +0200, Borislav Petkov wrote:
-> On Tue, Apr 08, 2025 at 11:52:42AM -0400, Yazen Ghannam wrote:
-> > At the moment, FMPM only loads on MI300A. We can just have a local
-> > function to mask the addresses. I was thinking we can have function
-> > pointers to make things generic. But maybe we keep it simple until
-> > really necessary by just using the MI300 version by default.
-> 
-> Now you're talking! :-P
-> 
-> > Please see patch below.
-> 
-> ... which I simplified even more.
-> 
-> I'm thinking whoever is going to test fmpm on something else besides MI300A,
-> they will have to extend this address masking thing and then we can cross that
-> bridge when we get to it.
-> 
-> So this is keeping it simple for now.
-> 
-> Ack?
+Hi,
 
-Yes, looks good to me.
+On 4/4/2025 19:58, Yazen Ghannam wrote:
+> On Thu, Mar 27, 2025 at 09:03:50PM +0000, Avadhut Naik wrote:
+>> Each Chip-Select (CS) of a Unified Memory Controller (UMC) on AMD EPYC
+>> SOCs has an Address Mask and a Secondary Address Mask register associated
+>> with it. The amd64_edac module logs DIMM sizes on a per-UMC per-CS
+>> granularity during init using these two registers.
+>>
+>> Currently, the module primarily considers only the Address Mask register
+>> for computing DIMM sizes. The Secondary Address Mask register is only
+>> considered for odd CS. Additionally, if it has been considered, the
+>> Address Mask register is ignored altogether for that CS. For
+>> power-of-two DIMMs, this is not an issue since only the Address Mask
+>> register is used.
+>>
+>> For non-power-of-two DIMMs, however, the Secondary Address Mask register
+>> is used in conjunction with the Address Mask register. However, since the
+>> module only considers either of the two registers for a CS, the size
+>> computed by the module is incorrect. The Secondary Address Mask register
+>> is not considered for even CS, and the Address Mask register is not
+>> considered for odd CS.
+>>
+> 
+> Missing an imperative statement for the major change.
+> 
+> "Include Secondary Address Mask register in calculation..." or similar.
+> 
+Will add a statement.
 
-Thanks!
+>> Furthermore, also rename some variables for greater clarity.
+>>
+>> Fixes: 81f5090db843 ("EDAC/amd64: Support asymmetric dual-rank DIMMs")
+>> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+>> Cc: stable@vger.kernel.org
+> 
+> JFYI, the TIP maintainer's guide recommends *not* actually sending the
+> patch to the stable list. Though I recall some stable maintainers are
+> fine with, or prefer, this.
+>
+Thanks for the info!
+ 
+>> ---
+>>  drivers/edac/amd64_edac.c | 56 ++++++++++++++++++++++++---------------
+>>  1 file changed, 35 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+>> index 90f0eb7cc5b9..16117fda727f 100644
+>> --- a/drivers/edac/amd64_edac.c
+>> +++ b/drivers/edac/amd64_edac.c
+>> @@ -1209,7 +1209,9 @@ static int umc_get_cs_mode(int dimm, u8 ctrl, struct amd64_pvt *pvt)
+>>  	if (csrow_enabled(2 * dimm + 1, ctrl, pvt))
+>>  		cs_mode |= CS_ODD_PRIMARY;
+>>  
+>> -	/* Asymmetric dual-rank DIMM support. */
+>> +	if (csrow_sec_enabled(2 * dimm, ctrl, pvt))
+>> +		cs_mode |= CS_EVEN_SECONDARY;
+>> +
+>>  	if (csrow_sec_enabled(2 * dimm + 1, ctrl, pvt))
+>>  		cs_mode |= CS_ODD_SECONDARY;
+>>  
+>> @@ -1230,12 +1232,10 @@ static int umc_get_cs_mode(int dimm, u8 ctrl, struct amd64_pvt *pvt)
+>>  	return cs_mode;
+>>  }
+>>  
+>> -static int __addr_mask_to_cs_size(u32 addr_mask_orig, unsigned int cs_mode,
+>> -				  int csrow_nr, int dimm)
+>> +static int calculate_cs_size(u32 mask, unsigned int cs_mode)
+>>  {
+>> -	u32 msb, weight, num_zero_bits;
+>> -	u32 addr_mask_deinterleaved;
+>> -	int size = 0;
+>> +	int msb, weight, num_zero_bits;
+>> +	u32 deinterleaved_mask = 0;
+> 
+> Don't need to initialize if it is set before first use below.
+> 
+> It doesn't hurt, but we might get patches to change this. I forget the
+> exact reason; maybe saving an instruction here and there adds up
+> throughout the kernel.
+> 
+Will remove this.
 
--Yazen
+>>  
+>>  	/*
+>>  	 * The number of zero bits in the mask is equal to the number of bits
+>> @@ -1248,19 +1248,32 @@ static int __addr_mask_to_cs_size(u32 addr_mask_orig, unsigned int cs_mode,
+>>  	 * without swapping with the most significant bit. This can be handled
+>>  	 * by keeping the MSB where it is and ignoring the single zero bit.
+>>  	 */
+>> -	msb = fls(addr_mask_orig) - 1;
+>> -	weight = hweight_long(addr_mask_orig);
+>> +	msb = fls(mask) - 1;
+>> +	weight = hweight_long(mask);
+>>  	num_zero_bits = msb - weight - !!(cs_mode & CS_3R_INTERLEAVE);
+>>  
+>>  	/* Take the number of zero bits off from the top of the mask. */
+>> -	addr_mask_deinterleaved = GENMASK_ULL(msb - num_zero_bits, 1);
+>> +	deinterleaved_mask = GENMASK(msb - num_zero_bits, 1);
+> 
+> This change makes sense to me. But it would be good to mention it in the
+> commit message. This is more than just renaming variables for clarity.
+> 
+Noted. Will mention this in the commit message.
+
+>> +	edac_dbg(1, "  Deinterleaved AddrMask: 0x%x\n", deinterleaved_mask);
+>> +
+>> +	return (deinterleaved_mask >> 2) + 1;
+> 
+> Also, 'introducing a new helper function' should be highlighted in the
+> commit message. It doesn't need to be a long description.
+> 
+Okay. Will mention this in the commit message.
+
+>> +}
+>> +
+>> +static int __addr_mask_to_cs_size(u32 addr_mask, u32 addr_mask_sec,
+>> +				  unsigned int cs_mode, int csrow_nr, int dimm)
+>> +{
+>> +	int size = 0;
+> 
+> You don't need to initialize this since it is immediately set below.
+> 
+> Or you can just call the function here.
+> 
+Will remove the initialization. Calling the function here might make
+the debug logs confusing.
+
+>>  
+>>  	edac_dbg(1, "CS%d DIMM%d AddrMasks:\n", csrow_nr, dimm);
+>> -	edac_dbg(1, "  Original AddrMask: 0x%x\n", addr_mask_orig);
+>> -	edac_dbg(1, "  Deinterleaved AddrMask: 0x%x\n", addr_mask_deinterleaved);
+>> +	edac_dbg(1, "  Primary AddrMask: 0x%x\n", addr_mask);
+>>  
+>>  	/* Register [31:1] = Address [39:9]. Size is in kBs here. */
+>> -	size = (addr_mask_deinterleaved >> 2) + 1;
+>> +	size = calculate_cs_size(addr_mask, cs_mode);
+>> +
+>> +	if (addr_mask_sec) {
+> 
+> I think we can skip this check.
+> 
+Commented below on this.
+
+> For debug messages, it doesn't hurt to be more explicit. So printing a
+> 'mask: 0x0' message is more helpful/reassuring than 'no message'.
+> 
+>> +		edac_dbg(1, "  Secondary AddrMask: 0x%x\n", addr_mask);
+> 
+> addr_mask -> addr_mask_sec
+> 
+>> +		size += calculate_cs_size(addr_mask_sec, cs_mode);
+> 
+> Maybe add a "!mask" check to return early if you want to save some
+> cycles in this helper function.
+> 
+In a way, this is the reason why I had added the above condition check.
+To avoid unnecessary function calls.
+
+AFAIK, power-of-2 DIMMs are predominantly used, so the Secondary Address
+Mask register will seldom be used.
+
+Would you agree?
+>> +	}
+>>  
+>>  	/* Return size in MBs. */
+>>  	return size >> 10;
+>> @@ -1270,7 +1283,7 @@ static int umc_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
+>>  				    unsigned int cs_mode, int csrow_nr)
+>>  {
+>>  	int cs_mask_nr = csrow_nr;
+>> -	u32 addr_mask_orig;
+>> +	u32 addr_mask = 0, addr_mask_sec = 0;
+>>  	int dimm, size = 0;
+>>  
+>>  	/* No Chip Selects are enabled. */
+>> @@ -1308,13 +1321,13 @@ static int umc_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
+>>  	if (!pvt->flags.zn_regs_v2)
+>>  		cs_mask_nr >>= 1;
+>>  
+>> -	/* Asymmetric dual-rank DIMM support. */
+>> -	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
+>> -		addr_mask_orig = pvt->csels[umc].csmasks_sec[cs_mask_nr];
+>> -	else
+>> -		addr_mask_orig = pvt->csels[umc].csmasks[cs_mask_nr];
+>> +	if (cs_mode & CS_EVEN_PRIMARY || cs_mode & CS_ODD_PRIMARY)
+> 
+> Another common way to do this kind of check:
+> 
+> 	if (cs_mode & (CS_EVEN_PRIMARY | CS_ODD_PRIMARY))
+> 
+Will use this!
+
+>> +		addr_mask = pvt->csels[umc].csmasks[cs_mask_nr];
+>> +
+>> +	if (cs_mode & CS_EVEN_SECONDARY || cs_mode & CS_ODD_SECONDARY)
+>> +		addr_mask_sec = pvt->csels[umc].csmasks_sec[cs_mask_nr];
+>>  
+>> -	return __addr_mask_to_cs_size(addr_mask_orig, cs_mode, csrow_nr, dimm);
+>> +	return __addr_mask_to_cs_size(addr_mask, addr_mask_sec, cs_mode, csrow_nr, dimm);
+>>  }
+>>  
+>>  static void umc_debug_display_dimm_sizes(struct amd64_pvt *pvt, u8 ctrl)
+>> @@ -3512,9 +3525,10 @@ static void gpu_get_err_info(struct mce *m, struct err_info *err)
+>>  static int gpu_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
+>>  				    unsigned int cs_mode, int csrow_nr)
+>>  {
+>> -	u32 addr_mask_orig = pvt->csels[umc].csmasks[csrow_nr];
+>> +	u32 addr_mask = pvt->csels[umc].csmasks[csrow_nr];
+>> +	u32 addr_mask_sec = pvt->csels[umc].csmasks_sec[csrow_nr];
+> 
+> Please align on the '='.
+> 
+Will do.
+
+>>  
+>> -	return __addr_mask_to_cs_size(addr_mask_orig, cs_mode, csrow_nr, csrow_nr >> 1);
+>> +	return __addr_mask_to_cs_size(addr_mask, addr_mask_sec, cs_mode, csrow_nr, csrow_nr >> 1);
+>>  }
+>>  
+>>  static void gpu_debug_display_dimm_sizes(struct amd64_pvt *pvt, u8 ctrl)
+>>
+>> base-commit: f1861fb575b028e35e6233295441d535f2e3f240
+> 
+> Thanks,
+> Yazen
+
+-- 
+Thanks,
+Avadhut Naik
+
 
