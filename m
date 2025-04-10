@@ -1,47 +1,47 @@
-Return-Path: <linux-edac+bounces-3512-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3513-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D56A84FA4
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Apr 2025 00:27:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CED31A84FA7
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Apr 2025 00:29:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB5D87B4DDD
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Apr 2025 22:26:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC4C94C0B2E
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Apr 2025 22:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38EFE1FC10E;
-	Thu, 10 Apr 2025 22:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E316320E003;
+	Thu, 10 Apr 2025 22:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="fudX9cfv"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="LQiSJili"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C752EAD5E;
-	Thu, 10 Apr 2025 22:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89041202F7B;
+	Thu, 10 Apr 2025 22:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744324041; cv=none; b=BEeQj2qM6ncnnmoDGVWGU0lbZz1RgGtWctthjGGLgth1H8PFs/EvcKLc4mYpyYjmwKvLZEYu+WRHjwesfCLxb5JIeAl8YU/0ONJFo6cQxl0gmsRFqmPWNBRl+GUPOl9w3oQ+1nYMmwqR2V21ZQgwVQsr/FtIJDt9twZQ2XWQl44=
+	t=1744324163; cv=none; b=WCU998GLtQHb8gkherilKn5iP15a2Y3nYKJsV0UOntk0hEenWUA7p/VmmaXUIHyn/a9uau4vf/0cIcGOYupYda/GJZKA8SihZ5zamwq7GCHKK/wUMcMshAzgHK5lHZrM2vp5uR4KdmT5CZevpW0k7YvAwZWzkGVJrXKDwOtermM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744324041; c=relaxed/simple;
-	bh=DrB08N5vJpBO00PaLi2EQwkYUnMtu3OKx4Wnr7y5pss=;
+	s=arc-20240116; t=1744324163; c=relaxed/simple;
+	bh=o4QeWaF1Zux9H/TMyr4q62bE+0yVW0ZNrHfLCpXWQeg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fmtuILHefS+O6c+pzC4wb5oOLfZCz980gjFPXOSL+Fzvtkrnr3hPnd1ktf8JNDlEdGYnwHgn6yJMWznWQ2G+O0Gq1otcuRwlCfSZBsMsWQU0sIas6fwZolt7uQpYsZZmZBYgljc+DNBellU5SZkbw4Cgqe5TugCY/ry9RQVoB1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=fudX9cfv; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=NLLk2WbT3XxmmzkryYTA/o2GmFwTHqe4FbGiWxwht2gXqYB75XxnL8tBv3tn6zfXf8wijdc5OK219HJE5SJsttDllxkrtpu8ScG390D2WEjd17X4Ng5gruUNBy0Uby520jkIF/dGFf7Wbfx7qT26n4+3bUm/rCUDTKhPDA4A5e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=LQiSJili; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.75.32.16] (unknown [40.78.12.133])
-	by linux.microsoft.com (Postfix) with ESMTPSA id C68FA2114DA7;
-	Thu, 10 Apr 2025 15:27:18 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C68FA2114DA7
+Received: from [100.75.32.16] (unknown [40.78.13.147])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 977D12114DA7;
+	Thu, 10 Apr 2025 15:29:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 977D12114DA7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744324039;
-	bh=pkMs5AJBhRZ0JMEFeYZdqR+F93uPTPCtkVAJXcycSu8=;
+	s=default; t=1744324162;
+	bh=lzClyl4jSujtrnGb0jX67wSU+NPlPXX70zMwzi9cA7k=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fudX9cfvxHLuQG5pnqmRTGCroHhiRkFrqQU/k2C1P+vq7cggMGSbkCx1h0Dj6jwrM
-	 dSfgZnql2xypQcjJhOgTtTseytEHr2Hi3praLAKOqzMVK2zRrZUFQ8CyMFdRljgIGR
-	 6mgiTrwj+YQM0MJ6P502NhijYQEPK1CWsk8JH648=
-Message-ID: <eff8d726-d25e-4424-846f-fd3cfa249315@linux.microsoft.com>
-Date: Thu, 10 Apr 2025 15:27:18 -0700
+	b=LQiSJiliUum98pWHRX3C1GObJBVaOi7WNpOKfrvnoRNZIhZaNfYCz+oAA1JvBigTW
+	 m5VpmYNLevUZeMETiXmOJGydpCJ8xlIdOzfzVOtiMr2S6QsKUxLjt8Y+WHhN8Qgwsw
+	 9Hmx+nzM6GkgHM5hmTs6eLgz7JTNvzAeC9LEg1tc=
+Message-ID: <0ed85d5f-f1b2-4b9c-8817-193ae98ce286@linux.microsoft.com>
+Date: Thu, 10 Apr 2025 15:29:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -67,31 +67,24 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/10/2025 1:04 PM, Tyler Hicks (Microsoft) wrote:
->> +		snprintf(msg, MESSAGE_SIZE, "%s %s error(s) on CPU %d",
->> +			 str, fatal ? "fatal" : "correctable", cpu);
+>> +static int __init cortex_arm64_edac_driver_init(void)
+>> +{
+>> +	struct device_node *np;
+>> +	int cpu;
+>> +	struct platform_device *pdev;
+>> +	int err;
 >> +
->> +		if (fatal)
->> +			edac_device_handle_ue(edac_ctl, cpu, 0, msg);
->> +		else
->> +			edac_device_handle_ce(edac_ctl, cpu, 0, msg);
->> +
->> +		write_sysreg_s(0, SYS_CPUMERRSR_EL1);
->> +		isb();
-> I think the register writes and barriers should happen much closer to the
-> register reads, in read_errors(). Looking back at Marc's feedback on v5, I
-> think his most important piece of feedback was to only clear the register when
-> the valid bit is set to avoid accidentally clobbering an error that came in
-> between the register read and write.
+>> +	for_each_possible_cpu(cpu) {
+>> +		np = of_get_cpu_node(cpu, NULL);
+> Copilot correctly points out that we don't check np for NULL here. I think
+> of_match_node() handles that fine but we get fairly deep into the call stack
+> before it is caught. Let's go ahead and proactive check the return value.
 > 
-> By moving the register writes into report_errors() in this v6 series, there's
-> now a much larger window where new errors could occur between the register
-> read and the register write. Those new errors would be silently lost/ignored.
-> Reducing the window to the least number of cycles seems important for accurate
-> reporting.
+> More importantly, it pointed out that we don't call of_node_put(np) before
+> moving onto the next CPU. This would result in a refcount issue and will need
+> to be fixed.
 
-Moving clear to report_errors() is wrong actually, it has be cleared 
-from the CPU, from read_errors() which is a SMP call. Let me share new 
-version with changes.
+Good catch. Let me change in next version.
 
 Thanks,
 Vijay
