@@ -1,101 +1,121 @@
-Return-Path: <linux-edac+bounces-3517-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3518-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF314A866BF
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Apr 2025 22:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8AF1A867AC
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Apr 2025 22:53:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8793C18968F4
-	for <lists+linux-edac@lfdr.de>; Fri, 11 Apr 2025 20:01:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9082B1B815C9
+	for <lists+linux-edac@lfdr.de>; Fri, 11 Apr 2025 20:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8FA6235C1E;
-	Fri, 11 Apr 2025 20:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 729FD28D83A;
+	Fri, 11 Apr 2025 20:52:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="O2ohyfAb"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="MaUaGM8p"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5731323026C;
-	Fri, 11 Apr 2025 20:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB7B2857E3;
+	Fri, 11 Apr 2025 20:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744401694; cv=none; b=UlRYx3MKOq2sR48KIICjTqlGv624zlKBNASNlzoh196AwVAnOO8/oCyq2fPZdN6jk1eElIpPc4j5kPkFslFPpSVRBCct+Jj7Z7EG5p4vkZ4QW86Jt/ehjFGdSLPyJjXK35+YujnZJKmEvPGwq4Wwhq+L22sJ2pOaPbVOdXpqp7w=
+	t=1744404734; cv=none; b=gKIivrK99KlmnuQqS6T9y6B+g0NRg4zCi2N+H2Rvi5U2xoz1JmBYrkSwfydllclTPngXazdwuLLu/hXvIp9QAt8z3U1IEmsn3+A6tda56xaBD9Y7flznimh0ztDsnFxv5i1O2RyxrDELbTRIOmNK6rc/wmeaLySwgADS05VnKEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744401694; c=relaxed/simple;
-	bh=2QhpccvsdGc8U6v2k8YHD/vVE7lypg2Vj/lFVArppZc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mlpW1aucQfj5F7BykFRhOmYAEKwU1bUMO/5j1cw0FmcZGbCyA89e9mQdQTu43hGFvVcDA/TdEls9vVxf5gSuxFvGPT0LGgp6JJfzLY1DMTsBM1M0ZJK/grDN8Osok6cNWaDXNJscEe9bFcGOwLSTlIRSPYpYhuOGABzzHU+H6eA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=O2ohyfAb; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0F15740E0243;
-	Fri, 11 Apr 2025 20:01:30 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 9glBSqHv_OV9; Fri, 11 Apr 2025 20:01:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1744401686; bh=2QhpccvsdGc8U6v2k8YHD/vVE7lypg2Vj/lFVArppZc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O2ohyfAbOFoYk/IS7F6pj+r7hxBWHGrFh1bpf0pJovk1nahEj3SAMEXKUupoyI+3t
-	 jDX1o0HabmK0N9rrBwgcjNtCx5Iu+hzLFL4Bux+gBJ/Vor3Nu9pganZsrwk8PS7/he
-	 cVEUFcyScw1fJZZNhXHVCW2R6Jcu1qYNOK5wgAAJOkA1j8M7rlV/bmXlO2Aa8o+iD6
-	 5X9t5AyAtMzenDsWKkEc12THvdXiq3Zh8/MbkFgIaoUtirX1P1N1zmGYblm9GifAd4
-	 HdS35xg2kLDN/7Uma4ZyQgW69IkHaC8PT940fC2erOMfWSCeVCcAe8d6BMvGfUex9s
-	 B1wk3vPmNwPvrzo4mBsbncz7L4vJsLnM737NKQhufsjkVKSGqNgyTf7gFWWsT8WVEm
-	 F+2RkiN9swlorig+qSC3CvJqwfKdNKUDerRTSh7+WzhPRk+2D/C+VAlyN2rN+qKDCG
-	 aTHdxS36aHIms7V4D6KF4JDtdLiMZcT2oLBsxL9erkH5Neq0kDcxoeIysgsdUfZuB0
-	 RFBGse1y6asNH4iBrF2CJZrbYC+GRam5YgqJCAzGOQY14M82XEVyz9ETO03daVrYJh
-	 sCzSXyEbmt+dbQzSBx70ZwmtEieT5zumK6hkSOklkSy7RIUSLL1wJTCxvI3Tntetua
-	 zjFI/GGGqItVTEjBnBE+uW9A=
-Received: from rn.tnic (ip-185-104-138-50.ptr.icomera.net [185.104.138.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id E2BB140E01FF;
-	Fri, 11 Apr 2025 20:01:14 +0000 (UTC)
-Date: Fri, 11 Apr 2025 22:02:07 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Marc Zyngier <maz@kernel.org>
-Cc: "Tyler Hicks (Microsoft)" <code@tyhicks.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Vijay Balakrishna <vijayb@linux.microsoft.com>,
-	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH 2/2] dt-bindings: arm: cpus: Add edac-enabled property
-Message-ID: <20250411200207.GAZ_l1P91QuMi_wecf@renoirsky.local>
-References: <1744241785-20256-1-git-send-email-vijayb@linux.microsoft.com>
- <1744241785-20256-3-git-send-email-vijayb@linux.microsoft.com>
- <319b7c65-3e2f-456b-a845-45f7a57ba2c5@kernel.org>
- <86o6x4lcf9.wl-maz@kernel.org>
- <Z/fV+SP0z+slV9/1@redbud>
- <86frigkmtd.wl-maz@kernel.org>
+	s=arc-20240116; t=1744404734; c=relaxed/simple;
+	bh=kxTCj2K40xus1IkV+DNiWTNVByJ6Z3Ovx9rtSTGdTRk=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=ozyC7CivqUL25/ybZe33nFUC8jejRF3xi5PVIuPIu22b8qheLCU87KN3l6O9Mer1VbeaEVyNSbfVz3M9ELXf+OitH9J/3uyn/qgrdpRvUszinTBOkhkb5iPz/0BNntfuxoLOnwLWKLy91R78nhMFspvgW3bKYSAj9K6Hr092rYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=MaUaGM8p; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53BKokUU689207
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 11 Apr 2025 13:50:46 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53BKokUU689207
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744404648;
+	bh=RSxA6WjXfzTzp9cSLSXzWSj0aQbPDgdMx3rGgv5vZFo=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=MaUaGM8ptiyNi5JNPWt6NXDw8PAuW9ldRndGnP2Ms2a5WhDxGDZmG9wZSREChComZ
+	 5WZ/ACqI8QPIApW2H+3S60a8ZuhEXXT3/4CoGujji3jvmFlwVOFHC9tj+gJU0zYj76
+	 fLPUlJt1NAlnsIICrT1IBvg8ssoIvqY4BrCd0zWR2qJWd/gvqDxfJWqsioW+lcez2s
+	 0OjBs72/2ECaksg5m8Zdd+dsabWYMF97MvLqFSlWKKuRnrqMJtIZxV9Y2X0uNN/Twt
+	 qct8mM81m1xNoj3uyJYNXFGbNRMRc88O5YTcpLTHLdVRgYOnAL34JelLSSB8abrZsj
+	 FVc2EtkpGepIg==
+Date: Fri, 11 Apr 2025 13:50:45 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Xin Li <xin@zytor.com>, Sean Christopherson <seanjc@google.com>
+CC: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
+        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
+        namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
+        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v1_10/15=5D_KVM=3A_VMX=3A_Use_WR?=
+ =?US-ASCII?Q?MSRNS_or_its_immediate_form_when_available?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <41eb2d08-1b2d-4ca8-bcb7-f5f4611f91a9@zytor.com>
+References: <20250331082251.3171276-1-xin@zytor.com> <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com> <41eb2d08-1b2d-4ca8-bcb7-f5f4611f91a9@zytor.com>
+Message-ID: <39ECA4CA-9CBC-4F72-B52E-9BD06DBF9B6D@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <86frigkmtd.wl-maz@kernel.org>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 10, 2025 at 05:23:26PM +0100, Marc Zyngier wrote:
-> We have some other EDAC implementation for arm64 CPUs (XGene,
-> ThunderX), and they are all perfectly useless (I have them in my
-> collection of horrors).
+On April 11, 2025 9:18:08 AM PDT, Xin Li <xin@zytor=2Ecom> wrote:
+>On 4/10/2025 4:24 PM, Sean Christopherson wrote:
+>>> +/*
+>>> + * Write EAX to MSR_IA32_SPEC_CTRL=2E
+>>> + *
+>>> + * Choose the best WRMSR instruction based on availability=2E
+>>> + *
+>>> + * Replace with 'wrmsrns' and 'wrmsrns %rax, $MSR_IA32_SPEC_CTRL' onc=
+e binutils support them=2E
+>>> + */
+>>> +=2Emacro WRITE_EAX_TO_MSR_IA32_SPEC_CTRL
+>>> +	ALTERNATIVE_2 __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
+>>> +				  xor %edx, %edx;				\
+>>> +				  mov %edi, %eax;				\
+>>> +				  ds wrmsr),					\
+>>> +		      __stringify(mov $MSR_IA32_SPEC_CTRL, %ecx;		\
+>>> +				  xor %edx, %edx;				\
+>>> +				  mov %edi, %eax;				\
+>>> +				  ASM_WRMSRNS),					\
+>>> +		      X86_FEATURE_WRMSRNS,					\
+>>> +		      __stringify(xor %_ASM_AX, %_ASM_AX;			\
+>>> +				  mov %edi, %eax;				\
+>>> +				  ASM_WRMSRNS_RAX; =2Elong MSR_IA32_SPEC_CTRL),	\
+>>> +		      X86_FEATURE_MSR_IMM
+>>> +=2Eendm
+>> This is quite hideous=2E  I have no objection to optimizing __vmx_vcpu_=
+run(), but
+>> I would much prefer that a macro like this live in generic code, and th=
+at it be
+>> generic=2E  It should be easy enough to provide an assembly friendly eq=
+uivalent to
+>> __native_wrmsr_constant()=2E
+>
+>Will do=2E
 
-Oh oh, can I remove, can I remove?
-
-My trigger finger is itching to kill some more useless code...
-
-Thx.
+This should be coming anyway, right?
 
