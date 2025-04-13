@@ -1,115 +1,114 @@
-Return-Path: <linux-edac+bounces-3527-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3528-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52F59A8719D
-	for <lists+linux-edac@lfdr.de>; Sun, 13 Apr 2025 12:38:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F35D0A873D6
+	for <lists+linux-edac@lfdr.de>; Sun, 13 Apr 2025 22:40:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F5DA18941E6
-	for <lists+linux-edac@lfdr.de>; Sun, 13 Apr 2025 10:38:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D1007A6DC9
+	for <lists+linux-edac@lfdr.de>; Sun, 13 Apr 2025 20:38:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B1D18B492;
-	Sun, 13 Apr 2025 10:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E331E51E1;
+	Sun, 13 Apr 2025 20:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSGejbrp"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Kqg8AlIs"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA23D2AD3E;
-	Sun, 13 Apr 2025 10:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E3E131E49;
+	Sun, 13 Apr 2025 20:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744540723; cv=none; b=GYarJH2zqD4c4hT+s/1FVxT2BvkRM2Amp8RbgqWz75gPAINpxwCt7BU0DZl9VoWbHSXfun6kzqrwdIjHZN9XocCLQuAMUotNXq6JOqaDYPu7XL27JnBIBkOv3YWFgwvceigHJ2mgDmRXr9ByisBWbbpuOZk23VqOz3oBifOviyg=
+	t=1744576796; cv=none; b=mkmr4/YEdc9vsel9jDcmIfxixMkVsSZDgYvlk7Ay8XbCOgiqRWF0fh1MZfWaQ10dJzLeAVlAO1MPgEN/Mn8srFE4heHTyC/t+Fs2QzyTCu4cJ7qc2aPrKXzfm5KMEgVlOusez2FCkl0OAsyqy9jbCPhnvI6pe9GVMoa7jsl7RLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744540723; c=relaxed/simple;
-	bh=HuSkE+YwTBmOVWhLSQyibRgYafQP6jEjTol0LiCwSPo=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j6KHNLUvzxsLkxXIXihiv6W+tyjAvO9spzL0QvXaZbqXhz2+WZAS5sxk5VOf1tgQGy+hb+xTZAvx5PGtkUbOBgXhLbDYlvGo0jLIPW3Q7FvQdepOKScJvHE7l0dUlG8RvCq6OJkbNcVVLcSJJunWwUCYbUhfFk6hjcs2X6WZJ1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSGejbrp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30357C4CEDD;
-	Sun, 13 Apr 2025 10:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744540723;
-	bh=HuSkE+YwTBmOVWhLSQyibRgYafQP6jEjTol0LiCwSPo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GSGejbrpB2Vrh45GmzvClJUMlHo5vypTzNzn0+YAHDC4Hz/MqNNO+T2+iQhADP4eH
-	 T0VyBZc7vmr8CvPkJUdkK5SqBxHh+dIbya1rEWY+7O3J8l/aAX9DHPOWBfH1YdpMXK
-	 ID1R7dmMELZxeKBOYWHWoO5wRfjkcB0r/rqB/ratP8Tvz04VSog8AzV6T6qagE6tgp
-	 Nz/twqg1DGThfHqpBhkrzLb5f3GC/BlJGz4qj2J0I5Nv7Z8Q0Da91O/jeNtM958DXf
-	 M43iHQaAYPuTfxZ77Q0vwee75GXGOj2L/jwLxlXRiPU6HKjXFmx6oLh7CFk43/P3HY
-	 pWR/Rylnu105w==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1u3ujY-004wP5-VE;
-	Sun, 13 Apr 2025 11:38:41 +0100
-Date: Sun, 13 Apr 2025 11:38:40 +0100
-Message-ID: <86a58kl51r.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: "Tyler Hicks (Microsoft)" <code@tyhicks.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Vijay Balakrishna <vijayb@linux.microsoft.com>,
-	Tony Luck <tony.luck@intel.com>,
+	s=arc-20240116; t=1744576796; c=relaxed/simple;
+	bh=Nw8QcptVhVAt+7InQoYP9i5Ze37D9ghFp28rjZFWcVY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YfE6LRcPzjGB7JQjT7wlRzmlsv5g2LiGpO3WW01Xx4zXNaIYIcz9R8jCjxttbIv2yCB9vcGBYYw8SKPZJ2DfekTfloySv9Lxkt8p5wo3Ue+y0YCNKqN2IqXXSZRPmw/9AUenILBnLh7HqkgteCDi4VyeN/kDHQRKOSpU/g3XyiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Kqg8AlIs; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9966140E023A;
+	Sun, 13 Apr 2025 20:39:48 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Z9Kj-hpq-4OT; Sun, 13 Apr 2025 20:39:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1744576784; bh=gPLzKBqSBKNRAJiY7TN5psrgTIFFhLEvXzNfFCfBUvw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Kqg8AlIshxd5u9C8KBuy3Wp7l9B12d0HNDARJc+0gmNSYgSb/PwgK6IXnOAX1n4kW
+	 lDZj46WnPEM60mVCk63IJLHHzyMoC2IUTb9Jc2GQ61OA1c/vbGkBktSNZqK8OLZefR
+	 qwITABkf8pln7yanVWdLmnEor2t57I0v/D9vnM4+0wEJgEzbbTmR6hNjQWg976oId7
+	 hsHsnve0kuFEvT3LU/l8gUwJ+Hc4R551cZj0NhES8qEzMGJaKk9ZNDDxkqBXRieZK5
+	 L8NIKNtqs5gOetx3eiR04e8v11r6CiYJYCOzjqKnIGdv0zjEjOnGxWdlKZzZKoXQgl
+	 Ye3K0Z08X19wVKThVBZkUl0SOJYsDk2y9ou+iqTx0/mDFg05rIpRYKnRjY8SBp36Io
+	 2SyaolQSfjwiyGDNDp1qJW+nMcX65x55Ow9khk+0OdcPdw3mXMrH8eZTUb/sCGNVAl
+	 AEJACqOCG+AJ4ZLEkE2ykOyFVZ/7PLySYd3pBxXxagIZ9zu1aaiQO3sGszANYnHfOr
+	 IaolcUYqXGT7LO4cMEHeRaMT+vbh3LKyR9qy0dAlDvWl8PAx1JzPTZRPYZa6nIkOLO
+	 wgKI+2BFLw7dZJEQ8lcC/IaOm+Ikm3ES2GYgQKsg6Ke/f7op+nFEXHzL2Bo26P/88i
+	 39Ocw9tlCtxZa1kbQwArM+EM=
+Received: from zn.tnic (p579690ee.dip0.t-ipconnect.de [87.150.144.238])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 572ED40E0214;
+	Sun, 13 Apr 2025 20:39:29 +0000 (UTC)
+Date: Sun, 13 Apr 2025 22:39:23 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Cc: Tony Luck <tony.luck@intel.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	James Morse <james.morse@arm.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH 2/2] dt-bindings: arm: cpus: Add edac-enabled property
-In-Reply-To: <20250411200207.GAZ_l1P91QuMi_wecf@renoirsky.local>
-References: <1744241785-20256-1-git-send-email-vijayb@linux.microsoft.com>
-	<1744241785-20256-3-git-send-email-vijayb@linux.microsoft.com>
-	<319b7c65-3e2f-456b-a845-45f7a57ba2c5@kernel.org>
-	<86o6x4lcf9.wl-maz@kernel.org>
-	<Z/fV+SP0z+slV9/1@redbud>
-	<86frigkmtd.wl-maz@kernel.org>
-	<20250411200207.GAZ_l1P91QuMi_wecf@renoirsky.local>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	devicetree@vger.kernel.org
+Subject: Re: [v7 PATCH 0/2] Add L1 and L2 error detection for A53, A57 and A72
+Message-ID: <20250413203923.GAZ_wg-_lYFt5hkfbh@fat_crate.local>
+References: <1744409319-24912-1-git-send-email-vijayb@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: bp@alien8.de, code@tyhicks.com, krzk@kernel.org, vijayb@linux.microsoft.com, tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, s.hauer@pengutronix.de
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1744409319-24912-1-git-send-email-vijayb@linux.microsoft.com>
 
-On Fri, 11 Apr 2025 21:02:07 +0100,
-Borislav Petkov <bp@alien8.de> wrote:
+On Fri, Apr 11, 2025 at 03:08:37PM -0700, Vijay Balakrishna wrote:
+> Hello,
 > 
-> On Thu, Apr 10, 2025 at 05:23:26PM +0100, Marc Zyngier wrote:
-> > We have some other EDAC implementation for arm64 CPUs (XGene,
-> > ThunderX), and they are all perfectly useless (I have them in my
-> > collection of horrors).
-> 
-> Oh oh, can I remove, can I remove?
-> 
-> My trigger finger is itching to kill some more useless code...
+> This is an attempt to revive [v5] series. I have attempted to address comments
+> and suggestions from Marc Zyngier since [v5]. Additionally, I have extended
+> support for A72 processors. Testing on a problematic A72 SoC has led to the
+> detection of Correctable Errors (CEs). I am eager to hear your suggestions and
+> feedback on this series.
 
-The drivers do report ECC errors being corrected, which indicates that
-the HW itself is doing its job. Yes, I buy cheap memory from eBay.
+Did you not read Marc's note:
 
-Do we need actual drivers to output crap on the console? Probably not,
-but I'm the wrong person to ask -- I only keep these machines alive to
-remind me how things can go horribly wrong.
+https://lore.kernel.org/all/86a58kl51r.wl-maz@kernel.org/
 
-I don't think there is any harm in keeping this crap around. It
-compiles, and if it breaks, I'll fix it. I'm not convinced we need any
-more of it though, specially for CPUs that are over a decade old.
+or
 
-	M.
+https://lore.kernel.org/all/86frigkmtd.wl-maz@kernel.org/
+
+?
 
 -- 
-Without deviation from the norm, progress is not possible.
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
