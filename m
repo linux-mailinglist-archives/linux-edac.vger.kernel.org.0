@@ -1,96 +1,115 @@
-Return-Path: <linux-edac+bounces-3526-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3527-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75389A87031
-	for <lists+linux-edac@lfdr.de>; Sun, 13 Apr 2025 01:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F59A8719D
+	for <lists+linux-edac@lfdr.de>; Sun, 13 Apr 2025 12:38:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABF63189B601
-	for <lists+linux-edac@lfdr.de>; Sat, 12 Apr 2025 23:11:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F5DA18941E6
+	for <lists+linux-edac@lfdr.de>; Sun, 13 Apr 2025 10:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3A3224B04;
-	Sat, 12 Apr 2025 23:11:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B1D18B492;
+	Sun, 13 Apr 2025 10:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="lMBig7n3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSGejbrp"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B68B38385;
-	Sat, 12 Apr 2025 23:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA23D2AD3E;
+	Sun, 13 Apr 2025 10:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744499495; cv=none; b=TXPgZ9muWRN+Mm+EKUEy1M+jnFzLdHI3EB1Px7usmziRebLEL1dDI6T+THRhPMgiOiF/BIooaWVVxVMtV8pZZAJieC6FWYe0SzfvnZZPV9qccjCXidEePrYMTc3bdTtmoDloaKqDBuBqRm+3s352k7fTr9HSGjZQFSvBZ33NLrQ=
+	t=1744540723; cv=none; b=GYarJH2zqD4c4hT+s/1FVxT2BvkRM2Amp8RbgqWz75gPAINpxwCt7BU0DZl9VoWbHSXfun6kzqrwdIjHZN9XocCLQuAMUotNXq6JOqaDYPu7XL27JnBIBkOv3YWFgwvceigHJ2mgDmRXr9ByisBWbbpuOZk23VqOz3oBifOviyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744499495; c=relaxed/simple;
-	bh=Z8ANyn5BO+4YSxFMj2ZIePI2Es9dy8Hv6toZ4ucWxdY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=oxV3o//yquRg90stwy5WFdPY7nwqVebyJ0TO1q6PLe9ttFBhflg9Q37Jt3dB3ncPBAf/hm/OFIloiJoRHVmgCPgzFaB0fW07aWiRXGUJe9zPyegDrzbOTFNqPn19lndi212o1n2vrj5VzKYurEs20ZOBOwcMV3q246un7E1N5/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=lMBig7n3; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53CNA8tE1265382
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sat, 12 Apr 2025 16:10:09 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53CNA8tE1265382
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1744499412;
-	bh=Z8ANyn5BO+4YSxFMj2ZIePI2Es9dy8Hv6toZ4ucWxdY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=lMBig7n3wyGQ77xYpn5pnxKVN4QM3Vkq6hDZcLvPaFwS2PWF/n09rzmm4i6ZIrSlX
-	 ldJKqqxh7XGdq6n0fK1xSbkbF0eDIoNvUz2LhiGL+7mwgnCfFlBgBbxU3imjGP8GwY
-	 zTU8dvf1jWNkf6+mSxkledPR0XPGAcZA1I9f+5+YiIA5YgCTj3M0isuBNWaO1BHck1
-	 A5Uh/ZdjOxEnzIwdlikBQnfr1jA4LYpMjCETWZHP0OeiOO0PyexivLyItY7m/buoB1
-	 Qlv5YTi1XbrFcCf8wBQrrImS7wL6ntMIDtBYRTjjMB9jzG1ZKHtxezcpa9pVk9CqYV
-	 YnyFnuF53LDCw==
-Date: Sat, 12 Apr 2025 16:10:06 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Xin Li <xin@zytor.com>, Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-CC: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org, acme@kernel.org,
-        namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org,
-        boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v1_10/15=5D_KVM=3A_VMX=3A_Use_WR?=
- =?US-ASCII?Q?MSRNS_or_its_immediate_form_when_available?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
-References: <20250331082251.3171276-1-xin@zytor.com> <20250331082251.3171276-11-xin@zytor.com> <Z_hTI8ywa3rTxFaz@google.com> <CALMp9eRJkzA2YXf1Dfxt3ONP+P9aTA=WPraOPJPJ6C6j677+6Q@mail.gmail.com> <fa16949e-7842-45f7-9715-1bdda13b762a@zytor.com>
-Message-ID: <EAB44BB2-99BB-4D4A-8306-0235D2931E72@zytor.com>
+	s=arc-20240116; t=1744540723; c=relaxed/simple;
+	bh=HuSkE+YwTBmOVWhLSQyibRgYafQP6jEjTol0LiCwSPo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=j6KHNLUvzxsLkxXIXihiv6W+tyjAvO9spzL0QvXaZbqXhz2+WZAS5sxk5VOf1tgQGy+hb+xTZAvx5PGtkUbOBgXhLbDYlvGo0jLIPW3Q7FvQdepOKScJvHE7l0dUlG8RvCq6OJkbNcVVLcSJJunWwUCYbUhfFk6hjcs2X6WZJ1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSGejbrp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30357C4CEDD;
+	Sun, 13 Apr 2025 10:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744540723;
+	bh=HuSkE+YwTBmOVWhLSQyibRgYafQP6jEjTol0LiCwSPo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=GSGejbrpB2Vrh45GmzvClJUMlHo5vypTzNzn0+YAHDC4Hz/MqNNO+T2+iQhADP4eH
+	 T0VyBZc7vmr8CvPkJUdkK5SqBxHh+dIbya1rEWY+7O3J8l/aAX9DHPOWBfH1YdpMXK
+	 ID1R7dmMELZxeKBOYWHWoO5wRfjkcB0r/rqB/ratP8Tvz04VSog8AzV6T6qagE6tgp
+	 Nz/twqg1DGThfHqpBhkrzLb5f3GC/BlJGz4qj2J0I5Nv7Z8Q0Da91O/jeNtM958DXf
+	 M43iHQaAYPuTfxZ77Q0vwee75GXGOj2L/jwLxlXRiPU6HKjXFmx6oLh7CFk43/P3HY
+	 pWR/Rylnu105w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1u3ujY-004wP5-VE;
+	Sun, 13 Apr 2025 11:38:41 +0100
+Date: Sun, 13 Apr 2025 11:38:40 +0100
+Message-ID: <86a58kl51r.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: "Tyler Hicks (Microsoft)" <code@tyhicks.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Vijay Balakrishna <vijayb@linux.microsoft.com>,
+	Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sascha Hauer <s.hauer@pengutronix.de>
+Subject: Re: [PATCH 2/2] dt-bindings: arm: cpus: Add edac-enabled property
+In-Reply-To: <20250411200207.GAZ_l1P91QuMi_wecf@renoirsky.local>
+References: <1744241785-20256-1-git-send-email-vijayb@linux.microsoft.com>
+	<1744241785-20256-3-git-send-email-vijayb@linux.microsoft.com>
+	<319b7c65-3e2f-456b-a845-45f7a57ba2c5@kernel.org>
+	<86o6x4lcf9.wl-maz@kernel.org>
+	<Z/fV+SP0z+slV9/1@redbud>
+	<86frigkmtd.wl-maz@kernel.org>
+	<20250411200207.GAZ_l1P91QuMi_wecf@renoirsky.local>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: bp@alien8.de, code@tyhicks.com, krzk@kernel.org, vijayb@linux.microsoft.com, tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, s.hauer@pengutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On April 11, 2025 9:32:32 PM PDT, Xin Li <xin@zytor=2Ecom> wrote:
->On 4/11/2025 2:12 PM, Jim Mattson wrote:
->> Surely, any CPU that has WRMSRNS also supports "Virtualize
->> IA32_SPEC_CTRL," right? Shouldn't we be using that feature rather than
->> swapping host and guest values with some form of WRMSR?
->
->Good question, the simple answer is that they are irrelevant=2E
+On Fri, 11 Apr 2025 21:02:07 +0100,
+Borislav Petkov <bp@alien8.de> wrote:
+> 
+> On Thu, Apr 10, 2025 at 05:23:26PM +0100, Marc Zyngier wrote:
+> > We have some other EDAC implementation for arm64 CPUs (XGene,
+> > ThunderX), and they are all perfectly useless (I have them in my
+> > collection of horrors).
+> 
+> Oh oh, can I remove, can I remove?
+> 
+> My trigger finger is itching to kill some more useless code...
 
-Also, *in this specific case* IA32_SPEC_CTRL is architecturally nonseriali=
-zing, i=2Ee=2E WRMSR executes as WRMSRNS anyway=2E
+The drivers do report ECC errors being corrected, which indicates that
+the HW itself is doing its job. Yes, I buy cheap memory from eBay.
+
+Do we need actual drivers to output crap on the console? Probably not,
+but I'm the wrong person to ask -- I only keep these machines alive to
+remind me how things can go horribly wrong.
+
+I don't think there is any harm in keeping this crap around. It
+compiles, and if it breaks, I'll fix it. I'm not convinced we need any
+more of it though, specially for CPUs that are over a decade old.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
