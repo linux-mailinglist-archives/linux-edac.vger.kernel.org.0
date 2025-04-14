@@ -1,148 +1,104 @@
-Return-Path: <linux-edac+bounces-3534-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3535-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C72E2A88777
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 17:39:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45651A888A7
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 18:34:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A11D172F3C
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 15:39:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 044C83A7798
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 16:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75DB8274FE7;
-	Mon, 14 Apr 2025 15:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9E827F736;
+	Mon, 14 Apr 2025 16:34:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=sargun.me header.i=@sargun.me header.b="HHJtgGjE"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Hmd5x8yT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2361C275861
-	for <linux-edac@vger.kernel.org>; Mon, 14 Apr 2025 15:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D505A2DFA3D;
+	Mon, 14 Apr 2025 16:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744645122; cv=none; b=hcr/OABXPIO6QCtWCp074t4Z1NE7tczEwXI3PbY05YdDnVTdfviccnI06F49uGirnaxmGZObGTJpG2S4J82INFbylLrlZGhDAP3E8+vHAnboitXFXT2RLRTnEy3XpzlPdpdo7960S7hKzN18Kp26LpNwY+S/D4Y6JbCT6N8bhRU=
+	t=1744648451; cv=none; b=T5OaUricdilW/Kyp9pxYBvXLs4go6GzdlibjizUQenBDcFK6WMuDi6+SJaA+uhcElnsrpo6kuVFFaTmrRTe+5l3eI6buaDcqC3JbqdD5chc4yVQcLVHXUCs+SBEMp2APYi4RiCDKMiyq6oCrTh4NHQ5PLnr9CzPfloPK4ze4Zjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744645122; c=relaxed/simple;
-	bh=QQWrFCU0lxYwyZvkufIrKpj9QZGeF1jQQqxeadFVPSI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VGM539IETRnvIs8FzsE3p/2a3tZTBSWUMYMQOeadGsCJU42OWCV2SrYJkf+cBm3iH7yqZA1j0H1zk4DwOPwUp7tDom4G6DzNuypK1FGtsCF1Wvv7knVRnZQ0bbq1ldYZOGYVPWfjpn24eCdseLvpXhOWuHbM/+xG/uoQA8ccsq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sargun.me; spf=pass smtp.mailfrom=sargun.me; dkim=pass (1024-bit key) header.d=sargun.me header.i=@sargun.me header.b=HHJtgGjE; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sargun.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sargun.me
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e6df3d5f596so664417276.1
-        for <linux-edac@vger.kernel.org>; Mon, 14 Apr 2025 08:38:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sargun.me; s=google; t=1744645118; x=1745249918; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cg7wm1gQKxPnYT5N6cnKLlagimUWPqnH4hJORex0FBs=;
-        b=HHJtgGjEv06ipS7G0Ge46lVbecHEBRJSmXdDLuOmcl0FpN/pv+Jt2h+bBmYx/vB3fp
-         PtEXqMA78ovGjreYYK9OtDhRweY+eAX+wmRJ1o+UPBRnStwQQWa+kGnnKP0jRYgp1cij
-         DAyqzayBxZryvTfZX2hrp0/jZfUGVGWyEm3Ys=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744645118; x=1745249918;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cg7wm1gQKxPnYT5N6cnKLlagimUWPqnH4hJORex0FBs=;
-        b=oNHPuJSCrfFfySoxZPudRnYJHulX4VcviRnjA1p6wAG5h4vUt6mfhf6F8BtkW76eYK
-         tKTWiRO/MxBz9qRy5NsvSFuoNLMBnY6UXWGq7LC4vwtlCiTYyNJTcyOkVG6FnZuLbECl
-         GVTtZ/3niq+N/e5n49+4pPz9ErqQMgrI9r2nPEd8iZlEcJENwH0JgGpxRSSkHM/y8T1o
-         SyjOrnCNIofndS4X6jnAqCI+yBFnDCkLg7DNE9bSj5Ae0EIgr9/373W3bTFTfOlwhhqS
-         MaHL6BUyNRDBydJA0VLAr5khVkQg3eDu39LYFHq1yhEtSLeENgcti7Ic0ntTypiH1rif
-         b/oA==
-X-Forwarded-Encrypted: i=1; AJvYcCWaTb4Vcutxx5jlLufog5inTtCXZd0GQu1tbI93QHEhK+940sAOhROmVVPjb6yA3khesXCYH+LSPjCj@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6nEls5WG5HrOIz8QKVZFj70Ury7mQV7sm1PPOQZwcQ/LNDWSy
-	B7jt4NlUebPvv2mp5zMw8ewWQPHQixWNm7FAvW/w1K4w6n+2sWEUfde8e+0GlNE=
-X-Gm-Gg: ASbGnctGuUyzh7iW2swbqBba64F54Nto1M8v4enPTW90o1u5Lh86WYHgwcjkH2APnio
-	GNlLeaEzj89zNdU7d67sDOH9jrYoCeoE6TJKcAncoe4fMWR+zlpYKm+ZJi8WXP3PhCRbiDncQG8
-	tcwq1Ns88iH2PQwOPlBDpPHuOvONyRMo9Km2l0BdDSIXBkLGBZc+wnpDTD+Ef8jCfdH+qICMqPF
-	WfWU559S995wkEpEwUS8FVLHftMTMdr9kRdqkWdrhQBKmjy2NO1qjAYJUFOG2kt2VlTxZEYlnSp
-	jM6Y6orlYLifIUwjNvTmRDR5ATIKEQ==
-X-Google-Smtp-Source: AGHT+IFXaJHA4jn4texV8xgFTA2mT/ZVZHNvt7z4f2KvUDw2pLx36QdW+AE9X7ghaoCnIgTjMYyeMA==
-X-Received: by 2002:a05:690c:d94:b0:6f5:be28:632c with SMTP id 00721157ae682-705599965b5mr95917727b3.2.1744645117480;
-        Mon, 14 Apr 2025 08:38:37 -0700 (PDT)
-Received: from localhost ([2a03:2880:25ff:8::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7053e11d349sm31264617b3.43.2025.04.14.08.38.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 08:38:36 -0700 (PDT)
-From: Sargun Dhillon <sargun@sargun.me>
-To: linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org
-Cc: Sargun Dhillon <sargun@sargun.me>,
+	s=arc-20240116; t=1744648451; c=relaxed/simple;
+	bh=H+8phVsMA2KFyA2CGK5w8E388kBsb7QiPb0AVzFAAuw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQTvgw6iGsTiScjkGZsK1t2cZtMQ7Xim9mjPnzkHd7hNbHsjMkdrXY71Z3+K4ECpzjCLeJ0bd/w91sOA9SmVBqelpJl/zBzoxAyre7v6hX61xTzk5WT43UzJj2baPaya20i9aZuvwJnUxPYpK3kb9GheLSWLj4lW1Zjtrwotgbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Hmd5x8yT; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id F054040E0200;
+	Mon, 14 Apr 2025 16:34:04 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 2pPM1EfRjSs0; Mon, 14 Apr 2025 16:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1744648441; bh=eVmLsIL8+zgjxJTn+4v2oA1H5L153iVSC3rDdOhs6yc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Hmd5x8yTSZY9As20dcJPFIn+aRWYOB+B7ukdwD++Fuc9cyjJbwtQF3wzf0KjZk51S
+	 2ybIPQLH4dVeMR+BnQDnycnQUTxXGvl30WkgsF88ry0/griLK5mRMqqzJeEHAoPJdo
+	 W9G0FsVRgfMdB3Rx9jySFaXr2umYtGBNP4f4FMlxPZXptNVw8pj04uUdxjBkU9x2JO
+	 SxBUsqSdDwOLzE2+s2c43yOQR8oGRYwRUa+uzSRwAcESr7FL+bqj5CV8qBAM/DqJVL
+	 TmU80kfnfDOftABaRZ74yzQFH2IjoA1FmahB8R5phREbUmrCxNSFeAKdGRqjuAnEZU
+	 kCijf0QV8Kt80wFvsIwpuXHXUJX5kC/syxBR4rHIzzeQ+O5Yivx6wUQbPUKmTKKsfE
+	 i/AoCPORFb5wd9o66XvrgrXkLfjKSzzmjDXqj+XuiVeSBto8NRH8bHcbx6RnGCB9Pn
+	 baVUuGsTS4GwaV4xJVCnOuJni2zDoYXVCdC70zF9D6uGMy50hYaKuNPYimTH7hhgw8
+	 ArHv5wxVvKQjxJtOAbGoc9Pjzn6t/2wx1Xvuw3Iw55kJ/ZzEJ7SPAxHgV6xNFP3MxP
+	 HrTj3yIBo+p5e8NDZD0UZ4KIGF0c7k91AMZyg2MQ4ZXObcZzGUGpLat4HLYhKDgOd7
+	 ypHXlwIIXwbvL0aP5CDjN+fw=
+Received: from zn.tnic (p579690ee.dip0.t-ipconnect.de [87.150.144.238])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB03440E023A;
+	Mon, 14 Apr 2025 16:33:54 +0000 (UTC)
+Date: Mon, 14 Apr 2025 18:33:47 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Sargun Dhillon <sargun@sargun.me>, Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
 	"Paul E . McKenney" <paulmck@kernel.org>,
-	Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>
-Subject: [PATCH v2] trace, RAS: Use __print_symbolic helper for entry severity for aer_events
-Date: Mon, 14 Apr 2025 08:38:34 -0700
-Message-ID: <20250414153835.947207-1-sargun@sargun.me>
-X-Mailer: git-send-email 2.47.1
+	Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v2] trace, RAS: Use __print_symbolic helper for entry
+ severity for aer_events
+Message-ID: <20250414163347.GEZ_0461mT0OZGpOjl@fat_crate.local>
+References: <20250414153835.947207-1-sargun@sargun.me>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250414153835.947207-1-sargun@sargun.me>
 
-The chained ternary conditional operator in the perf event format for
-ras:aer_event was causing a misrepresentation of the severity of the event
-when used with "perf script". Rather than building our own hand-rolled
-formatting, just use the __print_symbolic helper to format it.
++ Rostedt.
 
-Specifically, all corrected errors were being formatted as non-fatal,
-uncorrected errors, as shown below with the BAD_TLP errors, which is
-correctable. This is due to a bug in libtraceevent, where chained
-ternary conditions are not parsed correctly.
+On Mon, Apr 14, 2025 at 08:38:34AM -0700, Sargun Dhillon wrote:
+> The chained ternary conditional operator in the perf event format for
+> ras:aer_event was causing a misrepresentation of the severity of the event
+> when used with "perf script". Rather than building our own hand-rolled
+> formatting, just use the __print_symbolic helper to format it.
+> 
+> Specifically, all corrected errors were being formatted as non-fatal,
+> uncorrected errors, as shown below with the BAD_TLP errors, which is
+> correctable. This is due to a bug in libtraceevent, where chained
+> ternary conditions are not parsed correctly.
 
-The before / after are as follows (and also tested to make sure
-uncorrectable events) still show up as uncorrectable.
+So because *some* libtraceevent has a bug, we're wagging the dog, not the
+tail?
 
-aer-inject was used with the following AER event injection script:
-AER
-PCI_ID 00:05.0
-COR_STATUS BAD_TLP
-HEADER_LOG 0 1 2 3
-
-dmesg (unchanged between runs):
-pcieport 0000:00:05.0: aer_inject: Injecting errors 00000040/00000000 into device 0000:00:05.0
-pcieport 0000:00:05.0: AER: Correctable error message received from 0000:00:05.0
-pcieport 0000:00:05.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
-pcieport 0000:00:05.0:   device [1b36:000c] error status/mask=00000040/0000e000
-pcieport 0000:00:05.0:    [ 6] BadTLP
-
-Before:
-virtme-ng:/# perf script |cat
-   irq/24-aerdrv     424 [002]   392.240255:          ras:aer_event: 0000:00:05.0 PCIe Bus Error: severity=Uncorrected, non-fatal, Bad TLP, TLP Header=Not available
-
-After:
-   irq/24-aerdrv     424 [002]    29.198383:          ras:aer_event: 0000:00:05.0 PCIe Bus Error: severity=Corrected, Bad TLP, TLP Header=Not available
-
-Signed-off-by: Sargun Dhillon <sargun@sargun.me>
----
- include/ras/ras_event.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-index e5f7ee0864e7..9312007096d7 100644
---- a/include/ras/ras_event.h
-+++ b/include/ras/ras_event.h
-@@ -327,9 +327,10 @@ TRACE_EVENT(aer_event,
- 
- 	TP_printk("%s PCIe Bus Error: severity=%s, %s, TLP Header=%s\n",
- 		__get_str(dev_name),
--		__entry->severity == AER_CORRECTABLE ? "Corrected" :
--			__entry->severity == AER_FATAL ?
--			"Fatal" : "Uncorrected, non-fatal",
-+		__print_symbolic(__entry->severity,
-+				 {AER_NONFATAL, "Uncorrected, non-fatal"},
-+				 {AER_FATAL, "Fatal"},
-+				 {AER_CORRECTABLE, "Corrected"}),
- 		__entry->severity == AER_CORRECTABLE ?
- 		__print_flags(__entry->status, "|", aer_correctable_errors) :
- 		__print_flags(__entry->status, "|", aer_uncorrectable_errors),
 -- 
-2.47.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
