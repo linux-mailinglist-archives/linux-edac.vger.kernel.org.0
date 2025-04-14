@@ -1,144 +1,148 @@
-Return-Path: <linux-edac+bounces-3533-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3534-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 635FAA88711
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 17:27:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C72E2A88777
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 17:39:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73EFD582E68
-	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 15:04:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A11D172F3C
+	for <lists+linux-edac@lfdr.de>; Mon, 14 Apr 2025 15:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD369274FCD;
-	Mon, 14 Apr 2025 15:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75DB8274FE7;
+	Mon, 14 Apr 2025 15:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="qWPsN03x"
+	dkim=pass (1024-bit key) header.d=sargun.me header.i=@sargun.me header.b="HHJtgGjE"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B1025229A;
-	Mon, 14 Apr 2025 15:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2361C275861
+	for <linux-edac@vger.kernel.org>; Mon, 14 Apr 2025 15:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744642957; cv=none; b=MpUp1kHCwBU+jW/OowX7q1MNLdmT5fAEUnIn8dPGmLoGOv+cz56ubb3qZrv6y++HP6jMkOVThx3cqJ2Vt9KGYb/j9rHum2qnlSChWnwK+liA0VnmEy3N5pCgssh4rqSrkk/XwjyYTHRzoKcdZSFdOchjpnuppYfwr4x1qg4M+BA=
+	t=1744645122; cv=none; b=hcr/OABXPIO6QCtWCp074t4Z1NE7tczEwXI3PbY05YdDnVTdfviccnI06F49uGirnaxmGZObGTJpG2S4J82INFbylLrlZGhDAP3E8+vHAnboitXFXT2RLRTnEy3XpzlPdpdo7960S7hKzN18Kp26LpNwY+S/D4Y6JbCT6N8bhRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744642957; c=relaxed/simple;
-	bh=29LBL8Eiyg9CDsCmAAfUL9mYEIwFGfoqYzoIU8iyiQY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AraeoyfV7P58C11VuC5gcFxohfX4O3aSz0j2zrKaxsPxznwgve1WvNCHsZAOubm89JKK2oE/t5q73SdaIZ3D2HUrwRge8vPSoO2t6mpFnE3iF9U6/fbcHi5ZCURtMfshG6ZD9sCDzyR318gr7xn4ODb8Oy778hy9fjvHjNDJeCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=qWPsN03x; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1744642944; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=XP1wiJKn79M25SDS7QDbse457FmVwidLJBCVM8ARXV4=;
-	b=qWPsN03xz9+pTwownWuaBgpyTH0pHxo1wiofftgmL4NUgVGKBx1rkK6Oc1UfaanaiLvQB5xPRY8PV3a9AquDZJ1I+R2PS3DQbJkxxcCjWz+N+mxOmRxoUl/shW77PYKWLyXuBt+ZRJvi9SGe0HcE0BRz4lOCI87ZOp2NORAKphE=
-Received: from 30.246.161.79(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WWsd0xB_1744642940 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 14 Apr 2025 23:02:22 +0800
-Message-ID: <709ee8d2-8969-424c-b32b-101c6a8220fb@linux.alibaba.com>
-Date: Mon, 14 Apr 2025 23:02:19 +0800
+	s=arc-20240116; t=1744645122; c=relaxed/simple;
+	bh=QQWrFCU0lxYwyZvkufIrKpj9QZGeF1jQQqxeadFVPSI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VGM539IETRnvIs8FzsE3p/2a3tZTBSWUMYMQOeadGsCJU42OWCV2SrYJkf+cBm3iH7yqZA1j0H1zk4DwOPwUp7tDom4G6DzNuypK1FGtsCF1Wvv7knVRnZQ0bbq1ldYZOGYVPWfjpn24eCdseLvpXhOWuHbM/+xG/uoQA8ccsq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sargun.me; spf=pass smtp.mailfrom=sargun.me; dkim=pass (1024-bit key) header.d=sargun.me header.i=@sargun.me header.b=HHJtgGjE; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sargun.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sargun.me
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e6df3d5f596so664417276.1
+        for <linux-edac@vger.kernel.org>; Mon, 14 Apr 2025 08:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sargun.me; s=google; t=1744645118; x=1745249918; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cg7wm1gQKxPnYT5N6cnKLlagimUWPqnH4hJORex0FBs=;
+        b=HHJtgGjEv06ipS7G0Ge46lVbecHEBRJSmXdDLuOmcl0FpN/pv+Jt2h+bBmYx/vB3fp
+         PtEXqMA78ovGjreYYK9OtDhRweY+eAX+wmRJ1o+UPBRnStwQQWa+kGnnKP0jRYgp1cij
+         DAyqzayBxZryvTfZX2hrp0/jZfUGVGWyEm3Ys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744645118; x=1745249918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cg7wm1gQKxPnYT5N6cnKLlagimUWPqnH4hJORex0FBs=;
+        b=oNHPuJSCrfFfySoxZPudRnYJHulX4VcviRnjA1p6wAG5h4vUt6mfhf6F8BtkW76eYK
+         tKTWiRO/MxBz9qRy5NsvSFuoNLMBnY6UXWGq7LC4vwtlCiTYyNJTcyOkVG6FnZuLbECl
+         GVTtZ/3niq+N/e5n49+4pPz9ErqQMgrI9r2nPEd8iZlEcJENwH0JgGpxRSSkHM/y8T1o
+         SyjOrnCNIofndS4X6jnAqCI+yBFnDCkLg7DNE9bSj5Ae0EIgr9/373W3bTFTfOlwhhqS
+         MaHL6BUyNRDBydJA0VLAr5khVkQg3eDu39LYFHq1yhEtSLeENgcti7Ic0ntTypiH1rif
+         b/oA==
+X-Forwarded-Encrypted: i=1; AJvYcCWaTb4Vcutxx5jlLufog5inTtCXZd0GQu1tbI93QHEhK+940sAOhROmVVPjb6yA3khesXCYH+LSPjCj@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6nEls5WG5HrOIz8QKVZFj70Ury7mQV7sm1PPOQZwcQ/LNDWSy
+	B7jt4NlUebPvv2mp5zMw8ewWQPHQixWNm7FAvW/w1K4w6n+2sWEUfde8e+0GlNE=
+X-Gm-Gg: ASbGnctGuUyzh7iW2swbqBba64F54Nto1M8v4enPTW90o1u5Lh86WYHgwcjkH2APnio
+	GNlLeaEzj89zNdU7d67sDOH9jrYoCeoE6TJKcAncoe4fMWR+zlpYKm+ZJi8WXP3PhCRbiDncQG8
+	tcwq1Ns88iH2PQwOPlBDpPHuOvONyRMo9Km2l0BdDSIXBkLGBZc+wnpDTD+Ef8jCfdH+qICMqPF
+	WfWU559S995wkEpEwUS8FVLHftMTMdr9kRdqkWdrhQBKmjy2NO1qjAYJUFOG2kt2VlTxZEYlnSp
+	jM6Y6orlYLifIUwjNvTmRDR5ATIKEQ==
+X-Google-Smtp-Source: AGHT+IFXaJHA4jn4texV8xgFTA2mT/ZVZHNvt7z4f2KvUDw2pLx36QdW+AE9X7ghaoCnIgTjMYyeMA==
+X-Received: by 2002:a05:690c:d94:b0:6f5:be28:632c with SMTP id 00721157ae682-705599965b5mr95917727b3.2.1744645117480;
+        Mon, 14 Apr 2025 08:38:37 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:8::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7053e11d349sm31264617b3.43.2025.04.14.08.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Apr 2025 08:38:36 -0700 (PDT)
+From: Sargun Dhillon <sargun@sargun.me>
+To: linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org
+Cc: Sargun Dhillon <sargun@sargun.me>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>
+Subject: [PATCH v2] trace, RAS: Use __print_symbolic helper for entry severity for aer_events
+Date: Mon, 14 Apr 2025 08:38:34 -0700
+Message-ID: <20250414153835.947207-1-sargun@sargun.me>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH v18 1/2] ACPI: APEI: send SIGBUS to current task if
- synchronous memory error not recovered
-To: Hanjun Guo <guohanjun@huawei.com>, catalin.marinas@arm.com,
- sudeep.holla@arm.com, lpieralisi@kernel.org, linux-acpi@vger.kernel.org,
- yazen.ghannam@amd.com, mark.rutland@arm.com, mingo@redhat.com,
- robin.murphy@arm.com, Jonathan.Cameron@Huawei.com, bp@alien8.de,
- rafael@kernel.org, linux-arm-kernel@lists.infradead.org,
- wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com,
- tony.luck@intel.com, linmiaohe@huawei.com, naoya.horiguchi@nec.com,
- james.morse@arm.com, tongtiangen@huawei.com, gregkh@linuxfoundation.org,
- will@kernel.org, jarkko@kernel.org
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- akpm@linux-foundation.org, linux-edac@vger.kernel.org, x86@kernel.org,
- justin.he@arm.com, ardb@kernel.org, ying.huang@linux.alibaba.com,
- ashish.kalra@amd.com, baolin.wang@linux.alibaba.com, tglx@linutronix.de,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com
-References: <20250404112050.42040-1-xueshuai@linux.alibaba.com>
- <20250404112050.42040-2-xueshuai@linux.alibaba.com>
- <0c0bc332-0323-4e43-a96b-dd5f5957ecc9@huawei.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <0c0bc332-0323-4e43-a96b-dd5f5957ecc9@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+The chained ternary conditional operator in the perf event format for
+ras:aer_event was causing a misrepresentation of the severity of the event
+when used with "perf script". Rather than building our own hand-rolled
+formatting, just use the __print_symbolic helper to format it.
 
+Specifically, all corrected errors were being formatted as non-fatal,
+uncorrected errors, as shown below with the BAD_TLP errors, which is
+correctable. This is due to a bug in libtraceevent, where chained
+ternary conditions are not parsed correctly.
 
-在 2025/4/14 22:37, Hanjun Guo 写道:
-> On 2025/4/4 19:20, Shuai Xue wrote:
->> Synchronous error was detected as a result of user-space process accessing
->> a 2-bit uncorrected error. The CPU will take a synchronous error exception
->> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue a
->> memory_failure() work which poisons the related page, unmaps the page, and
->> then sends a SIGBUS to the process, so that a system wide panic can be
->> avoided.
->>
->> However, no memory_failure() work will be queued when abnormal synchronous
->> errors occur. These errors can include situations such as invalid PA,
->> unexpected severity, no memory failure config support, invalid GUID
->> section, etc. In such case, the user-space process will trigger SEA again.
->> This loop can potentially exceed the platform firmware threshold or even
->> trigger a kernel hard lockup, leading to a system reboot.
->>
->> Fix it by performing a force kill if no memory_failure() work is queued
->> for synchronous errors.
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
->> Reviewed-by: Jane Chu <jane.chu@oracle.com>
->> ---
->>   drivers/acpi/apei/ghes.c | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index b72772494655..50e4d924aa8b 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -799,6 +799,17 @@ static bool ghes_do_proc(struct ghes *ghes,
->>           }
->>       }
->> +    /*
->> +     * If no memory failure work is queued for abnormal synchronous
->> +     * errors, do a force kill.
->> +     */
->> +    if (sync && !queued) {
->> +        dev_err(ghes->dev,
->> +            HW_ERR GHES_PFX "%s:%d: synchronous unrecoverable error (SIGBUS)\n",
->> +            current->comm, task_pid_nr(current));
->> +        force_sig(SIGBUS);
->> +    }
-> 
-> I think it's reasonable to send a force kill to the task when the
-> synchronous memory error is not recovered.
-> 
-> But I hope this code will not trigger some legacy firmware issues,
-> let's be careful for this, so can we just introduce arch specific
-> callbacks for this?
+The before / after are as follows (and also tested to make sure
+uncorrectable events) still show up as uncorrectable.
 
-Sorry, can you give more details? I am not sure I got your point.
+aer-inject was used with the following AER event injection script:
+AER
+PCI_ID 00:05.0
+COR_STATUS BAD_TLP
+HEADER_LOG 0 1 2 3
 
-For x86, Tony confirmed that ghes will not dispatch x86 synchronous errors
-(a.k.a machine check exception), in previous vesion.
-Sync is only used in arm64 platform, see is_hest_sync_notify().
+dmesg (unchanged between runs):
+pcieport 0000:00:05.0: aer_inject: Injecting errors 00000040/00000000 into device 0000:00:05.0
+pcieport 0000:00:05.0: AER: Correctable error message received from 0000:00:05.0
+pcieport 0000:00:05.0: PCIe Bus Error: severity=Correctable, type=Data Link Layer, (Receiver ID)
+pcieport 0000:00:05.0:   device [1b36:000c] error status/mask=00000040/0000e000
+pcieport 0000:00:05.0:    [ 6] BadTLP
 
-> 
-> Thanks
-> Hanjun
+Before:
+virtme-ng:/# perf script |cat
+   irq/24-aerdrv     424 [002]   392.240255:          ras:aer_event: 0000:00:05.0 PCIe Bus Error: severity=Uncorrected, non-fatal, Bad TLP, TLP Header=Not available
 
-Thanks.
-Shuai
+After:
+   irq/24-aerdrv     424 [002]    29.198383:          ras:aer_event: 0000:00:05.0 PCIe Bus Error: severity=Corrected, Bad TLP, TLP Header=Not available
+
+Signed-off-by: Sargun Dhillon <sargun@sargun.me>
+---
+ include/ras/ras_event.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index e5f7ee0864e7..9312007096d7 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -327,9 +327,10 @@ TRACE_EVENT(aer_event,
+ 
+ 	TP_printk("%s PCIe Bus Error: severity=%s, %s, TLP Header=%s\n",
+ 		__get_str(dev_name),
+-		__entry->severity == AER_CORRECTABLE ? "Corrected" :
+-			__entry->severity == AER_FATAL ?
+-			"Fatal" : "Uncorrected, non-fatal",
++		__print_symbolic(__entry->severity,
++				 {AER_NONFATAL, "Uncorrected, non-fatal"},
++				 {AER_FATAL, "Fatal"},
++				 {AER_CORRECTABLE, "Corrected"}),
+ 		__entry->severity == AER_CORRECTABLE ?
+ 		__print_flags(__entry->status, "|", aer_correctable_errors) :
+ 		__print_flags(__entry->status, "|", aer_uncorrectable_errors),
+-- 
+2.47.1
+
 
