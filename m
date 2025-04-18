@@ -1,194 +1,180 @@
-Return-Path: <linux-edac+bounces-3584-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3585-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADD29A9372E
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Apr 2025 14:35:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50198A938B6
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Apr 2025 16:31:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6C6B3AE364
-	for <lists+linux-edac@lfdr.de>; Fri, 18 Apr 2025 12:35:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94B497B48A7
+	for <lists+linux-edac@lfdr.de>; Fri, 18 Apr 2025 14:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BEE274FF4;
-	Fri, 18 Apr 2025 12:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C10C82899;
+	Fri, 18 Apr 2025 14:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="H34aLp19"
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="mfTcCXGS"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010033.outbound.protection.outlook.com [52.101.193.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A8D212D8A;
-	Fri, 18 Apr 2025 12:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744979720; cv=none; b=Qdl8ILjuO+IOv4CdBS5WQsCOBVny6Z3Jskdt2wOzeCzTWtBeryOECLzAUdMa+zshnm0rdyn03ewb23fGbrYErbo/bzxYB5yAr5mpsGw0S5FAg1B3JHE00lHQ8z9qO5A59E87ACy8qNgRpnxte4WwTZrtUrZIYnOLjUUZuBEMwB0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744979720; c=relaxed/simple;
-	bh=6CrdNbp/demKpRChXxKiOZWkDp7cZPXxIcoSLVsut78=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rNTfhH2F4W8xrCtYLHZX+eqTYfzh4jSba8VGpduVdcNTJjZfJMZxF9ryJynS636zav1oIlMQzTFbXhqIMD3FQF+KKbwQNvEOJe9zGoyYigfdmx58SlACjdr88mjUwuLNw1iOduHl2VMcNYCPuMq342pFku/37eay3wKQF6XqcuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=H34aLp19; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1744979708; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=ET48gmghr/S6KXKpbHbaUOhbwdjcr6/9oYUul7jTD2Y=;
-	b=H34aLp19BoMIW+cp1y5Vo/s4xNLEoZxunukpcExeRIkfjHKzh/kLNOlYCj8KhL3aNaUa2qMPY1V09ht/Dvqw4uZRgIT1ucubKsUsENxHS1GQlzmEUWzi63bFnlsA9l7tUuWBYY5eXO/4EKXqHuDz6x0Sp/5zmQlREyMjTRphEWg=
-Received: from 30.246.162.65(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WXJZ5.I_1744979704 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 18 Apr 2025 20:35:06 +0800
-Message-ID: <653abdd4-46d2-4956-b49c-8f9c309af34d@linux.alibaba.com>
-Date: Fri, 18 Apr 2025 20:35:03 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C67B282FA;
+	Fri, 18 Apr 2025 14:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744986673; cv=fail; b=bJaS0kBOcw3QilrnfiXzX+JlxG9O15o8vYZjjrv+q3hIQpUvMQ9MGI3xVKUZ6GdSmPFFdWtTcDz4Nxq90WIdlZ5ZeLdGUz8nKIHDhFw8YmhTskZzQy9NZGtzTyAKQR+fdjCvqT0LgMr2re2bAjKQsAEHeqmN9jNrrTbV5/oWjXc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744986673; c=relaxed/simple;
+	bh=ii/ZRy7YCksaiW8E633PAb3esJzIoeryt+ZR0Rp13mQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=HdzgP3drDae2AHWNTHGBHEhaUGfrjPnj4g0qzHRCBAl18qq2rSGJeZPMP6sLyrpTgJGz/h4UldjdFPMyCr2MkxtaLieDVOkkMSPivyxqd4Z7Ga3h4VujWxJ7oqFh4CX/dcVl7R2pUIzyXypFOrin0YRaisfZOGbu9H6en9inseo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=mfTcCXGS; arc=fail smtp.client-ip=52.101.193.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=C+0wRuM72AxmQFpU9xrwIOgeDhYJsCQfWk3hdOwkwxE40AwJDMtGIbJ7gUfL+OTnBaT2lbEqnfMKJ6RUjD/WdHFfDb0xDOSBAY5Gf/u3j+Pxs3zq+3IOgixQ/P9WoQNy2NrylZshoVSBWh6u+xgWSY91jPyAGd3XjT25n2XDqZekSFpRK5Q8BLcxW/UkMb+crL6TGPyPVzKTK7mZe/IOT9CiubkJVPUvhXzq/BTILOImrW1nhVLb2fZL9yJO8xCAh1OAxshMfvQb3C8VsWLViEnjOZX7JQ7BkIgUfhVI5Aw8Wm26m2VWH1evJRpaZQKi+Mq5GMKrXqtsnUuroLYAWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=05Kk0xlKQtGdSskDhCbwGn+OV7rFfRBYLn5Sn4K3Msg=;
+ b=aOrWDWYviMSWVibuNmb4E0dVZUYvTmXBRM8DLyrRSMEO2ZnM+8+/pFS6gWtn85n9KRCKW2Q6/KOdsbr333sVHM0f1Pr1PE2RKioO8ach34v2c+S90KAn1sF0g6KVctXsDZGK7Wbly/FbCMNZY1V+RJTilWZbRcU7Drz9Ke+0+4QHmm7UaBLJEBindEPSzxxelbu/lo3537S8x283Awy6P9N22/+ZFh3bU04ETOvC23Ti13FNrOKYAn9j+roRRX9oEVCzBtwQHCzR6KWPc+LXRWeZAH/Q3qiaKYavrKcCbLBMTbdJGOsqOXcCFwEnjjfHiP1rAwqbIIURB6pEnjnSTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=05Kk0xlKQtGdSskDhCbwGn+OV7rFfRBYLn5Sn4K3Msg=;
+ b=mfTcCXGSDp2/FXyNhGs9RGgC+hq9TvK3f8TvAJ3LEnod6L33iq441VT3DKqhkiokIB21RBgpxnqgdrA//cwtf0/3J+xI92UFbliZYj/Kvq/s2J8fS69kTFO3Xff6mQFELlNSPUTc7rWWBMLtt5ZB2dsmIWrx5bUIZSMu3/2UFrb/MmnxTs5CoDcs95vkXgMXOGRrJhcSzLMIrxD+UVWISzFeYE2pVTnry8ybaZSXWWFkRHadcQ/knDbJJw5IYxsLEEQF6BL9laAAGpND5FmbcFbFIPWRHbHdrmkjHojw0a104JvaMJ+wNZG1zTKtql+zR4DT1vGV8zLMzpSAKhytmQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
+Received: from BYAPR03MB3461.namprd03.prod.outlook.com (2603:10b6:a02:b4::23)
+ by SJ0PR03MB6674.namprd03.prod.outlook.com (2603:10b6:a03:396::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.27; Fri, 18 Apr
+ 2025 14:31:05 +0000
+Received: from BYAPR03MB3461.namprd03.prod.outlook.com
+ ([fe80::706b:dd15:bc81:313c]) by BYAPR03MB3461.namprd03.prod.outlook.com
+ ([fe80::706b:dd15:bc81:313c%2]) with mapi id 15.20.8655.022; Fri, 18 Apr 2025
+ 14:31:05 +0000
+From: Matthew Gerlach <matthew.gerlach@altera.com>
+To: dinguyen@kernel.org,
+	bp@alien8.de,
+	tony.luck@intel.com,
+	james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Matthew Gerlach <matthew.gerlach@altera.com>
+Subject: [PATCH 0/2] EDAC/altera: two bug fixes
+Date: Fri, 18 Apr 2025 07:30:50 -0700
+Message-Id: <20250418143052.38593-1-matthew.gerlach@altera.com>
+X-Mailer: git-send-email 2.35.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR05CA0033.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::8) To BYAPR03MB3461.namprd03.prod.outlook.com
+ (2603:10b6:a02:b4::23)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH v18 1/2] ACPI: APEI: send SIGBUS to current task if
- synchronous memory error not recovered
-To: Hanjun Guo <guohanjun@huawei.com>, "Luck, Tony" <tony.luck@intel.com>,
- rafael@kernel.org, Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- akpm@linux-foundation.org, linux-edac@vger.kernel.org, x86@kernel.org,
- justin.he@arm.com, ardb@kernel.org, ying.huang@linux.alibaba.com,
- ashish.kalra@amd.com, baolin.wang@linux.alibaba.com, tglx@linutronix.de,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com, Hanjun Guo <guohanjun@huawei.com>,
- catalin.marinas@arm.com, sudeep.holla@arm.com, lpieralisi@kernel.org,
- linux-acpi@vger.kernel.org, yazen.ghannam@amd.com, mark.rutland@arm.com,
- mingo@redhat.com, robin.murphy@arm.com, Jonathan.Cameron@Huawei.com,
- bp@alien8.de, rafael@kernel.org, linux-arm-kernel@lists.infradead.org,
- wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com,
- tony.luck@intel.com, linmiaohe@huawei.com, naoya.horiguchi@nec.com,
- james.morse@arm.com, tongtiangen@huawei.com, gregkh@linuxfoundation.org,
- will@kernel.org, jarkko@kernel.org
-References: <20250404112050.42040-1-xueshuai@linux.alibaba.com>
- <20250404112050.42040-2-xueshuai@linux.alibaba.com>
- <0c0bc332-0323-4e43-a96b-dd5f5957ecc9@huawei.com>
- <709ee8d2-8969-424c-b32b-101c6a8220fb@linux.alibaba.com>
- <353809e7-5373-0d54-6ddb-767bc5af9e5f@huawei.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <353809e7-5373-0d54-6ddb-767bc5af9e5f@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR03MB3461:EE_|SJ0PR03MB6674:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3f666b3-e8af-44ea-60c1-08dd7e85a68a
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?vNJjXKNJMxJ6CgRqC668k1wDZX4r9WgPufszebOApQAPkZhJxo5j1OkxgXt8?=
+ =?us-ascii?Q?jf0uiRs/Bg3iGOFbFz9yG4svgapjC/b1P+OcuW07I70B3VRt9Q5mtlgQBYz4?=
+ =?us-ascii?Q?ov7nOlLsbSQz6RPXORRLY3JNNs+wvtzhN2SWdpc0GdaWNQ1QPruIYNxHncUi?=
+ =?us-ascii?Q?p+o4VhGLpnh48PrJXLUwizeIh29zn6HbTT++Qb4wfM6E/ei31SEZ7FxV2sib?=
+ =?us-ascii?Q?PdvdafPgF1bwR5llYRrK7/kNP+MaRdCtUPA110FQxQvqzmzCypayEK6fXqDc?=
+ =?us-ascii?Q?0gSdshNQ4yztouJ9SRoRArc3B8sKqjD/zOy0/nfFxzNNNrmkQmsDkdwq3wEm?=
+ =?us-ascii?Q?3odwKuGclpS3g8cg0DQg2FnO3N91FLHNaNkq4cWYvifou5DMuf5RwDiNPYm6?=
+ =?us-ascii?Q?3bKLAVAEtBQKTGajsLHGq1aSaKPAm3NbvtpFEdB1WUzC7aClUhWUEa873RL3?=
+ =?us-ascii?Q?P88ecGno06vhS4e6/MB8NmGT4tcD0RIQ0E0oVQWVsT/WIIeDEBU/hBS/vAXZ?=
+ =?us-ascii?Q?7LBHI3TmuFR4ACFqIcG5Pgq8nOpiB7Y4t9q9SJUpss1rFAroJKqR0wactRWn?=
+ =?us-ascii?Q?wqY+O0c1U45LgyLfBRdGmSMDnDsWuUypjcvV076hOdqIM9I88nIehLJ2nTLp?=
+ =?us-ascii?Q?IPC5HCK3QOetETEtpslWZ2hp/qou/UNHsumDOGExfuc/9ieQ5AJbf0L5e+VF?=
+ =?us-ascii?Q?xcwidvUAbF5ZHC63I7VoZHQXphbcBhswSvbwkpmiZL3LDLW141KvLfHx5Bvn?=
+ =?us-ascii?Q?PcK59lGMYk+EqF26SvIE4bJN88I52A5Z1Nq1NJnr5w5CGqIZA5grlVXXzDqN?=
+ =?us-ascii?Q?A/0zfkn6fB9zBcnV2pKnbTPlpyYkzi45nze1m/q39P30NtFzk5R2fxX/K8De?=
+ =?us-ascii?Q?IX+JmG/Exv9Fi+Gk0unikX0mGt4Xcfj9OdRHo/z57uKSa50vr2YOOXU04Dr0?=
+ =?us-ascii?Q?ezajJwB5K+dTf/kDmVCK1ZYMLEGSHu9EF0DvSIEPcpl5WaQgf211AIJDmgCo?=
+ =?us-ascii?Q?b6HP0Kk2TeHtBAfSBlRIMLcEZeD5mbMJHIS4PSa1NZiXtpou4/ECzsZ/5qlu?=
+ =?us-ascii?Q?QnoS75ZFhSVw8nXgcrccka5flMPeReydzAVVu79huIH5x34SNvEJBZphOVTE?=
+ =?us-ascii?Q?6Fc3i6DCKY5ZYST1mStsQnkTYe86IW72hDTzN5bQZRSQS5O3ar5cKxVMKNae?=
+ =?us-ascii?Q?j7TtjbBdPI897QtiNVqKVSZJDZJYovSslmnX4Q3CDNAEOK3ApA57qD86fdbv?=
+ =?us-ascii?Q?Zr+KO6QSOQmOuqMxDeH2KX+WJQtJUDFiU5WCRhF742FyVT/8EhCxciBFExSV?=
+ =?us-ascii?Q?9B0Eo1gra+nqtHzxb/lu20VyE1ZKLK4SOc7/NjaFb7rHvQNkLQSvGzkMiRJn?=
+ =?us-ascii?Q?+haI69k7XUyeOdSnvMp9ggd90EKzwDuzwuPdbAA7mfnMchozq9dvl0E5fBFw?=
+ =?us-ascii?Q?CnolM+D7JIY=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3461.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?l/sYw69hlNbtLqT+DNU0HN3GYPPH8Yt/UigP/WoThlbKgqHRMbH30Yvq2RqN?=
+ =?us-ascii?Q?KG05Ez78YX0ZGdnhIQ5fFkD0h21IP5T0HJRAJFyg+0iUJywIoQMQ4aYrt6Yy?=
+ =?us-ascii?Q?aDKXOWzWc061WgX4E6xcL0CWAiF+qX4DKOt8F6oyQi4Khv33iXF6wstFE5rO?=
+ =?us-ascii?Q?uor4m0hIQ93NkC9cBsqTyW/Z1xibIxnhK0XNKVfAtI63zROgTO9/3gFXvxzN?=
+ =?us-ascii?Q?LJMugMVDnSMDO7LBttFAOpagLUh/g+j9bUB48izpJ7OpZ5AnS1+tIn0VTi/7?=
+ =?us-ascii?Q?anfWH/ejAJmcFxPUUBGwTdE9HivpDE6dLsbRVqk1SoTvuP3U0Luf/zhcrUfE?=
+ =?us-ascii?Q?HbZ0qbOYpeEwuFEmUJVo6HIVfZJfStNZKGUHL8ul2sBXqOzf26tslT1NYyss?=
+ =?us-ascii?Q?xut3C1FXfviZRDA89kuZCCl8+rB8eWS79zAeeoGMxE9xQHK35gIA7tITJBuk?=
+ =?us-ascii?Q?Xh9p2Ip9mREa0kMbViXY7AtEwoePodXppb5dIx9QIaHk1m0oFZMGNTrI2i+b?=
+ =?us-ascii?Q?CAo5c88OFihi7dJoDk+MqopIBTJbkNLw0REZlRZRoXM4qMSilgc8/yzPvkad?=
+ =?us-ascii?Q?flYgPdyPTTt/Z2pnZQWbRiP71FHMnqgaEjVB26P7xGZkCRbHtYh/XM2kr4H0?=
+ =?us-ascii?Q?ngmUXsI1YBoUB2zzEhsB/MfMNhnFbuFB9dbSZpmpBoSLTz79MWMjX3sVNKA7?=
+ =?us-ascii?Q?LIwIGuBBp/5Umuk21XJmOhTengw4xab3foUy/ayz+jyQWcf8fJGJJ2gTXSdh?=
+ =?us-ascii?Q?BJWf5M86W9cdYKn+v0ouaKpSKGFZWew9SjVQ87sABWdhx605x6Bg41DmsJXK?=
+ =?us-ascii?Q?ZeZInkkYkbpRWuia7KoIduLsQevHPv1RaPg2ntSmNBcBYi7hFGZjhUvgtFNo?=
+ =?us-ascii?Q?OTyHn3mvmUXQed1A2f41+Pu0j8/5ujni+yL3lCYUL/aaWe4a9/9Cv1/Z2tc8?=
+ =?us-ascii?Q?Fj7m6x20jnl7ssFhIXQhxrscTc3olRsMhyzdcWcQPThkt+qqsq8rIFjs8jgN?=
+ =?us-ascii?Q?tcyiZ2fASNu0HYvWpnJcA7ir8bkvoFLZDto8dFuRu12zzCzyMhr+GiuaHfXO?=
+ =?us-ascii?Q?ssYD22DL5iGgK+Y6/ezDhv0xhbrb0RZ0kcVqSzV+7wdB0nhw4nxysmjIB59K?=
+ =?us-ascii?Q?hAaodEcacx/A9TgAXFHeEXS0bnuzveR4L9YLnanIme15oZS8An167pLZP8e3?=
+ =?us-ascii?Q?fZcYKZT5zgSqnuKYNt6Ci1XKNlqzDZVOcoFkR2jBup68XVtA7mGzJi6ho9z3?=
+ =?us-ascii?Q?FrU92mVikWvZufW72kYMSUKJZBAUV1fcVIimUXufmH9NAxuURmqL+Q5dLDE/?=
+ =?us-ascii?Q?rYxjAJqvbwFJt8PgjmHEZ7Xbhg0kfdBZn5wskdUVUQvdpCGwcD0q0DpVCDVG?=
+ =?us-ascii?Q?mhaVzAP97eN7Gb0v2pZnf3SPJ/uQGiLp9Byr14X14L54EU6KRt+sx37gLhuu?=
+ =?us-ascii?Q?Q9h/ugc1JQP7zmUOfhVIvdsHYpRHPaBfwgTnF2jUHxz5B1+QzOPFUYNo7r/j?=
+ =?us-ascii?Q?+xoDBKOFTZMi1c+q6E0XltbkBAumTZvtMLigoZhFHfDT25Ru7Upw579fZKLw?=
+ =?us-ascii?Q?XG4pbAGoXZ/cXZixnhqlZLVlGjonutbfp/azL0dGmc6Ragte8AywArbyicLU?=
+ =?us-ascii?Q?Zg=3D=3D?=
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3f666b3-e8af-44ea-60c1-08dd7e85a68a
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3461.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2025 14:31:04.9816
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m4CU5+cpqkOu1hEEdCxJdRxU0CyfVsE+qg9KsgpRyoI0hfulp8vGua0u5BzVv6dCOZDPbL8IG47sy1VmRcAU02dweKu2pHalZM5wWfejmMo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB6674
 
+This patch set contains two bug fixes for the Altera ECC manager.
 
+Patch 1:
+ - Fix bug testing the wrong structure member.
 
-在 2025/4/18 15:48, Hanjun Guo 写道:
-> On 2025/4/14 23:02, Shuai Xue wrote:
->>
->>
->> 在 2025/4/14 22:37, Hanjun Guo 写道:
->>> On 2025/4/4 19:20, Shuai Xue wrote:
->>>> Synchronous error was detected as a result of user-space process accessing
->>>> a 2-bit uncorrected error. The CPU will take a synchronous error exception
->>>> such as Synchronous External Abort (SEA) on Arm64. The kernel will queue a
->>>> memory_failure() work which poisons the related page, unmaps the page, and
->>>> then sends a SIGBUS to the process, so that a system wide panic can be
->>>> avoided.
->>>>
->>>> However, no memory_failure() work will be queued when abnormal synchronous
->>>> errors occur. These errors can include situations such as invalid PA,
->>>> unexpected severity, no memory failure config support, invalid GUID
->>>> section, etc. In such case, the user-space process will trigger SEA again.
->>>> This loop can potentially exceed the platform firmware threshold or even
->>>> trigger a kernel hard lockup, leading to a system reboot.
->>>>
->>>> Fix it by performing a force kill if no memory_failure() work is queued
->>>> for synchronous errors.
->>>>
->>>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->>>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>>> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
->>>> Reviewed-by: Jane Chu <jane.chu@oracle.com>
->>>> ---
->>>>   drivers/acpi/apei/ghes.c | 11 +++++++++++
->>>>   1 file changed, 11 insertions(+)
->>>>
->>>> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->>>> index b72772494655..50e4d924aa8b 100644
->>>> --- a/drivers/acpi/apei/ghes.c
->>>> +++ b/drivers/acpi/apei/ghes.c
->>>> @@ -799,6 +799,17 @@ static bool ghes_do_proc(struct ghes *ghes,
->>>>           }
->>>>       }
->>>> +    /*
->>>> +     * If no memory failure work is queued for abnormal synchronous
->>>> +     * errors, do a force kill.
->>>> +     */
->>>> +    if (sync && !queued) {
->>>> +        dev_err(ghes->dev,
->>>> +            HW_ERR GHES_PFX "%s:%d: synchronous unrecoverable error (SIGBUS)\n",
->>>> +            current->comm, task_pid_nr(current));
->>>> +        force_sig(SIGBUS);
->>>> +    }
->>>
->>> I think it's reasonable to send a force kill to the task when the
->>> synchronous memory error is not recovered.
->>>
->>> But I hope this code will not trigger some legacy firmware issues,
->>> let's be careful for this, so can we just introduce arch specific
->>> callbacks for this?
->>
->> Sorry, can you give more details? I am not sure I got your point.
->>
->> For x86, Tony confirmed that ghes will not dispatch x86 synchronous errors
->> (a.k.a machine check exception), in previous vesion.
->> Sync is only used in arm64 platform, see is_hest_sync_notify().
-> 
-> Sorry for the late reply, from the code I can see that x86 will reuse
-> ghes_do_proc(), if Tony confirmed that x86 is OK, it's OK to me as well.
+Patch 2:
+ - Mask HW interrupts until handler registered.
 
-Hi, Hanjun,
+Niravkumar L Rabara (2):
+  EDAC/altera: fix cut and paste error
+  EDAC/altera: Set DDR and SDMMC interrupt mask before registration
 
-Glad to hear that.
+ drivers/edac/altera_edac.c | 9 +++++----
+ drivers/edac/altera_edac.h | 2 ++
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-I copy and paste in the original disscusion with @Tony from mailist.[1]
-
-> On x86 the "action required" cases are signaled by a synchronous machine check
-> that is delivered before the instruction that is attempting to consume the uncorrected
-> data retires. I.e., it is guaranteed that the uncorrected error has not been propagated
-> because it is not visible in any architectural state.
-
-> APEI signaled errors don't fall into that category on x86 ... the uncorrected data
-> could have been consumed and propagated long before the signaling used for
-> APEI can alert the OS.
-
-I also add comments in the code.
-
-/*
-  * A platform may describe one error source for the handling of synchronous
-  * errors (e.g. MCE or SEA), or for handling asynchronous errors (e.g. SCI
-  * or External Interrupt). On x86, the HEST notifications are always
-  * asynchronous, so only SEA on ARM is delivered as a synchronous
-  * notification.
-  */
-static inline bool is_hest_sync_notify(struct ghes *ghes)
-{
-	u8 notify_type = ghes->generic->notify.type;
-
-	return notify_type == ACPI_HEST_NOTIFY_SEA;
-}
-
-
-If you are happy with code, please explictly give me your reviewed-by tags :)
-
-
-> 
-> Thanks
-> Hanjun
-
-Thanks.
-
-Best Regards,
-Shuai
-
-[1] https://lore.kernel.org/lkml/CAJZ5v0hdgxsDiXqOmeqBQoZUQJ1RssM=3jpYpWt3qzy0n2eyaA@mail.gmail.com/t/#u
+-- 
+2.35.3
 
 
