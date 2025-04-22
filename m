@@ -1,122 +1,104 @@
-Return-Path: <linux-edac+bounces-3642-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3643-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41293A96D47
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Apr 2025 15:46:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FC08A96FE3
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Apr 2025 17:07:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF2D97A2030
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Apr 2025 13:44:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74A251B80296
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Apr 2025 15:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809DF27CCF3;
-	Tue, 22 Apr 2025 13:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E00B28FFCD;
+	Tue, 22 Apr 2025 15:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kkr2LAPZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I6IV+lrb"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171394C85;
-	Tue, 22 Apr 2025 13:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F9828F935
+	for <linux-edac@vger.kernel.org>; Tue, 22 Apr 2025 15:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745329558; cv=none; b=ChZ5B5TQbA8x5jMJt56rhEgLb2yztUItZbMSYi/7Rf+WC8IQjEMc6NFLch8YfURbi3GFVr/kYwyxKnko5JSCZzNUbcjplsbfy82cZ6UHWPPMst/YTO7Qn7kKnZ+TANdb4tJByB/JRmwXPjCewxzFQ6Y6v6+1C/O6PAaKPmaFT+8=
+	t=1745334187; cv=none; b=UDIPOM4uakMjlE3kqgadCWqAaVV14UlBWPcwyYgGde/jKRNlmy1x5NvKeUue5c9pdL3vOn4XgMGJ8/WrpIV8X1dDg3a7DpZVjZj3jZJVbIMUFN6Pd8KlE8AuY1jGR5sJumN8UR4xsOkow8GD60vuni6Q8zCD436uurDk9bHD1rA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745329558; c=relaxed/simple;
-	bh=jIOq4QvOdlHSw26DEIMRQ/KisyqK6PA8sRT/Pyqybrs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SCgYqwKxYyj6A6ud11CdGz0sgtFsP1UQTSSkg3Nrp4tlt0JEFQwYnDR3ZNFJDrYp7sXR4G0tb4Z9YevIWuW2uk7waRS7Cjayar9dJhIGPrWGjjwty5XLOsEoAaDbuaZrcV8cbKhcWw9+mtEQvBw8L2nd3yRqoSKpvE/1aV5Nk/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kkr2LAPZ; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745329556; x=1776865556;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jIOq4QvOdlHSw26DEIMRQ/KisyqK6PA8sRT/Pyqybrs=;
-  b=kkr2LAPZDSeo4k6Z/OajHdH4oQR7L82oRH4sV41U9oxEsOzbtVhJXQ3t
-   N52KpIjiSpf5Lt9aSke4WeKlamFPKxIWfpz1qP6Wi5SAmhMJ4V5yUuyTe
-   Dktovt1q6SLveuq4lJiGZhtXgj7CV45d6MbXrlMf8m9gUXX0BJ5kx+6oK
-   dbX4bCOE+CS8ENSKW6m4nt0AH3lEBHz7PPHadPj989+LVbCv32NWH40fd
-   HqEpnHBeQT8mJmUHVhqgfoW/8zTwCSPKl2sZwHyfWfbA0+j4CN8Pd/HeR
-   SledSl0Fxotbap137/q8y343Oopjk6MF1hWoQuTIaPfzV7aOXMTFIsn0F
-   Q==;
-X-CSE-ConnectionGUID: DpE8WdeTQ1Kqqc/RzYO8FQ==
-X-CSE-MsgGUID: HtMF6/YpTICht6sY6H1ggw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="49551228"
-X-IronPort-AV: E=Sophos;i="6.15,231,1739865600"; 
-   d="scan'208";a="49551228"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 06:45:55 -0700
-X-CSE-ConnectionGUID: sSKjILpCQDmtG85Sar3PhQ==
-X-CSE-MsgGUID: gVNrwwuyQ7C/OQ+sBn6pJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,231,1739865600"; 
-   d="scan'208";a="131867441"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2025 06:45:53 -0700
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Jason Baron <jbaron@akamai.com>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	James Jernigan <jameswestonjernigan@gmail.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Yi Lai <yi1.lai@intel.com>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] EDAC/ie31200: Add two Intel SoCs for EDAC support
-Date: Tue, 22 Apr 2025 21:44:50 +0800
-Message-ID: <20250422134450.1880648-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1745334187; c=relaxed/simple;
+	bh=a9oHiuIRd+Lat23wgyOLQVKu0davNOYNyV1lqgu94Hc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=q1vOtXcfO0PS7AHd35efYUZCFQzPZ5BZhQj5oQnBaDtsL7ae651GQhhhPLeaT7sZYkCPGBj+tlXKvULQwmt8MTkuxD2/l0W21YLNTKQrI6NsBGuvHY/g6CffgcdOx/v5fcyiQzz4lH1HkypDfBtpMwY2KlWT8GRACQIauSFp0uQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I6IV+lrb; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ff798e8c3bso4464206a91.2
+        for <linux-edac@vger.kernel.org>; Tue, 22 Apr 2025 08:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1745334183; x=1745938983; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZR743ev6ExzRYE8cINx+AM9cywgAmFfoIc+SqezuNJU=;
+        b=I6IV+lrbYv0t+bvIaiG0TbVyWJT40Lj0vRqcLzc3/x+0dcZml1AnFM8HQY5Ii0wkCK
+         EFI9GLLncA7Nf81PeY4qYgGpbEdk6GQtvjHUrP43uS7sYSItfs/Hp/W+equBtADhN9iR
+         H8kGG/d5XAZylKSAL++q+ioYsECrBM0IYZU7VUdqcrJGhPa3joqiDrIgBusCnfsOOjmZ
+         /a1Dr6t8bvSNSFRCHQvERf4r1hilrZRf/fX4p3Lkj5VzPiie0d1c69yQE2wP4ATTE3E/
+         J6p2quspRGpvtugOYU1sLARWmrmhAeltWiFl33W2BwncgY4q3qCNTdFwpdJXyCO/Kkkj
+         To3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745334183; x=1745938983;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZR743ev6ExzRYE8cINx+AM9cywgAmFfoIc+SqezuNJU=;
+        b=JCz6bN7af/jcx52EVywcMz2d+WTmLkDkzIlG6O2Hayzh8psbDBElSHbCw02o+mFHj8
+         xcTLWfAYKHXmOzNYmlNlWrDRxkhTzo8tsOfjXuRjupAwN8Fz+N+/mfUcrxKhqAl3jqO2
+         e6LkBaC77pQHAE8kClYQvEkY7N0frbS3Gow8RjbjFqB3TKBx2/jUDCxmNT31aQTA+Gpt
+         I2LgxcOSJ3m3PSOAO4ur8MU4BL7AXjbu7ixbcLA6EvuP6bC3la8q1TyxTWp8NirwTTeQ
+         51RGwszTqmJu5/NQDwz3lj+JEde+bTejgeuy2u4a3KZgLNdo9iFt6kB904SKqMK40Bej
+         1Bdw==
+X-Forwarded-Encrypted: i=1; AJvYcCWEyHBWEDL6vua8waoDkfsN1Y/mO/Av9eJZ321EinBlAlmC/pwd+hRbTnM7UndvUhHfmlNMTxc5+FzX@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDH7vIPvMghOCi4+XiEx7XWAoQMi/dtoeuQbsZ/K7kxxj8hs9M
+	V9OUyIiSBBeWxicW0u6G4VBm91627JRJ8MvRx/iy5qUw1z2O9s0pCviLdverfVOx482+5bsv7/i
+	8JA==
+X-Google-Smtp-Source: AGHT+IEIapJZJRM9UWSGs3HX5eEFDXXhucM1QTXJfnPOK/9YTrDfsNmQubNfg9xjcSY4LHTjaYmG0pXn5/g=
+X-Received: from pjbsn11.prod.google.com ([2002:a17:90b:2e8b:b0:308:861f:fddb])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3a0c:b0:2ef:31a9:95c6
+ with SMTP id 98e67ed59e1d1-3087bb56439mr25794718a91.14.1745334182926; Tue, 22
+ Apr 2025 08:03:02 -0700 (PDT)
+Date: Tue, 22 Apr 2025 08:03:01 -0700
+In-Reply-To: <20250422082216.1954310-1-xin@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20250422082216.1954310-1-xin@zytor.com>
+Message-ID: <aAevpauKYWwObsB7@google.com>
+Subject: Re: [RFC PATCH v2 00/34] MSR refactor with new MSR instructions support
+From: Sean Christopherson <seanjc@google.com>
+To: "Xin Li (Intel)" <xin@zytor.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-pm@vger.kernel.org, 
+	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org, 
+	jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com, 
+	bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com, 
+	pbonzini@redhat.com, vkuznets@redhat.com, luto@kernel.org, 
+	boris.ostrovsky@oracle.com, kys@microsoft.com, haiyangz@microsoft.com, 
+	decui@microsoft.com
+Content-Type: text/plain; charset="us-ascii"
 
-Add two compute die IDs for Raptor Lake-S and Alder Lake-S for EDAC
-support. Note that because Alder Lake-S shares the same memory controller
-registers as Raptor Lake-S, it can reuse the configuration data of Raptor
-Lake-S for EDAC support.
+On Tue, Apr 22, 2025, Xin Li (Intel) wrote:
+> base-commit: f30a0c0d2b08b355c01392538de8fc872387cb2b
 
-Tested-by: James Jernigan <jameswestonjernigan@gmail.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- drivers/edac/ie31200_edac.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 204834149579..55cf54741aa0 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -89,6 +89,10 @@
- #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_1	0xa703
- #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_2	0x4640
- #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_3	0x4630
-+#define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_4	0xa700
-+
-+/* Alder Lake-S */
-+#define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1	0x4660
- 
- #define IE31200_RANKS_PER_CHANNEL	8
- #define IE31200_DIMMS_PER_CHANNEL	2
-@@ -734,6 +738,8 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_1), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_2), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_3), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_4), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1), (kernel_ulong_t)&rpl_s_cfg},
- 	{ 0, } /* 0 terminated list. */
- };
- MODULE_DEVICE_TABLE(pci, ie31200_pci_tbl);
--- 
-2.43.0
-
+This commit doesn't exist in Linus' tree or the tip tree, and the series doesn't
+apply cleanly on any of the "obvious" choices.  Reviewing a 34 patches series
+without being able to apply it is a wee bit difficult...
 
