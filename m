@@ -1,48 +1,48 @@
-Return-Path: <linux-edac+bounces-3664-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3665-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4055EA98A10
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 14:44:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED3C3A98A12
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 14:46:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6A4B3B3456
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 12:44:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D9F23AB793
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 12:45:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79B9E26C396;
-	Wed, 23 Apr 2025 12:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94BCC2701B7;
+	Wed, 23 Apr 2025 12:46:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ux1yrl8V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ibOEyq04"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54ED1266EF8
-	for <linux-edac@vger.kernel.org>; Wed, 23 Apr 2025 12:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70083182
+	for <linux-edac@vger.kernel.org>; Wed, 23 Apr 2025 12:46:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745412273; cv=none; b=EEPZkngZ7R+sViTEA3Uj0dyQdLHe2xQRcdVFWYnOLIDrl8yszxUCDww0GsFkDo9j1tl1Wffra5xAfvL7gYB98XFpCDFfM25nMKsuwnf44Rtab8+OhDTUOKVopIkCHZAQ95tYmOyehunjPETe+aNGg+5JNFy1y+mmF8INWTOSppc=
+	t=1745412365; cv=none; b=roueYQdxGADnZTN6fHskJSBwycEIdjpn+/CHILxHC/BPomyQkjYB/l/UHgyfXcywD1AS0/2tn02Rn/A74M9l1SZs5slH+6V6P40I5wk+SNJECHZf6MQ9urVerKcRGMAKO+Nkr5K0paRkmq5ZV8fpN9g9qjjVTNN4VtULxoL/+Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745412273; c=relaxed/simple;
-	bh=4jr3+sqCU0bpqjepxisDlsUBCztXvoYlbW7kW+s3U+o=;
+	s=arc-20240116; t=1745412365; c=relaxed/simple;
+	bh=RdVIsQcwaYaNZcrLtpMJb7+sOwFoo6Ay9jN4KPWHpQ0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l4UCw9LnZh/bfDEr8FXD3atc2nsXirqdoaudfE+cLEE3VTtfZ+pT6SvuHc2G/5fuNPXmz4RTztSba8g+IEeuRuQlYPV0t/3YDbMU+vIi+x4bObq1Pmv5Yp8/1DCzpi/O3o9arBtC4DtPN9xpz4CK4YyzeN9S6URdkUY7WQCb/1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ux1yrl8V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B745CC4CEE2;
-	Wed, 23 Apr 2025 12:44:31 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=M0qK6ZHzKCb4VN5c5y7UYxUVPmYN53/qXUrE4RrmMN9y0pseFz4LVb/5ww5PBmp+Bfpxjcr0APuGeiTBrCCEvIR2CXbQ6mxcFY1KUmLn8wXX8xllwfU1VfchW6JV+HIciGqWxiOaH5/c/IiQ2woXGXfn5X1B6LUcEc8SNEZs2ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ibOEyq04; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EFA9C4CEE2;
+	Wed, 23 Apr 2025 12:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745412273;
-	bh=4jr3+sqCU0bpqjepxisDlsUBCztXvoYlbW7kW+s3U+o=;
+	s=k20201202; t=1745412364;
+	bh=RdVIsQcwaYaNZcrLtpMJb7+sOwFoo6Ay9jN4KPWHpQ0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ux1yrl8VduWh6Srw6w7Ekv8VP2R2c2BJ5PHiD03M28UeSY1v7INzQhY59dOxN63z5
-	 cqXRCgAGwMaC5Y59u7U1P6qzDsPz4AqsBs0yowXwYb/QUuq1+hPpO88ckL48KW7gVM
-	 pg9VNB5zjgYjlxVxAn/1uCPoEAMqPd8TvapkveMEOh7dmeps9G9VfFMqccNWDJZusb
-	 Rdq9tSDjvXep4PftGu53SD6PheBqckeKHv0hyDbyiglgfNH/C9dVMDzb1vf5YWnnk5
-	 86a/Qc8RoNIZ5r3gOyhfQvagnPWEZr3NXy1alW0OTc7zrLRdcSNsUPB3IbkvJT+LIj
-	 w2zKzU2gqe+4g==
-Message-ID: <19d88896-c789-4617-a3e4-f134c99363cd@kernel.org>
-Date: Wed, 23 Apr 2025 14:44:30 +0200
+	b=ibOEyq04n0kJZYFjBzIVAfba4faQ+SkwlTGaid34annbsTvWT1mU3ATn0E2ncjTAD
+	 JI3/isUlSe0WRjLNQE6r4YLAw77RgmRDlxc4w3xzi0N0WZbJKyG1ZR3/1SLAzMBESa
+	 by6yXzVRITKmHqRrXmvbi7yS5+HT+UdvTpMusTHylgcmBA7Apga0hEegaIkDzKEoyl
+	 zyw0JY/72sodSKoxVkXwvKtaCZ83flYIhqJXhMV5+N55CymSUF5s4di1sMaE3QEl6Z
+	 5nGpMEUdR+AkmMky/rGWC4Z45FLRs20TdtKvgPxuyVv2148ooZhqlNVK92F5i+R3NE
+	 kfW2ps28ky59w==
+Message-ID: <494fe323-9132-40f8-9b1f-feabcbccd829@kernel.org>
+Date: Wed, 23 Apr 2025 14:46:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -50,13 +50,12 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: edac: Add bindings for Xilinx Versal
- EDAC for XilSem
+Subject: Re: [PATCH 5/6] edac: xilinx: Add EDAC support for Xilinx XilSem
 To: Rama devi Veggalam <rama.devi.veggalam@amd.com>,
  linux-edac@vger.kernel.org, git-dev@amd.com, michal.simek@amd.com
 Cc: radhey.shyam.pandey@amd.com
 References: <20250422162347.3217007-1-rama.devi.veggalam@amd.com>
- <20250422162347.3217007-2-rama.devi.veggalam@amd.com>
+ <20250422162347.3217007-6-rama.devi.veggalam@amd.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,108 +101,71 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250422162347.3217007-2-rama.devi.veggalam@amd.com>
+In-Reply-To: <20250422162347.3217007-6-rama.devi.veggalam@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 22/04/2025 18:23, Rama devi Veggalam wrote:
-> Add device tree bindings for Xilinx Versal EDAC for
-> XilSem controller
-> 
-> Signed-off-by: Rama devi Veggalam <rama.devi.veggalam@amd.com>
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
-
-Limited review follows
-
-> ---
->  .../edac/xlnx,versal-xilsem-edac.yaml         | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/xlnx,versal-xilsem-edac.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/edac/xlnx,versal-xilsem-edac.yaml b/Documentation/devicetree/bindings/edac/xlnx,versal-xilsem-edac.yaml
-> new file mode 100644
-> index 000000000000..99abcaf1e055
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/xlnx,versal-xilsem-edac.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/edac/xlnx,versal-xilsem-edac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +	if (device_sub_family_code == VERSALNET_SUB_FAMILY_CODE) {
+> +		priv->sw_event_node_id = VERSAL_NET_EVENT_ERROR_SW_ERR;
+> +		priv->cram_ce_mask = XPM_VERSAL_NET_EVENT_ERROR_MASK_XSEM_CRAM_CE;
+> +		priv->cram_ue_mask = XPM_VERSAL_NET_EVENT_ERROR_MASK_XSEM_CRAM_UE;
+> +		priv->npi_ue_mask = XPM_VERSAL_NET_EVENT_ERROR_MASK_XSEM_NPI_UE;
+> +	} else if (device_sub_family_code == VERSAL_SUB_FAMILY_CODE) {
+> +		priv->sw_event_node_id = VERSAL_EVENT_ERROR_SW_ERR;
+> +		priv->cram_ce_mask = XPM_VERSAL_EVENT_ERROR_MASK_XSEM_CRAM_CE_5;
+> +		priv->cram_ue_mask = XPM_VERSAL_EVENT_ERROR_MASK_XSEM_CRAM_UE_6;
+> +		priv->npi_ue_mask = XPM_VERSAL_EVENT_ERROR_MASK_XSEM_NPI_UE_7;
+> +	} else {
+> +		edac_printk(KERN_ERR, EDAC_DEVICE, "Invalid Device Sub family code %d\n",
+> +			    device_sub_family_code);
+> +	}
+> +	rc = xlnx_register_event(PM_NOTIFY_CB, priv->sw_event_node_id,
+> +				 priv->cram_ce_mask | priv->cram_ue_mask | priv->npi_ue_mask,
+> +				 false, xsem_err_callback, dci);
+> +	if (rc) {
+> +		if (rc == -EACCES)
+> +			rc = -EPROBE_DEFER;
+> +		goto free_edac_dev;
+> +	}
 > +
-> +title: Xilinx Versal Xilsem EDAC driver
+> +	edac_printk(KERN_DEBUG, EDAC_DEVICE, "%s success\n", __func__);
 
-Describe hardware, not drivers.
+Drop, your drivers are supposed to be silent on success.
 
+
+> +	return rc;
 > +
-> +maintainers:
-> +  - Rama Devi Veggalam <rama.devi.veggalam@amd.com>
+> +free_edac_dev:
+> +	edac_device_del_device(&pdev->dev);
+> +free_dev_ctl:
+> +	edac_device_free_ctl_info(dci);
 > +
-> +description: |
-> +  Xilinx Versal Soft Error Mitigation (XilSEM) is part of the
-> +  Platform Loader and Manager (PLM) which is loaded into and runs on the
-> +  Platform Management Controller (PMC). XilSEM is responsible for detecting
-> +  and optionally correcting soft errors in Configuration Memory of Versal.
-> +  Whenever an error is detected, be it correctable or uncorrectable, XilSEM
-> +  notifies the errors to user application.
-> +  This driver is responsible for handling error events received from XilSEM
-> +  on PLM.
-
-Same problem
-
+> +	return rc;
+> +}
 > +
-> +properties:
-> +  compatible:
-> +    items:
+> +/**
+> + * xsem_edac_remove - Unbind driver from controller.
+> + * @pdev:	Platform device.
+> + *
+> + * Return: Unconditionally 0
+> + */
 
-Drop items
+Whatever KPIs you have for amount of documented code we do not care, so
+please drop all such silly function comments. There is really no benefit
+in documenting what remove() does.
 
-> +      - enum:
-> +          - xlnx,versal-xilsem-edac
 
-Drop edac, your device description mentions the name is only xilsem.
-
+> +static void xsem_edac_remove(struct platform_device *pdev)
+> +{
+> +	struct edac_device_ctl_info *dci = platform_get_drvdata(pdev);
+> +	struct xsem_edac_priv *priv = dci->pvt_info;
 > +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +      edac@f2014050 {
-
-fix indentation, see other bindings.
-
-> +        compatible = "xlnx,versal-xilsem-edac";
-> +        reg = <0xf2014050 0xc4>;
-> +      };
-
-
+> +	xlnx_unregister_event(PM_NOTIFY_CB, priv->sw_event_node_id,
+> +			      priv->cram_ce_mask | priv->cram_ue_mask | priv->npi_ue_mask,
+> +			      xsem_err_callback, dci);
+> +	edac_device_del_device(&pdev->dev);
+> +	edac_device_free_ctl_info(dci);
 Best regards,
 Krzysztof
 
