@@ -1,152 +1,131 @@
-Return-Path: <linux-edac+bounces-3658-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3659-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 099F6A97617
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Apr 2025 21:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9963CA9815E
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 09:42:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C44543B8DF2
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Apr 2025 19:51:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DDCF3AA052
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 07:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED7929A3C9;
-	Tue, 22 Apr 2025 19:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4B326770B;
+	Wed, 23 Apr 2025 07:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sEsuM4T/"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="ht8Pg4C2"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C3C2973DB
-	for <linux-edac@vger.kernel.org>; Tue, 22 Apr 2025 19:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8961B266B40;
+	Wed, 23 Apr 2025 07:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745351486; cv=none; b=BKHmWuPChjRzm7B/INBLgFlus02da9jLXv322Icv7RUOJls51ja/j3BX5nPLoiwakPmIPzrceDSrdjfmEu9xvrLPeGi33kJPi8zOXy7f1H7j4Gmf1iUP5/S2/lQVNVFte57znjn2lMNTrDfAR+FK4+bcAsRHcnJ3/Ux2hF1cUjc=
+	t=1745394142; cv=none; b=f+ydcomMXbvp5XfWQLxQfmy0Tc3TQIovWfxhWK+Maa3XbPFAbP/Cmy5+fQq4yEdtrgd19gPvo1thhWDDOxe+5LnJdzWsJblv/geDddvFz40l2ylv+T5c3bkutWE5P/uonILSXuLh6XTO4Z59AFhLenLQtdUZhasfH4X5/YrIwrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745351486; c=relaxed/simple;
-	bh=G+t2v6BhLb+5vWztzdpssgwdNSlTOk90KThSVmnEfpo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OUXCGqlBgfIzx8K98WmK+fCELJ2uaCI8fA5ul8xJr96Gnnoqr4O751dzyD/uHtUDbjMsxdf4/uYL9uyMGesVqkVl+dmW7dvhgHz5yUXbE2D+Bg4fxwHax6uEHZhqAkodLCZVRqyy81MN+7LJxy9xJrccPRC1fruXwmwwVKwYfXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sEsuM4T/; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ff7f9a0b9bso4915697a91.0
-        for <linux-edac@vger.kernel.org>; Tue, 22 Apr 2025 12:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745351483; x=1745956283; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mH6UGx1+cJUt0+vdtDYj5GNgwh2+pJEonMo7kApLLOI=;
-        b=sEsuM4T/6AiEfbcv6LEBX9nIBDT+43JI3MKdo3iKnkO2YqI70DcND2IDwLROe9Q4D5
-         GArSdE4crjfrbQKmyHy1Els5AUgocKZZBhQ4ePOShvuMia5QfeqWQImCd0ooUy3J7eaq
-         uQ6iKaiB9W6Oab+GGxn3MZLM2zo9IQaI7BW1VoDi98zqEoGP3JMAMBj5PRaUmpBLWtRo
-         mjh4DGwfQSGSsttkwj1ptnNcpnPTSEHYTK8QeWv5i016xI7jxtl9m17cB/A22/f5mrtk
-         Q0lgI2Pwnlfgiq4aj2EbhSZVbFNZn+LTprUdDBVTDrYPrI9CfkqS4laNY2dRY2mAg8i+
-         vevA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745351483; x=1745956283;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mH6UGx1+cJUt0+vdtDYj5GNgwh2+pJEonMo7kApLLOI=;
-        b=djq8qiI7LOfL+N15cI9AC2MRi0w4lVusU0uuylHL5i3WHVuNDydg/jcPuC5SdzL/iR
-         fSO8Y7bkHYNiTVS2+tG0LOuJ7QNmhTOn58985NFjC4DYTloIRFBX/KPlAsRCdm0hFyWl
-         bppoVtadkHkWMuRZuunxUKxkGUKhT6GtElvnYj3hlJRiJ9Ew0+e3T2zVjBbZwW/zcFaT
-         0pINCROzr7GYguraCXUVlsbqEtFjo/yPLdSQSBc+Sd7NH8m7jrh0m5FPGJhM0RSXkVJ5
-         fGOg1S26UkPevfcK1hPnuKCGBCFrE+ZJ5IXqhrwWtFJ6V0YctFxRthz12e7e24+2R+WE
-         g6Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCXZBYgZ0DrCW7Xe4Q0X1BmkGW46BAdkboSWKsgAnGygOzW4GovIO/xASyWOKnaeVzwNtSHAulWQ/puO@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9RdHxz/4lIClRfI9wV/SX8Y9qYfzwTLFD5m0mJQFO9I0HGWj9
-	Akmeewit1geX+kDbe7IsIDsK3FuBgTbh7oEPHjWptc7l7ajrJ483AttxkNBK0p1Amy9B+L0Ppy1
-	bDQ==
-X-Google-Smtp-Source: AGHT+IGkV0RcloCvNwgssDSlkXsqRo5n8/rzSZ0U6QUVt02K3Nbge8IReH8D+uHUWVsCRD28uFY//07FCPo=
-X-Received: from pjbsr7.prod.google.com ([2002:a17:90b:4e87:b0:301:2679:9d9])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b90:b0:2ee:bc7b:9237
- with SMTP id 98e67ed59e1d1-3087bb9ede2mr21004314a91.27.1745351482796; Tue, 22
- Apr 2025 12:51:22 -0700 (PDT)
-Date: Tue, 22 Apr 2025 12:51:21 -0700
-In-Reply-To: <aAfxuby_0eZZTrj-@gmail.com>
+	s=arc-20240116; t=1745394142; c=relaxed/simple;
+	bh=Xg0KnLB4URmkB602Xl9ajDC10CPLIyV/X6uVweDcuCc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YKoIQt4kM9SVtdMkFPcHx3Teo7vY5PdftIkNFXNJbAYMiEzNTB+uxMxm6zM9n9PTRy0eeyhJQh7sea/HfnIRQKKKujReyQc19s/P3txXSDHYXKyx7ayn+lYtcNhPRtE0ALncDQOn+FL5yT2XiKDhuWC44uUguh+IQdNBbsRsGFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=ht8Pg4C2; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53N7efcj3105192
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 23 Apr 2025 00:41:21 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53N7efcj3105192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745394085;
+	bh=6GdmFpMZgynlN0+8/dR5L54gssO+r5xFLscuv7Zb+Vs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ht8Pg4C2x78BenMmhZHdlstOae3d80RJunxbx/Cvdsa9Ng1sweJyhq1qZe74uad8w
+	 dHIUkIaWpBwuEpEQXpNTzZstGa5HP1LuibQWsRATlidlNhOkvy0MIlrog/VWtzXAtz
+	 iLAft/hoYaZa+I3d3ZuooQk2COryT2hVxNfUJCgHWslPfgG0MkXcQL1z8/s+UH5PeL
+	 gb+2hbsIwrgPCaQZfJBxkbSwSmLHKEpQNdet6O8uEfcXydqh1elJk/5c7nEHD20WPV
+	 eqeeCqMeQgCc7w45x4no+uWwxrEjeXlIz4D82w4Q141GaNuvo9afJ+SLxKkWxA61fx
+	 KcYJYI7GY7/WQ==
+Message-ID: <9268e169-554d-43c8-a00c-f43c274f6116@zytor.com>
+Date: Wed, 23 Apr 2025 00:40:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250422082216.1954310-1-xin@zytor.com> <aAevpauKYWwObsB7@google.com>
- <cb4e24a0-fdb7-46d2-9b0e-200f5e3e4c96@zytor.com> <DS7PR11MB6077B4D80EB7020C4D3FCD52FCBB2@DS7PR11MB6077.namprd11.prod.outlook.com>
- <aAfxuby_0eZZTrj-@gmail.com>
-Message-ID: <aAfzOWnYzcPjZDEI@google.com>
-Subject: Re: [RFC PATCH v2 00/34] MSR refactor with new MSR instructions support
-From: Sean Christopherson <seanjc@google.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>, Xin Li <xin@zytor.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>, 
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>, 
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>, 
-	"xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>, 
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>, 
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>, 
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"hpa@zytor.com" <hpa@zytor.com>, "acme@kernel.org" <acme@kernel.org>, "jgross@suse.com" <jgross@suse.com>, 
-	"andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>, "peterz@infradead.org" <peterz@infradead.org>, 
-	"namhyung@kernel.org" <namhyung@kernel.org>, "mark.rutland@arm.com" <mark.rutland@arm.com>, 
-	"alexander.shishkin@linux.intel.com" <alexander.shishkin@linux.intel.com>, "jolsa@kernel.org" <jolsa@kernel.org>, 
-	"irogers@google.com" <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	"kan.liang@linux.intel.com" <kan.liang@linux.intel.com>, "wei.liu@kernel.org" <wei.liu@kernel.org>, 
-	"ajay.kaher@broadcom.com" <ajay.kaher@broadcom.com>, 
-	"bcm-kernel-feedback-list@broadcom.com" <bcm-kernel-feedback-list@broadcom.com>, 
-	"pbonzini@redhat.com" <pbonzini@redhat.com>, "vkuznets@redhat.com" <vkuznets@redhat.com>, 
-	"luto@kernel.org" <luto@kernel.org>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	"kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com" <haiyangz@microsoft.com>, 
-	Dexuan Cui <decui@microsoft.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 06/34] x86/msr: Use the alternatives mechanism to
+ read PMC
+To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, andrew.cooper3@citrix.com, peterz@infradead.org,
+        namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-7-xin@zytor.com>
+ <fbb509e8-0bd6-480f-be32-fd0895255a21@suse.com>
+ <a482b4df-f662-4d5d-8100-ade07afcdc24@zytor.com>
+ <bfeba521-0a49-42d0-bf83-15d031dfc6da@suse.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <bfeba521-0a49-42d0-bf83-15d031dfc6da@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 22, 2025, Ingo Molnar wrote:
+On 4/22/2025 2:28 AM, Juergen Gross wrote:
 > 
-> * Luck, Tony <tony.luck@intel.com> wrote:
-> 
-> > > >> base-commit: f30a0c0d2b08b355c01392538de8fc872387cb2b
-> > > >
-> > > > This commit doesn't exist in Linus' tree or the tip tree, and the series doesn't
-> > > > apply cleanly on any of the "obvious" choices.  Reviewing a 34 patches series
-> > > > without being able to apply it is a wee bit difficult...
-> > > >
-> > >
-> > > $ git show f30a0c0d2b08b355c01392538de8fc872387cb2b
-> > > commit f30a0c0d2b08b355c01392538de8fc872387cb2b
-> > > Merge: 49b517e68cf7 e396dd85172c
-> > > Author: Ingo Molnar <mingo@kernel.org>
-> > > Date:   Tue Apr 22 08:37:32 2025 +0200
-> > >
-> > >      Merge branch into tip/master: 'x86/sev'
-> > >
-> > >       # New commits in x86/sev:
-> > >          e396dd85172c ("x86/sev: Register tpm-svsm platform device")
-> > >          93b7c6b3ce91 ("tpm: Add SNP SVSM vTPM driver")
-> > >          b2849b072366 ("svsm: Add header with SVSM_VTPM_CMD helpers")
-> > >          770de678bc28 ("x86/sev: Add SVSM vTPM probe/send_command
-> > > functions")
-> > >
-> > >      Signed-off-by: Ingo Molnar <mingo@kernel.org>
-> > >
-> > >
-> > > You probably need to git pull from the tip tree :-)
-> > 
-> > If possible, you should avoid basing a series on tip/master as it 
-> > gets recreated frequently by merging all the topic branches. The SHA1 
-> > is here today, gone tomorrow.
-> 
-> Correct, although for x86 patch submissions via email it's not wrong: 
-> what applies today will likely apply tomorrow as well, regardless of 
-> the SHA1 change. :-)
+> I have worked rather hard to make it less intrusive, especially by removing
+> the paravirt specific code patching (now all done via alternative patching)
+> and by removing 32-bit Xen PV mode.
 
-Yeah, but as Tony pointed out, when using base commit that may be ephemeral, then
-the cover letter needs to call out the tree+branch.  This series applies on the
-current tip/master, but there was nothing to clue me into that fact.
+I looked at the optimization, and it is a nice improvement.
 
