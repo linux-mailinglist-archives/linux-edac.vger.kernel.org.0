@@ -1,43 +1,44 @@
-Return-Path: <linux-edac+bounces-3679-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3680-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91700A99583
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 18:40:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5126A9958C
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 18:40:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2597118898C3
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 16:36:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90B213B68EC
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 16:35:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C8F288CBB;
-	Wed, 23 Apr 2025 16:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2E928540E;
+	Wed, 23 Apr 2025 16:35:54 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA0CEEAB;
-	Wed, 23 Apr 2025 16:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715E1288CB9;
+	Wed, 23 Apr 2025 16:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745426151; cv=none; b=nv0MD3+Tno3LSZnHGUyorMcsqmyRHCb6jAn1G8Qmrk/TGCDadmHbMsgb6wpOmZM3Fy03B7IEPieX2rVtYxtWNCydYaXMJ0POqb8ckTM9inbiZuDTsDpC5JhsZMl3NE5ujO+ZgbYKvNwNxB9n6vK47JATjQuew+NqFx10L1TrYjU=
+	t=1745426154; cv=none; b=W+8l5PJZyiC7eCbusHekg/sNKgH+sZ706Oq9qrbrmRXkeCHlmBZ/gMzjINlHNMBXY3vbfC43aFnsvb8Hj/LAN8Jn4SA/bXoaJlvRRSm7/rZOKh7L+MpgRiUevkxKAyNg+ztrVgrz+dLVrftOKKTz5jPxbrCh+Xm/0szM1ZdH+lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745426151; c=relaxed/simple;
-	bh=V2nBNVntpaPQrFIDDDYwr52sQjrD/BBqgT2AgCr5WPU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ji2OAGuXVEzcNbWiWxkgUJl9MqYaKt3+UVUIwac5bI9dCqE0UaMZ/3v9NUcxtfp7moLWMFQSNDzAjF8DoZyGEds7smum2enUOymvrCKai87590SMxSeYxYhLo1fqZK70pfJE+5IyqpusLj8nxus/AxN/j3PTPA4BerJ0JzDiE4o=
+	s=arc-20240116; t=1745426154; c=relaxed/simple;
+	bh=Sfwv0NX2N1BPj+mtPyoFabRaA3F0GkFZasoqwT4kZ48=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oisWGZzXRfG0YcmL40LIarE7WqoEzs6UsO0T9HCY7MAP5ApL0XXksL32gQ6EAtwTlkvJuBnL2g8506ZBakQkdtDzVJ5iqnhv9SAIoHekQ8JqXB/CwMkMN3agpRV4VqQFBrB9cIL87BCPdvrlU8klh8hy2LcDlQLtaGPmMHTpzcA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZjPnQ6h1Rz6L5Ht;
-	Thu, 24 Apr 2025 00:34:02 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZjPnT0YHwz6L5JB;
+	Thu, 24 Apr 2025 00:34:05 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id A61BD14020A;
-	Thu, 24 Apr 2025 00:35:46 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id CC68E1404FA;
+	Thu, 24 Apr 2025 00:35:48 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.32.89) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 23 Apr 2025 18:35:45 +0200
+ 15.1.2507.39; Wed, 23 Apr 2025 18:35:47 +0200
 From: <shiju.jose@huawei.com>
 To: <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
 	<linux-doc@vger.kernel.org>
@@ -53,10 +54,12 @@ CC: <bp@alien8.de>, <rafael@kernel.org>, <tony.luck@intel.com>,
 	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
 	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
 	<wanghuiqiang@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v4 0/3] ACPI: Add support for ACPI RAS2 feature table
-Date: Wed, 23 Apr 2025 17:35:07 +0100
-Message-ID: <20250423163511.1412-1-shiju.jose@huawei.com>
+Subject: [PATCH v4 1/3] ACPI: ACPI 6.5: RAS2: Rename RAS2 table structure and field names
+Date: Wed, 23 Apr 2025 17:35:08 +0100
+Message-ID: <20250423163511.1412-2-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
+In-Reply-To: <20250423163511.1412-1-shiju.jose@huawei.com>
+References: <20250423163511.1412-1-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -70,79 +73,72 @@ X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Add support for ACPI RAS2 feature table (RAS2) defined in the
-ACPI 6.5 specification, section 5.2.21 and RAS2 HW based memory
-scrubbing feature.
+Rename the RAS2 table structure and field names to shorten them and
+avoid long lines in the ACPI RAS2 drivers.
 
-ACPI RAS2 patches were part of the EDAC series [1].
+1. struct acpi_ras2_shared_memory to struct acpi_ras2_shmem
 
-The code is based on ras.git: edac-for-next branch [2].
+2. In struct acpi_ras2_shared_memory: fields,
+   - set_capabilities[16] to set_caps[16]
+   - num_parameter_blocks to num_param_blks
+   - set_capabilities_status to set_caps_status
 
-1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
-2. https://web.git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-for-next
+3. struct acpi_ras2_patrol_scrub_parameter to
+   struct acpi_ras2_patrol_scrub_param
 
-Changes
-=======
-v3 -> v4:
-1.  Changes for feedbacks from Yazen on v3.
-    https://lore.kernel.org/all/20250415210504.GA854098@yaz-khff2.amd.com/
+4. In struct acpi_ras2_patrol_scrub_parameter: fields,
+   - patrol_scrub_command to command
+   - requested_address_range to req_addr_range
+   - actual_address_range to actl_addr_range
 
-v2 -> v3:
-1. Rename RAS2 table structure and field names in 
-   include/acpi/actbl2.h limited to only necessary
-   for RAS2 scrub feature. Not for merging.
-   Corresponding changes are merged in the acpica:
-   https://github.com/acpica/acpica/commit/2c8a38f747de9d977491a494faf0dfaf799b777b
-2. Changes for feedbacks from Jonathan on v2.
-3. Daniel reported a known behaviour: when readback 'size' attribute after
-   setting in, returns 0 before starting scrubbing via 'addr' attribute.
-   Changes added to fix this.
-4. Daniel reported that firmware cannot update status of demand scrubbing
-   via the 'Actual Address Range (OUTPUT)', thus add workaround in the
-   kernel to update sysfs 'addr' attribute with the status of demand
-   scrubbing.
-5. Optimized logic in ras2_check_pcc_chan() function
-   (patch - ACPI:RAS2: Add ACPI RAS2 driver).
-6. Add PCC channel lock to struct ras2_pcc_subspace and change
-   lock in ras2_mem_ctx as a pointer to pcc channel lock to make sure
-   writing to PCC subspace shared memory is protected from race conditions.
-   
-v1 -> v2:
-1.  Changes for feedbacks from Borislav.
-    - Shorten ACPI RAS2 structures and variables names.
-    - Shorten some of the other variables in the RAS2 drivers.
-    - Fixed few CamelCases.
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+---
+Corresponding changes are merged in the acpica:
+https://github.com/acpica/acpica/commit/2c8a38f747de9d977491a494faf0dfaf799b777b
+---
+ include/acpi/actbl2.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-2.  Changes for feedbacks from Yazen.
-    - Added newline after number of '}' and return statements.
-    - Changed return type for "ras2_add_aux_device() to 'int'.
-    - Deleted a duplication of acpi_get_table("RAS2",...) in the ras2_acpi_parse_table().
-    - Add "FW_WARN" to few error logs in the ras2_acpi_parse_table().
-    - Rename ras2_acpi_init() to acpi_ras2_init() and modified to call acpi_ras2_init()
-      function from the acpi_init().
-    - Moved scrub related variables from the struct ras2_mem_ctx from  patch
-      "ACPI:RAS2: Add ACPI RAS2 driver" to "ras: mem: Add memory ACPI RAS2 driver".  
-
-Shiju Jose (3):
-  ACPI: ACPI 6.5: RAS2: Rename RAS2 table structure and field names
-  ACPI:RAS2: Add ACPI RAS2 driver
-  ras: mem: Add memory ACPI RAS2 driver
-
- Documentation/edac/scrub.rst |  76 ++++++
- drivers/acpi/Kconfig         |  11 +
- drivers/acpi/Makefile        |   1 +
- drivers/acpi/bus.c           |   3 +
- drivers/acpi/ras2.c          | 451 +++++++++++++++++++++++++++++++++++
- drivers/ras/Kconfig          |  11 +
- drivers/ras/Makefile         |   1 +
- drivers/ras/acpi_ras2.c      | 406 +++++++++++++++++++++++++++++++
- include/acpi/actbl2.h        |  16 +-
- include/acpi/ras2.h          |  70 ++++++
- 10 files changed, 1038 insertions(+), 8 deletions(-)
- create mode 100644 drivers/acpi/ras2.c
- create mode 100644 drivers/ras/acpi_ras2.c
- create mode 100644 include/acpi/ras2.h
-
+diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
+index 2e917a8f8bca..493174ca87f6 100644
+--- a/include/acpi/actbl2.h
++++ b/include/acpi/actbl2.h
+@@ -2802,15 +2802,15 @@ struct acpi_ras2_pcc_desc {
+ 
+ /* RAS2 Platform Communication Channel Shared Memory Region */
+ 
+-struct acpi_ras2_shared_memory {
++struct acpi_ras2_shmem {
+ 	u32 signature;
+ 	u16 command;
+ 	u16 status;
+ 	u16 version;
+ 	u8 features[16];
+-	u8 set_capabilities[16];
+-	u16 num_parameter_blocks;
+-	u32 set_capabilities_status;
++	u8 set_caps[16];
++	u16 num_param_blks;
++	u32 set_caps_status;
+ };
+ 
+ /* RAS2 Parameter Block Structure for PATROL_SCRUB */
+@@ -2823,11 +2823,11 @@ struct acpi_ras2_parameter_block {
+ 
+ /* RAS2 Parameter Block Structure for PATROL_SCRUB */
+ 
+-struct acpi_ras2_patrol_scrub_parameter {
++struct acpi_ras2_patrol_scrub_param {
+ 	struct acpi_ras2_parameter_block header;
+-	u16 patrol_scrub_command;
+-	u64 requested_address_range[2];
+-	u64 actual_address_range[2];
++	u16 command;
++	u64 req_addr_range[2];
++	u64 actl_addr_range[2];
+ 	u32 flags;
+ 	u32 scrub_params_out;
+ 	u32 scrub_params_in;
 -- 
 2.43.0
 
