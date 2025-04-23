@@ -1,125 +1,156 @@
-Return-Path: <linux-edac+bounces-3683-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3684-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 330EDA995BD
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 18:50:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4637EA99622
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 19:14:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45B51188B926
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 16:50:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A7EF465798
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 17:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9386289342;
-	Wed, 23 Apr 2025 16:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506C228A414;
+	Wed, 23 Apr 2025 17:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="im0Ha/Jr"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="IvWYQaPf"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C02288CBC
-	for <linux-edac@vger.kernel.org>; Wed, 23 Apr 2025 16:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A554289367;
+	Wed, 23 Apr 2025 17:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745426992; cv=none; b=PCv4WCtKq2wZ6BdPBmSRasgGpjjeo0c6IX3Cb9TydEyN9846ilivMCicN0a1Y+1bBu6OFK1PVS+NkfUQ3eGWMYdv/ugV3l8DEHYhPT7gCeEllUeKMNMbsmUpgaYh4gaiTMUAnXYb8RnCV520hCbO+lrVLLznQxBcJFQaV0Ke0s8=
+	t=1745428457; cv=none; b=MxKRslDQEtyPfFb+S9EuI7Ux6Qpsvo3CK+mj01oBLM5BXfxtm6qwRND1I50FUIm65P0gqR7arJ/dDy1IA/mUkHrSBOALyFRiTtEZ+AyPN2uR7NybBZhadBicoZLt5yxPMybg9n7r6AeAEKq0OXaWLu64WomNBu1iUvv2ff10JFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745426992; c=relaxed/simple;
-	bh=AaJW6oZj7uAa8i6ILtNhohhVixxZynWRyR9f+oaDWlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TwB7Vf+x/sPliOrezvM9ZXqw8yW0k5hRprUTzKpP6irvQca1E2B6SiKkKYphvUr0bbWHAYx4upOERP6tD/ZNgsaWRDDcupScDaKr4+gkJ+ZXDKJuAcfy9EZm43DsxqyFt+uMyvBEyZ+OB35Kdij6J7Nig3V4vPcgA/NHRJqGEJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=im0Ha/Jr; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39bf44be22fso46622f8f.0
-        for <linux-edac@vger.kernel.org>; Wed, 23 Apr 2025 09:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745426989; x=1746031789; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d13RLXbPFS/6DcGoCdNLJfMaNzP5WD2uKgALut8qrnY=;
-        b=im0Ha/Jri64dPb8kpSDsZJw5QKqcGa22gIo5G8y0XjFD14xz7FNnlSEc0d5jLzggxd
-         PpBFXEba1Q+yie6qVL3V3VDrHUUkY7VHbG8YQ0sV3mvMwoEV60KmCV/68trc0w7VB6sP
-         52wSdVY+iKrLE8zOuisJDasgLQnWLFH+kgnYsAx0h+Jonjuqe+sif0fEUMIO9KCXO4A7
-         GvbICkpN2Eu6MF/NKUfs8BhZtdbb0dzsXYtCTWRy9oHK91yj/vtCyM/ZroU6eRR2FXRa
-         yMemlPC9zjJWsWsrE2zbdtNZSPRjm7tKR5lYrd4+1EernIJDxcDMm5Z2U8F5uHO5BZVw
-         Wm6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745426989; x=1746031789;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d13RLXbPFS/6DcGoCdNLJfMaNzP5WD2uKgALut8qrnY=;
-        b=owjjxnTYMAu8VqZDf0Trz8dzoY1cRH01EK5AKN3TzlAThvKTVzBbKatwRvmls9SwAm
-         Fp8r1isQGiYzdFAzAjocjEzd3QAnKc6doT9k+qoJs9KbRzy514quYSobJPeCciuA9Wsn
-         0m4TeD74c2lzU3/Afpk8AZgCaD/AWNOMevDgO6bi7DxaXWxIIBQlOeP1Od2bjGlJpyCC
-         iHA66ASbEHl1cqSEa+kPtPlQ+n/H1RWwP72338+8/E38GcUfjfG+yBGib0cN62rYO0LO
-         Meqslb8j8xpVLHN8kUgcDvMCLn9ZjJYI46NwMySf37gQIXx93eSLDViHWfK+9emdQ0Ij
-         /XTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXnKfya9tyWC2r/fOUGa+txxEyZ8Lc+gfJtAdCmbMA7WbmA6kf4Vf1aBl30ZXZOyDiLc2lUx9YjU33W@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU+RviEq0pyLi1qjZUOsYVGKHTK2WLdLdv8klL+AlEykRsTKFM
-	uwPIMe22O9JbDJag8epkLZUHBP4eRsEpu2FEe6SDU2D2QxMDRnHFfpsRcuAW3qbigyPz6asff68
-	i
-X-Gm-Gg: ASbGncty2GAy7wgg4PMLV8EUb5Pws9eJRJtWHOQTOmtpekYfj0t87eWyuPfGPgWOqDr
-	Mba71YEcaUgCEzjFqchnrG0eVUuHJK8mw3XJp1jD90zhTLkbXA841CmL6qZ0fr2Z79wl2ONncml
-	gWgHBMYhCqrMJaeCdUt7fjIRGsn213D53/eifxi+X0P7Ey+a+TuCbHFMCgoeE0cgFlQJHDQtpI8
-	mUp+MN3Pr8rx4HA6D0ry5vgUSt/w2dZp/QyoIXVa57w9rUp8ki0i9ciQS4lqFKnWjRtLWCzYFvF
-	G+Ew88vIc70511o3G5O3QPwqbLaMUw/lwGD5PX4y7TYBuruJ+kcQwG+S
-X-Google-Smtp-Source: AGHT+IElulydR2z4r0tqf6Ma9PoBW4CLBbvBBZ3hMURzGdVDB6yekLE5lWVATbFtTsLy3adeVroPHQ==
-X-Received: by 2002:a05:6000:4212:b0:39c:1f02:449f with SMTP id ffacd0b85a97d-3a06c3fe4a1mr291942f8f.2.1745426989186;
-        Wed, 23 Apr 2025 09:49:49 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-44092d3e6c2sm31289045e9.33.2025.04.23.09.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 09:49:48 -0700 (PDT)
-Date: Wed, 23 Apr 2025 19:49:45 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: Re: [bug report] EDAC/{skx_common,i10nm}: Refactor
- show_retry_rd_err_log()
-Message-ID: <a9ab50ec-56e3-47dd-9ecd-333fbb1d964b@stanley.mountain>
-References: <aAih0KmEVq7ch6v2@stanley.mountain>
- <CY8PR11MB7134CE0CA414F81958EB5CEA89BA2@CY8PR11MB7134.namprd11.prod.outlook.com>
- <DS7PR11MB6077471F9B1B3221DA9FDEE5FCBA2@DS7PR11MB6077.namprd11.prod.outlook.com>
+	s=arc-20240116; t=1745428457; c=relaxed/simple;
+	bh=q0SsHabUmjj5ZdU0sUyhSgU3OxN3W7D4JCWOS+nAJGU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ogq1kDakyIirld0U5ZpyIoxMu6VLdb0zMDYf/Aknwg5vSuREa6Ya0eBaEcv4g14AXQxokz5Pc0qfYkck4zBqqSs+B5TbNfbbZvgH8vwsKiC2aEW0zDW1yffs7ZrlhTr/SfI26z1VdSX9rbrnXAlJEyeI42BEKBtbACv3qalWw5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=IvWYQaPf; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53NHCvSb3804133
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 23 Apr 2025 10:12:58 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53NHCvSb3804133
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745428382;
+	bh=AIJHrckYwFl98orUcLBTt95yPEoWX9oW9903W4hlM3w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IvWYQaPfxJvqBiLff3ahLWLm3on+DUaPa1Srpyp5LZs0jmOjsi4vJcD4bjFx1mkw1
+	 kmlinO9+bgIwDEaEPFxhzeh7OV4pJBnWqMwgS7SNusPzCVCr4pLxzCg1y9KDDjfFVk
+	 DyWNlDOln4+yBgIudOkFG4lEG2Lq/WOJhKF9+SXuHgWi4l0RDrbboFRD8k6F5lKkRA
+	 14yiMRrsILUIgyeyHSqLlSqGk6PDPkVte7v13JiaABizSWVFosdv0a/zLQKXJUGorp
+	 W8BYnasPgTuqRiwJsD+umVEKtOLbT7Bc0M6cVA0p6p7RA3scb+WSFcK+vk2X+rNlyz
+	 87hDNwO5mesTw==
+Message-ID: <e01fb578-3523-4f19-8db3-e231d5daa76e@zytor.com>
+Date: Wed, 23 Apr 2025 10:12:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DS7PR11MB6077471F9B1B3221DA9FDEE5FCBA2@DS7PR11MB6077.namprd11.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 01/34] x86/msr: Move rdtsc{,_ordered}() to
+ <asm/tsc.h>
+To: Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-2-xin@zytor.com>
+ <4caedcaf-793a-4371-a8db-50723dcdbad4@intel.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <4caedcaf-793a-4371-a8db-50723dcdbad4@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 23, 2025 at 04:26:21PM +0000, Luck, Tony wrote:
-> > >     362                         /* Clear RRL status if RRL in Linux control mode. */
-> > >     363                         if (retry_rd_err_log == 2 && !j && (log & status_mask))
-> > > --> 364                                 write_imc_reg(imc, ch, offset, width, log &
-> > > ~status_mask);
-> > >
-> > > This will clear the high 32 bits of log.
-> >
-> > It's OK to clear the high 32 bits of 'log', as we only write the low 32 bits of 'log' to
-> > the 1st RRL register, which is a u32 type.
-> >
-> > To improve code sanity, it might be worthwhile to create a patch that changes
-> > 'status_mask' to a u64 type. @Luck, Tony, should I create a fix patch on top of the
-> > current patch series to fix this warning?
+On 4/23/2025 7:13 AM, Dave Hansen wrote:
+> On 4/22/25 01:21, Xin Li (Intel) wrote:
+>> Relocate rdtsc{,_ordered}() from <asm/msr.h> to <asm/tsc.h>, and
+>> subsequently remove the inclusion of <asm/msr.h> in <asm/tsc.h>.
+>> Consequently, <asm/msr.h> must be included in several source files
+>> that previously did not require it.
 > 
-> Qiuxu,
+> I know it's mildly obvious but could you please add a problem statement
+> to these changelogs, even if it's just one little sentence?
+
+So "ALWAYS make a changelog a complete story", right?
+
+And that would be helpful for long term maintainability.
+
 > 
-> Yes. Write a patch for this and give a Reported-by: credit to Dan.
+> 	For some reason, there are some TSC-related functions in the
+> 	MSR header even though there is a tsc.h header.
 > 
+> 	Relocate rdtsc{,_ordered}() and	subsequently remove the
+> 	inclusion of <asm/msr.h> in <asm/tsc.h>. Consequently,
+> 	<asm/msr.h> must be included in several source files that
+> 	previously did not require it.
+> 
+> But I agree with the concept, so with this fixed:
 
-Thanks.  But mention what you said that it's a false positive.
+TBH, I did hesitate to touch so many files just to include msr.h.
 
-It's hard to silence a warning like this in Smatch because you'd need to
-read into the write_imc_reg() to see that only 4 byte widths are
-supported.
+But because tsc.h doesn't reference any MSR definitions, it doesn't make 
+sense to include msr.h in tsc.h.  I still did the big changes.
 
-regards,
-dan carpenter
+> 
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
+Thank you very much!
 
