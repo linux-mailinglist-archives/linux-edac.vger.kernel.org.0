@@ -1,297 +1,259 @@
-Return-Path: <linux-edac+bounces-3699-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3700-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BACA9A9CF
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Apr 2025 12:16:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CF3FA9AECD
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Apr 2025 15:21:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 785141898588
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Apr 2025 10:16:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6EB4442F9D
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Apr 2025 13:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C45B221578;
-	Thu, 24 Apr 2025 10:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B792F27BF61;
+	Thu, 24 Apr 2025 13:21:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Uc1LIfFS"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="udc58ogg"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2071.outbound.protection.outlook.com [40.107.96.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE12200B99
-	for <linux-edac@vger.kernel.org>; Thu, 24 Apr 2025 10:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745489788; cv=none; b=pBytyMizMy9hStAzyk8x7umMAp3cDOpya59+ZZDGGCqbPr90c6A2BBK21sDaBnyqIkdTF6nbmfnyChko4zm+DZllY6lwJOjHjVzAtl3Saf0WkZLAa9ERnNV9mIWY6Kg6Pt5s10HjC7MBJ69A65xR+cCzIEdA8HfyOglChnH5z70=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745489788; c=relaxed/simple;
-	bh=7yeb9KlYqqGD/ZehSL+UaW5Mu1Sv69xuG2EIsa3T9HE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oa/33TyyMqnYSHC6Y79ca+T4oCJGxVuFS/o+SxmNuImKBd+1DoSUPK0Thk+msPNI965l9XjkmFc3AafWZPCqAfWngCm4yeu2wfmAnL/JT5JzXL1t5raMWCg5jeOj/xpHJ/H5GCjWZVl1DEhQa2t6h8xzjqq4fP6C2v8ac5leIgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Uc1LIfFS; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-acbb85ce788so174348966b.3
-        for <linux-edac@vger.kernel.org>; Thu, 24 Apr 2025 03:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1745489784; x=1746094584; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7yeb9KlYqqGD/ZehSL+UaW5Mu1Sv69xuG2EIsa3T9HE=;
-        b=Uc1LIfFSDIHNQ23wMS5iHv24uVL5h9lN210nzT7FaSizPbik0nQTdA9QkYqCPBx4BG
-         lko+Fozdla4PPvEkvWF90NLY4byvoeV/wC8ea15qjAF+pqysPNTaJf5Nm6+H4mHfnsL+
-         XNruFElKeCgdQszJHWaqhOXtVXMIRglK18ueuTFOY6riRw3u6uxJLR1G1FUPiZbYctZx
-         QanAHAbVecEhPTp12dAgBCbZZx2Mpw6srdJ5MubqXxWAvMI1+Lnz7tfRQ8GryKLlCKU0
-         eZLzaQ0nGc4fqSq6nqpw0BE6XRGe29/3q+akS9bdzgVSlde1Aoqyuy/mUC/dMHZQgHAS
-         NVrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745489784; x=1746094584;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7yeb9KlYqqGD/ZehSL+UaW5Mu1Sv69xuG2EIsa3T9HE=;
-        b=jDStb1aeZUlfsjx6NU726B5wZn3u9BhH1STNXmUA/GfDCb/sP/kmYu9KUBCcAMhPZj
-         OjdyGAzfhnENita2y666ckH6K/EvRx9/0t4VU05QF0+ZLnTlApchfSwTluEoNHOzjrLT
-         M/gutNEjPN0L4pp5C38xdlsjLkqzC7mWGCppQXP8ZL2HzgEClB5h3AERaIbXp4u7GPTv
-         S6hF0RbP0HJKkrqPBqJXdWG3b73BDKumbbj+ZvgkBCjC6UwHRur2yrwb460ZYSt64cR+
-         /6geY8GH3B+OZo1N4cR9h4P7Lq1jLlDmR3T5i9ma28nD+i+deGNPE+zHsFuUjPIFmL3J
-         bKDg==
-X-Forwarded-Encrypted: i=1; AJvYcCWTFTuF83qLBN65PAZHqjR5cwYik6lhw/WIXyi9Kd6dPOI2dEHK7jYUsa91ro3as4DWoE3fZ33spxgr@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAdQVhmGXz7sjVePsRPmhWWmfbeqvcUB1azyZ9Fp8O0Y37gAFe
-	WCfiOQTzSH+TiBcvzLCcF8sJn/22RVJyEGmzOfelC09L51n5xdOOijzZ9oZvduI=
-X-Gm-Gg: ASbGncsExzx03j4YpQcAida8/RhMzPNjlqN7orpQCMyLHYqndAkeEJCntZClujitquV
-	GKdKWBO9sD6gCrmbtwds1hKXzVR44HhKIi4BKVu7Ogu+QIG6/BwdponA1Ez5//gKC+s3rAYohtw
-	Z1zvmDrbqbNAt6iLHbwP0UVnwLNMAwPaoFYADieupucylBio+RS35sl66DnDFdsCL+B7/vpK7FF
-	qcD6CkPlWQfzzdfGdda2/DSq0yz0NMEfBgWps2Sk+uTgRIIf1oVKMjGpsoD3IeUUcKMRRMpM57/
-	5fk27vsS1EJL6Iu2657tO0QDpQGIcNdG/Q5PEZRgDZxhBvi1SgefmFhsdg9Go1Grv6OgwUmfz77
-	isc41VbMnkY52SLreZtWDP5RzIwRN03R0B18AIIXYFzyy0lM76GwV6jsdTQESs53v3Q==
-X-Google-Smtp-Source: AGHT+IEm0tqe1Y6NrZYwZAPw8mP7gfJu/rS857Ou/Nw00s8avdEvZrPp9A2s5JSOi+lWLJhyNrhoNw==
-X-Received: by 2002:a17:907:3f9e:b0:aca:d4f6:440d with SMTP id a640c23a62f3a-ace5723afaemr234662066b.17.1745489783619;
-        Thu, 24 Apr 2025 03:16:23 -0700 (PDT)
-Received: from ?IPV6:2003:e5:870f:e000:6c64:75fd:2c51:3fef? (p200300e5870fe0006c6475fd2c513fef.dip0.t-ipconnect.de. [2003:e5:870f:e000:6c64:75fd:2c51:3fef])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace59c5e9ccsm85183966b.178.2025.04.24.03.16.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Apr 2025 03:16:23 -0700 (PDT)
-Message-ID: <054eec5c-1f36-454b-9220-b7f975d2717b@suse.com>
-Date: Thu, 24 Apr 2025 12:16:21 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF41D14B06C;
+	Thu, 24 Apr 2025 13:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745500891; cv=fail; b=ScquKcO1r6DY438kSWNxyxRR5xfsdBi+mbcesTIMzs7FOb4pgAltco1OPoh+oCnRw8TkYyNf6nWar5jczVHLgHwhvRffYSfM6mhIfkjrNt+wHvFtRA5HOWGGY0brnlzV91IgfeCb5A+l/aVpOtdiu+Hbj4qQAAILsaDiFUI0OAk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745500891; c=relaxed/simple;
+	bh=65iszVhjlDhXObcb8q5qKiNTo1GwC8zHggiEOH/bqWQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=efPl7VoNlCeSL8tamLnk87BAJEJOXEiK/XG15+EctV3FnXMR8MSO8yr+O7bePmdb2emx68zB9nOJdkyYv8FRt0phqyVnWmrETJygWky+Dyo+MtOhYnFlTRpCeaZ+frEECxffmYIsNeo4Gyij/r59GVi8amaWE0z8KxQmCHjUuuM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=udc58ogg; arc=fail smtp.client-ip=40.107.96.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eugwn1xZqdzm2LTIBC3kLS+OzZ3r3KrIz2uYXNfyid6nr4bAx1w1oOoXzE3k/0aQoY4kpSRXGRznfQI3eVdvBYpN8isICDvWYhOX/ByCtqon/tdz0814C9BqvwD9TPb9UilBFHKtgQ2ar0QlNnEFxPd6cQ+nXpQo+EhGMVLCBNVoZKqX/TIci81MvearZW1twbisZnGx213x855xJzpiHQlmBW2llzpqvj0BcssbQfbUH0L5iJDCl7dHRmUoAsShyvrZPRIHNJytv2bU27lW/g8M2G6k7Inq8GK08AxR0J+fPnlhnNu3pmx06tcokh5qWTt275vDqKyQ5TfafH/NLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Maip3IdmA/Pes2JdgPEU6J0RTzsYpvu5UEMf0mV9scU=;
+ b=l9XstZEdbq1boGb6RMnVstXtgGWHhXY4VZ8h64jUnhQJeKZRg7r2L30YPiR8vr9qbdtaTFrfkAaSITH/C7e//xUaE9rY+Tball05wKvGToF1wIjfqgOpqayopgD3/quz2YsyLbdCNVGr1casHZW30wc9CVnNnJMNbWghznndnEeVyVALdDPglAPqe/Swar2n1NB/Z6kUfoqALEdtzWnxWrlWzq0pYwfHj1Zz9ZwNJHElgx5VDdDb6Cf2fn/fW6mnniixUR7/KjhXcWwSpd8CK0H3IkKQfV9GyxYQK8N++HQS1T1A6t4IUBcDIkWQ79SAHBsNcb0RzBmvgwjcW6OQdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Maip3IdmA/Pes2JdgPEU6J0RTzsYpvu5UEMf0mV9scU=;
+ b=udc58oggc2daFnn5e22LRQIo9+cHDN5gJZzDCskS5FoqFRRKoclo6gYepTiWI5hS06HL3pHTNC07E5Y+rSOHqZjXdu36nQPbNoVdXVh7mb4ZIbk8wH7rvLZOm62ymt2On3E2Q0BphyeOM5I/AxBinyIHsPlAS53OfiJBmN+X1w4=
+Received: from BN0PR02CA0049.namprd02.prod.outlook.com (2603:10b6:408:e5::24)
+ by PH7PR12MB7872.namprd12.prod.outlook.com (2603:10b6:510:27c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.23; Thu, 24 Apr
+ 2025 13:21:25 +0000
+Received: from BL6PEPF00022573.namprd02.prod.outlook.com
+ (2603:10b6:408:e5:cafe::4f) by BN0PR02CA0049.outlook.office365.com
+ (2603:10b6:408:e5::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.37 via Frontend Transport; Thu,
+ 24 Apr 2025 13:21:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF00022573.mail.protection.outlook.com (10.167.249.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8655.12 via Frontend Transport; Thu, 24 Apr 2025 13:21:24 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 24 Apr
+ 2025 08:21:24 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 24 Apr
+ 2025 08:21:22 -0500
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Thu, 24 Apr 2025 08:21:19 -0500
+From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>
+CC: <git@amd.com>, <ptsm@linux.microsoft.com>, <srivatsa@csail.mit.edu>,
+	<shubhrajyoti.datta@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Borislav
+ Petkov" <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, James Morse
+	<james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Robert
+ Richter" <rric@kernel.org>, Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Subject: [PATCH v6 0/6] EDAC/Versal NET: Add support for error notification
+Date: Thu, 24 Apr 2025 18:51:12 +0530
+Message-ID: <20250424132118.17074-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 14/34] x86/msr: refactor
- pv_cpu_ops.write_msr{_safe}()
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-15-xin@zytor.com>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <20250422082216.1954310-15-xin@zytor.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------pWVoNv7WLwVBgb4mHgM007fn"
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB05.amd.com: shubhrajyoti.datta@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00022573:EE_|PH7PR12MB7872:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65d4f294-c8a6-4d2f-1b9c-08dd8332e97f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|82310400026|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?B7JkJPhNdMJBeMfyPqs57tS5rAHa30poaYIlmxZY/Jej7II1H8dIhWptJFw/?=
+ =?us-ascii?Q?oTfuBMxHWDF4+JmoWZDBZNtsxLuciyglMkn6BG5+FptPlJhXhqlzMq9RW+2s?=
+ =?us-ascii?Q?JCk77EcGQS4kQMwlGBP8ASqIi0KvVZUr5Te12Ir+gURpm7IPI2zC6jnNkfSV?=
+ =?us-ascii?Q?ZScZQw9OyHM6pN48yM2kESPpBmln64vCZf1rhoc6tFCgBql0zmOBRvfkSzFa?=
+ =?us-ascii?Q?2tO5PYrvdayrS0g8N90mvaSpQ3Ig6AUy7ZJYy7Ciz8EOJLyNN6sw99a8/8vQ?=
+ =?us-ascii?Q?691uprWJFFYjI0UUg0/z5F0kH4VD2/YykIrpmwrv612JB4lf5A7BxW5iJ/Be?=
+ =?us-ascii?Q?cF1TnAWqgVG1x0EnyM4XhldVwwNz4OcWa9v/KQkOTkc7IweD7tsrl1gH6tJH?=
+ =?us-ascii?Q?SBMH6+2mre1nVMhfJBRsB+ZQVp+D9UMTGhSbTE8xVnBMceboL5dqRhSy33Oi?=
+ =?us-ascii?Q?8DkiUjg+O0w1FMw9S9Z3SU8qnT2E9ArdA+fD7J5NLyG7cUV0sJs/JLrJMT3Z?=
+ =?us-ascii?Q?ZivVLatBfmTFgyCUOoMeqIGeA3HDCQAm/HYX4Az2UHaMiu7LijlEJ6d4xbHm?=
+ =?us-ascii?Q?4krN1rOEcqmRs5xtIS+efItiOO606E4HU2nOmrBDax/URr5ktVD8Z0ljPP4C?=
+ =?us-ascii?Q?OGGgMD2ZPViAp6CuQgvm6N+M3HKe07I6rrb1EyUO/fo7KnkLalHw2leCT6K8?=
+ =?us-ascii?Q?i4QXMqxmIMguk4xYyXXBNUnuAJZijvDxlYZ/Sm2lGFMCMkHX+rSc5Knt4KIP?=
+ =?us-ascii?Q?jTaeEd5EoSOnHO8bTaJPLB7dWOTijvuVa2hizoGjtmb9mvao0GBhlhun9nWU?=
+ =?us-ascii?Q?bjSp+7jEAcgQibfD8khZFYmtmMpAHu+Hpq2U9ID2a6WTzvL9lfyAGsWTUj9+?=
+ =?us-ascii?Q?/eJ/ZA8kqfXSZyLONTzh0zAXM2gE6a/2mLyHHnQG7s/3E02cjAM5LVueaB6y?=
+ =?us-ascii?Q?jhOznSO4cg0y2Pz66qX3njkjixddPsI4h193op8YGiPCaE4fQLIOTILctwy9?=
+ =?us-ascii?Q?0mLgQ9lRFxp75zA5Z+ed308qCk76K8b2hLi3sMBq8udl6cboqb8iq+yyhNiY?=
+ =?us-ascii?Q?WK9fNa1CtVrTSY/9VbylEmTjmuq6fhBnWWI2M2iDVSkx49rdjlMaofvAImtE?=
+ =?us-ascii?Q?2qxCxXFSdD44iEcFSowbZbuDsQr3fBkxUpXObnAyl3NwWuTjGpKvCa/1bCQD?=
+ =?us-ascii?Q?eGQPOqAMsxdpEnWOq0Tf3O+pfxtlHfJqoLPzubo6GewLe9SxmCXUBPmz1ZE7?=
+ =?us-ascii?Q?8bvzsqZHKpcWNG86TxVGm+Zq+vynUv8XqwHzvKxf4H2+T+bUztqOlCJKzneB?=
+ =?us-ascii?Q?ufMxuef8I49WQMjB0kvGx2sgQfS7L20dgK/c8SZJE+CevVr6IZVBIUvMOYTt?=
+ =?us-ascii?Q?Rp24l1o99dVkzLKMmHMki98aBEgwAHaMswtGga58L5SOrukHpT7ZfMQs9Fuc?=
+ =?us-ascii?Q?uzQz378NQhGbLPrujBBDUALNpJKVORQcChPMIMhX9dbBB/3NtMKgsK9ptOE4?=
+ =?us-ascii?Q?ZOG2gZPsWQknDrwm0QD8B2l2Evo9ZSpDSOmi?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 13:21:24.5048
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65d4f294-c8a6-4d2f-1b9c-08dd8332e97f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF00022573.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7872
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------pWVoNv7WLwVBgb4mHgM007fn
-Content-Type: multipart/mixed; boundary="------------b3S9hpqWlrcvhJkKaKAw7Czp";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com
-Message-ID: <054eec5c-1f36-454b-9220-b7f975d2717b@suse.com>
-Subject: Re: [RFC PATCH v2 14/34] x86/msr: refactor
- pv_cpu_ops.write_msr{_safe}()
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-15-xin@zytor.com>
-In-Reply-To: <20250422082216.1954310-15-xin@zytor.com>
+Adds support for the error notification for the Versal NET EDAC driver.
+The driver receives error events via RPMsg instead of directly accessing
+hardware registers. The NMC((Network management controller), which has
+secure access to DDRMC registers, gathers the necessary information and
+transmits it through RPMsg.
 
---------------b3S9hpqWlrcvhJkKaKAw7Czp
-Content-Type: multipart/mixed; boundary="------------BppMQx0iku6Wc7Pk9I10DjXt"
+During probe, the driver registers with RPMsg and retrieves DDR
+configuration by scheduling a work item from the NMC.
+Once this is completed, it registers the EDAC controller.
+When an error occurs, the NMC sends an RPMsg, notifying the driver.
+The EDAC driver handles error reporting for all events.
+Also we register the EDAC once and it reports the errors for all the
+events including the 8 DDRMC controllers. So while registering we give
+the particulars of the 1st controller.
 
---------------BppMQx0iku6Wc7Pk9I10DjXt
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Currently 20 errors has been tested.
 
-T24gMjIuMDQuMjUgMTA6MjEsIFhpbiBMaSAoSW50ZWwpIHdyb3RlOg0KPiBBbiBNU1IgdmFs
-dWUgaXMgcmVwcmVzZW50ZWQgYXMgYSA2NC1iaXQgdW5zaWduZWQgaW50ZWdlciwgd2l0aCBl
-eGlzdGluZw0KPiBNU1IgaW5zdHJ1Y3Rpb25zIHN0b3JpbmcgaXQgaW4gRURYOkVBWCBhcyB0
-d28gMzItYml0IHNlZ21lbnRzLg0KPiANCj4gVGhlIG5ldyBpbW1lZGlhdGUgZm9ybSBNU1Ig
-aW5zdHJ1Y3Rpb25zLCBob3dldmVyLCB1dGlsaXplIGEgNjQtYml0DQo+IGdlbmVyYWwtcHVy
-cG9zZSByZWdpc3RlciB0byBzdG9yZSB0aGUgTVNSIHZhbHVlLiAgVG8gdW5pZnkgdGhlIHVz
-YWdlIG9mDQo+IGFsbCBNU1IgaW5zdHJ1Y3Rpb25zLCBsZXQgdGhlIGRlZmF1bHQgTVNSIGFj
-Y2VzcyBBUElzIGFjY2VwdCBhbiBNU1INCj4gdmFsdWUgYXMgYSBzaW5nbGUgNjQtYml0IGFy
-Z3VtZW50IGluc3RlYWQgb2YgdHdvIDMyLWJpdCBzZWdtZW50cy4NCj4gDQo+IFRoZSBkdWFs
-IDMyLWJpdCBBUElzIGFyZSBzdGlsbCBhdmFpbGFibGUgYXMgY29udmVuaWVudCB3cmFwcGVy
-cyBvdmVyIHRoZQ0KPiBBUElzIHRoYXQgaGFuZGxlIGFuIE1TUiB2YWx1ZSBhcyBhIHNpbmds
-ZSA2NC1iaXQgYXJndW1lbnQuDQo+IA0KPiBUaGUgZm9sbG93aW5nIGlsbHVzdHJhdGVzIHRo
-ZSB1cGRhdGVkIGRlcml2YXRpb24gb2YgdGhlIE1TUiB3cml0ZSBBUElzOg0KPiANCj4gICAg
-ICAgICAgICAgICAgICAgX193cm1zcnEodTMyIG1zciwgdTY0IHZhbCkNCj4gICAgICAgICAg
-ICAgICAgICAgICAvICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICAgICAgICAgICAg
-LyAgICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICAgICBuYXRpdmVfd3Jtc3JxKG1z
-ciwgdmFsKSAgICBuYXRpdmVfd3Jtc3IobXNyLCBsb3csIGhpZ2gpDQo+ICAgICAgICAgICAg
-ICAgICAgIHwNCj4gICAgICAgICAgICAgICAgICAgfA0KPiAgICAgICAgICAgICBuYXRpdmVf
-d3JpdGVfbXNyKG1zciwgdmFsKQ0KPiAgICAgICAgICAgICAgICAgIC8gICAgICAgICAgXA0K
-PiAgICAgICAgICAgICAgICAgLyAgICAgICAgICAgIFwNCj4gICAgICAgICB3cm1zcnEobXNy
-LCB2YWwpICAgIHdybXNyKG1zciwgbG93LCBoaWdoKQ0KPiANCj4gV2hlbiBDT05GSUdfUEFS
-QVZJUlQgaXMgZW5hYmxlZCwgd3Jtc3JxKCkgYW5kIHdybXNyKCkgYXJlIGRlZmluZWQgb24g
-dG9wDQo+IG9mIHBhcmF2aXJ0X3dyaXRlX21zcigpOg0KPiANCj4gICAgICAgICAgICAgIHBh
-cmF2aXJ0X3dyaXRlX21zcih1MzIgbXNyLCB1NjQgdmFsKQ0KPiAgICAgICAgICAgICAgICAg
-LyAgICAgICAgICAgICBcDQo+ICAgICAgICAgICAgICAgIC8gICAgICAgICAgICAgICBcDQo+
-ICAgICAgICAgICAgd3Jtc3JxKG1zciwgdmFsKSAgICB3cm1zcihtc3IsIGxvdywgaGlnaCkN
-Cj4gDQo+IHBhcmF2aXJ0X3dyaXRlX21zcigpIGludm9rZXMgY3B1LndyaXRlX21zcihtc3Is
-IHZhbCksIGFuIGluZGlyZWN0IGxheWVyDQo+IG9mIHB2X29wcyBNU1Igd3JpdGUgY2FsbDoN
-Cj4gDQo+ICAgICAgSWYgb24gbmF0aXZlOg0KPiANCj4gICAgICAgICAgICAgIGNwdS53cml0
-ZV9tc3IgPSBuYXRpdmVfd3JpdGVfbXNyDQo+IA0KPiAgICAgIElmIG9uIFhlbjoNCj4gDQo+
-ICAgICAgICAgICAgICBjcHUud3JpdGVfbXNyID0geGVuX3dyaXRlX21zcg0KPiANCj4gVGhl
-cmVmb3JlLCByZWZhY3RvciBwdl9jcHVfb3BzLndyaXRlX21zcntfc2FmZX0oKSB0byBhY2Nl
-cHQgYW4gTVNSIHZhbHVlDQo+IGluIGEgc2luZ2xlIHU2NCBhcmd1bWVudCwgcmVwbGFjaW5n
-IHRoZSBjdXJyZW50IGR1YWwgdTMyIGFyZ3VtZW50cy4NCj4gDQo+IE5vIGZ1bmN0aW9uYWwg
-Y2hhbmdlIGludGVuZGVkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogWGluIExpIChJbnRlbCkg
-PHhpbkB6eXRvci5jb20+DQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NA
-c3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
---------------BppMQx0iku6Wc7Pk9I10DjXt
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Changes in v6:
+ - Patch added
+cdx is compile tested.
+ - Updated commit message
+- Update commit description
+- Update the commit message.
+- update to the chip name as xlnx,versal-net
+- Correct indentation
+- Update to xlnx,versal-net-ddrmc5
+- Update the kconfig message
+- Make the messages uniform
+- Add some more supported events
+- rename regval to reglo
+- combine/ reformat functions
+- remove trailing comments
+- Remove unneeded comments
+- make the amd_mcdi function void
+- rename versalnet_rpmsg_edac to versalnet_edac
+- Remove the column bit and use them directly
+- Update the comments
+- Update the mod_name to versalnet_edac
+- remove the global priv col and rows
+- rename edac_priv to mc_priv
+- Update the comment description for dwidth
+- Remove error_id enum
+- rename the variable par to parity
+- make get_ddr_config void
+- Fix memory leak of the mcdi structure
+- Update the spelling
+- Remove the workqueue
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
-oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
-kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
-1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
-BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
-N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
-PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
-FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
-UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
-vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
-+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
-qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
-tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
-CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
-RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
-8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
-BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
-SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
-nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
-AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
-Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
-hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
-w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
-VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
-OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
-/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
-c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
-F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
-k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
-wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
-5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
-TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
-N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
-AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
-0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
-Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
-we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
-v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
-Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
-534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
-b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
-yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
-suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
-jR/i1DG86lem3iBDXzXsZDn8R3/CwO0EGAEIACAWIQSFEmdy6PYElKXQl/ew3p3W
-KL8TLwUCWt3w0AIbAgCBCRCw3p3WKL8TL3YgBBkWCAAdFiEEUy2wekH2OPMeOLge
-gFxhu0/YY74FAlrd8NAACgkQgFxhu0/YY75NiwD/fQf/RXpyv9ZX4n8UJrKDq422
-bcwkujisT6jix2mOOwYBAKiip9+mAD6W5NPXdhk1XraECcIspcf2ff5kCAlG0DIN
-aTUH/RIwNWzXDG58yQoLdD/UPcFgi8GWtNUp0Fhc/GeBxGipXYnvuWxwS+Qs1Qay
-7/Nbal/v4/eZZaWs8wl2VtrHTS96/IF6q2o0qMey0dq2AxnZbQIULiEndgR625EF
-RFg+IbO4ldSkB3trsF2ypYLij4ZObm2casLIP7iB8NKmQ5PndL8Y07TtiQ+Sb/wn
-g4GgV+BJoKdDWLPCAlCMilwbZ88Ijb+HF/aipc9hsqvW/hnXC2GajJSAY3Qs9Mib
-4Hm91jzbAjmp7243pQ4bJMfYHemFFBRaoLC7ayqQjcsttN2ufINlqLFPZPR/i3IX
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+Changes in v5:
+- Update the binding
+- Update the compatible
+- Update the handle_error documentation
 
---------------BppMQx0iku6Wc7Pk9I10DjXt--
+Changes in v4:
+- Update the compatible
+- align the example
+- Enhance the description for rproc
+- Update the compatible
 
---------------b3S9hpqWlrcvhJkKaKAw7Czp--
+Changes in v3:
+- make remove void
 
---------------pWVoNv7WLwVBgb4mHgM007fn
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+Changes in v2:
+- Export the symbols for module compilation
+- New patch addition
+- rename EDAC to memory controller
+- update the compatible name
+- Add remote proc handle
+- Read the data width from the registers
+- Remove the dwidth, rank and channel number the same is
+read from the RpMsg.
+- remove reset
+- Add the remote proc requests
+- remove probe_once
+- reorder the rpmsg registration
+- the data width , rank and number of channel is read from message.
 
------BEGIN PGP SIGNATURE-----
+Shubhrajyoti Datta (6):
+  cdx: add the cdx headers to include/linux
+  cdx: Add DDRMC Commands for DDR Configuration Retrieval
+  cdx: Export Symbols for MCDI RPC and Initialization
+  ras: Export log_non_standard_event for External Usage
+  dt-bindings: memory-controllers: Add support for Versal NET EDAC
+  EDAC/VersalNET: Add support for error notification
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmgKD3UFAwAAAAAACgkQsN6d1ii/Ey8e
-hQf+IyaGfaANfYLf1gQb5JWLRkUgyz/njZG+UwVqy+rsaIYD+pEhdKw5SCCnD0k0rYwGX+humDna
-09S/SBtqSMJ6op9sp+0UMcix59tVByTG+d8H/RBLf2IWAPI0XKU6b3m310+4u3nyopkvf/rjeJWt
-SfFxXPA+0soMqiPgLiqLfQOcImvL7By/Ic4k7iCcQ8r2tUX4e49qE7Ceu6m2OhnWo7gegbiK3g3a
-o5e9jvL464VbQ0jA76OH8KY4kcOV8y0TQXP2dC3WWvN7O1iNoEL9KIIg3/K4iTHOY10ayy/UVXOd
-NK1TCl85M2LuLTmu8q4pp9E3JwXRobXErwdZe+JYvQ==
-=xegw
------END PGP SIGNATURE-----
+ .../xlnx,versal-net-ddrmc5.yaml               |   41 +
+ drivers/cdx/controller/cdx_controller.c       |    1 -
+ drivers/cdx/controller/cdx_rpmsg.c            |    1 -
+ drivers/cdx/controller/mcdi.c                 |    7 +-
+ drivers/cdx/controller/mcdi_functions.c       |    1 -
+ drivers/cdx/controller/mcdi_functions.h       |    2 +-
+ drivers/edac/Kconfig                          |   11 +
+ drivers/edac/Makefile                         |    1 +
+ drivers/edac/versalnet_edac.c                 | 1108 +++++++++++++++++
+ drivers/ras/ras.c                             |    1 +
+ .../bitfield.h => include/linux/mc_bitfield.h |    0
+ .../linux}/mc_cdx_pcol.h                      |   16 +
+ .../cdx/controller => include/linux}/mcdi.h   |    4 +-
+ 13 files changed, 1185 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,versal-net-ddrmc5.yaml
+ create mode 100644 drivers/edac/versalnet_edac.c
+ rename drivers/cdx/controller/bitfield.h => include/linux/mc_bitfield.h (100%)
+ rename {drivers/cdx/controller => include/linux}/mc_cdx_pcol.h (97%)
+ rename {drivers/cdx/controller => include/linux}/mcdi.h (99%)
 
---------------pWVoNv7WLwVBgb4mHgM007fn--
+-- 
+2.17.1
+
 
