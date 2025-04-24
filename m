@@ -1,54 +1,65 @@
-Return-Path: <linux-edac+bounces-3687-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3688-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 181B3A99BFA
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Apr 2025 01:25:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF5D0A9A221
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Apr 2025 08:30:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD2515A4E06
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Apr 2025 23:24:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF5C87B045B
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Apr 2025 06:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9AC922F74A;
-	Wed, 23 Apr 2025 23:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418D41FBEBD;
+	Thu, 24 Apr 2025 06:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="g52K7MMR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="frtjTorX"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8838A223DC9;
-	Wed, 23 Apr 2025 23:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC3E1DDC21;
+	Thu, 24 Apr 2025 06:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745450701; cv=none; b=hyTgH2V/vJuX9QYVG+arQSvJUxwStbr4L1uUukR+Cp+KqaDYyhYG0b2SjEAmv1VsxFzHOSot4fgNC1DkNF3YeVFOH/Cg4xlIRLkpBtfG9Zlf+1/dIfVS6hc+fpIl0YQX1Zq9N+j5JW+KsQ3ibDJcHyJS5jiqZ7Hrfx2/KLEm5Aw=
+	t=1745475970; cv=none; b=qFzSV8mWf6pXHaxl+6szdoc/RyPCdCAwXAI/iTmxa1HyPaoTsLsh2PuZSBqwtG1X6QzOw0q3edysS61U3+GGhlHWlMsNoLD/Wv9zzOAwZkKaKdULVNwMPZsqyDLunQMb7gPVRshThYfQVEzIydUHRl0iWAVCtE0gSLxFAzJuIQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745450701; c=relaxed/simple;
-	bh=yskBEWSEF6FlJkJi4DwqXGby0psHuBX/9ua/oCniJP8=;
+	s=arc-20240116; t=1745475970; c=relaxed/simple;
+	bh=r9pnF53EyyaRucMwNVgQLeGE6Ab0R4f4MEaSIMBKOXs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BGfXTY3iZ9Dv287qopTGeAFuZgVIrDc8m82KQ/oiLlfn0gsv9XMT7ucLGil1u6izN/iUiE/2SQ6vB/g9lqm4G5KY2yOtKRKaCx+KvtMQP0O7tE+UqWfofsxkZJycIddgpRuvoWzC9jEjRx3jcprOutLYPcJSPvaBZYthxio3O4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=g52K7MMR; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53NNNmdO016856
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 23 Apr 2025 16:23:49 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53NNNmdO016856
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1745450634;
-	bh=3ZRudBcQfUXdEeUGknvRzjxdjhla7ofQa9vhRPg63Iw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g52K7MMRbWF6yLwDhmY0YU3Om9fpRH0Ut+qyo76sxSZ4NHnyBc98XW5u2s2hVCFUK
-	 PhNe+N15jsjlumb03xkDxJWNBMQ76zGMekkVPvwrCgqXTuVJomLV1T/3YW5TFZ7jZ8
-	 1UmN3Fwk6b31yjBct2QL3ajxMU+0ZhSXqsLtn5qHYLVhfR4vWwV537HB9cU8VSqJHv
-	 6bXyJrePtilh9n0zOlm3jS0UhKtUD+8gXNtFrWLBIVXKpgaPuv0YalLYf+ij4Y2WWd
-	 yrxqlPYGWH/00BTyjqGIOa+LNPKvKGQxRb/Vrh8pulNMK2D75Bck1Sw8zFpVOmUKyD
-	 ftlR5gTTNtHcw==
-Message-ID: <88bcd897-8436-4ebb-ac03-833c8c8045f2@zytor.com>
-Date: Wed, 23 Apr 2025 16:23:47 -0700
+	 In-Reply-To:Content-Type; b=IE2zI/x8j13CcPvtXUwjzDePmkBTb7TjM9rnQOnmIur2rDvdsRBIniA1UgeEM+g2R/sMrElMfkFk9q2R+/KgRnfHzGbSeSyAjynlSKaibPRBgAMaaTmk8QGgiTGzKz4DPkC9eldQmAvl9+FMgkKXNgn7h1D6GG4DxrJ6pGdMJZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=frtjTorX; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745475966; x=1777011966;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=r9pnF53EyyaRucMwNVgQLeGE6Ab0R4f4MEaSIMBKOXs=;
+  b=frtjTorXnnyRNojO/uMNvHpfb8o8jg6AILywkYb0KIv7SI4HsdlatWLi
+   4q79+bYdQluLuCFzEC0Y0QYqjp91xKftuKGiJ3Oq6sb9lwO2fs5WMWjbE
+   29PSOIZf4TBuVUGFe9aSM+s6Y41b5BQuDnfB1uMHuXqxt21pny0n2aHFW
+   u50qo8Rqooqz4I8E9ReYRHLeSQOpPnKZwJuQorYio/u64jEaWxNHf4Lwn
+   aTE8ge/fEdVzPOCMoJ6w0TLR6dHMPkMS6HIKD+aND3du8P72ZLecYoUwj
+   LWsW/ZMh0joA7wL60wBWfChehZi8bj+QlrdADgtiBFTXDH0pM9hTE6Vyt
+   g==;
+X-CSE-ConnectionGUID: Z1dpGu+eQHW25lxJoYL7Aw==
+X-CSE-MsgGUID: 9HrqRHW1RMKp0TVWhdoWtw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="47187615"
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="47187615"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:26:05 -0700
+X-CSE-ConnectionGUID: Ejvh0aUHTACVpOK/Jqvr7Q==
+X-CSE-MsgGUID: i3jvGnxIQpSi7EjKCit1UA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,235,1739865600"; 
+   d="scan'208";a="132432771"
+Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.245.128]) ([10.124.245.128])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 23:25:52 -0700
+Message-ID: <20471e53-c228-4cf6-83e6-3ab49f32f19f@linux.intel.com>
+Date: Thu, 24 Apr 2025 14:25:49 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -56,91 +67,162 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 08/34] x86/msr: Convert a native_wrmsr() use to
- native_wrmsrq()
-To: Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
+Subject: Re: [RFC PATCH v2 11/34] x86/msr: Remove calling
+ native_{read,write}_msr{,_safe}() in pmu_msr_{read,write}()
+To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
 Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+ jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
+ namhyung@kernel.org, mark.rutland@arm.com,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org,
+ ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+ tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+ seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+ kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
 References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-9-xin@zytor.com>
- <2932db03-164a-447e-92cf-1ef6c35c15a4@intel.com>
+ <20250422082216.1954310-12-xin@zytor.com>
 Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <2932db03-164a-447e-92cf-1ef6c35c15a4@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+In-Reply-To: <20250422082216.1954310-12-xin@zytor.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/23/2025 8:51 AM, Dave Hansen wrote:
-> On 4/22/25 01:21, Xin Li (Intel) wrote:
->>   static __always_inline void sev_es_wr_ghcb_msr(u64 val)
->>   {
->> -	u32 low, high;
->> -
->> -	low  = (u32)(val);
->> -	high = (u32)(val >> 32);
->> -
->> -	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
->> +	native_wrmsrq(MSR_AMD64_SEV_ES_GHCB, val);
->>   }
-> 
-> A note on ordering: Had this been a native_wrmsr()=>__wrmsr()
-> conversion, it could be sucked into the tree easily before the big
-> __wrmsr()=>native_wrmsrq() conversion.
 
-Can't reorder the 2 patches, because __wrmsr() takes two u32 arguments
-and the split has to be done explicitly in sev_es_wr_ghcb_msr().
+On 4/22/2025 4:21 PM, Xin Li (Intel) wrote:
+> hpa found that pmu_msr_write() is actually a completely pointless
+> function [1]: all it does is shuffle some arguments, then calls
+> pmu_msr_chk_emulated() and if it returns true AND the emulated flag
+> is clear then does *exactly the same thing* that the calling code
+> would have done if pmu_msr_write() itself had returned true.  And
+> pmu_msr_read() does the equivalent stupidity.
+>
+> Remove the calls to native_{read,write}_msr{,_safe}() within
+> pmu_msr_{read,write}().  Instead reuse the existing calling code
+> that decides whether to call native_{read,write}_msr{,_safe}() based
+> on the return value from pmu_msr_{read,write}().  Consequently,
+> eliminate the need to pass an error pointer to pmu_msr_{read,write}().
+>
+> While at it, refactor pmu_msr_write() to take the MSR value as a u64
+> argument, replacing the current dual u32 arguments, because the dual
+> u32 arguments were only used to call native_write_msr{,_safe}(), which
+> has now been removed.
+>
+> [1]: https://lore.kernel.org/lkml/0ec48b84-d158-47c6-b14c-3563fd14bcc4@zytor.com/
+>
+> Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Sign-off-by: Xin Li (Intel) <xin@zytor.com>
+> ---
+>  arch/x86/xen/enlighten_pv.c |  6 +++++-
+>  arch/x86/xen/pmu.c          | 27 ++++-----------------------
+>  arch/x86/xen/xen-ops.h      |  4 ++--
+>  3 files changed, 11 insertions(+), 26 deletions(-)
+>
+> diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+> index 9fbe187aff00..1418758b57ff 100644
+> --- a/arch/x86/xen/enlighten_pv.c
+> +++ b/arch/x86/xen/enlighten_pv.c
+> @@ -1132,6 +1132,8 @@ static void set_seg(unsigned int which, unsigned int low, unsigned int high,
+>  static void xen_do_write_msr(unsigned int msr, unsigned int low,
+>  			     unsigned int high, int *err)
+>  {
+> +	u64 val;
+> +
+>  	switch (msr) {
+>  	case MSR_FS_BASE:
+>  		set_seg(SEGBASE_FS, low, high, err);
+> @@ -1158,7 +1160,9 @@ static void xen_do_write_msr(unsigned int msr, unsigned int low,
+>  		break;
+>  
+>  	default:
+> -		if (!pmu_msr_write(msr, low, high, err)) {
+> +		val = (u64)high << 32 | low;
+> +
+> +		if (!pmu_msr_write(msr, val)) {
+>  			if (err)
+>  				*err = native_write_msr_safe(msr, low, high);
+>  			else
+> diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
+> index 9c1682af620a..95caae97a394 100644
+> --- a/arch/x86/xen/pmu.c
+> +++ b/arch/x86/xen/pmu.c
+> @@ -313,37 +313,18 @@ static bool pmu_msr_chk_emulated(unsigned int msr, uint64_t *val, bool is_read,
+>  	return true;
+>  }
+>  
+> -bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err)
+> +bool pmu_msr_read(u32 msr, u64 *val)
 
-Thanks!
-     Xin
+The function name is some kind of misleading right now. With the change,
+this function only read PMU MSR's value if it's emulated, otherwise it
+won't really read PMU MSR. How about changing the name to
+"pmu_emulated_msr_read" or something similar?
 
 
+>  {
+>  	bool emulated;
+>  
+> -	if (!pmu_msr_chk_emulated(msr, val, true, &emulated))
+> -		return false;
+> -
+> -	if (!emulated) {
+> -		*val = err ? native_read_msr_safe(msr, err)
+> -			   : native_read_msr(msr);
+> -	}
+> -
+> -	return true;
+> +	return pmu_msr_chk_emulated(msr, val, true, &emulated) && emulated;
+>  }
+>  
+> -bool pmu_msr_write(unsigned int msr, uint32_t low, uint32_t high, int *err)
+> +bool pmu_msr_write(u32 msr, u64 val)
+
+ditto.
+
+
+>  {
+> -	uint64_t val = ((uint64_t)high << 32) | low;
+>  	bool emulated;
+>  
+> -	if (!pmu_msr_chk_emulated(msr, &val, false, &emulated))
+> -		return false;
+> -
+> -	if (!emulated) {
+> -		if (err)
+> -			*err = native_write_msr_safe(msr, low, high);
+> -		else
+> -			native_write_msr(msr, low, high);
+> -	}
+> -
+> -	return true;
+> +	return pmu_msr_chk_emulated(msr, &val, false, &emulated) && emulated;
+>  }
+>  
+>  static u64 xen_amd_read_pmc(int counter)
+> diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
+> index dc886c3cc24d..a1875e10be31 100644
+> --- a/arch/x86/xen/xen-ops.h
+> +++ b/arch/x86/xen/xen-ops.h
+> @@ -271,8 +271,8 @@ void xen_pmu_finish(int cpu);
+>  static inline void xen_pmu_init(int cpu) {}
+>  static inline void xen_pmu_finish(int cpu) {}
+>  #endif
+> -bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err);
+> -bool pmu_msr_write(unsigned int msr, uint32_t low, uint32_t high, int *err);
+> +bool pmu_msr_read(u32 msr, u64 *val);
+
+The prototype of pmu_msr_read() has been changed, but why there is no
+corresponding change in its caller (xen_do_read_msr())?
+
+
+> +bool pmu_msr_write(u32 msr, u64 val);
+>  int pmu_apic_update(uint32_t reg);
+>  u64 xen_read_pmc(int counter);
+>  
 
