@@ -1,216 +1,212 @@
-Return-Path: <linux-edac+bounces-3757-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3761-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AADE5A9DB3C
-	for <lists+linux-edac@lfdr.de>; Sat, 26 Apr 2025 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4992A9E18B
+	for <lists+linux-edac@lfdr.de>; Sun, 27 Apr 2025 11:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F061A17EAEE
-	for <lists+linux-edac@lfdr.de>; Sat, 26 Apr 2025 13:45:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C36017F69E
+	for <lists+linux-edac@lfdr.de>; Sun, 27 Apr 2025 09:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D9418E025;
-	Sat, 26 Apr 2025 13:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5E6B2528F6;
+	Sun, 27 Apr 2025 09:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FL73MtPT"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="KGPKbjRG"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3714223C9;
-	Sat, 26 Apr 2025 13:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E4122D4FF;
+	Sun, 27 Apr 2025 09:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745675146; cv=none; b=SCKtN3FU1DTzlZSmN0aTJKqG3/Usn6prS6t4s5oy5Xq76UmhKx52aTNzDzHm1Pd5hzmAFNInSCARSSS69dge7tYx7Mc/Vqy6daDXv7MULv91H5rUBol82nSd0Jw8/HLyVYtjbICvyWtPqh5TxJQazeGOFK6iWWbkfCwXxO2O10U=
+	t=1745745694; cv=none; b=JPkmomVfWl2skuId5/fVAMz8jDYE9Pmjx0h1kOJACpReBvWRGAINW0//gUHxwofon/8oVGYGx5BpHx8l9tYB3WqRb10b9Ktm5KsU4iJlyZZzLvak5DG8TVh90l7M0AbrCx0JuixbZKQhgpLd6IXN3OK6kdDsx3IoypM3gcEYvYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745675146; c=relaxed/simple;
-	bh=I4nsA4r/Iu57UddEcOKuVuHTuSSaO7yRpZoDOY/Qp2U=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=f6jE//5dGP+yujZDygBhxI12zfBvjAiiIrmsxv8F+/qVvJWSwkEDnJXcMj8isOy+aqgiKuXi7bsGIRTqJzOSGW+jKWbYdrDP8oBUy6IWpAoMJFHcvXaaL+IrJKMNeZxoixKhKLAFnoyhqFAUNNjURaGIpUGUw/+2LWdOinTXh80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FL73MtPT; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745675144; x=1777211144;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=I4nsA4r/Iu57UddEcOKuVuHTuSSaO7yRpZoDOY/Qp2U=;
-  b=FL73MtPTIblP+GDB0e3HutmxvspsnScb1Q8MgkOg+0FgCJk83LlQX37D
-   D6O2VEiAd3ZnGAPuMeiC1p+lOxC0BUoWn/yv9KlVf4JTDVYVqfnzXA+OR
-   DutgC9PHVari3dsAVurAxj8alSC47O3w3xRUAYEaHX8vKl6xSDeiXOV5u
-   8+fXOtcF1Mufp5d7nAAGzqNA6s/EWO5tUHxoKF/tApwjc8U0b5Odl1lhr
-   5XkdHiDtLbON22C2c1d62RcP6zLnpMSStEIY8p39MDCuaMuh/sz5NYt7M
-   stq1CpRZD+QdAxMzxnx04nXmArVvLbd97t0xzFj351KRhqDSXG/JM5O9T
-   A==;
-X-CSE-ConnectionGUID: rluqqy2OT+ujeyTWTOU9Mg==
-X-CSE-MsgGUID: +oYvne6NRzqCTuyzNKfqzw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11415"; a="47229772"
-X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="47229772"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 06:45:43 -0700
-X-CSE-ConnectionGUID: WMbNce1ORpCDbJZHWjGjpw==
-X-CSE-MsgGUID: UaIR2HdjTjK095toUEDbGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,241,1739865600"; 
-   d="scan'208";a="138223278"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.235])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2025 06:45:29 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Sat, 26 Apr 2025 16:45:26 +0300 (EEST)
-To: Xin Li <xin@zytor.com>
-cc: LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org, 
-    linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-    virtualization@lists.linux.dev, linux-pm@vger.kernel.org, 
-    linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org, 
-    linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    Netdev <netdev@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
-    tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-    dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-    acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com, 
-    peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com, 
-    alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
-    adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org, 
-    ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com, 
-    tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com, 
-    seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com, 
-    kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com, 
-    dapeng1.mi@linux.intel.com
-Subject: Re: [PATCH v3 01/14] x86/msr: Move rdtsc{,_ordered}() to
- <asm/tsc.h>
-In-Reply-To: <e62b81f3-1952-43e6-85fd-18c6f37d531d@zytor.com>
-Message-ID: <f8a5b080-b2a8-06f0-3d2d-d232ef0887a4@linux.intel.com>
-References: <20250425083442.2390017-1-xin@zytor.com> <20250425083442.2390017-2-xin@zytor.com> <42dc90e1-df2a-2324-d28c-d75fb525e4a2@linux.intel.com> <e62b81f3-1952-43e6-85fd-18c6f37d531d@zytor.com>
+	s=arc-20240116; t=1745745694; c=relaxed/simple;
+	bh=sAwmHzM5BuZaF2+SHHsnyyh62JrNU6fREWCA/ZhKmV8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lTHC9iF/c7HURUkq2JmhYs2wkxV2XC9iYFJRULkVi/FkhQXbQo5cffa/C8h+bdbC9/HkBwsysYlWm764XapjbeKeGp6Po7o+57VxXWStqhpXOxoKnCgt0cj3EfVOd9lPsnJhADr3XmXY3BML4+LflMHlUUWcTqz9iba0sOm8dBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=KGPKbjRG; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53R9KRRv1598826
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Sun, 27 Apr 2025 02:20:31 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53R9KRRv1598826
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745745633;
+	bh=qSfXCrg4qMgrCCN/nBzwbznIDzcGPiftIKltZswFgIE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KGPKbjRGgpHgFU0cY/ACUzxlHFjWDOeiPp9By/ChtzbJZIweuQ+iTo89wAU0iNihQ
+	 SKEyvJHImJNQXBkUZWIdvyDCu6QoEPA8rITFD0DzOFnJQDU+Kzfi3F/wVVPJtaasOz
+	 tp9WXAiFowdLbVcAn52sxpFAE0019Qh9Ohma3zzykO4s2ncruEhapesrBun7C7nbu/
+	 4XCH6DGZYk0OeujJJD/cl152iPZUttGL/t3z+ARRTRK4pCAey7AUYR4wEKwxvjBg97
+	 nHT/eL7JBioWUo9OkjJnkhRi5NlEgkrstADaj6ZDGDUs2C9E+9FUj4IM8BNmXhLIe2
+	 IL5Z9UXy1PO/Q==
+From: "Xin Li (Intel)" <xin@zytor.com>
+To: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v4 00/15] MSR code cleanup part one
+Date: Sun, 27 Apr 2025 02:20:12 -0700
+Message-ID: <20250427092027.1598740-1-xin@zytor.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-589040720-1745675126=:944"
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-589040720-1745675126=:944
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 8bit
 
-On Sat, 26 Apr 2025, Xin Li wrote:
+This patch set is the first part of the patch set:
 
-> On 4/25/2025 8:45 AM, Ilpo J=C3=A4rvinen wrote:
-> > To me this looks really a random set of source files, maybe it helped s=
-ome
-> > build success but it's hard for me to review this because there are sti=
-ll
-> > cases that depend on indirect include chains.
-> >=20
-> > Could you just look into solving all missing msr.h includes instead
-> > as clearly some are still missing after 3 pre-existing ones and you add=
-ing
-> > it into 3 files:
-> >=20
-> > $ git grep -e rdmsr -e wrmsr -l drivers/platform/x86/
-> > drivers/platform/x86/intel/ifs/core.c
-> > drivers/platform/x86/intel/ifs/load.c
-> > drivers/platform/x86/intel/ifs/runtest.c
-> > drivers/platform/x86/intel/pmc/cnp.c
-> > drivers/platform/x86/intel/pmc/core.c
-> > drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> > drivers/platform/x86/intel/speed_select_if/isst_if_mbox_msr.c
-> > drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-> > drivers/platform/x86/intel/tpmi_power_domains.c
-> > drivers/platform/x86/intel/turbo_max_3.c
-> > drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-> > drivers/platform/x86/intel_ips.c
-> >=20
-> > $ git grep -e 'msr.h' -l drivers/platform/x86/
-> > drivers/platform/x86/intel/pmc/core.c
-> > drivers/platform/x86/intel/tpmi_power_domains.c
-> > drivers/platform/x86/intel_ips.c
->=20
-> I think you want me to add all necessary direct inclusions, right?
+  MSR refactor with new MSR instructions support
 
-For asm/msr.h yes, as it seems you're altering the inclusion paths and all=
-=20
-non-direct includes have a chance of breaking so it seems prudent to just=
-=20
-convert them into direct includes.
+@ https://lore.kernel.org/lkml/20250422082216.1954310-1-xin@zytor.com/T/#m5a34be7d4ed55f0baca965cb65452a08e9ad7c8a
 
-> This is the right thing to do, and I did try it but gave up later.
->=20
-> I will do it in the next iteration as you asked.  But I want to make my
-> points:
->=20
-> 1) It's not just two patterns {rd,wr}msr, there are a lot of definitions
->    in <asm/msr.h> and we need to cover all of them:
 
-I know and I don't expect you to get it 100% perfect, but taking a major=20
-step into the right direction would be way better than build testing one=20
-configuration and see what blows up and fix only those.
+It's getting *WAY* too big, and whether to zap the pv_ops MSR APIs is
+still under argument.  Dave Hansen suggested to focus on rename stuff
+first, most of which he acked.
 
-In this particular case, the amount of includes seemed really subpar with=
-=20
-many users lacking the include.
+Jürgen Groß also gave his RBs to the Xen MSR cleanup patches.
 
->       struct msr_info
->       struct msr_regs_info
->       struct saved_msr
->       struct saved_msrs
+So here comes the first MSR cleanup patch set with version 4.
 
-Could be shortened to -e 'struct msr' -e 'struct saved_msr'.
 
->       {read,write}_msr
->       rdpmc
->       .*msr.*_on_cpu
+Changes in v4:
+1) Add missing includes in a different patch (Ilpo Järvinen).
+2) Add all necessary direct inclusions for msr.h (Ilpo Järvinen).
+3) Remove two "else" that no longer make sense (Juergen Gross).
+4) Collect RBs from Jürgen Groß and ABs from Peter Zijlstra.
 
-Well, my pattern already caught rdmsr.*on_cpu and wrmsr.*on_cpu.
 
-For the other patterns, I don't see those at all under=20
-drivers/platform/x86/ but I think when one typically implies the=20
-others tend appear as well so this might not be as hard as it seems.
+Link to the previous v3 patch set:
+https://lore.kernel.org/lkml/20250425083442.2390017-1-xin@zytor.com/
 
-> 2) Once all necessary direct inclusions are in place, it's easy to
->    overlook adding a header inclusion in practice, especially if the
->    build passes.  Besides we often forget to remove a header when a
->    definition is removed.  In other words, direct inclusion is hard to
->    maintain.
 
-This is true as well but we should still try to move towards the right=20
-state affairs even if we will not get it near 100% until there's a real=20
-tool that relentlessly keeps exposing such human oversight.
+This patch series is based on:
 
-And do I try to check also includes whenever I remember while reviewing=20
-patches (which requires some effort as they are not visible in the code=20
-context and might not appear in a patch at all).
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/msr
 
-> 3) Some random kernel configuration combinations can cause the current
->    kernel build to fail.  I hit one in x86 UML.
 
-Yes, which why direct including is much better than relying on fragile=20
-indirects.
+Xin Li (Intel) (15):
+  x86/msr: Add missing includes of <asm/msr.h>
+  x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
+  x86/msr: Remove rdpmc()
+  x86/msr: Rename rdpmcl() to rdpmc()
+  x86/msr: Convert the rdpmc() macro into an always inline function
+  x86/xen/msr: Return u64 consistently in Xen PMC read functions
+  x86/msr: Convert __wrmsr() uses to native_wrmsr{,q}() uses
+  x86/msr: Add the native_rdmsrq() helper
+  x86/msr: Convert __rdmsr() uses to native_rdmsrq() uses
+  x86/xen/msr: Remove calling native_{read,write}_msr{,_safe}() in
+    pmu_msr_{read,write}()
+  x86/xen/msr: Remove pmu_msr_{read,write}()
+  x86/xen/msr: Remove the error pointer argument from set_seg()
+  x86/pvops/msr: refactor pv_cpu_ops.write_msr{,_safe}()
+  x86/msr: Replace wrmsr(msr, low, 0) with wrmsrq(msr, low)
+  x86/msr: Change the function type of native_read_msr_safe()
 
-> We all know Ingo is the best person to discuss this with :).  While my
-> understanding of the header inclusion issue may be inaccurate or
-> outdated.
->=20
-> So for me, using "make allyesconfig" is a practical method for a quick
-> local build check, plus I always send my patches to Intel LKP.
+ arch/x86/coco/sev/core.c                      |   2 +-
+ arch/x86/events/amd/brs.c                     |   4 +-
+ arch/x86/events/amd/uncore.c                  |   2 +-
+ arch/x86/events/core.c                        |   2 +-
+ arch/x86/events/intel/core.c                  |   4 +-
+ arch/x86/events/intel/ds.c                    |   2 +-
+ arch/x86/events/msr.c                         |   3 +
+ arch/x86/events/perf_event.h                  |   1 +
+ arch/x86/events/probe.c                       |   2 +
+ arch/x86/hyperv/hv_apic.c                     |   6 +-
+ arch/x86/hyperv/hv_vtl.c                      |   4 +-
+ arch/x86/hyperv/ivm.c                         |   3 +-
+ arch/x86/include/asm/apic.h                   |   4 +-
+ arch/x86/include/asm/fred.h                   |   1 +
+ arch/x86/include/asm/microcode.h              |   2 +
+ arch/x86/include/asm/mshyperv.h               |   3 +-
+ arch/x86/include/asm/msr.h                    | 130 +++++-------------
+ arch/x86/include/asm/paravirt.h               |  57 ++++----
+ arch/x86/include/asm/paravirt_types.h         |  10 +-
+ arch/x86/include/asm/suspend_32.h             |   1 +
+ arch/x86/include/asm/suspend_64.h             |   1 +
+ arch/x86/include/asm/switch_to.h              |   4 +-
+ arch/x86/include/asm/tsc.h                    |  76 +++++++++-
+ arch/x86/kernel/cpu/amd.c                     |   2 +-
+ arch/x86/kernel/cpu/common.c                  |  10 +-
+ arch/x86/kernel/cpu/mce/core.c                |   6 +-
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c     |  25 ++--
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c        |   2 +-
+ arch/x86/kernel/cpu/umwait.c                  |   4 +-
+ arch/x86/kernel/fpu/xstate.h                  |   1 +
+ arch/x86/kernel/hpet.c                        |   1 +
+ arch/x86/kernel/kvm.c                         |   2 +-
+ arch/x86/kernel/kvmclock.c                    |   2 +-
+ arch/x86/kernel/process_64.c                  |   1 +
+ arch/x86/kernel/trace_clock.c                 |   2 +-
+ arch/x86/kernel/tsc_sync.c                    |   1 +
+ arch/x86/kvm/svm/svm.c                        |  34 ++---
+ arch/x86/kvm/vmx/vmx.c                        |   4 +-
+ arch/x86/lib/kaslr.c                          |   2 +-
+ arch/x86/mm/mem_encrypt_identity.c            |   5 +-
+ arch/x86/realmode/init.c                      |   1 +
+ arch/x86/xen/enlighten_pv.c                   |  58 ++++----
+ arch/x86/xen/pmu.c                            |  72 +++-------
+ arch/x86/xen/xen-ops.h                        |   5 +-
+ drivers/acpi/acpi_extlog.c                    |   1 +
+ drivers/acpi/processor_perflib.c              |   1 +
+ drivers/acpi/processor_throttling.c           |   3 +-
+ drivers/char/agp/nvidia-agp.c                 |   1 +
+ drivers/cpufreq/amd-pstate-ut.c               |   2 +
+ drivers/crypto/ccp/sev-dev.c                  |   1 +
+ drivers/edac/amd64_edac.c                     |   1 +
+ drivers/edac/ie31200_edac.c                   |   1 +
+ drivers/edac/mce_amd.c                        |   1 +
+ drivers/hwmon/hwmon-vid.c                     |   4 +
+ drivers/idle/intel_idle.c                     |   1 +
+ drivers/misc/cs5535-mfgpt.c                   |   1 +
+ drivers/net/vmxnet3/vmxnet3_drv.c             |   4 +
+ drivers/platform/x86/intel/ifs/core.c         |   1 +
+ drivers/platform/x86/intel/ifs/load.c         |   1 +
+ drivers/platform/x86/intel/ifs/runtest.c      |   1 +
+ drivers/platform/x86/intel/pmc/cnp.c          |   1 +
+ .../intel/speed_select_if/isst_if_common.c    |   1 +
+ .../intel/speed_select_if/isst_if_mbox_msr.c  |   1 +
+ .../intel/speed_select_if/isst_tpmi_core.c    |   1 +
+ drivers/platform/x86/intel/turbo_max_3.c      |   1 +
+ .../intel/uncore-frequency/uncore-frequency.c |   1 +
+ drivers/powercap/intel_rapl_common.c          |   1 +
+ drivers/powercap/intel_rapl_msr.c             |   1 +
+ .../processor_thermal_device.c                |   1 +
+ drivers/thermal/intel/intel_tcc_cooling.c     |   1 +
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |   1 +
+ drivers/video/fbdev/geode/display_gx.c        |   1 +
+ drivers/video/fbdev/geode/gxfb_core.c         |   1 +
+ drivers/video/fbdev/geode/lxfb_ops.c          |   1 +
+ 74 files changed, 308 insertions(+), 295 deletions(-)
 
-Even with LKP, randconfig builds may still require many tests to find=20
-issues.
 
-> There probably wants a script that identifies all files that reference a
-> definition in a header thus need to include it explicitly.  And indirect
-> includes should be zapped.
+base-commit: a5447e92e169dafaf02fd653500105c7186d7128
+-- 
+2.49.0
 
-Sadly, the clang based include-what-you-use tool is not yet there for=20
-the kernel AFAIK.
-
---=20
- i.
-
---8323328-589040720-1745675126=:944--
 
