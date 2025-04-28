@@ -1,65 +1,65 @@
-Return-Path: <linux-edac+bounces-3780-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3781-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 482E8A9FA46
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Apr 2025 22:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 407BCA9FACD
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Apr 2025 22:53:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5006C3B9811
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Apr 2025 20:14:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A4F35A4A0F
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Apr 2025 20:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB177297A5C;
-	Mon, 28 Apr 2025 20:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 222DB1F4720;
+	Mon, 28 Apr 2025 20:53:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NWWUMq7K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YkHHIHDJ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385681A7262;
-	Mon, 28 Apr 2025 20:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA09314D428;
+	Mon, 28 Apr 2025 20:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745871257; cv=none; b=cMJIJ5M2kThpymuLFvekyIlb82Ib26uq3M2FnuKLP4moHFcmZOPPbLWr/SzSZXowJ3P+588Yxjc+7r2TaV2bBofwx3kjReRzxViuAg+NsBhxR3i2B3v9xcsVqSq/UUXSzaiWx9XTHDMQPuN/sH+DTdEL19wZP7JKXncDJzKBVpY=
+	t=1745873626; cv=none; b=b/LYFsLXWwJ7mOR7T3lAqmUyObCOobeWR4aGl/V8fN3zvxXUotcBXfpzswWTsgQtRh6Gz2Fs5FYRYMsG52d9sPKN1DR/5x7xAz+TRci5M9oMPRLO/Z2OiYQQpa/YHkYEKfe706J2h3uJv3IpcMRcqYtTSW5s8lOVTmNe5PoWp9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745871257; c=relaxed/simple;
-	bh=jTWbJb+lEXQZP9dnjw7jiyRsnqeUGH8qRZ0vzYVWEec=;
+	s=arc-20240116; t=1745873626; c=relaxed/simple;
+	bh=dIXdjyGN5GZXIFp0+Zc/gdhIuiBg16Kdh9JRO35h/fU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o+HTn5JvYG4iGsCp1PQJrlXoyyY5+XeZsenxC4zuvKtNWbf+TdaYL6nKfy+Cm6Ae62iE1LfvVsDM+oqhssWajMRp1Lt+0Mkj9ukvZ/GyjRrqg8r9z+WRoIg28pxpjYO6jPZUKbRJ3bHe5DC97D6Jg6jL4+XPWvvzPZ6RRKolSyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NWWUMq7K; arc=none smtp.client-ip=198.175.65.12
+	 In-Reply-To:Content-Type; b=tTkcguxkWqEkka0/KKKq4nXogipUqZhuDMnIH3dB6oGnM/Huc7Jpr1JGuiPBSNNkI/1zEdUsc9ZKIk48E5sZcaO/GIvczUE0MYr0K4JSxnBMdtb4s3oM1yTh1nuiKUSkS3m0RwKAz2bI2Panr9dD7d/PRLgaXHed8nJVd5NqSpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YkHHIHDJ; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745871255; x=1777407255;
+  t=1745873624; x=1777409624;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=jTWbJb+lEXQZP9dnjw7jiyRsnqeUGH8qRZ0vzYVWEec=;
-  b=NWWUMq7K9qdbIZyn4+uf3xufMPSM5Z/U+VppaqcO/cRSqxedp8/yM3uZ
-   8GwNTNXTsV7zNyWnG6biPywhav22DDllCL2a5Bb975ayqk9gYmDltyLxP
-   mPTBey6K5rEd5Rx0F6nA5t+DpFbCyO2EnplN910u2eu7Zzz/zjojGrSBa
-   uf5hr4vXd0Vr3qIPzBc0qP40dGpN8rh+umxKA/MU7TCTzJAVQ4u/RPozM
-   k2VjqivSiJc7glZI5+uOpPdITFgp8acpJyfOmoyT36LNbEgKKiseq8i8B
-   Hp6jpRzFVvpUAyGuNvpve9HJ/sHYQxdx5Ez65DuMMDZ/O/Ikyrir9gurN
-   g==;
-X-CSE-ConnectionGUID: Zru+8fLyScSoO7UP3IyTHg==
-X-CSE-MsgGUID: DsznE3CmRr+FPC2DLomSSQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="58846869"
+  bh=dIXdjyGN5GZXIFp0+Zc/gdhIuiBg16Kdh9JRO35h/fU=;
+  b=YkHHIHDJsLP0kdZ1TIRYFocokzIMMHbSEIAfkSUrQbszC8I/AWn06I3j
+   J9uspn7u/vIbHMBrrynEIkgBozrAvnlwXSGulTKG4B4HQsUTetO1cEjdL
+   esj62DOWFwC8aIP0LfMBzObLM/SrNCcs6wzCxEG5keSy8kB4V3NCWyaaQ
+   Ci2LjTt9JbHZGQVu++MRwla30JfeBaR3yAlbsXX5lPTCa3/EcHs/FDFeA
+   YV1kECN3MESD5Is0hAQ5x9tta5CpsliAhrpt78m5Zl35PIgqQ2U4vzQSV
+   YQbBScph4elwUE1c+oIK/2O+bJ61nOkkA/d0xlHKyzzn1WuQ13Kw6OTfp
+   w==;
+X-CSE-ConnectionGUID: b28U1ljrSBuHBATbYqiUJg==
+X-CSE-MsgGUID: qh7rdQPfR82S+3plD+X6Kg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="51296745"
 X-IronPort-AV: E=Sophos;i="6.15,247,1739865600"; 
-   d="scan'208";a="58846869"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 13:14:14 -0700
-X-CSE-ConnectionGUID: c/7z4qTIShW5Dg7RTuDTSA==
-X-CSE-MsgGUID: cd+Ds/M0TBikqrJ2DthBIw==
+   d="scan'208";a="51296745"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 13:53:43 -0700
+X-CSE-ConnectionGUID: IVIsTEVgRtmHrAx6nL+c+g==
+X-CSE-MsgGUID: bC3xG4giReaMJgH/nskNLg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,247,1739865600"; 
-   d="scan'208";a="164579332"
+   d="scan'208";a="138433190"
 Received: from cmdeoliv-mobl4.amr.corp.intel.com (HELO [10.125.109.95]) ([10.125.109.95])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 13:14:13 -0700
-Message-ID: <0f6fd481-4a74-4461-b6a1-49a45d4e5d55@intel.com>
-Date: Mon, 28 Apr 2025 13:14:12 -0700
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2025 13:53:41 -0700
+Message-ID: <72fd82fa-a604-467e-906f-04d050e5ce8e@intel.com>
+Date: Mon, 28 Apr 2025 13:53:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/8] cxl/edac: Add CXL memory device ECS control
- feature
+Subject: Re: [PATCH v3 6/8] cxl/edac: Support for finding memory operation
+ attributes from the current boot
 To: shiju.jose@huawei.com, linux-cxl@vger.kernel.org,
  dan.j.williams@intel.com, jonathan.cameron@huawei.com, dave@stgolabs.net,
  alison.schofield@intel.com, vishal.l.verma@intel.com, ira.weiny@intel.com
@@ -79,10 +79,10 @@ Cc: linux-edac@vger.kernel.org, linux-doc@vger.kernel.org, bp@alien8.de,
  roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
  wanghuiqiang@huawei.com
 References: <20250407174920.625-1-shiju.jose@huawei.com>
- <20250407174920.625-5-shiju.jose@huawei.com>
+ <20250407174920.625-7-shiju.jose@huawei.com>
 Content-Language: en-US
 From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20250407174920.625-5-shiju.jose@huawei.com>
+In-Reply-To: <20250407174920.625-7-shiju.jose@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -91,453 +91,485 @@ Content-Transfer-Encoding: 7bit
 On 4/7/25 10:49 AM, shiju.jose@huawei.com wrote:
 > From: Shiju Jose <shiju.jose@huawei.com>
 > 
-> CXL spec 3.2 section 8.2.10.9.11.2 describes the DDR5 ECS (Error Check
-> Scrub) control feature.
-> The Error Check Scrub (ECS) is a feature defined in JEDEC DDR5 SDRAM
-> Specification (JESD79-5) and allows the DRAM to internally read, correct
-> single-bit errors, and write back corrected data bits to the DRAM array
-> while providing transparency to error counts.
+> Certain operations on memory, such as memory repair, are permitted
+> only when the address and other attributes for the operation are
+> from the current boot. This is determined by checking whether the
+> memory attributes for the operation match those in the CXL gen_media
+> or CXL DRAM memory event records reported during the current boot.
 > 
-> The ECS control allows the requester to change the log entry type, the ECS
-> threshold count (provided the request falls within the limits specified in
-> DDR5 mode registers), switch between codeword mode and row count mode, and
-> reset the ECS counter.
+> The CXL event records must be backed up because they are cleared
+> in the hardware after being processed by the kernel.
 > 
-> Register with EDAC device driver, which retrieves the ECS attribute
-> descriptors from the EDAC ECS and exposes the ECS control attributes to
-> userspace via sysfs. For example, the ECS control for the memory media FRU0
-> in CXL mem0 device is located at /sys/bus/edac/devices/cxl_mem0/ecs_fru0/
+> Support is added for storing CXL gen_media or CXL DRAM memory event
+> records in xarrays. Old records are deleted when they expire or when
+> there is an overflow and which depends on platform correctly report
+> Event Record Timestamp field of CXL spec Table 8-55 Common Event
+> Record Format.
 > 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Fan Ni <fan.ni@samsung.com>
+> Additionally, helper functions are implemented to find a matching
+> record in the xarray storage based on the memory attributes and
+> repair type.
+> 
+> Add validity check, when matching attributes for sparing, using
+> the validity flag in the DRAM event record, to ensure that all
+> required attributes for a requested repair operation are valid and
+> set.
+> 
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
 > ---
->  drivers/cxl/Kconfig     |  17 ++
->  drivers/cxl/core/edac.c | 363 +++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 378 insertions(+), 2 deletions(-)
+>  drivers/cxl/Kconfig       |   4 +
+>  drivers/cxl/core/edac.c   | 307 ++++++++++++++++++++++++++++++++++++++
+>  drivers/cxl/core/mbox.c   |  11 +-
+>  drivers/cxl/core/memdev.c |   1 +
+>  drivers/cxl/cxlmem.h      |  19 +++
+>  5 files changed, 340 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> index af72416edcd4..51987f2a2548 100644
+> index 2333f7c0b6db..48b7314afdb8 100644
 > --- a/drivers/cxl/Kconfig
 > +++ b/drivers/cxl/Kconfig
-> @@ -147,6 +147,23 @@ config CXL_EDAC_SCRUB
->  	  (e.g. scrub rates for the patrol scrub feature).
->  	  Otherwise say 'n'.
+> @@ -173,6 +173,10 @@ config CXL_EDAC_MEM_REPAIR
+>  	  to control the memory repair features (e.g. sparing, PPR)
+>  	  configurations of CXL memory expander devices.
 >  
-> +config CXL_EDAC_ECS
-> +	bool "Enable CXL Error Check Scrub (Repair)"
-> +	depends on CXL_EDAC_MEM_FEATURES
-> +	depends on EDAC_ECS
-> +	help
-> +	  The CXL EDAC ECS control is optional and allows host to
-> +	  control the ECS feature configurations of CXL memory expander
-> +	  devices.
+> +	  When enabled, the memory repair feature requires an additional
+> +	  memory of approximately 43KB to store CXL DRAM and CXL general
+> +	  media event records.
 > +
-> +	  When enabled 'cxl_mem' EDAC devices are published with memory
-> +	  ECS control attributes as described by
-> +	  Documentation/ABI/testing/sysfs-edac-ecs.
-> +
-> +	  Say 'y' if you have an expert need to change default settings
-> +	  of a memory ECS feature established by the platform/device.
-> +	  Otherwise say 'n'.
-> +
->  config CXL_PORT
->  	default CXL_BUS
->  	tristate
+>  	  When enabled 'cxl_mem' EDAC devices are published with memory
+>  	  repair control attributes as described by
+>  	  Documentation/ABI/testing/sysfs-edac-memory-repair.
 > diff --git a/drivers/cxl/core/edac.c b/drivers/cxl/core/edac.c
-> index 3a4f9ed726d3..a624fc90caf9 100644
+> index 246a02785f1d..02bd4c675871 100644
 > --- a/drivers/cxl/core/edac.c
 > +++ b/drivers/cxl/core/edac.c
-> @@ -19,7 +19,7 @@
+> @@ -14,10 +14,12 @@
+>  #include <linux/cleanup.h>
+>  #include <linux/edac.h>
+>  #include <linux/limits.h>
+> +#include <linux/xarray.h>
+>  #include <cxl/features.h>
+>  #include <cxl.h>
 >  #include <cxlmem.h>
 >  #include "core.h"
+> +#include "trace.h"
 >  
-> -#define CXL_NR_EDAC_DEV_FEATURES 1
-> +#define CXL_NR_EDAC_DEV_FEATURES 2
+>  #define CXL_NR_EDAC_DEV_FEATURES 2
 >  
->  #ifdef CONFIG_CXL_EDAC_SCRUB
->  struct cxl_patrol_scrub_context {
-> @@ -441,11 +441,361 @@ static int cxl_region_scrub_init(struct cxl_region *cxlr,
+> @@ -840,6 +842,280 @@ static int cxl_perform_maintenance(struct cxl_mailbox *cxl_mbox, u8 class,
+>  
+>  	return cxl_internal_send_cmd(cxl_mbox, &mbox_cmd);
 >  }
->  #endif /* CONFIG_CXL_EDAC_SCRUB */
->  
-> +#ifdef CONFIG_CXL_EDAC_ECS
-> +struct cxl_ecs_context {
-> +	u16 num_media_frus;
-> +	u16 get_feat_size;
-> +	u16 set_feat_size;
-> +	u8 get_version;
-> +	u8 set_version;
-> +	u16 effects;
-> +	struct cxl_memdev *cxlmd;
-> +};
 > +
 > +/*
-> + * See CXL spec rev 3.2 @8.2.10.9.11.2 Table 8-225 DDR5 ECS Control Feature
-> + * Readable Attributes.
+> + * Support for finding a memory operation attributes
+> + * are from the current boot or not.
 > + */
-> +struct cxl_ecs_fru_rd_attrbs {
-> +	u8 ecs_cap;
-> +	__le16 ecs_config;
-> +	u8 ecs_flags;
-> +} __packed;
 > +
-> +struct cxl_ecs_rd_attrbs {
-> +	u8 ecs_log_cap;
-> +	struct cxl_ecs_fru_rd_attrbs fru_attrbs[];
-> +} __packed;
+> +struct cxl_mem_err_rec {
+> +	struct xarray rec_gen_media;
+> +	struct xarray rec_dram;
+> +};
 > +
-> +/*
-> + * See CXL spec rev 3.2 @8.2.10.9.11.2 Table 8-226 DDR5 ECS Control Feature
-> + * Writable Attributes.
+> +enum cxl_mem_repair_type {
+> +	CXL_PPR,
+> +	CXL_CACHELINE_SPARING,
+> +	CXL_ROW_SPARING,
+> +	CXL_BANK_SPARING,
+> +	CXL_RANK_SPARING,
+> +	CXL_REPAIR_MAX,
+> +};
+> +
+> +/**
+> + * struct cxl_mem_repair_attrbs - CXL memory repair attributes
+> + * @dpa: DPA of memory to repair
+> + * @nibble_mask: nibble mask, identifies one or more nibbles on the memory bus
+> + * @row: row of memory to repair
+> + * @column: column of memory to repair
+> + * @channel: channel of memory to repair
+> + * @sub_channel: sub channel of memory to repair
+> + * @rank: rank of memory to repair
+> + * @bank_group: bank group of memory to repair
+> + * @bank: bank of memory to repair
+> + * @repair_type: repair type. For eg. PPR, memory sparing etc.
 > + */
-> +struct cxl_ecs_fru_wr_attrbs {
-> +	__le16 ecs_config;
-> +} __packed;
-> +
-> +struct cxl_ecs_wr_attrbs {
-> +	u8 ecs_log_cap;
-> +	struct cxl_ecs_fru_wr_attrbs fru_attrbs[];
-> +} __packed;
-> +
-> +#define CXL_ECS_LOG_ENTRY_TYPE_MASK GENMASK(1, 0)
-> +#define CXL_ECS_REALTIME_REPORT_CAP_MASK BIT(0)
-> +#define CXL_ECS_THRESHOLD_COUNT_MASK GENMASK(2, 0)
-> +#define CXL_ECS_COUNT_MODE_MASK BIT(3)
-> +#define CXL_ECS_RESET_COUNTER_MASK BIT(4)
-> +#define CXL_ECS_RESET_COUNTER 1
-> +
-> +enum {
-> +	ECS_THRESHOLD_256 = 256,
-> +	ECS_THRESHOLD_1024 = 1024,
-> +	ECS_THRESHOLD_4096 = 4096,
+> +struct cxl_mem_repair_attrbs {
+> +	u64 dpa;
+> +	u32 nibble_mask;
+> +	u32 row;
+> +	u16 column;
+> +	u8 channel;
+> +	u8 sub_channel;
+> +	u8 rank;
+> +	u8 bank_group;
+> +	u8 bank;
+> +	enum cxl_mem_repair_type repair_type;
 > +};
 > +
-> +enum {
-> +	ECS_THRESHOLD_IDX_256 = 3,
-> +	ECS_THRESHOLD_IDX_1024 = 4,
-> +	ECS_THRESHOLD_IDX_4096 = 5,
-> +};
-> +
-> +static const u16 ecs_supp_threshold[] = {
-> +	[ECS_THRESHOLD_IDX_256] = 256,
-> +	[ECS_THRESHOLD_IDX_1024] = 1024,
-> +	[ECS_THRESHOLD_IDX_4096] = 4096,
-> +};
-> +
-> +enum {
-> +	ECS_LOG_ENTRY_TYPE_DRAM = 0x0,
-> +	ECS_LOG_ENTRY_TYPE_MEM_MEDIA_FRU = 0x1,
-> +};
-> +
-> +enum cxl_ecs_count_mode {
-> +	ECS_MODE_COUNTS_ROWS = 0,
-> +	ECS_MODE_COUNTS_CODEWORDS = 1,
-> +};
-> +
-> +static int cxl_mem_ecs_get_attrbs(struct device *dev,
-> +				  struct cxl_ecs_context *cxl_ecs_ctx,
-> +				  int fru_id, u8 *log_cap, u16 *config)
+> +static struct cxl_event_gen_media *
+> +cxl_find_rec_gen_media(struct cxl_memdev *cxlmd,
+> +		       struct cxl_mem_repair_attrbs *attrbs)
 > +{
-> +	struct cxl_memdev *cxlmd = cxl_ecs_ctx->cxlmd;
-> +	struct cxl_mailbox *cxl_mbox = &cxlmd->cxlds->cxl_mbox;
-> +	struct cxl_ecs_fru_rd_attrbs *fru_rd_attrbs;
-> +	size_t rd_data_size;
-> +	size_t data_size;
+> +	struct cxl_mem_err_rec *array_rec = cxlmd->array_err_rec;
+> +	struct cxl_event_gen_media *rec;
 > +
-> +	rd_data_size = cxl_ecs_ctx->get_feat_size;
+> +	if (!array_rec)
+> +		return NULL;
 > +
-> +	struct cxl_ecs_rd_attrbs *rd_attrbs __free(kvfree) =
-> +		kvzalloc(rd_data_size, GFP_KERNEL);
-> +	if (!rd_attrbs)
-> +		return -ENOMEM;
+> +	rec = xa_load(&array_rec->rec_gen_media, attrbs->dpa);
+> +	if (!rec)
+> +		return NULL;
 > +
-> +	data_size = cxl_get_feature(cxl_mbox, &CXL_FEAT_ECS_UUID,
-> +				    CXL_GET_FEAT_SEL_CURRENT_VALUE, rd_attrbs,
-> +				    rd_data_size, 0, NULL);
-> +	if (!data_size)
-> +		return -EIO;
+> +	if (attrbs->repair_type == CXL_PPR)
+> +		return rec;
 > +
-> +	fru_rd_attrbs = rd_attrbs->fru_attrbs;
-> +	*log_cap = rd_attrbs->ecs_log_cap;
-> +	*config = le16_to_cpu(fru_rd_attrbs[fru_id].ecs_config);
-> +
-> +	return 0;
+> +	return NULL;
 > +}
 > +
-> +static int cxl_mem_ecs_set_attrbs(struct device *dev,
-> +				  struct cxl_ecs_context *cxl_ecs_ctx,
-> +				  int fru_id, u8 log_cap, u16 config)
+> +static struct cxl_event_dram *
+> +cxl_find_rec_dram(struct cxl_memdev *cxlmd,
+> +		  struct cxl_mem_repair_attrbs *attrbs)
 > +{
-> +	struct cxl_memdev *cxlmd = cxl_ecs_ctx->cxlmd;
-> +	struct cxl_mailbox *cxl_mbox = &cxlmd->cxlds->cxl_mbox;
-> +	struct cxl_ecs_fru_rd_attrbs *fru_rd_attrbs;
-> +	struct cxl_ecs_fru_wr_attrbs *fru_wr_attrbs;
-> +	size_t rd_data_size, wr_data_size;
-> +	u16 num_media_frus, count;
-> +	size_t data_size;
+> +	struct cxl_mem_err_rec *array_rec = cxlmd->array_err_rec;
+> +	struct cxl_event_dram *rec;
+> +	u16 validity_flags;
 > +
-> +	num_media_frus = cxl_ecs_ctx->num_media_frus;
-> +	rd_data_size = cxl_ecs_ctx->get_feat_size;
-> +	wr_data_size = cxl_ecs_ctx->set_feat_size;
-> +	struct cxl_ecs_rd_attrbs *rd_attrbs __free(kvfree) =
-> +		kvzalloc(rd_data_size, GFP_KERNEL);
-> +	if (!rd_attrbs)
-> +		return -ENOMEM;
+> +	if (!array_rec)
+> +		return NULL;
 > +
-> +	data_size = cxl_get_feature(cxl_mbox, &CXL_FEAT_ECS_UUID,
-> +				    CXL_GET_FEAT_SEL_CURRENT_VALUE, rd_attrbs,
-> +				    rd_data_size, 0, NULL);
-> +	if (!data_size)
-> +		return -EIO;
+> +	rec = xa_load(&array_rec->rec_dram, attrbs->dpa);
+> +	if (!rec)
+> +		return NULL;
 > +
-> +	struct cxl_ecs_wr_attrbs *wr_attrbs __free(kvfree) =
-> +		kvzalloc(wr_data_size, GFP_KERNEL);
-> +	if (!wr_attrbs)
-> +		return -ENOMEM;
+> +	validity_flags = get_unaligned_le16(rec->media_hdr.validity_flags);
+> +	if (!(validity_flags & CXL_DER_VALID_CHANNEL) ||
+> +	    !(validity_flags & CXL_DER_VALID_RANK))
+> +		return NULL;
 > +
-> +	/*
-> +	 * Fill writable attributes from the current attributes read
-> +	 * for all the media FRUs.
-> +	 */
-> +	fru_rd_attrbs = rd_attrbs->fru_attrbs;
-> +	fru_wr_attrbs = wr_attrbs->fru_attrbs;
-> +	wr_attrbs->ecs_log_cap = log_cap;
-> +	for (count = 0; count < num_media_frus; count++)
-> +		fru_wr_attrbs[count].ecs_config =
-> +			fru_rd_attrbs[count].ecs_config;
-> +
-> +	fru_wr_attrbs[fru_id].ecs_config = cpu_to_le16(config);
-> +
-> +	return cxl_set_feature(cxl_mbox, &CXL_FEAT_ECS_UUID,
-> +			       cxl_ecs_ctx->set_version, wr_attrbs,
-> +			       wr_data_size,
-> +			       CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET,
-> +			       0, NULL);
-> +}
-> +
-> +static u8 cxl_get_ecs_log_entry_type(u8 log_cap, u16 config)
-> +{
-> +	return FIELD_GET(CXL_ECS_LOG_ENTRY_TYPE_MASK, log_cap);
-> +}
-> +
-> +static u16 cxl_get_ecs_threshold(u8 log_cap, u16 config)
-> +{
-> +	u8 index = FIELD_GET(CXL_ECS_THRESHOLD_COUNT_MASK, config);
-> +
-> +	return ecs_supp_threshold[index];
-> +}
-> +
-> +static u8 cxl_get_ecs_count_mode(u8 log_cap, u16 config)
-> +{
-> +	return FIELD_GET(CXL_ECS_COUNT_MODE_MASK, config);
-> +}
-> +
-> +#define CXL_ECS_GET_ATTR(attrb)						    \
-> +	static int cxl_ecs_get_##attrb(struct device *dev, void *drv_data,  \
-> +				       int fru_id, u32 *val)		    \
-> +	{								    \
-> +		struct cxl_ecs_context *ctx = drv_data;			    \
-> +		u8 log_cap;						    \
-> +		u16 config;						    \
-> +		int ret;						    \
-> +									    \
-> +		ret = cxl_mem_ecs_get_attrbs(dev, ctx, fru_id, &log_cap,    \
-> +					     &config);			    \
-> +		if (ret)						    \
-> +			return ret;					    \
-> +									    \
-> +		*val = cxl_get_ecs_##attrb(log_cap, config);		    \
-> +									    \
-> +		return 0;						    \
-> +	}
-> +
-> +CXL_ECS_GET_ATTR(log_entry_type)
-> +CXL_ECS_GET_ATTR(count_mode)
-> +CXL_ECS_GET_ATTR(threshold)
-> +
-> +static int cxl_set_ecs_log_entry_type(struct device *dev, u8 *log_cap,
-> +				      u16 *config, u32 val)
-> +{
-> +	if (val != ECS_LOG_ENTRY_TYPE_DRAM &&
-> +	    val != ECS_LOG_ENTRY_TYPE_MEM_MEDIA_FRU)
-> +		return -EINVAL;
-> +
-> +	*log_cap = FIELD_PREP(CXL_ECS_LOG_ENTRY_TYPE_MASK, val);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_set_ecs_threshold(struct device *dev, u8 *log_cap, u16 *config,
-> +				 u32 val)
-> +{
-> +	*config &= ~CXL_ECS_THRESHOLD_COUNT_MASK;
-> +
-> +	switch (val) {
-> +	case ECS_THRESHOLD_256:
-> +		*config |= FIELD_PREP(CXL_ECS_THRESHOLD_COUNT_MASK,
-> +				      ECS_THRESHOLD_IDX_256);
+> +	switch (attrbs->repair_type) {
+> +	case CXL_PPR:
+> +		if (!(validity_flags & CXL_DER_VALID_NIBBLE) ||
+> +		    get_unaligned_le24(rec->nibble_mask) == attrbs->nibble_mask)
+> +			return rec;
 > +		break;
-> +	case ECS_THRESHOLD_1024:
-> +		*config |= FIELD_PREP(CXL_ECS_THRESHOLD_COUNT_MASK,
-> +				      ECS_THRESHOLD_IDX_1024);
+> +	case CXL_CACHELINE_SPARING:
+> +		if (!(validity_flags & CXL_DER_VALID_BANK_GROUP) ||
+> +		    !(validity_flags & CXL_DER_VALID_BANK) ||
+> +		    !(validity_flags & CXL_DER_VALID_ROW) ||
+> +		    !(validity_flags & CXL_DER_VALID_COLUMN))
+> +			return NULL;
+> +
+> +		if (rec->media_hdr.channel == attrbs->channel &&
+> +		    rec->media_hdr.rank == attrbs->rank &&
+> +		    rec->bank_group == attrbs->bank_group &&
+> +		    rec->bank == attrbs->bank &&
+> +		    get_unaligned_le24(rec->row) == attrbs->row &&
+> +		    get_unaligned_le16(rec->column) == attrbs->column &&
+> +		    (!(validity_flags & CXL_DER_VALID_NIBBLE) ||
+> +		     get_unaligned_le24(rec->nibble_mask) ==
+> +			     attrbs->nibble_mask) &&
+> +		    (!(validity_flags & CXL_DER_VALID_SUB_CHANNEL) ||
+> +		     rec->sub_channel == attrbs->sub_channel))
+> +			return rec;
 > +		break;
-> +	case ECS_THRESHOLD_4096:
-> +		*config |= FIELD_PREP(CXL_ECS_THRESHOLD_COUNT_MASK,
-> +				      ECS_THRESHOLD_IDX_4096);
+> +	case CXL_ROW_SPARING:
+> +		if (!(validity_flags & CXL_DER_VALID_BANK_GROUP) ||
+> +		    !(validity_flags & CXL_DER_VALID_BANK) ||
+> +		    !(validity_flags & CXL_DER_VALID_ROW))
+> +			return NULL;
+> +
+> +		if (rec->media_hdr.channel == attrbs->channel &&
+> +		    rec->media_hdr.rank == attrbs->rank &&
+> +		    rec->bank_group == attrbs->bank_group &&
+> +		    rec->bank == attrbs->bank &&
+> +		    get_unaligned_le24(rec->row) == attrbs->row &&
+> +		    (!(validity_flags & CXL_DER_VALID_NIBBLE) ||
+> +		     get_unaligned_le24(rec->nibble_mask) ==
+> +			     attrbs->nibble_mask))
+> +			return rec;
+> +		break;
+> +	case CXL_BANK_SPARING:
+> +		if (!(validity_flags & CXL_DER_VALID_BANK_GROUP) ||
+> +		    !(validity_flags & CXL_DER_VALID_BANK))
+> +			return NULL;
+> +
+> +		if (rec->media_hdr.channel == attrbs->channel &&
+> +		    rec->media_hdr.rank == attrbs->rank &&
+> +		    rec->bank_group == attrbs->bank_group &&
+> +		    rec->bank == attrbs->bank &&
+> +		    (!(validity_flags & CXL_DER_VALID_NIBBLE) ||
+> +		     get_unaligned_le24(rec->nibble_mask) ==
+> +			     attrbs->nibble_mask))
+> +			return rec;
+> +		break;
+> +	case CXL_RANK_SPARING:
+> +		if (rec->media_hdr.channel == attrbs->channel &&
+> +		    rec->media_hdr.rank == attrbs->rank &&
+> +		    (!(validity_flags & CXL_DER_VALID_NIBBLE) ||
+> +		     get_unaligned_le24(rec->nibble_mask) ==
+> +			     attrbs->nibble_mask))
+> +			return rec;
 > +		break;
 > +	default:
-> +		dev_dbg(dev, "Invalid CXL ECS threshold count(%d) to set\n",
-> +			val);
-> +		dev_dbg(dev, "Supported ECS threshold counts: %u, %u, %u\n",
-> +			ECS_THRESHOLD_256, ECS_THRESHOLD_1024,
-> +			ECS_THRESHOLD_4096);
-> +		return -EINVAL;
+> +		return NULL;
 > +	}
 > +
-> +	return 0;
+> +	return NULL;
 > +}
 > +
-> +static int cxl_set_ecs_count_mode(struct device *dev, u8 *log_cap, u16 *config,
-> +				  u32 val)
+> +#define CXL_MAX_STORAGE_DAYS 10
+> +#define CXL_MAX_STORAGE_TIME_SECS (CXL_MAX_STORAGE_DAYS * 24 * 60 * 60)
+> +
+> +static void cxl_del_expired_gmedia_recs(struct xarray *rec_xarray,
+> +					struct cxl_event_gen_media *cur_rec)
 > +{
-> +	if (val != ECS_MODE_COUNTS_ROWS && val != ECS_MODE_COUNTS_CODEWORDS) {
-> +		dev_dbg(dev, "Invalid CXL ECS scrub mode(%d) to set\n", val);
-> +		dev_dbg(dev,
-> +			"Supported ECS Modes: 0: ECS counts rows with errors,"
-> +			" 1: ECS counts codewords with errors\n");
-> +		return -EINVAL;
+> +	u64 cur_ts = le64_to_cpu(cur_rec->media_hdr.hdr.timestamp);
+> +	struct cxl_event_gen_media *rec;
+> +	unsigned long index;
+> +	u64 delta_ts_secs;
+> +
+> +	xa_for_each(rec_xarray, index, rec) {
+> +		delta_ts_secs = (cur_ts -
+> +			le64_to_cpu(rec->media_hdr.hdr.timestamp)) / 1000000000ULL;
+> +		if (delta_ts_secs >= CXL_MAX_STORAGE_TIME_SECS) {
+> +			xa_erase(rec_xarray, index);
+> +			kfree(rec);
+> +		}
 > +	}
-> +
-> +	*config &= ~CXL_ECS_COUNT_MODE_MASK;
-> +	*config |= FIELD_PREP(CXL_ECS_COUNT_MODE_MASK, val);
-> +
-> +	return 0;
 > +}
 > +
-> +static int cxl_set_ecs_reset_counter(struct device *dev, u8 *log_cap,
-> +				     u16 *config, u32 val)
+> +static void cxl_del_expired_dram_recs(struct xarray *rec_xarray,
+> +				      struct cxl_event_dram *cur_rec)
 > +{
-> +	if (val != CXL_ECS_RESET_COUNTER)
-> +		return -EINVAL;
+> +	u64 cur_ts = le64_to_cpu(cur_rec->media_hdr.hdr.timestamp);
+> +	struct cxl_event_dram *rec;
+> +	unsigned long index;
+> +	u64 delta_secs;
 > +
-> +	*config &= ~CXL_ECS_RESET_COUNTER_MASK;
-> +	*config |= FIELD_PREP(CXL_ECS_RESET_COUNTER_MASK, val);
-> +
-> +	return 0;
-> +}
-> +
-> +#define CXL_ECS_SET_ATTR(attrb)						    \
-> +	static int cxl_ecs_set_##attrb(struct device *dev, void *drv_data,  \
-> +					int fru_id, u32 val)		    \
-> +	{								    \
-> +		struct cxl_ecs_context *ctx = drv_data;			    \
-> +		u8 log_cap;						    \
-> +		u16 config;						    \
-> +		int ret;						    \
-> +									    \
-> +		if (!capable(CAP_SYS_RAWIO))				    \
-> +			return -EPERM;					    \
-> +									    \
-> +		ret = cxl_mem_ecs_get_attrbs(dev, ctx, fru_id, &log_cap,    \
-> +					     &config);			    \
-> +		if (ret)						    \
-> +			return ret;					    \
-> +									    \
-> +		ret = cxl_set_ecs_##attrb(dev, &log_cap, &config, val);     \
-> +		if (ret)						    \
-> +			return ret;					    \
-> +									    \
-> +		return cxl_mem_ecs_set_attrbs(dev, ctx, fru_id, log_cap,    \
-> +					      config);			    \
+> +	xa_for_each(rec_xarray, index, rec) {
+> +		delta_secs = (cur_ts -
+> +			le64_to_cpu(rec->media_hdr.hdr.timestamp)) / 1000000000ULL;
+> +		if (delta_secs >= CXL_MAX_STORAGE_TIME_SECS) {
+> +			xa_erase(rec_xarray, index);
+> +			kfree(rec);
+> +		}
 > +	}
-> +CXL_ECS_SET_ATTR(log_entry_type)
-> +CXL_ECS_SET_ATTR(count_mode)
-> +CXL_ECS_SET_ATTR(reset_counter)
-> +CXL_ECS_SET_ATTR(threshold)
+> +}
 > +
-> +static const struct edac_ecs_ops cxl_ecs_ops = {
-> +	.get_log_entry_type = cxl_ecs_get_log_entry_type,
-> +	.set_log_entry_type = cxl_ecs_set_log_entry_type,
-> +	.get_mode = cxl_ecs_get_count_mode,
-> +	.set_mode = cxl_ecs_set_count_mode,
-> +	.reset = cxl_ecs_set_reset_counter,
-> +	.get_threshold = cxl_ecs_get_threshold,
-> +	.set_threshold = cxl_ecs_set_threshold,
-> +};
+> +#define CXL_MAX_REC_STORAGE_COUNT 200
 > +
-> +static int cxl_memdev_ecs_init(struct cxl_memdev *cxlmd,
-> +			       struct edac_dev_feature *ras_feature)
+> +static void cxl_del_overflow_old_recs(struct xarray *rec_xarray)
 > +{
-> +	struct cxl_ecs_context *cxl_ecs_ctx;
-> +	struct cxl_feat_entry *feat_entry;
-> +	int num_media_frus;
+> +	void *err_rec;
+> +	unsigned long index, count = 0;
 > +
-> +	feat_entry =
-> +		cxl_feature_info(to_cxlfs(cxlmd->cxlds), &CXL_FEAT_ECS_UUID);
-> +	if (!feat_entry)
-> +		return -EOPNOTSUPP;
+> +	xa_for_each(rec_xarray, index, err_rec)
+> +		count++;
 > +
-> +	if (!(le32_to_cpu(feat_entry->flags) & CXL_FEATURE_F_CHANGEABLE))
-> +		return -EOPNOTSUPP;
+> +	if (count <= CXL_MAX_REC_STORAGE_COUNT)
+> +		return;
 > +
-> +	num_media_frus = (le16_to_cpu(feat_entry->get_feat_size) -
-> +			  sizeof(struct cxl_ecs_rd_attrbs)) /
-> +			 sizeof(struct cxl_ecs_fru_rd_attrbs);
-> +	if (!num_media_frus)
-> +		return -EOPNOTSUPP;
+> +	count -= CXL_MAX_REC_STORAGE_COUNT;
+> +	xa_for_each(rec_xarray, index, err_rec) {
+> +		xa_erase(rec_xarray, index);
+> +		kfree(err_rec);
+> +		count--;
+> +		if (!count)
+> +			break;
+> +	}
+> +}
 > +
-> +	cxl_ecs_ctx =
-> +		devm_kzalloc(&cxlmd->dev, sizeof(*cxl_ecs_ctx), GFP_KERNEL);
-> +	if (!cxl_ecs_ctx)
+> +int cxl_store_rec_gen_media(struct cxl_memdev *cxlmd, union cxl_event *evt)
+> +{
+> +	struct cxl_mem_err_rec *array_rec = cxlmd->array_err_rec;
+> +	struct cxl_event_gen_media *rec;
+> +	void *old_rec;
+> +
+> +	if (!array_rec)
+> +		return 0;
+> +
+> +	rec = kmemdup(&evt->gen_media, sizeof(*rec), GFP_KERNEL);
+> +	if (!rec)
 > +		return -ENOMEM;
 > +
-> +	*cxl_ecs_ctx = (struct cxl_ecs_context){
-> +		.get_feat_size = le16_to_cpu(feat_entry->get_feat_size),
-> +		.set_feat_size = le16_to_cpu(feat_entry->set_feat_size),
-> +		.get_version = feat_entry->get_feat_ver,
-> +		.set_version = feat_entry->set_feat_ver,
-> +		.effects = le16_to_cpu(feat_entry->effects),
-> +		.num_media_frus = num_media_frus,
-> +		.cxlmd = cxlmd,
-> +	};
+> +	old_rec = xa_store(&array_rec->rec_gen_media,
+> +			   le64_to_cpu(rec->media_hdr.phys_addr), rec,
+> +			   GFP_KERNEL);
+> +	if (xa_is_err(old_rec))
+> +		return xa_err(old_rec);
 > +
-> +	ras_feature->ft_type = RAS_FEAT_ECS;
-> +	ras_feature->ecs_ops = &cxl_ecs_ops;
-> +	ras_feature->ctx = cxl_ecs_ctx;
-> +	ras_feature->ecs_info.num_media_frus = num_media_frus;
+> +	kfree(old_rec);
+> +
+> +	cxl_del_expired_gmedia_recs(&array_rec->rec_gen_media, rec);
+> +	cxl_del_overflow_old_recs(&array_rec->rec_gen_media);
 > +
 > +	return 0;
 > +}
-> +#endif /* CONFIG_CXL_EDAC_ECS */
+> +EXPORT_SYMBOL_NS_GPL(cxl_store_rec_gen_media, "CXL");
 > +
->  int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
->  {
->  	struct edac_dev_feature ras_features[CXL_NR_EDAC_DEV_FEATURES];
->  	int num_ras_features = 0;
-> -#if defined(CONFIG_CXL_EDAC_SCRUB)
-> +#if defined(CONFIG_CXL_EDAC_SCRUB) || defined(CONFIG_CXL_EDAC_ECS)
->  	int rc;
->  #endif
+> +int cxl_store_rec_dram(struct cxl_memdev *cxlmd, union cxl_event *evt)
+> +{
+> +	struct cxl_mem_err_rec *array_rec = cxlmd->array_err_rec;
+> +	struct cxl_event_dram *rec;
+> +	void *old_rec;
+> +
+> +	if (!array_rec)
+> +		return 0;
+> +
+> +	rec = kmemdup(&evt->dram, sizeof(*rec), GFP_KERNEL);
+> +	if (!rec)
+> +		return -ENOMEM;
+> +
+> +	old_rec = xa_store(&array_rec->rec_dram,
+> +			   le64_to_cpu(rec->media_hdr.phys_addr), rec,
+> +			   GFP_KERNEL);
+> +	if (xa_is_err(old_rec))
+> +		return xa_err(old_rec);
+> +
+> +	kfree(old_rec);
+> +
+> +	cxl_del_expired_dram_recs(&array_rec->rec_dram, rec);
+> +	cxl_del_overflow_old_recs(&array_rec->rec_dram);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_store_rec_dram, "CXL");
+>  #endif /* CONFIG_CXL_EDAC_MEM_REPAIR */
 >  
-> @@ -458,6 +808,15 @@ int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
+>  int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
+> @@ -868,6 +1144,16 @@ int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
 >  		num_ras_features++;
 >  #endif
 >  
-> +#ifdef CONFIG_CXL_EDAC_ECS
-> +	rc = cxl_memdev_ecs_init(cxlmd, &ras_features[num_ras_features]);
-> +	if (rc < 0 && rc != -EOPNOTSUPP)
-> +		return rc;
+> +#ifdef CONFIG_CXL_EDAC_MEM_REPAIR
+> +	struct cxl_mem_err_rec *array_rec =
+> +		devm_kzalloc(&cxlmd->dev, sizeof(*array_rec), GFP_KERNEL);
+> +	if (!array_rec)
+> +		return -ENOMEM;
 > +
-> +	if (rc != -EOPNOTSUPP)
-> +		num_ras_features++;
+> +	cxlmd->array_err_rec = array_rec;
+> +	xa_init(&array_rec->rec_gen_media);
+> +	xa_init(&array_rec->rec_dram);
 > +#endif
-> +
 >  	char *cxl_dev_name __free(kfree) =
 >  		kasprintf(GFP_KERNEL, "cxl_%s", dev_name(&cxlmd->dev));
 >  	if (!cxl_dev_name)
+> @@ -903,3 +1189,24 @@ int devm_cxl_region_edac_register(struct cxl_region *cxlr)
+>  #endif
+>  }
+>  EXPORT_SYMBOL_NS_GPL(devm_cxl_region_edac_register, "CXL");
+> +
+> +void devm_cxl_memdev_edac_release(struct cxl_memdev *cxlmd)
+> +{
+> +#ifdef CONFIG_CXL_EDAC_MEM_REPAIR
+> +	struct cxl_mem_err_rec *array_rec = cxlmd->array_err_rec;
+> +	struct cxl_event_gen_media *rec_gen_media;
+> +	struct cxl_event_dram *rec_dram;
+> +	unsigned long index;
+> +
+> +	if (!array_rec)
+> +		return;
+> +
+> +	xa_for_each(&array_rec->rec_dram, index, rec_dram)
+> +		kfree(rec_dram);
+> +	xa_destroy(&array_rec->rec_dram);
+> +	xa_for_each(&array_rec->rec_gen_media, index, rec_gen_media)
+> +		kfree(rec_gen_media);
+> +	xa_destroy(&array_rec->rec_gen_media);
+> +#endif
+> +}
+> +EXPORT_SYMBOL_NS_GPL(devm_cxl_memdev_edac_release, "CXL");
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index d72764056ce6..2689e6453c5a 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -922,12 +922,19 @@ void cxl_event_trace_record(const struct cxl_memdev *cxlmd,
+>  				hpa_alias = hpa - cache_size;
+>  		}
+>  
+> -		if (event_type == CXL_CPER_EVENT_GEN_MEDIA)
+> +		if (event_type == CXL_CPER_EVENT_GEN_MEDIA) {
+> +			if (cxl_store_rec_gen_media((struct cxl_memdev *)cxlmd, evt))
+> +				dev_dbg(&cxlmd->dev, "CXL store rec_gen_media failed\n");
+> +
+>  			trace_cxl_general_media(cxlmd, type, cxlr, hpa,
+>  						hpa_alias, &evt->gen_media);
+> -		else if (event_type == CXL_CPER_EVENT_DRAM)
+> +		} else if (event_type == CXL_CPER_EVENT_DRAM) {
+> +			if (cxl_store_rec_dram((struct cxl_memdev *)cxlmd, evt))
+> +				dev_dbg(&cxlmd->dev, "CXL store rec_dram failed\n");
+> +
+>  			trace_cxl_dram(cxlmd, type, cxlr, hpa, hpa_alias,
+>  				       &evt->dram);
+> +		}
+>  	}
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_event_trace_record, "CXL");
+> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> index a16a5886d40a..953d8407d0dd 100644
+> --- a/drivers/cxl/core/memdev.c
+> +++ b/drivers/cxl/core/memdev.c
+> @@ -27,6 +27,7 @@ static void cxl_memdev_release(struct device *dev)
+>  	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+>  
+>  	ida_free(&cxl_memdev_ida, cxlmd->id);
+> +	devm_cxl_memdev_edac_release(cxlmd);
+>  	kfree(cxlmd);
+>  }
+>  
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 1b9bf6b42521..6f808809f7c0 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -47,6 +47,9 @@
+>   * @depth: endpoint port depth
+>   * @cur_scrub_cycle: current scrub cycle set for this device
+>   * @cur_region_id: id number of a backed region (if any) for which current scrub cycle set
+> + * @array_err_rec: List of xarrarys to store the memdev error records to
+> + *		   check attributes for a memory repair operation are from
+> + *		   current boot.
+>   */
+>  struct cxl_memdev {
+>  	struct device dev;
+> @@ -62,6 +65,7 @@ struct cxl_memdev {
+>  	u8 cur_scrub_cycle;
+>  	int cur_region_id;
+>  #endif
+> +	void *array_err_rec;
+>  };
+>  
+>  static inline struct cxl_memdev *to_cxl_memdev(struct device *dev)
+> @@ -863,11 +867,26 @@ int cxl_clear_poison(struct cxl_memdev *cxlmd, u64 dpa);
+>  #if IS_ENABLED(CONFIG_CXL_EDAC_MEM_FEATURES)
+>  int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd);
+>  int devm_cxl_region_edac_register(struct cxl_region *cxlr);
+> +void devm_cxl_memdev_edac_release(struct cxl_memdev *cxlmd);
+>  #else
+>  static inline int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
+>  { return 0; }
+>  static inline int devm_cxl_region_edac_register(struct cxl_region *cxlr)
+>  { return 0; }
+> +static inline void devm_cxl_memdev_edac_release(struct cxl_memdev *cxlmd)
+> +{ return; }
+> +#endif
+> +
+> +#ifdef CONFIG_CXL_EDAC_MEM_REPAIR
+> +int cxl_store_rec_gen_media(struct cxl_memdev *cxlmd, union cxl_event *evt);
+> +int cxl_store_rec_dram(struct cxl_memdev *cxlmd, union cxl_event *evt);
+> +#else
+> +static inline int cxl_store_rec_gen_media(struct cxl_memdev *cxlmd,
+> +					  union cxl_event *evt)
+> +{ return 0; }
+> +static inline int cxl_store_rec_dram(struct cxl_memdev *cxlmd,
+> +				     union cxl_event *evt)
+> +{ return 0; }
+>  #endif
+>  
+>  #ifdef CONFIG_CXL_SUSPEND
 
 
