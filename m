@@ -1,227 +1,152 @@
-Return-Path: <linux-edac+bounces-3783-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3784-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1773AA07A3
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Apr 2025 11:46:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50FF0AA1531
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Apr 2025 19:24:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6673A1A8230B
-	for <lists+linux-edac@lfdr.de>; Tue, 29 Apr 2025 09:46:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CABAE4A0974
+	for <lists+linux-edac@lfdr.de>; Tue, 29 Apr 2025 17:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC8842BE11A;
-	Tue, 29 Apr 2025 09:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D7A251790;
+	Tue, 29 Apr 2025 17:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KhEkgs3Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lJuLm9EW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78132750ED;
-	Tue, 29 Apr 2025 09:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ADA82C60;
+	Tue, 29 Apr 2025 17:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745919968; cv=none; b=a1/Y7er53mi0bVLoxAyX8YQdD9DnKoavjyp8hUvCSVVMkG8mUUuugUszd6HZQF/bfJLqeMl7eThf7FVkL9cc29fImiSyJVZsWZ5hfIv2umcrepRnROHJJ1J/ZbKsLd+ioxUd48QAViGSs4x5ZQ8oFcVnhA4kuAC2D3JFevcodM0=
+	t=1745947282; cv=none; b=TYxYxnOWlKZRZa2YzDA4yji6M3bjWGPqO6TREMaH3LMgZd6efNS121pywGgIQb8fUV1hxrwvWcpH8haGs92eVW7WQoqc6OLG07tb1a/wBFPPc6/gm3oVW/jqnPU09Iizs+Mjhk9b/ihHemvZqnWt0YSrYX9AKfLCVa1MKENzD2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745919968; c=relaxed/simple;
-	bh=OEmsROS2dzbLzqVvteqA+LjMNAwHbDGb3LITSHjMruA=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Emgtv/gMe8St7UkcENtZv3YP4C3bsW6bZP0FKsGeS9U1BnqUjnJNZbnZpBbPYaqf5kryfkN+/tEaJYtwi4K+j+U/qRm+KlwPYB0QDqUiQEgBYfYiwi91+Wkmi/tUOtgTIFRj6nyQpWbf5tTKZhqvDps63zrbTXyaR88wDjjZJ/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KhEkgs3Z; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1745947282; c=relaxed/simple;
+	bh=vYY2zbE6OK0wScySObCKJRjYLAvY/gAV9CwgCR4nPcw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gt95Lsazm8X5izGnujeGFjYUAg94uttxt+M6JSMRIlTOYiOpfoVrsncFNgXCuVsGjvUUZT0Wx4IB5i1xtXSvSOm1LjSLySfoYL75ctHHK7fz0Nh3BdT+hKCSeNPyHZRkviOIOnuzTxSId3+hJtP92DwkCSC3Y7XCm4D6bVBhUEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lJuLm9EW; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745919967; x=1777455967;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=OEmsROS2dzbLzqVvteqA+LjMNAwHbDGb3LITSHjMruA=;
-  b=KhEkgs3ZllIg5zGgsQX8fqOMXknpgK69caY27Orl6Lxtw7NSWSLkG1w4
-   g2DW8+YFG9+XROlrqXraqLm0YeKWEEPWfiozJNYG7NTjY9Ybfsx3fLYkC
-   y8vtWOJIfBcuRSbazfZUYhXJKkjZZzmLz+muojM6CKnLobXStCbTRw9bt
-   bVEcs9nbLpqe00aqkAN6nG2rckC7k2KlnNzn8lwvKgBJHm7fasoExIpQ2
-   Jpakh/f/zv4EkmnPEU3vWprM8wNHG6yIZRy3Hb/xzhlHzWUISTWFmsr4c
-   /lOfdyDSIpXKM0elxe1+HRCwKDWNyXDlQ7xWGHaMQuoIH+jRXpCTKCWob
-   Q==;
-X-CSE-ConnectionGUID: Z6lDBEttR7i/lsUKBkcN2Q==
-X-CSE-MsgGUID: JtsTc6SLS9m+bLDZyPwX+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11417"; a="35143891"
-X-IronPort-AV: E=Sophos;i="6.15,248,1739865600"; 
-   d="scan'208";a="35143891"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 02:46:06 -0700
-X-CSE-ConnectionGUID: chXqGONbRG+KNhUajc2ULw==
-X-CSE-MsgGUID: 8lVzqi8rRgSKGWTaNKThpQ==
+  t=1745947281; x=1777483281;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vYY2zbE6OK0wScySObCKJRjYLAvY/gAV9CwgCR4nPcw=;
+  b=lJuLm9EW5I1rvGoJhBGB0iikbdDB/5tMuGr0oQTnF5myfe5xKt/zCfvR
+   NKsmPk5l0UMuNFZz+H6RIxpJVowuwS7vittyOUxDdky5tjm6Caw07QJbM
+   hrWmwZjpxI1Dq0YA+F5Az133/H1o5BeW+Li4LDIwO7Ma9LvQE4wOca/yR
+   IN6Ya922YKxSqoWxGeF8RG5yawv9C7nwjrGeUzuSmbv/flcXkBx6B+9ai
+   oTLaN8ET/JLgqFIeParChHjz9DwfoQJKUf9RB/abBzlGMNyrUhBTYicvC
+   Gi/9K/sGPck+WvGTcf/oeMCOmp0tSw/GkgoNHoHVRQ/UQI0IHc7kisEud
+   A==;
+X-CSE-ConnectionGUID: P4OYuo27QOuArCUuORCVJw==
+X-CSE-MsgGUID: hm8/o+pzTkKit0jNTNjjMg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="64996929"
+X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
+   d="scan'208";a="64996929"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 10:21:20 -0700
+X-CSE-ConnectionGUID: 8vZD04tyRg2Aa5RoJMWkAg==
+X-CSE-MsgGUID: mHsBn+CMR4uPyr9hrkfPSA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,248,1739865600"; 
-   d="scan'208";a="133495412"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.205])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 02:45:52 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 29 Apr 2025 12:45:49 +0300 (EEST)
-To: "Xin Li (Intel)" <xin@zytor.com>
-cc: LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org, 
-    linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-    virtualization@lists.linux.dev, linux-pm@vger.kernel.org, 
-    linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org, 
-    linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    Netdev <netdev@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
-    tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-    dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-    acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com, 
-    peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com, 
-    alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
-    adrian.hunter@intel.com, kan.liang@linux.intel.com, wei.liu@kernel.org, 
-    ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com, 
-    tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com, 
-    seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com, 
-    kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com, 
-    dapeng1.mi@linux.intel.com
-Subject: Re: [PATCH v4 01/15] x86/msr: Add missing includes of <asm/msr.h>
-In-Reply-To: <20250427092027.1598740-2-xin@zytor.com>
-Message-ID: <a1917b37-e41e-d303-749b-4007cda01605@linux.intel.com>
-References: <20250427092027.1598740-1-xin@zytor.com> <20250427092027.1598740-2-xin@zytor.com>
+X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
+   d="scan'208";a="139073305"
+Received: from sschumil-mobl2.ger.corp.intel.com (HELO fdefranc-mobl3.intel.com) ([10.245.246.45])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 10:21:14 -0700
+From: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-pci@vger.kernel.org,
+	linux-edac@vger.kernel.org
+Cc: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
+Subject: [PATCH 0/4 v2] Make ELOG log and trace consistently with GHES
+Date: Tue, 29 Apr 2025 19:21:05 +0200
+Message-ID: <20250429172109.3199192-1-fabio.m.de.francesco@linux.intel.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-666243473-1745919726=:938"
-Content-ID: <1b5519eb-241d-dec5-af5a-fc9378cf96ec@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+When Firmware First is enabled, BIOS handles errors first and then it
+makes them available to the kernel via the Common Platform Error Record
+(CPER) sections (UEFI 2.10 Appendix N). Linux parses the CPER sections
+via one of two similar paths, either ELOG or GHES.
 
---8323328-666243473-1745919726=:938
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <6ad7f337-7709-3cca-3ccd-80f11d3e8d38@linux.intel.com>
+Currently, ELOG and GHES show some inconsistencies in how they print to
+the kernel log as well as in how they report to userspace via trace
+events.
 
-On Sun, 27 Apr 2025, Xin Li (Intel) wrote:
+Make the two mentioned paths act similarly for what relates to logging
+and tracing.
 
-> For some reason, there are some TSC-related functions in the MSR
-> header even though there is a tsc.h header.
->=20
-> To facilitate the relocation of rdtsc{,_ordered}() from <asm/msr.h>
-> to <asm/tsc.h> and to eventually eliminate the inclusion of
-> <asm/msr.h> in <asm/tsc.h>, add <asm/msr.h> to the source files that
-> reference definitions from <asm/msr.h>.
->=20
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->=20
-> Change in v4:
-> *) Add missing includes in a different patch (Ilpo J=E4rvinen).
-> *) Add all necessary direct inclusions for msr.h (Ilpo J=E4rvinen).
->=20
-> Change in v3:
-> * Add a problem statement to the changelog (Dave Hansen).
-> ---
->  arch/x86/events/msr.c                                         | 3 +++
->  arch/x86/events/perf_event.h                                  | 1 +
->  arch/x86/events/probe.c                                       | 2 ++
+--- Changes for v2 ---
 
-Under arch/x86/events/ a few files seem to be missing the include?
+	- Add a patch to pass log levels to pci_print_aer() (Dan)
+	- Add a patch to trace CPER CXL Protocol Errors
+	- Rework commit messages (Dan)
+	- Use log_non_standard_event() (Bjorn)
 
->  arch/x86/hyperv/ivm.c                                         | 1 +
+--- Changes for v1 ---
 
-Also under hyperv/ not all files are covered but I'm a bit hesitant to=20
-suggest a change there since I'm not sure if they (hypervisors) do=20
-something special w.r.t. msr.
+	- Drop the RFC prefix and restart from PATCH v1
+	- Drop patch 3/3 because a discussion on it has not yet been
+	  settled
+	- Drop namespacing in export of pci_print_aer while() (Dan)
+	- Don't use '#ifdef' in *.c files (Dan)
+	- Drop a reference on pdev after operation is complete (Dan)
+	- Don't log an error message if pdev is NULL (Dan)
 
->  arch/x86/include/asm/fred.h                                   | 1 +
->  arch/x86/include/asm/microcode.h                              | 2 ++
->  arch/x86/include/asm/mshyperv.h                               | 1 +
->  arch/x86/include/asm/msr.h                                    | 1 +
->  arch/x86/include/asm/suspend_32.h                             | 1 +
->  arch/x86/include/asm/suspend_64.h                             | 1 +
->  arch/x86/include/asm/switch_to.h                              | 2 ++
+--- Changes for RFC v2 ---
+	
+	- 0/3: rework the subject line and the letter.
+        - 1/3: no changes.
+        - 2/3: trace CPER PCIe Section only if CONFIG_ACPI_APEI_PCIEAER
+          is defined; the kernel test robot reported the use of two
+          undefined symbols because the test for the config option was
+          missing; rewrite the subject line and part of commit message.
+        - 3/3: no changes.
 
-arch/x86/kernel/acpi/ ?
-acrh/x86/kernel/cet.c ?
-=2E..
 
-There seem to be quite many under arch/x86/ that still don't have it, I=20
-didn't list them all as there were so many after this point.
+Fabio M. De Francesco (4):
+  ACPI: extlog: Trace CPER Non-standard Section Body
+  PCI/AER: Modify pci_print_aer() to take log level
+  ACPI: extlog: Trace CPER PCI Express Error Section
+  ACPI: extlog: Trace CPER CXL Protocol Errors
 
-But that's up to x86 maintainers how throughout they want you to be.
+ drivers/acpi/acpi_extlog.c | 96 ++++++++++++++++++++++++++++++++++++++
+ drivers/cxl/core/pci.c     |  2 +-
+ drivers/cxl/core/ras.c     |  6 +++
+ drivers/pci/pcie/aer.c     | 18 +++----
+ drivers/ras/ras.c          |  1 +
+ include/cxl/event.h        |  2 +
+ include/linux/aer.h        | 13 +++++-
+ 7 files changed, 126 insertions(+), 12 deletions(-)
 
-This command may be helpful to exclude the files which already have the=20
-include so you can focus on the ones that may still be missing it:
+-- 
+2.48.1
 
-git grep -l -e rdmsr -e wrmsr | grep -v -f <(git grep -l -e 'asm/msr\.h')
-
->  arch/x86/kernel/cpu/resctrl/pseudo_lock.c                     | 1 +
->  arch/x86/kernel/fpu/xstate.h                                  | 1 +
->  arch/x86/kernel/hpet.c                                        | 1 +
->  arch/x86/kernel/process_64.c                                  | 1 +
->  arch/x86/kernel/trace_clock.c                                 | 2 +-
->  arch/x86/kernel/tsc_sync.c                                    | 1 +
->  arch/x86/lib/kaslr.c                                          | 2 +-
->  arch/x86/mm/mem_encrypt_identity.c                            | 1 +
->  arch/x86/realmode/init.c                                      | 1 +
->  drivers/acpi/acpi_extlog.c                                    | 1 +
->  drivers/acpi/processor_perflib.c                              | 1 +
->  drivers/acpi/processor_throttling.c                           | 3 ++-
->  drivers/char/agp/nvidia-agp.c                                 | 1 +
->  drivers/cpufreq/amd-pstate-ut.c                               | 2 ++
->  drivers/crypto/ccp/sev-dev.c                                  | 1 +
->  drivers/edac/amd64_edac.c                                     | 1 +
->  drivers/edac/ie31200_edac.c                                   | 1 +
->  drivers/edac/mce_amd.c                                        | 1 +
->  drivers/hwmon/hwmon-vid.c                                     | 4 ++++
->  drivers/idle/intel_idle.c                                     | 1 +
->  drivers/misc/cs5535-mfgpt.c                                   | 1 +
->  drivers/net/vmxnet3/vmxnet3_drv.c                             | 4 ++++
->  drivers/platform/x86/intel/ifs/core.c                         | 1 +
->  drivers/platform/x86/intel/ifs/load.c                         | 1 +
->  drivers/platform/x86/intel/ifs/runtest.c                      | 1 +
->  drivers/platform/x86/intel/pmc/cnp.c                          | 1 +
->  drivers/platform/x86/intel/speed_select_if/isst_if_common.c   | 1 +
->  drivers/platform/x86/intel/speed_select_if/isst_if_mbox_msr.c | 1 +
->  drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c   | 1 +
->  drivers/platform/x86/intel/turbo_max_3.c                      | 1 +
->  .../platform/x86/intel/uncore-frequency/uncore-frequency.c    | 1 +
->  drivers/powercap/intel_rapl_common.c                          | 1 +
->  drivers/powercap/intel_rapl_msr.c                             | 1 +
->  .../thermal/intel/int340x_thermal/processor_thermal_device.c  | 1 +
->  drivers/thermal/intel/intel_tcc_cooling.c                     | 1 +
->  drivers/thermal/intel/x86_pkg_temp_thermal.c                  | 1 +
->  drivers/video/fbdev/geode/display_gx.c                        | 1 +
->  drivers/video/fbdev/geode/gxfb_core.c                         | 1 +
->  drivers/video/fbdev/geode/lxfb_ops.c                          | 1 +
-
-Under drivers/ this looked pretty complete. Nice work.
-
-Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> # for pdx86
-
-I also noticed these files might not need to include msr.h:
-
-drivers/cpufreq/elanfreq.c
-drivers/cpufreq/sc520_freq.c
-drivers/accel/habanalabs/common/habanalabs_ioctl.c
-
-=2E..so if you want, you may consider optionally adding a cleanup patch to=
-=20
-remove the include from them.
-
-> --- a/drivers/video/fbdev/geode/gxfb_core.c
-> +++ b/drivers/video/fbdev/geode/gxfb_core.c
-> @@ -30,6 +30,7 @@
->  #include <linux/cs5535.h>
-> =20
->  #include <asm/olpc.h>
-> +#include <asm/msr.h>
-
-In wrong order.
-> =20
->  #include "gxfb.h"
-
---
- i.
---8323328-666243473-1745919726=:938--
 
