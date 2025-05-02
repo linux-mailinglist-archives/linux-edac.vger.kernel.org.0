@@ -1,142 +1,130 @@
-Return-Path: <linux-edac+bounces-3802-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3803-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB32AAA6870
-	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 03:39:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F342FAA6C24
+	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 10:02:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49CBA1BA3E1C
-	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 01:39:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64ABE4A4B88
+	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 08:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695708635D;
-	Fri,  2 May 2025 01:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420A6267F74;
+	Fri,  2 May 2025 08:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RR6wK5c0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o40ruDpd"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D242626AD9;
-	Fri,  2 May 2025 01:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D3426772A;
+	Fri,  2 May 2025 08:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746149981; cv=none; b=URJVc1/XRyUggVthtQ6tnS+JbzHIoBzYX7arfvY7RKEPxcZA/97P8zTk2V0/GzthlJ7EuisW/m/GxwCnH62ylRGbp+6h8q1M1epPuORh4SIPQSAoJHciKUW9iwgtI2Er0ih/2kRMUS8UVGN4N/NA0qRdgQXCobtk0OFwvxCyAjU=
+	t=1746172957; cv=none; b=SsNGsBRXJZfNjBj2nlca3vZEuGbvN3I7SRrrLrzOeaE3tp8BZn43mf1SWIYNiu04HBLXibI4LRyX2YHVuLX70JMLW1Idv8qEOVu4OzWnPJQgHvdR6Kolvxin3w+DWKsBLBjGGMEe99ljp3HGaBSmm5f8l3HwQGKv1nkdRYM889U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746149981; c=relaxed/simple;
-	bh=3zVuQw+HTDcea1hXOfP2Sl/+HBL4z+uYXaoaFlkXkSo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ClCVINsdh0RivXvBSjPqXaOwuthfenP2sfTPOxuq5KQTUhXD58RHo3e6ME9NZfWr/vunWXUswhYf+jkT3XPKfC6Y/rd8TJtQg68tmeG3uqVfvsacVYjLiZz1sfkhOxa66EDisFVI1abh5XqJC4UlA8yx8cgsoOpkNkNgRN96QCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RR6wK5c0; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746149980; x=1777685980;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3zVuQw+HTDcea1hXOfP2Sl/+HBL4z+uYXaoaFlkXkSo=;
-  b=RR6wK5c0kWmUZKE5o4RO8qORmnCudeoTdHGMBweuy1S3nkSJuw3+dTAV
-   AgHLbACdVfPfqbnhD6t/i3BzD8foQv4G/sxCwZDj2GBNmZkWSMcCm6MHf
-   yr2ONZtj6wKCm/U3U08SCzwuvdhkMliWHGMLHl1eBiLScFsiJgvx35kO5
-   YraBAd3XEXyNGRocXb3HlG6Da4m7RrpUhOX07g6wPrBAHTq4wyIotPHOR
-   XP9GvQYexLYzUSzGaGu84AhsiTFR+iLOSD0rtlZaVjqFiOiqpB1ArBSIE
-   gxxaoeN7A3xoTpOy56Aiue5OqfvIPXq+Rt1XMjqsPQ+j2cxLsaGfvfw7G
-   Q==;
-X-CSE-ConnectionGUID: JSyaFa8jQ46THra2kwIZaw==
-X-CSE-MsgGUID: 2XKc5gL2SRq8pHjCoo8rHA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11420"; a="47716524"
-X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
-   d="scan'208";a="47716524"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 18:39:39 -0700
-X-CSE-ConnectionGUID: iRlh85/DSx6/VwiNrNUPSw==
-X-CSE-MsgGUID: cgw/mgtRQPeG8pg+iW7zEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,255,1739865600"; 
-   d="scan'208";a="139672933"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2025 18:39:35 -0700
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Jason Baron <jbaron@akamai.com>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Yi Lai <yi1.lai@intel.com>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] ie31200/EDAC: Add Intel Bartlett Lake-S SoCs support
-Date: Fri,  2 May 2025 09:39:00 +0800
-Message-ID: <20250502013900.343430-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1746172957; c=relaxed/simple;
+	bh=VrP6FYMiM8APrbbiFFr3vwipUq0BMzeGXIdgg8yPKw0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LCHlu1zSYY41ig/48LvnpO9otB1H8qnK5lJAz2V6++HLw/UNq3c6aR9r71UgJfjDGbsy+AtpDOc80YBA+a7cdxtk3Xv3w2GG7KlqKU8a5xw35u3t9UPtw39myLGqHMyXhxviHVio+U1AdfuDH/o+ZZtfR1jfVUXrKkoKQxEE3Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o40ruDpd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE92BC4CEE4;
+	Fri,  2 May 2025 08:02:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746172956;
+	bh=VrP6FYMiM8APrbbiFFr3vwipUq0BMzeGXIdgg8yPKw0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o40ruDpdxuzYi5SlPXBVO3KE83CyehxDNrNO/541PgVjFTDFgkp9ttfsSywwoC2Xi
+	 deyF+fk2wjQxxc5XQRBVm8Bmt2O6KE/EWUyWPBtkP4DjmRVUsgvwR4qUU7TcNGYno2
+	 LrsDSCZuBZAWl/LYiTehIFOfFP/Ile60POceUApHmDdzreBk3ZrpTs99IMSeErgzEI
+	 qcVRENdvjn60dt64quynSDl7VztBTPTl/yjYLXHI6ByaM4mPy/wh1yniu8zkGauz6l
+	 KWZFS4mxzAp7qh9gzlauN/px1lSmL30l6NU2jcy73WKeezA7wFlGHek2h34pt4xuBA
+	 QpbqWIpAjreaA==
+Date: Fri, 2 May 2025 10:02:26 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: "Xin Li (Intel)" <xin@zytor.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+	peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+	dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
+Subject: Re: [PATCH v4 02/15] x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
+Message-ID: <aBR8EoYkxaFHwZN2@gmail.com>
+References: <20250427092027.1598740-1-xin@zytor.com>
+ <20250427092027.1598740-3-xin@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250427092027.1598740-3-xin@zytor.com>
 
-Bartlett Lake-S is a derivative of Raptor Lake-S and is optimized for
-IoT/Edge applications. It shares the same memory controller registers
-as Raptor Lake-S. Add compute die IDs of Bartlett Lake-S and reuse the
-configuration data of Raptor Lake-S for Bartlett Lake-S EDAC support.
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
-This patch is on top of the RAS tree edac-for-next branch [1] with the
-top commit [2].
+* Xin Li (Intel) <xin@zytor.com> wrote:
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-[2] 4521b86e4a6e ("Merge ras/edac-urgent into for-next")
+> index 94408a784c8e..13335a130edf 100644
+> --- a/arch/x86/include/asm/tsc.h
+> +++ b/arch/x86/include/asm/tsc.h
+> @@ -7,7 +7,81 @@
+>  
+>  #include <asm/cpufeature.h>
+>  #include <asm/processor.h>
+> -#include <asm/msr.h>
+> +
+> +/*
+> + * both i386 and x86_64 returns 64-bit value in edx:eax, but gcc's "A"
+> + * constraint has different meanings. For i386, "A" means exactly
+> + * edx:eax, while for x86_64 it doesn't mean rdx:rax or edx:eax. Instead,
+> + * it means rax *or* rdx.
+> + */
+> +#ifdef CONFIG_X86_64
+> +/* Using 64-bit values saves one instruction clearing the high half of low */
+> +#define DECLARE_ARGS(val, low, high)	unsigned long low, high
+> +#define EAX_EDX_VAL(val, low, high)	((low) | (high) << 32)
+> +#define EAX_EDX_RET(val, low, high)	"=a" (low), "=d" (high)
+> +#else
+> +#define DECLARE_ARGS(val, low, high)	u64 val
+> +#define EAX_EDX_VAL(val, low, high)	(val)
+> +#define EAX_EDX_RET(val, low, high)	"=A" (val)
+> +#endif
 
- drivers/edac/ie31200_edac.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Meh, this patch creates a duplicate copy of DECLARE_ARGS() et al in 
+<asm/tsc.h> now:
 
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 55cf54741aa0..1ec00d458463 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -94,6 +94,18 @@
- /* Alder Lake-S */
- #define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1	0x4660
- 
-+/* Bartlett Lake-S */
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_1	0x4639
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_2	0x463c
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_3	0x4642
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_4	0x4643
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_5	0xa731
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_6	0xa732
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_7	0xa733
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_8	0xa741
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_9	0xa744
-+#define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_10	0xa745
-+
- #define IE31200_RANKS_PER_CHANNEL	8
- #define IE31200_DIMMS_PER_CHANNEL	2
- #define IE31200_CHANNELS		2
-@@ -740,6 +752,16 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_3), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_4), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_1), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_2), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_3), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_4), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_5), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_6), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_7), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_8), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_9), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_10), (kernel_ulong_t)&rpl_s_cfg},
- 	{ 0, } /* 0 terminated list. */
- };
- MODULE_DEVICE_TABLE(pci, ie31200_pci_tbl);
--- 
-2.43.0
+ arch/x86/include/asm/msr.h:#define DECLARE_ARGS(val, low, high) unsigned long low, high
+ arch/x86/include/asm/msr.h:#define DECLARE_ARGS(val, low, high) u64 val
+ arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/tsc.h:#define DECLARE_ARGS(val, low, high) unsigned long low, high
+ arch/x86/include/asm/tsc.h:#define DECLARE_ARGS(val, low, high) u64 val
+ arch/x86/include/asm/tsc.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/tsc.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/tsc.h:#undef DECLARE_ARGS
 
+Which was both an undeclared change, bloats the code, causes various 
+problems, and is totally unnecessary to boot.
+
+Please don't do that ...
+
+Thanks,
+
+	Ingo
 
