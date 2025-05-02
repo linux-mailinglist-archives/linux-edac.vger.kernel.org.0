@@ -1,44 +1,44 @@
-Return-Path: <linux-edac+bounces-3807-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3808-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA16CAA6CC2
-	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 10:45:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C4B4AA6CC4
+	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 10:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C7CD1BC1E73
-	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 08:46:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E148A17EB3E
+	for <lists+linux-edac@lfdr.de>; Fri,  2 May 2025 08:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6EDC22A4E7;
-	Fri,  2 May 2025 08:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C486822ACFB;
+	Fri,  2 May 2025 08:45:50 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEFF13AA2E;
-	Fri,  2 May 2025 08:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7861F76C2;
+	Fri,  2 May 2025 08:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746175549; cv=none; b=uJhcl1M96zINah4rY85XonAchn6D4UxKYNFXARH14X6UPHD9PLk+29pXE66usY/wTPdNoaV/O2QPIJqniCQDv+pI30Jufz52Ev7FIxpLzAWM/QVAS2SKQBDkdOrO/6IYLAC6CcBNCjyxd1EV4WJbikEJqFBkN89eBTZzxmp1eI4=
+	t=1746175550; cv=none; b=McI/f50b8eXscMcpQp2XCOIV3Csxl4NgTNLIt5rGocs0P7RZrn+7qixqy++SGHKKMx8bRw8xQbVNRktwvwfuPPZKPb0yEB5ow8eAI8uukhJN4tqV3VSd+z6nF0i9tGpwKX6vUOJShAYT8Kx2YgF31RBVgz/o0MwXOrpnlZBlecc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746175549; c=relaxed/simple;
-	bh=zu0ac8LDjm74lHe3jv8tdxV6DkSiqZ3HGWixAXATcZ0=;
+	s=arc-20240116; t=1746175550; c=relaxed/simple;
+	bh=v6Cdn315MFEcpUnxZ6eZWxEGLgd+UQyVKIUaxKaqaX4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=guNRdL9GSo4lfM0Cbj/5jePJnFQj5xbxIw0VBYBxGA5ebJ7zWp6WmgAZ8zT+Cc+PfcM2p9MP3YYdQ/n8pkkILicE1aa3UuGC/VVNAFy2qgzBT214o6BQlj6V0OJGPBFr5EyZZIuBBq1HuXpzHT/Q48H4pZindoSTDJyAj79TZHM=
+	 MIME-Version:Content-Type; b=iYb1BVtaBvjdz3880wSyIxOWedGFpzRCdLpvnQXEZD0yMpqyKEqRYQgu7ElnS+nKPn98JcErFNtXA/Z1S3mjEI2nu5isVz2i9Pu0wQclwwfr4uhtAfzUCOkEotmiyaTAiQWawFBU3tr1awYhDMDW3g71Us5hzMTY4sFenPnUNUM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZpkwQ2XVqz6L4xM;
-	Fri,  2 May 2025 16:43:34 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZpksD1Zqmz6K92N;
+	Fri,  2 May 2025 16:40:48 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id 76EC41400D9;
-	Fri,  2 May 2025 16:45:45 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 16FEE140137;
+	Fri,  2 May 2025 16:45:47 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.168.187) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 2 May 2025 10:45:44 +0200
+ 15.1.2507.39; Fri, 2 May 2025 10:45:45 +0200
 From: <shiju.jose@huawei.com>
 To: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
 	<dave@stgolabs.net>, <jonathan.cameron@huawei.com>, <dave.jiang@intel.com>,
@@ -50,9 +50,9 @@ CC: <linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>, <bp@alien8.de>,
 	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
 	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
 	<wanghuiqiang@huawei.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v4 1/8] EDAC: Update documentation for the CXL memory patrol scrub control feature
-Date: Fri, 2 May 2025 09:45:09 +0100
-Message-ID: <20250502084517.680-2-shiju.jose@huawei.com>
+Subject: [PATCH v4 2/8] cxl: Update prototype of function get_support_feature_info()
+Date: Fri, 2 May 2025 09:45:10 +0100
+Message-ID: <20250502084517.680-3-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
 In-Reply-To: <20250502084517.680-1-shiju.jose@huawei.com>
 References: <20250502084517.680-1-shiju.jose@huawei.com>
@@ -69,99 +69,70 @@ X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
-Update the Documentation/edac/scrub.rst to include use cases and
-policies for CXL memory device-based, CXL region-based patrol scrub
-control and CXL Error Check Scrub (ECS).
+Add following changes to function get_support_feature_info()
+1. Make generic to share between cxl-fwctl and cxl-edac paths.
+2. Rename get_support_feature_info() to cxl_feature_info()
+3. Change parameter const struct fwctl_rpc_cxl *rpc_in to
+   const uuid_t *uuid.
 
+Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 ---
- Documentation/edac/scrub.rst | 76 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ drivers/cxl/core/core.h     |  2 ++
+ drivers/cxl/core/features.c | 17 +++++++----------
+ 2 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/edac/scrub.rst b/Documentation/edac/scrub.rst
-index daab929cdba1..89a33ef3fde3 100644
---- a/Documentation/edac/scrub.rst
-+++ b/Documentation/edac/scrub.rst
-@@ -264,3 +264,79 @@ Sysfs files are documented in
- `Documentation/ABI/testing/sysfs-edac-scrub`
+diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+index 17b692eb3257..613cce5c4f7b 100644
+--- a/drivers/cxl/core/core.h
++++ b/drivers/cxl/core/core.h
+@@ -124,6 +124,8 @@ int cxl_acpi_get_extended_linear_cache_size(struct resource *backing_res,
+ 					    int nid, resource_size_t *size);
  
- `Documentation/ABI/testing/sysfs-edac-ecs`
+ #ifdef CONFIG_CXL_FEATURES
++struct cxl_feat_entry *
++cxl_feature_info(struct cxl_features_state *cxlfs, const uuid_t *uuid);
+ size_t cxl_get_feature(struct cxl_mailbox *cxl_mbox, const uuid_t *feat_uuid,
+ 		       enum cxl_get_feat_selection selection,
+ 		       void *feat_out, size_t feat_out_size, u16 offset,
+diff --git a/drivers/cxl/core/features.c b/drivers/cxl/core/features.c
+index 1498e2369c37..a83a2214a136 100644
+--- a/drivers/cxl/core/features.c
++++ b/drivers/cxl/core/features.c
+@@ -355,17 +355,11 @@ static void cxlctl_close_uctx(struct fwctl_uctx *uctx)
+ {
+ }
+ 
+-static struct cxl_feat_entry *
+-get_support_feature_info(struct cxl_features_state *cxlfs,
+-			 const struct fwctl_rpc_cxl *rpc_in)
++struct cxl_feat_entry *
++cxl_feature_info(struct cxl_features_state *cxlfs,
++		 const uuid_t *uuid)
+ {
+ 	struct cxl_feat_entry *feat;
+-	const uuid_t *uuid;
+-
+-	if (rpc_in->op_size < sizeof(uuid))
+-		return ERR_PTR(-EINVAL);
+-
+-	uuid = &rpc_in->set_feat_in.uuid;
+ 
+ 	for (int i = 0; i < cxlfs->entries->num_features; i++) {
+ 		feat = &cxlfs->entries->ent[i];
+@@ -547,7 +541,10 @@ static bool cxlctl_validate_set_features(struct cxl_features_state *cxlfs,
+ 	struct cxl_feat_entry *feat;
+ 	u32 flags;
+ 
+-	feat = get_support_feature_info(cxlfs, rpc_in);
++	if (rpc_in->op_size < sizeof(uuid_t))
++		return ERR_PTR(-EINVAL);
 +
-+Examples
-+--------
-+
-+The usage takes the form shown in these examples:
-+
-+1. CXL memory Patrol Scrub
-+
-+The following are the use cases identified why we might increase the scrub rate.
-+
-+- Scrubbing is needed at device granularity because a device is showing
-+  unexpectedly high errors.
-+
-+- Scrubbing may apply to memory that isn't online at all yet. Likely this
-+  is a system wide default setting on boot.
-+
-+- Scrubbing at a higher rate because the monitor software has determined that
-+  more reliability is necessary for a particular data set. This is called
-+  Differentiated Reliability.
-+
-+1.1. Device based scrubbing
-+
-+CXL memory is exposed to memory management subsystem and ultimately userspace
-+via CXL devices. Device-based scrubbing is used for the first use case
-+described in "Section 1 CXL Memory Patrol Scrub".
-+
-+When combining control via the device interfaces and region interfaces,
-+"see Section 1.2 Region based scrubbing".
-+
-+Sysfs files for scrubbing are documented in
-+`Documentation/ABI/testing/sysfs-edac-scrub`
-+
-+1.2. Region based scrubbing
-+
-+CXL memory is exposed to memory management subsystem and ultimately userspace
-+via CXL regions. CXL Regions represent mapped memory capacity in system
-+physical address space. These can incorporate one or more parts of multiple CXL
-+memory devices with traffic interleaved across them. The user may want to control
-+the scrub rate via this more abstract region instead of having to figure out the
-+constituent devices and program them separately. The scrub rate for each device
-+covers the whole device. Thus if multiple regions use parts of that device then
-+requests for scrubbing of other regions may result in a higher scrub rate than
-+requested for this specific region.
-+
-+Region-based scrubbing is used for the third use case described in
-+"Section 1 CXL Memory Patrol Scrub".
-+
-+Userspace must follow below set of rules on how to set the scrub rates for any
-+mixture of requirements.
-+
-+1. Taking each region in turn from lowest desired scrub rate to highest and set
-+   their scrub rates. Later regions may override the scrub rate on individual
-+   devices (and hence potentially whole regions).
-+
-+2. Take each device for which enhanced scrubbing is required (higher rate) and
-+   set those scrub rates. This will override the scrub rates of individual devices,
-+   setting them to the maximum rate required for any of the regions they help back,
-+   unless a specific rate is already defined.
-+
-+Sysfs files for scrubbing are documented in
-+`Documentation/ABI/testing/sysfs-edac-scrub`
-+
-+2. CXL memory Error Check Scrub (ECS)
-+
-+The Error Check Scrub (ECS) feature enables a memory device to perform error
-+checking and correction (ECC) and count single-bit errors. The associated
-+memory controller sets the ECS mode with a trigger sent to the memory
-+device. CXL ECS control, allows the host, thus the userspace, to change the
-+attributes for error count mode, threshold number of errors per segment
-+(indicating how many segments have at least that number of errors) for
-+reporting errors, and reset the ECS counter. Thus, the responsibility for
-+initiating Error Check Scrub on a memory device may lie with the memory
-+controller or platform when unexpectedly high error rates are detected.
-+
-+Sysfs files for scrubbing are documented in
-+`Documentation/ABI/testing/sysfs-edac-ecs`
++	feat = cxl_feature_info(cxlfs, &rpc_in->set_feat_in.uuid);
+ 	if (IS_ERR(feat))
+ 		return false;
+ 
 -- 
 2.43.0
 
