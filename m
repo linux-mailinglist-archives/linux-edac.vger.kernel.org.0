@@ -1,46 +1,46 @@
-Return-Path: <linux-edac+bounces-3832-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3833-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E012DAAAD55
-	for <lists+linux-edac@lfdr.de>; Tue,  6 May 2025 04:33:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEDB8AAB073
+	for <lists+linux-edac@lfdr.de>; Tue,  6 May 2025 05:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 783B0461744
-	for <lists+linux-edac@lfdr.de>; Tue,  6 May 2025 02:31:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DF064E1339
+	for <lists+linux-edac@lfdr.de>; Tue,  6 May 2025 03:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1F73066E4;
-	Mon,  5 May 2025 23:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6143428B4FC;
+	Mon,  5 May 2025 23:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJ0QV3Ek"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tFc3MNHJ"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0911E2F8BCF;
-	Mon,  5 May 2025 23:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14352FB2BA;
+	Mon,  5 May 2025 23:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746487244; cv=none; b=C2IgkZOpqQL35Bpi6K4ZXicSo4cRyFmjQeCUEYnWBruMZ4Pp2TKA8mep9t3ZkJ5n0FsmbPQF8O/MBrIUWbsOokqoLk0/btQehxEXYghDCaFGbFAS8hBGYN+oABHJaSrPmcnGCLYlTe4SRiabkCzBWF8f4Xu4+hG/hbDwp/VnIJk=
+	t=1746487407; cv=none; b=ZOv+fciPE4tD7HBiXUTR8qGTNnf3NTr+mYpQ4+nYzTfS2LDRKOq3OjI6rI1jNY72YP88D8vP0wTYHANG2+bohWaW2u/raZQsl7dUQVsseXS1Dyt8nKPC4Ku0ED9Y9XduFJxrWokrNgvNL6a+gNawPd7ngyAgq61uYVHrmxmNYiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746487244; c=relaxed/simple;
-	bh=Nx8scXla9ValBM11uvtLamrG6d7WCnagX7kaHOl45iM=;
+	s=arc-20240116; t=1746487407; c=relaxed/simple;
+	bh=dyCX6F2jPhi6g0pJYPEwuDqcq3tMWkUoLJk0fI2gYWA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TIPG83OP5aaUQioi5obpJ1hbgdLMgV/tsq5H/CSGCnpDlc2JaYsk9SlLLVXhCiHplYjFDgY6IveYUtkWGsinVvIhJ7AFm71qiALJOH1410SLv47CDAhQctBbDPu7dxR2YU3ULYTX/x+MyuUeF7WkeYkfllX8nv9KLRlUCBQw5uE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJ0QV3Ek; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1BECC4CEF6;
-	Mon,  5 May 2025 23:20:41 +0000 (UTC)
+	 MIME-Version; b=PAaG0RD5HdtL/qkNXOJQn7IFw2g2TwqcwYUfD4qDzISSfoOkqPiAg/I1JPWakmHI67SGJX/RQ4LfwF2IKM/HrNcp1WUXnj9tacHlXv0CauwPR37dWxY9px3JGxqFWbCMsCHsW8zzTFZB4WmkUvXPOsFlC5u43fUhfdhHbgMWLWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tFc3MNHJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7ADC4CEED;
+	Mon,  5 May 2025 23:23:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746487242;
-	bh=Nx8scXla9ValBM11uvtLamrG6d7WCnagX7kaHOl45iM=;
+	s=k20201202; t=1746487405;
+	bh=dyCX6F2jPhi6g0pJYPEwuDqcq3tMWkUoLJk0fI2gYWA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sJ0QV3EkIUKigL1DI2sikKYVhFF++Wi4Vf97bQB/HSHJXT0goXEehS1O747hynze2
-	 /a4cRo8nsCWOFO1Nxs7b/vQlPVJ9fHWQjRFpyMwkUGSSik+lVTjYtlj1IaObIV+WZR
-	 Lma2LYec9IZctgLyJzNCeoa4siix1LG/3KyYEmb2Kd47ttOeev1lql3G/L2jAI/Zio
-	 7WOMIZ45r2y+3gl+2d4c+5w7OR5vZwWSoWVNOTOHRv58gkDk/NSC8xIFuVYTB+IDKs
-	 vx6ySEJ6BNCRQNjWJ0XDsnYypZW6S4ZqxcpXl0xZllfYsJEvUfhFnlTd/ObZ09KdbG
-	 rGvys39lZvHuQ==
+	b=tFc3MNHJf9nEyhtFXlJ9WwI9zJZ3tAavU4JDtZM3pWZBA5Te3MvN95rEVPeI39vwi
+	 OBIAe0guEl0McZA8Ehz2MGkACad078rJXLyszkv00UDT01qclDW4cmOT2LRbVCxr1c
+	 Z2Pkx2EOoKXdFf9OSrhEQEH/mxzpbqDU7BW4yAh708UJoS+mvvdo8sluEIfCQ5B33X
+	 hO0g7DY3xh3rHup33LKP/wXEKKmNF5gDEU2XXZg+ZsJY1nRc2DlGAJ17u8/xzNMolw
+	 ckCSDDzIop95c3Gk+QMtbv3iNw+ty54aqAYvHY8nRtTKRledavjm0M0cLHxv2Ys/8Q
+	 vXrZia38ypmGQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Sasha Levin <sashal@kernel.org>,
 	bp@alien8.de,
 	linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 076/114] EDAC/ie31200: work around false positive build warning
-Date: Mon,  5 May 2025 19:17:39 -0400
-Message-Id: <20250505231817.2697367-76-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 52/79] EDAC/ie31200: work around false positive build warning
+Date: Mon,  5 May 2025 19:21:24 -0400
+Message-Id: <20250505232151.2698893-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505231817.2697367-1-sashal@kernel.org>
-References: <20250505231817.2697367-1-sashal@kernel.org>
+In-Reply-To: <20250505232151.2698893-1-sashal@kernel.org>
+References: <20250505232151.2698893-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.237
+X-stable-base: Linux 5.4.293
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
@@ -102,7 +102,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 13 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index cad20e87783b5..79a6612bd01e4 100644
+index d3d9916b1ba3f..f865528728d75 100644
 --- a/drivers/edac/ie31200_edac.c
 +++ b/drivers/edac/ie31200_edac.c
 @@ -398,10 +398,9 @@ static int ie31200_probe1(struct pci_dev *pdev, int dev_idx)
@@ -162,8 +162,8 @@ index cad20e87783b5..79a6612bd01e4 100644
 -			if (dimm_info[j][i].dual_rank) {
 +			if (dimm_info.dual_rank) {
  				nr_pages = nr_pages / 2;
- 				dimm = edac_get_dimm(mci, (i * 2) + 1, j, 0);
- 				dimm->nr_pages = nr_pages;
+ 				dimm = EDAC_DIMM_PTR(mci->layers, mci->dimms,
+ 						     mci->n_layers, (i * 2) + 1,
 -- 
 2.39.5
 
