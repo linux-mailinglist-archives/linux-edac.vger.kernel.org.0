@@ -1,109 +1,86 @@
-Return-Path: <linux-edac+bounces-3853-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3854-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFFF4AADDFE
-	for <lists+linux-edac@lfdr.de>; Wed,  7 May 2025 14:03:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F15AAE4ED
+	for <lists+linux-edac@lfdr.de>; Wed,  7 May 2025 17:36:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A8941889091
-	for <lists+linux-edac@lfdr.de>; Wed,  7 May 2025 12:03:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD0523A5DFA
+	for <lists+linux-edac@lfdr.de>; Wed,  7 May 2025 15:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5144021A426;
-	Wed,  7 May 2025 12:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="amRANy8W"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFE5289343;
+	Wed,  7 May 2025 15:36:33 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76B41FF7B4;
-	Wed,  7 May 2025 12:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56005748D;
+	Wed,  7 May 2025 15:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746619421; cv=none; b=B7buI/9BLs/+sJKqGJtlYLbkzZ8psNWB4v/KJcMSTGiMDnpp64ToADujAGzBLv4GQeO3bk4ZEfmzZp0+/KE3DbhnJOgrsVbXkmkQoDgA3dAanxqVoArF5Agm5HV3YVwvTFigwNjHeC1AdUyMSvkC0Jp5H24bSxu63M6ScSVcgPI=
+	t=1746632193; cv=none; b=rY19VgLP1z7neelijMziTvMVlD0TJNt92EWu3UWwv7YhgciIcI8sbzs2mbFvJgzcoKc3WTGupY1Pt6x6mQPtylzBbgvqAT3xTaYdYqwhVXYNcP4K/cqXAgS1mTdeUzw1+HqqHFQ3td1L61Non9j83D/t3gQPxdISNlvxUrPeXPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746619421; c=relaxed/simple;
-	bh=XQ/rIt1s2mOL0+ga7HTjobxdM7XRJ3LDtydxR0plKbE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fuC+VWlEhFFtQN9N8357EeuOZxVxvM6HGjBlR4cysw+RN1fRZSippnNYBh8oFK4epFJJ4finhhjVIyLJELPLKN4KdkXDRyJ+cWEBaAWM++btBmIRc+cte1YhhX/Faxd+tTypeYFU96v6MeuWqk3Ncd752/FtRYgXuTPaUK4qPDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=amRANy8W; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1746619407; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=ShXk2Ny+OfZP5082cR19VWEAQCtfhGVK83M3eG6Emmc=;
-	b=amRANy8W+6m3Zw+h1199J1IABJDbD8K7m3qhWMqrY+qStB/RTPTEbgwcXtuSVsJ4TuuPJ6PbY1/X3+5zsjN9/drQ9r3SB3VzmHSF6S9zRuS5XB2KgKWHRQQVQr6R20B3ijRfchUKhJk7K41JQXmTexWRJDIVO6WIdNDIr+sRz1A=
-Received: from 30.246.160.110(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WZqjoua_1746619403 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 07 May 2025 20:03:25 +0800
-Message-ID: <16fd041f-0c51-4c1f-941d-0906fcc6885c@linux.alibaba.com>
-Date: Wed, 7 May 2025 20:03:22 +0800
+	s=arc-20240116; t=1746632193; c=relaxed/simple;
+	bh=AqeGKYZmJoJGYyMkrFh3sxPaKMjEoYRtVwnLWT9e0dk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZAAnid/JQImvcp+n24avP2Hz0QdYvJe9l4zDLFIiWCC9iHh8C9tsHqkK0oadn5w++Uloi6pgqCyhWFoh8q42sw+NaRCkHU4ErRgemXZPwGFXKjQlX5DVcBOTdP3gRzHE64TypdZGwYiNPlvPwOXSW7azPq+523v6vL0IsD4z3gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D32C4CEE2;
+	Wed,  7 May 2025 15:36:29 +0000 (UTC)
+Date: Wed, 7 May 2025 11:36:40 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: lukas@wunner.de, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
+ bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
+ naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+ mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v7] PCI: hotplug: Add a generic RAS tracepoint for
+ hotplug event
+Message-ID: <20250507113640.0b27d95f@gandalf.local.home>
+In-Reply-To: <20250507011535.43800-1-xueshuai@linux.alibaba.com>
+References: <20250507011535.43800-1-xueshuai@linux.alibaba.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: rostedt@goodmis.org, lukas@wunner.de, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, helgaas@kernel.org, bhelgaas@google.com,
- tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
- davem@davemloft.net, anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
- peterz@infradead.org, tianruidong@linux.alibaba.com
-References: <20250507011535.43800-1-xueshuai@linux.alibaba.com>
- <20250507120914.000001c8@huawei.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20250507120914.000001c8@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Wed,  7 May 2025 09:15:35 +0800
+Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
+> +#endif /* _TRACE_HW_EVENT_PCI_HP_H */
+> +
+> +#undef TRACE_INCLUDE_PATH
+> +#define TRACE_INCLUDE_PATH  ../../drivers/pci/hotplug
 
-在 2025/5/7 19:09, Jonathan Cameron 写道:
-> On Wed,  7 May 2025 09:15:35 +0800
-> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
-> 
->> Hotplug events are critical indicators for analyzing hardware health,
->> particularly in AI supercomputers where surprise link downs can
->> significantly impact system performance and reliability.
->>
->> To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
->> tracepoint for hotplug event to help healthy check, and generate
->> tracepoints for pcie hotplug event. Add enum pci_hotplug_event in
->> include/uapi/linux/pci.h so applications like rasdaemon can register
->> tracepoint event handlers for it.
->>
->> The output like below:
->>
->> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
->> $ cat /sys/kernel/debug/tracing/trace_pipe
->>      <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
->>
->>      <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
->>
->> Suggested-by: Lukas Wunner <lukas@wunner.de>
->> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
->> Reviewed-by: Lukas Wunner <lukas@wunner.de>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> FWIW looks good to me.
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Note, this is not always safe to do. If "drivers", "pci" or "hotplug" ever
+become a macro, the path will also be updated, and this will fail to build.
 
-Thanks :)
+> +#undef TRACE_INCLUDE_FILE
+> +#define TRACE_INCLUDE_FILE trace
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
+> diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
 
-> 
-> Any userspace tooling planned for this?
+The safer way to do this is to have:
 
-Yep, we plan to monitor this tracepoint in rasdaemon after this patch merged.
+In drivers/pci/hotplug/Makefile:
 
-Best Regards,
-Shuai
+CFLAGS_pciehp_ctrl.o := -I$(src)
 
+And replace the TRACE_INCLUDE_PATH to:
+
+#define TRACE_INCLUDE_PATH .
+
+-- Steve
 
