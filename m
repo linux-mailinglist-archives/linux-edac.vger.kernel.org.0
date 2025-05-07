@@ -1,250 +1,282 @@
-Return-Path: <linux-edac+bounces-3835-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3836-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE003AAC6B3
-	for <lists+linux-edac@lfdr.de>; Tue,  6 May 2025 15:42:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9F80AAD28E
+	for <lists+linux-edac@lfdr.de>; Wed,  7 May 2025 03:16:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C57C7ACD0F
-	for <lists+linux-edac@lfdr.de>; Tue,  6 May 2025 13:40:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D3B5462186
+	for <lists+linux-edac@lfdr.de>; Wed,  7 May 2025 01:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85959280032;
-	Tue,  6 May 2025 13:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA4CE8528E;
+	Wed,  7 May 2025 01:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="H+VsQc83";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="A2WDNfDn"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="UjPwzL2e"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out199-4.us.a.mail.aliyun.com (out199-4.us.a.mail.aliyun.com [47.90.199.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893A327A457;
-	Tue,  6 May 2025 13:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A0CF4E2;
+	Wed,  7 May 2025 01:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746538922; cv=none; b=Bn00Zo+MVOp58/hHjYKax14Z20wr7b4ZheCA4Z6bpqx2j8lKyH1XAY4sUpfJQ3qz/p6oeiRiAA2gaJ5KJa4+6YZGiV+lldxiz1azbKogjaAtEec4ooj6onW8GLSpQZce7aI26CjiuCy88gjva17OpBn4nN5HewHTX6EBfmRuWSE=
+	t=1746580577; cv=none; b=GoEt/44dVKoEVSCSJ0ELjiRF6i9FWVt6Uzse4gDJL8AgvZ7vgQGqlR0tagwc7CIEjh/6x5Jfnvo1vdogWuIoU7PJO7C4XnNJgQ/eu/6VwttW2gt44OjkGXhW5U825gvFXg89B5HLRIktKF/Ijaxm2+yrJMRNjrrT3BSO2lTpEyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746538922; c=relaxed/simple;
-	bh=xid3ylr8PUedVja8ADfCHrXz8QvAkNFfRtSA6wAUKzs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BOWTKVe4n0LUdryLoHZH/aJfRi1sDEVCNP1qft31IJCAQDqm83zLGThbHDUMc8kpFvxSAGf5A/q+CFKuyM9iiiNzLhdmbXBSSf2PBiqlq4MOvs1X5nqZfszzi6jesuS76sYaXbCYt2eK2OfG0DFN3qGaz5srkngtoZLJn8CLe+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=H+VsQc83; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=A2WDNfDn; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1746538918;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6KIDdrTanUmKEwxmKjGlY7d/jG09aY8AhXQLqxXMqzQ=;
-	b=H+VsQc831BMBvRdCis3hR9IME8F22ohOOmKZluRXXeIChbYi1i570UHmhVD5rd7PsM0wkw
-	1HP7eA6z+5IOLUhZQhdmF7or5iTztS2QKJRbmEAgjwq+1Hky247NEhKEDwxezgoUgE8R63
-	V0qhDAjB+7b6J29c/AFLytdeXny2As20JkHKAF/cRWfC8kJjaTkOeduY468BYQE2K9Pe7t
-	RZn4xt/lidjhGxatyOKQrc3oS+XevZF44OnoNsT2EV+VMTLkWVspPyrnrP+fONNObWghO5
-	kqLvOAkiLKb35XcFpn3CDCCYGOIkDA8SOrbQ3Xkiok9AVLUm0v7enGUguU9+4Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1746538918;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6KIDdrTanUmKEwxmKjGlY7d/jG09aY8AhXQLqxXMqzQ=;
-	b=A2WDNfDnfT0mD/DZk/nR0ud2qdiz1r7YzlYDJPAh4yEaDeywUZVRbpTk6UzDijgMvH2IBC
-	SeknVmXTWgr5wDBA==
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: maz@kernel.org, linux-kernel@vger.kernel.org, "Jiri Slaby (SUSE)"
- <jirislaby@kernel.org>, Aaro Koskinen <aaro.koskinen@iki.fi>, Abhinav
- Kumar <quic_abhinavk@quicinc.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Alexandre Torgue <alexandre.torgue@foss.st.com>, Alex
- Deucher <alexander.deucher@amd.com>, Alex Shi <alexs@kernel.org>, Alim
- Akhtar <alim.akhtar@samsung.com>, Alvin =?utf-8?Q?=C5=A0ipraga?=
- <alsi@bang-olufsen.dk>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, amd-gfx@lists.freedesktop.org,
- Amit Kucheria <amitk@kernel.org>, Anatolij Gustschin <agust@denx.de>, Andi
- Shyti <andi.shyti@kernel.org>, Andreas =?utf-8?Q?F=C3=A4rber?=
- <afaerber@suse.de>, Andreas
- Kemnade <andreas@kemnade.info>, Andrew Jeffery
- <andrew@codeconstruct.com.au>, Andrew Lunn <andrew@lunn.ch>, Andy
- Shevchenko <andy@kernel.org>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, Antoine Tenart
- <atenart@kernel.org>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, Anup
- Patel <anup@brainfault.org>, Arnd Bergmann <arnd@arndb.de>,
- asahi@lists.linux.dev, Bartosz Golaszewski <brgl@bgdev.pl>, Baruch Siach
- <baruch@tkos.co.il>, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
- Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>, Bjorn Andersson
- <andersson@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Borislav
- Petkov <bp@alien8.de>, Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Claudiu Beznea
- <claudiu.beznea@tuxon.dev>, Corentin Chary <corentin.chary@gmail.com>,
- Daire McNamara <daire.mcnamara@microchip.com>, Daniel Golle
- <daniel@makrotopia.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Daniel Mack <daniel@zonque.org>, Daniel Palmer <daniel@thingy.jp>, Dave
- Hansen <dave.hansen@linux.intel.com>, David Airlie <airlied@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, DENG Qingfang <dqfext@gmail.com>,
- Dinh Nguyen <dinguyen@kernel.org>, Dmitry Baryshkov
- <dmitry.baryshkov@linaro.org>, Dongliang Mu <dzm91@hust.edu.cn>, Doug
- Berger <opendmb@gmail.com>, dri-devel@lists.freedesktop.org, Eddie James
- <eajames@linux.ibm.com>, Eric Dumazet <edumazet@google.com>, Fabio Estevam
- <festevam@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Geoff Levand <geoff@infradead.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Gregory Clement
- <gregory.clement@bootlin.com>, Guo Ren <guoren@kernel.org>, Hans de Goede
- <hdegoede@redhat.com>, Haojian Zhuang <haojian.zhuang@gmail.com>, Haojian
- Zhuang <haojian.zhuang@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
- Herve Codina <herve.codina@bootlin.com>, Hou Zhiqiang
- <Zhiqiang.Hou@nxp.com>, "H. Peter Anvin" <hpa@zytor.com>, Huacai Chen
- <chenhuacai@kernel.org>, Changhuang Liang
- <changhuang.liang@starfivetech.com>, Chen-Yu Tsai <wens@csie.org>,
- "Chester A. Unal" <chester.a.unal@arinc9.com>, Christian =?utf-8?Q?K?=
- =?utf-8?Q?=C3=B6nig?=
- <christian.koenig@amd.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Chris Zankel <chris@zankel.net>, Ilpo
- =?utf-8?Q?J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, Imre Kaloz
- <kaloz@openwrt.org>,
- Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>, James
- Morse <james.morse@arm.com>, Janne Grunau <j@jannau.net>, Janusz
- Krzysztofik <jmkrzyszt@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Jassi
- Brar <jassisinghbrar@gmail.com>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Jerome Brunet <jbrunet@baylibre.com>, Jianjun
- Wang <jianjun.wang@mediatek.com>, Jiawen Wu <jiawenwu@trustnetic.com>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Jim Quinlan <jim2101024@gmail.com>,
- Jingoo Han <jingoohan1@gmail.com>, Joel Stanley <joel@jms.id.au>, Johannes
- Berg <johannes@sipsolutions.net>, John Crispin <john@phrozen.org>, John
- Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonas Bonn
- <jonas@southpole.se>, Jonathan Cameron <jic23@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Jonathan Hunter <jonathanh@nvidia.com>, Jonathan
- =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, Joyce Ooi
- <joyce.ooi@intel.com>,
- Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>, Keerthy
- <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>, Konrad Dybcio
- <konradybcio@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Krzysztof
- =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, Kunihiko Hayashi
- <hayashi.kunihiko@socionext.com>, Lakshmi Sowjanya D
- <lakshmi.sowjanya.d@intel.com>, Lars-Peter Clausen <lars@metafoo.de>, Lee
- Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij
- <linus.walleij@linaro.org>, Linus Walleij <linusw@kernel.org>,
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-remoteproc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-rpi-kernel@lists.infradead.org,
- linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org,
- loongarch@lists.linux.dev, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Ludovic Desroches <ludovic.desroches@microchip.com>, Lukasz Luba
- <lukasz.luba@arm.com>, "Luke D. Jones" <luke@ljones.dev>, Madhavan
- Srinivasan <maddy@linux.ibm.com>, Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>, Marek =?utf-8?Q?Beh=C3=BAn?=
- <kabel@kernel.org>, Marijn
- Suijten <marijn.suijten@somainline.org>, Mark Brown <broonie@kernel.org>,
- Mark-PK Tsai <mark-pk.tsai@mediatek.com>, Martin Blumenstingl
- <martin.blumenstingl@googlemail.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Max Filippov <jcmvbkbc@gmail.com>, Maxime Coquelin
- <mcoquelin.stm32@gmail.com>, Mengyuan Lou <mengyuanlou@net-swift.com>,
- Michael Buesch <m@bues.ch>, Michael Ellerman <mpe@ellerman.id.au>, Michal
- Simek <michal.simek@amd.com>, Miodrag Dinic <miodrag.dinic@mips.com>,
- Naveen N Rao <naveen@kernel.org>, Neil Armstrong
- <neil.armstrong@linaro.org>, netdev@vger.kernel.org, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Nicholas Piggin <npiggin@gmail.com>, Nikhil Agarwal
- <nikhil.agarwal@amd.com>, Nipun Gupta <nipun.gupta@amd.com>, Nishanth
- Menon <nm@ti.com>, Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>, Palmer
- Dabbelt
- <palmer@dabbelt.com>, Paolo Abeni <pabeni@redhat.com>, Paul Cercueil
- <paul@crapouillou.net>, Paul Walmsley <paul.walmsley@sifive.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>, Peter Rosin
- <peda@axentia.se>, Philipp Zabel <p.zabel@pengutronix.de>, Piotr
- Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
- platform-driver-x86@vger.kernel.org, Prasad Kumpatla
- <quic_pkumpatl@quicinc.com>, Qiang Zhao <qiang.zhao@nxp.com>, Qin Jian
- <qinjian@cqplus1.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Randy
- Dunlap <rdunlap@infradead.org>, Ray Jui <rjui@broadcom.com>, Rengarajan
- Sundararajan <Rengarajan.S@microchip.com>, Richard Cochran
- <richardcochran@gmail.com>, Richard Weinberger <richard@nod.at>, Rich
- Felker <dalias@libc.org>, Rob Clark <robdclark@gmail.com>, Robert Jarzmik
- <robert.jarzmik@free.fr>, Robert Richter <rric@kernel.org>, Rob Herring
- <robh@kernel.org>, Roger Quadros <rogerq@kernel.org>, Russell King
- <linux@armlinux.org.uk>, Ryan Chen <ryan_chen@aspeedtech.com>, Ryder Lee
- <ryder.lee@mediatek.com>, Samuel Holland <samuel@sholland.org>, Santosh
- Shilimkar <ssantosh@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Scott Branden <sbranden@broadcom.com>, Scott Wood <oss@buserror.net>, Sean
- Paul <sean@poorly.run>, Sean Wang <sean.wang@kernel.org>, Sean Wang
- <sean.wang@mediatek.com>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, Sergio Paracuellos
- <sergio.paracuellos@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Shawn Lin
- <shawn.lin@rock-chips.com>, Siddharth Vadapalli <s-vadapalli@ti.com>,
- Simona Vetter <simona@ffwll.ch>, Stafford Horne <shorne@gmail.com>, Stefan
- Kristiansson <stefan.kristiansson@saunalahti.fi>, Stephen Boyd
- <sboyd@kernel.org>, Sven Peter <sven@svenpeter.dev>, Takashi Iwai
- <tiwai@suse.com>, Talel Shenhar <talel@amazon.com>, Tero Kristo
- <kristo@kernel.org>, Thangaraj Samynathan <Thangaraj.S@microchip.com>,
- Thara Gopinath <thara.gopinath@gmail.com>, Thierry Reding
- <thierry.reding@gmail.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Toan Le <toan@os.amperecomputing.com>,
- Tony Lindgren <tony@atomide.com>, Tony Luck <tony.luck@intel.com>,
- UNGLinuxDriver@microchip.com, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
- <ukleinek@kernel.org>,
- Vignesh Raghavendra <vigneshr@ti.com>, Vineet Gupta <vgupta@kernel.org>,
- Vladimir Oltean <olteanv@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>,
- WANG Xuerui <kernel@xen0n.name>, Woojung Huh <woojung.huh@microchip.com>,
- x86@kernel.org, Yanteng Si <si.yanteng@linux.dev>, Yoshinori Sato
- <ysato@users.sourceforge.jp>, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v2 00/57] irqdomain: Cleanups and Documentation
-In-Reply-To: <20250319092951.37667-1-jirislaby@kernel.org>
-References: <20250319092951.37667-1-jirislaby@kernel.org>
-Date: Tue, 06 May 2025 15:41:57 +0200
-Message-ID: <874ixxonyy.ffs@tglx>
+	s=arc-20240116; t=1746580577; c=relaxed/simple;
+	bh=4Y/wfHCD/JmJfE1SBEtkQtHX5ZUN0fh0CH1uktm6L4k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o5Gu46vtGRB7AUZ0ag2jd5MI8mci85cXrJE5uW59a77zbAWYFkOdnEjCWLh3Xmf2uJuDDOc4tl7+FxXoH48269/Wg0N0BkyXvpB7nR9Upd/JmhGTr3s3I89wXKHMnEOzbCDRtKKSVgVfz+la7ifXp74NmaRwnPt5EZr6ZkiwmKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=UjPwzL2e; arc=none smtp.client-ip=47.90.199.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1746580551; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=BhkBg8BHNtFzJ9+ijMhzKHUaq64bGU+JAPv//d4vJvM=;
+	b=UjPwzL2exoui+xntVmaD82fl9MKZRNmHOtzVksh1TLNxVdxY4N84oZHz2hT8Rcez93C/JymMNeKTIPnURCMQu6cqg9V+40KUnFtUR+O+ULUnuexQlxq3ElaLqPb/fVPnRMOtrk9nQRSiF9EOzsZkSfMx20zkrFc7Usfp5opzjII=
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WZh9L8X_1746580536 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 07 May 2025 09:15:49 +0800
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+To: rostedt@goodmis.org,
+	lukas@wunner.de,
+	linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	helgaas@kernel.org
+Cc: bhelgaas@google.com,
+	tony.luck@intel.com,
+	bp@alien8.de,
+	xueshuai@linux.alibaba.com,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	oleg@redhat.com,
+	naveen@kernel.org,
+	davem@davemloft.net,
+	anil.s.keshavamurthy@intel.com,
+	mark.rutland@arm.com,
+	peterz@infradead.org,
+	tianruidong@linux.alibaba.com
+Subject: [PATCH v7] PCI: hotplug: Add a generic RAS tracepoint for hotplug event
+Date: Wed,  7 May 2025 09:15:35 +0800
+Message-ID: <20250507011535.43800-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 19 2025 at 10:28, Jiri Slaby wrote:
+Hotplug events are critical indicators for analyzing hardware health,
+particularly in AI supercomputers where surprise link downs can
+significantly impact system performance and reliability.
 
-> Hi,
->
-> tl;dr if patches are agreed upon, I ask subsys maintainers to take the
-> respective ones via their trees (as they are split per subsys), so that
-> the IRQ tree can take only the rest. That would minimize churn/conflicts
-> during merges.
+To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
+tracepoint for hotplug event to help healthy check, and generate
+tracepoints for pcie hotplug event. Add enum pci_hotplug_event in
+include/uapi/linux/pci.h so applications like rasdaemon can register
+tracepoint event handlers for it.
 
-So. It's rc5 by now and I picked up everything which did not show up in
-next yet. As there are some patches in next, I delayed the removal of
-functions for the merge window so that we don't end up with merge
-dependencies.
+The output like below:
 
-To reducde conflicts, I grabbed the irq branch from the PCI tree under
-the assumption that this branch is stable.
+$ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
+$ cat /sys/kernel/debug/tracing/trace_pipe
+    <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
 
-The series sits now in
+    <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/cleanups
+Suggested-by: Lukas Wunner <lukas@wunner.de>
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+---
+changes since v6:
+- move defination of tracepoint enum back to trace.h. Otherwise, it will
+  cause a build error when CONFIG_UAPI_HEADER_TEST=y. The problem is that
+  the PCI_HOTPLUG_EVENT macro needs to include "linux/tracepoint.h" but it
+  is not allowed in userspace.
+- No code changes compared to v5.
 
-and will be in next soon. If there are duplicates showing up in next,
-I'm going to remove them from my branch, so the branch is not for basing
-development on.
+change since v5: 
+- move define of enum to include/uapi/linux/pci.h
+- link: https://lore.kernel.org/lkml/202501190108.tRReJA1Z-lkp@intel.com/
 
-@Jiri, I fixed up all your subject prefixes as
+v5:
+- link: https://patchwork.kernel.org/project/linux-pci/patch/20250109025543.56830-1-xueshuai@linux.alibaba.com/
 
-  'irqdomain: subsys: Switch to foo()'
+---
+ drivers/pci/hotplug/pciehp_ctrl.c | 33 ++++++++++++---
+ drivers/pci/hotplug/trace.h       | 68 +++++++++++++++++++++++++++++++
+ include/uapi/linux/pci.h          |  7 ++++
+ 3 files changed, 102 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/pci/hotplug/trace.h
 
-does not make any sense at all. These subsystems have their regular
-prefixes and these changes do not justify made up irqdomain special
-prefixes at all.
+diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
+index d603a7aa7483..f9beb4d3a9b8 100644
+--- a/drivers/pci/hotplug/pciehp_ctrl.c
++++ b/drivers/pci/hotplug/pciehp_ctrl.c
+@@ -23,6 +23,9 @@
+ #include "../pci.h"
+ #include "pciehp.h"
+ 
++#define CREATE_TRACE_POINTS
++#include "trace.h"
++
+ /* The following routines constitute the bulk of the
+    hotplug controller logic
+  */
+@@ -244,12 +247,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+ 	case ON_STATE:
+ 		ctrl->state = POWEROFF_STATE;
+ 		mutex_unlock(&ctrl->state_lock);
+-		if (events & PCI_EXP_SLTSTA_DLLSC)
++		if (events & PCI_EXP_SLTSTA_DLLSC) {
+ 			ctrl_info(ctrl, "Slot(%s): Link Down\n",
+ 				  slot_name(ctrl));
+-		if (events & PCI_EXP_SLTSTA_PDC)
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_LINK_DOWN);
++		}
++		if (events & PCI_EXP_SLTSTA_PDC) {
+ 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+ 				  slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_CARD_NOT_PRESENT);
++		}
+ 		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
+ 		break;
+ 	default:
+@@ -269,6 +280,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+ 					      INDICATOR_NOOP);
+ 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+ 				  slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_CARD_NOT_PRESENT);
+ 		}
+ 		mutex_unlock(&ctrl->state_lock);
+ 		return;
+@@ -281,12 +295,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+ 	case OFF_STATE:
+ 		ctrl->state = POWERON_STATE;
+ 		mutex_unlock(&ctrl->state_lock);
+-		if (present)
++		if (present) {
+ 			ctrl_info(ctrl, "Slot(%s): Card present\n",
+ 				  slot_name(ctrl));
+-		if (link_active)
+-			ctrl_info(ctrl, "Slot(%s): Link Up\n",
+-				  slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_CARD_PRESENT);
++		}
++		if (link_active) {
++			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_LINK_UP);
++		}
+ 		ctrl->request_result = pciehp_enable_slot(ctrl);
+ 		break;
+ 	default:
+diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
+new file mode 100644
+index 000000000000..5b60cd7bcffb
+--- /dev/null
++++ b/drivers/pci/hotplug/trace.h
+@@ -0,0 +1,68 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_HW_EVENT_PCI_HP_H
++
++#include <linux/tracepoint.h>
++
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM pci
++
++#define PCI_HOTPLUG_EVENT					\
++	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
++	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
++	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
++	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
++
++/* Enums require being exported to userspace, for user tool parsing */
++#undef EM
++#undef EMe
++#define EM(a, b)	TRACE_DEFINE_ENUM(a);
++#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
++
++PCI_HOTPLUG_EVENT
++
++/*
++ * Now redefine the EM() and EMe() macros to map the enums to the strings
++ * that will be printed in the output.
++ */
++#undef EM
++#undef EMe
++#define EM(a, b)	{a, b},
++#define EMe(a, b)	{a, b}
++
++TRACE_EVENT(pci_hp_event,
++
++	TP_PROTO(const char *port_name,
++		 const char *slot,
++		 const int event),
++
++	TP_ARGS(port_name, slot, event),
++
++	TP_STRUCT__entry(
++		__string(	port_name,	port_name	)
++		__string(	slot,		slot		)
++		__field(	int,		event	)
++	),
++
++	TP_fast_assign(
++		__assign_str(port_name);
++		__assign_str(slot);
++		__entry->event = event;
++	),
++
++	TP_printk("%s slot:%s, event:%s\n",
++		__get_str(port_name),
++		__get_str(slot),
++		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
++	)
++);
++
++#endif /* _TRACE_HW_EVENT_PCI_HP_H */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH  ../../drivers/pci/hotplug
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_FILE trace
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
+index a769eefc5139..4f150028965d 100644
+--- a/include/uapi/linux/pci.h
++++ b/include/uapi/linux/pci.h
+@@ -39,4 +39,11 @@
+ #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
+ #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
+ 
++enum pci_hotplug_event {
++	PCI_HOTPLUG_LINK_UP,
++	PCI_HOTPLUG_LINK_DOWN,
++	PCI_HOTPLUG_CARD_PRESENT,
++	PCI_HOTPLUG_CARD_NOT_PRESENT,
++};
++
+ #endif /* _UAPILINUX_PCI_H */
+-- 
+2.39.3
 
-Thanks,
-
-        tglx
 
