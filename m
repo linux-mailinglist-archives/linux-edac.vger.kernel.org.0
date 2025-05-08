@@ -1,125 +1,174 @@
-Return-Path: <linux-edac+bounces-3867-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3868-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12E41AAF204
-	for <lists+linux-edac@lfdr.de>; Thu,  8 May 2025 06:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03DB3AAF72F
+	for <lists+linux-edac@lfdr.de>; Thu,  8 May 2025 11:52:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F4C04E320A
-	for <lists+linux-edac@lfdr.de>; Thu,  8 May 2025 04:14:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 622474C3237
+	for <lists+linux-edac@lfdr.de>; Thu,  8 May 2025 09:52:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F2FC20409A;
-	Thu,  8 May 2025 04:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="PzQsT6ED"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4197F4B1E48;
+	Thu,  8 May 2025 09:52:12 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D2932CA9;
-	Thu,  8 May 2025 04:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD515A945;
+	Thu,  8 May 2025 09:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746677674; cv=none; b=OVuPaikaHcCv9s8w8R1GuBR9jJTeaGg78JPlpmZyDUu6V9GslAs5opg+RrdMb6/GaoVHiVZNox6uWIu3TdrrUnzfRbZKINy4znb3/DZQvh35Eu0QEQU4iwnxdqw0qXZc6TcftLfRHSuYJqgRZQbs/LVcr5Z941G+nzly3SeBZU4=
+	t=1746697932; cv=none; b=rUDJ8zki2L4oY9+EH1xwbVB7UzBM0D7ZzamJnzP8mtrMnMrpx9TFsh9XfjPWX1flYZNqU2sONqsY8fHyHJbkNGoUeZBX8BYQgHg9HJWSFSLKoEQVrBIze1j8OjyYOM2NoS48dS1fKvGuCf4l7ZCyJ2Ru3Xs7X/6vpcwP/ADVmNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746677674; c=relaxed/simple;
-	bh=kkFlGg5bNPTJPjCV1zeL3eKzkCAHsT7R0AsSJTUn46Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iGemK9K9QT+WUyGP5IpdHonn1HtJZd72gPao9JijuqfM2YqI1twMzbKC0Z8bbZoAN2vVbfckTv+jqCco3y4d1dzmBZUGNqX1LcfFoUV+pIWOkpNctjy+nk9AsZvqHBylXqrzDkGEGYS+UBXktVZfKhVXu5xThjoSy4vUR1oEUfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=PzQsT6ED; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.75.0.18] (unknown [40.78.12.246])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 042A121199E9;
-	Wed,  7 May 2025 21:14:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 042A121199E9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1746677672;
-	bh=qjjRDbgXc5t2xS79DeCctPMPk2aN4d/AA83/fxurBo0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PzQsT6EDggx9vwP8aXC7LjcT1HCntXX6m7vqa+lTLGoggaeS1CMDAdPe3hRX0JtTX
-	 ZkOXEd7L8XILk7eyA626yAvp8XrLuRSMN6WdF/R9Rg0HUFHPHigw9Eqkt8WthSibWf
-	 8tXz5CW0LCJd+2KAr7oSf47/WJO+hD7RUPYZQfLM=
-Message-ID: <013cab30-7314-46bb-afd6-156632835fcc@linux.microsoft.com>
-Date: Wed, 7 May 2025 21:14:30 -0700
+	s=arc-20240116; t=1746697932; c=relaxed/simple;
+	bh=smR+sa3ThfinspiI9/1lrpMdzZOk1s6VFWqxY9XLyZY=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LhbCMEtDRbP973yfN8jm+WWjVsBciA/qLY0CPXk/imrzqTL8kwWhTOSGvr+kKWzARUFMTTDfKFNQg1v0u1zjyyUQ5cm/jAV+/6V+wMIvbZ5vvQF2ect1CCx5bk2SXcSakFtAzhU4/gYXtEIZqpUTHAmmU8eX5o2hZYMtpgz8IP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZtS8R2vccz6K9TX;
+	Thu,  8 May 2025 17:51:51 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 72C4F1402CB;
+	Thu,  8 May 2025 17:52:07 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 8 May
+ 2025 11:52:06 +0200
+Date: Thu, 8 May 2025 10:52:05 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: <shiju.jose@huawei.com>
+CC: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
+	<dave@stgolabs.net>, <dave.jiang@intel.com>, <alison.schofield@intel.com>,
+	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+	<linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <lenb@kernel.org>, <Yazen.Ghannam@amd.com>,
+	<mchehab@kernel.org>, <nifan.cxl@gmail.com>, <linuxarm@huawei.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>
+Subject: Re: [PATCH v4 1/8] EDAC: Update documentation for the CXL memory
+ patrol scrub control feature
+Message-ID: <20250508105205.00007499@huawei.com>
+In-Reply-To: <20250502084517.680-2-shiju.jose@huawei.com>
+References: <20250502084517.680-1-shiju.jose@huawei.com>
+	<20250502084517.680-2-shiju.jose@huawei.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v8 PATCH 0/2] Add L1 and L2 error detection for A53, A57 and A72
-To: Borislav Petkov <bp@alien8.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, James Morse <james.morse@arm.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
- <rric@kernel.org>, linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
- Tyler Hicks <code@tyhicks.com>, Marc Zyngier <maz@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, devicetree@vger.kernel.org
-References: <1746404860-27069-1-git-send-email-vijayb@linux.microsoft.com>
- <20250505091044.GCaBiAlCFqVgV7-3TJ@fat_crate.local>
-Content-Language: en-US
-From: Vijay Balakrishna <vijayb@linux.microsoft.com>
-In-Reply-To: <20250505091044.GCaBiAlCFqVgV7-3TJ@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500009.china.huawei.com (7.191.174.84) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On 5/5/25 02:10, Borislav Petkov wrote:
-> On Sun, May 04, 2025 at 05:27:38PM -0700, Vijay Balakrishna wrote:
->> Hello,
->>
->> This is an attempt to revive [v5] series. I have attempted to address comments
->> and suggestions from Marc Zyngier since [v5]. Additionally, I have extended
-> 
-> I'd like to hear from ARM folks here, whether this makes sense to have still.
-> 
->> support for A72 processors. Testing the driver on a problematic A72 SoC
->> has led to the detection of Correctable Errors (CEs). Below are logs captured
->> from the problematic SoC during various boot instances.
->>
->> [  876.896022] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
->>
->> [ 3700.978086] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
->>
->> [  976.956158] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
->>
->> [ 1427.933606] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
->>
->> [  192.959911] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
->>
->> Our primary focus is on A72. We have a significant number of A72-based systems
-> 
-> Then zap the support for the other CPUs as supporting those is futile.
-> 
-> cortex_arm64_l1_l2.c - I don't want an EDAC driver per RAS functional unit.
-> Call this edac_a72 or whatever, which will contain all A72 RAS functionality
-> support. ARM folks will give you a good idea here if you don't have.
-> 
-> Also, I'd need at least a reviewer entry to MAINTAINERS for patches to this
-> driver because you'll be the only ones testing this as you have vested
-> interest in this working.
-> 
-> The dt patch needs a reviewed-by too.
-> 
-> Once that is addressed, I'll take a look.
-> 
-> Thx.
-> 
+On Fri, 2 May 2025 09:45:09 +0100
+<shiju.jose@huawei.com> wrote:
 
-Thank you, Boris.
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> Update the Documentation/edac/scrub.rst to include use cases and
+> policies for CXL memory device-based, CXL region-based patrol scrub
+> control and CXL Error Check Scrub (ECS).
+> 
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 
-I will soon be posting a new series featuring only A72 functionality. 
-Could the ARM folks on Cc please comment on additional changes we can 
-include for A72?
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Tyler and I can serve as joint reviewers, and I'll update the 
-MAINTAINERS file accordingly.
+> ---
+>  Documentation/edac/scrub.rst | 76 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+> 
+> diff --git a/Documentation/edac/scrub.rst b/Documentation/edac/scrub.rst
+> index daab929cdba1..89a33ef3fde3 100644
+> --- a/Documentation/edac/scrub.rst
+> +++ b/Documentation/edac/scrub.rst
+> @@ -264,3 +264,79 @@ Sysfs files are documented in
+>  `Documentation/ABI/testing/sysfs-edac-scrub`
+>  
+>  `Documentation/ABI/testing/sysfs-edac-ecs`
+> +
+> +Examples
+> +--------
+> +
+> +The usage takes the form shown in these examples:
+> +
+> +1. CXL memory Patrol Scrub
+> +
+> +The following are the use cases identified why we might increase the scrub rate.
+> +
+> +- Scrubbing is needed at device granularity because a device is showing
+> +  unexpectedly high errors.
+> +
+> +- Scrubbing may apply to memory that isn't online at all yet. Likely this
+> +  is a system wide default setting on boot.
+> +
+> +- Scrubbing at a higher rate because the monitor software has determined that
+> +  more reliability is necessary for a particular data set. This is called
+> +  Differentiated Reliability.
+> +
+> +1.1. Device based scrubbing
+> +
+> +CXL memory is exposed to memory management subsystem and ultimately userspace
+> +via CXL devices. Device-based scrubbing is used for the first use case
+> +described in "Section 1 CXL Memory Patrol Scrub".
+> +
+> +When combining control via the device interfaces and region interfaces,
+> +"see Section 1.2 Region based scrubbing".
+> +
+> +Sysfs files for scrubbing are documented in
+> +`Documentation/ABI/testing/sysfs-edac-scrub`
+> +
+> +1.2. Region based scrubbing
+> +
+> +CXL memory is exposed to memory management subsystem and ultimately userspace
+> +via CXL regions. CXL Regions represent mapped memory capacity in system
+> +physical address space. These can incorporate one or more parts of multiple CXL
+> +memory devices with traffic interleaved across them. The user may want to control
+> +the scrub rate via this more abstract region instead of having to figure out the
+> +constituent devices and program them separately. The scrub rate for each device
+> +covers the whole device. Thus if multiple regions use parts of that device then
+> +requests for scrubbing of other regions may result in a higher scrub rate than
+> +requested for this specific region.
+> +
+> +Region-based scrubbing is used for the third use case described in
+> +"Section 1 CXL Memory Patrol Scrub".
+> +
+> +Userspace must follow below set of rules on how to set the scrub rates for any
+> +mixture of requirements.
+> +
+> +1. Taking each region in turn from lowest desired scrub rate to highest and set
+> +   their scrub rates. Later regions may override the scrub rate on individual
+> +   devices (and hence potentially whole regions).
+> +
+> +2. Take each device for which enhanced scrubbing is required (higher rate) and
+> +   set those scrub rates. This will override the scrub rates of individual devices,
+> +   setting them to the maximum rate required for any of the regions they help back,
+> +   unless a specific rate is already defined.
+> +
+> +Sysfs files for scrubbing are documented in
+> +`Documentation/ABI/testing/sysfs-edac-scrub`
+> +
+> +2. CXL memory Error Check Scrub (ECS)
+> +
+> +The Error Check Scrub (ECS) feature enables a memory device to perform error
+> +checking and correction (ECC) and count single-bit errors. The associated
+> +memory controller sets the ECS mode with a trigger sent to the memory
+> +device. CXL ECS control, allows the host, thus the userspace, to change the
+> +attributes for error count mode, threshold number of errors per segment
+> +(indicating how many segments have at least that number of errors) for
+> +reporting errors, and reset the ECS counter. Thus, the responsibility for
+> +initiating Error Check Scrub on a memory device may lie with the memory
+> +controller or platform when unexpectedly high error rates are detected.
+> +
+> +Sysfs files for scrubbing are documented in
+> +`Documentation/ABI/testing/sysfs-edac-ecs`
 
-Krzysztof, I would appreciate your reviewed-by for the DT patch when I 
-post the next version.
-
-Thanks,
-Vijay
 
