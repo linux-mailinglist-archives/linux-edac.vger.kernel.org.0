@@ -1,121 +1,287 @@
-Return-Path: <linux-edac+bounces-3878-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3879-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB38FAB1D66
-	for <lists+linux-edac@lfdr.de>; Fri,  9 May 2025 21:38:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC8C9AB2D43
+	for <lists+linux-edac@lfdr.de>; Mon, 12 May 2025 03:41:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67E437B9139
-	for <lists+linux-edac@lfdr.de>; Fri,  9 May 2025 19:36:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 781BE189F6BD
+	for <lists+linux-edac@lfdr.de>; Mon, 12 May 2025 01:39:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1305625DCED;
-	Fri,  9 May 2025 19:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE9931DF991;
+	Mon, 12 May 2025 01:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="CGHBQHWe"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="C0Ms8ztr"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7099025DB17;
-	Fri,  9 May 2025 19:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66265BE4A;
+	Mon, 12 May 2025 01:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746819465; cv=none; b=ki58WrVTVVhanzKQAcr9MMBr1X52QPx0r+j26WT+NQXNPAL7xelNIHId7wK+CQYMetA+OnqrZHggnz5F+v2FQcBK0PzTQSuqiIItRi9bfywuzeMVDJtuYzHwN5cs0gI/aSrVQcyCUQlk4jBJBYS8R5ztRX/+nOs2NtJgCnj9hag=
+	t=1747013927; cv=none; b=KC0AhcCr9Jw9yxt6VopFbMmcWLMgYASlJeSdhlstr1bnsncyS5PYTt9SvPiARmnamUPu3Jfsebmde/WzIe5eXhXmmmKvOb2p9cCwBNAqIyQ4ylG/ol23Poie07bjpAZymX6tcxZyFFmj/2xTVyVipIUGk5uq22RAI4j+hZ0JfhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746819465; c=relaxed/simple;
-	bh=8ZVz+sM2e38LEUbul09GjJfrj5dzyu8vCUAhuzz5CWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bRLtdJ1rHXFkqpei6eRy42nNpM6FeX/e/Kq3Us/YVcwJJcoWUQ7PIohe6jMNrj7uZlELAppKz+bn5URc1yiO1nt4y/TjNC+v5L/64vfMVPEm5/BxQAcpWnl249Ad+OuNRIMhujybtgI9+e1J3YO3+WSy6H2j4wcPTb3IoyLKVs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=CGHBQHWe; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 562C940E023E;
-	Fri,  9 May 2025 19:37:39 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 1dJBXWql5nCj; Fri,  9 May 2025 19:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1746819455; bh=KZxuyNV+T/kC6I+JBt8h1fqec+RQznGYJxv2+6xlmsk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CGHBQHWeU+grgUNGE19DOAdePgmdRhszVJUUO6w66pAkS/7NPngyEfaj7SvLSSRva
-	 cD5n7eVSVZ7h+h46SLWnGUfCaickXT48zxlik/5NEyUVhOzIhCbB19gJGucfln/Vzf
-	 Inr7FX2Y6JMg9rC/gFWqYL3uNlkM2Zkm7tSO9S04VZwebpazADz2+t4TiBKm+XC3l3
-	 PA2EjIjNVCbB2jkKHeKhqFUBhjKXrOEGDn6M/EdSbZMZ+6sp91AQRkmivnwlNY1JJI
-	 G+XgMYt1sWXcm5b2I2KIgak64p8yc88ffaKuQ0Ao5XIDv698o1sWNH2LWius7Rrj4+
-	 NNmUVajFmqBBtYVxlXbBpiyHE/kr+JZ7om32W+6yEpIZvyRiERDvCtvrEkTudzp4fR
-	 RaBVwpFd4ihgpDpVNH/vS0rVe0J8aYGT0nWgtae1K1GBUD8evjXZElS/oFFqGMIYRa
-	 OYPU3lJyWCYloRZtAeNCzb9Cbcb+vFTEd4NRUb0DhE7sM4j7qupLlUhxzBP54++kZY
-	 oyhA+aemGWarEbkQNgaS7OAa5hgedgJeBrK6m5gbbphZVFEn1MLe1HhykN+aO+8pOU
-	 ECpprSlFAsty8PZ0+qD5J5ACJH3I7LEOEtrt1uFcPCg2UnMUrUXxyhOIAbpvkxjlAW
-	 89x7Q7ohM5zzVbsQGEpD1Y5o=
-Received: from zn.tnic (p579690ee.dip0.t-ipconnect.de [87.150.144.238])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E151E40E015E;
-	Fri,  9 May 2025 19:37:27 +0000 (UTC)
-Date: Fri, 9 May 2025 21:37:21 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com,
-	Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Subject: Re: [PATCH v3 15/17] x86/mce/amd: Support SMCA Corrected Error
- Interrupt
-Message-ID: <20250509193721.GRaB5ZccvAs9ST_3IM@fat_crate.local>
-References: <20250415-wip-mca-updates-v3-0-8ffd9eb4aa56@amd.com>
- <20250415-wip-mca-updates-v3-15-8ffd9eb4aa56@amd.com>
+	s=arc-20240116; t=1747013927; c=relaxed/simple;
+	bh=uSZA2lmYixoSogdOaDu8s/wyNYgZcvJd8hzamOlPS4k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LyvA0RtnjGOcM/wyEu/IXC3RYEbDfBFYwdEmN1G8NIwPsYFn394GhpHPgQqrimeb7GC3dYOZVUYtnS3ctmTBiIdTnxJY+NLSQN20dIurx60DrhI1V+DpgC/XV2QCaWxG30mdkwkyLHBOW/AiYJlEx25Pkhf8TfsiUhVBF8zLVyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=C0Ms8ztr; arc=none smtp.client-ip=115.124.30.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1747013922; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=V9q0sf3g93s0nWBse7LhUuLgRfg0z0G5/pexwXedHVA=;
+	b=C0Ms8ztrxXDAvsi63F04PtSmKC2BKecPwPw6bLrMFMH83vUnEujwkY/k2c7HNekXaEPhqhTX4OEsV+mMXHHcb3S1WCGCMlbCq2Kw4fMFKcF1SYK3iRGEHN5pTICqEn9Y7ivn8MViISTwP42L66a6zumA/73c+IZMCqhW3WzEMp4=
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WaCSN28_1747013920 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 12 May 2025 09:38:41 +0800
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+To: rostedt@goodmis.org,
+	lukas@wunner.de,
+	linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	helgaas@kernel.org
+Cc: bhelgaas@google.com,
+	tony.luck@intel.com,
+	bp@alien8.de,
+	xueshuai@linux.alibaba.com,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	oleg@redhat.com,
+	naveen@kernel.org,
+	davem@davemloft.net,
+	anil.s.keshavamurthy@intel.com,
+	mark.rutland@arm.com,
+	peterz@infradead.org,
+	tianruidong@linux.alibaba.com
+Subject: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for hotplug event
+Date: Mon, 12 May 2025 09:38:39 +0800
+Message-ID: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250415-wip-mca-updates-v3-15-8ffd9eb4aa56@amd.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 15, 2025 at 02:55:10PM +0000, Yazen Ghannam wrote:
-> @@ -306,6 +306,11 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
->  			high |= BIT(5);
->  		}
+Hotplug events are critical indicators for analyzing hardware health,
+particularly in AI supercomputers where surprise link downs can
+significantly impact system performance and reliability.
 
-Yeah, the above statements explain in comments what they do so that we don't
-have to define the bits but use them straight "naked" with the BIT macro.
-I think you'd need to put something along the lines of that text...
+To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
+tracepoint for hotplug event to help healthy check, and generate
+tracepoints for pcie hotplug event. Add enum pci_hotplug_event in
+include/uapi/linux/pci.h so applications like rasdaemon can register
+tracepoint event handlers for it.
 
-> Check for the feature bit in the MCA_CONFIG register and confirm that
-> the MCA thresholding interrupt handler is already enabled. If successful,
-> set the feature enable bit in the MCA_CONFIG register to indicate to the
-> Platform that the OS is ready for the interrupt.
+The output like below:
 
-... here.
+$ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
+$ cat /sys/kernel/debug/tracing/trace_pipe
+    <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
 
-<---
+    <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
 
-> +		if ((low & BIT(10)) && data->thr_intr_en) {
-> +			__set_bit(bank, data->thr_intr_banks);
-> +			high |= BIT(8);
-> +		}
-> +
->  		this_cpu_ptr(mce_banks_array)[bank].lsb_in_status = !!(low & BIT(8));
->  
->  		wrmsr(smca_config, low, high);
-> 
-> -- 
-> 2.49.0
-> 
+Suggested-by: Lukas Wunner <lukas@wunner.de>
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+---
+changes since v7:
+- replace the TRACE_INCLUDE_PATH to avoid macro conflict per Steven
+- pick up Reviewed-by from Lukas Wunner
+---
+ drivers/pci/hotplug/Makefile      |  3 ++
+ drivers/pci/hotplug/pciehp_ctrl.c | 33 ++++++++++++---
+ drivers/pci/hotplug/trace.h       | 68 +++++++++++++++++++++++++++++++
+ include/uapi/linux/pci.h          |  7 ++++
+ 4 files changed, 105 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/pci/hotplug/trace.h
 
+diff --git a/drivers/pci/hotplug/Makefile b/drivers/pci/hotplug/Makefile
+index 40aaf31fe338..a1a9d1e98962 100644
+--- a/drivers/pci/hotplug/Makefile
++++ b/drivers/pci/hotplug/Makefile
+@@ -3,6 +3,9 @@
+ # Makefile for the Linux kernel pci hotplug controller drivers.
+ #
+ 
++# define_trace.h needs to know how to find our header
++CFLAGS_pciehp_ctrl.o				:= -I$(src)
++
+ obj-$(CONFIG_HOTPLUG_PCI)		+= pci_hotplug.o
+ obj-$(CONFIG_HOTPLUG_PCI_COMPAQ)	+= cpqphp.o
+ obj-$(CONFIG_HOTPLUG_PCI_IBM)		+= ibmphp.o
+diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
+index d603a7aa7483..f9beb4d3a9b8 100644
+--- a/drivers/pci/hotplug/pciehp_ctrl.c
++++ b/drivers/pci/hotplug/pciehp_ctrl.c
+@@ -23,6 +23,9 @@
+ #include "../pci.h"
+ #include "pciehp.h"
+ 
++#define CREATE_TRACE_POINTS
++#include "trace.h"
++
+ /* The following routines constitute the bulk of the
+    hotplug controller logic
+  */
+@@ -244,12 +247,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+ 	case ON_STATE:
+ 		ctrl->state = POWEROFF_STATE;
+ 		mutex_unlock(&ctrl->state_lock);
+-		if (events & PCI_EXP_SLTSTA_DLLSC)
++		if (events & PCI_EXP_SLTSTA_DLLSC) {
+ 			ctrl_info(ctrl, "Slot(%s): Link Down\n",
+ 				  slot_name(ctrl));
+-		if (events & PCI_EXP_SLTSTA_PDC)
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_LINK_DOWN);
++		}
++		if (events & PCI_EXP_SLTSTA_PDC) {
+ 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+ 				  slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_CARD_NOT_PRESENT);
++		}
+ 		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
+ 		break;
+ 	default:
+@@ -269,6 +280,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+ 					      INDICATOR_NOOP);
+ 			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+ 				  slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_CARD_NOT_PRESENT);
+ 		}
+ 		mutex_unlock(&ctrl->state_lock);
+ 		return;
+@@ -281,12 +295,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+ 	case OFF_STATE:
+ 		ctrl->state = POWERON_STATE;
+ 		mutex_unlock(&ctrl->state_lock);
+-		if (present)
++		if (present) {
+ 			ctrl_info(ctrl, "Slot(%s): Card present\n",
+ 				  slot_name(ctrl));
+-		if (link_active)
+-			ctrl_info(ctrl, "Slot(%s): Link Up\n",
+-				  slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_CARD_PRESENT);
++		}
++		if (link_active) {
++			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
++			trace_pci_hp_event(pci_name(ctrl->pcie->port),
++					   slot_name(ctrl),
++					   PCI_HOTPLUG_LINK_UP);
++		}
+ 		ctrl->request_result = pciehp_enable_slot(ctrl);
+ 		break;
+ 	default:
+diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
+new file mode 100644
+index 000000000000..21329c198019
+--- /dev/null
++++ b/drivers/pci/hotplug/trace.h
+@@ -0,0 +1,68 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_HW_EVENT_PCI_HP_H
++
++#include <linux/tracepoint.h>
++
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM pci
++
++#define PCI_HOTPLUG_EVENT					\
++	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
++	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
++	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
++	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
++
++/* Enums require being exported to userspace, for user tool parsing */
++#undef EM
++#undef EMe
++#define EM(a, b)	TRACE_DEFINE_ENUM(a);
++#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
++
++PCI_HOTPLUG_EVENT
++
++/*
++ * Now redefine the EM() and EMe() macros to map the enums to the strings
++ * that will be printed in the output.
++ */
++#undef EM
++#undef EMe
++#define EM(a, b)	{a, b},
++#define EMe(a, b)	{a, b}
++
++TRACE_EVENT(pci_hp_event,
++
++	TP_PROTO(const char *port_name,
++		 const char *slot,
++		 const int event),
++
++	TP_ARGS(port_name, slot, event),
++
++	TP_STRUCT__entry(
++		__string(	port_name,	port_name	)
++		__string(	slot,		slot		)
++		__field(	int,		event	)
++	),
++
++	TP_fast_assign(
++		__assign_str(port_name);
++		__assign_str(slot);
++		__entry->event = event;
++	),
++
++	TP_printk("%s slot:%s, event:%s\n",
++		__get_str(port_name),
++		__get_str(slot),
++		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
++	)
++);
++
++#endif /* _TRACE_HW_EVENT_PCI_HP_H */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH .
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_FILE trace
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
+index a769eefc5139..4f150028965d 100644
+--- a/include/uapi/linux/pci.h
++++ b/include/uapi/linux/pci.h
+@@ -39,4 +39,11 @@
+ #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
+ #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
+ 
++enum pci_hotplug_event {
++	PCI_HOTPLUG_LINK_UP,
++	PCI_HOTPLUG_LINK_DOWN,
++	PCI_HOTPLUG_CARD_PRESENT,
++	PCI_HOTPLUG_CARD_NOT_PRESENT,
++};
++
+ #endif /* _UAPILINUX_PCI_H */
 -- 
-Regards/Gruss,
-    Boris.
+2.39.3
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
