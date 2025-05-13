@@ -1,108 +1,149 @@
-Return-Path: <linux-edac+bounces-3888-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3889-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6211AB4500
-	for <lists+linux-edac@lfdr.de>; Mon, 12 May 2025 21:32:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA735AB5954
+	for <lists+linux-edac@lfdr.de>; Tue, 13 May 2025 18:07:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E63D4467D38
-	for <lists+linux-edac@lfdr.de>; Mon, 12 May 2025 19:32:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EA1C860089
+	for <lists+linux-edac@lfdr.de>; Tue, 13 May 2025 16:06:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A159A298CC5;
-	Mon, 12 May 2025 19:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kSnwCH/0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D827245008;
+	Tue, 13 May 2025 16:07:01 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7303925332D;
-	Mon, 12 May 2025 19:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912532BE114;
+	Tue, 13 May 2025 16:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747078226; cv=none; b=oW9YWZ+s1p1mpZST+FFJNTgwVHtqdJ+cPFF24GSzaT8V/KoWztAYAoiCi5qgNXBC193roqJ84nPWX1ivfOUfuyaingb7CficgigBSGIa5p2Sel+pm4bP5cY9C7qngOeiCAqURBPHx5DGofbTmGBF9FM2k4IWtihadXA0NSHkO+Y=
+	t=1747152421; cv=none; b=JsWYu593VdG3vpGQ/drhiKtUMqnNnfF10dOgBpt9BDfzwouP5nWElaZS6yCCc2f76iXBpxoORxriLwhVTHhrzukxJkRHy6xQ2IMKX9ULZKQVEPciie30VzJNoddbFpKEwa9HeZVyxtk2v+HhbNjlUHXL0jILIe/Zui6xl/IVTYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747078226; c=relaxed/simple;
-	bh=SnfXj5AiXjTNiB+Fi6IRuaS5N/lfiblfFGY2z5N4g6A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aRWUrkT1/WdaVbWzYtRuZOBT7wjiyrtmQFV4KNmEq6/Jr3X603vyDqBO+EjHiesEcRkS2gbYqnP+NMgc2A4DAd3614E8XwzVi57ZgEcGOmEiPWM/Xbi5xglo9U3KkZ2hBPDvZIsIU4yJ59bWB9q+l1J2vT/9ZH2BqFgCGdwLiAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kSnwCH/0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED12C4CEE7;
-	Mon, 12 May 2025 19:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747078225;
-	bh=SnfXj5AiXjTNiB+Fi6IRuaS5N/lfiblfFGY2z5N4g6A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kSnwCH/0MiCWixLiKAZWxYQeeso/DTlx7vs8BTNUQxtyT+7yRJklPvnBUH1mFJW4z
-	 mSgN9w2RbiR8/fHK+v99pAIq6Pt9v2YSjdE/SC5gzGVm5dU2B0xKIXMO7TGyXOchzB
-	 8nzoNa0nTzfsVUoCDAlS6blZFZQKc4162/VzKPRlLn7yEx2vRRbVmJ0ToXbBCLk1xj
-	 dcWJ18azoOjXQzdKGLaWl3knqOYBwZ2xzV7v60ijiVeBHrD05j7OME+Q/kkHr83RsN
-	 LYXenR3n9MaC4D7gO8RcZIgMIfKecDsPrVMDKUqKFnZciKYmo8Oh9y3fjLe06JjeSu
-	 Y95gkvrf8aFOA==
-Date: Mon, 12 May 2025 14:30:23 -0500
-From: Rob Herring <robh@kernel.org>
-To: Vijay Balakrishna <vijayb@linux.microsoft.com>
-Cc: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: arm: cpus: Add edac-enabled property
-Message-ID: <20250512193023.GA3708326-robh@kernel.org>
-References: <1746404860-27069-1-git-send-email-vijayb@linux.microsoft.com>
- <1746404860-27069-3-git-send-email-vijayb@linux.microsoft.com>
+	s=arc-20240116; t=1747152421; c=relaxed/simple;
+	bh=AtjmzhmTK2XEOwq1jRggREoKhGneutApb7VFOMLM7JU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oqDomdkXM1jrsQXP+7bctKAdJhzDkzTIk7SYJBQw23d6d5uiQJYdBkMltWl88OSRWEav2drQ9RCrpt4VV9efuxw0T+XHdUhjue5K2tUU5jcck+ZNMFLynw5ppB1jTpovHm3snKVWYWQrWXYFLtF9cyOde0Wu6UepqBdcFaEjEUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Zxh7T4f9Wz6K8xB;
+	Wed, 14 May 2025 00:02:13 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 355F11402EA;
+	Wed, 14 May 2025 00:06:54 +0800 (CST)
+Received: from localhost (10.220.132.170) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 13 May
+ 2025 18:06:51 +0200
+Date: Tue, 13 May 2025 17:06:48 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: <shiju.jose@huawei.com>
+CC: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
+	<dave@stgolabs.net>, <dave.jiang@intel.com>, <alison.schofield@intel.com>,
+	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+	<linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <lenb@kernel.org>, <Yazen.Ghannam@amd.com>,
+	<mchehab@kernel.org>, <nifan.cxl@gmail.com>, <linuxarm@huawei.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>
+Subject: Re: [PATCH v4 2/8] cxl: Update prototype of function
+ get_support_feature_info()
+Message-ID: <20250513170648.0000517e@huawei.com>
+In-Reply-To: <20250502084517.680-3-shiju.jose@huawei.com>
+References: <20250502084517.680-1-shiju.jose@huawei.com>
+	<20250502084517.680-3-shiju.jose@huawei.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1746404860-27069-3-git-send-email-vijayb@linux.microsoft.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Sun, May 04, 2025 at 05:27:40PM -0700, Vijay Balakrishna wrote:
-> From: Sascha Hauer <s.hauer@pengutronix.de>
+On Fri, 2 May 2025 09:45:10 +0100
+<shiju.jose@huawei.com> wrote:
+
+> From: Shiju Jose <shiju.jose@huawei.com>
 > 
-> Some ARM Cortex CPUs like the A53, A57 and A72 have Error Detection And
-> Correction (EDAC) support on their L1 and L2 caches. This is implemented
-> in implementation defined registers, so usage of this functionality is
-> not safe in virtualized environments or when EL3 already uses these
-> registers. This patch adds a edac-enabled flag which can be explicitly
-> set when EDAC can be used.
+> Add following changes to function get_support_feature_info()
+> 1. Make generic to share between cxl-fwctl and cxl-edac paths.
+> 2. Rename get_support_feature_info() to cxl_feature_info()
+> 3. Change parameter const struct fwctl_rpc_cxl *rpc_in to
+>    const uuid_t *uuid.
 > 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> [vijayb: Added A72 to the commit message]
-> Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+> Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+Oops. I missed giving a tag on this one.
+
+Seems fine to me.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+Thanks for the poke. 
+
 > ---
->  Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/cxl/core/core.h     |  2 ++
+>  drivers/cxl/core/features.c | 17 +++++++----------
+>  2 files changed, 9 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-> index 2e666b2a4dcd..d1dc0a843d07 100644
-> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-> @@ -331,6 +331,12 @@ properties:
->        corresponding to the index of an SCMI performance domain provider, must be
->        "perf".
+> diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+> index 17b692eb3257..613cce5c4f7b 100644
+> --- a/drivers/cxl/core/core.h
+> +++ b/drivers/cxl/core/core.h
+> @@ -124,6 +124,8 @@ int cxl_acpi_get_extended_linear_cache_size(struct resource *backing_res,
+>  					    int nid, resource_size_t *size);
 >  
-> +  edac-enabled:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      Some CPUs support Error Detection And Correction (EDAC) on their L1 and
-> +      L2 caches. This flag marks this function as usable.
+>  #ifdef CONFIG_CXL_FEATURES
+> +struct cxl_feat_entry *
+> +cxl_feature_info(struct cxl_features_state *cxlfs, const uuid_t *uuid);
+>  size_t cxl_get_feature(struct cxl_mailbox *cxl_mbox, const uuid_t *feat_uuid,
+>  		       enum cxl_get_feat_selection selection,
+>  		       void *feat_out, size_t feat_out_size, u16 offset,
+> diff --git a/drivers/cxl/core/features.c b/drivers/cxl/core/features.c
+> index 1498e2369c37..a83a2214a136 100644
+> --- a/drivers/cxl/core/features.c
+> +++ b/drivers/cxl/core/features.c
+> @@ -355,17 +355,11 @@ static void cxlctl_close_uctx(struct fwctl_uctx *uctx)
+>  {
+>  }
+>  
+> -static struct cxl_feat_entry *
+> -get_support_feature_info(struct cxl_features_state *cxlfs,
+> -			 const struct fwctl_rpc_cxl *rpc_in)
+> +struct cxl_feat_entry *
+> +cxl_feature_info(struct cxl_features_state *cxlfs,
+> +		 const uuid_t *uuid)
+>  {
+>  	struct cxl_feat_entry *feat;
+> -	const uuid_t *uuid;
+> -
+> -	if (rpc_in->op_size < sizeof(uuid))
+> -		return ERR_PTR(-EINVAL);
+> -
+> -	uuid = &rpc_in->set_feat_in.uuid;
+>  
+>  	for (int i = 0; i < cxlfs->entries->num_features; i++) {
+>  		feat = &cxlfs->entries->ent[i];
+> @@ -547,7 +541,10 @@ static bool cxlctl_validate_set_features(struct cxl_features_state *cxlfs,
+>  	struct cxl_feat_entry *feat;
+>  	u32 flags;
+>  
+> -	feat = get_support_feature_info(cxlfs, rpc_in);
+> +	if (rpc_in->op_size < sizeof(uuid_t))
+> +		return ERR_PTR(-EINVAL);
 > +
+> +	feat = cxl_feature_info(cxlfs, &rpc_in->set_feat_in.uuid);
+>  	if (IS_ERR(feat))
+>  		return false;
+>  
 
-Since we don't want this on newer cores, add an if/then schema to only 
-allow this on A72 and whatever else you end up supporting.
-
-Rob
 
