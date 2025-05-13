@@ -1,82 +1,94 @@
-Return-Path: <linux-edac+bounces-3892-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3893-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E541EAB5D11
-	for <lists+linux-edac@lfdr.de>; Tue, 13 May 2025 21:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AFF0AB5DBA
+	for <lists+linux-edac@lfdr.de>; Tue, 13 May 2025 22:38:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66C3017E2C0
-	for <lists+linux-edac@lfdr.de>; Tue, 13 May 2025 19:22:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A14B546437C
+	for <lists+linux-edac@lfdr.de>; Tue, 13 May 2025 20:38:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E02728E5E3;
-	Tue, 13 May 2025 19:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F841F3B8A;
+	Tue, 13 May 2025 20:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="g9G6wvoK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VFO1h/ZY"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9241EB5CB;
-	Tue, 13 May 2025 19:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747164158; cv=fail; b=HJxmPwUK/dlRClbzCPu6pGuMb8Nq+FMTa6x1i2pAx+M1nSQ0COSC2j+FPoLDLCZgblDdmFEwFxRV7Gq9YRWyjIUnXoQmONvpMYzBW6azuZv75xVKCv80JKOjJoF9b1il2oE8PtLvqAZIwzR+aitccBeedIkYyI92zE8UUAhvfuc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747164158; c=relaxed/simple;
-	bh=xY+8bvuKVTs+HinsX9IEzXUr00FGEaqUCiyf2xN0lT4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P2/KysrlzJxtBTSLX7BHFzfUujafJDhnVaQZl4LgRHjxlyUDCkGsB1JmRGg9eSuGXiMvZPjVpQM1uAvikNLV7bAw3Wyj4uj957ETpbYE3kkZoKSoLNmC5TvPMPMtXbC/Tyfs1egun22AclOZhDTKoIVZmpcDSdBDaAyg068eR2g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=g9G6wvoK; arc=fail smtp.client-ip=40.107.223.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MYapb8wTtr7eYHRDPvmkQDG+7LKJNG043dC1LeqLG8D9YXonSC9lSZWAK0S7d/H7hY9CAcAnvEvCTzSF990PNMKYgV8EHclHpnYdz27wm+RIKdHcU25MNKxI0L0dcxX3cvbO89c6cPkVUCYEoWUkcBPf6xexPq1mhTcqs/62gXR8WiMRk2Ay8j+jdIgw5k6Y8pORKZhmu8Gnx5OW+K2E55Yh55MaXLj9orQBJATmLWU384ok+mj05T2lL7Jge9UCrMHGhW7A+7gtPbUR5Z3dzPNatkOvXA8v4mLEN35WRjWY3SqByJMw0VhiwC7Hl/6XybaVRzpHT9kg0XtcLgeYaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EaVfyeSvI7SiegNbD7gLpKq3H6CLosOxKLq02+ruYio=;
- b=N5FVCX0r+5Wi8qGqh6wJHZIzD9L3QhBRo+T0kWWZOX7Twemq652sr1kE78lYQtHRKi69uvIChNm8S0NutqZoqNJ5s3qLOoy0NKd9OZqv/fpvseFab99nplLPhxIM8BswBCWKXbAImhz9wcwe5lsmScZjtk47DPRI4DprorGqe3vbaZnAZwtj25f1u+T/tpcsilWwozAI0DUkmYz3o176GYXsz8ZlSFrcKyRj2NCl61NlKnW4nNgpJOrVX+kQDd8sLDKNiyhaqTOsLS96D/7Xrd+szgaSYiwiVleIspFqsf8PtHqKHVo4YApNYQSiPSOJDaAWYElKGi6Sh76usNNZFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EaVfyeSvI7SiegNbD7gLpKq3H6CLosOxKLq02+ruYio=;
- b=g9G6wvoKb5Vmv4SyeEtL8rjRZal7xhXVOcNbq6lPoLDJr3P3OZeS1sj76gUiKq6OuyzCfNOww6fEJJcfKLdaFWtkcieNRTU2XpngYGHyjvvPGFi1hjusUJQt2VOtBteKMFy/XV7Db9kve5BLRWwh9fBWMFBqga1rgAEB42XeF+s=
-Received: from BN9PR03CA0878.namprd03.prod.outlook.com (2603:10b6:408:13c::13)
- by DS7PR12MB5840.namprd12.prod.outlook.com (2603:10b6:8:7b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.30; Tue, 13 May
- 2025 19:22:33 +0000
-Received: from MN1PEPF0000ECD8.namprd02.prod.outlook.com
- (2603:10b6:408:13c:cafe::31) by BN9PR03CA0878.outlook.office365.com
- (2603:10b6:408:13c::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.33 via Frontend Transport; Tue,
- 13 May 2025 19:22:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MN1PEPF0000ECD8.mail.protection.outlook.com (10.167.242.137) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8722.18 via Frontend Transport; Tue, 13 May 2025 19:22:32 +0000
-Received: from titanite-d354host.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 13 May 2025 14:22:32 -0500
-From: Avadhut Naik <avadhut.naik@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <bp@alien8.de>, <linux-kernel@vger.kernel.org>, <avadnaik@amd.com>,
-	=?UTF-8?q?=C5=BDilvinas=20=C5=BDaltiena?= <zilvinas@natrix.lt>, Yazen Ghannam
-	<yazen.ghannam@amd.com>
-Subject: [PATCH v4] EDAC/amd64: Fix size calculation for Non-Power-of-Two DIMMs
-Date: Tue, 13 May 2025 19:20:11 +0000
-Message-ID: <20250513192221.784445-1-avadhut.naik@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBE81BC3F;
+	Tue, 13 May 2025 20:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747168678; cv=none; b=eF7gNDCaOLpqKmiQlHINCORzjKhxOwLSCgFNEMFL5p919O89WzWdaOx8p1wQ54gxIthxinBdZSInMewJ7mCinQQbxcjZcaciUOzzxOm7C3p8u2Tx3jJWCqDUxHHS7zDLeTPOo5zJ6rNA+pSArwjxkDRxgN0nk/H29UR4NNvI9vc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747168678; c=relaxed/simple;
+	bh=iledouXHe57iRPBcypmDJ7inmxqQ1E9J+7ME0uM8qbM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MmkTFV1tjx+mW2slg3ep1mRiR5yembWpLdPlRRxAiMags5m06tKgJ1jrv8UjhKZoBP2UYkr8PyLOD7/Ha+hF6NZpSGk4JfYUHKjaVAY2s5K4SS2ROuMp5iClaZwpVyPqec3qiOqVvqrJaFHiq1YkJd6MNHif37dTMae6S6F7RGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VFO1h/ZY; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747168677; x=1778704677;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iledouXHe57iRPBcypmDJ7inmxqQ1E9J+7ME0uM8qbM=;
+  b=VFO1h/ZY2SFe6aKfe/aJDYQuoiLbsepLyrkcpxclmZafYKUnQuFHpkSY
+   g2YF6xDLtOujjlT8eSVc1+dL+U0TZUoTQiAd0DAicMlofdaowcgSiBLSc
+   L9kjiHbUv6GuFNlO0/aZho75BCp0TNy7C3f5nfzfvWBI7scXGNEhG6EDX
+   PCcrSWdmeme2SQ1JeuI8jgLKf8915FqYOE4DNYq+b5pOp3oJs1aLUGP9w
+   AXMUc7Fy4becNhtN6RCAsxHiODDW6EB5PeQNu9AvhlSjFvRdYPSDdm9xQ
+   mV43W369N2nJabuwxDsJhtbEdwG1Q5fgSMMGE2aWRSIM1xVbA9Q8oNpR2
+   Q==;
+X-CSE-ConnectionGUID: 2hGg2gNqRn+oMu/z1gjRLw==
+X-CSE-MsgGUID: weNzSQ0nR9Sw72LRSU3Axw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="49160385"
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="49160385"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 13:37:56 -0700
+X-CSE-ConnectionGUID: lKSujK11Tuqza5QWUjLgyA==
+X-CSE-MsgGUID: cyraYM2EQ8K8c1BLePI4EA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,286,1739865600"; 
+   d="scan'208";a="138241709"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by fmviesa008.fm.intel.com with ESMTP; 13 May 2025 13:37:55 -0700
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Xin Li <xin@zytor.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Kai Huang <kai.huang@intel.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	linux-perf-users@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v6 0/9] x86: Add support for NMI-source reporting with FRED
+Date: Tue, 13 May 2025 13:37:54 -0700
+Message-ID: <20250513203803.2636561-1-sohil.mehta@intel.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -84,236 +96,171 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD8:EE_|DS7PR12MB5840:EE_
-X-MS-Office365-Filtering-Correlation-Id: e2798e00-563d-426e-06a1-08dd925382b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WGNWVWRKVmd6UlpJMkk1NFVjMU44cmFTV1dxb2t5OEY5emdlNWQ5MTFCL1c0?=
- =?utf-8?B?RXpUTTk0b0l4RUdOMUJBWDl2Y3Z2S3crWE55RnBGMDVXc25jS2hrNHhWOFBZ?=
- =?utf-8?B?QnlpTndQazJlSnoySDFvYUVhYVdEN3M1K2ZTWXYyVTR3dU9NZ1VHRWRLWFJV?=
- =?utf-8?B?amVxZGNad2x0MXk0RFl5S0ZuTXhUeE5iU0o3L1ZneVlUbXFNcklWUXRTc1NO?=
- =?utf-8?B?MFFsci9yM284TVRQKzE1bjZzQklHNWRWTVU3REs2VVNMVTJMRFpVTjhTTzl0?=
- =?utf-8?B?blNpaDgwM3lJSmhHNFhjQmQzL1dpQ09tZFpReElDY1BwaHMyOWttUjNzNWpH?=
- =?utf-8?B?dHM0QitRU1NDZXMwbkF0VFE2VURLalF4ckc0bXdhVkdkUFROUVdld3ZwR3Fm?=
- =?utf-8?B?SWNNRktPWlJBdkYxd1JLbmF1VkgyYUVMZjczSVZOY0VYVEFQWlBCalp3WXcy?=
- =?utf-8?B?YVZ5bkVnUjdnNmNCMUljbi81NVZ1cFFZYnd3V0d5aDJmeS91K3AyemljSnZJ?=
- =?utf-8?B?N3NvYVJUU1BBVmpObmRNUjhFcVJhdkRwQzZCSVBLRG9KR3lMQWorWlRiNHZJ?=
- =?utf-8?B?d0t1QTZNT3cyQUhNMzZ0VmR0MElrVWplbHgwRGpHYmJpeVJFcEV0TnQvVkpM?=
- =?utf-8?B?c21veVBwN0JUZ0h5UzRiQTRiamV0ekd6RkJGd0tjUWFDaWxCZnEzSXlkNE9L?=
- =?utf-8?B?MXptMTNyUzlLd1VMeHc5RmRUWjNRNFlxL1BKSS8xbDdaUVlJOTByYmo4YnRE?=
- =?utf-8?B?aU5QNU1IbnZ0UlBWVEFYM2hONHJpUXhKd0VxelFadFl2cnR3eFAxbkJ5ZjdX?=
- =?utf-8?B?dDdOM0V0MXFBM3hFZGM1UDNuTysybU0rSXFQb2EyaE85dWxCNmw3d1AzYnY4?=
- =?utf-8?B?ZE5KVGd5YUNuV2wraGk0YjZKeTV4cFIrcHhMZmllbGZhNHZ2Qm1ZeHlnMW1N?=
- =?utf-8?B?U1owNEZqMGhqT0c1dXlxVWFJRGUrelJNU2JSMG1MdnFyWkRncGxrMkF5WTEz?=
- =?utf-8?B?TmRhTWVRdjA0bFVVdlBMYytrYVlzZGNDT0pVOVFGdlNNMlJ0QmV1U0Y3YTdw?=
- =?utf-8?B?bldxNzdqMVIvL2hxV0pHWTZYSklXaWwwaDVKY0dUR2Z4U0VqZjBTUzdCL3N6?=
- =?utf-8?B?WlhGbGUxWVI0UXJHdHN2MVNwZE42WmZHVk9FWTZPa1l6eldGVysydzc3TGox?=
- =?utf-8?B?VkNKQU9SR2J0SmhRR2l3alBuMjZSOWtWazR2QXZEbW5wdURKT25HWlJVaTY0?=
- =?utf-8?B?cENra3UyZjhwSjRTcEJpUHp6QWd5WEFhNzA4TStxVUZuUlhzTUhGUkt3cEdF?=
- =?utf-8?B?TFM4ZjRNQnZrSElyL29FeEYvOEFZZWVlSHA2SmVzRWRXc0tJMjVXdWxVakR1?=
- =?utf-8?B?Tm91QnJTbldYKzgyOFBodmVhTXdnaVNMemJ0cmtPZExxNHBnNFZxd3hKUDBq?=
- =?utf-8?B?TVB6VUIyOEtyaEVTN0M3UWpGNFRnMXEzN1JybHhFV0h5Qi9haXVqcFI0c3dH?=
- =?utf-8?B?TWxqSEhXVnJ3SEpiWTZjRVNRRURvUG53Mjd4RFh0a3BycXJ3SkNWeTlBTHJN?=
- =?utf-8?B?Z2ttWW1HVWY4YjVaWjhVVUJGeGo0blVjdE9CTmNhSkx1a0lwMGFUSDgxdWt3?=
- =?utf-8?B?QW9IUzJnUHNzL1pFUERxeUlQYXh6aXdvVTRKWGU0b0ZhelhWa1hyL3Ruajdh?=
- =?utf-8?B?cUtJM2hxQ21XK0ZvN01YeHdFRHdoaVRGeDdQVm90ekh2M3FpM0U5S1A3cFF1?=
- =?utf-8?B?enRYR3FtYWZ4OUMxcXdDUW0zR0xyeVVuSk13aVB0ZVh2VkZ3RWppVFlkVXRJ?=
- =?utf-8?B?VTdzZzdlRExqck4zV1E3eGlsOFhCbVgyazJWMWwyVlR2VXpVRHdxT09UOVNW?=
- =?utf-8?B?ZS9oRThZTnR4MlJhZFFjLzc1Vk9NMi81cFN2UkwvQ0MwSjQrNlc4UnpZQStU?=
- =?utf-8?B?bTJhN2Q1ekl5RDhBUExOWTBKeVZocWY3clE0TktSTW5qNjZURG9jTm4wSHZM?=
- =?utf-8?B?UWVIcW55dG56aUNQQmdTLzg4WVo1VUJ0Z2FhVnNzbVpPcHJTeS9vK1NsR1Rr?=
- =?utf-8?B?aTdJdFhnRWRpclFMb2x1R2dXMFhjcFRna0RSUT09?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2025 19:22:32.9081
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2798e00-563d-426e-06a1-08dd925382b8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECD8.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5840
 
-Each Chip-Select (CS) of a Unified Memory Controller (UMC) on AMD's
-modern Zen-based SOCs has an Address Mask and a Secondary Address Mask
-register associated with it. The amd64_edac module logs DIMM sizes on a
-per-UMC per-CS granularity during init using these two registers.
+Introduction
+============
+NMI-source reporting with FRED [1] provides a new mechanism for
+identifying the source of NMIs. As part of the FRED event delivery
+framework, a 16-bit vector bitmap is provided that identifies one or
+more sources that caused the NMI.
 
-Currently, the module primarily considers only the Address Mask register
-for computing DIMM sizes. The Secondary Address Mask register is only
-considered for odd CS. Additionally, if it has been considered, the
-Address Mask register is ignored altogether for that CS. For
-power-of-two DIMMs, this is not an issue since only the Address Mask
-register is used.
+Using the source bitmap, the kernel can precisely run the relevant NMI
+handlers instead of polling the entire NMI handler list. Additionally,
+the source information would be invaluable for debugging misbehaving
+handlers and unknown NMIs.
 
-For non-power-of-two DIMMs, however, the Secondary Address Mask register
-is used in conjunction with the Address Mask register. However, since the
-module only considers either of the two registers for a CS, the size
-computed by the module is incorrect. The Secondary Address Mask register
-is not considered for even CS, and the Address Mask register is not
-considered for odd CS.
+Changes since v5
+================
+This series mainly implements PeterZ's suggestions in patches 4,5,6:
 
-Introduce a new helper function so that both Address Mask and Secondary
-Address Mask registers are considered, when valid, for computing DIMM
-sizes. Furthermore, also rename some variables for greater clarity.
+ * Simplify NMI handling by always setting and using the source bitmap.
+ * Add runtime warnings for unexpected values.
+ * Fix a compile issue in apic.h with a specific config.
+ * Drop the tracepoint changes for now (include it with the DebugFS series).
+ * Pick-up Sandipan's tested-by for the perf patch.
 
-Fixes: 81f5090db843 ("EDAC/amd64: Support asymmetric dual-rank DIMMs")
-Reported-by: Žilvinas Žaltiena <zilvinas@natrix.lt>
-Closes: https://lore.kernel.org/dbec22b6-00f2-498b-b70d-ab6f8a5ec87e@natrix.lt
-Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
-Tested-by: Žilvinas Žaltiena <zilvinas@natrix.lt>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: stable@vger.kernel.org
-```
-Changes in v2:
-1. Avoid unnecessary variable initialization.
-2. Modify commit message to accurately reflect the changes.
-3. Move check for non-zero Address Mask register into the new helper.
+The previous posting included a major simplification compared to the
+series posted last year[2]. Refer the v5 cover letter for details.
+v5: https://lore.kernel.org/lkml/20250507012145.2998143-1-sohil.mehta@intel.com/
 
-Changes in v3:
-1. Add the missing Closes tag and rearrange tags per tip tree handbook.
-3. Slightly modify commit message to properly reflect the SOCs that may
-encounter this issue.
-4. Rebase on top of edac-for-next.
+Overview of NMI-source usage
+============================
+Code snippets:
 
-Changes in v4:
-1. Rebase on top of edac-for-next.
+// Allocate a static source vector at compile time
+#define NMIS_VECTOR_TEST	1
 
-Links:
-v1: https://lore.kernel.org/all/20250327210718.1640762-1-avadhut.naik@amd.com/
-v2: https://lore.kernel.org/all/20250415213150.755255-1-avadhut.naik@amd.com/
-v3: https://lore.kernel.org/all/20250416222552.1686475-1-avadhut.naik@amd.com/
----
- drivers/edac/amd64_edac.c | 57 ++++++++++++++++++++++++---------------
- 1 file changed, 36 insertions(+), 21 deletions(-)
+// Register an NMI handler with the vector
+register_nmi_handler(NMI_LOCAL, test_handler, 0, "nmi_test", NMIS_VECTOR_TEST);
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 90f0eb7cc5b9..9e8b8bd2be32 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -1209,7 +1209,9 @@ static int umc_get_cs_mode(int dimm, u8 ctrl, struct amd64_pvt *pvt)
- 	if (csrow_enabled(2 * dimm + 1, ctrl, pvt))
- 		cs_mode |= CS_ODD_PRIMARY;
- 
--	/* Asymmetric dual-rank DIMM support. */
-+	if (csrow_sec_enabled(2 * dimm, ctrl, pvt))
-+		cs_mode |= CS_EVEN_SECONDARY;
-+
- 	if (csrow_sec_enabled(2 * dimm + 1, ctrl, pvt))
- 		cs_mode |= CS_ODD_SECONDARY;
- 
-@@ -1230,12 +1232,13 @@ static int umc_get_cs_mode(int dimm, u8 ctrl, struct amd64_pvt *pvt)
- 	return cs_mode;
- }
- 
--static int __addr_mask_to_cs_size(u32 addr_mask_orig, unsigned int cs_mode,
--				  int csrow_nr, int dimm)
-+static int calculate_cs_size(u32 mask, unsigned int cs_mode)
- {
--	u32 msb, weight, num_zero_bits;
--	u32 addr_mask_deinterleaved;
--	int size = 0;
-+	int msb, weight, num_zero_bits;
-+	u32 deinterleaved_mask;
-+
-+	if (!mask)
-+		return 0;
- 
- 	/*
- 	 * The number of zero bits in the mask is equal to the number of bits
-@@ -1248,19 +1251,30 @@ static int __addr_mask_to_cs_size(u32 addr_mask_orig, unsigned int cs_mode,
- 	 * without swapping with the most significant bit. This can be handled
- 	 * by keeping the MSB where it is and ignoring the single zero bit.
- 	 */
--	msb = fls(addr_mask_orig) - 1;
--	weight = hweight_long(addr_mask_orig);
-+	msb = fls(mask) - 1;
-+	weight = hweight_long(mask);
- 	num_zero_bits = msb - weight - !!(cs_mode & CS_3R_INTERLEAVE);
- 
- 	/* Take the number of zero bits off from the top of the mask. */
--	addr_mask_deinterleaved = GENMASK_ULL(msb - num_zero_bits, 1);
-+	deinterleaved_mask = GENMASK(msb - num_zero_bits, 1);
-+	edac_dbg(1, "  Deinterleaved AddrMask: 0x%x\n", deinterleaved_mask);
-+
-+	return (deinterleaved_mask >> 2) + 1;
-+}
-+
-+static int __addr_mask_to_cs_size(u32 addr_mask, u32 addr_mask_sec,
-+				  unsigned int cs_mode, int csrow_nr, int dimm)
-+{
-+	int size;
- 
- 	edac_dbg(1, "CS%d DIMM%d AddrMasks:\n", csrow_nr, dimm);
--	edac_dbg(1, "  Original AddrMask: 0x%x\n", addr_mask_orig);
--	edac_dbg(1, "  Deinterleaved AddrMask: 0x%x\n", addr_mask_deinterleaved);
-+	edac_dbg(1, "  Primary AddrMask: 0x%x\n", addr_mask);
- 
- 	/* Register [31:1] = Address [39:9]. Size is in kBs here. */
--	size = (addr_mask_deinterleaved >> 2) + 1;
-+	size = calculate_cs_size(addr_mask, cs_mode);
-+
-+	edac_dbg(1, "  Secondary AddrMask: 0x%x\n", addr_mask_sec);
-+	size += calculate_cs_size(addr_mask_sec, cs_mode);
- 
- 	/* Return size in MBs. */
- 	return size >> 10;
-@@ -1270,7 +1284,7 @@ static int umc_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 				    unsigned int cs_mode, int csrow_nr)
- {
- 	int cs_mask_nr = csrow_nr;
--	u32 addr_mask_orig;
-+	u32 addr_mask = 0, addr_mask_sec = 0;
- 	int dimm, size = 0;
- 
- 	/* No Chip Selects are enabled. */
-@@ -1308,13 +1322,13 @@ static int umc_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 	if (!pvt->flags.zn_regs_v2)
- 		cs_mask_nr >>= 1;
- 
--	/* Asymmetric dual-rank DIMM support. */
--	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
--		addr_mask_orig = pvt->csels[umc].csmasks_sec[cs_mask_nr];
--	else
--		addr_mask_orig = pvt->csels[umc].csmasks[cs_mask_nr];
-+	if (cs_mode & (CS_EVEN_PRIMARY | CS_ODD_PRIMARY))
-+		addr_mask = pvt->csels[umc].csmasks[cs_mask_nr];
-+
-+	if (cs_mode & (CS_EVEN_SECONDARY | CS_ODD_SECONDARY))
-+		addr_mask_sec = pvt->csels[umc].csmasks_sec[cs_mask_nr];
- 
--	return __addr_mask_to_cs_size(addr_mask_orig, cs_mode, csrow_nr, dimm);
-+	return __addr_mask_to_cs_size(addr_mask, addr_mask_sec, cs_mode, csrow_nr, dimm);
- }
- 
- static void umc_debug_display_dimm_sizes(struct amd64_pvt *pvt, u8 ctrl)
-@@ -3512,9 +3526,10 @@ static void gpu_get_err_info(struct mce *m, struct err_info *err)
- static int gpu_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 				    unsigned int cs_mode, int csrow_nr)
- {
--	u32 addr_mask_orig = pvt->csels[umc].csmasks[csrow_nr];
-+	u32 addr_mask		= pvt->csels[umc].csmasks[csrow_nr];
-+	u32 addr_mask_sec	= pvt->csels[umc].csmasks_sec[csrow_nr];
- 
--	return __addr_mask_to_cs_size(addr_mask_orig, cs_mode, csrow_nr, csrow_nr >> 1);
-+	return __addr_mask_to_cs_size(addr_mask, addr_mask_sec, cs_mode, csrow_nr, csrow_nr >> 1);
- }
- 
- static void gpu_debug_display_dimm_sizes(struct amd64_pvt *pvt, u8 ctrl)
+// Generate an NMI with the source vector using NMI encoded delivery
+__apic_send_IPI_mask(cpumask, APIC_DM_NMI | NMIS_VECTOR_TEST);
 
-base-commit: 4521b86e4a6ef9efff329ef18120b1520059ae4e
+// Handle an NMI with or without the source information (oversimplified)
+source_bitmap = fred_event_data(regs);
+if (!source_bitmap || (source_bitmap & BIT(NMIS_VECTOR_TEST)))
+        test_handler();
+
+// Unregister handler along with the vector
+unregister_nmi_handler(NMI_LOCAL, "nmi_test");
+
+Patch structure
+===============
+The patches are based on tip:x86/nmi because they depend on the NMI
+cleanup series merged earlier [3].
+
+Patch 1-2: Prepare FRED/KVM and enumerate NMI-source reporting
+Patch 3-5: Register and handle NMI-source vectors 
+Patch 6-8: APIC changes to generate NMIs with vectors
+Patch   9: Improve debug print with NMI-source information
+
+Many thanks to Sean Christopherson, Xin Li, H. Peter Anvin, Andi Kleen,
+Tony Luck, Kan Liang, Jacob Pan Jun, Zeng Guang, Peter Zijlstra,
+Sandipan Das, Steven Rostedt and others for their contributions, reviews
+and feedback.
+
+Future work / Opens
+===================
+I am considering a few additional changes that would be valuable for
+enhancing NMI handling support. Any feedback, preferences or suggestions
+on the following would be helpful.
+
+Assigning more NMI-source vectors
+---------------------------------
+The current patches assign NMI vectors to a limited number of sources.
+The microcode rendezvous and crash reboot code use NMI but do not go
+through the typical register_nmi_handler() path. Their handling is
+special-cased in exc_nmi(). To isolate blame and improve debugging, it
+would be useful to assign vectors to them, even if the vectors are
+ignored during handling.
+
+Other NMI sources, such as GHES and Platform NMIs, can also be assigned
+vectors to speed up their NMI handling and improve isolation. However,
+this would require a software/hardware agreement on vector reservation
+and usage. Such an endeavor is likely not worth the effort.
+
+Explicitly enabling NMIs
+------------------------
+HPA brought up the idea [4] of explicitly enabling NMIs only when the
+kernel is ready to take them. With FRED, if we enter the kernel with
+NMIs disabled, they could remain disabled until returning back to
+userspace. I am evaluating the request and related code changes.
+
+Debug support (Tracing and DebugFS)
+-----------------------
+NMI-source information can help identify issues when multiple NMIs occur
+simultaneously or if certain NMI handlers consistently misbehave. Based
+on feedback from Steven Rostedt[5], the plan is to move the trace event
+to arch/x86 and then add source_bitmap to the nmi_handler() trace event.
+
+Currently, the kernel has counters for unknown NMIs, swallowed NMIs and
+other NMI handling data. However, there is no easy way to access that.
+To identify issues that happen over a longer timeframe, it might be
+useful to add DebugFS support for NMI statistics.
+
+KVM support
+-----------
+The NMI-source feature can be useful for perf users and other NMI use
+cases in guest VMs. Exposing NMI-source to guests once FRED support is
+in place should be relatively easier. The prototype code for this is
+under evaluation.
+
+Links
+=====
+[1]: Chapter 9, https://www.intel.com/content/www/us/en/content-details/819481/flexible-return-and-event-delivery-fred-specification.html
+[2]: https://lore.kernel.org/lkml/20240709143906.1040477-1-jacob.jun.pan@linux.intel.com/
+[3]: https://lore.kernel.org/lkml/20250327234629.3953536-1-sohil.mehta@intel.com/
+[4]: https://lore.kernel.org/lkml/F5D36889-A868-46D2-A678-8EE26E28556D@zytor.com/
+[5]: https://lore.kernel.org/lkml/20250507174809.10cfc5ac@gandalf.local.home/
+
+Jacob Pan (1):
+  perf/x86: Enable NMI-source reporting for perfmon
+
+Sohil Mehta (7):
+  x86/cpufeatures: Add the CPUID feature bit for NMI-source reporting
+  x86/nmi: Extend the registration interface to include the NMI-source
+    vector
+  x86/nmi: Assign and register NMI-source vectors
+  x86/nmi: Add support to handle NMIs with source information
+  x86/nmi: Prepare for the new NMI-source vector encoding
+  x86/nmi: Enable NMI-source for IPIs delivered as NMIs
+  x86/nmi: Print source information with the unknown NMI console message
+
+Zeng Guang (1):
+  x86/fred, KVM: VMX: Pass event data to the FRED entry point from KVM
+
+ arch/x86/entry/entry_64_fred.S      |  2 +-
+ arch/x86/events/amd/ibs.c           |  2 +-
+ arch/x86/events/core.c              |  6 ++---
+ arch/x86/events/intel/core.c        |  6 ++---
+ arch/x86/include/asm/apic.h         | 39 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/apicdef.h      |  2 +-
+ arch/x86/include/asm/cpufeatures.h  |  1 +
+ arch/x86/include/asm/fred.h         |  9 ++++---
+ arch/x86/include/asm/nmi.h          | 37 ++++++++++++++++++++++++++-
+ arch/x86/kernel/apic/hw_nmi.c       |  5 ++--
+ arch/x86/kernel/apic/ipi.c          |  4 +--
+ arch/x86/kernel/apic/local.h        | 24 ++++++++++--------
+ arch/x86/kernel/cpu/cpuid-deps.c    |  1 +
+ arch/x86/kernel/cpu/mce/inject.c    |  4 +--
+ arch/x86/kernel/cpu/mshyperv.c      |  3 +--
+ arch/x86/kernel/kgdb.c              |  8 +++---
+ arch/x86/kernel/kvm.c               |  9 +------
+ arch/x86/kernel/nmi.c               | 37 +++++++++++++++++++++++++++
+ arch/x86/kernel/nmi_selftest.c      |  9 +++----
+ arch/x86/kernel/smp.c               |  6 ++---
+ arch/x86/kvm/vmx/vmx.c              |  5 ++--
+ arch/x86/platform/uv/uv_nmi.c       |  4 +--
+ drivers/acpi/apei/ghes.c            |  2 +-
+ drivers/char/ipmi/ipmi_watchdog.c   |  3 +--
+ drivers/edac/igen6_edac.c           |  3 +--
+ drivers/thermal/intel/therm_throt.c |  2 +-
+ drivers/watchdog/hpwdt.c            |  6 ++---
+ 27 files changed, 171 insertions(+), 68 deletions(-)
+
+
+base-commit: f2e01dcf6df2d12e86c363ea9c37d53994d89dd6
 -- 
 2.43.0
 
