@@ -1,207 +1,226 @@
-Return-Path: <linux-edac+bounces-3907-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3908-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA89DAB6A13
-	for <lists+linux-edac@lfdr.de>; Wed, 14 May 2025 13:33:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B1B4AB6DE3
+	for <lists+linux-edac@lfdr.de>; Wed, 14 May 2025 16:15:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74DC91B63B3F
-	for <lists+linux-edac@lfdr.de>; Wed, 14 May 2025 11:33:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93FD286000C
+	for <lists+linux-edac@lfdr.de>; Wed, 14 May 2025 14:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F972741A0;
-	Wed, 14 May 2025 11:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B30D1537A7;
+	Wed, 14 May 2025 14:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b9dQZtUd"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E570226883;
-	Wed, 14 May 2025 11:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B947F79DA
+	for <linux-edac@vger.kernel.org>; Wed, 14 May 2025 14:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747222331; cv=none; b=dwrSAOuGjbB7Fq9Aw7KzrL0HctCkliy+1dxhgEQlukRUcT5kDCHeNpVzdn7hYiJ7LjTsyPgVYPBdNsDpNYMn7ES4/qmQKiQH+z7nOaCTzRopsUy7zApzZneqrlfCn4cwLAhGcCoiNZKkTTrybITQvGhC8VJaUDF8SbZDw1m7ShU=
+	t=1747232151; cv=none; b=OS6eztlWiOylITO7rmHJ8OS/VbAlESd3xdX9VbXP5VVydYHF5kcF1cQa0JInNpmxYwfLhrWn7cyAwnJ3XKKJV8HyOYZ2Ctz6swGQtu+7UUxFJtyyMdUrHOVHmH6iGT1P/u/zVnDxI4m+a3Cqd0MJgP4HnGLtKMGRxgHGVvos2WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747222331; c=relaxed/simple;
-	bh=U0a33LtWm3c7usN0bq37jysT1DqBk4K2k4WTfaLAaX0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=kYMCUaWOEtplAirvVgoAphrbggV3sn62YGVOuE2dIH5jfpTcLAEhgwSdS9rTaAmZYGfRC3GA6dlQOAJ+NfYw02/Q6lD48PsySCBMsojkChiw4yq9LY8ZC6uIbcJceZtMDZ1a+0SopUdnBNuMoI0bnJziFsvGyXPKNDgJREM3k60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZyB4Z54PHz6K9BK;
-	Wed, 14 May 2025 19:31:26 +0800 (CST)
-Received: from frapeml100005.china.huawei.com (unknown [7.182.85.132])
-	by mail.maildlp.com (Postfix) with ESMTPS id E20BC1400DC;
-	Wed, 14 May 2025 19:31:59 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml100005.china.huawei.com (7.182.85.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 14 May 2025 13:31:59 +0200
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Wed, 14 May 2025 13:31:59 +0200
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Daniel Ferguson <danielf@os.amperecomputing.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-CC: "bp@alien8.de" <bp@alien8.de>, "rafael@kernel.org" <rafael@kernel.org>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "lenb@kernel.org"
-	<lenb@kernel.org>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, Linuxarm <linuxarm@huawei.com>,
-	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
-	<jiaqiyan@google.com>, "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>, "james.morse@arm.com"
-	<james.morse@arm.com>, "jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>, "erdemaktas@google.com"
-	<erdemaktas@google.com>, "pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>, "gthelen@google.com"
-	<gthelen@google.com>, "wschwartz@amperecomputing.com"
-	<wschwartz@amperecomputing.com>, "dferguson@amperecomputing.com"
-	<dferguson@amperecomputing.com>, "wbs@os.amperecomputing.com"
-	<wbs@os.amperecomputing.com>, "nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
-	tanxiaofei <tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>
-Subject: RE: [PATCH v5 1/2] ACPI:RAS2: Add ACPI RAS2 driver
-Thread-Topic: [PATCH v5 1/2] ACPI:RAS2: Add ACPI RAS2 driver
-Thread-Index: AQHbv5klMort+tGT8kGjctbrTEAbprPRVnoAgACt2EA=
-Date: Wed, 14 May 2025 11:31:59 +0000
-Message-ID: <19ccc1b78e104132962792b55ab92df5@huawei.com>
-References: <20250507214344.709-1-shiju.jose@huawei.com>
- <20250507214344.709-2-shiju.jose@huawei.com>
- <8cdf7885-31b3-4308-8a7c-f4e427486429@os.amperecomputing.com>
-In-Reply-To: <8cdf7885-31b3-4308-8a7c-f4e427486429@os.amperecomputing.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1747232151; c=relaxed/simple;
+	bh=Vni+4rSFtgKkhj4M9hes19xnkZVVVh6560vIbrsuwcs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=XjfqMeTZYG+b0MWNsfYI2UAFbs8aXEfk+uqwG3nemv8I5fOYbjNCK4N6QFATUUSMe1C5NVeS9RnOK9GY9FznPsAY4X1cqojvae7JRuFPavru0Kjq5UbrQurxCpBf+PzfRQD2nn0S9yVtNwefKHaKTEqkoIUJRY0ovAwWZFDNT3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b9dQZtUd; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-22e6c82716dso8707975ad.0
+        for <linux-edac@vger.kernel.org>; Wed, 14 May 2025 07:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747232149; x=1747836949; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t7ibtTN1MnsJc6E1eBxUxx8I+Mw5Swe/fTJWwFyUmjo=;
+        b=b9dQZtUdVp761zGXUN1GOvgKa6cUUwdVurdewUUUiRSa2084aZ8YRXSnFRhlEZEAYs
+         e3Y/B3kHN2Z9CUhtxiDCYY7TQENsrAgzWB2UsixUjkwtvrxSa9kOxEA/kxm17FzTF3Kd
+         MnIBqJnd2AuRHOQ3VCYIVOzkgjT/ueiquMoM9iQGrXhUMYRb35veN5k8smQyApM0kL4Q
+         66UUIuCOzuFIBcf/RhIBY56JehE6RArmn8nHwTPxcR4out09W/p78FNgpK6pKsWtatl7
+         qjZp9iH/6ffDh72kjOLGO/bERGnuha1nLlSv5pykERnb3AXSUIEMh2FSUAEbwutkUKSw
+         786Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747232149; x=1747836949;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t7ibtTN1MnsJc6E1eBxUxx8I+Mw5Swe/fTJWwFyUmjo=;
+        b=diMwh6BpBS8dbNgm2iJv/WVqmu94dNyiFd8uyCiBwPqgrwVqicXCztD2TwYRN/qyfp
+         4j7vWu1g9Oh06IG9HLLr5qS2JKOVaf8BijIgSnFgqgmHwbx6b7AmoR7hYsWha3ttZJEG
+         58v7dTt/GnWpIbuuuSXxrga1P84R9XdVE8eTihnfPnsEtR53yDH0By7Wx/CdLzQZ8A6l
+         0+u7TTIsCcseYZXvwXsBYRD6aT11K1L4T3V1A8lN2u139gUQ/ELcR4s/ROf/hpgeTnzV
+         L+Af7ydDknvGHaHL4BFJ80rr9wAOEWyd20snWTqFczgrpzgh2Ha8qn26p/ct1JGp3tg4
+         pw2g==
+X-Forwarded-Encrypted: i=1; AJvYcCUjlsEL0tUlq+xHxunjUt1l3+sb4C7fB7NYppvMRCpU8+FCONrRV8cE1RSC8WOS+95ZnflDvLnto0wY@vger.kernel.org
+X-Gm-Message-State: AOJu0YzP9nymKieNZHQzqRjuSnaueBEr9OxGvH1W4F/PfIRhzGTs2wMa
+	4VrZVRafACCfJL31FoxnD6P0y82ofBPP/uw6Y7e0LAjX5I79xGeS4fSYzNS+93C02OMUhS7QltI
+	lng==
+X-Google-Smtp-Source: AGHT+IF9L3gdmcUnBmViiAIB+CbEBP/3GNzYJ74W69/RQCJXO9WEtDuMKsjbGgOXh1LtWeoxFLt4egw1KwI=
+X-Received: from plbmb16.prod.google.com ([2002:a17:903:990:b0:223:4788:2e83])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1a4e:b0:22e:50f2:1450
+ with SMTP id d9443c01a7336-23197fc77f2mr53990535ad.22.1747232149047; Wed, 14
+ May 2025 07:15:49 -0700 (PDT)
+Date: Wed, 14 May 2025 07:15:42 -0700
+In-Reply-To: <20250513203803.2636561-2-sohil.mehta@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20250513203803.2636561-1-sohil.mehta@intel.com> <20250513203803.2636561-2-sohil.mehta@intel.com>
+Message-ID: <aCSljsvI0A-HC_DT@google.com>
+Subject: Re: [PATCH v6 1/9] x86/fred, KVM: VMX: Pass event data to the FRED
+ entry point from KVM
+From: Sean Christopherson <seanjc@google.com>
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Xin Li <xin@zytor.com>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Tony Luck <tony.luck@intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andrew Cooper <andrew.cooper3@citrix.com>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, 
+	Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org, 
+	linux-edac@vger.kernel.org, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogRGFuaWVsIEZlcmd1c29uIDxkYW5p
-ZWxmQG9zLmFtcGVyZWNvbXB1dGluZy5jb20+DQo+U2VudDogMTQgTWF5IDIwMjUgMDM6NTUNCj5U
-bzogU2hpanUgSm9zZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPjsgbGludXgtZWRhY0B2Z2VyLmtl
-cm5lbC5vcmc7IGxpbnV4LQ0KPmFjcGlAdmdlci5rZXJuZWwub3JnOyBsaW51eC1kb2NAdmdlci5r
-ZXJuZWwub3JnDQo+Q2M6IGJwQGFsaWVuOC5kZTsgcmFmYWVsQGtlcm5lbC5vcmc7IHRvbnkubHVj
-a0BpbnRlbC5jb207IGxlbmJAa2VybmVsLm9yZzsNCj5sZW8uZHVyYW5AYW1kLmNvbTsgWWF6ZW4u
-R2hhbm5hbUBhbWQuY29tOyBtY2hlaGFiQGtlcm5lbC5vcmc7DQo+Sm9uYXRoYW4gQ2FtZXJvbiA8
-am9uYXRoYW4uY2FtZXJvbkBodWF3ZWkuY29tPjsgbGludXgtbW1Aa3ZhY2sub3JnOw0KPkxpbnV4
-YXJtIDxsaW51eGFybUBodWF3ZWkuY29tPjsgcmllbnRqZXNAZ29vZ2xlLmNvbTsNCj5qaWFxaXlh
-bkBnb29nbGUuY29tOyBKb24uR3JpbW1AYW1kLmNvbTsgZGF2ZS5oYW5zZW5AbGludXguaW50ZWwu
-Y29tOw0KPm5hb3lhLmhvcmlndWNoaUBuZWMuY29tOyBqYW1lcy5tb3JzZUBhcm0uY29tOyBqdGhv
-dWdodG9uQGdvb2dsZS5jb207DQo+c29tYXN1bmRhcmFtLmFAaHBlLmNvbTsgZXJkZW1ha3Rhc0Bn
-b29nbGUuY29tOyBwZ29uZGFAZ29vZ2xlLmNvbTsNCj5kdWVud2VuQGdvb2dsZS5jb207IGd0aGVs
-ZW5AZ29vZ2xlLmNvbTsNCj53c2Nod2FydHpAYW1wZXJlY29tcHV0aW5nLmNvbTsgZGZlcmd1c29u
-QGFtcGVyZWNvbXB1dGluZy5jb207DQo+d2JzQG9zLmFtcGVyZWNvbXB1dGluZy5jb207IG5pZmFu
-LmN4bEBnbWFpbC5jb207IHRhbnhpYW9mZWkNCj48dGFueGlhb2ZlaUBodWF3ZWkuY29tPjsgWmVu
-Z3RhbyAoQikgPHByaW1lLnplbmdAaGlzaWxpY29uLmNvbT47IFJvYmVydG8NCj5TYXNzdSA8cm9i
-ZXJ0by5zYXNzdUBodWF3ZWkuY29tPjsga2FuZ2thbmcuc2hlbkBmdXR1cmV3ZWkuY29tOw0KPndh
-bmdodWlxaWFuZyA8d2FuZ2h1aXFpYW5nQGh1YXdlaS5jb20+DQo+U3ViamVjdDogUmU6IFtQQVRD
-SCB2NSAxLzJdIEFDUEk6UkFTMjogQWRkIEFDUEkgUkFTMiBkcml2ZXINCj4NCj4+ICtzdGF0aWMg
-aW50IHJhczJfcmVwb3J0X2NhcF9lcnJvcih1MzIgY2FwX3N0YXR1cykgew0KPj4gKwlzd2l0Y2gg
-KGNhcF9zdGF0dXMpIHsNCj4+ICsJY2FzZSBBQ1BJX1JBUzJfTk9UX1ZBTElEOg0KPj4gKwljYXNl
-IEFDUElfUkFTMl9OT1RfU1VQUE9SVEVEOg0KPj4gKwkJcmV0dXJuIC1FUEVSTTsNCj4+ICsJY2Fz
-ZSBBQ1BJX1JBUzJfQlVTWToNCj4+ICsJCXJldHVybiAtRUJVU1k7DQo+PiArCWNhc2UgQUNQSV9S
-QVMyX0ZBSUxFRDoNCj4+ICsJY2FzZSBBQ1BJX1JBUzJfQUJPUlRFRDoNCj4+ICsJY2FzZSBBQ1BJ
-X1JBUzJfSU5WQUxJRF9EQVRBOg0KPj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+PiArCWRlZmF1bHQ6
-IC8qIDAgb3Igb3RoZXIsIFN1Y2Nlc3MgKi8NCj4+ICsJCXJldHVybiAwOw0KPj4gKwl9DQo+PiAr
-fQ0KPj4gKw0KPj4gK3N0YXRpYyBpbnQgcmFzMl9jaGVja19wY2NfY2hhbihzdHJ1Y3QgcmFzMl9w
-Y2Nfc3Vic3BhY2UNCj4+ICsqcGNjX3N1YnNwYWNlKSB7DQo+PiArCXN0cnVjdCBhY3BpX3JhczJf
-c2htZW0gX19pb21lbSAqZ2VuX2NvbW1fYmFzZSA9IHBjY19zdWJzcGFjZS0NCj4+Y29tbV9hZGRy
-Ow0KPj4gKwl1MzIgY2FwX3N0YXR1czsNCj4+ICsJdTE2IHN0YXR1czsNCj4+ICsJdTMyIHJjOw0K
-Pj4gKw0KPj4gKwkvKg0KPj4gKwkgKiBBcyBwZXIgQUNQSSBzcGVjLCB0aGUgUENDIHNwYWNlIHdp
-bGwgYmUgaW5pdGlhbGl6ZWQgYnkNCj4+ICsJICogcGxhdGZvcm0gYW5kIHNob3VsZCBoYXZlIHNl
-dCB0aGUgY29tbWFuZCBjb21wbGV0aW9uIGJpdCB3aGVuDQo+PiArCSAqIFBDQyBjYW4gYmUgdXNl
-ZCBieSBPU1BNLg0KPj4gKwkgKg0KPj4gKwkgKiBQb2xsIFBDQyBzdGF0dXMgcmVnaXN0ZXIgZXZl
-cnkgM3VzKGRlbGF5X3VzKSBmb3IgbWF4aW11bSBvZg0KPj4gKwkgKiBkZWFkbGluZV91cyh0aW1l
-b3V0X3VzKSB1bnRpbCBQQ0MgY29tbWFuZCBjb21wbGV0ZSBiaXQgaXMNCj5zZXQoY29uZCkuDQo+
-PiArCSAqLw0KPj4gKwlyYyA9IHJlYWR3X3JlbGF4ZWRfcG9sbF90aW1lb3V0KCZnZW5fY29tbV9i
-YXNlLT5zdGF0dXMsIHN0YXR1cywNCj4+ICsJCQkJCXN0YXR1cyAmDQo+UENDX1NUQVRVU19DTURf
-Q09NUExFVEUsIDMsDQo+PiArCQkJCQlwY2Nfc3Vic3BhY2UtPmRlYWRsaW5lX3VzKTsNCj4+ICsJ
-aWYgKHJjKSB7DQo+PiArCQlwcl93YXJuKCJQQ0MgY2hlY2sgY2hhbm5lbCBmYWlsZWQgZm9yIDog
-JWQgcmM9JWRcbiIsDQo+PiArCQkJcGNjX3N1YnNwYWNlLT5wY2NfaWQsIHJjKTsNCj4+ICsJCXJl
-dHVybiByYzsNCj4+ICsJfQ0KPj4gKw0KPj4gKwlpZiAoc3RhdHVzICYgUENDX1NUQVRVU19FUlJP
-Uikgew0KPj4gKwkJY2FwX3N0YXR1cyA9IHJlYWR3X3JlbGF4ZWQoJmdlbl9jb21tX2Jhc2UtDQo+
-PnNldF9jYXBzX3N0YXR1cyk7DQo+PiArCQlyYyA9IHJhczJfcmVwb3J0X2NhcF9lcnJvcihjYXBf
-c3RhdHVzKTsNCj4+ICsNCj4+ICsJCXN0YXR1cyAmPSB+UENDX1NUQVRVU19FUlJPUjsNCj4+ICsJ
-CXdyaXRld19yZWxheGVkKHN0YXR1cywgJmdlbl9jb21tX2Jhc2UtPnN0YXR1cyk7DQo+PiArCQly
-ZXR1cm4gcmM7DQo+PiArCX0NCj4+ICsNCj4+ICsJaWYgKHN0YXR1cyAmIFBDQ19TVEFUVVNfQ01E
-X0NPTVBMRVRFKQ0KPj4gKwkJcmV0dXJuIDA7DQo+PiArDQo+PiArCXJldHVybiAtRUlPOw0KPj4g
-K30NCj4NCj5XZSBzdGlsbCBoYXZlIGFuIG91dHN0YW5kaW5nIHByb2JsZW0uIFRoaXMgbWF5IHNv
-dW5kIGZhbWlsaWFyLg0KPg0KPklmIGEgdXNlciBzcGVjaWZpZXMgYW4gaW52YWxpZCBhZGRyZXNz
-LCBvdXIgZmlybXdhcmUgd2lsbCBzZXQgYW4gZXJyb3IgY29kZSBpbiB0aGUNCj5zZXRfY2Fwc19z
-dGF0dXMgZmllbGQgb2YgdGhlIGFjcGlfcmFzMl9zaG1lbSBzdHJ1Y3R1cmUuIEluIG91ciBjYXNl
-LCB0aGUgZXJyb3INCj5jb2RlIGlzIEFDUElfUkFTMl9JTlZBTElEX0RBVEEsIGFuZCB0aGUgdXNl
-ciB3aWxsIG9ic2VydmUgYW4gRUlOVkFMLiBUaGlzIGlzDQo+ZXhwZWN0ZWQuDQo+DQo+SG93ZXZl
-ciwgaWYgdGhlIHVzZXIgdGhlbiBzdWJzZXF1ZW50bHkgYXR0ZW1wdHMgdG8gd3JpdGUgYSBWQUxJ
-RCBhZGRyZXNzLA0KPnJhczJfZ2V0X3BhdHJvbF9zY3J1Yl9ydW5uaW5nIHdpbGwgaW5kaXJlY3Rs
-eSBjYWxsIHJhczJfY2hlY2tfcGNjX2NoYW4gdXNpbmcNCj50aGUgcHJldmlvdXNseSBJTlZBTElE
-IGFkZHJlc3MgdG8gZGV0ZXJtaW5lIGlmIHRoZSBzY3J1YmJlciBpcyBzdGlsbCBydW5uaW5nLg0K
-PlVuZm9ydHVuYXRlbHksIHRoZSBJTlZBTElEIGFkZHJlc3MgY2F1c2VzIHJhczJfZ2V0X3BhdHJv
-bF9zY3J1Yl9ydW5uaW5nIHRvDQo+ZmFpbCwgdGhlcmVmb3JlIHByZXZlbnRpbmcgdGhlIHVzZXIg
-ZnJvbSBzcGVjaWZ5aW5nIGEgVkFMSUQgYWRkcmVzcyBhZnRlcg0KPnNwZWNpZnlpbmcgYW4gSU5W
-QUxJRCBhZGRyZXNzLg0KPg0KPlRoZSBvbmx5IHdheSB0byBtb3ZlIGZvcndhcmQgZnJvbSB0aGlz
-IGluZXNjYXBhYmxlIGNvbmRpdGlvbiBpcyB0byByZWJvb3QgdGhlDQo+c3lzdGVtLg0KPg0KPkhl
-cmUgaXMgYSBkZW1vIG9mIHRoZSBwcm9ibGVtIGFzIEkgcm91Z2hseSBzZWUgaXQgb24gb3VyIHN5
-c3RlbSAoSSd2ZSBsYWJlbGVkIHRoZQ0KPmxpbmUgbnVtYmVycyBmb3Igc2FrZSBvZiBkaXNjdXNz
-aW9uKToNCj4xICBbcm9vdEBteWhvc3Qgc2NydWIwXSMgZWNobyAweDEwMDAwMDAwMCA+IHNpemUN
-Cj4yICBbcm9vdEBteWhvc3Qgc2NydWIwXSMgZWNobyAweDFmMDAwMDAwMDAgPiBhZGRyDQo+MyAg
-W3Jvb3RAbXlob3N0IHNjcnViMF0jIGVjaG8gMHhjZjAwMDAwMDAwID4gYWRkcg0KPjQgIHdyaXRl
-IGVycm9yOiBJbnZhbGlkIGFyZ3VtZW50DQo+NSAgWyAgMjE0LjQ0NjMzOF0gUENDVCBQQ0NUOiBG
-YWlsZWQgdG8gc3RhcnQgZGVtYW5kIHNjcnViYmluZw0KPjYgIFtyb290QG15aG9zdCBzY3J1YjBd
-IyBlY2hvIDB4MWYwMDAwMDAwMCA+IGFkZHINCj43ICB3cml0ZSBlcnJvcjogSW52YWxpZCBhcmd1
-bWVudA0KPjggIFsgIDI0Mi4yNjM5MDldIFBDQ1QgUENDVDogZmFpbGVkIHRvIHJlYWQgcGFyYW1l
-dGVycw0KPjkgIFtyb290QG15aG9zdCBzY3J1YjBdIyBlY2hvIDB4MTAwMDAwMDAwID4gc2l6ZQ0K
-PjEwIHdyaXRlIGVycm9yOiBJbnZhbGlkIGFyZ3VtZW50DQo+MTEgWyAgMjQ2LjE5MDE5Nl0gUEND
-VCBQQ0NUOiBmYWlsZWQgdG8gcmVhZCBwYXJhbWV0ZXJzDQo+DQo+VGhlIHVwcGVyIG1vc3QgbWVt
-b3J5IGFkZHJlc3Mgb24gdGhpcyBzeXN0ZW0gaXMgMHhiZjAwMDAwMDAwLiBMaW5lIDEgYW5kIDIN
-Cj51c2UgdmFsaWQgdmFsdWVzLCBhbmQgbGluZSAyIHByb2R1Y2VzIHRoZSBleHBlY3RlZCByZXN1
-bHRzLiBPbiBsaW5lIDMsIEkndmUNCj5zcGVjaWZpZWQgYW4gSU5WQUxJRCBhZGRyZXNzIChvdXRz
-aWRlIG9mIHZhbGlkIHJhbmdlKS4gVGhlIGVycm9yIG9uIGxpbmUgNSBpcw0KPmV4cGVjdGVkIGFm
-dGVyIGV4ZWN1dGluZyB0aGUgU1RBUlRfUEFUUk9MX1NDUlVCQkVSIGNvbW1hbmQgd2l0aCBhbg0K
-PklOVkFMSUQgYWRkcmVzcy4NCj4NCj5MaW5lIDYgc2hvdyBob3cgSSBhdHRlbXB0IHRvIHNwZWNp
-ZnkgYSBWQUxJRCBhZGRyZXNzLiBVbmZvcnR1bmF0ZWx5LA0KPnJhczJfZ2V0X3BhdHJvbF9zY3J1
-Yl9ydW5uaW5nIGVuY291bnRlcnMgYW5kIGVycm9yIGFmdGVyIGV4ZWN1dGluZw0KPkdFVF9QQVRS
-T0xfUEFSQU1FVEVSUyBiZWNhdXNlIGl0IHVzZWQgdGhlIE9MRCBJTlZBTElEIHZhbHVlcyBpbiBw
-c19zbS0NCj4+cGFyYW1zLnJlcV9hZGRyX3JhbmdlLiBMaW5lIDcgYW5kIDggYXJlIHRoZSByZXN1
-bHQuIFNpbmNlIHRoZSBmbG93IG9mDQo+ZXhlY3V0aW9uIGlmIGFib3J0ZWQgYXQgdGhpcyBwb2lu
-dCwgeW91IGNhbiBuZXZlciByZWN0aWZ5IHRoZSBzaXR1YXRpb24gYW5kIGluc2VydCBhDQo+dmFs
-aWQgdmFsdWUgaW50byBwc19zbS0+cGFyYW1zLnJlcV9hZGRyX3JhbmdlLCB1bmxlc3MgeW91IHJl
-Ym9vdCB0aGUgc3lzdGVtLg0KPg0KPk9uZSBoYWxmIGJha2VkIHNvbHV0aW9uIHRvIHRoaXMgcHJv
-YmxlbSwgaXMgdG8gbW9kaWZ5DQo+cmFzMl9nZXRfcGF0cm9sX3NjcnViX3J1bm5pbmcgc28gdGhh
-dCBpZiB0aGVyZSBpcyBhIG5vbi16ZXJvIGFkZHJlc3Mgb3Igc2l6ZQ0KPnNwZWNpZmllZCwgQU5E
-IHRoZSBsYXN0IGVycm9yIGNvZGUgd2UgcmVjZWl2ZWQgd2FzIElOVkFMSUQgREFUQSwgdGhlbiBh
-c3N1bWUNCj50aGUgc2NydWJiZXIgaXMgTk9UIHJ1bm5pbmcuDQpIaSBEYW5pZWwsDQoNClRoYW5r
-cyBmb3IgcmVwb3J0aW5nIHRoZSBpc3N1ZS4NCkNhbiB5b3UgY2hlY2sgd2hldGhlciBmb2xsb3dp
-bmcgY2hhbmdlIGZpeCB0aGUgaXNzdWUgaW4geW91ciB0ZXN0IHNldHVwPw0KPT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9y
-YXMvYWNwaV9yYXMyLmMgYi9kcml2ZXJzL3Jhcy9hY3BpX3JhczIuYw0KaW5kZXggNGQ5Y2ZkM2Jk
-ZjQ1Li5mZjRhYTFiNzU4NjAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Jhcy9hY3BpX3JhczIuYw0K
-KysrIGIvZHJpdmVycy9yYXMvYWNwaV9yYXMyLmMNCkBAIC0yNTUsNiArMjU1LDEzIEBAIHN0YXRp
-YyBpbnQgcmFzMl9od19zY3J1Yl93cml0ZV9hZGRyKHN0cnVjdCBkZXZpY2UgKmRldiwgdm9pZCAq
-ZHJ2X2RhdGEsIHU2NCBiYXNlDQogICAgICAgIHJldCA9IHJhczJfc2VuZF9wY2NfY21kKHJhczJf
-Y3R4LCBQQ0NfQ01EX0VYRUNfUkFTMik7DQogICAgICAgIGlmIChyZXQpIHsNCiAgICAgICAgICAg
-ICAgICBkZXZfZXJyKHJhczJfY3R4LT5kZXYsICJGYWlsZWQgdG8gc3RhcnQgZGVtYW5kIHNjcnVi
-YmluZ1xuIik7DQorICAgICAgICAgICAgICAgaWYgKHJldCA9PSAtRVBFUk0gfHwgcmV0ID09IC1F
-SU5WQUwpIHsNCisgICAgICAgICAgICAgICAgICAgICAgIHBzX3NtLT5wYXJhbXMucmVxX2FkZHJf
-cmFuZ2VbMF0gPSAwOw0KKyAgICAgICAgICAgICAgICAgICAgICAgcHNfc20tPnBhcmFtcy5yZXFf
-YWRkcl9yYW5nZVsxXSA9IDA7DQorICAgICAgICAgICAgICAgICAgICAgICByYXMyX2N0eC0+YmFz
-ZSA9IDA7DQorICAgICAgICAgICAgICAgICAgICAgICByYXMyX2N0eC0+c2l6ZSA9IDA7DQorICAg
-ICAgICAgICAgICAgICAgICAgICByYXMyX2N0eC0+b2Rfc2NydWJfc3RzID0gT0RfU0NSVUJfU1RT
-X0lETEU7DQorICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQog
-ICAgICAgIH0NCiAgICAgICAgcmFzMl9jdHgtPm9kX3NjcnViX3N0cyA9IE9EX1NDUlVCX1NUU19B
-Q1RJVkU7DQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpU
-aGFua3MsDQpTaGlqdSANCg0KPg0KPlJlZ2FyZHMsDQo+fkRhbmllbA0K
+On Tue, May 13, 2025, Sohil Mehta wrote:
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 5c5766467a61..1d43d4a2f6b6 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7079,7 +7079,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu,
+>  
+>  	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
+>  	if (cpu_feature_enabled(X86_FEATURE_FRED))
+> -		fred_entry_from_kvm(EVENT_TYPE_EXTINT, vector);
+> +		fred_entry_from_kvm(EVENT_TYPE_EXTINT, vector, 0);
+>  	else
+>  		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
+>  	kvm_after_interrupt(vcpu);
+> @@ -7393,7 +7393,8 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+>  	    is_nmi(vmx_get_intr_info(vcpu))) {
+>  		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
+>  		if (cpu_feature_enabled(X86_FEATURE_FRED))
+> -			fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR);
+> +			fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR,
+> +					    vmx_get_exit_qual(vcpu));
+>  		else
+>  			vmx_do_nmi_irqoff();
+>  		kvm_after_interrupt(vcpu);
+
+As a prep patch, what if we provide separate wrappers for IRQ vs. NMI?  That way
+KVM doesn't need to shove a '0' literal for the IRQ case.  There isn't that much
+code that's actually shared between the two, once you account for KVM having to
+hardcode the NMI information.
+
+Compile tested only...
+
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Wed, 14 May 2025 07:07:55 -0700
+Subject: [PATCH] x86/fred: Provide separate IRQ vs. NMI wrappers for "entry"
+ from KVM
+
+Provide separate wrappers for forwarding IRQs vs NMIs from KVM in
+anticipation of adding support for NMI source reporting, which will add
+an NMI-only parameter, i.e. will further pollute the current API with a
+param that is a hardcoded for one of the two call sites.
+
+Opportunistically tag the non-FRED NMI wrapper __always_inline, as the
+compiler could theoretically generate a function call and trigger and a
+(completely benign) "leaving noinstr" warning.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/fred.h | 24 +++++++++++++++++++-----
+ arch/x86/kvm/vmx/vmx.c      |  4 ++--
+ 2 files changed, 21 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/include/asm/fred.h b/arch/x86/include/asm/fred.h
+index 2a29e5216881..dfb4f5e6a37a 100644
+--- a/arch/x86/include/asm/fred.h
++++ b/arch/x86/include/asm/fred.h
+@@ -10,6 +10,7 @@
+ 
+ #include <asm/asm.h>
+ #include <asm/trapnr.h>
++#include <asm/irq_vectors.h>
+ 
+ /*
+  * FRED event return instruction opcodes for ERET{S,U}; supported in
+@@ -70,14 +71,26 @@ __visible void fred_entry_from_user(struct pt_regs *regs);
+ __visible void fred_entry_from_kernel(struct pt_regs *regs);
+ __visible void __fred_entry_from_kvm(struct pt_regs *regs);
+ 
+-/* Can be called from noinstr code, thus __always_inline */
+-static __always_inline void fred_entry_from_kvm(unsigned int type, unsigned int vector)
++/* Must be called from noinstr code, thus __always_inline */
++static __always_inline void fred_nmi_from_kvm(void)
+ {
+ 	struct fred_ss ss = {
+ 		.ss     =__KERNEL_DS,
+-		.type   = type,
++		.type   = EVENT_TYPE_NMI,
++		.vector = NMI_VECTOR,
++		.nmi    = true,
++		.lm     = 1,
++	};
++
++	asm_fred_entry_from_kvm(ss);
++}
++
++static inline void fred_irq_from_kvm(unsigned int vector)
++{
++	struct fred_ss ss = {
++		.ss     =__KERNEL_DS,
++		.type   = EVENT_TYPE_EXTINT,
+ 		.vector = vector,
+-		.nmi    = type == EVENT_TYPE_NMI,
+ 		.lm     = 1,
+ 	};
+ 
+@@ -109,7 +122,8 @@ static __always_inline unsigned long fred_event_data(struct pt_regs *regs) { ret
+ static inline void cpu_init_fred_exceptions(void) { }
+ static inline void cpu_init_fred_rsps(void) { }
+ static inline void fred_complete_exception_setup(void) { }
+-static inline void fred_entry_from_kvm(unsigned int type, unsigned int vector) { }
++static __always_inline void fred_nmi_from_kvm(void) { }
++static inline void fred_irq_from_kvm(unsigned int vector) { }
+ static inline void fred_sync_rsp0(unsigned long rsp0) { }
+ static inline void fred_update_rsp0(void) { }
+ #endif /* CONFIG_X86_FRED */
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 5c5766467a61..271f92fee76b 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7079,7 +7079,7 @@ static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu,
+ 
+ 	kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
+ 	if (cpu_feature_enabled(X86_FEATURE_FRED))
+-		fred_entry_from_kvm(EVENT_TYPE_EXTINT, vector);
++		fred_irq_from_kvm(vector);
+ 	else
+ 		vmx_do_interrupt_irqoff(gate_offset((gate_desc *)host_idt_base + vector));
+ 	kvm_after_interrupt(vcpu);
+@@ -7393,7 +7393,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+ 	    is_nmi(vmx_get_intr_info(vcpu))) {
+ 		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
+ 		if (cpu_feature_enabled(X86_FEATURE_FRED))
+-			fred_entry_from_kvm(EVENT_TYPE_NMI, NMI_VECTOR);
++			fred_nmi_from_kvm();
+ 		else
+ 			vmx_do_nmi_irqoff();
+ 		kvm_after_interrupt(vcpu);
+
+base-commit: 9f35e33144ae5377d6a8de86dd3bd4d995c6ac65
+--
 
