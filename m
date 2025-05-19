@@ -1,166 +1,165 @@
-Return-Path: <linux-edac+bounces-3939-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3940-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70BECABBD62
-	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 14:12:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DED1ABC1D2
+	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 17:12:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FF5417BDB0
-	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 12:12:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93235188E0B6
+	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 15:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3830F2750EB;
-	Mon, 19 May 2025 12:12:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889FC2857CD;
+	Mon, 19 May 2025 15:12:16 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F3B1C683;
-	Mon, 19 May 2025 12:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583642853EF;
+	Mon, 19 May 2025 15:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747656768; cv=none; b=i6l4z2sUWIuy/MGSLf4lhIqYTe+jVbaqsQhzTjTdQwo4tvaAIpK+E/Cs4bCXOO+x8+TbXvNQQ1dOxv+ZsFmr0e/AQDgwreL3QrDKo3xKrqtRdVFJEV9JrDMmXI0RzK1lb4v/0JXt+FAq4YkK/fisTnaEpzOk5VuGVGJkkfWzoeM=
+	t=1747667536; cv=none; b=A0SBVzWOp9JgmGQYK94uBMPsPqGRlNp/i/NLUmzZynbjriIuSFjc455nxgg3hHD7ef8hmDFza7qeLDdPAWDc2AhGuAwC3espdrWRRTgJIAwyhLCSMx4FqM9duluXeK+IbkJwgkgSH4H+2wnu0b2u/aRilJO9pmoTZo57+7zS+/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747656768; c=relaxed/simple;
-	bh=rFRIvFuWUliJwSLHrP/h/3fIaAtmVc4vP2aeAbKLg5g=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rPm5/hLu5g/9VxyP+yQ83c95cYRFh34UoYwO12iH1DLd2HQLVV8Lqsi3clr+D1wvOWQ4QZaMvKeEEQppB5KUR9OzY77UCwT8Z/cR2tlOcW+6dgzjsARagr11D7OXhuNYZT9IOb9/DCoFZICIrnrYCtGkk+OAhTw4GB3Lh2hCJvc=
+	s=arc-20240116; t=1747667536; c=relaxed/simple;
+	bh=4yDTTgeK3NB53OcYwuVVMvoPuDfwm79+z+SSPTGZzh4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=a8W9oO2KJpp55GpMlV9IJbWgAH72MbyzXLRKAV63Ih6XhWGtzoygqZlOZeryleI4jFcb0CpauH9WH/6UjoWk7yVqkEb4KaHPPYq05cc3cEEZo/Bxa95QRFGU9ApYaVN6cBWUagqisrSpH59IJBq7yjlFNIXmWnpyNr4yYuH95No=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4b1Gky1LM6z6K9jp;
-	Mon, 19 May 2025 20:11:54 +0800 (CST)
-Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7B9C4140133;
-	Mon, 19 May 2025 20:12:41 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (7.182.85.172) by
- frapeml500005.china.huawei.com (7.182.85.13) with Microsoft SMTP Server
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4b1LjV1JM3z6K9ql;
+	Mon, 19 May 2025 23:10:54 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id C04721400E3;
+	Mon, 19 May 2025 23:11:41 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.148.165) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 19 May 2025 14:12:41 +0200
-Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
- frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
- Mon, 19 May 2025 14:12:41 +0200
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Daniel Ferguson <danielf@os.amperecomputing.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-CC: "bp@alien8.de" <bp@alien8.de>, "rafael@kernel.org" <rafael@kernel.org>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "lenb@kernel.org"
-	<lenb@kernel.org>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, Linuxarm <linuxarm@huawei.com>,
-	"rientjes@google.com" <rientjes@google.com>, "jiaqiyan@google.com"
-	<jiaqiyan@google.com>, "Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>, "james.morse@arm.com"
-	<james.morse@arm.com>, "jthoughton@google.com" <jthoughton@google.com>,
-	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>, "erdemaktas@google.com"
-	<erdemaktas@google.com>, "pgonda@google.com" <pgonda@google.com>,
-	"duenwen@google.com" <duenwen@google.com>, "gthelen@google.com"
-	<gthelen@google.com>, "wschwartz@amperecomputing.com"
-	<wschwartz@amperecomputing.com>, "dferguson@amperecomputing.com"
-	<dferguson@amperecomputing.com>, "wbs@os.amperecomputing.com"
-	<wbs@os.amperecomputing.com>, "nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
-	tanxiaofei <tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>
-Subject: RE: [PATCH v6 1/2] ACPI:RAS2: Add ACPI RAS2 driver
-Thread-Topic: [PATCH v6 1/2] ACPI:RAS2: Add ACPI RAS2 driver
-Thread-Index: AQHbxmZ7uLoEIE5IaUS4NXsz+YRI27PVfH2AgARkgPA=
-Date: Mon, 19 May 2025 12:12:41 +0000
-Message-ID: <a98451bf422e4dcba7bb0075fa892e5b@huawei.com>
-References: <20250516132205.789-1-shiju.jose@huawei.com>
-	<20250516132205.789-2-shiju.jose@huawei.com>
- <51bcb52c-4132-4daf-8903-29b121c485a1@os.amperecomputing.com>
-In-Reply-To: <51bcb52c-4132-4daf-8903-29b121c485a1@os.amperecomputing.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 15.1.2507.39; Mon, 19 May 2025 17:11:40 +0200
+From: <shiju.jose@huawei.com>
+To: <linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>
+CC: <bp@alien8.de>, <rafael@kernel.org>, <tony.luck@intel.com>,
+	<lenb@kernel.org>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
+	<mchehab@kernel.org>, <jonathan.cameron@huawei.com>, <linux-mm@kvack.org>,
+	<linuxarm@huawei.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
+	<Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
+	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, <shiju.jose@huawei.com>
+Subject: [PATCH v7 0/2] ACPI: Add support for ACPI RAS2 feature table
+Date: Mon, 19 May 2025 16:11:13 +0100
+Message-ID: <20250519151116.803-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
-DQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IERhbmllbCBGZXJndXNvbiA8
-ZGFuaWVsZkBvcy5hbXBlcmVjb21wdXRpbmcuY29tPg0KPlNlbnQ6IDE2IE1heSAyMDI1IDIwOjA1
-DQo+VG86IFNoaWp1IEpvc2UgPHNoaWp1Lmpvc2VAaHVhd2VpLmNvbT47IGxpbnV4LWVkYWNAdmdl
-ci5rZXJuZWwub3JnOyBsaW51eC0NCj5hY3BpQHZnZXIua2VybmVsLm9yZzsgbGludXgtZG9jQHZn
-ZXIua2VybmVsLm9yZw0KPkNjOiBicEBhbGllbjguZGU7IHJhZmFlbEBrZXJuZWwub3JnOyB0b255
-Lmx1Y2tAaW50ZWwuY29tOyBsZW5iQGtlcm5lbC5vcmc7DQo+bGVvLmR1cmFuQGFtZC5jb207IFlh
-emVuLkdoYW5uYW1AYW1kLmNvbTsgbWNoZWhhYkBrZXJuZWwub3JnOw0KPkpvbmF0aGFuIENhbWVy
-b24gPGpvbmF0aGFuLmNhbWVyb25AaHVhd2VpLmNvbT47IGxpbnV4LW1tQGt2YWNrLm9yZzsNCj5M
-aW51eGFybSA8bGludXhhcm1AaHVhd2VpLmNvbT47IHJpZW50amVzQGdvb2dsZS5jb207DQo+amlh
-cWl5YW5AZ29vZ2xlLmNvbTsgSm9uLkdyaW1tQGFtZC5jb207IGRhdmUuaGFuc2VuQGxpbnV4Lmlu
-dGVsLmNvbTsNCj5uYW95YS5ob3JpZ3VjaGlAbmVjLmNvbTsgamFtZXMubW9yc2VAYXJtLmNvbTsg
-anRob3VnaHRvbkBnb29nbGUuY29tOw0KPnNvbWFzdW5kYXJhbS5hQGhwZS5jb207IGVyZGVtYWt0
-YXNAZ29vZ2xlLmNvbTsgcGdvbmRhQGdvb2dsZS5jb207DQo+ZHVlbndlbkBnb29nbGUuY29tOyBn
-dGhlbGVuQGdvb2dsZS5jb207DQo+d3NjaHdhcnR6QGFtcGVyZWNvbXB1dGluZy5jb207IGRmZXJn
-dXNvbkBhbXBlcmVjb21wdXRpbmcuY29tOw0KPndic0Bvcy5hbXBlcmVjb21wdXRpbmcuY29tOyBu
-aWZhbi5jeGxAZ21haWwuY29tOyB0YW54aWFvZmVpDQo+PHRhbnhpYW9mZWlAaHVhd2VpLmNvbT47
-IFplbmd0YW8gKEIpIDxwcmltZS56ZW5nQGhpc2lsaWNvbi5jb20+OyBSb2JlcnRvDQo+U2Fzc3Ug
-PHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT47IGthbmdrYW5nLnNoZW5AZnV0dXJld2VpLmNvbTsN
-Cj53YW5naHVpcWlhbmcgPHdhbmdodWlxaWFuZ0BodWF3ZWkuY29tPg0KPlN1YmplY3Q6IFJlOiBb
-UEFUQ0ggdjYgMS8yXSBBQ1BJOlJBUzI6IEFkZCBBQ1BJIFJBUzIgZHJpdmVyDQo+DQo+PiArc3Rh
-dGljIGludCByYXMyX2NoZWNrX3BjY19jaGFuKHN0cnVjdCByYXMyX3BjY19zdWJzcGFjZQ0KPj4g
-KypwY2Nfc3Vic3BhY2UpIHsNCj4+ICsJc3RydWN0IGFjcGlfcmFzMl9zaG1lbSBfX2lvbWVtICpn
-ZW5fY29tbV9iYXNlID0gcGNjX3N1YnNwYWNlLQ0KPj5jb21tX2FkZHI7DQo+PiArCXUzMiBjYXBf
-c3RhdHVzOw0KPj4gKwl1MTYgc3RhdHVzOw0KPj4gKwl1MzIgcmM7DQo+PiArDQo+PiArCS8qDQo+
-PiArCSAqIEFzIHBlciBBQ1BJIHNwZWMsIHRoZSBQQ0Mgc3BhY2Ugd2lsbCBiZSBpbml0aWFsaXpl
-ZCBieQ0KPj4gKwkgKiBwbGF0Zm9ybSBhbmQgc2hvdWxkIGhhdmUgc2V0IHRoZSBjb21tYW5kIGNv
-bXBsZXRpb24gYml0IHdoZW4NCj4+ICsJICogUENDIGNhbiBiZSB1c2VkIGJ5IE9TUE0uDQo+PiAr
-CSAqDQo+PiArCSAqIFBvbGwgUENDIHN0YXR1cyByZWdpc3RlciBldmVyeSAzdXMoZGVsYXlfdXMp
-IGZvciBtYXhpbXVtIG9mDQo+PiArCSAqIGRlYWRsaW5lX3VzKHRpbWVvdXRfdXMpIHVudGlsIFBD
-QyBjb21tYW5kIGNvbXBsZXRlIGJpdCBpcw0KPnNldChjb25kKS4NCj4+ICsJICovDQo+PiArCXJj
-ID0gcmVhZHdfcmVsYXhlZF9wb2xsX3RpbWVvdXQoJmdlbl9jb21tX2Jhc2UtPnN0YXR1cywgc3Rh
-dHVzLA0KPj4gKwkJCQkJc3RhdHVzICYNCj5QQ0NfU1RBVFVTX0NNRF9DT01QTEVURSwgMywNCj4+
-ICsJCQkJCXBjY19zdWJzcGFjZS0+ZGVhZGxpbmVfdXMpOw0KPj4gKwlpZiAocmMpIHsNCj4+ICsJ
-CXByX3dhcm4oIlBDQyBjaGVjayBjaGFubmVsIGZhaWxlZCBmb3IgOiAlZCByYz0lZFxuIiwNCj4+
-ICsJCQlwY2Nfc3Vic3BhY2UtPnBjY19pZCwgcmMpOw0KPj4gKwkJcmV0dXJuIHJjOw0KPj4gKwl9
-DQo+PiArDQo+PiArCWlmIChzdGF0dXMgJiBQQ0NfU1RBVFVTX0VSUk9SKSB7DQo+PiArCQljYXBf
-c3RhdHVzID0gcmVhZHdfcmVsYXhlZCgmZ2VuX2NvbW1fYmFzZS0NCj4+c2V0X2NhcHNfc3RhdHVz
-KTsNCj4+ICsJCXJjID0gcmFzMl9yZXBvcnRfY2FwX2Vycm9yKGNhcF9zdGF0dXMpOw0KPj4gKw0K
-Pj4gKwkJc3RhdHVzICY9IH5QQ0NfU1RBVFVTX0VSUk9SOw0KPj4gKwkJd3JpdGV3X3JlbGF4ZWQo
-c3RhdHVzLCAmZ2VuX2NvbW1fYmFzZS0+c3RhdHVzKTsNCj4+ICsJCXJldHVybiByYzsNCj4+ICsJ
-fQ0KPj4gKw0KPj4gKwlpZiAoc3RhdHVzICYgUENDX1NUQVRVU19DTURfQ09NUExFVEUpDQo+PiAr
-CQlyZXR1cm4gMDsNCj4+ICsNCj4+ICsJcmV0dXJuIC1FSU87DQo+PiArfQ0KPg0KPkhpLCBJJ20g
-dGVycmlibHkgc29ycnkgZm9yIHRoZSBsYXRlIGNodXJuDQo+DQo+SXQgaXMgb3VyIGN1cnJlbnQg
-YmVsaWVmIHRoYXQgY2hlY2tpbmcgdGhlIHNldF9jYXBzX3N0YXR1cyBpcyBub3QgZGVwZW5kZW50
-IG9uIGlmDQo+dGhlIFBDQ19TVEFUVVNfRVJST1IgYml0IGlzIHNldC4gSXQgc2VlbXMgdG8gdXMs
-IHRoYXQgdGhlIFBDQ19TVEFUVVNfRVJST1INCj5iaXQgc2hvdWxkIG9ubHkgYmUgc2V0IGlmIHRo
-ZXJlIGlzIGEgcHJvYmxlbSB3aXRoIHRoZSBQQ0MgcHJvdG9jb2wuIFdlJ3ZlDQo+aW50ZXJwcmV0
-ZWQgdGhlIHNldF9jYXBzX3N0YXR1cyBhcyBhIGNhcGFiaWxpdHkgc3BlY2lmaWMgZXJyb3IgcmVw
-b3J0aW5nDQo+bWVjaGFuaXNtLiBXZSBoYXZlIHRlc3RlZCB0aGUgZm9sbG93aW5nIGFtZW5kbWVu
-dCB0byB0aGlzIGZsb3csIGFuZCB1cmdlIHlvdQ0KPnRvIGNvbnNpZGVyIHRoaXMgY2hhbmdlLCBv
-ciBhIGZ1bmN0aW9uYWxseSBlcXVpdmFsZW50IG9uZToNCg0KVGhhbmtzIERhbmllbCBmb3IgdGhl
-IHN1Z2dlc3Rpb24uIEkgaGF2ZSB0ZXN0ZWQgd2l0aCB0aGUgY2hhbmdlcyBhbmQgd2lsbCBpbmNv
-cnBvcmF0ZQ0KaW4gdjcuDQoNClRoYW5rcywNClNoaWp1ICAgDQo+DQo+ZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvYWNwaS9yYXMyLmMgYi9kcml2ZXJzL2FjcGkvcmFzMi5jIGluZGV4DQo+NmJiYjAwOTFi
-NGIzLi4zZjczYzlmZjMzYTMgMTAwNjQ0DQo+LS0tIGEvZHJpdmVycy9hY3BpL3JhczIuYw0KPisr
-KyBiL2RyaXZlcnMvYWNwaS9yYXMyLmMNCj5AQCAtMTE2LDE4ICsxMTYsMjAgQEAgc3RhdGljIGlu
-dCByYXMyX2NoZWNrX3BjY19jaGFuKHN0cnVjdA0KPnJhczJfcGNjX3N1YnNwYWNlDQo+KnBjY19z
-dWJzcGFjZSkNCj4gICAgICAgIH0NCj4NCj4gICAgICAgIGlmIChzdGF0dXMgJiBQQ0NfU1RBVFVT
-X0VSUk9SKSB7DQo+LSAgICAgICAgICAgICAgIGNhcF9zdGF0dXMgPSByZWFkd19yZWxheGVkKCZn
-ZW5fY29tbV9iYXNlLT5zZXRfY2Fwc19zdGF0dXMpOw0KPi0gICAgICAgICAgICAgICByYyA9IHJh
-czJfcmVwb3J0X2NhcF9lcnJvcihjYXBfc3RhdHVzKTsNCj4tDQo+ICAgICAgICAgICAgICAgIHN0
-YXR1cyAmPSB+UENDX1NUQVRVU19FUlJPUjsNCj4gICAgICAgICAgICAgICAgd3JpdGV3X3JlbGF4
-ZWQoc3RhdHVzLCAmZ2VuX2NvbW1fYmFzZS0+c3RhdHVzKTsNCj4tICAgICAgICAgICAgICAgcmV0
-dXJuIHJjOw0KPisgICAgICAgICAgICAgICByZXR1cm4gLUVJTzsNCj4gICAgICAgIH0NCj4NCj4t
-ICAgICAgIGlmIChzdGF0dXMgJiBQQ0NfU1RBVFVTX0NNRF9DT01QTEVURSkNCj4tICAgICAgICAg
-ICAgICAgcmV0dXJuIDA7DQo+DQo+LSAgICAgICByZXR1cm4gLUVJTzsNCj4rICAgICAgIGlmICgh
-KHN0YXR1cyAmIFBDQ19TVEFUVVNfQ01EX0NPTVBMRVRFKSkNCj4rICAgICAgICAgICAgICAgcmV0
-dXJuIC1FSU87DQo+Kw0KPisgICAgICAgLy8gQ2FjaGUsIENsZWFyLCBhbmQgUmVwb3J0IGZlYXR1
-cmUgc3BlY2lmaWMgc3RhdHVzDQo+KyAgICAgICBjYXBfc3RhdHVzID0gcmVhZHdfcmVsYXhlZCgm
-Z2VuX2NvbW1fYmFzZS0+c2V0X2NhcHNfc3RhdHVzKTsNCj4rICAgICAgIHdyaXRld19yZWxheGVk
-KDB4MCwgJmdlbl9jb21tX2Jhc2UtPnNldF9jYXBzX3N0YXR1cyk7DQo+KyAgICAgICByYyA9IHJh
-czJfcmVwb3J0X2NhcF9lcnJvcihjYXBfc3RhdHVzKTsNCj4rICAgICAgIHJldHVybiByYzsNCj4g
-fQ0KPg0KPlRoYW5rcyBhZ2FpbiwNCj5+RGFuaWVsDQoNCg==
+From: Shiju Jose <shiju.jose@huawei.com>
+
+Add support for ACPI RAS2 feature table (RAS2) defined in the
+ACPI 6.5 specification, section 5.2.21 and RAS2 HW based memory
+scrubbing feature.
+
+ACPI RAS2 patches were part of the EDAC series [1].
+
+The code is based on ras.git: edac-for-next branch [2]
+merged with linux-pm.git [3] : linux-next branch.
+
+1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
+2. https://web.git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git/log/?h=edac-for-next
+3. https://web.git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
+
+Changes
+=======
+v6 -> v7:
+1. Fix for the issue reported by Daniel,
+   In ras2_check_pcc_chan(), add read, clear and check RAS2 set_cap_status outside
+   if (status & PCC_STATUS_ERROR) check. 
+   https://lore.kernel.org/all/51bcb52c-4132-4daf-8903-29b121c485a1@os.amperecomputing.com/
+
+v5 -> v6:
+1. Fix for the issue reported by Daniel, in start scrubbing with correct addr and size
+   after firmware return INVALID DATA error for scrub request with invalid addr or size.
+   https://lore.kernel.org/all/8cdf7885-31b3-4308-8a7c-f4e427486429@os.amperecomputing.com/
+   
+v4 -> v5:
+1. Fix for the build warnings reported by kernel test robot.
+   https://patchwork.kernel.org/project/linux-edac/patch/20250423163511.1412-3-shiju.jose@huawei.com/
+2. Removed patch "ACPI: ACPI 6.5: RAS2: Rename RAS2 table structure and field names"
+   from the series as the patch was merged to linux-pm.git : branch linux-next
+3. Rebased to ras.git: edac-for-next branch merged with linux-pm.git : linux-next branch.
+      
+v3 -> v4:
+1.  Changes for feedbacks from Yazen on v3.
+    https://lore.kernel.org/all/20250415210504.GA854098@yaz-khff2.amd.com/
+
+v2 -> v3:
+1. Rename RAS2 table structure and field names in 
+   include/acpi/actbl2.h limited to only necessary
+   for RAS2 scrub feature.
+2. Changes for feedbacks from Jonathan on v2.
+3. Daniel reported a known behaviour: when readback 'size' attribute after
+   setting in, returns 0 before starting scrubbing via 'addr' attribute.
+   Changes added to fix this.
+4. Daniel reported that firmware cannot update status of demand scrubbing
+   via the 'Actual Address Range (OUTPUT)', thus add workaround in the
+   kernel to update sysfs 'addr' attribute with the status of demand
+   scrubbing.
+5. Optimized logic in ras2_check_pcc_chan() function
+   (patch - ACPI:RAS2: Add ACPI RAS2 driver).
+6. Add PCC channel lock to struct ras2_pcc_subspace and change
+   lock in ras2_mem_ctx as a pointer to pcc channel lock to make sure
+   writing to PCC subspace shared memory is protected from race conditions.
+   
+v1 -> v2:
+1.  Changes for feedbacks from Borislav.
+    - Shorten ACPI RAS2 structures and variables names.
+    - Shorten some of the other variables in the RAS2 drivers.
+    - Fixed few CamelCases.
+
+2.  Changes for feedbacks from Yazen.
+    - Added newline after number of '}' and return statements.
+    - Changed return type for "ras2_add_aux_device() to 'int'.
+    - Deleted a duplication of acpi_get_table("RAS2",...) in the ras2_acpi_parse_table().
+    - Add "FW_WARN" to few error logs in the ras2_acpi_parse_table().
+    - Rename ras2_acpi_init() to acpi_ras2_init() and modified to call acpi_ras2_init()
+      function from the acpi_init().
+    - Moved scrub related variables from the struct ras2_mem_ctx from  patch
+      "ACPI:RAS2: Add ACPI RAS2 driver" to "ras: mem: Add memory ACPI RAS2 driver".
+
+Shiju Jose (2):
+  ACPI:RAS2: Add ACPI RAS2 driver
+  ras: mem: Add memory ACPI RAS2 driver
+
+ Documentation/edac/scrub.rst |  78 ++++++
+ drivers/acpi/Kconfig         |  11 +
+ drivers/acpi/Makefile        |   1 +
+ drivers/acpi/bus.c           |   3 +
+ drivers/acpi/ras2.c          | 450 +++++++++++++++++++++++++++++++++++
+ drivers/ras/Kconfig          |  11 +
+ drivers/ras/Makefile         |   1 +
+ drivers/ras/acpi_ras2.c      | 424 +++++++++++++++++++++++++++++++++
+ include/acpi/ras2.h          |  70 ++++++
+ 9 files changed, 1049 insertions(+)
+ create mode 100644 drivers/acpi/ras2.c
+ create mode 100644 drivers/ras/acpi_ras2.c
+ create mode 100644 include/acpi/ras2.h
+
+-- 
+2.43.0
+
 
