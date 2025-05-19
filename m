@@ -1,318 +1,252 @@
-Return-Path: <linux-edac+bounces-3943-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3944-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFF8FABC53D
-	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 19:10:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA659ABC8D1
+	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 23:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8971B4A0882
-	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 17:10:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90A963AE005
+	for <lists+linux-edac@lfdr.de>; Mon, 19 May 2025 21:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BDB2882C7;
-	Mon, 19 May 2025 17:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EA6921ADC7;
+	Mon, 19 May 2025 21:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="grTTUBit"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HINiW166"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEE01E9B21;
-	Mon, 19 May 2025 17:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747674648; cv=none; b=LGZcg9Yjl8YJo/t6dQdhP/m/XztuQtvB1Q0D2u/J1iLUKkZMoVEX4DVX9Etf5KT5ohLG6PnCzBRLm/9yrsTGbacrpzpe6W0B1ccYJlZqmyD03M05Mlzxgr7SJV0+rxLXy82+DCNEpl95NQfNhlnAIctk5jbLEz8JAwCTDqklSNI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747674648; c=relaxed/simple;
-	bh=jBJnRwW6I+AEyq4e/HnFfARoLiRBaG6k41aGuf3ZfsA=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=kKiyEvtFtLbUadlesLWmTLVhC30+loAkRR1y3+wldTN/SA4T1T0GRFYlH0ELo9CvGRsIT/iTKuPxoaIZdI9wKQIFp2arvqlJZk8/0e/sGUDK/tkMPtWP0xNwFI2zEIuvRAate7rUIO6lcSBm4nk+qoQLSKwrP3C0tJkoEwm8FBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=grTTUBit; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF621D63FC;
+	Mon, 19 May 2025 21:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747688498; cv=fail; b=iUKcIB2nZ37hN+dMdsqcyw+T6vp6Ha2pm5LZHmnsIBDQFmYcpSBmRphbdQXeq1N51PKIMKflwCz84TxlO9+D8Qzjjp9dplJyyu1h9P340OlsZdzaNwDSgLqigF8gB6WO/3wnoLxdWNCC899WhudlnuSS/WkSqGyguUYoNT4EuUY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747688498; c=relaxed/simple;
+	bh=xwGJzeLC9nOa+CIQVlSDotMz8l+vk0WixDcFr+DhLMI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=cHeYTTFQLxv6qYvxEDfYI0wKNbBwHs1z3Yinr2PsD4YccwL51my7iad0aMymFJJgQwCLNB4bVG2kFp1xm48COuEJAtTsvQL119UjdT/kxwKEbUCnYOjum1FsJ6UY7rMh19rx42U2jEhlCYc3ZDaX4UhRnIeTuIkxi0KfvBPs0NM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HINiW166; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747674647; x=1779210647;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jBJnRwW6I+AEyq4e/HnFfARoLiRBaG6k41aGuf3ZfsA=;
-  b=grTTUBitXHsklyZTIzA3wSU4HpYhwQMA4pjFTdZFzC9wMd+7d6NlZ2NV
-   eBsvkKbSLzUwPMCRiC9RMMaaE/wiigHuBfd9qH0gaQ+owRVeQ41c88yrl
-   ZgzsXNtAZG2COlgx3oPPo0Ku6LM85MjcQvMdDLJOw2hAxf0A7mLbf7Jjm
-   U9OdFhjs0qjMt9ERVYqpVCHgn1x1Sy+TL8s5sZ3R15tskod0ckCeYm/nr
-   ldxRKcOVkTMj7wkX6tc+gdQj/hpRA7PhIqCEZFJ3V9t/msMGxvIN5ShZV
-   C9iK4XHaJPnmBu+mfClIbmlY4wRoVqO/mcQjS1c7vuSjw/uuh6jFHPa0H
-   w==;
-X-CSE-ConnectionGUID: EbUjfgEFQvaQdKhLMWY1ww==
-X-CSE-MsgGUID: fN675RE8RBq6XqCAD3C6UA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="66997930"
+  t=1747688497; x=1779224497;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=xwGJzeLC9nOa+CIQVlSDotMz8l+vk0WixDcFr+DhLMI=;
+  b=HINiW1669HVdb6LbNhUXBvUhaMkPOAJwD9oaBhKAahRjM3TXpiL8gcIe
+   on+90WroMfVChw2EchQ1RNp5c8/hDRiQeaAZkwYeOgr0hcdv7s5mECen5
+   3fDYRxeq0prGHWCHXFZaMzfpdN2zILaY44+h8k0Gqn7IZVcCwWoVLpBHt
+   2UXxmkOYO9d3tzQ3pGORtOWkpEqKszHmduYMWT6/MMd9Z+PFTTEGXTJBq
+   WPYa8RryAcyeis7OqOz52sGN/qaqI2T7TFskfGixanI+QGvYpbvMoEhyO
+   +mBkW+z/TyzzpUgSTUXtl+doAZgz9uhiWjS9TfhC8cPeTRr70wQk6gHLH
+   g==;
+X-CSE-ConnectionGUID: oLOFJqCrTZiB9jhloTlX5A==
+X-CSE-MsgGUID: H06B+ggdRnikERetFxwkmg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="60637982"
 X-IronPort-AV: E=Sophos;i="6.15,301,1739865600"; 
-   d="scan'208";a="66997930"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 10:10:46 -0700
-X-CSE-ConnectionGUID: dSAdntPZT7O3jx7uAhBjhA==
-X-CSE-MsgGUID: Qy6G2AgZRPKFB0xBse1OrQ==
+   d="scan'208";a="60637982"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 14:01:33 -0700
+X-CSE-ConnectionGUID: TV8D1XVQQOGOcpDuH7rcYw==
+X-CSE-MsgGUID: wqZHv2HHTHW25NCG/ylCRA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,301,1739865600"; 
-   d="scan'208";a="139315745"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.35])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 10:10:40 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 19 May 2025 20:10:37 +0300 (EEST)
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-cc: rostedt@goodmis.org, Lukas Wunner <lukas@wunner.de>, 
-    linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-    helgaas@kernel.org, bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de, 
-    mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com, 
-    naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com, 
-    mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-In-Reply-To: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
-Message-ID: <87b1f8c6-bd72-b1a8-40a6-bbf552552806@linux.intel.com>
-References: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
+   d="scan'208";a="139386670"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 14:01:31 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 19 May 2025 14:01:30 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Mon, 19 May 2025 14:01:30 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.43) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Mon, 19 May 2025 14:01:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WTTVw+8quM1U/VDd5R21D1G/w+0G3qrEKqEdmUotPWlTsYyVJVS8T5VWQgXeG9eKj0RXh9V7dvvR31lFBgNThkwpl7GR67sA+mOhila4WE2CBzBKai08RsVFYmPAW0H2eenj8yT1MFzMUeGt88y0L4C3J3GQqrQAyaT3RqFU+J+IWGPLHCcZbQavz0UIM1BdPrZzMRxjPoT+enetxV895xqUtWR6TJC/ukEno3i5R1eMOenL5f8u1j5jtTWjnKdyu1g8U4MYUqH6ruokoAIgX6EchJN3pDh+LRf9dfj8n/+E0cRuNSXbZzY/MFl4T+BaNq+0QfnJEHHojN7qpg/IiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hVc3sgcEvuy7WqQ9vLRAyCWkegsXDOIRs5ZN9OmsmYg=;
+ b=ZZ1gZ9GPGMGPRNXOhqn78GTuV9w6ua+QF9O+uipZa9e/lJm5MGq6ySmD1Y3LaJ/Soblg8j+DS+F8gm5rPPnp3KUh35jH5zwJGNHkHIDJvG3dhZa2RuJPjpf1kmHKQ/MlYHuakqRt0Iib6oGxjUPSdFOrvJqyW6GQEbDaiTNYNa8NeeS90+R6mSQv7FWMP1tMxZMUyf+o+OMtTRAkDuMAphV7N6q97+/j03nAiB3oAdaJuI21rboQK4A7HOqDtDTl/m2kZXEIqALEzqwND+RckFDdTxHxS0mc95AW3epf9GL7ee0V8MXUBbnUkPkMP0hzTZIjdZVEchys/p6WBMriXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB8794.namprd11.prod.outlook.com (2603:10b6:806:46a::5)
+ by DS7PR11MB7905.namprd11.prod.outlook.com (2603:10b6:8:ed::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Mon, 19 May
+ 2025 21:01:28 +0000
+Received: from SA1PR11MB8794.namprd11.prod.outlook.com
+ ([fe80::a3d4:9d67:2f5d:6720]) by SA1PR11MB8794.namprd11.prod.outlook.com
+ ([fe80::a3d4:9d67:2f5d:6720%5]) with mapi id 15.20.8746.030; Mon, 19 May 2025
+ 21:01:28 +0000
+Date: Mon, 19 May 2025 14:01:23 -0700
+From: Alison Schofield <alison.schofield@intel.com>
+To: <shiju.jose@huawei.com>
+CC: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
+	<jonathan.cameron@huawei.com>, <dave.jiang@intel.com>, <dave@stgolabs.net>,
+	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+	<linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <lenb@kernel.org>, <Yazen.Ghannam@amd.com>,
+	<mchehab@kernel.org>, <nifan.cxl@gmail.com>, <linuxarm@huawei.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>
+Subject: Re: [PATCH v5 7/8] cxl/edac: Add CXL memory device memory sparing
+ control feature
+Message-ID: <aCucI3TPynSycGug@aschofie-mobl2.lan>
+References: <20250515115927.772-1-shiju.jose@huawei.com>
+ <20250515115927.772-8-shiju.jose@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250515115927.772-8-shiju.jose@huawei.com>
+X-ClientProxiedBy: BYAPR01CA0047.prod.exchangelabs.com (2603:10b6:a03:94::24)
+ To SA1PR11MB8794.namprd11.prod.outlook.com (2603:10b6:806:46a::5)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB8794:EE_|DS7PR11MB7905:EE_
+X-MS-Office365-Filtering-Correlation-Id: dfdfeda3-4284-4f90-6cd7-08dd971852bf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?Mld1QlpZamkwanBZa1BRamN5MGFEbW5JQThMZnhOZHkxNmd1NTNMV2xBemxY?=
+ =?utf-8?B?VERJRFNCNktkMkxiY3FwZ09TTVF2Y0s5YjVDT0s2NXRGYnhyQit2aVc4emxL?=
+ =?utf-8?B?eEljOGZNRjNuZ0VzMDNGOENxZWxNS2FxZHdTdk9aMGJuNHRRc3FnUnRiRDVU?=
+ =?utf-8?B?L3NKdGY0RE5BTzdHSFdvR0NWdFNJL1Q1eHVHb0pXYWF1ODk0dDRWUTlQQUNW?=
+ =?utf-8?B?S05GUDJxY2prRUJMKzd0MCtJblA2MWlZODRDTnZsa2NxQkM1K1U3WnZWVG1l?=
+ =?utf-8?B?RmZTN1lXblZ4cm9aUkcwU3NFV1RPbXVBUjN6WENzK0w4eGh1V0pYUWtkeXNr?=
+ =?utf-8?B?N2NlT2V4TndjeS9SaVlmS2g2U0lxRWo2QW5aTk9tbE56ZURyTzg2RFdPVjQv?=
+ =?utf-8?B?MzRZSS9scUxmWk5nUEx5N082RWdiOUdsVVhQTEZJS2NkTnQ2QkJUWldiTmNR?=
+ =?utf-8?B?U3FxeXg3M3QvR202SFlrMkptV2orNUtDeUJYVHhramVtQkVhUUloSWpJd3BG?=
+ =?utf-8?B?TTFKQlE5RmN2eVdoMnZqSm94KzFlSkFpN1gwTWVzVjd5L1hMOEtpTzRuZWhU?=
+ =?utf-8?B?MXVqb0ZWVW1meURoWFN0Ly9GSkg2MjhxcUpZcnBLR0ZIZ2VCQXBXaVMwS1g1?=
+ =?utf-8?B?T05od0xYeEd0ZnRyNWR6NVFxL1VqejRONlNGZFh1STM1NlZPWEY1R3AyY2FD?=
+ =?utf-8?B?NllwOFlrN0lPbGVrdGNxREhqSDYxdVNaT3JLMjRsZS9YTmpRc1NLUUs3aTQ4?=
+ =?utf-8?B?cnYyaEhhTWpxcHFmU1RnNGFXSmNGUDRUcjA2M0ZrblhDZVhhTUU5dllLOGVG?=
+ =?utf-8?B?Qm13ajdNV3ROeGJ5dVFQMTF5Y09nTEo5WkN1dERUNnVEeVM3SXlMZGxrUUtB?=
+ =?utf-8?B?VGY3TjFreFZRYlh1VkE1aThCYVQ0S2tUQ3dDV1pNUThDT0xGS1JrbUozaWF0?=
+ =?utf-8?B?RUZ5alVILzhxcVc1cERtcm5PWVBpQVBPQjR0c2ZJWmVIeVR3Z2tKZnBkVFBE?=
+ =?utf-8?B?TUtha21Gb3FMcjVYSVBCWHc0NVFlell2ZkdPNWR0UndwMWxITno5ei81c29Q?=
+ =?utf-8?B?ZlRhWW5qVVFSNExISzdFc3J6Q3VaL3BtakV6N1hKZUhXNDBOSTZRenBKY0M3?=
+ =?utf-8?B?N0V4SThCRGNHZXFiQjdmQjNXV0E0dFlBYzFBVEZ3bTg0VVRXeWxuNnZHenI3?=
+ =?utf-8?B?ZSsrTjl3NnZvU2VHUHRPYXJNWk1TNXY0WUdPSWVscGl3RmpqL0JWYU9WcE1p?=
+ =?utf-8?B?ZWFVK3VhSjF1anhmV2IrNGNFazExdlZXdTlZWlhzOHRRTGZNd2JMMmtINjhX?=
+ =?utf-8?B?UFI4NDgxNDFiMk9FVHYzSWJoZ3Fjem9QR3hVWlcwclc3bk5JNzFLTE5MSHhC?=
+ =?utf-8?B?eEthU0RRM3E0SXMvU3IxWk9CRFhva29lUlZ4UmNYNnNvT2c4SkdwalordUl4?=
+ =?utf-8?B?NjE1aW9VR0NoNjM3ZHo5ZjFaUDJBZlJ5L3I0WStsdlovbWlMNm8wQmI3WXlx?=
+ =?utf-8?B?MjNSdVE1L3RFRHVMQ2cxRGMzVk9TeFIvWVA5UWhqaG9qUzlscXgzODJCUXR4?=
+ =?utf-8?B?ZlR5eCtjUk9Rb2pqZ2MxQ1RkQnBnYUVMbHBicXcxNHJoRTkvRkdkbW1yNTcv?=
+ =?utf-8?B?MGpDU3NOMW5OVmMvTjh4V0FpN040MUlMb1RueWFJS2YycG12TFQvN0xhT21E?=
+ =?utf-8?B?U1RyRjVna1QrWnE1M2RweUhXYnc0T29IQVNEKzZVOG9NZkx4NThMZ3I1N1lG?=
+ =?utf-8?B?Ny9acUNUdzZ6WG13ai9TbkdQV01Fam56QlNCaGtzOTF6clg3R0xXdXB5ZEwr?=
+ =?utf-8?B?azR3VmdDTWh3MzhWQnd0anpkT3pLMnBrbmRHeHNFUllNT3orQks0aFpxTFJK?=
+ =?utf-8?B?SHZHOTRsNUJZYnRUdHlhTTJEUkg5c0hNamJMWDdUQktzQ21DdmhpUzl5cjFp?=
+ =?utf-8?Q?dTC9spBuSPM=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB8794.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WDJoemxNWlBEckJhakJFMHdtQTZpWG5Zb1JlUEpxVFdwVlQ1dHRlT0wrbTFF?=
+ =?utf-8?B?UG5YQVp3TGdaTytQeU90dXMraWNHWXFsd1YvVkNuUWt4dzhSajBoSFpGaEpG?=
+ =?utf-8?B?TmdqbXJ6b3Irb2RtNUxlTDRTdjY3ZFc4aDBRL1N5WnZhRCtaV0RaZnM2SENT?=
+ =?utf-8?B?UURmWC9aNENiVHJEV1BkVWdUNzY4TzBXZzB6NTlWN3NGYnpPZjVZbmduKzhT?=
+ =?utf-8?B?eDNVMk55WTZmWFg0d3FUQ3FOYkZSM21SVXpSY2dIQXJzblBjc2N3TldFWWpZ?=
+ =?utf-8?B?MGgrZnpTMG9Yb1Z2c2FaOUpsbnhiemZPRzVIM2h2dFlDYkdKOHlXWGNWejhJ?=
+ =?utf-8?B?clN0ZkZxVktidDVnbTNhR292V0x2SmhWcWpnMDEyaDEvZ3hES0pVOHU2bkZk?=
+ =?utf-8?B?RGY3cm1BYlBZQzVzNHNBOGVKS3hhNXIyL2NsK0pLc3RHZVZ3Q3RJNi9OaHVO?=
+ =?utf-8?B?VmI1WGhiSGQzdjVaYkJGRk5RaXVMWjMzZnFMSExKdDN5ZTlpZ280b0U1WXM5?=
+ =?utf-8?B?OVZSNEdaZ3M5RGhEMVoxVXczSUpXUFpxSCtuRnEwSnRoSnA4YlpuYnFsczZE?=
+ =?utf-8?B?RWtUUWRudDdpSWhGVGVqWUYrWFQrblZZYW9aejVKRFBUY3VocU15bGoxaUYr?=
+ =?utf-8?B?WVRobnpxUk1MQTJkNXhsWnR0VDBRdzh1cFpjcFV0S2ZyNjVTTnFYc0VqeGhs?=
+ =?utf-8?B?ODg5UEQzbzg3ckxRWUtvRkxFZFB6aTBOckptOFhGOTVXWFE4OGFTNUN3Qmd5?=
+ =?utf-8?B?SWdzMTFZT2JCYy93SzZkdnZoQ3RlbGx4TGE4UWVkWXR6V0txcit5WG41b2Jz?=
+ =?utf-8?B?N2ZsL05SZXJXUDZQbWlHY0JQb2xMOFFnQ2lmRElXMEc2UmpzbituZlVTdW0v?=
+ =?utf-8?B?TVlDNERzVzlqRXVHZHcvZEdHdVErTkJuMDVQOVFpOGR4b2xyeVJZUTlMV00v?=
+ =?utf-8?B?NkI0d0lHd0FsemhBamZWLzlibS9EZ1NXYjQ0L0NaNzVuSVBmTk9qeTZlS3Rt?=
+ =?utf-8?B?K3krR1FuUGI3NkZGT0R6ZVB4QVF6TkduTzNwNHR6YktoTGJTc2lDc0NuSEZJ?=
+ =?utf-8?B?bGtPNWIxZU52Y04xdmYzV25CRDVOZHVPNVpiUEVCem9ZSlRtUm9EMWNFdG9u?=
+ =?utf-8?B?dUtBZDluRjU5ejVDeFJsS2JVMk1mVGcxM1RRcWF3S0s1cVMyemxwOXJUc1dV?=
+ =?utf-8?B?NnFLcGFkbW83Z0k5NmowaTVJbDZSSmYycy9DZzExZk5ncWxnRENURG8zMEJv?=
+ =?utf-8?B?emR1cFdhSkkvb1FuTllxVEIwaUUvaW9rSjZydHBzdXlXUHllb3BVQUJvUFNs?=
+ =?utf-8?B?czZsbWthZHYxemxzR0JnY05jQWJCTFZkVWdHc2VIQWlDSk9MajRZTVF2aThH?=
+ =?utf-8?B?SnpqN3JDamxxMzhZV1pLTnpxRm5DZ1JZdmdWUXB6TmNnNHpnWUVvTEtYa0pp?=
+ =?utf-8?B?VFZRTW00M3RGbktoT21HYTNKS0VHVmxIbVFKQTVZR013dEhsYVorUWdqTHQ5?=
+ =?utf-8?B?RFBhWTE5Mlh3REd5UVZDUXJKbDg3UzE1cGlobGJMSnJMazFWd2lvWUhkaXh5?=
+ =?utf-8?B?YjEvTlFyemhmUUdwK1pkN0FGbjIyNVhvRG9GVWM0bG9oTFF6M1dhQUVpcTNj?=
+ =?utf-8?B?YXd3bTVtMFFYS3BuMytuYUJ6OGdTVjFTbGFLNXN1MWlBS1ZIRXFpV1llVldR?=
+ =?utf-8?B?T1NDbzNZTTIzRFVtSDcza1lJbjhhOWd1K3lwYldFZHFGK3RPSk5SaHM3OGlz?=
+ =?utf-8?B?VEhJZTE4ekdPVmhzRGNIN2NLUnhPb244Nm00M25RSEVKRzZxOHUzQWtKNFlI?=
+ =?utf-8?B?Nm9mejI5MnhFdzZyOE15T3dxSTVZa0FXUGh3MStGS3VObW9nL3ZWOENjdE5k?=
+ =?utf-8?B?MVp3QUo2TTNrUTdoYmtWNXVXdzhZVExhbW41SmlYZ1J3Q3lqVjNxSkNDaHBj?=
+ =?utf-8?B?eWZKQnJYQk5jczlpeGd1Q1BnTmpHMDExZlJ6OEhwNk5SdXFvU2dXVWpxUGNj?=
+ =?utf-8?B?WFZnRndHUUlVempSbXRoL0cycmlCaUYvMDQvdHlnd21yL2hmVDFnK09aSkh3?=
+ =?utf-8?B?bk81MkJDNlBmWEUwcjRmYWNaRE81OVlISkZEaFZ3Y0VPT2Z6MUZHSFhUMFhi?=
+ =?utf-8?B?ZFg5VWJCQVJSZW5UMkg4R2JkVHpVQzNXNFQ3Wnc4UHVGenJIODhSRm81MnND?=
+ =?utf-8?B?d1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfdfeda3-4284-4f90-6cd7-08dd971852bf
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB8794.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2025 21:01:28.2485
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4Ilzyk8YjwAoTWPBN0D8nJJTpQIoE//vVTi8fAu9aymwm1RUIFEzQXX7ZawHKTJoPNR0bKuXyEUss2crodF9uiWbBaKc71C+yABj5oVRdrk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7905
+X-OriginatorOrg: intel.com
 
-On Mon, 12 May 2025, Shuai Xue wrote:
+On Thu, May 15, 2025 at 12:59:23PM +0100, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+>
 
-> Hotplug events are critical indicators for analyzing hardware health,
-> particularly in AI supercomputers where surprise link downs can
-> significantly impact system performance and reliability.
-> 
-> To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
-> tracepoint for hotplug event to help healthy check, and generate
-> tracepoints for pcie hotplug event. Add enum pci_hotplug_event in
-> include/uapi/linux/pci.h so applications like rasdaemon can register
-> tracepoint event handlers for it.
-> 
-> The output like below:
-> 
-> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
-> $ cat /sys/kernel/debug/tracing/trace_pipe
->     <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
-> 
->     <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
-> 
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Reviewed-by: Lukas Wunner <lukas@wunner.de>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
-> changes since v7:
-> - replace the TRACE_INCLUDE_PATH to avoid macro conflict per Steven
-> - pick up Reviewed-by from Lukas Wunner
-> ---
->  drivers/pci/hotplug/Makefile      |  3 ++
->  drivers/pci/hotplug/pciehp_ctrl.c | 33 ++++++++++++---
->  drivers/pci/hotplug/trace.h       | 68 +++++++++++++++++++++++++++++++
->  include/uapi/linux/pci.h          |  7 ++++
->  4 files changed, 105 insertions(+), 6 deletions(-)
->  create mode 100644 drivers/pci/hotplug/trace.h
-> 
-> diff --git a/drivers/pci/hotplug/Makefile b/drivers/pci/hotplug/Makefile
-> index 40aaf31fe338..a1a9d1e98962 100644
-> --- a/drivers/pci/hotplug/Makefile
-> +++ b/drivers/pci/hotplug/Makefile
-> @@ -3,6 +3,9 @@
->  # Makefile for the Linux kernel pci hotplug controller drivers.
->  #
+snip
+
+> diff --git a/drivers/cxl/core/edac.c b/drivers/cxl/core/edac.c
+> index 489c9996bfbc..395d56457931 100644
+> --- a/drivers/cxl/core/edac.c
+> +++ b/drivers/cxl/core/edac.c
+> @@ -21,7 +21,17 @@
+>  #include "core.h"
+>  #include "trace.h"
 >  
-> +# define_trace.h needs to know how to find our header
-> +CFLAGS_pciehp_ctrl.o				:= -I$(src)
+> -#define CXL_NR_EDAC_DEV_FEATURES 2
+> +#define CXL_NR_EDAC_DEV_FEATURES 6
 > +
->  obj-$(CONFIG_HOTPLUG_PCI)		+= pci_hotplug.o
->  obj-$(CONFIG_HOTPLUG_PCI_COMPAQ)	+= cpqphp.o
->  obj-$(CONFIG_HOTPLUG_PCI_IBM)		+= ibmphp.o
-> diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
-> index d603a7aa7483..f9beb4d3a9b8 100644
-> --- a/drivers/pci/hotplug/pciehp_ctrl.c
-> +++ b/drivers/pci/hotplug/pciehp_ctrl.c
-> @@ -23,6 +23,9 @@
->  #include "../pci.h"
->  #include "pciehp.h"
+> +static bool cxl_is_memdev_memory_online(const struct cxl_memdev *cxlmd)
+> +{
+> +	struct cxl_port *port = cxlmd->endpoint;
+> +
+> +	if (port && cxl_num_decoders_committed(port))
+> +		return true;
+> +
+> +	return false;
+> +}
 >  
-> +#define CREATE_TRACE_POINTS
-> +#include "trace.h"
-> +
->  /* The following routines constitute the bulk of the
->     hotplug controller logic
->   */
-> @@ -244,12 +247,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->  	case ON_STATE:
->  		ctrl->state = POWEROFF_STATE;
->  		mutex_unlock(&ctrl->state_lock);
-> -		if (events & PCI_EXP_SLTSTA_DLLSC)
-> +		if (events & PCI_EXP_SLTSTA_DLLSC) {
->  			ctrl_info(ctrl, "Slot(%s): Link Down\n",
->  				  slot_name(ctrl));
-> -		if (events & PCI_EXP_SLTSTA_PDC)
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_LINK_DOWN);
-> +		}
-> +		if (events & PCI_EXP_SLTSTA_PDC) {
->  			ctrl_info(ctrl, "Slot(%s): Card not present\n",
->  				  slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
-> +		}
->  		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
->  		break;
->  	default:
-> @@ -269,6 +280,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->  					      INDICATOR_NOOP);
->  			ctrl_info(ctrl, "Slot(%s): Card not present\n",
->  				  slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
->  		}
->  		mutex_unlock(&ctrl->state_lock);
->  		return;
-> @@ -281,12 +295,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->  	case OFF_STATE:
->  		ctrl->state = POWERON_STATE;
->  		mutex_unlock(&ctrl->state_lock);
-> -		if (present)
-> +		if (present) {
->  			ctrl_info(ctrl, "Slot(%s): Card present\n",
->  				  slot_name(ctrl));
-> -		if (link_active)
-> -			ctrl_info(ctrl, "Slot(%s): Link Up\n",
-> -				  slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_CARD_PRESENT);
-> +		}
-> +		if (link_active) {
-> +			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_LINK_UP);
-> +		}
->  		ctrl->request_result = pciehp_enable_slot(ctrl);
->  		break;
->  	default:
-> diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
-> new file mode 100644
-> index 000000000000..21329c198019
-> --- /dev/null
-> +++ b/drivers/pci/hotplug/trace.h
-> @@ -0,0 +1,68 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_HW_EVENT_PCI_HP_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM pci
-> +
-> +#define PCI_HOTPLUG_EVENT					\
-> +	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
-> +	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
-> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
-> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
 
-Hi,
+Looks like above fcn needs to be inside the below #ifdef.
+Smatch is warning this when EDAC_SCRUB is off
 
-While I was thinking of adding tracing into PCIe BW controller (bwctrl), 
-I ended up thinking that perhaps it would make more sense to have PCIe 
-Link related tracepoints which would cover both hotplug and bwctrl so that 
-also Link Speed changes would be reported through the same trace event.
+drivers/cxl/core/edac.c:27:13: warning: ‘cxl_is_memdev_memory_online’ defined but not used [-Wunused-function]
+   27 | static bool cxl_is_memdev_memory_online(const struct cxl_memdev *cxlmd)
 
-Downgraded speed may indicate there's something wrong with the card and 
-the Link Speed does have performance impact too for those who are pushing 
-BW boundaries such as AI systems.
 
-So my suggestion is:
+>  #ifdef CONFIG_CXL_EDAC_SCRUB
 
-- Add "Link Speed changed" to the event types.
-- Add Link Speed and Width into the event format (and probably also Flit 
-  mode as PCIe gen6 is coming).
-
-> +/* Enums require being exported to userspace, for user tool parsing */
-> +#undef EM
-> +#undef EMe
-> +#define EM(a, b)	TRACE_DEFINE_ENUM(a);
-> +#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
-> +
-> +PCI_HOTPLUG_EVENT
-> +
-> +/*
-> + * Now redefine the EM() and EMe() macros to map the enums to the strings
-> + * that will be printed in the output.
-> + */
-> +#undef EM
-> +#undef EMe
-> +#define EM(a, b)	{a, b},
-> +#define EMe(a, b)	{a, b}
-> +
-> +TRACE_EVENT(pci_hp_event,
-> +
-> +	TP_PROTO(const char *port_name,
-> +		 const char *slot,
-> +		 const int event),
-> +
-> +	TP_ARGS(port_name, slot, event),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(	port_name,	port_name	)
-> +		__string(	slot,		slot		)
-> +		__field(	int,		event	)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(port_name);
-> +		__assign_str(slot);
-> +		__entry->event = event;
-> +	),
-> +
-> +	TP_printk("%s slot:%s, event:%s\n",
-> +		__get_str(port_name),
-> +		__get_str(slot),
-> +		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
-> +	)
-> +);
-> +
-> +#endif /* _TRACE_HW_EVENT_PCI_HP_H */
-> +
-> +#undef TRACE_INCLUDE_PATH
-> +#define TRACE_INCLUDE_PATH .
-> +#undef TRACE_INCLUDE_FILE
-> +#define TRACE_INCLUDE_FILE trace
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
-> index a769eefc5139..4f150028965d 100644
-> --- a/include/uapi/linux/pci.h
-> +++ b/include/uapi/linux/pci.h
-> @@ -39,4 +39,11 @@
->  #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
->  #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
->  
-> +enum pci_hotplug_event {
-> +	PCI_HOTPLUG_LINK_UP,
-> +	PCI_HOTPLUG_LINK_DOWN,
-> +	PCI_HOTPLUG_CARD_PRESENT,
-> +	PCI_HOTPLUG_CARD_NOT_PRESENT,
-> +};
-> +
->  #endif /* _UAPILINUX_PCI_H */
-> 
-
--- 
- i.
+snip to end.
 
 
