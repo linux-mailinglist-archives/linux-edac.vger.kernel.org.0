@@ -1,97 +1,97 @@
-Return-Path: <linux-edac+bounces-3947-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3948-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 669EAABCC63
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 03:36:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CAADABCC8F
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 04:02:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE6483A7CAD
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 01:36:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 906E4189D3C7
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 02:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70AF253F35;
-	Tue, 20 May 2025 01:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAFBE255F4C;
+	Tue, 20 May 2025 02:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SIXuBbaJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBPNZQzV"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913E5AD4B;
-	Tue, 20 May 2025 01:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F9A1DC9A3;
+	Tue, 20 May 2025 02:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747704990; cv=fail; b=D/udoDCCY2ZrekBLBR2PsSzbrwIetC3CWOvZr5doWNQWH+bEmBigeIiSoJX5dD/x1qRek9fz7IZCrtHUAmCI33YWaUw91/VdoxVdAZw63zzBUsOaMLMEsBCkwrwmzvNjwcbFaKQQiZfPdUgFdPu45VOjAJY0p3T3t+GqCwiAOjQ=
+	t=1747706555; cv=fail; b=NqLDKr76O7h+TMfIWOypQPJ/LUj8wJpqEcILr60OSPv7VXLFYUA34GK3iKv4L6rCT4sjtnDTWbWha3B4nQn9T9kJAu57VlQBu/YcDwfwFsTeskGc4zXlKkdh7oqqc82ywQ95lq024N38sWFIIBXapAGCsreBIXlK1sV3GVMcjxY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747704990; c=relaxed/simple;
-	bh=5Yu1YNVu1JnkEzlL8vq9pSKn8JtKi/NJRJpY2d5nfDU=;
+	s=arc-20240116; t=1747706555; c=relaxed/simple;
+	bh=GLtXzhHHvQvCVsl/MMjZ+YvB2xbln9yVdotOKYvx44Q=;
 	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=qAQSeGWzH1HJR8I2Or3ys+IRyMB+vWX/kPfwvVeX//Ky71IpwZbhyFxVcXJDMbYL7Who1nI6rCy+7nCLScbvICTjSDeYhmK+Nkp4EmHuY8MaR1uYPxC84xYH3KjIug1LJfVMNfQzx5hdNBt5luQJN5ni3xKfFTnI4SdJZL0741A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SIXuBbaJ; arc=fail smtp.client-ip=198.175.65.9
+	 Content-Disposition:In-Reply-To:MIME-Version; b=W/QjBTppwDWgBPT+lyBb/m6VU/Agfhlzs2uZpwVIuYNxxtm5TnTN29ktiW2FjfHzR9c9rmvfslA6JOMEq0/Qw12J/NetD5W3QbltmqHo8SXxksmSCn00gF9g/+1s004bx/sk+KPzntAyWzdepMtvTtlF+MxrJ/10ulB9pVtihsg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBPNZQzV; arc=fail smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747704989; x=1779240989;
+  t=1747706554; x=1779242554;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=5Yu1YNVu1JnkEzlL8vq9pSKn8JtKi/NJRJpY2d5nfDU=;
-  b=SIXuBbaJnGtRTM4dPeBoqAGHEwzBYojfvIqWbHXBXW8ShA+D1xTXFgRx
-   eFDkuB5Tns7hy2UOwTSC2MBAqr6XyJHaFpvS+yUOTuFmXwdbv8aYeK5d9
-   JWQ/P+FCA1ft9v987km3nnmTPMHaRXd3G5PbWwYt4REHcTPw6SLAY2tVU
-   Bs+eT8VxboTv197u39JgHoMFCJh4EpDl1bhAzXqL5puNy8/k+tYQq0tCP
-   c3Limdx52l9MLhspgzsCG3vct+hyiRTyozBnldRlaXcO3cESrXblxtNga
-   iIjXXL0KpyVrqphEPL9Txjjd0CMcdetIdFgnOhbOxUwsLcxZNzFmjZpn7
-   A==;
-X-CSE-ConnectionGUID: wapzyJPlTbSVXqI96UxKPQ==
-X-CSE-MsgGUID: WmU8umCdQWGxqFFkZTZPxw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="72132726"
+  bh=GLtXzhHHvQvCVsl/MMjZ+YvB2xbln9yVdotOKYvx44Q=;
+  b=nBPNZQzVDz6kNKPngPmeeQw8XeUc2zfQOiuCWV51ql2VFC04M5mjo771
+   spiM3xyAjqmqg9WoXFzJBlIFn+gsTJelSpBMfFocCLqfqRjGmSYZkPime
+   l/CIbpNOANKq0uv47rdWertRGWCqwgYLCWcrAyWFsb1lN5WFOhg0V2Klq
+   ykpwtTTcIoeXP3V/gyX73Dac0muKJaarxFoohDP4/mNVorG63f4qCJSnk
+   uqEoDGwbO1ReTOWQsbdnRnaIgcH7cig06WXtQIQmFACjeCyR10B70M1Bv
+   s34ifmytldqtbInh4VAV0JxDx8/fwscmmAjte+jBwCQXQY3gCmjeCH8Ah
+   Q==;
+X-CSE-ConnectionGUID: cNRmLuJGTpekj73bZ9xHtg==
+X-CSE-MsgGUID: 55Jy8Wf8S/GAjFzd73ICfA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="37242059"
 X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="72132726"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 18:36:28 -0700
-X-CSE-ConnectionGUID: N/Z/NHLGRz+7RS9gWSClFw==
-X-CSE-MsgGUID: aXIS/bWWSlOERmTzB5ndOg==
+   d="scan'208";a="37242059"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 19:02:30 -0700
+X-CSE-ConnectionGUID: dw4TNAWGTwyVxdc/A+OKqA==
+X-CSE-MsgGUID: XIiKeZ8eRp2T4IAQptg/4A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="140548833"
+   d="scan'208";a="139432764"
 Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 18:36:27 -0700
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 19:02:31 -0700
 Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
  ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Mon, 19 May 2025 18:36:26 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ 15.2.1544.25; Mon, 19 May 2025 19:02:29 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
  ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Mon, 19 May 2025 18:36:26 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.43) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.2.1544.25 via Frontend Transport; Mon, 19 May 2025 19:02:29 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Mon, 19 May 2025 18:36:25 -0700
+ 15.1.2507.44; Mon, 19 May 2025 19:02:29 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tNKm/8tQo0AaXJvArT8xoJCUBiFtFA/JxhEIuisMVzotHZDGjo9ZUiVlfazK89S7VPNsZKIWqvNkhLAHS7yCThibDJEkINCozOC8uCEwi5cyK8fFl4W4LBH+2dXP8YbUYQ8v/cKQHwJi1K8NB5kzKBjH3KVH88LyEdBWT+ETXdcUz/Okgywbz1KyMvjy8uRbef8EYJmL8MCG/q6J8uABvzE3ITpybcAybrNNskVwFMMehgaexW4dfvaLyQOIvPCdUmuaENDKE7zpjMzwCQvs9hPwzRucAXKrtRbYfWQibWn36/bT0RDi+wHyqNnK1WOnqrNSEBhHAn6Npc1QbWwyOQ==
+ b=V5lYieEW6eBIpHRfrrTEbUYqwGR3m3nYf2YBVxrdhtLiEN8Uh10fQocXh2o7bX0hbcxpSlmbUwLZyp5z1C0BLFi4EZsKm+2Kb446GRNwI/xIoUkPgr45/M1Mcg12SkbxFeF/D6Uxt5AfJ8wk1RJVdOhW5/EwtgwYyx2sS22tSmoOjaO40LC4rQZQl3PTALQwmQq6zdgLUIF2E/keUoOWaSQ2bOYz+7MiOYUXXrW4QngUdSFPoS9T8Beox+wwD3PbSkCacAfHaB/iLaaDu5L4723y/sLQ2nEPRVTGEvXWOKtfckevOgyJ5NqcJEfT7EAXsaWdLUCzRfiIHIH2WGsGwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uS16BpIvL3boVhmUsyJpzc+EhP/XA0qtXRk41+39WiA=;
- b=Q37+1/OU4hhO4+Ps6o4lsjouW+iKLAwPMwRzevJK8qiE2tvf0WvtsNmKyDo6s5CfQmwXwUYqQX1a+INxhwLY+Djwcn/VqjjcbcmRKg8jPOfaUpPX6LZlEtBsakt4caEVYIHYyHh9IJYT1ne6mGs4C96i4xS+lJX+Hb41GdyrHf3ZDn+ox+QPVtZ5yH3xZqhA/1w19kMRkMmL0rwvB0XIDO0Wx3m6pry/NJh1yB/KfUgTKlj2TFa7KSBw4yk4k5iN+w70Apigb7aYlf36e8vCDVjyCAHfde53enfyqm9oTJeLH5X3IoXlnnCZYfRYerSApzQUe+FZTZtP111Kss/N6w==
+ bh=IJA9+z600Rx7V//y8vYpUKGbfKNihsc2zGMY6w7ivpI=;
+ b=zMNz81MccofPSM8QQuQSkC+22Tjoo1fcHYYHH+JeKLnluLE6+LsGQozTJZz7T0Ay+3Ten2JEem4P/KbzUDqN7sedL7RqZEvl5rjKG29o4nEQARsqO2DT8icD7k/PREopqQlwGDPoGQ4aHVIIfJ4t1Ny5Vz8m0PbAsoLJGCGZebcYbL73x+QmTQaaVGkwvyOmuGOFwtIhdGVLts0qZI3lLMBLHwOBK01rPYvm+lHPaLV+PX4hcSZU0k/EnaUx6GbXLtu1LuC8uUEZRSavWfs/rlLsed48dO+ufl+vmjDcbE9TFaQl5HXD4wKm08r34FrTDX2djRd/QixnRM8hqPF6qA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from SA1PR11MB8794.namprd11.prod.outlook.com (2603:10b6:806:46a::5)
- by BL4PR11MB8797.namprd11.prod.outlook.com (2603:10b6:208:5a7::8) with
+ by DS7PR11MB7784.namprd11.prod.outlook.com (2603:10b6:8:e1::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Tue, 20 May
- 2025 01:36:09 +0000
+ 2025 02:02:26 +0000
 Received: from SA1PR11MB8794.namprd11.prod.outlook.com
  ([fe80::a3d4:9d67:2f5d:6720]) by SA1PR11MB8794.namprd11.prod.outlook.com
  ([fe80::a3d4:9d67:2f5d:6720%5]) with mapi id 15.20.8746.030; Tue, 20 May 2025
- 01:36:09 +0000
-Date: Mon, 19 May 2025 18:36:01 -0700
+ 02:02:26 +0000
+Date: Mon, 19 May 2025 19:02:17 -0700
 From: Alison Schofield <alison.schofield@intel.com>
 To: <shiju.jose@huawei.com>
 CC: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
@@ -103,14 +103,16 @@ CC: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
 	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
 	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
 	<wanghuiqiang@huawei.com>
-Subject: Re: [PATCH v5 0/8] cxl: support CXL memory RAS features
-Message-ID: <aCvcgUv03XUWtYKS@aschofie-mobl2.lan>
+Subject: Re: [PATCH v5 3/8] cxl/edac: Add CXL memory device patrol scrub
+ control feature
+Message-ID: <aCviqcNwQCUokZhl@aschofie-mobl2.lan>
 References: <20250515115927.772-1-shiju.jose@huawei.com>
+ <20250515115927.772-4-shiju.jose@huawei.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20250515115927.772-1-shiju.jose@huawei.com>
-X-ClientProxiedBy: BYAPR08CA0009.namprd08.prod.outlook.com
- (2603:10b6:a03:100::22) To SA1PR11MB8794.namprd11.prod.outlook.com
+In-Reply-To: <20250515115927.772-4-shiju.jose@huawei.com>
+X-ClientProxiedBy: BYAPR05CA0045.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::22) To SA1PR11MB8794.namprd11.prod.outlook.com
  (2603:10b6:806:46a::5)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -119,139 +121,304 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB8794:EE_|BL4PR11MB8797:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4681158-4840-4607-25c6-08dd973eb248
+X-MS-TrafficTypeDiagnostic: SA1PR11MB8794:EE_|DS7PR11MB7784:EE_
+X-MS-Office365-Filtering-Correlation-Id: e82e093e-7ad6-42df-4c55-08dd97425e6a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?YQl4XgqihnwQ+9BHkYGjrHN5x/VvjleaeBxFQcJpqYVeUm26y8YNRoeE6GaY?=
- =?us-ascii?Q?RbKdZdhz0ZSjnP8pdoAYF9oyNW+GdDR2EKNN4SDHiTo//gMisW8dNF8yZXiR?=
- =?us-ascii?Q?hKVIUgRAdpGtnFopkLfv0IbvHdvy0UAIHXNVcfXuVEUbbpfk/YRU8XxsXVJE?=
- =?us-ascii?Q?5/4CgRrV9CbAHLmAtdAbj51NcwktUFJsuokBknT6qpNnAI5lHUd5T3s7hFIB?=
- =?us-ascii?Q?CQ4fShGCY25NDMn92QQyrI5hvZL79uSf2Wqqio2qwdBsWgEdc+5kDt9qm1Uh?=
- =?us-ascii?Q?7s+pooDfLnCzGUAodPJF5t4RG4nGAOU5JCWn1hs9QrTkRybMRWGW9SaEIKN4?=
- =?us-ascii?Q?x5G909JTAeRbhLgiba48yXb6teGkLd6A+Jtwds3HiTLthzpLl/YTw9GnAIYW?=
- =?us-ascii?Q?Usfw7ZWHydWFi+Q5kFCic3UwadHy6PdGCsE1qLNt/Xi9EqGwjTlSKK2ZGTb1?=
- =?us-ascii?Q?2FiqMOAFojC0c806OdKn4WSgQi56EPxbU4zgF1hQjg5SZlq1xWKSbYdoKssP?=
- =?us-ascii?Q?7W6VdqZNNsb94JS87FKLnJgNjY44Roxisn7HvU09uArIeGgI1URWQ3q3aP4d?=
- =?us-ascii?Q?oRv2w8q+HkV+ioBMDPBcTnmNZ2g/KUo3W23v8VcDr7iO1MoxHvXmV6lSqBHW?=
- =?us-ascii?Q?TWT1XiUKxYqbrHQlHX60l12t9QxgR/YSfi6p2v/XT/Q7EYbWq/lQshX13n0c?=
- =?us-ascii?Q?P3fWtK/yHQYShYQvE8bClTS1SIC2gbW3W7ploWZsU9kSBWHsp2jGT/oB2bDO?=
- =?us-ascii?Q?UoE1nWlUuF8Qjf6aUNq/JjP6OKT0QNil1C8iv1UHUocFdTFNNS8n91OIYRwe?=
- =?us-ascii?Q?ZiRtNg1z3grRp/c/LP7ic8+rlv3C+i2yqqUjTGfGpKUHheYWFXaw+0yjbIbk?=
- =?us-ascii?Q?//YDb3XdvdqABDfyyK3eEvK2VOYgK12YHf2cW2wsvG6VRPelC/KufrcVvK3H?=
- =?us-ascii?Q?JLBviqPVFuGYTnM8pll0R2YGkK4XbQTB1Z9mlN7WEbFMLysfey5inyUZJZ12?=
- =?us-ascii?Q?o1ZRmxAP3yL5YhDIl/8z7LNPjuD11xyMZ1iV+6da8vsIt2nvfqQkVwxG2PvS?=
- =?us-ascii?Q?1j5VHRScG5ENYSYVe/5gCKq3GReH+W8ZXf8adHWlFkIJr0/7YH9qBbShtdsn?=
- =?us-ascii?Q?ptjZKxhhxAsFqwVGLejtB5mnqOsyoUulvntUuE+jQJqxc+Ow2bXjyCfUiOrO?=
- =?us-ascii?Q?WLeN6kOPL1O63M5fRnMBgy/ZdaG6HgGyOOjAXmxTxF/i04VQSQV9tYpR9HVw?=
- =?us-ascii?Q?WMpv7wSY551i2e8cP1cueWZghl/Al0h329plk5X7je8HF3fHU7CFnuyqq+gY?=
- =?us-ascii?Q?rivNb+AcwFQCrIWSUMBRXVDXqMohjCdYF8l1Gi6mwaM//ShLVLI/7G92LoC2?=
- =?us-ascii?Q?NtMSxLYEAFsLcP4NLVCO/fy+PJqrpcvGBlEB/rOI/bFxPU3rkQ=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB8794.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?X3LgZbb4XZkWjhkZtmV8HEJrFkFYJ0mVAC1wwAtDIa/ykAt4lQMlumgajFWb?=
+ =?us-ascii?Q?Ry0b5WdUyxwR/lgrufT/IJGQei9E/GC33pBPPpa+PFAtyrFiFkFDNHhjdVOk?=
+ =?us-ascii?Q?3lSzpXxEHMjQo68Bwa2Wh2nPSwuy1xjbyV4VwD7lTHS3y67of6157eS1JoM0?=
+ =?us-ascii?Q?4p8g4W8PdX05RwS5GJPs7RBILU3TU2ubnQ/kXqoUcc4t1rd3BI8kGcPv3rX8?=
+ =?us-ascii?Q?3uQRPvQWWxmuclxvTLppnRIltPRye3JRqqCr3QaytXhNjrom85rnu4aoAOvQ?=
+ =?us-ascii?Q?K+POUnb4TSxGo8YV8sfrv4ed1z8sewheQgMSkPfIjKHeHYkCZOZanfL3mNfg?=
+ =?us-ascii?Q?+FQsq+iRmU843GzTrOwSkdYlSrAmf8AGJj95RYkBJH0+9eT4a76oSbdvfczw?=
+ =?us-ascii?Q?/DNbflqhjCSb3Ui1uzF2HkROrbWkORtYfCLDVU3yeYWNrD9+Zj4MpHNHyyGr?=
+ =?us-ascii?Q?AQCIT4hKmBI6SBYh7KjkcoJ+CEasesdWYAMMr2RC62lhoiSk5/1/U+hcfCah?=
+ =?us-ascii?Q?VdgDD7bquC3L8wyQGXD30IU7EfIVelTZE/4okzKgt/A679deJBl2iBYqUj9A?=
+ =?us-ascii?Q?EEAd1FKTGTMq5Zxqj6q7shA/YreWgzHkbpVGjvykGaVC9CygNC53RnqK+4sZ?=
+ =?us-ascii?Q?m4N6dz91m458p2CMNicqbPiAIPBt/RGkFjlyIJP2c6q4eVMzue/yQEeTbOz2?=
+ =?us-ascii?Q?7NNcD2nHv5AVmDoD+MI72wevOAIYcPwjhUpJkBJyCXYijR36XnOR/LWMOzXL?=
+ =?us-ascii?Q?9wG0MewjWJmDKMfjlCMAqLND8qpp4h2h91lUhwWLl+LxHPE474mnmsTH97+s?=
+ =?us-ascii?Q?5snR41oRt4veXxztFFmBJ34pWUCUCMJT296EQvOxkJQ7T5wblIppSWmMzaWZ?=
+ =?us-ascii?Q?Ofe6X73NwG57KxsURZRT3cHUdMI3zRtujtvOzaFpgJPsAmfxV6CC7rgVQ2sD?=
+ =?us-ascii?Q?NAOZ4+w9JkBlbKWdfQAUTW6DzUFzfIMMb4aF7/2cz+4+hePGZxYI1gBKIXND?=
+ =?us-ascii?Q?+I2rO5gJ2KVRYWYf3MSoPBRm5KAonZNp0w1VddaMC+3mFixFTs5rhecFoJpC?=
+ =?us-ascii?Q?Wf6e/R3xf5QXpIMnLYb0o1ZNFOfTUwrvrRQVTYy7L06tCZCnHuHjqxH6fJUU?=
+ =?us-ascii?Q?RX1e6rsBAC0dLE+dm0PB3UWa33vxKN6tqe4BWwNSgMTspaGKLB5ELRHzQrm0?=
+ =?us-ascii?Q?kF+GaoAAnxPqZWjBU+UDjNT8SnfAzJuhvUJZkCErUi69ZGSuBbSoDWvYFPCP?=
+ =?us-ascii?Q?1AHqrqN9B0Y+n/f8aZ8G1F4yXsO6kL2/6pFmGM+T9hJCfF7KWiVnq98IUvte?=
+ =?us-ascii?Q?mezFktXNZdnCTLoZw2BdIojuMK/QnUevgMMCwpr9I3lpI2EV9858bVW1+UMq?=
+ =?us-ascii?Q?pwOTXCqqGhytvH9I6hvuN17uiFIM1qGcB12Tss3/40eenI222qrbwpdCjpDP?=
+ =?us-ascii?Q?okVvopd68C0=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB8794.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Vyla08Qn7uld1CDb70tWAFXoTtp1g0E7qYr1Y18nJQbfkeJd6FUNJQUVtlpz?=
- =?us-ascii?Q?oNPCg1zpL2StqKd3E44zsldWKIlI7kOI4UZFjYQ0QHnFm5n6sTyYIshu/Asc?=
- =?us-ascii?Q?DG2Iq3yYl/TwEESNT3Hd87bBsKw6O23tuGtPlcVRIJt5G9Fp/4rpJOy98Zsb?=
- =?us-ascii?Q?aTXgjM2twC2xIJgkr0RanWT7H5WdBDLIODRnVoynLLRx3al57A50dbmPexnc?=
- =?us-ascii?Q?ZHTbqwiof0W4YMvsCBrfoQKAv587eNfw8TGvIkell1ZxM+s7WTcS8jf59D4b?=
- =?us-ascii?Q?UY6OVUgMr6i8fh7TZ+DyfSFQQQSxTrZUWxB7dHhsHP4x4YwrUN2ZYwchjywm?=
- =?us-ascii?Q?A9BHQU16oBjNX9gSvoRKUSvy2ULD+1aCL2qP0WtSdi0UCAfp9dlOhU/3ZIEf?=
- =?us-ascii?Q?dP2XMsuekNy5Yl4/c7WJDdqw7iXoJ2atL5py1jp0pvEY3QQBj1Svyj0acgx1?=
- =?us-ascii?Q?yceBUKEqw0+/Sm/Lyh24xJZMedDblSMVo2ftm58r4nlfDnMWo96m35h0gZne?=
- =?us-ascii?Q?+VtXFLrSAQAfEjhnfbtHQGjMr65MVPM4FlrOw9poKVllA5w8kwbs/VW52wmd?=
- =?us-ascii?Q?rclt4Sqc+HF8l1fRG4QyG3kL+rQ53byYUf8gPpc0CVEZc+guFH0onNb95bkb?=
- =?us-ascii?Q?5WMzCitssBkO2o4Fn9g27yzSQTG6NJBV/QoSg6LUfoRO8JqHdw2F1bMsAYS5?=
- =?us-ascii?Q?t0LcOaVaGXiobR4QQd2fCExGqeHQnExh5arWL4XFPhhOGGPIyjedZLWf8Hve?=
- =?us-ascii?Q?jbOG2B+kJJO4U9L5b2CwhCMwPZcL0AfmGTgadzjM7x5I0inNx/yxi57NXFZZ?=
- =?us-ascii?Q?oNUqmOEjQWirMjjcYmbvKJO909RIzHMU36nlbRJOtQavdfbyku3NHdN0BX9j?=
- =?us-ascii?Q?nHERJNBCgcfetzTHp8A2BWbb1eynsf9wOzBkfDWKqKSsyFWeilSGB7I+7Fv3?=
- =?us-ascii?Q?WLdAGCZ+TWNd3NnxBrQkfEVQr0hEeH0Xn4S5QVaIyhltUWfFkYAAjAK5f6Uf?=
- =?us-ascii?Q?0WPyUtf419yrugW7RMFjBNfuFNnj0BlzllOudcvpMitJtUJir+5f2tSpvQ+2?=
- =?us-ascii?Q?xTuU4XifYqVQ872JXlS68/aedQPmOFtrgW/weZVHaEQWcxN7beDOQeaBpBz0?=
- =?us-ascii?Q?zkcu78WHKCQxcta8s+VyMF72TJxmlM2RERPvi+zMOLYM60kpRxnMkwvdm9s5?=
- =?us-ascii?Q?iGSDh+JzWqboLLR309GXccIZ32x2OTf+Y9pUwYbL85vtgJBYWZLl7vWksTm3?=
- =?us-ascii?Q?noUCgrwyOZ3JnV6pB9ikQIOUtq1zy4r0dT7OcambMVoVkLAdPjimlDZFsXzH?=
- =?us-ascii?Q?GiSxjcBGhomIrq5s9twGF5ZV/0FXll1wuu7DY8CJ53NRCmbuwQUdPNyPELOE?=
- =?us-ascii?Q?uuNNB6cuhgrgZHLEljjHMrj5VQs0J5V2A3YdRb1o2xa3riz6gzMPyryirI4Q?=
- =?us-ascii?Q?pxIFJ0VCISVHJTr2jRFCRm1pArPWSPrKe8yv2s/uz7+Lfq1p1Ka/iUic/NzG?=
- =?us-ascii?Q?7bC4xBZhWnfxDsMUMm+h9fULyD3aeOdSoSvszmGx6vvLhitLMTdP5kW0C7z0?=
- =?us-ascii?Q?k1qKG7thM2xtfgYRjb26rrZ3N0Xinw7M4z1kBwsWSgI1Seg0Ltl7lxewWCJQ?=
- =?us-ascii?Q?uA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4681158-4840-4607-25c6-08dd973eb248
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cqg/GcN9FbM22cfhDRkQqLGunPi/lhK56o3zZw7Z3NIkUNEjnusOStntoW50?=
+ =?us-ascii?Q?09m2NNEQ9w90Mia6UTu/bMDtCR3CkuWCzBdBv3Vu9hqIU3/KsD83NU8mUI6U?=
+ =?us-ascii?Q?EFZwe5zKWWsjX2S1KKKv8LNjHyy6K0MIhqkkzyP0Fybap9+g03Y1ZkOL0Q3L?=
+ =?us-ascii?Q?BT9bjWcpD4hrXc9utzVuHmix2+4BHC7eT2YaThW6rs22ECLtmgD54lWp/vr5?=
+ =?us-ascii?Q?LoAJrEm5McCt+ClEmd08x4h/BJKlp4vXI/aWMMvZtXC8VCNkewFqYcsHijPK?=
+ =?us-ascii?Q?pgMFNtTXOfsDQqgVn0fTKmbnJJfwZp/wY0izbGTvXJLdmNPo84vo0DINX5ht?=
+ =?us-ascii?Q?c+b8bxvGpL2io4T4871KYuT2RDEkv8O24CiJkgig2J6G0y4e90VFD0uLDoOd?=
+ =?us-ascii?Q?yxDgAq//fGOJTETJm10ieBb6cdIWitt0+CuXAm/RlFLL40YjrBOFHP+GuqU/?=
+ =?us-ascii?Q?jApQ3bz3MduHBew+NAjtsHwufk9zgVzY3w9Z40hMstwAgvMT2hV5REzoVjub?=
+ =?us-ascii?Q?0xGPRIcTVgOpIORBnQ1GSPtP3kDeJLbBCsDGEhaoQHlTD56NiqNjgDHmuKDD?=
+ =?us-ascii?Q?kUat8J3kUbYI/RyxdI11fr4lpAP8RUtbL58C1xahMUdCZBrQiUCRysuNUE/R?=
+ =?us-ascii?Q?zCgLZcKNoZuxblLRd21B+hqo0NqXfq1VdFC/uGqV1dPemWwqYoz1o6w5QKUN?=
+ =?us-ascii?Q?namoEST8V5tBEjgOK+nuWSDuIXsDrYJNfnw+Tg4l81G6k7/smq/U1/sYy4IE?=
+ =?us-ascii?Q?tuWHtdG8Cna4eRwZ1ox0fwuQu8ztM6h9wkZnj6nuKaod58PJtwoxGIVRg4LW?=
+ =?us-ascii?Q?A08Z9UtXvN6nWvT1pPc3D79dYH0+QqMWzPtgbe2iTGJqKDpbBkyKC4/pQuWe?=
+ =?us-ascii?Q?mniy/RcVPPw9YXba2FzzSzUOuJaw/J0mj/9mV1KvduGLkXHITtMsVHOpfY/N?=
+ =?us-ascii?Q?mdTGLH4u7g7uv3boPqfccp9V6QNlmH+IixQ/JVe7R8yylsDD4mzUlKar1z2l?=
+ =?us-ascii?Q?53HpV5AvapNG73R9wKSynYht6bXW2kITBVwsm2SUuEnVQTMcy3dBZxgZfMrr?=
+ =?us-ascii?Q?+Wc+SiQneuWI7Xb2NuRukJqDWcpTNtchH5mRBeIrVWawaMN/8EeP0Re9vtBD?=
+ =?us-ascii?Q?lFbudKsQxKyzCLSpG3GIw/GU4YfFt89z22SDLZH2SPpcKSawoD9K8RWQdgcg?=
+ =?us-ascii?Q?xZWDNTRT5DEj5H0SgAwHO2HBxMtU8excnIuB43C/FHGyIBn6YIVE/51WV918?=
+ =?us-ascii?Q?NTlLLSLEq77wTUJU2GYI7kY17v+qsmQmMWo+I0XYb2RS/sFjkkoupPoBigt0?=
+ =?us-ascii?Q?t3MzPihmqoPTlhGsQGWSjyMrDqdohYNiE9MV3KjqSy65uiaVHMk52vLVi7L6?=
+ =?us-ascii?Q?Zs04SPSVg/8YnvPiQu8KJcseRmALyfW+7g34K+FwRTUElA9kwVdEhY/1eDTM?=
+ =?us-ascii?Q?w+2Rh4yeA54uB/GqKeYoh1dIVISrJxQHCW4Ln1QgycxUeeC5fg8Hw/Gw1sQ9?=
+ =?us-ascii?Q?f2ZbE9BUUi+rhzt5WDn+WIftuMKQM5hz6bRQt1meNu2wH7zkhuYuLh2sriuQ?=
+ =?us-ascii?Q?8QWsr1IbDdeD/IMsAJzW+mgCcn49FXY7pizpcuOm+cqNxYO7U0v81GrnIck8?=
+ =?us-ascii?Q?KA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e82e093e-7ad6-42df-4c55-08dd97425e6a
 X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB8794.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2025 01:36:09.3648
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2025 02:02:26.7281
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AJKFVAN/9DzLuBGraJK1UIW0THDNIcL8GEYToenPG68FPBQ6RWOIlpL7yH+7GS6ur2r0vHzu4CPEk8Wn4E6dwkV6f7F27Fm+XYn3fSlgdvY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL4PR11MB8797
+X-MS-Exchange-CrossTenant-UserPrincipalName: QAUj1G+tPdgdt4Noe5MGrc6EYLzEqu38ZAHZdYAzGDtWz5zCFByk2bKk6PiwAZSpSXm9sQgeK71BDtkCq1Nqvw24mMjBcNDM4GUYCjix4ow=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7784
 X-OriginatorOrg: intel.com
 
-On Thu, May 15, 2025 at 12:59:16PM +0100, shiju.jose@huawei.com wrote:
+On Thu, May 15, 2025 at 12:59:19PM +0100, shiju.jose@huawei.com wrote:
 > From: Shiju Jose <shiju.jose@huawei.com>
->
-> Support for CXL memory EDAC features: patrol scrub, ECS, soft-PPR and
-> memory sparing.
+> 
+> CXL spec 3.2 section 8.2.10.9.11.1 describes the device patrol scrub
+> control feature. The device patrol scrub proactively locates and makes
+> corrections to errors in regular cycle.
+> 
 
 snip
 
-> 
-> Shiju Jose (8):
->   EDAC: Update documentation for the CXL memory patrol scrub control
->     feature
->   cxl: Update prototype of function get_support_feature_info()
->   cxl/edac: Add CXL memory device patrol scrub control feature
->   cxl/edac: Add CXL memory device ECS control feature
->   cxl/edac: Add support for PERFORM_MAINTENANCE command
->   cxl/edac: Support for finding memory operation attributes from the
->     current boot
->   cxl/edac: Add CXL memory device memory sparing control feature
->   cxl/edac: Add CXL memory device soft PPR control feature
-> 
->  Documentation/edac/memory_repair.rst |   31 +
->  Documentation/edac/scrub.rst         |   76 +
->  drivers/cxl/Kconfig                  |   71 +
->  drivers/cxl/core/Makefile            |    1 +
->  drivers/cxl/core/core.h              |    2 +
->  drivers/cxl/core/edac.c              | 2082 ++++++++++++++++++++++++++
+> +
+> +static int cxl_scrub_get_attrbs(struct cxl_patrol_scrub_context *cxl_ps_ctx,
+> +				u8 *cap, u16 *cycle, u8 *flags, u8 *min_cycle)
+> +{
+> +	struct cxl_mailbox *cxl_mbox;
+> +	u8 min_scrub_cycle = U8_MAX;
+> +	struct cxl_memdev *cxlmd;
+> +	int i, ret;
+> +
+> +	if (cxl_ps_ctx->cxlr) {
+> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
+> +		struct cxl_region_params *p = &cxlr->params;
 
-Hi Shiju, 
+This function and the next, have a big if { } wrapper around
+cxlr existence. Can this logic be reversed -
 
-The file edac.c contains a scattering of ifdef's that can be replaced
-with the IS_ENABLED() mechanism.
+ie, declare cxl_region and cxl_region_params in the header and
+then do something like - 
 
-This issue touches many patches, looks like patches 3-7 all added to edac.c.
+	if (!cxl_ps_ctx->cxlr) {
+		cxl_mbox = &cxl_ps_ctx->cxlmd->cxlds->cxl_mbox;
+		return cxl_mem_scrub_get_attrbs(cxl_mbox, cap, cycle, flags, min_cycle);
+	}
 
-See Documentation/process/coding-style.rst  "Conditional Compilation".
-You'll find a few usage example in drivers/cxl/ and of course many more
-all over the kernel.
+	cxlr =  cxl_ps_ctx->cxlr;
+	p = &cxlr->params;
 
-Conversely, in cxlmem.h, the patch uses IS_ENABLED() where an #ifdef
-is perfectly fine and expected. See the surrounding ifdef's in cxlmem.h
+Then all this code below can shift left.
 
-I'm aware it's not a simple search and replace operation to rework this
-but it is worth doing now to make the code more readable forever, and
-there's also the benefit of allowing the compiler to check code inside
-the block for correctness.
+> +
+> +		struct rw_semaphore *region_lock __free(rwsem_read_release) =
+> +			rwsem_read_intr_acquire(&cxl_region_rwsem);
+> +		if (!region_lock)
+> +			return -EINTR;
+> +
+> +		for (i = 0; i < p->nr_targets; i++) {
+> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
+> +
+> +			cxlmd = cxled_to_memdev(cxled);
+> +			cxl_mbox = &cxlmd->cxlds->cxl_mbox;
+> +			ret = cxl_mem_scrub_get_attrbs(cxl_mbox, cap, cycle,
+> +						       flags, min_cycle);
+> +			if (ret)
+> +				return ret;
+> +
+> +			if (min_cycle)
+> +				min_scrub_cycle =
+> +					min(*min_cycle, min_scrub_cycle);
+> +		}
+> +
+> +		if (min_cycle)
+> +			*min_cycle = min_scrub_cycle;
+> +
+> +		return 0;
+> +	}
+> +	cxl_mbox = &cxl_ps_ctx->cxlmd->cxlds->cxl_mbox;
+> +
+> +	return cxl_mem_scrub_get_attrbs(cxl_mbox, cap, cycle, flags, min_cycle);
+> +}
+> +
+> +static int cxl_scrub_set_attrbs(struct device *dev,
+> +				struct cxl_patrol_scrub_context *cxl_ps_ctx,
+> +				u8 cycle, u8 flags)
+> +{
+> +	struct cxl_scrub_wr_attrbs wr_attrbs;
+> +	struct cxl_mailbox *cxl_mbox;
+> +	struct cxl_memdev *cxlmd;
+> +	int ret, i;
+> +
+> +	wr_attrbs.scrub_cycle_hours = cycle;
+> +	wr_attrbs.scrub_flags = flags;
+> +
+> +	if (cxl_ps_ctx->cxlr) {
+> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
+> +		struct cxl_region_params *p = &cxlr->params;
 
--- Alison
+Similar to above function, but more work in the !cxlr case. Maybe a goto.
 
->  drivers/cxl/core/features.c          |   17 +-
->  drivers/cxl/core/mbox.c              |   11 +-
->  drivers/cxl/core/memdev.c            |    1 +
->  drivers/cxl/core/region.c            |   10 +
->  drivers/cxl/cxl.h                    |   10 +
->  drivers/cxl/cxlmem.h                 |   36 +
->  drivers/cxl/mem.c                    |    4 +
->  drivers/edac/mem_repair.c            |    9 +
->  include/linux/edac.h                 |    7 +
->  15 files changed, 2356 insertions(+), 12 deletions(-)
->  create mode 100644 drivers/cxl/core/edac.c
-> 
+
+> +
+> +		struct rw_semaphore *region_lock __free(rwsem_read_release) =
+> +			rwsem_read_intr_acquire(&cxl_region_rwsem);
+> +		if (!region_lock)
+> +			return -EINTR;
+> +
+> +		for (i = 0; i < p->nr_targets; i++) {
+> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
+> +
+> +			cxlmd = cxled_to_memdev(cxled);
+> +			cxl_mbox = &cxlmd->cxlds->cxl_mbox;
+> +			ret = cxl_set_feature(cxl_mbox, &CXL_FEAT_PATROL_SCRUB_UUID,
+> +					      cxl_ps_ctx->set_version, &wr_attrbs,
+> +					      sizeof(wr_attrbs),
+> +					      CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET,
+> +					      0, NULL);
+> +			if (ret)
+> +				return ret;
+> +
+> +			if (cycle != cxlmd->cur_scrub_cycle) {
+> +				if (cxlmd->cur_region_id != -1)
+> +					dev_info(dev,
+> +						 "Device scrub rate(%d hours) set by region%d rate overwritten by region%d scrub rate(%d hours)\n",
+> +						 cxlmd->cur_scrub_cycle,
+> +						 cxlmd->cur_region_id, cxlr->id,
+> +						 cycle);
+> +
+> +				cxlmd->cur_scrub_cycle = cycle;
+> +				cxlmd->cur_region_id = cxlr->id;
+> +			}
+> +		}
+> +
+> +		return 0;
+> +	}
+> +
+> +	cxlmd = cxl_ps_ctx->cxlmd;
+> +	cxl_mbox = &cxlmd->cxlds->cxl_mbox;
+> +	ret = cxl_set_feature(cxl_mbox, &CXL_FEAT_PATROL_SCRUB_UUID,
+> +			      cxl_ps_ctx->set_version, &wr_attrbs,
+> +			      sizeof(wr_attrbs),
+> +			      CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET, 0,
+> +			      NULL);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (cycle != cxlmd->cur_scrub_cycle) {
+> +		if (cxlmd->cur_region_id != -1)
+> +			dev_info(dev,
+> +				 "Device scrub rate(%d hours) set by region%d rate overwritten with device local scrub rate(%d hours)\n",
+> +				 cxlmd->cur_scrub_cycle, cxlmd->cur_region_id,
+> +				 cycle);
+> +
+> +		cxlmd->cur_scrub_cycle = cycle;
+> +		cxlmd->cur_region_id = -1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+skip
+
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 3ec6b906371b..685957b312ea 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -45,6 +45,8 @@
+>   * @endpoint: connection to the CXL port topology for this memory device
+>   * @id: id number of this memdev instance.
+>   * @depth: endpoint port depth
+> + * @cur_scrub_cycle: current scrub cycle set for this device
+> + * @cur_region_id: id number of a backed region (if any) for which current scrub cycle set
+>   */
+>  struct cxl_memdev {
+>  	struct device dev;
+> @@ -56,6 +58,10 @@ struct cxl_memdev {
+>  	struct cxl_port *endpoint;
+>  	int id;
+>  	int depth;
+> +#ifdef CONFIG_CXL_EDAC_SCRUB
+> +	u8 cur_scrub_cycle;
+> +	int cur_region_id;
+> +#endif
+>  };
+
+
+Why the cur_ prefix?  Seems like it's just 'the' scrub cycle.
+
+How about:
+
+s/cur_scrub_cycle/scrub_cycle
+s/cur_region_id/scrub_region_id
+
+That also makes it clear that the region_id is related to the scrub.
+
+Somewhere later cur_region_id gets compared to -1 a few times.
+Perhaps add a define for that like #define CXL_SCRUB_NO_REGION -1
+
+>  
+>  static inline struct cxl_memdev *to_cxl_memdev(struct device *dev)
+> @@ -853,6 +859,16 @@ int cxl_trigger_poison_list(struct cxl_memdev *cxlmd);
+>  int cxl_inject_poison(struct cxl_memdev *cxlmd, u64 dpa);
+>  int cxl_clear_poison(struct cxl_memdev *cxlmd, u64 dpa);
+>  
+> +#if IS_ENABLED(CONFIG_CXL_EDAC_MEM_FEATURES)
+
+that's the one I mentioned in cover letter that can be #ifdef
+
+> +int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd);
+> +int devm_cxl_region_edac_register(struct cxl_region *cxlr);
+> +#else
+> +static inline int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
+> +{ return 0; }
+> +static inline int devm_cxl_region_edac_register(struct cxl_region *cxlr)
+> +{ return 0; }
+> +#endif
+> +
+>  #ifdef CONFIG_CXL_SUSPEND
+>  void cxl_mem_active_inc(void);
+>  void cxl_mem_active_dec(void);
+> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+> index 9675243bd05b..6e6777b7bafb 100644
+> --- a/drivers/cxl/mem.c
+> +++ b/drivers/cxl/mem.c
+> @@ -180,6 +180,10 @@ static int cxl_mem_probe(struct device *dev)
+>  			return rc;
+>  	}
+>  
+> +	rc = devm_cxl_memdev_edac_register(cxlmd);
+> +	if (rc)
+> +		dev_dbg(dev, "CXL memdev EDAC registration failed rc=%d\n", rc);
+> +
+>  	/*
+>  	 * The kernel may be operating out of CXL memory on this device,
+>  	 * there is no spec defined way to determine whether this device
 > -- 
 > 2.43.0
+> 
 > 
 
