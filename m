@@ -1,110 +1,91 @@
-Return-Path: <linux-edac+bounces-3960-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3961-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29D6FABD902
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 15:11:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B64FABE011
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 18:10:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68BC61BA0B32
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 13:11:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76BA98C05E9
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 16:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B21F22D4DE;
-	Tue, 20 May 2025 13:11:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B05C4275103;
+	Tue, 20 May 2025 16:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="WvXZr0vv"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D819A101F2;
-	Tue, 20 May 2025 13:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4418F26C396;
+	Tue, 20 May 2025 16:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747746677; cv=none; b=Uf6D17HcrFct4U9OnOF6aOBGLPbxqSnneXKhZOm15pfuk9LaHReJ0LJD0+3JE88uBBvnlhpA3POOixIEze3AZouSMWGBT8TjZoPwi1tuM6R8i1n9Y4tUmeAaWZZ47tE9nYjcFYJJ4Y6eOyQFlY+5UkHF95/j3dvFZWEgqaNpDW0=
+	t=1747757373; cv=none; b=KI+qBmuXKeVwufMUVmD0w+sfUOKl1ovAMfJ0630o3TQXdHWN8DoXxFmrC+cCUTZriS7St9SbvnnQR9CeYSNSvnwUIBMAPmeRY/RuwU4EHoOtq7rqFTZPqW+QFf4QnEv44H02MLFdKWE6Pj6MDpharLSwEv9c/Npcx34benUR7p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747746677; c=relaxed/simple;
-	bh=lnhhPRrsOk4MPxnSZJQvFL1yIitI5QzXVX9Hhlx1fa4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qWjr5oSZe7xBcl5deiwEV3UIdXd4oHBsoNnLKwOBPxvXZJpGEbrAiVF0YSn444+Ivg2tVKgiaaoaxgT74HKLjJnc7/ntxLkOOXc8fJY6pP+QqIvuVi2KFTffjFzhqYrKAyE/v/WwiDslBe0nH/XuzmEs+c6cTUBw+1S9wgo9TWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 040CB20091A5;
-	Tue, 20 May 2025 15:11:06 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id CDE601B8296; Tue, 20 May 2025 15:11:05 +0200 (CEST)
-Date: Tue, 20 May 2025 15:11:05 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Shuai Xue <xueshuai@linux.alibaba.com>, rostedt@goodmis.org,
-	linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	helgaas@kernel.org, bhelgaas@google.com, tony.luck@intel.com,
-	bp@alien8.de, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-	oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
-	anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
-	peterz@infradead.org, tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for
- hotplug event
-Message-ID: <aCx_aXy9MEs6XKZE@wunner.de>
-References: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
- <87b1f8c6-bd72-b1a8-40a6-bbf552552806@linux.intel.com>
- <650cd4e4-561b-4d50-9cf2-c601518c9b9f@linux.alibaba.com>
- <31693574-e8bc-9a56-bad0-6a22280c4b6b@linux.intel.com>
- <aCxdFm_BpgOTFFUv@wunner.de>
- <aCxxA-4HEnZ-O2W0@wunner.de>
- <9b46a12b-90e2-c1ba-9394-5caa23a5cad7@linux.intel.com>
+	s=arc-20240116; t=1747757373; c=relaxed/simple;
+	bh=QsPbWopl90NhAfbzIQZhkUpuoKh3760rkfO147eFZUw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AJPMb8yla60YvUFlz2EouLA1Q4vS+JtPP0jwxJbevcWtFAJw1W9ooRpP5nXIfoJevySe2jhqf2zjgFYyusqmF9qlOUu8L4gvIVlL92+ovHTP5Izq5demP0+Hh2IkjA9zw3eaOP+CwyocZu9SYwih5zbvz52Kelx3neQpqXP1/Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=WvXZr0vv; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.75.200.68] (unknown [40.78.12.246])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 95B10206789F;
+	Tue, 20 May 2025 09:09:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 95B10206789F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1747757366;
+	bh=ewI1krelm1qHOVbYJgxVRWGxDfpNjtQIIAfnmWISbuM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WvXZr0vvtz8VjYgCmTlUlFt0zB6b6L5oO/lWgBpCa7aKiQbOyph8ckTJmMIM34Muo
+	 nlu+d1v+9/oxzCpGbV4v87kfmPZR5kVRT3f5ezkMBTw1Yfb4HRGb6QkCQyhg/BsGfk
+	 GOqN3w2nD7pLgwRzIzf6BVD+qkrQFflI/v/C+s8w=
+Message-ID: <ea19ad06-142c-4d7e-83ba-00b9b7e3cdaf@linux.microsoft.com>
+Date: Tue, 20 May 2025 09:09:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b46a12b-90e2-c1ba-9394-5caa23a5cad7@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] drivers/edac: Add L1 and L2 error detection for A72
+To: Borislav Petkov <bp@alien8.de>
+Cc: Tony Luck <tony.luck@intel.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, James Morse <james.morse@arm.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter
+ <rric@kernel.org>, linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Tyler Hicks <code@tyhicks.com>, Marc Zyngier <maz@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, devicetree@vger.kernel.org
+References: <1747353973-4749-1-git-send-email-vijayb@linux.microsoft.com>
+ <1747353973-4749-2-git-send-email-vijayb@linux.microsoft.com>
+ <20250519085130.GFaCrxEnZvaoETKrao@fat_crate.local>
+Content-Language: en-US
+From: Vijay Balakrishna <vijayb@linux.microsoft.com>
+In-Reply-To: <20250519085130.GFaCrxEnZvaoETKrao@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 20, 2025 at 03:52:56PM +0300, Ilpo Järvinen wrote:
-> On Tue, 20 May 2025, Lukas Wunner wrote:
-> > A link speed event could contain a "reason" field
-> > which indicates why the link speed changed,
-> > e.g. "hotplug", "autonomous", "thermal", "retrain", etc.
-> > 
-> > In other words, instead of mixing the infomation for hotplug
-> > and link speed events together in one event, a separate link
-> > speed event could point to hotplug as one possible reason for
-> > the new speed.
+On 5/19/2025 1:51 AM, Borislav Petkov wrote:
+> I'd venture a guess you need to protect here against CPU hotplug...
 > 
-> It will be somewhat challenging to link LBMS into what caused it, 
-> especially in cases where there is more than one LBMS following a single 
-> Link Retraining.
-> 
-> Do you have opinion on should the event be only recorded from LBMS/LABS 
-> if the speed changed from the previous value? The speed should probably 
-> also be reported also for the first time (initial enumeration, hotplugging 
-> a new board).
+>> +	for_each_cpu_and(cpu, cpu_online_mask, &compat_mask) {
+>> +		smp_call_function_single(cpu, read_errors, &merrsr, true);
+>> +		report_errors(edac_ctl, cpu, &merrsr);
+>> +	}
+>> +}
+>> +
 
-One idea would be to amend struct pcie_bwctrl_data with an
-enum member describing the reason.
+Hi Boris,
 
-pcie_bwnotif_irq() uses that reason when reporting the speed change
-in a trace event.
+I appreciate you highlighting the CPU hotplug issue. Upon further review 
+of surrounding code, I realized we must ensure that the data passed to 
+read_errors() is per-CPU.
 
-After an Endpoint has been removed, the Downstream Port or Root Port
-above resets the reason to "hotplug", so that the next link event
-is assigned that reason.
+Thank you for your review. I will address the remainder of your comments 
+promptly.
 
-Similarly pcie_set_target_speed() could be amended with an enum argument
-for the reason and it would set that in struct pcie_bwctrl_data before
-calling pcie_bwctrl_change_speed().
-
-Thanks,
-
-Lukas
+Vijay
 
