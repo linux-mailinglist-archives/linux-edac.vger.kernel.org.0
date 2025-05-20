@@ -1,424 +1,264 @@
-Return-Path: <linux-edac+bounces-3948-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3949-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CAADABCC8F
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 04:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CE48ABCD45
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 04:36:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 906E4189D3C7
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 02:02:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95B361B63CD6
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 02:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAFBE255F4C;
-	Tue, 20 May 2025 02:02:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 577C5256C73;
+	Tue, 20 May 2025 02:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBPNZQzV"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="fXhvvNke"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F9A1DC9A3;
-	Tue, 20 May 2025 02:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747706555; cv=fail; b=NqLDKr76O7h+TMfIWOypQPJ/LUj8wJpqEcILr60OSPv7VXLFYUA34GK3iKv4L6rCT4sjtnDTWbWha3B4nQn9T9kJAu57VlQBu/YcDwfwFsTeskGc4zXlKkdh7oqqc82ywQ95lq024N38sWFIIBXapAGCsreBIXlK1sV3GVMcjxY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747706555; c=relaxed/simple;
-	bh=GLtXzhHHvQvCVsl/MMjZ+YvB2xbln9yVdotOKYvx44Q=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=W/QjBTppwDWgBPT+lyBb/m6VU/Agfhlzs2uZpwVIuYNxxtm5TnTN29ktiW2FjfHzR9c9rmvfslA6JOMEq0/Qw12J/NetD5W3QbltmqHo8SXxksmSCn00gF9g/+1s004bx/sk+KPzntAyWzdepMtvTtlF+MxrJ/10ulB9pVtihsg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBPNZQzV; arc=fail smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747706554; x=1779242554;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=GLtXzhHHvQvCVsl/MMjZ+YvB2xbln9yVdotOKYvx44Q=;
-  b=nBPNZQzVDz6kNKPngPmeeQw8XeUc2zfQOiuCWV51ql2VFC04M5mjo771
-   spiM3xyAjqmqg9WoXFzJBlIFn+gsTJelSpBMfFocCLqfqRjGmSYZkPime
-   l/CIbpNOANKq0uv47rdWertRGWCqwgYLCWcrAyWFsb1lN5WFOhg0V2Klq
-   ykpwtTTcIoeXP3V/gyX73Dac0muKJaarxFoohDP4/mNVorG63f4qCJSnk
-   uqEoDGwbO1ReTOWQsbdnRnaIgcH7cig06WXtQIQmFACjeCyR10B70M1Bv
-   s34ifmytldqtbInh4VAV0JxDx8/fwscmmAjte+jBwCQXQY3gCmjeCH8Ah
-   Q==;
-X-CSE-ConnectionGUID: cNRmLuJGTpekj73bZ9xHtg==
-X-CSE-MsgGUID: 55Jy8Wf8S/GAjFzd73ICfA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="37242059"
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="37242059"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 19:02:30 -0700
-X-CSE-ConnectionGUID: dw4TNAWGTwyVxdc/A+OKqA==
-X-CSE-MsgGUID: XIiKeZ8eRp2T4IAQptg/4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="139432764"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 19:02:31 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Mon, 19 May 2025 19:02:29 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Mon, 19 May 2025 19:02:29 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Mon, 19 May 2025 19:02:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=V5lYieEW6eBIpHRfrrTEbUYqwGR3m3nYf2YBVxrdhtLiEN8Uh10fQocXh2o7bX0hbcxpSlmbUwLZyp5z1C0BLFi4EZsKm+2Kb446GRNwI/xIoUkPgr45/M1Mcg12SkbxFeF/D6Uxt5AfJ8wk1RJVdOhW5/EwtgwYyx2sS22tSmoOjaO40LC4rQZQl3PTALQwmQq6zdgLUIF2E/keUoOWaSQ2bOYz+7MiOYUXXrW4QngUdSFPoS9T8Beox+wwD3PbSkCacAfHaB/iLaaDu5L4723y/sLQ2nEPRVTGEvXWOKtfckevOgyJ5NqcJEfT7EAXsaWdLUCzRfiIHIH2WGsGwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IJA9+z600Rx7V//y8vYpUKGbfKNihsc2zGMY6w7ivpI=;
- b=zMNz81MccofPSM8QQuQSkC+22Tjoo1fcHYYHH+JeKLnluLE6+LsGQozTJZz7T0Ay+3Ten2JEem4P/KbzUDqN7sedL7RqZEvl5rjKG29o4nEQARsqO2DT8icD7k/PREopqQlwGDPoGQ4aHVIIfJ4t1Ny5Vz8m0PbAsoLJGCGZebcYbL73x+QmTQaaVGkwvyOmuGOFwtIhdGVLts0qZI3lLMBLHwOBK01rPYvm+lHPaLV+PX4hcSZU0k/EnaUx6GbXLtu1LuC8uUEZRSavWfs/rlLsed48dO+ufl+vmjDcbE9TFaQl5HXD4wKm08r34FrTDX2djRd/QixnRM8hqPF6qA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB8794.namprd11.prod.outlook.com (2603:10b6:806:46a::5)
- by DS7PR11MB7784.namprd11.prod.outlook.com (2603:10b6:8:e1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Tue, 20 May
- 2025 02:02:26 +0000
-Received: from SA1PR11MB8794.namprd11.prod.outlook.com
- ([fe80::a3d4:9d67:2f5d:6720]) by SA1PR11MB8794.namprd11.prod.outlook.com
- ([fe80::a3d4:9d67:2f5d:6720%5]) with mapi id 15.20.8746.030; Tue, 20 May 2025
- 02:02:26 +0000
-Date: Mon, 19 May 2025 19:02:17 -0700
-From: Alison Schofield <alison.schofield@intel.com>
-To: <shiju.jose@huawei.com>
-CC: <linux-cxl@vger.kernel.org>, <dan.j.williams@intel.com>,
-	<jonathan.cameron@huawei.com>, <dave.jiang@intel.com>, <dave@stgolabs.net>,
-	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-	<linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>, <bp@alien8.de>,
-	<tony.luck@intel.com>, <lenb@kernel.org>, <Yazen.Ghannam@amd.com>,
-	<mchehab@kernel.org>, <nifan.cxl@gmail.com>, <linuxarm@huawei.com>,
-	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
-	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
-	<wanghuiqiang@huawei.com>
-Subject: Re: [PATCH v5 3/8] cxl/edac: Add CXL memory device patrol scrub
- control feature
-Message-ID: <aCviqcNwQCUokZhl@aschofie-mobl2.lan>
-References: <20250515115927.772-1-shiju.jose@huawei.com>
- <20250515115927.772-4-shiju.jose@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250515115927.772-4-shiju.jose@huawei.com>
-X-ClientProxiedBy: BYAPR05CA0045.namprd05.prod.outlook.com
- (2603:10b6:a03:74::22) To SA1PR11MB8794.namprd11.prod.outlook.com
- (2603:10b6:806:46a::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDCF1E492;
+	Tue, 20 May 2025 02:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747708578; cv=none; b=RELpW0uOvD+M6sX9j23vaz72qfVCDZbwhhN1fmJV5WNrhw1skMSK6mGdaFTRhA6NYgNQ8LY7kZQqfTkAU43RzUbufZ8AuHUjKvyk/67gw5WLNhG5fFPrrXikZ/rjnWF1t+y2PMWIHtsq6ih2jEA75EyxNYieOi7af7ugiJ7TkMQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747708578; c=relaxed/simple;
+	bh=7KpnOLhxcCredMBeviPLH4FL4tigVI7I8UfgLjMf5vE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y4unAZ86Y2i4yMak7SyIyXijnQvJ7WquBbIA8VQojrcQChgiVnr6lsJvVR8k3DghnxVctU1j77F3lpF4IaEuRDJ3+9fyO6n7g21/vYXcJUaecwc/FXq7xmt9DSlA3u9CXcPPVG/BB44ukatA48hA1qK2KdqhYfoABmjI4ediamw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=fXhvvNke; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1747708565; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=OcLiZg9ZpVoBrJtJjMV8giKcAzcADBiu4oE3444yGmA=;
+	b=fXhvvNkecmcf3z9yUjhwbkdFcq5aTKQRvSj+xDQeSq3x54lSWjwKkZ/RchkgaKjbizQt4nF2tCziFJA40fPSpmp/nJ0TPINL+coaVvYnZlYaziGCRxLIPNR77wW8NQFzPh276NoRXgxh8w8tAPfFHt89yoRI42aWiFOH5H+mEGk=
+Received: from 30.246.160.208(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WbJOtjU_1747708562 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 20 May 2025 10:36:03 +0800
+Message-ID: <650cd4e4-561b-4d50-9cf2-c601518c9b9f@linux.alibaba.com>
+Date: Tue, 20 May 2025 10:36:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB8794:EE_|DS7PR11MB7784:EE_
-X-MS-Office365-Filtering-Correlation-Id: e82e093e-7ad6-42df-4c55-08dd97425e6a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?X3LgZbb4XZkWjhkZtmV8HEJrFkFYJ0mVAC1wwAtDIa/ykAt4lQMlumgajFWb?=
- =?us-ascii?Q?Ry0b5WdUyxwR/lgrufT/IJGQei9E/GC33pBPPpa+PFAtyrFiFkFDNHhjdVOk?=
- =?us-ascii?Q?3lSzpXxEHMjQo68Bwa2Wh2nPSwuy1xjbyV4VwD7lTHS3y67of6157eS1JoM0?=
- =?us-ascii?Q?4p8g4W8PdX05RwS5GJPs7RBILU3TU2ubnQ/kXqoUcc4t1rd3BI8kGcPv3rX8?=
- =?us-ascii?Q?3uQRPvQWWxmuclxvTLppnRIltPRye3JRqqCr3QaytXhNjrom85rnu4aoAOvQ?=
- =?us-ascii?Q?K+POUnb4TSxGo8YV8sfrv4ed1z8sewheQgMSkPfIjKHeHYkCZOZanfL3mNfg?=
- =?us-ascii?Q?+FQsq+iRmU843GzTrOwSkdYlSrAmf8AGJj95RYkBJH0+9eT4a76oSbdvfczw?=
- =?us-ascii?Q?/DNbflqhjCSb3Ui1uzF2HkROrbWkORtYfCLDVU3yeYWNrD9+Zj4MpHNHyyGr?=
- =?us-ascii?Q?AQCIT4hKmBI6SBYh7KjkcoJ+CEasesdWYAMMr2RC62lhoiSk5/1/U+hcfCah?=
- =?us-ascii?Q?VdgDD7bquC3L8wyQGXD30IU7EfIVelTZE/4okzKgt/A679deJBl2iBYqUj9A?=
- =?us-ascii?Q?EEAd1FKTGTMq5Zxqj6q7shA/YreWgzHkbpVGjvykGaVC9CygNC53RnqK+4sZ?=
- =?us-ascii?Q?m4N6dz91m458p2CMNicqbPiAIPBt/RGkFjlyIJP2c6q4eVMzue/yQEeTbOz2?=
- =?us-ascii?Q?7NNcD2nHv5AVmDoD+MI72wevOAIYcPwjhUpJkBJyCXYijR36XnOR/LWMOzXL?=
- =?us-ascii?Q?9wG0MewjWJmDKMfjlCMAqLND8qpp4h2h91lUhwWLl+LxHPE474mnmsTH97+s?=
- =?us-ascii?Q?5snR41oRt4veXxztFFmBJ34pWUCUCMJT296EQvOxkJQ7T5wblIppSWmMzaWZ?=
- =?us-ascii?Q?Ofe6X73NwG57KxsURZRT3cHUdMI3zRtujtvOzaFpgJPsAmfxV6CC7rgVQ2sD?=
- =?us-ascii?Q?NAOZ4+w9JkBlbKWdfQAUTW6DzUFzfIMMb4aF7/2cz+4+hePGZxYI1gBKIXND?=
- =?us-ascii?Q?+I2rO5gJ2KVRYWYf3MSoPBRm5KAonZNp0w1VddaMC+3mFixFTs5rhecFoJpC?=
- =?us-ascii?Q?Wf6e/R3xf5QXpIMnLYb0o1ZNFOfTUwrvrRQVTYy7L06tCZCnHuHjqxH6fJUU?=
- =?us-ascii?Q?RX1e6rsBAC0dLE+dm0PB3UWa33vxKN6tqe4BWwNSgMTspaGKLB5ELRHzQrm0?=
- =?us-ascii?Q?kF+GaoAAnxPqZWjBU+UDjNT8SnfAzJuhvUJZkCErUi69ZGSuBbSoDWvYFPCP?=
- =?us-ascii?Q?1AHqrqN9B0Y+n/f8aZ8G1F4yXsO6kL2/6pFmGM+T9hJCfF7KWiVnq98IUvte?=
- =?us-ascii?Q?mezFktXNZdnCTLoZw2BdIojuMK/QnUevgMMCwpr9I3lpI2EV9858bVW1+UMq?=
- =?us-ascii?Q?pwOTXCqqGhytvH9I6hvuN17uiFIM1qGcB12Tss3/40eenI222qrbwpdCjpDP?=
- =?us-ascii?Q?okVvopd68C0=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB8794.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cqg/GcN9FbM22cfhDRkQqLGunPi/lhK56o3zZw7Z3NIkUNEjnusOStntoW50?=
- =?us-ascii?Q?09m2NNEQ9w90Mia6UTu/bMDtCR3CkuWCzBdBv3Vu9hqIU3/KsD83NU8mUI6U?=
- =?us-ascii?Q?EFZwe5zKWWsjX2S1KKKv8LNjHyy6K0MIhqkkzyP0Fybap9+g03Y1ZkOL0Q3L?=
- =?us-ascii?Q?BT9bjWcpD4hrXc9utzVuHmix2+4BHC7eT2YaThW6rs22ECLtmgD54lWp/vr5?=
- =?us-ascii?Q?LoAJrEm5McCt+ClEmd08x4h/BJKlp4vXI/aWMMvZtXC8VCNkewFqYcsHijPK?=
- =?us-ascii?Q?pgMFNtTXOfsDQqgVn0fTKmbnJJfwZp/wY0izbGTvXJLdmNPo84vo0DINX5ht?=
- =?us-ascii?Q?c+b8bxvGpL2io4T4871KYuT2RDEkv8O24CiJkgig2J6G0y4e90VFD0uLDoOd?=
- =?us-ascii?Q?yxDgAq//fGOJTETJm10ieBb6cdIWitt0+CuXAm/RlFLL40YjrBOFHP+GuqU/?=
- =?us-ascii?Q?jApQ3bz3MduHBew+NAjtsHwufk9zgVzY3w9Z40hMstwAgvMT2hV5REzoVjub?=
- =?us-ascii?Q?0xGPRIcTVgOpIORBnQ1GSPtP3kDeJLbBCsDGEhaoQHlTD56NiqNjgDHmuKDD?=
- =?us-ascii?Q?kUat8J3kUbYI/RyxdI11fr4lpAP8RUtbL58C1xahMUdCZBrQiUCRysuNUE/R?=
- =?us-ascii?Q?zCgLZcKNoZuxblLRd21B+hqo0NqXfq1VdFC/uGqV1dPemWwqYoz1o6w5QKUN?=
- =?us-ascii?Q?namoEST8V5tBEjgOK+nuWSDuIXsDrYJNfnw+Tg4l81G6k7/smq/U1/sYy4IE?=
- =?us-ascii?Q?tuWHtdG8Cna4eRwZ1ox0fwuQu8ztM6h9wkZnj6nuKaod58PJtwoxGIVRg4LW?=
- =?us-ascii?Q?A08Z9UtXvN6nWvT1pPc3D79dYH0+QqMWzPtgbe2iTGJqKDpbBkyKC4/pQuWe?=
- =?us-ascii?Q?mniy/RcVPPw9YXba2FzzSzUOuJaw/J0mj/9mV1KvduGLkXHITtMsVHOpfY/N?=
- =?us-ascii?Q?mdTGLH4u7g7uv3boPqfccp9V6QNlmH+IixQ/JVe7R8yylsDD4mzUlKar1z2l?=
- =?us-ascii?Q?53HpV5AvapNG73R9wKSynYht6bXW2kITBVwsm2SUuEnVQTMcy3dBZxgZfMrr?=
- =?us-ascii?Q?+Wc+SiQneuWI7Xb2NuRukJqDWcpTNtchH5mRBeIrVWawaMN/8EeP0Re9vtBD?=
- =?us-ascii?Q?lFbudKsQxKyzCLSpG3GIw/GU4YfFt89z22SDLZH2SPpcKSawoD9K8RWQdgcg?=
- =?us-ascii?Q?xZWDNTRT5DEj5H0SgAwHO2HBxMtU8excnIuB43C/FHGyIBn6YIVE/51WV918?=
- =?us-ascii?Q?NTlLLSLEq77wTUJU2GYI7kY17v+qsmQmMWo+I0XYb2RS/sFjkkoupPoBigt0?=
- =?us-ascii?Q?t3MzPihmqoPTlhGsQGWSjyMrDqdohYNiE9MV3KjqSy65uiaVHMk52vLVi7L6?=
- =?us-ascii?Q?Zs04SPSVg/8YnvPiQu8KJcseRmALyfW+7g34K+FwRTUElA9kwVdEhY/1eDTM?=
- =?us-ascii?Q?w+2Rh4yeA54uB/GqKeYoh1dIVISrJxQHCW4Ln1QgycxUeeC5fg8Hw/Gw1sQ9?=
- =?us-ascii?Q?f2ZbE9BUUi+rhzt5WDn+WIftuMKQM5hz6bRQt1meNu2wH7zkhuYuLh2sriuQ?=
- =?us-ascii?Q?8QWsr1IbDdeD/IMsAJzW+mgCcn49FXY7pizpcuOm+cqNxYO7U0v81GrnIck8?=
- =?us-ascii?Q?KA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e82e093e-7ad6-42df-4c55-08dd97425e6a
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB8794.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2025 02:02:26.7281
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QAUj1G+tPdgdt4Noe5MGrc6EYLzEqu38ZAHZdYAzGDtWz5zCFByk2bKk6PiwAZSpSXm9sQgeK71BDtkCq1Nqvw24mMjBcNDM4GUYCjix4ow=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7784
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for hotplug
+ event
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: rostedt@goodmis.org, Lukas Wunner <lukas@wunner.de>,
+ linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ helgaas@kernel.org, bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
+ naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+ mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
+References: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
+ <87b1f8c6-bd72-b1a8-40a6-bbf552552806@linux.intel.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <87b1f8c6-bd72-b1a8-40a6-bbf552552806@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 15, 2025 at 12:59:19PM +0100, shiju.jose@huawei.com wrote:
-> From: Shiju Jose <shiju.jose@huawei.com>
+Hi, Ilpo,
+
+在 2025/5/20 01:10, Ilpo Järvinen 写道:
+> On Mon, 12 May 2025, Shuai Xue wrote:
 > 
-> CXL spec 3.2 section 8.2.10.9.11.1 describes the device patrol scrub
-> control feature. The device patrol scrub proactively locates and makes
-> corrections to errors in regular cycle.
+>> Hotplug events are critical indicators for analyzing hardware health,
+>> particularly in AI supercomputers where surprise link downs can
+>> significantly impact system performance and reliability.
+>>
+>> To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
+>> tracepoint for hotplug event to help healthy check, and generate
+>> tracepoints for pcie hotplug event. Add enum pci_hotplug_event in
+>> include/uapi/linux/pci.h so applications like rasdaemon can register
+>> tracepoint event handlers for it.
+>>
+>> The output like below:
+>>
+>> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
+>> $ cat /sys/kernel/debug/tracing/trace_pipe
+>>      <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
+>>
+>>      <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
+>>
+>> Suggested-by: Lukas Wunner <lukas@wunner.de>
+>> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>> Reviewed-by: Lukas Wunner <lukas@wunner.de>
+>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> ---
+>> changes since v7:
+>> - replace the TRACE_INCLUDE_PATH to avoid macro conflict per Steven
+>> - pick up Reviewed-by from Lukas Wunner
+>> ---
+>>   drivers/pci/hotplug/Makefile      |  3 ++
+>>   drivers/pci/hotplug/pciehp_ctrl.c | 33 ++++++++++++---
+>>   drivers/pci/hotplug/trace.h       | 68 +++++++++++++++++++++++++++++++
+>>   include/uapi/linux/pci.h          |  7 ++++
+>>   4 files changed, 105 insertions(+), 6 deletions(-)
+>>   create mode 100644 drivers/pci/hotplug/trace.h
+>>
+>> diff --git a/drivers/pci/hotplug/Makefile b/drivers/pci/hotplug/Makefile
+>> index 40aaf31fe338..a1a9d1e98962 100644
+>> --- a/drivers/pci/hotplug/Makefile
+>> +++ b/drivers/pci/hotplug/Makefile
+>> @@ -3,6 +3,9 @@
+>>   # Makefile for the Linux kernel pci hotplug controller drivers.
+>>   #
+>>   
+>> +# define_trace.h needs to know how to find our header
+>> +CFLAGS_pciehp_ctrl.o				:= -I$(src)
+>> +
+>>   obj-$(CONFIG_HOTPLUG_PCI)		+= pci_hotplug.o
+>>   obj-$(CONFIG_HOTPLUG_PCI_COMPAQ)	+= cpqphp.o
+>>   obj-$(CONFIG_HOTPLUG_PCI_IBM)		+= ibmphp.o
+>> diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
+>> index d603a7aa7483..f9beb4d3a9b8 100644
+>> --- a/drivers/pci/hotplug/pciehp_ctrl.c
+>> +++ b/drivers/pci/hotplug/pciehp_ctrl.c
+>> @@ -23,6 +23,9 @@
+>>   #include "../pci.h"
+>>   #include "pciehp.h"
+>>   
+>> +#define CREATE_TRACE_POINTS
+>> +#include "trace.h"
+>> +
+>>   /* The following routines constitute the bulk of the
+>>      hotplug controller logic
+>>    */
+>> @@ -244,12 +247,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+>>   	case ON_STATE:
+>>   		ctrl->state = POWEROFF_STATE;
+>>   		mutex_unlock(&ctrl->state_lock);
+>> -		if (events & PCI_EXP_SLTSTA_DLLSC)
+>> +		if (events & PCI_EXP_SLTSTA_DLLSC) {
+>>   			ctrl_info(ctrl, "Slot(%s): Link Down\n",
+>>   				  slot_name(ctrl));
+>> -		if (events & PCI_EXP_SLTSTA_PDC)
+>> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+>> +					   slot_name(ctrl),
+>> +					   PCI_HOTPLUG_LINK_DOWN);
+>> +		}
+>> +		if (events & PCI_EXP_SLTSTA_PDC) {
+>>   			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+>>   				  slot_name(ctrl));
+>> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+>> +					   slot_name(ctrl),
+>> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
+>> +		}
+>>   		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
+>>   		break;
+>>   	default:
+>> @@ -269,6 +280,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+>>   					      INDICATOR_NOOP);
+>>   			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+>>   				  slot_name(ctrl));
+>> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+>> +					   slot_name(ctrl),
+>> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
+>>   		}
+>>   		mutex_unlock(&ctrl->state_lock);
+>>   		return;
+>> @@ -281,12 +295,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+>>   	case OFF_STATE:
+>>   		ctrl->state = POWERON_STATE;
+>>   		mutex_unlock(&ctrl->state_lock);
+>> -		if (present)
+>> +		if (present) {
+>>   			ctrl_info(ctrl, "Slot(%s): Card present\n",
+>>   				  slot_name(ctrl));
+>> -		if (link_active)
+>> -			ctrl_info(ctrl, "Slot(%s): Link Up\n",
+>> -				  slot_name(ctrl));
+>> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+>> +					   slot_name(ctrl),
+>> +					   PCI_HOTPLUG_CARD_PRESENT);
+>> +		}
+>> +		if (link_active) {
+>> +			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
+>> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+>> +					   slot_name(ctrl),
+>> +					   PCI_HOTPLUG_LINK_UP);
+>> +		}
+>>   		ctrl->request_result = pciehp_enable_slot(ctrl);
+>>   		break;
+>>   	default:
+>> diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
+>> new file mode 100644
+>> index 000000000000..21329c198019
+>> --- /dev/null
+>> +++ b/drivers/pci/hotplug/trace.h
+>> @@ -0,0 +1,68 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
+>> +#define _TRACE_HW_EVENT_PCI_HP_H
+>> +
+>> +#include <linux/tracepoint.h>
+>> +
+>> +#undef TRACE_SYSTEM
+>> +#define TRACE_SYSTEM pci
+>> +
+>> +#define PCI_HOTPLUG_EVENT					\
+>> +	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
+>> +	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
+>> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
+>> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
 > 
-
-snip
-
-> +
-> +static int cxl_scrub_get_attrbs(struct cxl_patrol_scrub_context *cxl_ps_ctx,
-> +				u8 *cap, u16 *cycle, u8 *flags, u8 *min_cycle)
-> +{
-> +	struct cxl_mailbox *cxl_mbox;
-> +	u8 min_scrub_cycle = U8_MAX;
-> +	struct cxl_memdev *cxlmd;
-> +	int i, ret;
-> +
-> +	if (cxl_ps_ctx->cxlr) {
-> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-> +		struct cxl_region_params *p = &cxlr->params;
-
-This function and the next, have a big if { } wrapper around
-cxlr existence. Can this logic be reversed -
-
-ie, declare cxl_region and cxl_region_params in the header and
-then do something like - 
-
-	if (!cxl_ps_ctx->cxlr) {
-		cxl_mbox = &cxl_ps_ctx->cxlmd->cxlds->cxl_mbox;
-		return cxl_mem_scrub_get_attrbs(cxl_mbox, cap, cycle, flags, min_cycle);
-	}
-
-	cxlr =  cxl_ps_ctx->cxlr;
-	p = &cxlr->params;
-
-Then all this code below can shift left.
-
-> +
-> +		struct rw_semaphore *region_lock __free(rwsem_read_release) =
-> +			rwsem_read_intr_acquire(&cxl_region_rwsem);
-> +		if (!region_lock)
-> +			return -EINTR;
-> +
-> +		for (i = 0; i < p->nr_targets; i++) {
-> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +
-> +			cxlmd = cxled_to_memdev(cxled);
-> +			cxl_mbox = &cxlmd->cxlds->cxl_mbox;
-> +			ret = cxl_mem_scrub_get_attrbs(cxl_mbox, cap, cycle,
-> +						       flags, min_cycle);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (min_cycle)
-> +				min_scrub_cycle =
-> +					min(*min_cycle, min_scrub_cycle);
-> +		}
-> +
-> +		if (min_cycle)
-> +			*min_cycle = min_scrub_cycle;
-> +
-> +		return 0;
-> +	}
-> +	cxl_mbox = &cxl_ps_ctx->cxlmd->cxlds->cxl_mbox;
-> +
-> +	return cxl_mem_scrub_get_attrbs(cxl_mbox, cap, cycle, flags, min_cycle);
-> +}
-> +
-> +static int cxl_scrub_set_attrbs(struct device *dev,
-> +				struct cxl_patrol_scrub_context *cxl_ps_ctx,
-> +				u8 cycle, u8 flags)
-> +{
-> +	struct cxl_scrub_wr_attrbs wr_attrbs;
-> +	struct cxl_mailbox *cxl_mbox;
-> +	struct cxl_memdev *cxlmd;
-> +	int ret, i;
-> +
-> +	wr_attrbs.scrub_cycle_hours = cycle;
-> +	wr_attrbs.scrub_flags = flags;
-> +
-> +	if (cxl_ps_ctx->cxlr) {
-> +		struct cxl_region *cxlr = cxl_ps_ctx->cxlr;
-> +		struct cxl_region_params *p = &cxlr->params;
-
-Similar to above function, but more work in the !cxlr case. Maybe a goto.
-
-
-> +
-> +		struct rw_semaphore *region_lock __free(rwsem_read_release) =
-> +			rwsem_read_intr_acquire(&cxl_region_rwsem);
-> +		if (!region_lock)
-> +			return -EINTR;
-> +
-> +		for (i = 0; i < p->nr_targets; i++) {
-> +			struct cxl_endpoint_decoder *cxled = p->targets[i];
-> +
-> +			cxlmd = cxled_to_memdev(cxled);
-> +			cxl_mbox = &cxlmd->cxlds->cxl_mbox;
-> +			ret = cxl_set_feature(cxl_mbox, &CXL_FEAT_PATROL_SCRUB_UUID,
-> +					      cxl_ps_ctx->set_version, &wr_attrbs,
-> +					      sizeof(wr_attrbs),
-> +					      CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET,
-> +					      0, NULL);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (cycle != cxlmd->cur_scrub_cycle) {
-> +				if (cxlmd->cur_region_id != -1)
-> +					dev_info(dev,
-> +						 "Device scrub rate(%d hours) set by region%d rate overwritten by region%d scrub rate(%d hours)\n",
-> +						 cxlmd->cur_scrub_cycle,
-> +						 cxlmd->cur_region_id, cxlr->id,
-> +						 cycle);
-> +
-> +				cxlmd->cur_scrub_cycle = cycle;
-> +				cxlmd->cur_region_id = cxlr->id;
-> +			}
-> +		}
-> +
-> +		return 0;
-> +	}
-> +
-> +	cxlmd = cxl_ps_ctx->cxlmd;
-> +	cxl_mbox = &cxlmd->cxlds->cxl_mbox;
-> +	ret = cxl_set_feature(cxl_mbox, &CXL_FEAT_PATROL_SCRUB_UUID,
-> +			      cxl_ps_ctx->set_version, &wr_attrbs,
-> +			      sizeof(wr_attrbs),
-> +			      CXL_SET_FEAT_FLAG_DATA_SAVED_ACROSS_RESET, 0,
-> +			      NULL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (cycle != cxlmd->cur_scrub_cycle) {
-> +		if (cxlmd->cur_region_id != -1)
-> +			dev_info(dev,
-> +				 "Device scrub rate(%d hours) set by region%d rate overwritten with device local scrub rate(%d hours)\n",
-> +				 cxlmd->cur_scrub_cycle, cxlmd->cur_region_id,
-> +				 cycle);
-> +
-> +		cxlmd->cur_scrub_cycle = cycle;
-> +		cxlmd->cur_region_id = -1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
-skip
-
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 3ec6b906371b..685957b312ea 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -45,6 +45,8 @@
->   * @endpoint: connection to the CXL port topology for this memory device
->   * @id: id number of this memdev instance.
->   * @depth: endpoint port depth
-> + * @cur_scrub_cycle: current scrub cycle set for this device
-> + * @cur_region_id: id number of a backed region (if any) for which current scrub cycle set
->   */
->  struct cxl_memdev {
->  	struct device dev;
-> @@ -56,6 +58,10 @@ struct cxl_memdev {
->  	struct cxl_port *endpoint;
->  	int id;
->  	int depth;
-> +#ifdef CONFIG_CXL_EDAC_SCRUB
-> +	u8 cur_scrub_cycle;
-> +	int cur_region_id;
-> +#endif
->  };
-
-
-Why the cur_ prefix?  Seems like it's just 'the' scrub cycle.
-
-How about:
-
-s/cur_scrub_cycle/scrub_cycle
-s/cur_region_id/scrub_region_id
-
-That also makes it clear that the region_id is related to the scrub.
-
-Somewhere later cur_region_id gets compared to -1 a few times.
-Perhaps add a define for that like #define CXL_SCRUB_NO_REGION -1
-
->  
->  static inline struct cxl_memdev *to_cxl_memdev(struct device *dev)
-> @@ -853,6 +859,16 @@ int cxl_trigger_poison_list(struct cxl_memdev *cxlmd);
->  int cxl_inject_poison(struct cxl_memdev *cxlmd, u64 dpa);
->  int cxl_clear_poison(struct cxl_memdev *cxlmd, u64 dpa);
->  
-> +#if IS_ENABLED(CONFIG_CXL_EDAC_MEM_FEATURES)
-
-that's the one I mentioned in cover letter that can be #ifdef
-
-> +int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd);
-> +int devm_cxl_region_edac_register(struct cxl_region *cxlr);
-> +#else
-> +static inline int devm_cxl_memdev_edac_register(struct cxl_memdev *cxlmd)
-> +{ return 0; }
-> +static inline int devm_cxl_region_edac_register(struct cxl_region *cxlr)
-> +{ return 0; }
-> +#endif
-> +
->  #ifdef CONFIG_CXL_SUSPEND
->  void cxl_mem_active_inc(void);
->  void cxl_mem_active_dec(void);
-> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> index 9675243bd05b..6e6777b7bafb 100644
-> --- a/drivers/cxl/mem.c
-> +++ b/drivers/cxl/mem.c
-> @@ -180,6 +180,10 @@ static int cxl_mem_probe(struct device *dev)
->  			return rc;
->  	}
->  
-> +	rc = devm_cxl_memdev_edac_register(cxlmd);
-> +	if (rc)
-> +		dev_dbg(dev, "CXL memdev EDAC registration failed rc=%d\n", rc);
-> +
->  	/*
->  	 * The kernel may be operating out of CXL memory on this device,
->  	 * there is no spec defined way to determine whether this device
-> -- 
-> 2.43.0
+> Hi,
 > 
+> While I was thinking of adding tracing into PCIe BW controller (bwctrl),
+> I ended up thinking that perhaps it would make more sense to have PCIe
+> Link related tracepoints which would cover both hotplug and bwctrl so that
+> also Link Speed changes would be reported through the same trace event.
 > 
+> Downgraded speed may indicate there's something wrong with the card and
+> the Link Speed does have performance impact too for those who are pushing
+> BW boundaries such as AI systems.
+
+Agreed!
+
+> 
+> So my suggestion is:
+> 
+> - Add "Link Speed changed" to the event types.
+> - Add Link Speed and Width into the event format (and probably also Flit
+>    mode as PCIe gen6 is coming).
+
+
+How about bellow event format:
+
++	TP_STRUCT__entry(
++		__string(	port_name,	port_name	)
++		__field(	unsigned char,	cur_bus_speed	)
++		__field(	unsigned char,	max_bus_speed	)
++		__field(	unsigned char,	flit_mode	)
++	),
+
+And add the event to pcie_update_link_speed():
+
+@@ -796,6 +799,10 @@ void pcie_update_link_speed(struct pci_bus *bus)
+         pcie_capability_read_word(bridge, PCI_EXP_LNKSTA, &linksta);
+         pcie_capability_read_word(bridge, PCI_EXP_LNKSTA2, &linksta2);
+         __pcie_update_link_speed(bus, linksta, linksta2);
++
++       trace_pci_link_event(pci_name(bridge), bus->cur_bus_speed,
++                                          bus->max_bus_speed,
++                                          PCI_HOTPLUG_LINK_SPEED_CHANGED);
+
+But I don't find link speed changed in hotplug driver, and the
+format of "Link Speed changed" is a bit different from "pci_hp_event".
+
+Do we really need a PCI_HOTPLUG_EVENT? May PCI_LINK_EVENT is more
+appropriate?
+
+Thanks.
+Best Regards.
+Shuai
 
