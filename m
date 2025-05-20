@@ -1,130 +1,125 @@
-Return-Path: <linux-edac+bounces-3955-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3956-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BBC7ABD5B1
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 12:59:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AF02ABD663
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 13:13:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBDE4189C4BE
-	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 10:59:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65B7E7B2FAE
+	for <lists+linux-edac@lfdr.de>; Tue, 20 May 2025 11:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0514F27467F;
-	Tue, 20 May 2025 10:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DNj9CCko"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D6F827FB11;
+	Tue, 20 May 2025 11:08:59 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C392571C6;
-	Tue, 20 May 2025 10:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632CD27A128;
+	Tue, 20 May 2025 11:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747738768; cv=none; b=ohl0WaCXqXq6PRXjCnzxUn9ILMpdwB2/dcwAaog+fCmeLvzhKceJEVC1u1waoGPy3ZFY2IpBenJHkV4WWEuZrhl6pvmL1I7cMW/TyAnwzlZ+YoyuICmQgVPSU/WJ/awsUPgSUhK4LaIfzDBynOoo6rmS5i5ZsaOlTX4D8PSi34o=
+	t=1747739339; cv=none; b=hSyI6Gn8wHcFeAMiKKYi4BpyDCMQOLw5UvWpCFLaIS9WCcMXb4aaE0+KxcHpTkEpFsMnVMuKh6KRpinUv/AQzCLBW7DWJzsYbsJUHIh7zbYwRU1oYQ+ERcZyya5I4TbfqoT9g6B4/hypyl6cfx7F5kbnKsVtyk5gBETSvyNKkWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747738768; c=relaxed/simple;
-	bh=l4iEXYcV8csXHHOj1KNHmvhvqNAfPwRVS8lQzLyZEss=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=tFvicMll/Ao4GsJYcHAWeUFkL8qx/P8hHbxlUrNae0zQDmf0YRBfU4NiuGU0Y/IFWoQ43Rb1nguhpWDiUC3r4butgLtABupZb/KT14w9hDBomIsFM3lMKoo2dGb/9zhMqm16Vn62iVx4MqzrmUEByWjSItIIZZcOSASn5joEycs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DNj9CCko; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747738767; x=1779274767;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=l4iEXYcV8csXHHOj1KNHmvhvqNAfPwRVS8lQzLyZEss=;
-  b=DNj9CCkoEToC++GXIxMtiPzCqVhjcaAUgWxoADXswGopvsyNtnb4IMUI
-   419Momycxd93TlzBp8cxsR0upGJjvsV7kNfnAKmS697dfcZdSk3pGVJuj
-   JcH5pu4UiXIehff60klC3Xddv5IRKiZWksOGAsRMDjGCGPCL1N0KEVnss
-   uRSM0ER98EJFSSvOFHrnf72JG+j36sfRAh9ri5Dql4GMEX9pzD8Y6idpM
-   CGBBFjQDIQy5tub3ksH+7K849P9p2CV+nhdZqdVGlXLfR79z3cIJ++bPn
-   BXHiwXc3x0d9gLstu3WdJALvp5VQFu5OdPKGzS2WmPLaq5nlzt8QCL4wg
-   g==;
-X-CSE-ConnectionGUID: ODNJ/k/4Rpq/Rs8oSUfQaA==
-X-CSE-MsgGUID: YOoNKrYTR2SFeOVNsx7Dcg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="75067870"
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="75067870"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 03:59:26 -0700
-X-CSE-ConnectionGUID: 75p56i/uQLygPkRJ9zIKag==
-X-CSE-MsgGUID: Bz8y70cdTEOwmBZJo11Zog==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="140167898"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.235])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 03:59:20 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 20 May 2025 13:59:17 +0300 (EEST)
-To: Lukas Wunner <lukas@wunner.de>, Shuai Xue <xueshuai@linux.alibaba.com>
-cc: rostedt@goodmis.org, linux-pci@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org, 
-    linux-trace-kernel@vger.kernel.org, helgaas@kernel.org, 
-    bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de, 
-    mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com, 
-    naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com, 
-    mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-In-Reply-To: <aCxdFm_BpgOTFFUv@wunner.de>
-Message-ID: <15e8e19d-d471-69da-b928-afc20ee9a584@linux.intel.com>
-References: <20250512013839.45960-1-xueshuai@linux.alibaba.com> <87b1f8c6-bd72-b1a8-40a6-bbf552552806@linux.intel.com> <650cd4e4-561b-4d50-9cf2-c601518c9b9f@linux.alibaba.com> <31693574-e8bc-9a56-bad0-6a22280c4b6b@linux.intel.com>
- <aCxdFm_BpgOTFFUv@wunner.de>
+	s=arc-20240116; t=1747739339; c=relaxed/simple;
+	bh=xOSgR7Uj1iG0IGZQV8kzsDkw1k4xr5zmRTWDBRZ71fU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YBIqLoUTpTMohvwEJg458CjCucXGMrAVLZUPVg6RySjHBlsHGFRSNv4s0AkTLSQW3wV353XVd0TORSzR7RfXja3zNh7fYiGe4leRfdrYcI9wO3O8pUAudicgmm7poq0gf4fqY7YLgO6Sp+mgp+pzvG3VAvQubuYs4M/itXZ+bwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4b1sBD4ZWFz6M4rd;
+	Tue, 20 May 2025 19:04:04 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 77202140114;
+	Tue, 20 May 2025 19:08:54 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 20 May
+ 2025 13:08:53 +0200
+Date: Tue, 20 May 2025 12:08:51 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
+CC: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>, Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>, Vishal Verma
+	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
+	<dan.j.williams@intel.com>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>,
+	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	<linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-cxl@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+	<linux-pci@vger.kernel.org>, <linux-edac@vger.kernel.org>
+Subject: Re: [PATCH 1/4 v2] ACPI: extlog: Trace CPER Non-standard Section
+ Body
+Message-ID: <20250520120851.000062cf@huawei.com>
+In-Reply-To: <20250429172109.3199192-2-fabio.m.de.francesco@linux.intel.com>
+References: <20250429172109.3199192-1-fabio.m.de.francesco@linux.intel.com>
+	<20250429172109.3199192-2-fabio.m.de.francesco@linux.intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-557717680-1747738757=:936"
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500012.china.huawei.com (7.191.174.4) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Tue, 29 Apr 2025 19:21:06 +0200
+"Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com> wrote:
 
---8323328-557717680-1747738757=:936
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+> ghes_do_proc() has a catch-all for unknown or unhandled CPER formats
+> (UEFI v2.10 Appendix N 2.3), extlog_print() does not. This gap was
+> noticed by a RAS test that injected CXL protocol errors which were
+> notified to extlog_print() via the IOMCA (I/O Machine Check
+> Architecture) mechanism. Bring parity to the extlog_print() path by
+> including a similar log_non_standard_event().
+> 
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fabio.m.de.francesco@linux.intel.com>
+Makes sense to me.
 
-On Tue, 20 May 2025, Lukas Wunner wrote:
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> On Tue, May 20, 2025 at 01:07:28PM +0300, Ilpo J=E4rvinen wrote:
-> > On Tue, 20 May 2025, Shuai Xue wrote:
-> > > , and the format of "Link Speed changed" is a bit different from=20
-> > > "pci_hp_event".
-> >=20
-> > The difference is only because when the Link is down, there's no Link
-> > Speed (obviously). Whenever a new device is hotplugged and it comes up,=
-=20
-> > there's also Link Speed for it which can be included into the trace eve=
-nt.=20
-> >=20
-> > I think the trace event should have some special value for the fields t=
-hat=20
-> > are N/A due to Link being off. While it would be possible to create=20
-> > separate events for speed changes and hotplug, I don't see any pros in=
-=20
-> > that approach over just having the N/A fields marked as such when the L=
-ink=20
-> > is Down.
->=20
-> Link speed changes and device plug/unplug events are orthogonal,
-> I don't think they should be mixed together in the same event.
->=20
-> A link speed event can be signaled simultaneously to a plug event
-> and then user space can decide in which type of event it's
-> interested in.
->=20
-> That also avoids the awkwardness of having N/A values for the
-> link speed on unplug.
+> ---
+>  drivers/acpi/acpi_extlog.c | 6 ++++++
+>  drivers/ras/ras.c          | 1 +
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/drivers/acpi/acpi_extlog.c b/drivers/acpi/acpi_extlog.c
+> index f7fb7205028d..caca6ccd6e99 100644
+> --- a/drivers/acpi/acpi_extlog.c
+> +++ b/drivers/acpi/acpi_extlog.c
+> @@ -182,6 +182,12 @@ static int extlog_print(struct notifier_block *nb, unsigned long val,
+>  			if (gdata->error_data_length >= sizeof(*mem))
+>  				trace_extlog_mem_event(mem, err_seq, fru_id, fru_text,
+>  						       (u8)gdata->error_severity);
+> +		} else {
+> +			void *err = acpi_hest_get_payload(gdata);
+> +
+> +			log_non_standard_event(sec_type, fru_id, fru_text,
+> +					       gdata->error_severity, err,
+> +					       gdata->error_data_length);
+>  		}
+>  	}
+>  
+> diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
+> index a6e4792a1b2e..ac0e132ccc3e 100644
+> --- a/drivers/ras/ras.c
+> +++ b/drivers/ras/ras.c
+> @@ -51,6 +51,7 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
+>  {
+>  	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
+>  }
+> +EXPORT_SYMBOL_GPL(log_non_standard_event);
+>  
+>  void log_arm_hw_error(struct cper_sec_proc_arm *err)
+>  {
 
-Fair enough.
-
---=20
- i.
-
---8323328-557717680-1747738757=:936--
 
