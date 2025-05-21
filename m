@@ -1,79 +1,79 @@
-Return-Path: <linux-edac+bounces-3981-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3982-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ED6CABFB3B
-	for <lists+linux-edac@lfdr.de>; Wed, 21 May 2025 18:29:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64908ABFB4A
+	for <lists+linux-edac@lfdr.de>; Wed, 21 May 2025 18:32:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33A827AEB5A
-	for <lists+linux-edac@lfdr.de>; Wed, 21 May 2025 16:27:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7951F7B22F4
+	for <lists+linux-edac@lfdr.de>; Wed, 21 May 2025 16:30:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E341E1DE8;
-	Wed, 21 May 2025 16:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E997F1E1DE8;
+	Wed, 21 May 2025 16:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EIJVQZZ3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtDyU5nw"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1840E16DC28;
-	Wed, 21 May 2025 16:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C39716DC28;
+	Wed, 21 May 2025 16:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747844915; cv=none; b=pFfR4SkCa1an2j5oHp3l91ITPHteHc2X4FpIYa7rGI78rDfabLqrOc9NkcHGTrdcodhP9KbpjMyyJH90R2pEu8dghuQ1cywoigJKcrxYnLgES16m2amTlNBxp+Pws9Wdtk3KNP0T9AjLGpA7cytUtLCnBWh8AoDmgOyKrpuYXgM=
+	t=1747845088; cv=none; b=HhalzzZOQmREk0MTkmpQLsRorlDHuEXjMgUcKtquO6cLn2/DLzf5kol+3hArG778cBEz143tdCXk3Z1Knh9ZpvECVAVQ/gbatNR1VM78xrfb+9sjtVN44Uh041QcbPMaFdahzS9wB2/vEBdlIB+IUU06TKY24QJndNOS49FGVPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747844915; c=relaxed/simple;
-	bh=rbiew2xFDSn1FN1RhaLn3Hgr55Spum0T/3YxvWv+4y4=;
+	s=arc-20240116; t=1747845088; c=relaxed/simple;
+	bh=rVB01lYj9aSiT3vcqWaafdFMVB8ErPQivfkQKiIe7l0=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GO2Z5wygK/qcXV/1OwwlSxSDLQsDgVZYGOV3AnNGPvFiQ1tBLyK97kL0PkGzIqI+y72VBRH2wIU9ockwGy46z0lpVrqchScgRT9tFLPCHtkz15YCUOPLe6vUwgRpnz80sHmkyRNg4CgCgSH8SQqhnKtmfuqu528ZY0mTxGbT1x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EIJVQZZ3; arc=none smtp.client-ip=209.85.216.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=HO7B8HJVta8CwnzievMg1bJJ8GYcoM4xZinPpirODJ+pfgnG6xKU8TbfFEbtY52RQa5OJwdzSKmA3inqQkcIbVxqAeIOooFl+oSQV8YS2ZmjorW2h0UrGQAxIt1IugXWWr2H/KiiMHzn9l39pD+HcQs6EJUJYVNuD+4ZZhXOmtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtDyU5nw; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3108d54332eso807602a91.2;
-        Wed, 21 May 2025 09:28:32 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-742c9907967so3775288b3a.1;
+        Wed, 21 May 2025 09:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747844912; x=1748449712; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747845086; x=1748449886; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pIggStz/RXQy+Pzj/PgUplHF/0nY494c0KtJ+rdPSo4=;
-        b=EIJVQZZ3zB3RLeJXGYjdg75CSC1YwKH8DYIWxCfOpQi01wIwy5km/a5gOmMu9WHKSN
-         FBGwtClkEbxVy3mX47lLVnXwENF/gRPi7iZlbahApmrQMYf70/ee5tV8hoNygCdEb88r
-         e6hwWpr+Q5pBgsgEMWfxPLC7OlZ1M/xjjDubLlhoHFNtKSIhFpfk8XmHtNT3JGfBRDea
-         u8V9XuOKC2f0oUUYFhiKz61h9+21339G0IXMYTSelkENOUiKETg1om0rHhjkysm+816s
-         9nldEc2Q2t6THtQ0OyV5JoYTDx3TjTDmLKxRWvx3uUgwg3h2FXfWqfNQev4E5XQUoors
-         q6Vw==
+        bh=pn+w0D/TRnBKc0XGfluQ6lHdM8uAAWfVWv0XUbJbjwQ=;
+        b=BtDyU5nwL9EiOLka25a7YpjM/MjOslV8jfFmdhPJUJgdafMdy+so3m29wNtO0wIU30
+         q2WvvL0ZMB2UOhqLO5LeV1T/k6Rg8/yFxlC72EJxGGK/f70IXNv8FcFw3qrT/mdTpZlE
+         t1At9NcrbLT9EYSn6VzCUY33lNbW3j6TgR/W5LE786JXrxYjVCt8rLYC+wCntM/4UM/2
+         xt6tEAN9xAsgomZBGh4yfS7DUO+Vy56+mbzhhRBwcGw5xILjdZ0xFHpJi00odn9kx/Ud
+         nI0lFW2DZksrfzyXmY+MPadps05cklbom5wL5L8qc2K1ur1or1DjM1MNXjmHtxCWZZf2
+         auVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747844912; x=1748449712;
+        d=1e100.net; s=20230601; t=1747845086; x=1748449886;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pIggStz/RXQy+Pzj/PgUplHF/0nY494c0KtJ+rdPSo4=;
-        b=FQ64H/2mWmK/ark9CLVG0kj238WmhXwukl+DxO9LJh0yT0u4DAxTdXnVrQuWk1+652
-         HpqQRdR90I9BRdW+D15bSSc8tvA61PfTdzSEILsEpvMeeM6a7N1E0oiPsK14lTDGWyWp
-         u1v+ishHGWh+Y6G/SRO0IxlDn6QFp3L9Id806RHHHRVL+/OtdKr2Mke5tz9PVeBIOrUv
-         eDQgHt/dx8aCXHqZ+1FkUUEVek9DrQZ0ac4jxT4BezkDGXSLYSnNRSJKR9zueBPYdNsa
-         EAZW0qOHj9MWT+Koo/H715wzxmqkIyqiv2WgjncbKCuOUolVhcqR4RdF4d6Xm7ZtfQ3c
-         3gfg==
-X-Forwarded-Encrypted: i=1; AJvYcCViqouLUeGd3wclT0DB5haFK5pKoJ8CAWTQkWLjNxUqbs1fSTMrepSejbC2OyZhN5vFga6/LL1J7gnPyQ==@vger.kernel.org, AJvYcCXXsj3s934AyoHyierVql+GkrWZUgXlQusx+2IexGFokswCKyTyAafs8tRf55kpLEMbgbsTfsjERAM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywog41ZfDvn+5qMDA86YKXYXG8zk9S5dBLLz8Zs2VcYCwkYauiN
-	9TREp0+V815sx5rI+VZfqZKAJKj2hqlLDaKK2V/Ic1FbDrMRl6yNhlIs
-X-Gm-Gg: ASbGncsaFgxAcKWDEGdccWOjB5dmGyoZBGMGTiNAtJnF6mgZCgE2KgCCj52qQMq8cp9
-	gAQx7gXBhnObpXK8JRyhuXUHgRcj2AsGYNKoxbHPQ1wvPl3QIUpFKfjtxvVaPwg4INUOcknQKJH
-	fbObPGgt/4ZlckC5ct+2p2uvBbzxPXKQShxx2++k9adwdeMpip7oCGuH16XFt0JzQuau+8WqBsR
-	6fG9heaQpiUPEMEtcgRObRiUDgqOKZXxWzg+3jImD6EIQnsf4PcQwb7uZ6fUGB+4Di9sohV7igz
-	WkCc9oK4KrTnNxKCrcXPDTbnL+eRdv2Wvy6Av1p13Oe5xgUoo3+aLQQYFMERC8Gb/w==
-X-Google-Smtp-Source: AGHT+IEFj9doKcpfTPVJWe7aov/vMTA7xf4yNgqObIP6ArrfA7NGdJu4q7Ixx3DqhByW7G/78OnyHw==
-X-Received: by 2002:a17:90b:1a91:b0:2ee:e113:815d with SMTP id 98e67ed59e1d1-30e830ebc99mr31724033a91.8.1747844912125;
-        Wed, 21 May 2025 09:28:32 -0700 (PDT)
+        bh=pn+w0D/TRnBKc0XGfluQ6lHdM8uAAWfVWv0XUbJbjwQ=;
+        b=oN1kUHuGTOsbFLrJGujPBPvzdflYjQiTlC8b+vlbQvKoWNVziLdsA3bvn3CxfATeZm
+         UQpOJsar28+Ch19rMetvjYKw63rxKrH+u6+l1Q0UyP9ivZJvw5PJ1P0htOljUE+x1ZN7
+         C29lSU1qK6I/CE66/rriQnLXuK0YDH1KEgPoqiRW18vIcL+rBkxgkCV0Fomfp24TvTAm
+         DQNm6MBebJvEMoMQDcbzAm6LhgXKdmXh/F4/KZA10yVGKTBWPF1RlfXPg/479xx6ifhB
+         +xOxf8HTSixp5a8fvLj7RFJjTyC8fkUvJNCzAcenUFYSPBniCxRgJzoSHkmZmSLvf/yj
+         wBig==
+X-Forwarded-Encrypted: i=1; AJvYcCVqORxl3t6dXeBUsFmP//okFvZcluOf1J4vknj7q9ktW6cP1PZV/rvSc1HNSQS5Cgys9NdDqMm2XPI=@vger.kernel.org, AJvYcCXjDfIPquu8Yhxw6qA0vc0kL/lG8lt7IXUSrFIQqQlulx6JfusMy/ARYMCV5Va7Ht+PDvenh33TNKXeOQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj1D1L3xXS8K01+DG9F5mIghcnzAPVFVYSZcVBOn8mwClOMTxl
+	A4Air7o6NtC11sTvjJ3/6v9CW80DG8QKazqfIuJPZDna4hE96f8yEnAF
+X-Gm-Gg: ASbGnctH0lo9abV7B4xtCEIgyoecIzibyPSsVzrtPLB9eshIxw/m2T5emherbste613
+	FSmhr4JnEnkKeOk66RZFSpmp07qAa6vwkXEKNS1c5KVjbab4/o2kqoXGlnszfjsweKIx/JXBxHs
+	K7qDWue5q+TrdRQwBm+yNDSnAZc6n4WfmxiAMMw4Fb51HfSQJno7o+imi1wlalzE8Q/VzPW6f38
+	6j0RDCTG/D9QeJajFRk5to8YeBWi/gEIcU91vrfqmAKeKkRjntwchxqu2QAmw1aWh0lw+seNuFm
+	XyDfblGcEspZcC2PwW+pM/50GP/BAMmguBJ/ohw9cgUJMnl9PlRe0Fg=
+X-Google-Smtp-Source: AGHT+IFp3n+dKx2GtdCyvAzDa8TfjiGZUSlOh+tuuS6LDqMXZsXk+ZYSPh7mhl+zVFsgztmW2lbtQQ==
+X-Received: by 2002:a05:6a21:3511:b0:206:a9bd:a186 with SMTP id adf61e73a8af0-21621882718mr36715905637.3.1747845086441;
+        Wed, 21 May 2025 09:31:26 -0700 (PDT)
 Received: from smc-140338-bm01 ([149.97.161.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30f365b2da7sm3860928a91.9.2025.05.21.09.28.30
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a970b7bcsm10073651b3a.52.2025.05.21.09.31.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 May 2025 09:28:31 -0700 (PDT)
+        Wed, 21 May 2025 09:31:25 -0700 (PDT)
 From: Fan Ni <nifan.cxl@gmail.com>
 X-Google-Original-From: Fan Ni <fan.ni@samsung.com>
-Date: Wed, 21 May 2025 16:28:28 +0000
+Date: Wed, 21 May 2025 16:31:23 +0000
 To: shiju.jose@huawei.com
 Cc: linux-cxl@vger.kernel.org, dan.j.williams@intel.com,
 	jonathan.cameron@huawei.com, dave.jiang@intel.com,
@@ -85,11 +85,11 @@ Cc: linux-cxl@vger.kernel.org, dan.j.williams@intel.com,
 	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
 	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
 	wanghuiqiang@huawei.com
-Subject: Re: [PATCH v6 1/8] EDAC: Update documentation for the CXL memory
- patrol scrub control feature
-Message-ID: <aC3_LDduxFk_V_AP@smc-140338-bm01>
+Subject: Re: [PATCH v6 2/8] cxl: Update prototype of function
+ get_support_feature_info()
+Message-ID: <aC3_2xDB7kR2a-qA@smc-140338-bm01>
 References: <20250521124749.817-1-shiju.jose@huawei.com>
- <20250521124749.817-2-shiju.jose@huawei.com>
+ <20250521124749.817-3-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -98,15 +98,18 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250521124749.817-2-shiju.jose@huawei.com>
+In-Reply-To: <20250521124749.817-3-shiju.jose@huawei.com>
 
-On Wed, May 21, 2025 at 01:47:39PM +0100, shiju.jose@huawei.com wrote:
+On Wed, May 21, 2025 at 01:47:40PM +0100, shiju.jose@huawei.com wrote:
 > From: Shiju Jose <shiju.jose@huawei.com>
 > 
-> Update the Documentation/edac/scrub.rst to include use cases and
-> policies for CXL memory device-based, CXL region-based patrol scrub
-> control and CXL Error Check Scrub (ECS).
+> Add following changes to function get_support_feature_info()
+> 1. Make generic to share between cxl-fwctl and cxl-edac paths.
+> 2. Rename get_support_feature_info() to cxl_feature_info()
+> 3. Change parameter const struct fwctl_rpc_cxl *rpc_in to
+>    const uuid_t *uuid.
 > 
+> Suggested-by: Dan Williams <dan.j.williams@intel.com>
 > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
@@ -114,93 +117,60 @@ On Wed, May 21, 2025 at 01:47:39PM +0100, shiju.jose@huawei.com wrote:
 Reviewed-by: Fan Ni <fan.ni@samsung.com>
 
 > ---
->  Documentation/edac/scrub.rst | 76 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 76 insertions(+)
+>  drivers/cxl/core/core.h     |  2 ++
+>  drivers/cxl/core/features.c | 17 +++++++----------
+>  2 files changed, 9 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/edac/scrub.rst b/Documentation/edac/scrub.rst
-> index daab929cdba1..2cfa74fa1ffd 100644
-> --- a/Documentation/edac/scrub.rst
-> +++ b/Documentation/edac/scrub.rst
-> @@ -264,3 +264,79 @@ Sysfs files are documented in
->  `Documentation/ABI/testing/sysfs-edac-scrub`
+> diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+> index 17b692eb3257..613cce5c4f7b 100644
+> --- a/drivers/cxl/core/core.h
+> +++ b/drivers/cxl/core/core.h
+> @@ -124,6 +124,8 @@ int cxl_acpi_get_extended_linear_cache_size(struct resource *backing_res,
+>  					    int nid, resource_size_t *size);
 >  
->  `Documentation/ABI/testing/sysfs-edac-ecs`
+>  #ifdef CONFIG_CXL_FEATURES
+> +struct cxl_feat_entry *
+> +cxl_feature_info(struct cxl_features_state *cxlfs, const uuid_t *uuid);
+>  size_t cxl_get_feature(struct cxl_mailbox *cxl_mbox, const uuid_t *feat_uuid,
+>  		       enum cxl_get_feat_selection selection,
+>  		       void *feat_out, size_t feat_out_size, u16 offset,
+> diff --git a/drivers/cxl/core/features.c b/drivers/cxl/core/features.c
+> index 1498e2369c37..a83a2214a136 100644
+> --- a/drivers/cxl/core/features.c
+> +++ b/drivers/cxl/core/features.c
+> @@ -355,17 +355,11 @@ static void cxlctl_close_uctx(struct fwctl_uctx *uctx)
+>  {
+>  }
+>  
+> -static struct cxl_feat_entry *
+> -get_support_feature_info(struct cxl_features_state *cxlfs,
+> -			 const struct fwctl_rpc_cxl *rpc_in)
+> +struct cxl_feat_entry *
+> +cxl_feature_info(struct cxl_features_state *cxlfs,
+> +		 const uuid_t *uuid)
+>  {
+>  	struct cxl_feat_entry *feat;
+> -	const uuid_t *uuid;
+> -
+> -	if (rpc_in->op_size < sizeof(uuid))
+> -		return ERR_PTR(-EINVAL);
+> -
+> -	uuid = &rpc_in->set_feat_in.uuid;
+>  
+>  	for (int i = 0; i < cxlfs->entries->num_features; i++) {
+>  		feat = &cxlfs->entries->ent[i];
+> @@ -547,7 +541,10 @@ static bool cxlctl_validate_set_features(struct cxl_features_state *cxlfs,
+>  	struct cxl_feat_entry *feat;
+>  	u32 flags;
+>  
+> -	feat = get_support_feature_info(cxlfs, rpc_in);
+> +	if (rpc_in->op_size < sizeof(uuid_t))
+> +		return ERR_PTR(-EINVAL);
 > +
-> +Examples
-> +--------
-> +
-> +The usage takes the form shown in these examples:
-> +
-> +1. CXL memory Patrol Scrub
-> +
-> +The following are the use cases identified why we might increase the scrub rate.
-> +
-> +- Scrubbing is needed at device granularity because a device is showing
-> +  unexpectedly high errors.
-> +
-> +- Scrubbing may apply to memory that isn't online at all yet. Likely this
-> +  is a system wide default setting on boot.
-> +
-> +- Scrubbing at a higher rate because the monitor software has determined that
-> +  more reliability is necessary for a particular data set. This is called
-> +  Differentiated Reliability.
-> +
-> +1.1. Device based scrubbing
-> +
-> +CXL memory is exposed to memory management subsystem and ultimately userspace
-> +via CXL devices. Device-based scrubbing is used for the first use case
-> +described in "Section 1 CXL Memory Patrol Scrub".
-> +
-> +When combining control via the device interfaces and region interfaces,
-> +"see Section 1.2 Region based scrubbing".
-> +
-> +Sysfs files for scrubbing are documented in
-> +`Documentation/ABI/testing/sysfs-edac-scrub`
-> +
-> +1.2. Region based scrubbing
-> +
-> +CXL memory is exposed to memory management subsystem and ultimately userspace
-> +via CXL regions. CXL Regions represent mapped memory capacity in system
-> +physical address space. These can incorporate one or more parts of multiple CXL
-> +memory devices with traffic interleaved across them. The user may want to control
-> +the scrub rate via this more abstract region instead of having to figure out the
-> +constituent devices and program them separately. The scrub rate for each device
-> +covers the whole device. Thus if multiple regions use parts of that device then
-> +requests for scrubbing of other regions may result in a higher scrub rate than
-> +requested for this specific region.
-> +
-> +Region-based scrubbing is used for the third use case described in
-> +"Section 1 CXL Memory Patrol Scrub".
-> +
-> +Userspace must follow below set of rules on how to set the scrub rates for any
-> +mixture of requirements.
-> +
-> +1. Taking each region in turn from lowest desired scrub rate to highest and set
-> +   their scrub rates. Later regions may override the scrub rate on individual
-> +   devices (and hence potentially whole regions).
-> +
-> +2. Take each device for which enhanced scrubbing is required (higher rate) and
-> +   set those scrub rates. This will override the scrub rates of individual devices,
-> +   setting them to the maximum rate required for any of the regions they help back,
-> +   unless a specific rate is already defined.
-> +
-> +Sysfs files for scrubbing are documented in
-> +`Documentation/ABI/testing/sysfs-edac-scrub`
-> +
-> +2. CXL memory Error Check Scrub (ECS)
-> +
-> +The Error Check Scrub (ECS) feature enables a memory device to perform error
-> +checking and correction (ECC) and count single-bit errors. The associated
-> +memory controller sets the ECS mode with a trigger sent to the memory
-> +device. CXL ECS control allows the host, thus the userspace, to change the
-> +attributes for error count mode, threshold number of errors per segment
-> +(indicating how many segments have at least that number of errors) for
-> +reporting errors, and reset the ECS counter. Thus the responsibility for
-> +initiating Error Check Scrub on a memory device may lie with the memory
-> +controller or platform when unexpectedly high error rates are detected.
-> +
-> +Sysfs files for scrubbing are documented in
-> +`Documentation/ABI/testing/sysfs-edac-ecs`
+> +	feat = cxl_feature_info(cxlfs, &rpc_in->set_feat_in.uuid);
+>  	if (IS_ERR(feat))
+>  		return false;
+>  
 > -- 
 > 2.43.0
 > 
