@@ -1,196 +1,91 @@
-Return-Path: <linux-edac+bounces-3996-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-3997-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B636AC29FC
-	for <lists+linux-edac@lfdr.de>; Fri, 23 May 2025 20:54:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA182AC2B08
+	for <lists+linux-edac@lfdr.de>; Fri, 23 May 2025 22:38:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 316C43AAD02
-	for <lists+linux-edac@lfdr.de>; Fri, 23 May 2025 18:54:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 998AF167FA8
+	for <lists+linux-edac@lfdr.de>; Fri, 23 May 2025 20:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ED4729A321;
-	Fri, 23 May 2025 18:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FF21EB36;
+	Fri, 23 May 2025 20:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ahOGKGZ7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eqCqZrN4"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFF6227E82;
-	Fri, 23 May 2025 18:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748026456; cv=fail; b=VjuLXXkHuCcqZw+QUFnD8jTA4sAbdYyX3RIega0JncqBfub61GpqSji6OHu8G1SlOS6aPV14GZspCcK8oPo8OzJZwf7nahtW7gRbzxil4hTSdsNUxVFClcleMzCuRfcFWm53+IfAgDt5n3Gffg1sNG1ditYV5NgBe/bavTE2X/Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748026456; c=relaxed/simple;
-	bh=cxn7zQKfNbWQWDyeRoqhRi06dfu/WYp4PHWcNFZBLJA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=CUU8k81VrpEPGPbkoswlVi3LWFceMkw7lO0WvYWeRWuf9iT+tqTqnLeDlynO4DsNVQzZI2YN7sypJuL1CQTiKW4Wqjl14q5rENCrP+HhwA2gCgW0WeN6yG6LJvd4olvWzKP/9zMerMdl7KGAhUuhDVsV0w95pgm2adROKV+V4nA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ahOGKGZ7; arc=fail smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8D01A5BAC;
+	Fri, 23 May 2025 20:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748032701; cv=none; b=AJRgjPbRIHfDcss8qpvyi1KiIvfzdG+XAkrYu3/bZdbwnFtGHezDlxfDyv5vnEElSmMW4R5umcQpEvjlWkU7lvUpoVDehtOdIog2GK0nq6AubVlS/qeiSmyce4zuAvW3G8FsnaCsPL/I8Yg2lXTAIeD0TbzEdAprle3bxOkbDl4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748032701; c=relaxed/simple;
+	bh=2eHoAb897E4Zll0VREizd3vRpfOFku8VAPjFPS4p8lE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o29RNMBbbT5MTBJbBwrXDCaNg8/nfYDKN+bFslgv1CToWcWy6wTo3Tz4XqMnUm41DksyG1u+zBoKLhTWfePfs7hqUrB5AuBJvo4mgEWEmdhvYN//zSvT6XW+0ZybtzIcQlxNaKVUBRX3cfUaNLjlfsPxF9LBQP5DWKK8yetlW08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eqCqZrN4; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748026455; x=1779562455;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=cxn7zQKfNbWQWDyeRoqhRi06dfu/WYp4PHWcNFZBLJA=;
-  b=ahOGKGZ7WsOzhYvhLmy/dlxzsabDTPt6UuGMNz8ssX61GyEeECVyYPsi
-   OHlx8JtroDJH5Vt8mnvy5Zu4ZgFeyVMcsEAzQNK5bp0stHQFMxQtJDd5d
-   6iWYFyu4NVvUmmvBOXP+ueVtDdTlIuR2/zCwQG9OBTtzqZ55DM/oj/Q5w
-   uORPF7gWny8F+PwDT2bW9hJRFI0dhXHM9ibSxgRL8VdIIGJvELhNQYkfh
-   ZAcLy+M+dK30XpOA2k81/V33YC+l//m8AxuycJc9TK7klaf4UposjnAGV
-   cSkUJg/TdqQXxRTfKpjtdyanObRIYHnPzp7dah/CwQrg2sEJzRRGW8gac
-   Q==;
-X-CSE-ConnectionGUID: k4y142LZQGqxYca1tyVNCQ==
-X-CSE-MsgGUID: AHFvRUpgTJaLtOwkDXZ1hQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="52718477"
+  t=1748032699; x=1779568699;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2eHoAb897E4Zll0VREizd3vRpfOFku8VAPjFPS4p8lE=;
+  b=eqCqZrN47U9NzwHKQmDGzpkncYY8BpZNR6uGBzrV9K2mxg+o5tYab/OE
+   YyZpEHvRE8cIqeYrk3JbAoawiqsdgbBuZbxQfaAF3XYAAl0zZD6qdblmT
+   qHETVjnz+uXuZS7Qe5rDHXMuZZqvKA/Oo1bHZpiwPci7K8ipXjYp47ngw
+   RzwvAXHmZvsiI56tzRfoal6rtqfewtuKPQWPpKDLO7vqUGz3Sryoup7aq
+   OfZHKHlIeqzy4bzwmxYR32vSE4Y4FDpre/P0JBDYNCmw0VA6SDyCWe1Vd
+   7N3mrz6P/qvIwN/+EdqkRfnQbZ902CpeB6jRn3RsErx7nvc/rEScUoJkp
+   w==;
+X-CSE-ConnectionGUID: tG6vLdxhQz+rPr38JRSqhQ==
+X-CSE-MsgGUID: e8uQoKAISLuO18EUMLBTSQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11441"; a="49979091"
 X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="52718477"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 11:54:13 -0700
-X-CSE-ConnectionGUID: E9X6ximkSwavpDxaBYOqGg==
-X-CSE-MsgGUID: HovLwLYpRAaQ9cct8os3sA==
+   d="scan'208";a="49979091"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 13:38:18 -0700
+X-CSE-ConnectionGUID: n1qtln1OQsaDOPUTIfIE9Q==
+X-CSE-MsgGUID: JLd2Q99zST6ZU0os1CXd5g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,309,1739865600"; 
-   d="scan'208";a="141309858"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 11:54:13 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Fri, 23 May 2025 11:54:12 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Fri, 23 May 2025 11:54:12 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (40.107.223.73)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.55; Fri, 23 May 2025 11:54:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ib6b5yr//sXimY4NZ7xGQ5JDkGpKACDxZoj/jVZqHi3jBMMOwox1VciAV99K12PUqRfv4fb4HxiA07B6hXDpV1gFhw380k9M6ThZ67jgCUoWPTpW61fm/FkGcpWQLveS9UL4032koId+6XUhFcPlWOf9SgGQZQhYwCb45Atakb7rXuPYfSLdN5X9m4igo6SGe+cIlm7njsJRAJdvvTuRrzGUPDnRlQ5dabG/itMQ7q74SVM7YiRnWeGXEDqb9NfeKA7TgetF2y+Fo90zZAfZKfQMMvSKcM4uwF7seG4sQ7cDTHI8r7Om8JXcCk6Pll2tlhNMeLJvb5LKCRsjgHR5iA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hDulkfJyIrEumlkqtxjytQBMW0CTonyNESA5OSm7hBk=;
- b=J/bxtnB2KrImr4+2HOz5jH1i9iA1Qeh0US98u+Oi6lZ622OARlGjZ9TEybB6jiaa8GtxTU+hid5MNSzE9NaTf7+YMdFwNGWCZ5h7i8G8P/gY0PCsFNxcHVDX+GfxEEaNy+3W5Dr7oMd0EWFSJCrELp3X94VhavTtESfEJVGr17S1gEc1YOke6zq/tlHWS3Kd+pyeKWiVam7mMDCrJnO/XiR56LldVUxEXXzJwbHeF4qunhRV4QFL2mGD/s1t3YI3gpltreIosViecjrCNyj/VPEmpa+84cLc/jWtmd47F5NTjtM9UW3lIPKUgsmf4haGgZjgnYbVqbZ3TqS2d+tcPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by IA1PR11MB8097.namprd11.prod.outlook.com (2603:10b6:208:457::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.22; Fri, 23 May
- 2025 18:53:56 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6b05:74cf:a304:ecd8]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6b05:74cf:a304:ecd8%4]) with mapi id 15.20.8769.019; Fri, 23 May 2025
- 18:53:56 +0000
-Date: Fri, 23 May 2025 11:53:53 -0700
-From: Dan Williams <dan.j.williams@intel.com>
-To: <shiju.jose@huawei.com>, <linux-cxl@vger.kernel.org>,
-	<dan.j.williams@intel.com>, <jonathan.cameron@huawei.com>,
-	<dave.jiang@intel.com>, <dave@stgolabs.net>, <alison.schofield@intel.com>,
-	<vishal.l.verma@intel.com>, <ira.weiny@intel.com>
-CC: <linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>, <bp@alien8.de>,
-	<tony.luck@intel.com>, <lenb@kernel.org>, <Yazen.Ghannam@amd.com>,
-	<mchehab@kernel.org>, <nifan.cxl@gmail.com>, <linuxarm@huawei.com>,
-	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
-	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
-	<wanghuiqiang@huawei.com>, <shiju.jose@huawei.com>
-Subject: Re: [PATCH v6 0/8] cxl: support CXL memory RAS features
-Message-ID: <6830c44161538_3e70100c7@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20250521124749.817-1-shiju.jose@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250521124749.817-1-shiju.jose@huawei.com>
-X-ClientProxiedBy: SJ0PR13CA0216.namprd13.prod.outlook.com
- (2603:10b6:a03:2c1::11) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+   d="scan'208";a="141178387"
+Received: from jdoman-mobl3.amr.corp.intel.com (HELO [10.125.109.152]) ([10.125.109.152])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2025 13:38:17 -0700
+Message-ID: <0ece175b-ee76-4814-a591-7a75cac321ea@intel.com>
+Date: Fri, 23 May 2025 13:38:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|IA1PR11MB8097:EE_
-X-MS-Office365-Filtering-Correlation-Id: 159fda74-f684-45e1-d202-08dd9a2b2b8c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?LV243/HE+AGoy+9zA/TQLag5qag5YshjuJmCjJbafDysgq8jsm2kYVIR53U2?=
- =?us-ascii?Q?eD2F222mB5nXLzhqIqcA9jcJDZYZo5+oZC05aqOrVHJiH7gzc+3Voc0alFqL?=
- =?us-ascii?Q?jCRIEwQFbam/sgZ74hO3ig5fe8ZdYLuyL5/M6KLvreNXlwvUxLgU3n0CuTcA?=
- =?us-ascii?Q?j0zlLuCOyVeXVagl/l/0+2foM2316g/51TYZbjENAvleYPRFSMgoU/JqT506?=
- =?us-ascii?Q?ZxmPaPUiXmPGryMGLx3VCT89yzwKgX7bvf9Rsj+6wMZjsaseW84rE0LeW5uy?=
- =?us-ascii?Q?LIjs92/Mn6+ZScXTtCxBfR/rJBb9K0Yk0G4bKehyZ1OFMgL4sVRUdy0YhVgX?=
- =?us-ascii?Q?hOgLCbDkuBWM3yHGeaDSAhjf/ci2iUUAsC9iEiuzLwTKuttfPFVY/E140wMI?=
- =?us-ascii?Q?z0SyNceyvpK8Swiur6tT87TI7T2E1w+8G6U2KE25sCghDb8amvyngzxKRtcX?=
- =?us-ascii?Q?LNqlhVIpNshoG3C2G3rqV5aApcRleQiz4pmgWDBZtg15XjZwSuQAS9d1GwXB?=
- =?us-ascii?Q?n6K/7uJQdwOmwxPUKHzzle5RG5VuSxOvbKQwqawNvLcH9XOlA6wrtik5M0fv?=
- =?us-ascii?Q?JDnLsaWeg27VTkkPkGnjLe088sm124O8S9W5yX5ziRj59XcJyshqAci2Q/K7?=
- =?us-ascii?Q?l9lIP98EjAsa0CZyostjMig6zy24ZLohDx0NEoTskIwFlGqNwhm3/xCZveKz?=
- =?us-ascii?Q?Zb7byW+dAed4JaHSkZHzOGYb92Zhb2fR+8vzMpBaM42m+jiA/nClcxDgBtli?=
- =?us-ascii?Q?2An4ngzShwPAmPxyddpyVSawDA+x9znjqNDQR1PvQ4YDmGR8EWLs68sAQ6IG?=
- =?us-ascii?Q?SMfRsntJ4aZvn8Vm8hLt+3O5aZeI+pXAL5kJgzMKTPn4abXnllmplEUBFCWt?=
- =?us-ascii?Q?IIga7GHWH6NCCxyTnP0yiikTPDuzEElKNs6gX0jepsgK9TUALocuxGDEQ8Hb?=
- =?us-ascii?Q?w999jf1OU5nrPxvKB2Aqsr5HzkxrJSQSw94Nn8Y3+JPCFLidyU+X7HVaVjVI?=
- =?us-ascii?Q?Nbiny/AlDw4Mke70XG9ZmCiC84HS3dQw/3lqLaE2/aul5JtFflkLL0263Wgl?=
- =?us-ascii?Q?j72Vfe8JwoAD3cGyYhf6Ij+7F1E0hPtYPTWECV1aE+6CMQcvnLJ/GJqv+BYG?=
- =?us-ascii?Q?8Pph4CkL9SVAVr4ZfjJ1K4uRu4qk77c00CmPR1lKmwxNr6ImeuAP2JXb157a?=
- =?us-ascii?Q?I06UVlMCkApWiVg7rO0ozJjs47xJ+vReZvchwPK6TAN1zXa4eoY8Ms98CUOR?=
- =?us-ascii?Q?vBNcHTZcBzfI3eOtwGwdaKExTFToB3v4OQMsIz1ImTASLOAFFTwIaEEDSbOW?=
- =?us-ascii?Q?FP02cQJhmEAp1V9SqTSMdxoQUgw2dOnfSkjob05PudOUeB5IEjseczUDEksc?=
- =?us-ascii?Q?TQ0vIkzUkzGkRXR0FqZruoJgJqKG?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N17mEJpfp7GmFJL0EavTLU2/rHRvydr/4xvht5s05q4Q2R+sLAHKS70ajKnQ?=
- =?us-ascii?Q?HIzMCCQrIaGXOTFuzQeDqhMkDODPTR4FIXsBdXl+4lBedBHJJRXIpSRKZxea?=
- =?us-ascii?Q?nNzD/6LZCdgQSZrHmJDbauy+HfYvhMDjRpxlUVaNZ4UQ9voavLrgn3knJl57?=
- =?us-ascii?Q?Aa29SqCT8A+JEOq+oMqLpc1KvLLGyWwaDmZzE7/+PSB5L20QdSV+W5Vwrii/?=
- =?us-ascii?Q?YS3KQO4t6lgIhprct4J7NHxvLRSJXV+m7ItjYJ+t8jUi7wcVunClF9tbfpVn?=
- =?us-ascii?Q?CXR+uUk7rkCERN3S8nH+SjrvsqOcLGIpFN0wjVPdKGB8Ig+dp/uUrjENZ0Eu?=
- =?us-ascii?Q?dZc8uzBU0v7ofmz8F25kgctbEwOZCDdh2Y5CtiQmo0FWw0MZysi6/9DSgVCP?=
- =?us-ascii?Q?XoztCVusDvIZETJlV4fuhm8EVqK6hngWU+pushf0WagypJ7/rbq7ML3wUxzS?=
- =?us-ascii?Q?Dv+N/FQGKMdqsXntJwNaFR+vibiUW9S7HyiRQItvFkf1P0iI5EuqFQo8plij?=
- =?us-ascii?Q?9qf8PPm1kVCX0CSPfu6ZXGRDL56WDT7axVWjbiRG+HF26z9NbwvCbemJEg30?=
- =?us-ascii?Q?tV3Tv6ZyDNE01KrdgQ5m3jyoSVvYi269d0ukgyky6iL1s3pcwH4kxVKwySvm?=
- =?us-ascii?Q?mtdYnBVYoBSYGCcAN+J0Z2R9zWifZLP2f8a5OsMxo/M18eqo/xF2QzoBkAI3?=
- =?us-ascii?Q?NZzCDGdoMuggHd/culAwbpRXlU3hHD4X0+ZC/Bv8glZIwHZTAcwdHO9ztGqs?=
- =?us-ascii?Q?Gi+Jd09YdFFUudUNSt2wRZ6Oa9PpWEzxZvWp33HBWf9WNuFQDs5iYNF2BdX3?=
- =?us-ascii?Q?HLTZhWlBqVOm1e3V1CHhiv8DsJh7F1yrbL0M14Qf0YrX/otPc2TMKBwnWch1?=
- =?us-ascii?Q?gwAjPkhmaDrKPgy4mMfkwME5+2ZEatA0gKO17hSTuhaDyse29extuKkhAGYb?=
- =?us-ascii?Q?hNcHZJ4nSOQ8yl8cv+br2YornLKKqMKACX0osa4QdnlUKqDnKBG/ZTjo6u5T?=
- =?us-ascii?Q?cOyp9j0LEcIqwcrf/Jsjou+L4hVnIep6zr35/wVfuM4xciBoceO2xuebl96f?=
- =?us-ascii?Q?Y+dypgfFrxxeOcdBF1aCMl77zAqN23N+nJi4F63ZpJYZwUGntzBg3vYErl/C?=
- =?us-ascii?Q?s6eTA2iaLI1D+O/qFhaNOY5RAmm9T9rMhSxcmH3QRkcxjbOdC4+/NIKhkUYs?=
- =?us-ascii?Q?4GTyyyWJ7QzTCANSgK9TU6UDl8X5+dShShqsXol3oIATmK+2bscfT1B+AENs?=
- =?us-ascii?Q?ytQdEomLEOkoDoQ8wHWLX2z78FQVy+hxZ/bvvc5Ngfj1degtJnbJOt2+4uLD?=
- =?us-ascii?Q?NCwopuXaB2LTcjWXUWpZROF4jl3u14O/9k4yPVryWlr84w9e/CpSnE7DD77p?=
- =?us-ascii?Q?vBp5qalPzPnBirQ0gLtNUAPpYQ/QTZeDVmaqb4+gbDft39CJU2G1CnEVbq4q?=
- =?us-ascii?Q?rDKOgxenMH7en9ZVOc4JZLdzOUkKJdzlQrzXjwcuFPwYJ1ZVFPai6mEBbkpR?=
- =?us-ascii?Q?evcAVDjQsXGNa1FCicpfOVzOVr/SFmFmdUOWWcwFtw+aZz7vmuvrUvItrxRn?=
- =?us-ascii?Q?UFwBHV6cpZVR70jYvjmfMnbBM9T+AQ4QBt4CEE7G5xYNDISx8zvjdlWiJ9o7?=
- =?us-ascii?Q?sA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 159fda74-f684-45e1-d202-08dd9a2b2b8c
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2025 18:53:56.3398
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LG3LSHce2Nwg8qUuhrVN3dGmMvS3csSyHIiOiI6NsdpKbjfmYZtihANRhcKErsVL0CXfuA3XEC1M5KUVp9XXfOzwKBIpsTHom0AXoAKWjN0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8097
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/8] cxl: support CXL memory RAS features
+To: shiju.jose@huawei.com, linux-cxl@vger.kernel.org,
+ dan.j.williams@intel.com, jonathan.cameron@huawei.com, dave@stgolabs.net,
+ alison.schofield@intel.com, vishal.l.verma@intel.com, ira.weiny@intel.com
+Cc: linux-edac@vger.kernel.org, linux-doc@vger.kernel.org, bp@alien8.de,
+ tony.luck@intel.com, lenb@kernel.org, Yazen.Ghannam@amd.com,
+ mchehab@kernel.org, nifan.cxl@gmail.com, linuxarm@huawei.com,
+ tanxiaofei@huawei.com, prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
+ kangkang.shen@futurewei.com, wanghuiqiang@huawei.com
+References: <20250521124749.817-1-shiju.jose@huawei.com>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20250521124749.817-1-shiju.jose@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-shiju.jose@ wrote:
+
+
+On 5/21/25 5:47 AM, shiju.jose@huawei.com wrote:
 > From: Shiju Jose <shiju.jose@huawei.com>
 > 
 > Support for CXL memory EDAC features: patrol scrub, ECS, soft-PPR and
@@ -216,11 +111,152 @@ shiju.jose@ wrote:
 > [5]: https://lore.kernel.org/lkml/20250207143028.1865-1-shiju.jose@huawei.com/
 > [6]: https://lore.kernel.org/lkml/20250207143028.1865-5-shiju.jose@huawei.com/
 
-All of my prior review comments are addressed, the maze of type-unsafe
-callbacks gives me pause, but not disqualifying since it is all
-self-contained out of the way in drivers/cxl/core/edac.c
+Applied to cxl/next
 
-For the series you can add:
+> 
+> Changes
+> =======
+> v5 -> v6:
+> 1. Fixed feedback from Randy Dunlap on CXL EDAC documentation.
+> 
+> 2. Feedback from Alison:
+>   - Replace #ifdef using IS_ENABLED() in the series
+>   - Fix for the kfree() oops in devm_cxl_memdev_edac_release()
+>     while unloading cxl-test module. 
+>   - Added separate helper functions for scrub set attributes for
+>     dev scrub and region scrub.
+>   - renaming to scrub_cycle and scrub_region_id.
+>       
+> 3. Feedback from Dave:
+>   - Fix for the kfree() oops in devm_cxl_memdev_edac_release()
+>     while unloading cxl-test module.
+>   - Add cxl_test inclusion of edac.o
+>   - Check return from cxl_feature_info() with IS_ERR in the series. 
+>  
+> 4. Rebased to linux.git [2] v6.15-rc4 (based on comment from Dave
+> in the thread [4]).
+>    
+> v4 -> v5:
+> 1. Fixed a compilation warning introduced by v3->v4, reported by Dave Jiang on v4. 
+>    drivers/cxl/core/edac.c: In function ‘cxl_mem_perform_sparing’:
+>    drivers/cxl/core/edac.c:1335:29: warning: the comparison will always evaluate as ‘true’ for the address of ‘validity_flags’ will never be NULL [-Waddress]
+>  1335 |                         if (!rec->media_hdr.validity_flags)
+>       |                             ^
+>    In file included from ./drivers/cxl/cxlmem.h:10,
+>                  from drivers/cxl/core/edac.c:21:
+>    ./include/cxl/event.h:35:12: note: ‘validity_flags’ declared here
+>    35 |         u8 validity_flags[2];
+>       |            ^~~~~~~~~~~~~~
+> 2. Updated patches for tags given.
+> 
+> v3 -> v4:
+> 1. Feedback from Dave Jiang on v3,
+> 1.1. Changes for comments in EDAC scrub documentation for CXL use cases.
+>      https://lore.kernel.org/all/2df68c68-f1a8-4327-abc9-d265326c133d@intel.com/
+> 1.2. Changes for comments in CXL memory sparing control feature.
+>      https://lore.kernel.org/all/4ee3323c-fb27-4fbe-b032-78fd54bc21a0@intel.com/
+>       
+> v2 -> v3:
+> 1. Feedback from Dan Williams on v2,
+>    https://lore.kernel.org/linux-mm/20250320180450.539-1-shiju.jose@huawei.com/
+>   - Modified get_support_feature_info() in fwctl series generic to use in
+>     cxl/fxctl and cxl/edac and replace cxl_get_feature_entry() in the CXL edac
+>     series.
+>   - Add usecase note for CXL ECS in Documentation/edac/scrub.rst.
+>   - Add info message when device scrub rate set by a region overwritten with a
+>     local device scrub rate or another region's scrub rate.
+>   - Replace 'ps' with patrol_scrub in the patrol scrub feature.
+>   - Replaced usage of intermediate objects struct cxl_memdev_ps_params and
+>     enum cxl_scrub_param etc for patrol scrub and did same for ECS.
+>   - Rename CXL_MEMDEV_PS_* macros.
+>   - Rename scrub_cycle_hrs-> scrub_cycle_hours
+>   - Add if (!cxl_dev_name)
+> 	return -ENOMEM;  to devm_cxl_memdev_edac_register()
+>   - Add  devm_cxl_region_edac_register(cxlr) for CXL_PARTMODE_PMEM case.
+>   - Add separate configurations for CXL scrub, ECS and memory repair
+>     CXL_EDAC_SCRUB, CXL_EDAC_ECS and CXL_EDAC_MEM_REPAIR.
+>   - Add 
+>        if (!capable(CAP_SYS_RAWIO))
+>              return -EPERM; for set attributes callbacks for CXL scrub, ECS and
+>     memory repair.  	       
+>   - In patch "cxl/mbox: Add support for PERFORM_MAINTENANCE mailbox command"
+>     * cxl_do_maintenance() -> cxl_perform_maintenance() and moved to cxl/core/edac.c 
+>     * kmalloc() -> kvzalloc()
+>   - In patch, "cxl: Support for finding memory operation attributes from the current boot"  
+>     * Moved code from drivers/cxl/core/ras.c to drivers/cxl/core/edac.c
+>     * Add few logics to releasing the cache to give safety with respect to error storms and burning
+>     * unlimited memory. 
+>     * Add estimated memory overhead expense of this feature documented in the Kconfig.
+>     * Unified various names such as attr, param, attrbs throughout the patches.
+>     * Moved > struct xarray rec_gen_media and struct xarray rec_dram; out of struct cxl_memdev
+>       to CXL edac object, but there is required a pointer to this object in struct cxl_memdev
+>       because the error records are reported and thus stored in the cxl_memdev context not
+>       in the CXL EDAC context.
+>       
+> 2. Feedback from Borislav on v2,
+>   - In include/linux/edac.h 
+>     Replace EDAC_PPR -> EDAC_REPAIR_PPR
+>             EDAC_CACHELINE_SPARING -> EDAC_REPAIR_CACHELINE_SPARING etc.
+> 
+> v1 -> v2:
+> 1. Feedback from Dan Williams on v1,
+>    https://lore.kernel.org/linux-mm/20250307091137.00006a0a@huawei.com/T/
+>   - Fixed lock issues in region scrubbing, added local cxl_acquire()
+>     and cxl_unlock.
+>   - Replaced CXL examples using cat and echo from EDAC .rst docs
+>     with short description and ref to ABI docs. Also corrections
+>     in existing descriptions as suggested by Dan.
+>   - Add policy description for the scrub control feature.
+>     However this may require inputs from CXL experts.
+>   - Replaced CONFIG_CXL_RAS_FEATURES with CONFIG_CXL_EDAC_MEM_FEATURES.
+>   - Few changes to depends part of CONFIG_CXL_EDAC_MEM_FEATURES.
+>   - Rename drivers/cxl/core/memfeatures.c as drivers/cxl/core/edac.c
+>   - snprintf() -> kasprintf() in few places.
+> 
+> 2. Feedback from Alison on v1,
+>   - In cxl_get_feature_entry()(patch 1), return NULL on failures and
+>     reintroduced checks in cxl_get_feature_entry().
+>   - Changed logic in for loop in region based scrubbing code.
+>   - Replace cxl_are_decoders_committed() to cxl_is_memdev_memory_online()
+>     and add as a local function to drivers/cxl/core/edac.c
+>   - Changed few multiline comments to single line comments.
+>   - Removed unnecessary comments from the code.
+>   - Reduced line length of few macros in ECS and memory repair code.
+>   - In new files, changed "GPL-2.0-or-later" -> "GPL-2.0-only".
+>   - Ran clang-format for new files and updated.                                                                                                                                          
+> 3. Changes for feedbacks from Jonathan on v1.
+>   - Changed few multiline comments to single line comments.
+> 
+> Shiju Jose (8):
+>   EDAC: Update documentation for the CXL memory patrol scrub control
+>     feature
+>   cxl: Update prototype of function get_support_feature_info()
+>   cxl/edac: Add CXL memory device patrol scrub control feature
+>   cxl/edac: Add CXL memory device ECS control feature
+>   cxl/edac: Add support for PERFORM_MAINTENANCE command
+>   cxl/edac: Support for finding memory operation attributes from the
+>     current boot
+>   cxl/edac: Add CXL memory device memory sparing control feature
+>   cxl/edac: Add CXL memory device soft PPR control feature
+> 
+>  Documentation/edac/memory_repair.rst |   31 +
+>  Documentation/edac/scrub.rst         |   76 +
+>  drivers/cxl/Kconfig                  |   71 +
+>  drivers/cxl/core/Makefile            |    1 +
+>  drivers/cxl/core/core.h              |    2 +
+>  drivers/cxl/core/edac.c              | 2103 ++++++++++++++++++++++++++
+>  drivers/cxl/core/features.c          |   17 +-
+>  drivers/cxl/core/mbox.c              |   11 +-
+>  drivers/cxl/core/memdev.c            |    1 +
+>  drivers/cxl/core/region.c            |   10 +
+>  drivers/cxl/cxl.h                    |   10 +
+>  drivers/cxl/cxlmem.h                 |   30 +
+>  drivers/cxl/mem.c                    |    4 +
+>  drivers/edac/mem_repair.c            |    9 +
+>  include/linux/edac.h                 |    7 +
+>  tools/testing/cxl/Kbuild             |    1 +
+>  16 files changed, 2372 insertions(+), 12 deletions(-)
+>  create mode 100644 drivers/cxl/core/edac.c
+> 
 
-Acked-by: Dan Williams <dan.j.williams@intel.com>
 
