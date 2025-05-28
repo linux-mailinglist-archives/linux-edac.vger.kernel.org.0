@@ -1,131 +1,231 @@
-Return-Path: <linux-edac+bounces-4013-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4014-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B02AAC651F
-	for <lists+linux-edac@lfdr.de>; Wed, 28 May 2025 11:02:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74380AC65C4
+	for <lists+linux-edac@lfdr.de>; Wed, 28 May 2025 11:24:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BABFF3AC753
-	for <lists+linux-edac@lfdr.de>; Wed, 28 May 2025 09:01:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1A5E17648E
+	for <lists+linux-edac@lfdr.de>; Wed, 28 May 2025 09:23:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472792741DF;
-	Wed, 28 May 2025 09:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA1B278E7C;
+	Wed, 28 May 2025 09:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="MwCo+B4S"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1623C244697;
-	Wed, 28 May 2025 09:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5570D27585C;
+	Wed, 28 May 2025 09:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748422915; cv=none; b=VN6mYsf+mDTFSZXfXai5oSNaVsSBkCgg4Pe5cIrRLELEL6bAK8jqTu1BWT5bR8VqkhYGcmY+eaJfy+J8uHjTQe6sFvi278JtqxD0IoYgXvOoRYkJKJI2kzFDZoDplRf6ELf99LTrfbSWiyhfvbzcbah3oSljRYhNWTwraeF/eHg=
+	t=1748424194; cv=none; b=nNvmb1MvKBXXBGMCBTQxxUL9oYAZJ/FzcRpakmIk5i+NwUClbni697rX52fZx2y6Xxw8zg5JEK+zmgE7Ve6C5Tiy2O8/YLqwYbwS+rr+MmaXiWRtpTCg1nO/7NcAqqzR4xJidQmce4PcJ1QkxLa23wNtSxJidepBowmOlracw3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748422915; c=relaxed/simple;
-	bh=yIHKFd65EMK3B3TOZUx1mxqsgXd/2gqGnSBL7N8XwSk=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PmX3a8CeC5n/K6fIrRkPxG3IgV+OQz4CQytEvPj2RrDp8LmfqOLKI/rRkwlaRG0H90p+mnIEi4/9rymYHniNOWxopQyear6u1z9GFcyBULPPnkRPn52xCI/yjkD1PF0y4+vcPHDQjUndJUTJGb1pcbgcKnOD72xNIJXrWrMWJpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4b6k4514v9z6HJZN;
-	Wed, 28 May 2025 17:00:37 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 64E7F1402EE;
-	Wed, 28 May 2025 17:01:49 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 28 May
- 2025 11:01:48 +0200
-Date: Wed, 28 May 2025 10:01:47 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Vijay Balakrishna <vijayb@linux.microsoft.com>
-CC: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, "Rob
- Herring" <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor
- Dooley" <conor+dt@kernel.org>, James Morse <james.morse@arm.com>, "Mauro
- Carvalho Chehab" <mchehab@kernel.org>, Robert Richter <rric@kernel.org>,
-	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Tyler Hicks
-	<code@tyhicks.com>, Marc Zyngier <maz@kernel.org>, Sascha Hauer
-	<s.hauer@pengutronix.de>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	<devicetree@vger.kernel.org>
-Subject: Re: [v10 PATCH 1/2] EDAC: Add EDAC driver for ARM Cortex A72 cores
-Message-ID: <20250528100147.0000741b@huawei.com>
-In-Reply-To: <1748387790-20838-2-git-send-email-vijayb@linux.microsoft.com>
-References: <1748387790-20838-1-git-send-email-vijayb@linux.microsoft.com>
-	<1748387790-20838-2-git-send-email-vijayb@linux.microsoft.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1748424194; c=relaxed/simple;
+	bh=XwVcsM0Ke27QaXVu4HALsNtN2BuTrzEyaowisRAZRTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZaERraTyQfFkQLsm9vJjuPQs7NUq5/NVNArclvP3KhoeZhiPNnuPmSflUCTU4SZieWn1JeW8hkwHBLLmJ3I3iVyLYmOdSW2rEH1AfB+YGdRaLPhI5wLcYPgu9WDoqRu031S01HK1/brrEXg+Cep0HaOS79wM+vUuR2+W46COLLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=MwCo+B4S reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9D2DA40E01AD;
+	Wed, 28 May 2025 09:23:07 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 6k1iIRKJfFlA; Wed, 28 May 2025 09:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1748424182; bh=si5vjMB3rqYmyMn24gD/zflzQ5T1gxEmIVKPQTemnUs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MwCo+B4SRUadtIe1XUxkBce8rFMI6dulfrRCIQeV3A/qP5P4UrULAs//ut1GGt8+J
+	 9cddGaZsgFOhZ/f7kdnmMZlk8VIDBzPOuasIQm8Qum51RnHfLzrPaGcQMYORD23uhs
+	 yDXcDlf7ilZ+EjBjxFxdDeCXbOjQyT4YAflvjvn0anDy6S305curU6phw351VdLwFo
+	 1tzAj8ndKknisMKZ4HE0bxEnzWlDSyH65EUH4UuFWAOG40AL8G9Aa0He++7W04oP/u
+	 q+rIDZ3iylb9GLu4mlDOxqv4td3pOfZ/3NUvtP7FVrvsqjzBvGgkW0muYsEj/Vk9DK
+	 V3uMCtuXN1CTURb9BADn9kTtTU+Jnf3qBNxhp2+ZiV7vY5dqyU0W09bVkEOyRbeyWO
+	 5acH68wcAQ/Pv8c4IdbW9yZND1szWbqX/o/wyxzDepbSZsdEI4jdUMPGPP9lYeDp5E
+	 sOnn3m7TLbXQan6OtBfgNSxomfAbw7SKLFjkJGbOOB69ME28Fw7sCDaZza7S3lW4YE
+	 YpyiTTDOcSviSuAJCdGI/v6Ig8FUkI5hwGEsblInpI7axuw38BeiQZQ4A48LdpKGFH
+	 dbV06SpVtBjqJAvgf4TMYdMne7uEHnzZuMET81tnV7XWX8G21DLMYjEMGb6uG4Iga9
+	 G1QxEwJ2RSUvJZyJ5OM7ZCXo=
+Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6159540E01B5;
+	Wed, 28 May 2025 09:22:56 +0000 (UTC)
+Date: Wed, 28 May 2025 11:22:50 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Avadhut Naik <avadhut.naik@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	avadnaik@amd.com,
+	=?utf-8?Q?=C5=BDilvinas_=C5=BDaltiena?= <zilvinas@natrix.lt>,
+	Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v4] EDAC/amd64: Fix size calculation for Non-Power-of-Two
+ DIMMs
+Message-ID: <20250528092250.GAaDbV6oEqvE3279dJ@fat_crate.local>
+References: <20250513192221.784445-1-avadhut.naik@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250513192221.784445-1-avadhut.naik@amd.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 27 May 2025 16:16:29 -0700
-Vijay Balakrishna <vijayb@linux.microsoft.com> wrote:
+On Tue, May 13, 2025 at 07:20:11PM +0000, Avadhut Naik wrote:
+> Each Chip-Select (CS) of a Unified Memory Controller (UMC) on AMD's
+> modern Zen-based SOCs has an Address Mask and a Secondary Address Mask
+> register associated with it. The amd64_edac module logs DIMM sizes on a
+> per-UMC per-CS granularity during init using these two registers.
+>=20
+> Currently, the module primarily considers only the Address Mask registe=
+r
+> for computing DIMM sizes. The Secondary Address Mask register is only
+> considered for odd CS. Additionally, if it has been considered, the
+> Address Mask register is ignored altogether for that CS. For
+> power-of-two DIMMs, this is not an issue since only the Address Mask
 
-> From: Sascha Hauer <s.hauer@pengutronix.de>
-> 
-> The driver is designed to support error detection and reporting for
-> Cortex A72 cores, specifically within their L1 and L2 cache systems.
-> The errors are detected by reading CPU/L2 memory error syndrome
-> registers.
-> 
-> Unfortunately there is no robust way to inject errors into the caches,
-> so this driver doesn't contain any code to actually test it. It has
-> been tested though with code taken from an older version [1] of this
-> driver. For reasons stated in thread [1], the error injection code is
-> not suitable for mainline, so it is removed from the driver.
-> 
-> [1] https://lore.kernel.org/all/1521073067-24348-1-git-send-email-york.sun@nxp.com/#t
-> 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Co-developed-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
-> Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
-I'm far from an expert on the EDAC side of things but generally this
-looks good to me.
+What are power-of-two DIMMs?
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+The number of DIMMs on the system is a 2^x?
 
-Note one comment inline that maybe it's worth adding a line
-to the copyright notice given changes you've made?
+Their ranks are a power of two?
 
-Jonathan
+Their combined size is not power of two?
 
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index a8f2d8f6c894..136416f43b44 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -88,3 +88,4 @@ obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
->  obj-$(CONFIG_EDAC_ZYNQMP)		+= zynqmp_edac.o
->  obj-$(CONFIG_EDAC_VERSAL)		+= versal_edac.o
->  obj-$(CONFIG_EDAC_LOONGSON)		+= loongson_edac.o
-> +obj-$(CONFIG_EDAC_CORTEX_A72)		+= edac_a72.o
-> diff --git a/drivers/edac/edac_a72.c b/drivers/edac/edac_a72.c
-> new file mode 100644
-> index 000000000000..f23c28fba354
-> --- /dev/null
-> +++ b/drivers/edac/edac_a72.c
-> @@ -0,0 +1,229 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Cortex A72 EDAC L1 and L2 cache error detection
-> + *
-> + * Copyright (c) 2020 Pengutronix, Sascha Hauer <s.hauer@pengutronix.de>
+One can only guess...
 
-I'd argue that you've made enough changes to add an additional
-copyright line.  Entirely up to you however!
+> register is used.
+>=20
+> For non-power-of-two DIMMs, however, the Secondary Address Mask registe=
+r
+> is used in conjunction with the Address Mask register. However, since t=
+he
+> module only considers either of the two registers for a CS, the size
+> computed by the module is incorrect.
 
-> + *
-> + * Based on Code from:
-> + * Copyright (c) 2018, NXP Semiconductor
-> + * Author: York Sun <york.sun@nxp.com>
-> + */
+Yah, it must be something about the size...
 
+> The Secondary Address Mask register
+> is not considered for even CS, and the Address Mask register is not
+> considered for odd CS.
+>=20
+> Introduce a new helper function so that both Address Mask and Secondary
+> Address Mask registers are considered, when valid, for computing DIMM
+> sizes. Furthermore, also rename some variables for greater clarity.
+
+So it is non-power-of-two sized DIMMs?
+
+IOW, DIMMs whose size is not a power of two?
+
+> Fixes: 81f5090db843 ("EDAC/amd64: Support asymmetric dual-rank DIMMs")
+> Reported-by: =C5=BDilvinas =C5=BDaltiena <zilvinas@natrix.lt>
+> Closes: https://lore.kernel.org/dbec22b6-00f2-498b-b70d-ab6f8a5ec87e@na=
+trix.lt
+> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+> Tested-by: =C5=BDilvinas =C5=BDaltiena <zilvinas@natrix.lt>
+> Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: stable@vger.kernel.org
+
+All that changelog stuff...
+
+> ```
+> Changes in v2:
+> 1. Avoid unnecessary variable initialization.
+> 2. Modify commit message to accurately reflect the changes.
+> 3. Move check for non-zero Address Mask register into the new helper.
+>=20
+> Changes in v3:
+> 1. Add the missing Closes tag and rearrange tags per tip tree handbook.
+> 3. Slightly modify commit message to properly reflect the SOCs that may
+> encounter this issue.
+> 4. Rebase on top of edac-for-next.
+>=20
+> Changes in v4:
+> 1. Rebase on top of edac-for-next.
+>=20
+> Links:
+> v1: https://lore.kernel.org/all/20250327210718.1640762-1-avadhut.naik@a=
+md.com/
+> v2: https://lore.kernel.org/all/20250415213150.755255-1-avadhut.naik@am=
+d.com/
+> v3: https://lore.kernel.org/all/20250416222552.1686475-1-avadhut.naik@a=
+md.com/
+> ---
+
+<--- ... goes here, under the --- line so that patch handling tools can i=
+gnore
+it.
+
+>  drivers/edac/amd64_edac.c | 57 ++++++++++++++++++++++++---------------
+>  1 file changed, 36 insertions(+), 21 deletions(-)
+
+...
+
+> +static int __addr_mask_to_cs_size(u32 addr_mask, u32 addr_mask_sec,
+> +				  unsigned int cs_mode, int csrow_nr, int dimm)
+> +{
+> +	int size;
+> =20
+>  	edac_dbg(1, "CS%d DIMM%d AddrMasks:\n", csrow_nr, dimm);
+> -	edac_dbg(1, "  Original AddrMask: 0x%x\n", addr_mask_orig);
+> -	edac_dbg(1, "  Deinterleaved AddrMask: 0x%x\n", addr_mask_deinterleav=
+ed);
+> +	edac_dbg(1, "  Primary AddrMask: 0x%x\n", addr_mask);
+> =20
+>  	/* Register [31:1] =3D Address [39:9]. Size is in kBs here. */
+> -	size =3D (addr_mask_deinterleaved >> 2) + 1;
+> +	size =3D calculate_cs_size(addr_mask, cs_mode);
+> +
+> +	edac_dbg(1, "  Secondary AddrMask: 0x%x\n", addr_mask_sec);
+> +	size +=3D calculate_cs_size(addr_mask_sec, cs_mode);
+> =20
+>  	/* Return size in MBs. */
+>  	return size >> 10;
+> @@ -1270,7 +1284,7 @@ static int umc_addr_mask_to_cs_size(struct amd64_=
+pvt *pvt, u8 umc,
+>  				    unsigned int cs_mode, int csrow_nr)
+>  {
+>  	int cs_mask_nr =3D csrow_nr;
+> -	u32 addr_mask_orig;
+> +	u32 addr_mask =3D 0, addr_mask_sec =3D 0;
+>  	int dimm, size =3D 0;
+
+The EDAC tree preferred ordering of variable declarations at the
+beginning of a function is reverse fir tree order::
+
+	struct long_struct_name *descriptive_name;
+	unsigned long foo, bar;
+	unsigned int tmp;
+	int ret;
+
+The above is faster to parse than the reverse ordering::
+
+	int ret;
+	unsigned int tmp;
+	unsigned long foo, bar;
+	struct long_struct_name *descriptive_name;
+
+And even more so than random ordering::
+
+	unsigned long foo, bar;
+	int ret;
+	struct long_struct_name *descriptive_name;
+	unsigned int tmp;
+
+--=20
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
