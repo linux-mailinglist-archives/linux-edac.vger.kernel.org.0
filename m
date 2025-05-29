@@ -1,82 +1,77 @@
-Return-Path: <linux-edac+bounces-4039-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4040-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D887AAC7B76
-	for <lists+linux-edac@lfdr.de>; Thu, 29 May 2025 11:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C5C4AC8075
+	for <lists+linux-edac@lfdr.de>; Thu, 29 May 2025 17:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0BAD4A17C4
-	for <lists+linux-edac@lfdr.de>; Thu, 29 May 2025 09:56:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E49F817D704
+	for <lists+linux-edac@lfdr.de>; Thu, 29 May 2025 15:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F39258CCE;
-	Thu, 29 May 2025 09:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533F122AE6B;
+	Thu, 29 May 2025 15:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ckKgXV2r"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hZbisq1R"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C05221B8F8;
-	Thu, 29 May 2025 09:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351C11ACEAC;
+	Thu, 29 May 2025 15:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748512580; cv=none; b=Xw1HWpSQUt6Vs1DfsqTVyW5whEguFAz+8qCRk7heJhKo3IqL/FkySV5CsF6kcIx5dUBAm6WKFjQ1FrYuRZYcjC08WG1S22UJKGW75i80dHY8Y8kaxZ7FFOUuQ5VYlg6JBBU1LvN9jzA0xjRe6zXaJVZEdyydC7ZiaUgGQGhjk70=
+	t=1748533336; cv=none; b=Wa/x8Vq3aeW0x9LhHNAG+W1mjt17RvfMgIVWQyO+nA8r8F4Ln30xMEqRnhiKiAsY6Oefo/oqRH7x2oyWEQxND6YtxKEwYtCKYkHAzBwW3n6JUAHSZpyLLmSrqSkgaVMnfrabvpXjy3eDnbl4FaUe3XJ4XIlvXx6ImnMzrAjcKtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748512580; c=relaxed/simple;
-	bh=yqJ5DgY98E8B+lVlUMTdL98B493AuzUfG5+zVE+Ydz4=;
+	s=arc-20240116; t=1748533336; c=relaxed/simple;
+	bh=NvS3iajel3uiFpERDVLOA+H1e2GfdGwuFWSBnEly3Iw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZEs5nyjirsIQaws/rTl6IzvYig7hrZL4eqYGWMpL1F0sFxr1Ss6eyAJPNewJExGmFnOwKMUL8VG4jDATA04U/SZlin3Uv6T8hNe4FZZb5x+clRQH02eZbG2YvN/hkY64dHb6qrmEES3wYNnnPgx1Xje1VPL6sDnbi6PvYtIQu8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ckKgXV2r; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=lZ16bBlbtLO37Cn8SKnvE3OlMAJ9ZmpvJVwZrCB3pQmEJUaZKAOXTkDkukt3x+0mH/OScH0li91gRQ1ywU8Qh+3tRgn7Pc+yg3EVanPKzv6XDMAv4oCnENwy8cYYVH7HxLTDIRYmCmNtkPFji4DyYRTNOErFDUZoEfMz230HB2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hZbisq1R; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2596D40E01B2;
-	Thu, 29 May 2025 09:56:14 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9567040E01B4;
+	Thu, 29 May 2025 15:42:08 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id vOts0cI1yeCP; Thu, 29 May 2025 09:56:11 +0000 (UTC)
+	with ESMTP id eVHumS4QlpMy; Thu, 29 May 2025 15:42:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1748512570; bh=0p3zG1uflJ57VnzRzCyb15DyMSrlT6u+CZBmAvONpls=;
+	t=1748533324; bh=AFiskssTvMw0BTST5ut/KPBkxvYipqUNG82ZFuKfYZ4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ckKgXV2rA0QMco8nlB9vBcyGhRIwHnbStYPd0+wGGjrz9ioPwmbPtzNmyMkwcpybc
-	 MgKi3moRDXQsgq+bHz4C+AH8+pUApqdw8j77mtced2xfEcakwQ31QwoElB6d3ON3dX
-	 Tgb5VPzV9dWZdtE0cWMOb64gfaAh2gWkXsao6OAEpXD/JnEeYKYd7+kLzXt3xpp9OG
-	 nD27DsJy4oMppsBJIylKe7bBqDY+Ya/a2lsy/PxQAjFu5u0MWOXEd3ajFBKwRoQO+u
-	 1xmpemVym5MHnaVAsxVjBKAgSTBe7xwWnjOkWcwvm0pIERfA9XXysM7fhdbiEWsuUn
-	 lInfRhrKT5ki8oZToamtuysSamu2qFFSOaCQpAk2EMnLPtwYojfKBdwD1OBL0MvFco
-	 O7t9xpVC3TMOVMuCNtb4DTjqQtpSiKUmVx3IqQHfMIPzhhbSfbn+L2XiVMBJRalO2w
-	 9FCwolrAELccRtKoRWDfY+PQMOBavmkdyb9eJQ0ial+vtc6EztndJYo5/nOw6/TT65
-	 fwZIiwVgJfI+lhsYoH+b+HAfkxPeuSB0Ji+K/oZGJdsh7OMHMR95P8f2BESr90WvkM
-	 /XQM7nOWeR3+HpYvPcntxidmTb4vmiPzJ39xu7mlvActJqTcEdygzxTqMjpr9A/TdG
-	 2zD5AxdmnZp8vlj5p3nUFLVY=
+	b=hZbisq1Rf8elH2xuvZxnzmvfA9yjubTHXr8jTguh52CvNwnMknBoeCkkmAflyioRj
+	 nRi6Z+NIlpc+Y775G5lAX8dUDY77ov+CU/NFJbrqGQEl0XCcVpAR/pnxfZeP6KVNcj
+	 miMnh8njo/U4gWn4BvQ62Nh8tgaU5o/m+j+THy6LhO3U9LvbNa07VhOeXImNvChS2H
+	 e/WBk3CxPxmmHiFX2dDD1/yAstqK1f/6cayQwrrq2OCjQWPhGedUX1liYGmFmThGLC
+	 +/jDjdnVBTjGUCthBWpz+SOh6kOR+ByzjtgE+q7NbmDQCNNu4ZMeRt8Tx6of/1zjTL
+	 FasIOF1UhXNv65tM1gAJvrh612fmfFBY4tYuy5mFSmbSGdtu7u1xyu6vu6SxqkQ07v
+	 bBYk3R+qg76UogGKk7mwMX2d8OUeaAz1ynDD9SMfUFL9mPwH9YY6vnfk7dx/tkxKni
+	 gxEg60nXXxdb+iR2wlifXqXefWWhg94BCGqzfS/Xf2Pg4EwMJvlSnNsEXwU0t2DKQb
+	 uHBSV7Z4ONXOajtE5pV4ftIVz2wZuBWmXT6dMYSqaUidvoZFmqeCjy0Kx30uu6JR67
+	 PR5eQlXO4UDF8oueUG7b0evHjtPukpy10ojOljKsRw8ftLCupn7UGH7tVvItfp37d4
+	 N5lL34ltGTUzVP5TcAn8+3Jg=
 Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DAA2C40E01A3;
-	Thu, 29 May 2025 09:55:54 +0000 (UTC)
-Date: Thu, 29 May 2025 11:55:47 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 040A240E01B2;
+	Thu, 29 May 2025 15:41:52 +0000 (UTC)
+Date: Thu, 29 May 2025 17:41:46 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Vijay Balakrishna <vijayb@linux.microsoft.com>
-Cc: Tony Luck <tony.luck@intel.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	devicetree@vger.kernel.org
-Subject: Re: [v11 PATCH 0/2] Add L1 and L2 error detection for A72
-Message-ID: <20250529095547.GBaDgvI0mCLSXsM0dR@fat_crate.local>
-References: <1748487628-30123-1-git-send-email-vijayb@linux.microsoft.com>
+To: Matthew Gerlach <matthew.gerlach@altera.com>
+Cc: dinguyen@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+	mchehab@kernel.org, rric@kernel.org, tthayer@opensource.altera.com,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Niravkumar L Rabara <niravkumar.l.rabara@intel.com>,
+	stable@kernel.org
+Subject: Re: [PATCH] EDAC/altera: Use correct width with writes to INTTEST
+ register.
+Message-ID: <20250529154146.GDaDiAOlkiHTwlgE0L@fat_crate.local>
+References: <20250527145707.25458-1-matthew.gerlach@altera.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -85,39 +80,30 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1748487628-30123-1-git-send-email-vijayb@linux.microsoft.com>
+In-Reply-To: <20250527145707.25458-1-matthew.gerlach@altera.com>
 
-On Wed, May 28, 2025 at 08:00:26PM -0700, Vijay Balakrishna wrote:
-> Changes since v10: 
-> - edac_a72.c: copyright line add (Jonathan)
-> - cpus.yaml: drop stale comment line (Krzysztof)
-> - added "Reviewed-by" tags
+On Tue, May 27, 2025 at 07:57:07AM -0700, Matthew Gerlach wrote:
+> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> 
+> On SoCFPGA platform INTTEST register only supports 16-bit write based on
+> the HW design, writing 32-bit to INTTEST register triggers SError to CPU.
+> Use 16-bit write for INITTEST register.
 
-It seems you're new to kernel development:
+For the future, please run this text through AI so that it can massage the
+formulations into proper English:
 
-From: Documentation/process/submitting-patches.rst
+    On the SoCFPGA platform, the INTTEST register supports only 16-bit writes.
+    A 32-bit write triggers an SError to the CPU so do 16-bit accesses only.
 
-"Don't get discouraged - or impatient
-------------------------------------
+> Fixes: c7b4be8db8bc ("EDAC, altera: Add Arria10 OCRAM ECC support")
+> Cc: stable@kernel.org
+> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@altera.com>
+> ---
+>  drivers/edac/altera_edac.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-After you have submitted your change, be patient and wait.  Reviewers are
-busy people and may not get to your patch right away.
-
-Once upon a time, patches used to disappear into the void without comment,
-but the development process works more smoothly than that now.  You should
-receive comments within a week or so; if that does not happen, make sure
-that you have sent your patches to the right place.  Wait for a minimum of
-one week before resubmitting or pinging reviewers - possibly longer during
-busy times like merge windows."
-
-And we have a merge window right now.
-
-Instead of sending patches every day, you should spend some time perusing the
-documentation about how this all works:
-
-https://kernel.org/doc/html/latest/process/development-process.html
-
-Thx.
+Applied, thanks.
 
 -- 
 Regards/Gruss,
