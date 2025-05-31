@@ -1,96 +1,99 @@
-Return-Path: <linux-edac+bounces-4051-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4052-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41558AC9A38
-	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 11:18:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1528AC9B56
+	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 16:15:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 492C9188CB14
-	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 09:18:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 889F817D39E
+	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 14:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D822376F8;
-	Sat, 31 May 2025 09:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FtwIlUdW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7B923C510;
+	Sat, 31 May 2025 14:15:46 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F0C21FF22
-	for <linux-edac@vger.kernel.org>; Sat, 31 May 2025 09:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B365F1758B;
+	Sat, 31 May 2025 14:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748683097; cv=none; b=ddlmnbJnAoM7LTeZNLLyQba3LO+GSrCpAG1aacXm9JX0Fwsnk2K7thBKJrfbk0NAvgIzPsAevgnFex6wTjbi5hyyji2Y3tRDZLagWEMKu3yxNlXlHzZ0BzPZGunZxaw0C5MHVVgTKqYEs91VUrdyAPsQGrNWYWHcTKOwuM0xVgg=
+	t=1748700946; cv=none; b=VBGNmfKoNlPGfqog5BLGdbSK3+5eToRFObNjy9UMFrvgScezi/KAAEOmLsf1rRVnhcK2nuzQfXkD0DmTLxbqtUuocLEi1HN9kA7MxFI98nbRirnmMW2hX29Y/86DMFWD1FonSG69fZ+XGSJo0ZDNteJ196wfLaIqcU1olrGj3Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748683097; c=relaxed/simple;
-	bh=0SooR0ZByCyCF9H+05PO2obI5RW/glmECnEHF31gmzY=;
+	s=arc-20240116; t=1748700946; c=relaxed/simple;
+	bh=+AbBPIg8jujjvnsIiFys7cvXSxsuoXKAm1dwhoDtFuM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ceJSN518oiudi4P0WYTCqDQVyedjJYOYXBKICE+VPv9FeApbAxU8IDKGt6l1GvNJ8gwBJ5XApidJ7EyiYNOcQI5HxTCRFB4yOGphb2CHx3ByBKAaNMcYxV9q86R3ttVMRIYInLw+fh8xXbtNK4S/ggMTOoWcN9Un44C5C0Cy+G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FtwIlUdW; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id ADE4B40E01B0;
-	Sat, 31 May 2025 09:18:03 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id k6wqfoqQIEp9; Sat, 31 May 2025 09:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1748683080; bh=0+kyw+z5OZ6UnYYyrp6X5NegSKnpGbT847EZoB9+6uY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FtwIlUdWxR0Rv0ezCsZXMpCgIAm8BbRaoLcXhwxibfqfSUCG/uNcfuJSe5+SO4/bS
-	 VyzYWxBwctKaBTKzhu48OKrfXwGOuw2Mj0zJrsAT02+kX9ygzXA1w5WFpRvhIAO+98
-	 Jk+GkxZQrOl5tK6MHcUC4qYogkE+qLm5y/AfnGfRk6NNv4mNn03NGivhRBH6yjyJcx
-	 CqaIpLOL+RwieRVH+HxiM82st+gJqfOfYY0lO8xqf9Ae/fkEwPG6ru9TzbacvsO6bX
-	 97HaSXn3BZCIAJMhhevcbUW7a0KhsAo/+C6sI+tV1Rkljf7XGEoUDYnVPnGqpYl5D0
-	 wND3QOzSSNCyypWDSJq05kBOKhzJjW58oU659B4NVJc05xt03I5FqM8WpjlXOodd5G
-	 /bRGDapB7ybYzhhfsJzZb+OR9rC/+8EN1ejAdG0YKDxSD3MiOMmkuZKXvfcy3/CKvh
-	 lmqIJK+Qz9l1n1fhxOcAQrR/0QOHq++ell6VZd1aFJuvosWYE62vxEcAqbt1xo+hVq
-	 9z7JDX2lAiv46oUt9bwBg1xvoK3ckl3vJdQCpvrMht3/037VirONXSCsdToKrfZEku
-	 Vtuu6bcKg4RWmCE4NeOFOm9dDSB/ckZeJGfYZsC1TX1huv0iM/b7JEfHfwrUGO0kI/
-	 ukKkShlHzJSA7PTbvEI9Mb7w=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	 Content-Type:Content-Disposition:In-Reply-To; b=N8/lA3T8wvZdMnEOqFPhHfKabgoFs0yo3cNI12n5i3PZOnNdvRO8GHwKX43oSW1SJTonWwpBN4U3y1e6n9AN+MW3duBH2rYWuoIJg14Bzx485FezyIblSfyq4hTwb1dDJyVrd1vodf/achVLxVp21lQr37ZT/L+mF1bu8ttRVBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EECF440E015E;
-	Sat, 31 May 2025 09:17:52 +0000 (UTC)
-Date: Sat, 31 May 2025 11:17:46 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>, tony.luck@intel.com,
-	x86@kernel.org, linux-edac@vger.kernel.org, wanghai38@huawei.com,
-	bobo.shaobowang@huawei.com
-Subject: Re: [RFC PATCH] x86/mce/inject: Add sanity check in inject_mce()
-Message-ID: <20250531091746.GAaDrJOuUlQyfRjgv3@fat_crate.local>
-References: <20250529033256.31554-1-wangxiongfeng2@huawei.com>
- <20250529094534.GAaDgsvhdl-BrzlM0J@fat_crate.local>
- <aDq6cecrsKYrwra2@gmail.com>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 4B5182C000A5;
+	Sat, 31 May 2025 16:15:41 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 2251CC9C53; Sat, 31 May 2025 16:15:41 +0200 (CEST)
+Date: Sat, 31 May 2025 16:15:41 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, rostedt@goodmis.org,
+	linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	helgaas@kernel.org, tony.luck@intel.com, bp@alien8.de,
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+	oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
+	anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
+	peterz@infradead.org, tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for
+ hotplug event
+Message-ID: <aDsPDTVkH5kkc_Fk@wunner.de>
+References: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
+ <87b1f8c6-bd72-b1a8-40a6-bbf552552806@linux.intel.com>
+ <650cd4e4-561b-4d50-9cf2-c601518c9b9f@linux.alibaba.com>
+ <31693574-e8bc-9a56-bad0-6a22280c4b6b@linux.intel.com>
+ <aCxdFm_BpgOTFFUv@wunner.de>
+ <aCxxA-4HEnZ-O2W0@wunner.de>
+ <9b46a12b-90e2-c1ba-9394-5caa23a5cad7@linux.intel.com>
+ <aCx_aXy9MEs6XKZE@wunner.de>
+ <6af283ea-bd36-44a7-949a-2ab8c80cf136@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aDq6cecrsKYrwra2@gmail.com>
+In-Reply-To: <6af283ea-bd36-44a7-949a-2ab8c80cf136@linux.alibaba.com>
 
-On Sat, May 31, 2025 at 10:14:41AM +0200, Ingo Molnar wrote:
-> Uhm, avoiding a hard kernel crash in case of a tooling or human error:
+On Thu, May 22, 2025 at 05:50:05PM +0800, Shuai Xue wrote:
+> As @Lukas points out, link speed changes and device plug/unplug events are
+> orthogonal issues.
+> 
+> Based on this thread discussion, I believe we need additional tweaking to
+> introduce a new tracepoint (perhaps named PCI_LINK_EVENT) to handle
+> link speed changes separately.
+> 
+> Regarding our next steps, would it be acceptable to merge the
+> PCI_HOTPLUG_EVENT to mainline first, and then work on implementing
+> the new link event tracepoint afterward?
 
-Do you know what this tool is about?
+Yes I think so, I think this patch is ready to go in.
 
-It is supposed to cause crashes, among others.
+However I'm not part of the PCI maintainer team,
+it would have to be applied by them (barring any objections).
 
--- 
-Regards/Gruss,
-    Boris.
+We're now in the merge window and it may be too late to squeeze it
+into the v6.16 pull request, but maybe it can be applied after
+the merge window has closed (in 1 week).
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+
+Lukas
 
