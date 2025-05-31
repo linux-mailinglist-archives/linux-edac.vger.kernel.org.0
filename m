@@ -1,67 +1,58 @@
-Return-Path: <linux-edac+bounces-4052-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4053-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1528AC9B56
-	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 16:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E0ECAC9C2E
+	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 20:05:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 889F817D39E
-	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 14:15:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B47817F8F7
+	for <lists+linux-edac@lfdr.de>; Sat, 31 May 2025 18:05:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7B923C510;
-	Sat, 31 May 2025 14:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5E14D8CE;
+	Sat, 31 May 2025 18:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gamyjiES"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B365F1758B;
-	Sat, 31 May 2025 14:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90C328371
+	for <linux-edac@vger.kernel.org>; Sat, 31 May 2025 18:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748700946; cv=none; b=VBGNmfKoNlPGfqog5BLGdbSK3+5eToRFObNjy9UMFrvgScezi/KAAEOmLsf1rRVnhcK2nuzQfXkD0DmTLxbqtUuocLEi1HN9kA7MxFI98nbRirnmMW2hX29Y/86DMFWD1FonSG69fZ+XGSJo0ZDNteJ196wfLaIqcU1olrGj3Ac=
+	t=1748714703; cv=none; b=JR356LEXZsdio1NOHSsPwBJk/6+sJTMYWhi1uRbr2FKm5rejO+ws6bYxE2Fx6UPmoZNqaO+fXA8qH3rMoIeoKdaBGiH2s8dTGDuSdWW8SI6+HtWUT4uW+IqIjJI0su2gPkiqo4RsC5vMXRLHOivP7y0SU2zHTqv55DO24UzkFAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748700946; c=relaxed/simple;
-	bh=+AbBPIg8jujjvnsIiFys7cvXSxsuoXKAm1dwhoDtFuM=;
+	s=arc-20240116; t=1748714703; c=relaxed/simple;
+	bh=jaIXDXigKl469dEo19Yrnh5EaHbBVaXROAQvXLyOInk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N8/lA3T8wvZdMnEOqFPhHfKabgoFs0yo3cNI12n5i3PZOnNdvRO8GHwKX43oSW1SJTonWwpBN4U3y1e6n9AN+MW3duBH2rYWuoIJg14Bzx485FezyIblSfyq4hTwb1dDJyVrd1vodf/achVLxVp21lQr37ZT/L+mF1bu8ttRVBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 4B5182C000A5;
-	Sat, 31 May 2025 16:15:41 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 2251CC9C53; Sat, 31 May 2025 16:15:41 +0200 (CEST)
-Date: Sat, 31 May 2025 16:15:41 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, rostedt@goodmis.org,
-	linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	helgaas@kernel.org, tony.luck@intel.com, bp@alien8.de,
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-	oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
-	anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
-	peterz@infradead.org, tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for
- hotplug event
-Message-ID: <aDsPDTVkH5kkc_Fk@wunner.de>
-References: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
- <87b1f8c6-bd72-b1a8-40a6-bbf552552806@linux.intel.com>
- <650cd4e4-561b-4d50-9cf2-c601518c9b9f@linux.alibaba.com>
- <31693574-e8bc-9a56-bad0-6a22280c4b6b@linux.intel.com>
- <aCxdFm_BpgOTFFUv@wunner.de>
- <aCxxA-4HEnZ-O2W0@wunner.de>
- <9b46a12b-90e2-c1ba-9394-5caa23a5cad7@linux.intel.com>
- <aCx_aXy9MEs6XKZE@wunner.de>
- <6af283ea-bd36-44a7-949a-2ab8c80cf136@linux.alibaba.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XOLkQcKfWaAZoVCxs77HetZwlChQn0zt27AQVbvCUMZZ5V/SY4oeDKjLOF4FLvpUurP3nJfotoXIk1MrnJM6eGulAMb11Yu7vmwyjyOyzt9jqm8ji6NWsfo0cTKEzRDVKhZuMAmSs+qfkC6xcnmNU4F5bOLD+mKPex3qpG+K3y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gamyjiES; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D2B9C4CEE3;
+	Sat, 31 May 2025 18:05:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748714703;
+	bh=jaIXDXigKl469dEo19Yrnh5EaHbBVaXROAQvXLyOInk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gamyjiESz1Fk9yX4ci4aBon7HDul/Ow0N9HQ8oMgCQ3Gul1QEbeQrWo7h3S5BBxXD
+	 3LJRwVyz7mfTJvY3uOax8sePM6QwaGGgOwNzwbMP/TPh575SY94Y96hM0dIE8pfEAt
+	 JyOo7nEXL/jk8ID7rGZeIkC9Ro42JSVAPW87ZOmnXefwc2s/oP/vqQsOSJgUuGe8ue
+	 Yz1ralXBkYXtnTaYzQg/mi4NRj5A7inXOADnrrCUcpnpZTyuLIdzvANyuo4IjWtQU8
+	 dSXFxlSLb79DvyqXRBkTi2dFIdIsr/eNjqq5AD7L+HbdxdTmp05P4dK2zFS2A3RwRt
+	 /npSc00p95rzA==
+Date: Sat, 31 May 2025 20:04:58 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Xiongfeng Wang <wangxiongfeng2@huawei.com>, tony.luck@intel.com,
+	x86@kernel.org, linux-edac@vger.kernel.org, wanghai38@huawei.com,
+	bobo.shaobowang@huawei.com
+Subject: Re: [RFC PATCH] x86/mce/inject: Add sanity check in inject_mce()
+Message-ID: <aDtEyl5A36zRyV7B@gmail.com>
+References: <20250529033256.31554-1-wangxiongfeng2@huawei.com>
+ <20250529094534.GAaDgsvhdl-BrzlM0J@fat_crate.local>
+ <aDq6cecrsKYrwra2@gmail.com>
+ <20250531091746.GAaDrJOuUlQyfRjgv3@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -70,30 +61,45 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6af283ea-bd36-44a7-949a-2ab8c80cf136@linux.alibaba.com>
+In-Reply-To: <20250531091746.GAaDrJOuUlQyfRjgv3@fat_crate.local>
 
-On Thu, May 22, 2025 at 05:50:05PM +0800, Shuai Xue wrote:
-> As @Lukas points out, link speed changes and device plug/unplug events are
-> orthogonal issues.
+
+* Borislav Petkov <bp@alien8.de> wrote:
+
+> On Sat, May 31, 2025 at 10:14:41AM +0200, Ingo Molnar wrote:
+> > Uhm, avoiding a hard kernel crash in case of a tooling or human error:
 > 
-> Based on this thread discussion, I believe we need additional tweaking to
-> introduce a new tracepoint (perhaps named PCI_LINK_EVENT) to handle
-> link speed changes separately.
+> Do you know what this tool is about?
 > 
-> Regarding our next steps, would it be acceptable to merge the
-> PCI_HOTPLUG_EVENT to mainline first, and then work on implementing
-> the new link event tracepoint afterward?
+> It is supposed to cause crashes, among others.
 
-Yes I think so, I think this patch is ready to go in.
+What tool? If you mean syzkaller, then it is very much not supposed to 
+crash on a correctly functioning kernel. If it causes a crash, then the 
+proper response is to fix the crash.
 
-However I'm not part of the PCI maintainer team,
-it would have to be applied by them (barring any objections).
+Or if you mean the MCE-injection interface, that's not supposed to 
+trigger avoidable crashes either, it's an injection facility for 
+testing purposes:
 
-We're now in the merge window and it may be too late to squeeze it
-into the v6.16 pull request, but maybe it can be applied after
-the merge window has closed (in 1 week).
+          Provide support for injecting machine checks for testing purposes.
+
+It's really simple really:
+
+- If the kernel unnecessarily locks up on the receipt of a 
+  hardware-generated MCE then that's a kernel bug that
+  should be fixed.
+
+- If the kernel unnecessarily locks up on the receipt of a 
+  software-generated MCE then that's a kernel bug that
+  should be fixed.
+
+TL;DR, this is not an acceptable kernel response:
+
+> > [  306.335489][ T3298] mce: CPUs not responding to MCE broadcast (may include false positives): 1-3
+> > [  306.336332][ T3298] Kernel panic - not syncing: Timeout: Not all CPUs entered broadcast exception handler
+> > [  306.337786][ T3298] Kernel Offset: 0x17400000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
 
 Thanks,
 
-Lukas
+	Ingo
 
