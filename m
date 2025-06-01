@@ -1,46 +1,46 @@
-Return-Path: <linux-edac+bounces-4058-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4059-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AFB5ACA395
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Jun 2025 01:48:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64774ACA4A3
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Jun 2025 02:13:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD3A93A3935
-	for <lists+linux-edac@lfdr.de>; Sun,  1 Jun 2025 23:46:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C48F41884FE6
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Jun 2025 00:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C132857F9;
-	Sun,  1 Jun 2025 23:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6174429AB13;
+	Sun,  1 Jun 2025 23:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZtX1vm/e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+NBD/KA"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1052857DD;
-	Sun,  1 Jun 2025 23:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3584929A9F4;
+	Sun,  1 Jun 2025 23:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748820566; cv=none; b=qLck2Xjf0wO3fIsdmFE4dqXdYH2z9Q1+mCsJ5cHk57TfqsdxdK12W5CznIMun6juugLVrqSbiSgyHrImaBr7axpGJMMrBEpC7heReRLEeIAHcKVQtQeEizCqve7fyn+Dn7lBu5979kYC9ZczgkbbR4PEe/ApgJ4IKiukBDtTVLM=
+	t=1748820834; cv=none; b=iexUfRQ7xQxY+zdqZ+gUyk/XdT7EzCdXO0tt5WlC/51fe5iDc579oe5J1JhX2xeLEVV0uYPJ48ECPQhNpTJ3IJhXg0LY3Tv1g5Duiksm4dI+PJ5FW9H4KNNKv/U61P0kQMTBrf5cH7JuA60yVNe9TQtPdAEf0GU6SdhQcvnvcps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748820566; c=relaxed/simple;
-	bh=34C4LEQndgPVWDjERP5Ld2SHnyzd2SKAkwFJc0jnVwQ=;
+	s=arc-20240116; t=1748820834; c=relaxed/simple;
+	bh=kRivBxA28mhfVAWS9CeGIDBLOp4KncQwrHzKmLLhJIU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kFuqET9F992so5RH5ksf8jUsg2NFyjX4Gd7eB3HEma121URDINkgs3BM8ThI7UV/Leeor3XH3Vy4Bu3mR/dFCjJPptZLVff12Foc01LIct83ycJmQoWVYII1Lk/fDAGdoSZL1vRgOfZE1szGGbYzV1B473JwmbJikrOThRW6L+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZtX1vm/e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FCA4C4CEF1;
-	Sun,  1 Jun 2025 23:29:25 +0000 (UTC)
+	 MIME-Version:Content-Type; b=IHaCCeXH4z+KTt/1RfM/KBhzztbhpJNkui05D/7YMNLa2skew8b//nO+sVrZ0LriVxQoZ/MCMSrpwCez80KkMtkhIeuek79I22s+1OOpCdztbTbC9jGoruENO8SXsNwo7hu48eUyqvdNI7473gMiLEYmeGTw7N55tiJjtN+zpjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+NBD/KA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B35C4CEF2;
+	Sun,  1 Jun 2025 23:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748820566;
-	bh=34C4LEQndgPVWDjERP5Ld2SHnyzd2SKAkwFJc0jnVwQ=;
+	s=k20201202; t=1748820834;
+	bh=kRivBxA28mhfVAWS9CeGIDBLOp4KncQwrHzKmLLhJIU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZtX1vm/eoiGrJRGm4Bk8AymBXQeh7I/Hft10z7rd/pPbdzVJy9YlKKQ4tGIMy7wNH
-	 tO3fjpdQEVC73EZHZJYR0k1PddwJ60dqJPd8O9vuNfSJwJ3tTNkjv95nM19nfqrV1x
-	 XaOuFUhUPKKrdg05ihL471lOaK0e/tBsfiFlplmZmqDiW648eaE+b0NWtX5Xz9Yzsq
-	 LYA/waIQzSjrx/9/gRjC4P+ApC5aMlI2+VPDX4mbLbocJTEpkJO5r8aSbUvFTWFt1Y
-	 dmiO/XfhG4HqxFGOu+tBtlZn/X7wKTmiZu3jgLCzlbjqZkvAeqEdZzasKIAHu+2Ud1
-	 0HELrLAmX6n1Q==
+	b=A+NBD/KAJh+5P+0hqjduD0byiRjltVU6TzPSxGnde7IJ07UeNLeugfqYxzQ89M4QQ
+	 C3YVyueZtnb4iNKFvN3JyVvN+qTZeS3uptBzvqJiKBufLMMO+R+RPl7GMB9IKpcaRa
+	 HpJaLNGVecMiNFjrh3k4ZywgDlkuxXqgp1M1hJFy/wlmD2D92pCe1DONt9G6sLuNSz
+	 GevneZwVBIENMlNP0DlpA3YXO1kNM91zo8W+qUGGIlUB3yXR199bBIhsQ3ylBI9mVI
+	 MHdo9rnHuHL0dWIHX6zwQTTE3GSVU363gciNZcMkwI+S5xk9C13lmRvWxJQifmwy2G
+	 CmYn3D+YfJifw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
 	bp@alien8.de,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 107/110] EDAC/igen6: Skip absent memory controllers
-Date: Sun,  1 Jun 2025 19:24:29 -0400
-Message-Id: <20250601232435.3507697-107-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 100/102] EDAC/igen6: Skip absent memory controllers
+Date: Sun,  1 Jun 2025 19:29:32 -0400
+Message-Id: <20250601232937.3510379-100-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250601232435.3507697-1-sashal@kernel.org>
-References: <20250601232435.3507697-1-sashal@kernel.org>
+In-Reply-To: <20250601232937.3510379-1-sashal@kernel.org>
+References: <20250601232937.3510379-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15
+X-stable-base: Linux 6.14.9
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -138,12 +138,12 @@ reliability without introducing new features or architectural changes.
  1 file changed, 62 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index 5807517ee32de..ec64bff8236f6 100644
+index 595908af9e5c9..14692c2da6222 100644
 --- a/drivers/edac/igen6_edac.c
 +++ b/drivers/edac/igen6_edac.c
 @@ -127,6 +127,7 @@
  
- static const struct res_config {
+ static struct res_config {
  	bool machine_check;
 +	/* The number of present memory controllers. */
  	int num_imc;
@@ -245,7 +245,7 @@ index 5807517ee32de..ec64bff8236f6 100644
  static int igen6_mem_slice_setup(u64 mchbar)
  {
  	struct igen6_imc *imc = &igen6_pvt->imc[0];
-@@ -1405,7 +1453,7 @@ static void opstate_set(const struct res_config *cfg, const struct pci_device_id
+@@ -1405,7 +1453,7 @@ static void opstate_set(struct res_config *cfg, const struct pci_device_id *ent)
  static int igen6_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  {
  	u64 mchbar;
