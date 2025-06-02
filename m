@@ -1,275 +1,181 @@
-Return-Path: <linux-edac+bounces-4059-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4060-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64774ACA4A3
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Jun 2025 02:13:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 859F7ACA982
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Jun 2025 08:30:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C48F41884FE6
-	for <lists+linux-edac@lfdr.de>; Mon,  2 Jun 2025 00:10:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A9CD189AD17
+	for <lists+linux-edac@lfdr.de>; Mon,  2 Jun 2025 06:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6174429AB13;
-	Sun,  1 Jun 2025 23:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF1114885B;
+	Mon,  2 Jun 2025 06:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+NBD/KA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ghNO+zd7"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3584929A9F4;
-	Sun,  1 Jun 2025 23:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71C530100;
+	Mon,  2 Jun 2025 06:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748820834; cv=none; b=iexUfRQ7xQxY+zdqZ+gUyk/XdT7EzCdXO0tt5WlC/51fe5iDc579oe5J1JhX2xeLEVV0uYPJ48ECPQhNpTJ3IJhXg0LY3Tv1g5Duiksm4dI+PJ5FW9H4KNNKv/U61P0kQMTBrf5cH7JuA60yVNe9TQtPdAEf0GU6SdhQcvnvcps=
+	t=1748845813; cv=none; b=pMaHqrDsuryZbVlZonYqqJ1wgrIh1GeWB0T8ccr5XPTVwJ+Uco3M7ENOIcoB506Z3/4vjWcuCGPgq3URQ3339+oWrlmaLSeCkFgK7EHCY0aUxefWRYyQxXAp6WiRKl7duC/B2mQelxrjvGdUd0UdprbZvf8zlVXdHduviFdAQ4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748820834; c=relaxed/simple;
-	bh=kRivBxA28mhfVAWS9CeGIDBLOp4KncQwrHzKmLLhJIU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IHaCCeXH4z+KTt/1RfM/KBhzztbhpJNkui05D/7YMNLa2skew8b//nO+sVrZ0LriVxQoZ/MCMSrpwCez80KkMtkhIeuek79I22s+1OOpCdztbTbC9jGoruENO8SXsNwo7hu48eUyqvdNI7473gMiLEYmeGTw7N55tiJjtN+zpjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+NBD/KA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B35C4CEF2;
-	Sun,  1 Jun 2025 23:33:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748820834;
-	bh=kRivBxA28mhfVAWS9CeGIDBLOp4KncQwrHzKmLLhJIU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A+NBD/KAJh+5P+0hqjduD0byiRjltVU6TzPSxGnde7IJ07UeNLeugfqYxzQ89M4QQ
-	 C3YVyueZtnb4iNKFvN3JyVvN+qTZeS3uptBzvqJiKBufLMMO+R+RPl7GMB9IKpcaRa
-	 HpJaLNGVecMiNFjrh3k4ZywgDlkuxXqgp1M1hJFy/wlmD2D92pCe1DONt9G6sLuNSz
-	 GevneZwVBIENMlNP0DlpA3YXO1kNM91zo8W+qUGGIlUB3yXR199bBIhsQ3ylBI9mVI
-	 MHdo9rnHuHL0dWIHX6zwQTTE3GSVU363gciNZcMkwI+S5xk9C13lmRvWxJQifmwy2G
-	 CmYn3D+YfJifw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	bp@alien8.de,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 100/102] EDAC/igen6: Skip absent memory controllers
-Date: Sun,  1 Jun 2025 19:29:32 -0400
-Message-Id: <20250601232937.3510379-100-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250601232937.3510379-1-sashal@kernel.org>
-References: <20250601232937.3510379-1-sashal@kernel.org>
+	s=arc-20240116; t=1748845813; c=relaxed/simple;
+	bh=iZsdRW2eWSM0CYYMYUe4/FaSLJwa7Tu9tmz6E/97JQk=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Ziz/BAXwufPlm3bdl5QqbAbtVfRo+6rLjR83doobZHaAB+2vF2erJEMqo5EPQ/TesnsKgRw4qcdZegB7gSUEGjkg0IwJPnMUgtB6wM4OINnuePU2cUGRsPfsRgzDbxC2N+AaQZbLUJ85L1xPh6FivwZ7TC8EQpzTGW2Tpey5L2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ghNO+zd7; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748845811; x=1780381811;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=iZsdRW2eWSM0CYYMYUe4/FaSLJwa7Tu9tmz6E/97JQk=;
+  b=ghNO+zd7jVDDqu1yBMm0dbh4cbzt4zB99WgaK4ui2xFo0xYEnMauQVXW
+   v7W3nwKQwFKmABajit/IGmMdR4sz3XNUG1o6zvVl0VO1LDA8CoSupYu1g
+   POISsCHry0FrPFGNxcT3oMRC75cSjIetm+sMFM0V66qhVsonyrLY5B8wl
+   ofYvecHSXzofhSQtcmEAi3j557m7WJT/31A9ogpff1iJ3M63OynyJMUCc
+   umsh43HEzG8+/2WfhtNg0aWI6CX7M0LKwxIg0fYsV+4pP9ZikgjaMrc+D
+   tbbiwfmWscs5hsK7slaYjSWLYkPHgy+Qc5oh78QKzz4glIlQiMB1spwyD
+   g==;
+X-CSE-ConnectionGUID: 5d/Hi8DpS8W4SUteUzNyzA==
+X-CSE-MsgGUID: dRWGdx/2SICtO+xm4sXiLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11450"; a="49973213"
+X-IronPort-AV: E=Sophos;i="6.16,202,1744095600"; 
+   d="scan'208";a="49973213"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2025 23:30:10 -0700
+X-CSE-ConnectionGUID: Ta+mIcmBS6Ss9Ett8EMblg==
+X-CSE-MsgGUID: E9sDq5bRTMuFqCtiVhAY/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,202,1744095600"; 
+   d="scan'208";a="144422014"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.134])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2025 23:30:05 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 2 Jun 2025 09:30:02 +0300 (EEST)
+To: Shuai Xue <xueshuai@linux.alibaba.com>, Lukas Wunner <lukas@wunner.de>
+cc: rostedt@goodmis.org, linux-pci@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org, 
+    linux-trace-kernel@vger.kernel.org, helgaas@kernel.org, 
+    bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de, 
+    mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com, 
+    naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com, 
+    mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for hotplug
+ event
+In-Reply-To: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
+Message-ID: <6b4d1351-805e-c8fc-3484-11c0ec466cf0@linux.intel.com>
+References: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.9
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+On Mon, 12 May 2025, Shuai Xue wrote:
 
-[ Upstream commit 20e190b1c1fd88b21cc5106c12cfe6def5ab849d ]
+> Hotplug events are critical indicators for analyzing hardware health,
+> particularly in AI supercomputers where surprise link downs can
+> significantly impact system performance and reliability.
+> 
+> To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
+> tracepoint for hotplug event to help healthy check, and generate
+> tracepoints for pcie hotplug event. Add enum pci_hotplug_event in
+> include/uapi/linux/pci.h so applications like rasdaemon can register
+> tracepoint event handlers for it.
+> 
+> The output like below:
+> 
+> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
+> $ cat /sys/kernel/debug/tracing/trace_pipe
+>     <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
+> 
+>     <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
+> 
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Reviewed-by: Lukas Wunner <lukas@wunner.de>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+> changes since v7:
+> - replace the TRACE_INCLUDE_PATH to avoid macro conflict per Steven
+> - pick up Reviewed-by from Lukas Wunner
+> ---
+>  drivers/pci/hotplug/Makefile      |  3 ++
+>  drivers/pci/hotplug/pciehp_ctrl.c | 33 ++++++++++++---
+>  drivers/pci/hotplug/trace.h       | 68 +++++++++++++++++++++++++++++++
+>  include/uapi/linux/pci.h          |  7 ++++
+>  4 files changed, 105 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/pci/hotplug/trace.h
+> 
+> diff --git a/drivers/pci/hotplug/Makefile b/drivers/pci/hotplug/Makefile
+> index 40aaf31fe338..a1a9d1e98962 100644
+> --- a/drivers/pci/hotplug/Makefile
+> +++ b/drivers/pci/hotplug/Makefile
+> @@ -3,6 +3,9 @@
+>  # Makefile for the Linux kernel pci hotplug controller drivers.
+>  #
+>  
+> +# define_trace.h needs to know how to find our header
+> +CFLAGS_pciehp_ctrl.o				:= -I$(src)
+> +
+>  obj-$(CONFIG_HOTPLUG_PCI)		+= pci_hotplug.o
+>  obj-$(CONFIG_HOTPLUG_PCI_COMPAQ)	+= cpqphp.o
+>  obj-$(CONFIG_HOTPLUG_PCI_IBM)		+= ibmphp.o
+> diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
+> index d603a7aa7483..f9beb4d3a9b8 100644
+> --- a/drivers/pci/hotplug/pciehp_ctrl.c
+> +++ b/drivers/pci/hotplug/pciehp_ctrl.c
+> @@ -23,6 +23,9 @@
+>  #include "../pci.h"
+>  #include "pciehp.h"
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include "trace.h"
 
-Some BIOS versions may fuse off certain memory controllers and set the
-registers of these absent memory controllers to ~0. The current igen6_edac
-mistakenly enumerates these absent memory controllers and registers them
-with the EDAC core.
+Hi,
 
-Skip the absent memory controllers to avoid mistakenly enumerating them.
+Instead of spreading tracepoint creating into subdriver code like this, 
+should we place it into one place, e.g., drivers/pci/pci-trace.c (which is 
+what I seem to have used in my yet to be submitted patch that adds 
+tracepoints into bwctrl link speed events)?
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/r/20250408132455.489046-2-qiuxu.zhuo@intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+> diff --git a/drivers/pci/hotplug/trace.h b/drivers/pci/hotplug/trace.h
+> new file mode 100644
+> index 000000000000..21329c198019
+> --- /dev/null
+> +++ b/drivers/pci/hotplug/trace.h
 
-**YES** This commit should be backported to stable kernel trees. Here's
-my comprehensive analysis: ## Bug Fix Classification This is clearly a
-**user-facing bug fix** that addresses a real stability issue. The
-commit fixes a problem where the EDAC driver would mistakenly enumerate
-absent memory controllers on systems where BIOS has fused them off,
-causing: 1. **Driver registration failures** - Attempting to register
-non-existent hardware with EDAC core 2. **Resource waste** - Unnecessary
-memory allocation and processing for absent controllers 3. **Potential
-system instability** - Invalid hardware enumeration could lead to
-crashes or boot issues 4. **Log spam** - False error reports from non-
-existent memory controllers ## Code Analysis - Key Changes The fix
-introduces robust hardware detection logic: ```c /bin /bin.usr-is-merged
-/boot /dev /etc /home /init /lib /lib.usr-is-merged /lib64 /lost+found
-/media /mnt /opt /proc /root /run /sbin /sbin.usr-is-merged /snap /srv
-/sys /tmp /usr /var Check whether the memory controller is absent. */
-static bool igen6_imc_absent(void __iomem *window) { return readl(window
-+ MAD_INTER_CHANNEL_OFFSET) == ~0; } ``` The main changes in
-`igen6_register_mcis()` function: - **Proactive detection**: Check if
-memory controller is present before attempting registration - **Graceful
-handling**: Skip absent controllers and only register working ones -
-**Dynamic counting**: Track logical vs physical memory controllers
-separately - **Better error handling**: Proper cleanup if registration
-fails ## Similarity to Approved Backports This commit shares
-characteristics with **Similar Commit #1** (Status: YES): - Both address
-absent/missing memory controller detection in EDAC drivers - Both add
-detection logic to skip non-functional hardware - Both prevent driver
-confusion from invalid register values (~0) - Both have clear commit
-messages explaining the user-facing problem The key pattern: **"Skip
-absent memory controllers"** appears in both commits, indicating this is
-a well-established class of important bug fixes. ## Risk Assessment -
-Very Low Risk The changes are: - **Contained**: Only affects the
-igen6_edac driver initialization path - **Defensive**: Adds safety
-checks rather than changing core logic - **Non-breaking**: Backward
-compatible - systems with all controllers present work unchanged -
-**Self-contained**: No dependencies on other subsystems ## Stable Tree
-Criteria Met ✅ **Fixes important bug**: Prevents driver failures on
-systems with fused-off memory controllers ✅ **Minimal risk**: Only adds
-detection logic, doesn't change existing functionality ✅ **Small
-change**: ~100 lines of defensive code ✅ **Clear side effects**: Only
-affects systems with absent memory controllers (positive impact) ✅
-**Production ready**: Addresses real-world BIOS configurations found in
-deployed systems ## User Impact This fix benefits users with: - Intel
-client SoCs with BIOS-fused memory controllers - Elkhart Lake, Alder
-Lake-N, and similar platforms where some memory controllers may be
-disabled - Systems experiencing EDAC driver failures or false error
-reports The commit follows stable tree best practices by fixing a clear
-user-facing bug with minimal, contained changes that improve system
-reliability without introducing new features or architectural changes.
+Perhaps in include/trace/events/pci.h (or 
+include/trace/events/pci-hotplug.h)?
 
- drivers/edac/igen6_edac.c | 78 +++++++++++++++++++++++++++++++--------
- 1 file changed, 62 insertions(+), 16 deletions(-)
+I don't know what is the general rule having them inside drivers/ vs 
+include/trace/events, Documentation/trace/tracepoints.rst only mentions 
+the latter, but there seems to be plenty under drivers/ too.
 
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index 595908af9e5c9..14692c2da6222 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -127,6 +127,7 @@
- 
- static struct res_config {
- 	bool machine_check;
-+	/* The number of present memory controllers. */
- 	int num_imc;
- 	u32 imc_base;
- 	u32 cmf_base;
-@@ -1201,23 +1202,21 @@ static void igen6_check(struct mem_ctl_info *mci)
- 		irq_work_queue(&ecclog_irq_work);
- }
- 
--static int igen6_register_mci(int mc, u64 mchbar, struct pci_dev *pdev)
-+/* Check whether the memory controller is absent. */
-+static bool igen6_imc_absent(void __iomem *window)
-+{
-+	return readl(window + MAD_INTER_CHANNEL_OFFSET) == ~0;
-+}
-+
-+static int igen6_register_mci(int mc, void __iomem *window, struct pci_dev *pdev)
- {
- 	struct edac_mc_layer layers[2];
- 	struct mem_ctl_info *mci;
- 	struct igen6_imc *imc;
--	void __iomem *window;
- 	int rc;
- 
- 	edac_dbg(2, "\n");
- 
--	mchbar += mc * MCHBAR_SIZE;
--	window = ioremap(mchbar, MCHBAR_SIZE);
--	if (!window) {
--		igen6_printk(KERN_ERR, "Failed to ioremap 0x%llx\n", mchbar);
--		return -ENODEV;
--	}
--
- 	layers[0].type = EDAC_MC_LAYER_CHANNEL;
- 	layers[0].size = NUM_CHANNELS;
- 	layers[0].is_virt_csrow = false;
-@@ -1283,7 +1282,6 @@ static int igen6_register_mci(int mc, u64 mchbar, struct pci_dev *pdev)
- fail2:
- 	edac_mc_free(mci);
- fail:
--	iounmap(window);
- 	return rc;
- }
- 
-@@ -1309,6 +1307,56 @@ static void igen6_unregister_mcis(void)
- 	}
- }
- 
-+static int igen6_register_mcis(struct pci_dev *pdev, u64 mchbar)
-+{
-+	void __iomem *window;
-+	int lmc, pmc, rc;
-+	u64 base;
-+
-+	for (lmc = 0, pmc = 0; pmc < NUM_IMC; pmc++) {
-+		base   = mchbar + pmc * MCHBAR_SIZE;
-+		window = ioremap(base, MCHBAR_SIZE);
-+		if (!window) {
-+			igen6_printk(KERN_ERR, "Failed to ioremap 0x%llx for mc%d\n", base, pmc);
-+			rc = -ENOMEM;
-+			goto out_unregister_mcis;
-+		}
-+
-+		if (igen6_imc_absent(window)) {
-+			iounmap(window);
-+			edac_dbg(2, "Skip absent mc%d\n", pmc);
-+			continue;
-+		}
-+
-+		rc = igen6_register_mci(lmc, window, pdev);
-+		if (rc)
-+			goto out_iounmap;
-+
-+		/* Done, if all present MCs are detected and registered. */
-+		if (++lmc >= res_cfg->num_imc)
-+			break;
-+	}
-+
-+	if (!lmc) {
-+		igen6_printk(KERN_ERR, "No mc found.\n");
-+		return -ENODEV;
-+	}
-+
-+	if (lmc < res_cfg->num_imc)
-+		igen6_printk(KERN_WARNING, "Expected %d mcs, but only %d detected.",
-+			     res_cfg->num_imc, lmc);
-+
-+	return 0;
-+
-+out_iounmap:
-+	iounmap(window);
-+
-+out_unregister_mcis:
-+	igen6_unregister_mcis();
-+
-+	return rc;
-+}
-+
- static int igen6_mem_slice_setup(u64 mchbar)
- {
- 	struct igen6_imc *imc = &igen6_pvt->imc[0];
-@@ -1405,7 +1453,7 @@ static void opstate_set(struct res_config *cfg, const struct pci_device_id *ent)
- static int igen6_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- {
- 	u64 mchbar;
--	int i, rc;
-+	int rc;
- 
- 	edac_dbg(2, "\n");
- 
-@@ -1421,11 +1469,9 @@ static int igen6_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	opstate_set(res_cfg, ent);
- 
--	for (i = 0; i < res_cfg->num_imc; i++) {
--		rc = igen6_register_mci(i, mchbar, pdev);
--		if (rc)
--			goto fail2;
--	}
-+	rc = igen6_register_mcis(pdev, mchbar);
-+	if (rc)
-+		goto fail;
- 
- 	if (res_cfg->num_imc > 1) {
- 		rc = igen6_mem_slice_setup(mchbar);
+> @@ -0,0 +1,68 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#if !defined(_TRACE_HW_EVENT_PCI_HP_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_HW_EVENT_PCI_HP_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM pci
+> +
+> +#define PCI_HOTPLUG_EVENT					\
+
 -- 
-2.39.5
+ i.
 
 
