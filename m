@@ -1,242 +1,171 @@
-Return-Path: <linux-edac+bounces-4070-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4071-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65FDEACCACE
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 17:57:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F61DACCB5B
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 18:35:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F2173A3E4B
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 15:56:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DCBE3A3E8D
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 16:35:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD3EC2405F6;
-	Tue,  3 Jun 2025 15:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A84192584;
+	Tue,  3 Jun 2025 16:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xmqt/TEf"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="YU5sBwUz"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E710823E330;
-	Tue,  3 Jun 2025 15:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC47434545;
+	Tue,  3 Jun 2025 16:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748966175; cv=none; b=JiC/ggNVOXqnN9APCfHUMTla7HdV6pudMT/tpx0PqqNHKDUSyPo+/519sdkk4+FAG1f5psv/dGkiC5fuzy8DCj8dNG/9Lp3chxX2kLWhcGc9+YWwE4wMdS8PB7qx7BbBWAoy4S3ZplvZ2K2TZg2A/FtKH7nh0XMsvLd0d+vTG8E=
+	t=1748968521; cv=none; b=FgbImmidFWocfdkQ4tiFDh/dk2LxRbrdn9SMKdjqVBxNU94EtahaZr6cMr73qgnAOAz82/beBF1otiMBk45FtwvkQvMzfA326dLhv8XwGbS8eSQ4Mr9uL4wJz04rZNRaV16LEwh6Xd9cNxq1wVADbaFGipNkA9hNGOPJ8qbUu7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748966175; c=relaxed/simple;
-	bh=tLFQ3kVxzUzxXmQTAy1M8ebof8zWsDJS26kUyGumKgk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rnCVK2faEfwUZo8445VRkemnyeZbRCWedy85/lM3PAWS2o54Qw4k5oFb3J9LYM7Llg8XMBqRWbs+KY+mMQcNHdH+/9O26RcNWk2Xv9P5O06Bedr/D0wJrYVPsQNnQsNXbPeT6N9vffD4teMuWRg1vJujG6cI2m1OpyIATX5Pg+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xmqt/TEf; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748966174; x=1780502174;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tLFQ3kVxzUzxXmQTAy1M8ebof8zWsDJS26kUyGumKgk=;
-  b=Xmqt/TEfBPxtjXxEHIEs6akywlo605QtbHVMQcnPmh3AzG7j1Uu9uKwI
-   1vxfnlRvSyeBGmU3ofzCtm9CWE33mR/u79uxTjPKKlGpKhOnAWHLvKobl
-   osivgIr0d67nHqW6qKeWTiWc7jTuITzpW8+I4PNzCaNN0QMdHhhpC5kwl
-   rEDeipJvyYK/D5e+F1yd8y422lLCy/p/9IlyMxw+4gsNuB3SG1ywG3P+b
-   6J3nVT2+FIjkV2bOQyRazyy+c4e6GESnjaW6O4xg6rT9fkadeAJOenpdr
-   6baL1J/pQeU5c9hwBohb2EGf8hVdi/2mz0tSawWn5ZT1Qp8MFvssJUeLP
-   w==;
-X-CSE-ConnectionGUID: h1kIhW0VS9K7BSwTXFRRVA==
-X-CSE-MsgGUID: 4xQe+a8JS7y9o/5WP7FOrA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11453"; a="62067022"
-X-IronPort-AV: E=Sophos;i="6.16,206,1744095600"; 
-   d="scan'208";a="62067022"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 08:56:14 -0700
-X-CSE-ConnectionGUID: 2UTVEQ4QSR6Ao15adFtvCg==
-X-CSE-MsgGUID: vuyu3xn3TBepnkxNsBoUHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,206,1744095600"; 
-   d="scan'208";a="175766136"
-Received: from fdefranc-mobl3.ger.corp.intel.com (HELO fdefranc-mobl3.intel.com) ([10.245.246.29])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 08:56:07 -0700
-From: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-pci@vger.kernel.org,
-	linux-edac@vger.kernel.org
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
-	"Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-Subject: [PATCH 4/4 v3] ACPI: extlog: Trace CPER CXL Protocol Error Section
-Date: Tue,  3 Jun 2025 17:54:39 +0200
-Message-ID: <20250603155536.577493-5-fabio.m.de.francesco@linux.intel.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250603155536.577493-1-fabio.m.de.francesco@linux.intel.com>
-References: <20250603155536.577493-1-fabio.m.de.francesco@linux.intel.com>
+	s=arc-20240116; t=1748968521; c=relaxed/simple;
+	bh=nxaCfdWauzjNiTIgCxophxKa0Ige88EfFoo8WmagOwk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mIOJu5WerhNuLDzT1V8v+hVJ1OTvAql8sCOFyuJjhPkRB1b2t4wVX/jJ5cTfEokjBow2rIkRIG10MjaF693a9LY+DgXvkbCjlIL4DBW8jFFjX3grzn+fKMrul+6j7RV8hcTxq3DJctJq655VJOJxzd8acMRzbf/Xc72j9jBTxGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=YU5sBwUz; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 553GYR2v3906763
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 3 Jun 2025 09:34:28 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 553GYR2v3906763
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025052101; t=1748968479;
+	bh=B4whhvRWBFRCoJ6hVF+KD7HMcx0awQWFQvakW3OGf4s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YU5sBwUzJA0fHvoPTdDw7FhsWEYRZK4g72VOSHCcdCFCiV150jNxjEO3uz+G6o7an
+	 voHH+OdGZvMTqANn6sJHxVJ7RaSCdxfDEdXJSj06CHtfk7zu7T6LiAg12rawuZ1Ap5
+	 DW7SJGAKuGccnPD980W1wh9jcmFdWaUKJW5FHnZD5u1CJtqZjiKH0yzo/Xxh5V58Pi
+	 V2p2Y4K+UYvNEDovZ9cZ4+mKmFYAps9lHtuwSx7aOZZjDyrDpAAiE3QrQTLI56hsCR
+	 Wvl7zYm1rM/j8OpZwidt/pnU6Mc/A5rGE6BMzFcjbl0Ru2EgRYUSO/jZ7zeWHA4XSW
+	 HAT7481f5BVWg==
+Message-ID: <9950dc5a-05ab-4a7c-a4e8-34012ef98549@zytor.com>
+Date: Tue, 3 Jun 2025 09:34:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/9] x86/nmi: Assign and register NMI-source vectors
+To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jacob Pan <jacob.pan@linux.microsoft.com>,
+        Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>,
+        Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org,
+        linux-edac@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20250513203803.2636561-1-sohil.mehta@intel.com>
+ <20250513203803.2636561-5-sohil.mehta@intel.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <20250513203803.2636561-5-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-When Firmware First is enabled, BIOS handles errors first and then it makes
-them available to the kernel via the Common Platform Error Record (CPER)
-sections (UEFI 2.10 Appendix N). Linux parses the CPER sections via one of
-two similar paths, either ELOG or GHES. The errors managed by ELOG are
-signaled to the BIOS by the I/O Machine Check Architecture (I/O MCA).
+On 5/13/2025 1:37 PM, Sohil Mehta wrote:
+> Prior to NMI-source support, the vector information was ignored by the
+> hardware while delivering NMIs. With NMI-source, the architecture
+> currently supports a 16-bit source bitmap to identify the source of the
+> NMI. Upon receiving an NMI, this bitmap is delivered as part of the FRED
+> event delivery mechanism to the kernel.
+> 
+> Assign a vector space of 0-15 that is specific to NMI-source and
+> independent of the IDT vector space of 0-255. Being a bitmap, the
+> NMI-source vectors do not have any inherent priority associated with
+> them. The order of executing the NMI handlers is up to the kernel.
 
-Currently, ELOG and GHES show some inconsistencies in how they report to
-userspace via trace events.
+I'm thinking should we mention that the bitmap could be extended more
+than 16 bits in future?  Or we just don't emphasize 16-bit or 0~15?
 
-Therefore, make the two mentioned paths act similarly by tracing the CPER
-CXL Protocol Error Section (UEFI v2.10, Appendix N.2.13).
 
-Cc: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Fabio M. De Francesco <fabio.m.de.francesco@linux.intel.com>
----
- drivers/acpi/acpi_extlog.c | 64 ++++++++++++++++++++++++++++++++++++++
- drivers/cxl/core/ras.c     |  6 ++++
- include/cxl/event.h        |  2 ++
- 3 files changed, 72 insertions(+)
+> 
+> Existing NMI handling already has a priority mechanism for the NMI
+> handlers, with CPU-specific (NMI_LOCAL) handlers executed first,
+> followed by platform NMI handlers and unknown NMI (NMI_UNKNOWN) handlers
+> being last. Within each of these NMI types, the handlers registered with
+> NMI_FLAG_FIRST are given priority.
+> 
+> NMI-source follows the same priority scheme to avoid unnecessary
+> complexity. Therefore, the NMI-source vectors are assigned arbitrarily,
+> except for vectors 0 and 2.
+> 
+> Vector 0 is set by the hardware whenever a source vector was not used
+> while generating an NMI or the originator could not be reliably
+> identified. Do not assign it to any handler.
+> 
+> Vector 2 is reserved for external NMIs corresponding to Local APIC -
+> LINT1. Some third-party chipsets may send NMI messages with a hardcoded
+> vector of 2, which would result in vector 2 being set in the NMI-source
+> bitmap. To avoid confusion, do not assign vector 2 to any handler.
+> 
+> NMI-source vectors are only assigned for NMI_LOCAL type handlers.
+> Platform NMI handlers have a single handler registered per type. They
+> don't need additional source information to differentiate among them.
+> 
+> Use the assigned vectors to register the respective NMI handlers. Warn
+> if the vector values are unexpected.
+> 
+> A couple of NMI handlers, such as the microcode rendezvous and the crash
+> reboot, do not use the typical NMI registration interface. Leave them
+> as-is for now.
+> 
+> Originally-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-diff --git a/drivers/acpi/acpi_extlog.c b/drivers/acpi/acpi_extlog.c
-index b2928ff297eda..de4f617f32d49 100644
---- a/drivers/acpi/acpi_extlog.c
-+++ b/drivers/acpi/acpi_extlog.c
-@@ -12,6 +12,7 @@
- #include <linux/ratelimit.h>
- #include <linux/edac.h>
- #include <linux/ras.h>
-+#include <cxl/event.h>
- #include <acpi/ghes.h>
- #include <asm/cpu.h>
- #include <asm/mce.h>
-@@ -160,6 +161,62 @@ static void extlog_print_pcie(struct cper_sec_pcie *pcie_err,
- 	pci_dev_put(pdev);
- }
- 
-+static void
-+extlog_cxl_cper_handle_prot_err(struct cxl_cper_sec_prot_err *prot_err,
-+				int severity)
-+{
-+#ifdef CONFIG_ACPI_APEI_PCIEAER
-+	struct cxl_cper_prot_err_work_data wd;
-+	u8 *dvsec_start, *cap_start;
-+
-+	if (!(prot_err->valid_bits & PROT_ERR_VALID_AGENT_ADDRESS)) {
-+		pr_err_ratelimited("CXL CPER invalid agent type\n");
-+		return;
-+	}
-+
-+	if (!(prot_err->valid_bits & PROT_ERR_VALID_ERROR_LOG)) {
-+		pr_err_ratelimited("CXL CPER invalid protocol error log\n");
-+		return;
-+	}
-+
-+	if (prot_err->err_len != sizeof(struct cxl_ras_capability_regs)) {
-+		pr_err_ratelimited("CXL CPER invalid RAS Cap size (%u)\n",
-+				   prot_err->err_len);
-+		return;
-+	}
-+
-+	if ((prot_err->agent_type == RCD || prot_err->agent_type == DEVICE ||
-+	     prot_err->agent_type == LD || prot_err->agent_type == FMLD) &&
-+	    !(prot_err->valid_bits & PROT_ERR_VALID_SERIAL_NUMBER))
-+		pr_warn(FW_WARN "CXL CPER no device serial number\n");
-+
-+	switch (prot_err->agent_type) {
-+	case RCD:
-+	case DEVICE:
-+	case LD:
-+	case FMLD:
-+	case RP:
-+	case DSP:
-+	case USP:
-+		memcpy(&wd.prot_err, prot_err, sizeof(wd.prot_err));
-+
-+		dvsec_start = (u8 *)(prot_err + 1);
-+		cap_start = dvsec_start + prot_err->dvsec_len;
-+
-+		memcpy(&wd.ras_cap, cap_start, sizeof(wd.ras_cap));
-+		wd.severity = cper_severity_to_aer(severity);
-+		break;
-+	default:
-+		pr_err_ratelimited("CXL CPER reserved agent type: %d\n",
-+				   prot_err->agent_type);
-+		return;
-+	}
-+
-+	cxl_cper_ras_handle_prot_err(&wd);
-+
-+#endif
-+}
-+
- static int extlog_print(struct notifier_block *nb, unsigned long val,
- 			void *data)
- {
-@@ -211,6 +268,12 @@ static int extlog_print(struct notifier_block *nb, unsigned long val,
- 			if (gdata->error_data_length >= sizeof(*mem))
- 				trace_extlog_mem_event(mem, err_seq, fru_id, fru_text,
- 						       (u8)gdata->error_severity);
-+		} else if (guid_equal(sec_type, &CPER_SEC_CXL_PROT_ERR)) {
-+			struct cxl_cper_sec_prot_err *prot_err =
-+				acpi_hest_get_payload(gdata);
-+
-+			extlog_cxl_cper_handle_prot_err(prot_err,
-+							gdata->error_severity);
- 		} else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
- 			struct cper_sec_pcie *pcie_err = acpi_hest_get_payload(gdata);
- 
-@@ -378,3 +441,4 @@ module_exit(extlog_exit);
- MODULE_AUTHOR("Chen, Gong <gong.chen@intel.com>");
- MODULE_DESCRIPTION("Extended MCA Error Log Driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("CXL");
-diff --git a/drivers/cxl/core/ras.c b/drivers/cxl/core/ras.c
-index 485a831695c70..56db290c88d35 100644
---- a/drivers/cxl/core/ras.c
-+++ b/drivers/cxl/core/ras.c
-@@ -98,6 +98,12 @@ static void cxl_cper_handle_prot_err(struct cxl_cper_prot_err_work_data *data)
- 		cxl_cper_trace_uncorr_prot_err(pdev, data->ras_cap);
- }
- 
-+void cxl_cper_ras_handle_prot_err(struct cxl_cper_prot_err_work_data *wd)
-+{
-+	cxl_cper_handle_prot_err(wd);
-+}
-+EXPORT_SYMBOL_NS_GPL(cxl_cper_ras_handle_prot_err, "CXL");
-+
- static void cxl_cper_prot_err_work_fn(struct work_struct *work)
- {
- 	struct cxl_cper_prot_err_work_data wd;
-diff --git a/include/cxl/event.h b/include/cxl/event.h
-index f9ae1796da85f..aef906e260330 100644
---- a/include/cxl/event.h
-+++ b/include/cxl/event.h
-@@ -285,4 +285,6 @@ static inline int cxl_cper_prot_err_kfifo_get(struct cxl_cper_prot_err_work_data
- }
- #endif
- 
-+void cxl_cper_ras_handle_prot_err(struct cxl_cper_prot_err_work_data *wd);
-+
- #endif /* _LINUX_CXL_EVENT_H */
--- 
-2.49.0
-
+Reviewed-by: Xin Li (Intel) <xin@zytor.com>
 
