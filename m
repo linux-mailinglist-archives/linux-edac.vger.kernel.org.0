@@ -1,226 +1,249 @@
-Return-Path: <linux-edac+bounces-4091-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4092-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A776ACCFAF
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Jun 2025 00:18:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 198A8ACCFE5
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Jun 2025 00:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E314D174640
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 22:18:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D43C7A482B
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 22:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E05221FDD;
-	Tue,  3 Jun 2025 22:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36DE24C06A;
+	Tue,  3 Jun 2025 22:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kn92s+5n"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g80YqjSO"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E8B38DD1;
-	Tue,  3 Jun 2025 22:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748989130; cv=none; b=q/4RZYS4AnY9p3dPxyzdn6v/Z8AC103KEoQSGm7JEVKTdXhV/qUdKL4q+Ih4ozOBRc+nfoi2yaxMd+LvrIxTeM6Zv+AOOoBZVrdYmwiDqWvJBbrDCdlKbxvpMTG5DLNc910QtH6sGs88jozX5TTA5PZACTuzCYg3+NCjbwhBPt4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748989130; c=relaxed/simple;
-	bh=K+F/YtNdZO6JxPVsJPOUW+izB++yyaaoWNSWuIwcQIU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NfEmIxUjp6CLa+28Jbw46LRISUDbszHh4BCno82V/cumOCyNMCEnLXZ9r7kyLQQV/FaBIz/enrIEUffDgywIb86XQGJrz/qCOPYeBY2NoEnhP/YzuSGmD6543VU34T+AkmaKfQpO+x17q8zGkOzyD1dPzA27jznrlvmxh/THDvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kn92s+5n; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DD42236FB;
+	Tue,  3 Jun 2025 22:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748990021; cv=fail; b=SFS9390BmtE+1nSeDbNOC6WIiyvjyllk2/TTfu90xZxyvaarNiu35z8ZM4U6zNP9y12H5beEytBwnM2OVrJR3BCWuZGpA7oorxWFo8MQiWlxYM/U7sl9uJaZI2t/Vq515S5jXHN1vkBM35I4uGDIb97yz5qm04KwUBtt3iEfjt0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748990021; c=relaxed/simple;
+	bh=/mkhDXuimt92Xw2brwIZSDHYekt2gXyN6NdlOOeniEs=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=MBLTb1a3IjXGOzbL9i3z8xSUxXHjDiee20X2mGhD7aMk/qgWM7I5XuXAbEDfboYFiiWXe6mXXlOPuYvlkOMVKVUbFo8FpHYkQPPkdkQqEzKZzWtGMxqdYAXh2lIQn1Zq1+UR3Oqc7nqe3OdJxbIuP6HyFTwGDidh/E2EO2IrDpU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g80YqjSO; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748989128; x=1780525128;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=K+F/YtNdZO6JxPVsJPOUW+izB++yyaaoWNSWuIwcQIU=;
-  b=kn92s+5nOtRyuDdar+9YB9ctZYaYventc0eSNeabQVGSLXRPPadwG3a7
-   cw0+Gw4YxBYnyrDb/gDBVX77TalMng62PRy6CXldDA0D9gFn9OTPBZDn8
-   PAW4KfD08YJ5qL3nQRCeGX184N50Wics11spOHpqLoEMKSRppXt5p/ab3
-   9QMsAJ35v3yE1G7bRUdMB/1JP4QTXpY0h7WuKTbbSfOmdLMoh903kUX1N
-   yIAH8EPNDmVP8GOVU8UYrBq5N7HiNWl0d8IzXwzfPZ7IRK7vcxDxQ0a5c
-   S7KoLRs23p3KdqyHLxwnViJfNN0Urs7+hjgWSZqW2e1wnVVlvOLty7bC5
+  t=1748990020; x=1780526020;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/mkhDXuimt92Xw2brwIZSDHYekt2gXyN6NdlOOeniEs=;
+  b=g80YqjSOeXKgS9pWPkQSeoI8sN/KblF4zOlhvc52Y+0Nk7YkyctHmd8a
+   9mNFwwyxA8IfPnhF5lwBSDYz1iUOnHkQJavfWjx+nMPOyechi14fmP72g
+   djmS/QFLSk/aUWONAh2aZS7CodPr5Tr6la5z6ti6b57gXqJTfjdK0g2+L
+   GFQWU87BEF24cApvMoE4PuzaHsZrNbZI3ttaD45jMVli77DgXnZDu2eEo
+   lJHD9gv6SlZtTS92GFiewjKkZ+09jU6+Jw+F6YD5ghoQajgwTuL2BIFLj
+   Yc88Kze7iqysdDwafBRVdJZx+c2m1WnhBBgM/n7g8WZIbW6gbkxXuHU4g
    w==;
-X-CSE-ConnectionGUID: ZIGG0yXERp6qFs3wTwE54A==
-X-CSE-MsgGUID: EDwut+tKTaOkVU9BReQtow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11453"; a="53677527"
+X-CSE-ConnectionGUID: L9cO7LxTSvCvrMkaLKr6BA==
+X-CSE-MsgGUID: hj+5T/fwQJSQbEJkGGbqEw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11453"; a="38680239"
 X-IronPort-AV: E=Sophos;i="6.16,207,1744095600"; 
-   d="scan'208";a="53677527"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 15:18:47 -0700
-X-CSE-ConnectionGUID: vDKE25ChRcipbzHXBQUJOw==
-X-CSE-MsgGUID: PQehbhp5RjqoV3hwbE53Zw==
+   d="scan'208";a="38680239"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 15:33:39 -0700
+X-CSE-ConnectionGUID: 1tEyIpsiR4iYSloyLw8dbA==
+X-CSE-MsgGUID: kbPAzJkAQIO0WcdjGKHK+w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,207,1744095600"; 
-   d="scan'208";a="148829830"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 15:18:46 -0700
-Received: from [10.124.221.22] (unknown [10.124.221.22])
-	by linux.intel.com (Postfix) with ESMTP id A14C120B5736;
-	Tue,  3 Jun 2025 15:18:43 -0700 (PDT)
-Message-ID: <b5c6a148-801e-46d5-bc8a-a550006dbd52@linux.intel.com>
-Date: Tue, 3 Jun 2025 15:18:42 -0700
+   d="scan'208";a="145968514"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2025 15:33:39 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Tue, 3 Jun 2025 15:33:38 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25 via Frontend Transport; Tue, 3 Jun 2025 15:33:38 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (40.107.220.57)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.55; Tue, 3 Jun 2025 15:33:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=syMOD2LaCu18qzM4eQ7QWjM/n/WuxexblxxuLwk2oMarxg8ZCb4CAXTW6XCqEMJYNHTzYEGl3ZNd9mjFB8b44w94MnKQIKJCG+wvjJaJ6xRAZSjLh+XGqyhhooc5+ZXaRJhio5Dn8sLXYjvTDZhdKfj0bdLfiyriBNYcUAcRtU8tA0oDQQe9vr6IW8qPE2m2RxCxIF2gWaGvlJUie2QWzpF9oV7vu0PbRqnDLbXLmJY2c1a+egsYi/pshmHtVcCJiHNNmCLMSeQsQcyTJyfq5WkmaVuItS0lg4LyfSpGYZVP3TE8wLA5glXwSGBShw+qcXO9NsDEaqwBHp5Ns6OFNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AbPBUhBq1CGJicRD/9XC95a//INW4EhlZAHfKPvc/yM=;
+ b=RgKhPs5nbWpBz8k5GAmo7/zC2J2yiXH3bm/xNH2SsCxB4X2KfaS8l4zj5Zm6NOvnX7S8/KVBzFdQgK7Y/lgVorUnNG/9WZo846q+YEFPRVItiyJNh8GxJ3ECjGBw5DX0cjp0gG655E16MqIqifCP8VZV8xxkAcEatngBcFkTaaaxme2HIZc3hdM4tmsM6JQKlOHj028L0P7aHcuvNJdzt1s2hQY25uru+uiOe/XhGECVys48OuruyOsnPhC6G1RJgxYxO+8B8KCiGDt3hlEuaEsZPycTPOFw0WKg5StjxeOxhh2FlI15CDpqxKvc/TlTwfQlU0u4Gdlvt1rZcsY8DA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+ by BY1PR11MB8127.namprd11.prod.outlook.com (2603:10b6:a03:531::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.37; Tue, 3 Jun
+ 2025 22:33:35 +0000
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::e8c4:59e3:f1d5:af3b]) by BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::e8c4:59e3:f1d5:af3b%4]) with mapi id 15.20.8792.034; Tue, 3 Jun 2025
+ 22:33:35 +0000
+Message-ID: <232ab16f-218f-4c33-9a6c-1652eea9d444@intel.com>
+Date: Tue, 3 Jun 2025 15:33:34 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/9] x86/nmi: Assign and register NMI-source vectors
+Content-Language: en-US
+To: Dave Hansen <dave.hansen@intel.com>, <x86@kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: Xin Li <xin@zytor.com>, "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski
+	<luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, "Sean
+ Christopherson" <seanjc@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>, Tony Luck <tony.luck@intel.com>,
+	"Zhang Rui" <rui.zhang@intel.com>, Steven Rostedt <rostedt@goodmis.org>,
+	"Andrew Cooper" <andrew.cooper3@citrix.com>, "Kirill A . Shutemov"
+	<kirill.shutemov@linux.intel.com>, Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Andi Kleen <ak@linux.intel.com>, Kai Huang <kai.huang@intel.com>, "Sandipan
+ Das" <sandipan.das@amd.com>, <linux-perf-users@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
+References: <20250513203803.2636561-1-sohil.mehta@intel.com>
+ <20250513203803.2636561-5-sohil.mehta@intel.com>
+ <e978e1fb-d88e-4789-bd33-367281dfa0ad@intel.com>
+ <67683e00-48fa-4aa8-91ff-8726a5374675@intel.com>
+ <58556be3-0516-4204-b19d-11cba7b21423@intel.com>
+From: Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <58556be3-0516-4204-b19d-11cba7b21423@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR05CA0016.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::21) To BYAPR11MB3320.namprd11.prod.outlook.com
+ (2603:10b6:a03:18::25)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4 v3] ACPI: extlog: Trace CPER PCI Express Error Section
-To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
- Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
- linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-cxl@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-pci@vger.kernel.org, linux-edac@vger.kernel.org
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-References: <20250603155536.577493-1-fabio.m.de.francesco@linux.intel.com>
- <20250603155536.577493-4-fabio.m.de.francesco@linux.intel.com>
-Content-Language: en-US
-From: Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20250603155536.577493-4-fabio.m.de.francesco@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|BY1PR11MB8127:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba706eb2-1932-411f-00b7-08dda2eead68
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?NEp1R1BGUGRCVGRFZTJ5bmRBVkI4V2hKcDVTQ1dFL2tSdFY0RWE0OVZJMFFH?=
+ =?utf-8?B?Yy95ZVo4dnBaY3ZURjI5dVQwbTAya1p4V0NyNEFLMlhNc1YzWjhHRjBzYlNq?=
+ =?utf-8?B?azEwZUVqUG5ocFY5N0NVdlRxNnFKaTM5bUlrWExBL1RybUZ0dzBPU3FaT2NY?=
+ =?utf-8?B?RHlSMVdyOXVkeVFodW82OEFsMkhuOTY1NlJaNUV6U1N4M1FjK2c2VzFENXh1?=
+ =?utf-8?B?Q1I5UlFOM1F5cVllWjZiUjhpRTlHUXJmV1pzRW43Z3c2ZmluUEZMV29ITUJC?=
+ =?utf-8?B?bVBkSlBURk5tMVBDSGVrckk1b2c0UTlNTEcwbGJUUlVDOFM3TjNmMk5YM1FU?=
+ =?utf-8?B?MVQwSmJUVzFVckxvWlNyTjBMYVp3ejAzUms5Z01NVSs2YWVCY2duZTd3UU4v?=
+ =?utf-8?B?Tk1GOEdSMmQ5TXdjS1VxOGhTS0VyNi9aeFp4REZnZVQ5OFk0Q3lJWkR0VnJL?=
+ =?utf-8?B?NHRwdGNFUGFZUDIwV1NZTVlGYUpsVit1WDZCWFdmMklZTVgwQnF1emExSDN0?=
+ =?utf-8?B?bXdvM3c1UjVQZzM0eGtqUWVqUFAvSnlTR21NeE5uTDBrR3FPa0oxYnQ2cXlv?=
+ =?utf-8?B?K1VhL1k4S3ZrbXBRSDhnTGc5aTlyU2J1dDlENmZYNGU5aDZKc3Yvc21FREFK?=
+ =?utf-8?B?NmxXdWovcmMzYkNMcU5SVER0a0NnWE1Ccnlkejc5RVppdVpZRVB1b0REMnln?=
+ =?utf-8?B?NmIzQmlDL2o5ZWNoK2xyRG5oWHdmUzhhVEtxR2QvT2h3VHVzWXpIMldtV1hy?=
+ =?utf-8?B?Tm54T3pCclFOV2YxSHRneVhHZmJqN25OYUtJU3pvQzhaaEpZSkV4N093eTNJ?=
+ =?utf-8?B?Yk42eWJ0S0x1QUJ5dkpUUjZBQW10QnNCWW5mN1RuWFJCV3JHMklnUFFnb1J4?=
+ =?utf-8?B?WDBCZ3ZoV0NtQUY0N2JEWElSRS8yRVcrTzgvMzlSNUtSbjg3cFhJcWtuUmxP?=
+ =?utf-8?B?MlJwVWdJRE5XdCs5bnVRaUZqZlNWaFVlV0pzNUd0TjA0bUR1b0htbUw1MU5M?=
+ =?utf-8?B?N0Y5aVRzaW5FUHBrVTUxTEdsbTJ5cUN4K0lWaXVUY254WXFqaCtuNktDVWhj?=
+ =?utf-8?B?bFNKa0hiZjdid0wrd3RROHc4NEQzM1BMdHJIWTFBaW4reHM3eXVGbUl2dEZQ?=
+ =?utf-8?B?WjVLenFnQmZ2WGlqUjBmZXY3OXY5M0JwN2NraTU4VTl6bUFYaHFXK1FyK0Rl?=
+ =?utf-8?B?ZU5EZUZYQkwyMmlxd056VTVpWTF2UStHRStKYW0wd1pTbElLMjZCQnhVNGlT?=
+ =?utf-8?B?bnk1WVBrK25OK1JRbENtejVZZC83K1Bhd3E0Rkh1ak1xVERURk5lUm1wSVhP?=
+ =?utf-8?B?bGU1Y2FOQWl0T01TMk1yWXNKWDBvREpINEJRNElKL1V6cE1VRm9RRVB1eWg1?=
+ =?utf-8?B?OW9oanUybmFxb0krSHRrZDFSa0dkWC9iYmxFRm1hZkpwQURXVnVESkg2OHJO?=
+ =?utf-8?B?TmFjV3VndWQ3R05XblFyT0MyRkFkdCttWUZXZjl4WEdBRmNVZmNNOTVEZFBu?=
+ =?utf-8?B?eG5pTHF6TXNqQ3Rrdld2OEdhVDk3TUxySERRRHZaYzUrcU0vTWJ0WG5CaVRy?=
+ =?utf-8?B?bDRHeDljUFBSbUJvZFRHN2NGTEhXdElNOVdncDV6UHZoNzBXUFVGc3VxUE5K?=
+ =?utf-8?B?eEsyNFJoQk5XU3RRQXJ1S0ZjeTJZa1FOUnlwOXZuZHFYWmFYSGFQYXRPdlEr?=
+ =?utf-8?B?V3J3VXpJOWlKSlFvbm5WVVcyajhsdzRaeitrem5OeXIveFhCZnZCOGNnUTlH?=
+ =?utf-8?B?UTl2a21sNE5wc3NFU0VwRHRPeURyVko3UHNseWFpaVZUM2R3NFVBamlkc3FU?=
+ =?utf-8?B?bFgwUGd4VTNkOHNKeTZHaVZIdVpGcHcwbnpQYUJxUm9pcFBzOFZyQXpMeGYv?=
+ =?utf-8?B?aDZuWkkwTXRhT1ZjVkNPZUFMRXhSTnlXYTdiVk83S1gwaXlPZWJSdlZhaGFq?=
+ =?utf-8?Q?/7o2hG3Euis=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Tms4YWxWNWxvZnAxTm8rOWVpMFE4czdiTHlwUFBvbTZYbFhJTXJsTDdFYS9S?=
+ =?utf-8?B?S1pGWjJsUGRBM0JpVS94YlFXanNYTkp2STVGWXB2NEhrRkIwYUJYS3poejVU?=
+ =?utf-8?B?VGllUHZObXNQQ3VSOTkvN0daYWJ0UVptYkJqRXBNL0tzT2huVFRyN2pxak5q?=
+ =?utf-8?B?Wko4ZXgzT0taR2lRd0tOMGU3MkJKamJNdXdnQWFpVkpKSG0wRUdsVDBlM21H?=
+ =?utf-8?B?cUUzRFhMcmUveGxHV1M5bDdQbHlOSTVxQjBTTUhzTndORnhCclI0OU92S29L?=
+ =?utf-8?B?NWJVM2xvV0o3ckNSQ0gxQjllSHV1N0syb0dDNjVqZkJMc2hOYURmamFBckVD?=
+ =?utf-8?B?K0l0RjBNR2RNV2JMNENSd0RweE1vWGRMVkVMZUJ1Z0hSSEUyWXVmSHVmZXBR?=
+ =?utf-8?B?cU1qRTJTSmZhdERMN3lZelJQWFQ5Q3pnTmFFZEQwYkpnK1hlYjV0MVgzeVoz?=
+ =?utf-8?B?RUhpRmxKcVNsTVJaNndKenpCQ3E3SkE0R2YvZDZEa2RvYUdHMmxxYkJDNG5K?=
+ =?utf-8?B?eXlyKzBtdlZjVWJ1TE9NdTNNV1JOdkltQ1NIUURiNkc3MkkybElLMHBrQ05L?=
+ =?utf-8?B?ejRVblRmTGNxcmxadmc0YjlSTjh4TmZIdEJJUER5cUZnUFJuTk54dm12V0Qw?=
+ =?utf-8?B?OFJVNmg4ckkyS3gwZExEZEcrL1ZGOWpJcGpFeGl1a1Z2V1VHVDFNaVhiVHk5?=
+ =?utf-8?B?dGNTN09KUEREeWJNZVc1YVJxRXBORUh0QkFCa2pKVDF6YndGNEhETXI3UTBN?=
+ =?utf-8?B?bWFiRCtxV1dzQzNEYS9YOUpLTUtkSGJxeFJZS0QrUXM1QndkWVQ3bFk0LzlI?=
+ =?utf-8?B?MFJIeDhZOTlXR3g5Uk8wWFRiM0R2TERJWVpRS1pWczNGdzNDYWF2cG5Mdmd1?=
+ =?utf-8?B?MnpBM1hzT2dyNU5GZjVVdVB6T1dac05tRkZsRmx2RmhRcEVnNHltN3kzczFZ?=
+ =?utf-8?B?VFZCdlhWenRWREdpSVpCWjQrMmtBeHhIVVBKajhUczdIYkg5Q0N2UFVNcXAx?=
+ =?utf-8?B?V1RudE1vdXVkQTRvWVQrWFBnWm81QzdOekRVc1VYb0hBdStkMkd6ZUpYVTdV?=
+ =?utf-8?B?U2NtQ2JQRi9ZUHJEejRtZVRDc015c0tuNkxpazJRMFhibWhpQjM2RS9EQzBP?=
+ =?utf-8?B?dTR2ZlVZaXFkMzRwZ1l3aHk2U0tSL3BOVHJzZ1hwRmFyaUh3cGh6R09jRjho?=
+ =?utf-8?B?RVR1L2pLdjNwR21zV3ZSUFd6QTVOcUtCajFGdDIzTHdiRTg1RXNqenY4cEk2?=
+ =?utf-8?B?UnA3cTdSbDF1ekxPYVpRUFNlTEtyL0tEY0Z4cTJNU3hGNFFyZHZVNTJ0NVh6?=
+ =?utf-8?B?V1Z2SEVQMlZYREgySzJDQmV6Q1QwTGdNRjBkc0FyMFFKYW5Xd3hid2xjVDY0?=
+ =?utf-8?B?cWFSRWdhRXR0L2t1anVabWJwZVhwd1NXUHBmenJmK0E2VDVLQXZoUWdRK3k5?=
+ =?utf-8?B?UmZHR21RMkUrT3d5dkNPQnEzRUY5UXNlVXlQSmQrM3NKMFNDR0xhcE53eUlL?=
+ =?utf-8?B?SVNWQkVXVHJ5REk1THNiZ3VzTTFTdkNiMUZnVGJaZWhaVHJlN2EvYW9KTWlT?=
+ =?utf-8?B?dDZVTDVmYy9rNkliR1Q5VlNMdmJhQmJhWnE1UWpQV2sxcSt1QUJ2aUQxQ2pm?=
+ =?utf-8?B?UmxESStqdlNkdm9rSy8rUHQ2NkVybWNiZHAvUmZHcGtaODd3L2hBNDRpU3Ar?=
+ =?utf-8?B?VHM0SXord1NTUzNUMTQveVZxcitkQ250cFRsaXU0N3lwSFBwT0FPcEdjbHRN?=
+ =?utf-8?B?blYydDZCN3ZFa0tKRk1BcnNTVjhUdStPcjd2SzBmRU5TQVpOUlI4MzYzVzlx?=
+ =?utf-8?B?L1NxMFhad0x5b3JkcWQrZ1IrNVltREtQSUZFakNnSDlHLzF0dlRRaStzeXR5?=
+ =?utf-8?B?TkQ3Ulc1aWhMNVhHL21QT0JFd0VpSkVrdVNacjEwVG9mZkZjTXRidzFVVXlG?=
+ =?utf-8?B?SUFPN2tYcUlnVWNSNGZDWGtJbkpNMFVITlhvcnBiMjlMMmc5cVRCS1hVZ0Q4?=
+ =?utf-8?B?anBsb1pOcU5qazB6QUNEcEgvY1p5czJEM01QU2prTmpDYkUveVhVdjNjb1NZ?=
+ =?utf-8?B?Qkx3MGR5eDl2bVJpMm9CUnhucHlMZUZIRW5rMlJCTWh5R2tiYmlUS1dZSjI0?=
+ =?utf-8?Q?/u18eo+dqNuPDAofa/19787SH?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba706eb2-1932-411f-00b7-08dda2eead68
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2025 22:33:35.2775
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gKd2IhLR3nLuuM7Ah82R8TkMhpZqgfnsWzK1rgF2WDxHzTS6B7DcDZ6N8jlc1o656oKlaYoOvPA4TVOhal5WhQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB8127
+X-OriginatorOrg: intel.com
 
+On 6/3/2025 2:54 PM, Dave Hansen wrote:
+> On 6/3/25 13:22, Sohil Mehta wrote:
+>> With an enum, it's harder to figure out the exact sources when let's say
+>> the source bitmap is printed as 0x0090.
+> 
+> Uhh, then don't print a bitmap. ;)
+> 
 
-On 6/3/25 8:54 AM, Fabio M. De Francesco wrote:
-> I/O Machine Check Architecture events may signal failing PCIe components
-> or links. The AER event contains details on what was happening on the wire
-> when the error was signaled.
->
-> Trace the CPER PCIe Error section (UEFI v2.10, Appendix N.2.7) reported
-> by the I/O MCA.
->
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fabio.m.de.francesco@linux.intel.com>
-> ---
->   drivers/acpi/Kconfig       |  1 +
->   drivers/acpi/acpi_extlog.c | 32 ++++++++++++++++++++++++++++++++
->   drivers/pci/pcie/aer.c     |  2 +-
->   include/linux/aer.h        |  8 ++++++--
->   4 files changed, 40 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-> index 7bc40c2735ac0..2bbd9e4868ad7 100644
-> --- a/drivers/acpi/Kconfig
-> +++ b/drivers/acpi/Kconfig
-> @@ -493,6 +493,7 @@ config ACPI_EXTLOG
->   	tristate "Extended Error Log support"
->   	depends on X86_MCE && X86_LOCAL_APIC && EDAC
->   	select UEFI_CPER
-> +	select ACPI_APEI_PCIEAER
->   	help
->   	  Certain usages such as Predictive Failure Analysis (PFA) require
->   	  more information about the error than what can be described in
-> diff --git a/drivers/acpi/acpi_extlog.c b/drivers/acpi/acpi_extlog.c
-> index 47d11cb5c9120..b2928ff297eda 100644
-> --- a/drivers/acpi/acpi_extlog.c
-> +++ b/drivers/acpi/acpi_extlog.c
-> @@ -132,6 +132,34 @@ static int print_extlog_rcd(const char *pfx,
->   	return 1;
->   }
->   
-> +static void extlog_print_pcie(struct cper_sec_pcie *pcie_err,
-> +			      int severity)
-> +{
-> +	struct aer_capability_regs *aer;
-> +	struct pci_dev *pdev;
-> +	unsigned int devfn;
-> +	unsigned int bus;
-> +	int aer_severity;
-> +	int domain;
-> +
-> +	if (!(pcie_err->validation_bits & CPER_PCIE_VALID_DEVICE_ID ||
-> +	      pcie_err->validation_bits & CPER_PCIE_VALID_AER_INFO))
-> +		return;
-> +
-> +	aer_severity = cper_severity_to_aer(severity);
-> +	aer = (struct aer_capability_regs *)pcie_err->aer_info;
-> +	domain = pcie_err->device_id.segment;
-> +	bus = pcie_err->device_id.bus;
-> +	devfn = PCI_DEVFN(pcie_err->device_id.device,
-> +			  pcie_err->device_id.function);
-> +	pdev = pci_get_domain_bus_and_slot(domain, bus, devfn);
-> +	if (!pdev)
-> +		return;
-> +
-> +	pci_print_aer(KERN_DEBUG, pdev, aer_severity, aer);
-> +	pci_dev_put(pdev);
-> +}
-> +
->   static int extlog_print(struct notifier_block *nb, unsigned long val,
->   			void *data)
->   {
-> @@ -183,6 +211,10 @@ static int extlog_print(struct notifier_block *nb, unsigned long val,
->   			if (gdata->error_data_length >= sizeof(*mem))
->   				trace_extlog_mem_event(mem, err_seq, fru_id, fru_text,
->   						       (u8)gdata->error_severity);
-> +		} else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
-> +			struct cper_sec_pcie *pcie_err = acpi_hest_get_payload(gdata);
-> +
-> +			extlog_print_pcie(pcie_err, gdata->error_severity);
->   		} else {
->   			void *err = acpi_hest_get_payload(gdata);
->   
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index d0ebf7c15afa9..627fcf4346983 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -801,7 +801,7 @@ void pci_print_aer(char *level, struct pci_dev *dev, int aer_severity,
->   	trace_aer_event(dev_name(&dev->dev), (status & ~mask),
->   			aer_severity, tlp_header_valid, &aer->header_log);
->   }
-> -EXPORT_SYMBOL_NS_GPL(pci_print_aer, "CXL");
-> +EXPORT_SYMBOL_GPL(pci_print_aer);
->   
->   /**
->    * add_error_device - list device to be handled
-> diff --git a/include/linux/aer.h b/include/linux/aer.h
-> index 45d0fb2e2e759..6ce433cee4625 100644
-> --- a/include/linux/aer.h
-> +++ b/include/linux/aer.h
-> @@ -56,16 +56,20 @@ struct aer_capability_regs {
->   #if defined(CONFIG_PCIEAER)
->   int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
->   int pcie_aer_is_native(struct pci_dev *dev);
-> +void pci_print_aer(char *level, struct pci_dev *dev, int aer_severity,
-> +		   struct aer_capability_regs *aer);
->   #else
->   static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
->   {
->   	return -EINVAL;
->   }
->   static inline int pcie_aer_is_native(struct pci_dev *dev) { return 0; }
-> +static inline void pci_print_aer(char *level, struct pci_dev *dev,
-> +				 int aer_severity,
-> +				 struct aer_capability_regs *aer)
-> +{ }
+Ah! Didn't look at it that way.
 
-This also needs rebase. With the patches queued for v6.16, you may not
-need to pass level any more.
+> /proc/cpuinfo doesn't print out CPUID leaves, it prints out bits mapped
+> to strings.
+> 
 
->   #endif
->   
-> -void pci_print_aer(char *level, struct pci_dev *dev, int aer_severity,
-> -		   struct aer_capability_regs *aer);
->   int cper_severity_to_aer(int cper_severity);
->   void aer_recover_queue(int domain, unsigned int bus, unsigned int devfn,
->   		       int severity, struct aer_capability_regs *aer_regs);
+Hasn't that caused more pains than gains :p But, point taken, I'll give
+it a shot.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+> Look at the kmalloc trace points:
+> 
+>             Xorg-4589    [003] ..... 1568557.823993: kmalloc: ...
+> gfp_flags=GFP_KERNEL
+>             Xorg-4589    [003] ..... 1568557.823993: kmalloc: ...
+> gfp_flags=GFP_KERNEL
+> 
+> gfp_flags are a bitmap, yet they're mapped out with strings and symbolic
+> names.
 
 
