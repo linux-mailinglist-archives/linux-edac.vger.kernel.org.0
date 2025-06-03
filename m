@@ -1,54 +1,54 @@
-Return-Path: <linux-edac+bounces-4071-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4072-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F61DACCB5B
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 18:35:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6212EACCB79
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 18:54:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DCBE3A3E8D
-	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 16:35:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6E5A7A2FE8
+	for <lists+linux-edac@lfdr.de>; Tue,  3 Jun 2025 16:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A84192584;
-	Tue,  3 Jun 2025 16:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6121C8629;
+	Tue,  3 Jun 2025 16:53:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="YU5sBwUz"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Tar3qt4z"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC47434545;
-	Tue,  3 Jun 2025 16:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6C41C84CB;
+	Tue,  3 Jun 2025 16:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748968521; cv=none; b=FgbImmidFWocfdkQ4tiFDh/dk2LxRbrdn9SMKdjqVBxNU94EtahaZr6cMr73qgnAOAz82/beBF1otiMBk45FtwvkQvMzfA326dLhv8XwGbS8eSQ4Mr9uL4wJz04rZNRaV16LEwh6Xd9cNxq1wVADbaFGipNkA9hNGOPJ8qbUu7U=
+	t=1748969624; cv=none; b=Yu6J2MZQP3AR+QBuL/FBnURS1My8bMH351uL2SeDDvD7vQyZQEwldiJuOKlD9T3lIViXSLrnV3qRJFzBI8N5JoO39+NCODuLctnyIXftK3MMgrbEJGZyF3EO2USYIa60bCjw/ul3crNMS56UIUbrOEQY45QrvsZPlqbyuxEpn34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748968521; c=relaxed/simple;
-	bh=nxaCfdWauzjNiTIgCxophxKa0Ige88EfFoo8WmagOwk=;
+	s=arc-20240116; t=1748969624; c=relaxed/simple;
+	bh=zTG2WSHP/QzN80mKi5sbGVhsf6UDhVvPJJZsNPjCR+8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mIOJu5WerhNuLDzT1V8v+hVJ1OTvAql8sCOFyuJjhPkRB1b2t4wVX/jJ5cTfEokjBow2rIkRIG10MjaF693a9LY+DgXvkbCjlIL4DBW8jFFjX3grzn+fKMrul+6j7RV8hcTxq3DJctJq655VJOJxzd8acMRzbf/Xc72j9jBTxGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=YU5sBwUz; arc=none smtp.client-ip=198.137.202.136
+	 In-Reply-To:Content-Type; b=mYLqh+1eiyev+iyQ/sUWqhZLJsrec2Hk72it0vQ7CYmrfYpyUvgc6Nw+RPvW7unS1h2OtH/dU9Xi+GF0DenIYoUbBJPwI0MWuxX0DYamy4BQ/weubZgljXBz816FORHNoS6mV3xvMpjIDlghuHspLwXlwlHyH2cvw2xhS6vNNTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Tar3qt4z; arc=none smtp.client-ip=198.137.202.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Received: from [192.168.7.202] ([71.202.166.45])
 	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 553GYR2v3906763
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 553Gr1tu3910879
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 3 Jun 2025 09:34:28 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 553GYR2v3906763
+	Tue, 3 Jun 2025 09:53:02 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 553Gr1tu3910879
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025052101; t=1748968479;
-	bh=B4whhvRWBFRCoJ6hVF+KD7HMcx0awQWFQvakW3OGf4s=;
+	s=2025052101; t=1748969588;
+	bh=+Kq8C3YIxbOrvPOiL59HyrbOPWMN0yu0wfkBZy6fL6E=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YU5sBwUzJA0fHvoPTdDw7FhsWEYRZK4g72VOSHCcdCFCiV150jNxjEO3uz+G6o7an
-	 voHH+OdGZvMTqANn6sJHxVJ7RaSCdxfDEdXJSj06CHtfk7zu7T6LiAg12rawuZ1Ap5
-	 DW7SJGAKuGccnPD980W1wh9jcmFdWaUKJW5FHnZD5u1CJtqZjiKH0yzo/Xxh5V58Pi
-	 V2p2Y4K+UYvNEDovZ9cZ4+mKmFYAps9lHtuwSx7aOZZjDyrDpAAiE3QrQTLI56hsCR
-	 Wvl7zYm1rM/j8OpZwidt/pnU6Mc/A5rGE6BMzFcjbl0Ru2EgRYUSO/jZ7zeWHA4XSW
-	 HAT7481f5BVWg==
-Message-ID: <9950dc5a-05ab-4a7c-a4e8-34012ef98549@zytor.com>
-Date: Tue, 3 Jun 2025 09:34:27 -0700
+	b=Tar3qt4zdmLvci+/p8Akq3JBBWPA+3SjfGfc9KgN7GfSIqvbIS24Ofc2E9xMQH7s0
+	 teus6VQkO2aJAHoTZbougfGfKdIwl9+bsAO7+cmQMbwL7v6FEf/l+JFRPnNaYGLJTm
+	 0HgOsnhWZZzqyUPfIh2czOaBQO6dHrsoBfBcElf8y5Gtn0qDrgXihIbw3i3LuDobNd
+	 Wm93U+f4sPwhHX5VAdTOF+FN45NoTZ6Kw32RhUHzq3LeE8+/Fo4hUc3nkZYrkUoEki
+	 V4gtz74M/tOpPuZq9L6TJ6MGDiYZin5ohOz76dNeg0ij96+sTnNt5VFJ1WPl5card/
+	 XkuCiGXwpMAGw==
+Message-ID: <b119c9ef-2963-4e28-89d3-2b1c8e64ec69@zytor.com>
+Date: Tue, 3 Jun 2025 09:53:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -56,7 +56,8 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/9] x86/nmi: Assign and register NMI-source vectors
+Subject: Re: [PATCH v6 5/9] x86/nmi: Add support to handle NMIs with source
+ information
 To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 Cc: "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
@@ -76,7 +77,7 @@ Cc: "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
         linux-edac@vger.kernel.org, kvm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 References: <20250513203803.2636561-1-sohil.mehta@intel.com>
- <20250513203803.2636561-5-sohil.mehta@intel.com>
+ <20250513203803.2636561-6-sohil.mehta@intel.com>
 Content-Language: en-US
 From: Xin Li <xin@zytor.com>
 Autocrypt: addr=xin@zytor.com; keydata=
@@ -113,58 +114,36 @@ Autocrypt: addr=xin@zytor.com; keydata=
  PYbAkjBbm+tuJ/Sm+5Yp5T/BnKz21FoCS8uvTiziHj2H7Cuekn6F8EYhegONm+RVg3vikOpn
  gao85i4HwQTK9/D1wgJIQkdwWXVMZ6q/OALaBp82vQ2U9sjTyFXgDjglgh00VRAHP7u1Rcu4
  l75w1xInsg==
-In-Reply-To: <20250513203803.2636561-5-sohil.mehta@intel.com>
+In-Reply-To: <20250513203803.2636561-6-sohil.mehta@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/13/2025 1:37 PM, Sohil Mehta wrote:
-> Prior to NMI-source support, the vector information was ignored by the
-> hardware while delivering NMIs. With NMI-source, the architecture
-> currently supports a 16-bit source bitmap to identify the source of the
-> NMI. Upon receiving an NMI, this bitmap is delivered as part of the FRED
-> event delivery mechanism to the kernel.
+> The NMI-source bitmap is delivered as FRED event data to the kernel.
+> When available, use NMI-source based filtering to determine the exact
+> handlers to run.
 > 
-> Assign a vector space of 0-15 that is specific to NMI-source and
-> independent of the IDT vector space of 0-255. Being a bitmap, the
-> NMI-source vectors do not have any inherent priority associated with
-> them. The order of executing the NMI handlers is up to the kernel.
-
-I'm thinking should we mention that the bitmap could be extended more
-than 16 bits in future?  Or we just don't emphasize 16-bit or 0~15?
-
-
+> Activate NMI-source based filtering only for Local NMIs. While handling
+> platform NMI types (such as SERR and IOCHK), do not use the source
+> bitmap. They have only one handler registered per type, so there is no
+> need to disambiguate between multiple handlers.
 > 
-> Existing NMI handling already has a priority mechanism for the NMI
-> handlers, with CPU-specific (NMI_LOCAL) handlers executed first,
-> followed by platform NMI handlers and unknown NMI (NMI_UNKNOWN) handlers
-> being last. Within each of these NMI types, the handlers registered with
-> NMI_FLAG_FIRST are given priority.
+> Some third-party chipsets may send NMI messages with a hardcoded vector
+> of 2, which would result in bit 2 being set in the NMI-source bitmap.
+> Skip the local NMI handlers in this situation.
 > 
-> NMI-source follows the same priority scheme to avoid unnecessary
-> complexity. Therefore, the NMI-source vectors are assigned arbitrarily,
-> except for vectors 0 and 2.
+> Bit 0 of the source bitmap is set by the hardware whenever a source
+> vector was not used while generating an NMI, or the originator could not
+> be reliably identified. Poll all the registered handlers in that case.
 > 
-> Vector 0 is set by the hardware whenever a source vector was not used
-> while generating an NMI or the originator could not be reliably
-> identified. Do not assign it to any handler.
+> When multiple handlers need to be executed, adhere to the existing
+> priority scheme and execute the handlers registered with NMI_FLAG_FIRST
+> before others.
 > 
-> Vector 2 is reserved for external NMIs corresponding to Local APIC -
-> LINT1. Some third-party chipsets may send NMI messages with a hardcoded
-> vector of 2, which would result in vector 2 being set in the NMI-source
-> bitmap. To avoid confusion, do not assign vector 2 to any handler.
+> The logic for handling legacy NMIs is unaffected since the source bitmap
+> would always have all bits set.
 > 
-> NMI-source vectors are only assigned for NMI_LOCAL type handlers.
-> Platform NMI handlers have a single handler registered per type. They
-> don't need additional source information to differentiate among them.
-> 
-> Use the assigned vectors to register the respective NMI handlers. Warn
-> if the vector values are unexpected.
-> 
-> A couple of NMI handlers, such as the microcode rendezvous and the crash
-> reboot, do not use the typical NMI registration interface. Leave them
-> as-is for now.
-> 
-> Originally-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
 Reviewed-by: Xin Li (Intel) <xin@zytor.com>
