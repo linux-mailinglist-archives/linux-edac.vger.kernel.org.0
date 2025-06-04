@@ -1,55 +1,55 @@
-Return-Path: <linux-edac+bounces-4101-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4102-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C108EACE175
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Jun 2025 17:31:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 738AEACE1A9
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Jun 2025 17:42:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21226189886C
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Jun 2025 15:31:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4420F176480
+	for <lists+linux-edac@lfdr.de>; Wed,  4 Jun 2025 15:42:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07EE81DD0D4;
-	Wed,  4 Jun 2025 15:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC05B19D07E;
+	Wed,  4 Jun 2025 15:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="CWJt10XU"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="MvpdE3Cp"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4CA148832;
-	Wed,  4 Jun 2025 15:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBE5146D6A;
+	Wed,  4 Jun 2025 15:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749051018; cv=none; b=b9eWPggKb9+8TkORa1qA2jL94T5LBe7DIi7JUIEYsJGaKWjF/JxfD8BCSZ3eo2c+AIlzCuPX9St/ME+Ny5tEu4yufoDapa+F5sHjC0tUOt97ppWDOpjDm8QjXeGxB65ZFfzqrTED6QQOjgAJKbiXXpTno0iQdKVf6Qu9zZgEePk=
+	t=1749051721; cv=none; b=K53DL7wL10StIAaUNLIBDP8nsx2I97xgdcRWwkuunuhmdWVuMtfpoyB4pIgv/K16IGXkKRew8sRDJUpCJdY7gNGhSQ9AdhQxdz7eOgspC0fRHWnKuf+8zN+6aN0oNkF11BZikOa/jtU8mhW0yQTd6Nzcd6yhQeKJfye8bb6H7T8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749051018; c=relaxed/simple;
-	bh=IntO0/FbgwhgBAN77s9LpsP+6ciHFlDY2+k3/nq5G/0=;
+	s=arc-20240116; t=1749051721; c=relaxed/simple;
+	bh=rMc9LpBQ7NgcyLQMEUZqHc6toB/T5zpFVrloQqjog7U=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Y2pTv81BJuPKeFdbEm7hrBizyHlqGLt8SevGA1k6MLJGXiWEnZ9HmqnEvw4M7JSFw5anBs08eMd1m21r51Wq1bU1dAO8SeCaJ8KbzyvuA8/xLWLrDXiusj+u68j+1U42ZJFn+Ig4PfQUMoTYtYcOTLn/mFiVDOiHISiXrxV9X7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=CWJt10XU; arc=none smtp.client-ip=198.137.202.136
+	 MIME-Version:Content-Type; b=fhl9/K6gSd9PKlp13x0v2eRagQc/JPjBSNI6WG1CVeqJgJo1SlVqtC0VHKJuZuSTCUcI+P8Vg4FMqaEoSCRBVpPpCd7s1gwp3x5u6SrGd5Qr+GAWZyi/I+9qtwMLJohZUW234gfFOMetjtvkQlGww4MA2GOvZcyr1hF8rZYXYJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=MvpdE3Cp; arc=none smtp.client-ip=198.137.202.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Received: from [127.0.0.1] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
 	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 554FTfWR079172
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 554FfQsf081940
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 4 Jun 2025 08:29:42 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 554FTfWR079172
+	Wed, 4 Jun 2025 08:41:26 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 554FfQsf081940
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025052101; t=1749050983;
-	bh=06DGrvhu1rhRSkUp5M4yyd9dVBhB/k8I9ffulUUuiZ4=;
+	s=2025052101; t=1749051687;
+	bh=rMc9LpBQ7NgcyLQMEUZqHc6toB/T5zpFVrloQqjog7U=;
 	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=CWJt10XUfOPx1/nx9ZCg8yilsk+XhK7WFpAKz7w3Pr/GVmjyx931ADKMUVWGo0Cf9
-	 BK9swHAH6bLOv/AKCFf89kclJ1EVrzrOE5ozFO583Wit4qvaHJslPf69jO+Xb10G/y
-	 HDSkkCzpr8N1DBmV8tHNlTC8h/mVHLiic7FH6lWq0osexW4hVU8viTdhORNcLc+p/i
-	 dwHVhQJyhp+6OyOsKaysK8dMKK1zQmc1U0WCq3uvvRuPwkrwsLOyzkXBvK/6OA+No7
-	 f3TRDnipWQlRTtZnqnOhpWwXoiRZ3Q3qSirfp4/fq7x4AzXRpbjWyBI3ueoLvzfcrm
-	 Vu0ZiW4gOySHw==
-Date: Wed, 04 Jun 2025 08:29:42 -0700
+	b=MvpdE3CpvzKYKJG3yH7XtkkMgROUTMYdw8rO3e4a+GYp38wzCHaQXsv+V65NwyTbg
+	 I1bkU7lonjMsEhnQ2FSKdRTeufL/h0+k+fVPA++oSUGRrVlbwjR2VCOEqIAi6igqPH
+	 90b9QcJGKNqwwS0n/L34JOLxR5V9PBfW2vzDTHUq5k/0nr1afIZslRcNOXRYp3uLw/
+	 lCK8Pt0FYC1WpVkosr+ROs3Bnzz1nJPpgi95PueEyDeZBWDmxHb2CQf1TfNbqSVntN
+	 e89wmhZPGzgDgK4shpHpImP78rUi5sKlgV578xuIv8irkIezm696S/zV6JhrI1DeWf
+	 iMpEqK+q+CNcg==
+Date: Wed, 04 Jun 2025 08:41:25 -0700
 From: "H. Peter Anvin" <hpa@zytor.com>
-To: Xin Li <xin@zytor.com>, Sohil Mehta <sohil.mehta@intel.com>,
+To: Sohil Mehta <sohil.mehta@intel.com>, Xin Li <xin@zytor.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org
 CC: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -69,9 +69,9 @@ CC: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v6_9/9=5D_x86/nmi=3A_Print_source_inf?=
  =?US-ASCII?Q?ormation_with_the_unknown_NMI_console_message?=
 User-Agent: K-9 Mail for Android
-In-Reply-To: <31507dc8-b1dc-4df3-bc0c-6958b4218746@zytor.com>
-References: <20250513203803.2636561-1-sohil.mehta@intel.com> <20250513203803.2636561-10-sohil.mehta@intel.com> <31507dc8-b1dc-4df3-bc0c-6958b4218746@zytor.com>
-Message-ID: <CC71F714-803B-44F3-A46D-308B75FB3FD0@zytor.com>
+In-Reply-To: <fa948d41-3f95-4385-86c1-5c115561b939@intel.com>
+References: <20250513203803.2636561-1-sohil.mehta@intel.com> <20250513203803.2636561-10-sohil.mehta@intel.com> <31507dc8-b1dc-4df3-bc0c-6958b4218746@zytor.com> <fa948d41-3f95-4385-86c1-5c115561b939@intel.com>
+Message-ID: <8035D788-0F60-48B8-8B98-DC352EC9AE62@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -82,14 +82,10 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On June 3, 2025 9:55:32 AM PDT, Xin Li <xin@zytor=2Ecom> wrote:
->On 5/13/2025 1:38 PM, Sohil Mehta wrote:
->> +	if (cpu_feature_enabled(X86_FEATURE_NMI_SOURCE))
->> +		pr_emerg_ratelimited("NMI-source bitmap is 0x%lx\n", fred_event_data=
-(regs));
->
->"0x%04lx"?
-
-Seems unnecessary to me to zero-pad it; it just makes small numbers harder=
- to read=2E We don't even use vector 12+ at this time, do we?
+I think printing the bitmap is fine for unknown bits set=2E=2E=2E after all=
+, you might have surprise vectors=2E Maybe a list would be cleaner by some =
+definition, but we already print bitmaps all over the place=2E It is not cr=
+itical as long as the information necessary for debugging is there=2E In fa=
+ct, it is often better for the information to be compact so users don't get=
+ tempted to abbreviate a bug report=2E
 
