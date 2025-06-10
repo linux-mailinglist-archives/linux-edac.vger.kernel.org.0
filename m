@@ -1,227 +1,166 @@
-Return-Path: <linux-edac+bounces-4103-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4104-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCF16AD081D
-	for <lists+linux-edac@lfdr.de>; Fri,  6 Jun 2025 20:30:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06DB0AD36ED
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Jun 2025 14:45:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCD883AB5C6
-	for <lists+linux-edac@lfdr.de>; Fri,  6 Jun 2025 18:30:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 905327AB850
+	for <lists+linux-edac@lfdr.de>; Tue, 10 Jun 2025 12:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A7CF1E25EF;
-	Fri,  6 Jun 2025 18:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="YPGMF+D+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33EC02BDC1C;
+	Tue, 10 Jun 2025 12:37:54 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2135.outbound.protection.outlook.com [40.107.101.135])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F2A13A41F;
-	Fri,  6 Jun 2025 18:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.135
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749234641; cv=fail; b=JXIeaKOiMNg2vhmU3S1gAXO7PArJjsgIfb/68BM7m8SqLf9F7pj70o8aqIzQSckvsY00I5RxjxM6+F1oO7Hhe8NR2AJbx4//UfL261WcNSamWqeLKHtS56GN29bwhLgxIjFgJRkKW4j1mZDZY1NwnYH+M9nTp2bVaPDUP2U83pU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749234641; c=relaxed/simple;
-	bh=79fnhhj6YnyIT63/OxtrBN1LgWsQMfo3uB0I+Fu6Ros=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=uyUMsO5au//7cjpgW71sMnoWK8lyUB84Rs1Hjdp4iEWar3qS1i3/jXiaAquJPe2KmEvONI+NIy7718muuO662YFHYNMmF1SluukWJSLqzkr5HQ5Mec/PsPGMUtV/YlbBZB9IuqM1qmsfGttEBPUIpzSiETkGtn+2YE1EZyDuMz0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=YPGMF+D+; arc=fail smtp.client-ip=40.107.101.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=R23lrfj2n2EhdZuA8ae0ekWo/nee4oEqDJOdKrY3ToB0tx5gQfC3pMXC6vWmYvsI/Yzu4cRlYfF5CsEjwvlXXYy/LcNpIbJk4Rts77nEqbe7KnkeR+K/UPEcuhXmmdS3BWYm2Jqvw6zUhJFQ+ubjfBV/LTFGw45m6WyBv6CnNLQjmRoYaR8Mg9Dm/xHYjLG/vwjbwCUUZaRwVpgcpDKWYDLisqJ/6h9dZLyZXcTTjVwbC6c0ewKnZ2zKiXAjeVoAAUUsQqJxAq0YA30cTXICYtkHWsfkohgk6f3FLTQc1Q9e/ATzaAIcUwjLITejGqOozf8+wCIBwlhQYOqHQ1bnEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g0xtbHlaADTMbNKM6N2Icm8Ajv3pfd9GQiY5NkrNoFA=;
- b=qvoR5SY4FSpwye4St0J55rR+LLJRfBTw7q5yTHe6EBx/E0kbqIFX770z3KIfvUCqAVQJjMTnhlvgA3XXm+G6TsLRPliKghnwL5QruJQugjOY/g947zsDm+9a1bZV9dJr8KfDHRmk/710SJ/ZZnYITHC6rQoP8Dh3n9V5OXPse13ezOXS7tjdLOCsV3AaowVGgXBpTI52UOUoHdXDhS7yfFYST7wHnXznBUKz0q04/ouGJBV6Ib8G7F8tbXbRqRFIyf+SJ1oVznyV1CUu1BZBSDbmH78UymnV+JuWiR0AJJrF1dXEXz+zRK5hGMG4A3tikVh/B/rry9xtMIKTlpzrvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g0xtbHlaADTMbNKM6N2Icm8Ajv3pfd9GQiY5NkrNoFA=;
- b=YPGMF+D+XoDc6CpN1ShTUNGxsBE9+CHkWxXN3hSoWR5m/DKzMKQ4Qy0fjaCsvvwUUFZJjytr8gHTlyEw1N40rogRywmRzEbZeLRFFscrPSAAF+ocEnPq7QsmbzUlHbRK6s3cpsf1iOoUcvb1ZhKx4+PeGlWmP96goEM9LR7x0f8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from CH3PR01MB8470.prod.exchangelabs.com (2603:10b6:610:1a4::21) by
- PH0PR01MB6167.prod.exchangelabs.com (2603:10b6:510:14::5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8769.20; Fri, 6 Jun 2025 18:30:34 +0000
-Received: from CH3PR01MB8470.prod.exchangelabs.com
- ([fe80::80c4:7216:f070:e5fd]) by CH3PR01MB8470.prod.exchangelabs.com
- ([fe80::80c4:7216:f070:e5fd%3]) with mapi id 15.20.8813.020; Fri, 6 Jun 2025
- 18:30:34 +0000
-Message-ID: <efbc8109-1854-43b2-bff4-095ecd5970cd@os.amperecomputing.com>
-Date: Fri, 6 Jun 2025 11:30:29 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] Fix issues with ARM Processor CPER records
-To: Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
- James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>,
- Tony Luck <tony.luck@intel.com>, linux-acpi@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1725429659.git.mchehab+huawei@kernel.org>
- <20241011115707.GCZwkSk5ybx-s9AqMM@fat_crate.local>
- <CAMj1kXGQSgeshrns7-EwTkG_c1dHgaxaVxO_FxWumdFx6m4vRQ@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Ferguson <danielf@os.amperecomputing.com>
-In-Reply-To: <CAMj1kXGQSgeshrns7-EwTkG_c1dHgaxaVxO_FxWumdFx6m4vRQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4P222CA0011.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:303:114::16) To CH3PR01MB8470.prod.exchangelabs.com
- (2603:10b6:610:1a4::21)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26696299923;
+	Tue, 10 Jun 2025 12:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749559074; cv=none; b=LrZZ/0t4BDLUgt89qQZCqL8A7PA38SCmrd2YSbk2OTIqno8cyX9or1/FoFnf0NxG44OwOVkhssURgVFVwUtX1cFTDZP4TYHlLaN6EJMKgpveNAlk8qpYRIJUjXjvF2Pll62qfabA5l6Jr04y08dwMz2ubGR9Hcr0SOnq2+62pQg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749559074; c=relaxed/simple;
+	bh=gARBi7y88ejFIZ1Ue7Iehk433lecsHJcdc0zkgBpY+k=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=emfeMleMvybQu2AhaTWbTuHyxnKm7fP86Vjn2nUEQbFd3ts2VZo7eNuuOFuqcn7+JE1F+JXFS+BVZ/XVcff3LnR7FNMqExrd13utwo58T9v2iklzJSzQbc4ay+xtHns1ZbgAjdGpAzr+ebrIcasd6KMKxoo2gDRxVE+uRdOG7Pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bGpDT20tvz6HJcD;
+	Tue, 10 Jun 2025 20:35:53 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id 028C414025A;
+	Tue, 10 Jun 2025 20:37:43 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.145.218) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 10 Jun 2025 14:37:41 +0200
+From: <shiju.jose@huawei.com>
+To: <rafael@kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC: <bp@alien8.de>, <tony.luck@intel.com>, <lenb@kernel.org>,
+	<leo.duran@amd.com>, <Yazen.Ghannam@amd.com>, <mchehab@kernel.org>,
+	<jonathan.cameron@huawei.com>, <linux-mm@kvack.org>, <linuxarm@huawei.com>,
+	<rientjes@google.com>, <jiaqiyan@google.com>, <Jon.Grimm@amd.com>,
+	<dave.hansen@linux.intel.com>, <naoya.horiguchi@nec.com>,
+	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
+	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
+	<gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, <shiju.jose@huawei.com>
+Subject: [PATCH v8 0/2] ACPI: Add support for ACPI RAS2 feature table
+Date: Tue, 10 Jun 2025 13:37:22 +0100
+Message-ID: <20250610123725.1652-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR01MB8470:EE_|PH0PR01MB6167:EE_
-X-MS-Office365-Filtering-Correlation-Id: c84133c3-da2f-4795-3dbf-08dda52839b1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|366016|52116014|7416014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Yk5nWmRBMXcxNFI1L043azRjZXYrYndZenVmSG92Qnc5bEdJT2pQSDVNVlMw?=
- =?utf-8?B?MXVud2pLOGZZVnFOSnVzS1paZ09ZSVNSRGdBdGc0NWFGcDFTNTB1MjRmNUsr?=
- =?utf-8?B?RWdkVWl0aTZ5UWc5aGFuN2ZMZHJhY1BZTkxEaXhXaEJqYk5GZCszcVluR3Ix?=
- =?utf-8?B?N0JxV203OVRMOWVsbXFBNWZ1elQrUGJDbWZYdFdKUCtlU014TGtSTXZCY2Vh?=
- =?utf-8?B?dmdoVG9WczZ3OWcxcTNZMzdsQ3lRMm5xa1pqUUZXZkQwdUpsc1NwZnllVzlq?=
- =?utf-8?B?YWY0RlVwNVp6eHVMWThMS3VQY0RDak9CU0oydjlxeXRuVk5BZ2tvT291VUR1?=
- =?utf-8?B?NUpsaS9laVkrdXFuSkl3RWdMc2RIckVSR285OS9YVHRRSnlTQzEvV0JKRlA3?=
- =?utf-8?B?WE5leVZ1L1IzNGV4VFRxZElyNUtrVGFucStXUW9VbUpoM2IrZjBkVURicjRL?=
- =?utf-8?B?RkdhLzd4VnZOQk5DclVnMEMwWmtMMDhzaHVsSDc0cHZxVURoUGxpd0k1ZjVZ?=
- =?utf-8?B?L0xMTXE1d1c0NjV1SC9RYTVkZFBOVmNNSVN1RkJJNzNzdzVrMVUzSUdmQUN6?=
- =?utf-8?B?RlV0QVJHS2hsYWhwVForaG9pVXEyRTlJNVVBLzlBVHMvOEJ4R2F2Z2hwb3ZT?=
- =?utf-8?B?dkNjYkdXV096RVYzVENFQ0J6ZVVQRFcyVFB6WlIvT0ppdU1DM0YzVGFmcFRU?=
- =?utf-8?B?ZEdrRzVHZWRDRVBkendJYjBqazVhY2F0M2RUdFFvRWc3SENMMHFjQ1lGc3dC?=
- =?utf-8?B?RnF0cnJUdlRmWjRkVUI2bko3OGZYcWFVZWFFREp2RXRUOWhJSHJrd0R2WE9i?=
- =?utf-8?B?T3lEY0UxWWh3ZDA1aVZ5MGIvaWRuR0dIRlZwNFAyeHJLcWxyczlNYnpnVzBN?=
- =?utf-8?B?STRJeDY0MnZlcnJFRGM3YnBkR0wveUY3VDZJQ1FIdkRBRkJMV1ZHSG5EWGxR?=
- =?utf-8?B?bDEzMFVDT0UrR25LUmNnc1BGS3k0Y2VUQ0N1SkZxeE80RVFqY211ZG5nU0E1?=
- =?utf-8?B?dnlmcW1JSjFCNUF5NzRxOWtaRE5kZmRNcksyOG96VytkWTlIMStraktGZ2VO?=
- =?utf-8?B?aXhZbGhNYmtPMlB0ZExycjlDNWVBdlVsK0FtaERUS055KzFqc3YzTEZneFFn?=
- =?utf-8?B?Q1FZVmdiNGJsdXVHckpQRitRcnVWL1lKZmtId0pPUGk4Y0tZdlduUnA0QnZp?=
- =?utf-8?B?WVhqd3VsVEwrUHpSaEFaV3k4ckZGMWxpK1RFcnIzSWczUXVrZWo4Tm1yT2Nl?=
- =?utf-8?B?T1ZVRlFkcCtrbmF2dmRUcDVTQUlCOS90Nk1qT2VMcDIzSWZRNVducWdmWnF6?=
- =?utf-8?B?U1ZrL1BIOU4wVzY0aW1CVzNPQ1FjWUErVytvTDR6YzdOWmkzekxxSW1ZR0p0?=
- =?utf-8?B?QlJqeHRkMTFVWEM3RiszZzNYVGhWS1UrbmxSWExEeFR0eHlQTkQ4cUdza3Fm?=
- =?utf-8?B?RWhZY3lhL0NwdUdqNXRmVEJOR2xUaDAwQ0pOeXVLNExEL3IrZjMzcDE4a09F?=
- =?utf-8?B?Y0xUVHFMMnppWjh3aDJpUDRnZngwM2N2UGdob1plVnJjNlJxU2kvemhPcE5u?=
- =?utf-8?B?aFNDNDk2LzdSK29WNnpkWHRMdzJCNXVGYng0bVBUUmJCYjIvazN3Y3VPdUhy?=
- =?utf-8?B?aTZtRmNseERhRllIZi93Umtsek41SXErSlQwV3ppRFJad3lPMzBqSi9udjYv?=
- =?utf-8?B?WFZ0eGtON3FWRnlmWWZ3dE1DV0o3aC9jQ1VxbWpwYW50eUxPUStmTUFwWTd1?=
- =?utf-8?B?enQ0ZzRIRWdFMldYQXZ6Y3BGNCtYYnhjUnRTNDZwbWRzZitKZUw3MlBOZjN5?=
- =?utf-8?B?cW95YUM5a3hTczkxblBXRWdpU2ZReTdmeS9QY2tiV0xVUEJZNW1EVXV0TU5j?=
- =?utf-8?B?NVRhS1VpdG4xdWR1VVUyTGZORDRIalNydFVqSCtpcG9wTU9LOFlHdmVhbkdi?=
- =?utf-8?B?Kzh5U09MTTJYU290SFBFR2F3aXJhcHZscEoyTkZydWF4SVhJNXB3MXZ0SVQv?=
- =?utf-8?B?T2FzT282aFJ3PT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR01MB8470.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(52116014)(7416014)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NTNpd2ErU0hUL1A0cktRLzFRWnJ0WmsvZ3R1L3RVMG9rczVyRENqZUJQQlZm?=
- =?utf-8?B?WDRpa0JPT2pYUU5ZMEdESTgyd21ranNiVWZnemhLZml4RGJlMGtJRDAxakh0?=
- =?utf-8?B?TkZ3azJacnZNckhyR2dRWW56ckhPclNIQWduemN4V0gvNVNvUFh5YUpGOVZ3?=
- =?utf-8?B?RS9aa2RjMWhHY21EL0hNSm1MOG1SQUpzZmlubDFaUE03UW9Fd0w1dXhrL3hB?=
- =?utf-8?B?UHh4V25EWjA5RHh2cXc4ZnBTbXVJT25PTTBsaitEQ3NUZlh2cFNEZGxlZXdv?=
- =?utf-8?B?UGIxbjN0a2pucCs2c0d4YlRTNnhXZGVXRXlNMGhINHpFdm5qeVJrOENLSVZm?=
- =?utf-8?B?RFZ3VUZQOVhpVElTa01yK1JNaHlXWHVnMjhUb0pJY1JSL3lkZlBOZXFIdy8r?=
- =?utf-8?B?b25vbU5uZVpiYzVYZ1hOSURZYVlmaXRIVGg2ZVZTVFlpVXNYUm5rb2EwRWpL?=
- =?utf-8?B?cFNrYnNvNVcvTFpFa1NaQ2hJSzhXMTdnM0dzRlNNblZWOHNOc1pjYS9NWDYz?=
- =?utf-8?B?KzJ3ak1PYmsyR3pRVFBBQ0VkaDluVy9CSHhjRmhkN0FUVWVwVmhrWGViUTRW?=
- =?utf-8?B?cFBtNmFydi9KendEZEwvZDNRT0MvWnpudXQvN3pxcTVMYWhaY0RtR0hUcEVw?=
- =?utf-8?B?ZVU1V0RONS9FejZIcUVGUzdlODc5M1U1emkrajJkUGtkNDA4MjA0dEF4U3RP?=
- =?utf-8?B?SWZFcXpwU3FDdGhHNnJONDZXZHBzclR2dkozVDIwbjUrSjBTeHBCbDhyK3Vv?=
- =?utf-8?B?bW0yVXlxVy8yWlJkcU0xNkhaVktTZ3FaRFFGdlV1QmVweEVKTzdOSnBmLzgr?=
- =?utf-8?B?a1NCdGJtVks1aGxOUzFVT0I3eUdVOTFjcWpUQlJoSFVVWGFuRkRrWnQrM2pk?=
- =?utf-8?B?WW9UbDlvVExrbk1GazcvS0t0cUgvd0RUWlZjcG4zdGZPWkRicXFJOHR1MDlF?=
- =?utf-8?B?Rko3dmFVZ2lDQjBldnhNd0JBNjVsL2VmYmZ3d3c0Rkt6ek5FLzR5Y0l4a0JN?=
- =?utf-8?B?eXFoU09wSXhGbmRHcUkyWU9YeS9nUWxwMElWUTJmN2QwTmp0RWFxSXpTbG11?=
- =?utf-8?B?RTIzSnRNVC81TEpVM3QwNUR6Y0t1NzBaUUhWOEsvMXY5bVBpYmNmN1A5Vkly?=
- =?utf-8?B?cVNZQXhON2ZqNFFOTnR2cytpcWtqOEZaWFZZZ3JTd2dQdDcyeHFWUzJidUd4?=
- =?utf-8?B?YU5sZ2pBWnMvMWk0alVpMGN4MUgyZFdKTVg5bE55aTFTNVN0N3FkTTM4S3ZF?=
- =?utf-8?B?S2tYTERHeDdwVnozc0pwaEQxQzVCMVFwWDZZTHBDU1lPY1JpSnJ2V2NCcW1z?=
- =?utf-8?B?VC9UTDJXNnlDTTlVdXVBTnQ0QkpoK29SSUlwVGlyaE9vWXhwWlVLenRpa3Zu?=
- =?utf-8?B?ZXl3N1E3RUs5K00vTGQ2WE9ZbFk4MVZpdWtSV0xkb0pNdUJqMXZZZ3dWUE9B?=
- =?utf-8?B?Qk5aYWRkR3hzekloUmlwTS9lbWoreVAxd0NFUzJ4d0JsaWUwRWhvTUVSK25K?=
- =?utf-8?B?bGRNejVzNFR6Yzd5N2MyVDJ4c3VXSkw5RmE4MHdqSVVEc3htdVNkU0hiVXdx?=
- =?utf-8?B?TERKV1VaNWpDKzhLQU8wazZYc3dtOGwycnU4QXpkVWlybWpWd3I2VTNxZStS?=
- =?utf-8?B?QkRJVFZKVzNlNEprc1lNRUcxaG0zUUtEREwyeGthcW15dllxZ1draU5rTFZQ?=
- =?utf-8?B?eTNqMUhCRE52Uyt3ZzI2RFlxRVdBbERyRnVlV0dQSk1ObnluNWkvTGZQRHoy?=
- =?utf-8?B?TjFHdVh2TUFIalY4QmtURy9tUzd5Y09XaXZIajVpUDFsMmtWMU16UGcwMCtO?=
- =?utf-8?B?K1FqMXdtVmtvUTd1U0w0NnExbWswb29Hb1I1Tmx1Qk9YaWM5eDBtS2VVbUxN?=
- =?utf-8?B?bjNKYlN2bDliSE5ZcDg3c2xuakt4cWRDLzd5N08xQXliM3NoODZERm11Mzhp?=
- =?utf-8?B?ZUpweGVUN3FCWFdCbVZjcDNqZGdWTGhXUG84dDN1aDd3RnNlRGJpUHdKV0Ry?=
- =?utf-8?B?ODdNZ2hpSHJJS2ZMaFNpdHhlOTR1L1IrLzFiRk91WUREdTBBRmE2TXgybnQ0?=
- =?utf-8?B?TG1GYnNrZWZyR3lyczdsaGZTaDgwZEhpa0JYN0U1bnBHRmhUR1RNRFF0VHRx?=
- =?utf-8?B?dlhPTDBSUEhKL09lR0VUSngwVXpMZDRmNGh2bmpwSHNveGpheGIyMGRvMm1G?=
- =?utf-8?Q?ZPGgGzBBqE6GRUKg91jIKtk=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c84133c3-da2f-4795-3dbf-08dda52839b1
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR01MB8470.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2025 18:30:34.4676
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MklcXgzK/QvIAhpgoGAGlzROzTt0jTtmC3zgXwWeFnlC8EUs6azJqThVw1uIrfmUVU5SYWceso1qXSmVb8fI4AAVJPupoMwc5vUNcbt+jQO4WXM43cT6x8RQYfcm7Ooq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6167
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
+From: Shiju Jose <shiju.jose@huawei.com>
 
+Add support for ACPI RAS2 feature table (RAS2) defined in the
+ACPI 6.5 specification, section 5.2.21 and RAS2 HW based memory
+scrubbing feature.
 
-On 10/14/2024 3:00 AM, Ard Biesheuvel wrote:
-> On Fri, 11 Oct 2024 at 13:57, Borislav Petkov <bp@alien8.de> wrote:
->>
->> On Wed, Sep 04, 2024 at 08:07:13AM +0200, Mauro Carvalho Chehab wrote:
->>> Jason Tian (1):
->>>   RAS: Report all ARM processor CPER information to userspace
->>>
->>> Mauro Carvalho Chehab (4):
->>>   efi/cper: Adjust infopfx size to accept an extra space
->>>   efi/cper: Add a new helper function to print bitmasks
->>>   efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
->>>   docs: efi: add CPER functions to driver-api
->>>
->>>  .../driver-api/firmware/efi/index.rst         | 11 +++-
->>>  drivers/acpi/apei/ghes.c                      | 27 ++++----
->>>  drivers/firmware/efi/cper-arm.c               | 52 ++++++++--------
->>>  drivers/firmware/efi/cper.c                   | 62 ++++++++++++++++++-
->>>  drivers/ras/ras.c                             | 41 +++++++++++-
->>>  include/linux/cper.h                          | 12 ++--
->>>  include/linux/ras.h                           | 16 ++++-
->>>  include/ras/ras_event.h                       | 48 ++++++++++++--
->>>  8 files changed, 210 insertions(+), 59 deletions(-)
->>
->> With the issues to patch 1 fixed:
->>
->> Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
->>
->> I'm presuming this'll go through Ard's tree. Alternatively, I can pick it up
->> too with Ard's ack.
->>
-> 
-> Either works for me.
-> 
-> Mauro: please put all maintainers on cc of the code you are touching - thanks.
+ACPI RAS2 patches were part of the EDAC series [1].
 
-What can I do to help this patch move forward?
-I noticed it needs to be rebased as of kernel v6.15.
+The code is based on linux.git v6.16-rc1 [2].
 
-Would it be helpful if I were to rebase, add all the maintainers to the cc, and
-resubmit ?
+1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
+2. https://github.com/torvalds/linux.git
 
-I did rebase to v6.15 and tested. Everything still seems good to go.
+Changes
+=======
+v7 -> v8:
+1. Rebased to linux.git v6.16-rc1 [2].
+
+v6 -> v7:
+1. Fix for the issue reported by Daniel,
+   In ras2_check_pcc_chan(), add read, clear and check RAS2 set_cap_status outside
+   if (status & PCC_STATUS_ERROR) check. 
+   https://lore.kernel.org/all/51bcb52c-4132-4daf-8903-29b121c485a1@os.amperecomputing.com/
+
+v5 -> v6:
+1. Fix for the issue reported by Daniel, in start scrubbing with correct addr and size
+   after firmware return INVALID DATA error for scrub request with invalid addr or size.
+   https://lore.kernel.org/all/8cdf7885-31b3-4308-8a7c-f4e427486429@os.amperecomputing.com/
+   
+v4 -> v5:
+1. Fix for the build warnings reported by kernel test robot.
+   https://patchwork.kernel.org/project/linux-edac/patch/20250423163511.1412-3-shiju.jose@huawei.com/
+2. Removed patch "ACPI: ACPI 6.5: RAS2: Rename RAS2 table structure and field names"
+   from the series as the patch was merged to linux-pm.git : branch linux-next
+3. Rebased to ras.git: edac-for-next branch merged with linux-pm.git : linux-next branch.
+      
+v3 -> v4:
+1.  Changes for feedbacks from Yazen on v3.
+    https://lore.kernel.org/all/20250415210504.GA854098@yaz-khff2.amd.com/
+
+v2 -> v3:
+1. Rename RAS2 table structure and field names in 
+   include/acpi/actbl2.h limited to only necessary
+   for RAS2 scrub feature.
+2. Changes for feedbacks from Jonathan on v2.
+3. Daniel reported a known behaviour: when readback 'size' attribute after
+   setting in, returns 0 before starting scrubbing via 'addr' attribute.
+   Changes added to fix this.
+4. Daniel reported that firmware cannot update status of demand scrubbing
+   via the 'Actual Address Range (OUTPUT)', thus add workaround in the
+   kernel to update sysfs 'addr' attribute with the status of demand
+   scrubbing.
+5. Optimized logic in ras2_check_pcc_chan() function
+   (patch - ACPI:RAS2: Add ACPI RAS2 driver).
+6. Add PCC channel lock to struct ras2_pcc_subspace and change
+   lock in ras2_mem_ctx as a pointer to pcc channel lock to make sure
+   writing to PCC subspace shared memory is protected from race conditions.
+   
+v1 -> v2:
+1.  Changes for feedbacks from Borislav.
+    - Shorten ACPI RAS2 structures and variables names.
+    - Shorten some of the other variables in the RAS2 drivers.
+    - Fixed few CamelCases.
+
+2.  Changes for feedbacks from Yazen.
+    - Added newline after number of '}' and return statements.
+    - Changed return type for "ras2_add_aux_device() to 'int'.
+    - Deleted a duplication of acpi_get_table("RAS2",...) in the ras2_acpi_parse_table().
+    - Add "FW_WARN" to few error logs in the ras2_acpi_parse_table().
+    - Rename ras2_acpi_init() to acpi_ras2_init() and modified to call acpi_ras2_init()
+      function from the acpi_init().
+    - Moved scrub related variables from the struct ras2_mem_ctx from  patch
+      "ACPI:RAS2: Add ACPI RAS2 driver" to "ras: mem: Add memory ACPI RAS2 driver".
+
+Shiju Jose (2):
+  ACPI:RAS2: Add ACPI RAS2 driver
+  ras: mem: Add memory ACPI RAS2 driver
+
+ Documentation/edac/scrub.rst |  73 ++++++
+ drivers/acpi/Kconfig         |  11 +
+ drivers/acpi/Makefile        |   1 +
+ drivers/acpi/bus.c           |   3 +
+ drivers/acpi/ras2.c          | 450 +++++++++++++++++++++++++++++++++++
+ drivers/ras/Kconfig          |  11 +
+ drivers/ras/Makefile         |   1 +
+ drivers/ras/acpi_ras2.c      | 424 +++++++++++++++++++++++++++++++++
+ include/acpi/ras2.h          |  70 ++++++
+ 9 files changed, 1044 insertions(+)
+ create mode 100644 drivers/acpi/ras2.c
+ create mode 100644 drivers/ras/acpi_ras2.c
+ create mode 100644 include/acpi/ras2.h
+
+-- 
+2.43.0
 
 
