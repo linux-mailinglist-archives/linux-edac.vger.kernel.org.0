@@ -1,322 +1,158 @@
-Return-Path: <linux-edac+bounces-4116-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4117-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 991FEAD6D79
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Jun 2025 12:20:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2B92AD6EA6
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Jun 2025 13:11:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A50311888C9F
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Jun 2025 10:19:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E04A7AD54F
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Jun 2025 11:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D88230269;
-	Thu, 12 Jun 2025 10:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8888023C8AE;
+	Thu, 12 Jun 2025 11:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oj14FmZw";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oj14FmZw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q45cTnMW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801AD22423F
-	for <linux-edac@vger.kernel.org>; Thu, 12 Jun 2025 10:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E3E23C4E1;
+	Thu, 12 Jun 2025 11:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749723556; cv=none; b=uQqrdNaTQm/8Y3WgQz2ZtCJ4xcYt/Di49jIx/IOw0yPOExIO6wXYKBEKvL6vkVQUJuemJyK0HiBGbDs/Sm4FKWbXCUHW5ZvEBk7BFNwrxqiARJCNn4WM/cJMGeZam+h2XGpuLGbzuyD1c7/90+pP72D6qBgLh4ii/u5DpUR+di8=
+	t=1749726655; cv=none; b=Do720y++mDgQKCZ20h1viCijBWY/f1oeuJ4NFTysjspgSHBhkoVnu8dQgUE5cTo9UGnzc9+kMPpQCzEvOOyAT2NCQ+H3RqC35/bAAmQyXBucsWfvsAC1pJPZAea4bu0s59JYryaagMfeqHTHK79LZqOvahC6MrMd5eGCe1ebv38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749723556; c=relaxed/simple;
-	bh=mdhllsYptJzWpWRaCohWre8At5dUtUcWHkcMPixG5dA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u8HFxaQfurCeqLNo94LgC0xSXHR+BctcnsOLhhWM+hP5SeqRBfFYCGLmHEZW+xhmmwMlAa7IjcrKLZLpuTWfy/LQVQ7fr4zjJloPfM/TOmvdg5iAU7WCXREFpaXdcyz5kdvl/Ju7L5cUCGSKu7pXeFd2J3n84TBW+XzVVh37oGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oj14FmZw; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oj14FmZw; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A2FFF21744;
-	Thu, 12 Jun 2025 10:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1749723551; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=mdhllsYptJzWpWRaCohWre8At5dUtUcWHkcMPixG5dA=;
-	b=oj14FmZwawggQFz/mpwdPbpGxwCSq2yPj3hGSfoo0OU/wstTt5Fn2/rZHE96f+GGsfXZNz
-	ExJsQpevYaVkROYm3SA5qZq8slxwMNs6Ubm+g7AedPOk6tq42b2faUsAZONoDMO7D7SwIf
-	2igyxskJsSksCKMTFbKdg8mOB2yntgw=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1749723551; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=mdhllsYptJzWpWRaCohWre8At5dUtUcWHkcMPixG5dA=;
-	b=oj14FmZwawggQFz/mpwdPbpGxwCSq2yPj3hGSfoo0OU/wstTt5Fn2/rZHE96f+GGsfXZNz
-	ExJsQpevYaVkROYm3SA5qZq8slxwMNs6Ubm+g7AedPOk6tq42b2faUsAZONoDMO7D7SwIf
-	2igyxskJsSksCKMTFbKdg8mOB2yntgw=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E1D23132D8;
-	Thu, 12 Jun 2025 10:19:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qsicNZ2pSmglUAAAD6G6ig
-	(envelope-from <jgross@suse.com>); Thu, 12 Jun 2025 10:19:09 +0000
-Message-ID: <84b14425-03e4-42be-8bd5-9bc010ebecda@suse.com>
-Date: Thu, 12 Jun 2025 12:19:09 +0200
+	s=arc-20240116; t=1749726655; c=relaxed/simple;
+	bh=9nBrpMK9zZeZHFNOhk7Yg3FOCL/mJbGGTtA0TEp4ISs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mWipY7Gj1P0iBai63NVgsByk91TsHi3hYpXJZerApVI/slihpJZFoz8eyzwkllL4GDiw2YUau9gDhutn1otE/YQF+kpKFtK3NnGMsm4bxOAFE9FpAPkmxqhvkHt3vstTmu4XYoB1uDdPj1C1AyVnTghYMD1e+Gv5vNAa6gUZE3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q45cTnMW; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-acae7e7587dso124691366b.2;
+        Thu, 12 Jun 2025 04:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749726652; x=1750331452; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9nBrpMK9zZeZHFNOhk7Yg3FOCL/mJbGGTtA0TEp4ISs=;
+        b=Q45cTnMW6M14BzyHymT7nYYg4t6x9BGdEF9ruN7/wgYyxXo4Tlylon5otQ4YZQ2Sc9
+         g/fsr0NtQvk/Etw0ossoeTHN5Cfeae/FY77K+/hghcbUHaHmOpEZQ0QfIC54ELk89me5
+         EBgOWoQq1e94sLb+w6ZhJiPIJqPQkeOe2ZawGAVkKUk0u4IwUvzbs9mvTc+zgI2EEhWV
+         PGOLGYDT83nHRbq8q1GqlAQnlaQHiOD0LpzhRwXdqYNIxtoKrSayGXBNK5OhJr55b+79
+         SORsFrLhL182smO44kfOdktCOFsoScdh5f38OKEwjH75O4ojvNwuU8hPnzj5H/SmbNCv
+         +Lzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749726652; x=1750331452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9nBrpMK9zZeZHFNOhk7Yg3FOCL/mJbGGTtA0TEp4ISs=;
+        b=bELuWToe0XVxZWlrcTkxavKMdL0MFQyUjScPQ1pg91aQZL3zKvLiKgFqlbm3+4a8As
+         WeWXlDIxcqIYIt7UIwIfJ4B+l4C7xmJfKkXq7/R9nUKU35ssrOtVuWMvppQr+Y7Kc2vl
+         LekwDtI4vlxtGg3GiOG6va7TloeGu0AdznSLOpwZmokfv75bkcaYqsyntWk/gLLmripo
+         jt7dx/p7akRQ0gtX32vSWTFgPxbc7n3pGyRA2WV16f3LOxczeMCBqQUucufUt+aImDS7
+         xzWa3bH/CDMc36uZQE0bHPB8bxlhhcTgOPAUl1lEVJH6d2NwPXMlAxtcU/OPL1lhVEN6
+         8PIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUN2/qpgkwIG246rcWkdFL5deXpx4GCN5qxQHhk/07t20elpOKE8gUso5+yE9DhYTCPKi4BFhMq/DXHWPth@vger.kernel.org, AJvYcCV1GKG+kHsF4n5I2gK90GR6LiYWn39EDXUZekx03xJIV+baxXMprxX07VyobFgCznO7uig=@vger.kernel.org, AJvYcCWGXzs+dFV2GyY3E0yV4zOWR3G/TNaMtqKUrNIbBXAbtI9I4JaH2vctoLgJHUPJ8bJjDZQJjH1x+9vM@vger.kernel.org, AJvYcCXSYtdOMlxqqKl+ZVGHFrfEJMLiTQIJYazh/Sq3vNSVy3mWobMC1QYakv0t0nNK5FNRjpYI7/n4L3Stpw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YymOdIutmqtabbKfGQiOrdoLCxolZvrE2ld2Lu2LUmXMj4EJNnq
+	mgNOgbSXzNv39WSD4TMmcwQNCr/4XXJs6d+MkM/SpCFOi5QahQNg0UwKGPfawZ2NuQo4410N3Qs
+	e8tDPI9zf5RIqEf3d+DfzkPDQS3OFJNc=
+X-Gm-Gg: ASbGnctdy4c7+GN+CO8Gy5mG3BMWkNtkjy46cni4wnAOoGi24oqYfju6gBuEE8HP08p
+	F/ED+LuyHg4gSAu8nQCI+1QmdWBnbjUjg11kHRS55rvWoMR/lxcTYncc4W1IheVbCGoFt1ubotK
+	A/n6e3KmxH90wx0rffNSE2FztOtajAOHWPMTyR8bEwrtc=
+X-Google-Smtp-Source: AGHT+IFrX17XfYVkjVnepz8BihCrbdN9elHb1a1FwyoMbX0yLjH2EltV5lWsECJ7oLshTrIE21PMDORFUypei4zXNLs=
+X-Received: by 2002:a17:907:980f:b0:ad8:a515:767f with SMTP id
+ a640c23a62f3a-adea9464061mr258576566b.51.1749726651742; Thu, 12 Jun 2025
+ 04:10:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20250612093228.7655-1-chengzhenghan@uniontech.com> <84b14425-03e4-42be-8bd5-9bc010ebecda@suse.com>
+In-Reply-To: <84b14425-03e4-42be-8bd5-9bc010ebecda@suse.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 12 Jun 2025 14:10:15 +0300
+X-Gm-Features: AX0GCFubP_i495cQIkoSGfjK4G9pwjz7TYfQyvgZfj4JA8pwuaopIL7tecp4u7I
+Message-ID: <CAHp75Vc7AO_sRgB1Nj6CevbseMFyv5ku8ZS3PwzAuAgysKVxNg@mail.gmail.com>
 Subject: Re: [PATCH] x86: Fix build warnings about export.h
-To: Zhenghan Cheng <chengzhenghan@uniontech.com>, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- mario.limonciello@amd.com, yazen.ghannam@amd.com, jpoimboe@kernel.org,
- tony.luck@intel.com, jarkko@kernel.org, bhelgaas@google.com,
- pbonzini@redhat.com, oleg@redhat.com, jbaron@akamai.com, ning.sun@intel.com,
- seanjc@google.com, luto@kernel.org, andy@kernel.org, jim.cromie@gmail.com,
- kirill.shutemov@linux.intel.com
-Cc: hpa@zytor.com, pawan.kumar.gupta@linux.intel.com, vkuznets@redhat.com,
- rostedt@goodmis.org, ardb@kernel.org, thomas.lendacky@amd.com,
- nikunj@amd.com, ashish.kalra@amd.com, kees@kernel.org,
- alexandre.chartre@oracle.com, rppt@kernel.org, steve.wahl@hpe.com,
- jirislaby@kernel.org, apatel@ventanamicro.com, bvanassche@acm.org,
- ptsm@linux.microsoft.com, Jonathan.Cameron@huawei.com,
- beata.michalska@arm.com, xin@zytor.com, davydov-max@yandex-team.ru,
- ravi.bangoria@amd.com, joel.granados@kernel.org, ffmancera@riseup.net,
- kprateek.nayak@amd.com, akpm@linux-foundation.org, bhe@redhat.com,
- brgerst@gmail.com, coxu@redhat.com, dmaluka@chromium.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-sgx@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux.dev, tboot-devel@lists.sourceforge.net,
- nouveau@lists.freedesktop.org, linux-coco@lists.linux.dev,
- xen-devel@lists.xenproject.org, Huacai Chen <chenhuacai@loongson.cn>,
- Zhenghan Cheng <your_email@example.com>
-References: <20250612093228.7655-1-chengzhenghan@uniontech.com>
-Content-Language: en-US
-From: Juergen Gross <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <20250612093228.7655-1-chengzhenghan@uniontech.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------r5mQdgOt4Whh0CrWNE4SR5Wo"
-X-Spamd-Result: default: False [-3.70 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
-	NEURAL_HAM_SHORT(-0.20)[-0.976];
-	MIME_UNKNOWN(0.10)[application/pgp-keys];
-	MIME_BASE64_TEXT(0.10)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[uniontech.com,linutronix.de,redhat.com,alien8.de,linux.intel.com,kernel.org,amd.com,intel.com,google.com,akamai.com,gmail.com];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	MIME_TRACE(0.00)[0:+,1:+,2:+,3:+,4:~,5:~];
-	ARC_NA(0.00)[];
-	FREEMAIL_CC(0.00)[zytor.com,linux.intel.com,redhat.com,goodmis.org,kernel.org,amd.com,oracle.com,hpe.com,ventanamicro.com,acm.org,linux.microsoft.com,huawei.com,arm.com,yandex-team.ru,riseup.net,linux-foundation.org,gmail.com,chromium.org,vger.kernel.org,lists.linux.dev,lists.sourceforge.net,lists.freedesktop.org,lists.xenproject.org,loongson.cn,example.com];
-	HAS_ATTACHMENT(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[61];
-	TAGGED_RCPT(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -3.70
-
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------r5mQdgOt4Whh0CrWNE4SR5Wo
-Content-Type: multipart/mixed; boundary="------------K0XYKHlxFzsICF9SMBfAUlSE";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Zhenghan Cheng <chengzhenghan@uniontech.com>, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- mario.limonciello@amd.com, yazen.ghannam@amd.com, jpoimboe@kernel.org,
- tony.luck@intel.com, jarkko@kernel.org, bhelgaas@google.com,
- pbonzini@redhat.com, oleg@redhat.com, jbaron@akamai.com, ning.sun@intel.com,
- seanjc@google.com, luto@kernel.org, andy@kernel.org, jim.cromie@gmail.com,
- kirill.shutemov@linux.intel.com
-Cc: hpa@zytor.com, pawan.kumar.gupta@linux.intel.com, vkuznets@redhat.com,
- rostedt@goodmis.org, ardb@kernel.org, thomas.lendacky@amd.com,
- nikunj@amd.com, ashish.kalra@amd.com, kees@kernel.org,
- alexandre.chartre@oracle.com, rppt@kernel.org, steve.wahl@hpe.com,
- jirislaby@kernel.org, apatel@ventanamicro.com, bvanassche@acm.org,
- ptsm@linux.microsoft.com, Jonathan.Cameron@huawei.com,
- beata.michalska@arm.com, xin@zytor.com, davydov-max@yandex-team.ru,
- ravi.bangoria@amd.com, joel.granados@kernel.org, ffmancera@riseup.net,
- kprateek.nayak@amd.com, akpm@linux-foundation.org, bhe@redhat.com,
- brgerst@gmail.com, coxu@redhat.com, dmaluka@chromium.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-sgx@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux.dev, tboot-devel@lists.sourceforge.net,
- nouveau@lists.freedesktop.org, linux-coco@lists.linux.dev,
- xen-devel@lists.xenproject.org, Huacai Chen <chenhuacai@loongson.cn>,
- Zhenghan Cheng <your_email@example.com>
-Message-ID: <84b14425-03e4-42be-8bd5-9bc010ebecda@suse.com>
-Subject: Re: [PATCH] x86: Fix build warnings about export.h
-References: <20250612093228.7655-1-chengzhenghan@uniontech.com>
-In-Reply-To: <20250612093228.7655-1-chengzhenghan@uniontech.com>
-
---------------K0XYKHlxFzsICF9SMBfAUlSE
-Content-Type: multipart/mixed; boundary="------------nwabp6M47v7PnA12GBXmtNk0"
-
---------------nwabp6M47v7PnA12GBXmtNk0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMTIuMDYuMjUgMTE6MzIsIFpoZW5naGFuIENoZW5nIHdyb3RlOg0KPiBBZnRlciBjb21t
-aXQgYTkzNGE1N2E0MmY2NGE0ICgic2NyaXB0cy9taXNjLWNoZWNrOg0KPiBjaGVjayBtaXNz
-aW5nICNpbmNsdWRlIDxsaW51eC9leHBvcnQuaD4gd2hlbiBXPTEiKQ0KPiBhbmQgY29tbWl0
-IDdkOTU2ODBkNjRhYzhlODM2YyAoInNjcmlwdHMvbWlzYy1jaGVjazoNCj4gY2hlY2sgdW5u
-ZWNlc3NhcnkgI2luY2x1ZGUgPGxpbnV4L2V4cG9ydC5oPiB3aGVuIFc9MSIpLA0KPiB3ZSBn
-ZXQgc29tZSBidWlsZCB3YXJuaW5ncyB3aXRoIFc9MSxzdWNoIGFzOg0KPiANCj4gYXJjaC94
-ODYvY29jby9zZXYvY29yZS5jOiB3YXJuaW5nOiBFWFBPUlRfU1lNQk9MKCkgaXMgdXNlZCwg
-YnV0ICNpbmNsdWRlIDxsaW51eC9leHBvcnQuaD4gaXMgbWlzc2luZw0KPiBhcmNoL3g4Ni9j
-cnlwdG8vYXJpYV9hZXNuaV9hdngyX2dsdWUuYzogd2FybmluZzogRVhQT1JUX1NZTUJPTCgp
-IGlzIHVzZWQsIGJ1dCAjaW5jbHVkZSA8bGludXgvZXhwb3J0Lmg+IGlzIG1pc3NpbmcNCj4g
-YXJjaC94ODYva2VybmVsL3Vud2luZF9vcmMuYzogd2FybmluZzogRVhQT1JUX1NZTUJPTCgp
-IGlzIHVzZWQsIGJ1dCAjaW5jbHVkZSA8bGludXgvZXhwb3J0Lmg+IGlzIG1pc3NpbmcNCj4g
-YXJjaC94ODYva3ZtL2h5cGVydi5jOiB3YXJuaW5nOiBFWFBPUlRfU1lNQk9MKCkgaXMgdXNl
-ZCwgYnV0ICNpbmNsdWRlIDxsaW51eC9leHBvcnQuaD4gaXMgbWlzc2luZw0KPiBhcmNoL3g4
-Ni9ldmVudHMvaW50ZWwvY29yZS5jOiB3YXJuaW5nOiBFWFBPUlRfU1lNQk9MKCkgaXMgbm90
-IHVzZWQsIGJ1dCAjaW5jbHVkZSA8bGludXgvZXhwb3J0Lmg+IGlzIHByZXNlbnQNCj4gYXJj
-aC94ODYvZXZlbnRzL3poYW94aW4vY29yZS5jOiB3YXJuaW5nOiBFWFBPUlRfU1lNQk9MKCkg
-aXMgbm90IHVzZWQsIGJ1dCAjaW5jbHVkZSA8bGludXgvZXhwb3J0Lmg+IGlzIHByZXNlbnQN
-Cj4gYXJjaC94ODYva2VybmVsL2NyYXNoLmM6IHdhcm5pbmc6IEVYUE9SVF9TWU1CT0woKSBp
-cyBub3QgdXNlZCwgYnV0ICNpbmNsdWRlIDxsaW51eC9leHBvcnQuaD4gaXMgcHJlc2VudA0K
-PiBhcmNoL3g4Ni9rZXJuZWwvZGV2aWNldHJlZS5jOiB3YXJuaW5nOiBFWFBPUlRfU1lNQk9M
-KCkgaXMgbm90IHVzZWQsIGJ1dCAjaW5jbHVkZSA8bGludXgvZXhwb3J0Lmg+IGlzIHByZXNl
-bnQNCj4gDQo+IHNvIGZpeCB0aGVzZSBidWlsZCB3YXJuaW5ncyBmb3IgeDg2Lg0KPiANCj4g
-U2lnbmVkLW9mZi1ieTogIlpoZW5naGFuIENoZW5nIiA8Y2hlbmd6aGVuZ2hhbkB1bmlvbnRl
-Y2guY29tPg0KPiBTdWdnZXN0ZWQtYnk6ICJIdWFjYWkgQ2hlbiIgPGNoZW5odWFjYWlAbG9v
-bmdzb24uY24+DQoNCkZvciBYZW4gYW5kIHBhcmF2aXJ0Og0KDQpBY2tlZC1ieTogSnVlcmdl
-biBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KDQpZb3VyIHBhdGNoIGlzIGxvb2tpbmcgYSBs
-aXR0bGUgYml0IHN0cmFuZ2UsIGFzIHRoZSBsaXN0IG9mIG1vZGlmaWVkIGZpbGVzDQppcyBs
-b2NhdGVkIGJldHdlZW4gdGhlIHBhdGNoIGh1bmtzLCBmb2xsb3dlZCBieSBhbm90aGVyICJT
-aWduZWQtb2ZmLWJ5OiIuDQoNCg0KSnVlcmdlbg0K
---------------nwabp6M47v7PnA12GBXmtNk0
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
+To: Juergen Gross <jgross@suse.com>
+Cc: Zhenghan Cheng <chengzhenghan@uniontech.com>, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
+	mario.limonciello@amd.com, yazen.ghannam@amd.com, jpoimboe@kernel.org, 
+	tony.luck@intel.com, jarkko@kernel.org, bhelgaas@google.com, 
+	pbonzini@redhat.com, oleg@redhat.com, jbaron@akamai.com, ning.sun@intel.com, 
+	seanjc@google.com, luto@kernel.org, andy@kernel.org, jim.cromie@gmail.com, 
+	kirill.shutemov@linux.intel.com, hpa@zytor.com, 
+	pawan.kumar.gupta@linux.intel.com, vkuznets@redhat.com, rostedt@goodmis.org, 
+	ardb@kernel.org, thomas.lendacky@amd.com, nikunj@amd.com, 
+	ashish.kalra@amd.com, kees@kernel.org, alexandre.chartre@oracle.com, 
+	rppt@kernel.org, steve.wahl@hpe.com, jirislaby@kernel.org, 
+	apatel@ventanamicro.com, bvanassche@acm.org, ptsm@linux.microsoft.com, 
+	Jonathan.Cameron@huawei.com, beata.michalska@arm.com, xin@zytor.com, 
+	davydov-max@yandex-team.ru, ravi.bangoria@amd.com, joel.granados@kernel.org, 
+	ffmancera@riseup.net, kprateek.nayak@amd.com, akpm@linux-foundation.org, 
+	bhe@redhat.com, brgerst@gmail.com, coxu@redhat.com, dmaluka@chromium.org, 
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org, 
+	linux-sgx@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux.dev, tboot-devel@lists.sourceforge.net, 
+	nouveau@lists.freedesktop.org, linux-coco@lists.linux.dev, 
+	xen-devel@lists.xenproject.org, Huacai Chen <chenhuacai@loongson.cn>, 
+	Zhenghan Cheng <your_email@example.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+On Thu, Jun 12, 2025 at 1:19=E2=80=AFPM Juergen Gross <jgross@suse.com> wro=
+te:
+>
+> On 12.06.25 11:32, Zhenghan Cheng wrote:
+> > After commit a934a57a42f64a4 ("scripts/misc-check:
+> > check missing #include <linux/export.h> when W=3D1")
+> > and commit 7d95680d64ac8e836c ("scripts/misc-check:
+> > check unnecessary #include <linux/export.h> when W=3D1"),
+> > we get some build warnings with W=3D1,such as:
+> >
+> > arch/x86/coco/sev/core.c: warning: EXPORT_SYMBOL() is used, but #includ=
+e <linux/export.h> is missing
+> > arch/x86/crypto/aria_aesni_avx2_glue.c: warning: EXPORT_SYMBOL() is use=
+d, but #include <linux/export.h> is missing
+> > arch/x86/kernel/unwind_orc.c: warning: EXPORT_SYMBOL() is used, but #in=
+clude <linux/export.h> is missing
+> > arch/x86/kvm/hyperv.c: warning: EXPORT_SYMBOL() is used, but #include <=
+linux/export.h> is missing
+> > arch/x86/events/intel/core.c: warning: EXPORT_SYMBOL() is not used, but=
+ #include <linux/export.h> is present
+> > arch/x86/events/zhaoxin/core.c: warning: EXPORT_SYMBOL() is not used, b=
+ut #include <linux/export.h> is present
+> > arch/x86/kernel/crash.c: warning: EXPORT_SYMBOL() is not used, but #inc=
+lude <linux/export.h> is present
+> > arch/x86/kernel/devicetree.c: warning: EXPORT_SYMBOL() is not used, but=
+ #include <linux/export.h> is present
+> >
+> > so fix these build warnings for x86.
+> >
+> > Signed-off-by: "Zhenghan Cheng" <chengzhenghan@uniontech.com>
+> > Suggested-by: "Huacai Chen" <chenhuacai@loongson.cn>
+>
+> For Xen and paravirt:
+>
+> Acked-by: Juergen Gross <jgross@suse.com>
+>
+> Your patch is looking a little bit strange, as the list of modified files
+> is located between the patch hunks, followed by another "Signed-off-by:".
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+Indeed.
+And at bare minimum please split at least to two:
+1) adding export.h;
+2) removing export.h.
 
---------------nwabp6M47v7PnA12GBXmtNk0--
 
---------------K0XYKHlxFzsICF9SMBfAUlSE--
-
---------------r5mQdgOt4Whh0CrWNE4SR5Wo
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmhKqZ0FAwAAAAAACgkQsN6d1ii/Ey9X
-VQf/R7PwyvgEHQL+aCN+trwA+f6BOxwLSPkJMa068wO/uqFIQUIrHnSm8vuItp8K4TbRoujnCAmD
-qc6aLD0w2pHhHkmvJEUFNDGKVeqlukRm3AyTCVbqN1RMw7Nd+hcM8yJv1P6hxJznNVTeuamYww6n
-jrWmU9VBqFABUMVuH42in3ngALypAG9sx3Sm05R0vn6DAV+GI3mrnpKCTF1ONoMcXQBPJEohtgLC
-f0LvToJeeeHnNhc6c20AIKOrxbdMXjosMfS2hDhX3tTDPm9LELql34Z7n1nGuloLqgbq2/590hw6
-4PZuTMy6Qxf5Pw92YW24Jc6NEWR5myQo2FWARFNaMw==
-=FXNZ
------END PGP SIGNATURE-----
-
---------------r5mQdgOt4Whh0CrWNE4SR5Wo--
+--=20
+With Best Regards,
+Andy Shevchenko
 
