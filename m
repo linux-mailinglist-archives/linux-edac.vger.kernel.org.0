@@ -1,115 +1,177 @@
-Return-Path: <linux-edac+bounces-4153-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4154-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B7FCADD0B7
-	for <lists+linux-edac@lfdr.de>; Tue, 17 Jun 2025 16:58:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77B25ADD614
+	for <lists+linux-edac@lfdr.de>; Tue, 17 Jun 2025 18:30:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2091E1892F08
-	for <lists+linux-edac@lfdr.de>; Tue, 17 Jun 2025 14:52:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C8A340512D
+	for <lists+linux-edac@lfdr.de>; Tue, 17 Jun 2025 16:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13F8220F58;
-	Tue, 17 Jun 2025 14:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="U6NqjxsW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EABE2F5461;
+	Tue, 17 Jun 2025 16:14:50 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BE021B195;
-	Tue, 17 Jun 2025 14:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3497F2ECEAE;
+	Tue, 17 Jun 2025 16:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750171930; cv=none; b=JRe1vZuJw0BUFUi4HxxqUat1WO2cgDeyJkVvigr4Qx0XWU4Ox43EqpBwy0wmu52w7tfiYQQMQZiGjTmdDdVrPZ+YeQWGVZ93tG5TtPb+vDf2MTuPdwzhAXR43WbkcWsl/VTGm9J1vhrkGs3EelfIlpAY1ORtIwqOBuP/Yta5KSI=
+	t=1750176890; cv=none; b=iXTTsAkYTu9p5b6e1KtYzv6m6GQuWtVodcYF8fbqKucKdm8EG74/5k4EGKoNyGw+KbpjkfEI8wXU+lV0drR8b/I/qEq7QlRHlX74/0+nQPji/y8TWe50ugukVnx723Qfu2EfxQMdChfz4sP3n2W5zpa60n+pyq1tXEO2IFOZfjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750171930; c=relaxed/simple;
-	bh=VsX4BK5co1HC6Jug9KwYzKm9GLrnoOFDIzHije9R4O8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=STKqEQ5M/j+5OL7XAznkB+y0WZ8XkUCRZQU83txTF6f9MsCXiVh/L9ifomJ7L4MAnGvs0qmd1Cnl3AXNeg8RZoDBfAptoXtWXiDxn3MfkQx0+oiQp9uIn1ymINRytjiai1pFqy7c3QkdDAmsrRikaRAfMj4MkABYVJWdEBgpM0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=U6NqjxsW reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 68E2940E00DD;
-	Tue, 17 Jun 2025 14:52:06 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id iZ_vovgaj2_k; Tue, 17 Jun 2025 14:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1750171921; bh=4ml0rmeUNs5rZ2x1hKl+QU0ujpUUnFpHGuedE0DaH8k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U6NqjxsWEin738TaCub5Tc3fq7XrJ5LUDAkq2tZnvXgmvLYSHq6xzcnTUrKgaDeu1
-	 j/Bat/c/ugqL7rC42R9az7KmQSRhtFm6sBcTu2dcLWfT7bJS7S9aAKQWwk0BEi50KX
-	 LF/ds1jSTw43y8lj7q9EhD5r2tN/VjcuAT+lTDFNJLaMACvss3KJC134yLOv+3v4vb
-	 wCtnlUFlGT0lnAnRYQ7v/PCA5WCNINhifVBpdTsj5CwwyWUPOolNDhONLDkukrMA1g
-	 p1sfa6C8Y3EJYnK/Zt3fFSB6qjYJNVU8oh4lJbpDWjibe0wyzO9RZTjLNIan5kSr03
-	 0Uv55UFkTSptMSJU6IgddQucjIHO2UzYAArv7juyr/zhLU6rDC9TLzy1y+VP9U/USq
-	 I0bdO4kyzJtcRsuNo5kASjoQwt2q3s+Cnn97W0qQr/kJa2En2g/pZ0dntLLrlyKqpy
-	 x0NtFrsBSSMN3qyDn3Jz0tPpjYKW8xWHi29xLaaZ+prbjbjAB5NaeZt2jxkuX7rY5k
-	 mI0lJjcwNul2UpkZUZEDquEodKcTOpGOdMkgyan5pCMHelUKYnboXLlYeUJUt4pj4L
-	 maFXELW3QzMdJRIQuxXXTC65NNqzHsDAx62dOy+n2PBQaAaDbILjpfCSU7KvWiUIVM
-	 yl37K8OpWsPARZdDtspXT/F0=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 829DC40E00CE;
-	Tue, 17 Jun 2025 14:51:56 +0000 (UTC)
-Date: Tue, 17 Jun 2025 16:51:50 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-Cc: "Luck, Tony" <tony.luck@intel.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	"open list:EDAC-IGEN6" <linux-edac@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: NULL pointer dereference in igen6_probe - 6.16-rc2
-Message-ID: <20250617145150.GCaFGBBvUvkrtpO9j_@fat_crate.local>
-References: <aFFN7RlXkaK_loQb@mail-itl>
- <20250617115707.GBaFFYE61vYHNuAkxR@fat_crate.local>
- <CY8PR11MB71345FDE3DF74BAF97B563F08973A@CY8PR11MB7134.namprd11.prod.outlook.com>
+	s=arc-20240116; t=1750176890; c=relaxed/simple;
+	bh=47wscfejyd2QJiq8VCYisbzVnf2p/uCd0EK6St/PPgg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GfuuLgyt5GCxOGSaCAKKijHoEqPJQFypBTl/7kPDA9h9OhtGvv4uPkjOiZVANcPCEZSJwgaOFg6Slo5fsBsGcGaqXFTgK/L4zEsZn3a4IVCVSajEjEDNze4OaPs/TStb4/ZbGMkOQvl/6XaZR3qIrwNisTFe1ZfSCAa721UrTFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bMBjF4JHPz6L5Vg;
+	Wed, 18 Jun 2025 00:12:33 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id 176261404C4;
+	Wed, 18 Jun 2025 00:14:44 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.157.40) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 17 Jun 2025 18:14:42 +0200
+From: <shiju.jose@huawei.com>
+To: <rafael@kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-doc@vger.kernel.org>, <bp@alien8.de>,
+	<tony.luck@intel.com>, <lenb@kernel.org>, <leo.duran@amd.com>,
+	<Yazen.Ghannam@amd.com>, <mchehab@kernel.org>
+CC: <jonathan.cameron@huawei.com>, <linux-mm@kvack.org>,
+	<linuxarm@huawei.com>, <rientjes@google.com>, <jiaqiyan@google.com>,
+	<Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
+	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
+	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<dferguson@amperecomputing.com>, <wbs@os.amperecomputing.com>,
+	<nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>,
+	<roberto.sassu@huawei.com>, <kangkang.shen@futurewei.com>,
+	<wanghuiqiang@huawei.com>, <shiju.jose@huawei.com>
+Subject: [PATCH v9 0/2] ACPI: Add support for ACPI RAS2 feature table
+Date: Tue, 17 Jun 2025 17:14:14 +0100
+Message-ID: <20250617161417.1681-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CY8PR11MB71345FDE3DF74BAF97B563F08973A@CY8PR11MB7134.namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500009.china.huawei.com (7.191.174.84) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
-On Tue, Jun 17, 2025 at 02:09:42PM +0000, Zhuo, Qiuxu wrote:
-> In the 10nm_edac driver for Intel Xeon server, 'cfg' is non-const, and =
-the field
-> 'cfg->ddr_imc_num' [1] is overwritten with the number of detected DDR m=
-emory
-> controllers at runtime.
->=20
-> Reverting 'cfg' in this igen6_edac driver to non-const, allowing it to =
-be set
-> with the actual number of detected memory controllers seems reasonable.
+From: Shiju Jose <shiju.jose@huawei.com>
 
-Question is: is that something the driver should allow? Detecting more me=
-mory
-controllers but enabling less. How can that even happen?
+Add support for ACPI RAS2 feature table (RAS2) defined in the
+ACPI 6.5 specification, section 5.2.21 and RAS2 HW based memory
+scrubbing feature.
 
-> After that then applying Boris' fix above is the simplest way to resolv=
-e the=20
-> issue. =F0=9F=98=8A
+ACPI RAS2 patches were part of the EDAC series [1].
 
-Right, just prepare a proper patch, please, so that Marek can test and
-confirm.
+The code is based on linux.git v6.16-rc2 [2].
 
-Thx.
+1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
+2. https://github.com/torvalds/linux.git
 
---=20
-Regards/Gruss,
-    Boris.
+Changes
+=======
+v8 -> v9:
+1. Added following changes for feedback from Yazen.
+ 1.1 In ras2_check_pcc_chan(..) function
+    - u32 variables moved to the same line.
+    - Updated error log for readw_relaxed_poll_timeout()
+    - Added error log for if (status & PCC_STATUS_ERROR), error condition.
+    - Removed an impossible condition check.
+  1.2. Added guard for ras2_pc_list_lock in ras2_get_pcc_subspace().
+        
+2. Rebased to linux.git v6.16-rc2 [2].
 
-https://people.kernel.org/tglx/notes-about-netiquette
+v7 -> v8:
+1. Rebased to linux.git v6.16-rc1 [2].
+
+v6 -> v7:
+1. Fix for the issue reported by Daniel,
+   In ras2_check_pcc_chan(), add read, clear and check RAS2 set_cap_status outside
+   if (status & PCC_STATUS_ERROR) check. 
+   https://lore.kernel.org/all/51bcb52c-4132-4daf-8903-29b121c485a1@os.amperecomputing.com/
+
+v5 -> v6:
+1. Fix for the issue reported by Daniel, in start scrubbing with correct addr and size
+   after firmware return INVALID DATA error for scrub request with invalid addr or size.
+   https://lore.kernel.org/all/8cdf7885-31b3-4308-8a7c-f4e427486429@os.amperecomputing.com/
+   
+v4 -> v5:
+1. Fix for the build warnings reported by kernel test robot.
+   https://patchwork.kernel.org/project/linux-edac/patch/20250423163511.1412-3-shiju.jose@huawei.com/
+2. Removed patch "ACPI: ACPI 6.5: RAS2: Rename RAS2 table structure and field names"
+   from the series as the patch was merged to linux-pm.git : branch linux-next
+3. Rebased to ras.git: edac-for-next branch merged with linux-pm.git : linux-next branch.
+      
+v3 -> v4:
+1.  Changes for feedbacks from Yazen on v3.
+    https://lore.kernel.org/all/20250415210504.GA854098@yaz-khff2.amd.com/
+
+v2 -> v3:
+1. Rename RAS2 table structure and field names in 
+   include/acpi/actbl2.h limited to only necessary
+   for RAS2 scrub feature.
+2. Changes for feedbacks from Jonathan on v2.
+3. Daniel reported a known behaviour: when readback 'size' attribute after
+   setting in, returns 0 before starting scrubbing via 'addr' attribute.
+   Changes added to fix this.
+4. Daniel reported that firmware cannot update status of demand scrubbing
+   via the 'Actual Address Range (OUTPUT)', thus add workaround in the
+   kernel to update sysfs 'addr' attribute with the status of demand
+   scrubbing.
+5. Optimized logic in ras2_check_pcc_chan() function
+   (patch - ACPI:RAS2: Add ACPI RAS2 driver).
+6. Add PCC channel lock to struct ras2_pcc_subspace and change
+   lock in ras2_mem_ctx as a pointer to pcc channel lock to make sure
+   writing to PCC subspace shared memory is protected from race conditions.
+   
+v1 -> v2:
+1.  Changes for feedbacks from Borislav.
+    - Shorten ACPI RAS2 structures and variables names.
+    - Shorten some of the other variables in the RAS2 drivers.
+    - Fixed few CamelCases.
+
+2.  Changes for feedbacks from Yazen.
+    - Added newline after number of '}' and return statements.
+    - Changed return type for "ras2_add_aux_device() to 'int'.
+    - Deleted a duplication of acpi_get_table("RAS2",...) in the ras2_acpi_parse_table().
+    - Add "FW_WARN" to few error logs in the ras2_acpi_parse_table().
+    - Rename ras2_acpi_init() to acpi_ras2_init() and modified to call acpi_ras2_init()
+      function from the acpi_init().
+    - Moved scrub related variables from the struct ras2_mem_ctx from  patch
+      "ACPI:RAS2: Add ACPI RAS2 driver" to "ras: mem: Add memory ACPI RAS2 driver".
+
+Shiju Jose (2):
+  ACPI:RAS2: Add ACPI RAS2 driver
+  ras: mem: Add memory ACPI RAS2 driver
+
+ Documentation/edac/scrub.rst |  73 ++++++
+ drivers/acpi/Kconfig         |  11 +
+ drivers/acpi/Makefile        |   1 +
+ drivers/acpi/bus.c           |   3 +
+ drivers/acpi/ras2.c          | 450 +++++++++++++++++++++++++++++++++++
+ drivers/ras/Kconfig          |  11 +
+ drivers/ras/Makefile         |   1 +
+ drivers/ras/acpi_ras2.c      | 424 +++++++++++++++++++++++++++++++++
+ include/acpi/ras2.h          |  70 ++++++
+ 9 files changed, 1044 insertions(+)
+ create mode 100644 drivers/acpi/ras2.c
+ create mode 100644 drivers/ras/acpi_ras2.c
+ create mode 100644 include/acpi/ras2.h
+
+-- 
+2.43.0
+
 
