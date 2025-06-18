@@ -1,232 +1,235 @@
-Return-Path: <linux-edac+bounces-4173-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4174-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CBDEADF19B
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 17:43:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5B1ADF283
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 18:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97B081882697
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 15:43:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3588C4A1687
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 16:24:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7532EF9BD;
-	Wed, 18 Jun 2025 15:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760762EE5ED;
+	Wed, 18 Jun 2025 16:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fcUSWCfz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Arj9sbtc"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DAA2E7168;
-	Wed, 18 Jun 2025 15:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750261377; cv=fail; b=KT01W+PMWLbGy7hvjg+VqbnFsCCoZRvHeczToQiB2ZRS9mws/Uw/bydk2akqq/+TdYzpujHKNtJtv8M7Rv1D7Qpo6ItRyiM0KOAXLxyb3DPBHZw6elJ6Vs2LfZhUmhZZtdzOpus4q4yNiLcYyJuWXGIvjZp4wVbnE9uEwyq9vcA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750261377; c=relaxed/simple;
-	bh=AANZQ+hsfRAJWUNWQsSsvYl10Xe2oouzyAbMJ8M+n4w=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=lSFme4C7i2a0qfXe14bv9RhWJQjnUlK/AbTHtsWjo8uWl1QywBvoJ+7T/m/0bfJC2Agl5HotVTuXv4apNvtL8BtTeZd8g3eUeJeBmRttm7hR6P/5CUBv6fMQN8PI3uNS5VPZewTcSV2FXgOqxDm2TSPVKqKWsrLGCiemyPH81Q4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fcUSWCfz; arc=fail smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C301C861F;
+	Wed, 18 Jun 2025 16:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750263853; cv=none; b=pb8avVzcBzWIYTZNtX6RSXs5TJ505aSnBbEJ3gjpMKK+gv1CiO9Rss4J/IeR+uMzzfaAf65ehIBw9jTYzcG1p9WIXFx6bN5wcGPn75xoVZs3VplbDrlFuNjrbyIU9gvX4MvVvL5xlmOyXm5ouOW1tiYU1r4+Dn/G7ETVrekxIiM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750263853; c=relaxed/simple;
+	bh=LpnXSIsmxA1FuFrogSoh7zOoT8duqsFyTMNTWWi5Z+Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Cw1yoFHSueedLBWATQZiKv3GBnime8ZNLYVpZRWE0m4mTk4mZVmPQdF0drgji4FUVzGlwk/+psXUaDzjOyD6kUWysUbT0nnpzSZ4yAT59XZmfFzVZ73MzsVx2NRxPxIcz5KmLfq4MpIffjEehspjNXCwzbvMzgVu1wy4FrkBwXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Arj9sbtc; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750261375; x=1781797375;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=AANZQ+hsfRAJWUNWQsSsvYl10Xe2oouzyAbMJ8M+n4w=;
-  b=fcUSWCfzaN7P2TE7jIR9bpSpfVMkDHSRFTADzPj+tneh8UT7y8aG7t8m
-   7Mdat3wkod/v8bZopx0gPrES7jwsDgIdMEmxhK4fOyEvRnKs2Qw7WLBeU
-   GcK7v78cG7WoBE4rm7frzGWieFPZFoVrwYqy0a9xqkAoRlIfExmROyuaj
-   dAIdRt5T4KyYSj2sGWDIyDvHTkmRanRJCjj6dKrIgl1IzYYnNFZPb3/Gc
-   3YW9vedOM5VtsqNKr6Acdpl8YlkT2TFpPSotW7/F7zfMxq7ZYJTmWhjoa
-   jYm5Zp+umXWs0MO46n02w8ll0hOAoxHNeDMRd22JeRGK7DXY4AL3ScIbn
-   g==;
-X-CSE-ConnectionGUID: 4yEb//jZS5O7XU8px93VOg==
-X-CSE-MsgGUID: zjehBIKaQfStSodcThhgQg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="52462631"
+  t=1750263852; x=1781799852;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=LpnXSIsmxA1FuFrogSoh7zOoT8duqsFyTMNTWWi5Z+Y=;
+  b=Arj9sbtceeNVmMFqVd8f58AFBbn4wtZfjwfz5OKNQUJO+/mYVI+8CyS5
+   Q8jRr8gbEsIQJ9PN4QCVZVmOmCgKnEEZtM1UOSo6dG278JK1Cvjcb8lRh
+   MjAQvUdmwsfjOnEl2fK7cHgufaTO6rIoYIZG9Fxr1Cc4iVFCmBBMgt+Xz
+   IPHZocgx7gbkb2p3pswiMoJemzC2kDzc7s2Exr7ZwU7BLtF5U8s2GNqGI
+   cjPQ/+nXhV3njPTbBV+2pjAV6/MwizwwOO4kiTtuBeapUqiyHBfkHPBF5
+   j6Dl67HKCnWOCdxWR3gtRvwIp6j1wWuuctszdt7d2KxlK4Vc1fX1Ww4e3
+   Q==;
+X-CSE-ConnectionGUID: JAwlpou/TIa4WWobrqLtVw==
+X-CSE-MsgGUID: rqCdo6CnSIunfmIbmSVQyQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="52467521"
 X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="52462631"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 08:42:52 -0700
-X-CSE-ConnectionGUID: s2bIus+TRaGFmESid1EcvQ==
-X-CSE-MsgGUID: KK8KeudJSyqFP2atRHnDsg==
+   d="scan'208";a="52467521"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 09:24:11 -0700
+X-CSE-ConnectionGUID: J2RqrhivS1iMmRGjAGvSnw==
+X-CSE-MsgGUID: 0Rn7xJIDSVaNzKexdWn9ZQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="150511415"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 08:42:47 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 18 Jun 2025 08:42:47 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Wed, 18 Jun 2025 08:42:47 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (40.107.244.86)
- by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 18 Jun 2025 08:42:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=j2aip5KXa1g6LZpsyOitoE9O1wrfcf7H8CuWpP/ev89APWGa79nG1a3g1zNbCEuxMTDAtGnvOzaY+bX9i5Aq4nNrf3ZckNfob2JZdhIGp/vTDzXGGCCb7/03lLoAqF1lrrMICCvHhS0Ang4n5h4CuyoldU2JCobEEKZnzvH2xfRWXuQmrss2SyvuSZIXF7jOanFTs4KFRkfvaUkyWuP42IbVNNSfWBY444JemW5bqYJsM4vA2KMy1z7d/RiyW2CXUSIH6hxEhc7zlX+xvUcgbBokVGA0XxqNKnyhkOYG6KfFLRs4z1OmUO9UTREnDkdSQ9UqnZ9K1cYeX6a1yPyZzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bVwX2wefnfQtqf7JSPvTizTAy6qpRdRZ6+JZz0HV5KY=;
- b=adug8e6+hzlJ7rYpelMLbRnyjyppdEUipCgvxNiIckOWg4pF02pGEZqzFOgH4h3rtlTgyS0+CU3J+Kk6E/GPlHIZqwsPPT6DKxuvW9+OVAdSLShhqVfvRheqYt5uPoDIf5GOzaOJ6XOz6LDsl9wkLbgshvkcJepEj7QQ2zGjprdCEQS1ssyUqwBHk29R2p/VRBTEZngPQY3Us3UcUmhha/BmmtzDQVdjTieZl7M0UJgvphXRhZWcGkbWD6Lu6X6ikv0jxQ53h3Nmh0XXdXUxffx4S58QDSr8dKMxKRxOVnLuxJmsXDo4jbcrjEfT5L8ECgHhoykcOeS2K4LoCVubGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
- by PH7PR11MB7988.namprd11.prod.outlook.com (2603:10b6:510:243::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.29; Wed, 18 Jun
- 2025 15:42:29 +0000
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d%7]) with mapi id 15.20.8835.018; Wed, 18 Jun 2025
- 15:42:29 +0000
-From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To: "Luck, Tony" <tony.luck@intel.com>
-CC: Borislav Petkov <bp@alien8.de>, "marmarek@invisiblethingslab.com"
-	<marmarek@invisiblethingslab.com>, James Morse <james.morse@arm.com>, "Mauro
- Carvalho Chehab" <mchehab@kernel.org>, Robert Richter <rric@kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/1] EDAC/igen6: Fix NULL pointer dereference
-Thread-Topic: [PATCH 1/1] EDAC/igen6: Fix NULL pointer dereference
-Thread-Index: AQHb3//92oSRM+Zs5UagMHP66pMForQJBQGAgAADjiA=
-Date: Wed, 18 Jun 2025 15:42:28 +0000
-Message-ID: <CY8PR11MB7134B9350A5DF2AA69640D418972A@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <aFFN7RlXkaK_loQb@mail-itl>
- <20250618031855.1435420-1-qiuxu.zhuo@intel.com>
- <aFLV2YMOzXe4iP-I@agluck-desk3>
+   d="scan'208";a="150533446"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 09:24:08 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: tony.luck@intel.com,
+	bp@alien8.de
+Cc: james.morse@arm.com,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	marmarek@invisiblethingslab.com,
+	mchehab@kernel.org,
+	qiuxu.zhuo@intel.com,
+	rric@kernel.org
+Subject: [PATCH v2 1/2] EDAC/igen6: Fix NULL pointer dereference
+Date: Thu, 19 Jun 2025 00:23:06 +0800
+Message-ID: <20250618162307.1523736-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.43.0
 In-Reply-To: <aFLV2YMOzXe4iP-I@agluck-desk3>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|PH7PR11MB7988:EE_
-x-ms-office365-filtering-correlation-id: 10c311a0-bebe-4aa8-b48c-08ddae7ebb70
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?ZuMCAD60+xy7LpMGkLd8XiJuzhdnCICTvWyNzb+/aQ2a+sghkZPM8eKDJ+?=
- =?iso-8859-1?Q?PMYbsr4/12qquUeuJleJwR/YISF3eRBNMjwtK2fxkIcoLaPlth2DOCKOge?=
- =?iso-8859-1?Q?2CrVGebi7Cn/wSDkbdjwyaIClipoQ3Hz1EHm1n3+YGo5EN/uQVC0Jlfyd2?=
- =?iso-8859-1?Q?7y/2OKQWm0qryRJ8ahwrFvMXBdk3MTFonNOfyUH4gtyMsFAsp5sGr2VM/x?=
- =?iso-8859-1?Q?C+5rYWXx7zBFJL3dzrjcOv1hzZmz4k8r6/imdbyYT+WeeOeR0+u6r3vZYj?=
- =?iso-8859-1?Q?dm3/pLYkObyxtP6dsIFsijK5J/LEutY3HKLb3KK0uE9O8nc0NkUhNeQEYT?=
- =?iso-8859-1?Q?xgKrC0gB1109MAsx4TIUtOEJBc9olJwWtYXt1hIm/LJO7XGzYPT9ncjvai?=
- =?iso-8859-1?Q?GFFhIoEBj6CP8MWUUjq3p/AVJF7XyD/mbia3D7j0t2Vc6GpPwR0Jwu5qLX?=
- =?iso-8859-1?Q?AqQVdl4GSmsYHZNH2OgdFtZtB7KN+HBMUVvlddASWUCPwppNwLcSfljn/e?=
- =?iso-8859-1?Q?BrpQyNgnR7Aopfscp7xBIKkUDvjJLMnP8hqRc+fpA5P/gc7ft/aaAEOE2c?=
- =?iso-8859-1?Q?hsgnMg4WYWgT7dC0SR2rz8GKmuA0CCRL69fmdZ+HIVLYtDRqMV+9tiAao9?=
- =?iso-8859-1?Q?nuAfVSx9Jm7wC+WP6qGJFkRXORgt57mk/6oyLBoam1qmVuYEpWAaZqRn47?=
- =?iso-8859-1?Q?nYku7a9rz7XPZkAVAXBbPTZppg2OVOUV/Wkv0vE2ODT9NB1Dz0SLOgYiKS?=
- =?iso-8859-1?Q?VVMgZKbipoWnnWXIsrWbbllQmcmmkuXDxuqtz5q9I3gXuSze+ynufP4liK?=
- =?iso-8859-1?Q?Eg+Usx2YZWxwAnHYHR9Q/ouuCGxJqw0Uv+9pLgT0+Y67eSiFrga5/iN0Xr?=
- =?iso-8859-1?Q?5roOgcuUjfNc6+V6tEKyJzgl/ufb4x+xy+6AVYbuFeP8/HTUWtmflD5V6b?=
- =?iso-8859-1?Q?SMyW7zdUcDA0uf4gscWAiS4ZteAqGaGFHELzii2smrCtqhCAN4dgpfx9Wp?=
- =?iso-8859-1?Q?fEMiVY6Z2iqaJvgiiB5/eqsW49x3sS1Rzrk5zb2cIpwLBywaeqqgBky5hV?=
- =?iso-8859-1?Q?XvDt441fCZEVdb36lfj+Dwl08DpGcHCEbYRpaFN1YKOA1IWB0jqY/hiP9a?=
- =?iso-8859-1?Q?rYNUeVqn1wNgizC5cLtRzEsjJ0eW8pmkKsEDEF8Ji4/hFpBvuAHuGkt8/0?=
- =?iso-8859-1?Q?KoRkb+VYyAWzg8UK/LALbOw+7l6arr2FIoXMPSu+jyViqt18D2+3ITjrQB?=
- =?iso-8859-1?Q?i6+mIbyusvvuAY9jD6RfUP3ed9Yh7o9YrFV9iI4BpjoGO3Vlah7U8M0od4?=
- =?iso-8859-1?Q?JJFMLYuS953KHLH7NyYTXpPjAo6AQF5+1OdlqcL4yYZypI53TYbX7Gr4/Y?=
- =?iso-8859-1?Q?i415U+n2o2hA5sXddUCOrx5WBRej+Wkw4+a6/1Si7Xbkx6oI0J2CP8AU3Y?=
- =?iso-8859-1?Q?UssGQWqrTUY26JD8ppuJpved2n0IkPbhm4Ze1ptbs4rAxalRh3pUNrlCDO?=
- =?iso-8859-1?Q?70+9d0uipdOng0dMpT04HEgfsyLHq0p/yjttJQ8Y3ZwBuPnGipt2CXdsU1?=
- =?iso-8859-1?Q?F4Bg9I0=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?2qbKYf8hJq4kJu0eRwhjprRaNt21ZxtdSwSE74p0VosesHl8M17j9eUw9w?=
- =?iso-8859-1?Q?LUIrZcg+b4zn/9N+IwMw+CRWggypInVNNl2V4wiA53ubAZQRGbqJxj0IIY?=
- =?iso-8859-1?Q?7O67HrfLShF/OhMLbYJc6WcbobZLllKKIUXglW0yrZapGjF2Hc0r7fdOmM?=
- =?iso-8859-1?Q?hKn2AO7I4Q5hwdZJTl95orc8ni6C4KxKQWnBqp+WmqXgO4vIY85pJYff/z?=
- =?iso-8859-1?Q?wlG5adyPUKYP5lP9jfFJ8k5b/TI0qQMEMxLTxV1r5R63g/o0TE7+e/EUDs?=
- =?iso-8859-1?Q?qtJQLZ7XD1J+1fRIofxZO3S/Y8Mnwm540PkE2dqRQfDlGH5daAHSh3KYxK?=
- =?iso-8859-1?Q?HZRLnzNay0Kykb3aXTavLxb2IJA9M5GOqFgXkAmKgWdG1E1vlJm4u2ijmG?=
- =?iso-8859-1?Q?d7CJzn+IRVf+S+HzUaNCX1Y8KttKeii045Ibjc0RZIfzo6BUZEQE8y6f61?=
- =?iso-8859-1?Q?8uOkDUjZ2JPMaGDOI74I2Z7VtnCUTHgdDjECvxPgRTCTFXjYx9eMVdd+Yb?=
- =?iso-8859-1?Q?Y5bKzsBiWvaghr94frd9j34PXB0V9L+zRKOY5J2gWaQxld/OjhVTEDvZJi?=
- =?iso-8859-1?Q?FxxIfpDnropVLDLgYS6I+YipdYsF2OFaJPPdNJALk6GxQ/Y+CnVuz5qfLh?=
- =?iso-8859-1?Q?2mNsuIHPRohV2h4jijBG/BXwod37F/2xTKcYGdIU65IxD3Lftc3T6V2FCn?=
- =?iso-8859-1?Q?QtWRccSmjk9ymTcN0frR+aoJ4ZxksXV+BoM0I1sy5hj7o8oqXGPF+/9C7V?=
- =?iso-8859-1?Q?oshPEzAvNV+3iz49dagZ6z626uWC/J3rPd9zrtNZJPgLe3jNHIlhnkgicO?=
- =?iso-8859-1?Q?N4wBUcUEL7+tjwJbRc7f39uWPoquKtnbncVYtapqgKyyI5fxV44dZ2jDu9?=
- =?iso-8859-1?Q?7hddWHGd1yWO0XTfKorIEU2gmLOb+I6yN4+MlNA/lpztXmaVemIzHCYod/?=
- =?iso-8859-1?Q?hMRg9/u4Nhh++kn7V25w2ByUz3IbQ04j60lG/03AIqCGa6jjIZGpxV4N3P?=
- =?iso-8859-1?Q?GxYM0g4WMEfbH6mP7BdjNBV/cI7F4TZQGWF+o0F0cjPjxIHAfPKtp6M/5a?=
- =?iso-8859-1?Q?A8wrNb2b3m8EKikiDMfZy92121sDTaSksmEXwHTNgLn4l1fhayHj7Cya7A?=
- =?iso-8859-1?Q?kqtyE56L8eL8BU+WAePuyu2jY/UXEZSHAoV7ZjyThKfGYNymlcvtWl+2oI?=
- =?iso-8859-1?Q?zHkFML5D7CI7Y6xmlMpQRmZamRQGoUxFtdHRS9uATyfOSfoWiSZYspk8Pn?=
- =?iso-8859-1?Q?tOkg1GeA7d94grorY0jX8f0VjnEqI9t9vEkhHyFXAHZAFrUA1jLf2YRvcd?=
- =?iso-8859-1?Q?qK1zmTkXa+ao+1tnf8kCCE3ldOCeK65MJoKXwH4RRXl8olNZCkmw8R674z?=
- =?iso-8859-1?Q?Wy/lC/yY+m9W58oI6tmKmWeyzqBbgAjYgFfwxi+WOMXp+N1ssHtDl5SYLH?=
- =?iso-8859-1?Q?DyM4fOGlT3BLYz5dwChjRD3xyFdcclrI25ttirKiZvyWMIle4ykCAMDYBy?=
- =?iso-8859-1?Q?JoSykm3lIVsT3KK5ZuJG+bPRHxKUQRmaqCWbJ3O/GBycnAOs5HK6O5uTBT?=
- =?iso-8859-1?Q?FHQb+NTSwouegWILNGSLYq5EQmosyBo8Gu8jxi2VHxAmBGdsJxO1gYefjG?=
- =?iso-8859-1?Q?PhPpQ3htOhe/hiebUG1SWu2AclNrLF/n/Q?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+References: <aFLV2YMOzXe4iP-I@agluck-desk3>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10c311a0-bebe-4aa8-b48c-08ddae7ebb70
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2025 15:42:28.9735
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Odhe8mjgVARljfQJ2wCWk4GWgxMrpNgLiPu3YiNE5c62VfaPLu9rMxE2fpJrc+VRy0ehZuRTb5oy8YuPRMmyVw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7988
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Tony,
+A kernel panic was reported with the following kernel log:
 
-> From: Luck, Tony <tony.luck@intel.com>
-> [...]
-> >
-> > This issue occurred because one memory controller was fused off by
->=20
-> Maybe "disabled by BIOS" rather than "fused off by BIOS".
+  EDAC igen6: Expected 2 mcs, but only 1 detected.
+  BUG: unable to handle page fault for address: 000000000000d570
+  ...
+  Hardware name: Notebook V54x_6x_TU/V54x_6x_TU, BIOS Dasharo (coreboot+UEFI) v0.9.0 07/17/2024
+  RIP: e030:ecclog_handler+0x7e/0xf0 [igen6_edac]
+  ...
+  igen6_probe+0x2a0/0x343 [igen6_edac]
+  ...
+  igen6_init+0xc5/0xff0 [igen6_edac]
+  ...
 
-The phrase "disabled by BIOS" should be more appropriate.
-Will update it in v2. Thanks.
-=20
-> > the BIOS but the igen6_edac driver still checked all the memory
-> > controllers, including this absent one, to identify the source of the
-> [...]
-> >
-> > -	if (lmc < res_cfg->num_imc)
-> > +	if (lmc < res_cfg->num_imc) {
-> >  		igen6_printk(KERN_WARNING, "Expected %d mcs, but
-> only %d detected.",
-> >  			     res_cfg->num_imc, lmc);
->=20
-> KERN_WARNING seems overly dramatic. BIOS likely had good reasons to
-> disable the memory controller (e.g. it isn't connected to any DIMM slots =
-on
-> the motherboard for this system). So there's nothing actually wrong that
-> needs to be fixed.
+This issue occurred because one memory controller was disabled by
+the BIOS but the igen6_edac driver still checked all the memory
+controllers, including this absent one, to identify the source of
+the error. Accessing the null MMIO for the absent memory controller
+resulted in the oops above.
 
-Yes. That's true.=20
+Fix this issue by reverting the configuration structure to non-const
+and updating the field 'res_cfg->num_imc' to reflect the number of
+detected memory controllers.
 
-> KERN_INFO is enough. Perhaps KERN_DEBUG?
+Fixes: 20e190b1c1fd ("EDAC/igen6: Skip absent memory controllers")
+Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Closes: https://lore.kernel.org/all/aFFN7RlXkaK_loQb@mail-itl/
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+v1->v2:
+  - Add "Tested-by" tag from Marek.
+  - s/fused off/disabled/ in the commit message, as suggested by Tony. 
 
-Will change the log level to "KERN_DEBUG" in v2 to reduce=A0noise.
+ drivers/edac/igen6_edac.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-- Qiuxu
+diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
+index 1930dc00c791..1cb5c67e78ae 100644
+--- a/drivers/edac/igen6_edac.c
++++ b/drivers/edac/igen6_edac.c
+@@ -125,7 +125,7 @@
+ #define MEM_SLICE_HASH_MASK(v)		(GET_BITFIELD(v, 6, 19) << 6)
+ #define MEM_SLICE_HASH_LSB_MASK_BIT(v)	GET_BITFIELD(v, 24, 26)
+ 
+-static const struct res_config {
++static struct res_config {
+ 	bool machine_check;
+ 	/* The number of present memory controllers. */
+ 	int num_imc;
+@@ -479,7 +479,7 @@ static u64 rpl_p_err_addr(u64 ecclog)
+ 	return ECC_ERROR_LOG_ADDR45(ecclog);
+ }
+ 
+-static const struct res_config ehl_cfg = {
++static struct res_config ehl_cfg = {
+ 	.num_imc		= 1,
+ 	.imc_base		= 0x5000,
+ 	.ibecc_base		= 0xdc00,
+@@ -489,7 +489,7 @@ static const struct res_config ehl_cfg = {
+ 	.err_addr_to_imc_addr	= ehl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct res_config icl_cfg = {
++static struct res_config icl_cfg = {
+ 	.num_imc		= 1,
+ 	.imc_base		= 0x5000,
+ 	.ibecc_base		= 0xd800,
+@@ -499,7 +499,7 @@ static const struct res_config icl_cfg = {
+ 	.err_addr_to_imc_addr	= ehl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct res_config tgl_cfg = {
++static struct res_config tgl_cfg = {
+ 	.machine_check		= true,
+ 	.num_imc		= 2,
+ 	.imc_base		= 0x5000,
+@@ -513,7 +513,7 @@ static const struct res_config tgl_cfg = {
+ 	.err_addr_to_imc_addr	= tgl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct res_config adl_cfg = {
++static struct res_config adl_cfg = {
+ 	.machine_check		= true,
+ 	.num_imc		= 2,
+ 	.imc_base		= 0xd800,
+@@ -524,7 +524,7 @@ static const struct res_config adl_cfg = {
+ 	.err_addr_to_imc_addr	= adl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct res_config adl_n_cfg = {
++static struct res_config adl_n_cfg = {
+ 	.machine_check		= true,
+ 	.num_imc		= 1,
+ 	.imc_base		= 0xd800,
+@@ -535,7 +535,7 @@ static const struct res_config adl_n_cfg = {
+ 	.err_addr_to_imc_addr	= adl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct res_config rpl_p_cfg = {
++static struct res_config rpl_p_cfg = {
+ 	.machine_check		= true,
+ 	.num_imc		= 2,
+ 	.imc_base		= 0xd800,
+@@ -547,7 +547,7 @@ static const struct res_config rpl_p_cfg = {
+ 	.err_addr_to_imc_addr	= adl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct res_config mtl_ps_cfg = {
++static struct res_config mtl_ps_cfg = {
+ 	.machine_check		= true,
+ 	.num_imc		= 2,
+ 	.imc_base		= 0xd800,
+@@ -558,7 +558,7 @@ static const struct res_config mtl_ps_cfg = {
+ 	.err_addr_to_imc_addr	= adl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct res_config mtl_p_cfg = {
++static struct res_config mtl_p_cfg = {
+ 	.machine_check		= true,
+ 	.num_imc		= 2,
+ 	.imc_base		= 0xd800,
+@@ -569,7 +569,7 @@ static const struct res_config mtl_p_cfg = {
+ 	.err_addr_to_imc_addr	= adl_err_addr_to_imc_addr,
+ };
+ 
+-static const struct pci_device_id igen6_pci_tbl[] = {
++static struct pci_device_id igen6_pci_tbl[] = {
+ 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU5), (kernel_ulong_t)&ehl_cfg },
+ 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU6), (kernel_ulong_t)&ehl_cfg },
+ 	{ PCI_VDEVICE(INTEL, DID_EHL_SKU7), (kernel_ulong_t)&ehl_cfg },
+@@ -1350,9 +1350,11 @@ static int igen6_register_mcis(struct pci_dev *pdev, u64 mchbar)
+ 		return -ENODEV;
+ 	}
+ 
+-	if (lmc < res_cfg->num_imc)
++	if (lmc < res_cfg->num_imc) {
+ 		igen6_printk(KERN_WARNING, "Expected %d mcs, but only %d detected.",
+ 			     res_cfg->num_imc, lmc);
++		res_cfg->num_imc = lmc;
++	}
+ 
+ 	return 0;
+ 
+
+base-commit: e04c78d86a9699d136910cfc0bdcf01087e3267e
+-- 
+2.43.0
+
 
