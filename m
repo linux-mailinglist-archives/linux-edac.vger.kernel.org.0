@@ -1,157 +1,136 @@
-Return-Path: <linux-edac+bounces-4171-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4172-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BFECADF097
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 17:02:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91243ADF0B0
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 17:06:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E0F53B2B95
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 14:59:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F3CB1631C7
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 15:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 898892EE5FB;
-	Wed, 18 Jun 2025 14:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6CD02EA149;
+	Wed, 18 Jun 2025 15:06:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DXiNBboK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ne4DG8N1"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863602EE29B;
-	Wed, 18 Jun 2025 14:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E72C1A3179;
+	Wed, 18 Jun 2025 15:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750258703; cv=none; b=aUKrUFPAtPzMf/gw+5M7ccZzQ5YjVTEMhiMcj7ry0eTDwGBMWVGoSGo+B6SSQ+T8U610367H3tjgEm2Mi6QG2prcC/jtLZ+uogGRD2/MCynlnv7OBhMJjpno3KXcDFSnOnEUw9GkYj5zyUuH5dQko90JTh0y1LPujaE/JmmnajE=
+	t=1750259167; cv=none; b=SbBttmNZKPO3bK4osceRjwikMyc5aDN18+TKtm1teUJa5+aVmzajoZ/n7eidmA6ZKblh4k4wybPZ+gelQXJdxlKmDT0wMKtH2O0EpiGC1L1UzsNAYV3HYCDqLGQ98eI5aVta7gRUs6z9HMXK4OVZWRKbf+UjprMYDKoBTNe0hD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750258703; c=relaxed/simple;
-	bh=ommGErbpAjgqiNvvyfyM1d8Yg7XXKXmLw8GLkxvcH9E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qf0vxMlkYNCDFtyELKw8W2iIWgVM68Ak1jKZmTK/O0W6FUpdaZo/HN5Eovlx7rtYvoj+KUhjABlbGnH+8CY9XNEk32x9+a5ayWuUBH5FxNlufPSCQikQnBjnoWnRY3GlTOhD4aZ/wpoQzGiprH3ozRSSQ8nYVl9RqSheLP19to8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DXiNBboK; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1750259167; c=relaxed/simple;
+	bh=uapEyWYgiWJmlIq+Y3Q/Ao1A4WvpMVp8alphcwzsvD8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+pMt+ycGnnfuwJ9FO2u2yAR4r1ywbh4zc3kp5SxgsJcdCD+c241GnmI2DdZnOO5UHe4npkki1o9t+Bq7EJ4sVOByXF3P+tyi5QnklKwl5T0pH0qjanoXB0ExHO953nGzDAMSQbRiF2t43nOSJCf17x2HLjgxgLJm+2kAwFO4nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ne4DG8N1; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750258702; x=1781794702;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ommGErbpAjgqiNvvyfyM1d8Yg7XXKXmLw8GLkxvcH9E=;
-  b=DXiNBboKFkWwDx5n3yi4GDB8aVNLGlM6D/Rh45W1dgXy17nxvz9gBNhK
-   0nUIxYQPACnr9K2H+5KqmAc2v26si2aQGyhwoqcp1w7Teb5RCtrYC6mp1
-   m6c39DkXtn381STVKVvK3iMpyZEW8IfrD9RFW59XliTU2imzXfab6IznE
-   KbSQgDXCxZ4dzEM9A/pFcF9NnaTTyZO2dDtNOLubxFghUiyVzxDPCSYha
-   z2Dol4viRdrTHxPVfIxgREytl1eC6D8vGvGf634BSzCjs54/lHwnZ9/Pc
-   Bo5Cp7cCWQRinI+O2j10YUilE5w1xkDDMuSY1ccdHsBdK+phKk/tMRwaT
-   g==;
-X-CSE-ConnectionGUID: fd97MakGSO+E+U6FBS2GMw==
-X-CSE-MsgGUID: uawIRaErR/KjRZuPVs4Olg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="63088126"
+  t=1750259165; x=1781795165;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=uapEyWYgiWJmlIq+Y3Q/Ao1A4WvpMVp8alphcwzsvD8=;
+  b=Ne4DG8N1YYysGgdzHGwoFuRMctcTAG4ODSWCMJCmFh8DtZqT2IrJ2fPc
+   SIdroZbqDuijOB09oMEIcoc+hD2kEpN4oDCO3SsOVafJzDOXThlaxk/JQ
+   OngBxWoKPD6cqFORmm6XTsOnHTOhUWdxmz5dpSN8FX5XS8sAQ8VitraIv
+   l9/hvkL6L4088bBx7f7tOw0ps7Ur4G2+4Agl0/2soxxKgM3/zG3vNCveZ
+   b2jgOYrhkucO1UHPP6lawIgcVFpefQVO74ZIxX+HOV82o9oibwFvMYkNL
+   lski4BO8GdxM9PT+oFrqAjF63QzLplN0wSCtoYkUwmMhf45TnkJRmYlAh
+   A==;
+X-CSE-ConnectionGUID: 809XKJl0TVeerKtWN7OMCw==
+X-CSE-MsgGUID: mJlYsezVSXuTbqnNNbaxxw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="52569471"
 X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="63088126"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 07:58:21 -0700
-X-CSE-ConnectionGUID: KzBtx/eNQRGPrA1Leg5Qew==
-X-CSE-MsgGUID: DhmJ8iDURIaOz2OiEXDsZw==
+   d="scan'208";a="52569471"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 08:06:04 -0700
+X-CSE-ConnectionGUID: uR7su9DxQ8qBDx80WPtraw==
+X-CSE-MsgGUID: xvukXqsdRqud5/oe2h3N0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="149438645"
-Received: from agladkov-desk.ger.corp.intel.com (HELO [10.125.108.97]) ([10.125.108.97])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 07:58:18 -0700
-Message-ID: <68938275-3f6a-46fc-9b38-2c916fdec3d6@intel.com>
-Date: Wed, 18 Jun 2025 07:58:17 -0700
+   d="scan'208";a="155489834"
+Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.103.51])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 08:06:04 -0700
+Date: Wed, 18 Jun 2025 08:06:01 -0700
+From: "Luck, Tony" <tony.luck@intel.com>
+To: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>, marmarek@invisiblethingslab.com,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] EDAC/igen6: Fix NULL pointer dereference
+Message-ID: <aFLV2YMOzXe4iP-I@agluck-desk3>
+References: <aFFN7RlXkaK_loQb@mail-itl>
+ <20250618031855.1435420-1-qiuxu.zhuo@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] KVM: TDX: Do not clear poisoned pages
-To: Adrian Hunter <adrian.hunter@intel.com>, Tony Luck <tony.luck@intel.com>,
- pbonzini@redhat.com, seanjc@google.com
-Cc: vannapurve@google.com, Borislav Petkov <bp@alien8.de>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- H Peter Anvin <hpa@zytor.com>, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- rick.p.edgecombe@intel.com, kirill.shutemov@linux.intel.com,
- kai.huang@intel.com, reinette.chatre@intel.com, xiaoyao.li@intel.com,
- tony.lindgren@linux.intel.com, binbin.wu@linux.intel.com,
- isaku.yamahata@intel.com, yan.y.zhao@intel.com, chao.gao@intel.com
-References: <20250618120806.113884-1-adrian.hunter@intel.com>
- <20250618120806.113884-3-adrian.hunter@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20250618120806.113884-3-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250618031855.1435420-1-qiuxu.zhuo@intel.com>
 
-On 6/18/25 05:08, Adrian Hunter wrote:
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -282,10 +282,10 @@ static void tdx_clear_page(struct page *page)
->  	void *dest = page_to_virt(page);
->  	unsigned long i;
+On Wed, Jun 18, 2025 at 11:18:55AM +0800, Qiuxu Zhuo wrote:
+> A kernel panic was reported with the following kernel log:
+> 
+>   EDAC igen6: Expected 2 mcs, but only 1 detected.
+>   BUG: unable to handle page fault for address: 000000000000d570
+>   ...
+>   Hardware name: Notebook V54x_6x_TU/V54x_6x_TU, BIOS Dasharo (coreboot+UEFI) v0.9.0 07/17/2024
+>   RIP: e030:ecclog_handler+0x7e/0xf0 [igen6_edac]
+>   ...
+>   igen6_probe+0x2a0/0x343 [igen6_edac]
+>   ...
+>   igen6_init+0xc5/0xff0 [igen6_edac]
+>   ...
+> 
+> This issue occurred because one memory controller was fused off by
+
+Maybe "disabled by BIOS" rather than "fused off by BIOS".
+
+> the BIOS but the igen6_edac driver still checked all the memory
+> controllers, including this absent one, to identify the source of
+> the error. Accessing the null MMIO for the absent memory controller
+> resulted in the oops above.
+> 
+> Fix this issue by reverting the configuration structure to non-const
+> and updating the field 'res_cfg->num_imc' to reflect the number of
+> detected memory controllers.
+> 
+> Fixes: 20e190b1c1fd ("EDAC/igen6: Skip absent memory controllers")
+> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> Closes: https://lore.kernel.org/all/aFFN7RlXkaK_loQb@mail-itl/
+> Suggested-by: Borislav Petkov <bp@alien8.de>
+> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+
+[snip]
+
+> @@ -1350,9 +1350,11 @@ static int igen6_register_mcis(struct pci_dev *pdev, u64 mchbar)
+>  		return -ENODEV;
+>  	}
 >  
-> -	/*
-> -	 * The page could have been poisoned.  MOVDIR64B also clears
-> -	 * the poison bit so the kernel can safely use the page again.
-> -	 */
-> +	/* Machine check handler may have poisoned the page */
-> +	if (PageHWPoison(page))
-> +		return;
+> -	if (lmc < res_cfg->num_imc)
+> +	if (lmc < res_cfg->num_imc) {
+>  		igen6_printk(KERN_WARNING, "Expected %d mcs, but only %d detected.",
+>  			     res_cfg->num_imc, lmc);
 
-I think the old comment needs to stay in some form.
+KERN_WARNING seems overly dramatic. BIOS likely had good reasons to
+disable the memory controller (e.g. it isn't connected to any DIMM
+slots on the motherboard for this system). So there's nothing actually
+wrong that needs to be fixed.
 
-There are two kinds of poisons here: One from an integrity mismatch and
-the other because the hardware decided the memory is bad. MOVDIR64B
-clears the integrity one, but not the hardware one obviously.
+KERN_INFO is enough. Perhaps KERN_DEBUG?
 
-Could we make that clear in the comment, please?
-
-
+-Tony
 
