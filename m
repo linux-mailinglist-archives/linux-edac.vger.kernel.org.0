@@ -1,145 +1,170 @@
-Return-Path: <linux-edac+bounces-4167-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4168-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EBBBADECD6
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 14:43:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883FFADEDBC
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 15:23:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33E183AD3F6
-	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 12:39:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3458F16D7DB
+	for <lists+linux-edac@lfdr.de>; Wed, 18 Jun 2025 13:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A34295DA5;
-	Wed, 18 Jun 2025 12:40:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9425C2E3AFF;
+	Wed, 18 Jun 2025 13:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KsTR72qF"
+	dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b="gHL5GTfN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A8besaRg"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD7F28B503;
-	Wed, 18 Jun 2025 12:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551301EDA26;
+	Wed, 18 Jun 2025 13:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750250403; cv=none; b=FcJnSAA6mdZayYs5IXzqv3vWwNum3w9ZQ6A8/wVUyG0L6easi66/EU7QtiRH5bH6x6BnhqZYkfs3pjThAEyW5noUjaDZCD8MCCtd6fziBcQSVp7i+Y3XxGlRfybOE/j7H6EaDRyR772wsNO6dIsSQGt8La6Q7LqHAsJx3Hziuxs=
+	t=1750252989; cv=none; b=H8IyMzA7n4dugm/E4FOdtcvHgv5ncdwdbRAiWjF7A2KrACQcM1ZBDh0B3WkB7TCrtGjnZ61QY3C1lCrI/Eb3ntCDOQpOM4L+xob4fWoW994lkN8+ri6AR3ssZkMFxsENHAPmX83XNUK7iCUqts9CpgfBMMla+0G3f3w1El6Mqs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750250403; c=relaxed/simple;
-	bh=gtPi66+hfTTTDE0soYLd3r6RNixK6xtDDPTsnM7s8AI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pLVub+NWSnVH+ybUNqqywbHW80gtjY2APuxyodM1XFOokLrhjUDtT2lWekq989wu7I9Q+p1rYXzqUUI3Qejbn9wEI6/tsfO+OUnOPgquhjzcyeja/3kKGciiz4zZAJzA8TAe2hLpthUaeXBmGrhqpGnURHTUyIAyCfB+EOCfrf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KsTR72qF; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750250402; x=1781786402;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gtPi66+hfTTTDE0soYLd3r6RNixK6xtDDPTsnM7s8AI=;
-  b=KsTR72qFfNWvN2A7jU/fDRFJEgUkNcdaOI+rd9dr9Fv0ehyjk2rxgBwR
-   WgOkP1lu38JxZuwjwDYRAc19bMdGzUtR72YNV33S7vLR24kJlK4vXoZYY
-   xExR1sP6TAV7OuSVrHcmXwXtv5LPwQ1U0T73dxfq8tQx/nd0vmGji+ErS
-   ZOQ5IYgGkAlVumG6hdXLpfz1NCgIH5la7eJB5zdxsWXwVJ2fdYO4q+wwN
-   bmTHQeZ9P+t2JZYfwKyeWKhkNTHTnsVMGKcGNQAYWP7BCb3c91epInDX7
-   p4YLCGmcEaxFU6wb+YNmbaMO42qKN78+9EWTD3GvHBq/yk41h7jjPDdCK
-   g==;
-X-CSE-ConnectionGUID: 9bJXNDKMTd+RvM01ZtThag==
-X-CSE-MsgGUID: oF6zxxobRoufNIAB+wLCtw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="51690100"
-X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="51690100"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 05:40:01 -0700
-X-CSE-ConnectionGUID: Aj2E/VTBRu++q7aFtIp7iQ==
-X-CSE-MsgGUID: nCSKsEt0RXaxnLgpFD+xMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,246,1744095600"; 
-   d="scan'208";a="150262264"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.247.1]) ([10.124.247.1])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2025 05:39:53 -0700
-Message-ID: <27b983f2-a6da-4b2c-a5d4-c84e2c80f193@intel.com>
-Date: Wed, 18 Jun 2025 20:39:50 +0800
+	s=arc-20240116; t=1750252989; c=relaxed/simple;
+	bh=5xtEzAj9y8QbOTiFWszUWHRMhkRtaTDilqBmPWoqasI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hvimRoL8bsgOD4G0BO0EXgGrWOqNKvYmio7SCjcp8JkzNimsNG30WT3JrSDOrnUGAZAEec7DKNLGSkL7ZJuxbiRvsyheZPjzcN2kLpSVhbxtK9Bj5yn1Fqq2CJaY3DaQgQwrUaWsn9sGqX5nVpGnhyqQsCxHKLiclOVmSKN/BTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com; spf=pass smtp.mailfrom=invisiblethingslab.com; dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b=gHL5GTfN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A8besaRg; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=invisiblethingslab.com
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id 807771380394;
+	Wed, 18 Jun 2025 09:23:06 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Wed, 18 Jun 2025 09:23:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1750252986;
+	 x=1750339386; bh=cJqYrty+ZCMQ9sMd6DPBbLgOpbJYrAg1hXA8IjpBTWk=; b=
+	gHL5GTfNzLDptWVxtr0Y6oX56/26YLLnItwE3GvmRTaalQjxapjQczosl3/96mGF
+	blQ1b3h4yYdOfJix/c+MxR3QtcmjeohqHqYjeRBqvXS88Ce71JQbu5te5OuGqHCO
+	bWny9g6YFPL7EIFtMS+gerQpEDFe9jzZyZ0OWxmIANAkL8b+ptAEfKKzT3Qsrnup
+	6EZ9AzhPMIC/pScsmEnJtGa0/7HbthLGs40/J+FjF5NdM1yjRnd0A4tzT2pfZ/Mb
+	VIiIORmmEcdhTLEFZN9QOU3oUhQJexzxK/yrywzdX6zJ5BYGYx2ch2CGCIRfTFsD
+	VbK0mBiufyoLiTj3q0rGJw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1750252986; x=1750339386; bh=cJqYrty+ZCMQ9sMd6DPBbLgOpbJYrAg1hXA
+	8IjpBTWk=; b=A8besaRgu5Ygp0FM/TSGA32km4RdyD5eqlAmdnMBx0tyHw1s//A
+	r4txev+iTlMED9ehgGkilgSLkEC8kn4Du3vica4+xjBK5KeUbMmrSGo6VATkLdSu
+	BtiC2VVD2uSuFOykRuK2jwf5yEIWLgDY7KNh88hTpvu+ooQ/DhxbCr+M8qOOinrT
+	hJ3+DJdMyuhK7p+C/EPf17PYDl72maTQiIOGVdA7zgIuMWyTFO1fZ8QmF4IC9D0U
+	06QasTKP3IXrGfOUbCRP9L6tMzA7nDhMoDd2qI0RufCvlK+MddFvWduytyoWybeL
+	Wr4xxdZ1OwX6Rf/tmP+og0TxQBxno9by/8w==
+X-ME-Sender: <xms:ub1SaLXPb_mlJsjlZuznwT7Jmjz3kgE056QYLHo8KOpxVwhdjVJAcg>
+    <xme:ub1SaDkqCmLYk5MkEfwrBar_dfDseBe7yZYjKCGeNCJFLbrMHjfetKNkh-YVnZi9x
+    HrlV0gDOOib3A>
+X-ME-Received: <xmr:ub1SaHaILzJfgnrooryIXEaXrGu7gi53sj9iVvSsLl1YFHeMYlTNC4aUZa-LlA2wHYiz39DvBvGzbNxgglQZEmwfyz9hR46qaLE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeen
+    ucfhrhhomhepfdhmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgshhlrggsrd
+    gtohhmfdcuoehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgt
+    ohhmqeenucggtffrrghtthgvrhhnpeekkeevieevkefhieetveehueekhedufeelgfevud
+    ejkefhffehuddtjeegteehtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
+    mhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgshhlrg
+    gsrdgtohhmpdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhuthdprhgtphht
+    thhopehqihhugihurdiihhhuohesihhnthgvlhdrtghomhdprhgtphhtthhopegsphesrg
+    hlihgvnhekrdguvgdprhgtphhtthhopehtohhnhidrlhhutghksehinhhtvghlrdgtohhm
+    pdhrtghpthhtohepjhgrmhgvshdrmhhorhhsvgesrghrmhdrtghomhdprhgtphhtthhope
+    hmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrhhitgeskhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqvggurggtsehvghgvrhdrkhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhg
+X-ME-Proxy: <xmx:ub1SaGWKgngI8yYe7ScJPCXjI5SaF0r8RL8h9gvYqqTzUHHzPEm38Q>
+    <xmx:ub1SaFlvS_90qv-_WTmvxYhug3F9jngxx8XBUhpRENYgKzjQlGo6zQ>
+    <xmx:ub1SaDf7Gs5DyAxF8WRWVl6BVjhsQKNL9yh3kIh5sBk0cM02_kK2lw>
+    <xmx:ub1SaPHxgbozNZ5UrcnmmTdNZvjPf0ReG_R--jh1VwcgAFLmcRFMwA>
+    <xmx:ur1SaNDYHNfs8Mnm1Goa5m9pr8lAWDo5FDjHiyW0f-MCzY6qTpAUeSF4>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 18 Jun 2025 09:23:04 -0400 (EDT)
+Date: Wed, 18 Jun 2025 15:23:02 +0200
+From: "marmarek@invisiblethingslab.com" <marmarek@invisiblethingslab.com>
+To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] EDAC/igen6: Fix NULL pointer dereference
+Message-ID: <aFK9tnZOPtF2pa80@mail-itl>
+References: <aFFN7RlXkaK_loQb@mail-itl>
+ <20250618031855.1435420-1-qiuxu.zhuo@intel.com>
+ <CY8PR11MB7134FA32BC293D5E868016A18972A@CY8PR11MB7134.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] KVM: TDX: Do not clear poisoned pages
-To: Adrian Hunter <adrian.hunter@intel.com>, Tony Luck <tony.luck@intel.com>,
- pbonzini@redhat.com, seanjc@google.com
-Cc: vannapurve@google.com, Borislav Petkov <bp@alien8.de>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- H Peter Anvin <hpa@zytor.com>, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- rick.p.edgecombe@intel.com, kirill.shutemov@linux.intel.com,
- kai.huang@intel.com, reinette.chatre@intel.com,
- tony.lindgren@linux.intel.com, binbin.wu@linux.intel.com,
- isaku.yamahata@intel.com, yan.y.zhao@intel.com, chao.gao@intel.com
-References: <20250618120806.113884-1-adrian.hunter@intel.com>
- <20250618120806.113884-3-adrian.hunter@intel.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20250618120806.113884-3-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="aTKB59D1qi71zo/d"
+Content-Disposition: inline
+In-Reply-To: <CY8PR11MB7134FA32BC293D5E868016A18972A@CY8PR11MB7134.namprd11.prod.outlook.com>
 
-On 6/18/2025 8:08 PM, Adrian Hunter wrote:
-> Skip clearing a private page if it is marked as poisoned.
-> 
-> The machine check architecture may have the capability to recover from
-> memory corruption in SEAM non-root (i.e. TDX VM guest) mode.  In that
-> case the page is marked as poisoned, and the TDX Module puts the TDX VM
-> into a FATAL error state where the only operation permitted is to tear it
-> down.
-> 
-> During tear down, reclaimed pages are cleared which, in some cases,  helps
-> to avoid integrity violation or TD bit mismatch detection when later being
-> read using a shared HKID.
-> 
-> However a poisoned page will never be allocated again, so clearing is not
-> necessary, and in any case poisoned pages should not be touched.
-> 
-> Note that while it is possible that memory corruption arises from integrity
-> violation which could be cleared by MOVDIR64B, that is not necessarily the
-> cause of the machine check.
-> 
-> Suggested-by: Kai Huang <kai.huang@intel.com>
-> Fixes: 8d032b683c299 ("KVM: TDX: create/destroy VM structure")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->   arch/x86/kvm/vmx/tdx.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 457f91b95147..f4263f7a3924 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -282,10 +282,10 @@ static void tdx_clear_page(struct page *page)
->   	void *dest = page_to_virt(page);
->   	unsigned long i;
->   
-> -	/*
-> -	 * The page could have been poisoned.  MOVDIR64B also clears
-> -	 * the poison bit so the kernel can safely use the page again.
-> -	 */
-> +	/* Machine check handler may have poisoned the page */
 
-This doesn't read correct. The page is not poisoned by the machine check 
-handler. Machine check handler just marks the page as poisoned.
+--aTKB59D1qi71zo/d
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 18 Jun 2025 15:23:02 +0200
+From: "marmarek@invisiblethingslab.com" <marmarek@invisiblethingslab.com>
+To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] EDAC/igen6: Fix NULL pointer dereference
 
-With it fixed,
+On Wed, Jun 18, 2025 at 03:26:43AM +0000, Zhuo, Qiuxu wrote:
+> Hi Marek,
+>=20
+> > From: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>
+> > [...]
+> > Subject: [PATCH 1/1] EDAC/igen6: Fix NULL pointer dereference
+>=20
+> Thank you for reporting this issue.=20
+> Could you please test this patch on your machine to verify if it fixes th=
+e issue?
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+I can confirm it works now, I have the "EDAC igen6: Expected 2 mcs, but only
+1 detected" message and it doesn't crash anymore. Thanks!
 
-> +	if (PageHWPoison(page))
-> +		return;
-> +
->   	for (i = 0; i < PAGE_SIZE; i += 64)
->   		movdir64b(dest + i, zero_page);
->   	/*
+Tested-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingslab.com>
 
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
+
+--aTKB59D1qi71zo/d
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmhSvbYACgkQ24/THMrX
+1yzzjAf5AUXowsoMKnMQkWMIwzyoBsS5h8NCJwz3O8C93ZqTdALF2L5Dk61Z9vx5
+ugDBhHjt7Xi3SH0kRtMUuoXKwlTSvBZzAGzdNcYd58wOx7V7JMtVQZtFNQeWXyoR
+hsZBxIDxyAUqhkyEuhKUhIXx8+LD+CTk3R+M/1sv5uDMallmd6BNyMQGQ6GUwyr7
+Ui90PAA7S3QVCy+C3+jD1qUutDQ2njNGmWfeiniT9cSiyJhXJpFqw4oi1Y/dIKCW
+Vse5M3NyHYiyKD92LEeYPDX0zv1ZhsTmC1X3fbjAJDjBhj+gPrs/Nx7LxK82QivG
+EqJoSthckcao5Yn0jjFKHrni9v7mjw==
+=EQ4E
+-----END PGP SIGNATURE-----
+
+--aTKB59D1qi71zo/d--
 
