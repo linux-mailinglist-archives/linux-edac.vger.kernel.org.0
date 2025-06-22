@@ -1,129 +1,121 @@
-Return-Path: <linux-edac+bounces-4200-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4201-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB6CCAE27F1
-	for <lists+linux-edac@lfdr.de>; Sat, 21 Jun 2025 10:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35E4AAE2EC8
+	for <lists+linux-edac@lfdr.de>; Sun, 22 Jun 2025 09:54:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C1BD177E9A
-	for <lists+linux-edac@lfdr.de>; Sat, 21 Jun 2025 08:16:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A51AC173228
+	for <lists+linux-edac@lfdr.de>; Sun, 22 Jun 2025 07:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21EF41C6FE9;
-	Sat, 21 Jun 2025 08:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B308198E6F;
+	Sun, 22 Jun 2025 07:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYtLxsbR"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="g8+IyqL2"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D645642A96;
-	Sat, 21 Jun 2025 08:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8B71BC4E;
+	Sun, 22 Jun 2025 07:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750493766; cv=none; b=YBtR+korZ2EL3KIo/dKl7f8jGcR4NnjAYqG9cwYtCQiR3hcFZyd6ah2xeYiICEDUOfqek9tBhNtO4oJV+69HRgFPIKrVKPh4h4xX16M8F7G7hVOZGl6OapkzhphfIR+JGm04kc8Gbt1VAF+Ip+uOgl1JuwjHrhw46LwomUkjNK8=
+	t=1750578852; cv=none; b=Ia1xfGS0+Ow9TCwC6xB+aBTelAzWOflJmklGBv44JC5XhLdzkRN/T8LaUxtgn8IYtMDXOD4kb7DZU5omnwt2SsnXyyPKpOpbD4VQtUxPjevEasTBtdrFOG7LBgvqn/es4ybS1lL0ULlC/vQBotocv8f878CZSt35D71GrY8jD2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750493766; c=relaxed/simple;
-	bh=oN1ZX1XWIvOgdq3a5xRnlSs5Yw9BiIoC3X45+HjSENk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X5lU1UWw1Eb/KqRdD+8QImnenj/tIAPqHVTCCnT8m2QOrzjFK/exGat4ryGAJQ0k9nN/pD/VpqD6qbq4Zq2X6tj3aV1GRpXFkdntoKsMGP/YAzq28LF5S2o2QTRRhM98BnYBxOyQSU4WAR0QmSA+fetaGguXARU9qNilNNZjSh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYtLxsbR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A12C4CEE7;
-	Sat, 21 Jun 2025 08:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750493765;
-	bh=oN1ZX1XWIvOgdq3a5xRnlSs5Yw9BiIoC3X45+HjSENk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=sYtLxsbRQ+Pf/Q1LzoMMge3CoxJso/FSDGjW2taSSBQvxtzAwIwHfzz+9hRJNsd5c
-	 Gcz+z6X3KY9FN1CenXi6JNy8AVZp3PQv69maINV/3j2yliTuyOwIIhn7/u6VDW8JFY
-	 RO3BWFJjhp2Ea1VxgX0y4teSzd3AMrfPkq6in69tQwkjspoZpZAoguK5ZQ2KF5gi6D
-	 BEztz9Ae6TQj++HSK3P9gMbToAnu/kRB+OMLIC1nOUaWeEEP0sZidoKx16xAR1vMvf
-	 rhDCMZB3+Ij61Bd31QZIT3qD+GbwmgkNLx0kXZmQpyjS7W0t8AD5Oxfi37PqGbKutB
-	 OAwbSBu6cy+dg==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-32b3c292bb4so22584871fa.1;
-        Sat, 21 Jun 2025 01:16:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUIqToRRyEFWL7lAnN6XGMxk6uUM09CLKV9WditTYTIU5zm5MC6vcgt8ccsPTEp6vt3c/QgV07/pirBEhRO@vger.kernel.org, AJvYcCV0DRq+ZpNzH2jxXKzBmL1GmsQA/O7DhQTQQ96f2H17Us/ntO+ralJ9ah6R+BxO7i8yp3TQS/aruFjtDA==@vger.kernel.org, AJvYcCX+Doxn5m0J4utHOBWnTgeupOG4IjbFTf3sRkoeb+Qw2CrrhudkVZUAtFm9S73Md4i/gKvexR8Xx0Cj@vger.kernel.org, AJvYcCXCwfaOTmtWTocSmrRmLDMkls9T/hBZiua6t3HjXVepbtvSaln4MSFiQqwe1/+aqk+7DgcIHISWdCCD@vger.kernel.org, AJvYcCXk5v7qEKMXjTvZSwQmpafx/IwYyDclcC72uz3mb2Pxl3doULLVaOEGDt2cU39Wi37SNcYvw4jWOBNP@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTMiBqCaUaoy2EG/or+LcE+ZaJmNHvWWm5STVIGcvYkRLa5cas
-	qPbQzlvrmjyoGFtxHhVBw1Vfd3BW3g17GKYnb46lJCAY5NPwqtk2OhruZY9+Ry9QCR3nlMMxzCN
-	k+LA1R7rKzH0dUa9y6LsJEdBDLk8shMI=
-X-Google-Smtp-Source: AGHT+IG7G1p+eMBQX8l5H3KUmCP0DYsHNGAcJGRnYN1fOb7tfyfV+XhAE8P+Qi1We2rHg3wDZBrW8geftynHAWEFjgU=
-X-Received: by 2002:a05:6512:3da6:b0:553:2dce:3ab2 with SMTP id
- 2adb3069b0e04-553e3b9910emr2075407e87.6.1750493763725; Sat, 21 Jun 2025
- 01:16:03 -0700 (PDT)
+	s=arc-20240116; t=1750578852; c=relaxed/simple;
+	bh=m3QhgC9Oxl2Bc7EUQ1UlUUrTpGTYUv9PwwzaefYP+9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Z2AKWLzBcUUosZKvwbdW9NBVbw969aVrWS8gJHGCvyWH/gFq9/zx8hQyU5gMFVUK2dUPZh8NKtOOa4+3+LpVcuaymZYvcaAGUoN5qWnGHchDgRx/NSFJi7C0sgxVVIYQLbs8k9rO7z1IgQWjrbrTCcRipMJ99SnHcPBWF9aKRUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=g8+IyqL2; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8BADC40E016E;
+	Sun, 22 Jun 2025 07:53:58 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id r08CE6IFBEys; Sun, 22 Jun 2025 07:53:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1750578835; bh=UNHDt2clM+6bGn8vHpQjAgNYRNnxjqxu28E8pcHqDfQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=g8+IyqL2f61heXobF4c7RXeJ+VYQ0BisnYVF1mjpWi0prw3wc8HexwbtO5sYRTCno
+	 6xM1H2ueCn07LMhJHXY/t0FkHhneyJgByiZADyeDFNL7mnAtgq2ZUyEFHZWPYP5BNz
+	 HPCntH0BnMNGy3Nxv5PZ+qAOX5iZvKuGGHIxp4vSj6nV64/XyiPwMAcA+J+4ddzeU2
+	 us2+Eo+Yoz5ozCYdLZJFZG6yC02U8nbtlhuq6NzWZQvq2FYAemdU1QiIc4JGTmQFWV
+	 o2TzyLIagYY+96bvvR2R5xEnUh3nlndza79rbEathUVhzerI/0RGTWkS/onQJ8b2Un
+	 Gg/dre5uGhnf4T1D4dRLVfdZAN2t+ImDUv9YYQqqehcSFsRzH5axkLBDPtFE1aZ9zC
+	 OeoC77TDbcOumkmFpmg3lYEKH/Hj2W5R//N+LkiWyEq/xuhwrlyeYj2AuHZGy9ZICh
+	 VbGkXu1oz63KxuLzXmrrXRg+NS323jdfcptQlPtDWdwDet5WKZNVSucQoJ5GiXLtMM
+	 P73H8NYYgTkJU6uPPXIHrQlKP4T0xfM9vFe3hzDvhBuBDZNgx4MSOW+zrFZcjy+ZQ0
+	 5Qu3YkYEHKs/UFHNTqa8d2Z+F/AAomgAoTkfkCFVkBRjC6TkZQXO9eXg24zcyCodkU
+	 aJDEH/Hva2UZDCAnmxWfszQk=
+Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 28EDE40E015D;
+	Sun, 22 Jun 2025 07:53:52 +0000 (UTC)
+Date: Sun, 22 Jun 2025 09:53:45 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC urgent for v6.16-rc3
+Message-ID: <20250622075345.GAaFe2iR1i-n1neZcW@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1725429659.git.mchehab+huawei@kernel.org>
- <20241011115707.GCZwkSk5ybx-s9AqMM@fat_crate.local> <CAMj1kXGQSgeshrns7-EwTkG_c1dHgaxaVxO_FxWumdFx6m4vRQ@mail.gmail.com>
- <efbc8109-1854-43b2-bff4-095ecd5970cd@os.amperecomputing.com>
-In-Reply-To: <efbc8109-1854-43b2-bff4-095ecd5970cd@os.amperecomputing.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sat, 21 Jun 2025 10:15:52 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGSNT08QrCp1jazmi9ANpZ7RCuS4kHo9x6hwxtp6z0Nhg@mail.gmail.com>
-X-Gm-Features: AX0GCFvW2Y9Ngxmoff6t5ijZh-D91PAeNXLsY6MvtMOOptWR8A-DweeytvCeo3M
-Message-ID: <CAMj1kXGSNT08QrCp1jazmi9ANpZ7RCuS4kHo9x6hwxtp6z0Nhg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] Fix issues with ARM Processor CPER records
-To: Daniel Ferguson <danielf@os.amperecomputing.com>
-Cc: Borislav Petkov <bp@alien8.de>, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
-	James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>, Tony Luck <tony.luck@intel.com>, 
-	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-edac@vger.kernel.org, linux-efi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Fri, 6 Jun 2025 at 20:30, Daniel Ferguson
-<danielf@os.amperecomputing.com> wrote:
->
->
->
-> On 10/14/2024 3:00 AM, Ard Biesheuvel wrote:
-> > On Fri, 11 Oct 2024 at 13:57, Borislav Petkov <bp@alien8.de> wrote:
-> >>
-> >> On Wed, Sep 04, 2024 at 08:07:13AM +0200, Mauro Carvalho Chehab wrote:
-> >>> Jason Tian (1):
-> >>>   RAS: Report all ARM processor CPER information to userspace
-> >>>
-> >>> Mauro Carvalho Chehab (4):
-> >>>   efi/cper: Adjust infopfx size to accept an extra space
-> >>>   efi/cper: Add a new helper function to print bitmasks
-> >>>   efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
-> >>>   docs: efi: add CPER functions to driver-api
-> >>>
-> >>>  .../driver-api/firmware/efi/index.rst         | 11 +++-
-> >>>  drivers/acpi/apei/ghes.c                      | 27 ++++----
-> >>>  drivers/firmware/efi/cper-arm.c               | 52 ++++++++--------
-> >>>  drivers/firmware/efi/cper.c                   | 62 ++++++++++++++++++-
-> >>>  drivers/ras/ras.c                             | 41 +++++++++++-
-> >>>  include/linux/cper.h                          | 12 ++--
-> >>>  include/linux/ras.h                           | 16 ++++-
-> >>>  include/ras/ras_event.h                       | 48 ++++++++++++--
-> >>>  8 files changed, 210 insertions(+), 59 deletions(-)
-> >>
-> >> With the issues to patch 1 fixed:
-> >>
-> >> Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
-> >>
-> >> I'm presuming this'll go through Ard's tree. Alternatively, I can pick it up
-> >> too with Ard's ack.
-> >>
-> >
-> > Either works for me.
-> >
-> > Mauro: please put all maintainers on cc of the code you are touching - thanks.
->
-> What can I do to help this patch move forward?
-> I noticed it needs to be rebased as of kernel v6.15.
->
-> Would it be helpful if I were to rebase, add all the maintainers to the cc, and
-> resubmit ?
->
+Hi Linus,
 
-Yes, please. And make sure you incorporate Boris's feedback on patch
-#1 and apply his conditional ack.
+please pull two urgent EDAC fixes for v6.16-rc3.
 
-Thanks,
+Thx.
+
+---
+
+The following changes since commit e04c78d86a9699d136910cfc0bdcf01087e3267e:
+
+  Linux 6.16-rc2 (2025-06-15 13:49:41 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac_urgent_for_v6.16_rc3
+
+for you to fetch changes up to 88efa0de3285be66969b71ec137d9dab1ee19e52:
+
+  EDAC/igen6: Fix NULL pointer dereference (2025-06-18 20:19:45 +0200)
+
+----------------------------------------------------------------
+- amd64: Correct the number of memory controllers on some AMD Zen clients
+
+- igen6: Handle firmware-disabled memory controllers properly
+
+----------------------------------------------------------------
+Avadhut Naik (1):
+      EDAC/amd64: Correct number of UMCs for family 19h models 70h-7fh
+
+Qiuxu Zhuo (1):
+      EDAC/igen6: Fix NULL pointer dereference
+
+ drivers/edac/amd64_edac.c |  1 +
+ drivers/edac/igen6_edac.c | 24 +++++++++++++-----------
+ 2 files changed, 14 insertions(+), 11 deletions(-)
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
