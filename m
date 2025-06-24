@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-4235-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4232-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 312BEAE688B
-	for <lists+linux-edac@lfdr.de>; Tue, 24 Jun 2025 16:26:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A7F7AE6840
+	for <lists+linux-edac@lfdr.de>; Tue, 24 Jun 2025 16:21:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AD776A2A90
-	for <lists+linux-edac@lfdr.de>; Tue, 24 Jun 2025 14:21:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF1837AB8CD
+	for <lists+linux-edac@lfdr.de>; Tue, 24 Jun 2025 14:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164B92E2F10;
-	Tue, 24 Jun 2025 14:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7B52E1754;
+	Tue, 24 Jun 2025 14:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="S4xlHmGC"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="B89mipnt"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2060.outbound.protection.outlook.com [40.107.95.60])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C292E0B61;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D722E0B67;
 	Tue, 24 Jun 2025 14:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.60
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750774606; cv=fail; b=bIlL3lrgl8YXIBPtt/WBThbKOKxnW3FMuKp1NMOsUKWm84h3CxZ0YwHZW7UevcZR0r7ZeT0crrcGXQb1BoHNT/4jHbMk9dp2qDFruTSWcuZ5PdVS+showCv+/PMeQHoHp6xtTeHvtT1Jejfg1YF2izqsfrwOpo8cmX2ncGgs2dY=
+	t=1750774606; cv=fail; b=U1cG6CnLUBSAcbPJq43bwDzXWZf5pkVLFR2pDmJffynNlu7teGcelTvFn4fg0lXtMgtyAuaxTsvDOvAsv2ufXnAV5lenp1yMWB7oOydiMCV/XGCF6aVAInwF4eaRqqj+eLXixUZXmv3jIjulxCQf7o0gHuwFQicYzXVpGZTbYsg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750774606; c=relaxed/simple;
-	bh=KHKc94XxBizT+ESKipj45EzFPfrUg77hNJrufuZ0yxo=;
+	bh=PUxvdU/FGrtMkKmlTayh4Bas0x/axFzp32/5zqxbNvs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=tWs6bMbXz2f9zIStaqCnbVbH1b5HlQX911zFYPv85LYB5PmBs0Rkp+eXx3XFkq2XnvBXyFpSsA0gLN0dsbX291Vg6Qkr6cptM4WTU8nf+AenHo7d6kpJMHCXV32+3GxGU2KNVCTv0v33rEtBIp+8pGDSiWDo9NcYx6lw5Z967OQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=S4xlHmGC; arc=fail smtp.client-ip=40.107.95.60
+	 In-Reply-To:To:CC; b=CwWkpFbBkxduLk4nLVPA0e8ZstiebFIYPATGohLIWKclshufO20Pj9TgDzN93CHYlvV79JnSOo3+0DOSe3KTActRSSSkBJioH8A24mlDZH5He9nuXlLIFh+TwCrV0vfeUdGNORFMqfGES7jtDTZQSx0jPR6iTzs7tX2N+3Ch/18=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=B89mipnt; arc=fail smtp.client-ip=40.107.243.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sh/WQHZQzV2t2t5eZD+Ie8KYnay2j3O6Tz1PSWroKzBm4VSNvDzu5otGQ6wJZWHEf1qk+zPVru2N/j8w/tywFDDj60bmwNitJshPsANzCKYtw+TASJSPBSVx6iyhpJAl+Xu3OHw++aC0vbScWgLwmVZuorrfjtNMwxa7lMyD2MYZumaoqlzHLDAnSaQGzFK/Rmt4Ld3hbqwfkaU+qCy9h26u/ms4wEgcwjsINbGWqdlPEDwig544xSSPiUzLr26acF3qyy2QQsvj3miLAsGXFc3M6xv3bjL7yX5l6ysRWotBKoCSrCizObypfcOZwY7aJRrAMHIE0vvBW3ZG9Y8sxw==
+ b=VWWhe/3GP0TQFrFnRfe1A0UqHmEkDztWVmzDeuDWJH2LLo+S8N8516ChYkdxgUlypL5RINE2gy/Fg+qcVlAu6El2qBCBFLMfLvG6c76V25UN3uY5tYgeAlVtMPKYU8uYxvdOnUuft7PuCQPobC5kPdugO3vLcmBCNEodVYf9LBdLUGO3L9igiIF69gGWCFWjgdUdHdmCj79dkIcO4BC6qHqYqww+alMP2JR/S8XGX9ii2fN8zhIzd64zGP5yAc7PwUeDzWpdYDJasxHrN54/0HpFis0vxipzqyC9mLcQJmA+Vmf3cngnFLX0Rydtp1+GZQPbKGeAPlLl4IvrWv7W1g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ADVTjgdDYzvuco1X9/2BkU/Ma5F5yiCHbXUACVMseYY=;
- b=uOk2zALbh25J2EErCn9+/FXn5EZfACeozXU4ShtvLZyQkQYOXmG9v8/t4uNiw/sQqnsUc11qrB+xr3FNrheGtXt0vPvfO8YUxaf/Uc9VGfeHbneTavZTrSc3dUrcDa11thT6NcGKEGDQm4T03intyrA8Gor/NDk64I5YitZDayfNK4LLT2E1yVBotAY6UqO+1fHlL7eb4VAVmcxDX4+a0dShPlRC+GKV+eTXelro4/o4bwddh5X8CUNMV/n9LAJGgfJF8iEtct3IGzhUvA3++x5ueC3V7wVqhrh4e2s21KGYewkpD+R6G2Q73bnyrpRvtdLi4q/31l5B/P+XA5KQww==
+ bh=xHoRZxtQL8M056Q0UaUCoTJKmPrv3TjuLdceI5SgjLk=;
+ b=sMZYC6qLfDXniuD1Q/M1w7sOrq7xA0Ia22tevS+ZGSmG8teio0LBPbgbJKBl8e3Shnm6OtRPBgI7fajTKn/OMdQfxw9jumckgBc+yndt+VdqWMkOV6enFlxzeHlSA2vUaLFO9UcQ+Cw126JetQvOIbVzZxhYw8Evz46wPpSZU5RAo+kQ/4ukVwd/SOg/EvEkA8NYPgVqGenDn2Ix/853dQGPdE1vIvE7Y6LEerhFbcUxkRCc9LH0XygIsdVi7pzsZeo+/eggwL7oexyGczctCH9MWVY+gSpkw2053kPWt0lzfJIfEEp74FL0KYz1WLSUXsriIQ4fxK3XytNz8SVuhw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ADVTjgdDYzvuco1X9/2BkU/Ma5F5yiCHbXUACVMseYY=;
- b=S4xlHmGCaA9VEblPNbX7vhXpjUukE8ghwdoWwWJ/7FK91klUEVZ5DElKK+voV1bTGl2usQD8Up6gQbbzMcoXJLCILXZ8I/pjvTi8xRWCWWDdRORBHnzHPE3XszS8nVBoMo6FqIh8GYCPMCNKsDn9pVH0r6BV4B1ds5BqTpUAl3U=
-Received: from BYAPR02CA0055.namprd02.prod.outlook.com (2603:10b6:a03:54::32)
- by PH7PR12MB6956.namprd12.prod.outlook.com (2603:10b6:510:1b9::19) with
+ bh=xHoRZxtQL8M056Q0UaUCoTJKmPrv3TjuLdceI5SgjLk=;
+ b=B89mipnt+nRV7/rXqAHsWSo4f56RqPyuyoIS3cmOSpvcK4hEUzl4bgslaCASyhGYItsIwbMNsE05omCukoQrS8m++VSXXlpaECiZFwieeBDUGKQORINV/m0evnPJVl9GIyPkWvFwb3Si5ptiGdi7o43+zgXNGZR0FaxWbj4Ov2g=
+Received: from BYAPR05CA0054.namprd05.prod.outlook.com (2603:10b6:a03:74::31)
+ by CH2PR12MB4070.namprd12.prod.outlook.com (2603:10b6:610:ae::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.28; Tue, 24 Jun
- 2025 14:16:40 +0000
-Received: from SJ1PEPF00001CE7.namprd03.prod.outlook.com
- (2603:10b6:a03:54:cafe::ab) by BYAPR02CA0055.outlook.office365.com
- (2603:10b6:a03:54::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.17; Tue, 24 Jun
+ 2025 14:16:41 +0000
+Received: from SJ1PEPF00001CE6.namprd03.prod.outlook.com
+ (2603:10b6:a03:74:cafe::92) by BYAPR05CA0054.outlook.office365.com
+ (2603:10b6:a03:74::31) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.16 via Frontend Transport; Tue,
- 24 Jun 2025 14:16:40 +0000
+ 24 Jun 2025 14:16:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,16 +63,17 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ1PEPF00001CE7.mail.protection.outlook.com (10.167.242.23) with Microsoft
+ SJ1PEPF00001CE6.mail.protection.outlook.com (10.167.242.22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8880.14 via Frontend Transport; Tue, 24 Jun 2025 14:16:40 +0000
+ 15.20.8880.14 via Frontend Transport; Tue, 24 Jun 2025 14:16:41 +0000
 Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 24 Jun
- 2025 09:16:38 -0500
+ 2025 09:16:39 -0500
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Tue, 24 Jun 2025 14:16:16 +0000
-Subject: [PATCH v4 21/22] x86/mce: Handle AMD threshold interrupt storms
+Date: Tue, 24 Jun 2025 14:16:17 +0000
+Subject: [PATCH v4 22/22] x86/mce: Save and use APEI corrected threshold
+ limit
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,7 +82,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250624-wip-mca-updates-v4-21-236dd74f645f@amd.com>
+Message-ID: <20250624-wip-mca-updates-v4-22-236dd74f645f@amd.com>
 References: <20250624-wip-mca-updates-v4-0-236dd74f645f@amd.com>
 In-Reply-To: <20250624-wip-mca-updates-v4-0-236dd74f645f@amd.com>
 To: <x86@kernel.org>, Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki"
@@ -94,156 +95,216 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE7:EE_|PH7PR12MB6956:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18a4af6e-7d2e-4b28-734d-08ddb329bcfc
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE6:EE_|CH2PR12MB4070:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55a5964c-e5b3-4ba7-7e43-08ddb329bdb6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Vkx2dW45MGdacXJWRlNLS25WMXIvQ3oxU0xEK0dncFF1bzRXNkZHU2dUTjlT?=
- =?utf-8?B?dGdzbG80R3A3YW5UOTZJMUNUSXlad0VSQ0I1K1FHbHk5WmZyZzJOSVVyQTJD?=
- =?utf-8?B?cXY3QUdWSDI4RkJEayt4NlBTN0FkQjJvL2NyRUZFZkNRSXNta3RiY09pSWM2?=
- =?utf-8?B?Wk0vQ3gvWTlueUs1cjJhVGhTc2tqTnZYbW9NQkJ1emJQUFR6ZW1TRFpvV3ha?=
- =?utf-8?B?eEVNZnpRRDc4enJaMjFDd0Rub0hUWkErbk1oakk5Y0pBUGVkVDRhQ3JQb3Uw?=
- =?utf-8?B?dlRPVjF0NmxCQ3FjM2xiWGp5WmQ5SHVlUnRjSDRQOVl4cGVjV2VEaEloVVp0?=
- =?utf-8?B?YjdudUFpT2xTUFVzZ0tCRDRZQ2JaSVM2a0psVEwyV0dBVUV6aVFzWGVjNisz?=
- =?utf-8?B?eWJwS0ZoVDRzOVpjejUzWDNJNUMwNnlvcHpIYnE1Z3JIYWdRcDZmZmYvY1R5?=
- =?utf-8?B?VjBwRElNazhsOWl1bXhKeXBJSzEvUnVSelNVb1lodHNSYUVUN1U1TW9UY1hs?=
- =?utf-8?B?RkNmTUlZMjZkcnV4Ky9kcWZheE5jVUhmVkszcm1xNlNMQnRHWk55U3RzSmFQ?=
- =?utf-8?B?RmRVQlk4OWk3K0RHeDVlQ1RYSzFMUWVkM0ZjZzFJMVZLci8ySWpESCtRQjBR?=
- =?utf-8?B?T0VQN0p3ZTEyQ2FoWUZualc1aTZWMlBoZSsxWUlqWURFYmdNTVVaYW5JWm9k?=
- =?utf-8?B?YndEVnIyT01KeXN4YjdsWDlZQXhZb0h0QXhwbm5JUmxha1dkVnFTbWltTXhV?=
- =?utf-8?B?TDZuZE9LQXJ3S01sZDZlRjFoMFFVOStUZWNvcUVKVXJ1MzJieWR5RnFwWDlQ?=
- =?utf-8?B?SkVMWkJMTVdPVm50d1VteXZjbHZrY3B2cmJSaEZ5SWVoVm45NWJQNW5TNDFw?=
- =?utf-8?B?aUZQRURhdlZPenZxWEgyQVdGd3RYbENDTGZGU1MzVDlpclpRSnNNNVRVWUdO?=
- =?utf-8?B?cDRHRlBWUTdZUlc3b0FuOGRIM1hneTZZbUdKTWh5OHZNeE5kU0t4amxkcGk1?=
- =?utf-8?B?UUZ0WDN4L1pWVGJML3pvWDRJd2lDb0pRd0lQSitUbG1nQUJlWCsxam5VZWRS?=
- =?utf-8?B?elp2WE4zL29Wa0pvWE52dkNyaTRUSldaK3lONUNBOTZNS2NTZ1Zsb3FVWFM2?=
- =?utf-8?B?eEVySGpjZTRWTTV2aGY1ejJ1Y0J2ZkFjNkFmQ09KRG1iMHdUYkVvVmVoZUZy?=
- =?utf-8?B?dUpqOXVHNWFCeGVUdVVkdWdPZVBtVjBGa0toZ1Fza1dURzV4NXNNNDV3S21F?=
- =?utf-8?B?eDNqM1lSUXFyZjVlTkd0NC9VUXpNalVpQlpjNHF4QjhCaDMyWE1PTVdzL0do?=
- =?utf-8?B?VUVhLzRGUXN4dDRQWWFybFFmK2svVWV0dHJoTlM4WDJUV01rTjFnTUN2UnFm?=
- =?utf-8?B?cHlrT1pWc0FMaDNwNVA0eFNqWktjbWRHSHVINTFEM09ESUpXbFdNUmVLSnJq?=
- =?utf-8?B?c0Fac3JiU1A5TW5SalVleUtxa3hFUk43Y1F4anorQVhJK0dzaFBaa1dSSk1M?=
- =?utf-8?B?Zk9PbjhWYnNqZDJOSG5oQ1FFWkpUYWxvcmFTNy9YRnlkS3ozZlhnYTNMSlZD?=
- =?utf-8?B?U2lqTHkra3VNd2JrVklCcVdQN2NQVkZqcVVVZ0pWR3JvdHZuS1ZCUC9hekxT?=
- =?utf-8?B?L01QVFgzQ3hrNm9UcjUxS3NFR2NzRWUzK2ttckhySnRDRFNCcXdrS2hkYVJ6?=
- =?utf-8?B?WW1KOXdaQXpvRDlnTGxMUG1QUlN0R3FvQ0VIYmp6Rm8wZ0RnbUhrMEU5V3dS?=
- =?utf-8?B?UWExdXd0Y3kwSDEwZ1FyelNZOFdyb29uVEpXTlZpbDVUMzhmRFpZYlhSTURl?=
- =?utf-8?B?c1BabXpBVHlpMk1UMUJYVDRGd2NPVElNRzF4R3UrbVdrVVVFMStrbktQSnV2?=
- =?utf-8?B?OVoxL0VzdHZjOFZzTnRmNGdYUm1MWjNQa08zOENIYTZ0VEJqMWJoaUpkemRF?=
- =?utf-8?B?WVRKYzc3cXNUYUJzNm9NQk5HWVRES29kcWRyTTNzS1N0c1J5aW1yTWo5V25K?=
- =?utf-8?B?OXV0UXhDYUV5TVZWVitTUjdpdVZna3NobWl4RGFhVDVxU2xXS21oUTQ2YWRZ?=
- =?utf-8?B?WWVYTEZNU044VkF1YzQ5ZXNXUmxBMXZzaUN1dz09?=
+	=?utf-8?B?bGNiT205R3pUbnpxZi9tL0c5UlIzZ1ZrK1lDbGFaNFlLV0Uyem5kQkxJczNC?=
+ =?utf-8?B?dmNkTm8wdE04UWRTRnRzWmZjNFVRK2lTS05OYldzMDJaUlh3V1RINzVYTGRk?=
+ =?utf-8?B?ZENVUHZmd1lKc1pUSXM0ajdlc2pmOWhiOVBpZ0t6bkNicmk4ZjVnZ2NaU2wv?=
+ =?utf-8?B?bVNIQmlEVUk3ckJMaGRMbU1pQ1NKUEp3NXpKWjBXOWI4dE1CMGZnZ3hESVo0?=
+ =?utf-8?B?TEdWUjhxcmJGc3RSYmJRWDU4RG5jem1HMDZSMXJJQ2Z3bXBjbHBGR3UwSy9i?=
+ =?utf-8?B?S3FlWDRyZ00vbHYyQmxWQXoxUXVibXFQRzh5OWNwMFB5ZnpQcWhTTXZsM29r?=
+ =?utf-8?B?N1R4UTdmU2JTajdad3FOT1dTUENGalhab0Q1Y3N1eVlHbWlmYk50ZWNLSHBw?=
+ =?utf-8?B?UVN2SWsyRnpuZVVEb0lQTUFRZjRtNWlRVTBVN0Q5VTMyS0FRQi91OW1WUmwy?=
+ =?utf-8?B?amY0cTh3d29VSnViSHpwWDB5SnhTSE93NXZTM3crVG03U2ErYzB3WWRjN2ho?=
+ =?utf-8?B?TS9JSnlhU2pKNmx0eTNYYlhxNCtHNngrRzlXdGtvRkw5L0FEZ0d4V2xpN21m?=
+ =?utf-8?B?V25QUHA5MmRjVVZ5dXVzLy84ZkdFN3J0d1dnd2ZORGQwakRSM3lOeUxwRkZo?=
+ =?utf-8?B?WjRuQXV1dUZoam1oSEhhbTRaMXM1a2pXUmh4VG5wNDAyVG5GNGVONTFKa2Yr?=
+ =?utf-8?B?WDF1QnNsa2dpQ1F5dXZMclYxRW9oekpGMzRiekxCR3FaVkRXNzhmSitFS0lV?=
+ =?utf-8?B?SENsYi94UFphcjJBd1lDQ0tEMmR4a1NFWHNabVlGcmtLNUtib3pIQkxVcHpq?=
+ =?utf-8?B?UjVmUXFJaGtjUEZmUEIwY082RSt2M0NxcjFIV3puOG9HU2VqWDM4THdJR2hu?=
+ =?utf-8?B?cFZxTmpha2t3RGgzVE9OQ0tJTU9TNTB3YzZsZW5RbzN5dDVvUURrNCs5WHRz?=
+ =?utf-8?B?M1FHK2h3bmpWQzF3MG45c0QwQWtEOTMzdlplaGduTDB1Yis4Yk5hT0VjbSt1?=
+ =?utf-8?B?dk9uZ20vQzNYYmtCV2luUXhrVGFtc2ZNZ2dsdENPcG14Q1pEU3ZkWXZnTVBE?=
+ =?utf-8?B?aGcvTERTY2NvbXBXU25weGY5T29BN2xoMzhZb0JaY1dOSGdRdEtQSmdXMnRU?=
+ =?utf-8?B?c3RyRnoyZ2g0YzF5MWhKaEhnUVVzRFJaYnNWZytKU3o4d2tsQlovZ3V5eERN?=
+ =?utf-8?B?TFEyemkvZTQyR1JDV0cyaFBVRHV5WEZ6NmRRNUN3ODJaaXZXUTlSSlZGUFNN?=
+ =?utf-8?B?MnZuc0hsV2xKYkk2Tmd0UjNkVXUyemxZeVBmek5CdTNIVEw5OCtac2dCZ2Zm?=
+ =?utf-8?B?ZkJqUzUvVjRhdzM0RmdjMWovNWQxNDZicTBYSnNwa2xJZm9nZnordGdZaVIz?=
+ =?utf-8?B?NWVzanhXdVFmbXhGYzJtTU9zeWhuVnJrWWtJL2lHY2dnOEJBQmRIYVk0OTdy?=
+ =?utf-8?B?NmRaMjA5N2NUMVFTR3pYQjVwWEdoMVVOdUhVekE5T0w2dkRvNy90NzZ5YURJ?=
+ =?utf-8?B?ZVp3UnhON044VmxRQ2d2ZWxjaXZ3TWJmM0IvNTRWanRVcXFiRDgzRzdEU0s1?=
+ =?utf-8?B?K1FzT1dkK0UxMmRuUVczUkY1U2x4SjJzZ1h3eExlUjQ4Z2grZ2xqUkh2cmtj?=
+ =?utf-8?B?ZHZQVzZ0TjRsLzRraEljd1FqenU5bkFMREZKeUpZQTBPR1Z3dHlNZTFKRlNn?=
+ =?utf-8?B?MXpkSDc2ak80WjBQbnR4THpVTy9haWVOck1CSTVUY0d0MGhyL1NCcVRpaVhp?=
+ =?utf-8?B?MEpreHBIYStxVU10MVExcXNVRUZ4MVhac2J0TlovZDV0em1Ra1dSRk5IeXJ5?=
+ =?utf-8?B?Ry9qOTdHRnc5N2QrTy9PYWpudDV6d29lVVVVWndlMEVrVmZsWGFac2VoenZT?=
+ =?utf-8?B?OXB2N0FTNDRyWkF3R1Z5eXNINTd3RGQ4K3EzNWhZSEY4UlBEeHpKTHRUU3pu?=
+ =?utf-8?B?WmhwbDllYTA4Z2ZMVnU2QUpTaEM3dnZ2Mmk5anY4blJ4RVRWUTJLNFRUQWtN?=
+ =?utf-8?B?eWNZQUZPRDlZWE1mZ245K0dMMXVZWFZ1d3pjM3pWVTZScVRvdWR5WEpIRHJl?=
+ =?utf-8?Q?+YygeN?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2025 14:16:40.0823
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2025 14:16:41.3005
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18a4af6e-7d2e-4b28-734d-08ddb329bcfc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55a5964c-e5b3-4ba7-7e43-08ddb329bdb6
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00001CE7.namprd03.prod.outlook.com
+	SJ1PEPF00001CE6.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6956
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4070
 
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+The MCA threshold limit generally is not something that needs to change
+during runtime. It is common for a system administrator to decide on a
+policy for their managed systems.
 
-Extend the logic of handling CMCI storms to AMD threshold interrupts.
+If MCA thresholding is OS-managed, then the threshold limit must be set
+at every boot. However, many systems allow the user to set a value in
+their BIOS. And this is reported through an APEI HEST entry even if
+thresholding is not in FW-First mode.
 
-Rely on the similar approach as of Intel's CMCI to mitigate storms per
-CPU and per bank. But, unlike CMCI, do not set thresholds and reduce
-interrupt rate on a storm. Rather, disable the interrupt on the
-corresponding CPU and bank. Re-enable back the interrupts if enough
-consecutive polls of the bank show no corrected errors (30, as
-programmed by Intel).
+Use this value, if available, to set the OS-managed threshold limit.
+Users can still override it through sysfs if desired for testing or
+debug.
 
-Turning off the threshold interrupts would be a better solution on AMD
-systems as other error severities will still be handled even if the
-threshold interrupts are disabled.
+APEI is parsed after MCE is initialized. So reset the thresholding
+blocks later to pick up the threshold limit.
 
-[Tony: Small tweak because mce_handle_storm() isn't a pointer now]
-[Yazen: Rebase and simplify]
-
-Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
 
 Notes:
-    Link:
-    https://lore.kernel.org/r/20250415-wip-mca-updates-v3-16-8ffd9eb4aa56@amd.com
-    
     v3->v4:
-    * Simplify based on new patches in this set.
-    
-    v2->v3:
-    * Add tag from Qiuxu.
-    
-    v1->v2:
-    * New in v2, but based on older patch.
-    * Rebased on current set and simplified.
-    * Kept old tags.
+    * New in v4.
 
- arch/x86/kernel/cpu/mce/amd.c       | 5 +++++
- arch/x86/kernel/cpu/mce/internal.h  | 2 ++
- arch/x86/kernel/cpu/mce/threshold.c | 3 +++
- 3 files changed, 10 insertions(+)
+ arch/x86/include/asm/mce.h          |  6 ++++++
+ arch/x86/kernel/acpi/apei.c         |  2 ++
+ arch/x86/kernel/cpu/mce/amd.c       | 18 ++++++++++++++++--
+ arch/x86/kernel/cpu/mce/internal.h  |  2 ++
+ arch/x86/kernel/cpu/mce/threshold.c | 13 +++++++++++++
+ 5 files changed, 39 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 7d6588195d56..1cfbfff0be3f 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -308,6 +308,12 @@ DECLARE_PER_CPU(struct mce, injectm);
+ /* Disable CMCI/polling for MCA bank claimed by firmware */
+ extern void mce_disable_bank(int bank);
+ 
++#ifdef CONFIG_X86_MCE_THRESHOLD
++void mce_save_apei_thr_limit(u32 thr_limit);
++#else
++static inline void mce_save_apei_thr_limit(u32 thr_limit) { }
++#endif /* CONFIG_X86_MCE_THRESHOLD */
++
+ /*
+  * Exception handler
+  */
+diff --git a/arch/x86/kernel/acpi/apei.c b/arch/x86/kernel/acpi/apei.c
+index 0916f00a992e..e21419e686eb 100644
+--- a/arch/x86/kernel/acpi/apei.c
++++ b/arch/x86/kernel/acpi/apei.c
+@@ -19,6 +19,8 @@ int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data)
+ 	if (!cmc->enabled)
+ 		return 0;
+ 
++	mce_save_apei_thr_limit(cmc->notify.error_threshold_value);
++
+ 	/*
+ 	 * We expect HEST to provide a list of MC banks that report errors
+ 	 * in firmware first mode. Otherwise, return non-zero value to
 diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 56e7d99cef86..85fd9273e90a 100644
+index 85fd9273e90a..9e26b0437dc6 100644
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -848,6 +848,11 @@ static void amd_deferred_error_interrupt(void)
- 	machine_check_poll(MCP_TIMESTAMP, &this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
- }
- 
-+void mce_amd_handle_storm(unsigned int bank, bool on)
-+{
-+	threshold_restart_bank(bank, on);
-+}
-+
- void amd_reset_thr_limit(unsigned int bank)
- {
- 	threshold_restart_bank(bank, true);
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index e25ad0c005d5..09ebcf82df93 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -267,6 +267,7 @@ void mce_prep_record_per_cpu(unsigned int cpu, struct mce *m);
- #ifdef CONFIG_X86_MCE_AMD
- void mce_threshold_create_device(unsigned int cpu);
- void mce_threshold_remove_device(unsigned int cpu);
-+void mce_amd_handle_storm(unsigned int bank, bool on);
- extern bool amd_filter_mce(struct mce *m);
- bool amd_mce_usable_address(struct mce *m);
- void amd_reset_thr_limit(unsigned int bank);
-@@ -299,6 +300,7 @@ void smca_bsp_init(void);
- #else
- static inline void mce_threshold_create_device(unsigned int cpu)	{ }
- static inline void mce_threshold_remove_device(unsigned int cpu)	{ }
-+static inline void mce_amd_handle_storm(unsigned int bank, bool on)	{ }
- static inline bool amd_filter_mce(struct mce *m) { return false; }
- static inline bool amd_mce_usable_address(struct mce *m) { return false; }
- static inline void amd_reset_thr_limit(unsigned int bank) { }
-diff --git a/arch/x86/kernel/cpu/mce/threshold.c b/arch/x86/kernel/cpu/mce/threshold.c
-index f4a007616468..45144598ec74 100644
---- a/arch/x86/kernel/cpu/mce/threshold.c
-+++ b/arch/x86/kernel/cpu/mce/threshold.c
-@@ -63,6 +63,9 @@ static void mce_handle_storm(unsigned int bank, bool on)
- 	case X86_VENDOR_INTEL:
- 		mce_intel_handle_storm(bank, on);
- 		break;
-+	case X86_VENDOR_AMD:
-+		mce_amd_handle_storm(bank, on);
-+		break;
+@@ -488,6 +488,18 @@ static void threshold_restart_bank(unsigned int bank, bool intr_en)
  	}
  }
  
++/* Try to use the threshold limit reported through APEI. */
++static u16 get_thr_limit(void)
++{
++	u32 thr_limit = mce_get_apei_thr_limit();
++
++	/* Fallback to old default if APEI limit is not available. */
++	if (!thr_limit)
++		return THRESHOLD_MAX;
++
++	return min(thr_limit, THRESHOLD_MAX);
++}
++
+ static void mce_threshold_block_init(struct threshold_block *b, int offset)
+ {
+ 	struct thresh_restart tr = {
+@@ -496,7 +508,7 @@ static void mce_threshold_block_init(struct threshold_block *b, int offset)
+ 		.lvt_off		= offset,
+ 	};
+ 
+-	b->threshold_limit		= THRESHOLD_MAX;
++	b->threshold_limit		= get_thr_limit();
+ 	threshold_restart_block(&tr);
+ };
+ 
+@@ -1079,7 +1091,7 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ 	b->address		= address;
+ 	b->interrupt_enable	= 0;
+ 	b->interrupt_capable	= lvt_interrupt_supported(bank, high);
+-	b->threshold_limit	= THRESHOLD_MAX;
++	b->threshold_limit	= get_thr_limit();
+ 
+ 	if (b->interrupt_capable) {
+ 		default_attrs[2] = &interrupt_enable.attr;
+@@ -1090,6 +1102,8 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+ 
+ 	list_add(&b->miscj, &tb->miscj);
+ 
++	mce_threshold_block_init(b, (high & MASK_LVTOFF_HI) >> 20);
++
+ 	err = kobject_init_and_add(&b->kobj, &threshold_ktype, tb->kobj, get_name(cpu, bank, b));
+ 	if (err)
+ 		goto out_free;
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index 09ebcf82df93..df98930a32a5 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -67,6 +67,7 @@ void mce_track_storm(struct mce *mce);
+ void mce_inherit_storm(unsigned int bank);
+ bool mce_get_storm_mode(void);
+ void mce_set_storm_mode(bool storm);
++u32  mce_get_apei_thr_limit(void);
+ #else
+ static inline void cmci_storm_begin(unsigned int bank) {}
+ static inline void cmci_storm_end(unsigned int bank) {}
+@@ -74,6 +75,7 @@ static inline void mce_track_storm(struct mce *mce) {}
+ static inline void mce_inherit_storm(unsigned int bank) {}
+ static inline bool mce_get_storm_mode(void) { return false; }
+ static inline void mce_set_storm_mode(bool storm) {}
++static inline u32  mce_get_apei_thr_limit(void) { return 0; }
+ #endif
+ 
+ /*
+diff --git a/arch/x86/kernel/cpu/mce/threshold.c b/arch/x86/kernel/cpu/mce/threshold.c
+index 45144598ec74..d00d5bf9959d 100644
+--- a/arch/x86/kernel/cpu/mce/threshold.c
++++ b/arch/x86/kernel/cpu/mce/threshold.c
+@@ -13,6 +13,19 @@
+ 
+ #include "internal.h"
+ 
++static u32 mce_apei_thr_limit;
++
++void mce_save_apei_thr_limit(u32 thr_limit)
++{
++	mce_apei_thr_limit = thr_limit;
++	pr_info("HEST: Corrected error threshold limit = %u\n", thr_limit);
++}
++
++u32 mce_get_apei_thr_limit(void)
++{
++	return mce_apei_thr_limit;
++}
++
+ static void default_threshold_interrupt(void)
+ {
+ 	pr_err("Unexpected threshold interrupt at vector %x\n",
 
 -- 
 2.49.0
