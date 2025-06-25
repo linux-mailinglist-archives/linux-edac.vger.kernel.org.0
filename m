@@ -1,72 +1,74 @@
-Return-Path: <linux-edac+bounces-4252-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4253-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D31DAE8C1E
-	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 20:15:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51C10AE8EE5
+	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 21:43:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78F883B6B98
-	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 18:14:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49A2E4A46EF
+	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 19:43:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C945C2701D8;
-	Wed, 25 Jun 2025 18:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C06DF2D5C81;
+	Wed, 25 Jun 2025 19:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GjWucunt"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="EK2gprrP"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6931DDC1E;
-	Wed, 25 Jun 2025 18:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FEF3074BC;
+	Wed, 25 Jun 2025 19:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750875314; cv=none; b=ky3YndlOAAJ22MSEXBpk5BO+ET79GelCRAQ0NHBXoDosPW6to57ExKt+U2fy0td0AZT3JLK51SPWDA9xncVCje0CLBs2B2Zu/m5jLcfU3CVY4qLvsWsVbbFu5NerA2/wy6WZraTDjxjW2vbjnGT0J19gzRmPYWPEsFmMePG18fw=
+	t=1750880629; cv=none; b=RpAq3BzXH/VcUYcts0kckHSVpv59ltGwijCdBqcG/vtdRR1vCQOwz4SwR5tGVuEnoMd3oNcKJgaP/14r6w584TePRVpo+BeKXI+R8nRwx3BsxEulbGDjL+ki7+c+4PjPGA7BQahrX88AKVjAQ7YiQDQZH8ATTv/7JIV0dTnlKqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750875314; c=relaxed/simple;
-	bh=CxtBoFDG1a0gobPdzSr/uuDoJXqLk9bYZjbFWAhbBBg=;
+	s=arc-20240116; t=1750880629; c=relaxed/simple;
+	bh=85TBiF9vWpEzOiyWOW6FnwMDFFQ0OHyo9F1KYkZHRJw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mn6BGRO6HYQNHffPoTlpwSDf1Ysd6tVZOBvpNjP2P/a6rYnFmNLXpQhz4aGNMHkVEf13Qh7dz+K3XZe/21+dDTOmH1+bTDRPxBKYA6lCXbvjSaicdSWzH3/zHCfcCXeYM5DzPjVRDcQPLgM1Tx6H/R3he8M2+muZk14bMndBnVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GjWucunt; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750875313; x=1782411313;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CxtBoFDG1a0gobPdzSr/uuDoJXqLk9bYZjbFWAhbBBg=;
-  b=GjWucuntzDlCAsjVTOqCtn3XSaPD34QitzeFGh9ZRfrynr9bj66Gfx9z
-   AEomu79lVc00ivkeAxa9J0cjUdUggp95AvSVqU4Jv+qE55rkjwvCDiptZ
-   cUnunSiUv6FTUJ+5RLVsg0gKepoTOX/tMNQTPLw+qJvHLIBG4PdjTtlbg
-   DzTjYxovG3YjFzgqnNr4ecB9c2oCyYM1iQ/BJ0XLAgC5k6TqnhZ4Opv1o
-   hnWMFOepU24cnxF9blxZdPdEmXgsjV+B3k8PYGuN1DRqCoFX2aot+c62x
-   m+gjdYbQga6Iz3MD2OjkjiW8Mv7lLUdyh0138ULpgiOSUrXhjaYsslTzo
-   w==;
-X-CSE-ConnectionGUID: NsGMuXHcT9So33Yjuvalsg==
-X-CSE-MsgGUID: rNdYn1T9RY6D7QztHv+VIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="75695502"
-X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
-   d="scan'208";a="75695502"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 11:15:12 -0700
-X-CSE-ConnectionGUID: SxgJoMYURoeM4rO5GTa72A==
-X-CSE-MsgGUID: a9b+IyaeR3GAlzq0ei13Yw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
-   d="scan'208";a="158050180"
-Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.103.51])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 11:15:11 -0700
-Date: Wed, 25 Jun 2025 11:15:09 -0700
-From: "Luck, Tony" <tony.luck@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XmTIHUCPtpH1zDx3+ue3QLzOCIhAwXtzMqt8qm+UoLm5hxqA39q42CjOnVLCTLG5dYyKqf9JNSP7hQsF7ZynclgODYwb4bR0EAtgHYEurJPAT4ojN0YM3kknd/6ZRBlu0yVcDCaTaWfwNpT1HlJ0gkrlS3xGVFZHKV8LBbTfN58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=EK2gprrP; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A55C340E019C;
+	Wed, 25 Jun 2025 19:43:43 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id QCoBZ2S8itpe; Wed, 25 Jun 2025 19:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1750880620; bh=j8KXOyVlrTz3WrmUUDKu9Dp2Ys4WOvLarIGmlHJOLtk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EK2gprrPUlw0WCgeibzeftf5aMmtKn86GN7kpnQYc1ptMpjshm+ZlDneG5x7fnSuQ
+	 BKQfs+vz48302ygD44ATw0R6lmWZgXcXeGi7ck4de76kjvMoTKz8g2YuiTX2599fIB
+	 T9DoJjcfSQ35YPX327YyrcmZqaUGYROiq8nvNgQqRuwGshfxdTpXCV1QeQhcHVwAYZ
+	 aM6xeCEMgJgqdkIaAujlmhoYJ+EP2DItCoAhZA/ORoIQbOzKZ/kEKd2qsxlT1XSaU8
+	 VYcOMrjmG173BRJlZpvtkVxAKl7+wMc1jMwy+hSnOvF3mpPyTTEJI8CH7ugaCRqWM8
+	 cW1qXHLXFPXtg19moqoF+jmtBIZdG0V8YXzN2419VXkr1VqqhB7sVake6Em9nYq/VB
+	 /TqPOKCdfDwZ9XRqG/NLTzwD/o0ITkyGFGYofSfHE770ibtvK+uNUaun9TkFxS7+7T
+	 lKmvUg3YMtwXd3w+ep5v9picR0zzkUzzgAEpzM0sPinCEmebW3gr5U83vc3/WHqmUE
+	 vzohUnybJu9ggJx5vFVwOJtPUU57rjbaUxJzjb7EKqJg7ZBfbpP6cCjk3GybclD7Bq
+	 ISs0Nm8gXv96Wj9iL1re7kyvNaiyJTxajcWHzQA9SIzRySfe4pQx1ETqlOhWCSFKcT
+	 cZjLfwYRHP5AgNfcW2oi+HY8=
+Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D466440E00DE;
+	Wed, 25 Jun 2025 19:43:28 +0000 (UTC)
+Date: Wed, 25 Jun 2025 21:43:22 +0200
+From: Borislav Petkov <bp@alien8.de>
 To: JP Kobryn <inwardvessel@gmail.com>
-Cc: bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
+Cc: tony.luck@intel.com, tglx@linutronix.de, mingo@redhat.com,
 	dave.hansen@linux.intel.com, hpa@zytor.com, aijay@meta.com,
 	x86@kernel.org, linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org, kernel-team@meta.com
 Subject: Re: [PATCH] mce: include cmci during intel feature clearing
-Message-ID: <aFw8rWwTVw85cavh@agluck-desk3>
+Message-ID: <20250625194322.GGaFxRWqx0WbE90k6N@fat_crate.local>
 References: <20250617214752.178263-1-inwardvessel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -74,7 +76,7 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20250617214752.178263-1-inwardvessel@gmail.com>
 
@@ -136,34 +138,32 @@ On Tue, Jun 17, 2025 at 02:47:52PM -0700, JP Kobryn wrote:
 > within this routine - the banks would be free for acquisition on the boot
 > up side of a kexec. This patch adds the call to clear CMCI to this intel
 > routine.
-> 
-> Reported-by: Aijay Adams <aijay@meta.com>
-> Signed-off-by: JP Kobryn <inwardvessel@gmail.com>
 
-LGTM
+Please:
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
+ - shorten this commit message - there really is no need to explain in such
+   detail that mcheck_cpu_clear() has simply forgotten to clear CMCI banks
+   too.
 
-> ---
->  arch/x86/kernel/cpu/mce/intel.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-> index efcf21e9552e..9b149b9c4109 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -478,6 +478,7 @@ void mce_intel_feature_init(struct cpuinfo_x86 *c)
->  void mce_intel_feature_clear(struct cpuinfo_x86 *c)
->  {
->  	intel_clear_lmce();
-> +	cmci_clear();
+ - run it through a spellchecker
 
-I particularly like that you found a one-line fix!
+ - drop all personal pronouns
 
->  }
->  
->  bool intel_filter_mce(struct mce *m)
-> -- 
-> 2.47.1
-> 
+ - write it in imperative tone
+
+Some hints:
+
+Section "2) Describe your changes" in
+Documentation/process/submitting-patches.rst for more details.
+
+Also, see section "Changelog" in
+Documentation/process/maintainer-tip.rst
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
