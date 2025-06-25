@@ -1,187 +1,283 @@
-Return-Path: <linux-edac+bounces-4238-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4239-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29F38AE7FCF
-	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 12:42:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51DB4AE8085
+	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 13:04:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F5017B2247
-	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 10:41:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E9BE169F06
+	for <lists+linux-edac@lfdr.de>; Wed, 25 Jun 2025 11:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D77632BD01A;
-	Wed, 25 Jun 2025 10:41:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D465428936B;
+	Wed, 25 Jun 2025 11:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TErRV/gd"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0655D2BD012;
-	Wed, 25 Jun 2025 10:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1598270EA5
+	for <linux-edac@vger.kernel.org>; Wed, 25 Jun 2025 11:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750848103; cv=none; b=s3JJpKHJCNfncql/hkw6qihpCfZU5ZCdvlfDr0LX6NypXibdB7XUBJMNstp1KOuqdXQMKfd4KCBwlHMIOfQseA8lL1SA/j3mrdmHNF6IaHGdaEHOgaoPIQwByUrSzxS/dz0DjYF17GOnFcsa89kFxzFnlsOVzjKNkqmPSQdkpA4=
+	t=1750849469; cv=none; b=FLymtfFLFUrgHA6jrLMP9gDhzpfuv5CTAI8sb9siIoq7qI3rnihG7okIuXqQrWhiLa17xPpegpCNG8tIPJqAGW4WUEw/PcLmDSxkGVvgkj+KIHpZW+gHI4xcKvGBB3PM29Ic+VRDpf2y57fr4ORG/ggETnou8bDCvKLUEAUQd40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750848103; c=relaxed/simple;
-	bh=UWgHI2JYjTR8/RE+TvkJISVMdND38DQGmtOHHEDcGJ4=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JJV/Xk2WjTWcNKfrrV5wSyVkOvVwCLLEzpq9rH3XpB4AS3TCI3zklB9yYGR5CAxjoLtIsZeWjgD3pbNf1sb1yZgxoScAElZgpwx+tOF4nRf8YLBUGG3gk0IldkxOZRB15IcRNEAh1fxdip4PiepRKPJ8mZ23jT08txm+tZC6XXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bRyyr6Smtz6M4ZT;
-	Wed, 25 Jun 2025 18:40:52 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 70FF71402FC;
-	Wed, 25 Jun 2025 18:41:38 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 25 Jun
- 2025 12:41:37 +0200
-Date: Wed, 25 Jun 2025 11:41:36 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: <shiju.jose@huawei.com>
-CC: <linux-edac@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<lenb@kernel.org>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
-	<mchehab@kernel.org>, <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-	<linuxarm@huawei.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>
-Subject: Re: [PATCH 1/1] EDAC: Fix lockdep splat caused by edac features
- code
-Message-ID: <20250625114136.0000021a@huawei.com>
-In-Reply-To: <20250624181312.1712-1-shiju.jose@huawei.com>
-References: <20250624181312.1712-1-shiju.jose@huawei.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1750849469; c=relaxed/simple;
+	bh=Y61BWDZPtR7pOaf7dLRue8jdp9Hm+JJTJKTIUIAX/6w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iqFU4L1HSmqyaegaTayQnmR42Cv4MLtrgRwHlY53KOLwwx/cB99LXZTivIMJC7BVW32wkzOluyvC+4eh9VnCfh0l4ACtG/pRfExlMKM9CvY9FDkjiPuRoCDXwFokZDOgYuhYDJbA1m/KJcv9tReTG2+v5AIprZkuYJOvsf0bjqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TErRV/gd; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a582e09144so3975321f8f.1
+        for <linux-edac@vger.kernel.org>; Wed, 25 Jun 2025 04:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1750849466; x=1751454266; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=bBM23Ct+ByfHw8SX8hyrNix/sLf/sb5BZO5XYr+ya8c=;
+        b=TErRV/gdYBjNP7cUVLn/kFyF8fQG5e4LdU5VRG8LeqKzmFrHa3SdTYp/8LlOHZJk3J
+         2w73MS8opdz0FHCHV1TfAS9skDT8fpbnexqcwjPM7kT73MwLB2yh75N0ggXYf1ZDslhi
+         wI+ld/2quuc3yAdVrtV+rcF+MVT4qbHo2/3WxroiSK9A+35u8YPHvwWxHB0pLa7tDFyG
+         gJ6R9AVQUKHn68MgTbVNspKPwDcAt/PImfs/UMOyFlJxcaMRZ/VDfDkSsL44n907aZ50
+         C7maMr9Fka+sVPLheQLi6Ifb1CKmneYq5+uUxyZFWKY0ti+FGdqQGuIZPEw/cLCW0m1X
+         O/tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750849466; x=1751454266;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bBM23Ct+ByfHw8SX8hyrNix/sLf/sb5BZO5XYr+ya8c=;
+        b=ChaJ/cm0XbD6aeyHSAHTwCZ8fYd+MdpOrrB8g9zZiDfYRs0jzTWxksmmw9jb3UtsHG
+         Bi9fptPkW+w3dmRpe3J8KRis5YXKuR0Sl3vEfihzPCPFTxdBqqo9jz6aXeGYHdRhW/DE
+         Jr6h9VwSDlH2+CGbzyr8LPb7pcf66NLgMMtRP5y9jc66P7GxLGpx5FOoSptuFpukq0Eu
+         uci8KwmW9IqV2iam8/GP3daJGkhMRKQGlPWZWANydmVCGWPuqWJIEVQq7vYjtXTgzczl
+         O0Wf84Rkpbljmajkrfu10vImIk6PKAe+cxxYUjSadSXA+0BLlhsxctWRWm+qHjABqqKy
+         CZJg==
+X-Forwarded-Encrypted: i=1; AJvYcCUkmQRjzHGbAeaX/RMOYA1/rCL4aS/PQMRNw6RtQLAuR8i1yDqtLzfa6yj5BMrCkaOREWteNmqp2B9M@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNWEWtOKhFjDHUJHgRAcUHQHZK/vvQesvXVSD/86lIOmoK1xM+
+	LXjOYPE9bj6exyqb7Ohe5mniworC027pY0ev6AUJEUqoGAo+fS98jfWbPnM1f4Fe95E=
+X-Gm-Gg: ASbGnctjxu5aMyfdVX0unVerSPCwOuOsRi4sCxjj/ht9HOGxqgwNclckI3CDd2UKML+
+	N5s8dbKVEGJsroxaj4pM0TVONpuwcI4mlFfeXg0vBirOcg30sSltNJhVMNyWPGQhI/1Yxu0NjOB
+	4mwj7lcUydf8o/kSHYgIgVp4K/qh7KBYjmo5XJu7XQ2X29JReTDNLCyqkKsTa/arh8Llc3MI+BO
+	K8Z+7SJJ1kKiXB4O/W6b9iK6xSiDEIszULlN2tNYGxSDscoNfxRf9oVmRrCi6UndQfTtOWpoppg
+	Km+D9IZsozdsGXTm8LyA1KHbbzRBHrcU8E46eX7hhiuorWspuEG/4UqhQnViJa31xs7uS+TopYC
+	8
+X-Google-Smtp-Source: AGHT+IGqXj4nCrHiF5JwTZNWhPjB/iAgsxt4njcrF6F5C/nV0EZz4mK8GLoApBEEds3Rk2JIMJczGg==
+X-Received: by 2002:a05:6000:40cd:b0:3a5:39e9:928d with SMTP id ffacd0b85a97d-3a6ed58b645mr2239688f8f.0.1750849466039;
+        Wed, 25 Jun 2025 04:04:26 -0700 (PDT)
+Received: from [192.168.0.20] ([212.21.159.38])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6e80ff8b8sm4225084f8f.71.2025.06.25.04.04.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jun 2025 04:04:25 -0700 (PDT)
+Message-ID: <fa56c7d9-cd93-47a5-bc48-0962b364d8be@suse.com>
+Date: Wed, 25 Jun 2025 14:04:24 +0300
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 11/22] x86/mce: Define BSP-only init
+To: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
+ Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Len Brown <lenb@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+ Smita.KoralahalliChannabasappa@amd.com, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+ linux-acpi@vger.kernel.org
+References: <20250624-wip-mca-updates-v4-0-236dd74f645f@amd.com>
+ <20250624-wip-mca-updates-v4-11-236dd74f645f@amd.com>
+From: Nikolay Borisov <nik.borisov@suse.com>
+Content-Language: en-US
+Autocrypt: addr=nik.borisov@suse.com; keydata=
+ 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
+In-Reply-To: <20250624-wip-mca-updates-v4-11-236dd74f645f@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- frapeml500008.china.huawei.com (7.182.85.71)
 
-On Tue, 24 Jun 2025 19:13:12 +0100
-<shiju.jose@huawei.com> wrote:
 
-> From: Shiju Jose <shiju.jose@huawei.com>
+
+On 6/24/25 17:16, Yazen Ghannam wrote:
+> Currently, MCA initialization is executed identically on each CPU as
+> they are brought online. However, a number of MCA initialization tasks
+> only need to be done once.
 > 
-> Fix the lockdep splat caused by missing sysfs_attr_init() calls
-> for the newely added EDAC feature's sysfs attributes.
-newly though recently is probably better.
+> Define a function to collect all 'global' init tasks and call this from
+> the BSP only. Start with CPU features.
 > 
-> ...
-> [   16.867268] CPU: 4 UID: 0 PID: 131 Comm: kworker/u33:4 Tainted: G           O        6.16.0-rc3+
-> [   16.867272] Tainted: [O]=OOT_MODULE
-> [   16.867273] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS edk2-20241117-5.fc41 11/17/2
-> 024
-> [   16.867275] Workqueue: async async_run_entry_fn
-> [   16.867282] RIP: 0010:lockdep_init_map_type+0x131/0x270
-> [   16.867287] Code: 85 c0 75 b4 e8 50 d6 6f 00 85 c0 74 ab 8b 3d 26 0d bd 01 85 ff 75 a1 48 c7 c6 c
-> f 52 ac 82 48 c7 c7 2a 12 aa 82 e8 6f 59 f6 ff <0f> 0b eb 8a 9c 58 0f 1f 40 00 48 89 c5 fa 0f 1f 44
-> 00 00 48 c7 c7
-> [   16.867289] RSP: 0018:ffffc900020875d8 EFLAGS: 00010292
-> [   16.867291] RAX: 0000000000000016 RBX: ffff888212716a58 RCX: 0000000000000000
-> [   16.867292] RDX: 0000000000000002 RSI: ffffffff82ab189f RDI: 00000000ffffffff
-> [   16.867293] RBP: ffff888201a5e8c0 R08: 0000000000000000 R09: 0000000000000000
-> [   16.867294] R10: 0000000000000000 R11: 65726f635f6c7863 R12: 0000000000000000
-> [   16.867295] R13: ffff888201a5e8c0 R14: ffff8882052bc630 R15: ffff888201a5e9a8
-> [   16.867296] FS:  0000000000000000(0000) GS:ffff8882f11e5000(0000) knlGS:0000000000000000
-> [   16.867298] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   16.867299] CR2: 00007f20a16c6030 CR3: 0000000003c4c005 CR4: 0000000000770ef0
-> [   16.867304] PKRU: 55555554
-> [   16.867305] Call Trace:
-> [   16.867308]  <TASK>
-> [   16.867313]  __kernfs_create_file+0x77/0xf0
-> [   16.887524]  sysfs_add_file_mode_ns+0x86/0x140
-> [   16.887534]  internal_create_group+0x1cc/0x4b0
-> [   16.887540]  internal_create_groups+0x42/0xa0
-> [   16.887544]  device_add+0x310/0x860
-> [   16.887548]  ? __init_waitqueue_head+0x4a/0x60
-> [   16.887555]  edac_dev_register+0x3ff/0x480
-> [   16.887565]  devm_cxl_memdev_edac_register+0x509/0x640 [cxl_core]
-> [   16.893091]  ? lock_acquire+0xc4/0x2d0
-> [   16.893100]  ? find_held_lock+0x2b/0x80
-> [   16.893103]  ? cxl_mem_probe+0x21e/0x360 [cxl_mem]
-> [   16.893113]  ? cxl_mem_probe+0x21e/0x360 [cxl_mem]
-> [   16.893117]  ? lockdep_hardirqs_on+0x78/0x100
-> [   16.896972]  ? cxl_mem_probe+0x226/0x360 [cxl_mem]
-> [   16.896982]  cxl_mem_probe+0x226/0x360 [cxl_mem]
-
-Prune this to drop timestamps etc and keep only the relevant info.
-https://docs.kernel.org/process/submitting-patches.html#backtraces-in-commit-messages
-
-Also, call out the code that actually causes the splat which from our earlier
-discussion is I think:
- if (!static_obj(key) && !is_dynamic_key(key)) check in lockdev_init_map_type?
-https://elixir.bootlin.com/linux/v6.15.3/source/kernel/locking/lockdep.c#L4977
-
-> ...
-> 
-> Fixes: f90b738166fe ("EDAC: Add scrub control feature")
-> Fixes: bcbd069b11b0 ("EDAC: Add a Error Check Scrub control feature")
-> Fixes: 699ea5219c4b ("EDAC: Add a memory repair control feature")
-> Reported-by: Dave Jiang <dave.jiang@intel.com>
-> Suggested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> Tested-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 > ---
->  drivers/edac/ecs.c        | 4 +++-
->  drivers/edac/mem_repair.c | 1 +
->  drivers/edac/scrub.c      | 1 +
->  3 files changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/edac/ecs.c b/drivers/edac/ecs.c
-> index 1d51838a60c1..1be237d15bed 100755
-> --- a/drivers/edac/ecs.c
-> +++ b/drivers/edac/ecs.c
-> @@ -170,8 +170,10 @@ static int ecs_create_desc(struct device *ecs_dev, const struct attribute_group
->  		fru_ctx->dev_attr[ECS_RESET]		= EDAC_ECS_ATTR_WO(reset, fru);
->  		fru_ctx->dev_attr[ECS_THRESHOLD]	= EDAC_ECS_ATTR_RW(threshold, fru);
->  
-> -		for (i = 0; i < ECS_MAX_ATTRS; i++)
-> +		for (i = 0; i < ECS_MAX_ATTRS; i++) {
->  			fru_ctx->ecs_attrs[i] = &fru_ctx->dev_attr[i].dev_attr.attr;
-> +			sysfs_attr_init(fru_ctx->ecs_attrs[i]);
-It feels to me like maybe this should be applied before we put the pointer in the array
-of attribute pointers.  So one line earlier (without the convenience of that
-shorter form). Perhaps a local variable?
+> Notes:
+>      Link:
+>      https://lore.kernel.org/r/20250415-wip-mca-updates-v3-7-8ffd9eb4aa56@amd.com
+>      
+>      v3->v4:
+>      * Change cpu_mca_init() to mca_bsp_init().
+>      * Drop code comment.
+>      
+>      v2->v3:
+>      * Add tags from Qiuxu and Tony.
+>      
+>      v1->v2:
+>      * New in v2.
+> 
+>   arch/x86/include/asm/mce.h     |  2 ++
+>   arch/x86/kernel/cpu/common.c   |  1 +
+>   arch/x86/kernel/cpu/mce/amd.c  |  3 ---
+>   arch/x86/kernel/cpu/mce/core.c | 28 +++++++++++++++++++++-------
+>   4 files changed, 24 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+> index 3224f3862dc8..31e3cb550fb3 100644
+> --- a/arch/x86/include/asm/mce.h
+> +++ b/arch/x86/include/asm/mce.h
+> @@ -241,12 +241,14 @@ struct cper_ia_proc_ctx;
+>   
+>   #ifdef CONFIG_X86_MCE
+>   int mcheck_init(void);
+> +void mca_bsp_init(struct cpuinfo_x86 *c);
+>   void mcheck_cpu_init(struct cpuinfo_x86 *c);
+>   void mcheck_cpu_clear(struct cpuinfo_x86 *c);
+>   int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
+>   			       u64 lapic_id);
+>   #else
+>   static inline int mcheck_init(void) { return 0; }
+> +static inline void mca_bsp_init(struct cpuinfo_x86 *c) {}
+>   static inline void mcheck_cpu_init(struct cpuinfo_x86 *c) {}
+>   static inline void mcheck_cpu_clear(struct cpuinfo_x86 *c) {}
+>   static inline int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 8feb8fd2957a..8a00faa1042a 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -1771,6 +1771,7 @@ static void __init early_identify_cpu(struct cpuinfo_x86 *c)
+>   		setup_clear_cpu_cap(X86_FEATURE_LA57);
+>   
+>   	detect_nopl();
+> +	mca_bsp_init(c);
+>   }
+>   
+>   void __init init_cpu_devs(void)
+> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+> index 292109e46a94..25a24d0b9cf9 100644
+> --- a/arch/x86/kernel/cpu/mce/amd.c
+> +++ b/arch/x86/kernel/cpu/mce/amd.c
+> @@ -655,9 +655,6 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
+>   	u32 low = 0, high = 0, address = 0;
+>   	int offset = -1;
+>   
+> -	mce_flags.overflow_recov = cpu_feature_enabled(X86_FEATURE_OVERFLOW_RECOV);
+> -	mce_flags.succor	 = cpu_feature_enabled(X86_FEATURE_SUCCOR);
+> -	mce_flags.smca		 = cpu_feature_enabled(X86_FEATURE_SMCA);
+>   	mce_flags.amd_threshold	 = 1;
+>   
+>   	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index ebe3e98f7606..c55462e6af1c 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -1837,13 +1837,6 @@ static void __mcheck_cpu_cap_init(void)
+>   	this_cpu_write(mce_num_banks, b);
+>   
+>   	__mcheck_cpu_mce_banks_init();
+> -
+> -	/* Use accurate RIP reporting if available. */
+> -	if ((cap & MCG_EXT_P) && MCG_EXT_CNT(cap) >= 9)
+> -		mca_cfg.rip_msr = MSR_IA32_MCG_EIP;
+> -
+> -	if (cap & MCG_SER_P)
+> -		mca_cfg.ser = 1;
+>   }
+>   
+>   static void __mcheck_cpu_init_generic(void)
+> @@ -2243,6 +2236,27 @@ DEFINE_IDTENTRY_RAW(exc_machine_check)
+>   }
+>   #endif
+>   
+> +void mca_bsp_init(struct cpuinfo_x86 *c)
+> +{
+> +	u64 cap;
+> +
+> +	if (!mce_available(c))
+> +		return;
+> +
+> +	mce_flags.overflow_recov = cpu_feature_enabled(X86_FEATURE_OVERFLOW_RECOV);
+> +	mce_flags.succor	 = cpu_feature_enabled(X86_FEATURE_SUCCOR);
+> +	mce_flags.smca		 = cpu_feature_enabled(X86_FEATURE_SMCA);
 
-			struct attribute *attr = &fru_ctx->dev_attr[i].dev_attr.attr;
-			
-			sysfs_attr_init(attr);
-			fru_ctx->ecs_attrs[i] = attr;
+nit: Why use cpu_feature_enabled VS say boot_cpu_has since none of the 3 
+features are defined in cpufeaturemasks.h, meaning that 
+cpu_feature_enabled is essentially static_cpu_has, given that this is 
+not a fast path?
 
-I don't care that much though.
-
-> +		}
->  
->  		sprintf(fru_ctx->name, "%s%d", EDAC_ECS_FRU_NAME, fru);
->  		group->name = fru_ctx->name;
-> diff --git a/drivers/edac/mem_repair.c b/drivers/edac/mem_repair.c
-> index d1a8caa85369..c7951bc5efdb 100755
-> --- a/drivers/edac/mem_repair.c
-> +++ b/drivers/edac/mem_repair.c
-> @@ -335,6 +335,7 @@ static int mem_repair_create_desc(struct device *dev,
->  		       &dev_attr[i], sizeof(dev_attr[i]));
->  		ctx->mem_repair_attrs[i] =
->  			&ctx->mem_repair_dev_attr[i].dev_attr.attr;
-> +		sysfs_attr_init(ctx->mem_repair_attrs[i]);
->  	}
->  
->  	sprintf(ctx->name, "%s%d", "mem_repair", instance);
-> diff --git a/drivers/edac/scrub.c b/drivers/edac/scrub.c
-> index e421d3ebd959..8831b44e9193 100755
-> --- a/drivers/edac/scrub.c
-> +++ b/drivers/edac/scrub.c
-> @@ -177,6 +177,7 @@ static int scrub_create_desc(struct device *scrub_dev,
->  	for (i = 0; i < SCRUB_MAX_ATTRS; i++) {
->  		memcpy(&scrub_ctx->scrub_dev_attr[i], &dev_attr[i], sizeof(dev_attr[i]));
->  		scrub_ctx->scrub_attrs[i] = &scrub_ctx->scrub_dev_attr[i].dev_attr.attr;
-> +		sysfs_attr_init(scrub_ctx->scrub_attrs[i]);
->  	}
->  	sprintf(scrub_ctx->name, "%s%d", "scrub", instance);
->  	group->name = scrub_ctx->name;
+It's not wrong per-se but I think the cpu_feature_enabled api is 
+somewhat of a trainwreck i.e we ought to have a version that uses 
+boot_cpu_has for "ordinary uses" and probably cpu_feature_enabled_fast 
+for fastpaths.
+> +
+> +	rdmsrq(MSR_IA32_MCG_CAP, cap);
+> +
+> +	/* Use accurate RIP reporting if available. */
+> +	if ((cap & MCG_EXT_P) && MCG_EXT_CNT(cap) >= 9)
+> +		mca_cfg.rip_msr = MSR_IA32_MCG_EIP;
+> +
+> +	if (cap & MCG_SER_P)
+> +		mca_cfg.ser = 1;
+> +}
+> +
+>   /*
+>    * Called for each booted CPU to set up machine checks.
+>    * Must be called with preempt off:
+> 
 
 
