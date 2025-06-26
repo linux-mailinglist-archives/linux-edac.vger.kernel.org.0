@@ -1,105 +1,132 @@
-Return-Path: <linux-edac+bounces-4260-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4261-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55BB1AE9DD9
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 14:52:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFA9CAE9FF7
+	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 16:11:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E1E71899D74
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 12:52:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9C4D5676B4
+	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 14:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118712E11BF;
-	Thu, 26 Jun 2025 12:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F8B52E175E;
+	Thu, 26 Jun 2025 14:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="d3APXVmd"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0143225B30A;
-	Thu, 26 Jun 2025 12:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB15C249F9;
+	Thu, 26 Jun 2025 14:10:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750942310; cv=none; b=iCxhr9tWLpBQ38UI1XM+khHOYnNw1jSUGjJksdnpMRDhsZ+vXOY3bZXLcK+YypiVijrQGpNZ48o6SMB8B3dMxK5kDan1SioTdXeIyzBDrxVVbeE2IpCSuis7xQEvZNw0uRF04Ub2UD85xIC4Ydjahl5/7ckugQ1ECDD108ReKDg=
+	t=1750947047; cv=none; b=gqhCIjTNKH4hq0KLYiCcNtLtXKhYolzkzd4XgNPON0KDe6qYTM8CsK2y0a+ruLxDParLUDmu/JF/jFKA43heyQZZX8yUTz5slDDrHJ2idQILjhSCGYC+LpNJ90PRTRdTzJeriu4Tz2wGQRmGEQy7UyxPnm+phRhj58m2AHVPwk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750942310; c=relaxed/simple;
-	bh=EPQkNCZl/P+7ztePCyqmZaljOKue1/126ei5E/j2mkQ=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QZqJeb+n+gedEdddVqQkTLND6FvippxRm/o0ZrhpIfGcKdusadpMPCjnkx0bL+tx4F0eChYxyWBpGIIv1V2SpEcTsVonxUo6klUPqEZUmlhMZifxPYvPqp7wBnIJ8IFsORYx5PJdB+Ki/AS06KQwghSujWLk1PiOxO6e6uJ40qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bSdpW2h3Cz6M4g3;
-	Thu, 26 Jun 2025 20:50:59 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8136F140426;
-	Thu, 26 Jun 2025 20:51:46 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 26 Jun
- 2025 14:51:45 +0200
-Date: Thu, 26 Jun 2025 13:51:44 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: <shiju.jose@huawei.com>
-CC: <linux-edac@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<lenb@kernel.org>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
-	<mchehab@kernel.org>, <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-	<linuxarm@huawei.com>, <tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>
-Subject: Re: [PATCH v2 1/1] EDAC: Fix lockdep splat caused by edac features
- code
-Message-ID: <20250626135144.00002973@huawei.com>
-In-Reply-To: <20250626101344.1726-1-shiju.jose@huawei.com>
-References: <20250626101344.1726-1-shiju.jose@huawei.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1750947047; c=relaxed/simple;
+	bh=lRGt/g0g8Dt9x8qN3dripz/CNyLvV5boW50dIA5joSQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cBY618C9FVIGgjxERgBosOhVaInE9mPghSBBXNorQJHKoeRZdxwYwB0ZMlYocNKYDo5YVGXOmNB1GihsYFRGqvkbGE/y/BRWAlqxi84eI86CmNGX3NF7kS2/PHuGdwqWjxaR4rLlWuy+DTXUHDCqrkINltTPdDgPj75XvA7U05w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=d3APXVmd; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9B38F40E015E;
+	Thu, 26 Jun 2025 14:10:42 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id TbYHqpyYlbtU; Thu, 26 Jun 2025 14:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1750947039; bh=x0ZNVMkUtmtDeX1WqjBnG1Spg/z8nwse68E2o5e9q/E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d3APXVmdrPkfYakMMvxi889t5BDcMTLZP6N9jd58++heM0JmucpBXmB9jaY/SjWj8
+	 oODAPZUoKcTNrT3FF8yYK6PTBGZnXewasgSkxUlvgYZa38ps3vehWg/Q3WNKcJ4B0b
+	 frz1CAgXPV1G24iRqjjf5TvK7sCC20pAteNx5ptg14W5Ev3ElIJt+bhXzQY2aNJ94S
+	 5yJwUYnwUfrwTzcMFY+4/F7G2PWzDCbTcngooJAzZK5hCwF+Fx8PxWUd59nhbodHcf
+	 Q6MuXwQDdtAB1uvY2oDBm9XKp0n568Yvib64DiuAjB507tmIxlQ/AjK1ol8+/zrSqf
+	 WzFA/mnSgOVrU6IspdlTWYsI+EEkWsSQ0y4mjg6pez21gr5EuGSXMGYWsSvfKvvw/8
+	 gEydbC1zWKxcTiuP+azOvJzHksoAKTWE6M4mhSjf529txokI5+s1YcaIcfa1Wd/CEw
+	 iNU6VGJKodd7u824zhDQwBT51d36X2W0hTl5xMTQy9FHt04lq0YPNkXdE/z62vdwNB
+	 /0t0S1vlw8pyFp3AOuXoR0hL0I+jCpJiBJkB9bXm5yKzVMQNLQ7RdBIX/81SGTCl3V
+	 ToGtzTK34exEfP3pe+WLrsV+sRpIi84rIe+KR8klgjdeN0OgEsvpMcx2cH6jAXd3lm
+	 YJKCsPBRZ5bqSCikUcmjw3f8=
+Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 10F1240E00DE;
+	Thu, 26 Jun 2025 14:10:29 +0000 (UTC)
+Date: Thu, 26 Jun 2025 16:10:23 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
+Cc: "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"git (AMD-Xilinx)" <git@amd.com>,
+	"Simek, Michal" <michal.simek@amd.com>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>
+Subject: Re: [PATCH] EDAC/synopsys: Clear the ecc counters at init
+Message-ID: <20250626141023.GBaF1UzwF9ITE8-LBQ@fat_crate.local>
+References: <20250528065650.27646-1-shubhrajyoti.datta@amd.com>
+ <20250603090536.GCaD664IbJB5IoR06g@fat_crate.local>
+ <SA1PR12MB894764756C6538EE985BDE24816CA@SA1PR12MB8947.namprd12.prod.outlook.com>
+ <20250604093735.GAaEAT39KGW1KJDrjD@fat_crate.local>
+ <SA1PR12MB89471067967E0A5F46CEE1DF8175A@SA1PR12MB8947.namprd12.prod.outlook.com>
+ <20250611164018.GAaEmxctC+ESUCvBNT@fat_crate.local>
+ <SA1PR12MB894766DFAD90E9DB15A3268F8174A@SA1PR12MB8947.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SA1PR12MB894766DFAD90E9DB15A3268F8174A@SA1PR12MB8947.namprd12.prod.outlook.com>
 
-On Thu, 26 Jun 2025 11:13:44 +0100
-<shiju.jose@huawei.com> wrote:
+On Thu, Jun 12, 2025 at 11:42:13AM +0000, Datta, Shubhrajyoti wrote:
+> Please find the diff below
 
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Fix the lockdep splat caused by missing sysfs_attr_init() calls
-> for the recently added EDAC feature's sysfs attributes.
-> 
-> In lockdep_init_map_type(), the check for the lock-class key
-> if (!static_obj(key) && !is_dynamic_key(key)) causes the splat.
-> 
-> Backtrace:
-> RIP: 0010:lockdep_init_map_type+0x131/0x270
-> Call Trace:
->  __kernfs_create_file+0x77/0xf0
-> sysfs_add_file_mode_ns+0x86/0x140
-> internal_create_group+0x1cc/0x4b0
-> internal_create_groups+0x42/0xa0
-> device_add+0x310/0x860
-> ? __init_waitqueue_head+0x4a/0x60
-> edac_dev_register+0x3ff/0x480
-> devm_cxl_memdev_edac_register+0x509/0x640 [cxl_core]
-> ? lock_acquire+0xc4/0x2d0
-> ? find_held_lock+0x2b/0x80
-> ? cxl_mem_probe+0x21e/0x360 [cxl_mem]
-> ? cxl_mem_probe+0x21e/0x360 [cxl_mem]
-> ? lockdep_hardirqs_on+0x78/0x100
-> ? cxl_mem_probe+0x226/0x360 [cxl_mem]
-> cxl_mem_probe+0x226/0x360 [cxl_mem]
-> 
-> Fixes: f90b738166fe ("EDAC: Add scrub control feature")
-> Fixes: bcbd069b11b0 ("EDAC: Add a Error Check Scrub control feature")
-> Fixes: 699ea5219c4b ("EDAC: Add a memory repair control feature")
-> Reported-by: Dave Jiang <dave.jiang@intel.com>
-> Suggested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Good first try, however...
 
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+> -/**
+> - * zynqmp_get_ecc_state - Return the controller ECC enable/disable status.
+> - * @base:      DDR memory controller base address.
+> - *
+> - * Get the ECC enable/disable status for the controller.
+> - *
+> - * Return: a ECC status boolean i.e true/false - enabled/disabled.
+> - */
+> -static bool zynqmp_get_ecc_state(void __iomem *base)
+> +static bool get_ecc_state(struct synps_edac_priv *priv)
 
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+This function's signature should be:
+
+static bool get_ecc_state(void __iomem *base, bool is_zynq)
+
+or so.
+
+Or you'd have to invent a proper way to figure out what hardware the driver is
+running on. Definitely not:
+
+	if (!priv->p_data->quirks)
+
+I have no clue how the device tree stuff makes the strings you pass in
+synps_edac_match available again but there should be a proper way to check the
+hw you're running on - not some arbitrary random case where zynq hw doesn't
+have quirks because once someone adds quirks, your scheme is down the drain.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
