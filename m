@@ -1,195 +1,152 @@
-Return-Path: <linux-edac+bounces-4258-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4259-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4E2CAE9771
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 10:03:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F3EBAE9AF5
+	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 12:14:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A2F517EF0D
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 08:03:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2618189F7EB
+	for <lists+linux-edac@lfdr.de>; Thu, 26 Jun 2025 10:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D6A25BEF6;
-	Thu, 26 Jun 2025 08:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UMY0CRr3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA5521D3DB;
+	Thu, 26 Jun 2025 10:14:06 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E32825A34F
-	for <linux-edac@vger.kernel.org>; Thu, 26 Jun 2025 08:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209D318035;
+	Thu, 26 Jun 2025 10:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750925006; cv=none; b=PGJ9sTDITOkOlkhngfJPG6djmwr2GmoGeoCJFJtJwwgTYOYWHoSHtH7bGM2l54gAovoPeFpRGYhG9n5kXKoQzTxGc+hHYOC3BBtfLXp/dSq7VnG2NgTUZuvo9JK9JEMwabpzmxpRqBDgIotHSavXN9dHaVMHvdbH1o3AKli5mZM=
+	t=1750932846; cv=none; b=j79GJ+nNTWxgDTVI39+xhvNu9VhoAxgE0EKrBNalFlmER19ZsF7k/LEIx8bor7iu7nuzBTcfmxlC+ovfRcm64whuPQz1hvCK6r6Qul6fh9lJGIAYi01GoGIJscnrisjifQGFCW5ybWBMoE9CKsf2jDDQFs08P8EyEt8twlYYpb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750925006; c=relaxed/simple;
-	bh=TX6cbqK3A7wm0xr8OkuHjx5m5oXahXwOVit8R3fCsJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SBjjrxPT22wGgxueksabaYtvkXj0ABijB03w75BvPS7gDRLh6qIaQ64UbN+h700lzM5Wuz8EF3pyjqQyxd4DFShp8gynmtIZj06jBoaGxeArNQ/molyeVW8OkiVoKoViDOWe1uwtNRPGDNA+0zIqr6CWbMXityjw8sUPK+UYH/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UMY0CRr3; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-45348bff79fso6583655e9.2
-        for <linux-edac@vger.kernel.org>; Thu, 26 Jun 2025 01:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1750925002; x=1751529802; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=eASQdGU0xGhBkNS6Re9mJOkMCP/ZJe7Z9f/s6yhHpfI=;
-        b=UMY0CRr3MK6r+JkzVFNGb4ePcbdW52arXsHEFsA/6oieqDhxRNxw0tVMGHTIY60nAE
-         W0ZZ2LY6bfH69r+YXXOwAgOpbyHBw1xx06pRpbJfpvTI8EZDYUpVzUNZPzb+Avhd7MOk
-         MQ2n0qIDA1cIvgju+MnzGmru6Q6Dg1Z+wqBOn2uH4EW6tzm87+SqJJfJL+FYkMqHrfuS
-         Be0++E7A3Ig0+QycyEDw+rIeGG06RrDMmYzJlGbUwAjWhTf+Q5qWGBF8LYz3BmtN5iCo
-         Q3NgphZxvTEoWogLLLHYOn2H8g2ekKRHsZTslTVOWVHgqJ0hPmU7uflS2WNOpiV3Z8pf
-         cIVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750925002; x=1751529802;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eASQdGU0xGhBkNS6Re9mJOkMCP/ZJe7Z9f/s6yhHpfI=;
-        b=VNdRAIZhPPr2u7ogJ6A9S9ykcjjalS3gv/o4UpqPQEu9cOqsAigi86ncF/OcGm9frF
-         lyV4VUSC91kLBPYmXdVs3uu+G9A9DHAtLRLGIb/r0Q/1Qw/URNbveQqRBR2gXNo/SRnP
-         fm/s26x0+ZwruQJDwcFBIo+TUMgiBaA2n6o8cQttc725hFC/1gt5ldUEmZiipzz2OWd6
-         2B6WB6ZBNm2xe+KyHkztOqH9a3rkHeOlHkjYdzWmOORuFdIb0FybuSOixMCwWdvonnxS
-         bfFEdPii3JVOi4lPbsAZK/yQY0wkiEkofdhT2hIVitebXkjz/RtdYFicYX/7mPZwWCSj
-         eAMg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6xYIJwqidThCondqgiHIyQouz59kPMIcp4qpRoIXpSQwY7jxhM7QzUzb4HwwURBElAveRlNcA/Lud@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCtQF5tYqG0CFZOz+sGsBUA1p9U+1sTnW8CIY2ml+6/b8PAuls
-	+rDSzwZqGkwH5bFTLNlG86G+PHG5oZfzu5Vpgag9O44Jw4mLCFzIKDCUtaN/5F+gsNA=
-X-Gm-Gg: ASbGncupS6PDAZ4hi9esI7fR3GHqtbl4E5vrjxxD++ONMxobxcFv2gPpGB6q7N3Co4f
-	4YC8qwpgAw6AdQ4sOyRSuEWyyWGGBhVxV+rcGDbQKMsapB1Cmx8OHMiYlJgVIaZm+zn86xk0SAe
-	sC/KMsj7q4prWsUXZYbo1Xqm7eVC4joZO28lLFXlzycrNyfygDeDX3wApumX3An/4I6JZap7TVg
-	cFOAqWnZCMXrbrZgEwWelJb02vt9MfKSzVVQFIJ96YVixXZRY9SVwmtQTE4mauuAL1ARMKx4DXu
-	QKzt4O7vafIdqrvPlOeGjvkz/BqIwdOmFZ1VN8UbFgp+PNhhXr9PWpRIvm26K0NIO8AYX/an3bb
-	e
-X-Google-Smtp-Source: AGHT+IF6yQImeJzcD3ZrKiWueyJc8jgxSQIaNzReiWnJay/LPDvnwG+t/EWe4mdsd+HllkB5N/cBWg==
-X-Received: by 2002:a05:6000:2dc2:b0:3a5:2e59:833a with SMTP id ffacd0b85a97d-3a6ed5d62f2mr4861840f8f.1.1750925001683;
-        Thu, 26 Jun 2025 01:03:21 -0700 (PDT)
-Received: from [192.168.0.20] ([212.21.159.38])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6e80f27besm6691313f8f.57.2025.06.26.01.03.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jun 2025 01:03:21 -0700 (PDT)
-Message-ID: <52a37afe-c41b-4f20-bbdc-bddc3ae26260@suse.com>
-Date: Thu, 26 Jun 2025 11:03:20 +0300
+	s=arc-20240116; t=1750932846; c=relaxed/simple;
+	bh=rVERr3o2U/V7UYblWMD0/KIEIoPl380oaAmlEYQ6Sm4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qBTShkLSE55K5ZhlBusxC6AdlACvaX58zXdaIJB3PMi4cfC30nEAjnzcCjFfEwV1VYDDY+dAH0bOWhYFLe/hWYZ/uI+WX80xHiEKfy/QYa5Hi1oaK4DervvVeRxvYdDgNRjcRnylp9Q7DEzA1i+oOXgCDjFTysh8OcwlUDLVLUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bSZGM5F72z6K9QQ;
+	Thu, 26 Jun 2025 18:11:23 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id 063F7140447;
+	Thu, 26 Jun 2025 18:13:59 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.126.171.218) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 26 Jun 2025 12:13:58 +0200
+From: <shiju.jose@huawei.com>
+To: <linux-edac@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
+	<lenb@kernel.org>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
+	<mchehab@kernel.org>, <dave.jiang@intel.com>, <jonathan.cameron@huawei.com>
+CC: <linux-cxl@vger.kernel.org>, <linuxarm@huawei.com>,
+	<tanxiaofei@huawei.com>, <prime.zeng@hisilicon.com>, <shiju.jose@huawei.com>
+Subject: [PATCH v2 1/1] EDAC: Fix lockdep splat caused by edac features code
+Date: Thu, 26 Jun 2025 11:13:44 +0100
+Message-ID: <20250626101344.1726-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 10/22] x86/mce: Remove __mcheck_cpu_init_early()
-To: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
- Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Len Brown <lenb@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- Smita.KoralahalliChannabasappa@amd.com, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
- linux-acpi@vger.kernel.org
-References: <20250624-wip-mca-updates-v4-0-236dd74f645f@amd.com>
- <20250624-wip-mca-updates-v4-10-236dd74f645f@amd.com>
-From: Nikolay Borisov <nik.borisov@suse.com>
-Content-Language: en-US
-Autocrypt: addr=nik.borisov@suse.com; keydata=
- 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
-In-Reply-To: <20250624-wip-mca-updates-v4-10-236dd74f645f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500012.china.huawei.com (7.191.174.4) To
+ frapeml500007.china.huawei.com (7.182.85.172)
 
+From: Shiju Jose <shiju.jose@huawei.com>
 
+Fix the lockdep splat caused by missing sysfs_attr_init() calls
+for the recently added EDAC feature's sysfs attributes.
 
-On 6/24/25 17:16, Yazen Ghannam wrote:
-> The __mcheck_cpu_init_early() function was introduced so that some
-> vendor-specific features are detected before the first MCA polling event
-> done in __mcheck_cpu_init_generic().
-> 
-> Currently, __mcheck_cpu_init_early() is only used on AMD-based systems and
-> additional code will be needed to support various system configurations.
-> 
-> However, the current and future vendor-specific code should be done during
-> vendor init. This keeps all the vendor code in a common location and
-> simplifies the generic init flow.
-> 
-> Move all the __mcheck_cpu_init_early() code into mce_amd_feature_init().
-> 
-> Also, move __mcheck_cpu_init_generic() after
-> __mcheck_cpu_init_prepare_banks() so that MCA is enabled after the first
-> MCA polling event.
-> 
-> Additionally, this brings the MCA init flow closer to what is described
-> in the x86 docs.
-> 
-> The AMD PPRs say
->    "The operating system must initialize the MCA_CONFIG registers prior to
->    initialization of the MCA_CTL registers.
-> 
->    The MCA_CTL registers must be initialized prior to enabling the error
->    reporting banks in MCG_CTL".
-> 
-> However, the Intel SDM "Machine-Check Initialization Pseudocode" says
-> MCG_CTL first then MCi_CTL.
-> 
-> But both agree that CR4.MCE should be set last.
-> 
-> Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> Tested-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+In lockdep_init_map_type(), the check for the lock-class key
+if (!static_obj(key) && !is_dynamic_key(key)) causes the splat.
 
+Backtrace:
+RIP: 0010:lockdep_init_map_type+0x131/0x270
+Call Trace:
+ __kernfs_create_file+0x77/0xf0
+sysfs_add_file_mode_ns+0x86/0x140
+internal_create_group+0x1cc/0x4b0
+internal_create_groups+0x42/0xa0
+device_add+0x310/0x860
+? __init_waitqueue_head+0x4a/0x60
+edac_dev_register+0x3ff/0x480
+devm_cxl_memdev_edac_register+0x509/0x640 [cxl_core]
+? lock_acquire+0xc4/0x2d0
+? find_held_lock+0x2b/0x80
+? cxl_mem_probe+0x21e/0x360 [cxl_mem]
+? cxl_mem_probe+0x21e/0x360 [cxl_mem]
+? lockdep_hardirqs_on+0x78/0x100
+? cxl_mem_probe+0x226/0x360 [cxl_mem]
+cxl_mem_probe+0x226/0x360 [cxl_mem]
 
-IMO the change which moves __mcheck_cpu_init_generic should be in a 
-separate patch so that in the changelog it's abundantly clear that it's 
-a "world switch" function and its invocation timing is important.
+Fixes: f90b738166fe ("EDAC: Add scrub control feature")
+Fixes: bcbd069b11b0 ("EDAC: Add a Error Check Scrub control feature")
+Fixes: 699ea5219c4b ("EDAC: Add a memory repair control feature")
+Reported-by: Dave Jiang <dave.jiang@intel.com>
+Suggested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+---
+Changes:
+v1 -> v2
+1. Changes for the feedback from Jonathan.
+   https://lore.kernel.org/linux-edac/aa142386d0944955b742340b2454e114@huawei.com/T/#md430a9f146794152ac45de57d0cda65caa7f765b
+  - Updated commit message.
+  - Called sysfs_attr_init() before put the pointer in the array
+    of attribute pointers.
+---
+ drivers/edac/ecs.c        | 4 +++-
+ drivers/edac/mem_repair.c | 1 +
+ drivers/edac/scrub.c      | 1 +
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-<snip>
+diff --git a/drivers/edac/ecs.c b/drivers/edac/ecs.c
+index 1d51838a60c1..51c451c7f0f0 100755
+--- a/drivers/edac/ecs.c
++++ b/drivers/edac/ecs.c
+@@ -170,8 +170,10 @@ static int ecs_create_desc(struct device *ecs_dev, const struct attribute_group
+ 		fru_ctx->dev_attr[ECS_RESET]		= EDAC_ECS_ATTR_WO(reset, fru);
+ 		fru_ctx->dev_attr[ECS_THRESHOLD]	= EDAC_ECS_ATTR_RW(threshold, fru);
+ 
+-		for (i = 0; i < ECS_MAX_ATTRS; i++)
++		for (i = 0; i < ECS_MAX_ATTRS; i++) {
++			sysfs_attr_init(&fru_ctx->dev_attr[i].dev_attr.attr);
+ 			fru_ctx->ecs_attrs[i] = &fru_ctx->dev_attr[i].dev_attr.attr;
++		}
+ 
+ 		sprintf(fru_ctx->name, "%s%d", EDAC_ECS_FRU_NAME, fru);
+ 		group->name = fru_ctx->name;
+diff --git a/drivers/edac/mem_repair.c b/drivers/edac/mem_repair.c
+index d1a8caa85369..70a033a76233 100755
+--- a/drivers/edac/mem_repair.c
++++ b/drivers/edac/mem_repair.c
+@@ -333,6 +333,7 @@ static int mem_repair_create_desc(struct device *dev,
+ 	for (i = 0; i < MR_MAX_ATTRS; i++) {
+ 		memcpy(&ctx->mem_repair_dev_attr[i],
+ 		       &dev_attr[i], sizeof(dev_attr[i]));
++		sysfs_attr_init(&ctx->mem_repair_dev_attr[i].dev_attr.attr);
+ 		ctx->mem_repair_attrs[i] =
+ 			&ctx->mem_repair_dev_attr[i].dev_attr.attr;
+ 	}
+diff --git a/drivers/edac/scrub.c b/drivers/edac/scrub.c
+index e421d3ebd959..f9d02af2fc3a 100755
+--- a/drivers/edac/scrub.c
++++ b/drivers/edac/scrub.c
+@@ -176,6 +176,7 @@ static int scrub_create_desc(struct device *scrub_dev,
+ 	group = &scrub_ctx->group;
+ 	for (i = 0; i < SCRUB_MAX_ATTRS; i++) {
+ 		memcpy(&scrub_ctx->scrub_dev_attr[i], &dev_attr[i], sizeof(dev_attr[i]));
++		sysfs_attr_init(&scrub_ctx->scrub_dev_attr[i].dev_attr.attr);
+ 		scrub_ctx->scrub_attrs[i] = &scrub_ctx->scrub_dev_attr[i].dev_attr.attr;
+ 	}
+ 	sprintf(scrub_ctx->name, "%s%d", "scrub", instance);
+-- 
+2.43.0
 
-
-In any case:
-
-Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
 
