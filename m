@@ -1,79 +1,158 @@
-Return-Path: <linux-edac+bounces-4279-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4280-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1ED1AECEB8
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 18:40:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C22FAECF87
+	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 20:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8E2189386C
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 16:40:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65F347A949A
+	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 18:23:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2B22327A3;
-	Sun, 29 Jun 2025 16:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA7F21D59B;
+	Sun, 29 Jun 2025 18:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gh3yHB2Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g0c/WHGZ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24857128819;
-	Sun, 29 Jun 2025 16:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F99943151;
+	Sun, 29 Jun 2025 18:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751215194; cv=none; b=gastfXIhP0dUEROYrt7Hq/aJgGkvxlhv8HMwlo/4LqxIaw8pJvtZ6iZ1aO4ou60D9PEtyh0dXZ9dgzHlsExVTteBYUcCcl2+X4O2rbNtpnBZ+NKIbrJIQTcZyDzvKtcEC9eKDqg984O2lP4U16lGhPf3vwFsc+p+BXZeWj2D060=
+	t=1751221501; cv=none; b=cq4jljGOwoPW+Q7N+rcFcZuxSZJ6w39LoNiX55CDG6Q0y9fulwhlYh6Nwxar7spcpd8GRMopHuWrBtdo/i0dfRjCeGPVrUVAhl9eQCA0Ltdxd7pzYCrxFztqi0rn4JR45p4hEulf2n9aiO3Q5clhI740woeM/28R8bOXcr7vy18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751215194; c=relaxed/simple;
-	bh=na+f677Q93r9B/vGlL7JQDCW2VUeqEdRW0DvEgwiEnc=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=b17NMfEO3+cCLs+TSr48fpvUC6baqe0S/tMZRZ5xzlcb3+zKEvG9HZHnQekZgvsB6zWNRbON23TcYuoShFe9ljicxpxibeujoN/HpJrVIQ5iYls82JCVb6ODBcytCX/JNHLVX8y5frdaz+Y1h0zXXRorRXz9bzmW6DShTFrFnlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gh3yHB2Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0528BC4CEEB;
-	Sun, 29 Jun 2025 16:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751215194;
-	bh=na+f677Q93r9B/vGlL7JQDCW2VUeqEdRW0DvEgwiEnc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=Gh3yHB2Qtxml/AHYpKCPaIOGdcSuAM1v04peky/nPTdrU8sZzZ5TgID7d7Aml4AnV
-	 wuB/F/R26YpdoRYNvN0ZGPS+4j/6OCt7l95MO9e+NFybsveYDf5RLiGRhQtcRwCJdl
-	 kysAUWtck3+ai9MLm2qW9fuLQnF4uVI+kxT5NZ+NyNRdTDgw3JjG7/JFnubHbtQuN4
-	 rFWmRu0EZjhJimbfpggq/ozGrBiktlGJvS+8Vz8Qsu7rHaM8wRxU9qnuIlkeGJEde2
-	 A60ekSFccyWzF/57yn+tZqzslSvO7M1rBUOAhK4wg9yM0qif2vIBEYt9TzmN0sSJJn
-	 5plKQ2RXG9oJA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADF6438111CE;
-	Sun, 29 Jun 2025 16:40:20 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC urgent for v6.16-rc4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20250629083502.GAaGD6tqBFp2YhK3Dr@fat_crate.local>
-References: <20250629083502.GAaGD6tqBFp2YhK3Dr@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20250629083502.GAaGD6tqBFp2YhK3Dr@fat_crate.local>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.16_rc4
-X-PR-Tracked-Commit-Id: a3f3040657417aeadb9622c629d4a0c2693a0f93
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3b1890e4b250c95cf93a0a772433c3a2300e7c8f
-Message-Id: <175121521936.2432237.8001285522719133143.pr-tracker-bot@kernel.org>
-Date: Sun, 29 Jun 2025 16:40:19 +0000
-To: Borislav Petkov <bp@alien8.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1751221501; c=relaxed/simple;
+	bh=DhBKlmjLOiyFfEEsVCIlTdKsD++1KdN8yi/Q0MbSXQw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CKDFkQYrLrRqOFTFzXEC57cnRedW3ibkBCdVZP0dY4xc57X3g+yPwsuEYI1mLszAAfqygSuN9hrTmdvGf1D+tBSYOhL35Y7SbB1kj52GzddEqZq+wKr6FP2WDEcHCe/30BgTxijn9hVU3JjSN+ZH6J+rB5w20Q0JDVBmIrL4EJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g0c/WHGZ; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6fad79433bbso13591026d6.0;
+        Sun, 29 Jun 2025 11:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751221499; x=1751826299; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PCn0+ucEkRvS1MPOQbl5PoaWNKu1L1cu8L9SbyabJaI=;
+        b=g0c/WHGZj+5vR7QB21/5L03uWdjiZXwZyPMplorffBBn4Uyi9JvUkQCQI2LVctsMVA
+         w3lJUXlxv3bWxFG6W9SvOSGgLuDgCt/29KiH6ZltB79GRP6/XjwNROZL3WZc3+dH7pDX
+         UC1hdHVGImnyxD4F0aIYAjhub2+E/914K9Oxm3dx/T6EW6fcPkMKGVTPEroXkwYqBlP4
+         R9+hSvcWIGDcCwyicDQHOKTMbgFR18ivVNyxY1pE5dwJPHnRQ/gbpAO2R2gZndcDFkC1
+         1egqlVBl90dTeh/SG65c77H1vy6eVcfrVbbDEkw+x3BjR/H3QHgvlTgFCKX29BJGQAqr
+         RJag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751221499; x=1751826299;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PCn0+ucEkRvS1MPOQbl5PoaWNKu1L1cu8L9SbyabJaI=;
+        b=j4z9V1Gbkd6qve7EZDx+2vITGicYWzbayWAPxc+ciorfmIC3hBahBulULSJBQYfEOg
+         QGgWvlsrgNwIe5N2RagcpetHWgBS9jt8zXkHhZdt7x6zI/ddB+dpz2ACFDn+VzOzoucq
+         frB0bLNGI89kqOFjBZgswNpmh0mmJ+SJCtPPONIHMZ2r/1l0uBLC/fMmwXarkl/kAIdY
+         eV9uCpepiWmi3aUaEDQKPkkmcwaS/SbyxweCqCS81EpL6hzwKI0ubzliwBnYZWZH9jjG
+         moym9swG4N4TzEw4SqAg583pOI7NEh2K8hAnVRXovTBwSCuF6NhGqL1d2Wqek3cG8N3U
+         u1bg==
+X-Forwarded-Encrypted: i=1; AJvYcCV/X3Z6D4Q49bexs9DmGJqDaxsEmGX+WYhCDw7Lcl3QAXl61Ii/DjpmDi1VHACqeNFqPFOv1nGzuI1t@vger.kernel.org, AJvYcCX6P9IfuAvIfpocZJPuDgB37P/BIqp92w3kK+QXzkki6ntdXkjlCfrk4DWOSJtZ5IOm4Pr/VPJ5gFjyPh2l@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIGOCHBH3FhqzALKEcSrI8H2vKXNX5jQy0WMPP1kegLfl4RBZf
+	+kyCBPu7rDmkaGA1zgYr0M9R8aAKQ9nLzYCfadjHffJEGh6KvM2w4IJ6
+X-Gm-Gg: ASbGncvSB4807UPaKxSonCkfsOHw+4Gq5Zv8Zwj+SQje4VyicerihGukkaPgZA/yjfN
+	4vMgjQpuOwDeGJGhDzCQhJu7g8ayY+ZJWEErpkXXwXW80ynGCZxemcpC9ZER3hR+IAAjC3NLHtj
+	mZprLBocZZGJDXTx15cN7QOfuzjthqbnZOF16UjRn5RAadpN/KS8qmCa34/+/OEk8c+Re6VHY3K
+	rtJYL2+XsLFgkND42K0sS9ABgUf7Yy/I4YS00eu5oS//nn2YDITG/W0hpChdmcl0NuHDgjg9t6c
+	GjFjqHkU3+O0vzvoEThkNT2mSyP6sj9vy2uzbyPAA7c0CC+/
+X-Google-Smtp-Source: AGHT+IE8ZFa0LSuu03SsIfsP4BI06sEZwP6Jddmvw7w8JwUeW05PDyCVNTa79hGOPUDZS+0Hpq8xJQ==
+X-Received: by 2002:a05:6214:2466:b0:6f8:8fdf:f460 with SMTP id 6a1803df08f44-6fffdcfc04bmr176240576d6.9.1751221499271;
+        Sun, 29 Jun 2025 11:24:59 -0700 (PDT)
+Received: from fedora ([2804:14c:64:af90::1001])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd771ab9d6sm55220746d6.28.2025.06.29.11.24.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jun 2025 11:24:58 -0700 (PDT)
+From: Marcelo Moreira <marcelomoreira1905@gmail.com>
+To: Yazen Ghannam <yazen.ghannam@amd.com>,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	~lkcamp/patches@lists.sr.ht
+Cc: Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/amd64: replace sprintf with sysfs_emit in show functions
+Date: Sun, 29 Jun 2025 15:24:48 -0300
+Message-ID: <20250629182448.265407-1-marcelomoreira1905@gmail.com>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Sun, 29 Jun 2025 10:35:02 +0200:
+Update all device attribute 'show' callbacks in the EDAC AMD64 driver to
+utilize sysfs_emit(). This change adheres to the recommendation outlined
+in Documentation/filesystems/sysfs.rst.
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.16_rc4
+This modification aligns with current sysfs subsystem guidelines.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3b1890e4b250c95cf93a0a772433c3a2300e7c8f
+Signed-off-by: Marcelo Moreira <marcelomoreira1905@gmail.com>
+---
+ drivers/edac/amd64_edac.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thank you!
-
+diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+index b681c0663203..b6d211255ef0 100644
+--- a/drivers/edac/amd64_edac.c
++++ b/drivers/edac/amd64_edac.c
+@@ -552,7 +552,7 @@ static ssize_t reg##_show(struct device *dev,				\
+ 	struct mem_ctl_info *mci = to_mci(dev);				\
+ 	struct amd64_pvt *pvt = mci->pvt_info;				\
+ 									\
+-	return sprintf(data, "0x%016llx\n", (u64)pvt->reg);		\
++	return  sysfs_emit(data, "0x%016llx\n", (u64)pvt->reg);		\
+ }
+ 
+ EDAC_DCT_ATTR_SHOW(dhar);
+@@ -571,7 +571,7 @@ static ssize_t dram_hole_show(struct device *dev, struct device_attribute *mattr
+ 
+ 	get_dram_hole_info(mci, &hole_base, &hole_offset, &hole_size);
+ 
+-	return sprintf(data, "%llx %llx %llx\n", hole_base, hole_offset,
++	return sysfs_emit(data, "%llx %llx %llx\n", hole_base, hole_offset,
+ 						 hole_size);
+ }
+ 
+@@ -602,7 +602,7 @@ static ssize_t inject_section_show(struct device *dev,
+ {
+ 	struct mem_ctl_info *mci = to_mci(dev);
+ 	struct amd64_pvt *pvt = mci->pvt_info;
+-	return sprintf(buf, "0x%x\n", pvt->injection.section);
++	return sysfs_emit(buf, "0x%x\n", pvt->injection.section);
+ }
+ 
+ /*
+@@ -638,7 +638,7 @@ static ssize_t inject_word_show(struct device *dev,
+ {
+ 	struct mem_ctl_info *mci = to_mci(dev);
+ 	struct amd64_pvt *pvt = mci->pvt_info;
+-	return sprintf(buf, "0x%x\n", pvt->injection.word);
++	return sysfs_emit(buf, "0x%x\n", pvt->injection.word);
+ }
+ 
+ /*
+@@ -675,7 +675,7 @@ static ssize_t inject_ecc_vector_show(struct device *dev,
+ {
+ 	struct mem_ctl_info *mci = to_mci(dev);
+ 	struct amd64_pvt *pvt = mci->pvt_info;
+-	return sprintf(buf, "0x%x\n", pvt->injection.bit_map);
++	return sysfs_emit(buf, "0x%x\n", pvt->injection.bit_map);
+ }
+ 
+ /*
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.50.0
+
 
