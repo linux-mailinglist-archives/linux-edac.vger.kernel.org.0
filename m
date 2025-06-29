@@ -1,116 +1,79 @@
-Return-Path: <linux-edac+bounces-4278-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4279-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9680AECBBE
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 10:35:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1ED1AECEB8
+	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 18:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 911B21896F93
-	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 08:35:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8E2189386C
+	for <lists+linux-edac@lfdr.de>; Sun, 29 Jun 2025 16:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23531F0984;
-	Sun, 29 Jun 2025 08:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2B22327A3;
+	Sun, 29 Jun 2025 16:39:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Elr5YFAE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gh3yHB2Q"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB4B126BF1;
-	Sun, 29 Jun 2025 08:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24857128819;
+	Sun, 29 Jun 2025 16:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751186125; cv=none; b=KL7SEy3LtxFKYVmDvpQRR3xnS/anCMiCt6zcXRoNYK449cME47bCpO5HAicI2agMolJ5dUf/ng7afJaOpvXwJHnYyeJ+kAuRvTqROdAFjXZsJS5wDyWkft3wV93FxpjsMSxsnTrkOlpJYvwQNRmwNzcVKzSJghubOrYSTsYkI5U=
+	t=1751215194; cv=none; b=gastfXIhP0dUEROYrt7Hq/aJgGkvxlhv8HMwlo/4LqxIaw8pJvtZ6iZ1aO4ou60D9PEtyh0dXZ9dgzHlsExVTteBYUcCcl2+X4O2rbNtpnBZ+NKIbrJIQTcZyDzvKtcEC9eKDqg984O2lP4U16lGhPf3vwFsc+p+BXZeWj2D060=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751186125; c=relaxed/simple;
-	bh=mrFp+fa2Ot1Q/rvbxMC0ldUW0RjVmgcoqPsSOOEvhdY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MjYgZq4NgdDC03QGqaYQA5qqK/+vQbSINZ/Yafqj13SZd1tSoGJGVhIywtpn/dRuOJwz/yxLrCGamdKulaNsS0sdgCWoX6vj+kBfE1hruoPD3u0bcOOW5RKG3SQk+nnxMEqccyQ+jRRaH1ufmqi6BGKY0ppu7mDROy1QSKodwNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Elr5YFAE; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8092140E0198;
-	Sun, 29 Jun 2025 08:35:18 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id w-Dlg_MbXOvo; Sun, 29 Jun 2025 08:35:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1751186113; bh=1VZXEJEpugQR3EdGxvkK/5zvq3zJOuO5xMnezM7QQ6k=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Elr5YFAER9ZnCXisdcmU8/Ogo9lti2/wlrNyuEYCKNyghUyANz8pWFxDjZXeKXhpf
-	 oH33Ikr0mTSVOA9SA8GgfcOAcXmvah47Eo4xsmhIMQzqJu4GXnm1uTZlSuc7uuNPeU
-	 o2s2wqfOC5Wx3gPctS31/cpNmj3JDiM2xseR/UP+VJNo5Em/1BwPlfVW+sjriV6nq/
-	 25ZhmIwTiQEWiWK0MLuGvlecMrtFAjX4mh+OanufUEoKnOgTHxp5Eavpx+qBL60C0D
-	 GW5xOlvhYyq5n6xma2Zs5CHik56qJKg3z/Sd++lPNHrChLMqX2GUdX4Ex6rOg61gJy
-	 Cgqbl859zPLLjoS/jrDVvDEHiHqx0qnDRJm/6FAW76rSQWGH8KTTY28Iewszor+R+b
-	 /zX3ThqJVxbQxmVYh44yMR8y0/YesL6AGnS7SWjpTTmFNR7e/kGuGnMHs6wdzQnHGD
-	 vfsF6htt/rcNJ+KaUMutt0E7wDL3Cbk0l+w70tQz6/j6KPaXnhUCfoOVKNMTrDLeV1
-	 4xah0xuByrtqzPgvaM7U5nHEHff8wjFAGiICdz/S6u1IhMOjhV427qAiHKKFvhuUen
-	 S0r38ySL5+7D5mPD0uETLV3SFdfLjYmdCeFRZMkMw4Pv2U9QoSoHukhSx9EwetvYOS
-	 F+Vlm9bLvh06VdYstN/2gzwk=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7C0AC40E00DC;
-	Sun, 29 Jun 2025 08:35:10 +0000 (UTC)
-Date: Sun, 29 Jun 2025 10:35:02 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-edac <linux-edac@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC urgent for v6.16-rc4
-Message-ID: <20250629083502.GAaGD6tqBFp2YhK3Dr@fat_crate.local>
+	s=arc-20240116; t=1751215194; c=relaxed/simple;
+	bh=na+f677Q93r9B/vGlL7JQDCW2VUeqEdRW0DvEgwiEnc=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=b17NMfEO3+cCLs+TSr48fpvUC6baqe0S/tMZRZ5xzlcb3+zKEvG9HZHnQekZgvsB6zWNRbON23TcYuoShFe9ljicxpxibeujoN/HpJrVIQ5iYls82JCVb6ODBcytCX/JNHLVX8y5frdaz+Y1h0zXXRorRXz9bzmW6DShTFrFnlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gh3yHB2Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0528BC4CEEB;
+	Sun, 29 Jun 2025 16:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751215194;
+	bh=na+f677Q93r9B/vGlL7JQDCW2VUeqEdRW0DvEgwiEnc=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Gh3yHB2Qtxml/AHYpKCPaIOGdcSuAM1v04peky/nPTdrU8sZzZ5TgID7d7Aml4AnV
+	 wuB/F/R26YpdoRYNvN0ZGPS+4j/6OCt7l95MO9e+NFybsveYDf5RLiGRhQtcRwCJdl
+	 kysAUWtck3+ai9MLm2qW9fuLQnF4uVI+kxT5NZ+NyNRdTDgw3JjG7/JFnubHbtQuN4
+	 rFWmRu0EZjhJimbfpggq/ozGrBiktlGJvS+8Vz8Qsu7rHaM8wRxU9qnuIlkeGJEde2
+	 A60ekSFccyWzF/57yn+tZqzslSvO7M1rBUOAhK4wg9yM0qif2vIBEYt9TzmN0sSJJn
+	 5plKQ2RXG9oJA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADF6438111CE;
+	Sun, 29 Jun 2025 16:40:20 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC urgent for v6.16-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250629083502.GAaGD6tqBFp2YhK3Dr@fat_crate.local>
+References: <20250629083502.GAaGD6tqBFp2YhK3Dr@fat_crate.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20250629083502.GAaGD6tqBFp2YhK3Dr@fat_crate.local>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.16_rc4
+X-PR-Tracked-Commit-Id: a3f3040657417aeadb9622c629d4a0c2693a0f93
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3b1890e4b250c95cf93a0a772433c3a2300e7c8f
+Message-Id: <175121521936.2432237.8001285522719133143.pr-tracker-bot@kernel.org>
+Date: Sun, 29 Jun 2025 16:40:19 +0000
+To: Borislav Petkov <bp@alien8.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 
-Hi Linus,
+The pull request you sent on Sun, 29 Jun 2025 10:35:02 +0200:
 
-please pull an EDAC fix for v6.16-rc4.
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.16_rc4
 
-Thx.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3b1890e4b250c95cf93a0a772433c3a2300e7c8f
 
----
-
-The following changes since commit 86731a2a651e58953fc949573895f2fa6d456841:
-
-  Linux 6.16-rc3 (2025-06-22 13:30:08 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.16_rc4
-
-for you to fetch changes up to a3f3040657417aeadb9622c629d4a0c2693a0f93:
-
-  EDAC/amd64: Fix size calculation for Non-Power-of-Two DIMMs (2025-06-25 16:40:03 +0200)
-
-----------------------------------------------------------------
-- Consider secondary address mask registers in amd64_edac in order to
-  get the correct total memory size of the system
-
-----------------------------------------------------------------
-Avadhut Naik (1):
-      EDAC/amd64: Fix size calculation for Non-Power-of-Two DIMMs
-
- drivers/edac/amd64_edac.c | 57 ++++++++++++++++++++++++++++++-----------------
- 1 file changed, 36 insertions(+), 21 deletions(-)
-
+Thank you!
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
