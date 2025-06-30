@@ -1,175 +1,145 @@
-Return-Path: <linux-edac+bounces-4291-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4292-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7AECAEE4BE
-	for <lists+linux-edac@lfdr.de>; Mon, 30 Jun 2025 18:37:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32DCCAEE569
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Jun 2025 19:11:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13AE53A1923
-	for <lists+linux-edac@lfdr.de>; Mon, 30 Jun 2025 16:35:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4015C7AA762
+	for <lists+linux-edac@lfdr.de>; Mon, 30 Jun 2025 17:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E950529827C;
-	Mon, 30 Jun 2025 16:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BMZUCUzV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B13B28DF40;
+	Mon, 30 Jun 2025 17:11:38 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5A628FAA5;
-	Mon, 30 Jun 2025 16:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C712571C7
+	for <linux-edac@vger.kernel.org>; Mon, 30 Jun 2025 17:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751301275; cv=none; b=IRzizjVJKj+sWSlax4pOCxZzwn9EyjPF4RTnL4mt6sHabdPPjEysj6sxNs69slFNUrvlGQh6YFMlpaoZD63DSuMg4IpBxh6Xbfn4M1x3dBPk1WtEXwtp99+wm3DLBHTTTa4N1ZeVt39A58WdLZScpmrRJmEK+5WtiMoPpg7rO4Q=
+	t=1751303498; cv=none; b=FoC5xe2DOxbOGhW0hg2qrfaN/Skptth5SFemnj0SYH5y7GTvICyzAEtRaAfvc7ZbRjqy/LKtTgYLecQEfrR90H3UcP9tiCAWFz6M1aR+r1g9BMJ8bZGqIfkB7SaIqcQTpJn2DNLKTT8M0wY6hcxpX3LAf2eIVy2mybuC4fAfHRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751301275; c=relaxed/simple;
-	bh=mEHgqV03o6VTz0DapeBgcIdYMe2Zhh2E6lJ6zYMRoDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JRTqNap/QUvixKvhvfvq2KUA7/nFNSnj2EdDAxyAQUSWCs96luOpwIUJSzQzBZGYYe0dOvDo9yqm9cFzMfm4oLay2U2vr/t2dRir0A9JD3/GL2nrPxNY61e83a231j77i4iBslNjrDpEH6XbUNwvkzphjIFCbEmUqolGLQ16mZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=BMZUCUzV; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D075740E0198;
-	Mon, 30 Jun 2025 16:34:24 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id wScW8kbuQCJS; Mon, 30 Jun 2025 16:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1751301259; bh=EnhzZidqHbMAwNFsHGf6+uqGMdAMCcl5F1jBVz6QWgE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BMZUCUzVVCYUN+c75XBck4//dLcc6OVn8555COXfzRHQN2jufiCIy47cd4CfOGk7+
-	 ymghOobXcEjp8GqUiwbPrImcJTX2MXN/GULqM0cgHpPqO+ELRjaWmY/F79fcDHZVsB
-	 d9dDNy+6I00tN3J+ZUbz6WWY7F35eMRd3QgNVTGanFTuIXfE1OjJ7+hDfatmeWCQ14
-	 x+97/wisPlpc6U2lVsIvjXGVweLd8bumwzVebVAKiG62we3YVGiWwjuWKZdHiNFmaB
-	 SZn5L30tUkgPDir4fv8KgEZBc/h+e8HCCjhpSAUIWoX5i/albOH0cR2D+Jj35UKhL8
-	 JZakHzgWoK3NhLd/Ofr5dObcCqkKtrhWokWRGWQP5+uZ1sU2M/gQnaHjQ5sKVoc6n5
-	 zjgfx5kw585maa7oHuoig3YnxkGn9h/c8WbExP8tqav6P9jgBdaKvtomzXRHJfs+mK
-	 c8A0CWiXZ+eV+wdUydjOZKBGEpj1mcCGmqITaYjVfEQoM+coCqOh/QmygdSRu9TBct
-	 U43jaqMRc3ZC+cLk763DM09RudZidK9jMp4RU1p5ZE0hDIrClArLsmgFxdOCbOBxse
-	 rMu+gkoqxnTs4Z7KSp9zfFCmxOOqfl9lSoFgeE/StRhz95n94La0pdh3XHsVw/IUJF
-	 oTm8SUbvrG6IYuCuEo5MZ7Bs=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7244C40E00DD;
-	Mon, 30 Jun 2025 16:34:04 +0000 (UTC)
-Date: Mon, 30 Jun 2025 18:33:57 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Vijay Balakrishna <vijayb@linux.microsoft.com>
-Cc: Tony Luck <tony.luck@intel.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	devicetree@vger.kernel.org
-Subject: Re: [v11 PATCH 1/2] EDAC: Add EDAC driver for ARM Cortex A72 cores
-Message-ID: <20250630163357.GGaGK8dbT4fp68PplM@fat_crate.local>
-References: <1748487628-30123-1-git-send-email-vijayb@linux.microsoft.com>
- <1748487628-30123-2-git-send-email-vijayb@linux.microsoft.com>
+	s=arc-20240116; t=1751303498; c=relaxed/simple;
+	bh=eeRuroM8rF0qg95CF/rA58wQpwOz/EJZDj6OJRRkvoE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=D5SUA6ejrMVGIdIp/WAWr7w1ag41umk57R3yuZyO/2PjGV6B/nyWnkL3n4kRSBq9B9G0VASDug4ZcReG5H0k8WAis0nPlCOt5Gi0cfwQoMaAPtAdVzg3kk9+/IhxMNgGMVdfcMDuU63DheC9kiguuRKuvLmqwVyQ5yAWdr9kjNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bWCNw45l7z6L5fG;
+	Tue,  1 Jul 2025 01:11:12 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 95FB31400CA;
+	Tue,  1 Jul 2025 01:11:32 +0800 (CST)
+Received: from localhost (10.122.19.247) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 30 Jun
+ 2025 19:11:31 +0200
+Date: Mon, 30 Jun 2025 18:11:30 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: <shiju.jose@huawei.com>
+CC: <linux-edac@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
+	<arnd@kernel.org>, <mchehab@kernel.org>, <rric@kernel.org>,
+	<dave.jiang@intel.com>, <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
+	<prime.zeng@hisilicon.com>
+Subject: Re: [PATCH 1/2] EDAC/scrub: Reduce stack usage in
+ scrub_create_desc()
+Message-ID: <20250630181130.000011c9@huawei.com>
+In-Reply-To: <20250630162034.1788-2-shiju.jose@huawei.com>
+References: <20250630162034.1788-1-shiju.jose@huawei.com>
+	<20250630162034.1788-2-shiju.jose@huawei.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1748487628-30123-2-git-send-email-vijayb@linux.microsoft.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, May 28, 2025 at 08:00:27PM -0700, Vijay Balakrishna wrote:
-> diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
-> index a8f2d8f6c894..136416f43b44 100644
-> --- a/drivers/edac/Makefile
-> +++ b/drivers/edac/Makefile
-> @@ -88,3 +88,4 @@ obj-$(CONFIG_EDAC_NPCM)			+= npcm_edac.o
->  obj-$(CONFIG_EDAC_ZYNQMP)		+= zynqmp_edac.o
->  obj-$(CONFIG_EDAC_VERSAL)		+= versal_edac.o
->  obj-$(CONFIG_EDAC_LOONGSON)		+= loongson_edac.o
-> +obj-$(CONFIG_EDAC_CORTEX_A72)		+= edac_a72.o
+On Mon, 30 Jun 2025 17:20:33 +0100
+<shiju.jose@huawei.com> wrote:
 
-The drivers filename format is
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> Constructing an array on the stack can exceed the warning limit
+> for per-function stack usage.
+> 
+> Change this to have the actual attribute array allocated statically and
+> then add the instance number on the per-instance copy.
+> 
+> Fixes: f90b738166fe ("EDAC: Add scrub control feature")
+> Suggested-by: Borislav Petkov (AMD) <bp@alien8.de>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
 
-	edac_<something>.c
+Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
-So a72_edac.c
-
-> diff --git a/drivers/edac/edac_a72.c b/drivers/edac/edac_a72.c
-> new file mode 100644
-> index 000000000000..4f40616d40a0
-> --- /dev/null
-> +++ b/drivers/edac/edac_a72.c
-> @@ -0,0 +1,230 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Cortex A72 EDAC L1 and L2 cache error detection
-> + *
-> + * Copyright (c) 2020 Pengutronix, Sascha Hauer <s.hauer@pengutronix.de>
-> + * Copyright (c) 2025 Microsoft Corporation, <vijayb@linux.microsoft.com>
-> + *
-> + * Based on Code from:
-> + * Copyright (c) 2018, NXP Semiconductor
-> + * Author: York Sun <york.sun@nxp.com>
-> + */
+> ---
+>  drivers/edac/scrub.c | 31 +++++++++++--------------------
+>  1 file changed, 11 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/edac/scrub.c b/drivers/edac/scrub.c
+> index f9d02af2fc3a..850347d274e8 100755
+> --- a/drivers/edac/scrub.c
+> +++ b/drivers/edac/scrub.c
+> @@ -142,17 +142,14 @@ static umode_t scrub_attr_visible(struct kobject *kobj, struct attribute *a, int
+>  	return 0;
+>  }
+>  
+> -#define EDAC_SCRUB_ATTR_RO(_name, _instance)       \
+> -	((struct edac_scrub_dev_attr) { .dev_attr = __ATTR_RO(_name), \
+> -					.instance = _instance })
+> -
+> -#define EDAC_SCRUB_ATTR_WO(_name, _instance)       \
+> -	((struct edac_scrub_dev_attr) { .dev_attr = __ATTR_WO(_name), \
+> -					.instance = _instance })
+> -
+> -#define EDAC_SCRUB_ATTR_RW(_name, _instance)       \
+> -	((struct edac_scrub_dev_attr) { .dev_attr = __ATTR_RW(_name), \
+> -					.instance = _instance })
+> +static const struct device_attribute scrub_dev_attr[] = {
+> +	[SCRUB_ADDRESS]		    = __ATTR_RW(addr),
+> +	[SCRUB_SIZE]		    = __ATTR_RW(size),
+> +	[SCRUB_ENABLE_BACKGROUND]   = __ATTR_RW(enable_background),
+> +	[SCRUB_MIN_CYCLE_DURATION]  = __ATTR_RO(min_cycle_duration),
+> +	[SCRUB_MAX_CYCLE_DURATION]  = __ATTR_RO(max_cycle_duration),
+> +	[SCRUB_CUR_CYCLE_DURATION]  = __ATTR_RW(current_cycle_duration)
+> +};
+>  
+>  static int scrub_create_desc(struct device *scrub_dev,
+>  			     const struct attribute_group **attr_groups, u8 instance)
+> @@ -160,14 +157,6 @@ static int scrub_create_desc(struct device *scrub_dev,
+>  	struct edac_scrub_context *scrub_ctx;
+>  	struct attribute_group *group;
+>  	int i;
+> -	struct edac_scrub_dev_attr dev_attr[] = {
+> -		[SCRUB_ADDRESS] = EDAC_SCRUB_ATTR_RW(addr, instance),
+> -		[SCRUB_SIZE] = EDAC_SCRUB_ATTR_RW(size, instance),
+> -		[SCRUB_ENABLE_BACKGROUND] = EDAC_SCRUB_ATTR_RW(enable_background, instance),
+> -		[SCRUB_MIN_CYCLE_DURATION] = EDAC_SCRUB_ATTR_RO(min_cycle_duration, instance),
+> -		[SCRUB_MAX_CYCLE_DURATION] = EDAC_SCRUB_ATTR_RO(max_cycle_duration, instance),
+> -		[SCRUB_CUR_CYCLE_DURATION] = EDAC_SCRUB_ATTR_RW(current_cycle_duration, instance)
+> -	};
+>  
+>  	scrub_ctx = devm_kzalloc(scrub_dev, sizeof(*scrub_ctx), GFP_KERNEL);
+>  	if (!scrub_ctx)
+> @@ -175,7 +164,9 @@ static int scrub_create_desc(struct device *scrub_dev,
+>  
+>  	group = &scrub_ctx->group;
+>  	for (i = 0; i < SCRUB_MAX_ATTRS; i++) {
+> -		memcpy(&scrub_ctx->scrub_dev_attr[i], &dev_attr[i], sizeof(dev_attr[i]));
+> +		scrub_ctx->scrub_dev_attr[i].dev_attr = scrub_dev_attr[i];
+> +		scrub_ctx->scrub_dev_attr[i].instance = instance;
 > +
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/bitfield.h>
-> +#include <asm/smp_plat.h>
-> +
-> +#include "edac_module.h"
-> +
-> +#define DRVNAME		"edac-a72"
-> +
-> +#define SYS_CPUMERRSR_EL1	sys_reg(3, 1, 15, 2, 2)
-> +#define SYS_L2MERRSR_EL1	sys_reg(3, 1, 15, 2, 3)
-> +
-> +#define CPUMERRSR_EL1_RAMID		GENMASK(30, 24)
-> +#define L2MERRSR_EL1_CPUID_WAY	GENMASK(21, 18)
-> +
-> +#define CPUMERRSR_EL1_VALID		BIT(31)
-> +#define CPUMERRSR_EL1_FATAL		BIT(63)
-> +#define L2MERRSR_EL1_VALID		BIT(31)
-> +#define L2MERRSR_EL1_FATAL		BIT(63)
-> +
-> +#define L1_I_TAG_RAM	0x00
-> +#define L1_I_DATA_RAM	0x01
-> +#define L1_D_TAG_RAM	0x08
-> +#define L1_D_DATA_RAM	0x09
-> +#define TLB_RAM			0x18
-> +
-> +#define MESSAGE_SIZE	64
+>  		sysfs_attr_init(&scrub_ctx->scrub_dev_attr[i].dev_attr.attr);
+>  		scrub_ctx->scrub_attrs[i] = &scrub_ctx->scrub_dev_attr[i].dev_attr.attr;
+>  	}
 
-I had written
-
-"Please group all defines together, align them vertically and then put other
-definitions below. Look at other drivers for inspiration."
-
-in my previous review
-
-Message-ID: <20250519085130.GFaCrxEnZvaoETKrao@fat_crate.local>
-
-but seems like this got ignored.
-
-Oh well, I'll ignore your submission too until you address *all* my review
-feedback.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
