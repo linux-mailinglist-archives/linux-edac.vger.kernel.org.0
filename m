@@ -1,146 +1,183 @@
-Return-Path: <linux-edac+bounces-4293-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4294-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29C8CAEE56C
-	for <lists+linux-edac@lfdr.de>; Mon, 30 Jun 2025 19:15:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B95E0AEEB13
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 02:03:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22C0D16417C
-	for <lists+linux-edac@lfdr.de>; Mon, 30 Jun 2025 17:15:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 647773BA588
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 00:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9A21C3BEB;
-	Mon, 30 Jun 2025 17:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E7479E1;
+	Tue,  1 Jul 2025 00:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLIrB1zI"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AAEF22F01
-	for <linux-edac@vger.kernel.org>; Mon, 30 Jun 2025 17:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA3F2F41;
+	Tue,  1 Jul 2025 00:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751303723; cv=none; b=SOFYu6W2B6CESlaO+11INyks8QgNRmUu20m6rQXYZnhTvM7q0Ta9bN0KAF1ptEkYIBxPJ7iCmDsNTxp2R6ZAkge0brRf4whADYNj1eWvlOSvCJYLoPaJiEr3Igeht6YtIfXD0yoYQ9XwKuKgb/zyvaxrBQvZ+hFg2MaFaY2FS48=
+	t=1751328194; cv=none; b=UCyMG0gFE1uGJDboK9L4hcIya/t6/5agIarI10DenSGdxUu12pWsF8KymnFVYs9/cpB0vs10fme8fy/ZpFQdf8e/vZHBtv3ZbyGWOeinLutCY28fo1k72HWJZMTo8IBDLLaHywA5oe5wV3KreiFo9ELZActMvK5NE5IldmDZCXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751303723; c=relaxed/simple;
-	bh=nQ4FD3ViARVtziCcWmgarF1OkIPj1MnbaWBVHLRo8Uk=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fs/+iUcv0x8vc/Lq5zBSIGa2TI72VebVhyDdwZH8BqH77bhBH7etPyw1P3s+m8b3DJwDk0JKSodBZ9Z2jU7BAG6GTmhui3nQCac2aj/2tOrdX+nqOlePXRn9T7NbKtunqtsPPkuu+RuEW/XvNY/LZopMC58iCHuXC4eHqNXBv1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bWCSd5dYvz6M58g;
-	Tue,  1 Jul 2025 01:14:25 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9B2D7140427;
-	Tue,  1 Jul 2025 01:15:18 +0800 (CST)
-Received: from localhost (10.122.19.247) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 30 Jun
- 2025 19:15:18 +0200
-Date: Mon, 30 Jun 2025 18:15:16 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: <shiju.jose@huawei.com>
-CC: <linux-edac@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<arnd@kernel.org>, <mchehab@kernel.org>, <rric@kernel.org>,
-	<dave.jiang@intel.com>, <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
-	<prime.zeng@hisilicon.com>
-Subject: Re: [PATCH 2/2] EDAC/ecs: Reduce stack usage in ecs_create_desc()
-Message-ID: <20250630181516.000058ab@huawei.com>
-In-Reply-To: <20250630162034.1788-3-shiju.jose@huawei.com>
-References: <20250630162034.1788-1-shiju.jose@huawei.com>
-	<20250630162034.1788-3-shiju.jose@huawei.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1751328194; c=relaxed/simple;
+	bh=r3HO+OmwgBy9rHu1SO2ar2a5RsyDb8ikV2VwcVG1RBo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c4vWus/z9BYZntiVHAhIQFfjXRAkLJUHGlOgx/m//OQ/7rlY6w96veKtOzolL58v+KxVaLEMGzc9JrwJPjAWhthGiSGp+DZhO+1GjURwJXM5gPtSPEFtwCegddi+X52iVatT0oLY2C5CTs0dDb0ty1XazR+BWLNVogQL4pB4LJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLIrB1zI; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6113e68da82so2029611eaf.1;
+        Mon, 30 Jun 2025 17:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751328192; x=1751932992; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ENsEpAeVLDs9lQsTFPW2zvKgMcTyFgJZvhlvMb6Kpk=;
+        b=XLIrB1zI27blgevLYlx3Uk1PekkyBEpWjGW6I8hB2Orn4ROX/PE+kn3eyIlwXJ832T
+         pattBJBsBORwyqhY/6rIhMqbxbB72uIJ0p0+klg3khrQDY77IJzIf2AkHRik/37UBpiQ
+         lzs6XJAU2QojbHxM6CzKp0dcvmvQEyO2W8KaW37Q8IwlHg1ieFo6Oioe9JB93L1XlpVZ
+         KHDOYmvf9W52RUTbKGWAsCrGq9t/EHbmD8ovLyVRmPsHnVwpWhB1wOrMU1+H8ojj9v1S
+         gVKUJOK1XvlAC7p6U/2k3kk8aVICi+TjOdRvMZ/CuXjp5GfJLlPCsJweM0NKjpmXLPQc
+         6RzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751328192; x=1751932992;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5ENsEpAeVLDs9lQsTFPW2zvKgMcTyFgJZvhlvMb6Kpk=;
+        b=Tb4YWLgcimrGSF4nNyC0qO/0tNiUAQH/QVYodcmR6UmdK4MwcrexMKSOZlfPF0nf72
+         kbaqtAQz4ZuI9d4L6ph3cWnrFHjBYbxiim74uV8+MnSCzCYsuyB+6Rz2otJejNDvCaj6
+         tXSOvf/7loGNVL3kyxyLBdGCIml4taWJZjaLH6W/b+R5tDwA26OFUQMsAREaPSv7LKQB
+         r3g+8Xv1rJxk++uzYh13CnzjFYw1apGIi8ejWVQzEq/XswmdgRt+iuhFTwTYUkBJCnnf
+         J/OZZVVzXs8cx6ge1P4SsijIqBQOWL0nWTDv0f8DDze54wdlcG5UAu96vaQe1M8X8m5n
+         3pMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBnKwFiFTOQz1Wuorb2Ngx/+lp3L9QGZ+EZn0+gsJ/xikIKhPSCWRgFyo+IPYC1LGvdLL0HZbBgRvIxntI@vger.kernel.org, AJvYcCX61yD2W0MHnD7UDAGX44MhDQbDWtfVlg9Z0XO/kzi9Gmwju17LPtaK4nEnZ2NmM7wHnJcBSFjxKsi4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2kJehHV6u06ReB4aQLGEOTzAUxbqT9ZAQWQU2PKxidqeYdt1d
+	NUPqeLFrx45moSDbVshbRKgmWCeCidmn51TgsAtgD4kHooGbuunnlGguH/2rhNs/KeY/AQeQVJj
+	LwLPSezQV5Nlkw3cPdyBLAt9lTaBpTLE=
+X-Gm-Gg: ASbGnctOMeTBsyqs3dEfN4v/m6DsO1V1QbLED44Txcy8yk/0vOYK+gDcmI+NY1wa3Ts
+	U9nS/FUzMqEyqbmV+wFHKJGgtbP8X3jNwAmnz+B1d/X80REoGB9rW6AXQQTT7wSbqOPWh884rqI
+	loVGMFJMKEmOAdar/d8ULzNprBsmPe8gTX9rSCJyu+f6g=
+X-Google-Smtp-Source: AGHT+IHG3LB3qgHlRcmTBxxBoMm0+Rmi1QgY4I9XqPAvIJm4k3s7YqMw8buhpfA4dYy9s20bpx4JN0bsyTV65Ag6KLw=
+X-Received: by 2002:a05:6808:1206:b0:406:1e0c:3196 with SMTP id
+ 5614622812f47-40b33e5ea83mr12052103b6e.28.1751328191746; Mon, 30 Jun 2025
+ 17:03:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
- frapeml500008.china.huawei.com (7.182.85.71)
+References: <20250629182448.265407-1-marcelomoreira1905@gmail.com> <2025063001-marigold-renewed-6361@gregkh>
+In-Reply-To: <2025063001-marigold-renewed-6361@gregkh>
+From: Marcelo Moreira <marcelomoreira1905@gmail.com>
+Date: Mon, 30 Jun 2025 21:03:00 -0300
+X-Gm-Features: Ac12FXysXiINyh4vhy75pryO5gVlJChGshOynnHRZOmiISFWcogSj31YiL2CQ-k
+Message-ID: <CAPZ3m_jo+28S-ouR0DBL9gXEmrM7RjY74MSHx=DE9G4KpRZ4Pg@mail.gmail.com>
+Subject: Re: [PATCH] EDAC/amd64: replace sprintf with sysfs_emit in show functions
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>, skhan@linuxfoundation.org, 
+	linux-kernel-mentees@lists.linuxfoundation.org, ~lkcamp/patches@lists.sr.ht, 
+	Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>, 
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 30 Jun 2025 17:20:34 +0100
-<shiju.jose@huawei.com> wrote:
+Em seg., 30 de jun. de 2025 =C3=A0s 02:07, Greg KH
+<gregkh@linuxfoundation.org> escreveu:
+>
+> On Sun, Jun 29, 2025 at 03:24:48PM -0300, Marcelo Moreira wrote:
+> > Update all device attribute 'show' callbacks in the EDAC AMD64 driver t=
+o
+> > utilize sysfs_emit(). This change adheres to the recommendation outline=
+d
+> > in Documentation/filesystems/sysfs.rst.
+> >
+> > This modification aligns with current sysfs subsystem guidelines.
+> >
+> > Signed-off-by: Marcelo Moreira <marcelomoreira1905@gmail.com>
+> > ---
+> >  drivers/edac/amd64_edac.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+> > index b681c0663203..b6d211255ef0 100644
+> > --- a/drivers/edac/amd64_edac.c
+> > +++ b/drivers/edac/amd64_edac.c
+> > @@ -552,7 +552,7 @@ static ssize_t reg##_show(struct device *dev,      =
+                       \
+> >       struct mem_ctl_info *mci =3D to_mci(dev);                        =
+ \
+> >       struct amd64_pvt *pvt =3D mci->pvt_info;                         =
+ \
+> >                                                                       \
+> > -     return sprintf(data, "0x%016llx\n", (u64)pvt->reg);             \
+> > +     return  sysfs_emit(data, "0x%016llx\n", (u64)pvt->reg);         \
+>
+> Why the extra ' '?
 
-> From: Shiju Jose <shiju.jose@huawei.com>
-> 
-> Reduce per-function stack usage by changing to an actual attribute array
-> allocated statically. Then, add the FRU ID number to the per-FRU copy.
-> 
-> In addition, rename the field 'dev_attr' in struct edac_ecs_fru_context to
-> 'ecs_dev_attr' for better readability.
-> 
-> Fixes: bcbd069b11b0 ("EDAC: Add a Error Check Scrub control feature")
-> Suggested-by: Borislav Petkov (AMD) <bp@alien8.de>
-> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
-I'm not sure I'd have bothered with the rename, but it's harmless and a
-small improvement, so fair enough.
+I didn't notice, sorry.
 
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
-> ---
->  drivers/edac/ecs.c | 29 +++++++++++------------------
->  1 file changed, 11 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/edac/ecs.c b/drivers/edac/ecs.c
-> index 51c451c7f0f0..368e01db63d3 100755
-> --- a/drivers/edac/ecs.c
-> +++ b/drivers/edac/ecs.c
-> @@ -26,7 +26,7 @@ struct edac_ecs_dev_attr {
->  
->  struct edac_ecs_fru_context {
->  	char name[EDAC_FEAT_NAME_LEN];
-> -	struct edac_ecs_dev_attr dev_attr[ECS_MAX_ATTRS];
-> +	struct edac_ecs_dev_attr ecs_dev_attr[ECS_MAX_ATTRS];
->  	struct attribute *ecs_attrs[ECS_MAX_ATTRS + 1];
->  	struct attribute_group group;
->  };
-> @@ -131,17 +131,12 @@ static umode_t ecs_attr_visible(struct kobject *kobj, struct attribute *a, int a
->  	return 0;
->  }
->  
-> -#define EDAC_ECS_ATTR_RO(_name, _fru_id)       \
-> -	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RO(_name), \
-> -				     .fru_id = _fru_id })
-> -
-> -#define EDAC_ECS_ATTR_WO(_name, _fru_id)       \
-> -	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_WO(_name), \
-> -				     .fru_id = _fru_id })
-> -
-> -#define EDAC_ECS_ATTR_RW(_name, _fru_id)       \
-> -	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RW(_name), \
-> -				     .fru_id = _fru_id })
-> +static const struct device_attribute ecs_dev_attr[] = {
-> +	[ECS_LOG_ENTRY_TYPE]	= __ATTR_RW(log_entry_type),
-> +	[ECS_MODE]		= __ATTR_RW(mode),
-> +	[ECS_RESET]		= __ATTR_WO(reset),
-> +	[ECS_THRESHOLD]		= __ATTR_RW(threshold)
-> +};
->  
->  static int ecs_create_desc(struct device *ecs_dev, const struct attribute_group **attr_groups,
->  			   u16 num_media_frus)
-> @@ -165,14 +160,12 @@ static int ecs_create_desc(struct device *ecs_dev, const struct attribute_group
->  		struct attribute_group *group = &fru_ctx->group;
->  		int i;
->  
-> -		fru_ctx->dev_attr[ECS_LOG_ENTRY_TYPE]	= EDAC_ECS_ATTR_RW(log_entry_type, fru);
-> -		fru_ctx->dev_attr[ECS_MODE]		= EDAC_ECS_ATTR_RW(mode, fru);
-> -		fru_ctx->dev_attr[ECS_RESET]		= EDAC_ECS_ATTR_WO(reset, fru);
-> -		fru_ctx->dev_attr[ECS_THRESHOLD]	= EDAC_ECS_ATTR_RW(threshold, fru);
-> -
->  		for (i = 0; i < ECS_MAX_ATTRS; i++) {
-> +			fru_ctx->ecs_dev_attr[i].dev_attr = ecs_dev_attr[i];
-> +			fru_ctx->ecs_dev_attr[i].fru_id = fru;
-> +
->  			sysfs_attr_init(&fru_ctx->dev_attr[i].dev_attr.attr);
-> -			fru_ctx->ecs_attrs[i] = &fru_ctx->dev_attr[i].dev_attr.attr;
-> +			fru_ctx->ecs_attrs[i] = &fru_ctx->ecs_dev_attr[i].dev_attr.attr;
->  		}
->  
->  		sprintf(fru_ctx->name, "%s%d", EDAC_ECS_FRU_NAME, fru);
 
+>
+> >  }
+> >
+> >  EDAC_DCT_ATTR_SHOW(dhar);
+> > @@ -571,7 +571,7 @@ static ssize_t dram_hole_show(struct device *dev, s=
+truct device_attribute *mattr
+> >
+> >       get_dram_hole_info(mci, &hole_base, &hole_offset, &hole_size);
+> >
+> > -     return sprintf(data, "%llx %llx %llx\n", hole_base, hole_offset,
+> > +     return sysfs_emit(data, "%llx %llx %llx\n", hole_base, hole_offse=
+t,
+> >                                                hole_size);
+> >  }
+> >
+> > @@ -602,7 +602,7 @@ static ssize_t inject_section_show(struct device *d=
+ev,
+> >  {
+> >       struct mem_ctl_info *mci =3D to_mci(dev);
+> >       struct amd64_pvt *pvt =3D mci->pvt_info;
+> > -     return sprintf(buf, "0x%x\n", pvt->injection.section);
+> > +     return sysfs_emit(buf, "0x%x\n", pvt->injection.section);
+> >  }
+> >
+> >  /*
+> > @@ -638,7 +638,7 @@ static ssize_t inject_word_show(struct device *dev,
+> >  {
+> >       struct mem_ctl_info *mci =3D to_mci(dev);
+> >       struct amd64_pvt *pvt =3D mci->pvt_info;
+> > -     return sprintf(buf, "0x%x\n", pvt->injection.word);
+> > +     return sysfs_emit(buf, "0x%x\n", pvt->injection.word);
+> >  }
+> >
+> >  /*
+> > @@ -675,7 +675,7 @@ static ssize_t inject_ecc_vector_show(struct device=
+ *dev,
+> >  {
+> >       struct mem_ctl_info *mci =3D to_mci(dev);
+> >       struct amd64_pvt *pvt =3D mci->pvt_info;
+> > -     return sprintf(buf, "0x%x\n", pvt->injection.bit_map);
+> > +     return sysfs_emit(buf, "0x%x\n", pvt->injection.bit_map);
+>
+> There's nothing wrong with these sprintf() lines, so no need to change
+> them, right?
+>
+> I only recommend making this type of change when adding new sysfs files,
+> no need for churn on old files when it is not needed at all.
+>
+
+Understood Greg, thanks for the feedback :)
+
+--
+Cheers,
+Marcelo Moreira
 
