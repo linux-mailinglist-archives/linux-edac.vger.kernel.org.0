@@ -1,141 +1,129 @@
-Return-Path: <linux-edac+bounces-4298-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4299-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0465CAEEDFA
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 07:51:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3B61AEF5FD
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 13:01:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5717C17AB88
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 05:51:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5678A7A7154
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 10:59:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A90421770C;
-	Tue,  1 Jul 2025 05:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D11D26FA77;
+	Tue,  1 Jul 2025 11:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="IcxruhGJ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788D71F4188
-	for <linux-edac@vger.kernel.org>; Tue,  1 Jul 2025 05:50:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56E126CE10;
+	Tue,  1 Jul 2025 11:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751349056; cv=none; b=onVT1ClnK2u9t7CQIpJZefzKRjt6Py+8XQh0XEdHM7uBIoXad28B24FXOiiNkFGyt218ZrGqRCGRWKdgiH0fvUXvIy8CCD5Vpup1UWJLztjJT8/qur9YzmD35//X9UJMc1xOigtSznf2c5l2LcWKMXe7bir0RxCjcNlk2IIJVm8=
+	t=1751367652; cv=none; b=P1gRlXVhtTuXSKHPMZb1MP6hasQL6Ze11D58e5L70MQd0pA32I0AjYxhK2/L5HpHVZUXcvGT0NtNp/V0lYRFrheAShuaREUlCRREO64Z/0tk3wS2WLNZ3lggSNZ4VTBtj5kRxTMswcaXHQs3sL4xazpcshCeWRs2Mu290n0HEVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751349056; c=relaxed/simple;
-	bh=59oObfdlOduQIc7dSYfzwiSPfyvM+om2M2owqMGFHaE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fdqeTB7Vv2VTW1hBJF7iibmLFfeFtetoBmi4hftcJR9psTAcyr64MfbGyN8wkuyMER8yqfnZiM7fa+lz6JYhTOw9WNZKsRdWdVVrBMDfAp6OHlvibfDmAf96KXvf7iy5whcLvD5e+QeyZutAaJWNKXdFBPMg5Oqj/hHLAM2kyUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bWXBB49Zwz6L5gK;
-	Tue,  1 Jul 2025 13:48:02 +0800 (CST)
-Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id 23D5214027A;
-	Tue,  1 Jul 2025 13:50:52 +0800 (CST)
-Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.33.96) by
- frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 1 Jul 2025 07:50:51 +0200
-From: <shiju.jose@huawei.com>
-To: <linux-edac@vger.kernel.org>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<arnd@kernel.org>, <mchehab@kernel.org>, <rric@kernel.org>,
-	<dave.jiang@intel.com>, <jonathan.cameron@huawei.com>
-CC: <linuxarm@huawei.com>, <tanxiaofei@huawei.com>,
-	<prime.zeng@hisilicon.com>, <shiju.jose@huawei.com>
-Subject: [PATCH v2 2/2] EDAC/ecs: Reduce stack usage in ecs_create_desc()
-Date: Tue, 1 Jul 2025 06:50:35 +0100
-Message-ID: <20250701055036.1802-3-shiju.jose@huawei.com>
-X-Mailer: git-send-email 2.43.0.windows.1
-In-Reply-To: <20250701055036.1802-1-shiju.jose@huawei.com>
-References: <20250701055036.1802-1-shiju.jose@huawei.com>
+	s=arc-20240116; t=1751367652; c=relaxed/simple;
+	bh=Ot7kZOdy+yQqlZJKbHBLYbYS5NsTV6IusHCngn2wRDM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CRUiA4dItob2SVdG5/2iINA+uCpSWNPFMsXIC7UApLrSxEKDJEzQ7Q+Lbp/wLjJiWddCGnp+5cAigCiXKb1yXvdDlCKZroj7YYgLwCE2drLXLHX03sQn+LDEx/oZe/LyRPD8PMX3LSVWOHoDP917xpFztxTX3kuEbiJDAHrtims=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=IcxruhGJ; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1751367641; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=96MBiLIAT11qw69jnWPcKdKmmqG3+//p54YrohdRwbU=;
+	b=IcxruhGJH/8UKQPuL2qCo4hn/kojdZ8QMT0fJPwhjbETbZFgEBvJv3QSL8jFIklexo3C/W/HIBYPUHbF37MwXY/drT3sr+EJk3ar0hnGyIlrNZS2CkcD6itBtW6xHh12W1YtS3e6HIrdcMYd+IAIbjXHC/W7dr0eKL3TZYLBjp4=
+Received: from 30.246.181.60(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WgO.Cpy_1751367636 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 01 Jul 2025 19:00:38 +0800
+Message-ID: <6671c3cc-5119-4544-bcb5-17e8cc2d7057@linux.alibaba.com>
+Date: Tue, 1 Jul 2025 19:00:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH v18 1/2] ACPI: APEI: send SIGBUS to current task if
+ synchronous memory error not recovered
+To: Will Deacon <will@kernel.org>, Hanjun Guo <guohanjun@huawei.com>,
+ rafael@kernel.org, Catalin Marinas <catalin.marinas@arm.com>
+Cc: "Luck, Tony" <tony.luck@intel.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+ linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com,
+ ardb@kernel.org, ying.huang@linux.alibaba.com, ashish.kalra@amd.com,
+ baolin.wang@linux.alibaba.com, tglx@linutronix.de,
+ dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
+ robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
+ zhuo.song@linux.alibaba.com, sudeep.holla@arm.com, lpieralisi@kernel.org,
+ linux-acpi@vger.kernel.org, yazen.ghannam@amd.com, mark.rutland@arm.com,
+ mingo@redhat.com, robin.murphy@arm.com, Jonathan.Cameron@Huawei.com,
+ bp@alien8.de, linux-arm-kernel@lists.infradead.org,
+ wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com,
+ linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com,
+ tongtiangen@huawei.com, gregkh@linuxfoundation.org, jarkko@kernel.org
+References: <20250404112050.42040-1-xueshuai@linux.alibaba.com>
+ <20250404112050.42040-2-xueshuai@linux.alibaba.com>
+ <0c0bc332-0323-4e43-a96b-dd5f5957ecc9@huawei.com>
+ <709ee8d2-8969-424c-b32b-101c6a8220fb@linux.alibaba.com>
+ <353809e7-5373-0d54-6ddb-767bc5af9e5f@huawei.com>
+ <653abdd4-46d2-4956-b49c-8f9c309af34d@linux.alibaba.com>
+ <de5d2417-dc92-b276-1125-4feb5151de7f@huawei.com>
+ <f60f1128-0d42-48e5-9a06-6ed7ca10767f@linux.alibaba.com>
+ <20250428152350.GA23615@willie-the-truck>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20250428152350.GA23615@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
- frapeml500007.china.huawei.com (7.182.85.172)
 
-From: Shiju Jose <shiju.jose@huawei.com>
+ >在 2025/4/28 23:23, Will Deacon 写道:
+ >> On Fri, Apr 25, 2025 at 09:10:09AM +0800, Shuai Xue wrote:
+ >>> 在 2025/4/25 09:00, Hanjun Guo 写道:
+ >>>> Call force_sig(SIGBUS) directly in ghes_do_proc() is not my favourite,
+ >>>> but I can bear that, please add
+ >>>>
+ >>>> Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+ >>>>
+ >>>> Thanks
+ >>>> Hanjun
+ >>>
+ >>> Thanks. Hanjun.
+ >>>
+ >>> @Rafael, @Catalin,
+ >>>
+ >>> Both patch 1 and 2 have reviewed-by tag from the arm64 ACPI 
+maintainers, Hanjun,
+ >>> now. Are you happpy to pick and queue this patch set to acpi tree 
+or arm tree?
+ >>
+ >> Since this primarily touches drivers/acpi/apei/ghes.c, I think it should
+ >> go via the ACPI tree and not the arm64 one.
+ >>
+ >> Will
+ >
+ >Hi, Will,
+ >
+ >Thank you for your confirmation :)
+ >
+ >@Rafael, do you have more comments on this patch set?
+ >
+ >Thanks you.
+ >
+ >Best Regards,
+ >Shuai
 
-Reduce per-function stack usage by changing to an actual attribute array
-allocated statically. Then, add the FRU ID number to the per-FRU copy.
+Hi, all,
 
-In addition, rename the field 'dev_attr' in struct edac_ecs_fru_context to
-'ecs_dev_attr' for better readability.
+Gentle ping.
 
-Fixes: bcbd069b11b0 ("EDAC: Add a Error Check Scrub control feature")
-Suggested-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
----
- drivers/edac/ecs.c | 31 ++++++++++++-------------------
- 1 file changed, 12 insertions(+), 19 deletions(-)
+Does ACPI or APEI tree still active? Looking forward to any response.
 
-diff --git a/drivers/edac/ecs.c b/drivers/edac/ecs.c
-index 51c451c7f0f0..05aa673a046b 100755
---- a/drivers/edac/ecs.c
-+++ b/drivers/edac/ecs.c
-@@ -26,7 +26,7 @@ struct edac_ecs_dev_attr {
- 
- struct edac_ecs_fru_context {
- 	char name[EDAC_FEAT_NAME_LEN];
--	struct edac_ecs_dev_attr dev_attr[ECS_MAX_ATTRS];
-+	struct edac_ecs_dev_attr ecs_dev_attr[ECS_MAX_ATTRS];
- 	struct attribute *ecs_attrs[ECS_MAX_ATTRS + 1];
- 	struct attribute_group group;
- };
-@@ -131,17 +131,12 @@ static umode_t ecs_attr_visible(struct kobject *kobj, struct attribute *a, int a
- 	return 0;
- }
- 
--#define EDAC_ECS_ATTR_RO(_name, _fru_id)       \
--	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RO(_name), \
--				     .fru_id = _fru_id })
--
--#define EDAC_ECS_ATTR_WO(_name, _fru_id)       \
--	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_WO(_name), \
--				     .fru_id = _fru_id })
--
--#define EDAC_ECS_ATTR_RW(_name, _fru_id)       \
--	((struct edac_ecs_dev_attr) { .dev_attr = __ATTR_RW(_name), \
--				     .fru_id = _fru_id })
-+static const struct device_attribute ecs_dev_attr[] = {
-+	[ECS_LOG_ENTRY_TYPE]	= __ATTR_RW(log_entry_type),
-+	[ECS_MODE]		= __ATTR_RW(mode),
-+	[ECS_RESET]		= __ATTR_WO(reset),
-+	[ECS_THRESHOLD]		= __ATTR_RW(threshold)
-+};
- 
- static int ecs_create_desc(struct device *ecs_dev, const struct attribute_group **attr_groups,
- 			   u16 num_media_frus)
-@@ -165,14 +160,12 @@ static int ecs_create_desc(struct device *ecs_dev, const struct attribute_group
- 		struct attribute_group *group = &fru_ctx->group;
- 		int i;
- 
--		fru_ctx->dev_attr[ECS_LOG_ENTRY_TYPE]	= EDAC_ECS_ATTR_RW(log_entry_type, fru);
--		fru_ctx->dev_attr[ECS_MODE]		= EDAC_ECS_ATTR_RW(mode, fru);
--		fru_ctx->dev_attr[ECS_RESET]		= EDAC_ECS_ATTR_WO(reset, fru);
--		fru_ctx->dev_attr[ECS_THRESHOLD]	= EDAC_ECS_ATTR_RW(threshold, fru);
--
- 		for (i = 0; i < ECS_MAX_ATTRS; i++) {
--			sysfs_attr_init(&fru_ctx->dev_attr[i].dev_attr.attr);
--			fru_ctx->ecs_attrs[i] = &fru_ctx->dev_attr[i].dev_attr.attr;
-+			fru_ctx->ecs_dev_attr[i].dev_attr = ecs_dev_attr[i];
-+			fru_ctx->ecs_dev_attr[i].fru_id = fru;
-+
-+			sysfs_attr_init(&fru_ctx->ecs_dev_attr[i].dev_attr.attr);
-+			fru_ctx->ecs_attrs[i] = &fru_ctx->ecs_dev_attr[i].dev_attr.attr;
- 		}
- 
- 		sprintf(fru_ctx->name, "%s%d", EDAC_ECS_FRU_NAME, fru);
--- 
-2.43.0
+Thanks.
 
+Best Regards,
+Shuai
 
