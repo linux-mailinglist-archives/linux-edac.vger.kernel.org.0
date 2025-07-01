@@ -1,176 +1,144 @@
-Return-Path: <linux-edac+bounces-4302-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4303-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35006AEF9B0
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 15:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 046A1AEFB70
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 16:02:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98FEB4E10B9
-	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 13:05:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38EB94A5DF2
+	for <lists+linux-edac@lfdr.de>; Tue,  1 Jul 2025 14:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A22DA274657;
-	Tue,  1 Jul 2025 13:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECBED27F187;
+	Tue,  1 Jul 2025 13:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahU48zzh"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15518223707;
-	Tue,  1 Jul 2025 13:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD90B27E7FC;
+	Tue,  1 Jul 2025 13:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751375110; cv=none; b=gVcY94qGK3ypOMhna2TkOaYuRLNo9cds1GCoGSPpjSgJSpDbP/9g0198qEwXpVBHgQnNDFpJwDOOnWX8DL6UbAP3Z0QC2ngIhJIXGNCGPT1651nRGqQb6GNFg0uda+c6K8SfrkqfD7jNJaiHqoZ5OGf0Iea8QmXrx8zgtXI+qAQ=
+	t=1751378229; cv=none; b=Afbrpv4q2huOnuepVlPlfh3mt9m2l3t0D2cO2zi6FcQnLCBNrP3BUGyWekeHoCqoFEqajqZeJ+wDV25j4cVEtGM7Gqco8ulfpYebe/peIWsretbqs/S+1Si/unUUnDc/m/pP98gztzbsjGi1FIQfgIbUOgHR4EP7uGyAfpX/d3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751375110; c=relaxed/simple;
-	bh=hKeiZFqaAZmfcsCW85Fv7xa/9DAFVCrUvTyCASY0EEU=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=faAv2nR1V6ktetq1kuKHbzojyZ9yZJyHtWjKN9votSdvoEcguehS5uU00RqUqya7Pm24jKkARSryvsNBvAhBzDJWhVl5QTVid0D0btffczBCrL1C9iYrzB6cJwb/nPx6q6CuDD+tMCeZ7yH0TCHSZ4XRkVup9fznggvRnJEzif8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bWjt25brXz6L5Y7;
-	Tue,  1 Jul 2025 21:04:42 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7EEF31402F8;
-	Tue,  1 Jul 2025 21:05:05 +0800 (CST)
-Received: from localhost (10.122.19.247) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 1 Jul
- 2025 15:05:04 +0200
-Date: Tue, 1 Jul 2025 14:05:03 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-CC: <linux-cxl@vger.kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
-	"Len Brown" <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Dave
- Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan
- Williams <dan.j.williams@intel.com>, Mahesh J Salgaonkar
-	<mahesh@linux.ibm.com>, Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas
-	<bhelgaas@google.com>, Tony Luck <tony.luck@intel.com>, Borislav Petkov
-	<bp@alien8.de>, <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-pci@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, Kuppuswamy Sathyanarayanan
-	<sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH 3/3 v4] ACPI: extlog: Trace CPER CXL Protocol Error
- Section
-Message-ID: <20250701140503.00006a48@huawei.com>
-In-Reply-To: <20250623145453.1046660-4-fabio.m.de.francesco@linux.intel.com>
-References: <20250623145453.1046660-1-fabio.m.de.francesco@linux.intel.com>
-	<20250623145453.1046660-4-fabio.m.de.francesco@linux.intel.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1751378229; c=relaxed/simple;
+	bh=bfyf64/9Lz8TeBB7ZRQVJI6e73cpzQVKOsse3DwDWRA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NZuznBmkR8XfmmWI4SZ7dyqWJ/HytVTGGBLqK9XLO4rQDy8xS4jRO64XL9jJHHMbLtlyIi7MLDh1B/X9bRagtWB+xW32IevjbWBeKb7bL/2xHj7fI+MzMsRTLCtmOcfhsSqMGI4HWmxqnVaDSae1CRJtziDnjJU0YHDvWPFAFFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahU48zzh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D558C4CEF7;
+	Tue,  1 Jul 2025 13:57:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751378229;
+	bh=bfyf64/9Lz8TeBB7ZRQVJI6e73cpzQVKOsse3DwDWRA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ahU48zzhuH3p0zjEEHJCC+eyqLqcVOS6ZGsdCIeneizv3aQAg97P2s3FrQBaEpu/T
+	 zc6YioylJbdVu47UwHW6qo6wJ93aZz+E5j/MLruvSvwKVzzRgtiu+4bhm4mOx6a06c
+	 n13afKMjPR6sxyjncmIFbIzvBdQcbgj/Zp7Qb2lmlWWu1xL/3ZQeYGtfkcIB3C3HuR
+	 REmvCvt4QUcSQ2rJwPKk3CZJVSxp+SrfxLAWXGjn86gF6xll986zDjE4k2e9xzKYJZ
+	 g4lAAgQ71DCVPESNVYtMOZyJ9B/Igc9pk8NkaEZGLZTyQjKe8OhxkAvMi4TTsbZ2sX
+	 5XwpoS4YiTdwA==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6118c1775dbso1681003eaf.1;
+        Tue, 01 Jul 2025 06:57:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXnN3znckr+n/FMKKO1StreYa4w05oGe3de2T/lkcOh8KJZRmacvBkUm8QPPWbvFHyCGkXsIXImLvmc@vger.kernel.org, AJvYcCXslInms+M45J32zTtsKd+0FGQm0cOYjm7JB1N9P/cyJhuYfqeJQ/oYX+pmlUGYSZlzJjAy/25waNfH0w==@vger.kernel.org, AJvYcCXsoqwh17eLWjaVhEtNw80L19nBh2XVGv5iL5UL2Cxmd2pVqsw9Fg/QNra/a2QBDcjHX516zDhZ+05t5UYS@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywt5RVXSzqTrWqavbudZrBfIGuEkFmMh0B8Nmd45gseX1oM8En8
+	3rAN5lBMQMS//oajI2AoR/Jw/0eQ/Tk5vioA/SwqT8yv6/SmzSwIKXsPCWHGwFHOay5zomWy6pH
+	56ALjP7l4YI7u0xG50iFjgG7PUrAJpZQ=
+X-Google-Smtp-Source: AGHT+IH8y5e96zUJRFb1OuI8gvD6XWj6u4OkFPyGcGOEmUKVc6TEctKaRmc0KPqe/ewtdYlc9kWivElDVmZVzHILVRs=
+X-Received: by 2002:a4a:ee96:0:b0:605:f34d:7e00 with SMTP id
+ 006d021491bc7-611b914ca94mr11199187eaf.7.1751378226833; Tue, 01 Jul 2025
+ 06:57:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- frapeml500008.china.huawei.com (7.182.85.71)
+References: <20250404112050.42040-1-xueshuai@linux.alibaba.com>
+ <20250404112050.42040-2-xueshuai@linux.alibaba.com> <0c0bc332-0323-4e43-a96b-dd5f5957ecc9@huawei.com>
+ <709ee8d2-8969-424c-b32b-101c6a8220fb@linux.alibaba.com> <353809e7-5373-0d54-6ddb-767bc5af9e5f@huawei.com>
+ <653abdd4-46d2-4956-b49c-8f9c309af34d@linux.alibaba.com> <de5d2417-dc92-b276-1125-4feb5151de7f@huawei.com>
+ <f60f1128-0d42-48e5-9a06-6ed7ca10767f@linux.alibaba.com> <20250428152350.GA23615@willie-the-truck>
+ <6671c3cc-5119-4544-bcb5-17e8cc2d7057@linux.alibaba.com>
+In-Reply-To: <6671c3cc-5119-4544-bcb5-17e8cc2d7057@linux.alibaba.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 1 Jul 2025 15:56:53 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j3NC2ki1XPXfznxZRBLaReDBJ+nzHFgvqMx5+MgERL-A@mail.gmail.com>
+X-Gm-Features: Ac12FXx9H-3vG8ZmZDA8pugDyN2jgQvzGSowL6_ycQvP5EUOr-jzraGGBrVWxV0
+Message-ID: <CAJZ5v0j3NC2ki1XPXfznxZRBLaReDBJ+nzHFgvqMx5+MgERL-A@mail.gmail.com>
+Subject: Re: [RESEND PATCH v18 1/2] ACPI: APEI: send SIGBUS to current task if
+ synchronous memory error not recovered
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: Will Deacon <will@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, rafael@kernel.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, "Luck, Tony" <tony.luck@intel.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
+	linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com, 
+	ardb@kernel.org, ying.huang@linux.alibaba.com, ashish.kalra@amd.com, 
+	baolin.wang@linux.alibaba.com, tglx@linutronix.de, 
+	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com, 
+	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com, 
+	zhuo.song@linux.alibaba.com, sudeep.holla@arm.com, lpieralisi@kernel.org, 
+	linux-acpi@vger.kernel.org, yazen.ghannam@amd.com, mark.rutland@arm.com, 
+	mingo@redhat.com, robin.murphy@arm.com, Jonathan.Cameron@huawei.com, 
+	bp@alien8.de, linux-arm-kernel@lists.infradead.org, 
+	wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com, 
+	linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com, 
+	tongtiangen@huawei.com, gregkh@linuxfoundation.org, jarkko@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 23 Jun 2025 16:54:20 +0200
-"Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com> wrote:
+On Tue, Jul 1, 2025 at 1:00=E2=80=AFPM Shuai Xue <xueshuai@linux.alibaba.co=
+m> wrote:
+>
+>  >=E5=9C=A8 2025/4/28 23:23, Will Deacon =E5=86=99=E9=81=93:
+>  >> On Fri, Apr 25, 2025 at 09:10:09AM +0800, Shuai Xue wrote:
+>  >>> =E5=9C=A8 2025/4/25 09:00, Hanjun Guo =E5=86=99=E9=81=93:
+>  >>>> Call force_sig(SIGBUS) directly in ghes_do_proc() is not my favouri=
+te,
+>  >>>> but I can bear that, please add
+>  >>>>
+>  >>>> Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+>  >>>>
+>  >>>> Thanks
+>  >>>> Hanjun
+>  >>>
+>  >>> Thanks. Hanjun.
+>  >>>
+>  >>> @Rafael, @Catalin,
+>  >>>
+>  >>> Both patch 1 and 2 have reviewed-by tag from the arm64 ACPI
+> maintainers, Hanjun,
+>  >>> now. Are you happpy to pick and queue this patch set to acpi tree
+> or arm tree?
+>  >>
+>  >> Since this primarily touches drivers/acpi/apei/ghes.c, I think it sho=
+uld
+>  >> go via the ACPI tree and not the arm64 one.
+>  >>
+>  >> Will
+>  >
+>  >Hi, Will,
+>  >
+>  >Thank you for your confirmation :)
+>  >
+>  >@Rafael, do you have more comments on this patch set?
+>  >
+>  >Thanks you.
+>  >
+>  >Best Regards,
+>  >Shuai
+>
+> Hi, all,
+>
+> Gentle ping.
+>
+> Does ACPI or APEI tree still active? Looking forward to any response.
 
-> When Firmware First is enabled, BIOS handles errors first and then it makes
-> them available to the kernel via the Common Platform Error Record (CPER)
-> sections (UEFI 2.10 Appendix N). Linux parses the CPER sections via one of
-> two similar paths, either ELOG or GHES. The errors managed by ELOG are
-> signaled to the BIOS by the I/O Machine Check Architecture (I/O MCA).
-> 
-> Currently, ELOG and GHES show some inconsistencies in how they report to
-> userspace via trace events.
-> 
-> Therefore, make the two mentioned paths act similarly by tracing the CPER
-> CXL Protocol Error Section (UEFI v2.10, Appendix N.2.13).
-> 
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Signed-off-by: Fabio M. De Francesco <fabio.m.de.francesco@linux.intel.com>
-> ---
->  drivers/acpi/acpi_extlog.c | 62 ++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/core/ras.c     |  6 ++++
->  include/cxl/event.h        |  2 ++
->  3 files changed, 70 insertions(+)
-> 
-> diff --git a/drivers/acpi/acpi_extlog.c b/drivers/acpi/acpi_extlog.c
-> index cefe8d2d8affc..9a37b08aacfea 100644
-> --- a/drivers/acpi/acpi_extlog.c
-> +++ b/drivers/acpi/acpi_extlog.c
-> @@ -12,6 +12,7 @@
->  #include <linux/ratelimit.h>
->  #include <linux/edac.h>
->  #include <linux/ras.h>
-> +#include <cxl/event.h>
->  #include <acpi/ghes.h>
->  #include <asm/cpu.h>
->  #include <asm/mce.h>
-> @@ -160,6 +161,60 @@ static void extlog_print_pcie(struct cper_sec_pcie *pcie_err,
->  	pci_dev_put(pdev);
->  }
->  
-> +static void
-> +extlog_cxl_cper_handle_prot_err(struct cxl_cper_sec_prot_err *prot_err,
-> +				int severity)
-> +{
-> +	struct cxl_cper_prot_err_work_data wd;
-> +	u8 *dvsec_start, *cap_start;
+For APEI changes, you need an ACK from one of the reviewers listed in
+the MAINTAINERS entry for APEI.
 
-
-A bunch of this is identical to cxl_cper_post_prot_err()
-Can we factor that stuff out for common use?
-
-> +
-> +	if (!(prot_err->valid_bits & PROT_ERR_VALID_AGENT_ADDRESS)) {
-> +		pr_warn_ratelimited("CXL CPER invalid agent type\n");
-> +		return;
-> +	}
-> +
-> +	if (!(prot_err->valid_bits & PROT_ERR_VALID_ERROR_LOG)) {
-> +		pr_warn_ratelimited("CXL CPER invalid protocol error log\n");
-> +		return;
-> +	}
-> +
-> +	if (prot_err->err_len != sizeof(struct cxl_ras_capability_regs)) {
-> +		pr_warn_ratelimited("CXL CPER invalid RAS Cap size (%u)\n",
-> +				    prot_err->err_len);
-> +		return;
-> +	}
-> +
-> +	if ((prot_err->agent_type == RCD || prot_err->agent_type == DEVICE ||
-> +	     prot_err->agent_type == LD || prot_err->agent_type == FMLD) &&
-> +	    !(prot_err->valid_bits & PROT_ERR_VALID_SERIAL_NUMBER))
-> +		pr_warn_ratelimited(FW_WARN
-> +				    "CXL CPER no device serial number\n");
-
-Whilst some of this check isn't present in cxl_cper_post_prot_err(), it should
-be harmless.
-
-> +
-> +	switch (prot_err->agent_type) {
-> +	case RCD:
-> +	case DEVICE:
-> +	case LD:
-> +	case FMLD:
-> +	case RP:
-> +	case DSP:
-> +	case USP:
-> +		memcpy(&wd.prot_err, prot_err, sizeof(wd.prot_err));
-> +
-> +		dvsec_start = (u8 *)(prot_err + 1);
-> +		cap_start = dvsec_start + prot_err->dvsec_len;
-> +
-> +		memcpy(&wd.ras_cap, cap_start, sizeof(wd.ras_cap));
-> +		wd.severity = cper_severity_to_aer(severity);
-> +		break;
-> +	default:
-> +		pr_err_ratelimited("CXL CPER reserved agent type: %d\n",
-> +				   prot_err->agent_type);
-> +		return;
-> +	}
-> +
-> +	cxl_cper_ras_handle_prot_err(&wd);
-> +}
+Thanks!
 
