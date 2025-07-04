@@ -1,78 +1,81 @@
-Return-Path: <linux-edac+bounces-4311-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4312-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D5DDAF8B53
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 10:25:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00E85AF8BD0
+	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 10:34:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C842456269C
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 08:23:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C4DD761CD8
+	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 08:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A972BCF7F;
-	Fri,  4 Jul 2025 07:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F132E499C;
+	Fri,  4 Jul 2025 07:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nx68XBF6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hhmDBvUy"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB5428B3ED;
-	Fri,  4 Jul 2025 07:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981112DCF60;
+	Fri,  4 Jul 2025 07:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751615658; cv=none; b=akhix1i4p+RKOfOGKz9TGTM0Qa3Rk6FaujA1Ck2zXVge4u37WO247J4qZr/KlwkN1fmQPxtBe9E+PUDxsAQA/YTPOF9A7MsJ7GFyT7g8YoKywulZvhUAKgciKD5KZtu13OSQIG1kTW5d8pPgcURVBEUDzvIdzosix87LMWJL+p8=
+	t=1751615682; cv=none; b=sqeFAoA1efgBho3e/Yzg/c6027Hj6hDSLNYG7vqtHURmn7JzJmhJfrU3hTsgFwIjHInoVcChr6Ic1vvOOq9Hqr1dzAKzNqE5B2Dbr86pZmwxfsqEpUWf+39jDsib8bH0t0YSm92h2hEjv4rkDqV89rC/ZtQ55Ma8uL5/U0QmT7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751615658; c=relaxed/simple;
-	bh=ppfSYqAbvKz06hUuUu+InAtyPJ44rr6/wnF/AFQd36w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JJ5Oae8QCuDImnOPrJ7MHhteK6GTgZOsEJTRyZxIuqCjKUqA/NgT7h2vM+PDf9Dv5bWOKvakLctuTctFQG0wALVgMc7v5acrt/8uIQOYYNtvlgOKe081dzM4tG3AosGV+7pTaD1j6lYNfq0JrJIaRDv86/RkJWINVfdE3zFqZSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nx68XBF6; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1751615682; c=relaxed/simple;
+	bh=mwU7btKAyZ9cAsrqBTZ0SjxXjFYhGz4ex9bDeH7DjAw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kzUaJ3zxs7gsolxq43pSzf8a6QvDnaKDEfZBN+oczplGvMG84R1v7pWDjLGK5mW3XwW2762BIds4LmHBt5UY2jvuzNZPNEEj1niL5r/MrmL2ndoUATYAHFOOmi6nABzzlT+d5r72Td1TLDIa/zuTc0ZpFF4skEjwZ9ABVdSNRuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hhmDBvUy; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751615656; x=1783151656;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ppfSYqAbvKz06hUuUu+InAtyPJ44rr6/wnF/AFQd36w=;
-  b=Nx68XBF6P4+pTN8p7DUKXeCq88k7TVmI1u534dnbpDKYjw6A11iLjcWk
-   Vzt/kqO1FHWRiGQTQHODoLqLYbuyxDzw399CcN59oD5RR75drUpi6VQk9
-   frKSFIBY42dJfA35eaqUIpJYAacJCcStUDU8XtJTz8c1nE41BrihWCLN3
-   UDAUNlSNic1PgMJBJP6Xx5oC6ZDAxhpBlXNyZ9F/tjV2aWutJKSK8lw5W
-   Hs9drmU9VC0wdhObwI67RJ8SG7BmRXiDQukP+VSSI9ft90/m5I0P6lN3+
-   7zmbKZlmU577BgALNMmy/YLhCrmpwGFch91wpf21shQDOXrOc6gKX/3Wf
-   A==;
-X-CSE-ConnectionGUID: 1ZG7v0hOSTKlAQw7PPDYLw==
-X-CSE-MsgGUID: YW0gd2+TTTqHKuk4sOWRIw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="57621101"
+  t=1751615680; x=1783151680;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mwU7btKAyZ9cAsrqBTZ0SjxXjFYhGz4ex9bDeH7DjAw=;
+  b=hhmDBvUyPmVdcvZe46Akoxv65+I151vLTzXdI8XssN1w/ILV0em2OaPt
+   J+4M/hFR0PfLSzO9pJPWqjcWmEMZHZCstaUjb/e+f+I5W/MXF6qDaA9Mx
+   nGs4FKJQ9Sh1iShF7CtyE5GWce+eACO0B3LOOW9h6wyfHFT/wAQ4CjKs0
+   3hE05k2BWdmcMWzhyANHsL88+iQLLzWFzzskjXjzdNYgS/7xlgGjHL+Id
+   nz2kF3z6Jdq7K8Unm1YdyQInEUUbBozlTcbJUnblatGEjqy/1GXL+8f1Z
+   Dpl5hyU+nD5acaXza6G4b+zd74YazxQeRvWTAG9BP5NYpiSJhyALFMAbu
+   w==;
+X-CSE-ConnectionGUID: hmHGdZ4yQYWNkO7d76rjSA==
+X-CSE-MsgGUID: 7JpYItX3Rxe47G2J49VzCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="57621134"
 X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="57621101"
+   d="scan'208";a="57621134"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:54:16 -0700
-X-CSE-ConnectionGUID: yOk/N1OrQ0qJ05Z7dUKvsg==
-X-CSE-MsgGUID: 3sc9ARBbS5GpD3N+4N5bBw==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:54:33 -0700
+X-CSE-ConnectionGUID: zCcdiXaSQWWvpz/h0rYQqg==
+X-CSE-MsgGUID: m7spTVa2Qo6iAT4/Fz/Dhw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="154663843"
+   d="scan'208";a="154663990"
 Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:54:13 -0700
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:54:30 -0700
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 To: Tony Luck <tony.luck@intel.com>,
 	Borislav Petkov <bp@alien8.de>
 Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	VikasX Chougule <vikasx.chougule@intel.com>,
 	James Morse <james.morse@arm.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Robert Richter <rric@kernel.org>,
 	Lili Li <lili.li@intel.com>,
 	Laurens SEGHERS <laurens@rale.com>,
-	VikasX Chougule <vikasx.chougule@intel.com>,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] EDAC: Add three Intel CPUs for EDAC support
-Date: Fri,  4 Jul 2025 23:16:06 +0800
-Message-ID: <20250704151609.7833-1-qiuxu.zhuo@intel.com>
+Subject: [PATCH 1/3] EDAC/i10nm: Add Intel Granite Rapids-D support
+Date: Fri,  4 Jul 2025 23:16:07 +0800
+Message-ID: <20250704151609.7833-2-qiuxu.zhuo@intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250704151609.7833-1-qiuxu.zhuo@intel.com>
+References: <20250704151609.7833-1-qiuxu.zhuo@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,28 +84,63 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add EDAC support for three Intel CPUs: 
+The Granite Rapids-D CPU model uses memory controller registers similar
+to those of the Granite Rapids server CPU but with a different memory
+controller MMIO base.
 
-  - Patch 1: Wildcat Lake SoCs with In-Band ECC.
-  - Patch 2: Granite Rapids-D for micro-server and edge computing applications.
-  - Patch 3: Raptor Lake HX series SoCs with Out-of-Band ECC.
+Add the Granite Rapids-D CPU model ID and use the new memory controller
+MMIO base for EDAC support.
 
-This patch series is on top of RAS edac-drivers branch.
+Tested-by: VikasX Chougule <vikasx.chougule@intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ drivers/edac/i10nm_base.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-Lili Li (1):
-  EDAC/igen6: Add Intel Wildcat Lake SoCs support
-
-Qiuxu Zhuo (2):
-  EDAC/i10nm: Add Intel Granite Rapids-D support
-  EDAC/ie31200: Add Intel Raptor Lake-HX SoCs support
-
- drivers/edac/i10nm_base.c   | 12 +++++++++++-
- drivers/edac/ie31200_edac.c |  4 ++++
- drivers/edac/igen6_edac.c   | 15 +++++++++++++++
- 3 files changed, 30 insertions(+), 1 deletion(-)
-
-
-base-commit: 815703e2ecdf091a724c16671aadd8c55de24878
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index a3fca2567752..c1e45c16f70e 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -62,6 +62,7 @@
+ 	((GET_BITFIELD(reg, 0, 10) << 12) + 0x140000)
+ 
+ #define I10NM_GNR_IMC_MMIO_OFFSET	0x24c000
++#define I10NM_GNR_D_IMC_MMIO_OFFSET	0x206000
+ #define I10NM_GNR_IMC_MMIO_SIZE		0x4000
+ #define I10NM_HBM_IMC_MMIO_SIZE		0x9000
+ #define I10NM_DDR_IMC_CH_CNT(reg)	GET_BITFIELD(reg, 21, 24)
+@@ -687,6 +688,14 @@ static struct pci_dev *get_gnr_mdev(struct skx_dev *d, int logical_idx, int *phy
+ 	return NULL;
+ }
+ 
++static u32 get_gnr_imc_mmio_offset(void)
++{
++	if (boot_cpu_data.x86_vfm == INTEL_GRANITERAPIDS_D)
++		return I10NM_GNR_D_IMC_MMIO_OFFSET;
++
++	return I10NM_GNR_IMC_MMIO_OFFSET;
++}
++
+ /**
+  * get_ddr_munit() - Get the resource of the i-th DDR memory controller.
+  *
+@@ -715,7 +724,7 @@ static struct pci_dev *get_ddr_munit(struct skx_dev *d, int i, u32 *offset, unsi
+ 			return NULL;
+ 
+ 		*offset = I10NM_GET_IMC_MMIO_OFFSET(reg) +
+-			  I10NM_GNR_IMC_MMIO_OFFSET +
++			  get_gnr_imc_mmio_offset() +
+ 			  physical_idx * I10NM_GNR_IMC_MMIO_SIZE;
+ 		*size   = I10NM_GNR_IMC_MMIO_SIZE;
+ 
+@@ -1030,6 +1039,7 @@ static const struct x86_cpu_id i10nm_cpuids[] = {
+ 	X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X, &spr_cfg),
+ 	X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,  &spr_cfg),
+ 	X86_MATCH_VFM(INTEL_GRANITERAPIDS_X,  &gnr_cfg),
++	X86_MATCH_VFM(INTEL_GRANITERAPIDS_D,  &gnr_cfg),
+ 	X86_MATCH_VFM(INTEL_ATOM_CRESTMONT_X, &gnr_cfg),
+ 	X86_MATCH_VFM(INTEL_ATOM_CRESTMONT,   &gnr_cfg),
+ 	X86_MATCH_VFM(INTEL_ATOM_DARKMONT_X,  &gnr_cfg),
 -- 
 2.43.0
 
