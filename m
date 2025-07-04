@@ -1,66 +1,66 @@
-Return-Path: <linux-edac+bounces-4319-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4320-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF83BAF90F4
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 12:55:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D167CAF90F9
+	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 12:56:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DAC5564B47
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 10:55:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38E4E1CA3768
+	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 10:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D272EF9B9;
-	Fri,  4 Jul 2025 10:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D68AD2F2737;
+	Fri,  4 Jul 2025 10:55:46 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5933C17;
-	Fri,  4 Jul 2025 10:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12551F419B;
+	Fri,  4 Jul 2025 10:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751626545; cv=none; b=T5TWj68HTb8oGwTOXgGjDENNthTvbWk9oka87oyoh0oLgGku81b3BBho+3or5tiHVN/GOsMHbUtep520aYfEEi7LA8obW2PjzaJmMpVnCxvVmTERqlxmpLOUr7OIzhtp7aDdLG/ckbgg3Ia/wjZXbMVe8iVR+4BiNrMRsRJwQTE=
+	t=1751626546; cv=none; b=vFLer6gUwuvgZCBxyNJ9L4BhFoP4szeR7sNJwsDXZellsQteb2zGKQN2MlqPYjOCYZdAJfYgFpyEGzPUFvBaQ/aQ+JU8iJiiyxt3cd8G5xGAKfO0Q+8g+3jyPXhp2VR3t7zgtiHTvo2AMewfNT0atxW3VrVB2rO/VMiOp5//L6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751626545; c=relaxed/simple;
-	bh=VHJxjtIueVu95g9CTT4FP5TOJfwkG07w26O/OKDvsts=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dj0jnWa3E7vQsHCiMi87VAM975itI6k8WOraMW5N02/dHA3ZvrsOxxgqeQTRUvhJoEXpE+EwsKTeGRnDLCDMwb3zvtFUdxiKoL35SEiBorhfC6on2OVLwTxgM6M1C8DNp1FCBSsW6fuqBVrorbCHL3o/o/+aXVAygeoyEN917Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1751626546; c=relaxed/simple;
+	bh=1U1z1g4EWNPlabCXdHT1aG1bOMPJnooVpW/UGp/hslE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=bOob/DxzmELW0HgK4NkGxZlGO4k74SCUf9bdvfc8UTTLisd0a5KhaoJQsABir1Cg0FLa0eyCenfUGiwzzsrtcS86ZvfRNuGhB8geD53Xr03HuKDo1ggGdkLxpATnP8RxlK0NSSgyB+SiWmYQkO/2ZbtegghwS78OZiGC8nOp3vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-60dffae17f3so1350886a12.1;
-        Fri, 04 Jul 2025 03:55:43 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-608acb0a27fso1193339a12.0;
+        Fri, 04 Jul 2025 03:55:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751626542; x=1752231342;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yv58hde0UO9uLPlUaDiluXjUg7qKqQefSz6dT5yVAoo=;
-        b=b/8ZBJAu4R5d48qxxpk1UMuadjGXOdjaaBtgOjoScdLrCxM/vPp/8IVh55Xw71h5bI
-         bx0tcnChJTtPlDW7P9YyUj/r4a+kB39sfwSgeGPWZs4cA9qcwCXPE78I7A1BRkWwGutJ
-         gPoQGo197akcFRgZDlFL2WodaXcyz0GQ7GKNQfwOVX0M0wIQhdEbBwP+/2KpE+Y/R5q8
-         2U51ikzpGKx/nr6Xsi9KVgqxEAe4i4LDusoG0AKZiO546rQaWETH6eADINbQhAZeeVB2
-         zUuqR5axSoOJbRnyl1v0Hn8Gs7Iriph38iL/bpPuZLWrHnaxK6s1q1Q39NSWtFPFkr61
-         OukA==
-X-Forwarded-Encrypted: i=1; AJvYcCV524Gp+A8JXMljo8qqSn/2ll4+5go8U77mQN0kvvF3ZSK3+62SZlpOJXV856WYQK3MlK2d4md9U9fW@vger.kernel.org, AJvYcCVQBWlB4n5RMAG+DLy2npoHbvOjMVryyMRkd298fLGpu+TLUNWG2L04KbUfPTwHs3NGrfNg6z9p62wt@vger.kernel.org, AJvYcCVbPlpBw3SC+C/c7s3G7fOraoZEBc8LChf9AHZ1e8mbYMMn3+W3SrUwyklhyS59e5k5ikC3CqucBqH+xSB5@vger.kernel.org, AJvYcCWlZRpBJLkK7f7Byb5RYG26pTSBy9alhDIkPH6Lq7Nq7xgE3BhtTFiGwta1mtFYSwq5ABMToXl2+Vn3SQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6Ij+FW+Goy+mk73PDfHyZRxlRcUF8a3YN5rQRpeZd4MwwmfMT
-	rvnXkm0ANiSsGr6yaNQYwNnbNhHNsyOwFx2x9RyRLPheItASbqZXmL+A
-X-Gm-Gg: ASbGnctvgfJjXuEn+P9sBg94LcsHkU4VcgvsfoFUcLUjMUFCkodSBG8i4SWkntP1o1M
-	1AJkrXrV2ATvRyQBXvxdxBEx882qYBbrlKbLLtNJEgPjw/2qyGtDFBiu3lFcVfrJXeWB4PhMSxF
-	h3OG37nhfGULH9eCh+1toIcjuoLRyVwyQUrTXHh4CMnCnNIQt+b2XsXGLN8cP9x0g8e6CgJHwPd
-	b7Xe3DbpBVcXUREUG5STHoGLgyG7nwCNsQrCL9P9BXaakXtSvEikq7AIk9ZSMXEV4/A3oebZCfE
-	9uLrH/oIfTpi+u+zsHjzLSjGmwWv9YTu7nX0HpsAVKmOgJxgHP5MfTdSFeTb8DjJ
-X-Google-Smtp-Source: AGHT+IFDLwmmlf2pCDoT/UbXqN8FDaMYsjxO3JDjk+MnIFacPE/J/E3g5iO+lHClwh8fuZSOwgGPiQ==
-X-Received: by 2002:a17:907:c25:b0:ae3:64e2:c1e with SMTP id a640c23a62f3a-ae3fe457a97mr167133666b.10.1751626541398;
-        Fri, 04 Jul 2025 03:55:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751626543; x=1752231343;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bnRo145nfkK9QuBJyViLREKLiDY2khAyxi7Lvw4HNyQ=;
+        b=NryTvJzg6zNNMJp2KvMYHmyoTBsyIxNlMi9WNboOT3QJYxnWCCcV667n6t7EiHRNGh
+         KbFzVubGDojgnutpqJOwarSwRPDR0GcTYh5cxPvk8bBA3jUJolLbmzx0Onm+civprqR2
+         Bm5ezVdjwnXb3Eel+FJlSVDtilP2oYSksYq4cNrf4GBey3XN+xVRqDZk5qI6JSe7CT5r
+         pfefqiCfnCKZUaWyl/LP5WpHg39GjplLtH30gl2K1+itvQZ+6t5G+NGkgCP0yPOUiNDJ
+         0GK4laE0slZw263iJ1U/nQq9hYEmzH/OTA1AAgDTOBt6mAXAX+s8wuwnEt9Ct8/1FHBh
+         EcnA==
+X-Forwarded-Encrypted: i=1; AJvYcCUfiY20wE9o9YC0ZgZhJ9VETGrJt/nfILSZ3WR+/4CJZUKGBlgl4PCnjKiJa39GlgJ54HZUr9j2d4wB5A==@vger.kernel.org, AJvYcCVgqe3GWEd0nlhZ8sxPwL9ntYtHvASox9N6Or78lThgYO/AvE4pmR/Q0ehpLEj8uvlynaP8b17xlntl@vger.kernel.org, AJvYcCXVUyY23EGWGyoaX+j8OABJNp2sq2VchCY6jEUDdQAjBb16BmWpwiTBDML0rmQZ5nqyrzHJS4vsMy3GxEnQ@vger.kernel.org, AJvYcCXd+8ZxuQgwyzbBDeXnPV4gWSbzI/uCh4RNCsoodw+u/BmdcVoBW76zsvd5e/7brgLsaXkaLBqPbU6X@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnGiprto2eIWo+ClYfZZCLveFe0YaR4q3jYpVKj99lHd33YaXq
+	5b9czZGZIUIs5U/LaJffoC8ZEbjP3yaMVmI4ACTtVkhRUcD0vyiO4eJj/RNkBrRd
+X-Gm-Gg: ASbGnctH6L26BgHjahUP8HF77JWtEyRSqgIgOnS3JcbJFBLyoSwehNQpNSgTsQCbO44
+	Pw8kxaMWSpPsllL0HsHmznbfSXmqDvTbx40r7S55Hm2VlzcMl0cb0M3aNKmsV7tfWyMuBhsmqqy
+	tTH61GLuie1ShekAGZsG6KfBZLWEF+qxUOhtby7/s7J561I9FvTqHERn1pJH67GQMoVHTJQ8Rnt
+	r/hPNfooglXYjS6TraX+BQ5x7pAf+RkA99KMmjni3EL1i95ami1McQcfVCPZ5H3QZPN7w/QNjUq
+	nVi0HtljnMjXFeYBDuh/h0t4dXXu2ZGapoK+hqOdeddfMtyOhl9mYg==
+X-Google-Smtp-Source: AGHT+IEUUlaP5Uj88xQKBdaUuNcoTE/9tGToatmRzQjANlxnwdqmOP0i05xJreCnnwNNZA5ZyTkmFA==
+X-Received: by 2002:a05:6402:13cc:b0:604:e33f:e5c0 with SMTP id 4fb4d7f45d1cf-60fd6e2078cmr1640262a12.30.1751626542839;
+        Fri, 04 Jul 2025 03:55:42 -0700 (PDT)
 Received: from localhost ([2a03:2880:30ff:70::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f66d1c37sm153036766b.35.2025.07.04.03.55.40
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60fcb8c758asm1147398a12.79.2025.07.04.03.55.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jul 2025 03:55:40 -0700 (PDT)
+        Fri, 04 Jul 2025 03:55:42 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH 0/2] panic: taint flag for recoverable hardware errors
-Date: Fri, 04 Jul 2025 03:55:18 -0700
-Message-Id: <20250704-taint_recovered-v1-0-7a817f2d228e@debian.org>
+Date: Fri, 04 Jul 2025 03:55:19 -0700
+Subject: [PATCH 1/2] panic: add taint flag for recoverable hardware errors
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -69,10 +69,9 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABazZ2gC/x3MWwqDMBAF0K0M99tAjH3YbEWkpOZq5yeWiUhB3
- HuhZwHnQKUpK6IcMO5adS2I0jaC6Z3KQqcZURB8uPq779yWtGxP47TuNGbX5sD+4dOtv7zQCD7
- GWb//cRjP8weEUURXYQAAAA==
-X-Change-ID: 20250703-taint_recovered-1d2e890a684b
+Message-Id: <20250704-taint_recovered-v1-1-7a817f2d228e@debian.org>
+References: <20250704-taint_recovered-v1-0-7a817f2d228e@debian.org>
+In-Reply-To: <20250704-taint_recovered-v1-0-7a817f2d228e@debian.org>
 To: Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, 
  Jonathan Corbet <corbet@lwn.net>, tony.luck@intel.com, rafael@kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, kbusch@kernel.org, rmikey@meta.com, 
@@ -81,115 +80,111 @@ Cc: Alexei Starovoitov <ast@kernel.org>, kbusch@kernel.org, rmikey@meta.com,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  kernel-team@meta.com, Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.15-dev-dd21f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3770; i=leitao@debian.org;
- h=from:subject:message-id; bh=VHJxjtIueVu95g9CTT4FP5TOJfwkG07w26O/OKDvsts=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoZ7Mrc7V7nLH19ai/Bq48bcC/oEO5w4zubbmIL
- dMeOvdQ4W2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaGezKwAKCRA1o5Of/Hh3
- bZPgD/9agbNbYeIcTyFzFhptaDD9QCpNr3kTZ49I0FZ5h0HdEjfkUZT+p7V4WxdgfEG8mCltXoo
- 2axTuviofV9XDDbWX68AnY82yQ2JVAFW51xPVBTdawiXLZhiZCknQ14Zj1FabdQtm+rwlsjBOgd
- 6so4xlfC+OXOalokgqlL8v33z9W4VI0s6+aBLoJHZilHbc9+xfrf0DtWopIBXJ4wgDxKfaKoJ0U
- Z7h0Y/ecHQsznBIa2yuQPfaR4dBPEfyfQ+eloKtrWWfnS6+OQKCFWOF6hMnspdglnhiAOPbA7Xi
- orM/sWe6gYAAxHtlivlFElALCznCEpcAiXX6qcz4WUHGC6WvUGkQWtVhbzLShJ1fjagy5ji7Ibs
- JKmOv47wMGfrtPKoUHDpgT3NpLXjBvRqpMdY46G6k5qanSWNZWVvfitXnodz5gL+CU1AzS2E5sw
- cSu8edqPYv/nY7CUoez7HiAsvZlVJlvEIosAPl29lfWwLakOqxxEYjSV+w2VsEe5wNGEdOfj3QB
- 4YUeuVeNCcVvXg/EYb/F3eHRifywY0rUlFbL3F1UJ4SsHQ1wwlFF54tVcpN33JPCmExfkmO7jPW
- 6POmnN3FPIH6Gqet1C6L+64UN6OPetpS6LgcffsOSZTjsxceke+WxLkYLMzJPLnNjXA2N7LJUBe
- NYzjnwTEjy+86xg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3834; i=leitao@debian.org;
+ h=from:subject:message-id; bh=1U1z1g4EWNPlabCXdHT1aG1bOMPJnooVpW/UGp/hslE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBoZ7MrV5o0cEJlsftNYaBg4QVYXzZVGm3PkRYHe
+ D8DvyA85ZKJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaGezKwAKCRA1o5Of/Hh3
+ bZ3YD/4qk9aZJm5t/I/WXN4rGCaHry6iWPEvaa8J3yMRs7H8x4aBULpzoYpiwxtUHmlxZJnJ3qU
+ Kt4cZgLTJZ3PDDGHdgtMA18Xurm1gQXEkvBFY8Q2m4p8BXXvK8GbDSUX1+1+fU1VmDLxqs7vW9J
+ E91PLl+Zj2+rnjVWuorITYj/ceDoSUzXH88ODnksb2pQDZkf2JE0h3YI22IIwUaV73Dd4u8yzhu
+ tPSt4zmYpqwZcH0p0i8Eo+XP9hwKjWkc/koMGhUzlbPNfEJH7F6FLEgs0wcy6+9Yo2CcmHEQwVy
+ 1yHbUKfrwfkXEeJyXVme68+vWZt0nOtIEuoxtLiW7ejwOjWWbLJHK2TCBfdmcaOz3oZ/LBCzrL3
+ qJ0vIcaAqEH4x6PaTBFqxyITf4s9E8t8q/tSs9TwWltJHRn2CIC5ZrHRUG17yMXtbBFnc6EnvnW
+ bd6EqxZCBD3WhKXLQBscoUp90hCuPiT9Ab4prWwbM1h+KJoT8N/docq2u43+n9xKEIX0saEc1RD
+ wheLNrMo1qdV59Itg8KJfmGCC9fqoT3yeWMnvc1ArWA8qxkNFLESSMWJYeajva7Z99cfPMdzKAU
+ efExcKuv1CbMlDQAISz7clTEFxRnqpi5xG2omMDiafcf6Bxf/79ThPRgBgY3LC0PFyKLRfGvj2m
+ RRSrBjwry4IfRhw==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Overview
-========
+This change introduces a new taint flag, bit 20 ('H'), to indicate when
+the kernel has identified recoverable hardware failures during runtime.
 
-This patchset introduces a new kernel taint flag to track systems that
-have experienced recoverable hardware errors during runtime. The
-motivation comes from the operational challenges of managing large
-server fleets where hardware events are common, and having them tainting
-the kernel helps operators to correlate problems more easily.
+The flag is documented in tainted-kernels.rst, defined in panic.h, added
+to the taint_flags array in panic.c, and supported in the
+kernel-chktaint debugging tool.
 
-This complement the new MACHINE_CHECK taint that got added for fatal
-errors. [1]
+Marking kernels that have encountered recoverable hardware errors helps
+correlate future issues with hardware events, improving diagnostics and
+support for affected systems
 
-Problem Statement
-=================
-
-In large-scale deployments with thousands of servers, hardware errors
-are inevitable. While modern systems can recover from many hardware
-failures (corrected ECC errors, recoverable CPU errors, etc.), these
-events causes the kernel to behave in very different ways, which can
-cause  bugs due to the path that is rarely exercised.
-
-I experienced this pain very recently, where several machines were
-crashing due to a recoverable PCI offline port. The hardware was
-behaving correctly, but, during the recoverable process, the kernel goes
-through some code path that is rarely tested.
-
-In my case, the kernel recoverable process caused some issues that were
-hard to find the root cause. For instance, recoverable PCI events
-cause the device to suddently go offline, and later PCI re-enumeration,
-which would reinitalize the driver.
-
-The event above caused some real crashes in production, in very
-different ways. From those that I investigated, I found:
-
-	1) If the disk was going away, it was causing a file systems
-	   issue that got already fixed in 6.14 and 6.15
-
-	2) If the network was going away, it was causing some iommu
-	   issues discussed and fixed in [2].
-
-	3) Possible other issues, that were not easy to correlate, such
-	   as stalls, hungup tasks, memory leaks, warnings, etc.
-
-	  a) These are hidden today, and I would like to expose them
-	     with this patch.
-
-In summary, when investigating system issues, there's no trivial way to
-determine if a machine has previously experienced hardware problems that
-might be contributing to current instability, other than going host by
-host and scanning kernel logs.
-
-Proposed Solution
-=================
-
-Add a new taint flag to the kernel (HW_ERROR_RECOVERED - for the lack of
-a better name) that gets set whenever the kernel detects and recovers
-from hardware errors.
-
-The taint provides additional context during crash investigation *without*
-implying that crashes are necessarily caused by hardware failures
-(similar to how PROPRIETARY_MODULE taint works). It is just an extra
-information that will provide more context about that machine.
-
-This patchset focuses on ACPI/GHES, which handles most recoverable
-hardware errors I have experience with, but can be extended to other
-subsystems like EDAC HW_EVENT_ERR_CORRECTED in the future.
-
---
-
-I would like to *thanks* Tony for the early discussions and
-encouragement.
-
-Link: https://lore.kernel.org/all/20250702-add_tain-v1-1-9187b10914b9@debian.org/ [1]
-Link: https://lore.kernel.org/all/20250409-page-pool-track-dma-v9-0-6a9ef2e0cba8@redhat.com/ [2]
-
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Breno Leitao (2):
-      panic: add taint flag for recoverable hardware errors
-      acpi/ghes: taint kernel on recovered hardware errors
-
  Documentation/admin-guide/tainted-kernels.rst | 7 ++++++-
- drivers/acpi/apei/ghes.c                      | 7 +++++--
  include/linux/panic.h                         | 3 ++-
  kernel/panic.c                                | 1 +
  tools/debugging/kernel-chktaint               | 8 ++++++++
- 5 files changed, 22 insertions(+), 4 deletions(-)
----
-base-commit: dc3cd0dfd91cad0611f0f0eace339a401da5d5ee
-change-id: 20250703-taint_recovered-1d2e890a684b
+ 4 files changed, 17 insertions(+), 2 deletions(-)
 
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index a0cc017e44246..28185e9c0e039 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -102,7 +102,8 @@ Bit  Log  Number  Reason that got the kernel tainted
+  17  _/T  131072  kernel was built with the struct randomization plugin
+  18  _/N  262144  an in-kernel test has been run
+  19  _/J  524288  userspace used a mutating debug operation in fwctl
+-===  ===  ======  ========================================================
++ 20  _/H 1048576  hardware recoverable failures identified
++===  === =======  ========================================================
+ 
+ Note: The character ``_`` is representing a blank in this table to make reading
+ easier.
+@@ -189,3 +190,7 @@ More detailed explanation for tainting
+  19) ``J`` if userpace opened /dev/fwctl/* and performed a FWTCL_RPC_DEBUG_WRITE
+      to use the devices debugging features. Device debugging features could
+      cause the device to malfunction in undefined ways.
++
++ 20) ``H`` if the kernel identified any recoverable hardware failure earlier
++     during its operation. This helps to correlate possible future issues to
++     the fact that the hardware got a recoverable error.
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+index 4adc657669354..d8241a052d69a 100644
+--- a/include/linux/panic.h
++++ b/include/linux/panic.h
+@@ -73,7 +73,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+ #define TAINT_RANDSTRUCT		17
+ #define TAINT_TEST			18
+ #define TAINT_FWCTL			19
+-#define TAINT_FLAGS_COUNT		20
++#define TAINT_HW_ERROR_RECOVERED	20
++#define TAINT_FLAGS_COUNT		21
+ #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+ 
+ struct taint_flag {
+diff --git a/kernel/panic.c b/kernel/panic.c
+index b0b9a8bf4560d..fd13baf5d94bc 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -540,6 +540,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+ 	TAINT_FLAG(RANDSTRUCT,			'T', ' ', true),
+ 	TAINT_FLAG(TEST,			'N', ' ', true),
+ 	TAINT_FLAG(FWCTL,			'J', ' ', true),
++	TAINT_FLAG(HW_ERROR_RECOVERED,		'H', ' ', false),
+ };
+ 
+ #undef TAINT_FLAG
+diff --git a/tools/debugging/kernel-chktaint b/tools/debugging/kernel-chktaint
+index e7da0909d0970..b2099155a820c 100755
+--- a/tools/debugging/kernel-chktaint
++++ b/tools/debugging/kernel-chktaint
+@@ -212,6 +212,14 @@ else
+ 	echo " * fwctl's mutating debug interface was used (#19)"
+ fi
+ 
++T=`expr $T / 2`
++if [ `expr $T % 2` -eq 0 ]; then
++	addout " "
++else
++	addout "H"
++	echo " * the kernel identified recoverable hardware errors (#20)"
++fi
++
+ echo "For a more detailed explanation of the various taint flags see"
+ echo " Documentation/admin-guide/tainted-kernels.rst in the Linux kernel sources"
+ echo " or https://kernel.org/doc/html/latest/admin-guide/tainted-kernels.html"
+
+-- 
+2.47.1
 
 
