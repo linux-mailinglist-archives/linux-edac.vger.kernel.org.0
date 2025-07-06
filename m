@@ -1,122 +1,118 @@
-Return-Path: <linux-edac+bounces-4314-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4326-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5899BAF8BC2
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 10:33:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F8CCAFA394
+	for <lists+linux-edac@lfdr.de>; Sun,  6 Jul 2025 10:04:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 968B81886639
-	for <lists+linux-edac@lfdr.de>; Fri,  4 Jul 2025 08:31:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2E4517E228
+	for <lists+linux-edac@lfdr.de>; Sun,  6 Jul 2025 08:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97C92EFDBD;
-	Fri,  4 Jul 2025 07:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 825921ACEDC;
+	Sun,  6 Jul 2025 08:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g4OxOzT2"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="e/Xezt7N"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091D42EF299;
-	Fri,  4 Jul 2025 07:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930601865EE;
+	Sun,  6 Jul 2025 08:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751615694; cv=none; b=PZ+fmj3xzUu6pQBgjJwJwtMFHG0febDftSq1w/rpDsC2NiIjnoXEW87EOUc3OkFUcM9PtnPDpyM2Dddf5RcLnvqkAjVLep1bOGxLhl3gYtzo0GpYXdcVxlaU5eTaKrE20pywJn5GP4U3Z7Ps7vx06rPCH0uX4+C1Yydl1Jf4A3U=
+	t=1751789087; cv=none; b=bZyh1jZ8l4s2mtsG7zDKR2N//XsSK5TUm13UZIj3v6JrrV0HmFPIzcVB65reRi0Vax+rutn9LlbpyT1ogvSTMwbJhk5wMTkXe3lWQ2kG3QXW6tLggZ6sP2RolMH5bcd1Z24Ixld5pynDnwoCrI4chrtSbhDDApiMZAoMHSEd31g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751615694; c=relaxed/simple;
-	bh=XL16kP0PZnjoqoViYhoYPPV5qOcdw3Kn409Pww6lGhs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gAKpkYwC1AqanTpwvEu2KqoQLsnAqZRdhPmY9qZxyQTRsYQG93Uvzh80c1A5N4I7wTfnvEdgkRGCJSljZ0ufgqKceHuz1edjzd+fUX7xNFAdcd8yd49vhxUoLp6zL/gFlNPdGyQmLk2FNwdGzPYv6DG/RY9aLiLKipSMID3Rvlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g4OxOzT2; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751615692; x=1783151692;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XL16kP0PZnjoqoViYhoYPPV5qOcdw3Kn409Pww6lGhs=;
-  b=g4OxOzT29ly0hWFFVhbQ+jNuwkhuraVfFY5W1jK+F8UmuUyZ29GpK6ez
-   yyZJojOFXqW2Z9nf5Yeos1TQ90kS+DN/3Pcb1YgrRz9KesR7g6N2F/4zb
-   JAkG8k9jqUCDkt67LdRkQNdH7kBIhpwXcZ1L+03AiFSyJxPvjgpfMBpw2
-   R2hlZboyZG5ugmMgl7DZArc9B9XDKOXHQ/g9N2F1f8y0jxlSPjB7SGagf
-   OzjOLx/OIcAK7cKKGbFHjJIlGlfXiAFNUMDr3Xmrsg2eWQ2JhaiwUdcXy
-   7+khwTZCc253QgdbYi8/BAJbcePAaLP7j3P/Y7ta/N+0viuVYRNrEtSJH
-   A==;
-X-CSE-ConnectionGUID: h+N2/KbMR7eGjFOYxNcMQA==
-X-CSE-MsgGUID: L2xUQhOIToiWm4lZPGLo2w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="57621180"
-X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="57621180"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:54:51 -0700
-X-CSE-ConnectionGUID: dDHsq61tTAaPg6EQF7QhNA==
-X-CSE-MsgGUID: wmU7MIggTn6PNHty1Z6djA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
-   d="scan'208";a="154664104"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:54:48 -0700
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Laurens SEGHERS <laurens@rale.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Lili Li <lili.li@intel.com>,
-	VikasX Chougule <vikasx.chougule@intel.com>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] EDAC/ie31200: Add Intel Raptor Lake-HX SoCs support
-Date: Fri,  4 Jul 2025 23:16:09 +0800
-Message-ID: <20250704151609.7833-4-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250704151609.7833-1-qiuxu.zhuo@intel.com>
-References: <20250704151609.7833-1-qiuxu.zhuo@intel.com>
+	s=arc-20240116; t=1751789087; c=relaxed/simple;
+	bh=rWitimji/TArZoN7xNQcJhAHxmy74el6SQ28neA1wDE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=W10kMj7M5K5y8YysRR/CRfru2URb1hadoi7M/7pDgNd3aUOpIlx4e/MaXZ1ePm9yDbbx+yjUPH0BBBpdQm3bIf3it6uJCMFdg8K1pzeUQrajzZlhNnzOLnhIhnttgemI7jnuoRr5rvkpOFYTowK2WYKrmrvDi+2uR6M6/U6Akok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=e/Xezt7N; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 173DF40E0198;
+	Sun,  6 Jul 2025 08:04:26 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id tByoW6Y3RtQZ; Sun,  6 Jul 2025 08:04:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1751789062; bh=++minv9RSmkgrrFu2G5MHkvmAC7Xah7qbPgFSQE+CnE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=e/Xezt7Nel+SvkugAot3jDMs6kzqiw05EGYSjeNgZRfXJ6S48E/dKOXPaGGw5Oqly
+	 q4Is0DZwKmx/ZwM7WQ2hTJFdae1Ew99dZtwXl6vvXuxItbIsVnldMARV0N/3eB+2SN
+	 Q3OwIMY5nppFJ6x74w1gJRgU+9eSGcB/c+ihi7uPJdKrtx/YPgJbSjw5tKDsMR7Y0z
+	 doQ1504YwHdfuV+oW668ImK8g9zUGjEwRgXNas/RUW5sD55DFLpUF2cigv8xRxUNpd
+	 ZuIsLRB0kYQaAi9DVa8M7ezbseKG9i1qMUe/BmsNa4gVl3Ef6rsBzUeGJ4H3g3TWGP
+	 7g6Q2T+pSE7NAS2YYKquhgX2fCjWw4Zu9RWB7hiohuhKmptdNLAz56mXvVn+n/ox7+
+	 JFOhtyUtAkTcI1/d6MXZzWKNQxi925iPiHcRh+AeSBIVhSnFG2weHUOhHowINdmiEf
+	 y9q/mPHseytTO2Dpn7+l1JzF5RzgSQK/TUqH9g++4jbGBGLU5HTeL9f3+HyG9bxXK2
+	 /FbV1nO4ay6U2y6D7gdHZmzcN/Bqu86X2pOvCA1gAhzjBhtd/Zycg6Q9V+AoBx0IUr
+	 gWspnNGJsKxz/Ar6+5c71Y5vM9+RM6aiOdvkC8Y0yv+qBj8LGx4q1BZwh0lexqCBFr
+	 oU3Gb2Jxuu3luEboSEtL3tto=
+Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5552140E0184;
+	Sun,  6 Jul 2025 08:04:19 +0000 (UTC)
+Date: Sun, 6 Jul 2025 10:04:10 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC urgent for v6.16-rc5
+Message-ID: <20250706080410.GAaGot-nOKs75u4yKR@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Intel Raptor Lake-HX SoC shares the same memory controller registers
-as Raptor Lake-S SoC. Add a compute die ID for Raptor Lake-HX SoCs with
-Out-of-Band ECC capability for EDAC support.
+Hi Linus,
 
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Tested-by: Laurens SEGHERS <laurens@rale.com>
+please pull an urgent EDAC fix for v6.16-rc5.
+
+Thx.
+
 ---
- drivers/edac/ie31200_edac.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index d9533ca25635..5c1fa1c0d12e 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -94,6 +94,9 @@
- #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_5	0xa740 /* 8P+12E, e.g. i7-14700 */
- #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_6	0xa704 /* 6P+8E,  e.g. i5-14600 */
- 
-+/* Raptor Lake-HX */
-+#define PCI_DEVICE_ID_INTEL_IE31200_RPL_HX_1	0xa702 /* 8P+16E, e.g. i9-13950HX */
-+
- /* Alder Lake-S */
- #define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1	0x4660
- 
-@@ -756,6 +759,7 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_4), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_5), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_6), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_HX_1), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_1), (kernel_ulong_t)&rpl_s_cfg},
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_2), (kernel_ulong_t)&rpl_s_cfg},
+The following changes since commit a3f3040657417aeadb9622c629d4a0c2693a0f93:
+
+  EDAC/amd64: Fix size calculation for Non-Power-of-Two DIMMs (2025-06-25 16:40:03 +0200)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.16_rc5
+
+for you to fetch changes up to 1e14ea901dc8d976d355ddc3e0de84ee86ef0596:
+
+  EDAC: Initialize EDAC features sysfs attributes (2025-06-30 10:57:24 +0200)
+
+----------------------------------------------------------------
+- Initialize sysfs attributes properly to avoid lockdep complaining about
+  an uninitialized lock class
+
+----------------------------------------------------------------
+Shiju Jose (1):
+      EDAC: Initialize EDAC features sysfs attributes
+
+ drivers/edac/ecs.c        | 4 +++-
+ drivers/edac/mem_repair.c | 1 +
+ drivers/edac/scrub.c      | 1 +
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+
+
 -- 
-2.43.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
