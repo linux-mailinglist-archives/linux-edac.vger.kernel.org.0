@@ -1,226 +1,333 @@
-Return-Path: <linux-edac+bounces-4340-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4341-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86683B000AF
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Jul 2025 13:39:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CA15B00797
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Jul 2025 17:51:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 622EF189EA01
-	for <lists+linux-edac@lfdr.de>; Thu, 10 Jul 2025 11:39:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6006A1C20FF5
+	for <lists+linux-edac@lfdr.de>; Thu, 10 Jul 2025 15:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3344623B61B;
-	Thu, 10 Jul 2025 11:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF89F2749F6;
+	Thu, 10 Jul 2025 15:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ca/LMCMA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNJ9wnkL"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C903187554;
-	Thu, 10 Jul 2025 11:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752147556; cv=fail; b=Ea80sjnxPKidXi6qdotwGeOqYSgj3u7K7QXyxB/GIU7wHAGBTAawuOjG5scZp0e6eZvqsBjzAHfoQTDXCAasyS296HoiRpbD3rr5nbv/KWrJRKc4xVvwy/dyvx0I/kSowEXxuvyIvCSzHt6JKHq6jRI5qZKx6hDVU22+3ACTwOw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752147556; c=relaxed/simple;
-	bh=aX/KwGu86qqnnPZ18nzBFbHuQN/5M+JHIegTn7YH5PQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HKODr5ibXpW0wU/uMCEqxzaRDWoFoJ+neP2LRceT67whrwsgEF7io/KVWqFjfL3kJ1OVInmFl6ZnvU85YUK7xkVQf5SF/L6uLf2y+clrP12NjX4adZYz9hAnT9jkJPVOPEzeKFrBj5q/SSjKONwj0DozefYsykJ5zfHRfT2REH4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ca/LMCMA; arc=fail smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752147544; x=1783683544;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aX/KwGu86qqnnPZ18nzBFbHuQN/5M+JHIegTn7YH5PQ=;
-  b=ca/LMCMAQo4omg6QnRMkgz/UjBjvxGftdnuVJ6xdNrpZxHdbwtrglza6
-   5vlWSK+j2lAhG+8XEWN/c8FN7G6zuqPpdBfTx/EoO6kd+qya8r4aIBZY2
-   VFcKwpQa3ZI3u4ciT9i9iMDLVOAIXolv+HsHGrBzUqyQR86XBGjLZ6N4z
-   iDVOpg+HUmKmgLLqfk9PiZb2DS6MEicpanhPaUn3KUbJz8Fn+zsLGKj6Q
-   e4c2q0LMZTWupscRX9iOtT9Vr/579j8deg1muXCd/lM7pEsugLqcxI4zd
-   77vI9P5jE1f6zhNn+GDUfd9VjHPmlcyBDpK7scoaxMt9hWAEkFt+CMAh9
-   g==;
-X-CSE-ConnectionGUID: b+IIafAqR3CX7qp3IQGxpA==
-X-CSE-MsgGUID: W8jiQtDzTl+f1HYxoWmAug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11489"; a="54573703"
-X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="54573703"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 04:39:03 -0700
-X-CSE-ConnectionGUID: LPvi9AGjSH2ephI+Kmg/9A==
-X-CSE-MsgGUID: 4brCfcsDTa2U4vggzo50Mw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="160343339"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 04:39:03 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Thu, 10 Jul 2025 04:39:03 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25 via Frontend Transport; Thu, 10 Jul 2025 04:39:03 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (40.107.237.53)
- by edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Thu, 10 Jul 2025 04:39:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eNk5KdACNaxSmpQynMIApBXro3VvML7ye9rwXOZUhnqoVm624slcNmUoewqT73u4jIa1ogaN87Z5wYUTuFogJR/AxoaW7kvqBRoyWim/i7/jHRSgQJFiTuX6UtYbXd2e0iNuoJMcN6rdCn5Z9Id6fxPstdYt+k+XAaOVcDBfKMfzNNYmRNgkUU3bjwFX9bELmBqQwfjKAuQyGVZnrDGvUaA5EEofjNSW2vThJY9kjNGXNftSe6+fxtQxGcgHC6Yl3bgoFrmAn9KJVPDTjQvPd6aGmklqKDqXGQtgpjIs0S69JFb5HainlOSz/bgeX2Vk+QM8K0aiyGuvqkMfdb78WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aX/KwGu86qqnnPZ18nzBFbHuQN/5M+JHIegTn7YH5PQ=;
- b=gWXzBiXZXuJ83jI9DrqV3dqvZ+2SxQyFGQ9hsi63oX7rniMnctPLPjyLjq/lIANyZedESTE8U54PCTwzujSjSwJ8msYdynVYzsqFClivxAEUoKV7KEe25uf4RqgKyA5fiBLJS1ic+Vd3SQj4h3KK3cAtW7PCEA49Qv79lA8vRvuv/q6EWK8OCA8e2oVnohiT1yIQ1WsHuMgQAjnHTtvlylWQTsKWelQSmNQLMyjQL3Fzap9j67K1oYiZLPijIEuYylstTgtzQ35fVRDBK32x272q8uehpYKGNeJjqNj40bFWrwTg4R7N/u6npfyMTVa0bOwYVtyCzi4RXJ6ncMTnSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
- by LV3PR11MB8602.namprd11.prod.outlook.com (2603:10b6:408:1b3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.21; Thu, 10 Jul
- 2025 11:39:00 +0000
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d]) by CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::cd87:9086:122c:be3d%7]) with mapi id 15.20.8880.027; Thu, 10 Jul 2025
- 11:38:59 +0000
-From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To: Wang Haoran <haoranwangsec@gmail.com>, "Luck, Tony" <tony.luck@intel.com>,
-	"bp@alien8.de" <bp@alien8.de>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: We found a bug in skx_common.c for the latest linux
-Thread-Topic: We found a bug in skx_common.c for the latest linux
-Thread-Index: AQHb8UCXLp35SLv4qESMGHAJHYuEdbQrOvQw
-Date: Thu, 10 Jul 2025 11:38:59 +0000
-Message-ID: <CY8PR11MB71349230AB9CF3347D333AC48948A@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <CANZ3JQTpr1xRwc9GED7aXePsZE_KZ6GnpO+wMn2UaMrD4tbMzg@mail.gmail.com>
-In-Reply-To: <CANZ3JQTpr1xRwc9GED7aXePsZE_KZ6GnpO+wMn2UaMrD4tbMzg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|LV3PR11MB8602:EE_
-x-ms-office365-filtering-correlation-id: bf4d2669-ef31-4ff1-61ad-08ddbfa65cca
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info: =?utf-8?B?L0lUZG9CaHBSOUgvck1NaW56aUU0OUo2UGczR09DU3A2V2wrUDlJTGwyRnM3?=
- =?utf-8?B?ZndidStNWFd5MG1sQjZLNFVkU3ZQeGorQ1pBeHJKeSt3NWJhVVhXUS9ONFI2?=
- =?utf-8?B?SmxwWHRLNXRMMkpvWElSeVpVOU0reFNJU1c0WlkyOUp4Ny9MRjVVQXVPYmpF?=
- =?utf-8?B?SjBvaW55ZTY4VXJOSzRadSt3NEtoQUZObVlmOXRtaHRBeTMyeUtrR0VRK0VW?=
- =?utf-8?B?azFKbXZrb2pIbllPcGxzdEMyTC9IcDVCcUREbldrOVIyVSs5NXJ0VjJIV1lS?=
- =?utf-8?B?MHRrUXFlMnZIM0ZSYkVBTmZ6bVpralVLaDQzdGNmaEhTTURLaWM4NkFUcURq?=
- =?utf-8?B?ZHArM3ljNEVkbWRHalZuM1J2SzhrdCtHYmdEVFpzSEJUUDhlcHlzeFBpYzM0?=
- =?utf-8?B?VjFzbHR2OGxIOTJRQ1k5ZnRKQUNBSnl2clE1SnozR1hlcjB1WFFmRFBaYkRo?=
- =?utf-8?B?SytOM0VEMGZ3MUo0UE1Uc2tobVN2K0NJNDNpTnFkc1NrSXpRSkhSQ292blA2?=
- =?utf-8?B?Q05iM2NsZUREbm1pWjFzSHY1V0JRL0gwdllHM1BIcVJSQm1saytPZEE3Kzk2?=
- =?utf-8?B?REswM29oenp3ZjQ2Y2ZUK0pyYTRiZkd3U2hNa1VpM2FTWW1tamVXUkl4ckJu?=
- =?utf-8?B?b1kzNitEV0lOalMwem4xQi9YUzBOMisvSXVrbkxqL2w3S3Y4blduY1lYTVF6?=
- =?utf-8?B?ZVNvaWRnOFRDb2ZxWm4zdHgvZTdtVXlSajI5MytnVWU3Sml2V1dJQ1Q5STdC?=
- =?utf-8?B?bERvWHNOMlFlWW12RW5oZytBa2tQckpNWVYvUFgyNjFIUmVXOEllQXVxZDRW?=
- =?utf-8?B?dWpvQUJqYkNjaFJBbTI5cEI2Z29yMUlyNzNEZUFhM3JJNkQvcjJxOGNTZkJy?=
- =?utf-8?B?aXcwRWludlRCeDV4bmduV1o5dFpRTlBxZFh1YVFtL2xteWFQQ0YwZURFamNY?=
- =?utf-8?B?MllWQmtxRDhmM21ycmZLN2xxck5UL0FKaDhsdUhFb3I5Z2FOeTRFN1MyOUk1?=
- =?utf-8?B?N2RCVWF0RlJrY1J3eGFpQ3I2WXgwVERoQ3RHRXFhVXhkc2tyN05FMUxwbDE1?=
- =?utf-8?B?RDByUTd2QzBiZEkzZkhRbnlnSjQ5a0FvUXJaeU5HYVBDK3hEOCs2blE2czB5?=
- =?utf-8?B?L2NRclF0TWNEYk5TTDBqdDNHZ3VYNWxVVDFuL2pkMXFtQUN5RFE0WWpGdmRW?=
- =?utf-8?B?c1M0OVVseUwzcytaQnlzUHkycFhUYTg4WmdPNWRna25lR1FDbE1JNDJqU2ho?=
- =?utf-8?B?WDZSd3I1TXpLTEZZV2o5K2pjWS9MN1k0OWVCMlkzQjhOTGs4T2s2OFYrTHlK?=
- =?utf-8?B?cGlTaUoxVTFnVG5jTG9JNi9sekpwdTFJRmhNOFZVWkZuYTUyK29LV1VpMmZH?=
- =?utf-8?B?ZHRvYkZycnI2OXlwYmJIc1hiR1VyOCtlVm45eUk5NzdlKytKV2Fha01EOEJG?=
- =?utf-8?B?OFFuQTBPSnBsN1owTTZoUlZuY2JqbG9tVEU5bStQUGI0VUY1Nlpyc091eUwz?=
- =?utf-8?B?cDFwUEJ0WmQ5UGd2eEwxdUFmTkRXa1JMUlBQUy8xSWpHendZK0M3MzNCRmFt?=
- =?utf-8?B?M2IxbllRM1RBTURmUVVvaW8yVGNOSEdaYVhpNmR6TXJXby9HOE9MUGh4WGNV?=
- =?utf-8?B?dHdnd2pUb05mdmJQVUlVRDMzZGFtaVFLYVJVTzJSeHRwSWRzUGU4cUZJbktm?=
- =?utf-8?B?WjNPb0hTNEtleElDdnUrUngrdzJ2a2U3dE5TVFhpNFVQenFKZ0RhNGQ5QkNt?=
- =?utf-8?B?T2E0VmFiaWVUbzVZdUd6UFJwbzNIKyt0MHBHSWRzQm5sUk5yRUtDdXIxYnhD?=
- =?utf-8?B?dC8vL3JERXcyOStMcnZYbHIyZUtJQVVQV1FYOHpKdGUyaklUNW9QN2cvUThW?=
- =?utf-8?B?TFdPZis5d3BpWHBleUY4MUIxUGQ1aXhMbmJ1Ulk2cExLVG04OWx1dDdKNDh5?=
- =?utf-8?B?N2FzOVhCZC9IZ2JId0NBSWNvZ3pCb0ZnSHUvSUR4S0JQQzJRdkoyUUsrejlz?=
- =?utf-8?B?UHlva1pGUFJ3PT0=?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RDNIUjA1cFFsL2QydGV2V284eERUT1RKUzU2OUp4bVIwc3R1clEyN3ZMRHZr?=
- =?utf-8?B?Nm5IeUJJWnM4SE8rb29GZUFtN2JlY3kvSXIxdThXWWlFSGpOVlJUS2tsaDAy?=
- =?utf-8?B?bWxtdnBxM1hEaGNsa0JNdnIzVVRFN1pDQmVRQ1VXNHo4MjNqWWNxY0hqTjFq?=
- =?utf-8?B?dWpyQkRJSWVueGZlNDdMejhLbVZvSG91S2dQVElXdHI2cjdRNmNyK2FBM3pi?=
- =?utf-8?B?UWpIVDdPRWpuNFA5T2RvM0hIbUFGbTNxN082Y0h6Z2Q1WjhIQXhtZE0xZHlt?=
- =?utf-8?B?Z01uSllDS3NrSWpIYldsRSswOGh6WGpZYVNBNmRXZFlXVjYzcXdFOVdvek9N?=
- =?utf-8?B?ckpNRDZJRnZDRWVjbkFVNnp0dWcwSDY4ZUl1VkRTZjBseEdHQ0gvMGhtYldP?=
- =?utf-8?B?L1RGRE43Qmo4Vis2SFJ4Nkcwdk9ETm1IWHBuVkxpd2JGdUI3bHgxeUgyU0Rs?=
- =?utf-8?B?Zi8xcm9LdUdpb096Y0I4MXFwcWhJeEhlMFljUHU1UzF2UnFOTGpCeE1IWm9O?=
- =?utf-8?B?ZEt3dndCbU1xYjZpTzF5c0tQOERDdUMrOElXQnlyRmhFN0lKVWkvWWU1NE81?=
- =?utf-8?B?QkMvN0p5dDZXVHN1ZkhRL2hMaUUyZnFLcGE1RUlJLzN0WDhNVmY5eTJNVDhy?=
- =?utf-8?B?cjdaWFRkSEtPYm5RSXFUcWRkRzgwZlkzSWZEbElKNENLZTR0N2JxMVFWSHBG?=
- =?utf-8?B?Qm01aHEwTHYvbzI2Sm9PSHJSTkRjVGVwczVEdHROeVRPWDArNEkzRWJaQ2xs?=
- =?utf-8?B?eUd2WTZwK3NKaG5CM3FLbU1FNDQ0Y2xybXdQcFhHV2lOc3ZKMlV0V2RBL2Ro?=
- =?utf-8?B?QksvZkZPUFVIdW5PZHJRY0FMUTU5TXZ2WTN2U25RaDA3MGErdUZDMHpkVnRD?=
- =?utf-8?B?Tkt3bVd0VjVINC9pMzhlOHgvV25XNElWWUZtdE1FdjNBZkJKOENnMHczaDVo?=
- =?utf-8?B?N2FTMU9sWVNFNnpYelRQek5nVDVyd0Ivalc1cjF1T1Z6eSt0cjRJRmpjWGdt?=
- =?utf-8?B?YnFKRlJBVkoyL3RESU1Ub2s3OERvOFhQTVNSbHBvb2R5azY3SkFyYWN1elVD?=
- =?utf-8?B?dzdxejVac1lJcEU2QW15YU8yTlN2Wk1oL3dZbmVkYU1qQm05ZVBCYVRCaVlm?=
- =?utf-8?B?ZlRIM25Yd3hGQnhTd2MyQ0FHUjVzMW42WGtjb2VWSjREeDBjSkJOODJRS0ky?=
- =?utf-8?B?TndkeUdKN25iZGJXNHpld3FWaEN6bUJ5Q2RONVBwQUFydjRGYjFHekxjdzZF?=
- =?utf-8?B?RmIyVlByL0p4QjI4SlluUzFGaStkN3JOb1FLVEdtKzJmbXJrbnRsUmRaWEZ0?=
- =?utf-8?B?aU9RQVhyWU1uOGNWWUIrN3FSZHJyNnZ1REpXeXg0Sm1XbUd6T1lVbFlVTW9V?=
- =?utf-8?B?WGlNR0tla0FqWkNJWGpWTFIrd3lOSXRlNmRZbmJjWk1XOEd0T0x1NkVFbmlY?=
- =?utf-8?B?aHM0QjZiWWVVM1FnWXdPb3ZhZHZQd2J3T3YrY2JDVC9ob3JyY0dnV2krZEZQ?=
- =?utf-8?B?bDBmU2tCM1p6ZVFxWURQaFpWU1pkd3ZuVXdZNFdGeG5KYTAvVHJuanY3bE9S?=
- =?utf-8?B?WExRT1lJM09LNS9ZMlg1TEZFOGFhTWRwYk5NUC92R1VHMmNPYmkvcGhUYmJh?=
- =?utf-8?B?UmQ5YzRCb3ZpTVFzNEgxUzJabE5ENlM5d0RXbjRXTm9iZkZOQk1rRVFrblk0?=
- =?utf-8?B?VGxEaXpoSk14RzBCdWlJbERKbDRmZS84TnZRTDREcHNTd0dZdVFWV2ZhVDYw?=
- =?utf-8?B?L0x4VjlZR0sxa2gvRUQvUFpoNmFncFlhWnN2Z21aN1FEZUE5Nm1ML1gxWUNz?=
- =?utf-8?B?bVk1d2cwZ1ZnQUd4UjBhV2t2L0VVZ0dNZmF0WkpIZzcyWGt0OCtOcG5ZRW9F?=
- =?utf-8?B?Si9kRXIxYTZ5QzNpVDlGWWw3WnJBa3JaWG1GQUVWdWQ4THZKQldNYW5MWXAw?=
- =?utf-8?B?SmdnQ3JnbitpSGtiazBrWHppNStiNnozYy9Qc0ZqWmIzRWFvVjF0alpOdlYr?=
- =?utf-8?B?c2RHcEpyeVpWdm50TWJOVVFlVTB4cmsxdldtV1p1RGRrdFFYN3ZlUjlrNFlH?=
- =?utf-8?B?dzUxYzdEaUlCam94S2VGZ1U0MHJTSHpFMzdETFhRMkxnWlJaeGFkUmI1RTd4?=
- =?utf-8?Q?nKFtNMOhkbg/i/1eURSzdwDoY?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E062271468;
+	Thu, 10 Jul 2025 15:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752162418; cv=none; b=d/LUYLIY8qIod+Z7BufAs9/Tg6rgQ/RtjnJCCipqxX30wT9duqyfTMc3KU7d1pKgGiNbycSf2vSWz9cKeZfTPyhxBzEpXdCdYRwJl4hriZAw40vubT0Zinf4FriYz26AdO2vsGHW7/+d1/k1AxjQNgqAZu7sEhqHUZHjUN3sdhE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752162418; c=relaxed/simple;
+	bh=oM1+Ehyo1XKAXDXS91myjKMXCy9LpbNbrfG5dwb/SMU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ux7pCHR7trmLVprSxHo2hV/Lf+KRLMDKVjGHk5Jl5Q8txgAtbNToiDsc9/wONLLG94yokSGVsp7hPfejE2OJW2LuY/Y/uz50/DxQfvuwyhvhtceRIxsjMnK2rW3A8nCYCz2HbB8hD8c8lZL3c0oON5GhRUxxGlcvyAc/iH/7ZUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNJ9wnkL; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4a4312b4849so13717411cf.1;
+        Thu, 10 Jul 2025 08:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752162416; x=1752767216; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CFRh5M+wR2uMTMJ/MORNLebKOfjVF5STzcGd6MRegLQ=;
+        b=NNJ9wnkLoPT9OyT9eYgv7pU4yBozqcnbwEs8wzZAg0W2w6OZ0SbLfteUcCKcsGsslb
+         kZc6MG+IoZLQ2SWZlsBXMjE7EoLzLsFSSitKGy+Du1Ei+DA9WMesZLjhLabvi+fvEQzO
+         1Z1UjGbXJ38xwsOVgTXQ/cuZquWJRjD950J7GwrJ0+vjEuMKvwQ5biT8yYWbmWBlq/Xh
+         L7TuixLCNe0a0suAx88Jb9VCvM/7BhSgjC778ObaXqDuW3NtoibboraLd9CIUropBe+7
+         acGkNN4n5yJDuC7Cf44samTpsAUM3V6SUGFVGGuFqzjW7//RpYOxuMY2Fajlbt2oAC3A
+         kRIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752162416; x=1752767216;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CFRh5M+wR2uMTMJ/MORNLebKOfjVF5STzcGd6MRegLQ=;
+        b=fOKcoVcB3IP0wRPXG/SYpFX8jJaBBUA2QUdZyzOKe5i5LUQF5E/jBJf8z2wNEv/sfA
+         9F9SdCmgFesnNix9sWViWg8J+KiEEyQEcnRaPYWhz0vEaujR8cS5G847VaXPN2cFaDP5
+         ceIkP5xkYWeGetye+ob3oOheDMrGHrlbdy+GOSesFJsZWNK9DOGLETmB2V3gr2TdsT9q
+         rDBtp3jnq+2Y+HUR34pC94UxF3JBGWxFl+KsACaI4rnIWP8E72Gqe1b7/pvEgyvYptNc
+         r3mS/d2Oglb5XdlJzYHg0sFsgPb7au2u186vVtZyUJtIAquDfrwAqSAy6rrQBUTzH5Ca
+         YuXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV0rZy5GaqX2+X52P5ypLcono4WuncqQJ1dg76hX4BF7e5LtdH5srVXQRVYITAarKJ2EDyMsr5aVw1S@vger.kernel.org, AJvYcCXHc6tLVDpw23GuJtkGJLI1S2fp66hxrr3lsINkq3Ws7u1lMQLgIgEXy8ZruBTqhqoJnWcYqwSxpfptDz3X@vger.kernel.org
+X-Gm-Message-State: AOJu0YztJZxSv3/j90WFQxxtJ9kGX/LkD5AFDKIuJkihsK5FBSUtDGm9
+	VT5AUt8lzDnT/tHfdPv9UeaBsBwBw9RcI13qa/IXUnkL3j1qjg+2f1zMwNTQTL2R0s48qJfKX1b
+	8RCflGhyw4xJKxK8Too7LQKz89SZH+Sh8pIEkBmCEFA==
+X-Gm-Gg: ASbGncvSekTjmnVJqXSNBNcInO1I/sYd3aQtun4rau2n34fiSUdXVN7G2UChJNNZHTr
+	ZSbYYYHiYYmDt/8v4Hlm+OnZSJ6dVgMxjmWDLLYS7hJxTrDjfxdJpV2WPnyZwPmuciRaKKHTQsW
+	HBQUk1VSnfKfSBuE983DYEWcNq8tTlmtvNjjqeszjUrETBQ2wwxpsPTg==
+X-Google-Smtp-Source: AGHT+IFzf7Wiy6uC7ifSVXNVJ02wG6d3iH9vAVhb54iIBDZYHdSilUfQGokgjtv7Vpa7hoe/Rf4u42B/9+7pm+cCcqs=
+X-Received: by 2002:ac8:5709:0:b0:4a8:5a:9e2f with SMTP id d75a77b69052e-4a9dec28aacmr85662381cf.8.1752162415579;
+ Thu, 10 Jul 2025 08:46:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf4d2669-ef31-4ff1-61ad-08ddbfa65cca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2025 11:38:59.8320
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OwSCYRtVg8koJVWJk2RTffRr9nYWajFdDrVK/tyLjxiUCbXoNRAGbgN02Z/tDvuJfXkp/sRSeOh0G5F3UDXlAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR11MB8602
-X-OriginatorOrg: intel.com
+References: <CANZ3JQTpr1xRwc9GED7aXePsZE_KZ6GnpO+wMn2UaMrD4tbMzg@mail.gmail.com>
+ <CY8PR11MB71349230AB9CF3347D333AC48948A@CY8PR11MB7134.namprd11.prod.outlook.com>
+In-Reply-To: <CY8PR11MB71349230AB9CF3347D333AC48948A@CY8PR11MB7134.namprd11.prod.outlook.com>
+From: Wang Haoran <haoranwangsec@gmail.com>
+Date: Thu, 10 Jul 2025 23:46:41 +0800
+X-Gm-Features: Ac12FXxzTjNlU8rlUG5TwEgMhAuCRQinxhwqzCZ1nLSH0eao7iaEPJVm5xWxsCc
+Message-ID: <CANZ3JQQdNGjzkAY-VUbs22sveHCsvCtgVkUApfTYFG7wGw1gCg@mail.gmail.com>
+Subject: Re: We found a bug in skx_common.c for the latest linux
+To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc: "Luck, Tony" <tony.luck@intel.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGkgSGFvcmFuLA0KDQo+IEZyb206IFdhbmcgSGFvcmFuIDxoYW9yYW53YW5nc2VjQGdtYWlsLmNv
-bT4NCj4gWy4uLl0NCj4gU3ViamVjdDogV2UgZm91bmQgYSBidWcgaW4gc2t4X2NvbW1vbi5jIGZv
-ciB0aGUgbGF0ZXN0IGxpbnV4DQo+IA0KPiBIaSwgbXkgbmFtZSBpcyBXYW5nIEhhb3Jhbi4gV2Ug
-Zm91bmQgYSBidWcgaW4gdGhlIHNreF9tY2Vfb3V0cHV0X2Vycm9yDQo+IGZ1bmN0aW9uIGxvY2F0
-ZWQgaW4gZHJpdmVycy9lZGFjL3NreF9jb21tb24uYyBpbiB0aGUgbGF0ZXN0IExpbnV4IGtlcm5l
-bA0KPiAodmVyc2lvbiA2LjE1LjUpLg0KPiBUaGUgaXNzdWUgYXJpc2VzIGZyb20gdGhlIHVzZSBv
-ZiBzbnByaW50ZiB0byB3cml0ZSBpbnRvIHRoZSBidWZmZXIgc2t4X21zZywNCj4gd2hpY2ggaXMg
-YWxsb2NhdGVkIHdpdGggc2l6ZSBNU0dfU0laRS5UaGUgZnVuY3Rpb24gZm9ybWF0cyBtdWx0aXBs
-ZSBzdHJpbmdzDQo+IGludG8gc2t4X21zZywgaW5jbHVkaW5nIHRoZSBkeW5hbWljYWxseSBnZW5l
-cmF0ZWQgYWR4bF9tc2csIHdoaWNoIGlzIGFsc28NCj4gYWxsb2NhdGVkIHdpdGggTVNHX1NJWkUu
-IFdoZW4gY29tYmluZWQgd2l0aCB0aGUgZm9ybWF0IHN0cmluZyAiJXMlcw0KPiBlcnJfY29kZTow
-eCUwNHg6MHglMDR4ICVzIiwgdGhlIHRvdGFsIG91dHB1dCBsZW5ndGggbWF5IGV4Y2VlZCBNU0df
-U0laRS4NCj4gQXMgYSByZXN1bHQsIHRoZSByZXR1cm4gdmFsdWUgb2Ygc25wcmludGYgbWF5IGJl
-IGdyZWF0ZXIgdGhhbiB0aGUgYWN0dWFsIGJ1ZmZlcg0KPiBzaXplLCB3aGljaCBjYW4gbGVhZCB0
-byB0cnVuY2F0aW9uIGlzc3VlcyBvciBjYXVzZSB0aGUNCj4gc2t4X3Nob3dfcmV0cnlfcmRfZXJy
-X2xvZygpIGZ1bmN0aW9uIHRvIGZhaWwgdW5leHBlY3RlZGx5Lg0KDQpEbyB5b3UgaGF2ZSBhIGRt
-ZXNnIGxvZyBmb3IgdGhlICppc3N1ZSogeW91IGRlc2NyaWJlZCBoZXJlPw0KDQpUaGFua3MNCi1R
-aXV4dQ0K
+Yes, I have!
+Thank you for your reply.
+This issue was discovered through static analysis rather than at
+runtime, so unfortunately we do not have a real-world PoC or specific
+dmesg log from skx_show_retry_rd_err_log().
+To provide additional context, during the execution of
+skx_show_retry_rd_err_log(res, skx_msg + len, MSG_SIZE - len,
+scrub_err);
+if len is greater than the allocated MSG_SIZE, the subsequent call
+inside skx_show_retry_rd_err_log such as
+n =3D snprintf(msg, len, " retry_rd_err_log[%.8x %.8x %.8x %.8x %.8x]",
+log0, log1, log2, log3, log4);
+will pass an invalid address (skx_msg + len) that has exceeded the
+bounds of the skx_msg buffer. Moreover, the size parameter (len)
+becomes negative, which is treated as a very large positive number due
+to the use of size_t. This can result in out-of-bounds memory access
+and potentially dangerous behavior in the kernel.
+
+we crafted a minimal kernel module to demonstrate this case:
+#include <linux/module.h>
+#include <linux/init.h>
+#include <linux/kernel.h>
+#include <linux/string.h>
+
+static int __init snprintf_test_init(void)
+{
+    char buf[10];
+    int i;
+
+    printk(KERN_INFO "snprintf_test: start\n");
+
+    for (i =3D 0; i < 10; i++) {
+        buf[i] =3D 'a' + i;
+    }
+
+    printk(KERN_INFO "snprintf_test: original buf (before snprintf):\n");
+    for (i =3D 0; i < sizeof(buf); i++) {
+        printk(KERN_INFO "  buf[%2d] =3D 0x%02x (%c)\n", i, buf[i],
+               (buf[i] >=3D 32 && buf[i] <=3D 126) ? buf[i] : '.');
+    }
+
+    int len =3D snprintf(buf + 12, -2, "snprintf with -2 size, num: %d", 12=
+3);
+
+    printk(KERN_INFO "snprintf_test: snprintf returned %d\n", len);
+
+    printk(KERN_INFO "snprintf_test: buf after snprintf:\n");
+    for (i =3D 0; i < sizeof(buf); i++) {
+        printk(KERN_INFO "  buf[%2d] =3D 0x%02x (%c)\n", i, buf[i],
+               (buf[i] >=3D 32 && buf[i] <=3D 126) ? buf[i] : '.');
+    }
+
+    return 0;
+}
+
+static void __exit snprintf_test_exit(void)
+{
+    printk(KERN_INFO "snprintf_test: exit\n");
+}
+
+module_init(snprintf_test_init);
+module_exit(snprintf_test_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("YourName");
+MODULE_DESCRIPTION("snprintf test");
+And here is the relevant excerpt from the kernel log (dmesg):
+[   61.503462] snprintf_test: loading out-of-tree module taints kernel.
+[   61.503472] snprintf_test: module verification failed: signature
+and/or required key missing - tainting kernel
+[   61.504431] snprintf_test: start
+[   61.504433] snprintf_test: original buf (before snprintf):
+[   61.504435]   buf[ 0] =3D 0x61 (a)
+[   61.504438]   buf[ 1] =3D 0x62 (b)
+[   61.504440]   buf[ 2] =3D 0x63 (c)
+[   61.504442]   buf[ 3] =3D 0x64 (d)
+[   61.504444]   buf[ 4] =3D 0x65 (e)
+[   61.504446]   buf[ 5] =3D 0x66 (f)
+[   61.504448]   buf[ 6] =3D 0x67 (g)
+[   61.504450]   buf[ 7] =3D 0x68 (h)
+[   61.504452]   buf[ 8] =3D 0x69 (i)
+[   61.504453]   buf[ 9] =3D 0x6a (j)
+[   61.504466] ------------[ cut here ]------------
+[   61.504468] WARNING: CPU: 0 PID: 4133 at lib/vsprintf.c:2780
+vsnprintf+0x5ad/0x5f0
+[   61.504475] Modules linked in: snprintf_test(OE+) snd_seq_dummy
+snd_hrtimer target_core_user uio target_core_pscsi target_core_file
+target_core_iblock iscsi_target_mod target_core_mod bnep qrtr
+intel_rapl_msr intel_rapl_common polyval_clmulni polyval_generic
+ghash_clmulni_intel sha256_ssse3 sha1_ssse3 aesni_intel crypto_simd
+cryptd vmw_balloon snd_ens1371 snd_ac97_codec gameport ac97_bus
+snd_pcm btusb btrtl snd_seq_midi snd_seq_midi_event btintel
+snd_rawmidi snd_seq btbcm btmtk bluetooth snd_seq_device
+vsock_loopback vmw_vsock_virtio_transport_common snd_timer
+vmw_vsock_vmci_transport snd vsock binfmt_misc soundcore vmw_vmci
+i2c_piix4 i2c_smbus input_leds joydev mac_hid sch_fq_codel vmwgfx
+drm_ttm_helper ttm msr parport_pc ppdev lp parport efi_pstore
+nfnetlink dmi_sysfs ip_tables x_tables autofs4 hid_generic psmouse
+vga16fb serio_raw vgastate mptspi mptscsih ahci mptbase e1000 libahci
+scsi_transport_spi pata_acpi usbhid hid floppy
+[   61.504595] CPU: 0 UID: 0 PID: 4133 Comm: insmod Tainted: G
+  OE       6.15.4-061504-generic #202506271452 PREEMPT(voluntary)
+[   61.504599] Tainted: [O]=3DOOT_MODULE, [E]=3DUNSIGNED_MODULE
+[   61.504600] Hardware name: VMware, Inc. VMware Virtual
+Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+[   61.504603] RIP: 0010:vsnprintf+0x5ad/0x5f0
+[   61.504606] Code: 73 04 41 c6 06 20 49 83 c6 01 4c 39 f0 75 ee 48
+8b 74 24 28 49 89 c6 45 31 c9 8b 06 83 f8 2f 0f 87 28 ff ff ff e9 a5
+fc ff ff <0f> 0b e9 d5 fb ff ff 48 8b 7c 24 28 48 8b 57 08 48 8d 42 08
+48 89
+[   61.504608] RSP: 0018:ffffd1ea04d4f7d0 EFLAGS: 00010296
+[   61.504611] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffd1ea04d=
+4f848
+[   61.504613] RDX: ffffffffc0abe0e8 RSI: fffffffffffffffe RDI: ffffd1ea04d=
+4f8bc
+[   61.504614] RBP: ffffd1ea04d4f838 R08: 0000000000000000 R09: 00000000000=
+00000
+[   61.504616] R10: 0000000000000000 R11: 0000000000000000 R12: ffffd1ea04d=
+4f8b0
+[   61.504617] R13: 0000000000000009 R14: 0000000000000009 R15: 00000000000=
+0006a
+[   61.504619] FS:  00007140a8251680(0000) GS:ffff8ccf6b49a000(0000)
+knlGS:0000000000000000
+[   61.504621] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   61.504623] CR2: 000072de22c27330 CR3: 0000000011235000 CR4: 00000000007=
+50ef0
+[   61.504639] PKRU: 55555554
+[   61.504641] Call Trace:
+[   61.504643]  <TASK>
+[   61.504648]  snprintf+0x4e/0x80
+[   61.504652]  snprintf_test_init+0xfb/0xff0 [snprintf_test]
+[   61.504656]  ? __pfx_snprintf_test_init+0x10/0x10 [snprintf_test]
+[   61.504659]  do_one_initcall+0x5d/0x330
+[   61.504697]  do_init_module+0x97/0x280
+[   61.504701]  load_module+0x74b/0x840
+[   61.504705]  init_module_from_file+0x95/0x100
+[   61.504710]  idempotent_init_module+0x110/0x300
+[   61.504715]  __x64_sys_finit_module+0x6b/0xd0
+[   61.504718]  x64_sys_call+0x18cd/0x2320
+[   61.504722]  do_syscall_64+0x7e/0x10c0
+[   61.504724]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504727]  ? ext4_llseek+0xc0/0x120
+[   61.504731]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504734]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504736]  ? arch_exit_to_user_mode_prepare.isra.0+0x22/0xd0
+[   61.504739]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504741]  ? syscall_exit_to_user_mode+0x38/0x1d0
+[   61.504744]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504746]  ? do_syscall_64+0x8a/0x10c0
+[   61.504749]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504751]  ? __fsnotify_parent+0x182/0x3e0
+[   61.504754]  ? __entry_text_end+0x102579/0x10257d
+[   61.504759]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504761]  ? vfs_read+0x178/0x390
+[   61.504766]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504769]  ? ksys_read+0x6f/0xf0
+[   61.504771]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504774]  ? arch_exit_to_user_mode_prepare.isra.0+0x22/0xd0
+[   61.504776]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504778]  ? syscall_exit_to_user_mode+0x38/0x1d0
+[   61.504781]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504784]  ? do_syscall_64+0x8a/0x10c0
+[   61.504786]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504788]  ? do_syscall_64+0x8a/0x10c0
+[   61.504791]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504794]  ? count_memcg_events.constprop.0+0x2a/0x50
+[   61.504797]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504799]  ? handle_mm_fault+0x1ca/0x2e0
+[   61.504803]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504806]  ? do_user_addr_fault+0x2f8/0x830
+[   61.504809]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504811]  ? arch_exit_to_user_mode_prepare.isra.0+0x22/0xd0
+[   61.504814]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504816]  ? irqentry_exit_to_user_mode+0x2d/0x1d0
+[   61.504819]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504821]  ? irqentry_exit+0x43/0x50
+[   61.504824]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   61.504826]  ? exc_page_fault+0x96/0x1e0
+[   61.504830]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   61.504832] RIP: 0033:0x7140a7931a2d
+[   61.504835] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e
+fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24
+08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 9b f3 0d 00 f7 d8 64 89
+01 48
+[   61.504837] RSP: 002b:00007ffd1bbeb7e8 EFLAGS: 00000246 ORIG_RAX:
+0000000000000139
+[   61.504839] RAX: ffffffffffffffda RBX: 00006484bd099790 RCX: 00007140a79=
+31a2d
+[   61.504841] RDX: 0000000000000000 RSI: 00006484887fd19e RDI: 00000000000=
+00003
+[   61.504843] RBP: 00007ffd1bbeb890 R08: 0000000000000000 R09: 00007ffd1bb=
+eb8d8
+[   61.504844] R10: 0000000000000000 R11: 0000000000000246 R12: 00006484887=
+fd19e
+[   61.504846] R13: 0000000000000000 R14: 00006484bd099750 R15: 00000000000=
+00000
+[   61.504850]  </TASK>
+[   61.504852] ---[ end trace 0000000000000000 ]---
+[   61.504854] snprintf_test: snprintf returned 0
+[   61.504856] snprintf_test: buf after snprintf:
+[   61.504857]   buf[ 0] =3D 0x61 (a)
+[   61.504858]   buf[ 1] =3D 0x62 (b)
+[   61.504860]   buf[ 2] =3D 0x63 (c)
+[   61.504861]   buf[ 3] =3D 0x64 (d)
+[   61.504863]   buf[ 4] =3D 0x65 (e)
+[   61.504864]   buf[ 5] =3D 0x66 (f)
+[   61.504865]   buf[ 6] =3D 0x67 (g)
+[   61.504867]   buf[ 7] =3D 0x68 (h)
+[   61.504868]   buf[ 8] =3D 0x69 (i)
+[   61.504869]   buf[ 9] =3D 0x6a (j)
+
+On Thu, Jul 10, 2025 at 7:39=E2=80=AFPM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
+wrote:
+>
+> Hi Haoran,
+>
+> > From: Wang Haoran <haoranwangsec@gmail.com>
+> > [...]
+> > Subject: We found a bug in skx_common.c for the latest linux
+> >
+> > Hi, my name is Wang Haoran. We found a bug in the skx_mce_output_error
+> > function located in drivers/edac/skx_common.c in the latest Linux kerne=
+l
+> > (version 6.15.5).
+> > The issue arises from the use of snprintf to write into the buffer skx_=
+msg,
+> > which is allocated with size MSG_SIZE.The function formats multiple str=
+ings
+> > into skx_msg, including the dynamically generated adxl_msg, which is al=
+so
+> > allocated with MSG_SIZE. When combined with the format string "%s%s
+> > err_code:0x%04x:0x%04x %s", the total output length may exceed MSG_SIZE=
+.
+> > As a result, the return value of snprintf may be greater than the actua=
+l buffer
+> > size, which can lead to truncation issues or cause the
+> > skx_show_retry_rd_err_log() function to fail unexpectedly.
+>
+> Do you have a dmesg log for the *issue* you described here?
+>
+> Thanks
+> -Qiuxu
 
