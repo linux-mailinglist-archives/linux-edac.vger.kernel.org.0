@@ -1,198 +1,190 @@
-Return-Path: <linux-edac+bounces-4364-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4365-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04D72B05A6E
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Jul 2025 14:41:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B1FCB05B24
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Jul 2025 15:17:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 331EE1A6404D
-	for <lists+linux-edac@lfdr.de>; Tue, 15 Jul 2025 12:41:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F44556553E
+	for <lists+linux-edac@lfdr.de>; Tue, 15 Jul 2025 13:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0C2A2E0901;
-	Tue, 15 Jul 2025 12:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502D32E1C69;
+	Tue, 15 Jul 2025 13:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ldj1uTFe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XI8Oi+Fj"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F452E0415;
-	Tue, 15 Jul 2025 12:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7601192D8A;
+	Tue, 15 Jul 2025 13:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752583253; cv=none; b=pAqzmw9U+hLQprTTvQRfoBmzS36Hjk0SHDyHQSEeRw/rdHNFC1nX6xCSiH0F4hCG8dA29GdlFoVTlQqqceHKxAP/1alMFOvb2F96KSdWBt+XIGiY52jH7Y6kOAAGaOKrRmBHYEkzH7Gm49Q482YUItzD4PcRAZy1VMEJrX2PQAs=
+	t=1752585442; cv=none; b=ET8Fu0NMW9sI7VrQlrUDTLdND3L4E+fWuu+tEM+uEyaH2bOEX/pNyMm4xpcrbSnhVU59Yoag++43McJ0wgdyez+/HD7CZpSL0ixHYr0qHnJXZclyDGUPjhFcWVzHt0dtjb4pc5Tkvd4EynI8T1JVSBYR/rV+VJN1+0VDifaIvyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752583253; c=relaxed/simple;
-	bh=TfeoKILN6uGz1OGlxgj30IyoFkYk5lj4H8dBRWQrclQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ennUiPPQpPmtdZPHYENq6L7EVvepJ60i8nbzzhGipubIZ1tGFEN7mNvYWoDTF7NBJm5uc2XoXhN4qJZ+gwt0O39dDHXrtHVGwRxxtv8XmYaErQz/tKB3yeQU1BLY2qoCyWUaUc/BU61iaWRS01kFAJ9UfYtW/8JSn9G2meXbuxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ldj1uTFe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E64C4CEFC;
-	Tue, 15 Jul 2025 12:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752583253;
-	bh=TfeoKILN6uGz1OGlxgj30IyoFkYk5lj4H8dBRWQrclQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ldj1uTFeF8vRtelS18jNkjoSIN+J0Dpm3JC9C8F5fhh9n0WLBVYVqmqUQUVjO1vdo
-	 UvZgyFgUk//9F9vQZDrK0hk0kvwwOmMnUqTO7w52dz1SDRE8lArgb4v1+vJedgzWls
-	 RfDVQvGJJFbXSWn/KX8d/TweuYV71vee0M0cxak+3W4DV7i4yoGPOGfvWX5KwiUlEW
-	 qzbFVHik4j6wWDDFkL468tJtQU/xmJqGGYG1LBroafoN387acc9Lb5EJSjx+QuP9eh
-	 o5DujpfqbCSYOzkOjOwScai+9ypqlZT/Tir24UTLEReuDDigOZbeOq2RHlb7jrIMtF
-	 PPcfgLXKf0Vuw==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-615831a3a78so797961eaf.1;
-        Tue, 15 Jul 2025 05:40:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVjb1b9tdrxWR8PS0ff4QuZ9do04+bPySQUyIkgHHWVc+bmm1879FsKnAAt9AgNyISO93nZsmI0Cdtz@vger.kernel.org, AJvYcCW3NigeA/lwjJ1Td+NqC+OkDJ0MiQR+td0o95zW7Y7kkc5NsTa8ZtPCaRad/OImFpy6dBukRvsoym5pPQ==@vger.kernel.org, AJvYcCWFMaz8gLKL1hSY6uxok42Oa+b7M4EdaQJERoBOl5MCqilqcC1gTOnS89EEv/YMnP/CrwOYSNaWKVBaQB63@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYoUiwJuvX0uyQY/LGhg94MVaMj5ezpmNhAUZdL7SPN+zVW70q
-	nJOzWxHP0wqNY9G8oigMtqgFrBWwY1Fxsv4cT7H8VJFXFno88kiLyv7di7g44N9+cj78X3+wVMe
-	tXvC4GXzKNlFd4BKNRs+wvUg1uzw2ldY=
-X-Google-Smtp-Source: AGHT+IE3VFsF0gCgkTbX+pN39J81tOvuuA0nHR7XTTqD3toqPIZXLr17a7eF4UGTVFewKNiMTJbsM+Wk4nshukXwDTo=
-X-Received: by 2002:a05:6820:2009:b0:611:f244:dfa5 with SMTP id
- 006d021491bc7-613e5eea6d1mr12571655eaf.2.1752583252489; Tue, 15 Jul 2025
- 05:40:52 -0700 (PDT)
+	s=arc-20240116; t=1752585442; c=relaxed/simple;
+	bh=1eesZ8FRGx3yBdLRXxEsKLP7sz2b7ZRsqVIaZRq93Ks=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kCd7tAr0pu80MaDuJg8cQqYd4H/cNcePh6gKlkA07pbKPTJVzacahfiMjWtQ0nxlMyrClQlf4tzODcaMKX6RV/e/KEROCuYhU/8n3Pf6pUtgL9/2cJakJRHS/ytq5xtbbfTXR5vcU8jxL6fKlYnWkybvHwDrM2KOYzoWpYXCilM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XI8Oi+Fj; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-23649faf69fso44467235ad.0;
+        Tue, 15 Jul 2025 06:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752585440; x=1753190240; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RPUohILp+ewieHf18DLvEo/uV8xKyb2IZtbl0JlgMRo=;
+        b=XI8Oi+FjK9bwGZegOX14KAiH0vm03C2dfFV4F/wRbkmua98uctnhylm14pofeCZb2+
+         JdpPISTDjiWyMepvUMdvL8oV3CaC8etsc3HnYKZMN9DflKOuMiaHZBe0s6fjEqGb0nc3
+         3G6bDER62GJDmxCIk+HphK+6uzv9kBZFR/LK45NtPUbcBk0X9cu6GV6vHwhObWOk4Y6V
+         JwSNsJoWrE+LcAp8Oh43ljIVR2hoO5GTAE35Ke6eguJv4yDunMx89s26cnwskVZJ0p0w
+         6wyOgpQl3yUAfuYAHce7Kpu7d582DMsBE2seOVPe6PU8VBs4dyU5567kantJtRa9WvCR
+         H/2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752585440; x=1753190240;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RPUohILp+ewieHf18DLvEo/uV8xKyb2IZtbl0JlgMRo=;
+        b=D4Xss5brS/0uAWmDwMwFPaQdCfn6UfcSNAFOXphdqHMr1evWWUTiLDfu907Xn+d5HC
+         GFYh/qlnZ9/nhGpK2a2Ec5i5oAqkyVmCuQOqRxs1Q2ok0Z4RZ+H00tEdUwiryaPZIgWl
+         h4TzxopcZfuBk4w/kzMv4+yh/N6OXlBz8aieZ6sP91fl346J8n1UOWQj6F/jJllHaY+w
+         pZC+JRGphng6E7bdNXXc2V9yko7WNoSesLT3o/+AkfzHWRePxArqbi+QypxW8fwj8aqK
+         9t05+qAG10hCy0fiTFUP31LMisKLccBPyyyD9avZVBtCjXMV+sne+BW0VaFWFdl3znx4
+         2TUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUkeaNs1Po3iV6c//6qDJEuBPnFf0vk8oppzuy/9MhDnxcghlfJwPHFLdQo8om8+ZhSpFVMeUlZfHdZ@vger.kernel.org, AJvYcCVDqKw6VcUu+crH3ZyqmTdmYDMRKbgn9YI3V6jWiiYCahx57cDplE4LZLPMXRCNwL6CrlkyCGs43pVgFQZX@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwKaEpK3JClrO9643NNvVcLqVHhG/Za5H3+IlBxxz5L5aHACVu
+	x5A18EM5sB/wV3vj9GyajFws+3BGtz64Is1yAZ2batL4jYu0/6e3Uyfr00C3/uKt
+X-Gm-Gg: ASbGncs6QZXq2dRwJSzJ3WP3CxVIqzPXtC6rhWwDrrkmRaIQ/mF6Brr7/pX2GZOD1C/
+	0/68P8RnNMS1jteS5embQInGhw6QzM2/qkavu6vLI47XO1Wpm4ULtVXbWqmiCOrrDU9KapatG/n
+	kUeGbIfICFLZUi4ZOiXDqxxAANs4m6XJeiGKCy2QcHJz+duABm6T1lZtj5cUTt9ywyO1/mQlI3y
+	JLud7BMV3F+KBcTuvw9zsu/jPK2sTyn/k/yUeo7Xi71wktosvg5vYWH47GmFItDQycFwS6NFwh7
+	eOqKH/FIaPp/mRX0aqyc/M/PQ5nJkqWZLpRcrUa2oApsBBU38cPnQ+g4yQns7Z4bCLZgRUnD+gw
+	x3T59JbkcnfcV7lqCdJrEbK8s
+X-Google-Smtp-Source: AGHT+IHb1NNRiOBodIjXa9IvzFu91s61XeKSSkuBPxxkKT7q3AU55A4W3UF4agdToNiW2HG5x44trg==
+X-Received: by 2002:a17:902:dace:b0:23c:7b65:9b08 with SMTP id d9443c01a7336-23dee1aba47mr342084525ad.1.1752585439816;
+        Tue, 15 Jul 2025 06:17:19 -0700 (PDT)
+Received: from shamiko.dns.podman ([2a09:bac5:398e:16c8::245:d5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c3eb7b652sm12730962a91.43.2025.07.15.06.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jul 2025 06:17:19 -0700 (PDT)
+From: Wang Haoran <haoranwangsec@gmail.com>
+To: tony.luck@intel.com,
+	bp@alien8.de
+Cc: james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wang Haoran <haoranwangsec@gmail.com>
+Subject: [PATCH] EDAC/{skx_common,i10nm}: Use scnprintf() for safer buffer handling
+Date: Tue, 15 Jul 2025 21:17:00 +0800
+Message-ID: <20250715131700.1092720-1-haoranwangsec@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250404112050.42040-1-xueshuai@linux.alibaba.com>
- <20250404112050.42040-2-xueshuai@linux.alibaba.com> <0c0bc332-0323-4e43-a96b-dd5f5957ecc9@huawei.com>
- <709ee8d2-8969-424c-b32b-101c6a8220fb@linux.alibaba.com> <353809e7-5373-0d54-6ddb-767bc5af9e5f@huawei.com>
- <653abdd4-46d2-4956-b49c-8f9c309af34d@linux.alibaba.com> <de5d2417-dc92-b276-1125-4feb5151de7f@huawei.com>
- <f60f1128-0d42-48e5-9a06-6ed7ca10767f@linux.alibaba.com> <20250428152350.GA23615@willie-the-truck>
- <6671c3cc-5119-4544-bcb5-17e8cc2d7057@linux.alibaba.com> <CAJZ5v0j3NC2ki1XPXfznxZRBLaReDBJ+nzHFgvqMx5+MgERL-A@mail.gmail.com>
- <3a465782-a8ff-4be8-9c15-e46f39196757@linux.alibaba.com> <CAJZ5v0gfFHCvE2Uu8=GRb9=ueK51s1-0BDBkJbbDG0tQvD5pLA@mail.gmail.com>
- <20250715140530.42c6bdc4@sal.lan>
-In-Reply-To: <20250715140530.42c6bdc4@sal.lan>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 15 Jul 2025 14:40:41 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ikkHeopHQb2Gxr4GnW3rqtowpWu_DEa5ahLK6f2nHH9Q@mail.gmail.com>
-X-Gm-Features: Ac12FXwKRYlUaFcGojWqkbjqTj5QJ0Jc1mh4fnplvgyugSBLLnhZkoPPPY9gJ9A
-Message-ID: <CAJZ5v0ikkHeopHQb2Gxr4GnW3rqtowpWu_DEa5ahLK6f2nHH9Q@mail.gmail.com>
-Subject: Re: [RESEND PATCH v18 1/2] ACPI: APEI: send SIGBUS to current task if
- synchronous memory error not recovered
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Shuai Xue <xueshuai@linux.alibaba.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Hanjun Guo <guohanjun@huawei.com>, "Luck, Tony" <tony.luck@intel.com>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
-	linux-edac@vger.kernel.org, x86@kernel.org, justin.he@arm.com, 
-	ardb@kernel.org, ying.huang@linux.alibaba.com, ashish.kalra@amd.com, 
-	baolin.wang@linux.alibaba.com, tglx@linutronix.de, 
-	dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com, 
-	robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com, 
-	zhuo.song@linux.alibaba.com, sudeep.holla@arm.com, lpieralisi@kernel.org, 
-	linux-acpi@vger.kernel.org, yazen.ghannam@amd.com, mark.rutland@arm.com, 
-	mingo@redhat.com, robin.murphy@arm.com, Jonathan.Cameron@huawei.com, 
-	bp@alien8.de, linux-arm-kernel@lists.infradead.org, 
-	wangkefeng.wang@huawei.com, tanxiaofei@huawei.com, mawupeng1@huawei.com, 
-	linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com, 
-	tongtiangen@huawei.com, gregkh@linuxfoundation.org, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 15, 2025 at 2:06=E2=80=AFPM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> Em Mon, 14 Jul 2025 19:30:19 +0200
-> "Rafael J. Wysocki" <rafael@kernel.org> escreveu:
->
-> > Hi,
-> >
-> > On Mon, Jul 14, 2025 at 1:54=E2=80=AFPM Shuai Xue <xueshuai@linux.aliba=
-ba.com> wrote:
-> > >
-> > > =E5=9C=A8 2025/7/1 21:56, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> > > > On Tue, Jul 1, 2025 at 1:00=E2=80=AFPM Shuai Xue <xueshuai@linux.al=
-ibaba.com> wrote:
-> > > >>
-> > > >>   >=E5=9C=A8 2025/4/28 23:23, Will Deacon =E5=86=99=E9=81=93:
-> > > >>   >> On Fri, Apr 25, 2025 at 09:10:09AM +0800, Shuai Xue wrote:
-> > > >>   >>> =E5=9C=A8 2025/4/25 09:00, Hanjun Guo =E5=86=99=E9=81=93:
-> > > >>   >>>> Call force_sig(SIGBUS) directly in ghes_do_proc() is not my=
- favourite,
-> > > >>   >>>> but I can bear that, please add
-> > > >>   >>>>
-> > > >>   >>>> Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
-> > > >>   >>>>
-> > > >>   >>>> Thanks
-> > > >>   >>>> Hanjun
-> > > >>   >>>
-> > > >>   >>> Thanks. Hanjun.
-> > > >>   >>>
-> > > >>   >>> @Rafael, @Catalin,
-> > > >>   >>>
-> > > >>   >>> Both patch 1 and 2 have reviewed-by tag from the arm64 ACPI
-> > > >> maintainers, Hanjun,
-> > > >>   >>> now. Are you happpy to pick and queue this patch set to acpi=
- tree
-> > > >> or arm tree?
-> > > >>   >>
-> > > >>   >> Since this primarily touches drivers/acpi/apei/ghes.c, I thin=
-k it should
-> > > >>   >> go via the ACPI tree and not the arm64 one.
-> > > >>   >>
-> > > >>   >> Will
-> > > >>   >
-> > > >>   >Hi, Will,
-> > > >>   >
-> > > >>   >Thank you for your confirmation :)
-> > > >>   >
-> > > >>   >@Rafael, do you have more comments on this patch set?
-> > > >>   >
-> > > >>   >Thanks you.
-> > > >>   >
-> > > >>   >Best Regards,
-> > > >>   >Shuai
-> > > >>
-> > > >> Hi, all,
-> > > >>
-> > > >> Gentle ping.
-> > > >>
-> > > >> Does ACPI or APEI tree still active? Looking forward to any respon=
-se.
-> > > >
-> > > > For APEI changes, you need an ACK from one of the reviewers listed =
-in
-> > > > the MAINTAINERS entry for APEI.
-> > > >
-> > > > Thanks!
-> > >
-> > > Hi, Rafael
-> > >
-> > > Sorry, I missed your email which goes in span (:
-> > >
-> > > ARM maintain @Catalin points that:
-> > >
-> > >  > James Morse is listed as reviewer of the ACPI APEI code but he's b=
-usy
-> > >  > with resctrl/MPAM. Adding Lorenzo, Sudeep and Hanjun as arm64 ACPI
-> > >  > maintainers, hopefully they can help.
-> > >
-> > > And Hanjun explictly gived his Reviewed-by tag in this thread, is tha=
-t
-> > > happy for you for merge?
-> >
-> > Not really.
-> >
-> > I need an ACK or R-by from a reviewer listed in the APEI entry in MAINT=
-AINERS.
-> >
-> > If James Morse is not able to fill that role (and AFAICS he's not been
-> > for quite some time now), I'd expect someone else to step up.
+snprintf() is fragile when its return value
+will be used to append additional data to a
+buffer. Use scnprintf() instead.
 
-Hi Mauro,
+Signed-off-by: Wang Haoran <haoranwangsec@gmail.com>
+---
+ drivers/edac/i10nm_base.c | 18 +++++++++---------
+ drivers/edac/skx_common.c |  4 ++--
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-> Rafael,
->
-> If you want, I can step-up to help with APEI review. Besides my work
-> with RAS/EDAC in the past, I'm doing some work those days adding
-> APEI injection in QEMU those days (currently focused on ARM error
-> injection via SEA and GPIO).
+diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
+index a3fca2567752..679d34c097c0 100644
+--- a/drivers/edac/i10nm_base.c
++++ b/drivers/edac/i10nm_base.c
+@@ -343,7 +343,7 @@ static void show_retry_rd_err_log(struct decoded_addr *res, char *msg,
+ 
+ 	status_mask = rrl->over_mask | rrl->uc_mask | rrl->v_mask;
+ 
+-	n = snprintf(msg, len, " retry_rd_err_log[");
++	n = scnprintf(msg, len, " retry_rd_err_log[");
+ 	for (i = 0; i < rrl->set_num; i++) {
+ 		scrub = (rrl->modes[i] == FRE_SCRUB || rrl->modes[i] == LRE_SCRUB);
+ 		if (scrub_err != scrub)
+@@ -355,9 +355,9 @@ static void show_retry_rd_err_log(struct decoded_addr *res, char *msg,
+ 			log = read_imc_reg(imc, ch, offset, width);
+ 
+ 			if (width == 4)
+-				n += snprintf(msg + n, len - n, "%.8llx ", log);
++				n += scnprintf(msg + n, len - n, "%.8llx ", log);
+ 			else
+-				n += snprintf(msg + n, len - n, "%.16llx ", log);
++				n += scnprintf(msg + n, len - n, "%.16llx ", log);
+ 
+ 			/* Clear RRL status if RRL in Linux control mode. */
+ 			if (retry_rd_err_log == 2 && !j && (log & status_mask))
+@@ -367,10 +367,10 @@ static void show_retry_rd_err_log(struct decoded_addr *res, char *msg,
+ 
+ 	/* Move back one space. */
+ 	n--;
+-	n += snprintf(msg + n, len - n, "]");
++	n += scnprintf(msg + n, len - n, "]");
+ 
+ 	if (len - n > 0) {
+-		n += snprintf(msg + n, len - n, " correrrcnt[");
++		n += scnprintf(msg + n, len - n, " correrrcnt[");
+ 		for (i = 0; i < rrl->cecnt_num && len - n > 0; i++) {
+ 			offset = rrl->cecnt_offsets[i];
+ 			width = rrl->cecnt_widths[i];
+@@ -378,20 +378,20 @@ static void show_retry_rd_err_log(struct decoded_addr *res, char *msg,
+ 
+ 			/* CPUs {ICX,SPR} encode two counters per 4-byte CORRERRCNT register. */
+ 			if (res_cfg->type <= SPR) {
+-				n += snprintf(msg + n, len - n, "%.4llx %.4llx ",
++				n += scnprintf(msg + n, len - n, "%.4llx %.4llx ",
+ 					      corr & 0xffff, corr >> 16);
+ 			} else {
+ 			/* CPUs {GNR} encode one counter per CORRERRCNT register. */
+ 				if (width == 4)
+-					n += snprintf(msg + n, len - n, "%.8llx ", corr);
++					n += scnprintf(msg + n, len - n, "%.8llx ", corr);
+ 				else
+-					n += snprintf(msg + n, len - n, "%.16llx ", corr);
++					n += scnprintf(msg + n, len - n, "%.16llx ", corr);
+ 			}
+ 		}
+ 
+ 		/* Move back one space. */
+ 		n--;
+-		n += snprintf(msg + n, len - n, "]");
++		n += scnprintf(msg + n, len - n, "]");
+ 	}
+ }
+ 
+diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
+index c9ade45c1a99..39c733dbc5b9 100644
+--- a/drivers/edac/skx_common.c
++++ b/drivers/edac/skx_common.c
+@@ -670,12 +670,12 @@ static void skx_mce_output_error(struct mem_ctl_info *mci,
+ 	}
+ 
+ 	if (res->decoded_by_adxl) {
+-		len = snprintf(skx_msg, MSG_SIZE, "%s%s err_code:0x%04x:0x%04x %s",
++		len = scnprintf(skx_msg, MSG_SIZE, "%s%s err_code:0x%04x:0x%04x %s",
+ 			 overflow ? " OVERFLOW" : "",
+ 			 (uncorrected_error && recoverable) ? " recoverable" : "",
+ 			 mscod, errcode, adxl_msg);
+ 	} else {
+-		len = snprintf(skx_msg, MSG_SIZE,
++		len = scnprintf(skx_msg, MSG_SIZE,
+ 			 "%s%s err_code:0x%04x:0x%04x ProcessorSocketId:0x%x MemoryControllerId:0x%x PhysicalRankId:0x%x Row:0x%x Column:0x%x Bank:0x%x BankGroup:0x%x",
+ 			 overflow ? " OVERFLOW" : "",
+ 			 (uncorrected_error && recoverable) ? " recoverable" : "",
+-- 
+2.43.0
 
-Thank you!
-
-OK, let me send a MAINTAINERS update with a list of new APEI reviewers.
 
