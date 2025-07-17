@@ -1,142 +1,184 @@
-Return-Path: <linux-edac+bounces-4372-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4373-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F72B0807C
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 00:25:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83266B08206
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 03:06:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CD1B7A8DE8
-	for <lists+linux-edac@lfdr.de>; Wed, 16 Jul 2025 22:24:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 763CE3A1787
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 01:06:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCF4329292F;
-	Wed, 16 Jul 2025 22:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C52F51A239D;
+	Thu, 17 Jul 2025 01:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bLa6uDZJ"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="IetQkNUL"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9A12857F1;
-	Wed, 16 Jul 2025 22:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECA517A5BE;
+	Thu, 17 Jul 2025 01:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752704735; cv=none; b=Vi89Ek+nkTPfUhjQbLe/KuoTavxJXjnunF5nfEe9WFVOgygqz3LQi8fCDJLrULMwW0Mh777eHRA7dihE44KB8N50sAUmwDj6w5rD/rs4xDaKDk9UKI3bjbKKziy0FzFgAYG5cxojlFzzmFC1b2NQH7Z0KeEARV/ZB1fOKz5fqsI=
+	t=1752714392; cv=none; b=gE7elwFjXogc4j3qnDwu3pyO0oAPueupJ3HYxlC5uDa2FfykN8jof3sD7m/Rv5VTFR421o8CC8MpqPy1llSmWMCxMCyY8gB0J/IOQQG2bLG5MCehoEOOsdJfscZ2q2BKa2InkwtOdGwwDULWz+4vkC9lXcgOkXnxU9qijNtSpP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752704735; c=relaxed/simple;
-	bh=b8p1yGebBghXJBd69Xqts/21wlzTMjRSUIp9WAfmGtg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=jyYVPHWL89PwecH6K91LowoTOM8EodJqf4Q7P7uV2jtadSDRhsNy1xn1Lbzu7zNuQaLX5eLKm4fpYsetOqr2S/fE0xuSxYda8MyXzYeFIHCAYxEWyBoswSUkmzXb1Axl9Pc4DjfP+dDrHGYXo4++Sgb0dHmuPlppXOEZGpGRdBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bLa6uDZJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 950FDC4CEE7;
-	Wed, 16 Jul 2025 22:25:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752704734;
-	bh=b8p1yGebBghXJBd69Xqts/21wlzTMjRSUIp9WAfmGtg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=bLa6uDZJw2dw2YRoHZuZEC1yP+RL5rzv8+TnUCg2Uh21tacQ6b1HvrQEUhwOjYwgg
-	 mC624E72HRNtB8vQGOzncBEK0d0FVrGUC4b2eYeUXLZOSD5SX1uRSD+7riCQ6FiAtw
-	 FmSAsFiqCecAH6Cb9qmsQKas/w+wM+eFAvvhYZpOzieQQDLCupaowiwQrTkeqO02bg
-	 jd0FqxrHvZk1gyMncqry/8hYSseU9OQviSsPPzbVJRFT5ZmOkZ8z+wcZd+4OlW+pHM
-	 aqBt9yJ/vMXLCDUWFWfLQce9U466WyajVpKhsKTCr6g9iBrB3KNDwwFgq6b69JpuVe
-	 YVNmiRkjioaPw==
-Date: Wed, 16 Jul 2025 17:25:33 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: rostedt@goodmis.org, lukas@wunner.de, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bhelgaas@google.com,
-	tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
-	davem@davemloft.net, anil.s.keshavamurthy@intel.com,
-	mark.rutland@arm.com, peterz@infradead.org,
-	tianruidong@linux.alibaba.com,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for
- hotplug event
-Message-ID: <20250716222533.GA2559636@bhelgaas>
+	s=arc-20240116; t=1752714392; c=relaxed/simple;
+	bh=E/o5q32lrliVlIiezxtyhXSPy3bCBk3SHNXPSTWSu4c=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=dgJWDcuJ8OvmEgi6pRyg0+zk4qZT8tn3rn5KWiywC7JEnwsb/ud9x6ToALoxW5+pQcKI18jEke4nz2GMkxBdduuiaYJ+n2VosbXWUNEBu9PgI5pPoT9Phev4T1gNURXJhs0rrbFSb2ib2FUFNbtSMcwMaWHAbkTTeoEi0uURXnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=IetQkNUL; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: by linux.microsoft.com (Postfix, from userid 1053)
+	id AD8C92116DA7; Wed, 16 Jul 2025 18:06:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AD8C92116DA7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1752714390;
+	bh=mS4Xl0mEd8rJOC6nXkcW6spg29QPJDbs/V520XmhqoQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=IetQkNULdOZlJ3MYx8joprNyNqwFxICBPPMoVQk1rxITNqRTiEkbGYBtoNpObYIwX
+	 wlINXsTIWfNHdUIxk81acTIn8ZIDjXAdN7QedT802fTfRQXhIhO36sy9ERDYOAHrdS
+	 PeJMboKpovK4OnSNM6MvdKf7DnRJkStvMYGgiLx0=
+From: Vijay Balakrishna <vijayb@linux.microsoft.com>
+To: Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tyler Hicks <code@tyhicks.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	devicetree@vger.kernel.org,
+	Vijay Balakrishna <vijayb@linux.microsoft.com>
+Subject: [v12 PATCH 0/2] Add L1 and L2 error detection for A72
+Date: Wed, 16 Jul 2025 18:06:28 -0700
+Message-Id: <1752714390-27389-1-git-send-email-vijayb@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250512013839.45960-1-xueshuai@linux.alibaba.com>
 
-[+cc Ilpo, Jonathan (should have been included since the patch has his
-Reviewed-by)]
+This is an attempt to revive [v5] series. I have attempted to address comments
+and suggestions from Marc Zyngier since [v5]. Additionally, I have limited
+the support only for A72 processors per [v8] discussion. Testing the driver
+on a problematic A72 SoC has led to the detection of Correctable Errors (CEs).
+Below are logs captured from the problematic SoC during various boot instances.
 
-Thanks for the ping; I noticed quite a bit of discussion but didn't
-follow it myself, so didn't know it was basically all resolved.
+[  876.896022] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
 
-On Mon, May 12, 2025 at 09:38:39AM +0800, Shuai Xue wrote:
-> Hotplug events are critical indicators for analyzing hardware health,
-> particularly in AI supercomputers where surprise link downs can
-> significantly impact system performance and reliability.
+[ 3700.978086] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
 
-I dropped the "particularly in AI supercomputers" part because I think
-this is relevant in general.
+[  976.956158] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
 
-> To this end, define a new TRACING_SYSTEM named pci, add a generic RAS
-> tracepoint for hotplug event to help healthy check, and generate
-> tracepoints for pcie hotplug event.
+[ 1427.933606] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
 
-I'm not quite clear on the difference between "add generic RAS
-tracepoint for hotplug event" and "generate tracepoints for pcie
-hotplug event."  Are these two different things?
+[  192.959911] EDAC DEVICE0: CE: cortex-arm64-edac instance: cpu2 block: L1 count: 1 'L1-D Data RAM correctable error(s) on CPU 2'
 
-I see the new TRACE_EVENT(pci_hp_event, ...) definition.  Is that what
-you mean by the "generic RAS tracepoint"?
+Testing our product kernel involved adding the 'edac-enabled' property to CPU
+nodes in the DTS. For mainline sanity checks, we tested under QEMU by
+extracting the default DTB and modifying the DTS to include the 'edac-enabled'
+property. We then verified the presence of /sysfs nodes for CE and UE counts
+for the emulated A72 CPUs.
 
-And the five new trace_pci_hp_event() calls that use the TRACE_EVENT
-are the "tracepoints for PCIe hotplug event"?
+Our primary focus is on A72. We have a significant number of A72-based systems
+in our fleet, and timely replacements via monitoring CEs will be instrumental
+in managing them effectively.
 
-> Add enum pci_hotplug_event in
-> include/uapi/linux/pci.h so applications like rasdaemon can register
-> tracepoint event handlers for it.
-> 
-> The output like below:
-> 
-> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
-> $ cat /sys/kernel/debug/tracing/trace_pipe
->     <...>-206     [001] .....    40.373870: pci_hp_event: 0000:00:02.0 slot:10, event:Link Down
-> 
->     <...>-206     [001] .....    40.374871: pci_hp_event: 0000:00:02.0 slot:10, event:Card not present
+I am eager to hear your suggestions and feedback on this series.
 
-> +#define PCI_HOTPLUG_EVENT					\
-> +	EM(PCI_HOTPLUG_LINK_UP,			"Link Up")	\
-> +	EM(PCI_HOTPLUG_LINK_DOWN,		"Link Down")	\
-> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"Card present")	\
-> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"Card not present")
+Thanks,
+Vijay
 
-Running this:
+[v5] https://lore.kernel.org/all/20210401110615.15326-1-s.hauer@pengutronix.de/#t
+[v6] https://lore.kernel.org/all/1744241785-20256-1-git-send-email-vijayb@linux.microsoft.com/
+[v7] https://lore.kernel.org/all/1744409319-24912-1-git-send-email-vijayb@linux.microsoft.com/#t
+[v8] https://lore.kernel.org/all/1746404860-27069-1-git-send-email-vijayb@linux.microsoft.com/
+[v9] https://lore.kernel.org/all/1747353973-4749-1-git-send-email-vijayb@linux.microsoft.com/
+[v10] https://lore.kernel.org/all/1748387790-20838-1-git-send-email-vijayb@linux.microsoft.com/
+[v11] https://lore.kernel.org/all/1748487628-30123-1-git-send-email-vijayb@linux.microsoft.com/
 
-  $ git grep -E "\<(EM|EMe)\("
+Changes since v11: 
+- driver file name change: edac_a72.c -> a72_edac.c (Boris)
+- align defines (Boris)
+- the device is registered before driver
+- in module exit unregister the device
 
-I notice that these new events don't look like the others, which
-mostly look like "word" or "event-type" or "VERB object".
+Changes since v10: 
+- edac_a72.c: copyright line add (Jonathan)
+- cpus.yaml: drop stale comment line (Krzysztof)
+- added  "Reviewed-by" tags
 
-I'm OK with this, but just giving you a chance to consider what will
-be the least surprise to users and easiest for grep and shell
-scripting.
+Changes since v9: 
+- commit title, message and prefix update (Boris)
+- fix spelling in Kconfig help text (Boris)
+- prepared patches against edac-for-next (Boris)
+- struct naming update from "merrsr" to "mem_err_synd_reg" (Boris)
+- grouping of all defines (Boris)
+- function variable declarations in reverse fir tree order (Boris)
+- simplify naming of static functions (Boris)
+- protect smp_call_function_single() against CPU hotplug (Boris)
+- "CPU" in visible string instead of "cpu" (Boris)
+- error message reflects "edac_a72" driver name (Boris)
+- fixed the issues with device_node release using scope exit (Jonathan)
+- of_cpu_device_node_get() instead of of_get_cpu_node() (Jonathan)
+- make dt-binding update applicable only for A72 using if/then schema (Rob)
 
-I also noticed capitalization of "Up" and "Down", but not "present"
-and "not present".
+Changes since v8: 
+- removed support for A53 and A57
+- added entry to MAINTAINERS
+- added missing module exit point to enable unload
 
-"Card" is only used occasionally and informally in the PCIe spec, and
-not at all in the context of hotplug of Slot Status (Presence Detect
-State refers to "adapter in the slot"), but it does match the pciehp
-dmesg text, so it probably makes sense to use that.
+Changes since v7: 
+- v5 was based on the internal product kernel, identified following upon review
+- correct format specifier to print CPUID/WAY
+- removal of unused dynamic attributes for edac_device_alloc_ctl_info() 
+- driver remove callback return type is void
 
-Anyway, I applied this on pci/trace for v6.17.  If there's anything
-you want to tweak in the commit log or event text, we can still do
-that.
+Changes since v6:
+- restore the change made in [v5] to clear CPU/L2 syndrome registers
+  back to read_errors()
+- upon detecting a valid error, clear syndrome registers immediately
+  to avoid clobbering between the read and write (Marc)
+- NULL return check for of_get_cpu_node() (Tyler)
+- of_node_put() to avoid refcount issue (Tyler)
+- quotes are dropped in yaml file (Krzysztof)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=trace
+Changes since v5:
+- rebase on v6.15-rc1
+- the syndrome registers for CPU/L2 memory errors are cleared only upon
+  detecting an error and an isb() after for synchronization (Marc)
+- "edac-enabled" hunk moved to initial patch to avoid breaking virtual
+  environments (Marc)
+- to ensure compatibility across all three families, we are not reporting
+  "L1 Dirty RAM," documented only in the A53 TRM
+- above prompted changing default CPU L1 error meesage from "unknown"
+  to "Unspecified"
+- capturing CPUID/WAY information in L2 memory error log (Marc)
+- module license from "GPL v2" to "GPL" (checkpatch.pl warning)
+- extend support for A72
 
-Bjorn
+Sascha Hauer (2):
+  EDAC: Add EDAC driver for ARM Cortex A72 cores
+  dt-bindings: arm: cpus: Add edac-enabled property
+
+ .../devicetree/bindings/arm/cpus.yaml         |  17 ++
+ MAINTAINERS                                   |   7 +
+ drivers/edac/Kconfig                          |   8 +
+ drivers/edac/Makefile                         |   1 +
+ drivers/edac/a72_edac.c                       | 230 ++++++++++++++++++
+ 5 files changed, 263 insertions(+)
+ create mode 100644 drivers/edac/a72_edac.c
+
+
+base-commit: 6beda760db7eb6b06cdbf77d4749af0bf9aca1e0
+-- 
+2.49.0
+
 
