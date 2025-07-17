@@ -1,355 +1,186 @@
-Return-Path: <linux-edac+bounces-4377-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4378-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F4E4B0887A
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 10:53:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 505EDB0924C
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 18:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7F0C4A951F
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 08:53:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3F5F7A2524
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 16:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 335352874E5;
-	Thu, 17 Jul 2025 08:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BAFA2FCFD0;
+	Thu, 17 Jul 2025 16:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="xWHrAi2p"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="HHYYyM6W"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2056.outbound.protection.outlook.com [40.107.100.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815CE287253;
-	Thu, 17 Jul 2025 08:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752742374; cv=none; b=bVK6BrndGdY5bZJhaRpmqc5yKShZnK+yufZDgc5dJnh8XdswoYEIUzZYaRpCQLXvY83PrYybPt1yf65pUY4TQHhX+otUQWwnxI9ILjrtgFXDpBGCvc56aLV3FXGX1nLg6Y5/8dJ7OQy9dsVzG3M4zCAZRFNFhTXV2Rn4gPsBMD4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752742374; c=relaxed/simple;
-	bh=ytAsy/vavJPcE7Vcm9shahUUbwVlqhcR3CZxTdfJH6Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ReB9jF/vakuCoYPPjBuo41eXIUn3Wv4aA3MdeksqrvEaN41tfX9VC7Uabm7mfIf4g6tjrkgZkv3Q0B5SzdoRkDVTPGr8O/5mYR3NKGkhjUi0vzDPEqTYrOCJVrgDRFi0Ajf7gKHBSWyjcBVFfvUmreBkHBa0AzCLJHUr8pYNzuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=xWHrAi2p; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1752742362; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=izEHRbUDFXVD/qrVi0rkduqZr+AH5if+rSaP/Tz+aXs=;
-	b=xWHrAi2pt/8dyichi2lcqMO91azBlRGT0kxxC+KCNS1F6J+8TXvgr2BfGmHUjAxjkvnT/vDE7Tc8u7wc5uPm+UsNLRjynQSUGrnN1FMfVAvknqOvKsUmlwGhVhEBE9kIRR/QuZL+DCIJIViggdehMXiCzm12HANFUk7rHdzb5vQ=
-Received: from 30.246.162.71(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Wj7R5AM_1752742357 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 17 Jul 2025 16:52:39 +0800
-Message-ID: <e932c232-bf54-4acb-b49d-e72bbb98c1ea@linux.alibaba.com>
-Date: Thu, 17 Jul 2025 16:52:37 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591CE1F30CC;
+	Thu, 17 Jul 2025 16:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.56
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752771398; cv=fail; b=XwSY7KTgTiKqwvfFqiF4TvygrwCTQLr4HipsurLxGeW9Zjbc+nOIYPvFCIoi6fhAyChI3UHSacaiTNr/4cDJBWfJ8W7l0G5+da/KTK7ub/uqItOKEOnDefcgqhp6zR/iZJtyHxxRW7aZKluHPKq2HYpnqmcF8krVoQUOAK7SOTU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752771398; c=relaxed/simple;
+	bh=uyQHc1ap9VD39R7xbP1dWlm3c0kErXrMN8K/8ADi1rg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JBwrX5vzgXeZSP2uW+sQHflC/hePxjQ+Pj2hFCjy3aLUMT3AcAmdARC+iAqXi+lNWn7zatTa7YSMLF1V62Bhg+aA4U0VKRvgDiJahgF/gIPhEvg0A1R3yJMiR0QBvi2Z8gxYdhRlVpKU1mFoLTaxPebMzf99+yXMO2qfzuvG/Lk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=HHYYyM6W; arc=fail smtp.client-ip=40.107.100.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lF2MZWJ/zrxIsJ/oUHA9GghDa6gblywCa4MYXFlVBeCm919gAfFR2HpOal1uaaWg1VfpC/r2sAUgxSei+qng6KuaWmeYZR9Wu3rrLNT+AW8NB32qEPQ+5ke8zBMneVre2gejTc6A+GD2kVVMt436S7kynQri4+Ob6PyXQimwn1lrSgn6pCOVZ/Nn539TIxz0B/kvk06JobHTVuGT0Nf0ylQtofKcyN8L3bnoKNh9POZZsNOa/RyMHOFv+NpfZlJz0IuCznsZRa7KpOH1LpaWhOblOmuMHWvet6pBcO5KfYrc3Gaojz9CDlrVd5myWTw1m5l/K6Um7xt25BGY9bBB2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tFPGsuUJajMZ2dXTYfZwJ7mnp5haB/6Qe6qDLUdeurM=;
+ b=SuuHPMxUY1hXi9fAgHykDv1DxZCqkdbWOgIbrIIcujf4pJmfgxj22msofW0taeqt8V+/eCIQUzoSZNpQ+TFUMdxkrqhDGpxn+pFg3vRlUFgoWs+7HD65DHuiNrKVFwfVYmz+8Ce1r14fjzuqOQDHcpjad0XnhLDDkHA+5K1MniTCGbl6+D833U7gNdr6lcQa4b/RFt7jHxC3RWdPBysxRMmBLbeFr9p9i745dWZnlFIIXWcpW9ueXlOutyi0a25NpSA7sDDzPLUv4S9F7ybYExStrmAireWva3VnQp+v3RCzkp447KBJk8RQiqRWik2hLnU8BmW6S4mttpK8OmoXIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tFPGsuUJajMZ2dXTYfZwJ7mnp5haB/6Qe6qDLUdeurM=;
+ b=HHYYyM6W0Plo+rnFNoGRU0EX3Uc9A565sAiLaOC/D0rg2+KyAOADq9strqbjIO7+P+JFFwde1xKQrAyzpFmGilNXrbhPT98vS5gaim3CuqfenFv3U5TyZ6T0BbaSBxjThBa7txJJKPjKNIsfhb6Y/08D+QDh118e3RNEeJj8ehs=
+Received: from MN2PR14CA0022.namprd14.prod.outlook.com (2603:10b6:208:23e::27)
+ by SJ1PR12MB6172.namprd12.prod.outlook.com (2603:10b6:a03:459::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8922.33; Thu, 17 Jul
+ 2025 16:56:30 +0000
+Received: from SA2PEPF00003AEB.namprd02.prod.outlook.com
+ (2603:10b6:208:23e:cafe::66) by MN2PR14CA0022.outlook.office365.com
+ (2603:10b6:208:23e::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.23 via Frontend Transport; Thu,
+ 17 Jul 2025 16:56:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SA2PEPF00003AEB.mail.protection.outlook.com (10.167.248.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8943.21 via Frontend Transport; Thu, 17 Jul 2025 16:56:29 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 17 Jul 2025 11:56:28 -0500
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <linux-edac@vger.kernel.org>
+CC: <bp@alien8.de>, <yazen.ghannam@amd.com>, <john.allen@amd.com>,
+	<linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>
+Subject: [PATCH 0/2] Incorporate DRAM address in EDAC messages
+Date: Thu, 17 Jul 2025 16:48:41 +0000
+Message-ID: <20250717165622.1162091-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v19 0/2] ACPI: APEI: fix potential hardlockup due to
- infinite SEA excepction loop
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: catalin.marinas@arm.com, sudeep.holla@arm.com, guohanjun@huawei.com,
- lpieralisi@kernel.org, linux-acpi@vger.kernel.org, yazen.ghannam@amd.com,
- mark.rutland@arm.com, mingo@redhat.com, robin.murphy@arm.com,
- Jonathan.Cameron@huawei.com, bp@alien8.de,
- linux-arm-kernel@lists.infradead.org, wangkefeng.wang@huawei.com,
- tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
- linmiaohe@huawei.com, naoya.horiguchi@nec.com, james.morse@arm.com,
- tongtiangen@huawei.com, gregkh@linuxfoundation.org, will@kernel.org,
- jarkko@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- akpm@linux-foundation.org, linux-edac@vger.kernel.org, x86@kernel.org,
- justin.he@arm.com, ardb@kernel.org, ying.huang@linux.alibaba.com,
- ashish.kalra@amd.com, baolin.wang@linux.alibaba.com, tglx@linutronix.de,
- dave.hansen@linux.intel.com, lenb@kernel.org, hpa@zytor.com,
- robert.moore@intel.com, lvying6@huawei.com, xiexiuqi@huawei.com,
- zhuo.song@linux.alibaba.com
-References: <20250714114212.31660-1-xueshuai@linux.alibaba.com>
- <CAJZ5v0gmuBwCXovP7WvmUss7midrJdPXNDCbhTV0tCWMb_V2ZQ@mail.gmail.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <CAJZ5v0gmuBwCXovP7WvmUss7midrJdPXNDCbhTV0tCWMb_V2ZQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AEB:EE_|SJ1PR12MB6172:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae1004b1-946a-4dc7-3fb0-08ddc552e076
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eWZaSTBjYkNocm43cms0eFZ2NXlvSDdjOW4wMS94THJOaG5jdlYvczU0TVND?=
+ =?utf-8?B?UGNIMlBoQnQ3V1hzUkg1Q0c1aUs5NThjLzhBOGlHQWdqVmJXMHhVaHgvUVhG?=
+ =?utf-8?B?MEVHK29QK1dLTUF5bnh4WWk0bUlNUWI5WjZPZzdpb0E5NEMyMnF0czVaTWZk?=
+ =?utf-8?B?VkhvbjhuZFZydytvd2pIQWplUjIxbGplTlI1WkpPNUtSODZwVlBzcXZRTCtE?=
+ =?utf-8?B?eWsvTDVjSGduUTNva2NaeXh1L1k1RGVZMHBNSCtnWUQ5bW1YQUdFb3A3dmJ4?=
+ =?utf-8?B?UG55WEEvTlVjMGw5NDJlaVNPTVN0ZFE4N0NYY29tMXJXVEZ2dis3MFR4MG9j?=
+ =?utf-8?B?YUpncURBUHV5KzRVNkg1TnoyaGM2eEFBQXRIRm1SRVV6KzNTaFYxLzBaL0N3?=
+ =?utf-8?B?eTFBWHB3cjFPNE9pMUxWaElJM3BvQzBKdkRnNDg0aExhL3czOXpETUJGejFL?=
+ =?utf-8?B?T3g5L3BYa2ZBRDVackZnZkpjOWxkb21ZbUZwMnlJTU9NT3RGaDZnVi9tSjFG?=
+ =?utf-8?B?YVQ0MG15aTRGRGpiRW1BT0hzRXRFUTBja2FRSUt1emZDb2hGZTNvVi9POXgv?=
+ =?utf-8?B?cXdLVW5TUW92YXppTXBuRmRrbzltTFI5U2VpMS9TVGZiUTZqbG04ZTFDUXND?=
+ =?utf-8?B?MnVodSs0L2JuS2ZZczY2L1E0VkppekNJb21pcGtaL1ZQellDVGpmbUF1aXQr?=
+ =?utf-8?B?QndvZGcrWGZzS1k1SFBGVEV0QU9aWUZ4Y0E1YVpNQXlqMXcyNDAveSt1R0Fy?=
+ =?utf-8?B?QnUxQmNISXNKQlJTNzZQZHlUUUxOUVYwN0Rna3R1M0Q2eVhhaFRIVjkzTy9V?=
+ =?utf-8?B?MnhsMTNtYjIyUHoyTHBERVZpa2pEUW5LeEJ5Umc1SFlqeWE3YjNYczJaSjNq?=
+ =?utf-8?B?T1d3ajVYKzBCMzJDWS9rdVpocXNTV1VKZmR3N2lLR2JYemZITzd4enlVdnBY?=
+ =?utf-8?B?Sy9GT3BoUkRKc3orSXVEREs4c3d3TktlcmxwTWxTREd5TWtSUzJPeDBqenFG?=
+ =?utf-8?B?L3NqVkIzNCttQ1JDenN0bEJSbURPT1pDQUVsNnZpY1pxeHhlL0t5VjZ3aDZl?=
+ =?utf-8?B?Tkkvc0FXZmtCUVdycjdIWWpCaGFwbU1LQUl1Tk9lY01wWGxQR0NVTDRNdVpm?=
+ =?utf-8?B?WnhFcGhSc2M4bWkzQjBDZDFEVEZOdllkUUhNbzhQQmpTZVREZHFLNFZCMzla?=
+ =?utf-8?B?elhkS0VCMUhmU21udlBBK25XaUcxSHF0NS93RUpiKzRiV3V5VVhQTTRWV0lt?=
+ =?utf-8?B?WWg4MUdEanVwRzIvWmxtZ3I0UjdtUWIrcGtkZkUyY211ME02aFlZdkVtUjlG?=
+ =?utf-8?B?TTROcmFpU1U0djZHc3NWODJzeEh3TlZXSXJBNURhWGhFeUdMVkpRQ2hTejk5?=
+ =?utf-8?B?clFYSEdsZXBSc3Nib0JlbWF5ZmwvcUhES0RSYVE0eWR0N0luUDRrd09OWEpE?=
+ =?utf-8?B?dXFER1I4MWtEVTZiUGE4cXVqM0dGT1RtNzlDQVVvTDhVMGs2UU96Z2hkaUJl?=
+ =?utf-8?B?Sm9CVkJQVG9HUWl6RkNCTzVEVFU0ditPaGQzcU5sSUVkLzlhVXEwS1U5RUJ6?=
+ =?utf-8?B?T0ZtY244WDJqTllGbmh6Q25SZWd3RnFrRXA5MnRCbU1uZ3ZkQXZtT1BJb0JG?=
+ =?utf-8?B?MW5sOXQ1T0J3ckxEKzF6OFdLaDJaVnpaNllJYm1hUWhWT0VhcTRHeWc2c3JF?=
+ =?utf-8?B?L2R0Qm9Fbk1Fd0dnMHV4Ly85Mi92b1lka2VKMXR1Q0VuS1FTcWk1bHRBNHlC?=
+ =?utf-8?B?YnQ3dHZzUXZFOThUZklySEdJaDVQY1ByRlVtN3ZNYjlMNTlaUnJ6bXdHYlJJ?=
+ =?utf-8?B?aENETTNjdS9HRTNObGFURytSd1h5UXVCMytXajZRZWpycUIxeFJyemQxNDZo?=
+ =?utf-8?B?VkYrY24yUmxsNVN5SjhwZmp0RDJibFFyT0doazJLcmQyeVN0bnFjQkFtcy83?=
+ =?utf-8?B?OGc0Vnp0TjA5a1dXVy8xSlkxTjcrTkxyMHVjcERSbmRNcjB3elZMaHM5Umt0?=
+ =?utf-8?B?Z2NMU3hSRGVvbGlMZndGR2tJUHczcGQrWjUxREFNMkdWQUFKQWx5RWVpV2Ni?=
+ =?utf-8?Q?N2Bq9F?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2025 16:56:29.9652
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae1004b1-946a-4dc7-3fb0-08ddc552e076
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003AEB.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6172
+
+Currently, the amd64_edac module only provides UMC normalized and system
+physical address when a DRAM ECC error occurs. DRAM Address is neither
+logged nor exported through tracepoint.
+
+Modern AMD SOCs provide UEFI PRM module that implements various address
+translation PRM handlers. These PRM handlers can be leveraged to convert
+UMC normalized address into DRAM address at runtime on occurence of a DRAM
+ECC error. This translated DRAM address can then be logged and exported
+through tracepoints. This set adds the required support to accomplish the
+aforementioned.
+
+The first patch adds support in the Address Transaltion Library to invoke
+the appropriate PRM handler to perform the translation.
+
+The second patch leverages the support added in the first patch to log
+DRAM Address and export it through the RAS tracepoint on occurrence of a
+DRAM ECC error.
+
+Avadhut Naik (2):
+  RAS/AMD/ATL: Translate UMC normalized address to DRAM address using
+    PRM
+  EDAC/amd64: Incorporate DRAM Address in EDAC message
+
+ drivers/edac/amd64_edac.c      | 23 ++++++++++++++++++++++
+ drivers/edac/amd64_edac.h      |  1 +
+ drivers/ras/amd/atl/core.c     |  3 ++-
+ drivers/ras/amd/atl/internal.h |  9 +++++++++
+ drivers/ras/amd/atl/prm.c      | 36 ++++++++++++++++++++++++++++++----
+ drivers/ras/amd/atl/umc.c      | 12 ++++++++++++
+ drivers/ras/ras.c              | 18 +++++++++++++++--
+ include/linux/ras.h            | 19 +++++++++++++++++-
+ 8 files changed, 113 insertions(+), 8 deletions(-)
 
 
+base-commit: 1fb0ddddf5d139089675b86702933cbca992b4d4
+-- 
+2.43.0
 
-在 2025/7/17 03:09, Rafael J. Wysocki 写道:
-> On Mon, Jul 14, 2025 at 1:42 PM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
->>
->> Dear maintainer:
->>
->> I am writing to respectfully request your review and consideration for merging
->> this patch series, which addresses potential hardlockup due to infinite
->> SEA excepction loop ( see bellow for details).
->>
->> As noted by @Catalin,
->>
->>> James Morse is listed as reviewer of the ACPI APEI code but he's busy
->>> with resctrl/MPAM. Adding Lorenzo, Sudeep and Hanjun as arm64 ACPI
->>> maintainers, hopefully they can help.
->>
->> This patch series has undergone extensive review through 19 iterations Received
->> 13 'Reviewed-by' tags from various reviewers. Notably includes review approval
->> from arm64 ACPI maintainer Hanjun Guo.
->>
->> The patches have been thoroughly tested and refined based on community feedback.
->> I believe they are ready for integration into the mainline kernel.
->>
->> I would greatly appreciate your time in reviewing these changes and
->> providing your ack if you find them acceptable for merging.
->>
->> Thank you for your continued support and maintenance of the kernel.
->>
->> changes since last v18:
->> - add reviewed-by tag for patch 1-2 from Hanjun
->>
->> no code changes since last v18:
->> - drop a mm/hwpoison patch which is merged into mainline
->>
->> changes singce v17:
->> - rebase to Linux 6.13-rc7 with no functional changes
->> - add reviewed-by tag for patch 1-3 from Jane Chu
->> - add reviewed-by tag for patch 3 from Yazen
->>
->> changes singce v16:
->> - add reviewed-by tag for patch 1 and patch 2 from Yazen
->> - rewrite warning message for force kill (per Yazen)
->> - warn with dev_err in ghes (per Jarkko)
->> - add return value -ENXIO in memory_failure comments  (per Yazen)
->> - Link: https://lore.kernel.org/lkml/20241104015430.98599-1-xueshuai@linux.alibaba.com/
->>
->> changes singce v15:
->> - add HW_ERR and GHES_PFX prefix per Yazen
->>
->> changes since v14:
->> - add reviewed-by tags from Jarkko and Jonathan
->> - remove local variable and use twcb->pfn
->>
->> changes since v13:
->> - add reviewed-by tag from Jarkko
->> - rename task_work to ghes_task_work (per Jarkko)
->>
->> changes since v12:
->> - tweak error message for force kill (per Jarkko)
->> - fix comments style (per Jarkko)
->> - fix commit log typo (per Jarko)
->>
->> changes since v11:
->> - rebase to Linux 6.11-rc6
->> - fix grammer and typo in commit log (per Borislav)
->> - remove `sync_` perfix of `sync_task_work`  (per Borislav)
->> - comments flags and description of `task_work`  (per Borislav)
->>
->> changes since v10:
->> - rebase to v6.8-rc2
->>
->> changes since v9:
->> - split patch 2 to address exactly one issue in one patch (per Borislav)
->> - rewrite commit log according to template (per Borislav)
->> - pickup reviewed-by tag of patch 1 from James Morse
->> - alloc and free twcb through gen_pool_{alloc, free) (Per James)
->> - rewrite cover letter
->>
->> changes since v8:
->> - remove the bug fix tag of patch 2 (per Jarkko Sakkinen)
->> - remove the declaration of memory_failure_queue_kick (per Naoya Horiguchi)
->> - rewrite the return value comments of memory_failure (per Naoya Horiguchi)
->>
->> changes since v7:
->> - rebase to Linux v6.6-rc2 (no code changed)
->> - rewritten the cover letter to explain the motivation of this patchset
->>
->> changes since v6:
->> - add more explicty error message suggested by Xiaofei
->> - pick up reviewed-by tag from Xiaofei
->> - pick up internal reviewed-by tag from Baolin
->>
->> changes since v5 by addressing comments from Kefeng:
->> - document return value of memory_failure()
->> - drop redundant comments in call site of memory_failure()
->> - make ghes_do_proc void and handle abnormal case within it
->> - pick up reviewed-by tag from Kefeng Wang
->>
->> changes since v4 by addressing comments from Xiaofei:
->> - do a force kill only for abnormal sync errors
->>
->> changes since v3 by addressing comments from Xiaofei:
->> - do a force kill for abnormal memory failure error such as invalid PA,
->> unexpected severity, OOM, etc
->> - pcik up tested-by tag from Ma Wupeng
->>
->> changes since v2 by addressing comments from Naoya:
->> - rename mce_task_work to sync_task_work
->> - drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
->> - add steps to reproduce this problem in cover letter
->>
->> changes since v1:
->> - synchronous events by notify type
->> - Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
->>
->> ## Cover Letter
->>
->> There are two major types of uncorrected recoverable (UCR) errors :
->>
->> - Synchronous error: The error is detected and raised at the point of the
->>    consumption in the execution flow, e.g. when a CPU tries to access
->>    a poisoned cache line. The CPU will take a synchronous error exception
->>    such as Synchronous External Abort (SEA) on Arm64 and Machine Check
->>    Exception (MCE) on X86. OS requires to take action (for example, offline
->>    failure page/kill failure thread) to recover this uncorrectable error.
->>
->> - Asynchronous error: The error is detected out of processor execution
->>    context, e.g. when an error is detected by a background scrubber. Some data
->>    in the memory are corrupted. But the data have not been consumed. OS is
->>    optional to take action to recover this uncorrectable error.
->>
->> Currently, both synchronous and asynchronous error use
->> memory_failure_queue() to schedule memory_failure() exectute in kworker
->> context. As a result, when a user-space process is accessing a poisoned
->> data, a data abort is taken and the memory_failure() is executed in the
->> kworker context:
->>
->>    - will send wrong si_code by SIGBUS signal in early_kill mode, and
->>    - can not kill the user-space in some cases resulting a synchronous
->>      error infinite loop
->>
->> Issue 1: send wrong si_code in early_kill mode
->>
->> Since commit a70297d22132 ("ACPI: APEI: set memory failure flags as
->> MF_ACTION_REQUIRED on synchronous events")', the flag MF_ACTION_REQUIRED
->> could be used to determine whether a synchronous exception occurs on
->> ARM64 platform.  When a synchronous exception is detected, the kernel is
->> expected to terminate the current process which has accessed poisoned
->> page. This is done by sending a SIGBUS signal with an error code
->> BUS_MCEERR_AR, indicating an action-required machine check error on
->> read.
->>
->> However, when kill_proc() is called to terminate the processes who have
->> the poisoned page mapped, it sends the incorrect SIGBUS error code
->> BUS_MCEERR_AO because the context in which it operates is not the one
->> where the error was triggered.
->>
->> To reproduce this problem:
->>
->>    # STEP1: enable early kill mode
->>    #sysctl -w vm.memory_failure_early_kill=1
->>    vm.memory_failure_early_kill = 1
->>
->>    # STEP2: inject an UCE error and consume it to trigger a synchronous error
->>    #einj_mem_uc single
->>    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->>    injecting ...
->>    triggering ...
->>    signal 7 code 5 addr 0xffffb0d75000
->>    page not present
->>    Test passed
->>
->> The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO
->> error and it is not fact.
->>
->> To fix it, queue memory_failure() as a task_work so that it runs in
->> the context of the process that is actually consuming the poisoned data.
->>
->> After this patch set:
->>
->>    # STEP1: enable early kill mode
->>    #sysctl -w vm.memory_failure_early_kill=1
->>    vm.memory_failure_early_kill = 1
->>
->>    # STEP2: inject an UCE error and consume it to trigger a synchronous error
->>    #einj_mem_uc single
->>    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->>    injecting ...
->>    triggering ...
->>    signal 7 code 4 addr 0xffffb0d75000
->>    page not present
->>    Test passed
->>
->> The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR
->> error as we expected.
->>
->> Issue 2: a synchronous error infinite loop due to memory_failure() failed
->>
->> If a user-space process, e.g. devmem, a poisoned page which has been set
->> HWPosion flag, kill_accessing_process() is called to send SIGBUS to the
->> current processs with error info. Because the memory_failure() is
->> executed in the kworker contex, it will just do nothing but return
->> EFAULT. So, devmem will access the posioned page and trigger an
->> excepction again, resulting in a synchronous error infinite loop. Such
->> loop may cause platform firmware to exceed some threshold and reboot
->> when Linux could have recovered from this error.
->>
->> To reproduce this problem:
->>
->>    # STEP 1: inject an UCE error, and kernel will set HWPosion flag for related page
->>    #einj_mem_uc single
->>    0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
->>    injecting ...
->>    triggering ...
->>    signal 7 code 4 addr 0xffffb0d75000
->>    page not present
->>    Test passed
->>
->>    # STEP 2: access the same page and it will trigger a synchronous error infinite loop
->>    devmem 0x4092d55b400
->>
->> To fix it, if memory_failure() failed, perform a force kill to current process.
->>
->> Issue 3: a synchronous error infinite loop due to no memory_failure() queued
->>
->> No memory_failure() work is queued unless all bellow preconditions check passed:
->>
->> - `if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))` in ghes_handle_memory_failure()
->> - `if (flags == -1)` in ghes_handle_memory_failure()
->> - `if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))` in ghes_do_memory_failure()
->> - `if (!pfn_valid(pfn) && !arch_is_platform_page(physical_addr)) ` in ghes_do_memory_failure()
->>
->> If the preconditions are not passed, the user-space process will trigger SEA again.
->> This loop can potentially exceed the platform firmware threshold or even
->> trigger a kernel hard lockup, leading to a system reboot.
->>
->> To fix it, if no memory_failure() queued, perform a force kill to current process.
->>
->> And the the memory errors triggered in kernel-mode[5], also relies on this
->> patchset to kill the failure thread.
->>
->> Lv Ying and XiuQi from Huawei also proposed to address similar problem[2][4].
->> Acknowledge to discussion with them.
->>
->> [1] Add ARMv8 RAS virtualization support in QEMU https://patchew.org/QEMU/20200512030609.19593-1-gengdongjiu@huawei.com/
->> [2] https://lore.kernel.org/lkml/20221205115111.131568-3-lvying6@huawei.com/
->> [3] https://lkml.kernel.org/r/20220914064935.7851-1-xueshuai@linux.alibaba.com
->> [4] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
->> [5] https://patchwork.kernel.org/project/linux-arm-kernel/cover/20240528085915.1955987-1-tongtiangen@huawei.com/
->>
->> Shuai Xue (2):
->>    ACPI: APEI: send SIGBUS to current task if synchronous memory error
->>      not recovered
->>    ACPI: APEI: handle synchronous exceptions in task work
->>
->>   drivers/acpi/apei/ghes.c | 88 +++++++++++++++++++++++++---------------
->>   include/acpi/ghes.h      |  3 --
->>   include/linux/mm.h       |  1 -
->>   mm/memory-failure.c      | 13 ------
->>   4 files changed, 55 insertions(+), 50 deletions(-)
->>
->> --
-> 
-> Both patches applied as 6.17 material with some minor edits in the changelogs.
-> 
-> Thanks!
-
-Hi, Rafael,
-
-After nearly three years and 19 revisions, this patch series has finally
-been merged. I am deeply grateful to all 13 reviewers for their
-professional feedback and valuable suggestions throughout the process.
-
-Rafael, thank you as well for your approval. I'm also pleased to see new
-reviewers joining the APEI area.
-
-Best regards,
-Shuai
 
