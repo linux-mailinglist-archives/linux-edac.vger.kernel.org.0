@@ -1,81 +1,94 @@
-Return-Path: <linux-edac+bounces-4383-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4384-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1159B094FC
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 21:29:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E68A7B095A2
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 22:23:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 352041C28375
-	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 19:30:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35A271752DF
+	for <lists+linux-edac@lfdr.de>; Thu, 17 Jul 2025 20:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D83F2F8C31;
-	Thu, 17 Jul 2025 19:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IEE7+Fcp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77A6021884A;
+	Thu, 17 Jul 2025 20:23:22 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24642153CE;
-	Thu, 17 Jul 2025 19:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859F82B2D7;
+	Thu, 17 Jul 2025 20:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752780592; cv=none; b=dfO+HIfPFU5BBUMJZpQVAMjExvukU7MafxE4LPSP70wRy0Jb/l4pOR9xE4b1obKaUNN5OCrqQXpkPrYrsk2abFHBW5dlAXxERL2/F4CAY6gEdpP6I+YC7QwULqga/BL7fMUYlOtKD6rMWYeC2cSTVBv3ExQb4Cc0CR5WTPHWzqU=
+	t=1752783802; cv=none; b=VB0iMO90Kwo/9pEOT6s4AqxweSSBdg/KvYSxQCtW05cbnR5zxjoM9huaZSWqVIkuMEvu3h/AzgIfLcQ6qwP1O1Rzua4NLRm8K3FZDr1ucFqm0JTA/hEwHdtdptSEzPjIiheO0vWk1p2gIJPZhPy7/KmQnhIhF86ftlNHOI+YVMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752780592; c=relaxed/simple;
-	bh=8HmzSzAM98imvYalhA76pwzsh+2wkE6ilBhKt2HWPqY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=AuM9vxBRSFWvQAMgGaN+d0DqftRb0MRJAKHMuuBsIybNXK9eD3CG9+cksEku8Ms/zN1Ckb1CXewT3naHfRl/cQoOBI+Y0OxJifzjF/5IRLAHWhHUV6eBqsPyGNdk7vaVh5ekkiQ4wNMwoh7VsxBvwKPX0AKMJTrI03N3w1ffjS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IEE7+Fcp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E726C4CEE3;
-	Thu, 17 Jul 2025 19:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752780592;
-	bh=8HmzSzAM98imvYalhA76pwzsh+2wkE6ilBhKt2HWPqY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=IEE7+Fcpsm1LD73FG6QqvI0LCbwPBKdhMZpHtQU3S5y3frbcfkHACDnR3b6L864KU
-	 cmaRTJc+FOiB73uwHNfPS4JwiNP4Cs5pNDLj/Gyke5C0D1II8q0wdT80UgiWaq358F
-	 9jwYAKXOXGOFzPYe6bn1JYVm5IdL0RnAfxdqkbu6MbqnzguYb2MruxI3GLeB9B9wpI
-	 gIDuIayLAf2v9Gf/a9jwg7SpopdCWs7anP3HZTqNT1JOS07FdrYT6mcFxEovAoW/uW
-	 g0+v+CZS79BLZirVaPcsyujNZoSAlyKrI7xRBa5kGUhKXGBxuSWj2WKxoYSCJVLBAc
-	 PtH837DiZDeMg==
-Date: Thu, 17 Jul 2025 14:29:50 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: rostedt@goodmis.org, lukas@wunner.de, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bhelgaas@google.com,
-	tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
-	davem@davemloft.net, anil.s.keshavamurthy@intel.com,
-	mark.rutland@arm.com, peterz@infradead.org,
-	tianruidong@linux.alibaba.com,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	s=arc-20240116; t=1752783802; c=relaxed/simple;
+	bh=XqY5p7zDA5kravuWtxORVPxfgTEVUyJsSIe9PVxcZso=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rP+xsJncSYoqvvdr5QKRMAL+QJAmMgLsEI/Muawo5yJ7OoEx58Jy9YL1QrzGUUhz5TNfkfmo7eslv2hlQ84myGbQnNaA4gWOZxMsyfqvjDDmveruE3lhkxmc76Sr1SCYaKZsXXdUqv6/dsY7IIhvOWgsRtvtvCk1O4OHxVpHuoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id A990D2C0646D;
+	Thu, 17 Jul 2025 22:23:17 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 70A2444C264; Thu, 17 Jul 2025 22:23:17 +0200 (CEST)
+Date: Thu, 17 Jul 2025 22:23:17 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Matthew W Carlis <mattc@purestorage.com>, xueshuai@linux.alibaba.com,
+	anil.s.keshavamurthy@intel.com, bhelgaas@google.com, bp@alien8.de,
+	davem@davemloft.net, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com, mhiramat@kernel.org,
+	naveen@kernel.org, oleg@redhat.com, peterz@infradead.org,
+	rostedt@goodmis.org, tianruidong@linux.alibaba.com,
+	tony.luck@intel.com,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for
  hotplug event
-Message-ID: <20250717192950.GA2594528@bhelgaas>
+Message-ID: <aHlbtTxO7mR9XfGX@wunner.de>
+References: <20250717172826.22120-1-mattc@purestorage.com>
+ <20250717190750.GA2592519@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2687d27d-09ed-429d-9ec7-463c69a3fff7@linux.alibaba.com>
+In-Reply-To: <20250717190750.GA2592519@bhelgaas>
 
-On Thu, Jul 17, 2025 at 02:00:14PM +0800, Shuai Xue wrote:
-> 在 2025/7/17 06:25, Bjorn Helgaas 写道:
-> ...
-> Thank you again for applying this to pci/trace for v6.17. If there’s
-> anything more to tweak in the commit log or event text, please let me
-> know.
+On Thu, Jul 17, 2025 at 02:07:50PM -0500, Bjorn Helgaas wrote:
+> and IIUC, it would be helpful for you to add:
+> 
+>   - DSP Vendor/Device ID (the Root Port or Switch Downstream Port,
+>     which is relatively static, so seems less useful to me than the
+>     USP/EP would be)
 
-Is there any convention for documenting tracepoints somewhere?  It
-looks like there's some doc in Documentation/trace/?  Should we be
-adding something there?
+Right, this is already logged in dmesg upon enumeration of the hotplug port,
+as well as available via lspci.
+
+>   - USP/EP Vendor/Device ID
+
+There's no 1:1 relation between link or presence events on the one hand,
+and enumeration of hotplugged components on the other hand:  The link
+may go up but the kernel may fail to enumerate the component, e.g. because
+it was yanked before it could be enumerated, or because the kernel has run
+out of MMIO space or bus numbers.
+
+Hence this would have to be logged through a separate tracepoint in
+pciehp_configure_device(), not by changing the tracepoints added here.
+
+Thanks,
+
+Lukas
 
