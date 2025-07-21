@@ -1,137 +1,235 @@
-Return-Path: <linux-edac+bounces-4396-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4397-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F6BDB0C502
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 15:18:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74932B0C56B
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 15:42:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D76947B27E3
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 13:16:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9FC23A71D9
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 13:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D0DF2D63FA;
-	Mon, 21 Jul 2025 13:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA5A2D9ECC;
+	Mon, 21 Jul 2025 13:41:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="rkcVs88b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SK42AtzW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601C029E109;
-	Mon, 21 Jul 2025 13:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F872D5C61;
+	Mon, 21 Jul 2025 13:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753103886; cv=none; b=MLzAocQB7z0iKMgwmwN0zPC1dKsrDnKlUhKyhvSfpkersoymfZynTRibIbUvYZPxdFrz0deeIL2jby4FhR6V8iX49v2w6y6kblZ9wIuMWXhO44xtD94qV5gDI2DB4iOowD0gWLT+6IRv97cq9Dr/vGtsx3xN0vUah26dCUKnV4A=
+	t=1753105305; cv=none; b=Wm62TxOlEMmEpy7IaobAik20YLHWbu2yDA/VIVaUisSBnGyqcm6DRyxMPk7BLlt0orNAqKEQGLkiR/M0kUvTBddie3kCQFCmBi/PAUbo4HoxRWiTzzneijNHm4GmcD35DKxhz0M4x689xWuDj3sVkFiLEZN2zoV3HXunViNhoeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753103886; c=relaxed/simple;
-	bh=dGm4NQ+3hGK/6za3afP2H7y1+PzpmhYcTH4ocGmLxsM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZBbUNXR8PEfoh0O5hVRhGzq4BVVPw6N1//V2AnIuWfs0rAiqkdG8LYJKk0S2KWYsOpKDaxG5ybuMPiIUOqBFs12qRapGRdlVSGdCadHA4h+BFjNy8mzT0u9n8Nv3lOOvLSfHd301GoWxyLdQqBOjfNmVPqX/gl9IuAUnznK+0YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=rkcVs88b; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1753103879; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=WnaoPqjkhqlDN6kTZRO3wpxLenliqy2lR/lm2VYfgC4=;
-	b=rkcVs88b+dc96OwGR3/nv1/xcBNjVE4AdaMd3WgC/jITbpvCs91H7w88KkzESvU8sV9NCCL03G0Fr+F+rOTEGHwL5XkWziy+DnIfer/04VLaxrXy+GE20FRqmmKgfByucn1x5JWCPNq1M81DWbKeigyNBoZXEiTYlZNMNw6BIaQ=
-Received: from 30.246.160.95(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WjPkmgl_1753103876 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 21 Jul 2025 21:17:57 +0800
-Message-ID: <25285fbd-ffab-49e5-a8be-e3a1c8e70d3c@linux.alibaba.com>
-Date: Mon, 21 Jul 2025 21:17:55 +0800
+	s=arc-20240116; t=1753105305; c=relaxed/simple;
+	bh=yNHo/yBmAD+zaXsjJA5Y11qSY/zQKwh/4qvEIaoDKMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EX4VVxrvG6TAQBZWRw3rDmo8pP7IjcKVaqDZoAyh31DtC60BY2Oyszmd9vKMtK+bwFt/gmEB0uqaQkRyEFYIMNuQKrjpoyqoJt4EIapW3A5y0NesjxjMqRYwV3I1zHfYegsd3DUbCq5kFeJv92PhnfL+9QV0xfdtymjt7OZolVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SK42AtzW; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753105304; x=1784641304;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yNHo/yBmAD+zaXsjJA5Y11qSY/zQKwh/4qvEIaoDKMs=;
+  b=SK42AtzWGRwH6509ytACjWN7HsxOMq1JGpYDRgJFBOQvkWaxg6sUz6RK
+   VQBAq0jbzMYmkcTLT3lIY885zKaFu6LKAm9Lm3qAx5m9rc+i5/jUE0T2W
+   Z8jy6kh16XXhyWg5NjUv0Sj/0kEKUsCaFUu4abYqINGO0JKexeTOTjLW6
+   YpM9F4tqCNFkKrLrAqpHDQA68GAOr+PrMstzJvpmJokHmKRXiI9Tvpn5D
+   R/Mv2vQNNwmblrAQmneGV0MSLxH1wedXbVpRrwNqHq9d8QoSOjZDYBkRQ
+   KiPL3qXSNbD792NPMbK/5R2eCvqLpNB2jn0LosA1e6DHPyDppYB08hi82
+   g==;
+X-CSE-ConnectionGUID: SZIDj9g3RSeAxaB+g1yJSw==
+X-CSE-MsgGUID: V9ZlOVoDTVGqdvYB/fdeTA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="59134448"
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="59134448"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 06:41:38 -0700
+X-CSE-ConnectionGUID: VQO7lgNvQBiokLZmq996hQ==
+X-CSE-MsgGUID: D5/JKbwNRY2y6JlMYOjNow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="158946600"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 21 Jul 2025 06:41:31 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1udqll-000GqT-0B;
+	Mon, 21 Jul 2025 13:41:29 +0000
+Date: Mon, 21 Jul 2025 21:40:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Breno Leitao <leitao@debian.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	Robert Moore <robert.moore@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	acpica-devel@lists.linux.dev, osandov@osandov.com,
+	xueshuai@linux.alibaba.com, konrad.wilk@oracle.com,
+	linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-pci@vger.kernel.org, kernel-team@meta.com,
+	Breno Leitao <leitao@debian.org>
+Subject: Re: [PATCH v2] vmcoreinfo: Track and log recoverable hardware errors
+Message-ID: <202507212132.OA9HtsQY-lkp@intel.com>
+References: <20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoint for hotplug
- event
-To: Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <helgaas@kernel.org>,
- Matthew W Carlis <mattc@purestorage.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: anil.s.keshavamurthy@intel.com, bhelgaas@google.com, bp@alien8.de,
- davem@davemloft.net, linux-edac@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, mark.rutland@arm.com,
- mathieu.desnoyers@efficios.com, mhiramat@kernel.org, naveen@kernel.org,
- oleg@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
- tianruidong@linux.alibaba.com, tony.luck@intel.com
-References: <20250718163532.GA2700834@bhelgaas>
- <fc0ded97-8643-4faa-a606-732bcd4ce4a1@linux.alibaba.com>
- <aHtFG3QsdohG466k@wunner.de>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <aHtFG3QsdohG466k@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org>
 
+Hi Breno,
 
+kernel test robot noticed the following build errors:
 
-在 2025/7/19 15:11, Lukas Wunner 写道:
-> On Sat, Jul 19, 2025 at 01:23:28PM +0800, Shuai Xue wrote:
->>             <...>-120     [002] .....   104.864051: pci_hp_event: 0000:00:03.0 slot:30, event:PCI_HOTPLUG_CARD_PRESENT
->>             <...>-120     [002] .....   104.864081: pci_hp_event: 0000:00:03.0 slot:30, event:PCI_HOTPLUG_LINK_UP
-> 
-> Somehow I liked the simple "Link Up" and "Card present" strings more
-> than this. :)
-> 
-> The PCI_HOTPLUG substring repeats what pci_hp_event already betrays,
-> that this is a hotplug event.
+[auto build test ERROR on 97987520025658f30bb787a99ffbd9bbff9ffc9d]
 
-I think Bjorn's concern is mainly about parsing issues when strings
-contain spaces.
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/vmcoreinfo-Track-and-log-recoverable-hardware-errors/20250721-181439
+base:   97987520025658f30bb787a99ffbd9bbff9ffc9d
+patch link:    https://lore.kernel.org/r/20250721-vmcore_hw_error-v2-1-ab65a6b43c5a%40debian.org
+patch subject: [PATCH v2] vmcoreinfo: Track and log recoverable hardware errors
+config: x86_64-buildonly-randconfig-004-20250721 (https://download.01.org/0day-ci/archive/20250721/202507212132.OA9HtsQY-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250721/202507212132.OA9HtsQY-lkp@intel.com/reproduce)
 
-So, how about using "Link_UP" and "Card_Present" instead?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507212132.OA9HtsQY-lkp@intel.com/
 
-> 
->>     irq/57-pciehp-120     [002] .....   104.990434: pci_link_event: 0000:00:03.0 cur_bus_speed:20, max_bus_speed:23, width:1, flit_mode:0, reason:5
->>     irq/57-pciehp-120     [002] .....   104.992377: pci_link_event: 0000:00:03.0 cur_bus_speed:20, max_bus_speed:23, width:1, flit_mode:0, reason:0
-> 
-> This contains a lot of terminology specific to PCI *Express*
-> (versus Conventional PCI or PCI-X).  Either it needs to be
-> "pcie_link_event" or we need to come up with a structure that
-> works for non-PCIe as well.
-> 
+All error/warnings (new ones prefixed by >>):
 
-I see, I will rename it to pcie_link_event.
+   In file included from include/linux/kexec.h:18,
+                    from init/initramfs.c:603:
+>> include/linux/vmcore_info.h:91:6: warning: no previous prototype for 'hwerror_tracking_log' [-Wmissing-prototypes]
+      91 | void hwerror_tracking_log(enum hwerror_tracking_source src) {};
+         |      ^~~~~~~~~~~~~~~~~~~~
+--
+   ld: arch/x86/kernel/traps.o: in function `hwerror_tracking_log':
+>> traps.c:(.text+0x68e): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/traps.o: in function `__pfx_hwerror_tracking_log':
+>> traps.c:(.text+0x67e): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/dumpstack_64.o: in function `hwerror_tracking_log':
+   dumpstack_64.c:(.text+0x10): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/dumpstack_64.o: in function `__pfx_hwerror_tracking_log':
+   dumpstack_64.c:(.text+0x0): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/dumpstack.o: in function `__pfx_hwerror_tracking_log':
+   dumpstack.c:(.text+0xc9): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/dumpstack.o: in function `hwerror_tracking_log':
+   dumpstack.c:(.text+0xd9): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/setup.o: in function `hwerror_tracking_log':
+   setup.c:(.text+0x54): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/setup.o: in function `__pfx_hwerror_tracking_log':
+   setup.c:(.text+0x44): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/e820.o: in function `__pfx_hwerror_tracking_log':
+   e820.c:(.text+0x19f): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/e820.o: in function `hwerror_tracking_log':
+   e820.c:(.text+0x1af): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/cpu/mce/core.o: in function `hwerror_tracking_log':
+   core.c:(.text+0x14f0): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/cpu/mce/core.o: in function `__pfx_hwerror_tracking_log':
+   core.c:(.text+0x14e0): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/acpi/madt_wakeup.o: in function `hwerror_tracking_log':
+   madt_wakeup.c:(.text+0x180): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/acpi/madt_wakeup.o: in function `__pfx_hwerror_tracking_log':
+   madt_wakeup.c:(.text+0x170): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/reboot.o: in function `hwerror_tracking_log':
+   reboot.c:(.text+0x13d): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/reboot.o: in function `__pfx_hwerror_tracking_log':
+   reboot.c:(.text+0x12d): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/smp.o: in function `hwerror_tracking_log':
+   smp.c:(.text+0x28e): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/smp.o: in function `__pfx_hwerror_tracking_log':
+   smp.c:(.text+0x27e): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/smpboot.o: in function `hwerror_tracking_log':
+   smpboot.c:(.text+0x8fe): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/smpboot.o: in function `__pfx_hwerror_tracking_log':
+   smpboot.c:(.text+0x8ee): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/setup_percpu.o: in function `hwerror_tracking_log':
+   setup_percpu.c:(.text+0x10): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/setup_percpu.o: in function `__pfx_hwerror_tracking_log':
+   setup_percpu.c:(.text+0x0): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/machine_kexec_64.o: in function `hwerror_tracking_log':
+   machine_kexec_64.c:(.text+0x772): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/machine_kexec_64.o: in function `__pfx_hwerror_tracking_log':
+   machine_kexec_64.c:(.text+0x762): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/kexec-bzimage64.o: in function `hwerror_tracking_log':
+   kexec-bzimage64.c:(.text+0xb9c): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/kexec-bzimage64.o: in function `__pfx_hwerror_tracking_log':
+   kexec-bzimage64.c:(.text+0xb8c): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: arch/x86/kernel/early_printk.o: in function `hwerror_tracking_log':
+   early_printk.c:(.text+0x31e): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: arch/x86/kernel/early_printk.o: in function `__pfx_hwerror_tracking_log':
+   early_printk.c:(.text+0x30e): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: kernel/panic.o: in function `hwerror_tracking_log':
+   panic.c:(.text+0x466): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: kernel/panic.o: in function `__pfx_hwerror_tracking_log':
+   panic.c:(.text+0x456): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: kernel/ksysfs.o: in function `hwerror_tracking_log':
+   ksysfs.c:(.text+0x1f6): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: kernel/ksysfs.o: in function `__pfx_hwerror_tracking_log':
+   ksysfs.c:(.text+0x1e6): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: kernel/reboot.o: in function `hwerror_tracking_log':
+   reboot.c:(.text+0xd31): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: kernel/reboot.o: in function `__pfx_hwerror_tracking_log':
+   reboot.c:(.text+0xd21): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: kernel/printk/printk.o: in function `hwerror_tracking_log':
+   printk.c:(.text+0x2119): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: kernel/printk/printk.o: in function `__pfx_hwerror_tracking_log':
+   printk.c:(.text+0x2109): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: kernel/kexec_core.o: in function `hwerror_tracking_log':
+   kexec_core.c:(.text+0x346): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: kernel/kexec_core.o: in function `__pfx_hwerror_tracking_log':
+   kexec_core.c:(.text+0x336): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: kernel/kexec_file.o: in function `hwerror_tracking_log':
+   kexec_file.c:(.text+0x42a): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: kernel/kexec_file.o: in function `__pfx_hwerror_tracking_log':
+   kexec_file.c:(.text+0x41a): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: kernel/kexec_handover.o: in function `hwerror_tracking_log':
+   kexec_handover.c:(.text+0xf63): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: kernel/kexec_handover.o: in function `__pfx_hwerror_tracking_log':
+   kexec_handover.c:(.text+0xf53): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: mm/mm_init.o: in function `hwerror_tracking_log':
+   mm_init.c:(.text+0x26d): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: mm/mm_init.o: in function `__pfx_hwerror_tracking_log':
+   mm_init.c:(.text+0x25d): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: block/blk-mq.o: in function `hwerror_tracking_log':
+   blk-mq.c:(.text+0x48d3): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: block/blk-mq.o: in function `__pfx_hwerror_tracking_log':
+   blk-mq.c:(.text+0x48c3): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: drivers/iommu/dma-iommu.o: in function `hwerror_tracking_log':
+   dma-iommu.c:(.text+0x196e): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: drivers/iommu/dma-iommu.o: in function `__pfx_hwerror_tracking_log':
+   dma-iommu.c:(.text+0x195e): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: drivers/md/dm-ioctl.o: in function `hwerror_tracking_log':
+   dm-ioctl.c:(.text+0x2f65): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: drivers/md/dm-ioctl.o: in function `__pfx_hwerror_tracking_log':
+   dm-ioctl.c:(.text+0x2f55): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
+   ld: drivers/firmware/efi/efi.o: in function `hwerror_tracking_log':
+   efi.c:(.text+0x5f2): multiple definition of `hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x80): first defined here
+   ld: drivers/firmware/efi/efi.o: in function `__pfx_hwerror_tracking_log':
+   efi.c:(.text+0x5e2): multiple definition of `__pfx_hwerror_tracking_log'; init/initramfs.o:initramfs.c:(.text+0x70): first defined here
 
-> PCI links can be tunneled over Thunderbolt, in this case the
-> link speed is fixed to 2.5 GT/s (USB4 v1.0 sec 11.2.1), but
-> in reality is governed by the speed of the Thunderbolt fabric
-> (which can even be asymmetric).  Do we want to report the
-> virtual 2.5 GT/s in this case or the actual Thunderbolt speed?
-> Or do we want a separate trace event for Thunderbolt?
-
-I'm not a user of Thunderbolt, which way do you prefer?
-
-> 
-> For Root and Downstream Ports, the physical "port" points "downstream",
-> whereas for Upstream Ports and Endpoints, the physical "port" points
-> "upstream".  Software interpreting the trace event may want to know
-> the direction (or whatever one wants to call it) because it cannot
-> tell from the address 0000:00:03.0 what the PCIe type is.  Having to
-> look this up in lspci seems cumbersome.  So it may be worthwhile to
-> include either the port's direction or the device's PCIe type in the
-> trace event.
-> 
-> Of course, hotplug only exists at Root or Downstream Ports, so any
-> trace event generated from the PCIe hotplug driver will pertain to
-> a downstream-facing port.  But the bandwidth controller also binds
-> to Upstream Ports and its trace events may thus pertain to link speed
-> changes at an upstream-facing port.
-
-Got it, i will device's PCIe type,
-
-> 
-> Thanks,
-> 
-> Lukas
-
-Thanks for valuable comments.
-
-Best Regards,
-Shuai
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
