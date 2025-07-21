@@ -1,81 +1,92 @@
-Return-Path: <linux-edac+bounces-4399-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4400-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 432BFB0C7DC
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 17:43:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 563D7B0C8B5
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 18:26:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FE1C16B944
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 15:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D4DD3AE902
+	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 16:25:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AFB2DF3F8;
-	Mon, 21 Jul 2025 15:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A47C2E172C;
+	Mon, 21 Jul 2025 16:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I0N8KIng"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09195170A2B;
-	Mon, 21 Jul 2025 15:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B3C2E093F;
+	Mon, 21 Jul 2025 16:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753112611; cv=none; b=b3D/13gVM0i8Fd8dPN3eX9EVF3DyCDS7sTzn6dSRa24d8sMR4w+A1oD0K1EA+5ahOWJuYmJtztFdp9MVa0WN7SdBRTFeQ5gRtwXDk13VxIglo9KMVZbi8buW2irgMRrmmblRl+JvXcYjAanigQpqjLySIj15ImHH0obQpWRGfAE=
+	t=1753115098; cv=none; b=BJM/Itn6dJ7UxRUa58duj83eeZUdEhEakY7ZRiWmHxjBgbfCYEJ29SLq/5yX3iK6+EfG/2t1fBZ28m9vhpbYJBxsRuoV0K4H3UKgo2kE7lrvm7S/yI1hoSREW4H229H64bXWglHEqXuJ2zWpMHgQZE8aJTipXBT8TJp2tRt8kpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753112611; c=relaxed/simple;
-	bh=FmHzynu9CSyBjY7snrkDKw/+CacF/IzAQo3vvCbvS+8=;
+	s=arc-20240116; t=1753115098; c=relaxed/simple;
+	bh=Y0c8fyTNCDbBI1ib06Eg9UDIUghtCzMuq8qbf2t/k5w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ByCd8QCoNqYkMEjhXbrUcpDxZFAKqh1S0fs6quqbVTDD4k+WYcPAKFuxRQ62GzcUFOI7KRAQ4HgsQYp8vZf82eEt7qmKKE3HN/Ow1OBGwkCOZF2CUzbojJv1cxjzSjlxGbHrjQMxt0T1NbAVvO/Y2BL2b/UX/H2iKht4WFEPlxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6077dea37easo6978369a12.3;
-        Mon, 21 Jul 2025 08:43:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753112608; x=1753717408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q8EMch7mkTjcU9bPeMD8J/i/5F0EvPo6dc4/iWe3Dl8=;
-        b=cvlXpL555Dil8P857eWH+XR0hmotVtqiwaClLhIbwQM8fFgRMCg71pc5WimBpg3n3R
-         HgnoUVeoEPskXSBEQJXGPg0sYfF3/8Womdc4A3/mpSn2P6HwQwE3f2hNWNyjViQxLfBB
-         kLbEW19BLVfyawk93hWq71WxPxiCB64MM6s8TsQ35Z9cR5W/sm59TIiR26Cm+r7k9Bgh
-         ObjAR+VQ1PiYNOFlB0vZAtjAsDPKuAoc3ruHb5VZ1G9ofb5ByNSOCKdE0BGjXaPFNxCw
-         h917UFBmAnMKnNqQilXZOibIcgYOMitWHinTiqt51K22exqn25spTOEH6Z7la4dz6HWt
-         PvkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGXAmtW2G+HXtWvXhIOhCgPKMp+YT8G5GbftnOjlfPEvsl/hRF8Xnf/k9bc2wfH2wjMMkjSfaWbclGxa4r@vger.kernel.org, AJvYcCVlKN65A7hfV/Xq8iWUMWMfy2RNIBcpKTULF5lzJvjioWteE+ALpDeD7rf+sG5m7UMCgQSDFS72hTZo@vger.kernel.org, AJvYcCX+pbJClUaJz6cJAaQ0+XcB9a66mTImlkKTci4fcCAFOhPta6Tqt7AuH1ikD4DKBtXaEpXVG1eKfsMG@vger.kernel.org, AJvYcCX0/7jIwcIW/+uZhXY+GE0MiqueWKrKymmN3F8E22CgC+dRAEr7pKtF8bk2gwdEeA6f4ER4IvVl2w1e5Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXqRVK8GFOfzKtOeItjxOkO1b7C0z31vfSZbesXOQtubg23Yaz
-	1eZB7W4F4uQoQwWOiKGaJzJ7ngSUujAUFDWiYjf8CDbp4Gh7eV194j49B/lt1g==
-X-Gm-Gg: ASbGnctRkWi6JFs/Q/ch7+GmjJoHeBktZISeWuU7UYqBIcAPP5u6dw3GeBkAj8bYuhi
-	UK4xW6S1pLTviFoHqYu4goyLGS5C9jUiPhpEciVCs1EN7Xp9HvW3WbofK8MvBqJWkKkL4AS2KL1
-	luSeG3xcHwNe8SiKr3yYZaNTG+dKg89ms1l1NO6xJxmIdrRrP5hRYge50VVVLjER1g0mN8SezGY
-	WH4mT8KL18HXsPfaLdGjQQDu/DWdFUO7Py2vXz7wh8Z2cWFgf9ZqkclasA7hviuX0kbvtB81hvV
-	r3RPx/A4+oy81ar+JQJgU9EE/5wjtn7NlwAsYMnJhDJVh/gY/umZf0cJ0XEvndDhncHzuiclcYa
-	vEAl2tnLRiPhbeVD9P4TRASM=
-X-Google-Smtp-Source: AGHT+IHiVZajLNzCqasc/a84TFi9Eq0YagQ04C+1iS6aqNPgOjIXzg/tFI2BWhK3viZOkIp11MJmpg==
-X-Received: by 2002:a05:6402:13c8:b0:612:b573:f4bb with SMTP id 4fb4d7f45d1cf-612b57401cfmr14728022a12.0.1753112608001;
-        Mon, 21 Jul 2025 08:43:28 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:4::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-612c8f0a0e2sm5675860a12.4.2025.07.21.08.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 08:43:27 -0700 (PDT)
-Date: Mon, 21 Jul 2025 08:43:24 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, 
-	Robert Moore <robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev, osandov@osandov.com, 
-	xueshuai@linux.alibaba.com, konrad.wilk@oracle.com, linux-edac@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org, kernel-team@meta.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cf3j7S1b9ph2BQHlxi+rOtGRkPvyaeEtbcpY38VR1SgdAgiUjJBXb3Zz0i0BTXuaBMZaK3FrhSVcU2yaGiQbnC14yujM6YapjNKfONcgZCP7+KM7gAqgZn6ja4qSncYj4PcJ1rwbjsnC7H7uikhR7GkHTOzhjtyBgJUrlkcWLaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I0N8KIng; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753115097; x=1784651097;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y0c8fyTNCDbBI1ib06Eg9UDIUghtCzMuq8qbf2t/k5w=;
+  b=I0N8KIng0drH2AyEy2zklWBPTdbm//+e0uM5oHYx5Cal8Jw3+cDPZvWY
+   lwrQ7dgUFrmD4mLHANl2fEAk+XZodaqvHVaAm07NnayIW8jQs2asFojd/
+   lYzAnvk++G69LRW8LqHyPyg4NMMV07zBiXFreTtmuX+tpVGnlEECxsvWR
+   TofXtuIvHen3AVThmU9V3XQaDRXTPdqIv19z4yDb+ZfIZa9KHjr+aF1yT
+   wS5c4Jz1OhWxdssH4mzGOFmwdJiuhAjIcxkspe/Hw92ZiX8QnTgRKQ1tI
+   m4HyauRyfDTvE7RDxqWKD4U411pKijmhJwXRTGCykZjUOx9vhFXr5LlKd
+   Q==;
+X-CSE-ConnectionGUID: RaKZtsdBRkWdEuS5bBUoig==
+X-CSE-MsgGUID: MXo5+SD7TjGwhcEfKGBqfw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="72791487"
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="72791487"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 09:24:56 -0700
+X-CSE-ConnectionGUID: /80dSFaRRlanM/T6SY8zFw==
+X-CSE-MsgGUID: l0qUhxBCQz+Cpzl2V+Cj2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="158184620"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 21 Jul 2025 09:24:49 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1udtJn-000GyP-0h;
+	Mon, 21 Jul 2025 16:24:47 +0000
+Date: Tue, 22 Jul 2025 00:24:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Breno Leitao <leitao@debian.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	Robert Moore <robert.moore@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev,
+	osandov@osandov.com, xueshuai@linux.alibaba.com,
+	konrad.wilk@oracle.com, linux-edac@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+	kernel-team@meta.com, Breno Leitao <leitao@debian.org>
 Subject: Re: [PATCH v2] vmcoreinfo: Track and log recoverable hardware errors
-Message-ID: <crxrexye2nmqebct6eisgkvpc7btrg6ckh5qr7tmhpkdnqys2h@6dpf2j6yhlxq>
+Message-ID: <202507220057.iVSR8aqd-lkp@intel.com>
 References: <20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org>
- <20250721135718.GAaH5HPinaKvXjM-1g@renoirsky.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -84,71 +95,52 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250721135718.GAaH5HPinaKvXjM-1g@renoirsky.local>
+In-Reply-To: <20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org>
 
-Hello Borislav,
+Hi Breno,
 
-On Mon, Jul 21, 2025 at 03:57:18PM +0200, Borislav Petkov wrote:
-> On Mon, Jul 21, 2025 at 03:13:40AM -0700, Breno Leitao wrote:
-> > Introduce a generic infrastructure for tracking recoverable hardware
-> > errors (HW errors that did not cause a panic) and record them for vmcore
-> > consumption. This aids post-mortem crash analysis tools by preserving
-> > a count and timestamp for the last occurrence of such errors.
-> > 
-> > This patch adds centralized logging for three common sources of
-> 
-> "Add centralized... "
+kernel test robot noticed the following build warnings:
 
-Ack!
+[auto build test WARNING on 97987520025658f30bb787a99ffbd9bbff9ffc9d]
 
-> > recoverable hardware errors:
-> > 
-> >   - PCIe AER Correctable errors
-> >   - x86 Machine Check Exceptions (MCE)
-> >   - APEI/CPER GHES corrected or recoverable errors
-> > 
-> > hwerror_tracking is write-only at kernel runtime, and it is meant to be
-> > read from vmcore using tools like crash/drgn. For example, this is how
-> > it looks like when opening the crashdump from drgn.
-> > 
-> > 	>>> prog['hwerror_tracking']
-> > 	(struct hwerror_tracking_info [3]){
-> > 		{
-> > 			.count = (int)844,
-> > 			.timestamp = (time64_t)1752852018,
-> > 		},
-> > 		...
-> > 
-> 
-> I'm still missing the justification why rasdaemon can't be used here.
-> You did explain it already in past emails.
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/vmcoreinfo-Track-and-log-recoverable-hardware-errors/20250721-181439
+base:   97987520025658f30bb787a99ffbd9bbff9ffc9d
+patch link:    https://lore.kernel.org/r/20250721-vmcore_hw_error-v2-1-ab65a6b43c5a%40debian.org
+patch subject: [PATCH v2] vmcoreinfo: Track and log recoverable hardware errors
+config: i386-buildonly-randconfig-001-20250721 (https://download.01.org/0day-ci/archive/20250722/202507220057.iVSR8aqd-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507220057.iVSR8aqd-lkp@intel.com/reproduce)
 
-Sorry, I will update it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507220057.iVSR8aqd-lkp@intel.com/
 
-> > +enum hwerror_tracking_source {
-> > +	HWE_RECOV_AER,
-> > +	HWE_RECOV_MCE,
-> > +	HWE_RECOV_GHES,
-> > +	HWE_RECOV_MAX,
-> > +};
-> 
-> Are we confident this separation will serve all cloud dudes?
+All warnings (new ones prefixed by >>):
 
-I am not, but, I've added them to CC list of this patch, so, they are
-more than free to chime in.
+   In file included from init/initramfs.c:603:
+   In file included from include/linux/kexec.h:18:
+>> include/linux/vmcore_info.h:91:6: warning: no previous prototype for function 'hwerror_tracking_log' [-Wmissing-prototypes]
+      91 | void hwerror_tracking_log(enum hwerror_tracking_source src) {};
+         |      ^
+   include/linux/vmcore_info.h:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      91 | void hwerror_tracking_log(enum hwerror_tracking_source src) {};
+         | ^
+         | static 
+   1 warning generated.
 
-> > +void hwerror_tracking_log(enum hwerror_tracking_source src)
-> 
-> A function should have a verb in its name explaining what it does:
-> 
-> hwerr_log_error_type()
-> 
-> or so.
 
-Ack!
+vim +/hwerror_tracking_log +91 include/linux/vmcore_info.h
 
-I will wait a bit more and send an updated version.
+    87	
+    88	#ifdef CONFIG_VMCORE_INFO
+    89	void hwerror_tracking_log(enum hwerror_tracking_source src);
+    90	#else
+  > 91	void hwerror_tracking_log(enum hwerror_tracking_source src) {};
+    92	#endif
+    93	
 
-Thanks for the review
---breno
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
