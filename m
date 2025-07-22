@@ -1,146 +1,191 @@
-Return-Path: <linux-edac+bounces-4400-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4401-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 563D7B0C8B5
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 18:26:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF8AB0CFD3
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Jul 2025 04:43:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D4DD3AE902
-	for <lists+linux-edac@lfdr.de>; Mon, 21 Jul 2025 16:25:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9660D1AA78A4
+	for <lists+linux-edac@lfdr.de>; Tue, 22 Jul 2025 02:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A47C2E172C;
-	Mon, 21 Jul 2025 16:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F6FA1E2307;
+	Tue, 22 Jul 2025 02:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I0N8KIng"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="V/UTAvpF"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B3C2E093F;
-	Mon, 21 Jul 2025 16:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AFF1DE8A0;
+	Tue, 22 Jul 2025 02:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753115098; cv=none; b=BJM/Itn6dJ7UxRUa58duj83eeZUdEhEakY7ZRiWmHxjBgbfCYEJ29SLq/5yX3iK6+EfG/2t1fBZ28m9vhpbYJBxsRuoV0K4H3UKgo2kE7lrvm7S/yI1hoSREW4H229H64bXWglHEqXuJ2zWpMHgQZE8aJTipXBT8TJp2tRt8kpo=
+	t=1753152220; cv=none; b=h41xPanxPaGh7agLrpDjh5Gx8SxYKTB1xoWrwYLA63fwLJQYOWUIFUIKJtaSBtJakB3eUpYJ8IH8mjc3Gf3aK4ovvoP5MNJh4qbkIysIFmyq4HT+X9kFqAGIegVIYctC9d/miMGi5IUrfUoL4Rr3X7Rg0JgI2cIymr0qIrDmmDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753115098; c=relaxed/simple;
-	bh=Y0c8fyTNCDbBI1ib06Eg9UDIUghtCzMuq8qbf2t/k5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cf3j7S1b9ph2BQHlxi+rOtGRkPvyaeEtbcpY38VR1SgdAgiUjJBXb3Zz0i0BTXuaBMZaK3FrhSVcU2yaGiQbnC14yujM6YapjNKfONcgZCP7+KM7gAqgZn6ja4qSncYj4PcJ1rwbjsnC7H7uikhR7GkHTOzhjtyBgJUrlkcWLaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I0N8KIng; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753115097; x=1784651097;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y0c8fyTNCDbBI1ib06Eg9UDIUghtCzMuq8qbf2t/k5w=;
-  b=I0N8KIng0drH2AyEy2zklWBPTdbm//+e0uM5oHYx5Cal8Jw3+cDPZvWY
-   lwrQ7dgUFrmD4mLHANl2fEAk+XZodaqvHVaAm07NnayIW8jQs2asFojd/
-   lYzAnvk++G69LRW8LqHyPyg4NMMV07zBiXFreTtmuX+tpVGnlEECxsvWR
-   TofXtuIvHen3AVThmU9V3XQaDRXTPdqIv19z4yDb+ZfIZa9KHjr+aF1yT
-   wS5c4Jz1OhWxdssH4mzGOFmwdJiuhAjIcxkspe/Hw92ZiX8QnTgRKQ1tI
-   m4HyauRyfDTvE7RDxqWKD4U411pKijmhJwXRTGCykZjUOx9vhFXr5LlKd
-   Q==;
-X-CSE-ConnectionGUID: RaKZtsdBRkWdEuS5bBUoig==
-X-CSE-MsgGUID: MXo5+SD7TjGwhcEfKGBqfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="72791487"
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="72791487"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 09:24:56 -0700
-X-CSE-ConnectionGUID: /80dSFaRRlanM/T6SY8zFw==
-X-CSE-MsgGUID: l0qUhxBCQz+Cpzl2V+Cj2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="158184620"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 21 Jul 2025 09:24:49 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1udtJn-000GyP-0h;
-	Mon, 21 Jul 2025 16:24:47 +0000
-Date: Tue, 22 Jul 2025 00:24:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Breno Leitao <leitao@debian.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
-	Robert Moore <robert.moore@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev,
-	osandov@osandov.com, xueshuai@linux.alibaba.com,
-	konrad.wilk@oracle.com, linux-edac@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-	kernel-team@meta.com, Breno Leitao <leitao@debian.org>
-Subject: Re: [PATCH v2] vmcoreinfo: Track and log recoverable hardware errors
-Message-ID: <202507220057.iVSR8aqd-lkp@intel.com>
-References: <20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org>
+	s=arc-20240116; t=1753152220; c=relaxed/simple;
+	bh=TpfBpPjtQ1TIVKcfvIOgBenSM0Z5cK8+wHNXEIxdfG8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VTU7wVOK0ZBYCkxvUsSPUVfxZC3nVvKYm3pli8TJ5MLfxJIebCSQecq9GtZ7/ui+zkiQZdhyKEZr+4JfywucinUILgxevEg+zb8rdCotnhYw69DXDcCn1jWrRcCu00Da3wappoLfuSylPpbxfS1j5OQWseeiUalxJlqNVncV4r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=V/UTAvpF; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1753152212; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=PSvOwAd8F8NSw1DU5J+G8+UcmSTgRBwFglVhweOlEgw=;
+	b=V/UTAvpFe22i21zs9tTZmyYoSpShw+oar2ObjnVEodRkRiyZZnYn7OWtw1wBXQIm/kM4punfgLSInLhEs/S6eHeZdNCA/6ZdPP3pzLGMWHsp6nhR50nVkkdH516xfrBZNjtduW/vU99xpADxSKGgzFW+CjhVYa79SeUb9eK9+uI=
+Received: from 30.246.160.95(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WjTqfLr_1753152209 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 22 Jul 2025 10:43:30 +0800
+Message-ID: <fcfc51c0-6a1f-435b-844b-4daba132f7b6@linux.alibaba.com>
+Date: Tue, 22 Jul 2025 10:43:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org>
-
-Hi Breno,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 97987520025658f30bb787a99ffbd9bbff9ffc9d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/vmcoreinfo-Track-and-log-recoverable-hardware-errors/20250721-181439
-base:   97987520025658f30bb787a99ffbd9bbff9ffc9d
-patch link:    https://lore.kernel.org/r/20250721-vmcore_hw_error-v2-1-ab65a6b43c5a%40debian.org
-patch subject: [PATCH v2] vmcoreinfo: Track and log recoverable hardware errors
-config: i386-buildonly-randconfig-001-20250721 (https://download.01.org/0day-ci/archive/20250722/202507220057.iVSR8aqd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250722/202507220057.iVSR8aqd-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507220057.iVSR8aqd-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from init/initramfs.c:603:
-   In file included from include/linux/kexec.h:18:
->> include/linux/vmcore_info.h:91:6: warning: no previous prototype for function 'hwerror_tracking_log' [-Wmissing-prototypes]
-      91 | void hwerror_tracking_log(enum hwerror_tracking_source src) {};
-         |      ^
-   include/linux/vmcore_info.h:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      91 | void hwerror_tracking_log(enum hwerror_tracking_source src) {};
-         | ^
-         | static 
-   1 warning generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoinggt for
+ hotplug event
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Matthew W Carlis <mattc@purestorage.com>, helgaas@kernel.org,
+ Lukas Wunner <lukas@wunner.de>, anil.s.keshavamurthy@intel.com,
+ bhelgaas@google.com, bp@alien8.de, davem@davemloft.net,
+ linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ linux-pci@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com, mhiramat@kernel.org,
+ naveen@kernel.org, oleg@redhat.com, peterz@infradead.org,
+ rostedt@goodmis.org, tianruidong@linux.alibaba.com, tony.luck@intel.com
+References: <20250717235055.GA2664149@bhelgaas>
+ <20250718034616.26250-1-mattc@purestorage.com>
+ <e92f8d1f-457c-4248-8397-81b0e20ff4af@linux.alibaba.com>
+ <11119800-3b6a-a683-3500-115a057c2826@linux.intel.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <11119800-3b6a-a683-3500-115a057c2826@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +/hwerror_tracking_log +91 include/linux/vmcore_info.h
 
-    87	
-    88	#ifdef CONFIG_VMCORE_INFO
-    89	void hwerror_tracking_log(enum hwerror_tracking_source src);
-    90	#else
-  > 91	void hwerror_tracking_log(enum hwerror_tracking_source src) {};
-    92	#endif
-    93	
+在 2025/7/21 18:18, Ilpo Järvinen 写道:
+> On Fri, 18 Jul 2025, Shuai Xue wrote:
+>> 在 2025/7/18 11:46, Matthew W Carlis 写道:
+>>> On Thu, Jul 17, 2025 Bjorn Helgaas wrote
+>>>> So I think your idea of adding current link speed/width to the "Link
+>>>> Up" event is still on the table, and that does sound useful to me.
+>>>
+>>> We're already reading the link status register here to check DLLA so
+>>> it would be nice. I guess if everything is healthy we're probably already
+>>> at the maximum speed by this point.
+>>>
+>>>> In the future we might add another tracepoint when we enumerate the
+>>>> device and know the Vendor/Device ID.
+>>>
+>>> I think we might have someone who would be interested in doing it.
+>>
+>>
+>> Hi, all,
+>>
+>> IIUC, the current hotplug event (or presence event) is enough for Matthew.
+>> and we would like a new tracepoing for link speed change which reports
+>> speeds.
+>>
+>> For hotplug event, I plan to send a new version to
+>>
+>> 1. address Bjorn' concerns about event strings by removing its spaces.
+>>
+>> #define PCI_HOTPLUG_EVENT
+>> \
+>> 	EM(PCI_HOTPLUG_LINK_UP,			"PCI_HOTPLUG_LINK_UP")
+>> \
+>> 	EM(PCI_HOTPLUG_LINK_DOWN,		"PCI_HOTPLUG_LINK_DOWN")
+>> \
+>> 	EM(PCI_HOTPLUG_CARD_PRESENT,		"PCI_HOTPLUG_CARD_PRESENT")
+>> \
+>> 	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,
+>> "PCI_HOTPLUG_CARD_NOT_PRESENT")
+>>
+>> 2. address Ilpo comments by moving pci_hp_event to a common place
+>> (include/trace/events/pci.h) so that the new comming can also use it.
+> 
+> Ah, I only now noticed you've decided to re-place them. Please disregard
+> my other comment about this being still open/undecided item.
+> 
+>> For link speed change event (perhaps named as pci_link_event),
+>> I plan to send a seperate patch, which provides:
+>>
+>> 	TP_STRUCT__entry(
+>> 		__string(	port_name,	port_name	)
+>> 		__field(	unsigned char,	cur_bus_speed	)
+>> 		__field(	unsigned char,	max_bus_speed	)
+>>   		__field(	unsigned char,	width		)
+>>   		__field(	unsigned int,	flit_mode	)
+>> 		__field(	unsigned char,	reason		)
+>> 		),
+>>
+>> The reason field is from Lukas ideas which indicates why the link speed
+>> changed, e.g. "hotplug", "autonomous", "thermal", "retrain", etc.
+>>
+>> Are you happy with above changes?
+> 
+> Since you're probably quite far with the pcie link event patch too given
+> above, could you take a look at the LNKSTA flags representation in my
+> patch and incorporate those as well as there seems to always lot of
+> uncertainty about those flags when investigating the LBMS/bwctrl related
+> issues so it seems prudent to explicitly include them into the traceevent
+> output:
+> 
+> https://lore.kernel.org/linux-pci/7c289bba-3133-0989-6333-41fc41fe3504@linux.intel.com/
+> 
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sure, Thank you for the feedback.
+
+I like the LNKSTA flags, LNKSTA flags provides better genericity
+compared to the custom reason field I initially proposed. But it may
+cause confusion when used in pcie_retrain_link(). However, I've
+identified a potential issue when this approach is applied in
+pcie_retrain_link() scenarios.
+
+Consider the following trace output when a device hotpluged:
+
+$ cat /sys/kernel/debug/tracing/trace_pipe
+$ cat /sys/kernel/debug/tracing/trace_pipe
+            <...>-118     [002] .....    28.414220: pci_hp_event: 0000:00:03.0 slot:30, event:PCI_HOTPLUG_CARD_PRESENT
+
+            <...>-118     [002] .....    28.414273: pci_hp_event: 0000:00:03.0 slot:30, event:PCI_HOTPLUG_LINK_UP
+
+    irq/57-pciehp-118     [002] .....    28.540189: pcie_link_event: 0000:00:03.0 type:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:16.0 GT/s PCIe, width:1, flit_mode:0, status:DLLLA
+
+    irq/57-pciehp-118     [002] .....    28.544999: pcie_link_event: 0000:00:03.0 type:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:16.0 GT/s PCIe, width:1, flit_mode:0, status:DLLLA
+
+The problem is that both trace events show status:DLLLA (Data Link Layer
+Link Active), which is the direct reading from PCI_EXP_LNKSTA. However,
+this doesn't accurately reflect the underlying context:
+
+- First DLLLA: Triggered by board_added() - link establishment after
+   card insertion
+- Second DLLLA: Triggered by pcie_retrain_link() - link retraining
+   completion
+
+( I trace the events in pcie_update_link_speed() )
+
+In the second case, the more relevant status would be PCI_EXP_LNKSTA_LT
+(Link Training) to indicate that link retraining was performed, even
+though the final register state shows DLLLA.
+
+Question: Should we explicitly report the contextual status (e.g.,
+PCI_EXP_LNKSTA_LT for retraining scenarios) rather than always reading
+the current register field? This would provide more meaningful trace
+information for debugging link state transitions.
+
+Additionally, I'd appreciate your thoughts on the overall tracepoint
+format shown above. Does this structure provide sufficient information
+for hotplug and link analysis while maintaining readability?
+
+Thanks.
+Shuai
 
