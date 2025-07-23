@@ -1,95 +1,126 @@
-Return-Path: <linux-edac+bounces-4417-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4418-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 542D1B0F4E1
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 16:06:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8973EB0F544
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 16:29:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53E01188CD51
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 14:06:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9391D3A3E5B
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 14:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244292F2718;
-	Wed, 23 Jul 2025 14:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6692EF9B9;
+	Wed, 23 Jul 2025 14:29:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JjM8tild"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0ACF78F3E;
-	Wed, 23 Jul 2025 14:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 324E1433A6;
+	Wed, 23 Jul 2025 14:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753279574; cv=none; b=rm5wO1BqgqDVYzwYLpm9LK8qVM14OVILDwH1oO5rEDIAnA5ymG8JVLscpD+QeyoNvtTBkpFahnLSJhIAyTqF24OZ0uO5X9qYFusA8EIGMCAEVafkEcxlbCyaoFvXuO9lB72tp7hIWV8ySlhl1VkSwCR2oHvWAjIvERrH1alo6PQ=
+	t=1753280968; cv=none; b=u3d+VwrcEbUxQo9j1HTk3gTrMkN1hRbztCECVl3cCoL9j2etPznHSyHa4OqATMRE7DtR65ZgeD4vnXCC5inCaQnb+IcQg4a0Gczp8UB/vQ7wdf4JhM9X8bRsb9wevvVXVScxEfD2vBRakseY2EZ/9/JroqGEvr1uXFpLqJcUvAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753279574; c=relaxed/simple;
-	bh=lMxJ452v0orPlmOr+epyAVHrDfvjemEaQSUKSAWFW5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KL7SGWoyPD/Px5crPXlR4z2falztOU35ksK15DYHkkRIfUo8BwiSInQXccVk8HKudp7eT7GYMiFUt87mKyf+X7v8G/NQE3sc7l0jQa3hc+hO9mul7YykU/TE33ZbOYy/bRE+1BZ68hD50dyjrC+Ftj571MrUd1cmKtEbVxs43zQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 7C56F1606A4;
-	Wed, 23 Jul 2025 14:06:03 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id BCD5E2D;
-	Wed, 23 Jul 2025 14:05:58 +0000 (UTC)
-Date: Wed, 23 Jul 2025 10:05:59 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: lukas@wunner.de, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
- ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
- Jonathan.Cameron@huawei.com, bhelgaas@google.com, tony.luck@intel.com,
- bp@alien8.de, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
- anil.s.keshavamurthy@intel.com, mark.rutland@arm.com, peterz@infradead.org,
- tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v9 2/2] PCI: trace: Add a RAS tracepoint to monitor link
- speed changes
-Message-ID: <20250723100559.7f0adb3c@batman.local.home>
-In-Reply-To: <20250723033108.61587-3-xueshuai@linux.alibaba.com>
-References: <20250723033108.61587-1-xueshuai@linux.alibaba.com>
-	<20250723033108.61587-3-xueshuai@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1753280968; c=relaxed/simple;
+	bh=JnPfz05COLFbrti4eA0oit4iSLVZ3XvOremqEbmexSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OH/3G9aImvnRFstvLjFDVPZQ/XVi1yW0EtlNWalN4iESPwoRIx/JAtMnRuEYHr2DPRqVcSUZEGU57lmtQcvPwIPP1mrMH9W06J8Lb95YF5HVM2zk3bYi9L/WJp1mGs/IkejYIl3FuIBbGfbNf3/0MkV5ZZsQKOh3wsnRypVv50I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JjM8tild; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753280967; x=1784816967;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JnPfz05COLFbrti4eA0oit4iSLVZ3XvOremqEbmexSk=;
+  b=JjM8tildqKRdGU+ADVYHW+mOMr9p/te3fMCwzPvfyPp1NXLk6NLdjMb8
+   z9GLBn367lEZjkO0/5a468HPqLfxNkSWvlzC6+E5b1CEu1kkYaJ83F/2k
+   yLQsVbE6Y+6CJwcRC9FiQLfsDeN9jUbY49eiycaSxKNbsIyl2hkI8j+eF
+   qrS0dnDtJ+bqU8Vo6RvZCnvCehSRtvv8b5T/T7pRWuDB9866WGjPkSD1I
+   jlmADsLUkVwylXgTQ71RCZVp/UisXD2lxigGr2Cszp51KwfRT2aqt/hAg
+   dye6sddHElwghIKdaM0pgoBtuMJ9OKePWHCiDelkplG2vfnJr1USdS6u8
+   A==;
+X-CSE-ConnectionGUID: GYC6BE01ThCrDgc7rwTulw==
+X-CSE-MsgGUID: tEM0QZ0HSuKd681BcpvO5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="58180465"
+X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
+   d="scan'208";a="58180465"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2025 07:29:26 -0700
+X-CSE-ConnectionGUID: bLMBwyrWRkeAJvKC8iopDQ==
+X-CSE-MsgGUID: UZkMCzLeRXqiwiq1mUGeIw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,333,1744095600"; 
+   d="scan'208";a="159562699"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 23 Jul 2025 07:29:21 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ueaT8-000JRD-1n;
+	Wed, 23 Jul 2025 14:29:18 +0000
+Date: Wed, 23 Jul 2025 22:28:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Breno Leitao <leitao@debian.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+	Robert Moore <robert.moore@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	acpica-devel@lists.linux.dev, osandov@osandov.com,
+	xueshuai@linux.alibaba.com, konrad.wilk@oracle.com,
+	linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-pci@vger.kernel.org, kernel-team@meta.com,
+	Breno Leitao <leitao@debian.org>
+Subject: Re: [PATCH v3] vmcoreinfo: Track and log recoverable hardware errors
+Message-ID: <202507232209.GrgpSr47-lkp@intel.com>
+References: <20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: kfh95roe4azn51jwbc9w8snmy97e6oiu
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: BCD5E2D
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19uu5kwrnovz3Zkv5N+cwHtWAyPjoGFzaM=
-X-HE-Tag: 1753279558-65806
-X-HE-Meta: U2FsdGVkX18EcBzxU5d2jMMvSMTDBFTAbWnieQrV6k8YfBJ6MEAHk+B+CAbikFXBJnqLIQgSVt445rKrwaBBa6Auvns6OK++ZmErCE8sU0Ez50ansF+A7gQWzAunWcOuyXUpE0S5IXv00CqWQvSwxPxwA1YuvU3QmvEzJd+FTgggGliPepeJs5OylpcMMbnJjaIdkdc1rHmyv7I0NFYDYCLcMJjJwWO1xF3gXEeUqxO35xy5UuQL06DMgxSusYQOx7opywjLHRjhmiCQlmu9xF8Vp4xoroRkSJ6ZtHFCGISfrPnqpLcwGY9Hs1QHCVopk5puHRuaJqXpEi2u8yVgmiBaXTZAx/Ed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org>
 
-On Wed, 23 Jul 2025 11:31:08 +0800
-Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+Hi Breno,
 
-> +	TP_printk("%s type:%d, reason:%d, cur_bus_speed:%s, max_bus_speed:%s, width:%u, flit_mode:%u, status:%s\n",
-> +		__get_str(port_name),
-> +		__entry->type,
-> +		__entry->reason,
-> +		pci_speed_string(__entry->cur_bus_speed),
-> +		pci_speed_string(__entry->max_bus_speed),
+kernel test robot noticed the following build warnings:
 
-Hmm, I guess pci_speed_string() should be added to libtraceveent so
-that perf and trace-cmd parses it correctly. I guess rasdaemon would
-want that too (which also uses libtraceevent).
+[auto build test WARNING on 97987520025658f30bb787a99ffbd9bbff9ffc9d]
 
--- Steve
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/vmcoreinfo-Track-and-log-recoverable-hardware-errors/20250723-005950
+base:   97987520025658f30bb787a99ffbd9bbff9ffc9d
+patch link:    https://lore.kernel.org/r/20250722-vmcore_hw_error-v3-1-ff0683fc1f17%40debian.org
+patch subject: [PATCH v3] vmcoreinfo: Track and log recoverable hardware errors
+config: x86_64-buildonly-randconfig-001-20250723 (https://download.01.org/0day-ci/archive/20250723/202507232209.GrgpSr47-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250723/202507232209.GrgpSr47-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507232209.GrgpSr47-lkp@intel.com/
 
-> +		__entry->width,
-> +		__entry->flit_mode,
-> +		__print_flags((unsigned long)__entry->link_status, "|",
-> +				LNKSTA_FLAGS)
-> +	)
-> +);
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: do_machine_check+0x5cc: call to hwerr_log_error_type() leaves .noinstr.text section
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
