@@ -1,105 +1,88 @@
-Return-Path: <linux-edac+bounces-4415-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4416-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64308B0EA99
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 08:26:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA46AB0ECB8
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 10:07:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6DAF1C8165E
-	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 06:27:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 364933A7A42
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 08:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F31826C391;
-	Wed, 23 Jul 2025 06:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E4F2797B3;
+	Wed, 23 Jul 2025 08:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDIKKI5e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0PPm3B7"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0814917BA6;
-	Wed, 23 Jul 2025 06:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23756277CBC;
+	Wed, 23 Jul 2025 08:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753251998; cv=none; b=cSYFRic3DUIYYpcJmXMy0Bg7YiEXXwML3sxL3x57duY6Aw1TxsD3MmtojoAkqLd1plCB/9KsukDMVvNVHDB9xbD3km5EfUnNCZ+sEcFzWmuwrNl+Sj71cmeblstJfW2QV584bS00GnFLiQLb5mezqFv4rT+RMN/owlLUcuTqqr8=
+	t=1753257962; cv=none; b=hsBY/cLz++oJ1cEU79wwl2Z67ST9GQADlnSTZAgviv6B1SRQLQgTnZdXVOA91qeZbf0D0ie7MBSZ2JGbb4ZjfY7k3JGOkkE9uYtSTdg7v1urX0cK/uNMYNhEnwUhbg31FOT3WvGioL1I7Db897DkjdKm7ajE1zVu+LI9Bzv2tCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753251998; c=relaxed/simple;
-	bh=ux9IkYfq1lY2FiVA9kzE3G4S1pelAI1ZDTYrto6gpJQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H0yTHpVmey5uV8qihEXFCciKsUwgKQZUIkgfyQVG5MqY73eZynVTUxKYw2hpNKITPjOJiUz9mblWYdz8NZLXqQn72eGWwYdAIlkg1WcER0h8YwNpH9C4LVLK2T0ZoVCwUJhENuh7y9/LiMHCEvJY+CAqC/Rxck39aHxLfK1RKWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDIKKI5e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E9DC4CEE7;
-	Wed, 23 Jul 2025 06:26:33 +0000 (UTC)
+	s=arc-20240116; t=1753257962; c=relaxed/simple;
+	bh=X/CAcZckTuK5hitg2f6i5nCCQw+RUx8Gwq+N1Zti844=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hEFmsJecDS5bhdaVb6XRbsi7bXGk1BMHXXIwHK4+K9EEMkvPDeRa7HNrA6Sg1+7yIFxWmJkoU4Ofx72SMVqlTxp6443mE2rIualp7GIv1FecEiTHoDYoBcd07XXoPnNsl62NIuev+OS8txJ8MqecEYZJ6LotVIozwsNbUdUwkoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o0PPm3B7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FBF9C4CEE7;
+	Wed, 23 Jul 2025 08:06:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753251995;
-	bh=ux9IkYfq1lY2FiVA9kzE3G4S1pelAI1ZDTYrto6gpJQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=KDIKKI5eT8iSUpJNzcxlHA1VMrIJrgaWeZvSOfA/GgbIY/8sYi8vGgpcXWp90HnBO
-	 jEfQ6uYSc+OF2X22AdpsiPsbkd5s9LnzPs7/64aqq48+hc76zWhjPKK9E8TO9fRc9J
-	 45G05yK4CnyNDtPTCdoJKgJfxKxjQ6bPetZkzvrtSXdD3gbq2FjWD3nsV5lRvS4S9G
-	 +ysgD4ko4YkV5f4KXd++YbQpMoH7yYW02wU3/hMLU3xbJPS2VdRSCs0kzh73EnaWsH
-	 YPjU7WdKYtu+EuLHBzzTK71q83mQKFUV/uE+KqWuXA/T0k37kyr3Z13aB/FPmtxBZg
-	 3vy28dDOL/Hug==
-From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To: bp@alien8.de
-Cc: linux-kernel@vger.kernel.org,
-	tglx@linutronix.de,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-edac@vger.kernel.org
-Subject: [PATCH -resend] edac: Use dev_fwnode()
-Date: Wed, 23 Jul 2025 08:26:31 +0200
-Message-ID: <20250723062631.1830757-1-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.50.1
+	s=k20201202; t=1753257961;
+	bh=X/CAcZckTuK5hitg2f6i5nCCQw+RUx8Gwq+N1Zti844=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o0PPm3B7ryEdUtbUQKIfiVtrZardJAB1ol7aHlT3Yq7VTtz81Qt85Q+/Sj+BI1gK+
+	 hcnc8MAe9/RjoiKrH8w/r6SQ1Nv8mOdDK1FSuqYFnMDDPxDuS5eIhXXIQgiaI70CAZ
+	 EMzov/3R0KJYXwX89YAP4S2eZYMAQlbJkUuH84xWX90PIJFWzuEVUuinlN6/wU31bo
+	 CC/l1FvgNDltepvFIhu0pA/3r/B31BT/bfT48zY9uOYGNsSOKiOmlQAp2EF6hpynV9
+	 yw6RAGpDs/W95IxaOny9HyR0decYah1xeHhbNOYtrGVD2ayc9eEXCc7vX6Y2sdQRx7
+	 j8ypmscJJk7Cg==
+Date: Wed, 23 Jul 2025 10:05:59 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Rama devi Veggalam <rama.devi.veggalam@amd.com>
+Cc: bp@alien8.de, tony.luck@intel.com, michal.simek@amd.com, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org, devicetree@vger.kernel.org, 
+	james.morse@arm.com, mchehab@kernel.org, rric@kernel.org, git@amd.com
+Subject: Re: [PATCH v2 1/4] dt-bindings: edac: Add bindings for Xilinx Versal
+ EDAC for XilSem
+Message-ID: <20250723-splendid-brainy-capuchin-cf52e4@kuoka>
+References: <20250722160315.2979294-1-rama.devi.veggalam@amd.com>
+ <20250722160315.2979294-2-rama.devi.veggalam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250722160315.2979294-2-rama.devi.veggalam@amd.com>
 
-irq_domain_create_simple() takes fwnode as the first argument. It can be
-extracted from the struct device using dev_fwnode() helper instead of
-using of_node with of_fwnode_handle().
+On Tue, Jul 22, 2025 at 09:33:12PM +0530, Rama devi Veggalam wrote:
+> +  Xilinx Versal Soft Error Mitigation (XilSEM) is part of the
+> +  Platform Loader and Manager (PLM) which is loaded into and runs on the
+> +  Platform Management Controller (PMC). XilSEM is responsible for reporting
+> +  and optionally correcting soft errors in Configuration Memory of Versal.
+> +  The memory is scanned by a hardware controller in the Versal Programmable
+> +  Logic (PL). During the scan, if the controller detects any error, be it
+> +  correctable or uncorrectable, it reports the error to PLM. The XilSEM on PLM
+> +  performs the error validation and notifies the errors to user application.
+> +  This XilSEM EDAC node is responsible for handling error events received from
+> +  XilSEM on PLM and also provides an interface to control scan operations and
+> +  fetching the scan status & configuration information.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,versal-xilsem-edac
 
-So use the dev_fwnode() helper.
+Implement or respond to previous comment.
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Robert Richter <rric@kernel.org>
-Link: https://lore.kernel.org/all/4bc0e1ca-a523-424a-8759-59e353317fba@kernel.org/
-
----
-Cc: linux-edac@vger.kernel.org
----
- drivers/edac/altera_edac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index cae52c654a15..cfd17a8e5865 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -2131,8 +2131,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 	edac->irq_chip.name = pdev->dev.of_node->name;
- 	edac->irq_chip.irq_mask = a10_eccmgr_irq_mask;
- 	edac->irq_chip.irq_unmask = a10_eccmgr_irq_unmask;
--	edac->domain = irq_domain_create_linear(of_fwnode_handle(pdev->dev.of_node),
--						64, &a10_eccmgr_ic_ops, edac);
-+	edac->domain = irq_domain_create_linear(dev_fwnode(&pdev->dev), 64, &a10_eccmgr_ic_ops,
-+						edac);
- 	if (!edac->domain) {
- 		dev_err(&pdev->dev, "Error adding IRQ domain\n");
- 		return -ENOMEM;
--- 
-2.50.1
+Best regards,
+Krzysztof
 
 
