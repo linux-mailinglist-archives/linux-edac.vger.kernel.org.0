@@ -1,197 +1,227 @@
-Return-Path: <linux-edac+bounces-4410-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4411-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DA1BB0E441
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Jul 2025 21:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23E1DB0E80F
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 03:29:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C79151892BDD
-	for <lists+linux-edac@lfdr.de>; Tue, 22 Jul 2025 19:29:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D813F1C83C76
+	for <lists+linux-edac@lfdr.de>; Wed, 23 Jul 2025 01:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DE4283FE6;
-	Tue, 22 Jul 2025 19:29:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6BE143744;
+	Wed, 23 Jul 2025 01:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3vK3tkK+"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="cUWZmD1l"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2086.outbound.protection.outlook.com [40.107.93.86])
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5847927FB31;
-	Tue, 22 Jul 2025 19:29:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753212557; cv=fail; b=ItGfuLFHu3ogoqwKM/hgkUg2sHzIQNzFNsEXTV7eApdyjgVso+6/5knbYKGG3K6c13LUpgiANiVKl/9D7V9UFzHj6n7lwHnZEOlqRZbYoke5HspeHxLVvh7Cfxq4EI+aOU5EbrB44lK37c10iAAwmrVZ1VM3VjnJ1oJNt5LSC4U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753212557; c=relaxed/simple;
-	bh=i/U0YIyiHfe6M/axefkRduNQ7RpR9Yuer/wskQIeJCw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n3WrqwdB+x+nbN/vfBLQTlLIGE2406XWWvjf+A86cprlK0wqDyys5vZKSe2K3QWJW4CvgUG19bAPq4SeSMZW4esRDcztGZ3eeifcPXEm8fe4eyoFKZzEqXtpa/WVjtMq9GX+7nzwPOOyjCTyyWC9tKXrVQBe+qWDTMuqJPP6HeM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3vK3tkK+; arc=fail smtp.client-ip=40.107.93.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T+P2oyD5kUY8C2HhxBdkFnbElrrzkbVWwlf6mS/Qomik4xPc6j0k4L6n0HfX/M/tYnyoML4HMOa6Vl0mf/QNXUwx3OKXj8JGSkyAmKslGERgJteLeMK3mC+yu4EwA+Fc0DGmNaMP27dVnjST+F+HzwLA8hvBz6sGH2CJbkRmKPivl8rNzSKddbpNzRgdra+GMDeBP4DVI87DmWNQm3uuXa/2I83/i5QDuOny/m788o5ZyRXf3ifNJtzHQYxUf84yxBRlYExZcHv4JkWGPPqyFHKl1KDyJ5+5hMX3App35t4+RAIcVW/tBsOhVCPXIKiaNyg+55Q+w/aO4lcKM2Z+Xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b77S+XvBE3UcdyMfp2HyJDwqeGZ6H40UJfg/Uwnyn9I=;
- b=w0R8GsYFNjsYxVE9/2ULlh3zqV5PjYnYCMGlkfY6ePn3oN4l7Ah+6UFT1wrLSKfDIsuO0uiPrWPa2XhoOHwyio1GqRGT1KG+Db7/0FjzB/eVaWONDP1zGk7swj4aJa9KZpze8bvQvcbH7N8WXpCzHBfb05KVuOZuWTde5xQXmQhzJ2xDSQdwLeNN/r4Xtiov2hSW9BvphNbZ9zERMTpXZ7YzZuf7LAMLHYSuGP+HlCdy1bCZT5oCDKLPGabkc7ARhU9iV6psBqG42KS0MAAkL3wPdvTWotCnktKMmJFPy87J15HgQdbLXDUt7gYKEgSjP+kPLF3rckn8Ocw7dOl3QQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b77S+XvBE3UcdyMfp2HyJDwqeGZ6H40UJfg/Uwnyn9I=;
- b=3vK3tkK+psFux5bBMhgTmGAK48Hb+RBRBbBIbNLqtI4eqy/xD9KbRZgtjIT9MVVPl2eVgJuadj6V+Czh8iKQnq/JoFbxLmROOAC0Od94HSmORyAsbmX8HIfCPqSz5uAiowhKnj+AHvvYOE7iRDkMqHQz8007euVfcrheGbwJHUY=
-Received: from BN9PR03CA0122.namprd03.prod.outlook.com (2603:10b6:408:fe::7)
- by DM4PR12MB7502.namprd12.prod.outlook.com (2603:10b6:8:112::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Tue, 22 Jul
- 2025 19:29:08 +0000
-Received: from BN2PEPF000055DD.namprd21.prod.outlook.com
- (2603:10b6:408:fe:cafe::61) by BN9PR03CA0122.outlook.office365.com
- (2603:10b6:408:fe::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.29 via Frontend Transport; Tue,
- 22 Jul 2025 19:29:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN2PEPF000055DD.mail.protection.outlook.com (10.167.245.7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8989.1 via Frontend Transport; Tue, 22 Jul 2025 19:29:08 +0000
-Received: from titanite-d354host.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 22 Jul 2025 14:29:05 -0500
-From: Avadhut Naik <avadhut.naik@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <bp@alien8.de>, <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
-	<avadnaik@amd.com>
-Subject: [PATCH] EDAC/amd64: Add support for AMD family 1Ah-based newer models
-Date: Tue, 22 Jul 2025 19:27:31 +0000
-Message-ID: <20250722192855.3108575-1-avadhut.naik@amd.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FB6E555;
+	Wed, 23 Jul 2025 01:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753234186; cv=none; b=Kmqz+kL2t1MLr5UM+u5BuLlpKMdaRNpAjxx+FYIIpFog6bnTT3FKBB+BOH/ohBtlDuXzS/ztjyNMrsszQ1mpzkOl7SjM6nfMkFqVB4GNT/JYVNY7tUvodjYCXaod7G16Huvnu5HXigDTzJK4oNztziXlyJsDl2i0KtkM5kIiv7A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753234186; c=relaxed/simple;
+	bh=O/wLw2j27a3iI9lIIXW1Xaeii1dCfWAHcpEtUDSdgNE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tax9ij3N0dtelupod6TNYnk0skdzG3Iw97GwxK00eK5FGdmCOpezx9gtfKiADN4RR1WajdKvkYoyj5V29mxfpa82rRhT3fwl52KC4+OOwVigjSMG0ytVWN36vs1pXLiI0UIDXQ665HaI9gW3PYhGYFwLNfBoBK+X0IKAxmgVUbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=cUWZmD1l; arc=none smtp.client-ip=115.124.30.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1753234179; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=3kjcjxT+3jwGi5nuGze3WD/7SQz1cWvVGiJNwUvAjsI=;
+	b=cUWZmD1lGpQlWGlztLxNb+GSUrvGbv4ddyAypc/Y5RG599gPx7Winn3k94Uc/yog3p3iIa+m43K5Id6MH+sdv734qPt78uhaOenTSIcCYtBEAwi0/HzUHcuXOtBH+kO4KyUVHsSlWJ4pPPs+tG5qz2+GBHAoxPoI3hH0HT7fRjA=
+Received: from 30.246.181.19(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WjZ3BE7_1753234176 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 23 Jul 2025 09:29:37 +0800
+Message-ID: <8f605fb3-09b4-4b3f-af2f-3c2d538ba212@linux.alibaba.com>
+Date: Wed, 23 Jul 2025 09:29:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8] PCI: hotplug: Add a generic RAS tracepoinggt for
+ hotplug event
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Matthew W Carlis <mattc@purestorage.com>, helgaas@kernel.org,
+ Lukas Wunner <lukas@wunner.de>, anil.s.keshavamurthy@intel.com,
+ bhelgaas@google.com, bp@alien8.de, davem@davemloft.net,
+ linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ linux-pci@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com, mhiramat@kernel.org,
+ naveen@kernel.org, oleg@redhat.com, peterz@infradead.org,
+ rostedt@goodmis.org, tianruidong@linux.alibaba.com, tony.luck@intel.com
+References: <20250717235055.GA2664149@bhelgaas>
+ <20250718034616.26250-1-mattc@purestorage.com>
+ <e92f8d1f-457c-4248-8397-81b0e20ff4af@linux.alibaba.com>
+ <11119800-3b6a-a683-3500-115a057c2826@linux.intel.com>
+ <fcfc51c0-6a1f-435b-844b-4daba132f7b6@linux.alibaba.com>
+ <d3de8888-5ba8-c27c-2a6a-eecf3cc284da@linux.intel.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <d3de8888-5ba8-c27c-2a6a-eecf3cc284da@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000055DD:EE_|DM4PR12MB7502:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6bf93955-66d9-46af-6172-08ddc9560742
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/6ShBrAgdxBMgXJOpVDj+LjrvRAhIfeIQ+pyen2xZqRBISSyv2HzBLRAJGTF?=
- =?us-ascii?Q?MtJXldIB+dspf90rZ/k8lOS3skg47ispk2ba+ojU049Rk/MJlAHJL+ib7Dar?=
- =?us-ascii?Q?Iyn/amEhmEFCaetjvrPg4ZIXa86tJeujcXurRZczlAFHRZdd7/lPbakUEKb6?=
- =?us-ascii?Q?BisO0u/rbJdD71Q+1/fyUO9AfanbUTz3KLEysnZV51N5kUOBv9FcbUu4ZIak?=
- =?us-ascii?Q?3iFBOZrwujgHfNI65lV6UHrRRywkuaMs4T8nSLCef0lXoakOI6qufmFEtLAu?=
- =?us-ascii?Q?qVcrazqGDIxbI92YuUUe+xizIkyMxxXt441mQakSOltQQtH8O5/h7LxhIIlV?=
- =?us-ascii?Q?INKtMKYGAv2NtwZ8cUF8MxEQNGyEXwtXuICAsya7s3mGd9GuzfJGBUtn6pA4?=
- =?us-ascii?Q?tPX1dLHCkfglXb8xJ94A3hrNkySix6rJ3G/nls0U9ku3ye49kYSz2N0RX1LZ?=
- =?us-ascii?Q?mjabQ9nxVkviArAJ+vb2G6VIEkvDQbjD8cGhwa06MTXTs28EojZBjVDW8g4V?=
- =?us-ascii?Q?Fbe0+8da5Cx/xXOKOdDBWqDtg97x3/vCIX+e+VljAJIqPj+bvBMXMiGYOWJo?=
- =?us-ascii?Q?BL82+Blj7tkzgR9AOiyRNALHaCxDwOnBOQ5DmCglXVXYAbM3jL5CoXLWiKho?=
- =?us-ascii?Q?Inx8Sr1Tw6it+yDugdCW1pG2Btxt+s1oA1ewHdFBeVtuhqOK9ZuVftWQWxZ4?=
- =?us-ascii?Q?jKzdgeeB+imz6g7cALC/5JMgPdFhZly62kKiPg/FpiHA6VfGY8OshO4nrR9C?=
- =?us-ascii?Q?yv35Cr447DedHeWttgJgYZbN42KiWY4NnhZbhxhsbgi0DoV8GtslSe0iBYhw?=
- =?us-ascii?Q?JVkajNhiEX0zy0YdiMBUFzDeBw5zCkl92rGcF1yEiF0echlBdOTOUvqCdLxt?=
- =?us-ascii?Q?2vaLiG7B2bNVyNXNF/KMjgkFOpXaY6otp84ocogY4lxcQdNdNKHtJ2ffUd7e?=
- =?us-ascii?Q?1WsoeqUe+Wlxu5TGk7xJZ5W10E8YQEaH0xOmmtBzmRFv4t247BrwmB+9+T/x?=
- =?us-ascii?Q?3yzO8nNt2mz7EyRBO/QiaZCqAW40YaMG+GjWB1XZlVwU5ixJBlU3yTIsZyWH?=
- =?us-ascii?Q?8u5t70ZqtNqf7Ep12M4kWeGn6gXUsZ+1sQMXDtuse+L5Jn1pgR8R5uq7uQ6s?=
- =?us-ascii?Q?ZqH3Dmrh+hhdL1IAZ5AW41RHWupfeSQ3Q7d9aCX9PZ/tcoPz157QteaF7gzv?=
- =?us-ascii?Q?dP5gBk7blA2uxAZVu5GpbZkPMAQTeN7426k9lgnyke8t+jEydo1atps59GpV?=
- =?us-ascii?Q?XentayCTDC5ea5fUxKAtLDVaMZZTowcyFO4GH5g6VBbAVAWb4dHx5jRjvf40?=
- =?us-ascii?Q?qof5oP2tfBhVe+v9WJ+rQddy6q34JucUNO6MU6Xwo5vB/w8JwFOe+hSiCpZA?=
- =?us-ascii?Q?kvFnBdN0wX3h5hVlEH6RTnKWWXPJ1LmfVOfLZFAqYSJDushzDRqKk6dpyfIt?=
- =?us-ascii?Q?o5Qkssz5bBduQzyxdYbh7El+fM4oAjNQEc0mqM7PmbdfIlBbv6AL/zHKLNPQ?=
- =?us-ascii?Q?K3FZ1RnsbXpEnvR5oZLsuz7DPPPljJSsKHZV?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2025 19:29:08.2239
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bf93955-66d9-46af-6172-08ddc9560742
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF000055DD.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7502
 
-Add support for family 1Ah-based models 50h-57h, 90h-9Fh, A0h-AFh, and
-C0h-C7h.
 
-Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
----
- drivers/edac/amd64_edac.c | 20 ++++++++++++++++++++
- drivers/edac/amd64_edac.h |  2 +-
- 2 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 07f1e9dc1ca7..06ae6750ca14 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3923,6 +3923,26 @@ static int per_family_init(struct amd64_pvt *pvt)
- 			pvt->ctl_name           = "F1Ah_M40h";
- 			pvt->flags.zn_regs_v2   = 1;
- 			break;
-+		case 0x50 ... 0x57:
-+			pvt->ctl_name           = "F1Ah_M50h";
-+			pvt->max_mcs            = 16;
-+			pvt->flags.zn_regs_v2   = 1;
-+			break;
-+		case 0x90 ... 0x9f:
-+			pvt->ctl_name			= "F1Ah_M90h";
-+			pvt->max_mcs			= 8;
-+			pvt->flags.zn_regs_v2	= 1;
-+			break;
-+		case 0xa0 ... 0xaf:
-+			pvt->ctl_name			= "F1Ah_MA0h";
-+			pvt->max_mcs			= 8;
-+			pvt->flags.zn_regs_v2	= 1;
-+			break;
-+		case 0xc0 ... 0xc7:
-+			pvt->ctl_name			= "F1Ah_MC0h";
-+			pvt->max_mcs			= 16;
-+			pvt->flags.zn_regs_v2	= 1;
-+			break;
- 		}
- 		break;
- 
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 17228d07de4c..d70b8a8d0b09 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -96,7 +96,7 @@
- /* Hardware limit on ChipSelect rows per MC and processors per system */
- #define NUM_CHIPSELECTS			8
- #define DRAM_RANGES			8
--#define NUM_CONTROLLERS			12
-+#define NUM_CONTROLLERS			16
- 
- #define ON true
- #define OFF false
+在 2025/7/22 20:29, Ilpo Järvinen 写道:
+> On Tue, 22 Jul 2025, Shuai Xue wrote:
+>> 在 2025/7/21 18:18, Ilpo Järvinen 写道:
+>>> On Fri, 18 Jul 2025, Shuai Xue wrote:
+>>>> 在 2025/7/18 11:46, Matthew W Carlis 写道:
+>>>>> On Thu, Jul 17, 2025 Bjorn Helgaas wrote
+>>>>>> So I think your idea of adding current link speed/width to the "Link
+>>>>>> Up" event is still on the table, and that does sound useful to me.
+>>>>>
+>>>>> We're already reading the link status register here to check DLLA so
+>>>>> it would be nice. I guess if everything is healthy we're probably
+>>>>> already
+>>>>> at the maximum speed by this point.
+>>>>>
+>>>>>> In the future we might add another tracepoint when we enumerate the
+>>>>>> device and know the Vendor/Device ID.
+>>>>>
+>>>>> I think we might have someone who would be interested in doing it.
+>>>>
+>>>>
+>>>> Hi, all,
+>>>>
+>>>> IIUC, the current hotplug event (or presence event) is enough for Matthew.
+>>>> and we would like a new tracepoing for link speed change which reports
+>>>> speeds.
+>>>>
+>>>> For hotplug event, I plan to send a new version to
+>>>>
+>>>> 1. address Bjorn' concerns about event strings by removing its spaces.
+>>>>
+>>>> #define PCI_HOTPLUG_EVENT
+>>>> \
+>>>> 	EM(PCI_HOTPLUG_LINK_UP,			"PCI_HOTPLUG_LINK_UP")
+>>>> \
+>>>> 	EM(PCI_HOTPLUG_LINK_DOWN,		"PCI_HOTPLUG_LINK_DOWN")
+>>>> \
+>>>> 	EM(PCI_HOTPLUG_CARD_PRESENT,		"PCI_HOTPLUG_CARD_PRESENT")
+>>>> \
+>>>> 	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,
+>>>> "PCI_HOTPLUG_CARD_NOT_PRESENT")
+>>>>
+>>>> 2. address Ilpo comments by moving pci_hp_event to a common place
+>>>> (include/trace/events/pci.h) so that the new comming can also use it.
+>>>
+>>> Ah, I only now noticed you've decided to re-place them. Please disregard
+>>> my other comment about this being still open/undecided item.
+>>>
+>>>> For link speed change event (perhaps named as pci_link_event),
+>>>> I plan to send a seperate patch, which provides:
+>>>>
+>>>> 	TP_STRUCT__entry(
+>>>> 		__string(	port_name,	port_name	)
+>>>> 		__field(	unsigned char,	cur_bus_speed	)
+>>>> 		__field(	unsigned char,	max_bus_speed	)
+>>>>    		__field(	unsigned char,	width		)
+>>>>    		__field(	unsigned int,	flit_mode	)
+>>>> 		__field(	unsigned char,	reason		)
+>>>> 		),
+>>>>
+>>>> The reason field is from Lukas ideas which indicates why the link speed
+>>>> changed, e.g. "hotplug", "autonomous", "thermal", "retrain", etc.
+>>>>
+>>>> Are you happy with above changes?
+>>>
+>>> Since you're probably quite far with the pcie link event patch too given
+>>> above, could you take a look at the LNKSTA flags representation in my
+>>> patch and incorporate those as well as there seems to always lot of
+>>> uncertainty about those flags when investigating the LBMS/bwctrl related
+>>> issues so it seems prudent to explicitly include them into the traceevent
+>>> output:
+>>>
+>>> https://lore.kernel.org/linux-pci/7c289bba-3133-0989-6333-41fc41fe3504@linux.intel.com/
+>>>
+>>>
+>>
+>> Sure, Thank you for the feedback.
+>>
+>> I like the LNKSTA flags, LNKSTA flags provides better genericity
+>> compared to the custom reason field I initially proposed. But it may
+>> cause confusion when used in pcie_retrain_link(). However, I've
+>> identified a potential issue when this approach is applied in
+>> pcie_retrain_link() scenarios.
+> 
+> I was trying to say the flags should be in addition to the other
+> information, not replace reason.
+> 
+>> Consider the following trace output when a device hotpluged:
+>>
+>> $ cat /sys/kernel/debug/tracing/trace_pipe
+>> $ cat /sys/kernel/debug/tracing/trace_pipe
+>>             <...>-118     [002] .....    28.414220: pci_hp_event: 0000:00:03.0
+>> slot:30, event:PCI_HOTPLUG_CARD_PRESENT
+>>
+>>             <...>-118     [002] .....    28.414273: pci_hp_event: 0000:00:03.0
+>> slot:30, event:PCI_HOTPLUG_LINK_UP
+>>
+>>     irq/57-pciehp-118     [002] .....    28.540189: pcie_link_event:
+>> 0000:00:03.0 type:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:16.0 GT/s
+>> PCIe, width:1, flit_mode:0, status:DLLLA
+>>
+>>     irq/57-pciehp-118     [002] .....    28.544999: pcie_link_event:
+>> 0000:00:03.0 type:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:16.0 GT/s
+>> PCIe, width:1, flit_mode:0, status:DLLLA
+>>
+>> The problem is that both trace events show status:DLLLA (Data Link Layer
+>> Link Active), which is the direct reading from PCI_EXP_LNKSTA. However,
+>> this doesn't accurately reflect the underlying context:
+>>
+>> - First DLLLA: Triggered by board_added() - link establishment after
+>>    card insertion
+>> - Second DLLLA: Triggered by pcie_retrain_link() - link retraining
+>>    completion
+>>
+>> ( I trace the events in pcie_update_link_speed() )
+>>
+>> In the second case, the more relevant status would be PCI_EXP_LNKSTA_LT
+>> (Link Training) to indicate that link retraining was performed, even
+>> though the final register state shows DLLLA.
+>>
+>> Question: Should we explicitly report the contextual status (e.g.,
+>> PCI_EXP_LNKSTA_LT for retraining scenarios) rather than always reading
+>> the current register field? This would provide more meaningful trace
+>> information for debugging link state transitions.
+> 
+> I'd prefer it coming from the LNKSTA register (TBH, I don't see much value
+> in synthetizing it at all). If we start to synthetize them, it will
+> potentially hide hw issues. I see on some platforms two LBMS assertions
+> per bwctrl speed change (which is done by retraining the link), one with
+> LT=1 and the second with LT=0.
+> 
+> ...But I never meant to replace "reason" with "flags".
 
-base-commit: 1fb0ddddf5d139089675b86702933cbca992b4d4
--- 
-2.43.0
+I see, I will keep both reason and flags.
 
+> 
+>> Additionally, I'd appreciate your thoughts on the overall tracepoint
+>> format shown above. Does this structure provide sufficient information
+>> for hotplug and link analysis while maintaining readability?
+> 
+> I don't have ideas how it could be improved beyond having those 4 flags
+> available. I suspect noone does as we've not had ability to collect this
+> information before when investigating issues so we're yet to understand
+> all its potential.
+> 
+
+
+Aha, agree.
+
+Thanks for valuable coments.
+
+Best Regards,
+Shuai
 
