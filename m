@@ -1,155 +1,109 @@
-Return-Path: <linux-edac+bounces-4427-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4428-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5ED5B10BA2
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Jul 2025 15:37:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2271DB10CC3
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Jul 2025 16:10:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E3235A23B7
-	for <lists+linux-edac@lfdr.de>; Thu, 24 Jul 2025 13:35:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EBA43A4571
+	for <lists+linux-edac@lfdr.de>; Thu, 24 Jul 2025 14:06:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2ABF28C2BE;
-	Thu, 24 Jul 2025 13:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6942254844;
+	Thu, 24 Jul 2025 14:07:11 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB51613BC0C;
-	Thu, 24 Jul 2025 13:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8DD4685;
+	Thu, 24 Jul 2025 14:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753364078; cv=none; b=GddP4x7VQayeZO/VshKBsOB9Fj+Ogf9kXLgY8BBrz/bWcecENqK4KB1xlsskQIoW3Je0/KpEzraMeU1MuXohxhSBUTfJauI3+UTk9OhFVdLBhCC66xL7o4WvZRcAMq3wmakkdgpTgoBdiMaj5zPy+4b3xmIxYCTaD0dFY7bhedY=
+	t=1753366031; cv=none; b=kMyp0YOiRLKztxkdaggpSc00x0xJH0d0fco1iyEproIjlpOchEg/xdq689vlRzWnatD1q8/4CJDwB3kg1RjKBHdSQ8t2r6KOyXTZo6eMaV/L5WysnY9IADZmXAjcIlowJeYICcU5uVPgl4VpOaAp+LZDrD7PxuebDQdiEae1lUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753364078; c=relaxed/simple;
-	bh=MVJ3E/91h69I0bmDMezkRZP4rkHbijJOQ6KILSOiZCE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D5TyZl0Q/3dEAIVMrh+F5EwN6S8zkpA3m/nPOtrkN1yhMDK4zPqNQ2CJ3LaPpijwzi8y1wZPKKv1W/sUNXcbQ95y3JxmQeGjVTKVsluR+pT7WJ+Lkxt3SZs7X8jpFEshXmmiSTE5BBTu7RoEjAqY5dmjkqMaFUHrMlBiG9T2Wp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-af2a2a54a95so162762066b.0;
-        Thu, 24 Jul 2025 06:34:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753364075; x=1753968875;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/fx+2jC1brmgVu9hs4XiOEifPBnLGokabrEM+R2kq2s=;
-        b=pAH/Z8xdK0+QpGizQ6NuqWHfiFMAaYNv2Tov10c2YcezJaCxR8WlODx/ugavmVPyYR
-         tqd5Vo0UvtLUm6eLDc4Luxbib+gfOx9C7/CktiAxXWZ+wHa6KyJlGvr2GvVaghkxfyDo
-         Pqh0UIAP5Yw8nt5Zuy7vH59gMNumCN6DIj32OhTt+4YGhVrWc9AlSzEDR2qTscH/kYBR
-         KExYk4vlp7rhsjqEB57TkSEgsybWgW+c0Lrd+x9VN9UO7oBARgzYDiH+p8Ch7RR1Kycc
-         RadCJQ1UXAtnUmYIZNdiTtwO2t23EBinzyK4EhwBpCByd9w7VNogEEanIi+Fn/MX4+en
-         IkKw==
-X-Forwarded-Encrypted: i=1; AJvYcCW6cFmtOT5l0dGa5Mlo8J0r2MgHainsQ1B2CKc4GzsqIUTsyEEas8Iv2KIz3fDH7lBbOGtNEyg2MidNcg==@vger.kernel.org, AJvYcCWAG1MdyVBLDOi9Jx5nEvpF0tHcfsSdxV40ssk5M2hHpqqHn6GCr3kLtdT1Y6WveE1gIfXdmP3+i3rL@vger.kernel.org, AJvYcCWco3+clfJrs7fd0vyNbzmXEovTeIOkE70+NXEFtm2eagGvpPBcFvupu1PkRuYpjcmHz57u7z6rSp5A@vger.kernel.org, AJvYcCXtSym/WcXizoM0yWfgrKDp6DJBNRWmWW9HQZ8Nqctp0s2M2e7HWuvY9BHwdqoAhE6XfmUNbyKxCxyo/4TE@vger.kernel.org
-X-Gm-Message-State: AOJu0YyefYRXlDMZXDTr4JRXMpR5b52SOMsZu3uTBl3rjV07HlLCiESl
-	GekYevEwhtVnLYf4cd8lvItm+p/hb3AVLPpX3D+rIN48VVNTGj/5sbUv
-X-Gm-Gg: ASbGnctVAr+M8C9xMzOwxb76ahgBTFuyAlW7lPUnJwcc+27lZoy6RNxQ984C/rfVEjg
-	+csaBqeN0aBY/25B/pKnJxLZHRknFXg0UAeJtFpzTojuzA7RjfgPCzWsJTs10ZyFU/F4UWqm5TT
-	szRmMZ2NCQPzgpVV063ALJKPHrx45Ps2LkrV2msHuMTMxagB4LkLvkbm2FSpsKsfW70YVKtm9gt
-	OLY2zyTEkcOwO7LShWCn9qu3fVfcZzutwrp7TmLq80odssPA4YYoPt2QJ74v0TNAZZKilk8AQDr
-	I/Rx8kN63uyBwXK3i7pYpH1/Vo9PudSfKhmFGcODqaorrbXGLSf8l+7j+pV9Iua95cvCVjGMtKg
-	BbWI8AMxRZg==
-X-Google-Smtp-Source: AGHT+IErTV5E5SvHgukSA8OS+U/Vctcx7DT/kAXhifsJMwbjohYquNlfTpV+af0AGvLRHpjhkGn6qQ==
-X-Received: by 2002:a17:907:e8e:b0:aec:76c6:6ef6 with SMTP id a640c23a62f3a-af2f8d4fc6amr617861566b.50.1753364074854;
-        Thu, 24 Jul 2025 06:34:34 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af47f861d7bsm111509066b.119.2025.07.24.06.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 06:34:34 -0700 (PDT)
-Date: Thu, 24 Jul 2025 06:34:31 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
-	Robert Moore <robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev, osandov@osandov.com, 
-	konrad.wilk@oracle.com, linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-pci@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v3] vmcoreinfo: Track and log recoverable hardware errors
-Message-ID: <4qh2wbcbzdajh2tvki26qe4tqjazmyvbn7v7aqqhkxpitdrexo@ucch4ppo7i4e>
-References: <20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org>
- <7ce9731a-b212-4e27-8809-0559eb36c5f2@linux.alibaba.com>
+	s=arc-20240116; t=1753366031; c=relaxed/simple;
+	bh=OkQND1FA8Zgiq+fCIXVzxfpptSSlpHzvRjGUS3FX33M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qo7Zq+SAedgxTywFipNDCpkeoDBGjVOV2kmeYSik/8PMqoSifut1ZoSiAGybmUJBFdIr+9BAY8ruN9xiD19KAug+qFQRu48pgy/tjZKqj29PPk21s4sYLcoqi7tVzpUMrKX4NLSYQtw/SKb8Xl4/mWb487i9AitOxMi0RKkZaqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id C93A61DA939;
+	Thu, 24 Jul 2025 14:07:05 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf19.hostedemail.com (Postfix) with ESMTPA id DE9FD20031;
+	Thu, 24 Jul 2025 14:07:00 +0000 (UTC)
+Date: Thu, 24 Jul 2025 10:06:59 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Shuai Xue <xueshuai@linux.alibaba.com>, lukas@wunner.de,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ helgaas@kernel.org, ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
+ Jonathan.Cameron@huawei.com, oe-kbuild-all@lists.linux.dev,
+ bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com,
+ naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+ mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v9 2/2] PCI: trace: Add a RAS tracepoint to monitor link
+ speed changes
+Message-ID: <20250724100659.697b5972@batman.local.home>
+In-Reply-To: <202507240322.nJGdyXsy-lkp@intel.com>
+References: <20250723033108.61587-3-xueshuai@linux.alibaba.com>
+	<202507240322.nJGdyXsy-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7ce9731a-b212-4e27-8809-0559eb36c5f2@linux.alibaba.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: sj9jeatpcmgk3dhhg1j4rmu7omcno6er
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: DE9FD20031
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19yykztU+ewahSgXtlShevzjICByiY4Pc0=
+X-HE-Tag: 1753366020-125808
+X-HE-Meta: U2FsdGVkX1+TEXuVgYhshrbY4gdIu46q7I1W9e0mKfeNI4eMYQUVJZpoHvrdSo361H5fZTwriFyQm9cGE275G//RCB7TOVItLCTRulhEsmdN7+LyWt6m5pwcSy6OnZXg3zHNWwKc/9Fb2DgNjW3uizrNmcCJ9AH2ZVRJLHmHMtCFECwCKURhar6iqTUabZCYm2MqOJysS+9ckxENYuxHxICNHsZd3zOsbqYsxF72SfWePz5NTMKiukyzLPbFBKd4COZbrBeTsg4hzVM8bRiB261Ip+XuIxyWFX/svazljEli/DuBbFmukYshzY0skaoB9agmZtxki2a4QPYF6Ty+escxqP/FJ4n57uGO7z9h4FeaTRgKEARY5QIrJK9dtsGyCG8FJ8GzVSsLsxG/hhL5NFJZRwXJFHdxL6DmA9egTDjGNkBCg2YqrFzsKdv10imfDJZRMaytYkpBcl+VQJRbK2y/4R0/yvDD
 
-Hello Shuai,
+On Thu, 24 Jul 2025 03:30:17 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-On Thu, Jul 24, 2025 at 04:00:09PM +0800, Shuai Xue wrote:
-> 在 2025/7/23 00:56, Breno Leitao 写道:
-> > Introduce a generic infrastructure for tracking recoverable hardware
-> > errors (HW errors that did not cause a panic) and record them for vmcore
-> > consumption. This aids post-mortem crash analysis tools by preserving
-> > a count and timestamp for the last occurrence of such errors.
-> > 
-> > Add centralized logging for three common sources of recoverable hardware
-> > errors:
+> url:    https://github.com/intel-lab-lkp/linux/commits/Shuai-Xue/PCI-trace-Add-a-generic-RAS-tracepoint-for-hotplug-event/20250723-113454
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
+> patch link:    https://lore.kernel.org/r/20250723033108.61587-3-xueshuai%40linux.alibaba.com
+> patch subject: [PATCH v9 2/2] PCI: trace: Add a RAS tracepoint to monitor link speed changes
+> config: sparc-sparc64_defconfig (https://download.01.org/0day-ci/archive/20250724/202507240322.nJGdyXsy-lkp@intel.com/config)
+> compiler: sparc64-linux-gcc (GCC) 15.1.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250724/202507240322.nJGdyXsy-lkp@intel.com/reproduce)
 > 
-> The term "recoverable" is highly ambiguous. Even within the x86
-> architecture, different vendors define errors differently. I'm not
-> trying to be pedantic about classification. As far as I know, for 2-bit
-> memory errors detected by scrub, AMD defines them as deferred errors
-> (DE) and handles them with log_error_deferred, while Intel uses
-> machine_check_poll. For 2-bit memory errors consumed by processes,
-> both Intel and AMD use MCE handling via do_machine_check(). Does your
-> HWERR_RECOV_MCE only focus on synchronous UE errors handled in
-> do_machine_check? What makes it special?
-
-I understand that deferred errors (DE) detected by memory scrubbing are
-typically silent and may not significantly impact system stability. In
-other words, I’m not convinced that including DE metrics in crash dumps
-would be helpful for correlating crashes with hardware issues—it might
-just add noise.
-
-Do you think it would be valuable to also log these events within
-log_error_deferred()?
-
-> > -	if (ghes_severity(estatus->error_severity) >= GHES_SEV_PANIC)
-> > +	sev = ghes_severity(estatus->error_severity);
-> > +	if (sev == GHES_SEV_RECOVERABLE || sev ==  GHES_SEV_CORRECTED)
-> > +		hwerr_log_error_type(HWERR_RECOV_GHES);
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507240322.nJGdyXsy-lkp@intel.com/
 > 
-> APEI does not define an error type named GHES. GHES is just a kernel
-> driver name. Many hardware error types can be handled in GHES (see
-> ghes_do_proc), for example, AER is routed by GHES when firmware-first
-> mode is used. As far as I know, firmware-first mode is commonly used in
-> production. Should GHES errors be categorized into AER, memory, and CXL
-> memory instead?
+> All errors (new ones prefixed by >>):
+> 
+>    sparc64-linux-ld: drivers/pci/probe.o: in function `pcie_update_link_speed':
+> >> probe.c:(.text+0x370): undefined reference to `__tracepoint_pcie_link_event'
+> >> sparc64-linux-ld: probe.c:(.text+0x37c): undefined reference to `__tracepoint_pcie_link_event'
+> >> sparc64-linux-ld: probe.c:(.text+0x3dc): undefined reference to `__traceiter_pcie_link_event'  
 
-I also considered slicing the data differently initially, but then
-realized it would add more complexity than necessary for my needs.
+The config has:
 
-If you believe we should further subdivide the data, I’m happy to do so.
+# CONFIG_CPU_HOTPLUG_STATE_CONTROL is not set
 
-You’re suggesting a structure like this, which would then map to the
-corresponding CPER_SEC_ sections:
+Which looks to me from the first patch, would enable the code that
+defines the trace events via the:
 
-	enum hwerr_error_type {
-	HWERR_RECOV_AER,     // maps to CPER_SEC_PCIE
-	HWERR_RECOV_MCE,     // maps to default MCE + CPER_SEC_PCIE
-	HWERR_RECOV_CXL,     // maps to CPER_SEC_CXL_*
-	HWERR_RECOV_MEMORY,  // maps to CPER_SEC_PLATFORM_MEM
-	}
++#define CREATE_TRACE_POINTS
++#include <trace/events/pci.h>
 
-Additionally, what about events related to CPU, Firmware, or DMA
-errors—for example, CPER_SEC_PROC, CPER_SEC_FW, CPER_SEC_DMAR? Should we
-include those in the classification as well?
+Thus, without compiling that file, the tracepoints would not be created
+and you would get the above errors.
 
-
-Thanks for your review and for the ongoing discussion!
---breno
+-- Steve
 
