@@ -1,159 +1,192 @@
-Return-Path: <linux-edac+bounces-4455-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4456-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB80AB13787
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Jul 2025 11:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 815C0B13CE9
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Jul 2025 16:21:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53DB23B8FE8
-	for <lists+linux-edac@lfdr.de>; Mon, 28 Jul 2025 09:28:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A828C3A79A5
+	for <lists+linux-edac@lfdr.de>; Mon, 28 Jul 2025 14:15:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D919463;
-	Mon, 28 Jul 2025 09:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E702BD04;
+	Mon, 28 Jul 2025 14:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="tgc4xQSj"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DS2MzbO7"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out199-6.us.a.mail.aliyun.com (out199-6.us.a.mail.aliyun.com [47.90.199.6])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA46224B04;
-	Mon, 28 Jul 2025 09:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67E3252906;
+	Mon, 28 Jul 2025 14:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753694934; cv=none; b=j70nkJXSeTroPjQzncUaUdup0j0KAV8ak7qGBhfKZZh27icwippmn2iXq24Aow+W8AODaxvVqWV02VatOusVikoP8Vqp0A8W8KdKPxw4LMXeswarNJ56PFbi9ETkxbWcx3T0zw6LZC5aOlw1hMQgGX0owxnOlRQ/CyByf/G97/c=
+	t=1753712144; cv=none; b=DZzb6nznZ9Oyq20zu29shu/S/J1CLvXTMR1eUxfIZxeZVUPXnCfYwGELznzcQLT8RAxFx94asUh908JiZ5bwJ2QjJ7CDs2v4eJ7guA4Gn4uMaQ5zyofBtzAubrVWlODDsugEa/0blvEBgkn/hGA6cQPaEPRvQTct20dJ8XDV69k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753694934; c=relaxed/simple;
-	bh=wEOK1xAURgW6Ytv2Br14Bpge7BO2wUGPNJlIORD5TVI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=at0b4WNJHWv72Dalb8jIt29XASu8pfFf8INesD0uqGZKWqRgj3Cfp7F5HFXLQBvWSGdrkT2Go2Uolbpa3RcWOAQzblSAxLZP9mvWrghk74qjl5qZm24MqSSnS0I0gNzEibMYFfigv2RV+O6rQPflRofn8IImN3r0TgiWvnWAbPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=tgc4xQSj; arc=none smtp.client-ip=47.90.199.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1753694911; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=M8FVPMMMRjlGh3vDVwp+zm4wCWL4AZ9kqfeszC7kZ74=;
-	b=tgc4xQSjpTLJsMSkkKgzQ4XuJTILsbPkfdrkbQizAXq5wZ8nbAGIHZtHZm8ypo1uPOYZS7WigHnT8StrOm4kGIoTOpgd3xgjLEosjUxf3FtskYQLH8sjZR4c0S0+xEvTIWvE6L4bONNakELDT6D9CZnXdvtNFB3L0YR2gQX6OUg=
-Received: from 30.246.181.19(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WkGaor9_1753694908 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 28 Jul 2025 17:28:29 +0800
-Message-ID: <61ec82be-a081-4b32-aa4a-a3ad6e564d23@linux.alibaba.com>
-Date: Mon, 28 Jul 2025 17:28:28 +0800
+	s=arc-20240116; t=1753712144; c=relaxed/simple;
+	bh=dtu3KlJUWUhrvmA8qAJUbEP/cmxhlgR0WbIpvIOqiX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qOk7jkranqEgbZVfatb6qtV/lwSIJgSiEg/fH7jwCuddaEh9nBluuGXM7oSPZqe8kRiLhZVvN1nJ2+tvYz1lWQykXbUCUfLaBpzZMgKrjyy7SNRIVfwPZrkaLxb0z642rL77X1U10dSU5oexg62EpAGo4h6S9eWQJ/uRScQJbSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DS2MzbO7; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AAF0340E0257;
+	Mon, 28 Jul 2025 14:15:37 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id IRVijsMAJqhA; Mon, 28 Jul 2025 14:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1753712133; bh=ez8QcFfxV1IA6+WZpvqSuMttUA8cEfmeY7NaeczZ+Mw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=DS2MzbO75i+Lpycdjv8k32CtvWmpLMedpuQsw5okhMV3iKk9Wjo5Qvudwro1RT2/M
+	 OXpW4zT08GYnWa9RucY+J20cO5J7Kuf0DVMGdEH1P3CUlCyRT+7CvK7RGunoJh9i0+
+	 HuLMI7SoMO06vO2ytoE96kEpd8aFSdG38dkMk1bnum1XBx5xt4fGrk1Te9XqeP9j5p
+	 QjQK+vzcXRrOkROp5CAw8GMrH6v67nGH+phnxdMuQqHUAyjE/uJWJ53QsXaUJltjr8
+	 oYPUZkk6JybZaLezUDe2Q+1Yjsrb3ExKi+tid4k7b56HLxD2fg7Yz2rKv/a43tzvXn
+	 LgIZlz7poQYzss8rK5N5vensddzB8dIf6ERs47r14DsZMjIzT3SPYvz7ptLPNSUAN2
+	 LdOvtOVRP+VaG/7VNU7jwYOIIT3yJ7cz0XCWNJ0rjK0tRkrvWzaKJKiETt3doGQFkF
+	 ka+ksMBnXE+457K0uQocIU/GozBA4GdGR4e2AxaXB/SCj8LCq/OLUDvvYG0J45z8Nl
+	 REEI9fCM69Twt+ciGwR7QlTDgp0LqCrlbesd0Xwk67fJVCeYVqR7NuqQYfyGHpzEzd
+	 36aFi1ZrZq4EyKP7stE3ynKxBbbI/U/mxYO86u/f+LMv6wuwE2kUIXXGoqfzjikBcp
+	 usdvE0crHDZ4S68yGzpCZzvM=
+Received: from zn.tnic (pd953092e.dip0.t-ipconnect.de [217.83.9.46])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AF19840E0256;
+	Mon, 28 Jul 2025 14:15:30 +0000 (UTC)
+Date: Mon, 28 Jul 2025 16:15:22 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-edac <linux-edac@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.17-rc1
+Message-ID: <20250728141521.GAaIeF-XYJVbfOQdT6@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/2] PCI: trace: Add a RAS tracepoint to monitor link
- speed changes
-To: Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <helgaas@kernel.org>
-Cc: rostedt@goodmis.org, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com,
- mattc@purestorage.com, Jonathan.Cameron@huawei.com, bhelgaas@google.com,
- tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
- davem@davemloft.net, anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
- peterz@infradead.org, tianruidong@linux.alibaba.com
-References: <20250723033108.61587-3-xueshuai@linux.alibaba.com>
- <20250725210921.GA3131414@bhelgaas> <aISJHjFrHkxVNFzJ@wunner.de>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <aISJHjFrHkxVNFzJ@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hi Linus,
+
+please pull the EDAC updates for v6.17-rc1.
+
+There's a small merge conflict with upstream, I've added the resolution at the
+end of this mail if it helps.
+
+Thx.
+
+---
+
+The following changes since commit 86731a2a651e58953fc949573895f2fa6d456841:
+
+  Linux 6.16-rc3 (2025-06-22 13:30:08 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v6.17_rc1
+
+for you to fetch changes up to 35928bc38db69a2af26624e35a250c1e0f9a6a3f:
+
+  EDAC/{skx_common,i10nm}: Use scnprintf() for safer buffer handling (2025-07-15 10:06:58 -0700)
+
+----------------------------------------------------------------
+- i10nm:
+ - switch to use scnprintf()
+ - Add Granite Rapids-D support
+
+- synopsys: Make sure ECC error and counter registers are cleared during
+  init/probing to avoid reporting stale errors
+
+- igen6: Add Wildcat Lake SoCs support
+
+- Make sure scrub features sysfs attributes are initialized properly
+
+- Allocate memory repair sysfs attributes statically to reduce stack
+  usage
+
+- Fix DIMM module size computation for DIMMs with total capacity which
+  is a non power-of-two number, in amd64_edac
+
+- Do not be too dramatic when reporting disabled memory controllers in
+  igen6_edac
+
+- Add support to ie31200_edac for the following SoCs:
+ - Core i5-14[67]00
+ - Bartless Lake-S SoCs
+ - Raptor Lake-HX
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      EDAC/mem_repair: Reduce stack usage in edac_mem_repair_get_desc()
+
+George Gaidarov (2):
+      EDAC/ie31200: Enable support for Core i5-14600 and i7-14700
+      EDAC/ie31200: Document which CPUs correspond to each Raptor Lake-S device ID
+
+Lili Li (1):
+      EDAC/igen6: Add Intel Wildcat Lake SoCs support
+
+Qiuxu Zhuo (4):
+      ie31200/EDAC: Add Intel Bartlett Lake-S SoCs support
+      EDAC/igen6: Reduce log level to debug for absent memory controllers
+      EDAC/i10nm: Add Intel Granite Rapids-D support
+      EDAC/ie31200: Add Intel Raptor Lake-HX SoCs support
+
+Shubhrajyoti Datta (1):
+      EDAC/synopsys: Clear the ECC counters on init
+
+Wang Haoran (1):
+      EDAC/{skx_common,i10nm}: Use scnprintf() for safer buffer handling
+
+ drivers/edac/i10nm_base.c    | 30 +++++++++-----
+ drivers/edac/ie31200_edac.c  | 38 +++++++++++++++--
+ drivers/edac/igen6_edac.c    | 17 +++++++-
+ drivers/edac/mem_repair.c    | 56 ++++++++++---------------
+ drivers/edac/skx_common.c    |  4 +-
+ drivers/edac/synopsys_edac.c | 97 +++++++++++++++++++++-----------------------
+ 6 files changed, 140 insertions(+), 102 deletions(-)
+
+---
+
+Merge conflict resolution:
+
+diff --cc drivers/edac/mem_repair.c
+index 70a033a76233,2e4e790e0ffe..000000000000
+--- a/drivers/edac/mem_repair.c
++++ b/drivers/edac/mem_repair.c
+@@@ -331,11 -319,10 +319,11 @@@ static int mem_repair_create_desc(struc
+  		return -ENOMEM;
+  
+  	for (i = 0; i < MR_MAX_ATTRS; i++) {
+- 		memcpy(&ctx->mem_repair_dev_attr[i],
+- 		       &dev_attr[i], sizeof(dev_attr[i]));
++ 		ctx->mem_repair_dev_attr[i].dev_attr = mem_repair_dev_attr[i];
++ 		ctx->mem_repair_dev_attr[i].instance = instance;
+ -		ctx->mem_repair_attrs[i] =
+ -			&ctx->mem_repair_dev_attr[i].dev_attr.attr;
+++
+ +		sysfs_attr_init(&ctx->mem_repair_dev_attr[i].dev_attr.attr);
+- 		ctx->mem_repair_attrs[i] =
+- 			&ctx->mem_repair_dev_attr[i].dev_attr.attr;
+++		ctx->mem_repair_attrs[i] = &ctx->mem_repair_dev_attr[i].dev_attr.attr;
+  	}
+  
+  	sprintf(ctx->name, "%s%d", "mem_repair", instance);
 
 
+-- 
+Regards/Gruss,
+    Boris.
 
-在 2025/7/26 15:51, Lukas Wunner 写道:
-> On Fri, Jul 25, 2025 at 04:09:21PM -0500, Bjorn Helgaas wrote:
->>> @@ -319,8 +319,7 @@ int pciehp_check_link_status(struct controller *ctrl)
->>>   		return -1;
->>>   	}
->>>   
->>> -	pcie_capability_read_word(pdev, PCI_EXP_LNKSTA2, &linksta2);
->>> -	__pcie_update_link_speed(ctrl->pcie->port->subordinate, lnk_status, linksta2);
->>> +	pcie_update_link_speed(ctrl->pcie->port->subordinate, PCIE_HOTPLUG);
->>
->> It kind of bugs me that the hot-add flow reads LNKSTA three times and
->> generates both pci_hp_event LINK_UP and link_event tracepoints:
->>
->>    pciehp_handle_presence_or_link_change
->>      link_active = pciehp_check_link_active()
->>        pcie_capability_read_word(PCI_EXP_LNKSTA)
->>      if (link_active)
->>        ctrl_info(ctrl, "Slot(%s): Link Up\n")
-> 
-> This LNKSTA read decides whether to bring up the slot.
-> It can't be eliminated.
-> 
->>        trace_pci_hp_event(PCI_HOTPLUG_LINK_UP)
->>        pciehp_enable_slot
->>          __pciehp_enable_slot
->>            board_added
->>              pciehp_check_link_status
->>                pcie_capability_read_word(PCI_EXP_LNKSTA)
-> 
-> This is sort of a final check whether the link is (still) active
-> before commencing device enumeration.  Doesn't look like it can
-> safely be eliminated either.
-> 
->>                pcie_update_link_speed
->>                  pcie_capability_read_word(PCI_EXP_LNKSTA)
->>                  pcie_capability_read_word(PCI_EXP_LNKSTA2)
->>                  trace_pcie_link_event(<REASON>)
-> 
-> This third register read is introduced by the present patch and is
-> indeed somewhat a step back, given that pciehp_check_link_status()
-> currently deliberately calls __pcie_update_link_speed() to pass
-> the already read LNKSTA value.
-
-Hi Lukas, and Bjorn:
-
-Thanks for the excellent technical analysis!
-
-You're absolutely right. I introduced an unnecessary regression by
-adding a third LNKSTA read when pciehp_check_link_status() already has
-the LNKSTA value and was specifically designed to pass it to
-__pcie_update_link_speed().
-
-> 
-> I'm wondering if the tracepoint can be moved down to
-> __pcie_update_link_speed()?
-
-Yes, that's a much better approach. Will fix it in next version.
-
-> 
->> And maybe we need both a bare LINK_UP event and a link_event with all
->> the details, but again it seems a little weird to me that there are
->> two tracepoints when there's really only one event and we know all the
->> link_event information from the very first LNKSTA read.
-> 
-> One of the reasons is that a "Link Down" event would have to
-> contain dummy values for link speed etc, so it seemed cleaner
-> to separate the hotplug event from the link speed event.
-> 
-> Thanks,
-> 
-> Lukas
-
-I agree with Lukas and I completely agree with this separation. The two
-tracepoints serve different purposes:
-
-- pci_hp_event: Pure hotplug state changes (LINK_UP/LINK_DOWN,
-   CARD_PRESENT/CARD_NOT_PRESENT)
-- pcie_link_event: Actual link parameter information when meaningful
-   values exist
-
-For LINK_DOWN events, we don't have meaningful speed/width values, so
-forcing them into a single tracepoint would indeed require dummy/invalid
-values, making the interface confusing.
-
-Thanks for the clear technical guidance and for catching my regression!
-
-Best regards,
-Shuai
+https://people.kernel.org/tglx/notes-about-netiquette
 
