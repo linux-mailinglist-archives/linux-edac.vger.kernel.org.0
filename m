@@ -1,334 +1,139 @@
-Return-Path: <linux-edac+bounces-4463-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4464-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 911B1B15772
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 04:13:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6632B158FB
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 08:32:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 623271890554
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 02:13:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6B6F3AA561
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 06:31:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0086B1A3154;
-	Wed, 30 Jul 2025 02:13:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC62F1D7E54;
+	Wed, 30 Jul 2025 06:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="MfsLmMn4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bAOsoTtC"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out199-9.us.a.mail.aliyun.com (out199-9.us.a.mail.aliyun.com [47.90.199.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701943FE5;
-	Wed, 30 Jul 2025 02:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143DA2629D;
+	Wed, 30 Jul 2025 06:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753841614; cv=none; b=QHVsMIdoJ47KG2rxJx1AyaoXV39ilyn1PISksg2leD7x1YBi/2xNDpsChb986veIsJm426Dj52A2O8mbN+tSQjdNP9JNL2sWwhtRFXecZSAqSRyrJm+CKWejSHvVVW/GBwufQeVEwjrI+wIlpYcsAhkVUUQgbqRSbDwlWtQrqtg=
+	t=1753857120; cv=none; b=M0K2nchhZFbLlOtSkmC3T+v/rWypYmdPSGGZ0viJV3V5hyim/DFEEsa5nrufNlHb/CjX291uBzPNqykiuX8edKE3mjL0qH2Q0V9TMpT2y9XTRR93OPEhsda1ohS/hFTT+wjjR57ZU6KWHCiTN5s1igBghXXmcBztSE9/qLRBlak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753841614; c=relaxed/simple;
-	bh=7w0CkwnKcFnU0+fcewMt4t591W5I/jfWXB58gONFi6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EC/MQUMcE8HPQv/av3AnIXqLB5+e+Vry+QWeCdkQJl82uxdVnFzeWCnjZ/vP5us3JemSCqa0FhqdHARWJ2u1OxkMatadPz64I7YnpBdxDmQxxpnPlRfootkr2DohYL+nKeE/OBAG6ABY6pred/uP8I4UCmizgbCwiuvoFZBLkaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=MfsLmMn4; arc=none smtp.client-ip=47.90.199.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1753841597; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Dm3eSNIAoLVxqE9erJ6ULR5jgwQF3FgIn6ofz2lHyj4=;
-	b=MfsLmMn48LtumDxcCDa8BUxd9oDgIZKCqQrr9sJc/B9tJrwXpW8pgANG9DgG4eoYxQdSkBSWrs2JDPhFY6fIYDudzNfXLZ/hwO08AFcoCtObytBQ9lV4V7sI93dC+yf5XovVOXyb1G8kfuTEECLMxJa9Hl8yJtMzruyTWcMcWPQ=
-Received: from 30.246.181.19(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WkShN8z_1753841593 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 30 Jul 2025 10:13:15 +0800
-Message-ID: <a87c5e74-082f-4be6-bbfd-4867bf72ddcc@linux.alibaba.com>
-Date: Wed, 30 Jul 2025 10:13:13 +0800
+	s=arc-20240116; t=1753857120; c=relaxed/simple;
+	bh=kxv5Gy1KyXxspx2uODeZUwYo5EVFmhwTBib9zYEQBIw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=RBe/HeRZgYulUiPTJbLrl5kWyiM0qbkv9hRK0+G6jH5QXXC+0FTip84K+skvQHg6zrQj/fuI87JrklHmkYahaSv+42tqqKlK2EVyRA3/+2J8bMVemslgfSn5i80rO8JPwxhjU454e7R8L9kagv58uSj13KdngctvNHzMtuqhJtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bAOsoTtC; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-769a21bd4d5so1474132b3a.0;
+        Tue, 29 Jul 2025 23:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753857118; x=1754461918; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=uB3+SIO6qA8oyFlUumi5OJO3sZoV3HuBnZCYSn8E4dg=;
+        b=bAOsoTtCv0tDEOL3vAQdoPteoY4vVfvrt25pytGoqWV4edB4Lax/jVhUrwyXXReRoI
+         7JdxJA39DYSSSEzTKlIEZHd9Kv+TIIxsr0hNZskgMUKNflzLKFTjh12NN5qV8D7WQsIf
+         xH6AcJVebmZZ8YZhBHx4+QKZgBVmtxRKSpibp2EApSQ8QHcWnmE9+SeU5MMp1sHEmnbg
+         BraVT+unNmwIX45aevWDnMCwtBxEkyIYsBykFCkbVmjiFiPS4ZLk4eJ7QfEiBj22sVg7
+         MFbjOhpr+O035OntpXi5eXoDyidSGdKyvVuA6G3D14jfZOsWDEgaGCpP170QEi/cVPjb
+         r4Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753857118; x=1754461918;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uB3+SIO6qA8oyFlUumi5OJO3sZoV3HuBnZCYSn8E4dg=;
+        b=ZpbgFyVjo9XSWLtdrU9TecG8d/o80AQjhJoKf+TFD7AQuY+BO3fOsHfuZbfbWv5XZP
+         cackxYOQhdGCqCi1mDzv9LS7TK+REOHIhz24EGmASqkF3FNbMWe4bFb7IWfxAkJBVLzy
+         QoHrcxE9vvpNbCisgm8Qbj4wQwIgY1A2knkfKHaKfdemWKVStjl9oGKK2V2FGznVPbUJ
+         7E4N7jAtLHlSf3DCaP7A0N4HmKyCPmv65zuyb+w5MlFTaPRpF6VPrZRHOx64aZlxsN1R
+         OQT7kF68K0OciU/fXLxYOsrg6Xj5Gm6K3H76u/PlodD32QiMVD/V7kAHYBMeE3i9B+Rt
+         681g==
+X-Forwarded-Encrypted: i=1; AJvYcCUS/+BciN+3WOJQ1tHeGHVHSK5cv3st7vqhiOdhzDNU42Tayc2XEXYWo+07UL/aPhxhfatQb39nsz1x@vger.kernel.org, AJvYcCV1f0sXtN4GqPof/dPCiCt3pORtncUEjsJkpyK++K8kpgzh5i/4jDmJZtym1TNAYlJyjO6C1kkrI+IS8/6k@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzMbBoj6LzYouVsYG95/mc6hZT9bWf8VzOLXT5/t+mrHgDYrde
+	wyQ1I+TzPiFoQLhTK/yva/GWRAx6ciRZ9hwMT13DyZcn+8HOVY7JzE6H
+X-Gm-Gg: ASbGncuerjnHJJubnG3acFhooQF5zWT9LxftES1VpoZKMDMSXxfSHVfpnw8CbAEraDr
+	CoAqZxT34dHlyxD/mrCjoECMTh7Z76BR/lqmYwfv8v7UMRnOy78Fju1mg3Z1vVTXrq1vQss7DYC
+	ILpK7Rf1ZN4RtEzzuU1DvkvLW2oWecFCBTwLw5K/ymc9kdPYmARIwSv3QWkOc3brdckUJaZpvr7
+	1m4tuD7v6G1ewachT8ATbwZepprNq61025NvAoWyvpJo7rtNtMDLmrh2YZCqkWjco9WsVFlvO7T
+	LCSTaS5sJA0AbE1tLgqjFOZRqrT4dv8vWkVfMQA8RQN41ol1tanKTJc+isqXYlBLYuYdwL13j2L
+	EAWKrBhfQooc1/krfyqKzKyUvWySvuKit/ui63ZOVze4Hy+mMaLE=
+X-Google-Smtp-Source: AGHT+IGNwnBA8YEqF5nvJyPxatvrwOdfNKJextLwZZjLL+IVGB134VLwbcX2uDhp9LYJQqI+fR2hjg==
+X-Received: by 2002:a05:6a00:1d9a:b0:748:fcfa:8bd5 with SMTP id d2e1a72fcca58-76ab1021910mr3523688b3a.3.1753857118212;
+        Tue, 29 Jul 2025 23:31:58 -0700 (PDT)
+Received: from localhost (118-163-61-247.hinet-ip.hinet.net. [118.163.61.247])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76408feb6casm9687396b3a.59.2025.07.29.23.31.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jul 2025 23:31:57 -0700 (PDT)
+Sender: AceLan Kao <acelan@gmail.com>
+From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+To: Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>,
+	Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/skx_common: Fix potential negative values in DIMM size calculation
+Date: Wed, 30 Jul 2025 14:31:55 +0800
+Message-ID: <20250730063155.2612379-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] vmcoreinfo: Track and log recoverable hardware errors
-To: Breno Leitao <leitao@debian.org>
-Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- James Morse <james.morse@arm.com>, Robert Moore <robert.moore@intel.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
- Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>,
- linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- acpica-devel@lists.linux.dev, osandov@osandov.com, konrad.wilk@oracle.com,
- linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-pci@vger.kernel.org, kernel-team@meta.com
-References: <20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org>
- <7ce9731a-b212-4e27-8809-0559eb36c5f2@linux.alibaba.com>
- <4qh2wbcbzdajh2tvki26qe4tqjazmyvbn7v7aqqhkxpitdrexo@ucch4ppo7i4e>
- <fdb5dced-ea5a-48b8-bbb4-fc3ade7f3df8@linux.alibaba.com>
- <ldlansfiesfxf4a6dzp5z2etquz5jgiq6ttx3al6q7sesgros6@xh4lkevbzsow>
- <4ef01be1-44b2-4bf5-afec-a90d4f71e955@linux.alibaba.com>
- <2a7ok3hdq3hmz45fzosd5vve4qpn6zy5uoogg33warsekigazu@wgfi7qsg5ixo>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <2a7ok3hdq3hmz45fzosd5vve4qpn6zy5uoogg33warsekigazu@wgfi7qsg5ixo>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+The skx_get_dimm_attr() function can return a negative error code,
+which is then assigned to 'ranks', 'rows', or 'cols'.
 
+[    9.344702] EDAC DEBUG: skx_get_dimm_attr: bad ranks = 3 (raw=0xffffffff)
+[    9.344703] EDAC DEBUG: skx_get_dimm_attr: bad rows = 7 (raw=0xffffffff)
+[    9.344703] EDAC DEBUG: skx_get_dimm_attr: bad cols = 3 (raw=0xffffffff)
+[    9.344704] ------------[ cut here ]------------
+[    9.344705] UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:453:2
+[    9.344707] shift exponent -66 is negative
 
-在 2025/7/29 21:48, Breno Leitao 写道:
-> On Mon, Jul 28, 2025 at 09:08:25AM +0800, Shuai Xue wrote:
->> 在 2025/7/26 00:16, Breno Leitao 写道:
->>> On Fri, Jul 25, 2025 at 03:40:58PM +0800, Shuai Xue wrote:
->>>
->>> 	enum hwerr_error_type {
->>> 		HWERR_RECOV_MCE,     // maps to errors in do_machine_check()
->>> 		HWERR_RECOV_CXL,     // maps to CPER_SEC_CXL_
->>> 		HWERR_RECOV_PCI,     // maps to AER (pci_dev_aer_stats_incr()) and CPER_SEC_PCIE and CPER_SEC_PCI
->>> 		HWERR_RECOV_MEMORY,  // maps to CPER_SEC_PLATFORM_MEM_
->>> 		HWERR_RECOV_CPU,     // maps to CPER_SEC_PROC_
->>> 		HWERR_RECOV_DMA,     // maps to CPER_SEC_DMAR_
->>> 		HWERR_RECOV_OTHERS,  // maps to CPER_SEC_FW_, CPER_SEC_DMAR_,
->>> 	}
->>>
->>> Is this what you think we should track?
->>>
->>> Thanks
->>> --breno
->>
->> It sounds good to me.
-> 
-> Does the following patch matches your expectation?
-> 
-> Thanks!
-> 
-> Author: Breno Leitao <leitao@debian.org>
-> Date:   Thu Jul 17 07:39:26 2025 -0700
-> 
->      vmcoreinfo: Track and log recoverable hardware errors
->      
->      Introduce a generic infrastructure for tracking recoverable hardware
->      errors (HW errors that did not cause a panic) and record them for vmcore
->      consumption. This aids post-mortem crash analysis tools by preserving
->      a count and timestamp for the last occurrence of such errors.
->      
->      Add centralized logging for sources of recoverable hardware
->      errors based on the subsystem it has been notified.
->      
->      hwerror_data is write-only at kernel runtime, and it is meant to be read
->      from vmcore using tools like crash/drgn. For example, this is how it
->      looks like when opening the crashdump from drgn.
->      
->              >>> prog['hwerror_data']
->              (struct hwerror_info[6]){
->                      {
->                              .count = (int)844,
->                              .timestamp = (time64_t)1752852018,
->                      },
->                      ...
->      
->      This helps fleet operators quickly triage whether a crash may be
->      influenced by hardware recoverable errors (which executes a uncommon
->      code path in the kernel), especially when recoverable errors occurred
->      shortly before a panic, such as the bug fixed by
->      commit ee62ce7a1d90 ("page_pool: Track DMA-mapped pages and unmap them
->      when destroying the pool")
->      
->      This is not intended to replace full hardware diagnostics but provides
->      a fast way to correlate hardware events with kernel panics quickly.
->      
->      Suggested-by: Tony Luck <tony.luck@intel.com>
->      Signed-off-by: Breno Leitao <leitao@debian.org>
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 4da4eab56c81d..f85759453f89a 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -45,6 +45,7 @@
->   #include <linux/task_work.h>
->   #include <linux/hardirq.h>
->   #include <linux/kexec.h>
-> +#include <linux/vmcore_info.h>
->   
->   #include <asm/fred.h>
->   #include <asm/cpu_device_id.h>
-> @@ -1690,6 +1691,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
->   	}
->   
->   out:
-> +	/* Given it didn't panic, mark it as recoverable */
-> +	hwerr_log_error_type(HWERR_RECOV_MCE);
-> +
->   	instrumentation_end();
->   
->   clear:
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index a0d54993edb3b..f0b17efff713e 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -43,6 +43,7 @@
->   #include <linux/uuid.h>
->   #include <linux/ras.h>
->   #include <linux/task_work.h>
-> +#include <linux/vmcore_info.h>
->   
->   #include <acpi/actbl1.h>
->   #include <acpi/ghes.h>
-> @@ -867,6 +868,40 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
->   }
->   EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, "CXL");
->   
-> +static void ghes_log_hwerr(int sev, guid_t *sec_type)
-> +{
-> +	if (sev != CPER_SEV_CORRECTED && sev != CPER_SEV_RECOVERABLE)
-> +		return;
-> +
-> +	if (guid_equal(sec_type, &CPER_SEC_PROC_ARM) ||
-> +	    guid_equal(sec_type, &CPER_SEC_PROC_GENERIC) ||
-> +	    guid_equal(sec_type, &CPER_SEC_PROC_IA)) {
-> +		hwerr_log_error_type(HWERR_RECOV_CPU);
-> +		return;
-> +	}
-> +
-> +	if (guid_equal(sec_type, &CPER_SEC_CXL_PROT_ERR) ||
-> +	    guid_equal(sec_type, &CPER_SEC_CXL_GEN_MEDIA_GUID) ||
-> +	    guid_equal(sec_type, &CPER_SEC_CXL_DRAM_GUID) ||
-> +	    guid_equal(sec_type, &CPER_SEC_CXL_MEM_MODULE_GUID)) {
-> +		hwerr_log_error_type(HWERR_RECOV_CXL);
-> +		return;
-> +	}
-> +
-> +	if (guid_equal(sec_type, &CPER_SEC_PCIE) ||
-> +	    guid_equal(sec_type, &CPER_SEC_PCI_X_BUS) {
-> +		hwerr_log_error_type(HWERR_RECOV_PCI);
-> +		return;
-> +	}
-> +
-> +	if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
-> +		hwerr_log_error_type(HWERR_RECOV_MEMORY);
-> +		return;
-> +	}
-> +
-> +	hwerr_log_error_type(HWERR_RECOV_OTHERS);
-> +}
-> +
->   static void ghes_do_proc(struct ghes *ghes,
->   			 const struct acpi_hest_generic_status *estatus)
->   {
-> @@ -888,6 +923,7 @@ static void ghes_do_proc(struct ghes *ghes,
->   		if (gdata->validation_bits & CPER_SEC_VALID_FRU_TEXT)
->   			fru_text = gdata->fru_text;
->   
-> +		ghes_log_hwerr(sev, sec_type);
->   		if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
->   			struct cper_sec_mem_err *mem_err = acpi_hest_get_payload(gdata);
->   
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index e286c197d7167..5ccb6ca347f3f 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -30,6 +30,7 @@
->   #include <linux/kfifo.h>
->   #include <linux/ratelimit.h>
->   #include <linux/slab.h>
-> +#include <linux/vmcore_info.h>
->   #include <acpi/apei.h>
->   #include <acpi/ghes.h>
->   #include <ras/ras_event.h>
-> @@ -746,6 +747,7 @@ static void pci_dev_aer_stats_incr(struct pci_dev *pdev,
->   	switch (info->severity) {
->   	case AER_CORRECTABLE:
->   		aer_info->dev_total_cor_errs++;
-> +		hwerr_log_error_type(HWERR_RECOV_PCI);
+The 3 values, rows, cols, and ranks are all -EINVAL(-22), so this line
+   (1ull << (rows + cols + ranks)
+would become
+   (1ull << ((-22) + (-22) + (-22))
+Which leads to shift exponent -66 error
 
-Hi Breno,
+Add a check to ensure that 'ranks', 'rows', and 'cols' are not
+negative before they are used in the size calculation. This prevents
+the use of invalid values.
 
-Thanks for working on this! The patch looks good overall, but I noticed
-an inconsistency in the AER handling:
+Fixes: 88a242c98740 ("EDAC, skx_common: Separate common code out from skx_edac")
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+---
+ drivers/edac/skx_common.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-In ghes_log_hwerr(), you're counting both CPER_SEV_CORRECTED and
-CPER_SEV_RECOVERABLE errors:
+diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
+index 39c733dbc5b9..36dd14320d70 100644
+--- a/drivers/edac/skx_common.c
++++ b/drivers/edac/skx_common.c
+@@ -436,6 +436,9 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
+ 	rows = numrow(mtr);
+ 	cols = imc->hbm_mc ? 6 : numcol(mtr);
+ 
++	if (ranks < 0 || rows < 0 || cols < 0)
++		return 0;
++
+ 	if (imc->hbm_mc) {
+ 		banks = 32;
+ 		mtype = MEM_HBM2;
+-- 
+2.43.0
 
-However, in the AER section, you're only handling AER_CORRECTABLE cases.
-IMHO, Non-fatal errors are recoverable and correspond to
-CPER_SEV_RECOVERABLE in the ACPI context.
-
-The mapping should probably be:
-
-- AER_CORRECTABLE → CPER_SEV_CORRECTED
-- AER_NONFATAL → CPER_SEV_RECOVERABLE
-
-What do you think?
-
-Thanks,
-Shuai
-
-
-
->   		counter = &aer_info->dev_cor_errs[0];
->   		max = AER_MAX_TYPEOF_COR_ERRS;
->   		break;
-> diff --git a/include/linux/vmcore_info.h b/include/linux/vmcore_info.h
-> index 37e003ae52626..538a3635fb1e5 100644
-> --- a/include/linux/vmcore_info.h
-> +++ b/include/linux/vmcore_info.h
-> @@ -77,4 +77,21 @@ extern u32 *vmcoreinfo_note;
->   Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
->   			  void *data, size_t data_len);
->   void final_note(Elf_Word *buf);
-> +
-> +enum hwerr_error_type {
-> +	HWERR_RECOV_MCE,
-> +	HWERR_RECOV_CPU,
-> +	HWERR_RECOV_MEMORY,
-> +	HWERR_RECOV_PCI,
-> +	HWERR_RECOV_CXL,
-> +	HWERR_RECOV_OTHERS,
-> +	HWERR_RECOV_MAX,
-> +};
-> +
-> +#ifdef CONFIG_VMCORE_INFO
-> +noinstr void hwerr_log_error_type(enum hwerr_error_type src);
-> +#else
-> +static inline void hwerr_log_error_type(enum hwerr_error_type src) {};
-> +#endif
-> +
->   #endif /* LINUX_VMCORE_INFO_H */
-> diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
-> index e066d31d08f89..4b5ab45d468f5 100644
-> --- a/kernel/vmcore_info.c
-> +++ b/kernel/vmcore_info.c
-> @@ -31,6 +31,13 @@ u32 *vmcoreinfo_note;
->   /* trusted vmcoreinfo, e.g. we can make a copy in the crash memory */
->   static unsigned char *vmcoreinfo_data_safecopy;
->   
-> +struct hwerr_info {
-> +	int __data_racy count;
-> +	time64_t __data_racy timestamp;
-> +};
-> +
-> +static struct hwerr_info hwerr_data[HWERR_RECOV_MAX];
-> +
->   Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
->   			  void *data, size_t data_len)
->   {
-> @@ -118,6 +125,17 @@ phys_addr_t __weak paddr_vmcoreinfo_note(void)
->   }
->   EXPORT_SYMBOL(paddr_vmcoreinfo_note);
->   
-> +void hwerr_log_error_type(enum hwerr_error_type src)
-> +{
-> +	if (src < 0 || src >= HWERR_RECOV_MAX)
-> +		return;
-> +
-> +	/* No need to atomics/locks given the precision is not important */
-> +	hwerr_data[src].count++;
-> +	hwerr_data[src].timestamp = ktime_get_real_seconds();
-> +}
-> +EXPORT_SYMBOL_GPL(hwerr_log_error_type);
-> +
->   static int __init crash_save_vmcoreinfo_init(void)
->   {
->   	vmcoreinfo_data = (unsigned char *)get_zeroed_page(GFP_KERNEL);
 
