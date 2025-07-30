@@ -1,262 +1,338 @@
-Return-Path: <linux-edac+bounces-4468-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4469-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22BB3B15FDD
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 13:58:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1489FB16115
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 15:12:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36A1C5A3022
-	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 11:57:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7504E7ACE13
+	for <lists+linux-edac@lfdr.de>; Wed, 30 Jul 2025 13:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31613293C44;
-	Wed, 30 Jul 2025 11:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UpfLdHQl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62151298991;
+	Wed, 30 Jul 2025 13:12:00 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC9C78F4C;
-	Wed, 30 Jul 2025 11:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753876681; cv=fail; b=LnpCIr1QRT5ihHSgZNP052YrZGY0CdFpPlADiLYJqe1cHIaNh4kys4FVqgYUYPxzD09XMDVACaDcHtn0Hgqrb3bQGxlf7X6ftu9uGn12j3TSmGa3QSf9d0fRZPm8vFThV9pU5RMcSXBtl2Zmf5Gs2VP+vv1+nufd9mZ4TIdMpUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753876681; c=relaxed/simple;
-	bh=LT0ZIDYGAYjrpalF+cuzVx3ZIYCrCi1KgW00f2HrgVQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=lsNZq5O+MAFF4EgvsGNL0Or8MFEhMgmMP9rwi2Cw9iita/pGSQoetzfiv3eX5mUbJ8VBBgAWF4nyFOJF6rrCUnhZJYyc66BChkCf+skr+cNfl80EIwF+b8eJwhFGkeCjYDvJzTkZfLGrSjtjuGV73r9a0ujzyFnttaO+iDkZxdc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UpfLdHQl; arc=fail smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753876680; x=1785412680;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=LT0ZIDYGAYjrpalF+cuzVx3ZIYCrCi1KgW00f2HrgVQ=;
-  b=UpfLdHQlSjUOfgreY7Iq2S6QNqpuAI8JgiL9PZ6dPA7KEImTYhq4vH9t
-   R2kctiClQwgoqZEUeJbdKc1wQrvWC+mFOqZZYjTS0uPbE7gUCWs7JOmKH
-   8kcaQUZixhuZC+6/YKfWuteh3YIzydUHTvbydgLKRjuEmtjJ5oF5wYkLh
-   6Qeq0srKjbBbhz/yNTxyIuxQnAelWtVFWQAOMeJA9KU+HAjXpolryclbI
-   ThatbqthraEUcOm3hLMy8yHwdUVNaCw1uOuKWKx5V/zWbs2ifWYVTZ8pw
-   jK2MyHEd8M6sF0hX5C8SwQGXuCZIMi0/9UKLBGU/QkFtgiCbBpGV5Xp5s
-   Q==;
-X-CSE-ConnectionGUID: zm6wmxrpRa6XXlAE1gLSow==
-X-CSE-MsgGUID: C3l34rtyS7OPjcavuhoOlg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="66445754"
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="66445754"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 04:57:59 -0700
-X-CSE-ConnectionGUID: JbLLLpRzTOGFbLuAmbzkQQ==
-X-CSE-MsgGUID: aNr6jRpPSM+yQZEZXatfNA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163313394"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 04:57:59 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Wed, 30 Jul 2025 04:57:58 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26 via Frontend Transport; Wed, 30 Jul 2025 04:57:58 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (40.107.92.44) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Wed, 30 Jul 2025 04:57:57 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=n/Qx58vEmOEglwaXPmiJ8xpwplJFo2DXIoy4tiCN7wCCoP5BuYIdOn7h98ugTfqRf2SwLcFnRj/G0kwTZqnGVpwN65VJPLMezN+cEZcHq44swTcZ8K7MG0MCjcBJjDuenyXNRGdG80A85S/n5ori5x94AT79W3zIfXHJlhGlRlk0m/UwrTV02LMMijbIiyE5dZl19cwPY/KqmGJBznFLmjExC4JwM4nfs/IrqG1PYB6qY9GDFSRk85KIKlYJ8PIrnyUkWALaAsYZ6AWiQC4wtolAjFpqpO3svUeVov6ep9VvHCInrHMzon+sCkSthZP+73AynxhLxjnh7V6fdLRKDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LT0ZIDYGAYjrpalF+cuzVx3ZIYCrCi1KgW00f2HrgVQ=;
- b=xfFYw7Nm260k2kLCuHIoVaYwEpeQom8TV3oxV6fWG13XcbuEWEoz6KT9qaJ3FFAbDzHIoadi/d3wpbrmXQAnR+f7FSlwvTiT5KHvhV4JEjAPUrOLj6X1yYvLhkAheEesSbuFHm6/ZFQwKNwvOacOW+GCdtPCNk5wRvPqZ6lF6mUOz0KXuYX/qzMGfOhfUo6lOMWN5aZK7d2GnZD+oEfE4wX4mEAI2SQCqHne2DFIr9qYq1vVJQEx7MK6ZCly3TGqYCbsBt2RCDDGr5XnLJ+wtxGfNH+nYanFOLZd/Cit1PHxk2crBPRsWW8mLNLxLs/RWPZAw83hNh/VJfyfbvbZtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5525.namprd11.prod.outlook.com (2603:10b6:208:31f::10)
- by DS7PR11MB6174.namprd11.prod.outlook.com (2603:10b6:8:9a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.24; Wed, 30 Jul
- 2025 11:57:08 +0000
-Received: from BL1PR11MB5525.namprd11.prod.outlook.com
- ([fe80::1a2f:c489:24a5:da66]) by BL1PR11MB5525.namprd11.prod.outlook.com
- ([fe80::1a2f:c489:24a5:da66%6]) with mapi id 15.20.8964.023; Wed, 30 Jul 2025
- 11:57:08 +0000
-From: "Huang, Kai" <kai.huang@intel.com>
-To: "Luck, Tony" <tony.luck@intel.com>, "Hunter, Adrian"
-	<adrian.hunter@intel.com>, "Hansen, Dave" <dave.hansen@intel.com>,
-	"Annapurve, Vishal" <vannapurve@google.com>
-CC: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "Li, Xiaoyao"
-	<xiaoyao.li@intel.com>, "Zhao, Yan Y" <yan.y.zhao@intel.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"tony.lindgren@linux.intel.com" <tony.lindgren@linux.intel.com>,
-	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "Chatre, Reinette"
-	<reinette.chatre@intel.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"Yamahata, Isaku" <isaku.yamahata@intel.com>,
-	"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"seanjc@google.com" <seanjc@google.com>, "pbonzini@redhat.com"
-	<pbonzini@redhat.com>, "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	"bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH 1/2] x86/mce: Fix missing address mask in recovery for
- errors in TDX/SEAM non-root mode
-Thread-Topic: [PATCH 1/2] x86/mce: Fix missing address mask in recovery for
- errors in TDX/SEAM non-root mode
-Thread-Index: AQHb4Em/yMlXy4vBpkewoE3shZA4ALQJAXsAgAFgjQCADMwmgIAAAM+AgAAQVoCAAAJ5AIAzfjCAgAARk4A=
-Date: Wed, 30 Jul 2025 11:57:08 +0000
-Message-ID: <287caf7fda25b8ac27211d2e50fa1077e0bf0bf6.camel@intel.com>
-References: <20250618120806.113884-1-adrian.hunter@intel.com>
-	 <20250618120806.113884-2-adrian.hunter@intel.com>
-	 <487c5e63-07d3-41ad-bfc0-bda14b3c435e@intel.com>
-	 <ccee2a0f-18fa-4037-bf97-f359e0791bf6@intel.com>
-	 <d443db90-ced5-43d0-9f85-ad436e445c3a@intel.com>
-	 <9a4752a4-e783-4f03-babf-23c31cee4ff9@intel.com>
-	 <SJ1PR11MB60836014330204B2FBCC7418FC45A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-	 <79eca29a-8ba4-4ad9-b2e0-54d8e668f731@intel.com>
-	 <807ff02d-7af0-419d-8d14-a4d6c5d5420d@intel.com>
-In-Reply-To: <807ff02d-7af0-419d-8d14-a4d6c5d5420d@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.56.2 (3.56.2-1.fc42) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5525:EE_|DS7PR11MB6174:EE_
-x-ms-office365-filtering-correlation-id: 3b2f3fd6-4a9f-42bc-1639-08ddcf6035e1
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016|38070700018;
-x-microsoft-antispam-message-info: =?utf-8?B?SldNT2tmY0JpRDYrRXl1ZE5SZGZwS1QyVFNPcStaVnlqSDFudUhQSXJvWXdo?=
- =?utf-8?B?REFhbXIvN21tdkpuaWJkOWs3ay9wZ2RBZHhPTmRHUGwxL3JIeUNRWnZHY0J4?=
- =?utf-8?B?cWxoMFJiVld5cUswc1ZwVDJpYlNoYldDd2FUZGpEN0JncSt2MENWWFhnOUZy?=
- =?utf-8?B?NUEvZlFGK25JekNMQ09JdGlLT1FSbVlxdVRrUm5PQTYvc1RQSjVCWnBrTmVo?=
- =?utf-8?B?dWhac1AraG0vVFhCV0VuVExoeTVlTXpucDNHODdHYjRQWVJLd2tPSmdTcGlu?=
- =?utf-8?B?UVpTUjVQS1BXdFM4eC8xMEFyYWJza3BDZ3FleTNSMEFjMjlYVWYvKzVZQnNi?=
- =?utf-8?B?OGR2NHhBK2xSNVJ6VFFPNlpDak44dEJhR2dwRm1DNVVjQXdVM3BNdVppRSs2?=
- =?utf-8?B?NEd0aFJRNWhuMC9mOGlxdEpwRFFuSzYzd3FlbDNKSDFuVDZ5WWlBOHNJSTBL?=
- =?utf-8?B?Tk1qZXBZbFBCOVVKNXUrdWxrSzVNM1pIRXJMVmMzR3AxQk5zMXdOcWV6RFRX?=
- =?utf-8?B?aVB3VWE5Mm1MRTBkb0cwUi90cHVqYkF2Znpxam5rSkNtc0NkTHplQkF6bUFs?=
- =?utf-8?B?WTg4Y2Q3MEJ6aFlnNzZkYWFNSDNZQ3plMWUvUnUwVlpXdzRvUWs2Vno0R1R6?=
- =?utf-8?B?VTNlZ0pKdTRqeFN4WE54NStJUHFndnNiZkpqdmlmNHFCb1cxSldwcURSbUdq?=
- =?utf-8?B?QU5yQmxKNy96WnZHbW5yTDhIa0dEZjZoSjlLcE5mVmZybzB3Y2o4NVpoV1NF?=
- =?utf-8?B?WGNrNTJDNFQvMkRyVzRLUXJobFoveGdtZldUWVAzMzZud2YvUG9WZUNyeGlL?=
- =?utf-8?B?Q2p3NUxiUVA0SXFWWkpIWW1GRTJ4Z1lRWGo4M2tjd3VqWE5TM2tEQmV4VFl1?=
- =?utf-8?B?RmdHcFE0YkFlQTRmK1VKWEpJUW9ibXJUeThuV2dLbmNvSG1HelhqZGtnUVRp?=
- =?utf-8?B?SUM2Ymk5RGozcUdzTWpBOURYY1BkRUkvSXFpRWw5OXlaMkdaTkxDUFFlTDU3?=
- =?utf-8?B?YUo4SVRtcWN0SktjNDZ6MlcvVWxaMVVxbi96dEl6cHR5eWZDTU9DYjBJRUkr?=
- =?utf-8?B?bFNoSjhldE0xdnRscVVxVGRacnRMazdGTVJDYkdYbmJNN0M5dzAyTFZGMktJ?=
- =?utf-8?B?dnNONXlxNjVvMml0cktQZlZPVWJ5ZEgwWnA3MTl3M1BUb09GWU05bUtMRkFh?=
- =?utf-8?B?akJtNVc5NU1lWXp2N082T20wTTFyZlNBVlY3azZ3NC9PdWcrWTJHRGlNbXU4?=
- =?utf-8?B?MGRJc296SXRaekR4MDk1N01RVHFXcXNpUEtRN09kSTZwYks1QjN2b1JsU1JG?=
- =?utf-8?B?Z2hxWEtDeUxBS1RiSTVPcEFTcEg1ZFJUTXVHZzF2YkJLZmNiNmpzZTMyUFl0?=
- =?utf-8?B?bGZ3bER2T1RLYm9mZVdFT090aGJ3ZCswOGUvSjJnK2VDQmF6SldOY1NXKzdy?=
- =?utf-8?B?c05NVGxBbXhxK2FqMzlmQ1kvNEk0MENHMjFPQ094MWhDdFR6dkQ2RUtpWWpr?=
- =?utf-8?B?VzVBWWQ2Y3dsc3BKUzY2U0VUMU9aeitGbnF1Nnh6ZVQzUkpsTjY2b3d2cjF2?=
- =?utf-8?B?ajRBOWFjcFIyd0tQcUprOVFicU1YZmRaeHAxVGQvSjJzRGlqYzdBTkJJamZO?=
- =?utf-8?B?VVZBRTdNekNjUE1ORzBDMk9UNkcxRU1ISWF2L1JTNDc1WElLdXljbDk0eVQ5?=
- =?utf-8?B?czVTa2RIWHVtSjEzK2MzeXNoTk53c0dMUTRRbk5QRTYrQmVIaXRTT2Z1cElU?=
- =?utf-8?B?ZVJjTHh2N3NlYktiR1dsZDZ2SjllSGYwYUR4eFN3V2lhM0JNNXFVYzVzamJs?=
- =?utf-8?B?ZU5oSC82WSs1bXo2RXVkWEpiWnp1Q2VZK2dpTGVQZWdiVGc5SEVIdUNycHNr?=
- =?utf-8?B?TTRBa2JuYjVwV2xrejFWMjZlRzIyVjRxdjJieEptS0VBTGJoaU9YTW9KVW5T?=
- =?utf-8?B?WWJOUDdFNzFpMXpJbndkVzNIQlo1T2xrSnV3MklDbmlZTFdzWDNxVWs4dzNx?=
- =?utf-8?Q?BudPu5klYh5+wQ8AEyeFLcNtKuXg4E=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5525.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cTFPTXdlQWRGR3Z2ZnVuYTRiK3BRSVdPK3QxMU5HU25RRWNFZTR6dko5dHQ2?=
- =?utf-8?B?STIveFlnMlBteHhMaFZYeHExYjBSZSt0WjFlK1ZZcWY3VVpKbWMvTldReFAw?=
- =?utf-8?B?S2t4dXpuV0ZObFprSk1rU2xTZ1p2S2RiMXZiM2c4UGpscW14NStOeklwOXJa?=
- =?utf-8?B?N0dJSVJ2dVlDM29HQnlSU1RXWDdMR1NyendleWw2NkxGRGZsZEI0WURFVlYw?=
- =?utf-8?B?U3QzNDZQV1VLRHBMaWxwYkpSL3JoaW9GYlRweXlOY1FaaUdJVGhxcURlOFN6?=
- =?utf-8?B?T2FZS2Z0VTBCa3hVWlI5M3d2WjhqMTR2bW52OE1TaEVlVWFTbmxDVzBPYzho?=
- =?utf-8?B?YS90dlR4L2tycEh2NG9BSHM5d0VGWGZOazFRSEplZlg3cUJhdHFRZVdxUnND?=
- =?utf-8?B?L0RGbTlJbDgrUndrYUloVVBsRmZmT0F0VmJPYU1PMDZhSnRDQzU1aGpBQ0d3?=
- =?utf-8?B?bHpONW5PZjFXWlEwZUJSblZRZ2pDbmNhZEsvdmdocC9RS2drRG5PcEV4TUlm?=
- =?utf-8?B?ekgycW8vaFpKKzcxa1Y2SUptbzMwbTRLbXQ2UGR5aEVheEZjcTg4eGxTOUt0?=
- =?utf-8?B?L0cvMlB6YU1oSzhKRDNLY1pHT1g3eitGVXlwNUVKN05SRGM2eXdQeFFWaU41?=
- =?utf-8?B?ek5mc01kMzR2cStXSnV2TElDM1p3dTM2ek1Da2xCdjdKV292Yk42TUtkeGpE?=
- =?utf-8?B?VG5YYkh0Z0JVeHJlemtqNThlTWpSSTYyS0Zsa05ZRzErbkpVOUZSUi9jSkZQ?=
- =?utf-8?B?SlpXbjdyWndNQTY1eVgyRElIdEhFc0FaMFA0ekZPUUtqcGJOV1ZPeDRkSWdq?=
- =?utf-8?B?NVZmanBzdVRPMzZneWZFTFZ1ZytUNTI0V0szKzVPY29IbnFycjhBOC9FQnFw?=
- =?utf-8?B?dXZwVUp4Z0Z1VFFEQjl1akVuQ3p0alBiZmtxdzhpL0VtdkRyRWdoeTJMR29F?=
- =?utf-8?B?QVpjSmdnYVdNRVJ4WWlJb05NdkcrYnJTdStnQ2FoZmlvSkpiWnZ1QWJVbExx?=
- =?utf-8?B?L1Nhc1Jvc0t2N1NpVEhRVDRpa3pBSzVMYWpiVC9JMlpVUWJSWmUwbHZKRXgx?=
- =?utf-8?B?QkxndWYvdUsxYnp2cytaT0JXZ20va1hYUU9HZUkzVlpFcUZXMHZXcUE2aXZj?=
- =?utf-8?B?OWxaTkF1Q2h2RDc3UTFlVUV0MDk5NmVXazdEWDN0dUZ6Y0dSK01NWmJDSjJS?=
- =?utf-8?B?Q3JxODAzYmQ5OUJLNVdCKytRVXY0ZDc4cktrKzQxcVJldlU4YjcvMHlENG5V?=
- =?utf-8?B?NFdkWWcrOVduUlZjR255ZHVuZnpRbGJtSElDMExadHQ2a0U5KzRBTHVETy9q?=
- =?utf-8?B?NFluOEZXRnNHaWIxdzVycWVIeXNDOUZwbnFnb0VnV05RVUNSM3NpRCtHOUI3?=
- =?utf-8?B?N1psVU0zeHgwYjIrb0puTVVKeWprK0pkS1NnSXdkbkh1TzJWQmRINXFmYjNu?=
- =?utf-8?B?RlJRL2hSazR6ekRyUmFxVWNzeWNXcGtzSXJBbzJkejVMYTZkbHNQVUVZekZ3?=
- =?utf-8?B?S3JpOWRwZ3pnanRjVWVTUDduYjUvYWxCS0FuQkxpczlubjJycGVKbVZPWjQ2?=
- =?utf-8?B?cWRpRFpsS3h6SkNTODVKR2tSUjNMUkJrdEJ6Y1ZSSEo5eUl5aGZ6cjZhR0Fv?=
- =?utf-8?B?a2xPeGpvUzNzQlo4NEVUZzhTWGZRa3I4aFVscXFmb3V4K0s5dzhuUXRyWVlD?=
- =?utf-8?B?YmFRd0Y2SEc2OHdPT2szNjAxNzZoOEV6Y2pDTGNSWmtPNFk4bTNpNVduY0hN?=
- =?utf-8?B?b21IcUZ5aEJVbE5kZTVLOEx5V3NuKzNtbnFTVUxhVjc0K3Vsc2tOcWhtT1BZ?=
- =?utf-8?B?Qm1HdDhycVBvdFY4eUs2bTQ2bmMvUE9TbXFVTHRhV1VGVDZpNHhDN3BRNGRI?=
- =?utf-8?B?YUFUdUNTRVJET0FtdEh6ZEpMRGNZc2ZkQlREeUd4elMwbExkdlAxMXNlbm85?=
- =?utf-8?B?UXpycUVEdlJldnhkYkY4TUtVZnF1eXdhOS9NTVBQRWhGNG5meGpuaERudW5p?=
- =?utf-8?B?a0krMjdsTk1VdzNtVlZsTGx0aEhxb3ZxanBid2x0MVFjM0g3d0VTMjltZWFY?=
- =?utf-8?B?dXZGMHlhY29lMjQ1NVE5RzJaemswWUF3M3FYK0dIKzlvTTZiYVZ1T0Y4OXZU?=
- =?utf-8?Q?ZVXXW5lYjeg4+TtW6F06NkHw3?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F4757A2C31585542B525AB09A9F6F5E9@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D832980DB;
+	Wed, 30 Jul 2025 13:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753881120; cv=none; b=LY6T6mMgat8Sqio2E5hYB2tmzDqxu3Oz9NQScO/PzguT/dzSeV8zlp0ehNatNaZi+Q5PvR5NL6YoQOvC4zK5TcRRUPjQWJ/DuZ23/HHKBGX+dDaWu5PZDswwHyv7//TCEzybC6nMuXiUB9ebBftaU5BX7m4Cs0c7EjgiZ68Tksk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753881120; c=relaxed/simple;
+	bh=m896s30J1y4O6958v84e106QWtaKbxc1uuVbVIJSHDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iO37NQYa3wvMWTo0eB+Y4lEx+wtY9TF/99ONCbXievOQFW/4KIP0km37vyRDUYrc0ZgZPIYeDtWxhs8TzV1J4nbcsmIPyebug2VmIrnU++knVBfvdZ9K7TOYjOW6JtWyajKrVmsMvdRMTY4328VHTMtawVPbQUjUVdXRSs1oRjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-61543f03958so4371563a12.0;
+        Wed, 30 Jul 2025 06:11:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753881117; x=1754485917;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1r+g1VtuzHhM6ee74oinlCtt8nG5NflXojKIeCrDYVI=;
+        b=jisuMXU6NGKi2L91RmXtKtRjiNO2k2dS9RU5AeBE9zOf1Q5kAQBEiB+7B4gAspLyd6
+         7VXnQpB1MH9FLyJDqNXzY55YO1Nl7IASUdzpfekhscSqd05yzM5rd+5q1OtD4tXML7e/
+         +p03DVleSm0wm/922ePoYwz062WyDNwElE/URAf2D80TZrb78h67UpH39puJqwmCPDbr
+         dSmzA0UvCM4flBUAZmuUBkcEA6qaqjSVZ1hXkbd7RM63+8qnrKNrjZIvUtq/DZk91h8s
+         q78KzK/+kz9J/c2JelNZxv+rmjT/CsS6LOT49eTULlHsrha7eq72NgEsgN1BZJ8N6vK2
+         Btjg==
+X-Forwarded-Encrypted: i=1; AJvYcCUKMXmx0cqs9Mtjsn/ekVLFoBOUB5hE/blrTOktjJr5n+Wo7lTEUqL2xmmAs0O9Bub9AnxlnIH2e7da@vger.kernel.org, AJvYcCVMwo5W5PRErj0dG5Siuz33IiG5wUogUAa5Obi/TfvirzU6Xg7fXrMzPjvdobdUOunfhPCVVgPC6zNkmMUP@vger.kernel.org, AJvYcCWFS3BEPcODlu3KtXFd3OPTd1B90ij5h66pF/e4E1ZZQNjf69DzKyEA6kVVZcJjYh0W7Q/PjTsIFP4WDA==@vger.kernel.org, AJvYcCXqF39gx4cSOHsHNU3hmtFzIAq4A/Ngsxy8I5EnlAuMNH6eB0u/QgqnG2ZgA2L+jiNzNQZEdINISBmG@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkBiIuA/eyTVqyyqp3KImB1LSvjqne1v1sGM9+lHfu2xaya3Xd
+	DUdztzwOqG/baPZeG5lnUiSVJVF+uWPODJKL854/JD5gCqllRjaeGF7k
+X-Gm-Gg: ASbGncuA6hqBp5eOdS3ikqcI2LH9JmDZIRyXGbjDvCV8nNVw9WmAYaIdrKla78SDQtH
+	EucI2A1LBscHvcDwiIu7H7U17Zwlwn5sAsibfIQnlbyTDvzCrmI4nJrORRUUH4CiaR+t5MvH9lw
+	Dyu515ZxExg0JGPnR2S5CN7MBQkIHaja1/NXcVaz3/jSBHLmZJHKDURurmvt2U9FOkNp7CAVydM
+	nDjZhIfCaPlK3y2Dd1UXHULxWATVW3LURt42jfePnTJJKyShSc9wzbzfs7TUfAjDWimpCYRMdj1
+	yL91vg+6WdF0vOGubiHBZytQ2AoNuLEx+hspf4foRGSss02AoUHyJBYl6JsBiCc1kCtLIqp3thZ
+	tjqlEvtQK+YK3
+X-Google-Smtp-Source: AGHT+IEJtGnQI/JmjEkDplKRh70f/n/Jy4pzHrfnwvhr7GH7c/cFeAWRx79OuzuHzhr0tNthVPDzgQ==
+X-Received: by 2002:a17:907:e915:b0:ae6:d47a:105d with SMTP id a640c23a62f3a-af8fda78edamr401007566b.55.1753881116184;
+        Wed, 30 Jul 2025 06:11:56 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:8::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af635a6685fsm743144466b.89.2025.07.30.06.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Jul 2025 06:11:55 -0700 (PDT)
+Date: Wed, 30 Jul 2025 06:11:52 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, 
+	Robert Moore <robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
+	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev, osandov@osandov.com, 
+	konrad.wilk@oracle.com, linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-pci@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v3] vmcoreinfo: Track and log recoverable hardware errors
+Message-ID: <zc4jm3hwvtwo5y2knk2bqzwmpf7ma7bdzs6uv2osavzcdew3nk@lfjrlp6sr7zz>
+References: <20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org>
+ <7ce9731a-b212-4e27-8809-0559eb36c5f2@linux.alibaba.com>
+ <4qh2wbcbzdajh2tvki26qe4tqjazmyvbn7v7aqqhkxpitdrexo@ucch4ppo7i4e>
+ <fdb5dced-ea5a-48b8-bbb4-fc3ade7f3df8@linux.alibaba.com>
+ <ldlansfiesfxf4a6dzp5z2etquz5jgiq6ttx3al6q7sesgros6@xh4lkevbzsow>
+ <4ef01be1-44b2-4bf5-afec-a90d4f71e955@linux.alibaba.com>
+ <2a7ok3hdq3hmz45fzosd5vve4qpn6zy5uoogg33warsekigazu@wgfi7qsg5ixo>
+ <a87c5e74-082f-4be6-bbfd-4867bf72ddcc@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5525.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b2f3fd6-4a9f-42bc-1639-08ddcf6035e1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2025 11:57:08.3607
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jAg+s3yMKp9TX1ocotHfSXnETgUsJbWlOtZmr1VUAXojPfQquf4q15JaUEgxNnS6CaWNr1mhu453SH8HlmrEdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6174
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a87c5e74-082f-4be6-bbfd-4867bf72ddcc@linux.alibaba.com>
 
-T24gV2VkLCAyMDI1LTA3LTMwIGF0IDEzOjU0ICswMzAwLCBBZHJpYW4gSHVudGVyIHdyb3RlOg0K
-PiBCdXQgdGhlcmUgYXJlIGFsc28gYWRkaXRpb25hbCBwbGFjZXMgd2hlcmUgaXQgc2VlbXMgbGlr
-ZSBNQ0lfQUREUl9QSFlTQUREUg0KPiBpcyBtaXNzaW5nOg0KPiANCj4gCXRkeF9kdW1wX21jZV9p
-bmZvKCkNCj4gCQlwYWRkcl9pc190ZHhfcHJpdmF0ZSgpDQo+IAkJCV9fc2VhbWNhbGxfcmV0KFRE
-SF9QSFlNRU1fUEFHRV9SRE1ELCAmYXJncykNCj4gCQkJCVRESF9QSFlNRU1fUEFHRV9SRE1EIGV4
-cGVjdHMgS2V5SUQgYml0cyB0byBiZSB6ZXJvDQoNClRoaXMgaXMgb25seSBjYWxsZWQgaW4gbWNl
-X3BhbmljKCkgcGF0aCwgd2hpY2ggYmFzaWNhbGx5IG1lYW5zIHRoZSAjTUMgaXMNCmZhdGFsLCBl
-LmcuLCBoYXBwZW5zIGluIGtlcm5lbCBjb250ZXh0Lg0KDQpUaGUgaW50ZW50aW9uIG9mIHRoaXMg
-aXMgdG8gY2F0Y2ggYW55ICNNQyBkdWUgdG8ga2VybmVsIGJ1ZyAoaS5lLiwNCnNvZnR3YXJlIGlz
-c3VlLCBidXQgbm90IGhhcmR3YXJlIGVycm9yKSB3aGljaCBkb2VzIHBhcnRpYWwgd3JpdGUgdG8g
-VERYDQpwcml2YXRlIG1lbW9yeSBhbmQgcmVhZCBhdCBhIGxhdGVyIHRpbWUsIGFuZCByZXBvcnQg
-YSBtb3JlIHByZWNpc2UNCmluZm9ybWF0aW9uIHRvIHRoZSB1c2VyIHRvIHBvaW50IG91dCB0aGlz
-IGNvdWxkIGJlIGR1ZSB0byAicG9zc2libGUga2VybmVsDQpidWciLiAgU2VlIGNoYW5nZWxvZyBv
-ZiA3MDA2MDQ2M2NiMmIgKCJ4ODYvbWNlOiBEaWZmZXJlbnRpYXRlIHJlYWwNCmhhcmR3YXJlICNN
-Q3MgZnJvbSBURFggZXJyYXR1bSBvbmVzIikuDQoNCkluIG90aGVyIHdvcmRzLCBmb3IgdGhpcyBj
-YXNlIHRoZSBhZGRyZXNzIHJlcG9ydGVkIHZpYSBNQ0lfQUREUl9QSFlTQUREUg0Kc2hvdWxkIG5v
-dCBjb250YWluIGFueSBLZXlJRCBiaXRzIHNpbmNlIHRoZSBrZXJuZWwgYWx3YXlzIHVzZXMga2V5
-SUQgMCB0bw0KcmVhZC4NCg0KSSBiZWxpZXZlIHRoZSBLZXlJRCBiaXRzIHdpbGwgb25seSBiZSBh
-cHBlbmRlZCB0byB0aGUgcGh5c2ljYWwgYWRkcmVzcw0KcmVwb3J0ZWQgaW4gTUNJX0FERFJfUEhZ
-U0FERFIgd2hlbiB0aGUgI01DIHdhcyB0cmlnZ2VyZWQgZnJvbSBURFggZ3Vlc3QsDQppLmUuLCB3
-aGVuIHRoZSBDUFUgd2FzIGFjY2Vzc2luZyBtZW1vcnkgdXNpbmcgVERYIEtleUlELiAgU3VjaCAj
-TUMgaXMgbm90DQpmYXRhbCBhbmQgd29uJ3QgY2FsbCBpbnRvIG1jZV9wYW5pYygpLg0KDQpUaGF0
-IGJlaW5nIHNhaWQsIGZvciB0ZHhfZHVtcF9tY2VfaW5mbygpLCB3aGlsZSBleHBsaWNpdGx5IG1h
-c2tpbmcgb3V0DQprZXlJRCBiaXRzIGluIE1DSV9BRERSX1BIWVNBRERSIG9idmlvdXNseSBkb2Vz
-bid0IGh1cnQgKG9yIGFyZ3VhYmx5IGJldHRlcg0KaW4gc29tZSB3YXkpLCBpdCBpcyBub3QgbmVj
-ZXNzYXJ5IEFGQUlDVC4NCg==
+Hello Shuai,
+
+On Wed, Jul 30, 2025 at 10:13:13AM +0800, Shuai Xue wrote:
+> In ghes_log_hwerr(), you're counting both CPER_SEV_CORRECTED and
+> CPER_SEV_RECOVERABLE errors:
+
+Thanks. I was reading this code a bit more, and I want to make sure my
+understanding is correct, giving I was confused about CORRECTED and
+RECOVERABLE errors.
+
+CPER_SEV_CORRECTED means it is corrected in the background, and the OS
+was not even notified about it. That includes 1-bit ECC error.
+THose are not the errors we are interested in, since they are irrelavant
+to the OS.
+
+If that is true, then I might not want count CPER_SEV_CORRECTED errors
+at all, but only CPER_SEV_RECOVERABLE.
+
+> However, in the AER section, you're only handling AER_CORRECTABLE cases.
+> IMHO, Non-fatal errors are recoverable and correspond to
+> CPER_SEV_RECOVERABLE in the ACPI context.
+> 
+> The mapping should probably be:
+> 
+> - AER_CORRECTABLE → CPER_SEV_CORRECTED
+> - AER_NONFATAL → CPER_SEV_RECOVERABLE
+
+Thanks. This means I want to count AER_NONFATAL but not AER_CORRECTABLE.
+Is this right?
+
+Summarizing, This is the a new version of the change, according to my
+new understanding:
+
+commit deca1c4b99dcfa64b29fe035f8422b4601212413
+Author: Breno Leitao <leitao@debian.org>
+Date:   Thu Jul 17 07:39:26 2025 -0700
+
+    vmcoreinfo: Track and log recoverable hardware errors
+
+    Introduce a generic infrastructure for tracking recoverable hardware
+    errors (HW errors that are visible to the OS but does not cause a panic)
+    and record them for vmcore consumption. This aids post-mortem crash
+    analysis tools by preserving a count and timestamp for the last
+    occurrence of such errors. On the other side, correctable errors, which
+    the OS typically remains unaware of because the underlying hardware
+    handles them transparently, are less relevant and therefore are NOT
+    tracked in this infrastructure.
+
+    Add centralized logging for sources of recoverable hardware
+    errors based on the subsystem it has been notified.
+
+    hwerror_data is write-only at kernel runtime, and it is meant to be read
+    from vmcore using tools like crash/drgn. For example, this is how it
+    looks like when opening the crashdump from drgn.
+
+            >>> prog['hwerror_data']
+            (struct hwerror_info[6]){
+                    {
+                            .count = (int)844,
+                            .timestamp = (time64_t)1752852018,
+                    },
+                    ...
+
+    This helps fleet operators quickly triage whether a crash may be
+    influenced by hardware recoverable errors (which executes a uncommon
+    code path in the kernel), especially when recoverable errors occurred
+    shortly before a panic, such as the bug fixed by
+    commit ee62ce7a1d90 ("page_pool: Track DMA-mapped pages and unmap them
+    when destroying the pool")
+
+    This is not intended to replace full hardware diagnostics but provides
+    a fast way to correlate hardware events with kernel panics quickly.
+
+    Suggested-by: Tony Luck <tony.luck@intel.com>
+    Signed-off-by: Breno Leitao <leitao@debian.org>
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 4da4eab56c81d..f85759453f89a 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -45,6 +45,7 @@
+ #include <linux/task_work.h>
+ #include <linux/hardirq.h>
+ #include <linux/kexec.h>
++#include <linux/vmcore_info.h>
+
+ #include <asm/fred.h>
+ #include <asm/cpu_device_id.h>
+@@ -1690,6 +1691,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	}
+
+ out:
++	/* Given it didn't panic, mark it as recoverable */
++	hwerr_log_error_type(HWERR_RECOV_MCE);
++
+ 	instrumentation_end();
+
+ clear:
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index a0d54993edb3b..9c549c4a1a708 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -43,6 +43,7 @@
+ #include <linux/uuid.h>
+ #include <linux/ras.h>
+ #include <linux/task_work.h>
++#include <linux/vmcore_info.h>
+
+ #include <acpi/actbl1.h>
+ #include <acpi/ghes.h>
+@@ -867,6 +868,40 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
+ }
+ EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, "CXL");
+
++static void ghes_log_hwerr(int sev, guid_t *sec_type)
++{
++	if (sev != CPER_SEV_RECOVERABLE)
++		return;
++
++	if (guid_equal(sec_type, &CPER_SEC_PROC_ARM) ||
++	    guid_equal(sec_type, &CPER_SEC_PROC_GENERIC) ||
++	    guid_equal(sec_type, &CPER_SEC_PROC_IA)) {
++		hwerr_log_error_type(HWERR_RECOV_CPU);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_CXL_PROT_ERR) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_GEN_MEDIA_GUID) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_DRAM_GUID) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_MEM_MODULE_GUID)) {
++		hwerr_log_error_type(HWERR_RECOV_CXL);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_PCIE) ||
++	    guid_equal(sec_type, &CPER_SEC_PCI_X_BUS) {
++		hwerr_log_error_type(HWERR_RECOV_PCI);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
++		hwerr_log_error_type(HWERR_RECOV_MEMORY);
++		return;
++	}
++
++	hwerr_log_error_type(HWERR_RECOV_OTHERS);
++}
++
+ static void ghes_do_proc(struct ghes *ghes,
+ 			 const struct acpi_hest_generic_status *estatus)
+ {
+@@ -888,6 +923,7 @@ static void ghes_do_proc(struct ghes *ghes,
+ 		if (gdata->validation_bits & CPER_SEC_VALID_FRU_TEXT)
+ 			fru_text = gdata->fru_text;
+
++		ghes_log_hwerr(sev, sec_type);
+ 		if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
+ 			struct cper_sec_mem_err *mem_err = acpi_hest_get_payload(gdata);
+
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index e286c197d7167..d814c06cdbee6 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -30,6 +30,7 @@
+ #include <linux/kfifo.h>
+ #include <linux/ratelimit.h>
+ #include <linux/slab.h>
++#include <linux/vmcore_info.h>
+ #include <acpi/apei.h>
+ #include <acpi/ghes.h>
+ #include <ras/ras_event.h>
+@@ -751,6 +752,7 @@ static void pci_dev_aer_stats_incr(struct pci_dev *pdev,
+ 		break;
+ 	case AER_NONFATAL:
+ 		aer_info->dev_total_nonfatal_errs++;
++		hwerr_log_error_type(HWERR_RECOV_PCI);
+ 		counter = &aer_info->dev_nonfatal_errs[0];
+ 		max = AER_MAX_TYPEOF_UNCOR_ERRS;
+ 		break;
+diff --git a/include/linux/vmcore_info.h b/include/linux/vmcore_info.h
+index 37e003ae52626..538a3635fb1e5 100644
+--- a/include/linux/vmcore_info.h
++++ b/include/linux/vmcore_info.h
+@@ -77,4 +77,21 @@ extern u32 *vmcoreinfo_note;
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len);
+ void final_note(Elf_Word *buf);
++
++enum hwerr_error_type {
++	HWERR_RECOV_MCE,
++	HWERR_RECOV_CPU,
++	HWERR_RECOV_MEMORY,
++	HWERR_RECOV_PCI,
++	HWERR_RECOV_CXL,
++	HWERR_RECOV_OTHERS,
++	HWERR_RECOV_MAX,
++};
++
++#ifdef CONFIG_VMCORE_INFO
++noinstr void hwerr_log_error_type(enum hwerr_error_type src);
++#else
++static inline void hwerr_log_error_type(enum hwerr_error_type src) {};
++#endif
++
+ #endif /* LINUX_VMCORE_INFO_H */
+diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
+index e066d31d08f89..4b5ab45d468f5 100644
+--- a/kernel/vmcore_info.c
++++ b/kernel/vmcore_info.c
+@@ -31,6 +31,13 @@ u32 *vmcoreinfo_note;
+ /* trusted vmcoreinfo, e.g. we can make a copy in the crash memory */
+ static unsigned char *vmcoreinfo_data_safecopy;
+
++struct hwerr_info {
++	int __data_racy count;
++	time64_t __data_racy timestamp;
++};
++
++static struct hwerr_info hwerr_data[HWERR_RECOV_MAX];
++
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len)
+ {
+@@ -118,6 +125,17 @@ phys_addr_t __weak paddr_vmcoreinfo_note(void)
+ }
+ EXPORT_SYMBOL(paddr_vmcoreinfo_note);
+
++void hwerr_log_error_type(enum hwerr_error_type src)
++{
++	if (src < 0 || src >= HWERR_RECOV_MAX)
++		return;
++
++	/* No need to atomics/locks given the precision is not important */
++	hwerr_data[src].count++;
++	hwerr_data[src].timestamp = ktime_get_real_seconds();
++}
++EXPORT_SYMBOL_GPL(hwerr_log_error_type);
++
+ static int __init crash_save_vmcoreinfo_init(void)
+ {
+ 	vmcoreinfo_data = (unsigned char *)get_zeroed_page(GFP_KERNEL);
+
 
