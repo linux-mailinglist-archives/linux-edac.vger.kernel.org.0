@@ -1,131 +1,130 @@
-Return-Path: <linux-edac+bounces-4478-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4479-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B03FFB16ABA
-	for <lists+linux-edac@lfdr.de>; Thu, 31 Jul 2025 05:16:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38596B17387
+	for <lists+linux-edac@lfdr.de>; Thu, 31 Jul 2025 16:57:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CBFC7B10F7
-	for <lists+linux-edac@lfdr.de>; Thu, 31 Jul 2025 03:14:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5A1E189E0BC
+	for <lists+linux-edac@lfdr.de>; Thu, 31 Jul 2025 14:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6BF23AB85;
-	Thu, 31 Jul 2025 03:15:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC3B1AC44D;
+	Thu, 31 Jul 2025 14:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B9y3v2BE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LfumEIUV"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72ACE374F1;
-	Thu, 31 Jul 2025 03:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C186E15573F;
+	Thu, 31 Jul 2025 14:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753931735; cv=none; b=tCedjT6MvcYwgo5lGNOaWRrO7wN+pOtSIxkqZO/xr3Gi33KJYYGoG5aWyPRCfw/efOpQ2yJRUZYQo+G3dEaO3ArC+JgenoJXW/H9ML5yNkaEoqiw/EnuJPZWV7sQmwGOkwbf1wZYYiG72j0cG8oDVlhu+FKsGJIBj7zG9yiNvmY=
+	t=1753973868; cv=none; b=UltxcMUav/zZmiJinjgBUi+bhd/Ufl0Rhh6nS7CRNp70+ALMqMNEEGQLeOdYVYJp9Cui0EUT3cFaJQeKiDvkbB00056d1yCYsmhkv5qGohXGlIL8pwzN9PzuLEB7TjNyYLXnmbZEvqHsbnbWoogc0GAO3AtzRsP6pwLSwn5P9ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753931735; c=relaxed/simple;
-	bh=4ubK10nlNLXRxHgE8dqebb95hXJg0647eX02sXWOHLI=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NEphxBWsae732iT4LvBbVSvMq7g3ZuDX9OOUTCzu2YOCAfi0j244KeQf9+ezsyaO98QG5bvOq1RC6UVpzDq5iAZeKO39WCpWLzyOAe/Escrbgn190TkLYASeRomXJ71mqFOgWR/9ePBsiyyWBO2aSzGk8G+0Wd08lfwCpQ0KKoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B9y3v2BE; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45619d70c72so11519525e9.0;
-        Wed, 30 Jul 2025 20:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753931732; x=1754536532; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LacnAABHDrKn9Xt5O+74YJcJtH11ROxmKsUHtO4Nna8=;
-        b=B9y3v2BEjDbIv9eOpcCcGfFu7UuvFu+ooYwswy0F7QKPucGrW3tBCLi+BIqQlW/x2s
-         hBNs9XO257PBBW7P3MSI7naiEsZHDvJcqv2brRS03wwFq28UK0Oze9aje/jzZ8MF//vr
-         kVoTwjJ4TwCu9PQfj3tZMznYZ9NZxLpZg0uumyw4cAINEl/wrageDqqsZHPsC6s0FWKp
-         cMkWp6U77E8ioPrIbC0vJsLhSIDNeD6jE1ATpBfPDoj3LoFBLt8EEQ1uIXl44pswcXQB
-         lnhOtBrqAj9v8wbYVEvSokGEA324XJOwVYb80CZuTAjTYdAlwNTohK+yGrWxExXiRYS8
-         mmtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753931732; x=1754536532;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LacnAABHDrKn9Xt5O+74YJcJtH11ROxmKsUHtO4Nna8=;
-        b=m+pUAw/1BYDSgg1srjHWlacR0ZYjQfORPMDoSSemMSEc4A3Pw9xqIAAsmusWcwBB51
-         D+uB2VA5CsRf3fE8hXdMUhOYq+ftUhiaIErFnhxD56cuw9uyaZ3RHKyd50gJmW5n3H1X
-         UO4NA88aC7+AfkV6lxQaZ35aBArapDgJMRKORZjySQlSMswXst0pSt75JUIl9gjlr477
-         18yOVlnNkLrwR7GlzizrV5Rg1mxTBHCHb9veIEDaP4l6H0tASzq04aa6wfWKA2CL2cv5
-         FckTQt9zklOdCnlW1tWn13tkdKc+Simg06Iuf0MeRzhpBgPaqMHFkzMvGuVMjV1QtRti
-         M01A==
-X-Forwarded-Encrypted: i=1; AJvYcCVb0Kbsm6uaNd2NO8VppNOJyxtOfnNWwB+uoCHpwnVBovr/oT6mOB/Ds3zXv0Zjb5s5MKU+D2Ve@vger.kernel.org, AJvYcCW8QC3JBjfMfdlwkwIO/UWWpbBMTgK2dtGEmxa6TV+TUobSNqm7JNhBvr9YXxeJV2M9DIyovR0JfTf0eXXm@vger.kernel.org, AJvYcCX8IbtCJ1kR9lb42jtZuUtR1tZZ4GEjT6rd2GOoYJQ/tMK9AkPpWQ91hUqG2ITeKUYsjwBVIWOPauT5@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVc/maOWrtaKKJeyIOySOv8dlVJfV/kU1Q91P79Cem9i4Bhww+
-	HZou9V3HTgpNf7mt4xNhxAHO72DHdKeVeyD3aLwwqPhDLraSOyjBq+v0
-X-Gm-Gg: ASbGncuHIGqEmfX83LUMVHbZ7s+Uo3XfhhhL48y/wpDXTu0qecxQNsbB0ATWvrU+BmB
-	N8vhaHngmnX3iVqdzR1QYYpBeS2zt4q/Yru5Q6xBTw3lFMbXi/6mVDpYWdCi9gfrQL4qL4J+Bzx
-	r3f95HBeAxal7U01mqudwwm36i78gTgw3LpFIcZ/sX4Eudl7jMUl37kMV261awaF7pl8lVlGnma
-	nAklMa8bKISD6agaXxmq1GDOTf4mbFpVkxnE+HndXo9gX6ZJyZ3/B7fOsm8/GZj0UDLMmDCTSgn
-	wINSYh4Op0vyAzJQh3xiPmhUFiIWweqXnYCcB6N7G0bKHy1wHU8Nn0sh4aoaOQfUSUotzWVD0YX
-	sX4eWRwO0rvk=
-X-Google-Smtp-Source: AGHT+IGK+50QwO8pdNFjDIvuoc5BDp7ah4zpf7VTDHZMXZYtttLO72d8HZmZal2SToqmSuZT6FcLZA==
-X-Received: by 2002:a05:600c:c093:b0:456:2257:3777 with SMTP id 5b1f17b1804b1-458a20032cfmr2162615e9.4.1753931731316;
-        Wed, 30 Jul 2025 20:15:31 -0700 (PDT)
-Received: from pc ([165.51.119.21])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45895377708sm45913035e9.8.2025.07.30.20.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jul 2025 20:15:30 -0700 (PDT)
-Date: Thu, 31 Jul 2025 04:15:27 +0100
-From: Salah Triki <salah.triki@gmail.com>
-To: Markus Elfring <Markus.Elfring@web.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	s=arc-20240116; t=1753973868; c=relaxed/simple;
+	bh=UFFR+hTx3dxFPTSyw62BqAvy6iS2U2OxnwlQbFRHkJw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P0ei5wnDcNDITru/H0mhQGPHA7d+gKHlvP4mbtzfglNYWU2ypVSJfFGiWkk5aQCON0xmUdkjZUOi9ud2phhmma7lHk4/6ZO/txPs8HMqVQ3AyNSrj7P9u8QrScA+x201KBtlCV24BJdk1qtqLRUzw/6PIuxE8Xk4s9L1LNO5qXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LfumEIUV; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753973866; x=1785509866;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UFFR+hTx3dxFPTSyw62BqAvy6iS2U2OxnwlQbFRHkJw=;
+  b=LfumEIUV333va11DgxtnlPAEoRqEn/CVE2rtlmz8Zf8myerri20pOkD2
+   pBjZzoZwD3x3kdJXFGdaOPNW2W/IvLzmLdbkaDcNT6Xa6bmfdPzsOIUs+
+   Xmds17L4OspQ/X9lvn4lPpRW2JzdYy5ePaTRg+PyvsFoq4QhfHlIkRwuB
+   VnaOl8Simvqps/U6OyBi1JahGdGnrQUL+2RuyYNfwwoeD7RzjCzQYCBQZ
+   ckIiCQ88qtxVxixHoUPGvrSrrpAXkYq4g/SYywaizyqL+LwjoQPsFSHQg
+   JIiAdSBAbaXFPfD56WXedR/PAd4xX0PACnPXc8NujhdAJTPcAFxKLaZG8
+   w==;
+X-CSE-ConnectionGUID: 9XizOVkOSTagIsJhLTpA6g==
+X-CSE-MsgGUID: QWw8RBQdRdOvsO1PhSEsuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="56231695"
+X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
+   d="scan'208";a="56231695"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 07:57:46 -0700
+X-CSE-ConnectionGUID: w17u4r+jSBeL1zfWrabTfg==
+X-CSE-MsgGUID: ldNseBrTRZ2jw4+KoBwwxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
+   d="scan'208";a="163633289"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 07:57:44 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	James Morse <james.morse@arm.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] EDAC: altera: Delete an inappropriate dma_free_coherent()
- call in altr_sdr_mc_err_inject_write()
-Message-ID: <aIrfzzqh4IzYtDVC@pc>
+	Robert Richter <rric@kernel.org>,
+	Lai Yi <yi1.lai@linux.intel.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] EDAC/Intel: Make memory controller instances into a flexible array
+Date: Thu, 31 Jul 2025 22:55:27 +0800
+Message-ID: <20250731145534.2759334-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-`dma_free_coherent()` must only be called if the corresponding
-`dma_alloc_coherent()` call has succeeded. Calling it when the allocation
-fails leads to undefined behavior.
+Problem
+=======
+The current array of memory controller instances for Intel server EDAC
+driver is sized using the macro NUM_IMC. Each time EDAC support is added
+for a new CPU, NUM_IMC needs to be updated to ensure it is greater than
+or equal to the number of memory controllers for the new CPU. This approach
+is inconvenient and also results in memory waste for older CPUs with fewer
+memory controllers.
 
-Add a check to ensure that the memory is only freed when the allocation
-was successful.
+Solution
+========
+Make the array of memory controller instances a flexible array and
+determine its size from configuration data or at runtime.
 
-Signed-off-by: Salah Triki <salah.triki@gmail.com>
-Fixes: 71bcada88b0f3 ("edac: altera: Add Altera SDRAM EDAC support")
-Cc: Markus Elfring <Markus.Elfring@web.de>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: James Morse <james.morse@arm.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Robert Richter <rric@kernel.org>
-Cc: linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
----
- drivers/edac/altera_edac.c | 1 -
- 1 file changed, 1 deletion(-)
+Patches
+=======
+Patch 1~3: Refactor code to be independent of *NUM*_IMC macros.
+Patch   4: Make the array of memory controller instances a flexible array.
+Patch 5~7: Clean up and remove unused *NUM*_IMC macros.
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index cae52c654a15..7685a8550d4b 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -128,7 +128,6 @@ static ssize_t altr_sdr_mc_err_inject_write(struct file *file,
- 
- 	ptemp = dma_alloc_coherent(mci->pdev, 16, &dma_handle, GFP_KERNEL);
- 	if (!ptemp) {
--		dma_free_coherent(mci->pdev, 16, ptemp, dma_handle);
- 		edac_printk(KERN_ERR, EDAC_MC,
- 			    "Inject: Buffer Allocation error\n");
- 		return -ENOMEM;
+Testing
+=======
+Pass basic testing on Cascade Lake, {Sapphire, Granite} Rapids server CPUs.
+- Load and unload the {skx,i10nm_}edac driver.
+- Receive events for memory correctable errors.
+- Decode memory errors.
+
+This patch series is on top of v6.16.
+
+Qiuxu Zhuo (7):
+  EDAC/{skx_common,skx}: Use configuration data, not global macros
+  EDAC/skx_common: Move mc_mapping to be a field inside struct skx_imc
+  EDAC/skx_common: Swap memory controller index mapping
+  EDAC/skx_common: Make skx_dev->imc[] a flexible array
+  EDAC/skx_common: Remove redundant upper bound check for res->imc
+  EDAC/i10nm: Reallocate skx_dev list if preconfigured cnt != runtime cnt
+  EDAC/skx_common: Remove unused *NUM*_IMC macros
+
+ drivers/edac/i10nm_base.c | 13 +++++-----
+ drivers/edac/skx_base.c   | 33 +++++++++++++++----------
+ drivers/edac/skx_common.c | 51 +++++++++++++++++++++++++--------------
+ drivers/edac/skx_common.h | 28 +++++++++------------
+ 4 files changed, 72 insertions(+), 53 deletions(-)
+
+
+base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
 -- 
 2.43.0
 
