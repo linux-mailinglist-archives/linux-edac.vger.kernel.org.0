@@ -1,158 +1,282 @@
-Return-Path: <linux-edac+bounces-4490-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4491-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D69CB184BA
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Aug 2025 17:13:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 790D9B18546
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Aug 2025 17:51:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FA087AB81A
-	for <lists+linux-edac@lfdr.de>; Fri,  1 Aug 2025 15:12:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C46B71896B01
+	for <lists+linux-edac@lfdr.de>; Fri,  1 Aug 2025 15:51:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA54E26D4DE;
-	Fri,  1 Aug 2025 15:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A67E27A927;
+	Fri,  1 Aug 2025 15:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JnGDJHEu"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2916C248868;
-	Fri,  1 Aug 2025 15:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754061213; cv=none; b=QpMkHlXAeCqNbbPxY+/OvhPrGhHLI4FXqxtWozddbNNCFpcZpkd2H+jhTSJS1CuY+wA0kgTYIRzb5BYK3Bru7EnPY1mWfKJBsp9yPexLzx6UCTQYWJC0bFjEVwh0lr1CwBVNmyHaKQMqvVl3aoJYccqa4VUG5iJWlQJ8RUOVNSE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754061213; c=relaxed/simple;
-	bh=nBk+x/sL+91shEFy5WplqXsJOJbjQ0q5hTrrJ7agcU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ycaz4mRj2rsbP2/TFQSKX/yNgLMKOuiPOdig/6PCOVtVA1uYU+0kxVxgsggzqQXdP4WfiOQwD9QQvNyjQXDycgC8nJfBrjLVB5YfEDkCNX+UxIA/LHCxkHdbSrUMFP47SD9xa7vwlPNIxo6U0wu9JDdQVp1vb6tnNL+gSt5WcS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-af8f5e38a9fso339813466b.0;
-        Fri, 01 Aug 2025 08:13:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754061210; x=1754666010;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pLvAFPQ8DYraj8LtMTWkc3DYDv2AWsFej7nsT5sUEtI=;
-        b=nRdzZ//A48eYJ6c4aZ46GzshZ7kIezOhRk9Yj7iejYBRu+af5wi3PKx/emb6NRcHPy
-         8kPF+3kVqzEkF3DSuBia0EFJPvzU9nl98oDBLFui3e6VvQnI37+7UgeJW1ou0CxAkyGF
-         5fxGtYPFCTWVGJfAH8NVGcpZG2If2CmhFYRqzHsjvPxxVEdjwRnisq2QSn93gjv57/lp
-         uETo2UCvN7gYpUub+G1s95cEjjVvPlgceKDX8E1Lei89LltBXQx7PDOeM9h/TtMBQAk8
-         iHeFFZyQGj3Jf5z2n8KosUx5tCabTFM+uOIxgKaYR94AT1IIgo0h7EhNF7pfcMPm+TJu
-         Km0g==
-X-Forwarded-Encrypted: i=1; AJvYcCV9AuUlWX8k8+T1AWZkGIfoWA2hrw/MQCUC5nYwLuI2LLUl9sqZ0DDaGer4O8JwgUaFv61e4juDDaHvHg==@vger.kernel.org, AJvYcCWex+DpUCqmAC75d3GVfBLyPJ2usWgxEdwXTHDNvhJBsWDmg0uqxP91l+/olNdvPVmozlTE2+KKlE0R@vger.kernel.org, AJvYcCWxdZUYCxH3lm8h9vBT5wZZOQBUxVP7Dmd1pDU4jmJhDj9XSnuud4cxlprjBGirkSwzSqJ6qIRjBjZT@vger.kernel.org, AJvYcCX3BHT7enYuvYS94XDGCsumeeqsVAbJGY/PKqz3AuWZVn2Zi0giY10u1XvgiFqXujVMV4xijOCo2kt8GKAk@vger.kernel.org
-X-Gm-Message-State: AOJu0YydrK7Z6++57/OEMlVaI0gEiwDZ7SBqt3CNCKY85bCyDKwK41TV
-	D6bNTTonpWbnxE8+5l81rW1DLaeWMorIuv9swhuXp6KZqzTMwTleEf6m
-X-Gm-Gg: ASbGncvPL1gClnWPHrmAfYezdMKWqla8OIN3VSWet0oXFDRUEe/yle0rcCTkVLwssFe
-	toEknconVpV/q1cW17EnmMqEuYtkR8Sj4O+3RT0h4khYYq1w29CKg2jYdEc2ZUEtha8zhxwkyZ4
-	2v0K4h0RSui3oLMxHSJusxxchM1tk4h/MSBo3A4eNuWAw8sd787zmPUHrnXQPfR1Mn0lHT60oFc
-	XgUm/0fpsom6yvJHBhj/FtTFxEA5/SiJ5EIfPnyMDkA+2ieBxkyl9723FsvSKdMTIvgTj1BDYzO
-	1ZMLr0CZbL07ImZuAJ7AA/wNziftHqp5rzBwyrjlR/LI5/kwTfsr6Uw1vlOhQZ3Ls8sI7FVdGtd
-	vWfGiZqaccAZRPw==
-X-Google-Smtp-Source: AGHT+IHxwNCV+mxtZBzz5cvZjpfuoqtgwb9V8VUnUiYcYZ36deiu6WNQjZZGI0DAGbFT+RybIxFgAA==
-X-Received: by 2002:a17:907:9706:b0:ae3:cd73:efde with SMTP id a640c23a62f3a-af9401b0c5emr13383466b.44.1754061210083;
-        Fri, 01 Aug 2025 08:13:30 -0700 (PDT)
-Received: from gmail.com ([2a03:2880:30ff:72::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a24062esm303137466b.126.2025.08.01.08.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Aug 2025 08:13:29 -0700 (PDT)
-Date: Fri, 1 Aug 2025 08:13:26 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
-	Robert Moore <robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev, osandov@osandov.com, 
-	xueshuai@linux.alibaba.com, konrad.wilk@oracle.com, linux-edac@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org, kernel-team@meta.com, osandov@fb.com
-Subject: Re: [PATCH v4] vmcoreinfo: Track and log recoverable hardware errors
-Message-ID: <f3yl424iqiyctgz4j36hzjrhkgae3a2h5smhalm2qbmq3nrpzd@oeuprthscfez>
-References: <20250801-vmcore_hw_error-v4-1-fa1fe65edb83@debian.org>
- <85663f65-d746-4e2c-b8a6-d594d9d0ba42@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0F11D7E37;
+	Fri,  1 Aug 2025 15:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754063481; cv=fail; b=SvTOzYFJ3Nb7YapKnJ/zPTCSYgaHrWECKgrOK75R/a+Tvb/L0IkmUinYot7leoXImKpDTeBJQohdHkKlV5IPDRGhO9scpmYwh1xFqq2MKcGnFVoivRIo8MFRxONhvW/xpmxGOR6GIQy9kdr8ft0hLaqGoby2kLKQ0I6Hr3mgMQY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754063481; c=relaxed/simple;
+	bh=Y6BrLjp044d+hncq6bQhOT+F0wXgE9os31UROoZCp6w=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=nGWpzHmIVtNweDeTFcuTChlJZfY6tmotlI+lLF5e3G53gSjnvRGUc7ncvqrWu3q6j96syC5SthmHQW7vVu0mSrQeEdEkLGv18vIvanBpXyyPAJBXuOVG/6NqwEF9ZxNVDn0wcQLxCKw5VwE5LLlykUWZ1s9/1WKumRnnxaXOi6A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JnGDJHEu; arc=fail smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754063480; x=1785599480;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Y6BrLjp044d+hncq6bQhOT+F0wXgE9os31UROoZCp6w=;
+  b=JnGDJHEuAFiV7N5NwnlBLHwUDivYYwce+hy5VywouOaA0gs8VyU/sIO5
+   eSFEwMPhmY9eMUqYgyrY0fmFh+cJTf2yVjfLM5Lp84OfH4oIY0BZ2PRK0
+   L+sOYm3VL6hJ7T3QpAO6tXBQu2c9Z4s2cu4SPt5hUU9WvH+BfFqiz6fUH
+   In2oylk2YQXwWKDqxwigDSNKWXeTIFHJ+jxH8oYTVULQyYmXmaUzFf9tu
+   bNYgYs/dTbOvXl9CO83b8nDBRV5j+mVeWvqx8OwfqKEpnxEJuddDyR/1N
+   GPwNzCErQGELrx926PWmSOi+1MwM90ThDWvB+gxnBc0Fw2eiSn5VYIQ1b
+   g==;
+X-CSE-ConnectionGUID: MgMtrRrpRZ6DFi9rkeSZMg==
+X-CSE-MsgGUID: 5ANZTg16SDWEnrW5WG7/GQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="78967114"
+X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
+   d="scan'208";a="78967114"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 08:51:15 -0700
+X-CSE-ConnectionGUID: 67qthLFZT+27Hd5VjKe2mg==
+X-CSE-MsgGUID: F9dLx+PVQkOpsLWr3TrPhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
+   d="scan'208";a="194554401"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 08:51:14 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Fri, 1 Aug 2025 08:51:13 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26 via Frontend Transport; Fri, 1 Aug 2025 08:51:13 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (40.107.102.71)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Fri, 1 Aug 2025 08:51:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fj8Gju0lBn0Af2cyF7dHg1rhInzSuH1B/36RzVkeIbCNLonO+9tx4ro2YrJvpUoeXcs8blg5cnNyscpd6tP/z+qBVTmO/fmdl6tP8dwqfZdsK4pIjg3HjMisNDHiBovM2StIar4Cs5Ell8Z0kDFxU05svasxFrmQLFnN5l0P+bC53w0RKYPbr8l4ADfXdfpkA4LV89GjnJvf8ZaF9R5wSY2jVLHlIEMBoJqBUk1AlcTKwWksDJyAfmniqdJuVeqHLGLMXzuNa2pwiN2Mfd4fkg3mpD+yxgfH6/h/EsbXgP6/MEFxVS3K5LCnBZuh6r0Cn6kIO4LJxChRGyGnhMVw0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EUqFGC4Vrdea4RaPYvjnPbFVnwLxu3db9Xb2WDQuY88=;
+ b=f6JQfdpJcfT7Aa46uBghV9iQs7kjlUHH+Zv7O8CgHjT/U9K9oGUDAKMJ1UTyx6gQxc5vjeiQdO3t1+vEm1wZzqN62wnwh/ShKvwUEBZbbP7x7bSGL+geHkNvzoejoQHwU0fGCV2F069LJHv/stNKv5Lsc/acYxtSPizE+0ZclYvekgfo/+1nrHDS5056OVU0FwJb92HGBpbC25qk9vobuULbech9N3LXGmZoHcGGFzjMJice/2bOSnm1PFQlHsuybg4AEh7KDk8y1cXIGvS4EquBxjsxvgFzomu8gp+5lS+/EK9/xV/3fPRrkQQlwZhJSHxJXFYwxLKNyoTdDNN7mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB7130.namprd11.prod.outlook.com (2603:10b6:806:29f::10)
+ by MW4PR11MB6715.namprd11.prod.outlook.com (2603:10b6:303:20e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.14; Fri, 1 Aug
+ 2025 15:50:43 +0000
+Received: from SA1PR11MB7130.namprd11.prod.outlook.com
+ ([fe80::fc98:7fe:bac0:f2d4]) by SA1PR11MB7130.namprd11.prod.outlook.com
+ ([fe80::fc98:7fe:bac0:f2d4%4]) with mapi id 15.20.8989.010; Fri, 1 Aug 2025
+ 15:50:43 +0000
+From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+To: Kyle Manna <kyle@kylemanna.com>, "Luck, Tony" <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>, Jason Baron <jbaron@akamai.com>
+CC: James Jernigan <jameswestonjernigan@gmail.com>, James Morse
+	<james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Robert
+ Richter" <rric@kernel.org>, "Lai, Yi1" <yi1.lai@intel.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/1] EDAC/ie31200: Add two more Intel Alder Lake-S SoCs
+ for EDAC support
+Thread-Topic: [PATCH 1/1] EDAC/ie31200: Add two more Intel Alder Lake-S SoCs
+ for EDAC support
+Thread-Index: AQHb/GafXcVlZ3WZRkiBtd6ukhBRJbRBVQ7ggADIQoCAC9vO0A==
+Date: Fri, 1 Aug 2025 15:50:43 +0000
+Message-ID: <SA1PR11MB71307A62016838428EAB52F58926A@SA1PR11MB7130.namprd11.prod.outlook.com>
+References: <20250724064415.1134574-1-kyle@kylemanna.com>
+ <CY8PR11MB7134484D663C31DA1544945B895EA@CY8PR11MB7134.namprd11.prod.outlook.com>
+ <e3bc0591-7ebf-4738-8848-599edd11c10d@app.fastmail.com>
+In-Reply-To: <e3bc0591-7ebf-4738-8848-599edd11c10d@app.fastmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB7130:EE_|MW4PR11MB6715:EE_
+x-ms-office365-filtering-correlation-id: a72f448e-bb43-427c-caef-08ddd1132c2a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?WataMUcaJsMKosH5H0cY5YwMMe2yc555HphyeQqcj3G3XCgHXQDqRcmuq+?=
+ =?iso-8859-1?Q?QL3npHEXm/dNRoe3/0edsGldKRpELUhK3jzcAZyADIeTezWrSMCMpJ8EOZ?=
+ =?iso-8859-1?Q?DxT6HtLiRGRKm6zWHMT8dYEIIuThNxaDvOkQCkHUT1zbhGlf8vX+fvSJNu?=
+ =?iso-8859-1?Q?7F+jCli1O9xoEagMKr1M8KntHgtFigIX1xlG+wDtxbK8Y2+JHbH/BRG9Db?=
+ =?iso-8859-1?Q?7jOdQJBn9rPzMFW9YyQm5+dbau3/8YufrphhLVUtykEk3NfTFE13JTJY4Q?=
+ =?iso-8859-1?Q?xcqFLVyhA+Wc30PFj4z6pcl+eKV4HiVjElrizU9vup3w431CwSZz/2k5Zm?=
+ =?iso-8859-1?Q?mOLwemsypQhfrnGbDQ/4dvgkQTsk0GdFEbutftk3BNqgwjsjbF8qVpbizM?=
+ =?iso-8859-1?Q?uzsHt1N31WCIjwMca2fcbnCV+2kUTMowYcXgbpJKExD77IG+B1rDd6qbz+?=
+ =?iso-8859-1?Q?4E9uuyQ4f4E2KWghPDB7d+f9Kvj/O4EC/mi5hoI2+JprS/5eysc1IMVACF?=
+ =?iso-8859-1?Q?tMeHVZqTkerKZULaggw5ulnvcU6vSaFUnv7qrqipAsoc9X4tc4U1yyMb6V?=
+ =?iso-8859-1?Q?7OMyR8fHvBkaSygswGU6KxmWN3B7sJAqJszWX8baCkTCds0b/inCrS7sP4?=
+ =?iso-8859-1?Q?3ka9wf716fj+mA7sOaDBu9bkrewPFbBjiEqCGCY2HvU1f0HiZ5mGanr3Bx?=
+ =?iso-8859-1?Q?QE4nwBsjgRSnvOHEENdI6YdEgWyQwc6lN0VavIW/BQL8k3cR6K8C44ur3A?=
+ =?iso-8859-1?Q?280Tz6ubCERevKqGtCdOg4bimUgD4zlEH8JO4zmH75PVvIeL+IRyt8ZhJJ?=
+ =?iso-8859-1?Q?fW0mgtnQj7ztvQmcjM5hDOB+viFnIhU7gN2CQdl3wOvAkShoyCooeLf+/2?=
+ =?iso-8859-1?Q?hQcMgoZ7TZpTWEaoedUxzTSPYEbcwcKlz0aOHbSU3ffeIV4cjefPqucL1q?=
+ =?iso-8859-1?Q?BJMo9RmWH0gM49J2PhAgJINE99jkxrxX5UXVm+BFN4zPzfW8O0kBtlzpW9?=
+ =?iso-8859-1?Q?ikjX8GhmWP002ZjDDSOVznC0FefjBW74FhsK8wimhSl0TV3mDlhDfR05vN?=
+ =?iso-8859-1?Q?B1jHNz1UFOG+saP/QzeM8uMZrVsDjg448ABm9kgqZRCM46DV2A787qFKKi?=
+ =?iso-8859-1?Q?7pM5mXgt2jktAh/QzbMeQIi/xIuY4vYqTEE3DhrwOPpAZU4txhbVC147O1?=
+ =?iso-8859-1?Q?Q6u7qmYB9oNXE98U9xcA2bD4t3HToCKqwTZbAZUTfgcBAGG7JfcvTzrf7c?=
+ =?iso-8859-1?Q?2+zr6alO6m6sTuNrS+0IFlPKmQji0WfxkQaGidqGjxe2rdDBqwvano3Rbt?=
+ =?iso-8859-1?Q?WJf864FaFZo6Xh1s0nmqxWrSVLDsKf2qHJ2g8uLPBVvLfOSUQC1RzKoVlc?=
+ =?iso-8859-1?Q?wbCzWDGkuucnjjns4SGq4iWl+yCBf/W9JNs/4k2gVZd7gIfh7j+EA55RSU?=
+ =?iso-8859-1?Q?uj/bEagzoq/73qj7ifgwfFM4hefo8TkSPOBZhErIU8EqmCCXQuejdjm+uf?=
+ =?iso-8859-1?Q?nZjWe6AE6E6TsfmPfFJHUB?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB7130.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?mSKKnzuImsPiOLQkY61Wzc8QadPplqU3miOxnWBGRQWZtbYX+9KOq22jmh?=
+ =?iso-8859-1?Q?tSWV0EkR0B0bpOFm8ayKapr7tX/qIfLrMctQS/yqnEw0ACAiZO3pkuw45B?=
+ =?iso-8859-1?Q?gJMRDiWzXlI+VnGiZ4XUNanxrPOAyTS5X98183Kbh+5qrMsKQlJ9Lpzj2u?=
+ =?iso-8859-1?Q?FpvIMlGt1BtKAfCuLqaXb7ASbU3CkpKTPl8nPEScg1yhzgLMm7wFNWWXKy?=
+ =?iso-8859-1?Q?UWynMBo5Op4ixCb03EGvYDsUkfQicdNoHiuTtfrYGVUKBbK6dduoLdxw1k?=
+ =?iso-8859-1?Q?O4yuzCgtjNrd91+sgQKcvgLNr56dR3JMXK5qR0gC7QbO2dKvFNc2t2TUPh?=
+ =?iso-8859-1?Q?Ck31oNt8tljGBWYGDpV8wIbmEugGY/2cO1Aud6uc4YOq1wBj04sIHP1ZFk?=
+ =?iso-8859-1?Q?rwsnocXh6waWmNioAmVFgYznaj/m7VEy20mfB03nlkjWauZzmN5VLYnZO1?=
+ =?iso-8859-1?Q?fUT/nT1WVTGSmhbNm2mtSIpA/FSRk66EfP6XCKsq94sbNkykDP5mQvtf5Z?=
+ =?iso-8859-1?Q?lc+ynEVt0BJFlUwuU5MqA/g7id2/rC+UgLhlCbN6GI8kPdR73O2tMe3rAu?=
+ =?iso-8859-1?Q?HL9ycmHGu48dvLhGnpdVy3E6lfzIzkhKg+N5KHOfoODrpvJsfP8vB/xxCo?=
+ =?iso-8859-1?Q?XKWw5tc192n2t6u9KPPfmONzSfOSo3SRQkDPXqYn6Gv8BDq23YyIUA4/nK?=
+ =?iso-8859-1?Q?MktD9S7LGZv22KpzB++Y3JQFuTN/SJcaufPsppOvWxL6/HvTO5w6xuRyF9?=
+ =?iso-8859-1?Q?NuP+nAJhR4crPe4wGTbRI/zeFCIu3K/EbmWGtxHAXY/KO80nBxRCCoUKlk?=
+ =?iso-8859-1?Q?aLja1nDYsp/oqbTz3qLEgiN4EBaCdUlNRmDovvUSnXFoQfunMiOuDDFCfG?=
+ =?iso-8859-1?Q?EEty9ac36F4nxDLFHJ2rcIdLS/NAWUelVL/VH3pWFBPNmKHLPFcx/5R2Y+?=
+ =?iso-8859-1?Q?yabQnMrIiHcDgwkG8FKo9w6YNxNeeDvu2EYNlU5QTLkHp6huK5WfOCwPuj?=
+ =?iso-8859-1?Q?1tSpRCojTwGZUqs6RuS4uAoZiMEqc2YpI6zGgmJCAu0M9/TiCXrAZP64hq?=
+ =?iso-8859-1?Q?kn1AMKlTO2brwrazz0B5HNcaf/VNRkzsr5/gxBYEzJia+v1liUWCexqMJe?=
+ =?iso-8859-1?Q?yXAJYQSV/7LpZ+mxUHq8B7bPNTYYr0QIE2ajMkvfiVyTv8t3GZWCzyxoMw?=
+ =?iso-8859-1?Q?7ElFNidAYyWzbDNPBiyemV9UjvMl64IheV+LbQdLs9tfF0SScTA801bKzL?=
+ =?iso-8859-1?Q?vzZPsK3WQp12JukRtvvADQ+PfsERONU/1jMYQza1wMe+C4D2bVZHgrSPUS?=
+ =?iso-8859-1?Q?3NkyNAJRXAyTPLLJBjH9DvbUaNvtLqXCHZAyMYSCqVppqXhwkBSLGzbgCe?=
+ =?iso-8859-1?Q?szpb2Agjp3v4NGlJ2zH4sEKUzQg+q3A2r9ovW2ExddytCliWnXldnSdvAZ?=
+ =?iso-8859-1?Q?V7r8l0ZiFF3rllKQICYpqGuKo0PKz9qMDm85/yNSBptoj00jZxzpQZu+O3?=
+ =?iso-8859-1?Q?pdFVzw9acmFJv4hVPQF+TJXQ5CJBPvt2TZpDjrhXxC+vi1JPeIwdrARdhq?=
+ =?iso-8859-1?Q?Y3ZzMF2PgfrJzXDNg0F7bCwP5MGj6VV5kyTFEI8I2Oh8E65Uwf8nD4j7Kf?=
+ =?iso-8859-1?Q?CkfSUSBUTpZqLjHvZ7hp3lmQi14xS/jXOx?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85663f65-d746-4e2c-b8a6-d594d9d0ba42@intel.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB7130.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a72f448e-bb43-427c-caef-08ddd1132c2a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2025 15:50:43.1716
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RVippTzLYue0YA8+JmPO8FS6uWSiy4aU/LjurwDoqaH46Dr5nsxvWKnA9X6XYl9sO+BjhK+u9r3aDgvOQojnQQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6715
+X-OriginatorOrg: intel.com
 
-Hello Dave,
+Hi Kyle,
 
-On Fri, Aug 01, 2025 at 07:52:17AM -0700, Dave Hansen wrote:
-> On 8/1/25 05:31, Breno Leitao wrote:
-> > Introduce a generic infrastructure for tracking recoverable hardware
-> > errors (HW errors that are visible to the OS but does not cause a panic)
-> > and record them for vmcore consumption.
-> ...
-> 
-> Are there patches for the consumer side of this, too? Or do humans
-> looking at crash dumps have to know what to go digging for?
-> 
-> In either case, don't we need documentation for this new ABI?
+> From: Kyle Manna <kyle@kylemanna.com>
+>> [...]=20
+> Hi Qiuxu,
+>=20
+> On Thu, Jul 24, 2025, at 07:31, Zhuo, Qiuxu wrote:
+> > Do you have access to these machines to load the ie31200_edac driver
+> > with your patch? If yes, would you take dmesg logs?
+>=20
+> I have access to a i5-12600K, here are the logs that I observed:
+>=20
+> $ dmesg | rg -i -e edac -e ecc -e ie31200 | rg -v systemd | rg edac
+> [   14.379905] caller ie31200_init_one+0x1b5/0x480 [ie31200_edac] mapping
+> multiple BARs
+> [   14.382709] EDAC MC0: Giving out device to module ie31200_edac
+> controller IE31200: DEV 0000:00:00.0 (INTERRUPT)
+> [   14.383042] EDAC MC1: Giving out device to module ie31200_edac
+> controller IE31200_1: DEV 0000:00:00.0 (INTERRUPT)
+>=20
+> I posted additional logs from sysfs and "ras-mc-ctl" here[0] after I lear=
+ned that
+> support was added for related processors as well as discussion with other
+> users trying to get W680 + ECC working.
+>=20
+> [0] https://forums.servethehome.com/index.php?threads/intel-w680-ddr5-
+> and-ecc-reporting.42559/#post-470425
 
-I have considered this, but the documentation for vmcoreinfo
-(admin-guide/kdump/vmcoreinfo.rst) solely documents what is explicitly
-exposed by vmcore, which differs from the nature of these counters.
+Thanks for the logs.=20
+Successfully loading the driver indicated the=A0i5-12600K is ECC capable.=20
+=20
+>=20
+> >> diff --git a/drivers/edac/ie31200_edac.c
+> >> b/drivers/edac/ie31200_edac.c index
+> >> a53612be4b2f..2078c12bbed2 100644
+> >> --- a/drivers/edac/ie31200_edac.c
+> >> +++ b/drivers/edac/ie31200_edac.c
+> >> @@ -94,6 +94,8 @@
+> >>
+> >>  /* Alder Lake-S */
+> >>  #define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1	0x4660
+> >> +#define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_2	0x4668
 
-Where would be a good place to document it?
+Add a small comment, please.
 
-> > @@ -1690,6 +1691,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
-> >  	}
-> >  
-> >  out:
-> > +	/* Given it didn't panic, mark it as recoverable */
-> > +	hwerr_log_error_type(HWERR_RECOV_MCE);
-> > +
-> 
-> Does "MCE" mean anything outside of x86?
++#define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_2	0x4668 /* 6P+6E, e.g. i7-12700=
+K */
 
-AFAIK this is a MCE concept.
+> >> +#define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_3	0x4648
 
-> I wonder if this would be better left as "HWERR_RECOV_ARCH" or something.
+Ditto.
++#define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_3	0x4648 /* 6P+4E, e.g. i5-12600=
+K */
 
-Sure. I can update it to be more generic.
+> >>
+> >
+> > I didn't find the place in your spec above that indicates these two
+> > CPUs with these two DIDs have Out-Of-Band ECC capabilities.
+> > Could you point it out to me?
+>=20
+> This Intel CPU page[1] lists ECC memory support and the same on the Intel
+> W680 chipset page[2]. The datasheet was used to confirm the DIDs[3] were
+> valid.
+>=20
+> [1] https://www.intel.com/content/www/us/en/products/sku/134589/intel-
+> core-i512600k-processor-20m-cache-up-to-4-90-ghz/specifications.html
+> [2] https://www.intel.com/content/www/us/en/products/sku/218834/intel-
+> w680-chipset/specifications.html
+> [3] https://edc.intel.com/content/www/us/en/design/ipla/software-
+> development-platforms/client/platforms/alder-lake-desktop/12th-generation=
+-
+> intel-core-processors-datasheet-volume-1-of-2/011/device-ids/
+>=20
+> Given that you added the i9-12900k (0x4660) in 180f091224a00 and I've
+> personally verified the i5-12600k (0x4648) is working (see dmesg logs abo=
+ve),
+> I've added the i7-12700k (0x4668) to assist future users.
 
-> > +void hwerr_log_error_type(enum hwerr_error_type src)
-> > +{
-> > +	if (src < 0 || src >= HWERR_RECOV_MAX)
-> > +		return;
-> > +
-> > +	/* No need to atomics/locks given the precision is not important */
-> 
-> Sure, but it's not even more lines of code to do:
-> 
-> 	atomic_inc(&hwerr_data[src].count);
-> 	WRITE_ONCE(hwerr_data[src].timestamp, ktime_get_real_seconds());
-> 
-> So why not?
+Thanks for the detailed specs and your verification.
+Please add the comments after the new DIDs as mentioned above, other than t=
+hat LGTM
 
-Sure, we can do that, I will update it also.
-
-> > +	hwerr_data[src].count++;
-> > +	hwerr_data[src].timestamp = ktime_get_real_seconds();
-> > +}
-> > +EXPORT_SYMBOL_GPL(hwerr_log_error_type);
-> 
-> I'd also love to hear more about _actual_ users of this. Surely, someone
-> hit a real world problem and thought this would be a nifty solution. Who
-> was that? What problem did they hit? How does this help them?
-
-Yes, this has been extensively discussed in the very first version of
-the patch. Borislav raised the same question, which was discussed in the
-following link:
-
-https://lore.kernel.org/all/20250715125327.GGaHZPRz9QLNNO-7q8@fat_crate.local/
-
-Thanks for the review,
---breno
+    Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>=20
 
