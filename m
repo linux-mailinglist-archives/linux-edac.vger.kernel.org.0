@@ -1,46 +1,46 @@
-Return-Path: <linux-edac+bounces-4510-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4511-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5F75B198C3
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 02:38:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E265B19912
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 02:40:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 696887AB6E8
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 00:36:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BD0F1896A72
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 00:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C15F819755B;
-	Mon,  4 Aug 2025 00:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB6D1EB5D6;
+	Mon,  4 Aug 2025 00:39:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rijg34os"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WvQFbo+P"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F1F13E898;
-	Mon,  4 Aug 2025 00:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27281FDD;
+	Mon,  4 Aug 2025 00:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267836; cv=none; b=QhWdOY0u/aBBg2x9lqV/xLaP0jncRZqBVC9suE+lz6QnFFGSUIRLrzukQtv6LF/7sttob1lnup1c9+WG4BZLo1Wq9pe1j9tzPjaZnHfl/0Njp1aXP6Zc0O2wgloNQa7HEPyrZFoe0mx1fVRxAs/PYI3I/5+a46Syzf8SPjMz8GA=
+	t=1754267962; cv=none; b=XytPhb3TeWIZzHBxguuhNvD/Tgm5u+9GChAmuGfyKIwYOg5Kovxmp53M08nz8BzLq6mZvEcl9B5AG5UPvK5qN5ZuTW+OGeyOA+9B2rmROfavAg4zzXv6WsHu8arpgoChWbsbGbVxhWs3i18xbZezoqBUdrxusLfdZ5IWUUInpgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267836; c=relaxed/simple;
-	bh=IpKtns3P/ErqCS+qIP+WUyXuDEeMvAW/gGi8BpPbWtg=;
+	s=arc-20240116; t=1754267962; c=relaxed/simple;
+	bh=EmwIn8yPAs/Pd7o5rJuRYCENvfZYU49E6gb1YFvXVrk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uOZO9H3BfGP2bf25q7gg3zwZXO3x/lKvrRl5d1ebiCj8/+/SJK7nR0dZzccjdcQs6RspWBGz2iw6Xwb4RoiEneZoZ2AZ8MC13n4PmJ7ItQpkKz92XSgH+qf2U7wjYdoEOuFDwuSZmXkRCD0CTa+ROby2rDGbVwL4mdeMTjTd7d0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rijg34os; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3E0C4CEFF;
-	Mon,  4 Aug 2025 00:37:14 +0000 (UTC)
+	 MIME-Version:Content-Type; b=piqb2o9+lVC13agFoWEusOY/ePaGJoeWRHWeCbcG+PYwbR5UtinXKSev1jo9XoL9dJqzW9YvZn/fz7qqIdL/w1eMKiKBR8yhmFrZGDD5vMyXWUmz1p8PkYFg7FE6mrMvGTLCC/Gs7h99lggSk55xg0vzwXf3lRD6gP7OtLwR8Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WvQFbo+P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CDFC4CEF0;
+	Mon,  4 Aug 2025 00:39:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267836;
-	bh=IpKtns3P/ErqCS+qIP+WUyXuDEeMvAW/gGi8BpPbWtg=;
+	s=k20201202; t=1754267961;
+	bh=EmwIn8yPAs/Pd7o5rJuRYCENvfZYU49E6gb1YFvXVrk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Rijg34osuvfm6u/3WFWpiSfzV4ateRsl7ptfHGMrO+2JHeVEEy4m3KjlBeEg4hunv
-	 NiSd26LiHXv8M9jtugIysB/dD67OL71tHNFA1HHhwGyQJhdH800ooZMYOGKmrf6oEs
-	 q4X/tEiiSaS/mRHzBk/23fdPgogmrvadhvjY6XwN4ELH43lhz7Z8R8FFHaHfZHaaiM
-	 x5+SAyKOgTncAEV2cZnWnUvRAgP6fBjhGUSXvrHmJbjFB8eyGChLtNuoE/LT3G/xmn
-	 dEfP9adRqbkjvPPc3J9iGbxVC1lm2ptXCHf72eQZy2ry218RMfVevFvFKAHGO5t7zw
-	 aoUmJPhWSFNiA==
+	b=WvQFbo+PYVLUF5yMtXkx0LRkBECR6lOsJZpI727+QHtu9mc072IIRpfM5A1GtzvRD
+	 Z13BR+ooABIa+Da0MOr4HjeKD05cjT68BKcljTM92zXmVlvEq8/Wtg+Cc6lbSgsecW
+	 gDRhk0JwE6IIffAn7qjd7d0iCIFiLEfgQLs9ikukwCurOTIxQm1Kthy6U+7je5Aavh
+	 z5Yz6JPqIR7wxa6CpD0fR3fuY4cFJH5Yz4B3fy3CAZ1+UQBuJNMroy2Z9k/gh8BhnQ
+	 3FTdukNeagXv6PyYEf0lrJMHw0M1u6sGLrdRxsZ9c7OhIzhYHd7xixauQfV1XOWkrk
+	 DSFUvQLbgn32A==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
 	michal.simek@amd.com,
 	linux-arm-kernel@lists.infradead.org,
 	linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 14/51] EDAC/synopsys: Clear the ECC counters on init
-Date: Sun,  3 Aug 2025 20:36:06 -0400
-Message-Id: <20250804003643.3625204-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 13/44] EDAC/synopsys: Clear the ECC counters on init
+Date: Sun,  3 Aug 2025 20:38:18 -0400
+Message-Id: <20250804003849.3627024-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804003643.3625204-1-sashal@kernel.org>
-References: <20250804003643.3625204-1-sashal@kernel.org>
+In-Reply-To: <20250804003849.3627024-1-sashal@kernel.org>
+References: <20250804003849.3627024-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.147
+X-stable-base: Linux 5.15.189
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -158,10 +158,10 @@ introduce new functionality or risk.
  1 file changed, 46 insertions(+), 51 deletions(-)
 
 diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index e7c18bb61f81..c02ad4f984ad 100644
+index e8ddb029f10d..cbc40f57b27b 100644
 --- a/drivers/edac/synopsys_edac.c
 +++ b/drivers/edac/synopsys_edac.c
-@@ -333,20 +333,26 @@ struct synps_edac_priv {
+@@ -346,20 +346,26 @@ struct synps_edac_priv {
  #endif
  };
  
@@ -190,7 +190,7 @@ index e7c18bb61f81..c02ad4f984ad 100644
  #ifdef CONFIG_EDAC_DEBUG
  	u64 (*get_mem_info)(struct synps_edac_priv *priv);
  #endif
-@@ -721,51 +727,38 @@ static enum dev_type zynqmp_get_dtype(const void __iomem *base)
+@@ -734,51 +740,38 @@ static enum dev_type zynqmp_get_dtype(const void __iomem *base)
  	return dt;
  }
  
@@ -271,7 +271,7 @@ index e7c18bb61f81..c02ad4f984ad 100644
  
  	return false;
  }
-@@ -935,18 +928,18 @@ static int setup_irq(struct mem_ctl_info *mci,
+@@ -948,18 +941,18 @@ static int setup_irq(struct mem_ctl_info *mci,
  }
  
  static const struct synps_platform_data zynq_edac_def = {
@@ -292,7 +292,7 @@ index e7c18bb61f81..c02ad4f984ad 100644
  #ifdef CONFIG_EDAC_DEBUG
  	.get_mem_info	= zynqmp_get_mem_info,
  #endif
-@@ -958,10 +951,10 @@ static const struct synps_platform_data zynqmp_edac_def = {
+@@ -971,10 +964,10 @@ static const struct synps_platform_data zynqmp_edac_def = {
  };
  
  static const struct synps_platform_data synopsys_edac_def = {
@@ -304,7 +304,7 @@ index e7c18bb61f81..c02ad4f984ad 100644
  	.quirks         = (DDR_ECC_INTR_SUPPORT | DDR_ECC_INTR_SELF_CLEAR
  #ifdef CONFIG_EDAC_DEBUG
  			  | DDR_ECC_DATA_POISON_SUPPORT
-@@ -1393,10 +1386,6 @@ static int mc_probe(struct platform_device *pdev)
+@@ -1406,10 +1399,6 @@ static int mc_probe(struct platform_device *pdev)
  	if (!p_data)
  		return -ENODEV;
  
@@ -315,7 +315,7 @@ index e7c18bb61f81..c02ad4f984ad 100644
  
  	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
  	layers[0].size = SYNPS_EDAC_NR_CSROWS;
-@@ -1416,6 +1405,12 @@ static int mc_probe(struct platform_device *pdev)
+@@ -1429,6 +1418,12 @@ static int mc_probe(struct platform_device *pdev)
  	priv = mci->pvt_info;
  	priv->baseaddr = baseaddr;
  	priv->p_data = p_data;
