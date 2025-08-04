@@ -1,334 +1,425 @@
-Return-Path: <linux-edac+bounces-4511-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4512-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E265B19912
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 02:40:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F7F4B1A872
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 19:12:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BD0F1896A72
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 00:40:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 652E03A61AD
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 17:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB6D1EB5D6;
-	Mon,  4 Aug 2025 00:39:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WvQFbo+P"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D311728B51A;
+	Mon,  4 Aug 2025 17:12:09 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27281FDD;
-	Mon,  4 Aug 2025 00:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892FA28B3FD;
+	Mon,  4 Aug 2025 17:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267962; cv=none; b=XytPhb3TeWIZzHBxguuhNvD/Tgm5u+9GChAmuGfyKIwYOg5Kovxmp53M08nz8BzLq6mZvEcl9B5AG5UPvK5qN5ZuTW+OGeyOA+9B2rmROfavAg4zzXv6WsHu8arpgoChWbsbGbVxhWs3i18xbZezoqBUdrxusLfdZ5IWUUInpgI=
+	t=1754327529; cv=none; b=UEWrl4V7YO5Y6qXCd23qf/noW1pXABofe5ObT+PluQa2gLJ94lqUm1sQDITCM50gg/MKWpRfY5zmmA+YtVk0QktV/VoUwnj3Dp68gFaVBSDx0KuYVXwmb+BKnxCoetHkq3Z0b9U/VqbrSrY1Ocqwumt6M3MQLo4pONa9t37jLk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267962; c=relaxed/simple;
-	bh=EmwIn8yPAs/Pd7o5rJuRYCENvfZYU49E6gb1YFvXVrk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=piqb2o9+lVC13agFoWEusOY/ePaGJoeWRHWeCbcG+PYwbR5UtinXKSev1jo9XoL9dJqzW9YvZn/fz7qqIdL/w1eMKiKBR8yhmFrZGDD5vMyXWUmz1p8PkYFg7FE6mrMvGTLCC/Gs7h99lggSk55xg0vzwXf3lRD6gP7OtLwR8Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WvQFbo+P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CDFC4CEF0;
-	Mon,  4 Aug 2025 00:39:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267961;
-	bh=EmwIn8yPAs/Pd7o5rJuRYCENvfZYU49E6gb1YFvXVrk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WvQFbo+PYVLUF5yMtXkx0LRkBECR6lOsJZpI727+QHtu9mc072IIRpfM5A1GtzvRD
-	 Z13BR+ooABIa+Da0MOr4HjeKD05cjT68BKcljTM92zXmVlvEq8/Wtg+Cc6lbSgsecW
-	 gDRhk0JwE6IIffAn7qjd7d0iCIFiLEfgQLs9ikukwCurOTIxQm1Kthy6U+7je5Aavh
-	 z5Yz6JPqIR7wxa6CpD0fR3fuY4cFJH5Yz4B3fy3CAZ1+UQBuJNMroy2Z9k/gh8BhnQ
-	 3FTdukNeagXv6PyYEf0lrJMHw0M1u6sGLrdRxsZ9c7OhIzhYHd7xixauQfV1XOWkrk
-	 DSFUvQLbgn32A==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Sasha Levin <sashal@kernel.org>,
-	michal.simek@amd.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 13/44] EDAC/synopsys: Clear the ECC counters on init
-Date: Sun,  3 Aug 2025 20:38:18 -0400
-Message-Id: <20250804003849.3627024-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804003849.3627024-1-sashal@kernel.org>
-References: <20250804003849.3627024-1-sashal@kernel.org>
+	s=arc-20240116; t=1754327529; c=relaxed/simple;
+	bh=U8hiBK1PxgCAv9ipCgQG5bU5XHNQGKij/Ifuw2n+9s4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FgreKjYYjz09Oe4rr4LZz5otW7iMd4+J+ovsAl2HQaZg1weLg6fP0aIvgfdDX3DIBrgmB1yHXKGYmFc/kVye/llnwuYSJ/jtlKVTW81/sxV+VpTuQdLokwl+o0WizuTJ4yNcQ5SbZU39F9LErsCzy+SjvxnYKu58vnyHIXEtx+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-af958127df5so337720966b.2;
+        Mon, 04 Aug 2025 10:12:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754327525; x=1754932325;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EWLq2akyBI3xn1jQaoqiG9+AWimy2RulSlc4iSMtFFs=;
+        b=PlATcnMbLnIVD9vhdYn2Hl0oKEh3LqsdcFSEaI2g8RKCnAdmOVzOwJfe+RwxyJZOes
+         xFZv4IffVmSjdUecFHbcwONppjlCMQwnzPbSZ9DJENsjiKE2oAk+xmsHPr3BK/jrIHoJ
+         JvOFaBMBdDFocyJUvye3l3lL92r0OKyaneOwPg2Fwt7K2swDv1oj6Z4rSffd0Bua8+cK
+         xBzwX6p7TR94Breohh7sEkXtrTkjKUzme9HfcuZWN6yjfumWioXcYxVDy/ZlX2jzSMIw
+         Y6IKebdNgpvCzb1c69IiOcWzgExFf/HPBtSnw/KwfNegnbcDLrpmnFxI9N6zCotO0vAB
+         kvvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+2x9LBzNtMbEu7he8t50IJru9EzNt2jRhwJdf8MqvnPvkCnuPQHRXXthrahYF25j+VbxQt5g8AyNa@vger.kernel.org, AJvYcCV9KXIqEBGa/ivpIF9XLRyyOrPkZVvzyUDQ/elXO1ct0UvUr1riPmO+TlnFpeeJFcWcchH/fBcChCHQ1KGT@vger.kernel.org, AJvYcCWBL+5kB4Z8Rb4hWCmPMb/LkGeBzCBBEMZmdev0Gojk4q1QRwLevcuGM0jAvOdxIn2iZ7CNyeDqxY4GHA==@vger.kernel.org, AJvYcCWMsoTBIthPOddEkGm/1K6dHsL5CCik4PQD9IQW4XSefOk5vi5j5rN5XhbBtMDGZ7VpWwB++lNe10p5@vger.kernel.org
+X-Gm-Message-State: AOJu0YwluLeFoSawAqzaW0u9zhJ/0CALGZQZEyhpKVBXTBdCVbU9n6ix
+	iJ3Na/hhnkMxpczeZNhqFtLd1tiicQPtCFQecbA5+dHTccqzjF/3QXtr
+X-Gm-Gg: ASbGncvc+32AhkZRuZMzdCqh4x05/d7zJ45hfWkjSUVqUXp+6RZ833Zsf/UwZLKMUHy
+	skGx3RYB5OxwoYY5I7Ysb0pRqInWZlNeJmspF0ENJBozYQzqYxmLSigec1s/Nkw1g8wE7OxZkA4
+	D1F3uegag8bsiFX4Mf0j0s62YT91Srt+RxqmgkCw9VSJPwc5D/mK+NTTEw6sUT5H11ql86o94kP
+	zKrEh1IcWDtYsFGNLuGP2Rj5Fgso3ae/HZKI7/s/pBhAL7DblDYY3+RQ1sDbiVufqZ/QEB8mZVJ
+	IqqFkwgiipJ9tCzIMMBIKNcJ7L45NMtxb8UQqIuCtVRlHAIk2TOmYuoXkRF0mcUNlkZ8Smp4k0Q
+	n5TM/GqXkUO81
+X-Google-Smtp-Source: AGHT+IG12n5Nmixkas6wqZx5ijh4VQDZfYD73PDKW2dU17GU9je/okyAxPVk5Oe7Ru1ep6KYUKfOOw==
+X-Received: by 2002:a17:907:97c5:b0:af2:80c9:7220 with SMTP id a640c23a62f3a-af9401ef95emr1181679866b.36.1754327523984;
+        Mon, 04 Aug 2025 10:12:03 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:7::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615ed86d601sm3660659a12.56.2025.08.04.10.12.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Aug 2025 10:12:03 -0700 (PDT)
+Date: Mon, 4 Aug 2025 10:12:00 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
+	Robert Moore <robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
+	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev, osandov@osandov.com, 
+	xueshuai@linux.alibaba.com, konrad.wilk@oracle.com, linux-edac@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org, kernel-team@meta.com, osandov@fb.com
+Subject: Re: [PATCH v4] vmcoreinfo: Track and log recoverable hardware errors
+Message-ID: <ipdhflmgqrlq2vor657fiwex66jqw2do747uvu3tvrcsvtvdjj@lg5zrcua2dgn>
+References: <20250801-vmcore_hw_error-v4-1-fa1fe65edb83@debian.org>
+ <85663f65-d746-4e2c-b8a6-d594d9d0ba42@intel.com>
+ <f3yl424iqiyctgz4j36hzjrhkgae3a2h5smhalm2qbmq3nrpzd@oeuprthscfez>
+ <0c045f1b-44d0-430c-9e8a-58b65dd84453@intel.com>
+ <buhwuankenpnvmio6jeoxverixoyfpn2eh62ix7vzxw7xvlxcv@rpibcrufr2yg>
+ <842d675e-4c22-4f13-b40b-c4b5208e4223@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.189
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <842d675e-4c22-4f13-b40b-c4b5208e4223@intel.com>
 
-From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+On Fri, Aug 01, 2025 at 10:06:51AM -0700, Dave Hansen wrote:
+> On 8/1/25 10:00, Breno Leitao wrote:
+> > Would a solution like this look better?
+> > 
+> > 	enum hwerr_error_type {
+> > 		HWERR_RECOV_CPU,
+> > 		HWERR_RECOV_MEMORY,
+> > 		HWERR_RECOV_PCI,
+> > 		HWERR_RECOV_CXL,
+> > 		HWERR_RECOV_OTHERS,
+> > 	#ifdef CONFIG_X86_MCE
+> > 		HWERR_RECOV_MCE,
+> > 	#endif
+> > 		HWERR_RECOV_MAX,
+> > 	};
+> > 
+> > Or, would you prefer to have HWERR_RECOV_ARCH and keep it always there?
+> 
+> That would only work for HWERR_RECOV_MCE, though. If you added another:
+> 
+> #ifdef CONFIG_FOO
+> 	HWERR_RECOV_FOO
+> #endif
+> 
+> then your example of:
+> 
+> 	>>> prog['hwerror_data']
+> 	(struct hwerror_info[6]){
+> 		{
+> 			.count = (int)844,
+> 			.timestamp = (time64_t)1752852018,
+> 		},
+> 		...
+> 
+> doesn't work any more. You wouldn't be able to tell HWERR_RECOV_MCE from
+> HWERR_RECOV_FOO because they'd alias to the same constant.
 
-[ Upstream commit b1dc7f097b78eb8d25b071ead2384b07a549692b ]
+Very good point, that is not what we want. Thanks for raising it.
 
-Clear the ECC error and counter registers during initialization/probe to avoid
-reporting stale errors that may have occurred before EDAC registration.
+> This whole thing is an ABI. Right?
 
-For that, unify the Zynq and ZynqMP ECC state reading paths and simplify the
-code.
+Exactly.
 
-  [ bp: Massage commit message.
-    Fix an -Wsometimes-uninitialized warning as reported by
-    Reported-by: kernel test robot <lkp@intel.com>
-    Closes: https://lore.kernel.org/oe-kbuild-all/202507141048.obUv3ZUm-lkp@intel.com ]
+I've digested the feedback a bit more and this is how it looks like now:
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/20250713050753.7042-1-shubhrajyoti.datta@amd.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+1) Remove HWERR_RECOV_MCE and account MCE errors in HWERR_RECOV_OTHERS
+2) Use the atomic operators to increase the number of errors, according
+   to Dave.
+3) Have an RST documentation that would help to answer question about
+   this feature as to let users know that this is available.
 
-LLM Generated explanations, may be completely bogus:
 
-**Backport Status: YES**
+Is this a better patch?
 
-This commit is suitable for backporting to stable kernel trees based on
-the following analysis:
+commit ff35595f66871ddf80cda0a8e42398738171abe1
+Author: Breno Leitao <leitao@debian.org>
+Date:   Thu Jul 17 07:39:26 2025 -0700
 
-## Bug Fix Nature
-The commit fixes a clear bug where the EDAC driver could report stale
-ECC errors from before the driver was initialized. This is evident from
-the commit message: "Clear the ECC error and counter registers during
-initialization/probe to avoid reporting stale errors that may have
-occurred before EDAC registration."
+    vmcoreinfo: Track and log recoverable hardware errors
+    
+    Introduce a generic infrastructure for tracking recoverable hardware
+    errors (HW errors that are visible to the OS but does not cause a panic)
+    and record them for vmcore consumption. This aids post-mortem crash
+    analysis tools by preserving a count and timestamp for the last
+    occurrence of such errors. On the other side, correctable errors, which
+    the OS typically remains unaware of because the underlying hardware
+    handles them transparently, are less relevant for crash dump
+    and therefore are NOT tracked in this infrastructure.
+    
+    Add centralized logging for sources of recoverable hardware
+    errors based on the subsystem it has been notified.
+    
+    hwerror_data is write-only at kernel runtime, and it is meant to be read
+    from vmcore using tools like crash/drgn. For example, this is how it
+    looks like when opening the crashdump from drgn.
+    
+            >>> prog['hwerror_data']
+            (struct hwerror_info[1]){
+                    {
+                            .count = (int)844,
+                            .timestamp = (time64_t)1752852018,
+                    },
+                    ...
+    
+    This helps fleet operators quickly triage whether a crash may be
+    influenced by hardware recoverable errors (which executes a uncommon
+    code path in the kernel), especially when recoverable errors occurred
+    shortly before a panic, such as the bug fixed by
+    commit ee62ce7a1d90 ("page_pool: Track DMA-mapped pages and unmap them
+    when destroying the pool")
+    
+    This is not intended to replace full hardware diagnostics but provides
+    a fast way to correlate hardware events with kernel panics quickly.
+    
+    Rare machine check exceptions—like those indicated by mce_flags.p5 or
+    mce_flags.winchip—are not accounted for in this method, as they fall
+    outside the intended usage scope for this feature’s user base.
+    
+    Suggested-by: Tony Luck <tony.luck@intel.com>
+    Suggested-by: Shuai Xue <xueshuai@linux.alibaba.com>
+    Signed-off-by: Breno Leitao <leitao@debian.org>
 
-## Code Changes Analysis
-
-1. **Problem Being Fixed**:
-   - The driver wasn't clearing ECC error counters during initialization
-   - This could lead to false error reports from pre-boot or pre-driver-
-     load errors
-   - Users could see incorrect ECC error counts that don't reflect
-     actual runtime errors
-
-2. **Solution Implementation**:
-   - The patch consolidates the ECC state checking into a single
-     `get_ecc_state()` function
-   - Adds counter clearing logic for both Zynq and ZynqMP platforms:
-     ```c
-     // For Zynq:
-     clearval = ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_UE_ERR;
-     writel(clearval, priv->baseaddr + ECC_CTRL_OFST);
-     writel(0x0, priv->baseaddr + ECC_CTRL_OFST);
-
-     // For ZynqMP:
-     clearval = readl(priv->baseaddr + ECC_CLR_OFST) |
-     ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_CE_ERRCNT |
-     ECC_CTRL_CLR_UE_ERR | ECC_CTRL_CLR_UE_ERRCNT;
-     writel(clearval, priv->baseaddr + ECC_CLR_OFST);
-     ```
-
-3. **Scope and Risk Assessment**:
-   - Changes are confined to the synopsys_edac driver
-   - No API changes or interface modifications
-   - The refactoring simplifies code by removing duplicate
-     `zynq_get_ecc_state()` and `zynqmp_get_ecc_state()` functions
-   - Adds platform type enum for cleaner platform identification
-   - Risk is minimal as it only affects initialization path
-
-4. **Stable Tree Criteria Compliance**:
-   - ✓ Fixes a real bug (stale error reporting)
-   - ✓ Small and contained changes (~150 lines)
-   - ✓ No new features added
-   - ✓ No architectural changes
-   - ✓ Low regression risk
-   - ✓ Clear fix for a specific problem
-
-5. **Additional Evidence**:
-   - The maintainer (Borislav Petkov) accepted and massaged the patch
-   - Fixed a compiler warning caught by kernel test robot
-   - The bug could affect production systems by showing false ECC errors
-
-This is a textbook example of a stable-worthy patch: it fixes a specific
-bug (stale ECC error reporting) with minimal, focused changes that don't
-introduce new functionality or risk.
-
- drivers/edac/synopsys_edac.c | 97 +++++++++++++++++-------------------
- 1 file changed, 46 insertions(+), 51 deletions(-)
-
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index e8ddb029f10d..cbc40f57b27b 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -346,20 +346,26 @@ struct synps_edac_priv {
- #endif
- };
+diff --git a/Documentation/driver-api/hw-recoverable-errors.rst b/Documentation/driver-api/hw-recoverable-errors.rst
+new file mode 100644
+index 0000000000000..7989258262d49
+--- /dev/null
++++ b/Documentation/driver-api/hw-recoverable-errors.rst
+@@ -0,0 +1,60 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=================================================
++Recoverable Hardware Error Tracking in vmcoreinfo
++=================================================
++
++Overview
++--------
++
++This feature provides a generic infrastructure within the Linux kernel to track
++and log recoverable hardware errors. These are hardware recoverable errors
++visible that might not cause immediate panics but may influence health, mainly
++because new code path will be executed in the kernel.
++
++By recording counts and timestamps of recoverable errors into the vmcoreinfo
++crash dump notes, this infrastructure aids post-mortem crash analysis tools in
++correlating hardware events with kernel failures. This enables faster triage
++and better understanding of root causes, especially in large-scale cloud
++environments where hardware issues are common.
++
++Benefits
++--------
++
++- Facilitates correlation of hardware recoverable errors with kernel panics or
++  unusual code paths that lead to system crashes.
++- Provides operators and cloud providers quick insights, improving reliability
++  and reducing troubleshooting time.
++- Complements existing full hardware diagnostics without replacing them.
++
++Data Exposure and Consumption
++-----------------------------
++
++- The tracked error data consists of per-error-type counts and timestamps of
++  last occurrence.
++- This data is stored in the `hwerror_data` array, categorized by error source
++  types like CPU, memory, PCI, CXL, and others.
++- It is exposed via vmcoreinfo crash dump notes and can be read using tools
++  like `crash`, `drgn`, or other kernel crash analysis utilities.
++- There is no other way to read these data other than from crash dumps.
++- These errros are divided by are, which includes CPU, Memory, PCI, CXL and
++  others.
++
++Typical usage example (in drgn REPL):
++
++.. code-block:: python
++
++    >>> prog['hwerror_data']
++    (struct hwerror_info[HWERR_RECOV_MAX]){
++        {
++            .count = (int)844,
++            .timestamp = (time64_t)1752852018,
++        },
++        ...
++    }
++
++Enabling
++--------
++
++- This feature is enabled when CONFIG_VMCORE_INFO is set.
++
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 4da4eab56c81d..9cc38c5ffb77a 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -45,6 +45,7 @@
+ #include <linux/task_work.h>
+ #include <linux/hardirq.h>
+ #include <linux/kexec.h>
++#include <linux/vmcore_info.h>
  
-+enum synps_platform_type {
-+	ZYNQ,
-+	ZYNQMP,
-+	SYNPS,
+ #include <asm/fred.h>
+ #include <asm/cpu_device_id.h>
+@@ -1690,6 +1691,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	}
+ 
+ out:
++	/* Given it didn't panic, mark it as recoverable */
++	hwerr_log_error_type(HWERR_RECOV_OTHERS);
++
+ 	instrumentation_end();
+ 
+ clear:
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index a0d54993edb3b..562459e9d632e 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -43,6 +43,7 @@
+ #include <linux/uuid.h>
+ #include <linux/ras.h>
+ #include <linux/task_work.h>
++#include <linux/vmcore_info.h>
+ 
+ #include <acpi/actbl1.h>
+ #include <acpi/ghes.h>
+@@ -867,6 +868,40 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
+ }
+ EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, "CXL");
+ 
++static void ghes_log_hwerr(int sev, guid_t *sec_type)
++{
++	if (sev != CPER_SEV_RECOVERABLE)
++		return;
++
++	if (guid_equal(sec_type, &CPER_SEC_PROC_ARM) ||
++	    guid_equal(sec_type, &CPER_SEC_PROC_GENERIC) ||
++	    guid_equal(sec_type, &CPER_SEC_PROC_IA)) {
++		hwerr_log_error_type(HWERR_RECOV_CPU);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_CXL_PROT_ERR) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_GEN_MEDIA_GUID) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_DRAM_GUID) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_MEM_MODULE_GUID)) {
++		hwerr_log_error_type(HWERR_RECOV_CXL);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_PCIE) ||
++	    guid_equal(sec_type, &CPER_SEC_PCI_X_BUS)) {
++		hwerr_log_error_type(HWERR_RECOV_PCI);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
++		hwerr_log_error_type(HWERR_RECOV_MEMORY);
++		return;
++	}
++
++	hwerr_log_error_type(HWERR_RECOV_OTHERS);
++}
++
+ static void ghes_do_proc(struct ghes *ghes,
+ 			 const struct acpi_hest_generic_status *estatus)
+ {
+@@ -888,6 +923,7 @@ static void ghes_do_proc(struct ghes *ghes,
+ 		if (gdata->validation_bits & CPER_SEC_VALID_FRU_TEXT)
+ 			fru_text = gdata->fru_text;
+ 
++		ghes_log_hwerr(sev, sec_type);
+ 		if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
+ 			struct cper_sec_mem_err *mem_err = acpi_hest_get_payload(gdata);
+ 
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index e286c197d7167..d814c06cdbee6 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -30,6 +30,7 @@
+ #include <linux/kfifo.h>
+ #include <linux/ratelimit.h>
+ #include <linux/slab.h>
++#include <linux/vmcore_info.h>
+ #include <acpi/apei.h>
+ #include <acpi/ghes.h>
+ #include <ras/ras_event.h>
+@@ -751,6 +752,7 @@ static void pci_dev_aer_stats_incr(struct pci_dev *pdev,
+ 		break;
+ 	case AER_NONFATAL:
+ 		aer_info->dev_total_nonfatal_errs++;
++		hwerr_log_error_type(HWERR_RECOV_PCI);
+ 		counter = &aer_info->dev_nonfatal_errs[0];
+ 		max = AER_MAX_TYPEOF_UNCOR_ERRS;
+ 		break;
+diff --git a/include/linux/vmcore_info.h b/include/linux/vmcore_info.h
+index 37e003ae52626..92e713c1a83d0 100644
+--- a/include/linux/vmcore_info.h
++++ b/include/linux/vmcore_info.h
+@@ -77,4 +77,20 @@ extern u32 *vmcoreinfo_note;
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len);
+ void final_note(Elf_Word *buf);
++
++enum hwerr_error_type {
++	HWERR_RECOV_CPU,
++	HWERR_RECOV_MEMORY,
++	HWERR_RECOV_PCI,
++	HWERR_RECOV_CXL,
++	HWERR_RECOV_OTHERS,
++	HWERR_RECOV_MAX,
 +};
 +
- /**
-  * struct synps_platform_data -  synps platform data structure.
-+ * @platform:		Identifies the target hardware platform
-  * @get_error_info:	Get EDAC error info.
-  * @get_mtype:		Get mtype.
-  * @get_dtype:		Get dtype.
-- * @get_ecc_state:	Get ECC state.
-  * @get_mem_info:	Get EDAC memory info
-  * @quirks:		To differentiate IPs.
-  */
- struct synps_platform_data {
-+	enum synps_platform_type platform;
- 	int (*get_error_info)(struct synps_edac_priv *priv);
- 	enum mem_type (*get_mtype)(const void __iomem *base);
- 	enum dev_type (*get_dtype)(const void __iomem *base);
--	bool (*get_ecc_state)(void __iomem *base);
- #ifdef CONFIG_EDAC_DEBUG
- 	u64 (*get_mem_info)(struct synps_edac_priv *priv);
- #endif
-@@ -734,51 +740,38 @@ static enum dev_type zynqmp_get_dtype(const void __iomem *base)
- 	return dt;
- }
++#ifdef CONFIG_VMCORE_INFO
++void hwerr_log_error_type(enum hwerr_error_type src);
++#else
++static inline void hwerr_log_error_type(enum hwerr_error_type src) {};
++#endif
++
+ #endif /* LINUX_VMCORE_INFO_H */
+diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
+index e066d31d08f89..fe9bf8db1922e 100644
+--- a/kernel/vmcore_info.c
++++ b/kernel/vmcore_info.c
+@@ -31,6 +31,13 @@ u32 *vmcoreinfo_note;
+ /* trusted vmcoreinfo, e.g. we can make a copy in the crash memory */
+ static unsigned char *vmcoreinfo_data_safecopy;
  
--/**
-- * zynq_get_ecc_state - Return the controller ECC enable/disable status.
-- * @base:	DDR memory controller base address.
-- *
-- * Get the ECC enable/disable status of the controller.
-- *
-- * Return: true if enabled, otherwise false.
-- */
--static bool zynq_get_ecc_state(void __iomem *base)
-+static bool get_ecc_state(struct synps_edac_priv *priv)
++struct hwerr_info {
++	atomic_t count;
++	time64_t timestamp;
++};
++
++static struct hwerr_info hwerr_data[HWERR_RECOV_MAX];
++
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len)
  {
-+	u32 ecctype, clearval;
- 	enum dev_type dt;
--	u32 ecctype;
--
--	dt = zynq_get_dtype(base);
--	if (dt == DEV_UNKNOWN)
--		return false;
- 
--	ecctype = readl(base + SCRUB_OFST) & SCRUB_MODE_MASK;
--	if ((ecctype == SCRUB_MODE_SECDED) && (dt == DEV_X2))
--		return true;
--
--	return false;
--}
--
--/**
-- * zynqmp_get_ecc_state - Return the controller ECC enable/disable status.
-- * @base:	DDR memory controller base address.
-- *
-- * Get the ECC enable/disable status for the controller.
-- *
-- * Return: a ECC status boolean i.e true/false - enabled/disabled.
-- */
--static bool zynqmp_get_ecc_state(void __iomem *base)
--{
--	enum dev_type dt;
--	u32 ecctype;
--
--	dt = zynqmp_get_dtype(base);
--	if (dt == DEV_UNKNOWN)
--		return false;
--
--	ecctype = readl(base + ECC_CFG0_OFST) & SCRUB_MODE_MASK;
--	if ((ecctype == SCRUB_MODE_SECDED) &&
--	    ((dt == DEV_X2) || (dt == DEV_X4) || (dt == DEV_X8)))
--		return true;
-+	if (priv->p_data->platform == ZYNQ) {
-+		dt = zynq_get_dtype(priv->baseaddr);
-+		if (dt == DEV_UNKNOWN)
-+			return false;
-+
-+		ecctype = readl(priv->baseaddr + SCRUB_OFST) & SCRUB_MODE_MASK;
-+		if (ecctype == SCRUB_MODE_SECDED && dt == DEV_X2) {
-+			clearval = ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_UE_ERR;
-+			writel(clearval, priv->baseaddr + ECC_CTRL_OFST);
-+			writel(0x0, priv->baseaddr + ECC_CTRL_OFST);
-+			return true;
-+		}
-+	} else {
-+		dt = zynqmp_get_dtype(priv->baseaddr);
-+		if (dt == DEV_UNKNOWN)
-+			return false;
-+
-+		ecctype = readl(priv->baseaddr + ECC_CFG0_OFST) & SCRUB_MODE_MASK;
-+		if (ecctype == SCRUB_MODE_SECDED &&
-+		    (dt == DEV_X2 || dt == DEV_X4 || dt == DEV_X8)) {
-+			clearval = readl(priv->baseaddr + ECC_CLR_OFST) |
-+			ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_CE_ERRCNT |
-+			ECC_CTRL_CLR_UE_ERR | ECC_CTRL_CLR_UE_ERRCNT;
-+			writel(clearval, priv->baseaddr + ECC_CLR_OFST);
-+			return true;
-+		}
-+	}
- 
- 	return false;
+@@ -118,6 +125,16 @@ phys_addr_t __weak paddr_vmcoreinfo_note(void)
  }
-@@ -948,18 +941,18 @@ static int setup_irq(struct mem_ctl_info *mci,
- }
+ EXPORT_SYMBOL(paddr_vmcoreinfo_note);
  
- static const struct synps_platform_data zynq_edac_def = {
-+	.platform = ZYNQ,
- 	.get_error_info	= zynq_get_error_info,
- 	.get_mtype	= zynq_get_mtype,
- 	.get_dtype	= zynq_get_dtype,
--	.get_ecc_state	= zynq_get_ecc_state,
- 	.quirks		= 0,
- };
- 
- static const struct synps_platform_data zynqmp_edac_def = {
-+	.platform = ZYNQMP,
- 	.get_error_info	= zynqmp_get_error_info,
- 	.get_mtype	= zynqmp_get_mtype,
- 	.get_dtype	= zynqmp_get_dtype,
--	.get_ecc_state	= zynqmp_get_ecc_state,
- #ifdef CONFIG_EDAC_DEBUG
- 	.get_mem_info	= zynqmp_get_mem_info,
- #endif
-@@ -971,10 +964,10 @@ static const struct synps_platform_data zynqmp_edac_def = {
- };
- 
- static const struct synps_platform_data synopsys_edac_def = {
-+	.platform = SYNPS,
- 	.get_error_info	= zynqmp_get_error_info,
- 	.get_mtype	= zynqmp_get_mtype,
- 	.get_dtype	= zynqmp_get_dtype,
--	.get_ecc_state	= zynqmp_get_ecc_state,
- 	.quirks         = (DDR_ECC_INTR_SUPPORT | DDR_ECC_INTR_SELF_CLEAR
- #ifdef CONFIG_EDAC_DEBUG
- 			  | DDR_ECC_DATA_POISON_SUPPORT
-@@ -1406,10 +1399,6 @@ static int mc_probe(struct platform_device *pdev)
- 	if (!p_data)
- 		return -ENODEV;
- 
--	if (!p_data->get_ecc_state(baseaddr)) {
--		edac_printk(KERN_INFO, EDAC_MC, "ECC not enabled\n");
--		return -ENXIO;
--	}
- 
- 	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
- 	layers[0].size = SYNPS_EDAC_NR_CSROWS;
-@@ -1429,6 +1418,12 @@ static int mc_probe(struct platform_device *pdev)
- 	priv = mci->pvt_info;
- 	priv->baseaddr = baseaddr;
- 	priv->p_data = p_data;
-+	if (!get_ecc_state(priv)) {
-+		edac_printk(KERN_INFO, EDAC_MC, "ECC not enabled\n");
-+		rc = -ENODEV;
-+		goto free_edac_mc;
-+	}
++void hwerr_log_error_type(enum hwerr_error_type src)
++{
++	if (src < 0 || src >= HWERR_RECOV_MAX)
++		return;
 +
- 	spin_lock_init(&priv->reglock);
- 
- 	mc_init(mci, pdev);
--- 
-2.39.5
-
++	atomic_inc(&hwerr_data[src].count);
++	WRITE_ONCE(hwerr_data[src].timestamp, ktime_get_real_seconds());
++}
++EXPORT_SYMBOL_GPL(hwerr_log_error_type);
++
+ static int __init crash_save_vmcoreinfo_init(void)
+ {
+ 	vmcoreinfo_data = (unsigned char *)get_zeroed_page(GFP_KERNEL);
 
