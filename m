@@ -1,58 +1,59 @@
-Return-Path: <linux-edac+bounces-4505-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4506-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F24B1971B
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 02:25:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 215AEB1975B
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 02:27:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD88D173F42
-	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 00:25:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDF093A34F4
+	for <lists+linux-edac@lfdr.de>; Mon,  4 Aug 2025 00:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D00417B402;
-	Mon,  4 Aug 2025 00:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E29EB184540;
+	Mon,  4 Aug 2025 00:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fgCN0nOx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0ywWmuv"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A2E136672;
-	Mon,  4 Aug 2025 00:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DA117A310;
+	Mon,  4 Aug 2025 00:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267104; cv=none; b=cHucyBe5qtcKedG1syu9PKX5O0kRT7UDQf4RDCnwbddcv7AQYpVFeWIrQauAueeA5Sdc73inijc3MHtx441DnJBaB/bZcGOQd2yBWB7Q+nrQUCni5umOR9c1lMbUdk1BShyucm6V8bPATTBJzEQ2hXi9Gm2p1qSAucijQpORUII=
+	t=1754267205; cv=none; b=mDfIks344lL7WNbM0/nvRGRMu+qSVm7lXk0B77YcMaDHNrQUlgQQSe1X7GcSq6zj48YSCSSmQOm9VpdDMT9g4RXyvx3mv/XnLesbS9Fp0snNdE+YaI8N95IxQi4ebulo4QRBbkAp6DLjoIwXQVKM1B8o9L3zwjvDu97LS8rjsqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267104; c=relaxed/simple;
-	bh=RQ76uI98boTgR4u2btpeiBmAd0oWZQmAJ9ceQvII/sg=;
+	s=arc-20240116; t=1754267205; c=relaxed/simple;
+	bh=s2/rlHHWGgfkIJwDCOvKo4CQOlSCHBQ1/r4At5fcDvQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e2ZWp5R9VbHc4ERPlGSJnk1gjHJen8Xy2uJK8rjr/3TgsDr7s0ajDyJwA+puVwCDPApTbO5WvunitoraKoV6nL3KexNHZqupxAsKHTjuSXY1HSy/HUZyNxfioCXu3tbXPwSlRa+llPHdNUkCuNKc8sy7P1A7xANKf02sBR9JeU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fgCN0nOx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1EC6C4CEEB;
-	Mon,  4 Aug 2025 00:25:02 +0000 (UTC)
+	 MIME-Version; b=EABxMZdIc888IHgqrGzH0OP/ghw3banWRGuO7zD+VCsWmCMHR/RhG0FQ1Y8RJjUiQ0dacbZydQ4rG++MI/Fev0pVTNWzQdcRoTvyjt3NhKv07RQnKeFMuoedadifxUerSUqgfA1y9vMO/aHoCyAvFED8DpBwqIzCZNpvjj3dXtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0ywWmuv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269B1C4CEEB;
+	Mon,  4 Aug 2025 00:26:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267104;
-	bh=RQ76uI98boTgR4u2btpeiBmAd0oWZQmAJ9ceQvII/sg=;
+	s=k20201202; t=1754267205;
+	bh=s2/rlHHWGgfkIJwDCOvKo4CQOlSCHBQ1/r4At5fcDvQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fgCN0nOxzv0CQfdIegiN0ygqhsKNt0tnbr9eHrAJF2f3LOvU9t6E32rkjEMzmEkOl
-	 YOyfSRLJz8CFLwsmuIA1XgAPW+3wVaVY8eoGYHqz2Ad5NrSpgnHvSF8oTAZBs/rhNZ
-	 QcfDYb3UWI06sI/4BavYqr4x5cRBXIX25e27gR9j9YTZD+6G41McYWvqX+EC9Kco9i
-	 jeF6ADFros6XiWc2/P1Rvz0QmM2Jy7rzHI/o+aZOVc2IQ3NxgmNi/hBnxHmtVEV0pn
-	 y4NUP5HzfBGCB1nnSEpwMg8wxD29x0Jz/Xwf2V4w770f4xo1IZMJ+ztJlwMqTZ0hUy
-	 O9on9356iUzzw==
+	b=A0ywWmuv4LS3ugpAnhXpelwVFwBcJo20bV/uuXGEpgc1i+yYsjLyo2GAuU/Qu2pvt
+	 /dqfkJ1+Twc0W1jgz+MsWjibbdOnJzzCqtS+nl1xRjxHHz/uDV1Gk5XBRTC+p2XzhP
+	 vDlBzojhsKRQBPJiQIklSWXswX/1L+bB62SvaPXXTd/qfrrwbvzPVkrkGcKx2g5NE2
+	 MjYEupoKWRH4m5FRp6RwuVTR8EOLW9Jet4GtrneVNT2GFtk2DAxqSm0Kqoj2dCHYvR
+	 e3hT4ZQGzwFkSmuBFrcU7gs/xQkb00BL9o3MmsUFqXb5a0luhDQvO4pxl0wNZ1Mvlh
+	 dSbCQ6LR+bqKA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+Cc: George Gaidarov <gdgaidarov+lkml@gmail.com>,
+	Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+	Tony Luck <tony.luck@intel.com>,
 	Borislav Petkov <bp@alien8.de>,
 	Sasha Levin <sashal@kernel.org>,
-	michal.simek@amd.com,
-	linux-arm-kernel@lists.infradead.org,
+	jbaron@akamai.com,
 	linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16 28/85] EDAC/synopsys: Clear the ECC counters on init
-Date: Sun,  3 Aug 2025 20:22:37 -0400
-Message-Id: <20250804002335.3613254-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.16 62/85] EDAC/ie31200: Enable support for Core i5-14600 and i7-14700
+Date: Sun,  3 Aug 2025 20:23:11 -0400
+Message-Id: <20250804002335.3613254-62-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250804002335.3613254-1-sashal@kernel.org>
 References: <20250804002335.3613254-1-sashal@kernel.org>
@@ -65,27 +66,22 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.16
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+From: George Gaidarov <gdgaidarov+lkml@gmail.com>
 
-[ Upstream commit b1dc7f097b78eb8d25b071ead2384b07a549692b ]
+[ Upstream commit 493f9c930e5ff72b3508755b45488d1ae2c9650e ]
 
-Clear the ECC error and counter registers during initialization/probe to avoid
-reporting stale errors that may have occurred before EDAC registration.
+Device ID '0xa740' is shared by i7-14700, i7-14700K, and i7-14700T.
+Device ID '0xa704' is shared by i5-14600, i5-14600K, and i5-14600T.
 
-For that, unify the Zynq and ZynqMP ECC state reading paths and simplify the
-code.
+Tested locally on my i7-14700K.
 
-  [ bp: Massage commit message.
-    Fix an -Wsometimes-uninitialized warning as reported by
-    Reported-by: kernel test robot <lkp@intel.com>
-    Closes: https://lore.kernel.org/oe-kbuild-all/202507141048.obUv3ZUm-lkp@intel.com ]
-
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Signed-off-by: George Gaidarov <gdgaidarov+lkml@gmail.com>
+Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/20250713050753.7042-1-shubhrajyoti.datta@amd.com
+Link: https://lore.kernel.org/r/20250529162933.1228735-1-gdgaidarov+lkml@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
@@ -93,241 +89,70 @@ LLM Generated explanations, may be completely bogus:
 
 **Backport Status: YES**
 
-This commit is suitable for backporting to stable kernel trees based on
-the following analysis:
+This commit should be backported to stable kernel trees for the
+following reasons:
 
-## Bug Fix Nature
-The commit fixes a clear bug where the EDAC driver could report stale
-ECC errors from before the driver was initialized. This is evident from
-the commit message: "Clear the ECC error and counter registers during
-initialization/probe to avoid reporting stale errors that may have
-occurred before EDAC registration."
+1. **Device ID Addition Only**: This commit adds exactly two new PCI
+   device IDs (`0xa740` and `0xa704`) to enable EDAC (Error Detection
+   and Correction) support for Intel Core i5-14600 and i7-14700
+   processors. According to the stable kernel rules at
+   Documentation/process/stable-kernel-rules.rst:15, patches that "just
+   add a device ID" are explicitly allowed in stable trees.
 
-## Code Changes Analysis
+2. **Minimal and Safe Change**: The patch is extremely small (4 lines of
+   actual code change), adding only:
+   - Two `#define` statements for the new device IDs
+   - Two entries to the `ie31200_pci_tbl[]` array that map these IDs to
+     the existing `rpl_s_cfg` configuration
 
-1. **Problem Being Fixed**:
-   - The driver wasn't clearing ECC error counters during initialization
-   - This could lead to false error reports from pre-boot or pre-driver-
-     load errors
-   - Users could see incorrect ECC error counts that don't reflect
-     actual runtime errors
+3. **No Functional Changes**: The commit doesn't introduce any new
+   functionality, algorithms, or modify existing behavior. It simply
+   extends hardware support using the already-tested Raptor Lake-S
+   configuration (`rpl_s_cfg`) for these new processor variants.
 
-2. **Solution Implementation**:
-   - The patch consolidates the ECC state checking into a single
-     `get_ecc_state()` function
-   - Adds counter clearing logic for both Zynq and ZynqMP platforms:
-     ```c
-     // For Zynq:
-     clearval = ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_UE_ERR;
-     writel(clearval, priv->baseaddr + ECC_CTRL_OFST);
-     writel(0x0, priv->baseaddr + ECC_CTRL_OFST);
+4. **Tested Hardware**: The commit message indicates "Tested locally on
+   my i7-14700K", showing the change has been verified on actual
+   hardware.
 
-     // For ZynqMP:
-     clearval = readl(priv->baseaddr + ECC_CLR_OFST) |
-     ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_CE_ERRCNT |
-     ECC_CTRL_CLR_UE_ERR | ECC_CTRL_CLR_UE_ERRCNT;
-     writel(clearval, priv->baseaddr + ECC_CLR_OFST);
-     ```
+5. **Pattern of Similar Commits**: Looking at the driver's history,
+   similar hardware enablement commits have been regularly added (e.g.,
+   commits `180f091224a0`, `021681830e41`, `05a61c6cb631`), following
+   the same pattern of adding device IDs for new processor variants.
 
-3. **Scope and Risk Assessment**:
-   - Changes are confined to the synopsys_edac driver
-   - No API changes or interface modifications
-   - The refactoring simplifies code by removing duplicate
-     `zynq_get_ecc_state()` and `zynqmp_get_ecc_state()` functions
-   - Adds platform type enum for cleaner platform identification
-   - Risk is minimal as it only affects initialization path
+6. **User Benefit**: Without this patch, users with these specific Intel
+   processors cannot use EDAC functionality to detect and report memory
+   errors, which is an important reliability feature for systems using
+   ECC memory.
 
-4. **Stable Tree Criteria Compliance**:
-   - ✓ Fixes a real bug (stale error reporting)
-   - ✓ Small and contained changes (~150 lines)
-   - ✓ No new features added
-   - ✓ No architectural changes
-   - ✓ Low regression risk
-   - ✓ Clear fix for a specific problem
+The commit perfectly fits the stable tree criteria of being a simple
+device ID addition that enables existing, tested functionality for new
+hardware variants without any risk of regression to existing systems.
 
-5. **Additional Evidence**:
-   - The maintainer (Borislav Petkov) accepted and massaged the patch
-   - Fixed a compiler warning caught by kernel test robot
-   - The bug could affect production systems by showing false ECC errors
+ drivers/edac/ie31200_edac.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This is a textbook example of a stable-worthy patch: it fixes a specific
-bug (stale ECC error reporting) with minimal, focused changes that don't
-introduce new functionality or risk.
-
- drivers/edac/synopsys_edac.c | 97 +++++++++++++++++-------------------
- 1 file changed, 46 insertions(+), 51 deletions(-)
-
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 5ed32a3299c4..51143b3257de 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -332,20 +332,26 @@ struct synps_edac_priv {
- #endif
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index a53612be4b2f..6aac6672ba38 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -91,6 +91,8 @@
+ #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_2	0x4640
+ #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_3	0x4630
+ #define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_4	0xa700
++#define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_5	0xa740
++#define PCI_DEVICE_ID_INTEL_IE31200_RPL_S_6	0xa704
+ 
+ /* Alder Lake-S */
+ #define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1	0x4660
+@@ -740,6 +742,8 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_2), (kernel_ulong_t)&rpl_s_cfg},
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_3), (kernel_ulong_t)&rpl_s_cfg},
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_4), (kernel_ulong_t)&rpl_s_cfg},
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_5), (kernel_ulong_t)&rpl_s_cfg},
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_6), (kernel_ulong_t)&rpl_s_cfg},
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1), (kernel_ulong_t)&rpl_s_cfg},
+ 	{ 0, } /* 0 terminated list. */
  };
- 
-+enum synps_platform_type {
-+	ZYNQ,
-+	ZYNQMP,
-+	SYNPS,
-+};
-+
- /**
-  * struct synps_platform_data -  synps platform data structure.
-+ * @platform:		Identifies the target hardware platform
-  * @get_error_info:	Get EDAC error info.
-  * @get_mtype:		Get mtype.
-  * @get_dtype:		Get dtype.
-- * @get_ecc_state:	Get ECC state.
-  * @get_mem_info:	Get EDAC memory info
-  * @quirks:		To differentiate IPs.
-  */
- struct synps_platform_data {
-+	enum synps_platform_type platform;
- 	int (*get_error_info)(struct synps_edac_priv *priv);
- 	enum mem_type (*get_mtype)(const void __iomem *base);
- 	enum dev_type (*get_dtype)(const void __iomem *base);
--	bool (*get_ecc_state)(void __iomem *base);
- #ifdef CONFIG_EDAC_DEBUG
- 	u64 (*get_mem_info)(struct synps_edac_priv *priv);
- #endif
-@@ -720,51 +726,38 @@ static enum dev_type zynqmp_get_dtype(const void __iomem *base)
- 	return dt;
- }
- 
--/**
-- * zynq_get_ecc_state - Return the controller ECC enable/disable status.
-- * @base:	DDR memory controller base address.
-- *
-- * Get the ECC enable/disable status of the controller.
-- *
-- * Return: true if enabled, otherwise false.
-- */
--static bool zynq_get_ecc_state(void __iomem *base)
-+static bool get_ecc_state(struct synps_edac_priv *priv)
- {
-+	u32 ecctype, clearval;
- 	enum dev_type dt;
--	u32 ecctype;
--
--	dt = zynq_get_dtype(base);
--	if (dt == DEV_UNKNOWN)
--		return false;
- 
--	ecctype = readl(base + SCRUB_OFST) & SCRUB_MODE_MASK;
--	if ((ecctype == SCRUB_MODE_SECDED) && (dt == DEV_X2))
--		return true;
--
--	return false;
--}
--
--/**
-- * zynqmp_get_ecc_state - Return the controller ECC enable/disable status.
-- * @base:	DDR memory controller base address.
-- *
-- * Get the ECC enable/disable status for the controller.
-- *
-- * Return: a ECC status boolean i.e true/false - enabled/disabled.
-- */
--static bool zynqmp_get_ecc_state(void __iomem *base)
--{
--	enum dev_type dt;
--	u32 ecctype;
--
--	dt = zynqmp_get_dtype(base);
--	if (dt == DEV_UNKNOWN)
--		return false;
--
--	ecctype = readl(base + ECC_CFG0_OFST) & SCRUB_MODE_MASK;
--	if ((ecctype == SCRUB_MODE_SECDED) &&
--	    ((dt == DEV_X2) || (dt == DEV_X4) || (dt == DEV_X8)))
--		return true;
-+	if (priv->p_data->platform == ZYNQ) {
-+		dt = zynq_get_dtype(priv->baseaddr);
-+		if (dt == DEV_UNKNOWN)
-+			return false;
-+
-+		ecctype = readl(priv->baseaddr + SCRUB_OFST) & SCRUB_MODE_MASK;
-+		if (ecctype == SCRUB_MODE_SECDED && dt == DEV_X2) {
-+			clearval = ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_UE_ERR;
-+			writel(clearval, priv->baseaddr + ECC_CTRL_OFST);
-+			writel(0x0, priv->baseaddr + ECC_CTRL_OFST);
-+			return true;
-+		}
-+	} else {
-+		dt = zynqmp_get_dtype(priv->baseaddr);
-+		if (dt == DEV_UNKNOWN)
-+			return false;
-+
-+		ecctype = readl(priv->baseaddr + ECC_CFG0_OFST) & SCRUB_MODE_MASK;
-+		if (ecctype == SCRUB_MODE_SECDED &&
-+		    (dt == DEV_X2 || dt == DEV_X4 || dt == DEV_X8)) {
-+			clearval = readl(priv->baseaddr + ECC_CLR_OFST) |
-+			ECC_CTRL_CLR_CE_ERR | ECC_CTRL_CLR_CE_ERRCNT |
-+			ECC_CTRL_CLR_UE_ERR | ECC_CTRL_CLR_UE_ERRCNT;
-+			writel(clearval, priv->baseaddr + ECC_CLR_OFST);
-+			return true;
-+		}
-+	}
- 
- 	return false;
- }
-@@ -934,18 +927,18 @@ static int setup_irq(struct mem_ctl_info *mci,
- }
- 
- static const struct synps_platform_data zynq_edac_def = {
-+	.platform = ZYNQ,
- 	.get_error_info	= zynq_get_error_info,
- 	.get_mtype	= zynq_get_mtype,
- 	.get_dtype	= zynq_get_dtype,
--	.get_ecc_state	= zynq_get_ecc_state,
- 	.quirks		= 0,
- };
- 
- static const struct synps_platform_data zynqmp_edac_def = {
-+	.platform = ZYNQMP,
- 	.get_error_info	= zynqmp_get_error_info,
- 	.get_mtype	= zynqmp_get_mtype,
- 	.get_dtype	= zynqmp_get_dtype,
--	.get_ecc_state	= zynqmp_get_ecc_state,
- #ifdef CONFIG_EDAC_DEBUG
- 	.get_mem_info	= zynqmp_get_mem_info,
- #endif
-@@ -957,10 +950,10 @@ static const struct synps_platform_data zynqmp_edac_def = {
- };
- 
- static const struct synps_platform_data synopsys_edac_def = {
-+	.platform = SYNPS,
- 	.get_error_info	= zynqmp_get_error_info,
- 	.get_mtype	= zynqmp_get_mtype,
- 	.get_dtype	= zynqmp_get_dtype,
--	.get_ecc_state	= zynqmp_get_ecc_state,
- 	.quirks         = (DDR_ECC_INTR_SUPPORT | DDR_ECC_INTR_SELF_CLEAR
- #ifdef CONFIG_EDAC_DEBUG
- 			  | DDR_ECC_DATA_POISON_SUPPORT
-@@ -1390,10 +1383,6 @@ static int mc_probe(struct platform_device *pdev)
- 	if (!p_data)
- 		return -ENODEV;
- 
--	if (!p_data->get_ecc_state(baseaddr)) {
--		edac_printk(KERN_INFO, EDAC_MC, "ECC not enabled\n");
--		return -ENXIO;
--	}
- 
- 	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
- 	layers[0].size = SYNPS_EDAC_NR_CSROWS;
-@@ -1413,6 +1402,12 @@ static int mc_probe(struct platform_device *pdev)
- 	priv = mci->pvt_info;
- 	priv->baseaddr = baseaddr;
- 	priv->p_data = p_data;
-+	if (!get_ecc_state(priv)) {
-+		edac_printk(KERN_INFO, EDAC_MC, "ECC not enabled\n");
-+		rc = -ENODEV;
-+		goto free_edac_mc;
-+	}
-+
- 	spin_lock_init(&priv->reglock);
- 
- 	mc_init(mci, pdev);
 -- 
 2.39.5
 
