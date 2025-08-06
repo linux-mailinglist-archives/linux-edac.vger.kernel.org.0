@@ -1,152 +1,154 @@
-Return-Path: <linux-edac+bounces-4525-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4526-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1DEAB1C0C3
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Aug 2025 08:59:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E597B1C222
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Aug 2025 10:27:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C2D03A7B1F
-	for <lists+linux-edac@lfdr.de>; Wed,  6 Aug 2025 06:59:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3404E18C12CD
+	for <lists+linux-edac@lfdr.de>; Wed,  6 Aug 2025 08:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4472135DD;
-	Wed,  6 Aug 2025 06:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB8DB2264B2;
+	Wed,  6 Aug 2025 08:27:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HyFEZJJq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNr+Xe3P"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0052116F4;
-	Wed,  6 Aug 2025 06:59:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECD92222C3
+	for <linux-edac@vger.kernel.org>; Wed,  6 Aug 2025 08:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754463561; cv=none; b=TeUome6bevgYAP9TXc4h3JTwvSZapzcozA5BXuiG4/F96Imnq4+RrBaezwUHATkOOMcqhHdi09r9m0xRblPHohFnq1r8Mxr9T+jMH/EVEmcZnhbc6kORDvzCAe4GUtG1fvRajFPPCWzGFhrrOAW0LLExTfLWsvr0mmbPUVCvKOA=
+	t=1754468838; cv=none; b=et9efNNnKSVl/XtO1pUQQDeKJrkqqdsCGZ9cSxu534uZzahA19EYWlyHm0IcoHut5W0nscVfJhVOoYMsY0cOgX6Z7tGjjLmhkIpwHJ+PvS1C6pZiM/f8WrN7B+uaAqdH7BwByM4wgeSknsXf9RlyyaQxoZuaBoGHulKTmB0yRNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754463561; c=relaxed/simple;
-	bh=1O89QYN8d1dcc3QruuHauYoW5IWmr4ZkIeVcdj9XOp8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tnRlXMJo9PYFaEwL+Ea83w9N4K7qi93tMFDFcMGqxqRr6XKUrROVpoCLDta3sMnHghgf8iivXQZAocOqGrfIyWG6D8RBvVXlK6TLKgE6Zo+8HG2CtKrY2TaTgQ0s5IKio2Atbc/gLbDzjntnwnTOnzfcpMjMRMxYUgFtF4j5sP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HyFEZJJq; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754463560; x=1785999560;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1O89QYN8d1dcc3QruuHauYoW5IWmr4ZkIeVcdj9XOp8=;
-  b=HyFEZJJqlLEqG9aihkH0NY/opa9AB0bzn7TQOMvRQ9YlXsOW7/UQrqnJ
-   lyfyfdhbDgQVcaxMaV+PSOQXSj1P7CpEaLunswKvVmZY8DxX9zIhnHicn
-   JbSWnHgYCGtPMZ8lvzzkq6lBmx98WeyNmb9/d99CICmytMvV3WTZZyU6b
-   Xf31tQ0tV8PrwxQxnbxXrFDykKVRVkFcCjuRpMQhNJ8qgCAR+qd3fs8Mg
-   ScS2de819Nu6bFhjosVFoxOE4GMNGz6KmnIM/AHTLSmOx/80ARP0CDrWy
-   52jhi54asc94Z5t+Zb91fERQIFZxkShBjmuiOvB/dFQBxqjnhQzaGyvbN
-   A==;
-X-CSE-ConnectionGUID: 73XcvumNRB23WYdAh1DyIQ==
-X-CSE-MsgGUID: XO12QrYoRoeofcaxydom1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="56638239"
-X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="56638239"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 23:59:19 -0700
-X-CSE-ConnectionGUID: BDovrBJgTsumwTBklslw4g==
-X-CSE-MsgGUID: yK8+ak9uSwKJCfV1tPPIJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="170076107"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 23:59:17 -0700
-From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Jose Jesus Ambriz Meza <jose.jesus.ambriz.meza@intel.com>,
-	Chia-Lin Kao <acelan.kao@canonical.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Lai Yi <yi1.lai@linux.intel.com>,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] EDAC/i10nm: Skip DIMM enumeration on a disabled memory controller
-Date: Wed,  6 Aug 2025 14:57:07 +0800
-Message-ID: <20250806065707.3533345-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1754468838; c=relaxed/simple;
+	bh=gmyJ8RabFn6os9+4V23ofdCpWBEqn90tf8Noyt/OuyQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qbZmVdnW0Nzv9dQqF/0BDVwojCphcA5lMiZlaSMC7647ufXP3f20K3HJpOPfdXolgbdldRKmnj8tU8rLS/EMRKU7FEhIlq13Q2Oa3uf0GSeNrseVFUUzrAxEmoaFiK8R/yAYgUwKpa/v3BPMEjAwLaPXy81qZI/B8x26MNCQaro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNr+Xe3P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 497ADC4AF09;
+	Wed,  6 Aug 2025 08:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754468838;
+	bh=gmyJ8RabFn6os9+4V23ofdCpWBEqn90tf8Noyt/OuyQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cNr+Xe3P9o7MyakbEXHCOLXnqyAvdwzmb74JESotvhKz/+jrIhDfB3msDg4xna8c9
+	 hEJQy7RZz+MW8dSKSZSmrsMZUcMqU6mMADD/0jz2FoqRL7wKqPzXBgodo+bnMvU5Q3
+	 bUOO1S3T4747XVUpD29axHsolwuN7QHkA0EEuMzLOSOY1o6t1SxgD17HXFAjfhggeJ
+	 7pckEnpCNDKKc6HsBGgBipZesluymeaMRrR+0dsnrPu7/mOb/jxDqHpkFAUrr/Ogwn
+	 VtXojvH5xf8x78a3P6S2Iws++NYlSi8v2vKiLjnGB1y+YiC+5uPCcgJiU8HVAXGBSG
+	 oUytVtRo/8t2g==
+Date: Wed, 6 Aug 2025 10:27:14 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Samaresh Singh <samaresh.s@partner.samsung.com>
+Cc: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+ "mchehab@kernel.org" <mchehab@kernel.org>
+Subject: Re: Coredump detected executing rasdaemon 0.8.3 using "rasdaemon -f
+ -r" on host with AMD CPU with Ubuntu 24
+Message-ID: <20250806102714.03aaf0bb@foz.lan>
+In-Reply-To: <8eaa91e233aa40aa9a3d9737313661b7@partner.samsung.com>
+References: <CGME20250805214451uscas1p25185f82c64c5519e601f4645044e0b86@uscas1p2.samsung.com>
+	<8eaa91e233aa40aa9a3d9737313661b7@partner.samsung.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-When loading the i10nm_edac driver on some Intel Granite Rapids servers,
-a call trace may appear as follows:
+Em Tue, 5 Aug 2025 21:44:50 +0000
+Samaresh Singh <samaresh.s@partner.samsung.com> escreveu:
 
-  UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:453:16
-  shift exponent -66 is negative
-  ...
-  __ubsan_handle_shift_out_of_bounds+0x1e3/0x390
-  skx_get_dimm_info.cold+0x47/0xd40 [skx_edac_common]
-  i10nm_get_dimm_config+0x23e/0x390 [i10nm_edac]
-  skx_register_mci+0x159/0x220 [skx_edac_common]
-  i10nm_init+0xcb0/0x1ff0 [i10nm_edac]
-  ...
+> Hi,
+>=20
+>   I compiled rasdaemon 0.8.3 using the code at https://github.com/mchehab=
+/rasdaemon/ on a machine with AMD CPUs and Ubuntu 24 as OS. =20
+> The details about the CPU is available as:
+> +++
+> processor            : 167
+> vendor_id            : AuthenticAMD
+> cpu family           : 25
+> model                   : 17
+> model name       : AMD EPYC 9634 84-Core Processor
+> stepping              : 1
+> microcode           : 0xa101148
+> cpu MHz                             : 1500.000
+> cache size            : 1024 KB
+> physical id           : 0
+> siblings : 168
+> core id                  : 78
+> cpu cores             : 84
+> apicid                   : 157
+> initial apicid        : 157
+> fpu                         : yes
+> fpu_exception    : yes
+> cpuid level          : 16
+> wp                         : yes
+>=20
+> root@msl-ssg-cx02:/usr/local/var/lib/rasdaemon# uname -a
+> Linux msl-ssg-cx02.msl.lab 6.8.0-71-generic #71-Ubuntu SMP PREEMPT_DYNAMI=
+C Tue Jul 22 16:52:38 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+> root@msl-ssg-cx02:/usr/local/var/lib/rasdaemon# cat /etc/lsb-release=20
+> DISTRIB_ID=3DUbuntu
+> DISTRIB_RELEASE=3D24.04
+> DISTRIB_CODENAME=3Dnoble
+> DISTRIB_DESCRIPTION=3D"Ubuntu 24.04.1 LTS"
+> +++++
+>  =20
+> I had installed all the required dependencies and configure using "-enabl=
+e-sqlite3 -enable-aer -enable-mce".  The compilation succeeded without any =
+errors/warnings but when I tried executing using the command "rasdaemon -f =
+-r" I got the coredump as shown below:
+> +++
+> root@msl-ssg-cx02:/usr/local/var/lib/rasdaemon# rasdaemon --version
+> rasdaemon 0.8.3
+> root@msl-ssg-cx02:/usr/local/var/lib/rasdaemon# rasdaemon -f -r
+> *** buffer overflow detected ***: terminated
+> Aborted (core dumped)
+> ++++
+>=20
+> Has this been reported by other folks?=20
 
-This occurs because some BIOS may disable a memory controller if there
-aren't any memory DIMMs populated on this memory controller. The DIMMMTR
-register of this disabled memory controller contains the invalid value
-~0, resulting in the call trace above.
+Tha=C2=B4t s new to me.
 
-Fix this call trace by skipping DIMM enumeration on a disabled memory
-controller.
 
-Fixes: ba987eaaabf9 ("EDAC/i10nm: Add Intel Granite Rapids server support")
-Reported-by: Jose Jesus Ambriz Meza <jose.jesus.ambriz.meza@intel.com>
-Reported-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-Closes: https://lore.kernel.org/all/20250730063155.2612379-1-acelan.kao@canonical.com/
-Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- drivers/edac/i10nm_base.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> Can you please look into this and let us know what could be causing this?=
+ =20
+> If you have already observed it, are there any plans to provide a fix for=
+ this issue?
 
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index a3fca2567752..ac9afcf461d7 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -1047,6 +1047,15 @@ static bool i10nm_check_ecc(struct skx_imc *imc, int chan)
- 	return !!GET_BITFIELD(mcmtr, 2, 2);
- }
- 
-+static bool i10nm_channel_disabled(struct skx_imc *imc, int chan)
-+{
-+	u32 mcmtr = I10NM_GET_MCMTR(imc, chan);
-+
-+	edac_dbg(1, "mc%d ch%d mcmtr reg %x\n", imc->mc, chan, mcmtr);
-+
-+	return (mcmtr == ~0 || GET_BITFIELD(mcmtr, 18, 18));
-+}
-+
- static int i10nm_get_dimm_config(struct mem_ctl_info *mci,
- 				 struct res_config *cfg)
- {
-@@ -1060,6 +1069,11 @@ static int i10nm_get_dimm_config(struct mem_ctl_info *mci,
- 		if (!imc->mbase)
- 			continue;
- 
-+		if (i10nm_channel_disabled(imc, i)) {
-+			edac_dbg(1, "mc%d ch%d is disabled.\n", imc->mc, i);
-+			continue;
-+		}
-+
- 		ndimms = 0;
- 
- 		if (res_cfg->type != GNR)
+You need to use the core dump to identify what line of code caused
+the issue. If your machine is using systemd, there is an utility
+(coredumpctl) that allows you to inspect it. There is a description
+about how to do it at:=20
 
-base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
--- 
-2.43.0
+https://wiki.archlinux.org/title/Core_dump
 
+Once you check the source, I suggest you to take a look at the code
+if it belongs to rasdaemon. If it came from some other place, e.g.
+from one of rasdaemon dependencies, then you may need to open a bug
+to the specific package on Ubuntu, if rasdaemon is passing the data
+right to it.
+
+Regards,
+Mauro
+
+>=20
+> Hope to hear soon.
+>=20
+> Sincerely
+> Samaresh K. Singh
+> Memory Solutions Lab Team
+> Samsung
+
+
+
+Thanks,
+Mauro
 
