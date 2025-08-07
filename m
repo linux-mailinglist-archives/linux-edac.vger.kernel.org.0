@@ -1,257 +1,444 @@
-Return-Path: <linux-edac+bounces-4533-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4534-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26958B1D31E
-	for <lists+linux-edac@lfdr.de>; Thu,  7 Aug 2025 09:14:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28611B1D72F
+	for <lists+linux-edac@lfdr.de>; Thu,  7 Aug 2025 14:02:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44A9C172982
-	for <lists+linux-edac@lfdr.de>; Thu,  7 Aug 2025 07:14:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CC8A165F3D
+	for <lists+linux-edac@lfdr.de>; Thu,  7 Aug 2025 12:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5189B230D35;
-	Thu,  7 Aug 2025 07:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Y2OkJYUc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317A123815D;
+	Thu,  7 Aug 2025 12:02:25 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mailout1.w2.samsung.com (mailout1.w2.samsung.com [211.189.100.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6352A3FE7
-	for <linux-edac@vger.kernel.org>; Thu,  7 Aug 2025 07:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.189.100.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24915221275;
+	Thu,  7 Aug 2025 12:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754550895; cv=none; b=de6Uf0PZn4g3FaXS4sQvZixkpYeXLqeExAUqSQJRk+bIFmuD7YALnZmjKv2mXo4uIdlIjuxAYRrLjYS7I8/HYJA3bSmeLEvFcoeHY0B/RMnMyeaJK4UH9ezlnEBMqoD+SIdEx+gzBmHkmz3/pjrwDxE2K1mB4IaLeQP6I+Bucv0=
+	t=1754568145; cv=none; b=NVAj8HPtv4fHC8tlTNRdxWJkgWJewH0RObAByKmoljlshR75Ou34Tg6pFnlj/MNfe3hPqK+wHO373jBU4vNS8g7y4sf/ZOths2tMElIKlv2oVx2i2IiqYbEIvAPQFjeBbO3k0mcFTqtwqry5XR5BQWL8Sjkw79NkYaLoewsrv+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754550895; c=relaxed/simple;
-	bh=jQtZ6SQTPHIbmV8zYywLQRA5uvx8McdFNCb+x+TiFig=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version:
-	 References; b=kOyDGB2FO1EyeR1jL9Sxjt8OxohWix4A0OM8CDR6M1GvORQ+QBaOknYm6khatgcqv4RfB6TG/KJSFKz2MTRw9zRPoReSACfx+WpWNmXyjlAJV3Y+ewCY9PNuFObwa1vcEIV+cy9SwA7KV5ledmpcvBGirzj3TFvIph6YtYdN4BM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=partner.samsung.com; spf=pass smtp.mailfrom=partner.samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Y2OkJYUc; arc=none smtp.client-ip=211.189.100.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=partner.samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=partner.samsung.com
-Received: from uscas1p2.samsung.com (unknown [182.198.245.207])
-	by mailout1.w2.samsung.com (KnoxPortal) with ESMTP id 20250807071450usoutp0128b4c6fbf62497f8933189476d51e44c~Zar0QBCGM0920809208usoutp01S;
-	Thu,  7 Aug 2025 07:14:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w2.samsung.com 20250807071450usoutp0128b4c6fbf62497f8933189476d51e44c~Zar0QBCGM0920809208usoutp01S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1754550890;
-	bh=jQtZ6SQTPHIbmV8zYywLQRA5uvx8McdFNCb+x+TiFig=;
-	h=From:To:CC:Subject:Date:References:From;
-	b=Y2OkJYUcPBrvSLNM/btt3XLq632LrXuw0fqe0LeGhPCTBfz2GHEHzcataW74I+95h
-	 8OL5CLPJUJU9zEteCo15liz+tT6P98xu+qX4cv7S6xsNxSUksC83692/nBWxsjG2pj
-	 z6KyofhWAW2tiY4f7WknANdSQ1dKxM/gPlxza5nY=
-Received: from ussmtxp1.samsung.com (u136.gpu85.samsung.co.kr
-	[203.254.195.136]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20250807071449uscas1p21a977bc7bf8b73e4dc05a4535b322be6~ZarzlQOy42152421524uscas1p2E;
-	Thu,  7 Aug 2025 07:14:49 +0000 (GMT)
-Received: from SSI-EX1.ssi.samsung.com (unknown [105.128.3.66]) by
-	ussmtxp1.samsung.com (KnoxPortal) with ESMTP id
-	20250807071449ussmtxp18425d036963bda7fbeb20b44a8283e4b~ZarzWLbOl2847028470ussmtxp1u;
-	Thu,  7 Aug 2025 07:14:49 +0000 (GMT)
-Received: from SSI-EX2.ssi.samsung.com (105.128.2.227) by
-	SSI-EX1.ssi.samsung.com (105.128.2.226) with Microsoft SMTP Server
-	(version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
-	15.1.2507.39; Thu, 7 Aug 2025 00:14:48 -0700
-Received: from SSI-EX2.ssi.samsung.com ([105.128.2.227]) by
-	SSI-EX2.ssi.samsung.com ([105.128.2.227]) with mapi id 15.01.2507.044; Thu,
-	7 Aug 2025 00:14:48 -0700
-From: Samaresh Singh <samaresh.s@partner.samsung.com>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: Re: Coredump detected executing rasdaemon 0.8.3 using
- "rasdaemon -f -r" on host with AMD CPU with Ubuntu 24
-Thread-Topic: Re: Coredump detected executing rasdaemon 0.8.3 using
-	"rasdaemon -f -r" on host with AMD CPU with Ubuntu 24
-Thread-Index: AdwHavSQw0/8TQj+S6OQLFn78+dfBQ==
-Date: Thu, 7 Aug 2025 07:14:48 +0000
-Message-ID: <17b9af7b1ec24e79876dee0f980845cb@partner.samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1754568145; c=relaxed/simple;
+	bh=WmmLTqk2OgTgbcaK+tbH9f2X98OF6Jw7cAoJOaXSLIE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=K8krU621zjp9CKXlZsNVEnMb5JrOwnXvYQRSmh1l6GF/MhVYwUcf4A+Fr2IEZ7A+1xGWDDiX7ukrejN11DhV9ALpdCsGNM0TVAG8On0WQGb+YOTvVSZKt7KRuMb8AjwdJH+XidmkFG0oXxpiCSH8ZCoi9On00bGoy76lw+0pM5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-af949891d3aso132132566b.1;
+        Thu, 07 Aug 2025 05:02:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754568141; x=1755172941;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TcEqD2Pp6Z225d6tl17GjpdF9VhMMcRo1GStFJJS27w=;
+        b=wEprYdzqWtQ3ZqohktgdfttcByCQ3AXQNFA5NJLiPwYbsM/1XgBFvC5Fh8Fb9WeEQp
+         EbkrsNXu87a1S1XAEhnVo412seuOfzD5v3F+1DKud1kTg+pVaRDi7z6mtpvVI7heaLLY
+         u0NaaNWFNn3Yvx/PucNAeOcuDyAUq7G+acfAh2I0Mrgrtn+2q53DHTSb7gIhZ4wdkZHK
+         69VQ72EyvdJN7eiK0Mo5bQdU8yVnOmKF5+lInvDiN2MRuyR+9NF4H3k2+7QHopS3Kk7M
+         kCduwNOjujxpH9LOtiBU9WDZWuFuFHNHXcScm4a85VGsNK4hUqdkJqb3RMw/jaDZr4kf
+         e0/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVL43qydsf7o6S3bfl82rGOWU6OdpiKzMzR7cfJXSpowCwWg3hZrsxqWem3fGyn+tKM7F0aPp0aVKlx@vger.kernel.org, AJvYcCVbVvqvzdcKZmNsQ7tTQPBkLCYCmlF1vMgVWBmnbJL7Oam9TF+kvLyYhaUGW8gQyqizRbZBc5hpPqnn@vger.kernel.org, AJvYcCW+FhFjyZ3P+iSNxDXblnF9QDCj3Y97uP7eQ5/EYlTY9fRvfHhuTUQ96IALu8dVPAV9WbLxB1aUnnFFBII+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHIGGDubZc6q/U/bsvT5G8sA+OBApCinnoiu3/jjyx/DYbi8H+
+	CCRQH0zfm8JkptwdB+DwyYMk9I5r9NDEYmL1YgA6Rkj5BsbRQ21vRO/9xXs+Gw==
+X-Gm-Gg: ASbGncvldYuU80fZktLopp8G1+PzEvubAA6G/Kz4Wqjeqd6jBa23eHBqTGIwlvKEkAm
+	2McErPi8iRzsG8EcwcxRNBI9+KQ4ggF+gvtEzWu7f7MTlQIKV6C0UL7JX2b8v5w4jSM0y7wMBRq
+	KCIkgTo4j0rKnurcpvywonOlGV7OgWMp5VVO1+lCoPD0MKwdS9Mf0Al8K4Bqaz/Fioy8nUIpbcE
+	NL7Z4NCLQUT6ktkCT8g3varkk3xBe1klK1TU2iTHTt92yMW0k8MnCpvukBwLMwHWIg5+NxypdYr
+	0N59ChezKRAM3dROhsjUMtMUslGYzDsEuQi74J3qnFIUPNmMb/gcrZ6AL1CsoyJPxIN+tbdS0co
+	f5OL6W2VKt3FS5iAFoue+3go=
+X-Google-Smtp-Source: AGHT+IGa1I/ilvIOBCvInSAxZfDpaVsMb4OkBgAFcX5LwdXi64LWkAcj3+hpGQebA5QV/8oJSjfE7g==
+X-Received: by 2002:a17:907:3d93:b0:af5:a834:c327 with SMTP id a640c23a62f3a-af99031cd5fmr577553966b.21.1754568140812;
+        Thu, 07 Aug 2025 05:02:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:9::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a219ef2sm1295120066b.96.2025.08.07.05.02.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Aug 2025 05:02:20 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+Date: Thu, 07 Aug 2025 05:02:11 -0700
+Subject: [PATCH v5] vmcoreinfo: Track and log recoverable hardware errors
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-CMS-MailID: 20250807071449uscas1p21a977bc7bf8b73e4dc05a4535b322be6
-X-CMS-RootMailID: 20250807071449uscas1p21a977bc7bf8b73e4dc05a4535b322be6
-References: <CGME20250807071449uscas1p21a977bc7bf8b73e4dc05a4535b322be6@uscas1p2.samsung.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250807-vmcore_hw_error-v5-1-0df35396e4b2@debian.org>
+X-B4-Tracking: v=1; b=H4sIAMKVlGgC/23PzWrDMAzA8VcxOsfDkr+ynPYeYxTHkRsflgxnp
+ B0l7z5SNpbhXgX6/aUbLFwyL9CJGxRe85LnCTphGwFxDNOZZR6gE0CKrPLKy/U9zoVP4+XEpcx
+ FaiJDz+yiRgeNgI/CKV/v4utbI2DMy+dcvu6BFffpj4WmslaUKNuYjOWhd1qbl4H7HKanuZxhx
+ 1Y6Aq4GSKJM2PrkB0ehD0eg+f2C8PFi6J0Nrjc62lCV9aFMVAN6LyflWp0iJvQVYP6AVj24wOx
+ AwMRu/77V/4Bt274Bb1xdTasBAAA=
+X-Change-ID: 20250707-vmcore_hw_error-322429e6c316
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+ James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, 
+ Borislav Petkov <bp@alien8.de>, Robert Moore <robert.moore@intel.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
+ Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>
+Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ acpica-devel@lists.linux.dev, osandov@osandov.com, 
+ xueshuai@linux.alibaba.com, konrad.wilk@oracle.com, 
+ linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-pci@vger.kernel.org, kernel-team@meta.com, 
+ Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.15-dev-dd21f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11826; i=leitao@debian.org;
+ h=from:subject:message-id; bh=WmmLTqk2OgTgbcaK+tbH9f2X98OF6Jw7cAoJOaXSLIE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBolJXLLipo1TDCKVywDcpai5J+PL9QnUPwrqKfW
+ P8sDVDZTvKJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaJSVywAKCRA1o5Of/Hh3
+ bSrHD/95S6d363l5YVcJC+RC5CaiPry+uBeGaRYCZ46OUPPhWLlCd14I+s8M3tyZau7hg+Ng47C
+ 0+jMJjzWQhYrPrWiVshbf2JA8oxwx6ZImBx3VPaYlKWNUz1k+GyH468Rj+3juO+KeERQIT4HDoU
+ DapphCHFmO0joirLNNEAAA5vfLN2vChY4CXyAGFrZq3ONzyPRowry0Tv93UcRlfvVhwrNMGeipT
+ ymVpDgfkdfvApspenJjvsPanUC1a9QWB0LLaTqDaNVwML/MmLVyaxlGTZIW5jP5jhAM9RBN3x9q
+ r6LivoXpbAQBIJScHrrMgPz1FcuvcdvyQcBfd/L8GnHZs8uPpemmOF8+yBkPJSpAuJSQuirMrnG
+ Yxco9PV5o3LOmBfRT5giYRqr4AzsEuTg5rhARhS/v8uAa360I7NmmYlkvP5jE5zykGpY+k5ofDe
+ MOv61/NfOHSIbbNrnxJcvFsOpZj/dmQ25ipxsJ5i1OG29W9X8M2Re+HfNK3R+cya5UdLp0G0p+Q
+ 3DrciRehC6/8tnIZ1PNSlZ4bpUTYOeS3q6qDq+BHYkh1urV4NCEcIJDi/5oKZzakvPUeEJO4pQZ
+ ST6OsrwjYBE0gFGwQPmoBmfBe8aP7eI8/EENCYjviC1ZmKtFYyqxHE3pgIsZVl8q5irbq0PKhqx
+ Q5K1jD22+WLzL6w==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-SGkgTWF1cm8sDQoNCiAgVGhhbmtzIGZvciB5b3VyIHJlc3BvbnNlLiAgDQogIEFzIHBlciB5b3Vy
-IHJlcXVlc3QsIEkgcmFuIHRoZSBjb21waWxlZCBjb2RlIHVzaW5nIEdEQiBhbmQgc2hvd24gYmVs
-b3cgaXMgdGhlIHN0YWNrIHRyYWNlIGFmdGVyIHRoZSBjcmFzaCBpbiB0aGUg4oCccmFzLWV2ZW50
-cy5j4oCdIGF0IGxpbmUgODYyIGluIGZ1bmN0aW9uIGFkZF9ldmVudF9oYW5kbGVyLg0KDQpBKSBS
-dW5uaW5nIHRoZSBjb21waWxlZCBjb2RlIHVzaW5nIEdEQiBhbmQgbG9va2luZyBhdCBiYWNrdHJh
-Y2UgYWZ0ZXIgY29yZWR1bXANCisrKysNCg0KKGdkYikgciAtZiAtcg0KU3RhcnRpbmcgcHJvZ3Jh
-bTogL2hvbWUvc2FtYXJlc2gucy9wcmFjL3JhczEvcmFzZGFlbW9uL3Jhc2RhZW1vbiAtZiAtcg0K
-DQpFbmFibGUgZGVidWdpbmZvZCBmb3IgdGhpcyBzZXNzaW9uPyAoeSBvciBbbl0pIHkNCkRlYnVn
-aW5mb2QgaGFzIGJlZW4gZW5hYmxlZC4NClRvIG1ha2UgdGhpcyBzZXR0aW5nIHBlcm1hbmVudCwg
-YWRkICdzZXQgZGVidWdpbmZvZCBlbmFibGVkIG9uJyB0byAuZ2RiaW5pdC4NCkRvd25sb2FkaW5n
-IHNlcGFyYXRlIGRlYnVnIGluZm8gZm9yIHN5c3RlbS1zdXBwbGllZCBEU08gYXQgMHg3ZmZmZjdm
-YzMwMDANCkRvd25sb2FkaW5nIHNlcGFyYXRlIGRlYnVnIGluZm8gZm9yIC9saWIveDg2XzY0LWxp
-bnV4LWdudS9saWJzcWxpdGUzLnNvLjAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIA0KRG93bmxvYWRpbmcgc2VwYXJhdGUgZGVidWcgaW5mbyBmb3IgL2xp
-Yi94ODZfNjQtbGludXgtZ251L2xpYnRyYWNlZXZlbnQuc28uMSAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgDQpbVGhyZWFkIGRlYnVnZ2luZyB1c2luZyBsaWJ0
-aHJlYWRfZGIgZW5hYmxlZF0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICANClVzaW5nIGhvc3QgbGlidGhy
-ZWFkX2RiIGxpYnJhcnkgIi9saWIveDg2XzY0LWxpbnV4LWdudS9saWJ0aHJlYWRfZGIuc28uMSIu
-DQoqKiogYnVmZmVyIG92ZXJmbG93IGRldGVjdGVkICoqKjogdGVybWluYXRlZA0KDQpQcm9ncmFt
-IHJlY2VpdmVkIHNpZ25hbCBTSUdBQlJULCBBYm9ydGVkLg0KRG93bmxvYWQgZmFpbGVkOiBJbnZh
-bGlkIGFyZ3VtZW50LiAgQ29udGludWluZyB3aXRob3V0IHNvdXJjZSBmaWxlIC4vbnB0bC8uL25w
-dGwvcHRocmVhZF9raWxsLmMuDQpfX3B0aHJlYWRfa2lsbF9pbXBsZW1lbnRhdGlvbiAobm9fdGlk
-PTAsIHNpZ25vPTYsIHRocmVhZGlkPTxvcHRpbWl6ZWQgb3V0PikgYXQgLi9ucHRsL3B0aHJlYWRf
-a2lsbC5jOjQ0DQp3YXJuaW5nOiA0NCAgICAgICAgLi9ucHRsL3B0aHJlYWRfa2lsbC5jOiBObyBz
-dWNoIGZpbGUgb3IgZGlyZWN0b3J5DQooZ2RiKSBidA0KIzAgIF9fcHRocmVhZF9raWxsX2ltcGxl
-bWVudGF0aW9uIChub190aWQ9MCwgc2lnbm89NiwgdGhyZWFkaWQ9PG9wdGltaXplZCBvdXQ+KSBh
-dCAuL25wdGwvcHRocmVhZF9raWxsLmM6NDQNCiMxICBfX3B0aHJlYWRfa2lsbF9pbnRlcm5hbCAo
-c2lnbm89NiwgdGhyZWFkaWQ9PG9wdGltaXplZCBvdXQ+KSBhdCAuL25wdGwvcHRocmVhZF9raWxs
-LmM6NzgNCiMyICBfX0dJX19fcHRocmVhZF9raWxsICh0aHJlYWRpZD08b3B0aW1pemVkIG91dD4s
-IHNpZ25vPXNpZ25vQGVudHJ5PTYpIGF0IC4vbnB0bC9wdGhyZWFkX2tpbGwuYzo4OQ0KIzMgIDB4
-MDAwMDdmZmZmN2M0NTI3ZSBpbiBfX0dJX3JhaXNlIChzaWc9c2lnQGVudHJ5PTYpIGF0IC4uL3N5
-c2RlcHMvcG9zaXgvcmFpc2UuYzoyNg0KIzQgIDB4MDAwMDdmZmZmN2MyODhmZiBpbiBfX0dJX2Fi
-b3J0ICgpIGF0IC4vc3RkbGliL2Fib3J0LmM6NzkNCiM1ICAweDAwMDA3ZmZmZjdjMjk3YjYgaW4g
-X19saWJjX21lc3NhZ2VfaW1wbCAoZm10PWZtdEBlbnRyeT0weDdmZmZmN2RjZTc2NSAiKioqICVz
-ICoqKjogdGVybWluYXRlZFxuIikNCiAgICBhdCAuLi9zeXNkZXBzL3Bvc2l4L2xpYmNfZmF0YWwu
-YzoxMzQNCiM2ICAweDAwMDA3ZmZmZjdkMzZjMTkgaW4gX19HSV9fX2ZvcnRpZnlfZmFpbCAobXNn
-PW1zZ0BlbnRyeT0weDdmZmZmN2RjZTc0YyAiYnVmZmVyIG92ZXJmbG93IGRldGVjdGVkIikNCiAg
-ICBhdCAuL2RlYnVnL2ZvcnRpZnlfZmFpbC5jOjI0DQojNyAgMHgwMDAwN2ZmZmY3ZDM2NWQ0IGlu
-IF9fR0lfX19jaGtfZmFpbCAoKSBhdCAuL2RlYnVnL2Noa19mYWlsLmM6MjgNCiM4ICAweDAwMDA3
-ZmZmZjdkMzdhNDcgaW4gX19HSV9fX3JlYWRfY2hrIChmZD1mZEBlbnRyeT0zLCBidWY9YnVmQGVu
-dHJ5PTB4NTU1NTU1NTg5ODRjLCBuYnl0ZXM9bmJ5dGVzQGVudHJ5PTgxOTIsIA0KICAgIGJ1Zmxl
-bj1idWZsZW5AZW50cnk9NjgwNCkgYXQgLi9kZWJ1Zy9yZWFkX2Noay5jOjI0DQojOSAgMHgwMDAw
-NTU1NTU1NTY0NGUwIGluIHJlYWQgKF9fbmJ5dGVzPTgxOTIsIF9fYnVmPTB4NTU1NTU1NTg5ODRj
-LCBfX2ZkPTMpDQogICAgYXQgL3Vzci9pbmNsdWRlL3g4Nl82NC1saW51eC1nbnUvYml0cy91bmlz
-dGQuaDoyOA0KIzEwIGFkZF9ldmVudF9oYW5kbGVyIChyYXM9cmFzQGVudHJ5PTB4NTU1NTU1NTg4
-NmIwLCBwZXZlbnQ9cGV2ZW50QGVudHJ5PTB4NTU1NTU1NTg5MTkwLCBwYWdlX3NpemU9cGFnZV9z
-aXplQGVudHJ5PTgxOTIsIA0KICAgIGdyb3VwPWdyb3VwQGVudHJ5PTB4NTU1NTU1NTczNGM5ICJy
-YXMiLCBldmVudD1ldmVudEBlbnRyeT0weDU1NTU1NTU3MzM5YSAibWNfZXZlbnQiLCANCiAgICBm
-dW5jPTB4NTU1NTU1NTY2NzAwIDxyYXNfbWNfZXZlbnRfaGFuZGxlcj4sIGlkPTAsIGZpbHRlcl9z
-dHI9MHgwKSBhdCByYXMtZXZlbnRzLmM6ODYyDQojMTEgMHgwMDAwNTU1NTU1NTY1YmMyIGluIGhh
-bmRsZV9yYXNfZXZlbnRzIChyZWNvcmRfZXZlbnRzPTxvcHRpbWl6ZWQgb3V0PiwgZW5hYmxlX2lw
-bWl0b29sPTApIGF0IHJhcy1ldmVudHMuYzo5ODUNCiMxMiAweDAwMDA1NTU1NTU1NjMyNmEgaW4g
-bWFpbiAoYXJnYz0zLCBhcmd2PTB4N2ZmZmZmZmZlMjY4KSBhdCByYXNkYWVtb24uYzoyMTINCisr
-KysNCg0KQikgU3RlcHBpbmcgdGhyb3VnaCB3aXRoIGJyZWFrIHBvaW50IGluIHJhcy1ldmVudHMu
-YyBhdCBzdGFydGluZyBhdCBsaW5lIDgzNw0KKysrDQo4MzcgICAgICAgICAgICAgICAgICAgICAg
-ICBmZCA9IG9wZW5fdHJhY2UocmFzLCBmbmFtZSwgT19SRE9OTFkpOw0KKGdkYikgbg0KODM4ICAg
-ICAgICAgICAgICAgICAgICAgICAgaWYgKGZkIDwgMCkgew0KKGdkYikgcCBmZA0KJDEgPSAzDQoo
-Z2RiKSBuDQo4NTIgICAgICAgICAgICAgICAgICAgICAgICBwYWdlID0gbWFsbG9jKHBhZ2Vfc2l6
-ZSk7DQooZ2RiKSANCjg1MyAgICAgICAgICAgICAgICAgICAgICAgIGlmICghcGFnZSkgew0KKGdk
-YikgcCBwYWdlDQokMiA9IDB4NTU1NTU1NTg5MmUwICJ0cmFjZV90b3RhbF9pbmZvIg0KKGdkYikg
-bg0KODYyICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmMgPSByZWFkKGZk
-LCBwYWdlICsgc2l6ZSwgcGFnZV9zaXplKTsNCihnZGIpIA0KODYzICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgaWYgKHJjIDwgMCkgew0KKGdkYikgcCByYw0KJDMgPSAxMzg4
-DQooZ2RiKSBuDQo4NjkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzaXpl
-ICs9IHJjOw0KKGdkYikgbg0KODcwICAgICAgICAgICAgICAgICAgICAgICAgfSB3aGlsZSAocmMg
-PiAwKTsNCihnZGIpIA0KODYyICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-cmMgPSByZWFkKGZkLCBwYWdlICsgc2l6ZSwgcGFnZV9zaXplKTsNCihnZGIpIA0KKioqIGJ1ZmZl
-ciBvdmVyZmxvdyBkZXRlY3RlZCAqKio6IHRlcm1pbmF0ZWQNCg0KUHJvZ3JhbSByZWNlaXZlZCBz
-aWduYWwgU0lHQUJSVCwgQWJvcnRlZC4NCkRvd25sb2FkIGZhaWxlZDogSW52YWxpZCBhcmd1bWVu
-dC4gIENvbnRpbnVpbmcgd2l0aG91dCBzb3VyY2UgZmlsZSAuL25wdGwvLi9ucHRsL3B0aHJlYWRf
-a2lsbC5jLg0KX19wdGhyZWFkX2tpbGxfaW1wbGVtZW50YXRpb24gKG5vX3RpZD0wLCBzaWdubz02
-LCB0aHJlYWRpZD08b3B0aW1pemVkIG91dD4pIGF0IC4vbnB0bC9wdGhyZWFkX2tpbGwuYzo0NA0K
-d2FybmluZzogNDQgICAgICAgIC4vbnB0bC9wdGhyZWFkX2tpbGwuYzogTm8gc3VjaCBmaWxlIG9y
-IGRpcmVjdG9yeQ0KDQorKysNCjgzNyAgICAgICAgICAgICAgICAgICAgICAgIGZkID0gb3Blbl90
-cmFjZShyYXMsIGZuYW1lLCBPX1JET05MWSk7DQooZ2RiKSBuDQo4MzggICAgICAgICAgICAgICAg
-ICAgICAgICBpZiAoZmQgPCAwKSB7DQooZ2RiKSBwIGZkDQokMSA9IDMNCihnZGIpIG4NCjg1MiAg
-ICAgICAgICAgICAgICAgICAgICAgIHBhZ2UgPSBtYWxsb2MocGFnZV9zaXplKTsNCihnZGIpIA0K
-ODUzICAgICAgICAgICAgICAgICAgICAgICAgaWYgKCFwYWdlKSB7DQooZ2RiKSBwIHBhZ2UNCiQy
-ID0gMHg1NTU1NTU1ODkyZTAgInRyYWNlX3RvdGFsX2luZm8iDQooZ2RiKSBuDQo4NjIgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByYyA9IHJlYWQoZmQsIHBhZ2UgKyBzaXpl
-LCBwYWdlX3NpemUpOw0KKGdkYikgDQo4NjMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBpZiAocmMgPCAwKSB7DQooZ2RiKSBwIHJjDQokMyA9IDEzODgNCihnZGIpIG4NCjg2
-OSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNpemUgKz0gcmM7DQooZ2Ri
-KSBuDQo4NzAgICAgICAgICAgICAgICAgICAgICAgICB9IHdoaWxlIChyYyA+IDApOw0KKGdkYikg
-DQo4NjIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByYyA9IHJlYWQoZmQs
-IHBhZ2UgKyBzaXplLCBwYWdlX3NpemUpOw0KKGdkYikgDQoqKiogYnVmZmVyIG92ZXJmbG93IGRl
-dGVjdGVkICoqKjogdGVybWluYXRlZA0KDQpQcm9ncmFtIHJlY2VpdmVkIHNpZ25hbCBTSUdBQlJU
-LCBBYm9ydGVkLg0KRG93bmxvYWQgZmFpbGVkOiBJbnZhbGlkIGFyZ3VtZW50LiAgQ29udGludWlu
-ZyB3aXRob3V0IHNvdXJjZSBmaWxlIC4vbnB0bC8uL25wdGwvcHRocmVhZF9raWxsLmMuDQpfX3B0
-aHJlYWRfa2lsbF9pbXBsZW1lbnRhdGlvbiAobm9fdGlkPTAsIHNpZ25vPTYsIHRocmVhZGlkPTxv
-cHRpbWl6ZWQgb3V0PikgYXQgLi9ucHRsL3B0aHJlYWRfa2lsbC5jOjQ0DQp3YXJuaW5nOiA0NCAg
-ICAgICAgLi9ucHRsL3B0aHJlYWRfa2lsbC5jOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5DQor
-KysrDQoNCkhvcGUgdG8gaGVhciBzb29uLg0KDQpTaW5jZXJlbHkNClNhbWFyZXNoIFNpbmdoDQoN
-CkZyb206IE1hdXJvIENhcnZhbGhvIENoZWhhYiA8bWNoZWhhYitodWF3ZWlAa2VybmVsLm9yZz4g
-DQpTZW50OiBXZWRuZXNkYXksIEF1Z3VzdCA2LCAyMDI1IDE6MjcgQU0NClRvOiBTYW1hcmVzaCBT
-aW5naCA8c2FtYXJlc2guc0BwYXJ0bmVyLnNhbXN1bmcuY29tPg0KQ2M6IGxpbnV4LWVkYWNAdmdl
-ci5rZXJuZWwub3JnOyBtY2hlaGFiQGtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBDb3JlZHVtcCBk
-ZXRlY3RlZCBleGVjdXRpbmcgcmFzZGFlbW9uIDAuOC4zIHVzaW5nICJyYXNkYWVtb24gLWYgLXIi
-IG9uIGhvc3Qgd2l0aCBBTUQgQ1BVIHdpdGggVWJ1bnR1IDI0DQoNCkVtIFR1ZSwgNSBBdWcgMjAy
-NSAyMTrigIo0NDrigIo1MCArMDAwMCBTYW1hcmVzaCBTaW5naCA8c2FtYXJlc2gu4oCKc0DigIpw
-YXJ0bmVyLuKAinNhbXN1bmcu4oCKY29tPiBlc2NyZXZldTogPiBIaSwgPiA+IEkgY29tcGlsZWQg
-cmFzZGFlbW9uIDAu4oCKOC7igIozIHVzaW5nIHRoZSBjb2RlIGF0IGh0dHBzOuKAii8vdXJsZGVm
-ZW5zZS7igIpjb20vdjMvX19odHRwczrigIovL3Byb3RlY3QyLuKAimZpcmVleWUu4oCKY29tL3Yx
-L3VybD9rPTA4M2Y4MDg5LTY5YjQ5NWI5LTA4M2UwYmM2LTAwMGJhYmZmYWEyMy01YWJlNTk0YWVh
-OTIyOWRlJnE9MSZlPTZlMTNhYTdlLTkyYzktNGI5OC04NjA3LTY5ZGUwNjRkNGQ2ZSZ1PWh0dHBz
-KjNBKjJGKjJGZ2l0aHViLuKAimNvbSoyRm1jaGVoYWIqMkZyYXNkYWVtb24qMkZfXztKU1VsSlNV
-bCEhRXdWenFHb1RLQnF2LTBEV0FKQm0hUnRSUWEwblFjWUc3bFBRbC1oMWpEVWthcUs5ZG0yeXFL
-XzA3RHE0N1RrcF82SFNTajRPeG5sREdaY2MwNWV3TzluM0NGeGdydFhWeWZSX1lKNFlJWnlUU3p2
-TVJDQSQNClpqUWNtUVJZRnBmcHRCYW5uZXJTdGFydA0KVGhpcyBNZXNzYWdlIElzIEZyb20gYW4g
-RXh0ZXJuYWwgU2VuZGVyIA0KVXNlIGNhdXRpb24gb3BlbmluZyBmaWxlcywgY2xpY2tpbmcgbGlu
-a3Mgb3IgcmVzcG9uZGluZyB0byByZXF1ZXN0cy4gDQoNCg0KWmpRY21RUllGcGZwdEJhbm5lckVu
-ZA0KRW0gVHVlLCA1IEF1ZyAyMDI1IDIxOjQ0OjUwICswMDAwDQpTYW1hcmVzaCBTaW5naCA8c2Ft
-YXJlc2guc0BwYXJ0bmVyLnNhbXN1bmcuY29tPiBlc2NyZXZldToNCg0KPiBIaSwNCj4gDQo+ICAg
-SSBjb21waWxlZCByYXNkYWVtb24gMC44LjMgdXNpbmcgdGhlIGNvZGUgYXQgaHR0cHM6Ly91cmxk
-ZWZlbnNlLmNvbS92My9fX2h0dHBzOi8vcHJvdGVjdDIuZmlyZWV5ZS5jb20vdjEvdXJsP2s9MDgz
-ZjgwODktNjliNDk1YjktMDgzZTBiYzYtMDAwYmFiZmZhYTIzLTVhYmU1OTRhZWE5MjI5ZGUmcT0x
-JmU9NmUxM2FhN2UtOTJjOS00Yjk4LTg2MDctNjlkZTA2NGQ0ZDZlJnU9aHR0cHMqM0EqMkYqMkZn
-aXRodWIuY29tKjJGbWNoZWhhYioyRnJhc2RhZW1vbioyRl9fO0pTVWxKU1VsISFFd1Z6cUdvVEtC
-cXYtMERXQUpCbSFSdFJRYTBuUWNZRzdsUFFsLWgxakRVa2FxSzlkbTJ5cUtfMDdEcTQ3VGtwXzZI
-U1NqNE94bmxER1pjYzA1ZXdPOW4zQ0Z4Z3J0WFZ5ZlJfWUo0WUlaeVRTenZNUkNBJCBvbiBhIG1h
-Y2hpbmUgd2l0aCBBTUQgQ1BVcyBhbmQgVWJ1bnR1IDI0IGFzIE9TLiAgDQo+IFRoZSBkZXRhaWxz
-IGFib3V0IHRoZSBDUFUgaXMgYXZhaWxhYmxlIGFzOg0KPiArKysNCj4gcHJvY2Vzc29yICAgICAg
-ICAgICAgOiAxNjcNCj4gdmVuZG9yX2lkICAgICAgICAgICAgOiBBdXRoZW50aWNBTUQNCj4gY3B1
-IGZhbWlseSAgICAgICAgICAgOiAyNQ0KPiBtb2RlbCAgICAgICAgICAgICAgICAgICA6IDE3DQo+
-IG1vZGVsIG5hbWUgICAgICAgOiBBTUQgRVBZQyA5NjM0IDg0LUNvcmUgUHJvY2Vzc29yDQo+IHN0
-ZXBwaW5nICAgICAgICAgICAgICA6IDENCj4gbWljcm9jb2RlICAgICAgICAgICA6IDB4YTEwMTE0
-OA0KPiBjcHUgTUh6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6IDE1MDAuMDAwDQo+IGNh
-Y2hlIHNpemUgICAgICAgICAgICA6IDEwMjQgS0INCj4gcGh5c2ljYWwgaWQgICAgICAgICAgIDog
-MA0KPiBzaWJsaW5ncyA6IDE2OA0KPiBjb3JlIGlkICAgICAgICAgICAgICAgICAgOiA3OA0KPiBj
-cHUgY29yZXMgICAgICAgICAgICAgOiA4NA0KPiBhcGljaWQgICAgICAgICAgICAgICAgICAgOiAx
-NTcNCj4gaW5pdGlhbCBhcGljaWQgICAgICAgIDogMTU3DQo+IGZwdSAgICAgICAgICAgICAgICAg
-ICAgICAgICA6IHllcw0KPiBmcHVfZXhjZXB0aW9uICAgIDogeWVzDQo+IGNwdWlkIGxldmVsICAg
-ICAgICAgIDogMTYNCj4gd3AgICAgICAgICAgICAgICAgICAgICAgICAgOiB5ZXMNCj4gDQo+IHJv
-b3RAbXNsLXNzZy1jeDAyOi91c3IvbG9jYWwvdmFyL2xpYi9yYXNkYWVtb24jIHVuYW1lIC1hDQo+
-IExpbnV4IG1zbC1zc2ctY3gwMi5tc2wubGFiIDYuOC4wLTcxLWdlbmVyaWMgIzcxLVVidW50dSBT
-TVAgUFJFRU1QVF9EWU5BTUlDIFR1ZSBKdWwgMjIgMTY6NTI6MzggVVRDIDIwMjUgeDg2XzY0IHg4
-Nl82NCB4ODZfNjQgR05VL0xpbnV4DQo+IHJvb3RAbXNsLXNzZy1jeDAyOi91c3IvbG9jYWwvdmFy
-L2xpYi9yYXNkYWVtb24jIGNhdCAvZXRjL2xzYi1yZWxlYXNlIA0KPiBESVNUUklCX0lEPVVidW50
-dQ0KPiBESVNUUklCX1JFTEVBU0U9MjQuMDQNCj4gRElTVFJJQl9DT0RFTkFNRT1ub2JsZQ0KPiBE
-SVNUUklCX0RFU0NSSVBUSU9OPSJVYnVudHUgMjQuMDQuMSBMVFMiDQo+ICsrKysrDQo+ICAgDQo+
-IEkgaGFkIGluc3RhbGxlZCBhbGwgdGhlIHJlcXVpcmVkIGRlcGVuZGVuY2llcyBhbmQgY29uZmln
-dXJlIHVzaW5nICItZW5hYmxlLXNxbGl0ZTMgLWVuYWJsZS1hZXIgLWVuYWJsZS1tY2UiLiAgVGhl
-IGNvbXBpbGF0aW9uIHN1Y2NlZWRlZCB3aXRob3V0IGFueSBlcnJvcnMvd2FybmluZ3MgYnV0IHdo
-ZW4gSSB0cmllZCBleGVjdXRpbmcgdXNpbmcgdGhlIGNvbW1hbmQgInJhc2RhZW1vbiAtZiAtciIg
-SSBnb3QgdGhlIGNvcmVkdW1wIGFzIHNob3duIGJlbG93Og0KPiArKysNCj4gcm9vdEBtc2wtc3Nn
-LWN4MDI6L3Vzci9sb2NhbC92YXIvbGliL3Jhc2RhZW1vbiMgcmFzZGFlbW9uIC0tdmVyc2lvbg0K
-PiByYXNkYWVtb24gMC44LjMNCj4gcm9vdEBtc2wtc3NnLWN4MDI6L3Vzci9sb2NhbC92YXIvbGli
-L3Jhc2RhZW1vbiMgcmFzZGFlbW9uIC1mIC1yDQo+ICoqKiBidWZmZXIgb3ZlcmZsb3cgZGV0ZWN0
-ZWQgKioqOiB0ZXJtaW5hdGVkDQo+IEFib3J0ZWQgKGNvcmUgZHVtcGVkKQ0KPiArKysrDQo+IA0K
-PiBIYXMgdGhpcyBiZWVuIHJlcG9ydGVkIGJ5IG90aGVyIGZvbGtzPyANCg0KVGhhwrR0IHMgbmV3
-IHRvIG1lLg0KDQoNCj4gQ2FuIHlvdSBwbGVhc2UgbG9vayBpbnRvIHRoaXMgYW5kIGxldCB1cyBr
-bm93IHdoYXQgY291bGQgYmUgY2F1c2luZyB0aGlzPyAgDQo+IElmIHlvdSBoYXZlIGFscmVhZHkg
-b2JzZXJ2ZWQgaXQsIGFyZSB0aGVyZSBhbnkgcGxhbnMgdG8gcHJvdmlkZSBhIGZpeCBmb3IgdGhp
-cyBpc3N1ZT8NCg0KWW91IG5lZWQgdG8gdXNlIHRoZSBjb3JlIGR1bXAgdG8gaWRlbnRpZnkgd2hh
-dCBsaW5lIG9mIGNvZGUgY2F1c2VkDQp0aGUgaXNzdWUuIElmIHlvdXIgbWFjaGluZSBpcyB1c2lu
-ZyBzeXN0ZW1kLCB0aGVyZSBpcyBhbiB1dGlsaXR5DQooY29yZWR1bXBjdGwpIHRoYXQgYWxsb3dz
-IHlvdSB0byBpbnNwZWN0IGl0LiBUaGVyZSBpcyBhIGRlc2NyaXB0aW9uDQphYm91dCBob3cgdG8g
-ZG8gaXQgYXQ6IA0KDQpodHRwczovL3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly93aWtpLmFy
-Y2hsaW51eC5vcmcvdGl0bGUvQ29yZV9kdW1wX187ISFFd1Z6cUdvVEtCcXYtMERXQUpCbSFSdFJR
-YTBuUWNZRzdsUFFsLWgxakRVa2FxSzlkbTJ5cUtfMDdEcTQ3VGtwXzZIU1NqNE94bmxER1pjYzA1
-ZXdPOW4zQ0Z4Z3J0WFZ5ZlJfWUo0WUlaeVIwQVp4RWZRJA0KDQpPbmNlIHlvdSBjaGVjayB0aGUg
-c291cmNlLCBJIHN1Z2dlc3QgeW91IHRvIHRha2UgYSBsb29rIGF0IHRoZSBjb2RlDQppZiBpdCBi
-ZWxvbmdzIHRvIHJhc2RhZW1vbi4gSWYgaXQgY2FtZSBmcm9tIHNvbWUgb3RoZXIgcGxhY2UsIGUu
-Zy4NCmZyb20gb25lIG9mIHJhc2RhZW1vbiBkZXBlbmRlbmNpZXMsIHRoZW4geW91IG1heSBuZWVk
-IHRvIG9wZW4gYSBidWcNCnRvIHRoZSBzcGVjaWZpYyBwYWNrYWdlIG9uIFVidW50dSwgaWYgcmFz
-ZGFlbW9uIGlzIHBhc3NpbmcgdGhlIGRhdGENCnJpZ2h0IHRvIGl0Lg0KDQpSZWdhcmRzLA0KTWF1
-cm8NCg0KPiANCj4gSG9wZSB0byBoZWFyIHNvb24uDQo+IA0KPiBTaW5jZXJlbHkNCj4gU2FtYXJl
-c2ggSy4gU2luZ2gNCj4gTWVtb3J5IFNvbHV0aW9ucyBMYWIgVGVhbQ0KPiBTYW1zdW5nDQoNCg0K
-DQpUaGFua3MsDQpNYXVybw0KDQo=
+Introduce a generic infrastructure for tracking recoverable hardware
+errors (HW errors that are visible to the OS but does not cause a panic)
+and record them for vmcore consumption. This aids post-mortem crash
+analysis tools by preserving a count and timestamp for the last
+occurrence of such errors. On the other side, correctable errors, which
+the OS typically remains unaware of because the underlying hardware
+handles them transparently, are less relevant for crash dump
+and therefore are NOT tracked in this infrastructure.
+
+Add centralized logging for sources of recoverable hardware
+errors based on the subsystem it has been notified.
+
+hwerror_data is write-only at kernel runtime, and it is meant to be read
+from vmcore using tools like crash/drgn. For example, this is how it
+looks like when opening the crashdump from drgn.
+
+	>>> prog['hwerror_data']
+	(struct hwerror_info[1]){
+		{
+			.count = (int)844,
+			.timestamp = (time64_t)1752852018,
+		},
+		...
+
+This helps fleet operators quickly triage whether a crash may be
+influenced by hardware recoverable errors (which executes a uncommon
+code path in the kernel), especially when recoverable errors occurred
+shortly before a panic, such as the bug fixed by
+commit ee62ce7a1d90 ("page_pool: Track DMA-mapped pages and unmap them
+when destroying the pool")
+
+This is not intended to replace full hardware diagnostics but provides
+a fast way to correlate hardware events with kernel panics quickly.
+
+Rare machine check exceptions—like those indicated by mce_flags.p5 or
+mce_flags.winchip—are not accounted for in this method, as they fall
+outside the intended usage scope for this feature’s user base.
+
+Suggested-by: Tony Luck <tony.luck@intel.com>
+Suggested-by: Shuai Xue <xueshuai@linux.alibaba.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+---
+Changes in v5:
+- Move the headers to uapi file (Dave Hansen)
+- Use atomic operations in the tracking struct (Dave Hansen)
+- Drop the MCE enum type, and track MCE errors as "others"
+- Document this feature better
+- Link to v4: https://lore.kernel.org/r/20250801-vmcore_hw_error-v4-1-fa1fe65edb83@debian.org
+
+Changes in v4:
+- Split the error by hardware subsystem instead of kernel
+  subsystem/driver (Shuai)
+- Do not count the corrected errors, only focusing on recoverable errors (Shuai)
+- Link to v3: https://lore.kernel.org/r/20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org
+
+Changes in v3:
+- Add more information about this feature in the commit message
+  (Borislav Petkov)
+- Renamed the function to hwerr_log_error_type() and use hwerr as
+  suffix (Borislav Petkov)
+- Make the empty function static inline (kernel test robot)
+- Link to v2: https://lore.kernel.org/r/20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org
+
+Changes in v2:
+- Split the counter by recoverable error (Tony Luck)
+- Link to v1: https://lore.kernel.org/r/20250714-vmcore_hw_error-v1-1-8cf45edb6334@debian.org
+---
+ Documentation/driver-api/hw-recoverable-errors.rst | 60 ++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/core.c                     |  4 ++
+ drivers/acpi/apei/ghes.c                           | 36 +++++++++++++
+ drivers/pci/pcie/aer.c                             |  2 +
+ include/linux/vmcore_info.h                        |  8 +++
+ include/uapi/linux/vmcore.h                        |  9 ++++
+ kernel/vmcore_info.c                               | 17 ++++++
+ 7 files changed, 136 insertions(+)
+
+diff --git a/Documentation/driver-api/hw-recoverable-errors.rst b/Documentation/driver-api/hw-recoverable-errors.rst
+new file mode 100644
+index 0000000000000..fc526c3454bd7
+--- /dev/null
++++ b/Documentation/driver-api/hw-recoverable-errors.rst
+@@ -0,0 +1,60 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=================================================
++Recoverable Hardware Error Tracking in vmcoreinfo
++=================================================
++
++Overview
++--------
++
++This feature provides a generic infrastructure within the Linux kernel to track
++and log recoverable hardware errors. These are hardware recoverable errors
++visible that might not cause immediate panics but may influence health, mainly
++because new code path will be executed in the kernel.
++
++By recording counts and timestamps of recoverable errors into the vmcoreinfo
++crash dump notes, this infrastructure aids post-mortem crash analysis tools in
++correlating hardware events with kernel failures. This enables faster triage
++and better understanding of root causes, especially in large-scale cloud
++environments where hardware issues are common.
++
++Benefits
++--------
++
++- Facilitates correlation of hardware recoverable errors with kernel panics or
++  unusual code paths that lead to system crashes.
++- Provides operators and cloud providers quick insights, improving reliability
++  and reducing troubleshooting time.
++- Complements existing full hardware diagnostics without replacing them.
++
++Data Exposure and Consumption
++-----------------------------
++
++- The tracked error data consists of per-error-type counts and timestamps of
++  last occurrence.
++- This data is stored in the `hwerror_data` array, categorized by error source
++  types like CPU, memory, PCI, CXL, and others.
++- It is exposed via vmcoreinfo crash dump notes and can be read using tools
++  like `crash`, `drgn`, or other kernel crash analysis utilities.
++- There is no other way to read these data other than from crash dumps.
++- These errors are divided by area, which includes CPU, Memory, PCI, CXL and
++  others.
++
++Typical usage example (in drgn REPL):
++
++.. code-block:: python
++
++    >>> prog['hwerror_data']
++    (struct hwerror_info[HWERR_RECOV_MAX]){
++        {
++            .count = (int)844,
++            .timestamp = (time64_t)1752852018,
++        },
++        ...
++    }
++
++Enabling
++--------
++
++- This feature is enabled when CONFIG_VMCORE_INFO is set.
++
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 4da4eab56c81d..9cc38c5ffb77a 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -45,6 +45,7 @@
+ #include <linux/task_work.h>
+ #include <linux/hardirq.h>
+ #include <linux/kexec.h>
++#include <linux/vmcore_info.h>
+ 
+ #include <asm/fred.h>
+ #include <asm/cpu_device_id.h>
+@@ -1690,6 +1691,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	}
+ 
+ out:
++	/* Given it didn't panic, mark it as recoverable */
++	hwerr_log_error_type(HWERR_RECOV_OTHERS);
++
+ 	instrumentation_end();
+ 
+ clear:
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index a0d54993edb3b..562459e9d632e 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -43,6 +43,7 @@
+ #include <linux/uuid.h>
+ #include <linux/ras.h>
+ #include <linux/task_work.h>
++#include <linux/vmcore_info.h>
+ 
+ #include <acpi/actbl1.h>
+ #include <acpi/ghes.h>
+@@ -867,6 +868,40 @@ int cxl_cper_kfifo_get(struct cxl_cper_work_data *wd)
+ }
+ EXPORT_SYMBOL_NS_GPL(cxl_cper_kfifo_get, "CXL");
+ 
++static void ghes_log_hwerr(int sev, guid_t *sec_type)
++{
++	if (sev != CPER_SEV_RECOVERABLE)
++		return;
++
++	if (guid_equal(sec_type, &CPER_SEC_PROC_ARM) ||
++	    guid_equal(sec_type, &CPER_SEC_PROC_GENERIC) ||
++	    guid_equal(sec_type, &CPER_SEC_PROC_IA)) {
++		hwerr_log_error_type(HWERR_RECOV_CPU);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_CXL_PROT_ERR) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_GEN_MEDIA_GUID) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_DRAM_GUID) ||
++	    guid_equal(sec_type, &CPER_SEC_CXL_MEM_MODULE_GUID)) {
++		hwerr_log_error_type(HWERR_RECOV_CXL);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_PCIE) ||
++	    guid_equal(sec_type, &CPER_SEC_PCI_X_BUS)) {
++		hwerr_log_error_type(HWERR_RECOV_PCI);
++		return;
++	}
++
++	if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
++		hwerr_log_error_type(HWERR_RECOV_MEMORY);
++		return;
++	}
++
++	hwerr_log_error_type(HWERR_RECOV_OTHERS);
++}
++
+ static void ghes_do_proc(struct ghes *ghes,
+ 			 const struct acpi_hest_generic_status *estatus)
+ {
+@@ -888,6 +923,7 @@ static void ghes_do_proc(struct ghes *ghes,
+ 		if (gdata->validation_bits & CPER_SEC_VALID_FRU_TEXT)
+ 			fru_text = gdata->fru_text;
+ 
++		ghes_log_hwerr(sev, sec_type);
+ 		if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
+ 			struct cper_sec_mem_err *mem_err = acpi_hest_get_payload(gdata);
+ 
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index e286c197d7167..d814c06cdbee6 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -30,6 +30,7 @@
+ #include <linux/kfifo.h>
+ #include <linux/ratelimit.h>
+ #include <linux/slab.h>
++#include <linux/vmcore_info.h>
+ #include <acpi/apei.h>
+ #include <acpi/ghes.h>
+ #include <ras/ras_event.h>
+@@ -751,6 +752,7 @@ static void pci_dev_aer_stats_incr(struct pci_dev *pdev,
+ 		break;
+ 	case AER_NONFATAL:
+ 		aer_info->dev_total_nonfatal_errs++;
++		hwerr_log_error_type(HWERR_RECOV_PCI);
+ 		counter = &aer_info->dev_nonfatal_errs[0];
+ 		max = AER_MAX_TYPEOF_UNCOR_ERRS;
+ 		break;
+diff --git a/include/linux/vmcore_info.h b/include/linux/vmcore_info.h
+index 37e003ae52626..e71518caacdfc 100644
+--- a/include/linux/vmcore_info.h
++++ b/include/linux/vmcore_info.h
+@@ -5,6 +5,7 @@
+ #include <linux/linkage.h>
+ #include <linux/elfcore.h>
+ #include <linux/elf.h>
++#include <uapi/linux/vmcore.h>
+ 
+ #define CRASH_CORE_NOTE_HEAD_BYTES ALIGN(sizeof(struct elf_note), 4)
+ #define CRASH_CORE_NOTE_NAME_BYTES ALIGN(sizeof(NN_PRSTATUS), 4)
+@@ -77,4 +78,11 @@ extern u32 *vmcoreinfo_note;
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len);
+ void final_note(Elf_Word *buf);
++
++#ifdef CONFIG_VMCORE_INFO
++void hwerr_log_error_type(enum hwerr_error_type src);
++#else
++static inline void hwerr_log_error_type(enum hwerr_error_type src) {};
++#endif
++
+ #endif /* LINUX_VMCORE_INFO_H */
+diff --git a/include/uapi/linux/vmcore.h b/include/uapi/linux/vmcore.h
+index 3e9da91866ffd..2ba89fafa518a 100644
+--- a/include/uapi/linux/vmcore.h
++++ b/include/uapi/linux/vmcore.h
+@@ -15,4 +15,13 @@ struct vmcoredd_header {
+ 	__u8 dump_name[VMCOREDD_MAX_NAME_BYTES]; /* Device dump's name */
+ };
+ 
++enum hwerr_error_type {
++	HWERR_RECOV_CPU,
++	HWERR_RECOV_MEMORY,
++	HWERR_RECOV_PCI,
++	HWERR_RECOV_CXL,
++	HWERR_RECOV_OTHERS,
++	HWERR_RECOV_MAX,
++};
++
+ #endif /* _UAPI_VMCORE_H */
+diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
+index e066d31d08f89..fe9bf8db1922e 100644
+--- a/kernel/vmcore_info.c
++++ b/kernel/vmcore_info.c
+@@ -31,6 +31,13 @@ u32 *vmcoreinfo_note;
+ /* trusted vmcoreinfo, e.g. we can make a copy in the crash memory */
+ static unsigned char *vmcoreinfo_data_safecopy;
+ 
++struct hwerr_info {
++	atomic_t count;
++	time64_t timestamp;
++};
++
++static struct hwerr_info hwerr_data[HWERR_RECOV_MAX];
++
+ Elf_Word *append_elf_note(Elf_Word *buf, char *name, unsigned int type,
+ 			  void *data, size_t data_len)
+ {
+@@ -118,6 +125,16 @@ phys_addr_t __weak paddr_vmcoreinfo_note(void)
+ }
+ EXPORT_SYMBOL(paddr_vmcoreinfo_note);
+ 
++void hwerr_log_error_type(enum hwerr_error_type src)
++{
++	if (src < 0 || src >= HWERR_RECOV_MAX)
++		return;
++
++	atomic_inc(&hwerr_data[src].count);
++	WRITE_ONCE(hwerr_data[src].timestamp, ktime_get_real_seconds());
++}
++EXPORT_SYMBOL_GPL(hwerr_log_error_type);
++
+ static int __init crash_save_vmcoreinfo_init(void)
+ {
+ 	vmcoreinfo_data = (unsigned char *)get_zeroed_page(GFP_KERNEL);
+
+---
+base-commit: 54efec8782214652b331c50646013f8526570e8d
+change-id: 20250707-vmcore_hw_error-322429e6c316
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
 
