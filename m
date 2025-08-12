@@ -1,148 +1,161 @@
-Return-Path: <linux-edac+bounces-4554-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4555-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C122B2234E
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 11:35:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB843B226C7
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 14:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 904B6188A52F
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 09:34:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51FF25085B5
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 12:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E232E92AF;
-	Tue, 12 Aug 2025 09:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377631F4289;
+	Tue, 12 Aug 2025 12:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pf7fzn4L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K3HHyj/M"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF812E7BB1;
-	Tue, 12 Aug 2025 09:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236FF1F1517;
+	Tue, 12 Aug 2025 12:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754991218; cv=none; b=pJQCDj667lCoQipV+hvU+BvG438Wy7dTY7ruuHDFE1mMByIwWqNiADVtSJRWd/WvWyA39vAVqkNMN6GLeuEaDGb6bG0UKUnF4qjKau6e7y9DhAWDUoyBsRIiclOZrgTQLiuiYH1H+ZGnoLPJHKb3wKJNI8e39F1gZrTmM8oUiAY=
+	t=1755001765; cv=none; b=QTUAW3jEPAqg+UqIHGg4BsH4vf4Z6+iR6LQqWke92Oh8gGIcCK3ksOSzqbjv/vfDEYCVn5LmvDN+RfffDZ22oZ+OvMqE9LR3Tn0n+FGbfFvv2PTnJ97Qsqx8lTahvX9aOo8upqIlX2JLDzYsEA9zqfkSunL4iFx3NTuNECp5oWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754991218; c=relaxed/simple;
-	bh=awVECIkj//NC3B2TraxKMvGe3uB8kJQ4UisWIm+eQEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZIt/cdGj6rzmHeglkzty4Fi8htmJPaJyeO7L6pO+DD5Xm1nQ+LCirUsZ/PI2nuqi/0Nx2kTTATekkb0kIo9JuJzzXqJ5lzPToEiWDx3ujMqIz8YWiKCTECUF5uuiJu6hgXcM+sG+AdAXVaDzR7yFFhYpnhy11F/QkKDMpGrFGAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pf7fzn4L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6FCC4CEF6;
-	Tue, 12 Aug 2025 09:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754991217;
-	bh=awVECIkj//NC3B2TraxKMvGe3uB8kJQ4UisWIm+eQEc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=pf7fzn4LaH5bQkMgjAiTtoP7T8keIrINlrcT/r7eagYQZjVIg9rmj6TIq0QJO5qq/
-	 lqcF8U7lezBatG5vitwCuO09s+OVWKNcPfw5O738QqQoh0q6W1ow0OPcmC3U8DHrCT
-	 AqqyIUSYmOqd0CBPkQz/7fOSISfQIy9Y6FhP2ZyASwV2PAJiVD5FNLiwiBiJyNkrsw
-	 p2B8/sXnDkizhStV548h/jyNap1kTeeZ1C8KCzrkxYuQzP13gtbX568ZHtyNTPdhAP
-	 vnyzJdK5obpPEMR+7OzHZntbzFX/Q4TJ5QaIdSvcooAuKO4ipSZ3jGag4Ye37zBCTl
-	 iufHl20YZyiQg==
-Date: Tue, 12 Aug 2025 11:33:29 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>
-Cc: EDAC Mailing List <linux-edac@vger.kernel.org>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Doc Mailing List
- <linux-doc@vger.kernel.org>, linux-kernel@vger.kernel.org, Akira Yokosawa
- <akiyks@gmail.com>, "David S. Miller" <davem@davemloft.net>, Ignacio
- Encinas Rubio <ignacio@iencinas.com>, Marco Elver <elver@google.com>, Shuah
- Khan <skhan@linuxfoundation.org>, Donald Hunter <donald.hunter@gmail.com>,
- Eric Dumazet <edumazet@google.com>, Jan Stancek <jstancek@redhat.com>,
- Paolo Abeni <pabeni@redhat.com>, Ruben Wauters <rubenru09@aol.com>,
- joel@joelfernandes.org, linux-kernel-mentees@lists.linux.dev,
- lkmm@lists.linux.dev, netdev@vger.kernel.org, peterz@infradead.org,
- stern@rowland.harvard.edu, Breno Leitao <leitao@debian.org>, Randy Dunlap
- <rdunlap@infradead.org>, Simon Horman <horms@kernel.org>
-Subject: [GIT PULL for v6.17-rc2] add a generic yaml parser integrated with
- Netlink specs generation
-Message-ID: <20250812113329.356c93c2@foz.lan>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1755001765; c=relaxed/simple;
+	bh=wUMFXw1ikUbmB37qJt2ibITa/9ZqIPjHsM1j5azCU4k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WSpCj6JUxnERm6KWfYqwCUc7kJofErw/h9tgUa1PYd1MUcKU0MEV0CiDd1hu6iTAE7mFE+7dbj+3zjJIX4AZibfKwoVirSTK+UkV8LJLLrncWT52AYoNl3kHPeKbUo/bmszIArVVOkjx6wVyhTpj5Qyf2J97ImmF+LkfSFKa2dA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K3HHyj/M; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755001763; x=1786537763;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wUMFXw1ikUbmB37qJt2ibITa/9ZqIPjHsM1j5azCU4k=;
+  b=K3HHyj/MoiO2UtDd5BVCqG25nxI+FcpkK95EZTixD/sz22frXRuWm5Cm
+   9NmHqPP88ZPL4YIKv2HKXKA/2NbFigZkqIqctjG3svJWXT6Zky+RWVItN
+   PjDeFYjuNruxWP8hPiiOG76f6zHp/NtPdlNFoJ2uNcXUrjQZqcfauTtCL
+   EZwW8IdPq2iGPBFVFOoBxK7X2G0h4JtR4R2yLLuLt961rVc0s3RoBnXU6
+   qP2KNM+o59IGZT6pS0IaxXo1IpLIlxPO/ppA60+4O8OfDvGqYzvcP+Inl
+   O05W90/y8Jc3gNO7BMdCQ7ThG8FDVOTopX/j2DTEbVTICrG5PxOI1kTz8
+   w==;
+X-CSE-ConnectionGUID: G5vw6UOhRC2kipZbNldp3Q==
+X-CSE-MsgGUID: stSrHMSATC6QMAfktfrL+w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="68648841"
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="68648841"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 05:29:22 -0700
+X-CSE-ConnectionGUID: Hmi5Ss0UTnSxAFam/bOv3Q==
+X-CSE-MsgGUID: K1CC5QUVQ2SjuvmdX2Eueg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="166548316"
+Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.245.30])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 05:29:16 -0700
+From: Adrian Hunter <adrian.hunter@intel.com>
+To: Tony Luck <tony.luck@intel.com>,
+	pbonzini@redhat.com,
+	seanjc@google.com
+Cc: vannapurve@google.com,
+	Borislav Petkov <bp@alien8.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	H Peter Anvin <hpa@zytor.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	rick.p.edgecombe@intel.com,
+	kai.huang@intel.com,
+	reinette.chatre@intel.com,
+	xiaoyao.li@intel.com,
+	tony.lindgren@linux.intel.com,
+	binbin.wu@linux.intel.com,
+	ira.weiny@intel.com,
+	isaku.yamahata@intel.com,
+	Fan Du <fan.du@intel.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>,
+	yan.y.zhao@intel.com,
+	chao.gao@intel.com
+Subject: [PATCH V2 0/2] Fixes for recovery for machine check in TDX/SEAM non-root mode
+Date: Tue, 12 Aug 2025 15:28:57 +0300
+Message-ID: <20250812122859.70911-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Organization: Intel Finland Oy, Registered Address: c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Transfer-Encoding: 8bit
 
-Hi Jon/Jakub,
+Hi
 
-In case you both prefer to merge from a stable tag, please pull from:
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-docs.git docs/v6.17-1
+Here is V2 of a small fix related to recovery for machine check in TDX/SEAM
+non-root mode, and a small tidy-up.
 
-For:
 
-- An YAML parser Sphinx plugin, integrated with Netlink YAML doc
-  parser.
+Changes in V2:
 
-The patch content is identical to my v10 submission:
+    x86/mce: Fix missing address mask in recovery for errors in TDX/SEAM
+    non-root mode
+      Mask address when it is read
+      Amend struct mce addr description
 
-	https://lore.kernel.org/linux-doc/cover.1753718185.git.mchehab+huawei@kernel.org/
+    KVM: TDX: Do not clear poisoned pages
+      Patch dropped
 
-The tag was rebased on the top of v6.17-rc1 to make easier for it to be
-merged on both docs and netlink trees. 
+    x86/mce: Remove MCI_ADDR_PHYSADDR
+      New patch
 
-No code changes since v10.
 
-Regards,
-Mauro
+The issue was noticed as part of work to determine the conditions under
+which TDX private memory needs to be cleared after being reclaimed.
+For guests with a large amount of memory, clearing all private pages during
+VM shutdown can take minutes, so we are looking at when that can be
+skipped.  A future patch will deal with that.
 
----
+One thing that was investigated was the effect of deliberately corrupting a
+TDX guest private page by writing to it on the host, and then reading it
+on the guest, which results in a machine check as expected, but revealed
+the issue addressed in patch 1.
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+There are 2 outstanding issues:
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+1. It is assumed that once the TDX VM is shutdown that the memory is
+returned to the allocator.  That is true at present, but may not be in the
+future.  Consider, for example, patch set "New KVM ioctl to link a gmem
+inode to a new gmem file" :
 
-are available in the Git repository at:
+      https://lore.kernel.org/r/cover.1747368092.git.afranji@google.com/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-docs.git tags/docs/v6.17-1
+2. Currently, KVM TDX does not cater for the TDX VM to enter a FATAL error
+state, where the only operation permitted is to tear down the VM.  KVM just
+carries on, hitting various errors, but in particular, memory reclaim fails
+because it is not following the teardown procedure, and all guest private
+memory is leaked.
 
-for you to fetch changes up to 47459937be8031aae6aaa17ac5f60985f7c9e1bd:
 
-  sphinx: parser_yaml.py: fix line numbers information (2025-08-12 07:47:31 +0200)
+Adrian Hunter (2):
+      x86/mce: Fix missing address mask in recovery for errors in TDX/SEAM non-root mode
+      x86/mce: Remove MCI_ADDR_PHYSADDR
 
-----------------------------------------------------------------
-[GIT PULL for v6.17-rc2] add a generic yaml parser integrated with Netlink specs generation
+ arch/x86/include/asm/mce.h      | 3 ---
+ arch/x86/include/uapi/asm/mce.h | 2 +-
+ arch/x86/kernel/cpu/mce/core.c  | 9 ++++++---
+ drivers/cxl/core/mce.c          | 2 +-
+ drivers/edac/skx_common.c       | 2 +-
+ 5 files changed, 9 insertions(+), 9 deletions(-)
 
-----------------------------------------------------------------
-Mauro Carvalho Chehab (14):
-      docs: netlink: netlink-raw.rst: use :ref: instead of :doc:
-      tools: ynl_gen_rst.py: Split library from command line tool
-      docs: netlink: index.rst: add a netlink index file
-      tools: ynl_gen_rst.py: cleanup coding style
-      docs: sphinx: add a parser for yaml files for Netlink specs
-      docs: use parser_yaml extension to handle Netlink specs
-      docs: uapi: netlink: update netlink specs link
-      tools: ynl_gen_rst.py: drop support for generating index files
-      docs: netlink: remove obsolete .gitignore from unused directory
-      MAINTAINERS: add netlink_yml_parser.py to linux-doc
-      tools: netlink_yml_parser.py: add line numbers to parsed data
-      docs: parser_yaml.py: add support for line numbers from the parser
-      docs: parser_yaml.py: fix backward compatibility with old docutils
-      sphinx: parser_yaml.py: fix line numbers information
 
- Documentation/Makefile                             |  17 -
- Documentation/conf.py                              |  20 +-
- Documentation/netlink/specs/index.rst              |  13 +
- Documentation/networking/index.rst                 |   2 +-
- Documentation/networking/netlink_spec/.gitignore   |   1 -
- Documentation/networking/netlink_spec/readme.txt   |   4 -
- Documentation/sphinx/parser_yaml.py                | 123 +++++++
- Documentation/userspace-api/netlink/index.rst      |   2 +-
- .../userspace-api/netlink/netlink-raw.rst          |   6 +-
- Documentation/userspace-api/netlink/specs.rst      |   2 +-
- MAINTAINERS                                        |   1 +
- tools/net/ynl/pyynl/lib/__init__.py                |   2 +
- tools/net/ynl/pyynl/lib/doc_generator.py           | 398 +++++++++++++++++++++
- tools/net/ynl/pyynl/ynl_gen_rst.py                 | 384 +-------------------
- 14 files changed, 565 insertions(+), 410 deletions(-)
- create mode 100644 Documentation/netlink/specs/index.rst
- delete mode 100644 Documentation/networking/netlink_spec/.gitignore
- delete mode 100644 Documentation/networking/netlink_spec/readme.txt
- create mode 100755 Documentation/sphinx/parser_yaml.py
- create mode 100644 tools/net/ynl/pyynl/lib/doc_generator.py
+Regards
+Adrian
 
