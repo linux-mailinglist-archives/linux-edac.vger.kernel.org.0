@@ -1,202 +1,127 @@
-Return-Path: <linux-edac+bounces-4557-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4558-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C0C6B226CC
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 14:30:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA415B227F4
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 15:13:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 048F7563E3D
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 12:29:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F1DA1BC0D69
+	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 13:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A952367C9;
-	Tue, 12 Aug 2025 12:29:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183EA1531E8;
+	Tue, 12 Aug 2025 13:02:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lRpJIciM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G96g/vXF"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51D722069F;
-	Tue, 12 Aug 2025 12:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94041178372;
+	Tue, 12 Aug 2025 13:02:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755001776; cv=none; b=K/fC9XnILa6clImqYvSoDQ5cJhbLrYb/FDyLJb5S+CnakHUKu9e26ZtOTrEP1liaYAXLIvn5/1MSnvafJ5Rq5RP/PP3ld1ob+Og6lRYs6Lpoz+WPsx5xP+hNfJ1jA8jeMrYj+3AiHKYj8BdOR3ymgCAre4pnlGMg5yr1q/Vq7yU=
+	t=1755003726; cv=none; b=GQ98l2q5SU4KWz/cbVvqi42O86OohsgeKxh1XzlUyXXKd7cnZ77OB77zG0hYG6zkS0bLCj48COimtySOrJmqrITojKS5q9M+AFN5+bMk2ixgiQkC0S/6u45Rp7DTcGQvRvI42VkoJ31OtQ254u4T+KmgEr5fXr09EWxXwO9vCWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755001776; c=relaxed/simple;
-	bh=4nZspt6FQtmPeOr0pILI5mDZRC1ewkBGJrubtoDgCuE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cXFdZMf+ezwam+mqZ1itZb7H8fFVcu43H+JLsy6/R9n2z60TyNmTNbtR0VpG2XdHjW1qGzFEzcJnX1CANzXQOE79jcv+2VnoNcUE+zpsYz5iNJvSMJOexCWSJsXw1NRzgEoM2+pGjJhcx6iig1M+qTwUVw0ujF/AVuAmCD2qbtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lRpJIciM; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755001775; x=1786537775;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4nZspt6FQtmPeOr0pILI5mDZRC1ewkBGJrubtoDgCuE=;
-  b=lRpJIciMkotcoOepDIaRPxRepbQvRFA69LYyMWdhKxHXZXCrvFOsG6Ud
-   ZVIubnT6Ay6ZBEAdrafvmsKw/0JvyXmuIIbPaS5epW4hgFJCGyHiRJNxX
-   MZc8sqX14e0YGjthn8bk6Z6UcLIV3juLMTgicCpMPYgOFIOSKRGyRV57P
-   mIIxRddCnlmf8csjKQbE+UT5B4Uulr1hXAFmbxCY1NvWRBGyszwihFAtR
-   4XJzk180GnepBL1HgeSFU7C69viV0hFUHxXGfugbzDmbMPcZksQRsV/f6
-   fwTUJEyTVwq5Ywrs3eSN7iKJkhJc9eedUNevNx2fSwHo0thYnuPlso8a4
-   w==;
-X-CSE-ConnectionGUID: 6vIfpjn2SUCcFjxzFIWSSQ==
-X-CSE-MsgGUID: Po7xv8LuRUyENKhBwnF80Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="68648860"
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="68648860"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 05:29:34 -0700
-X-CSE-ConnectionGUID: dZ8itZ3HQDu6aAMfA0L/Aw==
-X-CSE-MsgGUID: gxv7xIJuSu604uixNwit/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="166548380"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.245.30])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 05:29:28 -0700
-From: Adrian Hunter <adrian.hunter@intel.com>
-To: Tony Luck <tony.luck@intel.com>,
-	pbonzini@redhat.com,
-	seanjc@google.com
-Cc: vannapurve@google.com,
-	Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	H Peter Anvin <hpa@zytor.com>,
+	s=arc-20240116; t=1755003726; c=relaxed/simple;
+	bh=Od72EQBv4JGDTn0Y2Ei/6o5RTBJu3gYZKCJLW7yYpAY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eYbToWNBKROkGyh3OhKgY55n5G8lp3R6iOkbDCFU6bX4XYO2VSzZKr/zzBhhq3tqc1bWb/ubdb/41Ne/n6y2cQ1A/ASeVPwNjyn28FytRJSwU4mNcKLXPx0w24jXzU5RaZqdiUepLgGOc67Fg3z7Rhy/CWdgLwPVInbqQzj13Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G96g/vXF; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-76b8d289f73so5024511b3a.1;
+        Tue, 12 Aug 2025 06:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755003724; x=1755608524; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTXlWUWgmGkbw6/R3L/8BNWjTwh9g+hdulCTYEuUKJU=;
+        b=G96g/vXFgmqMl5+tzeYquBHSb7xixKnTe36mgsE3BqSMjx5Q4jOrazEaKnw/g69mMe
+         GG2gTzZTRIUBwwJ33gyEbrNo3wuEdoqY7jXp2TZVzD2fspS9s0HCtvWlYYqqW7LhvOwx
+         LCbuUrUwKoQPMVty0AG2937VC1ye97cM88d59mb5s6arJHYmnWEPoepEvI1QCd8pnutd
+         Jcdc2dtGM4x6In28L5dKuZktkgkhI12E9bsNtH7SSc5y8Dm9OUnz+0siWQIteQdBIGvx
+         gIuxgK8vc/7xX/799Vu9fl8/e/Z2Bkyk+tbKbKUOj/akh/jeocCDUGyTADjPqi+2atGU
+         AzKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755003724; x=1755608524;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hTXlWUWgmGkbw6/R3L/8BNWjTwh9g+hdulCTYEuUKJU=;
+        b=vILTGiyrShFA7UCudaaf/OKxNwdpsecxtPdNzHhDwZuInWwVDe51jKwOtZFbI4EfLz
+         tyBUWQ7TK9Br2DQwntLTIPJreNciH3iKOBJyQ/422jFr0unjix1WdBYsI9ygTIzWzFg8
+         csHxcS3OBXM8CrUEJhyRfhTyF6JqQJR5xayYydjWbRDb3KjGQy9ysGm5gnPstN8OQWUL
+         WqxNiM7uL4WlFteaFnVl4023h3bZKt1wgorhYA3gT7lTzTW5NsakxZKmH4zFIMz6g548
+         qDcMkcpKIt/gGaLnil+cQsHnqScEsQw6c/2cYYsdVGSbdXKVCtn/DEdK9rLCrugIhbon
+         TIhg==
+X-Forwarded-Encrypted: i=1; AJvYcCULyoW2qje+xsh796R8zkMtorDHrSMMBFtvXh+20oQCDklIouXUOP2o4gF1pzMhEMWHg0YrfS2DrxyK@vger.kernel.org, AJvYcCUzpWsmo8oS3e1dSQgK5jfivNGeBikyh43KBIy5ADTLT1cQo6qj8mOGab/Ei4VdVAeX7TdbEZwqDB40yAm8@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwfjIIpyfQIP5W7OkOEgf+FrO/nhaUVWHqLQa4hLN7orBbpnhq
+	S6oN/i4fGVoZ2krcvoTeyBWVEqjqITb9gSyi/V4/22WuqkyprYQTVc7T
+X-Gm-Gg: ASbGncuGEwTmwEe0EluR0LVMdHi6AuTFOJ6YztaxP4UU0P98vRNb38Yp1W70la+q4Ce
+	9RXoPTv2hyNdF4LYy34GhGZSQmORQ7lZxoaZDlcxhahUzHssfKBwrKyfBnDoUnTq/xKgl5r1i7e
+	r7n0VL3LqtTy8KFHT6RCRNsiV4r3NrLHfLsYPXo7/B82jQ+KskA/7YXO248zm8AKbOwM5i2Ondk
+	8bUEY5m+nsa/qfDA7Pi1yon/MhWwZ7hA8QsicWl1os9BY9h0UFfKabs7UpYMReOwWM5lvHQQly1
+	ZAA+gdf796byErI97WTlrVi26/sMMia/vOgjTRcGTYe2tYdQnQUT8RZ3k3oXtDvxfao2nSuR5Sj
+	+99m8Ig6TPENFdCqxmQQJ3y7XL3eKb7hnjW0KgsJ2/kR+cp8g
+X-Google-Smtp-Source: AGHT+IEfj3f4ctl/apnhfqtH5DFUARmiRo+9eePYi9dZvWb7zWEVyJBVpYHA+kDolCUljLpGVlr4pg==
+X-Received: by 2002:a17:902:ec82:b0:23d:fa9a:80ac with SMTP id d9443c01a7336-242fc2c9e78mr45597505ad.16.1755003723081;
+        Tue, 12 Aug 2025 06:02:03 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:8898:77ef:d42e:3af1:d5eb:7170])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899b5f2sm299105125ad.125.2025.08.12.06.01.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 06:02:02 -0700 (PDT)
+From: darshanrathod475@gmail.com
+To: bp@alien8.de,
+	tony.luck@intel.com
+Cc: james.morse@arm.com,
+	mchehab@kernel.org,
+	rric@kernel.org,
 	linux-edac@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	rick.p.edgecombe@intel.com,
-	kai.huang@intel.com,
-	reinette.chatre@intel.com,
-	xiaoyao.li@intel.com,
-	tony.lindgren@linux.intel.com,
-	binbin.wu@linux.intel.com,
-	ira.weiny@intel.com,
-	isaku.yamahata@intel.com,
-	Fan Du <fan.du@intel.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	yan.y.zhao@intel.com,
-	chao.gao@intel.com
-Subject: [PATCH V2 2/2] x86/mce: Remove MCI_ADDR_PHYSADDR
-Date: Tue, 12 Aug 2025 15:28:59 +0300
-Message-ID: <20250812122859.70911-3-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250812122859.70911-1-adrian.hunter@intel.com>
-References: <20250812122859.70911-1-adrian.hunter@intel.com>
+	Darshan Rathod <darshanrathod475@gmail.com>
+Subject: [PATCH] edac/amd76x: Remove assignment from if condition in amd76x_remove_one()
+Date: Tue, 12 Aug 2025 18:31:54 +0530
+Message-Id: <20250812130154.2220684-1-darshanrathod475@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
 
-Now that the address is masked when it is read from the machine check bank
-address register (refer patch "x86/mce: Fix missing address mask in
-recovery for errors in TDX/SEAM non-root mode"), the MCI_ADDR_PHYSADDR
-macro is no longer needed.  Remove it.
+From: Darshan Rathod <darshanrathod475@gmail.com>
 
-Note MCE address information also enters the kernel from APEI via the
-Common Platform Error Record (CPER) Memory Error Section "Physical Address"
-field (struct cper_sec_mem_err physical_addr), refer the UEFI
-specification.  It is assumed that field contains only the physical
-address.
+The code was performing an assignment inside the if condition:
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+    if ((mci = edac_mc_del_mc(&pdev->dev)) == NULL)
+
+This triggers a checkpatch.pl warning. Split the assignment and the
+check into separate statements to improve readability and comply with
+kernel coding style.
+
+Signed-off-by: Darshan Rathod <darshanrathod475@gmail.com>
 ---
+ drivers/edac/amd76x_edac.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
-Changes in V2:
-
-      New patch
-
-
- arch/x86/include/asm/mce.h     | 3 ---
- arch/x86/kernel/cpu/mce/core.c | 6 +++---
- drivers/cxl/core/mce.c         | 2 +-
- drivers/edac/skx_common.c      | 2 +-
- 4 files changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 6c77c03139f7..0cf8017dcae9 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -91,9 +91,6 @@
- #define  MCI_MISC_ADDR_MEM	3	/* memory address */
- #define  MCI_MISC_ADDR_GENERIC	7	/* generic */
+diff --git a/drivers/edac/amd76x_edac.c b/drivers/edac/amd76x_edac.c
+index 2a49f68a7cf9..4937d8728cf0 100644
+--- a/drivers/edac/amd76x_edac.c
++++ b/drivers/edac/amd76x_edac.c
+@@ -324,7 +324,8 @@ static void amd76x_remove_one(struct pci_dev *pdev)
+ 	if (amd76x_pci)
+ 		edac_pci_release_generic_ctl(amd76x_pci);
  
--/* MCi_ADDR register defines */
--#define MCI_ADDR_PHYSADDR	GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
--
- /* CTL2 register defines */
- #define MCI_CTL2_CMCI_EN		BIT_ULL(30)
- #define MCI_CTL2_CMCI_THRESHOLD_MASK	0x7fffULL
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index deb47463a75d..80e06d6728a7 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -642,7 +642,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
- 	    mce->severity != MCE_DEFERRED_SEVERITY)
- 		return NOTIFY_DONE;
+-	if ((mci = edac_mc_del_mc(&pdev->dev)) == NULL)
++	mci = edac_mc_del_mc(&pdev->dev);
++	if (mci == NULL)
+ 		return;
  
--	pfn = (mce->addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
-+	pfn = mce->addr >> PAGE_SHIFT;
- 	if (!memory_failure(pfn, 0)) {
- 		set_mce_nospec(pfn);
- 		mce->kflags |= MCE_HANDLED_UC;
-@@ -1415,7 +1415,7 @@ static void kill_me_maybe(struct callback_head *cb)
- 	if (!p->mce_ripv)
- 		flags |= MF_MUST_KILL;
- 
--	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
-+	pfn = p->mce_addr >> PAGE_SHIFT;
- 	ret = memory_failure(pfn, flags);
- 	if (!ret) {
- 		set_mce_nospec(pfn);
-@@ -1444,7 +1444,7 @@ static void kill_me_never(struct callback_head *cb)
- 
- 	p->mce_count = 0;
- 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
--	pfn = (p->mce_addr & MCI_ADDR_PHYSADDR) >> PAGE_SHIFT;
-+	pfn = p->mce_addr >> PAGE_SHIFT;
- 	if (!memory_failure(pfn, 0))
- 		set_mce_nospec(pfn);
- }
-diff --git a/drivers/cxl/core/mce.c b/drivers/cxl/core/mce.c
-index ff8d078c6ca1..4ba8b7ae3de7 100644
---- a/drivers/cxl/core/mce.c
-+++ b/drivers/cxl/core/mce.c
-@@ -24,7 +24,7 @@ static int cxl_handle_mce(struct notifier_block *nb, unsigned long val,
- 	if (!endpoint)
- 		return NOTIFY_DONE;
- 
--	spa = mce->addr & MCI_ADDR_PHYSADDR;
-+	spa = mce->addr;
- 
- 	pfn = spa >> PAGE_SHIFT;
- 	if (!pfn_valid(pfn))
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 39c733dbc5b9..2de675958560 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -732,7 +732,7 @@ int skx_mce_check_error(struct notifier_block *nb, unsigned long val,
- 
- 	memset(&res, 0, sizeof(res));
- 	res.mce  = mce;
--	res.addr = mce->addr & MCI_ADDR_PHYSADDR;
-+	res.addr = mce->addr;
- 	if (!pfn_to_online_page(res.addr >> PAGE_SHIFT) && !arch_is_platform_page(res.addr)) {
- 		pr_err("Invalid address 0x%llx in IA32_MC%d_ADDR\n", mce->addr, mce->bank);
- 		return NOTIFY_DONE;
+ 	edac_mc_free(mci);
 -- 
-2.48.1
+2.25.1
 
 
