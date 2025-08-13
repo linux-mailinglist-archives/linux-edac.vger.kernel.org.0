@@ -1,461 +1,297 @@
-Return-Path: <linux-edac+bounces-4571-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4572-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0A8FB24E6B
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Aug 2025 17:58:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD220B2551A
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Aug 2025 23:19:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E6899A21D1
-	for <lists+linux-edac@lfdr.de>; Wed, 13 Aug 2025 15:51:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 759A35A7321
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Aug 2025 21:19:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7D2288C9D;
-	Wed, 13 Aug 2025 15:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CD112D641A;
+	Wed, 13 Aug 2025 21:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="o0EkC1Zb"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="Zhd1SlC8"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2055.outbound.protection.outlook.com [40.107.96.55])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11022130.outbound.protection.outlook.com [52.101.43.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DB62877F3;
-	Wed, 13 Aug 2025 15:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F58122F389;
+	Wed, 13 Aug 2025 21:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.130
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755099919; cv=fail; b=QhHqEvIrGv7HiGKK8J2Gu+1WFnE1zcuWrIK20dm/XjI5W6Nzt5wcx0pm2h1ZjdSRc0eZUY37e+bcypfe3zYK70Sze8ecdRwTNEXv7Fv9O2ng9VGFwHDt8G+5dAwx0oDT9HYalEIgLv7Zj20VWh+WyH0CIyHnN9JxvK4H9xLuqQA=
+	t=1755119982; cv=fail; b=GwC7HWaX9DbXsKg1mSr1okWyD/ezreZG4X2KqpmYSOm9gZh1HXS2rBM8z1rPIhN7iys5+tAh3Zo1a22ufchnlSYOtMr76HMCp+DVuHarC3FmAPUsWlTyaeJ1TxtxL4vvjQ3eJ1m70QuJmmYh67O3YtTyOImOfyIJ53oPu8kSVpA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755099919; c=relaxed/simple;
-	bh=jUP4HDeAKb2Zo2lbrjy0OYUx/6lofXvGL5xTOqgipFQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SeUfNUF2Mz7FZJhJndpeKXuYSANYs0eNSk6867Y6gD2A7ZBIkXZOsTagYvzYhCpHTInCJJT3NP3Fs/68CgS0hfJDFt8DfYZURtuLYKdVnEwyFiFPXV14CAI0gj8AkDYFK1btkPm6bDBkjV3rqSrozR7w1rY+fA276AO2gdWeliQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=o0EkC1Zb; arc=fail smtp.client-ip=40.107.96.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1755119982; c=relaxed/simple;
+	bh=MJUaUZZOR8MU5gJdGjaD7ImMzVPJIT5zoxE16shBU5k=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=nswuoEO4j8Jt0ldpppRgvLQWT+bHghGTv6NL89ZFGvIEI8RHBD8sokdP08xPf9OBrUXdbbAl4ML9M+gyVyQg/P14iGPWQrqbaW0NJkyvHKn5J5n5cjBcYnJOYLnQaoqa2muMKw3dJqDEmZRoqR4TVA99wLWQIPEByvRKqALZqSA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=Zhd1SlC8; arc=fail smtp.client-ip=52.101.43.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=l8U6l7qdK17KOmZR8rARs4nnZIAi9dwlSnwwyWlaS4tXt4QUaGV6f2Nv/L15Z9tgd58ByZD7qlR+3GCdm0BZc8It6y7q+TXqenR/yvCvUCqWTLw6RkMeHTAvP4JdT5QtCllm98+U1Imq+w0OdQpT2qE3n8I4S5SWc7IRy7343hNGFBoQJoZngnkYR0uhbwEljDu9HyV4zGEusxGqWHhxP2JPafZvY7cVmMnfzkyUINqIKcKXmVViJA2m99ql0aUEMG4bxqGCI8IwjSMfyR0BpD3EE7HfxMgMDy7aFJanJK6vF8gstbK3M3JHh4P6Bp9uymTO8Si0zg3X/aM7m3qZ2A==
+ b=OO+1HbazljDcz2NuGwwp7P9Mmx6T1Sy/qxvMhuTk+6teMhAHdTxL5yXJYG0kztuANJ7nmF61dksLlF8gVVQboOx3cbipTzJcbCJ9pAokXIFnsxXaygZ6A3i32JGWFW5/boY9ycgvQTos58Ivi9SUSzNuuT5Evn0xh1FhS+GY+pTGUN7wCfr14Z4lQbzVn10NkGaM/taC3tIwhwBimltMMtr1AQ73sSl4Kaqhby/53j1MX7Zy5tYCqtzPjDCEt2bbyDk8SpYgCXqqCeuBj9PCH8+9w+c3YnTSBoQxpcZve/ERc4R6md6GLTBPoWw+qAqgIh7udp3LeA0/XsDNiJ8lcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BGRsUUT5H6qhN7Apcxy51DgUc0TiMU/5rZJBD+1FTJE=;
- b=YfLZpuelsIObfndbczeVyg5mUeZalGdIhJZiXpxBH0NsnOHAC6ZvLRT4h24Zwt9eaNwuDkjit55V8hekAyyJ7dWpaSgE8h74ksquoo7lD1832tlWJLkbvJ5BFq6zjEdoG6DxaJBrjRMJGg8ZzXKvaXujKEjqeOSqIPSnpkjtlJCLnxGiW3KVAZTjll1nOVMFstHMstcbFkNxvB8NGTWbR1MpOmAx/p/zXutQFuqP2LF4WlF6vjauw8bhiCS3eg0LoO5g8HihBWx4frbLzMTso28ccPrYwLhcSw+wH5dH5zZVDESukkxvbJSNF8TQRW7jv/2ufb4SuoyfjMAg6mOIeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=Ssz/pOd+LIPTiLCapGwCl8VScqMruUB11aUKhqbX8b8=;
+ b=ydIe3ddGU9NkKRG1hX1WT3aFaccTcfoL67TztuTGZ93XgNTFdivMRuVJByLEJvLVutGWpDEmRMMLcy9OswkS/GjklLxDcr/d23MCGGccgEjjjcNvGVu+nziJpnecG54ByPqM467sP/ZM9A2WWhDSh/pPwm0uO4zmbNo527AeJBV5tEAO2MGMn3lgqwmTHVt956CkGwZD883ThEvzrRm1sxNg/eWXoQItYkLBscqX8/CgGK3phAlXJXgylKvm0gRI1hpzCaVaDysFtI6O7EfCRN5Q2LJRSsoChF3aGXjRoIl5bYl5xdtoKXv7yJ9wSROlIRN3/pjEbss0BbGTy0hjlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BGRsUUT5H6qhN7Apcxy51DgUc0TiMU/5rZJBD+1FTJE=;
- b=o0EkC1ZbE3C6S9WcfUnH3vWN2Ja75A9KKFCsPN1nRgt7mTd7MjHekMTGpOjdyjtisWsxTINULYHzWxfVHPj1mzC7KxjbkCzcBWHJwO8meoJ2dEI6E82VimmQ0RRwDQ1NtrfrBPUOdWhPtTfE/2P+OC5Fm6WgcbxxZPIZhRVwsic=
-Received: from BN0PR04CA0054.namprd04.prod.outlook.com (2603:10b6:408:e8::29)
- by LV3PR12MB9439.namprd12.prod.outlook.com (2603:10b6:408:20e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.13; Wed, 13 Aug
- 2025 15:45:09 +0000
-Received: from BN3PEPF0000B074.namprd04.prod.outlook.com
- (2603:10b6:408:e8:cafe::2c) by BN0PR04CA0054.outlook.office365.com
- (2603:10b6:408:e8::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9031.16 via Frontend Transport; Wed,
- 13 Aug 2025 15:45:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B074.mail.protection.outlook.com (10.167.243.119) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9031.11 via Frontend Transport; Wed, 13 Aug 2025 15:45:09 +0000
-Received: from purico-9eb2host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 13 Aug
- 2025 10:45:06 -0500
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>, <x86@kernel.org>,
-	<avadhut.naik@amd.com>, <john.allen@amd.com>, Yazen Ghannam
-	<yazen.ghannam@amd.com>
-Subject: [PATCH] x86/mce: Do away with unnecessary context quirks
-Date: Wed, 13 Aug 2025 15:44:55 +0000
-Message-ID: <20250813154455.162489-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.50.1
+ bh=Ssz/pOd+LIPTiLCapGwCl8VScqMruUB11aUKhqbX8b8=;
+ b=Zhd1SlC8agbuXNbsMcmXqw/KDJGA2A1nY0jOmNQs+FvtULtO7ii3EWgzHT2PfEFMGcot2H+SRWRXYc1W0tKLAHVY2HwDXZyVKuzWf3a7k+qeNED01aJuS0s4eNm1MwxexC8Vtai0wJbTjBZYEOKTySJeDdazdBdxzfroDHoYP6A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SA3PR01MB8473.prod.exchangelabs.com (2603:10b6:806:397::12) by
+ SN4PR01MB7423.prod.exchangelabs.com (2603:10b6:806:1ea::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9031.14; Wed, 13 Aug 2025 21:19:36 +0000
+Received: from SA3PR01MB8473.prod.exchangelabs.com
+ ([fe80::46d7:1d3a:dc9c:69c3]) by SA3PR01MB8473.prod.exchangelabs.com
+ ([fe80::46d7:1d3a:dc9c:69c3%6]) with mapi id 15.20.9031.014; Wed, 13 Aug 2025
+ 21:19:35 +0000
+From: Daniel Ferguson <danielf@os.amperecomputing.com>
+Subject: [PATCH v5 0/5] Fix issues with ARM Processor CPER records
+Date: Wed, 13 Aug 2025 14:19:13 -0700
+Message-Id: <20250813-mauro_v3-v6-16-rev2-v5-0-954db8ccfbe6@os.amperecomputing.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFEBnWgC/22Nyw6CMBREf4XctZcU+qCw8j8MMRWu0AWUtNBoC
+ P9uxa27OZPMmR0CeUsBmmwHT9EG6+YE8pJBN5p5ILR9YihZKVnFC5zM5t09cowKC4VpUyKvtRJ
+ a9STZA9Jy8fS0r9N6axOPNqzOv8+TKL7tz6eZ/OuLAhmSkVxXstai6K4u5GZayFPnpmVb7TzkK
+ UF7HMcHxVXbU8MAAAA=
+X-Change-ID: 20250731-mauro_v3-v6-16-rev2-3986486de50b
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+ James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, 
+ Borislav Petkov <bp@alien8.de>, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+ linux-efi@vger.kernel.org, linux-edac@vger.kernel.org, 
+ Jason Tian <jason@os.amperecomputing.com>, 
+ Shengwei Luo <luoshengwei@huawei.com>, 
+ Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
+ Daniel Ferguson <danielf@os.amperecomputing.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Shiju Jose <shiju.jose@huawei.com>
+X-Mailer: b4 0.14.2
+X-ClientProxiedBy: CYZPR20CA0009.namprd20.prod.outlook.com
+ (2603:10b6:930:a2::20) To SA3PR01MB8473.prod.exchangelabs.com
+ (2603:10b6:806:397::12)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B074:EE_|LV3PR12MB9439:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4466ddfd-29ee-4b2f-ab38-08ddda8061f9
+X-MS-TrafficTypeDiagnostic: SA3PR01MB8473:EE_|SN4PR01MB7423:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3670a3ae-8883-4440-49d3-08dddaaf1a88
+X-MS-Exchange-AtpMessageProperties: SA
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
+	BCL:0;ARA:13230040|1800799024|366016|52116014|7416014|376014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?aG1Nmaa4BEcByXiLCYcCSYwxOBGCIRo7VSr6g4CnlZkB4GOvknAtzw+x4Uj1?=
- =?us-ascii?Q?LO1dxN48Alo0eD8gguVBnJ/ReKo3txS+a5w42AKE73QRjpxc6nG9cYEp/JJb?=
- =?us-ascii?Q?PkYeZygyR+oTx4E0hzi0JZoR1XhJ5CzGOJh6YyJydHYFsBGkHIRhuanENW3U?=
- =?us-ascii?Q?3WzDvfBoYQ8t3UQIUrCfvsRTj6c7y39gbVLa7MoJKTmgq8mLgzRis6DpfBUJ?=
- =?us-ascii?Q?PDroKvsAKLIEtknQCrZ0HeuvX0ThwtvTPUc+PBzBDBdiPH0vtRB1vjNn22+m?=
- =?us-ascii?Q?osktK7IUdGHUVIN36/z9R+N+U02KgkClnS/fsY+U/eLwP6cIeBwhkDitqJjo?=
- =?us-ascii?Q?72glVJ8mjCQXjbwR4ZiPsuPX1MuYDKDpNQHB/kDHWorHGcB3vyIVD/lJ0sWN?=
- =?us-ascii?Q?QinR/TyKkx2kfDC1nVdwPxCaLYx6Ady7bQLjNLv2ZvwBDA5qn9Iyqo+KNjCH?=
- =?us-ascii?Q?Ol7/whWpDNVTwtowpaa0Ktd4WnSC3xwX9j08VRsGfkQn8lnEzjfCOU/dR0Sa?=
- =?us-ascii?Q?++MhxeFSAub/geBeyOtefAN/wvwhXdwaVY4Z1Nnve91qVHPJo6GtRajYMm9J?=
- =?us-ascii?Q?jPuX2YcYXBYnave4rXJlvemiE2UwJMMvqNe8rXvk1962Sj9cIdMaO+d+ZOF/?=
- =?us-ascii?Q?w/Rl/sdyzND789cr5XIsNlmKwMrUKKaHJreI8V+w3SbYTnMlG4bkOmWVXrVi?=
- =?us-ascii?Q?cxItn4okaPNSPLaAyi2qkcNDJUoztSNbxGr7rKkP23enk22A25zPTK791Mhb?=
- =?us-ascii?Q?UshZ9rkJmTw1UBhyrCDHdmBapr+/qQ1Yx0aW+VRLXJns54odSND93jKlLoBB?=
- =?us-ascii?Q?gh8iNEBIGjwIfDgwjDYRYpurOb30nJs7eRnkX4tdNSKPJ7TQWUiVluLDPl/W?=
- =?us-ascii?Q?i2q5OvdHoOUktRDWzmlHwWFuI/6iHYDMjnBNgnLmKP8QBZUVXw53Ehh+wtkZ?=
- =?us-ascii?Q?bujPHL8mYNqmBUAYKSqnKXrtN7nnm0GFJP7SyQDwtmuI6FL2FxUpCVi4lTLZ?=
- =?us-ascii?Q?IhR+Q63z0J1+/HMf/VYnvp3xxE4Hwuv6+acyIwfe8SwcYkZ/4L1iphD7gkTT?=
- =?us-ascii?Q?cxmw1ZiIoZWCoExPQ63k432si7jXbNGnNPT2Vu/xRtweE9ttp7yeMjyyClwy?=
- =?us-ascii?Q?WsysfixtKkqOmTauLRgk/fDjSbaUjRQypyLWtF2TEM3QqMU7vRZMpCDzmZ1s?=
- =?us-ascii?Q?mjPUzEuKpqmy0ATBnEsHvZkmvekvCY4fgieduDYlEp7/Xjtua5wAfG7lNxTI?=
- =?us-ascii?Q?Kr9frNrRTIbujWoFQOWKVIKNlF8Mc6u/mW6mZ79gz/ZdAKdVeyhtHlWpQqef?=
- =?us-ascii?Q?a83sk4yTL+8yusM4x30g3g7MvxJbyP+uMyhAJh7kPlizLmkZRZ2tF7ZA2IAj?=
- =?us-ascii?Q?OTuflvaYsla6HVrM4movZ4bXyi4o2m8ldyUjOCbsl8LtmydtoxXsZhLZ2tAZ?=
- =?us-ascii?Q?/FqOEJIvj8hSMdBY+reu79ANUdK1S8a/gm10fKsD9j0TStxgZbB1ilJcsDeX?=
- =?us-ascii?Q?IUuBthTEcV2acYJe/NqT2c5ZTzd96WYsCdj7?=
+	=?utf-8?B?Rko4c3U1UmdlZGxOMUlyUHRRWUg2WTRObG41SE5LcjVnWDRUMTR3QVFxT05w?=
+ =?utf-8?B?c3dhYW5EWW1SdE0wcXU0NGFQa3hyUTRIWllBSEdSOXVQUmtOZ2hZZ3J2YTU5?=
+ =?utf-8?B?TktyR0hRc3F6c3g2VnBodTVGUDNuT2lqd3U3WTFGemNhcVNzQzdtTW5wUHVy?=
+ =?utf-8?B?WnNNM1FsOG8zRitPVG52anYwSm95NHRySnNPc1E4cm83REwxb1BSNWZZOXRG?=
+ =?utf-8?B?Y00vVEZwcTJzNEdTMVJQci9jRWlYMDdPeWlPOS9ZN3NBOExDNkplZlVSVndj?=
+ =?utf-8?B?SEJaY0tFcU1RZkQwQmpRSjcybU9vTm1aNkNhNlpwNFRtLzZ0VzNwQ0drT1JO?=
+ =?utf-8?B?aU1sWXNKZ1J4MzdCeUhWWnRjdWkzcnphSzNFaWR3bDAxNTN0dXdxT1dpZ2Yz?=
+ =?utf-8?B?bXFoeGR5bGh6TVZscjQxZURyUFRTeGVqZSt2U1dkaFA4UnJrRzlVTTEzQjAx?=
+ =?utf-8?B?SUpnaU12V2NsSWNZNElremFPYjIzN3JtdlE0aVdiZ1BhemNrUEtIaW1Cb3Np?=
+ =?utf-8?B?MjkvL3ZyYjZuYkhyY0JzVXI4Yzh2OEJhQnoyR0F1QWxFajVJNWxua0d0WHJO?=
+ =?utf-8?B?S1hYelVJTW9PT0xNakdRUXl0bDBXV0pEYkp6NnhKZ1JHeEt0eTRHdGt2NFRr?=
+ =?utf-8?B?ejZWbmhUcVFQL09BNWJhM093RVlLTHZNZWp0ZTNVdE9QWnpSV3JIalN4ekQ4?=
+ =?utf-8?B?UHJvdnk1QU5wMFk5UU9pNGF4S2ZZUWhSU0R2UkRVekx4WkVDSHBVVDlsTTFM?=
+ =?utf-8?B?VVRxWUt3UFVUSy9lSUlIbTFtVFhZTFhaY3dRN1JWRFErOEV4ZHhKUTZnOE0v?=
+ =?utf-8?B?Ykd3c2h5Vy9razFDYXdwR2UzSVI5endBSElRbUpXbkVUM0ZuSGt4dE8rdSti?=
+ =?utf-8?B?OWdCbHJIMUV0cVVGWHY4RWN6MHlVRmIvQkRNV2FkM3RaZlR6NmpTSGFOMXk1?=
+ =?utf-8?B?alUwa1l0V3BLemp2ZXY3K3I1MlRWcEF5MDZmb2dDeDhVeFNJS243a1p3NGVq?=
+ =?utf-8?B?RURFZjRpamZPK3E5TmFkQ3BOL2dWdnpEQXZNOUFRaktzdFMwR0VJeFNnVG9W?=
+ =?utf-8?B?a2ZXY1p4UkcvaStaTjVLVTFZY3hUeHE1K1hVeDFtR21zSHBYTEZ3NmdmTUJP?=
+ =?utf-8?B?VWlmTEJsOUFKQ1g0aWpHM05Ob2R1dTNTcXBlYTdOTkpKclB1L0pmUFBkMTds?=
+ =?utf-8?B?bFdwNFBmS0lVZ1h4K2hQMDA5QmFZVTlMVUcvWHJpUkVKL3ltd2QrOVFzQXhI?=
+ =?utf-8?B?eiszN3JCc0lHdHpWZ0RGTGhiQi9JKzF5L1BFRzR2M1BsVjNtUXJJL0JPdVNV?=
+ =?utf-8?B?N2lvSkVRYzl3aG05QitUUnpYL0pzaGZXL1hMOXZuRVk5NjNKMDZnY01aMWhh?=
+ =?utf-8?B?TDRqWTVzckJjYkJqaG9ZU3dNUzhQY3YyMUlRbDN6V0xxU1pEbXFTV2JKbUZs?=
+ =?utf-8?B?bUNJT2Y3bU11WitvVDl5ZmdUVGkyYkNmcW9YMGFUNjI3ZnNydjJjWkxrelRu?=
+ =?utf-8?B?aUQrMVNvM05ad3JhNmJhc3NBYjQ0WHZFQ2t0Y1JTYXoybERVVGVadnh2WmJY?=
+ =?utf-8?B?NkNGZjVNaXFjWFFZS0kzN1g3TnFBUHY1VmwrenNhUHkrcjEzSGFRL01oM0hJ?=
+ =?utf-8?B?dDVDZDZtZ1REc0FzNGYweXZnOUZpMklBbHFZclY1ZEpYc1JoQWM5ZkpWaGhu?=
+ =?utf-8?B?Z2VxWVExQ2QxWDlOQ1BEMmY0b1RSQy93cHUrQUlVNzBDVUw5UnFNNG1uNGZW?=
+ =?utf-8?B?dDRUOTBBcUxsditEdkU4M0xkUTJFL0VkeEd6T29Hd1hLMlI4b2xGUUVYUFhQ?=
+ =?utf-8?B?RFBWZ3NiK25CVXZZT2NiWGRiSmVYYTBqb1Z3WmtaR0ViMThUVFZZQ2lvL05M?=
+ =?utf-8?B?VjFuZUFRT1FrK0pHOFVyVFhRb3dMN2NycFhadXlmclpvMjZ6OCt0OEFHTnlZ?=
+ =?utf-8?B?cnBsOU85bngrUk4xaGVJRUVHRnB3MkRic1JjUUFUUVdiVHhLL1FVZnZVZUV4?=
+ =?utf-8?Q?s24ws0i5QbQ9dA+o6QO0vF6XaE4jUA=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2025 15:45:09.0474
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR01MB8473.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OFdNZkErRG5RTkl4bVZ1RTU2a1JLUjBVaVRTdDVteU5zWThGc09WanRyNDVq?=
+ =?utf-8?B?N2hhVU42dVp3OGYrVzFLL2piaTdCMGxSTFZhMVFHYjNjYVhFc2tzcitmWER6?=
+ =?utf-8?B?dmE2Unk3aDBWSXErTm1MREFpN21MVDRkVXFkc2tDY3Bad29ZNFZlSmJGMUxw?=
+ =?utf-8?B?bXQ0QjFtSkFJbVVRVDFoOURmNUVySi9YMitXZVhmZUtnaVVJS3FML1dReE1O?=
+ =?utf-8?B?Q2ozWGFyV2lrSlNxeDR6ekNTYjExYjVtbW0zTURXS0d1WnhwV2FsbjlOajhX?=
+ =?utf-8?B?dzVlRUJHTXFCYi9RdXk5cnhxendHMGs0Y3ZmVXREVzllSG1PYURmZGdzTnFl?=
+ =?utf-8?B?UkxTMHl3NGRiS3FUc3ZicnhmanVvNDNkRnRYTHpnYlZORWJGaXdWV3Urekc1?=
+ =?utf-8?B?QlNaMXJzODF3dzErWFFqQktpL25Yb0IwU1BkNWYzV0N5N21CN080OTNCTEg3?=
+ =?utf-8?B?cEtLMTJ1QTN6QW5HWGxLU09TYW5PK2h5ZEtKSU1SWk51NDJWTEJiVDlHUXNK?=
+ =?utf-8?B?ZXVMV3RhOVliSkpETmpSRzdHeTU5cW5tWlUxV0VkcHRMTzhMcXVRN3gxc09X?=
+ =?utf-8?B?a3EveVpweWpSalY3MWFVSFRXZDdzTk5lUFh5SjkxZ2xSRjdUMW5wTXJWdE5G?=
+ =?utf-8?B?YWE3Wkh0U0dBMWdxVWNOTEZXNkNRYWd1VXc4UE81ZURzUURtemF0KzdwNWow?=
+ =?utf-8?B?ODQ2Vm9Nek9FVEZTYlhCV2IzZEpzcjlycldqRENIRFNmY1B5WlhGUTFnSkVB?=
+ =?utf-8?B?Z1ovVHhZVkpzVkpGWnRqYlpwRTNicDVHNWhyOWtkYkRFbGdWWTJOMmVLYlor?=
+ =?utf-8?B?ODl5MXJFbVY4cmp1R3JIdWllL1JxelJJNDNXa0dUc1lyZkk5ZFdmZk5Iamho?=
+ =?utf-8?B?VVZ0ZTNzRys3bCtjQmROMm5pYmNBQXNmR1pMZnpCb3hqMEFYblJyOHNmN1RY?=
+ =?utf-8?B?OHorbXB4QTgyRUxnQXNZR1hIR2ZFY3FTQjMrOUFvTVpjWWQvTVJKQkwwdUMy?=
+ =?utf-8?B?Qy9GQStVU29tUnMvNGtKVVRzZEFQblowUG01cDY4cnRRaDhkam1mdERRVkth?=
+ =?utf-8?B?TVJwbEFLSHFwbktsMWhGWFBKRFJjTWtVSEJsa2NaeUxKa1dZWVh0QjR2V1VW?=
+ =?utf-8?B?ZjE0UE4rdkRtdkg2RjdDNmNOMGw5YXVtcVY0QnZQZHN1WUJJVkhBVU1kUCtB?=
+ =?utf-8?B?aEJvUmtsWDZIdVhlYzVkcitvUW1zMW9NbFpxZHNFZ3Qra1p6ZGhOMVY3OEF0?=
+ =?utf-8?B?OTV2VzA5NU4vRjBqYU9Vd0RHQ1h4eExyQ3Q4ekkybVVEZ0VTbVhGQUNZeUxP?=
+ =?utf-8?B?aU16aXV0cTdGWWsxQ3g1SjFRdm4vSHF1Q3pXMXRJQ0xFS3JPVHBsdjJSU2tn?=
+ =?utf-8?B?VzVUWFZlYkkvek5sbkZvZkVpYXczakRidXlQYUZuVldiYzlDbFBkSzFQeGUz?=
+ =?utf-8?B?ZVBmdHcyY2VqYkNRKzA3dEtWNUJ2MnNPa3BSZzhuUmFGTmZ0M1JBdVRGUGl0?=
+ =?utf-8?B?dENiYTYrenU4SWdPdDRhVDI5RnlrZCtKQ2RQc0ppZkJnMjB5WXU5RzVGYkEv?=
+ =?utf-8?B?N3pJNHRSM0pNWVkyc0pxSmJLcU51aFF5ZmpsUmxuTjlBYnJzQUh3U3ZUaS9q?=
+ =?utf-8?B?UmF1VTRrRWgyc1JEVHhYMkwzczdBcW8xMytUNnpCUFdjVFI0U1RRb044aXhP?=
+ =?utf-8?B?SjRsRHRrYWd5RHhpTE0zcHZnSmxrT0lpWDhJUXZLM0RZVVBTeUtVcnRhblI0?=
+ =?utf-8?B?SkJhYy9XN2dGZ084aEliYWhsRjltVUlHK3N4K0s5RXkrWnV3blF2VDIrZGVq?=
+ =?utf-8?B?L1dmcnhSL2tZLzdoMmxxb2V6cnFZL0RwUlhySHRyaFBOQmp4VlZveDRYSm5p?=
+ =?utf-8?B?b01RYWJUdS9TejhPblUwcHd1YStMK0s2TDA2bVl2RnoyZjgyZDd3NGVLZHA1?=
+ =?utf-8?B?QWQ4MkU5c2h2MjdmYXJ3K0xBVHQ1SWJJOTFOSG9iMXpGbHIxTFlZTGp0NEFR?=
+ =?utf-8?B?TFR0cnV1ZG5tMTRDcUQwaTNHY3g2eHM5YWNjVVVWMUo1YXd3MzZkNkFZS3ht?=
+ =?utf-8?B?ZVpnN2h2d2s4RlQyNEU4c2Q4QkJaUHdwLzF5d1dKejBpdEoxT0I3Z21zR2lB?=
+ =?utf-8?B?VExFOGtWV3JtQ0lPYkpqVHRjbHVMZitpQkUzeEgyU1RUQzByZE1hNXhPaU9v?=
+ =?utf-8?Q?ae3ySEyNB7uj4pvKg8zCCxs=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3670a3ae-8883-4440-49d3-08dddaaf1a88
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR01MB8473.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2025 21:19:35.8378
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4466ddfd-29ee-4b2f-ab38-08ddda8061f9
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B074.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9439
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QCDFCPKzk64xsdTFznTEo9m0D98dkSUJ/dDPDas4kHIWVTYxxNyyG3ilPgMbikPTfcTxYc0TxcvziFxpYNpD1w/fzGnl85VMZfSSE0HpqyJU1tncITGzpp3c9El8aKLV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR01MB7423
 
-Both Intel and AMD have quirks related to recovery in the Instruction
-Fetch Units. The common issue is that MCG_STATUS[RIPV] and
-MCG_STATUS[EIPV] are set to '0', so Linux will not save the CS and IP
-registers. The severity grading functions will later see that CS=0, so it
-is assumed that the #MC was taken in kernel context. This leads to a
-kernel panic even if the #MC was recoverable and in user context.
+This is needed for both kernelspace and userspace properly handle
+ARM processor CPER events.
 
-RIPV is "restart IP valid" which means program execution can restart at
-the IP on the stack. This is a general indicator on whether system
-software should try to return to the executing process or not. The exact
-value is not needed by MCE handling.
+Patch 1 of this series fix the UEFI 2.6+ implementation of the ARM
+trace event, as the original implementation was incomplete.
+Changeset e9279e83ad1f ("trace, ras: add ARM processor error trace event")
+added such event, but it reports only some fields of the CPER record
+defined on UEFI 2.6+ appendix N, table N.16.  Those are not enough
+actually parse such events on userspace, as not even the event type
+is exported.
 
-EIPV is "error IP valid" which means the IP on the stack is directly
-associated with the error. This is a specific indicator that the saved
-IP is exactly where the #MC was taken. System software can share this
-for debugging and/or try to take further recovery actions based on the
-nature of the code represented by the IP.
+Patch 2 fixes a compilation breakage when W=1;
 
-Neither of these refer to the CS register which is used to determine
-the execution context privilege level.
+Patch 3 adds a new helper function to be used by cper and ghes drivers to
+display CPER bitmaps;
 
-It is not clear why CS and IP are tied together in the Linux handling.
-This could be a carryover from 32-bit execution where "IP" is the
-combination of "CS:IP". But it not apparent if this "IP=CS:IP"
-association, as applies to MCE handling, is a Linux assumption or
-explicitly noted in x86 documentation when describing RIPV/EIPV.
+Patch 4 fixes CPER logic according with UEFI 2.9A errata. Before it, there
+was no description about how processor type field was encoded. The errata
+defines it as a bitmask, and provides the information about how it should
+be encoded.
 
-It is clear that in the affected use cases, the processor context is
-valid in general. And the only variable is the IP validity which is
-explicitly based on RIPV/EIPV. An invalid CPU context is represented by
-the MCA_STATUS[PCC] "Processor Context Corrupt" bit.
+Patch 5 adds CPER functions to Kernel-doc.
 
-Avoid the need for these context quirks by refactoring the Linux MCE
-handling code to treat the CS and IP registers independently.
+This series was validated with the help of an ARM EINJ code for QEMU:
 
-Additionally, this removes the need to "fake" the CS value for VM86
-mode.
+	https://gitlab.com/mchehab_kernel/qemu/-/tree/qemu_submission
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+$ scripts/ghes_inject.py -d arm -p 0xdeadbeef -t cache,bus,micro-arch
+
+[   11.094205] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
+[   11.095009] {1}[Hardware Error]: event severity: recoverable
+[   11.095486] {1}[Hardware Error]:  Error 0, type: recoverable
+[   11.096090] {1}[Hardware Error]:   section_type: ARM processor error
+[   11.096399] {1}[Hardware Error]:   MIDR: 0x00000000000f0510
+[   11.097135] {1}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000080000000
+[   11.097811] {1}[Hardware Error]:   running state: 0x0
+[   11.098193] {1}[Hardware Error]:   Power State Coordination Interface state: 0
+[   11.098699] {1}[Hardware Error]:   Error info structure 0:
+[   11.099174] {1}[Hardware Error]:   num errors: 2
+[   11.099682] {1}[Hardware Error]:    error_type: 0x1a: cache error|bus error|micro-architectural error
+[   11.100150] {1}[Hardware Error]:    physical fault address: 0x00000000deadbeef
+[   11.111214] Memory failure: 0xdeadb: recovery action for free buddy page: Recovered
+
+- 
+
+I also tested the ghes and cper reports both with and without this
+change, using different versions of rasdaemon, with and without
+support for the extended trace event. Those are a summary of the
+test results:
+
+- adding more fields to the trace events didn't break userspace API:
+  both versions of rasdaemon handled it;
+
+- the rasdaemon patches to handle the new trace report was missing
+  a backward-compatibility logic. I fixed already. So, rasdaemon
+  can now handle both old and new trace events.
+
+Btw, rasdaemon has gained support for the extended trace since its
+version 0.5.8 (released in 2021). I didn't saw any issues there
+complain about troubles on it, so either distros used on ARM servers
+are using an old version of rasdaemon, or they're carrying on the trace
+event changes as well.
+
 ---
- arch/x86/kernel/cpu/mce/core.c     | 101 +++--------------------------
- arch/x86/kernel/cpu/mce/internal.h |   8 +--
- arch/x86/kernel/cpu/mce/severity.c |  24 +++----
- 3 files changed, 22 insertions(+), 111 deletions(-)
+v5:
+ - fix a few code formatting issues
+ - remove "Co-developed-by: danielf" because his/my contribution was
+   removed in v2.
+ - adjust tag block
+ - Link to v4: https://lore.kernel.org/linux-acpi/20250805-mauro_v3-v6-16-rev2-v4-0-ea538759841c@os.amperecomputing.com
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 4da4eab56c81..1aed411cbdb1 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -456,9 +456,8 @@ static noinstr void mce_wrmsrq(u32 msr, u64 v)
-  * check into our "mce" struct so that we can use it later to assess
-  * the severity of the problem as we read per-bank specific details.
-  */
--static noinstr void mce_gather_info(struct mce_hw_err *err, struct pt_regs *regs)
-+static noinstr void mce_gather_info(struct mce_hw_err *err)
- {
--	struct mce *m;
- 	/*
- 	 * Enable instrumentation around mce_prep_record() which calls external
- 	 * facilities.
-@@ -467,29 +466,7 @@ static noinstr void mce_gather_info(struct mce_hw_err *err, struct pt_regs *regs
- 	mce_prep_record(err);
- 	instrumentation_end();
- 
--	m = &err->m;
--	m->mcgstatus = mce_rdmsrq(MSR_IA32_MCG_STATUS);
--	if (regs) {
--		/*
--		 * Get the address of the instruction at the time of
--		 * the machine check error.
--		 */
--		if (m->mcgstatus & (MCG_STATUS_RIPV|MCG_STATUS_EIPV)) {
--			m->ip = regs->ip;
--			m->cs = regs->cs;
--
--			/*
--			 * When in VM86 mode make the cs look like ring 3
--			 * always. This is a lie, but it's better than passing
--			 * the additional vm86 bit around everywhere.
--			 */
--			if (v8086_mode(regs))
--				m->cs |= 3;
--		}
--		/* Use accurate RIP reporting if available. */
--		if (mca_cfg.rip_msr)
--			m->ip = mce_rdmsrq(mca_cfg.rip_msr);
--	}
-+	err->m.mcgstatus = mce_rdmsrq(MSR_IA32_MCG_STATUS);
- }
- 
- bool mce_available(struct cpuinfo_x86 *c)
-@@ -738,7 +715,7 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
- 
- 	this_cpu_inc(mce_poll_count);
- 
--	mce_gather_info(&err, NULL);
-+	mce_gather_info(&err);
- 	m = &err.m;
- 
- 	if (flags & MCP_TIMESTAMP)
-@@ -841,35 +818,6 @@ void machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
- }
- EXPORT_SYMBOL_GPL(machine_check_poll);
- 
--/*
-- * During IFU recovery Sandy Bridge -EP4S processors set the RIPV and
-- * EIPV bits in MCG_STATUS to zero on the affected logical processor (SDM
-- * Vol 3B Table 15-20). But this confuses both the code that determines
-- * whether the machine check occurred in kernel or user mode, and also
-- * the severity assessment code. Pretend that EIPV was set, and take the
-- * ip/cs values from the pt_regs that mce_gather_info() ignored earlier.
-- */
--static __always_inline void
--quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
--{
--	if (bank != 0)
--		return;
--	if ((m->mcgstatus & (MCG_STATUS_EIPV|MCG_STATUS_RIPV)) != 0)
--		return;
--	if ((m->status & (MCI_STATUS_OVER|MCI_STATUS_UC|
--		          MCI_STATUS_EN|MCI_STATUS_MISCV|MCI_STATUS_ADDRV|
--			  MCI_STATUS_PCC|MCI_STATUS_S|MCI_STATUS_AR|
--			  MCACOD)) !=
--			 (MCI_STATUS_UC|MCI_STATUS_EN|
--			  MCI_STATUS_MISCV|MCI_STATUS_ADDRV|MCI_STATUS_S|
--			  MCI_STATUS_AR|MCACOD_INSTR))
--		return;
--
--	m->mcgstatus |= MCG_STATUS_EIPV;
--	m->ip = regs->ip;
--	m->cs = regs->cs;
--}
--
- /*
-  * Disable fast string copy and return from the MCE handler upon the first SRAR
-  * MCE on bank 1 due to a CPU erratum on Intel Skylake/Cascade Lake/Cooper Lake
-@@ -923,26 +871,6 @@ static noinstr bool quirk_skylake_repmov(void)
- 	return false;
- }
- 
--/*
-- * Some Zen-based Instruction Fetch Units set EIPV=RIPV=0 on poison consumption
-- * errors. This means mce_gather_info() will not save the "ip" and "cs" registers.
-- *
-- * However, the context is still valid, so save the "cs" register for later use.
-- *
-- * The "ip" register is truly unknown, so don't save it or fixup EIPV/RIPV.
-- *
-- * The Instruction Fetch Unit is at MCA bank 1 for all affected systems.
-- */
--static __always_inline void quirk_zen_ifu(int bank, struct mce *m, struct pt_regs *regs)
--{
--	if (bank != 1)
--		return;
--	if (!(m->status & MCI_STATUS_POISON))
--		return;
--
--	m->cs = regs->cs;
--}
--
- /*
-  * Do a quick check if any of the events requires a panic.
-  * This decides if we keep the events around or clear them.
-@@ -960,11 +888,6 @@ static __always_inline int mce_no_way_out(struct mce_hw_err *err, char **msg, un
- 			continue;
- 
- 		arch___set_bit(i, validp);
--		if (mce_flags.snb_ifu_quirk)
--			quirk_sandybridge_ifu(i, m, regs);
--
--		if (mce_flags.zen_ifu_quirk)
--			quirk_zen_ifu(i, m, regs);
- 
- 		m->bank = i;
- 		if (mce_severity(m, regs, &tmp, true) >= MCE_PANIC_SEVERITY) {
-@@ -1057,7 +980,7 @@ static noinstr int mce_timed_out(u64 *t, const char *msg)
-  * All the spin loops have timeouts; when a timeout happens a CPU
-  * typically elects itself to be Monarch.
-  */
--static void mce_reign(void)
-+static void mce_reign(struct pt_regs *regs)
- {
- 	struct mce_hw_err *err = NULL;
- 	struct mce *m = NULL;
-@@ -1088,7 +1011,7 @@ static void mce_reign(void)
- 	 */
- 	if (m && global_worst >= MCE_PANIC_SEVERITY) {
- 		/* call mce_severity() to get "msg" for panic */
--		mce_severity(m, NULL, &msg, true);
-+		mce_severity(m, regs, &msg, true);
- 		mce_panic("Fatal machine check", err, msg);
- 	}
- 
-@@ -1197,7 +1120,7 @@ static noinstr int mce_start(int *no_way_out)
-  * Synchronize between CPUs after main scanning loop.
-  * This invokes the bulk of the Monarch processing.
-  */
--static noinstr int mce_end(int order)
-+static noinstr int mce_end(int order, struct pt_regs *regs)
- {
- 	u64 timeout = (u64)mca_cfg.monarch_timeout * NSEC_PER_USEC;
- 	int ret = -1;
-@@ -1227,7 +1150,7 @@ static noinstr int mce_end(int order)
- 			ndelay(SPINUNIT);
- 		}
- 
--		mce_reign();
-+		mce_reign(regs);
- 		barrier();
- 		ret = 0;
- 	} else {
-@@ -1557,7 +1480,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 
- 	this_cpu_inc(mce_exception_count);
- 
--	mce_gather_info(&err, regs);
-+	mce_gather_info(&err);
- 	m = &err.m;
- 	m->tsc = rdtsc();
- 
-@@ -1607,7 +1530,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	 * When there's any problem use only local no_way_out state.
- 	 */
- 	if (!lmce) {
--		if (mce_end(order) < 0) {
-+		if (mce_end(order, regs) < 0) {
- 			if (!no_way_out)
- 				no_way_out = worst >= MCE_PANIC_SEVERITY;
- 
-@@ -1950,9 +1873,6 @@ static void apply_quirks_amd(struct cpuinfo_x86 *c)
- 	 */
- 	if (c->x86 == 0x15 && c->x86_model <= 0xf)
- 		mce_flags.overflow_recov = 1;
--
--	if (c->x86 >= 0x17 && c->x86 <= 0x1A)
--		mce_flags.zen_ifu_quirk = 1;
- }
- 
- static void apply_quirks_intel(struct cpuinfo_x86 *c)
-@@ -1988,9 +1908,6 @@ static void apply_quirks_intel(struct cpuinfo_x86 *c)
- 	if (c->x86_vfm < INTEL_CORE_YONAH && mca_cfg.bootlog < 0)
- 		mca_cfg.bootlog = 0;
- 
--	if (c->x86_vfm == INTEL_SANDYBRIDGE_X)
--		mce_flags.snb_ifu_quirk = 1;
--
- 	/*
- 	 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
- 	 * rep movs.
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index b5ba598e54cb..59a94daa31ad 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -211,9 +211,6 @@ struct mce_vendor_flags {
- 	 */
- 	smca			: 1,
- 
--	/* Zen IFU quirk */
--	zen_ifu_quirk		: 1,
--
- 	/* AMD-style error thresholding banks present. */
- 	amd_threshold		: 1,
- 
-@@ -223,13 +220,10 @@ struct mce_vendor_flags {
- 	/* Centaur Winchip C6-style MCA */
- 	winchip			: 1,
- 
--	/* SandyBridge IFU quirk */
--	snb_ifu_quirk		: 1,
--
- 	/* Skylake, Cascade Lake, Cooper Lake REP;MOVS* quirk */
- 	skx_repmov_quirk	: 1,
- 
--	__reserved_0		: 55;
-+	__reserved_0		: 57;
- };
- 
- extern struct mce_vendor_flags mce_flags;
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index 2235a7477436..6bf7081b19c0 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -272,23 +272,23 @@ static bool is_copy_from_user(struct pt_regs *regs)
- 	return true;
- }
- 
--/*
-- * If mcgstatus indicated that ip/cs on the stack were
-- * no good, then "m->cs" will be zero and we will have
-- * to assume the worst case (IN_KERNEL) as we actually
-- * have no idea what we were executing when the machine
-- * check hit.
-- * If we do have a good "m->cs" (or a faked one in the
-- * case we were executing in VM86 mode) we can use it to
-- * distinguish an exception taken in user from from one
-- * taken in the kernel.
-- */
- static noinstr int error_context(struct mce *m, struct pt_regs *regs)
- {
- 	int fixup_type;
- 	bool copy_user;
- 
--	if ((m->cs & 3) == 3)
-+	/* Without register info, assume the worst. */
-+	if (!regs)
-+		return IN_KERNEL;
-+
-+	m->ip = regs->ip;
-+	m->cs = regs->cs;
-+
-+	/* Use accurate RIP reporting if available. */
-+	if (mca_cfg.rip_msr)
-+		m->ip = mce_rdmsrq(mca_cfg.rip_msr);
-+
-+	if (user_mode(regs))
- 		return IN_USER;
- 
- 	if (!mc_recoverable(m->mcgstatus))
--- 
-2.50.1
+v4:
+ - rebase to kernel v6.16
+ - modify commit message of patch 1, and adjust white spaces
+   per Boris' suggestions.
+ - Link to v3: https://lore.kernel.org/linux-acpi/cover.1725429659.git.mchehab+huawei@kernel.org
+
+v3:
+ - history of patch 1 improved with a chain of co-developed-by;
+ - add a better description and an example on patch 3;
+ - use BIT_ULL() on patch 3;
+ - add a missing include on patch 4.
+
+v2:
+  - removed an uneeded patch adding #ifdef for CONFIG_ARM/ARM64;
+  - cper_bits_to_str() now returns the number of chars filled at the buffer;
+  - did a cosmetic (blank lines) improvement at include/linux/ras.h;
+  - arm_event trace dynamic arrays renamed to pei_buf/ctx_buf/oem_buf.
+
+Jason Tian (1):
+      RAS: Report all ARM processor CPER information to userspace
+
+Mauro Carvalho Chehab (4):
+      efi/cper: Adjust infopfx size to accept an extra space
+      efi/cper: Add a new helper function to print bitmasks
+      efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
+      docs: efi: add CPER functions to driver-api
+
+ Documentation/driver-api/firmware/efi/index.rst | 11 +++--
+ drivers/acpi/apei/ghes.c                        | 27 +++++------
+ drivers/firmware/efi/cper-arm.c                 | 52 ++++++++++-----------
+ drivers/firmware/efi/cper.c                     | 62 ++++++++++++++++++++++++-
+ drivers/ras/ras.c                               | 40 +++++++++++++++-
+ include/linux/cper.h                            | 12 +++--
+ include/linux/ras.h                             | 16 +++++--
+ include/ras/ras_event.h                         | 49 +++++++++++++++++--
+ 8 files changed, 210 insertions(+), 59 deletions(-)
 
 
