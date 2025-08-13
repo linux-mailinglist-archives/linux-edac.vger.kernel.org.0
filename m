@@ -1,149 +1,149 @@
-Return-Path: <linux-edac+bounces-4568-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4569-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 264F9B238A8
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 21:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF72B23E81
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Aug 2025 04:51:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71A8A7222E5
-	for <lists+linux-edac@lfdr.de>; Tue, 12 Aug 2025 19:24:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3DF16E63C2
+	for <lists+linux-edac@lfdr.de>; Wed, 13 Aug 2025 02:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9202FD1C5;
-	Tue, 12 Aug 2025 19:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6ED272E5D;
+	Wed, 13 Aug 2025 02:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sj+eHPKz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="En3aKEhH"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9257F2F8BC3;
-	Tue, 12 Aug 2025 19:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C36A26E703;
+	Wed, 13 Aug 2025 02:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755026647; cv=none; b=G9+5V4vNRVBnqzEobmg3Wewz1GCI0azNTBw8vL0J/h9M2C9KEAmecdoi7Yii+fJQpTf0xmZrytRcY+A2t0yltKyAMoMw5lQyC6fd9aW028WoNz899pWqieWzarWe3PprZGwJCZUxHS3cF/FtVFEF3hU+kagMh0fUm1S+yvNetPI=
+	t=1755053398; cv=none; b=VKKXa4TxnCbViA8Ucp42nXpcrmqEvK6NfEqdAcFOMS8v4iPqoTMDaKTclEGoIjONTyr1XouJalPt91K89T+80h+c/7UZN4XjrlsAfUuvtsbldkWOK+0U+RuZgryx1jfJsuCOJnOI95fXjgmEuzYO/ja0iM5T8IeKLRr56fjTb/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755026647; c=relaxed/simple;
-	bh=xJKYOxUWkPZ3nmqmyRsauTD2N7Zyq6ecCwpko7Jpu+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FdWACO5yKKCxoA3Yrk5Au7wd7D3SILyZZB8ZADOz/GTQkSqmMFkBSxfGW/WqPXrG065ow40w2haRV2M+VS/Vo5LuTy+BhnQP5XAUGF8Fabm/sE8JpPOP577mCXsvcjYKQGDbPaOteF8YsmmawXe6tmO4QeO3r8Ps6yI0HV1XifE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sj+eHPKz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2F2C4CEF4;
-	Tue, 12 Aug 2025 19:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755026647;
-	bh=xJKYOxUWkPZ3nmqmyRsauTD2N7Zyq6ecCwpko7Jpu+M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=sj+eHPKzi4lnxnUtytBWZa/RjWt4wpZFiMhFmH2pPKmFPN+YoZmS1qpvmckNGaXPK
-	 z/lYmJezGczjR7PCuMnfx+GOrZ+u2Echk6c74OdP72tFXkA5X1gTgFFwHTsK++PcXW
-	 XmGdGPq8bs5EuO8ZcxXZq9Fs8dWHOtHTzovR2ZataMdtcTmiwWUeogufJXY9ZSYMZV
-	 HXltP0AlX48QSPX8JEI3gXJPuGOnKuT+9UbJjsHYYk9lRlsMY0ZZUjeiOURnu/JMCG
-	 XafKqyl7h/RUgreakPkdEXipd7z+vWcHyDUQdth3astZeQ6m61hOfW7kW0lcmPdYAd
-	 G4iPa2hjmcZUA==
-Date: Tue, 12 Aug 2025 21:23:59 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>, EDAC
- Mailing List <linux-edac@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Doc Mailing List
- <linux-doc@vger.kernel.org>, Akira Yokosawa <akiyks@gmail.com>, "David S.
- Miller" <davem@davemloft.net>, Ignacio Encinas Rubio
- <ignacio@iencinas.com>, Marco Elver <elver@google.com>, Shuah Khan
- <skhan@linuxfoundation.org>, Donald Hunter <donald.hunter@gmail.com>, Eric
- Dumazet <edumazet@google.com>, Jan Stancek <jstancek@redhat.com>, Paolo
- Abeni <pabeni@redhat.com>, Ruben Wauters <rubenru09@aol.com>,
- joel@joelfernandes.org, linux-kernel-mentees@lists.linux.dev,
- lkmm@lists.linux.dev, netdev@vger.kernel.org, peterz@infradead.org,
- stern@rowland.harvard.edu, Breno Leitao <leitao@debian.org>, Simon Horman
- <horms@kernel.org>
-Subject: Re: [GIT PULL for v6.17-rc2] add a generic yaml parser integrated
- with Netlink specs generation
-Message-ID: <20250812212359.6e905337@foz.lan>
-In-Reply-To: <e8731f6f-9057-46f0-8df0-7ece500c0928@infradead.org>
-References: <20250812113329.356c93c2@foz.lan>
-	<87h5ycfl3s.fsf@trenco.lwn.net>
-	<e8731f6f-9057-46f0-8df0-7ece500c0928@infradead.org>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1755053398; c=relaxed/simple;
+	bh=ltKqSBZXfwtqcj+oKam9eDueOe346roobe+OsgG6koo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PyL+J/Zeed6e55QPQtdtI3HoUBuAwGnVZY5FbLFJ+S5MsWh/qZYrJpxdwYRDQDourNvwSNqyLCkTaL+AvIE4N+Y8ucR5HLSmB7j0Pi9ln2sewI+7eVS8DAKuxB+fpq7YnLnNiQoJWlfmoo0s78K+AThi0grKyLHKw406T2iOmLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=En3aKEhH; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-31f3b54da19so4202848a91.1;
+        Tue, 12 Aug 2025 19:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755053396; x=1755658196; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lQS8nEhwcYVup+sy9iJFHAcWvpA/jZF+5gx1aBAFcyc=;
+        b=En3aKEhHvZDH3kePuWlnI3KxDHBGFFYWQ4SvNBbXdyv+9O1xICrvjqqCwxBy2N3VqH
+         JACQDCDzL5exghjN31onNlIgAXzECkfEdo3HXnpEN3f0GnkCiJ0tBu5ZffkHyHwhDFbs
+         d6UH/1B8UQrM/0EaLGurSJnwv2NVMRyawrvQ/nQlsZ8fSN+ajP/jZ/IJjtawK3Gxft7i
+         DzLjubedNM8GCBDgqW+adc39aBawcmBSaAypwnNcaJDk0LqTP3AmcHG8qDnIo13q6EHZ
+         eFCwWOyvk95hOunMGojS3EKJfs/sZq6H5/iEvJpofGfKOmBe8f0PhUxwSTqMrlDRX6+C
+         amSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755053396; x=1755658196;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lQS8nEhwcYVup+sy9iJFHAcWvpA/jZF+5gx1aBAFcyc=;
+        b=dwEFlKNHJyKhMP/0+KQ+9yWdH2fObFAcfAoKM3mXodPaOLxzb/gjNGJ1Fv0KwRoT5g
+         /LcoZzW1XUNU1SYDFEBDmflrYbltG5140bPXZ5YyiKrYlbf+DiLKjn1OqNgleLMWpAXd
+         Z7GcFOtY6znRS9ssYTgnYFAKIfli47m6R93x0fp4CCYuoF7dyoEK1KS9FCSkRIMvaT3I
+         cjH3P2CTfY+mC2yMHRvHdZKYWrBhypWTFu/CVldlymegWNbEFgSr7tL5DcLqDrQIyEDj
+         BaRKM/6G//eXc9rFyReR13POl8CTzN8IU59dNM38UQsT1aQmnjVNcOmAdnNQGqVdrpgd
+         ZamQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpp5sh5QOlyFjL94/yYamxBY9g1jvSC4VckZfV62cw7AE5CicQYCEe0hMvMEZDRCJp75T/BsiwEzk=@vger.kernel.org, AJvYcCWXIlEuqx549Pgr6BRpLWTSEPuk/ikjmWOzJl7QTpQDSuLwXs0hlGegsNXB7NpcxTtIZDzkb7cCJBcSQjGW@vger.kernel.org, AJvYcCXdL0iFcsPNeY9E/Y4nEyW5a3pg3nZxrmvIRhk36Ehbtss6JOuuFBllYngqoU5lhPP0HxPn5MDw@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxvIMtvDc+LFd17Jpkuvp+aNRKpeFxYH8ekZ0SjqBu/OaTpOfE
+	xaZ7pbxiusLiByLS8pROr1qag5Y6VJg6Z+NNfAoKAf3ildHfGM8AiE3u
+X-Gm-Gg: ASbGncurhOEyF/gwNwsFnIBpSpentsmYpno6dZpfY0jJo8mU9/ZlAT7q0/kXbI44hkD
+	NqzAVbf9bYuX7lJ+cgRVpeQcCMOeDyqFeCkl6RUvM2EAFEKZgSDEdD0fdvws7427hvPZk6xtq0d
+	0LshN7Ae4OAggTXdcDu310je7sjUwSk4DBU2AgG2O/+PIBLeMxWZXvL/sppAkkd7Twv4uxEXc+D
+	U5dy+tdQxiWpN17/TaWf86Ioi+PiUwSqEhJKlB4jaJYQEm31dzZxQpMkLD+a8ewaMtJrWwhtJwr
+	6JL2LL3z85RQenGpmlZ67LmRotVME1pyAR2BvbEOCK3JbmKlx1wj/UD6pdggoCBqQbJHOVsniv2
+	bK0XQMYE3KH0N0G+AWDgpB5FWhzl1SVf0t0Qsz/uofzXX/fRUsrj3KCJr5hksHTHmR2zi
+X-Google-Smtp-Source: AGHT+IFhTsVjvaAkfVJ663GzAql5Yv8cxjFsr6hoRD84O4VIwAig7x7xsHG/KN3bVF51/jYDe2q7ew==
+X-Received: by 2002:a17:90b:4cc9:b0:316:e77:e2cf with SMTP id 98e67ed59e1d1-321d0ed0f13mr1991457a91.35.1755053396217;
+        Tue, 12 Aug 2025 19:49:56 -0700 (PDT)
+Received: from [10.0.2.15] (KD106167137155.ppp-bb.dion.ne.jp. [106.167.137.155])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-321d1d981b2sm557590a91.14.2025.08.12.19.49.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Aug 2025 19:49:55 -0700 (PDT)
+Message-ID: <9c4a655e-095b-45fe-b35d-c3f0ae6a9237@gmail.com>
+Date: Wed, 13 Aug 2025 11:49:50 +0900
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL for v6.17-rc2] add a generic yaml parser integrated
+ with Netlink specs generation
+To: Jonathan Corbet <corbet@lwn.net>,
+ Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: EDAC Mailing List <linux-edac@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+ "David S. Miller" <davem@davemloft.net>,
+ Ignacio Encinas Rubio <ignacio@iencinas.com>, Marco Elver
+ <elver@google.com>, Shuah Khan <skhan@linuxfoundation.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Jan Stancek <jstancek@redhat.com>, Paolo Abeni <pabeni@redhat.com>,
+ Ruben Wauters <rubenru09@aol.com>, linux-kernel-mentees@lists.linux.dev,
+ netdev@vger.kernel.org, Breno Leitao <leitao@debian.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Simon Horman <horms@kernel.org>,
+ Akira Yokosawa <akiyks@gmail.com>
+References: <20250812113329.356c93c2@foz.lan> <87h5ycfl3s.fsf@trenco.lwn.net>
+Content-Language: en-US
+From: Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <87h5ycfl3s.fsf@trenco.lwn.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Tue, 12 Aug 2025 11:41:58 -0700
-Randy Dunlap <rdunlap@infradead.org> wrote:
+[-CC: LKMM folks and list; this has nothing to do with the memory model]
 
-> On 8/12/25 11:31 AM, Jonathan Corbet wrote:
-> > Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
-> >   
-> >> Hi Jon/Jakub,
-> >>
-> >> In case you both prefer to merge from a stable tag, please pull from:
-> >>
-> >> 	git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-docs.git docs/v6.17-1
-> >>
-> >> For:
-> >>
-> >> - An YAML parser Sphinx plugin, integrated with Netlink YAML doc
-> >>   parser.  
-> > 
-> > OK, I have done that.  I will note that it adds a warning:
-> >   
-> >> Documentation/networking/netlink_spec/index.rst: WARNING: document isn't included in any toctree  
-> > ...it might be nice to get that straightened out.  
+Hi Jon,
+
+On Tue, 12 Aug 2025 12:31:03 -0600, Jonathan Corbet wrote:
+> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 > 
-> I see it, at least in linux-next. However, its format is
-> "different," so that may have confused whatever printed
-> that message:
+>> Hi Jon/Jakub,
+>>
+>> In case you both prefer to merge from a stable tag, please pull from:
+>>
+>> 	git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-docs.git docs/v6.17-1
+>>
+>> For:
+>>
+>> - An YAML parser Sphinx plugin, integrated with Netlink YAML doc
+>>   parser.
 > 
-> from Documentation/networking/index.rst:
+> OK, I have done that.  I will note that it adds a warning:
 > 
->    filter
->    generic-hdlc
->    generic_netlink
->    netlink_spec/index
->    gen_stats
->    gtp
->    ila
+>> Documentation/networking/netlink_spec/index.rst: WARNING: document isn't included in any toctree
+> 
+> ...it might be nice to get that straightened out.
 
-Maybe some merge conflict/merge issue, as this was renamed:
+After the merge, "git status" complains:
 
-$ git show 1ce4da3dd99e98bd4a8b396c291041080e0fe85e Documentation/networking/index.rst
-commit 1ce4da3dd99e98bd4a8b396c291041080e0fe85e
-Author: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Date:   Thu Jun 12 10:34:30 2025 +0200
+    Untracked files:
+      (use "git add <file>..." to include in what will be committed)
+	Documentation/networking/netlink_spec/
 
-    docs: use parser_yaml extension to handle Netlink specs
-    
-    Instead of manually calling ynl_gen_rst.py, use a Sphinx extension.
-    This way, no .rst files would be written to the Kernel source
-    directories.
-    
-    We are using here a toctree with :glob: property. This way, there
-    is no need to touch the netlink/specs/index.rst file every time
-    a new Netlink spec is added/renamed/removed.
-    
-    Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-    Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
+So, I don't think there is anything you can do in the Git repo side ...
 
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index ac90b82f3ce9..b7a4969e9bc9 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -57,7 +57,7 @@ Contents:
-    filter
-    generic-hdlc
-    generic_netlink
--   netlink_spec/index
-+   ../netlink/specs/index
-    gen_stats
-    gtp
-    ila
+We need to remember to "rm -rf" the directory after crossing this merge
+point.
 
-Thanks,
-Mauro
+In theory, such "rm -rf" could be added somewhere in Documentation/Makefile,
+but that would not work well with write-protected shared kernel repos.
+
+        Thanks, Akira
+
 
