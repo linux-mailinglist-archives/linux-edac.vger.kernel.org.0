@@ -1,243 +1,255 @@
-Return-Path: <linux-edac+bounces-4621-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4622-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2AF0B2D72D
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 10:55:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D027B2D97C
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 12:03:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E469F16C0C9
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 08:54:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DDDF5A4357
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 10:01:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67CFE2D979F;
-	Wed, 20 Aug 2025 08:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D94552DA769;
+	Wed, 20 Aug 2025 10:00:57 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C88F1FECA1;
-	Wed, 20 Aug 2025 08:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F90042AA9;
+	Wed, 20 Aug 2025 10:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755680061; cv=none; b=KR3+9Teu7WNoDCdAP0fTYzDsK5O/zTklZ2QIB6pWu9KSWkkqGYWg9wAyVwvIKR7FQCCXQ/6kDtGWZ7+jNMpKpRGhpl3svjooas/s1bSWbVHwByjoaBRmA1gsqz+VU5N7Yzt6ZS1R8AHhcylMo0wNeGwKPWWfHEdkHTGuTxX9pHY=
+	t=1755684057; cv=none; b=k4bFHvQ9vJIWKO+Vw8FUu+aPkIS4zeaRHqTf5eutLdjNTUtjlEi7GDzf3bJX2Moddv+B0R2BWR7tVwmYxVVSIp9NdmwFfx7dyl5TQyv800tBgIuAh9D6rGsH62TipS4oB48loGbuoQ3/3gt2gpgVORUVNhdbAnttempHLIISdKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755680061; c=relaxed/simple;
-	bh=Q0jCltmdOp/FjWil04xh1U8Myk7S1FnVFZvnd7aW+6g=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oVHKVTDBZ8zMScvEGHOmSiy9M+9ppkmEm4mggG52QAjBqUAJv6CcP8oHb+m9fEJjIhQNHwK9jm2D2fxRZQOt2rF1328oGSl71DnA3WEbAKRtHBMInGm1IAnYOLP5dhom6yuE9CcZb0ewXLc7oHZEQzIMcZnaM9yQbR2e9nslIsg=
+	s=arc-20240116; t=1755684057; c=relaxed/simple;
+	bh=gqeCeX/KuikXd6w1dw6+rL3RKYN2gDYQ3ZF9QLugi+A=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=pAUGWpH4pKAkCElex2f+L97hhhrXA19ewk1xFR8J4LxgY0uald0dJ7iMOwVRiccD7QHBvnzqzRrdmTpkGbxm66jlJuJojv7G4Wj24ZBJL59qje64I3udLdGsRbrcqLEIrdqiGdzZnM1Fw4MAXbDyIKfY5X4ZUffK8nUgBXAaYLo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4c6KtT2CW1z6FHD3;
-	Wed, 20 Aug 2025 16:51:13 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 07A5D1402FB;
-	Wed, 20 Aug 2025 16:54:16 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 20 Aug
- 2025 10:54:14 +0200
-Date: Wed, 20 Aug 2025 09:54:13 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Mike Rapoport <rppt@kernel.org>
-CC: <shiju.jose@huawei.com>, <rafael@kernel.org>, <bp@alien8.de>,
-	<akpm@linux-foundation.org>, <dferguson@amperecomputing.com>,
-	<linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-doc@vger.kernel.org>, <tony.luck@intel.com>,
-	<lenb@kernel.org>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
-	<mchehab@kernel.org>, <linuxarm@huawei.com>, <rientjes@google.com>,
-	<jiaqiyan@google.com>, <Jon.Grimm@amd.com>, <dave.hansen@linux.intel.com>,
-	<naoya.horiguchi@nec.com>, <james.morse@arm.com>, <jthoughton@google.com>,
-	<somasundaram.a@hpe.com>, <erdemaktas@google.com>, <pgonda@google.com>,
-	<duenwen@google.com>, <gthelen@google.com>, <wschwartz@amperecomputing.com>,
-	<wbs@os.amperecomputing.com>, <nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>,
-	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
-	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>
-Subject: Re: [PATCH v11 1/3] mm: Add support to retrieve physical address
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4c6MQY5KX0z6L5Rp;
+	Wed, 20 Aug 2025 18:00:37 +0800 (CST)
+Received: from frapeml500006.china.huawei.com (unknown [7.182.85.219])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9387F1402FF;
+	Wed, 20 Aug 2025 18:00:50 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml500006.china.huawei.com (7.182.85.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 20 Aug 2025 12:00:50 +0200
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Wed, 20 Aug 2025 12:00:50 +0200
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Jonathan Cameron <jonathan.cameron@huawei.com>, Mike Rapoport
+	<rppt@kernel.org>
+CC: "rafael@kernel.org" <rafael@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"lenb@kernel.org" <lenb@kernel.org>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "mchehab@kernel.org"
+	<mchehab@kernel.org>, Linuxarm <linuxarm@huawei.com>, "rientjes@google.com"
+	<rientjes@google.com>, "jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>
+Subject: RE: [PATCH v11 1/3] mm: Add support to retrieve physical address
  range of memory from the node ID
-Message-ID: <20250820095413.00003bd7@huawei.com>
-In-Reply-To: <aKV6dVkPiBPw595T@kernel.org>
+Thread-Topic: [PATCH v11 1/3] mm: Add support to retrieve physical address
+ range of memory from the node ID
+Thread-Index: AQHcC5XB01xAziOY6k6EjlFpWKMWULRqGx0AgAD11oCAABZagIAALmIQ
+Date: Wed, 20 Aug 2025 10:00:50 +0000
+Message-ID: <964fc2721fb7499daa5f49eddfed54ff@huawei.com>
 References: <20250812142616.2330-1-shiju.jose@huawei.com>
 	<20250812142616.2330-2-shiju.jose@huawei.com>
-	<20250819175420.00007ce6@huawei.com>
-	<aKV6dVkPiBPw595T@kernel.org>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	<20250819175420.00007ce6@huawei.com>	<aKV6dVkPiBPw595T@kernel.org>
+ <20250820095413.00003bd7@huawei.com>
+In-Reply-To: <20250820095413.00003bd7@huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- frapeml500008.china.huawei.com (7.182.85.71)
 
-On Wed, 20 Aug 2025 10:34:13 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
-
-> On Tue, Aug 19, 2025 at 05:54:20PM +0100, Jonathan Cameron wrote:
-> > On Tue, 12 Aug 2025 15:26:13 +0100
-> > <shiju.jose@huawei.com> wrote:
-> >   
-> > > From: Shiju Jose <shiju.jose@huawei.com>
-> > > 
-> > > In the numa_memblks, a lookup facility is required to retrieve the
-> > > physical address range of memory in a NUMA node. ACPI RAS2 memory
-> > > features are among the use cases.
-> > > 
-> > > Suggested-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> > > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>  
-> > 
-> > Looks fine to me.  Mike, what do you think?  
-> 
-> I still don't see why we can't use existing functions like
-> get_pfn_range_for_nid() or memblock_search_pfn_nid().
-> 
-> Or even node_start_pfn() and node_spanned_pages().
-
-Good point.  No reason anyone would scrub this on memory that hasn't
-been hotplugged yet, so no need to use numa-memblk to get the info.
-I guess I was thinking of the wrong hammer :)
-
-I'm not sure node_spanned_pages() works though as we need not to include
-ranges that might be on another node as we'd give a wrong impression of
-what was being scrubbed.
-
-Should be able to use some combination of node_start_pfn() and maybe
-memblock_search_pfn_nid() to get it though (that also gets the nid
-we already know but meh, no ral harm in that.)
-
-Jonathan
-
-
-
-
->
-> > One passing comment inline.
-> > 
-> > Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> >   
-> > > ---
-> > >  include/linux/numa.h         |  9 +++++++++
-> > >  include/linux/numa_memblks.h |  2 ++
-> > >  mm/numa.c                    | 10 ++++++++++
-> > >  mm/numa_memblks.c            | 37 ++++++++++++++++++++++++++++++++++++
-> > >  4 files changed, 58 insertions(+)
-> > > 
-> > > diff --git a/include/linux/numa.h b/include/linux/numa.h
-> > > index e6baaf6051bc..1d1aabebd26b 100644
-> > > --- a/include/linux/numa.h
-> > > +++ b/include/linux/numa.h
-> > > @@ -41,6 +41,10 @@ int memory_add_physaddr_to_nid(u64 start);
-> > >  int phys_to_target_node(u64 start);
-> > >  #endif
-> > >  
-> > > +#ifndef nid_get_mem_physaddr_range
-> > > +int nid_get_mem_physaddr_range(int nid, u64 *start, u64 *end);
-> > > +#endif
-> > > +
-> > >  int numa_fill_memblks(u64 start, u64 end);
-> > >  
-> > >  #else /* !CONFIG_NUMA */
-> > > @@ -63,6 +67,11 @@ static inline int phys_to_target_node(u64 start)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static inline int nid_get_mem_physaddr_range(int nid, u64 *start, u64 *end)
-> > > +{
-> > > +	return 0;
-> > > +}
-> > > +
-> > >  static inline void alloc_offline_node_data(int nid) {}
-> > >  #endif
-> > >  
-> > > diff --git a/include/linux/numa_memblks.h b/include/linux/numa_memblks.h
-> > > index 991076cba7c5..7b32d96d0134 100644
-> > > --- a/include/linux/numa_memblks.h
-> > > +++ b/include/linux/numa_memblks.h
-> > > @@ -55,6 +55,8 @@ extern int phys_to_target_node(u64 start);
-> > >  #define phys_to_target_node phys_to_target_node
-> > >  extern int memory_add_physaddr_to_nid(u64 start);
-> > >  #define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
-> > > +extern int nid_get_mem_physaddr_range(int nid, u64 *start, u64 *end);
-> > > +#define nid_get_mem_physaddr_range nid_get_mem_physaddr_range
-> > >  #endif /* CONFIG_NUMA_KEEP_MEMINFO */
-> > >  
-> > >  #endif /* CONFIG_NUMA_MEMBLKS */
-> > > diff --git a/mm/numa.c b/mm/numa.c
-> > > index 7d5e06fe5bd4..5335af1fefee 100644
-> > > --- a/mm/numa.c
-> > > +++ b/mm/numa.c
-> > > @@ -59,3 +59,13 @@ int phys_to_target_node(u64 start)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(phys_to_target_node);
-> > >  #endif
-> > > +
-> > > +#ifndef nid_get_mem_physaddr_range
-> > > +int nid_get_mem_physaddr_range(int nid, u64 *start, u64 *end)
-> > > +{
-> > > +	pr_info_once("Unknown target phys addr range for node=%d\n", nid);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(nid_get_mem_physaddr_range);
-> > > +#endif
-> > > diff --git a/mm/numa_memblks.c b/mm/numa_memblks.c
-> > > index 541a99c4071a..e1e56b7a3499 100644
-> > > --- a/mm/numa_memblks.c
-> > > +++ b/mm/numa_memblks.c
-> > > @@ -590,4 +590,41 @@ int memory_add_physaddr_to_nid(u64 start)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
-> > >  
-> > > +/**
-> > > + * nid_get_mem_physaddr_range - Get the physical address range
-> > > + *				of the memblk in the NUMA node.
-> > > + * @nid: NUMA node ID of the memblk
-> > > + * @start: Start address of the memblk
-> > > + * @end: End address of the memblk
-> > > + *
-> > > + * Find the lowest contiguous physical memory address range of the memblk
-> > > + * in the NUMA node with the given nid and return the start and end
-> > > + * addresses.
-> > > + *
-> > > + * RETURNS:
-> > > + * 0 on success, -errno on failure.
-> > > + */
-> > > +int nid_get_mem_physaddr_range(int nid, u64 *start, u64 *end)
-> > > +{
-> > > +	struct numa_meminfo *mi = &numa_meminfo;
-> > > +	int i;
-> > > +
-> > > +	if (!numa_valid_node(nid))
-> > > +		return -EINVAL;
-> > > +
-> > > +	for (i = 0; i < mi->nr_blks; i++) {
-> > > +		if (mi->blk[i].nid == nid) {
-> > > +			*start = mi->blk[i].start;
-> > > +			/*
-> > > +			 * Assumption: mi->blk[i].end is the last address
-> > > +			 * in the range + 1.  
-> > 
-> > This was my fault for asking on internal review if this was documented
-> > anywhere. It's kind of implicitly obvious when reading numa_memblk.c
-> > because there are a bunch of end - 1 prints.
-> > So can probably drop this comment.
-> >   
-> > > +			 */
-> > > +			*end = mi->blk[i].end;
-> > > +			return 0;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	return -ENODEV;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(nid_get_mem_physaddr_range);
-> > >  #endif /* CONFIG_NUMA_KEEP_MEMINFO */  
-> >   
-> 
-
+Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogSm9uYXRoYW4gQ2FtZXJvbiA8am9u
+YXRoYW4uY2FtZXJvbkBodWF3ZWkuY29tPg0KPlNlbnQ6IDIwIEF1Z3VzdCAyMDI1IDA5OjU0DQo+
+VG86IE1pa2UgUmFwb3BvcnQgPHJwcHRAa2VybmVsLm9yZz4NCj5DYzogU2hpanUgSm9zZSA8c2hp
+anUuam9zZUBodWF3ZWkuY29tPjsgcmFmYWVsQGtlcm5lbC5vcmc7IGJwQGFsaWVuOC5kZTsNCj5h
+a3BtQGxpbnV4LWZvdW5kYXRpb24ub3JnOyBkZmVyZ3Vzb25AYW1wZXJlY29tcHV0aW5nLmNvbTsg
+bGludXgtDQo+ZWRhY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWFjcGlAdmdlci5rZXJuZWwub3Jn
+OyBsaW51eC1tbUBrdmFjay5vcmc7IGxpbnV4LQ0KPmRvY0B2Z2VyLmtlcm5lbC5vcmc7IHRvbnku
+bHVja0BpbnRlbC5jb207IGxlbmJAa2VybmVsLm9yZzsNCj5sZW8uZHVyYW5AYW1kLmNvbTsgWWF6
+ZW4uR2hhbm5hbUBhbWQuY29tOyBtY2hlaGFiQGtlcm5lbC5vcmc7DQo+TGludXhhcm0gPGxpbnV4
+YXJtQGh1YXdlaS5jb20+OyByaWVudGplc0Bnb29nbGUuY29tOw0KPmppYXFpeWFuQGdvb2dsZS5j
+b207IEpvbi5HcmltbUBhbWQuY29tOyBkYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb207DQo+bmFv
+eWEuaG9yaWd1Y2hpQG5lYy5jb207IGphbWVzLm1vcnNlQGFybS5jb207IGp0aG91Z2h0b25AZ29v
+Z2xlLmNvbTsNCj5zb21hc3VuZGFyYW0uYUBocGUuY29tOyBlcmRlbWFrdGFzQGdvb2dsZS5jb207
+IHBnb25kYUBnb29nbGUuY29tOw0KPmR1ZW53ZW5AZ29vZ2xlLmNvbTsgZ3RoZWxlbkBnb29nbGUu
+Y29tOw0KPndzY2h3YXJ0ekBhbXBlcmVjb21wdXRpbmcuY29tOyB3YnNAb3MuYW1wZXJlY29tcHV0
+aW5nLmNvbTsNCj5uaWZhbi5jeGxAZ21haWwuY29tOyB0YW54aWFvZmVpIDx0YW54aWFvZmVpQGh1
+YXdlaS5jb20+OyBaZW5ndGFvIChCKQ0KPjxwcmltZS56ZW5nQGhpc2lsaWNvbi5jb20+OyBSb2Jl
+cnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+Ow0KPmthbmdrYW5nLnNoZW5AZnV0
+dXJld2VpLmNvbTsgd2FuZ2h1aXFpYW5nIDx3YW5naHVpcWlhbmdAaHVhd2VpLmNvbT4NCj5TdWJq
+ZWN0OiBSZTogW1BBVENIIHYxMSAxLzNdIG1tOiBBZGQgc3VwcG9ydCB0byByZXRyaWV2ZSBwaHlz
+aWNhbCBhZGRyZXNzDQo+cmFuZ2Ugb2YgbWVtb3J5IGZyb20gdGhlIG5vZGUgSUQNCj4NCj5PbiBX
+ZWQsIDIwIEF1ZyAyMDI1IDEwOjM0OjEzICswMzAwDQo+TWlrZSBSYXBvcG9ydCA8cnBwdEBrZXJu
+ZWwub3JnPiB3cm90ZToNCj4NCj4+IE9uIFR1ZSwgQXVnIDE5LCAyMDI1IGF0IDA1OjU0OjIwUE0g
+KzAxMDAsIEpvbmF0aGFuIENhbWVyb24gd3JvdGU6DQo+PiA+IE9uIFR1ZSwgMTIgQXVnIDIwMjUg
+MTU6MjY6MTMgKzAxMDANCj4+ID4gPHNoaWp1Lmpvc2VAaHVhd2VpLmNvbT4gd3JvdGU6DQo+PiA+
+DQo+PiA+ID4gRnJvbTogU2hpanUgSm9zZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPj4gPiA+
+DQo+PiA+ID4gSW4gdGhlIG51bWFfbWVtYmxrcywgYSBsb29rdXAgZmFjaWxpdHkgaXMgcmVxdWly
+ZWQgdG8gcmV0cmlldmUgdGhlDQo+PiA+ID4gcGh5c2ljYWwgYWRkcmVzcyByYW5nZSBvZiBtZW1v
+cnkgaW4gYSBOVU1BIG5vZGUuIEFDUEkgUkFTMiBtZW1vcnkNCj4+ID4gPiBmZWF0dXJlcyBhcmUg
+YW1vbmcgdGhlIHVzZSBjYXNlcy4NCj4+ID4gPg0KPj4gPiA+IFN1Z2dlc3RlZC1ieTogSm9uYXRo
+YW4gQ2FtZXJvbiA8am9uYXRoYW4uY2FtZXJvbkBodWF3ZWkuY29tPg0KPj4gPiA+IFNpZ25lZC1v
+ZmYtYnk6IFNoaWp1IEpvc2UgPHNoaWp1Lmpvc2VAaHVhd2VpLmNvbT4NCj4+ID4NCj4+ID4gTG9v
+a3MgZmluZSB0byBtZS4gIE1pa2UsIHdoYXQgZG8geW91IHRoaW5rPw0KPj4NCj4+IEkgc3RpbGwg
+ZG9uJ3Qgc2VlIHdoeSB3ZSBjYW4ndCB1c2UgZXhpc3RpbmcgZnVuY3Rpb25zIGxpa2UNCj4+IGdl
+dF9wZm5fcmFuZ2VfZm9yX25pZCgpIG9yIG1lbWJsb2NrX3NlYXJjaF9wZm5fbmlkKCkuDQo+Pg0K
+Pj4gT3IgZXZlbiBub2RlX3N0YXJ0X3BmbigpIGFuZCBub2RlX3NwYW5uZWRfcGFnZXMoKS4NCj4N
+Cj5Hb29kIHBvaW50LiAgTm8gcmVhc29uIGFueW9uZSB3b3VsZCBzY3J1YiB0aGlzIG9uIG1lbW9y
+eSB0aGF0IGhhc24ndCBiZWVuDQo+aG90cGx1Z2dlZCB5ZXQsIHNvIG5vIG5lZWQgdG8gdXNlIG51
+bWEtbWVtYmxrIHRvIGdldCB0aGUgaW5mby4NCj5JIGd1ZXNzIEkgd2FzIHRoaW5raW5nIG9mIHRo
+ZSB3cm9uZyBoYW1tZXIgOikNCj4NCj5JJ20gbm90IHN1cmUgbm9kZV9zcGFubmVkX3BhZ2VzKCkg
+d29ya3MgdGhvdWdoIGFzIHdlIG5lZWQgbm90IHRvIGluY2x1ZGUNCj5yYW5nZXMgdGhhdCBtaWdo
+dCBiZSBvbiBhbm90aGVyIG5vZGUgYXMgd2UnZCBnaXZlIGEgd3JvbmcgaW1wcmVzc2lvbiBvZiB3
+aGF0DQo+d2FzIGJlaW5nIHNjcnViYmVkLg0KPg0KPlNob3VsZCBiZSBhYmxlIHRvIHVzZSBzb21l
+IGNvbWJpbmF0aW9uIG9mIG5vZGVfc3RhcnRfcGZuKCkgYW5kIG1heWJlDQo+bWVtYmxvY2tfc2Vh
+cmNoX3Bmbl9uaWQoKSB0byBnZXQgaXQgdGhvdWdoICh0aGF0IGFsc28gZ2V0cyB0aGUgbmlkIHdl
+IGFscmVhZHkNCj5rbm93IGJ1dCBtZWgsIG5vIHJhbCBoYXJtIGluIHRoYXQuKQ0KDQpUaGFua3Mg
+TWlrZSBhbmQgSm9uYXRoYW4uDQoNClRoZSBmb2xsb3dpbmcgYXBwcm9hY2hlcyB3ZXJlIHRyaWVk
+IGFzIHlvdSBzdWdnZXN0ZWQsIGluc3RlYWQgb2YgbmV3bHkgcHJvcG9zZWQNCm5pZF9nZXRfbWVt
+X3BoeXNhZGRyX3JhbmdlKCkuDQpNZXRob2RzIDEgdG8gMyBnaXZlIHRoZSBzYW1lIHJlc3VsdCBh
+cyBuaWRfZ2V0X21lbV9waHlzYWRkcl9yYW5nZSgpLCBidXQNCk1ldGhvZCA0IGdpdmVzIGEgZGlm
+ZmVyZW50IHZhbHVlIGZvciB0aGUgc2l6ZS4NCg0KUGxlYXNlIGFkdmlzZSB3aGljaCBtZXRob2Qg
+c2hvdWxkIGJlIHVzZWQgZm9yIHRoZSBSQVMyPw0KDQpUaGFua3MsDQpTaGlqdQ0KDQpNZXRob2Qg
+MSANCiBzdGFydF9wZm4gPSBub2RlX3N0YXJ0X3BmbihyYXMyX2N0eC0+c3lzX2NvbXBfbmlkKTsN
+CiBlbmRfcGZuID0gbm9kZV9lbmRfcGZuKHJhczJfY3R4LT5zeXNfY29tcF9uaWQpOw0KIHN0YXJ0
+ID0gX19wZm5fdG9fcGh5cyhzdGFydF9wZm4pOw0KIGVuZCA9IF9fcGZuX3RvX3BoeXMoZW5kX3Bm
+bik7DQogcmFzMl9jdHgtPm1lbV9iYXNlX2FkZHIgPSBzdGFydDsNCiByYXMyX2N0eC0+bWVtX3Np
+emUgPSBlbmQgLSBzdGFydDsNCiBwcl9pbmZvKCJtZW1fYmFzZV9hZGRyPTB4JWx4IG1lbV9zaXpl
+PTB4JWx4XG4iLCByYXMyX2N0eC0+bWVtX2Jhc2VfYWRkciwgcmFzMl9jdHgtPm1lbV9zaXplKTsN
+Cg0KTWV0aG9kIDINCiBzdGFydF9wZm4gPSBub2RlX3N0YXJ0X3BmbihyYXMyX2N0eC0+c3lzX2Nv
+bXBfbmlkKTsNCiBzaXplX3BmbiA9IG5vZGVfc3Bhbm5lZF9wYWdlcyhyYXMyX2N0eC0+c3lzX2Nv
+bXBfbmlkKTsNCiByYXMyX2N0eC0+bWVtX2Jhc2VfYWRkciA9IF9fcGZuX3RvX3BoeXMoc3RhcnRf
+cGZuKTsNCiByYXMyX2N0eC0+bWVtX3NpemUgPSBfX3Bmbl90b19waHlzKHNpemVfcGZuKTsNCiBw
+cl9pbmZvKCJtZW1fYmFzZV9hZGRyPTB4JWx4IG1lbV9zaXplPTB4JWx4XG4iLCByYXMyX2N0eC0+
+bWVtX2Jhc2VfYWRkciwgcmFzMl9jdHgtPm1lbV9zaXplKTsNCg0KTWV0aG9kIDMNCiBnZXRfcGZu
+X3JhbmdlX2Zvcl9uaWQocmFzMl9jdHgtPnN5c19jb21wX25pZCwgJnN0YXJ0X3BmbiwgJmVuZF9w
+Zm4pOw0KIHN0YXJ0ID0gX19wZm5fdG9fcGh5cyhzdGFydF9wZm4pOyAgICAgICAgICAgICAgIA0K
+IGVuZCA9IF9fcGZuX3RvX3BoeXMoZW5kX3Bmbik7ICAgDQogcmFzMl9jdHgtPm1lbV9iYXNlX2Fk
+ZHIgPSBzdGFydDsNCiByYXMyX2N0eC0+bWVtX3NpemUgPSBlbmQgLSBzdGFydDsNCiBwcl9pbmZv
+KCJtZW1fYmFzZV9hZGRyPTB4JWx4IG1lbV9zaXplPTB4JWx4XG4iLCByYXMyX2N0eC0+bWVtX2Jh
+c2VfYWRkciwgcmFzMl9jdHgtPm1lbV9zaXplKTsNCg0KTWV0aG9kIDQNCiBwZm4gPSBub2RlX3N0
+YXJ0X3BmbihyYXMyX2N0eC0+c3lzX2NvbXBfbmlkKTsNCiByYyA9IG1lbWJsb2NrX3NlYXJjaF9w
+Zm5fbmlkKHBmbiwgJnN0YXJ0X3BmbiwgJmVuZF9wZm4pOw0KIGlmIChyYyA9PSBOVU1BX05PX05P
+REUpIHsNCiAgICAgcHJfd2FybigiRmFpbGVkIHRvIGZpbmQgcGh5IGFkZHIgcmFuZ2UgZm9yIE5V
+TUEgbm9kZSgldSkgcmM9JWRcbiIsIHJjKTsNCuKAguKAgiBnb3RvIGN0eF9mcmVlOw0KIH0NCiBz
+dGFydCA9IF9fcGZuX3RvX3BoeXMoc3RhcnRfcGZuKTsgICAgICAgICAgICAgICANCiBlbmQgPSBf
+X3Bmbl90b19waHlzKGVuZF9wZm4pOyAgIA0KIHJhczJfY3R4LT5tZW1fYmFzZV9hZGRyID0gc3Rh
+cnQ7DQogcmFzMl9jdHgtPm1lbV9zaXplID0gZW5kIC0gc3RhcnQ7DQogcHJfaW5mbygibWVtX2Jh
+c2VfYWRkcj0weCVseCBtZW1fc2l6ZT0weCVseFxuIiwgcmFzMl9jdHgtPm1lbV9iYXNlX2FkZHIs
+IHJhczJfY3R4LT5tZW1fc2l6ZSk7DQoNCj4NCj5Kb25hdGhhbg0KPg0KPg0KPg0KPg0KPj4NCj4+
+ID4gT25lIHBhc3NpbmcgY29tbWVudCBpbmxpbmUuDQo+PiA+DQo+PiA+IFJldmlld2VkLWJ5OiBK
+b25hdGhhbiBDYW1lcm9uIDxqb25hdGhhbi5jYW1lcm9uQGh1YXdlaS5jb20+DQo+PiA+DQo+PiA+
+ID4gLS0tDQo+PiA+ID4gIGluY2x1ZGUvbGludXgvbnVtYS5oICAgICAgICAgfCAgOSArKysrKysr
+KysNCj4+ID4gPiAgaW5jbHVkZS9saW51eC9udW1hX21lbWJsa3MuaCB8ICAyICsrDQo+PiA+ID4g
+IG1tL251bWEuYyAgICAgICAgICAgICAgICAgICAgfCAxMCArKysrKysrKysrDQo+PiA+ID4gIG1t
+L251bWFfbWVtYmxrcy5jICAgICAgICAgICAgfCAzNw0KPisrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKw0KPj4gPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDU4IGluc2VydGlvbnMoKykN
+Cj4+ID4gPg0KPj4gPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L251bWEuaCBiL2luY2x1
+ZGUvbGludXgvbnVtYS5oIGluZGV4DQo+PiA+ID4gZTZiYWFmNjA1MWJjLi4xZDFhYWJlYmQyNmIg
+MTAwNjQ0DQo+PiA+ID4gLS0tIGEvaW5jbHVkZS9saW51eC9udW1hLmgNCj4+ID4gPiArKysgYi9p
+bmNsdWRlL2xpbnV4L251bWEuaA0KPj4gPiA+IEBAIC00MSw2ICs0MSwxMCBAQCBpbnQgbWVtb3J5
+X2FkZF9waHlzYWRkcl90b19uaWQodTY0IHN0YXJ0KTsgIGludA0KPj4gPiA+IHBoeXNfdG9fdGFy
+Z2V0X25vZGUodTY0IHN0YXJ0KTsgICNlbmRpZg0KPj4gPiA+DQo+PiA+ID4gKyNpZm5kZWYgbmlk
+X2dldF9tZW1fcGh5c2FkZHJfcmFuZ2UgaW50DQo+PiA+ID4gK25pZF9nZXRfbWVtX3BoeXNhZGRy
+X3JhbmdlKGludCBuaWQsIHU2NCAqc3RhcnQsIHU2NCAqZW5kKTsgI2VuZGlmDQo+PiA+ID4gKw0K
+Pj4gPiA+ICBpbnQgbnVtYV9maWxsX21lbWJsa3ModTY0IHN0YXJ0LCB1NjQgZW5kKTsNCj4+ID4g
+Pg0KPj4gPiA+ICAjZWxzZSAvKiAhQ09ORklHX05VTUEgKi8NCj4+ID4gPiBAQCAtNjMsNiArNjcs
+MTEgQEAgc3RhdGljIGlubGluZSBpbnQgcGh5c190b190YXJnZXRfbm9kZSh1NjQgc3RhcnQpDQo+
+PiA+ID4gIAlyZXR1cm4gMDsNCj4+ID4gPiAgfQ0KPj4gPiA+DQo+PiA+ID4gK3N0YXRpYyBpbmxp
+bmUgaW50IG5pZF9nZXRfbWVtX3BoeXNhZGRyX3JhbmdlKGludCBuaWQsIHU2NCAqc3RhcnQsDQo+
+PiA+ID4gK3U2NCAqZW5kKSB7DQo+PiA+ID4gKwlyZXR1cm4gMDsNCj4+ID4gPiArfQ0KPj4gPiA+
+ICsNCj4+ID4gPiAgc3RhdGljIGlubGluZSB2b2lkIGFsbG9jX29mZmxpbmVfbm9kZV9kYXRhKGlu
+dCBuaWQpIHt9ICAjZW5kaWYNCj4+ID4gPg0KPj4gPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xp
+bnV4L251bWFfbWVtYmxrcy5oDQo+PiA+ID4gYi9pbmNsdWRlL2xpbnV4L251bWFfbWVtYmxrcy5o
+IGluZGV4IDk5MTA3NmNiYTdjNS4uN2IzMmQ5NmQwMTM0DQo+PiA+ID4gMTAwNjQ0DQo+PiA+ID4g
+LS0tIGEvaW5jbHVkZS9saW51eC9udW1hX21lbWJsa3MuaA0KPj4gPiA+ICsrKyBiL2luY2x1ZGUv
+bGludXgvbnVtYV9tZW1ibGtzLmgNCj4+ID4gPiBAQCAtNTUsNiArNTUsOCBAQCBleHRlcm4gaW50
+IHBoeXNfdG9fdGFyZ2V0X25vZGUodTY0IHN0YXJ0KTsNCj4+ID4gPiAjZGVmaW5lIHBoeXNfdG9f
+dGFyZ2V0X25vZGUgcGh5c190b190YXJnZXRfbm9kZSAgZXh0ZXJuIGludA0KPj4gPiA+IG1lbW9y
+eV9hZGRfcGh5c2FkZHJfdG9fbmlkKHU2NCBzdGFydCk7ICAjZGVmaW5lDQo+PiA+ID4gbWVtb3J5
+X2FkZF9waHlzYWRkcl90b19uaWQgbWVtb3J5X2FkZF9waHlzYWRkcl90b19uaWQNCj4+ID4gPiAr
+ZXh0ZXJuIGludCBuaWRfZ2V0X21lbV9waHlzYWRkcl9yYW5nZShpbnQgbmlkLCB1NjQgKnN0YXJ0
+LCB1NjQNCj4+ID4gPiArKmVuZCk7ICNkZWZpbmUgbmlkX2dldF9tZW1fcGh5c2FkZHJfcmFuZ2UN
+Cj4+ID4gPiArbmlkX2dldF9tZW1fcGh5c2FkZHJfcmFuZ2UNCj4+ID4gPiAgI2VuZGlmIC8qIENP
+TkZJR19OVU1BX0tFRVBfTUVNSU5GTyAqLw0KPj4gPiA+DQo+PiA+ID4gICNlbmRpZiAvKiBDT05G
+SUdfTlVNQV9NRU1CTEtTICovDQo+PiA+ID4gZGlmZiAtLWdpdCBhL21tL251bWEuYyBiL21tL251
+bWEuYyBpbmRleA0KPj4gPiA+IDdkNWUwNmZlNWJkNC4uNTMzNWFmMWZlZmVlIDEwMDY0NA0KPj4g
+PiA+IC0tLSBhL21tL251bWEuYw0KPj4gPiA+ICsrKyBiL21tL251bWEuYw0KPj4gPiA+IEBAIC01
+OSwzICs1OSwxMyBAQCBpbnQgcGh5c190b190YXJnZXRfbm9kZSh1NjQgc3RhcnQpICB9DQo+PiA+
+ID4gRVhQT1JUX1NZTUJPTF9HUEwocGh5c190b190YXJnZXRfbm9kZSk7DQo+PiA+ID4gICNlbmRp
+Zg0KPj4gPiA+ICsNCj4+ID4gPiArI2lmbmRlZiBuaWRfZ2V0X21lbV9waHlzYWRkcl9yYW5nZSBp
+bnQNCj4+ID4gPiArbmlkX2dldF9tZW1fcGh5c2FkZHJfcmFuZ2UoaW50IG5pZCwgdTY0ICpzdGFy
+dCwgdTY0ICplbmQpIHsNCj4+ID4gPiArCXByX2luZm9fb25jZSgiVW5rbm93biB0YXJnZXQgcGh5
+cyBhZGRyIHJhbmdlIGZvciBub2RlPSVkXG4iLA0KPj4gPiA+ICtuaWQpOw0KPj4gPiA+ICsNCj4+
+ID4gPiArCXJldHVybiAwOw0KPj4gPiA+ICt9DQo+PiA+ID4gK0VYUE9SVF9TWU1CT0xfR1BMKG5p
+ZF9nZXRfbWVtX3BoeXNhZGRyX3JhbmdlKTsNCj4+ID4gPiArI2VuZGlmDQo+PiA+ID4gZGlmZiAt
+LWdpdCBhL21tL251bWFfbWVtYmxrcy5jIGIvbW0vbnVtYV9tZW1ibGtzLmMgaW5kZXgNCj4+ID4g
+PiA1NDFhOTljNDA3MWEuLmUxZTU2YjdhMzQ5OSAxMDA2NDQNCj4+ID4gPiAtLS0gYS9tbS9udW1h
+X21lbWJsa3MuYw0KPj4gPiA+ICsrKyBiL21tL251bWFfbWVtYmxrcy5jDQo+PiA+ID4gQEAgLTU5
+MCw0ICs1OTAsNDEgQEAgaW50IG1lbW9yeV9hZGRfcGh5c2FkZHJfdG9fbmlkKHU2NCBzdGFydCkg
+IH0NCj4+ID4gPiBFWFBPUlRfU1lNQk9MX0dQTChtZW1vcnlfYWRkX3BoeXNhZGRyX3RvX25pZCk7
+DQo+PiA+ID4NCj4+ID4gPiArLyoqDQo+PiA+ID4gKyAqIG5pZF9nZXRfbWVtX3BoeXNhZGRyX3Jh
+bmdlIC0gR2V0IHRoZSBwaHlzaWNhbCBhZGRyZXNzIHJhbmdlDQo+PiA+ID4gKyAqCQkJCW9mIHRo
+ZSBtZW1ibGsgaW4gdGhlIE5VTUEgbm9kZS4NCj4+ID4gPiArICogQG5pZDogTlVNQSBub2RlIElE
+IG9mIHRoZSBtZW1ibGsNCj4+ID4gPiArICogQHN0YXJ0OiBTdGFydCBhZGRyZXNzIG9mIHRoZSBt
+ZW1ibGsNCj4+ID4gPiArICogQGVuZDogRW5kIGFkZHJlc3Mgb2YgdGhlIG1lbWJsaw0KPj4gPiA+
+ICsgKg0KPj4gPiA+ICsgKiBGaW5kIHRoZSBsb3dlc3QgY29udGlndW91cyBwaHlzaWNhbCBtZW1v
+cnkgYWRkcmVzcyByYW5nZSBvZg0KPj4gPiA+ICt0aGUgbWVtYmxrDQo+PiA+ID4gKyAqIGluIHRo
+ZSBOVU1BIG5vZGUgd2l0aCB0aGUgZ2l2ZW4gbmlkIGFuZCByZXR1cm4gdGhlIHN0YXJ0IGFuZA0K
+Pj4gPiA+ICtlbmQNCj4+ID4gPiArICogYWRkcmVzc2VzLg0KPj4gPiA+ICsgKg0KPj4gPiA+ICsg
+KiBSRVRVUk5TOg0KPj4gPiA+ICsgKiAwIG9uIHN1Y2Nlc3MsIC1lcnJubyBvbiBmYWlsdXJlLg0K
+Pj4gPiA+ICsgKi8NCj4+ID4gPiAraW50IG5pZF9nZXRfbWVtX3BoeXNhZGRyX3JhbmdlKGludCBu
+aWQsIHU2NCAqc3RhcnQsIHU2NCAqZW5kKSB7DQo+PiA+ID4gKwlzdHJ1Y3QgbnVtYV9tZW1pbmZv
+ICptaSA9ICZudW1hX21lbWluZm87DQo+PiA+ID4gKwlpbnQgaTsNCj4+ID4gPiArDQo+PiA+ID4g
+KwlpZiAoIW51bWFfdmFsaWRfbm9kZShuaWQpKQ0KPj4gPiA+ICsJCXJldHVybiAtRUlOVkFMOw0K
+Pj4gPiA+ICsNCj4+ID4gPiArCWZvciAoaSA9IDA7IGkgPCBtaS0+bnJfYmxrczsgaSsrKSB7DQo+
+PiA+ID4gKwkJaWYgKG1pLT5ibGtbaV0ubmlkID09IG5pZCkgew0KPj4gPiA+ICsJCQkqc3RhcnQg
+PSBtaS0+YmxrW2ldLnN0YXJ0Ow0KPj4gPiA+ICsJCQkvKg0KPj4gPiA+ICsJCQkgKiBBc3N1bXB0
+aW9uOiBtaS0+YmxrW2ldLmVuZCBpcyB0aGUgbGFzdCBhZGRyZXNzDQo+PiA+ID4gKwkJCSAqIGlu
+IHRoZSByYW5nZSArIDEuDQo+PiA+DQo+PiA+IFRoaXMgd2FzIG15IGZhdWx0IGZvciBhc2tpbmcg
+b24gaW50ZXJuYWwgcmV2aWV3IGlmIHRoaXMgd2FzDQo+PiA+IGRvY3VtZW50ZWQgYW55d2hlcmUu
+IEl0J3Mga2luZCBvZiBpbXBsaWNpdGx5IG9idmlvdXMgd2hlbiByZWFkaW5nDQo+PiA+IG51bWFf
+bWVtYmxrLmMgYmVjYXVzZSB0aGVyZSBhcmUgYSBidW5jaCBvZiBlbmQgLSAxIHByaW50cy4NCj4+
+ID4gU28gY2FuIHByb2JhYmx5IGRyb3AgdGhpcyBjb21tZW50Lg0KPj4gPg0KPj4gPiA+ICsJCQkg
+Ki8NCj4+ID4gPiArCQkJKmVuZCA9IG1pLT5ibGtbaV0uZW5kOw0KPj4gPiA+ICsJCQlyZXR1cm4g
+MDsNCj4+ID4gPiArCQl9DQo+PiA+ID4gKwl9DQo+PiA+ID4gKw0KPj4gPiA+ICsJcmV0dXJuIC1F
+Tk9ERVY7DQo+PiA+ID4gK30NCj4+ID4gPiArRVhQT1JUX1NZTUJPTF9HUEwobmlkX2dldF9tZW1f
+cGh5c2FkZHJfcmFuZ2UpOw0KPj4gPiA+ICAjZW5kaWYgLyogQ09ORklHX05VTUFfS0VFUF9NRU1J
+TkZPICovDQo+PiA+DQo+Pg0KDQo=
 
