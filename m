@@ -1,130 +1,194 @@
-Return-Path: <linux-edac+bounces-4625-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4626-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87812B2E246
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 18:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8B7DB2E2E4
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 19:04:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 686B23AC637
-	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 16:24:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 910A75E3095
+	for <lists+linux-edac@lfdr.de>; Wed, 20 Aug 2025 17:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D00C32778E;
-	Wed, 20 Aug 2025 16:24:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C41F322C9F;
+	Wed, 20 Aug 2025 17:02:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Xpn3rQL5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNX5FnBn"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76131322747;
-	Wed, 20 Aug 2025 16:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D928221F2F;
+	Wed, 20 Aug 2025 17:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755707085; cv=none; b=cB7XIIukdT3VAwN8XJhB0eajf9VFBW2vsug/cD/i+fC0+W+xdFebxC4fQ99wMYp3LU8kysS2GCTX/swYncL/1BZ4U3URNxcwZqk4lWd7Fgur5oh9fBg5IN0/eZibgLfoCii6mRAjTJCag6PXIehjxlAD44/4syvfHBzt47fbTFY=
+	t=1755709373; cv=none; b=prQpngrgVqSTeZkSFol/AASHNGhf3U/HBhQ3rlwV695dZViumdb7h56FGd4B5o/FTjyQjEB/qKvNRoYnzsucVCDJZdjx1tKZUAo7tLoM0Qtn6nOpgmj/Kitk6bDscCWJdYIl6WUbWb4lIFQOPGevtotM56fUwYMH+3Are6AWvq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755707085; c=relaxed/simple;
-	bh=wwps0N/86vOfUDd1Y2Jf/4c5untsNqYTzcR0bDOAy+M=;
+	s=arc-20240116; t=1755709373; c=relaxed/simple;
+	bh=HrCdwjFpFxpaKWtgscNZ318aNnsG5NhL9DO1rfmynjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GU9QqO2tNE3wMolXc3+BWqFpP0I06eZadN9szo0UIFJyCzlL6XP1OUMmvMp0kqMHpQk5HG59g45/K7whgvRhZvdWN0dAf5iThmQK6ejCcz+IpKDAiE5BHmaZpFdPbHvOJMITzhp+U3eHDlfdTyuIf7hjHMiL9AR94VK1p1K7M/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Xpn3rQL5; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id C886440E0217;
-	Wed, 20 Aug 2025 16:24:38 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 9tN_kXF78LWW; Wed, 20 Aug 2025 16:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1755707074; bh=HWIAN4COtM7EocQZHQEUT/ZaG//VJsQJBVIvh+BQZUc=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=VyNVT4/9qlHhyGzVE1TIwlAXysvyHNg3kaOjLcNEbO0n1Q5MtDaP58RWS54rnUS6hpsrwUlWfv9Opht7DYM1KX+IsKUtdP0DjoQXm0yLYm9w485ypwv44sqOG53QmirTSHBnhCIx1MfvK9qWUeP+wPciN7q6id8Zso/EIaTST94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNX5FnBn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F515C4CEE7;
+	Wed, 20 Aug 2025 17:02:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755709372;
+	bh=HrCdwjFpFxpaKWtgscNZ318aNnsG5NhL9DO1rfmynjw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xpn3rQL5/5YWQaTL2Wl6Zq8PEQsQQuzoN5NnGFx02U7/GYrOQ3I+uA5XwysHJg9/u
-	 cdNqbtwlD65rmvAXOPF4Sa8mK+0VIaxHc1rOb7s1OnwdnXnLuBbiK9dUoz4jJgiP+W
-	 AccyxDqfEtlfHZwdkuFu1ZN2XPLo0zooqH1af3upiyMsXnACNZxBfQCAe+rF2Gfwbm
-	 BgYPI3mYNJwGIqaa/4s/fw1NXEQnI8fDpma4eyysC+Nrdt/roil9yHy5CesZ2Q7ZiJ
-	 1x1a8FU1QW1iwVxSifswYXCtCl0MSs8wDqW0Wm0c431M1IENk27T98na5idLDyho6W
-	 zOU8R2AVkQScFfdL2myM4O31iPX7eeu6lHAS7VquNABV1bjwJd54jZiSuP8q5R6Ia6
-	 1s8qRwMVC399qltOPx+58EA22u8Yxjn5st2dySsZBB/p7E040zCpdWMewhcpp69rv3
-	 YHXjl9I/kAY3SqdbXue62zfszj5L3OfGTQEKarGGRjpySIZdrEmfqynf4idOj6gbqM
-	 0Ksj15IuBJkSbMhxFt+K91D8NZLoZrq8yjye+TsGcE7hZCNI1qEwXdPzZlx5VB+20+
-	 EnoQeC6kBKaTuDB7fzUb2NzqOfmTwZpPqxs/6XK7LbOaaAPnvyOOCR6ZyIVSvijtRB
-	 nwjfw0M/sVGK97ACv/UxgKUo=
-Received: from zn.tnic (pd953092e.dip0.t-ipconnect.de [217.83.9.46])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EF46540E0206;
-	Wed, 20 Aug 2025 16:24:24 +0000 (UTC)
-Date: Wed, 20 Aug 2025 18:24:18 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: linux-kernel@vger.kernel.org, tglx@linutronix.de,
-	Dinh Nguyen <dinguyen@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org
-Subject: Re: [PATCH -resend] edac: Use dev_fwnode()
-Message-ID: <20250820162418.GLaKX2soq1RgYCAPCA@fat_crate.local>
-References: <20250723062631.1830757-1-jirislaby@kernel.org>
+	b=cNX5FnBnvRPnHvtWE445pbsFMOEnqBch380SOWkKQEEqYR3bTQB3UhYZL1zZq86gy
+	 ZAPvZkHUR2Bb4QrLdatZM7uw1LdxYOvmqWz3/07RD0VAVhBxhDq4rZY85a7K9Gxdg0
+	 0+HnI/K4ybXFFjpiWB56YQ8ARtzypHtkFPkQmpK5ahtnKknsDoPb8mKVzPnjM9L6oJ
+	 XqnFDf/pemk0g94lPuynwtt/HYP8zzZD2e+d0mpAUikbFf7Atz47ODTY5ZcDVIloj8
+	 HQqR2YMk42KWsT4S1D3sc1hBNDesVadUMxcI9A6B8j45r8vsSK+hATFecL0KdfNc5M
+	 jX2YADHI1r3FA==
+Date: Wed, 20 Aug 2025 20:02:38 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	Linuxarm <linuxarm@huawei.com>,
+	"rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+	"erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>,
+	"gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>,
+	"Zengtao (B)" <prime.zeng@hisilicon.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+	wanghuiqiang <wanghuiqiang@huawei.com>
+Subject: Re: [PATCH v11 1/3] mm: Add support to retrieve physical address
+ range of memory from the node ID
+Message-ID: <aKX_rk0DasbDgJrS@kernel.org>
+References: <20250812142616.2330-1-shiju.jose@huawei.com>
+ <20250812142616.2330-2-shiju.jose@huawei.com>
+ <20250819175420.00007ce6@huawei.com>
+ <aKV6dVkPiBPw595T@kernel.org>
+ <20250820095413.00003bd7@huawei.com>
+ <964fc2721fb7499daa5f49eddfed54ff@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250723062631.1830757-1-jirislaby@kernel.org>
+In-Reply-To: <964fc2721fb7499daa5f49eddfed54ff@huawei.com>
 
-On Wed, Jul 23, 2025 at 08:26:31AM +0200, Jiri Slaby (SUSE) wrote:
-> irq_domain_create_simple() takes fwnode as the first argument. It can be
-> extracted from the struct device using dev_fwnode() helper instead of
-> using of_node with of_fwnode_handle().
-> 
-> So use the dev_fwnode() helper.
-> 
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Robert Richter <rric@kernel.org>
-> Link: https://lore.kernel.org/all/4bc0e1ca-a523-424a-8759-59e353317fba@kernel.org/
-> 
-> ---
-> Cc: linux-edac@vger.kernel.org
-> ---
->  drivers/edac/altera_edac.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index cae52c654a15..cfd17a8e5865 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -2131,8 +2131,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->  	edac->irq_chip.name = pdev->dev.of_node->name;
->  	edac->irq_chip.irq_mask = a10_eccmgr_irq_mask;
->  	edac->irq_chip.irq_unmask = a10_eccmgr_irq_unmask;
-> -	edac->domain = irq_domain_create_linear(of_fwnode_handle(pdev->dev.of_node),
-> -						64, &a10_eccmgr_ic_ops, edac);
-> +	edac->domain = irq_domain_create_linear(dev_fwnode(&pdev->dev), 64, &a10_eccmgr_ic_ops,
-> +						edac);
->  	if (!edac->domain) {
->  		dev_err(&pdev->dev, "Error adding IRQ domain\n");
->  		return -ENOMEM;
-> -- 
+On Wed, Aug 20, 2025 at 10:00:50AM +0000, Shiju Jose wrote:
+> >-----Original Message-----
+> >From: Jonathan Cameron <jonathan.cameron@huawei.com>
+> >Sent: 20 August 2025 09:54
+> >To: Mike Rapoport <rppt@kernel.org>
+> >Cc: Shiju Jose <shiju.jose@huawei.com>; rafael@kernel.org; bp@alien8.de;
+> >akpm@linux-foundation.org; dferguson@amperecomputing.com; linux-
+> >edac@vger.kernel.org; linux-acpi@vger.kernel.org; linux-mm@kvack.org; linux-
+> >doc@vger.kernel.org; tony.luck@intel.com; lenb@kernel.org;
+> >leo.duran@amd.com; Yazen.Ghannam@amd.com; mchehab@kernel.org;
+> >Linuxarm <linuxarm@huawei.com>; rientjes@google.com;
+> >jiaqiyan@google.com; Jon.Grimm@amd.com; dave.hansen@linux.intel.com;
+> >naoya.horiguchi@nec.com; james.morse@arm.com; jthoughton@google.com;
+> >somasundaram.a@hpe.com; erdemaktas@google.com; pgonda@google.com;
+> >duenwen@google.com; gthelen@google.com;
+> >wschwartz@amperecomputing.com; wbs@os.amperecomputing.com;
+> >nifan.cxl@gmail.com; tanxiaofei <tanxiaofei@huawei.com>; Zengtao (B)
+> ><prime.zeng@hisilicon.com>; Roberto Sassu <roberto.sassu@huawei.com>;
+> >kangkang.shen@futurewei.com; wanghuiqiang <wanghuiqiang@huawei.com>
+> >Subject: Re: [PATCH v11 1/3] mm: Add support to retrieve physical address
+> >range of memory from the node ID
+> >
+> >On Wed, 20 Aug 2025 10:34:13 +0300
+> >Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> >> On Tue, Aug 19, 2025 at 05:54:20PM +0100, Jonathan Cameron wrote:
+> >> > On Tue, 12 Aug 2025 15:26:13 +0100
+> >> > <shiju.jose@huawei.com> wrote:
+> >> >
+> >> > > From: Shiju Jose <shiju.jose@huawei.com>
+> >> > >
+> >> > > In the numa_memblks, a lookup facility is required to retrieve the
+> >> > > physical address range of memory in a NUMA node. ACPI RAS2 memory
+> >> > > features are among the use cases.
+> >> > >
+> >> > > Suggested-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+> >> > > Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> >> >
+> >> > Looks fine to me.  Mike, what do you think?
+> >>
+> >> I still don't see why we can't use existing functions like
+> >> get_pfn_range_for_nid() or memblock_search_pfn_nid().
+> >>
+> >> Or even node_start_pfn() and node_spanned_pages().
+> >
+> >Good point.  No reason anyone would scrub this on memory that hasn't been
+> >hotplugged yet, so no need to use numa-memblk to get the info.
+> >I guess I was thinking of the wrong hammer :)
+> >
+> >I'm not sure node_spanned_pages() works though as we need not to include
+> >ranges that might be on another node as we'd give a wrong impression of what
+> >was being scrubbed.
 
-Applied, thanks.
+If nodes are not interleaved node_spanned_pages() would work, even if there
+are holes inside the node, like e.g. e820-reserved memory.
+So with non-interleaved nodes node_start_pfn() and either
+node_spanned_pages() or node_end_pfn() will give the node extents and they
+are faster than get_pfn_range_for_nid().
+
+If the nodes are interleaved, though, a single mem_base, mem_size are not
+enough for a node as there are a few contiguous ranges in that node, e.g.
+
+  0              4G              8G             12G            16G
+  +-------------+ +-------------+ +-------------+ +-------------+
+  |    node 0   | |    node 1   | |    node 0   | |    node 1   |
+  +-------------+ +-------------+ +-------------+ +-------------+
+
+I didn't look into the details of the RAS2 driver, but isn't it's something
+it should handle?
+
+> >Should be able to use some combination of node_start_pfn() and maybe
+> >memblock_search_pfn_nid() to get it though (that also gets the nid we already
+> >know but meh, no ral harm in that.)
+> 
+> Thanks Mike and Jonathan.
+> 
+> The following approaches were tried as you suggested, instead of newly proposed
+> nid_get_mem_physaddr_range().
+> Methods 1 to 3 give the same result as nid_get_mem_physaddr_range(), but
+> Method 4 gives a different value for the size.
+
+I believe that's because on x86 the node 0 is really scrambled because of
+e820/efi reservations that never make it to memblock.
+ 
+> Please advise which method should be used for the RAS2?
+> 
+> Thanks,
+> Shiju
+> 
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Sincerely yours,
+Mike.
 
