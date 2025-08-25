@@ -1,296 +1,201 @@
-Return-Path: <linux-edac+bounces-4655-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4656-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40CB2B345A7
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 17:24:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 941B5B346F0
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 18:18:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A4F2162C8D
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 15:24:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16C882A4A2A
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 16:17:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02A2F279789;
-	Mon, 25 Aug 2025 15:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 932BA274B56;
+	Mon, 25 Aug 2025 16:10:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="1u512M3d"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="BZv7aZNE"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6742821FF2A;
-	Mon, 25 Aug 2025 15:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756135442; cv=fail; b=Hq1xoWp46QCX12gfrXPy9/tvftaIarlLx0CmIQyl3LhJa7DeUvJJPj+mgjLmNCMVD5Wh/sCYf2l2H9VRiSiJZu/sGXYx44ohEnGvVvAyfVPm3g6ctpCQtSNDGRkA05Ik55kfof1vMdpl9cdPcTTJGw23x+JXw4YJiZiR4xXzGfA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756135442; c=relaxed/simple;
-	bh=D+ckMoacOKwnayv8TA72Q7avkpRj/TrDn3LTqzzeX0w=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=A2C4cjn2b/bEL+ra73O5oGGhS6An+Gf/9QpkpPP3L7FC0sSnEa/8c8/W4iiyB+AHy9kAFhR0nraQ0fXpUAsIlhiCDTKGMmozCSjzyA8SJzm6d6lZS5O1wJzHsGGOpp2TSds12SW177pUSOgBJPESrscTQfKBSsb4QMoqjeq17TY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=1u512M3d; arc=fail smtp.client-ip=40.107.223.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Dz++OLZZyHb7Np4xiiO9ABcI6FaHqrKmxEnnnDSIlmI7xMrjYkWpB8EXmZGdhaMfZJJcnoS9kt0lrvtCKaGsNR2ZVEcGZ1hjAxN4RPuyIsB4I59R+5f7hekfASlDPzrvw0eR6jB0784Do0ckfDq9V5jERRR/blThaMvSIJy5BaIoxaZtLDwhR6G49kMTf8j6DI3LR6PfXlnyZpKisbWwMHQA6PqjEl+3T26ADDRVkDL8qabgxOewcD7cceAY28pPGrvgMA7gfnaXlFt0OnJoGhYQlCrg9GXU4gbFkx9UEY8Zv77R3V4cZpiUaPCxA9PltfajJbyRFgXbzHT0c2cCEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oh98miuZjMxNiMUhs6gCrXSEf4l9VW0O4HbQC+f9/ic=;
- b=ubZt6gEvL+QJV6RJKTyyQKyBs2w5oJGv19OOCqmFbdqU/S8dB8CiLfkiIZBMNqcwknK91jftNizIyeMTqtlsUdJT/g+Y42zQugQ87lCJhuU/6IIHD0JBdyeWBSgJGVh1ESh9SJNHA8WbevZ6VKE103LCHpllmdQA7jTzrjd+/8n/J2urwwbReRaiSw6VCEr+BI1TJIokzw/0j7wt1K7eMJmjUGFaUG3xMTgo2QGkMhbbT94XoG6hp8IMuTZFZXDEwFLstXrmEKNUexvw0NYLtiGMWsYWQOi9uO5097mziavUO0c3+jIsf1nvODM0Q42Zcna8XSbtthPMTfhoflCA6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oh98miuZjMxNiMUhs6gCrXSEf4l9VW0O4HbQC+f9/ic=;
- b=1u512M3dva8SshqnfLIKl9bVTROCoU3/+ej9chI2a7od76lsfaLY4RKiBL4qriWNEsoXWRzvQudxtBnVUxzi/23hf9josBZZqass4LAK8fwhGYA43FqdOn2PuB6nqQVLypg4ulc3a2GxeNOrFmgYGFDoJvE9RHOa1pdOj/m0WmE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
- by DM6PR12MB4387.namprd12.prod.outlook.com (2603:10b6:5:2ac::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.22; Mon, 25 Aug
- 2025 15:23:58 +0000
-Received: from CH0PR12MB5388.namprd12.prod.outlook.com
- ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
- ([fe80::a363:f18a:cdd1:9607%5]) with mapi id 15.20.9052.019; Mon, 25 Aug 2025
- 15:23:58 +0000
-Message-ID: <3dccf0ad-3cad-4211-b01b-c3f750092711@amd.com>
-Date: Mon, 25 Aug 2025 10:23:49 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] EDAC/amd64: Add support for AMD family 1Ah-based
- newer models
-To: Borislav Petkov <bp@alien8.de>, Avadhut Naik <avadhut.naik@amd.com>
-Cc: linux-edac@vger.kernel.org, yazen.ghannam@amd.com,
- linux-kernel@vger.kernel.org
-References: <20250807201843.4045761-1-avadhut.naik@amd.com>
- <20250807201843.4045761-2-avadhut.naik@amd.com>
- <20250818212248.GHaKOZqGhfCciWWOcD@fat_crate.local>
-Content-Language: en-US
-From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <20250818212248.GHaKOZqGhfCciWWOcD@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN4PR01CA0034.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:273::7) To CH0PR12MB5388.namprd12.prod.outlook.com
- (2603:10b6:610:d7::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9632A301034;
+	Mon, 25 Aug 2025 16:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.143.35
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756138235; cv=none; b=Z14KvqstUPSZLOk7satVIQcbK7unx0bT2inz0SnOlrLiMwcNjl+pJSBq4OspyDOeDekFfT6oeniQtCGxuLIdvBwXZ2dgSmmVep1QsP4htwjfMtHONNFXmLkr+ymg5RNBwAR5g3ljYz0EhbA/cSQTaZogdjoA1r8O4OPUilJnkBk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756138235; c=relaxed/simple;
+	bh=P8XGQESn+FTZdmVay8MRlOAG5BK1vdHzeEJ7SdMsQdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ryxeo5QVzN6hGlyv+TZBCZ3d8sBtItd7XD1avNZClRVnpjyVPBTWU/MrS0BrQLBGqzpHFc7RHMISZsMl/c1GZR1RncQRBB97YtSL3pUM1BjXAgzAf5JIfgrUNaTHKTJ/AilJ+i74dsMXoZ6vJsb1NuNqbTZP+rQROrJUfLlX+ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=BZv7aZNE; arc=none smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57PCNc4l029977;
+	Mon, 25 Aug 2025 16:09:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps0720; bh=sQ
+	H2klu1q9w/NyJjrasqKq1tGmDd3ucFuLZtG1LKn80=; b=BZv7aZNECNBSQkdGA2
+	8twBMjCYGOwkxdSEOXhC1z9DwHwoNNt1eQIq97g8jtcPYLT0e4pRleKzYd4qRlNE
+	e5sSQTAOlZqZ7TgRYFJnpqbLO63L23IQ4pZxqF96n0kAsPit9+6Q7Iuqb2+mAHBo
+	7aSZn0pRR+1KLabMU+vsqPC/DLUH+aClU0hEvSkluWwqm28t0luI99KzkaS5D6RT
+	JrJUiJkfR1LTIDbArRsP93f6yRX5CPDFoy1vS7OFFCXyUfkjR6Y5/jClcq+KYayS
+	0hObwpsGkO1tBZgOkG4uI+Vb57PNOGz5uezsDgv8x9MC2rTvyEAZUMm+TxO/dr0h
+	kJiQ==
+Received: from p1lg14879.it.hpe.com ([16.230.97.200])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 48q6xvq0wc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Aug 2025 16:09:15 +0000 (GMT)
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 07E97130D5;
+	Mon, 25 Aug 2025 16:09:13 +0000 (UTC)
+Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.36])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 10E16801616;
+	Mon, 25 Aug 2025 16:09:10 +0000 (UTC)
+Date: Mon, 25 Aug 2025 11:09:06 -0500
+From: Kyle Meyer <kyle.meyer@hpe.com>
+To: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Jiaqi Yan <jiaqiyan@google.com>, akpm@linux-foundation.org,
+        david@redhat.com, tony.luck@intel.com, bp@alien8.de,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, lorenzo.stoakes@oracle.com,
+        Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+        surenb@google.com, mhocko@suse.com, nao.horiguchi@gmail.com,
+        jane.chu@oracle.com, osalvador@suse.de
+Subject: Re: [PATCH] mm/memory-failure: Do not call action_result() on
+ already poisoned pages
+Message-ID: <aKyKort2opfQYqgA@hpe.com>
+References: <20250821164445.14467-1-kyle.meyer@hpe.com>
+ <CACw3F53KmKRJyH+ajicyDUgGbPZT=U3VE4n+Jt3E62BxEiiCGA@mail.gmail.com>
+ <aKd1K3ueTacGTf1W@hpe.com>
+ <CACw3F527M-x=UeB0tN_sjCgp_YP_8yLkVRCLP2dLO2bzXrqWsA@mail.gmail.com>
+ <14a0dd45-388d-7a32-5ee5-44e60277271a@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|DM6PR12MB4387:EE_
-X-MS-Office365-Filtering-Correlation-Id: 89915a09-1eac-4ca9-366b-08dde3eb6972
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RWtLWlBaODhWcjlURGwvMVNnNzM3aFNpVTJyWnllb3VNalNoMkVtcUZOOGNU?=
- =?utf-8?B?UzZ2VHp4Rm1NNFFkSEJtMU1pWUFTYmR2RXgvSzFYZkJQN3lOMGlMY1pVNkJF?=
- =?utf-8?B?MjExTkU0SFN3eWZ4am85ZjJ2WTJackczWm11RnFZOUFDRWVLRWtqQVNqTXgv?=
- =?utf-8?B?WlczNk1aTFBxdmZCVzhyRVNtZnlQc1dXZnVmdGhYcWtUVXBma3YvSEl3elkx?=
- =?utf-8?B?NnpZcnpsMmRMZDhFRmNySGNmMTN4ZWo0VnM5VEtjZkFhcmVjci9QR3lKQnJk?=
- =?utf-8?B?VTJyMThWbGFQNUpKWkcrNHJkTDQyakt6MVN4VG1EdHZyS2JRSGV6S0lpeDJ0?=
- =?utf-8?B?TnprVWU0RlY1SjFhU2hubU1HRktlZU1JUW93dUt4VmR1Z3dKbGVBLys0d3NR?=
- =?utf-8?B?N2YyT0RabWFhMUlNTkxURzFoTWxYRWZ2clJoZ1lqQUZtc0xaYWNqL2ZxaVh5?=
- =?utf-8?B?NUw5SXZMWlBGQmozNlhXREtNRDRBaFA5SUFjNjFpMDBmZUo1MExWZTJxNExD?=
- =?utf-8?B?M0MxbzBGb2ZMczJtMVA1aXNLeC8yNGxYdE43clJ3SERJS0lGbW1aZ0FnYVFJ?=
- =?utf-8?B?Q2l1SjY0U25QTnRJb3g4Z0NFbUxkdFdxS0xYYUVkdGlKTURxTFJTUC9nb2dx?=
- =?utf-8?B?SUtnUE5nL1Q0VnRobGtOWTNEci80c3JpMjZMQTJaMFV0RXRXc3ovRUtrUFY5?=
- =?utf-8?B?R3N4cUU2VS9iTW5pMmExS0tMZEdGVXpXWExJQXlFRlRHNnRFd3hEeXRWcGlo?=
- =?utf-8?B?WGpEbDNaRHk3My9iSWp4YkhTbVFRTFhMMy9lRFhQSmFCUzE4dzNJY3JDdWVS?=
- =?utf-8?B?a1hRQkdXdmtjVllwSU1YMHpoS09HbGZtdjZpOVZUb0JsWFV2MDhJVWxmaDZ6?=
- =?utf-8?B?eEM0bEorb29XSTFxOTM4ajZYM2tUT25uUXRFaVg2ZVAxeWg1UDBKcTBxZFRN?=
- =?utf-8?B?MzIxSVU1S2ZIbmFoVElVY0xkZjU3MlJtS3FxSTYyUW1ZUjFtRXlZamJoSHBJ?=
- =?utf-8?B?ZFhPQXZOYy9MWE1CY21ReVZZS0I2bzVad0tQZ2J1YUpMa094cjZPYUpjSEFm?=
- =?utf-8?B?YUNBNmlDWjJEanovV0ZYclFOVFVhRUMvRk9TWjh5QnpSMHdqazd3OG5VSnA5?=
- =?utf-8?B?ZHowa0ZHaFRWQWlxMm4xOFpGS1dlN3BOWVdxTGVnayt0YmQxdjVOdkxld3h2?=
- =?utf-8?B?SXBYejVmTDhGSXpPYWo0dnVJbklGRFBNTkl0ZDdYa2VqNzd3dkxrQzNKaVhz?=
- =?utf-8?B?cDFyYnpUNnRQZk5TNjNSaW1yUUFhejBKK1hmV3lHQ0NrdHhUNXpxUWhPQ0N6?=
- =?utf-8?B?YlhIQXFmbDk5OXJoSnV0OWtLRnNXTnIzdjBYVCt0TDVMY21mRTNzVVk0VnBw?=
- =?utf-8?B?cDlOWURvZ2dNRStabWdMR0dQOWY3T3AzWVV6NkFvNUNaZ0F1UGJKdUt0bEV4?=
- =?utf-8?B?QXhCZVBWMXFRY0VDd1dCaFpYYmkrUXAvL3hUQWtWd0FIZ2FKdFoySTdzOXBj?=
- =?utf-8?B?UTFBRDRoc2tnN3ZYWnhwZzF0SnE2Yng4bHFSSm81aHhyWXBnZU1NbUd2Ly82?=
- =?utf-8?B?R2JOMFNHQ2pSZ1d5b05ZZmhCTERrUVZNcVlENFFIU3Y1elBDM1BTRDh5b1lm?=
- =?utf-8?B?Zm5uOWZHNWNRYXJpUStjWlpUVDkxZWhSSHlyU294R1V3TGZLZmV1S0lhTk1K?=
- =?utf-8?B?bll2RHp0eTJpejZiWlpWT04wbnlWY3FmOGFEWnBaT0QybnVpR1Jpc3RyY3k3?=
- =?utf-8?B?RG5vemxoSkIyRGRQOWVQMXpCdVhSSHlNWUVZV3RndU40cjVnQVd5T0tHZU5k?=
- =?utf-8?B?OGxyTWxpRU5BWVlQVmpMNG95WEFobklBcXRPekFtNFlqUzZiTXlpb1dzdWxa?=
- =?utf-8?B?bmlPS3NjVEhjMjNyTFQrRzhMeG81VW1HQWp0cFpXZENHN3l0emtUdkUwSFZL?=
- =?utf-8?Q?Pj+pNj1KcbE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?emoramxqVmRlb2ZuSlpOaHJ0VEFlMDNnZE1RYzBhNzBaVm5qTU41Q2FXOWJ2?=
- =?utf-8?B?QTljVHJqR0QyUUhTSmJUYVBtMmlsRjZZU1liRzJIQU9NUW9tZHN0OEVaQkRr?=
- =?utf-8?B?bEVGV1Y4K210bWl2S2JwREtGdGJrUXQwYllUczJaUTltYXplRWd2aDBQT0tF?=
- =?utf-8?B?Si9JQ0I2SEhLeWE4aTZkOWdHVDFPR0N2emczb1FwMUV0czJVNUlsbEFST08x?=
- =?utf-8?B?S3l0QVNwcnZjT25pV3FVbzRVeWIzSkl4RHRkTTh0MGc3UXhZZVc0c0dtdjd2?=
- =?utf-8?B?ejBFYUlDVzlSbW9xLyt2SmowVmxqNnlVRzgvT0FqQWsvL2F1NDZCdkFvdU1r?=
- =?utf-8?B?VlVPTmJ6RCs0Z24yZ0U0WndVZWVUbFpvZHcwMDkyV1A0a1pYQ0RDc1BpSFBl?=
- =?utf-8?B?UmhIQWJQK01nZTU2K0c4WGFuRFJ5cHVrOEt1TVlSZXVnU2RnbzJDQVlxRXA0?=
- =?utf-8?B?OTIwMFN1RVVmbHlOdlJBbEZ0WTRHQnNtdnhpcXZWZktVYnRQQjBsbzlFTlMw?=
- =?utf-8?B?bnp2OXo4bzFPNDlnUVJZTFVSTS9qMlRGKzRRc2FMM0EzNXhpSjQvVGhoVjFs?=
- =?utf-8?B?aDg5aWVIb2ZRZnZaZ1J1ckNnSzRWTERQUlFWV2N2Y2cyNEFQMlVnTnNSZUVD?=
- =?utf-8?B?NGw1Sm95b1oyU1FaQlJFNk1OZTNVLzhLOWI2VVIvd3E5bW05R3JrdnlHbmNZ?=
- =?utf-8?B?d3FqOHF6bGpSUGZyd3N2Smc4UHVBbGNUTWpxcVRTMUJvNWloWThuaVZ3Vkhp?=
- =?utf-8?B?WUNNeGJMYVVFVFkvTkVSKzZVYTgwS283WFBoNmFSRVVwYm9TakdXUUJMTmVy?=
- =?utf-8?B?WjY5R3BTVmluYVF0QnVTMmNuQUlZNHh2dExRRHU5ZlArNHltZG8zNEZGVEp0?=
- =?utf-8?B?a2dqT24vNEVibHhJeHIva1g5L2V3MCtRWlYrWm8wSmFNMkxjY2gyQ2U3SXZu?=
- =?utf-8?B?a1NQU0Y5K3dJQ0JjUk4xQ1RxQlhiUnFxanBXWXREeGZxeEVIVnlBYmZZeGd0?=
- =?utf-8?B?Q05IWkZGVWZuUnNwV3BCMHg5K2xReFFOZjBtcGhEdVlJSnN1U1B1WnppNmFo?=
- =?utf-8?B?SDVWN3ZZQ2h1SVNhamluWk55VnM5QVNCVUlGQVZYT3REYWdJWDVzbEJteWdY?=
- =?utf-8?B?UERacDREcnNKdFlycFpuTnNaSmc0Z0Z6eDkzV3N3Q2xBWmFXU1BubnQ4ODRa?=
- =?utf-8?B?N1BKU3lGbDJRazBnbzRKVjhURmE3SzFOWllnb0Z4SUhKcitrOHpiNHJVeHo0?=
- =?utf-8?B?djRLLzRhNndXeWExL3dubGpRcWE2M1ZVTU92Yi9WWDArR2hxWS93ZmdsSTZG?=
- =?utf-8?B?cG1uZW5KQVZpZG5Pc1FhK0t5dGlUOFZtMlhnREVtcysvbFlEKy9CK3hsYzdl?=
- =?utf-8?B?OXptcXpxaHM2WDNHOGV3ZTJPZXowSkJ5MkQ4YVpiMWtJQ0tlMmdWYStyYmtT?=
- =?utf-8?B?dE9vZmJzSXpwaGs2dFFKSVQ5eFo0ZDdVekwrUEZwN1VkclVjYzhWWXZtNVda?=
- =?utf-8?B?TUhmczk4UW1UUzgwbDlYY2hMb2kwUGtMYVRES1BDcUdPeTJ0OWNja3U1VWNJ?=
- =?utf-8?B?VjZEakNOTis5SFNEQlZkZ0U1a0hDcXJ6TnVBdUVpaE9KNVBFUitNTjN0MXFz?=
- =?utf-8?B?LzZRb255RU00NmRhUEZzWUg0dklZODlGaFZEaGdUNUMrMkozS2hmYW5RRVZi?=
- =?utf-8?B?TGJXL2I4YzBSbUVrOFlFL2FPaW93TTF6VHVjT3hiZk5tci9xZ2ZTNTIyUGxL?=
- =?utf-8?B?ak96cVFKZ1Vjd0dEdDdUWGh5dGVVTlpoa3NQQUhkT2R0ekFNaUZ6UjE4Mlpy?=
- =?utf-8?B?K2ZHSjVJdFp4aWNoc0xrcDZ1ZXBvSDRwbi80bEk2WVhxRE40Z21YYUhLa2lv?=
- =?utf-8?B?WGRGNk9wc1dRYlp2YXRWMkpkejA3akJaQUJJOU04bzJINXNRWGhXcDBaTWZz?=
- =?utf-8?B?ZmxEb1R0dnNwcWdUNkdPalhaQmQ0emtiNEpsQlBLRldrK05DR2NKMXN5L21o?=
- =?utf-8?B?WE42T0FTOFQrUHRIbHgwQXpiN09nSUNjTWxYekdQYnRlcVZER0VLcnAwMTZt?=
- =?utf-8?B?VFE4cXZiY1FhSmJ3cThHSUd2V2thWXNjYVl4d0lIamFVZ0lFRm1XYWJGa3N3?=
- =?utf-8?Q?C9w/+ayTjKncrpsOQ9M7q43/e?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89915a09-1eac-4ca9-366b-08dde3eb6972
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2025 15:23:58.3653
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dxthTRU9+moVVXak3gMlld+jeDrk7qLB0Tme9qf2ItpM3px6St1BXF0kwqTSdlW7jbccvD8Miha3mdBS5L7yZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4387
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <14a0dd45-388d-7a32-5ee5-44e60277271a@huawei.com>
+X-Proofpoint-GUID: eAojbwjnBFsxwDzG-eJQqJ_iiTYjmQP3
+X-Authority-Analysis: v=2.4 cv=ArTu3P9P c=1 sm=1 tr=0 ts=68ac8aab cx=c_pps
+ a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=MvuuwTCpAAAA:8 a=ERPcR_hKxm5yt4fehIQA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODI1MDE0NSBTYWx0ZWRfX3Fhlj65ssQQh
+ iBxTfpOt7lv+4AFi8G63U53mKaWeYuCR6wPS6FvOcefIDLVr6N6IWqxUH+wGfyIm1PIUsrBVcZD
+ xqIlK2/HnzT/9/+QzwmaZX2UeC+gfWVsThm2oqmBQaxefjXFfKvAR97DhQmATQIAX/vEV2WZiIF
+ RqYr7Mb8Bz6xh1Ih/+HSos4C+lb/V3zaCiNOUp4ZVnbV+svX60RFioRGpOHMOXp/v2Rslx0nTiz
+ 4Wp9M7oU0f0yaGLDMF/d9hcjqWI8vCWFTBQ+J+u9SVw6kDP4Ut2cFD9R4QnRBfnkUBcHyg9Wg7Y
+ 6s3brve84JhuX92h9sU5l/FES2uNn7KPFCqzzIGHB0qiBKLYxiFTRDPTkc1lR3nVrmGbpQbmdqO
+ wQDgsmx0WHl/S4Owq8wLdwT4udB7hZSv28AaEyOA62CgztPuyFyIuPqdvbzV0MS8pA/gjsQo
+X-Proofpoint-ORIG-GUID: eAojbwjnBFsxwDzG-eJQqJ_iiTYjmQP3
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-25_07,2025-08-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508250145
 
-Apologies!
+On Mon, Aug 25, 2025 at 11:04:43AM +0800, Miaohe Lin wrote:
+> On 2025/8/22 8:24, Jiaqi Yan wrote:
+> > On Thu, Aug 21, 2025 at 12:36 PM Kyle Meyer <kyle.meyer@hpe.com> wrote:
+> >>
+> >> On Thu, Aug 21, 2025 at 11:23:48AM -0700, Jiaqi Yan wrote:
+> >>> On Thu, Aug 21, 2025 at 9:46 AM Kyle Meyer <kyle.meyer@hpe.com> wrote:
+> >>>>
+> >>>> Calling action_result() on already poisoned pages causes issues:
+> >>>>
+> >>>> * The amount of hardware corrupted memory is incorrectly incremented.
+> >>>> * NUMA node memory failure statistics are incorrectly updated.
+> >>>> * Redundant "already poisoned" messages are printed.
+> >>>
+> >>> All agreed.
+> >>>
+> >>>>
+> >>>> Do not call action_result() on already poisoned pages and drop unused
+> >>>> MF_MSG_ALREADY_POISONED.
+> >>>
+> >>> Hi Kyle,
+> >>>
+> >>> Patch looks great to me, just one thought...
+> 
+> Thanks both.
+> 
+> >>>
+> >>> Alternatively, have you thought about keeping MF_MSG_ALREADY_POISONED
+> >>> but changing action_result for MF_MSG_ALREADY_POISONED?
+> >>> - don't num_poisoned_pages_inc(pfn)
+> >>> - don't update_per_node_mf_stats(pfn, result)
+> >>> - still pr_err("%#lx: recovery action for %s: %s\n", ...)
+> >>> - meanwhile remove "pr_err("%#lx: already hardware poisoned\n", pfn)"
+> >>> in memory_failure and try_memory_failure_hugetlb
+> >>
+> >> I did consider that approach but I was concerned about passing
+> >> MF_MSG_ALREADY_POISONED to action_result() with MF_FAILED. The message is a
+> >> bit misleading.
+> > 
+> > Based on my reading the documentation for MF_* in static const char
+> > *action_name[]...
+> > 
+> > Yeah, for file mapped pages, kernel may not have hole-punched or
+> > truncated it from the file mapping (shmem and hugetlbfs for example)
+> > but that still considered as MF_RECOVERED, so touching a page with
+> > HWPoison flag doesn't mean that page was failed to be recovered
+> > previously.
+> > 
+> > For pages intended to be taken out of the buddy system, touching a
+> > page with HWPoison flag does imply it isn't isolated and hence
+> > MF_FAILED.
+> 
+> There should be other cases that memory_failure failed to isolate the
+> hwpoisoned pages at first time due to various reasons.
+> 
+> > 
+> > In summary, seeing the HWPoison flag again doesn't necessarily
+> > indicate what the recovery result was previously; it only indicate
+> > kernel won't re-attempt to recover?
+> 
+> Yes, kernel won't re-attempt to or just cannot recover.
+> 
+> > 
+> >>
+> >> How about introducing a new MF action result? Maybe MF_NONE? The message could
+> >> look something like:
+> > 
+> > Adding MF_NONE sounds fine to me, as long as we correctly document its
+> > meaning, which can be subtle.
+> 
+> Adding a new MF action result sounds good to me. But IMHO MF_NONE might not be that suitable
+> as kill_accessing_process might be called to kill proc in this case, so it's not "NONE".
 
-Mistakenly hit send early in my previous response.
+OK, would you like a separate MF action result for each case? Maybe
+MF_ALREADY_POISONED and MF_ALREADY_POISONED_KILLED?
 
-On 8/18/2025 16:22, Borislav Petkov wrote:
-> On Thu, Aug 07, 2025 at 08:14:53PM +0000, Avadhut Naik wrote:
->> Add support for family 1Ah-based models 50h-57h, 90h-9Fh, A0h-AFh, and
->> C0h-C7h.
->>
->> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
->> ---
->>  drivers/edac/amd64_edac.c | 20 ++++++++++++++++++++
->>  drivers/edac/amd64_edac.h |  2 +-
->>  2 files changed, 21 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
->> index 07f1e9dc1ca7..2f6ab783bf20 100644
->> --- a/drivers/edac/amd64_edac.c
->> +++ b/drivers/edac/amd64_edac.c
->> @@ -3923,6 +3923,26 @@ static int per_family_init(struct amd64_pvt *pvt)
->>  			pvt->ctl_name           = "F1Ah_M40h";
->>  			pvt->flags.zn_regs_v2   = 1;
->>  			break;
->> +		case 0x50 ... 0x57:
->> +			pvt->ctl_name           = "F1Ah_M50h";
->> +			pvt->max_mcs            = 16;
->> +			pvt->flags.zn_regs_v2   = 1;
->> +			break;
->> +		case 0x90 ... 0x9f:
->> +			pvt->ctl_name           = "F1Ah_M90h";
->> +			pvt->max_mcs            = 8;
->> +			pvt->flags.zn_regs_v2   = 1;
->> +			break;
->> +		case 0xa0 ... 0xaf:
->> +			pvt->ctl_name           = "F1Ah_MA0h";
->> +			pvt->max_mcs            = 8;
->> +			pvt->flags.zn_regs_v2   = 1;
->> +			break;
->> +		case 0xc0 ... 0xc7:
->> +			pvt->ctl_name           = "F1Ah_MC0h";
->> +			pvt->max_mcs            = 16;
->> +			pvt->flags.zn_regs_v2   = 1;
->> +			break;
->>  		}
-> 
-> Oh boy, this pvt->ctl_name is ridiculous: we're collecting a zoo of string
-> objects where this thing can simply be scnprintf()-ed once at driver init and
-> then the pointer handed in to mci->ctl_name.
-> 
-> Something like
-> 
-> static char *ctl_name[MAX_CTL_NAMELEN]; 
-> 
-> or so. And then
-> 
-> 	scnprintf(...)
-> 
-> into it based on family and model.
-> 
-> Can you pls do that as a cleanup upfront?
-> 
-> This is slowly getting out of hand.
-> 
-> And then you can group them together:
-> 
-> case 0x50 ... 0x57:
-> case 0xc0 ... 0xc7:
-> 	pvt->max_mcs            = 16;
-> 	pvt->flags.zn_regs_v2   = 1;
-> 	break;
-> 
-> ...
-> 
-> and so on.
-> 
-> So that this function turns back into something saner again.
-> 
-> Thx.
-> 
-Will try to put this in place and make it the fist patch of this
-set.
+MF_ALREADY_POISONED can be the default and MF_ALREADY_POISONED_KILLED can be
+used when kill_accessing_process() returns -EHWPOISON.
 
-> 
-> 
-> 
-> 
->>  		break;
->>  
->> diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
->> index 17228d07de4c..d70b8a8d0b09 100644
->> --- a/drivers/edac/amd64_edac.h
->> +++ b/drivers/edac/amd64_edac.h
->> @@ -96,7 +96,7 @@
->>  /* Hardware limit on ChipSelect rows per MC and processors per system */
->>  #define NUM_CHIPSELECTS			8
->>  #define DRAM_RANGES			8
->> -#define NUM_CONTROLLERS			12
->> +#define NUM_CONTROLLERS			16
-> 
-> I've asked this before but can we read out the number of controllers from the
-> hw somewhere instead of diddling with this silly define all the time?
-> 
-> Thx.
-> 
+The log messages could look like...
 
-Had considered this sometime back. Didn't pursue further as it maybe somewhat
-tricky.
+Memory failure: 0xXXXXXXXX: recovery action for already poisoned page: None
+	and
+Memory failure: 0xXXXXXXXX: recovery action for already poisoned page: Process killed
 
-Some new CPUIDs were introduced since Zen4 trough which we MAYBE able to
-accomplish this i.e get rid of the macro.
-
-But am not not sure as to what we should do for older SOCs in that case.
-Zen3, for example.
-
-Will look more if I can find something else.
-
--- 
 Thanks,
-Avadhut Naik
-
+Kyle Meyer
 
