@@ -1,78 +1,79 @@
-Return-Path: <linux-edac+bounces-4652-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4653-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71F56B33EAF
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 14:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BFF5B342C4
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 16:10:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E6B93A1EE0
-	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 12:04:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3F5F5E7BED
+	for <lists+linux-edac@lfdr.de>; Mon, 25 Aug 2025 14:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A42524A066;
-	Mon, 25 Aug 2025 12:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59E62F3C04;
+	Mon, 25 Aug 2025 14:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="YYwS79DM"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="EKpByuyw"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB09414A4DB;
-	Mon, 25 Aug 2025 12:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902682F3C0D;
+	Mon, 25 Aug 2025 13:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756123490; cv=none; b=HindzKXAc15OLgsBt+xIVd0kq6QIUlcD7LbevHrA5xws7lGV4e0BWaPitHsKiJekWvkuqD0EibKwhplPw8aSQ4ihFqYQ3KyToJux/UE+V/fvbDiKMV5cr5ugsDuut9lWiQFzk9KnExXeF83FdK0qdjUfOUh6ErvLwoP1RxsSpzw=
+	t=1756130400; cv=none; b=ZbSzSSsgYnXyJBwDubCUIxv2jdjclDNdqYFlT63oFJq/3vM5qI3WAy0sCHNsbFVodsEoazPSJBs9VVb20PI4B583GVqqNl98i0BcPYsyZ+ODNHvfAQsUjmSunpMkCffH/Mql0bfXQWkqAmf0Bg1i1qOQfSnvCc8j3oSEURapKu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756123490; c=relaxed/simple;
-	bh=wc9yzC1w0oDY5Rrrc5b+vRIsswJg6nCQZcY6Ge7F6sU=;
+	s=arc-20240116; t=1756130400; c=relaxed/simple;
+	bh=rYRD/HZ3Tpzk1DQ5Y829POkVTZM8tM0nQEqE/Y36k6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VA8WOHky9E4wVeCTT0gkl0i6qIClFtxgpkmwf0jfOmkpedNrj2ShsA43r/Uq3jLEkUYDES8r3cHDB0B5Dfei5gxH8F52nie76Xa40dEFgHWQKfDzbsB8LduzbpaM4vm8FmzNdpOoAd5rdu6YZpmwNov+UOiWNKbskLlA0hd5ils=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=YYwS79DM; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=ICwFrGe5hzvPCkZ+4jPHyalR9adqxjb9Pi89+YZCxXMF2A4iyKLI0q4EuZ2+zeUyDqcfgkvz5ExurYhxNObm14F9cm/DXrPMkx4BsfdZUtUr2Qd32i0UVsgE5Hng8mqlawrOQBCMU/DgRv6WGwVRx8xxcZQPsICN+xst62Cz+ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=EKpByuyw; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6BCC540E0202;
-	Mon, 25 Aug 2025 12:04:37 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3774240E02A2;
+	Mon, 25 Aug 2025 13:59:55 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id AnyG2N-1O2KL; Mon, 25 Aug 2025 12:04:34 +0000 (UTC)
+	with ESMTP id PLN_WYZWnhHb; Mon, 25 Aug 2025 13:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1756123473; bh=IsU0wvnQjX2rP1sM+BcRLLHmk2CHZDI5c8J9mfULb/Y=;
+	t=1756130391; bh=jUnQvc6mz4vGDxL//LckkTiwfWtaOdXiv2Ln9tXl+H4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YYwS79DMfCmQU0O58jl55ssfSoqh0j7RpdAEFKU7w4OubEjxMNn6DTYNEKd15mG2A
-	 lD17OD/ZzY20yG6di9J7xq51xN33pCVRj5b9uM0Dr7PKL3uTMorGg1g5V6vzV2jl2A
-	 VqBwJFEndg2NLh753k6mg7C10Gepk8ra1+0BADfyOKIY5VBJn33MIwlla2Bw+1Lpdd
-	 B6MhMQf9cPfkxLoKfUoq0u6ULlmi7pDyAMoIfkD8oVJAXpCaPL7T/+7Yrb5q3deEVp
-	 ssmXghs9Q8l1CGUbacDd3xveHIzr8Kh555A7rUW4aad3Pp2ULqAjFYBFm+1xIkQG3i
-	 pDjAgW2XKoqWnnKjEvhv8adlmavuG+IgHxQMDB3kee/dSMaa2/Q7mvRdxHhdEpoK72
-	 zr5BV3uT+ES1n37gaF5QGdeSTZ0RgMANdIfi3m3tvxJCIje+DN8b6Iac/q0z3b8vHh
-	 G3P6i8b4R6N08cv5Eg2EBf99kA4I/p/YpYwNtelKoKF0xup7r8cpZVSBkqUwydy/Fy
-	 e6LoZO1K/DHBOpddN3LHLATpBz9tdGNZySdAS3UG58KL9iTpWC4omUe9RjOiKKaZ2H
-	 17WjzCPH1nhkv070FBvRn1NrIouJf3HRK3WmVuCaPHZFUr67ARYg1monNAluLmzJ0+
-	 YlAiJ2ywRQc0DhdTR0IpJy6E=
+	b=EKpByuyw8kwp9sPrCsif66id90g9LoluXmrL3IDiCjYVG/30hEKbE27vOf71PG7v4
+	 3yRg1OaOrr1HRmZ3doJNzkqHOZN7UWfubMp0xiXNNpq0QJcgv5l+1m3K1War8Z4/bi
+	 xTtWmyCk4qmu5O+8SUk4nhYBb7YwxwTi1+k1rjb7XYuLIKR2RAIaaCtSyHCkkzZW6k
+	 QdG7meNt7QtN14+JpcoXcGZPR1oBSnDgDI5g1oDBU+NQf300nVOhWEBa96Ii/sETH7
+	 OsG4aY6O/lwcur5H9JCXkeejW599XyoQpXUcbNmslCLFVeQ6nt1XWTUUxMUFm3GSWZ
+	 plVCGALeMhrourm+rr1789h7LzLkvUJK4TSccHwgkN7WZirW9UiUu13djB+D8ojMl5
+	 xflkHYw1ZnD5y7XGDbW2XeDq+CddUg5o0IQI2CL7xFon+oG9H3IwsJKn8JNcdhlaIa
+	 vTW4S/GY6BYOx3f7kysRVNqUgxHAA+a/3ESh6m20+XGuv5Q7UMeaStQAJhDJVVM5Hv
+	 PprchRKq5dbNQxIjMvM/VeG79nI/UmtJDMQSLjzxaIIg1JTBiLUsSy8pOFwm5NXC7e
+	 f8deXd+xqU/MXJDM19yjoSrgQg0P236effTJEoB69JBuhl4uXhM1iNBBlv2h9qx7En
+	 SPNqiMaEfpz0/x429ixx4GwE=
 Received: from zn.tnic (pd953092e.dip0.t-ipconnect.de [217.83.9.46])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1227040E01A1;
-	Mon, 25 Aug 2025 12:04:23 +0000 (UTC)
-Date: Mon, 25 Aug 2025 14:04:16 +0200
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9103D40E01A1;
+	Mon, 25 Aug 2025 13:59:40 +0000 (UTC)
+Date: Mon, 25 Aug 2025 15:59:33 +0200
 From: Borislav Petkov <bp@alien8.de>
-To: Salah Triki <salah.triki@gmail.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] EDAC: altera: Delete an inappropriate
- dma_free_coherent() call in altr_sdr_mc_err_inject_write()
-Message-ID: <20250825120416.GBaKxRQCES-psm-XrY@fat_crate.local>
-References: <aIrfzzqh4IzYtDVC@pc>
+To: Nikolay Borisov <nik.borisov@suse.com>
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
+	Tony Luck <tony.luck@intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org, Smita.KoralahalliChannabasappa@amd.com,
+	Qiuxu Zhuo <qiuxu.zhuo@intel.com>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v4 08/22] x86/mce/amd: Put list_head in threshold_bank
+Message-ID: <20250825135933.GTaKxsRXQSsvN1dN26@fat_crate.local>
+References: <20250624-wip-mca-updates-v4-0-236dd74f645f@amd.com>
+ <20250624-wip-mca-updates-v4-8-236dd74f645f@amd.com>
+ <68039ee2-5407-4bd4-9735-62674805eaad@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -81,48 +82,18 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aIrfzzqh4IzYtDVC@pc>
+In-Reply-To: <68039ee2-5407-4bd4-9735-62674805eaad@suse.com>
 
-On Thu, Jul 31, 2025 at 04:15:27AM +0100, Salah Triki wrote:
-> `dma_free_coherent()` must only be called if the corresponding
-> `dma_alloc_coherent()` call has succeeded. Calling it when the allocation
-> fails leads to undefined behavior.
-> 
-> Add a check to ensure that the memory is only freed when the allocation
-> was successful.
-> 
-> Signed-off-by: Salah Triki <salah.triki@gmail.com>
-> Fixes: 71bcada88b0f3 ("edac: altera: Add Altera SDRAM EDAC support")
-> Cc: Markus Elfring <Markus.Elfring@web.de>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Robert Richter <rric@kernel.org>
-> Cc: linux-edac@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/edac/altera_edac.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index cae52c654a15..7685a8550d4b 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -128,7 +128,6 @@ static ssize_t altr_sdr_mc_err_inject_write(struct file *file,
->  
->  	ptemp = dma_alloc_coherent(mci->pdev, 16, &dma_handle, GFP_KERNEL);
->  	if (!ptemp) {
-> -		dma_free_coherent(mci->pdev, 16, ptemp, dma_handle);
->  		edac_printk(KERN_ERR, EDAC_MC,
->  			    "Inject: Buffer Allocation error\n");
->  		return -ENOMEM;
-> -- 
+On Wed, Jun 25, 2025 at 07:52:26PM +0300, Nikolay Borisov wrote:
+> That way you end up with a single btl (but I guess a version that uses btq
+> should be added as well) inside the loop rather than a bunch of instructions
+> moving data around for per_cpu.
 
+There's also this_cpu_ptr() etc.
 
-Applied, thanks.
+You know how I always take patches, right?
+
+:-)
 
 -- 
 Regards/Gruss,
