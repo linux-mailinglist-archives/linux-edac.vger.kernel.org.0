@@ -1,259 +1,283 @@
-Return-Path: <linux-edac+bounces-4681-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4682-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 347B5B3514A
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Aug 2025 03:58:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A157AB35352
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Aug 2025 07:29:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2424C1A876B1
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Aug 2025 01:58:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 85E434E3C78
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Aug 2025 05:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B11D1FDE19;
-	Tue, 26 Aug 2025 01:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23D92EE619;
+	Tue, 26 Aug 2025 05:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="OdestZrw"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qy4dai7v"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2074.outbound.protection.outlook.com [40.107.237.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C720F25F98A;
-	Tue, 26 Aug 2025 01:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.143.35
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756173490; cv=none; b=Aw1TO6diZfpLoC6/I1Km0u8DKcKo8sYZwjD34AtQBhP0DOyKPRhXUrr0qdIwQMP2Z4iXrCfcS0485kwKfW+C4Vyvfx2zET0hmxdfwW6s0IOHO3l/TlQTxdj4OHEnC1z/scn3hRdmQnyZs++glaD0huGkZMxJFXYPOyuqmHq57Jo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756173490; c=relaxed/simple;
-	bh=911as14KgJsJVgpdmIaiOaAoGydhgdF03A1AMBWMslo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qd7SQLBvUNFcQhYptXtYD6DCbCdQmZ4crTWkSnI/298Lv0ye1K1hRGTCJKY7wj7gybK3GPcbv4fX5+rldj/IfPu2rQXEr6vX79nWwGSGShrSd/bMsmXAROS2LTPiCqWxC1F6MJC/Cn42ERwF3V4dR3tX0iVd5gUFktSJ/fdqag8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=unknown smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=OdestZrw; arc=none smtp.client-ip=148.163.143.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=tempfail smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57PIhYOX010998;
-	Tue, 26 Aug 2025 01:56:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=q3
-	e2ypT3Kx6Yk73bwvacvSvu/yuGOsKJ/34CpZyahLM=; b=OdestZrwhcBNQMcaOB
-	NuxwGYIa/nrXisiL9KNmm877OTiNmM1AKTmg/0rCGWxm9WQGMdWKoXNObrxbu30O
-	GN+kSa2pLDgTdczlN+3FXkpmfJ1mdZNodesZ4wRyr8/xAl4DTMitRxZF+sMjoqK2
-	0tGa2sP+0yytiriXLLO2Gp0rTUUhwbkABQPth2IEYwhIzfevqEBIXWL0qOAijBI+
-	vJTXM08nhOkCF8t+ZEIHEdhKvX9rkXw7MCokl7Tx5F1f7C5yDURteWoaJLHu5lvU
-	wNh6i7DSgFKR7l2jAxvvM1xtEHe5ZjSDWGkzX5iiEqYyIDFl1dDBgIWLQ18MpQ0E
-	2qIQ==
-Received: from p1lg14878.it.hpe.com ([16.230.97.204])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 48rwc12t1g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Aug 2025 01:56:56 +0000 (GMT)
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14878.it.hpe.com (Postfix) with ESMTPS id E061C130EC;
-	Tue, 26 Aug 2025 01:56:35 +0000 (UTC)
-Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id D1FEF8014CE;
-	Tue, 26 Aug 2025 01:56:32 +0000 (UTC)
-Date: Mon, 25 Aug 2025 20:56:30 -0500
-From: Kyle Meyer <kyle.meyer@hpe.com>
-To: jane.chu@oracle.com
-Cc: Miaohe Lin <linmiaohe@huawei.com>, Jiaqi Yan <jiaqiyan@google.com>,
-        akpm@linux-foundation.org, david@redhat.com, tony.luck@intel.com,
-        bp@alien8.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, lorenzo.stoakes@oracle.com,
-        Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
-        surenb@google.com, mhocko@suse.com, nao.horiguchi@gmail.com,
-        osalvador@suse.de
-Subject: Re: [PATCH] mm/memory-failure: Do not call action_result() on
- already poisoned pages
-Message-ID: <aK0UTovxnKfjPwXs@hpe.com>
-References: <20250821164445.14467-1-kyle.meyer@hpe.com>
- <CACw3F53KmKRJyH+ajicyDUgGbPZT=U3VE4n+Jt3E62BxEiiCGA@mail.gmail.com>
- <aKd1K3ueTacGTf1W@hpe.com>
- <CACw3F527M-x=UeB0tN_sjCgp_YP_8yLkVRCLP2dLO2bzXrqWsA@mail.gmail.com>
- <14a0dd45-388d-7a32-5ee5-44e60277271a@huawei.com>
- <aKyKort2opfQYqgA@hpe.com>
- <2bd5c32b-dfc4-4345-8cc8-bbda5acdc596@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEC12EDD41;
+	Tue, 26 Aug 2025 05:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756186166; cv=fail; b=YM8XPAmOUU8cj0WCQZ8Jx2JjdVKs1zwOmyEQCzKYks+BnWIRcOhhFWBCFXiLMW+0USsRMo6vHaUWQXH/7EjvMLaFhH24JlZph4txgipWohtH9WynZ/C2TEuuYDztu9MQq06+kWJBBodIMUSQw7MVoTFvvRBSW7DjQb6oNSehhH4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756186166; c=relaxed/simple;
+	bh=K/LEs6YEgR5rIusa9bO+Y33b3i4ZbvgMQiTulp8+zag=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=e3TmpTjDX7VlH7+KItMNewtk157UhXYRPf6HaCscqihFoGAsJKxEYnm0fX7sjjitssbi9j5qfVO1zUK99vtN3PGxUQUhtw4Llld5/U9HfOHJ6/zsu9ZTKLYVN5dlAg2ErZXyyBFTj1nfHC0yYjRulXwC9z+LnuR/N1FxzhppICo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qy4dai7v; arc=fail smtp.client-ip=40.107.237.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Y4poUr/ySQQz5ZoY5DkyhJPIImGfHk9BT4b1QTx0ur3sidfQU9i4PrgO4Vz0m+Ox2Vws9DXUJ6bUOQ/AnlXhSadzo1sLOM9/P0O1eaSDqu42P1IVeaj+8wYN1VTgQC5KL1bt9Ux7fRaJpcVwq7lp1g0X3NRrHiX9pKGEHA9EqXQyHRdlXUoaG0AMir+76LUmrgrE5rS6wtrKASpydVJSms3wVv9+B1q7gZfsNLMwHWDbnt64qjmPElQgGDLuMYgWc88mOuuMS0HG5nuY3O1g3YGTs7XenJzFKW/VDYTaJAEFzJ8kTaa4ZE0MbvtNSm4y8LqVkLFHprP9YduhvhA46w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mnXA4yLkBh1rt1pI+laF2fio5nBjATe/BM93174oCQY=;
+ b=robP+Ij54kdwJb7ZvyKWu+vUZJ5uIV/QQJKXGHIltf8iQl9blnyEgrzWJtiPf5OavhlSpBwjeY1fYGkQo5O9LAPD+baAVkp9N8sevgEdmEBADTSsPvoAMwCGtz1mC3fRXqekWZiefOF74Kqo5+pwqHEY9DCrfTWkMt1gn3nRhW9hoSZLOCwTBxHkKYcN0NE82X5ACvx10giIId/hoSnb+u4CgJjre9K/zOyO3gTOv/3CwZg3f64JfVs5lxaHZf25O0F5A1n1AvHuhkX9cl67dZVCkchyJA+OZE9NRkAjvprZIy7tK4LJjxAiFvqCYz4rMy3HQNeMqR6isrwObbMFDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mnXA4yLkBh1rt1pI+laF2fio5nBjATe/BM93174oCQY=;
+ b=qy4dai7v3jQS44b0jgBztgnyUHNKcya2vVUrAoxsH6BNjXp47VS3CmhLelZvsJAll6LfHISvgxxNBIgs1uUX3DTGSaZDhZPwFpjhHds2sWUR3lkFDfLWo5I0Zzi3Cywxar52fPAR/h1DYItyH2036MCuNRbesXR/sXoh/bkhojk=
+Received: from BN9PR03CA0931.namprd03.prod.outlook.com (2603:10b6:408:108::6)
+ by BN3PR12MB9570.namprd12.prod.outlook.com (2603:10b6:408:2ca::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.20; Tue, 26 Aug
+ 2025 05:29:20 +0000
+Received: from MN1PEPF0000F0DF.namprd04.prod.outlook.com
+ (2603:10b6:408:108:cafe::13) by BN9PR03CA0931.outlook.office365.com
+ (2603:10b6:408:108::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.20 via Frontend Transport; Tue,
+ 26 Aug 2025 05:29:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MN1PEPF0000F0DF.mail.protection.outlook.com (10.167.242.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9073.11 via Frontend Transport; Tue, 26 Aug 2025 05:29:20 +0000
+Received: from Satlexmb09.amd.com (10.181.42.218) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 26 Aug
+ 2025 00:29:20 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb09.amd.com
+ (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Mon, 25 Aug
+ 2025 22:29:19 -0700
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Tue, 26 Aug 2025 00:29:15 -0500
+From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>
+CC: <git@amd.com>, <ptsm@linux.microsoft.com>, <srivatsa@csail.mit.edu>,
+	<shubhrajyoti.datta@gmail.com>, Shubhrajyoti Datta
+	<shubhrajyoti.datta@amd.com>, Krzysztof Kozlowski <krzk@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Borislav
+ Petkov" <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, James Morse
+	<james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Robert
+ Richter" <rric@kernel.org>, Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal
+	<nikhil.agarwal@amd.com>
+Subject: [PATCH v8 0/5] EDAC/Versal NET: Add support for error notification
+Date: Tue, 26 Aug 2025 10:59:09 +0530
+Message-ID: <20250826052914.2066884-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2bd5c32b-dfc4-4345-8cc8-bbda5acdc596@oracle.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODI2MDAxNCBTYWx0ZWRfX77CJDoR4U+bo
- adA0Byap4kY4QNffTn/8w4l6Y0Di6CfcyCKXwdkK/7sIZTalDyO7Dw8qfIb06flAOD/C+dbK4Ck
- 4KVI/94bV+VSbzwhWpZFvrAR9DUBi4ji1MoCYrvZwL+t9huiE0bzbQY54MH739HWD/T2oRiNnYY
- 5eRrgWIU+JnxELLMgWyDNSm9l+NhFWtVbv+xHOVM8TOeocNGJf29+1S/LKNSW8+6V8tTHwASige
- Kj/xsvL/wtZOhiZ2Gsfmv/vM8rJ95FQgDoNCcmsoHMqe0VueEmMc1ouQMg2bqZxUjxflBnicEM1
- emquCn8wvGd+X3wdDi3h7utZk+5i/kSqfiazPzit/6sjnOYWeZZ6WjkyHxq34ny3H/byvoy9kOG
- 5JFbqAP8RKyGnOlcROihqSby3nWxHPBkfEDFAEvVB6NpmRecJ+4G+Th2/RDuZQ3OiJ7bW/I6
-X-Authority-Analysis: v=2.4 cv=EMYG00ZC c=1 sm=1 tr=0 ts=68ad1468 cx=c_pps
- a=UObrlqRbTUrrdMEdGJ+KZA==:117 a=UObrlqRbTUrrdMEdGJ+KZA==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=yPCof4ZbAAAA:8 a=MvuuwTCpAAAA:8
- a=1XWaLZrsAAAA:8 a=VzHv1wIHhfcjo_lpb9wA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: sIWRHfsPa6103QyDutpgkX3sUVCctQYx
-X-Proofpoint-GUID: sIWRHfsPa6103QyDutpgkX3sUVCctQYx
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-26_01,2025-08-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 suspectscore=0 impostorscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- malwarescore=0 phishscore=0 bulkscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508260014
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0DF:EE_|BN3PR12MB9570:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1c6efb69-cb20-4c23-4062-08dde461824d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?6tpRLgLDiYPzgja2Af9KqemVA1i3DBVTIIHczSpn+MR3JaWKeMIXuuEQBxqf?=
+ =?us-ascii?Q?3XOXEc84H6rqkiOuIAV9IiyDF1mJ0KiWLaFf8dD3FpzOi/ADjY5H0AEo0OUP?=
+ =?us-ascii?Q?2d6KnNZUPzjW/B1ljrXwnjZTZFUFriVbVl7vWhgKBOQzYX7n7VunuYqZ9QON?=
+ =?us-ascii?Q?9RBJfrdGH/RKBaZ39gcfu7SVcyGEVu+QI97NuMsR0tmd1J7BFS163DReASf5?=
+ =?us-ascii?Q?vRe9vQLswzrr6ApK8qT9JXRutNOWvaTkbjdoBNBjlaebtFrYvf8WGpIW92Oq?=
+ =?us-ascii?Q?HM13PL89VBC4XCI2rFUgJeRzTECNDEUOBoL3SDh7Fbtnfy6NlTT7N2m08Xcy?=
+ =?us-ascii?Q?ixXNh+n2eFRTOETorqiZLZqplkU1wpuk2i7IYYdhgQ3Icb6Hsbc0zNF//rcC?=
+ =?us-ascii?Q?07k/gx/pk9DlKGFg5K3HQrQeNagA8zktZA1oTiI39q/rjF23tlFBzOweONfB?=
+ =?us-ascii?Q?vfyHzLNw6RqIRegN83NA7m7wvfTMsL+ydkoZZdibHXP8XdXzyB1xT8Js7Ual?=
+ =?us-ascii?Q?qA3uZFODn4nULhHi/slz9HEX4BhWGPrhadva45G2uo4nARVS3/0BtbIngGAo?=
+ =?us-ascii?Q?Gfxchg+HzKYE1cHSlhZA8C5YUmjznEscuKP8iUW76lUhvxWvNcKDBUFAgLU8?=
+ =?us-ascii?Q?KjZRg3JcFJsYGFEkxflmWNY3N/HjX6TQ0cUUYvrMS4NFNPggXiisSWD32SmO?=
+ =?us-ascii?Q?T20mbRJz8RSkcbogUlcAzmbuQQK+cQfECVfTRZFBHtYVpKT69uuLG/Ig0xKg?=
+ =?us-ascii?Q?OTWWQnTzL/sgtUaYmNUkL9TbS/sUWNvRJDJazNadkV+yDSBLfRAILwng/NxW?=
+ =?us-ascii?Q?5HnKSZdDaer3+hJMf8lBzdO3i9WYRss9w6WpSig4h1MVO77eI25B0avRulxa?=
+ =?us-ascii?Q?Kfzt74xPoMsZ768T9sqhEUQl0MZYN85qvCTspnZ2krKCk0osOgGD5lgwQsI8?=
+ =?us-ascii?Q?PpN0SBq2ehC/nK8zjbDJU11GIrlXO+9c9xRWUIrCQzuVrMRffPS3yTwworub?=
+ =?us-ascii?Q?Q5IQmhbA/30KSAsQ8pZDIHnmXqmQOmAdqhgr37tUErg99ZtYsu2ksBfaUErQ?=
+ =?us-ascii?Q?+1YzitDigIG6xwH3OzH3huE3rulsjlEhIZF2sofiIpmCswxCYwswhadmKIt4?=
+ =?us-ascii?Q?X6xB8N6fZsuYjnDD+YRsr5bJx0K1/KqCBTR+PjJhI5sOlsAw31lV3IBPh9G+?=
+ =?us-ascii?Q?a16/AImFo6zALOMot5BZ0AnbWOKOcOkoRiIvochrw+IWQWeQfclB5cm/mvPA?=
+ =?us-ascii?Q?R6ShZIxXYBic/irdfRAMi9NdACJ3/I+hNcQ7GZkiznN+XaEuQxz93e7BuA/t?=
+ =?us-ascii?Q?Ho4abWlsvEAJIXz6Kwqa1EsJmDXKKe7L/kd80dJJXFWhJI3cIrtS5tgnOb1Y?=
+ =?us-ascii?Q?YpZDpKHAVaMldwxiMVmrd6AtC4xspr8VjCQiVGN87UaaNSKBmMRlEKO3kXUn?=
+ =?us-ascii?Q?fBRHVVivgngtj3TwE20yNP5ceXrWGObXUBFB9VBxANPCGernTaqG5eyMMeWt?=
+ =?us-ascii?Q?r3npWiUDplUvtX0ZK+2MfcmMwhRljARFx3yX?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2025 05:29:20.5107
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c6efb69-cb20-4c23-4062-08dde461824d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000F0DF.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR12MB9570
 
-On Mon, Aug 25, 2025 at 03:36:54PM -0700, jane.chu@oracle.com wrote:
-> On 8/25/2025 9:09 AM, Kyle Meyer wrote:
-> > On Mon, Aug 25, 2025 at 11:04:43AM +0800, Miaohe Lin wrote:
-> > > On 2025/8/22 8:24, Jiaqi Yan wrote:
-> > > > On Thu, Aug 21, 2025 at 12:36 PM Kyle Meyer <kyle.meyer@hpe.com> wrote:
-> > > > > 
-> > > > > On Thu, Aug 21, 2025 at 11:23:48AM -0700, Jiaqi Yan wrote:
-> > > > > > On Thu, Aug 21, 2025 at 9:46 AM Kyle Meyer <kyle.meyer@hpe.com> wrote:
-> > > > > > > 
-> > > > > > > Calling action_result() on already poisoned pages causes issues:
-> > > > > > > 
-> > > > > > > * The amount of hardware corrupted memory is incorrectly incremented.
-> > > > > > > * NUMA node memory failure statistics are incorrectly updated.
-> > > > > > > * Redundant "already poisoned" messages are printed.
-> 
-> Assuming this means that the numbers reported from
->   /sys/devices/system/node/node*/memory_failure/*
-> do not match certain expectation, right?
-> 
-> If so, could you clarify what is the expectation?
 
-Sure, and please let me know if I'm mistaken.
+Adds support for the error notification for the Versal NET EDAC driver.
+The driver receives error events via RPMsg instead of directly accessing
+hardware registers. The NMC((Network management controller), which has
+secure access to DDRMC registers, gathers the necessary information and
+transmits it through RPMsg.
 
-Here's the description of total:
+During probe, the driver registers with RPMsg and retrieves DDR
+configuration by scheduling a work item from the NMC.
+Once this is completed, it registers the EDAC controller.
+When an error occurs, the NMC sends an RPMsg, notifying the driver.
+The EDAC driver handles error reporting for all events.
+Also we register the EDAC once and it reports the errors for all the
+events including the 8 DDRMC controllers. So while registering we give
+the particulars of the 1st controller.
 
-What:		/sys/devices/system/node/nodeX/memory_failure/total
-Date:		January 2023
-Contact:	Jiaqi Yan <jiaqiyan@google.com>
-Description:
-		The total number of raw poisoned pages (pages containing
-		corrupted data due to memory errors) on a NUMA node.
+Currently 20 errors has been tested.
 
-That should emit the number of poisoned pages on NUMA node X. That's
-incremented each time update_per_node_mf_stats() is called.
 
-Here's the description of failed:
+Changes in v8:
+- Split `mcdi.h` into `mcdi.h` and `mcdid.h`
+- Removed common code from CDX headers
+- Used refactored versions from shared location
+- Remove "EDAC" from macros and shoterned them
+- Removed redundant parentheses
+- Improved the description of the @i field in union ecc_error_info
+- Improved logging for memory_failure()
+- Merged init_csrows() into mc_init():
+- Remove AMD-specific naming for static functions
+- Add MAINTAINERS file
+- Register all the controllers
+- Replace  AMD_ERR use the snprintf in a function
 
-What:		/sys/devices/system/node/nodeX/memory_failure/failed
-Date:		January 2023
-Contact:	Jiaqi Yan <jiaqiyan@google.com>
-Description:
-		Of the raw poisoned pages on a NUMA node, how many pages are
-		failed by memory error recovery attempt. This usually means
-		a key recovery operation failed.
+Changes in v7:
+- add a minimal header instead moving them
+- Add the kernel doc description
+- Add the prototype from first patch to here
+- Add the reviewed by tag
+- Update the header paths
+- merge edac_cdx_pcol.h
 
-That should emit the number of poisoned pages on NUMA node X that could
-not be recovered because the attempt failed. That's incremented each time
-update_per_node_mf_stats() is called with MF_FAILED.
+Changes in v6:
+ - Patch added
+- Update commit description
+- Update the commit message.
+- update to the chip name as xlnx,versal-net
+- Correct indentation
+- Update to xlnx,versal-net-ddrmc5
+- Update the kconfig message
+- Make the messages uniform
+- Add some more supported events
+- rename regval to reglo
+- combine/ reformat functions
+- remove trailing comments
+- Remove unneeded comments
+- make the amd_mcdi function void
+- rename versalnet_rpmsg_edac to versalnet_edac
+- Remove the column bit and use them directly
+- Update the comments
+- Update the mod_name to versalnet_edac
+- remove the global priv col and rows
+- rename edac_priv to mc_priv
+- Update the comment description for dwidth
+- Remove error_id enum
+- rename the variable par to parity
+- make get_ddr_config void
+- Fix memory leak of the mcdi structure
+- Update the spelling
+- Remove the workqueue
 
-We're currently calling action_result() with MF_FAILED each time we encounter
-a poisoned page (note: the huge page path is a bit different, we only call
-action_result() with MF_FAILED when MF_ACTION_REQUIRED is set). That, IMO,
-breaks the descriptions. We already incremented the per NUMA node MF statistics
-to account for that poisoned page.
+Changes in v5:
+- Update the binding
+- Update the compatible
+- Update the handle_error documentation
 
-> > > > > > 
-> > > > > > All agreed.
-> > > > > > 
-> > > > > > > 
-> > > > > > > Do not call action_result() on already poisoned pages and drop unused
-> > > > > > > MF_MSG_ALREADY_POISONED.
-> > > > > > 
-> > > > > > Hi Kyle,
-> > > > > > 
-> > > > > > Patch looks great to me, just one thought...
-> > > 
-> > > Thanks both.
-> > > 
-> > > > > > 
-> > > > > > Alternatively, have you thought about keeping MF_MSG_ALREADY_POISONED
-> > > > > > but changing action_result for MF_MSG_ALREADY_POISONED?
-> > > > > > - don't num_poisoned_pages_inc(pfn)
-> > > > > > - don't update_per_node_mf_stats(pfn, result)
-> > > > > > - still pr_err("%#lx: recovery action for %s: %s\n", ...)
-> > > > > > - meanwhile remove "pr_err("%#lx: already hardware poisoned\n", pfn)"
-> > > > > > in memory_failure and try_memory_failure_hugetlb
-> > > > > 
-> > > > > I did consider that approach but I was concerned about passing
-> > > > > MF_MSG_ALREADY_POISONED to action_result() with MF_FAILED. The message is a
-> > > > > bit misleading.
-> > > > 
-> > > > Based on my reading the documentation for MF_* in static const char
-> > > > *action_name[]...
-> > > > 
-> > > > Yeah, for file mapped pages, kernel may not have hole-punched or
-> > > > truncated it from the file mapping (shmem and hugetlbfs for example)
-> > > > but that still considered as MF_RECOVERED, so touching a page with
-> > > > HWPoison flag doesn't mean that page was failed to be recovered
-> > > > previously.
-> > > > 
-> > > > For pages intended to be taken out of the buddy system, touching a
-> > > > page with HWPoison flag does imply it isn't isolated and hence
-> > > > MF_FAILED.
-> > > 
-> > > There should be other cases that memory_failure failed to isolate the
-> > > hwpoisoned pages at first time due to various reasons.
-> > > 
-> > > > 
-> > > > In summary, seeing the HWPoison flag again doesn't necessarily
-> > > > indicate what the recovery result was previously; it only indicate
-> > > > kernel won't re-attempt to recover?
-> > > 
-> > > Yes, kernel won't re-attempt to or just cannot recover.
-> > > 
-> > > > 
-> > > > > 
-> > > > > How about introducing a new MF action result? Maybe MF_NONE? The message could
-> > > > > look something like:
-> > > > 
-> > > > Adding MF_NONE sounds fine to me, as long as we correctly document its
-> > > > meaning, which can be subtle.
-> > > 
-> > > Adding a new MF action result sounds good to me. But IMHO MF_NONE might not be that suitable
-> > > as kill_accessing_process might be called to kill proc in this case, so it's not "NONE".
-> > 
-> > OK, would you like a separate MF action result for each case? Maybe
-> > MF_ALREADY_POISONED and MF_ALREADY_POISONED_KILLED?
-> > 
-> > MF_ALREADY_POISONED can be the default and MF_ALREADY_POISONED_KILLED can be
-> > used when kill_accessing_process() returns -EHWPOISON.
-> > 
-> > The log messages could look like...
-> > 
-> > Memory failure: 0xXXXXXXXX: recovery action for already poisoned page: None
-> > 	and
-> > Memory failure: 0xXXXXXXXX: recovery action for already poisoned page: Process killed
-> 
-> Agreed with Miaohe that "None" won't work.
+Changes in v4:
+- Update the compatible
+- align the example
+- Enhance the description for rproc
+- Update the compatible
 
-What action is M-F() taking to recover already poisoned pages that don't have
-MF_ACTION_REQUIRED set?
+Changes in v3:
+- make remove void
 
-> "Process killed" sounds okay for MF_MSG_ALREADY_POISONED, but
-> we need to understand why "Failed" doesn't work for your usecase.
-> "Failed" means process is killed but page is not successfully isolated which
-> applies to MF_MSG_ALREADY_POISONED case as well.
+Changes in v2:
+- Export the symbols for module compilation
+- New patch addition
+- rename EDAC to memory controller
+- update the compatible name
+- Add remote proc handle
+- Read the data width from the registers
+- Remove the dwidth, rank and channel number the same is
+read from the RpMsg.
+- remove reset
+- Add the remote proc requests
+- remove probe_once
+- reorder the rpmsg registration
+- the data width , rank and number of channel is read from message.
 
-So that accessing process is killed. Why call action_result() with MF_FAILED?
-Doesn't that indicate we poisoned another page and the recovery attempt failed?
+Shubhrajyoti Datta (5):
+  cdx: add the headers to include/linux
+  cdx: Export Symbols for MCDI RPC and Initialization
+  ras: Export log_non_standard_event for External Usage
+  dt-bindings: memory-controllers: Add support for Versal NET EDAC
+  EDAC/VersalNET: Add support for error notification
 
-Thanks,
-Kyle Meyer
+ .../xlnx,versal-net-ddrmc5.yaml               |   41 +
+ MAINTAINERS                                   |    7 +
+ drivers/cdx/controller/cdx_controller.c       |    2 +-
+ drivers/cdx/controller/cdx_rpmsg.c            |    2 +-
+ drivers/cdx/controller/mcdi.c                 |   34 +-
+ drivers/cdx/controller/mcdi_functions.c       |    1 -
+ drivers/cdx/controller/mcdi_functions.h       |    3 +-
+ drivers/cdx/controller/mcdid.h                |   65 +
+ drivers/edac/Kconfig                          |   11 +
+ drivers/edac/Makefile                         |    1 +
+ drivers/edac/versalnet_edac.c                 | 1077 +++++++++++++++++
+ drivers/ras/ras.c                             |    1 +
+ .../linux/cdx}/bitfield.h                     |    0
+ include/linux/cdx/edac_cdx_pcol.h             |   28 +
+ .../controller => include/linux/cdx}/mcdi.h   |   46 +-
+ 15 files changed, 1268 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,versal-net-ddrmc5.yaml
+ create mode 100644 drivers/cdx/controller/mcdid.h
+ create mode 100644 drivers/edac/versalnet_edac.c
+ rename {drivers/cdx/controller => include/linux/cdx}/bitfield.h (100%)
+ create mode 100644 include/linux/cdx/edac_cdx_pcol.h
+ rename {drivers/cdx/controller => include/linux/cdx}/mcdi.h (78%)
+
+-- 
+2.34.1
+
 
