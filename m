@@ -1,82 +1,82 @@
-Return-Path: <linux-edac+bounces-4683-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4684-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79BB5B35355
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19FBB35359
 	for <lists+linux-edac@lfdr.de>; Tue, 26 Aug 2025 07:30:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B805418848DD
-	for <lists+linux-edac@lfdr.de>; Tue, 26 Aug 2025 05:30:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2DB13A1315
+	for <lists+linux-edac@lfdr.de>; Tue, 26 Aug 2025 05:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7B972EE617;
-	Tue, 26 Aug 2025 05:29:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A974D2EFDB9;
+	Tue, 26 Aug 2025 05:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lib5ty22"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SH7eaYTX"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2059.outbound.protection.outlook.com [40.107.243.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71E82EDD41;
-	Tue, 26 Aug 2025 05:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5922EE29F;
+	Tue, 26 Aug 2025 05:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.59
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756186174; cv=fail; b=W7YjqBgErY0eNPGH+depu3AFZ9geVqwx67Eejo3BKzYXI8BL2HiM4Qi7N9RQLiNVrEQeISMkLD75OvslPHK84N1ndrZzMJbx9tNtzD6sacZt6p5geUENyTvbxvIP4+ImARPKEOGhWqV+J2jU2VulIcMkpE/rsJoVWRHt6y6mTSw=
+	t=1756186175; cv=fail; b=Rhs+T+iDJJ9sJ1heQjuF14zMVp2hW1G6fityeeQKjTj3+NiNWyny0j3QipD7tLA02mLmeBgDOuCXqiWl4tALtKUkmrwgiSsVkIFNDEOIONVW5ZNLKeY6BP4B2MYvNqgxlMHnmDZ2yU0xnaCZP9yxaeA/tjX5pFw8nf3sp4l26EM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756186174; c=relaxed/simple;
-	bh=vgtoPmVrZEI+pgB+/CXDBNmSS+aiW0KMxgFvYvyoEqY=;
+	s=arc-20240116; t=1756186175; c=relaxed/simple;
+	bh=BedOt79+PW6QxRT0a2r83zG0BciGBldYa/9lcLTECJ4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mb1UMEAIA/Yv9Ct/Qv5pAlL8r0QqkV0+LIGA9CLzkH+fgitJUmfv5UtS0TqR1z4pb++YTi8q1NKmvPWxM6kpsZB9ygsX22cx2Qe44wmZ2/l9UZ5DxvN3yaZ4i2qOKh3ih3J2n51eA6XE3GWTy2AfF7D0Dxs5yrt6I/1mnSxdcKs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lib5ty22; arc=fail smtp.client-ip=40.107.223.83
+	 MIME-Version:Content-Type; b=WijnqFap6qqgTt8xxkid2ezjx6S/ChcZL2gJ8UTYw6k+AhbpYNg8DuZrvbxL0eyASGpPo6r7BT3DToarbv2zIlLK07Cyssvt/dGvYyB1JpMmQpaeHA0ASr0LZgs1XC+SM4+VbuoxwQG5yi6n9AWqifP/z2sOPSyRf5jhAfJd6MM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SH7eaYTX; arc=fail smtp.client-ip=40.107.243.59
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qtQ7HxXPhXllJYSuhQY5QCosXTmi7BGlWiiBYmIV1sKf4aDFy68CqlllKmqNJ0g726IdlgH/DWus4oYQZGIpU2utFsipmtzUteNhIfvC4dwh6B7NxNtMQ8TQhKo6A/iepjb50EY9gFDrOLsFYzuOjyhgQHok117O+K55i+qiRrS80Shd6gv4mBepYyRboeONwo16W7lnShKeeJvPCuM4vhBvWOWfdO6Z5v4U35AUMWemmAOE4PFeFuXF9SXyz09B4kxhFFAfmImp9S9jcuFq9vQ60elKwXirchulwlqd4QwKLIYy1JozB0FJABCDjQ+LENsNmkri6l1B3VNoo7f8Hw==
+ b=nOkNK6wXvnTm20XxNgY96a13+7V/nKNmo53rpMD0kCjAFPtVKxk+gfz1SAxyLUibGPZVWPKc1hZvMALkwxpOLw5YL3ma/L3kyTOeZKZQeqmdXpERKd0yAqX0xyk8QTeZ+x6nNbt3m9jZU6Ad7Fow9quwG7+qSrt9NF6itsU7fKcurxErS8zJqEb3QKTlfI/IbP2q2yvVp6LWw0oFCenqjbo9cut38FPjP3Bt8w7mQWPSM36nJuX6wBcZzA9zoFVT8vrg39+EZL5aFjiDoWjURSfhAux/hZFZ0Agj2tmDWXuIeAQOK2roJmRYZtXHBm4VtBFnX+PjOCL9QRq2GQlHLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TseDBIMvYxHmGVLVQZnL2dYNeyEHNNzCPU2zzTRJyhM=;
- b=Now5Lgxv1xy6Cy6ZEbSRLWea8f8ZZU4NnQd/tkyIWzm4giAOoY8QVYO8J7plnNmZr3kh/kgU5OGyUcVkoVtMfRvkZaEwFVTpH3RtaWLV537mlodm2r4WOsehdT/ano0je/dR0teJjGJijRz17DzdCy+na8q/yUxtZEOFWo38oPBVqlvwOq/Bvjk5qbvth3wDdJ4qjbSCehNIxTQlaETA2YKGmLqfuciYHVQmiAxZ8LZIKvRMQGbPVFCau1p2JKjOjYaEVDNOIsZlUvrKDIy2xme1POHa3I9v1NevhXXiEP0eVqAo6ijuHZuGN5eEayNu0QYrUZSVhefU7OGbzwgHPg==
+ bh=Fao3+upMfuKUn7A1BBpx/0/uQ2/CPeUVXV+AjUc+vcM=;
+ b=lUb8OyHZ8Hx8ux7gJUQW+sxA3UycNxCAxYRDFYP79npZsHYyKNo0zKM5qXwcB00waDw4etqZ/NHkIDseJVIGYuD9UZJHrtOfYZREgQEjKyeyuLQq7GS19yPlfmicPMFo9jD6ibHeBlWdgpmtBRpT6mJTeDscFeNbziH6fwhXQZ+ChnRBdf1oyT5tY8nB/6na5rO2yUGjC4RoLR1rYyJAPZgsK5BKKz0fralhXP8C8doQ93c3r97U/8WZFYy9THl89vAOLqF7A11r71Gf9RuDdoiFPWFsccA3FYDj0vEcf3DBQaf0YWH4V0IxnACfuLRbEJBlBcKs5yJHm/4YwLHRFA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TseDBIMvYxHmGVLVQZnL2dYNeyEHNNzCPU2zzTRJyhM=;
- b=lib5ty22ViF/m8FBwlLVUizjSvKxnDJXZM0jM0LxuY7hDoHYZOtM05byfXW5Xk5kQhqCxAbVuhUsqlkFaCjeJwqVW/gfUBIpBKi+nsJ4h/w699+eJJJg8dPkkb1m+s/VIbQKWyRqdM+DZqApXFGrbg49tgJ/s9DvYSlrSe3Qh14=
-Received: from BN9PR03CA0955.namprd03.prod.outlook.com (2603:10b6:408:108::30)
- by SA5PPFAB8DFE4E8.namprd12.prod.outlook.com (2603:10b6:80f:fc04::8db) with
+ bh=Fao3+upMfuKUn7A1BBpx/0/uQ2/CPeUVXV+AjUc+vcM=;
+ b=SH7eaYTXff9A4cuJURgtlgiY1hA8rJE6y5aK8uer9TESsCBiOv28ch09RVUKjQa5HVnPqn1egu+SLTLgVMKkQdxJMKcIHAwPMDGHYpU+L2/O2QJaJ5sqQ29PWUVnKSGHhpCh9StenYLP9YP4IJ35HeJ/RX/7YxZSUiY03Fq3Qz4=
+Received: from DS7PR03CA0171.namprd03.prod.outlook.com (2603:10b6:5:3b2::26)
+ by SN7PR12MB8132.namprd12.prod.outlook.com (2603:10b6:806:321::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.19; Tue, 26 Aug
- 2025 05:29:25 +0000
-Received: from MN1PEPF0000F0DF.namprd04.prod.outlook.com
- (2603:10b6:408:108:cafe::57) by BN9PR03CA0955.outlook.office365.com
- (2603:10b6:408:108::30) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.19 via Frontend Transport; Tue,
- 26 Aug 2025 05:29:25 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.20; Tue, 26 Aug
+ 2025 05:29:30 +0000
+Received: from DS3PEPF000099E0.namprd04.prod.outlook.com
+ (2603:10b6:5:3b2:cafe::24) by DS7PR03CA0171.outlook.office365.com
+ (2603:10b6:5:3b2::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.21 via Frontend Transport; Tue,
+ 26 Aug 2025 05:29:30 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MN1PEPF0000F0DF.mail.protection.outlook.com (10.167.242.37) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DS3PEPF000099E0.mail.protection.outlook.com (10.167.17.203) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9073.11 via Frontend Transport; Tue, 26 Aug 2025 05:29:25 +0000
-Received: from Satlexmb09.amd.com (10.181.42.218) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9073.11 via Frontend Transport; Tue, 26 Aug 2025 05:29:30 +0000
+Received: from Satlexmb09.amd.com (10.181.42.218) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 26 Aug
- 2025 00:29:24 -0500
+ 2025 00:29:29 -0500
 Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb09.amd.com
  (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Mon, 25 Aug
- 2025 22:29:24 -0700
+ 2025 22:29:28 -0700
 Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 26 Aug 2025 00:29:19 -0500
+ Transport; Tue, 26 Aug 2025 00:29:24 -0500
 From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 To: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linux-edac@vger.kernel.org>
@@ -88,9 +88,9 @@ CC: <git@amd.com>, <ptsm@linux.microsoft.com>, <srivatsa@csail.mit.edu>,
 	<james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Robert
  Richter" <rric@kernel.org>, Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal
 	<nikhil.agarwal@amd.com>
-Subject: [PATCH v8 1/5] cdx: add the headers to include/linux
-Date: Tue, 26 Aug 2025 10:59:10 +0530
-Message-ID: <20250826052914.2066884-2-shubhrajyoti.datta@amd.com>
+Subject: [PATCH v8 2/5] cdx: Export Symbols for MCDI RPC and Initialization
+Date: Tue, 26 Aug 2025 10:59:11 +0530
+Message-ID: <20250826052914.2066884-3-shubhrajyoti.datta@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250826052914.2066884-1-shubhrajyoti.datta@amd.com>
 References: <20250826052914.2066884-1-shubhrajyoti.datta@amd.com>
@@ -104,323 +104,163 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0DF:EE_|SA5PPFAB8DFE4E8:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69daa101-afe9-4cbf-9b7c-08dde4618522
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099E0:EE_|SN7PR12MB8132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62284627-eb56-43bc-8daf-08dde461881f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|7416014|82310400026|1800799024;
+	BCL:0;ARA:13230040|7416014|376014|1800799024|36860700013|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Z+GxJG+Qj75t8y+riTE6inaK0SdxApsmrf6/hNYNAqln6Shznxs+YuspByD9?=
- =?us-ascii?Q?AyU+kecdiK59OdljF15Bg4pq960mmhMOnRUuTqWeyAAsPmP70mRvyqbxmoE4?=
- =?us-ascii?Q?bqJ6GMRAF+VEPoGACe/SFoTDBqDHCadaRPsd9g5fwS21w/cXddqsdErUedV4?=
- =?us-ascii?Q?dazpoWXUxMwg0heZeICb4f0900+oiasVJZ312Avtl7le/t/cbSzORV3xwpgw?=
- =?us-ascii?Q?n4AdgF7ysdqJNo0VpjT+a8ra8XlWDhOWMAVfcykUGrrZo6vowLII94zgvvs5?=
- =?us-ascii?Q?34+ZVniWrFMfEu17wsND8QHiRt7kfiN7mZFlOIik7+HwgSXVjGDXXZJwva6+?=
- =?us-ascii?Q?oJVk4Dn2ypfRXp2lpbdpGRQhxhgeOwmMOF7McSSn+9LvGLUgDQQpHXsrOPX7?=
- =?us-ascii?Q?20QRpEPSTLJBPdWb+cf7cOLGQIJZtZQeNQf1iDXLgHOY7iD426+inYtTD0vQ?=
- =?us-ascii?Q?ijLDBT3g3ZQCPN+aEB6Sky5fYoT5c8XK8+qiL7MuHpNH0NVeLC91N8NRMs7z?=
- =?us-ascii?Q?7ooGJSMNHzlqEGvI+4/L2m/3uhaMmS3L1/3fOZH2xRyOqo4c0uvaul5z/Xnb?=
- =?us-ascii?Q?DigM7wjt1Z4IJ4uFCKenOD8E519Acij6FUs4zT2TQNQSwT196bXkUj1cwbtY?=
- =?us-ascii?Q?0h/lQGllibplgaQPNHAP0dKaIFNF1yPu7d2kGjnQSlSBgi25OG1WYaFPgVmC?=
- =?us-ascii?Q?GeBxvQWlv9PjHfPZZQQEs86a4Mfp0upVAHsuLUgYqnHoP3YWfiGyO8k1qc2W?=
- =?us-ascii?Q?7gjXWJrKnpLlu9aGv4qMQIHIDTD6eOiaEVJKTJDVwqfH8vyagWT1ynflzRRI?=
- =?us-ascii?Q?s+yQE2Ybcy8Si3SmuWy9PSoGOLy+Jc8eHm4OHBsAd8kx1S7jkWU+YwEKIxrI?=
- =?us-ascii?Q?APUEoZsMiCoVqnMqkBeZJLPXEd8bYw5MtS9/l/q+ACbAgY3jjU9KIdZAIi5c?=
- =?us-ascii?Q?f2uJNOuJyAaVPpulb51G3WyCx3aXlmpE0fws96uqGSu+LCEGRaHDZ//oI+fJ?=
- =?us-ascii?Q?84blHksoPho76ErzY06osy7bxrk4M9k0zhH14werBGGMfPANNsDGgwNmWbgf?=
- =?us-ascii?Q?mUci9/b52lVwB++bZ+dNimciAlckse0gHN6apYT18ehvaajYuClKheiQ7uta?=
- =?us-ascii?Q?BGxtzq4YxN3KmJrZGu7C//zXRZzWI1Dd+18Y9nbnGXC46cRYB63JArn9M8Yq?=
- =?us-ascii?Q?y1t0+Lma2Ai8xQu1FJnDh2zJTOP7y+yPdVdySfcBCuxZuiuoEWPGWfh1+YV7?=
- =?us-ascii?Q?13BqlLlTXShrTOHjkovsxFFUW7w5BsMHPYbPOF4kdtYbZwl0b/J9oiMaltbu?=
- =?us-ascii?Q?HaNv2ay4K6m7tea4v9fZe8SIHhtd1wZed54qZ5EUE1ZgX+0mV7wvXQDueVTh?=
- =?us-ascii?Q?VOAaE7MSp7eHGm8/Xv/SMjogquiU7CMYu0nJB+TWOtWL4+JBoxZ8swIrcqRQ?=
- =?us-ascii?Q?73d2qcn07OUffdf8bFJYLuNJrihNo21nD5VsXsvYdlEyJ2RHjS8xF+d2kxMl?=
- =?us-ascii?Q?rKA00fqeNJty2a7BZpXAWSjzdPXcTa/KzlSQ?=
+	=?us-ascii?Q?hWxWlmugQ3MHGkXBpbQTqEiQLW+W+7utJ1942qFVZR28bmoxJbc+BugsqL2s?=
+ =?us-ascii?Q?GaCIr1Fp9CWpcq23btdmwia/mhxLR7btg57UdSNlfqpy0EMIZt0wpZcLvYYW?=
+ =?us-ascii?Q?7Nh9aEufKYWEsJkd5Xc7PoAyO5fsQQVKSSQwwTAN+lOi0Q4QTk+tObqLF07P?=
+ =?us-ascii?Q?m8/0J40O8DwuuNaUlwkrOMuctf2dJnuHL5SOUpBjSTwiQCTqY+0a7x5qBZBP?=
+ =?us-ascii?Q?D0fH3qbxHjxpt/AQXX75MXICtak3k0qGo8/RWCoe3bkRluAa7upK19avaEry?=
+ =?us-ascii?Q?HHZ6qjHOLeY71NuIki7qBiE/Kodte1HtYVe0qqjIhgo+9OqztOJvP5Qb71dU?=
+ =?us-ascii?Q?XsY8NJ+r7Cslov4//LezhH6ySSK9T3w9Kjyh1ruwn/3rADIbxDjKWngEbbNE?=
+ =?us-ascii?Q?76UrbfG8lKFTIMi9Kg/9aQql+A6G4yb2X7rBjLkL1p2VLYYz55I8U16za8RI?=
+ =?us-ascii?Q?DpNde8amEDvLb3qWJkZYi9HjwR7xV9h6BYmXiUknSuHyCOyoCn3iA5vyRTif?=
+ =?us-ascii?Q?fRt59iqEbFosN8c8OKg59r4M/4LW0bu9rSPuZoaAKFLRVRClU2tbkbleuFHk?=
+ =?us-ascii?Q?Dv8mNYtmY5edwpDD9eNZ77bctsrCQpdejIsx87TW83eWKipQPuNS9F3TJon4?=
+ =?us-ascii?Q?+FAMtS/S/TgNS6pCaAAKREOQb25OPwEJLWW1fCAc+C4J2APtXHpNsnO0kW9T?=
+ =?us-ascii?Q?YmVQm/KPsu5dp0pSjZyPC6d8+fNETA8OisfsNnIueG6jsBF4pWqB88SuvnMW?=
+ =?us-ascii?Q?UBiUW8jEAKs1lMWFSJASdBktEIk7ZfXqF9ySR7HLbLZ1/KvMTwTnuysSehmo?=
+ =?us-ascii?Q?fwafXmzu31jbaSkNnpGQQle9GJcOHVrDdfKEFypE1ZevapjB+M+/bHIFpmno?=
+ =?us-ascii?Q?BkrLqPtbKlziPEo29u1YVfuh/esbDhgsMXYBjvl+qNPd3rxWe4OAGIctO2Pe?=
+ =?us-ascii?Q?i9RXZLQATMF+rqwJ6jspESuQLztO2Kxkpxm14qVWq1ZEJfjt3krmnxjK3dCZ?=
+ =?us-ascii?Q?E7G9aoenzmerkCKuzOe7ZZJp/ga9GKmbXSW056/A343Gs+FBSCCGJJ3Y6uyF?=
+ =?us-ascii?Q?p+zqs85EkiztG3TjEiJfRp24m9vFK/UZ2XLETLbQ1yo1LOd0w81rfgA9drx1?=
+ =?us-ascii?Q?wNh7GLFj35B5ZgzUmEZFu+BFrOS5R5OSn8KhAmzNW5kcLo8eq/9xjbAXzCn5?=
+ =?us-ascii?Q?qIogIDkfcJKpCq4biS2ZO1s0s9CcEsJzg7NlpamoSr8qK2uzFLMOanuzmWap?=
+ =?us-ascii?Q?nccftTdwbXuRSnmTQvm/2143MwcvqkcIjUFLpyuVsFKx1gKZUPHBdldSTb6L?=
+ =?us-ascii?Q?6QH5MCQb367hYPKx10WttgHdCSQFnwcIfHYNDI4lcOgiJ+s5Xz5IHdpO9qnK?=
+ =?us-ascii?Q?QRSZL0PAYEu1KyacUWert4iLqcsVogPzUOtwOZH6vjpgmM/W5hpvjWF/Se4p?=
+ =?us-ascii?Q?J2E5mTj1Ts7dyMB0wbXlQ080lXYrffhGvh7aywuTIwTXo3bI5JQaa3dxjyeo?=
+ =?us-ascii?Q?6yNx6N53CxgAtecz5F0CdoLEwgioZErrBSUq?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2025 05:29:25.2639
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2025 05:29:30.2394
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69daa101-afe9-4cbf-9b7c-08dde4618522
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62284627-eb56-43bc-8daf-08dde461881f
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000F0DF.namprd04.prod.outlook.com
+	DS3PEPF000099E0.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA5PPFAB8DFE4E8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8132
 
-Move `bitfield.h` from the CDX controller directory to
-`include/linux/cdx` to make them accessible to other drivers.
-
-As part of this refactoring, `mcdi.h` has been split into two headers:
-- `mcdi.h`: retains interface-level declarations
-- `mcdid.h`: contains internal definitions and macros
-
-This is in preparation for VersalNET EDAC
-driver that relies on it.
+The cdx_mcdi_init, cdx_mcdi_process_cmd, and cdx_mcdi_rpc functions are
+needed by VersalNET EDAC modules that interact with the MCDI (Management
+Controller Direct Interface) framework. These functions facilitate
+communication between different hardware components by enabling command
+execution and status management.
 
 Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 ---
 
-Changes in v8:
-- Split `mcdi.h` into `mcdi.h` and `mcdid.h`
-- Removed common code from CDX headers
-- Used refactored versions from shared location
+(no changes since v7)
 
 Changes in v7:
-- add a minimal header instead moving them
+- Add the kernel doc description
+- Add the prototype from first patch to here
 
 Changes in v6:
- - Patch added
+- Update commit description
 
- drivers/cdx/controller/cdx_controller.c       |  2 +-
- drivers/cdx/controller/cdx_rpmsg.c            |  2 +-
- drivers/cdx/controller/mcdi.c                 |  5 +-
- drivers/cdx/controller/mcdi_functions.c       |  1 -
- drivers/cdx/controller/mcdi_functions.h       |  3 +-
- drivers/cdx/controller/mcdid.h                | 65 +++++++++++++++++++
- .../linux/cdx}/bitfield.h                     |  0
- .../controller => include/linux/cdx}/mcdi.h   | 52 +--------------
- 8 files changed, 73 insertions(+), 57 deletions(-)
- create mode 100644 drivers/cdx/controller/mcdid.h
- rename {drivers/cdx/controller => include/linux/cdx}/bitfield.h (100%)
- rename {drivers/cdx/controller => include/linux/cdx}/mcdi.h (74%)
+Changes in v2:
+- Export the symbols for module compilation
 
-diff --git a/drivers/cdx/controller/cdx_controller.c b/drivers/cdx/controller/cdx_controller.c
-index d623f9c7517a..e943cec09fab 100644
---- a/drivers/cdx/controller/cdx_controller.c
-+++ b/drivers/cdx/controller/cdx_controller.c
-@@ -14,7 +14,7 @@
- #include "cdx_controller.h"
- #include "../cdx.h"
- #include "mcdi_functions.h"
--#include "mcdi.h"
-+#include "mcdid.h"
- 
- static unsigned int cdx_mcdi_rpc_timeout(struct cdx_mcdi *cdx, unsigned int cmd)
- {
-diff --git a/drivers/cdx/controller/cdx_rpmsg.c b/drivers/cdx/controller/cdx_rpmsg.c
-index 04b578a0be17..d4f763323aac 100644
---- a/drivers/cdx/controller/cdx_rpmsg.c
-+++ b/drivers/cdx/controller/cdx_rpmsg.c
-@@ -15,7 +15,7 @@
- #include "../cdx.h"
- #include "cdx_controller.h"
- #include "mcdi_functions.h"
--#include "mcdi.h"
-+#include "mcdid.h"
- 
- static struct rpmsg_device_id cdx_rpmsg_id_table[] = {
- 	{ .name = "mcdi_ipc" },
+ drivers/cdx/controller/mcdi.c | 29 +++++++++++++++++++++++++++++
+ include/linux/cdx/mcdi.h      |  6 ++++++
+ 2 files changed, 35 insertions(+)
+
 diff --git a/drivers/cdx/controller/mcdi.c b/drivers/cdx/controller/mcdi.c
-index e760f8d347cc..90bf9f7c257b 100644
+index 90bf9f7c257b..6f52d8dac907 100644
 --- a/drivers/cdx/controller/mcdi.c
 +++ b/drivers/cdx/controller/mcdi.c
-@@ -23,9 +23,10 @@
- #include <linux/log2.h>
- #include <linux/net_tstamp.h>
- #include <linux/wait.h>
-+#include <linux/cdx/bitfield.h>
+@@ -100,6 +100,19 @@ static unsigned long cdx_mcdi_rpc_timeout(struct cdx_mcdi *cdx, unsigned int cmd
+ 		return cdx->mcdi_ops->mcdi_rpc_timeout(cdx, cmd);
+ }
  
--#include "bitfield.h"
--#include "mcdi.h"
-+#include <linux/cdx/mcdi.h>
-+#include "mcdid.h"
- 
- static void cdx_mcdi_cancel_cmd(struct cdx_mcdi *cdx, struct cdx_mcdi_cmd *cmd);
- static void cdx_mcdi_wait_for_cleanup(struct cdx_mcdi *cdx);
-diff --git a/drivers/cdx/controller/mcdi_functions.c b/drivers/cdx/controller/mcdi_functions.c
-index 885c69e6ebe5..8ae2d99be81e 100644
---- a/drivers/cdx/controller/mcdi_functions.c
-+++ b/drivers/cdx/controller/mcdi_functions.c
-@@ -5,7 +5,6 @@
- 
- #include <linux/module.h>
- 
--#include "mcdi.h"
- #include "mcdi_functions.h"
- 
- int cdx_mcdi_get_num_buses(struct cdx_mcdi *cdx)
-diff --git a/drivers/cdx/controller/mcdi_functions.h b/drivers/cdx/controller/mcdi_functions.h
-index b9942affdc6b..57fd1bae706b 100644
---- a/drivers/cdx/controller/mcdi_functions.h
-+++ b/drivers/cdx/controller/mcdi_functions.h
-@@ -8,7 +8,8 @@
- #ifndef CDX_MCDI_FUNCTIONS_H
- #define CDX_MCDI_FUNCTIONS_H
- 
--#include "mcdi.h"
-+#include <linux/cdx/mcdi.h>
-+#include "mcdid.h"
- #include "../cdx.h"
- 
- /**
-diff --git a/drivers/cdx/controller/mcdid.h b/drivers/cdx/controller/mcdid.h
-new file mode 100644
-index 000000000000..5014b04ed710
---- /dev/null
-+++ b/drivers/cdx/controller/mcdid.h
-@@ -0,0 +1,65 @@
-+/* SPDX-License-Identifier: GPL-2.0
++/**
++ * cdx_mcdi_init - Initialize MCDI (Management Controller Driver Interface) state
++ * @cdx: NIC through which to issue the command
 + *
-+ * Copyright 2008-2013 Solarflare Communications Inc.
-+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
++ * This function allocates and initializes internal MCDI structures and resources
++ * for the CDX device, including the workqueue, locking primitives, and command
++ * tracking mechanisms. It sets the initial operating mode and prepares the device
++ * for MCDI operations.
++ *
++ * Return:
++ * * 0        - on success
++ * * -ENOMEM  - if memory allocation or workqueue creation fails
 + */
-+
-+#ifndef CDX_MCDID_H
-+#define CDX_MCDID_H
-+
-+#include <linux/mutex.h>
-+#include <linux/kref.h>
-+#include <linux/rpmsg.h>
-+
-+#include "mc_cdx_pcol.h"
-+
-+#ifdef DEBUG
-+#define CDX_WARN_ON_ONCE_PARANOID(x) WARN_ON_ONCE(x)
-+#define CDX_WARN_ON_PARANOID(x) WARN_ON(x)
-+#else
-+#define CDX_WARN_ON_ONCE_PARANOID(x) do {} while (0)
-+#define CDX_WARN_ON_PARANOID(x) do {} while (0)
-+#endif
-+
-+#define MCDI_BUF_LEN (8 + MCDI_CTL_SDU_LEN_MAX)
-+
-+static inline struct cdx_mcdi_iface *cdx_mcdi_if(struct cdx_mcdi *cdx)
-+{
-+	return cdx->mcdi ? &cdx->mcdi->iface : NULL;
-+}
-+
-+void cdx_mcdi_finish(struct cdx_mcdi *cdx);
-+
-+int cdx_mcdi_rpc_async(struct cdx_mcdi *cdx, unsigned int cmd,
-+		       const struct cdx_dword *inbuf, size_t inlen,
-+		       cdx_mcdi_async_completer *complete,
-+		       unsigned long cookie);
-+int cdx_mcdi_wait_for_quiescence(struct cdx_mcdi *cdx,
-+				 unsigned int timeout_jiffies);
-+
-+/*
-+ * We expect that 16- and 32-bit fields in MCDI requests and responses
-+ * are appropriately aligned, but 64-bit fields are only
-+ * 32-bit-aligned.
+ int cdx_mcdi_init(struct cdx_mcdi *cdx)
+ {
+ 	struct cdx_mcdi_iface *mcdi;
+@@ -129,6 +142,7 @@ int cdx_mcdi_init(struct cdx_mcdi *cdx)
+ fail:
+ 	return rc;
+ }
++EXPORT_SYMBOL_GPL(cdx_mcdi_init);
+ 
+ void cdx_mcdi_finish(struct cdx_mcdi *cdx)
+ {
+@@ -554,6 +568,19 @@ static void cdx_mcdi_start_or_queue(struct cdx_mcdi_iface *mcdi,
+ 			cdx_mcdi_cmd_start_or_queue(mcdi, cmd);
+ }
+ 
++/**
++ * cdx_mcdi_process_cmd - Process an incoming MCDI response
++ * @cdx: NIC through which to issue the command
++ * @outbuf:  Pointer to the response buffer received from the management controller
++ * @len:     Length of the response buffer in bytes
++ *
++ * This function handles a response from the management controller. It locates the
++ * corresponding command using the sequence number embedded in the header,
++ * completes the command if it is still pending, and initiates any necessary cleanup.
++ *
++ * The function assumes that the response buffer is well-formed and at least one
++ * dword in size.
 + */
-+#define MCDI_BYTE(_buf, _field)						\
-+	((void)BUILD_BUG_ON_ZERO(MC_CMD_ ## _field ## _LEN != 1),	\
-+	 *MCDI_PTR(_buf, _field))
-+#define MCDI_WORD(_buf, _field)						\
-+	((void)BUILD_BUG_ON_ZERO(MC_CMD_ ## _field ## _LEN != 2),	\
-+	 le16_to_cpu(*(__force const __le16 *)MCDI_PTR(_buf, _field)))
-+#define MCDI_POPULATE_DWORD_1(_buf, _field, _name1, _value1)		\
-+	CDX_POPULATE_DWORD_1(*_MCDI_DWORD(_buf, _field),		\
-+			     MC_CMD_ ## _name1, _value1)
-+#define MCDI_SET_QWORD(_buf, _field, _value)				\
-+	do {								\
-+		CDX_POPULATE_DWORD_1(_MCDI_DWORD(_buf, _field)[0],	\
-+				     CDX_DWORD, (u32)(_value));	\
-+		CDX_POPULATE_DWORD_1(_MCDI_DWORD(_buf, _field)[1],	\
-+				     CDX_DWORD, (u64)(_value) >> 32);	\
-+	} while (0)
-+#define MCDI_QWORD(_buf, _field)					\
-+	(CDX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[0], CDX_DWORD) |	\
-+	(u64)CDX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[1], CDX_DWORD) << 32)
-+
-+#endif /* CDX_MCDID_H */
-diff --git a/drivers/cdx/controller/bitfield.h b/include/linux/cdx/bitfield.h
-similarity index 100%
-rename from drivers/cdx/controller/bitfield.h
-rename to include/linux/cdx/bitfield.h
-diff --git a/drivers/cdx/controller/mcdi.h b/include/linux/cdx/mcdi.h
-similarity index 74%
-rename from drivers/cdx/controller/mcdi.h
-rename to include/linux/cdx/mcdi.h
-index 54a65e9760ae..46e3f63b062a 100644
---- a/drivers/cdx/controller/mcdi.h
+ void cdx_mcdi_process_cmd(struct cdx_mcdi *cdx, struct cdx_dword *outbuf, int len)
+ {
+ 	struct cdx_mcdi_iface *mcdi;
+@@ -591,6 +618,7 @@ void cdx_mcdi_process_cmd(struct cdx_mcdi *cdx, struct cdx_dword *outbuf, int le
+ 
+ 	cdx_mcdi_process_cleanup_list(mcdi->cdx, &cleanup_list);
+ }
++EXPORT_SYMBOL_GPL(cdx_mcdi_process_cmd);
+ 
+ static void cdx_mcdi_cmd_work(struct work_struct *context)
+ {
+@@ -758,6 +786,7 @@ int cdx_mcdi_rpc(struct cdx_mcdi *cdx, unsigned int cmd,
+ 	return cdx_mcdi_rpc_sync(cdx, cmd, inbuf, inlen, outbuf, outlen,
+ 				 outlen_actual, false);
+ }
++EXPORT_SYMBOL_GPL(cdx_mcdi_rpc);
+ 
+ /**
+  * cdx_mcdi_rpc_async - Schedule an MCDI command to run asynchronously
+diff --git a/include/linux/cdx/mcdi.h b/include/linux/cdx/mcdi.h
+index 46e3f63b062a..1344119e9a2c 100644
+--- a/include/linux/cdx/mcdi.h
 +++ b/include/linux/cdx/mcdi.h
-@@ -11,16 +11,7 @@
- #include <linux/kref.h>
- #include <linux/rpmsg.h>
- 
--#include "bitfield.h"
--#include "mc_cdx_pcol.h"
--
--#ifdef DEBUG
--#define CDX_WARN_ON_ONCE_PARANOID(x) WARN_ON_ONCE(x)
--#define CDX_WARN_ON_PARANOID(x) WARN_ON(x)
--#else
--#define CDX_WARN_ON_ONCE_PARANOID(x) do {} while (0)
--#define CDX_WARN_ON_PARANOID(x) do {} while (0)
--#endif
-+#include "linux/cdx/bitfield.h"
- 
- /**
-  * enum cdx_mcdi_mode - MCDI transaction mode
-@@ -36,8 +27,6 @@ enum cdx_mcdi_mode {
- #define MCDI_RPC_LONG_TIMEOU	(60 * HZ)
- #define MCDI_RPC_POST_RST_TIME	(10 * HZ)
- 
--#define MCDI_BUF_LEN (8 + MCDI_CTL_SDU_LEN_MAX)
--
- /**
-  * enum cdx_mcdi_cmd_state - State for an individual MCDI command
-  * @MCDI_STATE_QUEUED: Command not started and is waiting to run.
-@@ -180,25 +169,6 @@ struct cdx_mcdi_data {
+@@ -169,6 +169,12 @@ struct cdx_mcdi_data {
  	u32 fn_flags;
  };
  
--static inline struct cdx_mcdi_iface *cdx_mcdi_if(struct cdx_mcdi *cdx)
--{
--	return cdx->mcdi ? &cdx->mcdi->iface : NULL;
--}
--
--int cdx_mcdi_init(struct cdx_mcdi *cdx);
--void cdx_mcdi_finish(struct cdx_mcdi *cdx);
--
--void cdx_mcdi_process_cmd(struct cdx_mcdi *cdx, struct cdx_dword *outbuf, int len);
--int cdx_mcdi_rpc(struct cdx_mcdi *cdx, unsigned int cmd,
--		 const struct cdx_dword *inbuf, size_t inlen,
--		 struct cdx_dword *outbuf, size_t outlen, size_t *outlen_actual);
--int cdx_mcdi_rpc_async(struct cdx_mcdi *cdx, unsigned int cmd,
--		       const struct cdx_dword *inbuf, size_t inlen,
--		       cdx_mcdi_async_completer *complete,
--		       unsigned long cookie);
--int cdx_mcdi_wait_for_quiescence(struct cdx_mcdi *cdx,
--				 unsigned int timeout_jiffies);
--
++int cdx_mcdi_init(struct cdx_mcdi *cdx);
++void cdx_mcdi_process_cmd(struct cdx_mcdi *cdx, struct cdx_dword *outbuf, int len);
++int cdx_mcdi_rpc(struct cdx_mcdi *cdx, unsigned int cmd,
++		 const struct cdx_dword *inbuf, size_t inlen,
++		 struct cdx_dword *outbuf, size_t outlen, size_t *outlen_actual);
++
  /*
   * We expect that 16- and 32-bit fields in MCDI requests and responses
   * are appropriately aligned, but 64-bit fields are only
-@@ -215,28 +185,8 @@ int cdx_mcdi_wait_for_quiescence(struct cdx_mcdi *cdx,
- #define _MCDI_DWORD(_buf, _field)					\
- 	((_buf) + (_MCDI_CHECK_ALIGN(MC_CMD_ ## _field ## _OFST, 4) >> 2))
- 
--#define MCDI_BYTE(_buf, _field)						\
--	((void)BUILD_BUG_ON_ZERO(MC_CMD_ ## _field ## _LEN != 1),	\
--	 *MCDI_PTR(_buf, _field))
--#define MCDI_WORD(_buf, _field)						\
--	((void)BUILD_BUG_ON_ZERO(MC_CMD_ ## _field ## _LEN != 2),	\
--	 le16_to_cpu(*(__force const __le16 *)MCDI_PTR(_buf, _field)))
- #define MCDI_SET_DWORD(_buf, _field, _value)				\
- 	CDX_POPULATE_DWORD_1(*_MCDI_DWORD(_buf, _field), CDX_DWORD, _value)
- #define MCDI_DWORD(_buf, _field)					\
- 	CDX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), CDX_DWORD)
--#define MCDI_POPULATE_DWORD_1(_buf, _field, _name1, _value1)		\
--	CDX_POPULATE_DWORD_1(*_MCDI_DWORD(_buf, _field),		\
--			     MC_CMD_ ## _name1, _value1)
--#define MCDI_SET_QWORD(_buf, _field, _value)				\
--	do {								\
--		CDX_POPULATE_DWORD_1(_MCDI_DWORD(_buf, _field)[0],	\
--				     CDX_DWORD, (u32)(_value));	\
--		CDX_POPULATE_DWORD_1(_MCDI_DWORD(_buf, _field)[1],	\
--				     CDX_DWORD, (u64)(_value) >> 32);	\
--	} while (0)
--#define MCDI_QWORD(_buf, _field)					\
--	(CDX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[0], CDX_DWORD) |	\
--	(u64)CDX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[1], CDX_DWORD) << 32)
--
- #endif /* CDX_MCDI_H */
 -- 
 2.34.1
 
