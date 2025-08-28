@@ -1,172 +1,189 @@
-Return-Path: <linux-edac+bounces-4699-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4700-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A947BB3906D
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 03:02:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE3DB3AA20
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 20:39:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10A7F682507
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 01:01:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9EA21897469
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 18:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC8E1D5ACE;
-	Thu, 28 Aug 2025 01:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625692765E9;
+	Thu, 28 Aug 2025 18:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="bDXguO39"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="UUbpN/YE"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5EF14AD2B
-	for <linux-edac@vger.kernel.org>; Thu, 28 Aug 2025 01:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067AE2765EB;
+	Thu, 28 Aug 2025 18:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.143.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756342837; cv=none; b=QneUHdXwLn5N3pwR+ScM2u+e6hlEa4tgG3LXnAEk0cN+bh2hzXx5r1/6hG3lgQia7Fsv3kPNIfbdB8wPCKi799MfYj87545WCarVYVBoHLJE4HOgVkEwxli/t0/qJf24uM2Z/qIiE2I6RZde/W1dhk3uLRvCQUOYy7yzFOe0sN0=
+	t=1756406387; cv=none; b=akemazPXX39mUKAy6dXbLCm5kCmrsxNFd0t8IYg/wS7orCiPnxtuFOuIGUUnQK7eVCwRVSjxt6Wo8OlPYhPb6X4GrNK1ysNXunBpXHAfQYd5xcTZrJVcAhfMyi+CAImclvSgjYsuRq3uKqHwjdYaHZ48wPPNYdi2sJ+xIKfRUxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756342837; c=relaxed/simple;
-	bh=KHnu9hnbjEiqlT7kqClbNDC1ZJkTRA3DpS0ShEeR3pU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BR7a7oGF1uuauN7ecMBCQP7Agic7vaLTnWoMNHhrmy2dXQWXbZGk/Il8VIKC52ZzsEcD5S07kM9vDHdjmKniN3doxLENNoskKkvbYIiPcaneCwqvFwUFBaKuGaRXTM3NdG/TWGm67zWMxuJLZeSqdEUgCG7cgVGvozZ6lzik1xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=bDXguO39; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-61c51f57224so603235a12.2
-        for <linux-edac@vger.kernel.org>; Wed, 27 Aug 2025 18:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1756342833; x=1756947633; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qkZV2r2s3Ve2mSW+cNV6K6LiCKiSQdIZC2Q3aoo2TPc=;
-        b=bDXguO39kwmE8d8UBDfFCMQgXhLpMoPLw558wv5P1qcuv0Ye2AxgoPOpK81tqrf12J
-         BwgfmIyjLhhQyRJvDsLARFcsEpaQiW6CuTGVZSUWJZJr4nMRT+GNWXFyPseRpSFgmp5k
-         7C66SlxPjSSAr8eLwsopV+rlmLiDWRi2LjrwoVd7Hh369svazChS4eQVIjX0oT08lmr2
-         +wlGd5ShDgtOSRaHj6qK/qo0wQS2jf0xbOrI+mT5l1cYLUbnMn8RlLC1sKjJ06k0WcvG
-         CPZtR2WxqWBwnqdFg8BlYBDXWYdZqYDTLdDf4lx0QdpdHwwzSvh4fWIxaYucA1//G+Pc
-         0VCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756342833; x=1756947633;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qkZV2r2s3Ve2mSW+cNV6K6LiCKiSQdIZC2Q3aoo2TPc=;
-        b=G9yqQkeT1P0OXadTL0pOGdeqNmKBJACTlzyKqRBQqJU2b0M2hMWuLRmIFbr/enEeXq
-         33oTGcrapri//eq2/lU9RLpd601CVnzvSvQMjtc2JgAML+o82BaEQxg7/jxMtz6QRmdk
-         xsWsKh2qNt7ox5NjXiSRxyxd00AQAsu4lvZJO4JLSCni31kYMRlk1d3argn/D4emr3tX
-         eRUmHpGfS/DowFYv9HxYds6UBaRjepv8likBdQttIMV/+kDa31gMEqVc3a7aa+zXR7xH
-         YGGWXGYtHyZT+JwzBMtrEtj9lsOcLL6J5XH1DmAIcNdLZ561NuY8F6LRQiuGsi/rDNR7
-         6MJw==
-X-Forwarded-Encrypted: i=1; AJvYcCUWu9IxdcRDfV2UAOfm52eW3WjUiAIPdeJk1Un1j7N418Gqgg9fydSFHsWBZ4/gnTH1Be+/xLzExg+X@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHKa8tm1CAEVwcm8aU1muj8fIPsWJMviQE+BZX1glgVf+sU4pG
-	1EoaJxvfuOlxOadBAwmZ3PxkGjFBsBPiPqJTOz+QipUghdkn2v2MAFZaVAN5ZR2ASAc=
-X-Gm-Gg: ASbGncu0hUQWHjDqEfwCdDlhyTScFXEcdK5CejLQKNg1xIuQPjLdIBOaiBvolRGnLqQ
-	yBnPewFhoZYSRnWyMgcp6eA9lXZdy898pDK5RvyKzuUyZCYdk+oGGDVku/OlZPl244gEAExtXJx
-	noLIA8Djcynke3+D8zCZwwNZEnMZgRUtqeEa3tAT+p6gRBb6mHOsh3u0pw4VWrfC8P6AK6N32wl
-	0ToATrcZIg8nqonQawQ/4W2e02xqoO9N/n9Xx0/Ryuu6Z+MntUifWd/TuTu3ZT4996FI9OfzCtd
-	MXtrbXVXmjhiC69TgfNaxDDVhZpPmi7cxSrMmMdmGBatktyYt1qRm/MIT4K06Kp0qq4Uhpst0q9
-	70vNvzATnLwO61qjnf9Y5CiuIrJqs0mZDY2hwTD0wbBxXWcsZgmteYTLbBQQu2Pc=
-X-Google-Smtp-Source: AGHT+IFowfbzDXzfKj1tbin1CbADg6SQUppIoHgdL2LBKWx0TCuFZuLUREbfAZ6iz35NlZp/Mlr9+A==
-X-Received: by 2002:a05:6402:a0c1:b0:61c:30cf:885c with SMTP id 4fb4d7f45d1cf-61c30cf8ca9mr15283114a12.32.1756342833263;
-        Wed, 27 Aug 2025 18:00:33 -0700 (PDT)
-Received: from dev-mattc2.dev.purestorage.com ([208.88.159.129])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-61caeb5e786sm2651785a12.32.2025.08.27.18.00.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 18:00:32 -0700 (PDT)
-From: Matthew W Carlis <mattc@purestorage.com>
-To: helgaas@kernel.org
-Cc: Smita.KoralahalliChannabasappa@amd.com,
-	adam.c.preble@intel.com,
-	agovindjee@purestorage.com,
-	alison.schofield@intel.com,
-	ashishk@purestorage.com,
-	bamstadt@purestorage.com,
-	bhelgaas@google.com,
-	bp@alien8.de,
-	chao.p.peng@intel.com,
-	dan.j.williams@intel.com,
-	dave.jiang@intel.com,
-	dave@stgolabs.net,
-	erwin.tsaur@intel.com,
-	feiting.wanyan@intel.com,
-	ira.weiny@intel.com,
-	james.morse@arm.com,
-	jrangi@purestorage.com,
-	lenb@kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	lukas@wunner.de,
-	mahesh@linux.ibm.com,
-	mattc@purestorage.com,
-	msaggi@purestorage.com,
-	oohall@gmail.com,
-	qingshun.wang@linux.intel.com,
-	rafael@kernel.org,
-	rhan@purestorage.com,
-	rrichter@amd.com,
-	sathyanarayanan.kuppuswamy@intel.com,
-	sconnor@purestorage.com,
-	tony.luck@intel.com,
-	vishal.l.verma@intel.com,
-	yudong.wang@intel.com,
-	zhenzhong.duan@intel.com
-Subject: [PATCH v5 0/2] PCI/AER: Handle Advisory Non-Fatal error
-Date: Wed, 27 Aug 2025 19:00:16 -0600
-Message-ID: <20250828010016.5824-1-mattc@purestorage.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250822165112.GA688464@bhelgaas>
-References: <20250822165112.GA688464@bhelgaas>
+	s=arc-20240116; t=1756406387; c=relaxed/simple;
+	bh=GNo2t51egNLhS8QjdRwVx/SQS8FD2wRkXa3bxmxwa4E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hT4RBFGai5MGwePgj+VDFxFfkYTr+NwJSJzlqOKpggO8tbSSQoLHU6ddBZLzyVTvX/lntfRlaZfHBZroXcMaWmg7DbSubRd3xyPr7vq4+aIQlqy8sbCSRISBFsM6Ts/8eO7SCQC7j73dtKmyvr5CDgXeLF415y7bg/SZsmhId5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=UUbpN/YE; arc=none smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57SEmjL4000988;
+	Thu, 28 Aug 2025 18:38:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
+	:content-type:date:from:message-id:mime-version:subject:to; s=
+	pps0720; bh=7tDlIM0TyZMcvSoK1xxHIEjCDRhecC3cjshhiua9X5k=; b=UUbp
+	N/YEKbBZQA3HEvX3FD5d1MirTV0FjnU1H8aAlBICM677obaXSec1f8Mem5oATus7
+	CjRSN3rOEdXKGuTJP5BzI09o8zDs3FCJX7D6fp/6+StpXvMyueFyVV7xmm04Kz/o
+	tmM0by0ZdVVGbGwpTVgwzDqyEKvCWxJqpKK5/nuMMjn12qYK5OxybdNAtP1Hbvsj
+	/aXm0wNWG8z5fQQe1w3d/uasOeZKYdhAC7AhOqRy+1jriXfWTCbsbn2tgthgyTlF
+	NZru6L5KzL/3G73LNfTIAmYv+DS2aRFpmDCtjePiwFRA8xC6vsxXuCqKhMKWZ60H
+	q3x3u0F5Qb2QoQVJRA==
+Received: from p1lg14879.it.hpe.com ([16.230.97.200])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 48ts71svb3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Aug 2025 18:38:32 +0000 (GMT)
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id A65F5132C5;
+	Thu, 28 Aug 2025 18:38:26 +0000 (UTC)
+Received: from HPE-5CG20646DK.localdomain (unknown [16.231.227.36])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 1263D800EB5;
+	Thu, 28 Aug 2025 18:38:22 +0000 (UTC)
+Date: Thu, 28 Aug 2025 13:38:20 -0500
+From: Kyle Meyer <kyle.meyer@hpe.com>
+To: akpm@linux-foundation.org, linmiaohe@huawei.com, jane.chu@oracle.com,
+        jiaqiyan@google.com
+Cc: bp@alien8.de, david@redhat.com, kyle.meyer@hpe.com,
+        Liam.Howlett@oracle.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lorenzo.stoakes@oracle.com, mhocko@suse.com, nao.horiguchi@gmail.com,
+        osalvador@suse.de, rppt@kernel.org, russ.anderson@hpe.com,
+        surenb@google.com, tony.luck@intel.com, vbabka@suse.cz
+Subject: [PATCH v2] mm/memory-failure: Fix redundant updates for already
+ poisoned pages
+Message-ID: <aLCiHMy12Ck3ouwC@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Authority-Analysis: v=2.4 cv=I5llRMgg c=1 sm=1 tr=0 ts=68b0a228 cx=c_pps
+ a=5jkVtQsCUlC8zk5UhkBgHg==:117 a=5jkVtQsCUlC8zk5UhkBgHg==:17
+ a=kj9zAlcOel0A:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=MvuuwTCpAAAA:8
+ a=_9263MXg1XWMioqDkNYA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: mEN2_SVhX1feWP9FMfdMAfO80NtjnQtM
+X-Proofpoint-GUID: mEN2_SVhX1feWP9FMfdMAfO80NtjnQtM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODI4MDEyNCBTYWx0ZWRfX8D7QSBPnFi+3
+ 6fhGaiBbJ/Jz8Ny806+A+AhBU3IsHMWCWG/DYuWOVzwDSZM2TruWwvTX4k/yLVr7fChTslnSkvD
+ YRFluNpFiUa8jj/DClEREh0I4XicCoq3nKwVLnZKIn4o+W7BGyAB+2Tlfd41zfqKWeq6cyDH7kR
+ EdenwIf4aIT1pr6g/llqxD8GjrOOt1DBndGBtVh0tgQc0dbz3aFwFFP0q7YaZY31Gkhy9oHYslF
+ qc1oDarTx+46ZOVri4kTCTi9yd41ir+KKpijdlDq4Buxkvn4qcOtwd0vWlMy9GTlZlHb/LAP3y4
+ AWOp2klQPiNWUZooas0BOFUJW9XgduAdYNxOWGJcZ8eF00CD1bav1aFWfuPXSngKybKGxclKNTA
+ ytMwq0Mq
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-28_04,2025-08-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 phishscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ clxscore=1015 spamscore=0 priorityscore=1501 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508280124
 
-On Fri, 22 Aug 2025 11:51:12 -0500, Bjorn Helgaas wrote 
-> Matthew, if you are able to test and/or provide a Reviewed-by, that would
-> be the best thing you can do to move this forward ...
+Duplicate memory errors can be reported by multiple sources.
 
-I spent some time looking at the patch thinking about it a little
-more carefully. The only thing I don't really like in this revision
-of the patch is the logging for "may cause Advisory". Example below
-from "[PATCH v5 2/2] PCI/AER: Print UNCOR_STATUS bits that might be ANFE".
+Passing an already poisoned page to action_result() causes issues:
 
-AER: Correctable error message received from 0000:b7:02.0
-PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
-  device [8086:0db0] error status/mask=00002000/00000000
-   [13] NonFatalErr
-  Uncorrectable errors that may cause Advisory Non-Fatal:
-   [12] TLP
+* The amount of hardware corrupted memory is incorrectly updated.
+* Per NUMA node MF stats are incorrectly updated.
+* Redundant "already poisoned" messages are printed.
 
-I don't think we really need to log the UE caused by ANF any differently
-than any other UE & in fact I would prefer not to. In my mind we should log all
-the UE status bits via the same format as before. Taking from example above,
-in my mind it would be nice if the logging looked like this.
+Avoid those issues by:
 
-AER: Correctable error message received from 0000:b7:02.0
-PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
-  device [8086:0db0] error status/mask=00002000/00000000
-   [13] NonFatalErr
-PCIe Bus Error: severity=Uncorrectable (Non-Fatal), type=Transaction Layer
-   [12] TLP
+* Skipping hardware corrupted memory updates for already poisoned pages.
+* Skipping per NUMA node MF stats updates for already poisoned pages.
+* Dropping redundant "already poisoned" messages.
 
-If there was only one error (that triggered ANF handling) then we would
-know that the Non-Fatal UE was what triggered the NonFatalErr. If some other
-Non-Fatal errors are happening at the same time then it doesn't really matter
-which was sent via ERR_COR vs ERR_NONFATAL since we would also know from Root
-Error Status that we had received at least one of each message type. The
-objective in my mind being to free up header-logs & log status details without
-making error the recovery worse.
+Make MF_MSG_ALREADY_POISONED consistent with other action_page_types and
+make calls to action_result() consistent for already poisoned
+normal pages and huge pages.
 
-Does this sound reasonable or unreasonable? I can update the patch-set &
-re-submit if 'reasonable'.
+Fixes: b8b9488d50b7 ("mm/memory-failure: improve memory failure action_result messages")
+Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
+---
 
-Cheers!
--Matt
+v1 -> v2:
+ * Continue passing poisoned pages to action_result() with MF_FAILED but don't
+update anything.
+ * https://lore.kernel.org/all/20250821164445.14467-1-kyle.meyer@hpe.com
+
+---
+ mm/memory-failure.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index fc30ca4804bf..10b3c281c2ae 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -956,7 +956,7 @@ static const char * const action_page_types[] = {
+ 	[MF_MSG_BUDDY]			= "free buddy page",
+ 	[MF_MSG_DAX]			= "dax page",
+ 	[MF_MSG_UNSPLIT_THP]		= "unsplit thp",
+-	[MF_MSG_ALREADY_POISONED]	= "already poisoned",
++	[MF_MSG_ALREADY_POISONED]	= "already poisoned page",
+ 	[MF_MSG_UNKNOWN]		= "unknown page",
+ };
+ 
+@@ -1349,9 +1349,10 @@ static int action_result(unsigned long pfn, enum mf_action_page_type type,
+ {
+ 	trace_memory_failure_event(pfn, type, result);
+ 
+-	num_poisoned_pages_inc(pfn);
+-
+-	update_per_node_mf_stats(pfn, result);
++	if (type != MF_MSG_ALREADY_POISONED) {
++		num_poisoned_pages_inc(pfn);
++		update_per_node_mf_stats(pfn, result);
++	}
+ 
+ 	pr_err("%#lx: recovery action for %s: %s\n",
+ 		pfn, action_page_types[type], action_name[result]);
+@@ -2094,12 +2095,11 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 		*hugetlb = 0;
+ 		return 0;
+ 	} else if (res == -EHWPOISON) {
+-		pr_err("%#lx: already hardware poisoned\n", pfn);
+ 		if (flags & MF_ACTION_REQUIRED) {
+ 			folio = page_folio(p);
+ 			res = kill_accessing_process(current, folio_pfn(folio), flags);
+-			action_result(pfn, MF_MSG_ALREADY_POISONED, MF_FAILED);
+ 		}
++		action_result(pfn, MF_MSG_ALREADY_POISONED, MF_FAILED);
+ 		return res;
+ 	} else if (res == -EBUSY) {
+ 		if (!(flags & MF_NO_RETRY)) {
+@@ -2285,7 +2285,6 @@ int memory_failure(unsigned long pfn, int flags)
+ 		goto unlock_mutex;
+ 
+ 	if (TestSetPageHWPoison(p)) {
+-		pr_err("%#lx: already hardware poisoned\n", pfn);
+ 		res = -EHWPOISON;
+ 		if (flags & MF_ACTION_REQUIRED)
+ 			res = kill_accessing_process(current, pfn, flags);
+-- 
+2.50.1
+
 
