@@ -1,129 +1,195 @@
-Return-Path: <linux-edac+bounces-4701-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4702-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 558A1B3AAC1
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 21:20:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3705EB3AB2F
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 21:59:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED3D97AF9FA
-	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 19:18:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52ADD175A0B
+	for <lists+linux-edac@lfdr.de>; Thu, 28 Aug 2025 19:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C443D1D6188;
-	Thu, 28 Aug 2025 19:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C674727E1D7;
+	Thu, 28 Aug 2025 19:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nbC/Jkf1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AsweaK26"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581552566;
-	Thu, 28 Aug 2025 19:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8B027D77B
+	for <linux-edac@vger.kernel.org>; Thu, 28 Aug 2025 19:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756408802; cv=none; b=TLbnFrbvPdQEgq43rUKAoqzluGxtULZtIJDuuC7D1VbHbTIEXcIQ5CqVGJTdsjUhltDqhvtdFHfDUq80lliV6BArUAZHa2xFs4hQ7gpaTnbrN/eCfOgmJB6UErLarS9tPfCP/wJx22FB6EvGK/d13pX5zAAl28TZHHTT+5N6Gfc=
+	t=1756411147; cv=none; b=YDPx+91524f336yxX87XpsUr75QD5WHrVkIgeuaKVDtxr0gxOboSne7xqFzMlgN/+JCvYm3Z3u/5q1bbs0I5yhkd72uyW2LkTsaAb/AdocjAPeTqToiJfMJXTOJ2Aq129qABjjSXoGCROc/qg6Dt53fmQeRJNXngNgOSYCeRo4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756408802; c=relaxed/simple;
-	bh=+Gb1pM2FWWlHFqIquLSo5LGWbYvDJRPv78VZs4wpMkU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=STb+cQXCv9WH8mCzt4dl5iqFii5MGR+vqcZLNUoeaeDl36UL31HbCkRMGhjlOotKTeIqxK67MNLPc+MShV76+6nI+V8eWHswEhWL2pxYMepuSR7cgcHf/cs7eXvx/Lk0HRcyzTNy534sRvyeT1Bd/WoESS3UWkO9g33vwGFJheE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nbC/Jkf1; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-770d7dafacdso1471289b3a.0;
-        Thu, 28 Aug 2025 12:20:01 -0700 (PDT)
+	s=arc-20240116; t=1756411147; c=relaxed/simple;
+	bh=t4M1DGGSu84GKZww69xAOCv/b4Z9RzHTknYIfiROzw4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wamtc48BhlLvKIZC/ZnoVFbLL4cuuNLgUIyQbI9oLENT042vmybfrdCkSr8bk4l4wKJlLVo2G1HPiPIR1lIkH3YJvL4gwciHXzCit1FUaZ3AfPUVgqQUCRYfg/ZTSMcPyrppHNp+/mA4sfoJeI1/vm+eUwjQnj9yYbCu8Bkk5Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AsweaK26; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-459fbc92e69so23135e9.0
+        for <linux-edac@vger.kernel.org>; Thu, 28 Aug 2025 12:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756408800; x=1757013600; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rZbjfWviaulURxlkGSeLlj9jt8Nutzfq8t7eym7kFBU=;
-        b=nbC/Jkf1fzBB2C2/4nyzCMtX2L6+YqsMLAc9tDtkWtw4b+cGGaNPQMIVVK6dMe9zxM
-         4Lbmt6ufBgQcDJBn4tATbRXJgPqiCSa/NOwwFl/juDd+Jmn6wxpyZgVZlRi3fvzSdfH7
-         M2DSH7+lenrHKYTQWSFvJLluWcVabnVimRw3srHKgsI0J//BiXuOohlQv0v3tRDyBzYo
-         OulzfctkcKJA0zk+jht9LRf+Hpv/3f2bKW4DK8uz7dM2uVCdRaLlIWdV5x2T655AXBcv
-         sxB3Wqjd3IAJLg2OpAty4kkA09RMpywgtcWFF/UKINShxu6IuD3FJT4gvj7rVtkgggts
-         viNA==
+        d=google.com; s=20230601; t=1756411143; x=1757015943; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rb1Ys+OS8pMllVi9x1vwj1VWFDJ6Jd401gcPHSeVaJI=;
+        b=AsweaK26icQwWumPzA9aBXLyJQGziafonFRhQ5MY2LrvVkX/m5hODOvNb5PxxTk8zq
+         JesgV78FSKHKrCjsVFC9BWfM7O9jzsui30XNVa1n+ovucMv5k74qwT2xvB1oyqyvDJeu
+         copJKVt/HhaU+Gvv46rVF7+6Du4QbrnBCGNQsr43x6QudwJuCbQo3sVx364TflpAm0dF
+         v+2LOyw6i1UvZWSEg6xKCpBIvO9LkSRyyEeAKk6SHX3Rej96HOWnKQF+7fn9Cisxf1di
+         wgtJ3EMOpboToBCUhoZgGL3X3AZ+P44Q6OPEn5NWiWiyEK1jgr9T+XmB+bpkOglWUMhl
+         /Uug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756408800; x=1757013600;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rZbjfWviaulURxlkGSeLlj9jt8Nutzfq8t7eym7kFBU=;
-        b=TgJNJx2K3WtZ9M8TVdeDdRofsiVqgMjw7uKnIVQPNRvHohvtM4kV+cL/z5cz2+MSKn
-         LsJJvK56WymatXF0VH16qiP/47KQa2Yc5Q8dlHHzCX95lIwYkmDzeFJrJJuZfK8v5/iH
-         afIIUzEov0+4LWaUjH9LA5M5AzJt6JIVkUzFJrlGiDLj9pbEfzVzCcffwOwc7xOrtOYK
-         +wkHif9VqlIiTBiioSHOVyI8bcs1EtRiRUpSzlpepferSi1SYwhvgqwqS15nrCzmNR7a
-         WXbfx7K4tYQ+u5BCXc/3+naHGSDbDJg+Q/1ItvGzzyyzxfbvD6XGyhYvqnjlt2lMew0L
-         Qg0g==
-X-Forwarded-Encrypted: i=1; AJvYcCU1+n5kNyCFZTj85SNij08sXRiUD4nDVvqD7fY0WprjaVDuA7+A2jvGWTuuLHHaOlBsr4YKgY1+3EHz@vger.kernel.org, AJvYcCXs1yr3GzQuWj8AAL5xx6qF5z+XZQ9pI8QNg9wsm+q7HQIIi8QQTJytMhymNX7iRhMM6SzEAi/Bs2q0jAuc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx6WngYKz6itiu/y1U1/SoePnPdOMpl8MdjAhl5jUAVdhEx6Xx
-	lviAiRatV0uZP+V2cGLcJBt897rdbNiIzWA857PZ7tsa6N543xfjREzt
-X-Gm-Gg: ASbGncu6b9IDjFv1AvrOMA++stAId1L10d79bK+46giPGPcuIXIqPf5ydSYX61uoPTY
-	UWJAE1vsc2KDeLDc6p5+rl4U59aAW/1BatSuEdApQSHws0mPRieZZx7cwMFlluNam7V6FaZsbc1
-	na/oSqfprXj1vyMh287i5RM9Vr9ZHGS79tfmvyZZ2jvhEmbjigMbVNXjz9pOQki0sMoG8pfqbWy
-	+6FWKGQv+Kmn8RltQg4prFK4RUenFHcCSGr0vts2d9KRvN1FHS8YEQjXoVo673ocSdCMaiYeNp8
-	AFqncsPmgj9vCy0xvG8bcqG16ckrTovmGlVjxH2fEnW2ODo/5iprMR/gX+KWlTzrnsRkL9ndWJd
-	KiCZ6pQzguIjVVVNGefQ8MpkGxPNCn1rNFzwi5LtGhTBs+/RzECHvxtYECsy5KmN/a3c4Ko2+ow
-	==
-X-Google-Smtp-Source: AGHT+IFl0Y7QVNFLHZ4+59lfeBIT6/YxI9xoelqYIcxzWB8l82ikCQufFR5vCyV+4qWGUnp07K1Vxw==
-X-Received: by 2002:a05:6a00:a07:b0:76e:2eff:7ae9 with SMTP id d2e1a72fcca58-7702fa086d4mr31412743b3a.12.1756408800483;
-        Thu, 28 Aug 2025 12:20:00 -0700 (PDT)
-Received: from visitorckw-System-Product-Name.. ([140.113.216.168])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a4e1ca7sm194268b3a.71.2025.08.28.12.19.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Aug 2025 12:20:00 -0700 (PDT)
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: bp@alien8.de,
-	tony.luck@intel.com
-Cc: james.morse@arm.com,
-	mchehab@kernel.org,
-	rric@kernel.org,
-	shiju.jose@huawei.com,
-	jonathan.cameron@huawei.com,
-	jserv@ccns.ncku.edu.tw,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH] EDAC: Fix wrong executable file modes for C source files
-Date: Fri, 29 Aug 2025 03:19:54 +0800
-Message-Id: <20250828191954.903125-1-visitorckw@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1756411143; x=1757015943;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rb1Ys+OS8pMllVi9x1vwj1VWFDJ6Jd401gcPHSeVaJI=;
+        b=McJ+yeaDUBSL0AxlO/H3RxaG1OBL7xT8X2TYLL2hFsKL5l/F5f+J0Ewga3XNpsyt8Y
+         2smeVToxwnsalg6umOIgL5aX5rYX664K7/83Zb7t/FwyrMlVfntZY3LT/oUXsTNuWxig
+         Zp/7/DOPpdcBaFK8c4UpXjrx4ZsvILP5iFm39WAKFrhvTwK8C+QdlDabe2cmxDcaPC5N
+         z4kkOOl1DSiy8wXfntW2m61SE/WIis7UevLFbOLUZ8ZG3p26U4q9QwoXV6NFcw7zc47X
+         w5dg2vk4f2C84h7swpAVYQelu3/on+HksGtcvbrO1+nGNXfiq79xcWFNSppYzym3IC33
+         GR5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUvMOGAoxmN4oX4EFG+3h6UvjYljAReogJmd1RwtXc8IyEj5M0nbwJZ7UfBrJ3xo2LAvsCcomf6oOts@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNzcycc6IYjJfHbq/D0/ED+6Qai9T5QxYi7za06peEtdAx7K26
+	WFB5I3sG7CY6cfLK9Z6tPAYyJuAUFfwpclSHa2XjtABVO8taOwxHAbG+Wf2ABdGeEbTySmD0sCM
+	dfJ6xRFymJD4VK1paizVf03n+BU6NMj41dVDz5DWb
+X-Gm-Gg: ASbGnct66mEVyBma8bmSviSjMgFP3mhBvuU/U3UZSWv7zo9GhgQKMdbAAHfNGtyxfUm
+	8fKUH5ZwDceDcwB/4a3UyA+ats1N8nWIehtipqx/UiI0nE9olGtrJp6ujcSgFb0iGuH0MSgpJQw
+	Zkini5FNwvRf4i+Msi86CeVG3HLdf8eU4+EM6wSZjnlbN15+Hi6fzrp6uhe7lwlbRNw7dnK5t0I
+	KOSOWoO2psHjwvl2dAGmKemtD594UOOLNO/dGx3CaOi
+X-Google-Smtp-Source: AGHT+IELO4yISZz+NofHK6C5sRr8016R68b1/4gVNR4ZG7rMts1wuKSLEVBc8+N5qzn2cwo5rC4hEXYji1cmxRvYCnw=
+X-Received: by 2002:a05:600c:8219:b0:45a:2861:3625 with SMTP id
+ 5b1f17b1804b1-45b65ee0f36mr6131575e9.4.1756411142902; Thu, 28 Aug 2025
+ 12:59:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <aLCiHMy12Ck3ouwC@hpe.com>
+In-Reply-To: <aLCiHMy12Ck3ouwC@hpe.com>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Thu, 28 Aug 2025 12:58:50 -0700
+X-Gm-Features: Ac12FXzKI2iUWzk8A5Vs745uV1abRMo4VLeJy6UKcLM1l6gTfbZW8s4ZlI0mr68
+Message-ID: <CACw3F50kFq4V9+-JUdi+PEYbNUkOJZHPOy4VCowhKXW-sB=Ugw@mail.gmail.com>
+Subject: Re: [PATCH v2] mm/memory-failure: Fix redundant updates for already
+ poisoned pages
+To: Kyle Meyer <kyle.meyer@hpe.com>
+Cc: akpm@linux-foundation.org, linmiaohe@huawei.com, jane.chu@oracle.com, 
+	bp@alien8.de, david@redhat.com, Liam.Howlett@oracle.com, 
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	lorenzo.stoakes@oracle.com, mhocko@suse.com, nao.horiguchi@gmail.com, 
+	osalvador@suse.de, rppt@kernel.org, russ.anderson@hpe.com, surenb@google.com, 
+	tony.luck@intel.com, vbabka@suse.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Three EDAC source files were mistakenly marked as executable in
-commit 1e14ea901dc8 ("EDAC: Initialize EDAC features sysfs attributes").
+On Thu, Aug 28, 2025 at 11:38=E2=80=AFAM Kyle Meyer <kyle.meyer@hpe.com> wr=
+ote:
+>
+> Duplicate memory errors can be reported by multiple sources.
+>
+> Passing an already poisoned page to action_result() causes issues:
+>
+> * The amount of hardware corrupted memory is incorrectly updated.
+> * Per NUMA node MF stats are incorrectly updated.
+> * Redundant "already poisoned" messages are printed.
+>
+> Avoid those issues by:
+>
+> * Skipping hardware corrupted memory updates for already poisoned pages.
+> * Skipping per NUMA node MF stats updates for already poisoned pages.
+> * Dropping redundant "already poisoned" messages.
+>
+> Make MF_MSG_ALREADY_POISONED consistent with other action_page_types and
+> make calls to action_result() consistent for already poisoned
+> normal pages and huge pages.
+>
+> Fixes: b8b9488d50b7 ("mm/memory-failure: improve memory failure action_re=
+sult messages")
+> Signed-off-by: Kyle Meyer <kyle.meyer@hpe.com>
+> ---
+>
+> v1 -> v2:
+>  * Continue passing poisoned pages to action_result() with MF_FAILED but =
+don't
+> update anything.
+>  * https://lore.kernel.org/all/20250821164445.14467-1-kyle.meyer@hpe.com
+>
+> ---
+>  mm/memory-failure.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index fc30ca4804bf..10b3c281c2ae 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -956,7 +956,7 @@ static const char * const action_page_types[] =3D {
+>         [MF_MSG_BUDDY]                  =3D "free buddy page",
+>         [MF_MSG_DAX]                    =3D "dax page",
+>         [MF_MSG_UNSPLIT_THP]            =3D "unsplit thp",
+> -       [MF_MSG_ALREADY_POISONED]       =3D "already poisoned",
+> +       [MF_MSG_ALREADY_POISONED]       =3D "already poisoned page",
+>         [MF_MSG_UNKNOWN]                =3D "unknown page",
+>  };
+>
+> @@ -1349,9 +1349,10 @@ static int action_result(unsigned long pfn, enum m=
+f_action_page_type type,
+>  {
+>         trace_memory_failure_event(pfn, type, result);
+>
+> -       num_poisoned_pages_inc(pfn);
+> -
+> -       update_per_node_mf_stats(pfn, result);
+> +       if (type !=3D MF_MSG_ALREADY_POISONED) {
+> +               num_poisoned_pages_inc(pfn);
+> +               update_per_node_mf_stats(pfn, result);
+> +       }
 
-These are plain C source files and should not carry the executable bit.
-Correcting their modes follows the principle of least privilege and
-avoids unnecessary execute permissions in the repository.
+Thanks Kyle, the code looks good to me. While you wait for Miaohe's
+review/ack...
 
-Fixes: 1e14ea901dc8 ("EDAC: Initialize EDAC features sysfs attributes")
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
----
- drivers/edac/ecs.c        | 0
- drivers/edac/mem_repair.c | 0
- drivers/edac/scrub.c      | 0
- 3 files changed, 0 insertions(+), 0 deletions(-)
- mode change 100755 => 100644 drivers/edac/ecs.c
- mode change 100755 => 100644 drivers/edac/mem_repair.c
- mode change 100755 => 100644 drivers/edac/scrub.c
+Reviewed-by: Jiaqi Yan <jiaqiyan@google.com>
 
-diff --git a/drivers/edac/ecs.c b/drivers/edac/ecs.c
-old mode 100755
-new mode 100644
-diff --git a/drivers/edac/mem_repair.c b/drivers/edac/mem_repair.c
-old mode 100755
-new mode 100644
-diff --git a/drivers/edac/scrub.c b/drivers/edac/scrub.c
-old mode 100755
-new mode 100644
--- 
-2.34.1
-
+>
+>         pr_err("%#lx: recovery action for %s: %s\n",
+>                 pfn, action_page_types[type], action_name[result]);
+> @@ -2094,12 +2095,11 @@ static int try_memory_failure_hugetlb(unsigned lo=
+ng pfn, int flags, int *hugetlb
+>                 *hugetlb =3D 0;
+>                 return 0;
+>         } else if (res =3D=3D -EHWPOISON) {
+> -               pr_err("%#lx: already hardware poisoned\n", pfn);
+>                 if (flags & MF_ACTION_REQUIRED) {
+>                         folio =3D page_folio(p);
+>                         res =3D kill_accessing_process(current, folio_pfn=
+(folio), flags);
+> -                       action_result(pfn, MF_MSG_ALREADY_POISONED, MF_FA=
+ILED);
+>                 }
+> +               action_result(pfn, MF_MSG_ALREADY_POISONED, MF_FAILED);
+>                 return res;
+>         } else if (res =3D=3D -EBUSY) {
+>                 if (!(flags & MF_NO_RETRY)) {
+> @@ -2285,7 +2285,6 @@ int memory_failure(unsigned long pfn, int flags)
+>                 goto unlock_mutex;
+>
+>         if (TestSetPageHWPoison(p)) {
+> -               pr_err("%#lx: already hardware poisoned\n", pfn);
+>                 res =3D -EHWPOISON;
+>                 if (flags & MF_ACTION_REQUIRED)
+>                         res =3D kill_accessing_process(current, pfn, flag=
+s);
+> --
+> 2.50.1
+>
 
