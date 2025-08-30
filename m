@@ -1,147 +1,120 @@
-Return-Path: <linux-edac+bounces-4707-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4708-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08D41B3C432
-	for <lists+linux-edac@lfdr.de>; Fri, 29 Aug 2025 23:18:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A8B8B3CC40
+	for <lists+linux-edac@lfdr.de>; Sat, 30 Aug 2025 17:49:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E3E544E2A54
-	for <lists+linux-edac@lfdr.de>; Fri, 29 Aug 2025 21:18:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C19EC3A8DD1
+	for <lists+linux-edac@lfdr.de>; Sat, 30 Aug 2025 15:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F2022367B8;
-	Fri, 29 Aug 2025 21:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC94B248881;
+	Sat, 30 Aug 2025 15:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTF1qr6g"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="IoFk00pM"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050131EEA49;
-	Fri, 29 Aug 2025 21:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6076B223DFD;
+	Sat, 30 Aug 2025 15:49:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756502284; cv=none; b=ReICshlY3i4xKXd8QLhAdps6AoTDN2OpY3X8v+gj1G8vrSV6YE6FAWVnVqdNBuo/kDnuoijuVWJjrNSV8smmc7lgPJlEQV0eXjTd6K4C7ibWmOhk31cvE0OLVvmxU8SLYzhGVx+ixeArW+Hp1eA1OkczwY4ATiBCMvRI+HlmQ/8=
+	t=1756568968; cv=none; b=QMKBnCHxJQHCKI6AWcPfSBBik2hnyeSj7lkMSqZ+4XlbaSWQ7vE4JvAc1xNly0BTeuabSJhXvSKyD0Wsy/QmGwQa/xVZbUSePyUg0so0dL99DNJkcZMBGhPbv7kUbNlOATc/zitn79eX3iur/MLAmaXCEn2HamdPV3NUm/5hJGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756502284; c=relaxed/simple;
-	bh=V5VOMAjw9pzEl70en0MP+3pcBujDo0p2tlcA6Iwhj08=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=KdxfetHFKFz/Ui447a7Xk/yO97URuOZAXNkMM3VOyUZPMQXLzQ4y2SbQv+DeSC0zWWN2Vve4CN9qV5+nUT2yDKbFI4DxHa1Z55X7wARDbx5rKCVeoRKllo6Zy9uI77tBYZGsaq7s+pJyxy09hP39z+4rE8lI+W8hUX0tXlCFmqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cTF1qr6g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B8E6C4CEF0;
-	Fri, 29 Aug 2025 21:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756502283;
-	bh=V5VOMAjw9pzEl70en0MP+3pcBujDo0p2tlcA6Iwhj08=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=cTF1qr6gFycOdtViqBehM1mwJmfXzfYP+ZHDqakqlmGuO18OPu7EJxuqBPjbkolvL
-	 qOxyZ4ZX6PBxKF6Y0I4ZTcz4v/tOkzZG4R0ZohsfxpaWtdJOfA8hiUEcZl+I0hvIbP
-	 mEXIVFKiifrZQEXq47mc7+8EuwpjhADw05aGzMbr5TqBL9v5w1YOPzezEmHpEBCLHj
-	 ZVsQdN3oZZbcIBF+e537fOz9HTTWFObWhdCnCU9zrXgEK1vSezg6ArLxCRu3dX5PDS
-	 4JUBXpK3uOMKHxjZ9GHz3s1Us6VsQrWHYGdCjHdjlcRryaOzKIjDXzJ/8o/VcOO3qR
-	 zztYif2H5i5wA==
-Date: Fri, 29 Aug 2025 16:18:01 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Zhenzhong Duan <zhenzhong.duan@intel.com>
-Cc: linux-pci@vger.kernel.org, bhelgaas@google.com, mahesh@linux.ibm.com,
-	oohall@gmail.com, linuxppc-dev@lists.ozlabs.org,
-	linux-acpi@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-	james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-	dave@stgolabs.net, jonathan.cameron@huawei.com,
-	dave.jiang@intel.com, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com, linmiaohe@huawei.com,
-	shiju.jose@huawei.com, adam.c.preble@intel.com, lukas@wunner.de,
-	Smita.KoralahalliChannabasappa@amd.com, rrichter@amd.com,
-	linux-cxl@vger.kernel.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, erwin.tsaur@intel.com,
-	sathyanarayanan.kuppuswamy@intel.com, dan.j.williams@intel.com,
-	feiting.wanyan@intel.com, yudong.wang@intel.com,
-	chao.p.peng@intel.com, qingshun.wang@linux.intel.com,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Matthew W Carlis <mattc@purestorage.com>
-Subject: Re: [PATCH v5 2/2] PCI/AER: Print UNCOR_STATUS bits that might be
- ANFE
-Message-ID: <20250829211801.GA1025641@bhelgaas>
+	s=arc-20240116; t=1756568968; c=relaxed/simple;
+	bh=sCz6OtkOx1vc4ea/ZODZiQbBdd0ICmXd2PZBM3+12wE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NfiaNaXoa822yQfFtu/V3ivurq9B4Vtu5Pnxrmrz7JE0+LO5LTFzq3wGbGsYOGwTR+m9EaaWOlt1vG4v1+CXraQtSU8iYqSLePVJFzwMDVZ2D+jY7s5+bswfHAYwULmoeLAGyc0tRJH9WM7iJM/XQbzQ5lblP7y4f5OtEpou9lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=IoFk00pM; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4976E40E016C;
+	Sat, 30 Aug 2025 15:49:21 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id dHomIRKhcIz4; Sat, 30 Aug 2025 15:49:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1756568958; bh=9plfLh/NHQsvvraG6diWzRD6eI4/nonopBwFheQd3Po=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IoFk00pMXcwfAL1NCebkf+p26Ps9bSLn7lCOaGhumPnP6ZHgWj75dOXvRQMYZquoB
+	 UY99zu/wYJeK59uoI3ohIeuVuyt6EDF/WdL4LvLzuvuxmDDQCe9KpRWc/JLToCGMr+
+	 g0HsP+3MGErFulj6FcIOOLBo6Tt4hAQJZHEchAfRVped/jO9mLCEs6jLk/o27ZriZM
+	 sIqrShkeSKR1oNIk1O8A9Gb/QhpCYrowjkBRehT8RNfYH6ByH9KvN7Maqhu112K8+i
+	 uSEBo0NWs5DHdHPNF+vSR7acGSCqhWyRbbx3H+Qx8gcXuE8cC90cIroPHFBLPD9ns5
+	 WUwfghcOPOOqxkr30B+1eTa0i1GMheRh1CsTg+DJeH+LmCmiYZVCfr7/gG0d2lBRsy
+	 5PcCxMzlr7b/bznTXYOlQPPbmhcuR6LvZ+FwX19esMgjgQJks+ds7ZoNVAu62RmPYH
+	 qMexuKsKPnMgJUC/BEZuSoGgjoSsQUqiuI03C78IBmIQVsFKSegSUc7cQMpkWn0xdb
+	 4b630GmJnFdSWn2FXrgmrnpy6eR1WtWYtf5xsimfhBG1Mza3L0XCF7ztAouuFk24zS
+	 q7VVVZdSVfumBJFzeC5jK68goZ55u67ivQIMu9BfivJhgrX+U29V47ykuusMLdpG9/
+	 kcGjhP2fcRRdHXT9apsokv6Q=
+Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id DD9CE40E0140;
+	Sat, 30 Aug 2025 15:49:07 +0000 (UTC)
+Date: Sat, 30 Aug 2025 17:49:02 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
+	rric@kernel.org, shiju.jose@huawei.com, jonathan.cameron@huawei.com,
+	jserv@ccns.ncku.edu.tw, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC: Fix wrong executable file modes for C source files
+Message-ID: <20250830154902.GCaLMdbp6eeHS9_IO0@fat_crate.local>
+References: <20250828191954.903125-1-visitorckw@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240620025857.206647-3-zhenzhong.duan@intel.com>
+In-Reply-To: <20250828191954.903125-1-visitorckw@gmail.com>
 
-[+cc Matt]
-
-On Thu, Jun 20, 2024 at 10:58:57AM +0800, Zhenzhong Duan wrote:
-> When an Advisory Non-Fatal error(ANFE) triggers, both correctable error(CE)
-> status and ANFE related uncorrectable error(UE) status will be printed:
+On Fri, Aug 29, 2025 at 03:19:54AM +0800, Kuan-Wei Chiu wrote:
+> Three EDAC source files were mistakenly marked as executable in
+> commit 1e14ea901dc8 ("EDAC: Initialize EDAC features sysfs attributes").
 > 
->   AER: Correctable error message received from 0000:b7:02.0
->   PCIe Bus Error: severity=Correctable, type=Transaction Layer, (Receiver ID)
->     device [8086:0db0] error status/mask=00002000/00000000
->      [13] NonFatalErr
->     Uncorrectable errors that may cause Advisory Non-Fatal:
->      [12] TLP
+> These are plain C source files and should not carry the executable bit.
+> Correcting their modes follows the principle of least privilege and
+> avoids unnecessary execute permissions in the repository.
 > 
-> Tested-by: Yudong Wang <yudong.wang@intel.com>
-> Co-developed-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-> Signed-off-by: "Wang, Qingshun" <qingshun.wang@linux.intel.com>
-> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Fixes: 1e14ea901dc8 ("EDAC: Initialize EDAC features sysfs attributes")
+> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 > ---
->  drivers/pci/pcie/aer.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+>  drivers/edac/ecs.c        | 0
+>  drivers/edac/mem_repair.c | 0
+>  drivers/edac/scrub.c      | 0
+>  3 files changed, 0 insertions(+), 0 deletions(-)
+>  mode change 100755 => 100644 drivers/edac/ecs.c
+>  mode change 100755 => 100644 drivers/edac/mem_repair.c
+>  mode change 100755 => 100644 drivers/edac/scrub.c
 > 
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index 3dcfa0191169..ba3a54092f2c 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -681,6 +681,7 @@ static void __aer_print_error(struct pci_dev *dev,
->  {
->  	const char **strings;
->  	unsigned long status = info->status & ~info->mask;
-> +	unsigned long anfe_status = info->anfe_status;
->  	const char *level, *errmsg;
->  	int i;
->  
-> @@ -701,6 +702,20 @@ static void __aer_print_error(struct pci_dev *dev,
->  				info->first_error == i ? " (First)" : "");
->  	}
->  	pci_dev_aer_stats_incr(dev, info);
-> +
-> +	if (!anfe_status)
-> +		return;
-
-__aer_print_error() is used by both native AER handling, where Linux
-fields the AER interrupt and reads the AER status registers directly,
-and APEI GHES firmware-first error handling, where platform firmware
-fields the AER interrupt, reads the AER status registers, and packages
-them up to hand off to Linux via aer_recover_queue().
-
-But the previous patch only sets info->anfe_status for the native
-path, so the APEI GHES path doesn't get the benefit of this change.
-
-I think both paths should log the same ANFE information.
-
-> +
-> +	strings = aer_uncorrectable_error_string;
-> +	pci_printk(level, dev, "Uncorrectable errors that may cause Advisory Non-Fatal:\n");
-> +
-> +	for_each_set_bit(i, &anfe_status, 32) {
-> +		errmsg = strings[i];
-> +		if (!errmsg)
-> +			errmsg = "Unknown Error Bit";
-> +
-> +		pci_printk(level, dev, "   [%2d] %s\n", i, errmsg);
-> +	}
->  }
->  
->  void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
+> diff --git a/drivers/edac/ecs.c b/drivers/edac/ecs.c
+> old mode 100755
+> new mode 100644
+> diff --git a/drivers/edac/mem_repair.c b/drivers/edac/mem_repair.c
+> old mode 100755
+> new mode 100644
+> diff --git a/drivers/edac/scrub.c b/drivers/edac/scrub.c
+> old mode 100755
+> new mode 100644
 > -- 
-> 2.34.1
-> 
+
+Applied, thanks.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
