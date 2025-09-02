@@ -1,43 +1,44 @@
-Return-Path: <linux-edac+bounces-4720-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4721-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74D75B40C10
-	for <lists+linux-edac@lfdr.de>; Tue,  2 Sep 2025 19:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D052B40C12
+	for <lists+linux-edac@lfdr.de>; Tue,  2 Sep 2025 19:31:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBA091B2846B
-	for <lists+linux-edac@lfdr.de>; Tue,  2 Sep 2025 17:31:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 187381B284BC
+	for <lists+linux-edac@lfdr.de>; Tue,  2 Sep 2025 17:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D09231827;
-	Tue,  2 Sep 2025 17:31:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44ED3341AD1;
+	Tue,  2 Sep 2025 17:31:03 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC1C32F768;
-	Tue,  2 Sep 2025 17:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296241DD9AD;
+	Tue,  2 Sep 2025 17:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756834260; cv=none; b=Jq0oJaZB7mVVtfs7qWuA3pzIfpxksUzHtq2jPlOlygIvR7zHJM+MREmfwM4sJOMD2Y8Avp8/5K99uBE3CaNwehheSOla1p1SELa2VyjUKMG/qDpRVtVnRTWrHyWk4R/0rul9eUlLbHEtTEXHCxmtxES1djjgkAp2IpvXS49NzNc=
+	t=1756834263; cv=none; b=U/IPY2Czn1kAqbDBot9loi5VqiX5eeWyQMqgPBkoNWOmo0TDVeDlzBlljVfpXcV2r6Y9LQN1I+GjcnfO9FK6oyZR7Shk8CI0hk5vgrRHnMQ5aHdj+KFRsJJXJITs5yT6KyNQssmtaN+AxEchm17s8EQId+13jkMci3Jb065qW7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756834260; c=relaxed/simple;
-	bh=DNxsmlGgb4fgxpuEAi2jxZ08D2nVig0sMyl6O4J/BTc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=f/n/49NEk5RtvwPsRtBQfOrvEligmGsh3H3blIjiqE/zZ9ylHP7VwLNE4mzqGwTanSs5p9M92TuRhLLmCwF5cvQaMjz8noUiNYfI9kQA27Cb7DilEG36vGp27RttJm1Id3geEZPKZmFMmO88Ru6+rdjsJaDKf3/Kq+W0zY4iNcs=
+	s=arc-20240116; t=1756834263; c=relaxed/simple;
+	bh=k0XWiDyNYRYHqaS7IihD0wvC4VABnBX7J4eEsDYjaTY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pVAa08ipKwplYxYVe48toJKVAnV3tr5eDUoK6wc23ntxPtEaAj6yU2BRBJXF27Cz9nfEzyhKM8SpTb/Hb4KuDXwSjWB2DMxBMrKJXVZ6QxQh6EHe4CBHAwun4i2kilJs6ND2ifguBz7z8BXGL9R4oWbIYoGD1fkqryMYYDpZDGg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cGXlG2zsDz6M4hF;
-	Wed,  3 Sep 2025 01:28:26 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cGXn91Ky4z6HJgc;
+	Wed,  3 Sep 2025 01:30:05 +0800 (CST)
 Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7568B1400C8;
-	Wed,  3 Sep 2025 01:30:53 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 0162E140275;
+	Wed,  3 Sep 2025 01:30:56 +0800 (CST)
 Received: from P_UKIT01-A7bmah.china.huawei.com (10.48.150.145) by
  frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 2 Sep 2025 19:30:51 +0200
+ 15.1.2507.39; Tue, 2 Sep 2025 19:30:54 +0200
 From: <shiju.jose@huawei.com>
 To: <rafael@kernel.org>, <bp@alien8.de>, <akpm@linux-foundation.org>,
 	<rppt@kernel.org>, <dferguson@amperecomputing.com>,
@@ -55,169 +56,604 @@ CC: <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
 	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
 	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
 	<shiju.jose@huawei.com>
-Subject: [PATCH v12 0/2] ACPI: Add support for ACPI RAS2 feature table
-Date: Tue, 2 Sep 2025 18:30:38 +0100
-Message-ID: <20250902173043.1796-1-shiju.jose@huawei.com>
+Subject: [PATCH v12 1/2] ACPI:RAS2: Add ACPI RAS2 driver
+Date: Tue, 2 Sep 2025 18:30:39 +0100
+Message-ID: <20250902173043.1796-2-shiju.jose@huawei.com>
 X-Mailer: git-send-email 2.43.0.windows.1
+In-Reply-To: <20250902173043.1796-1-shiju.jose@huawei.com>
+References: <20250902173043.1796-1-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
  frapeml500007.china.huawei.com (7.182.85.172)
 
 From: Shiju Jose <shiju.jose@huawei.com>
 
 Add support for ACPI RAS2 feature table (RAS2) defined in the
-ACPI 6.5 specification, section 5.2.21 and RAS2 HW based memory
-scrubbing feature.
+ACPI 6.5 Specification, section 5.2.21.
+Driver defines RAS2 Init, which extracts the RAS2 table and driver
+adds auxiliary device for each memory feature which binds to the
+RAS2 memory driver.
 
-ACPI RAS2 patches were part of the EDAC series [1].
+Driver uses PCC mailbox to communicate with the ACPI HW and the
+driver adds OSPM interfaces to send RAS2 commands.
 
-The code is based on linux.git v6.17-rc4 [2].
+According to the ACPI specification rev 6.5, section 5.2.21.1.1
+RAS2 Platform Communication Channel Descriptor, “RAS2 supports multiple
+PCC channels, where a channel is dedicated to a given component
+instance.” Thus, RAS2 driver has been implemented to support only
+systems that comply with the specification, i.e. a dedicated PCC channel
+per system component instance for communication.
 
-1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
-2. https://github.com/torvalds/linux.git
+ACPI specification rev 6.5, section 5.2.21.1.1 Table 5.80: RAS2 Platform
+Communication Channel Descriptor format, defines Field: Instance,
+Identifier for the system component instance that the RAS feature is
+associated with.
 
-Changes
-=======
-v11 -> v12:
-1. Modified logic for finding the lowest contiguous phy memory addr range for
-NUMA domain using node_start_pfn() and node_spanned_pages() according to the
-feedback from Mike Rapoport in v11.
-https://lore.kernel.org/all/aKsIlFTkBsAF5sqD@kernel.org/
+Section 5.2.21.2.1 Hardware-based Memory Scrubbing describes as
+The platform can use this feature to expose controls and capabilities
+associated with hardware-based memory scrub engines. Modern scalable
+platforms have complex memory systems with a multitude of memory
+controllers that are in turn associated with NUMA domains. It is also
+common for RAS errors related to memory to be associated with NUMA
+domains, where the NUMA domain functions as a FRU identifier. This
+feature thus provides memory scrubbing at a NUMA domain granularity.
+The following are supported:
+1. Independent memory scrubbing controls for each NUMA domain, identified
+using its proximity domain.
+2. Provision for background (patrol) scrubbing of the entire memory
+system, as well as on-demand scrubbing for a specific region of memory.
 
-2. Rebase to 6.17-rc4.
+Thus, the RAS2 driver requires the lowest contiguous physical memory range
+of the memory associated with a NUMA domain when communicating with the
+firmware for memory-related features such as scrubbing. The driver uses
+the component instance ID, as defined in Table 5.80, to retrieve the
+lowest contiguous physical memory address range within the NUMA node
+and store it in the struct ras2_context to expose the address range to
+the userspace and for the communication with the firmware.
 
-v10 -> v11:
-1. Simplified code by removing workarounds previously added to support
-   non-compliant case of single PCC channel shared across all proximity
-   domains (which is no longer required). 
-   https://lore.kernel.org/all/f5b28977-0b80-4c39-929b-cf02ab1efb97@os.amperecomputing.com/
-
-2. Fix for the comments from Borislav (Thanks).
-   https://lore.kernel.org/all/20250811152805.GQaJoMBecC4DSDtTAu@fat_crate.local/
-
-3. Rebase to 6.17-rc1.
-
-v9 -> v10:
-1. Use pcc_chan->shmem instead of 
-   acpi_os_ioremap(pcc_chan->shmem_base_addr,...) as it was
-   acpi_os_ioremap internally by the PCC driver to pcc_chan->shmem.
-   
-2. Changes required for the Ampere Computing system where uses a single
-   PCC channel for RAS2 memory features across all NUMA domains. Based on the
-   requirements from by Daniel on V9
-   https://lore.kernel.org/all/547ed8fb-d6b7-4b6b-a38b-bf13223971b1@os.amperecomputing.com/
-   and discussion with Jonathan.
-2.1 Add node_to_range lookup facility to numa_memblks. This is to retrieve the lowest
-    physical continuous memory range of the memory associated with a NUMA domain.
-2.2. Set requested addr range to the memory region's base addr and size
-   while send RAS2 cmd GET_PATROL_PARAMETER 
-   in functions ras2_update_patrol_scrub_params_cache() &
-   ras2_get_patrol_scrub_running().
-2.3. Split struct ras2_mem_ctx into struct ras2_mem_ctx_hdr and struct ras2_pxm_domain
-   to support cases, uses a single PCC channel for RAS2 scrubbers across all NUMA
-   domains and PCC channel per RAS2 scrub instance. Provided ACPI spec define single
-   memory scrub per NUMA domain.
-2.4. EDAC feature sysfs folder for RAS2 changed from "acpi_ras_memX" to  "acpi_ras_mem_idX"
-   because memory scrub instances across all NUMA domains would present under
-   "acpi_ras_mem_id0" when a system uses a single PCC channel for RAS2 scrubbers across
-   all NUMA domains etc.
-2.5. Removed Acked-by: Rafael from patch [2], because of the several above changes from v9.
-
-v8 -> v9:
-1. Added following changes for feedback from Yazen.
- 1.1 In ras2_check_pcc_chan(..) function
-    - u32 variables moved to the same line.
-    - Updated error log for readw_relaxed_poll_timeout()
-    - Added error log for if (status & PCC_STATUS_ERROR), error condition.
-    - Removed an impossible condition check.
-  1.2. Added guard for ras2_pc_list_lock in ras2_get_pcc_subspace().
-        
-2. Rebased to linux.git v6.16-rc2 [2].
-
-v7 -> v8:
-1. Rebased to linux.git v6.16-rc1 [2].
-
-v6 -> v7:
-1. Fix for the issue reported by Daniel,
-   In ras2_check_pcc_chan(), add read, clear and check RAS2 set_cap_status outside
-   if (status & PCC_STATUS_ERROR) check. 
-   https://lore.kernel.org/all/51bcb52c-4132-4daf-8903-29b121c485a1@os.amperecomputing.com/
-
-v5 -> v6:
-1. Fix for the issue reported by Daniel, in start scrubbing with correct addr and size
-   after firmware return INVALID DATA error for scrub request with invalid addr or size.
-   https://lore.kernel.org/all/8cdf7885-31b3-4308-8a7c-f4e427486429@os.amperecomputing.com/
-   
-v4 -> v5:
-1. Fix for the build warnings reported by kernel test robot.
-   https://patchwork.kernel.org/project/linux-edac/patch/20250423163511.1412-3-shiju.jose@huawei.com/
-2. Removed patch "ACPI: ACPI 6.5: RAS2: Rename RAS2 table structure and field names"
-   from the series as the patch was merged to linux-pm.git : branch linux-next
-3. Rebased to ras.git: edac-for-next branch merged with linux-pm.git : linux-next branch.
-      
-v3 -> v4:
-1.  Changes for feedbacks from Yazen on v3.
-    https://lore.kernel.org/all/20250415210504.GA854098@yaz-khff2.amd.com/
-
-v2 -> v3:
-1. Rename RAS2 table structure and field names in 
-   include/acpi/actbl2.h limited to only necessary
-   for RAS2 scrub feature.
-2. Changes for feedbacks from Jonathan on v2.
-3. Daniel reported a known behaviour: when readback 'size' attribute after
-   setting in, returns 0 before starting scrubbing via 'addr' attribute.
-   Changes added to fix this.
-4. Daniel reported that firmware cannot update status of demand scrubbing
-   via the 'Actual Address Range (OUTPUT)', thus add workaround in the
-   kernel to update sysfs 'addr' attribute with the status of demand
-   scrubbing.
-5. Optimized logic in ras2_check_pcc_chan() function
-   (patch - ACPI:RAS2: Add ACPI RAS2 driver).
-6. Add PCC channel lock to struct ras2_pcc_subspace and change
-   lock in ras2_mem_ctx as a pointer to pcc channel lock to make sure
-   writing to PCC subspace shared memory is protected from race conditions.
-   
-v1 -> v2:
-1.  Changes for feedbacks from Borislav.
-    - Shorten ACPI RAS2 structures and variables names.
-    - Shorten some of the other variables in the RAS2 drivers.
-    - Fixed few CamelCases.
-
-2.  Changes for feedbacks from Yazen.
-    - Added newline after number of '}' and return statements.
-    - Changed return type for "ras2_add_aux_device() to 'int'.
-    - Deleted a duplication of acpi_get_table("RAS2",...) in the ras2_acpi_parse_table().
-    - Add "FW_WARN" to few error logs in the ras2_acpi_parse_table().
-    - Rename ras2_acpi_init() to acpi_ras2_init() and modified to call acpi_ras2_init()
-      function from the acpi_init().
-    - Moved scrub related variables from the struct ras2_mem_ctx from  patch
-      "ACPI:RAS2: Add ACPI RAS2 driver" to "ras: mem: Add memory ACPI RAS2 driver".
-
-Shiju Jose (2):
-  ACPI:RAS2: Add ACPI RAS2 driver
-  ras: mem: Add memory ACPI RAS2 driver
-
- Documentation/edac/scrub.rst |  73 ++++++
- drivers/acpi/Kconfig         |  12 +
- drivers/acpi/Makefile        |   1 +
- drivers/acpi/bus.c           |   3 +
- drivers/acpi/ras2.c          | 389 ++++++++++++++++++++++++++++++++
- drivers/ras/Kconfig          |  11 +
- drivers/ras/Makefile         |   1 +
- drivers/ras/acpi_ras2.c      | 424 +++++++++++++++++++++++++++++++++++
- include/acpi/ras2.h          |  77 +++++++
- 9 files changed, 991 insertions(+)
+Co-developed-by: A Somasundaram <somasundaram.a@hpe.com>
+Signed-off-by: A Somasundaram <somasundaram.a@hpe.com>
+Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Tested-by: Daniel Ferguson <danielf@os.amperecomputing.com>
+Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+---
+ drivers/acpi/Kconfig  |  12 ++
+ drivers/acpi/Makefile |   1 +
+ drivers/acpi/bus.c    |   3 +
+ drivers/acpi/ras2.c   | 389 ++++++++++++++++++++++++++++++++++++++++++
+ include/acpi/ras2.h   |  63 +++++++
+ 5 files changed, 468 insertions(+)
  create mode 100644 drivers/acpi/ras2.c
- create mode 100644 drivers/ras/acpi_ras2.c
  create mode 100644 include/acpi/ras2.h
 
+diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+index b594780a57d7..db21bf5a39c7 100644
+--- a/drivers/acpi/Kconfig
++++ b/drivers/acpi/Kconfig
+@@ -293,6 +293,18 @@ config ACPI_CPPC_LIB
+ 	  If your platform does not support CPPC in firmware,
+ 	  leave this option disabled.
+ 
++config ACPI_RAS2
++	bool "ACPI RAS2 driver"
++	select AUXILIARY_BUS
++	select MAILBOX
++	select PCC
++	select NUMA_KEEP_MEMINFO if NUMA_MEMBLKS
++	help
++	  The driver adds support for ACPI RAS2 feature table (extracts RAS2
++	  table from OS system table) and OSPM interfaces to send RAS2
++	  commands via PCC mailbox subspace. Driver adds platform device for
++	  the RAS2 memory features which binds to the RAS2 memory driver.
++
+ config ACPI_PROCESSOR
+ 	tristate "Processor"
+ 	depends on X86 || ARM64 || LOONGARCH || RISCV
+diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+index d1b0affb844f..abfec6745724 100644
+--- a/drivers/acpi/Makefile
++++ b/drivers/acpi/Makefile
+@@ -105,6 +105,7 @@ obj-$(CONFIG_ACPI_EC_DEBUGFS)	+= ec_sys.o
+ obj-$(CONFIG_ACPI_BGRT)		+= bgrt.o
+ obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
+ obj-$(CONFIG_ACPI_SPCR_TABLE)	+= spcr.o
++obj-$(CONFIG_ACPI_RAS2)		+= ras2.o
+ obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
+ obj-$(CONFIG_ACPI_PPTT) 	+= pptt.o
+ obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o pfr_telemetry.o
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index a984ccd4a2a0..b02ceb2837c6 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -31,6 +31,7 @@
+ #include <acpi/apei.h>
+ #include <linux/suspend.h>
+ #include <linux/prmt.h>
++#include <acpi/ras2.h>
+ 
+ #include "internal.h"
+ 
+@@ -1474,6 +1475,8 @@ static int __init acpi_init(void)
+ 	acpi_debugger_init();
+ 	acpi_setup_sb_notify_handler();
+ 	acpi_viot_init();
++	acpi_ras2_init();
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/acpi/ras2.c b/drivers/acpi/ras2.c
+new file mode 100644
+index 000000000000..a17eab9eecf1
+--- /dev/null
++++ b/drivers/acpi/ras2.c
+@@ -0,0 +1,389 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Implementation of ACPI RAS2 driver.
++ *
++ * Copyright (c) 2024-2025 HiSilicon Limited.
++ *
++ * Support for RAS2 - ACPI 6.5 Specification, section 5.2.21
++ *
++ * Driver contains ACPI RAS2 init, which extracts the ACPI RAS2 table and
++ * get the PCC channel subspace for communicating with the ACPI compliant
++ * HW platform which supports ACPI RAS2. Driver adds auxiliary devices
++ * for each RAS2 memory feature which binds to the memory ACPI RAS2 driver.
++ */
++
++#define pr_fmt(fmt) "ACPI RAS2: " fmt
++
++#include <linux/delay.h>
++#include <linux/export.h>
++#include <linux/iopoll.h>
++#include <linux/ktime.h>
++#include <acpi/pcc.h>
++#include <acpi/ras2.h>
++
++/**
++ * struct ras2_pcc_subspace - Data structure for PCC communication
++ * @mbox_client:	struct mbox_client object
++ * @pcc_chan:		Pointer to struct pcc_mbox_chan
++ * @comm_addr:		Pointer to RAS2 PCC shared memory region
++ * @elem:		List for registered RAS2 PCC channel subspaces
++ * @pcc_lock:		PCC lock to provide mutually exclusive access
++ *			to PCC channel subspace
++ * @deadline_us:	Poll PCC status register timeout in micro secs
++ *			for PCC command complete
++ * @pcc_mpar:		Maximum Periodic Access Rate(MPAR) for PCC channel
++ * @pcc_mrtt:		Minimum Request Turnaround Time(MRTT) in micro secs
++ *			OS must wait after completion of a PCC command before
++ *			issue next command
++ * @last_cmd_cmpl_time:	completion time of last PCC command
++ * @last_mpar_reset:	Time of last MPAR count reset
++ * @mpar_count:		MPAR count
++ * @pcc_id:		Identifier of the RAS2 platform communication channel
++ * @last_cmd:		Last PCC command
++ * @pcc_chnl_acq:	Status of PCC channel acquired
++ */
++struct ras2_pcc_subspace {
++	struct mbox_client		mbox_client;
++	struct pcc_mbox_chan		*pcc_chan;
++	struct acpi_ras2_shmem __iomem	*comm_addr;
++	struct list_head		elem;
++	struct mutex			pcc_lock;
++	unsigned int			deadline_us;
++	unsigned int			pcc_mpar;
++	unsigned int			pcc_mrtt;
++	ktime_t				last_cmd_cmpl_time;
++	ktime_t				last_mpar_reset;
++	int				mpar_count;
++	int				pcc_id;
++	u16				last_cmd;
++	bool				pcc_chnl_acq;
++};
++
++/*
++ * Arbitrary retries for PCC commands because the remote processor
++ * could be much slower to reply. Keeping it high enough to cover
++ * emulators where the processors run painfully slow.
++ */
++#define RAS2_NUM_RETRIES 600ULL
++
++#define RAS2_FEAT_TYPE_MEMORY 0x00
++
++static int ras2_report_cap_error(u32 cap_status)
++{
++	switch (cap_status) {
++	case ACPI_RAS2_NOT_VALID:
++	case ACPI_RAS2_NOT_SUPPORTED:
++		return -EPERM;
++	case ACPI_RAS2_BUSY:
++		return -EBUSY;
++	case ACPI_RAS2_FAILED:
++	case ACPI_RAS2_ABORTED:
++	case ACPI_RAS2_INVALID_DATA:
++		return -EINVAL;
++	default: /* 0 or other, Success */
++		return 0;
++	}
++}
++
++static int ras2_check_pcc_chan(struct ras2_pcc_subspace *pcc_subspace)
++{
++	struct acpi_ras2_shmem __iomem *gen_comm_base = pcc_subspace->comm_addr;
++	u32 cap_status, rc;
++	u16 status;
++
++	/*
++	 * As per ACPI spec, the PCC space will be initialized by
++	 * platform and should have set the command completion bit when
++	 * PCC can be used by OSPM.
++	 *
++	 * Poll PCC status register every 3us(delay_us) for maximum of
++	 * deadline_us(timeout_us) until PCC command complete bit is set(cond).
++	 */
++	rc = readw_relaxed_poll_timeout(&gen_comm_base->status, status,
++					status & PCC_STATUS_CMD_COMPLETE, 3,
++					pcc_subspace->deadline_us);
++	if (rc) {
++		pr_warn("PCC check channel timeout for pcc_id=%d rc=%d\n",
++			pcc_subspace->pcc_id, rc);
++		return rc;
++	}
++
++	if (status & PCC_STATUS_ERROR) {
++		pr_warn("Error in executing last command=%d for pcc_id=%d\n",
++			pcc_subspace->last_cmd, pcc_subspace->pcc_id);
++		status &= ~PCC_STATUS_ERROR;
++		writew_relaxed(status, &gen_comm_base->status);
++		return -EIO;
++	}
++
++	cap_status = readw_relaxed(&gen_comm_base->set_caps_status);
++	writew_relaxed(0x0, &gen_comm_base->set_caps_status);
++	return ras2_report_cap_error(cap_status);
++}
++
++/**
++ * ras2_send_pcc_cmd() - Send RAS2 command via PCC channel
++ * @ras2_ctx:	pointer to the RAS2 context structure
++ * @cmd:	command to send
++ *
++ * Returns: 0 on success, an error otherwise
++ */
++int ras2_send_pcc_cmd(struct ras2_mem_ctx *ras2_ctx, u16 cmd)
++{
++	struct ras2_pcc_subspace *pcc_subspace = ras2_ctx->pcc_subspace;
++	struct acpi_ras2_shmem __iomem *gen_comm_base = pcc_subspace->comm_addr;
++	struct mbox_chan *pcc_channel;
++	unsigned int time_delta;
++	int rc;
++
++	rc = ras2_check_pcc_chan(pcc_subspace);
++	if (rc < 0)
++		return rc;
++
++	pcc_channel = pcc_subspace->pcc_chan->mchan;
++
++	/*
++	 * Handle the Minimum Request Turnaround Time(MRTT).
++	 * "The minimum amount of time that OSPM must wait after the completion
++	 * of a command before issuing the next command, in microseconds."
++	 */
++	if (pcc_subspace->pcc_mrtt) {
++		time_delta = ktime_us_delta(ktime_get(),
++					    pcc_subspace->last_cmd_cmpl_time);
++		if (pcc_subspace->pcc_mrtt > time_delta)
++			udelay(pcc_subspace->pcc_mrtt - time_delta);
++	}
++
++	/*
++	 * Handle the non-zero Maximum Periodic Access Rate(MPAR).
++	 * "The maximum number of periodic requests that the subspace channel can
++	 * support, reported in commands per minute. 0 indicates no limitation."
++	 *
++	 * This parameter should be ideally zero or large enough so that it can
++	 * handle maximum number of requests that all the cores in the system can
++	 * collectively generate. If it is not, we will follow the spec and just
++	 * not send the request to the platform after hitting the MPAR limit in
++	 * any 60s window.
++	 */
++	if (pcc_subspace->pcc_mpar) {
++		if (pcc_subspace->mpar_count == 0) {
++			time_delta = ktime_ms_delta(ktime_get(),
++						    pcc_subspace->last_mpar_reset);
++			if (time_delta < 60 * MSEC_PER_SEC) {
++				dev_dbg(ras2_ctx->dev,
++					"PCC cmd not sent due to MPAR limit");
++				return -EIO;
++			}
++			pcc_subspace->last_mpar_reset = ktime_get();
++			pcc_subspace->mpar_count = pcc_subspace->pcc_mpar;
++		}
++		pcc_subspace->mpar_count--;
++	}
++
++	/* Write to the shared comm region */
++	writew_relaxed(cmd, &gen_comm_base->command);
++
++	/* Flip CMD COMPLETE bit */
++	writew_relaxed(0, &gen_comm_base->status);
++
++	/* Ring doorbell */
++	rc = mbox_send_message(pcc_channel, &cmd);
++	if (rc < 0) {
++		dev_warn(ras2_ctx->dev,
++			 "Err sending PCC mbox message. cmd:%d, rc:%d\n",
++			 cmd, rc);
++		return rc;
++	}
++
++	pcc_subspace->last_cmd = cmd;
++
++	/*
++	 * If Minimum Request Turnaround Time is non-zero, we need
++	 * to record the completion time of both READ and WRITE
++	 * command for proper handling of MRTT, so we need to check
++	 * for pcc_mrtt in addition to CMD_READ.
++	 */
++	if (cmd == PCC_CMD_EXEC_RAS2 || pcc_subspace->pcc_mrtt) {
++		rc = ras2_check_pcc_chan(pcc_subspace);
++		if (pcc_subspace->pcc_mrtt)
++			pcc_subspace->last_cmd_cmpl_time = ktime_get();
++	}
++
++	if (pcc_channel->mbox->txdone_irq)
++		mbox_chan_txdone(pcc_channel, rc);
++	else
++		mbox_client_txdone(pcc_channel, rc);
++
++	return rc < 0 ? rc : 0;
++}
++EXPORT_SYMBOL_GPL(ras2_send_pcc_cmd);
++
++static void ras2_list_pcc_release(struct ras2_pcc_subspace *pcc_subspace)
++{
++	pcc_mbox_free_channel(pcc_subspace->pcc_chan);
++	kfree(pcc_subspace);
++}
++
++static int ras2_register_pcc_channel(struct ras2_mem_ctx *ras2_ctx, int pcc_id)
++{
++	struct ras2_pcc_subspace *pcc_subspace;
++	struct pcc_mbox_chan *pcc_chan;
++	struct mbox_client *mbox_cl;
++
++	if (pcc_id < 0)
++		return -EINVAL;
++
++	pcc_subspace = kzalloc(sizeof(*pcc_subspace), GFP_KERNEL);
++	if (!pcc_subspace)
++		return -ENOMEM;
++
++	mbox_cl			= &pcc_subspace->mbox_client;
++	mbox_cl->knows_txdone	= true;
++
++	pcc_chan = pcc_mbox_request_channel(mbox_cl, pcc_id);
++	if (IS_ERR(pcc_chan)) {
++		kfree(pcc_subspace);
++		return PTR_ERR(pcc_chan);
++	}
++
++	pcc_subspace->pcc_id		= pcc_id;
++	pcc_subspace->pcc_chan		= pcc_chan;
++	pcc_subspace->comm_addr		= pcc_chan->shmem;
++	pcc_subspace->deadline_us	= RAS2_NUM_RETRIES * pcc_chan->latency;
++	pcc_subspace->pcc_mrtt		= pcc_chan->min_turnaround_time;
++	pcc_subspace->pcc_mpar		= pcc_chan->max_access_rate;
++	pcc_subspace->mbox_client.knows_txdone	= true;
++	pcc_subspace->pcc_chnl_acq	= true;
++
++	ras2_ctx->pcc_subspace	= pcc_subspace;
++	ras2_ctx->comm_addr	= pcc_subspace->comm_addr;
++	ras2_ctx->dev		= pcc_chan->mchan->mbox->dev;
++
++	mutex_init(&pcc_subspace->pcc_lock);
++	ras2_ctx->pcc_lock	= &pcc_subspace->pcc_lock;
++
++	return 0;
++}
++
++static DEFINE_IDA(ras2_ida);
++static void ras2_release(struct device *device)
++{
++	struct auxiliary_device *auxdev = to_auxiliary_dev(device);
++	struct ras2_mem_ctx *ras2_ctx =
++		container_of(auxdev, struct ras2_mem_ctx, adev);
++
++	ida_free(&ras2_ida, auxdev->id);
++	ras2_list_pcc_release(ras2_ctx->pcc_subspace);
++	kfree(ras2_ctx);
++}
++
++static int ras2_add_aux_device(char *name, int channel, u32 pxm_inst)
++{
++	unsigned long start_pfn, size_pfn;
++	struct ras2_mem_ctx *ras2_ctx;
++	int id, rc;
++
++	ras2_ctx = kzalloc(sizeof(*ras2_ctx), GFP_KERNEL);
++	if (!ras2_ctx)
++		return -ENOMEM;
++
++	ras2_ctx->sys_comp_nid = pxm_to_node(pxm_inst);
++	/*
++	 * Retrieve the lowest contiguous physical memory address range within
++	 * the NUMA node.
++	 */
++	start_pfn = node_start_pfn(ras2_ctx->sys_comp_nid);
++	size_pfn = node_spanned_pages(ras2_ctx->sys_comp_nid);
++	if (!size_pfn) {
++		pr_debug("Failed to find phy addr range for NUMA node(%u)\n",
++			 pxm_inst);
++		goto ctx_free;
++	}
++	ras2_ctx->mem_base_addr = __pfn_to_phys(start_pfn);
++	ras2_ctx->mem_size = __pfn_to_phys(size_pfn);
++
++	rc = ras2_register_pcc_channel(ras2_ctx, channel);
++	if (rc < 0) {
++		pr_debug("Failed to register pcc channel rc=%d\n", rc);
++		goto ctx_free;
++	}
++
++	id = ida_alloc(&ras2_ida, GFP_KERNEL);
++	if (id < 0) {
++		rc = id;
++		goto ctx_free;
++	}
++
++	ras2_ctx->adev.id		= id;
++	ras2_ctx->adev.name		= RAS2_MEM_DEV_ID_NAME;
++	ras2_ctx->adev.dev.release	= ras2_release;
++	ras2_ctx->adev.dev.parent	= ras2_ctx->dev;
++
++	rc = auxiliary_device_init(&ras2_ctx->adev);
++	if (rc)
++		goto ida_free;
++
++	rc = auxiliary_device_add(&ras2_ctx->adev);
++	if (rc) {
++		auxiliary_device_uninit(&ras2_ctx->adev);
++		return rc;
++	}
++
++	return 0;
++
++ida_free:
++	ida_free(&ras2_ida, id);
++ctx_free:
++	kfree(ras2_ctx);
++
++	return rc;
++}
++
++static int acpi_ras2_parse(struct acpi_table_ras2 *ras2_tab)
++{
++	struct acpi_ras2_pcc_desc *pcc_desc_list;
++	int rc;
++	u16 i;
++
++	if (ras2_tab->header.length < sizeof(*ras2_tab)) {
++		pr_warn(FW_WARN "ACPI RAS2 table present but broken (too short #1)\n");
++		return -EINVAL;
++	}
++
++	if (!ras2_tab->num_pcc_descs) {
++		pr_warn(FW_WARN "No PCC descs in ACPI RAS2 table\n");
++		return -EINVAL;
++	}
++
++	pcc_desc_list = (struct acpi_ras2_pcc_desc *)(ras2_tab + 1);
++	for (i = 0; i < ras2_tab->num_pcc_descs; i++, pcc_desc_list++) {
++		if (pcc_desc_list->feature_type != RAS2_FEAT_TYPE_MEMORY)
++			continue;
++
++		rc = ras2_add_aux_device(RAS2_MEM_DEV_ID_NAME,
++					 pcc_desc_list->channel_id,
++					 pcc_desc_list->instance);
++		if (rc)
++			pr_warn("Failed to add RAS2 auxiliary device rc=%d\n", rc);
++	}
++
++	return 0;
++}
++
++void __init acpi_ras2_init(void)
++{
++	struct acpi_table_ras2 *ras2_tab;
++	acpi_status status;
++
++	status = acpi_get_table(ACPI_SIG_RAS2, 0,
++				(struct acpi_table_header **)&ras2_tab);
++	if (ACPI_FAILURE(status)) {
++		pr_err("Failed to get table, %s\n", acpi_format_exception(status));
++		return;
++	}
++
++	if (acpi_ras2_parse(ras2_tab))
++		pr_err("Failed to parse RAS2 table\n");
++
++	acpi_put_table((struct acpi_table_header *)ras2_tab);
++}
+diff --git a/include/acpi/ras2.h b/include/acpi/ras2.h
+new file mode 100644
+index 000000000000..cb053b5f37e7
+--- /dev/null
++++ b/include/acpi/ras2.h
+@@ -0,0 +1,63 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * ACPI RAS2 driver header file
++ *
++ * Copyright (c) 2024-2025 HiSilicon Limited
++ */
++
++#ifndef _ACPI_RAS2_H
++#define _ACPI_RAS2_H
++
++#include <linux/acpi.h>
++#include <linux/auxiliary_bus.h>
++#include <linux/mailbox_client.h>
++#include <linux/mutex.h>
++#include <linux/types.h>
++
++struct device;
++
++/*
++ * ACPI spec 6.5 Table 5.82: PCC command codes used by
++ * RAS2 platform communication channel.
++ */
++#define PCC_CMD_EXEC_RAS2 0x01
++
++#define RAS2_AUX_DEV_NAME "ras2"
++#define RAS2_MEM_DEV_ID_NAME "acpi_ras2_mem"
++
++/**
++ * struct ras2_mem_ctx - Context for RAS2 memory features
++ * @adev:		Auxiliary device object
++ * @comm_addr:		Pointer to RAS2 PCC shared memory region
++ * @dev:		Pointer to device backing struct mbox_controller for PCC
++ * @pcc_subspace:	Pointer to local data structure for PCC communication
++ * @pcc_lock:		Pointer to PCC lock to provide mutually exclusive access
++ *			to PCC channel subspace
++ * @sys_comp_nid:	Node ID of the system component that the RAS feature
++ *			is associated with. See ACPI spec 6.5 Table 5.80: RAS2
++ *			Platform Communication Channel Descriptor format,
++ *			Field: Instance
++ * @mem_base_addr:	Base of the lowest physical continuous memory range
++ *			of the memory associated with the NUMA domain
++ * @mem_size		Size of the lowest physical continuous memory range
++ *			of the memory associated with the NUMA domain
++ */
++struct ras2_mem_ctx {
++	struct auxiliary_device		adev;
++	struct acpi_ras2_shmem __iomem	*comm_addr;
++	struct device			*dev;
++	void				*pcc_subspace;
++	struct mutex			*pcc_lock;
++	u32				sys_comp_nid;
++	u64				mem_base_addr;
++	u64				mem_size;
++};
++
++#ifdef CONFIG_ACPI_RAS2
++void __init acpi_ras2_init(void);
++int ras2_send_pcc_cmd(struct ras2_mem_ctx *ras2_ctx, u16 cmd);
++#else
++static inline void acpi_ras2_init(void) { }
++#endif
++
++#endif /* _ACPI_RAS2_H */
 -- 
 2.43.0
 
