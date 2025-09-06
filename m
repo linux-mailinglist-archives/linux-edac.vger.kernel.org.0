@@ -1,218 +1,228 @@
-Return-Path: <linux-edac+bounces-4729-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4730-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 325FAB44ED1
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Sep 2025 09:14:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA0DAB471B7
+	for <lists+linux-edac@lfdr.de>; Sat,  6 Sep 2025 17:03:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C77D617D0C8
-	for <lists+linux-edac@lfdr.de>; Fri,  5 Sep 2025 07:14:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 951A8583474
+	for <lists+linux-edac@lfdr.de>; Sat,  6 Sep 2025 15:03:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2836B2D46D9;
-	Fri,  5 Sep 2025 07:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A14A1EFF9B;
+	Sat,  6 Sep 2025 15:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nrSD0tXw"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dbF8kgxy"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2067.outbound.protection.outlook.com [40.107.93.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF862D3A8A;
-	Fri,  5 Sep 2025 07:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757056464; cv=none; b=SAWbZI5FGae6lR1uKf+EBOPavdWq1sO1EeQ5poc8H9B/1BWyCRoW3xgBIgJNYqxCWEfzHAK/l/DjmNInqhcslysa/Cjp8SUPKNzREw+aqk9vG3aAtjQiKn5putlwm7rVbDw7qFHfhG2O3uvUTrKpXaGJcOuBrvYtwchM4RPMvkM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757056464; c=relaxed/simple;
-	bh=i36iL+KR7T7uZpLSbsJEopmHE0PSVOySVwlmjmxdzKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=C9tudciOaC8XAioZvPvQk2cDfvF+gdgimm2FRHbpMVhRyqxPHbxQrwux4lyBFRwZD3bdjwU7FSLBRm9asoFAHR0hJPcBBZBbgqNKJSXObOKTsZy3VbmDYg2FBae3sSnBPMM1dOUo6lOk3QuXRhRGXoYX5U+XRj33Pq5ItIC1cyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nrSD0tXw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B3CC4CEF1;
-	Fri,  5 Sep 2025 07:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757056463;
-	bh=i36iL+KR7T7uZpLSbsJEopmHE0PSVOySVwlmjmxdzKo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=nrSD0tXwtr2Yh1WmtvrkbYVD6OdnGHNJRibQrTfQxvkXrwV4OIkdLex+XPX02JlCY
-	 gP7eLtKIOzQKP+CN813MJczPTT/3jYXu29IuQR/3DtTcfJPSlj97VKxG+HsayT9q+3
-	 UZpgBRDuZ8bdk2qniqyF0vHOz5myfV+7xo2Uu1Nc5ngWsv/f/5pZ7l6n66JSAJwuRM
-	 02Fpwu5KAFVCsqz9Mt+d2595brCMvo0mqRST59KdV2qxBBZGzgQ38Ki3Ci7T69072E
-	 0adZr8zFdJtgZdLfLJudW/dRMDvfsgvOFhYeSh9YX+auBadcmWcdXTvTXBj++iH/UC
-	 nGVXlkAtg4PFg==
-Date: Fri, 5 Sep 2025 09:14:17 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: EDAC Mailing List <linux-edac@vger.kernel.org>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] v4: Split sphinx call logic from docs Makefile
-Message-ID: <20250905091417.13181d6f@foz.lan>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CBF315D35;
+	Sat,  6 Sep 2025 15:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757171009; cv=fail; b=hTvlMUUEthV47R8Y1BkeRv3YEOk11GZy+ra1414s9uQEBvxJ8FmiHDO9J4ajYRk1ceb5ugdpohPGcK7PTE1DSaI0lhjTlZb1gCUGLgkysTYIoUpYfzUZgo1Gj2cOU3R8iaIoqcI/wr8c8sSS0VN331Fd4ENeebtG7LUdsWRnyb8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757171009; c=relaxed/simple;
+	bh=iImvuTMXLA3k1EvK9tTJ6dMkywkegKgHif+pejqWxOc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EHylC/2ErnhMl+dzfAtIK6loGZ/mrYPkuPW+0xD0opCFEJ3PjWGtSSmiVumyft00fK83D6Z0DDsmqfjkrnthbPtfi5ZxHPFkShHAAOh4BHxECU8hpbZzmVgB9/LABun0AQiX/dqcnB3yyTKrQN94IKECgodkpUaSS1SZeQUJHNQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dbF8kgxy; arc=fail smtp.client-ip=40.107.93.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SYkMtCgxegEMcCyx8u4u8HZnU4Z7hClZgYY6sXpCyAS5YwwE0MEGCfGbf5FBCgbpyWBeDB5XAYTMPqe7cz/azoUkQr1zIRyWjs16QioL05JzP0dVA4xmmJ7WJGy64aM6e8ay8A7CkLUK57O+JW2WZBFOVr83cBGrUkUGWsf4bMVhvq3wL8bwUQBM7kMCyfgwLMvJuEBiA8LjZwtLeY1BTK0DwT/9hMItzyvpTV4GpsYHSeXRl2+EwEFvhWlIa8Y8SlqPGthZNerowc0F3ZLVW4CBKtg3H0VRzXD4n/Mfv/YdhRHKEmmbbL8eEyR3Vj48qbiu9WyC+ifEHSGPQAkMxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=laCtqat2fdRv4KDFVxLu1nv/qjv+K+TccQI7pxA/Lk8=;
+ b=UInGDLyOmEO3s0LiK//w4uzQy6NH2IL/xRq5K4KNyd+J1CmHQCL7hjkEjbRxpo4oHZqrV7n0V545sMAgge9+7GbQWTa+RxrapkfWIjRAyVoGoJbSqTls68ND9Xx9EyK1iMPGsZOBs4YSMT/76h7NiGXJTAsqeeX74jF1jFwUAKcWmF0XLzFqTT0U2vudLlUcSF0ThVE34ycYYRDFPlOZfV1Bj1/iNYDuq1+WY+oVzPWdUxLqQ6ripUH7p/kBCHAK2ApFAR/r+XsXdAJ8zsTZ6UGePnL4foQ/47ol8FmKoRhc5QmIyfnEiu+9dTrx+w2+4P73Gf/H/4xq97FUrv8fdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=laCtqat2fdRv4KDFVxLu1nv/qjv+K+TccQI7pxA/Lk8=;
+ b=dbF8kgxyXYXEhEJooyNEjbC13nSWDcWFeWyDXj3atT5NdiI5+gP2aKeZiuoHOPkL6om17Z4qFk5oeZRCfpAmKXWiKg6EW+xrpNcA54ZFFTrLtrZMkcl3jW+JbwwXSZ2+ZpVNpVkzkuFcwJqEweaEPOndKNqMU9eRFWDDY/sUY6M=
+Received: from BY3PR03CA0011.namprd03.prod.outlook.com (2603:10b6:a03:39a::16)
+ by CH1PR12MB9645.namprd12.prod.outlook.com (2603:10b6:610:2af::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.18; Sat, 6 Sep
+ 2025 15:03:21 +0000
+Received: from CO1PEPF000044EF.namprd05.prod.outlook.com
+ (2603:10b6:a03:39a:cafe::25) by BY3PR03CA0011.outlook.office365.com
+ (2603:10b6:a03:39a::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9094.18 via Frontend Transport; Sat,
+ 6 Sep 2025 15:03:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044EF.mail.protection.outlook.com (10.167.241.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9094.14 via Frontend Transport; Sat, 6 Sep 2025 15:03:20 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 6 Sep
+ 2025 10:03:19 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 6 Sep
+ 2025 10:03:17 -0500
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Sat, 6 Sep 2025 10:03:13 -0500
+From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To: <linux-edac@vger.kernel.org>
+CC: <git@amd.com>, <shubhrajyoti.datta@gmail.com>, Rafael Wysocki
+	<rafael@kernel.org>, Tony Luck <tony.luck@intel.com>, Borislav Petkov
+	<bp@alien8.de>, Hanjun Guo <guohanjun@huawei.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>, Shuai Xue <xueshuai@linux.alibaba.com>, Len Brown
+	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH] APEI: GHES: Replace log_non_standard_event with direct tracepoint call
+Date: Sat, 6 Sep 2025 20:33:07 +0530
+Message-ID: <20250906150307.13921-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB05.amd.com: shubhrajyoti.datta@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044EF:EE_|CH1PR12MB9645:EE_
+X-MS-Office365-Filtering-Correlation-Id: 949ff642-68a7-4670-242b-08dded5684c6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|376014|7416014|82310400026|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?J7Dd7U3H2vzXUWQyIBj0KiYu9azHrEYC04aeXz7r6Dv0FFv4TUfvW1o0WNIP?=
+ =?us-ascii?Q?1L1fBO40t0NuJYb++CIusBE1IpeuUaxnKaVsZZILTHJYaGxgeQQi4Z7shgLb?=
+ =?us-ascii?Q?Spra45Z19DrmTDRM7cbV6pZaMIIHGO4SyYtDydFjlvlsHuMQm/29eiGTB0Xc?=
+ =?us-ascii?Q?K4ixiA0Qnk0klF0b3kwl2pXorDLiJbkw75dPw1FoWol83OIb6xSRhtOQbx8s?=
+ =?us-ascii?Q?aG3JSyZqROYi7ijs/4ufkr4KY235Vnph++Hk4LwVD+YLUf5TcGNRPDXm8u7u?=
+ =?us-ascii?Q?edQpLkr0HWDKEJuxiCfyYRuU+pZ/U5UQ+FgyzbyyJTmWI+TlYAgTSFk9aVHd?=
+ =?us-ascii?Q?xQJTX/1lokUR8yoI3D6+kN5/MMAgNHZZ5mmetxSirwF1YBfvRsAV7+EwfAR9?=
+ =?us-ascii?Q?MwAZzbFhLWYo2D6DnhiwZABpc9XICdtv5b80olhMz3BAGGmT50Y3E0cFSN8d?=
+ =?us-ascii?Q?oAF8jIAHYqQBVhse7ElsVCE6OupEeE5DVRnbXFB2hI+sbjuHjY29udv2J5qR?=
+ =?us-ascii?Q?N/hfl/Oj0yx9ubmMyUwievRNZQ/Yr+mH2xpbRlhQ3vlRITrodfar3GxkLNqa?=
+ =?us-ascii?Q?XU1axaOdUjDLVlxujQTU6S5Uw3wc4Y+w1G4+BcRu4/oLT9DzsXO7nrmiIEN0?=
+ =?us-ascii?Q?dy+3KvTYQVvh5hb40PkprBz4GeJMzmTTeQD8eS7oQHpC8G9jGRNM1/Hf+E7K?=
+ =?us-ascii?Q?Xo8NJ6PT3yaPs7eLKiITQIrVTY4xhvY5jisjk1mEU7u7haSXSPwurqHUL10z?=
+ =?us-ascii?Q?urcBmfte7dQol0SZ140VINZGE1zagd5vZjcDiAL8bE+5asoKqNR+k4mlvlDa?=
+ =?us-ascii?Q?o/SmcHcZ9tlaU6AAmixJqE7KhSLlCsNZVuGiEqVxnQH2reWFVoAl3gVAHezO?=
+ =?us-ascii?Q?0UnrNbcqCi1nUK9LToczVC7O6O3EtruMz0kF6EobcbGgGAG2S8QjDYUoOx+Z?=
+ =?us-ascii?Q?4onAQoC3SxWnYmiKHQ4S8RDs9XYkIfe1JJn4neZgAjmF/m6c8VZujjBtYyYW?=
+ =?us-ascii?Q?Y9Rvp5OWd99uahDOwI1zH0ATsDhOyr1NWZLaOTgZRz0ntziS/mZevWgkjx9d?=
+ =?us-ascii?Q?G7Lt6X0+6Oo1UpThsX3MYJbE+OZiC7J3khu8LqsFQN3SrdTJXmrzA1K5cGa8?=
+ =?us-ascii?Q?dprvcO0InuW+empGXPGW8NOXEYl5XAr1im2xMiFY8pzeehu+wqSbAb3eY+e1?=
+ =?us-ascii?Q?/ESqIEV0E56i9pzAQk30sjt2MWO6tX9UEqtjjdjDeDvcwVMDxY6Vrkg/nWEl?=
+ =?us-ascii?Q?QOE2YTZkSPMDtGj7CmEOXAFS8fyENk9xt44slCP56FVhDY4e382/guGaDi7H?=
+ =?us-ascii?Q?acRAQPLqwFLbH3RKu3LHICYI4Mz62kDDJNcis5bpnDaMjgNeHZH95bTv70qK?=
+ =?us-ascii?Q?Un/bw+PCB34J8j3z4UUjC5/E6WzitBNTsJbmn0bN8rF3fehrFwihS9wKKCtw?=
+ =?us-ascii?Q?jiAnwlYa0M8eEYvB8G1b1de28xgvENboX7OQUmJlJiO1lLV1MCGl5exxBEOj?=
+ =?us-ascii?Q?RYOtM0YI4wv1h4H1+Te9ltX47oroW9EQ3SfiACRfSUCuiRgOdpzJ7vWdvw?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(7416014)(82310400026)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2025 15:03:20.5675
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 949ff642-68a7-4670-242b-08dded5684c6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044EF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PR12MB9645
 
-Hi Jon,
+Simplify non-standard RAS event logging by replacing
+log_non_standard_event() with a direct call to trace_non_standard_event()
+in the GHES error handler. Remove the redundant wrapper from the RAS
+subsystem to reduce indirection.
 
-As patch 04/19 do some changes on non-English documents, perhaps the best
-is for you to pick the series as a pull request. The content here
-is identical to:
+Suggested-by: Borislav Petkov  <bp@alien8.de>
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+---
+discurssion link
+https://lore.kernel.org/all/20250901151658.GBaLW46ibJuf4kGgnl@fat_crate.local/
 
-	https://lore.kernel.org/linux-doc/cover.1756969623.git.mchehab+huawei@kernel.org/
+ drivers/acpi/apei/ghes.c | 7 ++++---
+ drivers/ras/ras.c        | 7 -------
+ include/linux/ras.h      | 8 --------
+ 3 files changed, 4 insertions(+), 18 deletions(-)
 
-so, I'll just repeat the description below.
-
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index a0d54993edb3..43896a476fd7 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -921,9 +921,10 @@ static void ghes_do_proc(struct ghes *ghes,
+ 			void *err = acpi_hest_get_payload(gdata);
+ 
+ 			ghes_defer_non_standard_event(gdata, sev);
+-			log_non_standard_event(sec_type, fru_id, fru_text,
+-					       sec_sev, err,
+-					       gdata->error_data_length);
++			if (IS_ENABLED(CONFIG_RAS))
++				trace_non_standard_event(sec_type, fru_id, fru_text,
++							 sec_sev, err,
++							 gdata->error_data_length);
+ 		}
+ 	}
+ 
+diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
+index a6e4792a1b2e..d51c546c2606 100644
+--- a/drivers/ras/ras.c
++++ b/drivers/ras/ras.c
+@@ -45,13 +45,6 @@ EXPORT_SYMBOL_GPL(amd_convert_umc_mca_addr_to_sys_addr);
+ #define TRACE_INCLUDE_PATH ../../include/ras
+ #include <ras/ras_event.h>
+ 
+-void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
+-			    const char *fru_text, const u8 sev, const u8 *err,
+-			    const u32 len)
+-{
+-	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
+-}
 -
+ void log_arm_hw_error(struct cper_sec_proc_arm *err)
+ {
+ 	trace_arm_event(err);
+diff --git a/include/linux/ras.h b/include/linux/ras.h
+index a64182bc72ad..4bd3ef7ca6d8 100644
+--- a/include/linux/ras.h
++++ b/include/linux/ras.h
+@@ -21,18 +21,10 @@ int __init parse_cec_param(char *str);
+ #endif
+ 
+ #ifdef CONFIG_RAS
+-void log_non_standard_event(const guid_t *sec_type,
+-			    const guid_t *fru_id, const char *fru_text,
+-			    const u8 sev, const u8 *err, const u32 len);
+ void log_arm_hw_error(struct cper_sec_proc_arm *err);
+ 
+ #else
+ static inline void
+-log_non_standard_event(const guid_t *sec_type,
+-		       const guid_t *fru_id, const char *fru_text,
+-		       const u8 sev, const u8 *err, const u32 len)
+-{ return; }
+-static inline void
+ log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
+ #endif
+ 
+-- 
+2.17.1
 
-This series does a major cleanup at docs Makefile by moving the
-actual doc build logic to a helper script (scripts/sphinx-build-wrapper).
-
-Such script was written in a way that it can be called either
-directly or via a makefile. When running via makefile, it will
-use GNU jobserver to ensure that, when sphinx-build is
-called, the number of jobs will match at most what it is
-specified by the "-j" parameter.
-
-The first 3 patches do a cleanup at scripts/jobserver-exec
-and moves the actual code to a library. Such library is used
-by both the jobserver-exec command line and by sphinx-build-wrappper.
-
-The change also gets rid of parallel-wrapper.sh, whose
-functions are now part of the wrapper code.
-
-I opted to pick patches from:
-   https://lore.kernel.org/linux-doc/cover.1756916565.git.mchehab+huawei@kernel.org/T/#t
-
-re-ordering them to make more sense.
-
-The last patch breaks doc build when Python3 < 3.7, as requested,
-or when sphinx-pre-install suggests to install an updated Sphinx
-version. Matteu suggested adding a PYTHON env to allow overriding it,
-but this won't would work with sphinx-pre-install, which is meant to
-be executed with older python versions, but still requires to run
-python from the suggested package to check if package install
-succeded. Currently, sphinx-pre-install recomments to install a newer
-Python on 3 distribution types:
-
-    - 3.11 on openSuse Leap;
-    - 3.9 on RHEL8 and RHEL8-based distros;
-    - 3.13 on openSUSE Thumbleweed.
-
-Patch 19 breaks sphinx-pre-install for those, and adding PYTHON
-env won't properly fix it. ATM, I can't think on a good non-hacky
-solution, as the only way I can think is to let sphinx-pre-install
-(and sphinx-build-wrapper) execute python3.x instead of python3.
-
----
-
-v4:
-- updated references for sphinx-pre-install after its rename;
-- added some extra patches to add more options to python_version,
-  allowing it to bail out and suggest alternatives;
-- added a patch at the end to explicitly break doc builds when
-  python3 points to python3.6 or older.
-
-v3:
-- rebased on the top of docs-next;
-- added two patches to build man files that were on a separate
-  patch series.
-
-v2:
-
-- there's no generic exception handler anymore;
-- it moves sphinx-pre-install to tools/docs;
-- the logic which ensures a minimal Python version got moved
-  to a library, which is now used by both pre-install and wrapper;
-- The first wrapper (05/13) doesn't contain comments (except for
-  shebang and SPDX). The goal is to help showing the size increase
-  when moving from Makefile to Python. Some file increase is
-  unavoidable, as Makefile is more compact: no includes, multple
-  statements per line, no argparse, etc;
-- The second patch adds docstrings and comments. It has almost
-  the same size of the code itself;
-- I moved the venv logic to a third wrapper patch;
-- I fixed an issue at the paraller build logic;
-- There are no generic except blocks anymore.
-
-Please pull from:
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-docs.git docs/v6.17-2
-
-For:
-
-{ADD CONTENT HERE}
-
-Regards,
-Mauro
-
----
-
-The following changes since commit 7e5a0fe4e8ae2eb341f8ebbee2b24231a58fc28b:
-
-  doc: filesystems: proc: remove stale information from intro (2025-09-03 16:04:43 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-docs.git tags/docs/v6.17-2
-
-for you to fetch changes up to 04de72da80bbb19e38e2b416de56a9cb179f25e9:
-
-  tools/docs: sphinx-* break documentation bulds on openSUSE (2025-09-04 21:07:43 +0200)
-
-----------------------------------------------------------------
-[GIT PULL for v6.17-rc5] docs fixes
-
-----------------------------------------------------------------
-Mauro Carvalho Chehab (19):
-      scripts/jobserver-exec: move the code to a class
-      scripts/jobserver-exec: move its class to the lib directory
-      scripts/jobserver-exec: add a help message
-      scripts: sphinx-pre-install: move it to tools/docs
-      tools/docs: python_version: move version check from sphinx-pre-install
-      tools/docs: python_version: drop a debug print
-      tools/docs: python_version: allow check for alternatives and bail out
-      tools/docs: sphinx-build-wrapper: add a wrapper for sphinx-build
-      tools/docs: sphinx-build-wrapper: add comments and blank lines
-      tools/docs: sphinx-build-wrapper: add support to run inside venv
-      docs: parallel-wrapper.sh: remove script
-      docs: Makefile: document latex/PDF PAPER= parameter
-      tools/docs: sphinx-build-wrapper: add an argument for LaTeX interactive mode
-      tools/docs,scripts: sphinx-*: prevent sphinx-build crashes
-      tools/docs: sphinx-build-wrapper: allow building PDF files in parallel
-      docs: add support to build manpages from kerneldoc output
-      tools: kernel-doc: add a see also section at man pages
-      scripts: kdoc_parser.py: warn about Python version only once
-      tools/docs: sphinx-* break documentation bulds on openSUSE
-
- Documentation/Makefile                             | 136 +---
- Documentation/doc-guide/kernel-doc.rst             |  29 +-
- Documentation/doc-guide/sphinx.rst                 |   4 +-
- Documentation/sphinx/kerneldoc-preamble.sty        |   2 +-
- Documentation/sphinx/parallel-wrapper.sh           |  33 -
- .../translations/it_IT/doc-guide/sphinx.rst        |   4 +-
- .../translations/zh_CN/doc-guide/sphinx.rst        |   4 +-
- Documentation/translations/zh_CN/how-to.rst        |   2 +-
- MAINTAINERS                                        |   3 +-
- Makefile                                           |   2 +-
- scripts/jobserver-exec                             |  88 +--
- scripts/lib/jobserver.py                           | 149 +++++
- scripts/lib/kdoc/kdoc_files.py                     |   5 +-
- scripts/lib/kdoc/kdoc_output.py                    |  84 ++-
- scripts/lib/kdoc/kdoc_parser.py                    |   7 +-
- scripts/split-man.pl                               |  28 -
- tools/docs/lib/python_version.py                   | 178 +++++
- tools/docs/sphinx-build-wrapper                    | 739 +++++++++++++++++++++
- {scripts => tools/docs}/sphinx-pre-install         | 135 +---
- 19 files changed, 1265 insertions(+), 367 deletions(-)
- delete mode 100644 Documentation/sphinx/parallel-wrapper.sh
- create mode 100755 scripts/lib/jobserver.py
- delete mode 100755 scripts/split-man.pl
- create mode 100644 tools/docs/lib/python_version.py
- create mode 100755 tools/docs/sphinx-build-wrapper
- rename {scripts => tools/docs}/sphinx-pre-install (93%)
 
