@@ -1,77 +1,77 @@
-Return-Path: <linux-edac+bounces-4786-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4787-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D891CB51C59
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 17:49:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF941B51C85
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 17:53:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12915A002A7
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 15:49:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8ECD716204C
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 15:53:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1992C327A32;
-	Wed, 10 Sep 2025 15:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6893212FA0;
+	Wed, 10 Sep 2025 15:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QlInzHdT"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="U6vtLLDr"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2042.outbound.protection.outlook.com [40.107.92.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399E132ED2A;
-	Wed, 10 Sep 2025 15:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF60A31AF2C;
+	Wed, 10 Sep 2025 15:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757519310; cv=fail; b=Kw0EElNzWn0kYomd8yovhPpwTnoA4+UQv2A/ANSTHyShOy7Kiz2Fb6yT6gbvQlMxXZAZY4pczQ7HEeReyax4p0RsZD1XsUi9y0BHna903+hdrZfnQSpRPeofz274n3jY+gXnERnVw+mPD0XvBUTGL84cETxhDMY+gUq4AAbByVw=
+	t=1757519625; cv=fail; b=k0Bbq0EPws8ZzHUHcPpUr1EfyBLl1Kl5AI8kI4iv7joLDMWNLdOSSjfBZilhOn0EetxTG1sL+BsHlnvGmZIvSXrrMNLE4qeaabw5euvU60KlU/oiRkReYYApnsRAfTAlu8B7Y3Eml8uS/A7sBPQlcvGc8k0Z7vHFeWotisqCLmk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757519310; c=relaxed/simple;
-	bh=l/QUvU1OaMRQCIa17IOF0Ht3yPcRF9X/i/JJX/CD1wg=;
+	s=arc-20240116; t=1757519625; c=relaxed/simple;
+	bh=xGnRwNYGHBf5uS+jiS4JMEPeL533MvdkJpLsIoOIdMY=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=RmZqX/1ArFxKR8z1zV387mw0Cclcb1YS2qBxcm1B1JgZyoxWwyfvGyrGRybPu3ZO23YfJLFd5573MEPeFVuasifO/JfmpFY6frarA1/3U7ydUr1u4FkzFW9skOPIwRqXU4ZKR9IZ6ygBLJWMze9nD2/LMaTTovi9LoJ1RvbA/Xg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QlInzHdT; arc=fail smtp.client-ip=40.107.93.82
+	 Content-Type:MIME-Version; b=GEPt5Ah98XC4EQgEoymPatLm4VEEvx08yz5ILYUywKtwwJh0AhKFO8e3U1IBncpzL/dJq5RKtp9hrV+5fxqLpAwvGPYwXuZwDo8jua9UnntHg6UybpbXl9y5wAajpFXC/f+b3zeuUjypiPYvdPGLwELUb+hI0+x17J199QXZyyQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=U6vtLLDr; arc=fail smtp.client-ip=40.107.92.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mEYQSJv/bOt55RMEYRFqRvEW3t1AAx14TlhkICH2d/XEeB3wbPMvG+Cm5QO1hpoSXOf0rWoHCE/GoUpZUAgFkUnK7Ivn2Drdj4Gr/RBvoZe8DKPIefTNOCXsbvWwv8jj+FI4Pd0Fr596MM2Pa2qyGrOLzYHK89S/eDXk9rWSkhGxCq6k3F7/fw291960r0clMkSy0pDVdx8VA6pKzTdxirtkXK9qcwMIudBs4M05v+GZ6kzEylaWIl1X7+1T2H7urDv2nHnbE4JovTtTfR+HZbAu/Q68R9VJDE1sxPIH+U0mogCyIprmKjGFcFSawSwziPeNa5znKl1yL/wo1TDH5Q==
+ b=GVMdSh96UCzHXuIYOP5cl+juXoYdbdIoCaDFogebaXgcXZSOLO93vZtssxA/8Y5QJmlGlwAiYCuX7g27P7b4FvqweWSQ63hiid0yx8T4TFApnureFykG9jgNzXzsqWu+yoLAozLITc6o0cr1B57tz5WqRykpOFDs7eJViAxE68P/CFOO96nGEXMMqa5GHUT7mM7EqFwdrQGAdxSfPljIgekA5Uv/tikRFqAPQIn2VpK4XNTVi8PuTjv6d7mPPbCDWd+4pcOwvFgaiqO/WHIp7WDiNJsZmS8Ca6VSJubM49bbbxOeIjQGpQYECuHgM6lSGCszjPMVwea9kJ20e4xXjA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jDP1vGTLRmBHUlC1Y/ieKfY5ubBoJNwZv0sotz4leZY=;
- b=P25b2ljwjY5TlFw48kRFa6KhsicAhX6fcBJJDw/aXeCTJp0ZGTCAgy6NCkaaSjLKN8nbzAN3+9uOMBsW4aZ7KbADvI+JmIgJIjO+hsMeC9FD/+qo84JsF9S5Z/evfOFlfkcwt2dOQqAEoMxYBUPdH6tEVrdjoE8ic/C9nt10G0bxMa2QDbqNtX6k26BnxWeg50/bkvEU1TWemFE/4VR5p2XTGJNrDLVGcyUMeSMEnfmfAbFrdkQH27xwDnFPhH1QvcXFaUs6KRlx6RH3Se0+AWE0vuu5wyntWhiSSpkDdfAogtaxVviyyQG7xD4l1p8OGHeIcj9R7gLE7VfKi6H3UA==
+ bh=SIwNBkyJ5WgfdmQ0Ocy+kI1Xz/ZMA+4RAskTVSq0gdU=;
+ b=RqyhuD//ZHCTbpvKnEmEJEfo+TTUxfpu/r92QOLAab04QSvVyeFOwjkzPmEc+mvDkTvTBBUBfYLDO8aKNKVGAErPWDVBgGhvinBqpJrSN9rbMcMEIoRURAUe43v7x4kNy5TzFQC9JZAswQfCec8VVVmnOlsCqzWeo4RQNHboE9rsSFLL4Y7LmmtcUm5kbkOnHh+ePLU8JTJfc4JaF3WuZygFsJJqwHKy6EXiZ/cmxWY/Hxgzqfc9DAwGwQB9P6Qxjcve6YofCs56isd/NsFbem66/cLJP4zpTQ3PdnrHO+WH/jVO46vEkGhzt+B75lOY89ccOVOD2axlvQ681Y5eug==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jDP1vGTLRmBHUlC1Y/ieKfY5ubBoJNwZv0sotz4leZY=;
- b=QlInzHdT1pyVm7auRXNbdoB1xQzv5S9j4/yRRp/dXE1xTz9TlG5okYQbYZ7X6OgIZdSaH7/BRHF8nmR7UFLzHb8KpVgfXxc6Tzttf5znOrw+8HM/LhEbx1r4rE1hM1QEZC7JI7Qy0ySJdGaUmiYtfcoUg+8hslIPHrRwb7PmW7M=
+ bh=SIwNBkyJ5WgfdmQ0Ocy+kI1Xz/ZMA+4RAskTVSq0gdU=;
+ b=U6vtLLDrW1kmtG7s2IeWuiAc7s9yhy87mUjP3+mu6+NOxqwme4tKKWTAh2jnzPcZzJqe3Kc6b2Cv7jlsPimOLjkn2G3KxZNXz/M1B1eMju04PZOh4DWupVyvBx/JfE7VDt8bVw/CL0gb1/vSbzyhUwmuQ7ZYOB5/09D6rd8HhlA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
- by CY8PR12MB7241.namprd12.prod.outlook.com (2603:10b6:930:5a::12) with
+ by CY8PR12MB7489.namprd12.prod.outlook.com (2603:10b6:930:90::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Wed, 10 Sep
- 2025 15:48:24 +0000
+ 2025 15:53:41 +0000
 Received: from CH0PR12MB5388.namprd12.prod.outlook.com
  ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
  ([fe80::a363:f18a:cdd1:9607%5]) with mapi id 15.20.9094.021; Wed, 10 Sep 2025
- 15:48:24 +0000
-Message-ID: <98e347a3-459e-41e4-8ad3-5dac086b6e74@amd.com>
-Date: Wed, 10 Sep 2025 10:48:22 -0500
+ 15:53:40 +0000
+Message-ID: <8186d0e4-14a1-4198-9a9f-8082f0b289b8@amd.com>
+Date: Wed, 10 Sep 2025 10:53:38 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/5] EDAC/amd64: Remove NUM_CONTROLLERS macro
+Subject: Re: [PATCH v3 1/5] EDAC/amd64: Generate ctl_name string at runtime
 To: Yazen Ghannam <yazen.ghannam@amd.com>, Avadhut Naik <avadhut.naik@amd.com>
 Cc: linux-edac@vger.kernel.org, bp@alien8.de, linux-kernel@vger.kernel.org
 References: <20250909185748.1621098-1-avadhut.naik@amd.com>
- <20250909185748.1621098-3-avadhut.naik@amd.com>
- <20250910150525.GE11602@yaz-khff2.amd.com>
+ <20250909185748.1621098-2-avadhut.naik@amd.com>
+ <20250910145108.GD11602@yaz-khff2.amd.com>
 Content-Language: en-US
 From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <20250910150525.GE11602@yaz-khff2.amd.com>
+In-Reply-To: <20250910145108.GD11602@yaz-khff2.amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9PR03CA0029.namprd03.prod.outlook.com
- (2603:10b6:806:20::34) To CH0PR12MB5388.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA1P222CA0149.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:3c2::26) To CH0PR12MB5388.namprd12.prod.outlook.com
  (2603:10b6:610:d7::15)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -80,209 +80,319 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|CY8PR12MB7241:EE_
-X-MS-Office365-Filtering-Correlation-Id: bae6c62e-cc8c-43a5-e919-08ddf08179db
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|CY8PR12MB7489:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb6eefc3-db4b-4cd0-d6df-08ddf082367a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Vi9qOUJVV1pjRXlDY0dVNGpaZDJDV29qYk1QcC92VFIyMndVa0drdUlmelBs?=
- =?utf-8?B?aXpzZVIzc3RmaWJaV29zYjE3S3pqblZBUjA2bTJDZE0vNHgzSFNtTFNyWW83?=
- =?utf-8?B?S1lzTW5SR3lCRVlKbjV4anhvdzZVb0trOHJCT0krV1M1aU9sbXN0MnlucnlC?=
- =?utf-8?B?VUIrL29qTjh6TXh6MEpEczRmYWJVTHRrMGJvZzgvRENVUkZKMFZyNTNYbVlW?=
- =?utf-8?B?WFNRRmZtOVhZMEtrVXJOamdmc2hVYWtYUTIxRFNxMmtoMkg4YUtrT0NmSnRC?=
- =?utf-8?B?akpkdVVZR1hWT1E2dWdwaGczQWpzd1RBMW9sVkFHLzdsYzdEdlFGUzBnbTg0?=
- =?utf-8?B?TFQvelo1dkZ6T1dNZityM3YvOGpoNDZ6Vnp5cGVjS1lKbVJ5djhTeTl2OThQ?=
- =?utf-8?B?dDRHOWtOZjVFRXA3R0tOempqK1YzVjJ2bzFBbjZxcXdtZlhRdmhFN2p4b3NJ?=
- =?utf-8?B?WDFPUjRtSUU5SGt4cmVwY0MzRWdOUFN1VDNlR29uZDhlL3NJYUJRZnVSWWw1?=
- =?utf-8?B?RS8ySVU1WW9yT0hFaFRZcEZleEZVTnowYkFwaEtxVno3Rmx5UTY1Qy9QMHo5?=
- =?utf-8?B?RTIyblozZlBFemVhVlJBVmduODRteDhqbzEvR3B4enVHZU42WThtVEY2QTQx?=
- =?utf-8?B?aWJSYS80SjhiSGt0RUFlOXczajR3dXN3R05yZmNOc3hhOWFXVnlvMWgxc1Bo?=
- =?utf-8?B?b05tMnNLb1B5T3VQT2ZkM3ZlRVZHejVaTGd6T09KSTFML0VMbHBHWGF2Q3Az?=
- =?utf-8?B?NzdlbEhQcFlSUzVibUtsaTFUR1JudE4yUzBtSUNJZE9xd0pNRDBLWUdPYnFv?=
- =?utf-8?B?SGg1Z3lhQzgwZ2pobGsrYTJ0cVZZYWRzTVhnMG1yTjZFdmIwWkJUNzl0R3V3?=
- =?utf-8?B?dGlIV1pEYmJTVkp1OC9sUHQ5N08zb2NFMThYZjRjZXNwWG9WNVpLWkF5WmpK?=
- =?utf-8?B?Y2daZXQxVFBOTHRBQm1iY2FTbkxrWUJ3VVZDcHlsOFVpQTk3OTNRNzBlVkJS?=
- =?utf-8?B?SGgyeExkUWh0S3lxblRpL09QeGtIRjhtSjJLNThKS3hFRGRQZXBIclBhYm4x?=
- =?utf-8?B?ektiQ3lKUEpzN0lYMzdTN1ZTdXFUQnpKMENaNCtXVkUrWWVRWTduVHYwV1FB?=
- =?utf-8?B?OWovQUpRS2pNeVlMK3pzQ2xvcXZGS3F2Sm41UFVGRUdJM2lJVDdwTUtqN0Mx?=
- =?utf-8?B?Vlg4aDBBRjlQZlJ0NVlwUDEvZStSQzFkY3FGZXBvNytFWS8rWVhHd21YU29J?=
- =?utf-8?B?NUpsY2NzbzdicW9YSlFTNi9LSEVSZlBCWnhGelY0cXhxSkVYS2VwREFxRTNB?=
- =?utf-8?B?YndPRytMaEYyeVcxZmVvTnlmbWIxOVRDQnZqMmJuWEpwSUZneEM1S3NKOFcr?=
- =?utf-8?B?M3VBV3RXdXRLNjJCZWJBY2RMMUw1ckd0dVBRWEQ4Qm1UNWdHRHJxN2NKbFBW?=
- =?utf-8?B?bk9GQTFhTXgzd21jWU51Y1lDeTdhVXpSQUU3aDg0WnUzeDJVK2wwYnZ1a29T?=
- =?utf-8?B?Yi9SN2JjQ0RjQ24xWEluditBN00zcXpidHh1aytwUVUxamQ4bFkvbnhyd1Ux?=
- =?utf-8?B?QXMrRXY5cUN1ZG5zK3dVQncwbEVqZWlPMG8zN3QrWTNDYlUxUk1sWDE1NlQ5?=
- =?utf-8?B?QnMxcitjMG9ObGIxZDk4VGlJOVg1ZnNJcjZVVmthd3pCMFRDSTIvVXVMT3VZ?=
- =?utf-8?B?aW9FQk9zaER5NUx0SzN5SDNyMVBjVklMcXlLRUYwMG9QTVp0WEo2eG1tbVlt?=
- =?utf-8?B?UEtXV09ORDcyQ1JmQjNqMkovWHk2Yi9vWGx5SmQ0OWlnZDg4cjAxeFBlVzdj?=
- =?utf-8?B?ajhZTGpMMlFVODdxZ05PUlR1YTFHRzc0U3NJVzJPQlZiMHZNcXdlMjNJMjh0?=
- =?utf-8?B?VTVueUIvdGhZOC9JTVo0YitZVDdGYi9ZT0M2N2ZDelBMZlBFU0lHVUptbEVp?=
- =?utf-8?Q?L0j/ZBM026U=3D?=
+	=?utf-8?B?V1V4TGtzVW44aGVLaVVwQVVpaE1QMzBBZFpjNXYzc3V6WDErMm1Wb2QzWDZl?=
+ =?utf-8?B?d3pkQzdiRjFCVDIrYVl1VFRqWVJuS2FkN1hxcUluM2JoQUxGOFZYR01FN2VQ?=
+ =?utf-8?B?c0pGcnN1VDQ5M2dkSFlDb3dWWW9pNTB5MVdPMGtoSDVhMXpmOUtNZGlPMTNt?=
+ =?utf-8?B?WkQ5enY4bUNMekZXWXVsdVdVS1FoVFhrRVZ3UExvUXNGRGhEOVhIYWRyZ3kz?=
+ =?utf-8?B?U21YMSs0Z2RKUEI2eEJLWHhISDJURnB4RXhXTHNmMjhuNW9YVHluMDRLMXl4?=
+ =?utf-8?B?QXNyYXNwNWpPK211a0dIOGd4THduNk1EVVhkS0g3VzBDYlNsNEVYelpYL0dq?=
+ =?utf-8?B?TjJpU1dKamh5WXdZNVFzNmptODNRdnAvSllwa0lOalJLczNRdE9DdHRRTGlX?=
+ =?utf-8?B?a1VnN3Q3OWhydWdLTFh2ZjJEZ2EraHlja3lPZlBoUmVDbHdCTmQ3U29BUklU?=
+ =?utf-8?B?OStJeWZZWmtVYk1hcUVHTWt2VktmTExBSlI2U3Q3WXY4cFk3RURnbkx5WlpD?=
+ =?utf-8?B?SjRxL3lJeGtNdjY4VCtHc1lCSExLQ0ZJTkNCd3JMZW8rRjZWMnRuVk4reUJV?=
+ =?utf-8?B?UzF2ZTE4YlcyK0w2aGNGRDg0UXhXK09xTGdUK2swWGRialpqczhqVy9QTUl3?=
+ =?utf-8?B?dW1aVkRYK3g2dHM5MDRjaE5maW9pQk9pSDhmN05vMUREK1hha2UxVHBDeVNj?=
+ =?utf-8?B?SHBTS0lLcERTa05BQVkzTVphUVlCY3RjRU1wRkFrY1lQM3QwTHNwOFR6TUZR?=
+ =?utf-8?B?N0psc09kWTE0MFFEWnJOcjhrb3kwSEhGWDJzc25PN2ZkOFhrb3FPOXBCOVhh?=
+ =?utf-8?B?Q2ZmK0NuLzF1MVFocFo2QmwvaUlyam1KSmhoKy9MeW84eTMvdm1xWkVhZEVh?=
+ =?utf-8?B?OU5aSTFaZmV3VlNQUzhSeDNFUGJSQ1FCYyt6T2Z5Z3JneldHTWxpSk1tS3dp?=
+ =?utf-8?B?MStXb2xSaHVFNmRYZ2gzU2o0WC9ObDIrNTg0Nm9mUkxFTFpSNDBxWERQb0E5?=
+ =?utf-8?B?Y3hRNWc3T3pid0lXRG9jdm1wRHhTRWFaai9rdFo3bnlhcktPUnc5U3NqdFR5?=
+ =?utf-8?B?T2RRS2pMc1gxNHMrOWJHRTJRUVB3clRUM2FqVUZmcnhQd2s1NDFMajdhdzd4?=
+ =?utf-8?B?NEpVZmRxT1BvNzdPbElSd01pWXFBd0QzWDFMaEtacEdJSDZaQklud0tEZDly?=
+ =?utf-8?B?WTJQd3hrcThJcGRTdlY5WWVGYzlBem9rYXJ1QnZjVHNXM3FzYndoRHBNaGhi?=
+ =?utf-8?B?bnhqNHE1WVdQeHNqWGdyYjgyZ3JIZGtYWVlQeG51ZmpzMlJOckNnUkMzWUR0?=
+ =?utf-8?B?bHppRzZkRndFMklRcHAvUjFhWVVoRC94bWdORDF1RGJ6elBicytjZFJEby9u?=
+ =?utf-8?B?QWJDMS9WZ05vSWlMdk5hdGJXa2lpT3M1T3czT0J5cHRPbE43TG1uSytPY1Rr?=
+ =?utf-8?B?dzRudEhNbXdLYnRBdjBSTnorNmhRV0ZBbGxxTklIT2hTd29uckZyNjg5WCtL?=
+ =?utf-8?B?VDZVWmFBbklhRndxS2RXUWZXRWY3STZocFc3b0gvN1V3a2tpbVptNlpEbTY4?=
+ =?utf-8?B?Vldnd2pDdzBiUlBoQ29MZUlyLzBzOG5ESXZ3T1BJczRzWUMzY1UwV2ovV2Z3?=
+ =?utf-8?B?bkRlSVQ2d2VIRDc5ZHNwZldsOEdDTDZBWEFUSHh5VndkY2YxWG1wdDJEUFhJ?=
+ =?utf-8?B?NUNhTVhDN2tabVY5VW4zMWU4c2pZcGJ4U1N4U1Z3cHdSOG5YdWVWWVBhVzRM?=
+ =?utf-8?B?bGJHN2ZZZC9GNkkvcDVBeEEzZm9lZWxILzRTbFFQNUMrQUg4a0phaFZCNnZi?=
+ =?utf-8?B?WjBleDlnN1B1d2FiVUdNdU1aLzFKVjdzSU05Vmo4dUJjQ3FHbDY2aTIwMlRK?=
+ =?utf-8?B?cGlVcXpiNnNhZlZCQTFOb2JNWUUrSVUyMXBnczh5enY1L3NjVU5FeTRiMjNU?=
+ =?utf-8?Q?E1psYpfrhBg=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Tmszb3NONE5LcFpETXdrYlllS2o4b3ZtOVFmdnFUaFgybGhwbkhULytQNjcy?=
- =?utf-8?B?ZGJzU0FpeWZ0K1NLOUxiU2pvcTUwZk0vaGwwaDBWK1hiOHhiTEhuOTdZM3Vs?=
- =?utf-8?B?Unp3amlzeDdqckFLZFFMZnJXcy9EUFpqRmZGb3NQWkVicnRScUhQclRGdXRR?=
- =?utf-8?B?YTEwL1czbmxtZDVkbXpFdDNINHBmTkhRdllJT3ZVTGplQktzT0E1b3VheUFI?=
- =?utf-8?B?YWc1emNhMEEwUTVuS3I0VU4vb2xIelM5MHBTVnF0ZWtxdytGdnhRcXlvMHAv?=
- =?utf-8?B?b0ovbk02ZzJsdGxZSkE1UDdVOVIxc3pDeVI0UGp5dlRvVW1YaU9qYjIxbDQ1?=
- =?utf-8?B?QVRBY3d4SEpRM0p4YVQyUHp6K2ltMk5UV0xONURTYitSemRFK1htbTRqbWJB?=
- =?utf-8?B?MEhOOFgzSHVGRXNUZ3F2TmIxQ1laM1drbjVaSms2NGdRcEtwU0ZVUmE2Mnlv?=
- =?utf-8?B?RWJxTzBCelhzMm1zNnFTTmcvVUZYU1FBYzdJSjFoQ3pMVmszc2xpNFZIaDhl?=
- =?utf-8?B?VVVlZFJ0NXo0S3dmUXNaa3BDZ0hmckFWV0dieElsclVNSjZQK0ZuWU8rV2xE?=
- =?utf-8?B?UTMxNWdsVWtLdHltSEllY2FFaU54aDk4WUMrZ1Z1dUxrRXE0SEQydEtSS2tm?=
- =?utf-8?B?T1I4Vk8xY2pxZHNPL0hHd0p1SzRqQ2pqY2FTbHlScnEyNDVLY2xIRGtKVUgv?=
- =?utf-8?B?dGQ4MzkzRDU4S1BmVi85Njk3TFdPVFVtelV6RnRDM253RUNZN2JuaGRiZ3J4?=
- =?utf-8?B?dC9XUlZHemxVZW92N1NTcVIvaDhQV1NzTzluOGdBS1Jpdk5aQks0Wng1RXdK?=
- =?utf-8?B?RFdHbWpOL0ViVTdJSS93K3Bnd0FZR0hkQ3krREtMZExHT2NRREs5cnZYaWtJ?=
- =?utf-8?B?d1NlTHhHZzM0OUxsL2Z0OFM3a0VDbFNwZ09LcXk3NUd0QkNwWmw5ZHJ2MHhm?=
- =?utf-8?B?dnR2Wk9ueDQyNGVEOXFxVG1pSUI5TVBhNGsxK3pyeHNNNWdFdmM1dVNxVXIw?=
- =?utf-8?B?azlxY3Z3REN5Ky8wRlVpbSsrTWRNcjM0d0N4ZWRoekkxTmRmOVpIYndNNXUz?=
- =?utf-8?B?RFNXV3Boa2ZUUkIzQTRnWmdRdzgrVkZSYUZBUDl3SFBQVlhqRDVaYTdhc1E5?=
- =?utf-8?B?dHU2TnMwaHRvS2prWUw0bEtsYmpna2dNYU1jbEVnV3BzeHQyY1piWVlSWGNN?=
- =?utf-8?B?NW1jdDlDMmIyR2FpWmF6bElNaEV1SnV3bEw0UFRJbE44VEl0eDFESHdjdW5o?=
- =?utf-8?B?cWp6bHFybkljcExnTTVJSVcrZDRGYjF2eWl4UDN6dnF0L0daVWpmTEwzdlE1?=
- =?utf-8?B?OGVwR0xVc1FVV2RVVklWZ2VLalhGSVE4UW5yOWxzRUVZcTU0R3h1N3VqUWxT?=
- =?utf-8?B?Q3FZalBEQjh5dEswSWZZUG9obXg1bHV6MDRWcEc2VlUwbXgzK2dPUzRBdURY?=
- =?utf-8?B?ZGpXS05ub3FBVEJYRGdkZ3l1SUdVMTNaV01lY2Z2bGJ6N2MvS243UnhhM3hv?=
- =?utf-8?B?d2sweTlxRWh5d1JWeUtvZ2xuUXpSSUdrSUJQSlN5ZjRQR0Yvbk9oaFg0dG5K?=
- =?utf-8?B?YnZ6WE50ZUJpdytaSWFWZ0RJMkVLTUlKS3Ixd0ZsRTEvQi9HUk5IbTc0S0R1?=
- =?utf-8?B?WWliZ003Y2dydVBUNFFrZHlHQUVRK1A2SmZINldLZDNEeXQ4Zk1UaENKeURY?=
- =?utf-8?B?RFlXdjg5QWJNQllmazM1MEg1V2N0dWdLOFltN1lMbjFxaFFLeFRjR09qcEo1?=
- =?utf-8?B?eEJNeENJR1IzRnpHeU1uK3RJWWVOK3gxQ2dLQzl4MktHK2dLb0pPWFo1L29F?=
- =?utf-8?B?SktBVFhMaUlmclhENkFTcFNxZUdjTzY0WXBpRDZENkFKcmVJWEpTSS9qTnZy?=
- =?utf-8?B?eFFwY082bFVDbndyVFVudmJidklNdUZlTWhpaXJkRWwzUzV1cWFvaWVsbDA4?=
- =?utf-8?B?ZGk4WDFCdUhkVzNJc0o5VHY3ZHlHS0RGT0dSeUs1YVczNFRhclJKYjFnamhN?=
- =?utf-8?B?ZFphOVJyWHJXWkNsVXl5MnBrdXlpSkZnSFNrOHB2aDJFOTBWQUcwNUZZeWRs?=
- =?utf-8?B?UHcyQURvTCtXNjhzaEpmVGR4UHVGajg4N2ZUVk56R3ZYS2dJdWxaVHgvWjdp?=
- =?utf-8?Q?+m63VoRak1AjwpdowGQHDK72f?=
+	=?utf-8?B?blQra3gxOUJQc2NlVFNaSzRHQVR1Zk9NQWN5RzdIUDcraUprSmMxWUdaY3Vj?=
+ =?utf-8?B?UVhFNFBtaStIN1p3Z2VmZk5tV0czZFB5SHY0UnluNERVKzg1YlhlZ0FONDVT?=
+ =?utf-8?B?Y2QySTNRMm9xZ3ExQVBNczlNODhyZDBwZjdRMHJMdklxSTJ3d3V4TVN0Tjc1?=
+ =?utf-8?B?eTBQSklpNkNacnJKdjJuVTUzNUp0OVhvWlUwemhyQzdHSjRZdUxnakFveERN?=
+ =?utf-8?B?TlpGUitXTFRiNmFraUdVYk5Wb1hHN1RvdlFzVEdjZVR4UWVmZUlndzB1aUpH?=
+ =?utf-8?B?Y200YkthS0JVTTBteDZTZlUrV3ZjTU9YR2hQQnpxY1BWaWlhYytQMG90WCtp?=
+ =?utf-8?B?dUx3MXh1WFR0L2FEM1c2eTBSNm0yZ0RweE55dDd0ZlhmQ2pFQ0lSWVhZOURt?=
+ =?utf-8?B?L3lvUUZ6dll6K29wNnpJa2pWUmZPVk9Xa21NVDRmUmV3ekhKVXIwL2g4aTh4?=
+ =?utf-8?B?ajNxS3ltUFNHYjNxU09mc200RGczZEJ2U0o2TDJVNVJFaUt0Mk9GUGkxSnRz?=
+ =?utf-8?B?WjNxZWRoWmNmY1MwRWU2Tjc0ZkFwRkxXK0daUENKbFM0OGhCUVM0c2xOT0xl?=
+ =?utf-8?B?bCszZzBNT3hWMEdkWTNieW9WQkdUaE1nZWlOL20vTlA4YkUvVG9mQUc4aFpY?=
+ =?utf-8?B?Nk1nUzgzdEdSRW5KMnVoaW1NaUhWMjFFam9QejBPQmVkZ2tlOWFxUWl0MmFV?=
+ =?utf-8?B?dGM5aEdPWGdlQ2FjbjI5WlVBOUdZWmh3Z1FYVzVuK3U5TE5GaWZldG1ZSXJn?=
+ =?utf-8?B?LzdXblpTNnhxY0QrUWdzVVAzSDdoMGlBMjhUQ25wVUVYRjZuV1d3K3FkakxM?=
+ =?utf-8?B?QW01b3dHM012TDdxY3VSY0owMitDR3Q1ME5ycFkxck9BYkpRK0dVYkVjazJq?=
+ =?utf-8?B?cjRRU0J3SW9XYUtvOUwxb1ZOK0VnLzJ3R0E4UlQ4cEhBMmpTbmRtampWZkZp?=
+ =?utf-8?B?QVBPVXZQMk1uYkZDcjlwN3NzRmxydWxRdWxURlNPQzJ4d0gzdGdoMTF3aTV2?=
+ =?utf-8?B?VFAzSEhIU0grbE5vcnh3TFQ3ai83K3pvYUZmb0psUXhVSnZIK3h4aFRWeTZl?=
+ =?utf-8?B?UDRnU2d1bmtoa1pyODBPZDVmNFVqSEpuMW9teVV2YWMrOEpCWVpDMlNxU3Fu?=
+ =?utf-8?B?cDNCdzBNYmU5OG5CMXp0bVF6SXpQdlZsajNyYmpLci8zR2YyZ0E2SklJSXgr?=
+ =?utf-8?B?QkJROWIxUVgyWjdzM1VSdFIvdnRNcC90N1ZzS3I1Qjl0eGRNWFo2bTliSXB6?=
+ =?utf-8?B?RGZQRlo0c2VQMmdUWU5FdzVQZWt3Zng1cHQ0T0VNUS9xdU5hTzFsRkZ1ZlBG?=
+ =?utf-8?B?Sy9SVTdER0xFVWxienN3UlN5SkxzWnRYZ29zekdmaUpsaXVhQUYzVFh3ck40?=
+ =?utf-8?B?Y1lkd1F4NzAzUmNkSGUxbU83TjlFN000bU9EVzhKelI3blUzdXZOZlFQaGI4?=
+ =?utf-8?B?L29iaEQzbWZrYVNNY1drakJXV2ZZQmpHNUEyS2IvQWpqYWVteHFRcVljcFkw?=
+ =?utf-8?B?bGRuWmdvV0VRM0FGZEUxZEFmTWY1YVU2a1ZDL1JLaTljYWlRSlg1TXlIelM5?=
+ =?utf-8?B?UVpqSHpKNGJOamVXbXV1ZFRiMzBzMmtTSjVyQ2tUdU5CYzZMM3VsKzZKM2NR?=
+ =?utf-8?B?T04yZTRQWWxtRzBSVi95WjZqMUs1QmlBLzNWNlFPT3N4ZUVYUkp0bS9MR1ZU?=
+ =?utf-8?B?UkxDN3hzSy84d0ZTNWpjV0c5RnpsbFZuVFhQVHRjejBpNmxKYU51L0Q5U1E5?=
+ =?utf-8?B?c0dTak5FTU1LWXFPR092RVZOS0NONWFDcFNwTmtoaHVHYkhYS0U3SGhPR3Ni?=
+ =?utf-8?B?U3BDNkRsYmxpRDVlWjUvUkw2UXFpMkN4cmZiRUJlQzU3NjJtZzg2WGkrRm52?=
+ =?utf-8?B?TDQ2Y3FEb3JUM2NhSTBFMXZOZ3lmOGZoNmFtdDRyQS9Vb0FLbDkyMTVvVHRS?=
+ =?utf-8?B?bWQvVWtnbklOQ3BLSk5DeE9zN25mZnZSU0xtcS9sZ2UwZHd0bXBYZ3ZxY3pN?=
+ =?utf-8?B?VjQ0VjFXcmlpb1N3dEprK1RKaVpVRENhbW9ZeS9qMS9DN1JOVTVFUmpmV2hM?=
+ =?utf-8?B?S1QrdDZkNERWM09LZnZ0QU94NXAxZ0N2VWhXUUFFbjE1UkpoMTFyQXVXRUMr?=
+ =?utf-8?Q?NVE527uI1Z8mv1wEv570T5OaG?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bae6c62e-cc8c-43a5-e919-08ddf08179db
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb6eefc3-db4b-4cd0-d6df-08ddf082367a
 X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 15:48:24.3943
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 15:53:40.8362
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bwelZrHBHHAuuS7RAx8mARgXUeIQu3BmCO5aqh9cyGwiws7r5XIU1A+OxppzFVX6RuhPheoSxx5dMzEWdTxovA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7241
+X-MS-Exchange-CrossTenant-UserPrincipalName: HJ25iR5jROX0nNxi3s1wPUS9GLcv6tgCm0tZcDo7Czi924RKG0idyYs5tj2aVfZpF3IQ0vDHV6vSGO2dIi/oIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7489
 
 
 
-On 9/10/2025 10:05, Yazen Ghannam wrote:
-> On Tue, Sep 09, 2025 at 06:53:11PM +0000, Avadhut Naik wrote:
->> Currently, the NUM_CONTROLLERS macro is only used to statically allocate
->> the csels array of struct chip_select in struct amd64_pvt.
+On 9/10/2025 09:51, Yazen Ghannam wrote:
+> On Tue, Sep 09, 2025 at 06:53:10PM +0000, Avadhut Naik wrote:
+>> Currently, the ctl_name string is statically assigned based on the family
+>> and model of the SOC when the amd64_edac module is loaded.
 >>
->> The size of this array, however, will never exceed the number of UMCs on
->> the SOC. Since, max_mcs variable in struct amd64_pvt already stores the
->> number of UMCs on the SOC, the macro can be removed and the static array
->> can be dynamically allocated instead.
-> 
-> You should note that max_mcs and the csels array are also used in legacy
-> systems with 'DCTs'.
-> 
-> Those had a max of 2 controllers which we already set in
-> per_family_init() as the global default. So the legacy systems are
-> covered by this change too.
-> 
-> Without noting this, it seems like that case may be overlooked.
-> 
-Will mention this in the commit message!
-
+>> The same, however, is not exactly needed as the string can be generated
+>> and assigned at runtime through scnprintf().
+>>
+>> Remove all static assignments and generate the string at runtime. Also,
+>> cleanup the switch cases which now become defunct.
 >>
 >> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 >> ---
 >> Changes in v3:
 >> Patch introduced.
 >> ---
->>  drivers/edac/amd64_edac.c | 19 +++++++++++++------
->>  drivers/edac/amd64_edac.h |  5 ++---
->>  2 files changed, 15 insertions(+), 9 deletions(-)
+>>  drivers/edac/amd64_edac.c | 44 +++++++--------------------------------
+>>  drivers/edac/amd64_edac.h |  4 +++-
+>>  2 files changed, 11 insertions(+), 37 deletions(-)
 >>
 >> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
->> index 3989794e4f29..0fade110c3fb 100644
+>> index 07f1e9dc1ca7..3989794e4f29 100644
 >> --- a/drivers/edac/amd64_edac.c
 >> +++ b/drivers/edac/amd64_edac.c
->> @@ -4000,30 +4000,34 @@ static int probe_one_instance(unsigned int nid)
->>  	if (ret < 0)
->>  		goto err_enable;
->>  
->> +	pvt->csels = kcalloc(pvt->max_mcs, sizeof(*pvt->csels), GFP_KERNEL);
->> +	if (!pvt->csels)
->> +		goto err_enable;
->> +
+>> @@ -3767,6 +3767,8 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  	pvt->model	= boot_cpu_data.x86_model;
+>>  	pvt->fam	= boot_cpu_data.x86;
+>>  	pvt->max_mcs	= 2;
 > 
-> You can move this allocation to the end of per_family_init(). That's
-> where we determine 'max_mcs'.
+> Newline here, please.
 > 
-> If you do so, then the 'goto' changes below are not needed.
-> 
-> Another option is to put it in hw_info_get() like we do for UMCs. But
-> that means adding the allocation to three different helper functions
-> rather than just the one with per_family_init().
-> 
+Okay.
 
-Had considered moving allocation to per_family_init() while sending
-this set. But then didn't since I had stated that I would be adding
-this allocation in probe_one_instance().
-In any case, will move it to per_family_init().
-
->>  	ret = pvt->ops->hw_info_get(pvt);
->>  	if (ret < 0)
->> -		goto err_enable;
->> +		goto err_csels;
->>  
->>  	ret = 0;
->>  	if (!instance_has_memory(pvt)) {
->>  		amd64_info("Node %d: No DIMMs detected.\n", nid);
->> -		goto err_enable;
->> +		goto err_csels;
->>  	}
->>  
->>  	if (!pvt->ops->ecc_enabled(pvt)) {
->>  		ret = -ENODEV;
->>  
->>  		if (!ecc_enable_override)
->> -			goto err_enable;
->> +			goto err_csels;
->>  
->>  		if (boot_cpu_data.x86 >= 0x17) {
->>  			amd64_warn("Forcing ECC on is not recommended on newer systems. Please enable ECC in BIOS.");
->> -			goto err_enable;
->> +			goto err_csels;
->>  		} else
->>  			amd64_warn("Forcing ECC on!\n");
->>  
->>  		if (!enable_ecc_error_reporting(s, nid, F3))
->> -			goto err_enable;
->> +			goto err_csels;
->>  	}
->>  
->>  	ret = init_one_instance(pvt);
->> @@ -4033,7 +4037,7 @@ static int probe_one_instance(unsigned int nid)
->>  		if (boot_cpu_data.x86 < 0x17)
->>  			restore_ecc_error_reporting(s, nid, F3);
->>  
->> -		goto err_enable;
->> +		goto err_csels;
->>  	}
->>  
->>  	amd64_info("%s detected (node %d).\n", pvt->ctl_name, pvt->mc_node_id);
->> @@ -4043,6 +4047,8 @@ static int probe_one_instance(unsigned int nid)
->>  
->>  	return ret;
->>  
->> +err_csels:
->> +	kfree(pvt->csels);
+>> +	scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), "F%02Xh_M%02Xh",
+>> +		  pvt->fam, pvt->model);
 > 
-> This can go in hw_info_put(). We have kfree(pvt->umc) there already.
+> There are a couple of special cases below.
 > 
-Okay. Will move it to hw_info_put().
+> So I think it may be better to move this part to the end...
+> 
+>>  
+>>  	/*
+>>  	 * Decide on which ops group to use here and do any family/model
+>> @@ -3779,8 +3781,10 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  
+>>  	switch (pvt->fam) {
+>>  	case 0xf:
+>> -		pvt->ctl_name				= (pvt->ext_model >= K8_REV_F) ?
+>> -							  "K8 revF or later" : "K8 revE or earlier";
+>> +		if (pvt->ext_model >= K8_REV_F)
+>> +			strscpy(pvt->ctl_name, "K8 revF or later", sizeof(pvt->ctl_name));
+>> +		else
+>> +			strscpy(pvt->ctl_name, "K8 revE or earlier", sizeof(pvt->ctl_name));
+> 
+> Maybe save this special case to a temporary "char *name".
+> 
+>>  		pvt->f1_id				= PCI_DEVICE_ID_AMD_K8_NB_ADDRMAP;
+>>  		pvt->f2_id				= PCI_DEVICE_ID_AMD_K8_NB_MEMCTL;
+>>  		pvt->ops->map_sysaddr_to_csrow		= k8_map_sysaddr_to_csrow;
+>> @@ -3788,7 +3792,6 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  		break;
+>>  
+>>  	case 0x10:
+>> -		pvt->ctl_name				= "F10h";
+>>  		pvt->f1_id				= PCI_DEVICE_ID_AMD_10H_NB_MAP;
+>>  		pvt->f2_id				= PCI_DEVICE_ID_AMD_10H_NB_DRAM;
+>>  		pvt->ops->dbam_to_cs			= f10_dbam_to_chip_select;
+>> @@ -3797,12 +3800,10 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  	case 0x15:
+>>  		switch (pvt->model) {
+>>  		case 0x30:
+>> -			pvt->ctl_name			= "F15h_M30h";
+>>  			pvt->f1_id			= PCI_DEVICE_ID_AMD_15H_M30H_NB_F1;
+>>  			pvt->f2_id			= PCI_DEVICE_ID_AMD_15H_M30H_NB_F2;
+>>  			break;
+>>  		case 0x60:
+>> -			pvt->ctl_name			= "F15h_M60h";
+>>  			pvt->f1_id			= PCI_DEVICE_ID_AMD_15H_M60H_NB_F1;
+>>  			pvt->f2_id			= PCI_DEVICE_ID_AMD_15H_M60H_NB_F2;
+>>  			pvt->ops->dbam_to_cs		= f15_m60h_dbam_to_chip_select;
+>> @@ -3811,7 +3812,6 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  			/* Richland is only client */
+>>  			return -ENODEV;
+>>  		default:
+>> -			pvt->ctl_name			= "F15h";
+>>  			pvt->f1_id			= PCI_DEVICE_ID_AMD_15H_NB_F1;
+>>  			pvt->f2_id			= PCI_DEVICE_ID_AMD_15H_NB_F2;
+>>  			pvt->ops->dbam_to_cs		= f15_dbam_to_chip_select;
+>> @@ -3822,12 +3822,10 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  	case 0x16:
+>>  		switch (pvt->model) {
+>>  		case 0x30:
+>> -			pvt->ctl_name			= "F16h_M30h";
+>>  			pvt->f1_id			= PCI_DEVICE_ID_AMD_16H_M30H_NB_F1;
+>>  			pvt->f2_id			= PCI_DEVICE_ID_AMD_16H_M30H_NB_F2;
+>>  			break;
+>>  		default:
+>> -			pvt->ctl_name			= "F16h";
+>>  			pvt->f1_id			= PCI_DEVICE_ID_AMD_16H_NB_F1;
+>>  			pvt->f2_id			= PCI_DEVICE_ID_AMD_16H_NB_F2;
+>>  			break;
+>> @@ -3836,76 +3834,52 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  
+>>  	case 0x17:
+>>  		switch (pvt->model) {
+>> -		case 0x10 ... 0x2f:
+>> -			pvt->ctl_name			= "F17h_M10h";
+>> -			break;
+>>  		case 0x30 ... 0x3f:
+>> -			pvt->ctl_name			= "F17h_M30h";
+>>  			pvt->max_mcs			= 8;
+>>  			break;
+>> -		case 0x60 ... 0x6f:
+>> -			pvt->ctl_name			= "F17h_M60h";
+>> -			break;
+>> -		case 0x70 ... 0x7f:
+>> -			pvt->ctl_name			= "F17h_M70h";
+>> -			break;
+>>  		default:
+>> -			pvt->ctl_name			= "F17h";
+>>  			break;
+>>  		}
+>>  		break;
+>>  
+>>  	case 0x18:
+>> -		pvt->ctl_name				= "F18h";
+>>  		break;
+>>  
+>>  	case 0x19:
+>>  		switch (pvt->model) {
+>>  		case 0x00 ... 0x0f:
+>> -			pvt->ctl_name			= "F19h";
+>>  			pvt->max_mcs			= 8;
+>>  			break;
+>>  		case 0x10 ... 0x1f:
+>> -			pvt->ctl_name			= "F19h_M10h";
+>>  			pvt->max_mcs			= 12;
+>>  			pvt->flags.zn_regs_v2		= 1;
+>>  			break;
+>> -		case 0x20 ... 0x2f:
+>> -			pvt->ctl_name			= "F19h_M20h";
+>> -			break;
+>>  		case 0x30 ... 0x3f:
+>>  			if (pvt->F3->device == PCI_DEVICE_ID_AMD_MI200_DF_F3) {
+>> -				pvt->ctl_name		= "MI200";
+>> +				memset(pvt->ctl_name, 0, sizeof(pvt->ctl_name));
+>> +				strscpy(pvt->ctl_name, "MI200", sizeof(pvt->ctl_name));
+> 
+> And this to a temp name too.
+> 
+>>  				pvt->max_mcs		= 4;
+>>  				pvt->dram_type		= MEM_HBM2;
+>>  				pvt->gpu_umc_base	= 0x50000;
+>>  				pvt->ops		= &gpu_ops;
+>>  			} else {
+>> -				pvt->ctl_name		= "F19h_M30h";
+>>  				pvt->max_mcs		= 8;
+>>  			}
+>>  			break;
+>> -		case 0x50 ... 0x5f:
+>> -			pvt->ctl_name			= "F19h_M50h";
+>> -			break;
+>>  		case 0x60 ... 0x6f:
+>> -			pvt->ctl_name			= "F19h_M60h";
+>>  			pvt->flags.zn_regs_v2		= 1;
+>>  			break;
+>>  		case 0x70 ... 0x7f:
+>> -			pvt->ctl_name			= "F19h_M70h";
+>>  			pvt->max_mcs			= 4;
+>>  			pvt->flags.zn_regs_v2		= 1;
+>>  			break;
+>>  		case 0x90 ... 0x9f:
+>> -			pvt->ctl_name			= "F19h_M90h";
+>>  			pvt->max_mcs			= 4;
+>>  			pvt->dram_type			= MEM_HBM3;
+>>  			pvt->gpu_umc_base		= 0x90000;
+>>  			pvt->ops			= &gpu_ops;
+>>  			break;
+>>  		case 0xa0 ... 0xaf:
+>> -			pvt->ctl_name			= "F19h_MA0h";
+>>  			pvt->max_mcs			= 12;
+>>  			pvt->flags.zn_regs_v2		= 1;
+>>  			break;
+>> @@ -3915,12 +3889,10 @@ static int per_family_init(struct amd64_pvt *pvt)
+>>  	case 0x1A:
+>>  		switch (pvt->model) {
+>>  		case 0x00 ... 0x1f:
+>> -			pvt->ctl_name           = "F1Ah";
+>>  			pvt->max_mcs            = 12;
+>>  			pvt->flags.zn_regs_v2   = 1;
+>>  			break;
+>>  		case 0x40 ... 0x4f:
+>> -			pvt->ctl_name           = "F1Ah_M40h";
+>>  			pvt->flags.zn_regs_v2   = 1;
+>>  			break;
+>>  		}
+> 
+> ...here.
+> 
+> Then check if the name was set already (by the special cases). If not,
+> then set the generic family/model name.
+> 
+> For example:
+> 	char *tmp_name = NULL;
+> 
+> 	if K8:
+> 		if F:
+> 			tmp_name = "K8 F";
+> 		else:
+> 			tmp_name = "K8 E";
+> 	if MI200:
+> 		tmp_name = "MI200";
+> 
+> 	if (tmp_name)
+> 		scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), tmp_name);
+> 	else
+> 		scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), "F%02Xh_M%02Xh",
+> 			  pvt->fam, pvt->model);
+> 
+Okay! Will try this out!
 
 -- 
 Thanks,
