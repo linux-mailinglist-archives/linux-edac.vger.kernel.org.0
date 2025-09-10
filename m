@@ -1,81 +1,82 @@
-Return-Path: <linux-edac+bounces-4772-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4773-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B915CB5160E
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 13:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AD8D5B51614
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 13:48:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66A77467A16
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 11:47:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B615467A65
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 11:48:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC454284B42;
-	Wed, 10 Sep 2025 11:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D86D2853F1;
+	Wed, 10 Sep 2025 11:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bjc9Jpz0"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SlFE3eEN"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C762512F1
-	for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 11:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A52727877B
+	for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 11:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757504841; cv=none; b=W0XkD2ILpKdnRv/x6KrkaYZPxlsCRQwBj1X/ld609B6NZkT9skYkeE2l+nOilt/qSmQjVT1nQUDuOMpPnxfD/Th5f587lh0CTGahK+jvGbO8L+pz302YV9POnC8O9tmQdcm+7dZHZtC/jG1RkU5cwq/oDgxaB4OVDXYmacmAYEg=
+	t=1757504888; cv=none; b=XXB5mTsdtTll/zHgBhH7Tm075M3ARABrVaMI7bBaeom634LCkxV0nvcLBTRCFvLyGIotNOtbnlh+q5z4B6tYgFG1n8BMh1IWVrsWIbHmIQoMymqTQHIDFq9ECjutTN4dsY78y4wYMOHygq52/l+84B/vjrvVnT3uF/7DxrK1aZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757504841; c=relaxed/simple;
-	bh=lbVleNB36fG112XJp199lcPL6rD2vaZRqT8hFjobxP0=;
+	s=arc-20240116; t=1757504888; c=relaxed/simple;
+	bh=glUpWDjU/whbEm+cXSDLbJPOFLb0/DY79uUM8qwNMmY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lGKIvvK2OzwVuOWb+pxDPz+uEgfrgoV3rDlwFyjh7Ae/U7sxrjnUBuM+W3O1YtwXjt+cPImh4dD9BpJsrhbJoI9vmshvFQC/R65bY3WQI5k0ySrLUcnkJ/UB+UDtCldnGIfjGB4xOs0yvI6nrKByQuh/MaD6I9V+oFMnrJnOUfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bjc9Jpz0; arc=none smtp.client-ip=209.85.221.50
+	 In-Reply-To:Content-Type; b=DQkWWjipJef6s+dGi61W4nBY4CjIgvkhpT+6gXqEA9QvkOzMLTzmhKlzQICQeVnKJAuTOiZu3EQydKk68qGuL35oB/UWj4fdEAlnHWbvBunB9bEC2tWBzWLqY13F2kKlZroru6M6XfQun+/ymlaHKKR5rJ1njz2v203RWX35QXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SlFE3eEN; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3c46686d1e6so4332557f8f.3
-        for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 04:47:19 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45ded619608so16423405e9.3
+        for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 04:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1757504838; x=1758109638; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1757504885; x=1758109685; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4b8l9UODp/FeCRZCFvzP4dsffoCBp+wjbwx4BoMSIwg=;
-        b=bjc9Jpz0wsqoK1Q/e7o0LX2Zg06F2GnUSUuhk+iOYeh+a+N2xsZ4zALT+klTsofDM5
-         PivKeCDnbQbVPHZwTBDJq3YwET226q86w4rhHNlzXl+PyC7pB1xAvV1IJBSw8I6GEzAp
-         DyU6J9VBdUZOtyWyReKFoyvCGGlwecOlTyc6Tfhi9/zs4RAxYoc9bd6jEwdJo8X04mjk
-         soFKpxUYL8HiyZ05ObwARaNvv7gBvzVDeHG5aJh9wPcWMUce8WAvaL/07XIhiqzZDcjF
-         h7lfltqaq/frL+Xlivl9YN7dpbHcTxyU7niLhI5h28Vz/B9rdvj0ASLNWXasbnhgXFSf
-         0hJQ==
+        bh=psddHzFokLiBPLVEpbVIxZmPYIzTbvsTQwlkDfkebjY=;
+        b=SlFE3eENiwnEM1Al7EMhcCMqh9WhfBa4g+FJfrvc39yX5nwe4NVDfwywiqO6CVLk0g
+         bW1MDTIzhCtViHtMWaNf47634TfjHUBYGkrXR4kHR7uIaSN+Lz/Z4xglnnPFmLSgIg+0
+         /k586jnhIR/4GAlPlyQpbjp7Eoar5wYg7N7sKkkvF+kevpy/rPFBqpap+FDxT+H3+8rU
+         LYHvuQlVM4/ts8vjnm9wK4QBndjvniWxo0nh2LL3ttEYxdC6skVXBeeVzX3HTK1M/UjO
+         mv7/JzWYNm7PNhY0CAhZ0YMpz8EESxghbkWTrBOGqJUeH+kD8fVXFYUbCFWzn40ETX7x
+         LS6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757504838; x=1758109638;
+        d=1e100.net; s=20230601; t=1757504885; x=1758109685;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4b8l9UODp/FeCRZCFvzP4dsffoCBp+wjbwx4BoMSIwg=;
-        b=usc/aTA1rUuBBuAw663G7Ea9im+Oe9nJHe9jfgW0qsW60dfR3gWe9xByOVpYJqbly2
-         tzC9gkTkoFRgQbSszXp77HhT7AC2XaDQkN1TpzdQvojscK0y3dL/FJ5q7FUJ8GV3c3Gn
-         ROAALMu7GVk0vmtrloJ8vi1yN1M/Z9Ed28uydeweC69gvwwEMy/teDW9UUSVTbEWphEU
-         IPQUR1hP+J9UOfp0cbgofmhYkLML8LdomI5hLEojdOHYajfQR+XwVc+AuViwOnlih7Fk
-         qeHfvU5h23m3tQF80ER0Q/hvrJY5ai73Z0vet9GOnFaI1hOfV9GBAL6a9g4Vtzl1mcGh
-         dB6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVGjhfLjqPGvKVa/TtmgJdh4ubR9qR9uCHdgnooXYt9I/uSGYlHHO/gQr6oCAj/FPlp8xngbarPYCkU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrpvMr4LV/Jq7vaaerFkdVfvw3wrjjsOYMnPbpUtT9BCYknSkP
-	QcWOq+4XxxnGBFx/CZpCgwpenXdPSdEDYQEm0G7pj+roQx7KijoUt5DVtTPejxoXExw=
-X-Gm-Gg: ASbGncvlj3FuLnfluBMjeJiAnNnwrEWC+4Yp3LV2D7mts2Qle6TEquYo9fKr8Z/FTG5
-	PNvQvChwvrSoDbaMX9Ra4TSAZ/mE8NuRSu4DlSYOOR6VZlYJbXhu0XM2Pdd4s5GZKcxm+WR4CO/
-	rZFnIjivSK4rHnTnIcRZejqcyeTNYKfC9rwh+dVXGLg4K6mKpL8m28QOBpr2v0a30a0Jz0aoQEi
-	GpU4tdkS3DibUt7B6v0ts1t76bWurfH/RKF/WIZI4rbSxB0fnrIhoLo2EUF4UYfgts/hjKLBM/W
-	/PR9Wzs5rX95PTPHE3X8PwF0ozX4kpDNvZIDbyfiuHT8H1fer0OkZKyq/BlX21FtLsum1joHSVQ
-	woG2zN8E2EI2XYNgA2wY0eVMVIXbXnozYsiO3
-X-Google-Smtp-Source: AGHT+IHzDMf/jaVov1RUOe73ZJkbRYR7qCbsg0/lCE8ZJG90MzF2ZKZezbrOeFUqcZDoFKM+jB3U0w==
-X-Received: by 2002:a05:6000:25c8:b0:3e2:6d96:b4b4 with SMTP id ffacd0b85a97d-3e643555864mr10937053f8f.41.1757504838050;
-        Wed, 10 Sep 2025 04:47:18 -0700 (PDT)
+        bh=psddHzFokLiBPLVEpbVIxZmPYIzTbvsTQwlkDfkebjY=;
+        b=aV7h7S/ocNRnS7ydcTja5yq9Iy1M9l6Q8i8TpAHMoVvRQ8XtfOEjS0FLtPhKeWypa2
+         huLRwcXRZzPHOl7Btag1YOzKq9978Pvu7Jnxd4RHpIukd3gCOG8Af5zrbK81gwEXV82Z
+         zM4n4Oo3LL/GLXBLmUXNyuVbeQN2ek0DOvlyUERGqCWWYXHNNihvpQCaj1QBZGf/hGz0
+         APGu+MmqQSZAgisqPdHi9QGT0IAvfWF2wKZWvMd3+MX4HU9xs06yXgwXdTScMc/FgmsK
+         wXhjUQNOmF9ROZ83jI3DLKsG6XW5F1Xk2P09ICVtKwHXTRYRtqELHW5VmrlAS9H8WqAr
+         jxWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBmbPig6XK4jatmi5eJqQ3wl8tjf8Xz7oh8d5Yljtzh1rGdbjzUVz3fizkenPlIIlup/gtIBT6NACg@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxrlDpU3dgExQdWXfb1gBeFUmRtOq0AnQ5ncr/efHFKz5sT0/6
+	zaFLLo0BNyyR8f8+O0HH59Slp8iqOphRmub6AM2uFwtyNdhkKXHf0+Y4rllgEyncfXP7WiS9Tcw
+	KKRG+
+X-Gm-Gg: ASbGnctP3skmWkvfzD82QzVD5G/KTz7yusHWc4d8Xd4qBaenBHfuCm7jl+zofu9QrUH
+	64CjYtXSboGVa+c9+Ik1lG1qkvi+ByG3N0+O5seyfej5Ruign4NZaj19WvH6HsRfvgLMgJzIu+j
+	NFRz46zqJaADrbMFmObdRSQKK/NEuKnwtn6NMBrGrlm7dEEzfDUWdVfl+0pDeSKUJ8jjZqbkaf9
+	6L0uCQLMYgdJzoq+EM6aAvExVwwC7zJ0dbZCKLiq1fhL+PfGD6qFWL2lzYguxO4zOe/j7p5nLWJ
+	e2/FiYu7ov3f+BTdn3KA08iN/hfXak+0SmoW4FVMuo9xllULszS6SDm61Rlvx/JucVEU4SfcQ15
+	aADsgqdK+r7lL6n++UyAbzK3y/gKLg5JM8to8
+X-Google-Smtp-Source: AGHT+IEC0BwkiBcLfkC6AyjnK+7m/uZFo+fHuHF5ML5ydk07hOwcF87TM1WXMbXyppNJR3OAgoJ1Xw==
+X-Received: by 2002:a05:6000:1a8d:b0:3e4:e4e:3449 with SMTP id ffacd0b85a97d-3e64c692515mr12297520f8f.58.1757504885431;
+        Wed, 10 Sep 2025 04:48:05 -0700 (PDT)
 Received: from [192.168.0.20] ([212.21.159.60])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e752238832sm6381943f8f.31.2025.09.10.04.47.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45df16070bdsm28840585e9.3.2025.09.10.04.48.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Sep 2025 04:47:17 -0700 (PDT)
-Message-ID: <98d80660-7140-43a2-b17c-07a0884996f8@suse.com>
-Date: Wed, 10 Sep 2025 14:47:16 +0300
+        Wed, 10 Sep 2025 04:48:04 -0700 (PDT)
+Message-ID: <49960695-5de9-494b-98c3-2ad7f1d5fa9f@suse.com>
+Date: Wed, 10 Sep 2025 14:48:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -83,14 +84,14 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 02/15] x86/mce: Define BSP-only init
+Subject: Re: [PATCH v6 03/15] x86/mce: Define BSP-only SMCA init
 To: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
  Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
  Smita.KoralahalliChannabasappa@amd.com, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
  linux-acpi@vger.kernel.org
 References: <20250908-wip-mca-updates-v6-0-eef5d6c74b9c@amd.com>
- <20250908-wip-mca-updates-v6-2-eef5d6c74b9c@amd.com>
+ <20250908-wip-mca-updates-v6-3-eef5d6c74b9c@amd.com>
 From: Nikolay Borisov <nik.borisov@suse.com>
 Content-Language: en-US
 Autocrypt: addr=nik.borisov@suse.com; keydata=
@@ -136,66 +137,21 @@ Autocrypt: addr=nik.borisov@suse.com; keydata=
  JDjakbdjBoYDWVoaPbp5KAQ2VQRiR54lir/inyqGX+dwzPX/F4OHfB5RTiAFLJliCxniKFsM
  d8eHe88jWjm6/ilx4IlLl9/MdVUGjLpBi18X7ejLz3U2quYD8DBAGzCjy49wJ4Di4qQjblb2
  pTXoEyM2L6E604NbDu0VDvHg7EXh1WwmijEu28c/hEB6DwtzslLpBSsJV0s1/jE=
-In-Reply-To: <20250908-wip-mca-updates-v6-2-eef5d6c74b9c@amd.com>
+In-Reply-To: <20250908-wip-mca-updates-v6-3-eef5d6c74b9c@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 9/8/25 18:40, Yazen Ghannam wrote:
-> Currently, MCA initialization is executed identically on each CPU as
-> they are brought online. However, a number of MCA initialization tasks
-> only need to be done once.
+> Currently on AMD systems, MCA interrupt handler functions are set during
+> CPU init. However, the functions only need to be set once for the whole
+> system.
 > 
-> Define a function to collect all 'global' init tasks and call this from
-> the BSP only. Start with CPU features.
+> Assign the handlers only during BSP init. Do so only for SMCA systems to
+> maintain the old behavior for legacy systems.
 > 
-> Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> Tested-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
 > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
-<snip>
-
-> @@ -2240,6 +2233,27 @@ DEFINE_IDTENTRY_RAW(exc_machine_check)
->   }
->   #endif
->   
-> +void mca_bsp_init(struct cpuinfo_x86 *c)
-> +{
-> +	u64 cap;
-> +
-> +	if (!mce_available(c))
-> +		return;
-> +
-> +	mce_flags.overflow_recov = cpu_feature_enabled(X86_FEATURE_OVERFLOW_RECOV);
-> +	mce_flags.succor	 = cpu_feature_enabled(X86_FEATURE_SUCCOR);
-> +	mce_flags.smca		 = cpu_feature_enabled(X86_FEATURE_SMCA);
-> +
-> +	rdmsrq(MSR_IA32_MCG_CAP, cap);
-> +
-> +	/* Use accurate RIP reporting if available. */
-> +	if ((cap & MCG_EXT_P) && MCG_EXT_CNT(cap) >= 9)
-> +		mca_cfg.rip_msr = MSR_IA32_MCG_EIP;
-> +
-> +	if (cap & MCG_SER_P)
-> +		mca_cfg.ser = 1;
-> +}
-> +
-
-
-LGTM
-
 Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
-
-nit: One question though for those CPUs which consist of P+E cores, is 
-it mandated that both types of cores will have identical MCE 
-architecture, I assume the x86 world will be a lot more unified than 
-Arm's big.LITTLE ?
-
->   /*
->    * Called for each booted CPU to set up machine checks.
->    * Must be called with preempt off:
-> 
-
 
