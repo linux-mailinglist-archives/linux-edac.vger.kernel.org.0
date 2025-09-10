@@ -1,78 +1,77 @@
-Return-Path: <linux-edac+bounces-4785-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4786-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50F9FB51BA8
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 17:31:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D891CB51C59
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 17:49:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B66D67B1DA3
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 15:28:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12915A002A7
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 15:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E741928C2D2;
-	Wed, 10 Sep 2025 15:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1992C327A32;
+	Wed, 10 Sep 2025 15:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KmQydqzJ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QlInzHdT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453545464E;
-	Wed, 10 Sep 2025 15:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399E132ED2A;
+	Wed, 10 Sep 2025 15:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.82
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757518197; cv=fail; b=FZFY9VHjWKQt7sqs5JB4MTaD/8mTgZaEjI0LrOiZjMeVgou6lYEbL0MAJNuq1HUxoJVfB8hRzMUJpiWc7ltGQfs1IOBza2RNkKbKCbgpxNvlMsb+qeZy9CrGq4nITHkZgIvusVDfAm/SI2f+j8695/8O/mhWJDJfaEMPdSEduR4=
+	t=1757519310; cv=fail; b=Kw0EElNzWn0kYomd8yovhPpwTnoA4+UQv2A/ANSTHyShOy7Kiz2Fb6yT6gbvQlMxXZAZY4pczQ7HEeReyax4p0RsZD1XsUi9y0BHna903+hdrZfnQSpRPeofz274n3jY+gXnERnVw+mPD0XvBUTGL84cETxhDMY+gUq4AAbByVw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757518197; c=relaxed/simple;
-	bh=BLFC9AfI7q58Z9bPkN68+09QGGPf7wcWVbA5yFHTldc=;
+	s=arc-20240116; t=1757519310; c=relaxed/simple;
+	bh=l/QUvU1OaMRQCIa17IOF0Ht3yPcRF9X/i/JJX/CD1wg=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=LDYjWX7CYEsn53tyVWkNxRDsq0eE5uNSN61L9mgDCm6zPBdowJTUGat8ppgYw0WPQhJwlY65n9/IvDGfkBochr4tzQCEackPym/0hfAljRxTyJgOOjCwXyOFR3pmGBwS+uXKdRuN+hyr42fTKEKEfVGqoujong7y6FYgaz2JEL4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KmQydqzJ; arc=fail smtp.client-ip=40.107.223.62
+	 Content-Type:MIME-Version; b=RmZqX/1ArFxKR8z1zV387mw0Cclcb1YS2qBxcm1B1JgZyoxWwyfvGyrGRybPu3ZO23YfJLFd5573MEPeFVuasifO/JfmpFY6frarA1/3U7ydUr1u4FkzFW9skOPIwRqXU4ZKR9IZ6ygBLJWMze9nD2/LMaTTovi9LoJ1RvbA/Xg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QlInzHdT; arc=fail smtp.client-ip=40.107.93.82
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=syDFuGJcj94gOKNugv+aUHXpvVuegswPdI/8+iEKZI5SOV3Z0xqqNj/oCUVPhGezXDjR1pemOYClGDGLjak17wEAxBaak5eTkUQhA5wqdBK7LK/XFvz8les2juc+qS3fisy3vGsm1dOtHiSSd+zxIZ/cHF0FHOy5hU2cbzxwJgmpiTvpQCnJwX7KA5vEl6OBSFsvgXLmz2GVE0hCKLkkRQ0S0e+RubWrB9HPPlRdROFeyIYEWzZMagjcQWwqvRgMjDsgRTHLY+0QocboC8TAlBx5SBAr3IuPa1kdZCwp9Pw0S048ksy/NX4TDMjfoQKqCXk0H+KrCA59/d362GAm/Q==
+ b=mEYQSJv/bOt55RMEYRFqRvEW3t1AAx14TlhkICH2d/XEeB3wbPMvG+Cm5QO1hpoSXOf0rWoHCE/GoUpZUAgFkUnK7Ivn2Drdj4Gr/RBvoZe8DKPIefTNOCXsbvWwv8jj+FI4Pd0Fr596MM2Pa2qyGrOLzYHK89S/eDXk9rWSkhGxCq6k3F7/fw291960r0clMkSy0pDVdx8VA6pKzTdxirtkXK9qcwMIudBs4M05v+GZ6kzEylaWIl1X7+1T2H7urDv2nHnbE4JovTtTfR+HZbAu/Q68R9VJDE1sxPIH+U0mogCyIprmKjGFcFSawSwziPeNa5znKl1yL/wo1TDH5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=buurZa1+vi1bnUrqFF5xC51391ABRVJwdNEMMShX3RE=;
- b=r6lxGd2d8lWqAZAqLNgD/Lc4pqmn1rNOyHYfdJJ7Yo+qd7cQEfrz/ZRwZKwFjxTt7CXn/46gsdTtCmyZdgzyISuOkvml/noFh0TQv+CmbmQWCzQN0TA3v6uKmzdq32/ciK3U6RF8AMCfvpk16gqQ4orPK1s7UaILqPfSEGhzKT0kUZy1NI6LeL4B9GjgkAW44ijDsifpaTbZgzNeujlkph5XXsPFw9ZzOFGeH46kto9bkAhtNlGoirDKo6IQCJLQuqUhL2F2gRC7khPfFO+NT4Qf8PkxZHM+kLQFzvIfY0n6AlE2LrW1Zo/u9BMPXBoSxaPsM02hWnFWTYclrF4gpw==
+ bh=jDP1vGTLRmBHUlC1Y/ieKfY5ubBoJNwZv0sotz4leZY=;
+ b=P25b2ljwjY5TlFw48kRFa6KhsicAhX6fcBJJDw/aXeCTJp0ZGTCAgy6NCkaaSjLKN8nbzAN3+9uOMBsW4aZ7KbADvI+JmIgJIjO+hsMeC9FD/+qo84JsF9S5Z/evfOFlfkcwt2dOQqAEoMxYBUPdH6tEVrdjoE8ic/C9nt10G0bxMa2QDbqNtX6k26BnxWeg50/bkvEU1TWemFE/4VR5p2XTGJNrDLVGcyUMeSMEnfmfAbFrdkQH27xwDnFPhH1QvcXFaUs6KRlx6RH3Se0+AWE0vuu5wyntWhiSSpkDdfAogtaxVviyyQG7xD4l1p8OGHeIcj9R7gLE7VfKi6H3UA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=buurZa1+vi1bnUrqFF5xC51391ABRVJwdNEMMShX3RE=;
- b=KmQydqzJxIUuFLmXFPIhD5dM5/6xXKjzIMqoZW131CaesAYv/7nMHeGJnhdcigfB/jiO9TKRZqzOMDRns1yiMnBH5DvXPQR6dn3ekB/QJQOzjThbcJ2Y3oCLT6HwRnt7gmebS4NISJnQTUB7PoWQckm+2MSxvYmtMI304ej8CLg=
+ bh=jDP1vGTLRmBHUlC1Y/ieKfY5ubBoJNwZv0sotz4leZY=;
+ b=QlInzHdT1pyVm7auRXNbdoB1xQzv5S9j4/yRRp/dXE1xTz9TlG5okYQbYZ7X6OgIZdSaH7/BRHF8nmR7UFLzHb8KpVgfXxc6Tzttf5znOrw+8HM/LhEbx1r4rE1hM1QEZC7JI7Qy0ySJdGaUmiYtfcoUg+8hslIPHrRwb7PmW7M=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
- by SA1PR12MB7197.namprd12.prod.outlook.com (2603:10b6:806:2bd::21) with
+ by CY8PR12MB7241.namprd12.prod.outlook.com (2603:10b6:930:5a::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Wed, 10 Sep
- 2025 15:29:53 +0000
+ 2025 15:48:24 +0000
 Received: from CH0PR12MB5388.namprd12.prod.outlook.com
  ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
  ([fe80::a363:f18a:cdd1:9607%5]) with mapi id 15.20.9094.021; Wed, 10 Sep 2025
- 15:29:53 +0000
-Message-ID: <e1702c62-57ea-47cb-8555-fe1614572b03@amd.com>
-Date: Wed, 10 Sep 2025 10:29:51 -0500
+ 15:48:24 +0000
+Message-ID: <98e347a3-459e-41e4-8ad3-5dac086b6e74@amd.com>
+Date: Wed, 10 Sep 2025 10:48:22 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] EDAC/mc_sysfs: Increase legacy channel support to
- 16
+Subject: Re: [PATCH v3 2/5] EDAC/amd64: Remove NUM_CONTROLLERS macro
 To: Yazen Ghannam <yazen.ghannam@amd.com>, Avadhut Naik <avadhut.naik@amd.com>
 Cc: linux-edac@vger.kernel.org, bp@alien8.de, linux-kernel@vger.kernel.org
 References: <20250909185748.1621098-1-avadhut.naik@amd.com>
- <20250909185748.1621098-5-avadhut.naik@amd.com>
- <20250910151713.GG11602@yaz-khff2.amd.com>
+ <20250909185748.1621098-3-avadhut.naik@amd.com>
+ <20250910150525.GE11602@yaz-khff2.amd.com>
 Content-Language: en-US
 From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <20250910151713.GG11602@yaz-khff2.amd.com>
+In-Reply-To: <20250910150525.GE11602@yaz-khff2.amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9PR13CA0030.namprd13.prod.outlook.com
- (2603:10b6:806:21::35) To CH0PR12MB5388.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA9PR03CA0029.namprd03.prod.outlook.com
+ (2603:10b6:806:20::34) To CH0PR12MB5388.namprd12.prod.outlook.com
  (2603:10b6:610:d7::15)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -81,201 +80,209 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|SA1PR12MB7197:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f2abf3e-9ef6-4c7d-0510-08ddf07ee3b7
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|CY8PR12MB7241:EE_
+X-MS-Office365-Filtering-Correlation-Id: bae6c62e-cc8c-43a5-e919-08ddf08179db
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?amh6eHRlRFRENUpmWjBKM0g4NHNJeTFQeVZ3ZmFZdndGVFNxNFJ3YndmRmRz?=
- =?utf-8?B?VkV1b1QzMFBBVTFpbjJGaFN6eWg3NjZBdHF1QUU3WmdLUkE0YmxndzdndmtE?=
- =?utf-8?B?eWMyRVZ1WHpsWGtheW9udWcySjFsUW1oUkI0ejNVVWtSS3ZpNzhxcDFwdkVU?=
- =?utf-8?B?WVFMdkM3ckZHUW5KUDM3UytWc09lV29URlpXMVR1dHFjRmQ4VGtuSUZpQWp1?=
- =?utf-8?B?ZjVxOXlNSnN6NWtkQVBLRUtGTUVvby9qZDVVUEdrbmNNS1ZJcGoxdmFTRTVK?=
- =?utf-8?B?Y1kvNFlqa1UwQVJCV2RuaXZXaEE4T3NDcmcxUUo5WHdnc2dnUUsxTGJrQlZ3?=
- =?utf-8?B?RmpFMjhUdG9wbHFHREdYK2dMeUZDbU5jc2w1OHN2a2hiMmtERWIzSG9pcTBx?=
- =?utf-8?B?TzVvR2xMM1FhNEdJbnFlU05TMnRoNEFvMFpWSlAwMmVucE9VRG9uSWpPUERz?=
- =?utf-8?B?cTYrQVQvRHRiaHJvcTB3MG45UUZwZS9BUWl0RzliVDZIbjZUWlMwZm0wWFZO?=
- =?utf-8?B?R2M4V0pMMzNJTHFJYmt2THBad0tvTXFKRDNrNmFCSy9WTGgxalhsK2JSOTBl?=
- =?utf-8?B?b0Zud3A5MjgyWHhKemtkZXB5cHV3dC9oVmRGU1NzSlFZSDNxVXV6dy9qSWdm?=
- =?utf-8?B?U0dXT0UvVkkwcFlkcE9zRlJITUZvNWwvMmc5UWhCek4xaGNLZVdySGwwaGhJ?=
- =?utf-8?B?Q3JacSt4aEx6Qk9kV3Ryd3NYbkpQSDJXTDBzZlF2ckhMcVN4MGZGYy8wOHNz?=
- =?utf-8?B?N0kxTTNSc21uTXMxdGV4RHRTVzNnVkZSb05sQjF4a000WjhleUJsZytiTTZ2?=
- =?utf-8?B?RldCUGpZQzl4RldMS1pwc1ZzanFxYjN0d2NQVXdCVmJseC9adEpQRTJKaWNG?=
- =?utf-8?B?RU8zNHhRbWl3c3dacXFJYnQwb0t0V2lUbzJTUHBLUGFlQXRvVWRJTGhoRXhT?=
- =?utf-8?B?U2RZUFllbUh0YWVUSEFFZWQwRTlzb0NTUzY5UC83ZUoxRjBMVTNQQ0s3ckpv?=
- =?utf-8?B?Um9sUnY0dE1KMlJaRTZMODN2UGxwZ1I5R1ZTZVYxeWU0RmZMRlhYY2cvQjI1?=
- =?utf-8?B?TjFTQm5EMVhESFZsVk91dytEMGpBeFdpcDNvQ3BrY3pVb2RSMUd4T3BDRlND?=
- =?utf-8?B?ZXhTbHRXeEF5VUtMR2t2UTZMRVB0cUdqalZ6NXFuM3RJb2drUEhqWXcrd0o4?=
- =?utf-8?B?Q3ZQVy9vZkxwaUxwaTI3RWRvWFlxN1ZFSGZjL0Y3VEFvckFKTytQak9wL0tK?=
- =?utf-8?B?bFlmcWFZZmx4cWUwejBCeTF1MVZ4Q2gybHNqbngrZmVHMUhrWElBZzRDZEU0?=
- =?utf-8?B?YzRkL1RXa05JOExsbUpDejZrRzM2RGJldXBVa1RXK00wOU1UMDBncEgyTHlS?=
- =?utf-8?B?STE0emtIVkg2STRWSmVvdGNtVUlyWExTaHdyOW55WUhwYXdydzRINjkzMldx?=
- =?utf-8?B?dURTWm9YTU1BeDNQWVhTTEI0QkNNUkhQb2hZNHU0UEFNRE0yUDlVNFFkdm1V?=
- =?utf-8?B?MEZHeldGb29mOW12bDBLNXlwY05idjNIRmhZWDFNN0pjRDlaTnJmekF1MmF6?=
- =?utf-8?B?ZE9TZTdkK2UxRHNsOEdsbVhDTjNHYk1oQVFsN0ZXc21SdC9md2c0OUhtMzRO?=
- =?utf-8?B?Mm5RMWMyR0RFYk9HSjJKZFNkOFlFNXpnT0prdVNGcm5TcGpLOGh5TXp3L0FE?=
- =?utf-8?B?RGVkUDdsRk82cFVZZzROOWpLUlNrRm9Ub3FOajZxdUhVajJYQTg1cWlzRXRx?=
- =?utf-8?B?L09LMjB3YS80ZkJ3UG11YlFOMzkvSjc3c3F5dUlPeHB2ZUt0YjVhV0VXTy9k?=
- =?utf-8?B?WEZ4RkdYUlloVFFTZXlCc3FIQnloMDU0WUFSSzdvWFNNR3FtaW5rMHNuamZG?=
- =?utf-8?B?STBQUThiQUNqVlErNitucDRESC9zM21yUUNEdGh6N0dud0ljMjhMZk81UHlJ?=
- =?utf-8?Q?QhqiifIxEw0=3D?=
+	=?utf-8?B?Vi9qOUJVV1pjRXlDY0dVNGpaZDJDV29qYk1QcC92VFIyMndVa0drdUlmelBs?=
+ =?utf-8?B?aXpzZVIzc3RmaWJaV29zYjE3S3pqblZBUjA2bTJDZE0vNHgzSFNtTFNyWW83?=
+ =?utf-8?B?S1lzTW5SR3lCRVlKbjV4anhvdzZVb0trOHJCT0krV1M1aU9sbXN0MnlucnlC?=
+ =?utf-8?B?VUIrL29qTjh6TXh6MEpEczRmYWJVTHRrMGJvZzgvRENVUkZKMFZyNTNYbVlW?=
+ =?utf-8?B?WFNRRmZtOVhZMEtrVXJOamdmc2hVYWtYUTIxRFNxMmtoMkg4YUtrT0NmSnRC?=
+ =?utf-8?B?akpkdVVZR1hWT1E2dWdwaGczQWpzd1RBMW9sVkFHLzdsYzdEdlFGUzBnbTg0?=
+ =?utf-8?B?TFQvelo1dkZ6T1dNZityM3YvOGpoNDZ6Vnp5cGVjS1lKbVJ5djhTeTl2OThQ?=
+ =?utf-8?B?dDRHOWtOZjVFRXA3R0tOempqK1YzVjJ2bzFBbjZxcXdtZlhRdmhFN2p4b3NJ?=
+ =?utf-8?B?WDFPUjRtSUU5SGt4cmVwY0MzRWdOUFN1VDNlR29uZDhlL3NJYUJRZnVSWWw1?=
+ =?utf-8?B?RS8ySVU1WW9yT0hFaFRZcEZleEZVTnowYkFwaEtxVno3Rmx5UTY1Qy9QMHo5?=
+ =?utf-8?B?RTIyblozZlBFemVhVlJBVmduODRteDhqbzEvR3B4enVHZU42WThtVEY2QTQx?=
+ =?utf-8?B?aWJSYS80SjhiSGt0RUFlOXczajR3dXN3R05yZmNOc3hhOWFXVnlvMWgxc1Bo?=
+ =?utf-8?B?b05tMnNLb1B5T3VQT2ZkM3ZlRVZHejVaTGd6T09KSTFML0VMbHBHWGF2Q3Az?=
+ =?utf-8?B?NzdlbEhQcFlSUzVibUtsaTFUR1JudE4yUzBtSUNJZE9xd0pNRDBLWUdPYnFv?=
+ =?utf-8?B?SGg1Z3lhQzgwZ2pobGsrYTJ0cVZZYWRzTVhnMG1yTjZFdmIwWkJUNzl0R3V3?=
+ =?utf-8?B?dGlIV1pEYmJTVkp1OC9sUHQ5N08zb2NFMThYZjRjZXNwWG9WNVpLWkF5WmpK?=
+ =?utf-8?B?Y2daZXQxVFBOTHRBQm1iY2FTbkxrWUJ3VVZDcHlsOFVpQTk3OTNRNzBlVkJS?=
+ =?utf-8?B?SGgyeExkUWh0S3lxblRpL09QeGtIRjhtSjJLNThKS3hFRGRQZXBIclBhYm4x?=
+ =?utf-8?B?ektiQ3lKUEpzN0lYMzdTN1ZTdXFUQnpKMENaNCtXVkUrWWVRWTduVHYwV1FB?=
+ =?utf-8?B?OWovQUpRS2pNeVlMK3pzQ2xvcXZGS3F2Sm41UFVGRUdJM2lJVDdwTUtqN0Mx?=
+ =?utf-8?B?Vlg4aDBBRjlQZlJ0NVlwUDEvZStSQzFkY3FGZXBvNytFWS8rWVhHd21YU29J?=
+ =?utf-8?B?NUpsY2NzbzdicW9YSlFTNi9LSEVSZlBCWnhGelY0cXhxSkVYS2VwREFxRTNB?=
+ =?utf-8?B?YndPRytMaEYyeVcxZmVvTnlmbWIxOVRDQnZqMmJuWEpwSUZneEM1S3NKOFcr?=
+ =?utf-8?B?M3VBV3RXdXRLNjJCZWJBY2RMMUw1ckd0dVBRWEQ4Qm1UNWdHRHJxN2NKbFBW?=
+ =?utf-8?B?bk9GQTFhTXgzd21jWU51Y1lDeTdhVXpSQUU3aDg0WnUzeDJVK2wwYnZ1a29T?=
+ =?utf-8?B?Yi9SN2JjQ0RjQ24xWEluditBN00zcXpidHh1aytwUVUxamQ4bFkvbnhyd1Ux?=
+ =?utf-8?B?QXMrRXY5cUN1ZG5zK3dVQncwbEVqZWlPMG8zN3QrWTNDYlUxUk1sWDE1NlQ5?=
+ =?utf-8?B?QnMxcitjMG9ObGIxZDk4VGlJOVg1ZnNJcjZVVmthd3pCMFRDSTIvVXVMT3VZ?=
+ =?utf-8?B?aW9FQk9zaER5NUx0SzN5SDNyMVBjVklMcXlLRUYwMG9QTVp0WEo2eG1tbVlt?=
+ =?utf-8?B?UEtXV09ORDcyQ1JmQjNqMkovWHk2Yi9vWGx5SmQ0OWlnZDg4cjAxeFBlVzdj?=
+ =?utf-8?B?ajhZTGpMMlFVODdxZ05PUlR1YTFHRzc0U3NJVzJPQlZiMHZNcXdlMjNJMjh0?=
+ =?utf-8?B?VTVueUIvdGhZOC9JTVo0YitZVDdGYi9ZT0M2N2ZDelBMZlBFU0lHVUptbEVp?=
+ =?utf-8?Q?L0j/ZBM026U=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VGVnM3BxNmVFTzRjRGdZYUlOWFZkUFdqNXlwelNNVzZVczZCNUZHSit1VjdX?=
- =?utf-8?B?Ylh0VWpYd0xFZG9mUGpCalZFc1BCK0RyVUh6akYvS3lOS1J1aWoyOXFrVXoz?=
- =?utf-8?B?bXZITXJHU2t6bllib0JSYVhWNTJKT3p6cGVvb0Jycll2SFZCampzb3h5Rkhu?=
- =?utf-8?B?dmZYT3BrWEpnWDRaTDdzNmR5MmhYeWZmbVluOERIZjRqMkowWnlveEJFN0Yr?=
- =?utf-8?B?YTlJYWVxdHEvOGlqRXhoeWFRYlNVRjl6UWl2M0h6YzRweG1ia3ZmUGU1YUxa?=
- =?utf-8?B?M2loZk5HbkViKzI5ei9NUVhzOTE3UkU5dEswczQ1N2VibDZ2Y3pKYnZpZlBt?=
- =?utf-8?B?ZDJVUkF5MzB1bU4wYW5lTG5MaHB2dlBvME1tOFZndlcwUmFsVG45TmRvZnhm?=
- =?utf-8?B?aHV6ME96azZuQnRrMWJtS0w4VkxwbkpmTDA0SkY2d2xLTVc3NmtZQStxbkFV?=
- =?utf-8?B?U24zb3AxaUhST0NuaGQ0SjN1eG5sYXA2REx2R1FnSXR4N1VGQ2ozUjNqZmU4?=
- =?utf-8?B?UktmMkJySm5TMUlHU25JNkZBREJPWXdpNXhuQnVHY2dXNGluU1Q5Nm1UaktT?=
- =?utf-8?B?aHljZjlsenBmMVArWmVrMXlqMlloZTk5VDFlWkNVQnhCNnplbUNvUzlDSURT?=
- =?utf-8?B?WEpUNEVVUER5N0VGUHBRK0diWFk2RjJPMTY1eEFBZWljNkVKbXRZNVh3MVUy?=
- =?utf-8?B?WlpZMlZqRTRQZUVpMitNckV2YU5uVFdoMFR0WHcxdlRqenVkeTdVVmxYTTlQ?=
- =?utf-8?B?eU1kdkJ1aVFYaHZEZTV3RDBONlJKemhXUnIvK0RhQnoyNUFjd2V0eGkwWHl0?=
- =?utf-8?B?MGdTS2JLSFJyZCtUWGZlbnJ0REF2TTJqZXZHYUlSb2t5STF2TXNJdndKWERD?=
- =?utf-8?B?L3YvSStzQVNhY1g3YWlWTmNiV1h6RmNad3h2QmIxakxBem5ZSlFxU0RKMnU1?=
- =?utf-8?B?ZUxIeG9wSFZ2VEo4amJVQUxteVpzdTh4YUdUOXNIRS9nOStVUjFOa3NhRDE2?=
- =?utf-8?B?VVZERkI1M1dsTDcvZEI2UjJtRHgvc0krRExLUjloVjJ6SEt6S1huVE9hM0RX?=
- =?utf-8?B?bEVJTXJEMHhKSi9IYjZ0N29NSWxXaUUzNzJTTmhPZ0c0emhnUDIwSVZlUk9R?=
- =?utf-8?B?NGdMNDJRZWVmM2NPOWRETTVsSUlseis2aGJWRFpoRXArd3ErQWEwUDBjS0sr?=
- =?utf-8?B?Q1JteXoxTUJhYjVnbFVlNUsrKy9jZ3FhS1BWVS9BVW5VN0dQaXk4NXpyYkFV?=
- =?utf-8?B?MjduWTgva1RndnVOOXM4M3B3cXFYbEFnNVZkVHoyVjV0T3FQdTFuTFRmUnVo?=
- =?utf-8?B?U29ETWpXWkFzZCtqWFZ0ME05WmF5RG9BT1d1L1VxNWd5c3lrZkpuTGNnc3Ar?=
- =?utf-8?B?YWZuRExSOEY1K2xESnJ2dHhNYi9uU3FlSEIrTUFQZThRcHFTRTRrRWhRV3FM?=
- =?utf-8?B?NnhyYXVyK1gyTUF0SlpjZGdIUkFvYmRxTVJnUlVueTRmcWRDaytxNWpRNnRj?=
- =?utf-8?B?b3lOYkVBZjUzN2s2NG5NQjJHWDREaUs2eEo5M3Z3K3JOVzRNNGlKc3JwK1Bj?=
- =?utf-8?B?UVh3ZGk0V0pma0tyajZZSVBmSUk0VVFWYmRYSEZLWDRzcmNkcTBlWThDcVNX?=
- =?utf-8?B?bWs2dGtXZDlSWHhOSkMyZVBaSm95SmQvbXoyZ2tzdEx2MTZqZWZGRjFwWDlB?=
- =?utf-8?B?VU9NSVBMcDgwWDVQVFdkaHE0dmZDeE5oRDFSWDQ1VHg2RkFqaHdPOFRmWHo2?=
- =?utf-8?B?bXlTOW81TUxkMnI2WE1ScHYyS3JvMm5VbGJYbUVML25XM252RVZKT2VUOXVP?=
- =?utf-8?B?NFJLeGduS3hHdGNVZXJzMHgyZDlIaWkvUXkrV21zbzYyK2hKcWg1ZDFDeDgw?=
- =?utf-8?B?YnkvQVpxVkFXL2puU0JLL1FHaHlYQnNYZ0pmbmtrREVGME84bmFqZ2dTR2xl?=
- =?utf-8?B?ZGs5SFFMTlk5aG1xZ3RienpPUHhMQ25vOU9ycldoR2FrcUQ2QWJCT05NRGFF?=
- =?utf-8?B?cnRGUVpwWFZIQTB5bm16WkZYTzgzaUFUTlhxRW1QSTRiM01nYzRDVjAwaUdK?=
- =?utf-8?B?QnZ3aHZZeWsxbm91bThYQjRnVDNNbFBHM0toQnlSTDFTVGovTE9wY2ZqOU9T?=
- =?utf-8?Q?5dtXNJGcQ9SKDCho/umdD4QHp?=
+	=?utf-8?B?Tmszb3NONE5LcFpETXdrYlllS2o4b3ZtOVFmdnFUaFgybGhwbkhULytQNjcy?=
+ =?utf-8?B?ZGJzU0FpeWZ0K1NLOUxiU2pvcTUwZk0vaGwwaDBWK1hiOHhiTEhuOTdZM3Vs?=
+ =?utf-8?B?Unp3amlzeDdqckFLZFFMZnJXcy9EUFpqRmZGb3NQWkVicnRScUhQclRGdXRR?=
+ =?utf-8?B?YTEwL1czbmxtZDVkbXpFdDNINHBmTkhRdllJT3ZVTGplQktzT0E1b3VheUFI?=
+ =?utf-8?B?YWc1emNhMEEwUTVuS3I0VU4vb2xIelM5MHBTVnF0ZWtxdytGdnhRcXlvMHAv?=
+ =?utf-8?B?b0ovbk02ZzJsdGxZSkE1UDdVOVIxc3pDeVI0UGp5dlRvVW1YaU9qYjIxbDQ1?=
+ =?utf-8?B?QVRBY3d4SEpRM0p4YVQyUHp6K2ltMk5UV0xONURTYitSemRFK1htbTRqbWJB?=
+ =?utf-8?B?MEhOOFgzSHVGRXNUZ3F2TmIxQ1laM1drbjVaSms2NGdRcEtwU0ZVUmE2Mnlv?=
+ =?utf-8?B?RWJxTzBCelhzMm1zNnFTTmcvVUZYU1FBYzdJSjFoQ3pMVmszc2xpNFZIaDhl?=
+ =?utf-8?B?VVVlZFJ0NXo0S3dmUXNaa3BDZ0hmckFWV0dieElsclVNSjZQK0ZuWU8rV2xE?=
+ =?utf-8?B?UTMxNWdsVWtLdHltSEllY2FFaU54aDk4WUMrZ1Z1dUxrRXE0SEQydEtSS2tm?=
+ =?utf-8?B?T1I4Vk8xY2pxZHNPL0hHd0p1SzRqQ2pqY2FTbHlScnEyNDVLY2xIRGtKVUgv?=
+ =?utf-8?B?dGQ4MzkzRDU4S1BmVi85Njk3TFdPVFVtelV6RnRDM253RUNZN2JuaGRiZ3J4?=
+ =?utf-8?B?dC9XUlZHemxVZW92N1NTcVIvaDhQV1NzTzluOGdBS1Jpdk5aQks0Wng1RXdK?=
+ =?utf-8?B?RFdHbWpOL0ViVTdJSS93K3Bnd0FZR0hkQ3krREtMZExHT2NRREs5cnZYaWtJ?=
+ =?utf-8?B?d1NlTHhHZzM0OUxsL2Z0OFM3a0VDbFNwZ09LcXk3NUd0QkNwWmw5ZHJ2MHhm?=
+ =?utf-8?B?dnR2Wk9ueDQyNGVEOXFxVG1pSUI5TVBhNGsxK3pyeHNNNWdFdmM1dVNxVXIw?=
+ =?utf-8?B?azlxY3Z3REN5Ky8wRlVpbSsrTWRNcjM0d0N4ZWRoekkxTmRmOVpIYndNNXUz?=
+ =?utf-8?B?RFNXV3Boa2ZUUkIzQTRnWmdRdzgrVkZSYUZBUDl3SFBQVlhqRDVaYTdhc1E5?=
+ =?utf-8?B?dHU2TnMwaHRvS2prWUw0bEtsYmpna2dNYU1jbEVnV3BzeHQyY1piWVlSWGNN?=
+ =?utf-8?B?NW1jdDlDMmIyR2FpWmF6bElNaEV1SnV3bEw0UFRJbE44VEl0eDFESHdjdW5o?=
+ =?utf-8?B?cWp6bHFybkljcExnTTVJSVcrZDRGYjF2eWl4UDN6dnF0L0daVWpmTEwzdlE1?=
+ =?utf-8?B?OGVwR0xVc1FVV2RVVklWZ2VLalhGSVE4UW5yOWxzRUVZcTU0R3h1N3VqUWxT?=
+ =?utf-8?B?Q3FZalBEQjh5dEswSWZZUG9obXg1bHV6MDRWcEc2VlUwbXgzK2dPUzRBdURY?=
+ =?utf-8?B?ZGpXS05ub3FBVEJYRGdkZ3l1SUdVMTNaV01lY2Z2bGJ6N2MvS243UnhhM3hv?=
+ =?utf-8?B?d2sweTlxRWh5d1JWeUtvZ2xuUXpSSUdrSUJQSlN5ZjRQR0Yvbk9oaFg0dG5K?=
+ =?utf-8?B?YnZ6WE50ZUJpdytaSWFWZ0RJMkVLTUlKS3Ixd0ZsRTEvQi9HUk5IbTc0S0R1?=
+ =?utf-8?B?WWliZ003Y2dydVBUNFFrZHlHQUVRK1A2SmZINldLZDNEeXQ4Zk1UaENKeURY?=
+ =?utf-8?B?RFlXdjg5QWJNQllmazM1MEg1V2N0dWdLOFltN1lMbjFxaFFLeFRjR09qcEo1?=
+ =?utf-8?B?eEJNeENJR1IzRnpHeU1uK3RJWWVOK3gxQ2dLQzl4MktHK2dLb0pPWFo1L29F?=
+ =?utf-8?B?SktBVFhMaUlmclhENkFTcFNxZUdjTzY0WXBpRDZENkFKcmVJWEpTSS9qTnZy?=
+ =?utf-8?B?eFFwY082bFVDbndyVFVudmJidklNdUZlTWhpaXJkRWwzUzV1cWFvaWVsbDA4?=
+ =?utf-8?B?ZGk4WDFCdUhkVzNJc0o5VHY3ZHlHS0RGT0dSeUs1YVczNFRhclJKYjFnamhN?=
+ =?utf-8?B?ZFphOVJyWHJXWkNsVXl5MnBrdXlpSkZnSFNrOHB2aDJFOTBWQUcwNUZZeWRs?=
+ =?utf-8?B?UHcyQURvTCtXNjhzaEpmVGR4UHVGajg4N2ZUVk56R3ZYS2dJdWxaVHgvWjdp?=
+ =?utf-8?Q?+m63VoRak1AjwpdowGQHDK72f?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f2abf3e-9ef6-4c7d-0510-08ddf07ee3b7
+X-MS-Exchange-CrossTenant-Network-Message-Id: bae6c62e-cc8c-43a5-e919-08ddf08179db
 X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 15:29:53.5015
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 15:48:24.3943
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TdZMzA03NrxPkopz1IWWOAg753PlUcow/vneS18jb7jEwhlpaDEM+C+7TvISTDe+898o0qgyhAhWMvpRuC0Lfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7197
+X-MS-Exchange-CrossTenant-UserPrincipalName: bwelZrHBHHAuuS7RAx8mARgXUeIQu3BmCO5aqh9cyGwiws7r5XIU1A+OxppzFVX6RuhPheoSxx5dMzEWdTxovA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7241
 
 
 
-On 9/10/2025 10:17, Yazen Ghannam wrote:
-> On Tue, Sep 09, 2025 at 06:53:13PM +0000, Avadhut Naik wrote:
->> Newer AMD systems can support up to 16 channels per EDAC "mc" device.
->> These are detected by the EDAC module running on the device, and the
->> current EDAC interface is appropriately enumerated.
+On 9/10/2025 10:05, Yazen Ghannam wrote:
+> On Tue, Sep 09, 2025 at 06:53:11PM +0000, Avadhut Naik wrote:
+>> Currently, the NUM_CONTROLLERS macro is only used to statically allocate
+>> the csels array of struct chip_select in struct amd64_pvt.
 >>
->> The legacy EDAC sysfs interface however, provides device attributes for
->> channels 0 through 11 only. Consequently, the last four channels, 12
->> through 15, will not be enumerated and will not be visible through the
->> legacy sysfs interface.
->>
->> Add additional device attributes to ensure that all 16 channels, if
->> present, are enumerated by and visible through the legacy EDAC sysfs
->> interface.
+>> The size of this array, however, will never exceed the number of UMCs on
+>> the SOC. Since, max_mcs variable in struct amd64_pvt already stores the
+>> number of UMCs on the SOC, the macro can be removed and the static array
+>> can be dynamically allocated instead.
+> 
+> You should note that max_mcs and the csels array are also used in legacy
+> systems with 'DCTs'.
+> 
+> Those had a max of 2 controllers which we already set in
+> per_family_init() as the global default. So the legacy systems are
+> covered by this change too.
+> 
+> Without noting this, it seems like that case may be overlooked.
+> 
+Will mention this in the commit message!
+
 >>
 >> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 >> ---
->> Changes in v2:
->> Patch introduced.
->>
 >> Changes in v3:
->> No changes.
+>> Patch introduced.
 >> ---
->>  drivers/edac/edac_mc_sysfs.c | 24 ++++++++++++++++++++++++
->>  1 file changed, 24 insertions(+)
+>>  drivers/edac/amd64_edac.c | 19 +++++++++++++------
+>>  drivers/edac/amd64_edac.h |  5 ++---
+>>  2 files changed, 15 insertions(+), 9 deletions(-)
 >>
->> diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
->> index 0f338adf7d93..8689631f1905 100644
->> --- a/drivers/edac/edac_mc_sysfs.c
->> +++ b/drivers/edac/edac_mc_sysfs.c
->> @@ -305,6 +305,14 @@ DEVICE_CHANNEL(ch10_dimm_label, S_IRUGO | S_IWUSR,
->>  	channel_dimm_label_show, channel_dimm_label_store, 10);
->>  DEVICE_CHANNEL(ch11_dimm_label, S_IRUGO | S_IWUSR,
->>  	channel_dimm_label_show, channel_dimm_label_store, 11);
->> +DEVICE_CHANNEL(ch12_dimm_label, S_IRUGO | S_IWUSR,
->> +	channel_dimm_label_show, channel_dimm_label_store, 12);
->> +DEVICE_CHANNEL(ch13_dimm_label, S_IRUGO | S_IWUSR,
->> +	channel_dimm_label_show, channel_dimm_label_store, 13);
->> +DEVICE_CHANNEL(ch14_dimm_label, S_IRUGO | S_IWUSR,
->> +	channel_dimm_label_show, channel_dimm_label_store, 14);
->> +DEVICE_CHANNEL(ch15_dimm_label, S_IRUGO | S_IWUSR,
->> +	channel_dimm_label_show, channel_dimm_label_store, 15);
+>> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
+>> index 3989794e4f29..0fade110c3fb 100644
+>> --- a/drivers/edac/amd64_edac.c
+>> +++ b/drivers/edac/amd64_edac.c
+>> @@ -4000,30 +4000,34 @@ static int probe_one_instance(unsigned int nid)
+>>  	if (ret < 0)
+>>  		goto err_enable;
 >>  
->>  /* Total possible dynamic DIMM Label attribute file table */
->>  static struct attribute *dynamic_csrow_dimm_attr[] = {
->> @@ -320,6 +328,10 @@ static struct attribute *dynamic_csrow_dimm_attr[] = {
->>  	&dev_attr_legacy_ch9_dimm_label.attr.attr,
->>  	&dev_attr_legacy_ch10_dimm_label.attr.attr,
->>  	&dev_attr_legacy_ch11_dimm_label.attr.attr,
->> +	&dev_attr_legacy_ch12_dimm_label.attr.attr,
->> +	&dev_attr_legacy_ch13_dimm_label.attr.attr,
->> +	&dev_attr_legacy_ch14_dimm_label.attr.attr,
->> +	&dev_attr_legacy_ch15_dimm_label.attr.attr,
->>  	NULL
->>  };
->>  
->> @@ -348,6 +360,14 @@ DEVICE_CHANNEL(ch10_ce_count, S_IRUGO,
->>  		   channel_ce_count_show, NULL, 10);
->>  DEVICE_CHANNEL(ch11_ce_count, S_IRUGO,
->>  		   channel_ce_count_show, NULL, 11);
->> +DEVICE_CHANNEL(ch12_ce_count, S_IRUGO,
->> +		   channel_ce_count_show, NULL, 12);
->> +DEVICE_CHANNEL(ch13_ce_count, S_IRUGO,
->> +		   channel_ce_count_show, NULL, 13);
->> +DEVICE_CHANNEL(ch14_ce_count, S_IRUGO,
->> +		   channel_ce_count_show, NULL, 14);
->> +DEVICE_CHANNEL(ch15_ce_count, S_IRUGO,
->> +		   channel_ce_count_show, NULL, 15);
->>  
->>  /* Total possible dynamic ce_count attribute file table */
->>  static struct attribute *dynamic_csrow_ce_count_attr[] = {
->> @@ -363,6 +383,10 @@ static struct attribute *dynamic_csrow_ce_count_attr[] = {
->>  	&dev_attr_legacy_ch9_ce_count.attr.attr,
->>  	&dev_attr_legacy_ch10_ce_count.attr.attr,
->>  	&dev_attr_legacy_ch11_ce_count.attr.attr,
->> +	&dev_attr_legacy_ch12_ce_count.attr.attr,
->> +	&dev_attr_legacy_ch13_ce_count.attr.attr,
->> +	&dev_attr_legacy_ch14_ce_count.attr.attr,
->> +	&dev_attr_legacy_ch15_ce_count.attr.attr,
->>  	NULL
->>  };
->>  
->> -- 
+>> +	pvt->csels = kcalloc(pvt->max_mcs, sizeof(*pvt->csels), GFP_KERNEL);
+>> +	if (!pvt->csels)
+>> +		goto err_enable;
+>> +
 > 
-> There are many checkpatch warnings here.
+> You can move this allocation to the end of per_family_init(). That's
+> where we determine 'max_mcs'.
 > 
-> Maybe it'd be prudent to note this in the commit message?
+> If you do so, then the 'goto' changes below are not needed.
 > 
-> Something like "checkpatch warnings ignored to maintain coding style"
-> and maybe "affected lines are deprecated and will be removed", etc.?
-> 
-> Otherwise, I expect there will be some "checkpatch warning" fixes coming
-> our way.
+> Another option is to put it in hw_info_get() like we do for UMCs. But
+> that means adding the allocation to three different helper functions
+> rather than just the one with per_family_init().
 > 
 
-Initially, was going to fix the checkpatch warnings. But then noticed that
-previous commits to this area had ignored warnings too. So let them be as
-is.
+Had considered moving allocation to per_family_init() while sending
+this set. But then didn't since I had stated that I would be adding
+this allocation in probe_one_instance().
+In any case, will move it to per_family_init().
 
-In any case, will add about this to the commit message.
-> Thanks,
-> Yazen
+>>  	ret = pvt->ops->hw_info_get(pvt);
+>>  	if (ret < 0)
+>> -		goto err_enable;
+>> +		goto err_csels;
+>>  
+>>  	ret = 0;
+>>  	if (!instance_has_memory(pvt)) {
+>>  		amd64_info("Node %d: No DIMMs detected.\n", nid);
+>> -		goto err_enable;
+>> +		goto err_csels;
+>>  	}
+>>  
+>>  	if (!pvt->ops->ecc_enabled(pvt)) {
+>>  		ret = -ENODEV;
+>>  
+>>  		if (!ecc_enable_override)
+>> -			goto err_enable;
+>> +			goto err_csels;
+>>  
+>>  		if (boot_cpu_data.x86 >= 0x17) {
+>>  			amd64_warn("Forcing ECC on is not recommended on newer systems. Please enable ECC in BIOS.");
+>> -			goto err_enable;
+>> +			goto err_csels;
+>>  		} else
+>>  			amd64_warn("Forcing ECC on!\n");
+>>  
+>>  		if (!enable_ecc_error_reporting(s, nid, F3))
+>> -			goto err_enable;
+>> +			goto err_csels;
+>>  	}
+>>  
+>>  	ret = init_one_instance(pvt);
+>> @@ -4033,7 +4037,7 @@ static int probe_one_instance(unsigned int nid)
+>>  		if (boot_cpu_data.x86 < 0x17)
+>>  			restore_ecc_error_reporting(s, nid, F3);
+>>  
+>> -		goto err_enable;
+>> +		goto err_csels;
+>>  	}
+>>  
+>>  	amd64_info("%s detected (node %d).\n", pvt->ctl_name, pvt->mc_node_id);
+>> @@ -4043,6 +4047,8 @@ static int probe_one_instance(unsigned int nid)
+>>  
+>>  	return ret;
+>>  
+>> +err_csels:
+>> +	kfree(pvt->csels);
+> 
+> This can go in hw_info_put(). We have kfree(pvt->umc) there already.
+> 
+Okay. Will move it to hw_info_put().
 
 -- 
 Thanks,
