@@ -1,81 +1,82 @@
-Return-Path: <linux-edac+bounces-4774-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4775-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56C30B517DF
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 15:27:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2DB4B517E8
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 15:29:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04E56461BF1
-	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 13:27:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC3D71894A81
+	for <lists+linux-edac@lfdr.de>; Wed, 10 Sep 2025 13:30:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A342D0C7E;
-	Wed, 10 Sep 2025 13:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C3F30649B;
+	Wed, 10 Sep 2025 13:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ApCtoVsc"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NzbxX17/"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5851F03F3
-	for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 13:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D547C288CA6
+	for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 13:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757510832; cv=none; b=mdRMX6+Y9jy1/2iMETcIUU8UH8tCdkD4VgfdL/tnkt07Mer3qhXdShpqeXF4Hkyw9m6P4YrxhDmL00N1XgmqzRWSbP5EWgN8v5udDWhpzNJ+FtFT9GVciBcEoMQLgs/RNuX2w3FjeKCgWVq8zTDEAvvCI4uveCpyVNFfMv+mOsg=
+	t=1757510981; cv=none; b=BnEX7piBwqjMNtJ7EOkg1J/IJ090UtlLcd3e74q+6jCTRnsVXi2rBghKXD6FeiM/9K3Eg85yVCFQ7Y4n3/o/Lm6WqvG2fTnuS4UaUPvdIO4GWd+O8FS2V9l3cMp/ddELmYfp9sRA6EVm8cm64nL2xQWEz0fBfIsZtvv9GNCZEmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757510832; c=relaxed/simple;
-	bh=ogVm8trucvDSm3Kwtl2iXjtv1SvKNGL9WqRdEd8fHcc=;
+	s=arc-20240116; t=1757510981; c=relaxed/simple;
+	bh=ummYQlHD+Zi9f47ks9lb05+8D8/hSZq4RnitAF5O7u8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q5Vd70PcH1JwczlE4DM4/BbsAgop0hjCwy9aT6YY4/DPAKrcDRB6Mt4F4j2U0SjR+hmSg1G0setSHJAERxm4vHe3/0fnyKYjdZH/OcAjqddxgyz08wIn8Q7fP8EgyR3hYCiT/NNr958Xvd5UM3JEyC7p6wvWiEz7tnj+JeD6efM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ApCtoVsc; arc=none smtp.client-ip=209.85.128.51
+	 In-Reply-To:Content-Type; b=ZymurcbgeZNzvnBRQQItdsdDFNjTf1QUo6H5E56pM6etpdgohGRvPpen9vY5hJ/f0Rdld2xJRPRvqi6Gs58lJYOR5hsZsw2aONKrMKq/lmxlXsRO3MmNUI8x9TV+wQi4bfLb4HpX910TY9ao+cyxmCCyA4inUWrSi6if4LMLexo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NzbxX17/; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45df09c7128so6249795e9.1
-        for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 06:27:08 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45decc9e83eso18972755e9.3
+        for <linux-edac@vger.kernel.org>; Wed, 10 Sep 2025 06:29:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1757510827; x=1758115627; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1757510977; x=1758115777; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=u0KH36ZKXhdeAdnK3QlMzkwzGwV1sdl29nhq++hRLN4=;
-        b=ApCtoVscftwGEYSefc9P7/f3xhc4SW366qqjReRdGJKxKGHRaLaPhKYuus9jA8pxFn
-         X1aFIsxPzgDg7fGZLwMOLuH3tRbs29bRhfURH2eeUoq/MBW73UHEFq+7fZ3ZJ/Otj9G5
-         tnPtwqCA33t6TfpOD3V7yYpvK/IR6sBk5hpR4SKpRfu+H65vd3zRAMvYzae137M/Dxlc
-         8X+ehXU4zPB4cXRmB6MiXqPYqNdbtLXGtn8yklOQcXEFlp9NfVjqoy8SpveMK3Ez2fPC
-         IWDUge1nt1I6IEKW79hYFPypLkLihjT3L3ilnYw30KgPAsgM+Ye8wQIc2hVk42j2zXQ1
-         kbUg==
+        bh=qlKGaH1d3s0RHZ4omQFOWJ+FEfeUfvKfp8hqseleBdI=;
+        b=NzbxX17/5esenJJ7V5bJGlb0yuqpeiXJnnFgS5nLFDyHAsPqFwkmfQVkFZmF9EruyQ
+         Cu2EMGGzbUqzYo5dJLjTUklAzVLeLnMRL9wYMu4GI5TebxegS/QzxPBYH49wwjkf5zUZ
+         LyxX4EcC3fwp4g3/IBo2v17qXBALIMUYx+svRmNbXJAUEoxFfptYgKZEIKTHMI+YeHVC
+         8pc20hZzgO406rgAuuvoYq3vPsrafaW8yz744QOjm2WVQNiX3Xd4DwNNOUjwrUMJwgzG
+         aw3ewFWXkWobJEDBGJFunKHALD5t+JbzocfflfF9XS6TkI03xH1heMsFk4hwyl0rA4Qb
+         4GoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757510827; x=1758115627;
+        d=1e100.net; s=20230601; t=1757510977; x=1758115777;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=u0KH36ZKXhdeAdnK3QlMzkwzGwV1sdl29nhq++hRLN4=;
-        b=BiIY/KOHyHwGY2nOII3XeqDDPXfJ4ceW+JF+c44vPqhhKlx4a01imREPah3UtABACe
-         yf4PG6oIEhZp4o+O6w4Z2mevrLagdWrgoVvduhFlLpdaoHM+GZC5uPavFFX7RosaoxWn
-         dl58pcwcaT/NmUUqBYv1lSRwEWgKR7sH03ZxA7f2pPDKePC53jpnBDeN2zKBlVRMj+sB
-         L+/cxGeZlEwhDNunZz0mB9Sa/0BvggXPEDphqJfKWF3HKNvBUTV55gfmsNc8lDhl4r7H
-         csy1RVCTllUaElW4f2bjh2GgYQWzAy4cYvI3RnnQDnB6bckb8xazcfZkWRuLVjcD6nL4
-         xBlw==
-X-Forwarded-Encrypted: i=1; AJvYcCV12uygAK5Lu+g1rofYkK7SWMTPSW537aAMQ4dqlH86N480H8q1/st3PVIkjGDosLrsvq83YJv2LuAh@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGOkzY/gufxBYGIJMivMMhA3XRs8/B72fs79pqchWgvHm9V1hK
-	qDXTqxBrMfnEUcewZN2NMtEXbARrEZPLpB7DO7Vh3z9FXnXg7Rdzu+27lZmvgdZOTLc=
-X-Gm-Gg: ASbGncuithJnzepCFRtPoGbeAsFTqLtWxtrlih21JJ+LCMy7Jf5JozzbZfra84pEpTQ
-	zXztbCxO3ydq74n1IRiBUnysswZxdU2Mc5nacoY/I/8Aj/pr4CfrY8sLLW826URPHA9Ox4ZjL4x
-	6+GkaPEib3sCkqD6SH5HpSs9loFEMJTJdNWMA3mUOSGL9FGS3X8jYNcKeEpu+cWtxH7dQKLfnlx
-	cNU1IQGI2NGQCZf/59RtA56rFqQG67VFmOVstWgFyC5Mf0CTh1fa14A5U7QXWcN4N8A1vI0RV97
-	21GyTuaO/FvDZhOkbFbDtyCb5MZm9fp+nZbGqg9AfSx7t5jWBfghsMPUkh0OZArNL9kvUjBg2IH
-	NpH1+D3VSMbhIwGf8L713XNvNRut5c5n5EaOKv/d+TbsXmA==
-X-Google-Smtp-Source: AGHT+IETw7dFN/bGOQqvrqcqGTQ0XCg0cHB9VY99Nl5WYPWvawcJVIy7xgIbI3+xfTA4oikqjgmGYw==
-X-Received: by 2002:a05:600c:840f:b0:45d:dc10:a5ee with SMTP id 5b1f17b1804b1-45dde20ee09mr143413245e9.15.1757510827160;
-        Wed, 10 Sep 2025 06:27:07 -0700 (PDT)
+        bh=qlKGaH1d3s0RHZ4omQFOWJ+FEfeUfvKfp8hqseleBdI=;
+        b=xNjEFGrgi2n9ayyHwg9fFyGpJ9IK9OB+hdxeCD0l3urJYFolJtHyaRp3mmVVk/wx3y
+         G8jAd0GNQG8V2jW+3ngiVa4As5Cmy3GPnK+5Ne/JDNtm9V2GwS8EkbmDgRgcXrQ6nvPc
+         LUenKCo1474Z+GQIGYrqK6jNJXyMsSUE66Kj1OKlY404WNGXb6I00ZDwdBpRVYhf9vAL
+         d5HAu0+GCV6IRbz8siHdbY/McHjkzu+DsB8jy8lZrjT8f/8+j+exn7+PQHlo35PcN3ZN
+         lo6PRO9mgW8ILA9C1LMuItFRSQdaW9vXvczm/yxklx48ju5SXfszhq97ht+i1e0pB5Zh
+         dKHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTJFvKPmgTvmFgSLkIbQKoDgLflPJVaP7joGRmDVxqwpVOKfBG1iU1FG3oEZ+Iil0kv3HFNkoGsRlZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa54hSzCuQRnb+G/DYG8hb1GAaLl0G+nEPWvhgLlgWk9+o/ukV
+	Yc4QVE/6300KXGwMuxGvL0Jqgqbv2yZjQOA6quyQskK3cec8YRLXwIHduLfhOpMthHXSQ2Trlfj
+	RfMY2
+X-Gm-Gg: ASbGncvVvf9FORQxgQq3jY2iABz6c3HT4ndOqHipbMdPrGGnJxHNR0aXW4l8mejMbUR
+	/gqsHMwdY+XrzklfGcK6T1Gj+tpz9Cvi3Jo7fI7aMosz8f2aBzJas6A2Jaf7UsQ9cRWDesbVXUY
+	kl/nUjyNdnvYpY5l2lXoeX7RN7FgXNchPof1kka9XF7eT/yKY7yUegEjaS6SHUiXp4IKeRnlsB5
+	dxbuDQd5WBUuXuwj4rljRwvF25Tyzb5UxoYIeOQDYlJFEdXvt5pWWrMY/LjCnaeYftRQHnlUT5L
+	9s2FMsLR5/d4CJOVFYmHVWa54NQGNhLfwmolZb19B9Tanq3hIwf/Cv6FVH+g/DGRBkbIjJrGERP
+	9dk6zmnzCDuwbajxfj/pi91cML0jnCwUapnC3vmtARMbilw==
+X-Google-Smtp-Source: AGHT+IGqaolibMl01HDsfx6w/vwOU7QUB/JY1ULsIM13HTYf1eE/9UqxSorRgHaJZ96041ndQjfP8g==
+X-Received: by 2002:a05:6000:2389:b0:3b7:9929:871c with SMTP id ffacd0b85a97d-3e642f90df2mr10709983f8f.37.1757510977136;
+        Wed, 10 Sep 2025 06:29:37 -0700 (PDT)
 Received: from [10.20.0.214] (ivokam.ddns.nbis.net. [109.121.139.111])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45df820d686sm27843075e9.10.2025.09.10.06.27.04
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45df81fcb04sm28019515e9.8.2025.09.10.06.29.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Sep 2025 06:27:06 -0700 (PDT)
-Message-ID: <ed56eac5-2484-4ac8-947a-5ccec80fa298@suse.com>
-Date: Wed, 10 Sep 2025 16:27:00 +0300
+        Wed, 10 Sep 2025 06:29:36 -0700 (PDT)
+Message-ID: <b669a4a9-ce0e-4906-96c9-689d69a66c23@suse.com>
+Date: Wed, 10 Sep 2025 16:29:32 +0300
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -83,14 +84,14 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 04/15] x86/mce: Do 'UNKNOWN' vendor check early
+Subject: Re: [PATCH v6 05/15] x86/mce: Separate global and per-CPU quirks
 To: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
  Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
  Smita.KoralahalliChannabasappa@amd.com, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
  linux-acpi@vger.kernel.org
 References: <20250908-wip-mca-updates-v6-0-eef5d6c74b9c@amd.com>
- <20250908-wip-mca-updates-v6-4-eef5d6c74b9c@amd.com>
+ <20250908-wip-mca-updates-v6-5-eef5d6c74b9c@amd.com>
 From: Nikolay Borisov <nik.borisov@suse.com>
 Content-Language: en-US
 Autocrypt: addr=nik.borisov@suse.com; keydata=
@@ -136,18 +137,19 @@ Autocrypt: addr=nik.borisov@suse.com; keydata=
  JDjakbdjBoYDWVoaPbp5KAQ2VQRiR54lir/inyqGX+dwzPX/F4OHfB5RTiAFLJliCxniKFsM
  d8eHe88jWjm6/ilx4IlLl9/MdVUGjLpBi18X7ejLz3U2quYD8DBAGzCjy49wJ4Di4qQjblb2
  pTXoEyM2L6E604NbDu0VDvHg7EXh1WwmijEu28c/hEB6DwtzslLpBSsJV0s1/jE=
-In-Reply-To: <20250908-wip-mca-updates-v6-4-eef5d6c74b9c@amd.com>
+In-Reply-To: <20250908-wip-mca-updates-v6-5-eef5d6c74b9c@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
 On 8.09.25 г. 18:40 ч., Yazen Ghannam wrote:
-> The 'UNKNOWN' vendor check is handled as a quirk that is run on each
-> online CPU. However, all CPUs are expected to have the same vendor.
+> Many quirks are global configuration settings and a handful apply to
+> each CPU.
 > 
-> Move the 'UNKNOWN' vendor check to the BSP-only init so it is done early
-> and once. Remove the unnecessary return value from the quirks check.
+> Move the per-CPU quirks to vendor init to execute them on each online
+> CPU. Set the global quirks during BSP-only init so they're only executed
+> once and early.
 > 
 > Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 > Tested-by: Tony Luck <tony.luck@intel.com>
