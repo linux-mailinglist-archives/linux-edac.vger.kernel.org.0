@@ -1,81 +1,81 @@
-Return-Path: <linux-edac+bounces-4792-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4793-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5793EB52E33
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Sep 2025 12:22:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24EA1B535FE
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Sep 2025 16:43:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A79E1C827AE
-	for <lists+linux-edac@lfdr.de>; Thu, 11 Sep 2025 10:22:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D11A47A8580
+	for <lists+linux-edac@lfdr.de>; Thu, 11 Sep 2025 14:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F30930FC03;
-	Thu, 11 Sep 2025 10:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C6D34166B;
+	Thu, 11 Sep 2025 14:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PcWnWvkB"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IJrjlpFx"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150CA23BD02
-	for <linux-edac@vger.kernel.org>; Thu, 11 Sep 2025 10:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9628340D9B
+	for <linux-edac@vger.kernel.org>; Thu, 11 Sep 2025 14:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757586137; cv=none; b=aW0wD5nmQG2E/l+8JPYy6ew6ShBMW/0OosYoThWDiVi6rZezhtj68pxjM+KpH1IL729+AZv8+G1V+tiXQiVVZYYHgdOqrmZWpmOVpHpogaXcJItJeEkYEnICR4zOV4y3eBUYg6hjh5pUG3LdvYUfg8y7IalWixwjTJ9HZW2/6yY=
+	t=1757601795; cv=none; b=QHkTIcB3VDosotKiyEuoIXFsdTQmw+ta1A4gwLlTx6xrdR8bI3bpm0mYW7d8MPsAvuLsf+xAvT+E2FohN1TuwftWWodr/HllFLAJ3t2fnIEUhAt3HYPr9bE6Ba9yVnj/QDQpfLjgm80MIE8mIFpbJiGrFnrqiuxDP8RK2aGLx3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757586137; c=relaxed/simple;
-	bh=XrchZecD+iM0UHQWDWdbk069oueZ5j4zUVkEyhba5FA=;
+	s=arc-20240116; t=1757601795; c=relaxed/simple;
+	bh=V6FD0d3JgbZXKHC+xUSTnDcPYnDX6VNwyniSodQFA3M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XEHFkzpbHUxybJ5gbIeWb13N/s1py/B2Wl3VCR9p3n8k1icV2bPKCj7sKrk4ErAAUnm5A3FDfgMPpYWl/zofTTVGhraWUMDw4pjeo6A3WFEiHsncMPLP6rHvi/Yl9OTqYVnbDHq2HXW7NuxuTuNsAwH1Y+sQvvimoHWYYteahwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PcWnWvkB; arc=none smtp.client-ip=209.85.221.43
+	 In-Reply-To:Content-Type; b=KaBfvotPHuv2xsggVErFBLtQC0b0ihaYy9oUoXNojI4x6NF3k1FsNeopzk1qKzCcJJci7odtllu126efbtWZ1T74jwZlvAyg5fxCz3SPCJUQ0sC0lfDMAbVWjVgTB2+Ie/PRbX0SPCVbbiYBIZV63OM3rV1fSa6I4WvBgOhfGcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IJrjlpFx; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b9edf4cf6cso482843f8f.3
-        for <linux-edac@vger.kernel.org>; Thu, 11 Sep 2025 03:22:14 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3e4b5aee522so595954f8f.1
+        for <linux-edac@vger.kernel.org>; Thu, 11 Sep 2025 07:43:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1757586133; x=1758190933; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1757601791; x=1758206591; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=VaCvqUSodMr/1P2WtmBAIMqveOipHOIUI7cFp3Ss9Ls=;
-        b=PcWnWvkB3iPoBTeA0nh9D2k7ccmlWyznXVGUl4GhqBz4HtkOWo33DA7p7pJqlO4KN8
-         l59H0o/XmraFZ5d93/e6H+vxd9unI5KEqdLdQ4omfw49dCl4yrQxFwa4h3hos4aXsS3R
-         c6pKLIml89XzmMSVvHAS5VzYFuLv60Aac7qLFpwOOc7ScMLSbeInCpzfGiyc/pDfj5eS
-         754yoR9m2On8B1t3MMzL6sGEbmx5S22Cm5rtsCe4pDPjBkV2ciSvk3HuClsxMadtiUOg
-         pnn6BpH88LjBwyB5alhgb2EeEUiky9hJsrZxCM02rAz6pERSLQexnKJjSzqL0BdDfEQj
-         QBLg==
+        bh=nL/0YN+s3DP2N6NxTAsYAkeIEs7a8heXoKnclmsN4gg=;
+        b=IJrjlpFxYt2+GHGiWozBj+4rTCQdLjp55QlaVqhsUeLS4s+0MrZ3LTQ6V0rmGSlofP
+         zgocB073IQrdWJ5wQe2+t9ZVyV4UKGxI+sYlOhf1ctkXx/3+excOTf7cKweJFcESNCCT
+         njwEMKE2lE2A/n7UjVwjTpA2jMs2fWOWL20p9yLbcd2u/LRJG4qUJuRwM8kquwjbi/GT
+         S2B5GqA0JqbGHIycVQtpAoMktJ07bd2dH0J5GTXdw/xpl+6SgHWj2rIuqZadoIgoLTCa
+         ym5uyUS7Ex+HAGhjcflcqen2rxuBOyuufstxDGdnd4/NEcjDLpQjGRLdmZKisHPKA4Gr
+         Y5Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757586133; x=1758190933;
+        d=1e100.net; s=20230601; t=1757601791; x=1758206591;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VaCvqUSodMr/1P2WtmBAIMqveOipHOIUI7cFp3Ss9Ls=;
-        b=nuDs4+JOBezmDNUU0np3+szjevvbq9PZh0W2sEmC9K/gMl/TslHZqKGv57JOAb/I0v
-         MS949q250nl3CquMc2y8Zc8afjj7dY3kBy8Cn9a3k28hintqy7fNG5myKQnLYC7w0mdR
-         e5GunKatSRaI9ObjOR2aTjgYWNRKgMaY+0OnrBbf+3HFoYVg00HyzxDAvepdmf7gDIwf
-         CYEUPJCV+gN0FpvXckCa0YB4owUmtoIvpobjHZpUEvtsayUP+w6ZllHqi3if93uDWKcw
-         LREPHPYNayiIeSUqgmRCyCjxJDxDqvoOdwiQCvZ4zcGNqEIdh+j0lmC7KAEnmpiXlXwi
-         ZLYA==
-X-Forwarded-Encrypted: i=1; AJvYcCWE7E/MAywEDCHOMDrTxxKTZPA3v+YYeEQgz/uMktogD3Y9X7FWmaHQot7YXVSfSl4iEtxxGbjovzJc@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOhIVSbHIP32Xrev9sLnH1V6EQg+FVHHqmr8PryvP9xxbkxH7d
-	fphpGMAJrHPyeWMyCd+WbwkouxQ8xavLEYxtSXDd8eR/lWruOKlPM/0DJ8pQZpR9vKk=
-X-Gm-Gg: ASbGncs8UaZOBMkxqChxPeinvVMc2zxBVSpdFv+S0rY6QqIgQeX2+Idn4CPSdiiHCZy
-	gYYjwz9j2Xr6DhBkhEEE1EInhKr64U2ptPpQIFhFma1ulG4WxPToj1wzAnYz0dEeXQ0kXovSZ7Q
-	iUUOU6fnXqXQ6ewhCMvoSRhzKFneTybimjbA2dVxm9C8qDKmpv9aqOA8rAUkiiRSx2s4Z2cD86Q
-	96uawfbKqrQu5mPIdPnAo6++AIH87oxikUP5lu6Zk3zw3c3JgyTh3m3wS/CaJRaHsLYE3LssXKm
-	DousNrc8Df3ux1RUJcI4i2WPKEqU4sGR5ExJfzn4u0WO25YL7KCWx+5OFrSy3pe869ha6tEVxcr
-	fMkPXkLrD5KEJdYRW+US/SLnc7w==
-X-Google-Smtp-Source: AGHT+IEecA9OPjkM3C+7UWPq2SdB0g7szX8lW/R9PZkVY1wz6UP3d6yUKt66x8EDdhmdc25mwV4zFA==
-X-Received: by 2002:a05:6000:40da:b0:3e2:b2f0:6e57 with SMTP id ffacd0b85a97d-3e642f91589mr16285645f8f.36.1757586133265;
-        Thu, 11 Sep 2025 03:22:13 -0700 (PDT)
-Received: from [192.168.0.20] ([212.21.159.60])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e015621a3sm12130445e9.0.2025.09.11.03.22.11
+        bh=nL/0YN+s3DP2N6NxTAsYAkeIEs7a8heXoKnclmsN4gg=;
+        b=KvJ5FOSGj/yWUOA2P506i1Jmo3b4obMf9MIm22To2z+nOk0Q2CyTrTFgkxAI0yqvno
+         s8mYxehkoR4C3EEjHdtxAvCSQxdBcLCwjgMkA6A8PlXUmiGtxERFWJkd36LuR8ZJdVZY
+         0YMz4Wh/8xCH4XoXqSNiKGrR794K15coqoX8tufhTTw/jKXuyd6gY4v40mOKpiF5436E
+         1ZbDPe17ze2c3bTvA5ymMqMXIJpVsE8uS1rFMcSTEyiayYnbOcdJN7zHgd97bLbM5A+K
+         DsQRF42iNRsLGwf569ZyytNdrPWp0P05rJt/GvvdAhl5/PCgvrCeSiEKiDCau8m1IRsC
+         RwUw==
+X-Forwarded-Encrypted: i=1; AJvYcCVN29SS/3CQyTlbqN30/1c37FkA7cNATZgGJYYDUby6fSAOLAmOBscPQ1YrhpnHIJ/rTyhXMYcnK1ZB@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSEGxO6yMg+f4bCQO6YdEjc/r9bUG0XCxM2xZhCXAEJ1iXBLZ2
+	ArBO0g/9Z82LMGY0P2Jgwlix33HwRNCRlhCapOM/mXpqTGePtXzpsK1JYrMNPwqWrCI=
+X-Gm-Gg: ASbGncsyZvEC4xNEN6+WBml+xJrHDTJtAIP18QOdTPcmeEePLNm7Wt+NhilNlZ3dDuv
+	hbZZAHkFaCd/oTSEUM/2IuK8ob/aZtVciifW6s6n2dDAhAKxzpRZY5KNbMH8cBKetsXYKhXgzKN
+	dM4JH2AI457vGlFCXdQZy4tkLQ1bbgR2MX2Bp7ed7PhUGbVE79ANYGufzGd+lc2QzlZTRB2Cqtk
+	6loKkKLqeDdYQEKzjLJRaIOsc5eVuclYyHrHoPVIYtQLEpgEqZHqE/kN8ol7ulcs0gXlKtKfRZB
+	vqhRX4rfD+p3o5KTLfXbYmZfmsQyaKtZxxdpq2qdEeaOPlznNEyCZ0dLmzmi1fq4nDD8zCUgleN
+	H9Ce0hPg6faiEjiUmLdJpCMY+yx/ni9vWViWcpav+Q6xtww==
+X-Google-Smtp-Source: AGHT+IFzH+V8s0sYRpmkvChDZV6cgGCwMXzJuS0qZEWWciIhM/GLC66m7Zo+tfDPNhyBgLig/B9WtQ==
+X-Received: by 2002:a05:6000:430c:b0:3e7:632a:f3fe with SMTP id ffacd0b85a97d-3e7632af44bmr1679160f8f.61.1757601791055;
+        Thu, 11 Sep 2025 07:43:11 -0700 (PDT)
+Received: from [10.20.0.214] (ivokam.ddns.nbis.net. [109.121.139.111])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7607d7affsm2876729f8f.48.2025.09.11.07.42.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Sep 2025 03:22:12 -0700 (PDT)
-Message-ID: <d5377e66-dbbc-4883-b223-ef6c0360e0dd@suse.com>
-Date: Thu, 11 Sep 2025 13:22:10 +0300
+        Thu, 11 Sep 2025 07:43:10 -0700 (PDT)
+Message-ID: <e85965a9-3aa5-4368-95bc-c46ab18a25fa@suse.com>
+Date: Thu, 11 Sep 2025 17:42:39 +0300
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -83,15 +83,14 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 10/15] x86/mce/amd: Enable interrupt vectors once
- per-CPU on SMCA systems
+Subject: Re: [PATCH v6 12/15] x86/mce/amd: Remove redundant reset_block()
 To: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
  Tony Luck <tony.luck@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
  Smita.KoralahalliChannabasappa@amd.com, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
  linux-acpi@vger.kernel.org
 References: <20250908-wip-mca-updates-v6-0-eef5d6c74b9c@amd.com>
- <20250908-wip-mca-updates-v6-10-eef5d6c74b9c@amd.com>
+ <20250908-wip-mca-updates-v6-12-eef5d6c74b9c@amd.com>
 From: Nikolay Borisov <nik.borisov@suse.com>
 Content-Language: en-US
 Autocrypt: addr=nik.borisov@suse.com; keydata=
@@ -137,83 +136,100 @@ Autocrypt: addr=nik.borisov@suse.com; keydata=
  JDjakbdjBoYDWVoaPbp5KAQ2VQRiR54lir/inyqGX+dwzPX/F4OHfB5RTiAFLJliCxniKFsM
  d8eHe88jWjm6/ilx4IlLl9/MdVUGjLpBi18X7ejLz3U2quYD8DBAGzCjy49wJ4Di4qQjblb2
  pTXoEyM2L6E604NbDu0VDvHg7EXh1WwmijEu28c/hEB6DwtzslLpBSsJV0s1/jE=
-In-Reply-To: <20250908-wip-mca-updates-v6-10-eef5d6c74b9c@amd.com>
+In-Reply-To: <20250908-wip-mca-updates-v6-12-eef5d6c74b9c@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 9/8/25 18:40, Yazen Ghannam wrote:
-> Scalable MCA systems have a per-CPU register that gives the APIC LVT
-> offset for the thresholding and deferred error interrupts.
+On 8.09.25 г. 18:40 ч., Yazen Ghannam wrote:
+> Many of the checks in reset_block() are done again in the block reset
+> function. So drop the redundant checks.
 > 
-> Currently, this register is read once to set up the deferred error
-> interrupt and then read again for each thresholding block. Furthermore,
-> the APIC LVT registers are configured each time, but they only need to
-> be configured once per-CPU.
-> 
-> Move the APIC LVT setup to the early part of CPU init, so that the
-> registers are set up once. Also, this ensures that the kernel is ready
-> to service the interrupts before the individual error sources (each MCA
-> bank) are enabled.
-> 
-> Apply this change only to SMCA systems to avoid breaking any legacy
-> behavior. The deferred error interrupt is technically advertised by the
-> SUCCOR feature. However, this was first made available on SMCA systems.
-> Therefore, only set up the deferred error interrupt on SMCA systems and
-> simplify the code.
-> 
-> Guidance from hardware designers is that the LVT offsets provided from
-> the platform should be used. The kernel should not try to enforce
-> specific values. However, the kernel should check that an LVT offset is
-> not reused for multiple sources.
-> 
-> Therefore, remove the extra checking and value enforcement from the MCE
-> code. The "reuse/conflict" case is already handled in
-> setup_APIC_eilvt().
-> 
-> Tested-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
 > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+
+
 > ---
 > 
 > Notes:
 >      Link:
->      https://lore.kernel.org/r/20250825-wip-mca-updates-v5-15-865768a2eef8@amd.com
+>      https://lore.kernel.org/r/20250825-wip-mca-updates-v5-17-865768a2eef8@amd.com
 >      
 >      v5->v6:
->      * Applied "bools to flags" and other fixups from Boris.
+>      * No change.
 >      
 >      v4->v5:
->      * Added back to set.
->      * Updated commit message with more details.
+>      * No change.
 >      
 >      v3->v4:
->      * Dropped from set.
->      
->      v2->v3:
->      * Add tags from Tony.
->      
->      v1->v2:
->      * Use new per-CPU struct.
->      * Don't set up interrupt vectors.
+>      * New in v4.
 > 
->   arch/x86/kernel/cpu/mce/amd.c | 121 ++++++++++++++++++------------------------
->   1 file changed, 53 insertions(+), 68 deletions(-)
+>   arch/x86/kernel/cpu/mce/amd.c | 28 +++++++---------------------
+>   1 file changed, 7 insertions(+), 21 deletions(-)
 > 
 > diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 1b1b83b3aef9..a6f5c9339d7c 100644
+> index 34268940c88a..9ca4079ff342 100644
 > --- a/arch/x86/kernel/cpu/mce/amd.c
 > +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -43,9 +43,6 @@
->   /* Deferred error settings */
->   #define MSR_CU_DEF_ERR		0xC0000410
+> @@ -812,29 +812,11 @@ static void amd_deferred_error_interrupt(void)
+>   	machine_check_poll(MCP_TIMESTAMP, &this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
+>   }
+>   
+> -static void reset_block(struct threshold_block *block)
+> -{
+> -	struct thresh_restart tr;
+> -	u32 low = 0, high = 0;
+> -
+> -	if (!block)
+> -		return;
+> -
+> -	if (rdmsr_safe(block->address, &low, &high))
+> -		return;
 
-nit: While touching this code why not finally rename this in line with 
-the APM, section 9.3.1.4: MCA_INTR_CFG
 
-Perhaps as a separate patch. I see that you did send a patch containing 
-this rename: 
-https://lore.kernel.org/all/20231118193248.1296798-13-yazen.ghannam@amd.com/ 
-But I guess it didn't land.
+This is being replaced by rdmsr, I guess it's safe because the fact we 
+are processing a block which has been on the bank list means it's 
+unlikely the rdmsr will fault.
+
+
+> -
+> -	if (!(high & MASK_OVERFLOW_HI))
+> -		return;
+
+nit: However, now, if mask overflow is not set a write to the msr will 
+be performed, with the effect that IntType is going to be cleared (hi &= 
+~MASK_INT_TYPE_HI; in threshold_restart_block), and MASK_COUNT_EN_HI 
+will be set, that's different than the existing code, albeit it might be 
+ok.
+> -
+> -	memset(&tr, 0, sizeof(tr));
+> -	tr.b = block;
+> -	threshold_restart_block(&tr);
+> -}
+> -
+>   static void amd_reset_thr_limit(unsigned int bank)
+>   {
+>   	struct threshold_bank **bp = this_cpu_read(threshold_banks);
+>   	struct threshold_block *block, *tmp;
+> +	struct thresh_restart tr;
+>   
+>   	/*
+>   	 * Validate that the threshold bank has been initialized already. The
+> @@ -844,8 +826,12 @@ static void amd_reset_thr_limit(unsigned int bank)
+>   	if (!bp || !bp[bank])
+>   		return;
+>   
+> -	list_for_each_entry_safe(block, tmp, &bp[bank]->miscj, miscj)
+> -		reset_block(block);
+> +	memset(&tr, 0, sizeof(tr));
+> +
+> +	list_for_each_entry_safe(block, tmp, &bp[bank]->miscj, miscj) {
+> +		tr.b = block;
+> +		threshold_restart_block(&tr);
+> +	}
+>   }
+>   
+>   /*
+> 
+
 
