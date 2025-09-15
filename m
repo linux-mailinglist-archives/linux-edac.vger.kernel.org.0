@@ -1,328 +1,201 @@
-Return-Path: <linux-edac+bounces-4800-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4801-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11C05B56DB4
-	for <lists+linux-edac@lfdr.de>; Mon, 15 Sep 2025 03:00:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CF9BB57902
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Sep 2025 13:50:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EBDB18976CE
-	for <lists+linux-edac@lfdr.de>; Mon, 15 Sep 2025 01:01:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E8367A320A
+	for <lists+linux-edac@lfdr.de>; Mon, 15 Sep 2025 11:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B931448D5;
-	Mon, 15 Sep 2025 01:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="jl4uq5O5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36B62FE07D;
+	Mon, 15 Sep 2025 11:50:22 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9768F2C181;
-	Mon, 15 Sep 2025 01:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8EB2FDC5D;
+	Mon, 15 Sep 2025 11:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757898051; cv=none; b=ZT+6T41GL9cNX//U3e7oUuh9rjnTNRomT04UM701cssL8lVU3dDejxFqW+VyNigPIah0L5s1ntxzTEmwiYDnXiq6MtYEKlYPmALX31nOChw1PFhEH6yqAjimU6vmqrcG9Z3qJNQGLOb0FIfQ6A1qSZ7NrW/Abw89CeYxJApwXLY=
+	t=1757937022; cv=none; b=f4/omf2FkyYEwag9NLlW9BYKw0Vg8gazVBAD/S+rMULLxfpb4WHO9mJ/Sfn+w+OsDv+jwCuaJxiSN1BPRurM2/BKJ/i/1HhOg7yTrDM3tzozFjChInYQ/ffhyWJRhRq4whEHmHtg6AXG5Mqevv5FabtQQc0lp8JZwVPJPXZWmMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757898051; c=relaxed/simple;
-	bh=NzN9rjVJQ+9EoqpW5aOLzYJjWUlAVKwEbf7e/tgTI6M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PGwUIi0jsIrUVkeYkHuLs4jjCzdbl0lS18pcZ7weRXNLjY3twrg7zOf8pxQcRHXACmU7+EHDbCbXTgtApa0HX550/hwwI8mc+rOEYCkceG02L47uVJScFs7W7yjVn4SDV9q8M6VwNOI/3YZYn++biRH07aXEZQmZ4EnsmSEhB8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=jl4uq5O5; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1757898015; x=1758502815; i=spasswolf@web.de;
-	bh=VGFoDMyPFuUpDSYcboPvOFSN6QkbwjmIPVFfUtrHzig=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=jl4uq5O5+qnKX0N+kQSCJVaH/nMmvGJU2wbLhGDkOntB0iINLZwaMjV0Xif9yHss
-	 8jfRVuc6e0Er/HXQ8KcfPKWBAQKcvshNh/ca5KiS4PXfGIC2NKlGwYml9cI6S/siM
-	 imSws9D6Ad16tnuI6z/Nu1FfL3mc+0yuL4iN1If0vGkM9Zax2t9UowNOGMkX6u8eM
-	 mUp4gbGnqlblRUPkNW+ho1YG5488l8s9qE8NmEOBX4JPaNeYnnIoZWGq4RB1hAu3W
-	 Up3G+oag7ALl5VYJ7CzvbWgBj2p8/bRpq2At5djXH2pQF+CLx4zc8BwfalMZ0WP3+
-	 71RHNc4p3x4d/4/0Cw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from localhost.localdomain ([95.223.134.88]) by smtp.web.de
- (mrweb105 [213.165.67.124]) with ESMTPSA (Nemesis) id
- 1N30dT-1uGpHf3ssP-012mT3; Mon, 15 Sep 2025 03:00:15 +0200
-From: Bert Karwatzki <spasswolf@web.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: Bert Karwatzki <spasswolf@web.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	x86@kernel.org,
-	rafael@kernel.org,
-	qiuxu.zhuo@intel.com,
-	nik.borisov@suse.com,
-	Smita.KoralahalliChannabasappa@amd.com
-Subject: spurious mce Hardware Error messages in next-20250912
-Date: Mon, 15 Sep 2025 03:00:09 +0200
-Message-ID: <20250915010010.3547-1-spasswolf@web.de>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: 20250908-wip-mca-updates-v6-0-eef5d6c74b9c@amd.com
-References: 
+	s=arc-20240116; t=1757937022; c=relaxed/simple;
+	bh=JbEac92sEXrJ/qwkFNWDdO6MpAz8n0Z/6Y4xoea3Djk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=DmBb9c25n0QrYRU6/SAFOqGxf5HFtqdFZ07fKVIxBVhOSPBlZtKm7KA1ytZwbYuiESsi5Do0eVkEitAbcGCD24hPbXtgDQ4JVqE2cvAM3XqbALTIG3d7YTRMvXjj+cKCcoUlRDRz2dnOwotrdQJV6emWt9o72fC5PmpkIhhgNQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cQNYv20tTz6M4w8;
+	Mon, 15 Sep 2025 19:47:31 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (unknown [7.182.85.172])
+	by mail.maildlp.com (Postfix) with ESMTPS id C6FBC1400DC;
+	Mon, 15 Sep 2025 19:50:16 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml500007.china.huawei.com (7.182.85.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 15 Sep 2025 13:50:16 +0200
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Mon, 15 Sep 2025 13:50:16 +0200
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: "rafael@kernel.org" <rafael@kernel.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "rppt@kernel.org" <rppt@kernel.org>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"lenb@kernel.org" <lenb@kernel.org>, "leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "mchehab@kernel.org"
+	<mchehab@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>, "rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>, "Jon.Grimm@amd.com"
+	<Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
+	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
+	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
+	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
+	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
+ Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
+	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>
+Subject: RE: [PATCH v12 1/2] ACPI:RAS2: Add ACPI RAS2 driver
+Thread-Topic: [PATCH v12 1/2] ACPI:RAS2: Add ACPI RAS2 driver
+Thread-Index: AQHcHC9WuMPoKRXbY02Oy+WxUZ/jerSMt+SAgAK0t2CAABfigIAEdNLA
+Date: Mon, 15 Sep 2025 11:50:16 +0000
+Message-ID: <9433067c142b45d583eb96587b929878@huawei.com>
+References: <20250902173043.1796-1-shiju.jose@huawei.com>
+ <20250902173043.1796-2-shiju.jose@huawei.com>
+ <20250910192707.GAaMHRCxWx37XitN3t@fat_crate.local>
+ <9dd5e9d8e9b04a93bd4d882ef5d8b63e@huawei.com>
+ <20250912141155.GAaMQqK4vS8zHd1z4_@fat_crate.local>
+In-Reply-To: <20250912141155.GAaMQqK4vS8zHd1z4_@fat_crate.local>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:vNh5W7o0sGw2tu3AAaWth41d+FZXAKBijQruaUs5pxCRE2B71sM
- c7AaO0ugWHKYc4nixAuR1gKc/4bRkobRByBslxZeiOO66f3ki7ykmWocBAgKIdK/CcaRA5o
- /NIoqELQoqvP9E8L2DKzxEvLmFWSCcIvYT/J0OgSVi99ILdV7qfGgf0eeaDY5LKlE9Ujloo
- Qh/bfLcfZCmyFHrz+kCWA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ChJG+CxSw1Y=;doF7wlOYm+8sLH3OP4GqrgmLcOU
- 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
- O5gpw+C0ou6Ea5dX89C
 
-On my MSI Alpha 15 (amd64) laptop running debian stable(trixie) and =20
-kernel next-20250912 I noticed the following mce error message in demsg:
-
-[   T10] mce: [Hardware Error]: Machine check events logged
-[   T10] [Hardware Error]: Corrected error, no action required.
-[   T10] [Hardware Error]: CPU:0 (19:50:0) MC11_STATUS[-|CE|-|AddrV|-|-|-|=
-UECC|-|Poison|-]: 0x8400aa4800a90139
-[   T10] [Hardware Error]: Error Addr: 0x006637a200000020
-[   T10] [Hardware Error]: IPID: 0x000700b040000000
-[   T10] [Hardware Error]: L3 Cache Ext. Error Code: 41
-[   T10] [Hardware Error]: cache level: L1, tx: GEN, mem-tx: DRD
-[   T10] mce: [Hardware Error]: Machine check events logged
-[   T10] [Hardware Error]: Corrected error, no action required.
-[   T10] [Hardware Error]: CPU:0 (19:50:0) MC14_STATUS[-|CE|-|AddrV|PCC|-|=
-SyndV|UECC|-|Poison|-]: 0x8724ac0800000000
-[   T10] [Hardware Error]: Error Addr: 0x002bf52e00000020
-[   T10] [Hardware Error]: IPID: 0x000700b040000000, Syndrome: 0x000000000=
-0000042
-[   T10]=20
-[   T10] [Hardware Error]: L3 Cache Ext. Error Code: 0
-[   T10] [Hardware Error]: cache level: RESV, tx: INSN
-
-The messages start about 333.34s after boot and usually appear 327.68s app=
-art
-(Yes, these timings are reproducible!):
-$ dmesg | grep mce
-[  333.338334] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[  333.338354] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[  661.018322] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[  661.018347] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[  988.698305] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[  988.698329] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[ 1316.378283] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[ 1316.378311] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[ 1644.058284] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-[ 1644.058303] [     T10] mce: [Hardware Error]: Machine check events logg=
-ed
-
-As these messages do not appear in v6.17-rc5 I bisected the issue=20
-(from v6.17-rc5 to next-20250912) and found this as the first bad commit:
-
-cf6f155e848b ("x86/mce: Unify AMD DFR handler with MCA Polling")
-
-Are these error messages a new error that was not reported previously or
-are these error messages a sign that the new code erroneously reports erro=
-rs?
-
-Hardware used:
-$ lspci
-00:00.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne Roo=
-t Complex
-00:00.2 IOMMU: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne IOMMU
-00:01.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Renoir PCIe Dummy =
-Host Bridge
-00:01.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Renoir PCIe GPP Bri=
-dge
-00:02.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Renoir PCIe Dummy =
-Host Bridge
-00:02.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne PCIe=
- GPP Bridge
-00:02.2 PCI bridge: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne PCIe=
- GPP Bridge
-00:02.3 PCI bridge: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne PCIe=
- GPP Bridge
-00:02.4 PCI bridge: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne PCIe=
- GPP Bridge
-00:08.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Renoir PCIe Dummy =
-Host Bridge
-00:08.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Renoir Internal PCI=
-e GPP Bridge to Bus
-00:14.0 SMBus: Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller (re=
-v 51)
-00:14.3 ISA bridge: Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge (rev=
- 51)
-00:18.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 0
-00:18.1 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 1
-00:18.2 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 2
-00:18.3 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 3
-00:18.4 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 4
-00:18.5 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 5
-00:18.6 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 6
-00:18.7 Host bridge: Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabri=
-c; Function 7
-01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Upst=
-ream Port of PCI Express Switch (rev c3)
-02:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Down=
-stream Port of PCI Express Switch
-03:00.0 Display controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 23=
- [Radeon RX 6600/6600 XT/6600M] (rev c3)
-03:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Navi 21/23 HD=
-MI/DP Audio Controller
-04:00.0 Network controller: MEDIATEK Corp. MT7921K (RZ608) Wi-Fi 6E 80MHz
-05:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/=
-8211/8411 PCI Express Gigabit Ethernet Controller (rev 15)
-06:00.0 Non-Volatile memory controller: Kingston Technology Company, Inc. =
-KC3000/FURY Renegade NVMe SSD [E18] (rev 01)
-07:00.0 Non-Volatile memory controller: Micron/Crucial Technology P1 NVMe =
-PCIe SSD[Frampton] (rev 03)
-08:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] =
-Cezanne [Radeon Vega Series / Radeon Vega Mobile Series] (rev c5)
-08:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Renoir Radeon=
- High Definition Audio Controller
-08:00.2 Encryption controller: Advanced Micro Devices, Inc. [AMD] Family 1=
-7h (Models 10h-1fh) Platform Security Processor
-08:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne =
-USB 3.1
-08:00.4 USB controller: Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne =
-USB 3.1
-08:00.5 Multimedia controller: Advanced Micro Devices, Inc. [AMD] Audio Co=
-processor (rev 01)
-08:00.6 Audio device: Advanced Micro Devices, Inc. [AMD] Family 17h/19h/1a=
-h HD Audio Controller
-08:00.7 Signal processing controller: Advanced Micro Devices, Inc. [AMD] S=
-ensor Fusion Hub
-
-$ cat /proc/cpuinfo
-processor	: 0
-vendor_id	: AuthenticAMD
-cpu family	: 25
-model		: 80
-model name	: AMD Ryzen 7 5800H with Radeon Graphics
-stepping	: 0
-microcode	: 0xa50000c
-cpu MHz		: 2145.090
-cache size	: 512 KB
-physical id	: 0
-siblings	: 16
-core id		: 0
-cpu cores	: 8
-apicid		: 0
-initial apicid	: 0
-fpu		: yes
-fpu_exception	: yes
-cpuid level	: 16
-wp		: yes
-flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat=
- pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdt=
-scp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid =
-aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic =
-movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_=
-legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext=
- perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pst=
-ate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms inv=
-pcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xget=
-bv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf=
- xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale=
- vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsav=
-e_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_re=
-cov succor smca fsrm debug_swap
-bugs		: sysret_ss_attrs spectre_v1 spectre_v2 spec_store_bypass srso ibpb_=
-no_ret spectre_v2_user tsa
-bogomips	: 6388.44
-TLB size	: 2560 4K pages
-clflush size	: 64
-cache_alignment	: 64
-address sizes	: 48 bits physical, 48 bits virtual
-power management: ts ttp tm hwpstate cpb eff_freq_ro [13] [14]
-
-
-Bert Karwatzki
+Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogQm9yaXNsYXYgUGV0a292IDxicEBh
+bGllbjguZGU+DQo+U2VudDogMTIgU2VwdGVtYmVyIDIwMjUgMTU6MTINCj5UbzogU2hpanUgSm9z
+ZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPkNjOiByYWZhZWxAa2VybmVsLm9yZzsgYWtwbUBs
+aW51eC1mb3VuZGF0aW9uLm9yZzsgcnBwdEBrZXJuZWwub3JnOw0KPmRmZXJndXNvbkBhbXBlcmVj
+b21wdXRpbmcuY29tOyBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+YWNwaUB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW1tQGt2YWNrLm9yZzsgbGludXgtZG9jQHZnZXIua2VybmVs
+Lm9yZzsNCj50b255Lmx1Y2tAaW50ZWwuY29tOyBsZW5iQGtlcm5lbC5vcmc7IGxlby5kdXJhbkBh
+bWQuY29tOw0KPllhemVuLkdoYW5uYW1AYW1kLmNvbTsgbWNoZWhhYkBrZXJuZWwub3JnOyBKb25h
+dGhhbiBDYW1lcm9uDQo+PGpvbmF0aGFuLmNhbWVyb25AaHVhd2VpLmNvbT47IExpbnV4YXJtIDxs
+aW51eGFybUBodWF3ZWkuY29tPjsNCj5yaWVudGplc0Bnb29nbGUuY29tOyBqaWFxaXlhbkBnb29n
+bGUuY29tOyBKb24uR3JpbW1AYW1kLmNvbTsNCj5kYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb207
+IG5hb3lhLmhvcmlndWNoaUBuZWMuY29tOw0KPmphbWVzLm1vcnNlQGFybS5jb207IGp0aG91Z2h0
+b25AZ29vZ2xlLmNvbTsgc29tYXN1bmRhcmFtLmFAaHBlLmNvbTsNCj5lcmRlbWFrdGFzQGdvb2ds
+ZS5jb207IHBnb25kYUBnb29nbGUuY29tOyBkdWVud2VuQGdvb2dsZS5jb207DQo+Z3RoZWxlbkBn
+b29nbGUuY29tOyB3c2Nod2FydHpAYW1wZXJlY29tcHV0aW5nLmNvbTsNCj53YnNAb3MuYW1wZXJl
+Y29tcHV0aW5nLmNvbTsgbmlmYW4uY3hsQGdtYWlsLmNvbTsgdGFueGlhb2ZlaQ0KPjx0YW54aWFv
+ZmVpQGh1YXdlaS5jb20+OyBaZW5ndGFvIChCKSA8cHJpbWUuemVuZ0BoaXNpbGljb24uY29tPjsg
+Um9iZXJ0bw0KPlNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+OyBrYW5na2FuZy5zaGVu
+QGZ1dHVyZXdlaS5jb207DQo+d2FuZ2h1aXFpYW5nIDx3YW5naHVpcWlhbmdAaHVhd2VpLmNvbT4N
+Cj5TdWJqZWN0OiBSZTogW1BBVENIIHYxMiAxLzJdIEFDUEk6UkFTMjogQWRkIEFDUEkgUkFTMiBk
+cml2ZXINCj4NCj5PbiBGcmksIFNlcCAxMiwgMjAyNSBhdCAxMjowNDo1N1BNICswMDAwLCBTaGlq
+dSBKb3NlIHdyb3RlOg0KPj4gPldoeSBpcyB0aGlzIHJlcXVpcmVtZW50IGhlcmU/DQo+PiBUaGUg
+cGh5c2ljYWwgbWVtb3J5IGFkZHJlc3MgcmFuZ2UgcmV0cmlldmVkIGhlcmUgZm9yIHRoZSBOVU1B
+IGRvbWFpbg0KPj4gaXMgdXNlZCBpbiB0aGUgc3Vic2VxdWVudCBwYXRjaCAgW1BBVENIIHYxMiAy
+LzJdIHJhczogbWVtOiBBZGQgbWVtb3J5DQo+PiBBQ1BJIFJBUzIgZHJpdmVyLCAxLiB0byBzZXQg
+UmVxdWVzdGVkIEFkZHJlc3MgUmFuZ2UoSU5QVVQpIGZpZWxkIG9mDQo+PiBUYWJsZSA1Ljg3OiBQ
+YXJhbWV0ZXIgQmxvY2sgU3RydWN0dXJlIGZvciBQQVRST0xfU0NSVUIgd2hlbiBzZW5kDQo+PiBH
+RVRfUEFUUk9MX1BBUkFNRVRFUlMgY29tbWFuZCB0byB0aGUgZmlybXdhcmUsIHRvIGdldCBzY3J1
+Yg0KPnBhcmFtZXRlcnMsIHJ1bm5pbmcgc3RhdHVzLCBjdXJyZW50IHNjcnViIHJhdGUgZXRjLg0K
+Pj4gMi4gZm9yIHRoZSB2YWxpZGl0eSBjaGVjayBvZiB0aGUgdXNlciByZXF1ZXN0ZWQgbWVtb3J5
+IGFkZHJlc3MgcmFuZ2UgdG8gc2NydWIuDQo+DQo+QWdhaW4sIHdoeSBkb2VzIGl0IGhhdmUgdG8g
+YmUgKmxvd2VzdCogYW5kICpjb250aWd1b3VzKj8NCj4NCj5Zb3VyIGFuc3dlciBkb2Vzbid0IGV4
+cGxhaW4gdGhhdC4NClRoaXMgaGFzIGJlZW4gYWRkZWQgYXMgc3VnZ2VzdGVkIGJ5IEpvbmF0aGFu
+IGNvbnNpZGVyaW5nIHRoZSBpbnRlcmxlYXZlZCBOVU1BIG5vZGUuDQpMaW5rIHRvIHRoZSByZWxh
+dGVkIGRpc2N1c3Npb24gaW4gVjExOg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjUw
+ODIxMTAwNjU1LjAwMDAzOTQyQGh1YXdlaS5jb20vI3QNCg0KfCBub2RlIDAgfCBub2RlIDEgfCBu
+b2RlIDAgfCAgIFBBIGFkZHJlc3MgbWFwLg0KQ2FuIHlvdSBnaXZlIHlvdXIgc3VnZ2VzdGlvbiB3
+aGF0IHdlIHNob3VsZCBkbyBhYm91dCBpdD8NCg0KPg0KPj4gQWxzbyBpbnRlbmRlZCB0byBleHBv
+c2UgdGhpcyBzdXBwb3J0ZWQgbWVtb3J5IGFkZHJlc3MgcmFuZ2UgdG8gdGhlDQo+PiB1c2Vyc3Bh
+Y2UgdmlhIEVEQUMgc2NydWIgY29udHJvbCBpbnRlcmZhY2UsIHRob3VnaCBpdCBpcyBub3QgcHJl
+c2VudCBub3cuDQo+DQo+V2h5PyBUbyB0aWUgb3Vyc2VsdmVzIHdpdGggZXZlbiBtb3JlIHVzZXIg
+QUJJPyENCj4NCj5UaGVyZSBiZXR0ZXIgYmUgYSBnb29kIHJlYXNvbiBhbmQgbm90IGEgYmV0dGVy
+IGRlc2lnbiBmb3Igd2hhdCB0aGlzIGlzIHRyeWluZyB0bw0KPmRvLg0KDQpUaGUgImFkZHJlc3Nf
+cmFuZ2VfYmFzZSIgYW5kICJhZGRyZXNzX3JhbmdlX3NpemUiIHN5c2ZzIGF0dHJpYnV0ZXMNCih1
+bnRpbCB0aGUgdjEzIG9mIEVEQUMgc2NydWIgaW50ZXJmYWNlLCkgd2hpY2ggd2UgY291bGQgYmUg
+dXNlZCBmb3IgcHVibGlzaCB0aGlzDQpwaHlzaWNhbCBhZGRyZXNzIHJhbmdlIG9mIHRoZSBtZW1v
+cnkgaW4gTlVNQSBkb21haW4gdG8gdGhlIHVzZXJzcGFjZSB3aGVuIHRoZSBkZW1hbmQgc2NydWJi
+aW5nDQppcyBub3QgaW4gcHJvZ3Jlc3MsIGJ1dCAiYWRkcmVzc19yYW5nZV9iYXNlIiBoYXMgY2hh
+bmdlZCB0byByZWFkIHRoZSBzdGF0dXMgb2YgIG9uLWRlbWFuZA0Kc2NydWJiaW5nIGJhc2VkIG9u
+IHRoZSBmZWVkYmFjayBoZXJlLg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzRlZTM2ZDAz
+YTI4OTQ2MDZhNTcxYjM3ZjQ0MGRhMzZmQGh1YXdlaS5jb20vI3QgICANCkFsc28gdG8gcHJlc2Vu
+dCB0aGlzIHJlcXVpcmVtZW50IGZvciB0aGUgUkFTMiwgIHRoZXJlIHdhcyBubyBtZXRob2QgZm91
+bmQgdG8gcmV0cmlldmUgdGhlDQptZW1vcnkgcGh5c2ljYWwgYWRkcmVzcyByYW5nZSB1bnRpbCBy
+ZWNlbnQgdmVyc2lvbnMgYXMgaXQgaXMgbm90IHN1cHBvcnRlZCBpbiB0aGUgUkFTMi4NCg0KVXNl
+IGNhc2UgZm9yIHRoZSBSQVMyIHRvIHB1Ymxpc2ggdGhlIHN1cHBvcnRlZCBQQSByYW5nZSBvZiB0
+aGUgbm9kZSBtZW1vcnkgdG8gdGhlIHVzZXJzcGFjZToNClN5c3RlbXMgd2l0aCBtdWx0aXBsZSBO
+VU1BIG5vZGUgZG9tYWlucyB3aXRoIHRoZSBzdXBwb3J0IGZvciB0aGUgZGVtYW5kIHNjcnViYmlu
+Zw0KZXhwb3NlZCB0byB0aGUgdXNlciB2aWEgdGhlIEVEQUMgc2NydWIgaW50ZXJmYWNlIGFzIGFj
+cGlfcmFzX21lbTAvc2NydWIsIGFjcGlfcmFzX21lbTEvc2NydWIsDQphY3BpX3Jhc19tZW0yL3Nj
+cnViLCAuLi4gZXRjLiAgIFdoZW4gdGhlIHVzZXJzcGFjZSB0b29sIChGb3IgZS5nLiByYXNkYWVt
+b24pICBvciBhbiBhZG1pbiBkZXRlY3RzDQphIGZhdWx0eSBwYWdlIG9yIGZhdWx0eSBhZGRyZXNz
+LCBzeXN0ZW0gcG9saWN5IG1heSBkZWNpZGVzIHRvIHNjcnViIHRoZSBjb3JyZXNwb25kaW5nIG1l
+bW9yeS4gDQpIb3dldmVyIGl0IGlzIHJlcXVpcmVkIHRvIGZpbmQgb3V0IHRoZSBFREFDIHNjcnVi
+IGluc3RhbmNlIG9mICB0aGUgY29ycmVzcG9uZGluZyAgbWVtb3J5IGluIHRoZQ0KTlVNQSBkb21h
+aW4sIHNldCBzY3J1YiBwYXJhbWV0ZXJzIGFuZCBpc3N1ZSB0aGUgc2NydWIgcmVxdWVzdC4NClRo
+ZXJlIGFyZSB0d28gb3B0aW9ucyBwcmVzZW50LA0KKDEpIFNldCB0aGUgc2NydWIgcGFyYW1ldGVy
+cyBhbmQgaXNzdWUgc2NydWIgcmVxdWVzdCBpbiBhbGwgdGhlIEVEQUMgc2NydWIgaW5zdGFuY2Vz
+IHByZXNlbnQgZm9yIFJBUzIuIFRoZQ0KIHNjcnViIHJlcXVlc3Qgc2hvdWxkIGZhaWwgZm9yIHRo
+ZSBpbnZhbGlkIGNhc2VzLg0KKDIpICBMb2NhdGUgdGhlIGNvcnJlc3BvbmRpbmcgRURBQyBzY3J1
+YiBpbnN0YW5jZXMgZm9yIHRoZSBjb3JyZXNwb25kaW5nIE5vZGUgbWVtb3J5DQogICAgICBieSBy
+ZWFkIGFuZCBjaGVjayBhZ2FpbnN0IHRoZSBQQSByYW5nZSBwdWJsaXNoZWQuDQoNCkkgdGhpbmsg
+T3B0aW9uICgyKSBzZWVtcyBiZXR0ZXI/IA0KSWYgc28sIGNhbiB0aGUgRURBQyBzY3J1YiBpbnRl
+cmZhY2UgIGJlIHVwZGF0ZWQgdG8gaW5jbHVkZSBhdHRyaWJ1dGVzIGZvciBwdWJsaXNoaW5nIHRo
+ZSBzdXBwb3J0ZWQNClBBIHJhbmdlIGZvciB0aGUgbWVtb3J5IGRldmljZSB0byBzY3J1Yj8NCg0K
+Pg0KPj4gPldoYXQgaGFwcGVucyB3aXRoIHRoZSBhdXggZGV2aWNlcyB5b3UgY3JlYXRlZCBzdWNj
+ZXNzZnVsbHkgaGVyZT8gVW53aW5kPw0KPj4gUGxlYXNlIHNlZSB0aGUgcHJldmlvdXMgZGlzY3Vz
+c2lvbnMgb24gdGhpcyB3ZXJlIGFib3V0IGFsbG93aW5nIHRoZQ0KPj4gc3VjY2Vzc2Z1bGx5IGNy
+ZWF0ZWQgYXV4aWxpYXJ5IGRldmljZXMgdG8gZXhpc3QuDQo+PiBodHRwczovL2xvcmUua2VybmVs
+Lm9yZy9hbGwvMjAyNTA0MTUyMTA1MDQuR0E4NTQwOThAeWF6LWtoZmYyLmFtZC5jb20vDQo+DQo+
+VGhlcmUncyBubyBkaXNjdXNzaW9uIGhlcmUuIEFuZCBub3RoaW5nIGFuc3dlcnMgdGhlIHF1ZXN0
+aW9uICJ3aHkiIHRoaXMgaXMgb2sgdG8NCj5kbyB0aGlzIHdheS4NCg0KVGhpcyB3YXMgY2hhbmdl
+ZCAgYmFzZWQgb24gdGhlIGZlZWRiYWNrIGZyb20gdGhlIFlhemVuIGluIHYzIG9mIHRoZSBzZXJp
+ZXMsDQpDb3B5IG9mIHRoZSBZYXplbidzIGZlZWRiYWNrIGZyb20gdGhlIGFib3ZlIGxpbms6IA0K
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCj4gKwl9DQo+ICsNCj4gKwlwY2NfZGVzY19s
+aXN0ID0gKHN0cnVjdCBhY3BpX3JhczJfcGNjX2Rlc2MgKikocmFzMl90YWIgKyAxKTsNCj4gKwlm
+b3IgKGkgPSAwOyBpIDwgcmFzMl90YWItPm51bV9wY2NfZGVzY3M7IGkrKywgcGNjX2Rlc2NfbGlz
+dCsrKSB7DQo+ICsJCWlmIChwY2NfZGVzY19saXN0LT5mZWF0dXJlX3R5cGUgIT0gUkFTMl9GRUFU
+X1RZUEVfTUVNT1JZKQ0KPiArCQkJY29udGludWU7DQo+ICsNCj4gKwkJcmMgPSByYXMyX2FkZF9h
+dXhfZGV2aWNlKFJBUzJfTUVNX0RFVl9JRF9OQU1FLCBwY2NfZGVzY19saXN0LT5jaGFubmVsX2lk
+KTsNCj4gKwkJaWYgKHJjKQ0KPiArCQkJcmV0dXJuIHJjOw0KDQpUaGlzIHJldHVybnMgZXJyb3Ig
+b24gdGhlIGZpcnN0IGZhaWx1cmUuDQoNCldoYXQgaWYgdGhlcmUgd2FzIGEgc3VjY2VzcyBiZWZv
+cmU/IERvZXMgdGhhdCBhdXhfZGV2aWNlIG5lZWQgdG8gYmUgcmVtb3ZlZD8NCg0KSWYgbm90LCB0
+aGVuIHdoeSByZXR1cm4gZmFpbHVyZSBhdCBhbGw/IFdoeSBub3QganVzdCB0cnkgdG8gYWRkIGFs
+bCBkZXZpY2VzPyBTb21lIG1heSBmYWlsIGFuZCBzb21lIG1heSBzdWNjZWVkLg0KPT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0gDQoNCldlIHRob3VnaHQgc2Vjb25kIG9wdGlvbiBpcyBhIGJl
+dHRlciBiZWNhdXNlIGEgc3VjY2Vzc2Z1bGx5IGFkZGVkIGF1eCBkZXYgZm9yIGEgbWVtb3J5IGRl
+dmljZSBhbmQgY29ycmVzcG9uZGluZw0KRURBQyBpbnRlcmZhY2UgY29udGludWUgZXhpc3QgYW5k
+IHN1cHBvcnQgdGhlIHNjcnViL2EgbWVtb3J5IGZlYXR1cmUuIA0KV2UgZG8gbm90IG1pbmQgZG9p
+bmcgc3RvcCBvbiBhIGZhaWx1cmUgYWRkaW5nIGFuIGF1eF9kZXZpY2UgYW5kIGZyZWUgcHJldmlv
+dXNseSBjcmF0ZWQgYXV4IGRldmljZXMsIHRob3VnaA0KaXQgbWF5IHJlcXVpcmUgc29tZSBhZGRp
+dGlvbmFsIGR5bmFtaWNhbGx5IGFsbG9jYXRlZCBtZW1vcnkgc3BhY2UgdG8gc3RvcmUgdGhlIHN1
+Y2Nlc3NmdWxseSBjcmVhdGVkIGF1eCBkZXZpY2VzDQpzbyB0aGF0IGZyZWUgdGhlbSBvbiBhIGZh
+aWx1cmUgbGF0ZXIuIEhvcGUgdGhhdCBpcyBhY2NlcHRhYmxlPw0KDQpUaGFua3MsDQpTaGlqdSAg
+DQoNCj4NCj4tLQ0KPlJlZ2FyZHMvR3J1c3MsDQo+ICAgIEJvcmlzLg0KPg0KPmh0dHBzOi8vcGVv
+cGxlLmtlcm5lbC5vcmcvdGdseC9ub3Rlcy1hYm91dC1uZXRpcXVldHRlDQoNCg0KDQo=
 
