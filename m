@@ -1,125 +1,117 @@
-Return-Path: <linux-edac+bounces-4831-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4832-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F3B5B8489F
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Sep 2025 14:17:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAF7EB849F3
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Sep 2025 14:41:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E7E41C00039
-	for <lists+linux-edac@lfdr.de>; Thu, 18 Sep 2025 12:17:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56CC01C28574
+	for <lists+linux-edac@lfdr.de>; Thu, 18 Sep 2025 12:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C971C5486;
-	Thu, 18 Sep 2025 12:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C84E3054F6;
+	Thu, 18 Sep 2025 12:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="RJfTU5E6"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="QaiSHMUW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B31138DEC
-	for <linux-edac@vger.kernel.org>; Thu, 18 Sep 2025 12:17:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835CD303CBE;
+	Thu, 18 Sep 2025 12:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758197838; cv=none; b=SdlVi7bsH3B0O92HvXkpEECF3iZaidy7o4/4WBmsYXPtZJDYUVnHyauW2oo2oH8D4UET7t2M4NS5lf3+W8Guu/I9bow2OPz8CY1fFoZm1WmrxWVUXGrK0/JcRxvWQq6QXww3a5ZkLu0OsK0Yg+ByMIMBynISTW+dbOh+c36dNaU=
+	t=1758199257; cv=none; b=DTWKLJmai0CjYoThd+bft6TEstW37G+FQ8708H33hsBm72rEfeeIkbPbD+lUotYw/yrfTjQrnkeIZlhQ4lZFsvClV5GvQdDBUIJW/E+x1yu0AlBMo/BPlWFO0Z11ZhFJsG+uE3jsdv68fqxTfun6LICwtEp/d8SEofb5V1UcxR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758197838; c=relaxed/simple;
-	bh=3HTdFHE1nOnlBuISAA1vPVTn99dilijNsc7PTZ/Rej8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QI56rHmiUenzPHfpctN66NeybxWwG8t6CHC0VByF4RQb8O8CqLZeJriLLw0OvkiS5Oe7ppEd8gdQGfgj6Av2vcQrOwd9/lc5K2zqozVdm4T3/7GhyOsXHQRH/sBjf70h7YK1or4uWUkv/CBSYGDilwAv8qhTcScoHJh9umYURfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=RJfTU5E6; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-77256e75eacso841670b3a.0
-        for <linux-edac@vger.kernel.org>; Thu, 18 Sep 2025 05:17:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1758197834; x=1758802634; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jatDnkKAY0zA3/egfMgLsSXpfyI9PR3+CVwZCbKLIFA=;
-        b=RJfTU5E6HCbEvFZDmlZyUaFg7a+olv/lbMXcGLtj6ZGbtSdGcA+q617+1FRBVJxHvC
-         cWet5jXlMZ/Zd347fXruZNKUWL+yltUU0cOdJow5VdpejvNYqukq2ooZBfirV0omu9xB
-         LRF1m6a5DG1WGLaK5uT8y2roqglZVVQri6HrTlBafnWMT3BptW2C8NL3OHFlgMA0bEmE
-         KATQoYrt2iJt1mYCjpxzWJsRvvnuxd+NbV/IJpF3WZ6NZiDMUbsYZfsZr64J4eQpBeRT
-         66LQJSbJdgM0I8YD1gqAwpO1Qfi2BlaLHlpr+Oz6HuX25WiFz6emzkMoagX/pJ9vz895
-         Mwkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758197834; x=1758802634;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jatDnkKAY0zA3/egfMgLsSXpfyI9PR3+CVwZCbKLIFA=;
-        b=kq+aGqb5P5IMete+5HIN3kiUlMR8c9dJjCRgjv1kOkHpJHwqkeoRZZ4LZjim3JV1Am
-         pGftDQyNq+ANTnzq708Ioqha34yJSM5+dZYYQPn7VGo7VCXmMuUgY6pOJlot6yY6eWnq
-         xBog9AFbR/Hxa1BlVFg/RP56DeGfXEyncZslMCpj6soZng/4+UZAS2WK+1j8A1EpN3LF
-         S/YDl5NfLOKU33vNL2qoYlp9RScxwlSgwSsz26+wf1MDD7W5I0wkCLIRarUAFiccLO4s
-         ENEYDpI8anxSiMun2EwjjMdt6ROFQlEcQUBt+FI5rHMqKBP+nEhFz5JN1kD3PLTfEiE9
-         i+yQ==
-X-Gm-Message-State: AOJu0YzBViLAVUHRJlvhAQHwjfdob5Qc0lsQj8lxQxma64NSCb9WRNWR
-	6BUeaE+gxl9XeMqXQymCsksx+99t7vIulN/rrHXRlvN+OUuxeeZoBmVEnt2vet6aXcE=
-X-Gm-Gg: ASbGncu3FQT21SEx2MDwxX6vvmMUarg8kp2LO6UsFiPnw42pgzJnNRJDIxMq99nl8Ki
-	o/twghHFOLTlGJgxLdWOcVFLyTn46/OKEMxK+mjQkPclz7xPsDeJK6mqp6PVBLdW+kMAIb59EVg
-	yFlzTHsEyS0X1bVs8t91I9ZQnvFI4o13C5K4slfUTYpi9D6gGpjGcD+/Dbes1LPpPtoKIcb9gsy
-	bvgtCAFjRqkPqepu+/M7sXdCzgJcJEF18dXCsBW31/WaY3V34uTcipOdNuTcoPxi3suz4o9BExe
-	6BarrNwJY+Bpum1B2TEU3KBcYgX35RerLhzPjVWfnWxrh0UDZz+xE0fkdo89Z8PRrqy8JbH4l+y
-	TtnzBDBJiKr+JPZ2QpRXjxvpS8d8pESs31AK48/KhJO3DCIzN7Q==
-X-Google-Smtp-Source: AGHT+IG4rqckA4W7pc4nGdg3+s4HGjiQFkvQqmFvGUjzXj+OKrljgWz6KGWOYSNvOTvazqcm9w16Og==
-X-Received: by 2002:a05:6a00:18a1:b0:772:78e6:f61a with SMTP id d2e1a72fcca58-77bf71cdeeemr7119344b3a.13.1758197834388;
-        Thu, 18 Sep 2025 05:17:14 -0700 (PDT)
-Received: from L4CR4519N7.bytedance.net ([203.208.189.10])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77da44030besm1168023b3a.0.2025.09.18.05.17.11
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 18 Sep 2025 05:17:14 -0700 (PDT)
-From: Rui Qi <qirui.001@bytedance.com>
-X-Google-Original-From: Rui Qi
-To: tony.luck@intel.com,
-	bp@alien8.de,
-	mchehab@kernel.org,
-	james.morse@arm.com,
-	rric@kernel.org
-Cc: linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rui Qi <qirui.001@bytedance.com>
-Subject: [PATCH] EDAC/skx_common: Fix allocation check when adxl_component_count is 0
-Date: Thu, 18 Sep 2025 20:17:04 +0800
-Message-Id: <20250918121704.45116-1-qirui.001@bytedance.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1758199257; c=relaxed/simple;
+	bh=R65TRM7Qpf4uO4bxhEDI0SdXyDRcLn7I8m3+/mg8EtE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UcJAjs1O0lIoqhqzPjAarPRfWroBleDCjKccth8RteV2aC4/nqIui4InBwCqnP0uRFu6yFTD0Pmm3fOwOFM8ifmIFxGmTHvYHayIBtqD294iWZjBSL/M1KeObOZATfmPRmD3gGr1n8t9ADDw1mK9gtfv7owTNZRY+chxLzSQKss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=QaiSHMUW; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DCE9E40E01D2;
+	Thu, 18 Sep 2025 12:40:51 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id YqDqIlJATrYw; Thu, 18 Sep 2025 12:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1758199247; bh=wNQZdWsXPRH5e0mb1c+K9xiZ0IshDQBYs9BXE+Oukmg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QaiSHMUWZv5TksePDfobU9otexEnaSHYctWEs6F2zrDejnKexDRQCN/zxOBgLRZ5B
+	 ASaBCXirJLoz++TN4GSnD1DjidjZ1cZhmCmrh/RULncyI4mb3MXD+Su2OZEerOa2a5
+	 Hx4z6ChqLBFQDIuE24za9viifDor1E1LZSa+vdk9m/0+f05G93Lth318LTazoW+7/b
+	 kCz1HS+wpLIHTaapsj0p9gxt89w9Hw/hvLI1cfhRT6m6QObtXRkQ9wurW9xf9ugbYZ
+	 jI1Vrk3EaMvHGNbvJ6vdQGxiI+SMTq2leU3pCcDzj5LflDPkydQlFKSHy1/ghHoAiS
+	 3NvBdR0Cq+VBYitGNNdBtIfmYQZRh9KsIsqn9AlsykWJKYbF7F0PPXLtRCRszREJRg
+	 sU0i8ToT2Rgad+pzBO15m8v7FBM5Q+6fOMewRPMfyMV3VSjAaW+1TZRWYjO822St82
+	 OPcFFwgYnPB4L7HKqlDrG8lKKI79NlWt0mSgBwOtSE65DTzzk3KzTOvemgZTorDvvi
+	 0GwMUm7aVapA4SbT7GNQaXIe/pz5jtQ2ZxtjTBANh5Itc+H8D/g6FE3TIxzETbUKyf
+	 jvuzpPeKwU9VXjzqjZ69jG6hFWQ72uBLYip1CxRz2eP1DgPnFQFre5B09TYCjN9f6B
+	 JDOewOhjZ7CM+9HUhnM6J6SE=
+Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 6145140E01BB;
+	Thu, 18 Sep 2025 12:40:41 +0000 (UTC)
+Date: Thu, 18 Sep 2025 14:40:35 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+	Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH next] EDAC/versalnet: Fix error code in probe()
+Message-ID: <20250918124035.GDaMv9w16GzdFyZA3R@fat_crate.local>
+References: <aMuta8vbLUaP_C-R@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aMuta8vbLUaP_C-R@stanley.mountain>
 
-From: Rui Qi <qirui.001@bytedance.com>
+On Thu, Sep 18, 2025 at 09:57:47AM +0300, Dan Carpenter wrote:
+> This code returns success if devm_kzalloc() fails.  Return -ENOMEM
+> instead.
+> 
+> Fixes: d5fe2fec6c40 ("EDAC: Add a driver for the AMD Versal NET DDR controller")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+>  drivers/edac/versalnet_edac.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/edac/versalnet_edac.c b/drivers/edac/versalnet_edac.c
+> index 66714fffa591..7c5db8bf0595 100644
+> --- a/drivers/edac/versalnet_edac.c
+> +++ b/drivers/edac/versalnet_edac.c
+> @@ -888,8 +888,10 @@ static int mc_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> -	if (!priv)
+> +	if (!priv) {
+> +		rc = -ENOMEM;
+>  		goto err_alloc;
+> +	}
+>  
+>  	amd_rpmsg_id_table[0].driver_data = (kernel_ulong_t)priv;
+>  
+> -- 
 
-Use ZERO_OR_NULL_PTR instead of simple NULL check to properly handle
-the case where adxl_component_count is 0, which would result in
-kcalloc returning ZERO_SIZE_PTR rather than NULL.
+Applied, thanks.
 
-This ensures correct error handling when no ADXL components are
-present and prevents potential issues with zero-sized allocations.
-
-Signed-off-by: Rui Qi <qirui.001@bytedance.com>
----
- drivers/edac/skx_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
-index 39c733dbc5b9..768d787813ec 100644
---- a/drivers/edac/skx_common.c
-+++ b/drivers/edac/skx_common.c
-@@ -90,7 +90,7 @@ int skx_adxl_get(void)
- 
- 	adxl_values = kcalloc(adxl_component_count, sizeof(*adxl_values),
- 			      GFP_KERNEL);
--	if (!adxl_values) {
-+	if (ZERO_OR_NULL_PTR(adxl_values)) {
- 		adxl_component_count = 0;
- 		return -ENOMEM;
- 	}
 -- 
-2.20.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
