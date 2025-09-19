@@ -1,68 +1,68 @@
-Return-Path: <linux-edac+bounces-4849-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4850-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F830B88E35
-	for <lists+linux-edac@lfdr.de>; Fri, 19 Sep 2025 12:25:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D13E2B88E47
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Sep 2025 12:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6D9B1C87E93
-	for <lists+linux-edac@lfdr.de>; Fri, 19 Sep 2025 10:24:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBAA01883C98
+	for <lists+linux-edac@lfdr.de>; Fri, 19 Sep 2025 10:25:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94383074BD;
-	Fri, 19 Sep 2025 10:23:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D353081D2;
+	Fri, 19 Sep 2025 10:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="sumI3pCh"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="I7IK1GuI"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.156.205.64])
+Received: from fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.178.132.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737FC306B3E;
-	Fri, 19 Sep 2025 10:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.156.205.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F263081A0;
+	Fri, 19 Sep 2025 10:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.178.132.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758277407; cv=none; b=EkfhgZLMhuF849J1ZQ7dLofabue+vM1L+N/SGkhhCjd4Ub1iTJu8obLoqomQGF1mWKeIHgHsqb4ZZ+rL/zH1lJNtOrmA5WJ8YWnM7RnaPuSjFnXtcvc7GY8lCf1RRBnM3+odctXQqJFK5/gQriWNMxyfMVd/e1lhowKIsjYiuIw=
+	t=1758277438; cv=none; b=t16QGw4vrL5Hx8ZLch/NAcxbMPGJGz1fpdLLYFnj21PXjP8Wf05FBgHSD6pin40QO0iFawU0dlDgDywUF6p+8pw6EUwjjQd7FJUeRmYQKU2zN4pK9B9kKx6bju2ovFl2wnmB6Dov5aeQcBvlNGmkhq8E7kfqSqOYeD10KCmfc0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758277407; c=relaxed/simple;
-	bh=mBsutiZSvOVvNJByrvLE9b3D79CfAae/c2faSCVfkjU=;
+	s=arc-20240116; t=1758277438; c=relaxed/simple;
+	bh=23s8l0G8LMW/LqgoII7VfOWAq4ph1Dyt0/EjDFoB5Tk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Khin2Vw5tpQXYxfixvbepbJtTIHD/g3jmNRXc+xrynfcD022GtGmr7ifdfBaN7EMdx+SqAf+2D9Vh6T7nbIuT+OxuIbIJgyTlSNRl0QegUul/kOeJ4jq8ugWtnHqJo10XNgv7GvWUAQ3TxsSZHyepvlJ76x4bp/H9WFTT4YRel8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=sumI3pCh; arc=none smtp.client-ip=18.156.205.64
+	 MIME-Version:Content-Type; b=VGlmdjPznsduPEA1z5rnMKvtWr82IsVQlMKVJTH5B+Odib1ABY8Zu3sw/1nerXuLAIAKuu2TFg0VwmcEzPgTkv92TlKR1gvT9yLLc4eo7QqZLX0HVWKpHulPAfsi2txazOM1Lf2+Oene8GseNqOpPSXvu1azhjnxpCzSFrTKTSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=I7IK1GuI; arc=none smtp.client-ip=63.178.132.221
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1758277405; x=1789813405;
+  t=1758277436; x=1789813436;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QbgnO9UxPmlnTs9ErmugBQ9uOmZYt7P0wc2omnh3GaU=;
-  b=sumI3pChfVrDH3ZdqFSUK9qjC02AqfimKUNR3E2lYfPKOzyFtHGXaxRA
-   pFafOAiuy3UFVfsI4+2+ov2ZmF8O6gKMdhU/YI1+wolf0KyUhniGFdjUU
-   mBxUjG2hBTxghT4/wokiZ7r9bk8zuPyW75bNThlW/uRuneM53G4Nq82UA
-   0GyXKIUZZbi+grIIuZGLoZEJ87UJYouxnU4WBBFd3CMyrsVt6DOUUUw5I
-   sN5x+rkeeMfqfdks6FWRgxDNfAPqasT7YOiUJVn/+z8/w/Hw8GzigNW+x
-   Ek85OYaDA86eA9PB8k3KQ4708LYhBwFqrkSlmt6QRxQMGP6YIQSH36nT4
-   g==;
-X-CSE-ConnectionGUID: OutPLXF4RFS9rYyx9RS6zQ==
-X-CSE-MsgGUID: 1bnrBmIhRfW8Z/7FfFsPpg==
+  bh=M14+Hrw3+0xfvL7LtAKdftp5KA5xdtXGebEkX3FEMMU=;
+  b=I7IK1GuIaLy5MfL08Rg4bsPusBnI7vCH5eff5CsKrPXxLWLVerKbjHT/
+   /SJYFxf01aaa4Wj1NxTdNHtQnc033S4krdMhmqhzCxwqu6yWl9xHvKH2x
+   OMN/rzDUTqG/UiONJq9vC7msrQHjXNXGDwu0jQA9SfNcsQcv1WooEeyhe
+   V5931TVzJAUziWWsMSak2h1OwPQYG4vorp5HsESevA1HMdjcqIj6h0sbw
+   qM+7wT8NItEhgMsInt3DT6A+Y6zYbmATruHhzm+t3JGh9QA5DL8CKWoU5
+   ONNpXHLFfh4S+S8a4NTeVFU/jxcnhWTxKddYXKX7TBWYCiJ/6xUDh9iNP
+   Q==;
+X-CSE-ConnectionGUID: tVddmQdzSSWtL5CWETEbBg==
+X-CSE-MsgGUID: BwlTxSfMRb+QOlcWG8kkaQ==
 X-IronPort-AV: E=Sophos;i="6.18,277,1751241600"; 
-   d="scan'208";a="2368465"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 10:23:22 +0000
-Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:22862]
+   d="scan'208";a="2264307"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 10:23:54 +0000
+Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:6079]
  by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.0.240:2525] with esmtp (Farcaster)
- id 78751fb8-59af-471c-be39-cbaca798d4b0; Fri, 19 Sep 2025 10:23:22 +0000 (UTC)
-X-Farcaster-Flow-ID: 78751fb8-59af-471c-be39-cbaca798d4b0
+ id adafa649-7e2b-48cb-b9f9-f9d8c19f03d6; Fri, 19 Sep 2025 10:23:53 +0000 (UTC)
+X-Farcaster-Flow-ID: adafa649-7e2b-48cb-b9f9-f9d8c19f03d6
 Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
+ EX19MTAEUC001.ant.amazon.com (10.252.51.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 19 Sep 2025 10:23:22 +0000
+ Fri, 19 Sep 2025 10:23:50 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 19 Sep 2025
- 10:22:53 +0000
+ 10:23:22 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <linux@armlinux.org.uk>, <jdike@addtoit.com>, <richard@nod.at>,
 	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
@@ -111,9 +111,9 @@ To: <linux@armlinux.org.uk>, <jdike@addtoit.com>, <richard@nod.at>,
 	<stable@vger.kernel.org>
 CC: <jonnyc@amazon.com>, Christoph Hellwig <hch@infradead.org>, Linus Torvalds
 	<torvalds@linux-foundation.org>
-Subject: [PATCH 09/27 5.10.y] minmax: fix indentation of __cmp_once() and __clamp_once()
-Date: Fri, 19 Sep 2025 10:17:09 +0000
-Message-ID: <20250919101727.16152-10-farbere@amazon.com>
+Subject: [PATCH 10/27 5.10.y] minmax: allow comparisons of 'int' against 'unsigned char/short'
+Date: Fri, 19 Sep 2025 10:17:10 +0000
+Message-ID: <20250919101727.16152-11-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250919101727.16152-1-farbere@amazon.com>
 References: <20250919101727.16152-1-farbere@amazon.com>
@@ -130,11 +130,12 @@ X-ClientProxiedBy: EX19D032UWA003.ant.amazon.com (10.13.139.37) To
 
 From: David Laight <David.Laight@ACULAB.COM>
 
-[ Upstream commit f4b84b2ff851f01d0fac619eadef47eb41648534 ]
+[ Upstream commit 4ead534fba42fc4fd41163297528d2aa731cd121 ]
 
-Remove the extra indentation and align continuation markers.
+Since 'unsigned char/short' get promoted to 'signed int' it is safe to
+compare them against an 'int' value.
 
-Link: https://lkml.kernel.org/r/bed41317a05c498ea0209eafbcab45a5@AcuMS.aculab.com
+Link: https://lkml.kernel.org/r/8732ef5f809c47c28a7be47c938b28d4@AcuMS.aculab.com
 Signed-off-by: David Laight <david.laight@aculab.com>
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Christoph Hellwig <hch@infradead.org>
@@ -144,57 +145,25 @@ Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- include/linux/minmax.h | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ include/linux/minmax.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 8718fd71a793..c0e738eacefa 100644
+index c0e738eacefa..842c1db62ffe 100644
 --- a/include/linux/minmax.h
 +++ b/include/linux/minmax.h
-@@ -35,11 +35,11 @@
- #define __cmp(op, x, y)	((x) __cmp_op_##op (y) ? (x) : (y))
+@@ -26,8 +26,9 @@
+ 	__builtin_choose_expr(__is_constexpr(is_signed_type(typeof(x))),	\
+ 		is_signed_type(typeof(x)), 0)
  
- #define __cmp_once(op, x, y, unique_x, unique_y) ({	\
--		typeof(x) unique_x = (x);		\
--		typeof(y) unique_y = (y);		\
--		static_assert(__types_ok(x, y),		\
--			#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
--		__cmp(op, unique_x, unique_y); })
-+	typeof(x) unique_x = (x);			\
-+	typeof(y) unique_y = (y);			\
-+	static_assert(__types_ok(x, y),			\
-+		#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
-+	__cmp(op, unique_x, unique_y); })
+-#define __types_ok(x, y) \
+-	(__is_signed(x) == __is_signed(y))
++#define __types_ok(x, y) 			\
++	(__is_signed(x) == __is_signed(y) ||	\
++		__is_signed((x) + 0) == __is_signed((y) + 0))
  
- #define __careful_cmp(op, x, y)					\
- 	__builtin_choose_expr(__is_constexpr((x) - (y)),	\
-@@ -49,16 +49,16 @@
- #define __clamp(val, lo, hi)	\
- 	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
- 
--#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({	\
--		typeof(val) unique_val = (val);				\
--		typeof(lo) unique_lo = (lo);				\
--		typeof(hi) unique_hi = (hi);				\
--		static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
--				(lo) <= (hi), true),					\
--			"clamp() low limit " #lo " greater than high limit " #hi);	\
--		static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
--		static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
--		__clamp(unique_val, unique_lo, unique_hi); })
-+#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({		\
-+	typeof(val) unique_val = (val);						\
-+	typeof(lo) unique_lo = (lo);						\
-+	typeof(hi) unique_hi = (hi);						\
-+	static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
-+			(lo) <= (hi), true),					\
-+		"clamp() low limit " #lo " greater than high limit " #hi);	\
-+	static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
-+	static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
-+	__clamp(unique_val, unique_lo, unique_hi); })
- 
- #define __careful_clamp(val, lo, hi) ({					\
- 	__builtin_choose_expr(__is_constexpr((val) - (lo) + (hi)),	\
+ #define __cmp_op_min <
+ #define __cmp_op_max >
 -- 
 2.47.3
 
