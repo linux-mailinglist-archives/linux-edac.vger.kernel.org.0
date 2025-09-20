@@ -1,74 +1,124 @@
-Return-Path: <linux-edac+bounces-4875-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4876-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7871DB8C06D
-	for <lists+linux-edac@lfdr.de>; Sat, 20 Sep 2025 08:07:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D36B8C565
+	for <lists+linux-edac@lfdr.de>; Sat, 20 Sep 2025 12:21:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B7B7A00419
-	for <lists+linux-edac@lfdr.de>; Sat, 20 Sep 2025 06:07:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CE6D7B2261
+	for <lists+linux-edac@lfdr.de>; Sat, 20 Sep 2025 10:20:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FBED230274;
-	Sat, 20 Sep 2025 06:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8374E2F7ADD;
+	Sat, 20 Sep 2025 10:21:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="LKJSZBvO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/7euhNL"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5692629D;
-	Sat, 20 Sep 2025 06:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7AD2C237C
+	for <linux-edac@vger.kernel.org>; Sat, 20 Sep 2025 10:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758348419; cv=none; b=FeZ9oLJ7AKsEyuA0DfyUXcd5Qr44QbZHIr0L43j1nk6bbMrDe0hq0iTt+yPQLbj+vqylzsLFGa5TZYg0DqajLEjWk/96Nq/AdXaugCS4eHmYDsTEZktFkW9Ui/BqJVD8LJGLmQgkTVm+dHcIqJHi7SHGtBxuB2nyRuvZrKGguUY=
+	t=1758363691; cv=none; b=IW8mowreqjx0WaOifYpRuJKbmmrW452s6H4PsKwDepCSMhebvRS8cbTit4joV2Vf/hHNNXmMFEhLCZiaYhnYmfOVT8fA8ThpmFRzpRu/YnzWLuyIuhOusnwrwIYOxb+7CoKxNAm21QbxC7gpFGRGwoM0EpU7TwiUMMzGst+LD7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758348419; c=relaxed/simple;
-	bh=2EPWXQTPLFrlpNDyEaIgSoxFAtt/g+MssXYZMtA09Cc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QMMRXrJPNDBjT3OKd4AHqIgUXS4nH9q+bxydthoLZL05+G0LdF76CbR/8uzy9UpjLRVzjQizuncjcukQlVgLis7kCD6kSvy/8ER8dSwlnVAeUukYkZBG7Ghu/Rk63MjYyUZdAY/2Avby1MHTU/jsMZPKNvXm5bXF5UkLSpTMkcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=LKJSZBvO; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1758348407; h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type;
-	bh=gEUGDmoExGXLvcHEzs0QOstMZP03ryhuORMmCkFNfto=;
-	b=LKJSZBvOFyuCtKTzTqy8SludRDzj6V+ld/+XlXXcovQrG99s+muPMVoY6Y92bg3nW2//ibbxUDK6yjHNKy1YMxIK/mQPg/qsZAob6xA20SjxzEsBSTTcMfFPF3Qf0shxBiZiD2aDHHwh7vA3Ug66UT4+zRNncNhK1yp/fHMzmkw=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WoMFQsU_1758348081 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Sat, 20 Sep 2025 14:01:22 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: rostedt@goodmis.org,
-	lukas@wunner.de,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	helgaas@kernel.org,
-	ilpo.jarvinen@linux.intel.com,
-	mattc@purestorage.com,
-	Jonathan.Cameron@huawei.com
-Cc: bhelgaas@google.com,
-	tony.luck@intel.com,
-	bp@alien8.de,
-	xueshuai@linux.alibaba.com,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	oleg@redhat.com,
-	naveen@kernel.org,
-	davem@davemloft.net,
-	anil.s.keshavamurthy@intel.com,
-	mark.rutland@arm.com,
-	peterz@infradead.org,
-	tianruidong@linux.alibaba.com
-Subject: [PATCH v10 2/3] PCI: trace: Add a RAS tracepoint to monitor link speed changes
-Date: Sat, 20 Sep 2025 14:01:16 +0800
-Message-Id: <20250920060117.866-3-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250920060117.866-1-xueshuai@linux.alibaba.com>
-References: <20250920060117.866-1-xueshuai@linux.alibaba.com>
+	s=arc-20240116; t=1758363691; c=relaxed/simple;
+	bh=NeUWLUvwC6kW9VyfKYx42FFXe0IA1wZCOhU/BXYAKwI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oVXwIOiDxC3HjsfhV0Ve68mGullLdlPpyj1hIhgkB+9/BO6hRoTZqnNOYRlv4HMNUYPg7uKEsmHSyyavgWh2BhFdLLW81bjf7cPwtVk5gvtm5DCE/eLWCFmDTS2TCtU9auWVQuLiURMdxkPoy9Xe5QX2KIOC8BSi+UYXP0Ujh0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/7euhNL; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45cb6428c46so26826835e9.1
+        for <linux-edac@vger.kernel.org>; Sat, 20 Sep 2025 03:21:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758363686; x=1758968486; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P0vYXtUQVOuP2mhoWd4ropfz+61/nK8dVG+VKmZf9qg=;
+        b=R/7euhNLFeNlzmaUZ+Phoi0Q88Um1/yPfSkGC3G2sFF8md/oqJcr43+2FV+9UmZ2Dk
+         SUnKvAzbGiMrGaYgJR97ThDsbv3pKQfcEILZgylruuHbwAgK1ibJB3U9tn1aPxbYXcK1
+         MyRhovHH6tj9EMTzJqrblnvCmVfWpPYmKtlRwrM4k2sJZEX5nejonCqSjRQvEZ+qH5zA
+         DZ8wgDnOm8GaSljL3BUhgkod1l54KOPFjRhr/NVlywP8mhfKqtfasB/gPB/yUR4l9gOU
+         cdSyKg0V831oaRBDwypFkfc9dJHAFm8Nx1QoZlRSq09uBR4nwN02T4sdmyv+CMFSoURH
+         KYog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758363686; x=1758968486;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P0vYXtUQVOuP2mhoWd4ropfz+61/nK8dVG+VKmZf9qg=;
+        b=uJA89zxL9Vw4j4WJ1I46BwNP9z1di4U86Bs2TrdgGRJitC4MbVYAyfbwOcSBtyhBgK
+         gRLD0+2qW3zeiRY+KxdFv2XJeTMSkVHqT9iJXkJILhvl68lUjLqxNQ/fgmixpkBjfUzL
+         bbhiirGuuCxvraG/+Rr3pfm3WjO/Vg1dD97bDXWUV6TgkhC+dQNhCNPD1ZGRtFnnqhIc
+         jO28DNS8xs+ea36q3CxdjYtDm3DFy1u3LnCH6ZCJUgcx4UgTGgM2SA8nQIsFTig7Wzbs
+         SPNQs2r6qezCtRI0GoZEqxY0AmTs0mzYKoUAxPBqtDX6V6DWoAnBjJcFMf/NAuGFwlaa
+         KHUA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJyqn7agDEjraEtCZRkP4MX6JOme+gN4QcKf2qVgUUeOvqr7Z6xdFqKOmrKu9FSYsM0pU9CYg8qC/I@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEgtydkaVmu1KA6nS5v3FZiCkeXBBuJEv5tnjhTH/n2CDP03GN
+	YszGKk+tspwYrrYuz8HJkiGuEujfzipzgj5tirxhZkbEryPFFkyfdnIN
+X-Gm-Gg: ASbGncs3jVPXy/EqKhzwPJN56lDGFdEBEPLN1EJZaR96jcja4R8wRO+6/t9opgNvFIz
+	xZoPVH97zs2HVchgitk+h6XVxQLLT8GvS35nRPbCtyZ4v95pOBP/G3wgFQK88pjd0zrba0xaeGP
+	4U9Voa89cTe1aPi/Z9R/bTTzdCYUB8vrmCcxEDxdVitBWzj7Rsq+pVs21BMrC+afvaK9XFg20Bt
+	4skr58zPm6g5BLkmJyZ+QTMbjKCNcvAPCjSFhRI6OufIH2953HPUuTIZggVIC8cxK0jKoeIDQKU
+	fGljOG1GEmSWZthJ679eFYSiKBZT+x+jea/bGBJnVsCJ48gt5f8FsWKkz9e2Iaru1Y8VzNJxkIz
+	30txbzRnAj/mos7j7x+KkjLZ9uMoLBR7o4PdQxZ8D0SpscKCa3Fz0jzW9yMlS
+X-Google-Smtp-Source: AGHT+IFiz+7GSgFF/mIUUp0ndfipkNQ39jr+2XK+PXUAveDTslyL1Wu67txaLfdop4/qCEdAg/m1vQ==
+X-Received: by 2002:a05:600c:c8f:b0:45f:2919:5e6c with SMTP id 5b1f17b1804b1-467e6f37d8dmr76782405e9.16.1758363685327;
+        Sat, 20 Sep 2025 03:21:25 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3f0e28c83d6sm5624389f8f.56.2025.09.20.03.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Sep 2025 03:21:25 -0700 (PDT)
+Date: Sat, 20 Sep 2025 11:21:22 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc: linux@armlinux.org.uk, jdike@addtoit.com,
+ anton.ivanov@cambridgegreys.com, dave.hansen@linux.intel.com,
+ peterz@infradead.org, tglx@linutronix.de, x86@kernel.org, hpa@zytor.com,
+ tony.luck@intel.com, qiuxu.zhuo@intel.com, mchehab@kernel.org,
+ james.morse@arm.com, rric@kernel.org, harry.wentland@amd.com,
+ sunpeng.li@amd.com, alexander.deucher@amd.com, airlied@linux.ie,
+ daniel@ffwll.ch, evan.quan@amd.com, james.qian.wang@arm.com,
+ liviu.dudau@arm.com, mihail.atanassov@arm.com, brian.starkey@arm.com,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
+ robdclark@gmail.com, sean@poorly.run, dmitry.torokhov@gmail.com,
+ agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com, rajur@chelsio.com,
+ davem@davemloft.net, kuba@kernel.org, peppe.cavallaro@st.com,
+ alexandre.torgue@st.com, joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+ malattia@linux.it, hdegoede@redhat.com, mgross@linux.intel.com,
+ intel-linux-scu@intel.com, artur.paszkiewicz@intel.com, jejb@linux.ibm.com,
+ martin.petersen@oracle.com, sakari.ailus@linux.intel.com,
+ gregkh@linuxfoundation.org, dushistov@mail.ru, luc.vanoostenryck@gmail.com,
+ rostedt@goodmis.org, pmladek@suse.com, sergey.senozhatsky@gmail.com,
+ andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+ akpm@linux-foundation.org, kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org,
+ pablo@netfilter.org, kadlec@netfilter.org, jmaloy@redhat.com,
+ ying.xue@windriver.com, willy@infradead.org, sashal@kernel.org,
+ ruanjinjie@huawei.com, David.Laight@ACULAB.COM, herve.codina@bootlin.com,
+ Jason@zx2c4.com, bvanassche@acm.org, keescook@chromium.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-media@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
+ linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
+ linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+ coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
+ stable@vger.kernel.org, jonnyc@amazon.com
+Subject: Re: [PATCH 00/27 5.10.y] Backport minmax.h updates from v6.17-rc6
+Message-ID: <20250920111904.6d9ecb17@pumpkin>
+In-Reply-To: <184ce83f-0063-43a0-a1c8-da23c5d03cf7@amd.com>
+References: <20250919101727.16152-1-farbere@amazon.com>
+	<184ce83f-0063-43a0-a1c8-da23c5d03cf7@amd.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -76,251 +126,192 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-PCIe link speed degradation directly impacts system performance and
-often indicates hardware issues such as faulty devices, physical layer
-problems, or configuration errors.
+On Fri, 19 Sep 2025 14:11:37 +0200
+Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
 
-To this end, add a RAS tracepoint to monitor link speed changes,
-enabling proactive health checks and diagnostic analysis.
+> On 19.09.25 12:17, Eliav Farber wrote:
+> > This series includes a total of 27 patches, to align minmax.h of
+> > v5.15.y with v6.17-rc6.
+> >=20
+> > The set consists of 24 commits that directly update minmax.h:
+> > 1) 92d23c6e9415 ("overflow, tracing: Define the is_signed_type() macro
+> >    once")
+> > 2) 5efcecd9a3b1 ("minmax: sanity check constant bounds when clamping")
+> > 3) 2122e2a4efc2 ("minmax: clamp more efficiently by avoiding extra
+> >    comparison")
+> > 4) f9bff0e31881 ("minmax: add in_range() macro")
+> > 5) c952c748c7a9 ("minmax: Introduce {min,max}_array()")
+> > 6) 5e57418a2031 ("minmax: deduplicate __unconst_integer_typeof()")
+> > 7) f6e9d38f8eb0 ("minmax: fix header inclusions")
+> > 8) d03eba99f5bf ("minmax: allow min()/max()/clamp() if the arguments
+> >    have the same signedness.")
+> > 9) f4b84b2ff851 ("minmax: fix indentation of __cmp_once() and
+> >    __clamp_once()")
+> > 10) 4ead534fba42 ("minmax: allow comparisons of 'int' against 'unsigned
+> >     char/short'")
+> > 11) 867046cc7027 ("minmax: relax check to allow comparison between
+> >     unsigned arguments and signed constants")
+> > 12) 3a7e02c040b1 ("minmax: avoid overly complicated constant
+> >     expressions in VM code")
+> > 14) 017fa3e89187 ("minmax: simplify and clarify min_t()/max_t()
+> >     implementation")
+> > 15) 1a251f52cfdc ("minmax: make generic MIN() and MAX() macros
+> >     available everywhere")
+> > 18) dc1c8034e31b ("minmax: simplify min()/max()/clamp()
+> >     implementation")
+> > 19) 22f546873149 ("minmax: improve macro expansion and type
+> >     checking")
+> > 20) 21b136cc63d2 ("minmax: fix up min3() and max3() too")
+> > 21) 71ee9b16251e ("minmax.h: add whitespace around operators and after
+> >     commas")
+> > 22) 10666e992048 ("minmax.h: update some comments")
+> > 23) b280bb27a9f7 ("minmax.h: reduce the #define expansion of min(),
+> >     max() and clamp()")
+> > 24) a5743f32baec ("minmax.h: use BUILD_BUG_ON_MSG() for the lo < hi
+> >     test in clamp()")
+> > 25) c3939872ee4a ("minmax.h: move all the clamp() definitions after the
+> >     min/max() ones")
+> > 26) 495bba17cdf9 ("minmax.h: simplify the variants of clamp()")
+> > 27) 2b97aaf74ed5 ("minmax.h: remove some #defines that are only
+> >     expanded once")
+> >=20
+> > 2 prerequisite commits that adjust users of MIN and MAX macros (to
+> > prevent compilation issues):
+> > 13) 4477b39c32fd ("minmax: add a few more MIN_T/MAX_T users")
+> > 17) cb04e8b1d2f2 ("minmax: don't use max() in situations that want a C
+> >     constant expression")
+> >=20
+> > 1 additional commit introduced to resolve a build failures during the
+> > backport:
+> > 16) lib: zstd: drop local MIN/MAX macros in favor of generic ones
+> >=20
+> > The primary motivation is to bring in commit (8).
+> > In mainline, this change allows min()/max()/clamp() to accept mixed
+> > argument types when both share the same signedness.
+> > Backported patches to v5.10.y that use such forms trigger compiler
+> > warnings, which in turn cause build failures when -Werror is enabled.
+> >=20
+> > Originaly I aligned 5.10.y to 5.15.y, but David Laight commented that I
+> > need to pick up the later changes (from Linus) as well.
+> >=20
+> > Andy Shevchenko (2):
+> >   minmax: deduplicate __unconst_integer_typeof()
+> >   minmax: fix header inclusions
+> >=20
+> > Bart Van Assche (1):
+> >   overflow, tracing: Define the is_signed_type() macro once
+> >=20
+> > David Laight (11):
+> >   minmax: allow min()/max()/clamp() if the arguments have the same
+> >     signedness.
+> >   minmax: fix indentation of __cmp_once() and __clamp_once()
+> >   minmax: allow comparisons of 'int' against 'unsigned char/short'
+> >   minmax: relax check to allow comparison between unsigned arguments and
+> >     signed constants
+> >   minmax.h: add whitespace around operators and after commas
+> >   minmax.h: update some comments
+> >   minmax.h: reduce the #define expansion of min(), max() and clamp()
+> >   minmax.h: use BUILD_BUG_ON_MSG() for the lo < hi test in clamp()
+> >   minmax.h: move all the clamp() definitions after the min/max() ones
+> >   minmax.h: simplify the variants of clamp()
+> >   minmax.h: remove some #defines that are only expanded once
+> >=20
+> > Eliav Farber (1):
+> >   lib: zstd: drop local MIN/MAX macros in favor of generic ones
+> >=20
+> > Herve Codina (1):
+> >   minmax: Introduce {min,max}_array()
+> >=20
+> > Jason A. Donenfeld (2):
+> >   minmax: sanity check constant bounds when clamping
+> >   minmax: clamp more efficiently by avoiding extra comparison
+> >=20
+> > Linus Torvalds (8):
+> >   minmax: avoid overly complicated constant expressions in VM code
+> >   minmax: add a few more MIN_T/MAX_T users
+> >   minmax: simplify and clarify min_t()/max_t() implementation
+> >   minmax: make generic MIN() and MAX() macros available everywhere
+> >   minmax: don't use max() in situations that want a C constant
+> >     expression
+> >   minmax: simplify min()/max()/clamp() implementation
+> >   minmax: improve macro expansion and type checking
+> >   minmax: fix up min3() and max3() too
+> >=20
+> > Matthew Wilcox (Oracle) (1):
+> >   minmax: add in_range() macro
+> >=20
+> >  arch/arm/mm/pageattr.c                        |   6 +-
+> >  arch/um/drivers/mconsole_user.c               |   2 +
+> >  arch/x86/mm/pgtable.c                         |   2 +- =20
+>=20
+> >  drivers/edac/sb_edac.c                        |   4 +-
+> >  drivers/edac/skx_common.h                     |   1 -
+> >  .../drm/amd/display/modules/hdcp/hdcp_ddc.c   |   2 +
+> >  .../drm/amd/pm/powerplay/hwmgr/ppevvmath.h    |  14 +-
+> >  .../drm/arm/display/include/malidp_utils.h    |   2 +-
+> >  .../display/komeda/komeda_pipeline_state.c    |  24 +-
+> >  drivers/gpu/drm/drm_color_mgmt.c              |   2 +-
+> >  drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |   6 -
+> >  drivers/gpu/drm/radeon/evergreen_cs.c         |   2 +
+> >  drivers/hwmon/adt7475.c                       |  24 +-
+> >  drivers/input/touchscreen/cyttsp4_core.c      |   2 +-
+> >  drivers/md/dm-integrity.c                     |   2 +-
+> >  drivers/media/dvb-frontends/stv0367_priv.h    |   3 +
+> >  .../net/ethernet/chelsio/cxgb3/cxgb3_main.c   |  18 +-
+> >  .../net/ethernet/stmicro/stmmac/stmmac_main.c |   2 +-
+> >  drivers/net/fjes/fjes_main.c                  |   4 +-
+> >  drivers/nfc/pn544/i2c.c                       |   2 -
+> >  drivers/platform/x86/sony-laptop.c            |   1 -
+> >  drivers/scsi/isci/init.c                      |   6 +- =20
+>=20
+> I do see the value to backport the infrastructure, but why are driver spe=
+cific changes backported as well?
 
-The following output is generated when a device is hotplugged:
+They will be about removing local definitions of MIN() and MAX() freeing
+them up for simple implementations (usable as constant initialisers) and th=
+en
+using them in places where the compound statements in min() and max() can't
+be used.
 
-$ echo 1 > /sys/kernel/debug/tracing/events/pci/pcie_link_event/enable
-$ cat /sys/kernel/debug/tracing/trace_pipe
-   irq/51-pciehp-88      [001] .....   381.545386: pcie_link_event: 0000:00:02.0 type:4, reason:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:16.0 GT/s PCIe, width:1, flit_mode:0, status:DLLLA
+Linus did all those changes - so he didn't have to wait for the maintainers
+to apply the changes (etc).
 
-Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Suggested-by: Matthew W Carlis <mattc@purestorage.com>
-Suggested-by: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- drivers/pci/hotplug/pciehp_hpc.c |  3 +-
- drivers/pci/pci.c                |  2 +-
- drivers/pci/pci.h                | 22 +++++++++++--
- drivers/pci/pcie/bwctrl.c        |  4 +--
- drivers/pci/probe.c              |  9 +++--
- include/linux/pci.h              |  1 +
- include/trace/events/pci.h       | 56 ++++++++++++++++++++++++++++++++
- 7 files changed, 87 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-index bcc51b26d03d..ad5f28f6a8b1 100644
---- a/drivers/pci/hotplug/pciehp_hpc.c
-+++ b/drivers/pci/hotplug/pciehp_hpc.c
-@@ -320,7 +320,8 @@ int pciehp_check_link_status(struct controller *ctrl)
- 	}
- 
- 	pcie_capability_read_word(pdev, PCI_EXP_LNKSTA2, &linksta2);
--	__pcie_update_link_speed(ctrl->pcie->port->subordinate, lnk_status, linksta2);
-+	__pcie_update_link_speed(ctrl->pcie->port->subordinate, PCIE_HOTPLUG,
-+				 lnk_status, linksta2);
- 
- 	if (!found) {
- 		ctrl_info(ctrl, "Slot(%s): No device found\n",
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index b0f4d98036cd..96755ffd3841 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -4749,7 +4749,7 @@ int pcie_retrain_link(struct pci_dev *pdev, bool use_lt)
- 	 * Link Speed.
- 	 */
- 	if (pdev->subordinate)
--		pcie_update_link_speed(pdev->subordinate);
-+		pcie_update_link_speed(pdev->subordinate, PCIE_LINK_RETRAIN);
- 
- 	return rc;
- }
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index b8d364545e7d..422406a0695c 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -3,6 +3,7 @@
- #define DRIVERS_PCI_H
- 
- #include <linux/pci.h>
-+#include <trace/events/pci.h>
- 
- struct pcie_tlp_log;
- 
-@@ -455,16 +456,31 @@ static inline int pcie_dev_speed_mbps(enum pci_bus_speed speed)
- }
- 
- u8 pcie_get_supported_speeds(struct pci_dev *dev);
--const char *pci_speed_string(enum pci_bus_speed speed);
- void __pcie_print_link_status(struct pci_dev *dev, bool verbose);
- void pcie_report_downtraining(struct pci_dev *dev);
- 
--static inline void __pcie_update_link_speed(struct pci_bus *bus, u16 linksta, u16 linksta2)
-+enum pcie_link_change_reason {
-+	PCIE_LINK_RETRAIN,
-+	PCIE_ADD_BUS,
-+	PCIE_BWCTRL_ENABLE,
-+	PCIE_BWCTRL_IRQ,
-+	PCIE_HOTPLUG
-+};
-+
-+static inline void __pcie_update_link_speed(struct pci_bus *bus,
-+					    enum pcie_link_change_reason reason,
-+					    u16 linksta, u16 linksta2)
- {
- 	bus->cur_bus_speed = pcie_link_speed[linksta & PCI_EXP_LNKSTA_CLS];
- 	bus->flit_mode = (linksta2 & PCI_EXP_LNKSTA2_FLIT) ? 1 : 0;
-+
-+	trace_pcie_link_event(bus,
-+			     reason,
-+			     FIELD_GET(PCI_EXP_LNKSTA_NLW, linksta),
-+			     linksta & PCI_EXP_LNKSTA_LINK_STATUS_MASK);
- }
--void pcie_update_link_speed(struct pci_bus *bus);
-+
-+void pcie_update_link_speed(struct pci_bus *bus, enum pcie_link_change_reason reason);
- 
- /* Single Root I/O Virtualization */
- struct pci_sriov {
-diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
-index 36f939f23d34..32f1b30ecb84 100644
---- a/drivers/pci/pcie/bwctrl.c
-+++ b/drivers/pci/pcie/bwctrl.c
-@@ -199,7 +199,7 @@ static void pcie_bwnotif_enable(struct pcie_device *srv)
- 	 * Update after enabling notifications & clearing status bits ensures
- 	 * link speed is up to date.
- 	 */
--	pcie_update_link_speed(port->subordinate);
-+	pcie_update_link_speed(port->subordinate, PCIE_BWCTRL_ENABLE);
- }
- 
- static void pcie_bwnotif_disable(struct pci_dev *port)
-@@ -234,7 +234,7 @@ static irqreturn_t pcie_bwnotif_irq(int irq, void *context)
- 	 * speed (inside pcie_update_link_speed()) after LBMS has been
- 	 * cleared to avoid missing link speed changes.
- 	 */
--	pcie_update_link_speed(port->subordinate);
-+	pcie_update_link_speed(port->subordinate, PCIE_BWCTRL_IRQ);
- 
- 	return IRQ_HANDLED;
- }
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index f41128f91ca7..c4cae2664156 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -21,6 +21,7 @@
- #include <linux/irqdomain.h>
- #include <linux/pm_runtime.h>
- #include <linux/bitfield.h>
-+#include <trace/events/pci.h>
- #include "pci.h"
- 
- #define CARDBUS_LATENCY_TIMER	176	/* secondary latency timer */
-@@ -788,14 +789,16 @@ const char *pci_speed_string(enum pci_bus_speed speed)
- }
- EXPORT_SYMBOL_GPL(pci_speed_string);
- 
--void pcie_update_link_speed(struct pci_bus *bus)
-+void pcie_update_link_speed(struct pci_bus *bus,
-+			    enum pcie_link_change_reason reason)
- {
- 	struct pci_dev *bridge = bus->self;
- 	u16 linksta, linksta2;
- 
- 	pcie_capability_read_word(bridge, PCI_EXP_LNKSTA, &linksta);
- 	pcie_capability_read_word(bridge, PCI_EXP_LNKSTA2, &linksta2);
--	__pcie_update_link_speed(bus, linksta, linksta2);
-+
-+	__pcie_update_link_speed(bus, reason, linksta, linksta2);
- }
- EXPORT_SYMBOL_GPL(pcie_update_link_speed);
- 
-@@ -882,7 +885,7 @@ static void pci_set_bus_speed(struct pci_bus *bus)
- 		pcie_capability_read_dword(bridge, PCI_EXP_LNKCAP, &linkcap);
- 		bus->max_bus_speed = pcie_link_speed[linkcap & PCI_EXP_LNKCAP_SLS];
- 
--		pcie_update_link_speed(bus);
-+		pcie_update_link_speed(bus, PCIE_ADD_BUS);
- 	}
- }
- 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 59876de13860..edd8a61ec44e 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -305,6 +305,7 @@ enum pci_bus_speed {
- 	PCI_SPEED_UNKNOWN		= 0xff,
- };
- 
-+const char *pci_speed_string(enum pci_bus_speed speed);
- enum pci_bus_speed pcie_get_speed_cap(struct pci_dev *dev);
- enum pcie_link_width pcie_get_width_cap(struct pci_dev *dev);
- 
-diff --git a/include/trace/events/pci.h b/include/trace/events/pci.h
-index 208609492c06..78e651b95cb3 100644
---- a/include/trace/events/pci.h
-+++ b/include/trace/events/pci.h
-@@ -57,6 +57,62 @@ TRACE_EVENT(pci_hp_event,
- 	)
- );
- 
-+#define PCI_EXP_LNKSTA_LINK_STATUS_MASK (PCI_EXP_LNKSTA_LBMS | \
-+					 PCI_EXP_LNKSTA_LABS | \
-+					 PCI_EXP_LNKSTA_LT | \
-+					 PCI_EXP_LNKSTA_DLLLA)
-+
-+#define LNKSTA_FLAGS					\
-+	{ PCI_EXP_LNKSTA_LT,	"LT"},			\
-+	{ PCI_EXP_LNKSTA_DLLLA,	"DLLLA"},		\
-+	{ PCI_EXP_LNKSTA_LBMS,	"LBMS"},		\
-+	{ PCI_EXP_LNKSTA_LABS,	"LABS"}
-+
-+TRACE_EVENT(pcie_link_event,
-+
-+	TP_PROTO(struct pci_bus *bus,
-+		  unsigned int reason,
-+		  unsigned int width,
-+		  unsigned int status
-+		),
-+
-+	TP_ARGS(bus, reason, width, status),
-+
-+	TP_STRUCT__entry(
-+		__string(	port_name,	pci_name(bus->self))
-+		__field(	unsigned int,	type		)
-+		__field(	unsigned int,	reason		)
-+		__field(	unsigned int,	cur_bus_speed	)
-+		__field(	unsigned int,	max_bus_speed	)
-+		__field(	unsigned int,	width		)
-+		__field(	unsigned int,	flit_mode	)
-+		__field(	unsigned int,	link_status	)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(port_name);
-+		__entry->type			= pci_pcie_type(bus->self);
-+		__entry->reason			= reason;
-+		__entry->cur_bus_speed		= bus->cur_bus_speed;
-+		__entry->max_bus_speed		= bus->max_bus_speed;
-+		__entry->width			= width;
-+		__entry->flit_mode		= bus->flit_mode;
-+		__entry->link_status		= status;
-+	),
-+
-+	TP_printk("%s type:%d, reason:%d, cur_bus_speed:%s, max_bus_speed:%s, width:%u, flit_mode:%u, status:%s\n",
-+		__get_str(port_name),
-+		__entry->type,
-+		__entry->reason,
-+		pci_speed_string(__entry->cur_bus_speed),
-+		pci_speed_string(__entry->max_bus_speed),
-+		__entry->width,
-+		__entry->flit_mode,
-+		__print_flags((unsigned long)__entry->link_status, "|",
-+				LNKSTA_FLAGS)
-+	)
-+);
-+
- #endif /* _TRACE_HW_EVENT_PCI_H */
- 
- /* This part must be outside protection */
--- 
-2.39.3
+	David
+=20
+>=20
+> I mean the changes are most likely correct but also not valuable in anywa=
+y as bug fix.
+>=20
+> Regards,
+> Christian.
+>=20
+> >  .../pci/hive_isp_css_include/math_support.h   |   5 -
+> >  fs/btrfs/misc.h                               |   2 -
+> >  fs/btrfs/tree-checker.c                       |   2 +-
+> >  fs/ext2/balloc.c                              |   2 -
+> >  fs/ext4/ext4.h                                |   2 -
+> >  fs/ufs/util.h                                 |   6 -
+> >  include/linux/compiler.h                      |  15 +
+> >  include/linux/minmax.h                        | 267 ++++++++++++++----
+> >  include/linux/overflow.h                      |   1 -
+> >  include/linux/trace_events.h                  |   2 -
+> >  kernel/trace/preemptirq_delay_test.c          |   2 -
+> >  lib/btree.c                                   |   1 -
+> >  lib/decompress_unlzma.c                       |   2 +
+> >  lib/logic_pio.c                               |   3 -
+> >  lib/vsprintf.c                                |   2 +-
+> >  lib/zstd/zstd_internal.h                      |   2 -
+> >  mm/zsmalloc.c                                 |   1 -
+> >  net/ipv4/proc.c                               |   2 +-
+> >  net/ipv6/proc.c                               |   2 +-
+> >  net/netfilter/nf_nat_core.c                   |   6 +-
+> >  net/tipc/core.h                               |   2 +-
+> >  net/tipc/link.c                               |  10 +-
+> >  44 files changed, 306 insertions(+), 164 deletions(-)
+> >  =20
+>=20
+>=20
 
 
