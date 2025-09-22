@@ -1,573 +1,365 @@
-Return-Path: <linux-edac+bounces-4901-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4902-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E9FB914FF
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Sep 2025 15:12:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97A13B918A9
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Sep 2025 15:58:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1854A3AA061
-	for <lists+linux-edac@lfdr.de>; Mon, 22 Sep 2025 13:12:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 201042A1603
+	for <lists+linux-edac@lfdr.de>; Mon, 22 Sep 2025 13:58:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D441B30AADC;
-	Mon, 22 Sep 2025 13:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E3D30E852;
+	Mon, 22 Sep 2025 13:58:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MM5eSd7r"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CDB30AAC7
-	for <linux-edac@vger.kernel.org>; Mon, 22 Sep 2025 13:12:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758546738; cv=none; b=OHR66ZxhoYfarP9PH7ZG+VoAi6NrJKhMCj4jSo3ZYLgYuqO91OhA64EW2nhGIkgtbKJ4RA9Eh+7v4qkbWrHSOt0zPwANw9rKz7fVm9b8qv4mJtX8d0Xd2lHKNnCxqnj/yhP16HejsIG7C7L/kc60f5IWLGkN4MmxNNnPSlRZ8sg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758546738; c=relaxed/simple;
-	bh=dBo02lAOpS9f/amBLfsXoqwSXXZtmCKvCnbIv2T6WBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uJaAhPN/cBJ/DNCefvyHukZW27B54FqvXUy63PndEdwPnQWFNemwmpx1ClPFE9XcqOgpGG480E8c0Y+5isC9G9qfD88XGvPcfImY+OLYV29qyEIXF+4kjlG7I7Wba3/O4qb5OTU90d+lJjIQCQz1fWlMq2aqRb1Uu9nr5r42bck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6C9C2444
-	for <linux-edac@vger.kernel.org>; Mon, 22 Sep 2025 06:12:07 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ADF753F694
-	for <linux-edac@vger.kernel.org>; Mon, 22 Sep 2025 06:12:15 -0700 (PDT)
-Date: Mon, 22 Sep 2025 14:10:19 +0100
-From: Liviu Dudau <liviu.dudau@arm.com>
-To: Eliav Farber <farbere@amazon.com>
-Cc: linux@armlinux.org.uk, jdike@addtoit.com, richard@nod.at,
-	anton.ivanov@cambridgegreys.com, dave.hansen@linux.intel.com,
-	luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-	tony.luck@intel.com, qiuxu.zhuo@intel.com, mchehab@kernel.org,
-	james.morse@arm.com, rric@kernel.org, harry.wentland@amd.com,
-	sunpeng.li@amd.com, alexander.deucher@amd.com,
-	christian.koenig@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-	evan.quan@amd.com, james.qian.wang@arm.com,
-	mihail.atanassov@arm.com, brian.starkey@arm.com,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, robdclark@gmail.com, sean@poorly.run,
-	jdelvare@suse.com, linux@roeck-us.net, fery@cypress.com,
-	dmitry.torokhov@gmail.com, agk@redhat.com, snitzer@redhat.com,
-	dm-devel@redhat.com, rajur@chelsio.com, davem@davemloft.net,
-	kuba@kernel.org, peppe.cavallaro@st.com, alexandre.torgue@st.com,
-	joabreu@synopsys.com, mcoquelin.stm32@gmail.com, malattia@linux.it,
-	hdegoede@redhat.com, mgross@linux.intel.com,
-	intel-linux-scu@intel.com, artur.paszkiewicz@intel.com,
-	jejb@linux.ibm.com, martin.petersen@oracle.com,
-	sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-	clm@fb.com, josef@toxicpanda.com, dsterba@suse.com, jack@suse.com,
-	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
-	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
-	sergey.senozhatsky@gmail.com, andriy.shevchenko@linux.intel.com,
-	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
-	akpm@linux-foundation.org, kuznet@ms2.inr.ac.ru,
-	yoshfuji@linux-ipv6.org, pablo@netfilter.org, kadlec@netfilter.org,
-	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
-	willy@infradead.org, sashal@kernel.org, ruanjinjie@huawei.com,
-	David.Laight@aculab.com, herve.codina@bootlin.com, Jason@zx2c4.com,
-	bvanassche@acm.org, keescook@chromium.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-media@vger.kernel.org, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
-	linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
-	stable@vger.kernel.org, jonnyc@amazon.com
-Subject: Re: [PATCH 04/27 5.10.y] minmax: add in_range() macro
-Message-ID: <aNFKuyJ8_EjdDwn8@e110455-lin.cambridge.arm.com>
-References: <20250919101727.16152-1-farbere@amazon.com>
- <20250919101727.16152-5-farbere@amazon.com>
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010021.outbound.protection.outlook.com [52.101.201.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440C7221F0C;
+	Mon, 22 Sep 2025 13:58:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.21
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758549523; cv=fail; b=AVxTC7CZScp7yzQFFvWySngxslqhMrT8fAanD5rTRtGlpWJuUuQSUbqlNj1GPJYZtGxYH2qO+Ar+c4ZEgX+2vKlJO2byCXw+MVJ5LXAYuhv2SeVN7oBibQ7ufHQawFTr98/leZTC+hU7+Si4E5c5lty46Yr5V56FGFRCbfxCME0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758549523; c=relaxed/simple;
+	bh=gdluk1HJgXQ9LI+Q1z3op9ftgOi0c/jOmToOe26PBp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VJcmpC21b3ltUVUT8tr/GgxIxnw98LXxAWhdyZBJ+IP2TFtcFjdawAax8kho3IN3gWSBb23TnWSHjqYDzXusto2zOwJHJv1FZYsipQPuFqnlW8ZuVrZ30yyz9pOHzKf61+tSBx9W4Xd36f7SRU3qWd+eagIaSZki4PIyORRtXbc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MM5eSd7r; arc=fail smtp.client-ip=52.101.201.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Y1Ok2qcvdGdhWHQroNFoBx2TK8ZOZww71WHTejNE6e3S4B7cxcqx7BGowpZP8VYsFpA0uOY1UETlE0BuISe3JZ+m1Euwp0e6gFzMPfAWC8mX3iCL8n73O7iHzaJks1+wA478J7XkOrShjTcWu65B381JyKki/rtCYyy6j4yquzH/S2oakBCbP/MmVQdHSzRydUHkahyUaNtePjsaBI9bgdRgZqrtd49W6p7O+meHE9/zxXIABIAr9YnMET6WkH1cmmaLDHjP6ndi7agd0/KTPnmH5YRos2bfkOsZdDPMfSIxgKoAHRxAkUxRYLrP23GoAJt08Z4uNp0W7C42oiBo5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7yj22cHR+VQURXPm4RtFFlp5I4svTDxfCz0+extyZuw=;
+ b=BeXEVRLzK6SBybbBJYNjIDrtbVUfYCw1F/JgV+hcQ/mvOxzZh8K/eRY5VHB55rtJJG+1DUmStqAVxFzm8XhxqZPYyAY4FqynYE7egrawBV71AcTxBfemhtle7YUdgj6yiuvF/9WbMbUkY9tni7FTgF3Hf7H3oeSYfgnCEG31jrPMTCQwC7xEKmR/FbMjGEexgLRMvQaFgMR+k8qK0SD3ntXc61bXZLFlJPfospx1YtXOYKHXxhsjsnrAP1qLHVFL5T94QB3VO3/kXZNQ6hhYG4Du99bT3sjC2IFuHIcFSY4Efh+wsPLNIVCygQ/f69Ls+Zgozo974rkuC/tHvpLHeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7yj22cHR+VQURXPm4RtFFlp5I4svTDxfCz0+extyZuw=;
+ b=MM5eSd7r65G9dQ3Rz6ZxZkIAd/FkmMQvkSNZGfwLyJ0E7HdnorAqtfKmUO1bFQ6LgbILffDnpjfCM0lP1JhoYLcgFBakVVoq1HwDElmC2VvGv7V9H9Xtusy23bwl0uiSVn0NWhU9d/Md49sUx457FYN1e7EMb/R0rubv+E3mYpE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ LV3PR12MB9440.namprd12.prod.outlook.com (2603:10b6:408:215::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9137.19; Mon, 22 Sep 2025 13:58:36 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%4]) with mapi id 15.20.9137.018; Mon, 22 Sep 2025
+ 13:58:36 +0000
+Date: Mon, 22 Sep 2025 09:58:24 -0400
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Nikolay Borisov <nik.borisov@suse.com>
+Cc: x86@kernel.org, Tony Luck <tony.luck@intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	Smita.KoralahalliChannabasappa@amd.com,
+	Qiuxu Zhuo <qiuxu.zhuo@intel.com>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v6 15/15] x86/mce: Save and use APEI corrected threshold
+ limit
+Message-ID: <20250922135824.GA31279@yaz-khff2.amd.com>
+References: <20250908-wip-mca-updates-v6-0-eef5d6c74b9c@amd.com>
+ <20250908-wip-mca-updates-v6-15-eef5d6c74b9c@amd.com>
+ <64314c7a-5212-4bf0-8181-8bbada0e81b5@suse.com>
+ <20250915173332.GA869676@yaz-khff2.amd.com>
+ <6e2d5351-dbd2-4e28-8bdb-b961fade5ebc@suse.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e2d5351-dbd2-4e28-8bdb-b961fade5ebc@suse.com>
+X-ClientProxiedBy: DS7PR05CA0052.namprd05.prod.outlook.com
+ (2603:10b6:8:2f::30) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250919101727.16152-5-farbere@amazon.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|LV3PR12MB9440:EE_
+X-MS-Office365-Filtering-Correlation-Id: b28cf055-19dc-4974-4049-08ddf9e01f64
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?6ZSiq7B+ivxopB4PFzipIr7r35DDWFOCutQs8ERiz4vSvba9xwFmgqG2bg/m?=
+ =?us-ascii?Q?2EB8ZCPffvkrjBenS/vEnZQaANIRwVIRm/wvkwHYoYrX0qPq5xfIuMF7lvh5?=
+ =?us-ascii?Q?KqGlnXN2Z70NNQzL3fSxGJrnhMy6lXYF9lUz9xD/jtKrKZqVVgn64lfE/tjN?=
+ =?us-ascii?Q?H6l1AKm+p2qh5+M0fdFnhYaS2HMl8nOZvLx7tsh3SjLN4LFVzembJtWkAIlb?=
+ =?us-ascii?Q?kCx0rHZUVyC20k/DbR8Ie1zWCL6Pk0E2mDRnvb0DjRGD18YXcoZJQsA2OV57?=
+ =?us-ascii?Q?IUgAWtHFgUlYu3ieZ1vHuWXT0iRE1lnMZ5cQ3d+hzUM+HCvW9SB6HjzMA4FW?=
+ =?us-ascii?Q?aaZFacZYSbG6g6YONIKcRrA8rWDkOLSWt4sS0R74heBmxfIhj1wIxKMi6OML?=
+ =?us-ascii?Q?Ekn+WmaahoBVkP7/bqLwI5PcuYrYoPLQkBHPtS3nvY4ORnw6dwEGWkv+zIHX?=
+ =?us-ascii?Q?huDpwTP8kJ33CcX+N3jQ4WmUR7rgqUkkxP2ux5fC6zEwzIdRf8tFMsHPE6LY?=
+ =?us-ascii?Q?DBOB59xrAd/8mt63P7RuJ7KaH7AwQr28GOE3CxjIP5TylAEIdv7r/gQXFInh?=
+ =?us-ascii?Q?VX8pW1930fQMYYqwTEZA8F6/2a5ltA9mxIMpzBalfUSh8OSMztoCSE0Ik0oq?=
+ =?us-ascii?Q?9nRDxbo56Y785x06Y3oKSnllXK507KxW0ajwG+5Q5b/w6THWcGYvJ8gpSEEd?=
+ =?us-ascii?Q?TZ5e1A8/muNhyHiFg7JSYA+8qvH3wesBowDhACZESjxzs2ixiw9ymNczzr4W?=
+ =?us-ascii?Q?IMN2qOpY4fzRBw0ytnsL4lSve5pLEWCnue6nOet7g+/ZaxUFFwjbXYCpbIVz?=
+ =?us-ascii?Q?MAkDwdekcqGUPFEPU7UZU4ezp5XWsK10IY6EVe6/tI/GnjLbO1ZLsPgtakTl?=
+ =?us-ascii?Q?Cvjx3sq1fVF7Tl1REnBjMDSPt7qb+BwaqplzD/uqVyUEeI8m9B1vPiWTbmhY?=
+ =?us-ascii?Q?Siwxe49jrX+N8Ih+hpYjUuGOUzQmQD1/bYYBweQJ7UozEkT55foXqW6Gh6Yt?=
+ =?us-ascii?Q?rXyJGK1Q2/mcKUZUArKyIdfyflbVbdYsu4rmUX/nwNuYxMo9O5AWTf+4NBTr?=
+ =?us-ascii?Q?P64yDQDFiTHcZ8WNJF6Ljv1Www2MjUvMmyMkxtpf78BX2SBFQ9r57iqXhljt?=
+ =?us-ascii?Q?6Qosvr/n4jVMlLGBRTNlAjN7vmaXFTc4Xumia3/RmD+W5ZsWM3DGgbIlv+4P?=
+ =?us-ascii?Q?New1FEDnBDbIU+XvXC65GqVbddKMCXBF4eo2XpbSl7GKxlt1rq1reIU1aOMv?=
+ =?us-ascii?Q?BbUv8xSScBUNBW8KIvYEbAWVD68U3pb2JWu1nWWNaZh0buyX3AFsX1AF4Hrf?=
+ =?us-ascii?Q?EVvLqjQiYYyAVs4hTnIBkefrlXsBfZiVfTPX+vHuY0tlpYTGnaoEjcpjUF+H?=
+ =?us-ascii?Q?kjtb6nX+kDrpfLr9p/6n9Q8MQKNuY78jrOFkolFbDPJ9+Ozg5e939uYhclcR?=
+ =?us-ascii?Q?NIqbOnX710I=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?9xJzBCK2ET6dov0+tzkqOY8GFgompOoSAKVpFIEEY9XErMYFh2O1bBvQtwe6?=
+ =?us-ascii?Q?Ju0880PPuIh+Dr21ifPv/HRchsL4CcHdJqK1IT3m5opbFDL6LdgcQOqGmnt+?=
+ =?us-ascii?Q?sCgpRdsu4hqcmBcLzDrTFdoCrtQMaLk7cqIgSqrhvFzLbpjqx78IZh+FVlNJ?=
+ =?us-ascii?Q?eRjS0QV3RvMCHUTGBl7ZJodcuFjKEZy8JO2bsGX+1dGM1W1pK7oOu8pWkrv6?=
+ =?us-ascii?Q?QghNH/VkCqpFVAHzpJ2Dkn+LFDBnw22sYZluGBIHSE5m6lP0SVrCJ9pTY78h?=
+ =?us-ascii?Q?lwqNVizMgMzsruEz9Afw3ZvoeNPbJ4jJjWVM7+QO1tBSFmJz1S0fxK8hHV0u?=
+ =?us-ascii?Q?V0a8nX56hXXh/hdwUHcv8XE9f8uqc6wMalc4xA0q4/IOE04kWE0rEFpqqy5p?=
+ =?us-ascii?Q?wOnUWF12Bic/EZFrNHdbQ1FyEfHRGnaycDL7DT0i05z9AA9q6zhiqvyRY+JL?=
+ =?us-ascii?Q?sU2YSCI1F1XupNFGjpvRy62/wOfZUu9ed4WEOVPzgoOu1CdLgSErk7PhAnC0?=
+ =?us-ascii?Q?6QUt9ImSXIlQqgtpcMTbMAlu43N5xJAU/uHvE70y04+YAsHhU1geGjE80+gp?=
+ =?us-ascii?Q?Sve+wSXa9KgVhlPatiHdYGFaH6+oSFzBqryxq5y3BRkN2To7ggP5phKGG2GY?=
+ =?us-ascii?Q?50cTNS23Ktux12TzaagiCbLvVG8ZIXOqT12rpa0l62yI66FOncmEu8OAHLfM?=
+ =?us-ascii?Q?HZSnFgbfjhtFVKmM3PuioXQYySR7HWy4iP6g9A+0+hJ8JBqRlUFT50gUbNvF?=
+ =?us-ascii?Q?8HjRm6ViozElgEdoueUZIgTIA6xaABv5e3jkVoOhT635V9TaAjGErSWqwX6e?=
+ =?us-ascii?Q?2OBwYcdYwC6HJSVT+q1tkJ+BZGy491OYQjJccpvpAjKv0FtjY3MlGm2mYJfp?=
+ =?us-ascii?Q?EuNKu/5OCEyjOh1UW7czaJNPmee/ASQyaHpFrGHqVbHNTrq3UHDQjSFB9Cfv?=
+ =?us-ascii?Q?OArNSCIJWDfwZlEhUCP21FLCaCRPwsE0bGthOIU3G/qEEMFQmcnXWvVNmquO?=
+ =?us-ascii?Q?zk7KANqjaNBfRzGuFfsOLdnSxz0+8Crk6ou3ZUO0XoKINZuOnrgIhdN0o6fB?=
+ =?us-ascii?Q?7uAkdzXeygIzNo43TXP7lWa6Z6VTBh2YXYwAg/A/3xgX0OExFVyNS/CYFLN4?=
+ =?us-ascii?Q?nXXe9KqWM9m9lQdWUPZVG5OqswVqD2wPbd9UiFTjDMUHOw+euPocbzZpweaf?=
+ =?us-ascii?Q?MD7C1yQyBmwaX4JEAjVKGT8jsOvK6dCJb0FE7BLB1FPkuEltnPsH6KGylHHo?=
+ =?us-ascii?Q?QcFm3GGXOEm0fmKoUIKHXSaaeeJmb1yakopgE1n2J70cx817nzONBO9uHmnQ?=
+ =?us-ascii?Q?YdxAfUv6UQecUuOKGJ0mGtg+SELVPiXhjYr7PK14Xb+CmwJI1ep5CovLVCJO?=
+ =?us-ascii?Q?QgR8HE0zXb+S8TM//geiXckMg2HLLAnBbHYd9VF34mAt3LlB0MGZz0ohpFDj?=
+ =?us-ascii?Q?hrsVM+w5Idk9EhKdykFDElkHU/PLZiNY1nZztlGa47edZ8jKWyNBIgEJGqDh?=
+ =?us-ascii?Q?DPNok0ISpiph3BVtM08wwUEzvHH5SCbayltvXlUJhf2k/AZU+P9kX0CQuUmH?=
+ =?us-ascii?Q?xQrEnlF8/4QxnYrdzCX4JpL0Qq3ZBMaGu/sHLzmm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b28cf055-19dc-4974-4049-08ddf9e01f64
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2025 13:58:35.8907
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cQ4eBqXYseq1VioSN00gESbQ7gFRyXIXkhQyF+wk1CbJkksOKxXZYkRTyHx3+G/G0JFBZKww/i6emsawm938VA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9440
 
-On Fri, Sep 19, 2025 at 10:17:04AM +0000, Eliav Farber wrote:
-> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+On Fri, Sep 19, 2025 at 01:42:57PM +0300, Nikolay Borisov wrote:
 > 
-> [ Upstream commit f9bff0e31881d03badf191d3b0005839391f5f2b ]
 > 
-> Patch series "New page table range API", v6.
+> On 9/15/25 20:33, Yazen Ghannam wrote:
+> > On Thu, Sep 11, 2025 at 08:01:17PM +0300, Nikolay Borisov wrote:
+> > > 
+> > > 
+> > > On 9/8/25 18:40, Yazen Ghannam wrote:
+> > > > The MCA threshold limit generally is not something that needs to change
+> > > > during runtime. It is common for a system administrator to decide on a
+> > > > policy for their managed systems.
+> > > > 
+> > > > If MCA thresholding is OS-managed, then the threshold limit must be set
+> > > > at every boot. However, many systems allow the user to set a value in
+> > > > their BIOS. And this is reported through an APEI HEST entry even if
+> > > > thresholding is not in FW-First mode.
+> > > > 
+> > > > Use this value, if available, to set the OS-managed threshold limit.
+> > > > Users can still override it through sysfs if desired for testing or
+> > > > debug.
+> > > > 
+> > > > APEI is parsed after MCE is initialized. So reset the thresholding
+> > > > blocks later to pick up the threshold limit.
+> > > > 
+> > > > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> > > > ---
+> > > > 
+> > > > Notes:
+> > > >       Link:
+> > > >       https://lore.kernel.org/r/20250825-wip-mca-updates-v5-20-865768a2eef8@amd.com
+> > > >       v5->v6:
+> > > >       * No change.
+> > > >       v4->v5:
+> > > >       * No change.
+> > > >       v3->v4:
+> > > >       * New in v4.
+> > > > 
+> > > >    arch/x86/include/asm/mce.h          |  6 ++++++
+> > > >    arch/x86/kernel/acpi/apei.c         |  2 ++
+> > > >    arch/x86/kernel/cpu/mce/amd.c       | 18 ++++++++++++++++--
+> > > >    arch/x86/kernel/cpu/mce/internal.h  |  2 ++
+> > > >    arch/x86/kernel/cpu/mce/threshold.c | 13 +++++++++++++
+> > > >    5 files changed, 39 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+> > > > index 7d6588195d56..1cfbfff0be3f 100644
+> > > > --- a/arch/x86/include/asm/mce.h
+> > > > +++ b/arch/x86/include/asm/mce.h
+> > > > @@ -308,6 +308,12 @@ DECLARE_PER_CPU(struct mce, injectm);
+> > > >    /* Disable CMCI/polling for MCA bank claimed by firmware */
+> > > >    extern void mce_disable_bank(int bank);
+> > > > +#ifdef CONFIG_X86_MCE_THRESHOLD
+> > > > +void mce_save_apei_thr_limit(u32 thr_limit);
+> > > > +#else
+> > > > +static inline void mce_save_apei_thr_limit(u32 thr_limit) { }
+> > > > +#endif /* CONFIG_X86_MCE_THRESHOLD */
+> > > > +
+> > > >    /*
+> > > >     * Exception handler
+> > > >     */
+> > > > diff --git a/arch/x86/kernel/acpi/apei.c b/arch/x86/kernel/acpi/apei.c
+> > > > index 0916f00a992e..e21419e686eb 100644
+> > > > --- a/arch/x86/kernel/acpi/apei.c
+> > > > +++ b/arch/x86/kernel/acpi/apei.c
+> > > > @@ -19,6 +19,8 @@ int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data)
+> > > >    	if (!cmc->enabled)
+> > > >    		return 0;
+> > > > +	mce_save_apei_thr_limit(cmc->notify.error_threshold_value);
+> > > > +
+> > > >    	/*
+> > > >    	 * We expect HEST to provide a list of MC banks that report errors
+> > > >    	 * in firmware first mode. Otherwise, return non-zero value to
+> > > > diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+> > > > index b895559e80ad..9b746080351f 100644
+> > > > --- a/arch/x86/kernel/cpu/mce/amd.c
+> > > > +++ b/arch/x86/kernel/cpu/mce/amd.c
+> > > > @@ -489,6 +489,18 @@ static void threshold_restart_bank(unsigned int bank, bool intr_en)
+> > > >    	}
+> > > >    }
+> > > > +/* Try to use the threshold limit reported through APEI. */
+> > > > +static u16 get_thr_limit(void)
+> > > > +{
+> > > > +	u32 thr_limit = mce_get_apei_thr_limit();
+> > > > +
+> > > > +	/* Fallback to old default if APEI limit is not available. */
+> > > > +	if (!thr_limit)
+> > > > +		return THRESHOLD_MAX;
+> > > > +
+> > > > +	return min(thr_limit, THRESHOLD_MAX);
+> > > > +}
+> > > > +
+> > > >    static void mce_threshold_block_init(struct threshold_block *b, int offset)
+> > > >    {
+> > > >    	struct thresh_restart tr = {
+> > > > @@ -497,7 +509,7 @@ static void mce_threshold_block_init(struct threshold_block *b, int offset)
+> > > >    		.lvt_off		= offset,
+> > > >    	};
+> > > > -	b->threshold_limit		= THRESHOLD_MAX;
+> > > > +	b->threshold_limit		= get_thr_limit();
+> > > >    	threshold_restart_block(&tr);
+> > > >    };
+> > > > @@ -1071,7 +1083,7 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+> > > >    	b->address		= address;
+> > > >    	b->interrupt_enable	= 0;
+> > > >    	b->interrupt_capable	= lvt_interrupt_supported(bank, high);
+> > > > -	b->threshold_limit	= THRESHOLD_MAX;
+> > > > +	b->threshold_limit	= get_thr_limit();
+> > > >    	if (b->interrupt_capable) {
+> > > >    		default_attrs[2] = &interrupt_enable.attr;
+> > > > @@ -1082,6 +1094,8 @@ static int allocate_threshold_blocks(unsigned int cpu, struct threshold_bank *tb
+> > > >    	list_add(&b->miscj, &tb->miscj);
+> > > > +	mce_threshold_block_init(b, (high & MASK_LVTOFF_HI) >> 20);
+> > > 
+> > > Why is this necessary? Shouldn't this patch consist of mainly
+> > > s/THRESHOLD_MAX/get_thr_limit();
+> > > 
+> > > 
+> > > In allocate_threshold_block have already properly set threshold_limit. So
+> > > this change really ensures threshold_restart_block is being called for the
+> > > given block being initialized. Ignoring the changed threshold limit logic,
+> > > why is this extra call necessary now and wasn't before?
+> > > 
+> > 
+> > It is necessary to apply the threshold limit to the hardware register.
+> > The MCA thresholding registers are accessed in two passes: first during
+> > per-CPU init, and second when the MCE subsystem devices are created.
+> > 
+> > The hardware registers are updated in the first pass, and they are left
+> > as-is in the second pass assuming no configuration has changed. That's
+> > why there isn't a "reset" in the second pass.
+> > 
+> > The APEI tables are parsed between the first and second passes. So now
+> > we need to update the registers during the second pass to apply the
+> > value found from HEST.
 > 
-> This patchset changes the API used by the MM to set up page table entries.
-> The four APIs are:
+> So APEI is initialized as part of the subsys_initcall which is processed
+> via:
 > 
->     set_ptes(mm, addr, ptep, pte, nr)
->     update_mmu_cache_range(vma, addr, ptep, nr)
->     flush_dcache_folio(folio)
->     flush_icache_pages(vma, page, nr)
+> start_kernel
+> rest_init
+> kernel_init
+> kernel_init_freeable
+> do_basic_setup
+> do_initcalls
 > 
-> flush_dcache_folio() isn't technically new, but no architecture
-> implemented it, so I've done that for them.  The old APIs remain around
-> but are mostly implemented by calling the new interfaces.
+> And the first mce_threshold_block_init() happens from :
 > 
-> The new APIs are based around setting up N page table entries at once.
-> The N entries belong to the same PMD, the same folio and the same VMA, so
-> ptep++ is a legitimate operation, and locking is taken care of for you.
-> Some architectures can do a better job of it than just a loop, but I have
-> hesitated to make too deep a change to architectures I don't understand
-> well.
+> start_kernel
+> arch_cpu_finalize_init <---- way before rest_init()
+> identify_boot_cpu
+> identify_cpu
+> mcheck_cpu_init
+> mcheck_cpu_init_vendor
+> mce_amd_feature_init
+> prepare_threshold_block
+> mce_threshold_block_init
 > 
-> One thing I have changed in every architecture is that PG_arch_1 is now a
-> per-folio bit instead of a per-page bit when used for dcache clean/dirty
-> tracking.  This was something that would have to happen eventually, and it
-> makes sense to do it now rather than iterate over every page involved in a
-> cache flush and figure out if it needs to happen.
 > 
-> The point of all this is better performance, and Fengwei Yin has measured
-> improvement on x86.  I suspect you'll see improvement on your architecture
-> too.  Try the new will-it-scale test mentioned here:
-> https://lore.kernel.org/linux-mm/20230206140639.538867-5-fengwei.yin@intel.com/
-> You'll need to run it on an XFS filesystem and have
-> CONFIG_TRANSPARENT_HUGEPAGE set.
+> Finally the per-cpu hotplug callback is installed via:
 > 
-> This patchset is the basis for much of the anonymous large folio work
-> being done by Ryan, so it's received quite a lot of testing over the last
-> few months.
+> mcheck_init_device <- initiated from a device_initcall, happens after APEI
+> subsys init.
+> mce_cpu_online  - called on every cpu from the HP machinery
+> mce_threshold_create_device
+> threshold_create_bank
+> allocate_threshold_blocks
+> mce_threshold_block_init - newly added call in alloc block, used to update
+> the register with the new limit
 > 
-> This patch (of 38):
 > 
-> Determine if a value lies within a range more efficiently (subtraction +
-> comparison vs two comparisons and an AND).  It also has useful (under some
-> circumstances) behaviour if the range exceeds the maximum value of the
-> type.  Convert all the conflicting definitions of in_range() within the
-> kernel; some can use the generic definition while others need their own
-> definition.
+> Given that mce_cpu_online is already called on every online cpu at the time
+> of installation of the callback, and every subsequent cpu that will come
+> online I can't help but wonder why do we have to do the mce initialization
+> from start_kernel, can't we move the mcheck_cpu_init call into
+> mce_cpu_online, or have the latter subsume the former?
 > 
-> Link: https://lkml.kernel.org/r/20230802151406.3735276-1-willy@infradead.org
-> Link: https://lkml.kernel.org/r/20230802151406.3735276-2-willy@infradead.org
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  arch/arm/mm/pageattr.c                        |  6 ++---
->  .../drm/arm/display/include/malidp_utils.h    |  2 +-
->  .../display/komeda/komeda_pipeline_state.c    | 24 ++++++++---------
+> Sorry if I'm being too nitpicky, I just want to have proper understanding of
+> the subsystem and the various (implicit) requirements it has.
+>
 
-For the malidp and komeda changes:
+No worries. It is a bit convoluted. I'd like to clean this up
+eventually. I have an old attempt here:
+https://github.com/AMDESE/linux/commit/640db92eca07804e889fac88856904552a4466bd
 
-Reviewed-by: Liviu Dudau <liviu.dudau@arm.com>
+In general, I'd like to do the hardware and data structure init in a
+single pass. And the sysfs interface can be optionally added separately.
 
-Best regards,
-Liviu
-
->  drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |  6 -----
->  .../net/ethernet/chelsio/cxgb3/cxgb3_main.c   | 18 ++++++-------
->  fs/btrfs/misc.h                               |  2 --
->  fs/ext2/balloc.c                              |  2 --
->  fs/ext4/ext4.h                                |  2 --
->  fs/ufs/util.h                                 |  6 -----
->  include/linux/minmax.h                        | 27 +++++++++++++++++++
->  lib/logic_pio.c                               |  3 ---
->  net/netfilter/nf_nat_core.c                   |  6 ++---
->  net/tipc/core.h                               |  2 +-
->  net/tipc/link.c                               | 10 +++----
->  14 files changed, 61 insertions(+), 55 deletions(-)
 > 
-> diff --git a/arch/arm/mm/pageattr.c b/arch/arm/mm/pageattr.c
-> index 9790ae3a8c68..3b3bfa825fad 100644
-> --- a/arch/arm/mm/pageattr.c
-> +++ b/arch/arm/mm/pageattr.c
-> @@ -25,7 +25,7 @@ static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
->  	return 0;
->  }
->  
-> -static bool in_range(unsigned long start, unsigned long size,
-> +static bool range_in_range(unsigned long start, unsigned long size,
->  	unsigned long range_start, unsigned long range_end)
->  {
->  	return start >= range_start && start < range_end &&
-> @@ -46,8 +46,8 @@ static int change_memory_common(unsigned long addr, int numpages,
->  	if (!size)
->  		return 0;
->  
-> -	if (!in_range(start, size, MODULES_VADDR, MODULES_END) &&
-> -	    !in_range(start, size, VMALLOC_START, VMALLOC_END))
-> +	if (!range_in_range(start, size, MODULES_VADDR, MODULES_END) &&
-> +	    !range_in_range(start, size, VMALLOC_START, VMALLOC_END))
->  		return -EINVAL;
->  
->  	data.set_mask = set_mask;
-> diff --git a/drivers/gpu/drm/arm/display/include/malidp_utils.h b/drivers/gpu/drm/arm/display/include/malidp_utils.h
-> index 49a1d7f3539c..9f83baac6ed8 100644
-> --- a/drivers/gpu/drm/arm/display/include/malidp_utils.h
-> +++ b/drivers/gpu/drm/arm/display/include/malidp_utils.h
-> @@ -35,7 +35,7 @@ static inline void set_range(struct malidp_range *rg, u32 start, u32 end)
->  	rg->end   = end;
->  }
->  
-> -static inline bool in_range(struct malidp_range *rg, u32 v)
-> +static inline bool malidp_in_range(struct malidp_range *rg, u32 v)
->  {
->  	return (v >= rg->start) && (v <= rg->end);
->  }
-> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c b/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c
-> index 7cc891c091f8..3e414d2fbdda 100644
-> --- a/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c
-> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c
-> @@ -305,12 +305,12 @@ komeda_layer_check_cfg(struct komeda_layer *layer,
->  	if (komeda_fb_check_src_coords(kfb, src_x, src_y, src_w, src_h))
->  		return -EINVAL;
->  
-> -	if (!in_range(&layer->hsize_in, src_w)) {
-> +	if (!malidp_in_range(&layer->hsize_in, src_w)) {
->  		DRM_DEBUG_ATOMIC("invalidate src_w %d.\n", src_w);
->  		return -EINVAL;
->  	}
->  
-> -	if (!in_range(&layer->vsize_in, src_h)) {
-> +	if (!malidp_in_range(&layer->vsize_in, src_h)) {
->  		DRM_DEBUG_ATOMIC("invalidate src_h %d.\n", src_h);
->  		return -EINVAL;
->  	}
-> @@ -452,14 +452,14 @@ komeda_scaler_check_cfg(struct komeda_scaler *scaler,
->  	hsize_out = dflow->out_w;
->  	vsize_out = dflow->out_h;
->  
-> -	if (!in_range(&scaler->hsize, hsize_in) ||
-> -	    !in_range(&scaler->hsize, hsize_out)) {
-> +	if (!malidp_in_range(&scaler->hsize, hsize_in) ||
-> +	    !malidp_in_range(&scaler->hsize, hsize_out)) {
->  		DRM_DEBUG_ATOMIC("Invalid horizontal sizes");
->  		return -EINVAL;
->  	}
->  
-> -	if (!in_range(&scaler->vsize, vsize_in) ||
-> -	    !in_range(&scaler->vsize, vsize_out)) {
-> +	if (!malidp_in_range(&scaler->vsize, vsize_in) ||
-> +	    !malidp_in_range(&scaler->vsize, vsize_out)) {
->  		DRM_DEBUG_ATOMIC("Invalid vertical sizes");
->  		return -EINVAL;
->  	}
-> @@ -574,13 +574,13 @@ komeda_splitter_validate(struct komeda_splitter *splitter,
->  		return -EINVAL;
->  	}
->  
-> -	if (!in_range(&splitter->hsize, dflow->in_w)) {
-> +	if (!malidp_in_range(&splitter->hsize, dflow->in_w)) {
->  		DRM_DEBUG_ATOMIC("split in_w:%d is out of the acceptable range.\n",
->  				 dflow->in_w);
->  		return -EINVAL;
->  	}
->  
-> -	if (!in_range(&splitter->vsize, dflow->in_h)) {
-> +	if (!malidp_in_range(&splitter->vsize, dflow->in_h)) {
->  		DRM_DEBUG_ATOMIC("split in_h: %d exceeds the acceptable range.\n",
->  				 dflow->in_h);
->  		return -EINVAL;
-> @@ -624,13 +624,13 @@ komeda_merger_validate(struct komeda_merger *merger,
->  		return -EINVAL;
->  	}
->  
-> -	if (!in_range(&merger->hsize_merged, output->out_w)) {
-> +	if (!malidp_in_range(&merger->hsize_merged, output->out_w)) {
->  		DRM_DEBUG_ATOMIC("merged_w: %d is out of the accepted range.\n",
->  				 output->out_w);
->  		return -EINVAL;
->  	}
->  
-> -	if (!in_range(&merger->vsize_merged, output->out_h)) {
-> +	if (!malidp_in_range(&merger->vsize_merged, output->out_h)) {
->  		DRM_DEBUG_ATOMIC("merged_h: %d is out of the accepted range.\n",
->  				 output->out_h);
->  		return -EINVAL;
-> @@ -866,8 +866,8 @@ void komeda_complete_data_flow_cfg(struct komeda_layer *layer,
->  	 * input/output range.
->  	 */
->  	if (dflow->en_scaling && scaler)
-> -		dflow->en_split = !in_range(&scaler->hsize, dflow->in_w) ||
-> -				  !in_range(&scaler->hsize, dflow->out_w);
-> +		dflow->en_split = !malidp_in_range(&scaler->hsize, dflow->in_w) ||
-> +				  !malidp_in_range(&scaler->hsize, dflow->out_w);
->  }
->  
->  static bool merger_is_available(struct komeda_pipeline *pipe,
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> index 655938df4531..f11da95566da 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> @@ -657,12 +657,6 @@ struct block_header {
->  	u32 data[];
->  };
->  
-> -/* this should be a general kernel helper */
-> -static int in_range(u32 addr, u32 start, u32 size)
-> -{
-> -	return addr >= start && addr < start + size;
-> -}
-> -
->  static bool fw_block_mem(struct a6xx_gmu_bo *bo, const struct block_header *blk)
->  {
->  	if (!in_range(blk->addr, bo->iova, bo->size))
-> diff --git a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-> index 8a167eea288c..10790a370f22 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-> +++ b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-> @@ -2131,7 +2131,7 @@ static const struct ethtool_ops cxgb_ethtool_ops = {
->  	.set_link_ksettings = set_link_ksettings,
->  };
->  
-> -static int in_range(int val, int lo, int hi)
-> +static int cxgb_in_range(int val, int lo, int hi)
->  {
->  	return val < 0 || (val <= hi && val >= lo);
->  }
-> @@ -2162,19 +2162,19 @@ static int cxgb_extension_ioctl(struct net_device *dev, void __user *useraddr)
->  			return -EINVAL;
->  		if (t.qset_idx >= SGE_QSETS)
->  			return -EINVAL;
-> -		if (!in_range(t.intr_lat, 0, M_NEWTIMER) ||
-> -		    !in_range(t.cong_thres, 0, 255) ||
-> -		    !in_range(t.txq_size[0], MIN_TXQ_ENTRIES,
-> +		if (!cxgb_in_range(t.intr_lat, 0, M_NEWTIMER) ||
-> +		    !cxgb_in_range(t.cong_thres, 0, 255) ||
-> +		    !cxgb_in_range(t.txq_size[0], MIN_TXQ_ENTRIES,
->  			      MAX_TXQ_ENTRIES) ||
-> -		    !in_range(t.txq_size[1], MIN_TXQ_ENTRIES,
-> +		    !cxgb_in_range(t.txq_size[1], MIN_TXQ_ENTRIES,
->  			      MAX_TXQ_ENTRIES) ||
-> -		    !in_range(t.txq_size[2], MIN_CTRL_TXQ_ENTRIES,
-> +		    !cxgb_in_range(t.txq_size[2], MIN_CTRL_TXQ_ENTRIES,
->  			      MAX_CTRL_TXQ_ENTRIES) ||
-> -		    !in_range(t.fl_size[0], MIN_FL_ENTRIES,
-> +		    !cxgb_in_range(t.fl_size[0], MIN_FL_ENTRIES,
->  			      MAX_RX_BUFFERS) ||
-> -		    !in_range(t.fl_size[1], MIN_FL_ENTRIES,
-> +		    !cxgb_in_range(t.fl_size[1], MIN_FL_ENTRIES,
->  			      MAX_RX_JUMBO_BUFFERS) ||
-> -		    !in_range(t.rspq_size, MIN_RSPQ_ENTRIES,
-> +		    !cxgb_in_range(t.rspq_size, MIN_RSPQ_ENTRIES,
->  			      MAX_RSPQ_ENTRIES))
->  			return -EINVAL;
->  
-> diff --git a/fs/btrfs/misc.h b/fs/btrfs/misc.h
-> index 6461ebc3a1c1..40ad75511435 100644
-> --- a/fs/btrfs/misc.h
-> +++ b/fs/btrfs/misc.h
-> @@ -8,8 +8,6 @@
->  #include <asm/div64.h>
->  #include <linux/rbtree.h>
->  
-> -#define in_range(b, first, len) ((b) >= (first) && (b) < (first) + (len))
-> -
->  static inline void cond_wake_up(struct wait_queue_head *wq)
->  {
->  	/*
-> diff --git a/fs/ext2/balloc.c b/fs/ext2/balloc.c
-> index 9bf086821eb3..1d9380c5523b 100644
-> --- a/fs/ext2/balloc.c
-> +++ b/fs/ext2/balloc.c
-> @@ -36,8 +36,6 @@
->   */
->  
->  
-> -#define in_range(b, first, len)	((b) >= (first) && (b) <= (first) + (len) - 1)
-> -
->  struct ext2_group_desc * ext2_get_group_desc(struct super_block * sb,
->  					     unsigned int block_group,
->  					     struct buffer_head ** bh)
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 1dc1292d8977..4adaf97d7435 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -3659,8 +3659,6 @@ static inline void set_bitmap_uptodate(struct buffer_head *bh)
->  	set_bit(BH_BITMAP_UPTODATE, &(bh)->b_state);
->  }
->  
-> -#define in_range(b, first, len)	((b) >= (first) && (b) <= (first) + (len) - 1)
-> -
->  /* For ioend & aio unwritten conversion wait queues */
->  #define EXT4_WQ_HASH_SZ		37
->  #define ext4_ioend_wq(v)   (&ext4__ioend_wq[((unsigned long)(v)) %\
-> diff --git a/fs/ufs/util.h b/fs/ufs/util.h
-> index 4931bec1a01c..89247193d96d 100644
-> --- a/fs/ufs/util.h
-> +++ b/fs/ufs/util.h
-> @@ -11,12 +11,6 @@
->  #include <linux/fs.h>
->  #include "swab.h"
->  
-> -
-> -/*
-> - * some useful macros
-> - */
-> -#define in_range(b,first,len)	((b)>=(first)&&(b)<(first)+(len))
-> -
->  /*
->   * functions used for retyping
->   */
-> diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-> index abdeae409dad..7affadcb2a29 100644
-> --- a/include/linux/minmax.h
-> +++ b/include/linux/minmax.h
-> @@ -3,6 +3,7 @@
->  #define _LINUX_MINMAX_H
->  
->  #include <linux/const.h>
-> +#include <linux/types.h>
->  
->  /*
->   * min()/max()/clamp() macros must accomplish three things:
-> @@ -175,6 +176,32 @@
->   */
->  #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
->  
-> +static inline bool in_range64(u64 val, u64 start, u64 len)
-> +{
-> +	return (val - start) < len;
-> +}
-> +
-> +static inline bool in_range32(u32 val, u32 start, u32 len)
-> +{
-> +	return (val - start) < len;
-> +}
-> +
-> +/**
-> + * in_range - Determine if a value lies within a range.
-> + * @val: Value to test.
-> + * @start: First value in range.
-> + * @len: Number of values in range.
-> + *
-> + * This is more efficient than "if (start <= val && val < (start + len))".
-> + * It also gives a different answer if @start + @len overflows the size of
-> + * the type by a sufficient amount to encompass @val.  Decide for yourself
-> + * which behaviour you want, or prove that start + len never overflow.
-> + * Do not blindly replace one form with the other.
-> + */
-> +#define in_range(val, start, len)					\
-> +	((sizeof(start) | sizeof(len) | sizeof(val)) <= sizeof(u32) ?	\
-> +		in_range32(val, start, len) : in_range64(val, start, len))
-> +
->  /**
->   * swap - swap values of @a and @b
->   * @a: first value
-> diff --git a/lib/logic_pio.c b/lib/logic_pio.c
-> index 07b4b9a1f54b..2ea564a40064 100644
-> --- a/lib/logic_pio.c
-> +++ b/lib/logic_pio.c
-> @@ -20,9 +20,6 @@
->  static LIST_HEAD(io_range_list);
->  static DEFINE_MUTEX(io_range_mutex);
->  
-> -/* Consider a kernel general helper for this */
-> -#define in_range(b, first, len)        ((b) >= (first) && (b) < (first) + (len))
-> -
->  /**
->   * logic_pio_register_range - register logical PIO range for a host
->   * @new_range: pointer to the IO range to be registered.
-> diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
-> index b7c3c902290f..96b61f0658c8 100644
-> --- a/net/netfilter/nf_nat_core.c
-> +++ b/net/netfilter/nf_nat_core.c
-> @@ -262,7 +262,7 @@ static bool l4proto_in_range(const struct nf_conntrack_tuple *tuple,
->  /* If we source map this tuple so reply looks like reply_tuple, will
->   * that meet the constraints of range.
->   */
-> -static int in_range(const struct nf_conntrack_tuple *tuple,
-> +static int nf_in_range(const struct nf_conntrack_tuple *tuple,
->  		    const struct nf_nat_range2 *range)
->  {
->  	/* If we are supposed to map IPs, then we must be in the
-> @@ -311,7 +311,7 @@ find_appropriate_src(struct net *net,
->  				       &ct->tuplehash[IP_CT_DIR_REPLY].tuple);
->  			result->dst = tuple->dst;
->  
-> -			if (in_range(result, range))
-> +			if (nf_in_range(result, range))
->  				return 1;
->  		}
->  	}
-> @@ -543,7 +543,7 @@ get_unique_tuple(struct nf_conntrack_tuple *tuple,
->  	if (maniptype == NF_NAT_MANIP_SRC &&
->  	    !(range->flags & NF_NAT_RANGE_PROTO_RANDOM_ALL)) {
->  		/* try the original tuple first */
-> -		if (in_range(orig_tuple, range)) {
-> +		if (nf_in_range(orig_tuple, range)) {
->  			if (!nf_nat_used_tuple(orig_tuple, ct)) {
->  				*tuple = *orig_tuple;
->  				return;
-> diff --git a/net/tipc/core.h b/net/tipc/core.h
-> index 73a26b0b9ca1..7c86fa4bb967 100644
-> --- a/net/tipc/core.h
-> +++ b/net/tipc/core.h
-> @@ -199,7 +199,7 @@ static inline int less(u16 left, u16 right)
->  	return less_eq(left, right) && (mod(right) != mod(left));
->  }
->  
-> -static inline int in_range(u16 val, u16 min, u16 max)
-> +static inline int tipc_in_range(u16 val, u16 min, u16 max)
->  {
->  	return !less(val, min) && !more(val, max);
->  }
-> diff --git a/net/tipc/link.c b/net/tipc/link.c
-> index 336d1bb2cf6a..ca96bdb77190 100644
-> --- a/net/tipc/link.c
-> +++ b/net/tipc/link.c
-> @@ -1588,7 +1588,7 @@ static int tipc_link_advance_transmq(struct tipc_link *l, struct tipc_link *r,
->  					  last_ga->bgack_cnt);
->  			}
->  			/* Check against the last Gap ACK block */
-> -			if (in_range(seqno, start, end))
-> +			if (tipc_in_range(seqno, start, end))
->  				continue;
->  			/* Update/release the packet peer is acking */
->  			bc_has_acked = true;
-> @@ -2216,12 +2216,12 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
->  		strncpy(if_name, data, TIPC_MAX_IF_NAME);
->  
->  		/* Update own tolerance if peer indicates a non-zero value */
-> -		if (in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
-> +		if (tipc_in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
->  			l->tolerance = peers_tol;
->  			l->bc_rcvlink->tolerance = peers_tol;
->  		}
->  		/* Update own priority if peer's priority is higher */
-> -		if (in_range(peers_prio, l->priority + 1, TIPC_MAX_LINK_PRI))
-> +		if (tipc_in_range(peers_prio, l->priority + 1, TIPC_MAX_LINK_PRI))
->  			l->priority = peers_prio;
->  
->  		/* If peer is going down we want full re-establish cycle */
-> @@ -2264,13 +2264,13 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
->  		l->rcv_nxt_state = msg_seqno(hdr) + 1;
->  
->  		/* Update own tolerance if peer indicates a non-zero value */
-> -		if (in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
-> +		if (tipc_in_range(peers_tol, TIPC_MIN_LINK_TOL, TIPC_MAX_LINK_TOL)) {
->  			l->tolerance = peers_tol;
->  			l->bc_rcvlink->tolerance = peers_tol;
->  		}
->  		/* Update own prio if peer indicates a different value */
->  		if ((peers_prio != l->priority) &&
-> -		    in_range(peers_prio, 1, TIPC_MAX_LINK_PRI)) {
-> +		    tipc_in_range(peers_prio, 1, TIPC_MAX_LINK_PRI)) {
->  			l->priority = peers_prio;
->  			rc = tipc_link_fsm_evt(l, LINK_FAILURE_EVT);
->  		}
-> -- 
-> 2.47.3
+> At the very least I believe this commit message should at least allude to
+> the fact that mce threshold devices have a strict requirement to be created
+> after the APEI subsys has been created.
+> 
 > 
 
--- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+The commit message has this:
+
+"APEI is parsed after MCE is initialized. So reset the thresholding
+blocks later to pick up the threshold limit."
+
+The "devices" are already created after APEI subsys init. The missing
+step is updating the hardware registers.
+
+Thanks,
+Yazen
 
