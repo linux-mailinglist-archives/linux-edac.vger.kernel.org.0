@@ -1,288 +1,188 @@
-Return-Path: <linux-edac+bounces-4904-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4905-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F98BB93FB1
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Sep 2025 04:17:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89F5BB949AA
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Sep 2025 08:46:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78F8117E00A
-	for <lists+linux-edac@lfdr.de>; Tue, 23 Sep 2025 02:17:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C8D0483CCD
+	for <lists+linux-edac@lfdr.de>; Tue, 23 Sep 2025 06:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694AF2701B1;
-	Tue, 23 Sep 2025 02:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8D730FC09;
+	Tue, 23 Sep 2025 06:46:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="AGQIMRC4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nbZTJz3R"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985B39478;
-	Tue, 23 Sep 2025 02:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D1D2737E1;
+	Tue, 23 Sep 2025 06:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758593824; cv=none; b=VzQ7fODIpz0vC+oYsbkDHbA0ydZk7fqfrlPfPNnKpRR14Mkcx/yK+RDj3M9OcELXRojBbN5AcCsn/zWiTDoUqvLm7RskDwy4axy8WOmr7nhRKX7mv289/DaUtuqS8jGKOE1DLQR8ejeUBr3McHKsMKJzXHX2ndKv2kWI01Yfe44=
+	t=1758609987; cv=none; b=L9qp+U25cCMd5JV6d6GTw96EMTgrGPyGWT0cq6fzHtpVA6T0EEoy3WlIWQyeJWDffxrSznn4dDdFK0DHx5cuqR6AfBjiHNm/FrfESFstEeYBwLrRLE3KyBQfksmcw++Pq46iFNmEFwEHvgDHkcDQnc3iYNK3bbsuoNeLalZmJgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758593824; c=relaxed/simple;
-	bh=B1zsSF9qe7OEHd2YFH2OlgC0iTuiA8DzMILYXwXr6nc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Qx1TqHSvaEsxyKfk6+8AGhuPUP6RHcrHa07wkR0196iG5I6x9zkrrK/ubUjSK/0tMeekVu4UfqMbypO0kLjmUb81aya5kAVwJuV/pNJIPOmlcph7fCPc9jucULBsHZbbOg+COv7+R/VrFKN5VFmb68RZeWKOH8m+HX9EvyKNXm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=AGQIMRC4; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1758593817; h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type;
-	bh=ZsKqdYHSWavPMgKI1y2o2ldKEM5tkb7kIEHNl5Tl04s=;
-	b=AGQIMRC4ELLeBVDjsEKWrVcxqVJ5NAVBh9ZP4RfHIW3vW7GUnywGengltcDW6yU/KyFO2TaEXX1FWVXpV5pYPGnOKViLqWzXCA/VhdSU2xmccfnuxlfBXyyd9oUyEg41RMlyXpVXBnOaz9MpN+2HNFG1KCLHY7iwEn/Gs/lyLF4=
-Received: from 30.246.179.19(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Wod5R4q_1758593813 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 23 Sep 2025 10:16:55 +0800
-Message-ID: <1f70ddf0-702a-444e-ac81-f2c52fa46f55@linux.alibaba.com>
-Date: Tue, 23 Sep 2025 10:16:53 +0800
+	s=arc-20240116; t=1758609987; c=relaxed/simple;
+	bh=GCivlAy7lnrNCtJC//h3SqDfb5QdSrixCRyVp8er9jc=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Z+Z2xjQWRptjx+ql4Rvt2YPQgKknm2+VEjqqG1PmQNwp5km0jqR2wf/vS0W4OtWBrdPtZbHdu+EwkdFLMAxm5Z8AA76Mvlwd+q2CYSBMyfmKuyQxx7EPka3lVXCZJDx5zk3zyMCBqZjpiftCM7gvejDSw+DkjA16qOtXFsdIdKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nbZTJz3R; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758609985; x=1790145985;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=GCivlAy7lnrNCtJC//h3SqDfb5QdSrixCRyVp8er9jc=;
+  b=nbZTJz3RgKhc0I6CWmnjXVmJPxkJ37xFo48QbOCtOxAQu/I0t39WMPiZ
+   DrvAhV2Kxoe70ZWMPOBgPjAqY9qYj8iDmL6hX8ChCy9ohegjb1TNtaqec
+   BertR8A2hlMCsX8wj4GqtO8awPecRtCdmEsojQ0eqWQmHEwTUOB0ldXy/
+   WqJRl3cTlpOXIJN5uNfPzs2isfWTivFN4sdgAMyB/ca1re5ejAU2eyjE9
+   EwZy/SyG61pumQfT6RgFickyZYTqoTvccMkNrfSepgAWvb1PoqjCZEEIa
+   Hi17pDnogv1Ii1EjvEGQyAyZ5wYVIFKziUJ6huCAqx2tOmnlz+qHTSznT
+   A==;
+X-CSE-ConnectionGUID: imHIr5R+T5Gf8LWyE7doyA==
+X-CSE-MsgGUID: 54GgKwt0RWK2UzNhR+hGrg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="60937824"
+X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
+   d="scan'208";a="60937824"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 23:46:24 -0700
+X-CSE-ConnectionGUID: HEHvwpL6QY6plyx69U4fVQ==
+X-CSE-MsgGUID: 553CWKKJRqygRePCxseEtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
+   d="scan'208";a="176615263"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.234])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 23:46:16 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 23 Sep 2025 09:46:13 +0300 (EEST)
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+cc: rostedt@goodmis.org, Lukas Wunner <lukas@wunner.de>, 
+    linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+    helgaas@kernel.org, mattc@purestorage.com, Jonathan.Cameron@huawei.com, 
+    bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de, 
+    mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com, 
+    naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com, 
+    mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v10 1/3] PCI: trace: Add a generic RAS tracepoint for
+ hotplug event
+In-Reply-To: <12c84bff-6863-4730-b08a-631df904aa12@linux.alibaba.com>
+Message-ID: <fe2abb10-3847-af1c-12c2-193c32befe0c@linux.intel.com>
+References: <20250920060117.866-1-xueshuai@linux.alibaba.com> <20250920060117.866-2-xueshuai@linux.alibaba.com> <6bab311a-d5ba-133c-fddd-52899959445c@linux.intel.com> <12c84bff-6863-4730-b08a-631df904aa12@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-Subject: Re: [PATCH v10 2/3] PCI: trace: Add a RAS tracepoint to monitor link
- speed changes
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: rostedt@goodmis.org, Lukas Wunner <lukas@wunner.de>,
- linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- helgaas@kernel.org, mattc@purestorage.com, Jonathan.Cameron@huawei.com,
- bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
- davem@davemloft.net, anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
- peterz@infradead.org, tianruidong@linux.alibaba.com
-References: <20250920060117.866-1-xueshuai@linux.alibaba.com>
- <20250920060117.866-3-xueshuai@linux.alibaba.com>
- <74cc8672-8e21-41e6-1535-2c504d90bbe0@linux.intel.com>
-In-Reply-To: <74cc8672-8e21-41e6-1535-2c504d90bbe0@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-460974142-1758609973=:961"
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-460974142-1758609973=:961
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+
+On Tue, 23 Sep 2025, Shuai Xue wrote:
+
+>=20
+>=20
+> =E5=9C=A8 2025/9/22 21:10, Ilpo J=C3=A4rvinen =E5=86=99=E9=81=93:
+> > On Sat, 20 Sep 2025, Shuai Xue wrote:
+> >=20
+> > > Hotplug events are critical indicators for analyzing hardware health,
+> > > and surprise link downs can significantly impact system performance a=
+nd
+> > > reliability.
+> > >=20
+> > > Define a new TRACING_SYSTEM named "pci", add a generic RAS tracepoint
+> > > for hotplug event to help health checks. Add enum pci_hotplug_event i=
+n
+> > > include/uapi/linux/pci.h so applications like rasdaemon can register
+> > > tracepoint event handlers for it.
+> > >=20
+> > > The following output is generated when a device is hotplugged:
+> > >=20
+> > > $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
+> > > $ cat /sys/kernel/debug/tracing/trace_pipe
+> > >     irq/51-pciehp-88      [001] .....  1311.177459: pci_hp_event:
+> > > 0000:00:02.0 slot:10, event:CARD_PRESENT
+> > >=20
+> > >     irq/51-pciehp-88      [001] .....  1311.177566: pci_hp_event:
+> > > 0000:00:02.0 slot:10, event:LINK_UP
+> > >=20
+> > > Suggested-by: Lukas Wunner <lukas@wunner.de>
+> > > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> > > Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> > > Reviewed-by: Lukas Wunner <lukas@wunner.de>
+> > > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > ---
+> > >   drivers/pci/Makefile              |  2 +
+> > >   drivers/pci/hotplug/Makefile      |  3 +-
+> > >   drivers/pci/hotplug/pciehp_ctrl.c | 31 ++++++++++++---
+> > >   drivers/pci/trace.c               | 11 ++++++
+> > >   include/trace/events/pci.h        | 63 ++++++++++++++++++++++++++++=
++++
+> > >   include/uapi/linux/pci.h          |  7 ++++
+> > >   6 files changed, 110 insertions(+), 7 deletions(-)
+> > >   create mode 100644 drivers/pci/trace.c
+> > >   create mode 100644 include/trace/events/pci.h
+> > >=20
+> > > diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+> > > index 67647f1880fb..bf389bc4dd3c 100644
+> > > --- a/drivers/pci/Makefile
+> > > +++ b/drivers/pci/Makefile
+> > > @@ -45,3 +45,5 @@ obj-y=09=09=09=09+=3D controller/
+> > >   obj-y=09=09=09=09+=3D switch/
+> > >     subdir-ccflags-$(CONFIG_PCI_DEBUG) :=3D -DDEBUG
+> > > +
+> > > +CFLAGS_trace.o :=3D -I$(src)
+> > > diff --git a/drivers/pci/hotplug/Makefile b/drivers/pci/hotplug/Makef=
+ile
+> > > index 40aaf31fe338..d41f7050b072 100644
+> > > --- a/drivers/pci/hotplug/Makefile
+> > > +++ b/drivers/pci/hotplug/Makefile
+> > > @@ -65,7 +65,8 @@ rpadlpar_io-objs=09:=3D=09rpadlpar_core.o \
+> > >   pciehp-objs=09=09:=3D=09pciehp_core.o=09\
+> > >   =09=09=09=09pciehp_ctrl.o=09\
+> > >   =09=09=09=09pciehp_pci.o=09\
+> > > -=09=09=09=09pciehp_hpc.o
+> > > +=09=09=09=09pciehp_hpc.o=09\
+> > > +=09=09=09=09../trace.o
+> >=20
+> > To make it useful for any PCI tracing, not juse hotplug, this object fi=
+le
+> > should be added in drivers/pci/Makefile, not here.
+>=20
+> Make sence. How about adding to the main CONFIG_PCI object:
+>=20
+> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+> index bf389bc4dd3c..d7f83d06351d 100644
+> --- a/drivers/pci/Makefile
+> +++ b/drivers/pci/Makefile
+> @@ -5,7 +5,7 @@
+>  obj-$(CONFIG_PCI)              +=3D access.o bus.o probe.o host-bridge.o=
+ \
+>                                    remove.o pci.o pci-driver.o search.o \
+>                                    rom.o setup-res.o irq.o vpd.o \
+> -                                  setup-bus.o vc.o mmap.o devres.o
+> +                                  setup-bus.o vc.o mmap.o devres.o trace=
+=2Eo
+>=20
+>  obj-$(CONFIG_PCI)              +=3D msi/
+>  obj-$(CONFIG_PCI)              +=3D pcie/
+
+Yes, that's the right place to add it.
 
 
+--=20
+ i.
 
-在 2025/9/22 21:06, Ilpo Järvinen 写道:
-> On Sat, 20 Sep 2025, Shuai Xue wrote:
-> 
->> PCIe link speed degradation directly impacts system performance and
->> often indicates hardware issues such as faulty devices, physical layer
->> problems, or configuration errors.
->>
->> To this end, add a RAS tracepoint to monitor link speed changes,
->> enabling proactive health checks and diagnostic analysis.
->>
->> The following output is generated when a device is hotplugged:
->>
->> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pcie_link_event/enable
->> $ cat /sys/kernel/debug/tracing/trace_pipe
->>     irq/51-pciehp-88      [001] .....   381.545386: pcie_link_event: 0000:00:02.0 type:4, reason:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:16.0 GT/s PCIe, width:1, flit_mode:0, status:DLLLA
->>
->> Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->> Suggested-by: Matthew W Carlis <mattc@purestorage.com>
->> Suggested-by: Lukas Wunner <lukas@wunner.de>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> ---
->>   drivers/pci/hotplug/pciehp_hpc.c |  3 +-
->>   drivers/pci/pci.c                |  2 +-
->>   drivers/pci/pci.h                | 22 +++++++++++--
->>   drivers/pci/pcie/bwctrl.c        |  4 +--
->>   drivers/pci/probe.c              |  9 +++--
->>   include/linux/pci.h              |  1 +
->>   include/trace/events/pci.h       | 56 ++++++++++++++++++++++++++++++++
->>   7 files changed, 87 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
->> index bcc51b26d03d..ad5f28f6a8b1 100644
->> --- a/drivers/pci/hotplug/pciehp_hpc.c
->> +++ b/drivers/pci/hotplug/pciehp_hpc.c
->> @@ -320,7 +320,8 @@ int pciehp_check_link_status(struct controller *ctrl)
->>   	}
->>   
->>   	pcie_capability_read_word(pdev, PCI_EXP_LNKSTA2, &linksta2);
->> -	__pcie_update_link_speed(ctrl->pcie->port->subordinate, lnk_status, linksta2);
->> +	__pcie_update_link_speed(ctrl->pcie->port->subordinate, PCIE_HOTPLUG,
->> +				 lnk_status, linksta2);
->>   
->>   	if (!found) {
->>   		ctrl_info(ctrl, "Slot(%s): No device found\n",
->> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
->> index b0f4d98036cd..96755ffd3841 100644
->> --- a/drivers/pci/pci.c
->> +++ b/drivers/pci/pci.c
->> @@ -4749,7 +4749,7 @@ int pcie_retrain_link(struct pci_dev *pdev, bool use_lt)
->>   	 * Link Speed.
->>   	 */
->>   	if (pdev->subordinate)
->> -		pcie_update_link_speed(pdev->subordinate);
->> +		pcie_update_link_speed(pdev->subordinate, PCIE_LINK_RETRAIN);
->>   
->>   	return rc;
->>   }
->> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
->> index b8d364545e7d..422406a0695c 100644
->> --- a/drivers/pci/pci.h
->> +++ b/drivers/pci/pci.h
->> @@ -3,6 +3,7 @@
->>   #define DRIVERS_PCI_H
->>   
->>   #include <linux/pci.h>
->> +#include <trace/events/pci.h>
->>   
->>   struct pcie_tlp_log;
->>   
->> @@ -455,16 +456,31 @@ static inline int pcie_dev_speed_mbps(enum pci_bus_speed speed)
->>   }
->>   
->>   u8 pcie_get_supported_speeds(struct pci_dev *dev);
->> -const char *pci_speed_string(enum pci_bus_speed speed);
->>   void __pcie_print_link_status(struct pci_dev *dev, bool verbose);
->>   void pcie_report_downtraining(struct pci_dev *dev);
->>   
->> -static inline void __pcie_update_link_speed(struct pci_bus *bus, u16 linksta, u16 linksta2)
->> +enum pcie_link_change_reason {
->> +	PCIE_LINK_RETRAIN,
->> +	PCIE_ADD_BUS,
->> +	PCIE_BWCTRL_ENABLE,
->> +	PCIE_BWCTRL_IRQ,
->> +	PCIE_HOTPLUG
-> 
-> Please use comma on any non-terminator entry so that adding to the list
-> later will not mess up diffs.
-
-Sure.
-
-> 
->> +};
->> +
->> +static inline void __pcie_update_link_speed(struct pci_bus *bus,
->> +					    enum pcie_link_change_reason reason,
->> +					    u16 linksta, u16 linksta2)
->>   {
->>   	bus->cur_bus_speed = pcie_link_speed[linksta & PCI_EXP_LNKSTA_CLS];
->>   	bus->flit_mode = (linksta2 & PCI_EXP_LNKSTA2_FLIT) ? 1 : 0;
->> +
->> +	trace_pcie_link_event(bus,
->> +			     reason,
->> +			     FIELD_GET(PCI_EXP_LNKSTA_NLW, linksta),
->> +			     linksta & PCI_EXP_LNKSTA_LINK_STATUS_MASK);
->>   }
->> -void pcie_update_link_speed(struct pci_bus *bus);
->> +
->> +void pcie_update_link_speed(struct pci_bus *bus, enum pcie_link_change_reason reason);
->>   
->>   /* Single Root I/O Virtualization */
->>   struct pci_sriov {
->> diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
->> index 36f939f23d34..32f1b30ecb84 100644
->> --- a/drivers/pci/pcie/bwctrl.c
->> +++ b/drivers/pci/pcie/bwctrl.c
->> @@ -199,7 +199,7 @@ static void pcie_bwnotif_enable(struct pcie_device *srv)
->>   	 * Update after enabling notifications & clearing status bits ensures
->>   	 * link speed is up to date.
->>   	 */
->> -	pcie_update_link_speed(port->subordinate);
->> +	pcie_update_link_speed(port->subordinate, PCIE_BWCTRL_ENABLE);
->>   }
->>   
->>   static void pcie_bwnotif_disable(struct pci_dev *port)
->> @@ -234,7 +234,7 @@ static irqreturn_t pcie_bwnotif_irq(int irq, void *context)
->>   	 * speed (inside pcie_update_link_speed()) after LBMS has been
->>   	 * cleared to avoid missing link speed changes.
->>   	 */
->> -	pcie_update_link_speed(port->subordinate);
->> +	pcie_update_link_speed(port->subordinate, PCIE_BWCTRL_IRQ);
->>   
->>   	return IRQ_HANDLED;
->>   }
->> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
->> index f41128f91ca7..c4cae2664156 100644
->> --- a/drivers/pci/probe.c
->> +++ b/drivers/pci/probe.c
->> @@ -21,6 +21,7 @@
->>   #include <linux/irqdomain.h>
->>   #include <linux/pm_runtime.h>
->>   #include <linux/bitfield.h>
->> +#include <trace/events/pci.h>
->>   #include "pci.h"
->>   
->>   #define CARDBUS_LATENCY_TIMER	176	/* secondary latency timer */
->> @@ -788,14 +789,16 @@ const char *pci_speed_string(enum pci_bus_speed speed)
->>   }
->>   EXPORT_SYMBOL_GPL(pci_speed_string);
->>   
->> -void pcie_update_link_speed(struct pci_bus *bus)
->> +void pcie_update_link_speed(struct pci_bus *bus,
->> +			    enum pcie_link_change_reason reason)
->>   {
->>   	struct pci_dev *bridge = bus->self;
->>   	u16 linksta, linksta2;
->>   
->>   	pcie_capability_read_word(bridge, PCI_EXP_LNKSTA, &linksta);
->>   	pcie_capability_read_word(bridge, PCI_EXP_LNKSTA2, &linksta2);
->> -	__pcie_update_link_speed(bus, linksta, linksta2);
->> +
->> +	__pcie_update_link_speed(bus, reason, linksta, linksta2);
->>   }
->>   EXPORT_SYMBOL_GPL(pcie_update_link_speed);
->>   
->> @@ -882,7 +885,7 @@ static void pci_set_bus_speed(struct pci_bus *bus)
->>   		pcie_capability_read_dword(bridge, PCI_EXP_LNKCAP, &linkcap);
->>   		bus->max_bus_speed = pcie_link_speed[linkcap & PCI_EXP_LNKCAP_SLS];
->>   
->> -		pcie_update_link_speed(bus);
->> +		pcie_update_link_speed(bus, PCIE_ADD_BUS);
->>   	}
->>   }
->>   
->> diff --git a/include/linux/pci.h b/include/linux/pci.h
->> index 59876de13860..edd8a61ec44e 100644
->> --- a/include/linux/pci.h
->> +++ b/include/linux/pci.h
->> @@ -305,6 +305,7 @@ enum pci_bus_speed {
->>   	PCI_SPEED_UNKNOWN		= 0xff,
->>   };
->>   
->> +const char *pci_speed_string(enum pci_bus_speed speed);
->>   enum pci_bus_speed pcie_get_speed_cap(struct pci_dev *dev);
->>   enum pcie_link_width pcie_get_width_cap(struct pci_dev *dev);
->>   
->> diff --git a/include/trace/events/pci.h b/include/trace/events/pci.h
->> index 208609492c06..78e651b95cb3 100644
->> --- a/include/trace/events/pci.h
->> +++ b/include/trace/events/pci.h
->> @@ -57,6 +57,62 @@ TRACE_EVENT(pci_hp_event,
->>   	)
->>   );
->>   
->> +#define PCI_EXP_LNKSTA_LINK_STATUS_MASK (PCI_EXP_LNKSTA_LBMS | \
->> +					 PCI_EXP_LNKSTA_LABS | \
->> +					 PCI_EXP_LNKSTA_LT | \
->> +					 PCI_EXP_LNKSTA_DLLLA)
-> 
-> This looks fragile because of the headers, I don't think there anything
-> that pulls these required defines within this header itself (so it only
-> works because the .c files have the pci.h include before it so that that
-> the defines from uapi side will be include).
-> 
-> If it's allowed for these files, you should include uapi/linux/pci_regs.h.
-> 
-
-Thanks for pointing out this dependency issue. You're absolutely right.
-
-I'll add the explicit include for uapi/linux/pci_regs.h at the top of
-the trace header file to ensure the PCI register macros are always
-available, regardless of inclusion order.
-
-Will fix this in next version.
-
-Thanks.
-Shuai
+--8323328-460974142-1758609973=:961--
 
