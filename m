@@ -1,173 +1,125 @@
-Return-Path: <linux-edac+bounces-4934-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4935-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52814B9D92A
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Sep 2025 08:20:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5341EBA20C0
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Sep 2025 02:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D33511B215A6
-	for <lists+linux-edac@lfdr.de>; Thu, 25 Sep 2025 06:20:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E9113270D2
+	for <lists+linux-edac@lfdr.de>; Fri, 26 Sep 2025 00:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B35CF2E9EC4;
-	Thu, 25 Sep 2025 06:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 167C546447;
+	Fri, 26 Sep 2025 00:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="JmAhQIXN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hy7IHfoE"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AAE2E8E08;
-	Thu, 25 Sep 2025 06:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D512B2DA;
+	Fri, 26 Sep 2025 00:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758781184; cv=none; b=LmY/gBTVP7EuHOwgHqcjs7mWCorcNs8j+c8sSu6hDOSjnBW/paM00QZrEhPyYcx01XltIPc1bT+FsgiijSP+TRU/fIRht4+KPZGH8AD0LSPpcV2kgXzgtJSUZLQxsXnVbYKror6z/PVOxnVqiirHaEbv9RJezn1Gzom4kZTQWtY=
+	t=1758845989; cv=none; b=XM0c9PiyrJ1mcO5nJvs8SDbiNeEh5Qg+UqIxSpSeto175ztXYIJExxjfrnBFzg1AFv/0MABFDtjEKItVmF8ByHZp7CdZVIE0hd7f9yo7db1yIKMnWR2UfupxnL8EcvQmqTfaQdwA+aq4R2AjXbigv796M7VlEDpZcTF9OWcDisE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758781184; c=relaxed/simple;
-	bh=9EXTsoYyDwgMiHeCGZOgLZPwxQhj3FEEbMGS+YkcfII=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=g1WjSDL/FBGgjw0SMZWLuHas3VRgUzeXK/5ED1ky70DnFOvVPV5NF6LqUcJi1IDpSXF0VdtjexyybBPiJv+iq8vwuOCBkXdbQxwmlROpbodC3cmMxhpqSIhd+ANJiB0NZgtCAZwd+rCfeMkzz75EoHso4A5IGXigFketCGPo+d0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=JmAhQIXN; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1758781178; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=wylYT/mZM3lnsRpRtwbAL9gIUgFK9qjAvr+0WK+Oh3U=;
-	b=JmAhQIXNru+RT76fyUaRGJdbdgWYvzn+7J48IEPNJpMfCaxcY1QPDosNy3RP39YjRo9UWTgZY6Mcb62oKDh4BClIaaMoGuNJlpV5jYOVpdm+UIDkPVycKVFDMArXE1nved2XZKDTT6pLuIzQ89Is2HcxgE8D6XyPOaIq9KkmQB4=
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WomdUf5_1758781175 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 25 Sep 2025 14:19:36 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: rostedt@goodmis.org,
-	lukas@wunner.de,
-	linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	helgaas@kernel.org,
-	ilpo.jarvinen@linux.intel.com,
-	mattc@purestorage.com,
+	s=arc-20240116; t=1758845989; c=relaxed/simple;
+	bh=n8M7Lv3wfpL1GX/MJgDEmNfO0OV9bNtF1FjVkjFNdY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJPF3LjwNb04ZOnZwthB0AnFtrXiqQrKdbmM57bLIPTEUN6oyDeTHqhr3CMQzaqpoyTlytDKlZUcQ1VZVUNOCewIC8gGQi07F7q2RnwLL8XUUI+Cz3CdBSsnut6Hfopclq0V+uWQEXdseKy4zNf85iScDyATOvMuKlPVmwsecis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hy7IHfoE; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758845987; x=1790381987;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n8M7Lv3wfpL1GX/MJgDEmNfO0OV9bNtF1FjVkjFNdY8=;
+  b=Hy7IHfoEDTcJWcAxaek2AJDsenMl5aVNP0hr1mxVWSaLy8CQLF+GLWif
+   hTjSwSRQdTFmuP/c7Zx+PGjMR8vejuVHGlpxdnMln+MOzMlg16lPrPOxt
+   c4Q+B2YuzFHKO9E7jCO1G7Np+7iMaEbCnJNEPlbL1qeqbMmZRwm9nK+rp
+   WQUVM94ERRUItYj7Vu4N+P/ffGxZPRG9jO6Jopdh5YSGyA0vg7PiczH56
+   5iIu3iRSgilzhiaHJxgG/Yryy5SPGNOC2m24cNke71aYMS6+aywcAXCKA
+   Yl4F4Y8O/ZbflpEuPJyIex+2KfNejWp3KCFkgDiwzaqQqErbpx8bLkdEt
+   Q==;
+X-CSE-ConnectionGUID: jnLo8pGQRQ6Lm1lMpPVoOw==
+X-CSE-MsgGUID: d6yvK09UQ92VP+N2bznLCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="60875623"
+X-IronPort-AV: E=Sophos;i="6.18,293,1751266800"; 
+   d="scan'208";a="60875623"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 17:19:46 -0700
+X-CSE-ConnectionGUID: 0NCXSoKiRwKHXpULZw+g2g==
+X-CSE-MsgGUID: FS9MS3pjSbmmFlKr2kBDNQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,293,1751266800"; 
+   d="scan'208";a="178227175"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 25 Sep 2025 17:19:40 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v1wBW-0005kL-1h;
+	Fri, 26 Sep 2025 00:19:38 +0000
+Date: Fri, 26 Sep 2025 08:18:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shuai Xue <xueshuai@linux.alibaba.com>, rostedt@goodmis.org,
+	lukas@wunner.de, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
+	ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
 	Jonathan.Cameron@huawei.com
-Cc: bhelgaas@google.com,
-	tony.luck@intel.com,
-	bp@alien8.de,
-	xueshuai@linux.alibaba.com,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	oleg@redhat.com,
-	naveen@kernel.org,
-	davem@davemloft.net,
-	anil.s.keshavamurthy@intel.com,
-	mark.rutland@arm.com,
-	peterz@infradead.org,
+Cc: oe-kbuild-all@lists.linux.dev, bhelgaas@google.com, tony.luck@intel.com,
+	bp@alien8.de, xueshuai@linux.alibaba.com, mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
+	davem@davemloft.net, mark.rutland@arm.com, peterz@infradead.org,
 	tianruidong@linux.alibaba.com
-Subject: [PATCH v11 3/3] Documentation: tracing: Add documentation about PCI tracepoints
-Date: Thu, 25 Sep 2025 14:19:28 +0800
-Message-Id: <20250925061928.42758-4-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250925061928.42758-1-xueshuai@linux.alibaba.com>
-References: <20250925061928.42758-1-xueshuai@linux.alibaba.com>
+Subject: Re: [PATCH v11 2/3] PCI: trace: Add a RAS tracepoint to monitor link
+ speed changes
+Message-ID: <202509260804.F13FDt4V-lkp@intel.com>
+References: <20250925061928.42758-3-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250925061928.42758-3-xueshuai@linux.alibaba.com>
 
-The PCI tracing system provides tracepoints to monitor critical hardware
-events that can impact system performance and reliability. Add
-documentation about it.
+Hi Shuai,
 
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- Documentation/trace/events-pci.rst | 74 ++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 Documentation/trace/events-pci.rst
+kernel test robot noticed the following build errors:
 
-diff --git a/Documentation/trace/events-pci.rst b/Documentation/trace/events-pci.rst
-new file mode 100644
-index 000000000000..500b27713224
---- /dev/null
-+++ b/Documentation/trace/events-pci.rst
-@@ -0,0 +1,74 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===========================
-+Subsystem Trace Points: PCI
-+===========================
-+
-+Overview
-+========
-+The PCI tracing system provides tracepoints to monitor critical hardware events
-+that can impact system performance and reliability. These events normally show
-+up here:
-+
-+	/sys/kernel/tracing/events/pci
-+
-+Cf. include/trace/events/pci.h for the events definitions.
-+
-+Available Tracepoints
-+=====================
-+
-+pci_hp_event
-+------------
-+
-+Monitors PCI hotplug events including card insertion/removal and link
-+state changes.
-+::
-+
-+    pci_hp_event  "%s slot:%s, event:%s\n"
-+
-+**Event Types**:
-+
-+* ``LINK_UP`` - PCIe link established
-+* ``LINK_DOWN`` - PCIe link lost
-+* ``CARD_PRESENT`` - Card detected in slot
-+* ``CARD_NOT_PRESENT`` - Card removed from slot
-+
-+**Example Usage**:
-+
-+    # Enable the tracepoint
-+    echo 1> /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
-+
-+    # Monitor events (the following output is generated when a device is hotplugged)
-+    cat /sys/kernel/debug/tracing/trace_pipe
-+       irq/51-pciehp-88      [001] .....  1311.177459: pci_hp_event: 0000:00:02.0 slot:10, event:CARD_PRESENT
-+
-+       irq/51-pciehp-88      [001] .....  1311.177566: pci_hp_event: 0000:00:02.0 slot:10, event:LINK_UP
-+
-+pcie_link_event
-+---------------
-+
-+Monitors PCIe link speed changes and provides detailed link status information.
-+::
-+
-+    pcie_link_event  "%s type:%d, reason:%d, cur_bus_speed:%s, max_bus_speed:%s, width:%u, flit_mode:%u, status:%s\n"
-+
-+**Parameters**:
-+
-+* ``type`` - PCIe device type (4=Root Port, etc.)
-+* ``reason`` - Reason for link change:
-+
-+  - ``0`` - Link retrain
-+  - ``1`` - Bus enumeration
-+  - ``2`` - Bandwidth controller enable
-+  - ``3`` - Bandwidth controller IRQ
-+  - ``4`` - Hotplug event
-+
-+
-+**Example Usage**:
-+
-+    # Enable the tracepoint
-+    echo1 > /sys/kernel/debug/tracing/events/pci/pcie_link_event/enable
-+
-+    # Monitor events (the following output is generated when a device is hotplugged)
-+    cat /sys/kernel/debug/tracing/trace_pipe
-+       irq/51-pciehp-88      [001] .....   381.545386: pcie_link_event: 0000:00:02.0 type:4, reason:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:16.0 GT/s PCIe, width:1, flit_mode:0, status:DLLLA
+[auto build test ERROR on pci/for-linus]
+[also build test ERROR on trace/for-next linus/master v6.17-rc7 next-20250925]
+[cannot apply to pci/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shuai-Xue/PCI-trace-Add-a-generic-RAS-tracepoint-for-hotplug-event/20250925-142250
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
+patch link:    https://lore.kernel.org/r/20250925061928.42758-3-xueshuai%40linux.alibaba.com
+patch subject: [PATCH v11 2/3] PCI: trace: Add a RAS tracepoint to monitor link speed changes
+config: x86_64-buildonly-randconfig-006-20250926 (https://download.01.org/0day-ci/archive/20250926/202509260804.F13FDt4V-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509260804.F13FDt4V-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509260804.F13FDt4V-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: vmlinux.o: in function `trace_raw_output_pcie_link_event':
+   trace.c:(.text+0x91792a): undefined reference to `pci_speed_string'
+>> ld: trace.c:(.text+0x917935): undefined reference to `pci_speed_string'
+
 -- 
-2.39.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
