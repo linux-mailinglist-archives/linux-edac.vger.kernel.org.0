@@ -1,84 +1,109 @@
-Return-Path: <linux-edac+bounces-4940-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4941-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0F33BA5F08
-	for <lists+linux-edac@lfdr.de>; Sat, 27 Sep 2025 14:26:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D4C2BA96B3
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Sep 2025 15:50:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E90E1673E1
-	for <lists+linux-edac@lfdr.de>; Sat, 27 Sep 2025 12:26:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CFBB188AEE6
+	for <lists+linux-edac@lfdr.de>; Mon, 29 Sep 2025 13:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E592E0410;
-	Sat, 27 Sep 2025 12:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C163081C9;
+	Mon, 29 Sep 2025 13:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mGu+TwSL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2IR/w1Nh"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8B927703E
-	for <linux-edac@vger.kernel.org>; Sat, 27 Sep 2025 12:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8312A2AD24;
+	Mon, 29 Sep 2025 13:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758976001; cv=none; b=A97jbTAU6MM9g1GUwAzawWkA1ehOGXNbzTaqVo1bxI8wqIBB3COpzRYmrdRk9G4Bamm5DzK3KZIXfY1SOp4RQ8CtobqyYtmbAG51IykccAe1D/lkdWIezBIKPIJVAOlVI7ryNlym7ml0h/UftMzf9ZQ5qHp5e5ugkdmBqXiHuSY=
+	t=1759153800; cv=none; b=FfEpG40vNgmDbGbR1AiTpKYQoDXO7nmx14qTzejjhTUbCePZiD9vjkNaZPjRNE6N5pwzJTbJcCOfbuPmt6nTQn7tiurbV2cLoGikGtZkv1uzf1B6WD9z2IbrVBIfZccTOLluTYeeFuufuvejZFOVuiBGRezLgb0GOxUA9RQQwAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758976001; c=relaxed/simple;
-	bh=rEfNw/hjnn2toGEkd2B+EFMnUNcZZBiV2AONtSPpb+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=q74XzC/5NK565C0A4NsWr1FrXF/XEP4rsfVydgz1QJohH0m0tmy8s0LBJIsyslRIUVVSDQhow0MrrAhs6iG1MuUFz548wrO2GmvCBXjv5RMvFLU8P0QkI5+HDkF4YEV55NDHj+0rfyFDqRh0S7Nq2+SEhM2b4izbLzXD3ATOu9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mGu+TwSL; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-46e37d6c21eso19403355e9.0
-        for <linux-edac@vger.kernel.org>; Sat, 27 Sep 2025 05:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758975998; x=1759580798; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SBLrdqiq83IjriqT+j/rod7j6tvQbgPiriXKTGAmd18=;
-        b=mGu+TwSLQzam783tObyDcH2rLIFuVGYxNVre9MwoFMsGm0AhR2pZsgD95vGQM2KNwu
-         dApDvVTuvreP1qHmXeHzNJTCapqbjEStu9D5k4cBt73HU1+c8COExHZ8dbYVwMpdTEEO
-         1K+ZUqFXi9XFq5pBpdkRNPqKpZSvw17B66Qn41yT9M99sUpxsb+GeTiHyE/GQ3F78TmN
-         k69Hxq6JsVnpYJHfKkH7NOJaS8KWBUIQJUBfOYQG/2jA5uEQUknDUFtkN7f+t8etLAUD
-         YRTm3Mc4F5nph/YwuA0bTRYs7O7tXbUV8b0kk3FuJd4x1XaEjp3Q+k/5XIrzJxfu0qoW
-         smSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758975998; x=1759580798;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBLrdqiq83IjriqT+j/rod7j6tvQbgPiriXKTGAmd18=;
-        b=ODoqOuNDyAYbpFPJdYj9ghm067qz7fi+ZmQxI867ZxomIFj00dMaUvqbrjrSd4HhTE
-         JWqgF8z/IhFvff3iC5dAOlxZVk7YDfKqPVpofuu/fd+v0IJOb1dwsKyOIJ6G/sThdsTL
-         jMu0wuLX/69xUAIU2He3xXq+Vh6cxc57bsNpoUTW5U9bqHP+jzyhR3XYcHx4GHbJ0fKJ
-         MOdK5OUXYB8flzx28kpJz0AV4KVfNC5P2EQjS00XNMZ3V50b7uANXWMPdHv1lz1ZcXhE
-         2bcXumavxcwDZPxC8EXgowbV6WZ8YsX+0wkejx3+LE0ng3HvNsUGf8uf5zPw6MD3VpIe
-         48qA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEL6igRVrLCvHe4zmKGEzrPGsS20BaGaoGE31qYJeCfMQ5HpIwIpM7NwKKGBhhkipwP86EjLbAqJsi@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2CswoMK2o9BFccScrmy9dA+a/XJaKEFXKI8MS1TGv90U42TRf
-	97j3DVX14xca5kIdtyPr2IPblznMZDIyuAuV+8hNDjpotSNKaMosxk8lOBSEf+QDdvk=
-X-Gm-Gg: ASbGncuxeofbEVhTrayxq2Km1/2ItTIGMzdEr6dJxwdEzUmaqW9iaIVUaVLt0zXN/J2
-	dqrjs0sDQ2kY6feTFuV1QxtlZHNATFlNOFCnFrCEALq74bHl5TI87KMyjDQHGN/VtYgnP9LoLFd
-	fku3aLSBqfm0hTevv2VDVkNpuw3cEklVO5Z9xWAwyWa/AldCln8NvCT2m+Vt4HApxFCDY3hSbJU
-	EXJDVoj1tqDCiMhFr/ofvKkteV670rvu5UMPPoGV5zkHtD3G2vZsYU4imH4qyegUzPaNIH/ldML
-	gNmCTs7TcK48P38oeUPtDzitDgRQIhv+/DeCbaOJ1zNEW5b3XGrxmKj7QAesIPo4iPpE742P39C
-	pz1RBeVbb3Ufqtq7D26U/hgZ1Kc+x
-X-Google-Smtp-Source: AGHT+IHAvRpOQmkSxSm6b3328/ZthZojPK7yroebvNA9zjeMtFoBw69S2yXMKcVzb6TG7S93dUplFw==
-X-Received: by 2002:a05:600c:c172:b0:46e:37af:f90e with SMTP id 5b1f17b1804b1-46e37affcc8mr86360625e9.6.1758975997952;
-        Sat, 27 Sep 2025 05:26:37 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-46e33b9e8aesm109617595e9.4.2025.09.27.05.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Sep 2025 05:26:37 -0700 (PDT)
-Date: Sat, 27 Sep 2025 15:26:34 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Cc: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH next] EDAC/versalnet: Fix off by one in handle_error()
-Message-ID: <aNfX-qj_KpCrnCUy@stanley.mountain>
+	s=arc-20240116; t=1759153800; c=relaxed/simple;
+	bh=ZP+96JhjkkrBnIK+mwXVIYMy7g62X4hPExrb6o1Qe/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g6XKS7nPhbh950zA2K8+x3h3QFYuDWeVRV8F0IfpcurRSqF5Tw4M5WnX7Lgi84DBRf2e/znONUwjhAskkJZMmMaa6KDUgsRo1bplIRvNRbSTQ5rPJzNxg4a9175jjZ8Cvl/z2kDGZqrexwZKpY4zmRT5iI7SVLNhUY+6YrLOWEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2IR/w1Nh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F31BC4CEF7;
+	Mon, 29 Sep 2025 13:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759153800;
+	bh=ZP+96JhjkkrBnIK+mwXVIYMy7g62X4hPExrb6o1Qe/s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=2IR/w1NhD6rO3VZzjaHsa/G5y5Y6EFTRaRCQoBFOIMmzFRk3gM0W0Mf+I/1sje/zM
+	 6eTkAuMiRzcWzHrNhmk6po9GpoWWRMGPau/mhN/FLC8qEKMftJ9tX/aLdXfc1Agx/E
+	 GgRNIXRtdpmNbgceNNbtDpd4ehAmTPd7HqANSrhw=
+Date: Mon, 29 Sep 2025 15:49:56 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Eliav Farber <farbere@amazon.com>
+Cc: linux@armlinux.org.uk, richard@nod.at, anton.ivanov@cambridgegreys.com,
+	johannes@sipsolutions.net, dave.hansen@linux.intel.com,
+	luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+	tony.luck@intel.com, qiuxu.zhuo@intel.com, mchehab@kernel.org,
+	james.morse@arm.com, rric@kernel.org, harry.wentland@amd.com,
+	sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+	alexander.deucher@amd.com, christian.koenig@amd.com,
+	Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+	evan.quan@amd.com, james.qian.wang@arm.com, liviu.dudau@arm.com,
+	mihail.atanassov@arm.com, brian.starkey@arm.com,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, robdclark@gmail.com, quic_abhinavk@quicinc.com,
+	dmitry.baryshkov@linaro.org, sean@poorly.run, jdelvare@suse.com,
+	linux@roeck-us.net, linus.walleij@linaro.org,
+	dmitry.torokhov@gmail.com, maz@kernel.org, wens@csie.org,
+	jernej.skrabec@gmail.com, samuel@sholland.org, agk@redhat.com,
+	snitzer@kernel.org, dm-devel@redhat.com, rajur@chelsio.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, peppe.cavallaro@st.com,
+	alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+	mcoquelin.stm32@gmail.com, krzysztof.kozlowski@linaro.org,
+	malattia@linux.it, hdegoede@redhat.com, markgross@kernel.org,
+	artur.paszkiewicz@intel.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, sakari.ailus@linux.intel.com,
+	fei1.li@intel.com, clm@fb.com, josef@toxicpanda.com,
+	dsterba@suse.com, jack@suse.com, tytso@mit.edu,
+	adilger.kernel@dilger.ca, dushistov@mail.ru,
+	luc.vanoostenryck@gmail.com, rostedt@goodmis.org,
+	mhiramat@kernel.org, pmladek@suse.com, senozhatsky@chromium.org,
+	andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+	minchan@kernel.org, ngupta@vflare.org, akpm@linux-foundation.org,
+	yoshfuji@linux-ipv6.org, dsahern@kernel.org, pablo@netfilter.org,
+	kadlec@netfilter.org, fw@strlen.de, jmaloy@redhat.com,
+	ying.xue@windriver.com, andrii@kernel.org, mykolal@fb.com,
+	ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, shuah@kernel.org, keescook@chromium.org,
+	wad@chromium.org, willy@infradead.org, sashal@kernel.org,
+	ruanjinjie@huawei.com, quic_akhilpo@quicinc.com,
+	David.Laight@aculab.com, herve.codina@bootlin.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
+	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH 07/19 v6.1.y] minmax: make generic MIN() and MAX() macros
+ available everywhere
+Message-ID: <2025092923-stove-rule-a00f@gregkh>
+References: <20250924202320.32333-1-farbere@amazon.com>
+ <20250924202320.32333-8-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -87,31 +112,19 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+In-Reply-To: <20250924202320.32333-8-farbere@amazon.com>
 
-The priv->mci[] array has NUM_CONTROLLERS so this > comparison needs to
-be >= to prevent an out of bounds access.
+On Wed, Sep 24, 2025 at 08:23:08PM +0000, Eliav Farber wrote:
+> From: Linus Torvalds <torvalds@linux-foundation.org>
+> 
+> [ Upstream commit 1a251f52cfdc417c84411a056bc142cbd77baef4 ]
 
-Fixes: d5fe2fec6c40 ("EDAC: Add a driver for the AMD Versal NET DDR controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/edac/versalnet_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+<snip>
 
-diff --git a/drivers/edac/versalnet_edac.c b/drivers/edac/versalnet_edac.c
-index 7c5db8bf0595..1ded4c3f0213 100644
---- a/drivers/edac/versalnet_edac.c
-+++ b/drivers/edac/versalnet_edac.c
-@@ -433,7 +433,7 @@ static void handle_error(struct mc_priv  *priv, struct ecc_status *stat,
- 	phys_addr_t pfn;
- 	int err;
- 
--	if (WARN_ON_ONCE(ctl_num > NUM_CONTROLLERS))
-+	if (WARN_ON_ONCE(ctl_num >= NUM_CONTROLLERS))
- 		return;
- 
- 	mci = priv->mci[ctl_num];
--- 
-2.51.0
+As this didn't go into 6.6.y yet, I'll stop here on this series for now.
+Please fix up for newer kernels first and then resend these.
 
+thanks,
+
+greg k-h
 
