@@ -1,155 +1,192 @@
-Return-Path: <linux-edac+bounces-4988-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4989-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6A5BBDC5F
-	for <lists+linux-edac@lfdr.de>; Mon, 06 Oct 2025 12:49:43 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC858BBE727
+	for <lists+linux-edac@lfdr.de>; Mon, 06 Oct 2025 17:11:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A94F734BBE6
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Oct 2025 10:49:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 94EDA4E2D06
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Oct 2025 15:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1004C26C3AC;
-	Mon,  6 Oct 2025 10:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5206B2D6619;
+	Mon,  6 Oct 2025 15:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E597mMN/"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="N/Nusk+U"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012044.outbound.protection.outlook.com [40.93.195.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8D4259C83;
-	Mon,  6 Oct 2025 10:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759747669; cv=none; b=tml4xtVwYWs7mwKu465pxaD9M1wNYmsIhsvhYxtQe8J4IYyauWoIwFyBOajIomUKRi+FbYs4heASeBAJovYd3/4qXOaToPNs2uKLWlmDGAxuudifybv/pb6Jz16G0BR61jbzOUzpKpUlXQcLdtryVBvskiTo1m9DbqRTPnXAq0k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759747669; c=relaxed/simple;
-	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=miDG5M6zH2nR+N4KhMGspZyicQXFTmDEh9ybswXjTlXN3HR+mLrxpPwebHxHysiiOqDHjMS/H8EKFHhQdNj4df9F7p4DBzVyfAygw1GCUL1GC9xovSEVk5dzcfGjbrAE8tYY2km5ucrFKZ8EY44tph7O1wcpbAS0IbE7mE7jP10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E597mMN/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDD7C4CEF5;
-	Mon,  6 Oct 2025 10:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1759747669;
-	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E597mMN/x7YVkjNX1Bc0G8W7GHt89kk8u2seksXgi5q2H3Gw9DqBry/MoIgd7Hl/f
-	 QcuYuZ/DwxfZxXg04LwRoNwgtiAl8T7SsOstK7UXK8SyqkUmffohAckrwzORjzcTe+
-	 /i/1SV3Pn0pttPu3dXePy8Hlmyjuwx9fL801o6Qw=
-Date: Mon, 6 Oct 2025 12:47:45 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Eliav Farber <farbere@amazon.com>
-Cc: jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-	dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-	hpa@zytor.com, tony.luck@intel.com, qiuxu.zhuo@intel.com,
-	james.morse@arm.com, rric@kernel.org, airlied@linux.ie,
-	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, robdclark@gmail.com,
-	sean@poorly.run, jdelvare@suse.com, linux@roeck-us.net,
-	linus.walleij@linaro.org, dmitry.torokhov@gmail.com, maz@kernel.org,
-	wens@csie.org, jernej.skrabec@gmail.com, agk@redhat.com,
-	snitzer@redhat.com, dm-devel@redhat.com, davem@davemloft.net,
-	kuba@kernel.org, mcoquelin.stm32@gmail.com,
-	krzysztof.kozlowski@canonical.com, malattia@linux.it,
-	hdegoede@redhat.com, mgross@linux.intel.com, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, sakari.ailus@linux.intel.com,
-	clm@fb.com, josef@toxicpanda.com, dsterba@suse.com, jack@suse.com,
-	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
-	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
-	senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
-	akpm@linux-foundation.org, yoshfuji@linux-ipv6.org,
-	dsahern@kernel.org, pablo@netfilter.org, kadlec@netfilter.org,
-	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
-	shuah@kernel.org, willy@infradead.org, sashal@kernel.org,
-	quic_akhilpo@quicinc.com, ruanjinjie@huawei.com,
-	David.Laight@aculab.com, herve.codina@bootlin.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
-	linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Subject: Re: [PATCH v2 07/19 5.15.y] minmax: simplify and clarify
- min_t()/max_t() implementation
-Message-ID: <2025100648-capable-register-101b@gregkh>
-References: <20251003130006.41681-1-farbere@amazon.com>
- <20251003130006.41681-8-farbere@amazon.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AC627FB03;
+	Mon,  6 Oct 2025 15:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759763455; cv=fail; b=U77+/3Q0y5ZPQUIv4fm4rkZifLiIm2Io1shteC5F6+IoHP7v/oeAKts1YnxSsGpMfpXJyfJBo1W6XSSsjo+uerZzNdkAUGLpJlOs/WZSl1Xkqq/a6ngujdtuusQnVhGTz3trVLotOd3n8vSFF62SOqhrenpKoiqsXekvwq21fvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759763455; c=relaxed/simple;
+	bh=k5W7A2pCD/6C4TDw+dKEIdeYFVYs9K48BzToF92HJQc=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=g7ZgyOFYLyvGleu1luzdDSV41Jfiy4xyutcifryLI9IIrgqM/eYrzaCpx4/8ahVGyZ5Y+rAFhTuhkCi73bDldF1SjnUVVIIAB6DkANcuB7RA3oG/NZhcKUEXr2v3L0uwf+pm8PNZvVceTiAT35zIpTCLBniOHj8SYgvVly6vBUY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=N/Nusk+U; arc=fail smtp.client-ip=40.93.195.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=n0t8R1cX+i5LlrwtzhrDS/3IUnrx4D5xgsu6ll2X6KDcOoSa8E+Z9nPkogi3n57FkMpi/qp99PI4kbab/q+l26ydgNwTW7rmt0bBK15oMSj7yoW35HBytonDPm7pQllUZ7cMUVIMnqaJywfTvk6roZ7DZFQfS4pyTw16s0cVjt4+yLJ9ZkoV8iqxkSM/1o56QvgN/dZkuZmomq0oKE8MBKK5KqaSbHHzWgTyzdJK6MBkNNhKnqpsA6H9ee5WpVdtT01KfpYTui+exF0aXhcVBDwT3t1TvngPs7YOxV0W/zEsbkW6ENlCK074aVH9OtI3WaFSMdHRIGntfXwsqHByGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vxXfrQHb0Fi4D3VXId5Ehnr3g32SrHthy0tN+v0tJzA=;
+ b=CW1js5AYBelKvvUQCJDILFrLs+7Fk1S/9XJq6KCDwKJEaKFi+ObnofN5t5m26WGkOPluMG6a5axTf6u+uhbqCoY/bdcvwREKEaYQSLe7USClkxzYNF6X9cUuVjr4/+joyV+ULGYycz8vcdKQp7JbSZ2BYt78iupiWwWe/ZI83nUnHf2Vu0oeaePU5Jc6cuov6n3IE+01R6nFBigU3++BPoRolGsskufhDV1nP7m74k90ox08KuGw+6/VbAdJYiF5xedw9YnEa5SfMVUtORlCEL43w159dXp0l3TACcvW5IrJ0v27stdte6xV8Fwr6QywCeHjmoH6WVfHJ9uHN1KOYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vxXfrQHb0Fi4D3VXId5Ehnr3g32SrHthy0tN+v0tJzA=;
+ b=N/Nusk+UnIuEmwK6hVC033I7PkHrWe2idMfBaQrwvXsuJGJqEP/4VS1o5twZ++CqkwdI0K222D9pc3X3fuEBp9xOZBWUTi2eTfauzykLIkLT4WROUkdykvP0PzSobZTqKhcXEubnmHFB/ZMgTDcJxxYQbBMb6JQ+pjagop3J42E=
+Received: from CH0PR03CA0204.namprd03.prod.outlook.com (2603:10b6:610:e4::29)
+ by SJ2PR12MB9211.namprd12.prod.outlook.com (2603:10b6:a03:55e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Mon, 6 Oct
+ 2025 15:10:50 +0000
+Received: from CH2PEPF0000014A.namprd02.prod.outlook.com
+ (2603:10b6:610:e4:cafe::a4) by CH0PR03CA0204.outlook.office365.com
+ (2603:10b6:610:e4::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9182.20 via Frontend Transport; Mon,
+ 6 Oct 2025 15:10:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ CH2PEPF0000014A.mail.protection.outlook.com (10.167.244.107) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9203.9 via Frontend Transport; Mon, 6 Oct 2025 15:10:49 +0000
+Received: from [127.0.1.1] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 6 Oct
+ 2025 08:10:48 -0700
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH 0/3] AMD ATL PRM Updates
+Date: Mon, 6 Oct 2025 15:10:24 +0000
+Message-ID: <20251006-wip-atl-prm-v1-0-4a62967fb2b0@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251003130006.41681-8-farbere@amazon.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAODb42gC/x3MwQrCMAyA4VcZORtsC1XxVcRDWjMXWGNJxxTG3
+ t3q8Tv8/waNTbjBddjAeJUmL+3whwHyRPpklEc3BBeid+6Eb6lIy4zVCuY4XlJMZx+8h15U41E
+ +/9vt3p2oMSYjzdPvUUh0FuVjobawwb5/AW/mtsB/AAAA
+X-Change-ID: 20251006-wip-atl-prm-c5f8b5b71211
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Yazen Ghannam <Yazen.Ghannam@amd.com>, Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>
+CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>, Avadhut Naik <avadhut.naik@amd.com>, John Allen
+	<john.allen@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, "Yazen
+ Ghannam" <yazen.ghannam@amd.com>
+X-Mailer: b4 0.15-dev-9b767
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000014A:EE_|SJ2PR12MB9211:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7f17bb2-9a2b-44fd-e891-08de04ea88b3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cG53OWxxM1VMYzNYMDhDRGc4TkhtTjBBb09PSDdrQkU3aUFUV2U3QmRpOXA3?=
+ =?utf-8?B?UVZXanFUQ3dNbHRodURYVFRVVlArYklxY1F0UXlpMkIxc2FLNUFzUXFTeThB?=
+ =?utf-8?B?dVVWdlNidFgwdzFuVlNadk9hQkFkZzR5Ni9TY0tNRjFNdzNTbGZFL0lmLzBn?=
+ =?utf-8?B?bWF3SGpFdURTazRuNEFoQmUxZHRLNGprQno2bHN0djhwS0NOdzBwWEJwZlFW?=
+ =?utf-8?B?WUpGTTVSN3p1WXBsTm1hZ0l1eDl3eVBlRXM0THV4RW9rZ0NGZzlhV1Q4QzI3?=
+ =?utf-8?B?MmZmeHlKU2RpQU9oWURZRG93bWoxY251TVpBR2NFQ2o4Y29GN3l5WkQydk5Y?=
+ =?utf-8?B?MnE4a3l5YmdzSGJNMnhFd1hDU2lLTm45b0hzcU9pTU1yb2hIbWMxd1Y4ZGhk?=
+ =?utf-8?B?aXYwY0d4RXVMRjVaMXVaaW1rMlZjT095SklrNTMwUXkvNTY4TkxMMDZKUW9E?=
+ =?utf-8?B?VUM5amROb3FnMU1vaVpMZ1FQYW1DMURjRVRvV04xL1Y1R0gyYUdDemJnMkFh?=
+ =?utf-8?B?YThjaEVrZDlZVWRSTk9BbExtQzlDbmtSSkswaFdxNGxvNkJrUHhqNUlDNTlD?=
+ =?utf-8?B?S3htcXpnOStycEowK1AyWllPb3ZIUmpWbytUSThaY0k1cVd4bVp6SGRvVXRC?=
+ =?utf-8?B?aktTNFQ2d3pHNVpQNHowSm9IanlqdkJaUTFaSHlUa0IvTG5LYW11aEtaMGtq?=
+ =?utf-8?B?S1ZGckdtMjZnd1VmQVV5VDU3Wnc2MXd4bzdBNTZOTGRPSkF2cXR0VzdVcGJv?=
+ =?utf-8?B?UlN1RFB3SlFoODVtT2czbEs2OFBjTy9BTTQ0eXZtWkhDRE50Y1haZ3FoQ0k4?=
+ =?utf-8?B?TUtaQVZjUFdyRWdjNDNVMEtmWUpYOUE0aFRmN0xlbkdRdXNLa2pseWZsMnVU?=
+ =?utf-8?B?UkVkVVpCamhxRFVHam5Mc0QwckdVMGdYNzVsWGdmRkl4cDNZWGwwR2dZVkRl?=
+ =?utf-8?B?aDM5TDZnNllsTUhUUXV3NGZ1aEFsS1p1aGdyZjZzMUZZZFhKeTE1VC9HNmJ2?=
+ =?utf-8?B?MDIyNmJYQzM4eWFsQnVUSkNlMitRK2pWSkljeFBRejBaemRkNXg5WVRaVis0?=
+ =?utf-8?B?THNERDMzbENUc3l0RVNxRVpyaFlLSU1UTGw0WGJqOWF2SzJoQXFMUENENDhW?=
+ =?utf-8?B?TUlPdTdEbElXYkRtRGJxL3NicHpqaFVjU1ljTjJjcHB6TXc0VGhGT1dxNE53?=
+ =?utf-8?B?b2VkK1d1N0hmNlhQYjgvTDh3QmxkM2J4WUk4dWpldCsrbGhrN1FkK2dSRDcw?=
+ =?utf-8?B?QmdUaExkRCtZUTAvQ090ZEFiWE9qU2VLT2R0Q2FZZXFSaVp0Zi9MMXRWY21C?=
+ =?utf-8?B?ejIwaThlUHF5bGlqN3VOSVJFQnN5T2FWb0VGcG9WSGt3OVRJSC9zYmJYdk1Q?=
+ =?utf-8?B?T3RudnF5VVpJSlpTUitrWnl6eWdiWVFLcUo5cHNuZEcrZEp4Um9jVmw1bGZD?=
+ =?utf-8?B?cDdvc040bUhRbTdpUWQ1VlV6OUNpTFl2TFNwT2ZtYjZMaHlCU0xQNHErV2Zr?=
+ =?utf-8?B?ZXFIaityOXBqU3ZnRHVucDJuZmQ5TFJvbFFtZHlSWHZ3S283aFZXUHBsREVP?=
+ =?utf-8?B?Z2hkM1pIQzJQQzcrMktLejYvRnpoQ3Bka3krbk9vOUdaMU1mNGwvb0RJUGM0?=
+ =?utf-8?B?cG9qL1poRm1jRjhkcm1lSDBPRjNxRHV2UmxjTWNYR3ZlOHZCZ1JINzROR1Ja?=
+ =?utf-8?B?UE8rdjMwTjZzR0pxWTEwRmNvRUxMWWJ4UWU5d1FtTytldnpuMHhsaXltdklX?=
+ =?utf-8?B?QUxWZng4bnh1Q00ybGNIUHhFQ3YrSDFqelZMOGo2aGVqaEZQY3JzNHVJV1RK?=
+ =?utf-8?B?aFljQlAxRlRiTGVCTHVoMERiYThtRlhSSUpjMTZGMGlDZDNYN3RKb2pHVER1?=
+ =?utf-8?B?Nmc4OVYrU2h5eUdYbWFqaTBHV3JaanNJQjQ5eFU3U1p2YXBTOGROWkl0dmV0?=
+ =?utf-8?B?OUtqYW5INGxwdWlEMEF0Snd6VElQMm1CMm9QQTR2MWhpcUF2V1VHSmQ4d3k0?=
+ =?utf-8?B?amNBbE9jY0RxVTk0bUlvT2pLWU1ibkdIVDdVb2pHdlVSdFFPb2NsNUo0OTZB?=
+ =?utf-8?B?eHZIdFhZQWZBazRnbzNBdWc0VDNRSmN4ZnBGMWxYbUQ5dXR3WURiaGZjUnhx?=
+ =?utf-8?Q?FxZo=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2025 15:10:49.5002
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7f17bb2-9a2b-44fd-e891-08de04ea88b3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF0000014A.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9211
 
-On Fri, Oct 03, 2025 at 12:59:54PM +0000, Eliav Farber wrote:
-> From: Linus Torvalds <torvalds@linux-foundation.org>
-> 
-> [ Upstream commit 017fa3e89187848fd056af757769c9e66ac3e93d ]
-> 
-> This simplifies the min_t() and max_t() macros by no longer making them
-> work in the context of a C constant expression.
-> 
-> That means that you can no longer use them for static initializers or
-> for array sizes in type definitions, but there were only a couple of
-> such uses, and all of them were converted (famous last words) to use
-> MIN_T/MAX_T instead.
-> 
-> Cc: David Laight <David.Laight@aculab.com>
-> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
+Hi all,
 
-Eliav, your testing infrastructure needs some work, this patch breaks
-the build on this kernel tree:
+This set updates the AMD Address Translation Library to default to using
+PRM handlers.
 
-In file included from ./include/linux/kernel.h:16,
-                 from ./include/linux/list.h:9,
-                 from ./include/linux/wait.h:7,
-                 from ./include/linux/wait_bit.h:8,
-                 from ./include/linux/fs.h:6,
-                 from fs/erofs/internal.h:10,
-                 from fs/erofs/zdata.h:9,
-                 from fs/erofs/zdata.c:6:
-fs/erofs/zdata.c: In function ‘z_erofs_decompress_pcluster’:
-fs/erofs/zdata.h:185:61: error: ISO C90 forbids variable length array ‘pages_onstack’ [-Werror=vla]
-  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
-      |                                                             ^~~~
-./include/linux/minmax.h:49:23: note: in definition of macro ‘__cmp_once_unique’
-   49 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-      |                       ^
-./include/linux/minmax.h:164:27: note: in expansion of macro ‘__cmp_once’
-  164 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-      |                           ^~~~~~~~~~
-fs/erofs/zdata.h:185:9: note: in expansion of macro ‘min_t’
-  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
-      |         ^~~~~
-fs/erofs/zdata.c:847:36: note: in expansion of macro ‘Z_EROFS_VMAP_ONSTACK_PAGES’
-  847 |         struct page *pages_onstack[Z_EROFS_VMAP_ONSTACK_PAGES];
-      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Patch 1 adds a small helper function in the ACPI PRMT code.
 
+Patch 2 adds the new ATL functionality.
 
-I'll drop this whole series, please do a bit more testing before sending
-out a new version.
+Patch 3 does minor miscellaneous cleanup.
 
-thanks,
+Please note there is a minor conflict with this set from Avadhut:
+https://lore.kernel.org/r/20250915212244.886668-1-avadhut.naik@amd.com
 
-greg k-h
+Thanks,
+Yazen
+
+---
+Yazen Ghannam (3):
+      ACPI: PRM: Add acpi_prm_handler_available()
+      RAS/AMD/ATL: Require PRM support for future systems
+      RAS/AMD/ATL: Return error codes from helper functions
+
+ drivers/acpi/prmt.c            |  6 ++++++
+ drivers/ras/amd/atl/core.c     |  7 +++++--
+ drivers/ras/amd/atl/internal.h | 10 +++++++++-
+ drivers/ras/amd/atl/prm.c      | 10 ++++++++++
+ drivers/ras/amd/atl/system.c   | 19 +++++++++++--------
+ drivers/ras/amd/atl/umc.c      |  2 +-
+ include/linux/prmt.h           |  2 ++
+ 7 files changed, 44 insertions(+), 12 deletions(-)
+---
+base-commit: fd94619c43360eb44d28bd3ef326a4f85c600a07
+change-id: 20251006-wip-atl-prm-c5f8b5b71211
+
 
