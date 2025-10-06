@@ -1,178 +1,155 @@
-Return-Path: <linux-edac+bounces-4987-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4988-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 758B4BBDB5A
-	for <lists+linux-edac@lfdr.de>; Mon, 06 Oct 2025 12:37:57 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E6A5BBDC5F
+	for <lists+linux-edac@lfdr.de>; Mon, 06 Oct 2025 12:49:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 589C64E983F
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Oct 2025 10:37:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A94F734BBE6
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Oct 2025 10:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906D9242D9F;
-	Mon,  6 Oct 2025 10:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1004C26C3AC;
+	Mon,  6 Oct 2025 10:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E597mMN/"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8DC188000;
-	Mon,  6 Oct 2025 10:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8D4259C83;
+	Mon,  6 Oct 2025 10:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759747067; cv=none; b=LbsJR0uIvh6R1qpBU41rFTMbGCLV0ljM5dQ8cJw3aZM0abuGASmUr0NJpGT9AYqyoiSghXMEQHb4bv4dFkBG448TV1ynfjsJsT2rWV6uurAW3xyb/7L/zFOqEkU4ClWFRk2RdAYJXOdzU3JbifcVF4KvQ2gIHpspJ5/nSOT4Ulc=
+	t=1759747669; cv=none; b=tml4xtVwYWs7mwKu465pxaD9M1wNYmsIhsvhYxtQe8J4IYyauWoIwFyBOajIomUKRi+FbYs4heASeBAJovYd3/4qXOaToPNs2uKLWlmDGAxuudifybv/pb6Jz16G0BR61jbzOUzpKpUlXQcLdtryVBvskiTo1m9DbqRTPnXAq0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759747067; c=relaxed/simple;
-	bh=5a0V+ktkM0zmP/i/KvTfiBf3YEBIe7ryg6F09ELHLbA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=mANQUkQ86/3n22/wDhxqVXUj4/CAezMGCvZV3InPEOf/kOrIVI4JPacmrn/+M80gkEVpXxYlSIoEm09HYxCTPlBelj+IsNpE9Jt5xqMbdZ37kqaPd2ej/4prB7OgIVT+RBHIwaaxZ0PHBp/gTcdn7IRyX4tlcLPo3HiJA4wHhnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cgG0z0LfWz6L4xs;
-	Mon,  6 Oct 2025 18:37:07 +0800 (CST)
-Received: from dubpeml500006.china.huawei.com (unknown [7.214.146.138])
-	by mail.maildlp.com (Postfix) with ESMTPS id BC60F1402CB;
-	Mon,  6 Oct 2025 18:37:39 +0800 (CST)
-Received: from dubpeml100008.china.huawei.com (7.214.145.227) by
- dubpeml500006.china.huawei.com (7.214.146.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 6 Oct 2025 11:37:39 +0100
-Received: from dubpeml100008.china.huawei.com ([7.214.145.227]) by
- dubpeml100008.china.huawei.com ([7.214.145.227]) with mapi id 15.02.1544.011;
- Mon, 6 Oct 2025 11:37:39 +0100
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Borislav Petkov <bp@alien8.de>, Jonathan Cameron
-	<jonathan.cameron@huawei.com>
-CC: "rafael@kernel.org" <rafael@kernel.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "rppt@kernel.org" <rppt@kernel.org>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"lenb@kernel.org" <lenb@kernel.org>, "Yazen.Ghannam@amd.com"
-	<Yazen.Ghannam@amd.com>, "mchehab@kernel.org" <mchehab@kernel.org>, Linuxarm
-	<linuxarm@huawei.com>, "rientjes@google.com" <rientjes@google.com>,
-	"jiaqiyan@google.com" <jiaqiyan@google.com>, "Jon.Grimm@amd.com"
-	<Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>
-Subject: RE: [PATCH v12 1/2] ACPI:RAS2: Add ACPI RAS2 driver
-Thread-Topic: [PATCH v12 1/2] ACPI:RAS2: Add ACPI RAS2 driver
-Thread-Index: AQHcHC9WuMPoKRXbY02Oy+WxUZ/jerSMt+SAgAK0t2CAABfigIAEdNLAgAOLbYCAABR4AIACsFkAgBrSt9A=
-Date: Mon, 6 Oct 2025 10:37:39 +0000
-Message-ID: <6ac4ad35975142df986bfcb27d1e9b2c@huawei.com>
-References: <20250902173043.1796-1-shiju.jose@huawei.com>
- <20250902173043.1796-2-shiju.jose@huawei.com>
- <20250910192707.GAaMHRCxWx37XitN3t@fat_crate.local>
- <9dd5e9d8e9b04a93bd4d882ef5d8b63e@huawei.com>
- <20250912141155.GAaMQqK4vS8zHd1z4_@fat_crate.local>
- <9433067c142b45d583eb96587b929878@huawei.com>
- <20250917162253.GCaMrgXYXq2T4hFI0w@fat_crate.local>
- <20250917183608.000038c4@huawei.com>
- <20250919103950.GCaM0y9r6R6b5jfx8z@fat_crate.local>
-In-Reply-To: <20250919103950.GCaM0y9r6R6b5jfx8z@fat_crate.local>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1759747669; c=relaxed/simple;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=miDG5M6zH2nR+N4KhMGspZyicQXFTmDEh9ybswXjTlXN3HR+mLrxpPwebHxHysiiOqDHjMS/H8EKFHhQdNj4df9F7p4DBzVyfAygw1GCUL1GC9xovSEVk5dzcfGjbrAE8tYY2km5ucrFKZ8EY44tph7O1wcpbAS0IbE7mE7jP10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E597mMN/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDD7C4CEF5;
+	Mon,  6 Oct 2025 10:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759747669;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E597mMN/x7YVkjNX1Bc0G8W7GHt89kk8u2seksXgi5q2H3Gw9DqBry/MoIgd7Hl/f
+	 QcuYuZ/DwxfZxXg04LwRoNwgtiAl8T7SsOstK7UXK8SyqkUmffohAckrwzORjzcTe+
+	 /i/1SV3Pn0pttPu3dXePy8Hlmyjuwx9fL801o6Qw=
+Date: Mon, 6 Oct 2025 12:47:45 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Eliav Farber <farbere@amazon.com>
+Cc: jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+	dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+	hpa@zytor.com, tony.luck@intel.com, qiuxu.zhuo@intel.com,
+	james.morse@arm.com, rric@kernel.org, airlied@linux.ie,
+	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, robdclark@gmail.com,
+	sean@poorly.run, jdelvare@suse.com, linux@roeck-us.net,
+	linus.walleij@linaro.org, dmitry.torokhov@gmail.com, maz@kernel.org,
+	wens@csie.org, jernej.skrabec@gmail.com, agk@redhat.com,
+	snitzer@redhat.com, dm-devel@redhat.com, davem@davemloft.net,
+	kuba@kernel.org, mcoquelin.stm32@gmail.com,
+	krzysztof.kozlowski@canonical.com, malattia@linux.it,
+	hdegoede@redhat.com, mgross@linux.intel.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, sakari.ailus@linux.intel.com,
+	clm@fb.com, josef@toxicpanda.com, dsterba@suse.com, jack@suse.com,
+	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
+	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
+	senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
+	akpm@linux-foundation.org, yoshfuji@linux-ipv6.org,
+	dsahern@kernel.org, pablo@netfilter.org, kadlec@netfilter.org,
+	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
+	shuah@kernel.org, willy@infradead.org, sashal@kernel.org,
+	quic_akhilpo@quicinc.com, ruanjinjie@huawei.com,
+	David.Laight@aculab.com, herve.codina@bootlin.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
+	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH v2 07/19 5.15.y] minmax: simplify and clarify
+ min_t()/max_t() implementation
+Message-ID: <2025100648-capable-register-101b@gregkh>
+References: <20251003130006.41681-1-farbere@amazon.com>
+ <20251003130006.41681-8-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251003130006.41681-8-farbere@amazon.com>
 
-Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogQm9yaXNsYXYgUGV0a292IDxicEBh
-bGllbjguZGU+DQo+U2VudDogMTkgU2VwdGVtYmVyIDIwMjUgMTE6NDANCj5UbzogSm9uYXRoYW4g
-Q2FtZXJvbiA8am9uYXRoYW4uY2FtZXJvbkBodWF3ZWkuY29tPg0KPkNjOiBTaGlqdSBKb3NlIDxz
-aGlqdS5qb3NlQGh1YXdlaS5jb20+OyByYWZhZWxAa2VybmVsLm9yZzsgYWtwbUBsaW51eC0NCj5m
-b3VuZGF0aW9uLm9yZzsgcnBwdEBrZXJuZWwub3JnOyBkZmVyZ3Vzb25AYW1wZXJlY29tcHV0aW5n
-LmNvbTsgbGludXgtDQo+ZWRhY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWFjcGlAdmdlci5rZXJu
-ZWwub3JnOyBsaW51eC1tbUBrdmFjay5vcmc7IGxpbnV4LQ0KPmRvY0B2Z2VyLmtlcm5lbC5vcmc7
-IHRvbnkubHVja0BpbnRlbC5jb207IGxlbmJAa2VybmVsLm9yZzsNCj5ZYXplbi5HaGFubmFtQGFt
-ZC5jb207IG1jaGVoYWJAa2VybmVsLm9yZzsgTGludXhhcm0NCj48bGludXhhcm1AaHVhd2VpLmNv
-bT47IHJpZW50amVzQGdvb2dsZS5jb207IGppYXFpeWFuQGdvb2dsZS5jb207DQo+Sm9uLkdyaW1t
-QGFtZC5jb207IGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbTsNCj5uYW95YS5ob3JpZ3VjaGlA
-bmVjLmNvbTsgamFtZXMubW9yc2VAYXJtLmNvbTsganRob3VnaHRvbkBnb29nbGUuY29tOw0KPnNv
-bWFzdW5kYXJhbS5hQGhwZS5jb207IGVyZGVtYWt0YXNAZ29vZ2xlLmNvbTsgcGdvbmRhQGdvb2ds
-ZS5jb207DQo+ZHVlbndlbkBnb29nbGUuY29tOyBndGhlbGVuQGdvb2dsZS5jb207DQo+d3NjaHdh
-cnR6QGFtcGVyZWNvbXB1dGluZy5jb207IHdic0Bvcy5hbXBlcmVjb21wdXRpbmcuY29tOw0KPm5p
-ZmFuLmN4bEBnbWFpbC5jb207IHRhbnhpYW9mZWkgPHRhbnhpYW9mZWlAaHVhd2VpLmNvbT47IFpl
-bmd0YW8gKEIpDQo+PHByaW1lLnplbmdAaGlzaWxpY29uLmNvbT47IFJvYmVydG8gU2Fzc3UgPHJv
-YmVydG8uc2Fzc3VAaHVhd2VpLmNvbT47DQo+a2FuZ2thbmcuc2hlbkBmdXR1cmV3ZWkuY29tOyB3
-YW5naHVpcWlhbmcgPHdhbmdodWlxaWFuZ0BodWF3ZWkuY29tPg0KPlN1YmplY3Q6IFJlOiBbUEFU
-Q0ggdjEyIDEvMl0gQUNQSTpSQVMyOiBBZGQgQUNQSSBSQVMyIGRyaXZlcg0KPg0KPk9uIFdlZCwg
-U2VwIDE3LCAyMDI1IGF0IDA2OjM2OjA4UE0gKzAxMDAsIEpvbmF0aGFuIENhbWVyb24gd3JvdGU6
-DQo+PiBUaGlzICdmaXJzdCBjb250aWd1b3VzIHJhbmdlJyBpcyBhbiBhdHRlbXB0IHRvIERUUlQg
-aW4gYSBjb3JuZXIgY2FzZQ0KPj4gdGhhdCBpcyByZWFsIGJ1dCB3aGVyZSB0aGVyZSBpcyBub3Qg
-YW4gb2J2aW91cyByaWdodCB0aGluZyBkdWUgdG8gc3BlYw0KPmxpbWl0YXRpb25zLg0KPg0KPlRo
-YW5rcyBmb3IgdGFraW5nIHRoZSB0aW1lIHRvIGV4cGFuZC4gVGhlIGdpc3Qgb2YgdGhpcyBuZWVk
-cyB0byBiZSBpbiBhIGNvbW1pdA0KPm1lc3NhZ2UgZm9yIGZ1dHVyZSByZWZlcmVuY2UuDQo+DQo+
-SE9XRVZFUiwgSSdtIHN0aWxsIG5vdCBjbGVhciAqd2h5KiB3ZSdyZSBqdW1waW5nIHRocm91Z2gg
-aG9vcHMgd2hpY2ggd2UNCj5wcm9iYWJseSBzZXQgdXAgb3Vyc2VsdmVzIHdpdGhvdXQgZXZlbiBr
-bm93aW5nIHdoeS4uLiBhdCBsZWFzdCBpdCBsb29rcyBsaWtlIHRoaXMNCj5mcm9tIHdoZXJlIEkn
-bSBzdGFuZGluZy4NCj4NCj5TbyB3aHkgbm90IHN0YXJ0IGEgc2NydWIgb24gdGhlIHdob2xlIHN5
-c3RlbT8gV2h5IGRvIHdlIGNhcmU/DQo+DQo+U2NydWIgaXMgImNoZWFwIiBpbiB0aGUgc2Vuc2Ug
-dGhhdCBpdCBydW5zIGluIHRoZSBiYWNrZ3JvdW5kIGFuZCBpcyB0aGUgbG93ZXN0DQo+cHJpb3Jp
-dHkgYW5kIGV2ZXJ5dGhpbmcgZWxzZSBvdmVycmlkZXMgaXQuDQo+DQo+U28gd2h5IGRlc2lnbiBh
-biBpbnRlcmZhY2Ugb25seSB3aGVuIHRoZXJlJ3MgYSBuZWVkIHRvIGRlc2lnbiBvbmUgYW5kIGRv
-IHRoZQ0KPnNpbXBsZXN0IHRoaW5nIG5vdywgZm9yIHN0YXJ0ZXJzPyBHYXRoZXIgc29tZSBleHBl
-cmllbmNlIGFuZCB0aGVuIGltcnBvdmUgaXQgYnkNCj5hY3R1YWxseSBkZXNpZ25pbmcgYW4gaW50
-ZXJmYWNlLi4uDQoNCkhpIEJvcmlzLA0KDQpTb3JyeSBmb3IgdGhlIGRlbGF5IGluIHJlcGxheWlu
-Zy4NCg0KV2UgaGF2ZSBhIHByb3RvdHlwZSBsb29raW5nIHRvIHNpbXBsaWZ5IHRoaW5ncyBhcyBm
-b2xsb3dzIChsZWF2aW5nIHBlciBub2RlIGFuZA0KcmFuZ2UgY29udHJvbCBmb3IgZnV0dXJlIHdv
-cmspLCBidXQgYmVmb3JlIEkgcG9zdCBpdCAod2FpdGluZyBmb3IgcmMxKSBJJ2QgbGlrZSB0byBk
-aXNjdXNzDQp0aGUgYXBwcm9hY2ggYW5kIGEgZmV3IG9wZW4gcXVlc3Rpb25zIg0KDQoxLlNjcnVi
-IHJhdGUNCjEuMS4gU2NydWIgcmF0ZSBpcyBjb21tb24gYWNyb3NzIHRoZSBOVU1BIG5vZGUgZG9t
-YWlucy4NCjEuMi4gQ29tbW9uIG1pbiBzY3J1YiByYXRlIGlzIG1heCBvZiBtaW4gc2NydWIgcmF0
-ZXMgYWNyb3NzIG5vZGVzLg0KMS4zLiBDb21tb24gbWF4IHNjcnViIHJhdGUgaXMgbWluIG9mIG1h
-eCBzY3J1YiByYXRlcyBhY3Jvc3Mgbm9kZXMuDQoxLjQuIFNjcnViIHJhdGUgYWxsb3dlZCB0byBj
-aGFuZ2Ugb25seSBpZiBOTyBkZW1hbmQgYW5kIHBhdHJvbA0KICAgc2NydWJiaW5nIGlzIGluIHBy
-b2dyZXNzIGFuZCBzaG91bGQgYmUgd2l0aGluIG1pbiBhbmQgbWF4DQogICByYW5nZSBvZiBzY3J1
-YiByYXRlcy4NCg0KMi4gRGVtYW5kIHNjcnViYmluZyBhbmQgQmFja2dyb3VuZCAocGF0cm9sKSBz
-Y3J1YmJpbmcNCjIuMS4gQmFja2dyb3VuZCBzY3J1YmJpbmcgcmVxdWVzdCBlbmFibGVzIEJHIHNj
-cnViYmluZw0KICAgICBvbiBhbGwgTlVNQSBub2Rlcy4NCg0KMi4yLiBGb3IsIGRlbWFuZCBzY3J1
-YmJpbmcgcmVxdWVzdCAyIG9wdGlvbnMgYXJlIGlkZW50aWZpZWQsDQogICAgIHdpdGggKGIpIHRy
-aWVkLiBQbGVhc2Ugc3VnZ2VzdCB0aGUgcmlnaHQgYXBwcm9hY2g/DQphKSBFbmFibGUgZGVtYW5k
-IHNjcnViYmluZyBvbiBhbGwgTlVNQSBub2RlcywgaG9wZSBmb3INCiAgICAgdGhlICdSZXF1ZXN0
-ZWQgQWRkcmVzcyBSYW5nZShJTlBVVCknIGZpZWxkLCBjYW4gdXNlDQogICAgIGFkZHJlc3Mgc2V0
-IHRvIHNjcnViIGFuZCBQQUdFX1NJWkUob3Igc2ltaWxhcikgZm9yIGFsbCB0aGUNCiAgICAgbm9k
-ZXMuIEZvciBSQVMyLCBvbmx5ICdhZGRyJyBzeXNmcyBhdHRyaWJ1dGUgaXMgYWRkZWQgbm93DQog
-ICAgIGFuZCAnc2l6ZScgc3lzZnMgYXR0cmlidXRlIGlzIHJlbW92ZWQuDQpiKSBFbmFibGUgZGVt
-YW5kIHNjcnViYmluZyBvbiBhIE5VTUEgbm9kZSBmb3Igd2hpY2gNCiAgICAgdGhlIHJlcXVlc3Rl
-ZCBhZGRyZXNzIHRvIHNjcnViIGlzIHdpdGhpbiB0aGUgUEEgcmFuZ2Ugb2YNCiAgICAgdGhhdCBu
-b2RlLg0KDQoyLjMuIERlbWFuZCBzY3J1YmJpbmcgaXMgbm90IGFsbG93ZWQgd2hlbiBiYWNrZ3Jv
-dW5kIHNjcnViYmluZw0KICAgICBpcyBpbiBwcm9ncmVzcy4NCg0KMi40LiBJZiAyLjIuIChiKSBp
-cyBjaG9zZW4sIHNob3VsZCBrZXJuZWwgYWxsb3cgQkcNCiAgICAgIHNjcnViYmluZyBvbiByZXN0
-IG9mIHRoZSBub2Rlcywgd2hlbiBkZW1hbmQgc2NydWJiaW5nIG9uDQogICAgICBzb21lIG5vZGUv
-cyBpcyBpbiBwcm9ncmVzcz8NCg0KMi41IFRoZSBzdGF0dXMgb2YgdGhlIEJHIHNjcnViYmluZyBl
-eHBvc2VkIHRvIHRoZSB1c2VyIHNwYWNlDQogICAgaW4gJ2VuYWJsZV9iYWNrZ3JvdW5kJyBzeXNm
-cyBhdHRyaWJ1dGUuDQoNCjIuNiBUaGUgc3RhdHVzIG9mIHRoZSBkZW1hbmQgc2NydWJiaW5nIGV4
-cG9zZWQgdG8gdGhlDQogICAgICAgdXNlciBzcGFjZSBpbiAnYWRkcicgc3lzZnMgYXR0cmlidXRl
-LiBIb3dldmVyIHdoZW4gdGhlDQogICAgICAgZGVtYW5kIHNjcnViYmluZyBpcyBvbiBtdWx0aXBs
-ZS9hbGwgbm9kZXMgYXJlIGluIHByb2dyZXNzLA0KICAgICAgIHdoaWNoIGRlbWFuZCBzY3J1YmJp
-bmcgc3RhdHVzIGFuZCBhZGRyZXNzIGluICdhZGRyJyBzeXNmcyBhdHRyaWJ1dGUNCiAgICAgICBh
-cyBzdGF0dXMgc2hvdWxkIGJlIGV4cG9zZWQgdG8gdGhlIHVzZXIgc3BhY2U/DQphKSBNYXkgYmUg
-dGhlIHN0YXR1cyBvZiB0aGUgZmlyc3QgZGV0ZWN0ZWQgbm9kZSB3aXRoIGRlbWFuZCBzY3J1YmJp
-bmcNCiAgICAgaXMgaW4gcHJvZ3Jlc3M/DQpiKSBEb2VzIG5vdCBzaG93IHRoZSBzdGF0dXMgYXQg
-YWxsLCBqdXN0IGZhaWwgdGhlIHJlcXVlc3QgaWYgdGhlDQogICAgZGVtYW5kIHNjcnViYmluZyBp
-cyBhbHJlYWR5IGluIHByb2dyZXNzIG9uIGEgbm9kZS9hbGwgbm9kZXM/DQpjKSAgQW55IG90aGVy
-IHN1Z2dlc3Rpb24/DQoNClRoYW5rcywNClNoaWp1DQoNCj4NCj5UaHguDQo+DQo+LS0NCj5SZWdh
-cmRzL0dydXNzLA0KPiAgICBCb3Jpcy4NCj4NCj5odHRwczovL3Blb3BsZS5rZXJuZWwub3JnL3Rn
-bHgvbm90ZXMtYWJvdXQtbmV0aXF1ZXR0ZQ0KDQo=
+On Fri, Oct 03, 2025 at 12:59:54PM +0000, Eliav Farber wrote:
+> From: Linus Torvalds <torvalds@linux-foundation.org>
+> 
+> [ Upstream commit 017fa3e89187848fd056af757769c9e66ac3e93d ]
+> 
+> This simplifies the min_t() and max_t() macros by no longer making them
+> work in the context of a C constant expression.
+> 
+> That means that you can no longer use them for static initializers or
+> for array sizes in type definitions, but there were only a couple of
+> such uses, and all of them were converted (famous last words) to use
+> MIN_T/MAX_T instead.
+> 
+> Cc: David Laight <David.Laight@aculab.com>
+> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+
+Eliav, your testing infrastructure needs some work, this patch breaks
+the build on this kernel tree:
+
+In file included from ./include/linux/kernel.h:16,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/wait.h:7,
+                 from ./include/linux/wait_bit.h:8,
+                 from ./include/linux/fs.h:6,
+                 from fs/erofs/internal.h:10,
+                 from fs/erofs/zdata.h:9,
+                 from fs/erofs/zdata.c:6:
+fs/erofs/zdata.c: In function ‘z_erofs_decompress_pcluster’:
+fs/erofs/zdata.h:185:61: error: ISO C90 forbids variable length array ‘pages_onstack’ [-Werror=vla]
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |                                                             ^~~~
+./include/linux/minmax.h:49:23: note: in definition of macro ‘__cmp_once_unique’
+   49 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
+      |                       ^
+./include/linux/minmax.h:164:27: note: in expansion of macro ‘__cmp_once’
+  164 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
+      |                           ^~~~~~~~~~
+fs/erofs/zdata.h:185:9: note: in expansion of macro ‘min_t’
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |         ^~~~~
+fs/erofs/zdata.c:847:36: note: in expansion of macro ‘Z_EROFS_VMAP_ONSTACK_PAGES’
+  847 |         struct page *pages_onstack[Z_EROFS_VMAP_ONSTACK_PAGES];
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+
+I'll drop this whole series, please do a bit more testing before sending
+out a new version.
+
+thanks,
+
+greg k-h
 
