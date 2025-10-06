@@ -1,61 +1,60 @@
-Return-Path: <linux-edac+bounces-4991-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-4993-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB94BBE738
-	for <lists+linux-edac@lfdr.de>; Mon, 06 Oct 2025 17:11:45 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C797ABBE76A
+	for <lists+linux-edac@lfdr.de>; Mon, 06 Oct 2025 17:17:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFB8B189A043
-	for <lists+linux-edac@lfdr.de>; Mon,  6 Oct 2025 15:11:59 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4A9F4349629
+	for <lists+linux-edac@lfdr.de>; Mon,  6 Oct 2025 15:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C49B2D781F;
-	Mon,  6 Oct 2025 15:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22FF51D5154;
+	Mon,  6 Oct 2025 15:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XNVof2AW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="02fDO24u"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011038.outbound.protection.outlook.com [52.101.62.38])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010013.outbound.protection.outlook.com [52.101.61.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6192F2D77FF;
-	Mon,  6 Oct 2025 15:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC49194C86;
+	Mon,  6 Oct 2025 15:17:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759763464; cv=fail; b=AbNzO61TODduCMQnWblnFfgJVrkR0DWJGoxRPmhBshy/hI6SXkAamztUDPz7rrnBUsCgbTLOoOkAcfuCxvYb3MjHN2Vnny7Ajoa2rGrUz1zvDKnRvGWd720FrXzNvZEzEUwScDrCGXuT21P2vu4JO3ghNGv8BKuYKoyWKZRGwuY=
+	t=1759763876; cv=fail; b=GF24DTwv93FkEceRI8xCMl0E4x8PPEenDUayBakP9mq4ton0R/nTWlj+LSwqfpodDgSgO4n/IsiBuV4cuA9aOSt4PRLRcgyrbF8rC6l0paxVE0DCrw8k97sSbYu9SqzPdBgQHmXw28t8i1eq78IOUkx7r/05bjpDNxWEe4Y3GP8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759763464; c=relaxed/simple;
-	bh=iF+TLHuV7O4IwewzupVNrTAn/z6g0wtIbGocU/w6Z8M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Njqs1bKCUfYVJfvl4OQq3PjmWkh3Mvx2BuNEOzbmnoA1vTwPMluiRKHpguGYBDXqWC5C85ekrsJvttsJloOVHA/0RgEQulMrB2xrsJg4ApdaF1B08tE061jdX+Uj6oVIk9ICwWdxW8NjT7Icy+dSjQkshmqj8qDtlx165zFdvw0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XNVof2AW; arc=fail smtp.client-ip=52.101.62.38
+	s=arc-20240116; t=1759763876; c=relaxed/simple;
+	bh=XHkaduVY4ALMXUe+mC31KrY8PfBUwTJDDGJUhfk97ow=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tCzGGaAlMt7xQvqJKvuH7kGsEIZi9Jg5GNTlECoqupatOSgTGMkqkwPJQAugZB2o8gFJle/WSzXugafvdKCdooTS60a9u5suySpWbXp3kM6JEi42Gayxagg4ekC4EZqKUAFA5+DDqeq3GahFt2BHztVs5uavN30MbOnMqmOrOEc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=02fDO24u; arc=fail smtp.client-ip=52.101.61.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lEd73ybx9aZxE/x7Vp/lYOhdh19H5Qwp+TTZEs0usZM9caYWGHFptPM+gespEeGCYAvCt4ZVk9eslGzB4jvBIkH6sQPXKhesK5YDdOq2FF+D4teLeJO6ZHye7A6SF/EeSQbMv4KDPGZ1lR1Yx6mQoR2p/vTjXJJl8DYPGHQn6VVOMyk7O/1r5YoUZXyTDKCRpdsnYdu/mXPaPLhLlpWimUMlXKyTwWkC3GuCoBIaGuG30HVWPmlhkQIqzUsEaoE7SuuxsJITgrzfodRK7keOwivoWR97dEIED//KAd/GOEsAQhZs0L7ERCDbvCQO6VzF5g5dUMBsSHBg/eD7J1DvOw==
+ b=T11rgFgp88Dw3HWf/TdXtrVniylko0/TrC7IF/NLpcOm87roYnWtWRM8fu3yvTrORnd+YfP4C+bLi8CSjQd5PJZsuNAREgClmtTInRyEGb4GS1kqpsqXYUN/dxjXOvcwXzodvy3JVtw2QrnpZUU3sK9T+r8qmvy0SG3af+7EqSdlmI571zzLggXFLSAOxnxGI5qOzOWs8c6WgF/yPABMyPfoxEFPLXxsyT2Py9cVIVU3ZCiR89epte6MOq38bSD3CRljFi6q56K9PNMgNznjEUdvqvAJbZGe2mkucbjhY+KadFyD+Ufy8OLl4gMSRCDMVsrvFM9zClMVoScEyUvw9Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o+a3uz3RS+Kn5yb72yRmmsA8GfRwWT32C9RYfl+5Q8I=;
- b=VK+3ipzBE6ul6XGPSKGXjxVFWZinWMZf47qJzKd6UCVGQWc1714bvDma+LKMnJFfERTdgCjM5oItWm+YKuxFhXHGVnZ6ITw93CuyTGqoi4SQt+CZYQAMo8629sO+CMQtMlFFU1NINHCdATcd2+K1LYV60Lqg39S2l5KTgHSL8lbdCcwpqde310wkWXar01+OD69/OY4pJJScDJ66fLRIJLcn3AlGlWbfFPdcIeA9tpXkP4fTdBM9zy1tBoQVV+uLoi65ax/d6D52GmtVrXPbushWdgchpexnToDsriEcDnwkk+xuH3aR1YnjbYwwgOyj1XUQk2sRnl8Wp26piKyCRg==
+ bh=bFL8cGLxDANHtox70QuZLBcNahtrSMQ0m0zihYNKYlc=;
+ b=rJAxTKkc44MYpWpaGF5lq1/AQ9PBvfCsSJe4J6fkq2MJaWIDoCMcNg/SVq1G+ApMYrZVhD7EEJp44UpJsu2snyRPcNjQHMDR2dOD+W/sFZtnT837bnF0vet6KfiBhmM8lHuU6Y8wyP4mcKZt9kXF2Fmv2JXtOe9mEBp5oZ3pFAItkCgyHgwsFzvEqQEd64obxKCdz5mJvbvDc4PmLEeR3HgXgdJ8Q7m6BKA0+1m0Zwte1lnD8Cvx1B98IHU4g6fFg7FfxZruvCitiQuv09s4/vqNZVMmCFV0R6h5ZSRgGiMGoWBs9dwz9aXKXlLoXgBWgW77I10QkulQMptaNchM9w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o+a3uz3RS+Kn5yb72yRmmsA8GfRwWT32C9RYfl+5Q8I=;
- b=XNVof2AWI8D3bx9AOesmQD5JXP4MSOzW5D7AVvcQl5G6DFKWjJx9Qz4BDhDjhQnqzY6shCJnBjBSf0y4uWf2mNoNN1zzg9UiA+ofFnVKrDr/vGNHcEcKfcvwtcIcrixcjtNMeSkxpo9i/u4Qyb2BJtiOTpaTQd1jANJ8gn1rnzE=
-Received: from CH5PR04CA0017.namprd04.prod.outlook.com (2603:10b6:610:1f4::17)
- by SN7PR12MB8603.namprd12.prod.outlook.com (2603:10b6:806:260::15) with
+ bh=bFL8cGLxDANHtox70QuZLBcNahtrSMQ0m0zihYNKYlc=;
+ b=02fDO24uceqqzanQSm3FKuET11DjhcYk/PPHwYqDa1OgKRfUKgYW715IbphJK+RWVUnJNJ7fOsjUthhtBHQm1P12ac8TInSuxmVVSKryjv6/leogozgOo/8opi0k7+wytgQIMYjtdTmQrrWYYHL1QoVivWHPQIPWlfZ+QYToEeE=
+Received: from MN0PR05CA0008.namprd05.prod.outlook.com (2603:10b6:208:52c::18)
+ by SN7PR12MB8772.namprd12.prod.outlook.com (2603:10b6:806:341::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Mon, 6 Oct
- 2025 15:10:51 +0000
-Received: from CH2PEPF00000143.namprd02.prod.outlook.com
- (2603:10b6:610:1f4:cafe::f4) by CH5PR04CA0017.outlook.office365.com
- (2603:10b6:610:1f4::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9182.20 via Frontend Transport; Mon,
- 6 Oct 2025 15:10:51 +0000
+ 2025 15:17:45 +0000
+Received: from MN1PEPF0000ECD7.namprd02.prod.outlook.com
+ (2603:10b6:208:52c:cafe::c8) by MN0PR05CA0008.outlook.office365.com
+ (2603:10b6:208:52c::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9203.9 via Frontend Transport; Mon, 6
+ Oct 2025 15:17:45 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,151 +62,129 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- CH2PEPF00000143.mail.protection.outlook.com (10.167.244.100) with Microsoft
+ MN1PEPF0000ECD7.mail.protection.outlook.com (10.167.242.136) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9203.9 via Frontend Transport; Mon, 6 Oct 2025 15:10:51 +0000
-Received: from [127.0.1.1] (10.180.168.240) by satlexmb07.amd.com
+ 15.20.9203.9 via Frontend Transport; Mon, 6 Oct 2025 15:17:45 +0000
+Received: from purico-9eb2host.amd.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 6 Oct
- 2025 08:10:50 -0700
+ 2025 08:17:42 -0700
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Mon, 6 Oct 2025 15:10:27 +0000
-Subject: [PATCH 3/3] RAS/AMD/ATL: Return error codes from helper functions
+To: <bp@alien8.de>, <tony.luck@intel.com>, <linux-edac@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>,
+	<john.allen@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH] RAS/AMD/FMPM: Add option to ignore CEs
+Date: Mon, 6 Oct 2025 15:17:31 +0000
+Message-ID: <20251006151731.1885098-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20251006-wip-atl-prm-v1-3-4a62967fb2b0@amd.com>
-References: <20251006-wip-atl-prm-v1-0-4a62967fb2b0@amd.com>
-In-Reply-To: <20251006-wip-atl-prm-v1-0-4a62967fb2b0@amd.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-	Yazen Ghannam <Yazen.Ghannam@amd.com>, Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>
-CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, Avadhut Naik <avadhut.naik@amd.com>, John Allen
-	<john.allen@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, "Yazen
- Ghannam" <yazen.ghannam@amd.com>
-X-Mailer: b4 0.15-dev-9b767
-X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000143:EE_|SN7PR12MB8603:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81527803-ef02-4161-e729-08de04ea89d2
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD7:EE_|SN7PR12MB8772:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e78b4c9-b63b-4b45-b1f4-08de04eb8068
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZlpRQTJsa25yQmR1VktMYytkREJPVGkzRUJ5UnFJTUNnQ3Y2bmVwVGlaZHN3?=
- =?utf-8?B?bUJpdDFkViszYUJ3U0FaMzlpc0pITzNLSFNzdWZYdTd0ZkNsMkIwKytqZ1Fs?=
- =?utf-8?B?bmxra25HVmgrN0tralNGcUpiMXlpMHA3bmNvbGp6RVMxbWJrNzVkbkZ4Z09P?=
- =?utf-8?B?d1ZtRTdQMjk4dEI4amU5bDRoMHYwR083NWJTUURUdUs1Y0w2UTFWbEVEdlhB?=
- =?utf-8?B?R1plYVVML3JiR1NtZ0ZLKzlzTnhHRUpEVjBnQUpHb0crMm1OQXdHT0gzcklP?=
- =?utf-8?B?WUJjdEZYSW9XMGswWGMzSk5tOHFnQjBWSWpTOG5jOWRtUkxqdkoyYkVrZTVj?=
- =?utf-8?B?aWFOWTlDUTB6dnptUTdSNGl6a3NBU2Z5aFRjczFvZG85WEFLYnRiQ1N1QUZ6?=
- =?utf-8?B?aWc1ZUdzejk3ajVTeU1qVGlSRHp4Ti9tWG9WbWo3bVdJZHZEaVB6K1Qyc1l6?=
- =?utf-8?B?SVJrQjB1c1VWcVpwc0RCeFRnMEI3d1ZIem80Tktqb0h0aVo0NG5iMnlEY0NL?=
- =?utf-8?B?VEwzQmJsTjZxRk0xczFMYXpURnFzT2pQbDI3WkYrS09keXNRdUtDMm4zQjYv?=
- =?utf-8?B?OUk1Z2ZKbDVsakNTQzhjWURuTUh3VlRvU2E4Wi80S29aTDhhaWdrWUJrWWQx?=
- =?utf-8?B?dzN0ZmZxUlptS29QVWpMMk5pRFJZejZLMWtjUCtDK1NvSi9GR3JSVDMvaEZQ?=
- =?utf-8?B?VDBpVmtzdy93dUh5TjdnRlc0RHY2Z0xMYmtmN2hMWVM3bVFiWEpJd25hazRO?=
- =?utf-8?B?RGR4Y0c2NnRoc1Zob0pxN3FOUFZmMDF5WElqcGc1amRuU2dIVWJnbEkxQStq?=
- =?utf-8?B?K1hwM21xRU5IbUM0bDhpNVRHcXF4QjY3aTAyMEFQT0hqNHB5RFgwaWIybDlh?=
- =?utf-8?B?VlluNkFiY20rTVJON2dDMzV2THVwV0YwcTFwaE9YSEJRbkFXWVFqTXRRWUZ4?=
- =?utf-8?B?ckhRWnhzdTBHblE2VzR3WndNVDNNMC9TdEMrSW16c3dKSlNnbTJWTS9KQW1z?=
- =?utf-8?B?NjA1WHRDNVJrMHV1bW5ldS9qU2tVVFN5Z3ZzL09XanRHTEsrMHM2RlA0bm5y?=
- =?utf-8?B?dE9CWjZucGIrQkVmaXNJSkk4b2EwSDdIS3NJNXlxZXVqT1p4TGZQeFZpSzF0?=
- =?utf-8?B?TFdlUC96WXJQNXZuT2FCWFFXZjFJNFRteVFiNjRndEtma1hqd0o5WCs2WXlZ?=
- =?utf-8?B?ZmNEZnY4aExaYnFPeFZLUEFxOEdvRHJNejhwSzFNQ2V4Qk5WUmdYWVpuMUJk?=
- =?utf-8?B?UUlMditQV0g5K09pcU90Si9XNlB4eXJsSUlxR0pRTkR6a3VxL29YOGtsak56?=
- =?utf-8?B?OWlxdDJYYVRyWHI1dTdib3ZidTNvbDJ4cXVIRWtLcFZCbG90M3pMbGYvdVhl?=
- =?utf-8?B?L2xvR0xwTmhJNWx1UHRINGxRM2x4RFY0MS9SZ21yUmVmUmZoVDRTTDErYXlF?=
- =?utf-8?B?QWkxejlYZlNnbWUzZ2xjUEJmNEtCcm5zODV5cUt0RTUzbjRvSjBmbUJZZmRD?=
- =?utf-8?B?dGVwRVhaM2dCY1o4RUtYK1BlNGdIV0U3OE85VEIyOXBsKzVXK0x0bUlWYitT?=
- =?utf-8?B?akdoQW5GVEFxcUxmbTh2Y0dBdFdZWUdSalpWOVh5Q3hYLzZQclcwdnp6NUFo?=
- =?utf-8?B?aDdmYi9aVFBaNTZyaEwraU1ycVRDbzg2ajZtM1EvcU8vUlBnelRYWEhrc1RM?=
- =?utf-8?B?K2tvVmVteUVWS0ljSldZUmQrTVM5Sm5hS0Z0QWQrL1JLM2VhcDhOWjRFRENV?=
- =?utf-8?B?amdoUEZpRm5GL3plOUZlTjErK2l5M25vVlZ4YzNDSzZyQWJmVGI3VHNKVllE?=
- =?utf-8?B?b3hPM21hWjJaSk1LTGltMUo2YVNjSiticEFzUFpDLzVIYUVaZ1E1QURBZTlY?=
- =?utf-8?B?OFJNTmpnM0FsR3ZqWUxUNzNqb2c1ZThzZmxnZ3NSbzNzUUdaWmpMc3JzaWJ0?=
- =?utf-8?B?QmNYZ2RZM0ZJcHg5bUNlbEVxZ2RjSmtZb2NTa2F2K1BkZExKUzhXYk1UVWVt?=
- =?utf-8?B?bTVYZEh4OUp0VGhic3d2OFVEclhhZnlWMk1ERWduYmcva0tERGlSc2w5c3Jj?=
- =?utf-8?B?eGxIMUhHcmNjY0I3Ykp3TGxiR3hTWXlhTXIzdWZLSXBFbXZ0R0YwUjN0bkVr?=
- =?utf-8?Q?zw7g=3D?=
+	=?us-ascii?Q?pPf5fKf1KgVTzKsYrr6T9MCnnrwbVO+z8DzEZsE7uue2gi7zBYY0YioCvFeO?=
+ =?us-ascii?Q?Mi0oq+OM0SMt5tmExQ3lyHCYTqz33MEzG1E0G1HzokRa1wjJP/qdyLQ+qiaR?=
+ =?us-ascii?Q?s+LaGw1V/Ry9QHjmjdO1bDuDz6F0awE63hVsENgox9s0OQ74ef5UO0MW5LeM?=
+ =?us-ascii?Q?9fJYqg6KT1P5YfmUZY4bUJOtFlvFrGOVyc8qAqOfqhG/eYfUvPHYPTRzlErQ?=
+ =?us-ascii?Q?OUMyBRASmn8ahxaOmLDH31uOCKmwA411Fktm/5hJshV9UWX1+nPBZSjovogk?=
+ =?us-ascii?Q?KlW5yn2DbmXDzvgwcXYwG+8vDdRH1s4ClTA+0Kwp99BS4lq0sV8wSL/UkLdp?=
+ =?us-ascii?Q?3TYwwJXVunYmLihre0Tdb4q6cS6ebV0mQDpGdlzbM/4bkssu1zZSe0Yjtdx6?=
+ =?us-ascii?Q?JQRLKJMjY+rTfijJHlDLdGx172p99PQ6aW52d069Fv+Z27orlEdrV7X07Boo?=
+ =?us-ascii?Q?3ec9EHOaDG0M+qdMH3wafeetQJvYAONK8YXEExrkNyqm4h4ViQ0LaMEA4mdk?=
+ =?us-ascii?Q?P5RrsCzLzj9Sikpsv/db89C1jFg778r6sA0vox8rgCVQN4LjUm+xvJOW0jje?=
+ =?us-ascii?Q?dTcpswXCedEZ/8rrbDjAomFVlo0iP8BtodKcXsr0ni517uJL1d0BTFj8JqY/?=
+ =?us-ascii?Q?0/HlzUEqSsUKR6yo1VHpJFtezrgehHGiEWJq5n0n2ODe/FV5qFI84sz/ZPKH?=
+ =?us-ascii?Q?WNPSg2wi6rKwP31sLZe2jMF2OJNQgSuqgrAtzqDm4M7BGUM/olmwwdivIUDi?=
+ =?us-ascii?Q?vbGgpMWj4ww6jw4X7PmRKi44jgzOEWpKGJn0SDjpBB3e/PGNc6spDHhtFmY+?=
+ =?us-ascii?Q?VuGU1FPoC/dzxHMlFUSC34fsDMKqiqvmvJXFQLdi5mAcWsnYbPQiCB3KVLNJ?=
+ =?us-ascii?Q?GuvEGQ8jBdf8njOHYeGM1Q5u+QSeH2DMvHV3WTcPPCXjlWZag15lwakPfcet?=
+ =?us-ascii?Q?VxF8f6qOkic9d0aKooWC/Foz8yz3HfFk7llu3LJ66JiKibq5WKjiLAtGYUBh?=
+ =?us-ascii?Q?ZmjkTDtZrP3YFNOV75PX3YzVLiLNXewxrEES4qYsuYLRkWCro8tG8Aw/UjIQ?=
+ =?us-ascii?Q?mH3b/5XyVeimZQOcC8VajBaTciJCiFySwGNkOF81lNx8czAnp6vkY+tR0+eV?=
+ =?us-ascii?Q?uCaRF5V/3QYehbCIzFJm5lOCk3z1oxJ+n2sOK3F0Z5CO59AMkeGi/OavxHy4?=
+ =?us-ascii?Q?aBCAks53RCK8+rD7eTNgNNZIaf8eOU6DENTQXpVf4XNUQ9/7eqgJwh79pPT4?=
+ =?us-ascii?Q?Obv+2vcSe6qS9k3ZYU/lyeI6q6J9xSFnHWpBSZgLZt8IRYR2Cwkux7VrGrv5?=
+ =?us-ascii?Q?0yTIdYJxk1MsrylXTjqy+255Q72U/HMUdKP65wZ4zG8aqpBxnkRqzp1JGvJB?=
+ =?us-ascii?Q?6PLFGn6fJSzO2lyiPE3rUjq9uTMCaLioWEkXzLXPF4Ljnx8dvZ2xfkINNkOt?=
+ =?us-ascii?Q?7XaWVO4sb0rHfDIqupz0+yqTrcaJ3CEJ5OBZtNyCQUKUZjKuJ2EsI5KlmxKb?=
+ =?us-ascii?Q?0qtynMSr/ip9Eiq6u/bSgSS6Ux2H0wBigCKhSgH6Ixuq1PmjKbuDkAYzH0WA?=
+ =?us-ascii?Q?C02xai7xTDOvB7/Wxqs=3D?=
 X-Forefront-Antispam-Report:
 	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2025 15:10:51.3807
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2025 15:17:45.0825
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81527803-ef02-4161-e729-08de04ea89d2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e78b4c9-b63b-4b45-b1f4-08de04eb8068
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000143.namprd02.prod.outlook.com
+	MN1PEPF0000ECD7.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8603
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8772
 
-Pass up error codes from helper functions rather than discarding them.
+Generally, FMPM will handle all memory errors as it is expected that
+"upstream" entities, like hardware thresholding or other Linux notifier
+blocks, will filter out errors.
 
-Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+However, some users prefer that correctable errors are not filtered out
+but only that FMPM does not take action on them.
+
+Add a module parameter to ignore correctable errors.
+
+When set, FMPM will not retire memory nor will it save FRU records for
+correctable errors.
+
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 ---
- drivers/ras/amd/atl/core.c   | 7 +++++--
- drivers/ras/amd/atl/system.c | 7 +++++--
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ drivers/ras/amd/fmpm.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/ras/amd/atl/core.c b/drivers/ras/amd/atl/core.c
-index 4197e10993ac..0f7cd6dab0b0 100644
---- a/drivers/ras/amd/atl/core.c
-+++ b/drivers/ras/amd/atl/core.c
-@@ -194,6 +194,8 @@ MODULE_DEVICE_TABLE(x86cpu, amd_atl_cpuids);
+diff --git a/drivers/ras/amd/fmpm.c b/drivers/ras/amd/fmpm.c
+index 8877c6ff64c4..08b16a133f20 100644
+--- a/drivers/ras/amd/fmpm.c
++++ b/drivers/ras/amd/fmpm.c
+@@ -129,6 +129,14 @@ static struct dentry *fmpm_dfs_entries;
+ 	GUID_INIT(0x5e4706c1, 0x5356, 0x48c6, 0x93, 0x0b, 0x52, 0xf2,	\
+ 		  0x12, 0x0a, 0x44, 0x58)
  
- static int __init amd_atl_init(void)
- {
-+	int ret;
++/**
++ * DOC: ignore_ce (bool)
++ * Switch to handle or ignore correctable errors.
++ */
++static bool ignore_ce;
++module_param(ignore_ce, bool, 0644);
++MODULE_PARM_DESC(ignore_ce, "Ignore correctable errors");
 +
- 	if (!x86_match_cpu(amd_atl_cpuids))
- 		return -ENODEV;
+ /**
+  * DOC: max_nr_entries (byte)
+  * Maximum number of descriptor entries possible for each FRU.
+@@ -413,6 +421,9 @@ static int fru_handle_mem_poison(struct notifier_block *nb, unsigned long val, v
+ 	if (!mce_is_memory_error(m))
+ 		return NOTIFY_DONE;
  
-@@ -202,8 +204,9 @@ static int __init amd_atl_init(void)
- 
- 	check_for_legacy_df_access();
- 
--	if (get_df_system_info())
--		return -ENODEV;
-+	ret = get_df_system_info();
-+	if (ret)
-+		return ret;
- 
- 	/* Increment this module's recount so that it can't be easily unloaded. */
- 	__module_get(THIS_MODULE);
-diff --git a/drivers/ras/amd/atl/system.c b/drivers/ras/amd/atl/system.c
-index 09664b0ff8a6..13c89ef2c487 100644
---- a/drivers/ras/amd/atl/system.c
-+++ b/drivers/ras/amd/atl/system.c
-@@ -285,10 +285,13 @@ static void dump_df_cfg(void)
- 
- int get_df_system_info(void)
- {
--	if (determine_df_rev()) {
-+	int ret;
++	if (ignore_ce && mce_is_correctable(m))
++		return NOTIFY_DONE;
 +
-+	ret = determine_df_rev();
-+	if (ret) {
- 		pr_warn("Failed to determine DF Revision");
- 		df_cfg.rev = UNKNOWN;
--		return -EINVAL;
-+		return ret;
- 	}
+ 	retire_dram_row(m->addr, m->ipid, m->extcpu);
  
- 	if (df_cfg.flags.prm_only)
+ 	/*
 
+base-commit: fd94619c43360eb44d28bd3ef326a4f85c600a07
 -- 
 2.51.0
 
