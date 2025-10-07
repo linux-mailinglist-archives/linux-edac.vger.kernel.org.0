@@ -1,74 +1,76 @@
-Return-Path: <linux-edac+bounces-5001-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5002-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B681BC1D12
-	for <lists+linux-edac@lfdr.de>; Tue, 07 Oct 2025 16:52:53 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABF09BC1D30
+	for <lists+linux-edac@lfdr.de>; Tue, 07 Oct 2025 16:57:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B6E519A2B6C
-	for <lists+linux-edac@lfdr.de>; Tue,  7 Oct 2025 14:53:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4EDBC4E274E
+	for <lists+linux-edac@lfdr.de>; Tue,  7 Oct 2025 14:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8367E2E22A9;
-	Tue,  7 Oct 2025 14:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F582E264C;
+	Tue,  7 Oct 2025 14:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KDe3nIe2"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="e/UsEWNW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012025.outbound.protection.outlook.com [40.107.209.25])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010024.outbound.protection.outlook.com [52.101.85.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68E02E1C54;
-	Tue,  7 Oct 2025 14:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BB82E22AA;
+	Tue,  7 Oct 2025 14:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.24
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759848768; cv=fail; b=lY+Dj4Qz4Ng6vnkS5Q5Cvsc2kfuY1bWHLR5WMSRPx6R0IZFusNbhKU0ARcw2C3/YkHtOKmSUCmqmOjAU0VJQ5mjLk/FzBtyjZcld43hE5WwPD7KjANkx/HlF/anUAaOlBXBI9Ucl19UFvPgaQ7vMAfrWJ8WCvP8GPkv8qrUX1Yg=
+	t=1759849016; cv=fail; b=uduls5pe0TVP7aKwZj5HoODke7jfOXHInzp0Goxl2LAlum4KXJ2PyeUPVPaMrs3jbZlY5tAP41/2H368M7jw6b5aPYyISBnWkRzCG+KAm0j1uK9P8m+LjL/b3EkR+TpgRzSvTosu2qxXYgtebFXeDfC8F4xQ7Pbt3rORbOfO1oA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759848768; c=relaxed/simple;
-	bh=O7ZZWhNZ8YvxrjBKZw6Q3yx0vi7kVm2z5w8vrCxgFDc=;
+	s=arc-20240116; t=1759849016; c=relaxed/simple;
+	bh=Ed76kk5R731pREMpXa6VVF/VRZY8TRblEznjGEO7PaI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=E89KsvMTtU9kXgOWQj5E32v3vud2T9qHJWyRBvXUZ4Fw5A0z8JrBw57E+oUXF9Y+c9x10o1p6OUj/GjCyiLd3B2SNhq4cmNPMWxd6dUMX0ejtBIuRXUraCb27d8xn5vUI6J4D9uFcXJe68KmWZdw0o83DWo+RR736mjYisXULlU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KDe3nIe2; arc=fail smtp.client-ip=40.107.209.25
+	 Content-Disposition:In-Reply-To:MIME-Version; b=UbM2nxoBj0RnMFhVjzGZYhow+djW4EXgUkKAQZaueEy8anZEQETIStJids1y0THtNq12bojZ7q69SRo9FQZUA0S/fs6neR3hMI4+8rUYjxxVXWcjpRKKP+0/ZCCLKYaOJPbP5e259NNNN/bcGydCgfAi7SYivZ/D3RPplaONjbM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=e/UsEWNW; arc=fail smtp.client-ip=52.101.85.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hrX+RDCXMUX2YFnKfZUSGapSUa4ZpJw4YV4yYfTdMgYdKVkTpvNeYrir//Pr3H8ueOspBFWnYXJW5saTCL+p9K34+TVjhGJU7aABsWcEC/a53GhgWBY8q7oZCdN+vyqVMOUmz14jtdQAjt3tC4RHqXqpsCD+FjKSRiiEMVO0anyPwFUCGAcwoLi8kQSPeqQI/qWJ7GwJ11IFe7lm8VGLyS8HQpp8vJogKsHCYgJQLco6nbpw17lhq89tYoKggIYuRomo1PaEmsI/pdf8Nf25FRRubVZb+bisbekMc1BwZ7fmMobicIKck6uUbyGb56Uw81PfqYd/L74j0KAeqYt+Aw==
+ b=YJ81VTErVa8tuZXlhc71qqEqU7M1cF/kfcYWiY7KKatonnvvbEzVCFoJ9qTwNtw2z9ZlvvS/19Lgsf4GouvwUrg4AYFrO0rKUm+QpKf7LGfHUNQQLzIyFkvl1NBT8nMP6Nq3IvUubHSHaPXBHOh/lCDL7DcihQatUEkpn8o//ppvfJKWnLXFgFg9k8xF97HNw6XhtDpHpXMT2bnM/VeSLYKXQsxy1TZfkzZ/izSgUTIMnHc3YW5urot4nAj+7BfbXvlQClwwWnhrhCi+E2dEkPgVtP1xXsu8ofZ9kMO7ISFDONQfs4RUdXKkULaib/GaGhaSFpQixApoQwves5CaZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mGecSHvfZvBF923s4J3cjTQGupp5getb/213eWFs9B8=;
- b=Hd1GvAtrABhVHFNvRw/Z7kNE84i2OrALuB1Nj+zQSN+T5Jj3vl5EOxVIUoo8TvIrYJshuFOW5ulC6plB9Ny8KcPUGRIwV1vihFfzT/Dh8M75Pn2GF/S5cS+A86hh+8RLbWvAmAijSjAPhw/aSbUvsdmHcZ5hdT0qVwxf1aaVPX5u0vMWqVnDcOGWpGSz6Ov605NnEIQifY1ppoZO8PQXXJOCyr+4RBRlwRc4GaK8wICVWcc1S18L80era2/isBLIl6KgeQblv3W+mflPEeEFF9h8ciC66DKLJZuWc2VvPPcHOWjQVFwHAm3KWvS2/tbBhX/viOjnZJEB0tfSyseR5w==
+ bh=SLVPWAeuI5Nyg17ntsYp6Twb0NjMMjTkyneNmYj4Qj0=;
+ b=NnHiwu6c+Rc9NUhy2gD6gRH0H8wOIJDWekxBPOLaZWioJKThxwMoh7ZH8H4a/eGMM/1po/PJMUJ+9ZrcmpO70PRNAxtDJ6JZVTseFXTHdEinN43LCEYJmiGxtSYP1Cyxnwih4Xrkq21Fh1bivT3lHLhpNNuvQv9usfiGVrfIR639fN45/Y+b+iBe+5+rNTXrQTaQQUN75GslqnFAjYx6P/4f07eAet2Mt3e934FobcwVVit48bwJDQ1TXfTw/O72abaORKgA80h0xsYd9OL7/YTxz0XnL9Pk0vKM0JgfZa2SYqann55OLyFNBiSBnCms0dAEq0wXzWz3d6cnsoDe3A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mGecSHvfZvBF923s4J3cjTQGupp5getb/213eWFs9B8=;
- b=KDe3nIe2cJB2tuRjXiQmfE+3t+/hmUnnyhD3+aaXL3W3xoT4F6rryioDmfABvj7/7nK+c/5KYeKnlCS3wxlXVNqQIsaWgSdAf3QHRMA/zb+dSl3BHsfo70HuBF29CaWXMyDmIY6hyNWdkLWkV1TRir9ISd1RUu/+myM++PDUl3Y=
+ bh=SLVPWAeuI5Nyg17ntsYp6Twb0NjMMjTkyneNmYj4Qj0=;
+ b=e/UsEWNWCVEYoZOnRPOw3vtjUQoTlsgGHbsOg0lFOyXE6pe7eKYLWSEo6hShmotMV+gMyZjK0UsJTVMTKTKLb9qjqUPwrTpwEDjlmgGuKCD3C7mbut2lBmQRVZF/5AmwxAPb/ykvmAo1VD1zGeHRJnWOhQjntVFElRJFxDf1kyc=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from CY5PR12MB6369.namprd12.prod.outlook.com (2603:10b6:930:21::10)
- by SN7PR12MB8820.namprd12.prod.outlook.com (2603:10b6:806:341::5) with
+ by DS7PR12MB5863.namprd12.prod.outlook.com (2603:10b6:8:7a::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Tue, 7 Oct
- 2025 14:52:40 +0000
+ 2025 14:56:48 +0000
 Received: from CY5PR12MB6369.namprd12.prod.outlook.com
  ([fe80::d4c1:1fcc:3bff:eea6]) by CY5PR12MB6369.namprd12.prod.outlook.com
  ([fe80::d4c1:1fcc:3bff:eea6%4]) with mapi id 15.20.9182.017; Tue, 7 Oct 2025
- 14:52:40 +0000
-Date: Tue, 7 Oct 2025 10:52:29 -0400
+ 14:56:48 +0000
+Date: Tue, 7 Oct 2025 10:56:44 -0400
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Avadhut Naik <avadhut.naik@amd.com>
-Cc: linux-edac@vger.kernel.org, bp@alien8.de, john.allen@amd.com,
-	linux-kernel@vger.kernel.org, avadnaik@amd.com
-Subject: Re: [PATCH v2 0/2] Incorporate DRAM address in EDAC messages
-Message-ID: <20251007145229.GA11984@yaz-khff2.amd.com>
-References: <20250915212244.886668-1-avadhut.naik@amd.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: tony.luck@intel.com, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com
+Subject: Re: [PATCH] RAS/AMD/FMPM: Add option to ignore CEs
+Message-ID: <20251007145644.GB11984@yaz-khff2.amd.com>
+References: <20251006151731.1885098-1-yazen.ghannam@amd.com>
+ <20251006213406.GJaOQ1zoXUKEk-7eCn@fat_crate.local>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250915212244.886668-1-avadhut.naik@amd.com>
-X-ClientProxiedBy: BN0PR03CA0046.namprd03.prod.outlook.com
- (2603:10b6:408:e7::21) To CY5PR12MB6369.namprd12.prod.outlook.com
+In-Reply-To: <20251006213406.GJaOQ1zoXUKEk-7eCn@fat_crate.local>
+X-ClientProxiedBy: BN9PR03CA0555.namprd03.prod.outlook.com
+ (2603:10b6:408:138::20) To CY5PR12MB6369.namprd12.prod.outlook.com
  (2603:10b6:930:21::10)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -77,127 +79,98 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6369:EE_|SN7PR12MB8820:EE_
-X-MS-Office365-Filtering-Correlation-Id: f54b4a3d-17ae-4eaf-d6e0-08de05b129ac
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6369:EE_|DS7PR12MB5863:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12db3e60-8fbd-4a91-fa1a-08de05b1bd8d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?NbMEQHctUNVAgwenXnDQ0Qj5MWgpi5lx9Gvew6RDLdcLIzdyPNdPeRHA0IFc?=
- =?us-ascii?Q?yrK1catDXViy/AX9g5sa4/XFnRvYFNTrl8ZUh1Dfz2bON87Y0wjZLFE6V/zh?=
- =?us-ascii?Q?bAnsxmfq3ttQCBKnWN93Jo5mDk61veyAiOS6n2yDRTf0xmdFj/c5sZGutwuG?=
- =?us-ascii?Q?xtJFU09dtfaqoRYkmvM1HC18fxNp1cPMUt7I5gnUAZ6J7c9HbxOqcmcq6eZL?=
- =?us-ascii?Q?4EF/oqhogt7loSLiHDl8MbbzlC83f7Pl71PRi4N04lS1fYJBNOVvCdvCj4Sd?=
- =?us-ascii?Q?4v2fs5F94cUk0wIJ4ObP3GsCgvBW8RrcNkYlsdLR4Kj6g2SGtV/J0R2NqvX1?=
- =?us-ascii?Q?nShN45bDNB/8fv8Pat4yupoVC/26CZlclw5+yn26ZsHtrVA59feu67kUh4TC?=
- =?us-ascii?Q?7fHOHnGFPfeE9HE6Hy0OM/RADgKysWV7oEdrtPVrbOiPjRVXboUset98Cklw?=
- =?us-ascii?Q?ruzYlQtUqbBXdSD9DEeQHARASaeTXl9Ve0EVRo/pMNuQzCn2ZvM8iuzElbup?=
- =?us-ascii?Q?YnZz6O3o5qSMd45XihCBEgQu4TgLp95UEBrpwc8gUW6JQ5DFiwRs00hBJlP0?=
- =?us-ascii?Q?AYQ+9VTZhEC7CTpXvoeaqgjfc+5hh0Sl1B4szyuGPN6cSeA1unWl/gJt198v?=
- =?us-ascii?Q?xObS2bmsP2sjnlyS1mWIFItu/2Z4deyZBVGWAi9XI+xfUdREq9DRRC8aL7qR?=
- =?us-ascii?Q?q9NV/GW3u7xTVSq2sr/wd9uvlm6dcU7xMlSadwaCaJdpbPhs2OHVXTinKQVl?=
- =?us-ascii?Q?A4s/3p8N6QuxndN5vrjuoZpjtTAQW0Mfjez5Dsu2z76FT295z9b3FBF19YNg?=
- =?us-ascii?Q?mtV6SWjl0dueaUFZJpx9Q4snxCRpiH6K/F6X60X7FUh1tL8NQyZUQtOGlFKm?=
- =?us-ascii?Q?wVefiCCPRSmjne13jkKi4YnGsbbHjJBRnDWjj9OtGlID8m/XeqMA4+bnL0gf?=
- =?us-ascii?Q?JMwcnPq2ojVXTF5758KMGQhNipJvRDeoJXGRWpPu/5RL+gxRadn7PSrucjSl?=
- =?us-ascii?Q?gVNcOP8b3t1US20JS8dhiEl9A2mFVHaSHP49xS5QpP8Wyv5Fbk2oa/ZdkOOS?=
- =?us-ascii?Q?bYnckDH66HgOb8lHTohKcx+HPmWjDmEwPCXFpRX8J6OmNUIZhnzQWBnBzrR7?=
- =?us-ascii?Q?xUGBJ0EuFPOq4KGV+S5ECYsx8r1igK7Xv2brFpch+GViZ/x93ieKb+GdaNvj?=
- =?us-ascii?Q?hUWdxv/5EHf2NfjwmQDGD+GoBRv/6N4YAOJVpMxSyv0gB2HtNc4XAztfWmLm?=
- =?us-ascii?Q?EwQ/bUeSgypgMcPAqiCZtTkxvjXXKAfV/0x+rTvZy3hFtHaFXh6mElYOOKJs?=
- =?us-ascii?Q?ea7ZYhGxdXMw0V9OKD0ldptCxxe8jP8bF0xmQ3ZquZCLMNlffch7THGY9mPy?=
- =?us-ascii?Q?3YaAhUW/UGZ2557z8MQrKAZdtM6RrMM3rq1x7i8ZIcEfJUrfJpRvm6DrGlht?=
- =?us-ascii?Q?NUoxI11eyGPFxWYm6Vtq7aQZ271kUQ6y?=
+	=?us-ascii?Q?tMGQxXOoCGmu3+xg4reUiM6MQiieWW0WP58Rftm4ir5qGDBURAOkQSk3Ny3M?=
+ =?us-ascii?Q?qm/OilojHzMJL4b2nNh8sEHR2TEon++xiFp0pvRBlUnfKLoEZgqdHJNeaTGG?=
+ =?us-ascii?Q?W6KEHsc8vS/VO5Yj3wuVtZ/oI+ZUo1wTGzoQhoHhez65gvbPMCh/1OCDAVWr?=
+ =?us-ascii?Q?woqKuGy4yXzN0eX0T/8hhQEPiuuYKNShpjyeGyye+5EQ0aQyAs93L0GMKdOv?=
+ =?us-ascii?Q?bLw9dSwVZ48YBPgz8apMuy33T4v4CH9iPncalZnzxqkpHRvgZFNqjqTDZHF1?=
+ =?us-ascii?Q?ByiZCtxz/P4cKzIfEY6HsJ0Aest42PW9dVW/990+FIgOZAcBvRIQ+zDbWKal?=
+ =?us-ascii?Q?/NVCU9756qSc0OSxdGpBmvWU3Xb4C5AtoiTrmvlvEQwm2vHqfv5/XuUZtvAQ?=
+ =?us-ascii?Q?0ALMyMWoqqMlVCOwp2WHQ/+TOcFA5LitmiEsEfdJtXEx+bxog0tg3sTMKh4C?=
+ =?us-ascii?Q?vg3ve3R776lFv8PnfKOLGcE5KT1BcoHz2s89Kc+IHrT86aEWJD9NEnrIGMZT?=
+ =?us-ascii?Q?QyG3be1Z3+WPnz9lYUZwREi48TuKpl3gNnxUPXAdwQagwB1/D1Q71hEX8cTr?=
+ =?us-ascii?Q?a44QKTSTF7ulFnOjDQnq8jJo5MjKzYBif5W7EvD6ebwHM3a+JHRk5Z/zpsZj?=
+ =?us-ascii?Q?1YNjFDTjrsRK/nplMJfdTTcAW8bnA2mqCfA8KvaQwpQ2RJ85U8DHqwrGEoBL?=
+ =?us-ascii?Q?qZ0BRqRgWAF7abR2Z66LpplcQd58M0vJibu+yJ/RTFeEaMc46ht3AOq06sYS?=
+ =?us-ascii?Q?PGMPx4u4URE8w/X/k58Hmf+MYeQqVduordaI2jw0Gmx+D5u0SDr/vy8uR87Q?=
+ =?us-ascii?Q?L2HD/AwK0LM1kx82A2AqdCir+YaUmjDMGV07coxmEMW0tSreQIcVesyyMzzy?=
+ =?us-ascii?Q?EOkwmhFGvSJB5ux1WYPELoPq76YhbMK97YV9SR2o4qn3/Fe2s6sD2AAv/kS4?=
+ =?us-ascii?Q?AuqQvkPfoKquZ8TGJ1WqZSTL5izkaQgyNjLHgemzk0j3kHBxU2BayW3cKN4h?=
+ =?us-ascii?Q?TTFMQdmXn08yim1TL87luAouWILYBBBf/Jf1T5GE6k14FncBWXvR1/Vt5wj0?=
+ =?us-ascii?Q?5rIHT6WpouUKnhpSakI8sPJprnG8sRGzm2xFyc8scAwHE/0nZ9e9y/00/CvX?=
+ =?us-ascii?Q?WqpiEc0oTaVj+gSdyb15zEYfQMHJglH3K5xx3FodXAR/6ZRBTpnjdvvv5NFK?=
+ =?us-ascii?Q?WfY4+2Qc0dKYPP3VMaY0wJQT7hdEkNIdB2qTgp86I3ZapixNL9FTchrn49pw?=
+ =?us-ascii?Q?gR7svQCfdJfsThratciBqvFLN2GYT5n0wwn1rOOsifqmCJyX0Rut/HStNKWE?=
+ =?us-ascii?Q?fo641x03TomYcEfWouey0f9bAMJA/MS3kNSOSejhDwHilcXh4bDHxVOBplMc?=
+ =?us-ascii?Q?Q5llvEgbLUbQLk4Ca8Rn9H+s3Urs7/q0jOEzC9PPYIVLA3RzTfZ+f+M3or7h?=
+ =?us-ascii?Q?PrfBXDa2PgiRL84asn6PGUYF6BlRvPjk?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6369.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?lNFZiCqJG4mnkPlGUQCXAktfmMTvR4K9+pyz5H5UvEJEb1Hc5XmoQLfsdT59?=
- =?us-ascii?Q?432vV3/pTIDAPXke5YALVX22O5/ZkDVht+6bEb/Z2RBW2dsQoXsSI3pl4HHB?=
- =?us-ascii?Q?38n+LpAV9me3pG6SsSuxiOpdSsWUMvogWRWWvsGl4R7fYfaiqu24wdku4hiK?=
- =?us-ascii?Q?cesxSnk5BJJ+9Y9LsoCmDMzEr58nfWpHQe3uOu9T80uSF8Wpmhyhb9GcgIAc?=
- =?us-ascii?Q?43if8iVQF4KwNNsSI45G1h2woiumJSCMUH2Xrk9d5Pq5aXqJCT3y7ZlZ+y4T?=
- =?us-ascii?Q?TTt8INbhCz6/9VkqN/W3vAuZMelD6deCYBl0ChAVnWqZ9K9xlXdtsCw7C6R0?=
- =?us-ascii?Q?UgX38NjRGLG6mKCe9Gp0Z1Eu2/ONlaZWkmhHP758wGtqgta43dfHELOAaaEM?=
- =?us-ascii?Q?llBePMEgb2wjZBBesjry+ugRuDx17yje8PfZC3yR+wAqFceiGf3sRyz+1txe?=
- =?us-ascii?Q?slM3q3v107KrsVPI9PTwR9VdIu4zyhv5WMRW1iqHk8YJjrOMdmzDCoqo60Ku?=
- =?us-ascii?Q?2DcMhWkY1IRx9VJR9FL+mBYh5BwaBTY4VBbRhmWHTbOcI/E5OC6m0xMV5gqq?=
- =?us-ascii?Q?YwQoiFzHcBj1RW2YMKo4R2GTo7idBWCOLGvATsXhGz5kTizOEL4CNjlBLDsV?=
- =?us-ascii?Q?xkp/7M3iEmC16PGVtASnRc0b+ouuCoHfMmY4QJxFl2i5PUDgv2W/ovv3CNnr?=
- =?us-ascii?Q?fpweL7Miq2zfImTZk7M833UpHEXpdt0El1RyFjLOU/qNEF8S17jIccPV1Hnd?=
- =?us-ascii?Q?1mNjF1Uya9mHNj+9XsHnizGNTQAhQf/Fy3U1C0Q9MXxLNf57gFi9wtEpZxYW?=
- =?us-ascii?Q?8TLg8tlv9fwXIAc0aGosubLyxkpTOVwzc5BNZWl4e+Yzhz7WxXOY3q+xV67e?=
- =?us-ascii?Q?ZqLU1kKUn47NhiN6g1ho6rrTsuJioYlatmWi6abFcC4NYl9diYF3qhwmov0S?=
- =?us-ascii?Q?h/0PCmjpQsGw8osgAoruDKj8Z2tAezgLFBChs4/Ce4o4NZHsPERG7yv4LZ86?=
- =?us-ascii?Q?jHfqlag/mcePR1+4CrR0W2c3lZLXZchVxK9VwgAYpeRu+nWnJ8c2VWLgDqqz?=
- =?us-ascii?Q?hjId1Rr7416NajR/sibjShW135jxVoQ2RGpMykkqRYduTgHeZFiSWlQCoDtU?=
- =?us-ascii?Q?uM5QuuwMggiCIZXdfOrzWktKfKRCrj3ybhibbL/04vqqWZg0J6zAPZSG0mto?=
- =?us-ascii?Q?Of2E5qBPKHe0GV1arl4N/c6WZ1XCiPZO/u/+ZJwNMzdg+wuiD7g5erywgqQj?=
- =?us-ascii?Q?SDRxK8YVF/cMKiIpFNqo3q/axlST/ANS98cwyLBlE1YEeuXA4OKtWyEOrajY?=
- =?us-ascii?Q?7iNWE/eeIPaKUSSDZ0XuJS8JzUWYuS59ZLPmpds+Ep9cVlbbGf1JqKywPMgj?=
- =?us-ascii?Q?TpaTxKoB3CXVlbG+YdOf7bVNdRdVDNn47YmmW1XUrYRe1ipjftUOL4OfOs+5?=
- =?us-ascii?Q?aDbvnSyRnyag/cyHpK8UjsjaSrfI6nUp4r+ToUv8QC6WkhOIxNQ34AOkLyhU?=
- =?us-ascii?Q?6wW6enXraL+RSxsUq87EuywY1NlqI/crbWqkRK6k+mv7QLX5Bns449jS87yX?=
- =?us-ascii?Q?Ck2UyOvhmZstAd1gwavy97ryUa2pWfpaLv5Z3bzn?=
+	=?us-ascii?Q?6iA9wQBHtE+Q71FMdzD1G2A52YNJFtbFbIP3v3g2j5RtAXBAXJCwhTItlqwb?=
+ =?us-ascii?Q?nYXZ7Fu/Sr+t3Vu259CtVK5wodWiXFdxEFFTH6RX20jTQDtLUfl4ZIwnDfsc?=
+ =?us-ascii?Q?iSVUvRxz4LbJ3bSTOzUy5hJL2aJWOPfE8LBzlvLWdjEG8QCO/Uw16P5dQHNT?=
+ =?us-ascii?Q?cYL/x8TMttxSHQK2c2ver3ExlTy18U2AFq5PI1oIu/qN3Kayn0WDc8ECX1WS?=
+ =?us-ascii?Q?X8+T/J2zE9XDbx59agJkvzL7tfS7OkIjGdZ8qUDLBmySh+2y4ul9hTbeonnc?=
+ =?us-ascii?Q?23wcqGzvnjkzbe2ulfEMZmTm6dvEBJFM+qjV8EAEMwM4s9G43NBsoYaVZDZ4?=
+ =?us-ascii?Q?2LZN4njNaWMfR+8UJ4Wd7WPSdKLjU0HoCsd9t1FS+Zwymg6orBKDq/nSqIMG?=
+ =?us-ascii?Q?YiIEuo638nL3XVKX5m9uzw3PQ02IfYyfFp5E43b8+5BL7KoJu5oHkICXNixK?=
+ =?us-ascii?Q?DgGlgbdZ7QzRb3gRBRQS906mKdK10EfNNx6iV4nxqSQQLddzeaN0yx1Q1/0g?=
+ =?us-ascii?Q?6K+e3lvgrdnAwayEp66Fe9mZRLGbVXpAqtYUg1v0K/RPh4fkSGgKu5XKn2w2?=
+ =?us-ascii?Q?Tz85lvjiV9rvC1paI6zUfmEUb0QiDkSDlcvp6gHTy0zwsSbatVs/rIr9JD6z?=
+ =?us-ascii?Q?5rE6DvIamsTpNQRyuFDjHAO6rZKZZFceOmnMWWoXlnYNBMkG5vWMjPiiEzXT?=
+ =?us-ascii?Q?xlc2cxISWucolZoeTiHo5EN/uomZ5+LqupT+1dRzjzKMga0Ne6qR9iU79Zwy?=
+ =?us-ascii?Q?c/N35gFomZJz0M7/5sZMZxVUWNoAoR4IJEM2AUWl+ixk+LUolbFIYbCk/4xJ?=
+ =?us-ascii?Q?TD5innTZQAprgJhOy5hlPYt9eE75/eoFNU2YP5jgwF7ZuJTE9TDJmXk4rF9s?=
+ =?us-ascii?Q?MuL4E51qvNGihF8It7u9QMt3CRFbPtbfdoA/ejA3apU6Mn/sKsYptgg+PJdy?=
+ =?us-ascii?Q?/RBDrduZFkUqj5L5xWkeolEIBm7MY6fVY3qeF7L4dP7hi3sC8VlwpP9HtyKw?=
+ =?us-ascii?Q?8KMAYAn7irbOiQefcRdmdAYn76azB83hZ5JgvWHr9YKYyYlnzt/GYc7KBdQW?=
+ =?us-ascii?Q?7zWVprLZEbCR7c9mgoYC6Lk4JTs2zrd+mJlFMxLHQlFCcnhVnucMlbSgqNQR?=
+ =?us-ascii?Q?pPqkg4mkxq6QWMupfvAdjj+Ydw1VUMRod8l5uorO8eLpmn6gh6EYMrSXRhia?=
+ =?us-ascii?Q?yBMTfO0XiA54lc8Te7D2L5BLd27SEO3s+agDOvPw+VlwG6dLsrjJyWiA9Bz9?=
+ =?us-ascii?Q?fNpS8ma8tgTP4uGVAHMKvbbuSSkck3Bu3O8iGBih5tA95ixZDPEHb8dEwc23?=
+ =?us-ascii?Q?/hYFcdpnjO0bto9g3lQZU2XHipNBiUTN9VUHWo0Ppl4I0+Df2j6clmVEJGAT?=
+ =?us-ascii?Q?O7/zU04J4XmySbb46l7rt+O1T/tIOtHNV/y/o+SA3izklQJY75/3NdNy6Sdk?=
+ =?us-ascii?Q?mIDwQEKyzZ7NFgsg+vxWp3rKHlEZ0wsi+sCoYwwdGRBzHqw+b3sxgaOZWhwV?=
+ =?us-ascii?Q?ZbHig9SkV1s0H4jvTGgmsMelgS72zvMdUYeuIpr/T49dSCIEap1TUq9NQwWn?=
+ =?us-ascii?Q?wZN5RR3iD+5D9d1dIrRDf4G1EDBPALsQAKZ0Ithf?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f54b4a3d-17ae-4eaf-d6e0-08de05b129ac
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12db3e60-8fbd-4a91-fa1a-08de05b1bd8d
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6369.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2025 14:52:40.2779
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2025 14:56:48.2375
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tP09adx/DTURGW4RvqfN8v3hRKEMPDn4GRhQqG8cbMgbNsderllnKeHgSiyKNvKSroKvlOEDi3yvQKDyHltm4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8820
+X-MS-Exchange-CrossTenant-UserPrincipalName: hyFnP28Q5YPauT/xT3KLyrFutzG3plvg5QdM3ym7t9Ip9749GWglSDt1wHq0r4jJpKDwt1wu5/pUsscY3D1A0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5863
 
-On Mon, Sep 15, 2025 at 09:20:21PM +0000, Avadhut Naik wrote:
-> Currently, the amd64_edac module only provides UMC normalized and system
-> physical address when a DRAM ECC error occurs. DRAM Address is neither
-> logged nor exported through tracepoint.
+On Mon, Oct 06, 2025 at 11:34:06PM +0200, Borislav Petkov wrote:
+> On Mon, Oct 06, 2025 at 03:17:31PM +0000, Yazen Ghannam wrote:
+> > Generally, FMPM will handle all memory errors as it is expected that
+> > "upstream" entities, like hardware thresholding or other Linux notifier
+> > blocks, will filter out errors.
+> > 
+> > However, some users prefer that correctable errors are not filtered out
+> > but only that FMPM does not take action on them.
 > 
-> Modern AMD SOCs provide UEFI PRM module that implements various address
-> translation PRM handlers. These PRM handlers can be leveraged to convert
-> UMC normalized address into DRAM address at runtime on occurrence of a
-> DRAM ECC error. This translated DRAM address can then be logged and
-> exported through tracepoints. This set adds the required support to
-> accomplish the aforementioned.
+> That's a pretty shallow use case if you ask me...
 > 
-> The first patch adds support in the Address Translation Library to invoke
-> the appropriate PRM handler to perform the translation.
-> 
-> The second patch leverages the support added in the first patch to log
-> DRAM Address and export it through the RAS tracepoint on occurrence of a
-> DRAM ECC error.
-> 
-> Changes in v2:
->  - Modify commit messages per feedback received.
->  - Remove unnecessary variables.
->  - Rename struct dram_addr to atl_dram_addr.
->  - Replace sprintf call in __log_ecc_error() with scnprintf.
->  - Pass the DRAM Address to edac_mc_handle_error() through "other_detail"
-> parameter instead of "msg".
-> 
-> Avadhut Naik (2):
->   RAS/AMD/ATL: Translate UMC normalized address to DRAM address using
->     PRM
->   EDAC/amd64: Incorporate DRAM Address in EDAC message
-> 
->  drivers/edac/amd64_edac.c      | 23 +++++++++++++++++++++-
->  drivers/edac/amd64_edac.h      |  1 +
->  drivers/ras/amd/atl/core.c     |  3 ++-
->  drivers/ras/amd/atl/internal.h |  9 +++++++++
->  drivers/ras/amd/atl/prm.c      | 36 ++++++++++++++++++++++++++++++----
->  drivers/ras/amd/atl/umc.c      |  9 +++++++++
->  drivers/ras/ras.c              | 18 +++++++++++++++--
->  include/linux/ras.h            | 19 +++++++++++++++++-
->  8 files changed, 109 insertions(+), 9 deletions(-)
-> 
-> 
-> base-commit: 501973598d05fdb1d1089fbf3cf40b605b836e16
 > -- 
 
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+I think it's a common use case without FMPM.
+
+IOW, log correctable errors but don't offline memory because of them.
+
+Does that sounds better or about the same?
 
 Thanks,
 Yazen
