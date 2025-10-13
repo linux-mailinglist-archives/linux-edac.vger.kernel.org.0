@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-5033-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5034-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2984FBD587F
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Oct 2025 19:37:39 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA87CBD588B
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Oct 2025 19:37:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CB9818A5B36
-	for <lists+linux-edac@lfdr.de>; Mon, 13 Oct 2025 17:38:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 644B54E7EB2
+	for <lists+linux-edac@lfdr.de>; Mon, 13 Oct 2025 17:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0111D3081C7;
-	Mon, 13 Oct 2025 17:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D6C308F07;
+	Mon, 13 Oct 2025 17:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="U0MdMlX4"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3Zh/cZVY"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012019.outbound.protection.outlook.com [40.93.195.19])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013018.outbound.protection.outlook.com [40.107.201.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABDA305062;
-	Mon, 13 Oct 2025 17:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43B021D596;
+	Mon, 13 Oct 2025 17:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.18
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760377048; cv=fail; b=CZ+zheZNdjfDYPmuE/ZWznXJ71nLStj0RVcu0eNH2ISedxaE7GpRii+3q/qXkfqX9k7jV9lYlnRvAeiEnSjG17DHl7d8F145MDl7DirdTyyNOWifv1H58DlmNEFJLxLSNzDHVMEONDafKd+0pJob7Ekd9ZqRaDWyHuMDIywesbw=
+	t=1760377060; cv=fail; b=F5BgT01sc5TTTU79gdZwlxGAjmyVV/2krHvnbwvQCvvYyZ+TSafkx4GHUJdni51tb3RxEIPZ6CKWH/jqyNgJfPwnzZR1FBARs+samcvK/1unWsZW+PZ7Hgu7p+dhqeeW6p/lFaJCGg9PeNd9dLJHG4XekHp+sNp5LUFu28cXTi0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760377048; c=relaxed/simple;
-	bh=RolwOF54I5Q9OIpsFTVd3oZ/fd5rjkKC4hh8toaMLqI=;
+	s=arc-20240116; t=1760377060; c=relaxed/simple;
+	bh=7y+dRSebsWw8gPc0uCb22KSByNDnL1NFRBtT95RlvuQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sU8mrQlMQ4PKG9VL+UTChzkle3tqn2dhN1oyB1wA/4lkNZabZ8fYtpB0+CQ+v5oU8RJ7S0h6lBI6DnlQjqh2hp8qDgYd13wLlkmuNrLtY4SVh4tnFjAy/5HJgYa1WlYvd4tRNtfX1SmII6O0XdUmCtTO51OXO2D9mNktIDY1PoE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=U0MdMlX4; arc=fail smtp.client-ip=40.93.195.19
+	 MIME-Version:Content-Type; b=jk/RQDf8gsN/xY+/WjY7CV2MnkB7WXVqCuSE5pSvAk6K5uLE4d9P40Ob2o6TnEk62Oufb1PEFpr5RC40u4akmp9t3sL4Nj1gWK19AVRBUpVS5OVpynOrwRFfVEL09VLce/UTdz/Jk2wrEZvLuVqquax9XvUME0cgz8j6mivBrNo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3Zh/cZVY; arc=fail smtp.client-ip=40.107.201.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S8xXPBqzPBANaCz3yfsQX6RLB+CL9sMhrjG3SJsCHlejCsDpzcENXzB9veA3TYMUbYhaejYbL7KoWXN/rT13pSRxeLUXFAQKhylVcXxVF3Zklb1zp3IDbAaI6to3qBI+Oyk6VIR1xoyIExBhKGI3R6PgSi4rVzhz0fSh9uNq91OnFtHryRx7LQgSRVblA2j4GzTGrg5rXsJiF/NQ0N9cFVo/5QmpzZ1bAXjkErh/wVDOz56SCAKepobiMYP1x2MLX+Y2fMuHOSqBQBQI06ZYEuc7qBEhGdeYTfkkiSnHwAvC/17Bii/wkw5DCsPcH34/wryTyM4J/uEQfoWVb1wWJw==
+ b=Lo9MehgGATThZxsXcB/x7KNyr8f6Qxffzde7FVN6DlQvkLuVZN8wALeCbTQtMG8gNzef6FezhObsrEtt5tfG7iqkAFsWE53+Y193cH9pHECbfIWVVI+vNq3tIgpGlwr3mZDFVsRrom71Y2xrJlM1gVeNHXsPHSWiw27h+3HjQ9fdHmkrQxzGUGSnwwEUIHrIWp4Y0YR1Nojip+F3mKEuZgUrb4jp8L0XaG1AudNjq6i3ZBnBqW+7eg4BTAwGeCkAGUuH/tTHcWNr4J9siUs7DHVhYsnN8rn6sqQfOT0Sr4N7a4SaHfH4AWqx2a2CP3912vEFpqii+lk0aRf26esJ0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tnWJ+kb+rLaHvM7iTs/o5H/qks1N2kR/t1GjaZl796M=;
- b=CfsRJuDdJ6AIlqZxor24PZNA51WGFYgCYb4NLgso9YcVRiHxfveVER0yRqAjQKNVunLjGgK5ZHd7bgHnHdgaFaRqBPo/+swn87+Lv15skI+n6XzCasCyRJWzbe47i22PfAiOodaJdmRXMjNIFOJ8DeSyQvaI6kU6Eg1W40nUUu2zl+10H1UagEdX9/cgF2Q+C3rBsSrjh6223O5zTzm6tW6nAfpEftJkooh9e3nFh1uHAYl6L2O3rKDrT3E2Q/kiEzfeCdH0C92KeNTmluGNbvCWGZpBaX9jSI2LJ/O5PnENlkxUvYjUGabxb9S7F34Z1Ee3zJ1Rjq8iSqnfwUWdkA==
+ bh=ptUrY+Ih7/8qPeH1o6ORIgHFbJLt6AhGxN/XRqZEjeA=;
+ b=sMca096//iOjNdU+xH9702od88V+py9X1DbXWDPZPsP16ylYyaTXmLHeEne31e5ooOuS7Y14O1spgzWiWJeR8VlFEPGdSJL4vuMpKix2DONPaAQSytwb5Tqq5PuiUFHsXuEnekXHME/GVsyIFABrDcPOVQRS74Ka6ZI8yLPRjmnAHoA7T2zhHBzftFfKsUr/IcQgHHydnNPYor5sei6PCAchoovBI+iw958kuy5Los1p6DjAhUtN8bwUOt/H4BZx1AsOUC+IiBXjArVINAdwGjeL+/L5GJmYyO87srDk8UtGzgffpPb8rcMRsB4LQ6sj8t/Z9w2ygtt0ybY/CEO6Fw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tnWJ+kb+rLaHvM7iTs/o5H/qks1N2kR/t1GjaZl796M=;
- b=U0MdMlX4ZqTHevivuLyRsWxKp02IQRg3GyOqmqZea9ncvGS9bTi4a2iV1LaIHXlc+flxxxdSoYn/KoShsqcREqfI8bFC6x4zLVzvzF49/TpfAlTkzaugJWRf8GxkWXbvGvudVfqq0d0gopU4osYbFCbyKxPPjau9/kS/UdGwXCQ=
-Received: from CH2PR07CA0041.namprd07.prod.outlook.com (2603:10b6:610:5b::15)
- by PH0PR12MB8800.namprd12.prod.outlook.com (2603:10b6:510:26f::12) with
+ bh=ptUrY+Ih7/8qPeH1o6ORIgHFbJLt6AhGxN/XRqZEjeA=;
+ b=3Zh/cZVYCnc9Vbi7CwZnCN7PntIC0mxDqOxngKjiipjQr4oQYfhetT3e5Nakd/FUfESj7UlZ+EkwAe0ME5qX7k2qecqczP0nyNjKisTrceJ57mRoQ8+b/EME4qNmjFfRdp0eRMCj5/BtA/ihhZyL/ZaiLX2sEAtTZb+miboZaQ0=
+Received: from CH2PR10CA0019.namprd10.prod.outlook.com (2603:10b6:610:4c::29)
+ by CH3PR12MB7667.namprd12.prod.outlook.com (2603:10b6:610:14f::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.11; Mon, 13 Oct
- 2025 17:37:23 +0000
-Received: from CH2PEPF00000140.namprd02.prod.outlook.com
- (2603:10b6:610:5b:cafe::1f) by CH2PR07CA0041.outlook.office365.com
- (2603:10b6:610:5b::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.13; Mon, 13 Oct
+ 2025 17:37:33 +0000
+Received: from CH2PEPF0000013C.namprd02.prod.outlook.com
+ (2603:10b6:610:4c:cafe::72) by CH2PR10CA0019.outlook.office365.com
+ (2603:10b6:610:4c::29) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9203.12 via Frontend Transport; Mon,
- 13 Oct 2025 17:37:22 +0000
+ 13 Oct 2025 17:37:33 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,20 +63,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- CH2PEPF00000140.mail.protection.outlook.com (10.167.244.72) with Microsoft
+ CH2PEPF0000013C.mail.protection.outlook.com (10.167.244.73) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9228.7 via Frontend Transport; Mon, 13 Oct 2025 17:37:22 +0000
+ 15.20.9228.7 via Frontend Transport; Mon, 13 Oct 2025 17:37:33 +0000
 Received: from titanite-d354host.amd.com (10.180.168.240) by
  satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 13 Oct 2025 10:37:21 -0700
+ 15.2.2562.17; Mon, 13 Oct 2025 10:37:32 -0700
 From: Avadhut Naik <avadhut.naik@amd.com>
 To: <linux-edac@vger.kernel.org>
 CC: <bp@alien8.de>, <yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
 	<avadhut.naik@amd.com>
-Subject: [PATCH 3/4] EDAC/amd64: Set zn_regs_v2 flag for all AMD Family 1Ah-based SOCs
-Date: Mon, 13 Oct 2025 17:30:42 +0000
-Message-ID: <20251013173632.1449366-4-avadhut.naik@amd.com>
+Subject: [PATCH 4/4] EDAC/mc_sysfs: Begin deprecating legacy sysfs EDAC interface
+Date: Mon, 13 Oct 2025 17:30:43 +0000
+Message-ID: <20251013173632.1449366-5-avadhut.naik@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251013173632.1449366-1-avadhut.naik@amd.com>
 References: <20251013173632.1449366-1-avadhut.naik@amd.com>
@@ -92,97 +92,173 @@ X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000140:EE_|PH0PR12MB8800:EE_
-X-MS-Office365-Filtering-Correlation-Id: 01586a4e-b33e-4cd2-4117-08de0a7f2ac3
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000013C:EE_|CH3PR12MB7667:EE_
+X-MS-Office365-Filtering-Correlation-Id: bdc62663-2622-43a1-b984-08de0a7f3152
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ZWiP1TRN8gooU/t2TRtbcWA3GZxRbiTK5sxXAjcQG8HQuWE0NMwNVj/YjjTK?=
- =?us-ascii?Q?QSkjXPi3cMpvJFz3HdeeeFSa+LW5gkn+67onlHV9Sp4EpC1ui8s9Gpkx8x2e?=
- =?us-ascii?Q?Gpz3+bUbCiAC2sjWFUV7/BRlV1unkoIH6FGPnMc1C+eZ2KJ0+SoWQONk7Efi?=
- =?us-ascii?Q?ytoa8zGnAXLd9pwFb1PHAnka329zZZyzCq5TLnTSFAZWUSP2PEpnSeDfKbR3?=
- =?us-ascii?Q?oqVoVDZQ3vzFhAK2dQ9OrfBp7VlAGs9iwEOIC7lFAqlmmztgVqQ2ynD11HxV?=
- =?us-ascii?Q?cFcB2DGWdgaQc0TaIvZcMaIHp33LSlkXKGl7t74lsEx7Jt89cPOwTxaeO78O?=
- =?us-ascii?Q?w+tQ08M5YzDZ+9yQwa5u1j6QPXXEmgaZYNUe3UKqasQXHBj0FlwtPPTEYJOq?=
- =?us-ascii?Q?EmdXrP27kFTgaRwKGJcZf4pcwB3tW+Y3mT/6F4gekwIfMNK4R7xy6qolFTIX?=
- =?us-ascii?Q?Djp6RBwwsx6dXCh+PviC7GAnPsPCdJzY2J7DzffYwlcQ42yxIPi+p3ggz9XL?=
- =?us-ascii?Q?+Bz33FIn2Kau5pqDs/qVe0p/SLnMyp3cVKMKf0/SnKss9DcKeX7RXtCxVOss?=
- =?us-ascii?Q?uSoigrt2J2PQpq73XECvB6JJzEktDIif7fdbUkHi2jXyRHxBCFjXswBWN3db?=
- =?us-ascii?Q?k9Bffct8VvrIU/X4+RJNf0M8d9fq8ol33KRdo5bhshuppEaD86kAIFa9Xobb?=
- =?us-ascii?Q?UOy57N2N9JUgUbbbkZtx+gPwzN2H2dphM/3gtu/1Yqafo1YuoPgDmRMThncF?=
- =?us-ascii?Q?O8sfQEVDoqC8ME6LPIiDP7qJ4eI9/KiWq7uuvzh+Cx/pL4MZAlnbMkWMy5e0?=
- =?us-ascii?Q?Kcrzp2lRLeE5Ijk+NWEveVZPFZ/if5GL0XZD0QQNFDqSNjlPSUlni6NKirix?=
- =?us-ascii?Q?5M1AnaForM8ovwDEB+zqeW65YmjVpCFpxUt/MtoEBGXHjLMg7dLtTa5nOCoP?=
- =?us-ascii?Q?3DrbWe0BG1mgL8zNIf5RfOr3FNBljtLF72j5wyWH6MoOB8ff9HMqYHqwVHaL?=
- =?us-ascii?Q?75Q5Ny/uDFw1S3ke6uMyFA0AfoJeyiJV8l5F8B+OMdjSrnKANw89xqK8PMUY?=
- =?us-ascii?Q?EJpNmQCIxZiQ7g1k36e9kW1WkQeZfmrueHSfqZW9TrsLlLgBlno+5dSaaAjt?=
- =?us-ascii?Q?rl1DIL1qJH0Nfw66ihDgL7Et/98HutYBYsTWyofSmZzdPgv7Ij5Sl1vEOzHy?=
- =?us-ascii?Q?5UXDBxLORRY0ACMfyxKKxtwf00Zv50/XN5Z0H3bleSFXIW7IBEplJyu4A2iA?=
- =?us-ascii?Q?0X33aYc+cA8ml1eForRAAkKwWsVkSsCqS32jHUfi4GNZprA6+a2wc6wAlrj3?=
- =?us-ascii?Q?/jSWNHx25C53IgRzBNIkR9Iz5W4bJmngQa0j7FFg6UCX+y9oc1bjPeITf7wR?=
- =?us-ascii?Q?Eh3ktr717Andm9iUV9SQCxlbPPJpfT2UiHXv/9QXnBvv+TBoigPMwmrfGZ0h?=
- =?us-ascii?Q?E+u4TXcywB6zu78kI98RftNnPPUaXHIAGjWJlax1EOYGlmc2YqJqq78/pWFn?=
- =?us-ascii?Q?m08/QAvxZkXDqJGrDnMo9TIr3uWfB5/J3+Jmi5DeHgFlZL9qL6W/GZV3Kgnr?=
- =?us-ascii?Q?L3RjuIGc2Mvfs7Wu7ro=3D?=
+	=?us-ascii?Q?4hxG4bzKnPPJPyccBHIRIduwD9QeBBzULQmv6drgCQh6JG5stVQVLk+P4hoo?=
+ =?us-ascii?Q?MPu2/BsPTSlIoymsbM4/P4LiJDtPGqhGUJUXjklQTrKA46xjlVpwJ7jcZbLz?=
+ =?us-ascii?Q?6gvYhJchZje2ObMuzF4AWtib9kSaTzuxwSHPIK3hn6NQdkB5DfkQAc6EQN7o?=
+ =?us-ascii?Q?41OWdYCpxZUMUZUfgaWPFBEdTFDhWgEoS7gFy4/BBg6ZkgPYLUDguazxwtRr?=
+ =?us-ascii?Q?g30h99Jqk4nIv0R0wIF8UKKqVbUfTWVv/+CfFHGYN1QrWXS+eAlNzuQCA8yP?=
+ =?us-ascii?Q?os+Go84uPLM+y/y7h42URrzLna12tC3tOk3dDcz3nO4wvtlK4yDxBXJlUU8p?=
+ =?us-ascii?Q?fQdi9kPetA2Iu+OXnQ1jkIRhBFiCT+2XTEnsHPr/5Mq7u9Yn98J7c22ZvrbU?=
+ =?us-ascii?Q?KVKgAD/95fd2psrhcQPUlc18R2TzEtgdAfx7jaZDyFW6tn52B23i8Mjllfg3?=
+ =?us-ascii?Q?y/Aj+KYT0cw2rz8WVmrFC1wasOxcbwI0kgZ4jYyTwTpuaK/knZk4PGxcriEr?=
+ =?us-ascii?Q?MCUk0DY0nM/7mqRPZjxtaHkfK8caHskVJqqeNR6QhWEuRNwP308wO+uPyLYN?=
+ =?us-ascii?Q?XoTB869O4h8+dHHYJyitEh20llMZMiaElL2jzxRQbwfa8axCm3dPQWrtDHsE?=
+ =?us-ascii?Q?S36WG/2y5DXy0xpdYMKg7OPbJrJar+vOaiIrZ1XodZoBKkTk3kUWz/R2FbI7?=
+ =?us-ascii?Q?nBYv9MSe9QRQtYAQh+v6pMG3HnNS1mAxWqIu4XwKg++UDguUcjkuBX/+13jD?=
+ =?us-ascii?Q?fm1y7wcV1+6F4UV0+rC+f2hdfOfmxQbJJYiQS2Jjsa6Dn4DMNhb92YxMwA2m?=
+ =?us-ascii?Q?FdBxhGGHUKZj8TETtmumpovl2J69ShYDgBDNVNidk9nDbycDzT/0vUFnOFws?=
+ =?us-ascii?Q?4E/kYJbW4cavA8VL0KbtTIbWXvfAPJIUZArpTnHXEGMLJFh3XdsyHdGoIn/j?=
+ =?us-ascii?Q?xU1ij9M66r/DHUTT4PooGpLtt6TRdvNtcDdkW0BYqu90PDqLHQ8IsFEkdL4X?=
+ =?us-ascii?Q?ZOfjmG7a6buqKOw14oPcNdLjcwN5Q+0DVM8GoFvHWqa8mjmiO2vYPb2gFOaK?=
+ =?us-ascii?Q?3aDMy5UC31MyyelWaJLL4WZFDPX98tu3/hZs6qygWsypzR89ueyY0DbpyyCe?=
+ =?us-ascii?Q?KCU6Bvcg/l/uO2Gbbs6ooOFMKwv8JwYvqO23xe6+hWrnUodw8hposPolhzrE?=
+ =?us-ascii?Q?CYr25VwyFBixNDrzp2f6F/Wt4+FctX5vaWDw7VYD5wGHHf8ij2MHT036gM2p?=
+ =?us-ascii?Q?g8TRk/8LzD9SNWgP0g/TCs1Udlmog0l8bOGArAzIyJUGt2BqxR0bgJrt6MCo?=
+ =?us-ascii?Q?LmZIOVUtWD8Y9419gGaVMe4NFH2vnQJYQ0cCXcTBBP1+EoLZniqphpjcCeoP?=
+ =?us-ascii?Q?iELp6ULaj4HjuYPzwJYfoCFfwAzLa4UqXZw8aS0tJdzja/z9R8yuu7u78H6j?=
+ =?us-ascii?Q?6HAiXKkbiQltBTTLpueJN0cOBxdNz1MmyIQXXhN/cNkj1NMxJ5KqviaNffBt?=
+ =?us-ascii?Q?LHNFaWdkQbx+cpYQWadCn/JE7W7kH0Is+6XPaMSzvWxWiPp2dhIf2dNT0v3J?=
+ =?us-ascii?Q?x0J1N3jrUyMAyuwyHx8=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2025 17:37:22.7130
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2025 17:37:33.7181
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01586a4e-b33e-4cd2-4117-08de0a7f2ac3
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdc62663-2622-43a1-b984-08de0a7f3152
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000140.namprd02.prod.outlook.com
+	CH2PEPF0000013C.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8800
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7667
 
-The zn_regs_v2 flag should be set for all AMD Family 1Ah-based SOCs.
+The legacy sysfs EDAC interface has been made obsolete more than a decade
+ago through the introduction of a new per-DIMM interface.
 
-Set the flag once for all 1Ah-based SOCs and avoid repetetive assignment.
+The legacy interface however, hasn't been removed till date.
+
+Begin deprecating it so that it can eventually be removed by v6.21.
 
 Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 ---
- drivers/edac/amd64_edac.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/edac/Kconfig         |  2 +-
+ drivers/edac/edac_mc.h       |  5 +++++
+ drivers/edac/edac_mc_sysfs.c | 16 ++++++++++++++++
+ 3 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 2391f3469961..832f9675e7b0 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3779,6 +3779,8 @@ static int per_family_init(struct amd64_pvt *pvt)
- 	else
- 		pvt->ops = &dct_ops;
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 39352b9b7a7e..fdfeba848114 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -25,7 +25,7 @@ if EDAC
  
-+	pvt->flags.zn_regs_v2 = (pvt->fam >= 0x1A) ? 1 : 0;
+ config EDAC_LEGACY_SYSFS
+ 	bool "EDAC legacy sysfs"
+-	default y
++	default n
+ 	help
+ 	  Enable the compatibility sysfs nodes.
+ 	  Use 'Y' if your edac utilities aren't ported to work with the newer
+diff --git a/drivers/edac/edac_mc.h b/drivers/edac/edac_mc.h
+index 881b00eadf7a..78b49d6906fd 100644
+--- a/drivers/edac/edac_mc.h
++++ b/drivers/edac/edac_mc.h
+@@ -95,6 +95,11 @@ do {									\
+ 
+ #define to_mci(k) container_of(k, struct mem_ctl_info, dev)
+ 
++static inline void deprecate_interface(void)
++{
++	pr_warn_once("NOTICE: The legacy EDAC sysfs interface has been deprecated and will be removed by v6.21. Please switch to the new interface!\n");
++}
 +
- 	switch (pvt->fam) {
- 	case 0xf:
- 		tmp_name				= (pvt->ext_model >= K8_REV_F) ?
-@@ -3887,20 +3889,14 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		switch (pvt->model) {
- 		case 0x00 ... 0x1f:
- 			pvt->max_mcs            = 12;
--			pvt->flags.zn_regs_v2   = 1;
--			break;
--		case 0x40 ... 0x4f:
--			pvt->flags.zn_regs_v2   = 1;
- 			break;
- 		case 0x50 ... 0x57:
- 		case 0xc0 ... 0xc7:
- 			pvt->max_mcs            = 16;
--			pvt->flags.zn_regs_v2   = 1;
- 			break;
- 		case 0x90 ... 0x9f:
- 		case 0xa0 ... 0xaf:
- 			pvt->max_mcs            = 8;
--			pvt->flags.zn_regs_v2   = 1;
- 			break;
- 		}
- 		break;
+ /**
+  * edac_mc_alloc() - Allocate and partially fill a struct &mem_ctl_info.
+  *
+diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+index 8689631f1905..8ed4b239b7f1 100644
+--- a/drivers/edac/edac_mc_sysfs.c
++++ b/drivers/edac/edac_mc_sysfs.c
+@@ -144,6 +144,8 @@ struct dev_ch_attribute {
+ static ssize_t csrow_ue_count_show(struct device *dev,
+ 				   struct device_attribute *mattr, char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 
+ 	return sysfs_emit(data, "%u\n", csrow->ue_count);
+@@ -152,6 +154,8 @@ static ssize_t csrow_ue_count_show(struct device *dev,
+ static ssize_t csrow_ce_count_show(struct device *dev,
+ 				   struct device_attribute *mattr, char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 
+ 	return sysfs_emit(data, "%u\n", csrow->ce_count);
+@@ -160,6 +164,8 @@ static ssize_t csrow_ce_count_show(struct device *dev,
+ static ssize_t csrow_size_show(struct device *dev,
+ 			       struct device_attribute *mattr, char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 	int i;
+ 	u32 nr_pages = 0;
+@@ -172,6 +178,8 @@ static ssize_t csrow_size_show(struct device *dev,
+ static ssize_t csrow_mem_type_show(struct device *dev,
+ 				   struct device_attribute *mattr, char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 
+ 	return sysfs_emit(data, "%s\n", edac_mem_types[csrow->channels[0]->dimm->mtype]);
+@@ -180,6 +188,8 @@ static ssize_t csrow_mem_type_show(struct device *dev,
+ static ssize_t csrow_dev_type_show(struct device *dev,
+ 				   struct device_attribute *mattr, char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 
+ 	return sysfs_emit(data, "%s\n", dev_types[csrow->channels[0]->dimm->dtype]);
+@@ -189,6 +199,8 @@ static ssize_t csrow_edac_mode_show(struct device *dev,
+ 				    struct device_attribute *mattr,
+ 				    char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 
+ 	return sysfs_emit(data, "%s\n", edac_caps[csrow->channels[0]->dimm->edac_mode]);
+@@ -199,6 +211,8 @@ static ssize_t channel_dimm_label_show(struct device *dev,
+ 				       struct device_attribute *mattr,
+ 				       char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 	unsigned int chan = to_channel(mattr);
+ 	struct rank_info *rank = csrow->channels[chan];
+@@ -238,6 +252,8 @@ static ssize_t channel_dimm_label_store(struct device *dev,
+ static ssize_t channel_ce_count_show(struct device *dev,
+ 				     struct device_attribute *mattr, char *data)
+ {
++	deprecate_interface();
++
+ 	struct csrow_info *csrow = to_csrow(dev);
+ 	unsigned int chan = to_channel(mattr);
+ 	struct rank_info *rank = csrow->channels[chan];
 -- 
 2.43.0
 
