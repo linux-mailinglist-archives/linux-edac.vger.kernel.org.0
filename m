@@ -1,105 +1,311 @@
-Return-Path: <linux-edac+bounces-5045-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5046-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD2B0BDA5CE
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 17:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D7A3BDA7E5
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 17:52:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 921C04EB595
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 15:24:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 97458504FA5
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 15:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B142FBDE9;
-	Tue, 14 Oct 2025 15:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bluematt.me header.i=@bluematt.me header.b="bO76bOGD";
-	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="UOPxHsXW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3311A3002AF;
+	Tue, 14 Oct 2025 15:40:34 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3AB23C50A
-	for <linux-edac@vger.kernel.org>; Tue, 14 Oct 2025 15:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A55F2DECD4;
+	Tue, 14 Oct 2025 15:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760455482; cv=none; b=jDCX6kwDfiQkqSq71/uwCTAzhGDMIOZFPt4fFdwUcAixGO1KS+01eU9JFN/IIa5a/x8S7oHGv7CAa0v1h5IMznjm1JnkUWsAEaY6OQy0LbJDyX1JXh3ouFy0B5hMgaBqKHYeJH+suowsNI4CLFNmbpUkjFOfwIunX+fF1ehoNX0=
+	t=1760456434; cv=none; b=i3h5/xY0cyoulake8AfJGGMxEXAOtDWC5aWRuplPeoJli+VpvdmbzaxVX8Ctb9QnO8/etJvlODDyv+qoxcw4K8I24Uotq0V6hoO53BP+WepfuoUJ6PfrileXfqbxapA+RJ6dLXShlY/hn86n8T5spJLdgDTMswvm/8xQ0fsE2SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760455482; c=relaxed/simple;
-	bh=pN9r2R2hx3achOjOKAVt05mZ7Kqu6Z95kgwVyE9HPHo=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=Z3Yo0vv7wjzfdByEYleC5poxRWoRyu8RyltOm6/a03bDlxN+49ub71S2JWX7CrqN4YT3pwPCBwqt3VJivObsNHIBce2p5vH8E4OsUdHWPHNB4BnECvTVHIadCe9PdK8v95LZpkIlHZhV+9eqhETkgzLk1th0enD9ZMPWna5f1Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bluematt.me; spf=pass smtp.mailfrom=bluematt.me; dkim=pass (2048-bit key) header.d=bluematt.me header.i=@bluematt.me header.b=bO76bOGD; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=UOPxHsXW; arc=none smtp.client-ip=69.59.18.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bluematt.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bluematt.me
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=bluematt.me
-	; s=1760454061; h=Subject:From:To:From:Subject:To:Cc:Cc:Reply-To:In-Reply-To:
-	References; bh=66GOyVF89Ab7SKll2RVWM7ast3QXlTRjGoKDoRo5MZ0=; b=bO76bOGDVMsjrP
-	WQx/3UHiXWWYVQAzy/ucieUuzmVHDkP5TASoQS0rA0dMH+JN5YtaFR8TCP0y1TmSL6KxfcaQOK7eN
-	YKk6Uh9wyRW2A7HYOXIxpCie1CZtZh5qL7Dmk8QgUx+iZEwHY8+ve0vPBcA1xKOdHBr5wYnwYeXzY
-	KQNfZejJ5VQqmxjyQ6UYKdZoEfkGWG9keL12HjmExytIa9NV5R8vwfRkouNRs/6OmENwdi3XL4ZhQ
-	groAIKEzJbSF8us7V3q963njs0LoCUMs+pPBrbjI6M6VfIZ3JX0PEW9o+UQZ12NLhepJ+wiX3yDxj
-	dM+6VU/Vyirj1ca9nYBw==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=clients.mail.as397444.net; s=1760454064; h=Subject:From:To:From:Subject:To:
-	Cc:Cc:Reply-To:In-Reply-To:References;
-	bh=66GOyVF89Ab7SKll2RVWM7ast3QXlTRjGoKDoRo5MZ0=; b=UOPxHsXWApu1zZklOewaOKciFW
-	o1gpugCD+/5SSbux6YLvfzQdt+n/rZZ6t8zmvTjKu3n4os3Q9LA7MtVqWWsDx3YHUuzkvSuHHVMcb
-	AKbXe2D3np8tQoDglepG9KThp9eWom4pJq35+DRCPzW3FW3Fvljt9D8hkzUubRqmTHhCFS51Gds+W
-	HZLzknxH6ioY8LnA0VKvoNB95UCzaN5cXxjW/EARBEnsa3Xdpl9lqthUt/D8nIVz6GcoX5Wo+EEfx
-	cU2O7RrBQChmXj75+4+boVNI9azMMOpKI5oGTnxP0UODz7ygxu71skzOR/RMEw7H2TTshl1sK4ydZ
-	4uCnjwcg==;
-X-DKIM-Note: Keys used to sign are likely public at
-X-DKIM-Note: https://as397444.net/dkim/bluematt.me and
-X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
-X-DKIM-Note: For more info, see https://as397444.net/dkim/
-Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
-	(envelope-from <git@bluematt.me>)
-	id 1v8gUg-00000004h8U-2IaJ for linux-edac@vger.kernel.org;
-	Tue, 14 Oct 2025 14:59:21 +0000
-Message-ID: <8ae4f35a-0cec-455f-8f2c-ce04fb99aa40@bluematt.me>
-Date: Tue, 14 Oct 2025 10:59:20 -0400
+	s=arc-20240116; t=1760456434; c=relaxed/simple;
+	bh=BN0cRurDhQvRoxeXN8Mz3Cz2hPp/sBOtgKJbjhSJQyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hpjS7bjarvodVR9GmsLXMGHelLbgJeyTXszjXMUQwt3m+FNyIoDj7BO/vRkIV/eqywSzRcXjHAcZnB4WNGag5XBruHNzws+yFH6VkXkbQtyV10L2/Yv0nwerobLl3ySaUTBtaHpWrZ2pV7hiyKNhcBIsiftr0xrHGYbWshLbnLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 4CF23BC054;
+	Tue, 14 Oct 2025 15:40:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id 0187020030;
+	Tue, 14 Oct 2025 15:40:23 +0000 (UTC)
+Date: Tue, 14 Oct 2025 11:40:29 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: lukas@wunner.de, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
+ ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
+ Jonathan.Cameron@huawei.com, bhelgaas@google.com, tony.luck@intel.com,
+ bp@alien8.de, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
+ anil.s.keshavamurthy@intel.com, mark.rutland@arm.com, peterz@infradead.org,
+ tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v12 1/3] PCI: trace: Add a generic RAS tracepoint for
+ hotplug event
+Message-ID: <20251014114029.4c59bb1a@gandalf.local.home>
+In-Reply-To: <20251014123159.57764-2-xueshuai@linux.alibaba.com>
+References: <20251014123159.57764-1-xueshuai@linux.alibaba.com>
+	<20251014123159.57764-2-xueshuai@linux.alibaba.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-US
-To: linux-edac@vger.kernel.org
-From: Matt Corallo <git@bluematt.me>
-Subject: [PATCH] EDAC/ie31200: Add support for additional Alder Lake-S CPUs
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: g3a8azz8jeckjuqkykwgg67ktcyoid1c
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 0187020030
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+56UC/0yh7pDLxktD4Ww/pF2GM3+ZNLaY=
+X-HE-Tag: 1760456423-588206
+X-HE-Meta: U2FsdGVkX1/qBhVcJ0onmnLBSHa++eubqrKZF2PFjqVPlCldnstYoRazugdO+YWZkIVcctGko81qhZCSs8vnLdIor1zt9/1uGNdHamW1GucCqsNS50hC3lm49cCPUBOGVx/ByTkRSapWnN5TjHsp12Wfb4Zde4RXLUdZV7uykreXujlih7Fu9V/LsRfteDpdnZkjCNUvb//ck/JjlEHNiVAledrwMO6KqBYlEpzsSCsACHSNF0AzlaWasCLCTd9EvxfIgYit2PnmZqrA9Ihp2fyHXnlvezc+TiaOljB8xpXBmIS9KJkV4ckYzuDG4DxUfmJP6AyeP+fPbKxsFRrJwH7cCH0wc94JRYrcrDPffY3o3Yad6s35a43fT5oAJPlh15LfGROEie02vnDv53MspU1+x4PcBJRiHruntzAOZDw=
 
-180f091224a002f8bd1629307c34619a5626841e added support for some but
-not all Alder Lake-S SoCs. This adds support for, at least,
-the i5-12600K which works with the existing Alder Lake-S config.
+On Tue, 14 Oct 2025 20:31:57 +0800
+Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
-Signed-off-by: Matt Corallo <git@bluematt.me>
----
-  drivers/edac/ie31200_edac.c | 2 ++
-  1 file changed, 2 insertions(+)
+> Hotplug events are critical indicators for analyzing hardware health,
+> and surprise link downs can significantly impact system performance and
+> reliability.
+> 
+> Define a new TRACING_SYSTEM named "pci", add a generic RAS tracepoint
+> for hotplug event to help health checks. Add enum pci_hotplug_event in
+> include/uapi/linux/pci.h so applications like rasdaemon can register
+> tracepoint event handlers for it.
+> 
+> The following output is generated when a device is hotplugged:
+> 
+> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
+> $ cat /sys/kernel/debug/tracing/trace_pipe
+>    irq/51-pciehp-88      [001] .....  1311.177459: pci_hp_event: 0000:00:02.0 slot:10, event:CARD_PRESENT
+> 
+>    irq/51-pciehp-88      [001] .....  1311.177566: pci_hp_event: 0000:00:02.0 slot:10, event:LINK_UP
+> 
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Reviewed-by: Lukas Wunner <lukas@wunner.de>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/pci/Makefile              |  3 ++
+>  drivers/pci/hotplug/pciehp_ctrl.c | 31 ++++++++++++---
+>  drivers/pci/trace.c               | 11 ++++++
+>  include/trace/events/pci.h        | 63 +++++++++++++++++++++++++++++++
+>  include/uapi/linux/pci.h          |  7 ++++
+>  5 files changed, 109 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/pci/trace.c
+>  create mode 100644 include/trace/events/pci.h
+> 
+> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+> index 67647f1880fb..58a4e4ea76b0 100644
+> --- a/drivers/pci/Makefile
+> +++ b/drivers/pci/Makefile
+> @@ -45,3 +45,6 @@ obj-y				+= controller/
+>  obj-y				+= switch/
+>  
+>  subdir-ccflags-$(CONFIG_PCI_DEBUG) := -DDEBUG
+> +
+> +CFLAGS_trace.o := -I$(src)
+> +obj-$(CONFIG_TRACING)		+= trace.o
+> diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
+> index bcc938d4420f..7805f697a02c 100644
+> --- a/drivers/pci/hotplug/pciehp_ctrl.c
+> +++ b/drivers/pci/hotplug/pciehp_ctrl.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/types.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/pci.h>
+> +#include <trace/events/pci.h>
+>  
+>  #include "../pci.h"
+>  #include "pciehp.h"
+> @@ -244,12 +245,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+>  	case ON_STATE:
+>  		ctrl->state = POWEROFF_STATE;
+>  		mutex_unlock(&ctrl->state_lock);
+> -		if (events & PCI_EXP_SLTSTA_DLLSC)
+> +		if (events & PCI_EXP_SLTSTA_DLLSC) {
+>  			ctrl_info(ctrl, "Slot(%s): Link Down\n",
+>  				  slot_name(ctrl));
+> -		if (events & PCI_EXP_SLTSTA_PDC)
+> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+> +					   slot_name(ctrl),
+> +					   PCI_HOTPLUG_LINK_DOWN);
 
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 5c1fa1c0d12e..010317e33738 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -99,6 +99,7 @@
+I know this is v12 and I don't remember if I suggested this before and you
+gave me a reason already, but why not simply pass in "ctrl" and have the
+TRACE_EVENT() denote the names?
 
-  /* Alder Lake-S */
-  #define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1	0x4660
-+#define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_2	0x4648 /* e.g. i5-12600K */
+> +		}
+> +		if (events & PCI_EXP_SLTSTA_PDC) {
+>  			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+>  				  slot_name(ctrl));
+> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+> +					   slot_name(ctrl),
+> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
+> +		}
+>  		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
+>  		break;
+>  	default:
+> @@ -269,6 +278,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+>  					      INDICATOR_NOOP);
+>  			ctrl_info(ctrl, "Slot(%s): Card not present\n",
+>  				  slot_name(ctrl));
+> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+> +					   slot_name(ctrl),
+> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
+>  		}
+>  		mutex_unlock(&ctrl->state_lock);
+>  		return;
+> @@ -281,12 +293,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
+>  	case OFF_STATE:
+>  		ctrl->state = POWERON_STATE;
+>  		mutex_unlock(&ctrl->state_lock);
+> -		if (present)
+> +		if (present) {
+>  			ctrl_info(ctrl, "Slot(%s): Card present\n",
+>  				  slot_name(ctrl));
+> -		if (link_active)
+> -			ctrl_info(ctrl, "Slot(%s): Link Up\n",
+> -				  slot_name(ctrl));
+> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+> +					   slot_name(ctrl),
+> +					   PCI_HOTPLUG_CARD_PRESENT);
+> +		}
+> +		if (link_active) {
+> +			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
+> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
+> +					   slot_name(ctrl),
+> +					   PCI_HOTPLUG_LINK_UP);
+> +		}
+>  		ctrl->request_result = pciehp_enable_slot(ctrl);
+>  		break;
+>  	default:
+> diff --git a/drivers/pci/trace.c b/drivers/pci/trace.c
+> new file mode 100644
+> index 000000000000..cf11abca8602
+> --- /dev/null
+> +++ b/drivers/pci/trace.c
+> @@ -0,0 +1,11 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Tracepoints for PCI system
+> + *
+> + * Copyright (C) 2025 Alibaba Corporation
+> + */
+> +
+> +#include <linux/pci.h>
+> +
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/pci.h>
+> diff --git a/include/trace/events/pci.h b/include/trace/events/pci.h
+> new file mode 100644
+> index 000000000000..208609492c06
+> --- /dev/null
+> +++ b/include/trace/events/pci.h
+> @@ -0,0 +1,63 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM pci
+> +
+> +#if !defined(_TRACE_HW_EVENT_PCI_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_HW_EVENT_PCI_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +#define PCI_HOTPLUG_EVENT						\
+> +	EM(PCI_HOTPLUG_LINK_UP,			"LINK_UP")		\
+> +	EM(PCI_HOTPLUG_LINK_DOWN,		"LINK_DOWN")		\
+> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"CARD_PRESENT")		\
+> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"CARD_NOT_PRESENT")
+> +
+> +/* Enums require being exported to userspace, for user tool parsing */
+> +#undef EM
+> +#undef EMe
+> +#define EM(a, b)	TRACE_DEFINE_ENUM(a);
+> +#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
+> +
+> +PCI_HOTPLUG_EVENT
+> +
+> +/*
+> + * Now redefine the EM() and EMe() macros to map the enums to the strings
+> + * that will be printed in the output.
+> + */
+> +#undef EM
+> +#undef EMe
+> +#define EM(a, b)	{a, b},
+> +#define EMe(a, b)	{a, b}
+> +
+> +TRACE_EVENT(pci_hp_event,
+> +
+> +	TP_PROTO(const char *port_name,
+> +		 const char *slot,
+> +		 const int event),
+> +
+> +	TP_ARGS(port_name, slot, event),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(	port_name,	port_name	)
+> +		__string(	slot,		slot		)
+> +		__field(	int,		event	)
+> +	),
 
-  /* Bartlett Lake-S */
-  #define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_1	0x4639
-@@ -761,6 +762,7 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
-  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_6), (kernel_ulong_t)&rpl_s_cfg},
-  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_HX_1), (kernel_ulong_t)&rpl_s_cfg},
-  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1), (kernel_ulong_t)&rpl_s_cfg},
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_2), (kernel_ulong_t)&rpl_s_cfg},
-  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_1), (kernel_ulong_t)&rpl_s_cfg},
-  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_2), (kernel_ulong_t)&rpl_s_cfg},
-  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_3), (kernel_ulong_t)&rpl_s_cfg},
---
-2.47.3
+	TP_PROTO(struct controller *ctrl, int event),
+
+	TP_ARGS(ctrl, event),
+
+	TP_STRUCT__entry(
+		__string(	port_name,	pci_name(ctrl->pcie->port)	)
+		__string(	slot,		slot_name(ctrl)			)
+		__field(	int,		event				)
+	),
+
+It would move the work out of the calling path.
+
+-- Steve
+
+
+> +
+> +	TP_fast_assign(
+> +		__assign_str(port_name);
+> +		__assign_str(slot);
+> +		__entry->event = event;
+> +	),
+> +
+> +	TP_printk("%s slot:%s, event:%s\n",
+> +		__get_str(port_name),
+> +		__get_str(slot),
+> +		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
+> +	)
+> +);
+> +
+> +#endif /* _TRACE_HW_EVENT_PCI_H */
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
+> diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
+> index a769eefc5139..4f150028965d 100644
+> --- a/include/uapi/linux/pci.h
+> +++ b/include/uapi/linux/pci.h
+> @@ -39,4 +39,11 @@
+>  #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
+>  #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
+>  
+> +enum pci_hotplug_event {
+> +	PCI_HOTPLUG_LINK_UP,
+> +	PCI_HOTPLUG_LINK_DOWN,
+> +	PCI_HOTPLUG_CARD_PRESENT,
+> +	PCI_HOTPLUG_CARD_NOT_PRESENT,
+> +};
+> +
+>  #endif /* _UAPILINUX_PCI_H */
+
 
