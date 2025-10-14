@@ -1,211 +1,105 @@
-Return-Path: <linux-edac+bounces-5044-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5045-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27C15BDA1C5
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 16:44:38 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD2B0BDA5CE
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 17:28:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 069104EB050
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 14:44:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 921C04EB595
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 15:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 324FD30103F;
-	Tue, 14 Oct 2025 14:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B142FBDE9;
+	Tue, 14 Oct 2025 15:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ERhq6RRI"
+	dkim=pass (2048-bit key) header.d=bluematt.me header.i=@bluematt.me header.b="bO76bOGD";
+	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="UOPxHsXW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E024E30147F;
-	Tue, 14 Oct 2025 14:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3AB23C50A
+	for <linux-edac@vger.kernel.org>; Tue, 14 Oct 2025 15:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760452870; cv=none; b=fSUlQGvd7gbnW1Rw9RSUNeTUgkbnim9p5pqSW5JuRvHsgCOLT+LUkZDZTPRonfTAm1AAa3r91j17DyGCPidzjawlajAh09vPsAaR+DSzBK4kGj80nghTqElfCAoF7g+WmRAoV98ftIlN+zg6ihuOGoyo6783i717qIFua6hyETo=
+	t=1760455482; cv=none; b=jDCX6kwDfiQkqSq71/uwCTAzhGDMIOZFPt4fFdwUcAixGO1KS+01eU9JFN/IIa5a/x8S7oHGv7CAa0v1h5IMznjm1JnkUWsAEaY6OQy0LbJDyX1JXh3ouFy0B5hMgaBqKHYeJH+suowsNI4CLFNmbpUkjFOfwIunX+fF1ehoNX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760452870; c=relaxed/simple;
-	bh=bzXzVGoX6Soh/go+uDrQi2kQPxtg+NUe8G2AQ2W5LuA=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Wv4I0NcO0EZfsbC5SWW5Y03mFckry1rHI2fpMRjnsVDeZtsRoMJeqQDmySiniVqzAC56EZ95Ll8LR/ZGcIqcKGX2U5dGjailCsNH/m+O8qlozhyNGbwkVtHaiU5QNydlHDlvQH5D3jUuQVVdv8wqRKHtriH2SYO48w6vZNRrSFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ERhq6RRI; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760452868; x=1791988868;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=bzXzVGoX6Soh/go+uDrQi2kQPxtg+NUe8G2AQ2W5LuA=;
-  b=ERhq6RRIgr4CCaB9QL3xKKMrR91sRxR8Spx/nXTNzIZ/AoVrhV+I6CUd
-   tySlr1w9KJX2DVwfbmNILpqodVRNJHufJW5wSN4Z6dpqKQOUwrWNcZ3sy
-   jVqg/tlFvf/gjl9ifbp/ry9ne0CI2Nx2whlP6TG4oDlA8XEaxbrsVSSAJ
-   m5uJ2YcNZclpoM48xFrFsi6UhNwGm5d3TxNWnhZi2XMRDFi8JykHyKcL6
-   4n0nYQPAPQQmZ4AXeA1cq7VfdiLjJFADdTcVbnUepa44JLWB2c0PMlXGa
-   6bDt0ll+pP0h6G8qGw5qREHlEUWsOg7S1vc9Sy7hVss5dfGsypC9uNIQF
-   Q==;
-X-CSE-ConnectionGUID: QSc3pEGPR2yStoe8rHCUOw==
-X-CSE-MsgGUID: 7wAnVZLLQZWgxwcKYi5R2g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="62319485"
-X-IronPort-AV: E=Sophos;i="6.19,228,1754982000"; 
-   d="scan'208";a="62319485"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 07:41:07 -0700
-X-CSE-ConnectionGUID: 3ulb3REWRsyEgBFO1He+uA==
-X-CSE-MsgGUID: LKZYOFdXSha35f1JqLHp7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,228,1754982000"; 
-   d="scan'208";a="187205148"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.195])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 07:40:59 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 14 Oct 2025 17:40:56 +0300 (EEST)
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-cc: rostedt@goodmis.org, Lukas Wunner <lukas@wunner.de>, 
-    linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-    helgaas@kernel.org, mattc@purestorage.com, Jonathan.Cameron@huawei.com, 
-    bhelgaas@google.com, tony.luck@intel.com, bp@alien8.de, 
-    mhiramat@kernel.org, mathieu.desnoyers@efficios.com, oleg@redhat.com, 
-    naveen@kernel.org, davem@davemloft.net, anil.s.keshavamurthy@intel.com, 
-    mark.rutland@arm.com, peterz@infradead.org, tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v12 3/3] Documentation: tracing: Add documentation about
- PCI tracepoints
-In-Reply-To: <20251014123159.57764-4-xueshuai@linux.alibaba.com>
-Message-ID: <cf4d3079-2d1b-dfa4-aa5f-e018962131bd@linux.intel.com>
-References: <20251014123159.57764-1-xueshuai@linux.alibaba.com> <20251014123159.57764-4-xueshuai@linux.alibaba.com>
+	s=arc-20240116; t=1760455482; c=relaxed/simple;
+	bh=pN9r2R2hx3achOjOKAVt05mZ7Kqu6Z95kgwVyE9HPHo=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=Z3Yo0vv7wjzfdByEYleC5poxRWoRyu8RyltOm6/a03bDlxN+49ub71S2JWX7CrqN4YT3pwPCBwqt3VJivObsNHIBce2p5vH8E4OsUdHWPHNB4BnECvTVHIadCe9PdK8v95LZpkIlHZhV+9eqhETkgzLk1th0enD9ZMPWna5f1Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bluematt.me; spf=pass smtp.mailfrom=bluematt.me; dkim=pass (2048-bit key) header.d=bluematt.me header.i=@bluematt.me header.b=bO76bOGD; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=UOPxHsXW; arc=none smtp.client-ip=69.59.18.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bluematt.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bluematt.me
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=bluematt.me
+	; s=1760454061; h=Subject:From:To:From:Subject:To:Cc:Cc:Reply-To:In-Reply-To:
+	References; bh=66GOyVF89Ab7SKll2RVWM7ast3QXlTRjGoKDoRo5MZ0=; b=bO76bOGDVMsjrP
+	WQx/3UHiXWWYVQAzy/ucieUuzmVHDkP5TASoQS0rA0dMH+JN5YtaFR8TCP0y1TmSL6KxfcaQOK7eN
+	YKk6Uh9wyRW2A7HYOXIxpCie1CZtZh5qL7Dmk8QgUx+iZEwHY8+ve0vPBcA1xKOdHBr5wYnwYeXzY
+	KQNfZejJ5VQqmxjyQ6UYKdZoEfkGWG9keL12HjmExytIa9NV5R8vwfRkouNRs/6OmENwdi3XL4ZhQ
+	groAIKEzJbSF8us7V3q963njs0LoCUMs+pPBrbjI6M6VfIZ3JX0PEW9o+UQZ12NLhepJ+wiX3yDxj
+	dM+6VU/Vyirj1ca9nYBw==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=clients.mail.as397444.net; s=1760454064; h=Subject:From:To:From:Subject:To:
+	Cc:Cc:Reply-To:In-Reply-To:References;
+	bh=66GOyVF89Ab7SKll2RVWM7ast3QXlTRjGoKDoRo5MZ0=; b=UOPxHsXWApu1zZklOewaOKciFW
+	o1gpugCD+/5SSbux6YLvfzQdt+n/rZZ6t8zmvTjKu3n4os3Q9LA7MtVqWWsDx3YHUuzkvSuHHVMcb
+	AKbXe2D3np8tQoDglepG9KThp9eWom4pJq35+DRCPzW3FW3Fvljt9D8hkzUubRqmTHhCFS51Gds+W
+	HZLzknxH6ioY8LnA0VKvoNB95UCzaN5cXxjW/EARBEnsa3Xdpl9lqthUt/D8nIVz6GcoX5Wo+EEfx
+	cU2O7RrBQChmXj75+4+boVNI9azMMOpKI5oGTnxP0UODz7ygxu71skzOR/RMEw7H2TTshl1sK4ydZ
+	4uCnjwcg==;
+X-DKIM-Note: Keys used to sign are likely public at
+X-DKIM-Note: https://as397444.net/dkim/bluematt.me and
+X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
+X-DKIM-Note: For more info, see https://as397444.net/dkim/
+Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
+	(envelope-from <git@bluematt.me>)
+	id 1v8gUg-00000004h8U-2IaJ for linux-edac@vger.kernel.org;
+	Tue, 14 Oct 2025 14:59:21 +0000
+Message-ID: <8ae4f35a-0cec-455f-8f2c-ce04fb99aa40@bluematt.me>
+Date: Tue, 14 Oct 2025 10:59:20 -0400
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-19756653-1760452856=:925"
+Content-Language: en-US
+To: linux-edac@vger.kernel.org
+From: Matt Corallo <git@bluematt.me>
+Subject: [PATCH] EDAC/ie31200: Add support for additional Alder Lake-S CPUs
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+180f091224a002f8bd1629307c34619a5626841e added support for some but
+not all Alder Lake-S SoCs. This adds support for, at least,
+the i5-12600K which works with the existing Alder Lake-S config.
 
---8323328-19756653-1760452856=:925
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Signed-off-by: Matt Corallo <git@bluematt.me>
+---
+  drivers/edac/ie31200_edac.c | 2 ++
+  1 file changed, 2 insertions(+)
 
-On Tue, 14 Oct 2025, Shuai Xue wrote:
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index 5c1fa1c0d12e..010317e33738 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -99,6 +99,7 @@
 
-> The PCI tracing system provides tracepoints to monitor critical hardware
-> events that can impact system performance and reliability. Add
-> documentation about it.
->=20
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> ---
->  Documentation/trace/events-pci.rst | 74 ++++++++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/trace/events-pci.rst
->=20
-> diff --git a/Documentation/trace/events-pci.rst b/Documentation/trace/eve=
-nts-pci.rst
-> new file mode 100644
-> index 000000000000..500b27713224
-> --- /dev/null
-> +++ b/Documentation/trace/events-pci.rst
-> @@ -0,0 +1,74 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> +Subsystem Trace Points: PCI
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> +
-> +Overview
-> +=3D=3D=3D=3D=3D=3D=3D=3D
-> +The PCI tracing system provides tracepoints to monitor critical hardware=
- events
-> +that can impact system performance and reliability. These events normall=
-y show
-> +up here:
-> +
-> +=09/sys/kernel/tracing/events/pci
-> +
-> +Cf. include/trace/events/pci.h for the events definitions.
-> +
-> +Available Tracepoints
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +pci_hp_event
-> +------------
-> +
-> +Monitors PCI hotplug events including card insertion/removal and link
-> +state changes.
-> +::
-> +
-> +    pci_hp_event  "%s slot:%s, event:%s\n"
-> +
-> +**Event Types**:
-> +
-> +* ``LINK_UP`` - PCIe link established
-> +* ``LINK_DOWN`` - PCIe link lost
-> +* ``CARD_PRESENT`` - Card detected in slot
-> +* ``CARD_NOT_PRESENT`` - Card removed from slot
-> +
-> +**Example Usage**:
-> +
-> +    # Enable the tracepoint
-> +    echo 1> /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
-> +
-> +    # Monitor events (the following output is generated when a device is=
- hotplugged)
-> +    cat /sys/kernel/debug/tracing/trace_pipe
-> +       irq/51-pciehp-88      [001] .....  1311.177459: pci_hp_event: 000=
-0:00:02.0 slot:10, event:CARD_PRESENT
-> +
-> +       irq/51-pciehp-88      [001] .....  1311.177566: pci_hp_event: 000=
-0:00:02.0 slot:10, event:LINK_UP
-> +
-> +pcie_link_event
-> +---------------
-> +
-> +Monitors PCIe link speed changes and provides detailed link status infor=
-mation.
-> +::
-> +
-> +    pcie_link_event  "%s type:%d, reason:%d, cur_bus_speed:%s, max_bus_s=
-peed:%s, width:%u, flit_mode:%u, status:%s\n"
-> +
-> +**Parameters**:
-> +
-> +* ``type`` - PCIe device type (4=3DRoot Port, etc.)
-> +* ``reason`` - Reason for link change:
-> +
-> +  - ``0`` - Link retrain
-> +  - ``1`` - Bus enumeration
-> +  - ``2`` - Bandwidth controller enable
-> +  - ``3`` - Bandwidth controller IRQ
+  /* Alder Lake-S */
+  #define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1	0x4660
++#define PCI_DEVICE_ID_INTEL_IE31200_ADL_S_2	0x4648 /* e.g. i5-12600K */
 
-Maybe these two should be called "Bandwidth notification" as that's the=20
-name of the underlying mechanism.
-
-For the entire series,
-
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
-> +  - ``4`` - Hotplug event
-> +
-> +
-> +**Example Usage**:
-> +
-> +    # Enable the tracepoint
-> +    echo1 > /sys/kernel/debug/tracing/events/pci/pcie_link_event/enable
-> +
-> +    # Monitor events (the following output is generated when a device is=
- hotplugged)
-> +    cat /sys/kernel/debug/tracing/trace_pipe
-> +       irq/51-pciehp-88      [001] .....   381.545386: pcie_link_event: =
-0000:00:02.0 type:4, reason:4, cur_bus_speed:2.5 GT/s PCIe, max_bus_speed:1=
-6.0 GT/s PCIe, width:1, flit_mode:0, status:DLLLA
->=20
-
---=20
- i.
-
---8323328-19756653-1760452856=:925--
+  /* Bartlett Lake-S */
+  #define PCI_DEVICE_ID_INTEL_IE31200_BTL_S_1	0x4639
+@@ -761,6 +762,7 @@ static const struct pci_device_id ie31200_pci_tbl[] = {
+  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_S_6), (kernel_ulong_t)&rpl_s_cfg},
+  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_RPL_HX_1), (kernel_ulong_t)&rpl_s_cfg},
+  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_1), (kernel_ulong_t)&rpl_s_cfg},
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_ADL_S_2), (kernel_ulong_t)&rpl_s_cfg},
+  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_1), (kernel_ulong_t)&rpl_s_cfg},
+  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_2), (kernel_ulong_t)&rpl_s_cfg},
+  	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IE31200_BTL_S_3), (kernel_ulong_t)&rpl_s_cfg},
+--
+2.47.3
 
