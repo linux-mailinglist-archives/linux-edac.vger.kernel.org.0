@@ -1,311 +1,226 @@
-Return-Path: <linux-edac+bounces-5046-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5047-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D7A3BDA7E5
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 17:52:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FDE4BDABF1
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 19:13:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 97458504FA5
-	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 15:40:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8906619240DF
+	for <lists+linux-edac@lfdr.de>; Tue, 14 Oct 2025 17:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3311A3002AF;
-	Tue, 14 Oct 2025 15:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CB753009F7;
+	Tue, 14 Oct 2025 17:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="0eyP7rm6"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010020.outbound.protection.outlook.com [52.101.56.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A55F2DECD4;
-	Tue, 14 Oct 2025 15:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760456434; cv=none; b=i3h5/xY0cyoulake8AfJGGMxEXAOtDWC5aWRuplPeoJli+VpvdmbzaxVX8Ctb9QnO8/etJvlODDyv+qoxcw4K8I24Uotq0V6hoO53BP+WepfuoUJ6PfrileXfqbxapA+RJ6dLXShlY/hn86n8T5spJLdgDTMswvm/8xQ0fsE2SQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760456434; c=relaxed/simple;
-	bh=BN0cRurDhQvRoxeXN8Mz3Cz2hPp/sBOtgKJbjhSJQyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hpjS7bjarvodVR9GmsLXMGHelLbgJeyTXszjXMUQwt3m+FNyIoDj7BO/vRkIV/eqywSzRcXjHAcZnB4WNGag5XBruHNzws+yFH6VkXkbQtyV10L2/Yv0nwerobLl3ySaUTBtaHpWrZ2pV7hiyKNhcBIsiftr0xrHGYbWshLbnLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 4CF23BC054;
-	Tue, 14 Oct 2025 15:40:28 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id 0187020030;
-	Tue, 14 Oct 2025 15:40:23 +0000 (UTC)
-Date: Tue, 14 Oct 2025 11:40:29 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: lukas@wunner.de, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
- ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
- Jonathan.Cameron@huawei.com, bhelgaas@google.com, tony.luck@intel.com,
- bp@alien8.de, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
- anil.s.keshavamurthy@intel.com, mark.rutland@arm.com, peterz@infradead.org,
- tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v12 1/3] PCI: trace: Add a generic RAS tracepoint for
- hotplug event
-Message-ID: <20251014114029.4c59bb1a@gandalf.local.home>
-In-Reply-To: <20251014123159.57764-2-xueshuai@linux.alibaba.com>
-References: <20251014123159.57764-1-xueshuai@linux.alibaba.com>
-	<20251014123159.57764-2-xueshuai@linux.alibaba.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAAB23D7D3;
+	Tue, 14 Oct 2025 17:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760462023; cv=fail; b=F3B27kxes6q3Yq9yFSk4g6XKRDbX2ha2f+2ARZmzky40IjJhmCj6Ba7V3A3829KZCkyOv4Kuhi7FAaeHuLcuHhZqen3lxDWoA32ZFNNI55idgmoFid3ZxkfrZUhJtDxMNyooPAnwCcWSihhsQLVP7zTE5e2gSWce4O0qIdQPqoM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760462023; c=relaxed/simple;
+	bh=149aufJ14pXuxoLK9kqVfmg3schf/pucGrn0yuk4D9E=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Md1S0NOjuxGzQML5vkUJn20bF82xvb4Kc+h4MSoU7Q6nAadumq56pPvVs/BXAQBMOGZnX8s3gPY9ushecLH9WpjIBN1I+MlP1XrNZpFpLQpeqG3reHpDFrpi5BRttYLcExgrGpY159SJ4/8d4sI6STCnv15GxGL8MaaEb22uDrU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=0eyP7rm6; arc=fail smtp.client-ip=52.101.56.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EkwN4M+jHQbiIKutco+Zv1x0/bhEDb8Yx65qqXkyY8NgwsUP+iioFu3o5Vaf5BW9h7sMtO8FV5DP6Bwm0LP9ZWsPBYf/pznEDFZ/lAizAslY+LBTffxBLUoGt4JKWsOtYV5osgj5DL+3zE8yAG+tPprWQabjOI7+dHZjRGlBYVH8ZH9F+JtouH5r6ripk+M3YweD+85M8Tg157X+xmtTNPyoZ1EyM+ny1rq/XcB4v73L+wWvOPpIeokbXPTTM62WrO05xpgUOHz4xCoOHznkuPIJjSVD2tEQnx2v6xSrs65I8ExebQDaFEmNTy4W9VPwteiPQuQOJeXEWNEDxtnwww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LbwI/zoZgPgweWNX5QXTyyII8pCpxj/stFMO8M+mQgE=;
+ b=mPR8y5In0tVZ3czKf2z7Oyvd8rqufz4DAg82vUX9rrwDc4zn6ki4gVyIPH2F9MhNhICXbIJzzRvGNkpoAOz9US1MvSI2sVgrd+muRz13xuPNB4FnU2EDxhmojdHy2BiIiwcOX+rVxOKKcp9sGJFTxh6fEW2mm+EFb1vQucnc14USruJdH+3WYz7/aZeGFuoRIc2vaSIJxh55tFyFSigrXump9QtO3ChLQnpIJVX5/8PFj0X7C4mQPB9XdHxwpwqDoBeNlmFwU6HxB1jxlEy5eiThA5S7RfTm7Fr34ZOglMe48rOVuqMBEHh6uwcv7L6+XC4RBe5dUb/MM+A+0FSGmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LbwI/zoZgPgweWNX5QXTyyII8pCpxj/stFMO8M+mQgE=;
+ b=0eyP7rm66Xn65eS648a3BlSOGp0IYYrlXB9YRhihwepv4xo5EPd/Em2EsjtSWc8xtbNq+1cHLOW5jmnoqyB114A0tdiSUpRSmEMK/71hGI5IIMW0qKGku09MNXxJ87/EnqGVyjECOvebQyAaWiNsJYBiZPJt9ZkVaJ3rpjfquXo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
+ by SN7PR12MB8817.namprd12.prod.outlook.com (2603:10b6:806:347::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.12; Tue, 14 Oct
+ 2025 17:13:39 +0000
+Received: from CH0PR12MB5388.namprd12.prod.outlook.com
+ ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
+ ([fe80::a363:f18a:cdd1:9607%7]) with mapi id 15.20.9228.009; Tue, 14 Oct 2025
+ 17:13:38 +0000
+Message-ID: <e78b6556-24c0-469b-81d5-98380aee1f6b@amd.com>
+Date: Tue, 14 Oct 2025 12:13:36 -0500
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH v3 0/2] Incorporate DRAM address in EDAC messages
+To: Borislav Petkov <bp@alien8.de>
+Cc: Avadhut Naik <avadhut.naik@amd.com>, linux-edac@vger.kernel.org,
+ john.allen@amd.com, linux-kernel@vger.kernel.org,
+ Yazen Ghannam <yazen.ghannam@amd.com>
+References: <20251013193726.2221539-1-avadhut.naik@amd.com>
+ <20251013220019.GFaO12cwSvbedQwGr6@fat_crate.local>
+ <20251014135206.GA361227@yaz-khff2.amd.com>
+Content-Language: en-US
+From: "Naik, Avadhut" <avadnaik@amd.com>
+In-Reply-To: <20251014135206.GA361227@yaz-khff2.amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM5PR07CA0116.namprd07.prod.outlook.com
+ (2603:10b6:4:ae::45) To CH0PR12MB5388.namprd12.prod.outlook.com
+ (2603:10b6:610:d7::15)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: g3a8azz8jeckjuqkykwgg67ktcyoid1c
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 0187020030
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+56UC/0yh7pDLxktD4Ww/pF2GM3+ZNLaY=
-X-HE-Tag: 1760456423-588206
-X-HE-Meta: U2FsdGVkX1/qBhVcJ0onmnLBSHa++eubqrKZF2PFjqVPlCldnstYoRazugdO+YWZkIVcctGko81qhZCSs8vnLdIor1zt9/1uGNdHamW1GucCqsNS50hC3lm49cCPUBOGVx/ByTkRSapWnN5TjHsp12Wfb4Zde4RXLUdZV7uykreXujlih7Fu9V/LsRfteDpdnZkjCNUvb//ck/JjlEHNiVAledrwMO6KqBYlEpzsSCsACHSNF0AzlaWasCLCTd9EvxfIgYit2PnmZqrA9Ihp2fyHXnlvezc+TiaOljB8xpXBmIS9KJkV4ckYzuDG4DxUfmJP6AyeP+fPbKxsFRrJwH7cCH0wc94JRYrcrDPffY3o3Yad6s35a43fT5oAJPlh15LfGROEie02vnDv53MspU1+x4PcBJRiHruntzAOZDw=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|SN7PR12MB8817:EE_
+X-MS-Office365-Filtering-Correlation-Id: 054113ca-2dff-4433-e91b-08de0b45041d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?d3N4L2k4d1VjMVIvK2dobDY4eTFEQzJ1WEFWUzdLSmt0MzlwbDlKekwwa3F3?=
+ =?utf-8?B?L2tmOXZlMlBQWW9aRFhyaWxkWDBpY3RSeTlXNFpWL3RFeWt6ZGZodTFGbnRI?=
+ =?utf-8?B?RkZPWlBhb2FNRmNpVmo0UFVQNWhMMVJ1a29IUnV4K0xNOXh4dEhHM0xvS1pI?=
+ =?utf-8?B?OVMzVnJqTnpHcFAwRVBVbXIzSFlkeDBlZm9scjN6OVd6bm84S29BNU5aSmx0?=
+ =?utf-8?B?TTJNZGVuTFBXSjhyREdpYXVTT1lQeEVVaWtCVVlQWXA2ZExZbUtra0pxTUIw?=
+ =?utf-8?B?WU9YKzNudWp3ek81em5sTUxKWGpvUm0wMS8vNjlNdDlWSlY0TGhrMmFUOCtF?=
+ =?utf-8?B?a3NjaE0zaWszZ3dwVmNqWlQwZVdISDdIdFpsOVZDMnZkQUZsUE1jcE81YlMx?=
+ =?utf-8?B?V01VR3pJeGxFRzFZcXlTc3VWeEVydXVCak5FdjhBd1gxUzg3aDRxcUtnMUd6?=
+ =?utf-8?B?bUZ6MitYeHYvOWMwOTA2RHRXbVNqQThZSXJxcE5pZzkxRm1sLzM5aEZLdjV1?=
+ =?utf-8?B?b3F1MS9LRW9vVUJBeTkvRER3c3pacFhKR1lieHF5U0oveDg2QUNCN05NSHBW?=
+ =?utf-8?B?NHhPSE5sTk8yNFBIYXFTWnRBeUUzTEMyY3cxZUJWcVgxOVZUL0I3MEZEVjhX?=
+ =?utf-8?B?V004Q2xzVDBPUWFFYnZFeE5ZMFFaT2x2bC9Ybm9QeHRYd1pBa2RZTHJsTWk0?=
+ =?utf-8?B?K2dpUmZLSHEwcUJuTlNCbEpRL0xqcFJkdUNrZldDbFJTUVhvT2hzMUptQjFa?=
+ =?utf-8?B?WGdTL0tsN0Z6T3ZGdWRyZVR3SWRDZW1Xa3VHcVZZY3ByMDAzOUlnWW9kYmJ5?=
+ =?utf-8?B?Q1djeGdFNFJvRnJ5N3pSdkQ1N3ArdXdnRlYwVnJEdm9JbXQ5UWVrYTlXQmlj?=
+ =?utf-8?B?OFliekZWRGYwS3MzWmlWV29wVzNiTjFub1AvajRNMzlYNjlRVEdNd3pYaDY3?=
+ =?utf-8?B?MS9sVWJpSmljSzg5UEdTKzhZOUZtK0tzdXhHM3lWcGJWNmtaSlhpRTlJWm9p?=
+ =?utf-8?B?bGRWaVVzNTJ0Ump1UmJUVjZtdGlobmNVbzZxMllqUlJlZGlLMWo5a3B5Mjkz?=
+ =?utf-8?B?VmNhQnV2MEFkMFpyZVA1a1Y0QmtSTkF1SXhyVHRsV0hZMFVUcElYd0gxRSsr?=
+ =?utf-8?B?bVRBUysrYWpRVzFxZWhvb0UydkpScmJjcEpFR0doeVNEazY4Z3hIVmZEMURB?=
+ =?utf-8?B?WktiNThzY3RVL2tvU1NvMVVuaUpBYlJHcldtNlBRRXB0YXRzNkI2Wmx5S2hD?=
+ =?utf-8?B?SUdMOHVlaFY2eFY4V0l0ajlzcTB4dXk2YWIrQnMvRTkyQjFZZGdGSDNWR3gw?=
+ =?utf-8?B?VGRuU1hhTTR3VWFnVkt1US92a0VYOFdhWnkvL0J2dkpkN3VlZkJOMkZlR3ov?=
+ =?utf-8?B?TitFWnlEOTFieVM4QnRDd3dwR294VHRjbkYxMkR2MXFlMU9OaGhvQnYrSVA4?=
+ =?utf-8?B?elFRVFZXOGxnZ3hFbWZZbFdTNWloWFRJWmxBOHNHNmROVGJHc3ZoOG4xR3Ri?=
+ =?utf-8?B?SkVaOWZ4eWpzY0ZaQjZXbmc2UWF4MXY0a1NYRlgvcXFsUHR1S3NLSFRFYkRi?=
+ =?utf-8?B?VkUxRStTMWU2QU4xRTRSSGxuQ3VUVnhHOTBqYWQxb2d6YVFZYVdxSXh1bnpV?=
+ =?utf-8?B?bWdhSlFGdEM5dEhROW0xaTgxTnhoNmZVOGVjbWlwWEk3WWlvaWFwOC9zZmZT?=
+ =?utf-8?B?TjdrZFdmeVJFMnRlVU9RT0NQWkJ3eFhJdUIwcUgvRk90bGM4UEtoYnk1MUg5?=
+ =?utf-8?B?SGxMWEdmZnlYa2RuVmRhMmYycW10RU96dlZnOXhFMkJnYWFaYmZBOFpyOWVz?=
+ =?utf-8?B?bjg0WU5iZ1FFUjljekZRd0lEUjRlT3FWbyswdVBiQ0RvUVdrcXd1WE54ZWh2?=
+ =?utf-8?B?R3Zlc2dyVEdlbnNWTXNZZ2dvNThnNGdiNmZSaklaaTJWQXc0Njg3UHZPS3NK?=
+ =?utf-8?Q?b/qMDx2ub+vjUNwajo4iCgBFKEwzAyur?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UGxsalRvVHQ1QnpXMnEwTmlLc3hXbFRBRGpGSFRxektxM2NTcURGTVE0NjhQ?=
+ =?utf-8?B?N3NmYWFzT2VkQ3hNcUttOE9CTEFUTWJnNU9nb2xBV05xaUZyT1N4ODhjcnZq?=
+ =?utf-8?B?MmhRSDllVEVPV1JQVW9qcmdrK3dsMmoxSklVN2QxWHIrVzEwTUpubldGWmZQ?=
+ =?utf-8?B?L0VGeGtjbkxILzAyT1pYU1VnMUFhK1NYVHVPZ1JQTTU1c2FzQU5xcGVqQjdD?=
+ =?utf-8?B?VEVqOGphWTZySE4vZEwzK3Q0d2xzZ0ZqOVNodHNlNmdlOHV6cU5aWU9lKzRk?=
+ =?utf-8?B?UDJybFVXK3ZFODFpU2xkVFZnR0JnODRsRXpkeEM4eWp4UjVMVUVUQlZtUlRw?=
+ =?utf-8?B?K2NQL2VoTDY2UGJLUmFvTDNDTmNRN2hkVDBrNGdRS0FaVzJSc3IwcE0vbWQ0?=
+ =?utf-8?B?V3ZqaGpxUlFuRUVXWGZUQU1xTnU4RUREVVRJVXJxeDJ2WGJVTEZ5ZFVZVlpW?=
+ =?utf-8?B?aFVJaSthaWtlK08zYytzSjdVQmVWWDFHR3FrTUhDRHZCOXhxWGIwTVN2ZUQx?=
+ =?utf-8?B?Z2tIQXN5eitGRURuTXRIQnJZNm5FR1JwVFRWMEd6UGdVTzZTRjRrVEp6ekJN?=
+ =?utf-8?B?bm84Q1FXUUhFTE5HMDM2YUYxL1YyZUZOM0RyYXN0SWpnNWVEMFg0TDIyd3F1?=
+ =?utf-8?B?ZkVROE1HV040ZDJBdmV1R3RpOTJQa01QUVJLcDdQenRLejRGU3o4c0Vpa0ZZ?=
+ =?utf-8?B?UFplR2F4cWNWcDdQclQ4VkFBRE9OOUdMQkVNTlpIMHFURVY1dEJ3SkJ5bXo1?=
+ =?utf-8?B?TG1jUnFqbWVuNHBqVUwyMWovbWl2WDliVUo1ci9SbGtYL0QxV1dtRk4zS3hS?=
+ =?utf-8?B?anVDNXp4K0E1MXV0Q094QUw4enBHRmxaYUJLSU5qVmFSRHg5S1czTEJuZHFy?=
+ =?utf-8?B?VUxzMkx2azdFR3loNk9GQjJKd0I2YnFlUDgxcDB2Tlh4TTNwaEVwQUVUWEdu?=
+ =?utf-8?B?b3lGaUNrbldxc2Z4bW9mckFBVUl0MVJFZFFORjJXeHdjcm0rRUxBOEJ2NEFx?=
+ =?utf-8?B?bWs4SCsyNENZZ2txbGhqM096SDA2MjlHVEM5Vk9PQytoMWNMdThuS0RFUVNP?=
+ =?utf-8?B?Nnk1aVJrbjdyZldwS04vOWF4eDR5OUIyWkJMeEJ2RGZtQlJQTnphVDNGNC9k?=
+ =?utf-8?B?emJCM2VOeldNS3pMZmpOeVZvTDREV28vdk9QczlBTElEdG80M3BiVnRkTnRl?=
+ =?utf-8?B?VVkxbE9lOUhTQkJiaVVYQU9RbzlTdEJoeUUwd0pWL21xWWZqOEJ6OStGeWFL?=
+ =?utf-8?B?SHgzaTVkZFZCTHFmVHo3eDcvY2FEUWw5K0hVOGdqbkdYWHJ3c2JxZVZoV1l0?=
+ =?utf-8?B?WVIwSHI0ZGtLREFZSWFiTXVoY2V4RkpyazN5eTJZbDdZeGNOeHFGaTZqaFZB?=
+ =?utf-8?B?dWdlaFQycWVCbXNrQjNMOFZPMTJsdG5VSDM3Z3owSFBRU3NGZG16MCs4VWFL?=
+ =?utf-8?B?L2xNbkhkMmZwSlRtcXJyQ0xMWlhnWXBjOHZPOGpHTXZrMzNXRE96RHM0RWJp?=
+ =?utf-8?B?N0ZEeElMQlgyWUxRaXpGWXdtN3N5dFpsKzdXcmttWFFtcGpJdFJSdmtCZUhO?=
+ =?utf-8?B?UGREUWFITEtBbis1cXZ4VVg4WUdGQ00vbVZqMmZpU2FMMStkK0hycVlrbm9O?=
+ =?utf-8?B?L2tSMXNsK200S0pjeDhxaURjOG1tRmJCOVJNYkUwOUpTSGxMRnVab2dOVXdJ?=
+ =?utf-8?B?aUVKTEZoeGFJKzNQRC9oQ01jN1lIK2l0Q0RoWGdMNFZZSE15TWRaUTdwRVJm?=
+ =?utf-8?B?Zmdza3Bhdk9ESXJDMjVEYzZyanQ1VC9XeWRScmlWeU5KRUtSakpKa1YzbXI5?=
+ =?utf-8?B?WEUwM2RxRUdzengyWXE4NDIrbWxUNEhLYWxZbjdDWDFDQ2ZoNGpyUFZZZ3E0?=
+ =?utf-8?B?Z2tDZkVFSUxzNFI3M2dZeWhZcEFJeGR0TTczeHl2UnlvUnVkZDNNNzZyMTFW?=
+ =?utf-8?B?NWwxd3JkSEtQaE5ZaUxka3BpRFUxV25FVkNYMnRwclpqWERXMTNEMG5iOEJG?=
+ =?utf-8?B?VmIxb284ZzV0MWx1MWY0dm81MVhXUUU4Q0FrM0pLc3pyam1qK3crdVlNak9u?=
+ =?utf-8?B?VkJEL3lXTHhLVDY3MEEvK1BVdlovM2tIakRwY1ZzdVFUNXIvbFRyU0VtSVJM?=
+ =?utf-8?Q?EEeytfjb3nXrrx22Uk4r2SLzP?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 054113ca-2dff-4433-e91b-08de0b45041d
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2025 17:13:38.5622
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R3fbmRy0QxbBUQ6qKnbtuzlEp87WAtIDlEJgDFjjliMCuieYTPTPYr8CMhLET9tJWOwYZBp8GYoVi56GVb8rDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8817
 
-On Tue, 14 Oct 2025 20:31:57 +0800
-Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
-> Hotplug events are critical indicators for analyzing hardware health,
-> and surprise link downs can significantly impact system performance and
-> reliability.
+
+On 10/14/2025 08:52, Yazen Ghannam wrote:
+> On Tue, Oct 14, 2025 at 12:00:19AM +0200, Borislav Petkov wrote:
+>> On Mon, Oct 13, 2025 at 07:34:47PM +0000, Avadhut Naik wrote:
+>>> Currently, the amd64_edac module only provides UMC normalized and system
+>>> physical address when a DRAM ECC error occurs. DRAM Address is neither
+>>> logged nor exported through tracepoint.
+>>>
+>>> Modern AMD SOCs provide UEFI PRM module that implements various address
+>>> translation PRM handlers. These PRM handlers can be leveraged to convert
+>>> UMC normalized address into DRAM address at runtime on occurrence of a
+>>> DRAM ECC error. This translated DRAM address can then be logged and
+>>> exported through tracepoints.
+>>
+>> And?
+>>
+>> I read all three commit messages to figure out *why* those DRAM addresses want
+>> to be logged. But it seems they don't want to be logged. Because there's not
+>> a single reason why they should be, AFAICT. Without a proper justification,
+>> this looks like a bunch of unnecessary code to me...
+>>
 > 
-> Define a new TRACING_SYSTEM named "pci", add a generic RAS tracepoint
-> for hotplug event to help health checks. Add enum pci_hotplug_event in
-> include/uapi/linux/pci.h so applications like rasdaemon can register
-> tracepoint event handlers for it.
+> Good point. I overlooked this myself.
 > 
-> The following output is generated when a device is hotplugged:
+> The "DRAM address" helps memory vendors analyze failures. System
+> builders want to collect this data and pass it along to the memory
+> vendors. The DRAM address is not contained in architectural data like
+> MCA info, and getting the address from MCA requires using additional
+> system-specific hardware info. It's much more reliable to get the DRAM
+> address from the system with the error rather than try to post-process
+> it later.
 > 
-> $ echo 1 > /sys/kernel/debug/tracing/events/pci/pci_hp_event/enable
-> $ cat /sys/kernel/debug/tracing/trace_pipe
->    irq/51-pciehp-88      [001] .....  1311.177459: pci_hp_event: 0000:00:02.0 slot:10, event:CARD_PRESENT
-> 
->    irq/51-pciehp-88      [001] .....  1311.177566: pci_hp_event: 0000:00:02.0 slot:10, event:LINK_UP
-> 
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Reviewed-by: Lukas Wunner <lukas@wunner.de>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  drivers/pci/Makefile              |  3 ++
->  drivers/pci/hotplug/pciehp_ctrl.c | 31 ++++++++++++---
->  drivers/pci/trace.c               | 11 ++++++
->  include/trace/events/pci.h        | 63 +++++++++++++++++++++++++++++++
->  include/uapi/linux/pci.h          |  7 ++++
->  5 files changed, 109 insertions(+), 6 deletions(-)
->  create mode 100644 drivers/pci/trace.c
->  create mode 100644 include/trace/events/pci.h
-> 
-> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
-> index 67647f1880fb..58a4e4ea76b0 100644
-> --- a/drivers/pci/Makefile
-> +++ b/drivers/pci/Makefile
-> @@ -45,3 +45,6 @@ obj-y				+= controller/
->  obj-y				+= switch/
->  
->  subdir-ccflags-$(CONFIG_PCI_DEBUG) := -DDEBUG
-> +
-> +CFLAGS_trace.o := -I$(src)
-> +obj-$(CONFIG_TRACING)		+= trace.o
-> diff --git a/drivers/pci/hotplug/pciehp_ctrl.c b/drivers/pci/hotplug/pciehp_ctrl.c
-> index bcc938d4420f..7805f697a02c 100644
-> --- a/drivers/pci/hotplug/pciehp_ctrl.c
-> +++ b/drivers/pci/hotplug/pciehp_ctrl.c
-> @@ -19,6 +19,7 @@
->  #include <linux/types.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/pci.h>
-> +#include <trace/events/pci.h>
->  
->  #include "../pci.h"
->  #include "pciehp.h"
-> @@ -244,12 +245,20 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->  	case ON_STATE:
->  		ctrl->state = POWEROFF_STATE;
->  		mutex_unlock(&ctrl->state_lock);
-> -		if (events & PCI_EXP_SLTSTA_DLLSC)
-> +		if (events & PCI_EXP_SLTSTA_DLLSC) {
->  			ctrl_info(ctrl, "Slot(%s): Link Down\n",
->  				  slot_name(ctrl));
-> -		if (events & PCI_EXP_SLTSTA_PDC)
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_LINK_DOWN);
+Adding to what Yazen mentioned, the algorithm employed for translating
+physical or normalized address into DRAM Address is somewhat complex.
+As such, user space tools might not incorporate the support required
+for translation.
+Having DRAM Address as part of kernel messages and tracepoints ensures
+that any memory error related information is not skipped.
 
-I know this is v12 and I don't remember if I suggested this before and you
-gave me a reason already, but why not simply pass in "ctrl" and have the
-TRACE_EVENT() denote the names?
+Does this alleviate your concerns?
+If yes, will add this information to commit messages and resend.
 
-> +		}
-> +		if (events & PCI_EXP_SLTSTA_PDC) {
->  			ctrl_info(ctrl, "Slot(%s): Card not present\n",
->  				  slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
-> +		}
->  		pciehp_disable_slot(ctrl, SURPRISE_REMOVAL);
->  		break;
->  	default:
-> @@ -269,6 +278,9 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->  					      INDICATOR_NOOP);
->  			ctrl_info(ctrl, "Slot(%s): Card not present\n",
->  				  slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_CARD_NOT_PRESENT);
->  		}
->  		mutex_unlock(&ctrl->state_lock);
->  		return;
-> @@ -281,12 +293,19 @@ void pciehp_handle_presence_or_link_change(struct controller *ctrl, u32 events)
->  	case OFF_STATE:
->  		ctrl->state = POWERON_STATE;
->  		mutex_unlock(&ctrl->state_lock);
-> -		if (present)
-> +		if (present) {
->  			ctrl_info(ctrl, "Slot(%s): Card present\n",
->  				  slot_name(ctrl));
-> -		if (link_active)
-> -			ctrl_info(ctrl, "Slot(%s): Link Up\n",
-> -				  slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_CARD_PRESENT);
-> +		}
-> +		if (link_active) {
-> +			ctrl_info(ctrl, "Slot(%s): Link Up\n", slot_name(ctrl));
-> +			trace_pci_hp_event(pci_name(ctrl->pcie->port),
-> +					   slot_name(ctrl),
-> +					   PCI_HOTPLUG_LINK_UP);
-> +		}
->  		ctrl->request_result = pciehp_enable_slot(ctrl);
->  		break;
->  	default:
-> diff --git a/drivers/pci/trace.c b/drivers/pci/trace.c
-> new file mode 100644
-> index 000000000000..cf11abca8602
-> --- /dev/null
-> +++ b/drivers/pci/trace.c
-> @@ -0,0 +1,11 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Tracepoints for PCI system
-> + *
-> + * Copyright (C) 2025 Alibaba Corporation
-> + */
-> +
-> +#include <linux/pci.h>
-> +
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/pci.h>
-> diff --git a/include/trace/events/pci.h b/include/trace/events/pci.h
-> new file mode 100644
-> index 000000000000..208609492c06
-> --- /dev/null
-> +++ b/include/trace/events/pci.h
-> @@ -0,0 +1,63 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM pci
-> +
-> +#if !defined(_TRACE_HW_EVENT_PCI_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_HW_EVENT_PCI_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +#define PCI_HOTPLUG_EVENT						\
-> +	EM(PCI_HOTPLUG_LINK_UP,			"LINK_UP")		\
-> +	EM(PCI_HOTPLUG_LINK_DOWN,		"LINK_DOWN")		\
-> +	EM(PCI_HOTPLUG_CARD_PRESENT,		"CARD_PRESENT")		\
-> +	EMe(PCI_HOTPLUG_CARD_NOT_PRESENT,	"CARD_NOT_PRESENT")
-> +
-> +/* Enums require being exported to userspace, for user tool parsing */
-> +#undef EM
-> +#undef EMe
-> +#define EM(a, b)	TRACE_DEFINE_ENUM(a);
-> +#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
-> +
-> +PCI_HOTPLUG_EVENT
-> +
-> +/*
-> + * Now redefine the EM() and EMe() macros to map the enums to the strings
-> + * that will be printed in the output.
-> + */
-> +#undef EM
-> +#undef EMe
-> +#define EM(a, b)	{a, b},
-> +#define EMe(a, b)	{a, b}
-> +
-> +TRACE_EVENT(pci_hp_event,
-> +
-> +	TP_PROTO(const char *port_name,
-> +		 const char *slot,
-> +		 const int event),
-> +
-> +	TP_ARGS(port_name, slot, event),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(	port_name,	port_name	)
-> +		__string(	slot,		slot		)
-> +		__field(	int,		event	)
-> +	),
+> Thanks,
+> Yazen
 
-	TP_PROTO(struct controller *ctrl, int event),
-
-	TP_ARGS(ctrl, event),
-
-	TP_STRUCT__entry(
-		__string(	port_name,	pci_name(ctrl->pcie->port)	)
-		__string(	slot,		slot_name(ctrl)			)
-		__field(	int,		event				)
-	),
-
-It would move the work out of the calling path.
-
--- Steve
-
-
-> +
-> +	TP_fast_assign(
-> +		__assign_str(port_name);
-> +		__assign_str(slot);
-> +		__entry->event = event;
-> +	),
-> +
-> +	TP_printk("%s slot:%s, event:%s\n",
-> +		__get_str(port_name),
-> +		__get_str(slot),
-> +		__print_symbolic(__entry->event, PCI_HOTPLUG_EVENT)
-> +	)
-> +);
-> +
-> +#endif /* _TRACE_HW_EVENT_PCI_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> diff --git a/include/uapi/linux/pci.h b/include/uapi/linux/pci.h
-> index a769eefc5139..4f150028965d 100644
-> --- a/include/uapi/linux/pci.h
-> +++ b/include/uapi/linux/pci.h
-> @@ -39,4 +39,11 @@
->  #define PCIIOC_MMAP_IS_MEM	(PCIIOC_BASE | 0x02)	/* Set mmap state to MEM space. */
->  #define PCIIOC_WRITE_COMBINE	(PCIIOC_BASE | 0x03)	/* Enable/disable write-combining. */
->  
-> +enum pci_hotplug_event {
-> +	PCI_HOTPLUG_LINK_UP,
-> +	PCI_HOTPLUG_LINK_DOWN,
-> +	PCI_HOTPLUG_CARD_PRESENT,
-> +	PCI_HOTPLUG_CARD_NOT_PRESENT,
-> +};
-> +
->  #endif /* _UAPILINUX_PCI_H */
+-- 
+Thanks,
+Avadhut Naik
 
 
