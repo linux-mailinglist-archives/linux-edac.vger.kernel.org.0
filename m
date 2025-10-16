@@ -1,357 +1,196 @@
-Return-Path: <linux-edac+bounces-5058-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5059-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D962DBE1830
-	for <lists+linux-edac@lfdr.de>; Thu, 16 Oct 2025 07:28:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08BF5BE2CDB
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Oct 2025 12:31:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B3E0189F521
-	for <lists+linux-edac@lfdr.de>; Thu, 16 Oct 2025 05:29:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5534C19A533F
+	for <lists+linux-edac@lfdr.de>; Thu, 16 Oct 2025 10:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85FF72288D5;
-	Thu, 16 Oct 2025 05:28:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A46A214812;
+	Thu, 16 Oct 2025 10:31:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="fUTnDuLK"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="lY/NlE/b"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010031.outbound.protection.outlook.com [52.101.46.31])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA34210E3;
-	Thu, 16 Oct 2025 05:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760592531; cv=fail; b=oKf7ByAYkLtYbhZVtqY8MDOcV0wkPT2Z2apJOtOVx1jJGHwh+sjEvCJkKiWGlOo2Yy0GwkZmyfP07I34bZ2Sif7gCdHUVxymUUQRb+8gPmTgzg9AMcZ4ud+AIcaoI6T+wmr+2KTnU66cDfC6tmn/XahDuMXWnfCz+isj6TrWThA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760592531; c=relaxed/simple;
-	bh=ZPcVrVFsD20Y6F8o9Zcu0Ls/l0UUeosZ5w8dWSlaMao=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rOXnNKqomhkDOJFHR27wIaypKi4THjiwbsaVFMnfu+UZKe9MUF5+sEr01gV2fyYCjDJX2AZdT7kXpwL7heh1YZU6TUnADTUC5QDQkVPaPfuORAU+BVYFnZeQdPf4DotmTKPJ4RXcDZXutPC3nJ/eOwrdJjQdAH9yRpbFb35fkuc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=fUTnDuLK; arc=fail smtp.client-ip=52.101.46.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JWvOTBXy78oOLniZ9WXfK65WuWAPPWch5hcDlaNfJOzo4vLDESbTKxky43hxNKPl9CxE5MT5GxYQbtJllUnJlwuQG/uHxkpvBFSTx83nxpgwTU5kKy0l39luyriyFgFcXaWJDtETKror0xf+OOuFBMZVRVwunxWms1U+RiAjjbauwgsE/kYr6IBOjfX2S17YGM5TwdsELYJ3H2XkpfNPBYjUxd9g63ih9Dchw6kJbnu+/Q7iqLHewNw9aaqnAE/0RWklNvVd0ej85YETOHbaC6MCF/DHOmYQUpUxSSTF1zS2Cw6LYvoUQdu4rOCTVNBkc1i+uPEoIH3i7OCq/d80Dw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EsIbwfCzj0dNaR5ft+o30uFHCIcVib2leoRsIBXOS18=;
- b=wsulDnR0OPxTGbDzEc50FKGoNXvB2NHgC7NoTNJwkwJ5e6EulB06fC6tUcSiFCozUkj9/Jdu8HARidJsxWozczv5vRh4J+G80aewQmNKOF7RnGS+XOwS2oOiA0TUw3awUWlQlGVvVCdnjvCey0uJhPM5Rsg//ivm7kvAFjeoxy+CqUq0RQ6yebsxPcuyVlATY6csCTvfuykpTTkxGSI9rWQu/wrI+HJ+7osligrGGYPRr9umDeCrCEJXJGZ1xT6z989X1aeZcRLYxYntn/6NUFUHSJdrG7mq8IBI+QrrRzHwFmYTPcsp4Aj7QjaV+ffeuNLoHzKx0B1IH1+jp1Cogw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EsIbwfCzj0dNaR5ft+o30uFHCIcVib2leoRsIBXOS18=;
- b=fUTnDuLK3bMMvx5d9DOot06uW9Qfyw5kgjffxo9QBG/UuNvO/8byB6OtQM6IJPuDZ0m5j7QQHs45MoZHNWh3NKoyOSCp6FjbmybI185WK+AgFc+vyiR02qML2YiUwdujVDEqKrp2b34ADrElt/topgRnWZwrBawVzNZ/nvFcWC0=
-Received: from MW4PR03CA0296.namprd03.prod.outlook.com (2603:10b6:303:b5::31)
- by LV2PR12MB5775.namprd12.prod.outlook.com (2603:10b6:408:179::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.10; Thu, 16 Oct
- 2025 05:28:45 +0000
-Received: from CO1PEPF000042AB.namprd03.prod.outlook.com
- (2603:10b6:303:b5:cafe::f1) by MW4PR03CA0296.outlook.office365.com
- (2603:10b6:303:b5::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9228.11 via Frontend Transport; Thu,
- 16 Oct 2025 05:28:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- CO1PEPF000042AB.mail.protection.outlook.com (10.167.243.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9228.7 via Frontend Transport; Thu, 16 Oct 2025 05:28:44 +0000
-Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 15 Oct
- 2025 22:28:43 -0700
-Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Wed, 15 Oct 2025 22:28:40 -0700
-From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <git@amd.com>, <shubhrajyoti.datta@gmail.com>, <dan.carpenter@linaro.org>,
-	Michal Simek <michal.simek@amd.com>, Borislav Petkov <bp@alien8.de>, "Tony
- Luck" <tony.luck@intel.com>, James Morse <james.morse@arm.com>, "Mauro
- Carvalho Chehab" <mchehab@kernel.org>, Robert Richter <rric@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] EDAC/versalnet: Refactor memory controller initialization and cleanup
-Date: Thu, 16 Oct 2025 10:58:39 +0530
-Message-ID: <20251016052839.2650517-1-shubhrajyoti.datta@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF6F328630;
+	Thu, 16 Oct 2025 10:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760610692; cv=none; b=qZ9eU8pJlxU931hGei6tbho9qxR+IQMNraXzxwC8hmRqPZde9yClKpLXEyfeDj1ABRlMbD1Grfd3yoC/1W5p+87jTp5R9/TJx+2IiyNhmulE6Yj3kqrP2UlcO7HnuQDUxHw/cRbrKPq4N6x75rXUy9us9FNhZ8Ie9R8+Uj/bQ28=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760610692; c=relaxed/simple;
+	bh=QAFUhoRdFH+O2TBpmIuIh+zAj2Yf6mN2lO7jrmSNEe8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yv5G2uJbqSnmuxCBz0rLgucLLCLUvDDgp7WxNseG6nFNbOHSQB3F9KD8o+xM3QglngaqNJoR9mc3aNf5xD7Un7pWO8s466/ismOMddAX9h9rjOQjuC2mk3ZZQaX+KNEn3zn9l0YvOp8n5xA+wzVMZeqJHRnlVlg+YqxF3OPXz0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=lY/NlE/b; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AE95240E01AB;
+	Thu, 16 Oct 2025 10:31:24 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id CjO_OZbZHhXX; Thu, 16 Oct 2025 10:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1760610680; bh=UxTkzxZWRqOwIOCFQgXcutuiJic9xI7p5Uhf9tCak18=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lY/NlE/bP8Uu488fCJhG0VgYb0R1RmofyVlWeYU0XvzJXOtwqnI+xxMcDXjl2A0Pl
+	 6ELFwVzaFEpa8Hry+XC8jnIRWF3YDqcSeRawxxnaTJCQPb4jPJvQtFosFivqcrTsss
+	 HdpxBZnmI6dw76swAIymhgwGB7IxO6t1OROHcIbFL3u5sgabLhNsOfTgJYzayQJR8r
+	 lYyQuWIEhPQC/ZZ+7P8u4d/JAwWKYRnszVzsDdw4gK6KdB8DMN403K0WHxyvYdLagE
+	 PfPidmueKn6PshP/FAV89SYV0jlguwSOYh4915QLvOyFjlaFaD4hWx0tyza+azW7Ah
+	 oeYwG+7IqlCxVPwsJ4fhl7LqhALZZjrNycfQ6g6SI4ukTtFzxVT6wx5OsInC80ktRR
+	 nOER+slSxz8ZYxAhUqJBivxp7sYvMiSWHedt5myWyLkwjP/58eQ1QDHGdIcAXPas6v
+	 JexQQYLu9I1jME/Rldi0WojMbP6915UBKD/cV2iVxm/aj3F4A4P7JJ3eb5lmZxkDmz
+	 0hWzTXQ/H4p5S0mPONWZDPpuh3q1O5ifLAwCghGaJ0BsggbS0GPDzIk4Bgojw6lm7b
+	 Ok44P94ia/XsBtmEMjwOfruDT5DxMkXhRHWof1dTAMRywZPG9ThHIFUpg9DZ51ug5/
+	 DmuV376y+aDKY5bmrbLXff3Y=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 1977140E00DE;
+	Thu, 16 Oct 2025 10:30:45 +0000 (UTC)
+Date: Thu, 16 Oct 2025 12:30:33 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"rppt@kernel.org" <rppt@kernel.org>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	Linuxarm <linuxarm@huawei.com>,
+	"rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+	"erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>,
+	"gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>,
+	"Zengtao (B)" <prime.zeng@hisilicon.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+	wanghuiqiang <wanghuiqiang@huawei.com>
+Subject: Re: [PATCH v12 1/2] ACPI:RAS2: Add ACPI RAS2 driver
+Message-ID: <20251015223242.GBaPAhCuS7YWqu-aH0@fat_crate.local>
+References: <20250902173043.1796-1-shiju.jose@huawei.com>
+ <20250902173043.1796-2-shiju.jose@huawei.com>
+ <20250910192707.GAaMHRCxWx37XitN3t@fat_crate.local>
+ <9dd5e9d8e9b04a93bd4d882ef5d8b63e@huawei.com>
+ <20250912141155.GAaMQqK4vS8zHd1z4_@fat_crate.local>
+ <9433067c142b45d583eb96587b929878@huawei.com>
+ <20250917162253.GCaMrgXYXq2T4hFI0w@fat_crate.local>
+ <20250917183608.000038c4@huawei.com>
+ <20250919103950.GCaM0y9r6R6b5jfx8z@fat_crate.local>
+ <6ac4ad35975142df986bfcb27d1e9b2c@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042AB:EE_|LV2PR12MB5775:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81fdeda0-46c4-4ad8-f5d7-08de0c74e00a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?He+t2Jveg6Bq+cUfJkceZfSlefMXbPdHEDUjEsOTJ/8p6Idb+fyRXspfoKfH?=
- =?us-ascii?Q?3ki9/nGLPbydT4KQvlVRglI24sFbU36HncUGyA2Fjx2NR2G5HhifN0sy5pkO?=
- =?us-ascii?Q?gDuqFvM3tNEO5Tl31Ajl2h1mFTqkKYEWkdzrdo8EGSFkaZYb+yccmOoB3QOc?=
- =?us-ascii?Q?mXY8vnNanjExlJBWr78OqaUMexvedPur01N6A2r+pgFADvvozCdh+0RN2LxN?=
- =?us-ascii?Q?ec6rlaEesp8lqIAnsQnjHt/EJXFENFlZg0RNZb5WViNhHcxYZpdMbLjty+3b?=
- =?us-ascii?Q?owq4NDqWI0qPjB3MKjrUWEkBdSuGgq1+B3tNFxZVl8G1axf/G1pITYVWapvr?=
- =?us-ascii?Q?Kvz3Lvop3ZAxFMt9Tp+27TJaLOUwYmH8Oy0EK/pJiG/q/Kz3fwtSy+cGth0D?=
- =?us-ascii?Q?JafkJH93RF9lJWKQUKf1d4ez4WlMOo3vbZZWQROYsHQhvZRV+oExUah/CrUw?=
- =?us-ascii?Q?yQ7mFokEweux343WSTdV774HqBevntflMsCa9oDNb3nE3Ig+gERo6EkafHxT?=
- =?us-ascii?Q?X+ypX3iRxQOqdWkTllmwVUciYRdM4DJ9XYOO4rYkfCR5s4HaiQoKRn8jKggs?=
- =?us-ascii?Q?TGQJxNL6YWsJyDeTyipQ41cJQYMjnC656gcM00f7hrLX0gSDQbM+eo2WZKI0?=
- =?us-ascii?Q?c1yQHK5+FjrZCEyZN1+3lpVNTJ5ghgc2AnHNzSs33U+Risyq+pUWKFQXGsow?=
- =?us-ascii?Q?BNGBgKQBo+gpt59RyltR2LiB9Z6MVt4YuY37N+vctg/XM4BElpqZuafEaS7w?=
- =?us-ascii?Q?esdK/y3sYOtM7dt1e+EHNHh6tc3gwi9hai6zfWictpebh+jTYIeWLoQIYdr8?=
- =?us-ascii?Q?EiGvazYbvAhCq01S0lxxFNsKrVN+msiLNmpTamedYzJgbW0l5Irq0/99WPU7?=
- =?us-ascii?Q?YE3QxobIgg/33Dedn3K9QuvnXFXbiRLcciCwy6YWbySKpI/8XpXie0v9ZEu2?=
- =?us-ascii?Q?8WU5K/9zgpBTE1iuiFBAdQtYcnn6wDENKBTov4zIhrhkqynGQYesfrHb98L9?=
- =?us-ascii?Q?8q1Sn9Rd/17FTHeMavOASFT6cosecmh7lcKEQW4j/AqUFGpSTfgreCj2iCvd?=
- =?us-ascii?Q?D/Ifde7sCI9AXije/U+G51WNncyOVLi/PF+bOD1QyhAfg0yd2hv0fQjehLEg?=
- =?us-ascii?Q?+NqtURr2Jz1yZ8wj8VDVIjIWofvA4Cl8Ltjn0kzwNGWeuwHUmdPB+Fsawe0F?=
- =?us-ascii?Q?ko/vAiJaBpb+rqefnWR/ga7CBGjuJu4LJorulTNhHOkbT0117YAKJUzUYBGB?=
- =?us-ascii?Q?wJ5LoiSGJIjAbm4exPZEEwdCa0bT+3Z0nNHHz9NMEx6PrBxDB2MRDjrLVty/?=
- =?us-ascii?Q?c86SfWy+M3fQsUDZlyB4ObEo6liWvmxH0dofkw/QgN/Ctx5vkTb3Hj/icn/i?=
- =?us-ascii?Q?54Ad8C9IQMPG0Fcobyrvf+82Lrv0ivNRgG5OmwP0M3zDUPWXp3GLI7bo08ft?=
- =?us-ascii?Q?ZbRl//psGw+xBBpbRNAMjYTHv+2rqdSvQPzQj/NoqtTZBIw6ANSX/1xxpQZT?=
- =?us-ascii?Q?4n9/QxCS3DwXwdl+C4/bPoq9zqFmSBE3trxfMNFIApOAruE9kGPPGleOBAE7?=
- =?us-ascii?Q?7Y2/VLrZl/hbMAylk+c=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2025 05:28:44.6406
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81fdeda0-46c4-4ad8-f5d7-08de0c74e00a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000042AB.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5775
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6ac4ad35975142df986bfcb27d1e9b2c@huawei.com>
 
-Simplify the initialization and cleanup flow for Versal Net DDRMC
-controllers in the EDAC driver. Key changes include:
+On Mon, Oct 06, 2025 at 10:37:39AM +0000, Shiju Jose wrote:
+> 1.Scrub rate
+> 1.1. Scrub rate is common across the NUMA node domains.
+> 1.2. Common min scrub rate is max of min scrub rates across nodes.
+> 1.3. Common max scrub rate is min of max scrub rates across nodes.
 
-* Introduced `init_single_versalnet()` for per-controller setup and
-  `init_versalnet()` for looping through NUM_CONTROLLERS.
-* Added proper rollback logic using `remove_single_versalnet()` when
-  partial initialization fails.
-* Improved readability and maintainability by reducing duplicated code and
-  consolidating error handling.
+And you need scrub rate to be per node because...?
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
----
+Why can't it be a system-wide scrub rate?
 
- drivers/edac/versalnet_edac.c | 158 +++++++++++++++++++---------------
- 1 file changed, 87 insertions(+), 71 deletions(-)
+If the use case appears which needs per-node scrub rate, then you design it
+this way.
 
-diff --git a/drivers/edac/versalnet_edac.c b/drivers/edac/versalnet_edac.c
-index 1ded4c3f0213..fc7e4c43b387 100644
---- a/drivers/edac/versalnet_edac.c
-+++ b/drivers/edac/versalnet_edac.c
-@@ -758,92 +758,111 @@ static void versal_edac_release(struct device *dev)
- 	kfree(dev);
- }
- 
--static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
-+static void  remove_single_versalnet(struct mc_priv *priv, int i)
-+{
-+	struct mem_ctl_info *mci;
-+
-+	mci = priv->mci[i];
-+	device_unregister(mci->pdev);
-+	edac_mc_del_mc(mci->pdev);
-+	edac_mc_free(mci);
-+}
-+
-+static int init_single_versalnet(struct mc_priv *priv, struct platform_device *pdev, int i)
- {
- 	u32 num_chans, rank, dwidth, config;
--	struct edac_mc_layer layers[2];
- 	struct mem_ctl_info *mci;
-+	struct edac_mc_layer layers[2];
- 	struct device *dev;
- 	enum dev_type dt;
- 	char *name;
--	int rc, i;
-+	int rc;
- 
--	for (i = 0; i < NUM_CONTROLLERS; i++) {
--		config = priv->adec[CONF + i * ADEC_NUM];
--		num_chans = FIELD_GET(MC5_NUM_CHANS_MASK, config);
--		rank = 1 << FIELD_GET(MC5_RANK_MASK, config);
--		dwidth = FIELD_GET(MC5_BUS_WIDTH_MASK, config);
--
--		switch (dwidth) {
--		case XDDR5_BUS_WIDTH_16:
--			dt = DEV_X16;
--			break;
--		case XDDR5_BUS_WIDTH_32:
--			dt = DEV_X32;
--			break;
--		case XDDR5_BUS_WIDTH_64:
--			dt = DEV_X64;
--			break;
--		default:
--			dt = DEV_UNKNOWN;
--		}
-+	config = priv->adec[CONF + i * ADEC_NUM];
-+	num_chans = FIELD_GET(MC5_NUM_CHANS_MASK, config);
-+	rank = 1 << FIELD_GET(MC5_RANK_MASK, config);
-+	dwidth = FIELD_GET(MC5_BUS_WIDTH_MASK, config);
-+
-+	switch (dwidth) {
-+	case XDDR5_BUS_WIDTH_16:
-+		dt = DEV_X16;
-+		break;
-+	case XDDR5_BUS_WIDTH_32:
-+		dt = DEV_X32;
-+		break;
-+	case XDDR5_BUS_WIDTH_64:
-+		dt = DEV_X64;
-+		break;
-+	default:
-+		dt = DEV_UNKNOWN;
-+	}
- 
--		if (dt == DEV_UNKNOWN)
--			continue;
-+	if (dt == DEV_UNKNOWN)
-+		return 0;
- 
--		/* Find the first enabled device and register that one. */
--		layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
--		layers[0].size = rank;
--		layers[0].is_virt_csrow = true;
--		layers[1].type = EDAC_MC_LAYER_CHANNEL;
--		layers[1].size = num_chans;
--		layers[1].is_virt_csrow = false;
-+	/* Find the first enabled device and register that one. */
-+	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
-+	layers[0].size = rank;
-+	layers[0].is_virt_csrow = true;
-+	layers[1].type = EDAC_MC_LAYER_CHANNEL;
-+	layers[1].size = num_chans;
-+	layers[1].is_virt_csrow = false;
-+
-+	rc = -ENOMEM;
-+	mci = edac_mc_alloc(i, ARRAY_SIZE(layers), layers,
-+			    sizeof(struct mc_priv));
-+	if (!mci) {
-+		edac_printk(KERN_ERR, EDAC_MC, "Failed memory allocation for MC%d\n", i);
-+		return rc;
-+	}
-+	priv->mci[i] = mci;
-+	priv->dwidth = dt;
-+
-+	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-+	if (!dev)
-+		return rc;
-+	dev->release = versal_edac_release;
-+	name = kmalloc(32, GFP_KERNEL);
-+	sprintf(name, "versal-net-ddrmc5-edac-%d", i);
-+	dev->init_name = name;
-+	rc = device_register(dev);
-+	if (rc)
-+		goto err_mc_free;
- 
--		rc = -ENOMEM;
--		mci = edac_mc_alloc(i, ARRAY_SIZE(layers), layers,
--				    sizeof(struct mc_priv));
--		if (!mci) {
--			edac_printk(KERN_ERR, EDAC_MC, "Failed memory allocation for MC%d\n", i);
--			goto err_alloc;
--		}
-+	mci->pdev = dev;
- 
--		priv->mci[i] = mci;
--		priv->dwidth = dt;
-+	platform_set_drvdata(pdev, priv);
- 
--		dev = kzalloc(sizeof(*dev), GFP_KERNEL);
--		dev->release = versal_edac_release;
--		name = kmalloc(32, GFP_KERNEL);
--		sprintf(name, "versal-net-ddrmc5-edac-%d", i);
--		dev->init_name = name;
--		rc = device_register(dev);
--		if (rc)
--			goto err_alloc;
-+	mc_init(mci, dev);
-+	rc = edac_mc_add_mc(mci);
-+	if (rc) {
-+		edac_printk(KERN_ERR, EDAC_MC, "Failed to register MC%d with EDAC core\n", i);
-+		goto err_unreg;
-+	}
-+	return 0;
-+err_unreg:
-+	device_unregister(mci->pdev);
-+err_mc_free:
-+	edac_mc_free(mci);
-+	return rc;
-+}
- 
--		mci->pdev = dev;
- 
--		platform_set_drvdata(pdev, priv);
-+static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
-+{
-+	int rc, i;
- 
--		mc_init(mci, dev);
--		rc = edac_mc_add_mc(mci);
--		if (rc) {
--			edac_printk(KERN_ERR, EDAC_MC, "Failed to register MC%d with EDAC core\n", i);
--			goto err_alloc;
--		}
-+	for (i = 0; i < NUM_CONTROLLERS; i++) {
-+		rc = init_single_versalnet(priv, pdev, i);
-+		if (rc)
-+			goto err_rm_versalnet;
- 	}
- 	return 0;
- 
--err_alloc:
--	while (i--) {
--		mci = priv->mci[i];
--		if (!mci)
--			continue;
--
--		if (mci->pdev) {
--			device_unregister(mci->pdev);
--			edac_mc_del_mc(mci->pdev);
--		}
--
--		edac_mc_free(mci);
-+err_rm_versalnet:
-+	while (i) {
-+		i--;
-+		remove_single_versalnet(priv, i);
- 	}
- 
- 	return rc;
-@@ -857,9 +876,6 @@ static void remove_versalnet(struct mc_priv *priv)
- 	for (i = 0; i < NUM_CONTROLLERS; i++) {
- 		device_unregister(priv->mci[i]->pdev);
- 		mci = edac_mc_del_mc(priv->mci[i]->pdev);
--		if (!mci)
--			return;
--
- 		edac_mc_free(mci);
- 	}
- }
+Or you already have a valid use case for it which dictates this design?
+
+> 1.4. Scrub rate allowed to change only if NO demand and patrol
+>    scrubbing is in progress
+
+Right.
+
+> 2. Demand scrubbing and Background (patrol) scrubbing
+> 2.1. Background scrubbing request enables BG scrubbing
+>      on all NUMA nodes.
+
+Right.
+
+> 2.2. For, demand scrubbing request 2 options are identified,
+>      with (b) tried. Please suggest the right approach?
+> a) Enable demand scrubbing on all NUMA nodes, hope for
+>      the 'Requested Address Range(INPUT)' field, can use
+>      address set to scrub and PAGE_SIZE(or similar) for all the
+>      nodes.
+
+Why do you need an address range? Why not start scrubbing and have it be
+fire-and-forget?
+
+> b) Enable demand scrubbing on a NUMA node for which
+>      the requested address to scrub is within the PA range of
+>      that node.
+> 
+> 2.3. Demand scrubbing is not allowed when background scrubbing
+>      is in progress.
+> 
+> 2.4. If 2.2. (b) is chosen, should kernel allow BG
+>       scrubbing on rest of the nodes, when demand scrubbing on
+>       some node/s is in progress?
+
+It seems like all scrubbing should be mutually-exclusive... or is there
+a point in scrubbing in parallel...?
+
+> 2.5 The status of the BG scrubbing exposed to the user space
+>     in 'enable_background' sysfs attribute.
+> 
+> 2.6 The status of the demand scrubbing exposed to the
+>        user space in 'addr' sysfs attribute. However when the
+>        demand scrubbing is on multiple/all nodes are in progress,
+>        which demand scrubbing status and address in 'addr' sysfs attribute
+>        as status should be exposed to the user space?
+> a) May be the status of the first detected node with demand scrubbing
+>      is in progress?
+> b) Does not show the status at all, just fail the request if the
+>     demand scrubbing is already in progress on a node/all nodes?
+> c)  Any other suggestion?
+
+First we need a proper granularity defined and then everything will revolve
+around it: should it be system-wide, per-node, does it need to have an address
+range or can it be started and no need for any further user interaction and so
+on and so on...
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
