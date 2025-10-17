@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5105-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5106-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0CD6BE8363
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 13:02:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFD4DBE82B1
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 12:55:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F19B6E6A77
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 10:55:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F6DB1AA4811
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 10:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D82C3277AA;
-	Fri, 17 Oct 2025 10:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6B1329C5F;
+	Fri, 17 Oct 2025 10:55:05 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1885D326D50;
-	Fri, 17 Oct 2025 10:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5035D328625;
+	Fri, 17 Oct 2025 10:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760698496; cv=none; b=KqFa9I14Ve8e8VLc+Lxk6cgZqlXyPSx8NV4//bXg6bP6VZCQEm3SAH+w9XBzqHRUYF+IixfA9W1oae1aohXmvnpOMtOAplRMBGqUMrLeWa7EepCGu1VQcZcOpB6RNJhe7/0HL1mkxDm5hpKZvnOQDbHKoUMEnL53tzGxt2TvG6s=
+	t=1760698505; cv=none; b=A+whcF+jhKlDDtUD9ZpEd2340roJND9TcLQgXmpVcnJapxTSrHkZB2fgR/+vmgvUP2fOjqATahZ2K7rKsRgzbEXzUlrOwy51QHc/gi6enDDkh4rwSpLvubenIGXafuy7F0diNq62T3OmNMlKNwcSZHq0s47M3DoC9mxgWjvBs3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760698496; c=relaxed/simple;
-	bh=nNXrMtZk3zYnmlXOuCh6SX9nUfQDOAFUF16LDju3VEQ=;
+	s=arc-20240116; t=1760698505; c=relaxed/simple;
+	bh=h1CBbndi5vjG2sunUGG3v0G/PrL6PmW48UBE7l/m+d4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aOS8iJcfvmNu5WddnnTM6M6Qa5+Or6RZ2AIhhFp92tUKaeiiCEbOsVcA71q/qV8qh7+YFTjyPFGzb0ywzQsJaij7yreHQuzAvT4sb+iprr4mb2ewLLoygE/mxMURRLej8EvOsmY3ElGVf7MfjGpUhStbxo1VKKjdnkBJ8gMJ56U=
+	 MIME-Version; b=Cl1aUwKjCenNpIqIEQp+Yn3g3XzOXqhubXPd4h5I2anSPVivOkmdNFuml2U0kpJPT8AqcQs1MIVRwJkZpdSGzsuR/dD5xW90K+sdfLefUqclFT+ggPYugzFI5DlEfLaGoU4hogoNVvyS16IANiBd/M8EhxxYGduiPHt8hE3yKjA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FB8C4CEE7;
-	Fri, 17 Oct 2025 10:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B48CC4CEFE;
+	Fri, 17 Oct 2025 10:54:55 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -79,11 +79,10 @@ Cc: linux-clk@vger.kernel.org,
 	linux-iio@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v4 2/4] bitfield: Add non-constant field_{prep,get}() helpers
-Date: Fri, 17 Oct 2025 12:54:10 +0200
-Message-ID: <67c1998f144b3a21399672c8e4d58d3884ae2b3c.1760696560.git.geert+renesas@glider.be>
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v4 3/4] clk: renesas: Use bitfield helpers
+Date: Fri, 17 Oct 2025 12:54:11 +0200
+Message-ID: <33827880afe233a54a817cff9730f59dc7e73def.1760696560.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1760696560.git.geert+renesas@glider.be>
 References: <cover.1760696560.git.geert+renesas@glider.be>
@@ -95,298 +94,133 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The existing FIELD_{GET,PREP}() macros are limited to compile-time
-constants.  However, it is very common to prepare or extract bitfield
-elements where the bitfield mask is not a compile-time constant.
-
-To avoid this limitation, the AT91 clock driver and several other
-drivers already have their own non-const field_{prep,get}() macros.
-Make them available for general use by consolidating them in
-<linux/bitfield.h>, and improve them slightly:
-  1. Avoid evaluating macro parameters more than once,
-  2. Replace "ffs() - 1" by "__ffs()",
-  3. Support 64-bit use on 32-bit architectures.
-
-This is deliberately not merged into the existing FIELD_{GET,PREP}()
-macros, as people expressed the desire to keep stricter variants for
-increased safety, or for performance critical paths.
+Use the FIELD_{GET,PREP}() and field_{get,prep}() helpers for const
+respective non-const bitfields, instead of open-coding the same
+operations.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Crt Mori <cmo@melexis.com>
 ---
 v4:
-  - Add Acked-by,
-  - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocate
-    power management debugfs helper APIs") in v6.17-rc1,
-  - Convert more recently introduced upstream copies:
-      - drivers/edac/ie31200_edac.c
-      - drivers/iio/dac/ad3530r.c
+  - No changes,
 
 v3:
-  - Add Acked-by,
-  - Drop underscores from macro parameters,
-  - Use __auto_type where possible,
-  - Correctly cast reg to the mask type,
-  - Introduces __val and __reg intermediates to simplify the actual
-    operation,
-  - Drop unneeded parentheses,
-  - Clarify having both FIELD_{GET,PREP}() and field_{get,prep}(),
+  - No changes,
 
 v2:
-  - Cast val resp. reg to the mask type,
-  - Fix 64-bit use on 32-bit architectures,
-  - Convert new upstream users:
-      - drivers/crypto/intel/qat/qat_common/adf_gen4_pm_debugfs.c
-      - drivers/gpio/gpio-aspeed.c
-      - drivers/iio/temperature/mlx90614.c
-      - drivers/pinctrl/nuvoton/pinctrl-ma35.c
-      - sound/usb/mixer_quirks.c
-  - Convert new user queued in renesas-devel for v6.15:
-      - drivers/soc/renesas/rz-sysc.c
+  - Rebase on top of commit 470e3f0d0b1529ab ("clk: renesas: rcar-gen4:
+    Introduce R-Car Gen4 CPG driver").
 ---
- drivers/clk/at91/clk-peripheral.c             |  1 +
- drivers/clk/at91/pmc.h                        |  3 --
- .../intel/qat/qat_common/adf_pm_dbgfs_utils.c |  8 +----
- drivers/edac/ie31200_edac.c                   |  4 +--
- drivers/gpio/gpio-aspeed.c                    |  5 +--
- drivers/iio/dac/ad3530r.c                     |  3 --
- drivers/iio/temperature/mlx90614.c            |  5 +--
- drivers/pinctrl/nuvoton/pinctrl-ma35.c        |  4 ---
- drivers/soc/renesas/rz-sysc.c                 |  3 +-
- include/linux/bitfield.h                      | 36 +++++++++++++++++++
- sound/usb/mixer_quirks.c                      |  4 ---
- 11 files changed, 42 insertions(+), 34 deletions(-)
+ drivers/clk/renesas/clk-div6.c      |  6 +++---
+ drivers/clk/renesas/rcar-gen3-cpg.c | 15 +++++----------
+ drivers/clk/renesas/rcar-gen4-cpg.c |  9 +++------
+ 3 files changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-peripheral.c b/drivers/clk/at91/clk-peripheral.c
-index e700f40fd87f9327..e7208c47268b6397 100644
---- a/drivers/clk/at91/clk-peripheral.c
-+++ b/drivers/clk/at91/clk-peripheral.c
-@@ -3,6 +3,7 @@
-  *  Copyright (C) 2013 Boris BREZILLON <b.brezillon@overkiz.com>
+diff --git a/drivers/clk/renesas/clk-div6.c b/drivers/clk/renesas/clk-div6.c
+index 3abd6e5400aded6a..f7b827b5e9b2dd32 100644
+--- a/drivers/clk/renesas/clk-div6.c
++++ b/drivers/clk/renesas/clk-div6.c
+@@ -7,6 +7,7 @@
+  * Contact: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
   */
  
 +#include <linux/bitfield.h>
- #include <linux/bitops.h>
  #include <linux/clk-provider.h>
- #include <linux/clkdev.h>
-diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
-index 5daa32c4cf2540d7..543d7aee8d248cdb 100644
---- a/drivers/clk/at91/pmc.h
-+++ b/drivers/clk/at91/pmc.h
-@@ -117,9 +117,6 @@ struct at91_clk_pms {
- 	unsigned int parent;
- };
- 
--#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
--#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
--
- #define ndck(a, s) (a[s - 1].id + 1)
- #define nck(a) (a[ARRAY_SIZE(a) - 1].id + 1)
- 
-diff --git a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
-index 69295a9ddf0ac92f..4ccc94ed9493a64c 100644
---- a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
-+++ b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
-@@ -1,18 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright(c) 2025 Intel Corporation */
-+#include <linux/bitfield.h>
- #include <linux/bitops.h>
- #include <linux/sprintf.h>
- #include <linux/string_helpers.h>
- 
- #include "adf_pm_dbgfs_utils.h"
- 
--/*
-- * This is needed because a variable is used to index the mask at
-- * pm_scnprint_table(), making it not compile time constant, so the compile
-- * asserts from FIELD_GET() or u32_get_bits() won't be fulfilled.
-- */
--#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
--
- #define PM_INFO_MAX_KEY_LEN	21
- 
- static int pm_scnprint_table(char *buff, const struct pm_status_row *table,
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 5a080ab65476dacf..dfc9a9cecd74207d 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -44,6 +44,7 @@
-  * but lo_hi_readq() ensures that we are safe across all e3-1200 processors.
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/module.h>
  #include <linux/init.h>
- #include <linux/pci.h>
-@@ -139,9 +140,6 @@
- #define IE31200_CAPID0_DDPCD		BIT(6)
- #define IE31200_CAPID0_ECC		BIT(1)
- 
--/* Non-constant mask variant of FIELD_GET() */
--#define field_get(_mask, _reg)  (((_reg) & (_mask)) >> (ffs(_mask) - 1))
--
- static int nr_channels;
- static struct pci_dev *mci_pdev;
- static int ie31200_registered = 1;
-diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
-index 7953a9c4e36d7550..3da999334971d501 100644
---- a/drivers/gpio/gpio-aspeed.c
-+++ b/drivers/gpio/gpio-aspeed.c
-@@ -5,6 +5,7 @@
-  * Joel Stanley <joel@jms.id.au>
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/cleanup.h>
- #include <linux/clk.h>
- #include <linux/gpio/aspeed.h>
-@@ -31,10 +32,6 @@
- #include <linux/gpio/consumer.h>
- #include "gpiolib.h"
- 
--/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
--#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
--#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
--
- #define GPIO_G7_IRQ_STS_BASE 0x100
- #define GPIO_G7_IRQ_STS_OFFSET(x) (GPIO_G7_IRQ_STS_BASE + (x) * 0x4)
- #define GPIO_G7_CTRL_REG_BASE 0x180
-diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
-index 6134613777b8e1d4..b97b46090d808ee7 100644
---- a/drivers/iio/dac/ad3530r.c
-+++ b/drivers/iio/dac/ad3530r.c
-@@ -53,9 +53,6 @@
- #define AD3530R_MAX_CHANNELS			8
- #define AD3531R_MAX_CHANNELS			4
- 
--/* Non-constant mask variant of FIELD_PREP() */
--#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
--
- enum ad3530r_mode {
- 	AD3530R_NORMAL_OP,
- 	AD3530R_POWERDOWN_1K,
-diff --git a/drivers/iio/temperature/mlx90614.c b/drivers/iio/temperature/mlx90614.c
-index 8a44a00bfd5ece38..1ad21b73e1b44cb0 100644
---- a/drivers/iio/temperature/mlx90614.c
-+++ b/drivers/iio/temperature/mlx90614.c
-@@ -22,6 +22,7 @@
-  * the "wakeup" GPIO is not given, power management will be disabled.
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/gpio/consumer.h>
-@@ -68,10 +69,6 @@
- #define MLX90614_CONST_SCALE 20 /* Scale in milliKelvin (0.02 * 1000) */
- #define MLX90614_CONST_FIR 0x7 /* Fixed value for FIR part of low pass filter */
- 
--/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
--#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
--#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
--
- struct mlx_chip_info {
- 	/* EEPROM offsets with 16-bit data, MSB first */
- 	/* emissivity correction coefficient */
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-ma35.c b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
-index cdad01d68a37e365..8d71dc53cc1de1f8 100644
---- a/drivers/pinctrl/nuvoton/pinctrl-ma35.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
-@@ -81,10 +81,6 @@
- #define MVOLT_1800			0
- #define MVOLT_3300			1
- 
--/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
--#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
--#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
--
- static const char * const gpio_group_name[] = {
- 	"gpioa", "gpiob", "gpioc", "gpiod", "gpioe", "gpiof", "gpiog",
- 	"gpioh", "gpioi", "gpioj", "gpiok", "gpiol", "gpiom", "gpion",
-diff --git a/drivers/soc/renesas/rz-sysc.c b/drivers/soc/renesas/rz-sysc.c
-index 9f79e299e6f41641..73eaf8b9d69f7208 100644
---- a/drivers/soc/renesas/rz-sysc.c
-+++ b/drivers/soc/renesas/rz-sysc.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2024 Renesas Electronics Corp.
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/cleanup.h>
  #include <linux/io.h>
- #include <linux/mfd/syscon.h>
-@@ -16,8 +17,6 @@
+@@ -171,8 +172,7 @@ static u8 cpg_div6_clock_get_parent(struct clk_hw *hw)
+ 	if (clock->src_mask == 0)
+ 		return 0;
  
- #include "rz-sysc.h"
+-	hw_index = (readl(clock->reg) & clock->src_mask) >>
+-		   __ffs(clock->src_mask);
++	hw_index = field_get(clock->src_mask, readl(clock->reg));
+ 	for (i = 0; i < clk_hw_get_num_parents(hw); i++) {
+ 		if (clock->parents[i] == hw_index)
+ 			return i;
+@@ -191,7 +191,7 @@ static int cpg_div6_clock_set_parent(struct clk_hw *hw, u8 index)
+ 	if (index >= clk_hw_get_num_parents(hw))
+ 		return -EINVAL;
  
--#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
--
- /**
-  * struct rz_sysc - RZ SYSC private data structure
-  * @base: SYSC base address
-diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-index 7ff817bdae19b468..c999fe70076f6684 100644
---- a/include/linux/bitfield.h
-+++ b/include/linux/bitfield.h
-@@ -220,4 +220,40 @@ __MAKE_OP(64)
- #undef __MAKE_OP
- #undef ____MAKE_OP
- 
-+/**
-+ * field_prep() - prepare a bitfield element
-+ * @mask: shifted mask defining the field's length and position
-+ * @val:  value to put in the field
-+ *
-+ * field_prep() masks and shifts up the value.  The result should be
-+ * combined with other fields of the bitfield using logical OR.
-+ * Unlike FIELD_PREP(), @mask is not limited to a compile-time constant.
-+ */
-+#define field_prep(mask, val)						\
-+	({								\
-+		__auto_type __mask = (mask);				\
-+		typeof(mask) __val = (val);				\
-+		unsigned int __shift = sizeof(mask) <= 4 ?		\
-+				       __ffs(__mask) : __ffs64(__mask);	\
-+		(__val << __shift) & __mask;	\
-+	})
-+
-+/**
-+ * field_get() - extract a bitfield element
-+ * @mask: shifted mask defining the field's length and position
-+ * @reg:  value of entire bitfield
-+ *
-+ * field_get() extracts the field specified by @mask from the
-+ * bitfield passed in as @reg by masking and shifting it down.
-+ * Unlike FIELD_GET(), @mask is not limited to a compile-time constant.
-+ */
-+#define field_get(mask, reg)						\
-+	({								\
-+		__auto_type __mask = (mask);				\
-+		typeof(mask) __reg =  (reg);				\
-+		unsigned int __shift = sizeof(mask) <= 4 ?		\
-+				       __ffs(__mask) : __ffs64(__mask);	\
-+		(__reg & __mask) >> __shift;	\
-+	})
-+
- #endif
-diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
-index 828af3095b86ee0a..6eee89cbc0867f2b 100644
---- a/sound/usb/mixer_quirks.c
-+++ b/sound/usb/mixer_quirks.c
-@@ -3311,10 +3311,6 @@ static int snd_bbfpro_controls_create(struct usb_mixer_interface *mixer)
- #define RME_DIGIFACE_REGISTER(reg, mask) (((reg) << 16) | (mask))
- #define RME_DIGIFACE_INVERT BIT(31)
- 
--/* Nonconst helpers */
--#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
--#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
--
- static int snd_rme_digiface_write_reg(struct snd_kcontrol *kcontrol, int item, u16 mask, u16 val)
+-	src = clock->parents[index] << __ffs(clock->src_mask);
++	src = field_prep(clock->src_mask, clock->parents[index]);
+ 	writel((readl(clock->reg) & ~clock->src_mask) | src, clock->reg);
+ 	return 0;
+ }
+diff --git a/drivers/clk/renesas/rcar-gen3-cpg.c b/drivers/clk/renesas/rcar-gen3-cpg.c
+index 10ae20489df9abd8..b954278ddd9d8aa8 100644
+--- a/drivers/clk/renesas/rcar-gen3-cpg.c
++++ b/drivers/clk/renesas/rcar-gen3-cpg.c
+@@ -54,10 +54,8 @@ static unsigned long cpg_pll_clk_recalc_rate(struct clk_hw *hw,
  {
- 	struct usb_mixer_elem_list *list = snd_kcontrol_chip(kcontrol);
+ 	struct cpg_pll_clk *pll_clk = to_pll_clk(hw);
+ 	unsigned int mult;
+-	u32 val;
+ 
+-	val = readl(pll_clk->pllcr_reg) & CPG_PLLnCR_STC_MASK;
+-	mult = (val >> __ffs(CPG_PLLnCR_STC_MASK)) + 1;
++	mult = FIELD_GET(CPG_PLLnCR_STC_MASK, readl(pll_clk->pllcr_reg)) + 1;
+ 
+ 	return parent_rate * mult * pll_clk->fixed_mult;
+ }
+@@ -94,7 +92,7 @@ static int cpg_pll_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 
+ 	val = readl(pll_clk->pllcr_reg);
+ 	val &= ~CPG_PLLnCR_STC_MASK;
+-	val |= (mult - 1) << __ffs(CPG_PLLnCR_STC_MASK);
++	val |= FIELD_PREP(CPG_PLLnCR_STC_MASK, mult - 1);
+ 	writel(val, pll_clk->pllcr_reg);
+ 
+ 	for (i = 1000; i; i--) {
+@@ -176,11 +174,7 @@ static unsigned long cpg_z_clk_recalc_rate(struct clk_hw *hw,
+ 					   unsigned long parent_rate)
+ {
+ 	struct cpg_z_clk *zclk = to_z_clk(hw);
+-	unsigned int mult;
+-	u32 val;
+-
+-	val = readl(zclk->reg) & zclk->mask;
+-	mult = 32 - (val >> __ffs(zclk->mask));
++	unsigned int mult = 32 - field_get(zclk->mask, readl(zclk->reg));
+ 
+ 	return DIV_ROUND_CLOSEST_ULL((u64)parent_rate * mult,
+ 				     32 * zclk->fixed_div);
+@@ -231,7 +225,8 @@ static int cpg_z_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	if (readl(zclk->kick_reg) & CPG_FRQCRB_KICK)
+ 		return -EBUSY;
+ 
+-	cpg_reg_modify(zclk->reg, zclk->mask, (32 - mult) << __ffs(zclk->mask));
++	cpg_reg_modify(zclk->reg, zclk->mask,
++		       field_prep(zclk->mask, 32 - mult));
+ 
+ 	/*
+ 	 * Set KICK bit in FRQCRB to update hardware setting and wait for
+diff --git a/drivers/clk/renesas/rcar-gen4-cpg.c b/drivers/clk/renesas/rcar-gen4-cpg.c
+index fb9a876aaba5cbcd..db3a0b8ef2b936bb 100644
+--- a/drivers/clk/renesas/rcar-gen4-cpg.c
++++ b/drivers/clk/renesas/rcar-gen4-cpg.c
+@@ -279,11 +279,7 @@ static unsigned long cpg_z_clk_recalc_rate(struct clk_hw *hw,
+ 					   unsigned long parent_rate)
+ {
+ 	struct cpg_z_clk *zclk = to_z_clk(hw);
+-	unsigned int mult;
+-	u32 val;
+-
+-	val = readl(zclk->reg) & zclk->mask;
+-	mult = 32 - (val >> __ffs(zclk->mask));
++	unsigned int mult = 32 - field_get(zclk->mask, readl(zclk->reg));
+ 
+ 	return DIV_ROUND_CLOSEST_ULL((u64)parent_rate * mult,
+ 				     32 * zclk->fixed_div);
+@@ -334,7 +330,8 @@ static int cpg_z_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	if (readl(zclk->kick_reg) & CPG_FRQCRB_KICK)
+ 		return -EBUSY;
+ 
+-	cpg_reg_modify(zclk->reg, zclk->mask, (32 - mult) << __ffs(zclk->mask));
++	cpg_reg_modify(zclk->reg, zclk->mask,
++		       field_prep(zclk->mask, 32 - mult));
+ 
+ 	/*
+ 	 * Set KICK bit in FRQCRB to update hardware setting and wait for
 -- 
 2.43.0
 
