@@ -1,126 +1,88 @@
-Return-Path: <linux-edac+bounces-5102-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5103-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D2BBBE7CB2
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 11:36:05 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04D83BE82D2
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 12:56:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 66CF2567127
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 09:27:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A038C568622
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 10:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911AB3203AB;
-	Fri, 17 Oct 2025 09:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="bJS3ICkf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E84D326D42;
+	Fri, 17 Oct 2025 10:54:38 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61062D5C61;
-	Fri, 17 Oct 2025 09:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51BF3203AB;
+	Fri, 17 Oct 2025 10:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760692439; cv=none; b=IlotQHUxK8JFOw7wo2R9RioC8VuM4MBkv3dNpwy9S8sVw0Q/9Bg6K9Gx5zXnNUQzMaTrko02/nVuWZNjgWSPR95a3j0dQLovm9sxaOqCWrqQD2JeE6WO1dvdMi1J+msFZUysZ99gQPD58UnDz1R9J8C/M2aWRiMVGJpnQeYBVb4=
+	t=1760698477; cv=none; b=Hl9/kpjQK/YztkBhDJKj2Z3f1yrd1PhH3FuSPiQkeAbh8giWO34GwiI8tDYTD/5Fq/xPJGO+XH1QyYpTeTzJCli2E0wrRtS5lqyHJhl1+zf/qY6TamdrFJWTeN7vnDKKyd1YBdUpZZsxEzipNvqWwmSOfB3BSN6OVQ+oqSMCE38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760692439; c=relaxed/simple;
-	bh=V2L3IilwofpV6SrsfVTvut5ipDXkokIOm+dTBT4i7eQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lTPQYymuzYxTI6aUIqLNn3C7DWqhHhv+yoldiyMM8P6cN7tmPggW6jZVoXmAIV1J9/uZDuHAr65iaGbD8JAt1xdyydf0nXZXfTmH1Z0+S+fk248PIj0/ZQ6UmHO6vxBXeXE/rKf+VXLdxhBCsJuBgCSWTf0Y0va0V5X6NmK9YKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=bJS3ICkf; arc=none smtp.client-ip=52.12.53.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1760692437; x=1792228437;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=k0dUe76w+6n5/NfsPbyefGVCom+xh3GGcFcV3Olhmks=;
-  b=bJS3ICkfgFedWl5t3te0XuFgDXWz8nBqHQTRTXEmWIJKuL6qSBM8S6lo
-   qWlp8IVFhGYjuCljEi8GOfcSbqH+tmKEEZvbtP9V9wWtn/s5gI8gv7//Y
-   zdnpZRxAiJ8nFsb7eC7GNe9Gm8l5PF74pM1VygYGU+pIPA6e11ygckgM+
-   gEApLlTUZ6QclTdRegSo2bp6laPl8PmAE7Cl5kNabPBce5Sboj/z22O+k
-   J+7XV0D5JnsdfIKqakhgqjO4qtfEpn5U89qoIbQeK6i3YQvX0obdlg2UM
-   pKCy7KqUeL7mvB26xraicOcxVnM+0ZFcv0+KspA0RfR1N8nH756RouAHI
-   w==;
-X-CSE-ConnectionGUID: RXTPyYArTMCGpEZ+E8Xbcw==
-X-CSE-MsgGUID: BWj3QBi9SQOiPxp1KjHzOA==
-X-IronPort-AV: E=Sophos;i="6.19,236,1754956800"; 
-   d="scan'208";a="4952411"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 09:13:57 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:21527]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.17.61:2525] with esmtp (Farcaster)
- id 6e4c0a13-2687-46e7-b791-5c0ff5190e98; Fri, 17 Oct 2025 09:13:57 +0000 (UTC)
-X-Farcaster-Flow-ID: 6e4c0a13-2687-46e7-b791-5c0ff5190e98
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 17 Oct 2025 09:13:56 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 17 Oct 2025
- 09:13:41 +0000
-From: Eliav Farber <farbere@amazon.com>
-To: <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
-	<linux@armlinux.org.uk>, <jdike@addtoit.com>, <richard@nod.at>,
-	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
-	<luto@kernel.org>, <peterz@infradead.org>, <tglx@linutronix.de>,
-	<mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>, <hpa@zytor.com>,
-	<tony.luck@intel.com>, <qiuxu.zhuo@intel.com>, <mchehab@kernel.org>,
-	<james.morse@arm.com>, <rric@kernel.org>, <harry.wentland@amd.com>,
-	<sunpeng.li@amd.com>, <alexander.deucher@amd.com>,
-	<christian.koenig@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-	<evan.quan@amd.com>, <james.qian.wang@arm.com>, <liviu.dudau@arm.com>,
-	<mihail.atanassov@arm.com>, <brian.starkey@arm.com>,
-	<maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-	<tzimmermann@suse.de>, <robdclark@gmail.com>, <sean@poorly.run>,
-	<jdelvare@suse.com>, <linux@roeck-us.net>, <fery@cypress.com>,
-	<dmitry.torokhov@gmail.com>, <agk@redhat.com>, <snitzer@redhat.com>,
-	<dm-devel@redhat.com>, <rajur@chelsio.com>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <peppe.cavallaro@st.com>, <alexandre.torgue@st.com>,
-	<joabreu@synopsys.com>, <mcoquelin.stm32@gmail.com>, <malattia@linux.it>,
-	<hdegoede@redhat.com>, <mgross@linux.intel.com>, <intel-linux-scu@intel.com>,
-	<artur.paszkiewicz@intel.com>, <jejb@linux.ibm.com>,
-	<martin.petersen@oracle.com>, <sakari.ailus@linux.intel.com>, <clm@fb.com>,
-	<josef@toxicpanda.com>, <dsterba@suse.com>, <xiang@kernel.org>,
-	<chao@kernel.org>, <jack@suse.com>, <tytso@mit.edu>,
-	<adilger.kernel@dilger.ca>, <dushistov@mail.ru>,
-	<luc.vanoostenryck@gmail.com>, <rostedt@goodmis.org>, <pmladek@suse.com>,
-	<sergey.senozhatsky@gmail.com>, <andriy.shevchenko@linux.intel.com>,
-	<linux@rasmusvillemoes.dk>, <minchan@kernel.org>, <ngupta@vflare.org>,
-	<akpm@linux-foundation.org>, <kuznet@ms2.inr.ac.ru>,
-	<yoshfuji@linux-ipv6.org>, <pablo@netfilter.org>, <kadlec@netfilter.org>,
-	<fw@strlen.de>, <jmaloy@redhat.com>, <ying.xue@windriver.com>,
-	<willy@infradead.org>, <farbere@amazon.com>, <sashal@kernel.org>,
-	<ruanjinjie@huawei.com>, <David.Laight@ACULAB.COM>,
-	<herve.codina@bootlin.com>, <Jason@zx2c4.com>, <keescook@chromium.org>,
-	<kbusch@kernel.org>, <nathan@kernel.org>, <bvanassche@acm.org>,
-	<ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-um@lists.infradead.org>,
-	<linux-edac@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-	<freedreno@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-input@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-	<platform-driver-x86@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<linux-staging@lists.linux.dev>, <linux-btrfs@vger.kernel.org>,
-	<linux-erofs@lists.ozlabs.org>, <linux-ext4@vger.kernel.org>,
-	<linux-sparse@vger.kernel.org>, <linux-mm@kvack.org>,
-	<netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
-	<tipc-discussion@lists.sourceforge.net>
-CC: Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>, Jens Axboe <axboe@kernel.dk>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mateusz Guzik
-	<mjguzik@gmail.com>, Pedro Falcato <pedro.falcato@gmail.com>
-Subject: [PATCH v2 27/27 5.10.y] minmax.h: remove some #defines that are only expanded once
-Date: Fri, 17 Oct 2025 09:05:19 +0000
-Message-ID: <20251017090519.46992-28-farbere@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251017090519.46992-1-farbere@amazon.com>
-References: <20251017090519.46992-1-farbere@amazon.com>
+	s=arc-20240116; t=1760698477; c=relaxed/simple;
+	bh=2iTRCBSgAgEc6VVwBZSn9Q6Vk0BEoRmGDB+2rvmH2AY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=upXyHCRsWU2jI/eDAW4LwyndsLd5pxe3Dhfb0pEIxr4HyU2PT6QWooUVfAXVkP7IZMzhH/+qqeckBVaZZJ6devWTkgmtaKFbsHK3DqIhyOSY1FAqWSyzgMh5S9f1TzsLRQ4XrNG1ULXbD5jgOD35IELQ2piphL6AciojK1kjJqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4B6C4CEE7;
+	Fri, 17 Oct 2025 10:54:28 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Miller <davem@davemloft.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Crt Mori <cmo@melexis.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alex Elder <elder@ieee.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Jason Baron <jbaron@akamai.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	David Lechner <dlechner@baylibre.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Cosmin Tanislav <demonsingur@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Jianping Shen <Jianping.Shen@de.bosch.com>
+Cc: linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	qat-linux@intel.com,
+	linux-gpio@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-iio@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v4 0/4] Non-const bitfield helpers
+Date: Fri, 17 Oct 2025 12:54:08 +0200
+Message-ID: <cover.1760696560.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -128,86 +90,139 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWA001.ant.amazon.com (10.13.139.22) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-From: David Laight <David.Laight@ACULAB.COM>
+	Hi all,
 
-[ Upstream commit 2b97aaf74ed534fb838d09867d09a3ca5d795208 ]
+<linux/bitfield.h> contains various helpers for accessing bitfields, as
+typically used in hardware registers for memory-mapped I/O blocks.
+These helpers ensure type safety, and deduce automatically shift values
+from mask values, avoiding mistakes due to inconsistent shifts and
+masks, and leading to a reduction in source code size.
 
-The bodies of __signed_type_use() and __unsigned_type_use() are much the
-same size as their names - so put the bodies in the only line that expands
-them.
+The existing FIELD_{GET,PREP}() macros are limited to compile-time
+constants.  However, it is very common to prepare or extract bitfield
+elements where the bitfield mask is not a compile-time constant (e.g. it
+comes from a table, or is created by shifting a compile-time constant).
+To avoid this limitation, the AT91 clock driver introduced its own
+field_{prep,get}() macros.  During the past four years, these have been
+copied to multiple drivers, and more copies are on their way[1], leading
+to the obvious review comment "please move this to <linux/bitfield.h>".
 
-Similarly __signed_type() is defined separately for 64bit and then used
-exactly once just below.
+Hence this series makes field_{prep,get}() available for general use
+(first two patches), and converts a few Renesas drivers to the existing
+FIELD_{GET,PREP}() and the new field_{get,prep}() helpers (last two
+patches).
 
-Change the test for __signed_type from CONFIG_64BIT to one based on gcc
-defined macros so that the code is valid if it gets used outside of a
-kernel build.
+Alternatives would be to use the typed {u*,be*,le*,...}_{get,encode}_bits()
+macros instead (which currently do not work with non-constant masks
+either, and the first attempt to change that generates much worse code),
+or to store the low bit and width of the mask instead (which would
+require changing all code that passes masks directly, and also generates
+worse code).
 
-Link: https://lkml.kernel.org/r/9386d1ebb8974fbabbed2635160c3975@AcuMS.aculab.com
-Signed-off-by: David Laight <david.laight@aculab.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Pedro Falcato <pedro.falcato@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- include/linux/minmax.h | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+Changes compared to v3[2]:
+  - Update recently introduced FIELD_MODIFY() macro,
+  - Add Acked-by,
+  - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocate
+    power management debugfs helper APIs") in v6.17-rc1,
+  - Convert more recently introduced upstream copies:
+      - drivers/edac/ie31200_edac.c
+      - drivers/iio/dac/ad3530r.c
 
-diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 2bbdd5b5e07e..eaaf5c008e4d 100644
---- a/include/linux/minmax.h
-+++ b/include/linux/minmax.h
-@@ -46,10 +46,8 @@
-  * comparison, and these expressions only need to be careful to not cause
-  * warnings for pointer use.
-  */
--#define __signed_type_use(ux) (2 + __is_nonneg(ux))
--#define __unsigned_type_use(ux) (1 + 2 * (sizeof(ux) < 4))
- #define __sign_use(ux) (is_signed_type(typeof(ux)) ? \
--	__signed_type_use(ux) : __unsigned_type_use(ux))
-+	(2 + __is_nonneg(ux)) : (1 + 2 * (sizeof(ux) < 4)))
- 
- /*
-  * Check whether a signed value is always non-negative.
-@@ -57,7 +55,7 @@
-  * A cast is needed to avoid any warnings from values that aren't signed
-  * integer types (in which case the result doesn't matter).
-  *
-- * On 64-bit any integer or pointer type can safely be cast to 'long'.
-+ * On 64-bit any integer or pointer type can safely be cast to 'long long'.
-  * But on 32-bit we need to avoid warnings about casting pointers to integers
-  * of different sizes without truncating 64-bit values so 'long' or 'long long'
-  * must be used depending on the size of the value.
-@@ -66,12 +64,12 @@
-  * them, but we do not use s128 types in the kernel (we do use 'u128',
-  * but they are handled by the !is_signed_type() case).
-  */
--#ifdef CONFIG_64BIT
--  #define __signed_type(ux) long
-+#if __SIZEOF_POINTER__ == __SIZEOF_LONG_LONG__
-+#define __is_nonneg(ux) statically_true((long long)(ux) >= 0)
- #else
--  #define __signed_type(ux) typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L))
-+#define __is_nonneg(ux) statically_true( \
-+	(typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L)))(ux) >= 0)
- #endif
--#define __is_nonneg(ux) statically_true((__signed_type(ux))(ux) >= 0)
- 
- #define __types_ok(ux, uy) \
- 	(__sign_use(ux) & __sign_use(uy))
+Changes compared to v2[3]:
+  - New patch "[PATCH v3 1/4] bitfield: Drop underscores from macro
+    parameters",
+  - Add Acked-by,
+  - Drop underscores from macro parameters,
+  - Use __auto_type where possible,
+  - Correctly cast reg to the mask type,
+  - Introduces __val and __reg intermediates to simplify the actual
+    operation,
+  - Drop unneeded parentheses,
+  - Clarify having both FIELD_{GET,PREP}() and field_{get,prep}(),
+
+Changes compared to v1[4]:
+  - Cast val resp. reg to the mask type,
+  - Fix 64-bit use on 32-bit architectures,
+  - Convert new upstream users:
+      - drivers/crypto/intel/qat/qat_common/adf_gen4_pm_debugfs.c
+      - drivers/gpio/gpio-aspeed.c
+      - drivers/iio/temperature/mlx90614.c
+      - drivers/pinctrl/nuvoton/pinctrl-ma35.c
+      - sound/usb/mixer_quirks.c
+  - Convert new user queued in renesas-devel for v6.15:
+      - drivers/soc/renesas/rz-sysc.c
+  - Drop the last 14 RFC patches.
+    They can be updated/resubmitted/applied later.
+
+I plan to take all four patches through the Renesas tree, and provide an
+immutable branch + tag with the first two patches, so subsystem
+maintainers that want to queue patches that depend on this can easily do
+so.  Once that tag has been merged in subsystem trees or upstream, I
+plan to update and resend actual conversions (see patches 4-17 in
+v1[4]).
+
+Thanks for your comments!
+
+[1] Work-in-progress new copies posted during the last few months (there
+    may be more):
+      - "[PATCH 10/24] mtd: rawnand: sunxi: cosmetic: move ECC_PAT_FOUND register in SoC caps"
+	https://lore.kernel.org/20251016142752.2627710-11-richard.genoud@bootlin.com
+      - "[PATCH 12/24] mtd: rawnand: sunxi: cosmetic: move NFC_ECC_MODE offset in SoC caps"
+	https://lore.kernel.org/20251016142752.2627710-13-richard.genoud@bootlin.com
+      - "[PATCH v2 05/15] mtd: rawnand: sunxi: rework pattern found registers"
+	https://lore.kernel.org/20251013152645.1119308-6-richard.genoud@bootlin.com
+      - "[PATCH v2 07/15] mtd: rawnand: sunxi: introduce ecc_mode_mask in sunxi_nfc_caps"
+	https://lore.kernel.org/20251013152645.1119308-8-richard.genoud@bootlin.com
+      - "[PATCH v5 2/2] iio: imu: smi330: Add driver"
+	https://lore.kernel.org/20251009153149.5162-3-Jianping.Shen@de.bosch.com
+      - "[PATCH v3 2/8] pwm: rzg2l-gpt: Add info variable to struct rzg2l_gpt_chip"
+	https://lore.kernel.org/20250923144524.191892-3-biju.das.jz@bp.renesas.com
+      - "[PATCH v2 3/3] gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller"
+	https://lore.kernel.org/20250903-ltc4283-support-v2-3-6bce091510bf@analog.com
+      - "[PATCH v7 15/24] media: i2c: add Maxim GMSL2/3 serializer and deserializer framework"
+	https://lore.kernel.org/20250718152500.2656391-16-demonsingur@gmail.com
+[2] "[PATCH v3 0/4] Non-const bitfield helpers"
+    https://lore.kernel.org/all/cover.1739540679.git.geert+renesas@glider.be/
+[3] "[PATCH v2 0/3] Non-const bitfield helpers"
+    https://lore.kernel.org/all/cover.1738329458.git.geert+renesas@glider.be
+[4] "[PATCH 00/17] Non-const bitfield helper conversions"
+    https://lore.kernel.org/all/cover.1637592133.git.geert+renesas@glider.be
+
+Geert Uytterhoeven (4):
+  bitfield: Drop underscores from macro parameters
+  bitfield: Add non-constant field_{prep,get}() helpers
+  clk: renesas: Use bitfield helpers
+  soc: renesas: Use bitfield helpers
+
+ drivers/clk/at91/clk-peripheral.c             |   1 +
+ drivers/clk/at91/pmc.h                        |   3 -
+ drivers/clk/renesas/clk-div6.c                |   6 +-
+ drivers/clk/renesas/rcar-gen3-cpg.c           |  15 +-
+ drivers/clk/renesas/rcar-gen4-cpg.c           |   9 +-
+ .../intel/qat/qat_common/adf_pm_dbgfs_utils.c |   8 +-
+ drivers/edac/ie31200_edac.c                   |   4 +-
+ drivers/gpio/gpio-aspeed.c                    |   5 +-
+ drivers/iio/dac/ad3530r.c                     |   3 -
+ drivers/iio/temperature/mlx90614.c            |   5 +-
+ drivers/pinctrl/nuvoton/pinctrl-ma35.c        |   4 -
+ drivers/soc/renesas/renesas-soc.c             |   4 +-
+ drivers/soc/renesas/rz-sysc.c                 |   3 +-
+ include/linux/bitfield.h                      | 142 +++++++++++-------
+ sound/usb/mixer_quirks.c                      |   4 -
+ 15 files changed, 108 insertions(+), 108 deletions(-)
+
 -- 
-2.47.3
+2.43.0
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
