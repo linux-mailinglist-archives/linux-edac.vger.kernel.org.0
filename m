@@ -1,170 +1,201 @@
-Return-Path: <linux-edac+bounces-5120-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5121-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F296DBEA936
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 18:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F5DBEADFA
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 18:51:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2F4EF4FCEAE
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 16:09:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2B8B158790D
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 16:37:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B302750E6;
-	Fri, 17 Oct 2025 16:09:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68192BF019;
+	Fri, 17 Oct 2025 16:37:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YtSviiKK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gBrR57zW"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616DD26B0A9;
-	Fri, 17 Oct 2025 16:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2C32BEFEA
+	for <linux-edac@vger.kernel.org>; Fri, 17 Oct 2025 16:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760717391; cv=none; b=qREF5xZYfz8j4tTdwHuxw+ZYqRQqN55rRX3y6OgPoYTZgs0hzvEcE6nq0yyUG+iDC24kUbfUs2Ia5BaxpplYzpi8qPIwBN4ZfU6L+ylVXc4BC+9yPQ3xRO4oXaBDYJVH0pTKa78mxyLZnYHpt1LwJuYCg8Dj1bgYz3vF8k+KuHg=
+	t=1760719035; cv=none; b=H4ZG8LUkkSuhBh1rU/BgPgw/LcwCFRYSCNhSFCMjD3IEQPGyiV4RDvptKgzJA4Pn93tfqV8STejOX0lKS1enf7eVxD7wKrASeDRwyWjvlD6DL0kNBOg9FrSeaFhzZMX5V70K+Sz4nWL98nTa4jovsp5npPHZpfIYVqEz0rC79jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760717391; c=relaxed/simple;
-	bh=BOrYC+tXjLjRqJyXcD4crvrBNK2lkUpKkjfEmyc87bI=;
+	s=arc-20240116; t=1760719035; c=relaxed/simple;
+	bh=K5dh/21yz367t5636zz5BS+SRG5wCokC8YohqZIkQhQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iWy895WajwE+h8mx6Pi2PYix+/PvfztRajECItZdikbvNHHv5lhxGisse8tPX4JO0xzFRLKewC9ErT44yMIAJY6utZePsszk7mX8ag/vyKI5fjBwAIjLZZ0djNPioX/lMqLB9MPuNZuqA7eF0yZakSVaCNBXaDxWk6Q/EwtNQFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YtSviiKK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE17C4CEE7;
-	Fri, 17 Oct 2025 16:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760717391;
-	bh=BOrYC+tXjLjRqJyXcD4crvrBNK2lkUpKkjfEmyc87bI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YtSviiKK7XhOypmn1B0JMTFJNg+aK9xkicr5kleBJoGLQsIHX6oRtRnPJgXbXWtLH
-	 cVrvwZYIhcft0nkxK/ZQBpXxxHeWHw5/VEilYnGTD4lEZyzXP8wqDKjbklEc7PQZxX
-	 jrw7mNWuagcjs3SnKes4mzFKMKH2tiSDMTY+zRgHS/b+KVlZKnLK4gb6spqja1+1F5
-	 LtRKkkOtABvH8jmUIF+maywb5ma9DVPFdB4So5FQ7XdD3Y3FN97CNzQWMZICjSRgyi
-	 XbXdYmBkEWUiq556ItdRa+tvmxGUk+V9ozsqtDgWFGhyHQtvMVM573eif+FMsCQ1J7
-	 ilRe5q/VN9eDQ==
-Date: Fri, 17 Oct 2025 17:09:24 +0100
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Eliav Farber <farbere@amazon.com>, stable@vger.kernel.org,
-	linux@armlinux.org.uk, jdike@addtoit.com, richard@nod.at,
-	anton.ivanov@cambridgegreys.com, dave.hansen@linux.intel.com,
-	luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-	tony.luck@intel.com, qiuxu.zhuo@intel.com, mchehab@kernel.org,
-	james.morse@arm.com, rric@kernel.org, harry.wentland@amd.com,
-	sunpeng.li@amd.com, alexander.deucher@amd.com,
-	christian.koenig@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-	evan.quan@amd.com, james.qian.wang@arm.com, liviu.dudau@arm.com,
-	mihail.atanassov@arm.com, brian.starkey@arm.com,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, robdclark@gmail.com, sean@poorly.run,
-	jdelvare@suse.com, linux@roeck-us.net, fery@cypress.com,
-	dmitry.torokhov@gmail.com, agk@redhat.com, snitzer@redhat.com,
-	dm-devel@redhat.com, rajur@chelsio.com, davem@davemloft.net,
-	kuba@kernel.org, peppe.cavallaro@st.com, alexandre.torgue@st.com,
-	joabreu@synopsys.com, mcoquelin.stm32@gmail.com, malattia@linux.it,
-	hdegoede@redhat.com, mgross@linux.intel.com,
-	intel-linux-scu@intel.com, artur.paszkiewicz@intel.com,
-	jejb@linux.ibm.com, martin.petersen@oracle.com,
-	sakari.ailus@linux.intel.com, clm@fb.com, josef@toxicpanda.com,
-	dsterba@suse.com, xiang@kernel.org, chao@kernel.org, jack@suse.com,
-	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
-	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
-	sergey.senozhatsky@gmail.com, andriy.shevchenko@linux.intel.com,
-	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
-	akpm@linux-foundation.org, kuznet@ms2.inr.ac.ru,
-	yoshfuji@linux-ipv6.org, pablo@netfilter.org, kadlec@netfilter.org,
-	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
-	willy@infradead.org, sashal@kernel.org, ruanjinjie@huawei.com,
-	David.Laight@aculab.com, herve.codina@bootlin.com, Jason@zx2c4.com,
-	keescook@chromium.org, kbusch@kernel.org, bvanassche@acm.org,
-	ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-edac@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-	linux-sparse@vger.kernel.org, linux-mm@kvack.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	tipc-discussion@lists.sourceforge.net
-Subject: Re: [PATCH v2 00/27 5.10.y] Backport minmax.h updates from v6.17-rc7
-Message-ID: <20251017160924.GA2728735@ax162>
-References: <20251017090519.46992-1-farbere@amazon.com>
- <2025101704-rumble-chatroom-60b5@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y53yz5ejN7gPoZ2w0JOCiBLwpJXZwktPj4bG83qDAPpkXCUM6EWrKRru49ZvtMn2IZ0GRcOqyuH+xowLJ7Bwd6ayFTr92JS+MRwdw+mUwDAZ3MrWccpPQOL3cYbYO1Z38gOu3fADkKdB3UxMmpmzoyXFX0BHhLTnF2CuNvt3mQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gBrR57zW; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-796fe71deecso26541346d6.1
+        for <linux-edac@vger.kernel.org>; Fri, 17 Oct 2025 09:37:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760719032; x=1761323832; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lZqTIsgME323ZkO31yyQWUQxJPAMGciP0ot1SYinmXM=;
+        b=gBrR57zWpXm2w/7blqiasX6rmV7vMOXlvxZj17ty4WRF2XnRnvCdJtbZv+TCRnKfEx
+         dJRlYjhECXVkQ9Q1HIXqpT24ZGQzQyQsiU9ADp3KCRFJ3G7mv1AiaubTgOpTRR3QJiZ3
+         nL5TZx6sR9W1Vxti398bZwYcjYqIqFXg7IwscFtEsLL6pqzhaQpJbypNsFnFKem58Lnt
+         vDxezsCzssRFdXkEHo2TWlwIp5pluD9Qrl4KdwvuiuR/eE1k/nRL5SkfuLiqgxJrKVTe
+         CXGLcSwa1vOVG6qTZzmTOJQt6xSCdBQTV/aXP+AmQChG2FjRoFtd4Y80fXd9rDh0uUM7
+         a6Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760719032; x=1761323832;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lZqTIsgME323ZkO31yyQWUQxJPAMGciP0ot1SYinmXM=;
+        b=kj80jFfnZphr7ccR1IKq2/jZIGGug2V9rC3afBoYcLJ3rjj3nBRqPWkNAytXydDxfn
+         1Ux7khG/nFRhq+lU1x3Sp8HEFJJIOG+HV9VPvM0D4WWl8jp83yEXhgDCuu63nKs8M4O1
+         5ZADdrb+XvdVAL8SXiXmVD5ZlUNdB8SZxlcf4cw7aKGmHzEV6+sIm+EGu71orNoc5Ty9
+         XN3g1mdqJOg9dN8ZpTBab/cnKWAdUAQ7pRrv1be+w8qP6r3uyBO2cHtep6o6xLfs6u48
+         zXgRpkxqJxJ2D3z7kRqKunPyekkIRmufRVqx9qN2vHxiV2ACIQfE/x2I/iZDARbjKPU1
+         RwuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUiH8JvG0AUQcUV2OTInhQtq01jpvMHJJutzDUgVUFNQ0IuJOFnyvxhPE5ggQ884oF15SlQB07dwlwf@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgM3aa7GSOAU6CbZI83c6KuqJtNfXHNwi9hbteJ/sVvd493fUn
+	imu3KumRypAvWQq9ifo7DkrNZgNDQfgRrhy6KBM/XnI3KyE7uDPqo2WD
+X-Gm-Gg: ASbGncvD6ZFTW54r+kub5IkVuzf/Wc+umWQSZ9G23wdn8YwjLU5XCONDxFQOAXvKr9j
+	uSWIT4rPD6+bEtFY+qzfe89bJtoE/szmLbSU4Q7bqaPjSygJ3qs4Ue+bM9YXwspY83u8lAPu7Ra
+	j6hNpO01xVXInQeLSb3BEUpiT9gGPmrOuih09Yqt5Rd5KKtrObIyzm8JylnVENr0NOuYq08mADu
+	T95+1sprquHSJT6gdpEKxDIUlyFhmnobSqNXSvhJkTyGKKJO/KtWYkeYDnlpEwsjkgls2lszeOg
+	vCS8ZKiuBgibXuspWBMS/wjw4mH27pe0Od0ZZMhszBVx5nsZWXQDnZu82wdcz/1irLsG3LBiFNV
+	rjb3GHq9vn8dzBUkQU0tqT+TLDgqNLCLcZ9fKG3VdA4KrYlAEHysmYffFOz/Da93rUphjLQTxJ5
+	ewRmgV3Z8=
+X-Google-Smtp-Source: AGHT+IEBLNSjsT2f6SbTw5aTPGakjHLdlQrL5hue+DxfPG8mzc3zrpMssrggDkT+31HrLygOdkrpIg==
+X-Received: by 2002:ad4:594b:0:b0:87c:2920:5730 with SMTP id 6a1803df08f44-87c29205b08mr24398926d6.40.1760719031704;
+        Fri, 17 Oct 2025 09:37:11 -0700 (PDT)
+Received: from localhost ([12.22.141.131])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87d02d91324sm1575686d6.65.2025.10.17.09.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Oct 2025 09:37:11 -0700 (PDT)
+Date: Fri, 17 Oct 2025 12:37:09 -0400
+From: Yury Norov <yury.norov@gmail.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Miller <davem@davemloft.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Cosmin Tanislav <demonsingur@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Jianping Shen <Jianping.Shen@de.bosch.com>,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-edac@vger.kernel.org, qat-linux@intel.com,
+	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] bitfield: Drop underscores from macro parameters
+Message-ID: <aPJwtZSMgZLDzxH8@yury>
+References: <cover.1760696560.git.geert+renesas@glider.be>
+ <792d176149bc4ffde2a7b78062388dc2466c23ca.1760696560.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2025101704-rumble-chatroom-60b5@gregkh>
+In-Reply-To: <792d176149bc4ffde2a7b78062388dc2466c23ca.1760696560.git.geert+renesas@glider.be>
 
-On Fri, Oct 17, 2025 at 05:03:02PM +0200, Greg KH wrote:
-> On Fri, Oct 17, 2025 at 09:04:52AM +0000, Eliav Farber wrote:
-> > This series backports 27 patches to update minmax.h in the 5.10.y
-> > branch, aligning it with v6.17-rc7.
-> > 
-> > The ultimate goal is to synchronize all long-term branches so that they
-> > include the full set of minmax.h changes.
-> > 
-> > - 6.12.y has already been backported; the changes are included in
-> >   v6.12.49.
-> > - 6.6.y has already been backported; the changes are included in
-> >   v6.6.109.
-> > - 6.1.y has already been backported; the changes are currently in the
-> >   6.1-stable tree.
-> > - 5.15.y has already been backported; the changes are currently in the
-> >   5.15-stable tree.
+On Fri, Oct 17, 2025 at 12:54:09PM +0200, Geert Uytterhoeven wrote:
+> There is no need to prefix macro parameters with underscores.
+> Remove the underscores.
 > 
-> With this series applied, on an arm64 server, building 'allmodconfig', I
-> get the following build error.
+> Suggested-by: David Laight <david.laight.linux@gmail.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v4:
+>   - Update recently introduced FIELD_MODIFY() macro,
 > 
-> Oddly I don't see it on my x86 server, perhaps due to different compiler
-> versions?
+> v3:
+>   - New.
+> ---
+>  include/linux/bitfield.h | 106 +++++++++++++++++++--------------------
+>  1 file changed, 53 insertions(+), 53 deletions(-)
 > 
-> Any ideas?
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> ------------------------
-> 
-> In function ‘rt2800_txpower_to_dev’,
->     inlined from ‘rt2800_config_channel’ at ../drivers/net/wireless/ralink/rt2x00/rt2800lib.c:4022:25:
-> ./../include/linux/compiler_types.h:309:45: error: call to ‘__compiletime_assert_1168’ declared with attribute error: clamp() low limit -7 greater than high limit 15
->   309 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->       |                                             ^
-> ./../include/linux/compiler_types.h:290:25: note: in definition of macro ‘__compiletime_assert’
->   290 |                         prefix ## suffix();                             \
->       |                         ^~~~~~
-> ./../include/linux/compiler_types.h:309:9: note: in expansion of macro ‘_compiletime_assert’
->   309 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->       |         ^~~~~~~~~~~~~~~~~~~
-> ../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> ../include/linux/minmax.h:188:9: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
->   188 |         BUILD_BUG_ON_MSG(statically_true(ulo > uhi),                            \
->       |         ^~~~~~~~~~~~~~~~
-> ../include/linux/minmax.h:195:9: note: in expansion of macro ‘__clamp_once’
->   195 |         __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
->       |         ^~~~~~~~~~~~
-> ../include/linux/minmax.h:218:36: note: in expansion of macro ‘__careful_clamp’
->   218 | #define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
->       |                                    ^~~~~~~~~~~~~~~
-> ../drivers/net/wireless/ralink/rt2x00/rt2800lib.c:3980:24: note: in expansion of macro ‘clamp_t’
->  3980 |                 return clamp_t(char, txpower, MIN_A_TXPOWER, MAX_A_TXPOWER);
->       |                        ^~~~~~~
+> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
+> index 5355f8f806a97974..7ff817bdae19b468 100644
+> --- a/include/linux/bitfield.h
+> +++ b/include/linux/bitfield.h
+> @@ -60,68 +60,68 @@
+>  
+>  #define __bf_cast_unsigned(type, x)	((__unsigned_scalar_typeof(type))(x))
+>  
+> -#define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)			\
+> +#define __BF_FIELD_CHECK(mask, reg, val, pfx)				\
+>  	({								\
+> -		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
+> -				 _pfx "mask is not constant");		\
+> -		BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");	\
+> -		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
+> -				 ~((_mask) >> __bf_shf(_mask)) &	\
+> -					(0 + (_val)) : 0,		\
+> -				 _pfx "value too large for the field"); \
+> -		BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >	\
+> -				 __bf_cast_unsigned(_reg, ~0ull),	\
+> -				 _pfx "type of reg too small for mask"); \
+> -		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
+> -					      (1ULL << __bf_shf(_mask))); \
+> +		BUILD_BUG_ON_MSG(!__builtin_constant_p(mask),		\
+> +				 pfx "mask is not constant");		\
+> +		BUILD_BUG_ON_MSG((mask) == 0, pfx "mask is zero");	\
+> +		BUILD_BUG_ON_MSG(__builtin_constant_p(val) ?		\
+> +				 ~((mask) >> __bf_shf(mask)) &	\
+> +					(0 + (val)) : 0,		\
+> +				 pfx "value too large for the field"); \
+> +		BUILD_BUG_ON_MSG(__bf_cast_unsigned(mask, mask) >	\
+> +				 __bf_cast_unsigned(reg, ~0ull),	\
+> +				 pfx "type of reg too small for mask"); \
+> +		__BUILD_BUG_ON_NOT_POWER_OF_2((mask) +			\
+> +					      (1ULL << __bf_shf(mask))); \
+>  	})
 
-Missing commit 3bc753c06dd0 ("kbuild: treat char as always unsigned")?
+Hi Geert,
 
-Cheers,
-Nathan
+Thanks for the series!
+
+I agree that underscored parameters are excessive. But fixing them has
+a side effect of wiping the history, which is a bad thing.
+
+I would prefer to save a history over following a rule that seemingly
+is not written down. Let's keep this untouched for now, and if there
+will be a need to move the code, we can drop underscores as well.
+
+Meanwhile you (and David) can propose a corresponding rule in
+coding-style.rst and a checkpatch warning. That way we at least will
+stop merging a new code of that style.
+
+Thanks,
+Yury
 
