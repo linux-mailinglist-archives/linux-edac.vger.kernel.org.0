@@ -1,138 +1,124 @@
-Return-Path: <linux-edac+bounces-5107-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5108-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3A7BE83B1
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 13:04:52 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E5DBE87D0
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 13:59:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C95D6E7A39
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 10:55:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E97F635BD3E
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 11:59:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07C632A3CF;
-	Fri, 17 Oct 2025 10:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991BB2DE70D;
+	Fri, 17 Oct 2025 11:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cSItTMlZ"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1C4320CB6;
-	Fri, 17 Oct 2025 10:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE4A332ED1;
+	Fri, 17 Oct 2025 11:59:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760698514; cv=none; b=bD1rHmmMGI3u2zqsOyACuZoQtwUOcFi9uafdIiy/BeUeh8sQq4bO+qKvs/e5VhATV1LIa96gWsn7zQYp0AWOK/LB1RzOXGZ2z9YlFUcyo7Vftu3FoNoiP6pk6JZE/H70RZCKZPNZNjBHZyQ0MId+Q7thzlW9LFvxJUz8PGUByqo=
+	t=1760702378; cv=none; b=G7JpNuCNKR2mhPYB8ZwkaT8d9NNwHoKr8HEbg1vCJdTpMtg2BKK0QC0OQ7ydMishGnFPbX5U0cHBcWu6R2uzQmUDzLhXJR54TJ4lfAoHNr+rkEdjCXpItPEAdnpAl7C+Gfzl0fsshjXb+zlNl5LeRw9J0IaCFQnlvPup4/4Q2zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760698514; c=relaxed/simple;
-	bh=YhNStRN+RN3qBLGJrZXY7hU9RUoPioJIdGPZbOpDi+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZU5eDxJStkFypkBS+TjYMHBT5LmiTdzzHEI7ZkNwz48R3EyAwwoCSfpUCf0g3DsxtzGZpzj2u6vkEAVH40dPT9+/5TNX/NjXAdGxU2+9wdzIDExYworkQcnUMya1wxb5OEmcKfPdCd9eeSDFrWMLofxPLNnvwk6kIlBjSthpDBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 442C9C4CEFB;
-	Fri, 17 Oct 2025 10:55:05 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Miller <davem@davemloft.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Crt Mori <cmo@melexis.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alex Elder <elder@ieee.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jason Baron <jbaron@akamai.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Kim Seer Paller <kimseer.paller@analog.com>,
-	David Lechner <dlechner@baylibre.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Cosmin Tanislav <demonsingur@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Jianping Shen <Jianping.Shen@de.bosch.com>
-Cc: linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	qat-linux@intel.com,
-	linux-gpio@vger.kernel.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-iio@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v4 4/4] soc: renesas: Use bitfield helpers
-Date: Fri, 17 Oct 2025 12:54:12 +0200
-Message-ID: <5182a66c22d80efd3fa7ccedf62554d9f95c0a40.1760696560.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1760696560.git.geert+renesas@glider.be>
-References: <cover.1760696560.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1760702378; c=relaxed/simple;
+	bh=38uFLiDTAO+A1PWpRP2bVJ1ijHpCWsegoKBcJwzF2PE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oRSqkmkyU//E0j9tu3ocppmmZp9yoeSdaF+D/IibHAvxEELpeO/gp0nFLJTngjol7puHPS1LrLq+pfV9gzqTSpTXr7CGp8PkepomT0mdrViS5eBGLimTHRtVfgIHoC6pdu719NNFqOLnkMKSWs/ANV+dCqAo4T/hBgfHOoM4RzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cSItTMlZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3037FC4CEE7;
+	Fri, 17 Oct 2025 11:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760702377;
+	bh=38uFLiDTAO+A1PWpRP2bVJ1ijHpCWsegoKBcJwzF2PE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cSItTMlZ+xkWo77L3dJDjTz61eq44oatBXCgbcCC5ycxjVd62F5ZBD5t/I/P7IMAl
+	 lQe+zy+uvgq1Iphq58yIzjQNmbjsJLGcQk9xMD89Oyn29Qra+kKcuYPJON2XTLg6Wc
+	 Tx4/0gvLYtBA9RdvGnygRkoazMU/mLdzs1fx2bZA=
+Date: Fri, 17 Oct 2025 13:59:33 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Eliav Farber <farbere@amazon.com>
+Cc: stable@vger.kernel.org, linux@armlinux.org.uk, jdike@addtoit.com,
+	richard@nod.at, anton.ivanov@cambridgegreys.com,
+	dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+	hpa@zytor.com, tony.luck@intel.com, qiuxu.zhuo@intel.com,
+	mchehab@kernel.org, james.morse@arm.com, rric@kernel.org,
+	harry.wentland@amd.com, sunpeng.li@amd.com,
+	alexander.deucher@amd.com, christian.koenig@amd.com,
+	airlied@linux.ie, daniel@ffwll.ch, evan.quan@amd.com,
+	james.qian.wang@arm.com, liviu.dudau@arm.com,
+	mihail.atanassov@arm.com, brian.starkey@arm.com,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, robdclark@gmail.com, sean@poorly.run,
+	jdelvare@suse.com, linux@roeck-us.net, fery@cypress.com,
+	dmitry.torokhov@gmail.com, agk@redhat.com, snitzer@redhat.com,
+	dm-devel@redhat.com, rajur@chelsio.com, davem@davemloft.net,
+	kuba@kernel.org, peppe.cavallaro@st.com, alexandre.torgue@st.com,
+	joabreu@synopsys.com, mcoquelin.stm32@gmail.com, malattia@linux.it,
+	hdegoede@redhat.com, mgross@linux.intel.com,
+	intel-linux-scu@intel.com, artur.paszkiewicz@intel.com,
+	jejb@linux.ibm.com, martin.petersen@oracle.com,
+	sakari.ailus@linux.intel.com, clm@fb.com, josef@toxicpanda.com,
+	dsterba@suse.com, xiang@kernel.org, chao@kernel.org, jack@suse.com,
+	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
+	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
+	sergey.senozhatsky@gmail.com, andriy.shevchenko@linux.intel.com,
+	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
+	akpm@linux-foundation.org, kuznet@ms2.inr.ac.ru,
+	yoshfuji@linux-ipv6.org, pablo@netfilter.org, kadlec@netfilter.org,
+	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
+	willy@infradead.org, sashal@kernel.org, ruanjinjie@huawei.com,
+	David.Laight@aculab.com, herve.codina@bootlin.com, Jason@zx2c4.com,
+	keescook@chromium.org, kbusch@kernel.org, nathan@kernel.org,
+	bvanassche@acm.org, ndesaulniers@google.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-media@vger.kernel.org, netdev@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
+	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+	linux-sparse@vger.kernel.org, linux-mm@kvack.org,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	tipc-discussion@lists.sourceforge.net,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Isabella Basso <isabbasso@riseup.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Sander Vanheule <sander@svanheule.net>,
+	Vlastimil Babka <vbabka@suse.cz>, Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH v2 01/27 5.10.y] overflow, tracing: Define the
+ is_signed_type() macro once
+Message-ID: <2025101708-obtuse-ellipse-e355@gregkh>
+References: <20251017090519.46992-1-farbere@amazon.com>
+ <20251017090519.46992-2-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251017090519.46992-2-farbere@amazon.com>
 
-Use the field_get() helper, instead of open-coding the same operation.
+On Fri, Oct 17, 2025 at 09:04:53AM +0000, Eliav Farber wrote:
+> From: Bart Van Assche <bvanassche@acm.org>
+> 
+> [ Upstream commit 92d23c6e94157739b997cacce151586a0d07bb8a ]
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v4:
-  - No changes,
+This isn't in 5.15.y, why is it needed in 5.10.y?
 
-v3:
-  - No changes,
+thanks,
 
-v2:
-  - Drop RFC, as a dependency was applied.
----
- drivers/soc/renesas/renesas-soc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index 1eb52356b996bdd7..ee4f17bb4db45db7 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2014-2016 Glider bvba
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-@@ -524,8 +525,7 @@ static int __init renesas_soc_init(void)
- 							   eshi, eslo);
- 		}
- 
--		if (soc->id &&
--		    ((product & id->mask) >> __ffs(id->mask)) != soc->id) {
-+		if (soc->id && field_get(id->mask, product) != soc->id) {
- 			pr_warn("SoC mismatch (product = 0x%x)\n", product);
- 			ret = -ENODEV;
- 			goto free_soc_dev_attr;
--- 
-2.43.0
-
+greg k-h
 
