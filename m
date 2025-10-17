@@ -1,68 +1,68 @@
-Return-Path: <linux-edac+bounces-5085-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5086-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95DACBE7929
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 11:18:43 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 710E7BE7952
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 11:19:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1152C189F754
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 09:15:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C5985566647
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 09:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4EE9322522;
-	Fri, 17 Oct 2025 09:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45CD3233F4;
+	Fri, 17 Oct 2025 09:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Xjy32rmh"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Plg7ix/R"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
+Received: from pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.13.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF49F25393B;
-	Fri, 17 Oct 2025 09:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.77.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2029C322C98;
+	Fri, 17 Oct 2025 09:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.13.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760692134; cv=none; b=oO4fn98339v5fUrR6hy4BBBzlt5O76DtTlFFeq6xchwcPn0xZ5AEiMpzMY4E22ut9BaW3HWVSNYShZKa8F09cPzT+tUcW9eoIFdyaftcvkZ9l5Y16N7tQ36IFwrvbxqJjhEeRfb6BnEnxIOqO9kmnKllVPS68Zv18plpJlhglBo=
+	t=1760692137; cv=none; b=ijmGibyh/QSQNkCm8Ufkzw4KFGRUpWb/kBqtrXq9wVlxZe9jz48kKbKLqcTXPCb2q6YZzT+mAzVGiqDQT+znUqM3Br9Pf/t7Xq8ZY1hg16AWDzFMfQo1tffwQLyUOBNVwgNxkm0sCEE792B7SzgzWTyJ1E1F2vc8OQyB5IHOK+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760692134; c=relaxed/simple;
-	bh=mBsutiZSvOVvNJByrvLE9b3D79CfAae/c2faSCVfkjU=;
+	s=arc-20240116; t=1760692137; c=relaxed/simple;
+	bh=23s8l0G8LMW/LqgoII7VfOWAq4ph1Dyt0/EjDFoB5Tk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Hvb58wDL3y/q3jnGNtjCVTm8r2tKvobRokijL5bWC95wDq/nR1o+BfGfAlM8IuZKwonCJzBJ1FKQVdOThsHsTwoacidwy6fWHqGXfIhaEOrxbLi2dLamggIjxt/F/aNkSwdFD12tBe/t5FzypaygZN6Q3s+SsntolHVVYwqC160=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Xjy32rmh; arc=none smtp.client-ip=44.246.77.92
+	 MIME-Version:Content-Type; b=K3mqvf3ztZta3gA1C8HQaxX9Zzm6HAIRV053akAd0qpwxoX0bIcD4mysj6C6vJmbK2MIetkdIwK3V5ZsEJmJPNUhPWcKnycZQjafH2N6MmylzEV4EO4+NlH/mRQk4gBuOjCp5sOK/T7m5B4JptAeN+uXUjEBIv/dWokrKVXCM6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Plg7ix/R; arc=none smtp.client-ip=52.13.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1760692132; x=1792228132;
+  t=1760692136; x=1792228136;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QbgnO9UxPmlnTs9ErmugBQ9uOmZYt7P0wc2omnh3GaU=;
-  b=Xjy32rmhPBEhn2X9X8XKTzLxRISTU8uAbSmb/u3CEz9fzlEPIHytwXcI
-   JZgPwyI94xzd3B7UGuHH+Qsx69pjwf42m5bdrG3xHyehpwmYbQGaKlOSq
-   R95SsNH9viAHdXmQIsLe4YC2OyO9XjV8vUk12khGYu6Jcpu9c0p1qMUcD
-   33Vp3p6bcdCsp+DTP+tDKy6ICEvPQH64M5IzsxdbmBcKF/mxnr5jsujge
-   Gjue0KWbWo0oxwRnJxWqfcqtWH1xPbTwfMmQ7Z8iIRkg0oKGSqnqfLGZ8
-   NQZZwZNaJmui/QgGwSbkGlCUj1dQV9kL2n9dTLHy3/HOPC+7kHy0z0MBY
-   w==;
-X-CSE-ConnectionGUID: ZdAxfbz5TG+RqPtGsn1SBA==
-X-CSE-MsgGUID: tDa4CAofRd+ioN4B3vss4g==
+  bh=M14+Hrw3+0xfvL7LtAKdftp5KA5xdtXGebEkX3FEMMU=;
+  b=Plg7ix/RJ7yvN7XhtAG1bVSr/kBz6iz3kva0f697hjdMq1c3thXeVTC3
+   ClRu8nKNyY4WwG5grtml86bm2vB1U7f9PtlXI6W4+d4gxcTD6MGj5A2Z3
+   Xo7bqFOywsRsOwVsLrYr7dpvcUqeOxCVLW4VODDvJfzq4HUKPoCXr6nlF
+   9VF0EA5qoarLV+tKQ+aO5HoEQJZLI2oUb+cRuWkSAgMWG05CNYXEG5p/U
+   mgPjZ6CgXuxer30aoUCrTYhCS5mdDy3V/kNEi21DTTEYuMWIY76Xksiif
+   fswJ+RSe77Qzsq4HeTnl9PiMzKOgLzyTcqYuS/sbV1kVphBeejBsbHams
+   A==;
+X-CSE-ConnectionGUID: XiNnWlBDTeOh9M4Ss3/Q3A==
+X-CSE-MsgGUID: f0Pk082NTpa3+TprzfOi0A==
 X-IronPort-AV: E=Sophos;i="6.19,236,1754956800"; 
-   d="scan'208";a="5070242"
+   d="scan'208";a="5072703"
 Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 09:08:49 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:10855]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.17.61:2525] with esmtp (Farcaster)
- id a1004d97-508f-41ad-a58d-cc3229a1bacf; Fri, 17 Oct 2025 09:08:49 +0000 (UTC)
-X-Farcaster-Flow-ID: a1004d97-508f-41ad-a58d-cc3229a1bacf
+  by internal-pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 09:08:55 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:30812]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.42.150:2525] with esmtp (Farcaster)
+ id c14b1481-125a-4238-9378-a0f89dea09b0; Fri, 17 Oct 2025 09:08:55 +0000 (UTC)
+X-Farcaster-Flow-ID: c14b1481-125a-4238-9378-a0f89dea09b0
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 17 Oct 2025 09:08:39 +0000
+ Fri, 17 Oct 2025 09:08:54 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 17 Oct 2025
- 09:08:24 +0000
+ 09:08:39 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
 	<linux@armlinux.org.uk>, <jdike@addtoit.com>, <richard@nod.at>,
@@ -113,9 +113,9 @@ To: <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
 	<tipc-discussion@lists.sourceforge.net>
 CC: Christoph Hellwig <hch@infradead.org>, Linus Torvalds
 	<torvalds@linux-foundation.org>
-Subject: [PATCH v2 10/27 5.10.y] minmax: fix indentation of __cmp_once() and __clamp_once()
-Date: Fri, 17 Oct 2025 09:05:02 +0000
-Message-ID: <20251017090519.46992-11-farbere@amazon.com>
+Subject: [PATCH v2 11/27 5.10.y] minmax: allow comparisons of 'int' against 'unsigned char/short'
+Date: Fri, 17 Oct 2025 09:05:03 +0000
+Message-ID: <20251017090519.46992-12-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251017090519.46992-1-farbere@amazon.com>
 References: <20251017090519.46992-1-farbere@amazon.com>
@@ -132,11 +132,12 @@ X-ClientProxiedBy: EX19D035UWA001.ant.amazon.com (10.13.139.101) To
 
 From: David Laight <David.Laight@ACULAB.COM>
 
-[ Upstream commit f4b84b2ff851f01d0fac619eadef47eb41648534 ]
+[ Upstream commit 4ead534fba42fc4fd41163297528d2aa731cd121 ]
 
-Remove the extra indentation and align continuation markers.
+Since 'unsigned char/short' get promoted to 'signed int' it is safe to
+compare them against an 'int' value.
 
-Link: https://lkml.kernel.org/r/bed41317a05c498ea0209eafbcab45a5@AcuMS.aculab.com
+Link: https://lkml.kernel.org/r/8732ef5f809c47c28a7be47c938b28d4@AcuMS.aculab.com
 Signed-off-by: David Laight <david.laight@aculab.com>
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Christoph Hellwig <hch@infradead.org>
@@ -146,57 +147,25 @@ Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- include/linux/minmax.h | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ include/linux/minmax.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 8718fd71a793..c0e738eacefa 100644
+index c0e738eacefa..842c1db62ffe 100644
 --- a/include/linux/minmax.h
 +++ b/include/linux/minmax.h
-@@ -35,11 +35,11 @@
- #define __cmp(op, x, y)	((x) __cmp_op_##op (y) ? (x) : (y))
+@@ -26,8 +26,9 @@
+ 	__builtin_choose_expr(__is_constexpr(is_signed_type(typeof(x))),	\
+ 		is_signed_type(typeof(x)), 0)
  
- #define __cmp_once(op, x, y, unique_x, unique_y) ({	\
--		typeof(x) unique_x = (x);		\
--		typeof(y) unique_y = (y);		\
--		static_assert(__types_ok(x, y),		\
--			#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
--		__cmp(op, unique_x, unique_y); })
-+	typeof(x) unique_x = (x);			\
-+	typeof(y) unique_y = (y);			\
-+	static_assert(__types_ok(x, y),			\
-+		#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
-+	__cmp(op, unique_x, unique_y); })
+-#define __types_ok(x, y) \
+-	(__is_signed(x) == __is_signed(y))
++#define __types_ok(x, y) 			\
++	(__is_signed(x) == __is_signed(y) ||	\
++		__is_signed((x) + 0) == __is_signed((y) + 0))
  
- #define __careful_cmp(op, x, y)					\
- 	__builtin_choose_expr(__is_constexpr((x) - (y)),	\
-@@ -49,16 +49,16 @@
- #define __clamp(val, lo, hi)	\
- 	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
- 
--#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({	\
--		typeof(val) unique_val = (val);				\
--		typeof(lo) unique_lo = (lo);				\
--		typeof(hi) unique_hi = (hi);				\
--		static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
--				(lo) <= (hi), true),					\
--			"clamp() low limit " #lo " greater than high limit " #hi);	\
--		static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
--		static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
--		__clamp(unique_val, unique_lo, unique_hi); })
-+#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({		\
-+	typeof(val) unique_val = (val);						\
-+	typeof(lo) unique_lo = (lo);						\
-+	typeof(hi) unique_hi = (hi);						\
-+	static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
-+			(lo) <= (hi), true),					\
-+		"clamp() low limit " #lo " greater than high limit " #hi);	\
-+	static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
-+	static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
-+	__clamp(unique_val, unique_lo, unique_hi); })
- 
- #define __careful_clamp(val, lo, hi) ({					\
- 	__builtin_choose_expr(__is_constexpr((val) - (lo) + (hi)),	\
+ #define __cmp_op_min <
+ #define __cmp_op_max >
 -- 
 2.47.3
 
