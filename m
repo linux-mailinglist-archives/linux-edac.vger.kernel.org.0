@@ -1,305 +1,470 @@
-Return-Path: <linux-edac+bounces-5109-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5110-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 946D7BE88C8
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 14:16:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A59C9BE899F
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 14:33:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 877254FDF7A
-	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 12:16:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B71C462289C
+	for <lists+linux-edac@lfdr.de>; Fri, 17 Oct 2025 12:33:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4176D2C11F5;
-	Fri, 17 Oct 2025 12:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E73AF2E5B27;
+	Fri, 17 Oct 2025 12:32:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="IjNIezMb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hX4UUnkR"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E36332EA3;
-	Fri, 17 Oct 2025 12:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.34.181.151
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760703394; cv=fail; b=W/Af5TaPJszZjsRUUBgUO1Ho1tfVjumiL0p7U7q8iwZ2NMpZsObbp1/qeejgb5MwZfpfeKFyrDyHhJU443m4Ol2m4R25dzS3jVpKUqsJtJikTQQ1Eu8CE3g9jfHIC1b7dQowXLC86kqCXYHG5KxWrzHBiXINsKPBMdiUoYs5xQU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760703394; c=relaxed/simple;
-	bh=gYDnavJxgHF2BtLIfegCkhALowUX2Q2vhSCtPw4pBrM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NQ3PHz25s1J5ccNHE94s+bTRZoQZhIw4wd0oB4ZtNinCSjhagLoCftKIewp5eph4VRm7ceSXZ6H69kLqDA1S+4vRSS7AgU/x/C26ShoF6kbeUqk8YMX7jtLw6KDuQ5CTOJ4J4RDrfp2UkQmD9lQiTldVAD1+tO8ixgS5nRNmfDw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=IjNIezMb; arc=fail smtp.client-ip=52.34.181.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6BD2D542A
+	for <linux-edac@vger.kernel.org>; Fri, 17 Oct 2025 12:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760704374; cv=none; b=FJKiUhLw1tRn+tqiqvrKSaCYesftI+9VGSqjO55UeEsB0XnqEBwhYNMVZqMf9cycCHicl1rumh98/+o/uP6duluJBNLJaVsLvWI0F9A+MdRNzVTrFAG+FVztdM6T5H0WKoaSV5RyuLNCdLO1uhuZaAiPWwaHUbW2wcUzR1KDuIs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760704374; c=relaxed/simple;
+	bh=a2A2bEvfMZ/aHPI6Me2QiUdDHn0myC9uOVKxYGHqCIo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nFOY5lBcHaeZ0dTlV+KtiKCKldyCcIAq+6gO2YhO9bVhttBRGF7iSAKaBfqitoGz0sPM1SJDByVwcmSd5J3qUt27nsyndOsifg9rxl6/vjCgIrmqsi4WqOQhagWbGFJRRtj57gylXzX9XFp5cQpYwI1R2Z/Qj3kCfT9qqWF1S18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hX4UUnkR; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-47117e75258so7060645e9.2
+        for <linux-edac@vger.kernel.org>; Fri, 17 Oct 2025 05:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1760703392; x=1792239392;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=gYDnavJxgHF2BtLIfegCkhALowUX2Q2vhSCtPw4pBrM=;
-  b=IjNIezMb6XRPNgiscb20x7PWd9Bnon15/2W76a+lWlF4HJWgall4QiwZ
-   sdA6/OhZlr0C0AvKQ733/U5xqe0n0z/9ANJLgkz98vIR7HFV0GycbxynO
-   2XPDlxq3f29DTILXoRXp55joUxfiWdSsZ92JcAhIE9GryxgSuHvf5I7rY
-   0rBr/H4k3wnPOKp8wmIREx4jIUliP0fEKcrlSeq1lLanBZQvaQ59Rznty
-   qdSmQcXp80rwJ8WWcpwP5m4neW3j0z8fOw4JsqusbRK99UF9iPzMicdCL
-   XBYFrH6A41o8ZRY71Vnm3Rbv5fb+AcMezCdi471Co6d7lyQESAM7i66AI
-   g==;
-X-CSE-ConnectionGUID: 08iORPpUR/C3qpk1PF36yA==
-X-CSE-MsgGUID: /JR+maiMThSU5TpzwA21yg==
-X-IronPort-AV: E=Sophos;i="6.18,263,1751241600"; 
-   d="scan'208";a="5080123"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 12:16:30 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:1691]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.16.196:2525] with esmtp (Farcaster)
- id 8ec0af0c-e575-4157-a7af-213ccc389138; Fri, 17 Oct 2025 12:16:30 +0000 (UTC)
-X-Farcaster-Flow-ID: 8ec0af0c-e575-4157-a7af-213ccc389138
-Received: from EX19EXOUWA001.ant.amazon.com (10.250.64.209) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 17 Oct 2025 12:16:29 +0000
-Received: from EX19EXOUWB001.ant.amazon.com (10.250.64.229) by
- EX19EXOUWA001.ant.amazon.com (10.250.64.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 17 Oct 2025 12:16:29 +0000
-Received: from PH0PR07CU006.outbound.protection.outlook.com (10.250.64.206) by
- EX19EXOUWB001.ant.amazon.com (10.250.64.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20
- via Frontend Transport; Fri, 17 Oct 2025 12:16:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nbwhkxny5R8fdLaKd/VtBFCpv4FItEDUGYYw83CT1YGw7QS88We0f+dOIyqI1vxzcd48TsaDprHGplgQ9K/ukiQjy2PXZ1UkGuCWbx5uj9QVcNQLp5S6CDeTadIePUaKzTWOfYcXfcChz4nUV56O9W1AzXmxGwz5Vk8m99Wt0NbIsFqkhANLSbPKxGiS9X887Xg8sLTAaVy0TPdGrTnGGIBkUe1KqPPJQHnJAjOuqLZVhSdkb9FzFMrOWQTNdHTPEZ7U1Xc7YxVHbLUQpPF+NIIDp9VwIYS1hXMM3Dkfxf3AXXCXU7sV5hb4pS9q9TzxTN3YJJfvewzcI0xsWr/vfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gYDnavJxgHF2BtLIfegCkhALowUX2Q2vhSCtPw4pBrM=;
- b=e7y4PgWP8o/nTyV48Cp+sg3y1/2H63nTYam4EgYbJ9GRKUXQaBua6WVzXd6hnP/jVLtw4SawnwUWxVsLK3jpYII1I+vcI5yvrpDrONpTJgn1JIXZaUMZ/LuoY7bRRdsKDi3K0+Hly7DM7v9D/iTZjaLM/W8bgg4TjX/uUgsrmmHnV9WZI0Cawc823IzzqGE8dEq7xThLIN/9O5zBjpbfm5JoIIUmhvgqMbswFKmJBEbfy8rwjcVsUdf2MJ2K3Fprd6V5EUO5L7tJYy0fqcZugMuT3EDLwJCek0EBE6aPwpIqmaiaN39AdYw3drLSFB88Rd0PmZ3FEyFVsfW8IHP39w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amazon.com; dmarc=pass action=none header.from=amazon.com;
- dkim=pass header.d=amazon.com; arc=none
-Received: from CH0PR18MB5433.namprd18.prod.outlook.com (2603:10b6:610:181::16)
- by SJ0PR18MB3898.namprd18.prod.outlook.com (2603:10b6:a03:2e8::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.13; Fri, 17 Oct
- 2025 12:16:27 +0000
-Received: from CH0PR18MB5433.namprd18.prod.outlook.com
- ([fe80::1423:ab6b:11cc:7b0]) by CH0PR18MB5433.namprd18.prod.outlook.com
- ([fe80::1423:ab6b:11cc:7b0%7]) with mapi id 15.20.9228.012; Fri, 17 Oct 2025
- 12:16:27 +0000
-From: "Farber, Eliav" <farbere@amazon.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: "stable@vger.kernel.org" <stable@vger.kernel.org>, "linux@armlinux.org.uk"
-	<linux@armlinux.org.uk>, "jdike@addtoit.com" <jdike@addtoit.com>,
-	"richard@nod.at" <richard@nod.at>, "anton.ivanov@cambridgegreys.com"
-	<anton.ivanov@cambridgegreys.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com"
-	<hpa@zytor.com>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, "james.morse@arm.com" <james.morse@arm.com>,
-	"rric@kernel.org" <rric@kernel.org>, "harry.wentland@amd.com"
-	<harry.wentland@amd.com>, "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
-	"alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-	"christian.koenig@amd.com" <christian.koenig@amd.com>, "airlied@linux.ie"
-	<airlied@linux.ie>, "daniel@ffwll.ch" <daniel@ffwll.ch>, "evan.quan@amd.com"
-	<evan.quan@amd.com>, "james.qian.wang@arm.com" <james.qian.wang@arm.com>,
-	"liviu.dudau@arm.com" <liviu.dudau@arm.com>, "mihail.atanassov@arm.com"
-	<mihail.atanassov@arm.com>, "brian.starkey@arm.com" <brian.starkey@arm.com>,
-	"maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
-	"mripard@kernel.org" <mripard@kernel.org>, "tzimmermann@suse.de"
-	<tzimmermann@suse.de>, "robdclark@gmail.com" <robdclark@gmail.com>,
-	"sean@poorly.run" <sean@poorly.run>, "jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@roeck-us.net" <linux@roeck-us.net>, "fery@cypress.com"
-	<fery@cypress.com>, "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-	"agk@redhat.com" <agk@redhat.com>, "snitzer@redhat.com" <snitzer@redhat.com>,
-	"dm-devel@redhat.com" <dm-devel@redhat.com>, "rajur@chelsio.com"
-	<rajur@chelsio.com>, "davem@davemloft.net" <davem@davemloft.net>,
-	"kuba@kernel.org" <kuba@kernel.org>, "peppe.cavallaro@st.com"
-	<peppe.cavallaro@st.com>, "alexandre.torgue@st.com"
-	<alexandre.torgue@st.com>, "joabreu@synopsys.com" <joabreu@synopsys.com>,
-	"mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>, "malattia@linux.it"
-	<malattia@linux.it>, "hdegoede@redhat.com" <hdegoede@redhat.com>,
-	"mgross@linux.intel.com" <mgross@linux.intel.com>,
-	"intel-linux-scu@intel.com" <intel-linux-scu@intel.com>,
-	"artur.paszkiewicz@intel.com" <artur.paszkiewicz@intel.com>,
-	"jejb@linux.ibm.com" <jejb@linux.ibm.com>, "martin.petersen@oracle.com"
-	<martin.petersen@oracle.com>, "sakari.ailus@linux.intel.com"
-	<sakari.ailus@linux.intel.com>, "clm@fb.com" <clm@fb.com>,
-	"josef@toxicpanda.com" <josef@toxicpanda.com>, "dsterba@suse.com"
-	<dsterba@suse.com>, "xiang@kernel.org" <xiang@kernel.org>, "chao@kernel.org"
-	<chao@kernel.org>, "jack@suse.com" <jack@suse.com>, "tytso@mit.edu"
-	<tytso@mit.edu>, "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-	"dushistov@mail.ru" <dushistov@mail.ru>, "luc.vanoostenryck@gmail.com"
-	<luc.vanoostenryck@gmail.com>, "rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"pmladek@suse.com" <pmladek@suse.com>, "sergey.senozhatsky@gmail.com"
-	<sergey.senozhatsky@gmail.com>, "andriy.shevchenko@linux.intel.com"
-	<andriy.shevchenko@linux.intel.com>, "linux@rasmusvillemoes.dk"
-	<linux@rasmusvillemoes.dk>, "minchan@kernel.org" <minchan@kernel.org>,
-	"ngupta@vflare.org" <ngupta@vflare.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "kuznet@ms2.inr.ac.ru" <kuznet@ms2.inr.ac.ru>,
-	"yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>, "pablo@netfilter.org"
-	<pablo@netfilter.org>, "kadlec@netfilter.org" <kadlec@netfilter.org>,
-	"fw@strlen.de" <fw@strlen.de>, "jmaloy@redhat.com" <jmaloy@redhat.com>,
-	"ying.xue@windriver.com" <ying.xue@windriver.com>, "willy@infradead.org"
-	<willy@infradead.org>, "sashal@kernel.org" <sashal@kernel.org>,
-	"ruanjinjie@huawei.com" <ruanjinjie@huawei.com>, "David.Laight@aculab.com"
-	<David.Laight@aculab.com>, "herve.codina@bootlin.com"
-	<herve.codina@bootlin.com>, "Jason@zx2c4.com" <Jason@zx2c4.com>,
-	"keescook@chromium.org" <keescook@chromium.org>, "kbusch@kernel.org"
-	<kbusch@kernel.org>, "nathan@kernel.org" <nathan@kernel.org>,
-	"bvanassche@acm.org" <bvanassche@acm.org>, "ndesaulniers@google.com"
-	<ndesaulniers@google.com>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-um@lists.infradead.org"
-	<linux-um@lists.infradead.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "amd-gfx@lists.freedesktop.org"
-	<amd-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "linux-arm-msm@vger.kernel.org"
-	<linux-arm-msm@vger.kernel.org>, "freedreno@lists.freedesktop.org"
-	<freedreno@lists.freedesktop.org>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "linux-input@vger.kernel.org"
-	<linux-input@vger.kernel.org>, "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
-	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-	"linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
-	"linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "netfilter-devel@vger.kernel.org"
-	<netfilter-devel@vger.kernel.org>, "coreteam@netfilter.org"
-	<coreteam@netfilter.org>, "tipc-discussion@lists.sourceforge.net"
-	<tipc-discussion@lists.sourceforge.net>, Arnd Bergmann <arnd@arndb.de>, "Dan
- Williams" <dan.j.williams@intel.com>, Eric Dumazet <edumazet@google.com>,
-	Isabella Basso <isabbasso@riseup.net>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>, Sander Vanheule
-	<sander@svanheule.net>, Vlastimil Babka <vbabka@suse.cz>, Yury Norov
-	<yury.norov@gmail.com>
-Subject: RE: [PATCH v2 01/27 5.10.y] overflow, tracing: Define the
- is_signed_type() macro once
-Thread-Topic: [PATCH v2 01/27 5.10.y] overflow, tracing: Define the
- is_signed_type() macro once
-Thread-Index: AQHcP1/cJJbWkEozCEifWbQxPnjh1Q==
-Date: Fri, 17 Oct 2025 12:16:27 +0000
-Message-ID: <CH0PR18MB54337BD648C23CBE40C1060CC6F6A@CH0PR18MB5433.namprd18.prod.outlook.com>
-References: <20251017090519.46992-1-farbere@amazon.com>
- <20251017090519.46992-2-farbere@amazon.com>
- <2025101708-obtuse-ellipse-e355@gregkh>
-In-Reply-To: <2025101708-obtuse-ellipse-e355@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amazon.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH0PR18MB5433:EE_|SJ0PR18MB3898:EE_
-x-ms-office365-filtering-correlation-id: d2272b9f-112f-46df-aed1-08de0d76ff4d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|38070700021;
-x-microsoft-antispam-message-info: =?us-ascii?Q?oH/lX6LqDPomk/HqyEBHvVh+yzsjtGo9hP4/6Jrv9HjvkWW+/Cw94zLGUlq+?=
- =?us-ascii?Q?WXEbxqDHRuXFrAfy15DECKN4MaBm6jI/AENOLxYizRuFg8EoKKUfQ/TO9tlP?=
- =?us-ascii?Q?ascSWkQ3fHQqjojnu7uhejFQc3h0LSF98BHo6l/LPvbQImfuECjNiMP/rKYi?=
- =?us-ascii?Q?bKY8edVhiZB2utV8Kix18D5LcRj8hHcp9KvX6JzO7PBKw+rcy+tp07Yco0WU?=
- =?us-ascii?Q?B7YKutFmS9oW35V7QUsxpH2GtlrACZzgbt9vPp4hi7L+WJNfQWn1+vrqLzNH?=
- =?us-ascii?Q?gQu9TxvBfQHCvZwOdYTHK7R4apLvBEIwGQ2w0ZtobEolS2PUaEsL7bPLzNY5?=
- =?us-ascii?Q?c9lftgwng+x2YwsuHnKFPlChTZWQvFRJstgD20qvO3tXbaHlJQ1XmgiVbYAV?=
- =?us-ascii?Q?PWxHF7KCfxptWQJIczRE1LS2xxtqwM7HvcV2bgT4fUG9ycZyK2X5UffIETcD?=
- =?us-ascii?Q?kQu7jmM8ppf4wfULJXrNy2SL2MjzuL7ncX30Sa1dzWB8/eHRGVGuVemfedVe?=
- =?us-ascii?Q?0ylz3AA46fkT31HNbSfxvL9p2mRkfOvt+XQdbVeXsFGlJc9MKw8dCsh0P/JR?=
- =?us-ascii?Q?QeWm73yiV/OmuEPURqXvGh7mkatKvbTXvUh2fHhU8PkwyA1oFaSF3q87FPUG?=
- =?us-ascii?Q?P0PaVH7Hb0CtrWnxdsu2p4Y9+GhX08KlLa/ayz0GLBDRKRfCQOm5D6FJI5kW?=
- =?us-ascii?Q?pF7t8QIPzRFsV3AOcHKxAsgO9kSz3QaermZXFrG61CwnWwpyXCBrz3uD6f8Y?=
- =?us-ascii?Q?M4zUcf035ipqPXEX6pjtn1Rkvqvnji/xWBKsx9+GpMPD9iLyOTvMjjw5bmFR?=
- =?us-ascii?Q?iMMLQ9nTGE0fw72wZ6k/h56MT2ZTkIdOmutKPdiVqwpXum2Y0JHzrovZF/f0?=
- =?us-ascii?Q?+AXk+iLmY22bM9c45oq/wKiqdqfh2DLS6gKYtNikrI2ZZAptnSl+K44PS09e?=
- =?us-ascii?Q?yO9hjd0Yq06hjmmo0EIyvcB9+I5wWEcpdBpAK4yH5v2GEr1XwpN8F0bR17oX?=
- =?us-ascii?Q?bhqd+xynobSgtGtbvBNBtenBlyM1/xRnsfHrPgQQLh+lVdXlwxG/LPNNG+LM?=
- =?us-ascii?Q?QdU6nsqnJvaRnlkE1Y04Oi/6YDEdcnDN3Pacv/ojVWZBXQ39f93cJ9MyYTFN?=
- =?us-ascii?Q?IpkLbAt+Yq+emScZEehGhGe+C/9gWoI0zKQBthrcZkiWNm0cSJnjg6qKe4Vs?=
- =?us-ascii?Q?aBQ6iXiEYxqvoOuQ5noDHzRIEZgbuj4b6bE6UeXSx4/WnVl/wPZ5kO04A3Ez?=
- =?us-ascii?Q?cgjGZJ0ryDcI+b5XXhO3yqQ465fHhjQaaB9796rQSyhcQaNOuhpSYCFRKYJO?=
- =?us-ascii?Q?ovwD33+FC5KiEekhb7c7OAhI6gLEFY5SiulAvfXQGKICSY+lujz90x1pbNkw?=
- =?us-ascii?Q?i1MOM+ZEI+oUaqX6bs70awvDBgSZVCbFWFiNmlsQQTOo8kNVAa7cAi8TLnN0?=
- =?us-ascii?Q?PpbXd99+RuaSNFedrephLqmAyFcQf99DewCmZF4n0SbyyfYzwl0UDx3r0ks/?=
- =?us-ascii?Q?8VRWCFBuNR70vYhOn1jVggu6pJCcWqwa+aRPam+H+hgGk9iPdFzEs4YXOg?=
- =?us-ascii?Q?=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR18MB5433.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2zWhqfqzxCe5eoq47fdxbmsimpshmvLNqwawP56Ucuc1Qibdfysb3A8mGU5S?=
- =?us-ascii?Q?y4i2Ss1cnYpE51JvwhzSlzEz6r29K2K6BafFiizKoMBYXim8L9LUr9NJiQUR?=
- =?us-ascii?Q?tZWATgYUG2LxG2xUn57BmF6o7cWGdtNNPnf3pGG9gw6Dzyv9nzUqNm5HL+0F?=
- =?us-ascii?Q?thXqbLJxmaLy/sg504YeXDqSwmAudkovXc+jy9iANUCvRTFuqjfRU7thZKHw?=
- =?us-ascii?Q?dSa/lCNymR2vcvO/4g0xvUusQGFuIEanQh+cPqAlGtzIgcaHNBBufDIXu8gF?=
- =?us-ascii?Q?tZXjI41HOKsRDSRxjGj1GRMv6d4ogaiEJ4CUZA0+4iH+jKNe4R+wNwZkY0eA?=
- =?us-ascii?Q?6doVAg9Io4YsoaCE95D9GCK4rCvh0WWf7RXSxIFZVNkjcM1qV2fpxdpOkUDT?=
- =?us-ascii?Q?aFlk50SEHiEtH8/FJRhFbdNY0ZVJuvmkBib1V2iUUuPbtm6svbF2WefX/oyf?=
- =?us-ascii?Q?G6OHPIZi7icoH83Cf4AyIZt8sIEK9+tkH5DSt+SlSb4zfcaZjlBhlCtrnDTD?=
- =?us-ascii?Q?8rAjIpuC6j62kHX0lE/ApoH/XcBFgaXb4PO7TwoIACCgMOYcFOhfetiakVen?=
- =?us-ascii?Q?wQ7ujDCtkpo8q05EqUy3dmQ7IHp2rb31GZ5tbsIwLgDdc4pe92ovL7f99TJz?=
- =?us-ascii?Q?Qvj00h5Jpr9v9ye760tPCc7c6/iF2p54QJDNxIIxokGa+TR5hW8+X7+x7w+e?=
- =?us-ascii?Q?XJrJmQJT/U0yFrjPZUOSk4B0IJEHDvk2dQrjAca+n4V9+C8XDq/xtwo9doIi?=
- =?us-ascii?Q?HtfgEXnWII8zUHWMFwfxVwxRly74kNBkq0MvuRXll6ufr0XNP3s1qw0rK0GC?=
- =?us-ascii?Q?3dDA/hA9PcZF12UcClbpU1eWA88m00WWNeQGnNKNjzBjvlYYINBSGNPwj9Kh?=
- =?us-ascii?Q?eOmSW7WmGTprnV16AZzA+hZXfpWv6P//2zcdaiDcrz0YMU8Wmnx0QtETH8XI?=
- =?us-ascii?Q?PKTm1GhK4y+yS44FPlgAL0/alULYDMJp6oVjXPtvuvB4W1fwM3jQGhIbeFyK?=
- =?us-ascii?Q?PkaqZMERQ0TR2Thc8aQOvG3YaSVLIu7qLCIAAfkzMheszcUkqrWD9kLQi7cz?=
- =?us-ascii?Q?ql0MSBPpNykuAMiSjpC6WJisQcScptp0YewoVtWrkvkvk6fK9k5eL1QSyDLh?=
- =?us-ascii?Q?MP64r9Ri1FzO7Eb/Sxrt893yrgGX6nyYQH/1v/uwTyEv/WXiYo419IHYysQe?=
- =?us-ascii?Q?GNY8apfrczf/AasDOzPhS4MbB4oVUJLZVtGwUT7L9mhYqmdPPjgzjpz+36Vs?=
- =?us-ascii?Q?/W7USOXU9GiZQ0jR7e0rPPZBp841ldBEkZeRyFDCXHWMCzGqV5Hm/+9W27b0?=
- =?us-ascii?Q?wVAtL+F6aa/PEVGNFDEbklQusrqFLaVTmijzdXufvnC/bvZeAzaaee6l74fu?=
- =?us-ascii?Q?jDa59Cfj6hGXGHPR3961DD51Az+PL/KRYptIRBnTtEJPYK3brWViToqz8QW+?=
- =?us-ascii?Q?bfpxyVLTi+rK2N5UiYH3XM8LxTpQhKukDcPZGYBLbjKkARks09VTTJhUUV/+?=
- =?us-ascii?Q?1X01j8icWASygDmTgvlNdEQ2Qfx4nIQze4VnvUuU5LTynDL+BJ9rW2ZQZfJ5?=
- =?us-ascii?Q?OQbktRJIGxKTNGVwvGQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
+        d=gmail.com; s=20230601; t=1760704369; x=1761309169; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4lviR4y4KLE3n7RRy47fCgv6ELqJOqJ04I0KWYPDO7E=;
+        b=hX4UUnkRDm0sl1BDUxGs4A9P4X+iFu4CnN5doIHs1faYyJiTeBArKVutaj8lacexLW
+         GT3Xvy/dOwDLFsG5zwUnNEQlDm0iyT9Lgc1hiqHJNWTS1f+EyrbBVaeAmfV6AqNYix9r
+         LfDaiS/wpyOWGXOjHpoKh3XsY81z//Dyd4EknZ+QXEhh5VQgHL2cnc9PMQrRL7KVUT25
+         FOciP4NmIZM0j3e4+zQ0vrHSEnDV8RiKNn9xv5nxXMBTVG/kSgsQIm2JIEHxrh+gPXzr
+         RYIsOeUJK3kVaA1GpxJCJ5gQdmtCyrHXHhTiXSENLK68dh/Vmbxo61w2xzQOy7F8XBOp
+         SabA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760704369; x=1761309169;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4lviR4y4KLE3n7RRy47fCgv6ELqJOqJ04I0KWYPDO7E=;
+        b=RfMznHDjebmKWU0uU/tLXE8T/7LB/xEL/9+7K0IzjtsFhxdY4TIxcpZ8b/syaX9kEV
+         x3rq8RVeDad2TG6Si2aOGqOo114LCM24tHw1q9bDCmVA1yhjeqULZVj4z4U6Mkg0uQ1k
+         xETX6p8ARzi45ITnHB545qFQ8NDazDN8MeBBqhlMFs/gCJ0Z+hsYD8yIXoXoe4E5J+ym
+         wH/OlgukRdH6mC3xxmAVMjEAxUBZ+2e05X9WQlWuia9deMPNQIETXfSvo1udFQBkHIWm
+         9yI46pP4vL8uc0o+9fBoPo2gYM0v5nezfBdSegXXL9srZ8mFnLEvgg1GLX63LPv69vt4
+         OjfA==
+X-Forwarded-Encrypted: i=1; AJvYcCUO9ZvlgPz9zqfXDkQOOW1q8aRX2cAljsz/rgu8BC4kMRhPgJegdhwiHFisrP2uk3x7St2i46NrL+Jf@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4AgMGDgB2g9rf61jDW/t76o8pEnCMDMRHPlF2C880mTp2Y8gV
+	DXMQ5UTamN8aF+MFTdRdcAqQyCEk3Lol3tocXaO/0egb5UVw4SfyArae
+X-Gm-Gg: ASbGncsTTAz/WPtQORSQ0BheSgjkgoIuURz7KhWuvmNEsbzmJkygHcT/dVBxK3PfXbu
+	1b8vEYWsE0FEjS3EIjz1zydIb/bJ0iSi4GWkiJGTDZahisMeUZccQ5FpXJpuJHXTxidRnTB+RaA
+	J9epk3p6k66OvKEOoDQbUensQYZq88v3300HZ3TuYlAKBt3LZUjYPoEZaN3GyyvRiA5AB4F8Owd
+	OPEUO4KG1U9WCfB8HiSphb6gbB6KjZk6+85MrBDixDn3mL5dujhoBSDmQvyjyKBnNqS6+m6jdUe
+	KN30eIHObPMcc+FhqKgo4g45AuIxPvpSLxKG+E75e+LYGZQ+at0NSTFPFlwn1h8iViZphCMIeAh
+	bkKnI34XqBLItuRZOnakirYtWgnXeIG1vwk8XQY/w5GEuNaYrTqsrl7rZo+aZOfWofWEZTjgLJd
+	41Ymw=
+X-Google-Smtp-Source: AGHT+IE4Z4uZhoJlnHZ4fZWGzVqlXcJ3VtJT0uS7DlsTcLhos7f+a2+qMfmhSL+PiYtMShO/dK+2CQ==
+X-Received: by 2002:a05:600c:548c:b0:468:9e79:bee0 with SMTP id 5b1f17b1804b1-471177bc126mr27325425e9.0.1760704368843;
+        Fri, 17 Oct 2025 05:32:48 -0700 (PDT)
+Received: from [10.5.0.2] ([195.158.248.102])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4270539be85sm5263938f8f.7.2025.10.17.05.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Oct 2025 05:32:48 -0700 (PDT)
+Message-ID: <f2b879d3e8120c7aeb0e6c9a5fd45b15a2b8e5a0.camel@gmail.com>
+Subject: Re: [PATCH v4 2/4] bitfield: Add non-constant field_{prep,get}()
+ helpers
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>, Michael Turquette	
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Nicolas Ferre	
+ <nicolas.ferre@microchip.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>,  Claudiu Beznea
+ <claudiu.beznea@tuxon.dev>, Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+ Herbert Xu	 <herbert@gondor.apana.org.au>, David Miller
+ <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
+ Golaszewski <brgl@bgdev.pl>, Joel Stanley	 <joel@jms.id.au>, Andrew Jeffery
+ <andrew@codeconstruct.com.au>, Crt Mori	 <cmo@melexis.com>, Jonathan
+ Cameron <jic23@kernel.org>, Lars-Peter Clausen	 <lars@metafoo.de>, Jacky
+ Huang <ychuang3@nuvoton.com>, Shan-Chun Hung	 <schung@nuvoton.com>, Yury
+ Norov <yury.norov@gmail.com>, Rasmus Villemoes	 <linux@rasmusvillemoes.dk>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai	 <tiwai@suse.com>, Johannes
+ Berg <johannes@sipsolutions.net>, Jakub Kicinski	 <kuba@kernel.org>, Alex
+ Elder <elder@ieee.org>, David Laight	 <david.laight.linux@gmail.com>,
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>,  Jason Baron
+ <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>, Tony Luck
+ <tony.luck@intel.com>,  Michael Hennerich <Michael.Hennerich@analog.com>,
+ Kim Seer Paller <kimseer.paller@analog.com>, David Lechner	
+ <dlechner@baylibre.com>, Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko	 <andy@kernel.org>, Richard Genoud
+ <richard.genoud@bootlin.com>, Cosmin Tanislav	 <demonsingur@gmail.com>,
+ Biju Das <biju.das.jz@bp.renesas.com>, Jianping Shen	
+ <Jianping.Shen@de.bosch.com>
+Cc: linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-edac@vger.kernel.org, qat-linux@intel.com,
+ linux-gpio@vger.kernel.org, 	linux-aspeed@lists.ozlabs.org,
+ linux-iio@vger.kernel.org, 	linux-sound@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jonathan Cameron	
+ <Jonathan.Cameron@huawei.com>
+Date: Fri, 17 Oct 2025 13:33:19 +0100
+In-Reply-To: <67c1998f144b3a21399672c8e4d58d3884ae2b3c.1760696560.git.geert+renesas@glider.be>
+References: <cover.1760696560.git.geert+renesas@glider.be>
+	 <67c1998f144b3a21399672c8e4d58d3884ae2b3c.1760696560.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR18MB5433.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2272b9f-112f-46df-aed1-08de0d76ff4d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2025 12:16:27.3648
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5280104a-472d-4538-9ccf-1e1d0efe8b1b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dlwakfkWPrCmyP4L3IyDhJEw/yKNGU9QXvfsoNPKhTM6UNmbIhyzw+PR2eLVNiKu9ws6u8cCmvnwkBI8/yMn8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR18MB3898
-X-OriginatorOrg: amazon.com
 
-> On Fri, Oct 17, 2025 at 09:04:53AM +0000, Eliav Farber wrote:
-> > From: Bart Van Assche <bvanassche@acm.org>
-> >
-> > [ Upstream commit 92d23c6e94157739b997cacce151586a0d07bb8a ]
->
-> This isn't in 5.15.y, why is it needed in 5.10.y?
+On Fri, 2025-10-17 at 12:54 +0200, Geert Uytterhoeven wrote:
+> The existing FIELD_{GET,PREP}() macros are limited to compile-time
+> constants.=C2=A0 However, it is very common to prepare or extract bitfiel=
+d
+> elements where the bitfield mask is not a compile-time constant.
+>=20
+> To avoid this limitation, the AT91 clock driver and several other
+> drivers already have their own non-const field_{prep,get}() macros.
+> Make them available for general use by consolidating them in
+> <linux/bitfield.h>, and improve them slightly:
+> =C2=A0 1. Avoid evaluating macro parameters more than once,
+> =C2=A0 2. Replace "ffs() - 1" by "__ffs()",
+> =C2=A0 3. Support 64-bit use on 32-bit architectures.
+>=20
+> This is deliberately not merged into the existing FIELD_{GET,PREP}()
+> macros, as people expressed the desire to keep stricter variants for
+> increased safety, or for performance critical paths.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Acked-by: Crt Mori <cmo@melexis.com>
+> ---
 
-This is the mainline commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/i=
-nclude/linux/overflow.h?h=3Dv6.18-rc1&id=3D92d23c6e94157739b997cacce151586a=
-0d07bb8a
+Hopefully this gets merged soon. About time to have these variants (I do ha=
+ve a
+driver submitted - in review - which is adding yet another variant of this)
+=20
+Acked-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 
-The commit hash is 92d23c6e94157739b997cacce151586a0d07bb8a, which is
-the one I used for the backport.
-
-And here is the corresponding commit in the 5.15.y branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/inc=
-lude/linux/overflow.h?h=3Dv5.15.194&id=3Ded6e37e30826b12572636c6bbfe6319233=
-690c90
-However, the commit message there references a different hash:
-a49a64b5bf195381c09202c524f0f84b5f3e816f.
-
----
-Regards, Eliav
+> v4:
+> =C2=A0 - Add Acked-by,
+> =C2=A0 - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocat=
+e
+> =C2=A0=C2=A0=C2=A0 power management debugfs helper APIs") in v6.17-rc1,
+> =C2=A0 - Convert more recently introduced upstream copies:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - drivers/edac/ie31200_edac.c
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - drivers/iio/dac/ad3530r.c
+>=20
+> v3:
+> =C2=A0 - Add Acked-by,
+> =C2=A0 - Drop underscores from macro parameters,
+> =C2=A0 - Use __auto_type where possible,
+> =C2=A0 - Correctly cast reg to the mask type,
+> =C2=A0 - Introduces __val and __reg intermediates to simplify the actual
+> =C2=A0=C2=A0=C2=A0 operation,
+> =C2=A0 - Drop unneeded parentheses,
+> =C2=A0 - Clarify having both FIELD_{GET,PREP}() and field_{get,prep}(),
+>=20
+> v2:
+> =C2=A0 - Cast val resp. reg to the mask type,
+> =C2=A0 - Fix 64-bit use on 32-bit architectures,
+> =C2=A0 - Convert new upstream users:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - drivers/crypto/intel/qat/qat_common/adf_=
+gen4_pm_debugfs.c
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - drivers/gpio/gpio-aspeed.c
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - drivers/iio/temperature/mlx90614.c
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - drivers/pinctrl/nuvoton/pinctrl-ma35.c
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - sound/usb/mixer_quirks.c
+> =C2=A0 - Convert new user queued in renesas-devel for v6.15:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - drivers/soc/renesas/rz-sysc.c
+> ---
+> =C2=A0drivers/clk/at91/clk-peripheral.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
+> =C2=A0drivers/clk/at91/pmc.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0 3 --
+> =C2=A0.../intel/qat/qat_common/adf_pm_dbgfs_utils.c |=C2=A0 8 +----
+> =C2=A0drivers/edac/ie31200_edac.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
+=A0 4 +--
+> =C2=A0drivers/gpio/gpio-aspeed.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ |=C2=A0 5 +--
+> =C2=A0drivers/iio/dac/ad3530r.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0 3 --
+> =C2=A0drivers/iio/temperature/mlx90614.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 5 +--
+> =C2=A0drivers/pinctrl/nuvoton/pinctrl-ma35.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 |=C2=A0 4 ---
+> =C2=A0drivers/soc/renesas/rz-sysc.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 3 +-
+> =C2=A0include/linux/bitfield.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 36 +++++++++++++++++++
+> =C2=A0sound/usb/mixer_quirks.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 |=C2=A0 4 ---
+> =C2=A011 files changed, 42 insertions(+), 34 deletions(-)
+>=20
+> diff --git a/drivers/clk/at91/clk-peripheral.c b/drivers/clk/at91/clk-
+> peripheral.c
+> index e700f40fd87f9327..e7208c47268b6397 100644
+> --- a/drivers/clk/at91/clk-peripheral.c
+> +++ b/drivers/clk/at91/clk-peripheral.c
+> @@ -3,6 +3,7 @@
+> =C2=A0 *=C2=A0 Copyright (C) 2013 Boris BREZILLON <b.brezillon@overkiz.co=
+m>
+> =C2=A0 */
+> =C2=A0
+> +#include <linux/bitfield.h>
+> =C2=A0#include <linux/bitops.h>
+> =C2=A0#include <linux/clk-provider.h>
+> =C2=A0#include <linux/clkdev.h>
+> diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
+> index 5daa32c4cf2540d7..543d7aee8d248cdb 100644
+> --- a/drivers/clk/at91/pmc.h
+> +++ b/drivers/clk/at91/pmc.h
+> @@ -117,9 +117,6 @@ struct at91_clk_pms {
+> =C2=A0	unsigned int parent;
+> =C2=A0};
+> =C2=A0
+> -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
+> -
+> =C2=A0#define ndck(a, s) (a[s - 1].id + 1)
+> =C2=A0#define nck(a) (a[ARRAY_SIZE(a) - 1].id + 1)
+> =C2=A0
+> diff --git a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+> b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+> index 69295a9ddf0ac92f..4ccc94ed9493a64c 100644
+> --- a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+> +++ b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+> @@ -1,18 +1,12 @@
+> =C2=A0// SPDX-License-Identifier: GPL-2.0-only
+> =C2=A0/* Copyright(c) 2025 Intel Corporation */
+> +#include <linux/bitfield.h>
+> =C2=A0#include <linux/bitops.h>
+> =C2=A0#include <linux/sprintf.h>
+> =C2=A0#include <linux/string_helpers.h>
+> =C2=A0
+> =C2=A0#include "adf_pm_dbgfs_utils.h"
+> =C2=A0
+> -/*
+> - * This is needed because a variable is used to index the mask at
+> - * pm_scnprint_table(), making it not compile time constant, so the comp=
+ile
+> - * asserts from FIELD_GET() or u32_get_bits() won't be fulfilled.
+> - */
+> -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -
+> =C2=A0#define PM_INFO_MAX_KEY_LEN	21
+> =C2=A0
+> =C2=A0static int pm_scnprint_table(char *buff, const struct pm_status_row=
+ *table,
+> diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+> index 5a080ab65476dacf..dfc9a9cecd74207d 100644
+> --- a/drivers/edac/ie31200_edac.c
+> +++ b/drivers/edac/ie31200_edac.c
+> @@ -44,6 +44,7 @@
+> =C2=A0 * but lo_hi_readq() ensures that we are safe across all e3-1200 pr=
+ocessors.
+> =C2=A0 */
+> =C2=A0
+> +#include <linux/bitfield.h>
+> =C2=A0#include <linux/module.h>
+> =C2=A0#include <linux/init.h>
+> =C2=A0#include <linux/pci.h>
+> @@ -139,9 +140,6 @@
+> =C2=A0#define IE31200_CAPID0_DDPCD		BIT(6)
+> =C2=A0#define IE31200_CAPID0_ECC		BIT(1)
+> =C2=A0
+> -/* Non-constant mask variant of FIELD_GET() */
+> -#define field_get(_mask, _reg)=C2=A0 (((_reg) & (_mask)) >> (ffs(_mask) =
+- 1))
+> -
+> =C2=A0static int nr_channels;
+> =C2=A0static struct pci_dev *mci_pdev;
+> =C2=A0static int ie31200_registered =3D 1;
+> diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
+> index 7953a9c4e36d7550..3da999334971d501 100644
+> --- a/drivers/gpio/gpio-aspeed.c
+> +++ b/drivers/gpio/gpio-aspeed.c
+> @@ -5,6 +5,7 @@
+> =C2=A0 * Joel Stanley <joel@jms.id.au>
+> =C2=A0 */
+> =C2=A0
+> +#include <linux/bitfield.h>
+> =C2=A0#include <linux/cleanup.h>
+> =C2=A0#include <linux/clk.h>
+> =C2=A0#include <linux/gpio/aspeed.h>
+> @@ -31,10 +32,6 @@
+> =C2=A0#include <linux/gpio/consumer.h>
+> =C2=A0#include "gpiolib.h"
+> =C2=A0
+> -/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
+> -#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) &
+> (_mask))
+> -
+> =C2=A0#define GPIO_G7_IRQ_STS_BASE 0x100
+> =C2=A0#define GPIO_G7_IRQ_STS_OFFSET(x) (GPIO_G7_IRQ_STS_BASE + (x) * 0x4=
+)
+> =C2=A0#define GPIO_G7_CTRL_REG_BASE 0x180
+> diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
+> index 6134613777b8e1d4..b97b46090d808ee7 100644
+> --- a/drivers/iio/dac/ad3530r.c
+> +++ b/drivers/iio/dac/ad3530r.c
+> @@ -53,9 +53,6 @@
+> =C2=A0#define AD3530R_MAX_CHANNELS			8
+> =C2=A0#define AD3531R_MAX_CHANNELS			4
+> =C2=A0
+> -/* Non-constant mask variant of FIELD_PREP() */
+> -#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) &
+> (_mask))
+> -
+> =C2=A0enum ad3530r_mode {
+> =C2=A0	AD3530R_NORMAL_OP,
+> =C2=A0	AD3530R_POWERDOWN_1K,
+> diff --git a/drivers/iio/temperature/mlx90614.c
+> b/drivers/iio/temperature/mlx90614.c
+> index 8a44a00bfd5ece38..1ad21b73e1b44cb0 100644
+> --- a/drivers/iio/temperature/mlx90614.c
+> +++ b/drivers/iio/temperature/mlx90614.c
+> @@ -22,6 +22,7 @@
+> =C2=A0 * the "wakeup" GPIO is not given, power management will be disable=
+d.
+> =C2=A0 */
+> =C2=A0
+> +#include <linux/bitfield.h>
+> =C2=A0#include <linux/delay.h>
+> =C2=A0#include <linux/err.h>
+> =C2=A0#include <linux/gpio/consumer.h>
+> @@ -68,10 +69,6 @@
+> =C2=A0#define MLX90614_CONST_SCALE 20 /* Scale in milliKelvin (0.02 * 100=
+0) */
+> =C2=A0#define MLX90614_CONST_FIR 0x7 /* Fixed value for FIR part of low p=
+ass filter
+> */
+> =C2=A0
+> -/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
+> -#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) &
+> (_mask))
+> -
+> =C2=A0struct mlx_chip_info {
+> =C2=A0	/* EEPROM offsets with 16-bit data, MSB first */
+> =C2=A0	/* emissivity correction coefficient */
+> diff --git a/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+> b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+> index cdad01d68a37e365..8d71dc53cc1de1f8 100644
+> --- a/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+> +++ b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+> @@ -81,10 +81,6 @@
+> =C2=A0#define MVOLT_1800			0
+> =C2=A0#define MVOLT_3300			1
+> =C2=A0
+> -/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
+> -#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) &
+> (_mask))
+> -
+> =C2=A0static const char * const gpio_group_name[] =3D {
+> =C2=A0	"gpioa", "gpiob", "gpioc", "gpiod", "gpioe", "gpiof", "gpiog",
+> =C2=A0	"gpioh", "gpioi", "gpioj", "gpiok", "gpiol", "gpiom", "gpion",
+> diff --git a/drivers/soc/renesas/rz-sysc.c b/drivers/soc/renesas/rz-sysc.=
+c
+> index 9f79e299e6f41641..73eaf8b9d69f7208 100644
+> --- a/drivers/soc/renesas/rz-sysc.c
+> +++ b/drivers/soc/renesas/rz-sysc.c
+> @@ -5,6 +5,7 @@
+> =C2=A0 * Copyright (C) 2024 Renesas Electronics Corp.
+> =C2=A0 */
+> =C2=A0
+> +#include <linux/bitfield.h>
+> =C2=A0#include <linux/cleanup.h>
+> =C2=A0#include <linux/io.h>
+> =C2=A0#include <linux/mfd/syscon.h>
+> @@ -16,8 +17,6 @@
+> =C2=A0
+> =C2=A0#include "rz-sysc.h"
+> =C2=A0
+> -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -
+> =C2=A0/**
+> =C2=A0 * struct rz_sysc - RZ SYSC private data structure
+> =C2=A0 * @base: SYSC base address
+> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
+> index 7ff817bdae19b468..c999fe70076f6684 100644
+> --- a/include/linux/bitfield.h
+> +++ b/include/linux/bitfield.h
+> @@ -220,4 +220,40 @@ __MAKE_OP(64)
+> =C2=A0#undef __MAKE_OP
+> =C2=A0#undef ____MAKE_OP
+> =C2=A0
+> +/**
+> + * field_prep() - prepare a bitfield element
+> + * @mask: shifted mask defining the field's length and position
+> + * @val:=C2=A0 value to put in the field
+> + *
+> + * field_prep() masks and shifts up the value.=C2=A0 The result should b=
+e
+> + * combined with other fields of the bitfield using logical OR.
+> + * Unlike FIELD_PREP(), @mask is not limited to a compile-time constant.
+> + */
+> +#define field_prep(mask, val)						\
+> +	({								\
+> +		__auto_type __mask =3D (mask);				\
+> +		typeof(mask) __val =3D (val);				\
+> +		unsigned int __shift =3D sizeof(mask) <=3D 4 ?		\
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __ffs(__mask) :
+> __ffs64(__mask);	\
+> +		(__val << __shift) & __mask;	\
+> +	})
+> +
+> +/**
+> + * field_get() - extract a bitfield element
+> + * @mask: shifted mask defining the field's length and position
+> + * @reg:=C2=A0 value of entire bitfield
+> + *
+> + * field_get() extracts the field specified by @mask from the
+> + * bitfield passed in as @reg by masking and shifting it down.
+> + * Unlike FIELD_GET(), @mask is not limited to a compile-time constant.
+> + */
+> +#define field_get(mask, reg)						\
+> +	({								\
+> +		__auto_type __mask =3D (mask);				\
+> +		typeof(mask) __reg =3D=C2=A0 (reg);				\
+> +		unsigned int __shift =3D sizeof(mask) <=3D 4 ?		\
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __ffs(__mask) :
+> __ffs64(__mask);	\
+> +		(__reg & __mask) >> __shift;	\
+> +	})
+> +
+> =C2=A0#endif
+> diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
+> index 828af3095b86ee0a..6eee89cbc0867f2b 100644
+> --- a/sound/usb/mixer_quirks.c
+> +++ b/sound/usb/mixer_quirks.c
+> @@ -3311,10 +3311,6 @@ static int snd_bbfpro_controls_create(struct
+> usb_mixer_interface *mixer)
+> =C2=A0#define RME_DIGIFACE_REGISTER(reg, mask) (((reg) << 16) | (mask))
+> =C2=A0#define RME_DIGIFACE_INVERT BIT(31)
+> =C2=A0
+> -/* Nonconst helpers */
+> -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
+> -
+> =C2=A0static int snd_rme_digiface_write_reg(struct snd_kcontrol *kcontrol=
+, int
+> item, u16 mask, u16 val)
+> =C2=A0{
+> =C2=A0	struct usb_mixer_elem_list *list =3D snd_kcontrol_chip(kcontrol);
 
