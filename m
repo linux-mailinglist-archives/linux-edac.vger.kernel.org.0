@@ -1,145 +1,87 @@
-Return-Path: <linux-edac+bounces-5131-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5132-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 369AEBF1F21
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Oct 2025 16:57:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95E1ABF21F2
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Oct 2025 17:33:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 19CC24F2F71
-	for <lists+linux-edac@lfdr.de>; Mon, 20 Oct 2025 14:56:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE49518843A6
+	for <lists+linux-edac@lfdr.de>; Mon, 20 Oct 2025 15:31:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8445222A7E0;
-	Mon, 20 Oct 2025 14:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+52i0G1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B827264619;
+	Mon, 20 Oct 2025 15:30:56 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32CE227E95
-	for <linux-edac@vger.kernel.org>; Mon, 20 Oct 2025 14:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78936217704;
+	Mon, 20 Oct 2025 15:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760972195; cv=none; b=bjC8a80iLssUdUZ1lU11PMmW7vtWkujSLeCPgHm9LF0GuqzgMzFj/a9BukjmVlfG3js5+UXULBzePB7JhR7FlMecODlPrk/oMZaXDdz2Usni83hX7h0zd30Qe+KQ40xuxo7sCUevsbZ15CBJB834O/Q7nXqJTWA8SJZ6HJkHJY8=
+	t=1760974256; cv=none; b=nyBdymq6AvjfjjrE36rGIQSCw9fBIB9f0zVD2xfeBQC5+YtRPpOyU2kSZs4ZZxgNDu7BdIMlqbxKyTI/F0i2jxXCjix5u+koWtFd0dTTbb2C/zKAKVcWVw+oTSK8jnz7TAwz9ApOdz7MW2yz/40MvcnVacBEj9VfC+yuKDrb6Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760972195; c=relaxed/simple;
-	bh=Sug/TiaFVNCgE/OTMIDWvRovNGDHRM3X2PR+kC0SaFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bzNuuuUFMN46BAdOtoVYpTTsIYAnPTAfmX6vY8Ne0+7SAfTUA12UTcQKZtJKta1R4Ce4fdYORArmplkM5/PNCVUjPmZ10B3H80njI1LD67N9SsFhwNyzj1jtievulV+5OiLuFeO9QTkIuEdtcs6ppyWE47gLqhTuKlwmlRhY0HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+52i0G1; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-78356c816fdso47210477b3.3
-        for <linux-edac@vger.kernel.org>; Mon, 20 Oct 2025 07:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760972193; x=1761576993; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DErh0jkxEaTV4PU1gk6ECpXb4KgwIGFW/OBZ7JW1qeg=;
-        b=C+52i0G1Q5aLYH8+WnTKL2NZUdCf1L4lQCQitDT3kcaz8o1OVvR/hul5Lo05P+kTdK
-         wSAk6OtNDnvAnZ9yazIGJxLkY5PNCsVPgcaoBAt642cUwZUBPg3XF3ibWybW2syzEV4O
-         t0IobW43VIv7D8O8BXNptHEdhwel+TTc7SEYDaz8eZqbejXyVE0cau6Nw5OHikq0KCNZ
-         +EwIno3T6IvxkbX7HvnmwFls2Dh7Rp7a/1fr6ygtjHTg51cAgBICGl+WnI4BLqj03oxC
-         wSfBAbyrfcFOB7pkZQIwetrPw1e36Z4M/Ri3+AWWiJ+FajQE/cxpYJu2lDmEpwYU9sgG
-         RmvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760972193; x=1761576993;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DErh0jkxEaTV4PU1gk6ECpXb4KgwIGFW/OBZ7JW1qeg=;
-        b=IDjEYojfIHzBYiB8AY4+SW4udlJZCEcq6HqMOEN2GrVNwvsqYKaEXbTUjDHMTHMTZj
-         +29ER6OToA0kp8faJWaP6yHzL1fY5eyUiqACMaW2kf0OzuF8Q5/tP9YLLRmNbJpoWqVR
-         vDQQVOC15awXaWAnb8vruaIVLLpnqYbrLh7EsWFvOuKOM7XPAsc+92ic0HfOltYUGLS6
-         BwQbSboCg41m93YJu3hawJWMmsdHl6vyP7CATFP8sZ5LU6Y68hROVOwx3kSFgIf0lFYp
-         9RDKPotDxLNeFoQ1hwJKAgfR3SXXAgMhb6Bm0VSIvjrS2Wjgj9IiQFxVASbn2AIzgi1v
-         YRSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWKa2lggoHLArqpNoTupNnbS9XXQJGo6ZI8Zg3uec1VpaeekHt8w6ycUrGrtH4Mj5rhExUcG7bOsXKd@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz31o5o5NEE0+1JIGdhzOSAaFnkWGWwFWWIPxPx/5L6eduSRQ5D
-	YSWYp0fBCnJdxQcWzknK+tz6FMhQ6Ay0CiE2Xmj82lx89cqwqfoO+cPQ
-X-Gm-Gg: ASbGncv9BGt16cT26JXrN3Pt8mUfDvEGn82/RpOccPthIecRdW1OvbxqeD15MIXOhk7
-	XBhQvl7MtE8JqsnmL1I4HUSchRN6eo0f6zp85khMqlqcFno5TNDASnB1gJH5Jg7ZiHzWbvLmq/J
-	coiL2VJyufFu/s5+yNBohui+HBr0A6yAqHiUKdkzKQWFvL5M79CTiBAHNWHTDY4CjX7fJi8fv/3
-	hh+g4ftgQQJ9y+7Ctug7nXxcWWCqLGalCEP1SHuBdcSQgaJFDuEdV/PW0GR9YGOYuB5tZtpeV9J
-	gVUgKoq4//Y0rw1yw++ExQRLz23Z6Dxz+P4nK/T10Q7lFboZjymtnjQWKJjC3RmGZOa83fYe1+I
-	3AYauXsW7Z83TPbNzX3+GFOCCeuyiG+WMFDa+obTxKOCGXWVLBkVvgTV7AqXUWjAv43QSb8QMqA
-	1P2cF3GpVbO+BVhUIxqWRPTjY5UvSWL7iX
-X-Google-Smtp-Source: AGHT+IE81F/jaXbyHR42ph2vrE4i4G97ZO8UgGatFFTjrjbQ0UYwj8u7zrZ9iwbiKwTlSepO74M7sA==
-X-Received: by 2002:a05:690c:951c:b0:781:1280:db43 with SMTP id 00721157ae682-7836d3bdceemr92264887b3.68.1760972192509;
-        Mon, 20 Oct 2025 07:56:32 -0700 (PDT)
-Received: from localhost (c-73-105-0-253.hsd1.fl.comcast.net. [73.105.0.253])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-784674d66fesm21762357b3.41.2025.10.20.07.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Oct 2025 07:56:31 -0700 (PDT)
-Date: Mon, 20 Oct 2025 10:56:30 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Miller <davem@davemloft.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Kim Seer Paller <kimseer.paller@analog.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Cosmin Tanislav <demonsingur@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Jianping Shen <Jianping.Shen@de.bosch.com>,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-edac@vger.kernel.org, qat-linux@intel.com,
-	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] bitfield: Drop underscores from macro parameters
-Message-ID: <aPZNnmot-Z5a2yIc@yury>
-References: <cover.1760696560.git.geert+renesas@glider.be>
- <792d176149bc4ffde2a7b78062388dc2466c23ca.1760696560.git.geert+renesas@glider.be>
- <aPJwtZSMgZLDzxH8@yury>
- <CAMuHMdXCoqZmSqRAfujib=2fk0Ob1FiPYWBj8vMXfuXNoKhfVg@mail.gmail.com>
+	s=arc-20240116; t=1760974256; c=relaxed/simple;
+	bh=yXu/aPFPd22saUrdFwVxRLUKqp+7tQb6E2xRDecSqYg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jxCbPgtHVSS8R5iZNuR/e8FIPbGhSNxIPPDThhRYCLOniBfLm5TD65q4vc+zPp8jrTOOSC/pDb//D0C2zXuhC0mf3nHSrUIcRm+BpwR5iLn5HYUv+bBtQNtG2bSBxyyatFEqtQj1+lWbebvmGTmxTvlcN52nJPba4sN49qm/Yks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id 79A73C01EE;
+	Mon, 20 Oct 2025 15:30:44 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id C7E372000D;
+	Mon, 20 Oct 2025 15:30:39 +0000 (UTC)
+Date: Mon, 20 Oct 2025 11:30:58 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: lukas@wunner.de, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, helgaas@kernel.org,
+ ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
+ Jonathan.Cameron@huawei.com, bhelgaas@google.com, tony.luck@intel.com,
+ bp@alien8.de, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ oleg@redhat.com, naveen@kernel.org, davem@davemloft.net,
+ anil.s.keshavamurthy@intel.com, mark.rutland@arm.com, peterz@infradead.org,
+ tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v12 1/3] PCI: trace: Add a generic RAS tracepoint for
+ hotplug event
+Message-ID: <20251020113058.0d245002@gandalf.local.home>
+In-Reply-To: <82098b0d-d460-4657-9db6-3721dcc9a162@linux.alibaba.com>
+References: <20251014123159.57764-1-xueshuai@linux.alibaba.com>
+	<20251014123159.57764-2-xueshuai@linux.alibaba.com>
+	<20251014114029.4c59bb1a@gandalf.local.home>
+	<b6353617-048a-4e12-a1d4-6d1484619927@linux.alibaba.com>
+	<20251015103757.3d6f6cf7@gandalf.local.home>
+	<82098b0d-d460-4657-9db6-3721dcc9a162@linux.alibaba.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXCoqZmSqRAfujib=2fk0Ob1FiPYWBj8vMXfuXNoKhfVg@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: sbz6fc6mr3sdntjm11j69wqbha6b3m5d
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: C7E372000D
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/aj93rMfMtQSQXPJ8Zy1ywqsFOi0yQcK8=
+X-HE-Tag: 1760974239-962848
+X-HE-Meta: U2FsdGVkX1/4v5hsBwz1QuFoJ2VSKd8GMWu6NDBGUoTHclOYdzzzBlYj/rkKevvf+yX9rmX7cllLc97CfukDvBlhCgzQYFwJm7lbJrXHd4/eW0mKiQofC7oOmZBt5P1cUtlGTVuGiCqm5GkdH34jH2aV3WxWzEnhFRbuZul2EdzHdX/CcnnhC0o9QX7yAn1Gclpb+9j1/2rvhCPRrIGalG37LQDT4q6YL1KeU9WlrpeWB8xRqxaAr8oYZFwFUcefnmKbWOjFyUg3z6U0PNbogO4S+k+ZlGSrxXLYFUKDvMWQJ55D1MXG+6ZoVLQxSQR5tzCRi3TeYIwVQGDA9xN3+OZ8KsNMGmGFc0oAfkO+6ZzUkOMqIxM+UO58l3BruDnuK4LWLAdopl2i4THE48eVpQ==
 
-> > I agree that underscored parameters are excessive. But fixing them has
-> > a side effect of wiping the history, which is a bad thing.
-> >
-> > I would prefer to save a history over following a rule that seemingly
-> > is not written down. Let's keep this untouched for now, and if there
-> > will be a need to move the code, we can drop underscores as well.
+On Mon, 20 Oct 2025 09:32:59 +0800
+Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+
+> Got it, will add a comment.
 > 
-> Fair enough.
-> So I assume you are fine with not having underscored parameters in
-> new code, like in [PATCH v4 2/4]?
+> If you don't have any other concerns with this patch, would you mind
+> adding your Reviewed-by tag?
 
-Yes, sure.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org> # for trace event
+
+-- Steve
 
