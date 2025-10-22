@@ -1,323 +1,417 @@
-Return-Path: <linux-edac+bounces-5156-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5157-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F2E7BFCF70
-	for <lists+linux-edac@lfdr.de>; Wed, 22 Oct 2025 17:50:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6E57BFCFE4
+	for <lists+linux-edac@lfdr.de>; Wed, 22 Oct 2025 18:00:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B06613A9FF6
-	for <lists+linux-edac@lfdr.de>; Wed, 22 Oct 2025 15:50:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C4333AB93E
+	for <lists+linux-edac@lfdr.de>; Wed, 22 Oct 2025 16:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE4F24C692;
-	Wed, 22 Oct 2025 15:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB0C26E165;
+	Wed, 22 Oct 2025 16:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDDu7gNP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oLwv1VdS"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0512459F7
-	for <linux-edac@vger.kernel.org>; Wed, 22 Oct 2025 15:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21F926ED52
+	for <linux-edac@vger.kernel.org>; Wed, 22 Oct 2025 16:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761148252; cv=none; b=Qsqn0glsIa9WxDYes4Mn6x9rWCx+oTiPl1g8p2U4jPjN3hvJMJI5LJoiwL2B6JOoQP/aYRd705d6b5U/4rod8Zc58lF0LOx1jNu8W9RReXadTA1CQ4z4rOTTEKSO+nF6ebmhnu97vKZQUvkApdubgmvvVFAGabOWGyuPKOkW83o=
+	t=1761148830; cv=none; b=hMo3cBu4AypVAqPHeQxIqjKg/6qLzbs4yoDi8jMNVFjxBVIBUgwSn81BopqG71jhIz7zkx7zMNhxhrLNOTWXzRxLh+QWKgvjJDh7C+EqLOgvpBshPsMGVlkTRcR2QRD1y17NjT/S5sxTYozmaq7vqC8hRSJw47ugF/OUJf/fW8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761148252; c=relaxed/simple;
-	bh=QB4SfuURmF0iWUdw/nwKqx87mibMXzZNnU/tV+VTflc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R7xYq4Wnem/PHlySqtVnPe4zr9V2lsi08nVEcqIwDCosNQ+o0GhZ7gUfobOrgmUx+99VJNwy9MbEuFRJAmql2fs5wmOnaTcp0z9t8OBg4jqPHlTVO2VzoHG818vi7lsGDTwgXZDsSY9lFwirqf80PI17uOLOEiphKTno/DJz/SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PDDu7gNP; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-890cc9b6bbbso1037708185a.3
-        for <linux-edac@vger.kernel.org>; Wed, 22 Oct 2025 08:50:49 -0700 (PDT)
+	s=arc-20240116; t=1761148830; c=relaxed/simple;
+	bh=aqh+eIb/pAJr1faQbjM3BAw0kdTESmg5XgtIC+w7U7o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fI9oUFBnnHo9tYAxo3AklKKytRsb2AdMcyrriJf9vcWE2eBl4JUndShPK9AjQ2q7C2fobW+6FgvwHDZqd6aTdwO4AaWmtX5ZENGexgojOs+hLWK2mmfDMI8WAIziYRRw5trE1RrNdCKaobo5CEDbBr8S+cq32qY3V8mst7hfSA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oLwv1VdS; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-471005e2ba9so68185e9.1
+        for <linux-edac@vger.kernel.org>; Wed, 22 Oct 2025 09:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761148249; x=1761753049; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M3oPL/TT2sCXS1NwLSM7rbWcVKVCBogVovmIALCF75E=;
-        b=PDDu7gNP+RCUzIQmZOQJK1qv35WyTpVYbtLZLmFSfywQDTG5R3T5gN41I7crHWRj2K
-         b5VQS09X5/96bxNUOMrO6FjixFoSqkFBkS3Ouv8k9MR6zr3GxbH/6moBzM3yEYPgD3jM
-         L4Q0xRTW6vh4ZfEIMEGVsqsk014lbD46/iUfRaUYt0vvuJHUXILq7NRkrnlsZLYCYre9
-         a2hXNyjBpCzoIJ+Nxhfai7xYyEZMrGzcM3kQZ/inOcx0EcPYqg+4Bi3mTFtogn8/Qqch
-         d8TFrDD11/JDwYgCmLgalmJB+MNlNKUbqqs0EzUk83DeDRFZUW61uSqjNo3UsEcspc+o
-         t+uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761148249; x=1761753049;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1761148826; x=1761753626; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M3oPL/TT2sCXS1NwLSM7rbWcVKVCBogVovmIALCF75E=;
-        b=DHN79EVSHkOSUR7uu/mWD/j6Ly+7bBddHfvZ5iFBV4O27OYdIyqxAinEMfAuVeaJek
-         EepqvvPE/jLrarkfqXKpkRe8c2SVo3dcJbT65I3e2wqNQzo5CmMqz3+JzLslWZEgDp28
-         w5RODhNzGr6yLQq8aE3FkGmx6yN1v2kgIERoIx1t6hC4RtmDF2W3StdXRARB8uKMAe+h
-         7W00r+9lf8n/NBvlZFB2sdp5ZT8rln9R39lQXFRhnmFuZR67LZF3jukLXvkNRy1NYDe2
-         0CvX92F3Y0Lof97apwjbKu+VqC5pqUxbusoTzpbG2LiN6lZUFrAMQrcwOSRfPn7Nd6lh
-         3j3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUj30T+0Jbt5FCt4bzgPwyle2wYMBdz9QyJG0Ywoc2zAXo35HZAyqPM+mHi+lhnusiN0ahlXajJ9H9V@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+pDGC56OSDF0v+UGFCFXsgrQkCqVMoH948U7g3Un37qlVEaeC
-	Oro2G4OD7/4/EToSpjUxv7xT1Ee750ryLFjzaknT8XW4UoQpSWS6zVOA
-X-Gm-Gg: ASbGnctMOZUWx19/imE0cmESf+kGBMhaiZpjqLkMa3UmTWCNvqEKebfVAGQ6cnHae9A
-	ZvEaLcDXq1SHYrVZdKc4tcOkDpptccYo9R9zt6M0ybnf0gGVaL+yGe+cRNE1I81KPY/NwaX8i2z
-	+C/QKb141qJFfVGY4W7UrS90+5mtMkQY+YGh/L6YXGuuPfNhGjujhFJoQ/0Bc5qZUR7ssjj0udY
-	FlgNMULqJmKBaHImEbiWK8uSa3+2ZnG25X0aFkEyleTqSwondeyNO05hW51ImucoYhUTo7zSy+j
-	l6sH4cmzwEUG8JFx11Z1ATjNGtEPHvtooZHTbnh+OX3mO9OLLFHhGVvq3trljuA2V65Rc4qmbW9
-	pWSuGJpeezYkwHB/3soNjt/bXAERt2iKbeG1ErPat+i9Y5lzYytDKp7dSg4jwzfwgf5U0TOWr8O
-	fsw4PYvd4=
-X-Google-Smtp-Source: AGHT+IFhU1/qxPcwG4iditd/DSbX/hwAr8IdRWU46wkqo60rCt6GN/oHrv/6ROXraOwUylmwPpHHaA==
-X-Received: by 2002:a05:620a:1984:b0:84f:f3bb:e464 with SMTP id af79cd13be357-8906fd1953cmr2828961185a.50.1761148248418;
-        Wed, 22 Oct 2025 08:50:48 -0700 (PDT)
-Received: from localhost ([12.22.141.131])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-891cd098328sm1000034585a.17.2025.10.22.08.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 08:50:47 -0700 (PDT)
-Date: Wed, 22 Oct 2025 11:50:46 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Miller <davem@davemloft.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Kim Seer Paller <kimseer.paller@analog.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Cosmin Tanislav <demonsingur@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Jianping Shen <Jianping.Shen@de.bosch.com>,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-edac@vger.kernel.org, qat-linux@intel.com,
-	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v4 2/4] bitfield: Add non-constant field_{prep,get}()
- helpers
-Message-ID: <aPj9Tu75OFenm7U0@yury>
-References: <cover.1760696560.git.geert+renesas@glider.be>
- <67c1998f144b3a21399672c8e4d58d3884ae2b3c.1760696560.git.geert+renesas@glider.be>
- <aPKQMdyMO-vrb30X@yury>
- <CAMuHMdXq7xubX4a6SZWcC1HX+_TsKeQigDVQrWvA=js5bhaUiQ@mail.gmail.com>
- <aPhbhQEWAel4aD9t@yury>
- <CAMuHMdUOX=ToDU_44fHrqKWUtee1LKpgisfTKOe4R33er9g+DA@mail.gmail.com>
+        bh=nrE4Qz7SJRI1Enuhm5FI5J4QD5PmBoz82eoX+T/eGMU=;
+        b=oLwv1VdS+JpHpiamz7188I1SWjVkvlQk1bIGBDB2pKKFigqWA98TBo7EDAzHsQ16Mg
+         R/xzzbhorKqaYw0ZCXeiw2eR9hrP5u+LbL1tdeLU5Q8bvIFIeyTQshFbLL3kHlKDzBUC
+         4Baxgmth/hz8AsJUkqaqUYwmX1Yb/X+QCK0qyEHqTxdEcwzUdbTr6itZJrr0xNUBkwaX
+         rDidT4rcKadIMMfejfS0qQTUhEKjQWbFhRecyxMQ+4andv8rzmb9uwslxUlmGOsEVHrS
+         ng4AFUTqUCqK1Kp76kp+8nqOSUEIsPBOZ/1BtVuhvyHwa2AYVorY3q/Ba/oEV+HVQlnQ
+         ucKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761148826; x=1761753626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nrE4Qz7SJRI1Enuhm5FI5J4QD5PmBoz82eoX+T/eGMU=;
+        b=O3uhqipgyjKIT75l4XXefwAoChUCfZPVGoPETs6MpY5MKpUhSv8MHOC0S4HiwBaKUs
+         +TtK00oBjPWW/C1mxJ+NDVzJKVr5huOJPT8ylUPsJawCueQgTZoJ9JslpEgIUh0PBLeB
+         j9cKy6HmWfZE3MCEulJTYNpjw9TrShjkYGn0+D4t8Kz7uQOoXUpfaOiJLN8/DLMRvL/u
+         iBfdK+KWa7TkIQlFqZBbd3oDHN8XaiUE/zyIKaqzmFP9yr87Z19wwK/fUwCexDExOg3z
+         6bDTje1FzDr4Z6yqb5r5aCSEYd+3N0Lrco3A+npuxn/YTCDXFbHKqBLG+cV/ITAgSYZn
+         ZKyA==
+X-Forwarded-Encrypted: i=1; AJvYcCVve8njGR0A+UrzrjBXHLevFUqbj+vuz+cC/pKCeHuYxv7SA4HNmw2np2NvorIDo83WJcv/JhYTgeuT@vger.kernel.org
+X-Gm-Message-State: AOJu0YybkqNDafFPqK3bcbkjBS2d5XYBkfw6aas3nq2oV0E83RZactt2
+	ryOJKqjzFveRrKwY7onWs3ERytNv2tbOWHGK7vqphHlNgoM7R0P6m15bGdLlfTu1L3ebHBNrfjO
+	d4rQK1CECQnVddnVR401NDM079mWCdDwDYR0+Lh4P
+X-Gm-Gg: ASbGnctUBzNdkiT1p5i7n0xF8sWf3+ra1XvqhANlyfaUAKh2Wq4hURhbVyYvIz1Bpes
+	CwAFl3dsjubTsgfsC8kVDfyq+fbYJBFkWVdHaYTKuPBkHdJAtxq/FO21PGp32jqIr52+c/5DRXW
+	iNNqC+2QnOYFpZSHLfrKnWCgXMTQEYXE2AiDC3FM9QNDQntMoiiczgtzhhlSVHFMpxIbvwqbWuW
+	bnWcE+9V6iPkDLdDwVJ0KUw5ECwxHvAIU1+kTUsZypGbxcd8093BH+I9g+1lYI5vaCpK5VAvv/X
+	6LKy3c+b/L3ZKYdLFw==
+X-Google-Smtp-Source: AGHT+IGQ5urEAQ9m57T3Tr0rBInJl1kxrVgo9aZA5J1ni84q+HbgDwPfJxL7EgSHQYRd3sVOQI4JW1ylUbWl3BXuheM=
+X-Received: by 2002:a05:600c:c04b:10b0:46f:c587:df17 with SMTP id
+ 5b1f17b1804b1-475c5138edbmr772405e9.1.1761148826010; Wed, 22 Oct 2025
+ 09:00:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUOX=ToDU_44fHrqKWUtee1LKpgisfTKOe4R33er9g+DA@mail.gmail.com>
+References: <20251021102327.199099-1-ankita@nvidia.com> <20251021102327.199099-2-ankita@nvidia.com>
+In-Reply-To: <20251021102327.199099-2-ankita@nvidia.com>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Wed, 22 Oct 2025 09:00:13 -0700
+X-Gm-Features: AS18NWCpMHMP31ZSlN1pMxGifJCs7kl9OgsJ-oSyN2IYIPEyac80DDLNqIbtKlQ
+Message-ID: <CACw3F5036Kfs_j8np+_+YejC02ADeLoCNYaQVhmBRzQF32NAgA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] mm: handle poisoning of pfn without struct pages
+To: ankita@nvidia.com
+Cc: aniketa@nvidia.com, vsethi@nvidia.com, jgg@nvidia.com, mochs@nvidia.com, 
+	skolothumtho@nvidia.com, linmiaohe@huawei.com, nao.horiguchi@gmail.com, 
+	akpm@linux-foundation.org, david@redhat.com, lorenzo.stoakes@oracle.com, 
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, tony.luck@intel.com, bp@alien8.de, rafael@kernel.org, 
+	guohanjun@huawei.com, mchehab@kernel.org, lenb@kernel.org, 
+	kevin.tian@intel.com, alex@shazbot.org, cjia@nvidia.com, kwankhede@nvidia.com, 
+	targupta@nvidia.com, zhiw@nvidia.com, dnigam@nvidia.com, kjaju@nvidia.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-edac@vger.kernel.org, 
+	Jonathan.Cameron@huawei.com, ira.weiny@intel.com, 
+	Smita.KoralahalliChannabasappa@amd.com, u.kleine-koenig@baylibre.com, 
+	peterz@infradead.org, linux-acpi@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 22, 2025 at 12:01:37PM +0200, Geert Uytterhoeven wrote:
-> Hi Yury,
-> 
-> On Wed, 22 Oct 2025 at 06:20, Yury Norov <yury.norov@gmail.com> wrote:
-> > On Mon, Oct 20, 2025 at 03:00:24PM +0200, Geert Uytterhoeven wrote:
-> > > On Fri, 17 Oct 2025 at 20:51, Yury Norov <yury.norov@gmail.com> wrote:
-> > > > On Fri, Oct 17, 2025 at 12:54:10PM +0200, Geert Uytterhoeven wrote:
-> > > > > The existing FIELD_{GET,PREP}() macros are limited to compile-time
-> > > > > constants.  However, it is very common to prepare or extract bitfield
-> > > > > elements where the bitfield mask is not a compile-time constant.
-> > > > >
-> > > > > To avoid this limitation, the AT91 clock driver and several other
-> > > > > drivers already have their own non-const field_{prep,get}() macros.
-> > > > > Make them available for general use by consolidating them in
-> > > > > <linux/bitfield.h>, and improve them slightly:
-> > > > >   1. Avoid evaluating macro parameters more than once,
-> > > > >   2. Replace "ffs() - 1" by "__ffs()",
-> > > > >   3. Support 64-bit use on 32-bit architectures.
-> > > > >
-> > > > > This is deliberately not merged into the existing FIELD_{GET,PREP}()
-> > > > > macros, as people expressed the desire to keep stricter variants for
-> > > > > increased safety, or for performance critical paths.
-> > > > >
-> > > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > > > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > Acked-by: Crt Mori <cmo@melexis.com>
-> > > > > ---
-> > > > > v4:
-> > > > >   - Add Acked-by,
-> > > > >   - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocate
-> > > > >     power management debugfs helper APIs") in v6.17-rc1,
-> > > > >   - Convert more recently introduced upstream copies:
-> > > > >       - drivers/edac/ie31200_edac.c
-> > > > >       - drivers/iio/dac/ad3530r.c
-> > > >
-> > > > Can you split out the part that actually introduces the new API?
-> > >
-> > > Unfortunately not, as that would cause build warnings/failures due
-> > > to conflicting redefinitions.
-> > > That is a reason why I want to apply this patch ASAP: new copies show
-> > > up all the time.
-> >
-> > In a preparation patch, for each driver:
-> >
-> >  +#ifndef field_prep
-> >  #define field_prep() ...
-> >  +#endif
-> >
-> > Or simply
-> >
-> >  +#undef field_prep
-> >  #define field_prep() ...
-> >
-> > Then add the generic field_prep() in a separate patch. Then you can drop
-> > ifdefery in the drivers.
-> >
-> > Yeah, more patches, but the result is cleaner.
-> 
-> And we need 3 kernel releases, as the addition of the macros to
-> the header file now has a hard dependency on adding the #undefs?
-> Unless I still apply all of them to an immutable branch, but then what
-> is the point?
+On Tue, Oct 21, 2025 at 3:23=E2=80=AFAM <ankita@nvidia.com> wrote:
+>
+> From: Ankit Agrawal <ankita@nvidia.com>
+>
+> The kernel MM currently does not handle ECC errors / poison on a memory
+> region that is not backed by struct pages. If a memory region mapped
+> using remap_pfn_range() for example, but not added to the kernel, MM
+> will not have associated struct pages. Add a new mechanism to handle
+> memory failure on such memory.
+>
+> Make kernel MM expose a function to allow modules managing the device
+> memory to register the device memory SPA and the address space associated
+> it. MM maintains this information as an interval tree. On poison, MM can
+> search for the range that the poisoned PFN belong and use the address_spa=
+ce
+> to determine the mapping VMA.
+>
+> In this implementation, kernel MM follows the following sequence that is
+> largely similar to the memory_failure() handler for struct page backed
+> memory:
+> 1. memory_failure() is triggered on reception of a poison error. An
+> absence of struct page is detected and consequently memory_failure_pfn()
+> is executed.
+> 2. memory_failure_pfn() collects the processes mapped to the PFN.
+> 3. memory_failure_pfn() sends SIGBUS to all the processes mapping the
+> poisoned PFN using kill_procs().
+>
+> Note that there is one primary difference versus the handling of the
+> poison on struct pages, which is to skip unmapping to the faulty PFN.
+> This is done to handle the huge PFNMAP support added recently [1] that
+> enables VM_PFNMAP vmas to map in either PMD level. Otherwise, a poison
+> to a PFN would need breaking the PMD mapping into PTEs to unmap only
+> the poisoned PFN. This will have a major performance impact.
+>
+> Link: https://lore.kernel.org/all/20240826204353.2228736-1-peterx@redhat.=
+com/ [1]
+>
+> Signed-off-by: Ankit Agrawal <ankita@nvidia.com>
+> ---
+>  MAINTAINERS                    |   1 +
+>  include/linux/memory-failure.h |  17 +++++
+>  include/linux/mm.h             |   1 +
+>  include/ras/ras_event.h        |   1 +
+>  mm/Kconfig                     |   1 +
+>  mm/memory-failure.c            | 128 ++++++++++++++++++++++++++++++++-
+>  6 files changed, 148 insertions(+), 1 deletion(-)
+>  create mode 100644 include/linux/memory-failure.h
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 520fb4e379a3..463d062d0386 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11359,6 +11359,7 @@ M:      Miaohe Lin <linmiaohe@huawei.com>
+>  R:     Naoya Horiguchi <nao.horiguchi@gmail.com>
+>  L:     linux-mm@kvack.org
+>  S:     Maintained
+> +F:     include/linux/memory-failure.h
+>  F:     mm/hwpoison-inject.c
+>  F:     mm/memory-failure.c
+>
+> diff --git a/include/linux/memory-failure.h b/include/linux/memory-failur=
+e.h
+> new file mode 100644
+> index 000000000000..bc326503d2d2
+> --- /dev/null
+> +++ b/include/linux/memory-failure.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_MEMORY_FAILURE_H
+> +#define _LINUX_MEMORY_FAILURE_H
+> +
+> +#include <linux/interval_tree.h>
+> +
+> +struct pfn_address_space;
+> +
+> +struct pfn_address_space {
+> +       struct interval_tree_node node;
+> +       struct address_space *mapping;
+> +};
+> +
+> +int register_pfn_address_space(struct pfn_address_space *pfn_space);
+> +void unregister_pfn_address_space(struct pfn_address_space *pfn_space);
+> +
+> +#endif /* _LINUX_MEMORY_FAILURE_H */
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 1ae97a0b8ec7..0ab4ea82ce9e 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -4006,6 +4006,7 @@ enum mf_action_page_type {
+>         MF_MSG_DAX,
+>         MF_MSG_UNSPLIT_THP,
+>         MF_MSG_ALREADY_POISONED,
+> +       MF_MSG_PFN_MAP,
+>         MF_MSG_UNKNOWN,
+>  };
+>
+> diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+> index c8cd0f00c845..fecfeb7c8be7 100644
+> --- a/include/ras/ras_event.h
+> +++ b/include/ras/ras_event.h
+> @@ -375,6 +375,7 @@ TRACE_EVENT(aer_event,
+>         EM ( MF_MSG_DAX, "dax page" )                                   \
+>         EM ( MF_MSG_UNSPLIT_THP, "unsplit thp" )                        \
+>         EM ( MF_MSG_ALREADY_POISONED, "already poisoned" )              \
+> +       EM ( MF_MSG_PFN_MAP, "non struct page pfn" )                    \
+>         EMe ( MF_MSG_UNKNOWN, "unknown page" )
+>
+>  /*
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index e443fe8cd6cf..0b07219390b9 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -777,6 +777,7 @@ config MEMORY_FAILURE
+>         depends on ARCH_SUPPORTS_MEMORY_FAILURE
+>         bool "Enable recovery from hardware memory errors"
+>         select MEMORY_ISOLATION
+> +       select INTERVAL_TREE
+>         select RAS
+>         help
+>           Enables code to recover from some memory failures on systems
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index df6ee59527dd..acfe5a9bde1d 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -38,6 +38,7 @@
+>
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+> +#include <linux/memory-failure.h>
+>  #include <linux/page-flags.h>
+>  #include <linux/sched/signal.h>
+>  #include <linux/sched/task.h>
+> @@ -154,6 +155,10 @@ static const struct ctl_table memory_failure_table[]=
+ =3D {
+>         }
+>  };
+>
+> +static struct rb_root_cached pfn_space_itree =3D RB_ROOT_CACHED;
+> +
+> +static DEFINE_MUTEX(pfn_space_lock);
+> +
+>  /*
+>   * Return values:
+>   *   1:   the page is dissolved (if needed) and taken off from buddy,
+> @@ -957,6 +962,7 @@ static const char * const action_page_types[] =3D {
+>         [MF_MSG_DAX]                    =3D "dax page",
+>         [MF_MSG_UNSPLIT_THP]            =3D "unsplit thp",
+>         [MF_MSG_ALREADY_POISONED]       =3D "already poisoned page",
+> +       [MF_MSG_PFN_MAP]                =3D "non struct page pfn",
+>         [MF_MSG_UNKNOWN]                =3D "unknown page",
+>  };
+>
+> @@ -1349,7 +1355,7 @@ static int action_result(unsigned long pfn, enum mf=
+_action_page_type type,
+>  {
+>         trace_memory_failure_event(pfn, type, result);
+>
+> -       if (type !=3D MF_MSG_ALREADY_POISONED) {
+> +       if (type !=3D MF_MSG_ALREADY_POISONED && type !=3D MF_MSG_PFN_MAP=
+) {
+>                 num_poisoned_pages_inc(pfn);
+>                 update_per_node_mf_stats(pfn, result);
+>         }
+> @@ -2216,6 +2222,121 @@ static void kill_procs_now(struct page *p, unsign=
+ed long pfn, int flags,
+>         kill_procs(&tokill, true, pfn, flags);
+>  }
+>
+> +int register_pfn_address_space(struct pfn_address_space *pfn_space)
+> +{
+> +       if (!pfn_space)
+> +               return -EINVAL;
+> +
+> +       mutex_lock(&pfn_space_lock);
+> +
+> +       if (interval_tree_iter_first(&pfn_space_itree,
+> +                                    pfn_space->node.start,
+> +                                    pfn_space->node.last)) {
+> +               mutex_unlock(&pfn_space_lock);
+> +               return -EBUSY;
+> +       }
+> +
+> +       interval_tree_insert(&pfn_space->node, &pfn_space_itree);
+> +       mutex_unlock(&pfn_space_lock);
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(register_pfn_address_space);
+> +
+> +void unregister_pfn_address_space(struct pfn_address_space *pfn_space)
+> +{
+> +       if (!pfn_space)
+> +               return;
+> +
+> +       mutex_lock(&pfn_space_lock);
+> +       interval_tree_remove(&pfn_space->node, &pfn_space_itree);
 
-Not sure what do you mean. You can do it in a single series, and you
-don't need and should not split the series across releases. Consider
-my recent cpumask_next_wrap() rework as an example:
+IIRC removing something not in interval tree will panic kernel. If I
+am not mistaken, should here do something like
+interval_tree_iter_first before interval_tree_remove, to avoid
+driver's ill behavior crash the system?
 
-https://lore.kernel.org/all/20250128164646.4009-1-yury.norov@gmail.com/
-
-1. #1-4 switch kernel users to alternative functions;
-2. #5 deprecates cpumask_next_wrap(), making sure it's a pure renaming,
-   i.e. no-op.
-3. #6 introduces the new nice implementation. It's the core-only patch,
-   no drivers are touched.
-4. #7-12 switch the rest of codebase from old version to new.
-5. #13 drops deprecated old function.
-
-This is the most common scheme. In you case you can cut the corners.
-
-The goals here are:
-
- - keep core patches free of non-core code;
- - switch drivers to the new functionality one-by-one in sake of
-   bisectability.
- 
-> > > > > --- a/include/linux/bitfield.h
-> > > > > +++ b/include/linux/bitfield.h
-> > > > > @@ -220,4 +220,40 @@ __MAKE_OP(64)
-> > > > >  #undef __MAKE_OP
-> > > > >  #undef ____MAKE_OP
-> > > > >
-> > > > > +/**
-> > > > > + * field_prep() - prepare a bitfield element
-> > > > > + * @mask: shifted mask defining the field's length and position
-> > > > > + * @val:  value to put in the field
-> > > > > + *
-> > > > > + * field_prep() masks and shifts up the value.  The result should be
-> > > > > + * combined with other fields of the bitfield using logical OR.
-> > > > > + * Unlike FIELD_PREP(), @mask is not limited to a compile-time constant.
-> > > > > + */
-> > > > > +#define field_prep(mask, val)                                                \
-> > > > > +     ({                                                              \
-> > > > > +             __auto_type __mask = (mask);                            \
-> > > > > +             typeof(mask) __val = (val);                             \
-> > > > > +             unsigned int __shift = sizeof(mask) <= 4 ?              \
-> > > > > +                                    __ffs(__mask) : __ffs64(__mask); \
-> > > > > +             (__val << __shift) & __mask;    \
-> > > >
-> > > > __ffs(0) is undef. The corresponding comment in
-> > > > include/asm-generic/bitops/__ffs.h explicitly says: "code should check
-> > > > against 0 first".
-> > >
-> > > An all zeroes mask is a bug in the code that calls field_{get,prep}().
-> >
-> > It's a bug in FIELD_GET() - for sure. Because it's enforced in
-> > __BF_FIELD_CHECK(). field_get() doesn't enforce it, doesn't even
-> > mention that in the comment.
-> >
-> > I'm not fully convinced that empty runtime mask should be a bug.
-> 
-> Getting (and using) data from nowhere is a bug.
-> Storing data where there is no space to store is also a bug.
-> 
-> I will add a comment.
-> 
-> > Consider memcpy(dst, src, 0). This is a no-op, but not a bug as
-> > soon as the pointers are valid. If you _think_ it's a bug - please
-> > enforce it.
-> 
-> memcpy() with a fixed size of zero is probably a bug.
-> memcpy() with a variable size is usually used to copy "as much as is
-> needed", so zero is usually not a bug.
-
-5 lines above you say: "Getting (and using) data from nowhere is a bug".
-Now you're saying: "so zero is usually not a bug". So, is it a bug or
-not?
-
-Consider this example:
-        
-        unsigned a = field_get(mask, get_user(ptr));
-
-Conceptually it's the same as per-bit copy_from_user().
-
-The copy_from_user 
-1. allows size == 0;
-2. does not dereference pointers in that case, i.e. doesn't call
-   get_user().
-
-Can we make sure that field_get() provides the same guarantees?
- 
-> > > > I think mask = 0 is a sign of error here. Can you add a code catching
-> > > > it at compile time, and maybe at runtime too? Something like:
-> > > >
-> > > >  #define __field_prep(mask, val)
-> > > >  ({
-> > > >         unsigned __shift = sizeof(mask) <= 4 ? __ffs(mask) : __ffs64(mask);
-> > > >         (val << __shift) & mask;
-> > > >  })
-> > > >
-> > > >  #define field_prep(mask, val)
-> > > >  ({
-> > > >         unsigned int __shift;
-> > > >         __auto_type __mask = (mask), __ret = 0;
-> > > >         typeof(mask) __val = (val);
-> > > >
-> > > >         BUILD_BUG_ON_ZERO(const_true(mask == 0));
-> > >
-> > > Futile, as code with a constant mask should use FIELD_PREP() instead.
-> >
-> > It's a weak argument. Sometimes compiler is smart enough to realize
-> > that something is a constant, while people won't. Sometimes code gets
-> > refactored. Sometimes people build complex expressions that should
-> > work both in run-time and compile time cases. Sometimes variables are
-> > compile- or run-time depending on config (nr_cpu_ids is an example).
-> >
-> > The field_prep() must handle const case just as good as capitalized
-> > version does.
-> 
-> OK, I will add the (build-time) check.
-
-If mask is compile-time, you can wire field_prep() to FIELD_PREP(), so
-it will do the work for you.
- 
-Thanks,
-Yury
+> +       mutex_unlock(&pfn_space_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(unregister_pfn_address_space);
+> +
+> +static void add_to_kill_pfn(struct task_struct *tsk,
+> +                           struct vm_area_struct *vma,
+> +                           struct list_head *to_kill,
+> +                           unsigned long pfn)
+> +{
+> +       struct to_kill *tk;
+> +
+> +       tk =3D kmalloc(sizeof(*tk), GFP_ATOMIC);
+> +       if (!tk)
+> +               return;
+> +
+> +       /* Check for pgoff not backed by struct page */
+> +       tk->addr =3D vma_address(vma, pfn, 1);
+> +       tk->size_shift =3D PAGE_SHIFT;
+> +
+> +       if (tk->addr =3D=3D -EFAULT)
+> +               pr_info("Unable to find address %lx in %s\n",
+> +                       pfn, tsk->comm);
+> +
+> +       get_task_struct(tsk);
+> +       tk->tsk =3D tsk;
+> +       list_add_tail(&tk->nd, to_kill);
+> +}
+> +
+> +/*
+> + * Collect processes when the error hit a PFN not backed by struct page.
+> + */
+> +static void collect_procs_pfn(struct address_space *mapping,
+> +                             unsigned long pfn, struct list_head *to_kil=
+l)
+> +{
+> +       struct vm_area_struct *vma;
+> +       struct task_struct *tsk;
+> +
+> +       i_mmap_lock_read(mapping);
+> +       rcu_read_lock();
+> +       for_each_process(tsk) {
+> +               struct task_struct *t =3D tsk;
+> +
+> +               t =3D task_early_kill(tsk, true);
+> +               if (!t)
+> +                       continue;
+> +               vma_interval_tree_foreach(vma, &mapping->i_mmap, pfn, pfn=
+) {
+> +                       if (vma->vm_mm =3D=3D t->mm)
+> +                               add_to_kill_pfn(t, vma, to_kill, pfn);
+> +               }
+> +       }
+> +       rcu_read_unlock();
+> +       i_mmap_unlock_read(mapping);
+> +}
+> +
+> +static int memory_failure_pfn(unsigned long pfn, int flags)
+> +{
+> +       struct interval_tree_node *node;
+> +       LIST_HEAD(tokill);
+> +
+> +       mutex_lock(&pfn_space_lock);
+> +       /*
+> +        * Modules registers with MM the address space mapping to the dev=
+ice memory they
+> +        * manage. Iterate to identify exactly which address space has ma=
+pped to this
+> +        * failing PFN.
+> +        */
+> +       for (node =3D interval_tree_iter_first(&pfn_space_itree, pfn, pfn=
+); node;
+> +            node =3D interval_tree_iter_next(node, pfn, pfn)) {
+> +               struct pfn_address_space *pfn_space =3D
+> +                       container_of(node, struct pfn_address_space, node=
+);
+> +
+> +               collect_procs_pfn(pfn_space->mapping, pfn, &tokill);
+> +       }
+> +       mutex_unlock(&pfn_space_lock);
+> +
+> +       /*
+> +        * Unlike System-RAM there is no possibility to swap in a differe=
+nt
+> +        * physical page at a given virtual address, so all userspace
+> +        * consumption of direct PFN memory necessitates SIGBUS (i.e.
+> +        * MF_MUST_KILL)
+> +        */
+> +       flags |=3D MF_ACTION_REQUIRED | MF_MUST_KILL;
+> +
+> +       kill_procs(&tokill, true, pfn, flags);
+> +
+> +       return action_result(pfn, MF_MSG_PFN_MAP, MF_RECOVERED);
+> +}
+> +
+>  /**
+>   * memory_failure - Handle memory failure of a page.
+>   * @pfn: Page Number of the corrupted page
+> @@ -2259,6 +2380,11 @@ int memory_failure(unsigned long pfn, int flags)
+>         if (!(flags & MF_SW_SIMULATED))
+>                 hw_memory_failure =3D true;
+>
+> +       if (!pfn_valid(pfn) && !arch_is_platform_page(PFN_PHYS(pfn))) {
+> +               res =3D memory_failure_pfn(pfn, flags);
+> +               goto unlock_mutex;
+> +       }
+> +
+>         p =3D pfn_to_online_page(pfn);
+>         if (!p) {
+>                 res =3D arch_memory_failure(pfn, flags);
+> --
+> 2.34.1
+>
+>
 
