@@ -1,199 +1,308 @@
-Return-Path: <linux-edac+bounces-5161-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5162-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D66BC00C42
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 13:34:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38E1AC00CD5
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 13:39:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1EB6E506200
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 11:33:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4CC11A61932
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 11:40:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AEB30EF7E;
-	Thu, 23 Oct 2025 11:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="P4GbrPyh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118E330DD34;
+	Thu, 23 Oct 2025 11:39:12 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011035.outbound.protection.outlook.com [40.93.194.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4809730C62E;
-	Thu, 23 Oct 2025 11:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761219170; cv=fail; b=SvmO4sz7hAhI2xFNcFE59M+NRpnP3pbvSdq9y4ko5zMhE6pRiLTtnLLDZ5olFBlX7YUFK3KhpPVFKxUmS6fnoi3povLeCXcAC3a3SBYY2Sw8NtvRSu3J4mQs67OemWlfFhRFclRprpQ0z101Zs6TVk5VyeM4MxlCdusAFWEFXZw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761219170; c=relaxed/simple;
-	bh=ydUfj1tUKlv9LLYaR5j5RNSij8dMzuWReUyYtq7EUGQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pj7KwYEmKGX8Ary2sa2CYZ/L4733ycxOJtuSjcqwbti4JObJaZp+UZ3lFovstZQ9x5/0IukBHPcR3Iv5Je4p43JlVXgi9K8cDyFKs1sw8LLsI1vPuPoyTN6MDsLKIkJw4cK8RRRaJQX7A3BRvu0WoymLbtzwnEmPt70CQmdPXag=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=P4GbrPyh; arc=fail smtp.client-ip=40.93.194.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=b15R985ne7+Ax9Xo03haNQF++HM9UncyEGCDNXUpLPUucrbw7DCQ+sWAJzUoVC+CdG8zW2xWMwpXhViT2CTc1q3Jz114n6LiQM2xDzWh+LGqwWLOcmS9g1Rc7bJINuyH04+V2u7fQVh98qGC7qxAaFmdl0miaAvZTECy3DoJKWie8vywHIu7GX5J7uNNPdlf1v9eiOLSIEEv61mRVyoie3fri3/IqiMJDu1XHsj4cmwOcgocZQ1y06I+qdb8s07p5I9UZwtu2y4M+BY/oZNpF7gc4YB3lSeZIQZyINFHSVOyyuZTqgr+ZFvCPPhYoXCGhkQeK2cExUi4px8eRnWdQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vHvLY2UdHrRhO6Hx85cMal7HJNoVbkmK05G/R+YTF5c=;
- b=M8b5UIVfsBi20BHxonZPmnQBbrPMCU4wmjoDTXxK+7R2iNQgk3u37ydlwcHjW8wdAKfHU9K771WBavCfxa+aXlWi+sbdnZ/KPyl29tNVBoXVAzbN2fRmKY2MrEl96vCoH1WEuYxgWUARWXgcvLb54pEigo2Naqivz407ojmEmgiIoq5JOQdAhkuUfioOROm0ST9yKvLqsfa9St3ww1EiN73kbAvn9K1JjA2AL4nV5CBW5IwaYNNuetdYaLvMI62FTQvZPO6ySlwSwRqIxn8l6W4jV9v/2/UWJLuaxzuqfMKIbi2URnJCRXTj5jtGlBCvyJFhxz6+iA97gEabEYsJ/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vHvLY2UdHrRhO6Hx85cMal7HJNoVbkmK05G/R+YTF5c=;
- b=P4GbrPyh0Tao6UhwJ5tWNerjbCwVq0zTnAhg4FhnGmgKLadpMC2HkZRU1AaD3jgW/USnBD+5DR6/YKa+niEBcRb1oGDiAr5g5YfyshRqyiXPTbD6nnWT6+BsGB/5EPhPsdv5Cgn3s8Fe3OLP9ONeHfX/zY7kjiig4mkgX+fCP4w=
-Received: from DM6PR07CA0067.namprd07.prod.outlook.com (2603:10b6:5:74::44) by
- DS0PR12MB6536.namprd12.prod.outlook.com (2603:10b6:8:d3::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9253.13; Thu, 23 Oct 2025 11:32:43 +0000
-Received: from DS2PEPF00003443.namprd04.prod.outlook.com
- (2603:10b6:5:74:cafe::9f) by DM6PR07CA0067.outlook.office365.com
- (2603:10b6:5:74::44) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9253.13 via Frontend Transport; Thu,
- 23 Oct 2025 11:32:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- DS2PEPF00003443.mail.protection.outlook.com (10.167.17.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9253.7 via Frontend Transport; Thu, 23 Oct 2025 11:32:43 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Thu, 23 Oct
- 2025 04:31:20 -0700
-Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 23 Oct
- 2025 06:31:11 -0500
-Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Thu, 23 Oct 2025 04:31:09 -0700
-From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-To: <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>
-CC: <git@amd.com>, <shubhrajyoti.datta@gmail.com>, Borislav Petkov
-	<bp@alien8.de>, Tony Luck <tony.luck@intel.com>, James Morse
-	<james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Robert
- Richter" <rric@kernel.org>, Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Subject: [PATCH] EDAC/versalnet: Handle split messages for non-standard errors
-Date: Thu, 23 Oct 2025 17:01:08 +0530
-Message-ID: <20251023113108.3467132-1-shubhrajyoti.datta@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7763E27054C
+	for <linux-edac@vger.kernel.org>; Thu, 23 Oct 2025 11:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761219551; cv=none; b=XxVTLRitrdtz5HYtGV52zw5Ze63VjONOYwNIbdsuslwCcCI2lrkbI2E8dqlQThO/1fbhu23eEF99V0RKaCiuRi19oA/IgNxDpPluXc86fBm55b8VQ3dXF9xniLvhm3UeXq5bTJO2hWuiUJqqJdSfZiaNQrK3gcqoO6QBRIHwICU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761219551; c=relaxed/simple;
+	bh=t2b3ao92xy0ESrIeC6f3Ix11H+BajiEZp3Qjq0JyHMk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ObSNuIGAvcaV10quIPtw5F7CEQKXnVZPxDeNPlkvA/+nV2X0qTTPCSq3GsvqdRJp1fo4j7D0KdHtrBumQ3g03J5M55l5szTLC25WZp6abyyv1RvvqmoSEu/gFyt/lbrVHc67TfVLKFgrg1CB2dTAYc9tnJ7r2NLsBWODqxk/CZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-5db37a935f1so77060137.1
+        for <linux-edac@vger.kernel.org>; Thu, 23 Oct 2025 04:39:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761219548; x=1761824348;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YGr3v7S6fzDOU9nQBXt6OSyvvunrcw7Wuu74VRCbNxc=;
+        b=wmuwgElgku9G1ks11Zv46jDAQ9x35rRLIL0a2YG7Jv+pllXAZNFnSFRzUg3cJAcAIr
+         RjCxdg8Z0Gb72umYZUa48whwUfe/H9Qj0ltqqkwSoyUC2iQ3HZy+xC4KdPGjBJqsugF3
+         jofsvuVo4Ek/r08aE6iVbXkyOPJ8baug1uH0/dxS5spBTcPvSGzBgpUoFZpA4cdnpeZp
+         oLLOkL7VvvcOMXpinMp2JH9ULQh9iA5D8knSrAHir8Iq5BopXmmThN0C/UK7BvdRtG9P
+         1npLjGFM+M6bVlZYeXcaRor+G4dkeW0WYuwdLFwZD9WGORwk5x/XSPa9d65ROert0jgw
+         qcZg==
+X-Forwarded-Encrypted: i=1; AJvYcCWa6dbbZzCHFs8bjuERw9JT7Ev4UH+OOLHK5ojFn67KMVB0z2YtVCsZxveaRhUD36RA4QrFUeDmqKBQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzF0bOs2J1c5xEz/YtXp7t9Gxy7ak2BQ1055Qwir3T1gLWkb3JT
+	7HRYasMQvlXeJhufHBm1txigfYXdBQiU8IrLP+/gaGMX/Ox8BeksNwh5FXClzroh
+X-Gm-Gg: ASbGnctULmWhL0XUqQlTP0RRqx+mMT1mVYQmQu6TpznpS8i37s4rA1fqUNk7LSLLJ3p
+	q1qisRHc525K3RNUrcj6M0NlOQ9NRroGKypUywjnfvZYv/vot/FdwsJmBXgFziGUtcP3h7kXCrS
+	jXjbxw2P87bLAHnEAtwJ5Os3+8StKmQxkNchf2OLAy4/UEjdqpbj6QNKbV1+p0cB2NhqAx31fPq
+	MQQzbGEHIyK9tzej38A0VtqwLL+r28JZnfqvtQ0jH2wI+9nZYXbOiJHjeJ+qZ3qpA4DkmSfQAWi
+	d/376VZ6XFOr/Y4nSl3jegNbZFBESplUDrl+RwWavvboysYoLkZ1Ui4i6lSHwqeJoJrj95UoiE7
+	VG3DvL/MFgnTPQQ45WpD3HkqCmY8fRGKz+EsbzvAPl19nfGmlfz1/XTs+nEKDRoQz8AtrODkerT
+	iuyg9tHOpCrLc3KDH4ajUgRDN2A98T+JbkLEwNuU5AwYKLDfqY
+X-Google-Smtp-Source: AGHT+IGrWyN0Zi3G9z23ZJpO7V7L6EdUOUKLSjqiEPLd2uoAX7P9z0gBTHQZhK8Ry8+PfEwKGgjHMA==
+X-Received: by 2002:a05:6102:c09:b0:5db:3935:1636 with SMTP id ada2fe7eead31-5db393518f0mr40050137.26.1761219547888;
+        Thu, 23 Oct 2025 04:39:07 -0700 (PDT)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-557bd8e11a3sm657196e0c.10.2025.10.23.04.39.06
+        for <linux-edac@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Oct 2025 04:39:06 -0700 (PDT)
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-5db1aa8c93eso349144137.2
+        for <linux-edac@vger.kernel.org>; Thu, 23 Oct 2025 04:39:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVIhijNBQVwafWxLA9Y1+vKUh4Z6ERuzcHb01g4mW2NfxnGFqQE6Wol1da8IwX6Rbi+tvYxKCDlQg04@vger.kernel.org
+X-Received: by 2002:a05:6102:c8b:b0:5db:350f:2c6b with SMTP id
+ ada2fe7eead31-5db350f2f90mr173817137.38.1761219546544; Thu, 23 Oct 2025
+ 04:39:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: shubhrajyoti.datta@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF00003443:EE_|DS0PR12MB6536:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ac55f74-68fc-4bad-9a5e-08de1227e206
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?m+/fXD+gyI5NdTO/NZcOs7Wf7rYCZIHw8Cc2P7/a8lgtMyHvF3TqnPP99uZf?=
- =?us-ascii?Q?S5oEKIiWJiC2N309qM/zLVG00QrebFHNNic9m6S2rYGpXDy+cxBCRqNanAy3?=
- =?us-ascii?Q?nSKNlk+ONeWSoRcn74/C1E4YAXJPJrI88/PGiLDgAY5PnS43Imd9srVX48OB?=
- =?us-ascii?Q?6fUkjW7ltk6qNo5PE+ZWYEoHtb5DF/SHmrrXW4gULuoIGyjggdm97+buYyBi?=
- =?us-ascii?Q?z5ph3AkKhye6rQg/7NYq1aLdJJzwA7Uqq8pkGaL1t/2fzy0TGI6+f8ZgAi/+?=
- =?us-ascii?Q?9qOCfejMSQXl9VBt3/KVNb0B4t83qGev3uOFrMifGvE3D9/KsJ7W3HmUUHPK?=
- =?us-ascii?Q?R9qFMYX6CdhLSu+X3Xsus05iOFSqQEtMKdkHDlWFjLDlJGs7HL/r/meGbvBD?=
- =?us-ascii?Q?1tfRDi5ZZKD9+FI/3zCv5ZL9sJDoS8DUy9WhxQC3oavk2iYtEE/cNlQxcpY4?=
- =?us-ascii?Q?diIDfD7SiSTOXWwpGyHUwhvCt9Cum+v1mevqNxng38AMfR41GrfNzLt0CsDF?=
- =?us-ascii?Q?D/X3evKQZISQwGzC3x9G4fUR9vf4tRVrjD3Sf39G29MPlv9tmsn4eX7ZZXxd?=
- =?us-ascii?Q?YmAiU3K+2K8RwgJUh2uelYBYpEh6diUKvj4VW80QsBk5sZM5K/a3VNukGDA3?=
- =?us-ascii?Q?WyMEJXOozasONYnNLTeqeAOaEz5TVu4jMmdZbZaTO/oWItl3hQ00gm0Tx641?=
- =?us-ascii?Q?kZyAvh4azhsYvfwqhxMg2sqipCUVch8XzZjNELVg7jwoxxoLfu3jSRf5TZzz?=
- =?us-ascii?Q?SD1IOWPcWebW1q3XGPUxOMGQuMRFuMYcx0QFc8owJ9NEcSzk56D59bqery9b?=
- =?us-ascii?Q?BI6DBwBNV+PwGWVtoS2KfZDqmlf34iUvkJjDbnCzcbw5umDsPe2cX8lUNQoT?=
- =?us-ascii?Q?XU6T2U/Wwnqb3iHmmRSupF9Rzz0K/OYaJ/x6R5fxmIjxoeutJU5X+70GgmPM?=
- =?us-ascii?Q?jeUqzU2ipr1RTRPniqn93dPBlZHYkm2eRcdE/sIsEferPb4kgjsiEmoIpIBH?=
- =?us-ascii?Q?p3+7ECk3LdWl3znrHIPSEdF9vTMADb8fazs6LRZl4uwwtC4wxto6BDH8uFa1?=
- =?us-ascii?Q?+gamaQOldnQ33FXOBvvNEEPJydeNWGHQtM8n1TKMZDzsedmnuo4YX4yap0Fz?=
- =?us-ascii?Q?kyl8Wl89Vu+vLpjmAo5qTyiJo4sjd8wX89xfWuUURgOZU8/LD9VHPXOpUyx6?=
- =?us-ascii?Q?D2zSYMfK/7gjWw69Pg2go7NkXec+6kIWV5Tos5fQPvCtZxk44e3rIlfhKuqI?=
- =?us-ascii?Q?gHj0TRRw/tGrnjdsQjs0rYSTOtAIsHIie8Ym32TqqAL9Z5EJwigSi0LjHz3B?=
- =?us-ascii?Q?BTnlRg2V+qnJ5Kui9pNY9iLkpdj29kgBeH23vl/1uLpHEBoxoehvETCp0V3K?=
- =?us-ascii?Q?lcwd2mjC6E5FLymrALWoHYBDp5zgnINHaprCUS21XDj6sYNvELEQutjZYMLx?=
- =?us-ascii?Q?BD+TPZi/w9IxFD25OBtaRCpWhgRQ+nHPq+HHSjfwc5yrCnBoPLfAc8+srzHO?=
- =?us-ascii?Q?jQYg/pplm1B3lZ8qww7u4dUE5HBWu2tFGR5BmKU+GTGMM9TOeFf1cBxmuwFj?=
- =?us-ascii?Q?NCFSiPCmWPdadAiuCpk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2025 11:32:43.7544
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ac55f74-68fc-4bad-9a5e-08de1227e206
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF00003443.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6536
+References: <cover.1760696560.git.geert+renesas@glider.be> <67c1998f144b3a21399672c8e4d58d3884ae2b3c.1760696560.git.geert+renesas@glider.be>
+ <aPKQMdyMO-vrb30X@yury> <CAMuHMdXq7xubX4a6SZWcC1HX+_TsKeQigDVQrWvA=js5bhaUiQ@mail.gmail.com>
+ <aPhbhQEWAel4aD9t@yury> <CAMuHMdUOX=ToDU_44fHrqKWUtee1LKpgisfTKOe4R33er9g+DA@mail.gmail.com>
+ <aPj9Tu75OFenm7U0@yury>
+In-Reply-To: <aPj9Tu75OFenm7U0@yury>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 23 Oct 2025 13:38:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX0dmJ_bEkKBZkzqXwM9m-Agwr_zMhMDXgdS+LSyoeG5w@mail.gmail.com>
+X-Gm-Features: AWmQ_bkfy7WIJP3UTtd6EyoPnmrw_M6kCYJ9kC1xrPr1U7jSNAuuLhNrJ5p1ts4
+Message-ID: <CAMuHMdX0dmJ_bEkKBZkzqXwM9m-Agwr_zMhMDXgdS+LSyoeG5w@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] bitfield: Add non-constant field_{prep,get}() helpers
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	David Miller <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Shan-Chun Hung <schung@nuvoton.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>, 
+	David Laight <david.laight.linux@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	Michael Hennerich <Michael.Hennerich@analog.com>, Kim Seer Paller <kimseer.paller@analog.com>, 
+	David Lechner <dlechner@baylibre.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Richard Genoud <richard.genoud@bootlin.com>, 
+	Cosmin Tanislav <demonsingur@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Jianping Shen <Jianping.Shen@de.bosch.com>, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org, qat-linux@intel.com, 
+	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
+	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-The current code assumes that only DDR errors have split messages.
-Ensures proper logging of non-standard event errors
-that may be split across multiple messages.
+Hi Yury,
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
----
+On Wed, 22 Oct 2025 at 17:50, Yury Norov <yury.norov@gmail.com> wrote:
+> On Wed, Oct 22, 2025 at 12:01:37PM +0200, Geert Uytterhoeven wrote:
+> > On Wed, 22 Oct 2025 at 06:20, Yury Norov <yury.norov@gmail.com> wrote:
+> > > On Mon, Oct 20, 2025 at 03:00:24PM +0200, Geert Uytterhoeven wrote:
+> > > > On Fri, 17 Oct 2025 at 20:51, Yury Norov <yury.norov@gmail.com> wrote:
+> > > > > On Fri, Oct 17, 2025 at 12:54:10PM +0200, Geert Uytterhoeven wrote:
+> > > > > > The existing FIELD_{GET,PREP}() macros are limited to compile-time
+> > > > > > constants.  However, it is very common to prepare or extract bitfield
+> > > > > > elements where the bitfield mask is not a compile-time constant.
+> > > > > >
+> > > > > > To avoid this limitation, the AT91 clock driver and several other
+> > > > > > drivers already have their own non-const field_{prep,get}() macros.
+> > > > > > Make them available for general use by consolidating them in
+> > > > > > <linux/bitfield.h>, and improve them slightly:
+> > > > > >   1. Avoid evaluating macro parameters more than once,
+> > > > > >   2. Replace "ffs() - 1" by "__ffs()",
+> > > > > >   3. Support 64-bit use on 32-bit architectures.
+> > > > > >
+> > > > > > This is deliberately not merged into the existing FIELD_{GET,PREP}()
+> > > > > > macros, as people expressed the desire to keep stricter variants for
+> > > > > > increased safety, or for performance critical paths.
+> > > > > >
+> > > > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > > > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > > > > > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > > Acked-by: Crt Mori <cmo@melexis.com>
+> > > > > > ---
+> > > > > > v4:
+> > > > > >   - Add Acked-by,
+> > > > > >   - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocate
+> > > > > >     power management debugfs helper APIs") in v6.17-rc1,
+> > > > > >   - Convert more recently introduced upstream copies:
+> > > > > >       - drivers/edac/ie31200_edac.c
+> > > > > >       - drivers/iio/dac/ad3530r.c
+> > > > >
+> > > > > Can you split out the part that actually introduces the new API?
+> > > >
+> > > > Unfortunately not, as that would cause build warnings/failures due
+> > > > to conflicting redefinitions.
+> > > > That is a reason why I want to apply this patch ASAP: new copies show
+> > > > up all the time.
+> > >
+> > > In a preparation patch, for each driver:
+> > >
+> > >  +#ifndef field_prep
+> > >  #define field_prep() ...
+> > >  +#endif
+> > >
+> > > Or simply
+> > >
+> > >  +#undef field_prep
+> > >  #define field_prep() ...
+> > >
+> > > Then add the generic field_prep() in a separate patch. Then you can drop
+> > > ifdefery in the drivers.
+> > >
+> > > Yeah, more patches, but the result is cleaner.
+> >
+> > And we need 3 kernel releases, as the addition of the macros to
+> > the header file now has a hard dependency on adding the #undefs?
+> > Unless I still apply all of them to an immutable branch, but then what
+> > is the point?
+>
+> Not sure what do you mean. You can do it in a single series, and you
+> don't need and should not split the series across releases. Consider
+> my recent cpumask_next_wrap() rework as an example:
+>
+> https://lore.kernel.org/all/20250128164646.4009-1-yury.norov@gmail.com/
+>
+> 1. #1-4 switch kernel users to alternative functions;
+> 2. #5 deprecates cpumask_next_wrap(), making sure it's a pure renaming,
+>    i.e. no-op.
+> 3. #6 introduces the new nice implementation. It's the core-only patch,
+>    no drivers are touched.
+> 4. #7-12 switch the rest of codebase from old version to new.
+> 5. #13 drops deprecated old function.
+>
+> This is the most common scheme. In you case you can cut the corners.
+>
+> The goals here are:
+>
+>  - keep core patches free of non-core code;
+>  - switch drivers to the new functionality one-by-one in sake of
+>    bisectability.
 
- drivers/edac/versalnet_edac.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+OK, I'll make it so...
 
-diff --git a/drivers/edac/versalnet_edac.c b/drivers/edac/versalnet_edac.c
-index fc7e4c43b387..a055f54a389b 100644
---- a/drivers/edac/versalnet_edac.c
-+++ b/drivers/edac/versalnet_edac.c
-@@ -605,6 +605,12 @@ static int rpmsg_cb(struct rpmsg_device *rpdev, void *data,
- 	length = result[MSG_ERR_LENGTH];
- 	offset = result[MSG_ERR_OFFSET];
- 
-+	for (i = 0 ; i < length; i++) {
-+		k = offset + i;
-+		j = ERROR_DATA + i;
-+		mc_priv->regs[k] = result[j];
-+	}
-+
- 	if (result[TOTAL_ERR_LENGTH] > length) {
- 		if (!mc_priv->part_len)
- 			mc_priv->part_len = length;
-@@ -615,11 +621,6 @@ static int rpmsg_cb(struct rpmsg_device *rpdev, void *data,
- 		 * messages the offset indicates the offset from which the data is to
- 		 * be taken
- 		 */
--		for (i = 0 ; i < length; i++) {
--			k = offset + i;
--			j = ERROR_DATA + i;
--			mc_priv->regs[k] = result[j];
--		}
- 		if (mc_priv->part_len < result[TOTAL_ERR_LENGTH])
- 			return 0;
- 		mc_priv->part_len = 0;
-@@ -705,7 +706,7 @@ static int rpmsg_cb(struct rpmsg_device *rpdev, void *data,
- 	/* Convert to bytes */
- 	length = result[TOTAL_ERR_LENGTH] * 4;
- 	log_non_standard_event(sec_type, &amd_versalnet_guid, mc_priv->message,
--			       sec_sev, (void *)&result[ERROR_DATA], length);
-+			       sec_sev, (void *)&mc_priv->regs, length);
- 
- 	return 0;
- }
+> > > > > > --- a/include/linux/bitfield.h
+> > > > > > +++ b/include/linux/bitfield.h
+> > > > > > @@ -220,4 +220,40 @@ __MAKE_OP(64)
+> > > > > >  #undef __MAKE_OP
+> > > > > >  #undef ____MAKE_OP
+> > > > > >
+> > > > > > +/**
+> > > > > > + * field_prep() - prepare a bitfield element
+> > > > > > + * @mask: shifted mask defining the field's length and position
+> > > > > > + * @val:  value to put in the field
+> > > > > > + *
+> > > > > > + * field_prep() masks and shifts up the value.  The result should be
+> > > > > > + * combined with other fields of the bitfield using logical OR.
+> > > > > > + * Unlike FIELD_PREP(), @mask is not limited to a compile-time constant.
+> > > > > > + */
+> > > > > > +#define field_prep(mask, val)                                                \
+> > > > > > +     ({                                                              \
+> > > > > > +             __auto_type __mask = (mask);                            \
+> > > > > > +             typeof(mask) __val = (val);                             \
+> > > > > > +             unsigned int __shift = sizeof(mask) <= 4 ?              \
+> > > > > > +                                    __ffs(__mask) : __ffs64(__mask); \
+> > > > > > +             (__val << __shift) & __mask;    \
+> > > > >
+> > > > > __ffs(0) is undef. The corresponding comment in
+> > > > > include/asm-generic/bitops/__ffs.h explicitly says: "code should check
+> > > > > against 0 first".
+> > > >
+> > > > An all zeroes mask is a bug in the code that calls field_{get,prep}().
+> > >
+> > > It's a bug in FIELD_GET() - for sure. Because it's enforced in
+> > > __BF_FIELD_CHECK(). field_get() doesn't enforce it, doesn't even
+> > > mention that in the comment.
+> > >
+> > > I'm not fully convinced that empty runtime mask should be a bug.
+> >
+> > Getting (and using) data from nowhere is a bug.
+
+^^^ This is about field_get().
+
+> > Storing data where there is no space to store is also a bug.
+
+^^^ This is about field_prep().
+
+> > I will add a comment.
+> >
+> > > Consider memcpy(dst, src, 0). This is a no-op, but not a bug as
+> > > soon as the pointers are valid. If you _think_ it's a bug - please
+> > > enforce it.
+> >
+> > memcpy() with a fixed size of zero is probably a bug.
+> > memcpy() with a variable size is usually used to copy "as much as is
+> > needed", so zero is usually not a bug.
+
+^^^ These 3 lines are about memcpy().
+
+> 5 lines above you say: "Getting (and using) data from nowhere is a bug".
+> Now you're saying: "so zero is usually not a bug". So, is it a bug or
+> not?
+
+> > > > > I think mask = 0 is a sign of error here. Can you add a code catching
+> > > > > it at compile time, and maybe at runtime too? Something like:
+> > > > >
+> > > > >  #define __field_prep(mask, val)
+> > > > >  ({
+> > > > >         unsigned __shift = sizeof(mask) <= 4 ? __ffs(mask) : __ffs64(mask);
+> > > > >         (val << __shift) & mask;
+> > > > >  })
+> > > > >
+> > > > >  #define field_prep(mask, val)
+> > > > >  ({
+> > > > >         unsigned int __shift;
+> > > > >         __auto_type __mask = (mask), __ret = 0;
+> > > > >         typeof(mask) __val = (val);
+> > > > >
+> > > > >         BUILD_BUG_ON_ZERO(const_true(mask == 0));
+> > > >
+> > > > Futile, as code with a constant mask should use FIELD_PREP() instead.
+> > >
+> > > It's a weak argument. Sometimes compiler is smart enough to realize
+> > > that something is a constant, while people won't. Sometimes code gets
+> > > refactored. Sometimes people build complex expressions that should
+> > > work both in run-time and compile time cases. Sometimes variables are
+> > > compile- or run-time depending on config (nr_cpu_ids is an example).
+> > >
+> > > The field_prep() must handle const case just as good as capitalized
+> > > version does.
+> >
+> > OK, I will add the (build-time) check.
+>
+> If mask is compile-time, you can wire field_prep() to FIELD_PREP(), so
+> it will do the work for you.
+
+OK, I will look into it.
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
