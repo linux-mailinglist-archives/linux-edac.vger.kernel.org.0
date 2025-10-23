@@ -1,348 +1,221 @@
-Return-Path: <linux-edac+bounces-5165-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5166-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73968C0236E
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 17:45:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2D4AC02537
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 18:10:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A3723A120C
-	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 15:44:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18CC63A53FB
+	for <lists+linux-edac@lfdr.de>; Thu, 23 Oct 2025 16:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2113533C520;
-	Thu, 23 Oct 2025 15:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68952280CD2;
+	Thu, 23 Oct 2025 16:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="WjTV2+RE"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qMxXg/SK"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012036.outbound.protection.outlook.com [52.101.48.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27AC51494C2;
-	Thu, 23 Oct 2025 15:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761234277; cv=none; b=gqO8tqun05M/3V2+s8pfl9V7BtgeKEkVCinWVRc+28XfTEb5v9Vjr26Z7TfEtJwuHgb0H+4sHvvmDGRgVJ3jZietPIpPHvoXFvtZZLOF7W3YI9vdQMcBtSNG2MUPB+gO1SR50rKv3jd+MQQ7/PoL4Dro80NQ+P39r45UShjHtUc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761234277; c=relaxed/simple;
-	bh=Lhe7H9W5juQg8fLQnUcI/v/IymZD5vPpXsj0aMBkf4Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F3QMtTdnbly5WZejmWh4EuI2iQTCTqygY+nCC3H1TpQwxmlpX9nxehz0QhwGefhZ51aT3E3k2j+WLyry/RUPn6/sDXgDQqvLkgSbKzbCHo8fz+vtEhZ+v/B50MK0LqfjPwS0JursjX9oWcs6k0exgBjIFrkRA/FwCVJADHQIQzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=WjTV2+RE reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4B1D940E0200;
-	Thu, 23 Oct 2025 15:44:31 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id CM8NHk_6x3J3; Thu, 23 Oct 2025 15:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1761234264; bh=xm6fgzstB/ZMSe+0kYNwkV48B2KG+DhMAv57BfPYULQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WjTV2+REKidbHHyzw1OfHF4zQF34Rx/xasIxW6/h/E4JBY8M85nAxKfSMYwXlkw1G
-	 uWwoD5HgmmFJITuOJ2TpbUTkrAAXqi0BBVgdSq/+3BeqxEs0kM+u/bUutjQjoXG3WU
-	 382w6mk2fUOkSdIloOI5ybTQMQAzMLnWfCLBrewvgb+BlcMKf87PH9+NjC/38UR1Ve
-	 Qi34JrKron19uLcrVVtiDcII/gMkB8a9D/VZcDOU/V64xfZqCi6S0un9PZq4rzeA5P
-	 gUOrf3boMrUfgYwELsCUntaza720Ah+fUOtItyKzVsiCBKdUf8fnjFmqXkWNe3PbLf
-	 VKAgSw0fFkh7iXYPItgCtEByZFy6WPjmgADvIF2MOolClZ/iBbtEOQIb2s3NB292Ib
-	 09Gu7i0JomIePuvgjOgGdBVW7ny6B4x1Ino0S/pZ+f5AqaLpZGV9Rb1VvtYcW+vTd7
-	 yUHY5tBm+URDYcgHKUvoaTBytbwmu0JUgLs3EuVesu+Hi9z++iFBHnScydM5a7Yb8a
-	 td3eIlMdYGwlPxEM0p1DtfpSVYsDIYObPvDyHIfs+kw3m/0cF0oINshX9bNSXZCiUn
-	 wYR9XpBUg9z1e41k/9lVNiw5tuLGoJQZ5LeVWVFRg0cK35AQY8PrXszf9mGsZxTGho
-	 VPngnBss0LTXy0+XEeSZKOW8=
-Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id C89B540E00DE;
-	Thu, 23 Oct 2025 15:44:11 +0000 (UTC)
-Date: Thu, 23 Oct 2025 17:44:05 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Cc: linux-edac@vger.kernel.org, git@amd.com, shubhrajyoti.datta@gmail.com,
-	dan.carpenter@linaro.org, Michal Simek <michal.simek@amd.com>,
-	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/versalnet: Refactor memory controller
- initialization and cleanup
-Message-ID: <20251023154405.GRaPpNRQRyvfpZjfex@fat_crate.local>
-References: <20251016052839.2650517-1-shubhrajyoti.datta@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2EA278761;
+	Thu, 23 Oct 2025 16:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.36
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761235760; cv=fail; b=iysg9T6zZ6/IZzzWJi+7BWAk3VR/P3s2SYdkYvSXnKVloxyC6oO+iWB9G0zwThgsDjuxMvMMsK3DIVclqI+/1jYJAvMlVyDproOJbcmMMK3OkyUH8kcxCjiMADFTfUTYhEjLFuaneKJ0xsbneTrBHZsTUgFiCpNvZmq6RJdCPjI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761235760; c=relaxed/simple;
+	bh=WsD7oaMxb4ea52kgZ7kPp0wKQVAXQhhJnKjhwtnVmkY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=hep8XiAYCeiJrHr3roE0tYDCZQMl5Q/TkXpdUO93xRoKc6UME4u6VoMLL2IDylS3oPl2vrVt7Zkt7B5MTCrz3+8tdq1BFnMJumlVaxqfvTxpOFrqm1RHJCpY1heyYM5j7xgeNhndsCW2FRVHxAHD0FiKYJTlNwDlzUa15JC72WQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qMxXg/SK; arc=fail smtp.client-ip=52.101.48.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BCrkGZwNMBWlvRX6M4wqn3L6Yx2PqtLPzpNouyMVqjiB+zHvG6U8I2A1LBdiM8mXDjGWMEQbK7pcNjG0vJue9R5s10UOkkJQNFf182WYAZEyxauv7RDDZOENbZP6ADa71XDb7Z4tYKVS4p4pynPZc/9tzFnOGWUYA5orFe5z+U4JLyxN4v/ZC+FkrDC1Awk1qHs0U15G9zJZRkAXaBUJrMGxp5Vp4hXRPdVhX9+0bKLikHcZj3MnLuIXvON4HqP8XNXL4rFjsUEeyOwFKICMtol7A7y/a1ZF+KzHiZS4R2foIrKQcdAwrTmktB+R4TiEjxcKNsOJhhpHX24Oio5kaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=udrxk/z2IjBAezu7mjTFOr2dv8Elrb0NCcgynU4j+mM=;
+ b=f+l1lzosr8LXVYHL5pw0jvJomWVFvp6+sVUDpRkUdLRvxsa8P9mweooHiI32PdxNm9dsOAZnfKlLJkSZKaPlCyl4wIlPJehsxGENW+0rg5miZ1RR94KpCOwQFYxLbZMNX0MBrfX9tsFqMZb/l9ijbAl96N+qXScEvUGWLIazKpdjLoEVdUVGPkrRa69M/Dqf6xyThOA0N1iV+9G9ghOBNxpq3R5vk4AEDtgdp0EjnaBjEYiWmcayOgSkL2GTQEB8muNLbFKGHOfZcaZMeYTbiYc9oHvHXpgbyBkz5sbP18T0iJHIGkwUeranqmtCI9vcdygwheRLpNRmUkGAuhw/eQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=udrxk/z2IjBAezu7mjTFOr2dv8Elrb0NCcgynU4j+mM=;
+ b=qMxXg/SKCDtTnVR7cOSbdQl1/PPmeHpDp0Zli0kLnnO6CC0l4y5SVViQVSbmsFI+jCBkKc0jLSE4MUtH7rz0NRP9MH0fvOVvORrDkr2xJ95g2K2Qmm3o3ukThgR7UQ4tOITkN60aqfd7UEwpFdiwpFHiwcn00niviWrnA6he58c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ CY8PR12MB7706.namprd12.prod.outlook.com (2603:10b6:930:85::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9253.12; Thu, 23 Oct 2025 16:09:16 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%6]) with mapi id 15.20.9253.011; Thu, 23 Oct 2025
+ 16:09:16 +0000
+Date: Thu, 23 Oct 2025 12:09:06 -0400
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Shyam-sundar.S-k@amd.com, bhelgaas@google.com, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
+	linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux@roeck-us.net, mario.limonciello@amd.com,
+	naveenkrishna.chatradhi@amd.com,
+	platform-driver-x86@vger.kernel.org, suma.hegde@amd.com,
+	tony.luck@intel.com, x86@kernel.org
+Subject: Re: [PATCH v3 06/12] x86/amd_nb: Use topology info to get AMD node
+ count
+Message-ID: <20251023160906.GA730672@yaz-khff2.amd.com>
+References: <20250107222847.3300430-7-yazen.ghannam@amd.com>
+ <20251022011610.60d0ba6e.michal.pecio@gmail.com>
+ <20251022133901.GB7243@yaz-khff2.amd.com>
+ <20251022173831.671843f4.michal.pecio@gmail.com>
+ <20251022160904.GA174761@yaz-khff2.amd.com>
+ <20251022181856.0e3cfc92.michal.pecio@gmail.com>
+ <20251023135935.GA619807@yaz-khff2.amd.com>
+ <20251023170107.0cc70bad.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023170107.0cc70bad.michal.pecio@gmail.com>
+X-ClientProxiedBy: BN1PR12CA0020.namprd12.prod.outlook.com
+ (2603:10b6:408:e1::25) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251016052839.2650517-1-shubhrajyoti.datta@amd.com>
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|CY8PR12MB7706:EE_
+X-MS-Office365-Filtering-Correlation-Id: b4457f6b-dd94-43a3-094d-08de124e83d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?vxenqRFkU3E3Y84+hFlCV1gbCgS/xSe75ft2TSEz3WaMeH1+CYHzxub5gK0Z?=
+ =?us-ascii?Q?Tb0LLDeKJP+Q/I47OvEwGEBZLOwHSP2oo7O0032vt1PK39+Q6Q3ZOIhJnPps?=
+ =?us-ascii?Q?FYRFusc/yiaXxd60mQnrpeXNK9fKYpPV053iBfPX+UzaNPrKnmoVxdHomJIT?=
+ =?us-ascii?Q?YSAJNv/Hzeq6bYF0o92XR4Jx0MGAEK6qIly5vFQsCEQP1veT/LcDNkHxXt7t?=
+ =?us-ascii?Q?Qd70qF88vpeSCUA1Ywurm1DWoWqlaBYTjmcIkjgug/p5L58xC1Ecj/m4RSS5?=
+ =?us-ascii?Q?mkKePbUt2xNXdgV6WENMQ+3BlaOt87supumWysfn9qknEbtjOg6jDvt3oStA?=
+ =?us-ascii?Q?SYA1xPmstD7oB0jBWRsYfAJBu3kkCL/AOK/1VhWfUXTVRQ4GxdkczxxEgNDC?=
+ =?us-ascii?Q?FJ1Ttvr4HFUTqqLkQ+gd59e0wX2P3QRXdf1Hqo8TA4QZ2F0k0pET8clIUfaI?=
+ =?us-ascii?Q?+TN1iV9nulrQK/b92iz/5MYXyrY4GRMG+umnaSQQwkwd32PUwNtgf49wkTIi?=
+ =?us-ascii?Q?RslvBFp7JnZHCmq2W9Dry5q4B2693faI5tFpGs9se7F2OCxyyX0cPktRZRd9?=
+ =?us-ascii?Q?gx3foGJG+/Z2hBxueC9ljBtLhdP3+PTGZbgtSvJnfjN611ejLYg/54AOu0la?=
+ =?us-ascii?Q?pBXpA6LtnwYT5soxapJOx7YIdNxe5j15WNyRghVj45CPVDDZGZakT2YToEud?=
+ =?us-ascii?Q?asvmEhk893GSSqXr2ZuLKRUCiUMsk31GacatdM2b3uhp6zCeDnxc9TwVXm6W?=
+ =?us-ascii?Q?4jfi/L8CSnEJIfwDOlxdZV+Xv+if86wR/7TmVjRqAdQ5q8dlZVHuM8ZuoYfa?=
+ =?us-ascii?Q?6jRMkDjolfyiNsdeF1hu2bh/8xNI7y2icXoxw8Y+gFHH76Rv3Ec3fX53Kq+Q?=
+ =?us-ascii?Q?zLFpujri3z+RU785yaiiEiCSNCHWkyFra5WwveN1Efh2ZOuNgWXqGHJR01dw?=
+ =?us-ascii?Q?2z7lxipiUhpTi8uvPCE/xLBs94HIFSm07Ytz+eiYkCRAta3h5dl2jU5eaHI2?=
+ =?us-ascii?Q?wZvLzWWwzHxdc6woyJcWdLlvI+kXRdYhkde+JMtusWhgPieW8VGLJGvy3aaO?=
+ =?us-ascii?Q?HI7gP8M7ncCZgJgMu8dIohr4FpQnJISfW24ctTjofDSqmlnRuLkWtc9cAdPP?=
+ =?us-ascii?Q?ZMt+9mbbkT41R3QFKLUXpOGWklzfnOvt3eKd8u22clw8vWUZXudwHzpGnqox?=
+ =?us-ascii?Q?MjhuUlMt13flvDNX5UKFAjG6Ob8HVbIDbfyfr3vLnqeTuZydiqhf89tzeAsn?=
+ =?us-ascii?Q?1DNUsjvem4A/uWs/p/3McGWFKN2jsoqzBuXCI76XzEq2dRJkm3rAkj9zI0lY?=
+ =?us-ascii?Q?3pqoaxtdxYpT56O8IuQycYQq7BwhP3yqk7w4JDhX/oqGTn9VjYv5jGmrtfoU?=
+ =?us-ascii?Q?/QEiVlNVVU9mJ4WPpe8prxF2vFnnuCvc/YNRoLioNCkwzymGdzGmg32K2cPE?=
+ =?us-ascii?Q?Q9FHpVJo6TMXNxtWKqTjNJVgs+jIyZKQ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?2ruyWjEoHSg3GdxuuYeAYf/bNhzNseXUG3yS4PScwchMKma+JLJYsMve9KXy?=
+ =?us-ascii?Q?Tz/gi4iwHNwXb6S3/yUGOUfJn1jtffXJqidumJopNB2kl1LNcJLbPnQnvgII?=
+ =?us-ascii?Q?dO6F0G8fb62VwPZZ9W7pFz+0g12i7FUUZs5uroWnYOQyAhBma+2n8QS4TzIQ?=
+ =?us-ascii?Q?e2h5sfhj9PJuZT7Rm+x21STbazqKHQXxLLJ2GbIU9NFJBqkIqyugFp38xktF?=
+ =?us-ascii?Q?XFs4fvflIYs88PogwEEA5W56GPlDx7wqc2FX1gFZv38Zt2mkl9YH4vSzAd/r?=
+ =?us-ascii?Q?koI7QN2+fgGFNfcetfyAWe8FFX3fqcQ7f86Ti0XlJfyMEDvfeEuorSaXjD7e?=
+ =?us-ascii?Q?h8OGapQLYhogmTEwvqhzGvS3iPt10CgFl2s5nE2vmFuj/MFZe1ebQ5WG5siG?=
+ =?us-ascii?Q?eydky88fNu3L3jLs0XO6QWDDez4eAkFKeULWHXGs9rXC9Q0Ix6wCu1OxLJdz?=
+ =?us-ascii?Q?8uKggJjHdnDSmuPS8Ev85kP6qv8bVlCX8QZf+Pe9vaJ8zu0Gyc3YzQOBXlSO?=
+ =?us-ascii?Q?wHw8i4o73YLlhZ7XA+7DCGkQ4lpbj4jXvTAULUsZM3mv/ozxyOQYe4a3JxYb?=
+ =?us-ascii?Q?D7UL57GzjSphmUDsGdMoiMFZI6oCi188DEgEpyy/MkZu5Ssx2ljxfo1rv2Xy?=
+ =?us-ascii?Q?6Hi8j4l5hKB28xWxomAN8ZIZWoEwsrWLJwDCdut3njZFiuejNibJwoWEfdc/?=
+ =?us-ascii?Q?OJZejMY2j1Yb4AM1c48AWoD/UjmM1P8YMTsAO8+Maq32RdXAkHXo6yvTCP4U?=
+ =?us-ascii?Q?qdVMvbAY39vW/0gdBZ+yoEw2S4L0SPFWSWx0RaZ7xBW7qlEk9Hb1GYfO5NCt?=
+ =?us-ascii?Q?OORAiUoNjpJR4ZupWWtL5UFM/gt7zsEvxoB2CmMnoyJAgP5p24eSp3j30OaH?=
+ =?us-ascii?Q?+gfb4R1wEUDI9ZaORLVsmLNm1nelhUZHvY13WyGLE+3HIQHe+awWy7Wox55n?=
+ =?us-ascii?Q?be/91ZNOEJg0SLOCNrHQrOsSivd5wCZr0NR8D3fxuNOdFfFz1Rwy063W4H1v?=
+ =?us-ascii?Q?PaHFbCXir35sEhR5TCnZImgCuAmZr1HhvcGubuIfJ9EA1knh0aOZTLywH6XN?=
+ =?us-ascii?Q?Vd9/qgD7fn5HVqXKTWggilbLcwYpLdKmIbVBS/fnQa/ZsDXtdiz8HPe6b3fO?=
+ =?us-ascii?Q?gLLnoGiv1/MMVscIgLgWvo9LQVRV6Y2ceqEMxlxcg6pnUok0b9/gSTwMuIaV?=
+ =?us-ascii?Q?QejmVTGlSwp24gMCQdD5+AAZqyMRgCWqjm6u6DEbtdfotjfNeOlF75gt3bta?=
+ =?us-ascii?Q?HAoZYd4napYDuCJ4zNM7mVDlV3hmveyFSekm4QIQe/WDcBMalbDmSMWwJNwn?=
+ =?us-ascii?Q?/5eiH7X1rhxbQb64s7elAdMQjniaNU8fpgVoAEjBYN6yaLkDMWOyt/JzHFCS?=
+ =?us-ascii?Q?Cnta465ASQ5NTK4vHCUTla5ntNZt+jcoN0lXgt3XbRb+8yJPlw/7QE/ja5A7?=
+ =?us-ascii?Q?3JjxXTjBhtrAcIppGM+iGhmvMKsFBbhevTh3jd2XJLo/YaZXvD2o5RQoiB11?=
+ =?us-ascii?Q?c1DjA8xgnhAjWap8JicPYFECLCbxMZZdUw1e50w3rktbUuHfS2PXusKU+ei5?=
+ =?us-ascii?Q?2X15Bwh4P0T2Pr84Az/FMJRpw0WWLiDks4qrRNCK?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4457f6b-dd94-43a3-094d-08de124e83d9
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2025 16:09:16.3836
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hmLPJ5iUFZ8TF7clUIwRd8qvsJ5vuLY9OENqhORX2Tyg2G/eQTL3lJTJXeP0iYz1rKBt84yJ7GAnbLcbWY8JDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7706
 
-Thanks for doing this!
+On Thu, Oct 23, 2025 at 05:01:07PM +0200, Michal Pecio wrote:
+> On Thu, 23 Oct 2025 09:59:35 -0400, Yazen Ghannam wrote:
+> > Thanks Michal.
+> > 
+> > I don't see anything obviously wrong.
+> 
+> Which code is responsible for setting up those bitmaps which
+> are counted by topology_init_possible_cpus()?
+> 
+> I guess I could add some printks there and reboot.
+> 
 
-On Thu, Oct 16, 2025 at 10:58:39AM +0530, Shubhrajyoti Datta wrote:
-> Simplify the initialization and cleanup flow for Versal Net DDRMC
-> controllers in the EDAC driver. Key changes include:
->=20
-> * Introduced `init_single_versalnet()` for per-controller setup and
->   `init_versalnet()` for looping through NUM_CONTROLLERS.
-> * Added proper rollback logic using `remove_single_versalnet()` when
->   partial initialization fails.
-> * Improved readability and maintainability by reducing duplicated code =
-and
->   consolidating error handling.
+The kernel seems to think there are 6 CPUs on your system:
 
-"Describe your changes in imperative mood, e.g. =E2=80=9Cmake xyzzy do fr=
-otz=E2=80=9D instead
-of =E2=80=9C[This patch] makes xyzzy do frotz=E2=80=9D or =E2=80=9C[I] ch=
-anged xyzzy to do frotz=E2=80=9D, as
-if you are giving orders to the codebase to change its behaviour."
+[    0.072059] CPU topo: Allowing 4 present CPUs plus 2 hotplug CPUs
 
-IOW:
+We don't seem them enabled, but they may still get APIC IDs. If so, then
+the IDs would be beyond the core shift of 2.
 
-"Introduce per-controller setup and teardown functions..."
+APIC IDs b'0 00 -> CPU0 on logical package 0
+	 b'0 01 -> CPU1 on logical package 0
+	 b'0 10 -> CPU2 on logical package 0
+	 b'0 11 -> CPU3 on logical package 0
+	 b'1 00 -> CPU0 on logical package 1
+	 b'1 01 -> CPU1 on logical package 1
 
-and so on.
 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> ---
->=20
->  drivers/edac/versalnet_edac.c | 158 +++++++++++++++++++---------------
->  1 file changed, 87 insertions(+), 71 deletions(-)
->=20
-> diff --git a/drivers/edac/versalnet_edac.c b/drivers/edac/versalnet_eda=
-c.c
-> index 1ded4c3f0213..fc7e4c43b387 100644
-> --- a/drivers/edac/versalnet_edac.c
-> +++ b/drivers/edac/versalnet_edac.c
-> @@ -758,92 +758,111 @@ static void versal_edac_release(struct device *d=
-ev)
->  	kfree(dev);
->  }
-> =20
-> -static int init_versalnet(struct mc_priv *priv, struct platform_device=
- *pdev)
-> +static void  remove_single_versalnet(struct mc_priv *priv, int i)
+Please try booting with "possible_cpus=4".
 
-remove_mc(). You don't need to stick "versalnet" in static function names=
-.
+The "number of possible CPUs" comes from the ACPI Multiple APIC
+Description Table (MADT). This has the signature "APIC".
 
-> +{
-> +	struct mem_ctl_info *mci;
-> +
-> +	mci =3D priv->mci[i];
-> +	device_unregister(mci->pdev);
-> +	edac_mc_del_mc(mci->pdev);
-> +	edac_mc_free(mci);
-> +}
-> +
-> +static int init_single_versalnet(struct mc_priv *priv, struct platform=
-_device *pdev, int i)
+Can you please provide the disassembly of this table?
 
-init_mc() is fine.
+You can use the following commands:
+1) Dump the ACPI tables to binaries:	"sudo acpidump -b"
+2) Disassemble the APIC table:		"iasl -d apic.dat"
 
->  {
->  	u32 num_chans, rank, dwidth, config;
-> -	struct edac_mc_layer layers[2];
->  	struct mem_ctl_info *mci;
-> +	struct edac_mc_layer layers[2];
->  	struct device *dev;
->  	enum dev_type dt;
->  	char *name;
-> -	int rc, i;
-> +	int rc;
-> =20
-> -	for (i =3D 0; i < NUM_CONTROLLERS; i++) {
-> -		config =3D priv->adec[CONF + i * ADEC_NUM];
-> -		num_chans =3D FIELD_GET(MC5_NUM_CHANS_MASK, config);
-> -		rank =3D 1 << FIELD_GET(MC5_RANK_MASK, config);
-> -		dwidth =3D FIELD_GET(MC5_BUS_WIDTH_MASK, config);
-> -
-> -		switch (dwidth) {
-> -		case XDDR5_BUS_WIDTH_16:
-> -			dt =3D DEV_X16;
-> -			break;
-> -		case XDDR5_BUS_WIDTH_32:
-> -			dt =3D DEV_X32;
-> -			break;
-> -		case XDDR5_BUS_WIDTH_64:
-> -			dt =3D DEV_X64;
-> -			break;
-> -		default:
-> -			dt =3D DEV_UNKNOWN;
-> -		}
-> +	config =3D priv->adec[CONF + i * ADEC_NUM];
-> +	num_chans =3D FIELD_GET(MC5_NUM_CHANS_MASK, config);
-> +	rank =3D 1 << FIELD_GET(MC5_RANK_MASK, config);
-> +	dwidth =3D FIELD_GET(MC5_BUS_WIDTH_MASK, config);
-> +
-> +	switch (dwidth) {
-> +	case XDDR5_BUS_WIDTH_16:
-> +		dt =3D DEV_X16;
-> +		break;
-> +	case XDDR5_BUS_WIDTH_32:
-> +		dt =3D DEV_X32;
-> +		break;
-> +	case XDDR5_BUS_WIDTH_64:
-> +		dt =3D DEV_X64;
-> +		break;
-> +	default:
-> +		dt =3D DEV_UNKNOWN;
-> +	}
-> =20
-> -		if (dt =3D=3D DEV_UNKNOWN)
-> -			continue;
-> +	if (dt =3D=3D DEV_UNKNOWN)
-> +		return 0;
-> =20
-> -		/* Find the first enabled device and register that one. */
-> -		layers[0].type =3D EDAC_MC_LAYER_CHIP_SELECT;
-> -		layers[0].size =3D rank;
-> -		layers[0].is_virt_csrow =3D true;
-> -		layers[1].type =3D EDAC_MC_LAYER_CHANNEL;
-> -		layers[1].size =3D num_chans;
-> -		layers[1].is_virt_csrow =3D false;
-> +	/* Find the first enabled device and register that one. */
-> +	layers[0].type =3D EDAC_MC_LAYER_CHIP_SELECT;
-> +	layers[0].size =3D rank;
-> +	layers[0].is_virt_csrow =3D true;
-> +	layers[1].type =3D EDAC_MC_LAYER_CHANNEL;
-> +	layers[1].size =3D num_chans;
-> +	layers[1].is_virt_csrow =3D false;
-> +
-> +	rc =3D -ENOMEM;
-> +	mci =3D edac_mc_alloc(i, ARRAY_SIZE(layers), layers,
-> +			    sizeof(struct mc_priv));
-> +	if (!mci) {
-> +		edac_printk(KERN_ERR, EDAC_MC, "Failed memory allocation for MC%d\n"=
-, i);
-> +		return rc;
-> +	}
-> +	priv->mci[i] =3D mci;
-> +	priv->dwidth =3D dt;
-> +
-> +	dev =3D kzalloc(sizeof(*dev), GFP_KERNEL);
-> +	if (!dev)
-> +		return rc;
+Both commands are part of the "acpica-tools" package.
 
-No, do not return here but jump to the end of the function which unwinds
-everything that's been setup so far. In this case, it should do
-edac_mc_del_mc() what edac_mc_alloc() allocated.
+[...]
+> 
+> BTW, I forgot to mention that I have a second seemingly identical
+> board with same BIOS running Phenom X6 1090T. It is not affected.
+> Not sure if this is helpful. I haven't tried swapping CPUs.
 
-This makes the unwinding loop easier in the remove function, see below.
+Can you please share the dmesg output from that system? And the ACPI
+table too?
 
-> +	dev->release =3D versal_edac_release;
-> +	name =3D kmalloc(32, GFP_KERNEL);
-> +	sprintf(name, "versal-net-ddrmc5-edac-%d", i);
-> +	dev->init_name =3D name;
-> +	rc =3D device_register(dev);
-> +	if (rc)
-> +		goto err_mc_free;
-> =20
-> -		rc =3D -ENOMEM;
-> -		mci =3D edac_mc_alloc(i, ARRAY_SIZE(layers), layers,
-> -				    sizeof(struct mc_priv));
-> -		if (!mci) {
-> -			edac_printk(KERN_ERR, EDAC_MC, "Failed memory allocation for MC%d\n=
-", i);
-> -			goto err_alloc;
-> -		}
-> +	mci->pdev =3D dev;
-> =20
-> -		priv->mci[i] =3D mci;
-> -		priv->dwidth =3D dt;
-> +	platform_set_drvdata(pdev, priv);
-> =20
-> -		dev =3D kzalloc(sizeof(*dev), GFP_KERNEL);
-> -		dev->release =3D versal_edac_release;
-> -		name =3D kmalloc(32, GFP_KERNEL);
-> -		sprintf(name, "versal-net-ddrmc5-edac-%d", i);
-> -		dev->init_name =3D name;
-> -		rc =3D device_register(dev);
-> -		if (rc)
-> -			goto err_alloc;
-> +	mc_init(mci, dev);
-> +	rc =3D edac_mc_add_mc(mci);
-> +	if (rc) {
-> +		edac_printk(KERN_ERR, EDAC_MC, "Failed to register MC%d with EDAC co=
-re\n", i);
-> +		goto err_unreg;
-> +	}
-> +	return 0;
-> +err_unreg:
-> +	device_unregister(mci->pdev);
-> +err_mc_free:
-> +	edac_mc_free(mci);
-> +	return rc;
-> +}
-> =20
-> -		mci->pdev =3D dev;
-> =20
-> -		platform_set_drvdata(pdev, priv);
-> +static int init_versalnet(struct mc_priv *priv, struct platform_device=
- *pdev)
-> +{
-> +	int rc, i;
-> =20
-> -		mc_init(mci, dev);
-> -		rc =3D edac_mc_add_mc(mci);
-> -		if (rc) {
-> -			edac_printk(KERN_ERR, EDAC_MC, "Failed to register MC%d with EDAC c=
-ore\n", i);
-> -			goto err_alloc;
-> -		}
-> +	for (i =3D 0; i < NUM_CONTROLLERS; i++) {
-> +		rc =3D init_single_versalnet(priv, pdev, i);
-> +		if (rc)
-> +			goto err_rm_versalnet;
+If the BIOS is the same, then I wonder if they hardcoded 6 CPUs in the
+MADT then mark the extras as "not enabled" on parts with lower cores.
 
-No need for that - just unwind here and drop the label.
-
->  	}
->  	return 0;
-> =20
-> -err_alloc:
-> -	while (i--) {
-> -		mci =3D priv->mci[i];
-> -		if (!mci)
-> -			continue;
-> -
-> -		if (mci->pdev) {
-> -			device_unregister(mci->pdev);
-> -			edac_mc_del_mc(mci->pdev);
-> -		}
-> -
-> -		edac_mc_free(mci);
-> +err_rm_versalnet:
-> +	while (i) {
-> +		i--;
-
-That should be:
-
-	while (i--)
-
-so that when you get to remove here, you remove only fully initialized me=
-mory
-controllers.
-
-> +		remove_single_versalnet(priv, i);
->  	}
-> =20
->  	return rc;
-
-In any case, yes, do you see how it all becomes a lot simpler this way?
-
-Thx.
-
---=20
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Yazen
 
