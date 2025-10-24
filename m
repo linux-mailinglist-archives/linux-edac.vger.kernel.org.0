@@ -1,269 +1,261 @@
-Return-Path: <linux-edac+bounces-5184-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5185-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72EB1C0627F
-	for <lists+linux-edac@lfdr.de>; Fri, 24 Oct 2025 14:05:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 453EDC068E7
+	for <lists+linux-edac@lfdr.de>; Fri, 24 Oct 2025 15:45:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B62983BAD9B
-	for <lists+linux-edac@lfdr.de>; Fri, 24 Oct 2025 11:59:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 441283AD6B9
+	for <lists+linux-edac@lfdr.de>; Fri, 24 Oct 2025 13:43:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C4330217A;
-	Fri, 24 Oct 2025 11:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B240E31D74A;
+	Fri, 24 Oct 2025 13:43:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iQ93Bx7o"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="fDkdTN8a"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010067.outbound.protection.outlook.com [40.93.198.67])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013002.outbound.protection.outlook.com [40.93.201.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7887304BC1;
-	Fri, 24 Oct 2025 11:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBD4313552;
+	Fri, 24 Oct 2025 13:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.2
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761307155; cv=fail; b=b4H1JupLKfU/5Rr549wSqE2y4HAiYct8gn/pnzfwHh3HW/PFnnDkbMUY0d3zpQp1kCQby3cHo+PXmALve2wkuJQKpp9tU25L2Y7eHR8QQQ3HeTM3ikpW7zhWTiOYVxpknQ5pjT1Q8A1+Z23GQjt6TF80jPJe+ng+ZCLsmNDKDRU=
+	t=1761313386; cv=fail; b=PXti5DhCI6jcZOVyWTs+jwlshkPhwB0k0h98FBsnxn3toqhZAsd0tHetrXN/5ZvLZLf/ee5e3iFdQHpFrZPr97/RUJNVjlsl6giYm/wdEeJ93AHVUvQWuNrxWX289OUa7tytEDHAS5mw7DoT7dGGXMiTEYdWLNcJDPKgH8B0faQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761307155; c=relaxed/simple;
-	bh=lPcBJ+IurrnNE6VPSaCah0Rffl7kGD3utAQ/klb2YM0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Iuk5+iWZYisnFIPMX6yxlczWPB7zeg1Xh/kBYprXyzHxsV0eXapKO0qwU1/KG+rvRx1H0UK+AExqid40yaZS1ESmWGYvNdtlVdgrRdr0Crbpko/G8QMw1GpxAAd/d/wJLEPq8bzQQB3dvUu8O7r5wAeqrKZVt5YruA58XK+MxsI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=iQ93Bx7o; arc=fail smtp.client-ip=40.93.198.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1761313386; c=relaxed/simple;
+	bh=4QFSW+VgabJQTpr/Hi3iBGGrdxqiLy6ExFHKp41Qhr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=dsCATXQ7+p3odvZeixiVUrr399m8zNYDAyb23Pqcx7liZn+V+3RGDyeFlUggy1+SyQ70qt36E9LO8aBeFjMBK36VN3wQ1XqU1obYzRPeTu+PP7v7ow+d0HsXsp7XMpSXqfYLcGFdB9Ot3EPVzs2wbUAbZbJv7HuyLf961ztvar0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=fDkdTN8a; arc=fail smtp.client-ip=40.93.201.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PwAO0UdqEgjC5Plw08VYKS0cC16x2hai/4x8Xn/SfuLoxYCeig4AlQYWr8OrR+9ToowC1eaqegnqVXp3y0mMEUIUh/zAXmfCmkl/G37niwsbdqvTmL6WFsvslLxf2Jbqw2VSZE48GOUuhz8n4LBx+WJCgvOabRVrnbq/W4WsfbIJEsUR71RgMlA8rNQP6SrR6wjczjgAum5tdfncU7fM5Efcvaf3hRalrPHYcffOFCcda785vNz1a6cKDyYMBQSN0aFt4DARyijuBDHx8D/L5NXWwEFxPvQd9p42qsTSZoxC5ok8niS0ZO2tBKKNtYC8O04C7EylJcQ1s6NX6zpnCg==
+ b=ttn8iHZHVVUPeAVnXpum4y36msfxUYO7y5Wg25VVNjOS4NP7IWGEHGt9byw2fRq5JZV8jxuslSkrbNl4VrJfT3SGXlp+S60pkynqFdJcEUlccy5ikQc6jpqt8aPbpPPOq0qSk1vU87++s4kAwSgiWJTnTl6yTFHg8bLVkDawMH7kC/eNKiNQcIU08n4vxEWyO8VnoPvPn1ZudQv2P5s6Pq9ElfLNyDbH5Xv83MDXbAqnTRvQhvObora9GcPcLgVF20EFHih2cNQBGyWa2lAA3Lrge5cw4PUfhbKzZfSBF26p6jHM3w+hZLy3ujRoRh17hafBgjvuEFzsb+7KzkE6hw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S7asKaPQ1krv2Lckh95gj7h3c7eO3u8dmHB9Xz+7gOU=;
- b=ibHA/DkmvpbTVkIyuO1OYFM6suffr5t5pHb4mZXZS/A26edA5h2BCyOf3Jy1lRLJUflji3fkWa9Yrz4hMYovW4/dtwNhukvuKTi5d52IUOPD8z2YEDpnENqJ7VN+st6yKW+2+Vuo7irZXHC5theAvAflKIF5Ei5GAzzj5Q2DLE0iFTyVA1C9Ui0m6VCpOnwfCDzqQqTgpNNJVL7VVqQNM2rJWxZBXYdhC160SXGoiN6c9H4a3nrS/A3tq9eE6oNpsy09qslO283QnA1+53VT64oeD5J7qsj6p9FhSD+krBniBBBEefsJjXEEKYZgphEUmmSVIGC5rR7q1wfXqV4sgw==
+ bh=ruAnUcc1+lZ67uaf3lE128bJmddDd2J1GYpv+v4z7SU=;
+ b=DTic0kfS1ZkRfxkD2rNRz2wMFlE7iqix22UzqWbGX8/xDXSYjVVKNaeiNTgBTnMFEE1E7WJO/hF0/ajm/EXc4SDQcpKr4O0MXA3aBgrdLqeKII0P3ErvhUhPcIrIRzqkMK482k+P5Dp2+lOMd77qZ9R/J5Ew45VOpqzh5mqWizCUKvt1NMZZ92p8Y2USA7IPyrM9No7R0zWHdgGg27rAhG3Hfe7ILxCIgCq80qBR1s7BFR0xb3M83fzao5wWXO+o1OZHAM0T7O5aTdc3s6bElC5OrmjN0/j5NWYXi92mhmGE0vXqXpcJpJmiJULZTuY6NiutCUA1OA1xDJhK3EtADQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S7asKaPQ1krv2Lckh95gj7h3c7eO3u8dmHB9Xz+7gOU=;
- b=iQ93Bx7o/YEVHjg3sk/KR1FpUk/YahuX/jvkd3GO9WpMjj66EVxRP1YZJLcZZjt1oSZoZVUtRJB4F8U8+Fomhaw1zcD1KuFpHTzfZ4u+l6pVMM9y9wEhzbT7GwLB2ZrksQBktjtY08b9bR98Spt6yOckSakZHPe1n2R/5Odqc/kyewpwLrIjj3R4goTAkeKZsmZAT9dyRlrjsDz29Ys9Ph5qgRTUbZL7ugpmCE1g2xa/9JtumAowXPKxEKSk9FcGlPrH+N15VsxQD3hel58aUeIymsXzUe0EzbkOQjhRBYihbN4B5zecPyTFps1REJpgu9tt8jw1Gn348TCZBa7NRQ==
-Received: from SA1PR12MB7199.namprd12.prod.outlook.com (2603:10b6:806:2bc::21)
- by MW4PR12MB7215.namprd12.prod.outlook.com (2603:10b6:303:228::8) with
+ bh=ruAnUcc1+lZ67uaf3lE128bJmddDd2J1GYpv+v4z7SU=;
+ b=fDkdTN8ap66rfTM9/hYFHDwxDvOtjiN8ctt7uKbP4DSxxQYCFTVyRKJikdvWiqgPhSZ6pEVAMLtNIAMrXyJL3P7f/Ok9iQe9W1Dv4Qg8Te+lCWxUViTFPhAXv1R6lcj10SE5RvsOxFh6i1/V4a/ZCXDJ2gCOYP/1L3VJqyRvwLg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ SA1PR12MB6799.namprd12.prod.outlook.com (2603:10b6:806:25b::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.12; Fri, 24 Oct
- 2025 11:59:09 +0000
-Received: from SA1PR12MB7199.namprd12.prod.outlook.com
- ([fe80::ae1b:d89a:dfb6:37c2]) by SA1PR12MB7199.namprd12.prod.outlook.com
- ([fe80::ae1b:d89a:dfb6:37c2%7]) with mapi id 15.20.9253.011; Fri, 24 Oct 2025
- 11:59:09 +0000
-From: Ankit Agrawal <ankita@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, Shuai Xue <xueshuai@linux.alibaba.com>
-CC: Aniket Agashe <aniketa@nvidia.com>, Vikram Sethi <vsethi@nvidia.com>, Matt
- Ochs <mochs@nvidia.com>, Shameer Kolothum <skolothumtho@nvidia.com>,
-	"linmiaohe@huawei.com" <linmiaohe@huawei.com>, "nao.horiguchi@gmail.com"
-	<nao.horiguchi@gmail.com>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "david@redhat.com" <david@redhat.com>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "vbabka@suse.cz"
-	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
-	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>,
-	"tony.luck@intel.com" <tony.luck@intel.com>, "bp@alien8.de" <bp@alien8.de>,
-	"rafael@kernel.org" <rafael@kernel.org>, "guohanjun@huawei.com"
-	<guohanjun@huawei.com>, "mchehab@kernel.org" <mchehab@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "kevin.tian@intel.com"
-	<kevin.tian@intel.com>, "alex@shazbot.org" <alex@shazbot.org>, Neo Jia
-	<cjia@nvidia.com>, Kirti Wankhede <kwankhede@nvidia.com>, "Tarun Gupta
- (SW-GPU)" <targupta@nvidia.com>, Zhi Wang <zhiw@nvidia.com>, Dheeraj Nigam
-	<dnigam@nvidia.com>, Krishnakant Jaju <kjaju@nvidia.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "Jonathan.Cameron@huawei.com"
-	<Jonathan.Cameron@huawei.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"Smita.KoralahalliChannabasappa@amd.com"
-	<Smita.KoralahalliChannabasappa@amd.com>, "u.kleine-koenig@baylibre.com"
-	<u.kleine-koenig@baylibre.com>, "peterz@infradead.org"
-	<peterz@infradead.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] mm: handle poisoning of pfn without struct pages
-Thread-Topic: [PATCH v3 1/3] mm: handle poisoning of pfn without struct pages
-Thread-Index: AQHcQnTIOnJO2MvUxkKEvE04/4cxdLTREQaAgAAjR4CAAAHgmg==
-Date: Fri, 24 Oct 2025 11:59:09 +0000
-Message-ID:
- <SA1PR12MB71992D35824674EB3A0C7D4AB0F1A@SA1PR12MB7199.namprd12.prod.outlook.com>
-References: <20251021102327.199099-1-ankita@nvidia.com>
- <20251021102327.199099-2-ankita@nvidia.com>
- <d2550489-834c-4dcd-b41f-d22590880343@linux.alibaba.com>
- <20251024115201.GD847003@nvidia.com>
-In-Reply-To: <20251024115201.GD847003@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB7199:EE_|MW4PR12MB7215:EE_
-x-ms-office365-filtering-correlation-id: 7a374073-93a7-4994-b341-08de12f4bd86
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700021;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?AHymHMZtIdtCXWrk00B3pNK/XcWyv6W8tJbwoiSJwBR+Pl1JsjLeorTkTq?=
- =?iso-8859-1?Q?Ttlj3ugxooty2l3itOXOeJF9dpeVbyQr4h1tAz/0YyLYBOdWnqmO4n3bit?=
- =?iso-8859-1?Q?GX7nKXMO89T6VWh/Wsq6uQyfZkSVqWxya3BsoMvo9tSmKKAkUhXVW/MG4s?=
- =?iso-8859-1?Q?1WgPoXlXxxdbvCXQas1PsdE2HtLLFmQuih0ifBr33f9LwAhch3xxRwvHp1?=
- =?iso-8859-1?Q?7KXGH3cnsZ38hZcIgdnR4A1Bi39kMwYuponb089DLNdR/MCmtAkODCPGgV?=
- =?iso-8859-1?Q?I3ka3mRYwIMN8lJU7cAhL6/tj46WX2XxLuXoIgPfnZxEiOg0e/ksdvksR1?=
- =?iso-8859-1?Q?VfyO5HfaIbVL9BprKwXhvtNSulAlbxEN8ibDmbPl/KQQfbRWtz4i5Ne9d7?=
- =?iso-8859-1?Q?8py5sI2f/VSTAGorXpMVoDj/0r/I+8V9WUPhqgkexDIYd6TE1Vz5cjuMEd?=
- =?iso-8859-1?Q?CxFF39Wq1QbDSN1PwUrtoqn6yBZ8KIlQJMFPIBxDnCL/+8Xr7OXA6CbBpx?=
- =?iso-8859-1?Q?wdRb0u+0JhJXCLCdd2xcsvxsT5pfLDj+pPlr+gIyryfbp/MXskB7Rrkd0d?=
- =?iso-8859-1?Q?Aviy30ynyqivPjx3zxJ3VDrqEhowagsfp9SB/XWKnvvsEx6T1HnOLhydoO?=
- =?iso-8859-1?Q?O7Pqjoark7YClkjFy1zpT6opK4KOSVa8C4vvX5qoj+fXDJLi0VYs/5XJU0?=
- =?iso-8859-1?Q?OBRwTIU8cqXo767YZYINRhrEW7gXVbSBJiVyxQy63dhYDEq9oLwHmP2SCN?=
- =?iso-8859-1?Q?VbPEKv5mIzWGKUGMwe/F3cwmg+CHNJO9XX0/UCfrMyDZUMd0Oa3d6/ewSC?=
- =?iso-8859-1?Q?A8RnDtAIrAfthR8TIdNIaa2H39Ou7z+P1QCzTYclcZ611DJVQ+X2/z27/Y?=
- =?iso-8859-1?Q?Rmd5kz7BJBo0x81OzPZxR9Sn/Ka4snp+n3nhmnVCFgZJ0jSSPexSVjntVV?=
- =?iso-8859-1?Q?5uJaNx0NGF9WZwHxtQj5eITRMr5gvejenYGKSGFs6/f7R5UK1XSh/PPz/y?=
- =?iso-8859-1?Q?Tqk9ptYnWwHbXfZZYTPGgiLoQi1CwvX52nJIiiIPoSMSmMfxfLGJWe6rH6?=
- =?iso-8859-1?Q?AX224ubEuAxUbJ5aZ02KvAG8Ves4fg07TTS/pYtiet9ICdvDP8s94HQsDW?=
- =?iso-8859-1?Q?BYPo6VnC017GyJLYsrrxcHZ1fhtFmyPR8RMeCAdTGq7XXOqAwHnS/stibB?=
- =?iso-8859-1?Q?FX9aHvc1bEPVrCc4biANDVOerBZPvpgqhvnsXEJDTLBuOVUJ4I+qW8jGCy?=
- =?iso-8859-1?Q?t67T1Mr6+iE0Gd/ZnoYdKZ76tEgmWG5oAU++sMz0X7jQlByYWQdGj/lpVG?=
- =?iso-8859-1?Q?XUWOxlv9FC4ipkdgRoNG0O4RwwLcetv6Tp5Ziby+ChATM7osxMQsZgCRI0?=
- =?iso-8859-1?Q?d7KukEjnrHI+Fdo1z2udA8yHlozXh2WwN8pQ116yETKMZlQiANQQSKEFfj?=
- =?iso-8859-1?Q?JoYs6jdVL9K+ggn9CJm0yqhHzEEOPng6Dsks84to07RDRnaSlZb4kyvDTd?=
- =?iso-8859-1?Q?Aj5mHOlGLxXOCFrY9NKePJXUuVE/WGzYdO0XibiAUcgVRx4Bn+PtIWKKiv?=
- =?iso-8859-1?Q?v+kGAKABIJbnx2o4AOYR963Rcj5U?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR12MB7199.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?Ehs1ONWSw4DmJpu8YlT71Kf0cmpDETmsWErDFcu9YnIwZksUMHtrOFTiUw?=
- =?iso-8859-1?Q?mSZOjaujOA0e7GDMLyIZr0eBTg8gQdy1KfFRR/ynzPonwohMbSwysnlHLT?=
- =?iso-8859-1?Q?2iy6VaYnHWXP9daDUYGLwtKP/smPswYRs+wOhY/QGkWs34mUs0iOsqJw/S?=
- =?iso-8859-1?Q?DcQxLVdrRJmKOwlght1lR7swQIgXOXxDoZ2IWjdM308OG5qQMdumcSgjyt?=
- =?iso-8859-1?Q?uNNg0cPH8d0WIqZflPsfY30xzijl3w3UcrxfN39UYfw7jBDufDcuNvWMQM?=
- =?iso-8859-1?Q?D42TwzyL3p8rNkteEpaEdV1MYkxzF6Edw/NWqcLRz9dG9sPeChK+El7sNw?=
- =?iso-8859-1?Q?My5bLwiSafqk0r/BNJ+G7CJY8TmHTC/ewkbeEo9q/G8Su1f44DS/GsO6PC?=
- =?iso-8859-1?Q?HO6PlPcLWSG7HOH1iwY6hollnLyxolMrGi560JN765c+EQmBj99RYKqtSw?=
- =?iso-8859-1?Q?urFYELuV2KzBZLButCAqfH9tfoC2DOPSyYyxcWwAvV6mecDcEpvDG5rDkt?=
- =?iso-8859-1?Q?UY3rKsW1MxVCUmR70LSvGIWMuGfaiALMZfh1yCslpQHYrqOmLJd0s4Arno?=
- =?iso-8859-1?Q?aiUbc8zEypzuvTQvFAosCOx//MO/BCBZoZCyi2H5BffJN8J69KgLtSnSCl?=
- =?iso-8859-1?Q?iJECAF5QjQDuZyuzABIYddA+trpY2JmYxCrpDN3zjR41ltkumnhgBgNkti?=
- =?iso-8859-1?Q?0SUccjdNw86q4LnwTJAp3lg9zHYplwqM00XSaSBiCmvbY6Woo9sgJfw3i/?=
- =?iso-8859-1?Q?ZP3B7bwIbfJEZl3vdiRbzDhjP+BpjnJo3lz+XGvSkTPZtS3mUTJirHz8zK?=
- =?iso-8859-1?Q?VRiKw/AVWj/XPo4jdQIFVbWdSfNiUHdBaOuIUFPaPwowbOxlnIvx/WAsWF?=
- =?iso-8859-1?Q?fUZ0A/Nz2wbojOPHU/jd1HrH7MNwtyVcF8OLAFj8ztwartftLKqrdM3aDW?=
- =?iso-8859-1?Q?060M5DwgodtMwM1RgIlwA0UQ7OAR2QNsal5NCN2cPHCgz27TaA/g12/DHw?=
- =?iso-8859-1?Q?46dBlEgo2Us+7RpaXwZig5EQxjeve4tIsNweH7fKlMla+/GU+D6jLdKOj9?=
- =?iso-8859-1?Q?YsQUBtXOI5S6fo+vxTNIFSzl8kpU69zWHpVkf8OSb4VyHvY2WhvNl1C2Da?=
- =?iso-8859-1?Q?Nrv0ParFO/04DFBIFGo10oNJ4t61b7xUO8IQXYSx7HglEHyi3t/VZzLlgU?=
- =?iso-8859-1?Q?QGZONqop3WVQKCuJ9MlWG6ijtzzg08Qvf6QhV7HXazdBaEzR8uJ84wYl+m?=
- =?iso-8859-1?Q?qXg2fZHdMHFg4DD952IvbWVPSBxZXthp9z6WC4mog3+MMzTRdcNuAnnquL?=
- =?iso-8859-1?Q?TXCteI3pvx25KAPwEN+UkQuLcFaFJ/LoAKA0gU9YTLD0OuTO302LSD0sSY?=
- =?iso-8859-1?Q?M6Jf9/BiU9mc4HjNzHsnwknKFt40fDgauhRp0obUvoZdDr4yPjpq9u8haQ?=
- =?iso-8859-1?Q?j01WW1qkx3w9zMXI9zdthNy4SaHJZlpflJVsOy1b7IrOKh5lLA8SGHNV3V?=
- =?iso-8859-1?Q?WhYIJHFAKqQmKFv5fslYgXmcHcRN+8jUR1XjbQQqYIS61oYeldLc+SE/MN?=
- =?iso-8859-1?Q?wsj9Qm3oOai5v3ik74pOJeTQJC/1nVuSIhuSWNG5zwZg+JK1xMBhdkOGLd?=
- =?iso-8859-1?Q?ixb7vXc7Suda4=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.13; Fri, 24 Oct
+ 2025 13:43:02 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%6]) with mapi id 15.20.9253.011; Fri, 24 Oct 2025
+ 13:43:02 +0000
+Date: Fri, 24 Oct 2025 09:42:56 -0400
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Shyam-sundar.S-k@amd.com, bhelgaas@google.com, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
+	linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux@roeck-us.net, mario.limonciello@amd.com,
+	naveenkrishna.chatradhi@amd.com,
+	platform-driver-x86@vger.kernel.org, suma.hegde@amd.com,
+	tony.luck@intel.com, x86@kernel.org
+Subject: Re: [PATCH v3 06/12] x86/amd_nb: Use topology info to get AMD node
+ count
+Message-ID: <20251024134256.GA27286@yaz-khff2.amd.com>
+References: <20251022173831.671843f4.michal.pecio@gmail.com>
+ <20251022160904.GA174761@yaz-khff2.amd.com>
+ <20251022181856.0e3cfc92.michal.pecio@gmail.com>
+ <20251023135935.GA619807@yaz-khff2.amd.com>
+ <20251023170107.0cc70bad.michal.pecio@gmail.com>
+ <20251023160906.GA730672@yaz-khff2.amd.com>
+ <20251023202503.72987338.michal.pecio@gmail.com>
+ <20251023190429.GB796848@yaz-khff2.amd.com>
+ <20251023190901.GA840389@yaz-khff2.amd.com>
+ <20251024104851.4d3030b0.michal.pecio@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251024104851.4d3030b0.michal.pecio@gmail.com>
+X-ClientProxiedBy: BN1PR10CA0006.namprd10.prod.outlook.com
+ (2603:10b6:408:e0::11) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|SA1PR12MB6799:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1377dd6-7eda-4b43-db53-08de13034009
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?QKcCQf7zgkU/CjHy64DYS3HvcA9lmgyA+D8MptLrLMzuD9NS4Xxn/YOt1o5n?=
+ =?us-ascii?Q?aZz5sRMSo9Y6QzXBj2q7/a+FE4XdxxoEroBlv1s89WhFftRKBs7bkC3yNBOc?=
+ =?us-ascii?Q?AlWAbVipE+Enpj/93Z+dKssCUPwIEZBpma1OgV7imqXmLrDQFUGlIQbbBPyV?=
+ =?us-ascii?Q?MVJJH7cOVW/W/mv+T1fbC70a35dYPCo4D5z07XGSjAXCcHIy1CvD17K7EMVY?=
+ =?us-ascii?Q?Y0SKARy8h8Gtx5NVYhLlh3GQqTE5K+4R5UgmuR5CDHC/6irdnbcn1QAOBTn0?=
+ =?us-ascii?Q?uq0wGl657nJOp8yiAtf/qYFbE9aA5+cTjbsGEOHG1IJzHRyoU4NZUaDWnbkB?=
+ =?us-ascii?Q?LT+1fAkjtiHAjTM6qCRAYVdJGDm/NlChS8wK1Ou5ZI5PqfpggzU3bOI5/GDo?=
+ =?us-ascii?Q?WNnM4F2jRP6k6bqTGzNf69pddFaDHzcXuMoCZgz01tYy/pRYb8b+wEbynouR?=
+ =?us-ascii?Q?2pqkNA1xglqFp8rR/ftBWN8kZFjoWw0douwZUR5OhNzOMohsSlb7H/AkLW/Q?=
+ =?us-ascii?Q?ZeTgg87eBpac3OzSOSMfrJws8plDYsYhNNuGLgkeLwszPiqpMeRz7zoboAJu?=
+ =?us-ascii?Q?Ki3xpz0EbCGNJi6eyz6WVhE0vJqXZMFE417Xag7F0oqGDuKhrILJBvP9oXAa?=
+ =?us-ascii?Q?yKxLgVFURPfvLSEuRL+KjIhy94dDdvZV0y4DaYaGfqgO3rFR8UR0rOoRyIEf?=
+ =?us-ascii?Q?s1GXDr+qAU2oeleU3JSHpCAatsY7rT/bOUMbUjEy8D+AGES+CuVGuDrVEWQY?=
+ =?us-ascii?Q?Vq3tkmOVZz1Tpbg7Dx6RTURrv9edfM8+Zzz3dkl3N86Y2VOJxnXxPhk9CP6N?=
+ =?us-ascii?Q?wypovbujTmi10lLCpyAMdWl70diXehUAMBvpCPcfA+Wc7mtQ3md6Q/w1gHXL?=
+ =?us-ascii?Q?xD+iG3pWrQiUzUEHFSrJuhyc58ybMzTLwWEz1BKM7cAGV52rnUrid7m9t/3u?=
+ =?us-ascii?Q?j59thtvzUUoSPdJWEvF4MDO/RPp+3dT5kT9EKBqQbX1oNiB+ZIpO0YbhDtQ3?=
+ =?us-ascii?Q?Bg2JtjGNnvhXkxXgbPApRJF/MqeaJhNmINlvuFGQU1LaPJBZIBpc7j+xqmDZ?=
+ =?us-ascii?Q?i2LNUSn9MrpNoFJl8CqHXLLbNLT0n9K+fAN7rcIV2qoxxvAjDd8jmF8BX43g?=
+ =?us-ascii?Q?BXaCrVQf9e1u9Yk774lB5xt1wLKYjY0Yjov7DgUFMERhkXgKSco8iJLYaoCE?=
+ =?us-ascii?Q?F8Cbvth0z7FtcUctHVBZWs5U3l/qgkr5UO6Og6hjIHhP8oH3M3H4y2gY8Yzj?=
+ =?us-ascii?Q?UQowU83Mi40ixZ3jYXzy3dct6218LDGspILDlVQ4lBEKsCeOqWyuelonNp41?=
+ =?us-ascii?Q?+3kvNj+fJK2BYeRnj8LiVS8eOLztaG9w1Foi2H6FBL+qDeGCc2ySYzW1eChG?=
+ =?us-ascii?Q?4RWRL4AP/UWAquE/FWBCzuOGlv9I8YqR1d69U4VYeEbgvNqpoA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?K/jtlAYoEP4Ja+s/59nSCMwmThjLORbKj9Ko04MZQHBwNvFQq+j943xnoYjf?=
+ =?us-ascii?Q?TYqsmr8p0HtkoMh39LGOpWPxJjp9iqFu2ISizZHWyBrRnE/SsKs/lxnFbA9d?=
+ =?us-ascii?Q?c3K6ohgnAr5IYXlKoX7KxvH4FHh0rA2/u3sRNLTAfJjywKzzC/ltuf8yavmK?=
+ =?us-ascii?Q?p73jp1oFvoZcmVdKTffanOP5QqFlz5/4qpDU/w+kU8tSew+McW8XY82RLsNx?=
+ =?us-ascii?Q?ezetD66N+6C2Tu/YsfP+MmkOmxCGzbGlQeO5KAbPpk2rJZDA04aLpR0ucNIF?=
+ =?us-ascii?Q?QQD0JR6ekv1mked9XraJPoDgVPQ3CiWyvi5KQljazaCv5NYRiTOxkM938+i4?=
+ =?us-ascii?Q?c/IWGlPNlRUVoI3VqSOI3USSoq3fgWpnRR0M378KsiCEtnSi7WcFCo0Y/uqL?=
+ =?us-ascii?Q?E4qabXJ+WeqshA+uU16XM2titex/mf6kwQnx5KF82r5JmEukbz9sOno/wQnv?=
+ =?us-ascii?Q?1yhvFDeff1AExaXkRPdif71FefwPXjWl3soyYPMchkF1v3ebRF33D+1udpug?=
+ =?us-ascii?Q?MZtK/ph+5ZduSn7pOv9xlR9ncEUmiwV6VpzfVORSI74+ZvchgQnuNjzQ3O63?=
+ =?us-ascii?Q?BZEH8DFOFZMifUT6ysErv7euUzi3Mg1xIMymRvodIPmO5wWXOI3yBIW/xF1u?=
+ =?us-ascii?Q?n4F6QgrlQpnXROawSDCpO5+yB5zBToFLQFrUq/UF0+rkPpFoVgZxHhgMUnr5?=
+ =?us-ascii?Q?N/ZAkQhYEs1FERVdwnfpQT5H/GzQCOrq4YoDT37nbpiZPBAyNNqjHzb3fSgt?=
+ =?us-ascii?Q?MfV1aPJisnvh4qDSxW8EJahy24KFIy1zHmyhbIdS0PoMaORfl6rOjoovYNoc?=
+ =?us-ascii?Q?K/oOnM3YTfwV9NPmFwiaeBvbfF2JvbOXBeqkQYoY1B5pEUlrNBcmLpZ+8QFj?=
+ =?us-ascii?Q?QdZO9sY03nTr+yoXcnv8m60GQAAwb/gOAXZs6NwSl1LYXJh+HsS3LLnemkTu?=
+ =?us-ascii?Q?WbgLgdRYBaosyWbjImiIkzuahHILC/HnhI693q2fap52e2ivCUYQmzvw7APP?=
+ =?us-ascii?Q?/gNrs+j3YKLLYbWMDgbCfpvl7D/VjdUmlVpDQy6GTzHbzl5i65uOkQW1xUsd?=
+ =?us-ascii?Q?NLje11xhdC15Z/jkMt8Uoksz4c0kQx32cWlVIr24wPHK3mic97159KY2zwU0?=
+ =?us-ascii?Q?LKzwntBos5MKipS1WhHHGpEEPo25gzQPY+eyUWM1X5rxFnVv8lYnQVkNgm0I?=
+ =?us-ascii?Q?HoVhiwlA9hwARW0Yj+Ez3ersY0B1eCPCL+UrtPhhzoS5mnB98rFf0EA8QfXd?=
+ =?us-ascii?Q?WuNW4gwJWEbLm5hXCmkqHRxTPs7k978D7IKro2S4AJwrheZfLGCsDwBQQAiG?=
+ =?us-ascii?Q?yEShJtoFdDIA6ml3766fQTgp9kDzrX1+j3WJWHEwQ5+eQfHyrO5WeIyuQzSS?=
+ =?us-ascii?Q?uMy2KgnRzs33cKFKYlg/xwXYkgqDj+1Yj//lBxRoeDD25zvpSbxlpOSWHWwF?=
+ =?us-ascii?Q?e1EfnunrmDAkQpO1mui2r9t4BgbY3zizhn5ic64g5W8odCy+ig/4z5n+2M3h?=
+ =?us-ascii?Q?i4o3vH4krHCQy3JRiHQQ1EGQNGD6Ed3nBW7bVi17fhsvrY8kzHRoMuI0VOdB?=
+ =?us-ascii?Q?mzRVEpUhxpBHJhE0edwHqcrgv4OrEGXSZFdl6WgI?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1377dd6-7eda-4b43-db53-08de13034009
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB7199.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a374073-93a7-4994-b341-08de12f4bd86
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2025 11:59:09.3711
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2025 13:43:01.7511
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3Q6YDAEs8zHNRhAqE/TWWnednCV8JA4EKq7QwsV+O5Ca0/snjJG3KSGW9f5RhDCvq171PAWgbGpccdWQO+hHyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7215
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pnmpCqih/vMrV6yWDMbHW8BPZeN+cP4WmeLHPy8LCyErFbBmTKTabWA7Z5tlNG2q78gHv6Yu6o9POzruWwVZeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6799
 
-Thank you so much for the feedbacks! Comments inline.=0A=
-=0A=
->> +int register_pfn_address_space(struct pfn_address_space *pfn_space)=0A=
->> +{=0A=
->> +	if (!pfn_space)=0A=
->> +		return -EINVAL;=0A=
->=0A=
-> Is there a reason callers may be passing NULL?=0A=
-No, that would be an invalid use case for such. =0A=
-=0A=
-> Register and unregister are good places to use guard().=0A=
-Thanks for the suggestion Ira. Will update it.=0A=
-=0A=
->If the pfn is not in the process why is it added to the kill list?=0A=
-I kept it as it is still a process with VMA mapped to the problematic=0A=
-PFN. This would ultimately result in SIGKILL to be sent to the process.=0A=
-in kill_procs(). This is very similar to the __add_to_kill() implementation=
-.=0A=
-=0A=
->> +static int memory_failure_pfn(unsigned long pfn, int flags)=0A=
->> +{=0A=
->> +	struct interval_tree_node *node;=0A=
->> +	LIST_HEAD(tokill);=0A=
->> +=0A=
->> +	mutex_lock(&pfn_space_lock);=0A=
->=0A=
-> scoped_guard()  Or probably wrap this part in a guarded function.=0A=
-=0A=
-Ack, thanks.=0A=
-=0A=
->> +void unregister_pfn_address_space(struct pfn_address_space *pfn_space)=
-=0A=
->> +{=0A=
->> +       if (!pfn_space)=0A=
->> +               return;=0A=
->> +=0A=
->> +       mutex_lock(&pfn_space_lock);=0A=
->> +       interval_tree_remove(&pfn_space->node, &pfn_space_itree);=0A=
->=0A=
-> IIRC removing something not in interval tree will panic kernel. If I=0A=
-> am not mistaken, should here do something like=0A=
-> interval_tree_iter_first before interval_tree_remove, to avoid=0A=
-> driver's ill behavior crash the system?=0A=
-=0A=
-Thanks Jiaqi for the suggestion. Yeah, I think we should add it.=0A=
-I'll fix that in the next version.=0A=
-=0A=
-=0A=
-> If pfn doesn't belong to any address space mapping, it's still=0A=
-> counted as MF_RECOVERED?=0A=
-=0A=
-Hi Miaohe, I wasn't sure how should we tag this. It seems you=0A=
-are suggesting MF_FAILED is more appropriate. I'll address that.=0A=
-=0A=
->>  	p =3D pfn_to_online_page(pfn);=0A=
->>  	if (!p) {=0A=
->>  		res =3D arch_memory_failure(pfn, flags);=0A=
->=0A=
-> Can we move above memory_failure_pfn block here? I'm worried=0A=
-> that too many scenario branches might lead to confusion.=0A=
-=0A=
-Sure if there isn't any objection, I'll update it.=0A=
-=0A=
->> On Fri, Oct 24, 2025 at 05:45:45PM +0800, Shuai Xue wrote:=0A=
->> Rather than having MM maintain metadata about these PFNs, have you=0A=
->> considered adding an operation callback similar to=0A=
->> dev_pagemap_ops->memory_failure?=0A=
->=0A=
-> I think someone could come with such a proposal on top of this, it=0A=
-> would not be hard to add some ops to pfn_address_space and have the=0A=
-> code call them instead of using the address_space.=0A=
-=0A=
-> This version just needs to link into the existing VMA machinery (ie=0A=
-> collect_procs_pfn), it doesn't make alot of sense to push that work=0A=
-> into drivers.=0A=
-=0A=
-Thanks Shuai for the suggestion. However, I agree on this with Jason.=0A=
-It is preferable to keep that as separate.=
+On Fri, Oct 24, 2025 at 10:48:51AM +0200, Michal Pecio wrote:
+> On Thu, 23 Oct 2025 15:09:01 -0400, Yazen Ghannam wrote:
+
+[...]
+
+> 
+> > Sorry for the rapid emails. Here's another interesting commit:
+> > f0551af02130 ("x86/topology: Ignore non-present APIC IDs in a present package")
+> 
+> I have this commit on 6.12 but it doesn't help.
+> 
+> As I understand, APIC ID is a bitfield of the form:
+> 
+> [package ID] ... [core ID] [thread ID]
+> 
+> In my case, per debugfs:
+> 
+> domain: Thread     shift: 0 dom_size:     1 max_threads:     1
+> domain: Core       shift: 2 dom_size:     4 max_threads:     4
+> domain: Module     shift: 2 dom_size:     1 max_threads:     4
+> domain: Tile       shift: 2 dom_size:     1 max_threads:     4
+> domain: Die        shift: 2 dom_size:     1 max_threads:     4
+> domain: DieGrp     shift: 2 dom_size:     1 max_threads:     4
+> domain: Package    shift: 2 dom_size:     1 max_threads:     4
+> 
+> So my phantom APICs simply look like another package with weird
+> non-sequential ID. (Probably not an ACPI spec violation yet?)
+> 
+> f0551af02130 only rejects disabled APICs in the same packages as
+> enabled ones. An earlier proposal in that thread was to reject all
+> disabled APICs on bare metal unless explicitly "online capable":
+> 
+> https://lore.kernel.org/all/87sf15ugsz.ffs@tglx/
+> 
+> This clearly goes against fed8d8773b8e and it seems to go against
+> what you wrote about AMD BIOSes potentially marking CPUs as disabled
+> in MADT and presumably allowing OS to wake them up with ACPI?
+
+Yes, that's right. It's not clear how this should be handled. :/
+
+> 
+> You asked elsewhere what happens if I online CPU5/6. I don't have
+> directories for them in /sys/, so not sure if I need any extra steps
+> to make them appear, or the kernel considers those CPUs bogus for
+> some reason and amd_nb could do the same?
+> 
+> Bitmaps from /sys/:
+> /sys/devices/system/cpu/enabled:0-3
+> /sys/devices/system/cpu/kernel_max:5
+> /sys/devices/system/cpu/offline:4-5
+> /sys/devices/system/cpu/online:0-3
+> /sys/devices/system/cpu/possible:0-5
+> /sys/devices/system/cpu/present:0-3
+
+Right, good question. Why bother marking some CPUs as "possible" if we
+can't bring them online?
+
+> 
+> I tried 6.18-rc2 and it's same thing, except EDAC and GART don't work.
+> On both kernels, possible_cpus=4 fixes it:
+> 
+> [    0.072066] CPU topo: Limiting to 4 possible CPUs
+> [    0.072074] CPU topo: CPU limit of 4 reached. Ignoring further CPUs
+> [    0.072082] IOAPIC[0]: apic_id 4, version 33, address 0xfec00000, GSI 0-23
+> [    0.072084] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+> [    0.072086] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 low level)
+> [    0.072089] ACPI: Using ACPI (MADT) for SMP configuration information
+> [    0.072090] ACPI: HPET id: 0x8300 base: 0xfed00000
+> [    0.072097] CPU topo: Max. logical packages:   1
+> [    0.072097] CPU topo: Max. logical dies:       1
+> [    0.072098] CPU topo: Max. dies per package:   1
+> [    0.072103] CPU topo: Max. threads per core:   1
+> [    0.072105] CPU topo: Num. cores per package:     4
+> [    0.072105] CPU topo: Num. threads per package:   4
+> [    0.072106] CPU topo: Allowing 4 present CPUs plus 0 hotplug CPUs
+> [    0.072107] CPU topo: Rejected CPUs 2
+
+Thanks for checking this.
+
+By the way, have you looked through your BIOS settings to see if there's
+something relevant? Maybe there's an option to remove the
+bogus/placeholder APIC entries?
+
+Here's the K10 BKDG for reference:
+https://www.amd.com/content/dam/amd/en/documents/archived-tech-docs/programmer-references/31116.pdf
+
+The "CPU Cores and Downcoring" section has some explicit restrictions on
+what is possible. So maybe something there can be used to filter out
+bogus CPU entries.
+
+Thanks,
+Yazen
 
