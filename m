@@ -1,386 +1,248 @@
-Return-Path: <linux-edac+bounces-5194-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5195-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ED92C0926E
-	for <lists+linux-edac@lfdr.de>; Sat, 25 Oct 2025 17:03:55 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCCD2C0A999
+	for <lists+linux-edac@lfdr.de>; Sun, 26 Oct 2025 15:22:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC8561C20E30
-	for <lists+linux-edac@lfdr.de>; Sat, 25 Oct 2025 15:04:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5D1814EB213
+	for <lists+linux-edac@lfdr.de>; Sun, 26 Oct 2025 14:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A06153009E2;
-	Sat, 25 Oct 2025 15:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD69246BA5;
+	Sun, 26 Oct 2025 14:19:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ii82CEJR"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aUj+IRv5"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010023.outbound.protection.outlook.com [52.101.46.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE5E3019DA;
-	Sat, 25 Oct 2025 15:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761404612; cv=none; b=JszAJm/W2aAuZv6oKAeQ+6DbCpqJ8GiHAaKjXQxOUW9cnqmls+wsn+sSagrZ9hqnBckO/ap2gZyZm9uRowp1m7c5fEN7Prx3lWEHiucxeWHKz9xoXXt14VxMuoKNSyuooYpKV2C4qNYTVRIi5/oDorxpzM4uOW0D3fM8tit4Tl0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761404612; c=relaxed/simple;
-	bh=BkmuO16h4mmUA1yuwJLb1GsQSmrpODIBX6fKyc5zkCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fMM2OIKsXMG5TcDeZNvj/gC/FXZj/rq93BB88LhaiICZ3ttM6k+ov0IvFkc0Sy9vlPNqxPF4wPUBI3Amk+gVysNN9f8NFa2omvWGyHU8HE8/HHA5k1o+XppeUKhYWPZdio0VqxteCH9BSsk2zhgP7rimhewb/1HMuyPZuzHsN7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ii82CEJR; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 2FB8640E019F;
-	Sat, 25 Oct 2025 15:03:27 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id LAmeftlVqX9D; Sat, 25 Oct 2025 15:03:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1761404602; bh=nCSgOU7dM4yjzLP0h/Updbog8vAhppuSiCCOin6HIpg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ii82CEJRRaYuL74C99DQdELj96yqtGFin5opC/b6OtA90rbMWGTQRfauocDES1lHW
-	 WsVZKrt4GHgyWpJ/z4FwUnQB60zVlTdmgAadc0fZZf66WS4uqLayXJgFerm5FMK+wI
-	 D0ermsAq1V8RLBMTC3CR8JXVmjvpuYBRvRC5DBH6EgkyRQ5FDn3tD601xq3QIhwFev
-	 Hg4rPpMWBJ3SCYJs8IOR4rlJVUEc1PNmMkoRMIz6xVxSWYz67iR6XJXjqKUNwXUQiG
-	 /t6ooNMNdw2hBmH1Rlytf7ffQHIScwvxhHpG2/s3Qn4j7Q1sq/qTCPeDeuwyuGyRVh
-	 zGZQfl8qRekJDZE5g5RNE9YLEjZYIQJL/tXNsufayrxPEbYQL/WrQ7LC4wcs57HP/X
-	 5Za/TBrXkjeCHBRKXRm1J1j4RP2QE9DF/U3asuhQ1bPg3x/4TfDiAhzVlvS7kIqtxq
-	 sbfCnVPjp/k7TldLrmyLyD1Mf4kFZwjcfmS7wvOx+8vcG3xVl+580Oh6WcQmdJAIsC
-	 LbHbMsnSekq27Fj9bziByqicjHyKzTbsGq9X+pI3+zcKKa0zNVeNwf/2lJ1+bG4BhP
-	 j7o0bCYUi6e1te7/DowQjsbPnnCaWyThxMayt/BDWi6l7RDpwltCwU/MO4+F5ZP8ow
-	 0+lZ+1CNhkkW7oy23KZcbLhc=
-Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 565A840E019B;
-	Sat, 25 Oct 2025 15:03:10 +0000 (UTC)
-Date: Sat, 25 Oct 2025 17:03:04 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-	Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	Bert Karwatzki <spasswolf@web.de>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v7 2/8] x86/mce: Unify AMD DFR handler with MCA Polling
-Message-ID: <20251025150304.GXaPzmqFawI0NrCC-0@fat_crate.local>
-References: <20251016-wip-mca-updates-v7-0-5c139a4062cb@amd.com>
- <20251016-wip-mca-updates-v7-2-5c139a4062cb@amd.com>
- <20251024150333.GSaPuVRQYxH92zyrmO@fat_crate.local>
- <20251024203012.GA251815@yaz-khff2.amd.com>
- <20251024212723.GGaPvvO3l2OlUEG7Xn@fat_crate.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB39D23EA9A;
+	Sun, 26 Oct 2025 14:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.23
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761488378; cv=fail; b=TpnmkKUIu0iVRup6OHPAU4Z90ob7Od+z/iuSlEaM0QmffJCoVfsyFAEhlx2UnzocFiF3rWeurO1D13IkskvJDLwHUG4yW21ockWXfp3yqoBQPf4z6JFFDo3tyaz/uF4NlVmTGOgUNpRpQ/49JQ8BVOsGQgHQJo7Z6ULFtYxSjlo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761488378; c=relaxed/simple;
+	bh=10B6nXMx8iXFQDeFFdQ2xfQHzNGPbf6hVEBMmObmzcI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=At2ApokiwVV69eKnPPGbeuNTGoAaYb1AZIdDH3R5lWiwGUlRsayUnVQGZzI/RNaZX1vpOCjYtP06WoZviG+eQ/CI8K4C8Md0bW7xfkq/vRRSc4foJ1EPXVwaXgQel7Cg+RWjcFKG75NaDDHMkSIRCbIX2hyT1QMPgKdK+WzJ/u0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aUj+IRv5; arc=fail smtp.client-ip=52.101.46.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hyPDnZLE+w2ztO/ND6UcaRYfu5/NpAdjOXcBBWj6ER7DcsUXFukPzTvOdegGBIjdLz5wPqBc7P0Rev3nP/E41bseYAnMQeltd0gZXMSkLNExn54PoyvUMypR6Fj8YP/7gWt9zfwGFEugTc4dujsyRJviLLxWpQJwEx54bNtf1kEFhypM4kqbslyBaDXQDFLxSWk7srwEXdqgWCOUd9PqUxdOHM8sDXUZwLOi4rxESQBwAvwmCLA8uKTCK8yaE5wg5p0MKlQrz2b+SmP2j52MVZEmIS7aBzkF/IvBXxgUebq1lTNFO/0eOZ037NACCgdYEVnmvacJeIhNtT4AMX+TDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vkkse/YCPhiM7IeSw5aVTcy7msUuRv8QaE1VftLvlMU=;
+ b=O9ejhQuo4O92dE8JlLCgMWcyyY7UpOXKe7yMd+fxBhKqIUfUh8W0RcI7WElVwxFD0XKqqG6lwvGNIZyUhyWPbJSYm2Y0gAcuDa/3GQ3l8U6tmfLdJ5id1mhn8MKWzHdZeScZRo8by7rrRxJsH7H02+1UZ3xs4jfX8HcjGW56JMpvcD5vzp3aNyum+qJTK24cRMsq8Ek9nXfXOZWAxrjvrQ1PjM6lt93LPsHHB6y7WxkRFXFVW2dUU+VwFfMBOymX4usO8GE303no8W4aRIW5zgACCK6jPQ/F5debpc/vfy0/W3xzuN5AYrrQzV7j3hhl3sxemtteQwZuGqw0MCE9IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Vkkse/YCPhiM7IeSw5aVTcy7msUuRv8QaE1VftLvlMU=;
+ b=aUj+IRv5JC4VovFuswLLZ1NBRSwtgVxbUPN5VvNj2bil2LP12qzmhoaiwhV8EKQJgOspCqBdpx0b+rp3acTsy/9/DgkefekX8WGm4NjEU7nWlSj8Rk8D3+kh8XLyKwVCKWc31a2O3v/kG0+y+FN9xo8wm7LDGqWC9MbaACM7b3XwzJW7TajTgye7trz3t7dNAQ4lwLWv9tRIDO/B4RKfCwSfCoFaS5/StQCEgNeXjrsZH8UAj1JvZzmr4R85NhdpOS0afLEzMC4XtdaKFPOojYyxH28pdkcnWAbeJ3cCw+iI0j5SrE6zyX+LW/oW9yOfJE9BqycD/BNAjcdS6fx72g==
+Received: from DM6PR05CA0057.namprd05.prod.outlook.com (2603:10b6:5:335::26)
+ by DS7PR12MB5790.namprd12.prod.outlook.com (2603:10b6:8:75::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.17; Sun, 26 Oct
+ 2025 14:19:32 +0000
+Received: from DS1PEPF00017097.namprd05.prod.outlook.com
+ (2603:10b6:5:335:cafe::fe) by DM6PR05CA0057.outlook.office365.com
+ (2603:10b6:5:335::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9275.5 via Frontend Transport; Sun,
+ 26 Oct 2025 14:19:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF00017097.mail.protection.outlook.com (10.167.18.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9275.10 via Frontend Transport; Sun, 26 Oct 2025 14:19:31 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.34; Sun, 26 Oct
+ 2025 07:19:22 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 26 Oct
+ 2025 07:19:21 -0700
+Received: from localhost.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Sun, 26 Oct 2025 07:19:21 -0700
+From: <ankita@nvidia.com>
+To: <ankita@nvidia.com>, <aniketa@nvidia.com>, <vsethi@nvidia.com>,
+	<jgg@nvidia.com>, <mochs@nvidia.com>, <skolothumtho@nvidia.com>,
+	<linmiaohe@huawei.com>, <nao.horiguchi@gmail.com>,
+	<akpm@linux-foundation.org>, <david@redhat.com>,
+	<lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
+	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
+	<tony.luck@intel.com>, <bp@alien8.de>, <rafael@kernel.org>,
+	<guohanjun@huawei.com>, <mchehab@kernel.org>, <lenb@kernel.org>,
+	<kevin.tian@intel.com>, <alex@shazbot.org>
+CC: <cjia@nvidia.com>, <kwankhede@nvidia.com>, <targupta@nvidia.com>,
+	<zhiw@nvidia.com>, <dnigam@nvidia.com>, <kjaju@nvidia.com>,
+	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-edac@vger.kernel.org>, <Jonathan.Cameron@huawei.com>,
+	<ira.weiny@intel.com>, <Smita.KoralahalliChannabasappa@amd.com>,
+	<u.kleine-koenig@baylibre.com>, <peterz@infradead.org>,
+	<linux-acpi@vger.kernel.org>, <kvm@vger.kernel.org>
+Subject: [PATCH v4 0/3] mm: Implement ECC handling for pfn with no struct page
+Date: Sun, 26 Oct 2025 14:19:16 +0000
+Message-ID: <20251026141919.2261-1-ankita@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251024212723.GGaPvvO3l2OlUEG7Xn@fat_crate.local>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017097:EE_|DS7PR12MB5790:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0267edf0-d235-497a-dccd-08de149aae93
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|7416014|376014|921020|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?l116OUSf7suddr5jla/zpE/8wHviigDw+yyU1dbuP5+/GxsXEogXRVR4SLoD?=
+ =?us-ascii?Q?EoTqa6eL2SI/93KMgIu2J7lno4KHvSwjiSBLwqvhMDc9tQSERhfUSXvDFdwR?=
+ =?us-ascii?Q?uw0/Gaxgv6P8l0OZL4kTtWvuC/RSkrHguuwdzAHy+pzjyHvWMLbWQGiGyfEN?=
+ =?us-ascii?Q?SMMDRDoNb9ds5nnZm+ft/GwPUGftyFumDtmBOAB5BrbysuHwXGFlUoGfQnJf?=
+ =?us-ascii?Q?VN58FLKVDnrD90vWyyIbBgbIJvPxUOLGlKQtsmuk664MgiYR5G8rbSTWAY7O?=
+ =?us-ascii?Q?24z0Uf6aDSuCvn8bUzviWczG+5aDcRhDqCI35FNE2r6jurHktFbmLvdzE+gT?=
+ =?us-ascii?Q?ju+OqzYqqiYqivBgCdCMDxJF4BR/bW8gvRLMsALRHUw5iru8PUejQWwBKBxX?=
+ =?us-ascii?Q?B1FCeC5ddWw9xLZuSTX/sqZ3o7upj/hJGQRs5OeRigwZ0bU2eAdYT3ciJYvD?=
+ =?us-ascii?Q?+AUZLosFGCPrCZeA+wsIGHPZ5OPkZPz5lszOpdWzpuTGkiwg4kFA6oKvHhyi?=
+ =?us-ascii?Q?H6kYJZK6qzLhtZaacDGom63DhBEngX8OtIWp8XnkrccFtVmY9wOy6VpKo2qY?=
+ =?us-ascii?Q?JFzzGBHo2tu+4Gb4zVyPipJAz2kbwJOVmCekYmhM5Sfwi8u1yHdfI6x83/9D?=
+ =?us-ascii?Q?BBAskbQdK3I3jyBT8dSmi/knsULQyZOD4kE5VFNax0TNMpqJQRRNiK3YQ8il?=
+ =?us-ascii?Q?ts+hPwuwm7ySukIaFcO9FDG73mdIzAulusfePE2cxIWedOyceTxT2L/K6rsN?=
+ =?us-ascii?Q?o5fCDg2AiUCFW2P3Lnuq1+XBsadnH5bddxMY5/gE5TnuSxQ0Gqaob6Ohi1Qs?=
+ =?us-ascii?Q?Dnm4KzahcBzYrI2CAgFXusIq2x6PBrhEdvw/GcFTF7M1PFP3vndavXq3Vu1i?=
+ =?us-ascii?Q?dWKqQe8u9MoF4xSIf2WB6yeiOtd0z0nP7ZWDVgTS4IIVglGRE92T3P3QBT06?=
+ =?us-ascii?Q?R4iMkF084jnLy8j2OYuqAQ3Gw/WwTPPNEgDW4LBa4HWhcCNNDzkh2cKK2+fe?=
+ =?us-ascii?Q?joD8tNfTRJYJNHm9djr8n0nyYc9Lhqr+gpueutoOxAz0ASO8OqpH330y64w/?=
+ =?us-ascii?Q?cwHvIYl67bf22On6tzXS9avQlGLqOAnR35XAyQNxnxVB9LAFxPYoYtd1NY5l?=
+ =?us-ascii?Q?GNV5donqOnkxc/iljA5GF3rqPM1QfL1nubgXDeIbJeiNAmKVfmoQyxxA2Yvg?=
+ =?us-ascii?Q?w4iP8At17WvKqAo4qPL2ECjNELEfEDE7fE8d+y9kNUNAcvjRbRZ7lp6OcS/3?=
+ =?us-ascii?Q?I1StAdex3fMbTravbAD3qd+q1YwuWPtWb/PSkPT4QTydBftJi0Z+9iwaertq?=
+ =?us-ascii?Q?UuuxxBKJqGvao5gaTY5xz/sSzVwVEF8d7W+fWuOiFYSExJvVwu+kuhevV3y0?=
+ =?us-ascii?Q?MeujE929RBPkKFD0X8TuvTHABYdKZX3WkQcG0XBhS4StTJT++PBYHhNhBqmR?=
+ =?us-ascii?Q?r84ivKOd1M+BhuZu5s9Br60KuMyDNqPxUC6fN+dAPEhU+8t0Re12T27En5JC?=
+ =?us-ascii?Q?n2FqjDDA3YarUXPF/nn3FjUd0Ynu19KxP6bo3UE+17BZ+oHYLRz7UWzjYGB1?=
+ =?us-ascii?Q?ATCHOxGoUfT7WVclu1CaUtm91eRID4BXpe37Jth2MSJyQThUbbUEE5lIFpof?=
+ =?us-ascii?Q?nQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(7416014)(376014)(921020)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2025 14:19:31.9030
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0267edf0-d235-497a-dccd-08de149aae93
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017097.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5790
 
-On Fri, Oct 24, 2025 at 11:27:23PM +0200, Borislav Petkov wrote:
-> On Fri, Oct 24, 2025 at 04:30:12PM -0400, Yazen Ghannam wrote:
-> > Should I send another revision?
-> 
-> Nah, I'm not done simplifying this yet. :-P
+From: Ankit Agrawal <ankita@nvidia.com>
 
-Yeah, no, looks ok now:
+Poison (or ECC) errors can be very common on a large size cluster.
+The kernel MM currently handles ECC errors / poison only on memory page
+backed by struct page. The handling is currently missing for the PFNMAP
+memory that does not have struct pages. The series adds such support.
 
+Implement a new ECC handling for memory without struct pages. Kernel MM
+expose registration APIs to allow modules that are managing the device
+to register its device memory region. MM then tracks such regions using
+interval tree.
+
+The mechanism is largely similar to that of ECC on pfn with struct pages.
+If there is an ECC error on a pfn, all the mapping to it are identified
+and a SIGBUS is sent to the user space processes owning those mappings.
+Note that there is one primary difference versus the handling of the
+poison on struct pages, which is to skip unmapping to the faulty PFN.
+This is done to handle the huge PFNMAP support added recently [1] that
+enables VM_PFNMAP vmas to map at PMD or PUD level. A poison to a PFN
+mapped in such as way would need breaking the PMD/PUD mapping into PTEs
+that will get mirrored into the S2. This can greatly increase the cost
+of table walks and have a major performance impact.
+
+nvgrace-gpu-vfio-pci module maps the device memory to user VA (Qemu) using
+remap_pfn_range without being added to the kernel [2]. These device memory
+PFNs are not backed by struct page. So make nvgrace-gpu-vfio-pci module
+make use of the mechanism to get poison handling support on the device
+memory.
+
+Patch rebased to v6.17-rc7.
+
+Signed-off-by: Ankit Agrawal <ankita@nvidia.com>
 ---
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 16 Oct 2025 16:37:47 +0000
-Subject: [PATCH] x86/mce: Unify AMD DFR handler with MCA Polling
 
-AMD systems optionally support a deferred error interrupt. The interrupt
-should be used as another signal to trigger MCA polling. This is similar to
-how other MCA interrupts are handled.
+Link: https://lore.kernel.org/all/20251021102327.199099-1-ankita@nvidia.com/ [v3]
 
-Deferred errors do not require any special handling related to the interrupt,
-e.g. resetting or rearming the interrupt, etc.
+v3 -> v4
+- Added guards in memory_failure_pfn, register, unregister function to
+simplify code. (Thanks Ira Weiny for suggestion).
+- Collected reviewed-by from Shuai Xue (Thanks!) on the mm GHES patch. Also
+moved it to the front of the series.
+- Added check for interval_tree_iter_first before removing the device
+memory region. (Thanks Jiaqi Yan for suggestion)
+- If pfn doesn't belong to any address space mapping, returning
+MF_IGNORED (Thanks Miaohe Lin for suggestion).
+- Updated patch commit to add more details on the perf impact on
+HUGE PFNMAP (Thanks Jason Gunthorpe, Tony Luck for suggestion).
 
-However, Scalable MCA systems include a pair of registers, MCA_DESTAT and
-MCA_DEADDR, that should be checked for valid errors. This check should be done
-whenever MCA registers are polled. Currently, the deferred error interrupt
-does this check, but the MCA polling function does not.
+v2 -> v3
+- Rebased to v6.17-rc7.
+- Skipped the unmapping of PFNMAP during reception of poison. Suggested by
+Jason Gunthorpe, Jiaqi Yan, Vikram Sethi (Thanks!)
+- Updated the check to prevent multiple registration to the same PFN
+range using interval_tree_iter_first. Thanks Shameer Kolothum for the
+suggestion.
+- Removed the callback function in the nvgrace-gpu requiring tracking of
+poisoned PFN as it isn't required anymore.
+- Introduced seperate collect_procs_pfn function to collect the list of
+processes mapping to the poisoned PFN.
 
-Call the MCA polling function when handling the deferred error interrupt. This
-keeps all "polling" cases in a common function.
+v1 -> v2
+- Change poisoned page tracking from bitmap to hashtable.
+- Addressed miscellaneous comments in v1.
 
-Add an SMCA status check helper. This will do the same status check and
-register clearing that the interrupt handler has done. And it extends the
-common polling flow to find AMD deferred errors.
+Link: https://lore.kernel.org/all/20240826204353.2228736-1-peterx@redhat.com/ [1]
+Link: https://lore.kernel.org/all/20240220115055.23546-1-ankita@nvidia.com/ [2]
 
-Clear the MCA_DESTAT register at the end of the handler rather than the
-beginning. This maintains the procedure that the 'status' register must be
-cleared as the final step.
+Ankit Agrawal (3):
+  mm: Change ghes code to allow poison of non-struct pfn
+  mm: handle poisoning of pfn without struct pages
+  vfio/nvgrace-gpu: register device memory for poison handling
 
-  [ bp: Zap commit message pieces explaining what the patch does;
-        zap unnecessary special-casing of deferred errors. ]
-
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/all/20251016-wip-mca-updates-v7-0-5c139a4062cb@amd.com
----
- arch/x86/include/asm/mce.h     |   6 ++
- arch/x86/kernel/cpu/mce/amd.c  | 111 ++++-----------------------------
- arch/x86/kernel/cpu/mce/core.c |  44 ++++++++++++-
- 3 files changed, 62 insertions(+), 99 deletions(-)
-
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 31e3cb550fb3..7d6588195d56 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -165,6 +165,12 @@
-  */
- #define MCE_IN_KERNEL_COPYIN	BIT_ULL(7)
- 
-+/*
-+ * Indicates that handler should check and clear Deferred error registers
-+ * rather than common ones.
-+ */
-+#define MCE_CHECK_DFR_REGS	BIT_ULL(8)
-+
- /*
-  * This structure contains all data related to the MCE log.  Also
-  * carries a signature to make it easier to find from external
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index ac6a98aa7bc2..d9f9ee7db5c8 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -56,6 +56,7 @@ static bool thresholding_irq_en;
- 
- struct mce_amd_cpu_data {
- 	mce_banks_t     thr_intr_banks;
-+	mce_banks_t     dfr_intr_banks;
- };
- 
- static DEFINE_PER_CPU_READ_MOSTLY(struct mce_amd_cpu_data, mce_amd_data);
-@@ -300,8 +301,10 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 		 * APIC based interrupt. First, check that no interrupt has been
- 		 * set.
- 		 */
--		if ((low & BIT(5)) && !((high >> 5) & 0x3))
-+		if ((low & BIT(5)) && !((high >> 5) & 0x3)) {
-+			__set_bit(bank, this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
- 			high |= BIT(5);
-+		}
- 
- 		this_cpu_ptr(mce_banks_array)[bank].lsb_in_status = !!(low & BIT(8));
- 
-@@ -792,37 +795,6 @@ bool amd_mce_usable_address(struct mce *m)
- 	return false;
- }
- 
--static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
--{
--	struct mce_hw_err err;
--	struct mce *m = &err.m;
--
--	mce_prep_record(&err);
--
--	m->status = status;
--	m->misc   = misc;
--	m->bank   = bank;
--	m->tsc	 = rdtsc();
--
--	if (m->status & MCI_STATUS_ADDRV) {
--		m->addr = addr;
--
--		smca_extract_err_addr(m);
--	}
--
--	if (mce_flags.smca) {
--		rdmsrq(MSR_AMD64_SMCA_MCx_IPID(bank), m->ipid);
--
--		if (m->status & MCI_STATUS_SYNDV) {
--			rdmsrq(MSR_AMD64_SMCA_MCx_SYND(bank), m->synd);
--			rdmsrq(MSR_AMD64_SMCA_MCx_SYND1(bank), err.vendor.amd.synd1);
--			rdmsrq(MSR_AMD64_SMCA_MCx_SYND2(bank), err.vendor.amd.synd2);
--		}
--	}
--
--	mce_log(&err);
--}
--
- DEFINE_IDTENTRY_SYSVEC(sysvec_deferred_error)
- {
- 	trace_deferred_error_apic_entry(DEFERRED_ERROR_VECTOR);
-@@ -832,75 +804,10 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_deferred_error)
- 	apic_eoi();
- }
- 
--/*
-- * Returns true if the logged error is deferred. False, otherwise.
-- */
--static inline bool
--_log_error_bank(unsigned int bank, u32 msr_stat, u32 msr_addr, u64 misc)
--{
--	u64 status, addr = 0;
--
--	rdmsrq(msr_stat, status);
--	if (!(status & MCI_STATUS_VAL))
--		return false;
--
--	if (status & MCI_STATUS_ADDRV)
--		rdmsrq(msr_addr, addr);
--
--	__log_error(bank, status, addr, misc);
--
--	wrmsrq(msr_stat, 0);
--
--	return status & MCI_STATUS_DEFERRED;
--}
--
--static bool _log_error_deferred(unsigned int bank, u32 misc)
--{
--	if (!_log_error_bank(bank, mca_msr_reg(bank, MCA_STATUS),
--			     mca_msr_reg(bank, MCA_ADDR), misc))
--		return false;
--
--	/*
--	 * Non-SMCA systems don't have MCA_DESTAT/MCA_DEADDR registers.
--	 * Return true here to avoid accessing these registers.
--	 */
--	if (!mce_flags.smca)
--		return true;
--
--	/* Clear MCA_DESTAT if the deferred error was logged from MCA_STATUS. */
--	wrmsrq(MSR_AMD64_SMCA_MCx_DESTAT(bank), 0);
--	return true;
--}
--
--/*
-- * We have three scenarios for checking for Deferred errors:
-- *
-- * 1) Non-SMCA systems check MCA_STATUS and log error if found.
-- * 2) SMCA systems check MCA_STATUS. If error is found then log it and also
-- *    clear MCA_DESTAT.
-- * 3) SMCA systems check MCA_DESTAT, if error was not found in MCA_STATUS, and
-- *    log it.
-- */
--static void log_error_deferred(unsigned int bank)
--{
--	if (_log_error_deferred(bank, 0))
--		return;
--
--	/*
--	 * Only deferred errors are logged in MCA_DE{STAT,ADDR} so just check
--	 * for a valid error.
--	 */
--	_log_error_bank(bank, MSR_AMD64_SMCA_MCx_DESTAT(bank),
--			      MSR_AMD64_SMCA_MCx_DEADDR(bank), 0);
--}
--
- /* APIC interrupt handler for deferred errors */
- static void amd_deferred_error_interrupt(void)
- {
--	unsigned int bank;
--
--	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank)
--		log_error_deferred(bank);
-+	machine_check_poll(MCP_TIMESTAMP, &this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
- }
- 
- static void reset_block(struct threshold_block *block)
-@@ -952,6 +859,14 @@ void amd_clear_bank(struct mce *m)
- {
- 	amd_reset_thr_limit(m->bank);
- 
-+	/* Clear MCA_DESTAT for all deferred errors even those logged in MCA_STATUS. */
-+	if (m->status & MCI_STATUS_DEFERRED)
-+		mce_wrmsrq(MSR_AMD64_SMCA_MCx_DESTAT(m->bank), 0);
-+
-+	/* Don't clear MCA_STATUS if MCA_DESTAT was used exclusively. */
-+	if (m->kflags & MCE_CHECK_DFR_REGS)
-+		return;
-+
- 	mce_wrmsrq(mca_msr_reg(m->bank, MCA_STATUS), 0);
- }
- 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 460e90a1a0b1..7be062429ce3 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -687,7 +687,10 @@ static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
- 		m->misc = mce_rdmsrq(mca_msr_reg(i, MCA_MISC));
- 
- 	if (m->status & MCI_STATUS_ADDRV) {
--		m->addr = mce_rdmsrq(mca_msr_reg(i, MCA_ADDR));
-+		if (m->kflags & MCE_CHECK_DFR_REGS)
-+			m->addr = mce_rdmsrq(MSR_AMD64_SMCA_MCx_DEADDR(i));
-+		else
-+			m->addr = mce_rdmsrq(mca_msr_reg(i, MCA_ADDR));
- 
- 		/*
- 		 * Mask the reported address by the reported granularity.
-@@ -714,6 +717,42 @@ static noinstr void mce_read_aux(struct mce_hw_err *err, int i)
- 
- DEFINE_PER_CPU(unsigned, mce_poll_count);
- 
-+/*
-+ * We have three scenarios for checking for Deferred errors:
-+ *
-+ * 1) Non-SMCA systems check MCA_STATUS and log error if found.
-+ * 2) SMCA systems check MCA_STATUS. If error is found then log it and also
-+ *    clear MCA_DESTAT.
-+ * 3) SMCA systems check MCA_DESTAT, if error was not found in MCA_STATUS, and
-+ *    log it.
-+ */
-+static bool smca_should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
-+{
-+	struct mce *m = &err->m;
-+
-+	/*
-+	 * If the MCA_STATUS register has a deferred error, then continue using it as
-+	 * the status register.
-+	 *
-+	 * MCA_DESTAT will be cleared at the end of the handler.
-+	 */
-+	if ((m->status & MCI_STATUS_VAL) && (m->status & MCI_STATUS_DEFERRED))
-+		return true;
-+
-+	/*
-+	 * If the MCA_DESTAT register has a deferred error, then use it instead.
-+	 *
-+	 * MCA_STATUS will not be cleared at the end of the handler.
-+	 */
-+	m->status = mce_rdmsrq(MSR_AMD64_SMCA_MCx_DESTAT(m->bank));
-+	if ((m->status & MCI_STATUS_VAL) && (m->status & MCI_STATUS_DEFERRED)) {
-+		m->kflags |= MCE_CHECK_DFR_REGS;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- /*
-  * Newer Intel systems that support software error
-  * recovery need to make additional checks. Other
-@@ -740,6 +779,9 @@ static bool should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
- {
- 	struct mce *m = &err->m;
- 
-+	if (mce_flags.smca)
-+		return smca_should_log_poll_error(flags, err);
-+
- 	/* If this entry is not valid, ignore it. */
- 	if (!(m->status & MCI_STATUS_VAL))
- 		return false;
--- 
-2.51.0
+ MAINTAINERS                         |   1 +
+ drivers/acpi/apei/ghes.c            |   6 --
+ drivers/vfio/pci/nvgrace-gpu/main.c |  45 ++++++++-
+ include/linux/memory-failure.h      |  17 ++++
+ include/linux/mm.h                  |   1 +
+ include/ras/ras_event.h             |   1 +
+ mm/Kconfig                          |   1 +
+ mm/memory-failure.c                 | 146 +++++++++++++++++++++++++++-
+ 8 files changed, 210 insertions(+), 8 deletions(-)
+ create mode 100644 include/linux/memory-failure.h
 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
