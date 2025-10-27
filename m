@@ -1,132 +1,147 @@
-Return-Path: <linux-edac+bounces-5225-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5226-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B115BC10F97
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 20:28:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23FFFC11697
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 21:37:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 400125057DD
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:22:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D29913A9312
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 20:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8820432C92D;
-	Mon, 27 Oct 2025 19:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2DC3168E3;
+	Mon, 27 Oct 2025 20:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PMQx/etA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="D0FvDvo6"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F21A17F4F6;
-	Mon, 27 Oct 2025 19:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3C73054FA;
+	Mon, 27 Oct 2025 20:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761592850; cv=none; b=csQjYFbd5D+IwcLLQ9CJef2I+VVNjjURjG0T3A5gpYpJhVvVdCyqGRryxQjg40x7K1YTmARQsPmNsJJAs23RlFF+0ExhtPL17wW1pD+ZgVUEVtZGhCF8IjdAZGnh6ab0iaR67gp4uTEPNo5Q0Km4KNrmk+Vf3jK5/kNr/68n1R0=
+	t=1761597457; cv=none; b=nUMj47UFRN84F7LSYpJKZ+5h/03rxDtrnLczOeo60GDa14LI+nNVc7Ygi/FwceYxNaFELyvFqlJKhiNAGZgu4qHXwp/RYrtLAI1cqwRhHQGMkyYiZL0yR6cEyoktCfsqZbdRLE8S+UsxWrrEqEQ9aY1PJQKnnz8fTuVazmHKEzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761592850; c=relaxed/simple;
-	bh=Wa6ldUv/zgI4JDq1tbT5Y+zylHVbZFrpTUSzqV/aoa4=;
+	s=arc-20240116; t=1761597457; c=relaxed/simple;
+	bh=5m1IrsDTkf+F/nhzqJRjiWrZIfJDK8f7MvjheZ4CUKk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TFCoEn/BwUnXHcw5n1Ysx8QeNw4O6eAgvsEHFvRE64x6Ah0+F+0Ot5JH9ALAUsXdqIz4RJ0n2sNbAuKC7TLoRbLmfT6D38UOkXUnj9/CpGb/k6/3sWGgEdFW/jWgyupZSCpKnjNuyb9Dc9/2V4Ysph1rNRoYGsJ0GRxZY4SnF0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PMQx/etA; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 42B5340E019D;
-	Mon, 27 Oct 2025 19:20:44 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ggxpkL2yj3s6; Mon, 27 Oct 2025 19:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1761592837; bh=1p4W+F+S0SLPkZVenYI4ZocIHZejOQOryBLd3i2s/hU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PMQx/etA73TOv2yFREJkLovtaztTvX/PMpHTTiyqJ9AcqP0fngLzrNoNOlF8oh/tZ
-	 /pGcyYIvopZrVpK0JdbHOLea3u4z1lK5sequd1DQltPfueTatFl2PEZALoWDG25tHB
-	 Y3TAS9yv9PQRNrIIEdnj3rsLYZmUZoxzjcX47TPZhQplzwFgVOl7Vs4tnnIpNMXiMq
-	 YAkUow67hB+uLo+YB/2+/9IOxWskSF4SjlARats4zyvZJqUxqqvWzwfumxO2J26+QS
-	 lRpsuDoBKTbUMjEhgyrrZxoKNBMCp1zxqHnwdRP1A3PMilKxFOnM0ngxPIVwWDLKry
-	 gtIPrEHGpKZV1ZBNnFsEQ7kONYl2qjy0nnVqm51Gy1etpEv02h9qoFMNvXv9MtHMxn
-	 hS+sMyE505DdoxCoQkw2Vj+e5d8K6nB/SW0aptL2zE6A/RFmiVHzc2KTeBQCelGV2E
-	 1dy8BYY+JXq3DFoH3IJssknEQtsHgfr444+AxFTpT36KAu+R3QgRHq3qtbBB9JtoyV
-	 4XWlzB5GCXlcEOk5v6B3uHBCmLPmo7v1YoXNlsgfMAgUXvOOWhF5NULiSgj97RNGgt
-	 fxS+0U2XR4ZDzJLsZpwa7y9OYLvGNDqNX5LaLJWtnCE9TdMwsmUJ+yWCHlMPgeE/E5
-	 fCY/lKHnThXybHSgOzrQnnio=
-Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 72AD940E021A;
-	Mon, 27 Oct 2025 19:20:26 +0000 (UTC)
-Date: Mon, 27 Oct 2025 20:20:19 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-	Tony Luck <tony.luck@intel.com>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-	Avadhut Naik <avadhut.naik@amd.com>,
-	John Allen <john.allen@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>
-Subject: Re: [PATCH v2 2/2] RAS/AMD/ATL: Require PRM support for future
- systems
-Message-ID: <20251027192019.GAaP_F8yifQ1TKlqtO@fat_crate.local>
-References: <20251017-wip-atl-prm-v2-0-7ab1df4a5fbc@amd.com>
- <20251017-wip-atl-prm-v2-2-7ab1df4a5fbc@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CP/dmW+0WfJj5gL3EzZQNEGCMci9r4BvFTFa9PUQCi+rnzXaStbsVHZAH1xgaIDLUE88y44xzIbzmmrZkeS4J0Bhz7GmzGC1gjqFCMOZeSiKM4sHu9G+2iOFTBecMbrqKm8pZySH/FRab3/ipu2oxGIYDHNqf4vfwSvR/thYWAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=D0FvDvo6; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 199381A16C2;
+	Mon, 27 Oct 2025 20:37:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D91106062C;
+	Mon, 27 Oct 2025 20:37:30 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B6F94102F2494;
+	Mon, 27 Oct 2025 21:36:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1761597449; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=ivu3nqaTqww2kM8ddgXsb86XR8Ecjso6qu9XWZHw9NQ=;
+	b=D0FvDvo6wBdzyM4yGf/Mo92JGsnDp3FEhnzQXToKT1lTmRgmCAobeQwwgIerEldSavB9Wj
+	8Fa1YqUSJN1a+KiX1LsgxoTiLAWFpjtTkZ/psXHq539twWXUsfVfZ1tOA47yFwLd40ImsE
+	G9WDXQxl4673JnnqnSaS0aJnztT1jPuWGeK5RQylZ1VZl0DiiBjKRSdLHbVPGru9aMBn/L
+	/NPFjf5YF1MLpjQf7UlDDcAIkfmZHS4oVHjAeodKNVAVJDdwuc8RjEgecO9ymeKN374J5m
+	aI0g1qxMk56Vwb3LCXgHJanQvqdAAA00oe5CNpFNb2x5v0Y/CqIa0frpfHITdQ==
+Date: Mon, 27 Oct 2025 21:36:40 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Miller <davem@davemloft.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Cosmin Tanislav <demonsingur@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Jianping Shen <Jianping.Shen@de.bosch.com>,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-edac@vger.kernel.org, qat-linux@intel.com,
+	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 01/23] clk: at91: pmc: #undef field_{get,prep}()
+ before definition
+Message-ID: <20251027203640291d726b@mail.local>
+References: <cover.1761588465.git.geert+renesas@glider.be>
+ <a26cfb39f4ac309ffbff339ffa5f54db12bd8c12.1761588465.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251017-wip-atl-prm-v2-2-7ab1df4a5fbc@amd.com>
+In-Reply-To: <a26cfb39f4ac309ffbff339ffa5f54db12bd8c12.1761588465.git.geert+renesas@glider.be>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Oct 17, 2025 at 01:26:29PM +0000, Yazen Ghannam wrote:
-> +	/* All other systems should have PRM handlers. */
-> +	if (!acpi_prm_handler_available(&norm_to_sys_guid)) {
-> +		pr_debug("PRM not available\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	df_cfg.flags.prm_only = true;
-> +	return 0;
->  }
->  
->  static int get_dram_hole_base(void)
-> @@ -297,6 +305,9 @@ int get_df_system_info(void)
->  		return ret;
->  	}
->  
-> +	if (df_cfg.flags.prm_only)
-> +		return 0;
-> +
->  	apply_node_id_shift();
->  
->  	get_num_maps();
-> diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
-> index 6e072b7667e9..18ce419236a5 100644
-> --- a/drivers/ras/amd/atl/umc.c
-> +++ b/drivers/ras/amd/atl/umc.c
-> @@ -422,7 +422,7 @@ unsigned long convert_umc_mca_addr_to_sys_addr(struct atl_err *err)
->  		 socket_id, die_id, coh_st_inst_id, addr);
->  
->  	ret_addr = prm_umc_norm_to_sys_addr(socket_id, err->ipid, addr);
-> -	if (!IS_ERR_VALUE(ret_addr))
-> +	if (!IS_ERR_VALUE(ret_addr) || df_cfg.flags.prm_only)
->  		return ret_addr;
->
+On 27/10/2025 19:41:35+0100, Geert Uytterhoeven wrote:
+> Prepare for the advent of globally available common field_get() and
+> field_prep() macros by undefining the symbols before defining local
+> variants.  This prevents redefinition warnings from the C preprocessor
+> when introducing the common macros later.
+> 
+> Suggested-by: Yury Norov <yury.norov@gmail.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Much better, thanks!
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Both applied.
+> --
+> v5:
+>   - New.
+> ---
+>  drivers/clk/at91/pmc.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
+> index 5daa32c4cf2540d7..78a87d31463e98b0 100644
+> --- a/drivers/clk/at91/pmc.h
+> +++ b/drivers/clk/at91/pmc.h
+> @@ -117,7 +117,9 @@ struct at91_clk_pms {
+>  	unsigned int parent;
+>  };
+>  
+> +#undef field_get
+>  #define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> +#undef field_prep
+>  #define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
+>  
+>  #define ndck(a, s) (a[s - 1].id + 1)
+> -- 
+> 2.43.0
+> 
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
