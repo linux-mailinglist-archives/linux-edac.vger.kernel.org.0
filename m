@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5221-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5222-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B12C9C10314
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:51:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95CAEC102F6
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:50:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D255719C8946
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:50:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B4F4B4F9C79
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A327931BC84;
-	Mon, 27 Oct 2025 18:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF39932ED46;
+	Mon, 27 Oct 2025 18:45:26 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED1724E4A8;
-	Mon, 27 Oct 2025 18:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93761317711;
+	Mon, 27 Oct 2025 18:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590717; cv=none; b=Hh8nGIdVjgNkLS+51lOJiE3tGXs4cW8YG24LHGFFkbRCVGLlwnauDo5xNbOVaBCQ/DzzMzxR/vdqjy5jNxev8aUarGiJlBHgz4KHRcfdV7bU11Plra2SM/jfwJg7f/sAbPdtNosHuRshzsm/QsBfT9umrL41VBjODlgToCMzmpA=
+	t=1761590726; cv=none; b=ee965hpeYgoXv2StjzT9B2IgQGlYtRMqcKO/AwQSzgd0m8ufeD3IA7+BmF2nuQxTn1L7ML336JFOPjcVP56k75AvhFoGSCZIvNKBtkuszMxXvkhpBmai3aO4L2/cVMxztR4lMCWLxE+JHd75FswSlBuwL+tkH2l0pIQ69o3tT7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590717; c=relaxed/simple;
-	bh=LSx1HtwZrH0dsMKwJzP92Z2ihwH3DOa7M4lsdOfMulQ=;
+	s=arc-20240116; t=1761590726; c=relaxed/simple;
+	bh=P7bX1PDZYqbzvyJxyuZ/d54zgR6Myun/JBHkpVMbSGw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EsDnWrFwkaqISIIL6iz9OEobCwCEVl2tiA5OvUyPSldpwX12PtjSCUZN7DOMKQ4ipD5ItFNSFI2/YuXGORdhceSrNci9W+uXcw5cfTW6kOBet7PlsCGvFbE2T0oDzshSML+4rkNk+oik0ohJLqz+rKinAHKjHsQb/hK2ErRkelg=
+	 MIME-Version; b=Ood6pkgZrRkFVGbbLSVJicY8W9kaW6Sax2aqVCwUCjWssGwvhBuT/KgN7pcmyL+I+lAOc5WbsuxrEFfdTezUnwihn3joeMJV7Bif9qO35VYLNiqiaFd/btv53XCX7GY230L3XdMLdQGGf6CrEK9Pqar4bu6zPfZHNkHLOJlKUNM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F736C113D0;
-	Mon, 27 Oct 2025 18:45:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0ACC4CEF1;
+	Mon, 27 Oct 2025 18:45:17 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -80,9 +80,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 20/23] ALSA: usb-audio: Convert to common field_{get,prep}() helpers
-Date: Mon, 27 Oct 2025 19:41:54 +0100
-Message-ID: <91f957d8857d64df9eae33824203cc770b0182b3.1761588465.git.geert+renesas@glider.be>
+Subject: [PATCH -next v5 21/23] iio: imu: smi330: Convert to common field_{get,prep}() helpers
+Date: Mon, 27 Oct 2025 19:41:55 +0100
+Message-ID: <79c392bcd9c1127e9a7fa977780335795f0b99af.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -100,29 +100,28 @@ of the globally available variants from <linux/bitfield.h>.
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v5:
-  - Extracted from "bitfield: Add non-constant field_{prep,get}()
-    helpers".
+  - New.
 ---
- sound/usb/mixer_quirks.c | 6 ------
+ drivers/iio/imu/smi330/smi330_core.c | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
-index 713a8498b975e1ac..6eee89cbc0867f2b 100644
---- a/sound/usb/mixer_quirks.c
-+++ b/sound/usb/mixer_quirks.c
-@@ -3311,12 +3311,6 @@ static int snd_bbfpro_controls_create(struct usb_mixer_interface *mixer)
- #define RME_DIGIFACE_REGISTER(reg, mask) (((reg) << 16) | (mask))
- #define RME_DIGIFACE_INVERT BIT(31)
+diff --git a/drivers/iio/imu/smi330/smi330_core.c b/drivers/iio/imu/smi330/smi330_core.c
+index a79964fe68fadf47..83e0dff5d973d046 100644
+--- a/drivers/iio/imu/smi330/smi330_core.c
++++ b/drivers/iio/imu/smi330/smi330_core.c
+@@ -67,12 +67,6 @@
+ #define SMI330_CHIP_ID 0x42
+ #define SMI330_SOFT_RESET_DELAY 2000
  
--/* Nonconst helpers */
+-/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
 -#undef field_get
 -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
 -#undef field_prep
 -#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
 -
- static int snd_rme_digiface_write_reg(struct snd_kcontrol *kcontrol, int item, u16 mask, u16 val)
- {
- 	struct usb_mixer_elem_list *list = snd_kcontrol_chip(kcontrol);
+ #define SMI330_ACCEL_CHANNEL(_axis) {					\
+ 	.type = IIO_ACCEL,						\
+ 	.modified = 1,							\
 -- 
 2.43.0
 
