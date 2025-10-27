@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5212-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5213-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1E2EC1017F
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:46:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42303C1023F
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:48:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 46BD0350F97
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:46:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EA25C4FCA99
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:46:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA56328B7F;
-	Mon, 27 Oct 2025 18:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1D832142A;
+	Mon, 27 Oct 2025 18:44:03 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25D0320A32;
-	Mon, 27 Oct 2025 18:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E716E31B82B;
+	Mon, 27 Oct 2025 18:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590634; cv=none; b=kxf3QWRF+d1bznHw9lx2tzOjWmm737KKLXyKoWQl/48kGT0d98Fd+SK+z6IOIWIhGfvAXTVSgvwLAcCF2luDh3TQg92EBkPskFck7WpwH8K2lhxzelOj74af1vElVYyOazHemIrKnP6esAackphDQZInwvMb+Brc2+jJtMUpLX8=
+	t=1761590643; cv=none; b=u+ZPbb7PEVBh4OMNZrDCI48/9hXb+ctvrYclmD5NFb1bjNaKNsNaLo/3rqnH0aAhabztiXVvTx3XkORFuT5Iu+hvRqPx1L63eR/xiq2cY9vIRYMqQVcBwiPvJUjZIIr86lH5YdcJMBhKiqeaBK12JPd5WuL4R7sa1Xlgpml1cCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590634; c=relaxed/simple;
-	bh=6KuO5yktm/803PSE7WiPRpg+MPVlzj4p7xX7X4g7rQA=;
+	s=arc-20240116; t=1761590643; c=relaxed/simple;
+	bh=OKpMmsozqeIKresQAJh95tpDvLKC9IZhdrU7X029S/M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BDGwEHfiu7dYEUTyqejVtdN4FzuKumkycrI0R6WKgGTlCjG3FirNp1lFcROHE0GZAYzmWvrQvfSXmejbCt0SPB2DuQm4Hl2cwepGO9xPj1iHsmctuzQXsvz6/yOiG2ytdS+JBVOU7VRgOqWaWIugHwwSbBC8YFiGtyohNSSGUDQ=
+	 MIME-Version; b=YyOGoc5Avm1mGfF80yAn7QnQsU/hGjN6HKvT62JMbDgRZHMNMVOjx6OW6ZngkQAe6UTMj/0BBOz7amvLMrL1PkSfiKYVahi6JGobmm7nouiscLbKLTPY5rynsra8sqwtcW7i0qIX4f7VpadoBIM+mr6MhT/oxb1ag/gUql9M9JA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91008C4CEFD;
-	Mon, 27 Oct 2025 18:43:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AC5C116B1;
+	Mon, 27 Oct 2025 18:43:53 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -79,11 +79,10 @@ Cc: linux-clk@vger.kernel.org,
 	linux-iio@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v5 11/23] bitfield: Add non-constant field_{prep,get}() helpers
-Date: Mon, 27 Oct 2025 19:41:45 +0100
-Message-ID: <bf68a22ce5be93bb2ea0a0c53071433814401ff9.1761588465.git.geert+renesas@glider.be>
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v5 12/23] clk: at91: Convert to common field_{get,prep}() helpers
+Date: Mon, 27 Oct 2025 19:41:46 +0100
+Message-ID: <b9e9b7d94ba51c7bc028321a85e91adecb23f925.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -93,141 +92,50 @@ List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The existing FIELD_{GET,PREP}() macros are limited to compile-time
-constants.  However, it is very common to prepare or extract bitfield
-elements where the bitfield mask is not a compile-time constant.
-
-To avoid this limitation, the AT91 clock driver and several other
-drivers already have their own non-const field_{prep,get}() macros.
-Make them available for general use by adding them to
-<linux/bitfield.h>, and improve them slightly:
-  1. Avoid evaluating macro parameters more than once,
-  2. Replace "ffs() - 1" by "__ffs()",
-  3. Support 64-bit use on 32-bit architectures,
-  4. Wire field_{get,prep}() to FIELD_{GET,PREP}() when mask is
-     actually constant.
-
-This is deliberately not merged into the existing FIELD_{GET,PREP}()
-macros, as people expressed the desire to keep stricter variants for
-increased safety, or for performance critical paths.
+Drop the driver-specific field_get() and field_prep() macros, in favor
+of the globally available variants from <linux/bitfield.h>.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Crt Mori <cmo@melexis.com>
-Acked-by: Nuno Sá <nuno.sa@analog.com>
-Acked-by: Richard Genoud <richard.genoud@bootlin.com>
 ---
 v5:
-  - Add Acked-by,
-  - Split off changes outside <linux/bitfield.h>,
-  - Document that mask must be non-zero,
-  - Document typical usage pattern,
-  - Recommend using FIELD_{PREP,GET}() directly to ensure compile-time
-    constant masks,
-  - Check BITS_PER_TYPE(mask) instead of sizeof(mask),
-  - Wire field_{get,prep}() to FIELD_{GET,PREP}() when mask is
-    constant, to improve type checking.
-
-v4:
-  - Add Acked-by,
-  - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocate
-    power management debugfs helper APIs") in v6.17-rc1,
-  - Convert more recently introduced upstream copies:
-      - drivers/edac/ie31200_edac.c
-      - drivers/iio/dac/ad3530r.c
-
-v3:
-  - Add Acked-by,
-  - Drop underscores from macro parameters,
-  - Use __auto_type where possible,
-  - Correctly cast reg to the mask type,
-  - Introduces __val and __reg intermediates to simplify the actual
-    operation,
-  - Drop unneeded parentheses,
-  - Clarify having both FIELD_{GET,PREP}() and field_{get,prep}(),
-
-v2:
-  - Cast val resp. reg to the mask type,
-  - Fix 64-bit use on 32-bit architectures,
-  - Convert new upstream users:
-      - drivers/crypto/intel/qat/qat_common/adf_gen4_pm_debugfs.c
-      - drivers/gpio/gpio-aspeed.c
-      - drivers/iio/temperature/mlx90614.c
-      - drivers/pinctrl/nuvoton/pinctrl-ma35.c
-      - sound/usb/mixer_quirks.c
-  - Convert new user queued in renesas-devel for v6.15:
-      - drivers/soc/renesas/rz-sysc.c
+  - Extracted from "bitfield: Add non-constant field_{prep,get}()
+    helpers".
 ---
- include/linux/bitfield.h | 54 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ drivers/clk/at91/clk-peripheral.c | 1 +
+ drivers/clk/at91/pmc.h            | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-index 5355f8f806a97974..d220790fd068305c 100644
---- a/include/linux/bitfield.h
-+++ b/include/linux/bitfield.h
-@@ -220,4 +220,58 @@ __MAKE_OP(64)
- #undef __MAKE_OP
- #undef ____MAKE_OP
+diff --git a/drivers/clk/at91/clk-peripheral.c b/drivers/clk/at91/clk-peripheral.c
+index e700f40fd87f9327..e7208c47268b6397 100644
+--- a/drivers/clk/at91/clk-peripheral.c
++++ b/drivers/clk/at91/clk-peripheral.c
+@@ -3,6 +3,7 @@
+  *  Copyright (C) 2013 Boris BREZILLON <b.brezillon@overkiz.com>
+  */
  
-+#define __field_prep(mask, val)						\
-+	({								\
-+		__auto_type __mask = (mask);				\
-+		typeof(mask) __val = (val);				\
-+		unsigned int __shift = BITS_PER_TYPE(mask) <= 32 ?	\
-+				       __ffs(__mask) : __ffs64(__mask);	\
-+		(__val << __shift) & __mask;	\
-+	})
-+
-+#define __field_get(mask, reg)						\
-+	({								\
-+		__auto_type __mask = (mask);				\
-+		typeof(mask) __reg =  (reg);				\
-+		unsigned int __shift = BITS_PER_TYPE(mask) <= 32 ?	\
-+				       __ffs(__mask) : __ffs64(__mask);	\
-+		(__reg & __mask) >> __shift;	\
-+	})
-+
-+/**
-+ * field_prep() - prepare a bitfield element
-+ * @mask: shifted mask defining the field's length and position, must be
-+ *        non-zero
-+ * @val:  value to put in the field
-+ *
-+ * field_prep() masks and shifts up the value.  The result should be
-+ * combined with other fields of the bitfield using logical OR.
-+ * Unlike FIELD_PREP(), @mask is not limited to a compile-time constant.
-+ * Typical usage patterns are a value stored in a table, or calculated by
-+ * shifting a constant by a variable number of bits.
-+ * If you want to ensure that @mask is a compile-time constant, please use
-+ * FIELD_PREP() directly instead.
-+ */
-+#define field_prep(mask, val)						\
-+	(__builtin_constant_p(mask) ? FIELD_PREP(mask, val)		\
-+				    : __field_prep(mask, val))
-+
-+/**
-+ * field_get() - extract a bitfield element
-+ * @mask: shifted mask defining the field's length and position, must be
-+ *        non-zero
-+ * @reg:  value of entire bitfield
-+ *
-+ * field_get() extracts the field specified by @mask from the
-+ * bitfield passed in as @reg by masking and shifting it down.
-+ * Unlike FIELD_GET(), @mask is not limited to a compile-time constant.
-+ * Typical usage patterns are a value stored in a table, or calculated by
-+ * shifting a constant by a variable number of bits.
-+ * If you want to ensure that @mask is a compile-time constant, please use
-+ * FIELD_GET() directly instead.
-+ */
-+#define field_get(mask, reg)						\
-+	(__builtin_constant_p(mask) ? FIELD_GET(mask, reg)		\
-+				    : __field_get(mask, reg))
-+
- #endif
++#include <linux/bitfield.h>
+ #include <linux/bitops.h>
+ #include <linux/clk-provider.h>
+ #include <linux/clkdev.h>
+diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
+index 78a87d31463e98b0..543d7aee8d248cdb 100644
+--- a/drivers/clk/at91/pmc.h
++++ b/drivers/clk/at91/pmc.h
+@@ -117,11 +117,6 @@ struct at91_clk_pms {
+ 	unsigned int parent;
+ };
+ 
+-#undef field_get
+-#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+-#undef field_prep
+-#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
+-
+ #define ndck(a, s) (a[s - 1].id + 1)
+ #define nck(a) (a[ARRAY_SIZE(a) - 1].id + 1)
+ 
 -- 
 2.43.0
 
