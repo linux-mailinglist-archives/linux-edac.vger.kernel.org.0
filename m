@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5218-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5219-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCA61C102E4
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AEE34C10320
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:51:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09838481755
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:48:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DDB8481F95
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:49:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FB6432D0F7;
-	Mon, 27 Oct 2025 18:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CAB032D7F0;
+	Mon, 27 Oct 2025 18:44:59 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1858931B116;
-	Mon, 27 Oct 2025 18:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AEFF31B830;
+	Mon, 27 Oct 2025 18:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590690; cv=none; b=ltkPXAMi4YKye/QSINh7WzDbEhIs6OfgbnXFIoHvS8UDjqrA5WZ642+KOf16Yhuv/3cIkai3tiakefQha1mYGL8fCW2EdzmaK/V7816E6rG9qUVE6A4Ih46e8PKklbCKlxGrVyar+/phH9SgXdB9erJ4wHkvv+/mmoroB3q7kPo=
+	t=1761590699; cv=none; b=Y0ZFutC9z9SpSPzu0tako/24U2NOY5rfyE7HM2uxlfIYd3tj/i60cdP+UQ/mWcyDF+gV8dCZYGqLnOPf6OBhW5gHBAr3QRFCRDktAgGNhONZEe+bAgwpWZo5Pvz3OKGhMnVXR3+yTcO90EhKEFEeLE2fa+J/Smow41RWDCHJz7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590690; c=relaxed/simple;
-	bh=2ky2KyWaqUYFHGiNsTK5hSKy1YE3+/sn+2WpwYCtaAI=;
+	s=arc-20240116; t=1761590699; c=relaxed/simple;
+	bh=bTPQPo2EZR+fBg73DOlsz07knIP/3wWrrgP8tYueYIE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fA+uE8hygGsQVHmkQft+9q3Mq8DFwlKcsK+pUPc6/VrAQw73BC5LJvBNxD1go7cKIYHaq9dTJSlmWz9D9PEufQ4v36AH2s83JLyFmv8Z+uqGyDygVzMn3UfeEpyfR2cHIaQdStawoU6P8S5L0K7TX+qf/Mb1rYNZDG3bSTU3k1U=
+	 MIME-Version; b=QTgrV9mbZD/MsSrj/bfUaPb/Rp//NoBjqJe1DVv3W2dXvSL/2zfUFglEWpS0zKvoggbv6XKTf16SIK+zpeOhS3l8dDEdhAVci90n7CRWd7Iz1JykMjfneXKTFx6zcNZ11w53q3x8vWWviB2IOw/zphbFcvuFPVenb7xw3IOBBsU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7643C4CEF1;
-	Mon, 27 Oct 2025 18:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD4CC113D0;
+	Mon, 27 Oct 2025 18:44:50 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -79,11 +79,10 @@ Cc: linux-clk@vger.kernel.org,
 	linux-iio@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v5 17/23] iio: mlx90614: Convert to common field_{get,prep}() helpers
-Date: Mon, 27 Oct 2025 19:41:51 +0100
-Message-ID: <8ea8d9d6c33d9589e8761f6000639546f1bd5148.1761588465.git.geert+renesas@glider.be>
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v5 18/23] pinctrl: ma35: Convert to common field_{get,prep}() helpers
+Date: Mon, 27 Oct 2025 19:41:52 +0100
+Message-ID: <ac3e718c5de6a23375055dd3c2e4ed6daf7542d5.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -99,31 +98,21 @@ Drop the driver-specific field_get() and field_prep() macros, in favor
 of the globally available variants from <linux/bitfield.h>.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Crt Mori <cmo@melexis.com>
 ---
 v5:
   - Extracted from "bitfield: Add non-constant field_{prep,get}()
     helpers".
 ---
- drivers/iio/temperature/mlx90614.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/pinctrl/nuvoton/pinctrl-ma35.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/iio/temperature/mlx90614.c b/drivers/iio/temperature/mlx90614.c
-index de5615fdb396aa3c..1ad21b73e1b44cb0 100644
---- a/drivers/iio/temperature/mlx90614.c
-+++ b/drivers/iio/temperature/mlx90614.c
-@@ -22,6 +22,7 @@
-  * the "wakeup" GPIO is not given, power management will be disabled.
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/gpio/consumer.h>
-@@ -68,12 +69,6 @@
- #define MLX90614_CONST_SCALE 20 /* Scale in milliKelvin (0.02 * 1000) */
- #define MLX90614_CONST_FIR 0x7 /* Fixed value for FIR part of low pass filter */
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-ma35.c b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+index 925dd717c9deead5..8d71dc53cc1de1f8 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-ma35.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+@@ -81,12 +81,6 @@
+ #define MVOLT_1800			0
+ #define MVOLT_3300			1
  
 -/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
 -#undef field_get
@@ -131,9 +120,9 @@ index de5615fdb396aa3c..1ad21b73e1b44cb0 100644
 -#undef field_prep
 -#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
 -
- struct mlx_chip_info {
- 	/* EEPROM offsets with 16-bit data, MSB first */
- 	/* emissivity correction coefficient */
+ static const char * const gpio_group_name[] = {
+ 	"gpioa", "gpiob", "gpioc", "gpiod", "gpioe", "gpiof", "gpiog",
+ 	"gpioh", "gpioi", "gpioj", "gpiok", "gpiol", "gpiom", "gpion",
 -- 
 2.43.0
 
