@@ -1,141 +1,132 @@
-Return-Path: <linux-edac+bounces-5224-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5225-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82F66C10362
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:52:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B115BC10F97
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 20:28:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC3651A239C5
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:51:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 400125057DD
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:22:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CAF32779A;
-	Mon, 27 Oct 2025 18:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8820432C92D;
+	Mon, 27 Oct 2025 19:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PMQx/etA"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F50E326D74;
-	Mon, 27 Oct 2025 18:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F21A17F4F6;
+	Mon, 27 Oct 2025 19:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590745; cv=none; b=uqbbbk5o8wLp/IfrkseYhTj9Gh4OIrYrQ7SkCYjeP1Wyp4K/AbWuz3Knj/UAb8cs66K2iq1WNWjRnKAi2tt6mOLwTtgshBdPIcosnR47PIebZT+REMAIXjHwENt94CaMi+cjrl+7addzmEXeY5W5p5R5Qd1uOuqnTUCZ4ASguZo=
+	t=1761592850; cv=none; b=csQjYFbd5D+IwcLLQ9CJef2I+VVNjjURjG0T3A5gpYpJhVvVdCyqGRryxQjg40x7K1YTmARQsPmNsJJAs23RlFF+0ExhtPL17wW1pD+ZgVUEVtZGhCF8IjdAZGnh6ab0iaR67gp4uTEPNo5Q0Km4KNrmk+Vf3jK5/kNr/68n1R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590745; c=relaxed/simple;
-	bh=l+k3T8WhLZTpDb7CbRpBhiGt+Z826lr9zR8apoxyAS8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FXP3SppS/Vt306GfL9WiCUbaMA/n0mm33Hc6xJ3anbSmMkBzEhm/2liwH47C2ELbGICr7+vKEwZeOsiEh1VRy7aWTm1q2IFGUjF9f7XorLdeUbMWNnjyTEpncns3+Wuon1nMzeRyjcPiR5bQMqwHtlA/FX2RTqppE3PszjSLq+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E1DC4CEF1;
-	Mon, 27 Oct 2025 18:45:35 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Miller <davem@davemloft.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Crt Mori <cmo@melexis.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alex Elder <elder@ieee.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Jason Baron <jbaron@akamai.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Kim Seer Paller <kimseer.paller@analog.com>,
-	David Lechner <dlechner@baylibre.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Cosmin Tanislav <demonsingur@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Jianping Shen <Jianping.Shen@de.bosch.com>
-Cc: linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	qat-linux@intel.com,
-	linux-gpio@vger.kernel.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-iio@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 23/23] soc: renesas: Use bitfield helpers
-Date: Mon, 27 Oct 2025 19:41:57 +0100
-Message-ID: <c6520836ab8f061f6f3f4be3bf63cda8d04101f7.1761588465.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
-References: <cover.1761588465.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1761592850; c=relaxed/simple;
+	bh=Wa6ldUv/zgI4JDq1tbT5Y+zylHVbZFrpTUSzqV/aoa4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TFCoEn/BwUnXHcw5n1Ysx8QeNw4O6eAgvsEHFvRE64x6Ah0+F+0Ot5JH9ALAUsXdqIz4RJ0n2sNbAuKC7TLoRbLmfT6D38UOkXUnj9/CpGb/k6/3sWGgEdFW/jWgyupZSCpKnjNuyb9Dc9/2V4Ysph1rNRoYGsJ0GRxZY4SnF0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PMQx/etA; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 42B5340E019D;
+	Mon, 27 Oct 2025 19:20:44 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ggxpkL2yj3s6; Mon, 27 Oct 2025 19:20:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1761592837; bh=1p4W+F+S0SLPkZVenYI4ZocIHZejOQOryBLd3i2s/hU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PMQx/etA73TOv2yFREJkLovtaztTvX/PMpHTTiyqJ9AcqP0fngLzrNoNOlF8oh/tZ
+	 /pGcyYIvopZrVpK0JdbHOLea3u4z1lK5sequd1DQltPfueTatFl2PEZALoWDG25tHB
+	 Y3TAS9yv9PQRNrIIEdnj3rsLYZmUZoxzjcX47TPZhQplzwFgVOl7Vs4tnnIpNMXiMq
+	 YAkUow67hB+uLo+YB/2+/9IOxWskSF4SjlARats4zyvZJqUxqqvWzwfumxO2J26+QS
+	 lRpsuDoBKTbUMjEhgyrrZxoKNBMCp1zxqHnwdRP1A3PMilKxFOnM0ngxPIVwWDLKry
+	 gtIPrEHGpKZV1ZBNnFsEQ7kONYl2qjy0nnVqm51Gy1etpEv02h9qoFMNvXv9MtHMxn
+	 hS+sMyE505DdoxCoQkw2Vj+e5d8K6nB/SW0aptL2zE6A/RFmiVHzc2KTeBQCelGV2E
+	 1dy8BYY+JXq3DFoH3IJssknEQtsHgfr444+AxFTpT36KAu+R3QgRHq3qtbBB9JtoyV
+	 4XWlzB5GCXlcEOk5v6B3uHBCmLPmo7v1YoXNlsgfMAgUXvOOWhF5NULiSgj97RNGgt
+	 fxS+0U2XR4ZDzJLsZpwa7y9OYLvGNDqNX5LaLJWtnCE9TdMwsmUJ+yWCHlMPgeE/E5
+	 fCY/lKHnThXybHSgOzrQnnio=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 72AD940E021A;
+	Mon, 27 Oct 2025 19:20:26 +0000 (UTC)
+Date: Mon, 27 Oct 2025 20:20:19 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Tony Luck <tony.luck@intel.com>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+	Avadhut Naik <avadhut.naik@amd.com>,
+	John Allen <john.allen@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	"Mario Limonciello (AMD)" <superm1@kernel.org>
+Subject: Re: [PATCH v2 2/2] RAS/AMD/ATL: Require PRM support for future
+ systems
+Message-ID: <20251027192019.GAaP_F8yifQ1TKlqtO@fat_crate.local>
+References: <20251017-wip-atl-prm-v2-0-7ab1df4a5fbc@amd.com>
+ <20251017-wip-atl-prm-v2-2-7ab1df4a5fbc@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251017-wip-atl-prm-v2-2-7ab1df4a5fbc@amd.com>
 
-Use the field_get() helper, instead of open-coding the same operation.
+On Fri, Oct 17, 2025 at 01:26:29PM +0000, Yazen Ghannam wrote:
+> +	/* All other systems should have PRM handlers. */
+> +	if (!acpi_prm_handler_available(&norm_to_sys_guid)) {
+> +		pr_debug("PRM not available\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	df_cfg.flags.prm_only = true;
+> +	return 0;
+>  }
+>  
+>  static int get_dram_hole_base(void)
+> @@ -297,6 +305,9 @@ int get_df_system_info(void)
+>  		return ret;
+>  	}
+>  
+> +	if (df_cfg.flags.prm_only)
+> +		return 0;
+> +
+>  	apply_node_id_shift();
+>  
+>  	get_num_maps();
+> diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+> index 6e072b7667e9..18ce419236a5 100644
+> --- a/drivers/ras/amd/atl/umc.c
+> +++ b/drivers/ras/amd/atl/umc.c
+> @@ -422,7 +422,7 @@ unsigned long convert_umc_mca_addr_to_sys_addr(struct atl_err *err)
+>  		 socket_id, die_id, coh_st_inst_id, addr);
+>  
+>  	ret_addr = prm_umc_norm_to_sys_addr(socket_id, err->ipid, addr);
+> -	if (!IS_ERR_VALUE(ret_addr))
+> +	if (!IS_ERR_VALUE(ret_addr) || df_cfg.flags.prm_only)
+>  		return ret_addr;
+>
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v5:
-  - No changes,
+Much better, thanks!
 
-v4:
-  - No changes,
+Both applied.
 
-v3:
-  - No changes,
-
-v2:
-  - Drop RFC, as a dependency was applied.
----
- drivers/soc/renesas/renesas-soc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index 1eb52356b996bdd7..ee4f17bb4db45db7 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2014-2016 Glider bvba
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-@@ -524,8 +525,7 @@ static int __init renesas_soc_init(void)
- 							   eshi, eslo);
- 		}
- 
--		if (soc->id &&
--		    ((product & id->mask) >> __ffs(id->mask)) != soc->id) {
-+		if (soc->id && field_get(id->mask, product) != soc->id) {
- 			pr_warn("SoC mismatch (product = 0x%x)\n", product);
- 			ret = -ENODEV;
- 			goto free_soc_dev_attr;
 -- 
-2.43.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
