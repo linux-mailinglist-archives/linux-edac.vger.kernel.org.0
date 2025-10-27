@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5202-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5203-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B2AFC1007A
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6D15C10096
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:44:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 40AD74FAE76
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:42:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 84FE94FEB55
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B3A231B824;
-	Mon, 27 Oct 2025 18:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC67031D375;
+	Mon, 27 Oct 2025 18:42:29 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A0A2D8DB9;
-	Mon, 27 Oct 2025 18:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E66831CA7F;
+	Mon, 27 Oct 2025 18:42:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590540; cv=none; b=YrhcB9zURYk8WPDIoeuFeasdtS8+lFR+NW8zydxlDVUjhIeGDyjV1fB++xTKcDfXgbYiHZmsUfRSiYe2DdhKM19CY23vcdeoyiyi2gp20bTdEU1SgUaOBl47d3Lt3tGP3pv7m9nlMEQlppzc0nujsH2fD9+Z6JHOQTeenLqYhKg=
+	t=1761590549; cv=none; b=NJ5cFMYe34+yV9Rdh/Pni4KncKG8IGcakYxEl1bcLjDBPVbPOmkKvKpvSud4ILn/GrOqiMB7ttmFh1+6qE4HBECh16NA5VMZFK/hXgLsrLNULfDS6w1hWWnEHJfbjkhAf3Q1WLqW8jJioVTeWmiabJbIafSZ7pRNLLpNCqpa1qQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590540; c=relaxed/simple;
-	bh=/KBW8Y28oqZl3pWzJPtKbC/ixdq4Sj+umSWS6JCYa/w=;
+	s=arc-20240116; t=1761590549; c=relaxed/simple;
+	bh=LvPiIuM54cTLiEzRaIElAbMmKhMg3cEDGYkxbhGtKKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MsD40a5HrQXn2qE1vTSCaZAGj7r+tAqzlFamg+o57aMSWtHgjqFpYEAmBgCH9PT4pbVqMdfDxb3ORYXXXCql/7Ja3bBHnGjivlxkcmWj/uRxA8hAZePzcID+mulj8nxRHuDEkGwDq1ZMw2qpMVhvmiHmPFZuojRWb2N4xfg8Ads=
+	 MIME-Version; b=ShtB4QnI2t/9RShb+e39DAdCG/1z8eEawBOfy/MT1o3zn0z8uHd4Cc/KQOntljg4WrL7tuIXv+Gs2r2ADkYliKv3WWKI4u6aX0RyWvw52dOv7Z9DEQCsc5LH03qTjxSDZdN6LPy8mwFmTKiH5UgkxZnQ/r+XIpPlomF+1g/DKbo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FA6EC4CEFD;
-	Mon, 27 Oct 2025 18:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 653D4C113D0;
+	Mon, 27 Oct 2025 18:42:20 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -80,9 +80,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 01/23] clk: at91: pmc: #undef field_{get,prep}() before definition
-Date: Mon, 27 Oct 2025 19:41:35 +0100
-Message-ID: <a26cfb39f4ac309ffbff339ffa5f54db12bd8c12.1761588465.git.geert+renesas@glider.be>
+Subject: [PATCH v5 02/23] crypto: qat - #undef field_get() before local definition
+Date: Mon, 27 Oct 2025 19:41:36 +0100
+Message-ID: <ef5c6bfcdf08892fa09cc4aaec5ef49067201195.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -94,10 +94,10 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare for the advent of globally available common field_get() and
-field_prep() macros by undefining the symbols before defining local
-variants.  This prevents redefinition warnings from the C preprocessor
-when introducing the common macros later.
+Prepare for the advent of a globally available common field_get() macro
+by undefining the symbol before defining a local variant.  This prevents
+redefinition warnings from the C preprocessor when introducing the common
+macro later.
 
 Suggested-by: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
@@ -105,23 +105,21 @@ Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 v5:
   - New.
 ---
- drivers/clk/at91/pmc.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
-index 5daa32c4cf2540d7..78a87d31463e98b0 100644
---- a/drivers/clk/at91/pmc.h
-+++ b/drivers/clk/at91/pmc.h
-@@ -117,7 +117,9 @@ struct at91_clk_pms {
- 	unsigned int parent;
- };
- 
+diff --git a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+index 69295a9ddf0ac92f..6186fafb4a7b0dab 100644
+--- a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
++++ b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+@@ -11,6 +11,7 @@
+  * pm_scnprint_table(), making it not compile time constant, so the compile
+  * asserts from FIELD_GET() or u32_get_bits() won't be fulfilled.
+  */
 +#undef field_get
  #define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
-+#undef field_prep
- #define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
  
- #define ndck(a, s) (a[s - 1].id + 1)
+ #define PM_INFO_MAX_KEY_LEN	21
 -- 
 2.43.0
 
