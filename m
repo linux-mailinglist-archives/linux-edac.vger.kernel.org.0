@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5210-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5211-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90C6EC1011F
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:45:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B24C101A6
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:46:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 14BFE350A48
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:45:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2FDA464FF7
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350E2326D76;
-	Mon, 27 Oct 2025 18:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 908BA32863F;
+	Mon, 27 Oct 2025 18:43:44 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A05F31C584;
-	Mon, 27 Oct 2025 18:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600AA2BD033;
+	Mon, 27 Oct 2025 18:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590615; cv=none; b=ao+T1T/ktz4aX3qbKelOqlYvBkd5A4vzOlyH+AjlaF1VLQz293yh4RRk3JVENP/vX2lk1eY/ytK/6Pprr38COc2cLvSa9gO3Kr9sl03PnzEVG2n843lW5PF0aB7OSeOetckizKlO3Bdpk3FrmeK39/LFkftfi+YcbhpNkm2MKSQ=
+	t=1761590624; cv=none; b=ghvr26W05ENSfyZ/Vuj9Xq6fir54JJ2XOieblabm2p3WnnYUdMyFVwgspM2uJovLeqN3K4oXwyzoOkT2cqPBjAjemHzoS8OWNGwSC3UWOAnX16l2R67F5292+rarmUJzRKdaQCthyDT18FKbh64DDqmdc/x904IzQX9sM1v31VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590615; c=relaxed/simple;
-	bh=9AtmaxAE5P6FLHZHWPVLhE0KnmeKCJv4vA8112RwR48=;
+	s=arc-20240116; t=1761590624; c=relaxed/simple;
+	bh=wo/YyHUnh4dUlne/6NyxVlSHFCYUWrwUefK13E/NdZg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PRgu/j63BFCi7/A+Y/3toIXOA90BjGgC6e1DSbf7W8AecNkUsAwuuY7Hfq84O8D59m8ErpzFqDP+zM/NoVsUfBMjLx/IgaSge8Tkj+U4HG+4LsJgbJCErQrWJSHy3IdYHvjdsBeejmE0Tjt79L8J5q/0NIwHFa3A44n3SrQ+rCo=
+	 MIME-Version; b=KmvkkZFWvwEBxcLPjaWdw0rQtS93kkAow0PAXueHVxHoEWLwJlXHHGJ3NYTtTikztHMWHxOZ9hQzbrKibUAGK4aBx2EyF1aqXsAosaP1KSbEd1z8QIc4Hhl2iXLO2cbPbdD+y0nJ/m+2ipakZifF/3e/AYoae4rGsxUNgVcSSt4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2490C113D0;
-	Mon, 27 Oct 2025 18:43:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D73C116C6;
+	Mon, 27 Oct 2025 18:43:35 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -80,9 +80,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 09/23] ALSA: usb-audio: #undef field_{get,prep}() before local definition
-Date: Mon, 27 Oct 2025 19:41:43 +0100
-Message-ID: <8f19d783dd783df5510408ffe9664dc6ef0d9434.1761588465.git.geert+renesas@glider.be>
+Subject: [PATCH -next v5 10/23] iio: imu: smi330: #undef field_{get,prep}() before definition
+Date: Mon, 27 Oct 2025 19:41:44 +0100
+Message-ID: <97549838f28a1bb7861cfb42ee687f832942b13a.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -105,23 +105,23 @@ Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 v5:
   - New.
 ---
- sound/usb/mixer_quirks.c | 2 ++
+ drivers/iio/imu/smi330/smi330_core.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
-index 828af3095b86ee0a..713a8498b975e1ac 100644
---- a/sound/usb/mixer_quirks.c
-+++ b/sound/usb/mixer_quirks.c
-@@ -3312,7 +3312,9 @@ static int snd_bbfpro_controls_create(struct usb_mixer_interface *mixer)
- #define RME_DIGIFACE_INVERT BIT(31)
+diff --git a/drivers/iio/imu/smi330/smi330_core.c b/drivers/iio/imu/smi330/smi330_core.c
+index d9178725ade3da83..a79964fe68fadf47 100644
+--- a/drivers/iio/imu/smi330/smi330_core.c
++++ b/drivers/iio/imu/smi330/smi330_core.c
+@@ -68,7 +68,9 @@
+ #define SMI330_SOFT_RESET_DELAY 2000
  
- /* Nonconst helpers */
+ /* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
 +#undef field_get
  #define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
 +#undef field_prep
  #define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
  
- static int snd_rme_digiface_write_reg(struct snd_kcontrol *kcontrol, int item, u16 mask, u16 val)
+ #define SMI330_ACCEL_CHANNEL(_axis) {					\
 -- 
 2.43.0
 
