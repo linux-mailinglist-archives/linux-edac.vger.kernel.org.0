@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5213-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5214-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42303C1023F
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B25B3C10251
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:49:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EA25C4FCA99
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:46:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4F0E74FFB94
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1D832142A;
-	Mon, 27 Oct 2025 18:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32D932ABC6;
+	Mon, 27 Oct 2025 18:44:12 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E716E31B82B;
-	Mon, 27 Oct 2025 18:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E98031B82B;
+	Mon, 27 Oct 2025 18:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590643; cv=none; b=u+ZPbb7PEVBh4OMNZrDCI48/9hXb+ctvrYclmD5NFb1bjNaKNsNaLo/3rqnH0aAhabztiXVvTx3XkORFuT5Iu+hvRqPx1L63eR/xiq2cY9vIRYMqQVcBwiPvJUjZIIr86lH5YdcJMBhKiqeaBK12JPd5WuL4R7sa1Xlgpml1cCs=
+	t=1761590652; cv=none; b=XqRPTNNSHQm8zpgGCaCqNxh3FfEMVFVN0V1ldTW9glGrlrnZNv+eMrVUyP33bI5gglkK3+wNinSsrTf/8mc8+/P54lzGQY++IfPoNljVkrZQDcRsqJzmrGNdjtdyfc1sVjO7CkfpiGLibkU7g8aBu0MScLXsUwcBNM+5/Os9Ktw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590643; c=relaxed/simple;
-	bh=OKpMmsozqeIKresQAJh95tpDvLKC9IZhdrU7X029S/M=;
+	s=arc-20240116; t=1761590652; c=relaxed/simple;
+	bh=PXVmPOn6yY5UfKE+4qxrNiI7L/NaK9gQJ/rTNzxB6Mc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YyOGoc5Avm1mGfF80yAn7QnQsU/hGjN6HKvT62JMbDgRZHMNMVOjx6OW6ZngkQAe6UTMj/0BBOz7amvLMrL1PkSfiKYVahi6JGobmm7nouiscLbKLTPY5rynsra8sqwtcW7i0qIX4f7VpadoBIM+mr6MhT/oxb1ag/gUql9M9JA=
+	 MIME-Version; b=S4CqgxEeUfvOxWawi5d0bwTMRK6mkDCEEAK9s7zoADr5Ww9U8cVVNVlrsdkCWMS7QO/cHWhpCMtsZ3phymUFk79R6Mw/+iNGfD8ByMh9DwxdMTfcsib/C98nW6Je7x0keCXxwuMuxF46z7LREGb8eqM/sEZNar3fhsnRwHhWXbI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AC5C116B1;
-	Mon, 27 Oct 2025 18:43:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C14BC4CEF1;
+	Mon, 27 Oct 2025 18:44:03 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -80,9 +80,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 12/23] clk: at91: Convert to common field_{get,prep}() helpers
-Date: Mon, 27 Oct 2025 19:41:46 +0100
-Message-ID: <b9e9b7d94ba51c7bc028321a85e91adecb23f925.1761588465.git.geert+renesas@glider.be>
+Subject: [PATCH v5 13/23] crypto: qat - convert to common field_get() helper
+Date: Mon, 27 Oct 2025 19:41:47 +0100
+Message-ID: <2556adf9d1dca0077d03785bef1f7592936c16c8.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -94,48 +94,43 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop the driver-specific field_get() and field_prep() macros, in favor
-of the globally available variants from <linux/bitfield.h>.
+Drop the driver-specific field_get() macro, in favor of the globally
+available variant from <linux/bitfield.h>.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
 v5:
   - Extracted from "bitfield: Add non-constant field_{prep,get}()
     helpers".
 ---
- drivers/clk/at91/clk-peripheral.c | 1 +
- drivers/clk/at91/pmc.h            | 5 -----
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-peripheral.c b/drivers/clk/at91/clk-peripheral.c
-index e700f40fd87f9327..e7208c47268b6397 100644
---- a/drivers/clk/at91/clk-peripheral.c
-+++ b/drivers/clk/at91/clk-peripheral.c
-@@ -3,6 +3,7 @@
-  *  Copyright (C) 2013 Boris BREZILLON <b.brezillon@overkiz.com>
-  */
- 
+diff --git a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+index 6186fafb4a7b0dab..4ccc94ed9493a64c 100644
+--- a/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
++++ b/drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c
+@@ -1,19 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright(c) 2025 Intel Corporation */
 +#include <linux/bitfield.h>
  #include <linux/bitops.h>
- #include <linux/clk-provider.h>
- #include <linux/clkdev.h>
-diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
-index 78a87d31463e98b0..543d7aee8d248cdb 100644
---- a/drivers/clk/at91/pmc.h
-+++ b/drivers/clk/at91/pmc.h
-@@ -117,11 +117,6 @@ struct at91_clk_pms {
- 	unsigned int parent;
- };
+ #include <linux/sprintf.h>
+ #include <linux/string_helpers.h>
  
+ #include "adf_pm_dbgfs_utils.h"
+ 
+-/*
+- * This is needed because a variable is used to index the mask at
+- * pm_scnprint_table(), making it not compile time constant, so the compile
+- * asserts from FIELD_GET() or u32_get_bits() won't be fulfilled.
+- */
 -#undef field_get
 -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
--#undef field_prep
--#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
 -
- #define ndck(a, s) (a[s - 1].id + 1)
- #define nck(a) (a[ARRAY_SIZE(a) - 1].id + 1)
+ #define PM_INFO_MAX_KEY_LEN	21
  
+ static int pm_scnprint_table(char *buff, const struct pm_status_row *table,
 -- 
 2.43.0
 
