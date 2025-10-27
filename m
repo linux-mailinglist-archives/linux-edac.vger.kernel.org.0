@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5207-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5208-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 513CEC10173
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:46:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B002C10158
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:46:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BB17A4FEDF3
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:44:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0E1E19C7FFA
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:45:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E21323416;
-	Mon, 27 Oct 2025 18:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C3431D759;
+	Mon, 27 Oct 2025 18:43:17 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC9931D72A;
-	Mon, 27 Oct 2025 18:43:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7CF317711;
+	Mon, 27 Oct 2025 18:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590587; cv=none; b=jLRF4+c0EKjnqwEXQXjQstOa/zKZQHqyEL95lfdl2c6dAISFTDC2HNHVWHWL9/GZY9v5ess2PUyRuLcyfbor+Ryx76E7GXt6VkTAKrYOQRbYMuZ2uweDLySzXqPCEkIRfF1qqeUL1OQCeho1FNi/3Xui0SBrYimQCRm/s5ni9hs=
+	t=1761590597; cv=none; b=S0d+BH+eRCJCfDJnVlxspVQXAd1JoBGW+ERmDYFmbw1tnO9ivYfds0qdmdeVbGR5uxcaNcGqhxaoRzKPoxlcmhusNhN5S8mri6trBXct6RZ/1tk7GqZGa621PMHVqVAv64282i1KU9pOmX3wlXu3za7y9zGrdHiZstAqfpaBoaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590587; c=relaxed/simple;
-	bh=OEcjZyeNzLajp8FfJqjN9/trUR9Pyk9ncfoMAVIuIvA=;
+	s=arc-20240116; t=1761590597; c=relaxed/simple;
+	bh=YxrLr8ynqDegUA8ULydlWJ04Wk6I4oRUFrBwiMNXFRM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XTISBmyc/AePQYonfwLmo98wuv+Q+cIttVSFCsEe4IpN8jsU/ltgdAN6AO9Mio16t397A/OYLHyAg3otVOnfLoy68S1im83uhOZAv85mKMy9wTD4sODlGkgozTBVNPT4Y+t1M3N98uCbeKYNdZm6C+a2CpjUCV49RP0x3o4/VSg=
+	 MIME-Version; b=EY7KIWzTNDYH8npjqXLSLqj6FiHqki0/lpJaoulctNEfD0sPqc9+nR09kSXmz8ivUDHPdWFiAGcoQCCM7j6eTNs3pbH+fhcSu1JUBpvlTu8/ZFY3+YttAz9yzLJn711dx+s36T24HUP8VpOBcuULPxA1l9Wm/j4gRh78z3kOZns=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FBDC116D0;
-	Mon, 27 Oct 2025 18:42:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EA8C116C6;
+	Mon, 27 Oct 2025 18:43:06 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -80,9 +80,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 06/23] iio: mlx90614: #undef field_{get,prep}() before local definition
-Date: Mon, 27 Oct 2025 19:41:40 +0100
-Message-ID: <6e8068f7c5cb2ca349264c2befc70b1b62f9b85d.1761588465.git.geert+renesas@glider.be>
+Subject: [PATCH v5 07/23] pinctrl: ma35: #undef field_{get,prep}() before local definition
+Date: Mon, 27 Oct 2025 19:41:41 +0100
+Message-ID: <03a492c8af84a41e47b33c9a974559805d070d8d.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -105,15 +105,15 @@ Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 v5:
   - New.
 ---
- drivers/iio/temperature/mlx90614.c | 2 ++
+ drivers/pinctrl/nuvoton/pinctrl-ma35.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iio/temperature/mlx90614.c b/drivers/iio/temperature/mlx90614.c
-index 8a44a00bfd5ece38..de5615fdb396aa3c 100644
---- a/drivers/iio/temperature/mlx90614.c
-+++ b/drivers/iio/temperature/mlx90614.c
-@@ -69,7 +69,9 @@
- #define MLX90614_CONST_FIR 0x7 /* Fixed value for FIR part of low pass filter */
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-ma35.c b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+index cdad01d68a37e365..925dd717c9deead5 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-ma35.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-ma35.c
+@@ -82,7 +82,9 @@
+ #define MVOLT_3300			1
  
  /* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
 +#undef field_get
@@ -121,7 +121,7 @@ index 8a44a00bfd5ece38..de5615fdb396aa3c 100644
 +#undef field_prep
  #define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
  
- struct mlx_chip_info {
+ static const char * const gpio_group_name[] = {
 -- 
 2.43.0
 
