@@ -1,230 +1,284 @@
-Return-Path: <linux-edac+bounces-5200-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5201-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FEDFC0E4AD
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 15:13:57 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 032A6C1004D
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:43:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6380E34E668
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 14:13:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A95844FD000
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:42:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF6B2BE7B4;
-	Mon, 27 Oct 2025 14:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="EBthcE9H"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D09031B110;
+	Mon, 27 Oct 2025 18:42:12 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013017.outbound.protection.outlook.com [40.93.201.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81EA1758B;
-	Mon, 27 Oct 2025 14:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761574308; cv=fail; b=ORqvUQx45R5HCYvMzz22v+pNipTNXlPz/plMXsHsz7tNCtK3dvOCIcUwYbrnN5DSp3LA5IwWcx8ve323f4R34Nd5I2760a9RBLRGefDuZcXtjLmZRRqtIati6zBx+J3kDVdaQcuKOyE5Qbk2/KzGVqEQs4Wjtnc4YMD79r8nJoU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761574308; c=relaxed/simple;
-	bh=9HqOHstqV/lJYq2LVfW6Tj5kXQgl0Ypb61hXF9/cGvk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=eQ/bgvSV3OGpONsimpE0v5LMfDCZIAQI8i4UhoRmNbgHz8tlyY8O2tVNfYgTk8pOpPDmgu/8wiHL1AMN2ycMv29mFKxByST0Sr0Kws1n+LnLJETCmBpxDuyYMXZatAWAVytdqVW7kEBu1/G5/rqS04Y6caBZThWGT2MaPq7zLx0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=EBthcE9H; arc=fail smtp.client-ip=40.93.201.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aHU3jHSIugseCutFlWlD+0aq3oA890pJd1wSBnUr2pvdG+tCkURu54d/qv/nUUFTHbDbvZMcqLDt7RjwHx9WWd3D5/hP4uedQuIzNwZtrdIoEkUdvc6P13CA09efGkbiAsRPrNJ4xCrmvbDytowO/dKKu9spMUpcXLhInE5jCuu9KMQKICJGCeNLDNeKk2UbWyMjQjzKL+XkSH3Ko+uspCn0wCQ6xtbX5TKtCcYy8AGOePJ0mONFT8GPUeVnBIBJUsYixHj65132nYpOpxWUQyBkvZ0u7kAeJSGrJWvDuK5lnAzYhiEdZFQeldShTwxYBos8jjOeLAb5xrT5QqGQsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sGT3RDaMQSnfx0U4HSCJay4jn5hXI07+U1rgsga0KSw=;
- b=HBasAAVhjC9tsQyoeD+1Ym6s02qT0gFIUiF8x4Dx4Ofr4viYRk/GjrO8ET5Wyvq4ZozDjVjfJOCX91PU3zgsYzXQFvuQLLfKvEEVBNXdkklMTYCxho+i1ZTvLVLbgrVrB13Tz1ZCuhsmUWK8MWU0JMWwP88W6TFcAm9VnUkZarcICZeE5cACY9Kwosc8Rm6AMswnFoX249V2Fqfut2+1XGA8I4NYw3BNoMJxIU72atuMcZ4ZdU4sr3kjp4vPd1nQR3rraa3jCZBjVKS75Z78ZsTkZdty1AYpCCZpRYjaSHfjH8DuE3D8L5HiLV9Q6wfUq+aKDBanvaNzF/3Vu5fF2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sGT3RDaMQSnfx0U4HSCJay4jn5hXI07+U1rgsga0KSw=;
- b=EBthcE9HCUYJUGjXtRK2HSaVBmyqCDI181AyiuAr6F+kag0PJtuzOeHGS8hUcemN2/s9EiWbtHjQtX6lfoSlFO/NPrjF7SEUj+7uvro/Kr1bziQd2E7/g1xwdDplBPO5SSKA7vQioCBM1F9rDkvPVUOXatqOJ4tlnsEbeSsVVOg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- SA1PR12MB5638.namprd12.prod.outlook.com (2603:10b6:806:229::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 14:11:44 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f%6]) with mapi id 15.20.9253.018; Mon, 27 Oct 2025
- 14:11:43 +0000
-Date: Mon, 27 Oct 2025 10:11:39 -0400
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-	Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	Bert Karwatzki <spasswolf@web.de>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v7 2/8] x86/mce: Unify AMD DFR handler with MCA Polling
-Message-ID: <20251027141139.GA51741@yaz-khff2.amd.com>
-References: <20251016-wip-mca-updates-v7-0-5c139a4062cb@amd.com>
- <20251016-wip-mca-updates-v7-2-5c139a4062cb@amd.com>
- <20251024150333.GSaPuVRQYxH92zyrmO@fat_crate.local>
- <20251024203012.GA251815@yaz-khff2.amd.com>
- <20251024212723.GGaPvvO3l2OlUEG7Xn@fat_crate.local>
- <20251025150304.GXaPzmqFawI0NrCC-0@fat_crate.local>
- <20251027133542.GA8279@yaz-khff2.amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251027133542.GA8279@yaz-khff2.amd.com>
-X-ClientProxiedBy: BN9PR03CA0141.namprd03.prod.outlook.com
- (2603:10b6:408:fe::26) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F672D8DB9;
+	Mon, 27 Oct 2025 18:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761590532; cv=none; b=CBS7AhpCTr6wftnKBRwcNDKjktpvvTUQNX88utDzwIrOGiEipIhxdZZMR9LNGZUSnLgdzRAuFYZgFQL9JLK5IrJp7Gr8tyW05cLgN2Mr6QWI4FR8z1MwtmlFFVCgLD0C8lWHnNSh/SLeY2ayo19bWStQd3+0NWoPqh+JWHkLDkQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761590532; c=relaxed/simple;
+	bh=xxOlJgeBwy+KzQJfsh3junpiGLLSk0j9on8nVYQ5M/c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RrpFjl7IKk4YPSmGzYViTHZHcorOJozqc7tpbdowUKO7nYPr0XNtyv3zg1dU2jwlqiuyJ5uSsZu9F49FmToNQ+/AmyTnozOfJx0xqQdTjY3SjYJzaUC43hZQmCWsTlCJ2oS9ec31B7IUu0g4YCbo6pkfP24E2axTGkR1elsMPZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADFEDC4CEF1;
+	Mon, 27 Oct 2025 18:42:01 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Miller <davem@davemloft.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Crt Mori <cmo@melexis.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alex Elder <elder@ieee.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Jason Baron <jbaron@akamai.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	David Lechner <dlechner@baylibre.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Cosmin Tanislav <demonsingur@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Jianping Shen <Jianping.Shen@de.bosch.com>
+Cc: linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	qat-linux@intel.com,
+	linux-gpio@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-iio@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v5 00/23] Non-const bitfield helpers
+Date: Mon, 27 Oct 2025 19:41:34 +0100
+Message-ID: <cover.1761588465.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|SA1PR12MB5638:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac580a29-2c8b-4863-d02c-08de1562c1b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?00QM+K2NHUoMA3RvDxZRkVOtRfjicMw6NYdJQujtPhkIj/yx94dVmFOYIEsD?=
- =?us-ascii?Q?v+wfGyJwF/nOwT9sP/SivE6o8SpsnsEbCe23IPYtPmg5j2NhDXOwTgcWnb9c?=
- =?us-ascii?Q?y+DKcT4r/ZkpNzTtChwRjVoeTEkBM6BxTifk4i+steJhC2JxSfHqxUC5Ftia?=
- =?us-ascii?Q?9hPl2sQgNEAybYSV+DwFP8+bA7q1ZrMydPw0RDGhLeps2Qc+eHhO2/OWFj50?=
- =?us-ascii?Q?QRtRop3QE3FuKX7q7H/F1HhSgHEhq1VWwzqHl458w5NBXNdpIxkx5l2wVYO0?=
- =?us-ascii?Q?NxcdeUa8a/G/ToLEjJQvBm4wyB9QgoJ8yCVzCJgKyLdBceWZNrhyfuAph9mL?=
- =?us-ascii?Q?QjkcZFAjSHAJ9G5iZWle3cOn6iCi1vWR6LrgbQAdniPrO4roj+TrqVY2YoAg?=
- =?us-ascii?Q?Bk4z98YqQePTxNmlZHxFYFLZRNu8XTWHIC+9ZM7KFC3kSkr0JYfyFENMLEVx?=
- =?us-ascii?Q?3WThhyad6z19nNnQmG5KRjQgn5338YC5dcygjincBWYqlLQY+qJWfKnHmwhw?=
- =?us-ascii?Q?Rw+YlUPi18d+2lt7v9xND5ADn0u77UZuV6wb53P9FLKzsMtQcqLz65j1fdRG?=
- =?us-ascii?Q?yVf1bDTM5dTN3BjVcm+cBaN6prTnq3HUAVAHXIyyA4ujpxNqCAl9GU2KLZgI?=
- =?us-ascii?Q?VgbL+AIwCCwP/+tJUScIL/FxdWhWCsMq8c0KR239ku3DI0eecTb7Kz19TMb7?=
- =?us-ascii?Q?f1Y17fnh32cjDGM+qWo6GKuR7FFD3sXuJW+yWteuNlECBKcJKhGaLzfJyxEr?=
- =?us-ascii?Q?BNIARSpeB0Mn9vYWhFy8PxGZmkHQAgzlsHJr3xyciXqA8Rc2o8Q2gKX4u/NQ?=
- =?us-ascii?Q?pxW5bRdknSoHQH/maZuiOoBLR+9MMwf56S/Xp0f1IAD9BwidyEwAbDCQ4aiO?=
- =?us-ascii?Q?Yawpe7JnuGqeHD+zclUpX1gBiUdVMFxb2Uz4O0JsE96CO7YNuC4jdkpZar3l?=
- =?us-ascii?Q?Ty0qeYHcMBcqKS4Ppn75JszJu9JsPG+MdvkkDO1pWBSTKH9SOs3Z6IQTXmUX?=
- =?us-ascii?Q?g89/TuEnJ7loNYL1mD0Lxqu9O41BUbgIV3YCPE3AwoM0mJzAJEfLr/hV5K0O?=
- =?us-ascii?Q?isbdve1uPg0r+xDsHnuK7dO+HKOLH9TuwZ94cGbwhczr0ChyPROAUE7Wxc/O?=
- =?us-ascii?Q?rfa51fJc9vrio75N9DSiPKsJe2CfuJfYmqouagMC31b7Qpgoxx+T0YFSEDoI?=
- =?us-ascii?Q?5haF9IjUlzUxRrCuoKsNtooJ0ROm77QNv+IaZbVemVvY9LzjTqYr7Qp/qU73?=
- =?us-ascii?Q?Zkd/mtF9M2uXfoXtJMqpmE+IqGV0fYUJOYAehIcFyASDRdmE4UtlJIevn0NS?=
- =?us-ascii?Q?oBoRghKaDQobg/5vXi/YmUNqkpuszRUX+5KZB8xN5epN9L/qDR+fSClq7iAy?=
- =?us-ascii?Q?8nA3OMYxN4qHV7v+fsAvc0hDFsvVlHIH542PcvxxSVyLzdHg5yAFrgSVGRWS?=
- =?us-ascii?Q?oKqQcSMuoo0Zmt3FfYA9kqQ+tfbZHEfZ?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WX1wK5cfSQduwm3qIgtxL3PzmZ2O1QwlssNVWNcSRxTL+1nfr/ZerbVNxPGw?=
- =?us-ascii?Q?g3R1m2/jKuNcrjnagTMqg7KTw+dISf0jeI1S/C3nfNdaNeSYlirSycQDNmGj?=
- =?us-ascii?Q?Pgf9Rxxl9ClvmjKOdjDTstMwUAiYKk1g4CntpF/PskP199w+qQKZLPD2F66H?=
- =?us-ascii?Q?B5QW2gXkgCcS6jA0a76r778N4hdh0gXjVja8hyZMuh5L+GLpKLOruqrWcDcP?=
- =?us-ascii?Q?wUpCZJxD8Z/XdeIgSvd349NkZCPLW7n+sXRI0qGvndRwuudAdFuZ6zGQr7Wk?=
- =?us-ascii?Q?yi9y7EiWzhxW4h4drwv1nzbVQxH98xVaFUCyktic1ihxIRNSWfSIf23aR1ZZ?=
- =?us-ascii?Q?MKYnBvoKACMC9kh3bRx2wpRjXhEMzLT5mNKGRv8IrehM+FMBEmFSgR+wHXZy?=
- =?us-ascii?Q?FXAGCcGuT5TKKQuYen/SBi5+ZJiFbh8bQp5DfY4iBlGFaln1JjzVtAm2IJJB?=
- =?us-ascii?Q?sice6mQE963VOQBqN9jyjg0F3Hy4eEsTWzOg4omft95FjhANfx9YYCJtyVpk?=
- =?us-ascii?Q?Py1qYt5L1+bjhEQb6NjI0nHi58LTM5zjZ5nHJ2FpD7Aa845NmEqCiJxAOOm4?=
- =?us-ascii?Q?atskyO6cU2EgqF1MDnCqhGT+XqD3W5npVf8avkfl2iON7NYn5mLeqY8El+Jf?=
- =?us-ascii?Q?gtWk3NAydSEmrtWzm0S6WadKoXyUy9IU++AJNc05O+86Hk1x3zCisVmcowVy?=
- =?us-ascii?Q?gHkJgyUzll48Bl9jBtKSNV336ZcM7yw9hmN2u4rsmJVyXpLUiO2EnrD7vk01?=
- =?us-ascii?Q?SbTevxMgKd933l2rE6GK0PDRYKp4xBYV/c6gdHe41KGPgJD/gHAih6vtPeFw?=
- =?us-ascii?Q?6LUXPQ5UA3/eLQQhspu2NMwGlInYcYOL1Vvzx8JF0MBWzgQFxbppUt658jry?=
- =?us-ascii?Q?lCqrJquRN9tYqSo5V/ZE76xx56FSsPEvi/IO6Jl64ctm1Jbdx7//j36oSC7A?=
- =?us-ascii?Q?/jYHtzQ0LZep+tswaZwc1mMxsMezMJGyHXHLgua6zcF2xiSKMMvjk8JwEFp5?=
- =?us-ascii?Q?XykJe13Q5iyPtWgl+RGJcrpJ88eWnKCjip3/FlXh6LxCD1ZBxn1XzuCh0jgJ?=
- =?us-ascii?Q?7+1HIFe5qmo12+lwWZgZWu9rdx+YnDplsvloQMD2CZ0ktGe3q292Ko06YMcg?=
- =?us-ascii?Q?eTePXxOxU9CClRGClOsG7uLfQvDxiwcAe81y1IgVPiXdTJKiWLkXQ44O2SmC?=
- =?us-ascii?Q?sXGyAB9z2aZPGD7cCCs1ln70mIxmK/IoZo66xblFRQV9v6gE/pR/aUQqCQXR?=
- =?us-ascii?Q?LXXpKJlFZ33FnkPVGtt7Hxj36AakAqq4FQbVjHBP4LUzAyYq067IP8h3VdMa?=
- =?us-ascii?Q?9huTEh7BCrnnXHS9u6NaBhL0eQBvCy56cA7WxklPZ5SUEtNJyLg0W/1XPQaX?=
- =?us-ascii?Q?tcvGJ9MxBh/FjBcHoGuMQYXpd2z+csmtDrxaT7wxvFoBjpVwIKjQnpkYjd7L?=
- =?us-ascii?Q?gjFf0PDjSpR0TcozKL1LVM9h4A5ZyxfnZD706i96qWe8Ow8o2H1ePSieujXC?=
- =?us-ascii?Q?qPGGXZ1uImXbK6TwT5gpZKAz7Go/+lVbAvZs/JFNN1FyDg9RLkFvXd1a+bDI?=
- =?us-ascii?Q?eNqOygfBC09E5Fbd+W0kqTEpRUi/nWC7Pm6tKw+u?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac580a29-2c8b-4863-d02c-08de1562c1b9
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 14:11:43.7061
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kaI3pHtGDFgtV49HmApFrUucArsLWWXX0wDhfObt8Q1gjq0zciLScs8Chgq1X5sHp2dPfD/1M2mgfuGwPMeNPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5638
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 27, 2025 at 09:35:42AM -0400, Yazen Ghannam wrote:
-> On Sat, Oct 25, 2025 at 05:03:04PM +0200, Borislav Petkov wrote:
-> > On Fri, Oct 24, 2025 at 11:27:23PM +0200, Borislav Petkov wrote:
-> > > On Fri, Oct 24, 2025 at 04:30:12PM -0400, Yazen Ghannam wrote:
-> > > > Should I send another revision?
-> > > 
-> > > Nah, I'm not done simplifying this yet. :-P
-> > 
-> > Yeah, no, looks ok now:
-> > 
+	Hi all,
 
-Here's another fixup. I also simplified the function parameters and
-tweaked the code comments.
+<linux/bitfield.h> contains various helpers for accessing bitfields, as
+typically used in hardware registers for memory-mapped I/O blocks.
+These helpers ensure type safety, and deduce automatically shift values
+from mask values, avoiding mistakes due to inconsistent shifts and
+masks, and leading to a reduction in source code size.
 
-Thanks,
-Yazen
+The existing FIELD_{GET,PREP}() macros are limited to compile-time
+constants.  However, it is very common to prepare or extract bitfield
+elements where the bitfield mask is not a compile-time constant (e.g. it
+comes from a table, or is created by shifting a compile-time constant).
+To avoid this limitation, the AT91 clock driver introduced its own
+field_{prep,get}() macros.  During the past four years, these have been
+copied to multiple drivers, and more copies are on their way[1], leading
+to the obvious review comment "please move this to <linux/bitfield.h>".
 
----
- arch/x86/kernel/cpu/mce/core.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+Hence this series
+  1. Takes preparatory steps in drivers definining local
+     field_{get,prep}() macros (patches 1-10),
+  2. Makes field_{prep,get}() available for general use (patch 11),
+  3. Converts drivers with local variants to the common helpers (patches
+     12-21),
+  4. Converts a few Renesas drivers to the existing FIELD_{GET,PREP}()
+     and the new field_{get,prep}() helpers (patches 22-23).
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 7be062429ce3..eaee48b8b339 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -726,21 +726,18 @@ DEFINE_PER_CPU(unsigned, mce_poll_count);
-  * 3) SMCA systems check MCA_DESTAT, if error was not found in MCA_STATUS, and
-  *    log it.
-  */
--static bool smca_should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
-+static bool smca_should_log_poll_error(struct mce *m)
- {
--	struct mce *m = &err->m;
--
- 	/*
--	 * If the MCA_STATUS register has a deferred error, then continue using it as
--	 * the status register.
--	 *
--	 * MCA_DESTAT will be cleared at the end of the handler.
-+	 * If MCA_STATUS happens to have a deferred error, then MCA_DESTAT will
-+	 * be cleared at the end of the handler.
- 	 */
--	if ((m->status & MCI_STATUS_VAL) && (m->status & MCI_STATUS_DEFERRED))
-+	if (m->status & MCI_STATUS_VAL)
- 		return true;
- 
- 	/*
--	 * If the MCA_DESTAT register has a deferred error, then use it instead.
-+	 * Use the MCA_DESTAT register if it has a deferred error. The redundant
-+	 * status bit check is to filter out any bogus errors.
- 	 *
- 	 * MCA_STATUS will not be cleared at the end of the handler.
- 	 */
-@@ -780,7 +777,7 @@ static bool should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
- 	struct mce *m = &err->m;
- 
- 	if (mce_flags.smca)
--		return smca_should_log_poll_error(flags, err);
-+		return smca_should_log_poll_error(m);
- 
- 	/* If this entry is not valid, ignore it. */
- 	if (!(m->status & MCI_STATUS_VAL))
+Alternatives would be to use the typed {u*,be*,le*,...}_{get,encode}_bits()
+macros instead (which currently do not work with non-constant masks
+either, and the first attempt to change that generates much worse code),
+or to store the low bit and width of the mask instead (which would
+require changing all code that passes masks directly, and also generates
+worse code).
+
+Changes compared to v4[2]:
+  - Add preparatory patches to #undef field_{get,prep}() in individual
+    drivers before defining local variants,
+  - Update new smi330 IIO IMU driver,
+  - Add Acked-by,
+  - Document that mask must be non-zero,
+  - Document typical usage pattern,
+  - Recommend using FIELD_{PREP,GET}() directly to ensure compile-time
+    constant masks,
+  - Check BITS_PER_TYPE(mask) instead of sizeof(mask),
+  - Wire field_{get,prep}() to FIELD_{GET,PREP}() when mask is
+    constant, to improve type checking,
+  - Extract conversion of individual drivers into separate patches.
+
+Changes compared to v3[3]:
+  - Update recently introduced FIELD_MODIFY() macro,
+  - Add Acked-by,
+  - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocate
+    power management debugfs helper APIs") in v6.17-rc1,
+  - Convert more recently introduced upstream copies:
+      - drivers/edac/ie31200_edac.c
+      - drivers/iio/dac/ad3530r.c
+
+Changes compared to v2[4]:
+  - New patch "[PATCH v3 1/4] bitfield: Drop underscores from macro
+    parameters",
+  - Add Acked-by,
+  - Drop underscores from macro parameters,
+  - Use __auto_type where possible,
+  - Correctly cast reg to the mask type,
+  - Introduces __val and __reg intermediates to simplify the actual
+    operation,
+  - Drop unneeded parentheses,
+  - Clarify having both FIELD_{GET,PREP}() and field_{get,prep}(),
+
+Changes compared to v1[5]:
+  - Cast val resp. reg to the mask type,
+  - Fix 64-bit use on 32-bit architectures,
+  - Convert new upstream users:
+      - drivers/crypto/intel/qat/qat_common/adf_gen4_pm_debugfs.c
+      - drivers/gpio/gpio-aspeed.c
+      - drivers/iio/temperature/mlx90614.c
+      - drivers/pinctrl/nuvoton/pinctrl-ma35.c
+      - sound/usb/mixer_quirks.c
+  - Convert new user queued in renesas-devel for v6.15:
+      - drivers/soc/renesas/rz-sysc.c
+  - Drop the last 14 RFC patches.
+    They can be updated/resubmitted/applied later.
+
+In the meantime, one more copy ended up in the IIO tree and in
+linux-next (commit 89cba586b8b4cde0 ("iio: imu: smi330: Add driver" in
+next-20251021 and later).  As this commit is not yet upstream, I cannot
+apply any updates (patches 10 and 21) for this driver yet.
+
+I plan to take all patches (except 10 and 21) through the
+Renesas tree, and provide an immutable branch + tag with all patches
+(except 10, 21, 22, and 23), so subsystem maintainers that want to queue
+patches that depend on the new helpers can easily do so.  Once that tag
+has been merged in subsystem trees or upstream, I plan to update and
+resend actual conversions (see patches 4-17 in v1[5]).
+
+To avoid build issues in linux-next, the IIO maintainer should:
+  1. Apply patch 10 now, and
+  2. Apply patch 21 later, either after
+       a. merging my immutable branch/tag, or
+       b. the new helpers in <linux/bitfield.h> are upstream,
+
+Note that there is also a minor conflict with linux-next due to the
+removal of an include file from drivers/gpio/gpio-aspeed.c.
+
+Thanks for your comments!
+
+[1] Work-in-progress new copies posted during the last few months (there
+    may be more):
+      - "[PATCH 10/24] mtd: rawnand: sunxi: cosmetic: move ECC_PAT_FOUND register in SoC caps"
+	https://lore.kernel.org/20251016142752.2627710-11-richard.genoud@bootlin.com
+      - "[PATCH 12/24] mtd: rawnand: sunxi: cosmetic: move NFC_ECC_MODE offset in SoC caps"
+	https://lore.kernel.org/20251016142752.2627710-13-richard.genoud@bootlin.com
+      - "[PATCH v2 05/15] mtd: rawnand: sunxi: rework pattern found registers"
+	https://lore.kernel.org/20251013152645.1119308-6-richard.genoud@bootlin.com
+      - "[PATCH v2 07/15] mtd: rawnand: sunxi: introduce ecc_mode_mask in sunxi_nfc_caps"
+	https://lore.kernel.org/20251013152645.1119308-8-richard.genoud@bootlin.com
+      - "[PATCH v5 2/2] iio: imu: smi330: Add driver"
+	https://lore.kernel.org/20251009153149.5162-3-Jianping.Shen@de.bosch.com
+	Now in iio/togreg and linux-next (next-20251021 and later)
+      - "[PATCH v3 2/8] pwm: rzg2l-gpt: Add info variable to struct rzg2l_gpt_chip"
+	https://lore.kernel.org/20250923144524.191892-3-biju.das.jz@bp.renesas.com
+      - "[PATCH v2 3/3] gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller"
+	https://lore.kernel.org/20250903-ltc4283-support-v2-3-6bce091510bf@analog.com
+      - "[PATCH v7 15/24] media: i2c: add Maxim GMSL2/3 serializer and deserializer framework"
+	https://lore.kernel.org/20250718152500.2656391-16-demonsingur@gmail.com
+[2] "[PATCH v4 0/4] Non-const bitfield helpers"
+    https://lore.kernel.org/cover.1760696560.git.geert+renesas@glider.be
+[3] "[PATCH v3 0/4] Non-const bitfield helpers"
+    https://lore.kernel.org/all/cover.1739540679.git.geert+renesas@glider.be/
+[4] "[PATCH v2 0/3] Non-const bitfield helpers"
+    https://lore.kernel.org/all/cover.1738329458.git.geert+renesas@glider.be
+[5] "[PATCH 00/17] Non-const bitfield helper conversions"
+    https://lore.kernel.org/all/cover.1637592133.git.geert+renesas@glider.be
+
+Geert Uytterhoeven (23):
+  clk: at91: pmc: #undef field_{get,prep}() before definition
+  crypto: qat - #undef field_get() before local definition
+  EDAC/ie31200: #undef field_get() before local definition
+  gpio: aspeed: #undef field_{get,prep}() before local definition
+  iio: dac: ad3530r: #undef field_prep() before local definition
+  iio: mlx90614: #undef field_{get,prep}() before local definition
+  pinctrl: ma35: #undef field_{get,prep}() before local definition
+  soc: renesas: rz-sysc: #undef field_get() before local definition
+  ALSA: usb-audio: #undef field_{get,prep}() before local definition
+  [next] iio: imu: smi330: #undef field_{get,prep}() before definition
+  bitfield: Add non-constant field_{prep,get}() helpers
+  clk: at91: Convert to common field_{get,prep}() helpers
+  crypto: qat - convert to common field_get() helper
+  EDAC/ie31200: Convert to common field_get() helper
+  gpio: aspeed: Convert to common field_{get,prep}() helpers
+  iio: dac: Convert to common field_prep() helper
+  iio: mlx90614: Convert to common field_{get,prep}() helpers
+  pinctrl: ma35: Convert to common field_{get,prep}() helpers
+  soc: renesas: rz-sysc: Convert to common field_get() helper
+  ALSA: usb-audio: Convert to common field_{get,prep}() helpers
+  [next] iio: imu: smi330: Convert to common field_{get,prep}() helpers
+  clk: renesas: Use bitfield helpers
+  soc: renesas: Use bitfield helpers
+
+ drivers/clk/at91/clk-peripheral.c             |  1 +
+ drivers/clk/at91/pmc.h                        |  3 --
+ drivers/clk/renesas/clk-div6.c                |  6 +--
+ drivers/clk/renesas/rcar-gen3-cpg.c           | 15 ++----
+ drivers/clk/renesas/rcar-gen4-cpg.c           |  9 ++--
+ .../intel/qat/qat_common/adf_pm_dbgfs_utils.c |  8 +--
+ drivers/edac/ie31200_edac.c                   |  4 +-
+ drivers/gpio/gpio-aspeed.c                    |  5 +-
+ drivers/iio/dac/ad3530r.c                     |  3 --
+ drivers/iio/imu/smi330/smi330_core.c          |  4 --
+ drivers/iio/temperature/mlx90614.c            |  5 +-
+ drivers/pinctrl/nuvoton/pinctrl-ma35.c        |  4 --
+ drivers/soc/renesas/renesas-soc.c             |  4 +-
+ drivers/soc/renesas/rz-sysc.c                 |  3 +-
+ include/linux/bitfield.h                      | 54 +++++++++++++++++++
+ sound/usb/mixer_quirks.c                      |  4 --
+ 16 files changed, 73 insertions(+), 59 deletions(-)
+
 -- 
-2.51.1
+2.43.0
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
