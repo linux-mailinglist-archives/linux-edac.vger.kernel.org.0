@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5223-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5224-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E167C102B2
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:50:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F66C10362
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:52:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1417A352998
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:50:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC3651A239C5
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A389326D6B;
-	Mon, 27 Oct 2025 18:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CAF32779A;
+	Mon, 27 Oct 2025 18:45:45 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E448831DDBD;
-	Mon, 27 Oct 2025 18:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F50E326D74;
+	Mon, 27 Oct 2025 18:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590736; cv=none; b=SVitQIyhHFeFYJHGlS4mk5xROtysVuT1QXvh5UuGqzWWQemRA1HXYc92LY6eZbXl5ECIrF+n7FjbXE/PZtT3oGtbulwNxOxJ021zZdLsjIF8N0AcA+KpbKbRoRzrnLJkDEYnTHtTcS6om1iu7K7nsHSQJJHj30sifGxAsPCcMyU=
+	t=1761590745; cv=none; b=uqbbbk5o8wLp/IfrkseYhTj9Gh4OIrYrQ7SkCYjeP1Wyp4K/AbWuz3Knj/UAb8cs66K2iq1WNWjRnKAi2tt6mOLwTtgshBdPIcosnR47PIebZT+REMAIXjHwENt94CaMi+cjrl+7addzmEXeY5W5p5R5Qd1uOuqnTUCZ4ASguZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590736; c=relaxed/simple;
-	bh=YxC1ZEm87oCyf+XvjDFW3H2bStOPO3EAmv2hz/JTnlg=;
+	s=arc-20240116; t=1761590745; c=relaxed/simple;
+	bh=l+k3T8WhLZTpDb7CbRpBhiGt+Z826lr9zR8apoxyAS8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tMqRsZN/tPnA2WpX5F+0CRir3YY89S5wqbcWfBr8GW2r2+/HlkcLDtAQg9zQIR768hN0C37ckYJvkGDFPDBrfzoVSXbJdI0TOKrMKsTcVz6TloMJgvOTU9V6q2VKGVte7/9ci1OTV8BQNrI2GU07Wntway8vCdjM9627wcX1PhE=
+	 MIME-Version; b=FXP3SppS/Vt306GfL9WiCUbaMA/n0mm33Hc6xJ3anbSmMkBzEhm/2liwH47C2ELbGICr7+vKEwZeOsiEh1VRy7aWTm1q2IFGUjF9f7XorLdeUbMWNnjyTEpncns3+Wuon1nMzeRyjcPiR5bQMqwHtlA/FX2RTqppE3PszjSLq+s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD0FC4CEFD;
-	Mon, 27 Oct 2025 18:45:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E1DC4CEF1;
+	Mon, 27 Oct 2025 18:45:35 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -80,9 +80,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 22/23] clk: renesas: Use bitfield helpers
-Date: Mon, 27 Oct 2025 19:41:56 +0100
-Message-ID: <362ca57b994141c4747596d9da432057e09e7713.1761588465.git.geert+renesas@glider.be>
+Subject: [PATCH v5 23/23] soc: renesas: Use bitfield helpers
+Date: Mon, 27 Oct 2025 19:41:57 +0100
+Message-ID: <c6520836ab8f061f6f3f4be3bf63cda8d04101f7.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -94,9 +94,7 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use the FIELD_{GET,PREP}() and field_{get,prep}() helpers for const
-respective non-const bitfields, instead of open-coding the same
-operations.
+Use the field_get() helper, instead of open-coding the same operation.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
@@ -110,120 +108,33 @@ v3:
   - No changes,
 
 v2:
-  - Rebase on top of commit 470e3f0d0b1529ab ("clk: renesas: rcar-gen4:
-    Introduce R-Car Gen4 CPG driver").
+  - Drop RFC, as a dependency was applied.
 ---
- drivers/clk/renesas/clk-div6.c      |  6 +++---
- drivers/clk/renesas/rcar-gen3-cpg.c | 15 +++++----------
- drivers/clk/renesas/rcar-gen4-cpg.c |  9 +++------
- 3 files changed, 11 insertions(+), 19 deletions(-)
+ drivers/soc/renesas/renesas-soc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/renesas/clk-div6.c b/drivers/clk/renesas/clk-div6.c
-index 3abd6e5400aded6a..f7b827b5e9b2dd32 100644
---- a/drivers/clk/renesas/clk-div6.c
-+++ b/drivers/clk/renesas/clk-div6.c
-@@ -7,6 +7,7 @@
-  * Contact: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
+index 1eb52356b996bdd7..ee4f17bb4db45db7 100644
+--- a/drivers/soc/renesas/renesas-soc.c
++++ b/drivers/soc/renesas/renesas-soc.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2014-2016 Glider bvba
   */
  
 +#include <linux/bitfield.h>
- #include <linux/clk-provider.h>
- #include <linux/init.h>
  #include <linux/io.h>
-@@ -171,8 +172,7 @@ static u8 cpg_div6_clock_get_parent(struct clk_hw *hw)
- 	if (clock->src_mask == 0)
- 		return 0;
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+@@ -524,8 +525,7 @@ static int __init renesas_soc_init(void)
+ 							   eshi, eslo);
+ 		}
  
--	hw_index = (readl(clock->reg) & clock->src_mask) >>
--		   __ffs(clock->src_mask);
-+	hw_index = field_get(clock->src_mask, readl(clock->reg));
- 	for (i = 0; i < clk_hw_get_num_parents(hw); i++) {
- 		if (clock->parents[i] == hw_index)
- 			return i;
-@@ -191,7 +191,7 @@ static int cpg_div6_clock_set_parent(struct clk_hw *hw, u8 index)
- 	if (index >= clk_hw_get_num_parents(hw))
- 		return -EINVAL;
- 
--	src = clock->parents[index] << __ffs(clock->src_mask);
-+	src = field_prep(clock->src_mask, clock->parents[index]);
- 	writel((readl(clock->reg) & ~clock->src_mask) | src, clock->reg);
- 	return 0;
- }
-diff --git a/drivers/clk/renesas/rcar-gen3-cpg.c b/drivers/clk/renesas/rcar-gen3-cpg.c
-index 10ae20489df9abd8..b954278ddd9d8aa8 100644
---- a/drivers/clk/renesas/rcar-gen3-cpg.c
-+++ b/drivers/clk/renesas/rcar-gen3-cpg.c
-@@ -54,10 +54,8 @@ static unsigned long cpg_pll_clk_recalc_rate(struct clk_hw *hw,
- {
- 	struct cpg_pll_clk *pll_clk = to_pll_clk(hw);
- 	unsigned int mult;
--	u32 val;
- 
--	val = readl(pll_clk->pllcr_reg) & CPG_PLLnCR_STC_MASK;
--	mult = (val >> __ffs(CPG_PLLnCR_STC_MASK)) + 1;
-+	mult = FIELD_GET(CPG_PLLnCR_STC_MASK, readl(pll_clk->pllcr_reg)) + 1;
- 
- 	return parent_rate * mult * pll_clk->fixed_mult;
- }
-@@ -94,7 +92,7 @@ static int cpg_pll_clk_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- 	val = readl(pll_clk->pllcr_reg);
- 	val &= ~CPG_PLLnCR_STC_MASK;
--	val |= (mult - 1) << __ffs(CPG_PLLnCR_STC_MASK);
-+	val |= FIELD_PREP(CPG_PLLnCR_STC_MASK, mult - 1);
- 	writel(val, pll_clk->pllcr_reg);
- 
- 	for (i = 1000; i; i--) {
-@@ -176,11 +174,7 @@ static unsigned long cpg_z_clk_recalc_rate(struct clk_hw *hw,
- 					   unsigned long parent_rate)
- {
- 	struct cpg_z_clk *zclk = to_z_clk(hw);
--	unsigned int mult;
--	u32 val;
--
--	val = readl(zclk->reg) & zclk->mask;
--	mult = 32 - (val >> __ffs(zclk->mask));
-+	unsigned int mult = 32 - field_get(zclk->mask, readl(zclk->reg));
- 
- 	return DIV_ROUND_CLOSEST_ULL((u64)parent_rate * mult,
- 				     32 * zclk->fixed_div);
-@@ -231,7 +225,8 @@ static int cpg_z_clk_set_rate(struct clk_hw *hw, unsigned long rate,
- 	if (readl(zclk->kick_reg) & CPG_FRQCRB_KICK)
- 		return -EBUSY;
- 
--	cpg_reg_modify(zclk->reg, zclk->mask, (32 - mult) << __ffs(zclk->mask));
-+	cpg_reg_modify(zclk->reg, zclk->mask,
-+		       field_prep(zclk->mask, 32 - mult));
- 
- 	/*
- 	 * Set KICK bit in FRQCRB to update hardware setting and wait for
-diff --git a/drivers/clk/renesas/rcar-gen4-cpg.c b/drivers/clk/renesas/rcar-gen4-cpg.c
-index fb9a876aaba5cbcd..db3a0b8ef2b936bb 100644
---- a/drivers/clk/renesas/rcar-gen4-cpg.c
-+++ b/drivers/clk/renesas/rcar-gen4-cpg.c
-@@ -279,11 +279,7 @@ static unsigned long cpg_z_clk_recalc_rate(struct clk_hw *hw,
- 					   unsigned long parent_rate)
- {
- 	struct cpg_z_clk *zclk = to_z_clk(hw);
--	unsigned int mult;
--	u32 val;
--
--	val = readl(zclk->reg) & zclk->mask;
--	mult = 32 - (val >> __ffs(zclk->mask));
-+	unsigned int mult = 32 - field_get(zclk->mask, readl(zclk->reg));
- 
- 	return DIV_ROUND_CLOSEST_ULL((u64)parent_rate * mult,
- 				     32 * zclk->fixed_div);
-@@ -334,7 +330,8 @@ static int cpg_z_clk_set_rate(struct clk_hw *hw, unsigned long rate,
- 	if (readl(zclk->kick_reg) & CPG_FRQCRB_KICK)
- 		return -EBUSY;
- 
--	cpg_reg_modify(zclk->reg, zclk->mask, (32 - mult) << __ffs(zclk->mask));
-+	cpg_reg_modify(zclk->reg, zclk->mask,
-+		       field_prep(zclk->mask, 32 - mult));
- 
- 	/*
- 	 * Set KICK bit in FRQCRB to update hardware setting and wait for
+-		if (soc->id &&
+-		    ((product & id->mask) >> __ffs(id->mask)) != soc->id) {
++		if (soc->id && field_get(id->mask, product) != soc->id) {
+ 			pr_warn("SoC mismatch (product = 0x%x)\n", product);
+ 			ret = -ENODEV;
+ 			goto free_soc_dev_attr;
 -- 
 2.43.0
 
