@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5216-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5217-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F26CC101FE
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:47:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD075C102AE
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 19:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3538E35179A
-	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:47:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27DF1480ECF
+	for <lists+linux-edac@lfdr.de>; Mon, 27 Oct 2025 18:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4822D32C302;
-	Mon, 27 Oct 2025 18:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1E532C95F;
+	Mon, 27 Oct 2025 18:44:40 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1963631D38B;
-	Mon, 27 Oct 2025 18:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9B331D740;
+	Mon, 27 Oct 2025 18:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590671; cv=none; b=pndbuNc53Kk9BsmQfBafv4cjcj7TKZpvuqqfp8iYnl+yYjxNfAwWOBV4NEFNZi2ur1crm47dUuXyVgEMZyhLJJNP6QrcQzHKn3g8MQeR2wNwDmi8aRwdxnQ6dWiDsN5ss8UX/VevE7KyHEb/8XfiajbK2VyycXAnhAoFO4CEhzs=
+	t=1761590680; cv=none; b=k5OOOp3D2qLYaSywUyUUJsnIQiwwkvBSztwZp70409n7eRA1/nnrrmiwYVvuBO9Fch0QApSxGXQ0uFmHk8zRCnIElqW3s+cfA83a2KdnGV5GaOqazVsaeBIbh7ikHn2+iVSnAwkbYX/gEcGEyBbfj3Lk7pyVxjG2cPrXIK2Q4Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590671; c=relaxed/simple;
-	bh=umv/qhdrDzWIvCo6MFMcY2LgT2iryrN6deUWKd28zDI=;
+	s=arc-20240116; t=1761590680; c=relaxed/simple;
+	bh=3Z0yKqYQt4n1/UTlKBhtwL5QwbFq00B6dzUNU0SmWuI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DsR0ATMzefU8p2rwfw22Fys5SdbwGfwOOQ1H5ppxyISajNkuIx/hpfuR/RR1RlhW8GefbHhB6WI1RU9P0wfmjxJ/A2+WYCAMDo2erZVRv/hnG61hQhO4XCfiYKLshWmFOlG7py36MMNB4Hdaxx67mWAQY/nHjTuqWTWzw/aN9YU=
+	 MIME-Version; b=FJJtSKtbKyItFUzfqtm7l22vjvSGzDmoax0Xg1mnJxWjRD7Wgt571SYosS2Swh/K2ZlM9sVwr2P/iQya1l8cqc22KRV16n7dipLkNItXu3TqHzEN2cMXa7gPJsEZsHwFHCYQYSHZJzZ1Nm0/ngiHgSNBhO/bxUkcLDdJV3yaTvA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B709C113D0;
-	Mon, 27 Oct 2025 18:44:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6544CC4CEF1;
+	Mon, 27 Oct 2025 18:44:31 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -79,10 +79,11 @@ Cc: linux-clk@vger.kernel.org,
 	linux-iio@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 15/23] gpio: aspeed: Convert to common field_{get,prep}() helpers
-Date: Mon, 27 Oct 2025 19:41:49 +0100
-Message-ID: <fbefa056d1e2cd13c52a0489b955c2b9442f0c9a.1761588465.git.geert+renesas@glider.be>
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v5 16/23] iio: dac: Convert to common field_prep() helper
+Date: Mon, 27 Oct 2025 19:41:50 +0100
+Message-ID: <c35442070b3484d6312e4c4ce197b00713d08656.1761588465.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1761588465.git.geert+renesas@glider.be>
 References: <cover.1761588465.git.geert+renesas@glider.be>
@@ -94,43 +95,34 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop the driver-specific field_get() and field_prep() macros, in favor
-of the globally available variants from <linux/bitfield.h>.
+Drop the driver-specific field_prep() macro, in favor of the globally
+available variant from <linux/bitfield.h>.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
 v5:
   - Extracted from "bitfield: Add non-constant field_{prep,get}()
     helpers".
 ---
- drivers/gpio/gpio-aspeed.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/iio/dac/ad3530r.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
-index ef4ccaf74a5b379e..3da999334971d501 100644
---- a/drivers/gpio/gpio-aspeed.c
-+++ b/drivers/gpio/gpio-aspeed.c
-@@ -5,6 +5,7 @@
-  * Joel Stanley <joel@jms.id.au>
-  */
+diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
+index 5684d11137f29948..b97b46090d808ee7 100644
+--- a/drivers/iio/dac/ad3530r.c
++++ b/drivers/iio/dac/ad3530r.c
+@@ -53,10 +53,6 @@
+ #define AD3530R_MAX_CHANNELS			8
+ #define AD3531R_MAX_CHANNELS			4
  
-+#include <linux/bitfield.h>
- #include <linux/cleanup.h>
- #include <linux/clk.h>
- #include <linux/gpio/aspeed.h>
-@@ -31,12 +32,6 @@
- #include <linux/gpio/consumer.h>
- #include "gpiolib.h"
- 
--/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
--#undef field_get
--#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
+-/* Non-constant mask variant of FIELD_PREP() */
 -#undef field_prep
 -#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
 -
- #define GPIO_G7_IRQ_STS_BASE 0x100
- #define GPIO_G7_IRQ_STS_OFFSET(x) (GPIO_G7_IRQ_STS_BASE + (x) * 0x4)
- #define GPIO_G7_CTRL_REG_BASE 0x180
+ enum ad3530r_mode {
+ 	AD3530R_NORMAL_OP,
+ 	AD3530R_POWERDOWN_1K,
 -- 
 2.43.0
 
