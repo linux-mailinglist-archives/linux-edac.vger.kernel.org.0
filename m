@@ -1,82 +1,82 @@
-Return-Path: <linux-edac+bounces-5252-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5256-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BEC2C1BAEC
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 16:33:25 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BA91C1BB73
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 16:39:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB9BB623F5D
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 14:31:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 156985C255B
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 14:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CDA29AB11;
-	Wed, 29 Oct 2025 14:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A9D341678;
+	Wed, 29 Oct 2025 14:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HVwISxo1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAIsqD2Z"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A82279DAD
-	for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 14:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CADF2E0402
+	for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 14:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761748236; cv=none; b=VuAvCZW7JNFk0ocexSD4lpCr0l7MOjcHW9Wv0z3Cf+G1SmSa1G74OzWhhGym01WxxtNHdGBFYrT0W9+khD2NQvQMLJMwCs8kuo9+nx2/wiYCrMi7JWTEM8BLCveTUAvO+sq3ezqRnnP3hVtnO053UkhuGY3sqV4zbNbQMM9joiI=
+	t=1761749021; cv=none; b=FFjzjEFf7uEnhO5xrHvaixHkS0+bPiIIVNOHiiT090UNdbTCK9JdWee9NPWp3Y8sa9lnH2xJpt9cY1rF4/qPKWuhOv1NQ7jsVdzZbv0/0VQzLqTJ15W86YSax8uwa9XCuIX4VbFGGbq9WzLES0NcRtJx1QXZYvg2zWj3Amibbb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761748236; c=relaxed/simple;
-	bh=7qSqb+8qhf4bmtYpSevPKgH9NpBXdJ7Y+QlL0CxIedM=;
+	s=arc-20240116; t=1761749021; c=relaxed/simple;
+	bh=Wgk3sH20qHeZBfqYYvcjCmo4mWJP4A+tn2y/6jju0pk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d2noXX2y/WsIZJmYiwYVK7xr99Rk57oh2XLgYjD4xkKV6WofsBEDC1qjiwLJIgUQqI5iQZcDaX/NzvsVvb3eCAKorr5v4VHRJEVO4FfVMw+NHTvOzCOt/9Cv6WAOnetPHdIwOyCQq5kOTvhQw4T3/le/CCLy+2nDjjCdIJ6OqyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HVwISxo1; arc=none smtp.client-ip=209.85.160.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=lfbIxgHQW9MTS9H62/gHLh+IJVYFKkBFTtgU4hcdGUs8PAlRCRc+oGsMOjLjZGipLjcEjKbpMqpSi77K7mXBgxNP85baozm4onlnbgxvQt8Ti+bZn0FJO03WH4Hf4mH0oppPkzxVBjHse66WSYGk9f1OKda0k/CAqqryyRKDgC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAIsqD2Z; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4ecf9c2c9acso37800781cf.2
-        for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 07:30:34 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-88f239686f2so711589185a.0
+        for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 07:43:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761748233; x=1762353033; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761749018; x=1762353818; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=JnpQqG3KsjO8HR5ITuKL9a0uCELInljqSPlsEDY9f3Y=;
-        b=HVwISxo10QqmrSYJm8NEWiPwMQdAiacHa63OSUEAOSCJl5S1CA8h1XtfTBJ+HmBrua
-         w0YVot9mWsIVPfNpcf5bUtJMJXLuR8HvqT4uo56qtjCKmLUSQiBatizK3mNSYFVNIqyT
-         YawDnfkurMYiTvK7GaRIEg9H7V06d4KB0okYHxfQLUJ8A0wxiAMZLhq6yzxKrBJvE948
-         ydDUTAKK8c26FesuIPJAp59RrcCTDy4fWxTiLBQNwkkz17hNB535tNRdNm6xv25uX473
-         +duWPWlmevzjZB4BKgqyMhXV20EeZDWiiTFHXfrcKqcTmGlM9nxBaHBuIZ7w/752aBPM
-         1Zmw==
+        bh=YCEuo11ZBMvPKplSQXGviQNPwjkOhxFZqewnhvYiFAE=;
+        b=TAIsqD2Zns/vh6XEVxrMyZ9XiuMEDvnnK9GumKlk7zWINRHoMaoOl52OOx0Lv3wX8E
+         FjgJ1Sm+Ey5eB0PUO3wZTVtavS9oGJO4zX/CUrLLVqZ8sx8q3ZG1uLFEEbBv2ZdVYajt
+         Dsx6B18zxGO3c2fhfoTsIh8TM1Cz97PLXclZQKnVjwOunoDH5Kn+aeHtJiKRTNrK3eoj
+         cIPxW133XNU4KYCPbPC5CPEARUrEFJBY+QO9p5tF3RLTzbyE5eHRPa2N0WdMynNJgw0P
+         zhvL6d3CV0BX+AxHb9gKsR2IAi8Cjq81a8HPF3uWXZ5j8dblvIysIgyQc/LTj9vaalmW
+         bZCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761748233; x=1762353033;
+        d=1e100.net; s=20230601; t=1761749018; x=1762353818;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JnpQqG3KsjO8HR5ITuKL9a0uCELInljqSPlsEDY9f3Y=;
-        b=GUXnHzZkkKcd3O+SuENAjWHLd+EkQjyUxj9c8eN8im049THcDDLoEbqvHRX4pwzUvC
-         hzfAwPhjDc1QncvZF028v3XMOh988BN5Mh1XdTf9MIoj5/6vG+UUNot5eghhxEkiT1U9
-         4o69g7kl0ODkKrAMJCnwUUy1KmGI6TWYbin6BkXbukrxhM49ISrAAJjIuhumpeySSzDN
-         MmjeaNvls1PRvis+0OydEjKxf7doTsUPFgv8kPTwZh7ZcrOGPlRRfJDyz76QVynp4jXM
-         Kp+oaNycYHchlTeTLDy1VR2wu9tIW3q0Da5AwckbnGpsCXwj0ArIG8dfE3ZvDMtxj6tO
-         rCiw==
-X-Forwarded-Encrypted: i=1; AJvYcCVOVlPKutDY6ptHkaEaymPIRPc94FZiJhgYeELyMMT8gxkqbFGBd1rSM5gxkwY2w/ZAINNPhUMDpiUm@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmYm5TQZ0WMD9UFEBKn9yihrzqIug3UBkt1Tjw4l0P4IBiUdc9
-	GS9HOHPMQkSZq94O9/OaQH84M320Mnh259BU2kIkQ2hsMRLJtHqoYTV4
-X-Gm-Gg: ASbGnctFVTwK+UWGACT5xdg6SYNvJkUXN9Y7LOO8HBETU0XDvoY9R7pb8KdUkeAMjlF
-	foWt477LJWGdwKqFwHUtDSn6jkB3UhVoYMMqM83MPevL/TnjlD0shiW1PJjKXoXEHZLNdhrz2vw
-	q+HRgGUw335S5U91IaSrT9jwVX34vDeNDQrXi2fi7omW3MHn8zHbdi3spE3aI0lNqbPDXaiZqA2
-	piGtcYJtwZxoQFLSURbnj7QcbRzI+EtoqCqjVLS5mSkpcvyvX6Z2FxYGu95ujgq0dDCa6nrlvWe
-	c8SV2kbidNc9z3pdfYw/DtwhmpMJrxExaGFN7+Q9sFrFrRur7JXp/Ak7ckx1oDo8Kr7Tl+CtoAC
-	zvVt88nLeAWwt+Sc2nJnKxbtUcS3xEU9+cbNlvUkMCNkdhFkx6OAZYt0ooq3OHDD0hXBpixHn
-X-Google-Smtp-Source: AGHT+IHd6ZEI/4efuxlvOLVTSJQH1JkXxxhkGirHmvwiRC9eDvjzIFKRpIZ05PrXMHCHH/Mrsnw0AA==
-X-Received: by 2002:a05:622a:24a:b0:4e8:93fc:f8c9 with SMTP id d75a77b69052e-4ed15b53cd6mr36770551cf.15.1761748233098;
-        Wed, 29 Oct 2025 07:30:33 -0700 (PDT)
+        bh=YCEuo11ZBMvPKplSQXGviQNPwjkOhxFZqewnhvYiFAE=;
+        b=MYDvykIvXw+qkcBPpe3j3jUXB5TwlTCRvKcejf1Iq9s1BZmTU5w5/a/LZhOKW0z2zw
+         5S2vvraRYuBdhlowTcuwndpjG0mvmfApv+SA0pWiiFD4WKjZ/gYGcyAJ45BPgczQYLsP
+         AAdwOtcXVhRgVofILbdd5ANGg9Kit2y8Mgjga5yDuECwBuKRryTOoz/xnb5asfxJggEJ
+         mQcmyEa6596TQbN6q30SOPQ95lc+8575xDtaelNULqEDCsYmuHLFonxsBZ+Bl+w694dV
+         LKqCmDTlatcAU4e1RggYCiBpkqfhPAoyqQAnsqkbItmZpDrxSLQ3gX+Wbp94rdvWiYFi
+         c8ew==
+X-Forwarded-Encrypted: i=1; AJvYcCX9DUcsFCWrJcK8nH/Je9LN4av7wZ+0fD6wV7pT7kKmltFYMGut0psWW71qyARRxer458bWIPxlttrN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJe5m6h6SlWPI30dJOGHWtCFHSBXuNYpePijd0/qk/fTw7MWjE
+	jYrUjwQNbFQfpJdKWFqzxqTOxv03mGokNjfM6+9ulSAyHcTocrJnu4dL
+X-Gm-Gg: ASbGncsT6YFNy+kx7g+Ziprt4GBqBKPM98iT/zJ12QaVVikcRQe86dHOk5/9lc+zQgH
+	5axWvv5uJ1xczamkJWEmRSk6P/07SvtgcALVdTVCC6wLo3ASFB4yUDuDbBoiAhrQpxEEyRLRCNj
+	oODz5vu8YzdXyQ3Pj4d6JtodasMHSNW9CDmSCiMtXDyomqPVmNKryLxRQ0LyaWIyhgwGMYBGKTX
+	kmmpe6C0EJ2AMV8hy0aEMlhrCu00A9R/PVCUQzTSU3CPT4OUmBrZljWGkctyg41DlG3vEkmGHh8
+	9OYwxseocVIpe8d6QTe2ElNTyMWsKdIxvP1Wlk8tidcuPfL4xQsnmRP24DQKcVZI2omhDf34c/d
+	TCuU0V2wIGJdaJYfuSKAZOGy9bcCSgg6w4q35g1XMKw+74PwnMAatVDKHomHbX0scu21hRlD+
+X-Google-Smtp-Source: AGHT+IHRIj9y57LgRm08PCQ5ag8nDTxAHjyPqcFEyJpmfMgUHtOJ1iinv/hiv9ZRE6XSrJXIT+Ycrw==
+X-Received: by 2002:a05:620a:710c:b0:89f:5a59:bf30 with SMTP id af79cd13be357-8a8e58b5164mr388519285a.78.1761749017372;
+        Wed, 29 Oct 2025 07:43:37 -0700 (PDT)
 Received: from localhost ([12.22.141.131])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87fc51e3809sm96571096d6.26.2025.10.29.07.30.32
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8a8179460fasm337345285a.57.2025.10.29.07.43.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 07:30:32 -0700 (PDT)
-Date: Wed, 29 Oct 2025 10:30:31 -0400
+        Wed, 29 Oct 2025 07:43:36 -0700 (PDT)
+Date: Wed, 29 Oct 2025 10:43:35 -0400
 From: Yury Norov <yury.norov@gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -116,10 +116,12 @@ Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v5 07/23] pinctrl: ma35: #undef field_{get,prep}() before
  local definition
-Message-ID: <aQIlB8KLhVuSqQvt@yury>
+Message-ID: <aQIoF_TPNq13Hc3O@yury>
 References: <cover.1761588465.git.geert+renesas@glider.be>
  <03a492c8af84a41e47b33c9a974559805d070d8d.1761588465.git.geert+renesas@glider.be>
  <CACRpkda6ykSZ0k9q4ChBW5NuPZvmjVjH2LPxyp3RB-=fJLBPFg@mail.gmail.com>
+ <aQIlB8KLhVuSqQvt@yury>
+ <CAMuHMdUTR2VnQ++j_ccUN3-GzKmSzS3H3QNyYqZNacfOBXD50Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -129,33 +131,45 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkda6ykSZ0k9q4ChBW5NuPZvmjVjH2LPxyp3RB-=fJLBPFg@mail.gmail.com>
+In-Reply-To: <CAMuHMdUTR2VnQ++j_ccUN3-GzKmSzS3H3QNyYqZNacfOBXD50Q@mail.gmail.com>
 
-On Wed, Oct 29, 2025 at 03:19:45PM +0100, Linus Walleij wrote:
-> Hi Geert,
+On Wed, Oct 29, 2025 at 03:33:49PM +0100, Geert Uytterhoeven wrote:
+> Hi Yury,
 > 
-> thanks for your patch!
-> 
-> On Mon, Oct 27, 2025 at 7:43 PM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> 
-> > Prepare for the advent of globally available common field_get() and
-> > field_prep() macros by undefining the symbols before defining local
-> > variants.  This prevents redefinition warnings from the C preprocessor
-> > when introducing the common macros later.
+> On Wed, 29 Oct 2025 at 15:30, Yury Norov <yury.norov@gmail.com> wrote:
+> > On Wed, Oct 29, 2025 at 03:19:45PM +0100, Linus Walleij wrote:
+> > > On Mon, Oct 27, 2025 at 7:43 PM Geert Uytterhoeven
+> > > <geert+renesas@glider.be> wrote:
+> > > > Prepare for the advent of globally available common field_get() and
+> > > > field_prep() macros by undefining the symbols before defining local
+> > > > variants.  This prevents redefinition warnings from the C preprocessor
+> > > > when introducing the common macros later.
+> > > >
+> > > > Suggested-by: Yury Norov <yury.norov@gmail.com>
+> > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > >
+> > > Do you want me to just merge this patch to the pinctrl tree or do
+> > > you have other plans?
 > >
-> > Suggested-by: Yury Norov <yury.norov@gmail.com>
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > There's a couple nits from Andy, and also a clang W=1 warning to
+> > address. So I think, v6 is needed.
 > 
-> Do you want me to just merge this patch to the pinctrl tree or do
-> you have other plans?
+> Indeed....
+> 
+> > But overlall, the series is OK, and I'd like to take it in bitmaps
+> > branch as it's more related to bits rather than a particular
+> > subsystem.
+> 
+> OK, fine for me (if I can still get an immutable branch ;-)
+> 
+> Note that as of today there are two more to fix in next:
+> commit d21b4338159ff7d7 ("mtd: rawnand: sunxi: introduce ecc_mode_mask
+> in sunxi_nfc_caps") in next-20251029
+> commit 6fc2619af1eb6f59 ("mtd: rawnand: sunxi: rework pattern found
+> registers") in next-20251029
 
-There's a couple nits from Andy, and also a clang W=1 warning to
-address. So I think, v6 is needed.
-
-But overlall, the series is OK, and I'd like to take it in bitmaps
-branch as it's more related to bits rather than a particular
-subsystem.
+Oh, OK. Didn't actually want to undercut you. :) So, at your
+discretion. Just let me know what you'd prefer.
 
 Thanks,
 Yury
