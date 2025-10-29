@@ -1,75 +1,72 @@
-Return-Path: <linux-edac+bounces-5250-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5253-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5333C1BA70
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 16:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E6B2C1BC73
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 16:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B90242789C
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 14:20:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ECDE642CE2
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 14:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C239D266B64;
-	Wed, 29 Oct 2025 14:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="STdMHBQT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A21A2C234F;
+	Wed, 29 Oct 2025 14:30:43 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E6F2638BF
-	for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 14:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2032641FB
+	for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 14:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761747601; cv=none; b=HIduxNsaVWjyGSnT9gZ6T4+/vGZDg8KrcnaW97/g6vldrV/wJcWLz0GSc9A4ZaZOrmERYPFqNNvSGVoBYVrJVe3ZyQARwO18ziMW8lwjakrcn6zPDACuJDXhdMKL79LWE6QKa0lg5x7Amlajbdzd9tZvJyHTetxs3HMQpefr9F4=
+	t=1761748243; cv=none; b=ukkB3a/GOGeOZdoPMAktoBCYvBoZ5LjVikdaidEqcpZ4nuN3kCcpq4fcRrbFvEQo3mpDjPrm4UlSfFhpVwOvHx15CegVCp56/dhk9c0lrCHCSysesTdgVYLKe85YBSt0EqW7lDXQi7MNdRzRO2DO/EGy3hA7VMnKNh7adYZwi+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761747601; c=relaxed/simple;
-	bh=1CX+8+kOSf10qsVFbiIqXKLPwxKNZKPK3M5tdY2U3zQ=;
+	s=arc-20240116; t=1761748243; c=relaxed/simple;
+	bh=RiCdWEkCDNsJiKATmU0RbHd3Kb5B/0yb//UgjVnVdPE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WzEVhWx9ocJyvok37aOqojmrF+dFzlelBdHQStltXNPCD2xw0Ztc/YhpVyOplcehcnioW9xVitImG7uMcx1Ktt/rhUDLTkghCDm/RGd+PxWgrRQdbtkPbK5R+4zJMiAsY7xiFLNr+jVV3djqWudtDsa1L7metkUg5x2CEUTYVpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=STdMHBQT; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-36527ac0750so64377911fa.3
-        for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 07:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761747598; x=1762352398; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oOeCj7atBm+jp74qXquxytnJSCplsW/eyoN4u7SHchg=;
-        b=STdMHBQT12yVVhenBH9kjtzktzfxhBOPKOo9apSlTLueZcsupwgg31te2NoZ1MYB8V
-         MSCDsKHm3FOvPOU5eIBCDfHMdlRjXQ/WaIfGw7guwrNmTT3BzH6WS72IQ0rngTeIuIKG
-         geIpbGtk9/KkbvqJ4ys0/EumZ1gCsCKUv+qxxEKzmywlju+PTnHhCdTYr2IGsTbcyPmT
-         1dv7mnHne5W/9nCZuPRS5MOiokEytiREtrQcf4/hBmfAUMtMcLusUKfTMKcUvAn01g/8
-         YYl2+QIB5DhWKuvrDaYdcUxOB+ZWEQK/1a4i5MEDu6ruYYw7g+OmbE5blhnTFS7GFVRk
-         77Mg==
+	 To:Cc:Content-Type; b=p4qo70hxVq/uhWb9/MxFXEKUWNxkzR8yUEHDA9PXvzP26hyAbMLUjM2QH9yjJa04PtuObFXQ4Wp70e9k2xauHpw/XoOBXYzb2PAjjjw+iTWhJV/5XKPDAJxOnOMmLvcwI4onOo7LQ/wLyVu9GyhtpK39qW7R1I/49+1u78xSkeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-8e352f6c277so1986493241.2
+        for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 07:30:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761747598; x=1762352398;
+        d=1e100.net; s=20230601; t=1761748240; x=1762353040;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oOeCj7atBm+jp74qXquxytnJSCplsW/eyoN4u7SHchg=;
-        b=iZgY72UGStWZx13WGs6zimosQXKerZ0vFKgdFMERlDqdptLftjYBV/NK2kToKhKdgL
-         xzTBtcs1SFtsg3lG5Immbj5/ujMmZOtDTdH0eS8pCxQ6cl65Ruo2h/2npI9tjJKtH2v3
-         WHSBZhbCxvoO4hbo6wfUSDNnMhsGTaGLUTy/tWNlGcf889ozcTid2EzQKaWF6hnSPoau
-         PscJkHOD8Tiqq/3FDLzJcAUGBn+VBLHZfFOCDH7wehjP1wYnL/dVGEU5CtL5daHclkfy
-         xgH/o5AmUq8NDnaM+35fIi7VRSpwTz6izv/iny/+YWGuva945nb67H7N5SXsahaccmNa
-         bemw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6pfby3RiDgpJLv+hrbUEEH9wSM0SqlvAdMwbIYX7W9/emTLNrSp7cYSAM1pSqGuBTooh1SjSrKDUx@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiAyvh9KLx38V1/jfGQTGbfnLP+UxVv+m0lMdXhFvCHibaerUy
-	lYsbAC/SHeFOe83wEbBqQZLLEW5bsGQl3R/SEmN+kln+62wIsZqy8MgtJ4uXoHiPlgJyBUDGZzD
-	3FE0+RzhE4JYa8W85mTrh+bmk/IMWl+C97PjBeMpZAg==
-X-Gm-Gg: ASbGncsk+gmRnrPNHfR0o9cZbqW30BcNicUtJ1/bmmHkKELXC5Xi7QdyjPxqZYSmVdp
-	fOS+S3qKTNVWqs3FkBy/O7D14c0GmF0pSS1eBa76cyI2yL4/f4TzqF5KY5Vg3VuUWMqe0lZ0+Jk
-	SUxx0Zpv4sGbbGqVkxAgNIEE0OG5iQRM4wU9qIxZy7yoMZTmKmiBqaIRosBSdaoQYMQH6ugqeGN
-	41H/qZwx+5q9ZdcbGDVbF39SH5Nxi4zosisZHdtKWMll4gc5EJA1W+x6siGbc4CJK7j5vB51pa3
-	3xH88w==
-X-Google-Smtp-Source: AGHT+IG59+bQUerf6uihfCFWCYSjQICr8Xo4ZbiwSS1E65/x2rl3ls+2t5ioYCJKzMBcQXa5Sk43LYjN69G8TJb8SWg=
-X-Received: by 2002:a05:6512:3055:b0:592:fc68:5b9d with SMTP id
- 2adb3069b0e04-594128623cfmr1174582e87.10.1761747597543; Wed, 29 Oct 2025
- 07:19:57 -0700 (PDT)
+        bh=UmTxX9Lp/E6iQMSfd9sSFodFiE1yd68ZDUJdx86zE5s=;
+        b=C74W5A1bCAo86Ipb3HcOu3Ph2oCQ536UZweLArgjkvYcbFJAsJF/KYRA1EQQkULCx3
+         3DaSPti/D5WSJCvbo51d0e8qx4KqFdycMotvxNpAI46EsxMOk7lBeoAFVNIrZSE+X/+/
+         53Rcl5GgVNE7YomAgeCCEwhSGmPvu3+9PeOzlY5sWPk+5LQZWvit5vb09ycVBsY1GzNl
+         aRlmdJBG7gf1yd9qZqj6Wgn4LgjjA80wJ3aKxXhPhPTqXeqbQVIPF16hPnYEgyCmSfHC
+         sqEweSCMdtno0UCQ8cQLxb92E4cn2WcLBHIfO4TOjFa0Q1G6TC0nL8ma4uJkfJLNXjxA
+         FUrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZGmauyo9umedFFtGtaba4RxS9SybDx33H29FUnTl9AfbzR7UWx6RNRUR0kAyjtA0jV+3jLFEcxsiz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+lEqjasXO8sGb/Yf2z+PdfrVzTmnLcDXnpuAOTnu9DBkP2U8W
+	XKwBcggkMad8dPEeVpbZcjf+twwCYcuqbmC6hSLxOWn4J79bIqAwXbLCCYmRCb8W
+X-Gm-Gg: ASbGncuIAXTDjN1R9MRnIG2UYCoOXzsx7I7ge/mLEwJyRTZD8MD7VMY1HlsIdMElZjH
+	ofdj4GRW9G8e6AW7aniZLO9tvA5h5VfeFUOeFiZkCtAUg0saGavBOGgIdqO8+P6j/mYddKWTqDd
+	O/urrGvsD7YN0Qi4mzYaAaEht/gPqJrebPYGRdzAH14NBB/UsUtRxRegYuQ+4H8m5Nntp/Q9BFL
+	a1K+7eA6GrDnyIp1YtLCv/VR1xOLiG4ggXsNdiA2YYrOktULxuEIN+eSGzPRYqyGjRjJdRVdRCa
+	gEwCOq63hTitw+f5eO+e+xmznfQkhgkp2txV1u63Zoto0ho1TSCvTVQA9jD+hkwOSGUBFDhMTdC
+	w0GAavPXsTJ8wIkUgHjamezpUedX/5oXl6mSZWBtUKc7299i40OQ30zSora6mQlL/vo6Hw+RJwU
+	XnERBc6316V5KZm4XRvM/YTVJ9hKOkcwfrolXBfQkYDQ==
+X-Google-Smtp-Source: AGHT+IH886PZYZcBxsJzDzYzCr7/mOr1s3gGXiupQ0VGRYxHAszHo0ADVFwIrI5O1gSQKM3OLdYB8Q==
+X-Received: by 2002:a05:6102:598a:b0:5db:2301:aa03 with SMTP id ada2fe7eead31-5db9067821dmr1066316137.34.1761748240132;
+        Wed, 29 Oct 2025 07:30:40 -0700 (PDT)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-934c3f431e3sm5197520241.8.2025.10.29.07.30.39
+        for <linux-edac@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Oct 2025 07:30:39 -0700 (PDT)
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-932bbd6ba76so2473034241.0
+        for <linux-edac@vger.kernel.org>; Wed, 29 Oct 2025 07:30:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXTW2gYmXjhvb0zZxjsDzmi+CWrtphLWRQe97bL09nfA5IPjruYunQhmv0qZ8r23QXiF6RT+ivs8Wic@vger.kernel.org
+X-Received: by 2002:a05:6102:3e95:b0:5db:38a1:213b with SMTP id
+ ada2fe7eead31-5db90656011mr932905137.27.1761748238614; Wed, 29 Oct 2025
+ 07:30:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -77,14 +74,16 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <cover.1761588465.git.geert+renesas@glider.be> <03a492c8af84a41e47b33c9a974559805d070d8d.1761588465.git.geert+renesas@glider.be>
-In-Reply-To: <03a492c8af84a41e47b33c9a974559805d070d8d.1761588465.git.geert+renesas@glider.be>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 29 Oct 2025 15:19:45 +0100
-X-Gm-Features: AWmQ_bk2MMp0FQz04qrj-8hmhOAMRkHeQZjiqCVvFpO75M_-67m5zTnOfqmkGUQ
-Message-ID: <CACRpkda6ykSZ0k9q4ChBW5NuPZvmjVjH2LPxyp3RB-=fJLBPFg@mail.gmail.com>
+ <CACRpkda6ykSZ0k9q4ChBW5NuPZvmjVjH2LPxyp3RB-=fJLBPFg@mail.gmail.com>
+In-Reply-To: <CACRpkda6ykSZ0k9q4ChBW5NuPZvmjVjH2LPxyp3RB-=fJLBPFg@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 29 Oct 2025 15:30:27 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWriu9eUHMSKcv7ojSqbquP3=z2oaquQZLx5nmN0EcGaA@mail.gmail.com>
+X-Gm-Features: AWmQ_blleyKJMjc4oETFxToQhJJ0bdzSdD1fdMmRWAHt71coVgn8wIHcAFgDdM8
+Message-ID: <CAMuHMdWriu9eUHMSKcv7ojSqbquP3=z2oaquQZLx5nmN0EcGaA@mail.gmail.com>
 Subject: Re: [PATCH v5 07/23] pinctrl: ma35: #undef field_{get,prep}() before
  local definition
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Linus Walleij <linus.walleij@linaro.org>
 Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
 	Nicolas Ferre <nicolas.ferre@microchip.com>, 
 	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
@@ -110,24 +109,39 @@ Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Geert,
+Hi Linus,
 
-thanks for your patch!
-
-On Mon, Oct 27, 2025 at 7:43=E2=80=AFPM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-
-> Prepare for the advent of globally available common field_get() and
-> field_prep() macros by undefining the symbols before defining local
-> variants.  This prevents redefinition warnings from the C preprocessor
-> when introducing the common macros later.
+On Wed, 29 Oct 2025 at 15:20, Linus Walleij <linus.walleij@linaro.org> wrot=
+e:
+> On Mon, Oct 27, 2025 at 7:43=E2=80=AFPM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
 >
-> Suggested-by: Yury Norov <yury.norov@gmail.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Prepare for the advent of globally available common field_get() and
+> > field_prep() macros by undefining the symbols before defining local
+> > variants.  This prevents redefinition warnings from the C preprocessor
+> > when introducing the common macros later.
+> >
+> > Suggested-by: Yury Norov <yury.norov@gmail.com>
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Do you want me to just merge this patch to the pinctrl tree or do
+> you have other plans?
 
-Do you want me to just merge this patch to the pinctrl tree or do
-you have other plans?
+My plan (cfr. cover letter) was to take it myself, as this is a hard
+dependency for 11/23.
+Thanks!
 
-Yours,
-Linus Walleij
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
