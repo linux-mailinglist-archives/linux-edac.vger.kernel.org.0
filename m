@@ -1,415 +1,256 @@
-Return-Path: <linux-edac+bounces-5243-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5244-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 162D9C17542
-	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 00:19:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BDC1C18261
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 04:15:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F1C0E4E2809
-	for <lists+linux-edac@lfdr.de>; Tue, 28 Oct 2025 23:18:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05F343B73F5
+	for <lists+linux-edac@lfdr.de>; Wed, 29 Oct 2025 03:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19DC345730;
-	Tue, 28 Oct 2025 23:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9B020A5E5;
+	Wed, 29 Oct 2025 03:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="NjWsmEz8"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Q2kDYBUv"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012014.outbound.protection.outlook.com [40.93.195.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01302AD32;
-	Tue, 28 Oct 2025 23:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761693535; cv=none; b=X0uN5pXDcN8CxO9SSzouk3NQhCo88YL+Rm5Pj7yMNdB/gE+mBVEbvgORCxUp+cjzPWNwtbx3/hD/GyJcWYh2MmGcJC8LG/W5Ya5EQVscsusDnJbajZ0UkO6vdLvGNgtq9YbEApV8yrAabZ1nMehM8nQURzccea3kFsAktQKsB0k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761693535; c=relaxed/simple;
-	bh=u/AsBCLPZSwSiuquTS8net/0yY0pN+chTJWc54dxxaM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qo2CyU82K1LmcYU8vPXqCZoDKAUb8LL35rkpxT6MP72nJNnJjokSFdXHcDAfARtU+SVgazD3vDJQfS+sGSV09MK3TcLYgbo7Jfm0efHjAa/C6AVVzeNKcBpUx525qCv9aIGTQh0fYbjf/aONIIW+lTYjxEel+eZ9D1+nNeqF590=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=NjWsmEz8; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6EB3040E00DA;
-	Tue, 28 Oct 2025 23:18:48 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id dQdH0zrd16_O; Tue, 28 Oct 2025 23:18:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1761693523; bh=2BcdfkUUlXVS7d00O3QKzdkOKKZIPIfnCTA0Aa8j80E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NjWsmEz8PJ8Jr3rS8dxM8+NBjEvOF///Hh29my4FmIORCNS807zec8qW7tSC+BUpU
-	 otDkN69nqBrABlXCa3FZwaKG01afoeYXeOdUk5BsZJrM7C/jH5fglcgatBMEriD1t6
-	 t+jVvSU3uOx9laHNt6LySE7kd0GN5aMhTAIi2Rp55pwMVTYPdEz/j1lT/2kLxxtylQ
-	 3CGsywn+JQ3kf10Ua9y8Z8qYdvQIeF04yXdk5OyUUz5oYGcW7UZ4F5JcFtafw4dahZ
-	 K3Vx3TFy2KlYuhcKC6UDR6JFvvCFL7+DTAqKgK/7p9S7lHKpje6DOM66NEay/SiNfS
-	 qp8bs+r+DYi/gIyNJipJMuJfYsIFRrQG0I3mzgcMoaDEw0HZvcR7rmfMZ2lkUtmQs4
-	 E0P16xzNOGVzJD4+UuselFIxZFOGwQS4f2yRT5/ncjkHjb3PRBxNHQm0bxIQBSP+Jg
-	 SrV5lRWo9FAc+Ws8nOZJ4LIMNm/vgZumdFOHQaU9vpRGOO+BUnJhDqkScP2XA+YY6U
-	 FoPnie84SEAud0zLJCzLmUFgjs/+gvQFcmRlC/vIa70k8T/rm8JMzRB1e8Vjiu3ghu
-	 H2jIkmrvSGePt6GhM8z222oQ8+89FN3dBaOB/sP8V2u1Nn5exoePR8bPvH/bUOTV5X
-	 QchI6x43+CCfqojLjnxUmyPU=
-Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 4F13540E021A;
-	Tue, 28 Oct 2025 23:18:31 +0000 (UTC)
-Date: Wed, 29 Oct 2025 00:18:25 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-	Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	Bert Karwatzki <spasswolf@web.de>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v7 2/8] x86/mce: Unify AMD DFR handler with MCA Polling
-Message-ID: <20251028231825.GDaQFPQflC7gyVOwMa@fat_crate.local>
-References: <20251024150333.GSaPuVRQYxH92zyrmO@fat_crate.local>
- <20251024203012.GA251815@yaz-khff2.amd.com>
- <20251024212723.GGaPvvO3l2OlUEG7Xn@fat_crate.local>
- <20251025150304.GXaPzmqFawI0NrCC-0@fat_crate.local>
- <20251027133542.GA8279@yaz-khff2.amd.com>
- <20251027141139.GA51741@yaz-khff2.amd.com>
- <20251028152231.GAaQDft32eXtTZBBzg@fat_crate.local>
- <20251028154258.GA526743@yaz-khff2.amd.com>
- <20251028174656.GBaQEBkOErfNAJbJsf@fat_crate.local>
- <20251028203719.GA655216@yaz-khff2.amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BE6194098;
+	Wed, 29 Oct 2025 03:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761707714; cv=fail; b=YwKoWnL4xk7LjZJ12TCnBQwZPQYskauy2Q0WlntPOf8uzJj4K8SPRWpvKMXrEFjfBzR93/IT8ESIhMy1S2LadOQ4NYPno8vPMXpI2KSY9Y8QTNxy/lCCw7tMHdACrlYlmJ8zN8LMY7tr7816zq4nnNO/6Ix5Y6F64XQKJiVONvM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761707714; c=relaxed/simple;
+	bh=Odh/FuQYrLExuI6tmD7gnBfgtMk2mgaP1sGnsWSs0Ps=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=U6bTVCKarkUvog9RSw2/Z89/hERO29YuUPhTiLB9cwYpy6D18CmetvXI+5YHUMSPXsaXDvfSY4SNSbh7Hm25JC1a1R8iIrD6KiG6NjefK9BDLY6YWCfwr5G9BMSDvIBr3CqiYbXrnyr5+UcRRcBofB/dAE/wl8WnzDd20oBaj+U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Q2kDYBUv; arc=fail smtp.client-ip=40.93.195.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dr7f2NPZwHF/YkHEVXKsEs3cb+OUrITrMFhE63xnoA8CfBJHiwKPbylpV8a+oI18dCOK7VpdH75wtrWhCigkExitd1eBmSrSlCGXyQsdnSEC8hrfddc1mffJvXgf69d1MbOvy0t/ooIRobe9OWs9LL76lwFc54tMgJ8ZrwWToOiBTeFwgREoAL5Odpmk6MGbX2KpM8n2ayAoSqoPnAJDsRWMh0yVyO1ewYLKvToeW5RTXw29BJWXIQ3AFF6WufUzKftWEFf+s9iRR91G9sI3AQ+ZWX7SI9FBJJU8rNi3jEKD+zwkS4Bob79DOdFB4pAlercauKEGEIxluFYVGpRNIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Odh/FuQYrLExuI6tmD7gnBfgtMk2mgaP1sGnsWSs0Ps=;
+ b=UX/Dsq3/8fmRrTAq1BijkX6+l4nQXUKxdlLyvHutCawZP0UuUL8ASKE8kShO4/sJTukiYN40UX4WmaubXi+OtvuueEVJvUYvt54lAycIxbXtHeMMYzwKGJhyLcmG3vQ0s+R4HD01tghkk1eoXt+T6Qy3Yo/x8JJgcrjFCSWnp+N1ZGJKxmzXvyvATml9ayXtUQ3aQFb8mmxGBFrf/5yswkAz6y9ApAJ0TqF5ev2Vk07yrHkn7HA4H+Lgw4wA2hsWe1HI5Ze6cykD0ZtbNfKAa2+FRq3BKSWL6vtMFsD2pTLtN7bC1N/k86jqV5Xu28qfCVZvy+AqNn2487YpIQdM5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Odh/FuQYrLExuI6tmD7gnBfgtMk2mgaP1sGnsWSs0Ps=;
+ b=Q2kDYBUvboJuG1Q6IxXWKhDufwF/tJlEKiaM8hCJo9NhUaIcrZIrYHKDu7+K2HFv/jISQXx7dQJEcVY/SzX8uo9NgwN5pGdVlaCSs/dQYdkIHGD6VbfGekiJhmTTiruUaJB8gkaxgJ12dwBzLYhr+JK0TD+nVAiaQYZrvm+PleWuePzD6YyvvKaQwE3bOu4I+W7lex0761qjK1NAzcppcR8Ggc/EwXFIpQBIip1xf4E3UcjLFmTbOML3qLmxOP+uuXsfgcepaQLyUJNMj7mhblKN5Q+Tqw6IiV5GPQVCSZa+yE+BYxDvj62e9JpBEHkwNEuqn8UScNdNWVRoOAS28w==
+Received: from MW4PR12MB7213.namprd12.prod.outlook.com (2603:10b6:303:22a::18)
+ by LV3PR12MB9215.namprd12.prod.outlook.com (2603:10b6:408:1a0::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.13; Wed, 29 Oct
+ 2025 03:15:08 +0000
+Received: from MW4PR12MB7213.namprd12.prod.outlook.com
+ ([fe80::b049:8074:780:73f]) by MW4PR12MB7213.namprd12.prod.outlook.com
+ ([fe80::b049:8074:780:73f%5]) with mapi id 15.20.9253.017; Wed, 29 Oct 2025
+ 03:15:08 +0000
+From: Ankit Agrawal <ankita@nvidia.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+CC: Aniket Agashe <aniketa@nvidia.com>, Vikram Sethi <vsethi@nvidia.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Matt Ochs <mochs@nvidia.com>, Shameer
+ Kolothum <skolothumtho@nvidia.com>, "linmiaohe@huawei.com"
+	<linmiaohe@huawei.com>, "nao.horiguchi@gmail.com" <nao.horiguchi@gmail.com>,
+	"david@redhat.com" <david@redhat.com>, "lorenzo.stoakes@oracle.com"
+	<lorenzo.stoakes@oracle.com>, "Liam.Howlett@oracle.com"
+	<Liam.Howlett@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
+	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
+	"mhocko@suse.com" <mhocko@suse.com>, "tony.luck@intel.com"
+	<tony.luck@intel.com>, "bp@alien8.de" <bp@alien8.de>, "rafael@kernel.org"
+	<rafael@kernel.org>, "guohanjun@huawei.com" <guohanjun@huawei.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "lenb@kernel.org"
+	<lenb@kernel.org>, "kevin.tian@intel.com" <kevin.tian@intel.com>,
+	"alex@shazbot.org" <alex@shazbot.org>, Neo Jia <cjia@nvidia.com>, Kirti
+ Wankhede <kwankhede@nvidia.com>, "Tarun Gupta (SW-GPU)"
+	<targupta@nvidia.com>, Zhi Wang <zhiw@nvidia.com>, Dheeraj Nigam
+	<dnigam@nvidia.com>, Krishnakant Jaju <kjaju@nvidia.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>, "Jonathan.Cameron@huawei.com"
+	<Jonathan.Cameron@huawei.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"Smita.KoralahalliChannabasappa@amd.com"
+	<Smita.KoralahalliChannabasappa@amd.com>, "u.kleine-koenig@baylibre.com"
+	<u.kleine-koenig@baylibre.com>, "peterz@infradead.org"
+	<peterz@infradead.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] mm: handle poisoning of pfn without struct pages
+Thread-Topic: [PATCH v4 2/3] mm: handle poisoning of pfn without struct pages
+Thread-Index: AQHcRoOUWJnftWewAUixSPYj9sJbdrTWte8AgAHBIgM=
+Date: Wed, 29 Oct 2025 03:15:08 +0000
+Message-ID:
+ <MW4PR12MB7213976611F767842380FB56B0FAA@MW4PR12MB7213.namprd12.prod.outlook.com>
+References: <20251026141919.2261-1-ankita@nvidia.com>
+	<20251026141919.2261-3-ankita@nvidia.com>
+ <20251027172620.d764b8e0eab34abd427d7945@linux-foundation.org>
+In-Reply-To: <20251027172620.d764b8e0eab34abd427d7945@linux-foundation.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR12MB7213:EE_|LV3PR12MB9215:EE_
+x-ms-office365-filtering-correlation-id: e64c2b95-514b-4383-73f5-08de16995d59
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|7416014|376014|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?fxzb6hLN/X33IF7vCwlQPHlH1+W8YSy7g5lTr+HFOH9Q2PcOBcb8Un0/7F?=
+ =?iso-8859-1?Q?3ue22+vBLuiGQF7TLEv6Znsl+lB5hpxKDANyEQzbRKy2Bh8ZMfNtsc3fF4?=
+ =?iso-8859-1?Q?iPWDdUTIF/Gg2H84ERjAA0gw8C5V8CKaWAgBZa76KN55lrIOpXRFktf+qQ?=
+ =?iso-8859-1?Q?2A2FjvQBx9G3bRPqJDCrl8tZwpLXUGwEoIKct0nBIMf/K12+nk9q8JP9DO?=
+ =?iso-8859-1?Q?qZMQN8rtbVW4XbM0fzBFl20ASXzqOwOn9C0qZ9hyPcOpGOIcA5I7LAbv14?=
+ =?iso-8859-1?Q?wBCNu4Gq9rKc5c3D0ujcfVBJXzeIk5SRj1MOZLdWcbsxH9awIvSz0YcqPQ?=
+ =?iso-8859-1?Q?Vtc8Ds3+qpqIlSBCoOZv4+UADCIZoP3VAFpo2JZgA1I6qrFrw/1eh4ZMH9?=
+ =?iso-8859-1?Q?XghTDO/wrGdqeDMCMJcyanubMqwwBiWOAS0Tkqb0e0xS4HSTEDoPhmqifW?=
+ =?iso-8859-1?Q?4e/VhvPm8Z9XBO3d5Lx2lJqhYnpH9AL6hWoyx7wTM6tm8qyF8trgZTCiJX?=
+ =?iso-8859-1?Q?rbwY8oasdS9+rIAJdopzUcx95WrLlSqpiUsVCm2tp1n5DLq3pFxPfEMNR+?=
+ =?iso-8859-1?Q?5rUS9gkEC6H4pVzqrI4bD/P9i8FWdeZkmp0MJqUrHuFQGwIc5PcyceEtA3?=
+ =?iso-8859-1?Q?/ZnVGVa8Md5pPyWK/k+3c4G15OdmrHD8wahiq+C4O6U8fJwjSLz5HrSBzY?=
+ =?iso-8859-1?Q?zGgR/8CgigBev5ER72PJs0mA10Mors/1VXIMsaq7JByHl9WyRG8U4yOYLp?=
+ =?iso-8859-1?Q?b3Fz4Qxb4SlGPrdGEgzrs56zAFGLhsjSr8WQ660OpumAvDWok3x+nCytqp?=
+ =?iso-8859-1?Q?Fw8EqWTSLHWM1jX97WMobjjWlK+TyyCao+qyrMWvePv1RG/SZ49S5RP+Lz?=
+ =?iso-8859-1?Q?NN95jN/RETm6gsTD2gk5t+j4X5eOfhnjnH72lvmnZlUzs12J5x9FbtSiaA?=
+ =?iso-8859-1?Q?DAtN0hPN9jxXRWZcWYGe9u2sEkRMTEYGrMw3lu/BnLTcI6+BdQrZIepgF5?=
+ =?iso-8859-1?Q?tcNWU0t45IzyghBazw3SBJoduK1T209lKHnnEyH1z3FAQ9zBOHzCUT1cGV?=
+ =?iso-8859-1?Q?bI6btkGQIEnDo7mfBaXisZr6gXRy0igNL5I/ku9jlDpFJVkWYA34+U4sOI?=
+ =?iso-8859-1?Q?BUXPJVWJqwmoIEVht4RNSAsnYtusm2mbEUVYMfGca7jwwZ7IeVX+nK1JJQ?=
+ =?iso-8859-1?Q?GbVXsJytfZMEBlTh0fDKof69+NMLxBFoE7iVkA/+N1Ra7EivKoukq7n5RW?=
+ =?iso-8859-1?Q?+XEhxbhLF+f0+/s3vULVlUx3j9SedIgJe2CsHdhF3mVBdjs0Iwk93/z8ef?=
+ =?iso-8859-1?Q?huG4id0f0jRNRmD7WKo0dO504aa5tysR3cwlvrv+iPCpiu9ZZFJ9b0jRS9?=
+ =?iso-8859-1?Q?9J5CUDM7y3etwsSq06sn9nwtgajxw+nzMiu1UX2Oe0ltcAIXn3Fa8gs9qC?=
+ =?iso-8859-1?Q?K/xT0C/oj6PEKuNu9YntFI0VEfH4uFIFkCQtv/rjxF6fgR+0YdKoEAwByM?=
+ =?iso-8859-1?Q?6uSPslSKeh3VF5tf2hStSLmWBCGbww6M2ayPeLFNaFDGZ9rBAtDUNCRflQ?=
+ =?iso-8859-1?Q?dsShLZr7b+qsOEl2vf/dPp8egKkp?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB7213.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?ZU6aly9yW4tpgo6d1N2hvw4HzK+s5p0GzsNz+3Quk6kT3rNcGz+N1AMP/k?=
+ =?iso-8859-1?Q?d5Teob8fYfIe85iSe9uSMt1c10ToB7pV7d22AsAQaX8hyOM1zJ6PFaDV9R?=
+ =?iso-8859-1?Q?J/4GTt5c1KIaDagP/TZ2NcWD8ibQ/q5p3BbzgLRMsaw6zjs85PrQpwcg/L?=
+ =?iso-8859-1?Q?PU3QTEEuGnBF8pGe/z+1blu57O98iOZZZetmrvnDML+jw69svBsoyeO4Vn?=
+ =?iso-8859-1?Q?Iolsheo10I/a4ZiJbE/tq7AI36lVP4DJJlbtzizDf0TWWwMdmghmny2J6g?=
+ =?iso-8859-1?Q?RsghWfVBcJhHMsHmTzIY5qmuZTwm9vb4WtEOtBHfG8VR7VaLARl1Bo83/I?=
+ =?iso-8859-1?Q?G7dhaxAVX1Rz9rdx5y5EA1hz97dWoUQ9z2Oci3QY0A6w5XsNKA3ChC0F+z?=
+ =?iso-8859-1?Q?tn53JFFvgwbEeWp58Yk4Wu+k+KSKLvD8UqmQjTuVqiITkg8dodGTi2nY/+?=
+ =?iso-8859-1?Q?Cp0Dx6iwNYNnDpSzP07sdeVQzz6i8JWmzvyfQSznPYf+Odhx77LlN5ubDY?=
+ =?iso-8859-1?Q?KfnFOK9jPiIEkNOPDkpcpTBYvi3ihUbKqELYJ4ic00NsEDHi7ofYrBlXoY?=
+ =?iso-8859-1?Q?7+W4Ef6UEQoyUJmGSP2pSAAq2B18atRSamOMKMOJDwnO21zmLl1w/vUk0x?=
+ =?iso-8859-1?Q?SSDtwHWX07bXPNgSVxHif56rXoUa4bI9xzdeZEPlYBVoNIejYx+3OagGS3?=
+ =?iso-8859-1?Q?jZ9aQHcBcYYvOCjtNFzjkIF+Z7DIEbYg//ekr9VoUflrnebALZNuMt0Bli?=
+ =?iso-8859-1?Q?kf9tAlpk+TTZKP2Jkch5HzPeXY67bXqyaUoh+USmWtSN5aQKVoJZ/rz0sc?=
+ =?iso-8859-1?Q?8PcLSa2RNLQAPY2tNKixIOKu5pSaXZfyr3Nk/VeWAv+YYGelepu3o9KQa+?=
+ =?iso-8859-1?Q?+55dtm2lb2Kmyv2xXHtgq8Lf0Awla9wnFTVhp3Ip37ZiyM/9MfpZm0l+3i?=
+ =?iso-8859-1?Q?rkULce6BZHXtIFyvBQkyhjpXGy01iyLb0ArwplGaQBfUS2doRBFXhgLC4w?=
+ =?iso-8859-1?Q?hf/mxqY8A012S29co0nnOWyuZs1DXtXVdMkN5STQrgsFLssBuvS/5VNidu?=
+ =?iso-8859-1?Q?CFGNzVQyT5Eg+eeH0+Z33V32WMzFQNiEDq+bSczKWT1L46U4R5nG77AVG/?=
+ =?iso-8859-1?Q?05oa3VmBCV8nM4fml1i7e2n34+fl7c9Mv/DVnvhm8Jd3piixqhJzT3bISm?=
+ =?iso-8859-1?Q?gUA+JaIhIjhP2BFgD3JyEnqNrww0W03QeouLTyt7ImSIA0/gIXT+SbLaaj?=
+ =?iso-8859-1?Q?iGYqZ77bMJ+BND53tieWCkPsAS2w2TJH/DHJEHMY1FeeVhmscC57UWWk7J?=
+ =?iso-8859-1?Q?JWqhIh0hkUeOuFRchPk+YtZLEI7/AgBVz0hRKZcvKW/ZGmEKfiox6nDJzW?=
+ =?iso-8859-1?Q?mLxpHYYu1ETTWtlm3V3RSYVySITukfiSWLL3wh/xnqdklmtlQiZCUKNXj/?=
+ =?iso-8859-1?Q?6mf3WrTQXzzqKCYz7/3DaTmkTSTqyzXLxduh6b0dlY8mKySqWkvUvKIOGS?=
+ =?iso-8859-1?Q?Kf0Qv9ISmB4sBDbKrhVlmIvyCsBWwYsetoKUiEIz/9bz1w350XkM7DzBoF?=
+ =?iso-8859-1?Q?3fTi5JR+hNan02OtqfpZ7xo+pKc+rf6KbzhGgUtRnBa3GEmrE0Q8LgbMIZ?=
+ =?iso-8859-1?Q?uP7fy29kn+XnM=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251028203719.GA655216@yaz-khff2.amd.com>
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB7213.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e64c2b95-514b-4383-73f5-08de16995d59
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2025 03:15:08.5046
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: z/gfYyXRtDdKK5WAmHsurhYHyxc6xmeW74LliUHj8JqHV7ldOfadFGDQ1FWwJfadg3Mr2evTTnACLNHC/dFgJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9215
 
-On Tue, Oct 28, 2025 at 04:37:19PM -0400, Yazen Ghannam wrote:
-> Yep, that's it. Much cleaner. :)
-
-:-)
-
-Final version:
-
-From dd705221b2b3fb06fd2dc25dd51a8aaa1b1bd6d5 Mon Sep 17 00:00:00 2001
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 16 Oct 2025 16:37:48 +0000
-Subject: [PATCH] x86/mce/amd: Enable interrupt vectors once per-CPU on SMCA
- systems
-
-Scalable MCA systems have a per-CPU register that gives the APIC LVT offset
-for the thresholding and deferred error interrupts.
-
-Currently, this register is read once to set up the deferred error interrupt
-and then read again for each thresholding block. Furthermore, the APIC LVT
-registers are configured each time, but they only need to be configured once
-per-CPU.
-
-Move the APIC LVT setup to the early part of CPU init, so that the registers
-are set up once. Also, this ensures that the kernel is ready to service the
-interrupts before the individual error sources (each MCA bank) are enabled.
-
-Apply this change only to SMCA systems to avoid breaking any legacy behavior.
-The deferred error interrupt is technically advertised by the SUCCOR feature.
-However, this was first made available on SMCA systems.  Therefore, only set
-up the deferred error interrupt on SMCA systems and simplify the code.
-
-Guidance from hardware designers is that the LVT offsets provided from the
-platform should be used. The kernel should not try to enforce specific values.
-However, the kernel should check that an LVT offset is not reused for multiple
-sources.
-
-Therefore, remove the extra checking and value enforcement from the MCE code.
-The "reuse/conflict" case is already handled in setup_APIC_eilvt().
-
-  [ bp: Simplify and drop some comments. ]
-
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Tested-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/all/20251016-wip-mca-updates-v7-0-5c139a4062cb@amd.com
----
- arch/x86/kernel/cpu/mce/amd.c  | 121 +++++++++++++++------------------
- arch/x86/kernel/cpu/mce/core.c |  19 +-----
- 2 files changed, 56 insertions(+), 84 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index d9f9ee7db5c8..0f4a01056ad3 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -43,9 +43,6 @@
- /* Deferred error settings */
- #define MSR_CU_DEF_ERR		0xC0000410
- #define MASK_DEF_LVTOFF		0x000000F0
--#define MASK_DEF_INT_TYPE	0x00000006
--#define DEF_LVT_OFF		0x2
--#define DEF_INT_TYPE_APIC	0x2
- 
- /* Scalable MCA: */
- 
-@@ -57,6 +54,10 @@ static bool thresholding_irq_en;
- struct mce_amd_cpu_data {
- 	mce_banks_t     thr_intr_banks;
- 	mce_banks_t     dfr_intr_banks;
-+
-+	u32		thr_intr_en: 1,
-+			dfr_intr_en: 1,
-+			__resv: 30;
- };
- 
- static DEFINE_PER_CPU_READ_MOSTLY(struct mce_amd_cpu_data, mce_amd_data);
-@@ -271,6 +272,7 @@ void (*deferred_error_int_vector)(void) = default_deferred_error_interrupt;
- 
- static void smca_configure(unsigned int bank, unsigned int cpu)
- {
-+	struct mce_amd_cpu_data *data = this_cpu_ptr(&mce_amd_data);
- 	u8 *bank_counts = this_cpu_ptr(smca_bank_counts);
- 	const struct smca_hwid *s_hwid;
- 	unsigned int i, hwid_mcatype;
-@@ -301,8 +303,8 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
- 		 * APIC based interrupt. First, check that no interrupt has been
- 		 * set.
- 		 */
--		if ((low & BIT(5)) && !((high >> 5) & 0x3)) {
--			__set_bit(bank, this_cpu_ptr(&mce_amd_data)->dfr_intr_banks);
-+		if ((low & BIT(5)) && !((high >> 5) & 0x3) && data->dfr_intr_en) {
-+			__set_bit(bank, data->dfr_intr_banks);
- 			high |= BIT(5);
- 		}
- 
-@@ -377,6 +379,14 @@ static bool lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
- {
- 	int msr = (hi & MASK_LVTOFF_HI) >> 20;
- 
-+	/*
-+	 * On SMCA CPUs, LVT offset is programmed at a different MSR, and
-+	 * the BIOS provides the value. The original field where LVT offset
-+	 * was set is reserved. Return early here:
-+	 */
-+	if (mce_flags.smca)
-+		return false;
-+
- 	if (apic < 0) {
- 		pr_err(FW_BUG "cpu %d, failed to setup threshold interrupt "
- 		       "for bank %d, block %d (MSR%08X=0x%x%08x)\n", b->cpu,
-@@ -385,14 +395,6 @@ static bool lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
- 	}
- 
- 	if (apic != msr) {
--		/*
--		 * On SMCA CPUs, LVT offset is programmed at a different MSR, and
--		 * the BIOS provides the value. The original field where LVT offset
--		 * was set is reserved. Return early here:
--		 */
--		if (mce_flags.smca)
--			return false;
--
- 		pr_err(FW_BUG "cpu %d, invalid threshold interrupt offset %d "
- 		       "for bank %d, block %d (MSR%08X=0x%x%08x)\n",
- 		       b->cpu, apic, b->bank, b->block, b->address, hi, lo);
-@@ -473,41 +475,6 @@ static int setup_APIC_mce_threshold(int reserved, int new)
- 	return reserved;
- }
- 
--static int setup_APIC_deferred_error(int reserved, int new)
--{
--	if (reserved < 0 && !setup_APIC_eilvt(new, DEFERRED_ERROR_VECTOR,
--					      APIC_EILVT_MSG_FIX, 0))
--		return new;
--
--	return reserved;
--}
--
--static void deferred_error_interrupt_enable(struct cpuinfo_x86 *c)
--{
--	u32 low = 0, high = 0;
--	int def_offset = -1, def_new;
--
--	if (rdmsr_safe(MSR_CU_DEF_ERR, &low, &high))
--		return;
--
--	def_new = (low & MASK_DEF_LVTOFF) >> 4;
--	if (!(low & MASK_DEF_LVTOFF)) {
--		pr_err(FW_BUG "Your BIOS is not setting up LVT offset 0x2 for deferred error IRQs correctly.\n");
--		def_new = DEF_LVT_OFF;
--		low = (low & ~MASK_DEF_LVTOFF) | (DEF_LVT_OFF << 4);
--	}
--
--	def_offset = setup_APIC_deferred_error(def_offset, def_new);
--	if ((def_offset == def_new) &&
--	    (deferred_error_int_vector != amd_deferred_error_interrupt))
--		deferred_error_int_vector = amd_deferred_error_interrupt;
--
--	if (!mce_flags.smca)
--		low = (low & ~MASK_DEF_INT_TYPE) | DEF_INT_TYPE_APIC;
--
--	wrmsr(MSR_CU_DEF_ERR, low, high);
--}
--
- static u32 get_block_address(u32 current_addr, u32 low, u32 high,
- 			     unsigned int bank, unsigned int block,
- 			     unsigned int cpu)
-@@ -543,12 +510,10 @@ static u32 get_block_address(u32 current_addr, u32 low, u32 high,
- 	return addr;
- }
- 
--static int
--prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
--			int offset, u32 misc_high)
-+static int prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
-+				   int offset, u32 misc_high)
- {
- 	unsigned int cpu = smp_processor_id();
--	u32 smca_low, smca_high;
- 	struct threshold_block b;
- 	int new;
- 
-@@ -568,18 +533,10 @@ prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
- 	__set_bit(bank, this_cpu_ptr(&mce_amd_data)->thr_intr_banks);
- 	b.interrupt_enable = 1;
- 
--	if (!mce_flags.smca) {
--		new = (misc_high & MASK_LVTOFF_HI) >> 20;
--		goto set_offset;
--	}
--
--	/* Gather LVT offset for thresholding: */
--	if (rdmsr_safe(MSR_CU_DEF_ERR, &smca_low, &smca_high))
--		goto out;
--
--	new = (smca_low & SMCA_THR_LVT_OFF) >> 12;
-+	if (mce_flags.smca)
-+		goto done;
- 
--set_offset:
-+	new = (misc_high & MASK_LVTOFF_HI) >> 20;
- 	offset = setup_APIC_mce_threshold(offset, new);
- 	if (offset == new)
- 		thresholding_irq_en = true;
-@@ -587,7 +544,6 @@ prepare_threshold_block(unsigned int bank, unsigned int block, u32 addr,
- done:
- 	mce_threshold_block_init(&b, offset);
- 
--out:
- 	return offset;
- }
- 
-@@ -678,6 +634,32 @@ static void amd_apply_cpu_quirks(struct cpuinfo_x86 *c)
- 		mce_banks[0].ctl = 0;
- }
- 
-+/*
-+ * Enable the APIC LVT interrupt vectors once per-CPU. This should be done
-+ * before hardware is ready to send interrupts.
-+ *
-+ * Individual error sources are enabled later during per-bank init.
-+ */
-+static void smca_enable_interrupt_vectors(void)
-+{
-+	struct mce_amd_cpu_data *data = this_cpu_ptr(&mce_amd_data);
-+	u64 mca_intr_cfg, offset;
-+
-+	if (!mce_flags.smca || !mce_flags.succor)
-+		return;
-+
-+	if (rdmsrq_safe(MSR_CU_DEF_ERR, &mca_intr_cfg))
-+		return;
-+
-+	offset = (mca_intr_cfg & SMCA_THR_LVT_OFF) >> 12;
-+	if (!setup_APIC_eilvt(offset, THRESHOLD_APIC_VECTOR, APIC_EILVT_MSG_FIX, 0))
-+		data->thr_intr_en = 1;
-+
-+	offset = (mca_intr_cfg & MASK_DEF_LVTOFF) >> 4;
-+	if (!setup_APIC_eilvt(offset, DEFERRED_ERROR_VECTOR, APIC_EILVT_MSG_FIX, 0))
-+		data->dfr_intr_en = 1;
-+}
-+
- /* cpu init entry point, called from mce.c with preempt off */
- void mce_amd_feature_init(struct cpuinfo_x86 *c)
- {
-@@ -689,10 +671,16 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
- 
- 	mce_flags.amd_threshold	 = 1;
- 
-+	smca_enable_interrupt_vectors();
-+
- 	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
--		if (mce_flags.smca)
-+		if (mce_flags.smca) {
- 			smca_configure(bank, cpu);
- 
-+			if (!this_cpu_ptr(&mce_amd_data)->thr_intr_en)
-+				continue;
-+		}
-+
- 		disable_err_thresholding(c, bank);
- 
- 		for (block = 0; block < NR_BLOCKS; ++block) {
-@@ -713,9 +701,6 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
- 			offset = prepare_threshold_block(bank, block, address, offset, high);
- 		}
- 	}
--
--	if (mce_flags.succor)
--		deferred_error_interrupt_enable(c);
- }
- 
- void smca_bsp_init(void)
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 7be062429ce3..4aff14e04287 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -726,24 +726,11 @@ DEFINE_PER_CPU(unsigned, mce_poll_count);
-  * 3) SMCA systems check MCA_DESTAT, if error was not found in MCA_STATUS, and
-  *    log it.
-  */
--static bool smca_should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
-+static bool smca_should_log_poll_error(struct mce *m)
- {
--	struct mce *m = &err->m;
--
--	/*
--	 * If the MCA_STATUS register has a deferred error, then continue using it as
--	 * the status register.
--	 *
--	 * MCA_DESTAT will be cleared at the end of the handler.
--	 */
--	if ((m->status & MCI_STATUS_VAL) && (m->status & MCI_STATUS_DEFERRED))
-+	if (m->status & MCI_STATUS_VAL)
- 		return true;
- 
--	/*
--	 * If the MCA_DESTAT register has a deferred error, then use it instead.
--	 *
--	 * MCA_STATUS will not be cleared at the end of the handler.
--	 */
- 	m->status = mce_rdmsrq(MSR_AMD64_SMCA_MCx_DESTAT(m->bank));
- 	if ((m->status & MCI_STATUS_VAL) && (m->status & MCI_STATUS_DEFERRED)) {
- 		m->kflags |= MCE_CHECK_DFR_REGS;
-@@ -780,7 +767,7 @@ static bool should_log_poll_error(enum mcp_flags flags, struct mce_hw_err *err)
- 	struct mce *m = &err->m;
- 
- 	if (mce_flags.smca)
--		return smca_should_log_poll_error(flags, err);
-+		return smca_should_log_poll_error(m);
- 
- 	/* If this entry is not valid, ignore it. */
- 	if (!(m->status & MCI_STATUS_VAL))
--- 
-2.51.0
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks Andrew for the comments.=0A=
+=0A=
+>> +int register_pfn_address_space(struct pfn_address_space *pfn_space)=0A=
+>> +{=0A=
+>> +=A0=A0=A0=A0 if (!pfn_space)=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return -EINVAL;=0A=
+>=0A=
+> I suggest this be removed - make register_pfn_address_space(NULL)=0A=
+> illegal and let the punishment be an oops.=0A=
+=0A=
+Yes, will remove it.=0A=
+=0A=
+>> +static void add_to_kill_pfn(struct task_struct *tsk,=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0 struct vm_area_struct *vma,=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0 struct list_head *to_kill,=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0 unsigned long pfn)=0A=
+>> +{=0A=
+>> +=A0=A0=A0=A0 struct to_kill *tk;=0A=
+>> +=0A=
+>> +=A0=A0=A0=A0 tk =3D kmalloc(sizeof(*tk), GFP_ATOMIC);=0A=
+>> +=A0=A0=A0=A0 if (!tk)=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return;=0A=
+>=0A=
+> This is unfortunate.=A0 GFP_ATOMIC is unreliable and we silently behave=
+=0A=
+> as if it worked OK.=0A=
+=0A=
+Got it. I'll mark this as a failure case.=0A=
+=0A=
+=0A=
+> We could play games here to make the GFP_ATOMIC allocation unnecessary,=
+=0A=
+> but nasty.=A0 Allocate the to_kill* outside the rcu_read_lock, pass that=
+=0A=
+> pointer into add_to_kill_pfn().=A0 If add_to_kill_pfn()'s=0A=
+> kmalloc(GFP_ATOMIC) failed, add_to_kill_pfn() can then consume the=0A=
+> caller's to_kill*.=A0 Then the caller can drop the lock, allocate a new=
+=0A=
+> to_kill* then restart the scan.=A0 And teach add_to_kill_pfn() to not=0A=
+> re-add tasks which are already on the list.=A0 Ugh.=0A=
+>=0A=
+> At the very very least we should tell the user that the kernel goofed=0A=
+> and that one of their processes won't be getting killed.=0A=
+=0A=
+Thanks for the suggestion. As mentioned above I'll mark the kmalloc=0A=
+allocation error as a failure and can put a log message there.=0A=
+=0A=
+>> +=A0=A0=A0=A0 scoped_guard(mutex, &pfn_space_lock) {=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 bool mf_handled =3D false;=0A=
+>> +=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /*=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * Modules registers with MM the=
+ address space mapping to the device memory they=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * manage. Iterate to identify e=
+xactly which address space has mapped to this=0A=
+>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * failing PFN.=0A=
+>=0A=
+> We're quite lenient about >80 columns nowadays, but overflowing 80 for=0A=
+> a block comment is rather needless.=0A=
+=0A=
+Yes. Since it passed through the strict checkpatch.pl check, I didn't notic=
+e.=0A=
+I'll fix it.=
 
