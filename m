@@ -1,86 +1,102 @@
-Return-Path: <linux-edac+bounces-5274-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5275-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42DB9C250B9
-	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 13:39:05 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BC4BC251EE
+	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 13:57:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89AE31897F13
-	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 12:39:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 842804F5792
+	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 12:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6716F329E47;
-	Fri, 31 Oct 2025 12:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 525FE32720D;
+	Fri, 31 Oct 2025 12:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e+ysPSfu"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="XsYJmiSk"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374B61C28E;
-	Fri, 31 Oct 2025 12:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88413306D47;
+	Fri, 31 Oct 2025 12:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761914341; cv=none; b=PYltm7/X8c4nLoCoxry+pHbYlohTk3X1ZWePqgKZWweehyRns0tNSt7yHIUINXnKkxJ1Tx7A3V1mffEJj2X1H17p9MxRL2ZMQCU793yVo5e8+vQfPHsCDPQGc5IAcyfwhzf+oceU87TojateFaN5lVwsKoCkSCf4Uxo0000LcZM=
+	t=1761915305; cv=none; b=Nt490jPY4EaBadUn3+zCblamEZkq7TVjlwnsSAJPbcAVTNuBLtBFFlBuAvnGU7nZuZ5V4TRkhf5rwjr4DnoWHatzfdfmFha2CrEg9rtlN88amGPJ4zyOrIu2L86daiFvvhzT3NifTDxczWA2NST0oIdcmM+1sRPbvLxw/dnXD2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761914341; c=relaxed/simple;
-	bh=gxgnWkdOyiGUoiNKkes6YJ/qXMfJLU1DXX/Btzew2wE=;
+	s=arc-20240116; t=1761915305; c=relaxed/simple;
+	bh=mOOwivX1UoIsplCEE5dmAFDyJ2jcgv0YChQYja6+qqM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mfOjqIfdrcrV/YSpzWsKD7ncdQZZEqFl5lucxO34Qi+c2hJ/ueI2w1DtqQnjI5ppObk51oD6KClYYZN6pBq0NsdqV8orpOxH3Cp9r/oVG9BPhWklhapmZ2uiv1bV0S1fJK7wyBDMhD9Bh+33TphAxZ6J38EHfjJAjy1BeYZc8DU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e+ysPSfu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CEBC4CEE7;
-	Fri, 31 Oct 2025 12:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761914340;
-	bh=gxgnWkdOyiGUoiNKkes6YJ/qXMfJLU1DXX/Btzew2wE=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=AeuzRLdyEN66qQXFr+/jp8OtAKWmcpVT4oIcD8Z5CqVyEQFnJd6HjidTOPaTh1DeXX29nuwSxIUm+lOyB7K6Ppmlgf4C86kJPXwKlR9b7Cbb+bbHQyFIqSmRhXkf9nIskKMfcTmWUct6cyQ16BPo+YY45KTRFtqAxMfM2g6HhK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=XsYJmiSk; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8425B40E021A;
+	Fri, 31 Oct 2025 12:55:00 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id cDkPO7uVnNoj; Fri, 31 Oct 2025 12:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1761915297; bh=twINoSEUBmO8uN9cB4cp2EUgBdLN58FZlTieTQpJHTY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e+ysPSfugIGUrkQpt6JwWovpHV7pOL+NYze6gAJd08GEF7LED3hWtEnFxoOfso6NA
-	 mZGc+j5/CbFR2/PzB9FErfN6sTvw1MSB3DXhlg/1QD5DiA9QIChxAHZ/IKPayH44IN
-	 OcrQy39oxxdrwBODuvZ67VKhQ/oI7c65+2Zh6eF0=
-Date: Fri, 31 Oct 2025 13:38:57 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Borislav Petkov <bp@alien8.de>
+	b=XsYJmiSkD6gOzCdjHolSZ2lLWLSXYrCy7OeYIF3FLssgdpW9biLsx6Wfrvck5PM0k
+	 cxoiIwZSfLzIWWojq4pk7lL5u+Qw+StPLKylDf1xOC4xXvZVOTmItH2BDFcg6lXgjU
+	 kztiQO/chC/sDjFuJVMf/4QlO2FmXkuUgcEIBpmUiNXDUggSCYC7YXL2fT5EAWEA8w
+	 Oyh2yEBthJhj14dfu45mAwBQnZfPuaXbopHf8n+OYMPZcXdbhMyUZ4H8d61ENmL1F8
+	 41WMnN24ipu6TZvKqUl3whjpFhrAFV2ly21MNc+da2LSBMdfw2VIwNCnVcmLxJuOqo
+	 sfXN1Jennop0cK4lYziJFNtshN+EyWRrp65uRkr+pYBcLw88k/0CxXsk3xFOYUAYLy
+	 nhDvs43Up3B0n1fn94AvuilLq+3RJdMqfxP0fH19NNfHzrCMmG3pthNk6fKTMnIVgM
+	 THwbMRuQCTYV1dMX2jrZCnoDgP0UBHfSbby6825hn6fAfWW30sN81GE9BwXl9/qWYO
+	 LPFMvzZfrhVMZ4gNL9wCxhFUpBbHlk+4SlaX8A679SEYNTvDLCpOGTAaWdExxLPQnL
+	 4y63F3AaJtWRIvLqRvfDNWPsioxFDMSgw5cb8ia9NZr1CXE8HbUmpQNaVdYwUVHDRh
+	 lEbt2OqdbVJ031guBrnqysDs=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id DE66940E016D;
+	Fri, 31 Oct 2025 12:54:51 +0000 (UTC)
+Date: Fri, 31 Oct 2025 13:54:46 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Greg KH <gregkh@linuxfoundation.org>
 Cc: Avadhut Naik <avadhut.naik@amd.com>, linux-edac@vger.kernel.org,
 	yazen.ghannam@amd.com, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 4/4] EDAC/mc_sysfs: Begin deprecating legacy sysfs EDAC
  interface
-Message-ID: <2025103150-subside-tux-fd46@gregkh>
+Message-ID: <20251031125446.GDaQSxllGS9N84L2sK@fat_crate.local>
 References: <20251013173632.1449366-1-avadhut.naik@amd.com>
  <20251013173632.1449366-5-avadhut.naik@amd.com>
  <20251029172419.GGaQJNw4Pofl1x1mve@fat_crate.local>
  <2025103029-reforest-negate-cc34@gregkh>
  <20251030191858.GEaQO6ImJ4fbqB_5ag@fat_crate.local>
+ <2025103150-subside-tux-fd46@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251030191858.GEaQO6ImJ4fbqB_5ag@fat_crate.local>
+In-Reply-To: <2025103150-subside-tux-fd46@gregkh>
 
-On Thu, Oct 30, 2025 at 08:18:58PM +0100, Borislav Petkov wrote:
-> On Thu, Oct 30, 2025 at 04:01:43PM +0100, Greg KH wrote:
-> > No one is going to notice this type of kernel log message.  If you think
-> > that no one is using the sysfs files, delete them now.  Why wait?
-> > 
-> > sysfs is meant to be such that userspace can handle file removals (i.e.
-> > that value is not present.)  Unfortunately, sometimes this does not
-> > actually happen and user tools do mess up and rely on things.  So either
-> > no one uses the file and it can be removed now, OR you have to leave it
-> > in for "forever".  There's no real chance to remove it later, that's
-> > just postponing the decision.
-> 
-> Lemme try to repeat what you're proposing to make sure we're on the same page:
-> 
-> we simply zap the files and see if anyone complains. If yes, we figure out why
-> they're using them and if they can't be moved to the new interface, we restore
-> them and maintain them forever.
-> 
-> Right?
+On Fri, Oct 31, 2025 at 01:38:57PM +0100, Greg KH wrote:
+> Yup!
 
-Yup!
+Thanks.
 
+@Avadhut: you can send the next revision now. :)
+
+Thx.
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
