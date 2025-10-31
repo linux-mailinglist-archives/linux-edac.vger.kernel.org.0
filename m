@@ -1,340 +1,154 @@
-Return-Path: <linux-edac+bounces-5269-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5270-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04076C23AAC
-	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 09:06:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D2F2C23D20
+	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 09:32:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A70E14F5AC0
-	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 08:02:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 852823AC652
+	for <lists+linux-edac@lfdr.de>; Fri, 31 Oct 2025 08:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3392D249E;
-	Fri, 31 Oct 2025 08:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F7EB305E02;
+	Fri, 31 Oct 2025 08:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="vzomL5YG"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VTwMkIR1"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010024.outbound.protection.outlook.com [52.101.46.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64AA285C8C;
-	Fri, 31 Oct 2025 08:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.24
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761897718; cv=fail; b=PJnjgmdoeuPzAtf1ieb+1y5J+8hw4+Mf6NDEpF5IFSUxN0Ul23dp3D4/HQ40geMPaIyQmeZ+tnogBeG+rLIiu++uQW97+X9HASoEKWv4xTv5Ur3VykYBA0xHKDZhzKCHZtp6CzCTxqUSZGgFhjvry76ihgETg1u9uajWF8LwbbY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761897718; c=relaxed/simple;
-	bh=5CktXik2jKGAcX6JDW65yXbqacqUuUSFRo+BZN7c8w8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=O2LZ6XFa07f7Ap7RzELg24zNmmGRxQ5yJvmAZ2wJADRZzUJnFJtNhPufcamci9Gx1HlgIOty8dybGY73hq05+iEJyhoz1+NXyegsJXNhmAZplY86QjhOlbLs38Cb9AcNIatd848uKqZFW/ZOg5POhV/7xPK4E5ZvwpqKq1hEBnE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=vzomL5YG; arc=fail smtp.client-ip=52.101.46.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UsdIkDAUj7QfkFwnmx+klyvenLQ0icoy4Z1IC56ymDbTdTDxZENZD10B/xn8CSaPva3ywAj0lc8obcHqkCUGCjQ90PypxsKAwz9kMzgnFcb6iALe+EEexDc1OsFIS9uJ9nf6+nga5il8Dd0ejh/L8BJylJABM7TmAjWxOyLg83+0vU/buj9OLIEF4DgqsCcCFaHdanB6QDcFd29Sr1yzgrLuxqJK/OQdpk1ZoxwQFiqeJqW12I0ub66vPyriw3nVBI4vAnwGJgn6WySu3a9QbSibfx0Z+oShXyLkyvLoLplqBv51fty5eW38enQm/YmrRTF1n/2JgLPB5ztjEFaP3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8N4berI6sw2hK8ppL+qxNpZbJ0B25XpbX/+lDoxTrro=;
- b=M/HY7IYCfFvwp8GzQgQtTSAJHgQ5BHDWCbdAWE+4SHm/OvMuBdG2cDUQ2UXLyA71lDvDBK1hwFO3PeL6PlYLh3280Ax4HtzSAaBbNFAYc5EGxn7z/BMN43mVQO8qX1y0UUsgj7d2laYCC6bdT6x4Wu40VoSv6PxFdCU+Jr4/vJoeYskD/PoG831KaI6NwcWR+k+Gw4hvg+wARNQTHXyx/IX3DYcbQsjFdW0Yx154bWFcq5hfidb6tXpm9pZr8asUQLSxSXPg/zjAK9U3T8mAxpK3GxoGkc1e8B7+tUlIgyUMslOexJWt26pteEq76wq9ocuK9jAVVYO9XJcuu2e/Wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8N4berI6sw2hK8ppL+qxNpZbJ0B25XpbX/+lDoxTrro=;
- b=vzomL5YGwav8iZCilAt+EJHMUzXj8fQyFd6suqioEJws8ux6og8e0b+ct4ymqxuhYWhGncFBBuaKWRFjfbWzMSNpNb7nORkN71dPgGCUDNuforsoEzWfBQh0ip+795Cqbz7bjWU+sfDo4HA8poCsdRnOy5YP5IyuDJTmA9rLlpTwrDWiqT+Z3cxDjCCScZGPb7bN7ZpKqJ/nG6B2iwjlIvB7yBGu60xEM7Zano7ScNutht9wp9AQKL1znQBxzwuoU9v5DqP1dKYoDOz1pE21ejSuNYDPplvV/xq38+qSr4yDwxfVPUGbU7c3dvrmXQ/fj45u6IlPWmiNzHJ/FHjXWA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-Received: from BL1PR03MB6037.namprd03.prod.outlook.com (2603:10b6:208:309::10)
- by SN7PR03MB7259.namprd03.prod.outlook.com (2603:10b6:806:2dc::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.14; Fri, 31 Oct
- 2025 08:01:54 +0000
-Received: from BL1PR03MB6037.namprd03.prod.outlook.com
- ([fe80::9413:f1a2:1d92:93f1]) by BL1PR03MB6037.namprd03.prod.outlook.com
- ([fe80::9413:f1a2:1d92:93f1%3]) with mapi id 15.20.9253.018; Fri, 31 Oct 2025
- 08:01:54 +0000
-Message-ID: <aa390919-ef3d-4942-ac7f-59efb3f3c907@altera.com>
-Date: Fri, 31 Oct 2025 16:01:44 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: edac: altera: Document additional ECC
- instances
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: dinguyen@kernel.org, matthew.gerlach@altera.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, bp@alien8.de, tony.luck@intel.com,
- linux-edac@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251028092232.773991-1-niravkumarlaxmidas.rabara@altera.com>
- <20251028092232.773991-2-niravkumarlaxmidas.rabara@altera.com>
- <20251029-adventurous-russet-jackal-64e3e5@kuoka>
-Content-Language: en-US
-From: Niravkumar L Rabara <niravkumarlaxmidas.rabara@altera.com>
-In-Reply-To: <20251029-adventurous-russet-jackal-64e3e5@kuoka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: KU0P306CA0062.MYSP306.PROD.OUTLOOK.COM
- (2603:1096:d10:23::9) To BL1PR03MB6037.namprd03.prod.outlook.com
- (2603:10b6:208:309::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1383043C8
+	for <linux-edac@vger.kernel.org>; Fri, 31 Oct 2025 08:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761899250; cv=none; b=OPChvoqLueDd2FWbTiRycobLhWZHpFX2X9zwnfXTOL/UXiDBn5FDCfGoCWCgz0c4BU7iZ5B8ma6jB40fawJGFSUQ5Om4V9sLRykMcbmxpCQGZkYlwH1+AQbYTF/Hx5Spx8O+GAZuzzelLEk0B62sGNilvmSHuNeKX/HndKNdpW0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761899250; c=relaxed/simple;
+	bh=lVQsmI/OgcGtefcLtFfLf1leQyCYm0kn4f7Js5h7gO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ouIGn4824VZhNtJD7X+ehqRpaJPT7jF4bc+eOUp3xlQUnqHQPcTNaj+a2ghqhwxNtJrZyy6wTUT6JTq3EbLQmD6SzH1B42nAJVaqORj3CKgEOnLlzJjjkWwRI5JpGMKOyGZb7/tETXAXiT5p6MLaws+jBh6Cqo5hgdQs0KEbkhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VTwMkIR1; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4711b95226dso24353065e9.0
+        for <linux-edac@vger.kernel.org>; Fri, 31 Oct 2025 01:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1761899246; x=1762504046; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=i/fYaZtBikFS6oNzHl/Bdj60BD7iQqSjLDzNr7ZdDK4=;
+        b=VTwMkIR1VeHb34IVXW5RjFZ5L2uhvkov+OYofjiegNANlWpv3EuvrJAeQu87V6/fX3
+         52EhifGNPAlypuWPbkKZ6F5OOUphcV72qQ6J+ReZE+um53bEQs/uPAbgHfF0xF9B6TRp
+         Ze3wtxMWxYLOE7w1cz2NZdKGOfqX0WGmVCOzMCnj2caN8UvByuoE7ajwBeEYgVw7t9AZ
+         iWo5GbUj6rqSq2+EAP0Qz+YbuhT7YYAC4HDPX17qUTaw5Uu1J4qjJUOPeknxIJA5HyCZ
+         wFlRckI875ozN6ZZos8cVTqxnHcW+CWaPKQIuIEl5ZAZ4wKFV2cN+BzoOKfZ1gN+cor4
+         51oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761899246; x=1762504046;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/fYaZtBikFS6oNzHl/Bdj60BD7iQqSjLDzNr7ZdDK4=;
+        b=tUzdEXbFNaA6arJEbil5W2yXs0dCkbDTjFj6Dl8+WlgztWyQ19CmBBeYDAHrrSRtBG
+         T55oQahG620XXpE5Ntp07IsW+75WDOX1SKy0qaqDLLl5hwpOYTh41XTM6R+ONuVsXS6C
+         IKSBXfUc5MxXZq5mhz9gCZtttqbvZ9rZpaY6t6KQkSStu46Bs4jtFCvX32eCp8LU2yCF
+         abgZWdzp5PoAQm2Wtd8Po/456EmNXYJWG1b9s+g5iEF7hdpqxK0pqfJxBbiy+8gX/5Vd
+         aKrh+VE7tkuXe9A2BoA2aaM/a8jtA91LUqtyvXKig3ICcd8laLtIDSeVKO/ktE5Su8jZ
+         qpSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUEQJs0gJEyQYr0dvzPmZieFlPVVJF0kvWGeLDadLZ32CImlW9Fj82dXGPLKsMA9wIwvu/zao/n+Y0f@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz82F0DaI+M+ctJJarpiJcujjDxUhQd4tocvxjE5n+I1hIfeBYo
+	S+2lrttnug7rNHTH4m9VAgVP/Yo98FVhIi/gXb8jHnMav9U5oFBgp1PdGj0uO5NHDMw=
+X-Gm-Gg: ASbGncvtEunCZDFFEPyDLbfAoqs2yjjnqgOpT78D90eDeQRlyU3LqT4HSQYfyaYM9rK
+	zW5JKrzxgwsh4Kr+63vXDS0T6qCRIkua6vBqNjc76cIMez+5t9xyBysdH41wQA+3LzC0GGEWPK4
+	m9dxQT2zt/s8aXNL5GkoIJlDZW1xcbrzYFWrm+gxacxxqYdoQip5suxy6+Th7/WESRp1WUvIbIT
+	UFrgRvCzLiqm6GODgaSRT7PDIOctQbrvxK9YHvpbsdGY06mK8FfVbHs3QnZ5Dgz0PBgY1hniN1K
+	SWnJr/+9q/N0tqBxT+c+8H7C93EasDyPRHSztA4Tl2adk5LJK6bQxv66T0VDYavHxEHV/W//NHg
+	lhb/NqF92XAwvuPjCjvA8EoyeD+4jn9VH3mLJhtKUzR7jUmgTxK/0VG4nqIUtq+nWXet7h9YYV9
+	hvRVkn2scDFbkH7pDgZ5fPbQ24
+X-Google-Smtp-Source: AGHT+IFSgi5NgEp0bWNzIHDj0wUEorxSLRV/wRdPuexvpAZjr+shE6+j17OmyoRsqSiC8CijMQFTMA==
+X-Received: by 2002:a05:6000:26c5:b0:427:580:99a7 with SMTP id ffacd0b85a97d-429bd6b222dmr2082292f8f.59.1761899241764;
+        Fri, 31 Oct 2025 01:27:21 -0700 (PDT)
+Received: from localhost (109-81-31-109.rct.o2.cz. [109.81.31.109])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429c1142e7dsm2242752f8f.17.2025.10.31.01.27.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 01:27:21 -0700 (PDT)
+Date: Fri, 31 Oct 2025 09:27:14 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Ankit Agrawal <ankita@nvidia.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Aniket Agashe <aniketa@nvidia.com>,
+	Vikram Sethi <vsethi@nvidia.com>, Jason Gunthorpe <jgg@nvidia.com>,
+	Matt Ochs <mochs@nvidia.com>,
+	Shameer Kolothum <skolothumtho@nvidia.com>,
+	"linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+	"nao.horiguchi@gmail.com" <nao.horiguchi@gmail.com>,
+	"david@redhat.com" <david@redhat.com>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+	"vbabka@suse.cz" <vbabka@suse.cz>,
+	"rppt@kernel.org" <rppt@kernel.org>,
+	"surenb@google.com" <surenb@google.com>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"guohanjun@huawei.com" <guohanjun@huawei.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"kevin.tian@intel.com" <kevin.tian@intel.com>,
+	"alex@shazbot.org" <alex@shazbot.org>, Neo Jia <cjia@nvidia.com>,
+	Kirti Wankhede <kwankhede@nvidia.com>,
+	"Tarun Gupta (SW-GPU)" <targupta@nvidia.com>,
+	Zhi Wang <zhiw@nvidia.com>, Dheeraj Nigam <dnigam@nvidia.com>,
+	Krishnakant Jaju <kjaju@nvidia.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+	"ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"Smita.KoralahalliChannabasappa@amd.com" <Smita.KoralahalliChannabasappa@amd.com>,
+	"u.kleine-koenig@baylibre.com" <u.kleine-koenig@baylibre.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] mm: handle poisoning of pfn without struct pages
+Message-ID: <aQRy4rafpvo-W-j6@tiehlicka>
+References: <20251026141919.2261-1-ankita@nvidia.com>
+ <20251026141919.2261-3-ankita@nvidia.com>
+ <20251027172620.d764b8e0eab34abd427d7945@linux-foundation.org>
+ <MW4PR12MB7213976611F767842380FB56B0FAA@MW4PR12MB7213.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR03MB6037:EE_|SN7PR03MB7259:EE_
-X-MS-Office365-Filtering-Correlation-Id: 888e1b94-42f3-4f8f-cdc2-08de1853c154
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|10070799003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Y1F6SHdXZm5OZ2taaXlVYmFxLzNzVEk0UVVRN0dtYVRqT050OE44WFpVa1hp?=
- =?utf-8?B?TmxiRjNIRzNmNldrSytSUWdNVlZBTlZsMVp4RnhZSG8yVUxZdFNqUC9UTFFW?=
- =?utf-8?B?ckZ2VHpheDdzRVZ1dGhRRnRWYmorMWpoT2NvSXdPYVpPSHA5OGNuSGJ0b2JW?=
- =?utf-8?B?TUt0L1NWS0Y4MlBGK2dYbmE2M0ozMXJucTY4em5lZFp0TGhZdFBYWGtXODR6?=
- =?utf-8?B?VklPZmJkMC91M1B5TVFnMFU1MEpsZ1hwbk8ybWsrZnVWUDBybW5MOHJnUmZa?=
- =?utf-8?B?eEVEVmMxRWdGWDNWaXk5QXgxNjhseVZLWWpENFp2anFCcW1SUkVRMVVSR1J0?=
- =?utf-8?B?NDdGaWtUa2Irb2VZMTBLNjhscW9FOUErU29QQXJwWTNDZVE2MUhlSmdnRUtR?=
- =?utf-8?B?LzB2OUVvc2RyaVpGeVZlanRFVzdFby93YkFJZXB0WVJtVlVXa3Y1eHBhR1dZ?=
- =?utf-8?B?cTNxcm9xUDFXNTJwZEZRenBIblNDV0NFQ0lZMjAwcGhOeDJsbHpuTERobERI?=
- =?utf-8?B?ajhvRkFHZ3ZKc1FLQTFnUlcvRmR1Qm1tMUFRd1hFbnJBN1hpaUxPckxxaDI0?=
- =?utf-8?B?Q0g2ck1JQkt4YVIreFlWTlJVdVVBZ1o5a1lmQjNJWHpUeTlkWVE4SkxxZ3c4?=
- =?utf-8?B?SWlHWTYycXdmWlFlS3grYmpLTnd1UU9aQk9sN2RsOFBabG13a25OckhGZFgr?=
- =?utf-8?B?RlNhUjI2cXRQc1RwZUFCcldwS0RHamw3UmJJeUdyNVBNNkdpRVRwTHpFK1N5?=
- =?utf-8?B?WDhmL1pOVlNSSUxTVWlnTmxaM2VPTkl6ZEdvQzErM2ZwMERuTmNIVXN5THBa?=
- =?utf-8?B?QUphRzBFeXIxN3ZZT0xXS2hvcFdGV1N0MmZHbk1rSzhlRUxMM1VHa3hEY0NC?=
- =?utf-8?B?cmtSNXgwQkRna2xXbUhQbmdPSG9HVGZscGQrcmZxc3BpajNiUWhPTFFVbUJP?=
- =?utf-8?B?UVNXQUJSeGRBbXFBUWk4My9aOWo5ek5jdUxBM2ppakFtOWg2alpSaEtHU0sz?=
- =?utf-8?B?YmpCMVVyUXN6ck1VTjJsdUJXck9jSzJTRVBnOUdFaXJmYkpTd01WVWNUWXZI?=
- =?utf-8?B?eWk3TXd5NFRYOCszWldoR1FMQ1lTSEpCMUlNdXVGcU90UWx2V2tOZFErM2dm?=
- =?utf-8?B?UEUzb0JVZVdLekdycmlSNDFpRG45MThvblg4emJRNk1peTZScE1USVJ3ZXk1?=
- =?utf-8?B?ZFhmajdLekRJTXc4QWpGUFpjdGhBdE9ZZWkxWCtDYjhWZDVybEd4NXFBanM2?=
- =?utf-8?B?OFgyR2tjQmpSL2lxN2hHSHV2eUVUSVJRZTNod2dMUDRMWlhBaDdjY1dtWFBL?=
- =?utf-8?B?dWpNb2hxZmpteTF6SG1iekRPL2pZMUFBYjdoRDljc2UwT2oweGFqYUxrS2Vv?=
- =?utf-8?B?WEEwcVpYTnd6azZicGtpeGVRaXJoSXBDeDQ4NlorejVtZ3A0TW5WOUxNcEZ4?=
- =?utf-8?B?R3ZJb2VKVWdZYWFlMzRwbGVTTTd3ZHcybGN4UHpvdGRya1J5Y3AyZVRVVkFB?=
- =?utf-8?B?em1xV05QVGJKOVhrOHpiR1BxR3FpeVZjRWVTbVQzd3FXSGFueVUwNnVRUit1?=
- =?utf-8?B?Ynl1dUx3L24zTEt0Y3R6RmxLQkdteWpvalJaUlZmOVpqRlVMU0ZpOEtCSUJi?=
- =?utf-8?B?ZndabXg1Y3BUV3d1MTZyUG5IdkN4SmcwMG85Q1hsWTQvcGJBc2I4VnpqL2hN?=
- =?utf-8?B?dEQrVEFVUzlwand2S04rMWFVQXlvem5YbHhDVDBlb0RaRjhSWG83U0NrdENv?=
- =?utf-8?B?bURuU254OUVTNU5lbHVkL0NWdU9XRXovdHRxRys5djBnNVRmRUh3aHNCQ0c2?=
- =?utf-8?B?eHV2eTJpT1dsSVhrYU9DdktQOTIvR0VrWDIwTW9NNW40SlZqRWVnak1idDU2?=
- =?utf-8?B?RmJ1RTUwbEpDTlVVeWtVTk05WUdGUHhLK09zKyt4alVmR1E9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR03MB6037.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(10070799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RDBYUHVaWnRMdlNRVmhzcDE0TmdEbGNsMWlqc09vcld1M3lQWXhGK0lUUDdT?=
- =?utf-8?B?dUUxd2x2a1RMQkpYUWlmSVJzWVhCSEVYYXRjV3VHQUYyYTM1TzB1Y0tHVHhv?=
- =?utf-8?B?U29RaVJXZUNtQzhWaHU5UHdhSGVBbmRTWnZBY2srVmZWNVMrVll0cDlvRE15?=
- =?utf-8?B?VXRacEw4OERhSlYxQ2VBK2E4TS9yR1pzZlFnWWtXWWRsaTVtYTdnaTRVZXBh?=
- =?utf-8?B?M01HTG5DUFU0aDVCNnRvTTV4MEgyWkVVNzI4T3RabytwMnRmVCtjbFZieVM5?=
- =?utf-8?B?OWZFQjlOQm5WZDI5Uk5YYnMvQ0loVG5zejdYUGJGVkVadVgwZ2J5QTBzUFBM?=
- =?utf-8?B?NVg5WHlzTDVsVTR6d1RqSGdJQkJ0SjdiSlhHbFZoSmpaSmpFcmtXWlg3OVFV?=
- =?utf-8?B?TDBzTWFmM09QVUNKQWVVemcxd0FZNE5wSkFIY1NFd1hocjRWSlVxRzEzb3FZ?=
- =?utf-8?B?cHEyMHAyRWJJRDZlenlGMzd0VGkyMzRKMzQvTjN6VkN2aFNicldWYlJBVzJE?=
- =?utf-8?B?alZqaWFFVEt6MnIvejByL1l1L05IVWJ5dHc3RzZGWHpPUHBJd0EzaWcvZmVs?=
- =?utf-8?B?ZGhFWDBab2prZmpIcTFsTE1MbkJTZTVsU1VvV1IrMmU4UnE1c2xBRTRBTlVG?=
- =?utf-8?B?dEdJb2M2eGovZTc5WVp3dkxCK0ttRHpEM0czWVlqSFVaWnpnY0pONGgzS0Jz?=
- =?utf-8?B?blNibHorZnB3eGlqRVRlSTZkQjlmbGNQS1UxZjFJK043UENWZ3JxbStzZDF6?=
- =?utf-8?B?RDExQWRnM2NOQ3AyL0Q2UVA1OHQwc0p5bGVTcm5OeVZjdXNJMHpaeWxNMHdB?=
- =?utf-8?B?R0tEK3I1ellEdi9lUmN5dVJRQ3VVYUdqM21Pcm1TaCt1V3plM2dsSFdKaUdE?=
- =?utf-8?B?OEI4d2VjendRM0NSL0h0RXlOTkxoUkJWTi9MSVFURkpvV1BycnpZRWttQlpr?=
- =?utf-8?B?TGh2dURlUkVyMlY3OWJDQ3cwQ1JmeC9qTEdWRnRXcTlySzAwblcyYklkcldp?=
- =?utf-8?B?c2Z2WWxid0JWbTYrbjdWcWk5VzQrQ1kxU3VFTkx0RExtNkFYcjJVSFRuT1dt?=
- =?utf-8?B?YS9mc0c4SzdqRmgwbEE4ZTMzSm5vVnVVOStnTGVYYkNDYTBGUWtRSENpTjB5?=
- =?utf-8?B?YnlVM1NxQk5BcSswRXhVVU85c3NpYVBmRkk2VktpR1BHUHVvNlZxcmx6cXhG?=
- =?utf-8?B?MFlzWjFDWFVways2M2hiWjlEcUc4eTdhdzdYMjB1TlhPV3crYTRLNURXeENt?=
- =?utf-8?B?Z1h4VkRiMFFEMEVQd3NqY2tyTmFZbEttZzJLTE5wVXBOWi9XeVhJSHJhVlNk?=
- =?utf-8?B?NENkUHhxZVlOdDFXT3lNOVRROEc1VHUvR0dPc1R1MFBEbjhiWjQzMmpTVTM3?=
- =?utf-8?B?UEVKLy94TVIrbnVHQ2wwc1R2R25GOWN2czBrM2dyWEpaVzROY3c2eW53V21i?=
- =?utf-8?B?MWF0OTJxVEU0OXhpNjcxKy9rUHRybEJxTnY5cDByNkVXblVKT0ZSZzB2dGdE?=
- =?utf-8?B?N1ZyUkM5Q2Fxd0hyUVBHYkhSeFpEbi9PeEdZUnZVOTBCUkxVa2hVd0pkTlpi?=
- =?utf-8?B?eVhrdmFIUmt1TXhNUjJwbHdXQ01aNnhTZ1Ivc3YxS2ZTMm1uUEdaTVp3SVFn?=
- =?utf-8?B?UnpHL3orTjR2ZXZQbWVVcU44ajV6STF4V0lyL21yeEhnM1lkMmdleTlEbjBR?=
- =?utf-8?B?SFYvb0FydExXNDJyWnROYlJuME95ZFBrOG45R3h2TzZtc2FpYkZFZVBxTTd3?=
- =?utf-8?B?U013cDduY0JSZmlMTG5JdGRGVlVSZ2xmT2VMdVBBdmpRbTFYN3JJOXhaWXE4?=
- =?utf-8?B?YnRRTzRBRlMvSGlpQWtFYVZhVUZvYUQ4NWpPd1IrdUpVQWlWN1dSTXQ5Mk1D?=
- =?utf-8?B?THM5U1lzczNKOUFWeTg4eGxPbEtRVHk4SGdpemNITmhiUEI0dGxDT3hKWXpo?=
- =?utf-8?B?UmphdHhjaEY4aEh2WWVIOElLSGlCVm1nVmFsN2oyQ2pyQWpSenlOYlR2M1lE?=
- =?utf-8?B?cExxYW9Kc1FvMXl5RGxnekZyZXJ2dG1rVmpYMGRYaGFrYlJ6RFZ4Y2FWVVMw?=
- =?utf-8?B?QW92MUlyclNqbTdHbWowaFhnSm5vSEtLL2UxcU00dkFBMEttUmp2YU5hcGp0?=
- =?utf-8?B?TlROTkVQMDk3VmVlb3lwYTdhd1BQdUpTVUxJKzJaa2pENlRUOGZFaFBEeFBv?=
- =?utf-8?B?RHN2RFRvNlFlNTA4TFgreDNjb3lpa0hOZS9uaTcvN1NOWktIeHNHcUI5VWNS?=
- =?utf-8?Q?fpGIGNjMyqKK/1H1oVS2Z6xBljfvhkZwjBvOG+MN4g=3D?=
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 888e1b94-42f3-4f8f-cdc2-08de1853c154
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR03MB6037.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2025 08:01:54.2075
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QmbdbOFN2u1+pcFxIaJJleoEYjaLfv+yt7lqDLdDQ7RAb4Lutd0GmM0RnLGt3xuAe+f8BHY5P9hlsyrvV6UHyEajEBFGrcPldccEhlkp7Xpua0cmlTM2gD/SfCp8wlEe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR03MB7259
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <MW4PR12MB7213976611F767842380FB56B0FAA@MW4PR12MB7213.namprd12.prod.outlook.com>
 
+On Wed 29-10-25 03:15:08, Ankit Agrawal wrote:
+> >> +static void add_to_kill_pfn(struct task_struct *tsk,
+> >> +                         struct vm_area_struct *vma,
+> >> +                         struct list_head *to_kill,
+> >> +                         unsigned long pfn)
+> >> +{
+> >> +     struct to_kill *tk;
+> >> +
+> >> +     tk = kmalloc(sizeof(*tk), GFP_ATOMIC);
+> >> +     if (!tk)
+> >> +             return;
+> >
+> > This is unfortunate.  GFP_ATOMIC is unreliable and we silently behave
+> > as if it worked OK.
+> 
+> Got it. I'll mark this as a failure case.
 
-
-On 29/10/2025 2:50 pm, Krzysztof Kozlowski wrote:
-> On Tue, Oct 28, 2025 at 05:22:27PM +0800,niravkumarlaxmidas.rabara@altera.com wrote:
->> From: Niravkumar L Rabara<niravkumarlaxmidas.rabara@altera.com>
->>
->> Add support for Secure Device Manager(SDM) QSPI ECC, IO96B memory
->> controller ECC and Configuration RAM(CRAM) Single Event Upset(SEU).
->>
->> Add interrupt-names property and increase interrupts maxItems from 2 to 7
->> to accommodate additional interrupts.
->>
->> Signed-off-by: Niravkumar L Rabara<niravkumarlaxmidas.rabara@altera.com>
->> ---
->>   .../edac/altr,socfpga-ecc-manager.yaml        | 77 ++++++++++++++++++-
->>   1 file changed, 76 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/edac/altr,socfpga-ecc-manager.yaml b/Documentation/devicetree/bindings/edac/altr,socfpga-ecc-manager.yaml
->> index 3d787dea0f14..5e0c08a15ab9 100644
->> --- a/Documentation/devicetree/bindings/edac/altr,socfpga-ecc-manager.yaml
->> +++ b/Documentation/devicetree/bindings/edac/altr,socfpga-ecc-manager.yaml
->> @@ -33,7 +33,13 @@ properties:
->>   
->>     interrupts:
->>       minItems: 1
->> -    maxItems: 2
->> +    maxItems: 7
-> No, list the interrupts instead. Your commit msg must clearly explain
-> why exception of not-fixed length/entries is justified.
-> 
-> See writing bindings.
-> 
->> +
->> +  interrupt-names:
->> +    items:
->> +      enum: [global_sbe, global_dbe, io96b0, io96b1, sdm_qspi_sbe, sdm_qspi_dbe, sdm_seu]
-> Nope, list the items instead. Please do not come up with some custom
-> syntax.
-> 
->> +    minItems: 1
->> +    maxItems: 7
->>   
->>     interrupt-controller: true
->>   
->> @@ -70,6 +76,41 @@ properties:
->>         - interrupts
->>         - altr,sdr-syscon
->>   
->> +  cram-seu:
-> Missing description, so difficult to say what is here.
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2- 
-> devicetree-basics.html#generic-names-recommendation
-> If you cannot find a name matching your device, please check in kernel
-> sources for similar cases or you can grow the spec (via pull request to
-> DT spec repo).
-> 
->> +    type: object
->> +    additionalProperties: false
->> +
->> +    properties:
->> +      compatible:
->> +        items:
->> +          - const: altr,socfpga-cram-seu
-> Why do you need compatible?
-> 
->> +
->> +      reg:
->> +        maxItems: 1
-> So you created child node only for reg? No, fold it into parent.
-> 
-> You also forgot to update the example.
-> 
->> +
->> +      altr,seu-safe-inject-ce-msb:
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +        description: MSB of error injection command for Correctable Error
->> +
->> +      altr,seu-safe-inject-ce-lsb:
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +        description: LSB of error injection command for Correctable Error
->> +
->> +      altr,seu-safe-inject-ue-msb:
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +        description: MSB of error injection command for Uncorrectable Error
->> +
->> +      altr,seu-safe-inject-ue-lsb:
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +        description: LSB of error injection command for Uncorrectable Error
-> How are these board-level properties?
-> 
->> +
->> +    required:
->> +      - compatible
->> +      - altr,seu-safe-inject-ce-msb
->> +      - altr,seu-safe-inject-ce-lsb
->> +      - altr,seu-safe-inject-ue-msb
->> +      - altr,seu-safe-inject-ue-lsb
->> +
->>   patternProperties:
->>     "^ocram-ecc@[a-f0-9]+$":
->>       type: object
->> @@ -191,6 +232,40 @@ patternProperties:
->>         - interrupts
->>         - altr,ecc-parent
->>   
->> +  "^sdm-qspi-ecc@[a-f0-9]+$":
->> +    type: object
->> +    additionalProperties: false
->> +
->> +    properties:
->> +      compatible:
->> +        items:
->> +          - const: altr,socfpga-sdm-qspi-ecc
-> No, drop.
-> 
->> +
->> +      reg:
->> +        maxItems: 1
->> +
->> +    required:
->> +      - compatible
->> +      - reg
-> No point for empty children. One reg is not justification for having a
-> child.
-> 
->> +
->> +  "^io96b[0-9]-ecc@[a-f0-9]+$":
-> You need to stop coming with random node names. Nothing explains why you
-> need children, why these are not part of parent node.
-> 
->> +    type: object
->> +    additionalProperties: false
->> +
->> +    properties:
->> +      compatible:
->> +        items:
->> +          - enum:
->> +              - altr,socfpga-io96b0-ecc
->> +              - altr,socfpga-io96b1-ecc
-> Plus all your compatibles have WRONG format. See writing bindings and
-> numerouse presentations - you always must use SoC specific compatible.
-> 
-> Best regards,
-> Krzysztof
-
-
-Hi Krzysztof,
-
-Thanks for the review and feedback on the patch series.
-Iâ€™ll go through your comments and address them in the next patch revision.
-
-Thanks,
-Nirav
-
-
-
+why do you need to batch all processes and kill them at once? Can you
+just kill one by one?
+-- 
+Michal Hocko
+SUSE Labs
 
