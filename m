@@ -1,138 +1,264 @@
-Return-Path: <linux-edac+bounces-5299-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5300-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81BF1C2C76F
-	for <lists+linux-edac@lfdr.de>; Mon, 03 Nov 2025 15:48:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 843E9C2D10D
+	for <lists+linux-edac@lfdr.de>; Mon, 03 Nov 2025 17:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2A253A9D53
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Nov 2025 14:43:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58661188BD6B
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Nov 2025 16:20:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D82AD2FBE0A;
-	Mon,  3 Nov 2025 14:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D363161B3;
+	Mon,  3 Nov 2025 16:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EkOuDj/r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxZK56Ol"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327E92836B1;
-	Mon,  3 Nov 2025 14:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143EF3161A4
+	for <linux-edac@vger.kernel.org>; Mon,  3 Nov 2025 16:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762181034; cv=none; b=V0ioaIl0z9pwvJBio77f5bB9X0jadepSnxsvjDZ1sXGg08KZwnBRg2t2+oZapx7ozGoW0YtMpYMKy1P2Zaq/7Vx0yMe5TIk8WrPRAoalvRxXXVDvxN+IFfWVUarJrHruiHagpdiuaxwjaP11EhkqF187barhCupkF5wa+/u7vgE=
+	t=1762186796; cv=none; b=CwqtgajX3ac6VNpjBQSLbQOTs9pgz/YX/8prTqxdsiKj1ijLh1wUSPr/WWm4SCWxMIpIEGTfLHpKhTv3jLYn2mLDFZkbveruZx+ZJNDd1bn2qbXYnSz+Dh2n/Cu7ws7pEK8xdp+2qlwaIPTIbxpRSrwlZovwHmXJtYiZcjBfq4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762181034; c=relaxed/simple;
-	bh=J02W1Iw/Jfwyc8k+uXOvE16dWe+Giy8i3f3bmJQNB04=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pKJPvuTqs8GjGc29cJetuafpis/S4HIrJw+/GUPj45CPnSvKdeLj9Y2l+qpOrRzmY7xhoviSuyr2aeKlgZd40bJyNjLSCyxCcopYwC5AqL1rI+yUw7YOVERdo7H1xYTiLOs75oJfV0pgCO/B1MzuknxCob8qwqlQiXbZbEmpZhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EkOuDj/r; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762181034; x=1793717034;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=J02W1Iw/Jfwyc8k+uXOvE16dWe+Giy8i3f3bmJQNB04=;
-  b=EkOuDj/rxtNmIUS8J1YLV/ModZd+qNSlJwDv+a4S6rdjy9dkMdLXEuoa
-   X0YA0CH67MzslSrrjVCA0aQasymsaCvn+I7C93k0pWTrYp9UHvmO+JDhy
-   a68o6LrUb68DNQIGEPpTKhMcicdzbL6RjyKvsy+onEzmA8A42Z0uN0zwE
-   5iGxwfwhYeZ/hIPLBJA5xNJ1w2Fn33y8482tAsSrrwFkDDQaUfy/h8aSC
-   zRDBhlGCOiNdXzHEyqEmRM9PJBhhjUOXmF7WRhbtLz7rbhn9amJP7fS2C
-   u6ClieyuT+vuD5zhvHOZ/Q4zoQhKZ1Ca8LqOy2A/kQ8aSdGs2oq6kdUuO
-   w==;
-X-CSE-ConnectionGUID: PRLxp95jR7SjcJjANLuEtg==
-X-CSE-MsgGUID: p0i+VPotRfODlvJxSBOJSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="86879817"
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="86879817"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 06:43:53 -0800
-X-CSE-ConnectionGUID: sg2xt+/qTXexAbr7EYwjtA==
-X-CSE-MsgGUID: S+XBoW6qRC2gVayyp3RQag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="186172524"
-Received: from jmaxwel1-mobl.amr.corp.intel.com (HELO [10.125.110.129]) ([10.125.110.129])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 06:43:52 -0800
-Message-ID: <8c6c5d0a-c5e1-4c43-b824-2e3aa6641d48@intel.com>
-Date: Mon, 3 Nov 2025 06:43:51 -0800
+	s=arc-20240116; t=1762186796; c=relaxed/simple;
+	bh=Sk3YUo7dUQtfztKAt03QLqMqer/FMN4d3z80Z8X0gQY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RNoAfkU/NhxEFtcPBrBH7h3Rtqj/OZuM4bXWPfG6TUUXWxIMLeSuUc3VbGiqenZu3iB6CHC1u3+NMisL6EOXVGnR5m3Mk37sWZk0zvY3aYUMDNiDgfg3wP7D2nwkTXUI1hXgLxsaqdNzhOBHFmDQdK1qeJGJbWqkvq/6T6VciVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxZK56Ol; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC112C116D0
+	for <linux-edac@vger.kernel.org>; Mon,  3 Nov 2025 16:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762186795;
+	bh=Sk3YUo7dUQtfztKAt03QLqMqer/FMN4d3z80Z8X0gQY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=dxZK56OlymerAXSLwcLJt5wUMBCeKIIy9k9GZrQIWtIybqxFAG8HG5eoRNsFV1W8G
+	 LQmGxQHV6ltIL3yHCFC1ZNy53wFCeSEoTPc0yw1eE3ENLLRJO45ic9q/r2nG/+wgFY
+	 ELkmJT1boKpiZjKxsCrgystfh2kWIvg+LAJHXn0A8525tXiVO6Fjy9b3m065jzMo05
+	 9OE+JYZs4ewGR8lOjokWdhW2QfC917+q9iNK447Mpr1ycV0G8ahkUHGdA6dKxtugSb
+	 xe2TIiC5CQhtwMvBVc7TBnLdt5sFpD6jBD2kw01inXCrgklxuYNintL75CBU+fNe/+
+	 WTETAAUJ7TKtw==
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7c52fa75cd3so3625636a34.3
+        for <linux-edac@vger.kernel.org>; Mon, 03 Nov 2025 08:19:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV4NMX5SU22WhUV4QdbMHvUGhVkAvzxj7TwYbYpKNQSb0bm9OS2Z7Jxt/ukLzm7nI5DPwfONVxhq8XA@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxly43a8h8TEsbLlhpzvxUB75QmU5mlb5Fbh3NKFABclXHH+fy1
+	v1tDkNetDMctVX1MGz64IhJPfxqURZJtMPWCgNDsQm9X6bvJSnu2QdLFFgjy41ndGbzqnx21k6c
+	HtS9eO40BmnD20e6SkjEoshzQj7dgnpY=
+X-Google-Smtp-Source: AGHT+IG3361toIoasB3uOKUzNV6dinGA22EHyvpJDIQt6UYgSrpZaDoMHd819oZo8awumREm/GvNri9dakziMUuH1og=
+X-Received: by 2002:a05:6808:d4d:b0:438:39a2:b61c with SMTP id
+ 5614622812f47-44f95dfb174mr5549335b6e.2.1762186795085; Mon, 03 Nov 2025
+ 08:19:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] x86/mm: support memory-failure on 32-bits with
- SPARSEMEM
-To: Xie Yuanbin <xieyuanbin1@huawei.com>, tglx@linutronix.de,
- david@redhat.com, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, hpa@zytor.com, akpm@linux-foundation.org,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, linmiaohe@huawei.com,
- nao.horiguchi@gmail.com, luto@kernel.org, peterz@infradead.org,
- tony.luck@intel.com
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-edac@vger.kernel.org, will@kernel.org, liaohua4@huawei.com,
- lilinjie8@huawei.com
-References: <5ace86cc-0b2d-4306-8bc1-dfc34cccef1a@redhat.com>
- <20251103132358.79766-1-xieyuanbin1@huawei.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20251103132358.79766-1-xieyuanbin1@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251030071321.2763224-1-hejunhao3@h-partners.com>
+In-Reply-To: <20251030071321.2763224-1-hejunhao3@h-partners.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 3 Nov 2025 17:19:43 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h=QtcT7zhZEgrTjUk7EAk2OfbGG6BoEEv-3toKODMXQA@mail.gmail.com>
+X-Gm-Features: AWmQ_bk1ceWWT4cSZSU5mE1myDtpg3UPaMnBHWg-zIlq7JFILI41pAtQ3N0MKOQ
+Message-ID: <CAJZ5v0h=QtcT7zhZEgrTjUk7EAk2OfbGG6BoEEv-3toKODMXQA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: APEI: Handle repeated SEA error interrupts storm scenarios
+To: Junhao He <hejunhao3@h-partners.com>
+Cc: rafael@kernel.org, tony.luck@intel.com, bp@alien8.de, guohanjun@huawei.com, 
+	mchehab@kernel.org, xueshuai@linux.alibaba.com, jarkko@kernel.org, 
+	yazen.ghannam@amd.com, jane.chu@oracle.com, lenb@kernel.org, 
+	Jonathan.Cameron@huawei.com, linux-acpi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-edac@vger.kernel.org, shiju.jose@huawei.com, tanxiaofei@huawei.com, 
+	linuxarm@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/3/25 05:23, Xie Yuanbin wrote:
-> I will update the V2 patch to describe it.
+On Thu, Oct 30, 2025 at 8:13=E2=80=AFAM Junhao He <hejunhao3@h-partners.com=
+> wrote:
+>
+> The do_sea() function defaults to using firmware-first mode, if supported=
+.
+> It invoke acpi/apei/ghes ghes_notify_sea() to report and handling the SEA
+> error, The GHES uses a buffer to cache the most recent 4 kinds of SEA
+> errors. If the same kind SEA error continues to occur, GHES will skip to
+> reporting this SEA error and will not add it to the "ghes_estatus_llist"
+> list until the cache times out after 10 seconds, at which point the SEA
+> error will be reprocessed.
+>
+> The GHES invoke ghes_proc_in_irq() to handle the SEA error, which
+> ultimately executes memory_failure() to process the page with hardware
+> memory corruption. If the same SEA error appears multiple times
+> consecutively, it indicates that the previous handling was incomplete or
+> unable to resolve the fault. In such cases, it is more appropriate to
+> return a failure when encountering the same error again, and then proceed
+> to arm64_do_kernel_sea for further processing.
+>
+> When hardware memory corruption occurs, a memory error interrupt is
+> triggered. If the kernel accesses this erroneous data, it will trigger
+> the SEA error exception handler. All such handlers will call
+> memory_failure() to handle the faulty page.
+>
+> If a memory error interrupt occurs first, followed by an SEA error
+> interrupt, the faulty page is first marked as poisoned by the memory erro=
+r
+> interrupt process, and then the SEA error interrupt handling process will
+> send a SIGBUS signal to the process accessing the poisoned page.
+>
+> However, if the SEA interrupt is reported first, the following exceptiona=
+l
+> scenario occurs:
+>
+> When a user process directly requests and accesses a page with hardware
+> memory corruption via mmap (such as with devmem), the page containing thi=
+s
+> address may still be in a free buddy state in the kernel. At this point,
+> the page is marked as "poisoned" during the SEA claim memory_failure().
+> However, since the process does not request the page through the kernel's
+> MMU, the kernel cannot send SIGBUS signal to the processes. And the memor=
+y
+> error interrupt handling process not support send SIGBUS signal. As a
+> result, these processes continues to access the faulty page, causing
+> repeated entries into the SEA exception handler. At this time, it lead to
+> an SEA error interrupt storm.
+>
+> Fixes this by returning a failure when encountering the same error again.
+>
+> The following error logs is explained using the devmem process:
+>   NOTICE:  SEA Handle
+>   NOTICE:  SpsrEl3 =3D 0x60001000, ELR_EL3 =3D 0xffffc6ab42671400
+>   NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>   NOTICE:  EsrEl3 =3D 0x92000410
+>   NOTICE:  PA is valid: 0x1000093c00
+>   NOTICE:  Hest Set GenericError Data
+>   [ 1419.542401][    C1] {57}[Hardware Error]: Hardware error from APEI G=
+eneric Hardware Error Source: 9
+>   [ 1419.551435][    C1] {57}[Hardware Error]: event severity: recoverabl=
+e
+>   [ 1419.557865][    C1] {57}[Hardware Error]:  Error 0, type: recoverabl=
+e
+>   [ 1419.564295][    C1] {57}[Hardware Error]:   section_type: ARM proces=
+sor error
+>   [ 1419.571421][    C1] {57}[Hardware Error]:   MIDR: 0x0000000000000000
+>   [ 1419.571434][    C1] {57}[Hardware Error]:   Multiprocessor Affinity =
+Register (MPIDR): 0x0000000081000100
+>   [ 1419.586813][    C1] {57}[Hardware Error]:   error affinity level: 0
+>   [ 1419.586821][    C1] {57}[Hardware Error]:   running state: 0x1
+>   [ 1419.602714][    C1] {57}[Hardware Error]:   Power State Coordination=
+ Interface state: 0
+>   [ 1419.602724][    C1] {57}[Hardware Error]:   Error info structure 0:
+>   [ 1419.614797][    C1] {57}[Hardware Error]:   num errors: 1
+>   [ 1419.614804][    C1] {57}[Hardware Error]:    error_type: 0, cache er=
+ror
+>   [ 1419.629226][    C1] {57}[Hardware Error]:    error_info: 0x000000002=
+0400014
+>   [ 1419.629234][    C1] {57}[Hardware Error]:     cache level: 1
+>   [ 1419.642006][    C1] {57}[Hardware Error]:     the error has not been=
+ corrected
+>   [ 1419.642013][    C1] {57}[Hardware Error]:    physical fault address:=
+ 0x0000001000093c00
+>   [ 1419.654001][    C1] {57}[Hardware Error]:   Vendor specific error in=
+fo has 48 bytes:
+>   [ 1419.654014][    C1] {57}[Hardware Error]:    00000000: 00000000 0000=
+0000 00000000 00000000  ................
+>   [ 1419.670685][    C1] {57}[Hardware Error]:    00000010: 00000000 0000=
+0000 00000000 00000000  ................
+>   [ 1419.670692][    C1] {57}[Hardware Error]:    00000020: 00000000 0000=
+0000 00000000 00000000  ................
+>   [ 1419.783606][T54990] Memory failure: 0x1000093: recovery action for f=
+ree buddy page: Recovered
+>   [ 1419.919580][ T9955] EDAC MC0: 1 UE Multi-bit ECC on unknown memory (=
+node:0 card:1 module:71 bank:7 row:0 col:0 page:0x1000093 offset:0xc00 grai=
+n:1 - APEI location: node:0 card:257 module:71 bank:7 row:0 col:0)
+>   NOTICE:  SEA Handle
+>   NOTICE:  SpsrEl3 =3D 0x60001000, ELR_EL3 =3D 0xffffc6ab42671400
+>   NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>   NOTICE:  EsrEl3 =3D 0x92000410
+>   NOTICE:  PA is valid: 0x1000093c00
+>   NOTICE:  Hest Set GenericError Data
+>   NOTICE:  SEA Handle
+>   NOTICE:  SpsrEl3 =3D 0x60001000, ELR_EL3 =3D 0xffffc6ab42671400
+>   NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>   NOTICE:  EsrEl3 =3D 0x92000410
+>   NOTICE:  PA is valid: 0x1000093c00
+>   NOTICE:  Hest Set GenericError Data
+>   ...
+>   ...        ---> Hapend SEA error interrupt storm
+>   ...
+>   NOTICE:  SEA Handle
+>   NOTICE:  SpsrEl3 =3D 0x60001000, ELR_EL3 =3D 0xffffc6ab42671400
+>   NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>   NOTICE:  EsrEl3 =3D 0x92000410
+>   NOTICE:  PA is valid: 0x1000093c00
+>   NOTICE:  Hest Set GenericError Data
+>   [ 1429.818080][ T9955] Memory failure: 0x1000093: already hardware pois=
+oned
+>   [ 1429.825760][    C1] ghes_print_estatus: 1 callbacks suppressed
+>   [ 1429.825763][    C1] {59}[Hardware Error]: Hardware error from APEI G=
+eneric Hardware Error Source: 9
+>   [ 1429.843731][    C1] {59}[Hardware Error]: event severity: recoverabl=
+e
+>   [ 1429.861800][    C1] {59}[Hardware Error]:  Error 0, type: recoverabl=
+e
+>   [ 1429.874658][    C1] {59}[Hardware Error]:   section_type: ARM proces=
+sor error
+>   [ 1429.887516][    C1] {59}[Hardware Error]:   MIDR: 0x0000000000000000
+>   [ 1429.901159][    C1] {59}[Hardware Error]:   Multiprocessor Affinity =
+Register (MPIDR): 0x0000000081000100
+>   [ 1429.901166][    C1] {59}[Hardware Error]:   error affinity level: 0
+>   [ 1429.914896][    C1] {59}[Hardware Error]:   running state: 0x1
+>   [ 1429.914903][    C1] {59}[Hardware Error]:   Power State Coordination=
+ Interface state: 0
+>   [ 1429.933319][    C1] {59}[Hardware Error]:   Error info structure 0:
+>   [ 1429.946261][    C1] {59}[Hardware Error]:   num errors: 1
+>   [ 1429.946269][    C1] {59}[Hardware Error]:    error_type: 0, cache er=
+ror
+>   [ 1429.970847][    C1] {59}[Hardware Error]:    error_info: 0x000000002=
+0400014
+>   [ 1429.970854][    C1] {59}[Hardware Error]:     cache level: 1
+>   [ 1429.988406][    C1] {59}[Hardware Error]:     the error has not been=
+ corrected
+>   [ 1430.013419][    C1] {59}[Hardware Error]:    physical fault address:=
+ 0x0000001000093c00
+>   [ 1430.013425][    C1] {59}[Hardware Error]:   Vendor specific error in=
+fo has 48 bytes:
+>   [ 1430.025424][    C1] {59}[Hardware Error]:    00000000: 00000000 0000=
+0000 00000000 00000000  ................
+>   [ 1430.053736][    C1] {59}[Hardware Error]:    00000010: 00000000 0000=
+0000 00000000 00000000  ................
+>   [ 1430.066341][    C1] {59}[Hardware Error]:    00000020: 00000000 0000=
+0000 00000000 00000000  ................
+>   [ 1430.294255][T54990] Memory failure: 0x1000093: already hardware pois=
+oned
+>   [ 1430.305518][T54990] 0x1000093: Sending SIGBUS to devmem:54990 due to=
+ hardware memory corruption
+>
+> Signed-off-by: Junhao He <hejunhao3@h-partners.com>
+> ---
+>  drivers/acpi/apei/ghes.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 005de10d80c3..eebda39bfc30 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -1343,8 +1343,10 @@ static int ghes_in_nmi_queue_one_entry(struct ghes=
+ *ghes,
+>         ghes_clear_estatus(ghes, &tmp_header, buf_paddr, fixmap_idx);
+>
+>         /* This error has been reported before, don't process it again. *=
+/
+> -       if (ghes_estatus_cached(estatus))
+> +       if (ghes_estatus_cached(estatus)) {
+> +               rc =3D -ECANCELED;
+>                 goto no_work;
+> +       }
+>
+>         llist_add(&estatus_node->llnode, &ghes_estatus_llist);
+>
+> --
 
-Please also include the logic behind why you want this change, including
-a description of the hardware on which you want to use this change.
+This needs a response from the APEI reviewers as per MAINTAINERS, thanks!
 
