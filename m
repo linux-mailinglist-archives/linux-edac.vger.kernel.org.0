@@ -1,127 +1,162 @@
-Return-Path: <linux-edac+bounces-5289-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5290-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F399C29F85
-	for <lists+linux-edac@lfdr.de>; Mon, 03 Nov 2025 04:36:05 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA9B3C2AFB5
+	for <lists+linux-edac@lfdr.de>; Mon, 03 Nov 2025 11:17:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9FD53AF629
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Nov 2025 03:36:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2204D344C0E
+	for <lists+linux-edac@lfdr.de>; Mon,  3 Nov 2025 10:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DAC1C6FE8;
-	Mon,  3 Nov 2025 03:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="cAsCMg1B"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 232142FD1C2;
+	Mon,  3 Nov 2025 10:17:53 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E221E1339B1;
-	Mon,  3 Nov 2025 03:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856292F28F0
+	for <linux-edac@vger.kernel.org>; Mon,  3 Nov 2025 10:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762140958; cv=none; b=bldSJQNTbCEoJKFWPS3PjoDFK6s1I/u5q/B9+57p+OZ9bSqgvyiNtxkO9WytlZPUOiLr15UKOE1B1CoV4vZdgPQgtb/Ng2ttceWSbJ9QQS72U+p7+2bFzeRnYKMpHdT+3dofzkPhO3GLekwYIp/2cps8dSgcsKjElKeuYFnsC/s=
+	t=1762165073; cv=none; b=VRh4CYaK9dsET14f8mPaFKXmfxtY8LlYmqDuNl4CcwVJl0XSAahUpgGPWg85VEmRvWlTewHMQ6Gva50iD5b3p/y9RKx8gY6TSaSQnaAJoZRg7N9m6kx5U/afn2o+rC+RqowUhet+9k7pUazFkIi2vT16ebkMPguXZiVTjevhjlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762140958; c=relaxed/simple;
-	bh=6SFg1x6PoSrmi6rv0iLomf8vqw2/CViQpjBOtbhVtz4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OF1r+9T8v1kkHA7+1+tJg7wfO1akBTAZFOGuFWk12+sx7rMnorBf6LNGKLBaCJLrQ9Lm6IDw88dJ+Wj/pYl2KabBHz+aF0G2md7oZhc7brQ5wlAdwmv+zQb87yivwF+QUncQ7QmR72p6m+qII3Dp/RVfbRTS+84/ULISWUbNH/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=cAsCMg1B; arc=none smtp.client-ip=113.46.200.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=5iAlRuAIsi2GE5ItcdrGuYTZod15rl8M0hhAckNHMcs=;
-	b=cAsCMg1BrDm96i8ognht4vAKSaZKt8SVQAMotpszTJBJw3IMv69XAQmpy1g5RnlhCc2rIjwzt
-	gXbsfEiX7W4ucdEJCpVZk59tAx3Xu8OTPFH61xGh3ZdGoquc2Z3PrYVIwpxPVPxTNV+VtESZRrv
-	ODY/L0Sak3nX9dqGFpx0wgg=
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4d0HJ63dr3zmV8P;
-	Mon,  3 Nov 2025 11:34:14 +0800 (CST)
-Received: from kwepemj100009.china.huawei.com (unknown [7.202.194.3])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7950E140277;
-	Mon,  3 Nov 2025 11:35:48 +0800 (CST)
-Received: from DESKTOP-A37P9LK.huawei.com (10.67.109.17) by
- kwepemj100009.china.huawei.com (7.202.194.3) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 3 Nov 2025 11:35:47 +0800
-From: Xie Yuanbin <xieyuanbin1@huawei.com>
-To: <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <hpa@zytor.com>, <akpm@linux-foundation.org>,
-	<david@redhat.com>, <lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>,
-	<vbabka@suse.cz>, <rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
-	<linmiaohe@huawei.com>, <nao.horiguchi@gmail.com>, <luto@kernel.org>,
-	<peterz@infradead.org>, <tony.luck@intel.com>
-CC: <x86@kernel.org>, <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-edac@vger.kernel.org>, <will@kernel.org>, <liaohua4@huawei.com>,
-	<lilinjie8@huawei.com>, Xie Yuanbin <xieyuanbin1@huawei.com>
-Subject: [PATCH 2/2] mm/memory-failure: remove the selection of RAS
-Date: Mon, 3 Nov 2025 11:35:36 +0800
-Message-ID: <20251103033536.52234-2-xieyuanbin1@huawei.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251103033536.52234-1-xieyuanbin1@huawei.com>
-References: <20251103033536.52234-1-xieyuanbin1@huawei.com>
+	s=arc-20240116; t=1762165073; c=relaxed/simple;
+	bh=mTHQRbPtXcLW9RC24UimP00dT4bpQ240D8TduWco7Ms=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nNZFWZzJiNkvWacUrOjzfnT6BSPJybYfVagCahAn3hZSEWGTIeehvkaj0yHtEFbRZjlzPEr6P/B2/vy4U9qTUg7opWpvPAZ2IE4zW1mY+r302sIUbPpdyiO0iOIR9Jen8wSQwQx8kHDv6HkgfhthzI79f8g620qjhaBlotQQ1Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29524c38f4fso35379115ad.2
+        for <linux-edac@vger.kernel.org>; Mon, 03 Nov 2025 02:17:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762165070; x=1762769870;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WN9rH9/69UaI2zM1r1sL3pcOf4U1LH9TZ13cniByZO0=;
+        b=YYIkTdh4OsUnhdwXmZmyKQn8b/AyGKFsuft0VdjP6AhbX4ZKivDy2KCnPOD5ShHHig
+         mmPz1BpVCVdgBlCK1aggil1PMQiDYBTykSe6tH7QoxGRfEogmQOQrSabM9fmTiHwC/HO
+         B/9eAxEj43tXsc4hpqIO8tdODzg/Wlvn3gApmg7HLpuXdFUyP7lb31F6CTrCXiAUv7cz
+         hTtBwK10F7fsAgeBt5pL5EsykaW64OXXtK4m43wqHx6A4n5o8bOJAfpdqHipavdcI1d2
+         pBfimBl2HInyUuxd+uCPtYjSG1Dv3Uudes6ioU3UIBsVl03WlNV6z5sJ0JTtzKYmmYlp
+         2uOA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJTGRt4QgN2P8PenBP87QpjSmhnKo1vl4B0M4kCKKzcWOnO1cQWrKRY/MAeovCLo5sOByVrX/f1cNk@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxVekzpIBmzyHGsyICUb5lOibBlWgxzJr7F/pe8o8cwDhvXMW3
+	rAdQg8OAJheGG/1ZPFZK1gaM1/iDdDDZJkK5di5Wq8z4yUnj6A3ePSJVVZ1x0TmO
+X-Gm-Gg: ASbGncs8vOGPu+q+LjYybChrjlkr6OAaPRt+1kpqzLD5pe4d9zeat+13q/V7Z5l5Gj7
+	iCtxnRGc9syKxi4Z9pzWotO6lIiNbYqiLBAqLHyHkprMFOrNPoqNQo5jEvICu6WAskT+kKVSFoA
+	T0t6dflpZYCdc0Wok6kVdexjsx9f9zpyXNW0UYmwDX8nzbTJoqPP73Or7hTGwd98QoBhWSXd/Dp
+	C+f6Jur2PSyeGJF4SqHJA2m4mCX3VaqZpRwc5UtbxjK7qs++QeYu1KHIuMHVzWeDYsPMUBhVUHR
+	s8tbwIGVmluulb1UO99QUl3VBEMDM7GX35jF7ZO6UGz14cWbNv+PT7SOD8jtQlCOh/seFY1pDhJ
+	n6uiK6A35rh5D2MkSnsFf8xU6EZucH5/nkr/pG0mSc5nM2UWr1dVflqbp2k/lQypnwgS3TcSUqC
+	p57q1JcQkM9KBZgfPbp29tt8AoltCXHlwEYvwfWx3KQtWuxrmsAVob5bcF
+X-Google-Smtp-Source: AGHT+IFmuLdtYMKJ/9O+JO2ssJKkVBHG7SY1Rgz/AgabNKICOZ6vuE9Q8CWBTfm57dQ+M9XGPPjhrQ==
+X-Received: by 2002:a17:903:24f:b0:295:24c3:8b49 with SMTP id d9443c01a7336-29524c38fcdmr146670175ad.46.1762165070425;
+        Mon, 03 Nov 2025 02:17:50 -0800 (PST)
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com. [209.85.215.182])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2959e4e598csm43721525ad.36.2025.11.03.02.17.50
+        for <linux-edac@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Nov 2025 02:17:50 -0800 (PST)
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b98a619f020so1354434a12.2
+        for <linux-edac@vger.kernel.org>; Mon, 03 Nov 2025 02:17:50 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU3lG+TfRG4cruPjcn73y5biPZt1GGfwpj6bW+WvbPZ8C6X43WeaEFkto5NacN/kaZAI54urlv2iuGo@vger.kernel.org
+X-Received: by 2002:a05:6102:418d:b0:5db:f031:84ce with SMTP id
+ ada2fe7eead31-5dbf031902dmr85155137.29.1762164587067; Mon, 03 Nov 2025
+ 02:09:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemj100009.china.huawei.com (7.202.194.3)
+References: <cover.1761588465.git.geert+renesas@glider.be> <97549838f28a1bb7861cfb42ee687f832942b13a.1761588465.git.geert+renesas@glider.be>
+ <20251102104326.0f1db96a@jic23-huawei>
+In-Reply-To: <20251102104326.0f1db96a@jic23-huawei>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 3 Nov 2025 11:09:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUkm2hxSW1yeKn8kZkSrosr8V-QTrHKSMkY2CPJ8UH_BQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bmxzzzgoIljXMDy5wJmHF15bg4ZKICGjY8c2_gWom3ME9XAPzMw0ghLXn4
+Message-ID: <CAMuHMdUkm2hxSW1yeKn8kZkSrosr8V-QTrHKSMkY2CPJ8UH_BQ@mail.gmail.com>
+Subject: Re: [PATCH -next v5 10/23] iio: imu: smi330: #undef
+ field_{get,prep}() before definition
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	David Miller <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, 
+	Lars-Peter Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Shan-Chun Hung <schung@nuvoton.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>, 
+	David Laight <david.laight.linux@gmail.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	Michael Hennerich <Michael.Hennerich@analog.com>, Kim Seer Paller <kimseer.paller@analog.com>, 
+	David Lechner <dlechner@baylibre.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Richard Genoud <richard.genoud@bootlin.com>, 
+	Cosmin Tanislav <demonsingur@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Jianping Shen <Jianping.Shen@de.bosch.com>, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org, qat-linux@intel.com, 
+	linux-gpio@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
+	linux-iio@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The commit 97f0b13452198290799f ("tracing: add trace event for
-memory-failure") introduces the selection of RAS in memory-failure.
-This commit is just a tracing feature; in reality, there is no dependency
-between memory-failure and RAS. RAS increases the size of the bzImage
-image by 8k, which is very valuable for embedded devices.
+Hi Jonathan,
 
-Signed-off-by: Xie Yuanbin <xieyuanbin1@huawei.com>
----
- mm/Kconfig          | 1 -
- mm/memory-failure.c | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
+On Sun, 2 Nov 2025 at 11:43, Jonathan Cameron <jic23@kernel.org> wrote:
+> On Mon, 27 Oct 2025 19:41:44 +0100
+> Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+>
+> > Prepare for the advent of globally available common field_get() and
+> > field_prep() macros by undefining the symbols before defining local
+> > variants.  This prevents redefinition warnings from the C preprocessor
+> > when introducing the common macros later.
+> >
+> > Suggested-by: Yury Norov <yury.norov@gmail.com>
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> So this is going to make a mess of merging your series given this is
+> queued up for next merge window.
+>
+> I can pick this one up perhaps and we loop back to the replacement of
+> these in a future patch?  Or perhaps go instead with a rename
+> of these two which is probably nicer in the intermediate state than
+> undefs.
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index a5a90b169435..c3a8e0ba1ac1 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -738,11 +738,10 @@ config ARCH_SUPPORTS_MEMORY_FAILURE
- 
- config MEMORY_FAILURE
- 	depends on MMU
- 	depends on ARCH_SUPPORTS_MEMORY_FAILURE
- 	bool "Enable recovery from hardware memory errors"
--	select RAS
- 	help
- 	  Enables code to recover from some memory failures on systems
- 	  with MCA recovery. This allows a system to continue running
- 	  even when some of its memory has uncorrected errors. This requires
- 	  special hardware support and typically ECC memory.
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index f698df156bf8..baf2bd79b2fb 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1276,11 +1276,13 @@ static void update_per_node_mf_stats(unsigned long pfn,
-  * setting PG_dirty outside page lock. See also comment above set_page_dirty().
-  */
- static int action_result(unsigned long pfn, enum mf_action_page_type type,
- 			 enum mf_result result)
- {
-+#ifdef CONFIG_RAS
- 	trace_memory_failure_event(pfn, type, result);
-+#endif
- 
- 	if (type != MF_MSG_ALREADY_POISONED) {
- 		num_poisoned_pages_inc(pfn);
- 		update_per_node_mf_stats(pfn, result);
- 	}
+Renaming would mean a lot of churn.
+Just picking up the #undef patch should be simple and safe? The
+removal of the underf and redef can be done in the next cycle.
+Thanks!
+
+> > --- a/drivers/iio/imu/smi330/smi330_core.c
+> > +++ b/drivers/iio/imu/smi330/smi330_core.c
+> > @@ -68,7 +68,9 @@
+> >  #define SMI330_SOFT_RESET_DELAY 2000
+> >
+> >  /* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
+> > +#undef field_get
+> >  #define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> > +#undef field_prep
+> >  #define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
+> >
+> >  #define SMI330_ACCEL_CHANNEL(_axis) {                                        \
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.51.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
