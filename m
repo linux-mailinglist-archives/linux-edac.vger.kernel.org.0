@@ -1,48 +1,46 @@
-Return-Path: <linux-edac+bounces-5314-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5315-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44B39C30541
-	for <lists+linux-edac@lfdr.de>; Tue, 04 Nov 2025 10:46:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67F96C30535
+	for <lists+linux-edac@lfdr.de>; Tue, 04 Nov 2025 10:46:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 065493AB32B
-	for <lists+linux-edac@lfdr.de>; Tue,  4 Nov 2025 09:33:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59DAC3AD3C2
+	for <lists+linux-edac@lfdr.de>; Tue,  4 Nov 2025 09:34:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2FCC2D062E;
-	Tue,  4 Nov 2025 09:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10352C326F;
+	Tue,  4 Nov 2025 09:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWYajnxB"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="D0rY8gFg"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30A92D12EF;
-	Tue,  4 Nov 2025 09:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C551552FD;
+	Tue,  4 Nov 2025 09:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762248828; cv=none; b=elxmupSfiiJlvWrodsZI3qznm6iaNbYgvqpRV70+FPSljhTXU9eIGnt5vV/IfP7HEb+ibnGybmL4HyXO85AowLKmepe/JPlNzHfArAcnTprbM9PWTRt1cCWIsCyJ1A40+E8LRhxh/NyQWG81fh5MXoq4rRpuxVdgn28T9rO3lus=
+	t=1762248880; cv=none; b=q1WcHgNCK85xzNhek3A7136lZwNpG9w1jbKzRXneA3nqsBtESPnaxaiKbzks05PilAg1jXwWBrTmr8QfwedOrAxG7GmdIA347ncnjml/F2isIP3j8nquzeydIWg5EkAw+pgPaEMxrIyGXJ8noUBgSLiy152e3JSaRlQhrUo8N7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762248828; c=relaxed/simple;
-	bh=W8xOsfIs+FLN84wwq7ugJWJ2PpWVMPpw+o5LSPIz4yc=;
+	s=arc-20240116; t=1762248880; c=relaxed/simple;
+	bh=fEVAyXwFyCE8r5KT4F927V7DbCxgjOnCllkSXe4iing=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=unDeEM4IiHMnUWobOEjCwbH+IHuKYObiVTKJzc1/4fKb6uTvNG1ak9+9ezbLH6hn2pFpmOof1AgmVNkMVQIAhPn8HSOIClO1jWeHHYNrten/XfOCSos4/0+Lr1yDaz0qJuaRn1tCecz9Dj+m9+49SE1d50XVbuFYGBI7ESAiQuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWYajnxB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F5A0C4CEF7;
-	Tue,  4 Nov 2025 09:33:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762248827;
-	bh=W8xOsfIs+FLN84wwq7ugJWJ2PpWVMPpw+o5LSPIz4yc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kWYajnxBp06uW/Fbs79kSGCpFkkJissFIjAueVxphZmrNwxcidb952mL7jDfxfeEM
-	 XJMcOLucCMvioxcRc3UuMhSygFZ8zEozO1os6GUUCJTgBUum6a2NOM8ycJBo5ZvRTh
-	 q4qL41VoYqesUXOIgnoz2xmQhohvfe/NCRDL5wM4+B6SkjG2MOumm3OV53+g5VcYQv
-	 Ey0IZONjjtkNzP6gyl/+Tqlhe8/uPT5DclF3GHsppa3KQJ96pMpc05bLsXTfHlyR57
-	 BgWJpdf/tcA4ihoVrCkv2IXq5pvCtMkA2PH3WTW6bAMPkRrAoKbNn6oZhbldp6jDjX
-	 lisGYz+Rk0wDg==
-Message-ID: <1b316667-470b-4e1a-9c18-e42571e4769c@kernel.org>
-Date: Tue, 4 Nov 2025 10:33:39 +0100
+	 In-Reply-To:Content-Type; b=JqQ/ekI3lxGy0kcndZbHVdgYdCEtDkIrCkvjhkWJmBDv2Vw+X22wiuN/OeOyQx0xP7O+lHR2Reh5obXuNRfA8nVY4sX/fkmeMQOLVS6zAYdcKGNeYoGpfFkl45qw2ouZlCoayfn1TNzbrCLQC/cX1cji6Z9pmkc2GfAzep5qU5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=D0rY8gFg; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1762248869; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=lNLhVwUKGHNYLggea58Uh2dC8gupkSgEBYYu/uld89Y=;
+	b=D0rY8gFgsqc9kIfoXchkwki2/IWkuoWXbQCl0wS5jo19ZgG44j2mR9m6IIeTmOf3DZeyMK4yTySNgNY4AzQGohMAXENtlhMR0Q58hXLHmspikFvP0Twas9gupUESkOdnZTWZH5gaDCg4ZmuktJG85PVcsn1+c6354A7bFz0j2sA=
+Received: from 30.50.185.91(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WrgbbAl_1762248866 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 04 Nov 2025 17:34:27 +0800
+Message-ID: <1f9ee237-9d62-4c33-83c3-ce4d9ca9497f@linux.alibaba.com>
+Date: Tue, 4 Nov 2025 17:34:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -50,48 +48,76 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] x86/mm: support memory-failure on 32-bits with
- SPARSEMEM
-To: Xie Yuanbin <xieyuanbin1@huawei.com>, david@redhat.com,
- dave.hansen@intel.com, bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, hpa@zytor.com, akpm@linux-foundation.org,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, linmiaohe@huawei.com,
- nao.horiguchi@gmail.com, luto@kernel.org, peterz@infradead.org,
- tony.luck@intel.com
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-edac@vger.kernel.org, will@kernel.org, liaohua4@huawei.com,
- lilinjie8@huawei.com
-References: <20251104072306.100738-1-xieyuanbin1@huawei.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20251104072306.100738-1-xieyuanbin1@huawei.com>
+Subject: Re: [PATCH v13 0/3] PCI: trace: Add a RAS tracepoint to monitor link
+ speed changes
+To: Bjorn Helgaas <bhelgaas@google.com>
+Cc: tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
+ davem@davemloft.net, anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
+ peterz@infradead.org, tianruidong@linux.alibaba.com, rostedt@goodmis.org,
+ lukas@wunner.de, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ helgaas@kernel.org, ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
+ Jonathan.Cameron@huawei.com
+References: <20251025114158.71714-1-xueshuai@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20251025114158.71714-1-xueshuai@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04.11.25 08:23, Xie Yuanbin wrote:
-> Memory bit flips are among the most common hardware errors in the server
-> and embedded fields, many hardware components have memory verification
-> mechanisms, for example ECC. When an error is detected, some hardware or
-> architectures report the information to software (OS/BIOS), for example,
-> the MCE (Machine Check Exception) on x86.
+
+
+在 2025/10/25 19:41, Shuai Xue 写道:
+> changes since v12:
+> - add Reviewed-by tag for PATCH 1 from Steve
+> - add Reviewed-by tag for PATCH 1-3 from Ilpo
+> - add comments for why use string to define tracepoint per Steve
+> - minor doc improvements from Ilpo
+> - remove use pci_speed_string to fix PCI dependends which cause build error on sparc64
 > 
-> Common errors include CE (Correctable Errors) and UE (Uncorrectable
-> Errors). When the kernel receives memory error information, if it has the
-> memory-failure feature, it can better handle memory errors without reboot.
-> For example, kernel can attempt to offline the affected memory by
-> migrating it or killing the process. Therefore, this feature is widely
-> used in servers and embedded fields.
+> changes since v11:
+> - rebase to Linux 6.18-rc1 (no functional changes)
+> 
+> changes since v10:
+> - explicitly include header file per Ilpo
+> - add comma on any non-terminator entry  per Ilpo
+> - compile trace.o under CONFIG_TRACING per Ilpo
+> 
+> changes since v9:
+> - add a documentation about PCI tracepoints per Bjorn
+> - create a dedicated drivers/pci/trace.c that always defines the PCI tracepoints per Steve
+> - move tracepoint callite into __pcie_update_link_speed() per Lukas and Bjorn
+> 
+> changes since v8:
+> - rewrite commit log from Bjorn
+> - move pci_hp_event to a common place (include/trace/events/pci.h) per Ilpo
+> - rename hotplug event strings per Bjorn and Lukas
+> - add PCIe link tracepoint per Bjorn, Lukas, and Ilpo
+> 
+> changes since v7:
+> - replace the TRACE_INCLUDE_PATH to avoid macro conflict per Steven
+> - pick up Reviewed-by from Lukas Wunner
+> 
+> Hotplug events are critical indicators for analyzing hardware health, and
+> surprise link downs can significantly impact system performance and reliability.
+> In addition, PCIe link speed degradation directly impacts system performance and
+> often indicates hardware issues such as faulty devices, physical layer problems,
+> or configuration errors.
+> 
+> This patch set add PCI hotplug and PCIe link tracepoint to help analyze PCI
+> hotplug events and PCIe link speed degradation.
+> 
+> Shuai Xue (3):
+>    PCI: trace: Add a generic RAS tracepoint for hotplug event
+>    PCI: trace: Add a RAS tracepoint to monitor link speed changes
+>    Documentation: tracing: Add documentation about PCI tracepoints
+> 
 
-This is a pretty generic description of MCEs.
+Hi, Bjorn,
 
-I think what we are missing is: who runs 32bit OSes on MCE-capable 
-hardware (or VMs?) and needs this to work.
+Gentle ping.
 
-What's the use case?
+Do you have any further concerns about this patch set?
 
--- 
-Cheers
-
-David
+Shuai
 
