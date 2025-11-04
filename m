@@ -1,79 +1,102 @@
-Return-Path: <linux-edac+bounces-5303-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5304-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2055C2E60C
-	for <lists+linux-edac@lfdr.de>; Tue, 04 Nov 2025 00:08:10 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF4E5C2EBC7
+	for <lists+linux-edac@lfdr.de>; Tue, 04 Nov 2025 02:23:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EBA654E4339
-	for <lists+linux-edac@lfdr.de>; Mon,  3 Nov 2025 23:07:31 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5A35934C48B
+	for <lists+linux-edac@lfdr.de>; Tue,  4 Nov 2025 01:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105B82FD1C2;
-	Mon,  3 Nov 2025 23:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WqtkZ31A"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CE12212548;
+	Tue,  4 Nov 2025 01:23:50 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0642EFDA5;
-	Mon,  3 Nov 2025 23:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED5E1A5BB4;
+	Tue,  4 Nov 2025 01:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762211249; cv=none; b=juBLIT9EYf81OtYlUB3bBAXOjChqH0zCi+mQXOVvV/ZkjjLR2HzrH87IPS4myl0Bv4qJlvxijv1PWR2sXO7Om5bXicoJdhcvq/ItJjCDNFnvotltQHpEIpEObmlvUVB8QyxlkQfqfh65HEfmKmXOosy7AM8fwHJ1Z4dgv6qSSW8=
+	t=1762219430; cv=none; b=YOTNpeuiLiE49d6s/UI7cMH71m/RmJmVodkxyKdF4T9J1JLSUazXiw1QNCnUdUX5FuKts8rwjHIc7Q77Z1fmWAtR8PjXR3li9n74Xc5I+aXu0MejFdrZPUNYsIOaDhPON7mcQpFeX/5CJ6NdYAkzQeEBd2avtJtcaKHzZedM8po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762211249; c=relaxed/simple;
-	bh=OMVS4a5vTHm5CQ4is8lSPAja+uMe69qUq5lJcXWmYB0=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FJHgq1Txs11Q2FNefYcaUrUmBCpAY7pjFST5CTzd+2RTx0Ea0osNySA332BDKaQdAAy6EexKtszoCI9ynZEgh6MEVOymqctwOIjh8x8tsAz1BuNRoU7jhM1pMB2TRTZc6CcOUDNzGNtAceKOOS1gIAhT5baRJEiMfgEpwgpauWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WqtkZ31A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73780C4CEE7;
-	Mon,  3 Nov 2025 23:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762211248;
-	bh=OMVS4a5vTHm5CQ4is8lSPAja+uMe69qUq5lJcXWmYB0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=WqtkZ31AxTGsOx54hTC6u5yISP2pPTQsi9fFFns6uKm6wOdMdGnlREhUSNgzhNWA+
-	 Vknodrnh4+eafOEg5rSZKw8OdRUXhUk3IwFiOxx9fYrhfJSPgZqrcn5cgOP3TziR/r
-	 WotwH4sEITqKpE2D9t9tOJJwOC0jKnp4l03lnzpB9KturTkyMQDYj4gnKCoZ3pF0G1
-	 dhDyKnicFuBqNwQ1g0DZ51OnVMRF6NeIRe8mRzRlH1v3QPmObB4qESLX0fTi4K7bV3
-	 6jV8wpyCQksGeX29ml0svrtEAs8JPN2Ef8NiVz1I5KM4bp/U9ReY09OadW84mxOK+G
-	 KTOd4pj7xEn7Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB45C3809A88;
-	Mon,  3 Nov 2025 23:07:03 +0000 (UTC)
-Subject: Re: [GIT PULL] EDAC urgent for v6.18-rc5
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20251103114438.GAaQiVpgXgECnocHvE@fat_crate.local>
-References: <20251103114438.GAaQiVpgXgECnocHvE@fat_crate.local>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20251103114438.GAaQiVpgXgECnocHvE@fat_crate.local>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.18_rc5
-X-PR-Tracked-Commit-Id: 79c0a2b7abc906c7cf3c793256c6b638d7dc477f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8bb886cb8f3a2811430ddb7d9838e245c57e7f7c
-Message-Id: <176221122260.2247133.18130206432088503298.pr-tracker-bot@kernel.org>
-Date: Mon, 03 Nov 2025 23:07:02 +0000
-To: Borislav Petkov <bp@alien8.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-edac <linux-edac@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1762219430; c=relaxed/simple;
+	bh=5Zm4kec9TgBkqZ7eh13MO0AlfoPfVZq8y6OXDMWw8Jg=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=teFguBp33vgTS+mGRcMW6aavtbsX1y64RBlyR87uFR3cxyhlyuNThkAlpHTAGtLb3lCyhzfbFXauK5F3ow/PvqT5k0yHJsZRxNht4T2LEwV5OT68MA4zdS/7x8idw0bSSH8Vms82uU0n3xpjt1GQsBmfjDVnWDxMe+wr9p7MOY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [202.112.113.212])
+	by APP-05 (Coremail) with SMTP id zQCowADHcO+GVQlpw8paAQ--.25136S2;
+	Tue, 04 Nov 2025 09:23:28 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: jbaron@akamai.com,
+	bp@alien8.de,
+	tony.luck@intel.com,
+	qiuxu.zhuo@intel.com
+Cc: linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	Ma Ke <make24@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] EDAC/ie31200: Fix error handling in ie31200_register_mci
+Date: Tue,  4 Nov 2025 09:23:17 +0800
+Message-Id: <20251104012317.34637-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:zQCowADHcO+GVQlpw8paAQ--.25136S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruw47ZF43try8Jr4kZFyrWFg_yoWfuFb_W3
+	WFv3y7Xr1qgr1vyr17Jw43urySkF9F9rn3GFW2gFy3J3W3ZF4DXw4DWFyUtr429a9rWFyD
+	Ja4jgry7Jr1xKjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbTxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+	4UJVW0owAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+	x2IErcIFxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrw
+	CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+	14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+	IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
+	x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+	0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb9mitUUUUU==
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 
-The pull request you sent on Mon, 3 Nov 2025 12:44:38 +0100:
+When mc > 0, ie31200_register_mci() initializes priv->dev but fails to
+call put_device() on it in the error path, causing a memory leak. Add
+proper put_device() call for priv->dev in the error handling path to
+balance device_initialize().
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_urgent_for_v6.18_rc5
+Found by code review.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8bb886cb8f3a2811430ddb7d9838e245c57e7f7c
+Cc: stable@vger.kernel.org
+Fixes: d0742284ec6d ("EDAC/ie31200: Add Intel Raptor Lake-S SoCs support")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+---
+ drivers/edac/ie31200_edac.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thank you!
-
+diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
+index 5a080ab65476..a5a4bb24b72a 100644
+--- a/drivers/edac/ie31200_edac.c
++++ b/drivers/edac/ie31200_edac.c
+@@ -528,6 +528,8 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, in
+ fail_unmap:
+ 	iounmap(window);
+ fail_free:
++	if (mc > 0)
++		put_device(&priv->dev);
+ 	edac_mc_free(mci);
+ 	return ret;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.17.1
+
 
