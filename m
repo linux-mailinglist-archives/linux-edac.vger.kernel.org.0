@@ -1,46 +1,48 @@
-Return-Path: <linux-edac+bounces-5315-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5316-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67F96C30535
-	for <lists+linux-edac@lfdr.de>; Tue, 04 Nov 2025 10:46:07 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43DCEC304C6
+	for <lists+linux-edac@lfdr.de>; Tue, 04 Nov 2025 10:39:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59DAC3AD3C2
-	for <lists+linux-edac@lfdr.de>; Tue,  4 Nov 2025 09:34:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8843134D559
+	for <lists+linux-edac@lfdr.de>; Tue,  4 Nov 2025 09:39:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10352C326F;
-	Tue,  4 Nov 2025 09:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0F5296BC2;
+	Tue,  4 Nov 2025 09:39:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="D0rY8gFg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZFQJVcMz"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C551552FD;
-	Tue,  4 Nov 2025 09:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0F62D7BF;
+	Tue,  4 Nov 2025 09:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762248880; cv=none; b=q1WcHgNCK85xzNhek3A7136lZwNpG9w1jbKzRXneA3nqsBtESPnaxaiKbzks05PilAg1jXwWBrTmr8QfwedOrAxG7GmdIA347ncnjml/F2isIP3j8nquzeydIWg5EkAw+pgPaEMxrIyGXJ8noUBgSLiy152e3JSaRlQhrUo8N7Q=
+	t=1762249143; cv=none; b=VhoAtxAxGm5WjjDuJXFRXrL+pNy7TqRN1wXgB6dLs3WJHPL6B5Jnd2FiWr4w4IbfzL6sehbheFj84816LS24PGsaZS+u3OYslIvdTnQ6c4b92yOw8bgWiTs+D0K+v8y/3PzDKIKGyTDxJkaraF0RCC57xRci4KDwAF0fZW7sY40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762248880; c=relaxed/simple;
-	bh=fEVAyXwFyCE8r5KT4F927V7DbCxgjOnCllkSXe4iing=;
+	s=arc-20240116; t=1762249143; c=relaxed/simple;
+	bh=yCvLd6/nomDiRwqOxlI7HgKTubggDv3X7Fw8HkVVE90=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JqQ/ekI3lxGy0kcndZbHVdgYdCEtDkIrCkvjhkWJmBDv2Vw+X22wiuN/OeOyQx0xP7O+lHR2Reh5obXuNRfA8nVY4sX/fkmeMQOLVS6zAYdcKGNeYoGpfFkl45qw2ouZlCoayfn1TNzbrCLQC/cX1cji6Z9pmkc2GfAzep5qU5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=D0rY8gFg; arc=none smtp.client-ip=115.124.30.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1762248869; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=lNLhVwUKGHNYLggea58Uh2dC8gupkSgEBYYu/uld89Y=;
-	b=D0rY8gFgsqc9kIfoXchkwki2/IWkuoWXbQCl0wS5jo19ZgG44j2mR9m6IIeTmOf3DZeyMK4yTySNgNY4AzQGohMAXENtlhMR0Q58hXLHmspikFvP0Twas9gupUESkOdnZTWZH5gaDCg4ZmuktJG85PVcsn1+c6354A7bFz0j2sA=
-Received: from 30.50.185.91(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WrgbbAl_1762248866 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 04 Nov 2025 17:34:27 +0800
-Message-ID: <1f9ee237-9d62-4c33-83c3-ce4d9ca9497f@linux.alibaba.com>
-Date: Tue, 4 Nov 2025 17:34:26 +0800
+	 In-Reply-To:Content-Type; b=ZUZmxd6eAA/M0n7ueahf0n5azKFP6xkvly+sCf3Yhy8UXUegbdVyu7ybKf9QsSH9UTTI5q4ZyEN7A3EBCAeefbkfRY6JAbRFGjGUxT2vnxTaqNs7fHXXzCnx0W0h5XG7I4J2B63oBIzsUOvYcSmm+g78COkUOPIB2DGhCesSBCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZFQJVcMz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B021DC16AAE;
+	Tue,  4 Nov 2025 09:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762249143;
+	bh=yCvLd6/nomDiRwqOxlI7HgKTubggDv3X7Fw8HkVVE90=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZFQJVcMzqNmStko7xcWsrOQU2jsh+T1CI46vYG7MnzH0iwjcfZAn6Iq4VUzTsLeFv
+	 EDzRxhDVpIdsBW7iHYlhsuhz8JZKZ+EfC7eqTQZjkhD5UGaB/yZ+eUzyqR2lf+hfTU
+	 RvSHzngbGZs3QS7uoyr/8slXk3r5d0MZT3i0lKwcZ8ryBtKSjdU4Rj+F2Mxdw+XEWS
+	 6LvvRwC5JqOArtOvAwEwGHqwxJqINAQ4R3zhvb+r31uCmFRLofuAX6m2wGXjxdySf/
+	 JA1nk5xWCsQ9/OWkCIAejRBF4rCVeNopvCjP4zEpewQbzFb/fi6GPJ9S/8eZxc/gki
+	 PIYs8bzyFG+Iw==
+Message-ID: <01b44e0f-ea2e-406f-9f65-b698b5504f42@kernel.org>
+Date: Tue, 4 Nov 2025 10:38:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -48,76 +50,156 @@ List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 0/3] PCI: trace: Add a RAS tracepoint to monitor link
- speed changes
-To: Bjorn Helgaas <bhelgaas@google.com>
-Cc: tony.luck@intel.com, bp@alien8.de, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, oleg@redhat.com, naveen@kernel.org,
- davem@davemloft.net, anil.s.keshavamurthy@intel.com, mark.rutland@arm.com,
- peterz@infradead.org, tianruidong@linux.alibaba.com, rostedt@goodmis.org,
- lukas@wunner.de, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- helgaas@kernel.org, ilpo.jarvinen@linux.intel.com, mattc@purestorage.com,
- Jonathan.Cameron@huawei.com
-References: <20251025114158.71714-1-xueshuai@linux.alibaba.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20251025114158.71714-1-xueshuai@linux.alibaba.com>
+Subject: Re: [PATCH v2 2/2] mm/memory-failure: remove the selection of RAS
+To: Xie Yuanbin <xieyuanbin1@huawei.com>, david@redhat.com,
+ dave.hansen@intel.com, bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
+ dave.hansen@linux.intel.com, hpa@zytor.com, akpm@linux-foundation.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, linmiaohe@huawei.com,
+ nao.horiguchi@gmail.com, luto@kernel.org, peterz@infradead.org,
+ tony.luck@intel.com
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-edac@vger.kernel.org, will@kernel.org, liaohua4@huawei.com,
+ lilinjie8@huawei.com
+References: <20251104072306.100738-1-xieyuanbin1@huawei.com>
+ <20251104072306.100738-3-xieyuanbin1@huawei.com>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251104072306.100738-3-xieyuanbin1@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+
+On 04.11.25 08:23, Xie Yuanbin wrote:
+> The commit 97f0b13452198290799f ("tracing: add trace event for
+> memory-failure") introduces the selection of RAS in memory-failure.
+> This commit is just a tracing feature; in reality, there is no dependency
+> between memory-failure and RAS. RAS increases the size of the bzImage
+> image by 8k, which is very valuable for embedded devices.
+> 
+> Move the memory-failure traceing code from ras_event.h to
+> memory-failure.h and remove the selection of RAS.
+> 
+> Signed-off-by: Xie Yuanbin <xieyuanbin1@huawei.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> ---
+
+[...]
+
+> +++ b/include/trace/events/memory-failure.h
+> @@ -0,0 +1,97 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM ras
+
+This trace system should not be called "ras". All RAS terminology should 
+be removed here.
+
+#define TRACE_SYSTEM memory_failure
+
+> +#define TRACE_INCLUDE_FILE memory-failure
+> +
+> +#if !defined(_TRACE_MEMORY_FAILURE_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_MEMORY_FAILURE_H
+> +
+> +#include <linux/tracepoint.h>
+> +#include <linux/mm.h>
+> +
+> +/*
+> + * memory-failure recovery action result event
+> + *
+> + * unsigned long pfn -	Page Frame Number of the corrupted page
+> + * int type	-	Page types of the corrupted page
+> + * int result	-	Result of recovery action
+> + */
+> +
+> +#define MF_ACTION_RESULT	\
+> +	EM ( MF_IGNORED, "Ignored" )	\
+> +	EM ( MF_FAILED,  "Failed" )	\
+> +	EM ( MF_DELAYED, "Delayed" )	\
+> +	EMe ( MF_RECOVERED, "Recovered" )
+> +
+> +#define MF_PAGE_TYPE		\
+> +	EM ( MF_MSG_KERNEL, "reserved kernel page" )			\
+> +	EM ( MF_MSG_KERNEL_HIGH_ORDER, "high-order kernel page" )	\
+> +	EM ( MF_MSG_HUGE, "huge page" )					\
+> +	EM ( MF_MSG_FREE_HUGE, "free huge page" )			\
+> +	EM ( MF_MSG_GET_HWPOISON, "get hwpoison page" )			\
+> +	EM ( MF_MSG_UNMAP_FAILED, "unmapping failed page" )		\
+> +	EM ( MF_MSG_DIRTY_SWAPCACHE, "dirty swapcache page" )		\
+> +	EM ( MF_MSG_CLEAN_SWAPCACHE, "clean swapcache page" )		\
+> +	EM ( MF_MSG_DIRTY_MLOCKED_LRU, "dirty mlocked LRU page" )	\
+> +	EM ( MF_MSG_CLEAN_MLOCKED_LRU, "clean mlocked LRU page" )	\
+> +	EM ( MF_MSG_DIRTY_UNEVICTABLE_LRU, "dirty unevictable LRU page" )	\
+> +	EM ( MF_MSG_CLEAN_UNEVICTABLE_LRU, "clean unevictable LRU page" )	\
+> +	EM ( MF_MSG_DIRTY_LRU, "dirty LRU page" )			\
+> +	EM ( MF_MSG_CLEAN_LRU, "clean LRU page" )			\
+> +	EM ( MF_MSG_TRUNCATED_LRU, "already truncated LRU page" )	\
+> +	EM ( MF_MSG_BUDDY, "free buddy page" )				\
+> +	EM ( MF_MSG_DAX, "dax page" )					\
+> +	EM ( MF_MSG_UNSPLIT_THP, "unsplit thp" )			\
+> +	EM ( MF_MSG_ALREADY_POISONED, "already poisoned" )		\
+> +	EMe ( MF_MSG_UNKNOWN, "unknown page" )
+> +
+> +/*
+> + * First define the enums in MM_ACTION_RESULT to be exported to userspace
+> + * via TRACE_DEFINE_ENUM().
+> + */
+> +#undef EM
+> +#undef EMe
+> +#define EM(a, b) TRACE_DEFINE_ENUM(a);
+> +#define EMe(a, b)	TRACE_DEFINE_ENUM(a);
+> +
+> +MF_ACTION_RESULT
+> +MF_PAGE_TYPE
+> +
+> +/*
+> + * Now redefine the EM() and EMe() macros to map the enums to the strings
+> + * that will be printed in the output.
+> + */
+> +#undef EM
+> +#undef EMe
+> +#define EM(a, b)		{ a, b },
+> +#define EMe(a, b)	{ a, b }
+> +
+> +TRACE_EVENT(memory_failure_event,
+> +	TP_PROTO(unsigned long pfn,
+> +		 int type,
+> +		 int result),
+> +
+> +	TP_ARGS(pfn, type, result),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(unsigned long, pfn)
+> +		__field(int, type)
+> +		__field(int, result)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->pfn	= pfn;
+> +		__entry->type	= type;
+> +		__entry->result	= result;
+> +	),
+> +
+> +	TP_printk("pfn %#lx: recovery action for %s: %s",
+> +		__entry->pfn,
+> +		__print_symbolic(__entry->type, MF_PAGE_TYPE),
+> +		__print_symbolic(__entry->result, MF_ACTION_RESULT)
+> +	)
+> +);
+> +#endif /* _TRACE_MEMORY_FAILURE_H */
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
 
 
+We want to add that new file to the "HWPOISON MEMORY FAILURE HANDLING" 
+section in MAINTAINERS.
 
-在 2025/10/25 19:41, Shuai Xue 写道:
-> changes since v12:
-> - add Reviewed-by tag for PATCH 1 from Steve
-> - add Reviewed-by tag for PATCH 1-3 from Ilpo
-> - add comments for why use string to define tracepoint per Steve
-> - minor doc improvements from Ilpo
-> - remove use pci_speed_string to fix PCI dependends which cause build error on sparc64
-> 
-> changes since v11:
-> - rebase to Linux 6.18-rc1 (no functional changes)
-> 
-> changes since v10:
-> - explicitly include header file per Ilpo
-> - add comma on any non-terminator entry  per Ilpo
-> - compile trace.o under CONFIG_TRACING per Ilpo
-> 
-> changes since v9:
-> - add a documentation about PCI tracepoints per Bjorn
-> - create a dedicated drivers/pci/trace.c that always defines the PCI tracepoints per Steve
-> - move tracepoint callite into __pcie_update_link_speed() per Lukas and Bjorn
-> 
-> changes since v8:
-> - rewrite commit log from Bjorn
-> - move pci_hp_event to a common place (include/trace/events/pci.h) per Ilpo
-> - rename hotplug event strings per Bjorn and Lukas
-> - add PCIe link tracepoint per Bjorn, Lukas, and Ilpo
-> 
-> changes since v7:
-> - replace the TRACE_INCLUDE_PATH to avoid macro conflict per Steven
-> - pick up Reviewed-by from Lukas Wunner
-> 
-> Hotplug events are critical indicators for analyzing hardware health, and
-> surprise link downs can significantly impact system performance and reliability.
-> In addition, PCIe link speed degradation directly impacts system performance and
-> often indicates hardware issues such as faulty devices, physical layer problems,
-> or configuration errors.
-> 
-> This patch set add PCI hotplug and PCIe link tracepoint to help analyze PCI
-> hotplug events and PCIe link speed degradation.
-> 
-> Shuai Xue (3):
->    PCI: trace: Add a generic RAS tracepoint for hotplug event
->    PCI: trace: Add a RAS tracepoint to monitor link speed changes
->    Documentation: tracing: Add documentation about PCI tracepoints
-> 
+Nothing else jumped at me.
 
-Hi, Bjorn,
+-- 
+Cheers
 
-Gentle ping.
-
-Do you have any further concerns about this patch set?
-
-Shuai
+David
 
