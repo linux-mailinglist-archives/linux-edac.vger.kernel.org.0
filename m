@@ -1,115 +1,105 @@
-Return-Path: <linux-edac+bounces-5339-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5340-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8616BC33C1E
-	for <lists+linux-edac@lfdr.de>; Wed, 05 Nov 2025 03:22:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE852C33CCC
+	for <lists+linux-edac@lfdr.de>; Wed, 05 Nov 2025 03:46:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AF853BD753
-	for <lists+linux-edac@lfdr.de>; Wed,  5 Nov 2025 02:22:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9A9664F0EFA
+	for <lists+linux-edac@lfdr.de>; Wed,  5 Nov 2025 02:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 371E7212548;
-	Wed,  5 Nov 2025 02:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34AFA248F69;
+	Wed,  5 Nov 2025 02:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="vTL06P1R"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1663515667D;
-	Wed,  5 Nov 2025 02:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E720E1E4AB;
+	Wed,  5 Nov 2025 02:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762309339; cv=none; b=dfutY5TAYfUN4PTdyqq/akqpg1E4VmqbjJCZj2rGINXXwv+saEbGKoLC8PafcOgtR7fkna2m9+3NGgx/07kspFwUeioQGnIjix+wtzeTmZKHsFJBTiQH7ZQXFim/AfrYlGJ+9G/pdn/wQ4Hk2pQ5lT1reE9hOJSOMarFP8bGPIQ=
+	t=1762310735; cv=none; b=fUQmMHZp3IE7z66IT0n+Hi/HL2bphmzTwfBClQmssofgCjCWsvJurR0BR93KhScLHJ2GQONBPPAD35k0GWYBtopO18vXpA6IwVI4jfK4KLANMK76v9UVjHISqAHLwpkoMzScHJyoYkChv7HrSrlWCR17w6jGcsFYmQow+AK+Jjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762309339; c=relaxed/simple;
-	bh=jcyZCyiQ7gewPuCpVaJy9bKOKxzxJIXCuOhjXBHr0+M=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=e6T+KIDnrk4RRZV1EImlS5EfkMJu/TMWDwCwteQHBsPOPPfG+oWr0sniDfG2OtUW3wkaoyXAt05Noi0eyNVDuYx+ml89brH/y5SvV2f+M+nA1emqDMRIGA93GrfvWOEvkGQv+6fZsJebuBmPxKA0drxTe+3f6dTRNglxg0gD6aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost.localdomain (unknown [202.112.113.212])
-	by APP-05 (Coremail) with SMTP id zQCowABn1PK8tAppNWWQAQ--.8867S2;
-	Wed, 05 Nov 2025 10:21:58 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: jbaron@akamai.com,
-	bp@alien8.de,
-	tony.luck@intel.com,
-	qiuxu.zhuo@intel.com
-Cc: linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org,
-	Ma Ke <make24@iscas.ac.cn>
-Subject: [PATCH v2] EDAC/ie31200: Fix error handling in ie31200_register_mci
-Date: Wed,  5 Nov 2025 10:21:46 +0800
-Message-Id: <20251105022146.22105-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:zQCowABn1PK8tAppNWWQAQ--.8867S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF18Wr4Uuw13tw1DJr15CFg_yoW8Gryxpw
-	sxWas8AryDtw4vka18Zr18ZFy5uwsIka15AFWfC3y3GwnxZryvyFyktrWayFy8Aa92yFWa
-	qr98J3ykAr1UAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
-	x2IErcIFxwCY1x0262kKe7AKxVWUAVWUtwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr4
-	1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
-	67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
-	8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAv
-	wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-	v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUkHUDUUUUU=
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+	s=arc-20240116; t=1762310735; c=relaxed/simple;
+	bh=3Ggi/Q/B9Jjx+W4BbCfJWgLqE0uFZ19wuYTgC69T+VI=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BdTXOdOToyVCfKJK1j0dVBneoTcTOwImTFq0YI1cPgDfVpIZph/jALP0OeyU8px9jg8uVt1ygqBlTeO7sNHQqCgdDltLpzGG83nkvjvM/x/mmtMrBj75af7ikRGVBY6UKXCUM56YScDByA9ow0QA8JhKDh0aDUCGC9rkw2B10lI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=vTL06P1R; arc=none smtp.client-ip=113.46.200.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=3Ggi/Q/B9Jjx+W4BbCfJWgLqE0uFZ19wuYTgC69T+VI=;
+	b=vTL06P1RNNIlClyL1lwh43rq8s5bX7YszQJ7wdw8CC/98pbIztmydkexhOiDM2G6jZXESTZxf
+	cXKvc+YlXQZ3kj62CtgIImOwKDQu7K8qtyI/8e6oY/B+18Tic/Q6vYCPhzVlGjszt8XnRPSK0Yx
+	9j4OGKfkLgTJf7oa7VKtCos=
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4d1V5567bFzmV7D;
+	Wed,  5 Nov 2025 10:43:53 +0800 (CST)
+Received: from kwepemj100009.china.huawei.com (unknown [7.202.194.3])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0C2C4140156;
+	Wed,  5 Nov 2025 10:45:29 +0800 (CST)
+Received: from DESKTOP-A37P9LK.huawei.com (10.67.109.17) by
+ kwepemj100009.china.huawei.com (7.202.194.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 5 Nov 2025 10:45:27 +0800
+From: Xie Yuanbin <xieyuanbin1@huawei.com>
+To: <dave.hansen@intel.com>, <david@kernel.org>
+CC: <Liam.Howlett@oracle.com>, <akpm@linux-foundation.org>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <david@redhat.com>, <hpa@zytor.com>,
+	<liaohua4@huawei.com>, <lilinjie8@huawei.com>, <linmiaohe@huawei.com>,
+	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <lorenzo.stoakes@oracle.com>, <luto@kernel.org>,
+	<mhocko@suse.com>, <mingo@redhat.com>, <nao.horiguchi@gmail.com>,
+	<peterz@infradead.org>, <rppt@kernel.org>, <surenb@google.com>,
+	<tglx@linutronix.de>, <tony.luck@intel.com>, <vbabka@suse.cz>,
+	<will@kernel.org>, <x86@kernel.org>, <xieyuanbin1@huawei.com>
+Subject: Re: [PATCH v2 0/2] x86/mm: support memory-failure on 32-bits with SPARSEMEM
+Date: Wed, 5 Nov 2025 10:45:23 +0800
+Message-ID: <20251105024523.14300-1-xieyuanbin1@huawei.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <47b3e8ba-bc95-41ce-be0a-ddfd1323bab3@intel.com>
+References: <47b3e8ba-bc95-41ce-be0a-ddfd1323bab3@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemj100009.china.huawei.com (7.202.194.3)
 
-ie31200_register_mci() calls device_initialize() for priv->dev
-unconditionally. However, in the error path, put_device() is not
-called, leading to an imbalance. Similarly, in the unload path,
-put_device() is missing.
+On Tue, 4 Nov 2025 06:26:58 -0800, Dave Hansen wrote:
+> Which LLM generated that for you, btw?
 
-Although edac_mc_free() eventually frees the memory, it does not
-release the device initialized by device_initialize(). For code
-readability and proper pairing of device_initialize()/put_device(),
-add put_device() calls in both error and unload paths.
+I wrote this myself; LLM just helped me with the translation. My English
+isn't very good, so I apologize for any mistakes.
 
-Found by code review.
+> I wanted to know _specifically_ what kind of hardware or 32-bit
+> environment you wanted to support with this series, though.
 
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
----
-Changes in v2:
-- modified the patch, thanks for developer's suggestions;
-- removed Fixes line.
----
- drivers/edac/ie31200_edac.c | 2 ++
- 1 file changed, 2 insertions(+)
+I think I have explained it clearly enough in this email:
+Link: https://lore.kernel.org/20251104133254.145660-1-xieyuanbin1@huawei.com
 
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index 5a080ab65476..ea8fc0d5f347 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -528,6 +528,7 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, in
- fail_unmap:
- 	iounmap(window);
- fail_free:
-+	put_device(&priv->dev);
- 	edac_mc_free(mci);
- 	return ret;
- }
-@@ -598,6 +599,7 @@ static void ie31200_unregister_mcis(void)
- 		mci = priv->mci;
- 		edac_mc_del_mc(mci->pdev);
- 		iounmap(priv->window);
-+		put_device(&priv->dev);
- 		edac_mc_free(mci);
- 	}
- }
--- 
-2.17.1
+In simple terms, it refers to some old existing equipment and some
+embedded devices. More specifically, it includes some routers, switches,
+and similar devices. From what I know, there is no VM environment that
+using it.
+If you are asking about a specific CPU chip model, I'm sorry, but I may
+not be able to provide that information for you.
 
+Btw, why do you only ask about which x86_32 devices use memory-failure,
+but not which x86_32 devices use sparsemem? This patch just allows both
+to coexist, and perhaps both are important?
+
+Thanks!
+
+Xie Yuanbin
 
