@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5383-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5384-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEBA8C3B65B
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:47:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 467DEC3B70C
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:50:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A198B1AA421C
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:43:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40D225628F7
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9154A333753;
-	Thu,  6 Nov 2025 13:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0776F334375;
+	Thu,  6 Nov 2025 13:37:50 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B44C32C329;
-	Thu,  6 Nov 2025 13:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D092332E695;
+	Thu,  6 Nov 2025 13:37:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762436259; cv=none; b=LQAXcqeUKkJwn13/Dyjn300Wjx3h4W6c6dP5I0d/8UMpwyJ+jGHaJOAEV6SACQJKxNdPpO+tTMiSj5P2bm7Ei+Adlds/A3HPTK+Gxkp6h/AfbAXV+9mg5xB12lD/fn5fumAmWPTyyPsb6+cODwDtu0tjeWnm/DdicAEyH9xm+RA=
+	t=1762436269; cv=none; b=PSckF+DnBk9bU9fN8YrPzuv5IqyTtRoEPqd7k+heCpENFMygmq1+X+uMPisOJfcIhTuutrSem9xEuYyMHSAqmYOh5Mk0ylGf6u+5V9OI+1kWwF4zl38LtoAKPsNriYUZSc2Tc+YgrjxRGM5jmZV87of9VbTJ37ac9gccRTFGl/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762436259; c=relaxed/simple;
-	bh=ZNy76KJ20NwyTajsiOvwW1vaEd5b4EPjtpWn4DyG6Qc=;
+	s=arc-20240116; t=1762436269; c=relaxed/simple;
+	bh=xVbhDHaHzmPRP7lrfj89FekJo4CRr58UcvA57BSXGAE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iXqaAsKH7+WlHPDNMzPSvrZFMKVnBGtys/CxXrVRvV3bYqq0+KWjayoa1DyqeNAmYAbliR3o6YyJpv/mX1laB7dJhrancWBEAY3HxFdeRL8mwoIZieubTKttqF2czxGgY8/MJKludTWWemyRsM/O2/YIOoIGEu6xH01VhJ+DvgU=
+	 MIME-Version; b=tP8UWURELJZC186YpHgfTj8rD3gyboGezaXqA6WeUxbeMtvmhw2bm3VF7v2NXaCJ/ka757op2opZUiLWLzzGhY8GXwgIPfxGz1JOWuNq7MSgXmjZvYBgxks3/YehE6jbYAvZ/ueVySl0q2rNFPztWyNxo2y+ynH0iGzMhguhUf0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F99C19421;
-	Thu,  6 Nov 2025 13:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA7CC116C6;
+	Thu,  6 Nov 2025 13:37:39 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Yury Norov <yury.norov@gmail.com>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -87,9 +87,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v6 18/26] iio: dac: Convert to common field_prep() helper
-Date: Thu,  6 Nov 2025 14:34:06 +0100
-Message-ID: <feaa25c4789213676b353289cb0f00f5dc43133b.1762435376.git.geert+renesas@glider.be>
+Subject: [PATCH v6 19/26] iio: mlx90614: Convert to common field_{get,prep}() helpers
+Date: Thu,  6 Nov 2025 14:34:07 +0100
+Message-ID: <007e72b33aee33726e161acd9d92f801b7051838.1762435376.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1762435376.git.geert+renesas@glider.be>
 References: <cover.1762435376.git.geert+renesas@glider.be>
@@ -101,11 +101,12 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop the driver-specific field_prep() macro, in favor of the globally
-available variant from <linux/bitfield.h>.
+Drop the driver-specific field_get() and field_prep() macros, in favor
+of the globally available variants from <linux/bitfield.h>.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Acked-by: Crt Mori <cmo@melexis.com>
 ---
 v6:
   - No changes,
@@ -114,24 +115,34 @@ v5:
   - Extracted from "bitfield: Add non-constant field_{prep,get}()
     helpers".
 ---
- drivers/iio/dac/ad3530r.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/iio/temperature/mlx90614.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
-index 5684d11137f29948..b97b46090d808ee7 100644
---- a/drivers/iio/dac/ad3530r.c
-+++ b/drivers/iio/dac/ad3530r.c
-@@ -53,10 +53,6 @@
- #define AD3530R_MAX_CHANNELS			8
- #define AD3531R_MAX_CHANNELS			4
+diff --git a/drivers/iio/temperature/mlx90614.c b/drivers/iio/temperature/mlx90614.c
+index de5615fdb396aa3c..1ad21b73e1b44cb0 100644
+--- a/drivers/iio/temperature/mlx90614.c
++++ b/drivers/iio/temperature/mlx90614.c
+@@ -22,6 +22,7 @@
+  * the "wakeup" GPIO is not given, power management will be disabled.
+  */
  
--/* Non-constant mask variant of FIELD_PREP() */
++#include <linux/bitfield.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/gpio/consumer.h>
+@@ -68,12 +69,6 @@
+ #define MLX90614_CONST_SCALE 20 /* Scale in milliKelvin (0.02 * 1000) */
+ #define MLX90614_CONST_FIR 0x7 /* Fixed value for FIR part of low pass filter */
+ 
+-/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
+-#undef field_get
+-#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
 -#undef field_prep
 -#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
 -
- enum ad3530r_mode {
- 	AD3530R_NORMAL_OP,
- 	AD3530R_POWERDOWN_1K,
+ struct mlx_chip_info {
+ 	/* EEPROM offsets with 16-bit data, MSB first */
+ 	/* emissivity correction coefficient */
 -- 
 2.43.0
 
