@@ -1,232 +1,303 @@
-Return-Path: <linux-edac+bounces-5364-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5365-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8208CC3B21D
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:15:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D0B4C3B43F
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:37:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 18F8E4F1717
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:07:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C94201A409A1
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:35:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F3252DAFA7;
-	Thu,  6 Nov 2025 13:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y6FJZmdI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39F732C945;
+	Thu,  6 Nov 2025 13:34:33 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D199130CDB7;
-	Thu,  6 Nov 2025 13:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762434463; cv=fail; b=P4TF9LR6qLjbb0Ep0CAeogiJbF1uCBhbutp2EAHeecdYgUqewP+PrKeqOVci4zPqsQDsyZAkE81U1KR0Mkvwn+bZIyuqWrAcm1J4Rk5x+blYD5xsdIrGYyjCYMRorRKpvHXI9LF4qUfRefe77O8lIiEBnMK7uZcVV8HjSD990Jw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762434463; c=relaxed/simple;
-	bh=ycjoU4qZZjVUqSKJvRIjRsx462xz+TdwcITr2Z+pQGs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Hvrri/x9+91pRwnrTPYP8fjBjjWxmXA1QIKsFkQ6ee9WFoHdXTgYhxkDBGdRB0NWwb8N3IV6c3L+U41G4g/9ZR3Z+xTvPqbYZXtMUCDhrbUY4NdCyedO1/EJuFKt2j8uDcO+b1ShWA3d/l8PF6829cMxG/oD34BdAwqEu1ni8k4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y6FJZmdI; arc=fail smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762434462; x=1793970462;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ycjoU4qZZjVUqSKJvRIjRsx462xz+TdwcITr2Z+pQGs=;
-  b=Y6FJZmdI1REB6Y0ZORU+2So9JfwfebVXkrxvnNyWwqWHBdU+1mUnPFHv
-   QWowpOqhCSr9ZmCKxQWmpq8kdwOMdD8onIBu4yH1x/BtfcxC2h1KaT3HE
-   l4qQghcrCbFD1lFPBDPpvEGp9ZK9G6Sb3KpCGzTyeleMUuuAdgFDfQEAF
-   yv7lOlTB7+SOePFpW5uTJO4wA6LFGascJuG9tEOYor4X0sEQB0IQSRjSu
-   byOaNple/hXRODAToF02F6UgEgAuYUJNNRpOT1FQu7aztlsLe48xy0tXL
-   xRNyNXMMF5afsZzsEZ7mBcnYLG2DUxqoYzSv5gTVz/g+8wLpByfgGzT5+
-   g==;
-X-CSE-ConnectionGUID: MU5iO256SV+9SYIS/s/vhQ==
-X-CSE-MsgGUID: SiKbsY/DTlCPIOuP/bBsGA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64483227"
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="64483227"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 05:07:41 -0800
-X-CSE-ConnectionGUID: qNsMdQyrTYqulGgiZ9MwgQ==
-X-CSE-MsgGUID: IWYaNm7BQR6b6vkZLd+t6w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="192109308"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 05:07:40 -0800
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Thu, 6 Nov 2025 05:07:40 -0800
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27 via Frontend Transport; Thu, 6 Nov 2025 05:07:40 -0800
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (40.93.195.56)
- by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Thu, 6 Nov 2025 05:07:40 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qnqBB1q7RbkeY5G9s5Mjf2wHGUCYl6g4RV3CpRApZqzndp9H8OUllGPRnu/kPSd1DdFJHhs3b2D/wiYmdoT/LiOZPAKHW2bfk8wCBTutfYbdNMTLYNNNhadlrTEpifKRGDnq9oSAXp6J8IY0ZT5R0RFOi9Dbdq/YOJ0Jfmhp+kTJ6xCUZB3LNug9SIga84RZymNkVhb0ahSptylIVwWIGm0N5KqAI+lssxDzknYbA0ENY6C8Pdn07VRdmk5d0enQikuMT0nPip0k8IbPfWYURasX06K+vEfaVHV5dcbXAn0gT9jwOwKhUGjsF+8tap1n8G1chSSuzOBnFpdP9qSYKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ycjoU4qZZjVUqSKJvRIjRsx462xz+TdwcITr2Z+pQGs=;
- b=vdQOl9n1SezXHUoeVMUl9TEaS388d94RiWJRrbczsYlyS5X/lxQ8FcAbfSNUdeqFocDwBDLl2++rFF4kNERUjdsoLd7ymVBksyvCc+mJe8imvuGfVp1/telUP2fjlgi8FC+r4+kNfxtC4XV8HLAEUHYE8vjrYFd9UFLwo0lnUUXdlkxlEhReL/St8z0OY0ys+zAtX/CSrcinJ4XXJhDeqSnoY2wq624GKNJSU4TFzyN4Eed2p6LlagxDjzFVXXKgQDlWROiCy4mthC0iPdJsYaA/phKVkdF8UvmgjQ/zLSEg9INf2HwfE6v7m7mYTiuEpKPjLEW6w6TSA3CeWGJGng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com (2603:10b6:930:62::17)
- by PH3PPF8C0509479.namprd11.prod.outlook.com (2603:10b6:518:1::d37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.10; Thu, 6 Nov
- 2025 13:07:38 +0000
-Received: from CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::5670:5b2e:6ecb:dcaf]) by CY8PR11MB7134.namprd11.prod.outlook.com
- ([fe80::5670:5b2e:6ecb:dcaf%4]) with mapi id 15.20.9275.013; Thu, 6 Nov 2025
- 13:07:38 +0000
-From: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To: Ma Ke <make24@iscas.ac.cn>, "jbaron@akamai.com" <jbaron@akamai.com>,
-	"bp@alien8.de" <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>
-CC: "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: RE: [PATCH v3] EDAC/ie31200: Fix error handling in
- ie31200_register_mci
-Thread-Topic: [PATCH v3] EDAC/ie31200: Fix error handling in
- ie31200_register_mci
-Thread-Index: AQHcTvoT0xOwtSNYu0K3U3v/ycxCU7Tlmrfg
-Date: Thu, 6 Nov 2025 13:07:37 +0000
-Message-ID: <CY8PR11MB7134D38563B5485D2426CBE989C2A@CY8PR11MB7134.namprd11.prod.outlook.com>
-References: <20251106084735.35017-1-make24@iscas.ac.cn>
-In-Reply-To: <20251106084735.35017-1-make24@iscas.ac.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY8PR11MB7134:EE_|PH3PPF8C0509479:EE_
-x-ms-office365-filtering-correlation-id: 25895817-1577-4f38-ff66-08de1d3575bc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021;
-x-microsoft-antispam-message-info: =?us-ascii?Q?T82tNMqkCT+tESg7oYoZ3wEKGkROLG6A2gyzrY7cCmfCoXJ6AXg/xxUWX8WI?=
- =?us-ascii?Q?XH9arxhoiwP8JqgEmPMJVF+pkfUyR5oUBslUlGIEYeMBNG7IB7THJFFThMMa?=
- =?us-ascii?Q?z6QVoeT24/gVrgB9HtxPbpGffbxIua+LS9P0gIYM6Goll0AEllTdaOa1lOkm?=
- =?us-ascii?Q?9cwf9k+RbKRAs4x86GORYti7jfENuCRQtGEJZ5e7sjAGZ5JFHotnQcHCsuQv?=
- =?us-ascii?Q?dLZZPiPhn0EcxzkUtmSHVdB8qnkLSBTX+0YjYnkclmZ1/zioFEA8TKdAHYcO?=
- =?us-ascii?Q?Ksr2O6ds5KAn7392CQwKXIamjagEKMPnkFUaIl2XnsEB1nuVHWCXNFUB0137?=
- =?us-ascii?Q?PiwKLZEMEryG40bWaKwtmRUkUFXM5W48iRD3o1Ilen3wFAQhXmg01lGRvngV?=
- =?us-ascii?Q?ovfFg0LffAmjyd344VDmrKNn+zCEUXxY+q+zFGoli6jpcEw1TCfXBDQb9KvK?=
- =?us-ascii?Q?z2E9r+3asAeCGI4PIo41dubOoZ8Ahy0NYyd1VtKYA0kktAUIMfZdK282Ep1f?=
- =?us-ascii?Q?Xl/VKf9GfIcKeYNe0O0piCRIz/BPkxPmqk3hbFwi3Zg9paKm89FraajKJo9k?=
- =?us-ascii?Q?lqzKUvkJnitqtQd6WXdOglou1qY43nxe+gv32Xs46cW9C+V1kuBTDQk5gPFH?=
- =?us-ascii?Q?gxuZ/ar1x2z+0N7TnnNUQ3JNphKiSju0akejtUetORWMQmH7CUz4hX+EepWK?=
- =?us-ascii?Q?qsXW5RGsVqOFULZPTN5RdtobTZ9bL59XYhALnqrphNHJl541S4nIoeUWRTqK?=
- =?us-ascii?Q?vTdsprCna67O150qxM88Gpyj5Ly4zZYhZ7piUpEW2bC/fId93bHGmdY4bkOj?=
- =?us-ascii?Q?0r+DM0JHEmacGD+0tLm7ju8MnAe6Yhbu4x+PAYMaRET0DZMzHTxsEUkuIuJK?=
- =?us-ascii?Q?kYJeBiwrES3UXPlWfMvjUhJeg41v7WWy60zqTOeP/qtyognzhoaDPvRQzYGa?=
- =?us-ascii?Q?e1bwk4xB8V9BX2wTeCPcGk3BRmXqeXmk64j0EaUtD5lBu6cJTEHHpoI2ZplN?=
- =?us-ascii?Q?jEsgn+HQch7GQsidiq/4+56C01R+k6D11JXVq6JEUY+9wjUobVQS9948QIFv?=
- =?us-ascii?Q?O2K9s/4ppQqEs2QNRtmIJfr7IGI7l5P5t247xirap7bJfRm9SPruquUH4e4F?=
- =?us-ascii?Q?15oxlYKNUGrHDss8dGnbrDnaEEJe2QeO+wvfLbqorhuWPDT9eQy2pEmabZof?=
- =?us-ascii?Q?Lf+UN03Mct7n51UX36ELLa+TXiTGYukIwnG+9UWe2P/dlUWHMoWDD96j2yzR?=
- =?us-ascii?Q?QQfBHWBFju7tupuBSRbPkFUhZueMnV2IRZQ6DhDs+cgirZoUUYsrNPMSmIo0?=
- =?us-ascii?Q?augLpH/xB/QNjYh9nRG0tFe1gnhE1y4MYik6ywHmNHuCirJETlZMwD8x2TGM?=
- =?us-ascii?Q?cZ2XPkYx5r7lhLyoigl9tJUf0Sh9QyMnvr/wZwsHd99bZIAcNjykIAJpyl7a?=
- =?us-ascii?Q?ZSPukG122lzPrQPK9RVZ32hBI9z2umTukHaJiec8Tpbp1e9PHV4el6J3Z7zs?=
- =?us-ascii?Q?+qJBbEFZ1TKi5dfH3EEx8n03iP3Xl28gtzUT?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7134.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+fHvzNE52NBjTuXHAURK0G5HuLzpBD2cIiUBAvmjKZd+yy+GPoeES4U7V0il?=
- =?us-ascii?Q?6jcrbJuVpanJISMjcM5wY4UbrS+qdBCTSFtAZ6xNPuVpsqyn8vLx5Gu687ZA?=
- =?us-ascii?Q?ZVnZ9czo3Clu4843Dl7Iik61zHhIjVOek9qPbfh7t1AVHKg7j7Gll3E63o3F?=
- =?us-ascii?Q?OLtG/0vQ23Tm/G7nqNf4XEIBZameHoOueVzMOcKVF5eMdLuK3tCbOnV4QIpt?=
- =?us-ascii?Q?Z2Fqf3Py1NXk3wagbPhHqpb3D2RmzFPeOk9TAIEbuk6sgo4Ouv1DNudarKHe?=
- =?us-ascii?Q?TTFuPNMQgrT4WU7UTG2qebtaepQqxVAzV0Jq9Iyp1XEEfmjIlFrfkNERT5jK?=
- =?us-ascii?Q?pavn1txULbcj3anhRzM4SAHhOPSSe7j9mudjGYRF0V8Jt2Idb1KEj3umQ7BE?=
- =?us-ascii?Q?I7sTzMlzrhHmEkoaR9G/u2YFpgR70WdV+h1so5i48yzzdYOkmi3dpBA9U4gb?=
- =?us-ascii?Q?L7vyR3RT3ZcT+BBOGBJxuiENFyYiV7n58c1C89P2r3HIhCV1j2Z/4nWyZ5Xd?=
- =?us-ascii?Q?aGAoZaz4xhefON+Pa6QeWgneGzDCNFdkTV1vbdMPBKoocZnG5FVRYAdRWE5V?=
- =?us-ascii?Q?aCUkK82jYFJ4yPmwNgu6hKEXu0UlVnp2htycGoiFgdD5kbbrUmnS88j/CNaW?=
- =?us-ascii?Q?a0wfKRY5oMDhYJGMRnPSpRlmfZjZrEP7jFOSF/a9Pt2idMr9i54rh/ujpUiw?=
- =?us-ascii?Q?/b61Oe0kQ/4E318aP1s0OCWCB7QgD/6ZJUih/xMfU4bh9CAwohheuG7QvpRZ?=
- =?us-ascii?Q?IQI54tuhfMLKKcSju3THsJJVMy1/20z6jdRWrejd83I/coPJaiD90hnSUmCJ?=
- =?us-ascii?Q?l3kc+iYOqhgKMDbOhJ10ZU6xFPup1vd/vSrjLyJYHr4lspqi2TiSwWFswejf?=
- =?us-ascii?Q?RDIL9v+h1k+tMU/WontDqfKcpEWB8IA8EVNg+dRlDzC5Rnvc5V9EnUJerF6K?=
- =?us-ascii?Q?bLMI02QzXsgU9YruIWweOfZ4JqSsf6w9pYqdJ254qSV9Xm+cm44El2iJvXgW?=
- =?us-ascii?Q?CqBLKSTV3PrTNMrY/8krFjk5K87te7xa1hpqdkpbU5xnDNVCJMJ3rplvUY0V?=
- =?us-ascii?Q?O6Kn3CdZ7PL5Qd7nDmk3oWDZtzmEspvnX+qq0Ks5+DlLP9NHVdrKdXlWTAOo?=
- =?us-ascii?Q?NJ3cinCT4niG1w3x3WyAdvsxmK6wRG56ouaifBzLjGg8KI7V2nt+NURddEoM?=
- =?us-ascii?Q?R/i5Q4sJaEnim0Yp2N3DOWagqEx7V2sV2sv007vbCDtb82Mcc5XoeCB1D6/z?=
- =?us-ascii?Q?ViTyfSW8WrsuP4605wkbKIIkOo9dld1ajZpyBiZEPxgmnwDYzJBes4iZg8CI?=
- =?us-ascii?Q?3e9dKVW7KyuDFWWPhDNOgQd4obpWloyoVzG9Ta1V2qeFm7GAQnE/6rrjbH+i?=
- =?us-ascii?Q?hZn35iyTn11RscXV9N1oTLsCChCB7f9uXYHRewCQ7IJp5s6NcEQsLK1F6xOt?=
- =?us-ascii?Q?pOuT04/qxgllGcyc0ZzAM+v/+UXcb7PKkE5+Bood7AblHmEkSNI7Yqpr3JAq?=
- =?us-ascii?Q?yz8djEPLR+6DZ0v6WiwsinXICESKDZDjiv94EpaOjFXHiH7bvFOmn/lFXDJG?=
- =?us-ascii?Q?MVOGAwVPMkXJIZHXSA+kxtzJoXZ314RuFpMTUt/k?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6982475D0;
+	Thu,  6 Nov 2025 13:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762436073; cv=none; b=sAls7jx944iixsV0XyZphfM+v2BuzBOFVifutRNz9LLWs/zfHKVQ4ncCHx8kMXrp5NCw9o26Ce/b0gOEoHxX4Tbtl4rQY0vlJzaGfknKBogwrYm7ZAtm5om16m5kKX4i+GeMT1Ni9SnwIN9dma5tCvTvIbPT77riaRZqKF2OX9k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762436073; c=relaxed/simple;
+	bh=vFi6JwsiqVBJ6NDjklmKzH3z7fjez3Z0YWaZVbFVPtg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MGeU6x6Ygu1Wt24oka8IzcUckh6mZt59ZhXEJodyIIP/eC8nAIxP0Y5jhrY7cuorKoYDCPXUG0sjPIzYfZNM1JBbGR9NuURJdVPVtnIEl2dvL7HcJO4I7RuE7KywQhGXXl+FX4kOsb7puVrc37aCnl02F5rNZ2Ms5OIhUjydTM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EB8C116C6;
+	Thu,  6 Nov 2025 13:34:21 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Yury Norov <yury.norov@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Miller <davem@davemloft.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Crt Mori <cmo@melexis.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alex Elder <elder@ieee.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Jason Baron <jbaron@akamai.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	David Lechner <dlechner@baylibre.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Richard Genoud <richard.genoud@bootlin.com>,
+	Cosmin Tanislav <demonsingur@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Jianping Shen <Jianping.Shen@de.bosch.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>
+Cc: linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	qat-linux@intel.com,
+	linux-gpio@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-iio@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v6 00/26] Non-const bitfield helpers
+Date: Thu,  6 Nov 2025 14:33:48 +0100
+Message-ID: <cover.1762435376.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7134.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25895817-1577-4f38-ff66-08de1d3575bc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2025 13:07:37.8783
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ag6yKzsQOoffJp2CQrkOlahqGhcnuxHsAV9ZMR/7+C5ZSGIfAW8xV9z/R0l7wR7P7GWaTI/iDlySWHztzc3ZeQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF8C0509479
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-> From: Ma Ke <make24@iscas.ac.cn>
-> Sent: Thursday, November 6, 2025 4:48 PM
-> To: jbaron@akamai.com; bp@alien8.de; Luck, Tony <tony.luck@intel.com>;
-> Zhuo, Qiuxu <qiuxu.zhuo@intel.com>
-> Cc: linux-edac@vger.kernel.org; linux-kernel@vger.kernel.org; akpm@linux-
-> foundation.org; Ma Ke <make24@iscas.ac.cn>
-> Subject: [PATCH v3] EDAC/ie31200: Fix error handling in ie31200_register_=
-mci
->=20
-> ie31200_register_mci() calls device_initialize() for priv->dev unconditio=
-nally.
-> However, in the error path, put_device() is not called, leading to an
-> imbalance. Similarly, in the unload path,
-> put_device() is missing.
->=20
-> Although edac_mc_free() eventually frees the memory, it does not release =
-the
-> device initialized by device_initialize(). For code readability and prope=
-r pairing
-> of device_initialize()/put_device(), add put_device() calls in both error=
- and
-> unload paths.
->=20
-> Found by code review.
->=20
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
-> ---
-> Changes in v3:
-> - moved put_device() from fail_free to fail_unmap to avoid using uninitia=
-lized
-> priv variable when window allocation fails.
+	Hi all,
 
-Oops ... I didn't catch that during v2 review.=20
+<linux/bitfield.h> contains various helpers for accessing bitfields, as
+typically used in hardware registers for memory-mapped I/O blocks.
+These helpers ensure type safety, and deduce automatically shift values
+from mask values, avoiding mistakes due to inconsistent shifts and
+masks, and leading to a reduction in source code size.
 
-For v3:
-Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+The existing FIELD_{GET,PREP}() macros are limited to compile-time
+constants.  However, it is very common to prepare or extract bitfield
+elements where the bitfield mask is not a compile-time constant (e.g. it
+comes from a table, or is created by shifting a compile-time constant).
+To avoid this limitation, the AT91 clock driver introduced its own
+field_{prep,get}() macros.  During the past four years, these have been
+copied to multiple drivers, and more copies are on their way[1], leading
+to the obvious review comment "please move this to <linux/bitfield.h>".
 
-> [...]
+Hence this series
+  1. Takes preparatory steps in drivers definining local
+     field_{get,prep}() macros (patches 1-11),
+  2. Introduces __FIELD_{PREP,GET}() helpers to avoid clang W=1 warnings
+     (patch 12),
+  3. Makes field_{prep,get}() available for general use (patch 13),
+  4. Converts drivers with local variants to the common helpers (patches
+     14-24),
+  5. Converts a few Renesas drivers to the existing FIELD_{GET,PREP}()
+     and the new field_{get,prep}() helpers (patches 25-26).
+
+Alternatives would be to use the typed {u*,be*,le*,...}_{get,encode}_bits()
+macros instead (which currently do not work with non-constant masks
+either, and the first attempt to change that generates much worse code),
+or to store the low bit and width of the mask instead (which would
+require changing all code that passes masks directly, and also generates
+worse code).
+
+Changes compared to v5[2]:
+  - Add Acked-by, Reviewed-by,
+  - Update sunxi rawnand driver in linux-next,
+  - Align \,
+  - Add Return sections to kerneldoc,
+  - Document field_{get,prep} in top comment block,
+  - New patch to add less-checking __FIELD_{GET,PREP}() helpers,
+  - Use less-checking __FIELD_{GET,PREP}() to avoid build issues with
+    clang and W=1.
+
+Changes compared to v4[3]:
+  - Add preparatory patches to #undef field_{get,prep}() in individual
+    drivers before defining local variants,
+  - Update new smi330 IIO IMU driver in linux-next,
+  - Add Acked-by,
+  - Document that mask must be non-zero,
+  - Document typical usage pattern,
+  - Recommend using FIELD_{PREP,GET}() directly to ensure compile-time
+    constant masks,
+  - Check BITS_PER_TYPE(mask) instead of sizeof(mask),
+  - Wire field_{get,prep}() to FIELD_{GET,PREP}() when mask is
+    constant, to improve type checking,
+  - Extract conversion of individual drivers into separate patches.
+
+Changes compared to v3[4]:
+  - Update recently introduced FIELD_MODIFY() macro,
+  - Add Acked-by,
+  - Rebase on top of commit 7c68005a46108ffa ("crypto: qat - relocate
+    power management debugfs helper APIs") in v6.17-rc1,
+  - Convert more recently introduced upstream copies:
+      - drivers/edac/ie31200_edac.c
+      - drivers/iio/dac/ad3530r.c
+
+Changes compared to v2[5]:
+  - New patch "[PATCH v3 1/4] bitfield: Drop underscores from macro
+    parameters",
+  - Add Acked-by,
+  - Drop underscores from macro parameters,
+  - Use __auto_type where possible,
+  - Correctly cast reg to the mask type,
+  - Introduces __val and __reg intermediates to simplify the actual
+    operation,
+  - Drop unneeded parentheses,
+  - Clarify having both FIELD_{GET,PREP}() and field_{get,prep}(),
+
+Changes compared to v1[6]:
+  - Cast val resp. reg to the mask type,
+  - Fix 64-bit use on 32-bit architectures,
+  - Convert new upstream users:
+      - drivers/crypto/intel/qat/qat_common/adf_gen4_pm_debugfs.c
+      - drivers/gpio/gpio-aspeed.c
+      - drivers/iio/temperature/mlx90614.c
+      - drivers/pinctrl/nuvoton/pinctrl-ma35.c
+      - sound/usb/mixer_quirks.c
+  - Convert new user queued in renesas-devel for v6.15:
+      - drivers/soc/renesas/rz-sysc.c
+  - Drop the last 14 RFC patches.
+    They can be updated/resubmitted/applied later.
+
+In the meantime, two more copies ended up in the IIO and MTD trees and
+in linux-next (commit 89cba586b8b4cde0 ("iio: imu: smi330: Add driver"
+in next-20251021 and later, commits 6fc2619af1eb6f59 ("mtd: rawnand:
+sunxi: rework pattern found registers") and d21b4338159ff7d7 ("mtd:
+rawnand: sunxi: introduce ecc_mode_mask in sunxi_nfc_caps") in
+next-20251029 and later).  As these commits are not yet upstream, any
+updates (patches 10, 11, 23 and 24) for these drivers cannot be applied
+with the rest of this series yet.
+
+Yury kindly offered to take the lionshare of this series through his
+bitmap tree, thanks for that!
+I am fine with that, if he would also provide an immutable branch + tag,
+which I can merge into the Renesas tree before taking patches 25 and 26
+myself.  Once that tag has been merged in subsystem trees or upstream, I
+plan to update and resend actual conversions (see patches 4-17 in
+v1[6]).
+
+To avoid build issues in linux-next, the IIO resp. MTD maintainers
+should:
+  1. Apply patch 10 resp. 11 now, and
+  2. Apply patch 23 resp. 24 later, either after
+       a. merging the immutable branch/tag, or
+       b. the new helpers in <linux/bitfield.h> are upstream,
+
+Note that there is also a minor conflict with linux-next due to the
+removal of an include file from drivers/gpio/gpio-aspeed.c.
+
+Thanks!
+
+[1] Work-in-progress new copies posted during the last few months (there
+    may be more):
+      - "[PATCH v2 3/3] gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller"
+	https://lore.kernel.org/20250903-ltc4283-support-v2-3-6bce091510bf@analog.com
+      - "[PATCH v7 15/24] media: i2c: add Maxim GMSL2/3 serializer and deserializer framework"
+	https://lore.kernel.org/20250718152500.2656391-16-demonsingur@gmail.com
+[2] "[PATCH v5 00/23] Non-const bitfield helpers"
+    https://lore.kernel.org/all/cover.1761588465.git.geert+renesas@glider.be
+[3] "[PATCH v4 0/4] Non-const bitfield helpers"
+    https://lore.kernel.org/cover.1760696560.git.geert+renesas@glider.be
+[4] "[PATCH v3 0/4] Non-const bitfield helpers"
+    https://lore.kernel.org/all/cover.1739540679.git.geert+renesas@glider.be
+[5] "[PATCH v2 0/3] Non-const bitfield helpers"
+    https://lore.kernel.org/all/cover.1738329458.git.geert+renesas@glider.be
+[6] "[PATCH 00/17] Non-const bitfield helper conversions"
+    https://lore.kernel.org/all/cover.1637592133.git.geert+renesas@glider.be
+
+Geert Uytterhoeven (26):
+  clk: at91: pmc: #undef field_{get,prep}() before definition
+  crypto: qat - #undef field_get() before local definition
+  EDAC/ie31200: #undef field_get() before local definition
+  gpio: aspeed: #undef field_{get,prep}() before local definition
+  iio: dac: ad3530r: #undef field_prep() before local definition
+  iio: mlx90614: #undef field_{get,prep}() before local definition
+  pinctrl: ma35: #undef field_{get,prep}() before local definition
+  soc: renesas: rz-sysc: #undef field_get() before local definition
+  ALSA: usb-audio: #undef field_{get,prep}() before local definition
+  [-next] iio: imu: smi330: #undef field_{get,prep}() before definition
+  [-next] mtd: rawnand: sunxi: #undef field_{get,prep}() before local
+    definition
+  bitfield: Add less-checking __FIELD_{GET,PREP}()
+  bitfield: Add non-constant field_{prep,get}() helpers
+  clk: at91: Convert to common field_{get,prep}() helpers
+  crypto: qat - convert to common field_get() helper
+  EDAC/ie31200: Convert to common field_get() helper
+  gpio: aspeed: Convert to common field_{get,prep}() helpers
+  iio: dac: Convert to common field_prep() helper
+  iio: mlx90614: Convert to common field_{get,prep}() helpers
+  pinctrl: ma35: Convert to common field_{get,prep}() helpers
+  soc: renesas: rz-sysc: Convert to common field_get() helper
+  ALSA: usb-audio: Convert to common field_{get,prep}() helpers
+  [-next] iio: imu: smi330: Convert to common field_{get,prep}() helpers
+  [-next] mtd: rawnand: sunxi: Convert to common field_{get,prep}()
+    helpers
+  clk: renesas: Use bitfield helpers
+  soc: renesas: Use bitfield helpers
+
+ drivers/clk/at91/clk-peripheral.c             |  1 +
+ drivers/clk/at91/pmc.h                        |  3 -
+ drivers/clk/renesas/clk-div6.c                |  6 +-
+ drivers/clk/renesas/rcar-gen3-cpg.c           | 15 +--
+ drivers/clk/renesas/rcar-gen4-cpg.c           |  9 +-
+ .../intel/qat/qat_common/adf_pm_dbgfs_utils.c |  8 +-
+ drivers/edac/ie31200_edac.c                   |  4 +-
+ drivers/gpio/gpio-aspeed.c                    |  5 +-
+ drivers/iio/dac/ad3530r.c                     |  3 -
+ drivers/iio/imu/smi330/smi330_core.c          |  4 -
+ drivers/iio/temperature/mlx90614.c            |  5 +-
+ drivers/mtd/nand/raw/sunxi_nand.c             |  4 -
+ drivers/pinctrl/nuvoton/pinctrl-ma35.c        |  4 -
+ drivers/soc/renesas/renesas-soc.c             |  4 +-
+ drivers/soc/renesas/rz-sysc.c                 |  3 +-
+ include/linux/bitfield.h                      | 95 +++++++++++++++++--
+ sound/usb/mixer_quirks.c                      |  4 -
+ 17 files changed, 106 insertions(+), 71 deletions(-)
+
+-- 
+2.43.0
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
