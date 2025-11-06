@@ -1,139 +1,110 @@
-Return-Path: <linux-edac+bounces-5362-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5363-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A285EC3A8D1
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 12:25:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5931C3AB11
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 12:50:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4C45B3510CD
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 11:25:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3852B561928
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 11:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9978030EF66;
-	Thu,  6 Nov 2025 11:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD1743090CD;
+	Thu,  6 Nov 2025 11:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ejgtQVDm"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="kHdyJ48e"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C79030EF7E
-	for <linux-edac@vger.kernel.org>; Thu,  6 Nov 2025 11:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752302F5330;
+	Thu,  6 Nov 2025 11:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762428309; cv=none; b=B/tVr3oOu0ENoijk4MbwAZqqZ2I2Un++s/63IiiTOUCTl/sCHeuzKieRJNzytBJBes0VH0PXOD8UUFZJ9lHP6YfUezCBQXJgdXr6uFz8Ib2MPA6n3Xo+OgrKL/2650yubBX+bUQ7Ohvq3ISlBZtqxKPmDosXd4MMeTN6+Z73aHo=
+	t=1762428901; cv=none; b=sBZ3umZ9BpWBmuybdzqqrCtH6MDbwLio7MHrBjuF+80lnclqJwP3TJhiksOdLJbeU5wIL4gZyhzAO+6eisLqWabaq0J0C7Kj+qZ22ZXKbwJ9B2WEjcRVuzmb6cnlbw8x0TsPTOtxP85IXRyEFzIKhrHYqZuDIYDSsj1m4r3jaZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762428309; c=relaxed/simple;
-	bh=53aEGacbdt9mh4MHgrcdnj49wMl+MBanKoOkq+buiLQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SQIOnZaifNZmdf3cqJ3Z9miADywnC9ayPgqB/fIlG2zPpNOS5I/I6qOMQelmSKeetSi02352p6MXvJ/3ku6Mfv/YrFRYLx8p/QFqdq80cec0T8yaJxLp3RL0aAqgDN9qro94mfyJGdA86oEDquLMotLX3GwMoaFfKQTG9P8jCn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ejgtQVDm; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-47109187c32so3773855e9.2
-        for <linux-edac@vger.kernel.org>; Thu, 06 Nov 2025 03:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762428306; x=1763033106; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iGj/iSzkfuIyvS/QpRi8dDUcKS5Ee/173QO43nXzkMU=;
-        b=ejgtQVDmtduDXGYDlI8HYMEIQCpNaFqguu6t4EvtJt/IXWcwdszsAnU1KhJDqEDxIX
-         OoTgptsTRWNujLME58H1SjbGDK6+0QoxSJqIsqPm6aYmxP/XyhF0gMa7tIV/nvwauSgU
-         zpp2loXhMyos1wk4m1ndc0UiPCYa5wmrnfZ+/Kzq0awuoSnB5mZl6iHvzvQhPFYDZrlL
-         PNhJCk8vfxN8djkAOMQ4ep/WgjeV1zk/4O61X0FrbRgSd4OMlFXZV62As8cWAbWQRtfC
-         SrgvWjXLeHA/YA5MYFZ/cR4NaNCSRqlIfPgx50OYctXw9YAaTeiAX9MKrsD6SRfdR5EY
-         rCBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762428306; x=1763033106;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iGj/iSzkfuIyvS/QpRi8dDUcKS5Ee/173QO43nXzkMU=;
-        b=Zuur06m2l4pyWc3qLHToYaabytaF9SCQdPHggLvXmjHQO5DKGUSAqHT9y63K87UIEJ
-         ri+1NEfIuzgGX90+aZpJ6YmXbeJ7ctc90f1OZzlVUyPSI3eWy2Aj6S2AofDHSr/6dItU
-         TUxqRMrRcgisqkmOrRkOHMnZOYCtcK0l5kk9tpzwfEPSgtGjdmR5eo0ye/XI1gRLTIwW
-         8+t54HwCAokOGa5LNlaMlBZWkx18R5+wW4P6yvOce3QMVmHpctVqyl9PunlyfNKJ7pSl
-         7hBPch5PdwWw3DadvYzjBZCHHINcvldDOVxXiUPWcHMKFkyOeBcPZnG1Doyj9F7GR4yU
-         1V/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUJpeEEKokhyLpj3yCDg994v83lu2Me5ERvO8l4dHHyL9P/uSgsOlw3Wf5tvEaMG28S6mGxb3fBEkkB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkVpfYbw0T74FxB4rduaByKbFJIK3Lw4ZLC5by2ye/4EMcOH7S
-	EJ6O8A+1yuq8dWbiISZyIKfaotYm3r8s7VqAobT+ungjJoLRdR+E3Q0IuJKAgsO+cVk=
-X-Gm-Gg: ASbGncsnomRMBl5xEvytzijYxbATG8XLNnrr9hQLYuUgOtx4bxLyo1YWxN7A/C8gaxs
-	zRQW6zvFyQch+OYpBbbEi33tuHlqVfF+3D0yGh3dJh34gDaWoMdZiv5nLxYiQmQJSvQGZM3tY5F
-	AyzO0GDy75diqPp9iNBL5/NNCMT2PxZnCsVlwYLDVEEQxFr+qc1r7C3du5f0NFny0ImQQsGdy/S
-	+P5ThSGo635w1dtvDHwI5Rt/NyCjaljpmM89JefGz90hydpvQZfKthmdaF0Pzo4nf//04KYRnTL
-	koWlNWR0MbTSdUx/YnUliZC6VmRvwabXQmYVXZRErGjO1eDuV4yE8eqLlzESxcNO0mEKCsqKtra
-	7cTYGZq/66Pqwauz0+yKV+rzWS7x9pGEPktefP2PN4pJ2KajJxNmAqJW9W64vNFsGqrW9el2LPU
-	bg/bDQyT+/4++lRbc3FMmL40D/
-X-Google-Smtp-Source: AGHT+IGA3eaiIFQ+2ZbiTA2MOgo0wwCquzKHa49AC8U6KCcMIh1ZnlWSFALO8lJzdAqqAE7UjkdKpg==
-X-Received: by 2002:a05:600c:841a:b0:471:a73:a9d2 with SMTP id 5b1f17b1804b1-4775cdc53d5mr54886855e9.11.1762428305744;
-        Thu, 06 Nov 2025 03:25:05 -0800 (PST)
-Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775cdcc528sm102956575e9.7.2025.11.06.03.25.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 03:25:05 -0800 (PST)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>
-Subject: [PATCH v2] RAS/CEC: replace use of system_wq with system_percpu_wq
-Date: Thu,  6 Nov 2025 12:24:54 +0100
-Message-ID: <20251106112454.124568-1-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.51.1
+	s=arc-20240116; t=1762428901; c=relaxed/simple;
+	bh=FZ+xQhevs4W6MojfQXMJAFD8Dy6zfGeKkSvuojK3q0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PLalTA8TU6NfBVHB7VBTIjJh60sZ7oZcG0TtNI9PjEgH2KvGnMKHuEonOmtInqFA9DmRPDKFVzMwbGbGU6bEsBAN7LGy+S6iK4jcaDL/eGrYridvEyUT7Ogl9ZROA3SIkwQt5ku5VNwg7jC1p9jAO0Qnz90GiPdpDEKPPF7VTa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=kHdyJ48e; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9189940E0191;
+	Thu,  6 Nov 2025 11:34:57 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ZrgZyW1OZZM8; Thu,  6 Nov 2025 11:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1762428890; bh=BMtzBSnJBOm8d3+HVK2n5RalBifjQWJOzmJjLIuA8n4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kHdyJ48euVXrbvL5GmyvXxjubv1k7H/0LpvojnfbQ6Zu762M5u2vQVXjbisW051xA
+	 DtOld8kil5i5xRNaQmbX83yrhf8HRaMcVJHGjkvlOnuh5v172JhV80hOPjulkK7d+A
+	 mxZXnSJOTl37mqCwo3DhxvVI+92vtmcOB+G0yx1j9e4cfasxoU7vxzVsUiU6vgWt7J
+	 az/rg2AsCGInvwhT8BClqoaaqifIBICHbniRPeFXVGNdztqXjjJdG5dRAjghXA5izH
+	 T7+0jfndFGsANY4+2sNOsICqvBcoZrytCOnYSaO12QlM2swz609HLskCUx8mDhElh4
+	 aPXPM2O+1H37CtyKcBYOBhtEpvtZZFa4n9BeryrTzsSVJDICuBVL4kX6T3Usn4GcpW
+	 sV2NxVUnHBs0CSAzFl9QajDp05E4JEwRUzkS151vNxtMv/0L00n2TYfvMCJJvV2PDR
+	 0QTmAQeH1Kz+a7StJ63IcomnAFWzatr8isiTw/mzQu4sL3H1VmVpaiKgPQ/vwcuqCo
+	 k0GTXpjePq2X/lo2KG9zog5itUfwFdcQ/r+8dGN0ZdyFuNZA9Zlob7tMoEXsLfuRuJ
+	 S0RVhLNHZdnVtEW51YUjO9bGxRjzWEGnydzwOM4DFPZduE7QpMY5wOepeAhqRevAG9
+	 SBUgBbp5TSml+t1DH7ENTPi8=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 197E440E00DE;
+	Thu,  6 Nov 2025 11:34:43 +0000 (UTC)
+Date: Thu, 6 Nov 2025 12:34:36 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: tony.luck@intel.com
+Cc: Ma Ke <make24@iscas.ac.cn>, jbaron@akamai.com, qiuxu.zhuo@intel.com,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org
+Subject: Re: [PATCH v3] EDAC/ie31200: Fix error handling in
+ ie31200_register_mci
+Message-ID: <20251106113436.GAaQyHzGJfszVtHNU0@fat_crate.local>
+References: <20251106084735.35017-1-make24@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251106084735.35017-1-make24@iscas.ac.cn>
 
-Currently if a user enqueues a work item using schedule_delayed_work() the
-used workqueue is "system_wq" (per-cpu wq) while queue_delayed_work() use
-WORK_CPU_UNBOUND (used when a CPU is not specified). The same applies to
-schedule_work() that is using system_wq and queue_work(), that makes use
-again of WORK_CPU_UNBOUND.
+On Thu, Nov 06, 2025 at 04:47:35PM +0800, Ma Ke wrote:
+> ie31200_register_mci() calls device_initialize() for priv->dev
+> unconditionally. However, in the error path, put_device() is not
+> called, leading to an imbalance. Similarly, in the unload path,
+> put_device() is missing.
+> 
+> Although edac_mc_free() eventually frees the memory, it does not
+> release the device initialized by device_initialize(). For code
+> readability and proper pairing of device_initialize()/put_device(),
+> add put_device() calls in both error and unload paths.
+> 
+> Found by code review.
+> 
+> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+> ---
+> Changes in v3:
+> - moved put_device() from fail_free to fail_unmap to avoid using uninitialized priv variable when window allocation fails.
 
-This lack of consistency cannot be addressed without refactoring the API.
-For more details see the Link tag below.
+Zapped v2 from the tree for the time being.
 
-This continues the effort to refactor workqueue APIs, which began with
-the introduction of new workqueues and a new alloc_workqueue flag in:
+> Changes in v2:
+> - modified the patch, thanks for developer's suggestions;
+> - removed Fixes line.
 
-commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
-commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
-
-Switch to using system_percpu_wq because system_wq is going away as part of
-a workqueue restructuring.
-
-Link: https://lore.kernel.org/all/20250221112003.1dSuoGyc@linutronix.de
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
----
- drivers/ras/cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index e440b15fbabc..15f7f043c8ef 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -166,7 +166,7 @@ static void cec_mod_work(unsigned long interval)
- 	unsigned long iv;
- 
- 	iv = interval * HZ;
--	mod_delayed_work(system_wq, &cec_work, round_jiffies(iv));
-+	mod_delayed_work(system_percpu_wq, &cec_work, round_jiffies(iv));
- }
- 
- static void cec_work_fn(struct work_struct *work)
 -- 
-2.51.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
