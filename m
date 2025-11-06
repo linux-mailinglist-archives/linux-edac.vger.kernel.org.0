@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5370-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5371-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4542C3B4AE
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 58022C3B4C0
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:40:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9265D1A432F6
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:38:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58F991A44EC5
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E10A3321B9;
-	Thu,  6 Nov 2025 13:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A71336ED8;
+	Thu,  6 Nov 2025 13:35:34 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DF622D4E9;
-	Thu,  6 Nov 2025 13:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A6D3321C7;
+	Thu,  6 Nov 2025 13:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762436124; cv=none; b=izLE1jZuLD8omcOhAtQPFJZwCpJEM1/oB/5JmiA3V6ELuKU2SzVp5EuEBPwx3BuQ0BxzNN1PUL7yaQ8ioCI/75Ixe9UxnaDwivjokcZW4xt3PrRD6F25NI1XiP437vlMBcpw904FaaCw14sn1esxLRLMcl3joye4D8W2vp/NjdM=
+	t=1762436134; cv=none; b=G3ZkoyKfx1ZdKN1ixtwEZ/glDgChPmwmr//A2sQtqpuT9SY9/ndqViWuOkSnTwoMYnF6PEM8ElPwY+MGwnKjaE/idJJjVFW01lpdSzQyKpgi7flB4o/VBSXucE31Mjzmt2EHlMLgzpHiLLItKmHYt6YpoI7I874vK4PMPwog//k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762436124; c=relaxed/simple;
-	bh=nDP0lFBvNYEkrAQEUlWtlqBdBdUwZbGNoXfDDRPBZhY=;
+	s=arc-20240116; t=1762436134; c=relaxed/simple;
+	bh=nyoHlA473M6VG5eO6lu/v0dCC77k1DZuDUpkBW3EzaE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xh4Jy6GiyQKAQ+rzdt10Aji+I5XM1kYONpd7zTkXEGxCLTra2NllHauY5wlqM+jVS2k3H4ANLqOZoy2+T3jGtRvGY+usOAH2+m/pATV+erXLzAtNDtJSKmi7v4WfCeJAg3+83o7lCrvq/gGZJ9qp71xxLursuXk6thIgnHq2saU=
+	 MIME-Version; b=mIjq+wKYU3Kc/sQ9tpum2VrvtERZkuhV82ID+FIi89M217n6ZO0XBQQ/4cns2Ps8uZGzK6siAgJOkcRuyoemTxZoTM//d2kEc0FxZlH/KZWGFp7CmY0kCuu7+xv0DxZfV4oYDzdw/bEnwOORswV9T4/1WnKRUMbF/4ODpGmxALo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A4DC116D0;
-	Thu,  6 Nov 2025 13:35:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB744C4CEF7;
+	Thu,  6 Nov 2025 13:35:24 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Yury Norov <yury.norov@gmail.com>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -86,9 +86,9 @@ Cc: linux-clk@vger.kernel.org,
 	linux-mtd@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v6 05/26] iio: dac: ad3530r: #undef field_prep() before local definition
-Date: Thu,  6 Nov 2025 14:33:53 +0100
-Message-ID: <a2466d9201cb8c25504e25ac531a69ef8bd6e958.1762435376.git.geert+renesas@glider.be>
+Subject: [PATCH v6 06/26] iio: mlx90614: #undef field_{get,prep}() before local definition
+Date: Thu,  6 Nov 2025 14:33:54 +0100
+Message-ID: <6c773f03da99ccc081a33d2363879957ac96ce33.1762435376.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1762435376.git.geert+renesas@glider.be>
 References: <cover.1762435376.git.geert+renesas@glider.be>
@@ -100,10 +100,10 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare for the advent of a globally available common field_prep() macro
-by undefining the symbol before defining a local variant.  This prevents
-redefinition warnings from the C preprocessor when introducing the common
-macro later.
+Prepare for the advent of globally available common field_get() and
+field_prep() macros by undefining the symbols before defining local
+variants.  This prevents redefinition warnings from the C preprocessor
+when introducing the common macros later.
 
 Suggested-by: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
@@ -114,21 +114,23 @@ v6:
 v5:
   - New.
 ---
- drivers/iio/dac/ad3530r.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/temperature/mlx90614.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
-index 6134613777b8e1d4..5684d11137f29948 100644
---- a/drivers/iio/dac/ad3530r.c
-+++ b/drivers/iio/dac/ad3530r.c
-@@ -54,6 +54,7 @@
- #define AD3531R_MAX_CHANNELS			4
+diff --git a/drivers/iio/temperature/mlx90614.c b/drivers/iio/temperature/mlx90614.c
+index 8a44a00bfd5ece38..de5615fdb396aa3c 100644
+--- a/drivers/iio/temperature/mlx90614.c
++++ b/drivers/iio/temperature/mlx90614.c
+@@ -69,7 +69,9 @@
+ #define MLX90614_CONST_FIR 0x7 /* Fixed value for FIR part of low pass filter */
  
- /* Non-constant mask variant of FIELD_PREP() */
+ /* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
++#undef field_get
+ #define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
 +#undef field_prep
  #define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
  
- enum ad3530r_mode {
+ struct mlx_chip_info {
 -- 
 2.43.0
 
