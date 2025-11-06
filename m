@@ -1,124 +1,139 @@
-Return-Path: <linux-edac+bounces-5361-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5362-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4335C3A871
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 12:23:09 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A285EC3A8D1
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 12:25:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 778435020E4
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 11:18:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4C45B3510CD
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 11:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6041830CD82;
-	Thu,  6 Nov 2025 11:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9978030EF66;
+	Thu,  6 Nov 2025 11:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="D9H4oseJ"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ejgtQVDm"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B0530EF7E
-	for <linux-edac@vger.kernel.org>; Thu,  6 Nov 2025 11:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C79030EF7E
+	for <linux-edac@vger.kernel.org>; Thu,  6 Nov 2025 11:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762427823; cv=none; b=FtljeB0KGT4Bcqb5LIW2Nz4BZvfhV6Ct02EVXdeN70j5Au0bUQGWTbgQG4GFBWt14gQKjmZbwFStOc6qHeBFC5oNCiftTH7YprsMWlLudaLsApuV8zGi7VSgucoHBoIDdfhO2rURGB8M00v5LwM8vi3diBjcuIHsQSp56bI3T68=
+	t=1762428309; cv=none; b=B/tVr3oOu0ENoijk4MbwAZqqZ2I2Un++s/63IiiTOUCTl/sCHeuzKieRJNzytBJBes0VH0PXOD8UUFZJ9lHP6YfUezCBQXJgdXr6uFz8Ib2MPA6n3Xo+OgrKL/2650yubBX+bUQ7Ohvq3ISlBZtqxKPmDosXd4MMeTN6+Z73aHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762427823; c=relaxed/simple;
-	bh=5eNc+nOiefXMo/F9DPBs3t4XDeKRYV4z6yHiYx/WKvc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TURF9BWHRCK0nq0xtVvQg9OgAwlB294p0NopFr3N3+b7iLZvV5rcRJ1V9DutNV3G0gK2qCW6QvCeNNoEvYHOXeFccINV5hNOID+1I7OaJ0Ayb1ik6QFnwrER+1M0xB1XGtxtW2z1OoIGk6tghKAn/sR7oTlSTEeel7zQj1TNgBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=D9H4oseJ; arc=none smtp.client-ip=209.85.208.170
+	s=arc-20240116; t=1762428309; c=relaxed/simple;
+	bh=53aEGacbdt9mh4MHgrcdnj49wMl+MBanKoOkq+buiLQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SQIOnZaifNZmdf3cqJ3Z9miADywnC9ayPgqB/fIlG2zPpNOS5I/I6qOMQelmSKeetSi02352p6MXvJ/3ku6Mfv/YrFRYLx8p/QFqdq80cec0T8yaJxLp3RL0aAqgDN9qro94mfyJGdA86oEDquLMotLX3GwMoaFfKQTG9P8jCn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ejgtQVDm; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-37a5d03b53dso8085811fa.3
-        for <linux-edac@vger.kernel.org>; Thu, 06 Nov 2025 03:17:01 -0800 (PST)
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-47109187c32so3773855e9.2
+        for <linux-edac@vger.kernel.org>; Thu, 06 Nov 2025 03:25:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762427819; x=1763032619; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5eNc+nOiefXMo/F9DPBs3t4XDeKRYV4z6yHiYx/WKvc=;
-        b=D9H4oseJ3hO8TyjO4cRGxCR5xfDKVfmH4k+3XcnILdvZS9jZMvOr7m7p43qTdeORxG
-         G/DXSl7tuyt7fUN8pueJzPdEJYHelNT1lrA9QiyrFMKDt5F8tDxmDFXkTbmQmCNEGfMv
-         r0U5+DPAVBE2bjFhiDe2EZhKnZ8Oh/OEgFYPIVQXMyl4ax53IZpuOMxeW7F5lnDt8Pwu
-         qCwi7niJGnKeQoxZglaG/AivUmgG1Vr42DNmdqkdvJJGULMoQuz9MTP3kbe1EUthaCkb
-         lK7ABGY3peL0fOmUk/PxiYnE4QrP96LMLjWZYOJINWOpCqSWtU/KPqpcKbP7/tfFufXC
-         Ytdg==
+        d=suse.com; s=google; t=1762428306; x=1763033106; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iGj/iSzkfuIyvS/QpRi8dDUcKS5Ee/173QO43nXzkMU=;
+        b=ejgtQVDmtduDXGYDlI8HYMEIQCpNaFqguu6t4EvtJt/IXWcwdszsAnU1KhJDqEDxIX
+         OoTgptsTRWNujLME58H1SjbGDK6+0QoxSJqIsqPm6aYmxP/XyhF0gMa7tIV/nvwauSgU
+         zpp2loXhMyos1wk4m1ndc0UiPCYa5wmrnfZ+/Kzq0awuoSnB5mZl6iHvzvQhPFYDZrlL
+         PNhJCk8vfxN8djkAOMQ4ep/WgjeV1zk/4O61X0FrbRgSd4OMlFXZV62As8cWAbWQRtfC
+         SrgvWjXLeHA/YA5MYFZ/cR4NaNCSRqlIfPgx50OYctXw9YAaTeiAX9MKrsD6SRfdR5EY
+         rCBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762427819; x=1763032619;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5eNc+nOiefXMo/F9DPBs3t4XDeKRYV4z6yHiYx/WKvc=;
-        b=pnW9PgIN2z+0b7Mpa8lR7I+kAO7NWE5QSTKoj+WMCmxMpXHxqICTU09fhZeYfbKEdT
-         5S3G+vTdlcua0s8l5nnC639izqTfCM6YZ3kXso9fIRxBSPl/yRkpkf73wDqYPwG8qQw3
-         Ir4N0hdQErGpNn0NGtIBWXhd5CAXsCkPjqXSGJKMYSYh2eGuX01BUwgmJSwA+XKKcMrb
-         6YNuMTguG66Y0gQUGDJ/rloxsPBP0qT/i95Osc/q8SdVB/OMdMBjyjk7kGxKW2qZp7De
-         7fkznaA9+IV9/c9OmysfDlp5xQgd51jkmh1Kh3kyml2zlMFRcKkLKadA83uo5QlIFTPB
-         Dk1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUAjYdgqdL5Em+0rKYE1wsRuXGdK6SAT57iUUSfspqnIVdSIBWyIEV7NEFDQK9xW9O/33bHbQxmTeYT@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2rIYIGifnaNmmn1fbbRMKCIZynXnpVkz6jQvpjUX+Y+yF41pq
-	l7cDBPxc0UhkkQzB2KN2j0SvfEPt+ngEBAScga1uOLDH5FNnwlNtetFY54BkWWfqQzsg0lRczGT
-	m/BEGcILmDYkadWL3x/Sb+r3AoIdOCG0rTRdyeshnhvJQwpiggBbb
-X-Gm-Gg: ASbGnct9jfknk2AKwVBzEnusDOrFzh0TmmmoMj+dRdzAno8sKZFHFRN/T5LvGWU5xfz
-	TmU3HKJiUPhpdZ3Igz1YB2pzpkPH33yATHLziIjwNKdNaxCoW4CMA2VXRQwzK0Cd/5Gr+cLHVtD
-	CiXdxotajWZ0ON1w000S4YE0S4IoG2Z6BqE6KO42coBEssPdV2L7VSoDocLYkhpRKc22lAw0jUD
-	mhGpKKvUrBLbupItwhHw5LcDng5w9OzRScGfPPzwrRvSEyFLYxZOUOoj0s7vnK0dlOKwcGrIRyD
-	JE/Y4XnMqCr/SxQ+cw==
-X-Google-Smtp-Source: AGHT+IHYcENGTqvymfQ1WOetN6c+qYHeKLd/0G4rh8vRBzb09b0W5AZ86qMpZX0M21EDepNZjbeEnDbHONIX+WPYXYs=
-X-Received: by 2002:a05:651c:23c4:10b0:37a:3260:c8ad with SMTP id
- 38308e7fff4ca-37a513e7181mr18653281fa.16.1762427819514; Thu, 06 Nov 2025
- 03:16:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762428306; x=1763033106;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iGj/iSzkfuIyvS/QpRi8dDUcKS5Ee/173QO43nXzkMU=;
+        b=Zuur06m2l4pyWc3qLHToYaabytaF9SCQdPHggLvXmjHQO5DKGUSAqHT9y63K87UIEJ
+         ri+1NEfIuzgGX90+aZpJ6YmXbeJ7ctc90f1OZzlVUyPSI3eWy2Aj6S2AofDHSr/6dItU
+         TUxqRMrRcgisqkmOrRkOHMnZOYCtcK0l5kk9tpzwfEPSgtGjdmR5eo0ye/XI1gRLTIwW
+         8+t54HwCAokOGa5LNlaMlBZWkx18R5+wW4P6yvOce3QMVmHpctVqyl9PunlyfNKJ7pSl
+         7hBPch5PdwWw3DadvYzjBZCHHINcvldDOVxXiUPWcHMKFkyOeBcPZnG1Doyj9F7GR4yU
+         1V/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUJpeEEKokhyLpj3yCDg994v83lu2Me5ERvO8l4dHHyL9P/uSgsOlw3Wf5tvEaMG28S6mGxb3fBEkkB@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkVpfYbw0T74FxB4rduaByKbFJIK3Lw4ZLC5by2ye/4EMcOH7S
+	EJ6O8A+1yuq8dWbiISZyIKfaotYm3r8s7VqAobT+ungjJoLRdR+E3Q0IuJKAgsO+cVk=
+X-Gm-Gg: ASbGncsnomRMBl5xEvytzijYxbATG8XLNnrr9hQLYuUgOtx4bxLyo1YWxN7A/C8gaxs
+	zRQW6zvFyQch+OYpBbbEi33tuHlqVfF+3D0yGh3dJh34gDaWoMdZiv5nLxYiQmQJSvQGZM3tY5F
+	AyzO0GDy75diqPp9iNBL5/NNCMT2PxZnCsVlwYLDVEEQxFr+qc1r7C3du5f0NFny0ImQQsGdy/S
+	+P5ThSGo635w1dtvDHwI5Rt/NyCjaljpmM89JefGz90hydpvQZfKthmdaF0Pzo4nf//04KYRnTL
+	koWlNWR0MbTSdUx/YnUliZC6VmRvwabXQmYVXZRErGjO1eDuV4yE8eqLlzESxcNO0mEKCsqKtra
+	7cTYGZq/66Pqwauz0+yKV+rzWS7x9pGEPktefP2PN4pJ2KajJxNmAqJW9W64vNFsGqrW9el2LPU
+	bg/bDQyT+/4++lRbc3FMmL40D/
+X-Google-Smtp-Source: AGHT+IGA3eaiIFQ+2ZbiTA2MOgo0wwCquzKHa49AC8U6KCcMIh1ZnlWSFALO8lJzdAqqAE7UjkdKpg==
+X-Received: by 2002:a05:600c:841a:b0:471:a73:a9d2 with SMTP id 5b1f17b1804b1-4775cdc53d5mr54886855e9.11.1762428305744;
+        Thu, 06 Nov 2025 03:25:05 -0800 (PST)
+Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775cdcc528sm102956575e9.7.2025.11.06.03.25.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Nov 2025 03:25:05 -0800 (PST)
+From: Marco Crivellari <marco.crivellari@suse.com>
+To: linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Tony Luck <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>
+Subject: [PATCH v2] RAS/CEC: replace use of system_wq with system_percpu_wq
+Date: Thu,  6 Nov 2025 12:24:54 +0100
+Message-ID: <20251106112454.124568-1-marco.crivellari@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105160819.302988-1-marco.crivellari@suse.com>
- <20251105162932.GAaQt7bON4FtSmxQ3Z@fat_crate.local> <CAAofZF4fBbFtiKxde2M2ikK4k-LqYVRoavPbNVh-XFiQPmfGvw@mail.gmail.com>
- <20251105210800.GCaQu8sKCjZ9Xcq8-n@fat_crate.local> <CAAofZF4Sdk0REJFearcrB5_MLLQZWaNpecUPV0+BOiNcvmTaWA@mail.gmail.com>
- <20251106104921.GAaQx9MWLfhyqHNDYK@fat_crate.local> <CAAofZF7cz_F9qgr7WqbORwH5iMuAO9f0SkWRQxQ4ns4o2X_xJA@mail.gmail.com>
- <20251106111137.GBaQyCaXz4RBMNsULJ@fat_crate.local>
-In-Reply-To: <20251106111137.GBaQyCaXz4RBMNsULJ@fat_crate.local>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Thu, 6 Nov 2025 12:16:48 +0100
-X-Gm-Features: AWmQ_bkuBOPmW7AIbnSHHhM4OteYDnQbRCEjZ1_1w6q1h8RBmH44fIN9Z7Gcf0M
-Message-ID: <CAAofZF7j-Y6mSydny2KtpVX1n5GTKNhu2PE1R7dwB9=SoAzPpA@mail.gmail.com>
-Subject: Re: [PATCH] RAS/CEC: replace use of system_wq with system_percpu_wq
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org, 
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Michal Hocko <mhocko@suse.com>, Tony Luck <tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 6, 2025 at 12:12=E2=80=AFPM Borislav Petkov <bp@alien8.de> wrot=
-e:
->
-> On Thu, Nov 06, 2025 at 12:03:51PM +0100, Marco Crivellari wrote:
-> > I was torn between "replace" and "rename", because there is a new workq=
-ueue,
-> > not only a rename of the old one, because for now it is still existing.=
- :-)
->
-> You can also say:
->
-> "Switch to using system_percpu_wq because system_wq is going away as part=
- of
-> a workqueue restructuring."
->
-> Now it is perfectly clear what's going on.
+Currently if a user enqueues a work item using schedule_delayed_work() the
+used workqueue is "system_wq" (per-cpu wq) while queue_delayed_work() use
+WORK_CPU_UNBOUND (used when a CPU is not specified). The same applies to
+schedule_work() that is using system_wq and queue_work(), that makes use
+again of WORK_CPU_UNBOUND.
 
-Cool, I like this version.
+This lack of consistency cannot be addressed without refactoring the API.
+For more details see the Link tag below.
 
-Thank you!
+This continues the effort to refactor workqueue APIs, which began with
+the introduction of new workqueues and a new alloc_workqueue flag in:
 
---=20
+commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
+commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
 
-Marco Crivellari
+Switch to using system_percpu_wq because system_wq is going away as part of
+a workqueue restructuring.
 
-L3 Support Engineer, Technology & Product
+Link: https://lore.kernel.org/all/20250221112003.1dSuoGyc@linutronix.de
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+---
+ drivers/ras/cec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
+index e440b15fbabc..15f7f043c8ef 100644
+--- a/drivers/ras/cec.c
++++ b/drivers/ras/cec.c
+@@ -166,7 +166,7 @@ static void cec_mod_work(unsigned long interval)
+ 	unsigned long iv;
+ 
+ 	iv = interval * HZ;
+-	mod_delayed_work(system_wq, &cec_work, round_jiffies(iv));
++	mod_delayed_work(system_percpu_wq, &cec_work, round_jiffies(iv));
+ }
+ 
+ static void cec_work_fn(struct work_struct *work)
+-- 
+2.51.1
+
 
