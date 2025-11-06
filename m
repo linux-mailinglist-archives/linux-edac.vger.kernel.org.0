@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5373-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5374-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98C82C3B6CA
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:49:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4492C3B53B
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:42:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20615560961
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:39:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68ABF1AA4C3A
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A5333A00C;
-	Thu,  6 Nov 2025 13:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6397533C51B;
+	Thu,  6 Nov 2025 13:36:08 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955FA339B34;
-	Thu,  6 Nov 2025 13:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3626E2D6E53;
+	Thu,  6 Nov 2025 13:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762436155; cv=none; b=E+22M/vt+rhorWdzXUeW1iVaeZT+HPMNNkaT2PZITJplx+H/B2QskBXFAM+8c/8kHMsgr94tyX3G2gLVXWYE47zeBqw7HZwUQRnY0fycfqESMF4u4UVTQ1O75Xg3l04IZmj0lc1ZEIYZ3jxz+O7BHj+cyekSvxaBqX6fzhjukqI=
+	t=1762436168; cv=none; b=M+3bEkjIu79zhYJfGoK3SQnpYCHPQws8Ku1T+EXjy1dZiQjbMwl1Gzx5c3WqbcDT8Tf5ZL35wTAmD3Wcd069S3CFI3J/UhsjL1PrUuiWYo1bcJlWGh96leRWgJkqnPSihEAhb6C9mYy49f+s7OyJUjBrTUnWtE+aZSEtcDlhj2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762436155; c=relaxed/simple;
-	bh=T6wmM16PxIZU4x9VVRCAk33xF0JNROV4eNP3HBAIm8k=;
+	s=arc-20240116; t=1762436168; c=relaxed/simple;
+	bh=vMt78jObvHH7kPWJbiQKe6Q3XYYoFMvl2O250d/oGhk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mELePjxmfBwTMt1si2Er/Iq+O4Jxw55ltoby0SZLaKP0G16qfu4ZxI6gYeCxz8691BYCCTGcbfUjex3oIdESGYt9LfwhPq4w6vwBTnciGrBfB32X9b7hzmSbNanVkaRDQQpZOFwJtQQlfXZiniQRYuKbUHLnYk5s9Fr01w0I+xE=
+	 MIME-Version; b=DB0enzzHRF/74NwcSg86CP8ZXwRTslnHbEhlw7hE+vJR/SfSe8F1YPxH4Q/0fGD88hTgdugGkHOs0L7G1Mlk8rzCDtJK7odA9ohtFMewzFjYjnNxccPwyNsBAKM9u/cEkYoO8ZhlFaeMWwSjeEjbB/jbtMLaUYq48ij8CWWvkwg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55176C116C6;
-	Thu,  6 Nov 2025 13:35:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97896C4CEFB;
+	Thu,  6 Nov 2025 13:35:55 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Yury Norov <yury.norov@gmail.com>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -85,10 +85,11 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-mtd@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v6 08/26] soc: renesas: rz-sysc: #undef field_get() before local definition
-Date: Thu,  6 Nov 2025 14:33:56 +0100
-Message-ID: <7feec8e9cf823dd365d6e0f21004f943964e52a0.1762435376.git.geert+renesas@glider.be>
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH v6 09/26] ALSA: usb-audio: #undef field_{get,prep}() before local definition
+Date: Thu,  6 Nov 2025 14:33:57 +0100
+Message-ID: <57114f0f4fcd3fcf8bbbcb5eaa2c0b4d22e9075c.1762435376.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1762435376.git.geert+renesas@glider.be>
 References: <cover.1762435376.git.geert+renesas@glider.be>
@@ -100,35 +101,38 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare for the advent of a globally available common field_get() macro
-by undefining the symbol before defining a local variant.  This prevents
-redefinition warnings from the C preprocessor when introducing the common
-macro later.
+Prepare for the advent of globally available common field_get() and
+field_prep() macros by undefining the symbols before defining local
+variants.  This prevents redefinition warnings from the C preprocessor
+when introducing the common macros later.
 
 Suggested-by: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Takashi Iwai <tiwai@suse.de>
 ---
 v6:
-  - No changes,
+  - Add Acked-by,
 
 v5:
   - New.
 ---
- drivers/soc/renesas/rz-sysc.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/usb/mixer_quirks.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/soc/renesas/rz-sysc.c b/drivers/soc/renesas/rz-sysc.c
-index 9f79e299e6f41641..b9880085d3634065 100644
---- a/drivers/soc/renesas/rz-sysc.c
-+++ b/drivers/soc/renesas/rz-sysc.c
-@@ -16,6 +16,7 @@
+diff --git a/sound/usb/mixer_quirks.c b/sound/usb/mixer_quirks.c
+index 828af3095b86ee0a..713a8498b975e1ac 100644
+--- a/sound/usb/mixer_quirks.c
++++ b/sound/usb/mixer_quirks.c
+@@ -3312,7 +3312,9 @@ static int snd_bbfpro_controls_create(struct usb_mixer_interface *mixer)
+ #define RME_DIGIFACE_INVERT BIT(31)
  
- #include "rz-sysc.h"
- 
+ /* Nonconst helpers */
 +#undef field_get
  #define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
++#undef field_prep
+ #define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
  
- /**
+ static int snd_rme_digiface_write_reg(struct snd_kcontrol *kcontrol, int item, u16 mask, u16 val)
 -- 
 2.43.0
 
