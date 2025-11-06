@@ -1,61 +1,61 @@
-Return-Path: <linux-edac+bounces-5353-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5354-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2CE4C38C53
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 02:59:10 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7341DC38C59
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 02:59:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 70B5F4EFDD0
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 01:59:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D20774EEA31
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 01:59:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0177F23AB95;
-	Thu,  6 Nov 2025 01:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3478922A4DB;
+	Thu,  6 Nov 2025 01:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="vCcuyRZ+"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mbIGtQ4e"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011017.outbound.protection.outlook.com [40.107.208.17])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011019.outbound.protection.outlook.com [52.101.62.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692A2223DE7;
-	Thu,  6 Nov 2025 01:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF701225A3B;
+	Thu,  6 Nov 2025 01:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762394293; cv=fail; b=lOUIO4PouUFgLraBv4Je7XpP2xkoP7vzWcUdFIDq98wdetUdZw5f0GSiVRY6bAFN8t2ocE++1Fhd+D53hS0HLA22QPv1gntjgTnorBcbwJfaPDHvMniKl+o6fnP4BQYCQkd11zhQXN5oV2bzySRm+UG0XO/yYp8kfk/pFWhMyWw=
+	t=1762394314; cv=fail; b=RAMtNzkZXae7E/L4M1AjKB1WGtRn5d3gQtGTWavoh2nxH7ZiCiqzwshSSUXfSQPnq3DTORblEuhF58/nAQz5YbKd5THLloNN2eIadlyFCXYaN9XLXY2v2wjEjTID8CPszRohva84OslQeQ2/6hTtBE2roxx5TzYuS6bX5TGb+Fo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762394293; c=relaxed/simple;
-	bh=ukcBiMPnSSNdpv8r09MLpqlK7gApSWRur6F7hrnlUGM=;
+	s=arc-20240116; t=1762394314; c=relaxed/simple;
+	bh=NfhaJG9ii6Uaft/bLorOB+BxKSIQaMoOVknenMkHorI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h6xgojhrQkGvjj+jn4xIIWtxLr7L/m8cldXEEmeMa8A07Mgwuvzi6qISfodFXe9+9oT60Ul9l6LX2JEuTzxayXob1MjA7sbiLgFz/UF/I/6mvD8W9+OP0CUrfaRFHog3qJ1L6rmpFZZX8BSA6Ws4zcYAfoSbEkRMkE6KOM2shcY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=vCcuyRZ+; arc=fail smtp.client-ip=40.107.208.17
+	 MIME-Version:Content-Type; b=B1JqrlyhQYedgraqq47vjBP43wOKv14yhPgVf3VJgM+ckrUKTha54fJ/haNsV4ZeCp1LAOapfVSBS5jgtZRzg/HrJTp6eLPAkQh5D3p7kNkSGgVD+Cj2BaKXoRP3Dl60hqsB39hcJbDkMtGZNxpdrbs5m0+bOXY9rBBVs/QETe8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mbIGtQ4e; arc=fail smtp.client-ip=52.101.62.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=U4uFv4jkMKj6KnrxKIzb7zuVEal40juYJ4zpyfyQA6iAUChCkSPT56JGetDgkCGMxIstuYfO3wi5Xyc0SQET0u+RAmrnBwH1sAKlFC/J+3PB2tB6vdL5mejDzkQJj78uPZL+3yJSiA/czusp41A1FGWq+r3393vYhfnIbBfV6Uip04rBQjavBlMJt8vdWjGg8h+mhLtC0yV9F1EdV1Z5VUC8ERD+cMC0yX/Rwi6SrIl6vbWzHNIdXVr+ILA/EIfYKm9e0UMDyzgC5woeH+6GeZokia6Eu9qaP2BVrInnln55b7zwqYXu3jOnO8NGLJvQU6bjCAw/aFELs0zLoeCD2Q==
+ b=r1hagYw0XOnxXGKAAshYxg587WWzCtgs8K/5BEEAXe/wSSFpHNLgwQwOKRiHkv1Hl9xv4XQAc7ZJCfyyudnocpRyCyT7Dl5j3wQavM3607lMoDK+C1yrceuIMWCeANwUhOsahkzPoJt1I3mlESuxGlXn/nbEv/HDl7PWBypwVZ7XVvaWBmI4tWyG2xeT659TqHWpe/i0oQtBdcmW5DGR4/DVDf6vrWAaltm1+y1vygV7NldtLaW07OJPCNpYTGWV6YibhQLy9gwW4kxITWpvN6Y7KHPUfwahaYCW1v95dH3ZljtVE3q1jHjVhVIB2labqqG8pMyGw/m5dI7xgWM0/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yQixXkCQ3sE2uZG9qdOUmFOpIl8zK/eUoHx2xVxh+ak=;
- b=dSdBnxFhqWK5E4zD/TKg6YPGtwHG5jYO/METPJcfxN4VNv3526hrZq8l4YwatD8x4ldN8bc0UIVwEoDGi9afNEDqJix7o1Zwr+AfQlg9VD9CPUzxPpT8l/feYCyygyxhk5o0vCGg7uDAnsARM8mi3CUUh/b86MrJVl11HgjPBBV6p/uS3ceMf6lVICfZw93IX7sAZ74SYzpAcX3m2RJFpPbadRfRadJvMpqbL6NZVJ0b0mYlf86lXp2XSVA7owHw3tKzTeGjduG3A5QUNGJYRSb6GbTqIzdsuYtkSa5AmOAKzFKHF6FMDHHUBq/WHMlxc2vD8e/jL81HGi4g5AG1aw==
+ bh=IKYQMoic+eCO+qq/0uxqKeDYa9UKDe5NjU1JQoV+15A=;
+ b=S9Q3wXq9yH66wdm6TRzOoBbp4XK+TPB7JXVL/dl93E1+eyPjv6VZtTVqnwiXo+7NJgIya5nJWsrjZ9dOVDaVNvChjWmyRFG8ZUPQXjhKqBenoeO4/uEftqj4bGinNsampbrpSCnx+8iDfbXEi5LHZqMnvolTFV4JWIt/nhyi1t9y6gZrUqJii0IH8uD2FegUHOU7x5xXo2/lai06HRp30lI7pRgN7eAeq8W4TE6eH3XHQi3vOH8ZFYrEw56yKOglqvkrMt9ae2Nj1jG0pIWBpugdvlmkv9D3T0NUPH51hloL0wV8Ks/D+8uq1Ee6rqAsxjx5qhf1wPuGpEqTgmFwNA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yQixXkCQ3sE2uZG9qdOUmFOpIl8zK/eUoHx2xVxh+ak=;
- b=vCcuyRZ+7qHPZnS+0g+U1Dn5wTDQx+VaqDKPZphICT45mKoj5Ym2Mwf0RSfh2ZKoeAPps+gV/CLO/mTyN3AmrmbDeL6ADyxKQeMuz7/OQN+JJH6m4bGmtHB1M3Huj4KiRUCYDy575VsRVamKrN5+CRsNrWe369YNPs73u0zhlb8=
-Received: from BY5PR04CA0022.namprd04.prod.outlook.com (2603:10b6:a03:1d0::32)
- by SN7PR12MB6741.namprd12.prod.outlook.com (2603:10b6:806:26f::14) with
+ bh=IKYQMoic+eCO+qq/0uxqKeDYa9UKDe5NjU1JQoV+15A=;
+ b=mbIGtQ4e/5/0r1X/iWphcjit0vkfr7MMksBNJsewspfQCQzAp0llwkcUO3MXcHnrzROf7cVn6NAXZoVjhDldC5wFg4vlEW4aRhTaRWUwzJ0QV1kNeKcoM3/pnBEqNSrrf8IhHzWan1gcbbhS1+dRYD36c97/yacpEe6/4kRs9HU=
+Received: from BY5PR04CA0007.namprd04.prod.outlook.com (2603:10b6:a03:1d0::17)
+ by LV8PR12MB9083.namprd12.prod.outlook.com (2603:10b6:408:18c::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.16; Thu, 6 Nov
- 2025 01:58:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.9; Thu, 6 Nov
+ 2025 01:58:23 +0000
 Received: from SJ5PEPF00000209.namprd05.prod.outlook.com
- (2603:10b6:a03:1d0:cafe::e) by BY5PR04CA0022.outlook.office365.com
- (2603:10b6:a03:1d0::32) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:a03:1d0:cafe::cc) by BY5PR04CA0007.outlook.office365.com
+ (2603:10b6:a03:1d0::17) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.7 via Frontend Transport; Thu, 6
- Nov 2025 01:58:00 +0000
+ Nov 2025 01:58:20 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,20 +65,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from satlexmb07.amd.com (165.204.84.17) by
  SJ5PEPF00000209.mail.protection.outlook.com (10.167.244.42) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9298.6 via Frontend Transport; Thu, 6 Nov 2025 01:58:05 +0000
+ 15.20.9298.6 via Frontend Transport; Thu, 6 Nov 2025 01:58:23 +0000
 Received: from titanite-d354host.amd.com (10.180.168.240) by
  satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Wed, 5 Nov 2025 17:58:00 -0800
+ 15.2.2562.17; Wed, 5 Nov 2025 17:58:11 -0800
 From: Avadhut Naik <avadhut.naik@amd.com>
 To: <linux-edac@vger.kernel.org>, <linux-doc@vger.kernel.org>
 CC: <bp@alien8.de>, <gregkh@linuxfoundation.org>, <corbet@lwn.net>,
 	<chenhuacai@kernel.org>, <mchehab+huawei@kernel.org>,
 	<yazen.ghannam@amd.com>, <linux-kernel@vger.kernel.org>,
 	<avadhut.naik@amd.com>
-Subject: [PATCH v2 2/3] EDAC/amd64: Remove NUM_CONTROLLERS macro
-Date: Thu, 6 Nov 2025 01:54:45 +0000
-Message-ID: <20251106015727.1987246-3-avadhut.naik@amd.com>
+Subject: [PATCH v2 3/3] edac: Remove the legacy EDAC sysfs interface
+Date: Thu, 6 Nov 2025 01:54:46 +0000
+Message-ID: <20251106015727.1987246-4-avadhut.naik@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251106015727.1987246-1-avadhut.naik@amd.com>
 References: <20251106015727.1987246-1-avadhut.naik@amd.com>
@@ -94,117 +94,696 @@ X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF00000209:EE_|SN7PR12MB6741:EE_
-X-MS-Office365-Filtering-Correlation-Id: 277d7889-e52c-44fc-3d50-08de1cd7ed4f
+X-MS-TrafficTypeDiagnostic: SJ5PEPF00000209:EE_|LV8PR12MB9083:EE_
+X-MS-Office365-Filtering-Correlation-Id: de9c5318-eaf2-4e6b-071b-08de1cd7f7c0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
+	BCL:0;ARA:13230040|36860700013|82310400026|30052699003|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YryYJQMFzW3B1XVQb88pegdajAF8k2E5JbHpTMMxKqnfpEdb4RRjul7c8pBT?=
- =?us-ascii?Q?h/HusqF26QTprHRyghjSL05K14Jhd8IEQs5UhfC+mBuidTyeF+aE1Z2ZEuQZ?=
- =?us-ascii?Q?oS17w69QRsxtikjieY909jOO0J0nZlLbByXIg30YVVuaCEewQ+9dI5HOy2w5?=
- =?us-ascii?Q?Hj3UNBRCLPHpaGgaCn64GpnA031r8nwyBddKT1spqm4Q6Uy8LSfovtW8mi36?=
- =?us-ascii?Q?tHOFtrUSjTzOf9RjE1m62YDqY6iYGH/ZjmtHxa0qKDSNRzvBi1opaN/zNPBi?=
- =?us-ascii?Q?wmi4ruoNfSwChNYA0REeJtib6fdKj4LvI4xhJw0ws1lTvO8/keQg5SIr/MRt?=
- =?us-ascii?Q?qLY+ziTGttGHf6UBJPbLNpYRpeLuJ3pTyQWslQVPU6Ilp7G70UmMpTl+t8uS?=
- =?us-ascii?Q?RpKCmVqIpVYpQWEa9KkT63oa31T4TSSWEeQrP/wmNZuVVgwx6dnzb2dbjsL+?=
- =?us-ascii?Q?ko/cvHyGDeChCfEOXYzpVqWrE+XXC/WD4hZBzlVWe8+q/PKlKWsfb2yWVbDG?=
- =?us-ascii?Q?pmacZL+N4MFQFw6FPoRuEr9bCXMZMYb23HAg2cVh0OlMkLuqmaj68Qj86TEX?=
- =?us-ascii?Q?xGl33nEYGC3hIIKuvJBbM4pn5+0sW1LY22aMeSKOA9YAp5FDOVkArKOk4JGq?=
- =?us-ascii?Q?m9eqBL+y6ClZ3X/iKEoIukTyHl84VaxcOg61OdwmSKMOCPGIjGOUJjAV3iuo?=
- =?us-ascii?Q?mmpd1jpDXI3nwCTPhH7lj160/ULGItKejd1HxCKKoIm+vIZhsmWavNj5BJnB?=
- =?us-ascii?Q?XRTicoTkQebXF+XThAl7JGI2ea9oStQ7xuCAwPF5RmoCpQQxSmRsAvpQluU4?=
- =?us-ascii?Q?Tx+lc3SZfGHV0ruipBz3auZGv+xBNOKwj/2pgDvLE/vQ57hGqTjkyY6NhNId?=
- =?us-ascii?Q?26EC9L+QX5i059yJ34Oz26UMpbNLwCFVL1SKU6ysH6HhqkwyTveDKoesMxIH?=
- =?us-ascii?Q?jpLDtyQ06h+wR4pLxPI/XEkGEf9H+kOhCqH+/9lgqli+0rYwnjE/FrM30kLp?=
- =?us-ascii?Q?rHGWJVOLzDXwGk2Yc1JXAWC9LQv9BQr2dOf5sR/70H/iunHOKy1Yeqq51Gih?=
- =?us-ascii?Q?7+1CGC+e20aSM1E2DtZkJUgYDKpJ7yq4aPWbJHLmK74WdNA/hraU3QH0Xi5q?=
- =?us-ascii?Q?U1q/7tvaPhoisdJNvNv0oi87asDhbg4wNM21CRtx4j/zyh9Ra0KW66fQEc3u?=
- =?us-ascii?Q?eIaUt0Ye8Ip90ofOVPejH1I86XjYHiXRTlMXotJH0IDx9/iGI2YI/3Ffuda2?=
- =?us-ascii?Q?PmDvDTnYdi+jox8weBelAzHtJU77+6a8lyeltTDXu87cnlUWGPniiJyhlFsC?=
- =?us-ascii?Q?yUyUE1dDhZcnJIbC4fCk1/3D7yML8KR7x24Xpv3bTDEcniA/ib/oYHy6hzMJ?=
- =?us-ascii?Q?lJHKfwIRq4tLI6ADZuqsgQJZ+5bFB+DrbsF447bxxlOkaAzmEl07rrS00xV2?=
- =?us-ascii?Q?MCWYs+gx8l4URtmvMZUZ2WYbcKh4/0pVx7fEn00WvFNCCyOe5OfqcTazVKSn?=
- =?us-ascii?Q?eMaE92VJWv5oRT/hcTB5qUyovfI9Rfo0J/ftxs4FOWSh81pNH0c+TAK9U022?=
- =?us-ascii?Q?7dXrsm31/oMeMJI/qK4=3D?=
+	=?us-ascii?Q?WWT7tyiPC/bNPAnvi1NTTuEhuMbHVZkMFhc7daM98QmWSbYz9Lob6dparD5I?=
+ =?us-ascii?Q?6JOlzvRkzYT1tByUUqhlyfgKux/HwQhrajsVcSsWlMzaLHi/zWrUaFmzGPH+?=
+ =?us-ascii?Q?RuUPgRPuylMVDqjdhxaLZK6XJmgMTZdynwwPiGltCUKjWYKFm4w/S2FQCoKo?=
+ =?us-ascii?Q?yTzV5zMxuMMucmfpZbhRmutNPs13a+kBK0zHV+VAzgi276TRuYGQm5iohig5?=
+ =?us-ascii?Q?s5zmdFFRLtYIeUS/1vo9TwYUgsxeCGpulZBb7Y3ZJX5hw8+H5p0nuig2VeOM?=
+ =?us-ascii?Q?RLOb//mDNP14NvVs0ye+PCwcnsnLBeRrLHTwMcbE2Xd7KSWz/EpAxatwG3Eh?=
+ =?us-ascii?Q?DBxVm+PSIlCR0meSpQcKacVaVEjkrb4whvbp5HF2cyqDYSDYlc6zhA2QNiew?=
+ =?us-ascii?Q?p9vBgJS2atqzMOXoyigFNg/oChs7l9hstFDwcLtF/0z9eXr1h5gvyCsDKPlG?=
+ =?us-ascii?Q?1TpA4+2qp9UQt0EP1F+TKrtjlKw06HfuxMOTWIfWybHYDLVU8mFqyho6M4BD?=
+ =?us-ascii?Q?9P47UqH25nQAkGZjYuRrw6h92Jm5K4EdKNx7r3NGOVNdNILJqn7W5wVXGbpI?=
+ =?us-ascii?Q?yU99PZirvzu74u0BABFjMBJ5eRX9i4XBOo2BU0KEjSu2XsCUT3FPipwZw6Tj?=
+ =?us-ascii?Q?/KH2zIbzxXbUzuHV7XeoRfwBWcuLWJPOkHAuBmBIvyQpc0skdrqkUgevIJ77?=
+ =?us-ascii?Q?0YXfMwlyY4YbQPU9L0abfO7PSNNOQommS31dOkacPugQOa0ufYsLq/oxUHdp?=
+ =?us-ascii?Q?9pCuAOj/We79yPXw5onX9ZURQpGHBcwvFn6vvbGaUjJShF5XZqV2hm9A639I?=
+ =?us-ascii?Q?SvPQop+5vV4IaYc2AyNtCNiKNvHWRM9yZ0RkjBXMDn/jkJF/8EpiHr6BnNtB?=
+ =?us-ascii?Q?BBhVxIUEg+w96M4w0V6jcyEQULrzglZAc+TrA1h99a1/U5LGnYQj1rBHUAF8?=
+ =?us-ascii?Q?0GixfnJT613T/8X9Qrp8P2M0AyQx+jnOzdkrt4YDxi+ko2ypn2737vY8qhh+?=
+ =?us-ascii?Q?Iunad1/9/Iu/ZSo6VLtYvkjTkZfs8GUu2u7rljFmQ8vWfR1nus4yaMbqzn76?=
+ =?us-ascii?Q?Y8+ADpnkqYQTaqZ6LtEVUB9uh4tAiLCUSfnHcdz/mkMC3/WTxEoSCJg4+WBT?=
+ =?us-ascii?Q?PXeXCYv7aFRrLXW06YjkZ9gHB3DVyi4jON6WUhglvN+fC7O/sjn2802BtkcU?=
+ =?us-ascii?Q?wlIzGoCMPSvriEL8qve1LTECHiNTUiSkQy6JURrUQJH3XSRTJ4TQeg8iLNI6?=
+ =?us-ascii?Q?nn2D7g0M6YimJeB7GHvGbDJ7NtuFPOV0rFUKgU6XXOm6LVp54J5v6eOiEbvU?=
+ =?us-ascii?Q?7n5jf6v8a8FoLEI2MQ+wLMna4xobzlf4ZVG6chNrDHqWR5nEWKY6+GlS76vP?=
+ =?us-ascii?Q?dMYRGp0uks6o+XHSElOqa02HquflTuP4PA4N0TkmZwHWnjLGWtgbN43DlotY?=
+ =?us-ascii?Q?4sdC3zi2hq1YUpBvne2+1mDR4TV/IZfH+mA6zI/3ma6ZLTKO64UyFiuYRFab?=
+ =?us-ascii?Q?0ZfKHJruO/3i7K/FzTSm6viwLKiqPox5EuNjahqy/3nkxDiHQlsbbWjj+kFA?=
+ =?us-ascii?Q?mmUpJAsidg4AcWgM6WE=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(30052699003)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 01:58:05.6795
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 01:58:23.1951
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 277d7889-e52c-44fc-3d50-08de1cd7ed4f
+X-MS-Exchange-CrossTenant-Network-Message-Id: de9c5318-eaf2-4e6b-071b-08de1cd7f7c0
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SJ5PEPF00000209.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6741
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9083
 
-Currently, the NUM_CONTROLLERS macro is used to limit the amount of
-memory controllers (UMCs) available per node.
+Commit 199747106934 ("edac: add a new per-dimm API and make the old
+per-virtual-rank API obsolete") introduced a new per-dimm sysfs interface
+for EDAC making the old per-virtual-rank sysfs interface obsolete.
 
-The number of UMCs available per node, however, is already cached by
-the max_mcs variable of struct amd64_pvt. Allocate the relevant data
-structures dynamically using the variable instead of static allocation
-through the macro.
-
-The max_mcs variable is used for legacy systems too. These systems have
-a max of 2 controllers. Since the default value of max_mcs, set in
-per_family_init(), is 2, these legacy systems are also covered by this
-change.
+Since this new sysfs interface was introduced more than a decade ago,
+remove the obsolete legacy interface.
 
 Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 ---
- drivers/edac/amd64_edac.c | 5 +++++
- drivers/edac/amd64_edac.h | 3 +--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/RAS/main.rst     | 142 +-------
+ arch/loongarch/configs/loongson3_defconfig |   1 -
+ drivers/edac/Kconfig                       |   8 -
+ drivers/edac/edac_mc_sysfs.c               | 404 ---------------------
+ 4 files changed, 3 insertions(+), 552 deletions(-)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 886ad075d222..2391f3469961 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3732,6 +3732,7 @@ static void hw_info_put(struct amd64_pvt *pvt)
- 	pci_dev_put(pvt->F1);
- 	pci_dev_put(pvt->F2);
- 	kfree(pvt->umc);
-+	kfree(pvt->csels);
- }
+diff --git a/Documentation/admin-guide/RAS/main.rst b/Documentation/admin-guide/RAS/main.rst
+index 447bfde509fb..5a45db32c49b 100644
+--- a/Documentation/admin-guide/RAS/main.rst
++++ b/Documentation/admin-guide/RAS/main.rst
+@@ -406,24 +406,8 @@ index of the MC::
+ 		   |->mc2
+ 		   ....
  
- static struct low_ops umc_ops = {
-@@ -3915,6 +3916,10 @@ static int per_family_init(struct amd64_pvt *pvt)
- 		scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), "F%02Xh_M%02Xh",
- 			  pvt->fam, pvt->model);
+-Under each ``mcX`` directory each ``csrowX`` is again represented by a
+-``csrowX``, where ``X`` is the csrow index::
+-
+-	.../mc/mc0/
+-		|
+-		|->csrow0
+-		|->csrow2
+-		|->csrow3
+-		....
+-
+-Notice that there is no csrow1, which indicates that csrow0 is composed
+-of a single ranked DIMMs. This should also apply in both Channels, in
+-order to have dual-channel mode be operational. Since both csrow2 and
+-csrow3 are populated, this indicates a dual ranked set of DIMMs for
+-channels 0 and 1.
+-
+-Within each of the ``mcX`` and ``csrowX`` directories are several EDAC
+-control and attribute files.
++Within each of the ``mcX`` directory are several EDAC control and
++attribute files.
  
-+	pvt->csels = kcalloc(pvt->max_mcs, sizeof(*pvt->csels), GFP_KERNEL);
-+	if (!pvt->csels)
-+		return -ENOMEM;
-+
+ ``mcX`` directories
+ -------------------
+@@ -569,7 +553,7 @@ this ``X`` memory module:
+ 		- Unbuffered-DDR
+ 
+ .. [#f5] On some systems, the memory controller doesn't have any logic
+-  to identify the memory module. On such systems, the directory is called ``rankX`` and works on a similar way as the ``csrowX`` directories.
++  to identify the memory module. On such systems, the directory is called ``rankX``.
+   On modern Intel memory controllers, the memory controller identifies the
+   memory modules directly. On such systems, the directory is called ``dimmX``.
+ 
+@@ -577,126 +561,6 @@ this ``X`` memory module:
+   symlinks inside the sysfs mapping that are automatically created by
+   the sysfs subsystem. Currently, they serve no purpose.
+ 
+-``csrowX`` directories
+-----------------------
+-
+-When CONFIG_EDAC_LEGACY_SYSFS is enabled, sysfs will contain the ``csrowX``
+-directories. As this API doesn't work properly for Rambus, FB-DIMMs and
+-modern Intel Memory Controllers, this is being deprecated in favor of
+-``dimmX`` directories.
+-
+-In the ``csrowX`` directories are EDAC control and attribute files for
+-this ``X`` instance of csrow:
+-
+-
+-- ``ue_count`` - Total Uncorrectable Errors count attribute file
+-
+-	This attribute file displays the total count of uncorrectable
+-	errors that have occurred on this csrow. If panic_on_ue is set
+-	this counter will not have a chance to increment, since EDAC
+-	will panic the system.
+-
+-
+-- ``ce_count`` - Total Correctable Errors count attribute file
+-
+-	This attribute file displays the total count of correctable
+-	errors that have occurred on this csrow. This count is very
+-	important to examine. CEs provide early indications that a
+-	DIMM is beginning to fail. This count field should be
+-	monitored for non-zero values and report such information
+-	to the system administrator.
+-
+-
+-- ``size_mb`` - Total memory managed by this csrow attribute file
+-
+-	This attribute file displays, in count of megabytes, the memory
+-	that this csrow contains.
+-
+-
+-- ``mem_type`` - Memory Type attribute file
+-
+-	This attribute file will display what type of memory is currently
+-	on this csrow. Normally, either buffered or unbuffered memory.
+-	Examples:
+-
+-		- Registered-DDR
+-		- Unbuffered-DDR
+-
+-
+-- ``edac_mode`` - EDAC Mode of operation attribute file
+-
+-	This attribute file will display what type of Error detection
+-	and correction is being utilized.
+-
+-
+-- ``dev_type`` - Device type attribute file
+-
+-	This attribute file will display what type of DRAM device is
+-	being utilized on this DIMM.
+-	Examples:
+-
+-		- x1
+-		- x2
+-		- x4
+-		- x8
+-
+-
+-- ``ch0_ce_count`` - Channel 0 CE Count attribute file
+-
+-	This attribute file will display the count of CEs on this
+-	DIMM located in channel 0.
+-
+-
+-- ``ch0_ue_count`` - Channel 0 UE Count attribute file
+-
+-	This attribute file will display the count of UEs on this
+-	DIMM located in channel 0.
+-
+-
+-- ``ch0_dimm_label`` - Channel 0 DIMM Label control file
+-
+-
+-	This control file allows this DIMM to have a label assigned
+-	to it. With this label in the module, when errors occur
+-	the output can provide the DIMM label in the system log.
+-	This becomes vital for panic events to isolate the
+-	cause of the UE event.
+-
+-	DIMM Labels must be assigned after booting, with information
+-	that correctly identifies the physical slot with its
+-	silk screen label. This information is currently very
+-	motherboard specific and determination of this information
+-	must occur in userland at this time.
+-
+-
+-- ``ch1_ce_count`` - Channel 1 CE Count attribute file
+-
+-
+-	This attribute file will display the count of CEs on this
+-	DIMM located in channel 1.
+-
+-
+-- ``ch1_ue_count`` - Channel 1 UE Count attribute file
+-
+-
+-	This attribute file will display the count of UEs on this
+-	DIMM located in channel 0.
+-
+-
+-- ``ch1_dimm_label`` - Channel 1 DIMM Label control file
+-
+-	This control file allows this DIMM to have a label assigned
+-	to it. With this label in the module, when errors occur
+-	the output can provide the DIMM label in the system log.
+-	This becomes vital for panic events to isolate the
+-	cause of the UE event.
+-
+-	DIMM Labels must be assigned after booting, with information
+-	that correctly identifies the physical slot with its
+-	silk screen label. This information is currently very
+-	motherboard specific and determination of this information
+-	must occur in userland at this time.
+-
+ 
+ System Logging
+ --------------
+diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
+index 3e838c229cd5..50e1304e7a6f 100644
+--- a/arch/loongarch/configs/loongson3_defconfig
++++ b/arch/loongarch/configs/loongson3_defconfig
+@@ -917,7 +917,6 @@ CONFIG_MMC=y
+ CONFIG_MMC_LOONGSON2=m
+ CONFIG_INFINIBAND=m
+ CONFIG_EDAC=y
+-# CONFIG_EDAC_LEGACY_SYSFS is not set
+ CONFIG_EDAC_LOONGSON=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_DRV_EFI=y
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 39352b9b7a7e..9a7ff42064e9 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -23,14 +23,6 @@ menuconfig EDAC
+ 
+ if EDAC
+ 
+-config EDAC_LEGACY_SYSFS
+-	bool "EDAC legacy sysfs"
+-	default y
+-	help
+-	  Enable the compatibility sysfs nodes.
+-	  Use 'Y' if your edac utilities aren't ported to work with the newer
+-	  structures.
+-
+ config EDAC_DEBUG
+ 	bool "Debugging"
+ 	select DEBUG_FS
+diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
+index 8689631f1905..091cc6aae8a9 100644
+--- a/drivers/edac/edac_mc_sysfs.c
++++ b/drivers/edac/edac_mc_sysfs.c
+@@ -115,401 +115,6 @@ static const char * const edac_caps[] = {
+ 	[EDAC_S16ECD16ED] = "S16ECD16ED"
+ };
+ 
+-#ifdef CONFIG_EDAC_LEGACY_SYSFS
+-/*
+- * EDAC sysfs CSROW data structures and methods
+- */
+-
+-#define to_csrow(k) container_of(k, struct csrow_info, dev)
+-
+-/*
+- * We need it to avoid namespace conflicts between the legacy API
+- * and the per-dimm/per-rank one
+- */
+-#define DEVICE_ATTR_LEGACY(_name, _mode, _show, _store) \
+-	static struct device_attribute dev_attr_legacy_##_name = __ATTR(_name, _mode, _show, _store)
+-
+-struct dev_ch_attribute {
+-	struct device_attribute attr;
+-	unsigned int channel;
+-};
+-
+-#define DEVICE_CHANNEL(_name, _mode, _show, _store, _var) \
+-	static struct dev_ch_attribute dev_attr_legacy_##_name = \
+-		{ __ATTR(_name, _mode, _show, _store), (_var) }
+-
+-#define to_channel(k) (container_of(k, struct dev_ch_attribute, attr)->channel)
+-
+-/* Set of more default csrow<id> attribute show/store functions */
+-static ssize_t csrow_ue_count_show(struct device *dev,
+-				   struct device_attribute *mattr, char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-
+-	return sysfs_emit(data, "%u\n", csrow->ue_count);
+-}
+-
+-static ssize_t csrow_ce_count_show(struct device *dev,
+-				   struct device_attribute *mattr, char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-
+-	return sysfs_emit(data, "%u\n", csrow->ce_count);
+-}
+-
+-static ssize_t csrow_size_show(struct device *dev,
+-			       struct device_attribute *mattr, char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-	int i;
+-	u32 nr_pages = 0;
+-
+-	for (i = 0; i < csrow->nr_channels; i++)
+-		nr_pages += csrow->channels[i]->dimm->nr_pages;
+-	return sysfs_emit(data, "%u\n", PAGES_TO_MiB(nr_pages));
+-}
+-
+-static ssize_t csrow_mem_type_show(struct device *dev,
+-				   struct device_attribute *mattr, char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-
+-	return sysfs_emit(data, "%s\n", edac_mem_types[csrow->channels[0]->dimm->mtype]);
+-}
+-
+-static ssize_t csrow_dev_type_show(struct device *dev,
+-				   struct device_attribute *mattr, char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-
+-	return sysfs_emit(data, "%s\n", dev_types[csrow->channels[0]->dimm->dtype]);
+-}
+-
+-static ssize_t csrow_edac_mode_show(struct device *dev,
+-				    struct device_attribute *mattr,
+-				    char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-
+-	return sysfs_emit(data, "%s\n", edac_caps[csrow->channels[0]->dimm->edac_mode]);
+-}
+-
+-/* show/store functions for DIMM Label attributes */
+-static ssize_t channel_dimm_label_show(struct device *dev,
+-				       struct device_attribute *mattr,
+-				       char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-	unsigned int chan = to_channel(mattr);
+-	struct rank_info *rank = csrow->channels[chan];
+-
+-	/* if field has not been initialized, there is nothing to send */
+-	if (!rank->dimm->label[0])
+-		return 0;
+-
+-	return sysfs_emit(data, "%s\n", rank->dimm->label);
+-}
+-
+-static ssize_t channel_dimm_label_store(struct device *dev,
+-					struct device_attribute *mattr,
+-					const char *data, size_t count)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-	unsigned int chan = to_channel(mattr);
+-	struct rank_info *rank = csrow->channels[chan];
+-	size_t copy_count = count;
+-
+-	if (count == 0)
+-		return -EINVAL;
+-
+-	if (data[count - 1] == '\0' || data[count - 1] == '\n')
+-		copy_count -= 1;
+-
+-	if (copy_count == 0 || copy_count >= sizeof(rank->dimm->label))
+-		return -EINVAL;
+-
+-	memcpy(rank->dimm->label, data, copy_count);
+-	rank->dimm->label[copy_count] = '\0';
+-
+-	return count;
+-}
+-
+-/* show function for dynamic chX_ce_count attribute */
+-static ssize_t channel_ce_count_show(struct device *dev,
+-				     struct device_attribute *mattr, char *data)
+-{
+-	struct csrow_info *csrow = to_csrow(dev);
+-	unsigned int chan = to_channel(mattr);
+-	struct rank_info *rank = csrow->channels[chan];
+-
+-	return sysfs_emit(data, "%u\n", rank->ce_count);
+-}
+-
+-/* cwrow<id>/attribute files */
+-DEVICE_ATTR_LEGACY(size_mb, S_IRUGO, csrow_size_show, NULL);
+-DEVICE_ATTR_LEGACY(dev_type, S_IRUGO, csrow_dev_type_show, NULL);
+-DEVICE_ATTR_LEGACY(mem_type, S_IRUGO, csrow_mem_type_show, NULL);
+-DEVICE_ATTR_LEGACY(edac_mode, S_IRUGO, csrow_edac_mode_show, NULL);
+-DEVICE_ATTR_LEGACY(ue_count, S_IRUGO, csrow_ue_count_show, NULL);
+-DEVICE_ATTR_LEGACY(ce_count, S_IRUGO, csrow_ce_count_show, NULL);
+-
+-/* default attributes of the CSROW<id> object */
+-static struct attribute *csrow_attrs[] = {
+-	&dev_attr_legacy_dev_type.attr,
+-	&dev_attr_legacy_mem_type.attr,
+-	&dev_attr_legacy_edac_mode.attr,
+-	&dev_attr_legacy_size_mb.attr,
+-	&dev_attr_legacy_ue_count.attr,
+-	&dev_attr_legacy_ce_count.attr,
+-	NULL,
+-};
+-
+-static const struct attribute_group csrow_attr_grp = {
+-	.attrs	= csrow_attrs,
+-};
+-
+-static const struct attribute_group *csrow_attr_groups[] = {
+-	&csrow_attr_grp,
+-	NULL
+-};
+-
+-static const struct device_type csrow_attr_type = {
+-	.groups		= csrow_attr_groups,
+-};
+-
+-/*
+- * possible dynamic channel DIMM Label attribute files
+- *
+- */
+-DEVICE_CHANNEL(ch0_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 0);
+-DEVICE_CHANNEL(ch1_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 1);
+-DEVICE_CHANNEL(ch2_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 2);
+-DEVICE_CHANNEL(ch3_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 3);
+-DEVICE_CHANNEL(ch4_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 4);
+-DEVICE_CHANNEL(ch5_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 5);
+-DEVICE_CHANNEL(ch6_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 6);
+-DEVICE_CHANNEL(ch7_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 7);
+-DEVICE_CHANNEL(ch8_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 8);
+-DEVICE_CHANNEL(ch9_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 9);
+-DEVICE_CHANNEL(ch10_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 10);
+-DEVICE_CHANNEL(ch11_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 11);
+-DEVICE_CHANNEL(ch12_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 12);
+-DEVICE_CHANNEL(ch13_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 13);
+-DEVICE_CHANNEL(ch14_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 14);
+-DEVICE_CHANNEL(ch15_dimm_label, S_IRUGO | S_IWUSR,
+-	channel_dimm_label_show, channel_dimm_label_store, 15);
+-
+-/* Total possible dynamic DIMM Label attribute file table */
+-static struct attribute *dynamic_csrow_dimm_attr[] = {
+-	&dev_attr_legacy_ch0_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch1_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch2_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch3_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch4_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch5_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch6_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch7_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch8_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch9_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch10_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch11_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch12_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch13_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch14_dimm_label.attr.attr,
+-	&dev_attr_legacy_ch15_dimm_label.attr.attr,
+-	NULL
+-};
+-
+-/* possible dynamic channel ce_count attribute files */
+-DEVICE_CHANNEL(ch0_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 0);
+-DEVICE_CHANNEL(ch1_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 1);
+-DEVICE_CHANNEL(ch2_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 2);
+-DEVICE_CHANNEL(ch3_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 3);
+-DEVICE_CHANNEL(ch4_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 4);
+-DEVICE_CHANNEL(ch5_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 5);
+-DEVICE_CHANNEL(ch6_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 6);
+-DEVICE_CHANNEL(ch7_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 7);
+-DEVICE_CHANNEL(ch8_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 8);
+-DEVICE_CHANNEL(ch9_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 9);
+-DEVICE_CHANNEL(ch10_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 10);
+-DEVICE_CHANNEL(ch11_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 11);
+-DEVICE_CHANNEL(ch12_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 12);
+-DEVICE_CHANNEL(ch13_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 13);
+-DEVICE_CHANNEL(ch14_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 14);
+-DEVICE_CHANNEL(ch15_ce_count, S_IRUGO,
+-		   channel_ce_count_show, NULL, 15);
+-
+-/* Total possible dynamic ce_count attribute file table */
+-static struct attribute *dynamic_csrow_ce_count_attr[] = {
+-	&dev_attr_legacy_ch0_ce_count.attr.attr,
+-	&dev_attr_legacy_ch1_ce_count.attr.attr,
+-	&dev_attr_legacy_ch2_ce_count.attr.attr,
+-	&dev_attr_legacy_ch3_ce_count.attr.attr,
+-	&dev_attr_legacy_ch4_ce_count.attr.attr,
+-	&dev_attr_legacy_ch5_ce_count.attr.attr,
+-	&dev_attr_legacy_ch6_ce_count.attr.attr,
+-	&dev_attr_legacy_ch7_ce_count.attr.attr,
+-	&dev_attr_legacy_ch8_ce_count.attr.attr,
+-	&dev_attr_legacy_ch9_ce_count.attr.attr,
+-	&dev_attr_legacy_ch10_ce_count.attr.attr,
+-	&dev_attr_legacy_ch11_ce_count.attr.attr,
+-	&dev_attr_legacy_ch12_ce_count.attr.attr,
+-	&dev_attr_legacy_ch13_ce_count.attr.attr,
+-	&dev_attr_legacy_ch14_ce_count.attr.attr,
+-	&dev_attr_legacy_ch15_ce_count.attr.attr,
+-	NULL
+-};
+-
+-static umode_t csrow_dev_is_visible(struct kobject *kobj,
+-				    struct attribute *attr, int idx)
+-{
+-	struct device *dev = kobj_to_dev(kobj);
+-	struct csrow_info *csrow = container_of(dev, struct csrow_info, dev);
+-
+-	if (idx >= csrow->nr_channels)
+-		return 0;
+-
+-	if (idx >= ARRAY_SIZE(dynamic_csrow_ce_count_attr) - 1) {
+-		WARN_ONCE(1, "idx: %d\n", idx);
+-		return 0;
+-	}
+-
+-	/* Only expose populated DIMMs */
+-	if (!csrow->channels[idx]->dimm->nr_pages)
+-		return 0;
+-
+-	return attr->mode;
+-}
+-
+-
+-static const struct attribute_group csrow_dev_dimm_group = {
+-	.attrs = dynamic_csrow_dimm_attr,
+-	.is_visible = csrow_dev_is_visible,
+-};
+-
+-static const struct attribute_group csrow_dev_ce_count_group = {
+-	.attrs = dynamic_csrow_ce_count_attr,
+-	.is_visible = csrow_dev_is_visible,
+-};
+-
+-static const struct attribute_group *csrow_dev_groups[] = {
+-	&csrow_dev_dimm_group,
+-	&csrow_dev_ce_count_group,
+-	NULL
+-};
+-
+-static void csrow_release(struct device *dev)
+-{
+-	/*
+-	 * Nothing to do, just unregister sysfs here. The mci
+-	 * device owns the data and will also release it.
+-	 */
+-}
+-
+-static inline int nr_pages_per_csrow(struct csrow_info *csrow)
+-{
+-	int chan, nr_pages = 0;
+-
+-	for (chan = 0; chan < csrow->nr_channels; chan++)
+-		nr_pages += csrow->channels[chan]->dimm->nr_pages;
+-
+-	return nr_pages;
+-}
+-
+-/* Create a CSROW object under specified edac_mc_device */
+-static int edac_create_csrow_object(struct mem_ctl_info *mci,
+-				    struct csrow_info *csrow, int index)
+-{
+-	int err;
+-
+-	csrow->dev.type = &csrow_attr_type;
+-	csrow->dev.groups = csrow_dev_groups;
+-	csrow->dev.release = csrow_release;
+-	device_initialize(&csrow->dev);
+-	csrow->dev.parent = &mci->dev;
+-	csrow->mci = mci;
+-	dev_set_name(&csrow->dev, "csrow%d", index);
+-	dev_set_drvdata(&csrow->dev, csrow);
+-
+-	err = device_add(&csrow->dev);
+-	if (err) {
+-		edac_dbg(1, "failure: create device %s\n", dev_name(&csrow->dev));
+-		put_device(&csrow->dev);
+-		return err;
+-	}
+-
+-	edac_dbg(0, "device %s created\n", dev_name(&csrow->dev));
+-
+-	return 0;
+-}
+-
+-/* Create a CSROW object under specified edac_mc_device */
+-static int edac_create_csrow_objects(struct mem_ctl_info *mci)
+-{
+-	int err, i;
+-	struct csrow_info *csrow;
+-
+-	for (i = 0; i < mci->nr_csrows; i++) {
+-		csrow = mci->csrows[i];
+-		if (!nr_pages_per_csrow(csrow))
+-			continue;
+-		err = edac_create_csrow_object(mci, mci->csrows[i], i);
+-		if (err < 0)
+-			goto error;
+-	}
+-	return 0;
+-
+-error:
+-	for (--i; i >= 0; i--) {
+-		if (device_is_registered(&mci->csrows[i]->dev))
+-			device_unregister(&mci->csrows[i]->dev);
+-	}
+-
+-	return err;
+-}
+-
+-static void edac_delete_csrow_objects(struct mem_ctl_info *mci)
+-{
+-	int i;
+-
+-	for (i = 0; i < mci->nr_csrows; i++) {
+-		if (device_is_registered(&mci->csrows[i]->dev))
+-			device_unregister(&mci->csrows[i]->dev);
+-	}
+-}
+-
+-#endif
+-
+ /*
+  * Per-dimm (or per-rank) devices
+  */
+@@ -989,12 +594,6 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
+ 			goto fail;
+ 	}
+ 
+-#ifdef CONFIG_EDAC_LEGACY_SYSFS
+-	err = edac_create_csrow_objects(mci);
+-	if (err < 0)
+-		goto fail;
+-#endif
+-
+ 	edac_create_debugfs_nodes(mci);
  	return 0;
- }
  
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 4ec6133d5179..1757c1b99fc8 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -96,7 +96,6 @@
- /* Hardware limit on ChipSelect rows per MC and processors per system */
- #define NUM_CHIPSELECTS			8
- #define DRAM_RANGES			8
--#define NUM_CONTROLLERS			16
+@@ -1019,9 +618,6 @@ void edac_remove_sysfs_mci_device(struct mem_ctl_info *mci)
+ #ifdef CONFIG_EDAC_DEBUG
+ 	edac_debugfs_remove_recursive(mci->debugfs);
+ #endif
+-#ifdef CONFIG_EDAC_LEGACY_SYSFS
+-	edac_delete_csrow_objects(mci);
+-#endif
  
- #define ON true
- #define OFF false
-@@ -348,7 +347,7 @@ struct amd64_pvt {
- 	u32 dbam1;		/* DRAM Base Address Mapping reg for DCT1 */
- 
- 	/* one for each DCT/UMC */
--	struct chip_select csels[NUM_CONTROLLERS];
-+	struct chip_select *csels;
- 
- 	/* DRAM base and limit pairs F1x[78,70,68,60,58,50,48,40] */
- 	struct dram_range ranges[DRAM_RANGES];
+ 	mci_for_each_dimm(mci, dimm) {
+ 		if (!device_is_registered(&dimm->dev))
 -- 
 2.43.0
 
