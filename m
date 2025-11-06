@@ -1,34 +1,34 @@
-Return-Path: <linux-edac+bounces-5369-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5370-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7EC9C3B5B6
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:45:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4542C3B4AE
+	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 14:40:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71F5B465EBB
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:38:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9265D1A432F6
+	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 13:38:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906EF3314C5;
-	Thu,  6 Nov 2025 13:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E10A3321B9;
+	Thu,  6 Nov 2025 13:35:24 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D7A22D4E9;
-	Thu,  6 Nov 2025 13:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DF622D4E9;
+	Thu,  6 Nov 2025 13:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762436114; cv=none; b=TUnlbuT50iGv0JJzMcSmHnqqwIdolQaqlLxG826mSOZJiHf8HEv4tKLMQ6sjPAdRKdlO+Bvm3sCeSOasOwQzhWkR5bvJX6fTa8xvv+ycVnz88+iu9vwxgsilanGGD1w55SrXz1Jz5KTAXPTDQ4/KCIcTjMoOWqCyPO351VuCcb0=
+	t=1762436124; cv=none; b=izLE1jZuLD8omcOhAtQPFJZwCpJEM1/oB/5JmiA3V6ELuKU2SzVp5EuEBPwx3BuQ0BxzNN1PUL7yaQ8ioCI/75Ixe9UxnaDwivjokcZW4xt3PrRD6F25NI1XiP437vlMBcpw904FaaCw14sn1esxLRLMcl3joye4D8W2vp/NjdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762436114; c=relaxed/simple;
-	bh=lZzkKR5s+uRAPjDMYU3Tgg7kF3xAcA5usORbjtYvJE8=;
+	s=arc-20240116; t=1762436124; c=relaxed/simple;
+	bh=nDP0lFBvNYEkrAQEUlWtlqBdBdUwZbGNoXfDDRPBZhY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bP/2FRT3LV66NaWYt1rmew1eeRofXlomHpDioP50TeKiJca5y04RVwfpW8DJ8vX7rvxWOR+AdXK+wcAxhbDNmlGNYWvicCLkUnXcHu0es7vQqHLBPxsVG3w9tijH8XVkeSoZeKRyojUnAk7FOScXOPGShkrxtpnTwKzVLJaRMnc=
+	 MIME-Version; b=Xh4Jy6GiyQKAQ+rzdt10Aji+I5XM1kYONpd7zTkXEGxCLTra2NllHauY5wlqM+jVS2k3H4ANLqOZoy2+T3jGtRvGY+usOAH2+m/pATV+erXLzAtNDtJSKmi7v4WfCeJAg3+83o7lCrvq/gGZJ9qp71xxLursuXk6thIgnHq2saU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD19C4CEFB;
-	Thu,  6 Nov 2025 13:35:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A4DC116D0;
+	Thu,  6 Nov 2025 13:35:14 +0000 (UTC)
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Yury Norov <yury.norov@gmail.com>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -85,11 +85,10 @@ Cc: linux-clk@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-mtd@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v6 04/26] gpio: aspeed: #undef field_{get,prep}() before local definition
-Date: Thu,  6 Nov 2025 14:33:52 +0100
-Message-ID: <d1442e895f689ed1872c3cccd04f01f2aa38c37b.1762435376.git.geert+renesas@glider.be>
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v6 05/26] iio: dac: ad3530r: #undef field_prep() before local definition
+Date: Thu,  6 Nov 2025 14:33:53 +0100
+Message-ID: <a2466d9201cb8c25504e25ac531a69ef8bd6e958.1762435376.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1762435376.git.geert+renesas@glider.be>
 References: <cover.1762435376.git.geert+renesas@glider.be>
@@ -101,38 +100,35 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare for the advent of globally available common field_get() and
-field_prep() macros by undefining the symbols before defining local
-variants.  This prevents redefinition warnings from the C preprocessor
-when introducing the common macros later.
+Prepare for the advent of a globally available common field_prep() macro
+by undefining the symbol before defining a local variant.  This prevents
+redefinition warnings from the C preprocessor when introducing the common
+macro later.
 
 Suggested-by: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
 v6:
-  - Add Acked-by,
+  - No changes,
 
 v5:
   - New.
 ---
- drivers/gpio/gpio-aspeed.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iio/dac/ad3530r.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
-index 7953a9c4e36d7550..ef4ccaf74a5b379e 100644
---- a/drivers/gpio/gpio-aspeed.c
-+++ b/drivers/gpio/gpio-aspeed.c
-@@ -32,7 +32,9 @@
- #include "gpiolib.h"
+diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
+index 6134613777b8e1d4..5684d11137f29948 100644
+--- a/drivers/iio/dac/ad3530r.c
++++ b/drivers/iio/dac/ad3530r.c
+@@ -54,6 +54,7 @@
+ #define AD3531R_MAX_CHANNELS			4
  
- /* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
-+#undef field_get
- #define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
+ /* Non-constant mask variant of FIELD_PREP() */
 +#undef field_prep
  #define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
  
- #define GPIO_G7_IRQ_STS_BASE 0x100
+ enum ad3530r_mode {
 -- 
 2.43.0
 
