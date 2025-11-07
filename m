@@ -1,239 +1,215 @@
-Return-Path: <linux-edac+bounces-5406-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5407-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 513C4C3D87D
-	for <lists+linux-edac@lfdr.de>; Thu, 06 Nov 2025 22:56:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1630C3E1CB
+	for <lists+linux-edac@lfdr.de>; Fri, 07 Nov 2025 02:20:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 148EB4E15DC
-	for <lists+linux-edac@lfdr.de>; Thu,  6 Nov 2025 21:56:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CFAA188B69A
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Nov 2025 01:20:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B953081AF;
-	Thu,  6 Nov 2025 21:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B352F549E;
+	Fri,  7 Nov 2025 01:19:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="REjd7ea4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TEBqBx0v"
+	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="FjYtJuer"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E56F2ED175;
-	Thu,  6 Nov 2025 21:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E90258EC1;
+	Fri,  7 Nov 2025 01:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762466194; cv=none; b=pq3FlPvHubjhz4bL1PPhBVukNfRjMytt+nNdF1N8Jbw8TKpZ6W9ujX+bAynRDa0yywcAVb6XJvqQ0RlNa3odq5vT8prFu12a1G+YZ3nWN1156cg6HV+jwbzskPVzHM+E3T16so4mwpCxfSk9D3/A7lXuWUhi7BdAqaHEEaojSw8=
+	t=1762478397; cv=none; b=tH7DlqE5rDC/ZZEiDxdaKkbrE5n8Pe6f7fiUFbs8U9vAtqKVe2z/9cGROvAw+nXXwXw6rRMGzAW43/sqO1Y1HJTfMbqKaYBkRNYRfyyMfK2nTHksHqzZLqjlkpM2Z29u1mmMobUPXRZPcenmOAEvBhRJ5V/oJCL+rXI6tYsmRQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762466194; c=relaxed/simple;
-	bh=Wnn2TE7l8/HF6KTmsLA1p6vAtjQPjrc9cNKpin17/Pw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cm/r6Q+RpivgLXsG5NjiyXR4GczgmlSfUlSZww2sI4r4VwxVUUgncSDlNmSewMv5ItcdS0EzSMg4pbKeg/gg/5sC/dhfkkjRuIbMDV9s3MLxG8aC6SKDnqmJYC3DppT6+CP31CqhGZFNBxqjCyrQat+U4iRRpmcIy0Aa1n54Lm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=REjd7ea4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TEBqBx0v; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 33E637A009A;
-	Thu,  6 Nov 2025 16:56:29 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Thu, 06 Nov 2025 16:56:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762466189;
-	 x=1762552589; bh=qPfsiLN1n3oCXH0bYb9sc+hEU45g8Wrq4al92DnOXSw=; b=
-	REjd7ea48BU9x1rmydQeYrwoKcgxNX8+mUmzTKMSvlEpUs8m9K9hlcK0GbU1LEeA
-	NVYPwD98/nmhIhUIkLFGqEMkZ0zcb0UQhKmGw+p9ULpJ6tfK3soxbmxm7mpK1sID
-	0KVYWCJWDNk6s3a4BLoCx0SUO8J1WUcG40XOMjtQAlKGZEmb3YXWXyZUcr1PFtHv
-	9lrTfMGzUTYcWiQFC9b1lvoBBt+S0AC9DYVLwU3vGQBdD5rpksjiEq8ERDMLzQh2
-	TCKP8oE1oMim/s7wzlN+v5BhFYNDZ88Y+Q85D3JXd4I889RtES83LnojVTX7vIhz
-	gcPNtHt1r9nbutpmtX3g/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762466189; x=
-	1762552589; bh=qPfsiLN1n3oCXH0bYb9sc+hEU45g8Wrq4al92DnOXSw=; b=T
-	EBqBx0vGyrD+M7zHDdEiypWw2aHj44F4s+KKGiS6E7bbBqutRUYGGdUXJDCJOPAP
-	cH8T4NgtQFCrRZMfvh5JdrYimP+Atx9vaYclPTYIVED5Zl30HjeD0vqfv//7lsem
-	/80j4lM4I85ZsZf0Cexk0ZY5LuzcuBze1x76Fgl5QNEJd3cNydWw5o4PC+u4vOPl
-	DSgosf/FvJe/Rjs8EJdluO5i2unn6u8QIJUwn8NCw1dqdWDjpaXDTLxAdmRlbRc4
-	s33o+DwUb34GVfaw0ww0pKuJ0GAxUvtYopgP56lHjoNF1Y29qJLrQ39QmyWuzt9e
-	Cm0zXNNMk0OliQDNcZyzg==
-X-ME-Sender: <xms:ihkNaZyuoNPb30d6i4X9m4a5JDlaVzyKERQvPEE3jNzHt2CQQ3PhSA>
-    <xme:ihkNaRjbfos2rb-YOcRfsfkOJQcqWFRmF26uvJe4fv47K1yA6hxkEVdV0jWjhsjfB
-    RHMgljin4t4oRzgzZD1sERWcnEn2PiyrV8uRKsfUZE0tqtIN9JI>
-X-ME-Received: <xmr:ihkNaRI8Za-W-t78sM2q5XqiH2yb-clOLLraA92U79VBmkvuUWTNPmp8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddukeejledvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfgjfhggtgfgsehtjeertd
-    dttddvnecuhfhrohhmpeetlhgvgicuhghilhhlihgrmhhsohhnuceorghlvgigsehshhgr
-    iigsohhtrdhorhhgqeenucggtffrrghtthgvrhhnpeehvddtueevjeduffejfeduhfeufe
-    ejvdetgffftdeiieduhfejjefhhfefueevudenucffohhmrghinhepkhgvrhhnvghlrdho
-    rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hlvgigsehshhgriigsohhtrdhorhhgpdhnsggprhgtphhtthhopeefledpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtoheprghnkhhithgrsehnvhhiughirgdrtghomhdprhgtph
-    htthhopegrnhhikhgvthgrsehnvhhiughirgdrtghomhdprhgtphhtthhopehvshgvthhh
-    ihesnhhvihguihgrrdgtohhmpdhrtghpthhtohepjhhgghesnhhvihguihgrrdgtohhmpd
-    hrtghpthhtohepmhhotghhshesnhhvihguihgrrdgtohhmpdhrtghpthhtohepshhkohhl
-    ohhthhhumhhthhhosehnvhhiughirgdrtghomhdprhgtphhtthhopehlihhnmhhirghohh
-    gvsehhuhgrfigvihdrtghomhdprhgtphhtthhopehnrghordhhohhrihhguhgthhhisehg
-    mhgrihhlrdgtohhmpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtih
-    honhdrohhrgh
-X-ME-Proxy: <xmx:ihkNaQcEhPMq-qSqBVkoefCb_0FrAK5mvbl7mJTt0zHmSaNo0LROJw>
-    <xmx:ixkNaVjv2QmUxlYiv9iqoyIZtqTYLtXDPfE3w3ztagX3NOq5dIUI3g>
-    <xmx:ixkNaVmiKwJPbNlzenf75TxYAt9k9HqaWn0xSxG0NfO9US_s1_J6uw>
-    <xmx:ixkNacVfSy0qbaJ67wFSS92CC5LBEmjQeDgZ49X0naGjhg6gxdpY9w>
-    <xmx:jRkNaWE7ZC2BhJZqjFONk0ddcg7naexkNkaf5fTZrI7LB8RMAz3li4ND>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Nov 2025 16:56:24 -0500 (EST)
-Date: Thu, 6 Nov 2025 14:56:22 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: <ankita@nvidia.com>
-Cc: <aniketa@nvidia.com>, <vsethi@nvidia.com>, <jgg@nvidia.com>,
- <mochs@nvidia.com>, <skolothumtho@nvidia.com>, <linmiaohe@huawei.com>,
- <nao.horiguchi@gmail.com>, <akpm@linux-foundation.org>, <david@redhat.com>,
- <lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
- <rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
- <tony.luck@intel.com>, <bp@alien8.de>, <rafael@kernel.org>,
- <guohanjun@huawei.com>, <mchehab@kernel.org>, <lenb@kernel.org>,
- <kevin.tian@intel.com>, <cjia@nvidia.com>, <kwankhede@nvidia.com>,
- <targupta@nvidia.com>, <zhiw@nvidia.com>, <dnigam@nvidia.com>,
- <kjaju@nvidia.com>, <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-edac@vger.kernel.org>, <Jonathan.Cameron@huawei.com>,
- <ira.weiny@intel.com>, <Smita.KoralahalliChannabasappa@amd.com>,
- <u.kleine-koenig@baylibre.com>, <peterz@infradead.org>,
- <linux-acpi@vger.kernel.org>, <kvm@vger.kernel.org>
-Subject: Re: [PATCH v5 3/3] vfio/nvgrace-gpu: register device memory for
- poison handling
-Message-ID: <20251106145622.1610d306.alex@shazbot.org>
-In-Reply-To: <20251102184434.2406-4-ankita@nvidia.com>
-References: <20251102184434.2406-1-ankita@nvidia.com>
-	<20251102184434.2406-4-ankita@nvidia.com>
+	s=arc-20240116; t=1762478397; c=relaxed/simple;
+	bh=Nm5aMpud/BwEyTnT0c68VLPBz2VGNEgyWcHAjm32KTE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Kr/8JEooxJKAIiNJN9twd47UqByUmi5ZKA7pkfxLVQ6IW6HnNhd+NWZevMltuv3bOJzE/qMmGKjGPBTpluSjhPkRQKwBQJGfne9FMiD+iuEWrRy9dAw4snbepNHR2EK1U9c/BurC/BHHs1uTFcOwIZpPIDL2AAf3mrexA+N6mek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=FjYtJuer; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 5A71DE0O03948483, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
+	t=1762477994; bh=Nm5aMpud/BwEyTnT0c68VLPBz2VGNEgyWcHAjm32KTE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=FjYtJuer4hRCLimOXncXlZIQxrDIaJOzVIlyF/XR+2h07rMUryx0of4RxIvpnWYjQ
+	 7CeWbPiqMjRIThwIdvIfHVndwI62Q2G/4Ev1pMTbRkBH1z2sS/+XMeyYoTUkBUviQ+
+	 0g91XR4antu5YKqHLja9I6+xY8OcEgKObAEJ0REFrKD52eWs4fZ0MxIWFPT9lb9Hfn
+	 4dF7jFfR4j2q5+TTYChrRdYCkECjVqqmQZLpcq+ffADMpD6XYAjUIFwzRrOvgbj8FW
+	 /uX6VKcx87UIUR27N3Qud+rxr5tUk90eTGOyvjTdYsGBScC7CFLZdC23drT0pq4k7B
+	 HoF3ZSJ5AXsgg==
+Received: from mail.realtek.com (rtkexhmbs04.realtek.com.tw[10.21.1.54])
+	by rtits2.realtek.com.tw (8.15.2/3.13/5.93) with ESMTPS id 5A71DE0O03948483
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 7 Nov 2025 09:13:14 +0800
+Received: from RTKEXHMBS01.realtek.com.tw (172.21.6.40) by
+ RTKEXHMBS04.realtek.com.tw (10.21.1.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.27; Fri, 7 Nov 2025 09:13:15 +0800
+Received: from RTKEXHMBS06.realtek.com.tw (10.21.1.56) by
+ RTKEXHMBS01.realtek.com.tw (172.21.6.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.27; Fri, 7 Nov 2025 09:13:14 +0800
+Received: from RTKEXHMBS06.realtek.com.tw ([::1]) by
+ RTKEXHMBS06.realtek.com.tw ([fe80::744:4bc9:832c:9b7e%10]) with mapi id
+ 15.02.1544.027; Fri, 7 Nov 2025 09:13:14 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko
+	<andriy.shevchenko@intel.com>
+CC: Yury Norov <yury.norov@gmail.com>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Ferre
+	<nicolas.ferre@microchip.com>,
+        Alexandre Belloni
+	<alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu
+	<herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        "Linus
+ Walleij" <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@codeconstruct.com.au>,
+        Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter
+ Clausen <lars@metafoo.de>,
+        Jacky Huang <ychuang3@nuvoton.com>,
+        Shan-Chun Hung
+	<schung@nuvoton.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jaroslav
+ Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Johannes Berg
+	<johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>, Alex Elder
+	<elder@ieee.org>,
+        David Laight <david.laight.linux@gmail.com>,
+        Vincent
+ Mailhol <mailhol.vincent@wanadoo.fr>,
+        Jason Baron <jbaron@akamai.com>, "Borislav Petkov" <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Michael
+ Hennerich <Michael.Hennerich@analog.com>,
+        Kim Seer Paller
+	<kimseer.paller@analog.com>,
+        David Lechner <dlechner@baylibre.com>,
+        =?utf-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Andy Shevchenko
+	<andy@kernel.org>,
+        Richard Genoud <richard.genoud@bootlin.com>,
+        Cosmin
+ Tanislav <demonsingur@gmail.com>,
+        "Biju Das" <biju.das.jz@bp.renesas.com>,
+        Jianping Shen <Jianping.Shen@de.bosch.com>,
+        Nathan Chancellor
+	<nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger
+	<richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "linux-renesas-soc@vger.kernel.org"
+	<linux-renesas-soc@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org"
+	<linux-crypto@vger.kernel.org>,
+        "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>,
+        "qat-linux@intel.com" <qat-linux@intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-wireless
+	<linux-wireless@vger.kernel.org>
+Subject: RE: [PATCH v6 12/26] bitfield: Add less-checking __FIELD_{GET,PREP}()
+Thread-Topic: [PATCH v6 12/26] bitfield: Add less-checking
+ __FIELD_{GET,PREP}()
+Thread-Index: AQHcTzpEEEZZM/7p4kSHE1AyVJF587TmYVZQ
+Date: Fri, 7 Nov 2025 01:13:14 +0000
+Message-ID: <c62eb5a727f149fb9d8b4a4c8d77418a@realtek.com>
+References: <cover.1762435376.git.geert+renesas@glider.be>
+ <cfc32f8530d5c0d4a7fb33c482a4bf549f26ec24.1762435376.git.geert+renesas@glider.be>
+ <aQy0T2vUINze_6_q@smile.fi.intel.com>
+ <CAMuHMdXVUJq36GvNUQE8FnHsX+=1jG4GOJ_034r=fgr_Rw4Djg@mail.gmail.com>
+ <aQzIIqNnTY41giH_@smile.fi.intel.com>
+ <CAMuHMdW8ndAdGnSHopYFMWvw7wk7wKz_7+N91M1jRHoqK1KBrg@mail.gmail.com>
+In-Reply-To: <CAMuHMdW8ndAdGnSHopYFMWvw7wk7wKz_7+N91M1jRHoqK1KBrg@mail.gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Sun, 2 Nov 2025 18:44:34 +0000
-<ankita@nvidia.com> wrote:
-
-> From: Ankit Agrawal <ankita@nvidia.com>
-> 
-> The nvgrace-gpu-vfio-pci module [1] maps the device memory to the user VA
-> (Qemu) using remap_pfn_range() without adding the memory to the kernel.
-> The device memory pages are not backed by struct page. The previous
-> patch implements the mechanism to handle ECC/poison on memory page without
-> struct page. This new mechanism is being used here.
-> 
-> The module registers its memory region and the address_space with the
-> kernel MM for ECC handling using the register_pfn_address_space()
-> registration API exposed by the kernel.
-> 
-> Link: https://lore.kernel.org/all/20240220115055.23546-1-ankita@nvidia.com/ [1]
-> 
-> Signed-off-by: Ankit Agrawal <ankita@nvidia.com>
-> ---
->  drivers/vfio/pci/nvgrace-gpu/main.c | 45 ++++++++++++++++++++++++++++-
->  1 file changed, 44 insertions(+), 1 deletion(-)
-
-LGTM.  I see Andrew has already picked this up in mm-new, if he
-refreshes, here's another ack.
-
-Acked-by: Alex Williamson <alex@shazbot.org>
-
-Thanks,
-Alex
-
-> diff --git a/drivers/vfio/pci/nvgrace-gpu/main.c b/drivers/vfio/pci/nvgrace-gpu/main.c
-> index d95761dcdd58..80b3ed63c682 100644
-> --- a/drivers/vfio/pci/nvgrace-gpu/main.c
-> +++ b/drivers/vfio/pci/nvgrace-gpu/main.c
-> @@ -8,6 +8,10 @@
->  #include <linux/delay.h>
->  #include <linux/jiffies.h>
->  
-> +#ifdef CONFIG_MEMORY_FAILURE
-> +#include <linux/memory-failure.h>
-> +#endif
-> +
->  /*
->   * The device memory usable to the workloads running in the VM is cached
->   * and showcased as a 64b device BAR (comprising of BAR4 and BAR5 region)
-> @@ -47,6 +51,9 @@ struct mem_region {
->  		void *memaddr;
->  		void __iomem *ioaddr;
->  	};                      /* Base virtual address of the region */
-> +#ifdef CONFIG_MEMORY_FAILURE
-> +	struct pfn_address_space pfn_address_space;
-> +#endif
->  };
->  
->  struct nvgrace_gpu_pci_core_device {
-> @@ -60,6 +67,28 @@ struct nvgrace_gpu_pci_core_device {
->  	bool has_mig_hw_bug;
->  };
->  
-> +#ifdef CONFIG_MEMORY_FAILURE
-> +
-> +static int
-> +nvgrace_gpu_vfio_pci_register_pfn_range(struct mem_region *region,
-> +					struct vm_area_struct *vma)
-> +{
-> +	unsigned long nr_pages;
-> +	int ret = 0;
-> +
-> +	nr_pages = region->memlength >> PAGE_SHIFT;
-> +
-> +	region->pfn_address_space.node.start = vma->vm_pgoff;
-> +	region->pfn_address_space.node.last = vma->vm_pgoff + nr_pages - 1;
-> +	region->pfn_address_space.mapping = vma->vm_file->f_mapping;
-> +
-> +	ret = register_pfn_address_space(&region->pfn_address_space);
-> +
-> +	return ret;
-> +}
-> +
-> +#endif
-> +
->  static void nvgrace_gpu_init_fake_bar_emu_regs(struct vfio_device *core_vdev)
->  {
->  	struct nvgrace_gpu_pci_core_device *nvdev =
-> @@ -127,6 +156,13 @@ static void nvgrace_gpu_close_device(struct vfio_device *core_vdev)
->  
->  	mutex_destroy(&nvdev->remap_lock);
->  
-> +#ifdef CONFIG_MEMORY_FAILURE
-> +	if (nvdev->resmem.memlength)
-> +		unregister_pfn_address_space(&nvdev->resmem.pfn_address_space);
-> +
-> +	unregister_pfn_address_space(&nvdev->usemem.pfn_address_space);
-> +#endif
-> +
->  	vfio_pci_core_close_device(core_vdev);
->  }
->  
-> @@ -202,7 +238,14 @@ static int nvgrace_gpu_mmap(struct vfio_device *core_vdev,
->  
->  	vma->vm_pgoff = start_pfn;
->  
-> -	return 0;
-> +#ifdef CONFIG_MEMORY_FAILURE
-> +	if (nvdev->resmem.memlength && index == VFIO_PCI_BAR2_REGION_INDEX)
-> +		ret = nvgrace_gpu_vfio_pci_register_pfn_range(&nvdev->resmem, vma);
-> +	else if (index == VFIO_PCI_BAR4_REGION_INDEX)
-> +		ret = nvgrace_gpu_vfio_pci_register_pfn_range(&nvdev->usemem, vma);
-> +#endif
-> +
-> +	return ret;
->  }
->  
->  static long
-
+R2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydEBsaW51eC1tNjhrLm9yZz4gd3JvdGU6DQo+IEhpIEFu
+ZHksDQo+IA0KPiBPbiBUaHUsIDYgTm92IDIwMjUgYXQgMTc6MDksIEFuZHkgU2hldmNoZW5rbw0K
+PiA8YW5kcml5LnNoZXZjaGVua29AaW50ZWwuY29tPiB3cm90ZToNCj4gPiBPbiBUaHUsIE5vdiAw
+NiwgMjAyNSBhdCAwMzo0OTowM1BNICswMTAwLCBHZWVydCBVeXR0ZXJob2V2ZW4gd3JvdGU6DQo+
+ID4gPiBPbiBUaHUsIDYgTm92IDIwMjUgYXQgMTU6NDQsIEFuZHkgU2hldmNoZW5rbw0KPiA+ID4g
+PGFuZHJpeS5zaGV2Y2hlbmtvQGludGVsLmNvbT4gd3JvdGU6DQo+ID4gPiA+IE9uIFRodSwgTm92
+IDA2LCAyMDI1IGF0IDAyOjM0OjAwUE0gKzAxMDAsIEdlZXJ0IFV5dHRlcmhvZXZlbiB3cm90ZToN
+Cj4gPiA+ID4gPiBUaGUgQlVJTERfQlVHX09OX01TRygpIGNoZWNrIGFnYWluc3QgIn4wdWxsIiB3
+b3JrcyBvbmx5IHdpdGggInVuc2lnbmVkDQo+ID4gPiA+ID4gKGxvbmcpIGxvbmciIF9tYXNrIHR5
+cGVzLiAgRm9yIGNvbnN0YW50IG1hc2tzLCB0aGF0IGNvbmRpdGlvbiBpcyB1c3VhbGx5DQo+ID4g
+PiA+ID4gbWV0LCBhcyBHRU5NQVNLKCkgeWllbGRzIGFuIFVMIHZhbHVlLiAgVGhlIGZldyBwbGFj
+ZXMgd2hlcmUgdGhlDQo+ID4gPiA+ID4gY29uc3RhbnQgbWFzayBpcyBzdG9yZWQgaW4gYW4gaW50
+ZXJtZWRpYXRlIHZhcmlhYmxlIHdlcmUgZml4ZWQgYnkNCj4gPiA+ID4gPiBjaGFuZ2luZyB0aGUg
+dmFyaWFibGUgdHlwZSB0byB1NjQgKHNlZSBlLmcuIFsxXSBhbmQgWzJdKS4NCj4gPiA+ID4gPg0K
+PiA+ID4gPiA+IEhvd2V2ZXIsIGZvciBub24tY29uc3RhbnQgbWFza3MsIHNtYWxsZXIgdW5zaWdu
+ZWQgdHlwZXMgc2hvdWxkIGJlIHZhbGlkLA0KPiA+ID4gPiA+IHRvbywgYnV0IGN1cnJlbnRseSBs
+ZWFkIHRvICJyZXN1bHQgb2YgY29tcGFyaXNvbiBvZiBjb25zdGFudA0KPiA+ID4gPiA+IDE4NDQ2
+NzQ0MDczNzA5NTUxNjE1IHdpdGggZXhwcmVzc2lvbiBvZiB0eXBlIC4uLiBpcyBhbHdheXMNCj4g
+PiA+ID4gPiBmYWxzZSItd2FybmluZ3Mgd2l0aCBjbGFuZyBhbmQgVz0xLg0KPiA+ID4gPiA+DQo+
+ID4gPiA+ID4gSGVuY2UgcmVmYWN0b3IgdGhlIF9fQkZfRklFTERfQ0hFQ0soKSBoZWxwZXIsIGFu
+ZCBmYWN0b3Igb3V0DQo+ID4gPiA+ID4gX19GSUVMRF97R0VULFBSRVB9KCkuICBUaGUgbGF0ZXIg
+bGFjayB0aGUgc2luZ2xlIHByb2JsZW1hdGljIGNoZWNrLCBidXQNCj4gPiA+ID4gPiBhcmUgb3Ro
+ZXJ3aXNlIGlkZW50aWNhbCB0byBGSUVMRF97R0VULFBSRVB9KCksIGFuZCBhcmUgaW50ZW5kZWQg
+dG8gYmUNCj4gPiA+ID4gPiB1c2VkIGluIHRoZSBmdWxseSBub24tY29uc3QgdmFyaWFudHMgbGF0
+ZXIuDQo+IA0KPiA+ID4gPiA+ICsgICAgIEJVSUxEX0JVR19PTl9NU0coX19iZl9jYXN0X3Vuc2ln
+bmVkKG1hc2ssIG1hc2spID4gICAgICAgICAgICAgICBcDQo+ID4gPiA+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICBfX2JmX2Nhc3RfdW5zaWduZWQocmVnLCB+MHVsbCksICAgICAgICAgICAgICAg
+IFwNCj4gPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgIHBmeCAidHlwZSBvZiByZWcgdG9v
+IHNtYWxsIGZvciBtYXNrIikNCj4gPiA+ID4NCj4gPiA+ID4gUGVyaGFwcyB3ZSBtYXkgY29udmVy
+dCB0aGlzIChhbmQgb3RoZXJzPykgdG8gc3RhdGljX2Fzc2VydCgpOnMgYXQgc29tZSBwb2ludD8N
+Cj4gPiA+DQo+ID4gPiBOaWNrIHRyaWVkIHRoYXQgYmVmb3JlLCB3aXRob3V0IHN1Y2Nlc3M6DQo+
+ID4gPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvQ0FLd3ZPZG1fcHJ0azFVUU5KUUdpZFpt
+NDRMazU4MlMzcD1vZjB5NDYrclZqblNnWEpnQG1haWwuZ21haWwuY29tDQo+ID4NCj4gPiBBaCwg
+dGhpcyBpcyB1bmZvcnR1bmF0ZS4NCj4gDQo+IE9mIGNvdXJzZSwgaXQgbWlnaHQgYmUgYW4gYWN0
+dWFsIGJ1ZyBpbiB0aGUgaTkxNSBkcml2ZXIuLi4NCj4gDQo+IFRoZSBleHRyYSBjaGVja2luZyBp
+biBmaWVsZF9wcmVwKCkgaW4gY2FzZSB0aGUgY29tcGlsZXIgY2FuDQo+IGRldGVybWluZSB0aGF0
+IHRoZSBtYXNrIGlzIGEgY29uc3RhbnQgYWxyZWFkeSBmb3VuZCBhIHBvc3NpYmxlIGJ1Zw0KPiBp
+biBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg5L2NvcmUuYzpydHc4OV9yb2NfZW5k
+KCk6DQo+IA0KPiAgICAgcnR3ODlfd3JpdGUzMl9tYXNrKHJ0d2RldiwgcmVnLCBCX0FYX1JYX0ZM
+VFJfQ0ZHX01BU0ssIHJ0d2Rldi0+aGFsLnJ4X2ZsdHIpOw0KPiANCj4gZHJpdmVycy9uZXQvd2ly
+ZWxlc3MvcmVhbHRlay9ydHc4OS9yZWcuaDoNCj4gDQo+ICAgICAjZGVmaW5lIEJfQVhfUlhfTVBE
+VV9NQVhfTEVOX01BU0sgR0VOTUFTSygyMSwgMTYpDQo+ICAgICAjZGVmaW5lIEJfQVhfUlhfRkxU
+Ul9DRkdfTUFTSyAoKHUzMil+Ql9BWF9SWF9NUERVX01BWF9MRU5fTUFTSykNCj4gDQo+IHNvIGl0
+IGxvb2tzIGxpa2UgQl9BWF9SWF9GTFRSX0NGR19NQVNLIGlzIG5vdCB0aGUgcHJvcGVyIG1hc2sg
+Zm9yDQo+IHRoaXMgb3BlcmF0aW9uLi4uDQoNClRoZSBwdXJwb3NlIG9mIHRoZSBzdGF0ZW1lbnRz
+IGlzIHRvIHVwZGF0ZSB2YWx1ZXMgZXhjbHVkaW5nIGJpdHMgb2YNCkJfQVhfUlhfTVBEVV9NQVhf
+TEVOX01BU0suIFRoZSB1c2Ugb2YgQl9BWF9SWF9GTFRSX0NGR19NQVNLIGlzIHRyaWNreSwgYnV0
+DQp0aGUgb3BlcmF0aW9uIGlzIGNvcnJlY3QgYmVjYXVzZSBiaXQgMCBpcyBzZXQsIHNvIF9fZmZz
+KG1hc2spIHJldHVybnMgMCBpbg0KcnR3ODlfd3JpdGUzMl9tYXNrKCkuIFRoZW4sIG9wZXJhdGlv
+biBsb29rcyBsaWtlDQoNCiAgIG9yaWcgPSByZWFkKHJlZyk7DQogICBuZXcgPSAob3JpZyAmIH5t
+YXNrKSB8IChkYXRhICYgbWFzayk7DQogICB3cml0ZShuZXcpOw0KDQpTaW5jZSB3ZSBkb24ndCB1
+c2UgRklFTERfe0dFVCxQUkVQfSBtYWNyb3Mgd2l0aCBCX0FYX1JYX0ZMVFJfQ0ZHX01BU0ssIGhv
+dw0KY2FuIHlvdSBmaW5kIHRoZSBwcm9ibGVtPyBQbGVhc2UgZ3VpZGUgdXMuIFRoYW5rcy4gDQoN
+ClBpbmctS2UNCg0K
 
