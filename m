@@ -1,106 +1,103 @@
-Return-Path: <linux-edac+bounces-5413-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5414-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04163C4006F
-	for <lists+linux-edac@lfdr.de>; Fri, 07 Nov 2025 14:07:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19842C4171C
+	for <lists+linux-edac@lfdr.de>; Fri, 07 Nov 2025 20:30:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 83205349C69
-	for <lists+linux-edac@lfdr.de>; Fri,  7 Nov 2025 13:07:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4641A4EA07F
+	for <lists+linux-edac@lfdr.de>; Fri,  7 Nov 2025 19:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C232C0F6F;
-	Fri,  7 Nov 2025 13:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD86C305066;
+	Fri,  7 Nov 2025 19:30:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eRH5NVAb"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="k8jTzFPQ"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18092264A9D
-	for <linux-edac@vger.kernel.org>; Fri,  7 Nov 2025 13:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A72D2DEA80;
+	Fri,  7 Nov 2025 19:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762520844; cv=none; b=gnGc4cOBHgUsg/AKdBjlvueVTQYQu3oQAUciXu1UJNhx2Vcmg8zvoAZduask4XfFSJyMKsyvToKx8O8X3VPW9QpiaVCA80cyP3+vmuI0JoBr5vNwZ37lxzlybdmRJdKzUfYqpfUD7p4deUwL/ETBfSfI+Awb4ANyYrKVNfVhrhw=
+	t=1762543849; cv=none; b=S2KzkPbWsCkdSY5jwWNuunqmW0Mh8VM+tq5piQgMqBIIAd/yOzTL607BYyy4uF+K6X7BTPWxefzfk6WoLhdsL6DuVLcL82lJnGSl9eSp4xYwIbLHmabU+QVtSOU2kvM8T5JmOEj4khYk8FpXjheiVwzaVvhzNC0FQmW1tNh9kGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762520844; c=relaxed/simple;
-	bh=HADGe1N2jHvqEsKvSITbCgDgSkgmU79zj+5Dduwse0M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GO4Ps0aPgMMdD/uAMvj45SbvT3CH5xu23fn8Ol4eB84oTDhYqahwBpeoMkGksJ2CGIIc65xADo/tdA08XMW14f3uucCjCZF5/stCB5PUw9KAvRWUo9gOZpwnQrpH4Sx3CXIzcLiesvtdQNP96SSYOx8/8uJNpeaMdWQxJV2aseY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eRH5NVAb; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-37a2d9cf22aso6531671fa.1
-        for <linux-edac@vger.kernel.org>; Fri, 07 Nov 2025 05:07:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762520840; x=1763125640; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HADGe1N2jHvqEsKvSITbCgDgSkgmU79zj+5Dduwse0M=;
-        b=eRH5NVAbPZ3HhOS2wmeNTIgx9sWt+a/BP/tBjZMX9VlL9qcU7cKNtQ/bgEJC0PeFrp
-         2OyJBeedSADo+1MyoDh9S25v6lnadV2923LKH0WbGl/ZUl2YMbtB2CskfArt1uUGGxGL
-         JMxMFbH1Kx2MdHJG+IeUhbgVqiBC8OQw1+FfI9qlEbjf3TS4uEQU6we1gjMdWTHjsRoJ
-         +AMdpI6IE884Sof+DfOSZlv1XERvbn8nx3yE8ig+vEH7tZadPSqOFoIplRqiltlOASf8
-         FWYffY/XJ1hujEUG5NqH26Oztqcbuzf14mRdMYvRcmWjdo+6I6uxV36U3TcFE8t2rxIk
-         uDSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762520840; x=1763125640;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HADGe1N2jHvqEsKvSITbCgDgSkgmU79zj+5Dduwse0M=;
-        b=Lgqbxa/B2cvu+blM3CznP0mwPxKiXisiweztGop2lIJeUKCDeNfh8sJOX/nsnGradN
-         MxMa7+Vpr6gLz/3R4+n164s6DnqFTBqghI/PKVJZyFVFf0pgL7ByiyleVKOIOIc3HAOk
-         hOplXwxW57nLfJuU7P0ETXHPA1ydM0gMOiVCPgkdZ/Yo8FB3w23kYV9AnQw2q34rbxe/
-         BiiCYA7hE1XfKGPamEc5Bc8eHquJ9kRk8D5YPSKpVenL6mSjMC6dNkhIVmVISWtrG73G
-         yEKHR9gbzKwaXfDg8qx9hXRv6ypWD5lQ7N0Me7bvLaqIybUFmWnW7Jv0ahOfdZIA7Cou
-         ht2g==
-X-Forwarded-Encrypted: i=1; AJvYcCXGjYNq5eQyAa2rLtNjekvd/PGONbo4l+OJC+i176CH40U8CA4MvzNeu8rOR7hHPpl8qmmqLsXlh7aU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNd5CZABtcoWg7E8/zrlk9gP0S+vSfTMk3TQPALOv1Wxe7GMp/
-	9kQcc3qPYNUuzRTzT2DI1KmzafikKIGXxLbpemnnTe7N8OWBppqcBdETSPnjzOlUaE/5gga0Q7f
-	bgcSWw/OrE8QoAiOwpuN+Kc92uLifiGx1EftzQNMOmq8CnnelVQpX
-X-Gm-Gg: ASbGncsDJaKLzXxgO7JVI4vTUBi14UP9K4AQPJ0mBpSROLlezq/3If0Xnpc1v1DuLkm
-	LraV3/oW+S7cKzinmdbrocmNniTudyZG4ldMfCNHdUrBbk4dySQdpZ7VdM5Bk1H4W/382aNkC6b
-	29PDqEB0phT4vcx7KFQccclSYh+I5KL/Aj6tc8D47vZqhixNL8e//nZU39FqWfsWPKXljdYCq0K
-	7O6wti51MykbfGHAQPgog1VgLqx0NIOA/wmJxMI38XlTukBJpCxvn9ZKnutGpUcaXiT6Q4c+0NV
-	PNf9ScbW0jw8/B/ljjLof9TIew1V
-X-Google-Smtp-Source: AGHT+IFl18SFhedv0/kCPQK6EPqV+HOejUCqpq+rV9VFd261NPF57ZXKMQalFpYyV9NRnZr09DAi9X3UvhvPEVD0hCI=
-X-Received: by 2002:a2e:a54e:0:b0:37a:17df:189 with SMTP id
- 38308e7fff4ca-37a76582829mr5262931fa.20.1762520840175; Fri, 07 Nov 2025
- 05:07:20 -0800 (PST)
+	s=arc-20240116; t=1762543849; c=relaxed/simple;
+	bh=GskO2h9wIb6SPHoA/5pHXkzC4O6zASQ0Yt8CLP+3dAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BfUfLZ9RKH0AoV7QWDZeErw0HWgOtEGFgIlo/8Q9lwJJcOLGKLXhMVtldcjSMYAgvPZmb0NDbiDNIKRWAB3V8JfO5Y2aZwn4uhYJYM45Lnfp5+HyKRpbvj+YicWx9MKE01WJSaG6SmjREb9ft7c9XH8yCcfXZXB4C6CMX/Pl1xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=k8jTzFPQ; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6557740E019D;
+	Fri,  7 Nov 2025 19:30:44 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id hRwvGZIqEm7N; Fri,  7 Nov 2025 19:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1762543841; bh=nvfMzttWB81WPeHCL4vBFk6WtiBVPUZbizCeeSkxrD8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k8jTzFPQxp6Yo+2WcT1jnavsVJTjyoxaXklgkN1iZ8JuPx6miIx69p8aZ4OywKuNl
+	 E7SImcN+nw438lcms7htdMDwUosjeul2nwwLT2bZLkAg4BKdXQj5w8MCKbNlVpyMCK
+	 wmVtWo/OnHRw2J4WVCJbQ/BQneM8IplSJqRBGxdarYZV/AjBnN+0vSCbm2I3nxJDiK
+	 f5wGm6CsXas+ps71ifjM8lZiUKu5fksgjnaQX5Ri66uqW9LMg2D1HwlFyAEIEAyTl7
+	 ZD8d+/R286B1QRQhQXzb710hOwLlwxxTfBz0+3FI23MQil00pdNH2aYcHBsyBFx/Ft
+	 g1KFNbWv/GvvrGlq9zDFKXKaKnflU5F4hFZh7De3dHU6w6a1+JJmkW/Vo3+E1Atbn4
+	 RioElPa0gLY6Niv7kYlHbfrR6P+9l9T/MXNsyuIuAIgJ31Eskbp2wL+mvqeQY32DVR
+	 T9ZjYwmjLlEoKzvENaFWddbTXsUMveoeK+h6JxtEMjsiFSbLcmgYbIUbHr9zP/qH2q
+	 MJRqzB+khgf5AWEtsahmpRYq282bDgXbPK9ri7fRz/vM2AgtIkCPGbA/7BdZ0o+nSc
+	 fXVlpJZK6tGT7FyGZBiWuLpeC8XUetYGBU6NGMsBGUWhj2SGqyuCzf445hd5l8NjJ3
+	 2ZdSJkmKGGmhrrGcbKXZr0xA=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id EFCF640E015B;
+	Fri,  7 Nov 2025 19:30:31 +0000 (UTC)
+Date: Fri, 7 Nov 2025 20:30:24 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"git (AMD-Xilinx)" <git@amd.com>,
+	"shubhrajyoti.datta@gmail.com" <shubhrajyoti.datta@gmail.com>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>
+Subject: Re: [PATCH] EDAC/versalnet: Handle split messages for non-standard
+ errors
+Message-ID: <20251107193024.GDaQ5I0J7-T-HvZqr9@fat_crate.local>
+References: <20251023113108.3467132-1-shubhrajyoti.datta@amd.com>
+ <20251029130832.GBaQIR0CF8kSl6exi7@fat_crate.local>
+ <LV5PR12MB9828A123A3ADFA1EB177E58681F8A@LV5PR12MB9828.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251106112454.124568-1-marco.crivellari@suse.com> <20251107130031.GBaQ3tb5GLPNeFSgbm@fat_crate.local>
-In-Reply-To: <20251107130031.GBaQ3tb5GLPNeFSgbm@fat_crate.local>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Fri, 7 Nov 2025 14:07:09 +0100
-X-Gm-Features: AWmQ_bltorxWwCCREvg6uySo4sx4zlBCQV6K1t58IUnJ0ilG5MXf98YIru6j3WM
-Message-ID: <CAAofZF6kFzxtNA+gaJa-YPySvekvYQ5pb-DyC=fG3EH5bAvHrA@mail.gmail.com>
-Subject: Re: [PATCH v2] RAS/CEC: replace use of system_wq with system_percpu_wq
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org, 
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Michal Hocko <mhocko@suse.com>, Tony Luck <tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <LV5PR12MB9828A123A3ADFA1EB177E58681F8A@LV5PR12MB9828.namprd12.prod.outlook.com>
 
-On Fri, Nov 7, 2025 at 2:00=E2=80=AFPM Borislav Petkov <bp@alien8.de> wrote=
-:
->[...]
-> Applied, thanks.
+On Fri, Oct 31, 2025 at 09:41:58AM +0000, Datta, Shubhrajyoti wrote:
+> > I'm guessing you want to move that comment too?
+> >
+> > If so, I can move it - you don't have to resend.
+> 
+> Thanks for the catch . I agree.
 
-Many thanks!
+Queued, thanks.
 
---=20
+-- 
+Regards/Gruss,
+    Boris.
 
-Marco Crivellari
-
-L3 Support Engineer, Technology & Product
+https://people.kernel.org/tglx/notes-about-netiquette
 
