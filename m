@@ -1,47 +1,47 @@
-Return-Path: <linux-edac+bounces-5416-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5417-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18183C43EA8
-	for <lists+linux-edac@lfdr.de>; Sun, 09 Nov 2025 14:35:00 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51830C43EC4
+	for <lists+linux-edac@lfdr.de>; Sun, 09 Nov 2025 14:35:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA1BF3A56D3
-	for <lists+linux-edac@lfdr.de>; Sun,  9 Nov 2025 13:34:58 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EE719347453
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Nov 2025 13:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C354E2F998A;
-	Sun,  9 Nov 2025 13:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8844F2F9D9A;
+	Sun,  9 Nov 2025 13:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQyQz3Xu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUq4YlSc"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BF517BA6;
-	Sun,  9 Nov 2025 13:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4828717BA6;
+	Sun,  9 Nov 2025 13:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762695295; cv=none; b=aG0u7k5Q79/Cygjzz31EqRbIW4bnQXPDkkmmQvrRySrN7iyxU0ixdm4YLhGADgo/S9sFft/JdkKIZEXeZa6h7JwnDv8YbZliLz7a/0rFDmYX1JUGeJjJwrsFlmVrGXum2/JgVbr45Ezy9SWHL3cV+udbg5KnMht4kb2ExsDJNt4=
+	t=1762695333; cv=none; b=MpKVJAgTETsc86WN8U2w9jMO+edx2w/eHwihIZeYdKxi0NKGE9TQwgUSP6lSpmgfaruYZj50f9tGanxab4qltwKA/gkooMmkbnTX9D7kfhu/C+7NQeGQheDOMOphS1TEjDUiDIgXrEu0/4xex9VBzxH0OnfB8tJ+22NqJlQR1r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762695295; c=relaxed/simple;
-	bh=RT2rRE/ELY9bGrDnosbnveAK4kjkneS/XTqVsxUylns=;
+	s=arc-20240116; t=1762695333; c=relaxed/simple;
+	bh=75xVTH6rL41i5gNYi5D5wNYFSB4OID9FByUjwxNSe6Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tsm4n4Up7zw1iSUisWDASM00BWiB/1yzZQr4hcr6IUX+TgO6s6QixPHorSFPV9+S/Qu8vxoS2bQXmuln6C2iYnEAtn4BzbSuxcCBsZqHaMmkPXDmuXs1M+0zWvJCn/yjzdP4zu+UOPFZuyxUvD5Iu8UVxHu+JVSPTRuN4CKxvfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQyQz3Xu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06534C19422;
-	Sun,  9 Nov 2025 13:34:42 +0000 (UTC)
+	 MIME-Version:Content-Type; b=fUtmBsdAhKlgKE3w2Ah9P0eF5eTqD03qFfjma16Q+q2MNVyQncG6qTAYhjejr3qM1ILAKOG0W+ME47/EOk/ABSA4O2xyzvLIAcBIYXfdQoqEsfuZ+GvPBQmLF/K7Kymp+7EAxcbvZUZ/kCVvVZn94w0aiWc0hmA9i25Myxq5Yqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUq4YlSc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73F0C19423;
+	Sun,  9 Nov 2025 13:35:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762695295;
-	bh=RT2rRE/ELY9bGrDnosbnveAK4kjkneS/XTqVsxUylns=;
+	s=k20201202; t=1762695333;
+	bh=75xVTH6rL41i5gNYi5D5wNYFSB4OID9FByUjwxNSe6Q=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NQyQz3Xu/4ch5jjTTPDSBjeBVRNEYduCHsh+EDx3P6FlYJVpOQX6pKco9OgMOx/in
-	 F80rjoMsLS/7XLxYrF1FBo4MLkHRajQPKOTIZOaC/6fi4uIG17iRyOJ0/gCowNRs1d
-	 ppYRn1q4Dml/h8MeJM8+xvbkn6hxSYS0Z2rnmdV3FUTzsqvHwhUI9R7XecGmL4AZ66
-	 FwIhhM5L3YI62kDlehONx8TWE1Va+28/8EvO//yU3GevKDsQAA9ma5ZjkVGW1Wx847
-	 0ivPCgE6pzDWEvB89x/gYKximcAcQCf/eOzmpaCr0FWO1PrXAbtfbX3KfScts9bAF9
-	 YRGLPkFrZYHmA==
-Date: Sun, 9 Nov 2025 13:34:39 +0000
+	b=OUq4YlScR9Yr3lqdI8+Yp0fI/C5dkrRC8Cq+F3uyLXMiZuA7Hfzg0VIC4P2u9QNCf
+	 C9AHZ2WTv5ZZUwgeHDjJ7ysaW4HPELl7S/VLwzmiEWmH9x7XuuSN+Ln99YomjKvbMq
+	 i3MhKBHc5WBbb6gdQpeOjbaUu7qebuQ00zSVfr+hMjBXHDv4tF+JB3hNcGYAPVP0Bg
+	 YBFDxk8I51LYyPl31nWk18LZDNHXhTQPG0l9XQKqXzTP5bnECbCZypFzgHezD1SqP0
+	 VkIWa5JPPo0EKvKltofU/ebvRFI1V7map8EhrzGaM4iK3tb4gIY5z3XHz3ztCpG+JO
+	 I0PjTLazIvM+Q==
+Date: Sun, 9 Nov 2025 13:35:13 +0000
 From: Jonathan Cameron <jic23@kernel.org>
 To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: Yury Norov <yury.norov@gmail.com>, Michael Turquette
@@ -76,12 +76,12 @@ Cc: Yury Norov <yury.norov@gmail.com>, Michael Turquette
  linux-aspeed@lists.ozlabs.org, linux-iio@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-mtd@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next v6 10/26] iio: imu: smi330: #undef
- field_{get,prep}() before definition
-Message-ID: <20251109133439.3d841b5b@jic23-huawei>
-In-Reply-To: <54c739d05673e512d091bf78e54cd00e3655d7d4.1762435376.git.geert+renesas@glider.be>
+Subject: Re: [PATCH v6 05/26] iio: dac: ad3530r: #undef field_prep() before
+ local definition
+Message-ID: <20251109133513.195e6baa@jic23-huawei>
+In-Reply-To: <a2466d9201cb8c25504e25ac531a69ef8bd6e958.1762435376.git.geert+renesas@glider.be>
 References: <cover.1762435376.git.geert+renesas@glider.be>
-	<54c739d05673e512d091bf78e54cd00e3655d7d4.1762435376.git.geert+renesas@glider.be>
+	<a2466d9201cb8c25504e25ac531a69ef8bd6e958.1762435376.git.geert+renesas@glider.be>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -92,22 +92,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu,  6 Nov 2025 14:33:58 +0100
+On Thu,  6 Nov 2025 14:33:53 +0100
 Geert Uytterhoeven <geert+renesas@glider.be> wrote:
 
-> Prepare for the advent of globally available common field_get() and
-> field_prep() macros by undefining the symbols before defining local
-> variants.  This prevents redefinition warnings from the C preprocessor
-> when introducing the common macros later.
+> Prepare for the advent of a globally available common field_prep() macro
+> by undefining the symbol before defining a local variant.  This prevents
+> redefinition warnings from the C preprocessor when introducing the common
+> macro later.
 > 
 > Suggested-by: Yury Norov <yury.norov@gmail.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-I tweaked the original driver to avoid the naming clash so this can be dropped
-and we can replace with the new function next cycle.
+Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
-Thanks,
-
-Jonathan
 
 > ---
 > v6:
@@ -116,22 +112,20 @@ Jonathan
 > v5:
 >   - New.
 > ---
->  drivers/iio/imu/smi330/smi330_core.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/iio/dac/ad3530r.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/iio/imu/smi330/smi330_core.c b/drivers/iio/imu/smi330/smi330_core.c
-> index d9178725ade3da83..a79964fe68fadf47 100644
-> --- a/drivers/iio/imu/smi330/smi330_core.c
-> +++ b/drivers/iio/imu/smi330/smi330_core.c
-> @@ -68,7 +68,9 @@
->  #define SMI330_SOFT_RESET_DELAY 2000
+> diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
+> index 6134613777b8e1d4..5684d11137f29948 100644
+> --- a/drivers/iio/dac/ad3530r.c
+> +++ b/drivers/iio/dac/ad3530r.c
+> @@ -54,6 +54,7 @@
+>  #define AD3531R_MAX_CHANNELS			4
 >  
->  /* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
-> +#undef field_get
->  #define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+>  /* Non-constant mask variant of FIELD_PREP() */
 > +#undef field_prep
->  #define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
+>  #define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
 >  
->  #define SMI330_ACCEL_CHANNEL(_axis) {					\
+>  enum ad3530r_mode {
 
 
