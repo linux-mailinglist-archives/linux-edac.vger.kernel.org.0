@@ -1,47 +1,47 @@
-Return-Path: <linux-edac+bounces-5417-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5418-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51830C43EC4
-	for <lists+linux-edac@lfdr.de>; Sun, 09 Nov 2025 14:35:40 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA139C43EEA
+	for <lists+linux-edac@lfdr.de>; Sun, 09 Nov 2025 14:36:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EE719347453
-	for <lists+linux-edac@lfdr.de>; Sun,  9 Nov 2025 13:35:39 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 793094E6492
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Nov 2025 13:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8844F2F9D9A;
-	Sun,  9 Nov 2025 13:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F2F2FA0ED;
+	Sun,  9 Nov 2025 13:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUq4YlSc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eh/R4uiY"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4828717BA6;
-	Sun,  9 Nov 2025 13:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA902F9C2A;
+	Sun,  9 Nov 2025 13:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762695333; cv=none; b=MpKVJAgTETsc86WN8U2w9jMO+edx2w/eHwihIZeYdKxi0NKGE9TQwgUSP6lSpmgfaruYZj50f9tGanxab4qltwKA/gkooMmkbnTX9D7kfhu/C+7NQeGQheDOMOphS1TEjDUiDIgXrEu0/4xex9VBzxH0OnfB8tJ+22NqJlQR1r4=
+	t=1762695352; cv=none; b=GEn+vxvjLpllsLnz7Z1tPQN0D59+lq9d315vaX8vUu0+Y+iXlZTEpcG1ll62m4aTHdqNggtTKshWC+Sx5XnG1HsYN/2u14Q5mGuNgiRKQ8x9r6Hdq7qTpKk/M2GDClITKaWQ5BZlYtsCGxSfYSPCDUFRodPuUM6+rxcAB76TPT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762695333; c=relaxed/simple;
-	bh=75xVTH6rL41i5gNYi5D5wNYFSB4OID9FByUjwxNSe6Q=;
+	s=arc-20240116; t=1762695352; c=relaxed/simple;
+	bh=O/YevAPjyQGJdjnwul8SWCeizRWaGIKJUDYVqj133Q0=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fUtmBsdAhKlgKE3w2Ah9P0eF5eTqD03qFfjma16Q+q2MNVyQncG6qTAYhjejr3qM1ILAKOG0W+ME47/EOk/ABSA4O2xyzvLIAcBIYXfdQoqEsfuZ+GvPBQmLF/K7Kymp+7EAxcbvZUZ/kCVvVZn94w0aiWc0hmA9i25Myxq5Yqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUq4YlSc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73F0C19423;
-	Sun,  9 Nov 2025 13:35:17 +0000 (UTC)
+	 MIME-Version:Content-Type; b=lUwHiR0yXdIFATE3zblzdhAcatOkKFbgMDxuW/P94m0ba+azjw6LnL8QSusIkniMGw6k2bxf1N51aCPc/QgnCcMp5JNmvruAlzs1On2VwQxNXfpOHzo3KunCnG2TD+OzknvhhvzS/vtT7+sB2yNmcoHGLWOjVsIyxgO5r730WSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eh/R4uiY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFBCC4CEF8;
+	Sun,  9 Nov 2025 13:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762695333;
-	bh=75xVTH6rL41i5gNYi5D5wNYFSB4OID9FByUjwxNSe6Q=;
+	s=k20201202; t=1762695352;
+	bh=O/YevAPjyQGJdjnwul8SWCeizRWaGIKJUDYVqj133Q0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OUq4YlScR9Yr3lqdI8+Yp0fI/C5dkrRC8Cq+F3uyLXMiZuA7Hfzg0VIC4P2u9QNCf
-	 C9AHZ2WTv5ZZUwgeHDjJ7ysaW4HPELl7S/VLwzmiEWmH9x7XuuSN+Ln99YomjKvbMq
-	 i3MhKBHc5WBbb6gdQpeOjbaUu7qebuQ00zSVfr+hMjBXHDv4tF+JB3hNcGYAPVP0Bg
-	 YBFDxk8I51LYyPl31nWk18LZDNHXhTQPG0l9XQKqXzTP5bnECbCZypFzgHezD1SqP0
-	 VkIWa5JPPo0EKvKltofU/ebvRFI1V7map8EhrzGaM4iK3tb4gIY5z3XHz3ztCpG+JO
-	 I0PjTLazIvM+Q==
-Date: Sun, 9 Nov 2025 13:35:13 +0000
+	b=Eh/R4uiYje//x/E5NBguFrAqNCuLNel2cOHVhB27Mg9Ytw5ykUA7PQ8TDbMs/JZjX
+	 f1oopBccD9AxDT/b5bTaUSCsognIXnybjXtM46XVqUITHz1ROp+Zg8I24NX+Lq7LAv
+	 xnEVEIa4W6NUN3MQQwkPuZopRE7KDBtY7covt4n6cMIJa4/lRpvS8y99BUDZkG+BAI
+	 QLJLaDrWai+mDshH9IzoBP5cBagFVRBQyeGWSKBqI63izs4ODJ8DCKMsY6YtYSBIzD
+	 t+VQiT8DuVUPVwNqVTLmyaG/5qdjzCcdv+utzFlsriA8NN6vyQ6iW64snJa8cW7h6V
+	 Wf2dpoQrjO4Sw==
+Date: Sun, 9 Nov 2025 13:35:34 +0000
 From: Jonathan Cameron <jic23@kernel.org>
 To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: Yury Norov <yury.norov@gmail.com>, Michael Turquette
@@ -76,12 +76,12 @@ Cc: Yury Norov <yury.norov@gmail.com>, Michael Turquette
  linux-aspeed@lists.ozlabs.org, linux-iio@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-mtd@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 05/26] iio: dac: ad3530r: #undef field_prep() before
- local definition
-Message-ID: <20251109133513.195e6baa@jic23-huawei>
-In-Reply-To: <a2466d9201cb8c25504e25ac531a69ef8bd6e958.1762435376.git.geert+renesas@glider.be>
+Subject: Re: [PATCH v6 06/26] iio: mlx90614: #undef field_{get,prep}()
+ before local definition
+Message-ID: <20251109133534.3326fb4b@jic23-huawei>
+In-Reply-To: <6c773f03da99ccc081a33d2363879957ac96ce33.1762435376.git.geert+renesas@glider.be>
 References: <cover.1762435376.git.geert+renesas@glider.be>
-	<a2466d9201cb8c25504e25ac531a69ef8bd6e958.1762435376.git.geert+renesas@glider.be>
+	<6c773f03da99ccc081a33d2363879957ac96ce33.1762435376.git.geert+renesas@glider.be>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -92,40 +92,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu,  6 Nov 2025 14:33:53 +0100
+On Thu,  6 Nov 2025 14:33:54 +0100
 Geert Uytterhoeven <geert+renesas@glider.be> wrote:
 
-> Prepare for the advent of a globally available common field_prep() macro
-> by undefining the symbol before defining a local variant.  This prevents
-> redefinition warnings from the C preprocessor when introducing the common
-> macro later.
+> Prepare for the advent of globally available common field_get() and
+> field_prep() macros by undefining the symbols before defining local
+> variants.  This prevents redefinition warnings from the C preprocessor
+> when introducing the common macros later.
 > 
 > Suggested-by: Yury Norov <yury.norov@gmail.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-
-
-> ---
-> v6:
->   - No changes,
-> 
-> v5:
->   - New.
-> ---
->  drivers/iio/dac/ad3530r.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/iio/dac/ad3530r.c b/drivers/iio/dac/ad3530r.c
-> index 6134613777b8e1d4..5684d11137f29948 100644
-> --- a/drivers/iio/dac/ad3530r.c
-> +++ b/drivers/iio/dac/ad3530r.c
-> @@ -54,6 +54,7 @@
->  #define AD3531R_MAX_CHANNELS			4
->  
->  /* Non-constant mask variant of FIELD_PREP() */
-> +#undef field_prep
->  #define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) & (_mask))
->  
->  enum ad3530r_mode {
-
 
