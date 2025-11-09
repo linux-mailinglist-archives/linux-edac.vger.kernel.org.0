@@ -1,47 +1,47 @@
-Return-Path: <linux-edac+bounces-5418-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5419-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA139C43EEA
-	for <lists+linux-edac@lfdr.de>; Sun, 09 Nov 2025 14:36:04 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD3CC43EF7
+	for <lists+linux-edac@lfdr.de>; Sun, 09 Nov 2025 14:39:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 793094E6492
-	for <lists+linux-edac@lfdr.de>; Sun,  9 Nov 2025 13:35:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5D4054E2C3F
+	for <lists+linux-edac@lfdr.de>; Sun,  9 Nov 2025 13:39:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F2F2FA0ED;
-	Sun,  9 Nov 2025 13:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD252FABEE;
+	Sun,  9 Nov 2025 13:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eh/R4uiY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRuJdceF"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA902F9C2A;
-	Sun,  9 Nov 2025 13:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96ED02F9C2A;
+	Sun,  9 Nov 2025 13:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762695352; cv=none; b=GEn+vxvjLpllsLnz7Z1tPQN0D59+lq9d315vaX8vUu0+Y+iXlZTEpcG1ll62m4aTHdqNggtTKshWC+Sx5XnG1HsYN/2u14Q5mGuNgiRKQ8x9r6Hdq7qTpKk/M2GDClITKaWQ5BZlYtsCGxSfYSPCDUFRodPuUM6+rxcAB76TPT4=
+	t=1762695561; cv=none; b=jSiprsBlkmk8dIAyll7LjIQTVt/vqWfITlCXM1moeQp4q/DzI6cB6ydF3guQ5TkdQrNOzqBd9NJH5m67Ud7ky6Br5SYvC4bLQrFQN7tP/2ENa8zZ5v7/juVbVoN7TWgTzmG3a+zeHqWquAxYSrlwtld8U3Oz4HEfOgU0zI3SlPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762695352; c=relaxed/simple;
-	bh=O/YevAPjyQGJdjnwul8SWCeizRWaGIKJUDYVqj133Q0=;
+	s=arc-20240116; t=1762695561; c=relaxed/simple;
+	bh=TmS8CkFMzA8p257zgP8ajlZZj7NKktorZzJfGu8kADk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lUwHiR0yXdIFATE3zblzdhAcatOkKFbgMDxuW/P94m0ba+azjw6LnL8QSusIkniMGw6k2bxf1N51aCPc/QgnCcMp5JNmvruAlzs1On2VwQxNXfpOHzo3KunCnG2TD+OzknvhhvzS/vtT7+sB2yNmcoHGLWOjVsIyxgO5r730WSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eh/R4uiY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFBCC4CEF8;
-	Sun,  9 Nov 2025 13:35:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=oxPMtn2895LE8umcn2gLyZtWIGE4By/VkBSj7G/Qib0Lpm/tqGoR+eXIf+b/oZL+6C5Ph5FZTBiPjuPOPCGD3j9ko1i+crZ8aDl33bV3sb+kALOzrm42kPXoqc629Du+fFoWfg22Tr+lwbHW9w2XETGQ5uafLDP8DIAWQRkPVj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRuJdceF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3DF5C4CEF7;
+	Sun,  9 Nov 2025 13:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762695352;
-	bh=O/YevAPjyQGJdjnwul8SWCeizRWaGIKJUDYVqj133Q0=;
+	s=k20201202; t=1762695561;
+	bh=TmS8CkFMzA8p257zgP8ajlZZj7NKktorZzJfGu8kADk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Eh/R4uiYje//x/E5NBguFrAqNCuLNel2cOHVhB27Mg9Ytw5ykUA7PQ8TDbMs/JZjX
-	 f1oopBccD9AxDT/b5bTaUSCsognIXnybjXtM46XVqUITHz1ROp+Zg8I24NX+Lq7LAv
-	 xnEVEIa4W6NUN3MQQwkPuZopRE7KDBtY7covt4n6cMIJa4/lRpvS8y99BUDZkG+BAI
-	 QLJLaDrWai+mDshH9IzoBP5cBagFVRBQyeGWSKBqI63izs4ODJ8DCKMsY6YtYSBIzD
-	 t+VQiT8DuVUPVwNqVTLmyaG/5qdjzCcdv+utzFlsriA8NN6vyQ6iW64snJa8cW7h6V
-	 Wf2dpoQrjO4Sw==
-Date: Sun, 9 Nov 2025 13:35:34 +0000
+	b=eRuJdceFQsdR7lWVjZXcQ5eo2LTrpkwCjVnhqhWqMgsWHpPaOmCSWAruleR0rDa3c
+	 zewmxH8r/ugX+Auz1z/GzwLYEmryJP7Yxt9ENJ0AKXlgrY5A6lsFG5/fgdl/WlQuI0
+	 wm5J1acBHw4E/gK68u06+opel8VRhYcrJcvtOFcncyLFMAVSPe89x4T+DcAQy3aEQQ
+	 oX85a3JCzSZAbUxwWvjBgSMTrD8mI2+wsSwQYY/Cvor7FYRe2eXlHmti2qvQabVS0/
+	 o+scmlpg9ZtBwS6CeH2c/exLXcnhRK2SIJLAmWLQvpPhhKxsXEyIVR2Jv6uyzWZ37T
+	 Qr+4vzbXZuRrg==
+Date: Sun, 9 Nov 2025 13:39:04 +0000
 From: Jonathan Cameron <jic23@kernel.org>
 To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: Yury Norov <yury.norov@gmail.com>, Michael Turquette
@@ -76,12 +76,12 @@ Cc: Yury Norov <yury.norov@gmail.com>, Michael Turquette
  linux-aspeed@lists.ozlabs.org, linux-iio@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-mtd@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 06/26] iio: mlx90614: #undef field_{get,prep}()
- before local definition
-Message-ID: <20251109133534.3326fb4b@jic23-huawei>
-In-Reply-To: <6c773f03da99ccc081a33d2363879957ac96ce33.1762435376.git.geert+renesas@glider.be>
+Subject: Re: [PATCH -next v6 23/26] iio: imu: smi330: Convert to common
+ field_{get,prep}() helpers
+Message-ID: <20251109133904.5eff2558@jic23-huawei>
+In-Reply-To: <a2275bd69f25d33f9fd3345409b2d8ae6285b9a7.1762435376.git.geert+renesas@glider.be>
 References: <cover.1762435376.git.geert+renesas@glider.be>
-	<6c773f03da99ccc081a33d2363879957ac96ce33.1762435376.git.geert+renesas@glider.be>
+	<a2275bd69f25d33f9fd3345409b2d8ae6285b9a7.1762435376.git.geert+renesas@glider.be>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
@@ -92,15 +92,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu,  6 Nov 2025 14:33:54 +0100
+On Thu,  6 Nov 2025 14:34:11 +0100
 Geert Uytterhoeven <geert+renesas@glider.be> wrote:
 
-> Prepare for the advent of globally available common field_get() and
-> field_prep() macros by undefining the symbols before defining local
-> variants.  This prevents redefinition warnings from the C preprocessor
-> when introducing the common macros later.
+> Drop the driver-specific field_get() and field_prep() macros, in favor
+> of the globally available variants from <linux/bitfield.h>.
 > 
-> Suggested-by: Yury Norov <yury.norov@gmail.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+
+This will need a revist next cycle. I preferred not to have
+the odd looking undef in the driver at introduction so prefixed with smi330_
+instead.  Only one instance so it wasn't worth comments to make ti clear what was going on.
+
+J
+
+
+> ---
+> v6:
+>   - No changes,
+> 
+> v5:
+>   - New.
+> ---
+>  drivers/iio/imu/smi330/smi330_core.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/iio/imu/smi330/smi330_core.c b/drivers/iio/imu/smi330/smi330_core.c
+> index a79964fe68fadf47..83e0dff5d973d046 100644
+> --- a/drivers/iio/imu/smi330/smi330_core.c
+> +++ b/drivers/iio/imu/smi330/smi330_core.c
+> @@ -67,12 +67,6 @@
+>  #define SMI330_CHIP_ID 0x42
+>  #define SMI330_SOFT_RESET_DELAY 2000
+>  
+> -/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
+> -#undef field_get
+> -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
+> -#undef field_prep
+> -#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
+> -
+>  #define SMI330_ACCEL_CHANNEL(_axis) {					\
+>  	.type = IIO_ACCEL,						\
+>  	.modified = 1,							\
+
 
