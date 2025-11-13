@@ -1,156 +1,176 @@
-Return-Path: <linux-edac+bounces-5435-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5436-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6ADEC4F90E
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Nov 2025 20:17:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47887C571F3
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Nov 2025 12:14:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 955B71891240
-	for <lists+linux-edac@lfdr.de>; Tue, 11 Nov 2025 19:18:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B791A3BDA02
+	for <lists+linux-edac@lfdr.de>; Thu, 13 Nov 2025 11:11:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC454302169;
-	Tue, 11 Nov 2025 19:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8C13396E8;
+	Thu, 13 Nov 2025 11:11:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAB3TiSt"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="TRCJCCoT";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="TRCJCCoT"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78742571BE;
-	Tue, 11 Nov 2025 19:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947CF33B6DD
+	for <linux-edac@vger.kernel.org>; Thu, 13 Nov 2025 11:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762888668; cv=none; b=TBb/aWU0jTg8i0jrNz1WbVOW3lAeZPR7pCcbL2SO9eWbBAbFI+p5TLUiNcOnDjVktgn9W0YfppWECngOdTywYmQjWyoSJu6uPH1bVs7nXt4oXJ3+sCo3WrPnuAlntbUuEeGRWuy8nHCSlFm7j9UjmzfZjzZ/AGSSPdh3KFkWX3Q=
+	t=1763032297; cv=none; b=ooyNESxD6xe30vInN5ZWOBWb+R3DooWcgImm2WaWMvbxiEhGAss8NYpU3GpF53I31HjgXB32nyu/GPyEClqXGvvUCO7DwuHY9l9RVlCI0+bkVPSrZhA/rEoralsNWjjptJM+iacfZwfaOW1pTHyoVuT6seHJwO8YFgBaI6Qte0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762888668; c=relaxed/simple;
-	bh=41RLRtaKbXKVyhTCyKGvYapSSOb8728iYPhMLtH1kSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=njk41oaX0JhW9Mt/26CCUL8MvphIpHTP/uT229bHmQbCVE0u/e6FsK8isfCKz77W0NicfbISBjWgpbhHRB+dVO2YlBLaGxAVFr8SdN4wroFJZ+k3XA4sOGHPzh7eLcmrDIAyc9jg0e4h8LDgBXo96EE927CYGEwbQXHjbXZT8IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAB3TiSt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D8EDC4CEFB;
-	Tue, 11 Nov 2025 19:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762888668;
-	bh=41RLRtaKbXKVyhTCyKGvYapSSOb8728iYPhMLtH1kSQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WAB3TiStxkM1FNwO8Op8NHHDZWFMtIxWcQcyMeysB/zEXMu7NC5jN7X7oCAZuO/uB
-	 kcb7FtT/bygYU7KdFv5BXUDnSmTnFkOZ8nnrMugK3rc8YAb9Myqj0+j/30pn8eY8Mi
-	 FkINs55JVB5sRHCnTlFQ5BMCeVelWSh/mOsZSAa3tc2o2UVRqLAHzjnGrk3XfMFmKE
-	 yUZtkwYIljsWxIjRlVV5OUJuG4eBUG7Ex4ojuJLvn0I0Ye5hWgfKtnWEOSOBCHSp4c
-	 JDb7nCKhP6NvnxojBfFa0FUjKp21Eg/jL89c2RHwG69wReDvu3Q1lYYDIxR5d/e8TK
-	 8F/IQbicLA9ig==
-Date: Tue, 11 Nov 2025 19:17:33 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre
- Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
- <claudiu.beznea@tuxon.dev>, Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Miller
- <davem@davemloft.net>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
- Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery
- <andrew@codeconstruct.com.au>, Crt Mori <cmo@melexis.com>, Lars-Peter
- Clausen <lars@metafoo.de>, Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun
- Hung <schung@nuvoton.com>, Yury Norov <yury.norov@gmail.com>, Rasmus
- Villemoes <linux@rasmusvillemoes.dk>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Johannes Berg <johannes@sipsolutions.net>,
- Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>, David Laight
- <david.laight.linux@gmail.com>, Vincent Mailhol
- <mailhol.vincent@wanadoo.fr>, Jason Baron <jbaron@akamai.com>, Borislav
- Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Kim Seer Paller
- <kimseer.paller@analog.com>, David Lechner <dlechner@baylibre.com>, Nuno
- =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Richard Genoud <richard.genoud@bootlin.com>, Cosmin Tanislav
- <demonsingur@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, Jianping
- Shen <Jianping.Shen@de.bosch.com>, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-edac@vger.kernel.org,
- qat-linux@intel.com, linux-gpio@vger.kernel.org,
- linux-aspeed@lists.ozlabs.org, linux-iio@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next v5 10/23] iio: imu: smi330: #undef
- field_{get,prep}() before definition
-Message-ID: <20251111191351.06c0e660@jic23-huawei>
-In-Reply-To: <CAMuHMdX8c1VkBuPDpJ5mpCcRH+zEX4F1bQKFf_V8N9ZZtCYqxA@mail.gmail.com>
-References: <cover.1761588465.git.geert+renesas@glider.be>
-	<97549838f28a1bb7861cfb42ee687f832942b13a.1761588465.git.geert+renesas@glider.be>
-	<20251102104326.0f1db96a@jic23-huawei>
-	<CAMuHMdUkm2hxSW1yeKn8kZkSrosr8V-QTrHKSMkY2CPJ8UH_BQ@mail.gmail.com>
-	<20251109125956.106c9a1a@jic23-huawei>
-	<CAMuHMdX8c1VkBuPDpJ5mpCcRH+zEX4F1bQKFf_V8N9ZZtCYqxA@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1763032297; c=relaxed/simple;
+	bh=1/FPQVsnQzjrhTBdNlAXMKIfkauK1gmj7sm/TRh4/0c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TIn//dTdCC6DsRYuyYbKM7AlVuWo7BSND29gvCkbbYX1L5MjwNMwLjaHIzN0thUK1lm9NSbVlSZa3ehTY/28RTe8va6cgYWVhjTXzw0gstkCIZ38H+B4R6DBOy6d40mZ7wilVEffkfaU/tNWjROYZigFk6KKP/7unweckeUp1tA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=TRCJCCoT; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=TRCJCCoT; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 706F11F894;
+	Thu, 13 Nov 2025 11:11:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1763032287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=1I9SGJKsb/GK/Y/jlbo+QZ+I4rf+T9CoVcsICkpyoJk=;
+	b=TRCJCCoT0AXPBYCCD2mTyJDuS0Wp8ssfjYRrI8wEWRSw153B9MswJCahHWfryfRY8JBR6r
+	dKrejh8LeEjIC5agiBzlr+USVQEMQgQ/qiNbyfx+9DtoNgOYBfCEZfbp/VXrNf5aPnWmNJ
+	a9P63WGJUw/Z5cZU4WYaoPqTzGlSgUQ=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=TRCJCCoT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1763032287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=1I9SGJKsb/GK/Y/jlbo+QZ+I4rf+T9CoVcsICkpyoJk=;
+	b=TRCJCCoT0AXPBYCCD2mTyJDuS0Wp8ssfjYRrI8wEWRSw153B9MswJCahHWfryfRY8JBR6r
+	dKrejh8LeEjIC5agiBzlr+USVQEMQgQ/qiNbyfx+9DtoNgOYBfCEZfbp/VXrNf5aPnWmNJ
+	a9P63WGJUw/Z5cZU4WYaoPqTzGlSgUQ=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 18ECE3EA61;
+	Thu, 13 Nov 2025 11:11:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id LzazA9+8FWllWgAAD6G6ig
+	(envelope-from <nik.borisov@suse.com>); Thu, 13 Nov 2025 11:11:27 +0000
+From: Nikolay Borisov <nik.borisov@suse.com>
+To: Yazen.Ghannam@amd.com
+Cc: bp@alien8.de,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nikolay Borisov <nik.borisov@suse.com>
+Subject: [PATCH] RAS/AMD/ATL: Remove bitwise_xor_bits
+Date: Thu, 13 Nov 2025 13:11:25 +0200
+Message-ID: <20251113111125.823960-1-nik.borisov@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 706F11F894
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	TO_DN_SOME(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:email,suse.com:mid,suse.com:dkim]
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Spam-Level: 
 
-On Mon, 10 Nov 2025 09:59:34 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+The name of the function is somewhat misleading, it's not just XORing
+bits, but is calculating the parity of the passed in value. There's
+already a compiler builtin function for this - __builtin_parity. Just
+use it. No functional changes.
 
-> Hi Jonathan,
+Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
+---
+ drivers/ras/amd/atl/umc.c | 22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
-Hi Geert,
-
-> 
-> On Sun, 9 Nov 2025 at 14:01, Jonathan Cameron <jic23@kernel.org> wrote:
-> > On Mon, 3 Nov 2025 11:09:36 +0100
-> > Geert Uytterhoeven <geert@linux-m68k.org> wrote:  
-> > > On Sun, 2 Nov 2025 at 11:43, Jonathan Cameron <jic23@kernel.org> wrote:  
-> > > > On Mon, 27 Oct 2025 19:41:44 +0100
-> > > > Geert Uytterhoeven <geert+renesas@glider.be> wrote:
-> > > >  
-> > > > > Prepare for the advent of globally available common field_get() and
-> > > > > field_prep() macros by undefining the symbols before defining local
-> > > > > variants.  This prevents redefinition warnings from the C preprocessor
-> > > > > when introducing the common macros later.
-> > > > >
-> > > > > Suggested-by: Yury Norov <yury.norov@gmail.com>
-> > > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>  
-> > > >
-> > > > So this is going to make a mess of merging your series given this is
-> > > > queued up for next merge window.
-> > > >
-> > > > I can pick this one up perhaps and we loop back to the replacement of
-> > > > these in a future patch?  Or perhaps go instead with a rename
-> > > > of these two which is probably nicer in the intermediate state than
-> > > > undefs.  
-> > >
-> > > Renaming would mean a lot of churn.
-> > > Just picking up the #undef patch should be simple and safe? The
-> > > removal of the underf and redef can be done in the next cycle.
-> > > Thanks!  
-> >
-> > Only 1 call of each of these in the driver, so churn is small either way.
-> >
-> > To avoid a bisection problem if your tree merges first I need to modify
-> > this stuff in the original patch or leave it for Linus to deal with as
-> > a merge conflict resolution which is mess I'd rather do without.  
-> 
-> If you add the #undef, there won't be any bisection problem?
-
-Two different things.  The bisection comment was about squashing into the
-original driver patch - not what was squashed.  Your tree may well merge
-before mine does and a bisection could therefore land in between the 
-driver introduction and a patch I merge today.
-
-The rename is a preference only because I don't want an undef that smells
-like a hack / bug work around kicking around in the tree for significant time
-(probably a whole kernel cycle). In this case the churn is very similar
-with that or a rename of the macros - so rename it is.
-
-Jonathan
-
+diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+index 6e072b7667e9..7ff4a5a1c5da 100644
+--- a/drivers/ras/amd/atl/umc.c
++++ b/drivers/ras/amd/atl/umc.c
+@@ -49,18 +49,6 @@ static u8 get_coh_st_inst_id_mi300(struct atl_err *err)
+ 	return i;
+ }
  
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
+-/* XOR the bits in @val. */
+-static u16 bitwise_xor_bits(u16 val)
+-{
+-	u16 tmp = 0;
+-	u8 i;
+-
+-	for (i = 0; i < 16; i++)
+-		tmp ^= (val >> i) & 0x1;
+-
+-	return tmp;
+-}
+-
+ struct xor_bits {
+ 	bool	xor_enable;
+ 	u16	col_xor;
+@@ -250,17 +238,17 @@ static unsigned long convert_dram_to_norm_addr_mi300(unsigned long addr)
+ 		if (!addr_hash.bank[i].xor_enable)
+ 			continue;
+ 
+-		temp  = bitwise_xor_bits(col & addr_hash.bank[i].col_xor);
+-		temp ^= bitwise_xor_bits(row & addr_hash.bank[i].row_xor);
++		temp  = (u16)__builtin_parity(col & addr_hash.bank[i].col_xor);
++		temp ^= (u16)__builtin_parity(row & addr_hash.bank[i].row_xor);
+ 		bank ^= temp << i;
+ 	}
+ 
+ 	/* Calculate hash for PC bit. */
+ 	if (addr_hash.pc.xor_enable) {
+-		temp  = bitwise_xor_bits(col  & addr_hash.pc.col_xor);
+-		temp ^= bitwise_xor_bits(row  & addr_hash.pc.row_xor);
++		temp  = (u16)__builtin_parity(col & addr_hash.pc.col_xor);
++		temp ^= (u16)__builtin_parity(row & addr_hash.pc.row_xor);
+ 		/* Bits SID[1:0] act as Bank[5:4] for PC hash, so apply them here. */
+-		temp ^= bitwise_xor_bits((bank | sid << NUM_BANK_BITS) & addr_hash.bank_xor);
++		temp ^= (u16)__builtin_parity((bank | sid << NUM_BANK_BITS) & addr_hash.bank_xor);
+ 		pc   ^= temp;
+ 	}
+ 
+-- 
+2.51.1
 
 
