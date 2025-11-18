@@ -1,103 +1,117 @@
-Return-Path: <linux-edac+bounces-5457-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5458-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00B99C69847
-	for <lists+linux-edac@lfdr.de>; Tue, 18 Nov 2025 14:02:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC1EDC69CD1
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Nov 2025 15:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id A03122A874
-	for <lists+linux-edac@lfdr.de>; Tue, 18 Nov 2025 13:02:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 036874F6722
+	for <lists+linux-edac@lfdr.de>; Tue, 18 Nov 2025 14:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273BB2DAFA4;
-	Tue, 18 Nov 2025 13:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F6135A93D;
+	Tue, 18 Nov 2025 13:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="v04/qdvc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JxauxAMP"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8B123BCFF;
-	Tue, 18 Nov 2025 13:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9E0347FC4
+	for <linux-edac@vger.kernel.org>; Tue, 18 Nov 2025 13:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763470941; cv=none; b=kGlYYKwI0gu7otjeV59HWxXUTaXRZ3rbRPgh50cyUFEY/8O/nZdWsYzfuScY8tFyf8nt44c2EEVncowfjxph44INTJAqBPshe4ofYXNbehADkJj+LGNffo99SwRB78KKd3k9MghCYTvIKRG7oSOGbeCLwV2R6Uz8rMzqIt/Lqdk=
+	t=1763474246; cv=none; b=N/Ijdnp9P9GJoCYCmPQhdBX6HAYK7dVO7X6LXUZSY+aRi3N5REHhKS33Yj56MouzS2kRkUtjcARHNuT3BXaffTyzGi8QSuC/MgP2QgVNJZDtZvs86zMzZ+TVu54cf795IIRo1AsFr++WfHIbY5szAh1BqwZMjJaNsMeE0f2k4FE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763470941; c=relaxed/simple;
-	bh=CB2uOReZgsobtwaBKBpmnV0Wphw1VrV1rB9pFCourqE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WoTfX4VphjOmNRpJg5VhE6Ja/5w0hbr10v6eS5fW7KnqEDsLgwPCovQAd/CCGJ5TfuzxJ6dqUTTdDeMIQFTSjxK6Oh/q8cwTmQLhe6a4fZTZy6I1CwN1iajDfOuqYdTQUl7eAgk6eXNVKULlAT1Qve6wtsI1hrnIMNCuMYEOVrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=v04/qdvc; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=CB2uOReZgsobtwaBKBpmnV0Wphw1VrV1rB9pFCourqE=; b=v04/qdvc32+tt+zPP4pbDmrzkf
-	zXGN+g/n7abQcm8ATAQLOOicg69LK54vwGhdR8jdcZh3yLsGHMNA3Ut6OlqqiMOMStHcN7gxFfKxN
-	enI0+iv1n4sauXKQob6ILS8ypE7nUnadXxnfCJlEXdPaBj7rxfELh4+KlLT/MN2SBs8/tGY6r+j1s
-	CViq6f347IAYD/ZBAw4f+BRM+uNF9RSbdew7zxtwQhEk2cL2iXEVhLh8nlUMvdMAnDuiu44RuoVai
-	ciM5p5UncHRv9cYN7CNYAyQVHPxLxsepPQA/I94/WwnvGJaaw6RSksnJT8E8jby62YqZCLWtPio7B
-	sRZNlS6w==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vLLLH-00FHMs-OI; Tue, 18 Nov 2025 13:01:56 +0000
-Date: Tue, 18 Nov 2025 05:01:47 -0800
-From: Breno Leitao <leitao@debian.org>
-To: tony.luck@intel.com, bp@alien8.de, akpm@linux-foundation.org
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	acpica-devel@lists.linux.dev, osandov@osandov.com, xueshuai@linux.alibaba.com, 
-	konrad.wilk@oracle.com, linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-pci@vger.kernel.org, kernel-team@meta.com, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, 
-	Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, 
-	Robert Moore <robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH RESEND v5] vmcoreinfo: Track and log recoverable hardware
- errors
-Message-ID: <vpilvvscosdl4o4cvbmtsrrp4btfwr5iidywmuiawfrgtlcwrr@ubtdbxfqyqpu>
-References: <20251010-vmcore_hw_error-v5-1-636ede3efe44@debian.org>
+	s=arc-20240116; t=1763474246; c=relaxed/simple;
+	bh=B7Y2jPvXl+Ml5QhQY6ztxFtDJUDkgSlRRQBd47ldFNo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TXsBCI/hps1BksEh8gIDPqVNdr3rrMIrIKVFsQmW5IhWE7qU+eHHy+SjHX8aPV0eyXxhMf7IlQUdqV5daJBzL0Pcsjs/JGQcalnNmE9dnvmHdH/LSQJsRoQQV83km11IUj4+MAVI76sRw7o7pwYNhsMN2/QjJjs9CriGbL2jX04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JxauxAMP; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1763474233;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hmbMMb0x7lTr3iL7dutg+8V0gOGJqiVZ6GailA3Ebok=;
+	b=JxauxAMPa914qmTvX/ido2fDW11/RgBnkldyHSIgitunKlCCfXdjhror68o+R0a3LKXzFy
+	qBEYoNjSW2pZE6CmT6+9PALMrdt1BliUelGr6w2FLF76g6AV8FJ4EcaywFqzwJqcAsfDwa
+	aR7+WU8n/EDMSSi6YYrNvp7xRMbvSDA=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] EDAC/ghes: Replace deprecated strcpy in ghes_edac_report_mem_error
+Date: Tue, 18 Nov 2025 14:56:22 +0100
+Message-ID: <20251118135621.101148-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251010-vmcore_hw_error-v5-1-636ede3efe44@debian.org>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello Andrew, Borislav, Tony,
+strcpy() has been deprecated [1] because it performs no bounds checking
+on the destination buffer, which can lead to buffer overflows. Use the
+safer strscpy() instead.
 
-On Fri, Oct 10, 2025 at 03:36:50AM -0700, Breno Leitao wrote:
-> Introduce a generic infrastructure for tracking recoverable hardware
-> errors (HW errors that are visible to the OS but does not cause a panic)
-> and record them for vmcore consumption. This aids post-mortem crash
-> analysis tools by preserving a count and timestamp for the last
-> occurrence of such errors. On the other side, correctable errors, which
-> the OS typically remains unaware of because the underlying hardware
-> handles them transparently, are less relevant for crash dump
-> and therefore are NOT tracked in this infrastructure.
+Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strcpy [1]
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+Changes in v2:
+- Update patch description (Boris)
+- Link to v1: https://lore.kernel.org/lkml/20251031114607.133523-1-thorsten.blum@linux.dev/
+---
+ drivers/edac/ghes_edac.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-<snip>
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index 1eb0136c6fbd..d80c88818691 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -15,6 +15,7 @@
+ #include "edac_module.h"
+ #include <ras/ras_event.h>
+ #include <linux/notifier.h>
++#include <linux/string.h>
+ 
+ #define OTHER_DETAIL_LEN	400
+ 
+@@ -332,7 +333,7 @@ static int ghes_edac_report_mem_error(struct notifier_block *nb,
+ 		p = pvt->msg;
+ 		p += snprintf(p, sizeof(pvt->msg), "%s", cper_mem_err_type_str(etype));
+ 	} else {
+-		strcpy(pvt->msg, "unknown error");
++		strscpy(pvt->msg, "unknown error");
+ 	}
+ 
+ 	/* Error address */
+@@ -357,14 +358,14 @@ static int ghes_edac_report_mem_error(struct notifier_block *nb,
+ 		dimm = find_dimm_by_handle(mci, mem_err->mem_dev_handle);
+ 		if (dimm) {
+ 			e->top_layer = dimm->idx;
+-			strcpy(e->label, dimm->label);
++			strscpy(e->label, dimm->label);
+ 		}
+ 	}
+ 	if (p > e->location)
+ 		*(p - 1) = '\0';
+ 
+ 	if (!*e->label)
+-		strcpy(e->label, "unknown memory");
++		strscpy(e->label, "unknown memory");
+ 
+ 	/* All other fields are mapped on e->other_detail */
+ 	p = pvt->other_detail;
+-- 
+2.51.1
 
-> Suggested-by: Tony Luck <tony.luck@intel.com>
-> Suggested-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-
-Do you know what is the right tree for this patch?
-
-I am wondering if it should go through Kdump, x86 or RAS/MCE tree?
-
-Thanks
---breno
 
