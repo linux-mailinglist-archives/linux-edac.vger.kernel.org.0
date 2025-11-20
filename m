@@ -1,126 +1,98 @@
-Return-Path: <linux-edac+bounces-5487-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5488-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3FF6C7473C
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 15:09:27 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A23FC7521F
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 16:51:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 827AE4EB830
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 14:00:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E0619361B78
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 15:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117A23469E7;
-	Thu, 20 Nov 2025 14:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7143635CB70;
+	Thu, 20 Nov 2025 15:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OIxgw57d"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="PGzU8Zeh"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA442307AFA;
-	Thu, 20 Nov 2025 14:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7345532E12B;
+	Thu, 20 Nov 2025 15:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763647203; cv=none; b=M+rutiqZPLvr7qApSWp/qVDgy98B7mABMjuqLFnjyI/nypl0uH6lKD5HE9aMHqt4rr+XxSWguYv76lH7LRA52ema7Sus43AnISmo3EurgkULVUgXnlbHyQedy02AgMrqGH2lb0lxQoxdSKYdDZT1q7UebvkACSgnF1lV6PxlJNg=
+	t=1763653340; cv=none; b=Twd+wsV7AcaI9M9plYpbnd0jAZzU8WhlEFaBQ8hansN1tqSIjbJSKQR7WmbpCkHC8eloTEXiGJz5zIIwzMR0jGizVF+8si3ywfk8AGLU4I06u+/vERryoeiQwzgCShKP9MSgF79aySzkG++uV6/AJn9BjXMJ2IjNuOUa/aJQzls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763647203; c=relaxed/simple;
-	bh=3c1rDlMwrBbzOuvwQjvriGZ09BNm0ZrVc/uEpCI/im8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mJTNr9Z7W0KvYqCsS4r58+v8gNj51AJ5U1XhPoT4/WEZVAxjmxyXZHBeUKepGgt222uuC47rLiumxfhmRZo0A9X0gg3DN2yFtqzVxlD8Fg82hgPS0jm7dFvHi2t2cpM5cGxcCTqrFB5yDsiXe9dbridgXbVhOwYHL4E201X0dkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OIxgw57d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD14C4CEF1;
-	Thu, 20 Nov 2025 13:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763647202;
-	bh=3c1rDlMwrBbzOuvwQjvriGZ09BNm0ZrVc/uEpCI/im8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OIxgw57dsl4CdroEfiPwEnKA/qK2YigIeTiVi5AlW3YxcgIYi9GBZusrzlVEOroyD
-	 JsTGBTLY5JlXkZp875v6PsQ8NUULK+kIUd47qeV/x2bZyy1SKSN1TMy23JS7zXl7cz
-	 ir1C/bH2smy+cQqvWVIjHghli4KIJM+Z25MgeNfmw2srRa1X6ayWcylZCI5HXl6MJf
-	 wqmNuBZK0qm/IDFTW2ugm0gnifZ5qCTWlOBKpgNr2vX8j9pZ1eFqsDWeG9zTHXxmRb
-	 OSqUnsJqqzXBV6442s/EW0bbVFA7cZsjTc5b4CQYdQzKVrmay3bBzhuC32QjqetYyO
-	 sirtoHruo0W/A==
-Message-ID: <fc7bae22-0705-475a-be89-8bb3ca12384d@kernel.org>
-Date: Thu, 20 Nov 2025 14:59:54 +0100
+	s=arc-20240116; t=1763653340; c=relaxed/simple;
+	bh=eZ98W032xGhtzzOcjOKRHJXESIfNISVOPT2tJHZw9LY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CBOuAfchjr0A009jG3eAV42OoklAO9eYAYEfTKsWQBATM0jMTWQxJ+N8QtMJOtHJfkeIlQSKXxTyrkkLv/1kp+7d/RaH19U4cXk9OlgNgj5VKXDDun2alJiFG3sbmr3vZ+cLs3AxM+UI7lYh3Yk4uc/yzoxWICiwiI85bRn6dzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=PGzU8Zeh; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8F9C040E01A5;
+	Thu, 20 Nov 2025 15:42:07 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id NrR-lPrdff99; Thu, 20 Nov 2025 15:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1763653324; bh=DHqZabO/ANSQtmpVG/tqnyDvkdQi1bfLKMSaSTgYxik=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PGzU8Zeh50QvF3/bzc++OjKId8pPa6jnAlkO93jFupml6L4yGy1o3dBAy3aFdgiQQ
+	 yxrxy1boh/X9hfemud2jU6RJgrikB6qTd9vbHPkwP/Co8Ocb56d/a2rf1QqTlo0kwJ
+	 I+9xfUT2p2PpJq+u3e39OXmxhF6/aEIn7ZKc28jvF/2PBYOmMH5jwAzChjANDl36Jp
+	 2si+p5CABesbIDaSzrLrIEdWrjYVbEREcKOB/H7oGJV/TOFECYzUD1rosBWNtdODRQ
+	 h4oPs6Rf8zM5jHqLyMpOCTwRjuntLNKlD2CN6Dd6vFYwn8jaLKWwSWBEaF8ESlE3c/
+	 julCErinne6+FCfJOMgWjVqnV0xpaZFHBpGQ4zq0vsLEI/KpUwOW2WVnMdeTw3pM+G
+	 qsjOmXOjtAkuWQV6L7Tel5wDlOoKwB50QMir49BFsmIu0BjBj4qcK/IMHfuKElLJON
+	 Ylzi38QtKR/lwDOfz9G+Zz5JXBTsXt4CVGMXPldzEPZzh1Ismq0u1j1d0lfyTFQhas
+	 SAAqvdB02hlUezM7zxpEmh5h5EX5XI4vAgFus2ngvizXZEdrEdNVIVk401IM/Kv2H1
+	 6fDT5QUdodc56dXnLf8qAw+bqeNI5puXw12wVe61ngzP1sJg95okuAOFVeq6ZvRx5f
+	 j7AmHmPnqiOq6i/bR6kfUt60=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 07B8D40E016D;
+	Thu, 20 Nov 2025 15:41:59 +0000 (UTC)
+Date: Thu, 20 Nov 2025 16:41:53 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Nikolay Borisov <nik.borisov@suse.com>
+Cc: Yazen.Ghannam@amd.com, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RAS/AMD/ATL: Remove bitwise_xor_bits
+Message-ID: <20251120154153.GBaR82wW8qjDQA8eoV@fat_crate.local>
+References: <20251113111125.823960-1-nik.borisov@suse.com>
+ <20251118123352.GJaRxnsHRC6KcbQanQ@fat_crate.local>
+ <edfc3212-dc28-43a5-9d9d-c838d253ea88@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] mm/memory-failure: remove the selection of RAS
-To: Xie Yuanbin <xieyuanbin1@huawei.com>, tony.luck@intel.com, bp@alien8.de,
- linmiaohe@huawei.com, nao.horiguchi@gmail.com, rostedt@goodmis.org,
- mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com
-Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, will@kernel.org,
- liaohua4@huawei.com, lilinjie8@huawei.com
-References: <20251119095943.67125-1-xieyuanbin1@huawei.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20251119095943.67125-1-xieyuanbin1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <edfc3212-dc28-43a5-9d9d-c838d253ea88@suse.com>
 
-On 11/19/25 10:59, Xie Yuanbin wrote:
-> The commit 97f0b13452198290799f ("tracing: add trace event for
-> memory-failure") introduces the selection of RAS in memory-failure.
-> This commit is just a tracing feature; in reality, there is no dependency
-> between memory-failure and RAS. RAS increases the size of the bzImage
-> image by 8k, which is very valuable for embedded devices.
-> 
-> Move the memory-failure traceing code from ras_event.h to
-> memory-failure.h and remove the selection of RAS.
-> 
-> v2->v3: https://lore.kernel.org/20251104072306.100738-3-xieyuanbin1@huawei.com
->    - Change define TRACE_SYSTEM from ras to memory_failure
->    - Add include/trace/events/memory-failure.h to
->      "HWPOISON MEMORY FAILURE HANDLING" section in MAINTAINERS
->    - Rebase to latest linux-next source
-> 
-> v1->v2: https://lore.kernel.org/20251103033536.52234-2-xieyuanbin1@huawei.com
->    - Move the memory-failure traceing code from ras_event.h to
->      memory-failure.h
-> 
-> Signed-off-by: Xie Yuanbin <xieyuanbin1@huawei.com>
-> Cc: David Hildenbrand (Red Hat) <david@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->   MAINTAINERS                           |  1 +
->   include/ras/ras_event.h               | 87 ------------------------
->   include/trace/events/memory-failure.h | 98 +++++++++++++++++++++++++++
->   mm/Kconfig                            |  1 -
->   mm/memory-failure.c                   |  5 +-
->   5 files changed, 103 insertions(+), 89 deletions(-)
->   create mode 100644 include/trace/events/memory-failure.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7310d9ca0370..43d6eb95fb05 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11631,10 +11631,11 @@ R:	Naoya Horiguchi <nao.horiguchi@gmail.com>
->   L:	linux-mm@kvack.org
->   S:	Maintained
->   F:	include/linux/memory-failure.h
->   F:	mm/hwpoison-inject.c
->   F:	mm/memory-failure.c
-> +F:	include/trace/events/memory-failure.
+On Tue, Nov 18, 2025 at 02:36:08PM +0200, Nikolay Borisov wrote:
+> Fair point, but bitwise xor is the lowest possible operation, I guess we
+> care about the higher-level effect, which is calculating parity.
 
-These are ordered alphabetically, so it should be further up next to the 
-other include.
+... in a function which "Calculate hash for each Bank bit."?
 
-With that
-
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+I don't think it matters either way. This is converting the DRAM addressing
+scheme into normalized addresses so as long as it is clear what happens
+there...
 
 -- 
-Cheers
+Regards/Gruss,
+    Boris.
 
-David
+https://people.kernel.org/tglx/notes-about-netiquette
 
