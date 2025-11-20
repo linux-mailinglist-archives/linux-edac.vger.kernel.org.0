@@ -1,129 +1,126 @@
-Return-Path: <linux-edac+bounces-5486-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5487-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 768E5C73F45
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 13:22:51 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3FF6C7473C
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 15:09:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 306FE4E2735
-	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 12:22:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 827AE4EB830
+	for <lists+linux-edac@lfdr.de>; Thu, 20 Nov 2025 14:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B340432D0D9;
-	Thu, 20 Nov 2025 12:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117A23469E7;
+	Thu, 20 Nov 2025 14:00:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fC6kkzkJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OIxgw57d"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B880932E12E;
-	Thu, 20 Nov 2025 12:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA442307AFA;
+	Thu, 20 Nov 2025 14:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763641365; cv=none; b=WQAFuReqRwVfEo0z2UuU+5pkT4Z1ouBH0mtalNMcOazUIoOIszCh+5u+UCdqN7iBKhjSgd4knHTYWhjPUjMCx8DZGxQghTqEygTBTL9yzW9obEWmJkvQBND6YPUwJMdsrKRHMdv028IQhh6Szd5y7IoHaJFex0uIXFPr3KdSwP0=
+	t=1763647203; cv=none; b=M+rutiqZPLvr7qApSWp/qVDgy98B7mABMjuqLFnjyI/nypl0uH6lKD5HE9aMHqt4rr+XxSWguYv76lH7LRA52ema7Sus43AnISmo3EurgkULVUgXnlbHyQedy02AgMrqGH2lb0lxQoxdSKYdDZT1q7UebvkACSgnF1lV6PxlJNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763641365; c=relaxed/simple;
-	bh=JEDrR5Djar9ZByqC4EgxiIUC5lAXDjC1ulowVMgS/Fs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kYglyVKHLswnjNYCpn+HgtuRGJdX2S+DQ5u+JkmnyGo1CRpaE6RaK9jeB5pTN+Nxsj5F/QozPLrggqDAOcvkmlbIJtxendHFu2qHAyigy0Ej4d3rcvf4TpT46MalKuAiW4cpoMgG37Smep0idiCQzL1yIenuvIMGB1n4+pSV6ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fC6kkzkJ; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1E5AC40E01A5;
-	Thu, 20 Nov 2025 12:22:38 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 2_Ag7KRp96E8; Thu, 20 Nov 2025 12:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1763641354; bh=3YOPtEkdRgfJxLHrAmXXDsS6n99vLsiqSHv/jglXyK4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fC6kkzkJ4X3v801ZrgODiPtrwlAuph9QNpqYgO6KTh+LhiWW/hi9TqBbA9AquISHN
-	 jDeP3ZlsYEVippeU1CGkufKCIi62BV5DCAKInmlO253O+5+mtk5RgUy/H/nbh188ko
-	 BHDrMXUqqUKb0ZE/5aFznV0BnQsz9rtD1i7uQbQGWfl5pIJUzPPqvMz+tEXn8an97g
-	 Kp23cMH8LkKUkJUYlQ9670G5b6a/5cvKEDkPKs5YfB65jCVT8wIkd63/0W4vJ/0OPJ
-	 9ehYI9qCzoQJZ4v1baeRDaNXRoFk5QYU0v0xymdmBR2U5T3Rha/PuWL2f/pHUpUSON
-	 kbyEndJUq+z7E0Yjl85UAMEAakMyFHkEspdlvoYLbaNYihEzeGOeRhAiHKw3dIYY0T
-	 G9jLxq7XAe6eQ9SIRjtEVfHjsU1m6Qa2iMHhlRLAvX+TZCZcSY244tNtH9ufNTQcd/
-	 UhVqaXxnopE72xlARDyWRlEvW9O7Ccy8vf08X3YY9ZfEryYIYN4CDNDBT0qDJeYueE
-	 ueRA8/hlzpquUCwiaRhmv4F+SxsEGLSB8tIYGOMB5JHb8fYqNasFa+MrrI9FZytcWt
-	 krwRxLI2/wCMtkDpxoFJ6ku3f7M5TPGNWJU1S76J/d4j4LWvjaB4+7x7wM9f5Dgi8q
-	 SHXpp4+Gk21NBtI25al5abag=
-Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 1FFE540E016E;
-	Thu, 20 Nov 2025 12:22:29 +0000 (UTC)
-Date: Thu, 20 Nov 2025 13:22:22 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Haotian Zhang <vulab@iscas.ac.cn>
-Cc: tony.luck@intel.com, qiuxu.zhuo@intel.com, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ras: cec: Fix debugfs error checking
-Message-ID: <20251120122222.GAaR8H_iCA0YxuyUvN@fat_crate.local>
-References: <20251120080708.427-1-vulab@iscas.ac.cn>
+	s=arc-20240116; t=1763647203; c=relaxed/simple;
+	bh=3c1rDlMwrBbzOuvwQjvriGZ09BNm0ZrVc/uEpCI/im8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mJTNr9Z7W0KvYqCsS4r58+v8gNj51AJ5U1XhPoT4/WEZVAxjmxyXZHBeUKepGgt222uuC47rLiumxfhmRZo0A9X0gg3DN2yFtqzVxlD8Fg82hgPS0jm7dFvHi2t2cpM5cGxcCTqrFB5yDsiXe9dbridgXbVhOwYHL4E201X0dkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OIxgw57d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD14C4CEF1;
+	Thu, 20 Nov 2025 13:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763647202;
+	bh=3c1rDlMwrBbzOuvwQjvriGZ09BNm0ZrVc/uEpCI/im8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OIxgw57dsl4CdroEfiPwEnKA/qK2YigIeTiVi5AlW3YxcgIYi9GBZusrzlVEOroyD
+	 JsTGBTLY5JlXkZp875v6PsQ8NUULK+kIUd47qeV/x2bZyy1SKSN1TMy23JS7zXl7cz
+	 ir1C/bH2smy+cQqvWVIjHghli4KIJM+Z25MgeNfmw2srRa1X6ayWcylZCI5HXl6MJf
+	 wqmNuBZK0qm/IDFTW2ugm0gnifZ5qCTWlOBKpgNr2vX8j9pZ1eFqsDWeG9zTHXxmRb
+	 OSqUnsJqqzXBV6442s/EW0bbVFA7cZsjTc5b4CQYdQzKVrmay3bBzhuC32QjqetYyO
+	 sirtoHruo0W/A==
+Message-ID: <fc7bae22-0705-475a-be89-8bb3ca12384d@kernel.org>
+Date: Thu, 20 Nov 2025 14:59:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251120080708.427-1-vulab@iscas.ac.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] mm/memory-failure: remove the selection of RAS
+To: Xie Yuanbin <xieyuanbin1@huawei.com>, tony.luck@intel.com, bp@alien8.de,
+ linmiaohe@huawei.com, nao.horiguchi@gmail.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
+ Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com
+Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+ linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, will@kernel.org,
+ liaohua4@huawei.com, lilinjie8@huawei.com
+References: <20251119095943.67125-1-xieyuanbin1@huawei.com>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251119095943.67125-1-xieyuanbin1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 20, 2025 at 04:07:08PM +0800, Haotian Zhang wrote:
-> The debugfs_create_dir() and debugfs_create_file() functions return
-> ERR_PTR() on error, not NULL. The current null-checks fail to detect
-> errors because ERR_PTR() encodes error codes as non-null pointer values.
+On 11/19/25 10:59, Xie Yuanbin wrote:
+> The commit 97f0b13452198290799f ("tracing: add trace event for
+> memory-failure") introduces the selection of RAS in memory-failure.
+> This commit is just a tracing feature; in reality, there is no dependency
+> between memory-failure and RAS. RAS increases the size of the bzImage
+> image by 8k, which is very valuable for embedded devices.
 > 
-> Replace the null-checks with IS_ERR() for all debugfs_create_dir() and
-> debugfs_create_file() and ras_get_debugfs_root calls to properly
-> handle errors.
+> Move the memory-failure traceing code from ras_event.h to
+> memory-failure.h and remove the selection of RAS.
 > 
-> Fixes: 011d82611172 ("RAS: Add a Corrected Errors Collector")
+> v2->v3: https://lore.kernel.org/20251104072306.100738-3-xieyuanbin1@huawei.com
+>    - Change define TRACE_SYSTEM from ras to memory_failure
+>    - Add include/trace/events/memory-failure.h to
+>      "HWPOISON MEMORY FAILURE HANDLING" section in MAINTAINERS
+>    - Rebase to latest linux-next source
+> 
+> v1->v2: https://lore.kernel.org/20251103033536.52234-2-xieyuanbin1@huawei.com
+>    - Move the memory-failure traceing code from ras_event.h to
+>      memory-failure.h
+> 
+> Signed-off-by: Xie Yuanbin <xieyuanbin1@huawei.com>
+> Cc: David Hildenbrand (Red Hat) <david@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>   MAINTAINERS                           |  1 +
+>   include/ras/ras_event.h               | 87 ------------------------
+>   include/trace/events/memory-failure.h | 98 +++++++++++++++++++++++++++
+>   mm/Kconfig                            |  1 -
+>   mm/memory-failure.c                   |  5 +-
+>   5 files changed, 103 insertions(+), 89 deletions(-)
+>   create mode 100644 include/trace/events/memory-failure.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7310d9ca0370..43d6eb95fb05 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11631,10 +11631,11 @@ R:	Naoya Horiguchi <nao.horiguchi@gmail.com>
+>   L:	linux-mm@kvack.org
+>   S:	Maintained
+>   F:	include/linux/memory-failure.h
+>   F:	mm/hwpoison-inject.c
+>   F:	mm/memory-failure.c
+> +F:	include/trace/events/memory-failure.
 
-git show 011d82611172:fs/debugfs/inode.c
-...
-struct dentry *debugfs_create_dir(const char *name, struct dentry *parent)
-{
-        struct dentry *dentry = start_creating(name, parent);
-        struct inode *inode;
- 
-        if (IS_ERR(dentry))
-                return NULL;
-		^^^^^^^^^^^
+These are ordered alphabetically, so it should be further up next to the 
+other include.
 
-So it used to return NULL at the time.
+With that
 
-However,
-
-/**     
- * debugfs_create_file - create a file in the debugfs filesystem
-
-	...
-
- * NOTE: it's expected that most callers should _ignore_ the errors returned
- * by this function. Other debugfs functions handle the fact that the "dentry"
- * passed to them could be an error and they don't crash in that case.
- * Drivers should generally work fine even if debugfs fails to init anyway.
- */
-
-and the _dir() one has the same note. I've been hesitant to remove that error
-handling in cec.c until now but I think we can safely zap it. It is
-unnecessary clutter by now.
-
-Thx.
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
 
 -- 
-Regards/Gruss,
-    Boris.
+Cheers
 
-https://people.kernel.org/tglx/notes-about-netiquette
+David
 
