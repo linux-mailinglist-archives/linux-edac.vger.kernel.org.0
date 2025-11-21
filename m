@@ -1,116 +1,206 @@
-Return-Path: <linux-edac+bounces-5495-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5496-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AA6EC77B7A
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 08:39:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6518C77E88
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 09:30:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A6F903548C0
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 07:39:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id C22DE29C49
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 08:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AA72D543A;
-	Fri, 21 Nov 2025 07:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178D333B6C3;
+	Fri, 21 Nov 2025 08:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="N5/8B55n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="icBxCpAo"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87309283683;
-	Fri, 21 Nov 2025 07:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C0C33B6ED;
+	Fri, 21 Nov 2025 08:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763710753; cv=none; b=UERmcOLUSCKyisYyLrQuBciYPAaMkdYjjMmCbnPoMkdjIRCmDUymNubCB74dtWU2KJpXcaDW3sbVkUq37nkMHUG75GcZP3v09/zIEDjjNiQ1RRwpPXGo8WGsroRs00Eg3dvbTi4QSr6wRGZJM5zeuhis2QqjPPjv4eJgDYWBo5U=
+	t=1763713809; cv=none; b=MC7Uy6QsCj6pfUZg96Ll9Hg1/95GmE2yNaUAkCcfFaWeHjedx7Y6czTAwDlLwbBplY0wTa1pceGuxRcjLzoByIbYJ6PErzrVoJPfH7zjU3NmdGaSPY4qBxtWpUv/HUXRIM6e+Q0DCHgWKybBh06FY3DAeQ/l9BhgR26x6hN1wxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763710753; c=relaxed/simple;
-	bh=AugTGMRA4pvKKAUuDdtPRrbisScHKer09i0AVJeGlPo=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=VFSiML5nZ22USIcHozRxh+hMkMPOoi6FzmBAN0E1SovhcF8cjQyETvb+QhD/YebPf9gDdo+y3qSvwwUQ4O8hnaSDxTDK8q7AtMrgQUAdpVqGzlmjjj8JgOnVt4RrI9Z2omNgX8fjqCCfmYtjnkroXp3PCPYAS2P9G30a4xBrVek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=N5/8B55n; arc=none smtp.client-ip=113.46.200.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=Jw7Ud8zh45h7Hnmg98SmQKRWVlaGwdOC5WqXH1EQ55o=;
-	b=N5/8B55nKmRouJYEJQ31wAPlVWAbWvnSJEvXC4E4Y/iT7YlDm1xWdztV8ZlPBdi7UML01lUc1
-	Fv8XbMPOj7kpwPW+tlnhHlLdprZnTT5vLaEvUbYWZSyYGWOxnOO7oHGFWOv5YELHAHIr5n25AxD
-	y1ox9Sv5tlLGPqrKu9b8QeU=
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4dCRrL55nqz1cyP6;
-	Fri, 21 Nov 2025 15:37:22 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id F1326180043;
-	Fri, 21 Nov 2025 15:39:07 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 21 Nov 2025 15:39:07 +0800
-Received: from [10.173.125.37] (10.173.125.37) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 21 Nov 2025 15:39:06 +0800
-Subject: Re: [PATCH v3] mm/memory-failure: remove the selection of RAS
-To: Xie Yuanbin <xieyuanbin1@huawei.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-trace-kernel@vger.kernel.org>,
-	<will@kernel.org>, <liaohua4@huawei.com>, <lilinjie8@huawei.com>,
-	<david@redhat.com>, <tony.luck@intel.com>, <bp@alien8.de>,
-	<nao.horiguchi@gmail.com>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-	<mathieu.desnoyers@efficios.com>, <akpm@linux-foundation.org>,
-	<david@kernel.org>, <lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>,
-	<vbabka@suse.cz>, <rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>
-References: <20251119095943.67125-1-xieyuanbin1@huawei.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <8567d8c5-e864-8f84-7805-c004698e72d7@huawei.com>
-Date: Fri, 21 Nov 2025 15:39:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1763713809; c=relaxed/simple;
+	bh=UebrCM8ZgZMn8LQGSIROx+8tEIsDHzwRTJoeAwz824A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fJijagkZ0soQFwFvFTJ2Ue0A+B2ft7+X5qiYyJTILnUcqu468Ru8Kr+tNzvM+ERERTXol0zzbWMXs5RhB2l8XZU5CjGIC+FBRZd2fZ/KIdv6FLzmY8C8qc6IPZ5WiZdiZuYfK3KNpntHWtzsE/GEyX1EzIq472IoeMc9Q+VGoIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=icBxCpAo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE695C4CEF1;
+	Fri, 21 Nov 2025 08:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763713808;
+	bh=UebrCM8ZgZMn8LQGSIROx+8tEIsDHzwRTJoeAwz824A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=icBxCpAoEIPHVB/ZSlCG4k5XNGYG0doJSk1JQBKjf35Q3+406a5S0biq2X1n/d3nk
+	 tZnrlXMMjYb+keUzmCh1U0Wu5zvjaukHkPwh3vW+YyqGH1Ev3bPU53F82MPnj9Manz
+	 e6i7W4RSSZTy82yXqOy1bNT4/0K0oG9PmvglExph7lzbvKEiP+BFAgRjlt0UBllAuP
+	 rLiuLvA88lPK53T+tN+cdCNo/sYurax2cC5FbvBtVNx0Mf3blhER6f/TnIJTAmmR/l
+	 fD3QjeSMgadjukEJj5qcd4HUGPnx0WSuIIzzMrqHmS9vM0GBNNKvZMkHZ0qU+9FXxp
+	 PyOMYaEMt1jiA==
+Date: Fri, 21 Nov 2025 09:30:01 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Daniel Ferguson <danielf@os.amperecomputing.com>, Ard Biesheuvel
+ <ardb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>, James
+ Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>, Borislav
+ Petkov <bp@alien8.de>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-edac@vger.kernel.org, Jason Tian
+ <jason@os.amperecomputing.com>, Shengwei Luo <luoshengwei@huawei.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, Shiju Jose
+ <shiju.jose@huawei.com>
+Subject: Re: [PATCH v6 0/5] Fix issues with ARM Processor CPER records
+Message-ID: <20251121093001.40e01849@foz.lan>
+In-Reply-To: <20250814-mauro_v3-v6-16-rev2-v6-0-e5538d534aa0@os.amperecomputing.com>
+References: <20250814-mauro_v3-v6-16-rev2-v6-0-e5538d534aa0@os.amperecomputing.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20251119095943.67125-1-xieyuanbin1@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemq500010.china.huawei.com (7.202.194.235)
 
-On 2025/11/19 17:59, Xie Yuanbin wrote:
-> The commit 97f0b13452198290799f ("tracing: add trace event for
-> memory-failure") introduces the selection of RAS in memory-failure.
-> This commit is just a tracing feature; in reality, there is no dependency
-> between memory-failure and RAS. RAS increases the size of the bzImage
-> image by 8k, which is very valuable for embedded devices.
+Em Thu, 14 Aug 2025 09:52:51 -0700
+Daniel Ferguson <danielf@os.amperecomputing.com> escreveu:
+
+> This is needed for both kernelspace and userspace properly handle
+> ARM processor CPER events.
 > 
-> Move the memory-failure traceing code from ras_event.h to
-> memory-failure.h and remove the selection of RAS.
+> Patch 1 of this series fix the UEFI 2.6+ implementation of the ARM
+> trace event, as the original implementation was incomplete.
+> Changeset e9279e83ad1f ("trace, ras: add ARM processor error trace event")
+> added such event, but it reports only some fields of the CPER record
+> defined on UEFI 2.6+ appendix N, table N.16.  Those are not enough
+> actually parse such events on userspace, as not even the event type
+> is exported.
+
+Hi Rafael/Ard,
+
+What's the status of this series? I'm not seeing it yet on linux-next.
+
+Regards,
+Mauro
+
 > 
-> v2->v3: https://lore.kernel.org/20251104072306.100738-3-xieyuanbin1@huawei.com
->   - Change define TRACE_SYSTEM from ras to memory_failure
->   - Add include/trace/events/memory-failure.h to
->     "HWPOISON MEMORY FAILURE HANDLING" section in MAINTAINERS
->   - Rebase to latest linux-next source
+> Patch 2 fixes a compilation breakage when W=1;
 > 
-> v1->v2: https://lore.kernel.org/20251103033536.52234-2-xieyuanbin1@huawei.com
->   - Move the memory-failure traceing code from ras_event.h to
->     memory-failure.h
+> Patch 3 adds a new helper function to be used by cper and ghes drivers to
+> display CPER bitmaps;
 > 
-> Signed-off-by: Xie Yuanbin <xieyuanbin1@huawei.com>
-> Cc: David Hildenbrand (Red Hat) <david@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Miaohe Lin <linmiaohe@huawei.com>
+> Patch 4 fixes CPER logic according with UEFI 2.9A errata. Before it, there
+> was no description about how processor type field was encoded. The errata
+> defines it as a bitmask, and provides the information about how it should
+> be encoded.
+> 
+> Patch 5 adds CPER functions to Kernel-doc.
+> 
+> This series was validated with the help of an ARM EINJ code for QEMU:
+> 
+> 	https://gitlab.com/mchehab_kernel/qemu/-/tree/qemu_submission
+> 
+> $ scripts/ghes_inject.py -d arm -p 0xdeadbeef -t cache,bus,micro-arch
+> 
+> [   11.094205] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
+> [   11.095009] {1}[Hardware Error]: event severity: recoverable
+> [   11.095486] {1}[Hardware Error]:  Error 0, type: recoverable
+> [   11.096090] {1}[Hardware Error]:   section_type: ARM processor error
+> [   11.096399] {1}[Hardware Error]:   MIDR: 0x00000000000f0510
+> [   11.097135] {1}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000080000000
+> [   11.097811] {1}[Hardware Error]:   running state: 0x0
+> [   11.098193] {1}[Hardware Error]:   Power State Coordination Interface state: 0
+> [   11.098699] {1}[Hardware Error]:   Error info structure 0:
+> [   11.099174] {1}[Hardware Error]:   num errors: 2
+> [   11.099682] {1}[Hardware Error]:    error_type: 0x1a: cache error|bus error|micro-architectural error
+> [   11.100150] {1}[Hardware Error]:    physical fault address: 0x00000000deadbeef
+> [   11.111214] Memory failure: 0xdeadb: recovery action for free buddy page: Recovered
+> 
+> - 
+> 
+> I also tested the ghes and cper reports both with and without this
+> change, using different versions of rasdaemon, with and without
+> support for the extended trace event. Those are a summary of the
+> test results:
+> 
+> - adding more fields to the trace events didn't break userspace API:
+>   both versions of rasdaemon handled it;
+> 
+> - the rasdaemon patches to handle the new trace report was missing
+>   a backward-compatibility logic. I fixed already. So, rasdaemon
+>   can now handle both old and new trace events.
+> 
+> Btw, rasdaemon has gained support for the extended trace since its
+> version 0.5.8 (released in 2021). I didn't saw any issues there
+> complain about troubles on it, so either distros used on ARM servers
+> are using an old version of rasdaemon, or they're carrying on the trace
+> event changes as well.
+> 
+> ---
+> v6:
+>  - fix typo in Jonathans "reviewed-by" in patch 3
+>  - Link to v5: https://lore.kernel.org/linux-acpi/20250813-mauro_v3-v6-16-rev2-v5-0-954db8ccfbe6@os.amperecomputing.com
+> 
+> v5:
+>  - fix a few code formatting issues
+>  - remove "Co-developed-by: danielf" because his/my contribution was
+>    removed in v2.
+>  - adjust tag block
+>  - Link to v4: https://lore.kernel.org/linux-acpi/20250805-mauro_v3-v6-16-rev2-v4-0-ea538759841c@os.amperecomputing.com
+> 
+> v4:
+>  - rebase to kernel v6.16
+>  - modify commit message of patch 1, and adjust white spaces
+>    per Boris' suggestions.
+>  - Link to v3: https://lore.kernel.org/linux-acpi/cover.1725429659.git.mchehab+huawei@kernel.org
+> 
+> v3:
+>  - history of patch 1 improved with a chain of co-developed-by;
+>  - add a better description and an example on patch 3;
+>  - use BIT_ULL() on patch 3;
+>  - add a missing include on patch 4.
+> 
+> v2:
+>   - removed an uneeded patch adding #ifdef for CONFIG_ARM/ARM64;
+>   - cper_bits_to_str() now returns the number of chars filled at the buffer;
+>   - did a cosmetic (blank lines) improvement at include/linux/ras.h;
+>   - arm_event trace dynamic arrays renamed to pei_buf/ctx_buf/oem_buf.
+> 
+>     
+> 
+> ---
+> Changes in v6:
+> - EDITME: describe what is new in this series revision.
+> - EDITME: use bulletpoints and terse descriptions.
+> - Link to v5: https://lore.kernel.org/r/20250813-mauro_v3-v6-16-rev2-v5-0-954db8ccfbe6@os.amperecomputing.com
+> 
+> Jason Tian (1):
+>       RAS: Report all ARM processor CPER information to userspace
+> 
+> Mauro Carvalho Chehab (4):
+>       efi/cper: Adjust infopfx size to accept an extra space
+>       efi/cper: Add a new helper function to print bitmasks
+>       efi/cper: align ARM CPER type with UEFI 2.9A/2.10 specs
+>       docs: efi: add CPER functions to driver-api
+> 
+>  Documentation/driver-api/firmware/efi/index.rst | 11 +++--
+>  drivers/acpi/apei/ghes.c                        | 27 +++++------
+>  drivers/firmware/efi/cper-arm.c                 | 52 ++++++++++-----------
+>  drivers/firmware/efi/cper.c                     | 62 ++++++++++++++++++++++++-
+>  drivers/ras/ras.c                               | 40 +++++++++++++++-
+>  include/linux/cper.h                            | 12 +++--
+>  include/linux/ras.h                             | 16 +++++--
+>  include/ras/ras_event.h                         | 49 +++++++++++++++++--
+>  8 files changed, 210 insertions(+), 59 deletions(-)
+> 
 
-LGTM. With David's comment addressed,
 
-Acked-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Thanks.
-.
-
+Thanks,
+Mauro
 
