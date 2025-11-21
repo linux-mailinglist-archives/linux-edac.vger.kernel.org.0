@@ -1,186 +1,164 @@
-Return-Path: <linux-edac+bounces-5493-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5494-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A3ACC77042
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 03:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0249AC770CC
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 03:47:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 61A5E4E03E0
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 02:32:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE5514E5A41
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 02:47:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B6721D58B;
-	Fri, 21 Nov 2025 02:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53292C3268;
+	Fri, 21 Nov 2025 02:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="umciH1Kb"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482881A38F9;
-	Fri, 21 Nov 2025 02:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D562C2340;
+	Fri, 21 Nov 2025 02:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763692360; cv=none; b=rVHMgmUuI8ce722V+tCsAW3nu8y/bMGdiWw4eu38XVDww5P5daTRgjKuFcVyEn9X2/QwdyB8Q+OjEq+T7Fw6A0c7zkY17J8Ly07qDD4/UNMZPouQgXeEd3WuOGFpE8ee2CgmgeVQj/aZv90cVTkDQPu+0sKQvihhmmZD0H+lmVw=
+	t=1763693261; cv=none; b=gWxvApc4DYKrayASEEexiH65jTJDap1JyrtINlk7mDXGRBxR4V3SDJ7ef3Cc0sEwspBLUuaQ8D3tfuRxH+YFW+gzZA+xmerNKk57/H7adj0H+GwAoa8U9e3zPjSw5x+A31rwi+UMPa35a72823++ym+3S/0NbNAEo2brN0YbTCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763692360; c=relaxed/simple;
-	bh=q2ZHh08a4BnvOmH6U2oeryxQJeOz5r6c6VkIAvHBr3c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dxf1Xy7sf5KtPriO9VflYHKl4kfgdOKtupe8xeOH4i3shadkHRA76rY7i2qv9W30Vf9HdqqtEDl2XqKIaBD7ZUeo2Xlhll7IotHWpgwPcuemOFMq3hwEaBqIA/gVINNFKo6eyINEAlsfVuH27cP3xweyhhwI2e6+nejd+YnEjSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from DESKTOP-L0HPE2S (unknown [124.16.141.245])
-	by APP-03 (Coremail) with SMTP id rQCowAC3QdQ6zx9pbAB9AQ--.42901S2;
-	Fri, 21 Nov 2025 10:32:29 +0800 (CST)
-From: Haotian Zhang <vulab@iscas.ac.cn>
-To: tony.luck@intel.com,
-	bp@alien8.de,
-	qiuxu.zhuo@intel.com
-Cc: linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Haotian Zhang <vulab@iscas.ac.cn>
-Subject: [PATCH v3] ras: cec: Fix debugfs error checking
-Date: Fri, 21 Nov 2025 10:31:14 +0800
-Message-ID: <20251121023114.1282-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.50.1.windows.1
+	s=arc-20240116; t=1763693261; c=relaxed/simple;
+	bh=p+34e7Vy7ZrzEmj8uQRE4g/xDOXVf1bb1yoOHS6Q8f8=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=P22bLsibPx+rgzvnbG4OW7uycbcZfulMzBzajjEqh+6KYBVcXWXYp6BQ4lTityPydv/yS3fxx2JpW8VGv/l7XdD1+lvbdCuhdQdOgZyAytV//vWpSp5KPmVg++3Ad+HUKGzbI+EZaYOhgtXTCTz3wnDykMLmUGQjfit/wXCZ0P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=umciH1Kb; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=7/+xC9VzlzEvb/9+gGLwhYCZZ6+xeKT68zJkKrNRvNo=;
+	b=umciH1KbToXmWnysWFcNx4N/28wNz0FN+EKeR71aSehD+o98NCvFpUht/EtqQYi3rjhCrLqTR
+	xZWOX/pqi5WYvldwqLxNWtnxyvByw/QgBSrE2U/DUzmcqJSsN8KVn3UF364j5bCMoAEZ0h88/IF
+	AVQ0DIPiG0E1xO56eb13KLQ=
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4dCKMx5vtWz1prL2;
+	Fri, 21 Nov 2025 10:45:49 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id 77BB314022D;
+	Fri, 21 Nov 2025 10:47:35 +0800 (CST)
+Received: from [10.174.178.247] (10.174.178.247) by
+ dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 21 Nov 2025 10:47:33 +0800
+Subject: Re: [PATCH RESEND v5] vmcoreinfo: Track and log recoverable hardware
+ errors
+To: Breno Leitao <leitao@debian.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, Tony Luck
+	<tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, Robert Moore
+	<robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+	<mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, Oliver
+ O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>
+CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<acpica-devel@lists.linux.dev>, <osandov@osandov.com>,
+	<xueshuai@linux.alibaba.com>, <konrad.wilk@oracle.com>,
+	<linux-edac@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+	<linux-pci@vger.kernel.org>, <kernel-team@meta.com>
+References: <20251010-vmcore_hw_error-v5-1-636ede3efe44@debian.org>
+From: Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <a4a34583-8f26-bb08-001f-a53715070c00@huawei.com>
+Date: Fri, 21 Nov 2025 10:47:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20251010-vmcore_hw_error-v5-1-636ede3efe44@debian.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowAC3QdQ6zx9pbAB9AQ--.42901S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr17Zry3ArWUXrWxXw45GFg_yoW5tr1xpa
-	93GrnxAr48Zwn8GFZakF17ZryfA3sagry7WryUu395Ar4UCr1Fv3Wak3y8tryv9F98W34Y
-	qF15J348A3W2kF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-	6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
-	JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUSNtxUUU
-	UU=
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBgoNA2kftVZzWAAAs8
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-The debugfs_create_dir() and debugfs_create_file() functions return
-ERR_PTR() on error, not NULL. The current null-checks fail to detect
-errors because ERR_PTR() encodes error codes as non-null pointer values.
+On 2025/10/10 18:36, Breno Leitao wrote:
+> Introduce a generic infrastructure for tracking recoverable hardware
+> errors (HW errors that are visible to the OS but does not cause a panic)
+> and record them for vmcore consumption. This aids post-mortem crash
+> analysis tools by preserving a count and timestamp for the last
+> occurrence of such errors. On the other side, correctable errors, which
+> the OS typically remains unaware of because the underlying hardware
+> handles them transparently, are less relevant for crash dump
+> and therefore are NOT tracked in this infrastructure.
+> 
+> Add centralized logging for sources of recoverable hardware
+> errors based on the subsystem it has been notified.
+> 
+> hwerror_data is write-only at kernel runtime, and it is meant to be read
+> from vmcore using tools like crash/drgn. For example, this is how it
+> looks like when opening the crashdump from drgn.
+> 
+> 	>>> prog['hwerror_data']
+> 	(struct hwerror_info[1]){
+> 		{
+> 			.count = (int)844,
+> 			.timestamp = (time64_t)1752852018,
+> 		},
+> 		...
+> 
+> This helps fleet operators quickly triage whether a crash may be
+> influenced by hardware recoverable errors (which executes a uncommon
+> code path in the kernel), especially when recoverable errors occurred
+> shortly before a panic, such as the bug fixed by
+> commit ee62ce7a1d90 ("page_pool: Track DMA-mapped pages and unmap them
+> when destroying the pool")
+> 
+> This is not intended to replace full hardware diagnostics but provides
+> a fast way to correlate hardware events with kernel panics quickly.
+> 
+> Rare machine check exceptions—like those indicated by mce_flags.p5 or
+> mce_flags.winchip—are not accounted for in this method, as they fall
+> outside the intended usage scope for this feature’s user base.
+> 
+> Suggested-by: Tony Luck <tony.luck@intel.com>
+> Suggested-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+> Changes in v5:
+> - Move the headers to uapi file (Dave Hansen)
+> - Use atomic operations in the tracking struct (Dave Hansen)
+> - Drop the MCE enum type, and track MCE errors as "others"
+> - Document this feature better
+> - Link to v4: https://lore.kernel.org/r/20250801-vmcore_hw_error-v4-1-fa1fe65edb83@debian.org
+> 
+> Changes in v4:
+> - Split the error by hardware subsystem instead of kernel
+>    subsystem/driver (Shuai)
+> - Do not count the corrected errors, only focusing on recoverable errors (Shuai)
+> - Link to v3: https://lore.kernel.org/r/20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org
+> 
+> Changes in v3:
+> - Add more information about this feature in the commit message
+>    (Borislav Petkov)
+> - Renamed the function to hwerr_log_error_type() and use hwerr as
+>    suffix (Borislav Petkov)
+> - Make the empty function static inline (kernel test robot)
+> - Link to v2: https://lore.kernel.org/r/20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org
+> 
+> Changes in v2:
+> - Split the counter by recoverable error (Tony Luck)
+> - Link to v1: https://lore.kernel.org/r/20250714-vmcore_hw_error-v1-1-8cf45edb6334@debian.org
+> ---
+>   Documentation/driver-api/hw-recoverable-errors.rst | 60 ++++++++++++++++++++++
+>   arch/x86/kernel/cpu/mce/core.c                     |  4 ++
+>   drivers/acpi/apei/ghes.c                           | 36 +++++++++++++
 
-Remove all null-checks for all debugfs_create_dir() and
-debugfs_create_file() since they are unnecessary.
+For the APEI part,
 
-Fixes: 011d82611172 ("RAS: Add a Corrected Errors Collector")
-Suggested-by: Zhuo, Qiuxu <qiuxu.zhuo@intel.com>
-Suggested-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
----
-Changes in v3:
-  -Remove all error handling as suggested by Borislav Petkov.
----
-Changes in v2:
-  -Also add fixes in create_debugfs_nodes() and ras_add_daemon_trace()
-   as suggested by Zhuo, Qiuxu.
----
- drivers/ras/cec.c     | 42 +++++-------------------------------------
- drivers/ras/debugfs.c | 11 +----------
- 2 files changed, 6 insertions(+), 47 deletions(-)
+Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
 
-diff --git a/drivers/ras/cec.c b/drivers/ras/cec.c
-index e440b15fbabc..5891f30641b7 100644
---- a/drivers/ras/cec.c
-+++ b/drivers/ras/cec.c
-@@ -480,55 +480,23 @@ DEFINE_SHOW_ATTRIBUTE(array);
- 
- static int __init create_debugfs_nodes(void)
- {
--	struct dentry *d, *pfn, *decay, *count, *array, *dfs;
-+	struct dentry *d, *dfs;
- 
- 	dfs = ras_get_debugfs_root();
--	if (!dfs) {
--		pr_warn("Error getting RAS debugfs root!\n");
--		return -1;
--	}
--
- 	d = debugfs_create_dir("cec", dfs);
--	if (!d) {
--		pr_warn("Error creating cec debugfs node!\n");
--		return -1;
--	}
- 
--	decay = debugfs_create_file("decay_interval", S_IRUSR | S_IWUSR, d,
-+	debugfs_create_file("decay_interval", S_IRUSR | S_IWUSR, d,
- 				    &decay_interval, &decay_interval_ops);
--	if (!decay) {
--		pr_warn("Error creating decay_interval debugfs node!\n");
--		goto err;
--	}
--
--	count = debugfs_create_file("action_threshold", S_IRUSR | S_IWUSR, d,
-+	debugfs_create_file("action_threshold", S_IRUSR | S_IWUSR, d,
- 				    &action_threshold, &action_threshold_ops);
--	if (!count) {
--		pr_warn("Error creating action_threshold debugfs node!\n");
--		goto err;
--	}
- 
- 	if (!IS_ENABLED(CONFIG_RAS_CEC_DEBUG))
- 		return 0;
- 
--	pfn = debugfs_create_file("pfn", S_IRUSR | S_IWUSR, d, &dfs_pfn, &pfn_ops);
--	if (!pfn) {
--		pr_warn("Error creating pfn debugfs node!\n");
--		goto err;
--	}
--
--	array = debugfs_create_file("array", S_IRUSR, d, NULL, &array_fops);
--	if (!array) {
--		pr_warn("Error creating array debugfs node!\n");
--		goto err;
--	}
-+	debugfs_create_file("pfn", S_IRUSR | S_IWUSR, d, &dfs_pfn, &pfn_ops);
-+	debugfs_create_file("array", S_IRUSR, d, NULL, &array_fops);
- 
- 	return 0;
--
--err:
--	debugfs_remove_recursive(d);
--
--	return 1;
- }
- 
- static int cec_notifier(struct notifier_block *nb, unsigned long val,
-diff --git a/drivers/ras/debugfs.c b/drivers/ras/debugfs.c
-index 42afd3de68b2..a1149e48b34a 100644
---- a/drivers/ras/debugfs.c
-+++ b/drivers/ras/debugfs.c
-@@ -45,18 +45,9 @@ static const struct file_operations trace_fops = {
- 
- int __init ras_add_daemon_trace(void)
- {
--	struct dentry *fentry;
--
--	if (!ras_debugfs_dir)
--		return -ENOENT;
--
--	fentry = debugfs_create_file("daemon_active", S_IRUSR, ras_debugfs_dir,
-+	debugfs_create_file("daemon_active", S_IRUSR, ras_debugfs_dir,
- 				     NULL, &trace_fops);
--	if (IS_ERR(fentry))
--		return -ENODEV;
--
- 	return 0;
--
- }
- 
- void __init ras_debugfs_init(void)
--- 
-2.50.1.windows.1
-
+Thanks
+Hanjun
 
