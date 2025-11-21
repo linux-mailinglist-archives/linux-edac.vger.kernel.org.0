@@ -1,164 +1,116 @@
-Return-Path: <linux-edac+bounces-5494-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5495-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0249AC770CC
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 03:47:46 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA6EC77B7A
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 08:39:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE5514E5A41
-	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 02:47:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A6F903548C0
+	for <lists+linux-edac@lfdr.de>; Fri, 21 Nov 2025 07:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53292C3268;
-	Fri, 21 Nov 2025 02:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AA72D543A;
+	Fri, 21 Nov 2025 07:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="umciH1Kb"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="N5/8B55n"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D562C2340;
-	Fri, 21 Nov 2025 02:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87309283683;
+	Fri, 21 Nov 2025 07:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763693261; cv=none; b=gWxvApc4DYKrayASEEexiH65jTJDap1JyrtINlk7mDXGRBxR4V3SDJ7ef3Cc0sEwspBLUuaQ8D3tfuRxH+YFW+gzZA+xmerNKk57/H7adj0H+GwAoa8U9e3zPjSw5x+A31rwi+UMPa35a72823++ym+3S/0NbNAEo2brN0YbTCg=
+	t=1763710753; cv=none; b=UERmcOLUSCKyisYyLrQuBciYPAaMkdYjjMmCbnPoMkdjIRCmDUymNubCB74dtWU2KJpXcaDW3sbVkUq37nkMHUG75GcZP3v09/zIEDjjNiQ1RRwpPXGo8WGsroRs00Eg3dvbTi4QSr6wRGZJM5zeuhis2QqjPPjv4eJgDYWBo5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763693261; c=relaxed/simple;
-	bh=p+34e7Vy7ZrzEmj8uQRE4g/xDOXVf1bb1yoOHS6Q8f8=;
+	s=arc-20240116; t=1763710753; c=relaxed/simple;
+	bh=AugTGMRA4pvKKAUuDdtPRrbisScHKer09i0AVJeGlPo=;
 	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=P22bLsibPx+rgzvnbG4OW7uycbcZfulMzBzajjEqh+6KYBVcXWXYp6BQ4lTityPydv/yS3fxx2JpW8VGv/l7XdD1+lvbdCuhdQdOgZyAytV//vWpSp5KPmVg++3Ad+HUKGzbI+EZaYOhgtXTCTz3wnDykMLmUGQjfit/wXCZ0P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=umciH1Kb; arc=none smtp.client-ip=113.46.200.219
+	 In-Reply-To:Content-Type; b=VFSiML5nZ22USIcHozRxh+hMkMPOoi6FzmBAN0E1SovhcF8cjQyETvb+QhD/YebPf9gDdo+y3qSvwwUQ4O8hnaSDxTDK8q7AtMrgQUAdpVqGzlmjjj8JgOnVt4RrI9Z2omNgX8fjqCCfmYtjnkroXp3PCPYAS2P9G30a4xBrVek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=N5/8B55n; arc=none smtp.client-ip=113.46.200.224
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=7/+xC9VzlzEvb/9+gGLwhYCZZ6+xeKT68zJkKrNRvNo=;
-	b=umciH1KbToXmWnysWFcNx4N/28wNz0FN+EKeR71aSehD+o98NCvFpUht/EtqQYi3rjhCrLqTR
-	xZWOX/pqi5WYvldwqLxNWtnxyvByw/QgBSrE2U/DUzmcqJSsN8KVn3UF364j5bCMoAEZ0h88/IF
-	AVQ0DIPiG0E1xO56eb13KLQ=
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4dCKMx5vtWz1prL2;
-	Fri, 21 Nov 2025 10:45:49 +0800 (CST)
-Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 77BB314022D;
-	Fri, 21 Nov 2025 10:47:35 +0800 (CST)
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
+	bh=Jw7Ud8zh45h7Hnmg98SmQKRWVlaGwdOC5WqXH1EQ55o=;
+	b=N5/8B55nKmRouJYEJQ31wAPlVWAbWvnSJEvXC4E4Y/iT7YlDm1xWdztV8ZlPBdi7UML01lUc1
+	Fv8XbMPOj7kpwPW+tlnhHlLdprZnTT5vLaEvUbYWZSyYGWOxnOO7oHGFWOv5YELHAHIr5n25AxD
+	y1ox9Sv5tlLGPqrKu9b8QeU=
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4dCRrL55nqz1cyP6;
+	Fri, 21 Nov 2025 15:37:22 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id F1326180043;
+	Fri, 21 Nov 2025 15:39:07 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 21 Nov 2025 10:47:33 +0800
-Subject: Re: [PATCH RESEND v5] vmcoreinfo: Track and log recoverable hardware
- errors
-To: Breno Leitao <leitao@debian.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, Tony Luck
-	<tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>, Robert Moore
-	<robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
-	<mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, Oliver
- O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>
-CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<acpica-devel@lists.linux.dev>, <osandov@osandov.com>,
-	<xueshuai@linux.alibaba.com>, <konrad.wilk@oracle.com>,
-	<linux-edac@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-pci@vger.kernel.org>, <kernel-team@meta.com>
-References: <20251010-vmcore_hw_error-v5-1-636ede3efe44@debian.org>
-From: Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <a4a34583-8f26-bb08-001f-a53715070c00@huawei.com>
-Date: Fri, 21 Nov 2025 10:47:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ 15.2.1544.11; Fri, 21 Nov 2025 15:39:07 +0800
+Received: from [10.173.125.37] (10.173.125.37) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 21 Nov 2025 15:39:06 +0800
+Subject: Re: [PATCH v3] mm/memory-failure: remove the selection of RAS
+To: Xie Yuanbin <xieyuanbin1@huawei.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-trace-kernel@vger.kernel.org>,
+	<will@kernel.org>, <liaohua4@huawei.com>, <lilinjie8@huawei.com>,
+	<david@redhat.com>, <tony.luck@intel.com>, <bp@alien8.de>,
+	<nao.horiguchi@gmail.com>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
+	<mathieu.desnoyers@efficios.com>, <akpm@linux-foundation.org>,
+	<david@kernel.org>, <lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>,
+	<vbabka@suse.cz>, <rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>
+References: <20251119095943.67125-1-xieyuanbin1@huawei.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <8567d8c5-e864-8f84-7805-c004698e72d7@huawei.com>
+Date: Fri, 21 Nov 2025 15:39:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20251010-vmcore_hw_error-v5-1-636ede3efe44@debian.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- dggpemf500002.china.huawei.com (7.185.36.57)
+In-Reply-To: <20251119095943.67125-1-xieyuanbin1@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-On 2025/10/10 18:36, Breno Leitao wrote:
-> Introduce a generic infrastructure for tracking recoverable hardware
-> errors (HW errors that are visible to the OS but does not cause a panic)
-> and record them for vmcore consumption. This aids post-mortem crash
-> analysis tools by preserving a count and timestamp for the last
-> occurrence of such errors. On the other side, correctable errors, which
-> the OS typically remains unaware of because the underlying hardware
-> handles them transparently, are less relevant for crash dump
-> and therefore are NOT tracked in this infrastructure.
+On 2025/11/19 17:59, Xie Yuanbin wrote:
+> The commit 97f0b13452198290799f ("tracing: add trace event for
+> memory-failure") introduces the selection of RAS in memory-failure.
+> This commit is just a tracing feature; in reality, there is no dependency
+> between memory-failure and RAS. RAS increases the size of the bzImage
+> image by 8k, which is very valuable for embedded devices.
 > 
-> Add centralized logging for sources of recoverable hardware
-> errors based on the subsystem it has been notified.
+> Move the memory-failure traceing code from ras_event.h to
+> memory-failure.h and remove the selection of RAS.
 > 
-> hwerror_data is write-only at kernel runtime, and it is meant to be read
-> from vmcore using tools like crash/drgn. For example, this is how it
-> looks like when opening the crashdump from drgn.
+> v2->v3: https://lore.kernel.org/20251104072306.100738-3-xieyuanbin1@huawei.com
+>   - Change define TRACE_SYSTEM from ras to memory_failure
+>   - Add include/trace/events/memory-failure.h to
+>     "HWPOISON MEMORY FAILURE HANDLING" section in MAINTAINERS
+>   - Rebase to latest linux-next source
 > 
-> 	>>> prog['hwerror_data']
-> 	(struct hwerror_info[1]){
-> 		{
-> 			.count = (int)844,
-> 			.timestamp = (time64_t)1752852018,
-> 		},
-> 		...
+> v1->v2: https://lore.kernel.org/20251103033536.52234-2-xieyuanbin1@huawei.com
+>   - Move the memory-failure traceing code from ras_event.h to
+>     memory-failure.h
 > 
-> This helps fleet operators quickly triage whether a crash may be
-> influenced by hardware recoverable errors (which executes a uncommon
-> code path in the kernel), especially when recoverable errors occurred
-> shortly before a panic, such as the bug fixed by
-> commit ee62ce7a1d90 ("page_pool: Track DMA-mapped pages and unmap them
-> when destroying the pool")
-> 
-> This is not intended to replace full hardware diagnostics but provides
-> a fast way to correlate hardware events with kernel panics quickly.
-> 
-> Rare machine check exceptions—like those indicated by mce_flags.p5 or
-> mce_flags.winchip—are not accounted for in this method, as they fall
-> outside the intended usage scope for this feature’s user base.
-> 
-> Suggested-by: Tony Luck <tony.luck@intel.com>
-> Suggested-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> ---
-> Changes in v5:
-> - Move the headers to uapi file (Dave Hansen)
-> - Use atomic operations in the tracking struct (Dave Hansen)
-> - Drop the MCE enum type, and track MCE errors as "others"
-> - Document this feature better
-> - Link to v4: https://lore.kernel.org/r/20250801-vmcore_hw_error-v4-1-fa1fe65edb83@debian.org
-> 
-> Changes in v4:
-> - Split the error by hardware subsystem instead of kernel
->    subsystem/driver (Shuai)
-> - Do not count the corrected errors, only focusing on recoverable errors (Shuai)
-> - Link to v3: https://lore.kernel.org/r/20250722-vmcore_hw_error-v3-1-ff0683fc1f17@debian.org
-> 
-> Changes in v3:
-> - Add more information about this feature in the commit message
->    (Borislav Petkov)
-> - Renamed the function to hwerr_log_error_type() and use hwerr as
->    suffix (Borislav Petkov)
-> - Make the empty function static inline (kernel test robot)
-> - Link to v2: https://lore.kernel.org/r/20250721-vmcore_hw_error-v2-1-ab65a6b43c5a@debian.org
-> 
-> Changes in v2:
-> - Split the counter by recoverable error (Tony Luck)
-> - Link to v1: https://lore.kernel.org/r/20250714-vmcore_hw_error-v1-1-8cf45edb6334@debian.org
-> ---
->   Documentation/driver-api/hw-recoverable-errors.rst | 60 ++++++++++++++++++++++
->   arch/x86/kernel/cpu/mce/core.c                     |  4 ++
->   drivers/acpi/apei/ghes.c                           | 36 +++++++++++++
+> Signed-off-by: Xie Yuanbin <xieyuanbin1@huawei.com>
+> Cc: David Hildenbrand (Red Hat) <david@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Miaohe Lin <linmiaohe@huawei.com>
 
-For the APEI part,
+LGTM. With David's comment addressed,
 
-Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+Acked-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Thanks
-Hanjun
+Thanks.
+.
+
 
