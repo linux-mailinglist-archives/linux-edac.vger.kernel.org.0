@@ -1,161 +1,142 @@
-Return-Path: <linux-edac+bounces-5506-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5507-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF980C7C7ED
-	for <lists+linux-edac@lfdr.de>; Sat, 22 Nov 2025 06:23:06 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4053FC7CE8B
+	for <lists+linux-edac@lfdr.de>; Sat, 22 Nov 2025 12:37:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 60B954E207C
-	for <lists+linux-edac@lfdr.de>; Sat, 22 Nov 2025 05:23:05 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E004335424C
+	for <lists+linux-edac@lfdr.de>; Sat, 22 Nov 2025 11:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA6E296BBB;
-	Sat, 22 Nov 2025 05:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1F9B2F7AB5;
+	Sat, 22 Nov 2025 11:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="O71ZRjK7"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fFJl0DFF"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31BB8248C;
-	Sat, 22 Nov 2025 05:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D131F37A1;
+	Sat, 22 Nov 2025 11:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763788980; cv=none; b=oGYRpN3VGf7daKvoRp2owicnX107DdJ/8u02q4KJU/BwIacN1OCc555QZGddXWDF/dAy2IzSz3ZuGFyXwT7LYcRMS9FACad/f5C4oO/e1rYALOMDPNDH9o/ZoM8VI6VWQOof8hlLOQTtyWKSnsx9LPCZi2uWr92bBfs6JnZ46BM=
+	t=1763811422; cv=none; b=pJCZmISewtPBNykUfkAZFD60YkFmtHPCsHMNtECyR2ZqdjVpf73EIr5vMEcdfYpWkFJJFeX6IkgCd25HfiRlHEmTSZJHxZuVUvHFSHW9p/pDWMYhPNUFiqW8es83KAoKvMLdxJdzHXz1VVpnuaaatCNVWCIS9tAriCeKHg+XDJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763788980; c=relaxed/simple;
-	bh=wEjAxsAYg0fns4hbL6oC/+qy5aQXSgsbyAJeWxJjerc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=quivEXi+vdMbnuMF5oXDwN7b46FX5/BW0yAiHIiEwp412aJmnnHysRMrz7PyDsIijibO+8tdiph4YumpYTtxv4mizEwO424cliSf+WUAcEP+DTWG3ZKh2DusTuWsWqROJzqptkTpmWYf1tsJ6wd3+Urbv4hVPV00RP+HsH9BTwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=O71ZRjK7; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=ctiiXJqj43yt6JFDqmOGbkwRPsJgQSrgpqu+YQaEadw=; b=O71ZRjK77TRPcnC4NwHOF25PzM
-	QXIKzNKT5MHAYI9TGOp2dd9ftqObQfTYmmqaeudsDv+ftQNBr8lEf5215q5bHLh36kZ5KlHu+nUpY
-	oePTHC1A2TdwX92YkkNo79STpXJMmcxsDEUjETKuimRzLMtlv7Uet6XddETu2X2EslVlHPIOi8Y54
-	2ZRy/7DQWXkdKjJ2U4Ct3dDAUgN3pXND3NerPs+rDUUbb7Bj26zzf/zFxuzOOpRNbDd3WlaMGMmq8
-	h2UmE7ShTS8n/kkhvaLanI1hDi1wclKfrX7hDWjxcyofgAyAqLtUDPn0m70i7WUDS5mfoIGRRfQKe
-	XJUYTC0g==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vMg5G-00000009HOl-42QK;
-	Sat, 22 Nov 2025 05:22:55 +0000
-Message-ID: <26083ba9-1979-4d14-8465-3f54f2f96d23@infradead.org>
-Date: Fri, 21 Nov 2025 21:22:53 -0800
+	s=arc-20240116; t=1763811422; c=relaxed/simple;
+	bh=3wFRhpyoBTISEUeWSI6RFRCI23Vl84wLgVvh+b7jTFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BVj57IIlcdexDs5zBa4JF5Hu0mEBuV6xRnCwQtyghEV8e4BnuRBrskYcWMgh0ghr0suKBaNLGWBfTnq3a813UYIUwZwm0+ZwSUUFgEjJ8NoYNfIlkCCxjO/BCXZkLV6/wy5MI3XnlFRpLIeeGCL/dMqAEqNWRA5sTeJ0erOJ4I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fFJl0DFF; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7757740E00DE;
+	Sat, 22 Nov 2025 11:36:54 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id EDmPM0qPi4Xi; Sat, 22 Nov 2025 11:36:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1763811410; bh=e+IxTgba59X5NTNporHArCj+R9MYjvwb1eYpYfEJANg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fFJl0DFFHsg6DZvn/4viW0HuYGGzFiOzYB7/+AIFk/mXPwii9u2fAXcp9zdmt5Pp2
+	 DPFwfQ3DxgVkbE77xLLHYv27KNste/IjXAaN2rJpFQCu1AwjvwCg1qAgTB7u/BPkLd
+	 6dvfTHjzxe8KeKwWIvnhqpoXR1pRNr1gTyoEbaaAWiORwyu3jmaaGNYl+Mvt6Pe+T1
+	 pHM36QfQwwYyvR9NGuAHi5xAKFYNYoE1cjR36BVHII+boDAROXmzm/x/QxHvCo1qJk
+	 YeS2EBmEQcmC9AT7qTvBR7aDF7whyw8sHg6MkhiJBukg5UzZRiEMCIkc/0O/C7MUcV
+	 VT6MIY9XbUtUbMxMZnsWUT8AytDpfdAMGGl4KuruIMo/0kyslHENfUfa3On3OFATkQ
+	 UHbJaYE8fIUQhZb3x4p9JDM8Vz25OicaY7VPkp6BooQjfOFrVuNxedEs5jKsT5B7Ff
+	 /F988/7Qn94VRaD8Sh/eKgnbDIxlTTfiIYEwS7lpxdEJGXtHGZkGOGWdvKWCJoXc3p
+	 TcILRx2ySw9SxsKZ7vpdzPq3GYLnGlbvERvhaM2CqdEm8dhtK6CqNd6IKx9EZ9zcDJ
+	 9voDxWnj0vSGPwyhAwis8qezutGum9CDEhE2ZhF72E2qqyp+KD6RME8bCl4flWXy3C
+	 Iu0iMJYLk2Zrqo8BUoIqdmrY=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 2E9A440E015A;
+	Sat, 22 Nov 2025 11:36:14 +0000 (UTC)
+Date: Sat, 22 Nov 2025 12:36:12 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: Daniel Ferguson <danielf@os.amperecomputing.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	"rafael@kernel.org" <rafael@kernel.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"rppt@kernel.org" <rppt@kernel.org>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	Linuxarm <linuxarm@huawei.com>,
+	"rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+	"erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>,
+	"gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>,
+	"Zengtao (B)" <prime.zeng@hisilicon.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+	wanghuiqiang <wanghuiqiang@huawei.com>
+Subject: Re: [PATCH v12 1/2] ACPI:RAS2: Add ACPI RAS2 driver
+Message-ID: <20251122113612.GAaSGgLOTZHWXQgpzY@fat_crate.local>
+References: <20250912141155.GAaMQqK4vS8zHd1z4_@fat_crate.local>
+ <9433067c142b45d583eb96587b929878@huawei.com>
+ <20250917162253.GCaMrgXYXq2T4hFI0w@fat_crate.local>
+ <20250917183608.000038c4@huawei.com>
+ <20250919103950.GCaM0y9r6R6b5jfx8z@fat_crate.local>
+ <6ac4ad35975142df986bfcb27d1e9b2c@huawei.com>
+ <20251015223242.GBaPAhCuS7YWqu-aH0@fat_crate.local>
+ <75e9bae2d30748d5b66c288135915cc3@huawei.com>
+ <20251103131914.GEaQir0sdz4Te_ea0l@fat_crate.local>
+ <409217e466a9497697a82e2ac8a6a5f7@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 2/2] ras: mem: Add ACPI RAS2 memory driver
-To: shiju.jose@huawei.com, rafael@kernel.org, bp@alien8.de,
- akpm@linux-foundation.org, rppt@kernel.org, dferguson@amperecomputing.com,
- linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, tony.luck@intel.com, lenb@kernel.org,
- leo.duran@amd.com, Yazen.Ghannam@amd.com, mchehab@kernel.org
-Cc: jonathan.cameron@huawei.com, linuxarm@huawei.com, rientjes@google.com,
- jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
- naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
- somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
- duenwen@google.com, gthelen@google.com, wschwartz@amperecomputing.com,
- wbs@os.amperecomputing.com, nifan.cxl@gmail.com, tanxiaofei@huawei.com,
- prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
- kangkang.shen@futurewei.com, wanghuiqiang@huawei.com
-References: <20251121182825.237-1-shiju.jose@huawei.com>
- <20251121182825.237-3-shiju.jose@huawei.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251121182825.237-3-shiju.jose@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <409217e466a9497697a82e2ac8a6a5f7@huawei.com>
 
+On Tue, Nov 04, 2025 at 12:55:48PM +0000, Shiju Jose wrote:
+> Thanks Borislav for the valuable suggestion and it make sense. Since
+> presently we are not sure how reaching the end of the node work on
+> individual platforms,  can we do this as an optimization in the next stage?
+> and Can we start with basic demand scrubbing without address range control
+> in sysfs, but with user space set only scrub rate and enable_demand, kernel
+> set the node's addr range as Requested Address Range to start the demand
+> scrubbing on entire node, as you suggested?
 
+Yap, I like starting simple and then delving into a more involved solution
+which is dictated by real life.
 
-On 11/21/25 10:28 AM, shiju.jose@huawei.com wrote:
-> diff --git a/Documentation/edac/scrub.rst b/Documentation/edac/scrub.rst
-> index 2cfa74fa1ffd..737a10da224f 100644
-> --- a/Documentation/edac/scrub.rst
-> +++ b/Documentation/edac/scrub.rst
-> @@ -340,3 +340,61 @@ controller or platform when unexpectedly high error rates are detected.
->  
->  Sysfs files for scrubbing are documented in
->  `Documentation/ABI/testing/sysfs-edac-ecs`
-> +
-> +3. ACPI RAS2 Hardware-based Memory Scrubbing
-> +
-> +3.1. On demand scrubbing for a specific memory region.
-> +
-> +3.1.1. Query the status of demand scrubbing
-> +
-> +# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_demand
-> +
-> +0
-> +
-> +3.1.2. Query what is device default/current scrub cycle setting.
-> +
-> +Applicable to both demand and background scrubbing.
-> +
-> +# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-> +
-> +36000
-> +
-
-What units (above)?
-
-> +3.1.3. Query the range of device supported scrub cycle for a memory region.
-> +
-> +# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/min_cycle_duration
-> +
-> +3600
-> +
-> +# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/max_cycle_duration
-> +
-> +86400
-> +
-
-ditto.
-
-> +3.1.4. Program scrubbing for the memory region in RAS2 device to repeat every
-> +43200 seconds (half a day).
-> +
-> +# echo 43200 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-> +
-> +3.1.5. Start 'demand scrubbing'.
-> +
-> +When a demand scrub is started, any background scrub currently in progress
-> +will be stopped and then automatically restarted once the demand scrub has
-> +completed.
-
-Will it restart where it left off or at the beginning?
-
-> +
-> +# echo 1 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_demand
-> +
-> +3.2. Background scrubbing the entire memory
-> +
-> +3.2.1. Query the status of background scrubbing.
-> +
-> +# cat /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
-> +
-> +0
-> +
-> +3.2.2. Program background scrubbing for RAS2 device to repeat in every 21600
-> +seconds (quarter of a day).
-> +
-> +# echo 21600 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/current_cycle_duration
-> +
-> +3.2.3. Start 'background scrubbing'.
-> +
-> +# echo 1 > /sys/bus/edac/devices/acpi_ras_mem0/scrub0/enable_background
+Thx.
 
 -- 
-~Randy
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
