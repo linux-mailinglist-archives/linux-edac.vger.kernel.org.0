@@ -1,99 +1,170 @@
-Return-Path: <linux-edac+bounces-5524-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5525-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC55AC80CA5
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Nov 2025 14:35:05 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A96A6C80FD2
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Nov 2025 15:25:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CEA964E51A9
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Nov 2025 13:35:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0DAEC345BAB
+	for <lists+linux-edac@lfdr.de>; Mon, 24 Nov 2025 14:25:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44A14306484;
-	Mon, 24 Nov 2025 13:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBEC30F7EA;
+	Mon, 24 Nov 2025 14:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="SX03hVGl"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sYHIteKi";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sYHIteKi"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E6B305E19;
-	Mon, 24 Nov 2025 13:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147E730DEAF
+	for <linux-edac@vger.kernel.org>; Mon, 24 Nov 2025 14:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763991303; cv=none; b=hY8gDB4lYELfIZ63ALhJt0Xmx8TRjw6Y5ETtaBJwEvdoykSGMqSgU7PdsjGwO7yldrjFQa/eAiWmANCJ+L75F/uP43HZi2c+T6+69wit3XAe2eWB+BliR2V90g+IAD+OxFT1qJ8nVyonX1TQMnKIv9JNcxbHZcR48CDhz3BsQ6g=
+	t=1763994332; cv=none; b=QZ8h+JJJ/PsoQg749rsDiUmoQCQKD6zlK2ef2qNBhkHsAUXsAFH+zhMkDNxyfEw0vMkcKDr9nJAaj4iqaax1R1T205do3mNIj6BrWUUCQTszCd1z6OuFsV247ZHWLyo+Eczw86MZ0tB4dfNNsGXaElmSR8Z687ko+NCnhXbNG0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763991303; c=relaxed/simple;
-	bh=IwfrM2saSao4+BK4dW2CaO2F95xTEMgfAx7m+BEIE5g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JfP5P8fbSHKscewUCWm30jHrVrzOGBfof+tSLouiKCXb95Kj5l+WUWDJBkgFB2rXIsHWuSAnlrbJYAZdPl/3hWo+EYKNtdGiQXj+Wu9nh/SrWkrWDaomcXQE/fO+iJdnq+bUKogrfHuGVxyPiB0uJ7+w30tcL/map7fcHblx2AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=SX03hVGl; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3F00F40E0216;
-	Mon, 24 Nov 2025 13:34:57 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ScYhU1G-4qtZ; Mon, 24 Nov 2025 13:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1763991294; bh=nX+4lVgacGfDztgVc6fqiU1yU0+iTmtRhkTVZyLa0/8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SX03hVGlyjyasg0YsBxosgyye1qk9jgUbXfl2Q7wRjiW85Z5KaWWuQs3b9pkqL7MH
-	 FqDGHW24pS11ONCauqiQ9XF4HQSRvRMiIehcgr2NXfKzcDxbQWEN5/NRj4TnMs8r8R
-	 wqu0vYObCnxKhibqhG9aW+iUoXIjGcJqXJyohGPZ5QeBKho32thdpC0aXkKwJ++uPH
-	 IuuES8fWmq27PI2dIoYbTcS+Mrroo7K1vhAe3c3L01zj6z4U7l+7euuk0jbVU7cq2/
-	 Zoct6Ag+yKSCWH2611ZA4yFyzzo6h8C1mD9/2GRlHGmYa54PIJzixigy2emjk18Tyj
-	 w3Gt/g/wZlIPYhIbz9uLeA4Af1S0ntK9tqwvL2IHHsBy7iFFKCoecJric4yFbBmTcJ
-	 H6hmo6CNuVuZ+DTXcwgLKUb5xjGjxzZkqAhNUzMUhpbZez9vQLJtg9SNpkL7XMpW3O
-	 x2+2m9Xl/NbeJGcP9vLx+e1XKuFWsibuBy/S17FlDKQcolEc1aPdnQgjb2oDbV/BmW
-	 O9GMhbDX0qdGkcLQD81xK1aUBd0aQ17OlMojTVHDx18ljWEb8SOCuv9gGaS+jqhWI3
-	 1OYep51v6vrC7MAp8GNx0hJFi6KUbhDi+luFqWScjXizhhaFhnCuNPOmABSgfYYZwv
-	 3ua4a3BNhrlREOFrM9XUgTsY=
-Received: from zn.tnic (p57969402.dip0.t-ipconnect.de [87.150.148.2])
+	s=arc-20240116; t=1763994332; c=relaxed/simple;
+	bh=L/XbNw+4Ugcjx/J4Mai31cTuDAtYkM88zPyJ4ltrlgY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XS6ncJ+r/teAdZsCBIXgIAzi04wxzSE8Tna4d7JUWkFipNHPXjglxbikLzgx3cJmHf/Kz8VFbHcVq8elCyqtgZfgqm5GcYsjuJhNA7IENPfjm6fr9vkpmATMeJPOgq1drcBEqD6FDJ98+cEQn+ofBgd+i5IhTcqtpSJFMOX7viY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sYHIteKi; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sYHIteKi; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id D88CC40E015B;
-	Mon, 24 Nov 2025 13:34:48 +0000 (UTC)
-Date: Mon, 24 Nov 2025 14:34:42 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Nikolay Borisov <nik.borisov@suse.com>
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Yazen.Ghannam@amd.com
-Subject: Re: [PATCH v2] RAS/AMD/ATL: Remove bitwise_xor_bits
-Message-ID: <20251124133442.GEaSRe8jPj_7WBXAw_@fat_crate.local>
-References: <20251124084011.1575166-1-nik.borisov@suse.com>
- <aSQeD-RSZxeuPj_h@google.com>
- <20251124110526.GAaSQ79mo0yx1h1Xxm@fat_crate.local>
- <aSRJdskInHGmbjIo@google.com>
- <20251124125249.GDaSRVIapy2dmis28p@fat_crate.local>
- <3e191e87-5b7f-49e9-b794-eb244d478c56@suse.com>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 534425BD39;
+	Mon, 24 Nov 2025 14:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1763994327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=haavHNAGdu2Jadk1TzWiSsMC3NtXgH1OWZQ0Sj8vclQ=;
+	b=sYHIteKiCsMfpxeM3neKOG7Ww6zq3Xg5yxyTqgygEBfBnlvACD1oc0banmPA3cKmkYgmY6
+	RInqXOdJMnML0HhBaaxGthMwCMY2YMybB8wIuXdnC+5TWlEQ81wPqLl16uP/ioBk8eDOk9
+	K/R2rkw+tCx96+whfulQXm2c0aNr0QE=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1763994327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=haavHNAGdu2Jadk1TzWiSsMC3NtXgH1OWZQ0Sj8vclQ=;
+	b=sYHIteKiCsMfpxeM3neKOG7Ww6zq3Xg5yxyTqgygEBfBnlvACD1oc0banmPA3cKmkYgmY6
+	RInqXOdJMnML0HhBaaxGthMwCMY2YMybB8wIuXdnC+5TWlEQ81wPqLl16uP/ioBk8eDOk9
+	K/R2rkw+tCx96+whfulQXm2c0aNr0QE=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F08323EA63;
+	Mon, 24 Nov 2025 14:25:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id yadDONZqJGm7DgAAD6G6ig
+	(envelope-from <nik.borisov@suse.com>); Mon, 24 Nov 2025 14:25:26 +0000
+From: Nikolay Borisov <nik.borisov@suse.com>
+To: linux-edac@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	bp@alien8.de,
+	Yazen.Ghannam@amd.com,
+	Nikolay Borisov <nik.borisov@suse.com>
+Subject: [PATCH] RAS/AMD/ATL: Replace bitwise_xor_bits() with hweight16()
+Date: Mon, 24 Nov 2025 16:25:17 +0200
+Message-ID: <20251124142517.1708451-1-nik.borisov@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3e191e87-5b7f-49e9-b794-eb244d478c56@suse.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:mid];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
 
-On Mon, Nov 24, 2025 at 03:24:40PM +0200, Nikolay Borisov wrote:
-> So yeah, much better IMHO, unless there is some hidden latency in the popcnt...
+Doing hweight16 and checking whether the lsb is set is functionally
+equivalent to what bitwise_xor_bits() does. In addition it results in
+better generated code as before gcc would inline the function 4 times.
+With hweight, the resulting code boils down to 2 instructions -  popcnt
+and andl as all cpus we care about has popcnt. No functional changes.
 
-Yap, exactly. And every CPU we care about supports POPCNT. And this is soo not
-perf-sensitive so let's whack that function.
+An alternative would have been to use the __builtin_parity() function provided
+by both Clang/GCC, however under some circumstances the compiler can choose not
+to inline it but generate a library call which is unsupported in the kernel.
 
-Thx.
+Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
+---
+ drivers/ras/amd/atl/umc.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
--- 
-Regards/Gruss,
-    Boris.
+diff --git a/drivers/ras/amd/atl/umc.c b/drivers/ras/amd/atl/umc.c
+index 6e072b7667e9..8d1363237eee 100644
+--- a/drivers/ras/amd/atl/umc.c
++++ b/drivers/ras/amd/atl/umc.c
+@@ -49,17 +49,6 @@ static u8 get_coh_st_inst_id_mi300(struct atl_err *err)
+ 	return i;
+ }
 
-https://people.kernel.org/tglx/notes-about-netiquette
+-/* XOR the bits in @val. */
+-static u16 bitwise_xor_bits(u16 val)
+-{
+-	u16 tmp = 0;
+-	u8 i;
+-
+-	for (i = 0; i < 16; i++)
+-		tmp ^= (val >> i) & 0x1;
+-
+-	return tmp;
+-}
+
+ struct xor_bits {
+ 	bool	xor_enable;
+@@ -250,17 +239,17 @@ static unsigned long convert_dram_to_norm_addr_mi300(unsigned long addr)
+ 		if (!addr_hash.bank[i].xor_enable)
+ 			continue;
+
+-		temp  = bitwise_xor_bits(col & addr_hash.bank[i].col_xor);
+-		temp ^= bitwise_xor_bits(row & addr_hash.bank[i].row_xor);
++		temp  = hweight16(col & addr_hash.bank[i].col_xor) & 1;
++		temp ^= hweight16(row & addr_hash.bank[i].row_xor) & 1;
+ 		bank ^= temp << i;
+ 	}
+
+ 	/* Calculate hash for PC bit. */
+ 	if (addr_hash.pc.xor_enable) {
+-		temp  = bitwise_xor_bits(col  & addr_hash.pc.col_xor);
+-		temp ^= bitwise_xor_bits(row  & addr_hash.pc.row_xor);
++		temp  = hweight16(col & addr_hash.pc.col_xor) & 1;
++		temp ^= hweight16(row & addr_hash.pc.row_xor) & 1;
+ 		/* Bits SID[1:0] act as Bank[5:4] for PC hash, so apply them here. */
+-		temp ^= bitwise_xor_bits((bank | sid << NUM_BANK_BITS) & addr_hash.bank_xor);
++		temp ^= hweight16((bank | sid << NUM_BANK_BITS) & addr_hash.bank_xor) & 1;
+ 		pc   ^= temp;
+ 	}
+
+--
+2.52.0
+
 
