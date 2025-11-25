@@ -1,180 +1,571 @@
-Return-Path: <linux-edac+bounces-5527-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5528-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E70FC820BE
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Nov 2025 19:13:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F257C83BCE
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 08:37:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4F9334E2BEB
-	for <lists+linux-edac@lfdr.de>; Mon, 24 Nov 2025 18:13:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D4DE3A2133
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 07:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D56E317715;
-	Mon, 24 Nov 2025 18:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0B5286881;
+	Tue, 25 Nov 2025 07:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mXCBRfYc"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cqS43dkb"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013012.outbound.protection.outlook.com [40.107.201.12])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5C32C11F5;
-	Mon, 24 Nov 2025 18:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764008036; cv=fail; b=gqBDVP9SYy/SnrYD+25du7PZai0pOOwmPsXJiXuCIG7bmDCS37v3iu1/fNv3S5znWmroFbZRKSij2LSEDheSajUALp+hOPgtISJVZ9JICuAyCQkhnuftHBoElOyhCq8zfqmGPtth+L0ivlxcdnyVXN6e9DEuU5Mf8GiP4AMkvb0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764008036; c=relaxed/simple;
-	bh=U4SuZnZ6aHKLR0isRC5RZAdTQsplbqZ18tLDK86hZh8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=urkIHC5nluCOq1EF3HEm6vSw6G1erG1F8sSFLKroDGItB6SzFyGie5aKa100zrCxwMQLsUkYbPk5lS4UdD8XMXnYhth1vP+x+0ygn3yQgTQwsL6U1T+7OVX1qnF2VFfiwm/rPNesfQWwsUZK3b74llJph5mP/bMlRqleVskJikI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mXCBRfYc; arc=fail smtp.client-ip=40.107.201.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IBR1FJhg6gBY/c83Z/cP6gYvxsCHeHgZW2OP4p5zBzGRXT5diF5suWb8yJYJAJJYStxW0u5HJaMfRzjaPgpzjlfeqcShH8gRi2LWhRq5UuTncucFWh1W0VDsRrt5frf+GcyK/mYOHKJ7xcoKgaUnhZCjiE9BWzQkxzErQLhxhERa0EZ1RIsFYn/BLMzWjFdjrs7t1f6D0CamPhM5WKL0mHLs4bWAcXGJf4NfRVHRBUHPVA+LdC8gUT4oB3F6l6Qcqn70q4sD1W8jOzWA+GfNazPTrQ1Ttbidh9vXK/ntOOn6oI12mo+vl1PtEufzCQmwm+Zfkq0hE+sdAKPdZRVrPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AQ2hElsFwixwHsOTK4yTxfuFZa5wI6YRbZL1lUa1SpY=;
- b=pz9gwc2o4S9PComZ63BBSx5PgO0lC/T00HO/lhL93veIZ1XtXKcaJyQ36m0Qtpe/SlqGJd5i9mpVbHtB3oWKKbESuHcKZqAW2bWr45akrKMDMUtTAkTpJ1nL9sAokB9zokpBmsp1pJEBTWS318wWLSXLm20gLeel3nbZOPahoEu51TGw8Vj7uIv6Xd/5ogkxm2owIKJJjVVs9webNr5zM2G+CngGnBAHHuhpcHxwDqDCGFGO50dZFJhfDDdaUzcAkyBbv/rtax4sb/o9nOzU4iMTjHokJuUjPaHS5ro4Y9bnLBpWjpmGljvJyU51uBRdqNsZbV0Z2KguLCBtTX8jfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AQ2hElsFwixwHsOTK4yTxfuFZa5wI6YRbZL1lUa1SpY=;
- b=mXCBRfYcVKFpJCXUfFuv11rECzBRBGM9rDTGLvQNgkAWJ4jT0Pea9ZqrNjGliYNY8+0R4OQAqc7id24OSiGACefFYxkxpTXrTdtQ0TQPARZzmLhYx0wonZVilL1H6IX4qzwHXANkpo6lGuiGw9t0zYECxwOyblsUL6HjlI9gYmc=
-Received: from SJ2PR07CA0015.namprd07.prod.outlook.com (2603:10b6:a03:505::28)
- by SA5PPFE3F7EF2AE.namprd12.prod.outlook.com (2603:10b6:80f:fc04::8e6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.17; Mon, 24 Nov
- 2025 18:13:49 +0000
-Received: from SJ1PEPF000023CF.namprd02.prod.outlook.com
- (2603:10b6:a03:505:cafe::b5) by SJ2PR07CA0015.outlook.office365.com
- (2603:10b6:a03:505::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.17 via Frontend Transport; Mon,
- 24 Nov 2025 18:13:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- SJ1PEPF000023CF.mail.protection.outlook.com (10.167.244.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9366.7 via Frontend Transport; Mon, 24 Nov 2025 18:13:45 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Mon, 24 Nov
- 2025 12:13:44 -0600
-Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 24 Nov
- 2025 12:13:44 -0600
-Received: from yocto-build.amd.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Mon, 24 Nov 2025 10:13:42 -0800
-From: Devang Vyas <devangnayanbhai.vyas@amd.com>
-To: <yazen.ghannam@amd.com>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: Devang Vyas <devangnayanbhai.vyas@amd.com>, Ramesh Garidapuri
-	<ramesh.garidapuri@amd.com>
-Subject: [PATCH] EDAC/amd64: Add support for family 19h, models 40h-4fh
-Date: Mon, 24 Nov 2025 23:43:35 +0530
-Message-ID: <20251124181335.284780-1-devangnayanbhai.vyas@amd.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF3A2701D9;
+	Tue, 25 Nov 2025 07:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764056244; cv=none; b=SN2y/hzVx5PxKpn9rbm37zc9v71ojOME7CjhSSQReK0SFEbbOa5eZN8ec8rZjSrTOW979mfoagXc+cG2nde4mTkFBhKcUX0/nIXk/+w45oZHhvY16EvktxcbSIKAh8uWLkQcebDkWYI5fmhka9bRvZ8nq7jHEeZ0saHheY5LtGE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764056244; c=relaxed/simple;
+	bh=BbmoSIykQfh52dMldlfQwveAGykFJ3zwaRK16pZP2mg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r4XLxwif8Q7WaqjZNEcPdaMqDuTmlPJgMza/Bpql5xp7vW7ESYHqfepl0zT/Cn1G9vT4Jj8fNZJX2ai+AsBe7HDF3KbodUf4N+B5tf6nBzz50iyzQO+u4ZfY9c3WAwjsW6s03lWKNFtftHeMC4sdfZcAY3cTALcMdvHqZasgwvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cqS43dkb; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8D24340E0250;
+	Tue, 25 Nov 2025 07:37:18 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id yiwnpniwkHOp; Tue, 25 Nov 2025 07:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1764056231; bh=U22VP4aqLatUWICSOnWOpVGgcJsVU0MJP+wCufIXQRE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cqS43dkbN6f6s0VuhYKRlN9bzEfiDsdIHHkJGzy2t4Ui95DVS1FS6I7k3qtqdde07
+	 00L/X0FllewF3qptWpwdjjdhmyladN72ma9SPjw9ztuck15+xsyMCEd5nx6DhURn3H
+	 kwY+AFtUZYNd/lhPkrd3BvcOC1t9ruo2bFr7TyKl2dRya5Z8/h8/WtQOV+/GSNQ5TL
+	 fnwNFR31CJED2eKe1TW3/PkNRIKrK3u8RKCA2v12sg3+HcXXRbC6q/wuwaYi//5IuV
+	 kVf/MKcJMOqu4rVYcDA+hIl27vjPkbOVEecgiqrAsTX4WG5hpCP0HXOqtIYAnef7Na
+	 Z1oIXAtIVSJmmC8/JhfrBp9y979DBLmkRToXUH4MBhmzaOxKgPSxSITRsee2ufUvU4
+	 G3+Bah+mjZ0GkVsbt/HJeGB/i/F0MqBa9NA3lFg8k35+kmoHTr9ESdvX94P3qgWwNc
+	 gcoZqWlRlLjrfkUXzoO3kxSC0/sfsj0v73vFF7w+opcqCUBciCxOlMTAoxwDwKmqcz
+	 tbNxbwUBgxOzQeCiCTLFtk/m/qBYD4EEFOF+U5h68acP+oDOFb8O3YU24oD3h2AP8C
+	 bxKSlvdcfcfI2mzlazc7HCiPOM1XAfuRsfluj4ushL8UoDbla39Dp4HyvPFbo27b2s
+	 j8eWc+r+IzEOvUDmrSiNfhY0=
+Received: from zn.tnic (p57969402.dip0.t-ipconnect.de [87.150.148.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id B9F0840E015B;
+	Tue, 25 Nov 2025 07:36:34 +0000 (UTC)
+Date: Tue, 25 Nov 2025 08:36:27 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: shiju.jose@huawei.com
+Cc: rafael@kernel.org, akpm@linux-foundation.org, rppt@kernel.org,
+	dferguson@amperecomputing.com, linux-edac@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, tony.luck@intel.com, lenb@kernel.org,
+	leo.duran@amd.com, Yazen.Ghannam@amd.com, mchehab@kernel.org,
+	jonathan.cameron@huawei.com, linuxarm@huawei.com,
+	rientjes@google.com, jiaqiyan@google.com, Jon.Grimm@amd.com,
+	dave.hansen@linux.intel.com, naoya.horiguchi@nec.com,
+	james.morse@arm.com, jthoughton@google.com, somasundaram.a@hpe.com,
+	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
+	gthelen@google.com, wschwartz@amperecomputing.com,
+	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
+	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+	wanghuiqiang@huawei.com
+Subject: Re: [PATCH v13 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
+ table
+Message-ID: <20251125073627.GLaSVce7hBqGH1a3ni@fat_crate.local>
+References: <20251121182825.237-1-shiju.jose@huawei.com>
+ <20251121182825.237-2-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB03.amd.com: devangnayanbhai.vyas@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CF:EE_|SA5PPFE3F7EF2AE:EE_
-X-MS-Office365-Filtering-Correlation-Id: 563257b8-e56d-41f2-e0f1-08de2b853505
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?+pCDfd6dLAQ9hlMN06Sea4hUEUZI6nc/6jSFhpYO9NT+pk0Kji0GQdD7A2UY?=
- =?us-ascii?Q?9SgHLKyejA21mWF817im9KhTVBi18EqJlRsflO6bL+F1efXzLDxqxtil2ijQ?=
- =?us-ascii?Q?G8RqMGmk3ixkI4xxJNzqk8n69Ottdmxa2Kpl6D/7gIGQ4/Sj5B+qQLt6PKXT?=
- =?us-ascii?Q?JGw4L3uhnhkPu36dHuUX6qzv4dsazkFdafzUjbvxejYa2iaDw1dLP1a1JRVR?=
- =?us-ascii?Q?CY3Y8+AJeOGiLHWIt6EFDK1AnYaKB/DQA5tiiaerEjy/+UK8ALPd/daj3RTV?=
- =?us-ascii?Q?0PMGCAqG8HaTautxmrIoGB5/r3NY0ZyjZteOYKOY+uOhxnja1T7wtFD6cL+Z?=
- =?us-ascii?Q?40ngsFcjElny7LDFMl1ccne0WPDy3Cw8TGNsjwY0KzDms+IqwjYPwpcUc9Mc?=
- =?us-ascii?Q?IBoDF0srH2ifTQjMRBZAMhBXnk7YTWvusTyKbsyWVuGO2vwT5/K6kA1PqrT4?=
- =?us-ascii?Q?zLdJMsZJUe0/xEjiD9+fNLZTc7586MbqTDrBx7nXqSp1fSBvW82bpX+JpADR?=
- =?us-ascii?Q?v9G/yhyGzNhOZK9GbjYNlI0B7oo8bndTHtOYotXJQDkQRFMjh00GGTqiH2H7?=
- =?us-ascii?Q?BCiEtE43+PNXJAJxZqQlzaeu/PJyhDL+0U/F/WoYRKyyEn9wT2+I/sjLUgDp?=
- =?us-ascii?Q?vcnUOtwVdaOpPRufur/ScoTOhZ87hHWLPIqmt/sAR0SJkSzF37YqlGf5/uXC?=
- =?us-ascii?Q?jzzNGvh4W2MAWfiEqumQvi1oTuzVu3kWjJ8pN30kNpN33n963VHlWgTXQMXN?=
- =?us-ascii?Q?Ab7ojQUjwIYw7M70UdNN8E+y43FQzihY5s7O7bjz1psoElpoihVRmOc3j3qd?=
- =?us-ascii?Q?Be222BoIQnHaUCkx+UTmt96q35eHJIxNSAT4Yh0384phkP4lg+AAKwNsSG7M?=
- =?us-ascii?Q?6wRxrAkg3v0niRMNIFDJdwZlyUEtoklYoHIwZhpfR8JKfnPoIT/DrGnTv5pF?=
- =?us-ascii?Q?551LtM/okfsUXQ3pByFJ1Aw/V/aVZtNfndC3UonXrkwKyTRxWu9hf3kraBVK?=
- =?us-ascii?Q?aWe72p/G7KLh5i3P+5eVOcTfrVQQgEHnOIPjanI8ZT4jD2VJoIgklSYr4Zz6?=
- =?us-ascii?Q?7QhiSyr/KfGIr2kyWExUSUdWxaGq8NxETQEnaVFClk3z4D6GP9bg/Vp66vlp?=
- =?us-ascii?Q?wKQQ7cdFhdqQ5hKdXXwoWakhJtCtcaxFAdCwm/yASue0SiD+bd6Pdj997wrs?=
- =?us-ascii?Q?80enPQq7rZMD4kiH2ChqgDkkrD9FibrAxBox8ei5DwYUJql3nfmnBsfIAcqO?=
- =?us-ascii?Q?kmPKNCc14io6B/xyfjOE/J9GFNe9e+F6ra11vPGWV+0G+FZifBMBmRO9OXU/?=
- =?us-ascii?Q?Lp6XvkMeWo4PaK7Ky2HJChe90K7NeQGsYwYuB4cFw+i/6/VGHwFA2UWlWbQa?=
- =?us-ascii?Q?qT7pRxxJgNEh4tjyX05G51K3u9uFA5yTw0X/sM2ifPiAZgxECFQwizVoMQLK?=
- =?us-ascii?Q?vNhKszOWLrebFUQ5qIYLRQRqpS9mQ/qsRdsuj3NMTSyMF4h4ai+BGb9Rfci7?=
- =?us-ascii?Q?TeUaT2sRlAewLq3/QoU5ATYDo49fSftJMZe/mmVXLiku5iSK4gNB2bk6uSpJ?=
- =?us-ascii?Q?b+erSl/X7sjBdzbiNRw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2025 18:13:45.2078
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 563257b8-e56d-41f2-e0f1-08de2b853505
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023CF.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA5PPFE3F7EF2AE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251121182825.237-2-shiju.jose@huawei.com>
 
-This patch updates the EDAC driver to include support
-for AMD SoC family 19h models 40h-4fh to support
-Ryzen 6000 CPUs/APUs ("Rembrandt").
+On Fri, Nov 21, 2025 at 06:28:20PM +0000, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> ACPI 6.5 Specification, section 5.2.21, defined RAS2 feature table (RAS2).
+> Driver adds support for RAS2 feature table, which provides interfaces for
+> platform RAS features, for eg. HW-based memory scrubbing, and logical to
+> PA translation service. RAS2 uses PCC channel subspace for communicating
+> with the ACPI compliant HW platform.
+> 
+> Co-developed-by: A Somasundaram <somasundaram.a@hpe.com>
+> Signed-off-by: A Somasundaram <somasundaram.a@hpe.com>
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Tested-by: Daniel Ferguson <danielf@os.amperecomputing.com>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> ---
+>  drivers/acpi/Kconfig  |  12 ++
+>  drivers/acpi/Makefile |   1 +
+>  drivers/acpi/bus.c    |   3 +
+>  drivers/acpi/ras2.c   | 398 ++++++++++++++++++++++++++++++++++++++++++
+>  include/acpi/ras2.h   |  57 ++++++
+>  5 files changed, 471 insertions(+)
+>  create mode 100644 drivers/acpi/ras2.c
+>  create mode 100644 include/acpi/ras2.h
+> 
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index ca00a5dbcf75..bfa9f3f4def5 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -293,6 +293,18 @@ config ACPI_CPPC_LIB
+>  	  If your platform does not support CPPC in firmware,
+>  	  leave this option disabled.
+>  
+> +config ACPI_RAS2
+> +	bool "ACPI RAS2 driver"
+> +	select AUXILIARY_BUS
+> +	select MAILBOX
+> +	select PCC
 
-The added changes enhance the ability to detect and
-report memory errors on systems that utilize AMD SoCs
-from the specified family.
+Why are those select instead of depend?
 
-Co-developed-by: Ramesh Garidapuri <ramesh.garidapuri@amd.com>
-Signed-off-by: Ramesh Garidapuri <ramesh.garidapuri@amd.com>
-Signed-off-by: Devang Vyas <devangnayanbhai.vyas@amd.com>
----
- drivers/edac/amd64_edac.c | 3 +++
- 1 file changed, 3 insertions(+)
+> +	depends on NUMA_KEEP_MEMINFO
+> +	help
+> +	  This driver adds support for RAS2 feature table provides interfaces
+> +	  for platform RAS features, for eg. HW-based memory scrubbing.
+> +	  If your platform does not support RAS2 in firmware, leave this
+> +	  option disabled.
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 2391f3469961..6cf0b6d7b5ec 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3863,6 +3863,9 @@ static int per_family_init(struct amd64_pvt *pvt)
- 				pvt->max_mcs		= 8;
- 			}
- 			break;
-+		case 0x40 ... 0x4f:
-+			pvt->max_mcs			= 4;
-+			break;
- 		case 0x60 ... 0x6f:
- 			pvt->flags.zn_regs_v2		= 1;
- 			break;
+So this driver is so niche that the majority of users want to leave it
+disabled. Pls explain that in the help.
+
+>  config ACPI_PROCESSOR
+>  	tristate "Processor"
+>  	depends on X86 || ARM64 || LOONGARCH || RISCV
+> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+> index d1b0affb844f..abfec6745724 100644
+> --- a/drivers/acpi/Makefile
+> +++ b/drivers/acpi/Makefile
+> @@ -105,6 +105,7 @@ obj-$(CONFIG_ACPI_EC_DEBUGFS)	+= ec_sys.o
+>  obj-$(CONFIG_ACPI_BGRT)		+= bgrt.o
+>  obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
+>  obj-$(CONFIG_ACPI_SPCR_TABLE)	+= spcr.o
+> +obj-$(CONFIG_ACPI_RAS2)		+= ras2.o
+>  obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
+>  obj-$(CONFIG_ACPI_PPTT) 	+= pptt.o
+>  obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o pfr_telemetry.o
+
+...
+
+> +static int check_pcc_chan(struct ras2_sspcc *sspcc)
+> +{
+> +	struct acpi_ras2_shmem __iomem *gen_comm_base = sspcc->comm_addr;
+> +	u32 cap_status;
+> +	u16 status;
+> +	int rc;
+> +
+> +	/*
+> +	 * As per ACPI spec, the PCC space will be initialized by
+								  ^
+								 the
+
+> +	 * platform and should have set the command completion bit when
+> +	 * PCC can be used by OSPM.
+> +	 *
+> +	 * Poll PCC status register every 3us for maximum of 600ULL * PCC
+> +	 * channel latency until PCC command complete bit is set.
+> +	 */
+> +	rc = readw_relaxed_poll_timeout(&gen_comm_base->status, status,
+> +					status & PCC_STATUS_CMD_COMPLETE, 3,
+> +					sspcc->deadline_us);
+> +	if (rc) {
+> +		pr_warn("PCC check channel timeout for pcc_id=%d rc=%d\n",
+> +			sspcc->pcc_id, rc);
+> +		return rc;
+> +	}
+> +
+> +	if (status & PCC_STATUS_ERROR) {
+> +		pr_warn("Error in executing last command=%d for pcc_id=%d\n",
+
+Commands are better printed in hex, no?
+
+IOW, "... command: 0x%x for ..."
+
+> +			sspcc->last_cmd, sspcc->pcc_id);
+> +		status &= ~PCC_STATUS_ERROR;
+> +		writew_relaxed(status, &gen_comm_base->status);
+> +		return -EIO;
+> +	}
+> +
+> +	cap_status = readw_relaxed(&gen_comm_base->set_caps_status);
+
+Is that register read always successful or you need to handle errors here too?
+
+> +	writew_relaxed(0x0, &gen_comm_base->set_caps_status);
+> +	return decode_cap_error(cap_status);
+> +}
+> +
+> +/**
+> + * ras2_send_pcc_cmd() - Send RAS2 command via PCC channel
+> + * @ras2_ctx:	pointer to the RAS2 context structure
+> + * @cmd:	command to send
+> + *
+> + * Returns: 0 on success, an error otherwise
+> + */
+> +int ras2_send_pcc_cmd(struct ras2_mem_ctx *ras2_ctx, u16 cmd)
+> +{
+> +	struct ras2_sspcc *sspcc = ras2_ctx->sspcc;
+
+No check for ras2_ctx before dereffing it? Especially if this is an exported
+function.
+
+> +	struct acpi_ras2_shmem __iomem *gen_comm_base = sspcc->comm_addr;
+> +	struct mbox_chan *pcc_channel;
+> +	unsigned int time_delta;
+> +	int rc;
+> +
+> +	rc = check_pcc_chan(sspcc);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	pcc_channel = sspcc->pcc_chan->mchan;
+> +
+> +	/*
+> +	 * Handle the Minimum Request Turnaround Time (MRTT).
+> +	 * "The minimum amount of time that OSPM must wait after the completion
+> +	 * of a command before issuing the next command, in microseconds."
+> +	 */
+> +	if (sspcc->pcc_mrtt) {
+> +		time_delta = ktime_us_delta(ktime_get(),
+
+Remove that linebreak pls. Audit your whole code for those pls.
+
+> +					    sspcc->last_cmd_cmpl_time);
+> +		if (sspcc->pcc_mrtt > time_delta)
+> +			udelay(sspcc->pcc_mrtt - time_delta);
+> +	}
+> +
+> +	/*
+> +	 * Handle the non-zero Maximum Periodic Access Rate (MPAR).
+> +	 * "The maximum number of periodic requests that the subspace channel can
+> +	 * support, reported in commands per minute. 0 indicates no limitation."
+> +	 *
+> +	 * This parameter should be ideally zero or large enough so that it can
+> +	 * handle maximum number of requests that all the cores in the system can
+> +	 * collectively generate. If it is not, follow the spec and just not
+> +	 * send the request to the platform after hitting the MPAR limit in
+> +	 * any 60s window.
+> +	 */
+> +	if (sspcc->pcc_mpar) {
+> +		if (sspcc->mpar_count == 0) {
+
+		if (!sspcc->mpar_count) {
+
+
+> +			time_delta = ktime_ms_delta(ktime_get(),
+> +						    sspcc->last_mpar_reset);
+> +			if (time_delta < 60 * MSEC_PER_SEC) {
+> +				dev_dbg(ras2_ctx->dev,
+> +					"PCC cmd(%u) not sent due to MPAR limit",
+> +					cmd);
+> +				return -EIO;
+> +			}
+> +			sspcc->last_mpar_reset = ktime_get();
+> +			sspcc->mpar_count = sspcc->pcc_mpar;
+> +		}
+> +		sspcc->mpar_count--;
+> +	}
+> +
+> +	/* Write to the shared comm region */
+> +	writew_relaxed(cmd, &gen_comm_base->command);
+> +
+> +	/* Flip CMD COMPLETE bit */
+> +	writew_relaxed(0, &gen_comm_base->status);
+> +
+> +	/* Ring doorbell */
+> +	rc = mbox_send_message(pcc_channel, &cmd);
+> +	if (rc < 0) {
+> +		dev_warn(ras2_ctx->dev,
+> +			 "Err sending PCC mbox message. cmd:%d, rc:%d\n",
+
+Yeah, you can say "Error". It is easier for all those dmesg greppers :)
+
+> +			 cmd, rc);
+> +		return rc;
+> +	}
+> +
+> +	sspcc->last_cmd = cmd;
+> +
+> +	/*
+> +	 * If Minimum Request Turnaround Time is non-zero, need
+> +	 * to record the completion time of both READ and WRITE
+> +	 * command for proper handling of MRTT, so need to check
+> +	 * for pcc_mrtt in addition to PCC_CMD_EXEC_RAS2.
+
+	 * If Minimum Request Turnaround Time is non-zero, need to record the
+	 * completion time of both READ and WRITE command for proper handling
+	 * of MRTT, so need to check for pcc_mrtt in addition to
+	 * PCC_CMD_EXEC_RAS2.
+
+Looks properly formatted to me.
+
+> +	 */
+> +	if (cmd == PCC_CMD_EXEC_RAS2 || sspcc->pcc_mrtt) {
+> +		rc = check_pcc_chan(sspcc);
+> +		if (sspcc->pcc_mrtt)
+> +			sspcc->last_cmd_cmpl_time = ktime_get();
+> +	}
+> +
+> +	if (pcc_channel->mbox->txdone_irq)
+> +		mbox_chan_txdone(pcc_channel, rc);
+> +	else
+> +		mbox_client_txdone(pcc_channel, rc);
+> +
+> +	return rc < 0 ? rc : 0;
+
+So you mean simply
+	
+	return rc;
+
+no? rc can be 0 too so what's the point of the ternary expression?
+
+And what's the logic here? You'd capture rc above from check_pcc_chan() and
+even if it is != 0, you'd pass it into the mbox* functions? I guess that
+weirdness deserves a comment...
+
+> +}
+> +EXPORT_SYMBOL_GPL(ras2_send_pcc_cmd);
+> +
+> +static int register_pcc_channel(struct ras2_mem_ctx *ras2_ctx, int pcc_id)
+> +{
+> +	struct ras2_sspcc *sspcc;
+> +	struct pcc_mbox_chan *pcc_chan;
+> +	struct mbox_client *mbox_cl;
+> +
+> +	if (pcc_id < 0)
+> +		return -EINVAL;
+> +
+> +	sspcc = kzalloc(sizeof(*sspcc), GFP_KERNEL);
+> +	if (!sspcc)
+> +		return -ENOMEM;
+> +
+> +	mbox_cl			= &sspcc->mbox_client;
+> +	mbox_cl->knows_txdone	= true;
+> +
+> +	pcc_chan = pcc_mbox_request_channel(mbox_cl, pcc_id);
+> +	if (IS_ERR(pcc_chan)) {
+> +		kfree(sspcc);
+> +		return PTR_ERR(pcc_chan);
+> +	}
+> +
+> +	sspcc->pcc_id		= pcc_id;
+> +	sspcc->pcc_chan		= pcc_chan;
+> +	sspcc->comm_addr	= pcc_chan->shmem;
+> +	sspcc->deadline_us	= PCC_NUM_RETRIES * pcc_chan->latency;
+> +	sspcc->pcc_mrtt		= pcc_chan->min_turnaround_time;
+> +	sspcc->pcc_mpar		= pcc_chan->max_access_rate;
+> +	sspcc->mbox_client.knows_txdone	= true;
+> +	sspcc->pcc_chnl_acq	= true;
+> +
+> +	ras2_ctx->sspcc		= sspcc;
+> +	ras2_ctx->comm_addr	= sspcc->comm_addr;
+> +	ras2_ctx->dev		= pcc_chan->mchan->mbox->dev;
+> +
+> +	mutex_init(&sspcc->pcc_lock);
+> +	ras2_ctx->pcc_lock	= &sspcc->pcc_lock;
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_IDA(ras2_ida);
+> +static void ras2_release(struct device *device)
+> +{
+> +	struct auxiliary_device *auxdev = to_auxiliary_dev(device);
+> +	struct ras2_sspcc *sspcc;
+> +	struct ras2_mem_ctx *ras2_ctx =
+
+No ugly linebreaks like that pls.
+
+> +		container_of(auxdev, struct ras2_mem_ctx, adev);
+> +
+> +	ida_free(&ras2_ida, auxdev->id);
+> +	sspcc = ras2_ctx->sspcc;
+> +	pcc_mbox_free_channel(sspcc->pcc_chan);
+> +	kfree(sspcc);
+> +	kfree(ras2_ctx);
+> +}
+> +
+> +static struct ras2_mem_ctx *
+
+No ugly linebreaks like that pls.
+
+> +add_aux_device(char *name, int channel, u32 pxm_inst)
+> +{
+> +	struct ras2_mem_ctx *ras2_ctx;
+> +	struct ras2_sspcc *sspcc;
+> +	int id, rc;
+> +
+> +	ras2_ctx = kzalloc(sizeof(*ras2_ctx), GFP_KERNEL);
+> +	if (!ras2_ctx)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	ras2_ctx->sys_comp_nid = pxm_to_node(pxm_inst);
+
+This needs to handle NUMA_NO_NODE retval.
+
+> +	rc = register_pcc_channel(ras2_ctx, channel);
+> +	if (rc < 0) {
+> +		pr_debug("Failed to register pcc channel rc=%d\n", rc);
+
+Make that error message more informative by dumping pxm_inst, channel and
+whatever else would be helpful in error debugging.
+
+> +		goto ctx_free;
+> +	}
+> +
+> +	id = ida_alloc(&ras2_ida, GFP_KERNEL);
+> +	if (id < 0) {
+> +		rc = id;
+> +		goto pcc_free;
+> +	}
+> +
+> +	ras2_ctx->adev.id		= id;
+> +	ras2_ctx->adev.name		= RAS2_MEM_DEV_ID_NAME;
+
+Wouldn't it make sense to have id be part of the name? I.e.,
+"acpi_ras2_mem%d" with id at the %d?
+
+
+> +	ras2_ctx->adev.dev.release	= ras2_release;
+> +	ras2_ctx->adev.dev.parent	= ras2_ctx->dev;
+> +
+> +	rc = auxiliary_device_init(&ras2_ctx->adev);
+> +	if (rc)
+> +		goto ida_free;
+> +
+> +	rc = auxiliary_device_add(&ras2_ctx->adev);
+> +	if (rc) {
+> +		auxiliary_device_uninit(&ras2_ctx->adev);
+> +		return ERR_PTR(rc);
+> +	}
+> +
+> +	return ras2_ctx;
+> +
+> +ida_free:
+> +	ida_free(&ras2_ida, id);
+> +pcc_free:
+> +	sspcc = ras2_ctx->sspcc;
+> +	pcc_mbox_free_channel(sspcc->pcc_chan);
+> +	kfree(sspcc);
+> +ctx_free:
+> +	kfree(ras2_ctx);
+> +
+> +	return ERR_PTR(rc);
+> +}
+> +
+> +static void acpi_ras2_parse(struct acpi_table_ras2 *ras2_tab)
+
+"parse_ras2_table"
+
+> +{
+> +	struct acpi_ras2_pcc_desc *pcc_desc_list;
+> +	struct ras2_mem_ctx *ras2_ctx;
+> +	u16 i, count;
+> +
+> +	if (ras2_tab->header.length < sizeof(*ras2_tab)) {
+> +		pr_warn(FW_WARN "ACPI RAS2 table present but broken (too short, size=%u)\n",
+> +			ras2_tab->header.length);
+> +		return;
+> +	}
+> +
+> +	if (!ras2_tab->num_pcc_descs) {
+> +		pr_warn(FW_WARN "No PCC descs in ACPI RAS2 table\n");
+> +		return;
+> +	}
+
+You need to sanity-check the number of descs so that the below allocation
+doesn't go nuts.
+
+> +
+> +	struct ras2_mem_ctx **pctx_list __free(kfree) = kzalloc(ras2_tab->num_pcc_descs * sizeof(*pctx_list), GFP_KERNEL);
+
+Function member declarations at the beginning of the function, pls, and then
+you can remove this ugly linebreak too.
+
+> +	if (!pctx_list)
+> +		return;
+> +
+> +	count = 0;
+> +	pcc_desc_list = (struct acpi_ras2_pcc_desc *)(ras2_tab + 1);
+> +	for (i = 0; i < ras2_tab->num_pcc_descs; i++, pcc_desc_list++) {
+> +		if (pcc_desc_list->feature_type != RAS2_FEAT_TYPE_MEMORY)
+> +			continue;
+> +
+> +		ras2_ctx = add_aux_device(RAS2_MEM_DEV_ID_NAME,
+> +					  pcc_desc_list->channel_id,
+> +					  pcc_desc_list->instance);
+> +		if (IS_ERR(ras2_ctx)) {
+> +			pr_warn("Failed to add RAS2 auxiliary device rc=%ld\n",
+> +				PTR_ERR(ras2_ctx));
+> +			for (i = count; i > 0; i--)
+
+You don't need that count var - can use i directly.
+
+> +				auxiliary_device_uninit(&pctx_list[i - 1]->adev);
+> +			return;
+
+When you return here you have dangling pointers in that pctx_list array.
+
+> +		}
+> +		pctx_list[count++] = ras2_ctx;
+
+
+Also, what's the point of that pctx_list array at all? So that you can do
+uninit on the ->adev in case you encounter a failure?
+
+> +	}
+> +}
+> +
+> +/**
+> + * acpi_ras2_init - RAS2 driver initialization function.
+> + *
+> + * Extracts the ACPI RAS2 table and retrieves ID for the PCC channel subspace
+> + * for communicating with the ACPI compliant HW platform. Driver adds an
+> + * auxiliary device, which binds to the memory ACPI RAS2 driver, for each RAS2
+> + * memory feature.
+> + *
+> + * Returns: none.
+> + */
+> +void __init acpi_ras2_init(void)
+> +{
+> +	struct acpi_table_ras2 *ras2_tab;
+> +	acpi_status status;
+> +
+> +	status = acpi_get_table(ACPI_SIG_RAS2, 0,
+> +				(struct acpi_table_header **)&ras2_tab);
+> +	if (ACPI_FAILURE(status)) {
+> +		pr_err("Failed to get table, %s\n", acpi_format_exception(status));
+
+Looks like pr_debug to me.
+
+> +		return;
+> +	}
+> +
+> +	acpi_ras2_parse(ras2_tab);
+
+This function does some table sanity checking and warns. What it should do is
+fail the driver load if the table is broken.
+
+Thx.
+
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
