@@ -1,99 +1,117 @@
-Return-Path: <linux-edac+bounces-5530-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5531-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C28AEC843FF
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 10:35:51 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EA36C84F02
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 13:18:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 820253A6D34
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 09:35:50 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7A326342037
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 12:18:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01EC72DE71A;
-	Tue, 25 Nov 2025 09:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F307F1A9B58;
+	Tue, 25 Nov 2025 12:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="tWLXEd2O"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="kNfpkD+T"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AF72C3245
-	for <linux-edac@vger.kernel.org>; Tue, 25 Nov 2025 09:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F134C1BC41;
+	Tue, 25 Nov 2025 12:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764063348; cv=none; b=UtPhavruJVjvukulInROqLjxLLvslP+y6EFzj4LHVLLHL7WZMBH97fyOUNm0Wn90lPC1EkkO81NZouddora+k5QbLfEUBDl2q+WQTbFJy2jgsIvvKJ5cvuxNyxnp9r3kRI+vt5I9nU9Tq5d7dX8PNB9Arhe2Z3HxeMB2K/UFaEc=
+	t=1764073102; cv=none; b=lLmuVGAOipJP3HDaMwRizhrkNAEPNwtwlgG6wRueVWya/9U0fIBTeLRzW2uYoR/vX0Gf18iVU/WzDHANHqD8+gn1OOsrQblhT8zMG6Wgm810W7nQH0l8TjhqUccLGaqaKK8KALqdh5fXG40/7YI5gtSNV3M4HPGgLvynD3uK9Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764063348; c=relaxed/simple;
-	bh=U7nEComjY2e2YunGcczdvtjizwqqMhv4CrkgLh/axMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qEW//Oko8ktpHn2RfuPX31BOec3S/IGtIyAloEza5pnaaheTszKvGqEBHgmk5gL8qzxbMFwojiSK3Ie1xUnWY8xJzudvIEcb+/xkW4OW/lW0BIjU4F3XbE8aAvdI0DSwOKjLLCwjXdVwo8gDoyQYDXDk+oXhjI0XGIAvXaUIV/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=tWLXEd2O; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <david.laight@runbox.com>)
-	id 1vNpSR-005kAk-Hr; Tue, 25 Nov 2025 10:35:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-	 s=selector1; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
-	bh=9C9j2EwP+dfCKYDGUnBZKucdfkkvyKBJa+crvY0pd3Q=; b=tWLXEd2OfSPBUqTTSDCMALSLb9
-	CB0121g6ZahaJLbG7XnJTz7kyuyUILWbHQHKyofFVC46/uzIL8d7aZiLj2bNe7HPr9oIHVS4qU+/c
-	++XSu2r/kpGtbTfdMbWh3G2c01GgIUGuNb3mgvZKVeR4xE/HTygrAiP5WgnmWd/gXMWabftfO1by2
-	FAPULHEnkWjX/+nlebIMxfK+nmb1kEiM2stWFD6UZDXsqiI8s857lygwZrHGKuy1UskuyqY1UKn1e
-	d7e5QmHCM04KL4zIbJRDKNX7u6SB61RuO6YCmnRuOXIa1vIQ3+zZMe9lYhytf52zrfX9QKdJuO65m
-	Z3T2+9bQ==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <david.laight@runbox.com>)
-	id 1vNpSR-0003qd-1E; Tue, 25 Nov 2025 10:35:35 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vNpSQ-00Bj0C-0q; Tue, 25 Nov 2025 10:35:34 +0100
-Date: Tue, 25 Nov 2025 09:35:29 +0000
-From: david laight <david.laight@runbox.com>
-To: Nikolay Borisov <nik.borisov@suse.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, bp@alien8.de,
- Yazen.Ghannam@amd.com
-Subject: Re: [PATCH v2] RAS/AMD/ATL: Remove bitwise_xor_bits
-Message-ID: <20251125093529.109c8e1e@pumpkin>
-In-Reply-To: <20251124084011.1575166-1-nik.borisov@suse.com>
-References: <20251124084011.1575166-1-nik.borisov@suse.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1764073102; c=relaxed/simple;
+	bh=MGO79TfULGGnTRo5ncAznV7iVB57q4d141FjxkM7FEM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BV1Tq63j8rxlmoukF2DKPmq1Dfnb7OR8UwjESHTeCYmA62UUaY3GJuVLRAxTKHhhk4VHow8Cq3f7p3iz8aryyzj+fhiFRGhl4uPB1xqFCj9BwirAsT6bJwaD/54cMYnahrt1ASYGgrjO90myLWPGnjcH6gGcIq18AusiD3zYh3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=kNfpkD+T; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B33A040E0218;
+	Tue, 25 Nov 2025 12:18:14 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id n6UYC02tB34v; Tue, 25 Nov 2025 12:18:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1764073089; bh=JNIc+Sn2V0B4ExWC90Z9ukQRRPTYfg8j2HLhuMTGwQ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kNfpkD+TwBOp9S5cDWxl5WJfqln+8ck0ulSKTc2eOZSBxKdLrB2iSb6RT0vJ6Yzn2
+	 NLtpzpXKzM9VP9MTDUgNWW4PNB/D8SOgwXQiC+3awpm+gWm5jC3kW6T61YzsJp5Q5j
+	 G+180Rt1Bh1ICKQHEfHYc2XsQ9+f+yQjCioUJtEGI+l3DUF5FNbmzYvwwJwCGolQLB
+	 T7V/8UFi2EqJoOblmPCOV3kIDIlusGIJhDE/GNh6vQVwaIMspcbigCYfP3jJrPtMKC
+	 RlLNwXANvp/vfi6EYz/wMuI3bgrwCcS/46EPjsHkPPpNntFtYsRDuUuX8dt3k+35kJ
+	 jIDMjUAuE05nxkpMGNs1vIi0zSBgvnUccMFB3hnvfZFNNF/08zUlofx/Au+vVneahF
+	 QzMxIgS/k4xCyPHecvp92Tzzllqlla68PnhmVQ0gs9rnruEYdn0XB80+tyn81CiowB
+	 AsoLGK+rdvsyCAAT4dS2ftwabelReNnmIofHnFokNks8WiikcQuxInRROL/B9uerjR
+	 yxzt77uckOltqBqflWtsMoqKuBI3oh/SOsXsieiPjZJkc0AJ6al8mSMHxZivT7smy4
+	 FwscQcMSo1T744HoIG9GD+Un1vf31RuwhIzW6DjRTy89FpVFkfn4/IgEFkG7I73nP1
+	 6X68rwrJfGi4n4X9Cldf91IU=
+Received: from zn.tnic (p57969402.dip0.t-ipconnect.de [87.150.148.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id A794240E015B;
+	Tue, 25 Nov 2025 12:18:03 +0000 (UTC)
+Date: Tue, 25 Nov 2025 13:18:02 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Devang Vyas <devangnayanbhai.vyas@amd.com>
+Cc: yazen.ghannam@amd.com, tony.luck@intel.com, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ramesh Garidapuri <ramesh.garidapuri@amd.com>
+Subject: Re: [PATCH] EDAC/amd64: Add support for family 19h, models 40h-4fh
+Message-ID: <20251125121802.GEaSWeeg36pHTqMAlR@fat_crate.local>
+References: <20251124181335.284780-1-devangnayanbhai.vyas@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251124181335.284780-1-devangnayanbhai.vyas@amd.com>
 
-On Mon, 24 Nov 2025 10:40:11 +0200
-Nikolay Borisov <nik.borisov@suse.com> wrote:
+On Mon, Nov 24, 2025 at 11:43:35PM +0530, Devang Vyas wrote:
+> This patch updates the EDAC driver to include support
 
-> Both LLVM/GCC support a __builtin_parity function which is functionally
-> equivalent to the custom bitwise_xor_bits() one. Let's simplify the code by
-> relying on the built-in. No functional changes.
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
+
+Also, do
+
+$ git grep 'This patch' Documentation/process
+
+for more details.
+
+> for AMD SoC family 19h models 40h-4fh to support
+> Ryzen 6000 CPUs/APUs ("Rembrandt").
 > 
+> The added changes enhance the ability to detect and
+> report memory errors on systems that utilize AMD SoCs
+> from the specified family.
 
-While you've got this code out on the operating table:
+Lemme repeat my comment from last time:
 
-- Change all the locals/parameters from u8/u16 to 'unsigned int'.
-  It will generate better code.
-  Using u8/u16 only makes any sense if you are trying to reduce the
-  size of a structure.
+"Use the commit message to explain why those need to load the EDAC driver at
+all."
 
-- Both col_xor and row_xor are masks (for the parity code).
-  So the names are wrong.
-  In fact I think all the 'xor' and 'XOR' are incorrectly named.
+Your text still doesn't explain why amd64_edac should load on a client CPU:
 
-- How often is 'xor_enable' aka 'mask_enable' set?
-  If set most of the time (or the code rarely runs) then if the hardware
-  register says 'don't include these values' then just set the row/col
-  mask values to zero and let the rest of the code just run through.
+https://en.wikipedia.org/wiki/Zen_3#Rembrandt
 
-	David
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
