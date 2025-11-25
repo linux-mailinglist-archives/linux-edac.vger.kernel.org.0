@@ -1,94 +1,99 @@
-Return-Path: <linux-edac+bounces-5529-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5530-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42D0EC84375
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 10:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C28AEC843FF
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 10:35:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C8D33A8ADC
-	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 09:27:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 820253A6D34
+	for <lists+linux-edac@lfdr.de>; Tue, 25 Nov 2025 09:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65DB42D3725;
-	Tue, 25 Nov 2025 09:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01EC72DE71A;
+	Tue, 25 Nov 2025 09:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Ujh5Xxgt"
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="tWLXEd2O"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44E1269B1C;
-	Tue, 25 Nov 2025 09:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AF72C3245
+	for <linux-edac@vger.kernel.org>; Tue, 25 Nov 2025 09:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764062836; cv=none; b=fGfB0qmTBDxxexsfqLg1AK100CCVnDKRZUQHRAHtahcZ3v4KR5grV/OkzSTCsz50TIdLg3wUivBP77ZrouY/wd/FxMv/SDtiK6Q8RpqEtZk2Nxn2c8x+zY4ku9y9XTwmF+Ajt7hxoOG9sOBHee5vFxppyRs1pHXZ6ohsHxhP10k=
+	t=1764063348; cv=none; b=UtPhavruJVjvukulInROqLjxLLvslP+y6EFzj4LHVLLHL7WZMBH97fyOUNm0Wn90lPC1EkkO81NZouddora+k5QbLfEUBDl2q+WQTbFJy2jgsIvvKJ5cvuxNyxnp9r3kRI+vt5I9nU9Tq5d7dX8PNB9Arhe2Z3HxeMB2K/UFaEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764062836; c=relaxed/simple;
-	bh=9fsfpjAM2+mQ4S4GAkoN+7jqNZGufRMjtus1fCgCMqc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HwR4Vbuv9pVfdwJPCtTbTcpCKpopE/8Nqk6F6O0sVQ7Gc1vA8jnJprp3MZ5XuiigMhmoBwbV2s+/yQshXJFTaXiW74jb7HIkPl8+hUKKjBugDnQXt+c3wvPTU9QHES0aFAcYP616SxuANPibzSwll6hPhJYm0QHOgS5rw7obsUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Ujh5Xxgt; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=k/+2LtzZDQDT/XIIJmpYRUvrcP2KDj85kUn+MGkQNJM=; b=Ujh5XxgtWd8jr9zZcd2oA5syOx
-	Cwt9IJjcT2z4O5nC1oTDkZz2phCS+d5yfzIkGRu+3qoqEO2RlWYiUacquZZfBmTVSUBoRbs2suKMb
-	tgNMMpisQA++79/GIAH54dlpgo6eDFiYCm+51O/uVjZGIk4WsbQUyxEdYxcDg802H6xhoFfnanQHH
-	9ssOiu60VP0hjxpyMc5BSbNgLUL69A3AfZGGp6YTPhBEe6KGim/4BfYTG36omzLqBzqEPxcbwEr1u
-	RUnLeqwU2gSJrzxpg6hLMJbWkXHRZJ1RayRA4ZqkwA+pmawb3gg1rEUtggbyAIsM1erOI2idwpGJb
-	W3EEC88g==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vNpKA-003ICO-9j; Tue, 25 Nov 2025 09:27:02 +0000
-Date: Tue, 25 Nov 2025 01:26:55 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Borislav Petkov <bp@alien8.de>, akpm@linux-foundation.org
-Cc: tony.luck@intel.com, akpm@linux-foundation.org, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev, 
-	osandov@osandov.com, xueshuai@linux.alibaba.com, konrad.wilk@oracle.com, 
-	linux-edac@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org, 
-	kernel-team@meta.com, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>, 
-	Robert Moore <robert.moore@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Hanjun Guo <guohanjun@huawei.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-	Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH RESEND v5] vmcoreinfo: Track and log recoverable hardware
- errors
-Message-ID: <zbqtqndpicedldf37c7t74cikasqruzkv2rqt2eh6ufjbj4exb@3p7ajieb6ovr>
-References: <20251010-vmcore_hw_error-v5-1-636ede3efe44@debian.org>
- <vpilvvscosdl4o4cvbmtsrrp4btfwr5iidywmuiawfrgtlcwrr@ubtdbxfqyqpu>
- <20251118141002.GEaRx-Oge8ZxtR4Vzi@fat_crate.local>
+	s=arc-20240116; t=1764063348; c=relaxed/simple;
+	bh=U7nEComjY2e2YunGcczdvtjizwqqMhv4CrkgLh/axMc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qEW//Oko8ktpHn2RfuPX31BOec3S/IGtIyAloEza5pnaaheTszKvGqEBHgmk5gL8qzxbMFwojiSK3Ie1xUnWY8xJzudvIEcb+/xkW4OW/lW0BIjU4F3XbE8aAvdI0DSwOKjLLCwjXdVwo8gDoyQYDXDk+oXhjI0XGIAvXaUIV/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=tWLXEd2O; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vNpSR-005kAk-Hr; Tue, 25 Nov 2025 10:35:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector1; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
+	bh=9C9j2EwP+dfCKYDGUnBZKucdfkkvyKBJa+crvY0pd3Q=; b=tWLXEd2OfSPBUqTTSDCMALSLb9
+	CB0121g6ZahaJLbG7XnJTz7kyuyUILWbHQHKyofFVC46/uzIL8d7aZiLj2bNe7HPr9oIHVS4qU+/c
+	++XSu2r/kpGtbTfdMbWh3G2c01GgIUGuNb3mgvZKVeR4xE/HTygrAiP5WgnmWd/gXMWabftfO1by2
+	FAPULHEnkWjX/+nlebIMxfK+nmb1kEiM2stWFD6UZDXsqiI8s857lygwZrHGKuy1UskuyqY1UKn1e
+	d7e5QmHCM04KL4zIbJRDKNX7u6SB61RuO6YCmnRuOXIa1vIQ3+zZMe9lYhytf52zrfX9QKdJuO65m
+	Z3T2+9bQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vNpSR-0003qd-1E; Tue, 25 Nov 2025 10:35:35 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vNpSQ-00Bj0C-0q; Tue, 25 Nov 2025 10:35:34 +0100
+Date: Tue, 25 Nov 2025 09:35:29 +0000
+From: david laight <david.laight@runbox.com>
+To: Nikolay Borisov <nik.borisov@suse.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org, bp@alien8.de,
+ Yazen.Ghannam@amd.com
+Subject: Re: [PATCH v2] RAS/AMD/ATL: Remove bitwise_xor_bits
+Message-ID: <20251125093529.109c8e1e@pumpkin>
+In-Reply-To: <20251124084011.1575166-1-nik.borisov@suse.com>
+References: <20251124084011.1575166-1-nik.borisov@suse.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251118141002.GEaRx-Oge8ZxtR4Vzi@fat_crate.local>
-X-Debian-User: leitao
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello Andrew,
+On Mon, 24 Nov 2025 10:40:11 +0200
+Nikolay Borisov <nik.borisov@suse.com> wrote:
 
-On Tue, Nov 18, 2025 at 03:10:02PM +0100, Borislav Petkov wrote:
-> On Tue, Nov 18, 2025 at 05:01:47AM -0800, Breno Leitao wrote:
-> > Do you know what is the right tree for this patch?
-> > 
-> > I am wondering if it should go through Kdump, x86 or RAS/MCE tree?
+> Both LLVM/GCC support a __builtin_parity function which is functionally
+> equivalent to the custom bitwise_xor_bits() one. Let's simplify the code by
+> relying on the built-in. No functional changes.
 > 
-> I can take it if akpm wants me to...
 
-Would you prefer to have this patch on your tree, or on Borislav's?
+While you've got this code out on the operating table:
 
-Thanks
---breno
+- Change all the locals/parameters from u8/u16 to 'unsigned int'.
+  It will generate better code.
+  Using u8/u16 only makes any sense if you are trying to reduce the
+  size of a structure.
+
+- Both col_xor and row_xor are masks (for the parity code).
+  So the names are wrong.
+  In fact I think all the 'xor' and 'XOR' are incorrectly named.
+
+- How often is 'xor_enable' aka 'mask_enable' set?
+  If set most of the time (or the code rarely runs) then if the hardware
+  register says 'don't include these values' then just set the row/col
+  mask values to zero and let the rest of the code just run through.
+
+	David
 
