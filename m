@@ -1,190 +1,113 @@
-Return-Path: <linux-edac+bounces-5541-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5542-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E449C94D91
-	for <lists+linux-edac@lfdr.de>; Sun, 30 Nov 2025 11:21:28 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 429E5C94F15
+	for <lists+linux-edac@lfdr.de>; Sun, 30 Nov 2025 12:22:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C4F314E06EC
-	for <lists+linux-edac@lfdr.de>; Sun, 30 Nov 2025 10:21:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E3361341C5A
+	for <lists+linux-edac@lfdr.de>; Sun, 30 Nov 2025 11:22:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DA9233D9C;
-	Sun, 30 Nov 2025 10:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7678C238D54;
+	Sun, 30 Nov 2025 11:21:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2ZTVLphB"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Mx4kkmJ9"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012042.outbound.protection.outlook.com [52.101.48.42])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016CF1373;
-	Sun, 30 Nov 2025 10:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764498084; cv=fail; b=ThY+vs3tnqteiS9g354CQ5ntsO9eTdQPl9IQqcKJGshICqn2UzanRlw/sTCFHTHcPK+rSEV20HLbr2bXRaZItOs86l+3aS4uMhkubsSLx88no/0KBN/cZL6BLIMpiiTatocnNTIl6y+RrJTBPAF5zOeMndK+u1B9v6k3EWeVTag=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764498084; c=relaxed/simple;
-	bh=sCy5QVihljFm6VEmr4sl4kr5dMXR0mkuAIJnD8e1Xt4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DTYrtdUApwbL8MLtKbxIpFcN6uT/NesCd+nlc0L5oGDk93cEvgY0G7CLrWQ+DYrilJV2yke5mH0/SfbSX1AlE4CxpQu46o1vUXx5FAM3eGRkVVcMtjS2Rza8gBHmgqwJDlP94105l/dxo00XhE4pk3aRI1bTDjw1X2iSqH0MVh0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2ZTVLphB; arc=fail smtp.client-ip=52.101.48.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mxUr42YLmyA1uMZpZGvKDfZBBm0qdBB+YV/9HWQaoBifygIAkGWGYkFR+6lCga23L53zbVL5RndMBB/vrgBXc5yGxvoGYehEgaDSPNHlJfSiPdTtVYqU8qj3GS4zhXKEA3GkgeLawFuVVV0cFZBRMMzUGqP0uIyNTdwOVSBxbM8ZkWEH3d6XRd1+NyCiPWfVpokz3Ja5xmix37OBFrEx1Nt2e4y/gMjehxSboRA9rzBxs3IMylngRGoZc4dCtQxssLPZUJZRvNNiyWqUl2jw9R3syOWZMoRa0IRJGjE9vM6tCZRKkIR5j0XijbbATDKaaJADiSboUXISK4kkTd8oZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QkismcIxKWwdd0jxpM3/o3OKrZGya+QSfnaiD80V9oQ=;
- b=WvYfJGkIpcz3heiFjL/CwCTtUJBcR7bbxq0ETAlW23FKQqJ5YXd0pANJ4Et4GGnVXEWxtA0U/QgdfrsbbCBqE4F6HiDwO/x5BhQru0na8VFwu1ws+Vm8/kOExCEnvMcdvr4Ifx0XjjoU7sf1lnkOa7e4NuX54ugzXjstLdtaLLrL0/eqDZhx02j7k1x2lVc84mjrcr4r0p2gsNKCd4l2hFdodb0syZpQpiZVnGmzP/wke4hpyCXrIKuI8iABdVK5cVvI3OZGUa63qp75WUf4GeAJLe7KOgN0v5YbBfWzC2lYzVrlJUHP8hTpcKkbTucLlxxvDX7qd0vmMhQlQDxhig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QkismcIxKWwdd0jxpM3/o3OKrZGya+QSfnaiD80V9oQ=;
- b=2ZTVLphBanhuuCLhd8H45rzWc4NjbEhN0JKki9ym0Otz34dUzS1/2H5yUt1W6hOmnni/6nlScH8ckIOmws2SS5QNZXnclzQsGes0X8eFYeN6LoUS18s5vzZ2GX3cKt3nwpJyhG0/xTR/fUatLecw5NFlEmXdQ0FbpCYvVAwKXe0=
-Received: from BN9PR03CA0673.namprd03.prod.outlook.com (2603:10b6:408:10e::18)
- by SJ2PR12MB9243.namprd12.prod.outlook.com (2603:10b6:a03:578::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Sun, 30 Nov
- 2025 10:21:19 +0000
-Received: from BN2PEPF000044A2.namprd02.prod.outlook.com
- (2603:10b6:408:10e:cafe::5) by BN9PR03CA0673.outlook.office365.com
- (2603:10b6:408:10e::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.17 via Frontend Transport; Sun,
- 30 Nov 2025 10:21:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- BN2PEPF000044A2.mail.protection.outlook.com (10.167.243.153) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9388.8 via Frontend Transport; Sun, 30 Nov 2025 10:21:18 +0000
-Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Sun, 30 Nov
- 2025 04:21:17 -0600
-Received: from yocto-build.amd.com (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Sun, 30 Nov 2025 02:21:16 -0800
-From: Devang Vyas <devangnayanbhai.vyas@amd.com>
-To: <yazen.ghannam@amd.com>, <bp@alien8.de>, <tony.luck@intel.com>,
-	<linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: Devang Vyas <devangnayanbhai.vyas@amd.com>, Ramesh Garidapuri
-	<ramesh.garidapuri@amd.com>
-Subject: [PATCH v2] EDAC/amd64: Add support for family 19h, models 40h-4fh
-Date: Sun, 30 Nov 2025 15:51:11 +0530
-Message-ID: <20251130102111.1180875-1-devangnayanbhai.vyas@amd.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C1815A864;
+	Sun, 30 Nov 2025 11:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764501719; cv=none; b=jfkYR0QS4EvLldy+C99nmJNuyn/aOD6ea98T1xXi3Sv2OAKKudO6Ao2rSRzoqtOREhCbAFEPOzmU5m7zvY51lD0wFvZJTVWZpO9tvu2H893JruH/gt8flhMnfVhr1TuG811Zw6PENexDDCIzY9/FLbxsjzYUS8VnrpkoO0E4wb4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764501719; c=relaxed/simple;
+	bh=fyyvbQVM2+GhJsuliAg71XlZgr2ALAHbppa4kJDf+Fg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V8Uw29GMp+C0NLy4EuropYZpV9967ENBlVL2tpeXH4DXuxCWDkriU904cB1YRYaAhiI6Jd7BmeUGiK3CaPSg9I7r2N6h9m5uP5UuacFpzznJu3Qh5VoXFHg2qUPGmlfliVMJo9ah0B9klNkhK/tLjSFBb86ON0m2N3joNmkHck8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Mx4kkmJ9; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 46C0940E0173;
+	Sun, 30 Nov 2025 11:21:54 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id spkQncZ7v7_A; Sun, 30 Nov 2025 11:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1764501710; bh=k0b9PAOs6kjDpExSMH3yJ0+ArW1lqguDw/Bi1eJTLm8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Mx4kkmJ9F2ZR7HJzF/w8bs3cuK/DvexCgiwd6RAUUXIOqJRKRIIlcZGpcKrlqB+1A
+	 /edVsOoVcsFIYWtaRZaQfpK93yDl0eTB4/cJjOIoKSgRQi6FCs8Gy5hVe4GCk5bzVq
+	 MGS9719//ZsfQIgg83FpPe+3wPxXT2ya5r3uE9ZnfFQ3OpoVPutTGM1LOfKHhRZrvi
+	 0HtkONCE1LPPjOON96csaFTwT7vrhbjYJa3jt9L0CRC0Bn+ZngKlkJu77PvhTLv4fk
+	 2Mg4bnxVL2tf8jvGqN392cdQU0VX3FNxfx2uuvGsiP6q/JNNEGAKZVK68Dfh5EIpgR
+	 HFGhox5Gy1LsTb2RC3F0LEBGiNRmd+csw5pfOevAigwbA2HoMtVWlHr3ZDvkdVNzy7
+	 sNf/SXzEvPz5bOigVg94kTFC1JODZWuc5iC/rY6p1JT4gQwD8WrETCZLWge49WpLU0
+	 hOXXBEYj/+nePzN8YNsfnX4+lYweSKid4R1u9ybyL8j/Uzx+fM2kayb386qH1FZi9u
+	 sbxVKG6E/FuxSQRA5ORBNgNyxexKaaAaPgnT5yQ9Bk/HELMOA3jz/rfa0DbWdE7BzM
+	 +Z4FUTmT/9/ph+tZcIpIItuNMUtiz0GFCz0DIdMcV9Mk65O2A9cSTL8cIpG3F6Lca4
+	 8lnFjVOU6V5cR93IoCMeHaTU=
+Received: from zn.tnic (pd953063a.dip0.t-ipconnect.de [217.83.6.58])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 9170A40E00DE;
+	Sun, 30 Nov 2025 11:21:44 +0000 (UTC)
+Date: Sun, 30 Nov 2025 12:21:44 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Devang Vyas <devangnayanbhai.vyas@amd.com>
+Cc: yazen.ghannam@amd.com, tony.luck@intel.com, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ramesh Garidapuri <ramesh.garidapuri@amd.com>
+Subject: Re: [PATCH v2] EDAC/amd64: Add support for family 19h, models 40h-4fh
+Message-ID: <20251130112144.GAaSwoyJuNCwJiVC1W@fat_crate.local>
+References: <20251130102111.1180875-1-devangnayanbhai.vyas@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000044A2:EE_|SJ2PR12MB9243:EE_
-X-MS-Office365-Filtering-Correlation-Id: 917c1c83-88d1-49d2-41f7-08de2ffa336d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?c2pDBdaATSiuGfnapfThNp+EUMWtwjY2VlpIBWJIwd+gIx2aKoxRm/DRkp0Y?=
- =?us-ascii?Q?AfkBUcw/S32Kc/6yrpsRXtbe9GmBBcSQv8y7+ZOOZOvL+DHmntSEElacUPIN?=
- =?us-ascii?Q?QfaurNQxehS1CeahQEwpKHSGAtGJTp2belnKCg6RdIDSSVBNQffPDOc5xEVs?=
- =?us-ascii?Q?6nSChVitOHSg0AuFEkXBzeTSS8ajHlLGf8Qs3p54VSphOnZOY2aySkD1i+hp?=
- =?us-ascii?Q?S1IIIEHfkrymlW3jHhlIYR/wgIy+YuoEpbRP4RJfVlpc37N6XbPNh4+kW4it?=
- =?us-ascii?Q?Q2WrnarD17erY76U3qrmDdxSog9/8nYnS5bwCIBmuuByL6kE1qru0be3MXQ7?=
- =?us-ascii?Q?7IkSw9w1mr3VDUn9XB5tJmgM5XsNZUa5YpgR3BgUQy319hom+lzJIp6rwJDU?=
- =?us-ascii?Q?YZ0mhheNDv/YnOBzgu6LaEYGU34O1os0FIDlS+Oa+V5Jo51uK3dl7ZBBym01?=
- =?us-ascii?Q?zM3Gdc584taTuOXV5sdth5iZ6TFxcM6fTcOSzRGSg29e5HX0li3+YvRZb4j/?=
- =?us-ascii?Q?YKKdGpSVRTW92VZQ7zI9u9n11Z2PhH9Ol3oRI1U8Gd7kcfKi9Hm5RUWpii3u?=
- =?us-ascii?Q?llPT0DYnD6+1YHxMhDDewKUoq0Ibn4VTs9Fv6Jhkk/cjtQ4kbq7/UZrs0vj0?=
- =?us-ascii?Q?bkgJbwZMEa7J8WIr6s8qsOsCAlnVs4XlxHqL3cA83wn32JOFChzvfGKb9uUH?=
- =?us-ascii?Q?I+Fp5TZnQ18gFtxpkFeK1CwhiCchOgRu5Z8JmmVQe58cPL+XgUw0dPlq3CI2?=
- =?us-ascii?Q?UAGYBjTmaOE8TIQQz24jBP7PCIYG/DTh94MNT4d7nyBQE7B4hOg1eqvdjSXw?=
- =?us-ascii?Q?Jj1blHvVaY5No1vj6L67e02k8lNkvDMC5dQWr6eo4IhK1ndytaNUqn7gHT64?=
- =?us-ascii?Q?efVOrVlrYR223/q4SM5uyauZayO5ctVPWbP60SRgNt7YtsjPY4U99t8iM9f3?=
- =?us-ascii?Q?4RCb/2gpkiSv1zXgtsxiUjeNF3kCcWbWi1B6lEQE413x3bAmSYOs6NIax4sU?=
- =?us-ascii?Q?x1Pm3h67AL1cl8zbkP5cZ6ZPbJ5HOiErav7LoYYlM9YN2a1FP6RoPo6j10YL?=
- =?us-ascii?Q?CzgGr8N0F5zqsnnwn//jDz+akjZhApWdU2YCtLRGCRca6KXwpHp9A8saDiT6?=
- =?us-ascii?Q?Div7GofiIWu65vJCJY5UBJr4hBbqX1aF6WNXX6M6gtyQzOhjq2eLc3TIZgzb?=
- =?us-ascii?Q?G4+ra7RyUSK5c3bjcluasCqHv/DMSyQB2OfSBIFMSnI78cH0qNy3F8Z0XmoT?=
- =?us-ascii?Q?TDSbVnEgzj4bGdsht+cYNPuvQZprEiIGy1T6+ZpxDXp1+wJ2FtAHndf1mIR/?=
- =?us-ascii?Q?Sn8RLI5h+vskHgmmDlEU9A98+2JCIAI4pfhz3oPI50BWTw59yIniWG22ZRXy?=
- =?us-ascii?Q?kbuJWMWBKDYvDZ8aOFhCriSgBHNCapmlv7fjKDl9Vo81INLU+fNiTjoa4hH9?=
- =?us-ascii?Q?CQBUJ/Q5IL2lRJ+5J+/T9XdisRavl87YCeatpGU3tz2LCu7H6JPjygePGTT1?=
- =?us-ascii?Q?KPL/kjYttgKfiRTnaaoZa/MTlMxx2PZZxD/ajwGsLsjhapD6YRT1nXELbNI0?=
- =?us-ascii?Q?F529RhkLMYAJrBJBoDk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2025 10:21:18.3928
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 917c1c83-88d1-49d2-41f7-08de2ffa336d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF000044A2.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9243
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251130102111.1180875-1-devangnayanbhai.vyas@amd.com>
 
-Enable AMD EDAC driver for AMD SoC family 19h with
-models 40h-4fh to support Ryzen 6000 CPUs/APUs
-("Rembrandt"), which provides kernel-level
-infrastructure needed for RAS (Reliability, Availability
-and Serviceability) features.
+On Sun, Nov 30, 2025 at 03:51:11PM +0530, Devang Vyas wrote:
+> Enable AMD EDAC driver for AMD SoC family 19h with
+> models 40h-4fh to support Ryzen 6000 CPUs/APUs
+> ("Rembrandt"), which provides kernel-level
+> infrastructure needed for RAS (Reliability, Availability
+> and Serviceability) features.
+> 
+> Added changes enhance the ability to detect and
+> report memory errors on systems that utilize AMD SoCs
+> from the specified family. There are 4 memory controllers
+> supported by Rembrandt which enables proper error reporting
+> and RAS testing on specified AMD SoCs.
+> 
+> AMD EDAC linux driver interfaces directly with the hardware-
+> error reporting mechanism present in AMD platform, otherwise
+> these errors would not be surfaced through the standard Linux
+> EDAC framework and RAS validation workflows would be
+> incomplete.
 
-Added changes enhance the ability to detect and
-report memory errors on systems that utilize AMD SoCs
-from the specified family. There are 4 memory controllers
-supported by Rembrandt which enables proper error reporting
-and RAS testing on specified AMD SoCs.
+Nope, this is reads like AI slop and too generic.
 
-AMD EDAC linux driver interfaces directly with the hardware-
-error reporting mechanism present in AMD platform, otherwise
-these errors would not be surfaced through the standard Linux
-EDAC framework and RAS validation workflows would be
-incomplete.
+Lemme try again: we do not enable amd64_edac on client hw - only server. Why
+does *this* *client* deserve an exception?
 
-Co-developed-by: Ramesh Garidapuri <ramesh.garidapuri@amd.com>
-Signed-off-by: Ramesh Garidapuri <ramesh.garidapuri@amd.com>
-Signed-off-by: Devang Vyas <devangnayanbhai.vyas@amd.com>
----
+Thx.
 
-Changes since v1:
-- Addressed review comment related to commit message which
-  adds detailed information on why AMD EDAC driver is essential
-  to load on AMD SoC.
-
- drivers/edac/amd64_edac.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 2391f3469961..6cf0b6d7b5ec 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3863,6 +3863,9 @@ static int per_family_init(struct amd64_pvt *pvt)
- 				pvt->max_mcs		= 8;
- 			}
- 			break;
-+		case 0x40 ... 0x4f:
-+			pvt->max_mcs			= 4;
-+			break;
- 		case 0x60 ... 0x6f:
- 			pvt->flags.zn_regs_v2		= 1;
- 			break;
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
