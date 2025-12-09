@@ -1,86 +1,89 @@
-Return-Path: <linux-edac+bounces-5557-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5558-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DFEECB04D1
-	for <lists+linux-edac@lfdr.de>; Tue, 09 Dec 2025 15:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 819EBCB04D5
+	for <lists+linux-edac@lfdr.de>; Tue, 09 Dec 2025 15:38:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 41A6C3048D8C
-	for <lists+linux-edac@lfdr.de>; Tue,  9 Dec 2025 14:37:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C21D1304A8E5
+	for <lists+linux-edac@lfdr.de>; Tue,  9 Dec 2025 14:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E3E72FE04E;
-	Tue,  9 Dec 2025 14:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8D42FDC52;
+	Tue,  9 Dec 2025 14:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SEjQyzbt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XiuIXCJ9"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E88C2FD7D2
-	for <linux-edac@vger.kernel.org>; Tue,  9 Dec 2025 14:37:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F352FD7BE
+	for <linux-edac@vger.kernel.org>; Tue,  9 Dec 2025 14:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765291032; cv=none; b=tBv02jQh98lj7TZni4CLDiKPiYsAZOZmmKkHEdJSYXmmWySe87gHlHJCn/NLPEAoCydd3Li9zcFqhBGXzL2mK3PwwbMypsyxjpTFaKCVTKS2RFeYZfO17pEFggRiHI7C4U5k62uruGTI4uax4bqXDVWpZlbN5KyKctQQE4oyTWQ=
+	t=1765291061; cv=none; b=LgovN0NohfkSbvKky8mFb562Q8m+ubWqntSLHko2NxmWKMQtjCoToy0nJHOkZRb38fVZyHUzUGg+dtjqF8+G+Ui/V0q/U1AkBkdRJ12o/YFwfO5NL/Axyc9va8cYWh313zMwj83228LQdYx2mWxvx1eOOSD62ht7GhGUMHQp9Uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765291032; c=relaxed/simple;
-	bh=jPCiTfm5BtmAyDqz4dpNFWOwHkPHShS71sU+oP4hgYQ=;
+	s=arc-20240116; t=1765291061; c=relaxed/simple;
+	bh=FvGNQ93BnOKGTFRoXunqjFw6C8IGuEm1oHOP9fxSZhA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cRyP5i0BPU1GnHCcT9FE0EYeqLedFArp0s6OJoBP+lSRqe2VmKZC17PXkleRh3OSKCInWbCdHFrWS3/Mli7imvIMGv+8L57TFkscU5qx46NklU2lM3obIMWtjT1KoBFVRdqy2/S1qW5S+1HUbawkN0kUGPN8KrR11WaDVFBpJS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SEjQyzbt; arc=none smtp.client-ip=209.85.128.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=rTdHw+RC9k+nT/HEemUjQ9KpjpA0LY07yWxfHCQTIXbgDc043iimYPukx7QsHKd0NxarZxLpTpqjQjPkquHzPKFfh20jgO9GO1t/wy//DDPEDAiRC5LhYN869s+ye4vR4jy8xUNW68gev4VuQIgIUEt+X2qCMgcxslVlh7r0gKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XiuIXCJ9; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-477a1c28778so72614975e9.3
-        for <linux-edac@vger.kernel.org>; Tue, 09 Dec 2025 06:37:09 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477563e28a3so41986315e9.1
+        for <linux-edac@vger.kernel.org>; Tue, 09 Dec 2025 06:37:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765291028; x=1765895828; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1765291058; x=1765895858; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j7I6ils17hDCA2e6qFPfR6Sw1ycg9esI4gXIyqhs7Ek=;
-        b=SEjQyzbtS2MrNiTiB0trVfMb3DQbSQn/HpHh1gqp8UWbooQ2t/EzFf+wAyoz7g2R6p
-         hCHtntGBwxM4sZVUgSPwGu39ZCAi3LrlXs2QymLs0a3jPPhqEZPZvNLnLIUUFJAHYHF9
-         aOA1i8VUqej05wNRgKRfsey2HQJozzVZI1Ph2OYVNMxEYfd25qeQuBBvbKQBXmWcH3J9
-         raFMbeVo1zCh7KmuYJROudZarfPGsO6r5Fgq/oIvdIByqGy4F3VeCR/aAffy2nE1blKc
-         jZ5lL/P8IDDL7gudgz8TY6gElXjWnGAdf9DVyfq3M7u5CgQN3wZq4RHgueaC7Birv2y9
-         jqyA==
+        bh=BldK9Vs6IjF0wInmk5nYkJAUfe1JnCd6MJmegFzUQbI=;
+        b=XiuIXCJ9uQIAHXsulJPn5dMYLMBrLA9x0SkPX5PIWafEH2bwFEYWUEv8zfmmTlB9sd
+         9LFpJG83cAdZ8dR5B2H262CEdo/iwSBxcVcpTefrqK3wnRZsj/B3PobqJcFli3GNDj1y
+         ZeK9YgG+UvBRtRjRloqnNfKWKLgWR1u/xRu7uDYlPyy/WRTaU+ubs7VZNlvs7rQcjVQu
+         FV/A+2CiubG2adfC49GthtEkeiQk9UD3If5gAN2ub5OfkmDDaz8c3GdznP+ysZZqXQzK
+         wbaZd0iPhODZ6IpPnFq8HF8RXyom4PnbSGH9wuooG9KMKNvcJ5940y57lGm3Jy9e0D9P
+         hzGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765291028; x=1765895828;
+        d=1e100.net; s=20230601; t=1765291058; x=1765895858;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j7I6ils17hDCA2e6qFPfR6Sw1ycg9esI4gXIyqhs7Ek=;
-        b=awSbp6ixBmmVVW0qhg+QMm1RbjKJ1y+Rsw+VJt/8punqYswSaSQ8X5tNlUr09Shkdv
-         IeGac9F9dNAoqMcuCz/LkSABSznJ5rTdaCgPlrU9Vm6SBWwaF3taJ8JY36QPp6agdAic
-         CKeDrRYAPjWnEOlgLMQ0tcBqxSEsFKm5QiRO8sVfNQw7VtEemlZ/kFLouX9gSkP7ssPF
-         v5arK9yGkhE+NXQ0wYQI/OQVFt5AVUKsjRAV53133E8t+QjJGyUmBsBx2zH5QxFviItd
-         dS4W9ul9Pwz31bD0LcwO0gUQZvi6ldV/+uKAmSDSEWqJO0vLtP7og9oYe0wtVfUVfI33
-         v8fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbCXD6Ksip266TTDvrUOuO4HWBPDTi7ODHkX3oWn4qzb6GzuyY7wX8Am0eNl52MhbnvV5bvnYIqIDB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnVMnU40il5DoiKgIRKJLZ7nuCW/DuFMh9Z2AwywQD/PDFcVuL
-	Ll+JfAYTP2LuXBwbCz+PRe/lX/zISpiO40444+RsU6zjlaeHsvHsddTtzZUs2hQi+iw=
-X-Gm-Gg: ASbGncvksb7hvzaE/UHvtL3W1eCcD30JMRPkseIJirTY4ve7Bfd/HixOvbC319pKT38
-	78X91N2Of7v3MTs0HtS8kjkofb7hDCvbOMHF1kdmfmthR7DUjVeSi6W0DeLiZAdokNWXFmzrV4X
-	SsFW1bzS4G5evVYuQXYb0HU6RqvnAmZ4DGPK4gXvFVoP8aqgEdKDfQP1TptVJ3dkbuMWxzyMCMU
-	EaBCV9/Jx6gshVFMk9yKo7WWXUS/wljns8Eg4di8X38qFwB/tMK1Fp9dKtS3YW+wdGOX5QR+vYT
-	aqGSed7pWak8bbX7IYzewfedfAQbz+sSkvYxxdLpLpRrziCm+LvI2qNNMh4JAbfW9xktsJCtpIw
-	TLMmyt37rmG6vs/djDKczDtTaAbg/Ln59Kyfwnu2n2mtSmtby/IzYzx/Zf/quSZTM72v2ofsWTM
-	UzMYSpb50Z7UQ9PI3Y
-X-Google-Smtp-Source: AGHT+IHOCArQRCixwS/QxD+LfLjq2i2YGAKLD9OGv4He4/CXuZ3NOgcnnS08tJHh+fDElmffX96jyw==
-X-Received: by 2002:a05:600c:a593:b0:479:3a87:208f with SMTP id 5b1f17b1804b1-4793a8720f6mr73856975e9.36.1765291028436;
-        Tue, 09 Dec 2025 06:37:08 -0800 (PST)
+        bh=BldK9Vs6IjF0wInmk5nYkJAUfe1JnCd6MJmegFzUQbI=;
+        b=gZ0dbZ/XnfxnN5/xsJiQRN/uVYShB/RdnuhzHVeuYfR2bXKxaVcIe0KQXDa8nXX8wA
+         oGKTFRlxvTv2GPC/bRQgYP/9D5KMDqw2v0zsklvbsP4d0i16ltfptTwVJOuNKiTpq0vl
+         OkO+ms5Ak0Y8qZ+hE/3ygU+3ihXF1vheiDqDsdA5NZ2IvmO+SzmhFXR9rYomPzxJxT6K
+         jeflqV+uMRBXtmwzJnmsg9NRZAQMuNkDHjigy079iyACS8UcVPuwSgfmfkHDMOPcRqSm
+         LMiFoYlZ9dHCh8BtqEwS/+aelGRD9CBUkdAqLqIF0XWeg583J50lwHlmIirGYYSo1bAI
+         5XKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOTMJu+OkYaVj4gyItYIULNnLeYXzaDqktEslB+15a3uFAq7YqfMHzDLGK4zkqJVvmXN4L2iq6a7aO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2hQSreTqwL+KtZrDWyUOzhu2icgVoQ2c6VHhhIBslr2dfqU1q
+	u2Ev/B9Pb10OAhpGv/toZn8KtKj45bgDIitvfLk9c0XlNz0J39HUEU1PcOALW5cnlH4=
+X-Gm-Gg: ASbGncsNUgCi4VRhHSRPW2QNKBAxPA5pWzMBG/QnI2tEc85CcZWvM5KZAZLffnOq7g1
+	RK5LBkNnDeVlKtDPLU2mpJIphkx0v9pCkOOyUvLMGSpy9PqDTxaxCNlkh4C98sLq7tSwQHM7e7g
+	DJQgNe6WQEIZE+9U+qwRKqpGp8vnMFIqwQDKigLJ6SyPL7yMmKF5ioHqjMMyuU5AOv3+v+6C+Dk
+	gGnPXWl1fa6xam5dte0jlhobU1X3YRTSWweSCeKvPiJLTXQXo5LDwdt9mTBKrLvpCarCkzsD4Im
+	ICXYvzZy+ZncZMZ20xIAdsOLrLFlL0le+ySPcgyjkYlsa3vQ2rVT9rqN4eLjMSJPQzAwwf7LtPK
+	6YwrnYeTc5ADT4pbV3MOindQEzTe0uPlGnRoqnLGxhdHIM6xfNN4kT8Af6EtiCFwU8R7mTJ3765
+	kRWaR2LbnB+3nAVkR1
+X-Google-Smtp-Source: AGHT+IGgI4wHvC+9WKvHMH7aD7uf0OW61Hf4TKPveUTQeZQVMn9uixyJZ3HP6SThVBqnKYajIH9pQQ==
+X-Received: by 2002:a05:600c:6d54:b0:477:991c:a17c with SMTP id 5b1f17b1804b1-47a7f9190e1mr15368165e9.6.1765291057926;
+        Tue, 09 Dec 2025 06:37:37 -0800 (PST)
 Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a7d6228e8sm41449625e9.5.2025.12.09.06.37.07
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a7d367dfbsm21472605e9.2.2025.12.09.06.37.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Dec 2025 06:37:08 -0800 (PST)
-Date: Tue, 9 Dec 2025 17:37:04 +0300
+        Tue, 09 Dec 2025 06:37:37 -0800 (PST)
+Date: Tue, 9 Dec 2025 17:37:34 +0300
 From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-	Aristeu Rozanski <arozansk@redhat.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] EDAC/i5400: Fix snprintf() limit calculation in
- calculate_dimm_size()
-Message-ID: <ccd06b91748e7ed8e33eeb2ff1e7b98700879304.1765290801.git.dan.carpenter@linaro.org>
-References: <cover.1765290801.git.dan.carpenter@linaro.org>
+To: "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, "Luck, Tony" <tony.luck@intel.com>,
+	Aristeu Rozanski <arozansk@redhat.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH] EDAC: fix a limit calculation in calculate_dimm_size()
+Message-ID: <aTg0Lsj_3bMrsrt9@stanley.mountain>
+References: <aTK9mKTphPwuR7qb@stanley.mountain>
+ <CY8PR11MB713404B614F5D046E94DE2A289A7A@CY8PR11MB7134.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -89,46 +92,11 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1765290801.git.dan.carpenter@linaro.org>
+In-Reply-To: <CY8PR11MB713404B614F5D046E94DE2A289A7A@CY8PR11MB7134.namprd11.prod.outlook.com>
 
-The snprintf() can't really overflow because we're writing a max of 42
-bytes to a PAGE_SIZE buffer.  But my static checker complains because
-the limit calculation doesn't take the first 11 space characters that
-we wrote into the buffer into consideration.  Fix this for the sake of
-correctness even though it doesn't affect runtime.
+Thanks for the review.  All good points.  I have resent the patch.
 
-Also delete an earlier "space -= n;" which was not used.
-
-Fixes: 68d086f89b80 ("i5400_edac: improve debug messages to better represent the filled memory")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
-v2: Delete the earlier "space -= n" which is not used.
-    Fix the subject
-
- drivers/edac/i5400_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/edac/i5400_edac.c b/drivers/edac/i5400_edac.c
-index b5cf25905b05..fb49a1d1df11 100644
---- a/drivers/edac/i5400_edac.c
-+++ b/drivers/edac/i5400_edac.c
-@@ -1026,13 +1026,13 @@ static void calculate_dimm_size(struct i5400_pvt *pvt)
- 		space -= n;
- 	}
- 
--	space -= n;
- 	edac_dbg(2, "%s\n", mem_buffer);
- 	p = mem_buffer;
- 	space = PAGE_SIZE;
- 
- 	n = snprintf(p, space, "           ");
- 	p += n;
-+	space -= n;
- 	for (branch = 0; branch < MAX_BRANCHES; branch++) {
- 		n = snprintf(p, space, "       branch %d       | ", branch);
- 		p += n;
--- 
-2.51.0
+regards,
+dan carpenter
 
 
