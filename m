@@ -1,124 +1,206 @@
-Return-Path: <linux-edac+bounces-5590-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5591-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F80DCEA2FA
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Dec 2025 17:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B880CEB2BD
+	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 04:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 287F830222D3
-	for <lists+linux-edac@lfdr.de>; Tue, 30 Dec 2025 16:38:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2207D304E176
+	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 03:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFE631A807;
-	Tue, 30 Dec 2025 16:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291DA274B39;
+	Wed, 31 Dec 2025 03:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="B9eS9G8c"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="NV4p3loP"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88152288F7;
-	Tue, 30 Dec 2025 16:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D562701D1;
+	Wed, 31 Dec 2025 03:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767112678; cv=none; b=TKrpOHR9AGEQ1rIWvPR+tvvuCHZgyfHyvZe97VJSCqtsyJPiy8s6utURFPhPmf9Ym+iRt/Jfw0px5oNmeo/jjdzZIrlt3FJGj8z4otPCLHULOcWW/LQxvOyON52cuUJ8XXfukbym/KoW5VYWBzfOGWmgvLfGYM1yLJX+ZZ6ATlo=
+	t=1767150353; cv=none; b=FJXRsw7z2OUGVjEEmv/9v2CzJhVH5jWaEakios7j2qCeTWumbLJMNslcG+ndTlDJTJEHSHYjfqkBj0uHDUUL/t0seeWYIy7sgYuMyGj7mfNTPw1JUJZZI9qqMwNWuw/BB1QkkVBh43ympJIM1hfKBCh6H80beSAYKAwYBZsQuCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767112678; c=relaxed/simple;
-	bh=witkOEmaJJa6AMar4fmkKBviZTDgklWbl48MEC0jFZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sFCBzF/vjKp5xE1yEBuWC07uixqDhLEmjYN+5Ylvzn9QHWDCn+qqPz3MToyujKBIkJ+Czf+bFEsF3IxeuWSE8xOhAYkXVeCC3y9gHLspaHs3tn9PWUSfOsuAXJElecUSRMvbyH7M66gQ7x+sYZIcxZZf/QU25mzJ3MMtTvElwTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=B9eS9G8c; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7193640E01A9;
-	Tue, 30 Dec 2025 16:37:47 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 3f0S4RaI0LrB; Tue, 30 Dec 2025 16:37:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1767112658; bh=NZ+rojh969nkpdOgRSHifcYt18me/f0kucNgJpB7KNI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B9eS9G8cdm+fRHqN0BZYnq13q1KcNBWgYhB282bpvos8ydwlVCswiHIb51FHhh4qj
-	 m1dVBkvBVhIGSm+6lMPUP45Bwn2L4+BBumfglI352v64M05uUh2uDtsm1YGnHoJMUT
-	 wMghrqrEGD4Uz6na4VRhtyb1T8fr6pgTcPYxaYqYs1xro5ReIGTO1sv7fR6FAzaQ6K
-	 /+L5JPMakxvCRSu9in5Ez2V3A2lhgArstQzAdj+Z9x+OclsoQTjqrCTbIKLgU4ucOI
-	 vuwxUdhpdG5DZ4pFOpc+iauakuOVdGsFt84PvEf+kSKj8OcGYekJtohB7Zyay3HtlX
-	 +brCos0TiDqXbQIQXmoddviabdt2m/Wr2q1XiR/2yFwDwOhO/YZKQuCh8+lwm5IxcJ
-	 tUGh3kTF6hhraZCUuKdtLPt655FnWqJIOE9rU48Z4Ta98KAGyEet8Hv47KfJDQxDl4
-	 +GTJgn0plx34DEys2vxcqRh/SY1O80tZB6bhL4Dt+6VltkjD5mrMGNsCk5l55DpN2G
-	 etTNB+JXSGMhBHhpoCQN2RKEw6birA9+/7xSOppB4ArNSVc47VhzvHVJ0gutJ8CL3K
-	 PqrwsRN8U34JBum5lqU4VeYLlzujOI/vbavEirrAL8k3hlkDFERfTK+N+YTf9116/Z
-	 wASSTJtRqF+Kf2Yjo66YT60s=
-Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 7267040E0200;
-	Tue, 30 Dec 2025 16:37:27 +0000 (UTC)
-Date: Tue, 30 Dec 2025 17:37:19 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>, Tony Luck <tony.luck@intel.com>,
-	Avadhut Naik <avadhut.naik@amd.com>, Arnd Bergmann <arnd@arndb.de>,
-	Ingo Molnar <mingo@kernel.org>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Thorsten Blum <thorsten.blum@linux.dev>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd64: avoid -Wformat-security warning
-Message-ID: <20251230163719.GAaVP_v7oYD3lEEcyu@fat_crate.local>
-References: <20251204100231.1034557-1-arnd@kernel.org>
+	s=arc-20240116; t=1767150353; c=relaxed/simple;
+	bh=fvm7Pr8ChlF9fMq8hHGbH/R7KbUFKKH+LxpSVw3aPNo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fVl+EuoaLzHu3L8JmXuNZDupotbptovt7sRLqFWo+NCD73nGde65+5TTO9pcAVGAn4c5Ye0slqBnJXgao9MeRodWz/mhAw+n1Sqbb02Ljas87eGiJ0cLo8kSGoAlzKEDAdpYsZ6Eur/0ApOGiIMHTP2I4moOe96Eac3+fpJ/jJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=NV4p3loP; arc=none smtp.client-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1767150339; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=SN48A7LMVLnJ6v/o+xWlCwiKyMcSY/eXb1mrlaUXvtI=;
+	b=NV4p3loPDqkZ7+D92eyf8c1RQXK9MqOjjV4x5+/hrJcvHa1gRVv3M/lMUNlgMjf/dbWuI+avCJt16T1X26doUw28Ffljx6zhBU7ukA05oUN8swUT3MvbCcWEEn1aN6BFc8wTQp3bra91Q9g1XYKoMdQX1Od/tVGVAk7vru9Oe3k=
+Received: from localhost(mailfrom:tianruidong@linux.alibaba.com fp:SMTPD_---0Ww.grOC_1767150333 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 31 Dec 2025 11:05:38 +0800
+From: Ruidong Tian <tianruidong@linux.alibaba.com>
+To: dan.j.williams@intel.com,
+	vishal.l.verma@intel.com,
+	dave.jiang@intel.com,
+	tony.luck@intel.com,
+	bp@alien8.de,
+	linux-cxl@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	xueshuai@linux.alibaba.com
+Cc: Ruidong Tian <tianruidong@linux.alibaba.com>
+Subject: [RFC PATCH v2] device/dax: Allow MCE recovery when accessing PFN metadata
+Date: Wed, 31 Dec 2025 11:05:26 +0800
+Message-Id: <20251231030526.108309-1-tianruidong@linux.alibaba.com>
+X-Mailer: git-send-email 2.33.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251204100231.1034557-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 04, 2025 at 11:02:25AM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Using a variable as a format string causes a (default-disabled) warning:
-> 
-> drivers/edac/amd64_edac.c: In function 'per_family_init':
-> drivers/edac/amd64_edac.c:3914:17: error: format not a string literal and no format arguments [-Werror=format-security]
->  3914 |                 scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), tmp_name);
->       |                 ^~~~~~~~~
-> 
-> The code here is safe, but in order to enable the warning by default in
-> the future, change this instance to pass the name indirectly.
-> 
-> Fixes: e9abd990aefd ("EDAC/amd64: Generate ctl_name string at runtime")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/edac/amd64_edac.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index 2391f3469961..63fca0ee2c23 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -3911,7 +3911,7 @@ static int per_family_init(struct amd64_pvt *pvt)
->  	}
->  
->  	if (tmp_name)
-> -		scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), tmp_name);
-> +		scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), "%s", tmp_name);
->  	else
->  		scnprintf(pvt->ctl_name, sizeof(pvt->ctl_name), "F%02Xh_M%02Xh",
->  			  pvt->fam, pvt->model);
-> -- 
+Both fsdax and devdax modes require significant space to store Page Frame
+Number (PFN) metadata (struct page). For a 1TiB namespace, approximately
+17.18GiB of metadata is needed[0]. As namespace sizes scale, hardware
+memory errors within this metadata region become increasingly frequent.
 
-Applied, thanks.
+Currently, the kernel treats any access to corrupted PFN metadata as an
+unrecoverable event, leading to an immediate system panic. However, in
+DAX scenarios (e.g., CXL-attached memory), the impact of metadata
+corruption is logically confined to the physical device backing that
+specific memory range.
 
+Instead of a global panic, the kernel can ideally localize the failure.
+By allowing the affected DAX memory range to be offlined or the specific
+device to be decommissioned, we can limit the blast radius of hardware
+errors. This enables other processes to migrate or exit gracefully
+rather than being terminated by a system-wide crash.
+
+Reproduce and testing:
+1. Inject error to PFN metadata
+2. mmap and read
+
+Before apply this patch, kernel will panic:
+  CPU 120: Machine Check Exception: f Bank 1: bd80000000100134
+  RIP 10:<ffffffff8598300e> {dax_set_mapping.isra.0+0xce/0x140}
+  TSC ee24b9e2d5 ADDR b213398000 MISC 86 PPIN 6deeb6484732971d
+  PROCESSOR 0:a06d1 TIME 1765336050 SOCKET 0 APIC b1 microcode 10003f3
+  Run the above through 'mcelog --ascii'
+  Machine check: Data load in unrecoverable area of kernel
+Kernel panic - not syncing: Fatal local machine check
+
+After apply this patch:
+User application receive SIGBUS, system still alive.
+
+[0]: https://docs.pmem.io/ndctl-user-guide/managing-namespaces#fsdax-and-devdax-capacity-considerations
+
+Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
+---
+ drivers/dax/dax-private.h | 25 +++++++++++++++++++++++++
+ drivers/dax/device.c      | 20 ++++++++++++++++----
+ 2 files changed, 41 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h
+index 0867115aeef2..4fd3065ae3ba 100644
+--- a/drivers/dax/dax-private.h
++++ b/drivers/dax/dax-private.h
+@@ -129,4 +129,29 @@ static inline bool dax_align_valid(unsigned long align)
+ 	return align == PAGE_SIZE;
+ }
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
++
++#ifndef copy_mc_to_kernel
++static inline int dax_test_page_mc(const struct page *page)
++{
++	return 0;
++}
++static inline int dax_test_folio_mc(const struct folio *page)
++{
++	return 0;
++}
++#else
++#include <linux/uaccess.h>
++static inline int dax_test_page_mc(const struct page *page)
++{
++	struct page _p;
++
++	return copy_mc_to_kernel(&_p, page, sizeof(struct page));
++}
++static inline int dax_test_folio_mc(const struct folio *folio)
++{
++	struct folio _f;
++
++	return copy_mc_to_kernel(&_f, folio, sizeof(struct folio));
++}
++#endif
+ #endif
+diff --git a/drivers/dax/device.c b/drivers/dax/device.c
+index 22999a402e02..cafe802aacb2 100644
+--- a/drivers/dax/device.c
++++ b/drivers/dax/device.c
+@@ -80,7 +80,7 @@ __weak phys_addr_t dax_pgoff_to_phys(struct dev_dax *dev_dax, pgoff_t pgoff,
+ 	return -1;
+ }
+ 
+-static void dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
++static int dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
+ 			      unsigned long fault_size)
+ {
+ 	unsigned long i, nr_pages = fault_size / PAGE_SIZE;
+@@ -95,6 +95,13 @@ static void dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
+ 	pgoff = linear_page_index(vmf->vma,
+ 			ALIGN_DOWN(vmf->address, fault_size));
+ 
++	for (i = 0; i < nr_pages; i++) {
++		struct page *p = pfn_to_page(pfn + i);
++
++		if (dax_test_page_mc(p) || dax_test_folio_mc(page_folio(p)))
++			return -EFAULT;
++	}
++
+ 	for (i = 0; i < nr_pages; i++) {
+ 		struct folio *folio = pfn_folio(pfn + i);
+ 
+@@ -104,6 +111,8 @@ static void dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
+ 		folio->mapping = filp->f_mapping;
+ 		folio->index = pgoff + i;
+ 	}
++
++	return 0;
+ }
+ 
+ static vm_fault_t __dev_dax_pte_fault(struct dev_dax *dev_dax,
+@@ -134,7 +143,8 @@ static vm_fault_t __dev_dax_pte_fault(struct dev_dax *dev_dax,
+ 
+ 	pfn = PHYS_PFN(phys);
+ 
+-	dax_set_mapping(vmf, pfn, fault_size);
++	if (dax_set_mapping(vmf, pfn, fault_size))
++		return VM_FAULT_SIGBUS;
+ 
+ 	return vmf_insert_page_mkwrite(vmf, pfn_to_page(pfn),
+ 					vmf->flags & FAULT_FLAG_WRITE);
+@@ -178,7 +188,8 @@ static vm_fault_t __dev_dax_pmd_fault(struct dev_dax *dev_dax,
+ 
+ 	pfn = PHYS_PFN(phys);
+ 
+-	dax_set_mapping(vmf, pfn, fault_size);
++	if (dax_set_mapping(vmf, pfn, fault_size))
++		return VM_FAULT_SIGBUS;
+ 
+ 	return vmf_insert_folio_pmd(vmf, page_folio(pfn_to_page(pfn)),
+ 				vmf->flags & FAULT_FLAG_WRITE);
+@@ -224,7 +235,8 @@ static vm_fault_t __dev_dax_pud_fault(struct dev_dax *dev_dax,
+ 
+ 	pfn = PHYS_PFN(phys);
+ 
+-	dax_set_mapping(vmf, pfn, fault_size);
++	if (dax_set_mapping(vmf, pfn, fault_size))
++		return VM_FAULT_SIGBUS;
+ 
+ 	return vmf_insert_folio_pud(vmf, page_folio(pfn_to_page(pfn)),
+ 				vmf->flags & FAULT_FLAG_WRITE);
 -- 
-Regards/Gruss,
-    Boris.
+2.33.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
