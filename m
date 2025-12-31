@@ -1,206 +1,330 @@
-Return-Path: <linux-edac+bounces-5591-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5592-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B880CEB2BD
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 04:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 331E9CEC04B
+	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 14:16:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2207D304E176
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 03:05:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 064D53011ED4
+	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 13:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291DA274B39;
-	Wed, 31 Dec 2025 03:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94EB1270EC1;
+	Wed, 31 Dec 2025 13:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="NV4p3loP"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FdAEpBzq"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D562701D1;
-	Wed, 31 Dec 2025 03:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966203A1E63;
+	Wed, 31 Dec 2025 13:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767150353; cv=none; b=FJXRsw7z2OUGVjEEmv/9v2CzJhVH5jWaEakios7j2qCeTWumbLJMNslcG+ndTlDJTJEHSHYjfqkBj0uHDUUL/t0seeWYIy7sgYuMyGj7mfNTPw1JUJZZI9qqMwNWuw/BB1QkkVBh43ympJIM1hfKBCh6H80beSAYKAwYBZsQuCw=
+	t=1767186973; cv=none; b=rzlqBsL3ctj6PMfuxdsGFBSeP2vH0qrl4zJGoiVeIJSbSntb91xhibqlOHsxfdhBO5cok1RSL80/8cY2zDpSyv11Vkbq1Me579sYcU4huqtiC3kq4vS2+xINGyLARZwynGFvLOofIy18YzxXsGC5GJUEg8fkQFA1cKdOppIf0Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767150353; c=relaxed/simple;
-	bh=fvm7Pr8ChlF9fMq8hHGbH/R7KbUFKKH+LxpSVw3aPNo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fVl+EuoaLzHu3L8JmXuNZDupotbptovt7sRLqFWo+NCD73nGde65+5TTO9pcAVGAn4c5Ye0slqBnJXgao9MeRodWz/mhAw+n1Sqbb02Ljas87eGiJ0cLo8kSGoAlzKEDAdpYsZ6Eur/0ApOGiIMHTP2I4moOe96Eac3+fpJ/jJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=NV4p3loP; arc=none smtp.client-ip=115.124.30.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1767150339; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=SN48A7LMVLnJ6v/o+xWlCwiKyMcSY/eXb1mrlaUXvtI=;
-	b=NV4p3loPDqkZ7+D92eyf8c1RQXK9MqOjjV4x5+/hrJcvHa1gRVv3M/lMUNlgMjf/dbWuI+avCJt16T1X26doUw28Ffljx6zhBU7ukA05oUN8swUT3MvbCcWEEn1aN6BFc8wTQp3bra91Q9g1XYKoMdQX1Od/tVGVAk7vru9Oe3k=
-Received: from localhost(mailfrom:tianruidong@linux.alibaba.com fp:SMTPD_---0Ww.grOC_1767150333 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 31 Dec 2025 11:05:38 +0800
-From: Ruidong Tian <tianruidong@linux.alibaba.com>
-To: dan.j.williams@intel.com,
-	vishal.l.verma@intel.com,
-	dave.jiang@intel.com,
-	tony.luck@intel.com,
-	bp@alien8.de,
-	linux-cxl@vger.kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	xueshuai@linux.alibaba.com
-Cc: Ruidong Tian <tianruidong@linux.alibaba.com>
-Subject: [RFC PATCH v2] device/dax: Allow MCE recovery when accessing PFN metadata
-Date: Wed, 31 Dec 2025 11:05:26 +0800
-Message-Id: <20251231030526.108309-1-tianruidong@linux.alibaba.com>
-X-Mailer: git-send-email 2.33.1
+	s=arc-20240116; t=1767186973; c=relaxed/simple;
+	bh=k1fRvVUAkh5UE0V1MpZkNCA/pRyeOKOo0AQ7lBU6Mlo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i8i5dV2epxIMOr46m254ml+LaxavaN/E5A1YulS6obqNYmyGws0PTEhICvgUx1NrbuZ1bplEtklBVsP/Lv80Hu5wScWJhfgVfPYLmBfwcUfDPLid8qbT8a6bVRJCJyiJIXA3lYqQLWSKKCfhJg/5jPg+sStCfbZ4MkmQqfFT9ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FdAEpBzq; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0B67940E0173;
+	Wed, 31 Dec 2025 13:16:06 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id LDoAWs3CqQvW; Wed, 31 Dec 2025 13:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1767186957; bh=ajz8Fd6mcoNmw+/d2cyXO5AEu5YjYnv2PPa+YT7Zvjo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FdAEpBzqldA0FeXm7sNHVBuhVYJiTvPHL8qp3YgFIMdyNKrUM7E3jDKeP66qBGdiQ
+	 jAauXPQde7d9O7MyizDlzj+ko9TLoc6hHle7MfG+0ycz/cPN9PtrOqpCnjalh8vdoC
+	 VFRkDyxO0vbMBllQseNvc1I3BnqipkkG6k2h4g4VHE6CkXW2Al5mgu5sXPX0LSUXEN
+	 +01IR9nbFwYgR+2LWiYOQW3CPtwu6YbyubvSPl2NU6qazF9Jc20+R2Ww4L+xflXVwO
+	 4d4H8eK5DHGFMmX+UJMBP3VvgbePoIC4Wuo3RLDyNT81j3SZE2DMnM26NFtJDUGwKF
+	 6/lgoRUDLfr7z/FZ/dBRtja5JedYEhKUCiC9zJDAZDKN8sBwrzhukKffzSvWuD7Df8
+	 wzgnpHTQ6DyloW7kqRDoowGjtsfhQrJnwlOUjm73dsYvi5fyLlGPGfU9JUMQ8xyzLP
+	 RFsVC1jiRTk3ygwQYZ56qnOaW658K7DaCaa2CGvtfONexV0i7bZO44yT7Oi1ZOjwx3
+	 hg51W1GBPtafHotFEqNZ0TN/Co8lYGQYYUwjpYKFkd6twLzs5PZ9P7D9x9/71t0jH3
+	 DNEMa35/AcIzGoIJsLcmx+QOrSecqmsXtCatFmNVaICo0ujuxcQ3xpmFB2/UgnFJQ9
+	 0fkXBj7biGgyxIfe5fnivkXU=
+Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 2077240E01A9;
+	Wed, 31 Dec 2025 13:15:21 +0000 (UTC)
+Date: Wed, 31 Dec 2025 14:15:12 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: "rafael@kernel.org" <rafael@kernel.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"rppt@kernel.org" <rppt@kernel.org>,
+	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"lenb@kernel.org" <lenb@kernel.org>,
+	"leo.duran@amd.com" <leo.duran@amd.com>,
+	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Linuxarm <linuxarm@huawei.com>,
+	"rientjes@google.com" <rientjes@google.com>,
+	"jiaqiyan@google.com" <jiaqiyan@google.com>,
+	"Jon.Grimm@amd.com" <Jon.Grimm@amd.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"jthoughton@google.com" <jthoughton@google.com>,
+	"somasundaram.a@hpe.com" <somasundaram.a@hpe.com>,
+	"erdemaktas@google.com" <erdemaktas@google.com>,
+	"pgonda@google.com" <pgonda@google.com>,
+	"duenwen@google.com" <duenwen@google.com>,
+	"gthelen@google.com" <gthelen@google.com>,
+	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
+	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
+	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>,
+	tanxiaofei <tanxiaofei@huawei.com>,
+	"Zengtao (B)" <prime.zeng@hisilicon.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	"kangkang.shen@futurewei.com" <kangkang.shen@futurewei.com>,
+	wanghuiqiang <wanghuiqiang@huawei.com>
+Subject: Re: [PATCH v13 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
+ table
+Message-ID: <20251231131512.GBaVUh4NSWqvr2xhbM@fat_crate.local>
+References: <20251121182825.237-1-shiju.jose@huawei.com>
+ <20251121182825.237-2-shiju.jose@huawei.com>
+ <20251125073627.GLaSVce7hBqGH1a3ni@fat_crate.local>
+ <fd4e4419b6d54c69bb4a1dde0273ee51@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fd4e4419b6d54c69bb4a1dde0273ee51@huawei.com>
 
-Both fsdax and devdax modes require significant space to store Page Frame
-Number (PFN) metadata (struct page). For a 1TiB namespace, approximately
-17.18GiB of metadata is needed[0]. As namespace sizes scale, hardware
-memory errors within this metadata region become increasingly frequent.
+On Tue, Nov 25, 2025 at 01:28:19PM +0000, Shiju Jose wrote:
+> I will change to depends. I followed the existing CONFIG ACPI_CPPC_LIB. 
 
-Currently, the kernel treats any access to corrupted PFN metadata as an
-unrecoverable event, leading to an immediate system panic. However, in
-DAX scenarios (e.g., CXL-attached memory), the impact of metadata
-corruption is logically confined to the physical device backing that
-specific memory range.
+Read the "Note:" under 
 
-Instead of a global panic, the kernel can ideally localize the failure.
-By allowing the affected DAX memory range to be offlined or the specific
-device to be decommissioned, we can limit the blast radius of hardware
-errors. This enables other processes to migrate or exit gracefully
-rather than being terminated by a system-wide crash.
+"- reverse dependencies: "select" <symbol> ["if" <expr>]"
 
-Reproduce and testing:
-1. Inject error to PFN metadata
-2. mmap and read
+here pls: Documentation/kbuild/kconfig-language.rst
 
-Before apply this patch, kernel will panic:
-  CPU 120: Machine Check Exception: f Bank 1: bd80000000100134
-  RIP 10:<ffffffff8598300e> {dax_set_mapping.isra.0+0xce/0x140}
-  TSC ee24b9e2d5 ADDR b213398000 MISC 86 PPIN 6deeb6484732971d
-  PROCESSOR 0:a06d1 TIME 1765336050 SOCKET 0 APIC b1 microcode 10003f3
-  Run the above through 'mcelog --ascii'
-  Machine check: Data load in unrecoverable area of kernel
-Kernel panic - not syncing: Fatal local machine check
+Now, some of the Kconfig symbols:
 
-After apply this patch:
-User application receive SIGBUS, system still alive.
-
-[0]: https://docs.pmem.io/ndctl-user-guide/managing-namespaces#fsdax-and-devdax-capacity-considerations
-
-Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
----
- drivers/dax/dax-private.h | 25 +++++++++++++++++++++++++
- drivers/dax/device.c      | 20 ++++++++++++++++----
- 2 files changed, 41 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h
-index 0867115aeef2..4fd3065ae3ba 100644
---- a/drivers/dax/dax-private.h
-+++ b/drivers/dax/dax-private.h
-@@ -129,4 +129,29 @@ static inline bool dax_align_valid(unsigned long align)
- 	return align == PAGE_SIZE;
- }
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-+
-+#ifndef copy_mc_to_kernel
-+static inline int dax_test_page_mc(const struct page *page)
-+{
-+	return 0;
-+}
-+static inline int dax_test_folio_mc(const struct folio *page)
-+{
-+	return 0;
-+}
-+#else
-+#include <linux/uaccess.h>
-+static inline int dax_test_page_mc(const struct page *page)
-+{
-+	struct page _p;
-+
-+	return copy_mc_to_kernel(&_p, page, sizeof(struct page));
-+}
-+static inline int dax_test_folio_mc(const struct folio *folio)
-+{
-+	struct folio _f;
-+
-+	return copy_mc_to_kernel(&_f, folio, sizeof(struct folio));
-+}
-+#endif
- #endif
-diff --git a/drivers/dax/device.c b/drivers/dax/device.c
-index 22999a402e02..cafe802aacb2 100644
---- a/drivers/dax/device.c
-+++ b/drivers/dax/device.c
-@@ -80,7 +80,7 @@ __weak phys_addr_t dax_pgoff_to_phys(struct dev_dax *dev_dax, pgoff_t pgoff,
- 	return -1;
- }
+diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+index 2322b0470d07..7f846c22fc30 100644
+--- a/drivers/acpi/Kconfig
++++ b/drivers/acpi/Kconfig
+@@ -295,7 +295,7 @@ config ACPI_CPPC_LIB
  
--static void dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
-+static int dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
- 			      unsigned long fault_size)
+ config ACPI_RAS2
+        bool "ACPI RAS2 driver"
+-       depends on AUXILIARY_BUS
++       select AUXILIARY_BUS
+        depends on MAILBOX
+        depends on PCC
+        help
+diff --git a/drivers/ras/Kconfig b/drivers/ras/Kconfig
+index dfc3a899280e..a1e6aed8bcc8 100644
+--- a/drivers/ras/Kconfig
++++ b/drivers/ras/Kconfig
+@@ -51,7 +51,7 @@ config MEM_ACPI_RAS2
+        depends on ACPI_RAS2
+        depends on EDAC
+        depends on EDAC_SCRUB
+-       depends on NUMA_KEEP_MEMINFO
++       select NUMA_KEEP_MEMINFO
+        help
+          The driver binds to the auxiliary device added by the ACPI RAS2
+          feature table parser. The driver uses a PCC channel subspace to
+
+are made to be selectable only and so you should select them because they're
+non-visible. Just remember that blindly selecting things is evil.
+
+
+> >> +			sspcc->last_cmd, sspcc->pcc_id);
+> >> +		status &= ~PCC_STATUS_ERROR;
+> >> +		writew_relaxed(status, &gen_comm_base->status);
+> >> +		return -EIO;
+> >> +	}
+> >> +
+> >> +	cap_status = readw_relaxed(&gen_comm_base->set_caps_status);
+> >
+> >Is that register read always successful or you need to handle errors here too?
+> 
+> Return value of 'set capability status'  is decoded and return error code on error case
+> in the below function call  'return decode_cap_error(cap_status)'
+
+Yah, this is not a common coding pattern. What you do is something like this:
+
+diff --git a/drivers/acpi/ras2.c b/drivers/acpi/ras2.c
+index 627895fee143..4caef7f2c4ea 100644
+--- a/drivers/acpi/ras2.c
++++ b/drivers/acpi/ras2.c
+@@ -85,7 +85,6 @@ static int decode_cap_error(u32 cap_status)
+ static int check_pcc_chan(struct ras2_sspcc *sspcc)
  {
- 	unsigned long i, nr_pages = fault_size / PAGE_SIZE;
-@@ -95,6 +95,13 @@ static void dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
- 	pgoff = linear_page_index(vmf->vma,
- 			ALIGN_DOWN(vmf->address, fault_size));
+        struct acpi_ras2_shmem __iomem *gen_comm_base = sspcc->comm_addr;
+-       u32 cap_status;
+        u16 status;
+        int rc;
  
-+	for (i = 0; i < nr_pages; i++) {
-+		struct page *p = pfn_to_page(pfn + i);
-+
-+		if (dax_test_page_mc(p) || dax_test_folio_mc(page_folio(p)))
-+			return -EFAULT;
-+	}
-+
- 	for (i = 0; i < nr_pages; i++) {
- 		struct folio *folio = pfn_folio(pfn + i);
+@@ -114,9 +113,11 @@ static int check_pcc_chan(struct ras2_sspcc *sspcc)
+                return -EIO;
+        }
  
-@@ -104,6 +111,8 @@ static void dax_set_mapping(struct vm_fault *vmf, unsigned long pfn,
- 		folio->mapping = filp->f_mapping;
- 		folio->index = pgoff + i;
- 	}
+-       cap_status = readw_relaxed(&gen_comm_base->set_caps_status);
++       rc = decode_cap_error(readw_relaxed(&gen_comm_base->set_caps_status));
 +
-+	return 0;
+        writew_relaxed(0x0, &gen_comm_base->set_caps_status);
+-       return decode_cap_error(cap_status);
++
++       return rc;
  }
- 
- static vm_fault_t __dev_dax_pte_fault(struct dev_dax *dev_dax,
-@@ -134,7 +143,8 @@ static vm_fault_t __dev_dax_pte_fault(struct dev_dax *dev_dax,
- 
- 	pfn = PHYS_PFN(phys);
- 
--	dax_set_mapping(vmf, pfn, fault_size);
-+	if (dax_set_mapping(vmf, pfn, fault_size))
-+		return VM_FAULT_SIGBUS;
- 
- 	return vmf_insert_page_mkwrite(vmf, pfn_to_page(pfn),
- 					vmf->flags & FAULT_FLAG_WRITE);
-@@ -178,7 +188,8 @@ static vm_fault_t __dev_dax_pmd_fault(struct dev_dax *dev_dax,
- 
- 	pfn = PHYS_PFN(phys);
- 
--	dax_set_mapping(vmf, pfn, fault_size);
-+	if (dax_set_mapping(vmf, pfn, fault_size))
-+		return VM_FAULT_SIGBUS;
- 
- 	return vmf_insert_folio_pmd(vmf, page_folio(pfn_to_page(pfn)),
- 				vmf->flags & FAULT_FLAG_WRITE);
-@@ -224,7 +235,8 @@ static vm_fault_t __dev_dax_pud_fault(struct dev_dax *dev_dax,
- 
- 	pfn = PHYS_PFN(phys);
- 
--	dax_set_mapping(vmf, pfn, fault_size);
-+	if (dax_set_mapping(vmf, pfn, fault_size))
-+		return VM_FAULT_SIGBUS;
- 
- 	return vmf_insert_folio_pud(vmf, page_folio(pfn_to_page(pfn)),
- 				vmf->flags & FAULT_FLAG_WRITE);
--- 
-2.33.1
 
+
+> >> +	 */
+> >> +	if (cmd == PCC_CMD_EXEC_RAS2 || sspcc->pcc_mrtt) {
+> >> +		rc = check_pcc_chan(sspcc);
+> >> +		if (sspcc->pcc_mrtt)
+> >> +			sspcc->last_cmd_cmpl_time = ktime_get();
+> >> +	}
+> >> +
+> >> +	if (pcc_channel->mbox->txdone_irq)
+> >> +		mbox_chan_txdone(pcc_channel, rc);
+> >> +	else
+> >> +		mbox_client_txdone(pcc_channel, rc);
+> >> +
+> >> +	return rc < 0 ? rc : 0;
+> >
+> >So you mean simply
+> >
+> >	return rc;
+> >
+> >no? rc can be 0 too so what's the point of the ternary expression?
+> 
+> This was added to handle the case rc = check_pcc_chan(sspcc); is not called
+> and last rc is returned from mbox_send_message() call because mbox_send_message()
+> return non-negative value for success and negative value for failure as per the documentation.
+> https://elixir.bootlin.com/linux/v6.18-rc7/source/drivers/mailbox/mailbox.c#L241
+
+Why do you keep pointing to some indexing service? What's wrong with simply
+pasting the code snippet you mean so that I can find it myself too?
+
+Anyway, what's wrong with:
+
+        /* Ring doorbell */
+        rc = mbox_send_message(pcc_channel, &cmd);
+        if (rc < 0) {
+                dev_warn(ras2_ctx->dev,
+                         "Error sending PCC mbox message cmd: 0x%x, rc:%d\n", cmd, rc);
+                return rc;
+        }
+
+Also, cmds in hex please.
+
+> >And what's the logic here? You'd capture rc above from check_pcc_chan() and
+> >even if it is != 0, you'd pass it into the mbox* functions? I guess that weirdness
+> >deserves a comment...
+> 
+> Both mbox_chan_txdone() and  mbox_client_txdone() required the status of the
+> last transmission as second argument.
+
+Yah, comment please!
+
+s> >
+> >> +{
+> >> +	struct acpi_ras2_pcc_desc *pcc_desc_list;
+> >> +	struct ras2_mem_ctx *ras2_ctx;
+> >> +	u16 i, count;
+> >> +
+> >> +	if (ras2_tab->header.length < sizeof(*ras2_tab)) {
+> >> +		pr_warn(FW_WARN "ACPI RAS2 table present but broken (too
+> >short, size=%u)\n",
+> >> +			ras2_tab->header.length);
+> >> +		return;
+> >> +	}
+> >> +
+> >> +	if (!ras2_tab->num_pcc_descs) {
+> >> +		pr_warn(FW_WARN "No PCC descs in ACPI RAS2 table\n");
+> >> +		return;
+> >> +	}
+> >
+> >You need to sanity-check the number of descs so that the below allocation
+> >doesn't go nuts.
+> Sorry, can you give more information?
+> I am wondering the above check  'if (!ras2_tab->num_pcc_descs)' { } is not enough? 
+
+You've done what I wanted:
+
+        if (!ras2_tab->num_pcc_descs || ras2_tab->num_pcc_descs > RAS2_MAX_NUM_PCC_DESCS) {
+                pr_warn(FW_WARN "No/Invalid number of PCC descs(%d) in ACPI RAS2 table\n",
+                        ras2_tab->num_pcc_descs);
+                return -EINVAL;
+        }
+
+The RAS2_MAX_NUM_PCC_DESCS thing.
+
+> >Also, what's the point of that pctx_list array at all? So that you can do uninit on
+> >the ->adev in case you encounter a failure?
+> Local variable ras2_ctx  is updated when calling add_aux_device() in each iteration as
+> add_aux_device()  allocates memory for struct ras2_mem_ctx  for the corresponding PCC
+> descriptor in the RAS2 table. 
+> Thus storing pointer to each ras2_ctx  in pctx_list[] to uninit all the previously added auxiliary devices
+> using auxiliary_device_uninit(->adev); when encounter a failure in a later iteration.   
+
+Looks weird. Lemme look at your new submission and see whether I can make it
+better.
+
+
+> >> +		return;
+> >> +	}
+> >> +
+> >> +	acpi_ras2_parse(ras2_tab);
+> >
+> >This function does some table sanity checking and warns. What it should do is fail
+> >the driver load if the table is broken.
+> 
+> Sure. 
+> If acpi_ras2_parse() and thus acpi_ras2_init() return error, can you guide
+> how to handle this error in acpi_init(void) where  acpi_ras2_init() is called?  
+> Something similar to this below,
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c index b02ceb2837c6..8b4fc572a05b 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -1475,7 +1475,12 @@ static int __init acpi_init(void)
+>         acpi_debugger_init();
+>         acpi_setup_sb_notify_handler();
+>         acpi_viot_init();
+> -       acpi_ras2_init();
+> +       result = acpi_ras2_init();
+> +       if (result) {
+> +               kobject_put(acpi_kobj);
+> +               disable_acpi();
+
+No, you certainly won't disable ACPI if that RAS2 thing parsing fails. What
+you should do is not allow the RAS2 memory driver to load.
+
+Lemme look at your new version.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
