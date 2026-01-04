@@ -1,87 +1,71 @@
-Return-Path: <linux-edac+bounces-5593-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5594-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62B61CEC372
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 17:08:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B18EECF0B94
+	for <lists+linux-edac@lfdr.de>; Sun, 04 Jan 2026 08:40:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 796C53013380
-	for <lists+linux-edac@lfdr.de>; Wed, 31 Dec 2025 16:08:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CAE6930056EC
+	for <lists+linux-edac@lfdr.de>; Sun,  4 Jan 2026 07:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A9E5277C9A;
-	Wed, 31 Dec 2025 16:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681DC2EB845;
+	Sun,  4 Jan 2026 07:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DDJplSYz"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="UbrFyJTu"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9455F27AC54;
-	Wed, 31 Dec 2025 16:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935512C0F83;
+	Sun,  4 Jan 2026 07:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767197285; cv=none; b=tVqo/2h+F82jy2byiyfTQOja8KM/11phG0NCFOlW3321GgOg4q/w4ZLQUBSExcuR72dgM2mFo+F0PGeZYtwH24GNbm/3gbaIPm6SrwJK/4Ln94H44ohcSnnOul6es+3/cw+oZFzdFUL9Z8F3sylNC+wWAVHgXHMLzKOubaUN3Wg=
+	t=1767512424; cv=none; b=sdrNyEChyiCu53bw0iA3AUNuBCDmOwG0Pae+rBRLSQLVsHZVTZ8xAI9mIn40sXJQ2e71477UAZRvY+n7KNvHa35UqrAYlQsxWoOii41+U8uXVUStNRaiFW4T22sND3wiDXac89kbYQzaiL74q0ntPCpaTUDu4gUvIlXw67dA9i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767197285; c=relaxed/simple;
-	bh=uF4mMitOhmGrYZZWgBHiG2QbuoA0AIgo3LSAqT7kU9M=;
+	s=arc-20240116; t=1767512424; c=relaxed/simple;
+	bh=W/Uqtqxww2ieH9bt4FpJO15jbtWTBOrjQZe/Cyin8r8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qXNHsydq5RFWfMWagbl1qto24pXlUssTYnzAkbH0P7tR5w93DR/wHijEatjUMFEWuv9XQBBWD8FLckIV4xtgMgeU3EbWTzTzRxUgq721b58i2c9+XyGb3J84belreniiodeb29LmCPouKWXtEg6GDriUT+7vZ3Q7b1UUO692E30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DDJplSYz; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=sKs1K0kbZbFVrcZQT3Nm3hZy48yErM3BsG3LermM1uvuiAFApTE8UxXd0i77FxPdezN/i7VmcxyOyhCn3rt4bgIDGRPOtGQTQMeRoIyjANrwR2X6QyqyJSAYMqXy5iY2V44yE7u1UY8sq2Tdg6Fjo0nnPr8UbPdsPhGpDNZBCYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=UbrFyJTu; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DBD4040E0281;
-	Wed, 31 Dec 2025 16:07:56 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 44F1840E01A9;
+	Sun,  4 Jan 2026 07:40:19 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id IljZNyQjQjEF; Wed, 31 Dec 2025 16:07:50 +0000 (UTC)
+	with ESMTP id ELooDslI3c7d; Sun,  4 Jan 2026 07:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1767197270; bh=HWouBMiF1EMh2+jI6GLE3S/Gvu5KjkPQi5L7cekMJZg=;
+	t=1767512412; bh=C2DOlp/Dd2QWf5LJvYulLRzQu+CXNN3VLRfzi0tEByg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DDJplSYzrglhEEbmZ0mRfZaOt3zwvpzuTwYLPVsof6rsoCbpVLSC96nBSs6sJZ53F
-	 r4KdoaeGF4/+LewLHoiieG87nkutk8JbgcIJYbdXTwTkXTyFvfxZXuGIleyn9sZcc9
-	 BcAs8YbvqWAggpP2XlY7M5l+gQpaX06Ltgg6LIIgvK+aPyjsUBKvkd+7SqenAP5IPW
-	 AJWKodYRTVpNPr6bHQ4n75QwNuePw8LzroHCs9KLIWkz67rNuJ1hjGkYC46/VSNutn
-	 ZEOBz90ZJbzZIQaiOhPx8p7xfOJUPgeNC8mnv0mXpV4MhUbC8ObjRd7t5iRvOFhRRa
-	 ftxIcIDJYrLyaxkZ97E962kB6unDyW3gd9M7b6WyEnmDyF4//KX7HY6iTS0et3P+F3
-	 MrxHpd42tAcWAnv7ERLij6+t52a3vzHiCjCgOMAFtHI0kmHp+2slxNsQPhjlzk7jqM
-	 uvRewEESpB50jqP0hNOQ6Eh5u0UC+A45J6ciabtIvac6Y+68ksTzztgD5VJW28BOtp
-	 89JbFQNRqBGCR2xNJz0DbYOav2IS0By8QBHilsLBzyo1mqrXsaLG41S9IrlB6I9o1h
-	 xoSOWpgt36LbBIzAzRaVtQRday/5HW2zr2ygP2DaEHZL6BBd5KiUTYbKvtj5a2HTj5
-	 GWhUmofThhIi+lD1MA4yZEy4=
+	b=UbrFyJTu6eYjAkGdDz8F9QRPL5Po/8kglGKfg6MkxOqxd1CZUZF+itakEmqjEnI0b
+	 9bMjh7vZSlRDnc/VvsbIIEUGN3nZ9/abIv8lFeBSK7x1ThgBphhO7s8bylfeguqtBy
+	 Cgu1ako6B3AkS1MmLsKpsHyeksu9DJFro6sLN0t2I2RBvjoPK4hkTurEnLV0qlhD2l
+	 V/Ddb5d31rBUdbluq6Z6Oq184IyQEk4YwnJaWWqsagPee+ELxYXUyDKlrRK4IYy954
+	 7/Sq1YLTHlxiCHXp2avAVnG8V7PFbBYZjLmgPZ65ILp8dBxWgPVYS/mbvAodFCmWCi
+	 /ahFAAzYJvAoSLLX2EuPFh1ROZfuUR5ND4rb9GB6rB4RkHpZdC6L7S9pe0xXHzhthS
+	 xEyy1ooBlbpGNmWl9c56uu4yHGjhE5mvrh3VMlZZ2K8XLzSaKi3V8/K3eBrmgqxX8k
+	 8pI8uHp2k+XiGYar1dyUwk1wcNY8ydn33j6gmpoZTVAILojTg/dZzn8uWy8PUbQyCA
+	 NX4Jp95oOA904oNUXvdxBhzXX5sBQDAVvJUXSVJhd5SXHcmYJvoOfrLS+3t6igWCn0
+	 M091OANJXTgY/dj7q4iOW4StJLPJoO0c1Xek6jVdBZDWPuIcteeygDUVmdLmH84RNt
+	 dFRQduG0oboiaaWygVy4Ya7E=
 Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id E824240E01AD;
-	Wed, 31 Dec 2025 16:07:13 +0000 (UTC)
-Date: Wed, 31 Dec 2025 17:07:05 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id D4F9C40E0194;
+	Sun,  4 Jan 2026 07:40:03 +0000 (UTC)
+Date: Sun, 4 Jan 2026 08:39:56 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: Jonathan Cameron <jonathan.cameron@huawei.com>
-Cc: shiju.jose@huawei.com, rafael@kernel.org, akpm@linux-foundation.org,
-	rppt@kernel.org, dferguson@amperecomputing.com,
-	linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-mm@kvack.org, linux-doc@vger.kernel.org, tony.luck@intel.com,
-	lenb@kernel.org, leo.duran@amd.com, Yazen.Ghannam@amd.com,
-	mchehab@kernel.org, linuxarm@huawei.com, rientjes@google.com,
-	jiaqiyan@google.com, Jon.Grimm@amd.com, dave.hansen@linux.intel.com,
-	naoya.horiguchi@nec.com, james.morse@arm.com, jthoughton@google.com,
-	somasundaram.a@hpe.com, erdemaktas@google.com, pgonda@google.com,
-	duenwen@google.com, gthelen@google.com,
-	wschwartz@amperecomputing.com, wbs@os.amperecomputing.com,
-	nifan.cxl@gmail.com, tanxiaofei@huawei.com,
-	prime.zeng@hisilicon.com, roberto.sassu@huawei.com,
-	kangkang.shen@futurewei.com, wanghuiqiang@huawei.com
-Subject: Re: [PATCH v13 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
- table
-Message-ID: <20251231160705.GAaVVKKfj5o-s7xLv6@fat_crate.local>
-References: <20251121182825.237-1-shiju.jose@huawei.com>
- <20251121182825.237-2-shiju.jose@huawei.com>
- <20251125073627.GLaSVce7hBqGH1a3ni@fat_crate.local>
- <20251208162924.00004a38@huawei.com>
+To: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+Cc: tony.luck@intel.com, dougthompson@xmission.com,
+	akpm@linux-foundation.org, juhlenko@akamai.com,
+	linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] edac: fix a resource leak in i3200_probe1()
+Message-ID: <20260104073956.GCaVoZTKvmnBN4jnqr@fat_crate.local>
+References: <20251223123202.1492038-1-lihaoxiang@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -90,18 +74,22 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251208162924.00004a38@huawei.com>
+In-Reply-To: <20251223123202.1492038-1-lihaoxiang@isrc.iscas.ac.cn>
 
-On Mon, Dec 08, 2025 at 04:29:24PM +0000, Jonathan Cameron wrote:
-> No to this suggestion.  Doing so breaks the rules that Linus has laid
-> out for use of __free. Constructor and destructor must be next to each
-> other. See guidance in cleanup.h.
+On Tue, Dec 23, 2025 at 08:32:02PM +0800, Haoxiang Li wrote:
+> If edac_mc_alloc() fails, also unmap the window.
+> Add a goto to do so.
+> 
+> Found by code review and compiled on ubuntu 20.04
+> 
+> Fixes: dd8ef1db87a4 ("edac: i3200 memory controller driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
+> ---
+>  drivers/edac/i3200_edac.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-/me goes and reads...
-
-Ah, ok, makes sense.
-
-Thanks for pointing it out.
+Both applied, thanks.
 
 -- 
 Regards/Gruss,
