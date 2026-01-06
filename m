@@ -1,254 +1,127 @@
-Return-Path: <linux-edac+bounces-5595-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5597-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44809CF532F
-	for <lists+linux-edac@lfdr.de>; Mon, 05 Jan 2026 19:17:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2BF7CF7ACD
+	for <lists+linux-edac@lfdr.de>; Tue, 06 Jan 2026 11:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B1473104210
-	for <lists+linux-edac@lfdr.de>; Mon,  5 Jan 2026 18:13:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F3A5331014CE
+	for <lists+linux-edac@lfdr.de>; Tue,  6 Jan 2026 10:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 095B533B96B;
-	Mon,  5 Jan 2026 18:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C4A30F950;
+	Tue,  6 Jan 2026 10:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TvOorBs3"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8325F20A5E5;
-	Mon,  5 Jan 2026 18:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D2230F802;
+	Tue,  6 Jan 2026 10:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767636798; cv=none; b=jHgyP12fiH19UC2uITdVAemlg4l188GgERF3r32xV+AVSzusF8cW16ZxgqWwWTlhRp9+o7IOSDmz+PQoyVdeo3Oy86/m95UHOeWBozCrVueKR5Mrtdabp0IpywN6H2jM8K8X9v7oppYEtHEPQexwJYYZb8umt+IFFWdDLxoMlpI=
+	t=1767693712; cv=none; b=Hs/5wRMgwDD/pTpWu7k/Y+6uHEE6h+PwdMCYRsKsu38TI0eYQ99nD6u4w9dpWCXkKKwVJdM4jb0Q9hv0z6PP9rciJfEPCl/9LsYDCgox6DErfR3KMa9ncQYwUg1IvlMxTfDWhVlYMlA9k5mQ/r5nylvuqhRd1l57vC/G7j1/xAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767636798; c=relaxed/simple;
-	bh=Oi/7Lkik7Z/VE/dAOSN3u0FLFN9+6NCpDRRpPQDpVfI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=CRiPiF+rF2K85OZEXEy7P8oPIg0AQCTC57raibyCVRaco+a/GKSd/GkORuk6kCjZYbZxa9gG2nFk4ZR2ZxvyQehOIohyTicqKEI1JxtVNSYvwuVXlKDvjPDu04Q5+MeA1CUpZ549vqzcyFMmXu4tJNwuiI1XmkpmIBAMtRqX7Z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.150])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dlMq97017zHnGfP;
-	Tue,  6 Jan 2026 02:13:09 +0800 (CST)
-Received: from dubpeml100006.china.huawei.com (unknown [7.214.145.132])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9BBCE4056A;
-	Tue,  6 Jan 2026 02:13:12 +0800 (CST)
-Received: from dubpeml100008.china.huawei.com (7.214.145.227) by
- dubpeml100006.china.huawei.com (7.214.145.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Mon, 5 Jan 2026 18:13:11 +0000
-Received: from dubpeml100008.china.huawei.com ([7.214.145.227]) by
- dubpeml100008.china.huawei.com ([7.214.145.227]) with mapi id 15.02.1544.036;
- Mon, 5 Jan 2026 18:13:01 +0000
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Borislav Petkov <bp@alien8.de>
-CC: "rafael@kernel.org" <rafael@kernel.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "rppt@kernel.org" <rppt@kernel.org>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"lenb@kernel.org" <lenb@kernel.org>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>, "rientjes@google.com" <rientjes@google.com>,
-	"jiaqiyan@google.com" <jiaqiyan@google.com>, "Jon.Grimm@amd.com"
-	<Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>
-Subject: RE: [PATCH v13 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
- table
-Thread-Topic: [PATCH v13 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
- table
-Thread-Index: AQHcWxSnEpDt2lc5YEO8lu0/cTa9krUDBkCAgAAe81CAONOhAIAIKpLA
-Date: Mon, 5 Jan 2026 18:13:01 +0000
-Message-ID: <95978df0ee6c4254b20cc773c8a4df29@huawei.com>
-References: <20251121182825.237-1-shiju.jose@huawei.com>
-	<20251121182825.237-2-shiju.jose@huawei.com>
-	<20251125073627.GLaSVce7hBqGH1a3ni@fat_crate.local>
-	<fd4e4419b6d54c69bb4a1dde0273ee51@huawei.com>
- <20251231131512.GBaVUh4NSWqvr2xhbM@fat_crate.local>
-In-Reply-To: <20251231131512.GBaVUh4NSWqvr2xhbM@fat_crate.local>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1767693712; c=relaxed/simple;
+	bh=N13GlUqWB+FxkmAZcovRjJqMegXZ8A3lxIKH7KbwRvs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Oglgb9o0wxoa9nei7HieCKrNJvc+GAkcuMBopDVOgb1WNUKK1ySCdh3M9fb49Ov45I0pf6pfzEDDaP8RTW22lwcq5rU4iNfjrDwup0dkWyR2nJaFncdh2TgAzUwr/oDfNWLSJFM/1NEJ+iSGruGEcrytdWyifPEzaIhe1bl98IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TvOorBs3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDB8C19424;
+	Tue,  6 Jan 2026 10:01:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767693710;
+	bh=N13GlUqWB+FxkmAZcovRjJqMegXZ8A3lxIKH7KbwRvs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TvOorBs3oF0WJmvBxhgmcfMSnYSUEMVQF2eWDtidXC8CNLdfGu/UEa1QUsGW2ivKB
+	 cZETNKB4D660Hk5QttLtFIJYq8aMhZztAMnk3oIEaodbQxciB4qZifzI4nn0xf49VY
+	 uReBUd1Q6ehETMmKCpMdnL94o+je8q20/RlX2YnmFgFFTNzSHdgHKPGbmm2Msu36XF
+	 Ze/5kOEmLtIzf1CR3clSEEP3z86lO6BbMqYvmvOOnC7dVkHP4pxIv9P7GGrzKsmooY
+	 MQ0GTXCqJ0FAEBKlFc9PZISY+BLoyC1xvs2P9eJPq2jf3Vn1RLHexVmwIfOIQkOjs3
+	 bXo6u5H7B++Qw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.99)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1vd3sp-000000008ZF-3xPz;
+	Tue, 06 Jan 2026 11:01:47 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Breno Leitao <leitao@debian.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Gregory Price <gourry@gourry.net>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Jason Tian <jason@os.amperecomputing.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Len Brown <lenb@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	Tony Luck <tony.luck@intel.com>,
+	acpica-devel@lists.linux.dev,
+	linux-acpi@vger.kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	pengdonglin <pengdonglin@xiaomi.com>
+Subject: [PATCH v4 0/4] apei/ghes: don't OOPS with bad ARM error CPER records
+Date: Tue,  6 Jan 2026 11:01:34 +0100
+Message-ID: <cover.1767693532.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogQm9yaXNsYXYgUGV0a292IDxicEBh
-bGllbjguZGU+DQo+U2VudDogMzEgRGVjZW1iZXIgMjAyNSAxMzoxNQ0KPlRvOiBTaGlqdSBKb3Nl
-IDxzaGlqdS5qb3NlQGh1YXdlaS5jb20+DQo+Q2M6IHJhZmFlbEBrZXJuZWwub3JnOyBha3BtQGxp
-bnV4LWZvdW5kYXRpb24ub3JnOyBycHB0QGtlcm5lbC5vcmc7DQo+ZGZlcmd1c29uQGFtcGVyZWNv
-bXB1dGluZy5jb207IGxpbnV4LWVkYWNAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj5hY3BpQHZn
-ZXIua2VybmVsLm9yZzsgbGludXgtbW1Aa3ZhY2sub3JnOyBsaW51eC1kb2NAdmdlci5rZXJuZWwu
-b3JnOw0KPnRvbnkubHVja0BpbnRlbC5jb207IGxlbmJAa2VybmVsLm9yZzsgbGVvLmR1cmFuQGFt
-ZC5jb207DQo+WWF6ZW4uR2hhbm5hbUBhbWQuY29tOyBtY2hlaGFiQGtlcm5lbC5vcmc7IEpvbmF0
-aGFuIENhbWVyb24NCj48am9uYXRoYW4uY2FtZXJvbkBodWF3ZWkuY29tPjsgTGludXhhcm0gPGxp
-bnV4YXJtQGh1YXdlaS5jb20+Ow0KPnJpZW50amVzQGdvb2dsZS5jb207IGppYXFpeWFuQGdvb2ds
-ZS5jb207IEpvbi5HcmltbUBhbWQuY29tOw0KPmRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbTsg
-bmFveWEuaG9yaWd1Y2hpQG5lYy5jb207DQo+amFtZXMubW9yc2VAYXJtLmNvbTsganRob3VnaHRv
-bkBnb29nbGUuY29tOyBzb21hc3VuZGFyYW0uYUBocGUuY29tOw0KPmVyZGVtYWt0YXNAZ29vZ2xl
-LmNvbTsgcGdvbmRhQGdvb2dsZS5jb207IGR1ZW53ZW5AZ29vZ2xlLmNvbTsNCj5ndGhlbGVuQGdv
-b2dsZS5jb207IHdzY2h3YXJ0ekBhbXBlcmVjb21wdXRpbmcuY29tOw0KPndic0Bvcy5hbXBlcmVj
-b21wdXRpbmcuY29tOyBuaWZhbi5jeGxAZ21haWwuY29tOyB0YW54aWFvZmVpDQo+PHRhbnhpYW9m
-ZWlAaHVhd2VpLmNvbT47IFplbmd0YW8gKEIpIDxwcmltZS56ZW5nQGhpc2lsaWNvbi5jb20+OyBS
-b2JlcnRvDQo+U2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT47IGthbmdrYW5nLnNoZW5A
-ZnV0dXJld2VpLmNvbTsNCj53YW5naHVpcWlhbmcgPHdhbmdodWlxaWFuZ0BodWF3ZWkuY29tPg0K
-PlN1YmplY3Q6IFJlOiBbUEFUQ0ggdjEzIDEvMl0gQUNQSTpSQVMyOiBBZGQgZHJpdmVyIGZvciB0
-aGUgQUNQSSBSQVMyIGZlYXR1cmUNCj50YWJsZQ0KPg0KPk9uIFR1ZSwgTm92IDI1LCAyMDI1IGF0
-IDAxOjI4OjE5UE0gKzAwMDAsIFNoaWp1IEpvc2Ugd3JvdGU6DQo+PiBJIHdpbGwgY2hhbmdlIHRv
-IGRlcGVuZHMuIEkgZm9sbG93ZWQgdGhlIGV4aXN0aW5nIENPTkZJRyBBQ1BJX0NQUENfTElCLg0K
-Pg0KPlJlYWQgdGhlICJOb3RlOiIgdW5kZXINCj4NCj4iLSByZXZlcnNlIGRlcGVuZGVuY2llczog
-InNlbGVjdCIgPHN5bWJvbD4gWyJpZiIgPGV4cHI+XSINCj4NCj5oZXJlIHBsczogRG9jdW1lbnRh
-dGlvbi9rYnVpbGQva2NvbmZpZy1sYW5ndWFnZS5yc3QNCj4NCj5Ob3csIHNvbWUgb2YgdGhlIEtj
-b25maWcgc3ltYm9sczoNCj4NCj5kaWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL0tjb25maWcgYi9k
-cml2ZXJzL2FjcGkvS2NvbmZpZyBpbmRleA0KPjIzMjJiMDQ3MGQwNy4uN2Y4NDZjMjJmYzMwIDEw
-MDY0NA0KPi0tLSBhL2RyaXZlcnMvYWNwaS9LY29uZmlnDQo+KysrIGIvZHJpdmVycy9hY3BpL0tj
-b25maWcNCj5AQCAtMjk1LDcgKzI5NSw3IEBAIGNvbmZpZyBBQ1BJX0NQUENfTElCDQo+DQo+IGNv
-bmZpZyBBQ1BJX1JBUzINCj4gICAgICAgIGJvb2wgIkFDUEkgUkFTMiBkcml2ZXIiDQo+LSAgICAg
-ICBkZXBlbmRzIG9uIEFVWElMSUFSWV9CVVMNCj4rICAgICAgIHNlbGVjdCBBVVhJTElBUllfQlVT
-DQo+ICAgICAgICBkZXBlbmRzIG9uIE1BSUxCT1gNCj4gICAgICAgIGRlcGVuZHMgb24gUENDDQo+
-ICAgICAgICBoZWxwDQo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvcmFzL0tjb25maWcgYi9kcml2ZXJz
-L3Jhcy9LY29uZmlnIGluZGV4DQo+ZGZjM2E4OTkyODBlLi5hMWU2YWVkOGJjYzggMTAwNjQ0DQo+
-LS0tIGEvZHJpdmVycy9yYXMvS2NvbmZpZw0KPisrKyBiL2RyaXZlcnMvcmFzL0tjb25maWcNCj5A
-QCAtNTEsNyArNTEsNyBAQCBjb25maWcgTUVNX0FDUElfUkFTMg0KPiAgICAgICAgZGVwZW5kcyBv
-biBBQ1BJX1JBUzINCj4gICAgICAgIGRlcGVuZHMgb24gRURBQw0KPiAgICAgICAgZGVwZW5kcyBv
-biBFREFDX1NDUlVCDQo+LSAgICAgICBkZXBlbmRzIG9uIE5VTUFfS0VFUF9NRU1JTkZPDQo+KyAg
-ICAgICBzZWxlY3QgTlVNQV9LRUVQX01FTUlORk8NCj4gICAgICAgIGhlbHANCj4gICAgICAgICAg
-VGhlIGRyaXZlciBiaW5kcyB0byB0aGUgYXV4aWxpYXJ5IGRldmljZSBhZGRlZCBieSB0aGUgQUNQ
-SSBSQVMyDQo+ICAgICAgICAgIGZlYXR1cmUgdGFibGUgcGFyc2VyLiBUaGUgZHJpdmVyIHVzZXMg
-YSBQQ0MgY2hhbm5lbCBzdWJzcGFjZSB0bw0KPg0KPmFyZSBtYWRlIHRvIGJlIHNlbGVjdGFibGUg
-b25seSBhbmQgc28geW91IHNob3VsZCBzZWxlY3QgdGhlbSBiZWNhdXNlIHRoZXkncmUNCj5ub24t
-dmlzaWJsZS4gSnVzdCByZW1lbWJlciB0aGF0IGJsaW5kbHkgc2VsZWN0aW5nIHRoaW5ncyBpcyBl
-dmlsLg0KDQpIaSBCb3Jpc2xhdiwNCiANClRoYW5rcyBmb3IgY29ycmVjdGluZy4gTW9kaWZpZWQu
-IFdpbGwgcG9zdCB0aGVzZSBjaGFuZ2VzIGluIFYxNSBhZnRlciB5b3VyIGZlZWRiYWNrDQpmb3Ig
-djE0Lg0KPg0KPg0KPj4gPj4gKwkJCXNzcGNjLT5sYXN0X2NtZCwgc3NwY2MtPnBjY19pZCk7DQo+
-PiA+PiArCQlzdGF0dXMgJj0gflBDQ19TVEFUVVNfRVJST1I7DQo+PiA+PiArCQl3cml0ZXdfcmVs
-YXhlZChzdGF0dXMsICZnZW5fY29tbV9iYXNlLT5zdGF0dXMpOw0KPj4gPj4gKwkJcmV0dXJuIC1F
-SU87DQo+PiA+PiArCX0NCj4+ID4+ICsNCj4+ID4+ICsJY2FwX3N0YXR1cyA9IHJlYWR3X3JlbGF4
-ZWQoJmdlbl9jb21tX2Jhc2UtPnNldF9jYXBzX3N0YXR1cyk7DQo+PiA+DQo+PiA+SXMgdGhhdCBy
-ZWdpc3RlciByZWFkIGFsd2F5cyBzdWNjZXNzZnVsIG9yIHlvdSBuZWVkIHRvIGhhbmRsZSBlcnJv
-cnMgaGVyZSB0b28/DQo+Pg0KPj4gUmV0dXJuIHZhbHVlIG9mICdzZXQgY2FwYWJpbGl0eSBzdGF0
-dXMnICBpcyBkZWNvZGVkIGFuZCByZXR1cm4gZXJyb3INCj4+IGNvZGUgb24gZXJyb3IgY2FzZSBp
-biB0aGUgYmVsb3cgZnVuY3Rpb24gY2FsbCAgJ3JldHVybg0KPmRlY29kZV9jYXBfZXJyb3IoY2Fw
-X3N0YXR1cyknDQo+DQo+WWFoLCB0aGlzIGlzIG5vdCBhIGNvbW1vbiBjb2RpbmcgcGF0dGVybi4g
-V2hhdCB5b3UgZG8gaXMgc29tZXRoaW5nIGxpa2UgdGhpczoNCj4NCj5kaWZmIC0tZ2l0IGEvZHJp
-dmVycy9hY3BpL3JhczIuYyBiL2RyaXZlcnMvYWNwaS9yYXMyLmMgaW5kZXgNCj42Mjc4OTVmZWUx
-NDMuLjRjYWVmN2YyYzRlYSAxMDA2NDQNCj4tLS0gYS9kcml2ZXJzL2FjcGkvcmFzMi5jDQo+Kysr
-IGIvZHJpdmVycy9hY3BpL3JhczIuYw0KPkBAIC04NSw3ICs4NSw2IEBAIHN0YXRpYyBpbnQgZGVj
-b2RlX2NhcF9lcnJvcih1MzIgY2FwX3N0YXR1cykgIHN0YXRpYyBpbnQNCj5jaGVja19wY2NfY2hh
-bihzdHJ1Y3QgcmFzMl9zc3BjYyAqc3NwY2MpICB7DQo+ICAgICAgICBzdHJ1Y3QgYWNwaV9yYXMy
-X3NobWVtIF9faW9tZW0gKmdlbl9jb21tX2Jhc2UgPSBzc3BjYy0+Y29tbV9hZGRyOw0KPi0gICAg
-ICAgdTMyIGNhcF9zdGF0dXM7DQo+ICAgICAgICB1MTYgc3RhdHVzOw0KPiAgICAgICAgaW50IHJj
-Ow0KPg0KPkBAIC0xMTQsOSArMTEzLDExIEBAIHN0YXRpYyBpbnQgY2hlY2tfcGNjX2NoYW4oc3Ry
-dWN0IHJhczJfc3NwY2MgKnNzcGNjKQ0KPiAgICAgICAgICAgICAgICByZXR1cm4gLUVJTzsNCj4g
-ICAgICAgIH0NCj4NCj4tICAgICAgIGNhcF9zdGF0dXMgPSByZWFkd19yZWxheGVkKCZnZW5fY29t
-bV9iYXNlLT5zZXRfY2Fwc19zdGF0dXMpOw0KPisgICAgICAgcmMgPQ0KPisgZGVjb2RlX2NhcF9l
-cnJvcihyZWFkd19yZWxheGVkKCZnZW5fY29tbV9iYXNlLT5zZXRfY2Fwc19zdGF0dXMpKTsNCj4r
-DQo+ICAgICAgICB3cml0ZXdfcmVsYXhlZCgweDAsICZnZW5fY29tbV9iYXNlLT5zZXRfY2Fwc19z
-dGF0dXMpOw0KPi0gICAgICAgcmV0dXJuIGRlY29kZV9jYXBfZXJyb3IoY2FwX3N0YXR1cyk7DQo+
-Kw0KPisgICAgICAgcmV0dXJuIHJjOw0KPiB9DQoNCk1vZGlmaWVkLiANCj4NCj4NCj4+ID4+ICsJ
-ICovDQo+PiA+PiArCWlmIChjbWQgPT0gUENDX0NNRF9FWEVDX1JBUzIgfHwgc3NwY2MtPnBjY19t
-cnR0KSB7DQo+PiA+PiArCQlyYyA9IGNoZWNrX3BjY19jaGFuKHNzcGNjKTsNCj4+ID4+ICsJCWlm
-IChzc3BjYy0+cGNjX21ydHQpDQo+PiA+PiArCQkJc3NwY2MtPmxhc3RfY21kX2NtcGxfdGltZSA9
-IGt0aW1lX2dldCgpOw0KPj4gPj4gKwl9DQo+PiA+PiArDQo+PiA+PiArCWlmIChwY2NfY2hhbm5l
-bC0+bWJveC0+dHhkb25lX2lycSkNCj4+ID4+ICsJCW1ib3hfY2hhbl90eGRvbmUocGNjX2NoYW5u
-ZWwsIHJjKTsNCj4+ID4+ICsJZWxzZQ0KPj4gPj4gKwkJbWJveF9jbGllbnRfdHhkb25lKHBjY19j
-aGFubmVsLCByYyk7DQo+PiA+PiArDQo+PiA+PiArCXJldHVybiByYyA8IDAgPyByYyA6IDA7DQo+
-PiA+DQo+PiA+U28geW91IG1lYW4gc2ltcGx5DQo+PiA+DQo+PiA+CXJldHVybiByYzsNCj4+ID4N
-Cj4+ID5ubz8gcmMgY2FuIGJlIDAgdG9vIHNvIHdoYXQncyB0aGUgcG9pbnQgb2YgdGhlIHRlcm5h
-cnkgZXhwcmVzc2lvbj8NCj4+DQo+PiBUaGlzIHdhcyBhZGRlZCB0byBoYW5kbGUgdGhlIGNhc2Ug
-cmMgPSBjaGVja19wY2NfY2hhbihzc3BjYyk7IGlzIG5vdA0KPj4gY2FsbGVkIGFuZCBsYXN0IHJj
-IGlzIHJldHVybmVkIGZyb20gbWJveF9zZW5kX21lc3NhZ2UoKSBjYWxsIGJlY2F1c2UNCj4+IG1i
-b3hfc2VuZF9tZXNzYWdlKCkgcmV0dXJuIG5vbi1uZWdhdGl2ZSB2YWx1ZSBmb3Igc3VjY2VzcyBh
-bmQgbmVnYXRpdmUNCj52YWx1ZSBmb3IgZmFpbHVyZSBhcyBwZXIgdGhlIGRvY3VtZW50YXRpb24u
-DQo+PiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92Ni4xOC1yYzcvc291cmNlL2Ry
-aXZlcnMvbWFpbGJveC9tYWlsDQo+PiBib3guYyNMMjQxDQo+DQo+V2h5IGRvIHlvdSBrZWVwIHBv
-aW50aW5nIHRvIHNvbWUgaW5kZXhpbmcgc2VydmljZT8gV2hhdCdzIHdyb25nIHdpdGggc2ltcGx5
-DQo+cGFzdGluZyB0aGUgY29kZSBzbmlwcGV0IHlvdSBtZWFuIHNvIHRoYXQgSSBjYW4gZmluZCBp
-dCBteXNlbGYgdG9vPw0KPg0KPkFueXdheSwgd2hhdCdzIHdyb25nIHdpdGg6DQo+DQo+ICAgICAg
-ICAvKiBSaW5nIGRvb3JiZWxsICovDQo+ICAgICAgICByYyA9IG1ib3hfc2VuZF9tZXNzYWdlKHBj
-Y19jaGFubmVsLCAmY21kKTsNCj4gICAgICAgIGlmIChyYyA8IDApIHsNCj4gICAgICAgICAgICAg
-ICAgZGV2X3dhcm4ocmFzMl9jdHgtPmRldiwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgIkVy
-cm9yIHNlbmRpbmcgUENDIG1ib3ggbWVzc2FnZSBjbWQ6IDB4JXgsIHJjOiVkXG4iLCBjbWQsIHJj
-KTsNCj4gICAgICAgICAgICAgICAgcmV0dXJuIHJjOw0KPiAgICAgICAgfQ0KPg0KPkFsc28sIGNt
-ZHMgaW4gaGV4IHBsZWFzZS4NCg0KTW9kaWZpZWQuDQo+DQo+PiA+QW5kIHdoYXQncyB0aGUgbG9n
-aWMgaGVyZT8gWW91J2QgY2FwdHVyZSByYyBhYm92ZSBmcm9tDQo+PiA+Y2hlY2tfcGNjX2NoYW4o
-KSBhbmQgZXZlbiBpZiBpdCBpcyAhPSAwLCB5b3UnZCBwYXNzIGl0IGludG8gdGhlIG1ib3gqDQo+
-PiA+ZnVuY3Rpb25zPyBJIGd1ZXNzIHRoYXQgd2VpcmRuZXNzIGRlc2VydmVzIGEgY29tbWVudC4u
-Lg0KPj4NCj4+IEJvdGggbWJveF9jaGFuX3R4ZG9uZSgpIGFuZCAgbWJveF9jbGllbnRfdHhkb25l
-KCkgcmVxdWlyZWQgdGhlIHN0YXR1cw0KPj4gb2YgdGhlIGxhc3QgdHJhbnNtaXNzaW9uIGFzIHNl
-Y29uZCBhcmd1bWVudC4NCj4NCj5ZYWgsIGNvbW1lbnQgcGxlYXNlIQ0KDQpBZGRlZCBjb21tZW50
-Lg0KPg0KPnM+ID4NCj4+ID4+ICt7DQo+PiA+PiArCXN0cnVjdCBhY3BpX3JhczJfcGNjX2Rlc2Mg
-KnBjY19kZXNjX2xpc3Q7DQo+PiA+PiArCXN0cnVjdCByYXMyX21lbV9jdHggKnJhczJfY3R4Ow0K
-Pj4gPj4gKwl1MTYgaSwgY291bnQ7DQo+PiA+PiArDQo+PiA+PiArCWlmIChyYXMyX3RhYi0+aGVh
-ZGVyLmxlbmd0aCA8IHNpemVvZigqcmFzMl90YWIpKSB7DQo+PiA+PiArCQlwcl93YXJuKEZXX1dB
-Uk4gIkFDUEkgUkFTMiB0YWJsZSBwcmVzZW50IGJ1dCBicm9rZW4gKHRvbw0KPj4gPnNob3J0LCBz
-aXplPSV1KVxuIiwNCj4+ID4+ICsJCQlyYXMyX3RhYi0+aGVhZGVyLmxlbmd0aCk7DQo+PiA+PiAr
-CQlyZXR1cm47DQo+PiA+PiArCX0NCj4+ID4+ICsNCj4+ID4+ICsJaWYgKCFyYXMyX3RhYi0+bnVt
-X3BjY19kZXNjcykgew0KPj4gPj4gKwkJcHJfd2FybihGV19XQVJOICJObyBQQ0MgZGVzY3MgaW4g
-QUNQSSBSQVMyIHRhYmxlXG4iKTsNCj4+ID4+ICsJCXJldHVybjsNCj4+ID4+ICsJfQ0KPj4gPg0K
-Pj4gPllvdSBuZWVkIHRvIHNhbml0eS1jaGVjayB0aGUgbnVtYmVyIG9mIGRlc2NzIHNvIHRoYXQg
-dGhlIGJlbG93DQo+PiA+YWxsb2NhdGlvbiBkb2Vzbid0IGdvIG51dHMuDQo+PiBTb3JyeSwgY2Fu
-IHlvdSBnaXZlIG1vcmUgaW5mb3JtYXRpb24/DQo+PiBJIGFtIHdvbmRlcmluZyB0aGUgYWJvdmUg
-Y2hlY2sgICdpZiAoIXJhczJfdGFiLT5udW1fcGNjX2Rlc2NzKScgeyB9IGlzIG5vdA0KPmVub3Vn
-aD8NCj4NCj5Zb3UndmUgZG9uZSB3aGF0IEkgd2FudGVkOg0KPg0KPiAgICAgICAgaWYgKCFyYXMy
-X3RhYi0+bnVtX3BjY19kZXNjcyB8fCByYXMyX3RhYi0+bnVtX3BjY19kZXNjcyA+DQo+UkFTMl9N
-QVhfTlVNX1BDQ19ERVNDUykgew0KPiAgICAgICAgICAgICAgICBwcl93YXJuKEZXX1dBUk4gIk5v
-L0ludmFsaWQgbnVtYmVyIG9mIFBDQyBkZXNjcyglZCkgaW4gQUNQSSBSQVMyDQo+dGFibGVcbiIs
-DQo+ICAgICAgICAgICAgICAgICAgICAgICAgcmFzMl90YWItPm51bV9wY2NfZGVzY3MpOw0KPiAg
-ICAgICAgICAgICAgICByZXR1cm4gLUVJTlZBTDsNCj4gICAgICAgIH0NCj4NCj5UaGUgUkFTMl9N
-QVhfTlVNX1BDQ19ERVNDUyB0aGluZy4NCg0KT2suDQo+DQo+PiA+QWxzbywgd2hhdCdzIHRoZSBw
-b2ludCBvZiB0aGF0IHBjdHhfbGlzdCBhcnJheSBhdCBhbGw/IFNvIHRoYXQgeW91DQo+PiA+Y2Fu
-IGRvIHVuaW5pdCBvbiB0aGUgLT5hZGV2IGluIGNhc2UgeW91IGVuY291bnRlciBhIGZhaWx1cmU/
-DQo+PiBMb2NhbCB2YXJpYWJsZSByYXMyX2N0eCAgaXMgdXBkYXRlZCB3aGVuIGNhbGxpbmcgYWRk
-X2F1eF9kZXZpY2UoKSBpbg0KPj4gZWFjaCBpdGVyYXRpb24gYXMNCj4+IGFkZF9hdXhfZGV2aWNl
-KCkgIGFsbG9jYXRlcyBtZW1vcnkgZm9yIHN0cnVjdCByYXMyX21lbV9jdHggIGZvciB0aGUNCj4+
-IGNvcnJlc3BvbmRpbmcgUENDIGRlc2NyaXB0b3IgaW4gdGhlIFJBUzIgdGFibGUuDQo+PiBUaHVz
-IHN0b3JpbmcgcG9pbnRlciB0byBlYWNoIHJhczJfY3R4ICBpbiBwY3R4X2xpc3RbXSB0byB1bmlu
-aXQgYWxsIHRoZSBwcmV2aW91c2x5DQo+YWRkZWQgYXV4aWxpYXJ5IGRldmljZXMNCj4+IHVzaW5n
-IGF1eGlsaWFyeV9kZXZpY2VfdW5pbml0KC0+YWRldik7IHdoZW4gZW5jb3VudGVyIGEgZmFpbHVy
-ZSBpbiBhIGxhdGVyDQo+aXRlcmF0aW9uLg0KPg0KPkxvb2tzIHdlaXJkLiBMZW1tZSBsb29rIGF0
-IHlvdXIgbmV3IHN1Ym1pc3Npb24gYW5kIHNlZSB3aGV0aGVyIEkgY2FuIG1ha2UgaXQNCj5iZXR0
-ZXIuDQpTdXJlLg0KPg0KPg0KPj4gPj4gKwkJcmV0dXJuOw0KPj4gPj4gKwl9DQo+PiA+PiArDQo+
-PiA+PiArCWFjcGlfcmFzMl9wYXJzZShyYXMyX3RhYik7DQo+PiA+DQo+PiA+VGhpcyBmdW5jdGlv
-biBkb2VzIHNvbWUgdGFibGUgc2FuaXR5IGNoZWNraW5nIGFuZCB3YXJucy4gV2hhdCBpdA0KPj4g
-PnNob3VsZCBkbyBpcyBmYWlsIHRoZSBkcml2ZXIgbG9hZCBpZiB0aGUgdGFibGUgaXMgYnJva2Vu
-Lg0KPj4NCj4+IFN1cmUuDQo+PiBJZiBhY3BpX3JhczJfcGFyc2UoKSBhbmQgdGh1cyBhY3BpX3Jh
-czJfaW5pdCgpIHJldHVybiBlcnJvciwgY2FuIHlvdQ0KPj4gZ3VpZGUgaG93IHRvIGhhbmRsZSB0
-aGlzIGVycm9yIGluIGFjcGlfaW5pdCh2b2lkKSB3aGVyZSAgYWNwaV9yYXMyX2luaXQoKSBpcw0K
-PmNhbGxlZD8NCj4+IFNvbWV0aGluZyBzaW1pbGFyIHRvIHRoaXMgYmVsb3csDQo+PiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9hY3BpL2J1cy5jIGIvZHJpdmVycy9hY3BpL2J1cy5jIGluZGV4DQo+PiBi
-MDJjZWIyODM3YzYuLjhiNGZjNTcyYTA1YiAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvYWNwaS9i
-dXMuYw0KPj4gKysrIGIvZHJpdmVycy9hY3BpL2J1cy5jDQo+PiBAQCAtMTQ3NSw3ICsxNDc1LDEy
-IEBAIHN0YXRpYyBpbnQgX19pbml0IGFjcGlfaW5pdCh2b2lkKQ0KPj4gICAgICAgICBhY3BpX2Rl
-YnVnZ2VyX2luaXQoKTsNCj4+ICAgICAgICAgYWNwaV9zZXR1cF9zYl9ub3RpZnlfaGFuZGxlcigp
-Ow0KPj4gICAgICAgICBhY3BpX3Zpb3RfaW5pdCgpOw0KPj4gLSAgICAgICBhY3BpX3JhczJfaW5p
-dCgpOw0KPj4gKyAgICAgICByZXN1bHQgPSBhY3BpX3JhczJfaW5pdCgpOw0KPj4gKyAgICAgICBp
-ZiAocmVzdWx0KSB7DQo+PiArICAgICAgICAgICAgICAga29iamVjdF9wdXQoYWNwaV9rb2JqKTsN
-Cj4+ICsgICAgICAgICAgICAgICBkaXNhYmxlX2FjcGkoKTsNCj4NCj5ObywgeW91IGNlcnRhaW5s
-eSB3b24ndCBkaXNhYmxlIEFDUEkgaWYgdGhhdCBSQVMyIHRoaW5nIHBhcnNpbmcgZmFpbHMuIFdo
-YXQgeW91DQo+c2hvdWxkIGRvIGlzIG5vdCBhbGxvdyB0aGUgUkFTMiBtZW1vcnkgZHJpdmVyIHRv
-IGxvYWQuDQo+DQo+TGVtbWUgbG9vayBhdCB5b3VyIG5ldyB2ZXJzaW9uLg0KDQpTdXJlLiBUaGFu
-a3MuDQo+DQo+VGh4Lg0KPg0KPi0tDQo+UmVnYXJkcy9HcnVzcywNCj4gICAgQm9yaXMuDQo+DQo+
-aHR0cHM6Ly9wZW9wbGUua2VybmVsLm9yZy90Z2x4L25vdGVzLWFib3V0LW5ldGlxdWV0dGUNCj4N
-Cg0KVGhhbmtzLA0KU2hpanUNCg0K
+Rafael,
+
+Current parsing logic at apei/ghes for ARM Processor Error
+assumes that the record sizes are correct. Yet, a bad BIOS
+might produce malformed GHES reports.
+
+Worse than that, it may end exposing data from other memory
+addresses, as the logic may end dumping large portions of
+the memory.
+
+Avoid that by checking the buffer sizes where needed.
+
+---
+
+v4:
+ - addressed Jonathan comments;
+ - added two extra patches to prevent other OOM issues.
+
+v3:
+  - addressed Shuai feedback;
+  - moved all ghes code to one patch;
+  - fixed a typo and a bad indent;
+  - cleanup the size check logic at ghes.c.
+
+
+Mauro Carvalho Chehab (4):
+  apei/ghes: ARM processor Error: don't go past allocated memory
+  efi/cper: don't go past the ARM processor CPER record buffer
+  apei/ghes: ensure that won't go past CPER allocated record
+  efi/cper: don't dump the entire memory region
+
+ drivers/acpi/apei/ghes.c        | 38 ++++++++++++++++++++++++++++-----
+ drivers/firmware/efi/cper-arm.c | 12 +++++++----
+ drivers/firmware/efi/cper.c     |  8 ++++++-
+ drivers/ras/ras.c               |  6 +++++-
+ include/acpi/ghes.h             |  1 +
+ include/linux/cper.h            |  3 ++-
+ 6 files changed, 56 insertions(+), 12 deletions(-)
+
+-- 
+2.52.0
+
 
