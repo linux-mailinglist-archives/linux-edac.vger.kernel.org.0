@@ -1,47 +1,47 @@
-Return-Path: <linux-edac+bounces-5609-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5606-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A43DD02AAD
-	for <lists+linux-edac@lfdr.de>; Thu, 08 Jan 2026 13:38:02 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9C1D02B4F
+	for <lists+linux-edac@lfdr.de>; Thu, 08 Jan 2026 13:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 858BB300D560
-	for <lists+linux-edac@lfdr.de>; Thu,  8 Jan 2026 12:37:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5F6DA30BE114
+	for <lists+linux-edac@lfdr.de>; Thu,  8 Jan 2026 12:38:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BF54AACDD;
-	Thu,  8 Jan 2026 11:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752E14A2E03;
+	Thu,  8 Jan 2026 11:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9q9GAk9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R3xSQKI6"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC5D4AA361;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F779495529;
 	Thu,  8 Jan 2026 11:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767872137; cv=none; b=s/hRgMUUvrZLHVFYGJSVHjhBj+VQ1loP4bowYSv7Mq4mH26PGGgI8ezDFxq75GcNqINTa3UwCDlmtHNM0qxlO8fFOgWy6X1gu6VRR+2GT/oAJiXwBp9lQiePPmySY4dF5LuNPtHe5C5fP0oBw4u8ZwiiTJ0t7OE90zXxQSJMdBQ=
+	t=1767872137; cv=none; b=g/lvxJQZ0BGXnuhSjO2XdbclyETcXL4Y3LLXAVatBhL6yBF3OgqxT9PutoymRQVrn95uwIM8ou9Bj5F/SGfxV8VoiWN4NDJ20s4Zm9wKFg+0hLcjJUZ8LhyQGqjVEpU40KjC9sxe514WnNzSEPQa6X2s6iLH5vtist9HV1Vk3vU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767872137; c=relaxed/simple;
-	bh=3Avwk9ah4fvsu5pW2Hk/IxHeMU3rEwQMuWdy8ZlvDv0=;
+	bh=7ClOr2/SXZvL7/2ZcJPhfqf9+Zeyoc7xjpGBwuIaGtc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kq/v9o8kSbKahxVVm0jwj/cQP8jIM4mJnBsCV57+77aITzJnnHz7S+GxwmJv4mDNWo9XIWVyvAfErFSVfzkXgOeHJC6YzNGfQ328wQ/ZmBtHE76Bh7nVsKj/lZ64g9yn1u0QhD5+tZ7PbnpBGbDWDYJfdGbV6vLdCRNX8VEtMPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9q9GAk9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C507C19424;
+	 MIME-Version:Content-Type; b=e5Xd3CSEq63EAVZHujxCtJ6kbZx4QdBpyLao4gFatn2i+AccSyXGrrRvmg6crJDxmqweo43saE3GPvF96xoG4P+vgPu/NVZ8hluyF/QL/fwxs8Mglr/uici61zu9nnumduCPYgAkG0C7OaTfCOYdQ+53U2jd1VKnuq9/erhBrQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R3xSQKI6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E93DC19421;
 	Thu,  8 Jan 2026 11:35:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1767872136;
-	bh=3Avwk9ah4fvsu5pW2Hk/IxHeMU3rEwQMuWdy8ZlvDv0=;
+	bh=7ClOr2/SXZvL7/2ZcJPhfqf9+Zeyoc7xjpGBwuIaGtc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T9q9GAk9Ua2Cg3c0vHldsZn8mjz7hkO461+3EBeFgmDBayLGRmkOex4SP/PQZ0/7r
-	 YFvYXcBfWNbeOSo0WyXfrJSxi63WIlwtXCz1C7yZXnX3TceaxSWcQUSlk9v9NqFXOG
-	 bF7nkXo7JQ38n7giapUDO43LQ/N89Y9lYWnMJymadVQTYKP6XEdUF4jWXy2CtzeZBa
-	 JKkK03+lgTJ/y1J1Ll0KiiS5FtVAJw38/oIyNcNJvlyDRHLpzuYw7eASyTB59ngb5g
-	 tttYmZ88XAmrBemBmNgzi5I5Hw3JQrXwemW5DERC3iwQoL+VKCvHnGxbFSXH+ScpPt
-	 oE6ILYQsRm5xw==
+	b=R3xSQKI6e8ONZTUffaDWdBa9taK+4xZA1ufJmKzvcNUEqrzOQaXb5uEM5t6Tvp21j
+	 Aq7c38CL2HsuJOTaCF0ZwnsxHm9yO8nJn7SoZWy5l6HwDVL9rK42gbhmqpoA2fcCnj
+	 o8y3O0SX9RVpLIdEn51RkhxbJvcF+v1QvmqFd8lgUyz36aL2C2f6nAr2sEJ5fQqwfQ
+	 6k3CqTc6o+1Lr2LvkMjgy6SchZqhoiR4tAedDRJhZNLS09baRdKLyO6/UsmoOGez7W
+	 jlYZ2cBWqLsvMgk2d45ShitMo5kVU+toIQVJrzzuxyRo+VC1+3EAceWpg4Ius6rBfd
+	 Blq6nMhfLMq1A==
 Received: from mchehab by mail.kernel.org with local (Exim 4.99)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1vdoIg-000000033yC-049Z;
+	id 1vdoIg-000000033yK-0JFk;
 	Thu, 08 Jan 2026 12:35:34 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -52,14 +52,10 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	linux-edac@vger.kernel.org,
 	linux-efi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Subject: [PATCH v6 2/4] efi/cper: don't go past the ARM processor CPER record buffer
-Date: Thu,  8 Jan 2026 12:35:04 +0100
-Message-ID: <41cd9f6b3ace3cdff7a5e864890849e4b1c58b63.1767871950.git.mchehab+huawei@kernel.org>
+	Jonathan Cameron <jonathan.cameron@huawei.com>
+Subject: [PATCH v6 4/4] efi/cper: don't dump the entire memory region
+Date: Thu,  8 Jan 2026 12:35:06 +0100
+Message-ID: <1752b5ba63a3e2f148ddee813b36c996cc617e86.1767871950.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1767871950.git.mchehab+huawei@kernel.org>
 References: <cover.1767871950.git.mchehab+huawei@kernel.org>
@@ -73,95 +69,42 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-There's a logic inside ghes/cper to detect if the section_length
-is too small, but it doesn't detect if it is too big.
+The current logic at cper_print_fw_err() doesn't check if the
+error record length is big enough to handle offset. On a bad firmware,
+if the ofset is above the actual record, length -= offset will
+underflow, making it dump the entire memory.
 
-Currently, if the firmware receives an ARM processor CPER record
-stating that a section length is big, kernel will blindly trust
-section_length, producing a very long dump. For instance, a 67
-bytes record with ERR_INFO_NUM set 46198 and section length
-set to 854918320 would dump a lot of data going a way past the
-firmware memory-mapped area.
+The end result can be:
 
-Fix it by adding a logic to prevent it to go past the buffer
-if ERR_INFO_NUM is too big, making it report instead:
+- the logic taking a lot of time dumping large regions of memory;
+- data disclosure due to the memory dumps;
+- an OOPS, if it tries to dump an unmapped memory region.
 
-	[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 1
-	[Hardware Error]: event severity: recoverable
-	[Hardware Error]:  Error 0, type: recoverable
-	[Hardware Error]:   section_type: ARM processor error
-	[Hardware Error]:   MIDR: 0xff304b2f8476870a
-	[Hardware Error]:   section length: 854918320, CPER size: 67
-	[Hardware Error]:   section length is too big
-	[Hardware Error]:   firmware-generated error record is incorrect
-	[Hardware Error]:   ERR_INFO_NUM is 46198
+Fix it by checking if the section length is too small before doing
+a hex dump.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 ---
- drivers/firmware/efi/cper-arm.c | 12 ++++++++----
- drivers/firmware/efi/cper.c     |  3 ++-
- include/linux/cper.h            |  3 ++-
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ drivers/firmware/efi/cper.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/firmware/efi/cper-arm.c b/drivers/firmware/efi/cper-arm.c
-index 76542a53e202..b21cb1232d82 100644
---- a/drivers/firmware/efi/cper-arm.c
-+++ b/drivers/firmware/efi/cper-arm.c
-@@ -226,7 +226,8 @@ static void cper_print_arm_err_info(const char *pfx, u32 type,
- }
- 
- void cper_print_proc_arm(const char *pfx,
--			 const struct cper_sec_proc_arm *proc)
-+			 const struct cper_sec_proc_arm *proc,
-+			 u32 length)
- {
- 	int i, len, max_ctx_type;
- 	struct cper_arm_err_info *err_info;
-@@ -238,9 +239,12 @@ void cper_print_proc_arm(const char *pfx,
- 
- 	len = proc->section_length - (sizeof(*proc) +
- 		proc->err_info_num * (sizeof(*err_info)));
--	if (len < 0) {
--		printk("%ssection length: %d\n", pfx, proc->section_length);
--		printk("%ssection length is too small\n", pfx);
-+
-+	if (len < 0 || proc->section_length > length) {
-+		printk("%ssection length: %d, CPER size: %d\n",
-+		       pfx, proc->section_length, length);
-+		printk("%ssection length is too %s\n", pfx,
-+		       (len < 0) ? "small" : "big");
- 		printk("%sfirmware-generated error record is incorrect\n", pfx);
- 		printk("%sERR_INFO_NUM is %d\n", pfx, proc->err_info_num);
- 		return;
 diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
-index 0232bd040f61..88fc0293f876 100644
+index 88fc0293f876..0e938fc5ccb1 100644
 --- a/drivers/firmware/efi/cper.c
 +++ b/drivers/firmware/efi/cper.c
-@@ -659,7 +659,8 @@ cper_estatus_print_section(const char *pfx, struct acpi_hest_generic_data *gdata
+@@ -560,6 +560,11 @@ static void cper_print_fw_err(const char *pfx,
+ 	} else {
+ 		offset = sizeof(*fw_err);
+ 	}
++	if (offset > length) {
++		printk("%s""error section length is too small: offset=%d, length=%d\n",
++		       pfx, offset, length);
++		return;
++	}
  
- 		printk("%ssection_type: ARM processor error\n", newpfx);
- 		if (gdata->error_data_length >= sizeof(*arm_err))
--			cper_print_proc_arm(newpfx, arm_err);
-+			cper_print_proc_arm(newpfx, arm_err,
-+					    gdata->error_data_length);
- 		else
- 			goto err_section_too_small;
- #endif
-diff --git a/include/linux/cper.h b/include/linux/cper.h
-index 5b1236d8c65b..440b35e459e5 100644
---- a/include/linux/cper.h
-+++ b/include/linux/cper.h
-@@ -595,7 +595,8 @@ void cper_mem_err_pack(const struct cper_sec_mem_err *,
- const char *cper_mem_err_unpack(struct trace_seq *,
- 				struct cper_mem_err_compact *);
- void cper_print_proc_arm(const char *pfx,
--			 const struct cper_sec_proc_arm *proc);
-+			 const struct cper_sec_proc_arm *proc,
-+			 u32 length);
- void cper_print_proc_ia(const char *pfx,
- 			const struct cper_sec_proc_ia *proc);
- int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg);
+ 	buf += offset;
+ 	length -= offset;
 -- 
 2.52.0
 
