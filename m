@@ -1,99 +1,137 @@
-Return-Path: <linux-edac+bounces-5617-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5618-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7299D11D97
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Jan 2026 11:26:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3719CD1395E
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Jan 2026 16:19:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 32461301FD30
-	for <lists+linux-edac@lfdr.de>; Mon, 12 Jan 2026 10:26:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AFB4D311EC50
+	for <lists+linux-edac@lfdr.de>; Mon, 12 Jan 2026 15:06:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 226CA29D294;
-	Mon, 12 Jan 2026 10:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402172DEA8F;
+	Mon, 12 Jan 2026 15:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="NedIBfr5"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from baidu.com (mx24.baidu.com [111.206.215.185])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E732C11D9;
-	Mon, 12 Jan 2026 10:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.206.215.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C1620010C;
+	Mon, 12 Jan 2026 15:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768213572; cv=none; b=hvU+OHGqnEkrN7F8MT1o73VfHLXnVzO1N+rqYr+O2ACypgIncu87Q56r26MoEYQviIw1KpGnDFzU+hPh/sKYq1gxK5IM2n21utCTqv/2B47pXIOAP3nbuZ5laCEkhRncNv2qCLjnfKWoVnkJ4q2y7/MmPOBL16YqiW2qn0n0zXU=
+	t=1768230405; cv=none; b=hp8oAlYUhjmunWXUfbGGiNwv9OPv8KQqP4iRI1K40RqLdVqt8FiQQ/qrSwkA7BXC+0fdjP9Q0eeLFs74+NIJX0ldSt2WlMgAr/KPVRgkTX50gTU07LFRFZ99H9FR+G/9jV1RsZVOKxaKYiYpVRSgW0WhyJcwGqbcZeCczJGdd+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768213572; c=relaxed/simple;
-	bh=8X4pn0QUH4N3ewQkB+pXPs6DXYUAF5N5dx2kYKo8BTo=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=I0Mvw3YRsDY5p0gmI8enfyfiv+oV+OOUpnea9Kk38/0BFF3PtzZCXnmemAXJozZ8O6Xl+PH+VBf7J5CyWgHWkwPkNqvWsl/KZUkKnIHgwLXKqiPdxyiBpRaufntwsB7mZOpkub+0FYDfi3xugHxMJbKevRibLFKfnqygQ41J534=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; arc=none smtp.client-ip=111.206.215.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
-From: "Li,Rongqing" <lirongqing@baidu.com>
-To: Borislav Petkov <bp@alien8.de>
-CC: Nikolay Borisov <nik.borisov@suse.com>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>, "Tony
- Luck" <tony.luck@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>, Qiuxu
- Zhuo <qiuxu.zhuo@intel.com>, Avadhut Naik <avadhut.naik@amd.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IFvlpJbpg6jpgq7ku7ZdIFJlOiBbUEFUQ0hdIHg4?=
- =?utf-8?B?Ni9tY2U6IEZpeCB0aW1lciBpbnRlcnZhbCBhZGp1c3RtZW50IGFmdGVyIGxv?=
- =?utf-8?Q?gging_a_MCE_event?=
-Thread-Topic: =?utf-8?B?562U5aSNOiBb5aSW6YOo6YKu5Lu2XSBSZTogW1BBVENIXSB4ODYvbWNlOiBG?=
- =?utf-8?B?aXggdGltZXIgaW50ZXJ2YWwgYWRqdXN0bWVudCBhZnRlciBsb2dnaW5nIGEg?=
- =?utf-8?Q?MCE_event?=
-Thread-Index: AQHcg51apqteKEUlTE6A1cyDr3var7VNtWyAgACQpxD//36VAIAAjr2g
-Date: Mon, 12 Jan 2026 10:24:11 +0000
-Message-ID: <268e2f0512db435685af987a2ba6893c@baidu.com>
-References: <20260112082747.2842-1-lirongqing@baidu.com>
- <36b42ced-f1e8-4eb0-b6f8-2a9434d5d26c@suse.com>
- <56d12335986e41da81581ef724742319@baidu.com>
- <20260112095118.GAaWTEFkUFHMlu0W-A@fat_crate.local>
-In-Reply-To: <20260112095118.GAaWTEFkUFHMlu0W-A@fat_crate.local>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1768230405; c=relaxed/simple;
+	bh=6ikETmnXVhfDfBU5WDpUDeodKoDandB1zGwKZAPM5/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C/nMCNqFqAmjiJaKTyYvKKJW++6FkNVqnOKvWuDQRuVUKqf9W/h3B7sKAeCgqKBJqPrjhk3KlFGSmdnIcDWP+p7+BHV6QtoSaLRAEOdCuTQihZHOS5FBeKprC9Q0nGowF+++teFXZnGjIhYug58eunM1knlPQHDIPl0qhxxd3eU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=NedIBfr5; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 4357840E01BB;
+	Mon, 12 Jan 2026 15:06:40 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id yTa45AN18amQ; Mon, 12 Jan 2026 15:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1768230395; bh=YaxxTxdQgjkNPEauwlTyuzVixI2qIhO1JHV0bjc5j1Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NedIBfr5xF/e/gTC09SP7G4e+R/fuASPskksbdhVSkWH9heL3VoDABQGgFyLfp19F
+	 wuCmqy2pL8yzxhKATai16K/86vJ1+LwmWz7FDyDZ3bW9B/w27BMmNvmbMj0D6Vm7cD
+	 ppKQLwTAX5aNROUqSxce9hwQPvlxbd8u+Z+IxkPOU4G3Xxg0pByMBR0j8eInXYl+aA
+	 pkNs97VwDtV65e+V1dgXpP96oxGgy5fZXDr+MemLkg0vRaPPXKGmUu2JpR1DENCxsc
+	 dSSoEenJuTqHVhJ608iZYsNqy24PxP2lpX1J55Z4AJOiN7SlLssPxYPVci36W8DscK
+	 9dEgevp8r8cXA51vgWNs/x2gETRmiL0SSNZUXt9LtLpvt382doyWGD+dcR3QL8Tgtk
+	 YVBBROcEyBWE+FkJH7rvz24B2MoQF6FcenuUClpwWLrAZ4GZnb94yUn5GGRMfH5CMr
+	 MYOr7DKnsQbsHBEEhn1YbH1a/Q/TNVbYWzC9KLcAbYGoCsfUbCuJjIvwbJkKMos5Ct
+	 xVighy+lOCy13YSoRERVOUBegzr7VXEQ3GEBcB3UKfjaz+dl7Qvr9Yaj/WkpO/xm8w
+	 8w5D0qdBsGwlRGesnnamyrp3RFV8pWcA/KM0coj4yKaGxMlXgkxmuKT/og/AKVUhaC
+	 bLERDi05T9nRIuVUc7zx7LEQ=
+Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 16ED240E00DE;
+	Mon, 12 Jan 2026 15:05:59 +0000 (UTC)
+Date: Mon, 12 Jan 2026 16:05:52 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: shiju.jose@huawei.com
+Cc: rafael@kernel.org, akpm@linux-foundation.org, rppt@kernel.org,
+	dferguson@amperecomputing.com, linux-edac@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, tony.luck@intel.com, lenb@kernel.org,
+	leo.duran@amd.com, Yazen.Ghannam@amd.com, mchehab@kernel.org,
+	jonathan.cameron@huawei.com, linuxarm@huawei.com,
+	rientjes@google.com, jiaqiyan@google.com, Jon.Grimm@amd.com,
+	dave.hansen@linux.intel.com, naoya.horiguchi@nec.com,
+	james.morse@arm.com, jthoughton@google.com, somasundaram.a@hpe.com,
+	erdemaktas@google.com, pgonda@google.com, duenwen@google.com,
+	gthelen@google.com, wschwartz@amperecomputing.com,
+	wbs@os.amperecomputing.com, nifan.cxl@gmail.com,
+	tanxiaofei@huawei.com, prime.zeng@hisilicon.com,
+	roberto.sassu@huawei.com, kangkang.shen@futurewei.com,
+	wanghuiqiang@huawei.com
+Subject: Re: [PATCH v14 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
+ table
+Message-ID: <20260112150552.GGaWUN0Ex8KgfqEEi5@fat_crate.local>
+References: <20251209145742.297-1-shiju.jose@huawei.com>
+ <20251209145742.297-2-shiju.jose@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-FEAS-Client-IP: 172.31.3.14
-X-FE-Policy-ID: 52:10:53:SYSTEM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251209145742.297-2-shiju.jose@huawei.com>
 
-PiBPbiBNb24sIEphbiAxMiwgMjAyNiBhdCAwOTozNjoyMUFNICswMDAwLCBMaSxSb25ncWluZyB3
-cm90ZToNCj4gPiBPaywgSSB3aWxsIGFkZCBtb3JlIGV4cGxhbmF0aW9uLCBhbmQgcmVuYW1lIG1j
-ZV9ub3RpZnlfaXJxKCkgYXMNCj4gPiBtY2Vfbm90aWZ5X3VzZXIoKTsNCj4gDQo+IE5vLCBmaXJz
-dCB5b3Ugc2hvdWxkIGV4cGxhaW4gd2hhdCB5b3UncmUgZml4aW5nIGhlcmUgYW5kIHdoeS4NCj4g
-DQo+IC0tDQo+IFJlZ2FyZHMvR3J1c3MsDQo+ICAgICBCb3Jpcy4NCj4gDQoNCkhvdyBhYm91dCBt
-b2RpZnlpbmcgdGhlIGNoYW5nZWxvZyBhcyBmb2xsb3dzDQoNCg0KICAgIHg4Ni9tY2U6IEZpeCB0
-aW1lciBpbnRlcnZhbCBhZGp1c3RtZW50IGFmdGVyIGxvZ2dpbmcgYSBNQ0UgZXZlbnQNCg0KICAg
-IFNpbmNlIGNvbW1pdCAwMTFkODI2MTExNzIgKCJSQVM6IEFkZCBhIENvcnJlY3RlZCBFcnJvcnMg
-Q29sbGVjdG9yIiksDQogICAgbWNlX3RpbWVyX2ZuKCkgaGFzIGluY29ycmVjdGx5IGRldGVybWlu
-ZWQgd2hldGhlciB0byBhZGp1c3QgdGhlDQogICAgdGltZXIgaW50ZXJ2YWwuIFRoZSBpc3N1ZSBh
-cmlzZXMgYmVjYXVzZSBtY2Vfbm90aWZ5X2lycSgpIG5vdyBhbHdheXMNCiAgICByZXR1cm5zIGZh
-bHNlIHdoZW4gY2FsbGVkIGZyb20gdGhlIHRpbWVyIHBhdGgsIHNpbmNlIHRoZSBwb2xsaW5nIGNv
-ZGUNCiAgICBuZXZlciBzZXRzIGJpdCAwIG9mIG1jZV9uZWVkX25vdGlmeS4gVGhpcyBwcmV2ZW50
-cyBwcm9wZXIgYWRqdXN0bWVudCBvZg0KICAgIHRoZSB0aW1lciBpbnRlcnZhbCBiYXNlZCBvbiB3
-aGV0aGVyIE1DRSBldmVudHMgd2VyZSBsb2dnZWQuDQoNCiAgICBUaGUgbWNlX25vdGlmeV9pcnEo
-KSBpcyBjYWxsZWQgZnJvbSB0d28gY29udGV4dHM6DQogICAgMS4gRWFybHkgbm90aWZpZXIgYmxv
-Y2sgLSBjb3JyZWN0bHkgc2V0cyBtY2VfbmVlZF9ub3RpZnkNCiAgICAyLiBUaW1lciBmdW5jdGlv
-biAtIG5ldmVyIHNldHMgbWNlX25lZWRfbm90aWZ5LCBtYWtpbmcgaXQgYSBub29wDQogICAgICAg
-KHRob3VnaCBsb2dnZWQgZXJyb3JzIGFyZSBzdGlsbCBwcm9jZXNzZWQgdGhyb3VnaCBtY2VfbG9n
-KCktPg0KICAgICAgICB4ODZfbWNlX2RlY29kZXJfY2hhaW4gLT4gZWFybHkgbm90aWZpZXIpLg0K
-DQogICAgRml4IHRoaXMgYnkgbW9kaWZ5aW5nIG1hY2hpbmVfY2hlY2tfcG9sbCgpIHRvIHJldHVy
-biBhIGJvb2xlYW4gaW5kaWNhdGluZw0KICAgIHdoZXRoZXIgYW55IE1DRSB3YXMgbG9nZ2VkLCBh
-bmQgdXBkYXRpbmcgbWNfcG9sbF9iYW5rcygpIGFuZCByZWxhdGVkDQogICAgZnVuY3Rpb25zIHRv
-IHByb3BhZ2F0ZSB0aGlzIHJldHVybiB2YWx1ZS4gVGhlbiwgbWNlX3RpbWVyX2ZuKCkgY2FuIHVz
-ZQ0KICAgIHRoaXMgZGlyZWN0IHJldHVybiB2YWx1ZSBpbnN0ZWFkIG9mIHJlbHlpbmcgb24gbWNl
-X25vdGlmeV9pcnEoKSBmb3INCiAgICB0aW1lciBpbnRlcnZhbCBkZWNpc2lvbnMuDQoNCiAgICBU
-aGlzIGVuc3VyZXMgdGhlIHRpbWVyIGludGVydmFsIGlzIGNvcnJlY3RseSByZWR1Y2VkIHdoZW4g
-TUNFIGV2ZW50cyBhcmUNCiAgICBsb2dnZWQgYW5kIGluY3JlYXNlZCB3aGVuIG5vIGV2ZW50cyBv
-Y2N1ci4NCg0KICAgIEZpeGVzOiAwMTFkODI2MTExNzIgKCJSQVM6IEFkZCBhIENvcnJlY3RlZCBF
-cnJvcnMgQ29sbGVjdG9yIikNCj4gaHR0cHM6Ly9wZW9wbGUua2VybmVsLm9yZy90Z2x4L25vdGVz
-LWFib3V0LW5ldGlxdWV0dGUNCg==
+On Tue, Dec 09, 2025 at 02:57:40PM +0000, shiju.jose@huawei.com wrote:
+> From: Shiju Jose <shiju.jose@huawei.com>
+> 
+> ACPI 6.5 Specification, section 5.2.21, defined RAS2 feature table (RAS2).
+> Driver adds support for RAS2 feature table, which provides interfaces for
+> platform RAS features, e.g., for HW-based memory scrubbing, and logical to
+> PA translation service. RAS2 uses PCC channel subspace for communicating
+> with the ACPI compliant HW platform.
+> 
+> Co-developed-by: A Somasundaram <somasundaram.a@hpe.com>
+> Signed-off-by: A Somasundaram <somasundaram.a@hpe.com>
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Tested-by: Daniel Ferguson <danielf@os.amperecomputing.com>
+> Signed-off-by: Shiju Jose <shiju.jose@huawei.com>
+> ---
+>  drivers/acpi/Kconfig  |  10 ++
+>  drivers/acpi/Makefile |   1 +
+>  drivers/acpi/bus.c    |   3 +
+>  drivers/acpi/ras2.c   | 409 ++++++++++++++++++++++++++++++++++++++++++
+>  include/acpi/ras2.h   |  57 ++++++
+>  5 files changed, 480 insertions(+)
+>  create mode 100644 drivers/acpi/ras2.c
+>  create mode 100644 include/acpi/ras2.h
+
+Please go over all my review comments from here:
+
+https://lore.kernel.org/r/20251125073627.GLaSVce7hBqGH1a3ni@fat_crate.local
+
+and either incorporate them or say why you don't agree.
+
+Ignoring them is NOT something you should do because this goes both ways.
+
+Ignoring this submission now.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
