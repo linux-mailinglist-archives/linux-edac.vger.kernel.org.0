@@ -1,79 +1,80 @@
-Return-Path: <linux-edac+bounces-5628-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5629-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CE97D1B070
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Jan 2026 20:25:26 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A2D4D1B0E5
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Jan 2026 20:31:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 24275302BF60
-	for <lists+linux-edac@lfdr.de>; Tue, 13 Jan 2026 19:25:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B5F8730021F5
+	for <lists+linux-edac@lfdr.de>; Tue, 13 Jan 2026 19:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39BE36215D;
-	Tue, 13 Jan 2026 19:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0C535E527;
+	Tue, 13 Jan 2026 19:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NHmQwOPo"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AeJg0F59"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA9D342CA7
-	for <linux-edac@vger.kernel.org>; Tue, 13 Jan 2026 19:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B28535B143
+	for <linux-edac@vger.kernel.org>; Tue, 13 Jan 2026 19:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768332324; cv=none; b=tqiZDI4swljMbtW6TFBoC6KN6enBSDj4BdpTfmSE8/5Pdo3N35BrWzm15O690fbmRi6Uczdebz1lc4Jwd/WUlf3lWHeNdN4bmuyo+ffm4GteQmREvmE+yQG7IFj6COf9OYyvD6VSipvkEUEAtoAveBrhMZ6WSN7si4LHlFzEgqg=
+	t=1768332684; cv=none; b=QcvFHOeca5vuNYe/eZXSD+3X6onLk1sUGinbtOnoRdD035h7CtexzrTauVWo/R+swKmMF0FaxCsObOO5q4ZPIqSUZyzMuVGlRz6UcpYOBCRQIbpJKMxPncO4vcLeCXXyb2i/oN4FETTsfUedbeAn0GhIt6AxJD4SFglwnw5iS+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768332324; c=relaxed/simple;
-	bh=3ZkQYQ9Hvmfdk3emBePIfc7xuqN/MKPa0PsuxWo8miE=;
+	s=arc-20240116; t=1768332684; c=relaxed/simple;
+	bh=wzmMnNWWT6BfV1epUm9llBn9KAdtDYsf/ppiReTh1EY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dgBmtdIPPT/LAPYPI+D+1Sy5QfXLAuzp/1xCpi4kn02iyE37MOgeGpeo10+0xT6q2FL+OfR//SegfvuaMHx21wYpZzkoQH89grK5XsKGMORCQLnPYJ+wIOQo8It9PCJTyX1OFjHQADRyINNqNgAulHcd4mbl3DGiIMExFbc86cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NHmQwOPo; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:Content-Type; b=qWlEZ6sU25Ctl4PgfSGGFyLCHLwTYomdYGkYS5fl81Cda6QpmfaBjAMsxdOTI/DvBYPyg3HWMh37ECGdICcQU4ha3/Jdzjyx1ivNFHIdE/1mA1wJmMV0fK0I0b3OV8M5z3bToBlY8LsHsFZtSYt4Tb17A/5e9792AVJHl+8bj7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AeJg0F59; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47d3ffa5f33so36093425e9.2
-        for <linux-edac@vger.kernel.org>; Tue, 13 Jan 2026 11:25:22 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4775895d69cso39844165e9.0
+        for <linux-edac@vger.kernel.org>; Tue, 13 Jan 2026 11:31:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768332321; x=1768937121; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1768332681; x=1768937481; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7MxhySkez3abPd82MAE9TjK7wo8HA/wmby/FsyIF5Ps=;
-        b=NHmQwOPoLjyQOYmMPCJw2g6Xa5+ntlMLGa6Sqc6zf3UwRmLb8NvzL8kz3azSDAn912
-         bywk93Kxw5+Cs7Bcpqvj9XlJ1YbwQYIIXPTZkdjRAjlCn3hiaCpxSeJn7TW6W3SSTj/5
-         duuStHMzNtmBftCc+xaasKVQnTxzQzrsXQOCdOYmeSMMAvAHfsuV4s0aLLtkK98XLhUg
-         NPAKsN/SY8d7DRsrDDcjctkc6I+6PBnSjSpF4UA+Z5t1H3ntpS9kyAIN7UN+3NlAXur2
-         2NOHOwLhtEK0RcG19QJ/4jdaXgh/rJa/ktlOu5S0uC7ckgy2luVwHHbm4KpCjecThLeV
-         NtVw==
+        bh=mZ+/SSm8Yk1STJqtuMveMdb2USAPK03seI/OasqORyI=;
+        b=AeJg0F59PJmA20XDlgPDnX0Gj7Q5w5g3TQfJe756gDVYWawZ+7DysuoDyJ5oIAu/ne
+         X/yyT/k/xKJRhMqJgFHw/hLJobXHsi+j9/omOIJCw+LEP0ByinmDqTHQh510nZ/+Jxbb
+         2rL5iFEegprUf8NUemUG3iM7msrGTzIZJ+JCwbMiEl68hE/h1oCkAWdkEs0f2KdoTR7X
+         IASuRQmrpPH6Bi6YOUa6jXyP7A452Wn9XfK6Qoj+lvpvYlcm8IuWvf1SZYJXpldCVK4J
+         GqzAIk8aRHZOUW4XwFfEzz68CEfzLiB1eme/ojQp50SFrV6NCIh4bjZNkgcZzwDrkQHL
+         2NJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768332321; x=1768937121;
+        d=1e100.net; s=20230601; t=1768332681; x=1768937481;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7MxhySkez3abPd82MAE9TjK7wo8HA/wmby/FsyIF5Ps=;
-        b=Rvoc3SLn2hEDBnQYR+d+YTCOrLU8BMIXmzI57fePy9lblu2A4wKIXTV3nfhKJh3MZ2
-         gFOQYg+AANmRgiMp0auvK4ccj2SU1jTMxj6nd2RwB9TyRrU4IPB/nDk4tPKK6Vlb56d9
-         FT9cG45jEaJljbLLplRP7+CgEzs7xUhsdqSlodwhO4UNIh+i6sWtEIgPNdgVdKFMFQzx
-         5lqg4yNlKqlrQ+/8AgjvFkppc/pM/kVj7ocBjI1zfgdIfmqQFa6/Z5XbBME66pARoNPq
-         B3elv2wLXHTmq3JzEDSWrWjRR6TlbyH8wrbE7FvDyMV8ZuXf6JrQMPxUqvxbMtrBM05n
-         wEhw==
-X-Forwarded-Encrypted: i=1; AJvYcCWkmzp7TPLtg1A190y/D3U2UgvqGNl/Ga0dhca4TezmY094iQij7RfDF7euCX0VTgUui4lT4IgFCxm8@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKhZlYs3JFNDp3x+vGqo1M9edzuMb7nr/knkWG9Nfiq4RmKv+D
-	1wUHmu4G9oU2Z+dZzLYUPGcIwkF5Yj2V6mMg4EWh4q0R6zmlmnvzjxW9YdlBBzdQAhs=
-X-Gm-Gg: AY/fxX6BjwW9Fg5mQ4wX6GvFcjhbEOT1+wG9AIkht9eryK1u6tbXdCm4YPO/7gppLdm
-	iXW1LN+/1GeWatkrxhddZV8kcQyZUHFKC6Qtnk0xnwj+AvDmEw1ilpBmgSsMGQ+O1KJ+bT+Y57D
-	dy0FY6ZVEUPDZA3UIkI7fcMaa2X0Krnn8xQPOr1D7qfto5D8w7artiHI92lPEqdWRSW8b0uXzQY
-	Muxh2YAIph8UhhLUolL5mdBGM1KlTFP92+ELcPcP5+0t4RjNoq/uOUFUz9Nq6BHy50zREVuYdtu
-	zJZrRG27SxudKenBX+RTSwpimqRsEEsXdQM4/FUc4XcH3R49SWXnk0IYZEdo3QN9s47EhXZdFmm
-	CA3x2Shf1Ol5PHhsuzucFPokEG6H6wBQ+A+zRR399JnCNf7zfFTGVKc8OufCvLRJD29sWvkV6QU
-	VthqOnb5jzY8srmI8KddIQd9EG0tMQKXndmFgJ
-X-Received: by 2002:a05:600c:1f89:b0:47a:810f:1d06 with SMTP id 5b1f17b1804b1-47ee33184c2mr3033035e9.4.1768332321045;
-        Tue, 13 Jan 2026 11:25:21 -0800 (PST)
+        bh=mZ+/SSm8Yk1STJqtuMveMdb2USAPK03seI/OasqORyI=;
+        b=emlOB/+E1KrEIPU2+R7oe9U4zsDxxhHxvsOfu7PDzVNps8G0xdJ8OMdjYTKfpk5Gx6
+         ljuI36Big0Jg9SBSm9XbNr8ZSaPZYljDHiQtbzaX/bYfUwmkv3Vo4doA3pXOe9Udq9vS
+         a5NjCaZO++eONP8f77OaHQOQ6GIClu8teCkTTnoBsKx9bduigXVWqDASBdLOmhRThIZJ
+         TEfQMGFAydz1QtXjIV0zBo9ryIYsIDRL7gyNwrEiZo8XQKPow6AWi70lmAnmLjLwz56N
+         4C+OtJfmK3LOnPBR5p2huoJhEQ9+GXguTwY/d8J8VSjyRhH6hjHeOHwcnybIpWRooI8u
+         H/ig==
+X-Forwarded-Encrypted: i=1; AJvYcCUEsRx4k/GXEpDI4EBuQ7eYqLtoWBJrwKiR1ejnto2HvAgsj2xM25yIIxzGK0uu1xBRpfkPSM4x09mR@vger.kernel.org
+X-Gm-Message-State: AOJu0YziyKo1Lbw1VyZmSq1VxG7WMj+/igBIZ847KtSTOdHq6aDOSG/A
+	eNJkPdOfO4O0Zmx7fK6mCq09kzoEqBwbdkYSqJRYlkGmpCe8U5iphSOckpGhGYDVI4MMqwVm8F9
+	evxrt
+X-Gm-Gg: AY/fxX6YzmZzxdyT8kboO6fyMFu72DZ0mHSie2eaaakDcU5bhjgKZkp2CpJo5mihHdB
+	8b/cv69RVsSxpfwPGzoV0XAA7Oql5F9yYq63yk6g24H3qyy3b3gllVucm4rK9WfhxAAwh+dGM8M
+	ziE5MCDFVe+8ayDjwa9uyM9RBepQwOCudEpQce0kxK4Rkssfg7+qOLOxfxoAY1jHrQssBtJ/WwP
+	FdQMdtQwoTE6SFHatrptgzl54QJGxJR8V9Bj9meNrHx8cn0Jv7cxkXax6EROhw3dQX+NidbxoUB
+	KBCZZI3FaavA0yjpAjhHX47VcbEh8HRKD0hpofqRDqyWqav33Mrzgb3Peop1kU2cvLDmHevtuaH
+	G1zMdlPW4ak82GkmSU+DDbiGGpHtZ/hhF0wrSwpsu7AdOnntECbb6XwM9t0DcWrj/2FCGSdjhVv
+	sVfjodN23lK0wc/xEloGGtt7lerjW9FLXzjX7ImGPHyAa4SOU=
+X-Received: by 2002:a05:600c:3acb:b0:45d:d97c:236c with SMTP id 5b1f17b1804b1-47ee3353e2emr3522635e9.21.1768332681559;
+        Tue, 13 Jan 2026 11:31:21 -0800 (PST)
 Received: from [192.168.0.20] (nborisov.ddns.nbis.net. [85.187.217.240])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ee283fdcesm3729905e9.15.2026.01.13.11.25.19
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f7035f2sm402672305e9.12.2026.01.13.11.31.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 11:25:20 -0800 (PST)
-Message-ID: <6feff2b3-6088-412c-b0c6-1d32aa5a9d50@suse.com>
-Date: Tue, 13 Jan 2026 21:25:19 +0200
+        Tue, 13 Jan 2026 11:31:21 -0800 (PST)
+Message-ID: <3eaf01db-6f51-4125-a4bd-bc54c6576e28@suse.com>
+Date: Tue, 13 Jan 2026 21:31:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -84,11 +85,11 @@ User-Agent: Mozilla Thunderbird
 Subject: =?UTF-8?B?UmU6IOetlOWkjTog562U5aSNOiDnrZTlpI06IFvlpJbpg6jpgq7ku7Zd?=
  =?UTF-8?Q?_Re=3A_=5BPATCH=5D_x86/mce=3A_Fix_timer_interval_adjustment_after?=
  =?UTF-8?Q?_logging_a_MCE_event?=
-To: Borislav Petkov <bp@alien8.de>
-Cc: "Luck, Tony" <tony.luck@intel.com>, "Li, Rongqing"
- <lirongqing@baidu.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+To: "Luck, Tony" <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+ "Li, Rongqing" <lirongqing@baidu.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "x86@kernel.org"
+ <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
  Yazen Ghannam <yazen.ghannam@amd.com>, "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
  Avadhut Naik <avadhut.naik@amd.com>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -102,8 +103,6 @@ References: <20260112082747.2842-1-lirongqing@baidu.com>
  <39cfb093256f4da78fe0bc9e814ce5d0@baidu.com>
  <20260113124837.GHaWY_JVdFi53mh6oO@fat_crate.local>
  <SJ1PR11MB6083F2650A8DB801F0EF26C8FC8EA@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <be786e9a-0302-47be-b2a8-bfa4449c7ab7@suse.com>
- <20260113191351.GQaWaZb6yzj4a9I_0Z@fat_crate.local>
 From: Nikolay Borisov <nik.borisov@suse.com>
 Content-Language: en-US
 Autocrypt: addr=nik.borisov@suse.com; keydata=
@@ -149,27 +148,44 @@ Autocrypt: addr=nik.borisov@suse.com; keydata=
  JDjakbdjBoYDWVoaPbp5KAQ2VQRiR54lir/inyqGX+dwzPX/F4OHfB5RTiAFLJliCxniKFsM
  d8eHe88jWjm6/ilx4IlLl9/MdVUGjLpBi18X7ejLz3U2quYD8DBAGzCjy49wJ4Di4qQjblb2
  pTXoEyM2L6E604NbDu0VDvHg7EXh1WwmijEu28c/hEB6DwtzslLpBSsJV0s1/jE=
-In-Reply-To: <20260113191351.GQaWaZb6yzj4a9I_0Z@fat_crate.local>
+In-Reply-To: <SJ1PR11MB6083F2650A8DB801F0EF26C8FC8EA@SJ1PR11MB6083.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 13.01.26 г. 21:13 ч., Borislav Petkov wrote:
-> On Tue, Jan 13, 2026 at 08:55:08PM +0200, Nikolay Borisov wrote:
->> tomorrow) I will send a patch that simply eliminates mce_notify_irq's call
->> in mce_timer_fn. I.e that function should be called only from the early
->> notifier.
+On 13.01.26 г. 20:53 ч., Luck, Tony wrote:
+>>> The comment in mce_timer_fn says to adjust the polling interval, but
+>>> I notice the kernel log always shows an MCE log every 5 minutes. Is this
+>>> normal?
+>>
+>> Use git annotate to figure out which patch added this comment and in context
+>> of what and that'll tell you why.
+>>
+>> As to the 5 minutes, look at how the check interval gets established.
 > 
-> You still need to know whether to halve the timeout or not. And that's that
-> mce_need_notify thing. And that gets called in the early notifier so it should
-> work.
+> Once upon a time the polling interval started out at 5 minutes, but the
+> interval was halved each time an error was found (so interval went
+> 150s, 75s, 37s, ... down to 1s). If no error was found, then the interval
+> was doubled (going back up to 300s).
 > 
-> However, it would be good to be able to bisect this and find a minimal fix to
-> backport...
+> This is described in the comment:
 > 
+>          /*
+>           * Alert userspace if needed. If we logged an MCE, reduce the polling
+>           * interval, otherwise increase the polling interval.
+>           */
+> 
+> It seems that the kernel isn't doing that today. Polling at a fixed 300 seconds
+> event though errors are being found and logged. Interesting that the timestamps
+> are 327.68 seconds apart, rather than 300 and change. So there is some strange
+> stuff going on.
 
-mce_need_notify even now works just in the early notifier because it's 
-set in mce_early_notifier() and subsequently reset in mce_notify_irq() 
-which is called immediately after the set.
+I think Li Rongqing patch does exactly that, since it predicates the 
+halving/doubling of the interval based on whether an error was found and 
+not whether it was reported to user space (what mce_notify_irq() ) does. 
+Both concepts seems to be independent and the former being the core one 
+we care about w.r.t to the decision how to adjust the interval, no ?
+
+<snip>
 
