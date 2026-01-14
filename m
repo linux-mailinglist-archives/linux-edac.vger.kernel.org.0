@@ -1,68 +1,68 @@
-Return-Path: <linux-edac+bounces-5642-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5643-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C297DD1F3C0
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Jan 2026 14:56:44 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34F44D1F34B
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Jan 2026 14:53:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B8214302E179
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Jan 2026 13:51:13 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 89C1D3008169
+	for <lists+linux-edac@lfdr.de>; Wed, 14 Jan 2026 13:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5243A273D66;
-	Wed, 14 Jan 2026 13:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B35273D66;
+	Wed, 14 Jan 2026 13:53:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="GFd0txDt"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="DW49NZUs"
 X-Original-To: linux-edac@vger.kernel.org
 Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5267326ED3F;
-	Wed, 14 Jan 2026 13:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB8726ED45;
+	Wed, 14 Jan 2026 13:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768398673; cv=none; b=lF/K90oynMZgZHcIh90HvsnJMEsNuBCUJ55edPMl7lOuldi4PUGZ8YiRHgkk9Jm3/fWjarrdy1kwg2ZZSvfpsNOGQPqS8kEgka4vN4hyfrE6wxlbfEyWx1/44bJeMOGn6kXWePk18PiAhClTfVj+CmrrLwEsUQN4bJI09Ts6vlk=
+	t=1768398786; cv=none; b=eyjKA/6rOkC9beHFX+JhUXGuD0QkMr57xegvmpy3J7HOOBQ52sD5PDQjbIHEYhb7QxDO/u+YVQ3mnmb5Z717UYQLe6ySN+3+V+rXNYOyd5qp/82mvz0ro8dZPzCBHxHi2R9QzJT5YiIoc1oucOnrBh8ucJtUVWcpR1B1cY9pdUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768398673; c=relaxed/simple;
-	bh=dOgoOn90W11kGI4+6sAeZmfHKlTC64xN3u4WbyUw0h4=;
+	s=arc-20240116; t=1768398786; c=relaxed/simple;
+	bh=rx948T5Jz+TVd+cSxOjdAplVhAONiWlk6YRwlW1gpdM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VJGg9xX/U7XjhIEKPkjrlXbpedQEHBJ1j4AYVjvWqusE5zGmWj6lZiN9nqcny93wD25AGYlzMB2hg3XIr/KMBTYkPxRse1v9XsvYCpRDNHFaKlpMaFvc0zyhxoWFAawng7iqxhqyackmz3bIE9VSjYLKmifGbJMQWnjGd0qhU2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=GFd0txDt; arc=none smtp.client-ip=65.109.113.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=DteDeQ6qaUeOYN/KucS7YPuCI7DmPldE3B3Z4OKHD57i1FkhkzMi+m9+njIcHzpel3/bNuJYxUAbhL2HXsR2KmFd1gF3pZn9lfIsqHKqL2D1dF3y2rsSs2w5PZ0JL/J46UWNKm7ZradwH5T6PaWH+Wnd5hPcy42YKu36+TUTZv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=DW49NZUs; arc=none smtp.client-ip=65.109.113.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 6477440E0280;
-	Wed, 14 Jan 2026 13:50:59 +0000 (UTC)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 74D0940E0252;
+	Wed, 14 Jan 2026 13:53:01 +0000 (UTC)
 X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
 Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
 	header.d=alien8.de
 Received: from mail.alien8.de ([127.0.0.1])
 	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ARdy5Ft5JHVx; Wed, 14 Jan 2026 13:50:56 +0000 (UTC)
+	with ESMTP id ketPsXLPb6C1; Wed, 14 Jan 2026 13:52:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1768398656; bh=A2At7p3/uobm6hMvE3qTEDD3cG3t4QDVxmePKlGAJ0s=;
+	t=1768398778; bh=ck+RrjSbt/12Eho/ns9ep46kEJDpgXOyIIGXP+HmfTY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GFd0txDt0WC5O108wqxpckLKNeKdMqd66Y96POhSClrV/2vvGJJ5Slkw/wjmV86zt
-	 LI5nh/9ILACexcwifQhLbMHbyBsstZsWiqOHCXzARI3+dr3cu+jAYhJZDk/7tEO0xO
-	 bEuOczQxVmUxnMPkeo9qmKfEITI3FqsYinwL2xj7uVVHyWFSZ6l3Aqr4vxkjzNvp81
-	 KqOk4ibznVP70R34Riee9iK4qE3jzpBzAyXcQS8yy53P0tq55cnnYZmo4WpeYFTNH/
-	 SsadJtIykRU6aloR31Ox1u4Ml4aWoDPUsmDNKEelrrcCEPBWQE2vfjk/pheDhRRVNv
-	 CZlNnyIPWDcLFTU6G17KtjKbtGD+C7JMH0vTdpVFd+9tVewuQ/sMS59DIzb4ieFrhJ
-	 tVSX5OSX+E9TBtgDqwcyfyUY+L/GjtLJuTn2AFV0n8aHxpCzZqvfYiOmt4rAxPASuy
-	 ZN4gf7dXadYkE2kgy0OmiQrAMozxzAp/+fC5pzLbVhbS4yTbbz5PvskBZnHSxRBrF2
-	 NfXI1bs/WHoBeoNLUl7ToILNv86/UEDBrpnCUTg0fMgTG26jab29fzhaD2v2bY118i
-	 bRGqlKhtg6tyQPKntIIhlsqoVYYTBgZ/SOEXjpXXDqbmnWV1dUgeQqKmcGv9QwZTB5
-	 BfdV6V/15AfHf6YNi9cb+8rk=
+	b=DW49NZUsR5mh3Sz6vn7ADoE+HIGxX6iQorlhWS2lGhzRlnxHwvKGvCUfspnItbIim
+	 JPTo4wGOExDqPGh154QFVxUwWyDfbd6bD/ZrBIuLCUPMGiZ1qlKZ4LjFASOS6FJGsm
+	 VpXz+2+JlzXiUfGxOmWXeG4o1so3eoIzH/synpWCdHMvK24qALmZ5Xt+BWWG6DmSPA
+	 hCVPPsadZQ9aS67KmGFt35z5JmasL7kqmJ+25JYHhOszbkISdufKftW3NIa7qzdHv7
+	 KSQ+0nahFX927gBvtVo8fPBgxX4/KTWUncaUoOjPjlvFgNw/cm37d2BxtTr6CTBXHq
+	 mClOOzZ0yuVovO2n0pb6H3Wq8mtFCBs8dZ5HGYuL+i9W5BL9EXkjIzxrbt0uthEjVE
+	 oV9wLNOsY0PhG8fyb83HyKN7JJJQ3oP0RCcFtzaLE0P3fF8VBEWS16I5HCBXX/0Y5b
+	 KGrcx08NcLCmOhNKFbEwDRHPM6+XV/Hr8DpMhddXkEj//qTDyWKYMxC0l09uropc95
+	 AT6GE3oDS4x8Jx0UamNI9coYG7IdZTAqHLtLw6PD/0FnK4mVaG4bCkkzDxHJR6kn5A
+	 NuUFR0JwE57Zx2h+EhxxG9sjvHYlIBRO6aN+ovRiqsuTbv6VpY37dzc70VkGmABGqY
+	 NcLLb0ygJeDyRQ3rYnonuF58=
 Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id C50A240E0028;
-	Wed, 14 Jan 2026 13:50:42 +0000 (UTC)
-Date: Wed, 14 Jan 2026 14:50:34 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 292EF40E016A;
+	Wed, 14 Jan 2026 13:52:45 +0000 (UTC)
+Date: Wed, 14 Jan 2026 14:52:44 +0100
 From: Borislav Petkov <bp@alien8.de>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: "Li, Rongqing" <lirongqing@baidu.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
+To: Nikolay Borisov <nik.borisov@suse.com>
+Cc: "Luck, Tony" <tony.luck@intel.com>,
+	"Li, Rongqing" <lirongqing@baidu.com>,
 	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
 	"x86@kernel.org" <x86@kernel.org>,
@@ -74,7 +74,7 @@ Cc: "Li, Rongqing" <lirongqing@baidu.com>,
 	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
 Subject: Re: [PATCH] x86/mce: Fix timer interval adjustment after logging a
  MCE event
-Message-ID: <20260114135034.GAaWefKm97-CkbEp4P@fat_crate.local>
+Message-ID: <20260114135244.GBaWefrBAUkp0e4RAT@fat_crate.local>
 References: <268e2f0512db435685af987a2ba6893c@baidu.com>
  <20260113095111.GHaWYVj4Crd2z8oLp-@fat_crate.local>
  <39cfb093256f4da78fe0bc9e814ce5d0@baidu.com>
@@ -84,7 +84,7 @@ References: <268e2f0512db435685af987a2ba6893c@baidu.com>
  <SJ1PR11MB6083A836550962AECED68500FC8EA@SJ1PR11MB6083.namprd11.prod.outlook.com>
  <20260113213158.GUaWa5zunSfuAzra0n@fat_crate.local>
  <20260113224152.GVaWbKMMzManQ5WwlT@fat_crate.local>
- <aWbjkAPX9a9ZlJGN@agluck-desk3>
+ <d2378cc7-d97e-4e8d-b1e7-af5ce3265d2e@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
@@ -93,21 +93,20 @@ List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aWbjkAPX9a9ZlJGN@agluck-desk3>
+In-Reply-To: <d2378cc7-d97e-4e8d-b1e7-af5ce3265d2e@suse.com>
 
-On Tue, Jan 13, 2026 at 04:30:08PM -0800, Luck, Tony wrote:
-> Seems to work (though you've deleted all the places where mce_need_notify
-> is used, so you can also delete the declaration.
+On Wed, Jan 14, 2026 at 08:17:50AM +0200, Nikolay Borisov wrote:
+> so now mce_notify_irq() is not being called from the early notifier, i.e the
+> callchain mc_poll_banks -> machine_check_poll -> mce_log no longer call
+> mce_notify_irq() in the early notifier chain.
 
-Right.
+... which was the result of us moving this back'n'forth and refactoring it as
+part of normal development. The thing is, that notification mechanism is
+perhaps not needed there anymore, in favor of simply querying the gen pool.
 
-> I see time delta between logs reducing while I'm injecting errors.
-> 
-> When I pause injection for several minutes, and then restart I see the
-> interval went back up again.
+But we'll see - needs more staring and injection.
 
-Thanks Tony, I'll play with this too and ponder over what would be the proper
-fix which to take to stable too.
+Thx.
 
 -- 
 Regards/Gruss,
