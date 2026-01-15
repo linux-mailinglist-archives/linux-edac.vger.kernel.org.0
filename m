@@ -1,134 +1,262 @@
-Return-Path: <linux-edac+bounces-5645-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5646-lists+linux-edac=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-edac@lfdr.de
 Delivered-To: lists+linux-edac@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4088D1FFD7
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Jan 2026 16:56:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E069AD24F50
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Jan 2026 15:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ED384301D2DA
-	for <lists+linux-edac@lfdr.de>; Wed, 14 Jan 2026 15:54:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9F8133013577
+	for <lists+linux-edac@lfdr.de>; Thu, 15 Jan 2026 14:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F983A1A38;
-	Wed, 14 Jan 2026 15:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZiWdFN5S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436833A35A0;
+	Thu, 15 Jan 2026 14:31:25 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE91F3A1A2D
-	for <linux-edac@vger.kernel.org>; Wed, 14 Jan 2026 15:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78EC3570AE;
+	Thu, 15 Jan 2026 14:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768406075; cv=none; b=cAzUQPq9lwV3Li4pEyWapcgJaDuiWKE/JyYxl1fqu+hUKV3So+ZzEWKswkJQf9WnxJLk/U27VyzJ9feie4slL2DAvKkyNJ78wkwO3QuxeuGuqFNDwombfDPcKKdDnInvLJU8gbTLHbk9G5TnsfCbwmN1NQ7+O6Mb5ShvBenyPP8=
+	t=1768487485; cv=none; b=qqR8UEgIIRIAH/SSYtxa9S5MfFQjK2pGnNei0eHDo9XEU9Eysjkpwkeist1TgS9eg63SZEHlY1GZaNbb6RJ2VUdxRzfDcFdZg4YixcvMjMDU6eq2i+QAzfeknOEiIWhU/SxMdzCxPRsqqoP9nIt3ywU5cHFzipxG1PagwhWg31Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768406075; c=relaxed/simple;
-	bh=/1wTiWpsCpunOq5fzWEU9xuNhfBmPPkOYODo7GujLyk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FBkHfdNwhi4k090+7dbCsqcmGD0imDIB5AzdwY1DrT29OqT/xMHV9n0g8UKxH0blGBZAXqnB+297yIlnzcJApV/h/WY93LWHfM87JkzgolPnr8KU8OOkee5dOFaUUaS7Q7ay5LzUJ+DNepm6EqSHmDBWcSYAbTe+5FnFf3DPyQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZiWdFN5S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DCF1C2BCAF
-	for <linux-edac@vger.kernel.org>; Wed, 14 Jan 2026 15:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768406075;
-	bh=/1wTiWpsCpunOq5fzWEU9xuNhfBmPPkOYODo7GujLyk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZiWdFN5SvPTdNAUhPXVsu6tOOMTlR5k8zfBkm2whiyn0TUM8irA+D9cTZqhbdgP3X
-	 Ukgbf3CcSpkm6XOXi5GtyQi/cto0zj3Ovdep4vIUD+CqQ01xdm2G83VRsbLN7TsFWa
-	 qq+uSNBtfVle6sUsVPDoMnqDwNl5oFEkcoeJzlTPqZUh60yzQi/uNX40zhsxYejw3a
-	 DnDKcKIPAnkTwSf0h0qmMsyXEcoG3jAE2j37nupLsRPB61hh4d63StfPAphGbKvvjp
-	 KfXp3kRn1j1TMzQB13ygKGl7TtyEAjuq3ThAzjbag6JWKFtbVLp2NZZ99FDcDCARh5
-	 6CPFwNcJDFPdA==
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-45a85a05a70so2110974b6e.3
-        for <linux-edac@vger.kernel.org>; Wed, 14 Jan 2026 07:54:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWY8ylQkkj+UYv5j+XQ+aurXRkk6Znci3SyVUkqL1Qaw3Chneq/9cexxVdFU2XaZ/BZieFBfkmu0/6d@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNDqcW4UmtCKn2ytNG/dF8FUxwr/tn7Enf+dbKd15TerWG7SGY
-	CH2ZYBMdy6Q9TuiP18IGxejbJQdF4He5aqw4vp3TsDVPFx682lQfWdbIMKsg3PyFXk/zbGpdtAG
-	Dx2KvuOeLMHE558IW/ulaIf1bvPXkiSs=
-X-Received: by 2002:a05:6808:1887:b0:444:1450:c1 with SMTP id
- 5614622812f47-45c73e614d1mr2012498b6e.64.1768406074506; Wed, 14 Jan 2026
- 07:54:34 -0800 (PST)
+	s=arc-20240116; t=1768487485; c=relaxed/simple;
+	bh=rsX5MbYFMyE3gr5uYbY5+bJH/++PXO69jv5d6JdGN84=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NQPf526FNDL7qQHneqcVAD8zNqoZaXayhA/OeADncwYz8TOCSOTnelkHU0OQTZ1JCMlyHgRsHKKd6+cZbKFrsWTidPegGnLLDyBQEgOassjAFOaVCNgO7Tevgby2hpjBypj5h8HxHj51Fzhc8EoaG9BgLAJozOx0YUeBEDjyM0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dsQQD6CLVzJ46ZJ;
+	Thu, 15 Jan 2026 22:31:00 +0800 (CST)
+Received: from dubpeml100008.china.huawei.com (unknown [7.214.145.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 43B1540539;
+	Thu, 15 Jan 2026 22:31:17 +0800 (CST)
+Received: from P_UKIT01-A7bmah.china.huawei.com (10.195.246.32) by
+ dubpeml100008.china.huawei.com (7.214.145.227) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Thu, 15 Jan 2026 14:31:15 +0000
+From: <shiju.jose@huawei.com>
+To: <bp@alien8.de>, <rafael@kernel.org>, <akpm@linux-foundation.org>,
+	<rppt@kernel.org>, <dferguson@amperecomputing.com>,
+	<linux-edac@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-doc@vger.kernel.org>, <tony.luck@intel.com>,
+	<lenb@kernel.org>, <leo.duran@amd.com>, <Yazen.Ghannam@amd.com>,
+	<mchehab@kernel.org>, <rdunlap@infradead.org>
+CC: <jonathan.cameron@huawei.com>, <linuxarm@huawei.com>,
+	<rientjes@google.com>, <jiaqiyan@google.com>, <Jon.Grimm@amd.com>,
+	<dave.hansen@linux.intel.com>, <naoya.horiguchi@nec.com>,
+	<james.morse@arm.com>, <jthoughton@google.com>, <somasundaram.a@hpe.com>,
+	<erdemaktas@google.com>, <pgonda@google.com>, <duenwen@google.com>,
+	<gthelen@google.com>, <wschwartz@amperecomputing.com>,
+	<wbs@os.amperecomputing.com>, <nifan.cxl@gmail.com>, <tanxiaofei@huawei.com>,
+	<prime.zeng@hisilicon.com>, <roberto.sassu@huawei.com>,
+	<kangkang.shen@futurewei.com>, <wanghuiqiang@huawei.com>,
+	<shiju.jose@huawei.com>
+Subject: [PATCH v15 0/2] ACPI: Add support for ACPI RAS2 feature table
+Date: Thu, 15 Jan 2026 14:30:57 +0000
+Message-ID: <20260115143101.876-1-shiju.jose@huawei.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1767871950.git.mchehab+huawei@kernel.org>
-In-Reply-To: <cover.1767871950.git.mchehab+huawei@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 14 Jan 2026 16:54:23 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hq_CvW3P6F7paGSaKOw6kzX_yUEsFPfL1Coco6yBAUBw@mail.gmail.com>
-X-Gm-Features: AZwV_QgR6vNMfQl8dFjf7vOcP8tSnhD2ep8Y06c90VtuR0ELeNasIQVPSS6lTjI
-Message-ID: <CAJZ5v0hq_CvW3P6F7paGSaKOw6kzX_yUEsFPfL1Coco6yBAUBw@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] apei/ghes: don't OOPS with bad ARM error CPER records
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Robert Moore <robert.moore@intel.com>, acpica-devel@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-edac@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ankit Agrawal <ankita@nvidia.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
-	Dan Williams <dan.j.williams@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Hanjun Guo <guohanjun@huawei.com>, Huang Yiwei <quic_hyiwei@quicinc.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Jason Tian <jason@os.amperecomputing.com>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Len Brown <lenb@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Shuai Xue <xueshuai@linux.alibaba.com>, 
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, Tony Luck <tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
+ dubpeml100008.china.huawei.com (7.214.145.227)
 
-On Thu, Jan 8, 2026 at 12:35=E2=80=AFPM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> Rafael,
->
-> Current parsing logic at apei/ghes for ARM Processor Error
-> assumes that the record sizes are correct. Yet, a bad BIOS
-> might produce malformed GHES reports.
->
-> Worse than that, it may end exposing data from other memory
-> addresses, as the logic may end dumping large portions of
-> the memory.
->
-> Avoid that by checking the buffer sizes where needed.
->
-> ---
->
-> v6:
->  - No code changes, just a cosmetic change at patch 3 description
->  - Added Jonathan's review on all patches
->
-> v5:
->  - Changed the name of a var as requested by Jonathan
->
-> v4:
->  - addressed Jonathan comments;
->  - added two extra patches to prevent other OOM issues.
->
-> v3:
->   - addressed Shuai feedback;
->   - moved all ghes code to one patch;
->   - fixed a typo and a bad indent;
->   - cleanup the size check logic at ghes.c.
->
-> Mauro Carvalho Chehab (4):
->   apei/ghes: ARM processor Error: don't go past allocated memory
->   efi/cper: don't go past the ARM processor CPER record buffer
->   apei/ghes: ensure that won't go past CPER allocated record
->   efi/cper: don't dump the entire memory region
->
->  drivers/acpi/apei/ghes.c        | 38 ++++++++++++++++++++++++++++-----
->  drivers/firmware/efi/cper-arm.c | 12 +++++++----
->  drivers/firmware/efi/cper.c     |  8 ++++++-
->  drivers/ras/ras.c               |  6 +++++-
->  include/acpi/ghes.h             |  1 +
->  include/linux/cper.h            |  3 ++-
->  6 files changed, 56 insertions(+), 12 deletions(-)
->
-> --
+From: Shiju Jose <shiju.jose@huawei.com>
 
-Applied as 6.20 material, but I changed the spelling of EFI, APEI,
-CPER, and GHES in the subjects/changelogs to all capitals.
+Add support for ACPI RAS2 feature table (RAS2) defined in the
+ACPI 6.5 specification, section 5.2.21 and RAS2 HW based memory
+scrubbing feature.
 
-Thanks!
+ACPI RAS2 patches were part of the EDAC series [1].
+
+The code is based on linux.git v6.19-rc5 [2].
+
+1. https://lore.kernel.org/linux-cxl/20250212143654.1893-1-shiju.jose@huawei.com/
+2. https://github.com/torvalds/linux.git
+
+Changes
+=======
+v14 -> v15:
+1. Incorporated new changes suggested by Borislav on v13.
+   https://lore.kernel.org/all/20251231131512.GBaVUh4NSWqvr2xhbM@fat_crate.local/
+   
+2. Rebase to v6.19-rc5.
+
+v13 -> v14:
+1. Modifications for changes wanted by Borislav.
+   https://lore.kernel.org/all/20251125073627.GLaSVce7hBqGH1a3ni@fat_crate.local/
+
+2. Changes for the comments from Randy Dunlap 
+   https://lore.kernel.org/all/4807417b-a8f7-47a3-b38a-94ea7bdbf775@infradead.org/
+   https://lore.kernel.org/all/af7b6cdc-c0a7-4896-ba6b-6bb933898d37@infradead.org/
+   https://lore.kernel.org/all/26083ba9-1979-4d14-8465-3f54f2f96d23@infradead.org/
+   
+v12 -> v13:
+1. Fixed some bugs reported and changes wanted by Borislav.
+   https://lore.kernel.org/all/20250910192707.GAaMHRCxWx37XitN3t@fat_crate.local/ 
+
+2. Tried modifying the patch header as commented by Borislav.
+
+3. Fixed a bug reported by Yazen.
+   https://lore.kernel.org/all/20250909162434.GB11602@yaz-khff2.amd.com/
+
+4. Changed setting 'Requested Address Range' for GET_PATROL_PARAMETERS
+   command to meet the requirements from Daniel for Ampere Computing
+   platform. 
+   https://lore.kernel.org/all/7a211c5c-174c-438b-9a98-fd47b057ea4a@os.amperecomputing.com/
+
+5. In RAS2 driver, removed support for scrub control attributes 'addr' and
+   'size' for the time being with the expectation that a firmware will do
+   the full node demand scrubbing and may enable these attributes in the
+   future.
+   
+6. Add 'enable_demand' attribute to the EDAC scrub interface to start/stop
+   the demand scrub, which is used for the RAS2 demand scrub control.
+
+v11 -> v12:
+1. Modified logic for finding the lowest contiguous phy memory addr range for
+NUMA domain using node_start_pfn() and node_spanned_pages() according to the
+feedback from Mike Rapoport in v11.
+https://lore.kernel.org/all/aKsIlFTkBsAF5sqD@kernel.org/
+
+2. Rebase to 6.17-rc4.
+
+v10 -> v11:
+1. Simplified code by removing workarounds previously added to support
+   non-compliant case of single PCC channel shared across all proximity
+   domains (which is no longer required). 
+   https://lore.kernel.org/all/f5b28977-0b80-4c39-929b-cf02ab1efb97@os.amperecomputing.com/
+
+2. Fix for the comments from Borislav (Thanks).
+   https://lore.kernel.org/all/20250811152805.GQaJoMBecC4DSDtTAu@fat_crate.local/
+
+3. Rebase to 6.17-rc1.
+
+v9 -> v10:
+1. Use pcc_chan->shmem instead of 
+   acpi_os_ioremap(pcc_chan->shmem_base_addr,...) as it was
+   acpi_os_ioremap internally by the PCC driver to pcc_chan->shmem.
+   
+2. Changes required for the Ampere Computing system where uses a single
+   PCC channel for RAS2 memory features across all NUMA domains. Based on the
+   requirements from by Daniel on V9
+   https://lore.kernel.org/all/547ed8fb-d6b7-4b6b-a38b-bf13223971b1@os.amperecomputing.com/
+   and discussion with Jonathan.
+2.1 Add node_to_range lookup facility to numa_memblks. This is to retrieve the lowest
+    physical continuous memory range of the memory associated with a NUMA domain.
+2.2. Set requested addr range to the memory region's base addr and size
+   while send RAS2 cmd GET_PATROL_PARAMETER 
+   in functions ras2_update_patrol_scrub_params_cache() &
+   ras2_get_patrol_scrub_running().
+2.3. Split struct ras2_mem_ctx into struct ras2_mem_ctx_hdr and struct ras2_pxm_domain
+   to support cases, uses a single PCC channel for RAS2 scrubbers across all NUMA
+   domains and PCC channel per RAS2 scrub instance. Provided ACPI spec define single
+   memory scrub per NUMA domain.
+2.4. EDAC feature sysfs folder for RAS2 changed from "acpi_ras_memX" to  "acpi_ras_mem_idX"
+   because memory scrub instances across all NUMA domains would present under
+   "acpi_ras_mem_id0" when a system uses a single PCC channel for RAS2 scrubbers across
+   all NUMA domains etc.
+2.5. Removed Acked-by: Rafael from patch [2], because of the several above changes from v9.
+
+v8 -> v9:
+1. Added following changes for feedback from Yazen.
+ 1.1 In ras2_check_pcc_chan(..) function
+    - u32 variables moved to the same line.
+    - Updated error log for readw_relaxed_poll_timeout()
+    - Added error log for if (status & PCC_STATUS_ERROR), error condition.
+    - Removed an impossible condition check.
+  1.2. Added guard for ras2_pc_list_lock in ras2_get_pcc_subspace().
+        
+2. Rebased to linux.git v6.16-rc2 [2].
+
+v7 -> v8:
+1. Rebased to linux.git v6.16-rc1 [2].
+
+v6 -> v7:
+1. Fix for the issue reported by Daniel,
+   In ras2_check_pcc_chan(), add read, clear and check RAS2 set_cap_status outside
+   if (status & PCC_STATUS_ERROR) check. 
+   https://lore.kernel.org/all/51bcb52c-4132-4daf-8903-29b121c485a1@os.amperecomputing.com/
+
+v5 -> v6:
+1. Fix for the issue reported by Daniel, in start scrubbing with correct addr and size
+   after firmware return INVALID DATA error for scrub request with invalid addr or size.
+   https://lore.kernel.org/all/8cdf7885-31b3-4308-8a7c-f4e427486429@os.amperecomputing.com/
+   
+v4 -> v5:
+1. Fix for the build warnings reported by kernel test robot.
+   https://patchwork.kernel.org/project/linux-edac/patch/20250423163511.1412-3-shiju.jose@huawei.com/
+2. Removed patch "ACPI: ACPI 6.5: RAS2: Rename RAS2 table structure and field names"
+   from the series as the patch was merged to linux-pm.git : branch linux-next
+3. Rebased to ras.git: edac-for-next branch merged with linux-pm.git : linux-next branch.
+      
+v3 -> v4:
+1.  Changes for feedbacks from Yazen on v3.
+    https://lore.kernel.org/all/20250415210504.GA854098@yaz-khff2.amd.com/
+
+v2 -> v3:
+1. Rename RAS2 table structure and field names in 
+   include/acpi/actbl2.h limited to only necessary
+   for RAS2 scrub feature.
+2. Changes for feedbacks from Jonathan on v2.
+3. Daniel reported a known behaviour: when readback 'size' attribute after
+   setting in, returns 0 before starting scrubbing via 'addr' attribute.
+   Changes added to fix this.
+4. Daniel reported that firmware cannot update status of demand scrubbing
+   via the 'Actual Address Range (OUTPUT)', thus add workaround in the
+   kernel to update sysfs 'addr' attribute with the status of demand
+   scrubbing.
+5. Optimized logic in ras2_check_pcc_chan() function
+   (patch - ACPI:RAS2: Add ACPI RAS2 driver).
+6. Add PCC channel lock to struct ras2_pcc_subspace and change
+   lock in ras2_mem_ctx as a pointer to pcc channel lock to make sure
+   writing to PCC subspace shared memory is protected from race conditions.
+   
+v1 -> v2:
+1.  Changes for feedbacks from Borislav.
+    - Shorten ACPI RAS2 structures and variables names.
+    - Shorten some of the other variables in the RAS2 drivers.
+    - Fixed few CamelCases.
+
+2.  Changes for feedbacks from Yazen.
+    - Added newline after number of '}' and return statements.
+    - Changed return type for "ras2_add_aux_device() to 'int'.
+    - Deleted a duplication of acpi_get_table("RAS2",...) in the ras2_acpi_parse_table().
+    - Add "FW_WARN" to few error logs in the ras2_acpi_parse_table().
+    - Rename ras2_acpi_init() to acpi_ras2_init() and modified to call acpi_ras2_init()
+      function from the acpi_init().
+    - Moved scrub related variables from the struct ras2_mem_ctx from  patch
+      "ACPI:RAS2: Add ACPI RAS2 driver" to "ras: mem: Add memory ACPI RAS2 driver".
+
+Shiju Jose (2):
+  ACPI:RAS2: Add driver for the ACPI RAS2 feature table
+  ras: mem: Add ACPI RAS2 memory driver
+
+ Documentation/ABI/testing/sysfs-edac-scrub |  13 +-
+ Documentation/edac/scrub.rst               |  60 +++
+ drivers/acpi/Kconfig                       |  10 +
+ drivers/acpi/Makefile                      |   1 +
+ drivers/acpi/bus.c                         |   3 +
+ drivers/acpi/ras2.c                        | 414 +++++++++++++++++++++
+ drivers/edac/scrub.c                       |  12 +
+ drivers/ras/Kconfig                        |  13 +
+ drivers/ras/Makefile                       |   1 +
+ drivers/ras/acpi_ras2.c                    | 395 ++++++++++++++++++++
+ include/acpi/ras2.h                        |  74 ++++
+ include/linux/edac.h                       |   4 +
+ 12 files changed, 995 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/acpi/ras2.c
+ create mode 100644 drivers/ras/acpi_ras2.c
+ create mode 100644 include/acpi/ras2.h
+
+-- 
+2.43.0
+
 
