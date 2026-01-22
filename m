@@ -1,49 +1,49 @@
-Return-Path: <linux-edac+bounces-5663-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5664-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IO/oAs7zcWmvZwAAu9opvQ
-	(envelope-from <linux-edac+bounces-5663-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Jan 2026 10:54:22 +0100
+	id CLGXO/TzcWmvZwAAu9opvQ
+	(envelope-from <linux-edac+bounces-5664-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Jan 2026 10:55:01 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4A5F64D93
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Jan 2026 10:54:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A45264DA8
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Jan 2026 10:55:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6D110806CDE
-	for <lists+linux-edac@lfdr.de>; Thu, 22 Jan 2026 09:49:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 70EC44E61F2
+	for <lists+linux-edac@lfdr.de>; Thu, 22 Jan 2026 09:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746C33AEF34;
-	Thu, 22 Jan 2026 09:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11FF0392B7C;
+	Thu, 22 Jan 2026 09:48:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="uPkOuCVf"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="vsxdMiNk"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59634284B26;
-	Thu, 22 Jan 2026 09:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396AA284B26;
+	Thu, 22 Jan 2026 09:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769075271; cv=none; b=LhjmjSvl+aD/C6OY3LFKWw8uX97GqQnueGfgk4m2tzKyZCI2i0WN3u6q0WL0fnnXL4rm2YdthoT/qmfbLAPCr/hElZ4yRYPPJItZSD+/DeUs7Vgvjt8dvJOLT1pjVCGPYOxFOUkgzSb8pXPKHNmnmNCaTxVqkCzFc29i39kTQB4=
+	t=1769075282; cv=none; b=rEt2jhcQXzWdlPyK38KrySTkXRkELuvSWTk8m3ERNXH2srb7lt3f/8AlTFqCcsBhPGw6JFXj4IdbqGauHwVGSxEWlcqSNOR2hT5MGXEk2Ybd5BsNKLO8gBq9jGnioVgnBvBPP0ExVxSJqBzegJbcz8etZPcgu1g81HSvupaYOGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769075271; c=relaxed/simple;
-	bh=JxvMWPoKGlB3uCfwmZ2W41dAQhQ/djGCES7s6qCtI0A=;
+	s=arc-20240116; t=1769075282; c=relaxed/simple;
+	bh=DnMBcfwUjtt1RUKLWGSecejfX5UC0YZOIdosE1gy7YA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Dwps1o3qhomjvH0iVlZ+6tX1Q5RqPKWiXjHAB6IbPOGPOMi9l+HfWHQRL55GEq8j1o1nWY8ubHTE4C7e2pCi6z2xQI+l9O6QGR04wvahJjcHdvkPcEoY48WjLPvyudRcu6gb8EH3W+BvkEVpa4eBI/Vp5ZW3kPTkurgpcc7+T3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=uPkOuCVf; arc=none smtp.client-ip=115.124.30.133
+	 MIME-Version; b=iHeBEA5H6mAJ6oXfV6oXkB1ZhHH01I7EnXBcef5ttFH9D9W1FMZy4bRn3ZzxHW7vT11ZtE8AnaVnhkPnjbDuzDjHE7NSowGDI67FwIZYcNguJlwSEOvmql8b9Jy20tVKecjckvySNJpDOC+M0Pxtq8ya21bBiPBBN5RFCohJtY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=vsxdMiNk; arc=none smtp.client-ip=115.124.30.118
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1769075266; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=5Gb/0pO9ZhFEXcQF/4tc/EbwH+IhljJ6XBnX4XBc2RQ=;
-	b=uPkOuCVf3oKcby6JYXfLYTNOHju14fdoHCUqQ6Z2rrbZWsANHBBpBm0R1eYUv9u5WlTYZSx7p3RRSBYLg0S7te/qBPk1wxMDsLKnxNl7bxqh1iXemOVCa9DR8r5UgrjKtmQR5L2YLRZ1GzWj9EaAA4z0J/duU8e9ybp8skKDNao=
-Received: from localhost(mailfrom:tianruidong@linux.alibaba.com fp:SMTPD_---0Wxbuwk0_1769075261 cluster:ay36)
+	t=1769075270; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=a2pQ+C4SUP4Ig2ZogJ3bhHxA66J4i8YOEkIhS0I/+MI=;
+	b=vsxdMiNkkcmF4L+WED2QQEWcAiaRgyP+yH5Zg++FPmSdR7NaxVEt4fIp+f8jTJJ1cXcsRrzftyuZ4JROViqrb4VatV99O/Yzaw29S4IksBWewOM0bMXeaqENpxs61KpG91vIXiD7R3SQ18RxEdQb+aiXJatnjUHtS0KjhLA99TA=
+Received: from localhost(mailfrom:tianruidong@linux.alibaba.com fp:SMTPD_---0WxbtZj3_1769075266 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Thu, 22 Jan 2026 17:47:45 +0800
+          Thu, 22 Jan 2026 17:47:50 +0800
 From: Ruidong Tian <tianruidong@linux.alibaba.com>
 To: catalin.marinas@arm.com,
 	will@kernel.org,
@@ -68,9 +68,9 @@ Cc: lenb@kernel.org,
 	zhuo.song@linux.alibaba.com,
 	oliver.yang@linux.alibaba.com,
 	Ruidong Tian <tianruidong@linux.alibaba.com>
-Subject: [PATCH v6 05/16] ras: AEST: Probe RAS system architecture version
-Date: Thu, 22 Jan 2026 17:46:45 +0800
-Message-Id: <20260122094656.73399-6-tianruidong@linux.alibaba.com>
+Subject: [PATCH v6 06/16] ras: AEST: Support RAS Common Fault Injection Model Extension
+Date: Thu, 22 Jan 2026 17:46:46 +0800
+Message-Id: <20260122094656.73399-7-tianruidong@linux.alibaba.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20260122094656.73399-1-tianruidong@linux.alibaba.com>
 References: <20260122094656.73399-1-tianruidong@linux.alibaba.com>
@@ -96,7 +96,7 @@ X-Spamd-Result: default: False [-7.46 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-5663-lists,linux-edac=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-5664-lists,linux-edac=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[23];
 	FROM_HAS_DN(0.00)[];
 	DMARC_POLICY_ALLOW(0.00)[linux.alibaba.com,none];
@@ -106,100 +106,96 @@ X-Spamd-Result: default: False [-7.46 / 15.00];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	FROM_NEQ_ENVFROM(0.00)[tianruidong@linux.alibaba.com,linux-edac@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.alibaba.com:mid,linux.alibaba.com:dkim,dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns,alibaba.com:email]
-X-Rspamd-Queue-Id: B4A5F64D93
+	DBL_BLOCKED_OPENRESOLVER(0.00)[alibaba.com:email,linux.alibaba.com:mid,linux.alibaba.com:dkim,dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6A45264DA8
 X-Rspamd-Action: no action
 
-The RAS version of a component can be probed via its ERRDEVARCH register.
-
-In cases where a component (e.g., SMMU) does not implement an ERRDEVARCH
-register, the driver falls back to using the RAS version of the Processing
-Element (PE).
+Add inject register descripted in Common Fault Injection Model
+Extension.
 
 Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
 ---
- arch/arm64/include/asm/ras.h |  3 +++
- drivers/ras/aest/aest-core.c | 22 ++++++++++++++++++++++
- drivers/ras/aest/aest.h      |  3 +++
- 3 files changed, 28 insertions(+)
+ drivers/ras/aest/aest-core.c | 15 ++++++++++++++-
+ drivers/ras/aest/aest.h      | 10 ++++++++++
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/ras.h b/arch/arm64/include/asm/ras.h
-index b6640b9972bf..da7c441252fe 100644
---- a/arch/arm64/include/asm/ras.h
-+++ b/arch/arm64/include/asm/ras.h
-@@ -4,6 +4,9 @@
- 
- #include <linux/types.h>
- 
-+/* ERRDEVARCH */
-+#define ERRDEVARCH_REV GENMASK(19, 16)
-+
- struct ras_ext_regs {
- 	u64 err_fr;
- 	u64 err_ctlr;
 diff --git a/drivers/ras/aest/aest-core.c b/drivers/ras/aest/aest-core.c
-index f4a5119dc513..84b2fb8127ff 100644
+index 84b2fb8127ff..1218ae51079c 100644
 --- a/drivers/ras/aest/aest-core.c
 +++ b/drivers/ras/aest/aest-core.c
-@@ -16,6 +16,27 @@ DEFINE_PER_CPU(struct aest_device, percpu_adev);
- #undef pr_fmt
- #define pr_fmt(fmt) "AEST: " fmt
- 
-+static int get_aest_node_ver(struct aest_node *node)
-+{
-+	u64 reg;
-+	void *devarch_base;
-+
-+	if (node->type == ACPI_AEST_GIC_ERROR_NODE) {
-+		devarch_base = ioremap(node->info->interface_hdr->address +
-+					       GIC_ERRDEVARCH,
-+				       PAGE_SIZE);
-+		if (!devarch_base)
-+			return 0;
-+
-+		reg = readl_relaxed(devarch_base);
-+		iounmap(devarch_base);
-+
-+		return FIELD_GET(ERRDEVARCH_REV, reg);
-+	}
-+
-+	return FIELD_GET(ID_AA64PFR0_EL1_RAS_MASK, read_cpuid(ID_AA64PFR0_EL1));
-+}
-+
- static int aest_init_record(struct aest_record *record, int i,
- 			    struct aest_node *node)
+@@ -124,7 +124,7 @@ static int aest_init_node(struct aest_device *adev, struct aest_node *node,
+ 			  struct acpi_aest_node *anode)
  {
-@@ -108,6 +129,7 @@ static int aest_init_node(struct aest_device *adev, struct aest_node *node,
+ 	int i, ret;
+-	u64 address;
++	u64 address, flags;
+ 
  	node->adev = adev;
  	node->info = anode;
- 	node->type = anode->type;
-+	node->version = get_aest_node_ver(node);
- 	node->name = alloc_aest_node_name(node);
- 	if (!node->name)
- 		return -ENOMEM;
+@@ -145,6 +145,19 @@ static int aest_init_node(struct aest_device *adev, struct aest_node *node,
+ 			return -ENOMEM;
+ 	}
+ 
++	flags = anode->interface_hdr->flags;
++	address = node->info->common->fault_inject_register_base;
++	if ((flags & AEST_XFACE_FLAG_FAULT_INJECT) && address) {
++		if (address - anode->interface_hdr->address < node->group->size)
++			node->inj = node->base +
++				    (address - anode->interface_hdr->address);
++		else {
++			node->inj = devm_ioremap(adev->dev, address, PAGE_SIZE);
++			if (!node->inj)
++				return -ENOMEM;
++		}
++	}
++
+ 	ret = aest_node_set_errgsr(adev, node);
+ 	if (ret)
+ 		return ret;
 diff --git a/drivers/ras/aest/aest.h b/drivers/ras/aest/aest.h
-index 31131cce9928..bf0b9a49fdaa 100644
+index bf0b9a49fdaa..505ecd9635bc 100644
 --- a/drivers/ras/aest/aest.h
 +++ b/drivers/ras/aest/aest.h
-@@ -61,6 +61,8 @@
+@@ -60,6 +60,9 @@
+ #define ERXMISC1 0x28
  #define ERXMISC2 0x30
  #define ERXMISC3 0x38
++#define ERXPFGF 0x800
++#define ERXPFGCTL 0x808
++#define ERXPFGCDN 0x810
  
-+#define GIC_ERRDEVARCH 0xFFBC
-+
- struct aest_access {
- 	u64 (*read)(void *base, u32 offset);
- 	void (*write)(void *base, u32 offset, u64 val);
-@@ -141,6 +143,7 @@ struct aest_node {
- 	 *              error events.
- 	 */
- 	unsigned long *status_reporting;
-+	int version;
+ #define GIC_ERRDEVARCH 0xFFBC
  
- 	const struct aest_group *group;
- 	struct aest_device *adev;
+@@ -120,6 +123,7 @@ struct aest_node {
+ 	u8 type;
+ 	void *errgsr;
+ 	void *base;
++	void *inj;
+ 
+ 	/*
+ 	 * This bitmap indicates which of the error records within this error
+@@ -208,6 +212,9 @@ static inline u64 aest_sysreg_read(void *__unused, u32 offset)
+ 		CASE_READ(res, ERXMISC1)
+ 		CASE_READ(res, ERXMISC2)
+ 		CASE_READ(res, ERXMISC3)
++		CASE_READ(res, ERXPFGF)
++		CASE_READ(res, ERXPFGCTL)
++		CASE_READ(res, ERXPFGCDN)
+ 	default :
+ 		res = 0;
+ 	}
+@@ -225,6 +232,9 @@ static inline void aest_sysreg_write(void *base, u32 offset, u64 val)
+ 		CASE_WRITE(val, ERXMISC1)
+ 		CASE_WRITE(val, ERXMISC2)
+ 		CASE_WRITE(val, ERXMISC3)
++		CASE_WRITE(val, ERXPFGF)
++		CASE_WRITE(val, ERXPFGCTL)
++		CASE_WRITE(val, ERXPFGCDN)
+ 	default :
+ 		return;
+ 	}
 -- 
 2.51.2.612.gdc70283dfc
 
