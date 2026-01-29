@@ -1,216 +1,685 @@
-Return-Path: <linux-edac+bounces-5683-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5684-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mD1UJgU8emlB4wEAu9opvQ
-	(envelope-from <linux-edac+bounces-5683-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Jan 2026 17:40:37 +0100
+	id GEylBdc1e2mGCQIAu9opvQ
+	(envelope-from <linux-edac+bounces-5684-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Jan 2026 11:26:31 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF35FA5FB1
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Jan 2026 17:40:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6431DAE9F7
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Jan 2026 11:26:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3ECEA3003802
-	for <lists+linux-edac@lfdr.de>; Wed, 28 Jan 2026 16:40:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A6580301FC8F
+	for <lists+linux-edac@lfdr.de>; Thu, 29 Jan 2026 10:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85689313E20;
-	Wed, 28 Jan 2026 16:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B34833F8CE;
+	Thu, 29 Jan 2026 10:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HI1fYzo3"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f193.google.com (mail-qk1-f193.google.com [209.85.222.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7801E318B91;
-	Wed, 28 Jan 2026 16:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E13F33F373
+	for <linux-edac@vger.kernel.org>; Thu, 29 Jan 2026 10:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769618434; cv=none; b=QJpQGKH5I6SXKpJYF45ZJRK2uTGupwYmhZV0EaL6x5qOfh8E20v/+ZgXG3Ufo3D8aDk38NOfyuLr5amnn/ybdZk72A17o3eZH49YZxk99PPfCPE/Ivoh643/S+j2ziyK4NdYPGoZYGDSAlvG/rcoFL6L3PB13n/x6C/99p23fW4=
+	t=1769682380; cv=none; b=SyYbVutAD9LtfQ9I4G8/68bCdQa3gfxqIWbyszMvVwGiH/gEuCqqdnp3hGHbUE7QD4XzC30cHh1S3GgFI2ijG4M4549MIXveDOnZGAaZtCt+ppp6eGjLiV/9KKNv7f+tv4lQEq9UaX5mkEspBEFoFAy1ye11CB3m0RjApvN3J1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769618434; c=relaxed/simple;
-	bh=KN0RWmM/E0PJw5+tacIVqLz8j2grF2gZqhBSbSiV+TM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=R6mjnwNoPMkfN7dX/pu5a/aa+fdx/XvsKzoSuuV9ZDdEORcwe+c4VPhWESNv1vsSBDlB6Mibe5mA9OoNzNEHLZeCyHyMymBnqm8EJpMb4ox2ayYxAdtGh39rP1+crRfec/doSbsMSIPt1Z3xEkZ8GYx6OHiUJfYb276/af22N3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4f1Sft4CpNzJ46ZP;
-	Thu, 29 Jan 2026 00:39:50 +0800 (CST)
-Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6628540086;
-	Thu, 29 Jan 2026 00:40:28 +0800 (CST)
-Received: from dubpeml500008.china.huawei.com (7.214.146.94) by
- dubpeml500005.china.huawei.com (7.214.145.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 28 Jan 2026 16:40:27 +0000
-Received: from dubpeml500008.china.huawei.com ([7.214.146.94]) by
- dubpeml500008.china.huawei.com ([7.214.146.94]) with mapi id 15.02.1544.011;
- Wed, 28 Jan 2026 16:40:27 +0000
-From: Shiju Jose <shiju.jose@huawei.com>
-To: Borislav Petkov <bp@alien8.de>
-CC: "rafael@kernel.org" <rafael@kernel.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "rppt@kernel.org" <rppt@kernel.org>,
-	"dferguson@amperecomputing.com" <dferguson@amperecomputing.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"lenb@kernel.org" <lenb@kernel.org>, "leo.duran@amd.com" <leo.duran@amd.com>,
-	"Yazen.Ghannam@amd.com" <Yazen.Ghannam@amd.com>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Linuxarm <linuxarm@huawei.com>, "rientjes@google.com" <rientjes@google.com>,
-	"jiaqiyan@google.com" <jiaqiyan@google.com>, "Jon.Grimm@amd.com"
-	<Jon.Grimm@amd.com>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "naoya.horiguchi@nec.com"
-	<naoya.horiguchi@nec.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "somasundaram.a@hpe.com"
-	<somasundaram.a@hpe.com>, "erdemaktas@google.com" <erdemaktas@google.com>,
-	"pgonda@google.com" <pgonda@google.com>, "duenwen@google.com"
-	<duenwen@google.com>, "gthelen@google.com" <gthelen@google.com>,
-	"wschwartz@amperecomputing.com" <wschwartz@amperecomputing.com>,
-	"wbs@os.amperecomputing.com" <wbs@os.amperecomputing.com>,
-	"nifan.cxl@gmail.com" <nifan.cxl@gmail.com>, tanxiaofei
-	<tanxiaofei@huawei.com>, "Zengtao (B)" <prime.zeng@hisilicon.com>, "Roberto
- Sassu" <roberto.sassu@huawei.com>, "kangkang.shen@futurewei.com"
-	<kangkang.shen@futurewei.com>, wanghuiqiang <wanghuiqiang@huawei.com>
-Subject: RE: [PATCH v16 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
- table
-Thread-Topic: [PATCH v16 1/2] ACPI:RAS2: Add driver for the ACPI RAS2 feature
- table
-Thread-Index: AQHcjJF8dezXiKYfZEmczjDGAWEGLrVktbUAgAMVYQA=
-Date: Wed, 28 Jan 2026 16:40:27 +0000
-Message-ID: <863e6f6f7d15466397948ce8e920a04c@huawei.com>
-References: <20260123175512.2066-1-shiju.jose@huawei.com>
- <20260123175512.2066-2-shiju.jose@huawei.com>
- <20260126171552.GJaXehSJp33nFnpvVd@fat_crate.local>
-In-Reply-To: <20260126171552.GJaXehSJp33nFnpvVd@fat_crate.local>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1769682380; c=relaxed/simple;
+	bh=fl0uYUK1KobwaOSneQyJdMKpmWEchaMKOqWmTZxsHdI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FhMcE9+0Irxm0wgQyJUwkILCp2P65YVF8ZfgPi5ftWAFUhJlNrGQHJ1F14C9MSI/CoDj/Bi1WGF9Ke//iq6skvfG0CrnW/BIyqZA/NtheODdrA9K3lKjktoyzZCxPPrB1qYQctuJq6OsgTXrxebQilXMb72/nay77fVdkMaK3/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HI1fYzo3; arc=none smtp.client-ip=209.85.222.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f193.google.com with SMTP id af79cd13be357-8c5386f1c9fso110683985a.1
+        for <linux-edac@vger.kernel.org>; Thu, 29 Jan 2026 02:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769682377; x=1770287177; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNZuGzMRyE26Okpg8ZMwr27OuF7twcWBvEpJ0WDxSa0=;
+        b=HI1fYzo3t14mUW9pOp+x1dJKCF70TFahE6h+eLzZmCa/bA0hxbSmJuOYynOu46K+MO
+         QNfB2FJ6X1bKH6hhEGUG9Ez8solBKbzOnEB8RqGZ8NL4YCA4/7awi+0a5MiEW+hzEO0i
+         JrBnBQoDQ00PlIw+E0DEKqBJ8bBXlpyqpQBGgY0ZQ/DTIPhoF/bCzwg+J0ShcYM/cYy4
+         uEfbOTLF9VtkDJDmCnWQpwT6NJUb2C/PUSQIBaaRHgA5b3fjHbDCtukVW49YdLJjTTGa
+         nrFILPfs7m2adpkmmKkLRPJtaIP/JnQte7SCN2d3g7MmD8dPCpA1UvoY1yAOtCW5zwih
+         O/eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769682377; x=1770287177;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNZuGzMRyE26Okpg8ZMwr27OuF7twcWBvEpJ0WDxSa0=;
+        b=AxD1EFavSksFjCrSsPsTMLLLPHGi4JiLVUOWY8wldp9u/j7J1xXQREyHb4IG9wiVxh
+         GkOSUYpIzyHGkHJ5wueku8z2dLklEJ7b0oyHorn6lQYuPFKIDg3GMn25sidAt2fVL2AG
+         7IStd/Ve3gT4RB0cM7nazVLGOdsSoxmuw/6yhZFdDOK9aM/clkf6guneocuFfEIleDnk
+         +e7w2CFEX7hPR1pvmhV68go0CPAc9LKBVPOUY842dQFaZnT1jlz1mseys7Ym7RyYyP1G
+         mS2guXq28HuThEQoiz0yl0sEuC+feOMefxDTOq+0vLgVOLVbLEFBFnoLEXQWLA60LqP0
+         gDyg==
+X-Gm-Message-State: AOJu0Yya3FTjKysArlS5cLXLiRYoxw5xXACwnSDjpywiUmnUSdT218Tb
+	tsQ5kWVRtrLmYSDJH1pkFfqhZg/CtXV2H9sashT3P3wsOV7AqUMzpWFYgPVlcgLo
+X-Gm-Gg: AZuq6aLWBpuMroEP0387VHl9tz/eKdtqyON3fK6L9gTjGNWl3hLd44TXvj3dt+1gJGt
+	isEgxlxi0nZ3L0fKMwwFq1I7farymjJHEQQnZXlV7ybzKhfBFyCbtdIHFSt+f3Cla6XkO1LAxho
+	n51f4/YRpmCOsl42Vp/hjLr38V/A44LjOIaXh4NFqr9NhnatHfRQgeGnyaaOcnIkPXCpKo6G/pJ
+	6nWLAQ3xz+rVgZOFC9lNR3MKp3j/7m8sJ5a3yR7JHUnloer3pYgHK6GGsjfT1LFirnQwhy6Vci0
+	Xf5GQ/wjAptl3XfwHMuH3ckPw0FFzK5kIHU0WW4QIckJzuo/RRG/jMlWAjp5DRZ295hmpOBOC9d
+	hCqZNOD/LdcQlExc65o2fDsYC9Ehe3a7jzLxFybB+umZGFE4WHzjBzlnZgleCwFGy0qQMCsBDlE
+	62UrlXEwtf/+a+Fm9PGt61NxLvH/Hd67HGDZd6RSbhdHEJDoqdpMPjNDfwcXbaxWrELg1iacFVx
+	Px+2nnAIyb86nsEjiuEI6FBPHMHscaqt1EfPa4tHbSNpyl/DAa5MqEE9o+mdw/tsi1Y7LWWgErL
+	Twf5
+X-Received: by 2002:a05:6808:ec4:b0:459:bcff:a568 with SMTP id 5614622812f47-45efc6b604cmr3739404b6e.65.1769675425771;
+        Thu, 29 Jan 2026 00:30:25 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-409570f2fbdsm3566119fac.4.2026.01.29.00.30.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jan 2026 00:30:25 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: linux-edac@vger.kernel.org
+Cc: Tim Small <tim@buttersideup.com>,
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	=?UTF-8?q?Martin=20Kepplinger-Novakovi=C4=87?= <martink@posteo.de>,
+	Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH] edac: i82443bxgx: remove driver that has been marked broken since 2007
+Date: Thu, 29 Jan 2026 00:29:27 -0800
+Message-ID: <20260129082937.48740-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.64 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,amperecomputing.com,vger.kernel.org,kvack.org,intel.com,amd.com,huawei.com,google.com,linux.intel.com,nec.com,arm.com,hpe.com,os.amperecomputing.com,gmail.com,hisilicon.com,futurewei.com];
-	RCPT_COUNT_TWELVE(0.00)[36];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-5683-lists,linux-edac=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[shiju.jose@huawei.com,linux-edac@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[buttersideup.com,gmail.com,alien8.de,intel.com,linux-foundation.org,kernel.org,posteo.de,ucw.cz];
+	TAGGED_FROM(0.00)[bounces-5684-lists,linux-edac=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.997];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-edac@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-edac];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: CF35FA5FB1
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,buttersideup.com:email,akamai.com:email]
+X-Rspamd-Queue-Id: 6431DAE9F7
 X-Rspamd-Action: no action
 
-DQo+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj5Gcm9tOiBCb3Jpc2xhdiBQZXRrb3YgPGJw
-QGFsaWVuOC5kZT4NCj5TZW50OiAyNiBKYW51YXJ5IDIwMjYgMTc6MTYNCj5UbzogU2hpanUgSm9z
-ZSA8c2hpanUuam9zZUBodWF3ZWkuY29tPg0KPkNjOiByYWZhZWxAa2VybmVsLm9yZzsgYWtwbUBs
-aW51eC1mb3VuZGF0aW9uLm9yZzsgcnBwdEBrZXJuZWwub3JnOw0KPmRmZXJndXNvbkBhbXBlcmVj
-b21wdXRpbmcuY29tOyBsaW51eC1lZGFjQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+YWNwaUB2
-Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW1tQGt2YWNrLm9yZzsgbGludXgtZG9jQHZnZXIua2VybmVs
-Lm9yZzsNCj50b255Lmx1Y2tAaW50ZWwuY29tOyBsZW5iQGtlcm5lbC5vcmc7IGxlby5kdXJhbkBh
-bWQuY29tOw0KPllhemVuLkdoYW5uYW1AYW1kLmNvbTsgbWNoZWhhYkBrZXJuZWwub3JnOyBKb25h
-dGhhbiBDYW1lcm9uDQo+PGpvbmF0aGFuLmNhbWVyb25AaHVhd2VpLmNvbT47IExpbnV4YXJtIDxs
-aW51eGFybUBodWF3ZWkuY29tPjsNCj5yaWVudGplc0Bnb29nbGUuY29tOyBqaWFxaXlhbkBnb29n
-bGUuY29tOyBKb24uR3JpbW1AYW1kLmNvbTsNCj5kYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb207
-IG5hb3lhLmhvcmlndWNoaUBuZWMuY29tOw0KPmphbWVzLm1vcnNlQGFybS5jb207IGp0aG91Z2h0
-b25AZ29vZ2xlLmNvbTsgc29tYXN1bmRhcmFtLmFAaHBlLmNvbTsNCj5lcmRlbWFrdGFzQGdvb2ds
-ZS5jb207IHBnb25kYUBnb29nbGUuY29tOyBkdWVud2VuQGdvb2dsZS5jb207DQo+Z3RoZWxlbkBn
-b29nbGUuY29tOyB3c2Nod2FydHpAYW1wZXJlY29tcHV0aW5nLmNvbTsNCj53YnNAb3MuYW1wZXJl
-Y29tcHV0aW5nLmNvbTsgbmlmYW4uY3hsQGdtYWlsLmNvbTsgdGFueGlhb2ZlaQ0KPjx0YW54aWFv
-ZmVpQGh1YXdlaS5jb20+OyBaZW5ndGFvIChCKSA8cHJpbWUuemVuZ0BoaXNpbGljb24uY29tPjsg
-Um9iZXJ0bw0KPlNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+OyBrYW5na2FuZy5zaGVu
-QGZ1dHVyZXdlaS5jb207DQo+d2FuZ2h1aXFpYW5nIDx3YW5naHVpcWlhbmdAaHVhd2VpLmNvbT4N
-Cj5TdWJqZWN0OiBSZTogW1BBVENIIHYxNiAxLzJdIEFDUEk6UkFTMjogQWRkIGRyaXZlciBmb3Ig
-dGhlIEFDUEkgUkFTMiBmZWF0dXJlDQo+dGFibGUNCj4NCj5PbiBGcmksIEphbiAyMywgMjAyNiBh
-dCAwNTo1NTowN1BNICswMDAwLCBzaGlqdS5qb3NlQGh1YXdlaS5jb20gd3JvdGU6DQo+PiArc3Rh
-dGljIGludCBwYXJzZV9yYXMyX3RhYmxlKHN0cnVjdCBhY3BpX3RhYmxlX3JhczIgKnJhczJfdGFi
-KSB7DQo+PiArCXN0cnVjdCBhY3BpX3JhczJfcGNjX2Rlc2MgKnBjY19kZXNjX2xpc3Q7DQo+PiAr
-CXN0cnVjdCByYXMyX21lbV9jdHggKipwY3R4X2xpc3Q7DQo+PiArCXN0cnVjdCByYXMyX21lbV9j
-dHggKnJhczJfY3R4Ow0KPj4gKwl1MTYgaTsNCj4+ICsNCj4+ICsJaWYgKHJhczJfdGFiLT5oZWFk
-ZXIubGVuZ3RoIDwgc2l6ZW9mKCpyYXMyX3RhYikpIHsNCj4+ICsJCXByX3dhcm4oRldfV0FSTiAi
-QUNQSSBSQVMyIHRhYmxlIHByZXNlbnQgYnV0IGJyb2tlbiAodG9vDQo+c2hvcnQsIHNpemU9JXUp
-XG4iLA0KPj4gKwkJCXJhczJfdGFiLT5oZWFkZXIubGVuZ3RoKTsNCj4+ICsJCXJldHVybiAtRUlO
-VkFMOw0KPj4gKwl9DQo+PiArDQo+PiArCWlmICghcmFzMl90YWItPm51bV9wY2NfZGVzY3MgfHwg
-cmFzMl90YWItPm51bV9wY2NfZGVzY3MgPg0KPlJBUzJfTUFYX05VTV9QQ0NfREVTQ1MpIHsNCj4+
-ICsJCXByX3dhcm4oRldfV0FSTiAiTm8vSW52YWxpZCBudW1iZXIgb2YgUENDIGRlc2NzKCVkKSBp
-bg0KPkFDUEkgUkFTMiB0YWJsZVxuIiwNCj4+ICsJCQlyYXMyX3RhYi0+bnVtX3BjY19kZXNjcyk7
-DQo+PiArCQlyZXR1cm4gLUVJTlZBTDsNCj4+ICsJfQ0KPj4gKw0KPj4gKwlwY3R4X2xpc3QgPSBr
-Y2FsbG9jKHJhczJfdGFiLT5udW1fcGNjX2Rlc2NzLCBzaXplb2YoKnBjdHhfbGlzdCksDQo+R0ZQ
-X0tFUk5FTCk7DQo+PiArCWlmICghcGN0eF9saXN0KQ0KPj4gKwkJcmV0dXJuIC1FTk9NRU07DQo+
-PiArDQo+PiArCXBjY19kZXNjX2xpc3QgPSAoc3RydWN0IGFjcGlfcmFzMl9wY2NfZGVzYyAqKShy
-YXMyX3RhYiArIDEpOw0KPj4gKwlmb3IgKGkgPSAwOyBpIDwgcmFzMl90YWItPm51bV9wY2NfZGVz
-Y3M7IGkrKywgcGNjX2Rlc2NfbGlzdCsrKSB7DQo+PiArCQlpZiAocGNjX2Rlc2NfbGlzdC0+ZmVh
-dHVyZV90eXBlICE9IFJBUzJfRkVBVF9UWVBFX01FTU9SWSkNCj4+ICsJCQljb250aW51ZTsNCj4+
-ICsNCj4+ICsJCXJhczJfY3R4ID0gYWRkX2F1eF9kZXZpY2UoUkFTMl9NRU1fREVWX0lEX05BTUUs
-DQo+cGNjX2Rlc2NfbGlzdC0+Y2hhbm5lbF9pZCwNCj4+ICsJCQkJCSAgcGNjX2Rlc2NfbGlzdC0+
-aW5zdGFuY2UpOw0KPj4gKwkJaWYgKElTX0VSUihyYXMyX2N0eCkpIHsNCj4+ICsJCQlwcl93YXJu
-KCJGYWlsZWQgdG8gYWRkIFJBUzIgYXV4aWxpYXJ5IGRldmljZSByYz0lbGRcbiIsDQo+UFRSX0VS
-UihyYXMyX2N0eCkpOw0KPj4gKwkJCWZvciAoOyBpID4gMDsgaS0tKSB7DQo+PiArCQkJCWlmIChw
-Y3R4X2xpc3RbaSAtIDFdKQ0KPj4gKwkJCQkJYXV4aWxpYXJ5X2RldmljZV91bmluaXQoJnBjdHhf
-bGlzdFtpIC0gMV0tDQo+PmFkZXYpOw0KPg0KPlRoaXMgaXMgd3JvbmcgLSB0aGVyZSBzaG91bGQg
-YmUgYSBmdW5jdGlvbiBjYWxsZWQgcmVtb3ZlX2F1eF9kZXZpY2UoKSB3aGljaA0KPnVud2luZHMg
-ZXZlcnl0aGluZyBhZGRfYXV4X2RldmljZSgpIGRvZXMgZm9yIGFsbCB0aG9zZSBkZXZpY2VzLg0K
-DQpIaSBCb3Jpc2xhdiwNCg0KVGhhbmtzIGZvciBjb21tZW50cyBhbmQgY2hhbmdlcy4NCg0KSSBh
-ZGRlZCByZW1vdmVfYXV4X2RldmljZSgpICBhcyBiZWxvdywgd2hpY2ggd291bGQgY2FsbCByYXMy
-X3JlbGVhc2UoKSBhbmQgZnJlZQ0KYWRkX2F1eF9kZXZpY2UoKSBkb2VzIGZvciB0aGF0IGF1eGls
-aWFyeSBkZXZpY2UuIEhvcGUgaXQgaXMgYWNjZXB0YWJsZT8NCg0KK3N0YXRpYyB2b2lkIHJlbW92
-ZV9hdXhfZGV2aWNlKHN0cnVjdCByYXMyX21lbV9jdHggKnJhczJfY3R4KSB7DQorICAgIGlmICgh
-cmFzMl9jdHgpDQorICAgICAgICByZXR1cm47DQorDQorICAgIGF1eGlsaWFyeV9kZXZpY2VfZGVs
-ZXRlKCZyYXMyX2N0eC0+YWRldik7DQorICAgIGF1eGlsaWFyeV9kZXZpY2VfdW5pbml0KCZyYXMy
-X2N0eC0+YWRldik7DQorfQ0KKw0KPg0KPkluIGFkZGl0aW9uLCBJIGRpZCBhIGJ1bmNoIG9mIGNs
-ZWFudXBzIG9udG9wLCBzZWUgYmVsb3cuIEkgY2FuJ3QgdGVzdCB0aGVtIHNvIHBscw0KPmhhdmUg
-YSBsb29rIGFuZCBydW4gdGhlbSBvbiB5b3VyIGh3IGFuZCBpZiBhbGwgZ29vZCwgbWVyZ2UgdGhl
-bSB3aXRoIHlvdXINCj5wYXRjaC4NCg0KSSB0ZXN0ZWQgeW91ciBjaGFuZ2VzIGFuZCBtZXJnZWQu
-DQpJIGdvdCBhIGNoZWNrcGF0Y2ggd2FybmluZyBmb3IgYmVsb3cgY2hhbmdlLg0KDQpUaGFua3Ms
-DQpTaGlqdQ0KDQo+DQo+VGh4Lg0KPg0KPi0tLQ0KPg0KPmRpZmYgLS1naXQgYS9kcml2ZXJzL2Fj
-cGkvS2NvbmZpZyBiL2RyaXZlcnMvYWNwaS9LY29uZmlnIGluZGV4DQo+N2Y4NDZjMjJmYzMwLi4w
-MDEwYjM4ZThmODEgMTAwNjQ0DQo+LS0tIGEvZHJpdmVycy9hY3BpL0tjb25maWcNCj4rKysgYi9k
-cml2ZXJzL2FjcGkvS2NvbmZpZw0KPkBAIC0yOTksOSArMjk5LDEwIEBAIGNvbmZpZyBBQ1BJX1JB
-UzINCj4gCWRlcGVuZHMgb24gTUFJTEJPWA0KPiAJZGVwZW5kcyBvbiBQQ0MNCj5AQCAtMTg3LDIy
-ICsxOTcsMjQgQEAgaW50IHJhczJfc2VuZF9wY2NfY21kKHN0cnVjdCByYXMyX21lbV9jdHgNCj4q
-cmFzMl9jdHgsIHUxNiBjbWQpDQo+DQo+IAkvKiBSaW5nIGRvb3JiZWxsICovDQo+IAlyYyA9IG1i
-b3hfc2VuZF9tZXNzYWdlKHBjY19jaGFubmVsLCAmY21kKTsNCj4rDQo+IAkvKg0KPi0JICogbWJv
-eF9zZW5kX21lc3NhZ2UoKSByZXR1cm4gbm9uLW5lZ2F0aXZlIGludGVnZXIgZm9yIHN1Y2Nlc3Nm
-dWwNCj5zdWJtaXNzaW9uDQo+LQkgKiBhbmQgbmVnYXRpdmUgdmFsdWUgb24gZmFpbHVyZS4NCj4r
-CSAqIG1ib3hfc2VuZF9tZXNzYWdlKCkgcmV0dXJucyBhIG5vbi1uZWdhdGl2ZSBpbnRlZ2VyIGZv
-ciBzdWNjZXNzZnVsDQo+c3VibWlzc2lvbg0KPisJICogYW5kIGEgbmVnYXRpdmUgdmFsdWUgb24g
-ZmFpbHVyZS4NCj4gCSAqLw0KPi0JcmMgPSByYyA8IDAgPyByYyA6IDA7DQo+IAlpZiAocmMgPCAw
-KSB7DQo+IAkJZGV2X3dhcm4ocmFzMl9jdHgtPmRldiwNCj4gCQkJICJFcnJvciBzZW5kaW5nIFBD
-QyBtYm94IG1lc3NhZ2UgY29tbWFuZDogMHgleCwNCj5yYzolZFxuIiwgY21kLCByYyk7DQo+IAkJ
-cmV0dXJuIHJjOw0KPisJfSBlbHNlIHsNCj4rCQlyYyA9IDA7DQo+IAl9DQo+DQpDaGVja3BhdGNo
-IHdhcm5pbmc6DQoNCldBUk5JTkc6IGVsc2UgaXMgbm90IGdlbmVyYWxseSB1c2VmdWwgYWZ0ZXIg
-YSBicmVhayBvciByZXR1cm4NCiMyMDc6IEZJTEU6IGRyaXZlcnMvYWNwaS9yYXMyLmM6MjA3Og0K
-KyAgICAgICAgcmV0dXJuIHJjOw0KKyAgICB9IGVsc2Ugew0KDQphbmQgbm8gd2FybmluZyB3aXRo
-IGFzIGJlbG93LA0KDQoraWYgKHJjID49IDApIHsNCisJcmMgPSAwOw0KK30gZWxzZSB7DQorCWRl
-dl93YXJuKHJhczJfY3R4LT5kZXYsDQorCQkgICAgICJFcnJvciBzZW5kaW5nIFBDQyBtYm94IG1l
-c3NhZ2UgY29tbWFuZDogMHgleCwgcmM6JWRcbiIsIGNtZCwgcmMpOw0KKwlyZXR1cm4gcmM7DQor
-fQ0KDQo=
+The history of this driver is pretty amusing. It was marked broken in
+2007 in commit 28f96eeafc89 ("drivers/edac-new-i82443bxgz-mc-driver:
+mark as broken"). It was then fixed in 2008 in commit 53a2fe5804e8
+("edac: make i82443bxgx_edac coexist with intel_agp"), but the
+dependency on BROKEN was never removed. Given that this was never fixed
+in the last ~18 years, it is obvious there is no demand for this
+driver. Remove it and move the former maintainer to the CREDITS file.
+
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ CREDITS                        |   4 +
+ MAINTAINERS                    |   6 -
+ drivers/edac/Kconfig           |   8 -
+ drivers/edac/Makefile          |   1 -
+ drivers/edac/i82443bxgx_edac.c | 462 ---------------------------------
+ 5 files changed, 4 insertions(+), 477 deletions(-)
+ delete mode 100644 drivers/edac/i82443bxgx_edac.c
+
+diff --git a/CREDITS b/CREDITS
+index ec8a2acf1947..86276baea6ac 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -3771,6 +3771,10 @@ S: 10 Stockalls Place
+ S: Minto, NSW, 2566
+ S: Australia
+ 
++N: Tim Small
++E: tim@buttersideup.com
++D: Intel 82443BX/GX (440BX/GX chipset) EDAC driver
++
+ N: Stephen Smalley
+ E: sds@tycho.nsa.gov
+ D: portions of the Linux Security Module (LSM) framework and security modules
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 67db88b04537..0bc1a7de24d9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9098,12 +9098,6 @@ L:	linux-edac@vger.kernel.org
+ S:	Maintained
+ F:	drivers/edac/i7core_edac.c
+ 
+-EDAC-I82443BXGX
+-M:	Tim Small <tim@buttersideup.com>
+-L:	linux-edac@vger.kernel.org
+-S:	Maintained
+-F:	drivers/edac/i82443bxgx_edac.c
+-
+ EDAC-I82975X
+ M:	"Arvind R." <arvino55@gmail.com>
+ L:	linux-edac@vger.kernel.org
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 81e40543ffd8..b1dfb657f1b2 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -150,14 +150,6 @@ config EDAC_E752X
+ 	  Support for error detection and correction on the Intel
+ 	  E7520, E7525, E7320 server chipsets.
+ 
+-config EDAC_I82443BXGX
+-	tristate "Intel 82443BX/GX (440BX/GX)"
+-	depends on PCI && X86_32
+-	depends on BROKEN
+-	help
+-	  Support for error detection and correction on the Intel
+-	  82443BX/GX memory controllers (440BX/GX chipsets).
+-
+ config EDAC_I82875P
+ 	tristate "Intel 82875p (D82875P, E7210)"
+ 	depends on PCI && X86_32
+diff --git a/drivers/edac/Makefile b/drivers/edac/Makefile
+index 8429b1e856bc..4f6a46321b32 100644
+--- a/drivers/edac/Makefile
++++ b/drivers/edac/Makefile
+@@ -38,7 +38,6 @@ obj-$(CONFIG_EDAC_PND2)			+= pnd2_edac.o
+ obj-$(CONFIG_EDAC_IGEN6)			+= igen6_edac.o
+ obj-$(CONFIG_EDAC_E7XXX)		+= e7xxx_edac.o
+ obj-$(CONFIG_EDAC_E752X)		+= e752x_edac.o
+-obj-$(CONFIG_EDAC_I82443BXGX)		+= i82443bxgx_edac.o
+ obj-$(CONFIG_EDAC_I82875P)		+= i82875p_edac.o
+ obj-$(CONFIG_EDAC_I82975X)		+= i82975x_edac.o
+ obj-$(CONFIG_EDAC_I3000)		+= i3000_edac.o
+diff --git a/drivers/edac/i82443bxgx_edac.c b/drivers/edac/i82443bxgx_edac.c
+deleted file mode 100644
+index 933dcf3cfdff..000000000000
+--- a/drivers/edac/i82443bxgx_edac.c
++++ /dev/null
+@@ -1,462 +0,0 @@
+-/*
+- * Intel 82443BX/GX (440BX/GX chipset) Memory Controller EDAC kernel
+- * module (C) 2006 Tim Small
+- *
+- * This file may be distributed under the terms of the GNU General
+- * Public License.
+- *
+- * Written by Tim Small <tim@buttersideup.com>, based on work by Linux
+- * Networx, Thayne Harbaugh, Dan Hollis <goemon at anime dot net> and
+- * others.
+- *
+- * 440GX fix by Jason Uhlenkott <juhlenko@akamai.com>.
+- *
+- * Written with reference to 82443BX Host Bridge Datasheet:
+- * http://download.intel.com/design/chipsets/datashts/29063301.pdf
+- * references to this document given in [].
+- *
+- * This module doesn't support the 440LX, but it may be possible to
+- * make it do so (the 440LX's register definitions are different, but
+- * not completely so - I haven't studied them in enough detail to know
+- * how easy this would be).
+- */
+-
+-#include <linux/module.h>
+-#include <linux/init.h>
+-
+-#include <linux/pci.h>
+-#include <linux/pci_ids.h>
+-
+-
+-#include <linux/edac.h>
+-#include "edac_module.h"
+-
+-#define EDAC_MOD_STR    "i82443bxgx_edac"
+-
+-/* The 82443BX supports SDRAM, or EDO (EDO for mobile only), "Memory
+- * Size: 8 MB to 512 MB (1GB with Registered DIMMs) with eight memory
+- * rows" "The 82443BX supports multiple-bit error detection and
+- * single-bit error correction when ECC mode is enabled and
+- * single/multi-bit error detection when correction is disabled.
+- * During writes to the DRAM, the 82443BX generates ECC for the data
+- * on a QWord basis. Partial QWord writes require a read-modify-write
+- * cycle when ECC is enabled."
+-*/
+-
+-/* "Additionally, the 82443BX ensures that the data is corrected in
+- * main memory so that accumulation of errors is prevented. Another
+- * error within the same QWord would result in a double-bit error
+- * which is unrecoverable. This is known as hardware scrubbing since
+- * it requires no software intervention to correct the data in memory."
+- */
+-
+-/* [Also see page 100 (section 4.3), "DRAM Interface"]
+- * [Also see page 112 (section 4.6.1.4), ECC]
+- */
+-
+-#define I82443BXGX_NR_CSROWS 8
+-#define I82443BXGX_NR_CHANS  1
+-#define I82443BXGX_NR_DIMMS  4
+-
+-/* 82443 PCI Device 0 */
+-#define I82443BXGX_NBXCFG 0x50	/* 32bit register starting at this PCI
+-				 * config space offset */
+-#define I82443BXGX_NBXCFG_OFFSET_NON_ECCROW 24	/* Array of bits, zero if
+-						 * row is non-ECC */
+-#define I82443BXGX_NBXCFG_OFFSET_DRAM_FREQ 12	/* 2 bits,00=100MHz,10=66 MHz */
+-
+-#define I82443BXGX_NBXCFG_OFFSET_DRAM_INTEGRITY 7	/* 2 bits:       */
+-#define I82443BXGX_NBXCFG_INTEGRITY_NONE   0x0	/* 00 = Non-ECC */
+-#define I82443BXGX_NBXCFG_INTEGRITY_EC     0x1	/* 01 = EC (only) */
+-#define I82443BXGX_NBXCFG_INTEGRITY_ECC    0x2	/* 10 = ECC */
+-#define I82443BXGX_NBXCFG_INTEGRITY_SCRUB  0x3	/* 11 = ECC + HW Scrub */
+-
+-#define I82443BXGX_NBXCFG_OFFSET_ECC_DIAG_ENABLE  6
+-
+-/* 82443 PCI Device 0 */
+-#define I82443BXGX_EAP   0x80	/* 32bit register starting at this PCI
+-				 * config space offset, Error Address
+-				 * Pointer Register */
+-#define I82443BXGX_EAP_OFFSET_EAP  12	/* High 20 bits of error address */
+-#define I82443BXGX_EAP_OFFSET_MBE  BIT(1)	/* Err at EAP was multi-bit (W1TC) */
+-#define I82443BXGX_EAP_OFFSET_SBE  BIT(0)	/* Err at EAP was single-bit (W1TC) */
+-
+-#define I82443BXGX_ERRCMD  0x90	/* 8bit register starting at this PCI
+-				 * config space offset. */
+-#define I82443BXGX_ERRCMD_OFFSET_SERR_ON_MBE BIT(1)	/* 1 = enable */
+-#define I82443BXGX_ERRCMD_OFFSET_SERR_ON_SBE BIT(0)	/* 1 = enable */
+-
+-#define I82443BXGX_ERRSTS  0x91	/* 16bit register starting at this PCI
+-				 * config space offset. */
+-#define I82443BXGX_ERRSTS_OFFSET_MBFRE 5	/* 3 bits - first err row multibit */
+-#define I82443BXGX_ERRSTS_OFFSET_MEF   BIT(4)	/* 1 = MBE occurred */
+-#define I82443BXGX_ERRSTS_OFFSET_SBFRE 1	/* 3 bits - first err row singlebit */
+-#define I82443BXGX_ERRSTS_OFFSET_SEF   BIT(0)	/* 1 = SBE occurred */
+-
+-#define I82443BXGX_DRAMC 0x57	/* 8bit register starting at this PCI
+-				 * config space offset. */
+-#define I82443BXGX_DRAMC_OFFSET_DT 3	/* 2 bits, DRAM Type */
+-#define I82443BXGX_DRAMC_DRAM_IS_EDO 0	/* 00 = EDO */
+-#define I82443BXGX_DRAMC_DRAM_IS_SDRAM 1	/* 01 = SDRAM */
+-#define I82443BXGX_DRAMC_DRAM_IS_RSDRAM 2	/* 10 = Registered SDRAM */
+-
+-#define I82443BXGX_DRB 0x60	/* 8x 8bit registers starting at this PCI
+-				 * config space offset. */
+-
+-/* FIXME - don't poll when ECC disabled? */
+-
+-struct i82443bxgx_edacmc_error_info {
+-	u32 eap;
+-};
+-
+-static struct edac_pci_ctl_info *i82443bxgx_pci;
+-
+-static struct pci_dev *mci_pdev;	/* init dev: in case that AGP code has
+-					 * already registered driver
+-					 */
+-
+-static int i82443bxgx_registered = 1;
+-
+-static void i82443bxgx_edacmc_get_error_info(struct mem_ctl_info *mci,
+-				struct i82443bxgx_edacmc_error_info
+-				*info)
+-{
+-	struct pci_dev *pdev;
+-	pdev = to_pci_dev(mci->pdev);
+-	pci_read_config_dword(pdev, I82443BXGX_EAP, &info->eap);
+-	if (info->eap & I82443BXGX_EAP_OFFSET_SBE)
+-		/* Clear error to allow next error to be reported [p.61] */
+-		pci_write_bits32(pdev, I82443BXGX_EAP,
+-				 I82443BXGX_EAP_OFFSET_SBE,
+-				 I82443BXGX_EAP_OFFSET_SBE);
+-
+-	if (info->eap & I82443BXGX_EAP_OFFSET_MBE)
+-		/* Clear error to allow next error to be reported [p.61] */
+-		pci_write_bits32(pdev, I82443BXGX_EAP,
+-				 I82443BXGX_EAP_OFFSET_MBE,
+-				 I82443BXGX_EAP_OFFSET_MBE);
+-}
+-
+-static int i82443bxgx_edacmc_process_error_info(struct mem_ctl_info *mci,
+-						struct
+-						i82443bxgx_edacmc_error_info
+-						*info, int handle_errors)
+-{
+-	int error_found = 0;
+-	u32 eapaddr, page, pageoffset;
+-
+-	/* bits 30:12 hold the 4kb block in which the error occurred
+-	 * [p.61] */
+-	eapaddr = (info->eap & 0xfffff000);
+-	page = eapaddr >> PAGE_SHIFT;
+-	pageoffset = eapaddr - (page << PAGE_SHIFT);
+-
+-	if (info->eap & I82443BXGX_EAP_OFFSET_SBE) {
+-		error_found = 1;
+-		if (handle_errors)
+-			edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci, 1,
+-					     page, pageoffset, 0,
+-					     edac_mc_find_csrow_by_page(mci, page),
+-					     0, -1, mci->ctl_name, "");
+-	}
+-
+-	if (info->eap & I82443BXGX_EAP_OFFSET_MBE) {
+-		error_found = 1;
+-		if (handle_errors)
+-			edac_mc_handle_error(HW_EVENT_ERR_UNCORRECTED, mci, 1,
+-					     page, pageoffset, 0,
+-					     edac_mc_find_csrow_by_page(mci, page),
+-					     0, -1, mci->ctl_name, "");
+-	}
+-
+-	return error_found;
+-}
+-
+-static void i82443bxgx_edacmc_check(struct mem_ctl_info *mci)
+-{
+-	struct i82443bxgx_edacmc_error_info info;
+-
+-	i82443bxgx_edacmc_get_error_info(mci, &info);
+-	i82443bxgx_edacmc_process_error_info(mci, &info, 1);
+-}
+-
+-static void i82443bxgx_init_csrows(struct mem_ctl_info *mci,
+-				struct pci_dev *pdev,
+-				enum edac_type edac_mode,
+-				enum mem_type mtype)
+-{
+-	struct csrow_info *csrow;
+-	struct dimm_info *dimm;
+-	int index;
+-	u8 drbar, dramc;
+-	u32 row_base, row_high_limit, row_high_limit_last;
+-
+-	pci_read_config_byte(pdev, I82443BXGX_DRAMC, &dramc);
+-	row_high_limit_last = 0;
+-	for (index = 0; index < mci->nr_csrows; index++) {
+-		csrow = mci->csrows[index];
+-		dimm = csrow->channels[0]->dimm;
+-
+-		pci_read_config_byte(pdev, I82443BXGX_DRB + index, &drbar);
+-		edac_dbg(1, "MC%d: Row=%d DRB = %#0x\n",
+-			 mci->mc_idx, index, drbar);
+-		row_high_limit = ((u32) drbar << 23);
+-		/* find the DRAM Chip Select Base address and mask */
+-		edac_dbg(1, "MC%d: Row=%d, Boundary Address=%#0x, Last = %#0x\n",
+-			 mci->mc_idx, index, row_high_limit,
+-			 row_high_limit_last);
+-
+-		/* 440GX goes to 2GB, represented with a DRB of 0. */
+-		if (row_high_limit_last && !row_high_limit)
+-			row_high_limit = 1UL << 31;
+-
+-		/* This row is empty [p.49] */
+-		if (row_high_limit == row_high_limit_last)
+-			continue;
+-		row_base = row_high_limit_last;
+-		csrow->first_page = row_base >> PAGE_SHIFT;
+-		csrow->last_page = (row_high_limit >> PAGE_SHIFT) - 1;
+-		dimm->nr_pages = csrow->last_page - csrow->first_page + 1;
+-		/* EAP reports in 4kilobyte granularity [61] */
+-		dimm->grain = 1 << 12;
+-		dimm->mtype = mtype;
+-		/* I don't think 440BX can tell you device type? FIXME? */
+-		dimm->dtype = DEV_UNKNOWN;
+-		/* Mode is global to all rows on 440BX */
+-		dimm->edac_mode = edac_mode;
+-		row_high_limit_last = row_high_limit;
+-	}
+-}
+-
+-static int i82443bxgx_edacmc_probe1(struct pci_dev *pdev, int dev_idx)
+-{
+-	struct mem_ctl_info *mci;
+-	struct edac_mc_layer layers[2];
+-	u8 dramc;
+-	u32 nbxcfg, ecc_mode;
+-	enum mem_type mtype;
+-	enum edac_type edac_mode;
+-
+-	edac_dbg(0, "MC:\n");
+-
+-	/* Something is really hosed if PCI config space reads from
+-	 * the MC aren't working.
+-	 */
+-	if (pci_read_config_dword(pdev, I82443BXGX_NBXCFG, &nbxcfg))
+-		return -EIO;
+-
+-	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
+-	layers[0].size = I82443BXGX_NR_CSROWS;
+-	layers[0].is_virt_csrow = true;
+-	layers[1].type = EDAC_MC_LAYER_CHANNEL;
+-	layers[1].size = I82443BXGX_NR_CHANS;
+-	layers[1].is_virt_csrow = false;
+-	mci = edac_mc_alloc(0, ARRAY_SIZE(layers), layers, 0);
+-	if (mci == NULL)
+-		return -ENOMEM;
+-
+-	edac_dbg(0, "MC: mci = %p\n", mci);
+-	mci->pdev = &pdev->dev;
+-	mci->mtype_cap = MEM_FLAG_EDO | MEM_FLAG_SDR | MEM_FLAG_RDR;
+-	mci->edac_ctl_cap = EDAC_FLAG_NONE | EDAC_FLAG_EC | EDAC_FLAG_SECDED;
+-	pci_read_config_byte(pdev, I82443BXGX_DRAMC, &dramc);
+-	switch ((dramc >> I82443BXGX_DRAMC_OFFSET_DT) & (BIT(0) | BIT(1))) {
+-	case I82443BXGX_DRAMC_DRAM_IS_EDO:
+-		mtype = MEM_EDO;
+-		break;
+-	case I82443BXGX_DRAMC_DRAM_IS_SDRAM:
+-		mtype = MEM_SDR;
+-		break;
+-	case I82443BXGX_DRAMC_DRAM_IS_RSDRAM:
+-		mtype = MEM_RDR;
+-		break;
+-	default:
+-		edac_dbg(0, "Unknown/reserved DRAM type value in DRAMC register!\n");
+-		mtype = -MEM_UNKNOWN;
+-	}
+-
+-	if ((mtype == MEM_SDR) || (mtype == MEM_RDR))
+-		mci->edac_cap = mci->edac_ctl_cap;
+-	else
+-		mci->edac_cap = EDAC_FLAG_NONE;
+-
+-	mci->scrub_cap = SCRUB_FLAG_HW_SRC;
+-	pci_read_config_dword(pdev, I82443BXGX_NBXCFG, &nbxcfg);
+-	ecc_mode = ((nbxcfg >> I82443BXGX_NBXCFG_OFFSET_DRAM_INTEGRITY) &
+-		(BIT(0) | BIT(1)));
+-
+-	mci->scrub_mode = (ecc_mode == I82443BXGX_NBXCFG_INTEGRITY_SCRUB)
+-		? SCRUB_HW_SRC : SCRUB_NONE;
+-
+-	switch (ecc_mode) {
+-	case I82443BXGX_NBXCFG_INTEGRITY_NONE:
+-		edac_mode = EDAC_NONE;
+-		break;
+-	case I82443BXGX_NBXCFG_INTEGRITY_EC:
+-		edac_mode = EDAC_EC;
+-		break;
+-	case I82443BXGX_NBXCFG_INTEGRITY_ECC:
+-	case I82443BXGX_NBXCFG_INTEGRITY_SCRUB:
+-		edac_mode = EDAC_SECDED;
+-		break;
+-	default:
+-		edac_dbg(0, "Unknown/reserved ECC state in NBXCFG register!\n");
+-		edac_mode = EDAC_UNKNOWN;
+-		break;
+-	}
+-
+-	i82443bxgx_init_csrows(mci, pdev, edac_mode, mtype);
+-
+-	/* Many BIOSes don't clear error flags on boot, so do this
+-	 * here, or we get "phantom" errors occurring at module-load
+-	 * time. */
+-	pci_write_bits32(pdev, I82443BXGX_EAP,
+-			(I82443BXGX_EAP_OFFSET_SBE |
+-				I82443BXGX_EAP_OFFSET_MBE),
+-			(I82443BXGX_EAP_OFFSET_SBE |
+-				I82443BXGX_EAP_OFFSET_MBE));
+-
+-	mci->mod_name = EDAC_MOD_STR;
+-	mci->ctl_name = "I82443BXGX";
+-	mci->dev_name = pci_name(pdev);
+-	mci->edac_check = i82443bxgx_edacmc_check;
+-	mci->ctl_page_to_phys = NULL;
+-
+-	if (edac_mc_add_mc(mci)) {
+-		edac_dbg(3, "failed edac_mc_add_mc()\n");
+-		goto fail;
+-	}
+-
+-	/* allocating generic PCI control info */
+-	i82443bxgx_pci = edac_pci_create_generic_ctl(&pdev->dev, EDAC_MOD_STR);
+-	if (!i82443bxgx_pci) {
+-		printk(KERN_WARNING
+-			"%s(): Unable to create PCI control\n",
+-			__func__);
+-		printk(KERN_WARNING
+-			"%s(): PCI error report via EDAC not setup\n",
+-			__func__);
+-	}
+-
+-	edac_dbg(3, "MC: success\n");
+-	return 0;
+-
+-fail:
+-	edac_mc_free(mci);
+-	return -ENODEV;
+-}
+-
+-/* returns count (>= 0), or negative on error */
+-static int i82443bxgx_edacmc_init_one(struct pci_dev *pdev,
+-				      const struct pci_device_id *ent)
+-{
+-	int rc;
+-
+-	edac_dbg(0, "MC:\n");
+-
+-	/* don't need to call pci_enable_device() */
+-	rc = i82443bxgx_edacmc_probe1(pdev, ent->driver_data);
+-
+-	if (mci_pdev == NULL)
+-		mci_pdev = pci_dev_get(pdev);
+-
+-	return rc;
+-}
+-
+-static void i82443bxgx_edacmc_remove_one(struct pci_dev *pdev)
+-{
+-	struct mem_ctl_info *mci;
+-
+-	edac_dbg(0, "\n");
+-
+-	if (i82443bxgx_pci)
+-		edac_pci_release_generic_ctl(i82443bxgx_pci);
+-
+-	if ((mci = edac_mc_del_mc(&pdev->dev)) == NULL)
+-		return;
+-
+-	edac_mc_free(mci);
+-}
+-
+-static const struct pci_device_id i82443bxgx_pci_tbl[] = {
+-	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82443BX_0)},
+-	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82443BX_2)},
+-	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82443GX_0)},
+-	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82443GX_2)},
+-	{0,}			/* 0 terminated list. */
+-};
+-
+-MODULE_DEVICE_TABLE(pci, i82443bxgx_pci_tbl);
+-
+-static struct pci_driver i82443bxgx_edacmc_driver = {
+-	.name = EDAC_MOD_STR,
+-	.probe = i82443bxgx_edacmc_init_one,
+-	.remove = i82443bxgx_edacmc_remove_one,
+-	.id_table = i82443bxgx_pci_tbl,
+-};
+-
+-static int __init i82443bxgx_edacmc_init(void)
+-{
+-	int pci_rc;
+-       /* Ensure that the OPSTATE is set correctly for POLL or NMI */
+-       opstate_init();
+-
+-	pci_rc = pci_register_driver(&i82443bxgx_edacmc_driver);
+-	if (pci_rc < 0)
+-		goto fail0;
+-
+-	if (mci_pdev == NULL) {
+-		const struct pci_device_id *id = &i82443bxgx_pci_tbl[0];
+-		int i = 0;
+-		i82443bxgx_registered = 0;
+-
+-		while (mci_pdev == NULL && id->vendor != 0) {
+-			mci_pdev = pci_get_device(id->vendor,
+-					id->device, NULL);
+-			i++;
+-			id = &i82443bxgx_pci_tbl[i];
+-		}
+-		if (!mci_pdev) {
+-			edac_dbg(0, "i82443bxgx pci_get_device fail\n");
+-			pci_rc = -ENODEV;
+-			goto fail1;
+-		}
+-
+-		pci_rc = i82443bxgx_edacmc_init_one(mci_pdev, i82443bxgx_pci_tbl);
+-
+-		if (pci_rc < 0) {
+-			edac_dbg(0, "i82443bxgx init fail\n");
+-			pci_rc = -ENODEV;
+-			goto fail1;
+-		}
+-	}
+-
+-	return 0;
+-
+-fail1:
+-	pci_unregister_driver(&i82443bxgx_edacmc_driver);
+-
+-fail0:
+-	pci_dev_put(mci_pdev);
+-	return pci_rc;
+-}
+-
+-static void __exit i82443bxgx_edacmc_exit(void)
+-{
+-	pci_unregister_driver(&i82443bxgx_edacmc_driver);
+-
+-	if (!i82443bxgx_registered)
+-		i82443bxgx_edacmc_remove_one(mci_pdev);
+-
+-	pci_dev_put(mci_pdev);
+-}
+-
+-module_init(i82443bxgx_edacmc_init);
+-module_exit(i82443bxgx_edacmc_exit);
+-
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Tim Small <tim@buttersideup.com> - WPAD");
+-MODULE_DESCRIPTION("EDAC MC support for Intel 82443BX/GX memory controllers");
+-
+-module_param(edac_op_state, int, 0444);
+-MODULE_PARM_DESC(edac_op_state, "EDAC Error Reporting state: 0=Poll,1=NMI");
+-- 
+2.43.0
+
 
