@@ -1,285 +1,514 @@
-Return-Path: <linux-edac+bounces-5709-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5710-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4K01BbCvjGl/sAAAu9opvQ
-	(envelope-from <linux-edac+bounces-5709-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Feb 2026 17:34:56 +0100
+	id gCAoD2/NjWn87AAAu9opvQ
+	(envelope-from <linux-edac+bounces-5710-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Feb 2026 13:54:07 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 279A91262CD
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Feb 2026 17:34:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C370812D9A6
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Feb 2026 13:54:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D5A783003BE0
-	for <lists+linux-edac@lfdr.de>; Wed, 11 Feb 2026 16:34:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6999F307D134
+	for <lists+linux-edac@lfdr.de>; Thu, 12 Feb 2026 12:50:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68275341063;
-	Wed, 11 Feb 2026 16:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7425B35B129;
+	Thu, 12 Feb 2026 12:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="HgifyPTf"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="LCPDuPdg"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012054.outbound.protection.outlook.com [40.93.195.54])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10ACE207A32;
-	Wed, 11 Feb 2026 16:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770827689; cv=fail; b=e+HlBQf5dJ0kbjYBBlsYpjjus806DDY9ND8hZdxsAzCMr7UpfhA7Qii7HpWOIQnQf1VjAu/aaHzu9epKgqeYhb8CxtydypCVMHhSiJ1SzEFyR3nrNilneiH3zpIYTGa5zovoPs8ckM3c3pqUx6abYdy+SEWRe/zqV+R6UyPzVGg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770827689; c=relaxed/simple;
-	bh=tz32ui55LrBid7GpjyTDfjHEnkdizmVtqDZWmW40bC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=aP1CStYeJgK6Y3MzWPc49XVPS5fUrFh477Ez6FQ0vwi3JXvOwMC/E1mtNYKSB7Pqmc++yin0MjJWYHWQY+r9e8AtzIDpi2u48iQI5Y8x04k8a/yiHmMZYErm+w9Qf8nILQslfgX4UfH8O+7sO6xobpmMxXu/Uuye+MuIPUG069k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=HgifyPTf; arc=fail smtp.client-ip=40.93.195.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hAmzUvPJvzw6wfpXK9Sf+Yxt5nfz+owl6U1Edez7Hf4qEC1RpkU1n2wJX4IGRQANr+NkcPz7VCY6huoWjLOR6pvqO5cfFIh8zacCMtHigXMiQk1cpHN1CI18gLFBwYojfUTdQkGc2KMaPoisNL0VddGqaDGvAtHEKGDSxBP+Iv0gWAeS1drf6ND2XAXHTtKzksSk4tNPJAsvGZtzl2EsaTmi2dv9IlY/bkxOwv/mL/uPzxtl6ioqEFGdcXsKp9lUF/jAWhJB1080KzTG75/0qNPR7e7G83QmOMDfC0YvsvbyibjyuXwXme53q5TLqfcjaL08XJvsXkDiFfneiUcEeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XFt/rE2SL+8L3U1EA+KndxpkXhfidUno02jQHTO9WtA=;
- b=UrfECo1a17q7xpkHgmws9HRwxRFXClbc1FhgCJ+JHWVXYZaX6X+qfwF9TycS4iA+enFEJbh3uIWXJxxdtPWrvQUeVGI+KlcDrt2MqAj8YGt4ywvc6Rsho9HFGyYNuzUhTKEMNv54WVgB276aU5xNw+PHD6teXPwnWVIYkLnTb8XpucR1XjBN4r2fAsIMxlYC9pe8nxe8yJe/JAsDrKw1ms6yrh+y5Y8XB9ah+gsVMnvV5X/VYwTos9BbKEjsISuQKhpek8gZA9VUqJWQrVsgd/gt3Dc/vLkscSEIyTd7RRFZoV663fjXx8gnAiAKdZLS0lsx3GBaDbiK3OKMX1Oi2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XFt/rE2SL+8L3U1EA+KndxpkXhfidUno02jQHTO9WtA=;
- b=HgifyPTf2Dxwqu13iE8WZvtq5NG0Kp1+lgLy+bftdgAV4lJDkndNfip81i/2iYMU88h88Q2lkVeavLkjhCJmb3bU4L2Mjg7lTRLtwm1wfeSxYFAO7HmoASVx0ii9yH9wjzu5atkpS936QCAumpzlGmjT0l8IcxX4diFKcBzq5Lw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- SJ0PR12MB5611.namprd12.prod.outlook.com (2603:10b6:a03:426::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Wed, 11 Feb
- 2026 16:34:44 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::7da:cc3:cf2e:8ebf]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::7da:cc3:cf2e:8ebf%4]) with mapi id 15.20.9611.008; Wed, 11 Feb 2026
- 16:34:44 +0000
-Date: Wed, 11 Feb 2026 11:34:38 -0500
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: William Roche <william.roche@oracle.com>
-Cc: Tony Luck <tony.luck@intel.com>, bp@alien8.de,
-	Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	"Allen, John" <John.Allen@amd.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jane Chu <jane.chu@oracle.com>
-Subject: Re: [RFC] AMD VM crashing on deferred memory error injection
-Message-ID: <20260211163438.GA1637@yaz-khff2.amd.com>
-References: <48d8e1c8-1eb9-49cc-8de8-78077f29c203@oracle.com>
- <20260209210819.GA445331@yaz-khff2.amd.com>
- <20260209211843.GA459737@yaz-khff2.amd.com>
- <6f87d29b-c30a-47f8-a519-0e1fba36f1a7@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f87d29b-c30a-47f8-a519-0e1fba36f1a7@oracle.com>
-X-ClientProxiedBy: SA1P222CA0182.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:3c4::20) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB861B4223;
+	Thu, 12 Feb 2026 12:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770900645; cv=none; b=ZviB02/L1tJjtrg2+f2mwOO133wqlGWAgnI0a/zXe5JSQ8vVGBpEUf+U0YOqpo7SDw0O1/DVImPC+mMLqsBHGiENomdcCrA2sfbSf34BHCjAUUuuESOLgI7+pUNvw+L09rjsyPpznfVh4nZGh3ZW5YpMwoKAGUi1HQDBqt6lsC8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770900645; c=relaxed/simple;
+	bh=KSICRLAvAUfdqVlNgkJenSJrdWTfSyADbuZBKzEG8A8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cq7hLISUArmXnM4uJtogT1bLn4xGQm0FJ0rNll7wPd7QQdoMN7uxVVo2eIo7lkmEYpwYd5A1OZp7DxqAB9/jAlxyFyMr4z7hCi/fItGeQiTPfIC+K+fFwOmy/4yE0fYnOX1Vutvdn2JrMX7MbEIdewGsro7baIaVHEBgHAZXEcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=LCPDuPdg; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1770900607; x=1771505407; i=spasswolf@web.de;
+	bh=QX9BdzyHHAV2Wo5xLMg0A0++xP/zoGs67dZgQREFwPI=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=LCPDuPdgsCDLB/98SmynbtYyaDe9RY8Xvd+5LZhYldqTnL/c7Kzs9+kuV5pvIGws
+	 jGO3Gvtmhil5QeBgTOtEvGJE7unKE7zT0+In/1MPbyDmUTEC0Wklak7sVHXD5RqLC
+	 bZg0kO0edkzFGLCDh2VulNZYxPtZGTAgOWL6lBzlvNbFSfjPC8pEzfdDk4y0Sn9La
+	 oX5s3L8UGdjY6Y7u3S1VkUy1taW5UT0i/8+YD4TX1joxElxjC0swQAFcnOtbayabc
+	 eDw3mimn7d59soT2dmrYHwr8pBCFw/a4WXdN6wIW3xvsu5Ve5R/H/GOBiGqXmkg3r
+	 KPpSs001m9gjFQe1gg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MDvDi-1vyFMx0S72-002Gg4; Thu, 12
+ Feb 2026 13:50:07 +0100
+Message-ID: <21ba47fa8893b33b94370c2a42e5084cf0d2e975.camel@web.de>
+Subject: Re: spurious (?) mce Hardware Error messages in v6.19
+From: Bert Karwatzki <spasswolf@web.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Nikolay Borisov <nik.borisov@suse.com>, spasswolf@web.de, Borislav
+ Petkov	 <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+ linux-kernel@vger.kernel.org, 	linux-next@vger.kernel.org,
+ linux-edac@vger.kernel.org, 	linux-acpi@vger.kernel.org, x86@kernel.org,
+ rafael@kernel.org, 	qiuxu.zhuo@intel.com,
+ Smita.KoralahalliChannabasappa@amd.com, spasswolf@web.de
+Date: Thu, 12 Feb 2026 13:50:05 +0100
+In-Reply-To: <20251009132055.GA472268@yaz-khff2.amd.com>
+References: <20250916091055.GAaMkpn72GrFnsueCF@fat_crate.local>
+	 <20250916140744.GA1054485@yaz-khff2.amd.com>
+	 <9488e4bf935aa1e50179019419dfee93d306ded9.camel@web.de>
+	 <be9e2759c1c474364e78ef291c33bc0506942669.camel@web.de>
+	 <20250917144148.GA1313380@yaz-khff2.amd.com>
+	 <6e1eda7dd55f6fa30405edf7b0f75695cf55b237.camel@web.de>
+	 <20250917192652.GA1610597@yaz-khff2.amd.com>
+	 <5ba955fe-2b96-429e-b2e8-5e1bf19d8e8e@suse.com>
+	 <20250918210005.GA2150610@yaz-khff2.amd.com>
+	 <67c7de1011ea7b8863051889ee2a41512fb0e044.camel@web.de>
+	 <20251009132055.GA472268@yaz-khff2.amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|SJ0PR12MB5611:EE_
-X-MS-Office365-Filtering-Correlation-Id: d91a7899-dba1-44f9-9f1c-08de698b7640
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sm9LVus8m6QppBfnS5LkSalN6I4AdH0/khgD0W0Afv9+26/+qnbZoTC+hfZr?=
- =?us-ascii?Q?naOP2z5ITBQJjDopiEGNwMIfFhdwneHBjBixkQO83ue+gXgqQTcrJhar9VDC?=
- =?us-ascii?Q?MVRNjNjlQlMjxBm1Dn9B3igAPB8C8H0pde2w+hb7Mv+jZgRb6VxDC5SedPRT?=
- =?us-ascii?Q?IOE5OMzXL8EnSq6ctai9LHeo5fFt9nOWA3tIK57Fo90F7r0M/DURngrm+y04?=
- =?us-ascii?Q?jphPPPWcb5Wo6kyhabXljidLs+DvsW5PeLVFIgqK+sULUm7zZ+UFfah2WW3I?=
- =?us-ascii?Q?c183Xh8JekDOXdC1FBb8mO8PivSiMNo0ObW9UFqL9jYgHz6scx+8UiLCgudE?=
- =?us-ascii?Q?fZENdpeKp+kuzNKYl9n2eczPRpvsgTfLkAl+D5yw/sbOV2JPvf5A08/MpjRt?=
- =?us-ascii?Q?vnaE9+5kBek87+BG6ierUkOgKEqbwGONeGyusSlYKDAS8qD8JJQ8Taw5CSVy?=
- =?us-ascii?Q?5JEzVfu247eNYdPtUWF9hUMZxHlqMou2IGioCH2+wsiO/rh1/o1uEcww5r/J?=
- =?us-ascii?Q?WSQ6rrAfipFEVDPjyIgGzRKoC0nJDnfFt9KCqvgIJ+hz2+6p35V1Ltq7Wcpj?=
- =?us-ascii?Q?fO8oO4UbnvChJHGScNUAI0wCYweK9pSWCJX8CjDfz+VaB6lNYgMQ4fbSV7ZK?=
- =?us-ascii?Q?RTlDJUmPgpJV74npjGemam0Zwt8c92oeU5u92fu2nxx01vfTmBm6/UhVfi8n?=
- =?us-ascii?Q?Ds7QdHvlix40TPYKJm7HF8IRbwULOcleyHO4QZRreDGLN8vi98K9ZGVnVgis?=
- =?us-ascii?Q?vKCCyf0r9pqf21ZDJmLER9SP82M9n2PfFWAD4ZzWcTZwjXSGYQARa286Y3NS?=
- =?us-ascii?Q?I7t9hBlTBq8b5C3faMhtX/l6gEoxQex0ixGpENyEKiWd0d/arzp81y+Dcdqy?=
- =?us-ascii?Q?7/DPdOl5dd8dToCpU5HzqPCnVLFXJGVjjie86aCaQBrEmQUWbP9X0Phvpv3O?=
- =?us-ascii?Q?bl5wYSxmill1WcemYPmmzcHKy/Au5rWjD8F/bsRZHQ7P7mET4KHFEW1ujjZD?=
- =?us-ascii?Q?yBriFDwtI1WVaYsvZSEVSsnkjLYNDOgvJdXctnZS+MzyvXk30FcisYlJcMaO?=
- =?us-ascii?Q?Zi+ng0f3RSiFoXc/9rVxBrCk3bgfbNwErtfgW6PssOEkgghpx1kSPqdW20sF?=
- =?us-ascii?Q?8eaOxHUHe0UzMhwPvoW7lYCJ/aMY/NzQUb3bakU9S9eObF6zgdo7fo8pGiZf?=
- =?us-ascii?Q?WqrFode58foPVs/gye+n8GByTHPUycmaeHxVcVFm50zR42o7PaQM5we76fJb?=
- =?us-ascii?Q?dleJOv1+nphbF7qHIWpvw9jlhhyN8KhZgR73YjDYQPvkoPlXU1DbJIILeWi0?=
- =?us-ascii?Q?9MUfvBg3nua6Gl8iAqKjlqjQXGVMzp3CarrxRgeG4NOhJv/PImfs7qjnkVyD?=
- =?us-ascii?Q?h0jW+3XVJw2n9H2JMNh8zapz8cIXEGTJ+mnOBUE5PT1pZ59029Pizi7xlca2?=
- =?us-ascii?Q?s+V/KYWjAW/AvmMUq3OuxNLpWT8BvkbGSVx78mayoqhX+u/mfMN5LIEaIApb?=
- =?us-ascii?Q?9tNKBk4DwVoXcK+b0vSMQ9i83SZYy+4Dx/ZuB7Atyx4cq9tVvc14Vs3DfmWu?=
- =?us-ascii?Q?TJC3X5saTe2ON3jiutQ=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?KutYchvECRKkfKSGVxUnbS+LmzCe3eVn3/RGgDv1iMyDM3S0zNRk0GlLPAUw?=
- =?us-ascii?Q?FxrThVK2vsJkKAC+z+m3Clnb8eD2jRs/pRXAXg+0ifFPDO2tlnnkTBJueLw9?=
- =?us-ascii?Q?HnJ/6mEtgwQNb++3Y4/c7wKAOpqd0JWDzvmofbXNZjRKSZT0GJrhplW27bsU?=
- =?us-ascii?Q?qSNVriWQAISYN7RUifMWliGjT+nK/wXiOyjO67IizmPuMcm2nWqYNO44WQbe?=
- =?us-ascii?Q?x1WuYGTK11Gw3hWCx0+NV8OaU8eoZfroCinHFdHuTD0we9z0E0pKqj0B4y1M?=
- =?us-ascii?Q?FFWkDfv4XatZq+QUgxolLMT/jxgJuYip7EAwFWKYVu5alwuy1zzvrsB/vC5y?=
- =?us-ascii?Q?j4RIjaC4GdszVDzO7LDPZutXxyoLcV/fUTK2XuflmqfXsvtJ6/kdhs5IE5KQ?=
- =?us-ascii?Q?61tcN6yt1IBODXwwO4mWzTfsryw8RoxdceWKzOFVk6sCHxLzfbJX3xTp5jNc?=
- =?us-ascii?Q?AzukEQlI43LnJ05PygMg/Ws2Ns5SRlJ0NZN/VjWS+OYdqFivcpP56Y+dgzy+?=
- =?us-ascii?Q?7N+541AEpRwXvrTJNIFB36n2IYCCEGTp7QKtR6s7dIUN+q/pepAQXV/gJUHf?=
- =?us-ascii?Q?CDsGNm9v9bOMH70C8fBUUyt4/cpa2IPGoqojSTeg1Kxalt1rBCejDtMKBDdX?=
- =?us-ascii?Q?E8NWL8mS5mxOBWT+wa1dnng9Ni5PoGFfiBtSXxRNsPwjE/nsvJUTXLbkpUsQ?=
- =?us-ascii?Q?5m1RPpMPjCMjp+FJ7Uj4mJ/TbTY0FILwZ8+5jsIdu1mPzWZAl6C3j3QBGb34?=
- =?us-ascii?Q?1eTN831JrPr5kP0YID95Z4icYzutpFJU1DxXNhlHneR9jJGhQFOhY5nSlyXc?=
- =?us-ascii?Q?0tTPH9EMxe+QTdgV+IFe4JKQCcMzwhKdl8QfKVv9VRUIQr/bsatFwSSODopV?=
- =?us-ascii?Q?RzNQsvZkwKPgI/nPV140Nxt0JTxTTpNbKpOgTtMVy0cMkTtSUJoNVwbXQgM1?=
- =?us-ascii?Q?1CtlNnhK6+nzvWs7UYR3WFemxo7pcanaIf5eEKBEf3OYp9PFiwcIV0yRVFox?=
- =?us-ascii?Q?IsJ31bMidmBK0WKk4M/X7qsGwbRpMQgXRxEaGBZJEoANWd+EriE79F1orvZ1?=
- =?us-ascii?Q?Wenc0EkWpYhbNjuDSLQeLBBDhj0aroSuLD1x19S3AdoVGvDQQwOErG/R+gUl?=
- =?us-ascii?Q?7XG60oIUAwL6AC4rk3wHRgu68cq+0+KhmtVx6q7wldHpsR8WTq9j/hwVUStG?=
- =?us-ascii?Q?jqgnkB0Q72sx9bWMb/qRsf8LUs0SXRdu4LL0GnL60LlxQqehO+qFuL6vL8rp?=
- =?us-ascii?Q?+9Ji0WJhlgDngG3xMkGPJp1BaI4mAW9vSwdxWFNgrnnKIjuelFKbTfHo+71b?=
- =?us-ascii?Q?LdIQW1qKa5ga0TwR55BQsPAYxcW85RO83neuXKEx+T76MBTgLSrTQMcFxFXm?=
- =?us-ascii?Q?65lI3sP59aiErnQEzmsaEfeHC9CIsoY2oe+rel8PbOV+c1DMRMZZ/ETIJimm?=
- =?us-ascii?Q?tcXJXOQfJvrJbrnNyj8KZpsJ1ByaunQOmpavrMvoV83s6mbjGkzCLfYnECM8?=
- =?us-ascii?Q?QVa4EN5X+yV6H9qCukNsstY+cCWFC5dJE+whWeNT8AMXQliO7NHyPC8M4ggd?=
- =?us-ascii?Q?RQZEbIuvTvYxf0lUFwiXRm9LvIrPePq89v4uJ+RiwMc9S+8nXkG5WsmUwRgr?=
- =?us-ascii?Q?P0O9ndeXn9wGhvDLIootBd6Z1l1eDe0x+DnU40S1TtNmZ8SPfYXDaKjQYqfL?=
- =?us-ascii?Q?dEQaXHge/aIvQSUDBtPPaKUjuPPzDp1H2TZ4/r4QWj6ep57bUeya4Y9pHZPK?=
- =?us-ascii?Q?/yWdtML88A=3D=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d91a7899-dba1-44f9-9f1c-08de698b7640
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2026 16:34:44.4150
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W0EFiT2W1Atxcfk++GkPi037CFGHgYOr3rAUfk40fQml/JDtaCaZ6Rz+cn0WbeIRFXWzgMMXr1L6MYf5+W/a4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5611
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tgGAHs5dLLjPQRtfueqgqvjhBzDY874QXU93JId2KciBkZl0JwL
+ wFM8mnoY913L7zKKaag44qYu707aEkhHZyqkzcUaV6wk5BGMyuqZzm3tJKvLLvMY1gtZS1p
+ TnGST5NKGejQFofDr0iqmXcPURhV+9jzYHkphgNrudd77DGKqCxHywMKSg23TajXi5MBtgT
+ ag/nfnqGDuuuDJJWnFzOA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:dKoChPW6M4Q=;zCLlRMqCwx9OUa+aAhLoAmiWW+h
+ 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
+ ns+mhrt0=
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[web.de,quarantine];
+	R_DKIM_ALLOW(-0.20)[web.de:s=s29768273];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5709-lists,linux-edac=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5710-lists,linux-edac=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[amd.com:+];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_FROM(0.00)[web.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_CC(0.00)[suse.com,web.de,alien8.de,intel.com,vger.kernel.org,kernel.org,amd.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yazen.ghannam@amd.com,linux-edac@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[spasswolf@web.de,linux-edac@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[web.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-edac];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,amd.com:dkim]
-X-Rspamd-Queue-Id: 279A91262CD
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: C370812D9A6
 X-Rspamd-Action: no action
 
-On Wed, Feb 11, 2026 at 02:42:07AM +0100, William Roche wrote:
-> On 2/9/26 22:18, Yazen Ghannam wrote:
-> > On Mon, Feb 09, 2026 at 04:08:19PM -0500, Yazen Ghannam wrote:
-> > > On Mon, Feb 09, 2026 at 05:36:32PM +0100, William Roche wrote:
-> > 
-> > [...]
-> > 
-> > > > According to me, this small kernel fix relies too much on a Qemu AMD
-> > > > specific implementation detail.
-> > > > 
-> > > > Would you have a more appropriate fix to suggest please ?
-> > > > 
-> > > > Thanks in advance for your feedback.
-> > > > William.
-> > > 
-> > > Thanks William for the report and details.
-> > > 
-> > > Clearing "STATUS" registers is a normal part of MCA handling.
-> > > 
-> > > We seem to allow clearing the regular "MCi_STATUS" register. I assume
-> > > this gets trapped/ignored by the hypervisor.
-> > > 
-> > > I expect we need to do the same behavior for the "MCA_DESTAT" register.
-> > > 
-> > > I'll do some research here, but please do share any pointers you may
-> > > have.
-> 
-> Yazen, I'm simply trying to find an answer in the AMD64 Architecture
-> Programmer's Manual, Volume 2: System Programming, 24593
-> 
-> This documents indicates (In chapter 9.3.3.4 MCA Deferred Error Status
-> Register) that:
-> "When the deferred error has been processed by the deferred error handler,
-> MCA_DESTAT should be
-> cleared. If MCA_STATUS also contains a deferred error, MCA_STATUS should be
-> cleared."
-> 
-> So I would imagine that allowing the reset of MCA_DESTAT the same way as
-> MCA_STATUS should be what the platform has to allow (or ignore).
-> 
+I couldn't test this patch as I was busy figuring out this:
+243b467dea17 Revert "drm/amd: Check if ASPM is enabled from PCIe subsystem=
+"
+but with this done I could do some testing on v6.19. The periodic bogus mc=
+e
+errors are gone because smca_should_log_poll_error() usually returns false=
+, but
+I still get some error messages for which I'm not sure if they are real er=
+rors.
 
-Yes, that's what I gathered too.
+I monitored smca_should_log_poll_error() like this (in v6.19 (errors do no=
+t occur in v6.18)):
 
-> > 
-> > Sorry for the rapid reply, but I think this is where we need an update.
-> > 
-> > Linux:
-> > arch/x86/kvm/x86.c : set_msr_mce()
-> > 
-> > Please note the comment:
-> > "All CPUs allow writing 0 to MCi_STATUS MSRs to clear the MSR."
-> > 
-> > We should include the MCA_DESTAT register range here.
-> > 
-> > What do you think?
-> 
-> But before trying to update the set_msr_mce() function, I don't think
-> that KVM keeps track of an MSR_AMD64_SMCA_MCx_DESTAT set of registers.
-> I can see mce_banks (for ctl, status, addr and misc) and mci_ctl2_banks
-> locations in struct kvm_vcpu_arch, but I don't see a location for SMCA
-> banks like MCA_DESTAT MSRs.
-> 
-> So if we make kvm ignore this update instead of raising a #GP error,
-> would it be a valid solution ?
-> 
+static bool smca_should_log_poll_error(struct mce *m)
+{
+	if (m->status & MCI_STATUS_VAL) {
+		printk(KERN_INFO "%s: 0\n", __func__);
+		return true;
+	}
 
-Yes, I think so. And the details depend on how much of the platform
-needs to be emulated.
+	m->status =3D mce_rdmsrq(MSR_AMD64_SMCA_MCx_DESTAT(m->bank));
+	if ((m->status & MCI_STATUS_VAL) && (m->status & MCI_STATUS_DEFERRED)) {
+		printk(KERN_INFO "%s: 1\n", __func__);
+		m->kflags |=3D MCE_CHECK_DFR_REGS;
+		return true;
+	}
 
-Some ideas in increasing order of complexity:
+	printk(KERN_INFO "%s: 2\n", __func__);
+	return false;
+}
 
-1) Ignore this register write.
+And get these error messages (usually just once or twice per boot)
 
-2) Do a basic validity check.
-   Allow "write 0 to MCA_DESTAT" and #GP for any other value.
-   Don't need to save MCA_DESTAT values.
+Examples from v6.19:
+$ grep -aE "Hardware Error|smca_should_log_poll_error: 1" /var/log/kern.lo=
+g
 
-3) Replicate the full platform behavior akin to MCi_STATUS.
-   Would need to save MCA_DESTAT values and do a "HWCR" bit check.
+2026-02-10T16:15:01.001203+01:00 lisa kernel: [    C0] smca_should_log_pol=
+l_error: 1
+2026-02-10T16:15:01.001815+01:00 lisa kernel: [T45426] mce: [Hardware Erro=
+r]: Machine check events logged
+2026-02-10T16:15:01.001818+01:00 lisa kernel: [T45426] [Hardware Error]: D=
+eferred error, no action required.
+2026-02-10T16:15:01.001819+01:00 lisa kernel: [T45426] [Hardware Error]: C=
+PU:0 (19:50:0) MC14_STATUS[-|-|-|AddrV|PCC|-|-|Deferred|-|-]: 0x8700900800=
+000000
+2026-02-10T16:15:01.001821+01:00 lisa kernel: [T45426] [Hardware Error]: E=
+rror Addr: 0x01b3877c00000020
+2026-02-10T16:15:01.001822+01:00 lisa kernel: [T45426] [Hardware Error]: I=
+PID: 0x000700b040000000
+2026-02-10T16:15:01.001831+01:00 lisa kernel: [T45426] [Hardware Error]: L=
+3 Cache Ext. Error Code: 0
+2026-02-10T16:15:01.001832+01:00 lisa kernel: [T45426] [Hardware Error]: c=
+ache level: RESV, tx: INSN
 
-I really don't think we want #3. This would useful for "register-based
-error injection/simulation"r. But that use case wouldn't do much with the
-MCA_DESTAT register without all the related Deferred error interrupt
-infrastructure.
+2026-02-11T14:24:13.358353+01:00 lisa kernel: [    C0] smca_should_log_pol=
+l_error: 1
+2026-02-11T14:24:13.358832+01:00 lisa kernel: [T310371] mce: [Hardware Err=
+or]: Machine check events logged
+2026-02-11T14:24:13.361773+01:00 lisa kernel: [T310371] [Hardware Error]: =
+Deferred error, no action required.
+2026-02-11T14:24:13.361778+01:00 lisa kernel: [T310371] [Hardware Error]: =
+CPU:0 (19:50:0) MC11_STATUS[-|-|-|AddrV|-|-|SyndV|UECC|Deferred|-|-]:
+0x8424b0c8009d011e
+2026-02-11T14:24:13.361781+01:00 lisa kernel: [T310371] [Hardware Error]: =
+Error Addr: 0x01f8a43400000020
+2026-02-11T14:24:13.361782+01:00 lisa kernel: [T310371] [Hardware Error]: =
+IPID: 0x000700b040000000, Syndrome: 0x0000000000000042
+2026-02-11T14:24:13.361787+01:00 lisa kernel: [T310371] [Hardware Error]: =
+L3 Cache Ext. Error Code: 29
+2026-02-11T14:24:13.361788+01:00 lisa kernel: [T310371] [Hardware Error]: =
+cache level: L2, tx: RESV, mem-tx: RD
 
-So I say the choice is between #1 and #2.
+2026-02-12T10:07:28.804529+01:00 lisa kernel: [    C0] smca_should_log_pol=
+l_error: 1
+2026-02-12T10:07:28.805020+01:00 lisa kernel: [T393396] mce: [Hardware Err=
+or]: Machine check events logged
+2026-02-12T10:07:28.805028+01:00 lisa kernel: [T393396] [Hardware Error]: =
+Deferred error, no action required.
+2026-02-12T10:07:28.805029+01:00 lisa kernel: [T393396] [Hardware Error]: =
+CPU:0 (19:50:0) MC11_STATUS[-|-|-|AddrV|PCC|-|-|Deferred|-|-]: 0x870090080=
+0000000
+2026-02-12T10:07:28.805030+01:00 lisa kernel: [T393396] [Hardware Error]: =
+Error Addr: 0x01300a9d00000020
+2026-02-12T10:07:28.805031+01:00 lisa kernel: [T393396] [Hardware Error]: =
+IPID: 0x000700b040000000
+2026-02-12T10:07:28.805033+01:00 lisa kernel: [T393396] [Hardware Error]: =
+L3 Cache Ext. Error Code: 0
+2026-02-12T10:07:28.805034+01:00 lisa kernel: [T393396] [Hardware Error]: =
+cache level: RESV, tx: INSN
 
-Thanks,
-Yazen
+Are the "Error Addr" reported here supposed to be physical addresses of me=
+mory?
+If they are they don't seem to make sense to me given the following output=
+ of
+"cat /proc/iomem":
+
+Memory in my machine:
+# cat /proc/iomem=20
+00000000-00000fff : Reserved
+00001000-0009ffff : System RAM
+000a0000-000fffff : Reserved
+  000a0000-000dffff : PCI Bus 0000:00
+  000f0000-000fffff : System ROM
+00100000-09bfefff : System RAM
+09bff000-0a000fff : Reserved
+0a001000-0a1fffff : System RAM
+0a200000-0a20efff : ACPI Non-volatile Storage
+0a20f000-e6057fff : System RAM
+e6058000-e614bfff : Reserved
+e614c000-e868afff : System RAM
+e868b000-e868bfff : Reserved
+e868c000-e9cdefff : System RAM
+e9cdf000-eb1fdfff : Reserved
+  eb1dd000-eb1e0fff : MSFT0101:00
+  eb1e1000-eb1e4fff : MSFT0101:00
+eb1fe000-eb25dfff : ACPI Tables
+eb25e000-eb555fff : ACPI Non-volatile Storage
+eb556000-ed1fefff : Reserved
+ed1ff000-edffffff : System RAM
+ee000000-efffffff : Reserved
+f0000000-fcffffff : PCI Bus 0000:00
+  f0000000-f7ffffff : PCI ECAM 0000 [bus 00-7f]
+    f0000000-f7ffffff : pnp 00:00
+  fc500000-fc9fffff : PCI Bus 0000:08
+    fc500000-fc5fffff : 0000:08:00.7
+      fc500000-fc5fffff : pcie_mp2_amd
+    fc600000-fc6fffff : 0000:08:00.4
+      fc600000-fc6fffff : xhci-hcd
+    fc700000-fc7fffff : 0000:08:00.3
+      fc700000-fc7fffff : xhci-hcd
+    fc800000-fc8fffff : 0000:08:00.2
+      fc800000-fc8fffff : ccp
+    fc900000-fc97ffff : 0000:08:00.0
+    fc980000-fc9bffff : 0000:08:00.5
+      fc980000-fc9bffff : AMD ACP3x audio
+        fc980000-fc990200 : acp_pdm_iomem
+    fc9c0000-fc9c7fff : 0000:08:00.6
+      fc9c0000-fc9c7fff : ICH HD audio
+    fc9c8000-fc9cbfff : 0000:08:00.1
+      fc9c8000-fc9cbfff : ICH HD audio
+    fc9cc000-fc9cdfff : 0000:08:00.7
+    fc9ce000-fc9cffff : 0000:08:00.2
+      fc9ce000-fc9cffff : ccp
+  fca00000-fccfffff : PCI Bus 0000:01
+    fca00000-fcbfffff : PCI Bus 0000:02
+      fca00000-fcbfffff : PCI Bus 0000:03
+        fca00000-fcafffff : 0000:03:00.0
+        fcb00000-fcb1ffff : 0000:03:00.0
+        fcb20000-fcb23fff : 0000:03:00.1
+          fcb20000-fcb23fff : ICH HD audio
+    fcc00000-fcc03fff : 0000:01:00.0
+  fcd00000-fcdfffff : PCI Bus 0000:07
+    fcd00000-fcd03fff : 0000:07:00.0
+      fcd00000-fcd03fff : nvme
+  fce00000-fcefffff : PCI Bus 0000:06
+    fce00000-fce03fff : 0000:06:00.0
+      fce00000-fce03fff : nvme
+  fcf00000-fcffffff : PCI Bus 0000:05
+    fcf00000-fcf03fff : 0000:05:00.0
+    fcf04000-fcf04fff : 0000:05:00.0
+      fcf04000-fcf04fff : r8169
+fd300000-fd37ffff : amd_iommu
+fec00000-fec003ff : IOAPIC 0
+fec01000-fec013ff : IOAPIC 1
+fec10000-fec10fff : Reserved
+  fec10000-fec10fff : pnp 00:04
+fed00000-fed00fff : Reserved
+  fed00000-fed003ff : HPET 0
+    fed00000-fed003ff : PNP0103:00
+fed40000-fed44fff : Reserved
+fed80000-fed8ffff : Reserved
+  fed81200-fed812ff : AMDI0030:00
+  fed81500-fed818ff : AMDI0030:00
+    fed81500-fed818ff : AMDI0030:00 AMDI0030:00
+fedc0000-fedc0fff : pnp 00:04
+fedc4000-fedc9fff : Reserved
+  fedc5000-fedc5fff : AMDI0010:03
+    fedc5000-fedc5fff : AMDI0010:03 AMDI0010:03
+fedcc000-fedcefff : Reserved
+fedd5000-fedd5fff : Reserved
+fee00000-fee00fff : pnp 00:04
+ff000000-ffffffff : pnp 00:04
+100000000-3ee2fffff : System RAM
+  30d800000-30e3a3d47 : Kernel code
+  30e400000-30e81efff : Kernel rodata
+  30ea00000-30eb108ff : Kernel data
+  30f00e000-30f1fffff : Kernel bss
+3ee300000-40fffffff : Reserved
+410000000-ffffffffff : PCI Bus 0000:00
+  fc00000000-fe0fffffff : PCI Bus 0000:01
+    fc00000000-fe0fffffff : PCI Bus 0000:02
+      fc00000000-fe0fffffff : PCI Bus 0000:03
+        fc00000000-fdffffffff : 0000:03:00.0
+        fe00000000-fe0fffffff : 0000:03:00.0
+  fe20000000-fe301fffff : PCI Bus 0000:08
+    fe20000000-fe2fffffff : 0000:08:00.0
+    fe30000000-fe301fffff : 0000:08:00.0
+  fe30300000-fe304fffff : PCI Bus 0000:04
+    fe30300000-fe303fffff : 0000:04:00.0
+      fe30300000-fe303fffff : 0000:04:00.0
+    fe30400000-fe30403fff : 0000:04:00.0
+    fe30404000-fe30404fff : 0000:04:00.0
+
+Cpu (0 of 16):
+processor	: 0
+vendor_id	: AuthenticAMD
+cpu family	: 25
+model		: 80
+model name	: AMD Ryzen 7 5800H with Radeon Graphics
+stepping	: 0
+microcode	: 0xa50000c
+cpu MHz		: 4187.420
+cache size	: 512 KB
+physical id	: 0
+siblings	: 16
+core id		: 0
+cpu cores	: 8
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 16
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat=
+ pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb
+rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apic=
+id aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2ap=
+ic movbe
+popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy=
+ abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfc=
+tr_core
+perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba i=
+brs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a=
+ rdseed adx
+smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occ=
+up_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd=
+ cppc arat
+npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists=
+ pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku os=
+pke vaes
+vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap
+bugs		: sysret_ss_attrs spectre_v1 spectre_v2 spec_store_bypass srso ibpb_=
+no_ret spectre_v2_user tsa vmscape
+bogomips	: 6388.20
+TLB size	: 2560 4K pages
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 48 bits physical, 48 bits virtual
+power management: ts ttp tm hwpstate cpb eff_freq_ro [13] [14]
+
+Pci devices:
+# lspci -tvnn
+-[0000:00]-+-00.0  Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne Root =
+Complex [1022:1630]
+           +-00.2  Advanced Micro Devices, Inc. [AMD] Renoir/Cezanne IOMMU=
+ [1022:1631]
+           +-01.0  Advanced Micro Devices, Inc. [AMD] Renoir PCIe Dummy Ho=
+st Bridge [1022:1632]
+           +-01.1-[01-03]----00.0-[02-03]----00.0-[03]--+-00.0  Advanced M=
+icro Devices, Inc. [AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M] [1002:=
+73ff]
+           |                                            \-00.1  Advanced M=
+icro Devices, Inc. [AMD/ATI] Navi 21/23 HDMI/DP Audio Controller [1002:ab2=
+8]
+           +-02.0  Advanced Micro Devices, Inc. [AMD] Renoir PCIe Dummy Ho=
+st Bridge [1022:1632]
+           +-02.1-[04]----00.0  MEDIATEK Corp. MT7921K (RZ608) Wi-Fi 6E 80=
+MHz [14c3:0608]
+           +-02.2-[05]----00.0  Realtek Semiconductor Co., Ltd. RTL8111/81=
+68/8211/8411 PCI Express Gigabit Ethernet Controller [10ec:8168]
+           +-02.3-[06]----00.0  Kingston Technology Company, Inc. KC3000/F=
+URY Renegade NVMe SSD [E18] [2646:5013]
+           +-02.4-[07]----00.0  Micron/Crucial Technology P1 NVMe PCIe SSD=
+[Frampton] [c0a9:2263]
+           +-08.0  Advanced Micro Devices, Inc. [AMD] Renoir PCIe Dummy Ho=
+st Bridge [1022:1632]
+           +-08.1-[08]--+-00.0  Advanced Micro Devices, Inc. [AMD/ATI] Cez=
+anne [Radeon Vega Series / Radeon Vega Mobile Series] [1002:1638]
+           |            +-00.1  Advanced Micro Devices, Inc. [AMD/ATI] Ren=
+oir Radeon High Definition Audio Controller [1002:1637]
+           |            +-00.2  Advanced Micro Devices, Inc. [AMD] Family =
+17h (Models 10h-1fh) Platform Security Processor [1022:15df]
+           |            +-00.3  Advanced Micro Devices, Inc. [AMD] Renoir/=
+Cezanne USB 3.1 [1022:1639]
+           |            +-00.4  Advanced Micro Devices, Inc. [AMD] Renoir/=
+Cezanne USB 3.1 [1022:1639]
+           |            +-00.5  Advanced Micro Devices, Inc. [AMD] Audio C=
+oprocessor [1022:15e2]
+           |            +-00.6  Advanced Micro Devices, Inc. [AMD] Family =
+17h/19h/1ah HD Audio Controller [1022:15e3]
+           |            \-00.7  Advanced Micro Devices, Inc. [AMD] Sensor =
+Fusion Hub [1022:15e4]
+           +-14.0  Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller=
+ [1022:790b]
+           +-14.3  Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge [1022=
+:790e]
+           +-18.0  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 0 [1022:166a]
+           +-18.1  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 1 [1022:166b]
+           +-18.2  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 2 [1022:166c]
+           +-18.3  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 3 [1022:166d]
+           +-18.4  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 4 [1022:166e]
+           +-18.5  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 5 [1022:166f]
+           +-18.6  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 6 [1022:1670]
+           \-18.7  Advanced Micro Devices, Inc. [AMD] Cezanne Data Fabric;=
+ Function 7 [1022:1671]
+
+
+Bert Karwatzki
 
