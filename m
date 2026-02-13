@@ -1,325 +1,450 @@
-Return-Path: <linux-edac+bounces-5713-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5714-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OIbWLpgqjmlsAQEAu9opvQ
-	(envelope-from <linux-edac+bounces-5713-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Feb 2026 20:31:36 +0100
+	id 8MKcHggdj2lQJAEAu9opvQ
+	(envelope-from <linux-edac+bounces-5714-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Feb 2026 13:46:00 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5674C130B72
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Feb 2026 20:31:36 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id A976013620D
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Feb 2026 13:45:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 862113066823
-	for <lists+linux-edac@lfdr.de>; Thu, 12 Feb 2026 19:31:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2B94E301152F
+	for <lists+linux-edac@lfdr.de>; Fri, 13 Feb 2026 12:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 605A4284880;
-	Thu, 12 Feb 2026 19:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0949347BD9;
+	Fri, 13 Feb 2026 12:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lFPFljpX"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="r3oZXChP"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011063.outbound.protection.outlook.com [40.107.208.63])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CCDBA21;
-	Thu, 12 Feb 2026 19:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770924670; cv=fail; b=VHyuO+tz8pinY2e4J9mkhAbyxm7Qb96HjzezuKWdpnSUCereK5Y1adnLR3g2H+xhGPIHuS+yywkqjqVhAnuYmzSYxU92zdS77RXsfdpRD8j98QiaF+5v3Q11DMZyYyUBaI8cFAjV7wMylmM8iep/ZIlkVvJ30xNgE5HrDf7rxhk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770924670; c=relaxed/simple;
-	bh=ozevW4cMBwcW7a1sBBY3Hb49K5vfp7IsUm6C8zL1UJM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=kJSV+8gVdvt+oW3nJ+TRfEggPovuZk9Pv8BNMiN0tIlpf9mTYWHr4SCYuLO4AfHJXZ4nRKzcWBiDhapOfW6zlAn+072+KJ+p4fyelvcAAlBKYrRTFeX2WsU36A7iIDVX5vxgaj4SAg8i6sadgqtqXDAxA7FUjxuskiY6/mse+VQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lFPFljpX; arc=fail smtp.client-ip=40.107.208.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WcoXTO205VAQIYI6gejnKfiHbU8047+ubDQlqKDJ1+Ys0yCvdGmNCJI0lamnqh3ktri15/Sq+IQXrHao9SvRhl5QGMo7jQKU4AXirDbrZrtfAT6yqbdfDaG5fYsFBkHFzHaSsmwAlqr+GPqGHXfu/mzEDzCAKk7GUZOE3qnqkT0VGZNiiI19trI60L0kHqbWAumnM9O9DzT+OzRjs3WVmrKZquc7otCncDRN3fiwOq4aPmHKVIE/FqlG7lUfNo+Qq2hmiFrggPi4Q7pB3YwqqbYwyws7Q55KXQyiCokWJX5snwLXm9Ns4ABRwLNOSLtHjTtQUAlH2EVkfcE4O68+3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uo6Q35IZo1k6TlrQ/BTA6yojPw0Pz1Z1ameKc/8FpxQ=;
- b=QlEpFm3tKdzC4ZZ/UDjSN2TXcfBRRsBvWMo+38TqnMkcz5j3WWLJtgt4aiAPcRy9XJU6v3s136yS7UzEOVHzzYRmQLzW6241FPNPThAbsbbZbab5dakwM16+4/G+J6TlN3RU1MiJSwt0uMlpLAsUWROs0QCxEBCfw5hU21ZR4LckpbukQs2vhypHCUwvY/CoX8RlQ3nS1ucZb5LwNFxSLR4qc2R04HDw8YgV6rzMctu2ikpf3IEuvWfFEZFl3b2ZhRxtzreKee+A7T3t4va9I2c15GcM8afG6R+/rEi4jzcyrnJjpc4Ks+KDmUFljisHpmr4Z1V3aYvb6P2mA6zclw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uo6Q35IZo1k6TlrQ/BTA6yojPw0Pz1Z1ameKc/8FpxQ=;
- b=lFPFljpX7okXpiAnsqBFyG1ca9mLmd0ditXQSMInXawHtZg+U9Ze3oNKLkZ4Hz+V9DavkPajyxeBu95Y2JObX4VrEWwav2TbF2SsCICXxrLqLiM6YsVQBjGwGy2YyQWdi9EZj9z61TrSEXlG/EYzLjbgx9sluUJh/0ZLVF5PVVU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- IA0PR12MB7627.namprd12.prod.outlook.com (2603:10b6:208:437::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.12; Thu, 12 Feb
- 2026 19:31:05 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::7da:cc3:cf2e:8ebf]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::7da:cc3:cf2e:8ebf%4]) with mapi id 15.20.9611.008; Thu, 12 Feb 2026
- 19:31:04 +0000
-Date: Thu, 12 Feb 2026 14:30:58 -0500
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: William Roche <william.roche@oracle.com>
-Cc: Tony Luck <tony.luck@intel.com>, bp@alien8.de,
-	Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	"Allen, John" <John.Allen@amd.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jane Chu <jane.chu@oracle.com>
-Subject: Re: [RFC] AMD VM crashing on deferred memory error injection
-Message-ID: <20260212193058.GA315621@yaz-khff2.amd.com>
-References: <48d8e1c8-1eb9-49cc-8de8-78077f29c203@oracle.com>
- <20260209210819.GA445331@yaz-khff2.amd.com>
- <20260209211843.GA459737@yaz-khff2.amd.com>
- <6f87d29b-c30a-47f8-a519-0e1fba36f1a7@oracle.com>
- <20260211163438.GA1637@yaz-khff2.amd.com>
- <09d2117b-02a2-4e16-8536-1d02e85ae6ee@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09d2117b-02a2-4e16-8536-1d02e85ae6ee@oracle.com>
-X-ClientProxiedBy: DM6PR21CA0010.namprd21.prod.outlook.com
- (2603:10b6:5:174::20) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67179191F92;
+	Fri, 13 Feb 2026 12:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770986753; cv=none; b=hZKmgAYGSQ2Sz/LiAMWqBPJqU4pQWKKXcfDAIx1vznSEcIJMNpmzgnlC31FQ64G5oFFd/DOSHOkcuu+CKcex+TOY7rrbiwtn9rs4EwUFitLZLfxFios3NA8KpDQ2vmgk+ix2XKIsGNQB7iQDWADKUe/pSvbhiRcf9ZXaer5b/WQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770986753; c=relaxed/simple;
+	bh=wpdiCiCzi3kBnjKQy4QyFoP2Kd+De0vk87lx6HMOhZ0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=m4ymnPSl7Y+VIYNCDJInxIQcNRy9KMBmy1AvwXawdBtCpENtr2I67yCIzzGlEr7DVrr6XEQWHe2syYa/RvZNGBLfsRf4WckW+Wbp24T1k8/RO/ZZhVPlkLLUjif9LIMRLIgzz5Js0l4fwIMzK0KumRILdHXu4EsAFOfXgXqnnes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=r3oZXChP; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1770986725; x=1771591525; i=spasswolf@web.de;
+	bh=PifJ3Vxvt+aCuhXceSXWRu3jIZxeq/nL+w3EeX5TPUI=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=r3oZXChPxWjA72lfdlKw4l65ykt5YsYu6XvrYhuY5llgArl8Qj+8f4wwx3A5+FTX
+	 S/F3Zuh231zQH2+M43NjbA3vv9vbfKY1ZKCWPYLUABx9XZB03eLfBofsxxupf3jil
+	 KuzA5+F+Cyf2ef3hZkUBpllD3SwI9EUjAeEZNRrNc13PLOouiupr+gxaIydgYRBOi
+	 CIBPb7YZ8siVs14m/27SvJYp+keQFS5X+63hOorLJ+/OSJ7NXRvPfOrPqcrIVouth
+	 cSVu3wh+Lx59LeTX385Wx02CSUS8t21OVGou62Xsxyvj0ZFZjOFYv7rNstQs301aq
+	 4Ik+xxf/3ALRz5ejwg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mmho4-1vP02U3wv8-00c9dG; Fri, 13
+ Feb 2026 13:45:25 +0100
+Message-ID: <cb484717e2600ae729b55ccfc92e807d88e5ab31.camel@web.de>
+Subject: Re: spurious (?) mce Hardware Error messages in v6.19
+From: Bert Karwatzki <spasswolf@web.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Nikolay Borisov <nik.borisov@suse.com>, spasswolf@web.de, Borislav
+ Petkov	 <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+ linux-kernel@vger.kernel.org, 	linux-next@vger.kernel.org,
+ linux-edac@vger.kernel.org, 	linux-acpi@vger.kernel.org, x86@kernel.org,
+ rafael@kernel.org, 	qiuxu.zhuo@intel.com,
+ Smita.KoralahalliChannabasappa@amd.com
+Date: Fri, 13 Feb 2026 13:45:23 +0100
+In-Reply-To: <21ba47fa8893b33b94370c2a42e5084cf0d2e975.camel@web.de>
+References: <20250916091055.GAaMkpn72GrFnsueCF@fat_crate.local>
+		 <20250916140744.GA1054485@yaz-khff2.amd.com>
+		 <9488e4bf935aa1e50179019419dfee93d306ded9.camel@web.de>
+		 <be9e2759c1c474364e78ef291c33bc0506942669.camel@web.de>
+		 <20250917144148.GA1313380@yaz-khff2.amd.com>
+		 <6e1eda7dd55f6fa30405edf7b0f75695cf55b237.camel@web.de>
+		 <20250917192652.GA1610597@yaz-khff2.amd.com>
+		 <5ba955fe-2b96-429e-b2e8-5e1bf19d8e8e@suse.com>
+		 <20250918210005.GA2150610@yaz-khff2.amd.com>
+		 <67c7de1011ea7b8863051889ee2a41512fb0e044.camel@web.de>
+		 <20251009132055.GA472268@yaz-khff2.amd.com>
+	 <21ba47fa8893b33b94370c2a42e5084cf0d2e975.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|IA0PR12MB7627:EE_
-X-MS-Office365-Filtering-Correlation-Id: c20ce3fe-a279-4193-8fb3-08de6a6d42be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2hTv/VdBUJ5bm2snQas7b7xZAUehhQrJ/jnWpVvC3HlSXn+dz02sIY6zPBJO?=
- =?us-ascii?Q?4F4+xqeFIaU5GrZH7Dki24xRTuo59DTGp+/talN5cFfDIfkKXlBXIAzXqnaX?=
- =?us-ascii?Q?FLmbxdbPTYFLpRVtNAnUIEzV3lZp4JgS/Z8nIxXhFi3Ln5pVNKEdPviYYyg6?=
- =?us-ascii?Q?S4us1ze7Vf6luHryBbeynC/ZLlz0KNXqEov4Aiowrqo2vYRUwKMQpRS3J3ka?=
- =?us-ascii?Q?O8yOOSZktFfnQDwooZPIrwwHIOxEq9ayyJOLC34hytdQZT74awBOsRnyRboc?=
- =?us-ascii?Q?n1yHhJy4lMOy9PPyre25E7553Ku28U7/7kCfQyznReC5j6AcKSPZS8PmVc+B?=
- =?us-ascii?Q?OTWefLoYcR1nxRFIJ2L0S4CN0kOuKz/mXFJU1NWrl1tK8XTrEMC2Y5gsm644?=
- =?us-ascii?Q?BRwb50ofOmsmKZj1K6V7lz6Wvz/7dluiFqwrs4kRyoiFc+WmYoykQkGmf1im?=
- =?us-ascii?Q?76rwy6KEKdHnvKk94zjxawAinG6NZUDZ+lAtOEuZQdLclBzjdzeZ1uGcAlHb?=
- =?us-ascii?Q?qRbFtuUGeXK7Zv1jPSQxdD4uaiBWj/j/V506JtcZ1JMknuBkZHR7duDKbAjx?=
- =?us-ascii?Q?KuUJ17F0U8poRymrL7mJLV3dz2vlGevK617Zcgf8NM2vfxaEQWXibaE2Fdy3?=
- =?us-ascii?Q?v1Qknud/U12lYP1z6eLZqbdMnJH5/GIttmozLwTukKJW3rNHDeXTV3IBaHLF?=
- =?us-ascii?Q?7io0HaSKWlAoHMxHKYLf/UQQSjOZwk3W0hJvBYiYygsJHp0p/bPpVx12vvaD?=
- =?us-ascii?Q?WnGAgCJjSLb54ww0gVvmd2S2YcOqjF2BGI+a18kyGKmB8pTh8aG74DFObBgg?=
- =?us-ascii?Q?JsROgy4A/uifQaKTybMxvWvcorZVQzOMx9IfreXv48x/a0Qr/3Ug41WYBBZF?=
- =?us-ascii?Q?YF2eDcjmncgje0vqnlKVVShUQBlABE22t3hZrBliCLZJ5kyKCPuotN1eYcG1?=
- =?us-ascii?Q?sQIgZO+aXN1SbKKrtVx4ztab1flZxzArMJuKjgpD7c8jindXXTajzK/hd0R4?=
- =?us-ascii?Q?QQ9JD2TjKTSOxzK3zhAgwAkCPxhBEPB8rmaRdCW3FD3Codp/fZu28wPwmnR0?=
- =?us-ascii?Q?sD/Bz78iRFEgyn1RrREgRX+FcJ2UYewzNmH8z5iVTTH+pvxdnCo5WQ6QVPFz?=
- =?us-ascii?Q?X3l/7MP/qLggVYmSZtqNaXzq7mPm3Ld3Es7Y71s3UHKmRUJH5/sFr7VTk1wx?=
- =?us-ascii?Q?cxQqSTwtVZ3bdaQb7ObcDqUOkMiN1PPG9juU6izxB0mhx46K/HL07Bh47xbV?=
- =?us-ascii?Q?P9Ly2lELT34ffRgsmcSEbcnVb7qAyfJG3CWAatKCZasbPTXPU4LqLl/yvZRD?=
- =?us-ascii?Q?whBukQTRHN+KfkqAJ2uwL8Tkaw1gkKubZF5Xm9wotqWXkuJe098M5RRfJ/UC?=
- =?us-ascii?Q?K77sL2KiIS+bzWYUFr2Sd8JS70JNzH3SIqZ9ubogOtL/ND/zi496/wIH17jz?=
- =?us-ascii?Q?lDWG9v7n4cbgkpAipWfkpGWbJW0p2WEDaTknKQ6pHlTdO7uF6qP3CC+rP+6z?=
- =?us-ascii?Q?0sNOc1p0ov88Y6o9b1vus6c6QDQx0bEkHQ0IbabVtx1tYmYVux0iLWZSJ+C+?=
- =?us-ascii?Q?6QvWq3qpkeFjqMydZRg=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?d0P2DOAfSYIcNTeMhy1LvF55b5bg5CJMnm0/2tUASdK6MaG3zPF2eRe3i1TB?=
- =?us-ascii?Q?1OI065GgoEzJKgfqZJ7tuOI0diy28zSkkxm4s7w0cuQr0jA+zTvOqoz2FXWP?=
- =?us-ascii?Q?yERF/9J1Aw6r5Iwil0c2PW1Eh6RYuRlj9jC1uWTPztu4Em1c/4dn4ixnGUJC?=
- =?us-ascii?Q?qeFhzsd4g0STJ3Ueruvx/yT13eTScyfqTJMjr3q2mTMzHnnr4t6de9Vbm2qP?=
- =?us-ascii?Q?8+wwK/OdPuaf5+FKG8wuvMaqcVeK25wYg4JHJx/GKAQz8UJHVO3zwTWlWzOp?=
- =?us-ascii?Q?1iB3Q7kTs+nuysuOdM7xjLWYX7JFyy07+A9BjUtYuXHX1QVRzZihfRxPlmdM?=
- =?us-ascii?Q?xYJ64Ghf7sam96Gh472hab67APppxX9HdmV+0P2trI0/VXKkMmuJq/Wh9FoY?=
- =?us-ascii?Q?7Y9At3Ikt2NBEaS9YfkC0sVmlmjvC0QX9IeLJvwa/5K3+yqBptVTjKz8m5v0?=
- =?us-ascii?Q?mGFWxOSgBjHTGe6AM/75FMWMP9GcRer0HSCxlDA7t03wojYv2KTSSDU065Nn?=
- =?us-ascii?Q?V1+bBNOGkBhGy/3YUDL48Xc1BpKNt1XWmiCWFbl1i/PY5+nYWAx+60o47wei?=
- =?us-ascii?Q?C1B/jh/ksa9lczti117PqOyVIzhev1jCZ5xYkKT16UvVy+rqSQTLqGx0jKFT?=
- =?us-ascii?Q?A5klH1ksCJZZ51wdR1Z5GPdfa4cPMSIZORdDLkhuaYHavbiGwz01QQ06Fk9d?=
- =?us-ascii?Q?GJMIVEZfffy4csE545Io7q0j+UCyquF3WwmaWxGgWE5sPloT9ENJd7lNWxgB?=
- =?us-ascii?Q?9BeFPMmaiEQBmLKYCa7hDYwneoG60Dd0U5X/9SGYOcib/rMDbWyK/lzHOMSw?=
- =?us-ascii?Q?1sYGMnqSdJSHbggyoM9dUiFQLDVq09Sxa2CdSMpdvXUJzxiV+HBDFctcErPf?=
- =?us-ascii?Q?kTZ1AXTaz8OI1XAH1e1k2A9kQ5VDI+YNLs+ZzH9Hz33puSoTv87UlrOAMok3?=
- =?us-ascii?Q?BqIycGbtVmd7jJAEYDXO7IRj1GOK/PpdqNpqHpvhgg23+PLn4onpsryDsOlg?=
- =?us-ascii?Q?H25RmT5BTdl/6wLVvR6MKITxctm+YFaZf3BlpvLpH/2R6ZdI8khC87ucQGp8?=
- =?us-ascii?Q?Nsw2gQeHPYpYPpf28vLOYuYX0Xuqgx8ZX1LiZwNBtToPXBZ6+NI7njAAQA2o?=
- =?us-ascii?Q?devp5+SVx9Nvh5Aq+P/i0RbWBv6n3ggJlQR631/BWHeQ0pmSeBKrNh2crEwx?=
- =?us-ascii?Q?n1jgZML4n85CzHQ15YGzufHqzlFDXIJO+JIPt/1jA2M6DueIqjYRp4rn278N?=
- =?us-ascii?Q?5nFBahDERmFE13bOnlNiEX/DViNxXTyPxClZs46Iv81ak64WaysUuBJc79J4?=
- =?us-ascii?Q?bPq2I/z49WGQhSIndNE1V8Hrtsz/ULrt5IGeYckBo8ITVSMHpabqvdFA6IJt?=
- =?us-ascii?Q?dbRKcVV2UGLzdBgRBdN8dYil4YoNq1wxzmN1U2s34ZFZrlOHVoB/77bVigb1?=
- =?us-ascii?Q?hFfivKlClx8BGcK5aJVmxVYiolTYqT4V0qiQYkQe969J2V67Xt+IPuXnGLuR?=
- =?us-ascii?Q?6LrvIFxMN24GwwbW/ckoVk9Sl407zy5/b7PcfW/fMoMGZqffQMSjwZntrPFT?=
- =?us-ascii?Q?/J3Ogrrc6W6ZJIxN8u5L4DZUx2u2CTINwu/Q8TdThcxqthn7GM7KDcS+/0AG?=
- =?us-ascii?Q?+PRonnuUvGTmOC3Y9WtHhujUI0JIoyJG8jIw4kSyeIrnCk626Dpb0ne67zqw?=
- =?us-ascii?Q?eRBRvoWmyX4Y0K9mhgl7LzNLGCExeGn9WU8TVhFIimcMAYhh?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c20ce3fe-a279-4193-8fb3-08de6a6d42be
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2026 19:31:04.5593
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M9/qb93aIv/FTCrhM0oBc6Wrf045I2WK+YEzgT3RIwaEweTYiYjHpOKYAVErLTUZrFFvTlcUaP3Pmwa6TqWZ0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7627
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:dpLOEXyeHgPxhgWra4gEHQSW3pIfMosO/VaB2p4QyCx3gHOJ/sS
+ QXyMiSz76uxfdT3eZDregFXIs5iKdp5Un7FrAKBwPshvOkxNDdxy5NtkEoDIqpKYU7UWTFx
+ pUhB8m86gJcKGlm0B7JOJFe3ilSN4nAPnS7C4OkaJ0/Wdoneb2DIaSLhU7Rkd/4rRk6URXx
+ 6qoEhIWgU2aaLo/QP0wZA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:wzvKiLqk74Y=;WL2VICgQkiuHK079Visx/bwqJ+v
+ 97EM+8SCvGuPgjvSfWtHaxzjFRxjz6evbK4SJ+ynXseJaHEoqdG9espcsWi5ANcL9XthFaDeF
+ KuRaLXiqkw/ybj9oRGzVft2mDFkxiNCbzGbBpGYrqmbxBDmUp4nDjTvjHcskeL+4Jsa/xEa6j
+ Hp+J5/WkLMtHpzBCHuNDCtt4+W+IRdraqLiCW40iMjzDD3X/D4SouV71SDfJgtQHmoILsXOrD
+ GSQKZKHeJZK/Sp/hXsF/OJYjU+G3GslBzOJ0ldBpvz6Wy/l6IklZFan5Se0T9Ji1LHcnVgO7m
+ aqBkHn9lA5dO3yHB6z3DDqRFZIRUCdPX0Uc+NTCvY+sMe+hPF+h4kifzMpPFO+JeIwa92QrXE
+ GuTpBWigTOTUc5sSj4fSeNiHMOtIiOwnf9C927QXTSeODphb3y0nCuRUpxIeuxPw4UjuRKwjX
+ a3QN2GnhjkPtXCdQDr00heWTMMBBqhNcEiXXhfR6x4xpnNSsSvdjKAT+pzZU7njmunZv9U/4J
+ ND/BteldIs9aejdQ8awO1TqVpK2XYAwiNbPJfN+rO/A1uBfjwcvYK1C8xIxBniq9qHfdfaepV
+ ZEbQ7l60xaKGA/i359VFZoxU5YPEAVq2Ykwr6jhvytiq1jB6rF2Rc6aTqc68wMawIdeMkifCh
+ M409gmYiqDCoIj/fy4uqNe2HmxSTein+xYBNrKGkNljkvxLmuwZw2PT0lPhw47vCRkewOCTdc
+ MSd/AO60lU8MfJXNcjxKejmbDUuuQ1Y01PweX4sljTwNs03vSx6hEWb2Ru608avxJPoeAZO3T
+ aMSIsDOX9R+H5x89ATyRxWo4XnY4QssX3Ha2mPtadOKGCcEFGa+if9SXLtWl3Bk3pdBrS5mW4
+ BmLwxh7xurUjOhgPEWpOgYUVBXyf1KwjCV5zSGrpB/yJ5BJ2J0r+isC10x+bKzIKuyUz/Q1tf
+ R95fMnZvkkiuxscZddymIxu8sQqmL/FgY7wH2a0gfS5tLFoEb+l32xazPr6j3VZ/K7N8G0lpy
+ v8pLRQwVqMFOjmWbujeeVaEv19Pv8j/JjeQWzd8u3mPnc5gUm1aZxuMAkzB38gOUK/5bpEmgV
+ pQn6096MsJ1ijUzBfczemQN6oDweTES3fH6GuDgaRdoL/frslknQs0RrcuW2HmBfQYCQiafMA
+ RZcJOZl3f9LszmYBsmksZ/faHcglmmEQxk9zFOt11OsWcRkDNyKnABWsHYOCOu5ri7D60eEWQ
+ T8xR1xKLwoPj+VCvwS8dPTzW7eZyRptW90hwsBstoKmgnmd2JVTb4i0UTLr6PdpTTKM13Nbxz
+ 931nJWW6WaSKT2zE19ilvlvQU1iLVAv0MdWNY9ES0uMAAd1yoWhsexFLJ/2eO4REHt7rHT0WE
+ gQwmEFpnXTy7Kd2FjtJryuKt8z97Y7oGKAlwUnQzdM/nAv3Xff34AuBR0jdStWZa7ZuxMua8b
+ XO5135mOrbz6T0OPRWAWtVJTPFv5Gn7Cz+Zk3/2z53lItFFGIGmISmu42lOmPQZe9RihGdVKd
+ jQxLEmvCJvL8GVKEmSBdDFM3Vx4gx2pVtEGbv8cQxs1hUW33oE0N/2flx3zXCfsJPMh+r1G9b
+ tGTSRKtE769GoKO3U4HKx5nScDf6OtiujAg+vR+d779wm7SHcZeLs7z2x24REgZjx/7NAf5Ab
+ wnx8Uyx1P2arvjgNfxES8ZHBNyJImiBUO7fQyl7M3cU0xOu4TvyAri01E6fT0bKT9HUbkYm6i
+ SfKuLXKHs1qy4i92zZtJp8tJNzKMhmccmKB676844qWEKqCDdNXwZBwYp7tIDzXp6pwkgsacR
+ GOqnV0RgfjH2/mPuzldHtJhpKgIii5FB6F1vmkd0ytyGvEncZGA088+zXS9J4EEquvHQC3nkc
+ IoMuCY7KpxYP5Etm+5KAcaYgvhZBpzPymikHWjz62ZZoCBgrdwC5IsOkIe4QAeSd2YgcMBYs6
+ AI57OpmhvZON/5vSneRJc+PqDDtw31wg67JGZsoSYRRxB0RLbjlwjn8tpMa4KP6BwJzg/vjwz
+ MC81pkCnY00g6ngoCTyV+wnHK96lH02PN8CAB2RgpuSpMi13gVwOUAN8h/3DXKGMxqkVdOHGt
+ KLICxQZjxCJ3cRvnF/+JxTgs1Xn4b/K8bwPkoVd77VivDaH+4nvWvuSkW+XbgrjcYmzC4mYnu
+ FoNOHLpuP8Z7LKMucXsPguOnSipDrBiNXRccumnnd2pCSK/HvCDUjpa8cX6paQCXwVt/wMKIL
+ 0Yepe4jGPNbxqkq1F639C5MVCTDQW7AzK3VV5+fjvyiD5zaI1F3RsPCrG8gRAgqgY0zvdpBDV
+ glbnDJZRCrGTYDUXy7CFGuwMcmMW8gRoY/fRT5cTYLU35ifVnEw8+ZTUyb8nUMyShpjjbMH/L
+ ZXDMGiIovU75N+4KnKmTZVxHp3x4xOsJiHonE/lw3Ec2P3ZAyuR2W/P06tq0i2I0FTkG2VVKg
+ blVumjAzvDyHAnteQi1WyTMeSRmE5QkQHEY0Iv1aJ8yhgu9LSORdRd8SF3n8au6jfsqmEeFBz
+ qDtSlAEEHZFYX5kWf1tI6giOjKSEEHVPSJLPlIgAbX1UK38pfpJvU/tJgSEzDp3HohdT8kuxe
+ afVPRngxQ/NW4fJfDRh8mbkC+cmi0FjWd/vXSqgYZjujTutvh+wGlGQ5VQQrR9raIhZvrd6CQ
+ 5p8kXBen6v2/cNmN/ZhjNZgxNH7p8gr07lbSO4GHVD9PkJjYlOpL2B5egC69cLMM1FbEDunkw
+ +4fAipQZKpfnIjdnE0oK01iCbQmnv1zQx8PQeoP0dBXDQ9go+KSbKQ+jBOBjrTT87zwkIBcwJ
+ 0/sPLlptufq+aOsULC2PKlXjivf9SbbELPm7cA8rpfi8lUyFRKcGhewaMMVvjwLT3NF1Yr+WB
+ WL075eg334txIkTvzbG9nh+uDWuUrKFmV/6BpMPrn1WmoCdMvy7srcArPc3u0IDyjJgMvtT+2
+ gWVe4W7DxK4UAVaaFVPZnEMWouKWKWB6hcD+GUdWGAQcdppKkTlQWaCH7FmcCBWje5sxCTC9D
+ N/jZ06s06SoIZu6c29wsyyYNFKC1fuUNb+cnQ+AC1TNoJaCRdNoAtWc6wOvvS4CvVw+Klg22S
+ u0OVefskslbE1ooN1jBGBSbpkmq6o5zPSXfQNjpBX1xGb6T4wu46PNdlWozmAOPwF/UZAf07i
+ fzNLGVPRNZQR8yKB5NVPymy5LNOUfFmVw2HHggX2c+XT2s7J2+pt6BJye2B94ZfrUjxq1/0BU
+ B0jxEFjhCZFkdPX1pCGORbsEzfeVvzbLrKYmjLQSMTUDm4SLq/SBaubguR4jfXOZKnZRY4yUM
+ ngjTTb0M4WH6iFn1/9uRemYC4z585KhskAtkIV1hC3rvMTdcBxXzrP+6oiyYSl25XR+vdcXHg
+ wt2nsAFnoqlBDYF3wLkjIiRu8KKiE5TAwq+XUt2GavoiS7NCFhe6uncCuHrXgUbuxWNsJROla
+ yMGvg2/Og1hP8kWjU809oInRyUEUDeYgNCkdiFbRiOlQwccLjk10T0DgcNOFh0DK/7WS6Xo46
+ 0abVlD8ff+zcdqtToE0n9swR0F5Dw2dSLESfyamk5/4I8AeHAV5mbnpcrHBjE+KmRSI/s0vdb
+ Z/3BgXI76YxHM5PE38mctmH1Nrh8U0f0l0N+yuObKOPKGbKYIF5prKvRbuqDd3/cwuRhVPOc7
+ XfEqZSS7E9mHu03OpMzeZUx8H7FcEXG1/x/T+j79o04bqO++HCig923nk6JOyRIrMadUnxzdj
+ gtRAvgoQwVXevfPsFOGYgpaInfcuriJ/LwaMSyzUxIsBMdJFPtOQEfCjUjxDqRzCWOjGnM05n
+ iVE55uFWAmoHZGfCG7MKLTWnb6rIbzuxQ6/aCXTOz5ZoZk0d3RvNrASndq9Txe6/zF2L1u6Wr
+ a+wwVCU+AsPpkhUZz3dEshGrCRgkBOnXXEQj/XD1VDdC+UOHoIj0IPcGet3vinoNJiLTOxxbe
+ lfgV7/H3C+Yda7ejp6+pKqSM8YqnRZl4L/5TXxq2MDf8d5nVdGA12COuFQ7YC4O7zPWKs+MQn
+ i/kPYOmEfQcYKijTAWMDrvH/cX8WSEtSFevlmR0exu1fvmrUcL4Ve9jK0koAb5BBE6eBpIaUb
+ NHn0t+kXZkQRaelPC7xKtgrRO0zcz+ltIP5t5nK00IB+onyLDgZmgStfy+mbqHlgzKK/xXZ/U
+ 2r3uyKBwCuM+IhRpRBcx6hjU7ZvoPOb2aEizqyLGFVyKwWKpPAzyuwtHEI+jnrpdjubhihu/k
+ wQXfBcFa6DF3NKjtignRg2dypbehV+IpgTblpet5kJwM7k74QnpqwpjL//7/VPpu4unA8th49
+ b+UWSc907gY1ySrCKmWFp019ntiKjXy9WjRfW0tl0r+KNl8iQXG6MXLz3uaqIuIMOGYaWuKEP
+ IcaFlKFDCkSNe7feeVh6JzMfutdll5XRt509qlLHmzzu8yliYcrdLocSLGS2mHnILqyhCFE8x
+ UwIdjUzMkdXweNipbDy0Dh1uj8z+Iq63GyW9ovnR85iNdgHQbguLWvsOYC07mlrCqDE5C6jok
+ 5Qk8k7uoZdOgPrgVaRHnQ8Ys+5jxKTrefVyNLFvjcO7Yq+UCBCQLSG3RnzQin9yrRkru8xMhK
+ u/mV8Bfo5bAqN8mg0VcCFxCcgFoSbckRiRWn+q02eDnA4e92YDahtg0FCG76T+6gnxjsCv+Ot
+ hgBYanBDk+x2Gn4FSugcxqTXOKZNVwgp47cgnnoqSGVhF1cWdnPBfetMwhAy2Bo2oc8aPXdju
+ F24LW0yCpEn5kPMbkthJzol5zlOV1IBetByVYzGTeq/jLr1jwpGQ0eUEiqytIGvT9hTNFwHCy
+ EDEYKCf6VFcps8xpO35vpyeW6qZnqpf3RerqZSTfvwZ0qFuK/H1Cyo62TytXY5jEXuNDEtBwJ
+ SUiU886SK2q4EDIO71FR6Vb5c0fMbJn4U2sRnjZ4346hVR7t0PHIkrQjVwCQq+7/kct/z7BWv
+ +imNXmIEKpUXxinxSw9QcA1YW1DEG/kM3bCbPOGVH42sBRjHwxRJXCowx+Lje5DfNV7yW7BZu
+ Jjm3BKspe9tFpGWmcezIkvLZTxc6Bs8wtr8g/y1l30pJOhO4KLrZHNMoC4WsRe3V1xj+hf7gr
+ 6R16axzkqU7i44AdDHjwV1XeCkSv4/i3SURVL0ddEkS+NHtkq+/Gj0p4B5rw==
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[web.de,quarantine];
+	R_DKIM_ALLOW(-0.20)[web.de:s=s29768273];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5713-lists,linux-edac=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5714-lists,linux-edac=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[amd.com:+];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_FROM(0.00)[web.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_CC(0.00)[suse.com,web.de,alien8.de,intel.com,vger.kernel.org,kernel.org,amd.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yazen.ghannam@amd.com,linux-edac@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[spasswolf@web.de,linux-edac@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[web.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-edac];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5674C130B72
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: A976013620D
 X-Rspamd-Action: no action
 
-On Thu, Feb 12, 2026 at 04:36:47PM +0100, William Roche wrote:
-> On 2/11/26 17:34, Yazen Ghannam wrote:
-> > On Wed, Feb 11, 2026 at 02:42:07AM +0100, William Roche wrote:
-> > > On 2/9/26 22:18, Yazen Ghannam wrote:
-> > > > On Mon, Feb 09, 2026 at 04:08:19PM -0500, Yazen Ghannam wrote:
-> > > > [...]
-> > > > Linux:
-> > > > arch/x86/kvm/x86.c : set_msr_mce()
-> > > > 
-> > > > Please note the comment:
-> > > > "All CPUs allow writing 0 to MCi_STATUS MSRs to clear the MSR."
-> > > > 
-> > > > We should include the MCA_DESTAT register range here.
-> > > > 
-> > > > What do you think?
-> > > 
-> > > But before trying to update the set_msr_mce() function, I don't think
-> > > that KVM keeps track of an MSR_AMD64_SMCA_MCx_DESTAT set of registers.
-> > > I can see mce_banks (for ctl, status, addr and misc) and mci_ctl2_banks
-> > > locations in struct kvm_vcpu_arch, but I don't see a location for SMCA
-> > > banks like MCA_DESTAT MSRs.
-> > > 
-> > > So if we make kvm ignore this update instead of raising a #GP error,
-> > > would it be a valid solution ?
-> > > 
-> > 
-> > Yes, I think so. And the details depend on how much of the platform
-> > needs to be emulated.
-> > 
-> > Some ideas in increasing order of complexity:
-> > 
-> > 1) Ignore this register write.
-> > 
-> > 2) Do a basic validity check.
-> >     Allow "write 0 to MCA_DESTAT" and #GP for any other value.
-> >     Don't need to save MCA_DESTAT values.
-> > 
-> > 3) Replicate the full platform behavior akin to MCi_STATUS.
-> >     Would need to save MCA_DESTAT values and do a "HWCR" bit check.
-> > 
-> > I really don't think we want #3. This would useful for "register-based
-> > error injection/simulation"r. But that use case wouldn't do much with the
-> > MCA_DESTAT register without all the related Deferred error interrupt
-> > infrastructure.
-> > 
-> > So I say the choice is between #1 and #2.
-> 
-> 
-> Thinking more about the problem introduced by your commit, I realized
-> that only SMCA systems have MCA_DESTAT registers. So we should not
-> allow access to this register from a non SMCA machine.
->  And Qemu AMD VM is an example of a non SMCA machine !
-> 
+It happened again, this time on next-20260212 after about 3.5h:
 
-So the SMCA CPUID bit is not advertised in this model?
+Error message:
+2026-02-13T12:47:34.505714+01:00 [T449218] mce: [Hardware Error]: Machine check events logged
+2026-02-13T12:47:34.505729+01:00 [T449218] [Hardware Error]: Deferred error, no action required.
+2026-02-13T12:47:34.505731+01:00 [T449218] [Hardware Error]: CPU:0 (19:50:0) MC11_STATUS[-|-|-|AddrV|-|-|-|Deferred|-|-]: 0x840090c800c98185
+2026-02-13T12:47:34.505733+01:00 [T449218] [Hardware Error]: Error Addr: 0x003bd7a800000020
+2026-02-13T12:47:34.505734+01:00 [T449218] [Hardware Error]: IPID: 0x000700b040000000
+2026-02-13T12:47:34.505736+01:00 [T449218] [Hardware Error]: L3 Cache Ext. Error Code: 9
+2026-02-13T12:47:34.505747+01:00 [T449218] [Hardware Error]: cache level: L1, tx: DATA
 
-> So according to me, modifying the hypervisor kvm to allow the access
-> to MCA_DESTAT is clearly not the right move.
-> 
-> We probably should implement an entire SMCA stack for Qemu, but this
-> is another topic...
-> For the moment, Borislav Petklov was right when he said that kvm works
-> as advertised. The problem that your fix introduced is that is tries to
-> access SMCA only registers on non SMCA machine.
-> 
-> Do you agree on this aspect ?
-> 
+Output of
+$ cat /proc/interrupts | grep -E "THR|MCP|MCE|DFR"
+ THR:          0          0          0          0          0          0          0          0          0          0          0          0          0          0
+0          0   Threshold APIC interrupts
+ DFR:          0          0          0          0          0          0          0          0          0          0          0          0          0          0
+0          0   Deferred Error APIC interrupts
+ MCE:          0          0          0          0          0          0          0          0          0          0          0          0          0          0
+0          0   Machine check exceptions
+ MCP:         48         48         48         48         48         48         48         48         48         48         48         48         48         48
+48         48   Machine check polls
 
-Yes, I agree.
+Output of (the non-zero error_count values {72,3165, 72,9} are
+the same asin my mail 15.9.2025 so these do not change)
+# find /sys/devices/system/machinecheck/ -name error_count -print -exec cat {} \;
 
-AMD systems generally have a Read-as-Zero/Writes-Ignored behavior when
-accessing unimplemented MCA registers. But this requires the system to
-recognize the register space.
+/sys/devices/system/machinecheck/machinecheck15/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck15/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck15/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck15/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck15/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck15/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck2/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck2/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck2/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck2/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck2/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck2/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck13/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck13/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck13/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck13/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck13/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck13/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_0/l3_cache_0/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_7/l3_cache_7/error_count
+72
+/sys/devices/system/machinecheck/machinecheck0/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/umc_1/dram_ecc/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/umc_1/misc_umc/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_5/l3_cache_5/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/pie/pie/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_3/l3_cache_3/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/coherent_slave_0/coherent_slave_0/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_1/l3_cache_1/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_6/l3_cache_6/error_count
+3165
+/sys/devices/system/machinecheck/machinecheck0/umc_0/dram_ecc/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/umc_0/misc_umc/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_4/l3_cache_4/error_count
+72
+/sys/devices/system/machinecheck/machinecheck0/coherent_slave_1/coherent_slave_1/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck0/l3_cache_2/l3_cache_2/error_count
+9
+/sys/devices/system/machinecheck/machinecheck0/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck11/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck11/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck11/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck11/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck11/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck11/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck9/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck9/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck9/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck9/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck9/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck9/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck7/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck7/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck7/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck7/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck7/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck7/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck5/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck5/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck5/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck5/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck5/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck5/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck3/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck3/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck3/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck3/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck3/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck3/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck14/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck14/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck14/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck14/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck14/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck14/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck1/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck1/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck1/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck1/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck1/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck1/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck12/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck12/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck12/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck12/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck12/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck12/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck10/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck10/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck10/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck10/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck10/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck10/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck8/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck8/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck8/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck8/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck8/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck8/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck6/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck6/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck6/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck6/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck6/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck6/decode_unit/decode_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck4/execution_unit/execution_unit/error_count
+0
+/sys/devices/system/machinecheck/machinecheck4/insn_fetch/insn_fetch/error_count
+0
+/sys/devices/system/machinecheck/machinecheck4/floating_point/floating_point/error_count
+0
+/sys/devices/system/machinecheck/machinecheck4/load_store/load_store/error_count
+0
+/sys/devices/system/machinecheck/machinecheck4/l2_cache/l2_cache/error_count
+0
+/sys/devices/system/machinecheck/machinecheck4/decode_unit/decode_unit/error_count
+0
 
-In this case, the register space is totally unknown to the system, so it
-responds with a #GP.
+I also did run memtest86+, 5 complete runs (~4.5h) passed without fail.
 
-> If yes, than the correct change is to test if we are on an SMCA machine
-> before accessing this register, like:
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 3f1dda355307..8664ba048a62 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -875,14 +875,18 @@ void amd_clear_bank(struct mce *m)
->  {
->         amd_reset_thr_limit(m->bank);
-> 
-> -       /* Clear MCA_DESTAT for all deferred errors even those logged in
-> MCA_STATUS. */
-> -       if (m->status & MCI_STATUS_DEFERRED)
-> -               mce_wrmsrq(MSR_AMD64_SMCA_MCx_DESTAT(m->bank), 0);
-> -
-> -       /* Don't clear MCA_STATUS if MCA_DESTAT was used exclusively. */
-> -       if (m->kflags & MCE_CHECK_DFR_REGS)
-> -               return;
-> +       if (mce_flags.smca) {
-> +               /*
-> +                * Clear MCA_DESTAT for all deferred errors even those
-> +                * logged in MCA_STATUS.
-> +                */
-> +               if (m->status & MCI_STATUS_DEFERRED)
-> +                       mce_wrmsrq(MSR_AMD64_SMCA_MCx_DESTAT(m->bank), 0);
-> 
-> +               /* Don't clear MCA_STATUS if MCA_DESTAT was used
-> exclusively. */
-> +               if (m->kflags & MCE_CHECK_DFR_REGS)
-> +                       return;
-> +       }
->         mce_wrmsrq(mca_msr_reg(m->bank, MCA_STATUS), 0);
->  }
-> 
-> 
-> I haven't noticed any obvious other non SMCA limitation in the other
-> changes of this series, but if you think about any other case, we can
-> probably fix all of them together.
-> 
-> If you agree with this change I can submit it as a formal PATCH.
-> 
-
-I think this change is fair. It could be minimized further by adding the
-SMCA check to the status bit check for the WRMSR step.
-
-	if (mce_flags.smca && (m->status & MCI_STATUS_DEFERRED))
-		mce_wrmsrq(MSR_AMD64_SMCA_MCx_DESTAT(m->bank), 0);
-
-Thanks,
-Yazen
+Bert Karwatzki
 
