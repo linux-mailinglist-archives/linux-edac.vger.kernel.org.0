@@ -1,262 +1,122 @@
-Return-Path: <linux-edac+bounces-5719-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5720-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0HvkOAnJj2mZTgEAu9opvQ
-	(envelope-from <linux-edac+bounces-5719-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Sat, 14 Feb 2026 01:59:53 +0100
+	id FB1BD7wakGkpWQEAu9opvQ
+	(envelope-from <linux-edac+bounces-5720-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Sat, 14 Feb 2026 07:48:28 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D7EC13A3A2
-	for <lists+linux-edac@lfdr.de>; Sat, 14 Feb 2026 01:59:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9FF13B421
+	for <lists+linux-edac@lfdr.de>; Sat, 14 Feb 2026 07:48:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3D0FC307F0A5
-	for <lists+linux-edac@lfdr.de>; Sat, 14 Feb 2026 00:58:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7FF8A30247D8
+	for <lists+linux-edac@lfdr.de>; Sat, 14 Feb 2026 06:48:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D46821E087;
-	Sat, 14 Feb 2026 00:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d2Br8zPD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA0E3161A6;
+	Sat, 14 Feb 2026 06:48:24 +0000 (UTC)
 X-Original-To: linux-edac@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out28-122.mail.aliyun.com (out28-122.mail.aliyun.com [115.124.28.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290F71E1C11;
-	Sat, 14 Feb 2026 00:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D678A30FF30;
+	Sat, 14 Feb 2026 06:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771030720; cv=none; b=BOkcrr4z9PVxtXyoU6x5F/YekcFpscuQGpRLMMngrluPVDQFFy6WSq4Hfw+mS4vIFoJ8jeLYBHiCUbjK7Bo5z4ZWGjccMN/J9f2udgc3coGkda+O+6euMfbkLRCRyeWMhkwUwts9Q4CPh0qxCE1yLLakh2DrhygwTbTDxVSWPoo=
+	t=1771051703; cv=none; b=twtSjOXILVA49kkoPVayo4VbwnPIUvHLAnnQITVLM6M0PEYrKy4jeGIRoY3TGDJpArzhJYX6yAooZi74j7tUwE6hCe92npSQ9or9GzWcjQ5eCFnm9EnOwPJUbdAUiEucygv/TkLchjbP+LJY4by8rtB8eYwf9O5gOt43wBjn2LQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771030720; c=relaxed/simple;
-	bh=lw/MWmDXCokKVTEYvkD+CT9aaE5yW6806FAANXJoHFg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O1NlJFI/MV58wef4URsjLhkOPHl0PucAhXA9WEmM8tft9PIRBzIfIcbYau193N5gk2OGp+ONHqR9zxMBLFdN/SmeCCGYY0c4uWb6Efo45PzVHj3/tB82zB62XLdc3wSJOzl21tqsUMnBaYjTOYh8kAZGt1i69T38rCpbfazwaKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d2Br8zPD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D59C19423;
-	Sat, 14 Feb 2026 00:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771030720;
-	bh=lw/MWmDXCokKVTEYvkD+CT9aaE5yW6806FAANXJoHFg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d2Br8zPDPuN9YfsaCFZBXpw/zqsjROhR1UdRDiQg7h/cVUVQaz2RjDZ7njLkx12Qa
-	 RVS9/Ntt+Vn9g/g1IkuRYijKR+gaH/J3ZWTKIpbnpm27LacqF7Dyp3IJII3ue5WBq0
-	 V7aWG0BgQNhzE8J7i0WqRvWBn4rrSFArBmCSNRgjv1oGta2QkHmfQmtjrHcxNGrtZW
-	 8cYiVAwGl08pLtRR/dWbWB3ym9+CxMJw9Tv5DJfKxz1RNykopztICyKZ6mHtdX7gTi
-	 zxS1DyfqG7CsidEkJ1iFT5jw1ulc6WDiuDYAG5/xyTIfvXCgMLbYNw860SFVasFIdk
-	 WE/poqgqqYesA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Lili Li <lili.li@intel.com>,
-	Tony Luck <tony.luck@intel.com>,
-	Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	bp@alien8.de,
-	linux-edac@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.18] EDAC/igen6: Add more Intel Panther Lake-H SoCs support
-Date: Fri, 13 Feb 2026 19:58:13 -0500
-Message-ID: <20260214005825.3665084-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260214005825.3665084-1-sashal@kernel.org>
-References: <20260214005825.3665084-1-sashal@kernel.org>
+	s=arc-20240116; t=1771051703; c=relaxed/simple;
+	bh=FxZk7KIYWWr1J7nfsvlVvAmNjHbQQUjN8XBbwufUIig=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GlXFlN2rX0eaPwYWq4lBUxeJgQwK8WAyTkO3UomWIX++bRxjvfqoYhqSef86rWnWzpO7oQ5Z/0bkSXsUFF2bD7mODYX+uUbjsAk582pip4ZVJlXhqgp7Y97uwl1KyX9papkRoVw30hhsEi3YQ8nUDGj0DNIgFv2SAcumxWJTqho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+Received: from localhost.localdomain(mailfrom:shiaichun@open-hieco.net fp:SMTPD_---.gX9s-M2_1771051350 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Sat, 14 Feb 2026 14:42:49 +0800
+From: Aichun Shi <shiaichun@open-hieco.net>
+To: yazen.ghannam@amd.com
+Cc: tglx@linutronix.de,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	shiaichun@open-hieco.net
+Subject: [PATCH] EDAC/mce_amd: Fix Hygon UMC ECC error decoding with logical_die_id
+Date: Sat, 14 Feb 2026 14:42:03 +0800
+Message-ID: <20260214064203.62488-1-shiaichun@open-hieco.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5719-lists,linux-edac=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[shiaichun@open-hieco.net,linux-edac@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-edac@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-edac];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,msgid.link:url]
-X-Rspamd-Queue-Id: 8D7EC13A3A2
+	TO_DN_NONE(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	R_DKIM_NA(0.00)[];
+	DMARC_NA(0.00)[open-hieco.net];
+	TAGGED_FROM(0.00)[bounces-5720-lists,linux-edac=lfdr.de];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,open-hieco.net:mid,open-hieco.net:email]
+X-Rspamd-Queue-Id: 4D9FF13B421
 X-Rspamd-Action: no action
 
-From: Lili Li <lili.li@intel.com>
+cpuinfo_topology.amd_node_id is populated via CPUID or MSR, as introduced
+by commit f7fb3b2dd92c ("x86/cpu: Provide an AMD/HYGON specific topology
+parser") and commit 03fa6bea5a3e ("x86/cpu: Make topology_amd_node_id()
+use the actual node info"). However, this value may be non-continuous for
+Hygon processors while EDAC uses continuous node IDs, which leads to
+incorrect UMC ECC error decoding.
 
-[ Upstream commit 4c36e6106997b6ad8f4a279b4bdbca3ed6f53c6c ]
+In contract, cpuinfo_topology.logical_die_id always provides continuous
+die (or node) IDs. Fix this by replacing topology_amd_node_id() with
+topology_logical_die_id() when decoding UMC ECC errors for Hygon
+processors.
 
-Add more Intel Panther Lake-H SoC compute die IDs for EDAC support.
-
-Signed-off-by: Lili Li <lili.li@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Link: https://patch.msgid.link/20251124131537.3633983-1-qiuxu.zhuo@intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Aichun Shi <shiaichun@open-hieco.net>
 ---
+ drivers/edac/mce_amd.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-LLM Generated explanations, may be completely bogus:
-
-Now I have a comprehensive picture. Let me summarize my analysis.
-
-## Detailed Analysis
-
-### 1. Commit Message Analysis
-
-The commit subject is "EDAC/igen6: Add more Intel Panther Lake-H SoCs
-support" and the body says "Add more Intel Panther Lake-H SoC compute
-die IDs for EDAC support." This is purely a **new device ID addition**
-to an existing driver. The commit is authored by Intel employees (Lili
-Li, Qiuxu Zhuo) who maintain this specific EDAC driver, and reviewed by
-the same team.
-
-### 2. Code Change Analysis
-
-The diff is straightforward and mechanical:
-
-**Part 1 - Macro definitions** (lines ~280-290): Adds 10 new `#define`
-constants:
-- `DID_PTL_H_SKU4` through `DID_PTL_H_SKU13` with PCI device IDs
-  `0xb003`, `0xb004`, `0xb005`, `0xb008`, `0xb011`, `0xb014`, `0xb015`,
-  `0xb028`, `0xb029`, `0xb02a`
-
-**Part 2 - PCI device table** (lines ~675-695): Adds 10 new
-`PCI_VDEVICE` entries, all pointing to the existing `mtl_p_cfg`
-configuration structure — the same configuration used by the 3 initial
-PTL-H SKUs.
-
-This is a textbook **PCI device ID addition**. No new logic, no new
-config structures, no new functions. Every new entry uses the identical
-`mtl_p_cfg` configuration as the existing PTL-H SKUs.
-
-### 3. Classification
-
-This falls squarely into the **"New Device IDs" exception** for stable
-trees:
-- The driver (`igen6_edac`) already exists in stable trees
-- The PTL-H configuration (`mtl_p_cfg`) and initial PTL-H support
-  already exist (since v6.13)
-- Only new PCI IDs are being added — enabling additional hardware
-  variants of the same SoC family
-
-### 4. Scope and Risk Assessment
-
-- **Lines changed**: ~20 (10 `#define`s + 10 PCI table entries)
-- **Files touched**: 1 (`drivers/edac/igen6_edac.c`)
-- **Risk**: Extremely low. The PCI device table is a static array of ID-
-  to-config mappings. The new entries only match hardware with those
-  specific PCI IDs. If the hardware isn't present, the entries are
-  completely inert. Zero risk to existing functionality.
-- **Complexity**: Trivial — pure data addition with no logic changes.
-
-### 5. Dependency Check
-
-This commit has one critical dependency:
-- **Initial PTL-H support commit** (`0be9f1af39022`): "EDAC/igen6: Add
-  Intel Panther Lake-H SoCs support" — landed in **v6.13**. This commit
-  defined `DID_PTL_H_SKU1`-`SKU3` and the usage of `mtl_p_cfg` for
-  PTL-H.
-
-Therefore:
-- **v6.1 LTS, v6.6 LTS, v6.12 stable**: The prerequisite commit is NOT
-  present. Backporting here would require first backporting the initial
-  PTL-H support.
-- **v6.13+ stable** (v6.13.y, v6.14.y, etc.): The prerequisite IS
-  present, so this patch can apply cleanly.
-
-### 6. User Impact
-
-EDAC (Error Detection And Correction) is critical infrastructure for
-detecting and reporting memory errors. Without these device IDs, users
-with Intel Panther Lake-H SoCs with these specific compute die IDs will
-get **no EDAC/ECC error reporting** — meaning memory errors could go
-undetected, leading to potential silent data corruption on affected
-hardware. This is exactly the kind of hardware enablement that stable
-users (particularly enterprise/embedded users) need.
-
-### 7. Stability Indicators
-
-- Reviewed by Intel's EDAC team member (Qiuxu Zhuo)
-- Signed off by the RAS maintainer (Tony Luck)
-- Same pattern as dozens of prior device ID additions to this driver,
-  all of which have been successfully backported to stable trees (Arrow
-  Lake, Meteor Lake-P/PS, Raptor Lake-P, Alder Lake-N, etc.)
-
-### 8. Verdict
-
-This is a classic, textbook device ID addition:
-- Purely mechanical addition of PCI device IDs
-- Uses existing infrastructure (no new code paths)
-- Enables EDAC support on additional Panther Lake-H hardware variants
-- Extremely low risk — inert on systems without matching hardware
-- The only concern is dependency on initial PTL-H support (v6.13+), but
-  this is manageable
-
-The commit matches the stable kernel rules for device ID additions
-perfectly. It's small, contained, obviously correct, and enables real
-hardware support for real users.
-
-**YES**
-
- drivers/edac/igen6_edac.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index 553c31a2d9226..839b6dd3629e9 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -274,6 +274,16 @@ static struct work_struct ecclog_work;
- #define DID_PTL_H_SKU1	0xb000
- #define DID_PTL_H_SKU2	0xb001
- #define DID_PTL_H_SKU3	0xb002
-+#define DID_PTL_H_SKU4	0xb003
-+#define DID_PTL_H_SKU5	0xb004
-+#define DID_PTL_H_SKU6	0xb005
-+#define DID_PTL_H_SKU7	0xb008
-+#define DID_PTL_H_SKU8	0xb011
-+#define DID_PTL_H_SKU9	0xb014
-+#define DID_PTL_H_SKU10	0xb015
-+#define DID_PTL_H_SKU11	0xb028
-+#define DID_PTL_H_SKU12	0xb029
-+#define DID_PTL_H_SKU13	0xb02a
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index af3c12284a1e..4a23c1d6488e 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -746,8 +746,13 @@ static void decode_smca_error(struct mce *m)
+ 	pr_emerg(HW_ERR "%s Ext. Error Code: %d", smca_get_long_name(bank_type), xec);
  
- /* Compute die IDs for Wildcat Lake with IBECC */
- #define DID_WCL_SKU1	0xfd00
-@@ -636,6 +646,16 @@ static struct pci_device_id igen6_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU1), (kernel_ulong_t)&mtl_p_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU2), (kernel_ulong_t)&mtl_p_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU3), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU4), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU5), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU6), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU7), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU8), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU9), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU10), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU11), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU12), (kernel_ulong_t)&mtl_p_cfg },
-+	{ PCI_VDEVICE(INTEL, DID_PTL_H_SKU13), (kernel_ulong_t)&mtl_p_cfg },
- 	{ PCI_VDEVICE(INTEL, DID_WCL_SKU1), (kernel_ulong_t)&wcl_cfg },
- 	{ },
- };
+ 	if ((bank_type == SMCA_UMC || bank_type == SMCA_UMC_V2) &&
+-	    xec == 0 && decode_dram_ecc)
+-		decode_dram_ecc(topology_amd_node_id(m->extcpu), m);
++	    xec == 0 && decode_dram_ecc) {
++		if (boot_cpu_data.x86_vendor == X86_VENDOR_HYGON &&
++		    boot_cpu_data.x86 == 0x18)
++			decode_dram_ecc(topology_logical_die_id(m->extcpu), m);
++		else
++			decode_dram_ecc(topology_amd_node_id(m->extcpu), m);
++	}
+ }
+ 
+ static inline void amd_decode_err_code(u16 ec)
 -- 
-2.51.0
+2.47.3
 
 
