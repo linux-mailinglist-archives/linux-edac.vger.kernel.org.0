@@ -1,257 +1,232 @@
-Return-Path: <linux-edac+bounces-5729-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5730-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cDUAFAGnmGmcKgMAu9opvQ
-	(envelope-from <linux-edac+bounces-5729-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Feb 2026 19:25:05 +0100
+	id eFWQLg9cmWkMTAMAu9opvQ
+	(envelope-from <linux-edac+bounces-5730-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Sat, 21 Feb 2026 08:17:35 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C381C16A08C
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Feb 2026 19:25:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25E9116C5CA
+	for <lists+linux-edac@lfdr.de>; Sat, 21 Feb 2026 08:17:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 902973010BA8
-	for <lists+linux-edac@lfdr.de>; Fri, 20 Feb 2026 18:25:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8FA54301AD05
+	for <lists+linux-edac@lfdr.de>; Sat, 21 Feb 2026 07:17:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924D7331A5F;
-	Fri, 20 Feb 2026 18:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D69D342C98;
+	Sat, 21 Feb 2026 07:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="vh2uFKaF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UdhBG4kI"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5773002C8;
-	Fri, 20 Feb 2026 18:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124AF27FB37
+	for <linux-edac@vger.kernel.org>; Sat, 21 Feb 2026 07:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771611901; cv=none; b=psS1mH3gf3Ig7UUjgtekZThywWJPPe+PxICmmOzQuUWH5WD49coLWSKzgRmWuuwV+XsOPCjrViqbQvkrNTmuv4i8Y7T8wzVpXD8VtHxvSU8AWRwmDl4+z2Tpbc3A18zcnBRTDyUd5Vr1HD7eviWKY844aa0tDaizaYcN1n/4Nn4=
+	t=1771658241; cv=none; b=qLvBAGDiD8Jgl9vA7yqCZEYj0wvwmsKznEDQsDtyB1Sh27CR1CP5s0B9XjSxbmM5AaTIzfaI8tEj224DV7tB9Q6VoU2miYZ+kPcsYjgca5tj7wmh4XI6Dj0+h0aGJ1TglcTFgLsmxyWEXKx3E2vNE/JUxAa4XoSAXqJHK8iwe/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771611901; c=relaxed/simple;
-	bh=oHxqK0VoiGESsnz/lGBeNo2HagU6k8bgUZsZgftuL3A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fWjVyvCYheJlexmX5BlEPFseAM8wYZFgrKK3fgKYxcintJBi89pHdtJAd7yUC8szrZ8FvPWSR4talJP550+E8/8x4jxgWc4r9/3zsrgF4Qc/59z3wvgp5hh1Pdn9+0wQOcHJxwMZVAoio3eNLm2+82Ip3UHZNK9Je0V0LWA/Q+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=vh2uFKaF; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1771611874; x=1772216674; i=spasswolf@web.de;
-	bh=uhi4lV8KO0Vgo6e4TxcYTwBPrMn+t5N4VhyAmc9Ik7A=;
-	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=vh2uFKaFouiX8sI+jPL5OUt01lPukssd619+S1OwWi0bLM0VE1Y6qg72qurGtY0T
-	 qs6I4huppCy9iY79rDo1y4Kq6jvoyTNkqUedYfcNRoaXsnD4wI+L4Iz2X5pUkPdte
-	 xhct7H4Y0RBg4+CUNVxV97F58N5ZaaDR3tRyGuixdQ7O7Wg3o0o3Rt6bhhhiPWn1+
-	 WVuaR0CwgPT0iuZTPNtwA14BACb09CxBttKtSHtRP0GCXyEo+KlkNSVKTVtgSSSS2
-	 z16KCivtDhYBoAEVILVFdB0ajL2piQvLqsNTiYcnoknTA/lTRIOLo2cKN8FybAbb3
-	 l0m7smJyDWQFzTDuGw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MFJjZ-1vvy9L160f-00Gxp8; Fri, 20
- Feb 2026 19:24:34 +0100
-Message-ID: <290ee50cbe68d246a9899b03d5c7ddebc549f0bf.camel@web.de>
-Subject: Re: spurious (?) mce Hardware Error messages in v6.19
-From: Bert Karwatzki <spasswolf@web.de>
-To: Mario Limonciello <mario.limonciello@amd.com>, Yazen Ghannam
-	 <yazen.ghannam@amd.com>
-Cc: Nikolay Borisov <nik.borisov@suse.com>, spasswolf@web.de, Borislav
- Petkov	 <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
- linux-kernel@vger.kernel.org, 	linux-next@vger.kernel.org,
- linux-edac@vger.kernel.org, 	linux-acpi@vger.kernel.org, x86@kernel.org,
- rafael@kernel.org, 	qiuxu.zhuo@intel.com,
- Smita.KoralahalliChannabasappa@amd.com
-Date: Fri, 20 Feb 2026 19:24:32 +0100
-In-Reply-To: <8530d765-6676-4ba4-98b5-07326c8dc924@amd.com>
-References: <be9e2759c1c474364e78ef291c33bc0506942669.camel@web.de>
-	 <20250917144148.GA1313380@yaz-khff2.amd.com>
-	 <6e1eda7dd55f6fa30405edf7b0f75695cf55b237.camel@web.de>
-	 <20250917192652.GA1610597@yaz-khff2.amd.com>
-	 <5ba955fe-2b96-429e-b2e8-5e1bf19d8e8e@suse.com>
-	 <20250918210005.GA2150610@yaz-khff2.amd.com>
-	 <67c7de1011ea7b8863051889ee2a41512fb0e044.camel@web.de>
-	 <20251009132055.GA472268@yaz-khff2.amd.com>
-	 <21ba47fa8893b33b94370c2a42e5084cf0d2e975.camel@web.de>
-	 <20260216202546.GA420258@yaz-khff2.amd.com>
-	 <20260219143345.GA5486@yaz-khff2.amd.com>
-	 <4e0c5a7ce9f1ab35eaec2c2908df3681ce6eda4d.camel@web.de>
-	 <8530d765-6676-4ba4-98b5-07326c8dc924@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	s=arc-20240116; t=1771658241; c=relaxed/simple;
+	bh=vnvnXNlkp2ND5qedAqYydF6OM9zLN7wJruh92arvpQw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=taSAapfVupDcZ30X8R9sCWAlFHa00piV2PWiQVk7Mz2hQfs7KOOTGQuRwJJifbktBe48IqRLJc5gy0dnDLKZUajlE1w1sk7DgPBHaKul/F0uo1s4EAwyqAKyS4iG7zkFy3fgmf/UHEOHs2BeHtzuxumNwcgmBFcaRSmodu45mqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UdhBG4kI; arc=none smtp.client-ip=209.85.215.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c6e734ba92bso1422869a12.3
+        for <linux-edac@vger.kernel.org>; Fri, 20 Feb 2026 23:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771658238; x=1772263038; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gKXH8s7b9vKKEwOo/CqqRU+/qpnSAXb0kNTxWvX9bpI=;
+        b=UdhBG4kIPIdOCX+mgtLiVxyjVikmZOruFry3Z+agD6fEB8zNRV2CT5/0OAobTGQZ6r
+         90FXlDF0vAGKipad7v7qYCR2k+EnEC0KA2s7tjz+AM7ZCXGVpQhBbaxbWlcgRyvhMnmU
+         DGjxnl5E47wvr5wYyV7IK15BPl2qXiYcdfhIAvCL3N0qxJQJxfvWoVHNCsHXXcq6hqni
+         fi65y5NQ8UUAI0MAYcOOCun83yAB8zO/NtZlsk9ZsQiC6QodgXwJmBilvUuDrPNfFOvH
+         Auq06hUfw0iY4DCcrJkS1Q74HXLNEe7VlKeZgal0icLO5Uab+VmlYLRZAcP9zrpz6l+G
+         4PoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771658238; x=1772263038;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gKXH8s7b9vKKEwOo/CqqRU+/qpnSAXb0kNTxWvX9bpI=;
+        b=EpjuKO7746Q3RL3LTUqiqtwJZTRQwp07Es2GSb41mq4o7WoLK4Jw5NBUd4ZupEYPkE
+         E+4cljY9BDYyId+hiG+pkOaSeDbR9OMUlKCXZK1Xi1En2XKeA7SK9U0tMxeGa0bZsc3k
+         vZ0rMa0QjwoyLVn29LYpZEiM6NnYi0YV9Uc9i1KedrRGqcKuwyf5gAqJiE65O7EoRY8d
+         j/bZfor47BpFqwdxg8Z+xBQrM8QmPHXf1zlj9f4SyL2kQiIlld3Ei8GmwTUsUUdvR8mO
+         n0Mc7l+eByB/AFObSwuqfZiZFzcFg2Fn3e5Dgf+Ob4OjhYdHG4yAgJnGVXjsGyezwndp
+         1ASg==
+X-Forwarded-Encrypted: i=1; AJvYcCXwj5NfsYI6EsD4ZjbZXVwWSArU7puUkdwZTkLwIlWEiGq9na228yKCVMBHKFeChXjLrPnQEzK3/JNi@vger.kernel.org
+X-Gm-Message-State: AOJu0YwryqSuw6fcx9Ntdq5Z3viO/ZbIvl5JGgkp6ahGRGsZYNyG0dPI
+	bGkke1WmoYJMjL4UuRAJKWM452lFMdetTvwBHM/qG8vl4YQbJ/tOPBYf
+X-Gm-Gg: AZuq6aKmGY5Wkgqaw6tOoZjb1L25F9umVHQFoF/aolsyjkhlU/Yf3DM4SZ6dfo+oEGF
+	9RAJnLFZHuhRV+PAsfS1nUjvzg2OJj09Zdxxn05/yZ+NILDe++0bmcm7H0jChxwRhcyNtdCDL66
+	sfTqURYY0qGCwVVlOQF2AUcJfrKvvNMWNNGaCZzbMDuvPj5Y8rQo2m69lGWArplIBjCBD/p+gYS
+	OlxlTkBpM4lbgvpEElH912zznwlST5cmN7AwbtISr3ul68wFMjYCoJb88iPXNTFw5txCRGRCOI3
+	mEyW+496QJIrFd59kE7PtGC6nJ5d3xMvPVisWX8i3f9Ap5pz9W6Y3wsEMEleEMKU6AA2wcBxyCf
+	4kZjRjVyvUDlusBbILbiQtvJ6r0/7RkPSv2h56AwPtvewQrqnueiTH0vy+vWvP2+9aFLN2Jra9a
+	/biwYdgt/juNZyL2gJ2kDYtNhMofWmJ/kbt2EtDn+RoAgDHV78L+vQJVX+vIbpTWx/WNovrJNZ6
+	f65hJlu
+X-Received: by 2002:a17:902:da90:b0:2aa:d981:10e3 with SMTP id d9443c01a7336-2ad74567346mr23780345ad.40.1771658238307;
+        Fri, 20 Feb 2026 23:17:18 -0800 (PST)
+Received: from localhost.localdomain ([138.199.21.245])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7503d406sm13341145ad.75.2026.02.20.23.17.16
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 20 Feb 2026 23:17:17 -0800 (PST)
+From: Eric-Terminal <ericterminal@gmail.com>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Cc: Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>,
+	linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Eric-Terminal <ericterminal@gmail.com>
+Subject: [PATCH] EDAC/versalnet: Fix resource leaks and NULL derefs in init_versalnet()
+Date: Sat, 21 Feb 2026 15:16:43 +0800
+Message-ID: <20260221071643.23702-1-ericterminal@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:dI2PakJwSMYq+ARwHU2JdWMbDElFwbgRcMD40NYd02/kxuSPdgU
- BLxwSYieZSKeK4tZKZAsPWBkYrAVTngm4v5kSrrlh0nZoKee368ofuAVLgv+BK0LUpaZXvB
- s3KMe4z1IMGb/4KhD4qr5QWZp5oKDFaI+ayyQRHAvfxMotD25blD50ObZ48AK4H6mLRjrB8
- r8wdwDKmzTpiQ7DGpZHAw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:5APjqxnZ5p8=;ixgtSEiufBJPQaBPs9AHMgUy4TW
- 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
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2858; i=ericterminal@gmail.com; h=from:subject; bh=vnvnXNlkp2ND5qedAqYydF6OM9zLN7wJruh92arvpQw=; b=owGbwMvMwCXWM/dCzeS3H+sZT6slMWTOjL4o+/i80LfsFx5rFT+Gip0Werv8oN3Ght9lx3crN eotinzN2FHKwiDGxSArpshy9/++ublet+Zc5z6cCzOHlQlkCAMXpwBM5OpKhv9RjR/OpE7/8O/C fhfF302POFkdApV9mBpeMBooWczZPkWXkeEqq19J3h+Fn9sYnOb5vJdlsXp6ed/WVRp9U2NmVXA Zp7AAAA==
+X-Developer-Key: i=ericterminal@gmail.com; a=openpgp; fpr=DDFFBE9D6D4ADA9CD70BC36D8C9DD07C93EDF17F
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[web.de,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[web.de:s=s29768273];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5729-lists,linux-edac=lfdr.de];
+	URIBL_MULTI_FAIL(0.00)[sea.lore.kernel.org:server fail];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[alien8.de,intel.com,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-5730-lists,linux-edac=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[web.de];
-	FREEMAIL_CC(0.00)[suse.com,web.de,alien8.de,intel.com,vger.kernel.org,kernel.org,amd.com];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,alternate.de:url];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[spasswolf@web.de,linux-edac@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[ericterminal@gmail.com,linux-edac@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[web.de:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-edac];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Queue-Id: C381C16A08C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 25E9116C5CA
 X-Rspamd-Action: no action
 
-Am Freitag, dem 20.02.2026 um 10:49 -0600 schrieb Mario Limonciello:
->=20
-> On 2/19/2026 9:43 AM, Bert Karwatzki wrote:
-> > Am Donnerstag, dem 19.02.2026 um 09:33 -0500 schrieb Yazen Ghannam:
-> > > On Mon, Feb 16, 2026 at 03:25:46PM -0500, Yazen Ghannam wrote:
-> > > > On Thu, Feb 12, 2026 at 01:50:05PM +0100, Bert Karwatzki wrote:
-> > >=20
-> > > [...]
-> > >=20
-> > > > >=20
-> > > > > 2026-02-10T16:15:01.001203+01:00 lisa kernel: [    C0] smca_shou=
-ld_log_poll_error: 1
-> > > > > 2026-02-10T16:15:01.001815+01:00 lisa kernel: [T45426] mce: [Har=
-dware Error]: Machine check events logged
-> > > > > 2026-02-10T16:15:01.001818+01:00 lisa kernel: [T45426] [Hardware=
- Error]: Deferred error, no action required.
-> > > > > 2026-02-10T16:15:01.001819+01:00 lisa kernel: [T45426] [Hardware=
- Error]: CPU:0 (19:50:0) MC14_STATUS[-|-|-|AddrV|PCC|-|-|Deferred|-|-]: 0x=
-8700900800000000
-> > >=20
-> > > Hi Bert,
-> > >=20
-> > > The CPU stepping indicates that this isn't a production model.
-> > >=20
-> > > Can you please share more info on your system? Is it a production la=
-ptop
-> > > or a pre-production sample?
-> > >=20
-> > > Thanks,
-> > > Yazenit
-> >=20
-> > As far as I know is a production Laptop, a MSI Alpha 15 B5EEK/MS-158L =
-model with
-> > bios version "BIOS E158LAMS.10F 11/11/2024" (the newest version availa=
-ble at
-> > https://de.msi.com/Laptop/Alpha-15-B5EX/support?sku_id=3D89840)=C2=A0a=
-nd without
-> > preinstalled Windows=C2=A0which=C2=A0I bought in=C2=A0December 2021 at=
- www.alternate.de (a shop
-> > which MSI lists as a "trusted partner":=C2=A0https://de.msi.com/servic=
-e/bzq)
-> >=20
-> > Bert Karwatzki
->=20
-> Do you know if it was purchased "right around" when it launched?  I'm=20
-> wondering if it's possible they used pre-production parts for some=20
-> reason with their initial systems.
->=20
-> The reason for this line of inquiry is if this is what we would have=20
-> considered pre-production silicon, it might be more appropriate to flag=
-=20
-> the CPU accordingly and ignore these MCEs.
+init_versalnet() has several bugs in its error handling:
 
-Yes, I bought right when it became available.
+ - kzalloc() and kmalloc() return values are used without NULL checks,
+   causing a NULL pointer dereference when allocation fails.
 
-Bert Karwatzki
+ - The cleanup loop uses while (i--) which skips the current failing
+   index, leaking the resources already allocated for that slot.
+
+ - edac_mc_del_mc() is called unconditionally during unwind, even for
+   controllers that were never registered with edac_mc_add_mc().
+
+ - sprintf() is used instead of snprintf() on a fixed-size buffer.
+
+Fix by adding NULL checks for dev and name allocations, replacing
+while (i--) with for (j = i; j >= 0; j--) to include the failing
+index, tracking successful edac_mc_add_mc() calls with a bool array,
+and switching to snprintf().
+
+Signed-off-by: Eric-Terminal <ericterminal@gmail.com>
+---
+ drivers/edac/versalnet_edac.c | 29 ++++++++++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/edac/versalnet_edac.c b/drivers/edac/versalnet_edac.c
+index 1a1092793..128e9cd5f 100644
+--- a/drivers/edac/versalnet_edac.c
++++ b/drivers/edac/versalnet_edac.c
+@@ -764,11 +764,12 @@ static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
+ {
+ 	u32 num_chans, rank, dwidth, config;
+ 	struct edac_mc_layer layers[2];
++	bool mc_added[NUM_CONTROLLERS] = { };
+ 	struct mem_ctl_info *mci;
+ 	struct device *dev;
+ 	enum dev_type dt;
+ 	char *name;
+-	int rc, i;
++	int rc, i, j;
+ 
+ 	for (i = 0; i < NUM_CONTROLLERS; i++) {
+ 		config = priv->adec[CONF + i * ADEC_NUM];
+@@ -813,11 +814,25 @@ static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
+ 		priv->dwidth = dt;
+ 
+ 		dev = kzalloc(sizeof(*dev), GFP_KERNEL);
++		if (!dev) {
++			rc = -ENOMEM;
++			goto err_alloc;
++		}
++
+ 		dev->release = versal_edac_release;
+ 		name = kmalloc(32, GFP_KERNEL);
+-		sprintf(name, "versal-net-ddrmc5-edac-%d", i);
++		if (!name) {
++			kfree(dev);
++			rc = -ENOMEM;
++			goto err_alloc;
++		}
++
++		snprintf(name, 32, "versal-net-ddrmc5-edac-%d", i);
+ 		dev->init_name = name;
+ 		rc = device_register(dev);
++		kfree(name);
++		if (rc)
++			put_device(dev);
+ 		if (rc)
+ 			goto err_alloc;
+ 
+@@ -831,21 +846,25 @@ static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
+ 			edac_printk(KERN_ERR, EDAC_MC, "Failed to register MC%d with EDAC core\n", i);
+ 			goto err_alloc;
+ 		}
++
++		mc_added[i] = true;
+ 	}
+ 	return 0;
+ 
+ err_alloc:
+-	while (i--) {
+-		mci = priv->mci[i];
++	for (j = i; j >= 0; j--) {
++		mci = priv->mci[j];
+ 		if (!mci)
+ 			continue;
+ 
+ 		if (mci->pdev) {
+ 			device_unregister(mci->pdev);
+-			edac_mc_del_mc(mci->pdev);
++			if (mc_added[j])
++				edac_mc_del_mc(mci->pdev);
+ 		}
+ 
+ 		edac_mc_free(mci);
++		priv->mci[j] = NULL;
+ 	}
+ 
+ 	return rc;
+-- 
+2.47.3
+
 
