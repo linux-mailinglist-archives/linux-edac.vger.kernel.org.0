@@ -1,231 +1,364 @@
-Return-Path: <linux-edac+bounces-5753-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5754-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WK2aBSCHoGlSkgQAu9opvQ
-	(envelope-from <linux-edac+bounces-5753-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Feb 2026 18:47:12 +0100
+	id wAnWMnOKoWnAuAQAu9opvQ
+	(envelope-from <linux-edac+bounces-5754-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Fri, 27 Feb 2026 13:13:39 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A823C1ACCFB
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Feb 2026 18:47:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 765F71B6F9D
+	for <lists+linux-edac@lfdr.de>; Fri, 27 Feb 2026 13:13:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E9CEA32561CD
-	for <lists+linux-edac@lfdr.de>; Thu, 26 Feb 2026 17:02:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B1826304AD81
+	for <lists+linux-edac@lfdr.de>; Fri, 27 Feb 2026 12:12:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502BC43E492;
-	Thu, 26 Feb 2026 16:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10DD3A6413;
+	Fri, 27 Feb 2026 12:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qOSgt1Xt"
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="CVdoQHs7"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013017.outbound.protection.outlook.com [40.93.196.17])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC4943DA59;
-	Thu, 26 Feb 2026 16:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772124750; cv=fail; b=I1oO5wu+JvKXRhuf87yDRVLcxUhNEsNkPJAbvqGp8MT3DgdCLLOL4upXJkFFpWD5LnNxaISUDaTw5u/Ej7PMWLcmn202tpspXWnpQm5HoLbXB80RdAOibl+1p1BQVHcoRqRDqSFS7Aex24wnDAVAkY24w2cTqU8/lDlHEsw0/K4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772124750; c=relaxed/simple;
-	bh=bfFiVt04FTPWKv1Fk37Jhp3nseJH7kg6A3rRtWVzvvw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=UEiuhzc0DPR6Wt82nx/P8dQEWXw0yJbBPICobbBr5Js+4oLp4qUkZ6JuSV1myJDnd6wxwdN4sz1zC79tz9iE7gCL4Phu3GfybUVmYbSyyqEfA3WpsNBCaU1/cotm6vcr6LigOh6601RkufuoqexBdtTvzyD6ahGEbvpX4+Cwvew=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qOSgt1Xt; arc=fail smtp.client-ip=40.93.196.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xGGIus80q/y252gedVMTfh6/dtJG16q6OgCH/fJKILiajn2XjYkxUCiT0SGsXUM8jeHHxtS0Ddrt98DrFARiRpIA3DQgwqIC0ZEzcqoKVbpioTLa6MYw0lSuXPUgu5K5HsPpFhjeeYIPdmp4/Yu18SJ5z0bai8VfaeIc7p2rTlE92mVaX9w8QXxUL9O0Bs4/VG2vYLO3rwVEnG/DLKAzkqpQ4Avb65fpFbapUyDmvxTqzjFPrpoDI2ma7NctAeT08IGQuAFkmGrX/SjpQL29sBI7c2YbFzovEHcpCmvwdDuQVAmRyPAN8IvpvTPLm49RJp/LbywUeeWV/xro/Bpn2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bfFiVt04FTPWKv1Fk37Jhp3nseJH7kg6A3rRtWVzvvw=;
- b=p5LONqsfyqwoFNIz0jZiYXIcgpulVZy3UwInQRXp/ob9VCdfTYXMvM6Be12DaD/6fh6nTwNlCjcR3z8eHbqCX1RqXZSCoNKznQDTSdTgVjbe636eGGvvVG+0MbFzI/QUbK/+UPRx2GAy2J2KEnML5NanPADGqdBHsGH1ZioKmjOYsRnKdbu5BlvHBSPRV9byuZagVp/e2+bUVMS04L77gqu3dd+F/7DkAvXrfkOpFmLe1Wq9QvwII+jFSCSifXIHpub9kISfJJBFkqv7Pl1rhlvJTzMYzvIZxKfqGx7MKS10/04opkt8jnA0ralnDJ2MfXmnnXir8V9KWnNSsq+aGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bfFiVt04FTPWKv1Fk37Jhp3nseJH7kg6A3rRtWVzvvw=;
- b=qOSgt1XtI+T/r5mz1cDR4UDXJbSOzbAbeCPd1QIph+/sYugolSTHVaL6W9j1jM2wMDwyTMof/r1B1a9vAuQaLfBkUFy6m3nsFWcEksHSRkcPnGPQXr6y8rfOWvPj4plOZaIDkL9nMzeS1oIpGnxtCz/j3XzAPXODKfiEjXsR+xU=
-Received: from LV5PR12MB9828.namprd12.prod.outlook.com (2603:10b6:408:304::19)
- by DS7PR12MB6024.namprd12.prod.outlook.com (2603:10b6:8:84::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.14; Thu, 26 Feb
- 2026 16:52:25 +0000
-Received: from LV5PR12MB9828.namprd12.prod.outlook.com
- ([fe80::f132:7e75:fd38:8685]) by LV5PR12MB9828.namprd12.prod.outlook.com
- ([fe80::f132:7e75:fd38:8685%5]) with mapi id 15.20.9654.014; Thu, 26 Feb 2026
- 16:52:25 +0000
-From: "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
-To: Borislav Petkov <bp@alien8.de>, Eric-Terminal <ericterminal@gmail.com>
-CC: Tony Luck <tony.luck@intel.com>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] EDAC/versalnet: Fix resource leaks and NULL derefs in
- init_versalnet()
-Thread-Topic: [PATCH v2] EDAC/versalnet: Fix resource leaks and NULL derefs in
- init_versalnet()
-Thread-Index: AQHcpxMp/LShkz49+UOGTiZW+FQR2LWU8VkAgABA3pA=
-Date: Thu, 26 Feb 2026 16:52:24 +0000
-Message-ID:
- <LV5PR12MB9828D20D0DFD1B03C2E8A67C8172A@LV5PR12MB9828.namprd12.prod.outlook.com>
-References:
- <DS2PR12MB9821250527F466180B16ACE38172A@DS2PR12MB9821.namprd12.prod.outlook.com>
- <20260226112907.76971-1-ericterminal@gmail.com>
- <20260226125932.GAaaBDtCAp5ueJVTib@fat_crate.local>
-In-Reply-To: <20260226125932.GAaaBDtCAp5ueJVTib@fat_crate.local>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2026-02-26T16:51:42.0000000Z;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution
- Only;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV5PR12MB9828:EE_|DS7PR12MB6024:EE_
-x-ms-office365-filtering-correlation-id: c0acc6c8-ceeb-42ee-6925-08de75576aef
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700021;
-x-microsoft-antispam-message-info:
- kyAPsm9D3MwgnLDtSFfdpWavVCHBasuBufEnfNbpL/CxrLbw0+7UsgMK2SeLpnSiqE53LQYIF0oN9WMNnJWLTlymogLQYePGJz2mg9JxVF3N67ZY1oo23hZGwIl1z8UPS9r+E62Ldr8BdjFg+D/iNY4mz6iSSHgFXKPHKobMxHyqcOAV0WGETYKUeDxR+p/anTCSNb9lBrFCPt6wYJHXmson7dXaRJIvgOcFNrn/cUrfcoKAyg16KH6Pgpa2U/78KXfebx0xUrWyTfS7i+5/N0yboNY39ujIYwBL4+VSBT+e2HZ8RD6OhXzDHkYPezwIUI0ipoEFX9jXkft99ouNuzwFqhj3E8GUxmC+Mablf1JiKgCeoGDKQrhOLOHjIlUBnmKHagKrvZ/stJo7GtJq4gdIlmcZqdWgpgC9ke9xGBp3oKtBz89h8fQEiE9ZMcWzZp3asrMpRLRPfckkqmR4N/M4anCtJxrKjO6f0tIjDvAQiszLpxW00KFZZFLA7t3IYjHAVXlls8M5MfvwLWa6/br77DJ5VhW9vUydpAfDWf248uLziABI0GhGWK+Vc3oIflJ6l+HdtStHF8jNFh7hDfYRel06roJ9srgw1RbVEc4r6zZ1Z2ozpe4MlA3CLnQoRLz5Cu6eEZHethicyNsko4yk7DdbRyuf6Tlw0M6rxcltuoiKq7dzOR9Cp0Ye6x7yn+k/IfaA8Wa7lXfSx7dNEUIYAROeW4NYxkLZMsAWIzvmfWOEwMowffpkUdA6itLF
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV5PR12MB9828.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?V0x4MmQ1QllBZ1YxV2hPa1oxR3k0VjRWRUphT281ZGVkT3pJdWdBRlVYeURp?=
- =?utf-8?B?R3Q4Q2c3VEh6SUpPZVo4YTFtaUUxT05SSi9BMmtaWU85aXRqeVJCSlQ5Y2ky?=
- =?utf-8?B?SGlUUmZLeUswLzREV2g3Z3lCa2UvalE1ZEx1bktJUUI3UWM5dUs5eTJsaDRJ?=
- =?utf-8?B?UmZjZ2VFaXd2MG11SUE5ZEZkMG54eXBSNExJRHF0cUxoUHQ5NkxXZHRxSnl4?=
- =?utf-8?B?bC9PcW5uSWlXcGcvZ3BwbkJVRmRpWTZmZ3lEc21TRXpYSTBCeXpYK0pxWXdG?=
- =?utf-8?B?NjRudmJQTG5SSFIyQzgrOGFOTStlck9vNUk3cWZzWUNVcEJ3NWJUSzdjK3NN?=
- =?utf-8?B?VjB3Q2xYeTdCdWFqSTZpZEl3aWxVSXB4cmRMQWR5VlN2SWtpU2lNbm5pM2tB?=
- =?utf-8?B?MlhaYVlWZFBaZ2lJVFNXdUxNSmJpaVh0VUFzSjVHQUNoSCtlMjhRMG5rWHRz?=
- =?utf-8?B?c0dUNGdvVmFkam04aERnQUtsaWgwSWhMQzZuMVlCNjEvbVBlcTJoNVhOQzNG?=
- =?utf-8?B?REcwclVXOUVSMld2YlNnUGN2U2Q4VEwrb05nMmsyYjVCZEs2dFErcjVESkcx?=
- =?utf-8?B?MmdTQzg5OW5GcE84NzdGSi9pQStidmRUZEhUWkljY0FBajlPS2RZOG5iM05n?=
- =?utf-8?B?U2VrNWtiandCOEVLc0ZGWk1rMitHNjN1NSt1dXN0Ym1CVzFpOGVydWMwaWw0?=
- =?utf-8?B?ZXJIaTVnRTFPTjhnMUlnc1c0a05TNUt3V2RuNGN2blJFVW1oOEVLbStFcFVU?=
- =?utf-8?B?akNkN1Nqb21qWFdwaUkzbDFOR1VqbGRtcEh0QjBTWjg2Q2VBVmIzQTY3Rldx?=
- =?utf-8?B?NE1ya0lLRm9jK3F5T3U1eTIxUUFjMmNFdmZNdkswZ3V2dHNWSmNFQWdWa1Jn?=
- =?utf-8?B?dHZSS1VJcXQ1ZkNpd3hGTlBCcVF6TWt3bmcwVnNoVFVpTnpKaFFEaERuLzZz?=
- =?utf-8?B?b3JJSEZ5L1c5OXJucjZFVW5wT0tMU3JMc2NDRjJpOG1OMzJPMnphdzFReTA0?=
- =?utf-8?B?M0NnUGVQcFkzcFBWNkFkcmpCbVFTWjZMYmw4RmJuQks0WTFJZStKWWFJRWlq?=
- =?utf-8?B?bDgrZ01NWTF5QUhzdnRIUXZGa3RIb2lrNjFWK1NqSS9DcUFrR2lROWVyZk1Q?=
- =?utf-8?B?cVFLRTgvS29QMXR4SlMzZmZ1d3BqbkFCM1RsbEtCWmNJWk55WCtUa2xaOU9D?=
- =?utf-8?B?SDlBbWFXMjFKdDZqeDAzWFNRMkhxV2h6a3pucCtOYVlzWWplQi9ickVsUm1q?=
- =?utf-8?B?elJ0TXF4cjl1bCsyR2JvWVhPOXpOK2hDVENlTnVtN2F4WVFSVUpjR0J3Sk9x?=
- =?utf-8?B?Rm9VNXI1bGVVamxJWGlpcHFpVXU3ZEVkNVF3TGNiRjdIZlhadHVOelgrZ3FL?=
- =?utf-8?B?Y0RpUFBQWTc3RGVrTEhOWmNQeFlIc0JBYWNNUDdFdzJYTmdFaFZnbElVUkVE?=
- =?utf-8?B?akxrZlBkdytJWXc5YWRMTHR5QlhCVHlTODZ1Y24yeFdSNFFUelNxYlh5aDlH?=
- =?utf-8?B?MTlBMWYxTjVqak0yMVlmVDFoWTZSTFlaT00wRWR0UjZEMk9PdzNlUFA3Mk9F?=
- =?utf-8?B?ZTlJVDIxZ1JRY3cyKzNiQVBtQkdyb2twVjc1ODRkUHJ0N1lPZS9aZXJJakRV?=
- =?utf-8?B?cHhCTlA1b3NwdFFLaFgxNnlrKzlvbmFYbWkzblQrVVhLRnFuYUV2d29VOGNi?=
- =?utf-8?B?VHJza1Z4bmU5a0VrWmdXTUpISGpWVlhrNVBNMm5JaWJaS3lUWks0QzNJeUhM?=
- =?utf-8?B?Qms1c3NFZXlIcXpoMjRRWE1ESnJCUXlUbW9NM2s5SXVLT1d4OERsdi9Td2Fh?=
- =?utf-8?B?MGhNOVJPdmJUSHNXeE0vYXhLYkZsekFKWGtMUWFrQ2h1dU1KUnJkQVdQU01R?=
- =?utf-8?B?VEk5QjI3aHpCUXZvNi84SUk4eXUwRXdBQ051UFZHaHVxSUw3TGVXbitsaUlV?=
- =?utf-8?B?NlhGeHJhQUJsVHo5d0ZSdHJjYnRQMng0b29OaFZPbnQrczlTQmVzUkRhOFV2?=
- =?utf-8?B?NElHZXllMzVOdXpFZ05nSExyWktVeWh0Y25JdjZKOGsyWkI0cFhmdW8xNGRN?=
- =?utf-8?B?Ri9QMEpCOExNdnJrd0VCdTJGSm92aEZkNEdEeGxhemwrR3M0OUtUdDlEdmFi?=
- =?utf-8?B?OWVLY2xiQzkvaFM0OUZ2M05LYlB6VG5adDQ1VXZHTEpLcUE3LzdHcmJ2VDJz?=
- =?utf-8?B?eDNlOGpyTXc2STlJZDNYZmw0RWFuTzlwRTZXUnJnblJRS1d5eVJZTWJUL09B?=
- =?utf-8?B?eHhhKzh0RFh1R3dFd2ZoVStHSXllb1RaamZLazI1OFpFV25pV2pQczlOa1Bq?=
- =?utf-8?Q?cXgJl078pDuzN6PdaY?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F1236BCC5;
+	Fri, 27 Feb 2026 12:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772194363; cv=none; b=o7HEEn+ssf9YgyYp+F+laarkzWsUXICiN2WwH01zI5kNuF4yscVWZVwhUKiLyfpYLWjOx2jXyeC8R8DenNXCxvlv4EfOvbfDh+/9YvlMfoPXc8s/eTV5wrw/pqRyqqbDemQdWtJEvAzmya+hAWZdevGm3Y88v9MoLiL3jaeI4Ls=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772194363; c=relaxed/simple;
+	bh=5722mkXdYgnzPR5bMWYBUQoTJhtCSVZMn0Gmfn38r9k=;
+	h=Subject:To:References:CC:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=PAKNROAzT6VVl3qsWqRTjc56E9YEAdCbdYIWMmX+27HeM7gNjYGSygQBspmklwWolDZlvqe1ot8u35KQ5KHjBJa3JJtV25QFUQx+Wnj03d5XBhGIxmLblCm/5NFzqzV9cvMCV3ZQWH/lB63vBWoQhi4Z4200yVvi0bnn6HDn6gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=CVdoQHs7; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
+dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=7VEALnvaWMcvDx38Kn3b+L0zf/ZROo5ZqxIk+zkF0nE=;
+	b=CVdoQHs71hAzokOgcGqn3HXAjwct44S2aOxlRp25B975m4f9OA+3F3/lYGcc34Z33xWCguEvG
+	SIqgO5/kcH013XLbgeJNSzsUpYAOAZdr1S66JhPhVSt/eTdXyLUQ2lOIkbSbS1UqwblgpizqyK9
+	S2IezFKk97DyIIq3P7BaCA4=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4fMnC64jZsz1prKm;
+	Fri, 27 Feb 2026 20:07:46 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2B132404AD;
+	Fri, 27 Feb 2026 20:12:37 +0800 (CST)
+Received: from kwepemn500004.china.huawei.com (7.202.194.145) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 27 Feb 2026 20:12:36 +0800
+Received: from [10.67.120.218] (10.67.120.218) by
+ kwepemn500004.china.huawei.com (7.202.194.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 27 Feb 2026 20:12:36 +0800
+Subject: Re: [PATCH] ACPI: APEI: Handle repeated SEA error interrupts storm
+ scenarios
+To: Shuai Xue <xueshuai@linux.alibaba.com>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, "Luck, Tony" <tony.luck@intel.com>
+References: <20251030071321.2763224-1-hejunhao3@h-partners.com>
+ <CAJZ5v0h=QtcT7zhZEgrTjUk7EAk2OfbGG6BoEEv-3toKODMXQA@mail.gmail.com>
+ <bf42a19d-0f5d-48d8-91f5-febb8bfd06d3@linux.alibaba.com>
+CC: Junhao He <hejunhao3@h-partners.com>, <bp@alien8.de>,
+	<guohanjun@huawei.com>, <mchehab@kernel.org>, <jarkko@kernel.org>,
+	<yazen.ghannam@amd.com>, <jane.chu@oracle.com>, <lenb@kernel.org>,
+	<Jonathan.Cameron@huawei.com>, <linux-acpi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-edac@vger.kernel.org>, <shiju.jose@huawei.com>,
+	<tanxiaofei@huawei.com>
+From: hejunhao <hejunhao3@h-partners.com>
+Message-ID: <9817f221-5b5f-7c25-ab94-cb04a854553a@h-partners.com>
+Date: Fri, 27 Feb 2026 20:12:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV5PR12MB9828.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0acc6c8-ceeb-42ee-6925-08de75576aef
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2026 16:52:24.9283
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 64t30BssXIG5kxBFqBcHe/zYITxJ+8IT2RYJT7N3oTe348J5WYPL0GfH49rgQZJZ1Jg52U84IxwnHCHIqatxqQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6024
+In-Reply-To: <bf42a19d-0f5d-48d8-91f5-febb8bfd06d3@linux.alibaba.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemn500004.china.huawei.com (7.202.194.145)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.94 / 15.00];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[h-partners.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
 	MAILLIST(-0.15)[generic];
-	MIME_BASE64_TEXT(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[alien8.de,gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	TAGGED_FROM(0.00)[bounces-5754-lists,linux-edac=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5753-lists,linux-edac=lfdr.de];
-	DKIM_TRACE(0.00)[amd.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[h-partners.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hejunhao3@h-partners.com,linux-edac@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[shubhrajyoti.datta@amd.com,linux-edac@vger.kernel.org];
-	RCPT_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-edac];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,LV5PR12MB9828.namprd12.prod.outlook.com:mid,intel.com:email,amd.com:email,amd.com:dkim]
-X-Rspamd-Queue-Id: A823C1ACCFB
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 765F71B6F9D
 X-Rspamd-Action: no action
 
-W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEFNRCBJbnRlcm5hbCBEaXN0cmlidXRpb24gT25seV0N
-Cg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCb3Jpc2xhdiBQZXRrb3Yg
-PGJwQGFsaWVuOC5kZT4NCj4gU2VudDogVGh1cnNkYXksIEZlYnJ1YXJ5IDI2LCAyMDI2IDY6MzAg
-UE0NCj4gVG86IEVyaWMtVGVybWluYWwgPGVyaWN0ZXJtaW5hbEBnbWFpbC5jb20+DQo+IENjOiBE
-YXR0YSwgU2h1YmhyYWp5b3RpIDxzaHViaHJhanlvdGkuZGF0dGFAYW1kLmNvbT47IFRvbnkgTHVj
-aw0KPiA8dG9ueS5sdWNrQGludGVsLmNvbT47IGxpbnV4LWVkYWNAdmdlci5rZXJuZWwub3JnOyBs
-aW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYy
-XSBFREFDL3ZlcnNhbG5ldDogRml4IHJlc291cmNlIGxlYWtzIGFuZCBOVUxMIGRlcmVmcyBpbg0K
-PiBpbml0X3ZlcnNhbG5ldCgpDQo+DQo+IENhdXRpb246IFRoaXMgbWVzc2FnZSBvcmlnaW5hdGVk
-IGZyb20gYW4gRXh0ZXJuYWwgU291cmNlLiBVc2UgcHJvcGVyIGNhdXRpb24NCj4gd2hlbiBvcGVu
-aW5nIGF0dGFjaG1lbnRzLCBjbGlja2luZyBsaW5rcywgb3IgcmVzcG9uZGluZy4NCj4NCj4NCj4g
-T24gVGh1LCBGZWIgMjYsIDIwMjYgYXQgMDc6Mjk6MDdQTSArMDgwMCwgRXJpYy1UZXJtaW5hbCB3
-cm90ZToNCj4gPiBGcm9tOiBZdWZhbiBDaGVuIDxlcmljdGVybWluYWxAZ21haWwuY29tPg0KPiA+
-DQo+ID4gaW5pdF92ZXJzYWxuZXQoKSBoYXMgc2V2ZXJhbCBidWdzIGluIGl0cyBlcnJvciBoYW5k
-bGluZy4ga3phbGxvYygpIGFuZA0KPiA+IGttYWxsb2MoKSByZXR1cm4gdmFsdWVzIGFyZSB1c2Vk
-IHdpdGhvdXQgTlVMTCBjaGVja3MsIGNhdXNpbmcgYSBOVUxMDQo+ID4gcG9pbnRlciBkZXJlZmVy
-ZW5jZSB3aGVuIGFsbG9jYXRpb24gZmFpbHMuIFRoZSBjbGVhbnVwIGxvb3AgdXNlcyB3aGlsZQ0K
-PiA+IChpLS0pIHdoaWNoIHNraXBzIHRoZSBjdXJyZW50IGZhaWxpbmcgaW5kZXgsIGxlYWtpbmcg
-dGhlIHJlc291cmNlcw0KPiA+IGFscmVhZHkgYWxsb2NhdGVkIGZvciB0aGF0IHNsb3QuIGVkYWNf
-bWNfZGVsX21jKCkgaXMgY2FsbGVkDQo+ID4gdW5jb25kaXRpb25hbGx5IGR1cmluZyB1bndpbmQs
-IGV2ZW4gZm9yIGNvbnRyb2xsZXJzIHRoYXQgd2VyZSBuZXZlcg0KPiA+IHJlZ2lzdGVyZWQgd2l0
-aCBlZGFjX21jX2FkZF9tYygpLiBBbHNvLCBzcHJpbnRmKCkgaXMgdXNlZCBpbnN0ZWFkIG9mDQo+
-ID4gc25wcmludGYoKSBvbiBhIGZpeGVkLXNpemUgYnVmZmVyLg0KPiA+DQo+ID4gRml4IGJ5IGFk
-ZGluZyBOVUxMIGNoZWNrcyBmb3IgZGV2IGFuZCBuYW1lIGFsbG9jYXRpb25zLCByZXBsYWNpbmcN
-Cj4gPiB3aGlsZSAoaS0tKSB3aXRoIGZvciAoaiA9IGk7IGogPj0gMDsgai0tKSB0byBpbmNsdWRl
-IHRoZSBmYWlsaW5nDQo+ID4gaW5kZXgsIHRyYWNraW5nIHN1Y2Nlc3NmdWwgZWRhY19tY19hZGRf
-bWMoKSBjYWxscyB3aXRoIGEgYm9vbCBhcnJheSwNCj4gPiBhbmQgc3dpdGNoaW5nIHRvIHNucHJp
-bnRmKCkuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBZdWZhbiBDaGVuIDxlcmljdGVybWluYWxA
-Z21haWwuY29tPg0KPiA+IFJldmlld2VkLWJ5OiBTaHViaHJhanlvdGkgRGF0dGEgPHNodWJocmFq
-eW90aS5kYXR0YUBhbWQuY29tPg0KPiA+IC0tLQ0KPiA+IHYyOiBDb3JyZWN0IFNpZ25lZC1vZmYt
-YnkgbmFtZSBhbmQgYWRkIFJldmlld2VkLWJ5IHRhZy4gRml4IGNvbW1pdCBtZXNzYWdlDQo+IGZv
-cm1hdHRpbmcuDQo+ID4NCj4gPiAgZHJpdmVycy9lZGFjL3ZlcnNhbG5ldF9lZGFjLmMgfCAyOSAr
-KysrKysrKysrKysrKysrKysrKysrKystLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMjQgaW5z
-ZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4NCj4gTm8sIHRoYW5rcywgd2UnbGwgZG8gdGhl
-IHByb3BlciBjbGVhbnVwIGhlcmU6DQo+DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8y
-MDI1MTEwNDA5MzkzMi4zODM4ODc2LTEtDQo+IHNodWJocmFqeW90aS5kYXR0YUBhbWQuY29tL1Qv
-I3UNCg0KTXkgYXBvbG9naWVzIHNvbWVob3cgSSBoYWQgbWlzc2VkIGl0Lg0KVGVzdGVkIGl0IG9u
-IHRoZSBoYXJkd2FyZS4NCj4NCj4gLS0NCj4gUmVnYXJkcy9HcnVzcywNCj4gICAgIEJvcmlzLg0K
-Pg0KPiBodHRwczovL3Blb3BsZS5rZXJuZWwub3JnL3RnbHgvbm90ZXMtYWJvdXQtbmV0aXF1ZXR0
-ZQ0K
+
+
+On 2025/11/4 9:32, Shuai Xue wrote:
+>
+>
+> 在 2025/11/4 00:19, Rafael J. Wysocki 写道:
+>> On Thu, Oct 30, 2025 at 8:13 AM Junhao He <hejunhao3@h-partners.com> wrote:
+>>>
+>>> The do_sea() function defaults to using firmware-first mode, if supported.
+>>> It invoke acpi/apei/ghes ghes_notify_sea() to report and handling the SEA
+>>> error, The GHES uses a buffer to cache the most recent 4 kinds of SEA
+>>> errors. If the same kind SEA error continues to occur, GHES will skip to
+>>> reporting this SEA error and will not add it to the "ghes_estatus_llist"
+>>> list until the cache times out after 10 seconds, at which point the SEA
+>>> error will be reprocessed.
+>>>
+>>> The GHES invoke ghes_proc_in_irq() to handle the SEA error, which
+>>> ultimately executes memory_failure() to process the page with hardware
+>>> memory corruption. If the same SEA error appears multiple times
+>>> consecutively, it indicates that the previous handling was incomplete or
+>>> unable to resolve the fault. In such cases, it is more appropriate to
+>>> return a failure when encountering the same error again, and then proceed
+>>> to arm64_do_kernel_sea for further processing.
+>>>
+>>> When hardware memory corruption occurs, a memory error interrupt is
+>>> triggered. If the kernel accesses this erroneous data, it will trigger
+>>> the SEA error exception handler. All such handlers will call
+>>> memory_failure() to handle the faulty page.
+>>>
+>>> If a memory error interrupt occurs first, followed by an SEA error
+>>> interrupt, the faulty page is first marked as poisoned by the memory error
+>>> interrupt process, and then the SEA error interrupt handling process will
+>>> send a SIGBUS signal to the process accessing the poisoned page.
+>>>
+>>> However, if the SEA interrupt is reported first, the following exceptional
+>>> scenario occurs:
+>>>
+>>> When a user process directly requests and accesses a page with hardware
+>>> memory corruption via mmap (such as with devmem), the page containing this
+>>> address may still be in a free buddy state in the kernel. At this point,
+>>> the page is marked as "poisoned" during the SEA claim memory_failure().
+>>> However, since the process does not request the page through the kernel's
+>>> MMU, the kernel cannot send SIGBUS signal to the processes. And the memory
+>>> error interrupt handling process not support send SIGBUS signal. As a
+>>> result, these processes continues to access the faulty page, causing
+>>> repeated entries into the SEA exception handler. At this time, it lead to
+>>> an SEA error interrupt storm.
+>>>
+>>> Fixes this by returning a failure when encountering the same error again.
+>>>
+>>> The following error logs is explained using the devmem process:
+>>>    NOTICE:  SEA Handle
+>>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
+>>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>>>    NOTICE:  EsrEl3 = 0x92000410
+>>>    NOTICE:  PA is valid: 0x1000093c00
+>>>    NOTICE:  Hest Set GenericError Data
+>>>    [ 1419.542401][    C1] {57}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 9
+>>>    [ 1419.551435][    C1] {57}[Hardware Error]: event severity: recoverable
+>>>    [ 1419.557865][    C1] {57}[Hardware Error]:  Error 0, type: recoverable
+>>>    [ 1419.564295][    C1] {57}[Hardware Error]:   section_type: ARM processor error
+>>>    [ 1419.571421][    C1] {57}[Hardware Error]:   MIDR: 0x0000000000000000
+>>>    [ 1419.571434][    C1] {57}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000081000100
+>>>    [ 1419.586813][    C1] {57}[Hardware Error]:   error affinity level: 0
+>>>    [ 1419.586821][    C1] {57}[Hardware Error]:   running state: 0x1
+>>>    [ 1419.602714][    C1] {57}[Hardware Error]:   Power State Coordination Interface state: 0
+>>>    [ 1419.602724][    C1] {57}[Hardware Error]:   Error info structure 0:
+>>>    [ 1419.614797][    C1] {57}[Hardware Error]:   num errors: 1
+>>>    [ 1419.614804][    C1] {57}[Hardware Error]:    error_type: 0, cache error
+>>>    [ 1419.629226][    C1] {57}[Hardware Error]:    error_info: 0x0000000020400014
+>>>    [ 1419.629234][    C1] {57}[Hardware Error]:     cache level: 1
+>>>    [ 1419.642006][    C1] {57}[Hardware Error]:     the error has not been corrected
+>>>    [ 1419.642013][    C1] {57}[Hardware Error]:    physical fault address: 0x0000001000093c00
+>>>    [ 1419.654001][    C1] {57}[Hardware Error]:   Vendor specific error info has 48 bytes:
+>>>    [ 1419.654014][    C1] {57}[Hardware Error]:    00000000: 00000000 00000000 00000000 00000000  ................
+>>>    [ 1419.670685][    C1] {57}[Hardware Error]:    00000010: 00000000 00000000 00000000 00000000  ................
+>>>    [ 1419.670692][    C1] {57}[Hardware Error]:    00000020: 00000000 00000000 00000000 00000000  ................
+>>>    [ 1419.783606][T54990] Memory failure: 0x1000093: recovery action for free buddy page: Recovered
+>>>    [ 1419.919580][ T9955] EDAC MC0: 1 UE Multi-bit ECC on unknown memory (node:0 card:1 module:71 bank:7 row:0 col:0 page:0x1000093 offset:0xc00 grain:1 - APEI location: node:0 card:257 module:71 bank:7 row:0 col:0)
+>>>    NOTICE:  SEA Handle
+>>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
+>>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>>>    NOTICE:  EsrEl3 = 0x92000410
+>>>    NOTICE:  PA is valid: 0x1000093c00
+>>>    NOTICE:  Hest Set GenericError Data
+>>>    NOTICE:  SEA Handle
+>>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
+>>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>>>    NOTICE:  EsrEl3 = 0x92000410
+>>>    NOTICE:  PA is valid: 0x1000093c00
+>>>    NOTICE:  Hest Set GenericError Data
+>>>    ...
+>>>    ...        ---> Hapend SEA error interrupt storm
+>>>    ...
+>>>    NOTICE:  SEA Handle
+>>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
+>>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
+>>>    NOTICE:  EsrEl3 = 0x92000410
+>>>    NOTICE:  PA is valid: 0x1000093c00
+>>>    NOTICE:  Hest Set GenericError Data
+>>>    [ 1429.818080][ T9955] Memory failure: 0x1000093: already hardware poisoned
+>>>    [ 1429.825760][    C1] ghes_print_estatus: 1 callbacks suppressed
+>>>    [ 1429.825763][    C1] {59}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 9
+>>>    [ 1429.843731][    C1] {59}[Hardware Error]: event severity: recoverable
+>>>    [ 1429.861800][    C1] {59}[Hardware Error]:  Error 0, type: recoverable
+>>>    [ 1429.874658][    C1] {59}[Hardware Error]:   section_type: ARM processor error
+>>>    [ 1429.887516][    C1] {59}[Hardware Error]:   MIDR: 0x0000000000000000
+>>>    [ 1429.901159][    C1] {59}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000081000100
+>>>    [ 1429.901166][    C1] {59}[Hardware Error]:   error affinity level: 0
+>>>    [ 1429.914896][    C1] {59}[Hardware Error]:   running state: 0x1
+>>>    [ 1429.914903][    C1] {59}[Hardware Error]:   Power State Coordination Interface state: 0
+>>>    [ 1429.933319][    C1] {59}[Hardware Error]:   Error info structure 0:
+>>>    [ 1429.946261][    C1] {59}[Hardware Error]:   num errors: 1
+>>>    [ 1429.946269][    C1] {59}[Hardware Error]:    error_type: 0, cache error
+>>>    [ 1429.970847][    C1] {59}[Hardware Error]:    error_info: 0x0000000020400014
+>>>    [ 1429.970854][    C1] {59}[Hardware Error]:     cache level: 1
+>>>    [ 1429.988406][    C1] {59}[Hardware Error]:     the error has not been corrected
+>>>    [ 1430.013419][    C1] {59}[Hardware Error]:    physical fault address: 0x0000001000093c00
+>>>    [ 1430.013425][    C1] {59}[Hardware Error]:   Vendor specific error info has 48 bytes:
+>>>    [ 1430.025424][    C1] {59}[Hardware Error]:    00000000: 00000000 00000000 00000000 00000000  ................
+>>>    [ 1430.053736][    C1] {59}[Hardware Error]:    00000010: 00000000 00000000 00000000 00000000  ................
+>>>    [ 1430.066341][    C1] {59}[Hardware Error]:    00000020: 00000000 00000000 00000000 00000000  ................
+>>>    [ 1430.294255][T54990] Memory failure: 0x1000093: already hardware poisoned
+>>>    [ 1430.305518][T54990] 0x1000093: Sending SIGBUS to devmem:54990 due to hardware memory corruption
+>>>
+>>> Signed-off-by: Junhao He <hejunhao3@h-partners.com>
+>>> ---
+>>>   drivers/acpi/apei/ghes.c | 4 +++-
+>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+>>> index 005de10d80c3..eebda39bfc30 100644
+>>> --- a/drivers/acpi/apei/ghes.c
+>>> +++ b/drivers/acpi/apei/ghes.c
+>>> @@ -1343,8 +1343,10 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
+>>>          ghes_clear_estatus(ghes, &tmp_header, buf_paddr, fixmap_idx);
+>>>
+>>>          /* This error has been reported before, don't process it again. */
+>>> -       if (ghes_estatus_cached(estatus))
+>>> +       if (ghes_estatus_cached(estatus)) {
+>>> +               rc = -ECANCELED;
+>>>                  goto no_work;
+>>> +       }
+>>>
+>>>          llist_add(&estatus_node->llnode, &ghes_estatus_llist);
+>>>
+>>> -- 
+>>
+>> This needs a response from the APEI reviewers as per MAINTAINERS, thanks!
+>
+> Hi, Rafael and Junhao,
+>
+> Sorry for late response, I try to reproduce the issue, it seems that
+> EINJ systems broken in 6.18.0-rc1+.
+>
+> [ 3950.741186] CPU: 36 UID: 0 PID: 74112 Comm: einj_mem_uc Tainted: G            E       6.18.0-rc1+ #227 PREEMPT(none)
+> [ 3950.751749] Tainted: [E]=UNSIGNED_MODULE
+> [ 3950.755655] Hardware name: Huawei TaiShan 200 (Model 2280)/BC82AMDD, BIOS 1.91 07/29/2022
+> [ 3950.763797] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [ 3950.770729] pc : acpi_os_write_memory+0x108/0x150
+> [ 3950.775419] lr : acpi_os_write_memory+0x28/0x150
+> [ 3950.780017] sp : ffff800093fbba40
+> [ 3950.783319] x29: ffff800093fbba40 x28: 0000000000000000 x27: 0000000000000000
+> [ 3950.790425] x26: 0000000000000002 x25: ffffffffffffffff x24: 000000403f20e400
+> [ 3950.797530] x23: 0000000000000000 x22: 0000000000000008 x21: 000000000000ffff
+> [ 3950.804635] x20: 0000000000000040 x19: 000000002f7d0018 x18: 0000000000000000
+> [ 3950.811741] x17: 0000000000000000 x16: ffffae52d36ae5d0 x15: 000000001ba8e890
+> [ 3950.818847] x14: 0000000000000000 x13: 0000000000000000 x12: 0000005fffffffff
+> [ 3950.825952] x11: 0000000000000001 x10: ffff00400d761b90 x9 : ffffae52d365b198
+> [ 3950.833058] x8 : 0000280000000000 x7 : 000000002f7d0018 x6 : ffffae52d5198548
+> [ 3950.840164] x5 : 000000002f7d1000 x4 : 0000000000000018 x3 : ffff204016735060
+> [ 3950.847269] x2 : 0000000000000040 x1 : 0000000000000000 x0 : ffff8000845bd018
+> [ 3950.854376] Call trace:
+> [ 3950.856814]  acpi_os_write_memory+0x108/0x150 (P)
+> [ 3950.861500]  apei_write+0xb4/0xd0
+> [ 3950.864806]  apei_exec_write_register_value+0x88/0xc0
+> [ 3950.869838]  __apei_exec_run+0xac/0x120
+> [ 3950.873659]  __einj_error_inject+0x88/0x408 [einj]
+> [ 3950.878434]  einj_error_inject+0x168/0x1f0 [einj]
+> [ 3950.883120]  error_inject_set+0x48/0x60 [einj]
+> [ 3950.887548]  simple_attr_write_xsigned.constprop.0.isra.0+0x14c/0x1d0
+> [ 3950.893964]  simple_attr_write+0x1c/0x30
+> [ 3950.897873]  debugfs_attr_write+0x54/0xa0
+> [ 3950.901870]  vfs_write+0xc4/0x240
+> [ 3950.905173]  ksys_write+0x70/0x108
+> [ 3950.908562]  __arm64_sys_write+0x20/0x30
+> [ 3950.912471]  invoke_syscall+0x4c/0x110
+> [ 3950.916207]  el0_svc_common.constprop.0+0x44/0xe8
+> [ 3950.920893]  do_el0_svc+0x20/0x30
+> [ 3950.924194]  el0_svc+0x38/0x160
+> [ 3950.927324]  el0t_64_sync_handler+0x98/0xe0
+> [ 3950.931491]  el0t_64_sync+0x184/0x188
+> [ 3950.935140] Code: 14000006 7101029f 54000221 d50332bf (f9000015)
+> [ 3950.941210] ---[ end trace 0000000000000000 ]---
+> [ 3950.945807] Kernel panic - not syncing: Oops: Fatal exception
+>
+> We need to fix it first.
+
+Hi shuai xue,
+
+Sorry for my late reply. Thank you for the review.
+To clarify the issue:
+This problem was introduced in v6.18-rc1 via a suspicious ARM64
+memory mapping change [1]. I can reproduce the crash consistently
+using the v6.18-rc1 kernel with this patch applied.
+
+Crucially, the crash disappears when the change is reverted — error
+injection completes successfully without any kernel panic or oops.
+This confirms that the ARM64 memory mapping change is the root cause.
+
+As noted in the original report, the change was reverted in v6.19-rc1, and
+subsequent kernels (including v6.19-rc1 and later) are stable and do not
+exhibit this problem.
+
+reproduce  logs:
+[  216.347073] Unable to handle kernel write to read-only memory at virtual address ffff800084825018
+...
+[  216.475949] CPU: 75 UID: 0 PID: 11477 Comm: sh Kdump: loaded Not tainted 6.18.0-rc1+ #60 PREEMPT
+[  216.486561] Hardware name: Huawei TaiShan 2280 V2/BC82AMDD, BIOS 1.91 07/29/2022
+[  216.587297] Call trace:
+[  216.589904]  acpi_os_write_memory+0x188/0x1c8 (P)
+[  216.594763]  apei_write+0xcc/0xe8
+[  216.598238]  apei_exec_write_register_value+0x90/0xd0
+[  216.603437]  __apei_exec_run+0xb0/0x128
+[  216.607420]  __einj_error_inject+0xac/0x450
+[  216.611750]  einj_error_inject+0x19c/0x220
+[  216.615988]  error_inject_set+0x4c/0x68
+[  216.619962]  simple_attr_write_xsigned.constprop.0.isra.0+0xe8/0x1b0
+[  216.626445]  simple_attr_write+0x20/0x38
+[  216.630502]  debugfs_attr_write+0x58/0xa8
+[  216.634643]  vfs_write+0xdc/0x408
+[  216.638088]  ksys_write+0x78/0x118
+[  216.641610]  __arm64_sys_write+0x24/0x38
+[  216.645648]  invoke_syscall+0x50/0x120
+[  216.649510]  el0_svc_common.constprop.0+0xc8/0xf0
+[  216.654318]  do_el0_svc+0x24/0x38
+[  216.657742]  el0_svc+0x38/0x150
+[  216.660996]  el0t_64_sync_handler+0xa0/0xe8
+[  216.665286]  el0t_64_sync+0x1ac/0x1b0
+[  216.669054] Code: d65f03c0 710102ff 540001e1 d50332bf (f9000295)
+[  216.675244] ---[ end trace 0000000000000000 ]---
+
+[1] https://lore.kernel.org/all/20251121224611.07efa95a@foz.lan/
+
+Best regards,
+Junhao.
+
 
