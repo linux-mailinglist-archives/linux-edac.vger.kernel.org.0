@@ -1,364 +1,400 @@
-Return-Path: <linux-edac+bounces-5754-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5755-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wAnWMnOKoWnAuAQAu9opvQ
-	(envelope-from <linux-edac+bounces-5754-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Feb 2026 13:13:39 +0100
+	id sK2VEfywomkC5AQAu9opvQ
+	(envelope-from <linux-edac+bounces-5755-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Sat, 28 Feb 2026 10:10:20 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 765F71B6F9D
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Feb 2026 13:13:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DE511C19AA
+	for <lists+linux-edac@lfdr.de>; Sat, 28 Feb 2026 10:10:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1826304AD81
-	for <lists+linux-edac@lfdr.de>; Fri, 27 Feb 2026 12:12:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 291E53009B02
+	for <lists+linux-edac@lfdr.de>; Sat, 28 Feb 2026 09:10:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10DD3A6413;
-	Fri, 27 Feb 2026 12:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DCA83EF0DE;
+	Sat, 28 Feb 2026 09:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="CVdoQHs7"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="NrC9+hu3"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F1236BCC5;
-	Fri, 27 Feb 2026 12:12:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289223EF0D6;
+	Sat, 28 Feb 2026 09:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772194363; cv=none; b=o7HEEn+ssf9YgyYp+F+laarkzWsUXICiN2WwH01zI5kNuF4yscVWZVwhUKiLyfpYLWjOx2jXyeC8R8DenNXCxvlv4EfOvbfDh+/9YvlMfoPXc8s/eTV5wrw/pqRyqqbDemQdWtJEvAzmya+hAWZdevGm3Y88v9MoLiL3jaeI4Ls=
+	t=1772269817; cv=none; b=ZWvdo5Mkk3saxUeptdyZhEqzqx+wlutBwWAqXvxkUG5/ctNG90ZKM1sCnBDbuq8ju0sDuXRRA3nsiX9nsDF7KT/gy7utwOcqod5wGVAdY0SRV0taCUXwJQVK2MDWqzjpZPsaKfEeMktxIMKiEAFFNS/Y2GGuw+wzQL87MqZ07wM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772194363; c=relaxed/simple;
-	bh=5722mkXdYgnzPR5bMWYBUQoTJhtCSVZMn0Gmfn38r9k=;
-	h=Subject:To:References:CC:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=PAKNROAzT6VVl3qsWqRTjc56E9YEAdCbdYIWMmX+27HeM7gNjYGSygQBspmklwWolDZlvqe1ot8u35KQ5KHjBJa3JJtV25QFUQx+Wnj03d5XBhGIxmLblCm/5NFzqzV9cvMCV3ZQWH/lB63vBWoQhi4Z4200yVvi0bnn6HDn6gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=CVdoQHs7; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=7VEALnvaWMcvDx38Kn3b+L0zf/ZROo5ZqxIk+zkF0nE=;
-	b=CVdoQHs71hAzokOgcGqn3HXAjwct44S2aOxlRp25B975m4f9OA+3F3/lYGcc34Z33xWCguEvG
-	SIqgO5/kcH013XLbgeJNSzsUpYAOAZdr1S66JhPhVSt/eTdXyLUQ2lOIkbSbS1UqwblgpizqyK9
-	S2IezFKk97DyIIq3P7BaCA4=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4fMnC64jZsz1prKm;
-	Fri, 27 Feb 2026 20:07:46 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2B132404AD;
-	Fri, 27 Feb 2026 20:12:37 +0800 (CST)
-Received: from kwepemn500004.china.huawei.com (7.202.194.145) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 27 Feb 2026 20:12:36 +0800
-Received: from [10.67.120.218] (10.67.120.218) by
- kwepemn500004.china.huawei.com (7.202.194.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 27 Feb 2026 20:12:36 +0800
-Subject: Re: [PATCH] ACPI: APEI: Handle repeated SEA error interrupts storm
- scenarios
-To: Shuai Xue <xueshuai@linux.alibaba.com>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, "Luck, Tony" <tony.luck@intel.com>
-References: <20251030071321.2763224-1-hejunhao3@h-partners.com>
- <CAJZ5v0h=QtcT7zhZEgrTjUk7EAk2OfbGG6BoEEv-3toKODMXQA@mail.gmail.com>
- <bf42a19d-0f5d-48d8-91f5-febb8bfd06d3@linux.alibaba.com>
-CC: Junhao He <hejunhao3@h-partners.com>, <bp@alien8.de>,
-	<guohanjun@huawei.com>, <mchehab@kernel.org>, <jarkko@kernel.org>,
-	<yazen.ghannam@amd.com>, <jane.chu@oracle.com>, <lenb@kernel.org>,
-	<Jonathan.Cameron@huawei.com>, <linux-acpi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-edac@vger.kernel.org>, <shiju.jose@huawei.com>,
-	<tanxiaofei@huawei.com>
-From: hejunhao <hejunhao3@h-partners.com>
-Message-ID: <9817f221-5b5f-7c25-ab94-cb04a854553a@h-partners.com>
-Date: Fri, 27 Feb 2026 20:12:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+	s=arc-20240116; t=1772269817; c=relaxed/simple;
+	bh=fjVgb8VyLIV8Ku77+NBH3y61pNTKp44JY2Mf1hqSgZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p/rGLdECt5M/w1PFiyKdDONyJ4Vqm7T8/B56q4MWUG3q3RejsnbXFE9rJgRCLjgwLh97Mtb2NWzKEVrRQ0GW6mQuex5fQ4bseKtQlLVfltGTnu+NtktC0EJSrcxODvfBfWNjEdfBwAtZ4qzN6z984SCvg7hGB7vWujGFYFecObU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=NrC9+hu3; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 47C9640E0028;
+	Sat, 28 Feb 2026 09:10:11 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id dBByi4k2UFYF; Sat, 28 Feb 2026 09:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1772269806; bh=fmv6w4uWYFduBvvSx3K5y1Je/l2pIqYdqZUpoX6pMlc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NrC9+hu3xIaoyQyQCepZsEyMBojGvmC4lkpplvvfLvLQQHMi4TNI0ubLQ1ZX1KzG5
+	 NBfhu8xI1SMrpSe8vRjbZTXXMXb3qBWWLM2reSSUtLz2aEwe2G+wFwIboWpD48cKeg
+	 g8eVtEUuokhuvC162Dax+fKwcQOADSM/pmBW5wSjqKRGHSTLwTvz0oZF2dCpRNT8mB
+	 B5TP4dRi7K+dlSBji1WLAKJno68+QwQJfRWpXbvOUfteQizGMEaUJ/sjeH9n7nAmZa
+	 gINIDBmk6xvzIFJxvGFh3ty8aR19q7cwerucO+w92afVdTH5+gmNATShoRHlHkPf78
+	 3q0zAN2y0rzeU6ogyBTcEH4uya2NEzpBwpdxaXbM/BjmQ3/48F8Eh30AgYjJqnLH59
+	 gDoztKdUA1L+Q8Fs6cobmrN3iio05XFQyOGEern2PtaZRjDOZmUQLTsWnVRXtC0ZkN
+	 xAAQHJraUEcII6tO1guR3Fakmduwssmh2HHfjpdcZQc6xaWBl3igktiVIB/NUABoxK
+	 WsM4n/C6jP7xYXGTDnEvz2ulUZyMXGxG51NdsPkXdbj4T+CRoyU4iQpVT7+UKzG4jG
+	 Qshyg+ZLq5xczX7aBE9HjMJvQgPUDnhMRVqZpQU2krehaZF3mAcsjmBepV83qfB9wW
+	 2hP3CGobMkkh1k6lvfnRP2Jw=
+Received: from zn.tnic (pd9530d5e.dip0.t-ipconnect.de [217.83.13.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 8155C40E00DA;
+	Sat, 28 Feb 2026 09:09:58 +0000 (UTC)
+Date: Sat, 28 Feb 2026 10:09:50 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"shubhrajyoti.datta@gmail.com" <shubhrajyoti.datta@gmail.com>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>
+Subject: Re: [PATCH v2] EDAC/versalnet: Refactor memory controller
+ initialization and cleanup
+Message-ID: <20260228090950.GAaaKw3oLZpmWxoa5T@fat_crate.local>
+References: <20251104093932.3838876-1-shubhrajyoti.datta@amd.com>
+ <20251109155844.GUaRC6NHP2x4oO2Dk0@fat_crate.local>
+ <LV5PR12MB9828F14FA3E06001BB0878E78172A@LV5PR12MB9828.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <bf42a19d-0f5d-48d8-91f5-febb8bfd06d3@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemn500004.china.huawei.com (7.202.194.145)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <LV5PR12MB9828F14FA3E06001BB0878E78172A@LV5PR12MB9828.namprd12.prod.outlook.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[h-partners.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[h-partners.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[alien8.de,none];
+	R_DKIM_ALLOW(-0.20)[alien8.de:s=alien8];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	TAGGED_FROM(0.00)[bounces-5754-lists,linux-edac=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5755-lists,linux-edac=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[h-partners.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,intel.com,arm.com,kernel.org];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hejunhao3@h-partners.com,linux-edac@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bp@alien8.de,linux-edac@vger.kernel.org];
+	DKIM_TRACE(0.00)[alien8.de:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-edac];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 765F71B6F9D
+	RCPT_COUNT_SEVEN(0.00)[8];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,fat_crate.local:mid,alien8.de:email,alien8.de:dkim]
+X-Rspamd-Queue-Id: 9DE511C19AA
 X-Rspamd-Action: no action
 
+On Thu, Feb 26, 2026 at 04:50:22PM +0000, Datta, Shubhrajyoti wrote:
+> Tested on the hardware.
 
+I don't know what is going on with the communication between you and me.
+Somehow there's a misunderstanding.
 
-On 2025/11/4 9:32, Shuai Xue wrote:
->
->
-> 在 2025/11/4 00:19, Rafael J. Wysocki 写道:
->> On Thu, Oct 30, 2025 at 8:13 AM Junhao He <hejunhao3@h-partners.com> wrote:
->>>
->>> The do_sea() function defaults to using firmware-first mode, if supported.
->>> It invoke acpi/apei/ghes ghes_notify_sea() to report and handling the SEA
->>> error, The GHES uses a buffer to cache the most recent 4 kinds of SEA
->>> errors. If the same kind SEA error continues to occur, GHES will skip to
->>> reporting this SEA error and will not add it to the "ghes_estatus_llist"
->>> list until the cache times out after 10 seconds, at which point the SEA
->>> error will be reprocessed.
->>>
->>> The GHES invoke ghes_proc_in_irq() to handle the SEA error, which
->>> ultimately executes memory_failure() to process the page with hardware
->>> memory corruption. If the same SEA error appears multiple times
->>> consecutively, it indicates that the previous handling was incomplete or
->>> unable to resolve the fault. In such cases, it is more appropriate to
->>> return a failure when encountering the same error again, and then proceed
->>> to arm64_do_kernel_sea for further processing.
->>>
->>> When hardware memory corruption occurs, a memory error interrupt is
->>> triggered. If the kernel accesses this erroneous data, it will trigger
->>> the SEA error exception handler. All such handlers will call
->>> memory_failure() to handle the faulty page.
->>>
->>> If a memory error interrupt occurs first, followed by an SEA error
->>> interrupt, the faulty page is first marked as poisoned by the memory error
->>> interrupt process, and then the SEA error interrupt handling process will
->>> send a SIGBUS signal to the process accessing the poisoned page.
->>>
->>> However, if the SEA interrupt is reported first, the following exceptional
->>> scenario occurs:
->>>
->>> When a user process directly requests and accesses a page with hardware
->>> memory corruption via mmap (such as with devmem), the page containing this
->>> address may still be in a free buddy state in the kernel. At this point,
->>> the page is marked as "poisoned" during the SEA claim memory_failure().
->>> However, since the process does not request the page through the kernel's
->>> MMU, the kernel cannot send SIGBUS signal to the processes. And the memory
->>> error interrupt handling process not support send SIGBUS signal. As a
->>> result, these processes continues to access the faulty page, causing
->>> repeated entries into the SEA exception handler. At this time, it lead to
->>> an SEA error interrupt storm.
->>>
->>> Fixes this by returning a failure when encountering the same error again.
->>>
->>> The following error logs is explained using the devmem process:
->>>    NOTICE:  SEA Handle
->>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
->>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
->>>    NOTICE:  EsrEl3 = 0x92000410
->>>    NOTICE:  PA is valid: 0x1000093c00
->>>    NOTICE:  Hest Set GenericError Data
->>>    [ 1419.542401][    C1] {57}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 9
->>>    [ 1419.551435][    C1] {57}[Hardware Error]: event severity: recoverable
->>>    [ 1419.557865][    C1] {57}[Hardware Error]:  Error 0, type: recoverable
->>>    [ 1419.564295][    C1] {57}[Hardware Error]:   section_type: ARM processor error
->>>    [ 1419.571421][    C1] {57}[Hardware Error]:   MIDR: 0x0000000000000000
->>>    [ 1419.571434][    C1] {57}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000081000100
->>>    [ 1419.586813][    C1] {57}[Hardware Error]:   error affinity level: 0
->>>    [ 1419.586821][    C1] {57}[Hardware Error]:   running state: 0x1
->>>    [ 1419.602714][    C1] {57}[Hardware Error]:   Power State Coordination Interface state: 0
->>>    [ 1419.602724][    C1] {57}[Hardware Error]:   Error info structure 0:
->>>    [ 1419.614797][    C1] {57}[Hardware Error]:   num errors: 1
->>>    [ 1419.614804][    C1] {57}[Hardware Error]:    error_type: 0, cache error
->>>    [ 1419.629226][    C1] {57}[Hardware Error]:    error_info: 0x0000000020400014
->>>    [ 1419.629234][    C1] {57}[Hardware Error]:     cache level: 1
->>>    [ 1419.642006][    C1] {57}[Hardware Error]:     the error has not been corrected
->>>    [ 1419.642013][    C1] {57}[Hardware Error]:    physical fault address: 0x0000001000093c00
->>>    [ 1419.654001][    C1] {57}[Hardware Error]:   Vendor specific error info has 48 bytes:
->>>    [ 1419.654014][    C1] {57}[Hardware Error]:    00000000: 00000000 00000000 00000000 00000000  ................
->>>    [ 1419.670685][    C1] {57}[Hardware Error]:    00000010: 00000000 00000000 00000000 00000000  ................
->>>    [ 1419.670692][    C1] {57}[Hardware Error]:    00000020: 00000000 00000000 00000000 00000000  ................
->>>    [ 1419.783606][T54990] Memory failure: 0x1000093: recovery action for free buddy page: Recovered
->>>    [ 1419.919580][ T9955] EDAC MC0: 1 UE Multi-bit ECC on unknown memory (node:0 card:1 module:71 bank:7 row:0 col:0 page:0x1000093 offset:0xc00 grain:1 - APEI location: node:0 card:257 module:71 bank:7 row:0 col:0)
->>>    NOTICE:  SEA Handle
->>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
->>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
->>>    NOTICE:  EsrEl3 = 0x92000410
->>>    NOTICE:  PA is valid: 0x1000093c00
->>>    NOTICE:  Hest Set GenericError Data
->>>    NOTICE:  SEA Handle
->>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
->>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
->>>    NOTICE:  EsrEl3 = 0x92000410
->>>    NOTICE:  PA is valid: 0x1000093c00
->>>    NOTICE:  Hest Set GenericError Data
->>>    ...
->>>    ...        ---> Hapend SEA error interrupt storm
->>>    ...
->>>    NOTICE:  SEA Handle
->>>    NOTICE:  SpsrEl3 = 0x60001000, ELR_EL3 = 0xffffc6ab42671400
->>>    NOTICE:  skt[0x0]die[0x0]cluster[0x0]core[0x1]
->>>    NOTICE:  EsrEl3 = 0x92000410
->>>    NOTICE:  PA is valid: 0x1000093c00
->>>    NOTICE:  Hest Set GenericError Data
->>>    [ 1429.818080][ T9955] Memory failure: 0x1000093: already hardware poisoned
->>>    [ 1429.825760][    C1] ghes_print_estatus: 1 callbacks suppressed
->>>    [ 1429.825763][    C1] {59}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 9
->>>    [ 1429.843731][    C1] {59}[Hardware Error]: event severity: recoverable
->>>    [ 1429.861800][    C1] {59}[Hardware Error]:  Error 0, type: recoverable
->>>    [ 1429.874658][    C1] {59}[Hardware Error]:   section_type: ARM processor error
->>>    [ 1429.887516][    C1] {59}[Hardware Error]:   MIDR: 0x0000000000000000
->>>    [ 1429.901159][    C1] {59}[Hardware Error]:   Multiprocessor Affinity Register (MPIDR): 0x0000000081000100
->>>    [ 1429.901166][    C1] {59}[Hardware Error]:   error affinity level: 0
->>>    [ 1429.914896][    C1] {59}[Hardware Error]:   running state: 0x1
->>>    [ 1429.914903][    C1] {59}[Hardware Error]:   Power State Coordination Interface state: 0
->>>    [ 1429.933319][    C1] {59}[Hardware Error]:   Error info structure 0:
->>>    [ 1429.946261][    C1] {59}[Hardware Error]:   num errors: 1
->>>    [ 1429.946269][    C1] {59}[Hardware Error]:    error_type: 0, cache error
->>>    [ 1429.970847][    C1] {59}[Hardware Error]:    error_info: 0x0000000020400014
->>>    [ 1429.970854][    C1] {59}[Hardware Error]:     cache level: 1
->>>    [ 1429.988406][    C1] {59}[Hardware Error]:     the error has not been corrected
->>>    [ 1430.013419][    C1] {59}[Hardware Error]:    physical fault address: 0x0000001000093c00
->>>    [ 1430.013425][    C1] {59}[Hardware Error]:   Vendor specific error info has 48 bytes:
->>>    [ 1430.025424][    C1] {59}[Hardware Error]:    00000000: 00000000 00000000 00000000 00000000  ................
->>>    [ 1430.053736][    C1] {59}[Hardware Error]:    00000010: 00000000 00000000 00000000 00000000  ................
->>>    [ 1430.066341][    C1] {59}[Hardware Error]:    00000020: 00000000 00000000 00000000 00000000  ................
->>>    [ 1430.294255][T54990] Memory failure: 0x1000093: already hardware poisoned
->>>    [ 1430.305518][T54990] 0x1000093: Sending SIGBUS to devmem:54990 due to hardware memory corruption
->>>
->>> Signed-off-by: Junhao He <hejunhao3@h-partners.com>
->>> ---
->>>   drivers/acpi/apei/ghes.c | 4 +++-
->>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->>> index 005de10d80c3..eebda39bfc30 100644
->>> --- a/drivers/acpi/apei/ghes.c
->>> +++ b/drivers/acpi/apei/ghes.c
->>> @@ -1343,8 +1343,10 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
->>>          ghes_clear_estatus(ghes, &tmp_header, buf_paddr, fixmap_idx);
->>>
->>>          /* This error has been reported before, don't process it again. */
->>> -       if (ghes_estatus_cached(estatus))
->>> +       if (ghes_estatus_cached(estatus)) {
->>> +               rc = -ECANCELED;
->>>                  goto no_work;
->>> +       }
->>>
->>>          llist_add(&estatus_node->llnode, &ghes_estatus_llist);
->>>
->>> -- 
->>
->> This needs a response from the APEI reviewers as per MAINTAINERS, thanks!
->
-> Hi, Rafael and Junhao,
->
-> Sorry for late response, I try to reproduce the issue, it seems that
-> EINJ systems broken in 6.18.0-rc1+.
->
-> [ 3950.741186] CPU: 36 UID: 0 PID: 74112 Comm: einj_mem_uc Tainted: G            E       6.18.0-rc1+ #227 PREEMPT(none)
-> [ 3950.751749] Tainted: [E]=UNSIGNED_MODULE
-> [ 3950.755655] Hardware name: Huawei TaiShan 200 (Model 2280)/BC82AMDD, BIOS 1.91 07/29/2022
-> [ 3950.763797] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [ 3950.770729] pc : acpi_os_write_memory+0x108/0x150
-> [ 3950.775419] lr : acpi_os_write_memory+0x28/0x150
-> [ 3950.780017] sp : ffff800093fbba40
-> [ 3950.783319] x29: ffff800093fbba40 x28: 0000000000000000 x27: 0000000000000000
-> [ 3950.790425] x26: 0000000000000002 x25: ffffffffffffffff x24: 000000403f20e400
-> [ 3950.797530] x23: 0000000000000000 x22: 0000000000000008 x21: 000000000000ffff
-> [ 3950.804635] x20: 0000000000000040 x19: 000000002f7d0018 x18: 0000000000000000
-> [ 3950.811741] x17: 0000000000000000 x16: ffffae52d36ae5d0 x15: 000000001ba8e890
-> [ 3950.818847] x14: 0000000000000000 x13: 0000000000000000 x12: 0000005fffffffff
-> [ 3950.825952] x11: 0000000000000001 x10: ffff00400d761b90 x9 : ffffae52d365b198
-> [ 3950.833058] x8 : 0000280000000000 x7 : 000000002f7d0018 x6 : ffffae52d5198548
-> [ 3950.840164] x5 : 000000002f7d1000 x4 : 0000000000000018 x3 : ffff204016735060
-> [ 3950.847269] x2 : 0000000000000040 x1 : 0000000000000000 x0 : ffff8000845bd018
-> [ 3950.854376] Call trace:
-> [ 3950.856814]  acpi_os_write_memory+0x108/0x150 (P)
-> [ 3950.861500]  apei_write+0xb4/0xd0
-> [ 3950.864806]  apei_exec_write_register_value+0x88/0xc0
-> [ 3950.869838]  __apei_exec_run+0xac/0x120
-> [ 3950.873659]  __einj_error_inject+0x88/0x408 [einj]
-> [ 3950.878434]  einj_error_inject+0x168/0x1f0 [einj]
-> [ 3950.883120]  error_inject_set+0x48/0x60 [einj]
-> [ 3950.887548]  simple_attr_write_xsigned.constprop.0.isra.0+0x14c/0x1d0
-> [ 3950.893964]  simple_attr_write+0x1c/0x30
-> [ 3950.897873]  debugfs_attr_write+0x54/0xa0
-> [ 3950.901870]  vfs_write+0xc4/0x240
-> [ 3950.905173]  ksys_write+0x70/0x108
-> [ 3950.908562]  __arm64_sys_write+0x20/0x30
-> [ 3950.912471]  invoke_syscall+0x4c/0x110
-> [ 3950.916207]  el0_svc_common.constprop.0+0x44/0xe8
-> [ 3950.920893]  do_el0_svc+0x20/0x30
-> [ 3950.924194]  el0_svc+0x38/0x160
-> [ 3950.927324]  el0t_64_sync_handler+0x98/0xe0
-> [ 3950.931491]  el0t_64_sync+0x184/0x188
-> [ 3950.935140] Code: 14000006 7101029f 54000221 d50332bf (f9000015)
-> [ 3950.941210] ---[ end trace 0000000000000000 ]---
-> [ 3950.945807] Kernel panic - not syncing: Oops: Fatal exception
->
-> We need to fix it first.
+I asked you:
 
-Hi shuai xue,
+"just take your patch + my changes and do a one patch, test it and send it out
+so that I can apply it"
 
-Sorry for my late reply. Thank you for the review.
-To clarify the issue:
-This problem was introduced in v6.18-rc1 via a suspicious ARM64
-memory mapping change [1]. I can reproduce the crash consistently
-using the v6.18-rc1 kernel with this patch applied.
+Which part of that above is not clear?
 
-Crucially, the crash disappears when the change is reverted — error
-injection completes successfully without any kernel panic or oops.
-This confirms that the ARM64 memory mapping change is the root cause.
+Tell me so that I can communicate my thoughts better to you in the future.
 
-As noted in the original report, the change was reverted in v6.19-rc1, and
-subsequent kernels (including v6.19-rc1 and later) are stable and do not
-exhibit this problem.
+Anyway, I did it myself again, because, oh well... :-(
 
-reproduce  logs:
-[  216.347073] Unable to handle kernel write to read-only memory at virtual address ffff800084825018
-...
-[  216.475949] CPU: 75 UID: 0 PID: 11477 Comm: sh Kdump: loaded Not tainted 6.18.0-rc1+ #60 PREEMPT
-[  216.486561] Hardware name: Huawei TaiShan 2280 V2/BC82AMDD, BIOS 1.91 07/29/2022
-[  216.587297] Call trace:
-[  216.589904]  acpi_os_write_memory+0x188/0x1c8 (P)
-[  216.594763]  apei_write+0xcc/0xe8
-[  216.598238]  apei_exec_write_register_value+0x90/0xd0
-[  216.603437]  __apei_exec_run+0xb0/0x128
-[  216.607420]  __einj_error_inject+0xac/0x450
-[  216.611750]  einj_error_inject+0x19c/0x220
-[  216.615988]  error_inject_set+0x4c/0x68
-[  216.619962]  simple_attr_write_xsigned.constprop.0.isra.0+0xe8/0x1b0
-[  216.626445]  simple_attr_write+0x20/0x38
-[  216.630502]  debugfs_attr_write+0x58/0xa8
-[  216.634643]  vfs_write+0xdc/0x408
-[  216.638088]  ksys_write+0x78/0x118
-[  216.641610]  __arm64_sys_write+0x24/0x38
-[  216.645648]  invoke_syscall+0x50/0x120
-[  216.649510]  el0_svc_common.constprop.0+0xc8/0xf0
-[  216.654318]  do_el0_svc+0x24/0x38
-[  216.657742]  el0_svc+0x38/0x150
-[  216.660996]  el0t_64_sync_handler+0xa0/0xe8
-[  216.665286]  el0t_64_sync+0x1ac/0x1b0
-[  216.669054] Code: d65f03c0 710102ff 540001e1 d50332bf (f9000295)
-[  216.675244] ---[ end trace 0000000000000000 ]---
+Please review and test that properly and lemme know.
 
-[1] https://lore.kernel.org/all/20251121224611.07efa95a@foz.lan/
+I hope at least this request is clear now... lemme know if not.
 
-Best regards,
-Junhao.
+Thx.
 
+---
+From 103298da3e376e471b0165f006c554c93f6aee64 Mon Sep 17 00:00:00 2001
+From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Date: Tue, 4 Nov 2025 15:09:20 +0530
+Subject: [PATCH] EDAC/versalnet: Refactor memory controller initialization and
+ cleanup
+
+Simplify the initialization and cleanup flow for Versal Net DDRMC
+controllers in the EDAC driver by carving out the single controller init
+into a separate function which allows for a much better and more
+readable error handling and unwinding.
+
+  [ bp:
+	- do the kzalloc allocations first
+	- "publish" the structures only after they've been initialized
+	  properly so that you don't need to unwind unnecessarily when
+	  it fails later
+	- remove_versalnet() is now trivial
+   ]
+
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://patch.msgid.link/20251104093932.3838876-1-shubhrajyoti.datta@amd.com
+---
+ drivers/edac/versalnet_edac.c | 174 +++++++++++++++++++---------------
+ 1 file changed, 97 insertions(+), 77 deletions(-)
+
+diff --git a/drivers/edac/versalnet_edac.c b/drivers/edac/versalnet_edac.c
+index 2cbc13d9bd00..0b47ed7fed63 100644
+--- a/drivers/edac/versalnet_edac.c
++++ b/drivers/edac/versalnet_edac.c
+@@ -70,6 +70,8 @@
+ #define XDDR5_BUS_WIDTH_32		1
+ #define XDDR5_BUS_WIDTH_16		2
+ 
++#define MC_NAME_LEN			32
++
+ /**
+  * struct ecc_error_info - ECC error log information.
+  * @burstpos:		Burst position.
+@@ -760,7 +762,17 @@ static void versal_edac_release(struct device *dev)
+ 	kfree(dev);
+ }
+ 
+-static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
++static void remove_one_mc(struct mc_priv *priv, int i)
++{
++	struct mem_ctl_info *mci;
++
++	mci = priv->mci[i];
++	device_unregister(mci->pdev);
++	edac_mc_del_mc(mci->pdev);
++	edac_mc_free(mci);
++}
++
++static int init_one_mc(struct mc_priv *priv, struct platform_device *pdev, int i)
+ {
+ 	u32 num_chans, rank, dwidth, config;
+ 	struct edac_mc_layer layers[2];
+@@ -768,102 +780,110 @@ static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
+ 	struct device *dev;
+ 	enum dev_type dt;
+ 	char *name;
+-	int rc, i;
+-
+-	for (i = 0; i < NUM_CONTROLLERS; i++) {
+-		config = priv->adec[CONF + i * ADEC_NUM];
+-		num_chans = FIELD_GET(MC5_NUM_CHANS_MASK, config);
+-		rank = 1 << FIELD_GET(MC5_RANK_MASK, config);
+-		dwidth = FIELD_GET(MC5_BUS_WIDTH_MASK, config);
+-
+-		switch (dwidth) {
+-		case XDDR5_BUS_WIDTH_16:
+-			dt = DEV_X16;
+-			break;
+-		case XDDR5_BUS_WIDTH_32:
+-			dt = DEV_X32;
+-			break;
+-		case XDDR5_BUS_WIDTH_64:
+-			dt = DEV_X64;
+-			break;
+-		default:
+-			dt = DEV_UNKNOWN;
+-		}
++	int rc;
+ 
+-		if (dt == DEV_UNKNOWN)
+-			continue;
++	config = priv->adec[CONF + i * ADEC_NUM];
++	num_chans = FIELD_GET(MC5_NUM_CHANS_MASK, config);
++	rank = 1 << FIELD_GET(MC5_RANK_MASK, config);
++	dwidth = FIELD_GET(MC5_BUS_WIDTH_MASK, config);
++
++	switch (dwidth) {
++	case XDDR5_BUS_WIDTH_16:
++		dt = DEV_X16;
++		break;
++	case XDDR5_BUS_WIDTH_32:
++		dt = DEV_X32;
++		break;
++	case XDDR5_BUS_WIDTH_64:
++		dt = DEV_X64;
++		break;
++	default:
++		dt = DEV_UNKNOWN;
++	}
+ 
+-		/* Find the first enabled device and register that one. */
+-		layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
+-		layers[0].size = rank;
+-		layers[0].is_virt_csrow = true;
+-		layers[1].type = EDAC_MC_LAYER_CHANNEL;
+-		layers[1].size = num_chans;
+-		layers[1].is_virt_csrow = false;
++	if (dt == DEV_UNKNOWN)
++		return 0;
+ 
+-		rc = -ENOMEM;
+-		mci = edac_mc_alloc(i, ARRAY_SIZE(layers), layers,
+-				    sizeof(struct mc_priv));
+-		if (!mci) {
+-			edac_printk(KERN_ERR, EDAC_MC, "Failed memory allocation for MC%d\n", i);
+-			goto err_alloc;
+-		}
++	/* Find the first enabled device and register that one. */
++	layers[0].type = EDAC_MC_LAYER_CHIP_SELECT;
++	layers[0].size = rank;
++	layers[0].is_virt_csrow = true;
++	layers[1].type = EDAC_MC_LAYER_CHANNEL;
++	layers[1].size = num_chans;
++	layers[1].is_virt_csrow = false;
++
++	rc = -ENOMEM;
++	name = kzalloc(MC_NAME_LEN, GFP_KERNEL);
++	if (!name)
++		return rc;
++
++	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
++	if (!dev)
++		goto err_name_free;
++
++	mci = edac_mc_alloc(i, ARRAY_SIZE(layers), layers, sizeof(struct mc_priv));
++	if (!mci) {
++		edac_printk(KERN_ERR, EDAC_MC, "Failed memory allocation for MC%d\n", i);
++		goto err_dev_free;
++	}
+ 
+-		priv->mci[i] = mci;
+-		priv->dwidth = dt;
++	sprintf(name, "versal-net-ddrmc5-edac-%d", i);
+ 
+-		dev = kzalloc_obj(*dev);
+-		dev->release = versal_edac_release;
+-		name = kmalloc(32, GFP_KERNEL);
+-		sprintf(name, "versal-net-ddrmc5-edac-%d", i);
+-		dev->init_name = name;
+-		rc = device_register(dev);
+-		if (rc)
+-			goto err_alloc;
++	dev->init_name = name;
++	dev->release = versal_edac_release;
+ 
+-		mci->pdev = dev;
++	rc = device_register(dev);
++	if (rc)
++		goto err_mc_free;
+ 
+-		platform_set_drvdata(pdev, priv);
++	mci->pdev = dev;
++	mc_init(mci, dev);
+ 
+-		mc_init(mci, dev);
+-		rc = edac_mc_add_mc(mci);
+-		if (rc) {
+-			edac_printk(KERN_ERR, EDAC_MC, "Failed to register MC%d with EDAC core\n", i);
+-			goto err_alloc;
+-		}
++	rc = edac_mc_add_mc(mci);
++	if (rc) {
++		edac_printk(KERN_ERR, EDAC_MC, "Failed to register MC%d with EDAC core\n", i);
++		goto err_unreg;
+ 	}
+-	return 0;
+ 
+-err_alloc:
+-	while (i--) {
+-		mci = priv->mci[i];
+-		if (!mci)
+-			continue;
+-
+-		if (mci->pdev) {
+-			device_unregister(mci->pdev);
+-			edac_mc_del_mc(mci->pdev);
+-		}
++	priv->mci[i] = mci;
++	priv->dwidth = dt;
+ 
+-		edac_mc_free(mci);
+-	}
++	platform_set_drvdata(pdev, priv);
++
++	return 0;
++
++err_unreg:
++	device_unregister(mci->pdev);
++err_mc_free:
++	edac_mc_free(mci);
++err_dev_free:
++	kfree(dev);
++err_name_free:
++	kfree(name);
+ 
+ 	return rc;
+ }
+ 
+-static void remove_versalnet(struct mc_priv *priv)
++static int init_versalnet(struct mc_priv *priv, struct platform_device *pdev)
+ {
+-	struct mem_ctl_info *mci;
+-	int i;
++	int rc, i;
+ 
+ 	for (i = 0; i < NUM_CONTROLLERS; i++) {
+-		device_unregister(priv->mci[i]->pdev);
+-		mci = edac_mc_del_mc(priv->mci[i]->pdev);
+-		if (!mci)
+-			return;
++		rc = init_one_mc(priv, pdev, i);
++		if (rc) {
++			while (i--)
++				remove_one_mc(priv, i);
+ 
+-		edac_mc_free(mci);
++			return rc;
++		}
+ 	}
++	return 0;
++}
++
++static void remove_versalnet(struct mc_priv *priv)
++{
++	for (int i = 0; i < NUM_CONTROLLERS; i++)
++		remove_one_mc(priv, i);
+ }
+ 
+ static int mc_probe(struct platform_device *pdev)
+-- 
+2.51.0
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
