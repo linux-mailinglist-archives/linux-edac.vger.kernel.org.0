@@ -1,134 +1,179 @@
-Return-Path: <linux-edac+bounces-5769-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5770-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4LitCSuVqGkLvwAAu9opvQ
-	(envelope-from <linux-edac+bounces-5769-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Wed, 04 Mar 2026 21:25:15 +0100
+	id gClrDlSnqWlSBwEAu9opvQ
+	(envelope-from <linux-edac+bounces-5770-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Thu, 05 Mar 2026 16:55:00 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96073207953
-	for <lists+linux-edac@lfdr.de>; Wed, 04 Mar 2026 21:25:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92612214EC6
+	for <lists+linux-edac@lfdr.de>; Thu, 05 Mar 2026 16:54:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A33113011075
-	for <lists+linux-edac@lfdr.de>; Wed,  4 Mar 2026 20:25:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D5471303677D
+	for <lists+linux-edac@lfdr.de>; Thu,  5 Mar 2026 15:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB1C37F010;
-	Wed,  4 Mar 2026 20:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C5893B894A;
+	Thu,  5 Mar 2026 15:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fbRsiW1F"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="VpGRYaUi"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013030.outbound.protection.outlook.com [40.93.196.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D592D8DA8;
-	Wed,  4 Mar 2026 20:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772655911; cv=none; b=UDSOrqkX7uy1mdeT+8I5tQOyOT2R+maoO12niWQBRS0Do99eNKw8si9UdQV0ibS9qsz+ANYhyuL6KLZI/6Ho36WyKAfYHNV1LlLKl+GodlCGVF5PsEDLTolB5vrLSEJqMx4ETyeYgAKMGLx5q7fRi4YOh85VpwIMMmOA0B7H/DY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772655911; c=relaxed/simple;
-	bh=vq3+5zNddjH4wQ3hoZEAsGJnjY8zRB2Vt837onfZiFQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=smXZZAAHXwbC9GpdSYOC++bk7A1BLt95X+UI7KVNWmk63xueSaiFUl4Tir/mBTAIwg3FQ2vWJ1ApdAn0BGUXfHw2sez0ttpulbeqLTGgT84TXAGA0If22JNZqxAXdXXNtsxG7mv1iqWSvHrTaIEYfYK9oP4RJGAlPrygHufJzRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fbRsiW1F; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1630840E0198;
-	Wed,  4 Mar 2026 20:25:07 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id EpfkwXb4Z6jo; Wed,  4 Mar 2026 20:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1772655903; bh=n/86SkTo8cC1brYHctDhv6B4FlHVD1zjjScvYG6/oS0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fbRsiW1FpUAtL7kj0DtZlObxr5SLZVzJyVGES/9LTHf8TSOEbVV7+9MzTc9PS05Kv
-	 9r6LMaUjBXCAteYuEoedhqvnF2XCb34n6a84wawVdlofysJl7t9l3ZxiybsLprE/J/
-	 27kz+0PEyP7oHBwB+dLxorm1wVWHfbPm6UzOKdqiA8W/CjYzgawRGdzY8JBVn32FdV
-	 SRTpl1TuUjyHxGAljtPNd8kCpKYkEJheEslRAnbWTSW0HzX+jxfItVfMrCdLqn1W1Y
-	 2Ltj8kW9mjyPDJENRPRK5xS1JRvnDEQlw0k+t6/JKAOCXEnyTvPaGCYbHDB5JoIEhI
-	 RCPpihd8A6aMPuvVlQ7X8n3/B9SzAiIKfDZgN/ykLJf/ERLdMj21655CVk28bLVNPL
-	 HPMwB/z4R3tvP5Bfx6B4Shk8r8mdH1nJ8OFZIDy3oyJSbJ8zLblBI1bS4MfV4YTgFD
-	 BrpxJUmA5mj+AUC3M6KYed3Rvg9SjgFkMFDXd5SwXCFCRf8dnBarO+bfgNxNRvJU2l
-	 /Cw1M6PhycNYHYE5kjvfYNXWJgIx9G17vTyy+IudH9HUq3R2KbEG17GA7M/7qKWz6C
-	 5D8mvH0J/f4DRzV6UVHzX2sLs6Jq+snuW2IaWcDWDcc31SDZa+KcFY4EWVw6rQ3Ihx
-	 QpQ+SEvDgl4cZ4ZwMArj/8vc=
-Received: from zn.tnic (pd9530d5e.dip0.t-ipconnect.de [217.83.13.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 618B940E00DE;
-	Wed,  4 Mar 2026 20:24:58 +0000 (UTC)
-Date: Wed, 4 Mar 2026 21:24:52 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, x86@kernel.org
-Subject: Re: [PATCH] x86/mce/amd, EDAC/mce_amd: Add new SMCA bank types
-Message-ID: <20260304202452.GCaaiVFDSSQbb4Zyfy@fat_crate.local>
-References: <20260202172158.2455749-1-yazen.ghannam@amd.com>
- <20260228150447.GCaaMED_7sbC3OvDsL@fat_crate.local>
- <20260302142255.GA145106@yaz-khff2.amd.com>
- <20260303153814.GAaacAZrUnFNBhPq1K@fat_crate.local>
- <20260304150402.GA807247@yaz-khff2.amd.com>
- <20260304163953.GAaahgWQIZ5QuxLDP5@fat_crate.local>
- <20260304180220.GA980523@yaz-khff2.amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5EE3806AA
+	for <linux-edac@vger.kernel.org>; Thu,  5 Mar 2026 15:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772725637; cv=fail; b=RxtbfFdFfu/yFsVdLZle8656qTj9r8zSSEcHVz6b0JTqtckeS7xY6UMfzbWVlML6Jvha3sqmCjAuIsF9EwEqeZOuNjX4NmQde2sQiyr01cdW8759CUEAAZiy5iwfrFm7Pa7qxc+4vxMj2OKH2fyxVVL/O/QNUCRcBqGqSNFavrM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772725637; c=relaxed/simple;
+	bh=hmAE0zPZ86609/M8m0iCTCLkOmGxmLN3NF4hnGKvmD4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LPxnx4bRjhim63qpV1jnjwHrKlOfuWBCNAC4AuclZs/HbDEl6NlWUQYzlAg24F7E8Gwl9Tdwoc70Sa1cJHbBNv9bqJgipVxI9/BBURa9e+7yU+s/v4iN0qS9ldkcvHYsYCek53RPDeRQdfaVsuoJNZgsy+s1qT+I2gzpmR0j1js=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=VpGRYaUi; arc=fail smtp.client-ip=40.93.196.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=f9oX9t8NlHPsqDoF14dZvCA3uMfZp8mccN26GDhg3a2zxVMqnufQFq6D4UQfgQAuGt3jpnpNuX4/aZddzMLsJRkx088/nBZ5/0QgQHI89Bt9x5ZNgOyRcu8RNW5EYqVRxy8MAc5k0QqUHFUJHj6lgENtPjEJi0+x2mBDfZS9M8HHvNFSTpRq9MQM+9+dXeNXrbfQdKt2hw7Gli3dsnDUT/cwKik7KDaZsEqzR1OxrX4JSV5Ui5qGP+OKDWZW2MmS19segJcQEomI5oaul24lxei6BooQoEFUMQ6WfS/Sshj61J4qkZWLx1sCL4GSfs8MJRzlhPc9m2in2UPGMIOnvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uZFljh6RBrhMRhAW+1dI1oWOPLy5EM6ZgbVrhi3sS48=;
+ b=wzagFm2CyfGGTzGfMUbt2jXfKXbkumsWBkM95kTntT6r6mSZ+hUqbiWtBPthKYhItSIe/jMgyv2fchTCgHu2XGgh+L6liwnIi5VxzZzMb1sme13pQ72ts4oJpumPS6OAQAfWbEsDvcHkb3+sn+omAF+9rEZEkq/j1Nhb7FZxfTupHtbytMNZofADh0wXNlWCVv4Te/h7fA8sKVB5LOqmy5M1wx9b7NVGPlU1Yjo8nRCGfD+GfyBoP/quH+IpYsqlQeCBYdhFzTGDcY4ylKUazAbpKDezefeUkMT+cFhhLi2g33AV4W38I0N/U8SkQLKXuknsb/lc9ULdfIzHZLEQBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uZFljh6RBrhMRhAW+1dI1oWOPLy5EM6ZgbVrhi3sS48=;
+ b=VpGRYaUinhQPCsr1BI4dnqTeaPIjq39h8vzS81+1RUuo23E9MaBn1oY1K/lUAgWgaN5WRHnap9B3uTPh2cm8x5KhgKR8ivu7p7fJmeNBHcmB8enNjzz6ETiRt+6XX7piVjwoTXeq6AOeGIQjKXlQE+RrJbWNTftxRSDCyu9LyGE=
+Received: from PH8P223CA0012.NAMP223.PROD.OUTLOOK.COM (2603:10b6:510:2db::17)
+ by MN2PR12MB4223.namprd12.prod.outlook.com (2603:10b6:208:1d3::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.18; Thu, 5 Mar
+ 2026 15:45:59 +0000
+Received: from CY4PEPF0000EE35.namprd05.prod.outlook.com
+ (2603:10b6:510:2db:cafe::1f) by PH8P223CA0012.outlook.office365.com
+ (2603:10b6:510:2db::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.23 via Frontend Transport; Thu,
+ 5 Mar 2026 15:45:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ CY4PEPF0000EE35.mail.protection.outlook.com (10.167.242.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9678.18 via Frontend Transport; Thu, 5 Mar 2026 15:45:57 +0000
+Received: from dogwood-dvt-marlim.amd.com (10.180.168.240) by
+ satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Thu, 5 Mar 2026 09:45:54 -0600
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: <mario.limonciello@amd.com>, <Yazen.Ghannam@amd.com>, Tony Luck
+	<tony.luck@intel.com>, <bp@alien8.de>, <superm1@kernel.org>
+CC: <yazen.ghannam@amd.com>, <linux-edac@vger.kernel.org>
+Subject: [PATCH] RAS/AMD/ATL: Decrease message about unknown DF revision to debug
+Date: Thu, 5 Mar 2026 09:45:27 -0600
+Message-ID: <20260305154528.1171999-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260304180220.GA980523@yaz-khff2.amd.com>
-X-Rspamd-Queue-Id: 96073207953
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE35:EE_|MN2PR12MB4223:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7f6e858-24c8-4661-e2db-08de7ace4b35
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|36860700016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	LTnIoFV+BRYhlXuLkRgvSz30UHSdKjmcZy8FYKAV+aeY2be+cqzd67+hpRmgkXUJTfUsVzTyd4rNU7JgQ4RvaZJzxceuN4aKhvt0HTdEINTTlwfwoxXlH8d85g6Utk6E5y3jAmdFsNbIOhr8cFwmfrYGEGmUNmOHV/noirVS5NbbcSD50dUxes4NloqbO33uRHhC0hr7JzysFD+7K3fsGOeyHgw6Yhj+OrlEZUsGbpdvdH7wEpW9FA3Wu9PVAvBz8QofpHrkdL2uTjW/swbiQSX600veJGYHjm+desb0hj5YIUlLje6VzZzk3Ysd37CPDDU+C9dtDLhKk7SN9cA3/Go5IN2my5AVVe41MXxBqg+yPGBuYwzbb8cBS7GifJLGE6hB0kLY9PVS8YOSxVSRwMBmFDFaOctdn3pPdxizveBiVO4ALjUV5qlBEuUNQCDvcmaysk2Nxe2QybHhAdGzlWxE2BlmK9ePx8ZPIKBFNQhqsS8p+Txtwwpvbfy+cftvilo6HNH1wgW5ngVKLwCMoVMPdWpOm+j0yOVD/AUdWto8dYuu7KqQovjGK7vwRwc1tk0pLn2B/YNYGqrVV2GUYL+46cioX8nV6W+p5s5YW7knwiRO+PCkHG01mxwK7/ba9gJrOegXBqQxzrZCbWkkqkhk+5EMsw4+st5u7vvt4QnxLYzkdEuuBLYl1F1sc/IBTP0DPH+53gi5ucUXEHBYPM+6uAS5Itfx5DKRADneDI8jyxwMLVFLaPen/cRrjQ5iA9kvR89H9QTlx2HOhkyzzw==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	M3u4I/5iutD40o3NFriiw1Vg5eIdDGocazbWVVQtVeYCILj5ZduR58pti64i+fUFPIZ4P7sAvR8GLrOt1+pLOlmFhimekEZGYsHSDHqWwmKmk0DyMGPhMTPE2X7lqy727TNGqk93X3wiY8oH7VWFI0TnHg7QH2xW/RMo3xQ2TJ/94yQJZ1lS4VjYVlTlQqaCax1v+74HmI3rZlyxOd5Dhh+d2G81jXRM5qzeQo9QDZg2tQZ/u6l7rOGnOdxQjqBOMzprzVdHOnUOVvOGUmp4oFx9TKjjNGYrTtUNOmm47gaqqB8z4L2bgu9Mcy8aToxwwqlE9TkMnqUjYIeT1qOD2JN+YfBcTVIjV0PkbCfK/CKYnW4GfbhtkhFrUhOrhfxiIibjSe5a1HHfr3FBFRV+ErNrzRsMzn6cBew679F5F8Tti67SNOXCSGfaB0oAV7xA
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2026 15:45:57.5994
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7f6e858-24c8-4661-e2db-08de7ace4b35
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE35.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4223
+X-Rspamd-Queue-Id: 92612214EC6
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[alien8.de,none];
-	R_DKIM_ALLOW(-0.20)[alien8.de:s=alien8];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5769-lists,linux-edac=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-5770-lists,linux-edac=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:dkim,amd.com:email,amd.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[amd.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[alien8.de:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bp@alien8.de,linux-edac@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[mario.limonciello@amd.com,linux-edac@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-edac];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,fat_crate.local:mid]
+	TAGGED_RCPT(0.00)[linux-edac];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-On Wed, Mar 04, 2026 at 01:02:20PM -0500, Yazen Ghannam wrote:
-> Though maybe you mean "sorting based on HWID/McaType" is not important?
-> I agree.
+commit 187d1b27a1e43 ("RAS/AMD/ATL: Require PRM support for future
+systems") made PRM mandatory for future systems; but this is only a
+datacenter centric point of view.  PRM is implemented on a case by
+case basis on other products and thus it will be expected that the
+DF revision can't be detected on some systems.
 
-Yeah, we can sort by IP name and not care of the numeric groups.
+Decrease the applicable messaging to debug.
 
-> Okay, I'll work on it.
+Fixes: 187d1b27a1e43 ("RAS/AMD/ATL: Require PRM support for future systems")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/ras/amd/atl/system.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
+diff --git a/drivers/ras/amd/atl/system.c b/drivers/ras/amd/atl/system.c
+index 812a30e21d3ad..a9bf05be5c3fc 100644
+--- a/drivers/ras/amd/atl/system.c
++++ b/drivers/ras/amd/atl/system.c
+@@ -300,7 +300,7 @@ int get_df_system_info(void)
+ 
+ 	ret = determine_df_rev();
+ 	if (ret) {
+-		pr_warn("Failed to determine DF Revision");
++		pr_debug("Failed to determine DF Revision");
+ 		df_cfg.rev = UNKNOWN;
+ 		return ret;
+ 	}
 -- 
-Regards/Gruss,
-    Boris.
+2.53.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
