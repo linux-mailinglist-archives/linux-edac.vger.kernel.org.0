@@ -1,336 +1,175 @@
-Return-Path: <linux-edac+bounces-5786-lists+linux-edac=lfdr.de@vger.kernel.org>
+Return-Path: <linux-edac+bounces-5787-lists+linux-edac=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-edac@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MKGrBXVTrGkOowEAu9opvQ
-	(envelope-from <linux-edac+bounces-5786-lists+linux-edac=lfdr.de@vger.kernel.org>)
-	for <lists+linux-edac@lfdr.de>; Sat, 07 Mar 2026 17:33:57 +0100
+	id 8NBMJJZNrWn/1AEAu9opvQ
+	(envelope-from <linux-edac+bounces-5787-lists+linux-edac=lfdr.de@vger.kernel.org>)
+	for <lists+linux-edac@lfdr.de>; Sun, 08 Mar 2026 11:21:10 +0100
 X-Original-To: lists+linux-edac@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8D822CB15
-	for <lists+linux-edac@lfdr.de>; Sat, 07 Mar 2026 17:33:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDF2422F4F5
+	for <lists+linux-edac@lfdr.de>; Sun, 08 Mar 2026 11:21:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BD6AF302B526
-	for <lists+linux-edac@lfdr.de>; Sat,  7 Mar 2026 16:33:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C449D300E5E8
+	for <lists+linux-edac@lfdr.de>; Sun,  8 Mar 2026 10:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF293A6EE8;
-	Sat,  7 Mar 2026 16:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4316D30F812;
+	Sun,  8 Mar 2026 10:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PPWFtc/X"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="aym4UDup"
 X-Original-To: linux-edac@vger.kernel.org
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011040.outbound.protection.outlook.com [40.107.208.40])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521523A640F;
-	Sat,  7 Mar 2026 16:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772901224; cv=fail; b=ZVYvsGWPXKIqYbf3gDyP1R/3lmeiPU/DiveaW4HIMaJudgZNW2sxiNM8IT/OcYViPdIeZOJ//eOXW+pv2Bh6ruYzFM/ZBUy4aISjIg8QepR+6jH4W/hmJcpUm2CjlY+idyo9dahsfIucIVHMLnMeJS9GiUFWDmx7QKh84CROwMk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772901224; c=relaxed/simple;
-	bh=pyfTYbvRvvziyZrHWQ4/FbJxUbXjyVjRRUq5I4mxpXc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jxk0IIKbxqm/JvR/ejr/zo5kWeqk8VtIK6UrcvjIxnK/YK0oRP81Y7iE3rzWmilIQNgTZMbMJL6W/ZzX/YbkOzdv7KEC4Oyj7ovVnYyd2fiO3Ju2XY0a/d1WcO2eJqRCMqpVV8scU4SuupMDvyefY4uF7k08IJ1CE9K+4SBxKjc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PPWFtc/X; arc=fail smtp.client-ip=40.107.208.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Yj51B1bzjJZXs2+4MkMCubnnMQPRuXnzK0iDPdsi+h6JAcBeAoaCemc2t1S7RPzXm6fG8hm1f3wlIlsk2ZcGt/q01qeu/x9gLr8ZFge+r+4dxkJh4VrT1xSIZTzB8TY63yyTfh2pbojlS95sBvaDUWSwRh4WLxPxlyRZ6DLBl/aceC2IsInuUAAiILrQYkN5+u4ZC08QMhRAmPsBNEtQYhotolRFsHgRtUmlLJOsNZMjHiFfOrcjRSSwXPLlSw4YT2YgIT87QRB1Guvpu9wmrEzsQUxLfYvQ83IIFrCgAVW4dVRDY8JF7XBcGLl7ZnjMxnj2P/yhEJJVcvjDwo9HUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TK99qf/ors4i/bTVLhvOuft0NPYgNSyv8q7p1ZOjDCE=;
- b=cGxSwo9HtxpB2Lg2VSSA1qZAMPtvr6j4EX05ayQWCOryIJU8ueJAoIQwD4te3A1ru4MTuRMoVQj/aw+dN2LXZh6GXYRkrkFhnhKYLyHZDTbmu/X73ZdSJ+E/c3gGUZz9vtxRFyCd43UY01xavgbR29if5O1oz6OgJR3c8pdxWfK7VS3Pl60oi1kLmDF3+v6YHkwiV5TxE197d0AIVJaqd6kNkzqmfGyb7eQJpE2jcvP2ULS+pQdMLsxlnBxIsyRWZbYdqmDsmYCqzjgNmxRvtOewYCSzg7uEGGZXeIiFxuRpA1cRlwcAffNjH9Hok2SfPB/zb7FPUCoUAsCao1YLSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TK99qf/ors4i/bTVLhvOuft0NPYgNSyv8q7p1ZOjDCE=;
- b=PPWFtc/XK26X+UrxrMAiLsdWUgw2mv2DjM7rNB1XLAudQXvTOcuQvBRKJlfeJY1NXnkvxwj1sgeSIdJmXJKf9QjcHf+BK1meTwFMpwLOupC12ThVZ4tuE37N/ux8Yg5fDEV4db/uzT8xgiD+kaQD7GS9d5N+1nso/oAZx3+04e4=
-Received: from SJ0PR03CA0154.namprd03.prod.outlook.com (2603:10b6:a03:338::9)
- by MN2PR12MB4270.namprd12.prod.outlook.com (2603:10b6:208:1d9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Sat, 7 Mar
- 2026 16:33:38 +0000
-Received: from SJ1PEPF00002327.namprd03.prod.outlook.com
- (2603:10b6:a03:338:cafe::59) by SJ0PR03CA0154.outlook.office365.com
- (2603:10b6:a03:338::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.23 via Frontend Transport; Sat,
- 7 Mar 2026 16:33:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- SJ1PEPF00002327.mail.protection.outlook.com (10.167.242.90) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9678.18 via Frontend Transport; Sat, 7 Mar 2026 16:33:38 +0000
-Received: from yaz-khff2.amd.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Sat, 7 Mar
- 2026 10:33:35 -0600
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: <linux-edac@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>, <x86@kernel.org>,
-	Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH v2 3/3] x86/mce, EDAC/mce_amd: Add new SMCA bank types
-Date: Sat, 7 Mar 2026 11:33:16 -0500
-Message-ID: <20260307163316.345923-4-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260307163316.345923-1-yazen.ghannam@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA9A946A;
+	Sun,  8 Mar 2026 10:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772965265; cv=none; b=IItWqhz4JwMhcn6/6hjB1wWrAKcttfPLVsiXbndUfeUg1Xnj98FRmzXaEWYePC70awnnMojDv8dTugEXEPSfsi8jvMUi2ArZL9O4J3xZ55H5Md33ghGyLT5gQv0qIn6wJ+KVmxBZPBHWnmA4cy1dCvb2FoyJukVbmp1hqeItJjw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772965265; c=relaxed/simple;
+	bh=XzMkjnSYlEqItXvwclfx4RIV2UlWWlDV0VHyjYBzQ9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HbtHm/+KD4t4XemAv0LiK4lOTWfHui7pO0JW8CkemIsCeywNUt38+Zm/3knMHTTJDxiJR6CQRnuppeeFZw6yVuDjSPKJeXpw0e3pZ/y2C1/4NXWvN/fR1gkkRVVBadt7WFzZXxCfxTsG47lj1svn6juD2IsPnRi1yEmItjCvuUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=aym4UDup; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 1AB5340E0163;
+	Sun,  8 Mar 2026 10:21:01 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id gqtYlXcGOaYL; Sun,  8 Mar 2026 10:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1772965257; bh=3L0qCp0Xye9aSiMNYAYOJpPKxq6poVcq2tx6ogNZDt0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aym4UDup/FZ0oFgEmX8oVlek9xcMgm3Kui8jWNxanbrRV9NmjcXHSykdm0QiEPRu+
+	 Edr0jydrfNlSiBK7aPhpBaEwUwXYJ6qWXekVqzmjwFnf6Gjxc1hM20VU7ONQh/Nbhv
+	 vPD3kI5QPVBERU9HIDgH4vVBdx93CZJb/fZXLXrf6GxAr3WW/NgoloszSwVUBUghcA
+	 5R5JndOGqIjWlEqLNdBTL0Kb/E5dVkoigAxQLoljKJNjEeS8Legtn7mwdiRbSg/q83
+	 LqXMv4WjJPTEahstMdC2BoDXgNvqf8sFGbkowvos+0B7mcpccPcTIKoiueyzG3UaxC
+	 4EmaNCyFl57FZXdsL+551UB+yyf6IN4IFI3pFLj0CdeQVkOP8mDpq7Tt4+7NpA5AQJ
+	 XEUE8lM32O+5jaRLR8CgPyP5PU/3EIamPDowzBW6CfEAO/68Gnky/u2x1mMT27Ag4e
+	 QyRLx9MeyoIfXKfUpXJjkePfff3/jrZDKwo2knv1EW0eKtQwJePgl4vJoM67GQf+J9
+	 hqFy6us73VNi2ITudyx5O/zjWaAU1hPtxM/3bdYLSsT7gKYa8ZD8Ixp7f/QhOp8dhc
+	 6I3vzJImah6vCNS84ZjWro78rwfPc7OCdYy/AojduFssYpayD2k2zZEblivvRBxqXF
+	 SPXNS7I8022GoC6+Jf9mWFTE=
+Received: from zn.tnic (pd9530d5e.dip0.t-ipconnect.de [217.83.13.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id A93B440E00DE;
+	Sun,  8 Mar 2026 10:20:52 +0000 (UTC)
+Date: Sun, 8 Mar 2026 11:20:46 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org
+Subject: Re: [PATCH v2 1/3] x86/mce, EDAC/mce_amd: Reorder SMCA bank type
+ enums
+Message-ID: <20260308102046.GNaa1NfuoXza1-cB8z@fat_crate.local>
 References: <20260307163316.345923-1-yazen.ghannam@amd.com>
+ <20260307163316.345923-2-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-edac@vger.kernel.org
 List-Id: <linux-edac.vger.kernel.org>
 List-Subscribe: <mailto:linux-edac+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-edac+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
- (10.181.42.216)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002327:EE_|MN2PR12MB4270:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87bf9fa2-6b93-4893-8fa4-08de7c674901
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|82310400026|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	uhiV9Xt5LiuhIsNJTFd3DrQtPlN53LgenLuCuKzPi2JZM4Io6LYldt3b1TpDB8xEbxPo9lZraRUSq2foYuGC+r+VZyvNYjP0Zx2FIoTGlUVErlsUM4wkxnA3rOFfZRJfvKB+iRCeuFnF4Nt5z3146hHvEej55KMJ7tXi11rlWxYEj/UV1mEz+bYUpbcSatGPIEbnGrcPiRzbXQtz7qsz/qmuT8FopRlSmB+T8bTtcep+JZxJ94fhmFMtbJFVbau6HVFqExnhHxyTGCmzgFIgEa+uBXOks8s7+rNzhRhvChJNOM7+haXVOCeI6PuphVNyIhJ2E8mj2AtfUP0Vjw8/KC2rUoUnHjkIyIOfQmAlvzcnTRkNDn3btX7oSti9ZEGEYmBnqreAXcjuyzaCbNiRq1TlegZgFyJLy5boVn3p1k9z6I7VZc+oCVptLQxpM3EQx3CgHMATld5eSTCkXVMcr5F1D/tq11V1thHTSvvvmwKRTO5M/97S3M1m3YKeyGdv3/y0s2G3d7MCOdLPAmKpoIXXFgmpBZpuNnaCc9EzkyT5H7i848/Nl6QETyCsc3x84xygZ2annQ3h9tXq08rdTWdnYLJ0Ctoq61v1Dmc32l6dpZFzuaA/O8iMROBuHWS39CroJOKqR1am9PieDl8wQqJm5MJz8Q2GG+ilUDD7UdmZPLbZmtRjSPu88YGcJa6KSYh6H4Sx1rnwGKrGJH/gNucg1ZMWYQJ/SXiaq8Hg6R+4P9TF+IOQIf0rRY3DQIQel9jbg+ZO/WAKuUYw92fL4Q==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	r525z77TK1tWmiJ+JhQfj6TDEwbX9z1qiuJrLXAQTMXUNYY1X798Fo1Bg2SBUpNVdFuz/BxLTrR3rNrhvNUB2vBW2iU9aCGqQSP++yOxoj3I8h1d4ScKRaRdWeDifVByrmCBVwJuf8dwLb4Ds5u8tvwt3R8/ho/lIXIj66PkcOpdylh8KyhCszCXRYMczTpwezX0GznITj7G+55DJrMMnVHT4kAJIqqpASTdILfLT5jTlPZzYbm26VP0/Imxbjyu4AadGr6CJ4/ZRAD/3FX7UQekenQmh2VYtTc7eiTMLYGTMi9GYda1/21n0ibho6hdANYo7ylSs9uqDGOKwbXp2fvW+n8JkH4+B0bBl+9Nv8iDibbUm3Ri63CDk4sT5EuJniMnSEaThCFnreIT0m9UQwama33uhwZF6Xf4Kx4eeYtkbFRr03SldBQFjDRroQ07
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2026 16:33:38.0157
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87bf9fa2-6b93-4893-8fa4-08de7c674901
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002327.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4270
-X-Rspamd-Queue-Id: 7F8D822CB15
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260307163316.345923-2-yazen.ghannam@amd.com>
+X-Rspamd-Queue-Id: EDF2422F4F5
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[alien8.de,none];
+	R_DKIM_ALLOW(-0.20)[alien8.de:s=alien8];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5787-lists,linux-edac=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5786-lists,linux-edac=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[alien8.de:+];
+	MISSING_XM_UA(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yazen.ghannam@amd.com,linux-edac@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[amd.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:dkim,amd.com:email,amd.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
+	FROM_NEQ_ENVFROM(0.00)[bp@alien8.de,linux-edac@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-edac];
-	NEURAL_HAM(-0.00)[-0.992];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	NEURAL_HAM(-0.00)[-0.998];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,alien8.de:dkim]
 X-Rspamd-Action: no action
 
-Recognize new SMCA bank types and include their short names for sysfs
-and long names for decoding.
+On Sat, Mar 07, 2026 at 11:33:14AM -0500, Yazen Ghannam wrote:
+> +/* Order by HWID then McaType with newline between HWID groups. */
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- arch/x86/include/asm/mce.h    | 11 +++++++++++
- arch/x86/kernel/cpu/mce/amd.c | 30 ++++++++++++++++++++++++++++++
- drivers/edac/mce_amd.c        | 10 ++++++++++
- 3 files changed, 51 insertions(+)
+So I would argue that keeping them *all* sorted the same makes reading and
+touching that code the simplest. Because you will have to modify the same
+spots when you add new ones and the hwid number doesn't really matter for
+humans.
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index 576a4b6e83ea..e4d0fc0978ac 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -351,7 +351,10 @@ enum smca_bank_types {
- 	 */
- 	SMCA_CS,	/* Coherent Station */
- 	SMCA_CS_V2,
-+	SMCA_DACC_BE,	/* Data Acceleration Back-end */
-+	SMCA_DACC_FE,	/* Data Acceleration Front-end */
- 	SMCA_DE,	/* Decoder Unit */
-+	SMCA_EDDR5CMN,	/* eDDR5 CMN */
- 	SMCA_EX,	/* Execution Unit */
- 	SMCA_FP,	/* Floating Point */
- 	SMCA_GMI_PCS,	/* GMI PCS Unit */
-@@ -363,12 +366,19 @@ enum smca_bank_types {
- 	SMCA_LS_V2,
- 	SMCA_MA_LLC,	/* Memory Attached Last Level Cache */
- 	SMCA_MP5,	/* Microprocessor 5 Unit */
-+	SMCA_MPART,	/* AMD Root of Trust Microprocessor */
-+	SMCA_MPASP,	/* AMD Secure Processor */
-+	SMCA_MPASP_V2,
-+	SMCA_MPDACC,	/* MP for Data Acceleration */
- 	SMCA_MPDMA,	/* MPDMA Unit */
-+	SMCA_MPM,	/* Microprocessor Manageability Core */
-+	SMCA_MPRAS,	/* MP for RAS */
- 	SMCA_NBIF,	/* NBIF Unit */
- 	SMCA_NBIO,	/* Northbridge IO Unit */
- 	SMCA_PB,	/* Parameter Block */
- 	SMCA_PCIE,	/* PCI Express Unit */
- 	SMCA_PCIE_V2,
-+	SMCA_PCIE_PL,	/* PCIe Link */
- 	SMCA_PIE,	/* Power, Interrupts, etc. */
- 	SMCA_PSP,	/* Platform Security Processor */
- 	SMCA_PSP_V2,
-@@ -377,6 +387,7 @@ enum smca_bank_types {
- 	SMCA_SHUB,	/* System HUB Unit */
- 	SMCA_SMU,	/* System Management Unit */
- 	SMCA_SMU_V2,
-+	SMCA_SSBDCI,	/* Die to Die Interconnect */
- 	SMCA_UMC,	/* Unified Memory Controller */
- 	SMCA_UMC_V2,
- 	SMCA_USB,	/* USB Unit */
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 86f51415283c..fc1513f8d180 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -96,7 +96,10 @@ static DEFINE_PER_CPU_READ_MOSTLY(u8[N_SMCA_BANK_TYPES], smca_bank_counts);
- 
- static const char * const smca_names[] = {
- 	[SMCA_CS ... SMCA_CS_V2]	= "coherent_station",
-+	[SMCA_DACC_BE]			= "dacc_be",
-+	[SMCA_DACC_FE]			= "dacc_fe",
- 	[SMCA_DE]			= "decode_unit",
-+	[SMCA_EDDR5CMN]			= "eddr5_cmn",
- 	[SMCA_EX]			= "execution_unit",
- 	[SMCA_FP]			= "floating_point",
- 	[SMCA_GMI_PCS]			= "gmi_pcs",
-@@ -107,17 +110,24 @@ static const char * const smca_names[] = {
- 	[SMCA_LS ... SMCA_LS_V2]	= "load_store",
- 	[SMCA_MA_LLC]			= "ma_llc",
- 	[SMCA_MP5]			= "mp5",
-+	[SMCA_MPART]			= "mpart",
-+	[SMCA_MPASP ... SMCA_MPASP_V2]	= "mpasp",
-+	[SMCA_MPDACC]			= "mpdacc",
- 	[SMCA_MPDMA]			= "mpdma",
-+	[SMCA_MPM]			= "mpm",
-+	[SMCA_MPRAS]			= "mpras",
- 	[SMCA_NBIF]			= "nbif",
- 	[SMCA_NBIO]			= "nbio",
- 	[SMCA_PB]			= "param_block",
- 	[SMCA_PCIE ... SMCA_PCIE_V2]	= "pcie",
-+	[SMCA_PCIE_PL]			= "pcie_pl",
- 	[SMCA_PIE]			= "pie",
- 	[SMCA_PSP ... SMCA_PSP_V2]	= "psp",
- 	[SMCA_RESERVED]			= "reserved",
- 	[SMCA_SATA]			= "sata",
- 	[SMCA_SHUB]			= "shub",
- 	[SMCA_SMU ... SMCA_SMU_V2]	= "smu",
-+	[SMCA_SSBDCI]			= "ssbdci",
- 
- 	/* UMC v2 is separate because both of them can exist in a single system. */
- 	[SMCA_UMC]			= "umc",
-@@ -166,6 +176,8 @@ static const struct smca_hwid smca_hwid_mcatypes[] = {
- 
- 	{ SMCA_PB,	 HWID_MCATYPE(0x05, 0x0)	},
- 
-+	{ SMCA_MPRAS,	 HWID_MCATYPE(0x12, 0x0)	},
-+
- 	{ SMCA_NBIO,	 HWID_MCATYPE(0x18, 0x0)	},
- 
- 	{ SMCA_CS,	 HWID_MCATYPE(0x2E, 0x0)	},
-@@ -178,6 +190,8 @@ static const struct smca_hwid smca_hwid_mcatypes[] = {
- 
- 	{ SMCA_XGMI_PCS, HWID_MCATYPE(0x50, 0x0)	},
- 
-+	{ SMCA_SSBDCI,	 HWID_MCATYPE(0x5C, 0x0)	},
-+
- 	{ SMCA_NBIF,	 HWID_MCATYPE(0x6C, 0x0)	},
- 
- 	{ SMCA_SHUB,	 HWID_MCATYPE(0x80, 0x0)	},
-@@ -199,13 +213,29 @@ static const struct smca_hwid smca_hwid_mcatypes[] = {
- 	{ SMCA_L3_CACHE, HWID_MCATYPE(0xB0, 0x7)	},
- 	{ SMCA_LS_V2,	 HWID_MCATYPE(0xB0, 0x10)	},
- 
-+	{ SMCA_MPDACC,	 HWID_MCATYPE(0xBE, 0x0)	},
-+
-+	{ SMCA_MPM,	 HWID_MCATYPE(0xF9, 0x0)	},
-+
-+	{ SMCA_MPASP,	 HWID_MCATYPE(0xFD, 0x0)	},
-+	{ SMCA_MPASP_V2, HWID_MCATYPE(0xFD, 0x1)	},
-+
- 	{ SMCA_PSP,	 HWID_MCATYPE(0xFF, 0x0)	},
- 	{ SMCA_PSP_V2,	 HWID_MCATYPE(0xFF, 0x1)	},
-+	{ SMCA_MPART,	 HWID_MCATYPE(0xFF, 0x2)	},
-+
-+	{ SMCA_DACC_FE,	 HWID_MCATYPE(0x157, 0x0)	},
-+
-+	{ SMCA_DACC_BE,	 HWID_MCATYPE(0x164, 0x0)	},
- 
- 	{ SMCA_USR_DP,	 HWID_MCATYPE(0x170, 0x0)	},
- 
- 	{ SMCA_USR_CP,	 HWID_MCATYPE(0x180, 0x0)	},
- 
-+	{ SMCA_EDDR5CMN, HWID_MCATYPE(0x1E0, 0x0)	},
-+
-+	{ SMCA_PCIE_PL,	 HWID_MCATYPE(0x1E1, 0x0)	},
-+
- 	{ SMCA_GMI_PCS,  HWID_MCATYPE(0x241, 0x0)	},
- 
- 	{ SMCA_XGMI_PHY, HWID_MCATYPE(0x259, 0x0)	},
-diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
-index 54ad56f2a9e0..bd252cb3c38e 100644
---- a/drivers/edac/mce_amd.c
-+++ b/drivers/edac/mce_amd.c
-@@ -690,7 +690,10 @@ static void decode_mc6_mce(struct mce *m)
- 
- static const char * const smca_long_names[] = {
- 	[SMCA_CS ... SMCA_CS_V2]	= "Coherent Station",
-+	[SMCA_DACC_BE]			= "DACC Back-end Unit",
-+	[SMCA_DACC_FE]			= "DACC Front-end Unit",
- 	[SMCA_DE]			= "Decode Unit",
-+	[SMCA_EDDR5CMN]			= "eDDR5 CMN Unit",
- 	[SMCA_EX]			= "Execution Unit",
- 	[SMCA_FP]			= "Floating Point Unit",
- 	[SMCA_GMI_PCS]			= "Global Memory Interconnect PCS Unit",
-@@ -700,17 +703,24 @@ static const char * const smca_long_names[] = {
- 	[SMCA_L3_CACHE]			= "L3 Cache",
- 	[SMCA_LS ... SMCA_LS_V2]	= "Load Store Unit",
- 	[SMCA_MP5]			= "Microprocessor 5 Unit",
-+	[SMCA_MPART]			= "MPART Unit",
-+	[SMCA_MPASP ... SMCA_MPASP_V2]	= "MPASP Unit",
-+	[SMCA_MPDACC]			= "MPDACC Unit",
- 	[SMCA_MPDMA]			= "MPDMA Unit",
-+	[SMCA_MPM]			= "MPM Unit",
-+	[SMCA_MPRAS]			= "MPRAS Unit",
- 	[SMCA_NBIF]			= "NBIF Unit",
- 	[SMCA_NBIO]			= "Northbridge IO Unit",
- 	[SMCA_PB]			= "Parameter Block",
- 	[SMCA_PCIE ... SMCA_PCIE_V2]	= "PCI Express Unit",
-+	[SMCA_PCIE_PL]			= "PCIe Link Unit",
- 	[SMCA_PIE]			= "Power, Interrupts, etc.",
- 	[SMCA_PSP ... SMCA_PSP_V2]	= "Platform Security Processor",
- 	[SMCA_RESERVED]			= "Reserved",
- 	[SMCA_SATA]			= "SATA Unit",
- 	[SMCA_SHUB]			= "System Hub Unit",
- 	[SMCA_SMU ... SMCA_SMU_V2]	= "System Management Unit",
-+	[SMCA_SSBDCI]			= "Die to Die Interconnect Unit",
- 
- 	/* UMC v2 is separate because both of them can exist in a single system. */
- 	[SMCA_UMC]			= "Unified Memory Controller",
+IOW, this:
+
+/*
+ * Format:
+ * { bank_type, hwid_mcatype }
+ *
+ * alphanumerically sorted by bank type.
+ */
+static const struct smca_hwid smca_hwid_mcatypes[] = {
+        { SMCA_CS,       HWID_MCATYPE(0x2E, 0x0)        },
+        { SMCA_CS_V2,    HWID_MCATYPE(0x2E, 0x2)        },
+        { SMCA_DE,       HWID_MCATYPE(0xB0, 0x3)        },
+        { SMCA_EX,       HWID_MCATYPE(0xB0, 0x5)        },
+        { SMCA_FP,       HWID_MCATYPE(0xB0, 0x6)        },
+        { SMCA_GMI_PCS,  HWID_MCATYPE(0x241, 0x0)       },
+        { SMCA_GMI_PHY,  HWID_MCATYPE(0x269, 0x0)       },
+        { SMCA_IF,       HWID_MCATYPE(0xB0, 0x1)        },
+        { SMCA_L2_CACHE, HWID_MCATYPE(0xB0, 0x2)        },
+        { SMCA_L3_CACHE, HWID_MCATYPE(0xB0, 0x7)        },
+        { SMCA_LS,       HWID_MCATYPE(0xB0, 0x0)        },
+        { SMCA_LS_V2,    HWID_MCATYPE(0xB0, 0x10)       },
+        { SMCA_MA_LLC,   HWID_MCATYPE(0x2E, 0x4)        },
+        { SMCA_MP5,      HWID_MCATYPE(0x01, 0x2)        },
+        { SMCA_MPDMA,    HWID_MCATYPE(0x01, 0x3)        },
+        { SMCA_NBIF,     HWID_MCATYPE(0x6C, 0x0)        },
+        { SMCA_NBIO,     HWID_MCATYPE(0x18, 0x0)        },
+        { SMCA_PB,       HWID_MCATYPE(0x05, 0x0)        },
+        { SMCA_PCIE,     HWID_MCATYPE(0x46, 0x0)        },
+        { SMCA_PCIE_V2,  HWID_MCATYPE(0x46, 0x1)        },
+        { SMCA_PIE,      HWID_MCATYPE(0x2E, 0x1)        },
+        { SMCA_PSP,      HWID_MCATYPE(0xFF, 0x0)        },
+        { SMCA_PSP_V2,   HWID_MCATYPE(0xFF, 0x1)        },
+        { SMCA_RESERVED, HWID_MCATYPE(0x00, 0x0)        },
+        { SMCA_SATA,     HWID_MCATYPE(0xA8, 0x0)        },
+        { SMCA_SHUB,     HWID_MCATYPE(0x80, 0x0)        },
+        { SMCA_SMU,      HWID_MCATYPE(0x01, 0x0)        },
+        { SMCA_SMU_V2,   HWID_MCATYPE(0x01, 0x1)        },
+        { SMCA_UMC,      HWID_MCATYPE(0x96, 0x0)        },
+        { SMCA_UMC_V2,   HWID_MCATYPE(0x96, 0x1)        },
+        { SMCA_USB,      HWID_MCATYPE(0xAA, 0x0)        },
+        { SMCA_USR_CP,   HWID_MCATYPE(0x180, 0x0)       },
+        { SMCA_USR_DP,   HWID_MCATYPE(0x170, 0x0)       },
+        { SMCA_WAFL_PHY, HWID_MCATYPE(0x267, 0x0)       },
+        { SMCA_XGMI_PCS, HWID_MCATYPE(0x50, 0x0)        },
+        { SMCA_XGMI_PHY, HWID_MCATYPE(0x259, 0x0)       },
+};
+
 -- 
-2.53.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
